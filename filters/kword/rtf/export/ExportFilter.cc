@@ -152,7 +152,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     if(pos!=-1) strExt = strImageName.mid(pos).lower();
 
     QString strTag;
-    if (strExt==".bmp")
+    if (strExt==".bmp" && false) // ### FIXME: there is a problem with BMPs
         strTag="\\wbitmap";
     else if (strExt==".png")
         strTag="\\pngblip";
@@ -176,9 +176,6 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         }
     }
 
-    m_textBody += "{\\pict";
-    m_textBody += strTag;
-
     // load the image, this isn't necessary for converted image
     if( !image.size() )
         if (!loadKoStoreFile(anchor.picture.koStoreName,image))
@@ -195,19 +192,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     // find original image width and height (in twips)
     long origWidth  = width;
     long origHeight = height;
-    QImage img( image );
-    if( !img.isNull() )
-    {
-        // check resolution, assume 2835 dpm (72 dpi) if not available
-        int resx = img.dotsPerMeterX();
-        int resy = img.dotsPerMeterY();
-        if( resx <= 0 ) resx = 2835;
-        if( resy <= 0 ) resy = 2835;
-
-        origWidth =  long(img.width() * 2834.65 * 20 / resx);
-        origHeight = long(img.height() * 2834.65 * 20 / resy);
-    }
-    else if( strExt == ".wmf" )
+    if( strExt == ".wmf" )
     {
         // special treatment for WMF with metaheader
         // d7cdc69a is metaheader magic id
@@ -231,7 +216,28 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
             image.resize( image.size()-22 );
         }
     } 
+    else
+    {
+        // It must be an image
+        QImage img( image );
+        if( img.isNull() )
+        {
+            kdWarning(30515) << "Unable to load picture as image " << anchor.picture.koStoreName << endl;
+            return true;
+        }
+        // check resolution, assume 2835 dpm (72 dpi) if not available
+        int resx = img.dotsPerMeterX();
+        int resy = img.dotsPerMeterY();
+        if( resx <= 0 ) resx = 2835;
+        if( resy <= 0 ) resy = 2835;
 
+        origWidth =  long(img.width() * 2834.65 * 20 / resx);
+        origHeight = long(img.height() * 2834.65 * 20 / resy);
+    }
+
+    // Now that we are sure to have a valid image, we can write the RTF tags
+    m_textBody += "{\\pict";
+    m_textBody += strTag;
 
     // calculate scaling factor (in percentage)
     int scaleX = width * 100 / origWidth;
