@@ -51,6 +51,8 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mTab->setTabShape(QTabWidget::Triangular);
 
   QGridLayout *mLayout;
+  QPushButton *mDuplicateBtn;
+  QPushButton *mApplyBtn;
 
   /* Translate */
   mTranslate = new QWidget(mTab);
@@ -63,48 +65,61 @@ QDockWindow(QDockWindow::InDock, parent, name)
   //connect(mVert, SIGNAL(valueChanged(int)), this, SLOT(slotTranslateChanged(int)));
   QCheckBox *mTRelative = new QCheckBox(i18n("Relative"), mTranslate, "T");
   connect(mTRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
-  QPushButton *mTDuplicateBtn = new QPushButton(i18n("Duplicate"), mTranslate);
-  connect(mTDuplicateBtn, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
-  QPushButton *mTApplyBtn = new QPushButton(i18n("Apply"), mTranslate);
-  connect(mTApplyBtn, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+  mDuplicateBtn = new QPushButton(i18n("Duplicate"), mTranslate);
+  connect(mDuplicateBtn, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
+  mApplyBtn = new QPushButton(i18n("Apply"), mTranslate);
+  connect(mApplyBtn, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
 
   mLayout->addWidget(mHorizText, 0, 0);
   mLayout->addWidget(mHorizBox, 0, 1);
   mLayout->addWidget(mVertText, 1, 0);
   mLayout->addWidget(mVertBox, 1, 1);
   mLayout->addMultiCellWidget(mTRelative, 2, 2, 0, 1);
-  mLayout->addWidget(mTDuplicateBtn, 3, 0);
-  mLayout->addWidget(mTApplyBtn, 3, 1);
+  mLayout->addWidget(mDuplicateBtn, 3, 0);
+  mLayout->addWidget(mApplyBtn, 3, 1);
   mTab->insertTab(mTranslate, i18n("T"));
 
   /* Rotate */
-  mRotate = new QGroupBox(4, Qt::Vertical, mTab);
-  mAngle = new KIntNumInput(0, mRotate);
+  mRotate = new QWidget(mTab);
+  mLayout = new QGridLayout(mRotate, 3, 2);
+  QLabel *mAngleText = new QLabel(i18n("Angle"), mRotate);
+  mAngleBox = new QSpinBox(-360, 360, 1, mRotate);
   //connect(mHoriz, SIGNAL(valueChanged(int)), this, SLOT(slotHorizTranslateChanged(int)));
-  mAngle->setRange(-360, 360, 1, false);
-  mAngle->setLabel(i18n("Angle"));
   QCheckBox *mRRelative = new QCheckBox(i18n("Relative"), mRotate, "R");
   connect(mRRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
-  QPushButton *but = new QPushButton(i18n("Duplicate"), mRotate);
-  connect(but, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
-  but = new QPushButton(i18n("Apply"), mRotate);
-  connect(but, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+  mDuplicateBtn = new QPushButton(i18n("Duplicate"), mRotate);
+  connect(mDuplicateBtn, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
+  mApplyBtn = new QPushButton(i18n("Apply"), mRotate);
+  connect(mApplyBtn, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+
+  mLayout->addWidget(mAngleText, 0, 0);
+  mLayout->addWidget(mAngleBox, 0, 1);
+  mLayout->addMultiCellWidget(mRRelative, 1, 1, 0, 1);
+  mLayout->addWidget(mDuplicateBtn, 2, 0);
+  mLayout->addWidget(mApplyBtn, 2, 1);
   mTab->insertTab(mRotate, i18n("R"));
 
   /* Shear */
-  mShear = new QGroupBox(5, Qt::Vertical, mTab);
-  mShearAngleX = new KIntNumInput(0, mShear);
-  mShearAngleX->setRange(-360, 360, 1, false);
-  mShearAngleX->setLabel(i18n("Shear horizontal"));
-  mShearAngleY = new KIntNumInput(0, mShear);
-  mShearAngleY->setRange(-360, 360, 1, false);
-  mShearAngleY->setLabel(i18n("Shear vertical"));
+  mShear = new QWidget(mTab);
+  mLayout = new QGridLayout(mShear, 4, 2);
+  QLabel *mShearAngleXText = new QLabel(i18n("Shear horizontal"), mShear);
+  mShearAngleXBox = new QSpinBox(-360, 360, 1, mShear);
+  QLabel *mShearAngleYText = new QLabel(i18n("Shear vertical"), mShear);
+  mShearAngleYBox = new QSpinBox(-360, 360, 1, mShear);
   QCheckBox *mSRelative = new QCheckBox(i18n("Relative"), mShear, "R");
   connect(mSRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
-  but = new QPushButton(i18n("Duplicate"), mShear);
-  connect(but, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
-  but = new QPushButton(i18n("Apply"), mShear);
-  connect(but, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+  mDuplicateBtn = new QPushButton(i18n("Duplicate"), mShear);
+  connect(mDuplicateBtn, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
+  mApplyBtn = new QPushButton(i18n("Apply"), mShear);
+  connect(mApplyBtn, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+
+  mLayout->addWidget(mShearAngleXText, 0, 0);
+  mLayout->addWidget(mShearAngleXBox, 0, 1);
+  mLayout->addWidget(mShearAngleYText, 1, 0);
+  mLayout->addWidget(mShearAngleYBox, 1, 1);
+  mLayout->addMultiCellWidget(mSRelative, 2, 2, 0, 1);
+  mLayout->addWidget(mDuplicateBtn, 3, 0);
+  mLayout->addWidget(mApplyBtn, 3, 1);
   mTab->insertTab(mShear, i18n("S"));
 
   setWidget(mTab);
@@ -164,10 +179,10 @@ void TransformPanel::slotDupPressed()
         c->addCommand(new TranslateCmd(mPage->document(), double(mHorizBox->value() - mHandle->rotCenter().x()), double(mVertBox->value()  - mHandle->rotCenter().y())));
     }
   else if(mTab->currentPage() == mRotate)
-    c->addCommand(new RotateCmd(mPage->document(), mHandle->rotCenter(), mAngle->value()));
+    c->addCommand(new RotateCmd(mPage->document(), mHandle->rotCenter(), mAngleBox->value()));
   else if(mTab->currentPage() == mShear)
-    c->addCommand(new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleX->value() * deg2rad,
-	                 mShearAngleY->value() * deg2rad));
+    c->addCommand(new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleXBox->value() * deg2rad,
+	                 mShearAngleYBox->value() * deg2rad));
   emit changeTransform(c);
 }
 
@@ -188,10 +203,10 @@ void TransformPanel::slotApplyPressed()
 	                                            double(mVertBox->value()  - mHandle->rotCenter().y()));
     }
   else if(mTab->currentPage() == mRotate)
-    c = new RotateCmd(mPage->document(), mHandle->rotCenter(), mAngle->value());
+    c = new RotateCmd(mPage->document(), mHandle->rotCenter(), mAngleBox->value());
   else if(mTab->currentPage() == mShear)
-    c = new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleX->value() * deg2rad,
-	                 mShearAngleY->value() * deg2rad);
+    c = new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleXBox->value() * deg2rad,
+	                 mShearAngleYBox->value() * deg2rad);
 
   if(c)
     emit changeTransform(c);

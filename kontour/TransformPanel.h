@@ -55,11 +55,11 @@ private:
   QWidget       *mTranslate;
   QSpinBox      *mHorizBox;
   QSpinBox      *mVertBox;
-  QGroupBox     *mRotate;
-  QGroupBox     *mShear;
-  KIntNumInput  *mAngle;
-  KIntNumInput  *mShearAngleX;
-  KIntNumInput  *mShearAngleY;
+  QWidget       *mRotate;
+  QSpinBox      *mAngleBox;
+  QWidget       *mShear;
+  QSpinBox      *mShearAngleXBox;
+  QSpinBox      *mShearAngleYBox;
   GPage         *mPage;
   Handle        *mHandle; // not strictly necessary, so convenience
   bool          mTRelative : 1;
