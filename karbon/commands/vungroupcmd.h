@@ -22,8 +22,6 @@
 #define __VUNGROUPCMD_H__
 
 #include "vcommand.h"
-#include "vselection.h"
-
 
 // Group object(s)
 
