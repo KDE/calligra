@@ -169,7 +169,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
   <b>Widget saving/loading</b>\n
   You can also control how your widget are saved/loaded. You can choose which properties to save
    (see autoSaveProperties()), and save/load custom properties, ie
-  properties that are not Q_PORPERTY but you want to save in the UI file. This is used eg to
+  properties that are not Q_PROPERTY but you want to save in the UI file. This is used eg to
    save combo box or listview contents (see saveSpecialProperty() and
   readSpecialProperty()). \n \n
 
