@@ -7,6 +7,7 @@
   <Action name="file_open_recent" />
   <Action name="file_save" />
   <Action name="file_save_as" />
+  <Merge />
   <Separator />
   <Action name="file_print" />
   <Separator />
