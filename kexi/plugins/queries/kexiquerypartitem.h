@@ -51,6 +51,9 @@ public:
 	void store(KoStore*);
 	void load(KoStore*);
 
+	KexiDBRecord *records(KexiDataProvider::Parameters params=KexiDataProvider::Parameters());
+
+
 protected:
 	friend class KexiQueryDesigner;
 	friend class KexiQueryDesigerGuiEditor;

@@ -83,6 +83,14 @@ KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 void
 KexiQueryDesignerSQLHistory::addEvent(QString q, bool s)
 {
+	HistoryEntry *he=m_history.last();
+	if (he) {
+		if (he->statement()==q) {
+			he->updateTime(QTime::currentTime());
+			repaint();
+			return;
+		}
+	}
 	addEntry(new HistoryEntry(s, QTime::currentTime(), q, 0));
 }
 
@@ -179,6 +187,10 @@ HistoryEntry::geometry(int y, int width, QFontMetrics f)
 {
 	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
 	return QRect(0, y, width, h);
+}
+
+void HistoryEntry::updateTime(const QTime &execTime) {
+	m_execTime=execTime;
 }
 
 HistoryEntry::~HistoryEntry()

@@ -192,6 +192,25 @@ KexiQueryPartItem::load(KoStore* store)
 	}
 }
 
+
+KexiDBRecord *KexiQueryPartItem::records(KexiDataProvider::Parameters params) {
+	if(m_sql.isEmpty()) return 0;
+	KexiDBRecord *rec;
+        try
+        {
+                rec = projectPart()->kexiProject()->db()->queryRecord(m_sql, true);
+        }
+        catch(KexiDBError &err)
+        {
+                kdDebug() << "KexiQueryPartItem(): db-error" << endl;
+                err.toUser(0);
+                return 0;
+        }
+
+	return rec;
+}
+
+
 KexiQueryPartItem::~KexiQueryPartItem()
 {
 }

@@ -103,21 +103,14 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 void
 KexiQueryDesigner::query()
 {
-	bool success = false;
-	try
-	{
-		if(m_view->executeQuery(processQuery()))
-			success = true;
-	}
-	catch(KexiDBError &err)
-	{
-		err.toUser(this);
-		emit queryExecuted(m_statement, success);
-	}
-
 	m_item->setSQL(m_statement);
-	emit queryExecuted(m_statement, success);
-
+	KexiDBRecord *rec=m_item->records();
+	if (rec) {
+		m_view->setDataSet(rec);
+		emit queryExecuted(m_statement,true);
+	}
+	else
+		emit queryExecuted(m_statement,false);
 }
 
 void

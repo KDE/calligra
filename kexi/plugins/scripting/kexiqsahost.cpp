@@ -41,11 +41,11 @@ KexiQSAHost::KexiQSAHost(KexiScriptHandler *parent, const char *name)
  : QObject(parent, name)
 {
 	m_parent = parent;
-
-	m_project = QSInterpreter::defaultInterpreter()->project();
+	m_interpreter = new QSInterpreter();
+	m_project = m_interpreter->project();
 
 //	m_project->open("/home/luci/db/kexi.qsa");
-	m_interpreter = QSInterpreter::defaultInterpreter();
+//	m_interpreter = QSInterpreter::defaultInterpreter();
 	new KexiQSAClasses(m_interpreter);
 	connect(m_parent->kexiProject(), SIGNAL(dbAvaible()), this, SLOT(slotDB()));
 
@@ -144,6 +144,7 @@ KexiQSAHost::slotDB()
 
 KexiQSAHost::~KexiQSAHost()
 {
+	delete m_interpreter;
 }
 
 #include "kexiqsahost.moc"

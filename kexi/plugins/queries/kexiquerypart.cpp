@@ -90,7 +90,7 @@ void KexiQueryPart::load (KoStore *ks)
 	{
 		kdDebug() << "KexiQueryPart::getQueries() added " << (*it).name << endl;
 		KexiQueryPartItem *qpi;
-		list->insert("kexi/query/" + (*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
+		list->insert( (*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
 		qpi->load(ks);
 	}
 
@@ -108,7 +108,6 @@ void KexiQueryPart::hookIntoView(KexiView *view)
 	virtual QStringList datasets() {return QStringList();}
 	virtual QStringList datasetNames() { return QStringList();}
 	virtual QStringList fields(const QString& identifier) {return QStringList();}
-	virtual KexiDBRecord *records(const QString& identifier,Parameters params) {return 0;}
 	virtual ParameterList parameters(const QString &identifier) { return ParameterList();}
 #endif
 
@@ -120,6 +119,23 @@ QStringList KexiQueryPart::datasets() {
 	}
 
 	return list;
+}
+
+KexiDBRecord *KexiQueryPart::records(const QString& identifier,Parameters params) {
+	QString shortID=localIdentifier(identifier);
+
+	KexiProjectHandlerItem *it=(*items())[shortID];
+	if (it) {
+		return (dynamic_cast<KexiQueryPartItem*>(it))->records(params);
+	}
+
+	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it) {
+		if (it.current()->shortIdentifier()==shortID) {
+			return (dynamic_cast<KexiQueryPartItem*>(*it))->records(params);
+		}
+	}
+
+	return 0;
 }
 
 QStringList KexiQueryPart::datasetNames() {

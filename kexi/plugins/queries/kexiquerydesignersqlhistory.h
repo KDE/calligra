@@ -38,6 +38,7 @@ class HistoryEntry
 		bool	isSelected() { return m_selected; }
 
 		QString	statement() { return m_statement; }
+		void updateTime(const QTime &execTime);
 
 	private:
 		bool	m_succeed;
