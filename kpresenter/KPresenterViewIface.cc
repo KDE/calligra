@@ -576,3 +576,8 @@ void KPresenterViewIface::configureCompletion()
 {
     view->configureCompletion();
 }
+
+void KPresenterViewIface::duplicateObj()
+{
+    view->duplicateObj();
+}

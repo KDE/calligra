@@ -3116,7 +3116,7 @@ void KPresenterView::objectSelectedChanged()
 {
     bool state=m_canvas->isOneObjectSelected();
     bool headerfooterselected=false;
-    bool rw = koDocument()->isReadWrite();
+    //bool rw = koDocument()->isReadWrite();
 
     if(m_canvas->numberOfObjectSelected()==1)
     {
@@ -6261,7 +6261,6 @@ void KPresenterView::openPopupMenuFlipObject( const QPoint &_point )
 void KPresenterView::slotObjectEditChanged()
 {
     bool state=m_canvas->isOneObjectSelected();
-    bool headerfooterselected=false;
     bool rw = koDocument()->isReadWrite();
 
     bool isText=!m_canvas->applicableTextInterfaces().isEmpty();

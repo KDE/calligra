@@ -173,7 +173,7 @@ k_dcop:
     virtual bool skipToPage( int _num );
 
     virtual void configureCompletion();
-
+    virtual void duplicateObj();
 
 private:
     KPresenterView *view;
