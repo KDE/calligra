@@ -255,28 +255,34 @@ void ZoomTool::zoomMinus()
 
 void ZoomTool::zoomWidth()
 {
-   setOverride();
+  setOverride();
 
-   int cw = QMAX(10,m_pCanvas->width()-20);
-   KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
-   float w = pl.ptWidth;
-   float z = cw/w;
+  KoZoomHandler zoom;
+  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
+  int cw = QMAX(10,m_pCanvas->width()-20);
+  KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
+  float w = zoom.zoomItX(pl.ptWidth);
+  float z = cw/w;
 
-   m_pCanvas->setUpdatesEnabled(false);
-   m_pCanvas->centerPage();
-   m_pCanvas->setZoom(qRound(z * 100));
-   m_pCanvas->setUpdatesEnabled(true);
+  m_pCanvas->setUpdatesEnabled(false);
+  m_pCanvas->centerPage();
+  m_pCanvas->setZoom(qRound(z * 100));
+  m_pCanvas->setUpdatesEnabled(true);
 
-   removeOverride();
+  removeOverride();
 }
 
 void ZoomTool::zoomHeight()
 {
   setOverride();
 
+  KoZoomHandler zoom;
+  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
   int ch = QMAX(10,m_pCanvas->height()-20);
   KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
-  float h = pl.ptHeight;
+  float h = zoom.zoomItY(pl.ptHeight);
   float zh = ch/h;
 
   m_pCanvas->setUpdatesEnabled(false);
@@ -291,12 +297,15 @@ void ZoomTool::zoomPage()
 {
   setOverride();
 
+  KoZoomHandler zoom;
+  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
+    QPaintDevice::x11AppDpiY());
   int cw = QMAX(10,m_pCanvas->width()-20);
   int ch = QMAX(10,m_pCanvas->height()-20);
 
   KoPageLayout pl = m_pCanvas->activePage()->paperLayout();
-  float w = pl.ptWidth;
-  float h = pl.ptHeight;
+  float w = zoom.zoomItX(pl.ptWidth);
+  float h = zoom.zoomItY(pl.ptHeight);
 
   float z = QMIN(cw/w,ch/h);
 
@@ -331,9 +340,11 @@ void ZoomTool::showPopupMenu( QPoint p )
 void ZoomTool::zoomSelected()
 {
   setOverride();
-
   KivioRect r = m_pCanvas->activePage()->getRectForAllSelectedStencils();
-  m_pCanvas->setVisibleArea(r);
+
+  if (!r.isNull() && r.isValid()) {
+    m_pCanvas->setVisibleArea(r);
+  }
 
   removeOverride();
 }
@@ -341,9 +352,11 @@ void ZoomTool::zoomSelected()
 void ZoomTool::zoomAllobjects()
 {
   setOverride();
-
   KivioRect r = m_pCanvas->activePage()->getRectForAllStencils();
-  m_pCanvas->setVisibleArea(r);
+
+  if (!r.isNull() && r.isValid()) {
+    m_pCanvas->setVisibleArea(r);
+  }
 
   removeOverride();
 }
