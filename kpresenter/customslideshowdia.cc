@@ -147,7 +147,14 @@ void CustomSlideShowDia::slotTest()
 
 void CustomSlideShowDia::slotAdd()
 {
-    DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, listPageName );
+    QStringList listCustomName;
+    CustomListMap::Iterator it;
+    for ( it = m_customListMap.begin(); it != m_customListMap.end(); ++it ) {
+        listCustomName.append( it.key() );
+    }
+
+
+    DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, listCustomName, listPageName );
     if ( dlg->exec() )
     {
         //insert new element
@@ -180,7 +187,14 @@ void CustomSlideShowDia::slotModify()
     QListBoxItem *item = list->selectedItem();
     if ( item )
     {
-        DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, item->text(), listPageName, m_customListMap[item->text()]);
+        QStringList listCustomName;
+        CustomListMap::Iterator it;
+        for ( it = m_customListMap.begin(); it != m_customListMap.end(); ++it ) {
+            if ( it.key() !=item->text() )
+                listCustomName.append( it.key() );
+        }
+
+        DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, item->text(), listCustomName, listPageName, m_customListMap[item->text()]);
         if ( dlg->exec() )
         {
             //insert new element
@@ -225,15 +239,17 @@ bool CustomSlideShowDia::uniqueName( int val, const QString & name ) const
 }
 
 
-DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, QStringList & _listPage, const char* name )
-    : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
+DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, QStringList & _listPage, const char* name )
+    : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel ),
+      listNameCustomSlideShow( _listNameSlideShow )
 {
     init();
     listSlide->insertStringList( _listPage );
 }
 
-DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList& _listPage, QStringList &_customListPage, const char* name )
-    : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
+DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow,QStringList& _listPage, QStringList &_customListPage, const char* name )
+    : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel ),
+      listNameCustomSlideShow( _listNameSlideShow )
 {
     init();
     m_name->setText( _customName );
@@ -395,10 +411,17 @@ QString DefineCustomSlideShow::customSlideShowName() const
 
 void DefineCustomSlideShow::slotOk()
 {
-    if ( listSlideShow->count() == 0  )
-        KMessageBox::error(this, i18n("You did not select any slides. Please select some slides."), i18n("Define Custom Slide Show"));
+    if ( listNameCustomSlideShow.contains( m_name->text() ) )
+    {
+        KMessageBox::error(this, i18n("Custom Slide Show name is already used."), i18n("Define Custom Slide Show"));
+    }
     else
-        accept();
+    {
+        if ( listSlideShow->count() == 0  )
+            KMessageBox::error(this, i18n("You did not select any slides. Please select some slides."), i18n("Define Custom Slide Show"));
+        else
+            accept();
+    }
 }
 
 #include "customslideshowdia.moc"

@@ -74,8 +74,8 @@ class DefineCustomSlideShow : public KDialogBase
 {
     Q_OBJECT
 public:
-    DefineCustomSlideShow( QWidget* parent, QStringList & _listPage, const char *name = 0L);
-    DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList& _listPage, QStringList &_customListPage, const char* name = 0L );
+    DefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, QStringList & _listPage, const char *name = 0L);
+    DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, QStringList& _listPage, QStringList &_customListPage, const char* name = 0L );
 
     QString customSlideShowName() const;
     QStringList customListSlideShow();
@@ -91,7 +91,7 @@ protected slots:
 
 protected:
     void init();
-
+    QStringList listNameCustomSlideShow;
     QListBox *listSlide;
     QListBox *listSlideShow;
     QToolButton *m_insertSlide;
