@@ -243,7 +243,7 @@ void KoTemplateChooseDia::setupTabs()
     d->m_grid->addWidget( line, 3, 0 );
 
     if ( d->m_dialogType!=OnlyTemplates ) {
-	QHBoxLayout *row = new QHBoxLayout( this );
+	QHBoxLayout *row = new QHBoxLayout( d->m_grid );
 	d->m_rbFile = new QRadioButton( i18n( "&Open an existing document" ), this );
 	connect( d->m_rbFile, SIGNAL( clicked() ), this, SLOT( openFile() ) );
 	row->addWidget(d->m_rbFile);
@@ -252,8 +252,7 @@ void KoTemplateChooseDia::setupTabs()
 	d->m_bFile->setMaximumSize( d->m_bFile->sizeHint() );
 	row->addWidget(d->m_bFile);
 	connect( d->m_bFile, SIGNAL( clicked() ), this, SLOT( chooseFile() ) );
-	d->m_grid->addLayout( row, 4, 0 );
-		
+			
 	line = new QFrame( this );
 	line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 	line->setMaximumHeight( 20 );
