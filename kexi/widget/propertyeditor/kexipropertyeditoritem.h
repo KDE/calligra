@@ -26,8 +26,6 @@
 #include "kexipropertyeditor.h"
 #include "kexiproperty.h"
 
-class QStringList;
-
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 {
 	public:
@@ -38,7 +36,6 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		const QString	name() { return m_property->name(); }
 		QVariant::Type	type() { return m_property->type(); }
 		QVariant	value() { return m_value; }
-		QStringList	list() { return m_list; }
 		KexiProperty*	property() { return m_property;}
 
 		void		setValue(QVariant value);
@@ -50,7 +47,6 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 
 	private:
 		QVariant	m_value;
-		QStringList 	m_list;
 		KexiProperty	*m_property;
 		QPtrList<KexiProperty>	childprop;
 };

@@ -56,6 +56,9 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEdito
 
 		virtual QVariant	getValue();
 
+	protected slots:
+		void			valueChange(int);
+		
 	protected:
 		KIntSpinBox		*m_spinBox;
 };
@@ -72,6 +75,9 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEd
 		~PropertyEditorDblSpin() {;}
 
 		virtual QVariant	getValue();
+	
+	protected slots:
+		void			valueChange(int);
 
 	protected:
 		KDoubleSpinBox		*m_spinBox;

@@ -18,7 +18,6 @@
 test::test()
     : KMainWindow( 0, "test" )
 {
-    // set the shell's ui resource file
     setXMLFile("testui.rc");
 
 	m_buffer = new KexiPropertyBuffer(this);
@@ -31,12 +30,12 @@ test::test()
 	m_buffer->insert("pixmap", KexiProperty("pixmap", *pix) );
 	m_buffer->insert("font", KexiProperty("font", this->font()) );
 	
-	/*QStringList list;
+	QStringList list;
 	list.append("Item 1");
 	list.append("Item 2");
 	list.append("Item 3");
 	m_buffer->insert("list", KexiProperty("list","Item 1" , list));
-	*/
+	
 	bool boolean=false;
 	m_buffer->insert("bool", KexiProperty("bool", QVariant(boolean, 4)));
 	

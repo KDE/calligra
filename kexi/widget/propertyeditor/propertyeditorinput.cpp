@@ -56,18 +56,25 @@ PropertyEditorInput::getValue()
 PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent,property, name)
 {
-	m_spinBox = new KIntSpinBox(0, property->value().toInt()*10, 1, 0, 10, this);
+	m_spinBox = new KIntSpinBox(0,50000, 1, 0, 10, this);
 	m_spinBox->resize(width(), height());
 	m_spinBox->setValue(property->value().toInt());
 	m_spinBox->show();
 
 	setWidget(m_spinBox);
+	connect(m_spinBox, SIGNAL(valueChanged(int)), this, SLOT(valueChange(int)));
 }
 
 QVariant
 PropertyEditorSpin::getValue()
 {
 	return QVariant(m_spinBox->value());
+}
+
+void
+PropertyEditorSpin::valueChange(int)
+{
+	emit changed(this);
 }
 
 //DOUBLE
@@ -77,11 +84,11 @@ PropertyEditorDblSpin::PropertyEditorDblSpin(QWidget *parent, KexiProperty *prop
 {
 	m_spinBox = new KDoubleSpinBox(this);
 	m_spinBox->resize(width(), height());
-
 	m_spinBox->setValue(property->value().toDouble());
 	m_spinBox->show();
 
 	setWidget(m_spinBox);
+	connect(m_spinBox, SIGNAL(valueChanged(int)), this, SLOT(valueChange(int)));
 }
 
 QVariant
@@ -90,6 +97,11 @@ PropertyEditorDblSpin::getValue()
 	return QVariant(m_spinBox->value());
 }
 
+void
+PropertyEditorDblSpin::valueChange(int)
+{
+	emit changed(this);
+}
 
 
 #include "propertyeditorinput.moc"

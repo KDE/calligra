@@ -31,8 +31,11 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 
 	m_combo->setFocusPolicy(QWidget::StrongFocus);
 	m_combo->setGeometry(frameGeometry());
-	m_combo->insertStringList(property->list());
+	if(property->list())
+	{
+	m_combo->insertStringList(*(property->list()));
 	m_combo->setCurrentText(property->value().asString());
+	}
 	m_combo->show();
 
 	setWidget(m_combo);

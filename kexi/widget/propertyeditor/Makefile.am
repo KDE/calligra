@@ -10,7 +10,7 @@ libkexipropertyeditor_la_SOURCES = kexiproperty.cpp kexipropertybuffer.cpp \
 libkexipropertyeditor_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexipropertyeditor_la_LIBADD = $(LIB_KIO) ../../core/libkexicore.la
 
-kexiproperties_la_METASOURCES = AUTO
+libkexipropertyeditor_la_METASOURCES = AUTO
 
 SUBDIRS = . #test
 

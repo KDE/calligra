@@ -22,7 +22,6 @@
 #include <qpixmap.h>
 #include <qcolor.h>
 #include <qfont.h>
-#include <qstringlist.h>
 #include <kdebug.h>
 
 #include <klocale.h>
@@ -33,19 +32,12 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, KexiProperty *
  : KListViewItem(parent, property->name(), format(property->value()))
 {
 	m_value = property->value();
-	m_list.clear();
 	m_property=property;
 	
 	childprop.setAutoDelete(true);
 
 	switch(property->type())
 	{
-		case QVariant::StringList:
-		{
-			//m_list=property->list();
-			setValue(m_value);
-			break;
-		}
 		case QVariant::Size:
 		{
 			QSize s = m_value.toSize();
@@ -105,14 +97,7 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, K
 void
 KexiPropertyEditorItem::setValue(QVariant value)
 {
-	if(m_property->type() == QVariant::StringList)
-	{
-		setText(1, m_list[value.toInt()]);
-	}
-	else
-	{
-		setText(1, format(value));
-	}
+	setText(1, format(value));
 	m_value = value;
 }
 
