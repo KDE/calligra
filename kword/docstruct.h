@@ -157,28 +157,6 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWDocStructClipartItem                                  */
-/******************************************************************/
-
-class KWDocStructClipartItem : public KWDocListViewItem
-{
-    Q_OBJECT
-
-public:
-    KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_pic, KWGUI*__parent );
-    virtual void selectFrameSet();
-
-public slots:
-    void slotDoubleClicked( QListViewItem *_item );
-    void slotRightButtonClicked( QListViewItem *, const QPoint &, int );
-
-protected:
-    KWPictureFrameSet *clip;
-    KWGUI *gui;
-
-};
-
-/******************************************************************/
 /* Class: KWDocStructPartItem                                     */
 /******************************************************************/
 
@@ -215,7 +193,6 @@ public:
     void setupTextFrames();
     void setupTables();
     void setupPictures();
-    void setupCliparts();
     void setupEmbedded();
     void setupFormulaFrames();
     virtual void setOpen( bool o );
@@ -251,7 +228,7 @@ protected:
     KWDocument *doc;
     KWGUI *gui;
 
-    KWDocStructRootItem *arrangement, *tables, *pictures, *cliparts, *textfrms, *embedded, *formulafrms;
+    KWDocStructRootItem *arrangement, *tables, *pictures, *textfrms, *embedded, *formulafrms;
 
 };
 

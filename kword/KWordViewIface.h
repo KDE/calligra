@@ -95,7 +95,6 @@ k_dcop:
 
     void editFootEndNote();
     void savePicture();
-    void saveClipart();
 
     void insertFile();
     void tableStylist();

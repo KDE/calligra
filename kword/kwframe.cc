@@ -1894,7 +1894,7 @@ bool KWPictureFrameSet::keepAspectRatio() const
 
 void KWPictureFrameSet::setKeepAspectRatio( bool b )
 {
-    // Not sure if we can check if it is a clipart, as it might not be load yet
+    // Not sure if we can check if it is a clipart, as it might not be loaded yet
     m_keepAspectRatio = b;
 }
 

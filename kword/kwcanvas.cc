@@ -457,6 +457,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
         m_insRect.setRect( docPoint.x(), docPoint.y(), 0, 0 );
         m_deleteMovingRect = false;
 
+        // ### TODO: remove the m_isClipart (it is the only place where it is needed)
         if ( !m_isClipart && !m_pixmapSize.isEmpty() )
         {
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
@@ -481,8 +482,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
             QRect viewportRect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
             if ( viewportRect.contains( vPoint ) ) // Don't move the mouse out of the viewport
                 QCursor::setPos( viewport()->mapToGlobal( vPoint ) );
-            emit docStructChanged(Cliparts); // ### TODO verify: why Cliparts?
         }
+        emit docStructChanged(Pictures); // ### TODO: inside ot outside the "if"?
     }
 }
 
@@ -1273,10 +1274,7 @@ void KWCanvas::mrCreatePixmap()
         KWFrameSet * fs = 0L;
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
         frameset->loadPicture( m_pictureFilename );
-        if ( !m_isClipart )
-        {
-            frameset->setKeepAspectRatio( m_keepRatio );
-        }
+        frameset->setKeepAspectRatio( m_keepRatio ); // For a clipart, this has almost no effect
         fs = frameset;
         m_insRect = m_insRect.normalize();
         KWFrame *frame = new KWFrame(fs, m_insRect.x(), m_insRect.y(), m_insRect.width(),
@@ -1289,10 +1287,7 @@ void KWCanvas::mrCreatePixmap()
         m_doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );
-    if(m_isClipart)
-        emit docStructChanged(Cliparts);
-    else
-        emit docStructChanged(Pictures);
+    emit docStructChanged(Pictures);
 }
 
 void KWCanvas::mrCreatePart() // mouse release, when creating part
@@ -1994,6 +1989,7 @@ void KWCanvas::insertPicture( const QString & filename, bool isClipart, QSize pi
     m_pictureFilename = filename;
     m_isClipart = isClipart;
     m_pixmapSize = pixmapSize;
+    /// ### FIXME: how is the following code supposed to work with cliparts?
     if( pixmapSize.isEmpty()) m_pixmapSize = QPixmap( filename ).size();
     m_keepRatio = _keepRatio;
 }

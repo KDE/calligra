@@ -52,7 +52,7 @@ enum FrameSetType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3,
 // This has to remain here because of KWDocument::refreshDocStructure()
 
 // This one has better remain here, otherwise kwdoc.cc needs docstruct.h
-enum TypeStructDocItem {Arrangement=1, Tables=2, Pictures=4, Cliparts=8, TextFrames=16, Embedded=32, FormulaFrames=64};
+enum TypeStructDocItem {Arrangement=1, Tables=2, Pictures=4, TextFrames=16, Embedded=32, FormulaFrames=64};
 
 // This one has better remain here, otherwise kwtexframeset.h needs footnote.h
 // Yes, if gcc was faster we would choose more modular code over compilation speed...

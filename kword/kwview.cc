@@ -5241,14 +5241,14 @@ void KWView::savePicture()
     if ( frame )//test for dcop call
     {
         KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-        QString oldFile=frameset->image().getKey().filename();
+        QString oldFile=frameset->picture().getKey().filename();
         KURL url(oldFile);
         if (!QDir(url.directory()).exists())
             oldFile = url.fileName();
 
         KoPicture picture(frameset->picture());
         QString mimetype=picture.getMimeType();
-        kdDebug() << "Picture is mime type: " << mimetype << endl;
+        kdDebug() << "Picture has mime type: " << mimetype << endl;
         QStringList mimetypes;
         mimetypes << mimetype;
         KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );

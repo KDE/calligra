@@ -194,38 +194,6 @@ void KWDocStructPictureItem::selectFrameSet()
 }
 
 
-
-/******************************************************************/
-/* Class: KWDocStrucClipartItem                                   */
-/******************************************************************/
-
-KWDocStructClipartItem::KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWPictureFrameSet *_clip, KWGUI*__parent )
-    :KWDocListViewItem( _parent, _text )
-{
-    clip = _clip;
-    gui = __parent;
-}
-
-void KWDocStructClipartItem::slotRightButtonClicked( QListViewItem *_item, const QPoint &p, int )
-{
-    if ( _item == this )
-        gui->getView()->openDocStructurePopupMenu( p, clip);
-
-}
-
-void KWDocStructClipartItem::slotDoubleClicked( QListViewItem *_item )
-{
-    if ( _item == this )
-        selectFrameSet();
-}
-
-void KWDocStructClipartItem::selectFrameSet()
-{
-    KWFrame *frame = clip->frame( 0 );
-    gui->canvasWidget()->scrollToOffset( frame->topLeft() );
-}
-
-
 /******************************************************************/
 /* Class: KWDocStructFormulaItem                                  */
 /******************************************************************/
@@ -322,13 +290,10 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, 
             setText( 0, i18n( "Tables" ) );
             setPixmap( 0, KWBarIcon( "inline_table" ) );
         } break;
-        case Pictures: {
+        case Pictures:
+        {
             setText( 0, i18n( "Pictures" ) );
             setPixmap( 0, KWBarIcon( "frame_image" ) );
-        } break;
-        case Cliparts: {
-            setText( 0, i18n( "Clipart" ) );
-            setPixmap( 0, KWBarIcon( "clipart" ) );
         } break;
         case Embedded: {
             setText( 0, i18n( "Embedded Objects" ) );
@@ -357,9 +322,6 @@ void KWDocStructRootItem::setOpen( bool o )
                 break;
             case Pictures:
                 setupPictures();
-                break;
-            case Cliparts:
-                setupCliparts();
                 break;
             case Embedded:
                 setupEmbedded();
@@ -604,43 +566,6 @@ void KWDocStructRootItem::setupPictures()
         ( void )new QListViewItem( this, i18n( "Empty" ) );
 }
 
-void KWDocStructRootItem::setupCliparts()
-{
-    if ( childCount() > 0 )
-    {
-        QListViewItem *child = firstChild(), *delChild;
-
-        while( child )
-        {
-            delChild = child;
-            child = child->nextSibling();
-            delete delChild;
-        }
-    }
-
-    KWFrameSet *frameset = 0L;
-    QString _name;
-    KWDocStructClipartItem *child;
-
-    int j = 0;
-    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
-    {
-        frameset = doc->frameSet( i );
-        if ( frameset->typeAsKOffice1Dot1() == FT_CLIPART && frameset->getNumFrames()>0)
-        {
-            _name=i18n("Clipart (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->key().filename()).arg(++j);
-            child = new KWDocStructClipartItem( this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ), gui );
-            QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
-            QObject::connect( listView(), SIGNAL( returnPressed( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
-            QObject::connect( listView(), SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &,int )), child, SLOT( slotRightButtonClicked( QListViewItem *, const QPoint &, int )));
-
-        }
-    }
-
-    if ( childCount() == 0 )
-        ( void )new QListViewItem( this, i18n( "Empty" ) );
-}
-
 void KWDocStructRootItem::setupEmbedded()
 {
     if ( childCount() > 0 )
@@ -691,7 +616,6 @@ KWDocStructTree::KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__pa
     arrangement=0L;
     tables=0L;
     pictures=0L;
-    cliparts=0L;
     textfrms=0L;
     embedded=0L;
     formulafrms=0L;
@@ -711,7 +635,6 @@ void KWDocStructTree::setup()
     refreshTree((int)FormulaFrames);
     refreshTree((int)Tables);
     refreshTree((int)Pictures);
-    refreshTree((int)Cliparts);
     refreshTree((int)Embedded);
     arrangement = new KWDocStructRootItem( this, doc, Arrangement, gui );
 }
@@ -775,20 +698,6 @@ void KWDocStructTree::refreshTree(int _type)
         {
             delete pictures;
             pictures=0L;
-        }
-    }
-    if(((int)Cliparts) & _type)
-    {
-        if(testExistTypeOfFrame(Cliparts))
-        {
-            if(!cliparts)
-                cliparts=new KWDocStructRootItem(this,doc,Cliparts,gui);
-            cliparts->setupCliparts();
-        }
-        else
-        {
-            delete cliparts;
-            cliparts=0L;
         }
     }
     if(((int)Embedded) & _type)
