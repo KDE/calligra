@@ -891,8 +891,9 @@ void KWordView::insertPicture()
 {
   QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
-							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw *.png *.PNG|All pictures\n"
+							  "*.png *.PNG|PNG-Pictures\n"
 							  "*.gif *.GIF|GIF-Pictures\n"
 							  "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 							  "*.bmp *.BMP|Windows Bitmaps\n"
@@ -1172,8 +1173,9 @@ void KWordView::toolsCreatePix()
   gui->getPaperWidget()->mmEdit();
   QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
-							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw *.png *.PNG|All pictures\n"
+							  "*.png *.PNG|PNG-Pictures\n"
 							  "*.gif *.GIF|GIF-Pictures\n"
 							  "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 							  "*.bmp *.BMP|Windows Bitmaps\n"

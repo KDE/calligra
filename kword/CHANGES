@@ -1160,3 +1160,8 @@ Reggie, 30.4.1999:
 Reggie, 1.5.1999:
 -----------------
 - Using new features of template dialog
+
+Reggie, 3.5.1999:
+-----------------
+- Added PNG to filters when opening KFileDialog for opening a pic
+
