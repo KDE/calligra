@@ -2,42 +2,43 @@
 EXPORT FILTER :
 
 VERSION 1
-	- text														DONE
-		* accent												DONE
-		* big parag must be truncated.
-		* ...
-	- layout													DONE
-	- title														DONE
-	- list														DONE
-	- paper														DONE
-	- footer, header									DONE
+	- text																												DONE
+		* accent																										DONE
+		* big parag must be truncated.															TODO
+	- layout																											DONE
+	- title																												DONE
+	- list																												DONE
+	- paper																												DONE
+	- footer, header																							DONE
 		* analyse the header and then test if a
-		* header, footer exist					DONE
-		* Use hType for hedaers/footers		DONE
-		* Use either \fancyhead or \chead	DONE
+		  header, footer exist																			DONE
+		* Use hType for hedaers/footers															DONE
+		* Use either \fancyhead or \chead														DONE
 		- add a parameter useformat to generate
-		  method												DONE
+		  method																										DONE
 		- put header/footer different place if
 		  it's center, ...
 		  to do that --> isCenter method for
-		  Texte class
-	- clean codes :))	)								DONE
-	- kdoc														DONE
-	- footnote, endnote								DONE
-	- Get all default informations		DONE
-	- Use QList for all list					DONE
-	- indent lists										DONE AT 80 %
-	- break lines											DONE (must be tested)
-	- use config class everywhere (with dialog box, ...).	DONE
-	- change the default font size to 12.
-	- change the font size only in the kword mode.
+		  Texte class																								TODO
+	- clean codes :))	)																						DONE
+	- kdoc																												DONE
+	- footnote, endnote																						DONE
+	- Get all default informations																DONE
+	- Use QList for all list																			DONE
+	- indent lists																								DONE AT 80 %
+	- break lines																									DONE (must be tested)
+	- use config class everywhere (with dialog box, ...).					DONE
+	- change the default font size to 12.													DONE
+	- change the font size only in the kword mode.								DONE
 	
 VERSION 2
-	- unicode								DONE
-	- table									DONE AT 80 %
-	- picture								DONE AT 80 %
-	- variable							FIRST WORK
-	- personalization				DIALOG BUT NOT USED
+	- unicode																											DONE
+	- table																												DONE AT 80 %
+	- picture																											DONE AT 80 %
+	- (margin) note																								
+	- variable																										FIRST WORK
+	- wave, double undeline, ...																	TODO
+	- personalization																							DIALOG BUT NOT USED
 	- optimisation
 		o left and right border for table (multicolumn not always usefull) ;
 		o cell scan for know if there are a border => there are several ;
@@ -46,12 +47,12 @@ VERSION 2
 
 VERSION 3
 	- parts
-	- formula								DONE AT 50 %
+	- formula																											DONE AT 50 %
 	- figure
 	- frame
 	- languages (several languages in a document).
 
 IMPORT FILTER :
-	- lexical parser 				DONE
-	- syntax. parser 				DONE
+	- lexical parser 																							DONE
+	- syntax. parser 																							DONE
 	- import filter in kword
