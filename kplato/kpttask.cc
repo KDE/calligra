@@ -550,7 +550,7 @@ KPTDateTime KPTTask::calculateForward(int use) {
         m_durationForward = KPTDuration::zeroDuration;
     }
     
-    kdDebug()<<"Earlyfinish: "<<m_earliestStartForward.toString()<<"+"<<m_durationForward.toString()<<"="<<(m_earliestStartForward+m_durationForward).toString()<<" "<<m_name<<" calculateForward()"<<endl;
+    //kdDebug()<<"Earlyfinish: "<<m_earliestStartForward.toString()<<"+"<<m_durationForward.toString()<<"="<<(m_earliestStartForward+m_durationForward).toString()<<" "<<m_name<<" calculateForward()"<<endl;
     m_visitedForward = true;
     return m_earliestStartForward + m_durationForward;
 }
@@ -674,7 +674,7 @@ KPTDateTime KPTTask::calculateBackward(int use) {
     } else { // ???
         m_durationBackward = KPTDuration::zeroDuration;
     }
-    kdDebug()<<"Latestart: "<<m_latestFinishBackward.toString()<<"-"<<m_durationBackward.toString()<<"="<<(m_latestFinishBackward-m_durationBackward).toString()<<" "<<m_name<<" calculateBackward()"<<endl;
+    //kdDebug()<<"Latestart: "<<m_latestFinishBackward.toString()<<"-"<<m_durationBackward.toString()<<"="<<(m_latestFinishBackward-m_durationBackward).toString()<<" "<<m_name<<" calculateBackward()"<<endl;
     m_visitedBackward = true;
     return m_latestFinishBackward - m_durationBackward;
 }
@@ -729,7 +729,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
         setStartTime(time);
         //kdDebug()<<k_funcinfo<<m_name<<" new startime="<<m_startTime<<endl;
     }
-    kdDebug()<<k_funcinfo<<m_name<<" m_startTime="<<m_startTime.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" m_startTime="<<m_startTime.toString()<<endl;
     if(type() == KPTNode::Type_Task) {
         switch (m_constraint) {
         case KPTNode::ASAP:
@@ -1179,6 +1179,7 @@ void KPTTask::addParentProxyRelations(QPtrList<KPTRelation> &list) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == Type_Summarytask) {
         // propagate to my children
+        //kdDebug()<<k_funcinfo<<m_name<<" is summary task"<<endl;
         QPtrListIterator<KPTNode> nodes = m_nodes;
         for (; nodes.current(); ++nodes) {
             nodes.current()->addParentProxyRelations(list);
@@ -1186,6 +1187,7 @@ void KPTTask::addParentProxyRelations(QPtrList<KPTRelation> &list) {
         }        
     } else {
         // add 'this' as child relation to the relations parent
+        //kdDebug()<<k_funcinfo<<m_name<<" is not summary task"<<endl;
         QPtrListIterator<KPTRelation> it = list;
         for (; it.current(); ++it) {
             it.current()->parent()->addChildProxyRelation(this, it.current());
@@ -1199,6 +1201,7 @@ void KPTTask::addChildProxyRelations(QPtrList<KPTRelation> &list) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == Type_Summarytask) {
         // propagate to my children
+        //kdDebug()<<k_funcinfo<<m_name<<" is summary task"<<endl;
         QPtrListIterator<KPTNode> nodes = m_nodes;
         for (; nodes.current(); ++nodes) {
             nodes.current()->addChildProxyRelations(list);
@@ -1206,6 +1209,7 @@ void KPTTask::addChildProxyRelations(QPtrList<KPTRelation> &list) {
         }        
     } else {
         // add 'this' as parent relation to the relations child
+        //kdDebug()<<k_funcinfo<<m_name<<" is not summary task"<<endl;
         QPtrListIterator<KPTRelation> it = list;
         for (; it.current(); ++it) {
             it.current()->child()->addParentProxyRelation(this, it.current());
@@ -1217,15 +1221,31 @@ void KPTTask::addChildProxyRelations(QPtrList<KPTRelation> &list) {
 
 void KPTTask::addParentProxyRelation(KPTNode *node, const KPTRelation *rel) {
     if (node->type() != Type_Summarytask) {
-        //kdDebug()<<"Add parent proxy from "<<node->name()<<" to (me) "<<m_name<<endl;
-        m_parentProxyRelations.append(new KPTProxyRelation(node, this, rel->type(), rel->lag()));
+        if (type() == Type_Summarytask) {
+            //kdDebug()<<"Add parent proxy from my children "<<m_name<<" to "<<node->name()<<endl;
+            QPtrListIterator<KPTNode> nodes = m_nodes;
+            for (; nodes.current(); ++nodes) {
+                nodes.current()->addParentProxyRelation(node, rel);
+            }
+        } else {
+            //kdDebug()<<"Add parent proxy from "<<node->name()<<" to (me) "<<m_name<<endl;
+            m_parentProxyRelations.append(new KPTProxyRelation(node, this, rel->type(), rel->lag()));
+        }
     }
 }
 
 void KPTTask::addChildProxyRelation(KPTNode *node, const KPTRelation *rel) {
     if (node->type() != Type_Summarytask) {
-        //kdDebug()<<"Add child proxy from (me) "<<m_name<<" to "<<node->name()<<endl;
-        m_childProxyRelations.append(new KPTProxyRelation(this, node, rel->type(), rel->lag()));
+        if (type() == Type_Summarytask) {
+            //kdDebug()<<"Add child proxy from my children "<<m_name<<" to "<<node->name()<<endl;
+            QPtrListIterator<KPTNode> nodes = m_nodes;
+            for (; nodes.current(); ++nodes) {
+                nodes.current()->addChildProxyRelation(node, rel);
+            }
+        } else {
+            //kdDebug()<<"Add child proxy from (me) "<<m_name<<" to "<<node->name()<<endl;
+            m_childProxyRelations.append(new KPTProxyRelation(this, node, rel->type(), rel->lag()));
+        }
     }
 }
 
