@@ -29,6 +29,7 @@ class QPixmap;
 class QWidget;
 class KInstance;
 class KLineEdit;
+class QListViewItem;
 class KoTemplateCreateDiaPrivate;
 
 /****************************************************************************
@@ -57,6 +58,7 @@ private slots:
     void slotCustom();
     void slotSelect();
     void slotNameChanged(const QString &name);
+    void slotItemClicked( QListViewItem * item );
 
     void slotAddGroup();
     void slotRemove();

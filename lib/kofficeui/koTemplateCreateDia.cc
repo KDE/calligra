@@ -116,6 +116,9 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     fillGroupTree();
     d->m_groups->sort();
 
+    connect( d->m_groups, SIGNAL( clicked( QListViewItem * ) ),
+             SLOT( slotItemClicked( QListViewItem * ) ) );
+
     QHBoxLayout *bbox=new QHBoxLayout(leftbox);
     d->m_add=new QPushButton(i18n("Add Group..."), mainwidget);
     connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
@@ -223,7 +226,6 @@ void KoTemplateCreateDia::slotOk() {
     if(k<foo)
         file+=m_file.right(k);
 
-    bool dontLeave=false;
     KoTemplate *t=new KoTemplate(d->m_name->text(), templateDir+file, icon, false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(t->name());
@@ -237,12 +239,13 @@ void KoTemplateCreateDia::slotOk() {
                                          arg(existingTemplate->name()))==KMessageBox::Yes)
                 group->add(t, true);
             else
-                dontLeave=true;
+            {
+                delete t;
+                return;
+            }
         }
     }
 
-    if(dontLeave)
-        return;
 
     if(!KStandardDirs::makeDir(templateDir) || !KStandardDirs::makeDir(iconDir)) {
         d->m_tree->writeTemplateTree();
@@ -323,6 +326,14 @@ void KoTemplateCreateDia::slotSelect() {
     d->m_customFile=url.path();
     d->m_customPixmap=QPixmap();
     updatePixmap();
+}
+
+void KoTemplateCreateDia::slotItemClicked( QListViewItem * item ) {
+    if ( item )
+    {
+        QString name = item->text( 0 );
+        d->m_name->setText( name ); // calls slotNameChanged
+    }
 }
 
 void KoTemplateCreateDia::slotNameChanged(const QString &name) {
