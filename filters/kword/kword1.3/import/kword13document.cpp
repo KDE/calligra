@@ -25,7 +25,7 @@
 #include "kword13layout.h"
 #include "kword13document.h"
 
-KWordDocument::KWordDocument( void )
+KWord13Document::KWord13Document( void )
 {
     m_normalTextFramesetList.setAutoDelete( true );
     m_tableFramesetList.setAutoDelete( true );
@@ -34,11 +34,11 @@ KWordDocument::KWordDocument( void )
     m_footEndNoteFramesetList.setAutoDelete( true );
 }
 
-KWordDocument::~KWordDocument( void )
+KWord13Document::~KWord13Document( void )
 {
 }
 
-void KWordDocument::xmldump( QIODevice* io )
+void KWord13Document::xmldump( QIODevice* io )
 {
     QTextStream iostream( io );
     iostream.setEncoding( QTextStream::UnicodeUTF8 );

@@ -41,7 +41,7 @@ KWord13Import::KWord13Import(KoFilter */*parent*/, const char */*name*/, const Q
 {
 }
 
-bool KWord13Import::parseRoot( QIODevice* io, KWordDocument& kwordDocument )
+bool KWord13Import::parseRoot( QIODevice* io, KWord13Document& kwordDocument )
 {
     KWordParser handler( &kwordDocument );
 
@@ -72,7 +72,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
 
     KoFilter::ConversionStatus result = KoFilter::StupidError;
     
-    KWordDocument kwordDocument;
+    KWord13Document kwordDocument;
     
     KoStoreDevice* subFile;
 

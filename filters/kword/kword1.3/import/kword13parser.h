@@ -26,7 +26,7 @@
 #include <qptrstack.h>
 
 class KWordParagraph;
-class KWordDocument;
+class KWord13Document;
 class KWordFrameset;
 class KWord13Layout;
 
@@ -71,7 +71,7 @@ public:
 class KWordParser : public QXmlDefaultHandler
 {
 public:
-    KWordParser( KWordDocument* kwordDocument );
+    KWordParser( KWord13Document* kwordDocument );
     virtual ~KWordParser( void );
 public:
     /// Process opening tag
@@ -97,7 +97,7 @@ protected:
 protected:
     QString indent; //DEBUG
     StackItemStack parserStack;
-    KWordDocument* m_kwordDocument;
+    KWord13Document* m_kwordDocument;
     KWordParagraph* m_currentParagraph; ///< Current paragraph
     KWord13Layout* m_currentLayout; ///< Current layout (or style)
 };

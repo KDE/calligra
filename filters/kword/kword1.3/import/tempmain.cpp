@@ -18,7 +18,7 @@ int tempmain( int argc, char **argv )
     if ( argc >= 3 )				// use argument as file name
         dest = argv[2];
 
-    KWordDocument kwordDocument;
+    KWord13Document kwordDocument;
     
     KWordParser handler( &kwordDocument );
 

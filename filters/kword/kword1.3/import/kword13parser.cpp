@@ -32,7 +32,7 @@ StackItem::~StackItem()
 {
 }
 
-KWordParser::KWordParser( KWordDocument* kwordDocument ) 
+KWordParser::KWordParser( KWord13Document* kwordDocument ) 
     : m_kwordDocument(kwordDocument), m_currentParagraph( 0 ), m_currentLayout( 0 )
 {
     parserStack.setAutoDelete( true );

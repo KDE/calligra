@@ -30,11 +30,11 @@ class QIODevice;
 
 #include "kword13frameset.h"
 
-class KWordDocument
+class KWord13Document
 {
 public:
-    KWordDocument( void );
-    ~KWordDocument( void );
+    KWord13Document( void );
+    ~KWord13Document( void );
     
 public:
     void xmldump( QIODevice* io );
