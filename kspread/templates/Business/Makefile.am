@@ -1,8 +1,8 @@
-template_DATA = .directory Invoice.desktop ExpenseReport.desktop
+template_DATA = .directory Invoice.desktop
 templatedir = $(kde_datadir)/kspread/templates/Business
 
-templatesrc_DATA = Invoice.kst ExpenseReport.kst
+templatesrc_DATA = Invoice.kst
 templatesrcdir = $(kde_datadir)/kspread/templates/Business/.source
 
-templateicons_DATA = Invoice.png ExpenseReport.png
+templateicons_DATA = Invoice.png
 templateiconsdir = $(kde_datadir)/kspread/templates/Business/.icon
