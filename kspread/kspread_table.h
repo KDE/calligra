@@ -761,6 +761,7 @@ public:
      */
     bool testListChoose(const QPoint &_marker);
 
+    void copyAsText(const QPoint &_marker);
 
     /**
      * Assume that the retangle 'src' was already selected. Then the user clicked on the

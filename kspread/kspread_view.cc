@@ -270,6 +270,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // ### This seems to be duplicated ....
     connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
     m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(), "copy" );
+
+    m_copy_as_text=new KAction( i18n("Copy as text"), "copy_as_text",0, this, SLOT( copyAsText() ), actionCollection(), "copy_as_text" );
+
     m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
     m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(), "cut" );
     m_specialPaste = new KAction( i18n("Special Paste..."), "special_paste",0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
@@ -1542,6 +1545,15 @@ void KSpreadView::copySelection()
     updateEditWidget();
 }
 
+void KSpreadView::copyAsText()
+{
+    if ( !m_pTable )
+        return;
+    m_pTable->copyAsText( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+
+}
+
+
 void KSpreadView::cutSelection()
 {
     if ( !m_pTable )
@@ -2247,6 +2259,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     {
       m_areaName->plug( m_pPopupColumn );
     }
+
     m_resizeColumn->plug( m_pPopupColumn );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
     m_pPopupColumn->insertSeparator();
@@ -2407,10 +2420,16 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 
     m_pPopupMenu = new QPopupMenu();
 
+    // If there is no selection
+    QRect selection( m_pTable->selectionRect() );
+
     m_cellLayout->plug( m_pPopupMenu );
     m_cut->plug( m_pPopupMenu );
     m_copy->plug( m_pPopupMenu );
     m_paste->plug( m_pPopupMenu );
+
+    m_copy_as_text->plug(m_pPopupMenu );
+
     m_specialPaste->plug( m_pPopupMenu );
     m_insertCellCopy->plug( m_pPopupMenu );
     m_pPopupMenu->insertSeparator();
@@ -2418,8 +2437,6 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_adjust->plug( m_pPopupMenu );
     m_default->plug( m_pPopupMenu );
 
-    // If there is no selection
-    QRect selection( m_pTable->selectionRect() );
     if(selection.right()!=0x7FFF && selection.bottom()!=0x7FFF )
     {
       m_areaName->plug( m_pPopupMenu );

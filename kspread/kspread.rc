@@ -7,6 +7,7 @@
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>
+  <Action name="copy_as_text"/>
   <Action name="specialPaste"/>
   <Separator/>
   <Action name="edit_find"/>

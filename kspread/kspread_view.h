@@ -298,8 +298,9 @@ public slots:
     void mergeCell();
     void dissociateCell();
     void gotoCell();
-    void  increaseIndent();
-    void  decreaseIndent();
+    void increaseIndent();
+    void decreaseIndent();
+    void copyAsText();
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -449,6 +450,7 @@ private:
     KToggleAction* m_alignBottom;
     KAction* m_transform;
     KAction* m_copy;
+    KAction* m_copy_as_text;
     KAction* m_paste;
     KAction* m_cut;
     KAction* m_specialPaste;

@@ -3862,6 +3862,13 @@ void KSpreadTable::setWordSpelling(const QPoint &_marker, const QString _listWor
 }
 
 
+void KSpreadTable::copyAsText( const QPoint &_marker )
+{
+    KSpreadCell* cell = cellAt( _marker.x(), _marker.y() );
+    if( !cell->isDefault() )
+        QApplication::clipboard()->setText( cell->text() );
+}
+
 void KSpreadTable::copySelection( const QPoint &_marker )
 {
     QRect rct;
