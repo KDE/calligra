@@ -74,9 +74,18 @@ static QString AmiProUnescape( const QString& str )
       // some special characters
       if( str[i+1] == '/' )
       {
-        result.truncate( result.length() - 1 ); // remove the '<'
-        result.append( QChar(str[i+2].unicode() + 0x40 ) );
-        i += 3;
+        if( str[i+2] == 'R' )
+        {
+          result.truncate( result.length() - 1 ); // remove the '<'
+          result.append( '\'' ); // </R> decoded as '
+          i += 3;
+        }
+        else
+        {
+          result.truncate( result.length() - 1 ); // remove the '<'
+          result.append( QChar(str[i+2].unicode() + 0x40 ) );
+          i += 3;
+        }
       }
 
       // yet another special characters
