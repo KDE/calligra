@@ -1656,38 +1656,41 @@ void KWCanvas::copySelectedFrames()
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
-        bool isTable = ( fs->type() == FT_TABLE );
-        QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
-        KWFrame * firstFrame = frameIt.current();
-        for ( ; frameIt.current(); ++frameIt )
+        if ( fs->isVisible() )
         {
-            KWFrame * frame = frameIt.current();
-            if ( frame->isSelected() )
+            bool isTable = ( fs->type() == FT_TABLE );
+            QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
+            KWFrame * firstFrame = frameIt.current();
+            for ( ; frameIt.current(); ++frameIt )
             {
-                // Two cases to be distinguished here
-                // If it's the first frame of a frameset, then copy the frameset (with that frame)
-                // Otherwise copy only the frame information
-                QDomElement parentElem = topElem;
-                if ( frame == firstFrame || isTable )
+                KWFrame * frame = frameIt.current();
+                if ( frame->isSelected() )
                 {
-                    parentElem = fs->toXML( parentElem, isTable ? true : false );
-                    // We'll save the frame inside that frameset tag
-                }
-                if ( !isTable )
-                {
-                    // Save the frame information
-                    QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
-                    parentElem.appendChild( frameElem );
-                    frame->save( frameElem );
-                    if ( frame != firstFrame )
+                    // Two cases to be distinguished here
+                    // If it's the first frame of a frameset, then copy the frameset (with that frame)
+                    // Otherwise copy only the frame information
+                    QDomElement parentElem = topElem;
+                    if ( frame == firstFrame || isTable )
                     {
-                        // Frame saved alone -> remember which frameset it's part of
-                        frameElem.setAttribute( "parentFrameset", fs->getName() );
+                        parentElem = fs->toXML( parentElem, isTable ? true : false );
+                        // We'll save the frame inside that frameset tag
                     }
+                    if ( !isTable )
+                    {
+                        // Save the frame information
+                        QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
+                        parentElem.appendChild( frameElem );
+                        frame->save( frameElem );
+                        if ( frame != firstFrame )
+                        {
+                            // Frame saved alone -> remember which frameset it's part of
+                            frameElem.setAttribute( "parentFrameset", fs->getName() );
+                        }
+                    }
+                    foundOne = true;
+                    if ( isTable ) // Copy tables only once, even if they have many cells selected
+                        break;
                 }
-                foundOne = true;
-                if ( isTable ) // Copy tables only once, even if they have many cells selected
-                    break;
             }
         }
     }

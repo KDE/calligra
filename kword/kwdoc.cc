@@ -1814,6 +1814,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
                 rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
                 KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
                 frame->load( frameElem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
+                frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 ); // make sure it's on top
                 fs->addFrame( frame, false );
                 if ( macroCmd )
                 {
@@ -2195,6 +2196,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch, QString::null );
     KWFrame *frame = new KWFrame(frameset, rect.x(), rect.y(), rect.width(), rect.height() );
+    frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 ); // make sure it's on top
     frameset->addFrame( frame );
     addFrameSet( frameset );
 
