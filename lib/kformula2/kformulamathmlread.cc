@@ -208,6 +208,102 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 
 	    docnode->appendChild(root);
 	}
+
+
+	else if (tag == "mtable") {
+	    type = 5;
+	    QString subtag;
+	    int rows=0,cols=0;
+	    QDomNode n = element->firstChild();
+	
+
+	    while (!n.isNull()) {
+		if (n.isElement()) {
+		    QDomElement e = n.toElement();
+            	    subtag = e.tagName().lower();
+		    if (subtag == "mtr")
+			{
+			     rows++;
+
+/* Determins the number of columns */
+
+    			    QDomNode cellnode = e.firstChild();
+    			    int cc=0;	    		
+
+			    while (!cellnode.isNull()) {
+				if (cellnode.isElement()) 
+				    cc++;  
+				
+				cellnode = cellnode.nextSibling();
+			    }
+		
+			    if(cc>cols) cols=cc;
+
+			}		    
+		}
+		n = n.nextSibling();
+	    }
+
+
+/*Again createing elements, I need to know the number of rows and cols to leave emty spaces*/
+
+
+	    n = element->firstChild();
+	    QDomElement matrix = doc->createElement("MATRIX");
+	    matrix.setAttribute("COLUMNS",cols);
+	    matrix.setAttribute("ROWS",rows);
+	    
+
+	    while (!n.isNull()) {
+		if (n.isElement()) {
+		    QDomElement e = n.toElement();
+            	    subtag = e.tagName().lower();
+		    if (subtag == "mtr") {
+
+    			QDomNode cellnode = e.firstChild();
+			int cc=0;	    		
+			while (!cellnode.isNull()) {
+			    if (cellnode.isElement()) {
+			        cc++;
+				QDomElement cell = doc->createElement("SEQUENCE");
+				QDomElement cellelement = cellnode.toElement();
+		  		processElement(&cellelement,doc,&cell);
+				matrix.appendChild(cell);				
+		
+			    }
+			    cellnode = cellnode.nextSibling();
+			}
+			
+			
+			/* Add empty elements */
+			for(;cc<cols;cc++) {
+			    QDomElement cell = doc->createElement("SEQUENCE");
+			    matrix.appendChild(cell);			
+			}
+			    
+
+
+		    }
+		}
+		n = n.nextSibling();
+	    }
+
+
+
+
+
+
+
+
+
+
+
+
+	    docnode->appendChild(matrix);
+	}
+
+
+
 	else if (tag == "msup" || tag == "msub") {
 	    type = 3;
 	    QDomNode n = element->firstChild();
@@ -246,6 +342,7 @@ bool MathMl2KFormula::processElement(QDomNode * node,QDomDocument * doc,
 	    }
 	    docnode->appendChild(root);
 	}
+
 	else if (tag == "munder" || tag == "mover") {
 	    type = 3;
 	    QDomNode n = element->firstChild();

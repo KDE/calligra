@@ -218,6 +218,12 @@ QString TextElement::toLatex()
 	char latin1 = character.latin1();
 	switch (latin1) {
 	    case 'a': return "\\alpha";	
+	    case 'b': return "\\beta";	
+	    case 'g': return "\\gamma";	
+	    case 'd': return "\\delta";	
+	    case 'e': return "\\varepsilon";	
+	    case 'z': return "\\zeta";	
+	    case 'h': return "\\eta";	
 	}
     }
      else

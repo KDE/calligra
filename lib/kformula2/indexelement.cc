@@ -1092,17 +1092,56 @@ ElementIndexPtr IndexElement::getIndex(int position)
 QString IndexElement::toLatex()
 {
     QString index="";
-    if(hasUpperLeft())
-        index+="^{"+upperLeft->toLatex()+"}";
-    if(hasLowerLeft())
-        index+="_{"+lowerLeft->toLatex()+"}";
+    
+    bool onlyRight=!hasUpperLeft() & !hasLowerLeft() & !hasUpperMiddle() & !hasLowerMiddle();    
 
-    index+="{"+content->toLatex()+"}";
+    if(onlyRight){
 
-    if(hasUpperRight())
-        index+="^{"+upperRight->toLatex()+"}";
-    if(hasLowerRight())
-        index+="_{"+lowerRight->toLatex()+"}";
+        index+="{"+content->toLatex()+"}";
+
+	if(hasUpperRight())
+            index+="^{"+upperRight->toLatex()+"}";
+        if(hasLowerRight())
+	    index+="_{"+lowerRight->toLatex()+"}";
+    }
+    else
+    {
 	
+	if(hasUpperMiddle()) {
+       	    index+="\\overset{";
+            index+="^{"+upperMiddle->toLatex()+"}";
+	    index+="}{";
+	
+	}
+
+	if(hasLowerMiddle()) {
+       	    index+="\\underset{";
+            index+="^{"+lowerMiddle->toLatex()+"}";
+	    index+="}{";
+	
+	}
+	
+	index+="\\sideset{";
+
+	if(hasUpperLeft())
+            index+="^{"+upperLeft->toLatex()+"}";
+
+	if(hasLowerLeft())
+    	    index+="_{"+lowerLeft->toLatex()+"}";
+
+	index+="}{";
+	
+	if(hasUpperRight())
+	    index+="^{"+upperRight->toLatex()+"}";
+	if(hasLowerRight())
+    	    index+="_{"+lowerRight->toLatex()+"}";
+	index+="}";
+
+        index+="{"+content->toLatex()+"}";
+	
+	if(hasUpperMiddle()) index+="}";
+	if(hasLowerMiddle()) index+="}";
+	
+    }	
     return index;
 }

@@ -20,6 +20,7 @@
 
 #include <iostream>
 
+#include <qpopupmenu.h>
 #include <qbuffer.h>
 #include <qcolor.h>
 #include <qimage.h>
@@ -77,12 +78,23 @@ bool KFormulaMimeSource::provides ( const char * format) const
 
 QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
 {
+QString fmt=format;  //case sensitive?
     
+    if(fmt=="text/plain")
+      fmt="text/x-tex";
 
-    if(QString(format)=="application/x-kformula")
-	return document.toCString();
+    if(fmt=="application/x-kformula")
+    {
+	QByteArray d=document.toCString();
+
+  	d.truncate(d.size()-1);
+
+	return d;
+    }
     else 
-    if(QString(format)=="image/ppm") {
+    if(fmt=="image/ppm") {
+	
+	cerr << "asking image" << endl;
         KFormulaDocument document;
         KFormulaContainer tmpContainer(&document);
 	FormulaCursor *c=tmpContainer.createCursor();
@@ -109,20 +121,26 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
      	
 	buff.close();
     	return d;
+
 	
     }
     else
-    if(QString(format)=="text/plain") {
+    if(fmt=="text/x-tex") {
+
         KFormulaDocument document;
         KFormulaContainer tmpContainer(&document);
 	FormulaCursor *c=tmpContainer.createCursor();
         tmpContainer.setActiveCursor(c);
         tmpContainer.paste();
-        delete c;
-        c = 0;
-    
-    	return tmpContainer.texString().utf8();
 
+        delete c;
+
+        c = 0;
+
+	QByteArray d=tmpContainer.texString().utf8();
+	d.truncate(d.size()-1);
+	
+    	return d;
     }
     else 
 	return QByteArray();
