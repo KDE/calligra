@@ -43,7 +43,10 @@ VObjectList::boundingBox() const
 		VObjectListIterator itr( *this );
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
-			m_boundingBox |= itr.current()->boundingBox();
+			if(m_boundingBox.isEmpty())
+				m_boundingBox = itr.current()->boundingBox();
+			else
+				m_boundingBox |= itr.current()->boundingBox();
 		}
 
 		m_boundingBoxIsInvalid = false;

@@ -339,7 +339,10 @@ VSegmentList::boundingBox() const
 		VSegment* segment = m_first;
 		while( segment )
 		{
-			m_boundingBox |= segment->boundingBox();
+			if(m_boundingBox.isEmpty())
+				m_boundingBox = segment->boundingBox();
+			else
+				m_boundingBox |= segment->boundingBox();
 			segment = segment->m_next;
 		}
 
