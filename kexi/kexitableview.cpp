@@ -499,6 +499,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	}
 	switch(columnType(col))
 	{
+		case QVariant::UInt:
 		case QVariant::Int:
 		{
 			int num = item->getValue(col).toInt();
@@ -517,16 +518,16 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //			p->drawRect(x - 1, 1, w - (x+x) - 1, h + 1);
 			break;
 		}
-		case QVariant::UInt:
 		case QVariant::Double:
 		{
+			QString f = KGlobal::_locale->formatNumber(item->getValue(col).toDouble());
 			if(item->isInsertItem() && m_pColumnModes->at(col) == 3)  //yes that isn't beautiful
 			{
 				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, "[Auto]");
 			}
 			else
 			{
-				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, item->getValue(col).toString());
+				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, f);
 			}
 			break;
 		}
@@ -562,6 +563,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 				p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
 				break;
 			}
+			break;
 		}
 		case QVariant::String:
 		default:
