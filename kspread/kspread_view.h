@@ -254,7 +254,7 @@ public slots:
     void verticalText(bool );
     void addModifyComment();
     void removeComment();
-    void showComment();
+    //void showComment();
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -460,7 +460,7 @@ private:
     KAction* m_firstLetterUpper;
     KToggleAction* m_verticalText;
     KAction* m_addModifyComment;
-    KAction* m_showComment;
+    //KAction* m_showComment;
     KAction* m_removeComment;
     KAction* m_insertCell;
     KAction* m_removeCell;

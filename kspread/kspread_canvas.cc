@@ -533,12 +533,26 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   int ypos, xpos;
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
-
+  QString comment;
   // Test whether the mouse is over some anchor
   KSpreadCell* cell = table->visibleCellAt( col, row );
   if ( cell )
+    {
     m_strAnchor = cell->testAnchor( _ev->pos().x() - xpos, _ev->pos().y() - ypos, this );
-
+    comment=cell->getComment();
+    }
+  int  u = cell->width( col, this );
+   if ( _ev->pos().x() >= xpos + u - 10 && _ev->pos().x() <= xpos + u  &&
+         _ev->pos().y() >= ypos  && _ev->pos().y() <= ypos +10 && !comment.isEmpty())
+         {
+         if(!labelComment)
+                showComment(row,col);
+         }
+    else if(labelComment)
+         {
+         delete labelComment;
+         labelComment=0;
+         }
   // Test whether we are in the lower right corner of the marker
   // if so => change the cursor
   {
@@ -1879,10 +1893,19 @@ void KSpreadCanvas::equalizeColumn()
 
 }
 
-void KSpreadCanvas::showComment()
+void KSpreadCanvas::showComment(int _row,int _col)
 {
-  QPainter painter;
-  KSpreadCell* cell = activeTable()->cellAt( marker() );
+QPainter painter;
+  int row=_row;
+  int col=_col;
+  //KSpreadCell* cell = activeTable()->cellAt( marker() );
+  if(_row==-1 && _col==-1)
+        {
+        row=markerRow();
+        col=markerColumn();
+        }
+
+  KSpreadCell* cell = activeTable()->cellAt( col,row );
   QString tmp;
   int pos=0;
   int pos1=0;
@@ -1896,7 +1919,6 @@ void KSpreadCanvas::showComment()
   }
   tmp=cell->getComment();
   int len=tmp.length();
-
   do
   {
     pos=tmp.find("\n",pos);
@@ -1918,11 +1940,14 @@ void KSpreadCanvas::showComment()
 
   labelComment=new QLabel(this);
   labelComment->setBackgroundColor( yellow ); // TODO find a better color (in the colorGroup)
-  int xpos = activeTable()->columnPos( markerColumn(), this );
-  int ypos = activeTable()->rowPos( markerRow(), this );
-  int w = cell->width( markerColumn(), this );
-  labelComment->setGeometry(xpos +w +10, ypos + 10,len+10, hei+10 ) ;
+  //int xpos = activeTable()->columnPos( markerColumn(), this );
+  //int ypos = activeTable()->rowPos( markerRow(), this );
+  //int w = cell->width( markerColumn(), this );
+  int xpos = activeTable()->columnPos( col, this );
+  int ypos = activeTable()->rowPos( row, this );
+  int w = cell->width( col, this );
   labelComment->setAlignment(Qt::AlignVCenter);
+  labelComment->setGeometry(xpos +w +10, ypos + 10,len+10, hei+10 ) ;
   labelComment->setText(tmp);
   labelComment->show();
 }

@@ -1004,78 +1004,42 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
        rightBorderWidth( _col, _row ) && m_bMultiRow )
   {
-    int lines = 1;
-    // copy of m_strOutText
+  // copy of m_strOutText
     QString o = m_strOutText;
-    // The stop character
-    o += "\n";
-    // current word
-    QString ws = "";
-    m_strOutText = "";
-    const char *p = o;
-    const char *start = o;
-    // Length of the current word
-    int wl = 0;
-    // Length of the current line
-    int l = 0;
-    int spacew = fm.width( ' ' );
-    // Loop over all chars
-    while ( *p )
-    {
-      // Separator ?
-      if ( *p == ' ' || *p == '\n' )
-      {
-	// Do we have to print a space or are we
-	// at the beginning of the line
-	int t = wl;
-	if ( start != o.data() )
-	  wl += spacew;
+    int lines = 1;
+    if(o.find(' ')!=-1)
+        {
 
-	// Does the new word fit in this line ?
-	if ( t > 0 && l + wl <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+        o+=' ';
+        int start=0;
+        int pos=0;
+        int pos1=0;
+        m_strOutText = "";
+        do
+          {
+          pos=o.find(' ',pos);
+          int width=fm.width(m_strOutText.mid(start,(pos1-start))+ o.mid(pos1,(pos-pos1)) );
+
+          if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
 	     rightBorderWidth( _col, _row ) )
-	{
-	  if ( start != o.data() )
-	    m_strOutText += " ";
-	  m_strOutText += ws;
-	  start = p + 1;
-	  l += t;
-	  wl = 0;
-	}
-	else // The word does not fit in the line
-	{
-	  // Did we print anything yet ?
-	  if ( start != o.data() )
-	  {
-	    // We printed something yet => start a new line
-	    lines++;
-	    // New line
-	    m_strOutText += "\n";
-	  }
-
-	  // Add the current word
-	  m_strOutText += ws;
-	  // Skip this word and the separator
-	  start = p + 1;
-	  l = wl;
-	  wl = 0;
-	}
-	ws = "";
-      }
-      // A usual character
-      else if ( *p != 0 )
-      {
-	// Add the character to the current line
-	char buf[2];
-	buf[0] = *p;
-	buf[1] = 0;
-	ws += buf;
-	wl += fm.width( *p );
-      }
-      p++;
-    }
-
-    m_iOutTextHeight *= lines;
+             {
+             m_strOutText+=o.mid(pos1,(pos-pos1));
+             pos1=pos;
+             }
+          else
+             {
+             if(o.at(pos1)==' ')
+                pos1=pos1+1;
+             m_strOutText+="\n"+o.mid(pos1,(pos-pos1));
+             start=pos1;
+             pos1=pos;
+             lines++;
+             }
+          pos++;
+          }
+        while(o.find(' ',pos)!=-1);
+        }
+        m_iOutTextHeight *= lines;
     m_iTextX = 0;
     // Calculate the maximum width
     QString t;
@@ -1098,6 +1062,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     while ( i != -1 );
   }
+
 
   switch( m_eAlignY )
   {

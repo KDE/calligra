@@ -264,7 +264,7 @@ public:
     void equalizeRow();
     void equalizeColumn();
 
-    void showComment();
+    void showComment(int row=-1,int col=-1);
 
     // Created by the view since it's layout is managed there,
     // but is in fact a sibling of the canvas, which needs to know about it.

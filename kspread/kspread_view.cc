@@ -276,7 +276,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_verticalText = new KToggleAction( i18n("Vertical text"),"vertical_text" ,0 ,actionCollection(), "verticaltext" );
     connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
     m_addModifyComment = new KAction( i18n("Add/modify comment..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
-    m_showComment = new KAction( i18n("Show comment"), 0, this, SLOT( showComment() ), actionCollection(), "showcomment" );
+    //m_showComment = new KAction( i18n("Show comment"), 0, this, SLOT( showComment() ), actionCollection(), "showcomment" );
     m_removeComment = new KAction( i18n("Remove comment"),"removecomment", 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
@@ -376,7 +376,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_borderColor = new KSelectColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
-    m_oszi = new KAction( i18n("Osciloscope..."), 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
+    m_oszi = new KAction( i18n("Osciloscope..."),"oscilloscope", 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
     m_scripts = new KScriptMenu( DCOPRef( kapp->dcopClient()->appId(), dcopObject()->objId() ), KSpreadFactory::global(),
 				 i18n("Scripts"), actionCollection(), "scripts" );
 
@@ -741,12 +741,12 @@ void KSpreadView::updateEditWidget()
 
     if( cell->getComment().isEmpty())
         {
-        m_showComment->setEnabled(FALSE);
+        //m_showComment->setEnabled(FALSE);
         m_removeComment->setEnabled(FALSE);
         }
     else
         {
-        m_showComment->setEnabled(TRUE);
+        //m_showComment->setEnabled(TRUE);
         m_removeComment->setEnabled(TRUE);
         }
     m_toolbarLock = FALSE;
@@ -1653,12 +1653,12 @@ void KSpreadView::removeComment()
   updateEditWidget();
 }
 
-void KSpreadView::showComment()
+/*void KSpreadView::showComment()
 {
   if ( !m_pTable )
 	return;
   m_pCanvas->showComment();
-}
+}*/
 
 void KSpreadView::consolidate()
 {
@@ -2089,7 +2089,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_addModifyComment->plug( m_pPopupMenu );
     if(!cell->getComment().isEmpty())
         {
-        m_showComment->plug( m_pPopupMenu );
+        //m_showComment->plug( m_pPopupMenu );
         m_removeComment->plug( m_pPopupMenu );
         }
 

@@ -647,3 +647,11 @@ example A5:B5
   Also allows spaces in table names - for when KScript supports it too.
   Merged changeNameCellRef and changeNameCellRef2 (added arg 'fullRowOrColumn')
   This fixes inserting/removing rows/columns/cells.
+
+2000-06-19-Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Rewrite multirow function, now it works
+-Now you can show comment when you move mouse on red triangle
+there is a bug in new qdom because when I try to load a comment
+qdom remove all '\n'
+=>showComment doesn't work and blocks kspread
