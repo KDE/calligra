@@ -18,11 +18,12 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <math.h>
 #include <kcolor.h>
 
 KColor::KColor()
 {
-  m_r = m_g = m_b = 0;
+  m_R = m_G = m_B = 0;
   RGBdirty = false;
   HSVdirty = LABdirty = CMYKdirty = true;
 }
@@ -32,36 +33,36 @@ KColor::KColor(int a, int b, int c, int d, colorModel m)
   switch (m)
 	{
 	case RGB:
-	  m_r = a;
-	  m_g = b;
-	  m_b = c;
+	  m_R = static_cast<unsigned char>(a);
+	  m_G = static_cast<unsigned char>(b);
+	  m_B = static_cast<unsigned char>(c);
 	  RGBdirty = false;
 	  HSVdirty = LABdirty = CMYKdirty = true;
 	  break;
 	case HSV:
-	  m_h = a;
-	  m_s = b;
-	  m_v = c;
+	  m_H = a;
+	  m_S = static_cast<unsigned char>(b);
+	  m_V = static_cast<unsigned char>(c);
 	  HSVdirty = false;
 	  RGBdirty = LABdirty = CMYKdirty = true;
 	  break;
 	case LAB:
-	  m_l = a;
-	  m_la = b;
-	  m_lb = c;
+	  m_L = a;
+	  m_a = b;
+	  m_b = c;
 	  LABdirty = false;
 	  RGBdirty = HSVdirty = CMYKdirty = true;
 	  break;
 	case CMYK:
-	  m_c = a;
-	  m_m = b;
-	  m_y = c;
-	  m_k = d;
+	  m_C = static_cast<unsigned char>(a);
+	  m_M = static_cast<unsigned char>(b);
+	  m_Y = static_cast<unsigned char>(c);
+	  m_K = static_cast<unsigned char>(d);
 	  CMYKdirty = false;
 	  RGBdirty = HSVdirty = LABdirty = true;
 	  break;
 	default:
-	  m_r = m_g = m_b = 0;
+	  m_R = m_G = m_B = 0;
 	  RGBdirty = false;
 	  HSVdirty = LABdirty = CMYKdirty = true;
 	}
@@ -69,127 +70,127 @@ KColor::KColor(int a, int b, int c, int d, colorModel m)
 
 KColor::~KColor() {}
 
-void KColor::setRGB (int r, int g, int b)
+void KColor::setRGB (uchar R, uchar G, uchar B)
 {
-  m_r = r;
-  m_g = g;
-  m_b = b;
+  m_R = R;
+  m_G = G;
+  m_B = B;
   RGBdirty = false;
   HSVdirty = LABdirty = CMYKdirty = true;
 }
 
-void KColor::setHSV (int h, int s, int v)
+void KColor::setHSV (int H, uchar S, uchar V)
 {
-  m_h = h;
-  m_s = s;
-  m_v = v;
+  m_H = H;
+  m_S = S;
+  m_V = V;
   HSVdirty = false;
   RGBdirty = LABdirty = CMYKdirty = true;
 }
 
-void KColor::setLAB (int l, int a, int b)
+void KColor::setLAB (int L, int a, int b)
 {
-  m_l = l;
-  m_la = a;
-  m_lb = b;
+  m_L = L;
+  m_a = a;
+  m_b = b;
   LABdirty = false;
   RGBdirty = HSVdirty = CMYKdirty = true;
 }
 
-void KColor::setCMYK (int c, int m, int y, int k)
+void KColor::setCMYK (uchar C, uchar M, uchar Y, uchar K)
 {
-  m_c = c;
-  m_m = m;
-  m_y = y;
-  m_k = k;
+  m_C = C;
+  m_M = M;
+  m_Y = Y;
+  m_K = K;
   CMYKdirty = false;
   RGBdirty = HSVdirty = LABdirty = true;
 }
 
-void KColor::rgb (int *r, int *g, int *b)
+void KColor::rgb (uchar *R, uchar *G, uchar *B)
 {
   if (RGBdirty)
 	calcRGB();
 
-  *r = m_r;
-  *g = m_g;
-  *b = m_b;
+  *R = m_R;
+  *G = m_G;
+  *B = m_B;
 }
 
-void KColor::hsv (int *h, int *s, int *v)
+void KColor::hsv (int *H, uchar *S, uchar *V)
 {
   if (HSVdirty)
   	calcHSV();
 
-  *h = m_h;
-  *s = m_s;
-  *v = m_v;
+  *H = m_H;
+  *S = m_S;
+  *V = m_V;
 }
 
-void KColor::lab (int *l, int *a, int *b)
+void KColor::lab (int *L, int *a, int *b)
 {
   if (LABdirty)
   	calcLAB();
-
-  *l = m_l;
-  *a = m_la;
-  *b = m_lb;
+  
+  *L = m_L;
+  *a = m_a;
+  *b = m_b;
 }
 
-void KColor::cmyk (int *c, int *m, int *y, int *k)
+void KColor::cmyk (uchar *C, uchar *M, uchar *Y, uchar *K)
 {
   if (CMYKdirty)
   	calcCMYK();
-
-  *c = m_c;
-  *m = m_m;
-  *y = m_y;
-  *k = m_k;
+  
+  *C = m_C;
+  *M = m_M;
+  *Y = m_Y;
+  *K = m_K;
 }
 
 void KColor::calcRGB()
 {
   if(!RGBdirty)
 	return;
-
+  
   if (!HSVdirty)
-	HSVtoRGB(m_h, m_s, m_v, &m_r, &m_g, &m_b);
+	HSVtoRGB(m_H, m_S, m_V, &m_R, &m_G, &m_B);
   else if (!LABdirty)
-	LABtoRGB(m_l, m_la, m_lb, &m_r, &m_g, &m_b);
+	LABtoRGB(m_L, m_a, m_b, &m_R, &m_G, &m_B);
   else if (!CMYKdirty)
-	CMYKtoRGB(m_c, m_m, m_y, m_k, &m_r, &m_g, &m_b);
+	CMYKtoRGB(m_C, m_M, m_Y, m_K, &m_R, &m_G, &m_B);
   else // should never happen!
-	  m_r = m_b = m_g = 0;
+	m_R = m_B = m_G = 0;
 }
 
 void KColor::calcHSV()
 {
   if(!HSVdirty)
 	return;
-
+  
   if(!RGBdirty)
-  	RGBtoHSV(m_r, m_g, m_b, &m_h, &m_s, &m_v);
+  	RGBtoHSV(m_R, m_G, m_B, &m_H, &m_S, &m_V);
   else if (!LABdirty)
-	LABtoHSV(m_l, m_la, m_lb, &m_h, &m_s, &m_v);
+	LABtoHSV(m_L, m_a, m_b, &m_H, &m_S, &m_V);
   else if (!CMYKdirty)
-	CMYKtoHSV(m_c, m_m, m_y, m_k, &m_h, &m_s, &m_v);
+	CMYKtoHSV(m_C, m_M, m_Y, m_K, &m_H, &m_S, &m_V);
   else // should never happen!
-	m_h = m_s = m_v = 0;
+	m_H = m_S = m_V = 0;
 }
 
 void KColor::calcLAB()
 {
   if(!LABdirty)
 	return;
-
+  
   if(!RGBdirty)
-  	RGBtoLAB(m_r, m_g, m_b, &m_l, &m_la, &m_lb);
+  	RGBtoLAB(m_R, m_G, m_B, &m_L, &m_a, &m_b);
   else if(!HSVdirty)
-  	HSVtoLAB(m_h, m_s, m_v, &m_l, &m_la, &m_lb);
+  	HSVtoLAB(m_H, m_S, m_V, &m_L, &m_a, &m_b);
   else if(!CMYKdirty)
-  	CMYKtoLAB(m_c, m_m, m_y, m_k, &m_l, &m_la, &m_lb);
+  	CMYKtoLAB(m_C, m_M, m_Y, m_K, &m_L, &m_a, &m_b);
   else // should never happen!
-	m_l = m_la = m_lb = 0;
+	m_L = m_a = m_b = 0;
 }
 
 void KColor::calcCMYK()
@@ -197,134 +198,236 @@ void KColor::calcCMYK()
   if(!CMYKdirty)
 	return;
   
-  if(!LABdirty)
-	LABtoCMYK(m_l, m_la, m_lb, &m_c, &m_m, &m_y, &m_k);
-  else if(!RGBdirty)
-  	RGBtoCMYK(m_r, m_g, m_b, &m_c, &m_m, &m_y, &m_k);
+  if(!RGBdirty)
+  	RGBtoCMYK(m_R, m_G, m_B, &m_C, &m_M, &m_Y, &m_K);
+  else if(!LABdirty)
+	LABtoCMYK(m_L, m_a, m_b, &m_C, &m_M, &m_Y, &m_K);
   else if(!HSVdirty)
-	HSVtoCMYK(m_h, m_s, m_v, &m_c, &m_m, &m_y, &m_k);
+	HSVtoCMYK(m_H, m_S, m_V, &m_C, &m_M, &m_Y, &m_K);
   else // should never happen!
-	m_c = m_m = m_y = m_k = 0;
+	m_C = m_M = m_Y = m_K = 0;
 }
 
-void KColor::RGBtoHSV(int r, int b, int g, int *h, int *s, int *v)
+void KColor::RGBtoHSV(uchar R, uchar G, uchar B, int *H, uchar *S, uchar *V)
 {
-  unsigned int max, min = r;
+  unsigned int max, min = R;
   unsigned char maxValue = 0; // r=0, g=1, b=2
   
   // find maximum and minimum RGB values
-  if (static_cast<unsigned int>(g) > max) { max = g; maxValue = 1; }
-  if (static_cast<unsigned int>(b) > max) { max = b; maxValue = 2; }
+  if (static_cast<unsigned int>(G) > max) { max = G; maxValue = 1; }
+  if (static_cast<unsigned int>(B) > max) { max = B; maxValue = 2; }
 
-  if (static_cast<unsigned int>(g) < min) min = g;
-  if (static_cast<unsigned int>(b) < min ) min = b;
+  if (static_cast<unsigned int>(G) < min) min = G;
+  if (static_cast<unsigned int>(B) < min ) min = B;
 
   int delta = max - min;
-  *v = max; // value
-  *s = max ? (510*delta+max)/(2*max) : 0; // saturation
+  *V = static_cast<unsigned char>(max); // value
+  *S = static_cast<unsigned char>(max ? (510*delta+max)/(2*max) : 0); // saturation
   
   // calc hue
-  if (*s == 0)
-	  *h = -1; // undefined hue
+  if (*S == 0)
+	  *H = -1; // undefined hue
   else 
 	{
 	  switch (maxValue)
 		{
 	    case 0: // red
-		  if (g >= b)
-			*h = (120*(g-b)+delta)/(2*delta);
+		  if (G >= B)
+			*H = (120*(G-B)+delta)/(2*delta);
 		  else
-		    *h = (120*(g-b+delta)+delta)/(2*delta) + 300;
+		    *H = (120*(G-B+delta)+delta)/(2*delta) + 300;
 		  break;
 	    case 1:	// green
-		  if (b > r)
-		    *h = 120 + (120*(b-r)+delta)/(2*delta);
+		  if (B > R)
+		    *H = 120 + (120*(B-R)+delta)/(2*delta);
 		  else
-		    *h = 60 + (120*(b-r+delta)+delta)/(2*delta);
+		    *H = 60 + (120*(B-R+delta)+delta)/(2*delta);
 		  break;
 	    case 2:	// blue
-		  if (r > g)
-		    *h = 240 + (120*(r-g)+delta)/(2*delta);
+		  if (R > G)
+		    *H = 240 + (120*(R-G)+delta)/(2*delta);
 		  else
-		    *h = 180 + (120*(r-g+delta)+delta)/(2*delta);
+		    *H = 180 + (120*(R-G+delta)+delta)/(2*delta);
 		  break;
 		}
     }
 }
 
-void KColor::RGBtoLAB(int r, int b, int g, int *l, int *la, int *lb)
+void KColor::RGBtoLAB(uchar R, uchar G, uchar B, int *L, int *a, int *b)
 {
-}
+  // Convert between RGB and CIE-Lab color spaces
+  // Uses ITU-R recommendation BT.709 with D65 as reference white.
+  // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
 
-void KColor::RGBtoCMYK(int r, int b, int g, int *c, int *m, int *y, int *k)
-{
-}
+  double X, Y, Z, fX, fY, fZ;
+  
+  X = 0.412453*R + 0.357580*G + 0.180423*B;
+  Y = 0.212671*R + 0.715160*G + 0.072169*B;
+  Z = 0.019334*R + 0.119193*G + 0.950227*B;
+  
+  X /= (255 * 0.950456);
+  Y /=  255;
+  Z /= (255 * 1.088754);
 
-void KColor::HSVtoRGB(int h, int s, int v, int *r, int *g, int *b)
-{
-  *r = *g = *b = v;
-
-  if (s != 0 && h != -1) // chromatic
+  if (Y > 0.008856)
 	{
-	  if (h >= 360) // angle > 360
-		h %= 360;
+	  fY = pow(Y, 1.0/3.0);
+	  *L = static_cast<int>(116.0*fY - 16.0 + 0.5);
+	}
+  else
+	{
+	  fY = 7.787*Y + 16.0/116.0;
+	  *L = static_cast<int>(903.3*Y + 0.5);
+	}
+  
+  if (X > 0.008856)
+	fX = pow(X, 1.0/3.0);
+  else
+	fX = 7.787*X + 16.0/116.0;
+  
+  if (Z > 0.008856)
+	fZ = pow(Z, 1.0/3.0);
+  else
+	fZ = 7.787*Z + 16.0/116.0;
+  
+  *a = static_cast<int>(500.0*(fX - fY) + 0.5);
+  *b = static_cast<int>(200.0*(fY - fZ) + 0.5);
+}
+
+void KColor::RGBtoCMYK(uchar R, uchar G, uchar B, uchar *C, uchar *M, uchar *Y, uchar *K)
+{
+  *C = 255-R;
+  *M = 255-G;
+  *Y = 255-B;
+  *K = 0;
+}
+
+void KColor::HSVtoRGB(int H, uchar S, uchar V, uchar *R, uchar *G, uchar *B)
+{
+  *R = *G = *B = V;
+
+  if (S != 0 && H != -1) // chromatic
+	{
+	  if (H >= 360) // angle > 360
+		H %= 360;
 	  
-	unsigned int f = h % 60;
-	h /= 60;
-	unsigned int p = static_cast<unsigned int>(2*v*(255-s)+255)/510;
+	unsigned int f = H % 60;
+	H /= 60;
+	unsigned int p = static_cast<unsigned int>(2*V*(255-S)+255)/510;
 	unsigned int q, t;
 	
-	if (h&1)
+	if (H&1)
 	  {
-	    q = static_cast<unsigned int>(2*v*(15300-s*f)+15300)/30600;
-	    switch(h)
+	    q = static_cast<unsigned int>(2*V*(15300-S*f)+15300)/30600;
+	    switch(H)
 		  {
-		  case 1: *r=static_cast<int>(q); *g=static_cast<int>(v), *b=static_cast<int>(p); break;
-		  case 3: *r=static_cast<int>(p); *g=static_cast<int>(q), *b=static_cast<int>(v); break;
-		  case 5: *r=static_cast<int>(v); *g=static_cast<int>(p), *b=static_cast<int>(q); break;
+		  case 1: *R=static_cast<int>(q); *G=static_cast<int>(V), *B=static_cast<int>(p); break;
+		  case 3: *R=static_cast<int>(p); *G=static_cast<int>(q), *B=static_cast<int>(V); break;
+		  case 5: *R=static_cast<int>(V); *G=static_cast<int>(p), *B=static_cast<int>(q); break;
 		  }
 	  }
 	else
 	  {
-	    t = static_cast<unsigned int>(2*v*(15300-(s*(60-f)))+15300)/30600;
-	    switch(h)
+	    t = static_cast<unsigned int>(2*V*(15300-(S*(60-f)))+15300)/30600;
+	    switch(H)
 		  {
-		  case 0: *r=static_cast<int>(v); *g=static_cast<int>(t), *b=static_cast<int>(p); break;
-		  case 2: *r=static_cast<int>(p); *g=static_cast<int>(v), *b=static_cast<int>(t); break;
-		  case 4: *r=static_cast<int>(t); *g=static_cast<int>(p), *b=static_cast<int>(v); break;
+		  case 0: *R=static_cast<int>(V); *G=static_cast<int>(t), *B=static_cast<int>(p); break;
+		  case 2: *R=static_cast<int>(p); *G=static_cast<int>(V), *B=static_cast<int>(t); break;
+		  case 4: *R=static_cast<int>(t); *G=static_cast<int>(p), *B=static_cast<int>(V); break;
 		  }
 	  }
-    }
+	}
 }
 
-void KColor::HSVtoLAB(int h, int s, int v, int *l, int *la, int *lb)
+void KColor::HSVtoLAB(int H, uchar S, uchar V, int *L, int *a, int *b)
 {
+  uchar R, G, B;
+  HSVtoRGB(H, S, V, &R, &G, &B);
+  RGBtoLAB(R, G, B, L, a, b);
 }
 
-void KColor::HSVtoCMYK(int h, int s, int v, int *c, int *m, int *y, int*k)
+void KColor::HSVtoCMYK(int H, uchar S, uchar V, uchar *C, uchar *M, uchar *Y, uchar*K)
 {
+  uchar R, G, B;
+  HSVtoRGB(H, S, V, &R, &G, &B);
+  RGBtoCMYK(R, G, B, C, M, Y, K);
 }
 
-void KColor::LABtoRGB(int l, int la, int lb, int *r, int *g, int *b)
+void KColor::LABtoRGB(int L, int a, int b, uchar *R, uchar *G, uchar *B)
 {
+  // Convert between RGB and CIE-Lab color spaces
+  // Uses ITU-R recommendation BT.709 with D65 as reference white.
+  // algorithm contributed by "Mark A. Ruzon" <ruzon@CS.Stanford.EDU>
+
+  double X, Y, Z, fX, fY, fZ;
+  int RR, GG, BB;
+
+  fY = pow((L + 16.0) / 116.0, 3.0);
+  if (fY < 0.008856)
+	fY = L / 903.3;
+  Y = fY;
+  
+  if (fY > 0.008856)
+	fY = pow(fY, 1.0/3.0);
+  else
+	fY = 7.787 * fY + 16.0/116.0;
+  
+  fX = a / 500.0 + fY;          
+  if (fX > 0.206893)
+	X = pow(fX, 3.0);
+  else
+	X = (fX - 16.0/116.0) / 7.787;
+  
+  fZ = fY - b /200.0;          
+  if (fZ > 0.206893)
+	Z = pow(fZ, 3.0);
+  else
+	Z = (fZ - 16.0/116.0) / 7.787;
+  
+  X *= (0.950456 * 255);
+  Y *= 255;
+  Z *= (1.088754 * 255);
+
+  RR = static_cast<int>(3.240479*X - 1.537150*Y - 0.498535*Z + 0.5);
+  GG = static_cast<int>(-0.969256*X + 1.875992*Y + 0.041556*Z + 0.5);
+  BB = static_cast<int>(0.055648*X - 0.204043*Y + 1.057311*Z + 0.5);
+  
+  *R = static_cast<unsigned char>(RR < 0 ? 0 : RR > 255 ? 255 : RR);
+  *G = static_cast<unsigned char>(GG < 0 ? 0 : GG > 255 ? 255 : GG);
+  *B = static_cast<unsigned char>(BB < 0 ? 0 : BB > 255 ? 255 : BB);
 }
 
-void KColor::LABtoHSV(int l, int la, int lb, int *h, int *s, int *v)
+void KColor::LABtoHSV(int L, int a, int b, int *H, uchar *S, uchar *V)
 {
+  uchar R, G, B;
+  LABtoRGB(L, a, b, &R, &G, &B);
+  RGBtoHSV(R, G, B, H, S, V);
 }
 
-void KColor::LABtoCMYK(int l, int la, int lb, int *c, int *m, int *y, int*k)
+void KColor::LABtoCMYK(int L, int a, int b, uchar *C, uchar *M, uchar *Y, uchar*K)
 {
+  uchar R, G, B;
+  LABtoRGB(L, a, b, &R, &G, &B);
+  RGBtoCMYK(R, G, B, C, M, Y, K);
 }
 
-void KColor::CMYKtoRGB(int c, int m, int y, int k, int *r, int *g, int *b)
+void KColor::CMYKtoRGB(uchar C, uchar M, uchar Y, uchar K, uchar *R, uchar *G, uchar *B)
 {
+  *R = static_cast<unsigned char>(255-(C+K));
+  *G = static_cast<unsigned char>(255-(M+K));
+  *B = static_cast<unsigned char>(255-(Y+K));
 }
 
-void KColor::CMYKtoHSV(int c, int m, int y, int k, int *h, int *s, int *v)
+void KColor::CMYKtoHSV(uchar C, uchar M, uchar Y, uchar K, int *H, uchar *S, uchar *V)
 {
+  uchar R, G, B;
+  CMYKtoRGB(C, M, Y, K, &R, &G, &B);
+  RGBtoHSV(R, G, B, H, S, V);
 }
 
-void KColor::CMYKtoLAB(int c, int m, int y, int k, int *l, int *la, int *lb)
+void KColor::CMYKtoLAB(uchar C, uchar M, uchar Y, uchar K, int *L, int *a, int *b)
 {
+  uchar R, G, B;
+  CMYKtoRGB(C, M, Y, K, &R, &G, &B);
+  RGBtoLAB(R, G, B, L, a, b);
 }
