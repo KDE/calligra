@@ -335,7 +335,7 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
     if ( mPainter.isActive() ) return FALSE;
 
     if ( mObjHandleTab ) delete[] mObjHandleTab;
-    mObjHandleTab = new ( WinObjHandle* )[ MAX_OBJHANDLE ];
+    mObjHandleTab = new WinObjHandle* [ MAX_OBJHANDLE ];
     for ( i=MAX_OBJHANDLE-1; i>=0; i-- )
         mObjHandleTab[ i ] = NULL;
 

@@ -71,7 +71,7 @@ KSpread::Range util_parseRange( const QString& _str )
   return r2;
 }
 
-KSpread::Range util_parseRange( const QString& _str, KSpreadMap* _map )
+KSpread::Range util_parseRange( const QString& _str, KSpreadMap*  )
 {
   KSpreadRange r( _str );
 
