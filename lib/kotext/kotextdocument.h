@@ -91,7 +91,7 @@ public:
     Qt3::QTextParag *drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
                                   KoZoomHandler* zoomHandler, bool onlyChanged = FALSE,
                                   bool drawCursor = FALSE, QTextCursor *cursor = 0,
-                                  bool resetChanged = TRUE, bool drawFormattingChars= FALSE );
+                                  bool resetChanged = TRUE, bool drawingMissingSpellLine = FALSE, bool drawFormattingChars= FALSE );
 
     /** Draw a single paragraph (used by drawWYSIWYG and by KWTextFrameSet::drawCursor).
      * Equivalent to QTextDocument::draw, but modified for wysiwyg */
@@ -100,12 +100,15 @@ public:
                            KoZoomHandler* zoomHandler,
                            bool drawCursor, QTextCursor *cursor,
                            bool resetChanged = TRUE,
+                           bool drawingMissingSpellLine = FALSE,
 			   bool drawFormattingChars = FALSE);
 
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagString */
     bool drawFormattingChars() const { return m_bDrawFormattingChars; }
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
     bool drawingShadow() const { return m_bDrawingShadow; }
+
+    bool drawingMissingSpellLine() const { return m_bDrawingMissingSpellLine; }
 
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
@@ -120,6 +123,7 @@ private:
     bool m_bDestroying;
     bool m_bDrawFormattingChars;
     bool m_bDrawingShadow;
+    bool m_bDrawingMissingSpellLine;
 };
 
 /**
