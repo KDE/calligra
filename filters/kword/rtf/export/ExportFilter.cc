@@ -28,7 +28,7 @@
 #include <qfileinfo.h>
 #include <qfontinfo.h>
 #include <qpicture.h>
-#include <qregion.h> // for 
+#include <qregion.h> // for #include <kdebugclasses.h>
 #include <qimage.h>
 
 #include <klocale.h>
@@ -683,14 +683,14 @@ bool RTFWorker::doCloseDocument(void)
     writeStyleData();
 
     *m_streamOut << m_textDocInfo;   // add document author, title, operator
-    *m_streamOut << "\\paperw" << m_paperWidth;
-    *m_streamOut << "\\paperh" << m_paperHeight;
+    *m_streamOut << "\\paperw" << int(m_paperWidth);
+    *m_streamOut << "\\paperh" << int(m_paperHeight);
     if (1==m_paperOrientation)
         *m_streamOut << "\\landscape";
-    *m_streamOut << "\\margl" << m_paperMarginLeft;
-    *m_streamOut << "\\margr" << m_paperMarginRight;
-    *m_streamOut << "\\margt" << m_paperMarginTop;
-    *m_streamOut << "\\margb" << m_paperMarginBottom;
+    *m_streamOut << "\\margl" << int(m_paperMarginLeft);
+    *m_streamOut << "\\margr" << int(m_paperMarginRight);
+    *m_streamOut << "\\margt" << int(m_paperMarginTop);
+    *m_streamOut << "\\margb" << int(m_paperMarginBottom);
     *m_streamOut << m_textPage;  // add page size, margins, etc.
     *m_streamOut << "\\widowctrl\\ftnbj\\aenddoc\\formshade \\fet0\\sectd\n";
     //*m_streamOut << "\\linex0\\endnhere\\plain";
