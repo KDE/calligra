@@ -44,8 +44,10 @@ class KoTextParag;
 class KoTextObject;
 class KPRLoadingInfo;
 
+
 class KOSpellConfig;
 class KoOasisContext;
+class KoXmlWriter;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -135,6 +137,7 @@ class KPresenterDoc : public KoDocument
     // save
     virtual QDomDocument saveXML();
     virtual bool completeSaving( KoStore* _store );
+    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
     // load
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, KoStore* store );

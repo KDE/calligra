@@ -68,6 +68,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koQueryTrader.h>
+#include <koxmlwriter.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -893,6 +894,12 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
                 return false;
         }
     }
+    return true;
+}
+
+bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    kdError() << "KPresenterDoc::saveOasis not implemented (for the moment :) )" << endl;
     return true;
 }
 
