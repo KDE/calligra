@@ -60,6 +60,9 @@ class WMLParser
     virtual bool doOpenCard( QString id, QString title );
     virtual bool doCloseCard();
     virtual bool doParagraph( QString, WMLFormatList, WMLLayout );
+    virtual bool doBeginTable();
+    virtual bool doTableCell( unsigned row, unsigned col );
+    virtual bool doEndTable();
 };
 
 #endif
