@@ -56,11 +56,12 @@ METASOURCES = AUTO
 messages: rc.cpp
 	rm -f tips.cpp
 	(cd data && $(PREPARETIPS) > ../tips.cpp)
-	LIST="data/*.rc `find . -name formeditor -prune , -name \*.ui`"; \
+	EXCLUDE="-path ./formeditor -o -path ./doc -o -path ./projectWizard -o -path ./filters -o -path ./plugins/kugar"; \
+	LIST="data/*.rc `find . \( \( $$EXCLUDE \) -prune -o -name \*.ui \) -type f`"; \
 	if test -n "$$LIST"; then \
 	 $(EXTRACTRC) $$LIST >> rc.cpp; \
 	fi; \
-	LIST=`find . -name formeditor -prune , -name \*.h -o -name \*.cpp`; \
+	LIST=`find . \( \( $$EXCLUDE \) -prune -o -name \*.h -o -name \*.cpp \) -type f`; \
 	if test -n "$$LIST"; then \
 	 $(XGETTEXT) $$LIST -o $(podir)/kexi.pot; \
 	fi
