@@ -11,7 +11,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_functions.cc kspread_dlg_csv.cc \
 	kspread_canvas.cc kspread_functions_helper.cc \
 	kspread_doc.cc kspread_numformat.cc \
-	kspread_value.cc \
+	kspread_value.cc kspread_style.cc kspread_style_manager.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_autofill.cc kspread_interpreter.cc \
 	kspread_functions_math.cc kspread_functions_conversion.cc \
@@ -22,7 +22,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_layout.cc kspread_map.cc kspread_changes.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_sheet.cc \
 	kspread_dlg_cons.cc kspread_util.cc kspread_functions_database.cc \
-        kspread_dlg_database.cc kspread_dlg_goalseek.cc \
+        kspread_dlg_database.cc kspread_dlg_goalseek.cc kspread_dlg_styles.cc \
 	kspread_editors.cc kspreadsubtotal.ui kspread_dlg_changes.cc \
 	kspread_dlg_reference.cc kspread_dlg_subtotal.cc \
 	kspread_dlg_comment.cc kspread_dlg_angle.cc kspread_dlg_goto.cc\
@@ -68,7 +68,7 @@ dummy.cc:
 
 noinst_HEADERS = kspread_doc.h kspread_functions.h kspread_functions_helper.h \
 	kspread_undo.h kspread_view.h kspread_tabbar.h \
-	kspread_autofill.h kspread_interpreter.h \
+	kspread_autofill.h kspread_interpreter.h kspread_style.h kspread_style_manager.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
 	kspread_dlg_scripts.h kspread_sheet.h kspread_cell.h \
 	kspread_dlg_cons.h kspread_cluster.h kspread_value.h \
@@ -76,7 +76,7 @@ noinst_HEADERS = kspread_doc.h kspread_functions.h kspread_functions_helper.h \
 	kspread_dlg_reference.h kspread_locale.h kspread_changes.h \
 	kspread_editors.h  kspread_dlg_formula.h kspread_dlg_changes.h \
 	kspread_dlg_reference.h kspread_dlg_area.h kspread_dlg_resize2.h\
-	kspread_dlg_special.h kspread_dlg_goto.h \
+	kspread_dlg_special.h kspread_dlg_goto.h kspread_dlg_styles.h \
 	kspread_dlg_sort.h kspread_dlg_anchor.h kspread_dlg_series.h \
 	kspread_dlg_preference.h kspread_dlg_angle.h \
 	kspread_factory.h kspread_handler.h \

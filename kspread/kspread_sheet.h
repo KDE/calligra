@@ -28,6 +28,7 @@ class KSpreadSheetPrint;
 class ColumnFormat;
 class RowFormat;
 class KSpreadCell;
+class KSpreadStyle;
 class KSpreadView;
 class KSpreadPoint;
 class KSpreadMap;
@@ -356,7 +357,7 @@ public:
      *
      * @return a non default KSpreadCell for the position.
      */
-    KSpreadCell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false );
+    KSpreadCell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false, KSpreadStyle * _style = 0 );
     KSpreadCell* nonDefaultCell( QPoint const & cellRef, bool scroll = false )
       { return nonDefaultCell( cellRef.x(), cellRef.y(), scroll ); }
 
@@ -476,6 +477,7 @@ public:
     void setSelectionPrecision( KSpreadSelection* selectionInfo, int _delta );
     void setSelectionPercent( KSpreadSelection* selectionInfo, bool b );
     void setSelectionMultiRow( KSpreadSelection* selectionInfo, bool enable );
+    void setSelectionStyle( KSpreadSelection* selectionInfo, KSpreadStyle * style );
 
     /**
     * setSelectionSize increase or decrease font size

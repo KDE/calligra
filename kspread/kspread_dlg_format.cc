@@ -17,10 +17,12 @@
 */
 
 #include "kspread_dlg_format.h"
-#include "kspread_view.h"
-#include "kspread_sheet.h"
-#include "kspread_undo.h"
 #include "kspread_doc.h"
+#include "kspread_sheet.h"
+#include "kspread_style.h"
+#include "kspread_style_manager.h"
+#include "kspread_undo.h"
+#include "kspread_view.h"
 
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
@@ -307,9 +309,9 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 	if ( e.tagName() == "cell" )
         {
 	    KSpreadSheet* table = m_view->activeTable();
-	    KSpreadFormat* cell = new KSpreadFormat( table );
+	    KSpreadFormat* cell = new KSpreadFormat( table, table->doc()->styleManager()->defaultStyle() );
 
-	    if ( !cell->load( e.namedItem("format").toElement(),Normal ) )
+	    if ( !cell->load( e.namedItem("format").toElement(), Normal ) )
 		return false;
 
 	    int row = e.attribute("row").toInt();

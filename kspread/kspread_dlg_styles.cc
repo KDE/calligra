@@ -1,0 +1,214 @@
+/* This file is part of the KDE project
+   Copyright (C) 2003 Norbert Andres, nandres@web.de
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#include <kcombobox.h>
+#include <kdebug.h>
+#include <klistview.h>
+#include <klocale.h>
+
+#include "kspread_canvas.h"
+#include "kspread_cell.h"
+#include "kspread_dlg_layout.h"
+#include "kspread_dlg_styles.h"
+#include "kspread_sheet.h"
+#include "kspread_style.h"
+#include "kspread_style_manager.h"
+#include "kspread_view.h"
+
+#include <qheader.h>
+#include <qlayout.h>
+
+StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
+  : QWidget( parent, name, fl )
+{
+  QVBoxLayout * layout = new QVBoxLayout( this, 11, 6, "layout"); 
+  
+  m_styleList = new KListView( this, "m_styleList" );
+  m_styleList->addColumn( i18n( "Styles" ) );
+  m_styleList->setResizeMode( KListView::AllColumns );
+  layout->addWidget( m_styleList );
+  
+  m_displayBox = new KComboBox( FALSE, this, "m_displayBox" );
+  layout->addWidget( m_displayBox );
+
+  m_styleList->header()->setLabel( 0, i18n( "Styles" ) );
+  m_displayBox->clear();
+  m_displayBox->insertItem( i18n( "All Styles" ) );
+  m_displayBox->insertItem( i18n( "Applied Styles" ) );
+  m_displayBox->insertItem( i18n( "Custom Styles" ) );
+  m_displayBox->insertItem( i18n( "Hierachical" ) );
+
+  resize( QSize(446, 384).expandedTo(minimumSizeHint()) );
+}
+
+StyleWidget::~StyleWidget()
+{
+}
+
+
+
+KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * manager, 
+                                  const char * name )
+  : KDialogBase( parent, name, true, "",
+                 KDialogBase::Ok | KDialogBase::Close | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3, 
+                 KDialogBase::Ok, false, KGuiItem( i18n( "&New" ) ), KGuiItem( i18n( "&Modify" ) ), KGuiItem( i18n( "&Delete" ) ) ),
+    m_view( parent ),
+    m_styleManager( manager ),
+    m_dlg( new StyleWidget( this ) )
+{
+  setCaption( i18n( "Style Manager" ) );
+  setButtonBoxOrientation( Vertical );
+  setMainWidget( m_dlg );
+
+  slotDisplayMode( 0 );
+  enableButton( KDialogBase::User3, false );
+
+  connect( m_dlg->m_styleList, SIGNAL( selectionChanged( QListViewItem * ) ), 
+           this, SLOT( slotSelectionChanged( QListViewItem * ) ) );
+  connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ), this, SLOT( slotDisplayMode( int ) ) );
+}
+
+KSpreadStyleDlg::~KSpreadStyleDlg()
+{
+}
+
+void KSpreadStyleDlg::slotDisplayMode( int mode )
+{
+  m_dlg->m_styleList->clear();
+  kdDebug() << "Mode: " << mode << endl;
+
+  if ( mode != 2 )
+    new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
+  
+  KSpreadStyleManager::Styles::iterator iter = m_styleManager->m_styles.begin();
+  KSpreadStyleManager::Styles::iterator end  = m_styleManager->m_styles.end();
+  
+  while ( iter != end )
+  {
+    KSpreadCustomStyle * styleData = iter.data();
+    if ( !styleData || styleData->name().isEmpty() )
+    {
+      ++iter;
+      continue;
+    }
+
+    if ( mode == 2 )
+    {
+      if ( styleData->type() == KSpreadStyle::CUSTOM )
+        new KListViewItem( m_dlg->m_styleList, styleData->name() );
+    }
+    else
+      new KListViewItem( m_dlg->m_styleList, styleData->name() );
+
+    ++iter;
+  }  
+}
+
+void KSpreadStyleDlg::slotOk()
+{
+  KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
+
+  if ( !item )
+  {
+    accept();
+    return;
+  }
+
+  KSpreadCustomStyle * s = 0;
+
+  QString name( item->text( 0 ) );
+  if ( name == i18n( "Default" ) )
+    s = m_styleManager->defaultStyle();
+  else
+    s = m_styleManager->style( name );
+
+  if ( !s )
+  {
+    accept();
+    return;
+  }
+
+  if ( m_view )
+  {
+    KSpreadSheet * sheet = m_view->activeTable();
+
+    if ( sheet )
+    {
+      m_view->doc()->emitBeginOperation(false);      
+      sheet->setSelectionStyle( m_view->selectionInfo(), s );
+      m_view->doc()->emitEndOperation();
+    }
+  }  
+
+  m_view->slotUpdateView( m_view->activeTable(), m_view->canvasWidget()->visibleCells() );
+  accept();
+}
+
+void KSpreadStyleDlg::slotUser1()
+{
+}
+
+void KSpreadStyleDlg::slotUser2()
+{
+  KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
+
+  if ( !item )
+    return;
+
+  KSpreadCustomStyle * s = 0;
+
+  QString name( item->text( 0 ) );
+  if ( name == i18n( "Default" ) )
+    s = m_styleManager->defaultStyle();
+  else
+    s = m_styleManager->style( name );
+
+  if ( !s )
+    return;
+
+  kdDebug() << "Showing dialog" << endl;
+
+  CellFormatDlg dlg( m_view, s, m_styleManager, m_view->doc() );
+}
+
+void KSpreadStyleDlg::slotUser3()
+{
+}
+
+void KSpreadStyleDlg::slotSelectionChanged( QListViewItem * item )
+{
+  if ( !item )
+    return;
+
+  KSpreadCustomStyle * style = m_styleManager->style( item->text( 0 ) );
+  if ( !style )
+  {
+    enableButton( KDialogBase::User3, false );
+    return;
+  }
+
+  if ( style->type() == KSpreadStyle::BUILTIN )
+    enableButton( KDialogBase::User3, false );
+  else
+    enableButton( KDialogBase::User3, true );
+}
+
+
+#include "kspread_dlg_styles.moc"
+

@@ -235,6 +235,7 @@ public slots:
     void adjust();
     void defaultSelection();
     void paperLayoutDlg();
+    void styleDialog();
     void definePrintRange();
     void resetPrintRange();
     void insertObject();
@@ -285,6 +286,8 @@ public slots:
     void multiRow( bool b );
     void precisionMinus();
     void precisionPlus();
+    void createStyleFromCell();
+    void styleSelected( const QString & );
     void setSelectionPrecision(int delta);
     void percent(bool b);
     void fontSelected( const QString &_font );
@@ -516,6 +519,8 @@ private:
     KToggleAction* m_underline;
     KToggleAction* m_strikeOut;
     KToggleAction* m_percent;
+    KSelectAction* m_selectStyle;
+    KAction* m_createStyle;
     KAction* m_precplus;
     KAction* m_precminus;
     KToggleAction* m_money;
@@ -551,6 +556,7 @@ private:
     KAction* m_undo;
     KAction* m_redo;
     KAction* m_paperLayout;
+    KAction* m_styleDialog;
     KAction* m_definePrintRange;
     KAction* m_resetPrintRange;
     KAction* m_insertFromDatabase;

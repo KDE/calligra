@@ -128,6 +128,7 @@ public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
 
     KSpreadCell( KSpreadSheet *_table, int _column, int _row );
+    KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row );
     /**
      * @see #tableDies
      */
@@ -423,8 +424,10 @@ public:
     QDate valueDate() const;
     QTime valueTime() const;
 
-    void setDate( QDate const & date, FormatType type );
-    void setTime( QTime const & time, FormatType type );
+    void setDate( QString const & dateString );
+    void setDate( QDate const & date );
+    void setTime( QTime const & time );
+    void setNumber( double number );
 
     const KSpreadValue value() const;
 

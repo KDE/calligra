@@ -97,16 +97,16 @@
     <Action name="hideColumn"/>
     <Action name="showColumn"/>
   </Menu>
-  <Action name="tableFormat"/>
   <Separator/>
-  <Action name="default"/>
-  <Action name="percent"/>
-  <Action name="precplus"/>
-  <Action name="precminus"/>
-  <Action name="money"/>
+  <Action name="tableFormat"/>
+  <Action name="styles"/>  
+  <Action name="stylemenu"/>
+  <Action name="createStyle"/>        
   <Separator/>
   <Action name="decreaseindent"/>
   <Action name="increaseindent"/>
+  <Action name="precplus"/>
+  <Action name="precminus"/>
   <Separator/>
   <Action name="changeangle"/>
  </Menu>

@@ -30,6 +30,7 @@
 #include <qregexp.h>
 #include <qlayout.h>
 
+#include <klineeditdlg.h>
 #include <kprocio.h>
 #include <kspell.h>
 #include <kspelldlg.h>
@@ -95,8 +96,11 @@
 #include "kspread_dlg_validity.h"
 #include "kspread_dlg_pasteinsert.h"
 #include "kspread_dlg_showColRow.h"
+#include "kspread_dlg_styles.h"
 #include "kspread_dlg_list.h"
 #include "kspread_undo.h"
+#include "kspread_style.h"
+#include "kspread_style_manager.h"
 #include "handler.h"
 #include "digest.h"
 
@@ -472,6 +476,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QStringList list = m_viewZoom->items();
     QString zoomStr = QString::number(m_pDoc->zoom() ) + '%';
     m_viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+
+    m_selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
+
     adjustActions( !m_pTable->isProtected() );
     adjustMapActions( !m_pDoc->map()->isProtected() );
 }
@@ -841,6 +848,19 @@ void KSpreadView::initializeGlobalOperationActions()
 
   m_createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this,
                                   SLOT( createTemplate() ), actionCollection(), "createTemplate" );
+
+  m_styleDialog = new KAction( i18n( "Style Manager..." ), 0, this, SLOT( styleDialog() ),
+                               actionCollection(), "styles" );
+  m_styleDialog->setToolTip( i18n( "Edit and organize cell styles" ) );
+
+  m_selectStyle = new KSelectAction( i18n( "St&yle" ), 0,
+                                     actionCollection(), "stylemenu" );
+  m_selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
+  connect( m_selectStyle, SIGNAL( activated( const QString & ) ), this, SLOT( styleSelected( const QString & ) ) );
+
+  m_createStyle = new KAction( i18n( "Create style from cell..." ), 0,
+                               this, SLOT( createStyleFromCell()), actionCollection(), "createStyle" );
+  m_createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell." ) );
 }
 
 
@@ -1178,7 +1198,7 @@ void KSpreadView::initializeTableActions()
                             actionCollection(), "hideTable" );
   m_hideTable->setToolTip(i18n("Hide the active sheet."));
 
-  m_tableFormat = new KAction( i18n("Sheet Style..."), 0, this,
+  m_tableFormat = new KAction( i18n("AutoFormat..."), 0, this,
                                SLOT( tableFormat() ), actionCollection(),
                                "tableFormat" );
   m_tableFormat->setToolTip(i18n("Set the worksheet formatting."));
@@ -1886,6 +1906,7 @@ void KSpreadView::initialPosition()
     m_tableFormat->setEnabled(false);
     m_sort->setEnabled(false);
     m_mergeCell->setEnabled(false);
+    m_createStyle->setEnabled(false);
 
     m_fillUp->setEnabled( false );
     m_fillRight->setEnabled( false );
@@ -4081,6 +4102,7 @@ void KSpreadView::adjustActions( bool mode )
   m_undo->setEnabled( mode );
   m_redo->setEnabled( mode );
   m_paperLayout->setEnabled( mode );
+  m_styleDialog->setEnabled( mode );
   m_definePrintRange->setEnabled( mode );
   m_resetPrintRange->setEnabled( mode );
   m_insertFromDatabase->setEnabled( mode );
@@ -4149,6 +4171,8 @@ void KSpreadView::adjustActions( bool mode )
   m_menuCalcSum->setEnabled( mode );
   m_menuCalcNone->setEnabled( mode );
   m_insertPart->setEnabled( mode );
+  m_createStyle->setEnabled( mode );
+  m_selectStyle->setEnabled( mode );
 
   m_tableFormat->setEnabled( false );
   m_sort->setEnabled( false );
@@ -5375,6 +5399,12 @@ void KSpreadView::layoutDlg()
                      selection.right(), selection.bottom() );
 }
 
+void KSpreadView::styleDialog()
+{
+  KSpreadStyleDlg dlg( this, m_pDoc->styleManager() );
+  dlg.exec();
+}
+
 void KSpreadView::paperLayoutDlg()
 {
     if ( m_pCanvas->editor() )
@@ -5556,6 +5586,68 @@ void KSpreadView::moneyFormat(bool b)
     m_pTable->setSelectionMoneyFormat( selectionInfo(), b );
   updateEditWidget();
   m_pDoc->emitEndOperation();
+}
+
+void KSpreadView::createStyleFromCell()
+{
+  if ( !m_pTable )
+    return;
+
+  QPoint p( m_selectionInfo->selection().topLeft() );
+  KSpreadCell * cell = m_pTable->nonDefaultCell( p.x(), p.y() );
+
+  bool ok = false;
+  QString styleName( "" );
+
+  while( true )
+  {
+    styleName = KLineEditDlg::getText( i18n( "Create style from cell..." ),
+                                               i18n( "Enter name:" ), styleName, &ok, this );
+    
+    if ( !ok ) // User pushed an OK button.
+      return;
+
+    styleName = styleName.stripWhiteSpace();
+
+    if ( styleName.length() < 1 )
+    {
+      KNotifyClient::beep();
+      KMessageBox::sorry( this, i18n( "The style name cannot be empty." ) );
+      continue;
+    }
+
+    if ( m_pDoc->styleManager()->style( styleName ) != 0 )
+    {
+      KNotifyClient::beep();
+      KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
+      continue;
+    }
+    break;
+  }
+
+  KSpreadCustomStyle * style = new KSpreadCustomStyle( cell->kspreadStyle(), styleName );
+
+  m_pDoc->styleManager()->m_styles[ styleName ] = style;
+  cell->setKSpreadStyle( style );
+  QStringList lst( m_selectStyle->items() );
+  lst.push_back( styleName );
+  m_selectStyle->setItems( lst );
+}
+
+void KSpreadView::styleSelected( const QString & style )
+{
+  if (m_pTable )
+  {
+    KSpreadStyle * s = m_pDoc->styleManager()->style( style );
+
+    if ( s )
+    {
+      kdDebug() << "Setting style" << endl;
+      m_pDoc->emitBeginOperation(false);      
+      m_pTable->setSelectionStyle( selectionInfo(), s );
+      m_pDoc->emitEndOperation();
+    }
+  }  
 }
 
 void KSpreadView::precisionPlus()
@@ -5829,7 +5921,9 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
       m_insertChartFrame->setEnabled( !simpleSelection );
       m_sortDec->setEnabled( !simpleSelection );
       m_sortInc->setEnabled( !simpleSelection);
+      m_createStyle->setEnabled( simpleSelection ); // just from one cell
     }
+    m_selectStyle->setCurrentItem( -1 );
     resultOfCalc();
     // Send some event around. This is read for example
     // by the calculator plugin.

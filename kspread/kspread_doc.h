@@ -26,6 +26,7 @@ class KSpreadUndo;
 class KSpreadView;
 class KSpreadMap;
 class KSpreadSheet;
+class KSpreadStyleManager;
 
 class KoStore;
 
@@ -106,6 +107,7 @@ public:
   void addTable( KSpreadSheet *_table );
 
   KSpreadMap *map() const { return m_pMap; }
+  KSpreadStyleManager * styleManager() const { return m_pStyleManager; }
 
   /**
    * @return the locale which was used for creating this document.
@@ -444,6 +446,11 @@ protected:
    * Pointer to the map that holds all the tables.
    */
   KSpreadMap *m_pMap;
+
+  /**
+   * Pointer to the manager of the styles
+   */
+  KSpreadStyleManager * m_pStyleManager;
 
   /**
    * This variable is used to give every KSpreadSheet a unique default name.

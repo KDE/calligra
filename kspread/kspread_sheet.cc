@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998,  1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1999 - 2003 The KSpread Team
+                             www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,6 +55,8 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_canvas.h"
+#include "kspread_style.h"
+#include "kspread_style_manager.h"
 
 #include "KSpreadTableIface.h"
 
@@ -227,13 +231,13 @@ KSpreadSheet::KSpreadSheet( KSpreadMap *_map, const QString &tableName, const ch
 
   m_id = s_id++;
   s_mapTables->insert( m_id, this );
+  m_pMap = _map;
+  m_pDoc = _map->doc();
 
-  m_defaultFormat = new KSpreadFormat( this );
+  m_defaultFormat = new KSpreadFormat( this, m_pDoc->styleManager()->defaultStyle() );
 
   m_emptyPen.setStyle( Qt::NoPen );
 
-  m_pMap = _map;
-  m_pDoc = _map->doc();
   m_dcop = 0;
   dcopObject();
   m_lstCellBindings.setAutoDelete( FALSE );
@@ -246,7 +250,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap *_map, const QString &tableName, const ch
   m_rows.setAutoDelete( true );
   m_columns.setAutoDelete( true );
 
-  m_pDefaultCell = new KSpreadCell( this, 0, 0 );
+  m_pDefaultCell = new KSpreadCell( this, m_pDoc->styleManager()->defaultStyle(), 0, 0 );
   m_pDefaultRowFormat = new RowFormat( this, 0 );
   m_pDefaultRowFormat->setDefault();
   m_pDefaultColumnFormat = new ColumnFormat( this, 0 );
@@ -599,7 +603,7 @@ RowFormat* KSpreadSheet::nonDefaultRowFormat( int _row, bool force_creation )
 }
 
 KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
-                                           bool _scrollbar_update )
+                                           bool _scrollbar_update, KSpreadStyle * _style )
 {
   if ( _scrollbar_update && m_bScrollbarUpdates )
   {
@@ -607,12 +611,17 @@ KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
     checkRangeVBorder( _row );
   }
 
-  KSpreadCell *p = m_cells.lookup( _column, _row );
+  KSpreadCell * p = m_cells.lookup( _column, _row );
   if ( p != 0L )
     return p;
 
-  KSpreadCell *cell = new KSpreadCell( this, _column, _row );
-  cell->copy( *m_pDefaultCell );
+  KSpreadCell * cell = 0;
+
+  if ( _style )
+    cell = new KSpreadCell( this, _style, _column, _row );
+  else
+    cell = new KSpreadCell( this, _column, _row );
+
   insertCell( cell );
 
   return cell;
@@ -939,6 +948,8 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
 
   // create cells in rows if complete columns selected
   KSpreadCell * cell;
+  KSpreadStyle * s = doc()->styleManager()->defaultStyle();
+
   if ( !worker.type_B && selected && util_isColumnSelected(selection) )
   {
     for ( RowFormat * rw = m_rows.first(); rw; rw = rw->next() )
@@ -947,7 +958,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
       {
         for ( int col = left; col <= right; ++col )
         {
-          cell = nonDefaultCell( col, rw->row() );
+          cell = nonDefaultCell( col, rw->row(), false, s );
         }
       }
     }
@@ -1036,7 +1047,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
         {
           for ( int i = left; i <= right; ++i )
           {
-            cell = nonDefaultCell( i, rw->row() );
+            cell = nonDefaultCell( i, rw->row(), false, s );
             worker.doWork( cell, false, i, rw->row() );
           }
         }
@@ -1056,11 +1067,14 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
         {
           if ( cell == m_pDefaultCell && worker.create_if_default )
           {
-            cell = new KSpreadCell( this, x, y );
+            cell = new KSpreadCell( this, s, x, y );
             insertCell( cell );
           }
           if ( cell != m_pDefaultCell )
+          {
+            kdDebug() << "not default" << endl;
             worker.doWork( cell, true, x, y );
+          }
         }
       }
     }
@@ -1625,13 +1639,14 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
 
   /* now we're going to actually loop through and set the values */
   double incr;
+  KSpreadStyle * s = doc()->styleManager()->defaultStyle();
   if (step >= 0 && start < end)
   {
     for ( incr = start; incr <= end; )
     {
-      cell = nonDefaultCell( x, y );
+      cell = nonDefaultCell( x, y, false, s );
 
-      if (cell->isObscuringForced())
+      if ( cell->isObscuringForced() )
       {
         cell = cell->obscuringCells().first();
       }
@@ -1644,7 +1659,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
                                      cell->getFormatString( x, y ), 
                                      cell->text(), !cell->isEmpty() );
       }
-      cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
+      cell->setNumber( incr );
       if (mode == Column)
       {
         ++y;
@@ -1683,7 +1698,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
   {
     for ( incr = start; incr >= end; )
     {
-      cell = nonDefaultCell( x, y );
+      cell = nonDefaultCell( x, y, false, s );
 
       if (cell->isObscuringForced())
       {
@@ -1698,7 +1713,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
                                      cell->text() );
       }
       //      cell->setCellText(cellText.setNum( incr ));
-      cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
+      cell->setNumber( incr );
       if (mode == Column)
       {
         ++y;
@@ -1736,7 +1751,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
   {
     for ( incr = start; incr <= end; )
     {
-      cell = nonDefaultCell( x, y );
+      cell = nonDefaultCell( x, y, false, s );
 
       if (cell->isObscuringForced())
       {
@@ -1751,7 +1766,7 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
                                      cell->text() );
       }
       //cell->setCellText(cellText.setNum( incr ));
-      cell->setCellText(m_pDoc->locale()->formatNumber(incr, 9));
+      cell->setNumber( incr );
       if (mode == Column)
       {
         ++y;
@@ -4195,9 +4210,11 @@ void KSpreadSheet::setSelectionMultiRow( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionAlignWorker : public KSpreadSheet::CellWorkerTypeA {
+struct SetSelectionAlignWorker 
+  : public KSpreadSheet::CellWorkerTypeA 
+{
     KSpreadFormat::Align _align;
-    SetSelectionAlignWorker( KSpreadFormat::Align align ) : _align( align ) { }
+    SetSelectionAlignWorker( KSpreadFormat::Align align ) : _align( align ) {}
     QString getUndoTitle() { return i18n("Change Horizontal Alignment"); }
     bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PAlign ) );
@@ -4235,7 +4252,11 @@ void KSpreadSheet::setSelectionAlign( KSpreadSelection* selectionInfo,
 
 struct SetSelectionAlignYWorker : public KSpreadSheet::CellWorkerTypeA {
     KSpreadFormat::AlignY _alignY;
-    SetSelectionAlignYWorker( KSpreadFormat::AlignY alignY ) : _alignY( alignY ) { }
+    SetSelectionAlignYWorker( KSpreadFormat::AlignY alignY ) 
+      : _alignY( alignY ) 
+    {
+      kdDebug() << "AlignY: " << _alignY << endl;
+    }
     QString getUndoTitle() { return i18n("Change Vertical Alignment"); }
     bool testCondition( RowFormat* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PAlignY ) );
@@ -4251,11 +4272,13 @@ struct SetSelectionAlignYWorker : public KSpreadSheet::CellWorkerTypeA {
 	c->clearNoFallBackProperties( KSpreadCell::PAlignY );
     }
     bool testCondition( KSpreadCell* cell ) {
+        kdDebug() << "testCondition" << endl;
 	return ( !cell->isObscuringForced() );
     }
     void doWork( KSpreadCell* cell, bool cellRegion, int, int ) {
 	if ( cellRegion )
 	    cell->setDisplayDirtyFlag();
+        kdDebug() << "cell->setAlignY: " << _alignY << endl;
 	cell->setAlignY( _alignY );
 	if ( cellRegion )
 	    cell->clearDisplayDirtyFlag();
@@ -4266,6 +4289,7 @@ struct SetSelectionAlignYWorker : public KSpreadSheet::CellWorkerTypeA {
 void KSpreadSheet::setSelectionAlignY( KSpreadSelection* selectionInfo,
                                        KSpreadFormat::AlignY _alignY )
 {
+  kdDebug() << "setSelectionAlignY: " << _alignY << endl;
     SetSelectionAlignYWorker w( _alignY );
     workOnCells( selectionInfo, w );
 }
@@ -4299,8 +4323,55 @@ void KSpreadSheet::setSelectionPrecision( KSpreadSelection* selectionInfo,
     workOnCells( selectionInfo, w );
 }
 
+struct SetSelectionStyleWorker : public KSpreadSheet::CellWorkerTypeA 
+{
+  KSpreadStyle * m_style;
+  SetSelectionStyleWorker( KSpreadStyle * style ) 
+    : m_style( style ) 
+  {
+  }
 
-struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA {
+  QString getUndoTitle() 
+  { 
+    return i18n("Apply Style"); 
+  }
+
+  void doWork( RowFormat* rw ) 
+  {
+    rw->setKSpreadStyle( m_style );
+  }
+
+  void doWork( ColumnFormat* cl ) 
+  {
+    cl->setKSpreadStyle( m_style );
+  }
+
+  bool testCondition( KSpreadCell* cell ) 
+  {
+    return ( !cell->isObscuringForced() && cell->kspreadStyle() != m_style );
+  }
+
+  void doWork( KSpreadCell* cell, bool cellRegion, int, int ) 
+  {
+    if ( cellRegion )
+      cell->setDisplayDirtyFlag();
+
+    cell->setKSpreadStyle( m_style );
+
+    if ( cellRegion )
+      cell->clearDisplayDirtyFlag();
+  }
+};
+
+
+void KSpreadSheet::setSelectionStyle( KSpreadSelection * selectionInfo, KSpreadStyle * style )
+{
+    SetSelectionStyleWorker w( style );
+    workOnCells( selectionInfo, w );
+}
+
+struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA 
+{
     bool b;
     KSpreadDoc *m_pDoc;
     SetSelectionMoneyFormatWorker( bool _b,KSpreadDoc* _doc ) : b( _b ), m_pDoc(_doc) { }
@@ -4864,12 +4935,12 @@ void KSpreadSheet::setConditional( KSpreadSelection* selectionInfo,
   int b = selection.bottom();
 
   KSpreadCell * cell;
-
+  KSpreadStyle * s = doc()->styleManager()->defaultStyle();
   for (int x = l; x <= r; ++x)
   {
     for (int y = t; y <= b; ++y)
     {
-      cell = nonDefaultCell( x, y );
+      cell = nonDefaultCell( x, y, false, s );
       cell->setConditionList(newConditions);
       cell->setDisplayDirtyFlag();
     }

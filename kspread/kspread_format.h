@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999  Torben Weis <weis@kde.org>
+   Copyright (C) 2000 - 2003 The KSpread Team
+                              www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,6 +38,7 @@ class DCOPObject;
 
 class KLocale;
 class KSpreadCurrency;
+class KSpreadStyle;
 
 /**
  */
@@ -43,7 +46,7 @@ class KSpreadFormat
 {
 public:
     enum Align { Left = 1, Center = 2, Right = 3, Undefined = 4 };
-    enum AlignY { Top = 1, Middle = 2, Bottom =3 };
+    enum AlignY { Top = 1, Middle = 2, Bottom = 3 };
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
     enum FloatColor { NegRed = 1, AllBlack = 2, NegBrackets = 3, NegRedBrackets = 4 };
     enum FormatType { Number=0, Text_format=5, Money=10, Percentage=25, Scientific=30,
@@ -98,10 +101,13 @@ public:
       QString symbol;
     };
 
-    KSpreadFormat( KSpreadSheet *_sheet );
+    /**
+     * don't pass in 0 for _style: only if you copy another format on this directly after...
+     */ 
+    KSpreadFormat( KSpreadSheet * _sheet, KSpreadStyle * _style );
     virtual ~KSpreadFormat();
 
-    void copy( const KSpreadFormat &_l );
+    void copy( const KSpreadFormat & _l );
 
     void defaultStyleFormat();
 
@@ -157,6 +163,9 @@ public:
 
     static void setGlobalColWidth( double width );
     static void setGlobalRowHeight( double height );
+
+
+    virtual void setKSpreadStyle( KSpreadStyle * style );
 
     /**
      * sets the format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
@@ -237,6 +246,7 @@ public:
     virtual void setHideAll( bool _b );
     virtual void setHideFormula( bool _b );
 
+    virtual void setCurrency( Currency const & c );
     virtual void setCurrency( int type, QString const & symbol );
 
     ////////////////////////////////
@@ -347,7 +357,7 @@ public:
     virtual bool isHideFormula( int col, int row) const;
     virtual bool isProtected( int col, int row ) const;
 
-
+    KSpreadStyle * kspreadStyle() const { return m_pStyle; } 
     KSpreadSheet* table() { return m_pTable; }
     const KSpreadSheet* table() const { return m_pTable; }
 
@@ -361,9 +371,8 @@ public:
      */
     virtual bool currencyInfo( Currency & currency) const;
 
-    QString getCurrencySymbol() const { return m_currency.symbol; }
-
-    QFont font() const { return m_textFont; }
+    QString getCurrencySymbol() const;
+    QFont font() const;
 
 protected:
     virtual const QPen& rightBorderPen() const;
@@ -388,97 +397,8 @@ protected:
      */
     virtual bool isDefault() const;
 
-    /**
-     * Format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
-     */
-    QString m_strFormat;
-
-    /**
-     * Alignment of the text
-     */
-    Align m_eAlign;
-    /**
-     * Aligment of the text at top middle or bottom
-     */
-    AlignY m_eAlignY;
-
-    /**
-     * The font used to draw the text
-     */
-    QFont m_textFont;
-    /**
-     * The pen used to draw the text
-     */
-    QPen m_textPen;
-    /**
-     * The background color
-     */
-    QColor m_bgColor;
-
-    /**
-     * The pen used to draw the right border
-     */
-    QPen m_rightBorderPen;
-
-    /**
-     * The pen used to draw the bottom border
-     */
-    QPen m_bottomBorderPen;
-
-    /**
-     * The pen used to draw the left border
-     */
-    QPen m_leftBorderPen;
-
-    /**
-     * The pen used to draw the top border
-     */
-    QPen m_topBorderPen;
-
-    /**
-     * The pen used to draw the diagonal
-     */
-    QPen m_fallDiagonalPen;
-    /**
-     * The pen used to draw the the diagonal which go up
-     */
-    QPen m_goUpDiagonalPen;
-
-    /**
-     * The brush used to draw the background.
-     */
-    QBrush m_backGroundBrush;
-
-    /**
-     * The precision of the floating point representation
-     * If precision is -1, this means that no precision is specified.
-     */
-    int m_iPrecision;
-    /**
-     * The prefix of a numeric value ( for example "$" )
-     * May be empty.
-     */
-    QString m_strPrefix;
-    /**
-     * The postfix of a numeric value ( for example "DM" )
-     * May be empty.
-     */
-    QString m_strPostfix;
-    /**
-     * The way of formatting a floating point value
-     */
-    FloatFormat m_eFloatFormat;
-    /**
-     * The color format of a floating point value
-     */
-    FloatColor m_eFloatColor;
-
-    /**
-     * Used to display 0.15 as 15% for example.
-     */
-    double m_dFactor;
-
-    KSpreadSheet *m_pTable;
+    KSpreadSheet * m_pTable;
+    KSpreadStyle * m_pStyle;
 
     uint m_mask;
 
@@ -490,29 +410,10 @@ protected:
 
     Q_UINT32 m_flagsMask;
 
-    FormatType m_eFormatType;
-
-    /**
-    * give angle of rotation
-    * default is null
-    */
-    int m_rotateAngle;
-
      /**
      * Stores a comment string.
      */
     QString m_strComment;
-
-    /**
-    * Give indent
-    */
-    double m_dIndent;
-
-    /**
-     * Currency information:
-     * about which currency from which country
-     */
-    Currency m_currency;
 
 private:
     void setProperty( Properties p );
@@ -520,13 +421,13 @@ private:
     /**
      * Currently just used for better abstraction.
      */
-    const QPen& leftBorderPen() const;
-    const QPen& topBorderPen() const;
-    const QPen& fallDiagonalPen() const;
-    const QPen& goUpDiagonalPen() const;
-    const QBrush& backGroundBrush() const;
-    const QFont& textFont() const;
-    const QPen& textPen() const;
+    const QPen & leftBorderPen() const;
+    const QPen & topBorderPen() const;
+    const QPen & fallDiagonalPen() const;
+    const QPen & goUpDiagonalPen() const;
+    const QBrush & backGroundBrush() const;
+    const QFont & textFont() const;
+    const QPen  & textPen() const;
 };
 
 /**
@@ -534,7 +435,7 @@ private:
 class RowFormat : public KSpreadFormat
 {
 public:
-    RowFormat( KSpreadSheet *_sheet, int _row );
+    RowFormat( KSpreadSheet * _sheet, int _row );
     ~RowFormat();
 
     virtual DCOPObject* dcopObject();

@@ -47,6 +47,10 @@ class QListBox;
 class QCheckBox;
 class KColorButton;
 class QComboBox;
+class KComboBox;
+
+class KSpreadCustomStyle;
+class KSpreadStyleManager;
 
 enum BorderType
 {
@@ -106,6 +110,25 @@ protected:
     bool undefined;
 };
 
+class GeneralTab : public QWidget
+{
+  Q_OBJECT
+
+ public:
+  GeneralTab( QWidget * parent, CellFormatDlg * _dlg );
+  ~GeneralTab();
+
+  bool apply( KSpreadCustomStyle * style );
+
+ private:
+  CellFormatDlg * m_dlg;
+  KComboBox     * m_parentBox;
+  KLineEdit     * m_nameEdit;
+
+  QString m_name;
+  QString m_parent;
+};
+
 /**
  */
 class CellFormatPageFont : public QWidget
@@ -114,6 +137,7 @@ class CellFormatPageFont : public QWidget
 public:
     CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg );
 
+    void apply( KSpreadCustomStyle * style );
     void apply( KSpreadCell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
@@ -185,6 +209,7 @@ class CellFormatPageMisc : public QWidget
 public:
     CellFormatPageMisc( QWidget *parent, CellFormatDlg *_dlg );
 
+    void apply( KSpreadCustomStyle * style );
     void apply( KSpreadCell *_cell );
     void applyColumn();
     void applyRow();
@@ -217,6 +242,7 @@ class CellFormatPageFloat : public QWidget
 public:
     CellFormatPageFloat( QWidget *parent, CellFormatDlg *_dlg );
 
+    void apply( KSpreadCustomStyle * style );
     void apply( KSpreadCell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
@@ -266,6 +292,7 @@ class CellFormatPagePosition : public QWidget
 public:
     CellFormatPagePosition( QWidget *parent, CellFormatDlg *_dlg );
 
+    void apply( KSpreadCustomStyle * style );
     void apply( KSpreadCell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
@@ -356,7 +383,6 @@ public:
     void applyOutline();
     void invertState(KSpreadBorderButton *_button);
     QPixmap paintFormatPixmap(PenStyle _style);
-    void applyOutline(KSpreadFormat * format);
 
 public slots:
     void changeState(KSpreadBorderButton *_this);
@@ -440,6 +466,7 @@ class CellFormatPagePattern : public QWidget
 public:
     CellFormatPagePattern( QWidget *parent, CellFormatDlg *_dlg );
 
+    void apply( KSpreadCustomStyle * style );
     void apply( KSpreadCell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
@@ -488,6 +515,7 @@ class CellFormatPageProtection : public QWidget
   CellFormatPageProtection( QWidget * parent, CellFormatDlg * _dlg );
   ~CellFormatPageProtection();
   
+  void apply( KSpreadCustomStyle * style );
   void apply( KSpreadCell  * _cell );
   void apply( ColumnFormat * _col );
   void apply( RowFormat    * _row );
@@ -515,7 +543,9 @@ public:
     /**
      * Create a format dlg for the rectangular area in '_table'.
      */
-    CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table, int _left, int _top, int _right, int _bottom );
+    CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table, int _left, int _top, int _right, int _bottom );
+    CellFormatDlg( KSpreadView * _view, KSpreadCustomStyle * _style, KSpreadStyleManager * _manager,
+                   KSpreadDoc * doc );
 
     ~CellFormatDlg();
 
@@ -532,11 +562,15 @@ public:
      */
     int exec();
 
-    KSpreadSheet* getTable() const { return m_table; }
+    KSpreadDoc * getDoc() const { return m_doc; }
+    KSpreadSheet * getTable() const { return m_table; }
+    KSpreadCustomStyle * getStyle() const { return m_style; }
+    KSpreadStyleManager * getStyleManager() const { return m_styleManager; }
 
     bool isSingleCell() { return ( left == right && top == bottom ); }
+    bool checkCircle( QString const & name, QString const & parent );
 
-    KLocale* locale()const {return m_pView->doc()->locale();}
+    KLocale * locale() const { return m_pView->doc()->locale(); }
 
     struct CellBorderFormat
     {
@@ -586,6 +620,8 @@ public:
     QString actionText;
     KSpreadCell::Align alignX;
     KSpreadCell::AlignY alignY;
+    QString styleName;
+    QString styleParent;
 
     bool bMultiRow;
     bool bVerticalText;
@@ -635,7 +671,6 @@ public:
 
 public slots:
     void slotApply();
-    void slotDefault();
 
 protected:
 
@@ -645,6 +680,7 @@ protected:
     QPixmap* paintFormatPixmap( const char *_string1, const QColor & _color1,
 				const char *_string2, const QColor & _color2 );
 
+    GeneralTab * generalPage;
     CellFormatPageFloat *floatPage;
     CellFormatPageBorder *borderPage;
     CellFormatPageMisc *miscPage;
@@ -654,11 +690,14 @@ protected:
     CellFormatPageProtection *protectPage;
     QTabDialog *tab;
 
-    /**
-     * The table that opened this dlg.
-     */
+    KSpreadDoc   * m_doc;
     KSpreadSheet * m_table;
     KSpreadView  * m_pView;
+    KSpreadCustomStyle * m_style;
+    KSpreadStyleManager * m_styleManager;
+
+    void applyStyle();
+    void initMembers();
 };
 
 #endif

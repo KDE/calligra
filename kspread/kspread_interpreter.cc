@@ -243,7 +243,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   {
     QString name = functionList[i];
     KSpreadFunction* function = repo->function( name );
-    if( function ) if( function->functionPtr )
+    if ( function && function->functionPtr )
       module->addObject( name, new KSValue( new KSBuiltinFunction( module, name, function->functionPtr ) ) );
   }
 

@@ -43,6 +43,7 @@
 #include "kspread_view.h"
 #include "kspread_canvas.h"
 #include "kspread_sheetprint.h"
+#include "kspread_style_manager.h"
 
 #include "koDocumentInfo.h"
 
@@ -72,6 +73,7 @@ QPtrList<KSpreadDoc>& KSpreadDoc::documents()
 
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+    m_pStyleManager( new KSpreadStyleManager() ),
     m_pageBorderColor( Qt::red )
 {
   m_bDelayCalculation = false;
@@ -327,7 +329,7 @@ QDomDocument KSpreadDoc::saveXML()
     QDomElement locale = m_locale.save( doc );
     spread.appendChild( locale );
 
-    if(m_refs.count()!=0)
+    if (m_refs.count() != 0 )
     {
         QDomElement areaname = saveAreaName( doc );
         spread.appendChild( areaname );
@@ -345,6 +347,9 @@ QDomDocument KSpreadDoc::saveXML()
         }
     }
 
+    QDomElement s = m_pStyleManager->save( doc );
+    spread.appendChild( s );
+
     QDomElement e = m_pMap->save( doc );
     spread.appendChild( e );
 
@@ -360,10 +365,10 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
 
 bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
-    QTime dt;
-    dt.start();
+  QTime dt;
+  dt.start();
 
-    emit sigProgress( 0 );
+  emit sigProgress( 0 );
   m_bLoading = TRUE;
   m_spellListIgnoreAll.clear();
   // <spreadsheet>
@@ -401,7 +406,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   //<areaname >
   QDomElement areaname = spread.namedItem( "areaname" ).toElement();
   if ( !areaname.isNull())
-        loadAreaName(areaname);
+    loadAreaName(areaname);
 
   QDomElement ignoreAll = spread.namedItem( "SPELLCHECKIGNORELIST").toElement();
   if ( !ignoreAll.isNull())
@@ -422,6 +427,17 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   emit sigProgress( 40 );
   // In case of reload (e.g. from konqueror)
   m_pMap->tableList().clear(); // it's set to autoDelete
+
+  QDomElement styles = spread.namedItem( "styles" ).toElement();
+  if ( !styles.isNull() )
+  {
+    if ( !m_pStyleManager->loadXML( styles ) )
+    {
+      setErrorMessage( i18n( "Styles cannot be loaded" ) );
+      m_bLoading = false;
+      return false;
+    }
+  }
 
 
   // <map>
@@ -1054,9 +1070,9 @@ void KSpreadDoc::retrieveMarkerInfo( const QRect &marker,
 
 KSpreadDoc::~KSpreadDoc()
 {
-    //don't save config when kword is embedded into konqueror
-    if(isReadWrite())
-        saveConfig();
+  //don't save config when kword is embedded into konqueror
+  if(isReadWrite())
+    saveConfig();
   destroyInterpreter();
 
   delete m_pUndoBuffer;
@@ -1065,6 +1081,7 @@ KSpreadDoc::~KSpreadDoc()
   s_docs->removeRef(this);
   kdDebug(36001) << "alive 1" << endl;
   delete m_pMap;
+  delete m_pStyleManager;
   delete m_pKSpellConfig;
 }
 
@@ -1127,14 +1144,16 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
    QDomElement element = doc.createElement( "areaname" );
    QValueList<Reference>::Iterator it2;
    for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
-        {
+   {
         QDomElement e = doc.createElement("reference");
         QDomElement tabname = doc.createElement( "tabname" );
         tabname.appendChild( doc.createTextNode( (*it2).table_name ) );
         e.appendChild( tabname );
+
         QDomElement refname = doc.createElement( "refname" );
         refname.appendChild( doc.createTextNode( (*it2).ref_name ) );
         e.appendChild( refname );
+
         QDomElement rect = doc.createElement( "rect" );
         rect.setAttribute( "left-rect", ((*it2).rect).left() );
         rect.setAttribute( "right-rect",((*it2).rect).right() );
@@ -1142,15 +1161,15 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
         rect.setAttribute( "bottom-rect", ((*it2).rect).bottom() );
         e.appendChild( rect );
         element.appendChild(e);
-        }
- return element;
+   }
+   return element;
 }
 
 void KSpreadDoc::loadAreaName( const QDomElement& element )
 {
-QDomElement tmp=element.firstChild().toElement();
-for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
-    {
+  QDomElement tmp=element.firstChild().toElement();
+  for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
+  {
     if ( tmp.tagName() == "reference" )
     {
         QString tabname;
@@ -1161,38 +1180,38 @@ for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
         int bottom=0;
         QDomElement tableName = tmp.namedItem( "tabname" ).toElement();
         if ( !tableName.isNull() )
-                {
-                tabname=tableName.text();
-                }
+        {
+          tabname=tableName.text();
+        }
         QDomElement referenceName = tmp.namedItem( "refname" ).toElement();
         if ( !referenceName.isNull() )
-                {
-                refname=referenceName.text();
-                }
+        {
+          refname=referenceName.text();
+        }
         QDomElement rect =tmp.namedItem( "rect" ).toElement();
-        if(!rect.isNull())
-                {
-                bool ok;
-                if ( rect.hasAttribute( "left-rect" ) )
-                        left=rect.attribute("left-rect").toInt( &ok );
-                if ( rect.hasAttribute( "right-rect" ) )
-		  right=rect.attribute("right-rect").toInt( &ok );
-                if ( rect.hasAttribute( "top-rect" ) )
-                        top=rect.attribute("top-rect").toInt( &ok );
-                if ( rect.hasAttribute( "bottom-rect" ) )
-                        bottom=rect.attribute("bottom-rect").toInt( &ok );
-                 }
+        if (!rect.isNull())
+        {
+          bool ok;
+          if ( rect.hasAttribute( "left-rect" ) )
+            left=rect.attribute("left-rect").toInt( &ok );
+          if ( rect.hasAttribute( "right-rect" ) )
+            right=rect.attribute("right-rect").toInt( &ok );
+          if ( rect.hasAttribute( "top-rect" ) )
+            top=rect.attribute("top-rect").toInt( &ok );
+          if ( rect.hasAttribute( "bottom-rect" ) )
+            bottom=rect.attribute("bottom-rect").toInt( &ok );
+        }
         QRect _rect;
         _rect.setCoords(left,top,right,bottom);
         addAreaName(_rect,refname,tabname);
-        }
     }
+  }
 }
 
 void KSpreadDoc::addStringCompletion(const QString &stringCompletion)
 {
-   if(listCompletion.items().contains(stringCompletion)==0)
-           listCompletion.addItem(stringCompletion);
+  if ( listCompletion.items().contains(stringCompletion) == 0 )
+    listCompletion.addItem( stringCompletion );
 }
 
 void KSpreadDoc::refreshInterface()

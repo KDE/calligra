@@ -26,13 +26,15 @@
 #include <qsimplerichtext.h>
 #include <qpopupmenu.h>
 
-#include "kspread_changes.h"
-#include "kspread_global.h"
 #include "kspread_canvas.h"
-#include "kspread_map.h"
+#include "kspread_changes.h"
 #include "kspread_doc.h"
-#include "kspread_util.h"
+#include "kspread_global.h"
+#include "kspread_map.h"
 #include "kspread_sheetprint.h"
+#include "kspread_style.h"
+#include "kspread_style_manager.h"
+#include "kspread_util.h"
 
 #include <kspread_value.h>
 
@@ -48,46 +50,77 @@ QChar KSpreadCell::decimal_point = '\0';
  *
  *****************************************************************************/
 
-KSpreadCell::KSpreadCell( KSpreadSheet *_table, int _column, int _row )
-  : KSpreadFormat( _table ),
-    conditions(this),
-    m_bShrinkToSize(false)
+KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
+  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
+    m_iRow( _row ),
+    m_iColumn( _column ),
+    m_dOutTextWidth( 0.0 ),
+    m_dOutTextHeight( 0.0 ),
+    m_dTextX( 0.0 ),
+    m_dTextY( 0.0 ),
+    m_iMergedXCells( 0 ),
+    m_iMergedYCells( 0 ),
+    m_iExtraXCells( 0 ),
+    m_iExtraYCells( 0 ),
+    m_dExtraWidth( 0.0 ),
+    m_dExtraHeight( 0.0 ),
+    m_style( ST_Normal ),
+    m_pPrivate( 0 ),
+    m_content( Text ),
+    m_value( KSpreadValue::empty() ),
+    m_pQML( 0 ),
+    m_pCode( 0 ),
+    conditions( this ),
+    m_bShrinkToSize( false ),
+    m_nbLines( 0 ),
+    m_Validity( 0 ),
+    m_nextCell( 0 ),
+    m_previousCell( 0 )
 {
-  m_nextCell = 0;
-  m_previousCell = 0;
   m_ObscuringCells.clear();
-  m_pCode = 0;
-  m_pPrivate = 0L;
-  m_pQML = NULL;
 
-  m_lstDepends.setAutoDelete( TRUE );
-  m_lstDependingOnMe.setAutoDelete( TRUE );
-
-  m_content = Text;
-
-  m_value = KSpreadValue::empty();
-
-  m_iRow = _row;
-  m_iColumn = _column;
-
-  m_style = ST_Normal;
-  m_iExtraXCells = 0;
-  m_iExtraYCells = 0;
-  m_iMergedXCells = 0;
-  m_iMergedYCells = 0;
-  m_dExtraWidth = 0.0;
-  m_dExtraHeight = 0.0;
-  m_iPrecision = -1;
-  m_dOutTextWidth = 0.0;
-  m_dOutTextHeight = 0.0;
-
-  m_nbLines=0;
-  m_Validity=0;
+  m_lstDepends.setAutoDelete( true );
+  m_lstDependingOnMe.setAutoDelete( true );
 
   clearAllErrors();
 }
 
-KSpreadSheet* KSpreadCell::sheet()
+KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row )
+  : KSpreadFormat( _table, _style ),
+    m_iRow( _row ),
+    m_iColumn( _column ),
+    m_dOutTextWidth( 0.0 ),
+    m_dOutTextHeight( 0.0 ),
+    m_dTextX( 0.0 ),
+    m_dTextY( 0.0 ),
+    m_iMergedXCells( 0 ),
+    m_iMergedYCells( 0 ),
+    m_iExtraXCells( 0 ),
+    m_iExtraYCells( 0 ),
+    m_dExtraWidth( 0.0 ),
+    m_dExtraHeight( 0.0 ),
+    m_style( ST_Normal ),
+    m_pPrivate( 0 ),
+    m_content( Text ),
+    m_value( KSpreadValue::empty() ),
+    m_pQML( 0 ),
+    m_pCode( 0 ),
+    conditions( this ),
+    m_bShrinkToSize( false ),
+    m_nbLines( 0 ),
+    m_Validity( 0 ),
+    m_nextCell( 0 ),
+    m_previousCell( 0 )
+{
+  m_ObscuringCells.clear();
+
+  m_lstDepends.setAutoDelete( true );
+  m_lstDependingOnMe.setAutoDelete( true );
+
+  clearAllErrors();
+}
+
+KSpreadSheet * KSpreadCell::sheet()
 {
   return m_pTable;
 }
@@ -118,7 +151,7 @@ int KSpreadCell::column() const
   return m_iColumn;
 }
 
-void KSpreadCell::copyFormat( KSpreadCell *_cell )
+void KSpreadCell::copyFormat( KSpreadCell * _cell )
 {
     copyFormat( _cell->column(), _cell->row() );
 }
@@ -132,14 +165,13 @@ void KSpreadCell::copyFormat( int _column, int _row )
     setTextFont( cell->textFont( _column, _row ) );
     setTextColor( cell->textColor( _column, _row ) );
     setBgColor( cell->bgColor( _column, _row) );
-    setLeftBorderPen(cell->leftBorderPen( _column, _row ));
-    setTopBorderPen(cell->topBorderPen( _column, _row ));
-    setBottomBorderPen(cell->bottomBorderPen( _column, _row ));
-    setRightBorderPen(cell->rightBorderPen( _column, _row ));
-    setFallDiagonalPen(cell->fallDiagonalPen( _column, _row ));
-    setGoUpDiagonalPen(cell->goUpDiagonalPen( _column, _row ));
-    setBackGroundBrush(cell->backGroundBrush( _column, _row));
-
+    setLeftBorderPen( cell->leftBorderPen( _column, _row ) );
+    setTopBorderPen( cell->topBorderPen( _column, _row ) );
+    setBottomBorderPen( cell->bottomBorderPen( _column, _row ) );
+    setRightBorderPen( cell->rightBorderPen( _column, _row ) );
+    setFallDiagonalPen( cell->fallDiagonalPen( _column, _row ) );
+    setGoUpDiagonalPen( cell->goUpDiagonalPen( _column, _row ) );
+    setBackGroundBrush( cell->backGroundBrush( _column, _row) );
     setPrecision( cell->precision( _column, _row ) );
     setPrefix( cell->prefix( _column, _row ) );
     setPostfix( cell->postfix( _column, _row ) );
@@ -149,18 +181,21 @@ void KSpreadCell::copyFormat( int _column, int _row )
     setMultiRow( cell->multiRow( _column, _row ) );
     setVerticalText( cell->verticalText( _column, _row ) );
     setStyle( cell->style());
-    setDontPrintText(cell->getDontprintText(_column, _row ) );
-    setNotProtected(cell->notProtected(_column, _row ) );
+    setDontPrintText( cell->getDontprintText(_column, _row ) );
+    setNotProtected( cell->notProtected(_column, _row ) );
     setHideAll(cell->isHideAll(_column, _row ) );
     setHideFormula(cell->isHideFormula(_column, _row ) );
     setIndent( cell->getIndent(_column, _row ) );
-
-    QValueList<KSpreadConditional> conditionList = cell->conditionList();
-    conditions.setConditionList(conditionList);
-
-    setComment( cell->comment(_column, _row) );
     setAngle( cell->getAngle(_column, _row) );
     setFormatType( cell->getFormatType(_column, _row) );
+    Currency c;
+    if ( cell->currencyInfo( c ) )
+      setCurrency( c );
+
+    QValueList<KSpreadConditional> conditionList = cell->conditionList();
+    conditions.setConditionList( conditionList );
+
+    setComment( cell->comment( _column, _row ) );
 }
 
 void KSpreadCell::copyAll( KSpreadCell *cell )
@@ -184,7 +219,7 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
     else
       setCellText( cell->text() );
 
-    setAction(cell->action() );
+    setAction( cell->action() );
 
     delete m_pPrivate;
     m_pPrivate = 0;
@@ -197,7 +232,7 @@ void KSpreadCell::defaultStyle()
   defaultStyleFormat();
 
   QValueList<KSpreadConditional> emptyList;
-  conditions.setConditionList(emptyList);
+  conditions.setConditionList( emptyList );
 
   delete m_Validity;
   m_Validity = 0L;
@@ -209,52 +244,52 @@ void KSpreadCell::formatChanged()
   setFlag( Flag_TextFormatDirty );
 }
 
-KSpreadFormat* KSpreadCell::fallbackFormat( int, int row )
+KSpreadFormat * KSpreadCell::fallbackFormat( int, int row )
 {
-    return table()->rowFormat( row );
+  return table()->rowFormat( row );
 }
 
-const KSpreadFormat* KSpreadCell::fallbackFormat( int, int row ) const
+const KSpreadFormat * KSpreadCell::fallbackFormat( int, int row ) const
 {
-    return table()->rowFormat( row );
+  return table()->rowFormat( row );
 }
 
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
 {
   // Unobscure the objects we obscure right now
-  for( int x = _col; x <= _col + m_iExtraXCells; x++ )
-    for( int y = _row; y <= _row + m_iExtraYCells; y++ )
+  for( int x = _col; x <= _col + m_iExtraXCells; ++x )
+    for( int y = _row; y <= _row + m_iExtraYCells; ++y )
       if ( x != _col || y != _row )
       {
-        KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
+        KSpreadCell * cell = m_pTable->nonDefaultCell( x, y );
         cell->unobscure(this);
       }
 
   // disable forcing ?
   if ( _x == 0 && _y == 0 )
   {
-      clearFlag(Flag_ForceExtra);
-      m_iExtraXCells = 0;
-      m_iExtraYCells = 0;
-      m_dExtraWidth = 0.0;
-      m_dExtraHeight = 0.0;
+      clearFlag( Flag_ForceExtra );
+      m_iExtraXCells  = 0;
+      m_iExtraYCells  = 0;
+      m_dExtraWidth   = 0.0;
+      m_dExtraHeight  = 0.0;
       m_iMergedXCells = 0;
       m_iMergedYCells = 0;
       return;
   }
 
     setFlag(Flag_ForceExtra);
-    m_iExtraXCells = _x;
-    m_iExtraYCells = _y;
+    m_iExtraXCells  = _x;
+    m_iExtraYCells  = _y;
     m_iMergedXCells = _x;
     m_iMergedYCells = _y;
 
     // Obscure the cells
-    for( int x = _col; x <= _col + _x; x++ )
-        for( int y = _row; y <= _row + _y; y++ )
+    for( int x = _col; x <= _col + _x; ++x )
+        for( int y = _row; y <= _row + _y; ++y )
             if ( x != _col || y != _row )
             {
-                KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
+                KSpreadCell * cell = m_pTable->nonDefaultCell( x, y );
                 cell->obscure( this, true );
             }
 
@@ -277,8 +312,8 @@ void KSpreadCell::move( int col, int row )
     m_ObscuringCells.clear();
 
     // Unobscure the objects we obscure right now
-    for( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; x++ )
-        for( int y = m_iRow; y <= m_iRow + m_iExtraYCells; y++ )
+    for( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
+        for( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
             if ( x != m_iColumn || y != m_iRow )
             {
                 KSpreadCell *cell = m_pTable->nonDefaultCell( x, y );
@@ -286,7 +321,7 @@ void KSpreadCell::move( int col, int row )
             }
 
     m_iColumn = col;
-    m_iRow = row;
+    m_iRow    = row;
 
     //    m_iExtraXCells = 0;
     //    m_iExtraYCells = 0;
@@ -304,7 +339,7 @@ void KSpreadCell::setLayoutDirtyFlag( bool format )
     if ( format )
         setFlag( Flag_TextFormatDirty );
 
-    QValueList<KSpreadCell*>::iterator it = m_ObscuringCells.begin();
+    QValueList<KSpreadCell*>::iterator it  = m_ObscuringCells.begin();
     QValueList<KSpreadCell*>::iterator end = m_ObscuringCells.end();
     for ( ; it != end; ++it )
     {
@@ -337,7 +372,7 @@ bool KSpreadCell::isEmpty() const
 
 bool KSpreadCell::isObscured() const
 {
-  return !( m_ObscuringCells.isEmpty() );
+    return !( m_ObscuringCells.isEmpty() );
 }
 
 bool KSpreadCell::isObscuringForced() const
@@ -370,30 +405,29 @@ void KSpreadCell::clearObscuringCells()
 
 void KSpreadCell::obscure( KSpreadCell *cell, bool isForcing )
 {
-  m_ObscuringCells.remove(cell); // removes *all* occurences
+  m_ObscuringCells.remove( cell ); // removes *all* occurences
   cell->clearObscuringCells();
-  if (isForcing)
+  if ( isForcing )
   {
-    m_ObscuringCells.prepend(cell);
+    m_ObscuringCells.prepend( cell );
   }
   else
   {
-    m_ObscuringCells.append(cell);
+    m_ObscuringCells.append( cell );
   }
   setFlag(Flag_LayoutDirty);
-  m_pTable->setRegionPaintDirty(cellRect());
+  m_pTable->setRegionPaintDirty( cellRect() );
 }
 
-void KSpreadCell::unobscure( KSpreadCell *cell )
+void KSpreadCell::unobscure( KSpreadCell * cell )
 {
-  m_ObscuringCells.remove(cell);
-  setFlag(Flag_LayoutDirty);
-  m_pTable->setRegionPaintDirty(cellRect());
+  m_ObscuringCells.remove( cell );
+  setFlag( Flag_LayoutDirty );
+  m_pTable->setRegionPaintDirty( cellRect() );
 }
 
-void KSpreadCell::clicked( KSpreadCanvas *_canvas )
+void KSpreadCell::clicked( KSpreadCanvas * _canvas )
 {
-
   if ( m_style == KSpreadCell::ST_Normal )
     return;
   else if ( m_style == KSpreadCell::ST_Select )
@@ -403,8 +437,8 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     if ( !_canvas )
       return;
 
-    QPopupMenu *popup = new QPopupMenu(_canvas);
-    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+    QPopupMenu *popup = new QPopupMenu( _canvas );
+    SelectPrivate *s = (SelectPrivate*) m_pPrivate;
 
     int id = 0;
     QStringList::ConstIterator it = s->m_lstItems.begin();
@@ -673,10 +707,8 @@ void KSpreadCell::freeAllObscuredCells()
     // Free all obscured cells.
     //
 
-  for ( int x = m_iColumn + m_iMergedXCells;
-        x <= m_iColumn + m_iExtraXCells; ++x )
-    for ( int y = m_iRow + m_iMergedYCells;
-          y <= m_iRow + m_iExtraYCells; ++y )
+  for ( int x = m_iColumn + m_iMergedXCells; x <= m_iColumn + m_iExtraXCells; ++x )
+    for ( int y = m_iRow + m_iMergedYCells; y <= m_iRow + m_iExtraYCells; ++y )
       if ( x != m_iColumn || y != m_iRow )
       {
         KSpreadCell *cell = m_pTable->cellAt( x, y );
@@ -708,7 +740,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     ColumnFormat *cl1 = m_pTable->columnFormat( _col );
     RowFormat *rl1 = m_pTable->rowFormat( _row );
-    if( cl1->isHide() || ( rl1->dblHeight() <= m_pTable->doc()->unzoomItY( 2 ) ) )
+    if ( cl1->isHide() || ( rl1->dblHeight() <= m_pTable->doc()->unzoomItY( 2 ) ) )
     {
         clearFlag( Flag_LayoutDirty );
         return;
@@ -901,8 +933,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             do
             {
                 pos = o.find( ' ', pos );
-                double width = m_pTable->doc()->unzoomItX( fm.width( m_strOutText.mid( start, (pos1-start) ) +
-                                                                     o.mid( pos1, (pos-pos1) ) ) );
+                double width = m_pTable->doc()->unzoomItX( fm.width( m_strOutText.mid( start, (pos1-start) )
+                                                                     + o.mid( pos1, (pos-pos1) ) ) );
 
                 if ( width <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row ) -
                               rightBorderWidth( _col, _row ) )
@@ -1286,7 +1318,7 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
         }
         break;
     case Money:
-        localizedNumber = locale()->formatMoney(value, m_currency.symbol, p );
+        localizedNumber = locale()->formatMoney(value, getCurrencySymbol(), p );
         if( floatFormat( _col, _row) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
             if (locale()->positiveSign().isNull())
@@ -3502,7 +3534,79 @@ void KSpreadCell::decPrecision()
   setFlag( Flag_LayoutDirty );
 }
 
+void KSpreadCell::setDate( QString const & dateString )
+{
+  clearAllErrors();
+  clearFormula();
+  
+  delete m_pQML;
+  m_pQML = 0L;
+  m_content = Text;
+  QString str( dateString );
+  
+  if ( tryParseDate( dateString ) )
+  {
+    FormatType tmpFormat = formatType();
+    if ( tmpFormat != TextDate &&
+         !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
+    {
+      //test if it's a short date or text date.
+      if ((locale()->formatDate( m_value.asDateTime().date(), false) == dateString))
+        setFormatType(TextDate);
+      else
+        setFormatType(ShortDate);
+    }
+  }
+  else
+  {
+    m_value.setValue( KSpreadValue( dateString ) );
 
+    // convert first letter to uppercase ?
+    if (m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
+    {
+        str = m_value.asString();
+        m_value.setValue( KSpreadValue( str[0].upper() 
+                                        + str.right( str.length() - 1 ) ) );
+    }
+  }
+  m_strText = str;
+
+  setFlag( Flag_LayoutDirty );
+  setFlag( Flag_TextFormatDirty );
+  setCalcDirtyFlag();
+}
+
+void KSpreadCell::setDate( QDate const & date )
+{
+  clearAllErrors();
+  clearFormula();
+  
+  delete m_pQML;
+  m_pQML = 0L;
+  m_content = Text;
+  
+  m_value.setValue( KSpreadValue( date ) );
+  setFlag( Flag_LayoutDirty );
+  setFlag( Flag_TextFormatDirty );
+  setCalcDirtyFlag();
+  checkNumberFormat();
+}
+
+void KSpreadCell::setNumber( double number )
+{
+  clearAllErrors();
+  clearFormula();
+  
+  delete m_pQML;
+  m_pQML = 0L;
+  m_content = Text;
+  
+  m_value.setValue( KSpreadValue( number ) );
+  setFlag(Flag_LayoutDirty);
+  setFlag(Flag_TextFormatDirty);
+  setCalcDirtyFlag();
+  checkNumberFormat();
+}
 
 void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool asText )
 {
@@ -3514,17 +3618,24 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
     {
       m_content = Text;
 
+      clearAllErrors();
+      clearFormula();
+
+      delete m_pQML;
+      m_pQML = 0L;
+      
       m_strOutText = ctext;
       m_strText    = ctext;
       m_value.setValue( KSpreadValue( ctext ) );
 
       setFlag(Flag_LayoutDirty);
       setFlag(Flag_TextFormatDirty);
-      
+      setCalcDirtyFlag();
+
       return;
     }
 
-    QString oldText=m_strText;
+    QString oldText = m_strText;
     setDisplayText( ctext, updateDepends );
     if(!m_pTable->isLoading() && !testValidity() )
     {
@@ -3995,11 +4106,11 @@ void KSpreadCell::checkTextInput()
     if ( tryParseDate( str ) )
     {
         FormatType tmpFormat = formatType();
-        if(tmpFormat!=TextDate &&
-           !(tmpFormat>=200 && tmpFormat<=216)) // ###
+        if ( tmpFormat != TextDate &&
+           !(tmpFormat >= 200 && tmpFormat <= 216)) // ###
         {
             //test if it's a short date or text date.
-            if((locale()->formatDate( m_value.asDateTime().date(), false) == str))
+            if ((locale()->formatDate( m_value.asDateTime().date(), false) == str))
                 setFormatType(TextDate);
             else
                 setFormatType(ShortDate);
@@ -4798,8 +4909,8 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 
 	if ( formatType() == Percentage )
         {
-          setFactor(100.0); // should have been already done by loadFormat
-          t = locale->formatNumber(m_value.asFloat() * m_dFactor, precision);
+          setFactor( 100.0 ); // should have been already done by loadFormat
+          t = locale->formatNumber( m_value.asFloat() * 100.0, precision );
 	  m_strText = pasteOperation( t, m_strText, op );
           m_strText += '%';
         }
