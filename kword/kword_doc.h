@@ -57,7 +57,7 @@ class KWContents;
 #include <qdict.h>
 
 /******************************************************************/
-/* Class: KWordChild						  */
+/* Class: KWordChild                                              */
 /******************************************************************/
 
 class KWordChild : public KoDocumentChild
@@ -81,7 +81,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWordDocument						  */
+/* Class: KWordDocument                                           */
 /******************************************************************/
 
 class KWordDocument : public KoDocument
@@ -142,14 +142,14 @@ public:
     { frames.remove( f ); setModified( true ); }
 
     KWParag *getFirstParag( unsigned int _num ) {
-	if ( frames.at( _num )->getFrameType() == FT_TEXT )
-	    return dynamic_cast<KWTextFrameSet*>( frames.at( _num ) )->getFirstParag();
-	else
-	    return 0L;
+        if ( frames.at( _num )->getFrameType() == FT_TEXT )
+            return dynamic_cast<KWTextFrameSet*>( frames.at( _num ) )->getFirstParag();
+        else
+            return 0L;
     }
 
     KWUserFont* getDefaultUserFont()
-    { return defaultUserFont;  }	
+    { return defaultUserFont;  }
     KWParagLayout *getDefaultParagLayout()
     { return defaultParagLayout; }
 
@@ -186,8 +186,8 @@ public:
     bool isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos );
 
     bool printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h,
-		    bool _viewFormattingChars = false, bool _drawVarBack = true, int dbx = -1, int dby = -1,
-		    int dbw = -1, int dbh = -1, const QBrush &dbback = Qt::NoBrush );
+                    bool _viewFormattingChars = false, bool _drawVarBack = true, int dbx = -1, int dby = -1,
+                    int dbw = -1, int dbh = -1, const QBrush &dbback = Qt::NoBrush );
     void printBorders( QPainter &_painter, int xOffset, int yOffset, int _w, int _h );
 
     void drawMarker( KWFormatContext &_fc, QPainter *_painter, int xOffset, int yOffset );
@@ -215,17 +215,37 @@ public:
 
     void setSelStart( KWFormatContext &_fc )
     { selStart = _fc; }
-
-    KWFormatContext *getSelStart()
-    { return &selStart;  }
     void setSelEnd( KWFormatContext &_fc )
     { selEnd = _fc; }
-
+    /**
+     * getSetStart/getSelEnd are used when making a selection.
+     * Be careful, getSelStart can be < or > than getSelEnd.
+     * Don't use those to iterate over the selection, use @ref getSelTop
+     * and @ref getSetBottom.
+     */
+    KWFormatContext *getSelStart()
+    { return &selStart;  }
     KWFormatContext *getSelEnd()
     { return &selEnd; }
 
+    /**
+     * getSelTop returns the format context of the top of the selection,
+     * guaranteed to be <= getSelBottom. Use this e.g. to iterate over the
+     * paragraphs in the selection.
+     */
+    KWFormatContext *getSelTop()
+    { return selStart < selEnd ? &selStart : &selEnd; }
+
+    /**
+     * getSelBottom returns the format context of the bottom of the selection,
+     * guaranteed to be >= getSelTop. Use this e.g. to iterate over the
+     * paragraphs in the selection.
+     */
+    KWFormatContext *getSelBottom()
+    { return selStart < selEnd ? &selEnd : &selStart; }
+
     void drawSelection( QPainter &_painter, int xOffset, int yOffset,
-			KWFormatContext *_selStart = 0L, KWFormatContext *_selEnd = 0L );
+                        KWFormatContext *_selStart = 0L, KWFormatContext *_selEnd = 0L );
     void setSelection( bool _has )
     { hasSelection = _has; }
 
@@ -237,7 +257,7 @@ public:
     void setFormat( KWFormat &_format, int flags = KWFormat::All );
 
     void paste( KWFormatContext *_fc, QString _string, KWPage *_page,
-		KWFormat *_format = 0L, const QString &_mime = "text/plain" );
+                KWFormat *_format = 0L, const QString &_mime = "text/plain" );
 
     void appendPage( unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE );
 
@@ -341,7 +361,7 @@ public:
     void registerVariable( KWVariable *var );
     void unregisterVariable( KWVariable *var );
     QList<KWVariable> *getVariables() {
-	return &variables;
+        return &variables;
     }
 
     void setVariableValue( const QString &name, const QString &value );
@@ -352,15 +372,15 @@ public:
     void setSerialLetterRecord( int r );
 
     bool onLineSpellCheck() const {
-	return spellCheck;
+        return spellCheck;
     }
     void setOnLineSpellCheck( bool b ) {
-	spellCheck = b;
+        spellCheck = b;
     }
 
     void createContents();
     KWContents *getContents() {
-	return contents;
+        return contents;
     }
 
     void checkNumberOfPages( KWFormatContext *fc );
@@ -397,7 +417,7 @@ protected:
     virtual bool completeLoading( KoStore* /* _store */ );
 
     virtual void draw( QPaintDevice*, long int _width, long int _height,
-		       float _scale );
+                       float _scale );
 
     void loadFrameSets( KOMLParser&, vector<KOMLAttrib>& );
     void loadStyleTemplates( KOMLParser&, vector<KOMLAttrib>& );
@@ -481,21 +501,21 @@ protected:
 inline int KWordDocument::zoomIt( int z ) const
 {
     if ( zoom == 100 )
-	return z;
+        return z;
     return ( zoom * z ) / 100;
 }
 
 inline unsigned int KWordDocument::zoomIt( unsigned int z ) const
 {
     if ( zoom == 100 )
-	return z;
+        return z;
     return ( zoom * z ) / 100;
 }
 
 inline double KWordDocument::zoomIt( double z ) const
 {
     if ( zoom == 100 )
-	return z;
+        return z;
     return ( (double)zoom * z ) / 100.0;
 }
 
