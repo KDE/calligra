@@ -189,6 +189,7 @@ public slots:
     // view menu
     void viewShowSideBar();
     void viewShowNoteBar();
+    void viewSlideMaster();
     void viewZoom( const QString &s );
 
     void viewFooter();
@@ -882,6 +883,10 @@ private:
 
     bool m_bShowGUI;
     bool presStarted;
+    /**
+     * Indicates if the master page is edited
+     */
+    bool m_editMaster;
     bool allowWebPres;
     bool allowMSPres;
     int currPg; // 0-based
@@ -907,6 +912,7 @@ private:
 
     KToggleAction *actionViewShowSideBar;
     KToggleAction *actionViewShowNoteBar;
+    KToggleAction *actionViewSlideMaster;
 
     KToggleAction *actionViewShowHelpLine;
 

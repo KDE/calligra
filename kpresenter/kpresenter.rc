@@ -38,6 +38,7 @@
   <Action name="view_showsidebar"/>
   <Action name="view_shownotebar"/>
   <Separator/>
+  <Action name="view_master"/>
   <Action name="view_header"/>
   <Action name="view_footer"/>
   <Separator/>

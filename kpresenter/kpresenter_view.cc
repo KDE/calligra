@@ -247,6 +247,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_autoPresStop = false;
     rndX = 0;
     rndY = 0;
+    m_editMaster = false;
     allowWebPres = true;
     allowMSPres = true;
     currPg = 0;
@@ -2377,6 +2378,9 @@ void KPresenterView::setupActions()
     actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters." ) );
     actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KPresenter shows you tabs, spaces, carriage returns and other non-printing characters." ) );
 
+    actionViewSlideMaster = new KToggleAction( i18n( "Slide &Master" ), 0,
+                                               this, SLOT( viewSlideMaster() ),
+                                               actionCollection(), "view_master" );
     actionViewHeader = new KToggleAction( i18n( "Show &Header" ), 0,
                                           this, SLOT( viewHeader() ),
                                           actionCollection(), "view_header" );
@@ -4572,6 +4576,23 @@ void KPresenterView::viewShowNoteBar()
         notebar->show();
 }
 
+void KPresenterView::viewSlideMaster()
+{
+#if MASTERPAGE
+    m_canvas->exitEditMode();
+    m_canvas->deSelectAllObj();
+    m_editMaster = !m_editMaster;
+    if ( m_editMaster )
+    {
+        m_canvas->setActivePage( m_pKPresenterDoc->masterPage() );
+    }
+    else
+    {
+        m_canvas->setActivePage( m_pKPresenterDoc->pageList().at( currPg ) );
+    }
+    m_canvas->repaint( false );
+#endif
+}
 void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
