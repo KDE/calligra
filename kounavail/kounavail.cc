@@ -28,6 +28,7 @@
 #include <kaboutdata.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <qapplication.h>
 
 KoUnavailPart::KoUnavailPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name )
     : KoDocument( parentWidget, widgetName, parent, name, false /*singleViewMode*/ )
@@ -70,6 +71,8 @@ void KoUnavailPart::setMimeType( const QCString& mime )
 void KoUnavailPart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/,
                                 double /*zoomX*/, double /*zoomY*/ )
 {
+    painter.save();
+    painter.setPen( QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
     // Need to draw only the document rectangle described in the parameter rect.
     int left = rect.left() / 20;
     int right = rect.right() / 20 + 1;
@@ -81,7 +84,6 @@ void KoUnavailPart::paintContent( QPainter& painter, const QRect& rect, bool /*t
     for( int y = left; y < right; ++y )
         painter.drawLine( left * 20, y * 20, right * 20, y * 20 );
 
-    painter.save();
     QFont defaultFont = KGlobalSettings::generalFont();
     defaultFont.setPointSize( 16 ); // ###
     painter.setFont( defaultFont );
