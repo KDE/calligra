@@ -585,14 +585,14 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, C
     }
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "ITALIC",    ProcessItalicTag,   (void*) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "UNDERLINE", ProcessUnderlineTag,(void*) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "STRIKEOUT", ProcessStrikeOutTag,(void*) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "WEIGHT",    ProcessWeightTag,   (void*) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "SIZE",      ProcessSizeTag,     (void*) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag,     (void*) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    (void*) &formatData ) );
-    tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,(void*) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "ITALIC",    ProcessItalicTag,   (void*) formatData ) );
+    tagProcessingList.append ( TagProcessing ( "UNDERLINE", ProcessUnderlineTag,(void*) formatData ) );
+    tagProcessingList.append ( TagProcessing ( "STRIKEOUT", ProcessStrikeOutTag,(void*) formatData ) );
+    tagProcessingList.append ( TagProcessing ( "WEIGHT",    ProcessWeightTag,   (void*) formatData ) );
+    tagProcessingList.append ( TagProcessing ( "SIZE",      ProcessSizeTag,     (void*) formatData ) );
+    tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag,     (void*) formatData ) );
+    tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    (void*) formatData ) );
+    tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,(void*) formatData ) );
 
     QString strDummy;
 
@@ -610,7 +610,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "NAME",        ProcessLayoutNameTag,     (void*) layout  ) );
     tagProcessingList.append ( TagProcessing ( "FOLLOWING",   NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "COUNTER",     ProcessCounterTag,        (void*) & layout->counter ) );
-    tagProcessingList.append ( TagProcessing ( "FORMAT",      ProcessSingleFormatTag,   (void*) &layout->formatData ) );
+    tagProcessingList.append ( TagProcessing ( "FORMAT",      ProcessSingleFormatTag,   (void*) & layout->formatData ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR",   NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",        ProcessLayoutFlowTag,     (void*) layout  ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",     NULL,                     NULL            ) );
@@ -620,7 +620,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
-static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy, ClassExportFilterBase* exportFilter)
+static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & outputText, ClassExportFilterBase* exportFilter)
 {
     // To use in <FORMATS> elements
 
@@ -628,7 +628,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy
 
     FormatData formatData (-1,-1);
 
-    ProcessSingleFormatTag(myNode,(void*) &formatData, strDummy, exportFilter);
+    ProcessSingleFormatTag(myNode,(void*) &formatData, outputText, exportFilter);
 
     formatDataList->append (formatData);
 }
@@ -680,10 +680,10 @@ class ClassExportFilterBase
         virtual bool isXML(void) const {return false;}
         virtual QString getDocType(void) const = 0;
         virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
-        virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const = 0;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText) = 0;
         virtual QString getStyleElement(void) {return QString::null;} //Default is no style
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
+        virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)=0;
     public: // Public variables
         bool inList; // Are we currently in a list?
         bool orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
@@ -754,8 +754,6 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         strParaText="&nbsp;";
     }
 
-    QString align=exportFilter->getParagraphOpeningTagExtraAttributes(paraLayout.alignment);
-
     // As KWord has only one depth of lists, we can process lists very simply.
     if ( paraLayout.counter.numbering == CounterData::NUM_LIST )
     {
@@ -786,10 +784,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
             exportFilter->typeList=paraLayout.counter.style;
         }
         // TODO: with Cascaded Style Sheet, we could add the exact counter type we want
-        // Note 1: .arg(strParaText) must remain last,
-        //  as strParaText may contain an unwanted % + number sequence
-        // Note 2: <li> cannot have an "align" attribute!
-        outputText += QString("<li>%1</li>\n").arg(strParaText);
+        outputText += exportFilter->getParagraphElement("li",strParaText,paraLayout);
     }
     else
     {
@@ -808,16 +803,12 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         }
         if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
         {
-            const int depth = paraLayout.counter.depth + 1;
-            // Note: .arg(strParaText) must remain last,
-            //  as strParaText may contain an unwanted % + number sequence
-            outputText += QString("<h%1%2>%4</h%3>\n").arg(depth).arg(align).arg(depth).arg(strParaText);
+            QString strDepth=QString("h%1").arg(paraLayout.counter.depth + 1);
+            outputText += exportFilter->getParagraphElement(strDepth,strParaText,paraLayout);
         }
         else
         {
-            // Note: .arg(strParaText) must remain last,
-            //  as strParaText may contain an unwanted % + number sequence
-            outputText += QString("<p%1>%2</p>\n").arg(align).arg(strParaText);
+            outputText += exportFilter->getParagraphElement("p",strParaText,paraLayout);
         }
     }
 }
@@ -1009,9 +1000,9 @@ class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
+        virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
 };
 
 QString ClassExportFilterHtmlTransitional::getDocType(void) const
@@ -1024,23 +1015,6 @@ QString ClassExportFilterHtmlTransitional::getBodyOpeningTagExtraAttributes(void
 {
     // Define the background colour as white!
     return " bgcolor=\"#FFFFFF\""; // Leading space is important!
-}
-
-QString ClassExportFilterHtmlTransitional::getParagraphOpeningTagExtraAttributes(const QString& strAlign) const
-{
-    if ( strAlign.isEmpty() || strAlign == "left" )
-        // We do not set "left" explicitly, since KWord cannot do bi-di
-    {
-        return QString::null;
-    }
-    else if ((strAlign == "right") || (strAlign=="center") || (strAlign=="justify"))
-    {
-        return QString(" align=\"%1\"").arg( strAlign );
-    }
-    else
-    {
-        return QString::null;
-    }
 }
 
 void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
@@ -1270,6 +1244,31 @@ QString ClassExportFilterHtmlTransitional::getStartOfListOpeningTag(const Counte
     return strResult;
 }
 
+QString ClassExportFilterHtmlTransitional::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)
+{
+    QString strAlign;
+
+    if (strTag!="li")
+    {
+        // We do not set "left" explicitly, since KWord cannot do bi-di
+        if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
+        {
+            strAlign=QString(" align=\"%1\"").arg(layout.alignment);
+        }
+    }
+
+    QString strElement;
+    strElement+='<';
+    strElement+=strTag;
+    strElement+=strAlign;
+    strElement+='>';
+    strElement+=strParagraphText;
+    strElement+="</";
+    strElement+=strTag;
+    strElement+=">\n";
+    return strElement;
+}
+
 //
 // ClassExportFilterHtmlTransitional (normal XHTML 1.0 Transitional)
 //
@@ -1303,9 +1302,9 @@ class ClassExportFilterHtmlSpartan : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
+        virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
 };
 
 QString ClassExportFilterHtmlSpartan::getDocType(void) const
@@ -1315,11 +1314,6 @@ QString ClassExportFilterHtmlSpartan::getDocType(void) const
 }
 
 QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
-QString ClassExportFilterHtmlSpartan::getParagraphOpeningTagExtraAttributes(const QString&) const
 {
     return QString::null;
 }
@@ -1421,6 +1415,19 @@ QString ClassExportFilterHtmlSpartan::getStartOfListOpeningTag(const CounterData
     return strResult;
 }
 
+QString ClassExportFilterHtmlSpartan::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData&)
+{
+    QString strElement;
+    strElement+='<';
+    strElement+=strTag;
+    strElement+='>';
+    strElement+=strParagraphText;
+    strElement+="</";
+    strElement+=strTag;
+    strElement+=">\n";
+    return strElement;
+}
+
 //
 // ClassExportFilterXHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
 //
@@ -1450,10 +1457,10 @@ class ClassExportFilterHtmlStyle : public ClassExportFilterBase
     public: //virtual
         virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStyleElement(void);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
+        virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
 };
 
 QString ClassExportFilterHtmlStyle::getDocType(void) const
@@ -1618,23 +1625,6 @@ QString ClassExportFilterHtmlStyle::getBodyOpeningTagExtraAttributes(void) const
     return QString::null;
 }
 
-QString ClassExportFilterHtmlStyle::getParagraphOpeningTagExtraAttributes(const QString& strAlign) const
-{
-    if ( strAlign.isEmpty() || strAlign == "left" )
-        // We do not set "left" explicitly, since KWord cannot do bi-di
-    {
-        return QString::null;
-    }
-    else if ((strAlign == "right") || (strAlign=="center") || (strAlign=="justify"))
-    {
-        return QString(" style=\"text-align:%1\"").arg( strAlign );
-    }
-    else
-    {
-        return QString::null;
-    }
-}
-
 QString ClassExportFilterHtmlStyle::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
 {
     QString strResult;
@@ -1710,6 +1700,32 @@ QString ClassExportFilterHtmlStyle::getStartOfListOpeningTag(const CounterData::
         }
     }
     return strResult;
+}
+
+QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)
+{
+    QString strAlign;
+
+    if (strTag!="li")
+    {
+        // We do not set "left" explicitly, since KWord cannot do bi-di
+        if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
+        {
+
+            strAlign=QString(" style=\"text-align:%1\"").arg(layout.alignment);
+        }
+    }
+
+    QString strElement;
+    strElement+='<';
+    strElement+=strTag;
+    strElement+=strAlign;
+    strElement+='>';
+    strElement+=strParagraphText;
+    strElement+="</";
+    strElement+=strTag;
+    strElement+=">\n";
+    return strElement;
 }
 
 //
