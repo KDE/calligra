@@ -257,10 +257,10 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
 	int j = other->findIndex( seq->getString() );
 	int k = j;
 	if ( j < i )
-	  k += (otherEnd - otherBegin);
-	if ( j + 1 == i )
+	  k += (otherEnd - otherBegin-1);
+	/*if ( j + 1 == i )
 	  _delta = -1.0;
-	else
+	  else*/
 	  _delta = ( double )( k - i );
 	return TRUE;
       }
