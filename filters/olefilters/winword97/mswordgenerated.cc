@@ -19,8 +19,9 @@
 
 DESCRIPTION
 
-    This file is a description of the structures used in the on-disk format
-    of Microsoft Word documents.
+    This file is a description of most structures used in the on-disk format
+    of Microsoft Word 97 documents. The only structures missing are those
+    which are tricky to autogenerate.
 */
 
 #include <mswordgenerated.h>

@@ -78,7 +78,7 @@ public:
         U16 grpprlBytes;
         U8 *grpprl;
     } PAPXFKP;
-    static unsigned read(const U8 *in, PAPXFKP *out, unsigned count = 1);
+    static unsigned read(unsigned nFib, const U8 *in, PAPXFKP *out);
 
     // STyle Definition (STD)
     typedef struct STD
@@ -133,6 +133,9 @@ public:
     static unsigned read(const U8 *in, unsigned baseInFile, STD *out, unsigned count=1);
 
     static unsigned read(const U8 *in, FIB *out, unsigned count=1);
+    static unsigned read(unsigned nFib, const U8 *in, BTE *out);
+    static unsigned read(unsigned nFib, const U8 *in, PCD *out);
+    static unsigned read(unsigned nFib, const U8 *in, PHE *out);
 
     // Some fundamental data structures. We keep pointers to our streams,
     // and a copy of the FIB.
@@ -156,7 +159,7 @@ public:
     // It is designed to be instantiated locally, once for each plex we are
     // interested in.
 
-    template <class T>
+    template <class T, int word6Size>
     class Plex
     {
     public:
@@ -167,7 +170,7 @@ public:
         //
         // Plex(bool (*callback)(unsigned start, unsigned end, const <T>&
 
-        Plex(MsWord *client, const U8 *plex, const U32 byteCount);
+        Plex(FIB &fib);
 
         // We would like to define the iterator as a proper friend class with a
         // constructor like this:
@@ -177,12 +180,12 @@ public:
         //
         // but that results in a compiler error.
 
-        void startIteration();
+        void startIteration(const U8 *plex, const U32 byteCount);
         bool getNext(U32 *startFc, U32 *endFc, T *data);
     protected:
-        MsWord *m_client;
+        FIB &m_fib;
         const U8 *m_plex;
-        const U32 m_byteCount;
+        U32 m_byteCount;
         unsigned m_crun;
         const U8 *m_fcNext;
         const U8 *m_dataNext;
@@ -204,7 +207,7 @@ public:
         //
         // Fkp(bool (*callback)(unsigned start, unsigned end, const <T>&
 
-        Fkp(MsWord *client, const U8 *fkp);
+        Fkp(FIB &fib);
 
         // We would like to define the iterator as a proper friend class with a
         // constructor like this:
@@ -214,10 +217,10 @@ public:
         //
         // but that results in a compiler error.
 
-        void startIteration();
+        void startIteration(const U8 *fkp);
         bool getNext(U32 *startFc, U32 *endFc, U8 *rgb, T1 *data1, T2 *data2);
     protected:
-        MsWord *m_client;
+        const FIB &m_fib;
         const U8 *m_fkp;
         U8 m_crun;
         const U8 *m_fcNext;
@@ -233,8 +236,8 @@ private:
     QString m_constructionError;
     void constructionError(unsigned line, const char *reason);
     static const unsigned s_minWordVersion = 100;
+    static const unsigned s_maxWord6Version = 105;
 
-    Plex<PCD> *m_pieceTable;
     void getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode);
     void getPAPX(
         const U8 *fkp,
@@ -267,10 +270,6 @@ private:
     void paragraphStyleModify(PAP *pap, PAPXFKP &style);
     void paragraphStyleModify(PAP *pap, PHE &layout);
     void paragraphStyleModify(PAP *pap, STD &style);
-
-    // Fetch the piece table.
-
-    void getPieces();
 
     // Fetch the styles in the style sheet.
 
