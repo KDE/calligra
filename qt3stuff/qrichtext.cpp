@@ -2146,7 +2146,7 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
     if (  c1.index() == 0 )
 	cursor->gotoLeft();
 
-    c1.parag()->remove( c1.index(), c1.parag()->length() - c1.index() );
+    c1.parag()->remove( c1.index(), c1.parag()->length() - 1 - c1.index() );
     QTextParag *p = c1.parag()->next();
     int dy = 0;
     QTextParag *tmp;
