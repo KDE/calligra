@@ -877,6 +877,9 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
   m_spellConfigWidget = new KSpellConfig( box, "spell_check",m_pView->doc()->getKSpellConfig()/*, false*/);
     dontCheckUpperWord = new QCheckBox( i18n("Do not check upper word"),box);
     dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);
+    
+  QWidget* spacer = new QWidget( box );
+  spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );  
 
     if( config->hasGroup("KSpell kspread") )
     {
