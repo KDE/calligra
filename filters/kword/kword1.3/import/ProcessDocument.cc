@@ -458,7 +458,7 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
         << TagProcessing ( "SHADOW",              NULL,                   NULL                               )
         << TagProcessing ( "FONTATTRIBUTE",       ProcessStringValueTag,  &formatData.text.fontAttribute     )
-        << TagProcessing ( "LANGUAGE",            NULL,                   NULL                               )
+        << TagProcessing ( "LANGUAGE",            ProcessStringValueTag,  &formatData.text.language          )
         << TagProcessing ( "ANCHOR",              NULL,                   NULL                               )
         << TagProcessing ( "IMAGE",               NULL,                   NULL                               )
         << TagProcessing ( "PICTURE",             NULL,                   NULL                               )

@@ -105,6 +105,7 @@ class TextFormatting
         int     verticalAlignment;
 
         QString fontAttribute;
+        QString language;
 
         bool    missing;   // true if the FormatData does not correspond to a real <FORMAT> element
 };

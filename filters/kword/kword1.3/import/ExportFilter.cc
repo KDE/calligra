@@ -651,6 +651,37 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         strElement+="\" ";
     }
 
+    key += ",";
+
+    if ( force || ( formatOrigin.language != formatData.language ) )
+    {
+        const QString lang ( formatData.language );
+        if ( ! lang.isEmpty() )
+        {
+            const int res = lang.find( '_' );
+
+            if ( res >= 0 )
+            {
+                kdDebug(30520) << "Language: " << lang << " => " << lang.left( res ) << " - " << lang.mid( res + 1 ) << endl;
+                strElement += "fo:language=\"";
+                strElement += lang.left( res );
+                strElement += "\" ";
+                strElement += "fo:country=\"";
+                strElement += lang.mid( res + 1 );
+                strElement += "\" ";
+            }
+            else
+            {
+                kdWarning(30520) << "Not standard language: " << lang << endl;
+                strElement += "fo:language=\"";
+                strElement += lang;
+                strElement += "\" ";
+            }
+
+            key+=formatData.language;
+        }
+    }
+
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
