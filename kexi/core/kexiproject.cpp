@@ -430,6 +430,29 @@ KexiProject::registerProjectHandler(KexiProjectHandler *part)
 	emit partListUpdated();
 }
 
+KexiProjectHandler *
+KexiProject::handlerForMime(const QString& mime)
+{
+	for (KexiProjectHandler *h=m_parts->first();h;h=m_parts->next())
+	{
+		if (h->mime()==mime) return h;
+	}
+	return 0;
+}
+
+ProviderList 
+KexiProject::providers(const QString &interfaceName)
+{
+	ProviderList l;
+	for (KexiProjectHandler *h=m_parts->first();h;h=m_parts->next())
+        {
+                if (h->qt_cast(interfaceName.latin1())) l.append(h);
+        }
+	return l;
+}
+
+
+
 PartList*
 KexiProject::getParts()
 {
@@ -489,3 +512,4 @@ void KexiProject::loadHandlers()
 			*it,this);	
 	}
 }
+

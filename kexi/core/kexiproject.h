@@ -96,6 +96,9 @@ public:
 	QString boolToString(bool b);
 	bool stringToBool(const QString &s);
 	KexiRelation *relationManager();
+
+	KexiProjectHandler *handlerForMime(const QString&);
+	ProviderList providers(const QString &interfaceName);
 signals:
 	void dbAvaible();
 	void saving(KoStore *);

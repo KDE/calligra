@@ -3,6 +3,7 @@
 
 #include <qstring.h>
 #include <qmap.h>
+#include <klocale.h>
 
 class QStringList;
 class KexiDBRecord;
@@ -14,9 +15,14 @@ class KexiDataProvider
 public:
 	class Parameter{
 	public:
-		enum Type{Unknown=0,String=1,Float=2,Date=3,TheLastOne=0xff};
+		Parameter(const QString& name_, const int type_){name=name_;type=type_;}
+		Parameter(){}
+		enum Type{Unknown=0,Text=1,Float=2,Int=3,Date=4,Time=5,DateTime=6,TheLastOne=0xff};
+		static const char* typeNames[];
+		static const char* typeDescription[];
+		static const int maxType;
 		QString name;
-		Type type;
+		int type;
 	};
 	typedef QValueList<Parameter> ParameterList;
 
