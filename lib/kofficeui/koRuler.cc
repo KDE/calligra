@@ -330,85 +330,87 @@ void KoRuler::drawVertical( QPainter *_painter )
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
-    double dist=0.0;
-    int j = 0;
     int totalh = qRound( zoomIt(layout.ptHeight) );
-    QString str;
-    QFont font; // Use the global KDE font. Let's hope it's appropriate.
-    font.setPointSize( 8 ); // Hardcode the size? (Werner)
-    QFontMetrics fm( font );
+    if ( ( diffy > 0 && totalh > diffy ) || ( diffy < 0 && diffy + totalh > 0 ) ) {
+        double dist=0.0;
+        int j = 0;
+        QString str;
+        QFont font; // Use the global KDE font. Let's hope it's appropriate.
+        font.setPointSize( 8 ); // Hardcode the size? (Werner)
+        QFontMetrics fm( font );
 
-    p.setBrush( colorGroup().brush( QColorGroup::Base ) );
+        p.setBrush( colorGroup().brush( QColorGroup::Base ) );
 
-    // Draw white rect
-    QRect r;
-    if ( !d->whileMovingBorderTop )
-        r.setTop( -diffy + frameStart );
-    else
-        r.setTop( d->oldMy );
-    r.setLeft( 0 );
-    if ( !d->whileMovingBorderBottom )
-        r.setHeight(d->frameEnd-frameStart);
-    else
-        r.setBottom( d->oldMy );
-    r.setRight( width() );
+        // Draw white rect
+        QRect r;
+        if ( !d->whileMovingBorderTop )
+            r.setTop( -diffy + frameStart );
+        else
+            r.setTop( d->oldMy );
+        r.setLeft( 0 );
+        if ( !d->whileMovingBorderBottom )
+            r.setHeight(d->frameEnd-frameStart);
+        else
+            r.setBottom( d->oldMy );
+        r.setRight( width() );
 
-    p.drawRect( r );
-    p.setFont( font );
+        p.drawRect( r );
+        p.setFont( font );
 
-    // Draw the numbers
-    switch( m_unit ) {
-    case KoUnit::U_INCH:
-        dist = INCH_TO_POINT ( m_zoom );
-        break;
-    case KoUnit::U_PT:
-        dist = 100.0 * m_zoom;
-        break;
-    case KoUnit::U_MM:
-        dist = MM_TO_POINT ( 10.0 * m_zoom );
-        break;
-    }
-
-    int maxheight = 0;
-    for ( double i = 0.0;i <= (double)totalh;i += dist ) {
-        str=QString::number(j++);
-        if ( m_unit == KoUnit::U_PT && j!=1 )
-            str+="00";
-        int textheight = fm.height();
-        maxheight = QMAX( maxheight, textheight );
-        p.drawText( qRound(( width() - fm.width( str ) ) * 0.5),
-                    qRound(i) - diffy - qRound(textheight * 0.5),
-                    width(), textheight, AlignLeft | AlignTop, str );
-    }
-
-    // Draw the medium-sized lines
-    if ( dist > maxheight + 1 )
-    {
-        for ( double i = dist * 0.5;i <= (double)totalh;i += dist ) {
-            int ii=qRound(i);
-            p.drawLine( 5, ii - diffy, width() - 5, ii - diffy );
+        // Draw the numbers
+        switch( m_unit ) {
+            case KoUnit::U_INCH:
+                dist = INCH_TO_POINT ( m_zoom );
+                break;
+            case KoUnit::U_PT:
+                dist = 100.0 * m_zoom;
+                break;
+            case KoUnit::U_MM:
+                dist = MM_TO_POINT ( 10.0 * m_zoom );
+                break;
         }
-    }
 
-    // Draw the small lines
-    if ( dist * 0.5 > maxheight + 1 )
-    {
-        for ( double i = dist * 0.25;i <=(double)totalh;i += dist *0.5 ) {
-            int ii=qRound(i);
-            p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
+        int maxheight = 0;
+        for ( double i = 0.0;i <= (double)totalh;i += dist ) {
+            str=QString::number(j++);
+            if ( m_unit == KoUnit::U_PT && j!=1 )
+                str+="00";
+            int textheight = fm.height();
+            maxheight = QMAX( maxheight, textheight );
+            p.drawText( qRound(( width() - fm.width( str ) ) * 0.5),
+                        qRound(i) - diffy - qRound(textheight * 0.5),
+                        width(), textheight, AlignLeft | AlignTop, str );
         }
+
+        // Draw the medium-sized lines
+        if ( dist > maxheight + 1 )
+        {
+            for ( double i = dist * 0.5;i <= (double)totalh;i += dist ) {
+                int ii=qRound(i);
+                p.drawLine( 5, ii - diffy, width() - 5, ii - diffy );
+            }
+        }
+
+        // Draw the small lines
+        if ( dist * 0.5 > maxheight + 1 )
+        {
+            for ( double i = dist * 0.25;i <=(double)totalh;i += dist *0.5 ) {
+                int ii=qRound(i);
+                p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
+            }
+        }
+
+        // Draw ending bar (at page height)
+        p.drawLine( 1, totalh - diffy + 1, width() - 1, totalh - diffy + 1 );
+        p.setPen( colorGroup().color( QColorGroup::Base ) );
+        p.drawLine( 1, totalh - diffy, width() - 1, totalh - diffy );
+
+        // Draw starting bar (at 0)
+        p.setPen( colorGroup().color( QColorGroup::Text ) );
+        p.drawLine( 1, -diffy, width() - 1, -diffy );
+        p.setPen( colorGroup().color( QColorGroup::Base ) );
+        p.drawLine( 1, -diffy - 1, width() - 1, -diffy - 1 );
     }
-
-    // Draw ending bar (at page height)
-    p.drawLine( 1, totalh - diffy + 1, width() - 1, totalh - diffy + 1 );
-    p.setPen( colorGroup().color( QColorGroup::Base ) );
-    p.drawLine( 1, totalh - diffy, width() - 1, totalh - diffy );
-
-    // Draw starting bar (at 0)
-    p.setPen( colorGroup().color( QColorGroup::Text ) );
-    p.drawLine( 1, -diffy, width() - 1, -diffy );
-    p.setPen( colorGroup().color( QColorGroup::Base ) );
-    p.drawLine( 1, -diffy - 1, width() - 1, -diffy - 1 );
 
     // Show the mouse position
     if ( d->action == A_NONE && showMPos ) {
