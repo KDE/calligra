@@ -20,7 +20,7 @@
 
 #include <qhbuttongroup.h>
 #include <qinputdialog.h>
-#include <qlayout.h> 
+#include <qlayout.h>
 #include <qptrvector.h>
 #include <qtoolbutton.h>
 
@@ -68,7 +68,7 @@ VLayerListViewItem::update()
 	setText( 2, m_layer->name() );
 	setPixmap( 1, QPixmap( il.iconPath( ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ? "14_layer_visible.png" : "14_layer_novisible.png" ), KIcon::Small ) ) );
 	setPixmap( 2, preview );
-	
+
 	if ( m_layer == m_view->part()->document().activeLayer() )
 		setSelected( true );
 } // VLayerListViewItem::update
@@ -85,7 +85,7 @@ VLayerListViewItem::pos()
 	VLayerListViewItem* item;
 	if( !( item = (VLayerListViewItem*)itemAbove() ) )
 		return 0;
-	else 
+	else
 		return 1 + item->pos();
 } // VLayerListViewItem::pos
 
@@ -93,7 +93,7 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	: VDocker( view->shell() ), m_view( view )
 {
 	KIconLoader il;
-	
+
 	setCaption( i18n( "Layers Manager" ) );
 
 	QToolButton* button;
@@ -122,7 +122,7 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	layout->addWidget( m_buttonGroup, 1);
 	layout->setSpacing( 0 );
 	layout->setMargin( 3 );
-	
+
 	m_layersListView->setAllColumnsShowFocus( true );
 	m_layersListView->setFixedSize( 160, 120 );
 	m_layersListView->addColumn( i18n( "S" ), 20 );
@@ -132,11 +132,11 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	m_layersListView->setColumnWidthMode( 2, QListView::Maximum );
 	m_layersListView->setResizeMode( QListView::LastColumn );
 	m_layersListView->setSorting( 0, false );
-	
+
 	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( selectionChanged( QListViewItem*, const QPoint&, int ) ) );
 	connect( m_layersListView, SIGNAL( rightButtonClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( renameLayer( QListViewItem*, const QPoint&, int ) ) );
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
-	
+
 	layout->activate();
 	updateLayers();
 	setWidget( mainWidget );
@@ -178,7 +178,7 @@ VLayersDocker::selectionChanged( QListViewItem* item, const QPoint &, int col )
 void
 VLayersDocker::renameLayer( QListViewItem* item, const QPoint&, int col )
 {
-	if ( ( item ) && col == 2 ) 
+	if ( ( item ) && col == 2 )
 	{
 		VLayerListViewItem* layerItem = (VLayerListViewItem*)item;
 		bool ok = true;
@@ -202,7 +202,7 @@ VLayersDocker::addLayer()
 	{
 		VLayer* layer = new VLayer( &( m_view->part()->document() ) );
 		layer->setName( name );
-		VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Delete layer"), 
+		VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n("Delete layer"),
 				layer, VLayerCmd::addLayer );
 		m_view->part()->addCommand( cmd, true );
 		updateLayers();
@@ -215,10 +215,13 @@ VLayersDocker::raiseLayer()
 	VLayerListViewItem* layerItem = (VLayerListViewItem*)m_layersListView->selectedItem();
 	if( !layerItem || !layerItem->layer() )
 		return;
-	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Raise layer" ), 
-			layerItem->layer(), VLayerCmd::raiseLayer );
-	m_view->part()->addCommand( cmd, true );
-	updatePreviews();
+        if ( m_view->part()->document().canRaiseLayer( layerItem->layer()))
+        {
+            VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Raise layer" ),
+                                            layerItem->layer(), VLayerCmd::raiseLayer );
+            m_view->part()->addCommand( cmd, true );
+            updatePreviews();
+        }
 } // VLayersDocker::raiseLayer
 
 void
@@ -228,9 +231,12 @@ VLayersDocker::lowerLayer()
 	if( !layerItem || !layerItem->layer() )
 		return;
 	VLayer *layer = layerItem->layer();
-	VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Lower layer" ), layer, VLayerCmd::lowerLayer );
-	m_view->part()->addCommand( cmd, true );
-	updatePreviews();
+        if ( m_view->part()->document().canLowerLayer( layer))
+        {
+            VLayerCmd* cmd = new VLayerCmd( &m_view->part()->document(), i18n( "Lower layer" ), layer, VLayerCmd::lowerLayer );
+            m_view->part()->addCommand( cmd, true );
+            updatePreviews();
+        }
 } // VLayersDocker::lowerLayer
 
 void

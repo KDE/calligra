@@ -119,7 +119,7 @@ VDocument::insertLayer( VLayer* layer )
 	m_activeLayer = layer;
 } // VDocument::insertLayer
 
-void 
+void
 VDocument::removeLayer( VLayer* layer )
 {
 	m_layers.remove( layer );
@@ -128,7 +128,19 @@ VDocument::removeLayer( VLayer* layer )
 	m_activeLayer = m_layers.getLast();
 } // VDocument::removeLayer
 
-void 
+bool VDocument::canRaiseLayer( VLayer* layer )
+{
+    int pos = m_layers.find( layer );
+    return (pos != int( m_layers.count() ) - 1 && pos >= 0 );
+}
+
+bool VDocument::canLowerLayer( VLayer* layer )
+{
+    int pos = m_layers.find( layer );
+    return (pos>0);
+}
+
+void
 VDocument::raiseLayer( VLayer* layer )
 {
 	int pos = m_layers.find( layer );
@@ -139,7 +151,7 @@ VDocument::raiseLayer( VLayer* layer )
 	}
 } // VDocument::raiseLayer
 
-void 
+void
 VDocument::lowerLayer( VLayer* layer )
 {
 	int pos = m_layers.find( layer );
@@ -150,13 +162,13 @@ VDocument::lowerLayer( VLayer* layer )
 	}
 } // VDocument::lowerLayer
 
-int 
+int
 VDocument::layerPos( VLayer* layer )
 {
 	return m_layers.find( layer );
 } // VDocument::layerPos
 
-void 
+void
 VDocument::setActiveLayer( VLayer* layer )
 {
 	if ( m_layers.find( layer ) != -1 )

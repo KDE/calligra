@@ -115,6 +115,11 @@ public:
 	void setUnitName( const QString& unitName )
 		{ m_unitName = unitName; }
 
+    bool canRaiseLayer( VLayer* layer );
+
+    bool canLowerLayer( VLayer* layer );
+
+
 	/**
 	 * Lifts the layer.
 	 */
@@ -130,28 +135,28 @@ public:
 	 */
 	int layerPos( VLayer* layer );
 
-	/** 
-	 * Inserts a new layer. 
+	/**
+	 * Inserts a new layer.
 	 * if pos is -1, appends it to the list.
 	 */
 	void insertLayer( VLayer* layer );
-	
+
 	/**
 	 * Removes the layer.
 	 */
 	void removeLayer( VLayer* layer );
-	
+
 	/**
-	 * Sets the active layer. 
+	 * Sets the active layer.
 	 */
 	void setActiveLayer( VLayer* layer );
-	
+
 	/**
 	 * Returns a pointer to the active layer.
 	 */
 	VLayer* activeLayer() const { return m_activeLayer; }
-	
-	/** 
+
+	/**
 	 * Returns the list of layers.
 	 */
 	const VLayerList& layers() const { return m_layers; }
@@ -173,10 +178,10 @@ public:
 		{ return m_selection; }
 
 	/**
-	 * Returns the selection mode. 
+	 * Returns the selection mode.
 	 */
 	VSelectionMode selectionMode() { return m_selectionMode; }
-	
+
 	/**
 	 * Sets the selection mode.
 	 */
