@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="78">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="79">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -160,7 +160,6 @@
   <ActionList name="datatools"/>
   <Separator/>
   <Action name="edit_sldatabase"/>
-  <Separator/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="configure_autocorrection"/>
