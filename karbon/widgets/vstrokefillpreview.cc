@@ -43,27 +43,31 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->clear( paletteBackgroundColor().rgb() );
 
 	m_painter->setPen( Qt::NoPen );
-	//m_painter->setBrush( qRgba( 255, 0, 0, 255) );
-	m_painter->setBrush( s.color().toQColor() );
+	if( s.type() != stroke_none )
+	{
+		m_painter->setBrush( s.color().toQColor() );
 
-	m_painter->newPath();
-	m_painter->moveTo( KoPoint( 10.0, 10.0 ) );
-	m_painter->lineTo( KoPoint( 30.0, 10.0 ) );
-	m_painter->lineTo( KoPoint( 30.0, 40.0 ) );
-	m_painter->lineTo( KoPoint( 10.0, 40.0 ) );
-	m_painter->lineTo( KoPoint( 10.0, 10.0 ) );
-	m_painter->fillPath();
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( 10.0, 10.0 ) );
+		m_painter->lineTo( KoPoint( 30.0, 10.0 ) );
+		m_painter->lineTo( KoPoint( 30.0, 40.0 ) );
+		m_painter->lineTo( KoPoint( 10.0, 40.0 ) );
+		m_painter->lineTo( KoPoint( 10.0, 10.0 ) );
+		m_painter->fillPath();
+	}
 
-	m_painter->setBrush( f.color().toQColor() );
+	if( f.type() != fill_none )
+	{
+		m_painter->setBrush( f.color().toQColor() );
 
-	m_painter->newPath();
-	m_painter->moveTo( KoPoint( 20.0, 20.0 ) );
-	m_painter->lineTo( KoPoint( 40.0, 20.0 ) );
-	m_painter->lineTo( KoPoint( 40.0, 50.0 ) );
-	m_painter->lineTo( KoPoint( 20.0, 50.0 ) );
-	m_painter->lineTo( KoPoint( 20.0, 20.0 ) );
-	m_painter->fillPath();
-
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( 20.0, 20.0 ) );
+		m_painter->lineTo( KoPoint( 40.0, 20.0 ) );
+		m_painter->lineTo( KoPoint( 40.0, 50.0 ) );
+		m_painter->lineTo( KoPoint( 20.0, 50.0 ) );
+		m_painter->lineTo( KoPoint( 20.0, 20.0 ) );
+		m_painter->fillPath();
+	}
 	m_painter->end();
 
 	repaint();
