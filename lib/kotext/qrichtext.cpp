@@ -4290,8 +4290,6 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	// check for cursor mark
 	if ( cursor && this == cursor->parag() && i == cursor->index() ) {
 	    curx = cursor->x();
-	    curh = h;
-	    cury = cy;
 	    curline = line;
             KoTextStringChar *c = chr;
             if ( i > 0 )
@@ -4396,7 +4394,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 
     // if we should draw a cursor, draw it now
     if ( curx != -1 && cursor ) {
-        drawCursor( painter, cursor, curx, cury, curh - lineSpacing( curline ), cg );
+        drawCursor( painter, cursor, curx, cury, curh, cg );
     }
 }
 
