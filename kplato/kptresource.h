@@ -21,6 +21,7 @@
 #define KPTRESOURCE_H
 
 #include "kptduration.h"
+#include "kptdatetime.h"
 
 #include <qdom.h>
 #include <qstring.h>
@@ -74,7 +75,7 @@ class KPTResourceGroup {
 	      /** Get the @num resources which is available in the time frame
             * defined by @start and @duration.
             */
-          QPtrList<KPTResource> availableResources(const KPTDuration start, const KPTDuration duration, int num);
+          QPtrList<KPTResource> availableResources(const KPTDateTime start, const KPTDuration duration, int num);
 	      /** Manage the dependent resources.  This is a list of the resource
 	        * groups that must have available resources for this resource to
 	        * perform the work
@@ -164,9 +165,9 @@ class KPTResource {
         void addWorkingHour(QTime from, QTime until);
         QPtrList<QTime> workingHours() { return m_workingHours; }
 
-        KPTDuration *getFirstAvailableTime(KPTDuration after = KPTDuration());
-        KPTDuration *getBestAvailableTime(KPTDuration duration);
-        KPTDuration *getBestAvailableTime(const KPTDuration after, const KPTDuration duration);
+        KPTDateTime *getFirstAvailableTime(KPTDateTime after = KPTDateTime());
+        KPTDateTime *getBestAvailableTime(KPTDuration duration);
+        KPTDateTime *getBestAvailableTime(const KPTDateTime after, const KPTDuration duration);
 
         bool load(QDomElement &element);
         void save(QDomElement &element);
@@ -237,12 +238,12 @@ public:
 class KPTAppointment {
     public:
         KPTAppointment() {}
-        KPTAppointment(KPTDuration startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode=0);
+        KPTAppointment(KPTDateTime startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode=0);
         ~KPTAppointment();
 
         // get/set member values.
-        const KPTDuration &startTime() const { return m_startTime; }
-        void setStartTime(KPTDuration st) { m_startTime=st; }
+        const KPTDateTime &startTime() const { return m_startTime; }
+        void setStartTime(KPTDateTime st) { m_startTime=st; }
 
         const KPTDuration &duration() const { return m_duration; }
         void setDuration(KPTDuration d) { m_duration=d; }
@@ -259,16 +260,16 @@ class KPTAppointment {
         int repeatCount() const { return m_repeatCount; }
         void setRepeatCount(int rc) { m_repeatCount=rc; }
 
-        void deleteAppointmentFromRepeatList(KPTDuration time);
-        void addAppointmentToRepeatList(KPTDuration time);
+        void deleteAppointmentFromRepeatList(KPTDateTime time);
+        void addAppointmentToRepeatList(KPTDateTime time);
 
-        bool isBusy(const KPTDuration &start, const KPTDuration &end);
+        bool isBusy(const KPTDateTime &start, const KPTDateTime &end);
 
         bool load(QDomElement &element, KPTProject &project);
         void save(QDomElement &element);
 
     private:
-        KPTDuration m_startTime;
+        KPTDateTime m_startTime;
         KPTDuration m_duration;
         KPTTask *m_task;
         KPTResource *m_resource;

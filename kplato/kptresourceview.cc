@@ -24,6 +24,7 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
+#include "kptdatetime.h"
 
 #include <KDGanttView.h>
 #include <KDGanttViewSummaryItem.h>
@@ -164,7 +165,7 @@ void KPTResourceView::drawAppointments(KPTResource *resource)
             QListViewItem *item = new QListViewItem(appList,
                     t->name(), t->leader(),
                     t->startTime().date().toString(), t->endTime().date().toString(),
-                    dur->toString(0));
+                    dur->toString(0)); // FIXME
             delete dur;
         }
     }

@@ -58,10 +58,10 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resource
 	dia->leaderfield->setText(task.leader());
 
     dia->setScheduling(task.constraint());
-    if (task.constraintTime() == KPTDuration::zeroDuration)
-        dia->setSchedulerDateTime(QDateTime::currentDateTime());
+    if (task.constraintTime().isValid())
+        dia->setSchedulerDateTime(task.constraintTime());
     else
-        dia->setSchedulerDateTime(task.constraintTime().dateTime());
+        dia->setSchedulerDateTime(QDateTime::currentDateTime());
 
     connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
     connect(dia, SIGNAL( schedulingTypeChanged(int) ), this, SLOT( slotSchedulingChanged(int) ));

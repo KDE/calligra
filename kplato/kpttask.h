@@ -27,6 +27,8 @@
 
 #include <qptrlist.h>
 
+class KPTDateTime;
+
 /**
   * A task in the scheduling software is represented by this class. A task
   * can be anything from 'build house' to 'drill hole' It will always mean
@@ -74,14 +76,14 @@ public:
      * Retrive the time this node starts. This is either implied from the set
      * time, or calculated by asking the parents.
      */
-    KPTDuration *getStartTime();
-    KPTDuration *getEndTime();
+    KPTDateTime *getStartTime();
+    KPTDateTime *getEndTime();
     /**
      * Retrieve the calculated float of this node
      */
     KPTDuration *getFloat();
 
-    const KPTDuration& expectedDuration(const KPTDuration &start);
+    const KPTDuration& expectedDuration(const KPTDateTime &start);
 
     // resources management
     /**
@@ -119,7 +121,7 @@ public:
     virtual void save(QDomElement &element);
 
     void calculateStartEndTime();
-    void calculateStartEndTime(const KPTDuration &start);
+    void calculateStartEndTime(const KPTDateTime &start);
 
     /**
      * Returns the total planned cost for this task (or subtasks)
@@ -140,7 +142,7 @@ public:
 
 private:
 
-    void calculateDuration(const KPTDuration &start); // stores duration to m_duration
+    void calculateDuration(const KPTDateTime &start); // stores duration to m_duration
 
     QPtrList<KPTResourceGroup> m_resource;
 

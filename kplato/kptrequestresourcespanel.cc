@@ -229,7 +229,8 @@ void KPTRequestResourcesPanel::unitsChanged(int units) {
 }
 
 void KPTRequestResourcesPanel::slotOk() {
-    selectedGroup->clear();
+    if (selectedGroup)
+        selectedGroup->clear();
 
     m_task.clearResourceRequests();
 

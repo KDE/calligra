@@ -63,6 +63,7 @@ class KPTDuration {
 
         QString toString() const { return m_theTime.toString(); }
         QString toString(int format) const { return QString("%1h").arg(hours()); } //FIXME
+        static KPTDuration fromString(const QString &s) { return KPTDuration(QDateTime::fromString(s)); }
 
         QDateTime dateTime() const { return m_theTime; }
         QDate date() const { return m_theTime.date(); }

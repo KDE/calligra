@@ -26,6 +26,7 @@
 #include "kpttaskdialog.h"
 #include "kptganttview.h"
 #include "kptpertview.h"
+#include "kptdatetime.h"
 
 #include "kptresourceview.h"
 #include "kptresourcedialog.h"
@@ -222,7 +223,7 @@ void KPTView::slotProjectEdit() {
 
 void KPTView::slotProjectCalculate() {
     getPart()->getProject().calculate();
-    KPTDuration *t = getPart()->getProject().getStartTime();
+    KPTDateTime *t = getPart()->getProject().getStartTime();
     delete t;
 }
 

@@ -17,10 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptnode.h"
-#include "kptresource.h"
 
 #include <qptrlist.h>
-#include <qdatetime.h>
 #include <qdom.h>
 
 #include <kdebug.h>
@@ -36,10 +34,10 @@ KPTNode::~KPTNode() {
 
 void KPTNode::init() {
     m_name="";
-    m_startTime.set(KPTDuration());
-    m_endTime.set(KPTDuration());
-    earliestStart.set(KPTDuration());
-    latestFinish.set(KPTDuration());
+    m_startTime = KPTDateTime();
+    m_endTime = KPTDateTime();
+    earliestStart = KPTDateTime();
+    latestFinish = KPTDateTime();
     m_constraint = KPTNode::ASAP;
     m_effort = 0;
     m_resourceOverbooked = false;
@@ -338,7 +336,7 @@ void KPTNode::set_unvisited_values() {
     = end_node()->successors.list.size() + numDependChildNodes();
 }
 
-void KPTNode::set_pert_values( const KPTDuration& time,
+void KPTNode::set_pert_values( const KPTDateTime& time,
                    start_type start ) {
   start_node()->*start = time;
   if( start_node() != end_node() )
@@ -347,7 +345,7 @@ void KPTNode::set_pert_values( const KPTDuration& time,
     i.current()->set_pert_values( time, start );
 }
 
-const KPTDuration& KPTNode::optimisticDuration(const KPTDuration &start)
+const KPTDuration& KPTNode::optimisticDuration(const KPTDateTime &start)
 {
     m_duration.set(KPTDuration::zeroDuration);
     if (m_effort)
@@ -355,7 +353,7 @@ const KPTDuration& KPTNode::optimisticDuration(const KPTDuration &start)
     return m_duration;
 }
 
-const KPTDuration& KPTNode::pessimisticDuration(const KPTDuration &start)
+const KPTDuration& KPTNode::pessimisticDuration(const KPTDateTime &start)
 {
     m_duration.set(KPTDuration::zeroDuration);
     if (m_effort)
@@ -363,7 +361,7 @@ const KPTDuration& KPTNode::pessimisticDuration(const KPTDuration &start)
     return m_duration;
 }
 
-const KPTDuration& KPTNode::expectedDuration(const KPTDuration &start)
+const KPTDuration& KPTNode::expectedDuration(const KPTDateTime &start)
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_duration.set(KPTDuration::zeroDuration);
@@ -379,7 +377,7 @@ const KPTDuration& KPTNode::expectedDuration() const
 }
 
 
-void KPTNode::calcDuration( const KPTDuration &start, const KPTDuration &effort )
+void KPTNode::calcDuration( const KPTDateTime &start, const KPTDuration &effort )
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_duration.add(effort);
@@ -521,13 +519,13 @@ void KPTNode::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
-    kdDebug()<<indent<<s<<" ("<<constraintTime().dateTime().toString()<<")"<<endl;
+    kdDebug()<<indent<<s<<" ("<<constraintTime().toString()<<")"<<endl;
     //kdDebug()<<indent<<"  Duration: "<<m_duration.dateTime().toString()<<endl;
     kdDebug()<<indent<<"  Duration: "<<m_duration.duration()<<QCString(" secs")<<" ("<<m_duration.dateTime().toString()<<")"<<endl;
-    kdDebug()<<indent<<"  Start time: "<<m_startTime.dateTime().toString()<<endl;
-    kdDebug()<<indent<<"  End time: " <<m_endTime.dateTime().toString()<<endl;
-    kdDebug()<<indent<<"  Earliest start: "<<earliestStart.dateTime().toString()<<endl;
-    kdDebug()<<indent<<"  Latest finish: " <<latestFinish.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Start time: "<<m_startTime.toString()<<endl;
+    kdDebug()<<indent<<"  End time: " <<m_endTime.toString()<<endl;
+    kdDebug()<<indent<<"  Earliest start: "<<earliestStart.toString()<<endl;
+    kdDebug()<<indent<<"  Latest finish: " <<latestFinish.toString()<<endl;
     kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
     kdDebug()<<indent<<"  Predecessors="<<start_node()->predecessors.number<<" unvisited="<<start_node()->predecessors.unvisited<<endl;
     //kdDebug()<<indent<<"  Successors="<<start_node()->successors.number<<" unvisited="<<start_node()->successors.unvisited<<endl;

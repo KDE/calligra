@@ -23,6 +23,7 @@
 #include "defs.h"
 #include "kptrelation.h"
 #include "kptduration.h"
+#include "kptdatetime.h"
 #include "kptresource.h"
 
 #include <qrect.h>
@@ -35,7 +36,6 @@
 class KPTEffort;
 class KPTProject;
 class KPTAppointment;
-
 class KPTResourceGroup;
 class KPTResource;
 class KPTResourceGroupRequest;
@@ -152,23 +152,23 @@ public:
 
     KPTRelation *findRelation(KPTNode *node);
 
-    void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
-    const KPTDuration &startTime() const { return m_startTime; }
-    void setEndTime(KPTDuration endTime) { m_endTime=endTime; }
-    const KPTDuration &endTime() const { return m_endTime; }
+    void setStartTime(KPTDateTime startTime) { m_startTime=startTime; }
+    const KPTDateTime &startTime() const { return m_startTime; }
+    void setEndTime(KPTDateTime endTime) { m_endTime=endTime; }
+    const KPTDateTime &endTime() const { return m_endTime; }
 
     virtual void setStartTime() {}
     virtual void setEndTime() {}
     virtual void setStartEndTime() { setStartTime(); setEndTime(); }
 
     const KPTDuration &getDuration() const { return m_duration; }
-    virtual KPTDuration *getEndTime() { return 0L; }
+    virtual KPTDateTime *getEndTime() { return 0L; }
 
     // These are entered by the project man. during the project
-    void setActualStartTime(KPTDuration startTime) { m_actualStartTime=startTime; }
-    const KPTDuration &actualStartTime() const { return m_actualStartTime; }
-    void setActualEndTime(KPTDuration endTime) { m_actualEndTime=endTime; }
-    const KPTDuration &actualEndTime() const { return m_actualEndTime; }
+    void setActualStartTime(KPTDateTime startTime) { m_actualStartTime=startTime; }
+    const KPTDateTime &actualStartTime() const { return m_actualStartTime; }
+    void setActualEndTime(KPTDateTime endTime) { m_actualEndTime=endTime; }
+    const KPTDateTime &actualEndTime() const { return m_actualEndTime; }
 
     void setEffort(KPTEffort* e) { m_effort = e; }
     KPTEffort* effort() const { return m_effort; }
@@ -200,7 +200,7 @@ public:
     /**
      * Calculate the start time, use actualStartTime() for the actually started time.
      */
-    virtual KPTDuration *getStartTime() = 0;
+    virtual KPTDateTime *getStartTime() = 0;
 
     /**
      * Retrieve the calculated float of this node
@@ -217,12 +217,12 @@ public:
       * getEarliestStart() returns earliest time this node can start
       * @see earliestStart
       */
-    KPTDuration getEarliestStart() const { return earliestStart; }
+    KPTDateTime getEarliestStart() const { return earliestStart; }
     /**
       * getLatestFinish() returns latest time this node can finish
       * @see latestFinish
       */
-    KPTDuration getLatestFinish() const { return latestFinish; }
+    KPTDateTime getLatestFinish() const { return latestFinish; }
 
     QString &name() { return m_name; }
     QString &leader() { return m_leader; }
@@ -239,28 +239,27 @@ public:
     int constraint() const { return m_constraint; }
     QString constraintToString() const;
 
-    const KPTDuration& optimisticDuration(const KPTDuration &start);
-    const KPTDuration& pessimisticDuration(const KPTDuration &start);
+    const KPTDuration& optimisticDuration(const KPTDateTime &start);
+    const KPTDuration& pessimisticDuration(const KPTDateTime &start);
     /**
      * Calculates and returns the duration.
      */
-    virtual const KPTDuration& expectedDuration(const KPTDuration &start);
+    virtual const KPTDuration& expectedDuration(const KPTDateTime &start);
     /**
      * Returns the (previously) calculated duration.
      * @see m_duration
      */
     const KPTDuration& expectedDuration() const;
 
-    virtual void setConstraintTime(KPTDuration time) { m_constraintTime = time; }
-    virtual void setConstraintTime(QDateTime time) { m_constraintTime = KPTDuration(time); }
+    virtual void setConstraintTime(QDateTime time) { m_constraintTime = time; }
 
-    virtual KPTDuration &constraintTime() { return m_constraintTime; }
-    virtual KPTDuration &startNotEarlier() { return m_constraintTime; }
-    virtual KPTDuration &finishNotLater() { return m_constraintTime; }
-    virtual KPTDuration &mustStartOn() { return m_constraintTime; }
+    virtual KPTDateTime &constraintTime() { return m_constraintTime; }
+    virtual KPTDateTime &startNotEarlier() { return m_constraintTime; }
+    virtual KPTDateTime &finishNotLater() { return m_constraintTime; }
+    virtual KPTDateTime &mustStartOn() { return m_constraintTime; }
 
     virtual void calculateStartEndTime() {}
-    virtual void calculateStartEndTime(const KPTDuration &start) {}
+    virtual void calculateStartEndTime(const KPTDateTime &start) {}
 
     virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
     virtual void makeAppointments() {}
@@ -342,7 +341,7 @@ protected:
      */
     void set_unvisited_values();
 
-    typedef KPTDuration KPTNode::*start_type;
+    typedef KPTDateTime KPTNode::*start_type;
 
     /**
      * Set values of earliest start or latest finish for start and
@@ -351,7 +350,7 @@ protected:
      * @param time The time to set all values to.
      * @param start Either KPTNode::earliestStart or KPTNode::latestFinish.
      */
-    void set_pert_values( const KPTDuration& time, start_type start );
+    void set_pert_values( const KPTDateTime& time, start_type start );
 
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;
@@ -369,7 +368,7 @@ protected:
 
     // Both of these are entered during the project, not at the initial
     // calculation.
-    KPTDuration m_actualStartTime, m_actualEndTime;
+    KPTDateTime m_actualStartTime, m_actualEndTime;
 
     KPTEffort* m_effort;
 
@@ -396,34 +395,34 @@ protected:
       * A task may be scheduled to start later because other tasks
       * scehduled in parallell takes more time to complete
       */
-    KPTDuration earliestStart;
+    KPTDateTime earliestStart;
     /** latestFinish is calculated by PERT/CPM.
       * A task may be scheduled to finish earlier because other tasks
       * scehduled in parallell takes more time to complete
       */
-    KPTDuration latestFinish;
+    KPTDateTime latestFinish;
 
     ConstraintType m_constraint;
 
-    void calcDuration(const KPTDuration &start, const KPTDuration &effort);
+    void calcDuration(const KPTDateTime &start, const KPTDuration &effort);
 
     /**
       * @m_constraintTime is used if any of the constraints
       * StartNotEarlier, FinishNotLater or MustStartOn is selected
       */
-    KPTDuration m_constraintTime;
+    KPTDateTime m_constraintTime;
 
     /**  m_startTime is the calculated start time.
       *  It depends on constraints (i.e. ASAP/ALAP)
       *  It will always be later or equal to @ref earliestStart
       */
-    KPTDuration m_startTime;
+    KPTDateTime m_startTime;
 
     /**  m_endTime is the calculated finish time.
       *  It depends on constraints (i.e. ASAP/ALAP)
       *  It will always be earlier or equal to @ref latestFinish
       */
-    KPTDuration m_endTime;
+    KPTDateTime m_endTime;
     /**  m_duration is the calculated duration which depends on
       *  e.g. estimated effort, allocated resources and risk
       */

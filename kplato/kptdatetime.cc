@@ -19,31 +19,30 @@
 
 #include "kptdatetime.h"
 
+#include <kdebug.h>
+
 KPTDateTime::KPTDateTime() : QDateTime() {
 }
 
 KPTDateTime::KPTDateTime(QDateTime dt) : QDateTime(dt.date(), dt.time()) {
 }
 
-KPTDateTime KPTDateTime::add(const KPTDuration &duration) {
-    KPTDateTime d(duration.dateTime());
+void KPTDateTime::add(const KPTDuration &duration) {
     int days = KPTDuration::zeroDuration.dateTime().daysTo(duration.dateTime());
-    QTime t;
+    QTime t; //00:00:00
     int secs = t.secsTo(duration.dateTime().time());
-    setDate(date().addDays(days));
-    setTime(time().addSecs(secs));
-    //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<", "<<secs<<endl;
-    return *this;
+    *this = addDays(days);
+    *this = addSecs(secs);
+    //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
-KPTDateTime KPTDateTime::subtract(const KPTDuration &duration) {
+void KPTDateTime::subtract(const KPTDuration &duration) {
     int days =  KPTDuration::zeroDuration.dateTime().daysTo(duration.dateTime());
-    QTime t;
+    QTime t; //00:00:00
     int secs = t.secsTo(duration.dateTime().time());
-    setDate(date().addDays(-days));
-    setTime(time().addSecs(-secs));
-    //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<", "<<secs<<endl;
-    return *this;
+    *this = addDays(-days);
+    *this = addSecs(-secs);
+    //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
 KPTDuration KPTDateTime::duration(const KPTDateTime &dt) {
@@ -57,4 +56,26 @@ KPTDuration KPTDateTime::duration(const KPTDateTime &dt) {
         dur.addSecs(time().secsTo(dt.time()));
     }
     return dur;
+}
+
+KPTDateTime KPTDateTime::operator+(const KPTDuration &duration) {
+    KPTDateTime d(*this);
+    d.add(duration);
+    return d;
+}
+
+KPTDateTime& KPTDateTime::operator+=(const KPTDuration &duration) {
+    add(duration);
+    return *this;
+}
+
+KPTDateTime KPTDateTime::operator-(const KPTDuration &duration) {
+    KPTDateTime d(*this);
+    d.subtract(duration);
+    return d;
+}
+
+KPTDateTime& KPTDateTime::operator-=(const KPTDuration &duration) {
+    subtract(duration);
+    return *this;
 }

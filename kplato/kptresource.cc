@@ -16,11 +16,11 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-//#include "kptresource.h"  //Note: kptproject.h includes this!
+
+#include "kptresource.h"
 #include "kptproject.h"
 #include "kpttask.h"
-
-#include <qdatetime.h>
+#include "kptdatetime.h"
 
 #include <kdebug.h>
 
@@ -255,15 +255,15 @@ void KPTResource::addWorkingHour(QTime from, QTime until) {
     m_workingHours.append(new QTime(until));
 }
 
-KPTDuration *KPTResource::getFirstAvailableTime(KPTDuration /*after*/) {
+KPTDateTime *KPTResource::getFirstAvailableTime(KPTDateTime /*after*/) {
     return 0L;
 }
 
-KPTDuration *KPTResource::getBestAvailableTime(KPTDuration /*duration*/) {
+KPTDateTime *KPTResource::getBestAvailableTime(KPTDuration /*duration*/) {
     return 0L;
 }
 
-KPTDuration *KPTResource::getBestAvailableTime(const KPTDuration after, const KPTDuration duration) {
+KPTDateTime *KPTResource::getBestAvailableTime(const KPTDateTime after, const KPTDuration duration) {
     return 0L;
 }
 
@@ -339,7 +339,7 @@ void KPTResource::saveAppointments(QDomElement &element) const {
     }
 }
 
-KPTAppointment::KPTAppointment(KPTDuration startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
+KPTAppointment::KPTAppointment(KPTDateTime startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode) :m_extraRepeats(), m_skipRepeats() {
     m_startTime=startTime;
     m_duration=duration;
     m_task=taskNode;
@@ -351,15 +351,14 @@ KPTAppointment::KPTAppointment(KPTDuration startTime, KPTDuration duration, KPTR
 KPTAppointment::~KPTAppointment() {
 }
 
-void KPTAppointment::deleteAppointmentFromRepeatList(KPTDuration time) {
+void KPTAppointment::deleteAppointmentFromRepeatList(KPTDateTime time) {
 }
 
-void KPTAppointment::addAppointmentToRepeatList(KPTDuration time) {
+void KPTAppointment::addAppointmentToRepeatList(KPTDateTime time) {
 }
 
-bool KPTAppointment::isBusy(const KPTDuration &start, const KPTDuration &end) {
-    KPTDuration finish(m_startTime);
-    finish.add(m_duration);
+bool KPTAppointment::isBusy(const KPTDateTime &start, const KPTDateTime &end) {
+    KPTDateTime finish(m_startTime + m_duration);
     return !(start > finish || end < m_startTime);
 }
 
@@ -375,8 +374,8 @@ bool KPTAppointment::load(QDomElement &element, KPTProject &project) {
         kdError()<<k_funcinfo<<"The referenced task does not exists: task id="<<id<<endl;
         return false;
     }
-    m_startTime = KPTDuration(QDateTime::fromString(element.attribute("start")));
-    m_duration = KPTDuration(QDateTime::fromString(element.attribute("duration")));
+    m_startTime = KPTDateTime::fromString(element.attribute("start"));
+    m_duration = KPTDuration::fromString(element.attribute("duration"));
 
     m_resource->addAppointment(this);
     return true;
@@ -513,7 +512,7 @@ void KPTAppointment::printDebug(QString indent)
 {
     kdDebug()<<indent<<"  + Appointment to task: "<<m_task->name()<<endl;
     indent += "  !";
-    kdDebug()<<indent<<"      From: "<<m_startTime.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"      From: "<<m_startTime.toString()<<endl;
     kdDebug()<<indent<<"  Duration: "<<m_duration.dateTime().toString()<<endl;
 }
 

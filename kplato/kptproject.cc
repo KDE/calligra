@@ -101,10 +101,7 @@ void KPTProject::calculate() {
 
 KPTDuration *KPTProject::getExpectedDuration() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration *ed = new KPTDuration(end_node()->getLatestFinish());
-    ed->subtract(start_node()->getEarliestStart());
-    //kdDebug()<<k_funcinfo<<"Project="<<name()<<" Duration="<<ed->dateTime().toString()<<endl;
-    return ed;
+    return new KPTDuration(end_node()->getLatestFinish() - start_node()->getEarliestStart());
 }
 
 KPTDuration *KPTProject::getRandomDuration() {
@@ -112,16 +109,15 @@ KPTDuration *KPTProject::getRandomDuration() {
 }
 
 
-KPTDuration *KPTProject::getStartTime() {
-    if(m_startTime == KPTDuration()) {
+KPTDateTime *KPTProject::getStartTime() {
+    if(!m_startTime.isValid()) {
         switch (m_constraint)
         {
         case KPTNode::ASAP:
-            m_startTime.set(earliestStart);
+            m_startTime = earliestStart;
             break;
         case KPTNode::ALAP:
-            m_startTime.set(latestFinish);
-            m_startTime.subtract(m_duration);
+            m_startTime = latestFinish - m_duration;
             break;
         case KPTNode::StartNotEarlier:
         case KPTNode::FinishNotLater:
@@ -131,20 +127,20 @@ KPTDuration *KPTProject::getStartTime() {
                 return m_parent->getStartTime();
             } else {
                 // hmmm, shouldn't happen to main project
-                if ( m_startTime == KPTDuration::zeroDuration )
-                    m_startTime = KPTDuration(QDateTime::currentDateTime());
+                if (!m_startTime.isValid())
+                    m_startTime = QDateTime::currentDateTime();
             }
         break;
         }
         case KPTNode::MustStartOn:
             // m_startTime should have been set!
-            if ( m_startTime == KPTDuration::zeroDuration )
-                m_startTime = KPTDuration(QDateTime::currentDateTime());
+            if (!m_startTime.isValid())
+                m_startTime = QDateTime::currentDateTime();
         default:
             break;
         }
     }
-    return new KPTDuration(m_startTime);
+    return new KPTDateTime(m_startTime);
 }
 
 
@@ -167,10 +163,10 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
          * finish (or latest start) time for currentNode as duration */
         KPTNode &currentNode = **curNode;
         //kdDebug()<<k_funcinfo<<"currentNode="<<currentNode.name()<<" earliest start="<<currentNode.earliestStart.dateTime().toString()<<endl;
-        KPTDuration duration( currentNode.earliestStart );
+        KPTDateTime startTime = currentNode.earliestStart;
         /* *** expected should be more general than this *** */
         /* *** we could use (say) a member function pointer *** */
-        duration.add( currentNode.expectedDuration(duration) );
+        startTime += currentNode.expectedDuration(startTime);
         /* Go through arcs from currentNode, propagating values */
         for( std::vector<KPTNode*>::iterator i = currentNode.successors.list.begin(); i != currentNode.successors.list.end(); ++i ) {
             /* add new nodes if necessary */
@@ -179,8 +175,8 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
             /* reduce unvisited to indicate that an arc/relation has been followed */
             (*i)->predecessors.unvisited--;
             /* act if duration is later than start of arc node */
-            if( duration > (*i)->earliestStart ){
-                (*i)->earliestStart = duration;
+            if( startTime > (*i)->earliestStart ){
+                (*i)->earliestStart = startTime;
             }
             //kdDebug()<<"Node="<<currentNode.name()<<" Successor Node="<<(*i)->name()<<" Earliest start="<<(*i)->earliestStart.dateTime().toString()<<endl;
         }
@@ -196,8 +192,8 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ) {
                 /* reduce unvisited to indicate that a relation has been followed */
                 i.current()->child()->start_node()->predecessors.unvisited--;
                 /* calculate u = duration (plus) lag of relation */
-                KPTDuration u( duration );
-                u.add( i.current()->lag() );
+                KPTDateTime u = startTime;
+                u += i.current()->lag();
                 /* act if u is later than start of next node */
                 //kdDebug()<<k_funcinfo<<"Calc time="<<u.dateTime().toString()<<" childs time="<<i.current()->child()->start_node()->getEarliestStart().dateTime().toString()<<endl;
                 if( u > i.current()->child()->start_node()->earliestStart ) {
@@ -230,15 +226,15 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
 #endif
 
         KPTNode &currentNode = **curNode;
-        KPTDuration t( currentNode.latestFinish );
+        KPTDateTime t = currentNode.latestFinish;
 #ifdef DEBUGPERT
-        kdDebug() << "Node: " <<currentNode.name()<< " latestFinish="<< t.dateTime().toString().latin1() << endl;
+        kdDebug() << "Node: " <<currentNode.name()<< " latestFinish="<< t.toString().latin1() << endl;
 #endif
         /* *** expected should be more general than this *** */
         /* *** we could use (say) a member function pointer *** */
-        t.subtract( currentNode.expectedDuration(t) );
+        t -= currentNode.expectedDuration(t);
 #ifdef DEBUGPERT
-        kdDebug() << "  New calculated latest finish=" << t.dateTime().toString().latin1() << endl;
+        kdDebug() << "  New calculated latest finish=" << t.toString().latin1() << endl;
 #endif
         /* Go through arcs from currentNode, propagating values */
         for( std::vector<KPTNode*>::iterator i = currentNode.predecessors.list.begin(); i != currentNode.predecessors.list.end(); ++i ) {
@@ -265,8 +261,8 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
                 /* reduce unvisited to indicate that a relation has been followed */
                 i.current()->parent()->end_node()->successors.unvisited--;
                 /* calculate u = t (minus) lag of relation */
-                KPTDuration u( t );
-                u.subtract( i.current()->lag() );
+                KPTDateTime u = t;
+                u -= i.current()->lag();
                 /* act if u is earlier than end of next node */
                 if( u < i.current()->parent()->end_node()->latestFinish ) {
                     i.current()->parent()->end_node()->latestFinish = u;
@@ -288,15 +284,15 @@ bool KPTProject::load(QDomElement &element) {
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
 
-    QDateTime dt( QDateTime::currentDateTime() );
+    KPTDateTime dt( QDateTime::currentDateTime() );
     dt = dt.fromString( element.attribute("project-start", dt.toString()) );
     //kdDebug()<<k_funcinfo<<"Start="<<dt.toString()<<endl;
-    setStartTime(KPTDuration(dt));
+    setStartTime(dt);
 
     // Use project-start as default
     dt = dt.fromString( element.attribute("project-end", dt.toString()) );
     //kdDebug()<<k_funcinfo<<"End="<<dt.toString()<<endl;
-    setEndTime(KPTDuration(dt));
+    setEndTime(dt);
 
     // Load the project children
     QDomNodeList list = element.childNodes();
@@ -373,8 +369,8 @@ void KPTProject::save(QDomElement &element)  {
     me.setAttribute("leader", m_leader);
     me.setAttribute("description", m_description);
 
-    me.setAttribute("project-start",startTime().dateTime().toString());
-    me.setAttribute("project-end",endTime().dateTime().toString());
+    me.setAttribute("project-start",startTime().toString());
+    me.setAttribute("project-end",endTime().toString());
 
     QDomElement e = me.ownerDocument().createElement("startnode");
     me.appendChild(e);
@@ -418,7 +414,7 @@ void KPTProject::save(QDomElement &element)  {
 void KPTProject::pert_cpm() {
     std::list<KPTNode*> nodelist;
     /* Set initial time for nodes to project start */
-    KPTDuration time( m_startTime );
+    KPTDateTime time( m_startTime );
     set_pert_values( time, &KPTNode::earliestStart );
     /* initialise list of nodes - start with start node of this */
     nodelist.push_back( start_node() );
@@ -435,7 +431,7 @@ void KPTProject::pert_cpm() {
     backward_pass( nodelist );
 }
 
-void KPTProject::setStartTime(KPTDuration startTime) {
+void KPTProject::setStartTime(KPTDateTime startTime) {
     m_startTime = startTime;
     if ( m_constraint == KPTNode::MustStartOn )
         earliestStart = startTime;

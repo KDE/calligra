@@ -22,6 +22,7 @@
 #include "kpttaskdialog.h"
 #include "kptduration.h"
 #include "kptrelation.h"
+#include "kptdatetime.h"
 
 #include <qdom.h>
 #include <qbrush.h>
@@ -72,51 +73,49 @@ KPTDuration *KPTTask::getRandomDuration() {
 
 void KPTTask::setStartTime() {
     //kdDebug()<<k_funcinfo<<endl;
-    if(numChildren() == 0) {
+    if(type() == KPTNode::Type_Task ||
+       type() == KPTNode::Type_Milestone) {
         switch (m_constraint)
         {
         case KPTNode::ASAP:
             //TODO: it must be room for parents/children also
-            m_startTime.set(earliestStart);
+            m_startTime = earliestStart;
             break;
         case KPTNode::ALAP:
         {
             //TODO: it must be room for parents/children also
-            m_startTime.set(latestFinish);
-            m_startTime.subtract(m_duration);
+            m_startTime = latestFinish - m_duration;
             break;
         }
         case KPTNode::StartNotEarlier:
-            constraintTime() > earliestStart ? m_startTime.set(constraintTime()) : m_startTime.set(earliestStart);
+            constraintTime() > earliestStart ? m_startTime = constraintTime() : m_startTime = earliestStart;
             break;
         case KPTNode::FinishNotLater:
-            m_startTime.set(constraintTime()); // FIXME
+            m_startTime = constraintTime(); // FIXME
             break;
         case KPTNode::MustStartOn:
         {
-            KPTDuration t(constraintTime().dateTime());
-            t.add(m_duration);
+            KPTDateTime t(constraintTime() + m_duration);
             if (constraintTime() >= earliestStart && t <= latestFinish)
-                m_startTime.set(constraintTime());
+                m_startTime = constraintTime();
             else {
                 // TODO: conflict
-                m_startTime.set(earliestStart);
+                m_startTime = earliestStart;
             }
             break;
         }
         default:
             break;
         }
-    } else {
-        // summary task
-        m_startTime.set(KPTDuration::zeroDuration);
-        KPTDuration *time = 0;
+    } else if (type() == KPTNode::Type_Summarytask) {
+        m_startTime = QDateTime();
+        KPTDateTime *time = 0;
         QPtrListIterator<KPTNode> it(m_nodes);
         for ( ; it.current(); ++it ) {
             it.current()->setStartTime();
             time = it.current()->getStartTime();
-            if (m_startTime < *time || *time == KPTDuration::zeroDuration)
-                m_startTime.set(*time);
+            if (!m_startTime.isValid() || m_startTime < *time)
+                m_startTime = *time;
         }
         delete time;
     }
@@ -125,37 +124,36 @@ void KPTTask::setStartTime() {
 void KPTTask::setEndTime() {
     //kdDebug()<<k_funcinfo<<endl;
     if(numChildren() == 0) {
-        m_endTime.set(m_startTime);
-        m_endTime.add(m_duration);
+        m_endTime = m_startTime + m_duration;
     } else {
         // summary task
-        m_endTime.set(KPTDuration::zeroDuration);
-        KPTDuration *time = 0;
+        m_endTime = QDateTime();
+        KPTDateTime *time = 0;
         QPtrListIterator<KPTNode> it(m_nodes);
         for ( ; it.current(); ++it ) {
             it.current()->setEndTime();
             time = it.current()->getEndTime();
-            if (*time > m_endTime)
-                m_endTime.set(*time);
+            if (!m_endTime.isValid() || *time > m_endTime)
+                m_endTime = *time;
 
         }
         delete time;
     }
 }
 
-KPTDuration *KPTTask::getStartTime() {
+KPTDateTime *KPTTask::getStartTime() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration *time = new KPTDuration();
+    KPTDateTime *time = new KPTDateTime();
     if(numChildren() == 0) {
-        time->set(m_startTime.dateTime());
+        *time = m_startTime;
     } else {
         // summary task
-        KPTDuration *start = 0;
+        KPTDateTime *start = 0;
         QPtrListIterator<KPTNode> it(m_nodes);
         for ( ; it.current(); ++it ) {
             start = it.current()->getStartTime();
-            if (*start < *time || *time == KPTDuration::zeroDuration) {
-                time->set(*start);
+            if (!time->isValid() || *start < *time) {
+                *time = *start;
             }
             delete start;
         }
@@ -163,19 +161,20 @@ KPTDuration *KPTTask::getStartTime() {
     return time;
 }
 
-KPTDuration *KPTTask::getEndTime() {
+KPTDateTime *KPTTask::getEndTime() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration *time = new KPTDuration();
+    KPTDateTime *time = new KPTDateTime();
     if(numChildren() == 0) {
-        time->set(m_startTime.dateTime());
+        *time = m_endTime;
     } else {
         // summary task
-        KPTDuration *end;
+        KPTDateTime *end;
         QPtrListIterator<KPTNode> it(m_nodes);
         for ( ; it.current(); ++it ) {
             end = it.current()->getEndTime();
-            if (*end < *time || *time == KPTDuration::zeroDuration)
-                time->set(*end);
+            if (!time->isValid() || *end > *time) {
+                *time = *end;
+            }
             delete end;
         }
     }
@@ -186,13 +185,13 @@ KPTDuration *KPTTask::getFloat() {
     return new KPTDuration;
 }
 
-const KPTDuration& KPTTask::expectedDuration(const KPTDuration &start) {
+const KPTDuration& KPTTask::expectedDuration(const KPTDateTime &start) {
     //kdDebug()<<k_funcinfo<<endl;
     calculateDuration(start);
     return m_duration;
  }
 
-void KPTTask::calculateDuration(const KPTDuration &start) {
+void KPTTask::calculateDuration(const KPTDateTime &start) {
     //kdDebug()<<k_funcinfo<<endl;
 
     int duration = m_effort->expected().duration();
@@ -328,10 +327,10 @@ void KPTTask::calculateStartEndTime() {
     }
 }
 
-void KPTTask::calculateStartEndTime(const KPTDuration &start) {
+void KPTTask::calculateStartEndTime(const KPTDateTime &start) {
     //kdDebug()<<k_funcinfo<<endl;
     if (start > m_startTime) { //TODO: handle different constraints
-        m_startTime.set(start);
+        m_startTime = start;
         setEndTime();
     }
 
@@ -349,11 +348,11 @@ bool KPTTask::load(QDomElement &element) {
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
 
-    earliestStart = KPTDuration(QDateTime::fromString(element.attribute("earlieststart")));
-    latestFinish = KPTDuration(QDateTime::fromString(element.attribute("latestfinish")));
-    m_startTime = KPTDuration(QDateTime::fromString(element.attribute("start")));
-    m_endTime = KPTDuration(QDateTime::fromString(element.attribute("end")));
-    m_duration = KPTDuration(QDateTime::fromString(element.attribute("duration")));
+    earliestStart = KPTDateTime::fromString(element.attribute("earlieststart"));
+    latestFinish = KPTDateTime::fromString(element.attribute("latestfinish"));
+    m_startTime = KPTDateTime::fromString(element.attribute("start"));
+    m_endTime = KPTDateTime::fromString(element.attribute("end"));
+    m_duration = KPTDuration::fromString(element.attribute("duration"));
 
     // Allow for both numeric and text
     QString constraint = element.attribute("scheduling","0");
@@ -476,15 +475,14 @@ double KPTTask::plannedCost(QDateTime &dt) {
         QPtrList<KPTAppointment> list = appointments(this);
         QPtrListIterator<KPTAppointment> it(list);
         for (; it.current(); ++it) {
-            if (it.current()->startTime() < dt) {
-                KPTDuration d(it.current()->startTime());
-                d.add(it.current()->duration());
+/* FIXME           if (it.current()->startTime() < dt) {
+                KPTDateTime d(startTime() + it.current()->duration());
                 int h = 0;
-                dt > d.dateTime() ? h = it.current()->startTime().hoursTo(d.dateTime()) : h = it.current()->startTime().hoursTo(dt);
-                c +=  h * it.current()->resource()->normalRate();
+                dt > d ? h = it.current()->startTime().hoursTo(d) : h = it.current()->startTime().hoursTo(dt);
+                c +=  it.current()->resource()->cost(dt);
                 //TODO:overtime
                 c += it.current()->resource()->fixedCost();
-            }
+            }*/
         }
     }
     return c;
@@ -537,13 +535,12 @@ int KPTTask::plannedWork(QDateTime &dt)  {
         QPtrList<KPTAppointment> a = appointments(this);
         QPtrListIterator<KPTAppointment> it(a);
         for (; it.current(); ++it) {
-            if (it.current()->startTime() < dt &&
+/*FIXME            if (it.current()->startTime() < dt &&
                 it.current()->resource()->type() == KPTResource::Type_Work) { // hmmm. show only work?
-                KPTDuration d(it.current()->startTime());
-                d.add(it.current()->duration());
-                dt > d.dateTime() ? w += it.current()->startTime().hoursTo(d.dateTime()) : w += it.current()->startTime().hoursTo(dt);
+                KPTDateTime d = it.current()->startTime() + it.current()->duration();
+                dt > d ? w += it.current()->startTime().hoursTo(d) : w += it.current()->startTime().hoursTo(dt);
                 //TODO:overtime and non-proportional work
-            }
+            }*/
         }
     }
     return w;

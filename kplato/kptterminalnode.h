@@ -66,8 +66,8 @@ public:
     /**
      * Calculate the start time, use startTime() for the actually started time.
      */
-    virtual KPTDuration *getStartTime()
-	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
+    virtual KPTDateTime *getStartTime()
+	{ return new KPTDateTime(); }
 
     /**
      * Retrieve the calculated float of this node
@@ -79,14 +79,14 @@ public:
      * Load and save
      */
     virtual bool load(QDomElement &e) {
-        earliestStart = KPTDuration(QDateTime::fromString(e.attribute("earlieststart")));
-        latestFinish = KPTDuration(QDateTime::fromString(e.attribute("latestfinish")));
+        earliestStart = KPTDateTime::fromString(e.attribute("earlieststart"));
+        latestFinish = KPTDateTime::fromString(e.attribute("latestfinish"));
         return true;
     }
 
     virtual void save(QDomElement &e)  {
-        e.setAttribute("earlieststart", earliestStart.dateTime().toString());
-        e.setAttribute("latestfinish", latestFinish.dateTime().toString());
+        e.setAttribute("earlieststart", earliestStart.toString());
+        e.setAttribute("latestfinish", latestFinish.toString());
     }
 
 protected:
@@ -109,8 +109,8 @@ public:
     void printDebug(bool /*children*/, QCString indent)
         {
             indent += "  ";
-            kdDebug()<<indent<<" Earliest start: "<<earliestStart.dateTime().toString()<<endl;
-            kdDebug()<<indent<<" Latest finish: "<<earliestStart.dateTime().toString()<<endl;
+            kdDebug()<<indent<<" Earliest start: "<<earliestStart.toString()<<endl;
+            kdDebug()<<indent<<" Latest finish: "<<earliestStart.toString()<<endl;
         }
 #endif
 

@@ -68,13 +68,13 @@ public:
      */
     KPTDuration *getRandomDuration();
 
-    void setStartTime(KPTDuration startTime);
+    void setStartTime(KPTDateTime startTime);
 
     /**
      * Retrive the time this node starts. This is either implied from the set
      * time, or calculated by asking the parents.
      */
-    KPTDuration *getStartTime();
+    KPTDateTime *getStartTime();
 
     /**
      * Retrieve the calculated float of this node
@@ -94,8 +94,8 @@ public:
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) ;
 
-    KPTDuration getEarliestStart() const { return startNode.earliestStart; }
-    KPTDuration getLatestFinish() const { return endNode.latestFinish; }
+    KPTDateTime getEarliestStart() const { return startNode.earliestStart; }
+    KPTDateTime getLatestFinish() const { return endNode.latestFinish; }
 
     QPtrList<KPTResourceGroup> &resourceGroups();
     virtual void addResourceGroup(KPTResourceGroup *resource);

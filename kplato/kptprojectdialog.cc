@@ -64,13 +64,10 @@ KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *parent, const char *n
 
 
 void KPTProjectDialog::slotOk() {
-    KPTDuration dt = KPTDuration();
-
     project.setConstraint((KPTNode::ConstraintType) dia->schedulerType->currentItem());
-    QDateTime endTime = QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time());
-    dt.set(endTime);
-    project.setStartTime(dt);
-    project.setConstraintTime(dt);
+    //FIXME
+    project.setStartTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));
+    project.setConstraintTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));
 
     project.setName(dia->namefield->text());
     project.setLeader(dia->leaderfield->text());

@@ -16,6 +16,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#ifndef KPTDATETIME_H
+#define KPTDATETIME_H
 
 #include <qdatetime.h>
 #include "kptduration.h"
@@ -31,20 +33,28 @@ public:
     KPTDateTime();
     KPTDateTime(QDateTime dt);
 
-    KPTDateTime add(const KPTDuration &duration);
-    KPTDateTime subtract(const KPTDuration &duration);
-    KPTDuration duration(const KPTDateTime &dt);
-
     /**
      * Adds the duration @duration to the datetime
      */
-    KPTDateTime operator+(const KPTDuration &duration) { return add(duration); }
+    KPTDateTime operator+(const KPTDuration &duration);
     /**
      * Subtracts the duration @duration from the datetime
      */
-    KPTDateTime operator-(const KPTDuration &duration) { return subtract(duration); }
+    KPTDateTime operator-(const KPTDuration &duration);
     /**
      * Returns the absolute duration between the two datetimes
      */
     KPTDuration operator-(const KPTDateTime &dt) { return duration(dt); }
+
+    KPTDateTime &operator+=(const KPTDuration &duration);
+    KPTDateTime &operator-=(const KPTDuration &duration);
+
+private:
+
+    KPTDuration duration(const KPTDateTime &dt);
+    void add(const KPTDuration &duration);
+    void subtract(const KPTDuration &duration);
+
 };
+
+#endif

@@ -26,7 +26,7 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
-//#include "kptmilestone.h"
+#include "kptdatetime.h"
 
 #include "KDGanttView.h"
 #include "KDGanttViewItem.h"
@@ -217,7 +217,7 @@ void KPTGanttView::draw(KPTProject &project)
     //kdDebug()<<k_funcinfo<<endl;
 	m_gantt->setUpdateEnabled(false);
 	clear();
-	/*KPTDuration *time;
+	/*KPTDateTime *time;
 	KPTDuration *dur;
 
 	 //The root node is supposed to be hidden.
@@ -267,7 +267,7 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 
 void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
 {
-	KPTDuration *time = node->getStartTime();
+	KPTDateTime *time = node->getStartTime();
 	KPTDuration *dur = node->getExpectedDuration();
 	KPTGanttViewSummaryItem *item;
 	if ( parentItem) {
@@ -278,9 +278,8 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node
 		item = new KPTGanttViewSummaryItem(m_gantt, node);
 	}
 
-	item->setStartTime(time->dateTime());
-	time->add(dur);
-	item->setEndTime(time->dateTime());
+	item->setStartTime(*time);
+	item->setEndTime(*time + *dur);
 	item->setOpen(true);
 
     delete time;
@@ -291,7 +290,7 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node
 
 void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
 {
-	KPTDuration *time = node->getStartTime();
+	KPTDateTime *time = node->getStartTime();
 	KPTDuration *dur = node->getExpectedDuration();
 	// display summary item
 	KPTGanttViewSummaryItem *item;
@@ -302,9 +301,8 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *n
 		// we are on the top level
 		item = new KPTGanttViewSummaryItem(m_gantt, node);
 	}
-	item->setStartTime(time->dateTime());
-	time->add(dur);
-	item->setEndTime(time->dateTime());
+	item->setStartTime(*time);
+	item->setEndTime(*time + *dur);
 	item->setOpen(true);
 
 	drawChildren(item, *node);
@@ -315,7 +313,7 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *n
 
 void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
-	KPTDuration *time = task->getStartTime();
+	KPTDateTime *time = task->getStartTime();
 	KPTDuration *dur = task->getExpectedDuration();
 	// display task item
 	KPTGanttViewTaskItem *item;
@@ -326,9 +324,8 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 		// we are on the top level
 		item = new KPTGanttViewTaskItem(m_gantt, task);
 	}
-	item->setStartTime(time->dateTime());
-	time->add(dur);
-	item->setEndTime(time->dateTime());
+	item->setStartTime(*time);
+	item->setEndTime(*time + *dur);
 	item->setOpen(true);
     if (task->resourceOverbooked() || task->resourceError()) {
         QColor c(yellow);
@@ -342,7 +339,7 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 
 void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
-	KPTDuration *time = task->getStartTime();
+	KPTDateTime *time = task->getStartTime();
 	KPTGanttViewEventItem *item;
 	if ( parentItem ) {
 		item = new KPTGanttViewEventItem(parentItem, task);
@@ -351,8 +348,8 @@ void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *ta
 		// we are on the top level
 		item = new KPTGanttViewEventItem(m_gantt, task);
 	}
-	item->setStartTime(time->dateTime());
-	item->setLeadTime(time->dateTime().addDays(1));
+	item->setStartTime(*time);
+	item->setLeadTime(time->addDays(1)); // FIXME: follow resolution of timescale
 	item->setOpen(true);
 
     delete time;
