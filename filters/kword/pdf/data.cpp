@@ -20,12 +20,14 @@
 
 #include <kglobal.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 
 using namespace PDFImport;
 
 static const char *TEXT_FRAMESET_NAMES[Nb_ParagraphTypes] = {
-    "Body Frameset #%1", "Header Frameset #%1", "Footer Frameset #%1"
+    I18N_NOOP("Body Frameset #%1"), I18N_NOOP("Header Frameset #%1"),
+    I18N_NOOP("Footer Frameset #%1")
 };
 
 Data::Data(KoFilterChain *chain, const DRect &pageRect,
@@ -113,8 +115,8 @@ QDomElement Data::createFrameset(FramesetType type, const QString &n)
     frameset.setAttribute("frameType", (text ? 1 : 2));
     QString name = n;
     if ( name.isNull() )
-        name = (text ? QString("Text Frameset %1")
-                : QString("Picture %1")).arg(index);
+        name = (text ? i18n("Text Frameset %1")
+                : i18n("Picture %1")).arg(index);
     frameset.setAttribute("name", name);
     frameset.setAttribute("frameInfo", 0);
 
@@ -151,7 +153,7 @@ void Data::initPage(const QValueVector<DRect> &rects,
 //        kdDebug(30516) << "page #" << pageIndex << " rect #" << i
 //                       << ": " << rects[i].toString() << endl;
         if ( !rects[i].isValid() ) continue;
-        QString name = QString(TEXT_FRAMESET_NAMES[i]).arg(pageIndex);
+        QString name = i18n(TEXT_FRAMESET_NAMES[i]).arg(pageIndex);
         _textFramesets[i] = createFrameset(Text, name);
         _framesets.appendChild(_textFramesets[i]);
         QDomElement frame = createFrame(Text, rects[i], true);

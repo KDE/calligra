@@ -16,4 +16,4 @@ service_DATA = kword_pdf_import.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordpdfimport.pot
+	$(XGETTEXT) *.cpp -o $(podir)/kwordpdfimport.pot
