@@ -29,7 +29,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 SplitLineCmd.h CommandHistory.h \
 		 FilterInfo.h ExportFilter.h ImportFilter.h \
 		 Ruler.h \
-		 qwmf.h wmfstruct.h metafuncs.h version.h \
+		 qwmf.h wmfstruct.h metafuncs.h \
 		 Arrow.h Painter.h LineStyle.h \
 		 TransformationDialog.h \
 		 MainView.h PStateManager.h OptionDialog.h \
@@ -39,7 +39,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 BrushCells.h PathTextTool.h \
 		 EllipseConfigDialog.h HelplineDialog.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
-		 StartupScreen.h filter_utils.h
+		 filter_utils.h
 
 libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
@@ -80,6 +80,6 @@ libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  EllipseConfigDialog.cc \
 			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
 			  BlendDialog.cc BlendCmd.cc \
-			  StartupScreen.cc filter_utils.cc
+			  filter_utils.cc
 
 METASOURCES =	AUTO

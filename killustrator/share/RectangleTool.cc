@@ -22,35 +22,29 @@
 
 */
 
-#include <iostream.h>
-#include "RectangleTool.h"
-#include "RectangleTool.moc"
-#include "GDocument.h"
-#include "Canvas.h"
-#include "Coord.h"
-#include "CreateRectangleCmd.h"
-#include "CommandHistory.h"
-#include "units.h"
-#include "PStateManager.h"
+#include <RectangleTool.h>
+
 #include <qkeycode.h>
-#include <kapp.h>
 #include <klocale.h>
-#include "version.h"
+
+#include <GDocument.h>
+#include <GPolygon.h>
+#include <Canvas.h>
+#include <Coord.h>
+#include <CreateRectangleCmd.h>
+#include <CommandHistory.h>
+#include <units.h>
+#include <PStateManager.h>
+
 #include <stdio.h>
 
 RectangleTool::RectangleTool (CommandHistory* history) : Tool (history) {
-  rect = NULL;
+  rect = 0L;
 }
 
 void RectangleTool::processEvent (QEvent* e, GDocument *doc,
-				  Canvas* canvas) {
-  if (e->type () ==
-#if QT_VERSION >= 199
-      QEvent::MouseButtonPress
-#else
-      Event_MouseButtonPress
-#endif
-      ) {
+                                  Canvas* canvas) {
+  if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
@@ -64,16 +58,10 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     rect->addPoint (3, Coord (xpos, ypos));
     doc->insertObject (rect);
     emit modeSelected (flag ? i18n ("Create Square") :
-		       i18n ("Create Rectangle"));
+                       i18n ("Create Rectangle"));
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::MouseMove
-#else
-	   Event_MouseMove
-#endif
-	   ) {
-    if (rect == NULL)
+  else if (e->type () == QEvent::MouseMove) {
+    if (rect == 0L)
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
@@ -92,19 +80,14 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     wval = cvtPtToUnit (unit, r.width ());
     hval = cvtPtToUnit (unit, r.height ());
 
+    // FIXME!!! (Werner)
     sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-	     flag ? I18N ("Create Square") :
-	     I18N ("Create Rectangle"), xval, u, yval, u, wval, u, hval, u);
+             flag ? (const char*)i18n("Create Square") :
+             (const char*)i18n("Create Rectangle"), xval, u, yval, u, wval, u, hval, u);
     emit modeSelected (msgbuf);
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::MouseButtonRelease
-#else
-	   Event_MouseButtonRelease
-#endif
-	   ) {
-    if (rect == NULL)
+  else if (e->type () == QEvent::MouseButtonRelease) {
+    if (rect == 0L)
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
@@ -122,17 +105,11 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
       doc->unselectAllObjects ();
       doc->setLastObject (rect);
     }
-    rect = NULL;
+    rect = 0L;
   }
-  else if (e->type () ==
-#if QT_VERSION >= 199
-	   QEvent::KeyPress
-#else
-	   Event_KeyPress
-#endif
-	   ) {
+  else if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == QT_ESCAPE)
+    if (ke->key () == Qt::Key_Escape)
       emit operationDone ();
   }
 }
@@ -141,3 +118,4 @@ void RectangleTool::activate (GDocument*, Canvas* /*canvas*/) {
   emit modeSelected (i18n ("Create Rectangle"));
 }
 
+#include <RectangleTool.moc>

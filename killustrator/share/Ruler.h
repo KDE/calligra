@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -25,11 +25,10 @@
 #ifndef Ruler_h_
 #define Ruler_h_
 
-#include <qwidget.h>
 #include <qframe.h>
-#include <qpixmap.h>
+#include <PStateManager.h>
 
-#include "PStateManager.h"
+class QPixmap;
 
 class Ruler : public QFrame {
   Q_OBJECT
@@ -37,7 +36,7 @@ public:
   enum Orientation { Horizontal, Vertical };
 
   Ruler (Orientation o, MeasurementUnit mu = UnitPoint, QWidget *parent = 0L,
-	 const char* name = 0L);
+         const char* name = 0L);
   ~Ruler();
 
   MeasurementUnit measurementUnit () const;
@@ -55,7 +54,7 @@ signals:
   /*emit signal for drawing a ruler, note: the position is in sceen positions
     and might be out of the drawing area; in such a case the position should
     be ignored by the slot of drawRuler and -- if drawn -- remove the
-    draw'ed-Ruler; note: the can be only one drawRuler at a time    
+    draw'ed-Ruler; note: the can be only one drawRuler at a time
     orientationHoriz = true <=> horizontal
    */
   void drawHelpline(int x, int y, bool orientationHoriz);

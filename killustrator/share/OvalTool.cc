@@ -108,8 +108,8 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     // FIXME (Werner)
     sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-             oval->isCircle () ? I18N ("Create Circle") :
-             I18N ("Create Ellipse"), xval, u, yval, u, wval, u, hval, u);
+             oval->isCircle () ? (const char*)i18n("Create Circle") :
+             (const char*)i18n("Create Ellipse"), xval, u, yval, u, wval, u, hval, u);
     emit modeSelected (msgbuf);
   }
   else if (e->type () == QEvent::MouseButtonRelease) {
@@ -137,7 +137,7 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   }
   else if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == QT_ESCAPE)
+    if (ke->key () == Qt::Key_Escape)
       emit operationDone ();
   }
 }

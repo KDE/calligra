@@ -49,7 +49,7 @@ struct WmfEnhMetaHeader
                               // This is 0 if there is no description string
   DWORD   nPalEntries;        // Number of entries in the metafile palette.
   SIZEL   szlDevice;          // Size of the reference device in pels
-  SIZEL   szlMillimeters;     // Size of the reference device in millimeters  
+  SIZEL   szlMillimeters;     // Size of the reference device in millimeters
 };
 #define ENHMETA_SIGNATURE       0x464D4520
 
@@ -80,18 +80,17 @@ struct WmfPlaceableHeader
 
 struct WmfMetaRecord
 {
-  DWORD rdSize;		// Record size (in words) of the function
-  WORD  rdFunction;	// Record function number
-  WORD  rdParm[1];	// WORD array of parameters
+  DWORD rdSize;         // Record size (in words) of the function
+  WORD  rdFunction;     // Record function number
+  WORD  rdParm[1];      // WORD array of parameters
 };
 
 
 struct WmfEnhMetaRecord
 {
-  DWORD iType;		// Record type EMR_xxx
-  DWORD nSize;		// Record size in bytes
-  DWORD dParm[1];	// DWORD array of parameters
+  DWORD iType;          // Record type EMR_xxx
+  DWORD nSize;          // Record size in bytes
+  DWORD dParm[1];       // DWORD array of parameters
 };
-
 
 #endif /*wmfstruct_h*/

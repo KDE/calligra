@@ -88,7 +88,7 @@ void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   }
   else if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == QT_ESCAPE)
+    if (ke->key () == Qt::Key_Escape)
       emit operationDone ();
   }
   return;

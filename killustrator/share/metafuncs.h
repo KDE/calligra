@@ -84,5 +84,4 @@ struct MetaFuncRec
   { NULL,                   0,      0 }
 };
 
-
 #endif /*metafunc_h*/

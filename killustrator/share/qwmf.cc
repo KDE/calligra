@@ -23,17 +23,13 @@
 #include <assert.h>
 #include <qcolor.h>
 #include <qapplication.h>
-// #include <endian.h>
 #include <qpixmap.h>
 
 bool qwmfDebug = FALSE;
 
-#include "version.h"
-
 #include "qwmf.h"
 #include "wmfstruct.h"
 #include "metafuncs.h"
-//#include <kautoarray.h>
 
 #define ABS(x) ((x)>=0?(x):-(x))
 
@@ -167,10 +163,10 @@ bool QWinMetaFile::load(const QString aFileName)
       debug("  key=%x", pheader.key);
       debug("  hmf=%x", pheader.hmf);
       debug("  bbox=(%d;%d;%d;%d)", pheader.bbox.left, pheader.bbox.top,
-	    pheader.bbox.right, pheader.bbox.bottom);
+            pheader.bbox.right, pheader.bbox.bottom);
       debug("  inch=%d", pheader.inch);
       debug("  checksum=%x (%s)", pheader.checksum,
-	    pheader.checksum==checksum?"ok":"wrong");
+            pheader.checksum==checksum?"ok":"wrong");
     }
 
     mCalcBBox = FALSE;
@@ -222,11 +218,11 @@ bool QWinMetaFile::load(const QString aFileName)
       debug("  iType=%d", eheader.iType);
       debug("  nSize=%d", eheader.nSize);
       debug("  rclBounds=(%ld;%ld;%ld;%ld)",
-	    eheader.rclBounds.left, eheader.rclBounds.top,
-	    eheader.rclBounds.right, eheader.rclBounds.bottom);
+            eheader.rclBounds.left, eheader.rclBounds.top,
+            eheader.rclBounds.right, eheader.rclBounds.bottom);
       debug("  rclFrame=(%ld;%ld;%ld;%ld)",
-	    eheader.rclFrame.left, eheader.rclFrame.top,
-	    eheader.rclFrame.right, eheader.rclFrame.bottom);
+            eheader.rclFrame.left, eheader.rclFrame.top,
+            eheader.rclFrame.right, eheader.rclFrame.bottom);
       debug("  dSignature=%d", eheader.dSignature);
       debug("  nVersion=%d", eheader.nVersion);
       debug("  nBytes=%d", eheader.nBytes);
@@ -353,16 +349,16 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
     if (mSingleStep || metaFuncTab[idx].method==0)
     {
       fprintf(stderr, "QWinMetaFile: %s%s",
-	      metaFuncTab[idx].method==0?"unimplemented ":"",
-	      metaFuncTab[idx].name);
+              metaFuncTab[idx].method==0?"unimplemented ":"",
+              metaFuncTab[idx].name);
       for (i=0; i<cmd->numParm; i++)
-	fprintf(stderr," %d", cmd->parm[i]);
+        fprintf(stderr," %d", cmd->parm[i]);
 
       if (mSingleStep)
       {
-	fflush(stderr);
-	qApp->processEvents(500);
-	//	gets(dummy);
+        fflush(stderr);
+        qApp->processEvents(500);
+        //      gets(dummy);
       }
       else fprintf(stderr, "\n");
     }
@@ -565,7 +561,7 @@ void QWinMetaFile::polypolygon(short num, short* parm)
   int polyCount = parm[0];
   int *vertices = new int[polyCount];
   bool bgMode = FALSE;
-  QT_PRFX::RasterOp rop = mPainter.rasterOp();
+  Qt::RasterOp rop = mPainter.rasterOp();
   QBrush fgBrush(mPainter.brush());
   QBrush bgBrush(mPainter.brush());
   bgBrush.setColor(mPainter.backgroundColor());
@@ -648,26 +644,26 @@ void QWinMetaFile::setBkColor(short /*num*/, short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setBkMode(short /*num*/, short* parm)
 {
-  if (parm[0]==1) mPainter.setBackgroundMode(QT_PRFX::TransparentMode);
-  else mPainter.setBackgroundMode(QT_PRFX::OpaqueMode);
+  if (parm[0]==1) mPainter.setBackgroundMode(Qt::TransparentMode);
+  else mPainter.setBackgroundMode(Qt::OpaqueMode);
 }
 
 
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setRop(short /*num*/, short* parm)
 {
-  QT_PRFX::RasterOp opTab[] =
+  Qt::RasterOp opTab[] =
   {
-    QT_PRFX::CopyROP/*none*/,
-    QT_PRFX::CopyROP, QT_PRFX::CopyROP, QT_PRFX::EraseROP, QT_PRFX::NotCopyROP,    /*  1...4 */
-    QT_PRFX::CopyROP, QT_PRFX::NotROP, QT_PRFX::XorROP, QT_PRFX::CopyROP,          /*  5...8 */
-    QT_PRFX::NotEraseROP, QT_PRFX::NotXorROP, QT_PRFX::CopyROP, QT_PRFX::NotOrROP, /*  9..12 */
-    QT_PRFX::CopyROP, QT_PRFX::CopyROP, QT_PRFX::OrROP, QT_PRFX::CopyROP           /* 13..16 */
+    Qt::CopyROP/*none*/,
+    Qt::CopyROP, Qt::CopyROP, Qt::EraseROP, Qt::NotCopyROP,    /*  1...4 */
+    Qt::CopyROP, Qt::NotROP, Qt::XorROP, Qt::CopyROP,          /*  5...8 */
+    Qt::NotEraseROP, Qt::NotXorROP, Qt::CopyROP, Qt::NotOrROP, /*  9..12 */
+    Qt::CopyROP, Qt::CopyROP, Qt::OrROP, Qt::CopyROP           /* 13..16 */
   };
-  QT_PRFX::RasterOp rop;
+  Qt::RasterOp rop;
 
   if (parm[0]>0 && parm[0]<=16) rop = opTab[parm[0]];
-  else rop = QT_PRFX::CopyROP;
+  else rop = Qt::CopyROP;
 
   mPainter.setRasterOp(rop);
 }
@@ -676,26 +672,26 @@ void QWinMetaFile::setRop(short /*num*/, short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
 {
-  static QT_PRFX::BrushStyle hatchedStyleTab[] =
+  static Qt::BrushStyle hatchedStyleTab[] =
   {
-    QT_PRFX::HorPattern,
-    QT_PRFX::FDiagPattern,
-    QT_PRFX::BDiagPattern,
-    QT_PRFX::CrossPattern,
-    QT_PRFX::DiagCrossPattern
+    Qt::HorPattern,
+    Qt::FDiagPattern,
+    Qt::BDiagPattern,
+    Qt::CrossPattern,
+    Qt::DiagCrossPattern
   };
-  static QT_PRFX::BrushStyle styleTab[] =
-  { QT_PRFX::SolidPattern,
-    QT_PRFX::NoBrush,
-    QT_PRFX::FDiagPattern,   /* hatched */
-    QT_PRFX::Dense4Pattern,  /* should be custom bitmap pattern */
-    QT_PRFX::HorPattern,     /* should be BS_INDEXED (?) */
-    QT_PRFX::VerPattern,     /* should be device-independend bitmap */
-    QT_PRFX::Dense6Pattern,  /* should be device-independend packed-bitmap */
-    QT_PRFX::Dense2Pattern,  /* should be BS_PATTERN8x8 */
-    QT_PRFX::Dense3Pattern   /* should be device-independend BS_DIBPATTERN8x8 */
+  static Qt::BrushStyle styleTab[] =
+  { Qt::SolidPattern,
+    Qt::NoBrush,
+    Qt::FDiagPattern,   /* hatched */
+    Qt::Dense4Pattern,  /* should be custom bitmap pattern */
+    Qt::HorPattern,     /* should be BS_INDEXED (?) */
+    Qt::VerPattern,     /* should be device-independend bitmap */
+    Qt::Dense6Pattern,  /* should be device-independend packed-bitmap */
+    Qt::Dense2Pattern,  /* should be BS_PATTERN8x8 */
+    Qt::Dense3Pattern   /* should be device-independend BS_DIBPATTERN8x8 */
   };
-  QT_PRFX::BrushStyle style;
+  Qt::BrushStyle style;
   short arg;
   WinObjBrushHandle* handle = createBrush();
 
@@ -707,7 +703,7 @@ void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
     else
     {
       debug("QWinMetaFile::createBrushIndirect: invalid hatched brush %d",arg);
-      style = QT_PRFX::SolidPattern;
+      style = Qt::SolidPattern;
     }
   }
   else if (arg>=0 && arg<9)
@@ -715,7 +711,7 @@ void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
   else
   {
     debug("QWinMetaFile::createBrushIndirect: invalid brush %d", arg);
-    style = QT_PRFX::SolidPattern;
+    style = Qt::SolidPattern;
   }
   //  debug("createBrushIndirect: %d/%d -> %d", parm[0], parm[3], (short)style);
 
@@ -727,17 +723,17 @@ void QWinMetaFile::createBrushIndirect(short /*num*/, short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::createPenIndirect(short /*num*/, short* parm)
 {
-  static QT_PRFX::PenStyle styleTab[] =
-  { QT_PRFX::SolidLine, QT_PRFX::DashLine, QT_PRFX::DotLine, QT_PRFX::DashDotLine, QT_PRFX::DashDotDotLine,
-    QT_PRFX::NoPen, QT_PRFX::SolidLine };
-  QT_PRFX::PenStyle style;
+  static Qt::PenStyle styleTab[] =
+  { Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine,
+    Qt::NoPen, Qt::SolidLine };
+  Qt::PenStyle style;
   WinObjPenHandle* handle = createPen();
 
   if (parm[0]>=0 && parm[0]<6) style=styleTab[parm[0]];
   else
   {
     debug("QWinMetaFile::createPenIndirect: invalid pen %d", parm[0]);
-    style = QT_PRFX::SolidLine;
+    style = Qt::SolidLine;
   }
   // if (parm[1]<=0) style=NoPen;
 

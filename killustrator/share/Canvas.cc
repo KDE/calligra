@@ -41,7 +41,6 @@
 #include "Handle.h"
 #include "ToolController.h"
 #include "QwViewport.h"
-#include "version.h"
 #include <kconfig.h>
 #include <kapp.h>
 
@@ -51,7 +50,7 @@
 //QArray<float> Canvas::zoomFactors;
 
 Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
-		const char* name) : QWidget (parent, name) {
+                const char* name) : QWidget (parent, name) {
   zoomFactors.push_back (0.5);
   zoomFactors.push_back (1.0);
   zoomFactors.push_back (1.5);
@@ -71,10 +70,10 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
 
   connect (document, SIGNAL (changed ()), this, SLOT (updateView ()));
   connect (document, SIGNAL (changed (const Rect&)),
-	   this, SLOT (updateRegion (const Rect&)));
+           this, SLOT (updateRegion (const Rect&)));
   connect (document, SIGNAL (sizeChanged ()), this, SLOT (calculateSize ()));
   connect (&(document->handle ()), SIGNAL (handleChanged ()),
-	   this, SLOT (updateView ()));
+           this, SLOT (updateView ()));
   connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
   pixmap = 0L;
@@ -107,9 +106,9 @@ void Canvas::ensureVisibility (bool flag) {
 
 void Canvas::calculateSize () {
   width = (int) (document->getPaperWidth () * resolution *
-		 zoomFactor / 72.0) + 4;
+                 zoomFactor / 72.0) + 4;
   height = (int) (document->getPaperHeight () * resolution *
-		  zoomFactor / 72.0 + 4);
+                  zoomFactor / 72.0 + 4);
   resize (width, height);
 
   if (pixmap != 0L)
@@ -224,9 +223,9 @@ float Canvas::snapXPositionToGrid (float pos) {
     vector<float>::iterator i;
     for (i = vertHelplines.begin (); i != vertHelplines.end (); i++) {
       if (fabs (*i - pos) <= 10.0) {
-	pos = *i;
-	snap = true;
-	break;
+        pos = *i;
+        snap = true;
+        break;
       }
     }
   }
@@ -248,9 +247,9 @@ float Canvas::snapYPositionToGrid (float pos) {
     vector<float>::iterator i;
     for (i = horizHelplines.begin (); i != horizHelplines.end (); i++) {
       if (fabs (*i - pos) <= 10.0) {
-	pos = *i;
-	snap = true;
-	break;
+        pos = *i;
+        snap = true;
+        break;
       }
     }
   }
@@ -272,16 +271,16 @@ void Canvas::snapPositionToGrid (float& x, float& y) {
     vector<float>::iterator i;
     for (i = horizHelplines.begin (); i != horizHelplines.end (); i++) {
       if (fabs (*i - y) <= 10.0) {
-	y = *i;
-	snap = true;
-	break;
+        y = *i;
+        snap = true;
+        break;
       }
     }
     for (i = vertHelplines.begin (); i != vertHelplines.end (); i++) {
       if (fabs (*i - x) <= 10.0) {
-	x = *i;
-	snap = true;
-	break;
+        x = *i;
+        snap = true;
+        break;
       }
     }
   }
@@ -308,7 +307,7 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
   // transform position of the mouse pointer according to current
   // zoom factor
   QPoint new_pos (qRound (e->x () * 72 / (resolution * zoomFactor)) - 1,
-		  qRound (e->y () * 72 / (resolution * zoomFactor)) - 1);
+                  qRound (e->y () * 72 / (resolution * zoomFactor)) - 1);
   QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
 
   emit mousePositionChanged (new_pos.x (), new_pos.y ());
@@ -317,28 +316,28 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
   if (ensureVisibilityFlag) {
     if (e->type () ==
 #if QT_VERSION >= 199
-	QEvent::MouseButtonPress
+        QEvent::MouseButtonPress
 #else
-	Event_MouseButtonPress
+        Event_MouseButtonPress
 #endif
-	&& e->button () == LeftButton)
+        && e->button () == LeftButton)
       dragging = true;
     else if (e->type () ==
 #if QT_VERSION >= 199
-	     QEvent::MouseButtonRelease
+             QEvent::MouseButtonRelease
 #else
-	     Event_MouseButtonRelease
+             Event_MouseButtonRelease
 #endif
-	     &&
-	     e->button () == LeftButton)
+             &&
+             e->button () == LeftButton)
       dragging = false;
     else if (e->type () ==
 #if QT_VERSION >= 199
-	     QEvent::MouseMove
+             QEvent::MouseMove
 #else
-	     Event_MouseMove
+             Event_MouseMove
 #endif
-	     && dragging)
+             && dragging)
       viewport->ensureVisible (e->x (), e->y (), 10, 10);
   }
 
@@ -352,13 +351,13 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
       && ! toolController->getActiveTool ()->consumesRMBEvents ()) {
     if (document->selectionIsEmpty ()) {
       GObject* obj = document->findContainingObject (new_pos.x (),
-						     new_pos.y ());
+                                                     new_pos.y ());
       if (obj) {
-	// pop up menu for the picked object
-	emit rightButtonAtObjectClicked (e->x (), e->y (), obj);
+        // pop up menu for the picked object
+        emit rightButtonAtObjectClicked (e->x (), e->y (), obj);
       }
       else {
-	emit rightButtonClicked (e->x (), e->y ());
+        emit rightButtonClicked (e->x (), e->y ());
       }
     }
     else {
@@ -400,7 +399,7 @@ void Canvas::paintEvent (QPaintEvent* e) {
   const QRect& rect = e->rect ();
   if (pixmap != 0L)
     bitBlt (this, rect.x (), rect.y (), pixmap,
-	    rect.x (), rect.y (), rect.width (), rect.height ());
+            rect.x (), rect.y (), rect.width (), rect.height ());
   else
     // For large zoom levels there is no pixmap to copy. So we
     // have to redraw the whole document, but without to call
@@ -527,7 +526,7 @@ void Canvas::updateRegion (const Rect& reg) {
   m.scale (s, s);
 
   QRect clip = m.map (QRect (int (r.left ()), int (r.top ()),
-			     int (r.width ()), int (r.height ())));
+                             int (r.width ()), int (r.height ())));
 
   QPaintDevice *pdev = (pixmap ? (QPaintDevice *) pixmap : (QPaintDevice *) this);
   if (pdev->paintingActive ()) {
@@ -654,7 +653,7 @@ void Canvas::printDocument () {
     break;
   }
   printer.setOrientation (document->pageLayout ().orientation == PG_PORTRAIT ?
-			  QPrinter::Portrait : QPrinter::Landscape);
+                          QPrinter::Portrait : QPrinter::Landscape);
   if (printer.setup (this)) {
     QPainter paint;
     paint.begin (&printer);
@@ -704,11 +703,7 @@ int Canvas::insertZoomFactor (float z) {
 }
 
 void Canvas::readGridProperties () {
-#if NEWKDE
   KConfig* config = kapp->config ();
-#else
-  KConfig* config = kapp->getConfig ();
-#endif
   QString oldgroup = config->group ();
 
   config->setGroup ("Grid");
@@ -727,11 +722,7 @@ void Canvas::readGridProperties () {
 }
 
 void Canvas::saveGridProperties () {
-#if NEWKDE
   KConfig* config = kapp->config ();
-#else
-  KConfig* config = kapp->getConfig ();
-#endif
   QString oldgroup = config->group ();
 
   config->setGroup ("Grid");
@@ -845,7 +836,7 @@ bool Canvas::showHelplines () {
 int Canvas::indexOfHorizHelpline (float pos) {
   for (uint i = 0; i < horizHelplines.size (); i++) {
     if (pos - NEAR_DISTANCE < horizHelplines[i] &&
-	pos + NEAR_DISTANCE > horizHelplines[i])
+        pos + NEAR_DISTANCE > horizHelplines[i])
       return i;
   }
   return -1;
@@ -854,7 +845,7 @@ int Canvas::indexOfHorizHelpline (float pos) {
 int Canvas::indexOfVertHelpline (float pos) {
   for (unsigned int i = 0; i < vertHelplines.size (); i++) {
     if (pos - NEAR_DISTANCE < vertHelplines[i] &&
-	pos + NEAR_DISTANCE > vertHelplines[i])
+        pos + NEAR_DISTANCE > vertHelplines[i])
       return i;
   }
   return -1;
@@ -890,9 +881,9 @@ bool Canvas::eventFilter (QObject *, QEvent *e) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == Key_Tab) {
       if (toolController->getActiveTool ()->isA ("SelectionTool"))
-	((SelectionTool *)
-	 toolController->getActiveTool ())->processTabKeyEvent (document,
-								this);
+        ((SelectionTool *)
+         toolController->getActiveTool ())->processTabKeyEvent (document,
+                                                                this);
     }
     else
       keyPressEvent (ke);

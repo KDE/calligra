@@ -26,7 +26,7 @@
 #define ToCurveCmd_h_
 
 #include <list>
-#include "Command.h"
+#include <Command.h>
 
 class GDocument;
 class GObject;

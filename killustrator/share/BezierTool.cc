@@ -53,7 +53,7 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     if (e->type () == QEvent::KeyPress) {
         QKeyEvent *ke = (QKeyEvent *) e;
-        if (ke->key () == QT_ESCAPE && curve != 0L) {
+        if (ke->key () == Qt::Key_Escape && curve != 0L) {
             /*
              * Abort the last operation
              */

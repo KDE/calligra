@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,28 +15,25 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include <iostream.h>
-#include "ZoomTool.h"
-#include "ZoomTool.moc"
-#include "GDocument.h"
-#include "Canvas.h"
-#include "CommandHistory.h"
-#include <kapp.h>
+#include <ZoomTool.h>
+
 #include <klocale.h>
+#include <Canvas.h>
+#include <CommandHistory.h>
 
 ZoomTool::ZoomTool (CommandHistory* history) : Tool (history) {
 }
 
-void ZoomTool::processEvent (QEvent* e, GDocument */*doc*/, 
-			     Canvas* canvas) {
-  if (e->type () == 
+void ZoomTool::processEvent (QEvent* e, GDocument */*doc*/,
+                             Canvas* canvas) {
+  if (e->type () ==
 #if QT_VERSION >= 199
       QEvent::MouseButtonRelease
 #else
@@ -56,3 +53,4 @@ void ZoomTool::activate (GDocument* /*doc*/, Canvas* /*canvas*/) {
   emit modeSelected (i18n ("Zoom In"));
 }
 
+#include <ZoomTool.moc>

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,20 +15,18 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include "ReorderCmd.h"
-#include "ReorderCmd.moc"
+#include <ReorderCmd.h>
 #include <klocale.h>
+#include <GDocument.h>
 
-#include "GDocument.h"
-
-ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos) 
+ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos)
   : Command(i18n("Reorder"))
 {
   objects.resize (doc->selectionCount ());
@@ -58,31 +56,33 @@ void ReorderCmd::execute () {
     oldpos[i] = idx;
     if (position == RP_ToFront || position == RP_ForwardOne) {
       if (idx == objects[i]->getLayer ()->objectCount () - 1)
-	// already at the first position
-	continue;
+        // already at the first position
+        continue;
 
       // move the object
       if (position == RP_ToFront)
-	newidx = objects[i]->getLayer ()->objectCount () - 1;
+        newidx = objects[i]->getLayer ()->objectCount () - 1;
       else
-	newidx = idx + 1;
+        newidx = idx + 1;
     }
     else {
       if (idx == 0)
-	// already at the last position
-	continue;
+        // already at the last position
+        continue;
 
       // move the object
       if (position == RP_ToBack)
-	newidx = 0;
+        newidx = 0;
       else
-	newidx = idx - 1;
+        newidx = idx - 1;
     }
     document->moveObjectToIndex (objects[i], newidx);
   }
 }
 
 void ReorderCmd::unexecute () {
-  for (unsigned int i = 0; i < objects.count (); i++) 
+  for (unsigned int i = 0; i < objects.count (); i++)
     document->moveObjectToIndex (objects[i], oldpos[i]);
 }
+
+#include <ReorderCmd.moc>

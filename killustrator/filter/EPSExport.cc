@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -33,7 +33,6 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qglobal.h>
-#include "version.h"
 #include "GDocument.h"
 #include "EPSExport.h"
 
@@ -74,7 +73,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
     break;
   }
   printer.setOrientation (doc->pageLayout ().orientation == PG_PORTRAIT ?
-			  QPrinter::Portrait : QPrinter::Landscape);
+                          QPrinter::Portrait : QPrinter::Landscape);
 
   QPainter paint;
   paint.begin (&printer);
@@ -85,9 +84,9 @@ bool EPSExport::exportToFile (GDocument* doc) {
   paint.translate (-box.left () + 1, -box.top () + 1);
   // force update of cliping regions (only for gradient pixmaps)
 #else
-  paint.setClipRect (box.left (), box.top (), 
-		     box.width () + 2 + box.left (), 
-		     box.height () + 2 + box.top ());
+  paint.setClipRect (box.left (), box.top (),
+                     box.width () + 2 + box.left (),
+                     box.height () + 2 + box.top ());
 #endif
   doc->invalidateClipRegions ();
   doc->drawContents (paint);

@@ -48,7 +48,7 @@ PolylineTool::PolylineTool (CommandHistory* history) : Tool (history) {
 void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == QT_ESCAPE && line != 0L) {
+    if (ke->key () == Qt::Key_Escape && line != 0L) {
       /*
        * Abort the last operation
        */

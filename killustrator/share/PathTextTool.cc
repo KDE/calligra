@@ -82,7 +82,7 @@ void PathTextTool::deactivate (GDocument*, Canvas* canvas) {
 void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* /*canvas*/) {
   if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == QT_ESCAPE) {
+    if (ke->key () == Qt::Key_Escape) {
       /*
        * Abort the last operation
        */
