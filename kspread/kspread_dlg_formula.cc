@@ -45,13 +45,13 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     m_pView = parent;
     m_focus = 0;
     m_desc = 0;
-    
+
     setCaption( name );
 
     KSpreadCell* cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
 							m_pView->canvasWidget()->markerRow() );
-    QString m_oldText=cell->text();
-    // Make shure that there is a cell editor running.
+     m_oldText=cell->text();
+    // Make sure that there is a cell editor running.
     if ( !m_pView->canvasWidget()->editor() )
     {
         m_pView->canvasWidget()->createEditor( KSpreadCanvas::CellEditor );
