@@ -1,6 +1,12 @@
 Changes after KPresenter 1.3 beta 4
 ===================================
-
+Fixes:
+- Fixed When resizing a frame it does not snap to the grid (#63032)
+- Fixed after resize/undo size of object is not the same
+- Fixed after move/undo position of object is not the same
+- Fixed resizing of poly line objects
+- Fixed after reload of some objects moved up a little bit
+- Fixed moving with key left used y grid
 
 Changes after KPresenter 1.3 beta 3
 ===================================
