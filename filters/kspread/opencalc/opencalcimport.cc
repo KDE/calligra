@@ -114,14 +114,14 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
   if ( isRange )
   {
     KSpreadRange newRange( range );
-    table    = newRange.tableName;
+    table    = newRange.sheetName;
     topLeft  = newRange.range.topLeft();
     botRight = newRange.range.bottomRight();
   }
   else
   {
     KSpreadPoint newPoint( range );
-    table    = newPoint.tableName;
+    table    = newPoint.sheetName;
     topLeft  = newPoint.pos;
     botRight = newPoint.pos;
   }
@@ -1430,10 +1430,10 @@ bool OpenCalcImport::parseBody( int numOfTables )
       continue;
     }
 
-    table = m_doc->createTable();
-    m_doc->addTable( table );
+    table = m_doc->createSheet();
+    m_doc->addSheet( table );
 
-    table->setTableName( t.attributeNS( ooNS::table, "name", QString::null ), true, false );
+    table->setSheetName( t.attributeNS( ooNS::table, "name", QString::null ), true, false );
     kdDebug()<<" table->name()"<<table->name()<<endl;
     sheet = sheet.nextSibling();
   }
@@ -1462,7 +1462,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
       continue;
     }
 
-    table = m_doc->map()->findTable( t.attributeNS( ooNS::table, "name", QString::null ) );
+    table = m_doc->map()->findSheet( t.attributeNS( ooNS::table, "name", QString::null ) );
     if ( !table )
     {
       KMessageBox::sorry( 0, i18n( "Skipping a table." ) );
@@ -1500,7 +1500,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
           if ( property.hasAttributeNS( ooNS::table, "display" ) )
           {
             bool visible = (property.attributeNS( ooNS::table, "display", QString::null ) == "true" ? true : false );
-            table->hideTable( !visible );
+            table->hideSheet( !visible );
             kdDebug(30518) << "Table: " << table->tableName() << ", hidden: " << !visible << endl;
           }
         }
@@ -1525,9 +1525,9 @@ bool OpenCalcImport::parseBody( int numOfTables )
       kdDebug(30518) << "Print range: " << point.translation << endl;
       KSpreadRange p( point.translation );
 
-      kdDebug(30518) << "Print table: " << p.tableName << endl;
+      kdDebug(30518) << "Print table: " << p.sheetName << endl;
 
-      if ( table->tableName() == p.tableName )
+      if ( table->sheetName() == p.sheetName )
         table->print()->setPrintRange( p.range );
     }
 
@@ -1636,8 +1636,8 @@ void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
 
       KSpreadRange p( range );
 
-      m_doc->addAreaName( p.range, name, p.tableName );
-      kdDebug(30518) << "Area range: " << p.tableName << endl;
+      m_doc->addAreaName( p.range, name, p.sheetName );
+      kdDebug(30518) << "Area range: " << p.sheetName << endl;
     }
   }
 }

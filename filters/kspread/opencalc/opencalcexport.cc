@@ -295,7 +295,7 @@ bool OpenCalcExport::exportSettings( KoStore * store, const KSpreadDoc * ksdoc )
   if ( view ) // no view if embedded document
   {
       KSpreadCanvas * canvas = view->canvasWidget();
-      activeTable = canvas->activeTable()->tableName();
+      activeTable = canvas->activeSheet()->sheetName();
       // save current sheet selection before to save marker, otherwise current pos is not saved
       view->saveCurrentSheetSelection();
   }
@@ -305,7 +305,7 @@ bool OpenCalcExport::exportSettings( KoStore * store, const KSpreadDoc * ksdoc )
   QDomElement configmaped = doc.createElement( "config:config-item-map-named" );
   configmaped.setAttribute( "config:name","Tables" );
 
-  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->sheetList() );
   for( ; it.current(); ++it )
   {
       QPoint marker;
@@ -456,8 +456,8 @@ void exportNamedExpr( QDomDocument & doc, QDomElement & parent,
     Reference ref = *it;
 
     namedRange.setAttribute( "table:name", ref.ref_name );
-    namedRange.setAttribute( "table:base-cell-address", convertRefToBase( ref.table_name, ref.rect ) );
-    namedRange.setAttribute( "table:cell-range-address", convertRefToRange( ref.table_name, ref.rect ) );
+    namedRange.setAttribute( "table:base-cell-address", convertRefToBase( ref.sheet_name, ref.rect ) );
+    namedRange.setAttribute( "table:cell-range-address", convertRefToRange( ref.sheet_name, ref.rect ) );
 
     parent.appendChild( namedRange );
 
@@ -486,7 +486,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
 
 
 
-  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->sheetList() );
 
   for( it.toFirst(); it.current(); ++it )
   {
@@ -910,7 +910,7 @@ void OpenCalcExport::createDefaultStyles()
 void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & autoStyles,
                                            const KSpreadDoc *ksdoc )
 {
-  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->sheetList() );
   const KSpreadSheet * sheet = it.toFirst();
 
   float width  = 20.999;
@@ -968,7 +968,7 @@ void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & maste
   masterPage.setAttribute( "style:name", "Default" );
   masterPage.setAttribute( "style:page-master-name", "pm1" );
 
-  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->sheetList() );
   const KSpreadSheet * sheet = it.toFirst();
 
   QString headerLeft;
