@@ -114,7 +114,6 @@ void KWFrameDia::init() {
         }
         else if(frameType == FT_TEXT)
         {
-#if 0
             if(! (frame->getFrameSet() &&
                   frame->getFrameSet()->getGroupManager()))
             { // not a table
@@ -130,13 +129,14 @@ void KWFrameDia::init() {
             }
             else if(! frame->getFrameSet()) // first creation
                 showPage(2);
-#endif
+#if 0
             setupTab1();
             setupTab2();
             setupTab3();
             setupTab4();
             if(! frame->getFrameSet()) // first creation
                 showPage(2);
+#endif
         }
         else if(frameType == FT_PICTURE)
         {
