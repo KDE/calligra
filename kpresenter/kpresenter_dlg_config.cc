@@ -34,8 +34,9 @@
 #include <kpresenter_dlg_config.h>
 #include <kpresenter_view.h>
 #include <kpresenter_doc.h>
+#include <koUnit.h>
 
-
+#include <float.h>
 #include <kspell.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
@@ -86,9 +87,16 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();
+
+    KoUnit::Unit unit = m_pView->kPresenterDoc()->getUnit();
+
     QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
     box->setSpacing( 10 );
+
+    oldNbRecentFiles=10;
+    double ptIndent = MM_TO_POINT(10.0);
+
     QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
     tmpQGroupBox->setTitle( i18n("Interface") );
 
@@ -103,6 +111,8 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
+        oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
+        ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
     }
 
     autoSave = new KIntNumInput( oldAutoSaveValue, tmpQGroupBox );
@@ -121,6 +131,24 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     eRastY->setRange( 1, 400, 1 );
     eRastY->setLabel( i18n("Vertical Raster: ") );
     lay1->addWidget( eRastY );
+
+    recentFiles=new KIntNumInput( oldNbRecentFiles, tmpQGroupBox );
+    recentFiles->setRange(1, 20, 1);
+    recentFiles->setLabel(i18n("Number of recent file:"));
+
+    lay1->addWidget(recentFiles);
+
+    QString suffix = KoUnit::unitName( unit ).prepend(' ');
+    double val = KoUnit::userValue( ptIndent, unit );
+    indent = new KDoubleNumInput( val, tmpQGroupBox );
+    indent->setRange(0.1, 50, 0.1);
+    indent->setFormat( "%.1f" );
+    indent->setSuffix( suffix );
+    indent->setLabel(i18n("Paragraph indent by toolbar buttons"));
+
+    lay1->addWidget(indent);
+
+
 
     box->addWidget( tmpQGroupBox );
 }
@@ -145,6 +173,20 @@ void configureInterfacePage::apply()
         config->writeEntry( "AutoSave", autoSaveVal );
         m_pView->kPresenterDoc()->setAutoSave( autoSaveVal*60 );
     }
+
+    double newIndent = KoUnit::fromUserValue( indent->value(), doc->getUnit() );
+    if( newIndent != doc->getIndentValue() )
+    {
+        config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        doc->setIndentValue( newIndent );
+    }
+    int nbRecent=recentFiles->value();
+    if(nbRecent!=oldNbRecentFiles)
+    {
+        config->writeEntry( "NbRecentFile", nbRecent);
+        m_pView->changeNbOfRecentFiles(nbRecent);
+    }
+
 }
 
 void configureInterfacePage::slotDefault()
@@ -152,6 +194,9 @@ void configureInterfacePage::slotDefault()
     eRastX->setValue( 10 );
     eRastY->setValue( 10 );
     autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
+    double newIndent = KoUnit::userValue( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->getUnit() );
+    indent->setValue( newIndent );
+    recentFiles->setValue(10);
 }
 
 configureColorBackground::configureColorBackground( KPresenterView* _view, QWidget *parent , char *name )

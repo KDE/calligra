@@ -267,6 +267,7 @@ public slots:
     void alignChanged( int );
 
     void formatParagraph();
+    void changeNbOfRecentFiles(int _nb);
 
 public:
     // create GUI

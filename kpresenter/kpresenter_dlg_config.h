@@ -44,6 +44,9 @@ private:
     int oldAutoSaveValue;
     unsigned int oldRastX;
     unsigned int oldRastY;
+    int oldNbRecentFiles;
+    KDoubleNumInput* indent;
+    KIntNumInput* recentFiles;
 };
 
 class configureColorBackground : public QWidget

@@ -183,7 +183,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     headerFooterEdit->hide();
 
     saveOnlyPage = -1;
-
+    m_maxRecentFiles = 10;
 
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
@@ -230,6 +230,7 @@ void KPresenterDoc::initConfig()
         // Config-file value in mm, default 10 pt
         double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
         setIndentValue(indent);
+        m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
     }
 
     QColor oldBgColor = Qt::white;

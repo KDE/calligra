@@ -582,7 +582,25 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
 {
     KoParagLayout layout;
-    QDomElement element = parentElem.namedItem( "COUNTER" ).toElement();
+
+    QDomElement element = parentElem.namedItem( "INDENTS" ).toElement();
+    if ( !element.isNull() )
+    {
+        double val=0.0;
+        if(element.hasAttribute("first"))
+            val=element.attribute("first").toDouble();
+        layout.margins[QStyleSheetItem::MarginFirstLine] = val;
+        val=0.0;
+        if(element.hasAttribute( "left"))
+            val=element.attribute( "left").toDouble();
+        layout.margins[QStyleSheetItem::MarginLeft] = val;
+        val=0.0;
+        if(element.hasAttribute("right"))
+            val=element.attribute("right").toDouble();
+        layout.margins[QStyleSheetItem::MarginRight] = val;
+    }
+
+    element = parentElem.namedItem( "COUNTER" ).toElement();
     if ( !element.isNull() )
     {
         layout.counter = new KoParagCounter;
@@ -594,9 +612,24 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
 void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
+    QDomElement element;
+    if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
+         layout.margins[QStyleSheetItem::MarginLeft] != 0 ||
+         layout.margins[QStyleSheetItem::MarginRight] != 0 )
+    {
+        element = doc.createElement( "INDENTS" );
+        parentElem.appendChild( element );
+        if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 )
+            element.setAttribute( "first", layout.margins[QStyleSheetItem::MarginFirstLine] );
+        if ( layout.margins[QStyleSheetItem::MarginLeft] != 0 )
+            element.setAttribute( "left", layout.margins[QStyleSheetItem::MarginLeft] );
+        if ( layout.margins[QStyleSheetItem::MarginRight] != 0 )
+            element.setAttribute( "right", layout.margins[QStyleSheetItem::MarginRight] );
+    }
+
     if ( layout.counter && layout.counter->numbering() != KoParagCounter::NUM_NONE )
     {
-        QDomElement element = doc.createElement( "COUNTER" );
+        element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );
         if (layout.counter )
             layout.counter->save( element );

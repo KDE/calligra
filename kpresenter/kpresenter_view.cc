@@ -232,6 +232,12 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 
     setKeyCompression( true );
     m_specialCharDlg=0L;
+
+    if ( shell() )
+    {
+        changeNbOfRecentFiles( m_pKPresenterDoc->maxRecentFiles() );
+    }
+
     connect(this, SIGNAL(embeddImage(const QString &)), SLOT(insertPicture(const QString &)));
 }
 
@@ -4034,6 +4040,12 @@ void KPresenterView::formatParagraph()
 void KPresenterView::textDefaultFormat()
 {
     page->setTextDefaultFormat( );
+}
+
+void KPresenterView::changeNbOfRecentFiles(int _nb)
+{
+    if ( shell() ) // 0 when embedded into konq !
+        shell()->setMaxRecentItems( _nb );
 }
 
 #include <kpresenter_view.moc>

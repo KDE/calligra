@@ -222,7 +222,7 @@
 		type	0=normal, 1=bullet-list, 2=enum-list
 		depth	list depth
 -->
-<!ELEMENT P  (TEXT|COUNTER)*>
+<!ELEMENT P  (TEXT|COUNTER|INDENTS)*>
 <!ATTLIST P
 		align	NMTOKEN #REQUIRED
 		type	NMTOKEN #REQUIRED
@@ -277,6 +277,19 @@
     bullet CDATA #IMPLIED
     start CDATA #IMPLIED
     numberingtype CDATA #REQUIRED>
+
+<!-- INDENTS
+        first: indent (pt) from the left border (of the frame) of the first line of a paragraph
+        left: indent (pt) that is used for the other lines in a paragraph.
+        right: indent (pt) on the right of all lines in the paragraph
+-->
+<!ELEMENT INDENTS
+    EMPTY>
+<!ATTLIST INDENTS
+    first CDATA #REQUIRED
+    left CDATA #REQUIRED
+    right CDATA #REQUIRED>
+
 
 <!-- VERTALIGN
             Super/sub script.

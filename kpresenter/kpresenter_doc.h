@@ -324,15 +324,16 @@ public:
     bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
     void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
 
-    // in pt
-    double getIndentValue() { return m_indent; }
-    void setIndentValue(double _ind) { m_indent=_ind; }
-
     // The user-chosen global unit
     QString getUnitName() { return KoUnit::unitName( m_unit ); }
     KoUnit::Unit getUnit() { return m_unit; }
     void setUnit( KoUnit::Unit _unit );
 
+    // in pt
+    double getIndentValue() { return m_indent; }
+    void setIndentValue(double _ind) { m_indent=_ind; }
+
+    int maxRecentFiles() const { return m_maxRecentFiles; }
 
 public slots:
     void movePage( int from, int to );
@@ -454,6 +455,8 @@ protected:
     double m_indent; // in pt
 
     KoUnit::Unit m_unit;
+    int m_maxRecentFiles;
+
 
 private:
     void pageTitleInsert( unsigned int pageNumber);
