@@ -1999,7 +1999,6 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         int lastPage = m_doc->getPages() - 1;
         if(frames.last()->frameBehavior() == KWFrame::AutoExtendFrame) {
             delFrame(frames.last(), true);
-            m_doc->updateAllFrames();
             m_doc->frameChanged( 0L );
         }
         bool removed = false;
