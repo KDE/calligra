@@ -46,7 +46,7 @@
 #include "property.h"
 
 KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const char* name )
-    : KoView( part, parent, name )
+    : KoView( part, parent, name ),pe(0)
 {
     setInstance( KudesignerFactory::global() );
     if ( !part->isReadWrite() ) // readonly case, e.g. when embedded into konqueror
@@ -60,17 +60,6 @@ KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const cha
     rc->viewport()->setFocusProxy(rc);
     rc->viewport()->setFocusPolicy(WheelFocus);
     rc->setFocus();
-
-    if (shell())
-    {
-        pe = new PropertyEditor(QDockWindow::OutsideDock, shell(), "propedit");
-        shell()->addDockWindow(pe, DockRight);
-        pe->show();
-
-        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*) ), pe,
-            SLOT( populateProperties(std::map<QString, PropPtr >*) ));
-        connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
-    }
 
     rc->itemToInsert = 0;
 
@@ -325,5 +314,32 @@ void KudesignerView::slotAddItemLine(){
 void KudesignerView::unselectItemAction(){
     itemsNothing->setChecked(true);
 }
+
+void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+        if ( ev->activated() ) {
+	    if ((!pe))
+	    {
+        	pe = new PropertyEditor(QDockWindow::OutsideDock, shell(), "propedit");
+	        shell()->addDockWindow(pe, DockRight);
+	        pe->show();
+	    
+	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*) ), pe,
+        	    SLOT( populateProperties(std::map<QString, PropPtr >*) ));
+	        connect(rc, SIGNAL( selectionClear() ), pe, SLOT( clearProperties() ));
+	    }
+
+
+		pe->show();
+		kdDebug()<<"pe->show()"<<endl;
+        }
+        else
+        {
+		pe->hide();
+		kdDebug()<<"pe->hide()"<<endl;
+        }
+    KoView::guiActivateEvent( ev );
+}
+
 
 #include "kudesigner_view.moc"

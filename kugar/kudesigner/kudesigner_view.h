@@ -21,6 +21,7 @@
 #define KUDESIGNER_VIEW
 
 #include <koView.h>
+#include <kparts/event.h>
 
 class KAction;
 class KRadioAction;
@@ -62,6 +63,7 @@ protected:
     virtual void resizeEvent(QResizeEvent* _ev);
 
     virtual void updateReadWrite( bool readwrite );
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
     void initActions();
 
