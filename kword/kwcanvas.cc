@@ -744,31 +744,32 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     if ( page == oldPage )
     {
         //kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
-
+        int minHeight = minFrameHeight + static_cast<int>(frame->bTop() + frame->bBottom());
+        int minWidth = minFrameWidth + static_cast<int>(frame->bLeft() + frame->bRight());
         if ( top && newTop != y )
         {
-            if (newBottom - y < minFrameHeight+5)
-                y = newBottom - minFrameHeight - 5;
+            if (newBottom - y < /*minFrameHeight*/minHeight+5)
+                y = newBottom - /*minFrameHeight*/minHeight - 5;
             y = QMAX( y, m_doc->ptPageTop( oldPage ) );
             newTop = y;
         } else if ( bottom && newBottom != y )
         {
-            if (y - newTop < minFrameHeight+5)
-                y = newTop + minFrameHeight + 5;
+            if (y - newTop < minHeight/*minFrameHeight*/+5)
+                y = newTop + /*minFrameHeight*/minHeight + 5;
             y = QMIN( y, m_doc->ptPageTop( oldPage + 1 ) );
             newBottom = y;
         }
 
         if ( left && newLeft != x )
         {
-            if (newRight - x < minFrameWidth)
-                x = newRight - minFrameWidth - 5;
+            if (newRight - x < minWidth/*minFrameWidth*/)
+                x = newRight - minWidth/*minFrameWidth*/ - 5;
             x = QMAX( x, 0 );
             newLeft = x;
         } else if ( right && newRight != x )
         {
-            if (x - newLeft < minFrameWidth)
-                x = newLeft + minFrameWidth + 5; // why +5 ?
+            if (x - newLeft < /*minFrameWidth*/minWidth)
+                x = newLeft + /*minFrameWidth*/minWidth + 5; // why +5 ?
             x = QMIN( x, m_doc->ptPaperWidth() );
             newRight = x;
         }
