@@ -1,0 +1,8 @@
+
+To view the samples, type a command similar to the following:
+
+  kugar -d sample1.kud -r sample1.kut
+
+For more information, see /usr/share/doc/kugar/README or type "man kugar".
+
+ -- Ben Burton <benb@acm.org>  Mon,  9 Apr 2001 02:02:20 -0500
