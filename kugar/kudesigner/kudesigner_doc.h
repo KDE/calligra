@@ -69,7 +69,7 @@ private:
 
     MyCanvas *docCanvas;
 
-//    KuDesignerPlugin *m_plugin;
+    KuDesignerPlugin *m_plugin;
     Dock m_propPos;
 
     void setReportItemAttributes(QDomNode *node, CanvasReportItem *item);

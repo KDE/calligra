@@ -158,6 +158,12 @@ bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument & rt)
     docCanvas = new MyCanvas(width, height);
     docCanvas->setAdvancePeriod(30);
 
+    if (m_plugin)
+    {
+        canvas()->setPlugin(m_plugin);
+        m_plugin=0;
+    }
+
     //creating KugarTemplate object
     CanvasKugarTemplate *templ = new CanvasKugarTemplate(0, 0, width, height, docCanvas);
     templ->show();
@@ -414,9 +420,9 @@ void KudesignerDoc::loadPlugin(const QString &name)
 {
 	kdDebug()<<"Trying to load plugin: "<<name<<endl;
 	KuDesignerPlugin *plug=KParts::ComponentFactory::createInstanceFromLibrary<KuDesignerPlugin>(name.utf8(),this);
-	canvas()->setPlugin(plug);
-	if (canvas()->plugin()) kdDebug()<<"plugin has been loaded"<<endl;
-	else kdDebug()<<"plugin couldn't be loaded :("<<endl;
+	m_plugin=plug;
+	if (m_plugin) kdDebug()<<"plugin has been loaded"<<endl;
+		else kdDebug()<<"plugin couldn't be loaded :("<<endl;
 }
 
 bool KudesignerDoc::completeSaving( KoStore* store )
