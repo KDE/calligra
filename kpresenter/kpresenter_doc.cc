@@ -716,8 +716,10 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDom
 
 }
 
-void KPresenterDoc::compatibilityPresSpeed()
+void KPresenterDoc::compatibilityFromOldFileFormat()
 {
+    //function to keep compatibility with old file format
+    //for example for presSpeed
     if ( m_loadingInfo && m_loadingInfo->presSpeed != - 1 )
     {
         if ( m_loadingInfo->presSpeed != -1 )
@@ -2864,7 +2866,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
             setPageLayout( m_pageLayout );
     }
 
-    compatibilityPresSpeed();
+    compatibilityFromOldFileFormat();
 
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );

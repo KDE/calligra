@@ -585,7 +585,7 @@ protected:
     void loadOasisIgnoreList( const QDomDocument&settingsDoc );
 
     //we move presSpeed to each table => compatibility with old file format
-    void compatibilityPresSpeed();
+    void compatibilityFromOldFileFormat();
 
     void parseOasisHelpLine( const QString &str );
 
