@@ -43,8 +43,6 @@ KoFilter::ConversionStatus MagickImport::convert(const QCString&, const QCString
 	if (!input)
 		return KoFilter::CreationError;
 	
-	printf("inputFilename = %s\n", inputFilename.latin1());
-	printf("input = %p\n", input);
 	return input -> importImage(inputFilename) ? KoFilter::OK : KoFilter::BadMimeType;
 }
 
