@@ -51,6 +51,8 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	m_sync = autoSync;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
+	connect(this, SIGNAL(expanded(QListViewItem *)), this, SLOT(slotExpanded(QListViewItem *)));
+	connect(this, SIGNAL(collapsed(QListViewItem *)), this, SLOT(slotCollapsed(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
 	connect(header(), SIGNAL(clicked(int)), this, SLOT(moveEditor()));
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
@@ -72,15 +74,31 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 void
 KexiPropertyEditor::slotClicked(QListViewItem *item)
 {
-	if(item)
-	{
+	if (!item)
+		return;
 //		int y = viewportToContents(QPoint(0, itemRect(item).y())).y();
 //		kdDebug() << "KexiPropertyEditor::slotClicked() y: " << y << endl;
 //		QRect g(columnWidth(0), y, columnWidth(1), item->height());
-		KexiPropertyEditorItem *i = static_cast<KexiPropertyEditorItem *>(item);
-		createEditor(i);//, g);
-	}
+	KexiPropertyEditorItem *i = static_cast<KexiPropertyEditorItem *>(item);
+	createEditor(i);//, g);
 }
+
+void
+KexiPropertyEditor::slotExpanded(QListViewItem *item)
+{
+	if (!item)
+		return;
+	moveEditor();
+}
+
+void
+KexiPropertyEditor::slotCollapsed(QListViewItem *item)
+{
+	if (!item)
+		return;
+	moveEditor();
+}
+
 
 void
 KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geometry)

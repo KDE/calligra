@@ -90,10 +90,6 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		void	valueChanged(const QString &propname, QVariant value);
 
 	public slots:
-		/*! This slot is called when the user clicks the list view. It takes care of deleting current editor and
-		   creating a new editor for the newly selected item.
-		*/
-		void	slotClicked(QListViewItem *i);
 		/*! This slot resets the value of an item, using KexiProperty::oldValue().
 		   It is called when pressing the "Revert to defaults" button
 		*/
@@ -126,6 +122,14 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		/*! This slot updates editor and revert buttons position and size when the columns are resized. */
 		void	slotColumnSizeChanged(int section, int oldS, int newS);
 		void	slotColumnSizeChanged(int section);
+
+		/*! This slot is called when the user clicks the list view. It takes care of deleting current editor and
+		   creating a new editor for the newly selected item.
+		*/
+		void	slotClicked(QListViewItem *item);
+
+		void	slotExpanded(QListViewItem *item);
+		void	slotCollapsed(QListViewItem *item);
 
 	protected:
 		/*! Creates an editor for the list item \a i in the rect \a geometry, and displays revert button 
