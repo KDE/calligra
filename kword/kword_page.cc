@@ -152,9 +152,6 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	    int mx = e->x() + xOffset;
 	    int my = e->y() + yOffset;
 
-	    if (doc->getProcessingType() == KWordDocument::WP && doc->getFrameSet(mx,my) < 1)
-	      break;
-
 	    mx = (mx / doc->getRastX()) * doc->getRastX();
 	    my = (my / doc->getRastY()) * doc->getRastY();
 
@@ -174,6 +171,8 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		      KWFrame *frame;
 		      for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
 			{
+			  if (doc->getProcessingType() == KWordDocument::WP && i == 0) continue;
+
 			  frameset = doc->getFrameSet(i);
 			  for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 			    {
@@ -199,7 +198,10 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		} break;
 	      case SizeVerCursor:
 		{
-		  KWFrame *frame = doc->getFirstSelectedFrame();
+		  int frameset = 0;
+		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
+		  if (frameset < 1) break;
+		  
 		  QPainter p;
 		  p.begin(this);
 		  p.setRasterOp(NotROP);
@@ -243,7 +245,10 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		} break;
 	      case SizeHorCursor:
 		{
-		  KWFrame *frame = doc->getFirstSelectedFrame();
+		  int frameset = 0;
+		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
+		  if (frameset < 1) break;
+
 		  QPainter p;
 		  p.begin(this);
 		  p.setRasterOp(NotROP);
@@ -287,7 +292,10 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		} break;
 	      case SizeFDiagCursor:
 		{
-		  KWFrame *frame = doc->getFirstSelectedFrame();
+		  int frameset = 0;
+		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
+		  if (frameset < 1) break;
+
 		  QPainter p;
 		  p.begin(this);
 		  p.setRasterOp(NotROP);
@@ -337,7 +345,10 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		} break;
 	      case SizeBDiagCursor:
 		{
-		  KWFrame *frame = doc->getFirstSelectedFrame();
+		  int frameset = 0;
+		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
+		  if (frameset < 1) break;
+
 		  QPainter p;
 		  p.begin(this);
 		  p.setRasterOp(NotROP);

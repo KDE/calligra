@@ -173,6 +173,7 @@ void KWFrameSet::addFrame(KWFrame _frame)
 {
   frames.append(new KWFrame(_frame.x(),_frame.y(),_frame.width(),_frame.height(),_frame.getRunAround(),_frame.getRunAroundGap()));
   if (frames.count() == 1) init();
+  update();
 }
 
 /*================================================================*/
@@ -180,12 +181,14 @@ void KWFrameSet::addFrame(KWFrame *_frame)
 {
   frames.append(new KWFrame(_frame->x(),_frame->y(),_frame->width(),_frame->height(),_frame->getRunAround(),_frame->getRunAroundGap()));
   if (frames.count() == 1) init();
+  update();
 }
 
 /*================================================================*/
 void KWFrameSet::delFrame(unsigned int _num)
 {
   frames.remove(_num);
+  update();
 }
 
 /*================================================================*/
@@ -303,6 +306,62 @@ void KWTextFrameSet::init()
 /*================================================================*/
 void KWTextFrameSet::update()
 {
+  typedef QList<KWFrame> FrameList;
+  QList<FrameList> frameList;
+  frameList.setAutoDelete(true);
+
+  QRect pageRect;
+  for (unsigned int i = 0;i < static_cast<unsigned int>(doc->getPages());i++)
+    {
+      pageRect = QRect(0,i * doc->getPTPaperHeight(),doc->getPTPaperWidth(),doc->getPTPaperHeight());
+
+      FrameList *l = new FrameList;
+      l->setAutoDelete(false);
+      for (unsigned int j = 0;j < frames.count();j++)
+	{
+	  if (frames.at(j)->intersects(pageRect))
+	    l->append(frames.at(j));
+	}  
+      
+      if (!l->isEmpty())
+	{
+	  FrameList *ll = new FrameList;
+	  ll->setAutoDelete(false);
+	  ll->append(l->first());
+	  for (unsigned int k = 1;k < l->count();k++)
+	    {
+	      bool inserted = false;
+	      for (unsigned int m = 0;m < ll->count();m++)
+		{ 
+		  if (l->at(k)->y() < ll->at(m)->y()) 
+		    {
+		      inserted = true;
+		      ll->insert(m,l->at(k));
+		      break;
+		    }
+		}
+	      if (!inserted) ll->append(l->at(k));
+	    }
+	  
+	  delete l;
+	  l = ll;
+	}
+      
+      frameList.append(l);
+    }
+
+  frames.setAutoDelete(false);
+  frames.clear();
+
+  for (unsigned int n = 0;n < frameList.count();n++)
+    {
+      for (unsigned int o = 0;o < frameList.at(n)->count();o++)
+	{
+	  frames.append(frameList.at(n)->at(o));
+	}
+    }
+
+  frames.setAutoDelete(true);
 }
 
 /*================================================================*/

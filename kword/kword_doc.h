@@ -297,6 +297,7 @@ public:
   void deSelectAllFrames();
   QCursor getMouseCursor(unsigned int mx,unsigned int my);
   KWFrame *getFirstSelectedFrame();
+  KWFrame *getFirstSelectedFrame(int &_frameset);
 
   void print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin);
   

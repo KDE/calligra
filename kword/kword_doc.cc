@@ -1558,6 +1558,26 @@ KWFrame *KWordDocument::getFirstSelectedFrame()
 }
 
 /*================================================================*/
+KWFrame *KWordDocument::getFirstSelectedFrame(int &_frameset)
+{
+  KWFrameSet *frameSet = 0L;
+  _frameset = 0;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      _frameset = i;
+      frameSet = getFrameSet(i);
+      for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
+	{	
+	  if (frameSet->getFrame(j)->isSelected())
+	    return frameSet->getFrame(j);
+	}
+    }
+
+  return 0L;
+}
+
+/*================================================================*/
 void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin)
 {
   QList<KWFormatContext> fcList;
@@ -1596,6 +1616,11 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 /*================================================================*/
 void KWordDocument::updateAllFrames()
 {
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      getFrameSet(i)->update();
+    }
+
   QList<KWFrame> _frames;
   _frames.setAutoDelete(false);
   unsigned int i = 0,j = 0;

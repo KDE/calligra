@@ -311,3 +311,9 @@ Reggie, 2.11.1998:
 Reggie, 3.11.1998:
 ------------------
 - Started implementing creating textframes with the mouse. It already works somehow.
+
+Reggie, 4.11.1998:
+------------------
+- Fixed some bugs with moving/resizing frames
+- Inserting text frames works now (quite :-) correctly
+- When changing something with frames/framesets they get updated correctly now
