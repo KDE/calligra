@@ -1339,12 +1339,8 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
 
 void KWTextFrameSet::fixParagWidth( KWTextParag* parag )
 {
-    if ( parag && parag->hasBorder() )
-    {
-        parag->setWidth( textDocument()->width() - 1 );
-    }
     // Fixing the parag rect for the formatting chars (CR and frame break).
-    else if ( parag && m_doc->viewFormattingChars() )
+    if ( parag && m_doc->viewFormattingChars() && parag->rect().width() < textDocument()->width() )
     {
         if ( parag->hardFrameBreakAfter() )
         {
@@ -1354,7 +1350,7 @@ void KWTextFrameSet::fixParagWidth( KWTextParag* parag )
             int width = 0;
             for ( int i = 0 ; i < (int)str.length() ; ++i )
                 width += lastFormat->width( str, i );
-            parag->setWidth( parag->rect().width() + width );
+            parag->setWidth( parag->rect().width() + width ); // TODO QMIN( textDocument()->width(), ... ) ?
         }
         else if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
         {
