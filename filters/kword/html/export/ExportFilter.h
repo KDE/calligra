@@ -38,7 +38,7 @@ class HtmlWorker : public KWEFBaseWorker
 {
 public:
     HtmlWorker(void) : m_ioDevice(NULL), m_streamOut(NULL) { }
-    virtual ~HtmlWorker(void) { }
+    virtual ~HtmlWorker(void) { delete m_streamOut; }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void); // Close file in normal conditions
