@@ -1281,7 +1281,7 @@ AC_DEFUN(AM_KDE_WITH_NLS,
       AC_DEFINE(ENABLE_NLS)
 
       AM_PATH_PROG_WITH_TEST_KDE(MSGFMT, msgfmt, 
-         [test -n "`$ac_dir/$ac_word --version 2>&1 | grep '(GNU gettext)'`"], msgfmt)
+         [test -n "`$ac_dir/$ac_word --version 2>&1 | grep 'GNU gettext'`"], msgfmt)
       AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
 
       if test -z "`$MSGFMT 2>&1 | grep 'GNU gettext'`"; then
@@ -1891,9 +1891,50 @@ fi
 
 ])
 
+
+AC_DEFUN(KDE_CHECK_LIBPTHREAD,
+[
+AC_CHECK_LIB(pthread, main, [LIBPTHREAD="-lpthread"], LIBPTHREAD= )
+AC_SUBST(LIBPTHREAD)
+])
+
+AC_DEFUN(KDE_TRY_LINK_PYTHON,
+[
+AC_CACHE_VAL(kde_cv_try_link_python_$1,
+[
+kde_save_cxxflags="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS $PYTHONINC"
+kde_save_libs="$LIBS"
+LIBS="$LIBS $LIBPYTHON $2 $LIBDL"
+kde_save_ldflags="$LDFLAGS"
+LDFLAGS="$LDFLAGS $PYTHONLIB"
+
+AC_TRY_LINK(
+[
+#include <Python.h>
+],[
+	PySys_SetArgv(1, 0);
+],
+	[kde_cv_try_link_python_$1=yes],
+	[kde_cv_try_link_python_$1=no]
+)
+CXXFLAGS="$kde_save_cxxflags"
+LIBS="$kde_save_libs"
+LDFLAGS="$kde_save_ldflags"
+])
+
+if test "$kde_cv_try_link_python_$1" = "yes"; then
+  $3
+else
+  $4
+fi
+
+])
+
 AC_DEFUN(KDE_CHECK_PYTHON,
 [
 AC_REQUIRE([KDE_CHECK_LIBDL])
+AC_REQUIRE([KDE_CHECK_LIBPTHREAD])
 if test -z "$1"; then 
   version="1.5"
 else
@@ -1929,32 +1970,27 @@ LIBPYTHON=-lpython$version
 AC_MSG_RESULT(header $python_incdir library $python_libdir)
 
 dnl Note: this test is very weak
-AC_MSG_CHECKING(if Python needs thread lib to compile)
-AC_CACHE_VAL(kde_cv_python_pthread,
-[
-kde_save_cxxflags=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $PYTHONINC"
-	AC_TRY_COMPILE([#include <Python.h>],
-[
-	PySys_SetArgv(1, 0);
-],
-	kde_cv_python_pthread=no,
-	[kde_cv_python_pthread=yes]
-)
-CXXFLAGS=$kde_save_cxxflags
-])
-
-AC_MSG_RESULT($kde_cv_python_pthread)
-
-if test "$kde_cv_python_pthread" = "yes"; then
-  LIBPYTHON="$LIBPYTHON -lpthread $LIBDL"
-fi
+AC_MSG_CHECKING(if an Python application links)
+KDE_TRY_LINK_PYTHON(normal, "", AC_MSG_RESULT(yes),
+ [
+    AC_MSG_RESULT(no)
+    AC_MSG_CHECKING(if Python depends on -lpthread)
+    KDE_TRY_LINK_PYTHON(pthread, "$LIBPTHREAD",
+    [  
+       AC_MSG_RESULT(yes)
+       LIBPYTHON="$LIBPYTHON $LIBPTHREAD $LIBDL"
+    ],
+    [
+       AC_MSG_RESULT(no)
+       AC_MSG_WARN([it seems, Python depends on another library. 
+Pleae use "make LIBPTYHON='-lpyhon$version -lotherlib'" to fix this
+and contact the authors to let them know about this problem])
+    ])
+ ]) 
 
 AC_SUBST(PYTHONINC)
 AC_SUBST(PYTHONLIB)
 AC_SUBST(LIBPYTHON)
-
-
 
 ])
 
