@@ -59,3 +59,10 @@ void KPTNode::insertRisk( unsigned int index, KPTRisk *risk ) {
 void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
 }
 
+void KPTNode::addChildNode( KPTNode *node) {
+}
+
+QDateTime *KPTNode::getDelay() {
+    return 0L;
+}
+

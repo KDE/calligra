@@ -23,6 +23,9 @@ KPTMilestone::KPTMilestone() : KPTNode() {
         m_nodeType=POINT_IN_TIME;
 }
 
+KPTMilestone::~KPTMilestone() {
+}
+
 QDateTime *KPTMilestone::getStartTime() {
     return 0L;
 }

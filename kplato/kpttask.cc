@@ -25,3 +25,20 @@ KPTTask::KPTTask() : KPTNode() {
 
 KPTTask::~KPTTask() {
 }
+
+QDateTime *KPTTask::getExpectedDuration() {
+    return 0L;
+}
+
+QDateTime *KPTTask::getRandomDuration() {
+    return 0L;
+}
+
+QDateTime *KPTTask::getStartTime() {
+    return 0L;
+}
+
+QDateTime *KPTTask::getFloat() {
+    return 0L;
+}
+

@@ -24,3 +24,20 @@ KPTProject::KPTProject() : KPTNode() {
 
 KPTProject::~KPTProject() {
 }
+
+QDateTime *KPTProject::getExpectedDuration() {
+    return 0L;
+}
+
+QDateTime *KPTProject::getRandomDuration() {
+    return 0L;
+}
+
+QDateTime *KPTProject::getStartTime() {
+    return 0L;
+}
+
+QDateTime *KPTProject::getFloat() {
+    return 0L;
+}
+
