@@ -597,11 +597,16 @@ public:
      */
     virtual void drawMargins( KWFrame *frame, QPainter *p, const QRect &fcrect, const QColorGroup &cg, KWViewMode *viewMode);
 
+    enum UpdateFramesFlags {
+        UpdateFramesInPage = 1,
+        UpdateFramesOnTopBelow = 2, // needs UpdateFramesInPage
+        SortFrames = 8 // kwtextframeset only
+    };
     /**
      * Called when our frames change, or when another frameset's frames change.
      * Framesets can reimplement it, but should always call the parent method.
      */
-    virtual void updateFrames();
+    virtual void updateFrames( int flags = 0xff );
 
     /** Return list of frames in page @p pageNum.
      * This is fast since it uses the m_framesInPage array.*/
@@ -882,7 +887,6 @@ public:
     KWChild *getChild()const { return m_child; }
 
     void updateChildGeometry( KWViewMode* viewMode );
-    virtual void updateFrames();
 
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
@@ -962,8 +966,6 @@ public:
     virtual void drawFrameContents(KWFrame *, QPainter*, const QRect&,
                                    const QColorGroup&, bool onlyChanged, bool resetChanged,
                                    KWFrameSetEdit *edit, KWViewMode *viewMode);
-
-    virtual void updateFrames();
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );

@@ -998,7 +998,7 @@ KWFrame * KWFrameSet::settingsFrame(KWFrame* frame)
     return frame; //fallback, should never happen
 }
 
-void KWFrameSet::updateFrames()
+void KWFrameSet::updateFrames( int flags )
 {
     if ( frames.isEmpty() )
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
@@ -1009,71 +1009,74 @@ void KWFrameSet::updateFrames()
 
     //kdDebug(32001) << "KWFrameSet::updateFrames " << this << " " << getName() << endl;
 
-    // For each of our frames, clear old list of frames on top, and grab min/max page nums
-    m_firstPage = frames.first()->pageNum(); // we know frames is not empty here
-    int lastPage = m_firstPage;
-    QPtrListIterator<KWFrame> fIt( frameIterator() );
-    for ( ; fIt.current(); ++fIt ) {
-        fIt.current()->clearFramesOnTop();
-        fIt.current()->clearFramesBelow();
-        int pg = fIt.current()->pageNum();
-        m_firstPage = QMIN( m_firstPage, pg );
-        lastPage = QMAX( lastPage, pg );
-    }
+    if ( flags & UpdateFramesInPage ) {
+        // For each of our frames, clear old list of frames on top, and grab min/max page nums
+        m_firstPage = frames.first()->pageNum(); // we know frames is not empty here
+        int lastPage = m_firstPage;
+        QPtrListIterator<KWFrame> fIt( frameIterator() );
+        for ( ; fIt.current(); ++fIt ) {
+            if ( flags & UpdateFramesOnTopBelow ) {
+                fIt.current()->clearFramesOnTop();
+                fIt.current()->clearFramesBelow();
+            }
+            int pg = fIt.current()->pageNum();
+            m_firstPage = QMIN( m_firstPage, pg );
+            lastPage = QMAX( lastPage, pg );
+        }
 
-    // Prepare the m_framesInPage structure
-    int oldSize = m_framesInPage.size();
-    m_framesInPage.resize( lastPage - m_firstPage + 1 );
-    // Clear the old elements
-    int oldElements = QMIN( oldSize, (int)m_framesInPage.size() );
-    for ( int i = 0 ; i < oldElements ; ++i )
-        m_framesInPage[i]->clear();
-    // Initialize the new elements.
-    for ( int i = oldElements ; i < (int)m_framesInPage.size() ; ++i )
-        m_framesInPage.insert( i, new QPtrList<KWFrame>() );
+        // Prepare the m_framesInPage structure
+        int oldSize = m_framesInPage.size();
+        m_framesInPage.resize( lastPage - m_firstPage + 1 );
+        // Clear the old elements
+        int oldElements = QMIN( oldSize, (int)m_framesInPage.size() );
+        for ( int i = 0 ; i < oldElements ; ++i )
+            m_framesInPage[i]->clear();
+        // Initialize the new elements.
+        for ( int i = oldElements ; i < (int)m_framesInPage.size() ; ++i )
+            m_framesInPage.insert( i, new QPtrList<KWFrame>() );
 
 
-    if ( m_doc->viewMode()->hasFrames() )
-    {
-        // Iterate over ALL framesets, to find those which have frames on top of us.
-        // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
-        // So we want it cached.
-        QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
-        for (; framesetIt.current(); ++framesetIt )
+        if ( m_doc->viewMode()->hasFrames() && ( flags & UpdateFramesOnTopBelow ) )
         {
-            KWFrameSet *frameSet = framesetIt.current();
-            if ( !frameSet->isVisible() )
-                continue;
-
-            // Floating frames are not "on top", they are "inside".
-            if ( frameSet->isFloating() )
-                continue;
-
-            //kdDebug(32001) << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
-
-            QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-            for ( ; frameIt.current(); ++frameIt )
+            // Iterate over ALL framesets, to find those which have frames on top of us.
+            // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
+            // So we want it cached.
+            QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+            for (; framesetIt.current(); ++framesetIt )
             {
-                KWFrame *frameMaybeOnTop = frameIt.current();
-                // Is this frame over any of our frames ?
-                QPtrListIterator<KWFrame> fIt( frameIterator() );
-                for ( ; fIt.current(); ++fIt )
+                KWFrameSet *frameSet = framesetIt.current();
+                if ( !frameSet->isVisible() )
+                    continue;
+
+                // Floating frames are not "on top", they are "inside".
+                if ( frameSet->isFloating() )
+                    continue;
+
+                //kdDebug(32001) << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
+
+                QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+                for ( ; frameIt.current(); ++frameIt )
                 {
-                    if ( fIt.current() != frameMaybeOnTop ) // Skip identity case ;)
+                    KWFrame *frameMaybeOnTop = frameIt.current();
+                    // Is this frame over any of our frames ?
+                    QPtrListIterator<KWFrame> fIt( frameIterator() );
+                    for ( ; fIt.current(); ++fIt )
                     {
-                        KWFrame *parentFrame = fIt.current();
-                        KWFrameSet *parentFrameset= parentFrame->frameSet();
-                        while (parentFrameset->isFloating()) {
-                            parentFrameset=parentFrameset->anchorFrameset();
-                            KWFrame *oldParentFrame = parentFrame;
-                            parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
-                            if(!parentFrame)
-                                parentFrame = oldParentFrame;
-                        }
-                        //kdDebug(32001) << "KWFrameSet::updateFrames comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
-                        KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
-                        if( !intersect.isEmpty() )
+                        if ( fIt.current() != frameMaybeOnTop ) // Skip identity case ;)
                         {
+                            KWFrame *parentFrame = fIt.current();
+                            KWFrameSet *parentFrameset= parentFrame->frameSet();
+                            while (parentFrameset->isFloating()) {
+                                parentFrameset=parentFrameset->anchorFrameset();
+                                KWFrame *oldParentFrame = parentFrame;
+                                parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
+                                if(!parentFrame)
+                                    parentFrame = oldParentFrame;
+                            }
+                            //kdDebug(32001) << "KWFrameSet::updateFrames comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
+                            KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
+                            if( !intersect.isEmpty() )
+                            {
 #if 0
                                 kdDebug(32002)
                                     << "KWFrameSet::updateFrames adding frame "
@@ -1085,26 +1088,28 @@ void KWFrameSet::updateFrames()
 	                        if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
 	                        {
 
-        	                        fIt.current()->addFrameOnTop( frameMaybeOnTop );
+                                    fIt.current()->addFrameOnTop( frameMaybeOnTop );
                                 } else
-	                        if ( parentFrame->zOrder() > frameMaybeOnTop->zOrder() )
-                	        {
+                                    if ( parentFrame->zOrder() > frameMaybeOnTop->zOrder() )
+                                    {
 					fIt.current()->addFrameBelow( frameMaybeOnTop );
-				}
+                                    }
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    // Iterate over frames again, to fill the m_framesInPage array
-    fIt.toFirst();
-    for ( ; fIt.current(); ++fIt ) {
-        int pg = fIt.current()->pageNum();
-        Q_ASSERT( pg <= lastPage );
-        m_framesInPage[pg - m_firstPage]->append( fIt.current() );
-        fIt.current()->sortFramesBelow();
+        // Iterate over frames again, to fill the m_framesInPage array
+        fIt.toFirst();
+        for ( ; fIt.current(); ++fIt ) {
+            int pg = fIt.current()->pageNum();
+            Q_ASSERT( pg <= lastPage );
+            m_framesInPage[pg - m_firstPage]->append( fIt.current() );
+            if ( flags & UpdateFramesOnTopBelow )
+                fIt.current()->sortFramesBelow();
+        }
     }
 
     if ( isFloating() )
@@ -1981,13 +1986,6 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
     } //else kdDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " onlychanged=true!" << endl;
 }
 
-void KWPartFrameSet::updateFrames()
-{
-    if( frames.isEmpty() ) // Deleted frameset -> don't refresh
-        return;
-    KWFrameSet::updateFrames();
-}
-
 void KWPartFrameSet::updateChildGeometry( KWViewMode* viewMode )
 {
     if( frames.isEmpty() ) // Deleted frameset
@@ -2287,11 +2285,6 @@ void KWFormulaFrameSet::slotFormulaChanged( double width, double height )
     }
 
     m_changed = true;
-}
-
-void KWFormulaFrameSet::updateFrames()
-{
-    KWFrameSet::updateFrames();
 }
 
 QDomElement KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)

@@ -224,6 +224,15 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     QPtrListIterator<HeaderFooterFrameset> it2( m_footnotes );
     for ( ; it2.current() ; ++it2 )
         it2.current()->deleteFramesAfterLast( m_doc->getPages() - 1 );
+    if ( mainTextFrameSet ) {
+        int lastFrame = m_doc->getPages() - 1 * numColumns + (numColumns-1);
+        while ( (int)mainTextFrameSet->getNumFrames() - 1 > lastFrame ) {
+#ifdef DEBUG_FRAMELAYOUT
+            kdDebug(32002) << "  Final cleanup: deleting frame " << mainTextFrameSet->getNumFrames() - 1 << " of main textframeset (lastFrame=" << lastFrame << ")" << endl;
+#endif
+            mainTextFrameSet->delFrame( mainTextFrameSet->getNumFrames() - 1 );
+        }
+    }
 
     if ( mainTextFrameResized != -1 && mainTextFrameSet->type() == FT_TEXT ) {
 #ifdef DEBUG_FRAMELAYOUT
@@ -308,27 +317,30 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
         KoRect rect( left + col * ( ptColumnWidth + ptColumnSpacing ),
                      top, ptColumnWidth, bottom - top );
         uint frameNum = pageNum * numColumns + col;
-#ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << " Page " << pageNum << ": resizing main text frame " << frameNum << " to " << rect << endl;
-#endif
         KWFrame* frame;
         if ( frameNum < mainTextFrameSet->getNumFrames() ) {
             // Resize existing frame
             frame = mainTextFrameSet->frame( frameNum );
+#ifdef DEBUG_FRAMELAYOUT
+            kdDebug(32002) << " Page " << pageNum << ": resizing main text frame " << frameNum << "(" << frame << ") to " << rect << endl;
+#endif
             bool resized = (rect != *frame);
             if ( resized ) {
                 frame->setRect( rect );
                 frame->updateRulerHandles();
                 mainTextFrameResized = true;
-                mainTextFrameSet->updateFrames();
+                mainTextFrameSet->updateFrames( 0xff - KWFrameSet::SortFrames ); // Don't sort frames yet!
             }
         } else {
             // Create new frame
             frame = new KWFrame( mainTextFrameSet, rect.x(), rect.y(), rect.width(), rect.height() );
+#ifdef DEBUG_FRAMELAYOUT
+            kdDebug(32002) << " Page " << pageNum << ": creating new main text frame " << frameNum << "(" << frame << ") to " << rect << endl;
+#endif
             mainTextFrameSet->addFrame( frame );
             Q_ASSERT( frameNum == mainTextFrameSet->getNumFrames()-1 );
             mainTextFrameResized = true;
-            mainTextFrameSet->updateFrames();
+            mainTextFrameSet->updateFrames( 0xff - KWFrameSet::SortFrames ); // Don't sort frames yet!
         }
         frame->setDrawFootNoteLine( hasFootNotes );
     }

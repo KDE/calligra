@@ -282,7 +282,7 @@ public:
 
     virtual void finalize();
 
-    virtual void updateFrames();
+    virtual void updateFrames( int flags = 0xff );
 
     /* Overloaded methods, look for docu in kwframe.h */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );

@@ -75,18 +75,18 @@ KWFrameSetEdit * KWTableFrameSet::createFrameSetEdit( KWCanvas * canvas )
     return new KWTableFrameSetEdit( this, canvas );
 }
 
-void KWTableFrameSet::updateFrames()
+void KWTableFrameSet::updateFrames( int flags )
 {
     if(m_cells.count()==0)
         return;
     for (unsigned int i =0; i < m_cells.count(); i++)
     {
-        m_cells.at(i)->updateFrames();
+        m_cells.at(i)->updateFrames( flags );
         //This is wrong (reason for famous infinite loop bug)
         //Do this in KWTableFrameSet::invalidate
         //m_cells.at(i)->invalidate();
     }
-    KWFrameSet::updateFrames();
+    KWFrameSet::updateFrames( flags );
 }
 
 void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )

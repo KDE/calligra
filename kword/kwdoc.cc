@@ -610,7 +610,7 @@ void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _c
             // (and frames of the main textframeset might just remain un-moved...)
             KWFrameSet *frameset = m_lstFrameSet.getFirst();
             KWFrame* lastFrame = frameset->frame( frameset->getNumFrames() - 1 );
-            if ( lastFrame && lastFrame->pageNum() + 1 != numPages ) {
+            if ( lastFrame && lastFrame->pageNum() + 1 < numPages ) {
                 kdDebug(32002) << "KWDocument::setPageLayout ensuring that recalcFrames will consider " << numPages << " pages." << endl;
                 // All that matters is that it's on numPages so that all pages will be recalc-ed.
                 // If the text layout then wants to remove some pages, no problem.
@@ -2808,31 +2808,15 @@ void KWDocument::removePage( int num )
 #ifdef DEBUG_PAGES
     kdDebug(32002) << "KWDocument::removePage " << num << endl;
 #endif
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
+    QPtrList<KWFrame> framesToDelete = framesInPage( num, false );
+    QPtrListIterator<KWFrame> frameIt( framesToDelete );
+    for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrameSet * frameSet = fit.current();
+        KWFrame * frame = frameIt.current();
+        KWFrameSet * frameSet = frame->frameSet();
         if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY )
             continue;
-        QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-        QPtrList<KWFrame> toDelete;
-        for ( ; frameIt.current(); ++frameIt )
-        {
-            KWFrame * frm = frameIt.current();
-#ifdef DEBUG_PAGES
-            //kdDebug(32002) << "   looking at " << frameSet->getName() << "  frame " << frm << "  pageNum:" << frm->pageNum() << endl;
-#endif
-            if ( frm->pageNum() == num )
-            {
-#ifdef DEBUG_PAGES
-                kdDebug(32002) << "KWDocument::removePage deleting frame " << frm << " (from frameset " << frameSet->getName() << ")" << endl;
-#endif
-                toDelete.append( frm ); // Can't remove the frame here, it screws up the iterator -> toDelete
-            }
-        }
-        QPtrListIterator<KWFrame> delIt( toDelete );
-        for ( ; delIt.current(); ++delIt )
-            frameSet->delFrame( delIt.current(), true );
+        frameSet->delFrame( frame, true );
     }
     m_pages--;
 #ifdef DEBUG_PAGES

@@ -124,7 +124,7 @@ public:
     virtual void delFrame( unsigned int num ) { KWFrameSet::delFrame( num ); } // stupid C++
 
     /** reshuffle frames so text is always displayed from top-left down and then right. */
-    virtual void updateFrames();
+    virtual void updateFrames( int flags = 0xff );
 
     /** Views notify the KWTextFrameSet of which area of the text
      * they're looking at, so that formatMore() ensures it's always formatted

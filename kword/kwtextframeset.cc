@@ -172,7 +172,7 @@ KWTextDocument * KWTextFrameSet::kwTextDocument() const
 void KWTextFrameSet::slotAvailableHeightNeeded()
 {
     kdDebug() << "KWTextFrameSet::slotAvailableHeightNeeded " << getName() << endl;
-    updateFrames();
+    updateFrames( /* TODO try passing 0 for speedup */ );
 }
 
 KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPoint ) const
@@ -1415,7 +1415,7 @@ struct FrameStruct
     }
 };
 
-void KWTextFrameSet::updateFrames()
+void KWTextFrameSet::updateFrames( int flags )
 {
     // Not visible ? Don't bother then.
     if ( !isVisible() ) {
@@ -1433,15 +1433,18 @@ void KWTextFrameSet::updateFrames()
     QValueList<FrameStruct> sortedFrames;
 
     int width = 0;
-    QPtrListIterator<KWFrame> frameIt( frameIterator() );
-    for ( ; frameIt.current(); ++frameIt )
+    QPtrListIterator<KWFrame> frameIter( frameIterator() );
+    for ( ; frameIter.current(); ++frameIter )
     {
         // Calculate max width while we're at it
         //kdDebug(32002) << "KWTextFrameSet::updateFrames frame innerWidth=" << frameIt.current()->innerWidth() << endl;
-        width = QMAX( width, m_doc->ptToLayoutUnitPixX( frameIt.current()->innerWidth()));
-        FrameStruct str;
-        str.frame = frameIt.current();
-        sortedFrames.append( str );
+        width = QMAX( width, m_doc->ptToLayoutUnitPixX( frameIter.current()->innerWidth()));
+        if ( flags & SortFrames )
+        {
+            FrameStruct str;
+            str.frame = frameIter.current();
+            sortedFrames.append( str );
+        }
     }
     if ( width != textDocument()->width() )
     {
@@ -1450,19 +1453,28 @@ void KWTextFrameSet::updateFrames()
         textDocument()->setWidth( width + 1 ); // QRect semantics problem (#32866)
     } //else kdDebug(32002) << "KWTextFrameSet::updateFrames width already " << width << endl;
 
-    qHeapSort( sortedFrames );
+    if ( flags & SortFrames )
+    {
+        qHeapSort( sortedFrames );
 
-    // Re-fill the frames list with the frames in the right order
-    frames.setAutoDelete( false );
-    frames.clear();
+        // Re-fill the frames list with the frames in the right order
+        frames.setAutoDelete( false );
+        frames.clear();
+
+        QValueList<FrameStruct>::Iterator it = sortedFrames.begin();
+        for ( ; it != sortedFrames.end() ; ++it )
+            frames.append( (*it).frame );
+    }
+
     double availHeight = 0;
     double internalYpt = 0;
     double lastRealFrameHeight = 0;
-    QValueList<FrameStruct>::Iterator it = sortedFrames.begin();
-    for ( ; it != sortedFrames.end() ; ++it )
+    bool firstFrame = true;
+
+    QPtrListIterator<KWFrame> frameIt( frames );
+    for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame * theFrame = (*it).frame;
-        frames.append( theFrame );
+        KWFrame* theFrame = frameIt.current();
 
         if ( !theFrame->isCopy() )
             internalYpt += lastRealFrameHeight;
@@ -1470,18 +1482,19 @@ void KWTextFrameSet::updateFrames()
         theFrame->setInternalY( internalYpt );
 
         // Update availHeight with the internal height of this frame - unless it's a copy
-        if ( ! ( theFrame->isCopy() && it != sortedFrames.begin() ) )
+        if ( ! ( theFrame->isCopy() && !firstFrame ) )
         {
             lastRealFrameHeight = theFrame->innerHeight();
             availHeight += lastRealFrameHeight;
         }
+        firstFrame = true;
     }
 
     m_textobj->setAvailableHeight( m_doc->ptToLayoutUnitPixY( availHeight ) );
     //kdDebug(32002) << this << " (" << getName() << ") KWTextFrameSet::updateFrames availHeight=" << availHeight << " (LU: " << availableHeight() << ")" << endl;
     frames.setAutoDelete( true );
 
-    KWFrameSet::updateFrames();
+    KWFrameSet::updateFrames( flags );
 }
 
 int KWTextFrameSet::availableHeight() const
