@@ -39,6 +39,7 @@
 #include <string>
 #include <map>
 #include <iostream.h>
+#include <cassert>
 #include <fstream.h>
 #include <strstream.h>
 
@@ -57,6 +58,8 @@
 
 #include "units.h"
 #include <klocale.h>
+
+using namespace std;
 
 // default papersize in mm
 #define PAPER_WIDTH 210.0
@@ -824,7 +827,7 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	  if (markNew)
 	    newObjs.push_back (obj);
 	  if (obj->hasId ())
-	    idtable.insert (pair<string, GObject*> (obj->getId (), obj));
+	    idtable[obj->getId ()] =  obj;
 	  
 	  insertObject (obj);
 	}

@@ -55,7 +55,7 @@ public:
   virtual void removePoint (int idx, bool update = true);
   virtual void insertPoint (int idx, const Coord& p, bool update = true);
   
-  virtual const char* typeName ();
+  virtual QString typeName () const;
 
   virtual GObject* copy ();
   virtual GObject* clone (const list<XmlAttribute>& attribs);

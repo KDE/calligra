@@ -42,6 +42,9 @@ class GObject;
 class ToolController;
 class QwViewport;
 
+using std::vector;
+
+
 class Canvas : public QWidget {
   Q_OBJECT
 public:

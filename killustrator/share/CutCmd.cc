@@ -31,6 +31,8 @@
 #include "GDocument.h"
 #include "GObject.h"
 
+using namespace std;
+
 CutCmd::CutCmd (GDocument* doc) 
   : Command(i18n("Cut"))
 {

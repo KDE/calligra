@@ -41,7 +41,7 @@ class GOval : public GObject {
   Q_OBJECT
 public:
   GOval (bool cFlag = false);
-  GOval (const list<XmlAttribute>& attribs, bool cFlag = false);
+  GOval (const std::list<XmlAttribute>& attribs, bool cFlag = false);
   GOval (const GOval& obj);
   ~GOval () {}
   
@@ -61,7 +61,7 @@ public:
   virtual bool isValid ();
 
   virtual GObject* copy ();
-  virtual GObject* clone (const list<XmlAttribute>& attribs);
+  virtual GObject* clone (const std::list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
 

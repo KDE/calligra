@@ -24,6 +24,7 @@
 
 #include <iostream.h>
 #include <fstream.h>
+#include <cassert>
 
 #include <qstrlist.h>
 

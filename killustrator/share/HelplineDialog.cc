@@ -35,6 +35,8 @@
 #include "PStateManager.h"
 #include "version.h"
 
+using namespace std;
+
 HelplineDialog::HelplineDialog (Canvas* c, QWidget* parent, 
 				const char* name) : 
     QTabDialog (parent, name, true) {

@@ -44,7 +44,7 @@ public:
   void setActiveDocument (GDocument* doc);
   
 protected:
-  void showLayers (const vector<GLayer*>& lvec);
+  void showLayers (const std::vector<GLayer*>& lvec);
   
   virtual int cellWidth (int col);
   virtual int cellHeight (int row);
@@ -58,7 +58,7 @@ private slots:
 
 private:
   GDocument* document;
-  vector<GLayer*> layers;
+  std::vector<GLayer*> layers;
   QPixmap pixmaps[3];
   QLineEdit* lineEditor;
   int editorRow;

@@ -31,6 +31,8 @@
 #include "GLayer.moc"
 #include "GDocument.h"
 
+using namespace std;
+
 int GLayer::lastID = 1;
 
 GLayer::GLayer (GDocument* doc, const char* text) : 
@@ -125,8 +127,11 @@ int GLayer::findIndexOfObject (GObject *obj) {
   list<GObject*>::iterator i = find (contents.begin (), contents.end (), obj);
   if (i == contents.end ())
     return -1;
-  else
-    return distance (contents.begin (), i);
+  else {
+    int n;
+    distance(contents.begin (), i, n);
+    return n;
+  }
 }
 
 void GLayer::insertObjectAtIndex (GObject* obj, unsigned int idx) {

@@ -30,6 +30,8 @@
 #include <qcolor.h>
 #include <iostream.h>
 
+using namespace std;
+
 #define CELL_WIDTH  50
 #define CELL_HEIGHT 30
 

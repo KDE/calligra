@@ -29,6 +29,8 @@
 #include "GDocument.h"
 #include "GGroup.h"
 
+using namespace std;
+
 GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
   document = doc;
   group = 0L;
@@ -41,7 +43,7 @@ GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
     // objects in the group
     GObject* o = *it;
     int idx = (int) document->findIndexOfObject (o);
-    idx_map.insert (pair<int, GObject*> (idx, o));
+    idx_map[idx] = o;
   }
   for (map<int, GObject*, less<int> >::iterator mi = idx_map.begin ();
        mi != idx_map.end (); mi++) {

@@ -81,7 +81,7 @@ public:
    */
 
   // get an array with all layers of the document
-  const vector<GLayer*>& getLayers ();
+  const std::vector<GLayer*>& getLayers ();
 
   // set the active layer where further actions take place
   void setActiveLayer (GLayer *layer);
@@ -110,7 +110,7 @@ public:
   GObject* lastObject () { return last; }
   void setLastObject (GObject* obj);
 
-  list<GObject*>& getSelection () { return selection; }
+  std::list<GObject*>& getSelection () { return selection; }
   bool selectionIsEmpty () const { return selection.empty (); }
   unsigned int selectionCount () const { return selection.size (); }
 
@@ -132,7 +132,7 @@ public:
 	
   bool saveToXml (ostream& os);
   bool readFromXml (istream& is);
-  bool insertFromXml (istream& is, list<GObject*>& newObjs);
+  bool insertFromXml (istream& is, std::list<GObject*>& newObjs);
 
   Handle& handle () { return selHandle; }
   
@@ -148,9 +148,10 @@ public:
   void setGrid (float dx, float dy, bool snap);
   void getGrid (float& dx, float& dy, bool& snap);
 
-  void setHelplines (const vector<float>& hlines, const vector<float>& vlines,
+  void setHelplines (const std::vector<float>& hlines, 
+                     const std::vector<float>& vlines,
 		     bool snap);
-  void getHelplines (vector<float>& hlines, vector<float>& vlines,
+  void getHelplines (std::vector<float>& hlines, std::vector<float>& vlines,
 		     bool& snap);
   
   void setComment(QString s);
@@ -161,7 +162,7 @@ public:
 
 protected:
   void updateHandle ();
-  bool parseBody (XmlReader& xml, list<GObject*>& newObjs, bool markNew);
+  bool parseBody (XmlReader& xml, std::list<GObject*>& newObjs, bool markNew);
   
 public slots:
   void objectChanged ();
@@ -184,8 +185,8 @@ protected:
   QString comment;
   QString keywords;
   int paperWidth, paperHeight; // pt
-  vector<GLayer*> layers; // the array of all layers
-  list<GObject*> selection;
+  std::vector<GLayer*> layers; // the array of all layers
+  std::list<GObject*> selection;
   GLayer* active_layer;     // the current layer
   GObject *last;
   Handle selHandle;
@@ -194,7 +195,7 @@ protected:
   KoPageLayout pLayout;
   bool snapToGrid, snapToHelplines;
   float gridx, gridy;
-  vector<float> hHelplines, vHelplines;
+  std::vector<float> hHelplines, vHelplines;
 };
 
 #endif 

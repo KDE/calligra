@@ -26,7 +26,7 @@
 #define UngroupCmd_h_
 
 #include <list>
-#include <pair.h>
+#include <utility>
 
 #include "Command.h"
 
@@ -44,8 +44,8 @@ public:
 
 private:
   GDocument* document;
-  typedef pair<GGroup*, list<GObject*> > GPair;
-  list<GPair> groups;
+  typedef std::pair<GGroup*, std::list<GObject*> > GPair;
+  std::list<GPair> groups;
 };
 
 #endif

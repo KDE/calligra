@@ -32,6 +32,8 @@
 #include <klocale.h>
 #include <kapp.h>
 
+using namespace std;
+
 struct release_obj {
   void operator () (GObject* obj) {
     obj->unref ();

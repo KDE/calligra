@@ -44,7 +44,7 @@ class GPolyline : public GObject {
   Q_OBJECT
 public:
   GPolyline ();
-  GPolyline (const list<XmlAttribute>& attribs);
+  GPolyline (const std::list<XmlAttribute>& attribs);
   GPolyline (const GPolyline& obj);
   ~GPolyline () {}
   
@@ -72,14 +72,14 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const list<XmlAttribute>& attribs);
+  virtual GObject* clone (const std::list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
 
   virtual bool findNearestPoint (const Coord& p, float max_dist, 
 				 float& dist, int& pidx, bool all = false);
 
-  virtual void getPath (vector<Coord>& path);
+  virtual void getPath (std::vector<Coord>& path);
   virtual GCurve* convertToCurve () const;
 
   virtual bool splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2);

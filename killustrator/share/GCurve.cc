@@ -27,6 +27,7 @@
 #include "GBezier.h"
 #include <qcolor.h>
 #include <kapp.h>
+#include <cassert>
 #include <klocale.h>
 #include "version.h"
 #include <math.h>

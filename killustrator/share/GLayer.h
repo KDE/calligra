@@ -55,7 +55,7 @@ public:
   /*
    * Content management
    */
-  list<GObject*>& objects () { return contents; }
+  std::list<GObject*>& objects () { return contents; }
   unsigned int objectCount () const { return contents.size (); }
   void insertObject (GObject* obj);
   void deleteObject (GObject* obj);
@@ -76,7 +76,7 @@ private:
     editableFlag,   // layer is editable
     wasEditable;    // layer was editable before the change to unvisible
 
-  list<GObject*> contents; // the list of objects
+  std::list<GObject*> contents; // the list of objects
   GDocument* document;
 
   static int lastID;

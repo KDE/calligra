@@ -45,11 +45,11 @@ public:
     return *this;
   }
 
-  bool operator== (const Coord& c) {
+  bool operator== (const Coord& c) const {
     return x_ == c.x_ && y_ == c.y_;
   }
   
-  bool operator!= (const Coord& c) {
+  bool operator!= (const Coord& c) const {
     return !(*this == c);
   }
 

@@ -47,6 +47,10 @@
 #include <map>
 #include <string>
 
+using std::vector;
+using std::list;
+using std::string;
+
 #ifndef M_PI // not ANSI C++, so it maybe...
 #define M_PI            3.14159265358979323846  /* pi */
 #endif
@@ -415,7 +419,7 @@ protected:
   static OutlineInfo defaultOutlineInfo;
   static FillInfo defaultFillInfo;
 
-  static map<string, GObject*> prototypes;
+  static std::map<std::string, GObject*> prototypes;
 };
 
 class GOState {

@@ -53,7 +53,7 @@ protected:
   virtual void mousePressEvent (QMouseEvent *event);
 
 private:
-  vector<QPixmap> brushPixmaps;
+  std::vector<QPixmap> brushPixmaps;
   int currentBrush;
 };
 

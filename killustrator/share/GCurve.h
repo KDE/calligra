@@ -30,7 +30,7 @@
 #include <qfont.h>
 #include <qwmatrix.h>
 #include <qpainter.h>
-#include <list.h>
+#include <list>
 
 #include "Coord.h"
 #include "GObject.h"
@@ -66,7 +66,7 @@ class GCurve : public GObject {
   Q_OBJECT
 public:
   GCurve ();
-  GCurve (const list<XmlAttribute>& attribs);
+  GCurve (const std::list<XmlAttribute>& attribs);
   GCurve (const GCurve& obj);
   ~GCurve () {}
 
@@ -76,7 +76,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const list<XmlAttribute>& attribs);
+  virtual GObject* clone (const std::list<XmlAttribute>& attribs);
 
   virtual void writeToXml (XmlWriter&);
 
@@ -107,11 +107,11 @@ protected:
   void calcBoundingBox ();
   void updateGradientShape (QPainter& p);
   void updatePath ();
-  list<GSegment>::iterator containingSegment (const Coord& p);
+  std::list<GSegment>::iterator containingSegment (const Coord& p);
 
 private:
   QPointArray points; // Points for the computed polygon
-  list<GSegment> segments;
+  std::list<GSegment> segments;
   bool closed;
 };
 

@@ -22,9 +22,10 @@
 */
 
 #include <stdlib.h>
-#include <iostream.h>
+#include <iostream>
 #include <math.h>
 #include <time.h>
+#include <utility>
 #include "GObject.h"
 #include "GObject.moc"
 
@@ -36,6 +37,8 @@
 #include "GClipart.h"
 #include "GBezier.h"
 #include "Gradient.h"
+
+using namespace std;
 
 GObject::OutlineInfo GObject::defaultOutlineInfo;
 GObject::FillInfo GObject::defaultFillInfo;
@@ -475,7 +478,7 @@ const char* GObject::getId () {
 }
 
 void GObject::registerPrototype (const char *className, GObject* proto) {
-  prototypes.insert (pair<string, GObject *> (className, proto));
+  prototypes[className] = proto;
 }
 
 GObject* GObject::lookupPrototype (const char *className) {

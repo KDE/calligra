@@ -22,15 +22,18 @@
 */
 
 #include <stdlib.h>
-#include <iostream.h>
+#include <iostream>
+#include <algorithm>
 #include <math.h>
-#include <assert.h>
+#include <cassert>
 #include "GText.h"
 #include "GText.moc"
 #include "GDocument.h"
 
 #include <klocale.h>
 #include <kapp.h>
+
+using namespace std;
 
 float seg_length (const Coord& c1, const Coord& c2) {
   float dx = c2.x () - c1.x ();

@@ -26,6 +26,7 @@
 #define DeleteCmd_h_
 
 #include <list>
+#include <utility>
 #include "Command.h"
 
 class GDocument;
@@ -41,7 +42,7 @@ public:
 
 private:
   GDocument* document;
-  list<pair<int, GObject*> > objects;
+  std::list<std::pair<int, GObject*> > objects;
   
 };
 

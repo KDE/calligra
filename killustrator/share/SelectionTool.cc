@@ -45,6 +45,8 @@
 #include <list>
 #include <algorithm>
 
+using namespace std;
+
 struct is_a : public binary_function<GObject*, const char*, bool> {
   bool operator () (GObject* obj, const char* tname) {
     return obj->isA (tname);
@@ -531,7 +533,7 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
   if (snap) {
     const Rect& obox = origbox; 
     Rect newbox = canvas->snapTranslatedBoxToGrid (obox.translate (dx, dy));
-    if (newbox != obox) {
+    if (! (newbox == obox)) {
       dx = newbox.x () - obox.x ();
       dy = newbox.y () - obox.y ();
     }

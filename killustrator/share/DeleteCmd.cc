@@ -29,6 +29,8 @@
 #include "GDocument.h"
 #include "GObject.h"
 
+using namespace std;
+
 DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
   document = doc;
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();

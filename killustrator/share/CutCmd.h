@@ -41,7 +41,7 @@ public:
 
 private:
   GDocument* document;
-  list<pair<int, GObject*> > objects;
+  list<std::pair<int, GObject*> > objects;
 };
 
 #endif
