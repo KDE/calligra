@@ -28,6 +28,7 @@
 #include "kwtextparag.h"
 
 class KWDocument;
+class KWFrame;
 class KWFrameSet;
 class KWFrameSetEdit;
 class KWTextFrameSet;
@@ -131,7 +132,7 @@ public:
 
     //delete frame
     void deleteTable( KWGroupManager *groupManager );
-    void deleteFrame();
+    void deleteFrame( KWFrame * frame );
 
     //move canvas
     void scrollToOffset( int _x, int _y );
@@ -197,9 +198,10 @@ private:
 
     // Frame stuff
     MouseMode m_mouseMode;
+    QRect m_resizedFrameInitialSize;
     QRect m_insRect;
     int oldMx, oldMy;
-    bool deleteMovingRect, frameResized;
+    bool deleteMovingRect, frameMoved,  frameResized;
     QString m_PixmapName; // when inserting a pixmap
     KoDocumentEntry m_partEntry; // when inserting a part
 
@@ -211,8 +213,6 @@ private:
     KWTblCellSize twid, thei;
     KWGroupManager *curTable;
     KWFrameMoveCommand *cmdMoveFrame;
-
-    QRect rectOfSizeSelected;
 };
 
 #endif

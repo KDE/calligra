@@ -117,7 +117,7 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
         }
     }
 
-    mousePressed = TRUE;
+    mousePressed = true;
     oldX = e->x();
     oldY = e->y();
     m_canvas->mpEditFrame( 0, x() + e->x(), y() + e->y() );
@@ -126,7 +126,7 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
 /*================================================================*/
 void KWResizeHandle::mouseReleaseEvent( QMouseEvent * )
 {
-    mousePressed = FALSE;
+    mousePressed = false;
     m_canvas->mrEditFrame();
 }
 

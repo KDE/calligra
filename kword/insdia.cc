@@ -121,7 +121,7 @@ bool KWInsertDia::doInsert()
 
     doc->recalcFrames();
     doc->updateAllFrames();
-    doc->updateAllViews( 0L );
+    doc->repaintAllViews();
     canvas->repaintAll();
 #if 0
     canvas->recalcCursor();

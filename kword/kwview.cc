@@ -1110,13 +1110,78 @@ void KWView::editReplace()
 /*================================================================*/
 void KWView::editDeleteFrame()
 {
+    QList<KWFrame> frames=doc->getSelectedFrames();
+    if(frames.count()>1)  {
+        KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
+                                        "You can only delete one frame at the time." ),
+                            i18n( "Delete Frame" ) );
+        return;
+    }
+    if(frames.count()<1)  {
+        KMessageBox::sorry( this, i18n( "You have not selected a frame.\n"
+                                        "You need to select a frame first in order to delete it."),
+                            i18n( "Delete Frame" ) );
+        return;
+    }
+    KWFrame *theFrame = frames.at(0);
+    KWFrameSet *fs = theFrame->getFrameSet();
 
-    int result;
-    result = KMessageBox::warningContinueCancel(this,                                                i18n("Do you want to delete this frame?"),
-                                                i18n("Delete Frame"),
-                                                i18n("&Delete"));
+    if ( fs->isAHeader() ) {
+        KMessageBox::sorry( this, i18n( "This is a Header frame, it can not be deleted."),
+                            i18n( "Delete Frame"  ) );
+        return;
+    }
+    if ( fs->isAFooter() ) {
+        KMessageBox::sorry( this, i18n( "This is a Footer frame, it can not be deleted."),
+                            i18n( "Delete Frame"  ) );
+        return;
+    }
+
+    // frame is part of a table?
+    if ( fs->getGroupManager() ) {
+        int result;
+        result = KMessageBox::warningContinueCancel(this,
+                                                    i18n( "You are about to delete a table\n"
+                                                          "Doing so will delete all the text in the table\n"
+                                                          "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
+        if (result != KMessageBox::Continue)
+            return;
+        gui->canvasWidget()->deleteTable( fs->getGroupManager() );
+        return;
+    }
+
+    if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT) {
+        if ( doc->processingType() == KWDocument::WP && doc->getFrameSetNum( fs ) == 0 )
+            return;
+
+        KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(doc->getFrameSet( 0 ) );
+        if ( !textfs )
+            return;
+
+        QTextDocument * textdoc = textfs->textDocument();
+        QTextParag * parag = textdoc->firstParag();
+        if ( parag && parag->string()->length() > 0 ) {
+            int result = KMessageBox::warningContinueCancel(this,
+                                                        i18n( "You are about to delete the last Frame of the\n"
+                                                              "Frameset '%1'.\n"
+                                                              "The contents of this Frameset will not appear\n"
+                                                              "anymore!\n\n"
+                                                              "Are you sure you want to do that?").arg(fs->getName()),
+                                                        i18n("Delete Frame"), i18n("&Delete"));
+
+            if (result == KMessageBox::Continue)
+                gui->canvasWidget()->deleteFrame( theFrame );
+            return;
+        }
+
+    }
+
+    int result = KMessageBox::warningContinueCancel(this,
+                                                    i18n("Do you want to delete this frame?"),
+                                                    i18n("Delete Frame"),
+                                                    i18n("&Delete"));
     if (result == KMessageBox::Continue)
-        gui->canvasWidget()->deleteFrame();
+        gui->canvasWidget()->deleteFrame( theFrame );
 }
 
 /*================================================================*/

@@ -262,6 +262,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 
 void KWTextFrameSet::layout()
 {
+    m_lastFormatted = text->firstParag();
     text->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
@@ -283,13 +284,28 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
     QListIterator<KWFrame> fIt( m_framesOnTop );
     for ( ; fIt.current() ; ++fIt )
     {
-        QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
-        // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
-        if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
-             ( frameRect.left() - p.x() < middle ) ) // adjust the left margin only
-                                                  // for frames which are in the
-                                                  // left half
-            newMargin = QMAX( newMargin, ( frameRect.right() - p.x() ) + space );
+        switch( fIt.current()->getRunAround() ) {
+        case RA_BOUNDINGRECT:
+        {
+            QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
+            // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
+            if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) &&
+                 ( frameRect.left() - p.x() < middle ) ) // adjust the left margin only
+                // for frames which are in the left half
+                newMargin = QMAX( newMargin, ( frameRect.right() - p.x() ) + space );
+        }
+        break;
+        case RA_SKIP:
+        {
+            QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
+            // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
+            if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
+                newMargin = QMAX( newMargin, m_width + 20 ); // bigger than the width -> no text here
+        }
+        break;
+        default: // case RA_NO:
+            break;
+        }
     }
 
     return QTextFlow::adjustLMargin( yp, h, margin + newMargin, space );
@@ -900,7 +916,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 
 void KWTextFrameSet::formatMore()
 {
-    if ( !m_lastFormatted || !isVisible() )
+    if ( !m_lastFormatted || !isVisible() || m_availableHeight == -1 )
 	return;
 
     int bottom = -1;
@@ -979,7 +995,8 @@ void KWTextFrameSet::formatMore()
         }
     }
     else
-        if ( frames.count() > 1 && !lastFormatted && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
+        if ( frames.count() > 1 && !lastFormatted && !isAHeader() && !isAFooter()
+             && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
         {
             kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << m_availableHeight << ") , trying to remove last frame" << endl;
             // Last frame is empty -> try removing last page

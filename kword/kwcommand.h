@@ -281,7 +281,7 @@ protected:
 class KWDeleteFrameCommand : public KCommand
 {
 public:
-    KWDeleteFrameCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex) ;
+    KWDeleteFrameCommand( const QString &name, KWDocument *_doc, KWFrame * frame) ;
     ~KWDeleteFrameCommand() {}
 
     void execute();

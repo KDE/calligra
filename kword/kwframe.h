@@ -67,10 +67,11 @@ public:
      * @param fs parent frameset
      * @param left, top, width, height coordinates of the frame
      * The page number will be automatically determined from the position of the frame.
-     * @param ra ...
+     * @param ra the "runaround" setting, i.e. whether text should flow below the frame,
+     * around the frame, or avoiding the frame on the whole horizontal band.
      * @param gap ...
      */
-    KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround ra = RA_NO, KWUnit gap = 1.0 /*mm*/);
+    KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround ra = RA_BOUNDINGRECT, KWUnit gap = 1.0 /*mm*/);
     /* Destructor */
     virtual ~KWFrame();
 

@@ -42,7 +42,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 {
     m_gui = lGui;
     m_currentFrameSetEdit = doc->getFrameSet( 0 )->createFrameSetEdit( this );
-    mousePressed = FALSE;
+    mousePressed = false;
     setMouseMode( MM_EDIT );
 
     cmdMoveFrame=0L;
@@ -409,10 +409,12 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
 }
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in edit-frame mode
+// This can be called by KWResizeHandle::mousePressEvent
 {
     int x = static_cast<int>( mx / doc->zoomedResolutionX() );
     int y = static_cast<int>( my / doc->zoomedResolutionY() );
     mousePressed = true;
+    frameMoved = false;
     frameResized = false;
     if ( e ) {
         // only simulate selection - we do real selection below
@@ -440,8 +442,8 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
             }
         }
     }
-    if( doc->getFirstSelectedFrame()!=0)
-        rectOfSizeSelected= doc->getFirstSelectedFrame()->normalize();
+    if( doc->getFirstSelectedFrame() )
+        m_resizedFrameInitialSize = doc->getFirstSelectedFrame()->normalize();
 
     QList<KWFrame> selectedFrames = doc->getSelectedFrames();
     QList<FrameIndex> frameindexList;
@@ -459,7 +461,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
         frameindexMove.append(move);
     }
     if(frameindexMove.count()!=0)
-        cmdMoveFrame =new KWFrameMoveCommand( i18n("Move Frame"),doc,frameindexList, frameindexMove ) ;
+        cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"),doc,frameindexList, frameindexMove ) ;
 
 
     viewport()->setCursor( doc->getMouseCursor( x, y ) );
@@ -548,7 +550,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     }
 
     if ( e->button() == LeftButton ) {
-	mousePressed = TRUE;
+	mousePressed = true;
 
         switch ( m_mouseMode ) {
         case MM_EDIT:
@@ -806,7 +808,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
             }
         }
 
-        frameResized = true; // mrEditFrame() expects us to make this one true
+        frameMoved = true;
 
 #if 0 // TODO
         if ( !undos.isEmpty() ) {
@@ -918,82 +920,77 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
 
 /*================================================================*/
 
-void KWCanvas::mrEditFrame()
+void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHandle's mouseReleaseEvents
 {
-    KWFrame *frame= doc->getFirstSelectedFrame();
-    if (!frame) return;
+    KWFrame *firstFrame = doc->getFirstSelectedFrame();
+    if (!firstFrame) return;
 #if 0
-    if ( doc->processingType() == KWDocument::DTP )
-        setRuler2Frame( frame );
+    if ( doc->processingType() == KWDocument::DTP ) // ?
+        setRuler2Frame( firstFrame );
 #endif
-    m_gui->getHorzRuler()->setFrameStart( frame->x() ); // does this need zoomItX() ?
+    m_gui->getHorzRuler()->setFrameStart( firstFrame->x() ); // does this need zoomItX() ?
+    // Why not the same with Y ?
 
-    doc->layout();
-
-    if ( frameResized ) {
-        doc->recalcFrames();
-        doc->updateAllFrames();
-        KWGroupManager *grpMgr = frame->getFrameSet()->getGroupManager();
+    if ( frameMoved || frameResized )
+    {
+        KWGroupManager *grpMgr = firstFrame->getFrameSet()->getGroupManager();
         if (grpMgr) {
             grpMgr->recalcCols();
             grpMgr->recalcRows();
             grpMgr->updateTempHeaders();
             //repaintTableHeaders( grpMgr );
         }
-        KWFrame *frame=doc->getFirstSelectedFrame();
 
-        //move or resize.
-        QRect tmpRect(frame->normalize());
-        if((rectOfSizeSelected.width()!=tmpRect.width())||
-           (rectOfSizeSelected.height()!=tmpRect.height()))
+        // Create command
+        if ( frameResized )
         {
-            //resize
-            FrameIndex *index=new FrameIndex;
-            FrameResizeStruct *tmpResize=new FrameResizeStruct;
-            tmpResize->sizeOfBegin=rectOfSizeSelected;
-            tmpResize->sizeOfEnd=frame->normalize();
+            KWFrame *frame = doc->getFirstSelectedFrame();
+            FrameIndex index;
+            FrameResizeStruct tmpResize;
+            tmpResize.sizeOfBegin = m_resizedFrameInitialSize;
+            tmpResize.sizeOfEnd = frame->normalize();
 
-            index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-            index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+            index.m_iFrameIndex = frame->getFrameSet()->getFrameFromPtr(frame);
+            index.m_iFrameSetIndex = doc->getFrameSetNum(frame->getFrameSet());
 
-            KWFrameResizeCommand *cmd =new KWFrameResizeCommand( i18n("Resize Frame"),doc,*index,*tmpResize ) ;
+            KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
             doc->addCommand(cmd);
+
+            doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
+            delete cmdMoveFrame; // Unused after all
+            cmdMoveFrame = 0L;
         }
         else
         {
-            if(cmdMoveFrame!=0L)
+            ASSERT( cmdMoveFrame ); // has been created by mpEditFrame
+            if( cmdMoveFrame )
             {
-                QList<KWFrame> selectedFrames=doc->getSelectedFrames();
-                QList<FrameResizeStruct> tmpListFrameMoved=cmdMoveFrame->getListFrameMoved();
-                KWFrame *frame=0L;
-                for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-                {
-                    tmpListFrameMoved.at(selectedFrames.find(frame))->sizeOfEnd=frame->normalize();
-                }
+                QList<KWFrame> selectedFrames = doc->getSelectedFrames();
+                QList<FrameResizeStruct> tmpListFrameMoved = cmdMoveFrame->getListFrameMoved();
+                int i = 0;
+                for(KWFrame * frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next(), ++i )
+                    tmpListFrameMoved.at(i)->sizeOfEnd = frame->normalize();
+
                 cmdMoveFrame->setListFrameMoved(tmpListFrameMoved);
                 doc->addCommand(cmdMoveFrame);
+                doc->framesChanged( selectedFrames, m_gui->getView() ); // repaint etc.
 
                 cmdMoveFrame=0L;
             }
-
         }
-        //recalcAll = TRUE;
-        //recalcText();
-        //recalcCursor();
-        repaintAll( true );
-        //recalcAll = FALSE;
+
     } else {
-        // Frame not resized - or moved
-        doc->updateAllViews( m_gui->getView() );
+        // Frame not resized nor moved
+        // doc->repaintAllViewsExcept( m_gui->getView() ); // Do we need this ?
     }
+    mousePressed = false;
 }
 
 void KWCanvas::mrCreateText()
 {
-    repaintAll();
     m_insRect = m_insRect.normalize();
-    KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
+        KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         KWFrameDia * frameDia = new KWFrameDia( this, frame, doc, FT_TEXT);
         connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
         frameDia->setCaption(i18n("Connect frame"));
@@ -1004,8 +1001,6 @@ void KWCanvas::mrCreateText()
 
 void KWCanvas::mrCreatePixmap()
 {
-    repaintAll();
-
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() && !m_PixmapName.isEmpty() ) {
         KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
@@ -1015,42 +1010,35 @@ void KWCanvas::mrCreatePixmap()
                                      m_insRect.height() );
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
-        repaintAll();
+        doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );
 }
 
 void KWCanvas::mrCreatePart() // mouse release, when creating part or kspread table
 {
-    repaintAll();
-
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
         doc->insertObject( m_insRect, m_partEntry, contentsX(), contentsY() );
-        repaintAll();
     }
     setMouseMode( MM_EDIT );
 }
 
 void KWCanvas::mrCreateFormula()
 {
-    repaintAll();
-
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, this );
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
-        repaintAll();
+        doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );
 }
 
 void KWCanvas::mrCreateTable()
 {
-    repaintAll();
-
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
         if ( tcols * minFrameWidth + m_insRect.x() > doc->paperWidth() )
@@ -1098,12 +1086,12 @@ void KWCanvas::mrCreateTable()
                           twid, thei );
             grpMgr->recalcRows();
         }
-        //recalcWholeText( TRUE );
         doc->updateAllFrames();
+        doc->layout();
+        repaintAll();
     }
     setMouseMode( MM_EDIT );
     useAnchor = false;
-
 }
 
 void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
@@ -1135,10 +1123,11 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                 mrCreateFormula();
                 break;
             default:
-                repaintAll();
+                //repaintAll(); ?
+                break;
         }
 
-	mousePressed = FALSE;
+	mousePressed = false;
     }
 }
 
@@ -1159,7 +1148,7 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
     }
 
     repaintAll();
-    mousePressed = TRUE;
+    mousePressed = false;
 }
 
 /*================================================================*/
@@ -1198,8 +1187,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
 
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
     doc->addCommand(cmd);
-
-    repaintAll();
+    doc->repaintAllViews();
 }
 
 /*================================================================*/
@@ -1237,8 +1225,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
 
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
     doc->addCommand(cmd);
-
-    repaintAll();
+    doc->repaintAllViews();
 }
 
 /*================================================================*/
@@ -1275,8 +1262,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
     }
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
     doc->addCommand(cmd);
-
-    repaintAll();
+    doc->repaintAllViews();
 }
 
 /*================================================================*/
@@ -1314,8 +1300,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
 
     KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),doc,frameindexList,tmpBorderList,_frmBrd);
     doc->addCommand(cmd);
-
-    repaintAll();
+    doc->repaintAllViews();
 }
 
 /*================================================================*/
@@ -1408,7 +1393,7 @@ void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
     macroCmd->addCommand(cmd);
 
     doc->addCommand(macroCmd);
-    repaintAll();
+    doc->repaintAllViews();
 }
 
 /*================================================================*/
@@ -1440,8 +1425,8 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     {
         KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame BackGroundColor"),doc,frameindexList,oldColor,_backColor);
         doc->addCommand(cmd);
+        doc->repaintAllViews();
     }
-    repaintAll();
 }
 
 
@@ -1470,19 +1455,11 @@ void KWCanvas::editFrameProperties()
     delete frameDia;
 }
 
-/*================================================================*/
-void KWCanvas::frameDiaClosed()
+void KWCanvas::frameDiaClosed() // get rid of this?
 {
-    //todo refresh text cursor etc...
 #if 0
-    hiliteFrameSet = -1;
-    recalcAll = TRUE;
-    recalcText();
-    recalcCursor();
-    recalcAll = FALSE;
-    repaintScreen (true);
+    doc->updateAllFrames(); // already done in framedia
 #endif
-    doc->updateAllFrames();
 }
 
 void KWCanvas::updateFrameFormat()
@@ -1523,175 +1500,53 @@ void KWCanvas::selectFrame( int mx, int my, bool select )
 
 KWGroupManager *KWCanvas::getTable()
 {
-    KWGroupManager *tmpGroupManager=0L;
     if( !m_currentFrameSetEdit)
-        return tmpGroupManager;
-    if( m_currentFrameSetEdit->frameSet()->getGroupManager()!=0)
-        return m_currentFrameSetEdit->frameSet()->getGroupManager();
-    else
-        return tmpGroupManager;
+        return 0L;
+    return m_currentFrameSetEdit->frameSet()->getGroupManager();
 }
 
-
-/*================================================================*/
-void KWCanvas::deleteFrame()
+void KWCanvas::deleteFrame( KWFrame * frame )
 {
-    if ( m_mouseMode != MM_EDIT_FRAME ) {
-        KMessageBox::sorry( this, i18n( "Please switch to the frame edit tool and\n"
-                                        "select the frame you want to delete." ),
-                            i18n( "Delete Frame" ) );
-        return;
-    }
-
-    QList<KWFrame> frames=doc->getSelectedFrames();
-    if(frames.count()>1)  {
-        KMessageBox::sorry( this, i18n( "You have selected multiple frames.\n"
-                                        "You can only delete one frame at the time." ),
-                            i18n( "Delete Frame" ) );
-        return;
-    }
-    if(frames.count()<1)  {
-        KMessageBox::sorry( this, i18n( "You have not selected a frame.\n"
-                                        "You need to select a frame first in order to delete it."),
-                            i18n( "Delete Frame" ) );
-        return;
-    }
-    KWFrame *theFrame = frames.at(0);
-    KWFrameSet *fs = theFrame->getFrameSet();
-
-    if ( fs->isAHeader() ) {
-        KMessageBox::sorry( this, i18n( "This is a Header frame, it can not be deleted."),
-                            i18n( "Delete Frame"  ) );
-        return;
-    }
-    if ( fs->isAFooter() ) {
-        KMessageBox::sorry( this, i18n( "This is a Footer frame, it can not be deleted."),
-                            i18n( "Delete Frame"  ) );
-        return;
-    }
-
-    // frame is part of a table?
-    if ( fs->getGroupManager() ) {
-        int result;
-        result = KMessageBox::warningContinueCancel(this,
-                                                    i18n( "You are about to delete a table\n"
-                                                          "Doing so will delete all the text in the table\n"
-                                                          "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
-        if (result != KMessageBox::Continue)
-            return;
-        deleteTable( fs->getGroupManager() );
-        return;
-    }
-
-    if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT) {
-        if ( doc->processingType() == KWDocument::WP && doc->getFrameSetNum( fs ) == 0 )
-            return;
-
-        KWTextFrameSet * textfs = 0L;
-        if ( !textfs )
-            textfs = dynamic_cast<KWTextFrameSet *>(doc->getFrameSet( 0 ) );
-        if ( !textfs )
-            return;
-
-        QTextDocument * textdoc = textfs->textDocument();
-        QTextParag * parag = textdoc->firstParag();
-        if(!( parag!=parag->next() && parag->string()->length()==0)) {
-            int result;
-            result = KMessageBox::warningContinueCancel(this,
-                                                        i18n( "You are about to delete the last Frame of the\n"
-                                                              "Frameset '%1'.\n"
-                                                              "Doing so will delete this Frameset and all the\n"
-                                                              "text contained in it as well!\n\n"
-                                                              "Are you sure you want to do that?").arg(fs->getName()),
-                                                        i18n("Delete Frame"), i18n("&Delete"));
-
-            if (result != KMessageBox::Continue)
-                return;
-        }
-
-    }
-
-#if 0
-    bool blinking = blinkTimer.isActive();
-    if ( blinking )
-        stopBlinkCursor();
-#endif
-    // do the actual delete.
-    FrameIndex index;
-    index.m_iFrameIndex=fs->getFrameFromPtr(theFrame);
-    index.m_iFrameSetIndex=doc->getFrameSetNum(fs);
-
-
+    KWFrameSet * fs = frame->getFrameSet();
     QString cmdName;
-    // Note: I would have preferred a virtual method in KWFrameSet (DF)
-    if(fs->getFrameType() == FT_TEXT)
-    {
+    switch (fs->getFrameType() ) {
+    case FT_TEXT:
         cmdName=i18n("Delete text frame");
-    }
-    else if(fs->getFrameType() == FT_FORMULA)
-    {
+        break;
+    case FT_FORMULA:
         cmdName=i18n("Delete formula frame");
-    }
-    else if(fs->getFrameType() == FT_PICTURE )
-    {
+        break;
+    case FT_PICTURE:
         cmdName=i18n("Delete picture frame");
+        break;
+    case FT_PART:
+        cmdName=i18n("Delete object frame");
+        break;
+    case FT_BASE:
+        ASSERT( 0 );
+        break;
     }
-    else if(fs->getFrameType() == FT_PART )
-    {
-         cmdName=i18n("Delete picture frame");
-    }
-    else
-    {
-        cmdName=i18n("Delete text frame");
-    }
-    KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand(cmdName,doc,index);
-    doc->addCommand(cmd);
-    fs->delFrame( theFrame );
-
-
-    doc->recalcFrames();
-    doc->updateAllFrames();
-    repaintAll();
+    KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( cmdName, doc, frame );
+    doc->addCommand( cmd );
+    cmd->execute();
 }
 
-/*================================================================*/
 void KWCanvas::deleteTable( KWGroupManager *groupManager )
 {
     if ( !groupManager )
         return;
-#if 0
-    bool blinking = blinkTimer.isActive();
-    if ( blinking )
-        stopBlinkCursor();
-#endif
+    // ## TODO undo/redo support
     doc->delGroupManager( groupManager );
-    doc->recalcFrames();
     doc->updateAllFrames();
-
-#if 0
-
-    fc->setFrameSet( 0 );
-    fc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getFirstParag() );
-
-    recalcAll = TRUE;
-    recalcText();
-    recalcCursor();
-    repaintScreen( TRUE );
-    recalcAll = FALSE;
-
-    if ( blinking )
-        startBlinkCursor();
-#endif
-
-    repaintAll();
+    doc->layout();
+    doc->repaintAllViews();
 }
-
 
 void KWCanvas::setMouseMode( MouseMode _mm )
 {
     if ( m_mouseMode != _mm )
     {
-        selectAllFrames( FALSE );
+        selectAllFrames( false );
         if ( _mm != MM_EDIT )
         {
             // Terminate edition of current frameset
@@ -1751,7 +1606,7 @@ void KWCanvas::setMouseMode( MouseMode _mm )
         } break;
     }
 
-    repaintAll();
+    //repaintAll(); ?
 }
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )

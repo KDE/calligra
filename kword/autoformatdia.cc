@@ -224,7 +224,7 @@ bool KWAutoFormatDia::applyConfig()
     doc->getAutoFormat().configUpperUpper( cbUpperUpper->isChecked() );
 
     doc->getAutoFormat().setEnabled( true );
-    doc->updateAllViews( 0L );
+    doc->repaintAllViews();
     doc->getAutoFormat().setEnabled( false );
 
     return true;

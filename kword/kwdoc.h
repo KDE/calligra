@@ -179,10 +179,17 @@ public:
     // Return true if @p r (in real pt coordinates) is out of the page @p page
     bool isOutOfPage( QRect & r, int page ) const;
 
-    void updateAllViews( KWView *_view, bool _erase = false );
     void updateAllViewportSizes();
     void setUnitToAll();
     void repaintAllViews( bool erase = false );
+    void repaintAllViewsExcept( KWView *_view, bool _erase = false );
+    /**
+     * Tell this method when a frame is moved / resized / created / deleted
+     * and everything will be update / repainted accordingly.
+     * If one view is already uptodate, pass it in @p view.
+     */
+    void frameChanged( KWFrame * frame, KWView * view = 0L );
+    void framesChanged( const QList<KWFrame> & frames, KWView * view = 0L );
 
     const QList<KWStyle> & styleList() const { return m_styleList; }
     /**
@@ -238,7 +245,7 @@ public:
     void setHeaderVisible( bool h );
     void setFooterVisible( bool f );
 
-    void recalcFrames( bool _cursor = false );
+    void recalcFrames();
 
     KoHFType getHeaderType() { return m_pageHeaderFooter.header; }
     KoHFType getFooterType() { return m_pageHeaderFooter.footer; }

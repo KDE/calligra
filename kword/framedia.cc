@@ -980,6 +980,9 @@ bool KWFrameDia::applyChanges()
                     _frameSet->addFrame( frame );
                     doc->addFrameSet( _frameSet );
                     emit changed();
+                    if ( frame->getRunAround() != RA_NO )
+                        doc->layout();
+                    doc->repaintAllViews();
                     return true;
                 }
                 doc->updateAllFrames();
@@ -988,6 +991,11 @@ bool KWFrameDia::applyChanges()
     }
 
     if ( frame ) {
+
+        if ( frame->getRunAround() != RA_NO )
+            doc->layout();
+        doc->repaintAllViews();
+
         if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                                 ( doc->processingType() == KWDocument::WP &&
                                                   doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {

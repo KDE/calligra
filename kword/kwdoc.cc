@@ -349,9 +349,10 @@ double KWDocument::ptColumnWidth() const
 }
 
 /*================================================================*/
-/* append headers and footers if needed */
-void KWDocument::recalcFrames( bool /*_cursor*/)
+/* append headers and footers if needed, and create enough pages for all the existing frames */
+void KWDocument::recalcFrames()
 {
+    kdDebug() << "KWDocument::recalcFrames" << endl;
     if ( frames.isEmpty() )
         return;
 
@@ -441,22 +442,24 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
         }
     }
 
-    if ( m_processingType == WP ) {
+    if ( m_processingType == WP ) { // why?
 
         int headOffset = 0, footOffset = 0;
         int oldPages = m_pages;
 
-        // Determine number of pages
+        // Determine number of pages - first from the text frames
         m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
+        // Then from the existing frames in general
         int pages2=0;
         for (int m = getNumFrameSets()-1; m>=0; m--) {
             KWFrameSet *fs=getFrameSet(m);
             for (int n = fs->getNumFrames()-1;  n >=0; n--) {
+                //kdDebug() << "KWDocument::recalcFrames frameset " << m << " frame " << n << " bottom=" << fs->getFrame(n)->bottom() << endl;
                 pages2=QMAX(pages2, fs->getFrame(n)->bottom());
             }
         }
-        pages2=static_cast<int>(pages2 / ptPaperHeight());
-        //kdDebug() << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << endl;
+        pages2=static_cast<int>( ceil( pages2 / ptPaperHeight() ) );
+        kdDebug() << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
 
         m_pages=QMAX(pages2, m_pages);
         if ( m_pages != oldPages )
@@ -1215,7 +1218,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 #endif
 
-    updateAllViews( 0L, true );     // in case any view exists already
+    repaintAllViews( true );     // in case any view exists already
+
+    kdDebug() << "KWDocument::loadXML done" << endl;
 
     setModified( false );
 
@@ -1829,7 +1834,7 @@ void KWDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _dif
 
     emit sig_insertObject( ch, frameset );
 
-    updateAllViews( 0 );
+    repaintAllViews();
 }
 
 /*================================================================*/
@@ -1898,7 +1903,7 @@ bool KWDocument::isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsi
    before redrawing with the _erase flag. (false implied)
    All views EXCEPT the argument _view are updated
  */
-void KWDocument::updateAllViews( KWView *_view, bool erase )
+void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 {
     for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
@@ -1963,7 +1968,7 @@ void KWDocument::repaintAllViews( bool erase )
 void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage*/ )
 {
     int thisPageNum = m_pages-1;
-    //kdDebug() << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
+    kdDebug() << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
     emit pageNumChanged();
 
@@ -1986,8 +1991,8 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                                   - it is on the former page and the frame is set to double sided.
                                   - AND the frame is set to be reconnected or copied
                                   -  */
-            //kdDebug() << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
-            //kdDebug() << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
+            kdDebug() << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
+            kdDebug() << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
             if ( (frame->pageNum() == thisPageNum ||
                   (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
                  (frame->getNewFrameBehaviour()==Reconnect ||
@@ -2023,7 +2028,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
     updateAllViewportSizes();
 
     if ( isHeaderVisible() || isFooterVisible() )
-        recalcFrames( false );  // Get headers and footers on the new page
+        recalcFrames();  // Get headers and footers on the new page
     // setModified(TRUE); This is called by formatMore, possibly on loading -> don't set modified
 }
 
@@ -2043,6 +2048,7 @@ bool KWDocument::canRemovePage( int num, KWFrame *f )
                 return FALSE;
         }
     }
+    kdDebug() << "KWDocument::removePage " << num << " frame=" << f << "-> TRUE" << endl;
     return TRUE;
 }
 
@@ -2463,20 +2469,45 @@ void KWDocument::updateAllFrames()
 #endif
 }
 
+// Tell this method when a frame is moved / resized / created / deleted
+// and everything will be update / repainted accordingly
+void KWDocument::frameChanged( KWFrame * frame, KWView * view )
+{
+    updateAllFrames();
+    if ( !frame || frame->getRunAround() != RA_NO )
+    {
+        layout();
+        repaintAllViewsExcept( view );
+    }
+}
+
+void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
+{
+    updateAllFrames();
+    QListIterator<KWFrame> it( frames );
+    for ( ; it.current() ; ++it )
+        if ( it.current()->getRunAround() != RA_NO )
+        {
+            layout();
+            repaintAllViewsExcept( view );
+            return;
+        }
+}
+
 /*================================================================*/
 void KWDocument::setHeaderVisible( bool h )
 {
     m_headerVisible = h;
-    recalcFrames( true );
-    updateAllViews( 0L, true );
+    recalcFrames();
+    repaintAllViews( true );
 }
 
 /*================================================================*/
 void KWDocument::setFooterVisible( bool f )
 {
     m_footerVisible = f;
-    recalcFrames( true );
-    updateAllViews( 0L, true );
+    recalcFrames();
+    repaintAllViews( true );
 }
 
 /*================================================================*/
@@ -2714,7 +2745,7 @@ void KWDocument::setSerialLetterRecord( int r )
 void KWDocument::createContents()
 {
     contents->createContents();
-    updateAllViews( 0, TRUE );
+    repaintAllViews( /*true*/ );
 }
 
 void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )
@@ -2737,7 +2768,6 @@ void KWDocument::addFrameSet( KWFrameSet *f )
   frames.append(f);
   //updateAllFrames();
   setModified( true );
-  //updateAllViews(0L);
 }
 
 void KWDocument::delFrameSet( KWFrameSet *f, bool deleteit)

@@ -1087,7 +1087,7 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
     frames.first()->setHeight( height );
 
     if ( ( oldWidth > width ) || ( oldHeight > height ) ) {
-        kWordDocument()->repaintAllViews( true );
+        kWordDocument()->repaintAllViews( true ); // ## is "true" necessary ? Try false (DF)
     }
 
     updateFrames();
