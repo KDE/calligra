@@ -1556,7 +1556,7 @@ void KPTextView::cut()
 
 void KPTextView::copy()
 {
-    kdDebug(33001)<<"void KPTextView::copy() "<<endl;
+    //kdDebug(33001)<<"void KPTextView::copy() "<<endl;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         KPrTextDrag *kd = newDrag( 0L );
         QApplication::clipboard()->setData( kd );
@@ -1565,7 +1565,7 @@ void KPTextView::copy()
 
 void KPTextView::paste()
 {
-    kdDebug(33001) << "KPTextView::paste()" << endl;
+    //kdDebug(33001) << "KPTextView::paste()" << endl;
 
     QMimeSource *data = QApplication::clipboard()->data();
     if ( data->provides( KPrTextDrag::selectionMimeType() ) )
