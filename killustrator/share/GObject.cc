@@ -83,7 +83,8 @@ GObject::GObject () {
 
 GObject::GObject (const list<XmlAttribute>& attribs) {
   list<XmlAttribute>::const_iterator first = attribs.begin ();
-	
+  layer = 0L;
+
   while (first != attribs.end ()) {
     const string& attr = (*first).name ();
     if (attr == "matrix") {

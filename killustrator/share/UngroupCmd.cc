@@ -63,9 +63,7 @@ void UngroupCmd::execute () {
 
     int pos = document->findIndexOfObject (group);
     if (pos != -1) {
-      // remove the group object
-      document->deleteObject (group);
-
+      document->setAutoUpdate (false);
       // extract the members of the group
       QListIterator<GObject> mi (group->getMembers ());
       for (int offs = 0; mi.current (); ++mi, ++offs) {
@@ -77,6 +75,9 @@ void UngroupCmd::execute () {
 	// of the group object
 	document->insertObjectAtIndex (obj, pos + offs);
       }
+      // remove the group object
+      document->deleteObject (group);
+      document->setAutoUpdate (true);
     }
   }
 }

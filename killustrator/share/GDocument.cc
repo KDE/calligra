@@ -567,12 +567,13 @@ void GDocument::objectChanged () {
     selBoxIsValid = false;
     updateHandle ();
     GObject* obj = (GObject *) sender ();
-    if (obj->isSelected ()) {
+    if (obj->isSelected () && autoUpdate) {
       emit selectionChanged ();
     }
   }
   setModified ();
-  emit changed ();
+  if (autoUpdate)
+      emit changed ();
 }
 
 bool GDocument::saveToXml (const char* fname) {
@@ -780,7 +781,8 @@ bool GDocument::readFromXml (const char* fname) {
       }
       else if (elem.tag () == "group") {
 	GGroup* group = new GGroup (elem.attributes ());
-	group->ref ();
+	group->setLayer (active_layer);
+	//	group->ref ();
 
 	if (!groups.empty ())
 	  groups.top ()->addObject (group);
@@ -811,7 +813,8 @@ bool GDocument::readFromXml (const char* fname) {
     }
     if (obj && finished) {
       if (!groups.empty ()) {
-	obj->ref ();
+	obj->setLayer (active_layer);
+	//	obj->ref ();
 	groups.top ()->addObject (obj);
       }
       else 
@@ -842,6 +845,7 @@ void GDocument::insertObjectAtIndex (GObject* obj, unsigned int idx) {
   objects.insert (idx, obj);
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
 #else
+  obj->ref ();
   GLayer* layer = obj->getLayer ();
   if (layer == 0L)
     layer = active_layer;
