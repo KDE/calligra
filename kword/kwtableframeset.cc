@@ -754,9 +754,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
 
 
     if ( _recalc )
-        recalcRows();
-
-    finalize();
+        finalize();
 }
 
 /*================================================================*/
