@@ -669,10 +669,26 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		else if( gradient.repeatMethod() == VGradient::reflect )
 			linear->spread = ART_GRADIENT_REFLECT;
 
-		double dx = ( gradient.vector().x() - gradient.origin().x() ) * m_zoomFactor;
-		double _y1 = gradient.vector().y();
-		_y1 = m_matrix.m22() * _y1 + m_matrix.dy() / m_zoomFactor;
+		double _x1 = gradient.origin().x();
+		double _x2 = gradient.vector().x();
 		double _y2 = gradient.origin().y();
+		double _y1 = gradient.vector().y();
+		kdDebug() << "_x1 : " << _x1 << endl;
+		kdDebug() << "_y1 : " << _y1 << endl;
+		kdDebug() << "_x2 : " << _x2 << endl;
+		kdDebug() << "_y2 : " << _y2 << endl;
+		// Adjust to gradientTransform
+		//QWMatrix m;// = gradient.gradientTransform();
+		//m.map(_x1, _y1, &_x1, &_y1);
+		//m.map(_x2, _y2, &_x2, &_y2);
+		//kdDebug() << "2_x1 : " << _x1 << endl;
+		//kdDebug() << "_y1 : " << _y1 << endl;
+		//kdDebug() << "_x2 : " << _x2 << endl;
+		//kdDebug() << "_y2 : " << _y2 << endl;
+		//double _y1n = _y1;
+
+		double dx = ( _x2 - _x1 ) * m_zoomFactor;
+		_y1 = m_matrix.m22() * _y1 + m_matrix.dy() / m_zoomFactor;
 		_y2 = m_matrix.m22() * _y2 + m_matrix.dy() / m_zoomFactor;
 		//kdDebug() << "_y1 : " << _y1 << ", _y2 " << _y2 << endl;
 		double dy = ( _y1 - _y2 ) * m_zoomFactor;
@@ -680,11 +696,12 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		linear->a = dx * scale;
 		linear->b = dy * scale;
-		linear->c = -( ( gradient.origin().x() * m_zoomFactor + m_matrix.dx() ) * linear->a +
+		linear->c = -( ( _x1 * m_zoomFactor + m_matrix.dx() ) * linear->a +
 					   ( _y2 * m_zoomFactor ) * linear->b );
-		//kdDebug() << "linear->a" << linear->a << endl;
-		//kdDebug() << "linear->b" << linear->b << endl;
-		//kdDebug() << "linear->c" << linear->c << endl;
+
+		kdDebug() << "linear->a" << linear->a << endl;
+		kdDebug() << "linear->b" << linear->b << endl;
+		kdDebug() << "linear->c" << linear->c << endl;
 
 		// get stop array
 		int offsets = -1;
@@ -750,7 +767,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			int opacity = opa * 255.0;
 			art_render_svp( render, svp );
 			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
-			art_karbon_render_gradient_radial( render, radial, ART_FILTER_HYPER );
+			art_karbon_render_gradient_radial( render, radial, ART_FILTER_NEAREST );
 		}
 	}
 	else if( gradient.type() == VGradient::conic )
@@ -787,7 +804,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 			int opacity = opa * 255.0;
 			art_render_svp( render, svp );
 			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
-			art_karbon_render_gradient_conical( render, conical, ART_FILTER_HYPER );
+			art_karbon_render_gradient_conical( render, conical, ART_FILTER_NEAREST );
 		}
 	}
 	if( render )

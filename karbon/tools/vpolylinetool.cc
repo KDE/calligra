@@ -35,9 +35,10 @@
 #include "vpainterfactory.h"
 #include "vpolylinetool.h"
 #include "vshapecmd.h"
+#include "vstroke.h"
 
 
-	VPolylineTool::VPolylineTool( KarbonView* view )
+VPolylineTool::VPolylineTool( KarbonView* view )
 	: VTool( view )
 {
 	m_bezierPoints.setAutoDelete( true );

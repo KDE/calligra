@@ -26,7 +26,9 @@
 #include "vselectnodes.h"
 #include "vselectobjects.h"
 #include "vvisitor.h"
-
+#include "vcolor.h"
+#include "vfill.h"
+#include "vstroke.h"
 
 VSelection::VSelection( VObject* parent )
 	: VObject( parent )

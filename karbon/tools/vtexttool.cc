@@ -42,6 +42,8 @@
 #include "vpainterfactory.h"
 #include "vselection.h"
 #include "vtexttool.h"
+#include "vfill.h"
+#include "vstroke.h"
 
 
 static void

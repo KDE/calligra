@@ -35,6 +35,7 @@
 #include "vcolor.h"
 #include "vselection.h"
 #include "vstrokecmd.h"
+#include "vstroke.h"
 #include "vstrokedlg.h"
 #include "vcolortab.h"
 

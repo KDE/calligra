@@ -32,6 +32,7 @@
 #include "vgradienttabwidget.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
+#include "vstroke.h"
 #include "vselection.h"
 
 #include <kdebug.h>

@@ -19,6 +19,7 @@
 */
 
 #include <qpainter.h>
+#include <qptrvector.h>
 
 #include <kiconloader.h>
 #include <kdebug.h>

@@ -38,6 +38,8 @@
 
 #include "vtoolbox.h"
 
+#include "vstroke.h"
+
 // Tools.
 #include "vcliparttool.h"
 #include "vellipsetool.h"
@@ -112,6 +114,7 @@
 // TODO: only for testing
 #include "vsegment.h"
 #include "vpath.h"
+
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )

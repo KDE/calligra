@@ -24,11 +24,8 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
-#include "vcolor.h"
 #include "vlayer.h"
 #include "vobject.h"
-#include "vstroke.h"
-#include "vfill.h"
 
 class QDomDocument;
 class QDomElement;

@@ -26,6 +26,9 @@
 
 #include <qvaluevector.h>
 
+class VGradient;
+class VPattern;
+
 // Stroke object(s)
 
 class VStrokeColorCmd : public VCommand

@@ -27,6 +27,8 @@
 #include "vselection.h"
 #include "vtext.h"
 #include "vtransformcmd.h"
+#include "vstroke.h"
+#include "vfill.h"
 
 
 VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
