@@ -134,10 +134,10 @@ void KWordTextFrameSetEditIface::insertFootNote( const QString & type )
 {
     if ( type.lower() =="footnote")
     {
-        m_framesetedit->insertFootNote( FootNote);
+        m_framesetedit->insertFootNote( FootNote, KWFootNoteVariable::Auto, QString::null);
     }
     else if ( type.lower()=="endnote")
     {
-        m_framesetedit->insertFootNote( EndNote);
+        m_framesetedit->insertFootNote( EndNote, KWFootNoteVariable::Auto, QString::null);
     }
 }

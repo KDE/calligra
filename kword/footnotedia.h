@@ -22,6 +22,7 @@
 
 #include <kdialogbase.h>
 #include "defs.h" // for NoteType
+#include "kwvariable.h"
 class QRadioButton;
 
 /******************************************************************/
@@ -36,16 +37,23 @@ public:
     KWFootNoteDia( QWidget *parent, const char *name = 0 );
 
     NoteType noteType() const;
-
+    KWFootNoteVariable::Numbering numberingType()const;
+    QString manualString()const;
 protected:
     void setupTab1();
     bool insertFootNote();
+protected slots:
+    void footLineChanged( const QString & );
 
 private:
     QWidget *tab1;
 
+    QRadioButton *m_rbAuto;
+    QRadioButton *m_rbManual;
+
     QRadioButton *m_rbFootNote;
     QRadioButton *m_rbEndNote;
+    QLineEdit *m_footLine;
 };
 
 #endif

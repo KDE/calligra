@@ -109,8 +109,8 @@ public:
     void setNumberingType( Numbering _type );
     Numbering numberingType() const { return m_numberingType;}
 
-    void setManualString( const QString & _str ) { m_manualString = _str;}
-    QString manualString() const { return m_manualString;}
+    void setManualString( const QString & _str ) { m_varType = QVariant(_str);}
+    QString manualString() const { return m_varType.toString();}
 
     virtual void drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
 
@@ -138,7 +138,6 @@ private:
     NoteType m_noteType;
     KWTextFrameSet* m_frameset;
     Numbering m_numberingType;
-    QString m_manualString;
 };
 
 #endif

@@ -136,7 +136,7 @@ KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, KoVariableForma
 void KWFootNoteVariable::setNumberingType( Numbering _type )
 {
     m_numberingType = _type;
-    delete m_varFormat;
+    //delete m_varFormat;
     setVariableFormat((_type == Manual) ? m_doc->variableFormatCollection()->format("STRING") : m_doc->variableFormatCollection()->format("NUMBER"));
 
 }

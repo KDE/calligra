@@ -25,6 +25,7 @@
 #include <kotextview.h>
 #include <koparaglayout.h>
 #include <koChangeCaseDia.h>
+#include "kwvariable.h"
 class KWStyle;
 class KWTextDrag;
 class KWDocument;
@@ -321,7 +322,7 @@ public:
 
     void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor() ); }
     void insertVariable( int type, int subtype = 0 );
-    void insertFootNote( NoteType noteType );
+    void insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering _numType, const QString &_manualString );
     void insertCustomVariable( const QString &name);
     void insertVariable( KoVariable *var, KoTextFormat *format = 0 /*means currentFormat()*/ );
 

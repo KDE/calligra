@@ -26,6 +26,8 @@
 
 #include <klocale.h>
 #include <qlayout.h>
+#include <qlineedit.h>
+
 
 /******************************************************************/
 /* Class: KWFootNoteDia                                           */
@@ -36,13 +38,8 @@ KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name )
 {
     setupTab1();
 
-    setButtonOKText(i18n("&Insert")/*,
-                    footnote ? i18n("Insert a footnote") :
-                    i18n("Insert an endnote")*/);
+    setButtonOKText(i18n("&Insert"));
 
-    /*setCaption( footnote ?
-                i18n("Insert Footnote") :
-                i18n("Insert Endnote"));*/
     setCaption( i18n("Insert Footnote / Endnote") );
 
     //setInitialSize( QSize(300, 250) );
@@ -55,6 +52,22 @@ void KWFootNoteDia::setupTab1()
     QVBoxLayout* vbox = new QVBoxLayout( tab1 );
 
     QButtonGroup *grp = new QButtonGroup( 2, Qt::Vertical, tab1 );
+    QGridLayout *grid = new QGridLayout( grp, 2, 2);
+    m_rbAuto = new QRadioButton( i18n("Automatic"), grp );
+    m_rbManual= new QRadioButton( i18n("Manual"), grp );
+
+    grp->setExclusive( true );
+    grid->addWidget( m_rbAuto, 0, 0);
+    grid->addWidget( m_rbManual, 1, 0);
+    m_rbAuto->setChecked( true );
+    m_footLine = new QLineEdit( grp);
+    connect( m_footLine, SIGNAL( textChanged ( const QString & )), this, SLOT(footLineChanged( const QString & )));
+    grid->addWidget( m_footLine, 1, 1);
+
+    vbox->addWidget( grp );
+
+
+    grp = new QButtonGroup( 2, Qt::Vertical, tab1 );
     m_rbFootNote = new QRadioButton( i18n("Footnote"), grp );
     m_rbEndNote = new QRadioButton( i18n("Endnote"), grp );
     grp->setExclusive( true );
@@ -66,7 +79,22 @@ void KWFootNoteDia::setupTab1()
     m_rbFootNote->setChecked( true );
 }
 
+void KWFootNoteDia::footLineChanged( const QString & )
+{
+    m_rbManual->setChecked( true );
+}
+
 NoteType KWFootNoteDia::noteType() const
 {
     return m_rbFootNote->isChecked() ? FootNote : EndNote;
+}
+
+KWFootNoteVariable::Numbering KWFootNoteDia::numberingType()const
+{
+    return m_rbAuto->isChecked() ? KWFootNoteVariable::Auto : KWFootNoteVariable::Manual;
+}
+
+QString KWFootNoteDia::manualString()const
+{
+    return m_footLine->text();
 }

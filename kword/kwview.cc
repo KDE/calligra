@@ -2656,7 +2656,7 @@ void KWView::insertFootNote()
         } else {
             KWFootNoteDia dia( this, 0 );
             if ( dia.exec() ) {
-                edit->insertFootNote( dia.noteType() );
+                edit->insertFootNote( dia.noteType(), dia.numberingType(), dia.manualString() );
             }
         }
     }

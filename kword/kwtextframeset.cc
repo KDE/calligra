@@ -2181,17 +2181,20 @@ void KWTextFrameSet::renumberFootNotes()
     short int varNumber = 1;
     bool needRepaint = false;
     QPtrListIterator< KWFootNoteVariable > vit( lst );
-    for ( ; vit.current() ; ++vit, ++varNumber )
+    for ( ; vit.current() ; ++vit )
     {
         KWFootNoteVariable* var = vit.current();
-        if ( varNumber != var->num() )
+        if ( var->numberingType()==KWFootNoteVariable::Auto && varNumber != var->num() )
         {
             var->setNum( varNumber );
             var->frameSet()->setName( i18n("Footnote %1").arg( varNumber ) );
-            var->paragraph()->invalidate(0);
-            var->paragraph()->setChanged( true );
-            needRepaint = true;
+            ++varNumber;
         }
+        else
+            var->frameSet()->setName( i18n("Footnote %1").arg( var->manualString() ) );
+        var->paragraph()->invalidate(0);
+        var->paragraph()->setChanged( true );
+        needRepaint = true;
     }
     if ( needRepaint )
         m_doc->slotRepaintChanged( this );
@@ -2837,12 +2840,16 @@ void KWTextFrameSetEdit::insertCustomVariable( const QString &name)
      insertVariable( var );
 }
 
-void KWTextFrameSetEdit::insertFootNote( NoteType noteType )
+void KWTextFrameSetEdit::insertFootNote( NoteType noteType,KWFootNoteVariable::Numbering _numType, const QString &_manualString)
 {
      kdDebug() << "KWTextFrameSetEdit::insertFootNote " << endl;
      KWDocument * doc = frameSet()->kWordDocument();
      KWFootNoteVariable * var = new KWFootNoteVariable( textFrameSet()->textDocument() , doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection(), doc);
      var->setNoteType( noteType );
+     var->setNumberingType(_numType );
+     if ( _numType ==KWFootNoteVariable::Manual)
+         var->setManualString( _manualString );
+
      // Now create text frameset which will hold the variable's contents
      KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( doc, i18n( "Footnotes" ) );
      fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
