@@ -28,6 +28,8 @@
 #include <shapes/vpolygon.h>
 #include <qcolor.h>
 #include <qfile.h>
+#include <qregexp.h>
+#include <iostream>
 
 typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "karbonsvgimport" ) );
@@ -142,23 +144,27 @@ SvgImport::convert()
 			//parseGObject( circle, object );
 			m_document.append( circle );
 		}
-		else if( b.tagName() == "polyline" )
+		else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
 		{
-			QDomElement point = b.firstChild().toElement();
 			VComposite *path = new VComposite( &m_document );
-			int x, y;
-			x = point.attribute( "x" ).toInt();
-			y = point.attribute( "y" ).toInt();
-			path->moveTo( KoPoint( x, y ) );
-			point = point.nextSibling().toElement();
-			for( ; !point.isNull(); point = point.nextSibling().toElement() )
+			bool bFirst = true;
+
+			QString points = b.attribute( "points" ).simplifyWhiteSpace();
+			points.replace( QRegExp( "," ), " " );
+			points.replace( QRegExp( "\r" ), "" );
+		    points.replace( QRegExp( "\n" ), "" );
+			QStringList pointList = QStringList::split( ' ', points );
+			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); it++ )
 			{
-				x = point.attribute( "x" ).toInt();
-				y = point.attribute( "y" ).toInt();
-				path->lineTo( KoPoint( x, y ) );
+				if( bFirst )
+				{
+					path->moveTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
+					bFirst = false;
+				}
+				else
+					path->lineTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
 			}
-			path->close();
-			QDomElement object = b.namedItem( "gobject" ).toElement();
+			if( b.tagName() == "polygon" ) path->close();
 			//parseGObject( path, object );
 			m_document.append( path );	
 		}
