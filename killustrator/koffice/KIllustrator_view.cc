@@ -1252,8 +1252,14 @@ void KIllustratorView::slotZoomOut()
    mZoomTool->zoomOut(getCanvas());
 }
 
+//when we get here, the canvas is already zoomed
 void KIllustratorView::slotZoomFactorChanged(float factor)
 {
+
+    //QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
+                      //vRuler, SLOT(setZoomFactor (float, int ,int)));*/
+   vRuler->setZoomFactor(factor,0,0);
+   hRuler->setZoomFactor(factor,50,50);
    QStringList list=m_viewZoom->items();
    QString f=QString::number(qRound(factor*100.0));
    int i=0;
