@@ -37,6 +37,7 @@
 
 #include <kdebug.h>
 
+#include <koGlobal.h>
 #include <koStore.h>
 
 #include "KWEFStructures.h"
@@ -46,7 +47,7 @@
 #include "KWEFBaseWorker.h"
 #include "KWEFKWordLeader.h"
 
-void ProcessParagraphTag ( QDomNode      myNode,
+static void ProcessParagraphTag ( QDomNode      myNode,
                            void          *,
                            QString       &outputText,
                            KWEFBaseClass *exportFilter )
@@ -70,7 +71,7 @@ void ProcessParagraphTag ( QDomNode      myNode,
 
 }
 
-void ProcessFramesetTag ( QDomNode      myNode,
+static void ProcessFramesetTag ( QDomNode      myNode,
                           void          *,
                           QString       &outputText,
                           KWEFBaseClass *exportFilter )
@@ -99,7 +100,7 @@ void ProcessFramesetTag ( QDomNode      myNode,
     //TODO: Treat the other types of frames (frameType)
 }
 
-void ProcessFramesetsTag ( QDomNode      myNode,
+static void ProcessFramesetsTag ( QDomNode      myNode,
                            void          *,
                            QString       &outputText,
                            KWEFBaseClass *exportFilter )
@@ -111,7 +112,43 @@ void ProcessFramesetsTag ( QDomNode      myNode,
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
-void ProcessDocTag ( QDomNode       myNode,
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )
+{
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    //tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+}
+
+static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter)
+{
+
+    int format=-1;
+    int orientation=-1;
+    double width=-1.0;
+    double height=-1.0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "format",          "int", (void*) &format ) );
+    attrProcessingList.append ( AttrProcessing ( "width",           "double", (void*) &width ) );
+    attrProcessingList.append ( AttrProcessing ( "height",          "double", (void*) &height ) );
+    attrProcessingList.append ( AttrProcessing ( "orientation",     "int", (void*) &orientation ) );
+    attrProcessingList.append ( AttrProcessing ( "columns",         "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "columnspacing",   "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "hType",           "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "fType",           "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "spHeadBody",      "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "spFootBody",      "", NULL ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+
+    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
+    leader->doFullPaperFormat(format, width, height, orientation);
+}
+
+static void ProcessDocTag ( QDomNode       myNode,
                      void           *,
                      QString        &outputText,
                      KWEFBaseClass  *exportFilter )
@@ -121,16 +158,35 @@ void ProcessDocTag ( QDomNode       myNode,
     attrProcessingList.append ( AttrProcessing ( "mime",          "", NULL ) );
     attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
     ProcessAttributes (myNode, attrProcessingList);
+    // TODO: verify syntax version and perhaps mime
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "PAPER",       NULL,                NULL ) );
+
+    KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
+    leader->doOpenHead();
+
+    // At first, process <PAPER>, even if mostly the output will need to be delayed.
+    tagProcessingList.append ( TagProcessing ( "PAPER",       ProcessPaperTag,     NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+
+    tagProcessingList.clear();
+    tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+
+    leader->doCloseHead();
+    leader->doOpenBody();
+
+    tagProcessingList.clear();
+    // TODO: do all those tags still exist in KWord 1.2?
+    tagProcessingList.append ( TagProcessing ( "PAPER",       NULL,                NULL ) ); // already done
     tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) );
+    tagProcessingList.append ( TagProcessing ( "STYLES",      NULL,                NULL ) ); // already done
     tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+    leader->doCloseBody();
 }
 
 void KWEFKWordLeader::setWorker(KWEFBaseWorker* newWorker)
@@ -143,6 +199,14 @@ KWEFBaseWorker*  KWEFKWordLeader::getWorker(void) const
     return m_worker;
 }
 
+// Short simple definition for methods with void parameter
+#define DO_VOID_DEFINITION(string) \
+    bool KWEFKWordLeader::##string() \
+    {\
+        if (m_worker) \
+            return m_worker->##string(); \
+        return false; \
+    }
 
 bool KWEFKWordLeader::doOpenFile(const QString& filenameOut, const QString& to)
 {
@@ -153,33 +217,10 @@ bool KWEFKWordLeader::doOpenFile(const QString& filenameOut, const QString& to)
     return false;
 }
 
-bool KWEFKWordLeader::doCloseFile(void)
-{
-    if (m_worker)
-        return m_worker->doCloseFile();
-    return false;
-}
-
-bool KWEFKWordLeader::doAbortFile(void)
-{
-    if (m_worker)
-        return m_worker->doAbortFile();
-    return false;
-}
-
-bool KWEFKWordLeader::doOpenDocument(void)
-{
-    if (m_worker)
-        return m_worker->doOpenDocument();
-    return false;
-}
-
-bool KWEFKWordLeader::doCloseDocument(void)
-{
-    if (m_worker)
-        return m_worker->doCloseDocument();
-    return false;
-}
+DO_VOID_DEFINITION(doCloseFile)
+DO_VOID_DEFINITION(doAbortFile)
+DO_VOID_DEFINITION(doOpenDocument)
+DO_VOID_DEFINITION(doCloseDocument)
 
 bool KWEFKWordLeader::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
 {
@@ -188,24 +229,25 @@ bool KWEFKWordLeader::doFullParagraph(QString& paraText, LayoutData& layout, Val
     return false;
 }
 
-bool KWEFKWordLeader::doOpenTextFrameSet(void)
-{
-    if (m_worker)
-        return m_worker->doOpenTextFrameSet();
-    return false;
-}
-
-bool KWEFKWordLeader::doCloseTextFrameSet(void)
-{
-    if (m_worker)
-        return m_worker->doCloseTextFrameSet();
-    return false;
-}
+DO_VOID_DEFINITION(doOpenTextFrameSet)
+DO_VOID_DEFINITION(doCloseTextFrameSet)
 
 bool KWEFKWordLeader::doFullDocumentInfo(QDomDocument& info)
 {
     if (m_worker)
         return m_worker->doFullDocumentInfo(info);
+    return false;
+}
+
+DO_VOID_DEFINITION(doOpenHead)
+DO_VOID_DEFINITION(doCloseHead)
+DO_VOID_DEFINITION(doOpenBody)
+DO_VOID_DEFINITION(doCloseBody)
+
+bool KWEFKWordLeader::doFullPaperFormat(const int format, const double width, const double height, const int orientation)
+{
+    if (m_worker)
+        return m_worker->doFullPaperFormat(format, width, height, orientation);
     return false;
 }
 

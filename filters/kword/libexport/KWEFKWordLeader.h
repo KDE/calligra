@@ -43,6 +43,11 @@ class KWEFKWordLeader : public KWEFBaseClass
         bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
         bool doOpenTextFrameSet(void);
         bool doCloseTextFrameSet(void);
+        bool doFullPaperFormat(const int format, const double width, const double height, const int orientation);
+        bool doOpenHead(void);
+        bool doCloseHead(void);
+        bool doOpenBody(void);
+        bool doCloseBody(void);
     protected: // leader/worker functions
         bool doOpenFile(const QString& filenameOut, const QString& to);
         bool doCloseFile(void);

@@ -26,17 +26,9 @@
 
 #include "KWEFBaseWorker.h"
 
-bool KWEFBaseWorker::doOpenFile(const QString& , const QString& )
-{
-    kdWarning() << "KWEFBaseWorker::doOpenFile was called (Worker not correctly defined?)" << endl;
-    return false;
-}
-
-bool KWEFBaseWorker::doCloseFile(void)
-{
-    kdWarning() << "KWEFBaseWorker::doCloseFile was called (Worker not correctly defined?)" << endl;
-    return false;
-}
+//
+// At first, define all methods that do something real!
+//
 
 bool KWEFBaseWorker::doAbortFile(void)
 {
@@ -44,35 +36,38 @@ bool KWEFBaseWorker::doAbortFile(void)
     return doCloseFile();
 }
 
-bool KWEFBaseWorker::doOpenDocument(void)
-{
-    kdWarning() << "KWEFBaseWorker::doOpenDocument was called (Worker not correctly defined?)" << endl;
-    return false;
-}
+//
+// Secondly, define all methods returning false
+//
 
-bool KWEFBaseWorker::doCloseDocument(void)
-{
-    kdWarning() << "KWEFBaseWorker::doCloseDocument was called (Worker not correctly defined?)" << endl;
-    return false;
-}
+#define DO_FALSE_DEFINITION(string) \
+    bool KWEFBaseWorker::##string \
+    {\
+        kdWarning() << "KWEFBaseWorker::" << #string << " was called (Worker not correctly defined?)" << endl; \
+        return false;\
+    }
 
-bool KWEFBaseWorker::doFullParagraph(QString&, LayoutData&, ValueListFormatData&)
-{
-    kdWarning() << "KWEFBaseWorker::doFullParagraph was called (Worker not correctly defined?)" << endl;
-    return false;
-}
+DO_FALSE_DEFINITION(doOpenFile(const QString& , const QString& ))
+DO_FALSE_DEFINITION(doCloseFile(void))
+DO_FALSE_DEFINITION(doOpenDocument(void))
+DO_FALSE_DEFINITION(doCloseDocument(void))
+DO_FALSE_DEFINITION(doFullParagraph(QString&, LayoutData&, ValueListFormatData&))
 
-bool KWEFBaseWorker::doOpenTextFrameSet(void)
-{
-    return true;
-}
+//
+// Thirdly, define all methods returning false
+//
 
-bool KWEFBaseWorker::doCloseTextFrameSet(void)
-{
-    return true;
-}
+#define DO_TRUE_DEFINITION(string) \
+    bool KWEFBaseWorker::##string \
+    {\
+        return true;\
+    }
 
-bool KWEFBaseWorker::doFullDocumentInfo(QDomDocument& info)
-{
-    return true;
-}
+DO_TRUE_DEFINITION(doOpenTextFrameSet(void))
+DO_TRUE_DEFINITION(doCloseTextFrameSet(void))
+DO_TRUE_DEFINITION(doFullDocumentInfo(QDomDocument& info))
+DO_TRUE_DEFINITION(doFullPaperFormat(const int format, const double width, const double height, const int orientation))
+DO_TRUE_DEFINITION(doOpenHead(void))
+DO_TRUE_DEFINITION(doCloseHead(void))
+DO_TRUE_DEFINITION(doOpenBody(void))
+DO_TRUE_DEFINITION(doCloseBody(void))

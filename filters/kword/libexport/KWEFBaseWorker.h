@@ -36,12 +36,18 @@ class KWEFBaseWorker
         virtual bool doOpenFile(const QString& filenameOut, const QString& to);
         virtual bool doCloseFile(void); // Close file in normal conditions
         virtual bool doAbortFile(void); // Close file after errors
-        virtual bool doOpenDocument(void);
-        virtual bool doCloseDocument(void);
+        virtual bool doOpenDocument(void); // Like HTML's <html>
+        virtual bool doCloseDocument(void); // Like HTML's </html>
         virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
-        virtual bool doOpenTextFrameSet(void);
-        virtual bool doCloseTextFrameSet(void);
+        virtual bool doOpenTextFrameSet(void); // Like AbiWord's <section>
+        virtual bool doCloseTextFrameSet(void); // Like AbiWord's </section>
         virtual bool doFullDocumentInfo(QDomDocument& info);  // PROVISORY!
+        virtual bool doFullPaperFormat(const int format,
+            const double width, const double height, const int orientation); // Like AbiWord's <papersize>
+        virtual bool doOpenHead(void); // Like HTML's <HEAD>
+        virtual bool doCloseHead(void); // Like HTML's </HEAD>
+        virtual bool doOpenBody(void); // Like HTML's <BODY>
+        virtual bool doCloseBody(void); // Like HTML's </BODY>
 };
 
 #endif /* KWEF_BASEWORKER_H */
