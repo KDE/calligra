@@ -5294,6 +5294,8 @@ void KWView::openDocStructurePopupMenu( const QPoint &_p, KWFrameSet *frameset)
 {
     if(!koDocument()->isReadWrite() )
         return;
+    bool state = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE);
+    actionEditFrameSet->setEnabled( state );
     QPopupMenu* popup = static_cast<QPopupMenu *>(factory()->container("docstruct_popup",this));
     if ( popup )
         popup->popup(_p);
