@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=mgp2kpr.py
+Name=Magicpoint Import Filter for KPresenter
+X-KDE-Wrapper-Export=application/x-kpresenter
+X-KDE-Wrapper-Import=application/x-magicpoint
+ServiceTypes=KOfficeGenericFilter

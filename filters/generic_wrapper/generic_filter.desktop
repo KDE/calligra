@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Generic KOffice filter
+X-KDE-Export=application/x-kpresenter
+X-KDE-Import=application/x-magicpoint
+X-KDE-Weight=1
+Type=Service
+ServiceTypes=KOfficeFilter
+X-KDE-Library=libgenerickofilter

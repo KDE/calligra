@@ -1,0 +1,40 @@
+KOffice Filter Wrapper
+======================
+
+This is a generic framework for developing KOffice import and export
+filters in a scripting language of your choice (Python, Perl, etc).
+
+Requirements for your filter:
+-----------------------------
+- do whatever you want with your script, it just has to take two
+  parameters, the input file and the output file
+- provide a .desktop files, containing these mandatory fields:
+
+Name=My cool filter in Perl
+Type=Service
+ServiceTypes=KOfficeGenericFilter
+Exec=my_filter.pl
+X-KDE-Wrapper-Export=<MIME type of the exported file>
+X-KDE-Wrapper-Import=<MIME type of the imported file>
+
+- write a suitable Makefile.am
+
+bin_SCRIPTS = my_filter.pl
+service_DATA = my_filter.desktop
+servicedir = $(kde_servicesdir)
+
+- if not already present, write a .desktop file for the external MIME
+  type
+
+In doubt, have a look at an example filter in
+filters/kpresenter/magicpoint.
+
+The only shortcoming at the moment is that you have to add these MIME
+types to filters/generic_wrapper/generic_filter.desktop file (in the
+fields X-KDE-Export resp. X-KDE-Import).
+
+---
+That's it, have fun :-)
+
+Lukas Tinkl <lukas@kde.org>
+SuSE Labs, Czech Republic

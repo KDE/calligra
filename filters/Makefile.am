@@ -8,4 +8,4 @@ if include_XSLTFILTERS
 XSLTFILTERDIR = xsltfilter
 endif
 
-SUBDIRS = kspread kword kpresenter olefilters $(KONTOURDIR) $(XSLTFILTERDIR) kformula $(KARBONDIR)
+SUBDIRS = generic_wrapper kspread kword kpresenter olefilters $(KONTOURDIR) $(XSLTFILTERDIR) kformula $(KARBONDIR)
