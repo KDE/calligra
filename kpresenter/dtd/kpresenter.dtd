@@ -1,13 +1,21 @@
 <!--	$Id$
 
 		This is an XML document type definition (DTD) for the
-		KPresenter document format. 
-		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from 
+		KPresenter document format.
+		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from
 		KPresenter's author Reginald Stadlbauer <reggie@kde.org>.
-
-		Please report all bugs to Kalle and Reginald at the above addresses.
 -->
-		
+
+<!-- Entity for <KEY>, <BACKPIXKEY>, <BACKCLIPKEY> and <BACKPICTUREKEY> -->
+<!ENTITY % key "day NMTOKEN #REQUIRED
+              filename CDATA #REQUIRED
+              hour NMTOKEN #REQUIRED
+              minute NMTOKEN #REQUIRED
+              month NMTOKEN #REQUIRED
+              msec NMTOKEN #REQUIRED
+              second NMTOKEN #REQUIRED
+              year NMTOKEN #REQUIRED" >
+
 
 
 <!--	A KPresenter document consists of a paper description, a
@@ -22,7 +30,7 @@
                 syntaxVersion:  Integer version of the syntax. Currently 2.
 		mime:		The MIME type (must always have the value application/x-kpresenter)
 -->
-<!ELEMENT DOC (PAPER | BACKGROUND | ,VARIABLESETTINGS | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PICTURES | PIXMAPS | CLIPARTS | SHOWPRESENTATIONDURATION | HELPLINES | SPELLCHECKIGNORELIST)* >
+<!ELEMENT DOC (PAPER | BACKGROUND | VARIABLESETTINGS | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PICTURES | PIXMAPS | CLIPARTS | SHOWPRESENTATIONDURATION | HELPLINES | SPELLCHECKIGNORELIST)* >
 <!ATTLIST DOC   author CDATA #IMPLIED
                 email CDATA #IMPLIED
                 editor CDATA #IMPLIED
@@ -50,7 +58,7 @@
 <!--	Describes the margins of the page.
 
 		Attributes:
-		
+
 		left:			left margin in pixels
 		right:			right margin in pixels
 		top:			top margin in pixels
@@ -148,21 +156,6 @@
 <!ATTLIST SIZE
 		width	NMTOKEN #REQUIRED
 		height	NMTOKEN #REQUIRED>
-
-
-<!--	The objects's shadow.
-
-		Attributes:
-
-		distance		distance between shadow and object
-		direction		direction of the shadow
-		color			color of the shadow
--->
-<!ELEMENT SHADOW EMPTY>
-<!ATTLIST SHADOW
-		distance     NMTOKEN #REQUIRED
-                direction    NMTOKEN #REQUIRED
-                color        CDATA   #REQUIRED>
 
 <!--	The effects for moving from page to page.
 
@@ -331,8 +324,8 @@
                 strikeoutstyleline CDATA #REQUIRED
                 whitespace NMTOKEN #IMPLIED
 		color	CDATA	#REQUIRED
-                textbackcolor CDATA #REQUIRES
-                VERTALIGN CDATA #REQUIRE>
+                textbackcolor CDATA #REQUIRED
+                VERTALIGN CDATA #REQUIRED>
 
 <!-- 
         A paragraph and a style can have counter data.
@@ -396,7 +389,7 @@
 
 <!--
         The borders can be used on a frame and on a paragraph.
-        the border has a color, displayed in the RGB value. 
+        the border has a color, displayed in the RGB value.
         The width is in points.
         Style   0 = solid
                 1 = dashes
@@ -496,10 +489,11 @@
             color:   color of shadow
 
 -->
+<!ELEMENT SHADOW EMPTY>
 <!ATTLIST SHADOW
     distance CDATA #REQUIRED
     direction CDATA #REQUIRED
-    color CDATA #REQUIRED
+    color CDATA #REQUIRED>
 
 <!ELEMENT PEN EMPTY>
 <!ATTLIST PEN	color   CDATA	#REQUIRED
@@ -548,13 +542,25 @@
 			rastY	NMTOKEN	#REQUIRED
 			color	CDATA	#REQUIRED>
 
-<!ELEMENT PAGE (BACKTYPE|BACKVIEW|BACKCOLOR1|BACKCOLOR2|BCTYPE|PGEFFECT|PGTIMER|PGSOUNDEFFECT)*>
+<!ELEMENT PAGE (BACKTYPE|BACKVIEW|BACKCOLOR1|BACKCOLOR2|BCTYPE|PGEFFECT|PGTIMER|PGSOUNDEFFECT|
+    BACKPIXKEY|BACKCLIPKEY|BACKPICTUREKEY)*>
 
 <!ELEMENT BACKTYPE EMPTY>
 <!ATTLIST BACKTYPE value CDATA #REQUIRED>
 
 <!ELEMENT BACKVIEW EMPTY>
 <!ATTLIST BACKVIEW value NMTOKEN #REQUIRED>
+
+<!-- Only for KPresenter 1.1 compactibility, otherwise use BACKPICTUREKEY -->
+<!ELEMENT BACKPIXKEY EMPTY>
+<!ATTLIST BACKPIXKEY %key; >
+
+<!-- Only for KPresenter 1.1 compactibility, otherwise use BACKPICTUREKEY -->
+<!ELEMENT BACKCLIPARTKEY EMPTY>
+<!ATTLIST BACKCLIPARTKEY %key; >
+
+<!ELEMENT BACKPICTUREKEY EMPTY>
+<!ATTLIST BACKPICTUREKEY %key; >
 
 <!ELEMENT BCTYPE EMPTY>
 <!ATTLIST BCTYPE value CDATA #REQUIRED>
@@ -577,6 +583,7 @@
 <!ATTLIST PGSOUNDEFFECT soundEffect    ( 0 | 1 )  #REQUIRED
                         soundFileNmae  CDATA      #REQUIRED>
 
+
 <!ELEMENT DISAPPEAR EMPTY >
 <!ATTLIST DISAPPEAR doit NMTOKEN #REQUIRED
                     effect NMTOKEN #REQUIRED
@@ -593,15 +600,8 @@
 <!ATTLIST HEADER show NMTOKEN #REQUIRED >
 
 <!ELEMENT KEY EMPTY >
-<!ATTLIST KEY day NMTOKEN #REQUIRED
-              filename CDATA #REQUIRED
-              hour NMTOKEN #REQUIRED
-              minute NMTOKEN #REQUIRED
-              month NMTOKEN #REQUIRED
-              msec NMTOKEN #REQUIRED
-              name CDATA #IMPLIED
-              second NMTOKEN #REQUIRED
-              year NMTOKEN #REQUIRED>
+<!ATTLIST KEY %key;
+              name CDATA #IMPLIED >
 
 <!ELEMENT LINEBEGIN EMPTY >
 <!ATTLIST LINEBEGIN value NMTOKEN #REQUIRED >
@@ -612,12 +612,12 @@
 <!ELEMENT LINETYPE EMPTY >
 <!ATTLIST LINETYPE value NMTOKEN #REQUIRED >
 
-<!EMPLENT PICTURES ( KEY* ) >
+<!ELEMENT PICTURES ( KEY* ) >
 
-<!-- Only for KPresneter 1.1 compactibility -->
+<!-- Only for KPresenter 1.1 compactibility -->
 <!ELEMENT CLIPARTS ( KEY* ) >
 
-<!-- Only for KPresneter 1.1 compactibility -->
+<!-- Only for KPresenter 1.1 compactibility -->
 <!ELEMENT PIXMAPS ( KEY* ) >
 
 <!ELEMENT PICTURESETTINGS EMPTY>
@@ -645,16 +645,24 @@
 <!ATTLIST Point point_x NMTOKEN #REQUIRED
                 point_y NMTOKEN #REQUIRED>
 
-<!ELEMENT HELPLINES (Vertical+ Horizontal+ HelpPoint+) >
+<!ELEMENT HELPLINES (Vertical+, Horizontal+, HelpPoint+) >
 <!ATTLIST HELPLINES show NMTOKEN #REQUIRED >
-<!ELEMENT Vertical value NMTOKEN #REQUIRED >
-<!ELEMENT Horizontal value NMTOKEN #REQUIRED >
-<!ELEMENT HelpPoint posX NMTOKEN #REQUIRED
+<!ELEMENT Vertical EMPTY>
+<!ATTLIST Vertical value NMTOKEN #REQUIRED >
+<!ELEMENT Horizontal EMPTY>
+<!ATTLIST Horizontal value NMTOKEN #REQUIRED >
+<!ELEMENT HelpPoint EMPTY>
+<!ATTLIST HelpPoint posX NMTOKEN #REQUIRED
                     posY NMTOKEN #REQUIRED>
 
 <!ELEMENT SPELLCHECKIGNORELIST ( SPELLCHECKIGNOREWORD+ )>
-<!ATTLIST SPELLCHECKIGNORELIST #EMPTY>
-<!ELEMENT SPELLCHECKIGNOREWORD word NMTOKEN #REQUIRED >
+<!ATTLIST SPELLCHECKIGNORELIST >
+<!ELEMENT SPELLCHECKIGNOREWORD EMPTY>
+<!ATTLIST SPELLCHECKIGNOREWORD word NMTOKEN #REQUIRED >
 
-<!ELEMENT OBJECTSNAME >
-<!ATTLIST NAME CDATA #REQUIRED>
+<!-- ### TODO: please verify! -->
+<!ELEMENT OBJECTSNAME ANY>
+<!ATTLIST OBJECTSNAME NAME CDATA #REQUIRED>
+
+<!ELEMENT NAME EMPTY>
+<!ATTLIST NAME value CDATA #REQUIRED>
