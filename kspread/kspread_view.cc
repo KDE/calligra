@@ -3637,9 +3637,10 @@ void KSpreadView::sheetProperties()
 
     if ( directionChanged )
     {
-        // the scrollbar remains reversed otherwise
+        // the scrollbar and hborder remain reversed otherwise
         d->horzScrollBar->setValue( d->horzScrollBar->maxValue() -
                                             d->horzScrollBar->value() );
+        d->hBorderWidget->update();
     }
 }
 
