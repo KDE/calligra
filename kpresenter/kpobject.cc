@@ -442,49 +442,50 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
     if ( !r.contains( _point ) )
       return Qt::arrowCursor;
 
-    if ( px >= ox && py >= oy && px <= ox + 6 && py <= oy + 6 )
+    int sz = 4;
+    if ( px >= ox && py >= oy && px <= ox + QMIN( ow / 3, sz ) && py <= oy + QMIN( oh / 3, sz ) )
     {
         _modType = MT_RESIZE_LU;
         return Qt::sizeFDiagCursor;
     }
 
-    if ( px >= ox && py >= oy + oh / 2 - 3 && px <= ox + 6 && py <= oy + oh / 2 + 3 )
+    if ( px >= ox && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 ) && px <= ox + QMIN( ow / 3, sz) && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2 ) )
     {
         _modType = MT_RESIZE_LF;
         return Qt::sizeHorCursor;
     }
 
-    if ( px >= ox && py >= oy + oh - 6 && px <= ox + 6 && py <= oy + oh )
+    if ( px >= ox && py >= oy + oh - QMIN( oh / 3, sz ) && px <= ox + QMIN( ow / 3, sz ) && py <= oy + oh )
     {
         _modType = MT_RESIZE_LD;
         return Qt::sizeBDiagCursor;
     }
 
-    if ( px >= ox + ow / 2 - 3 && py >= oy && px <= ox + ow / 2 + 3 && py <= oy + 6 )
+    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 ) && py <= oy + QMIN( oh / 3, sz ) )
     {
         _modType = MT_RESIZE_UP;
         return Qt::sizeVerCursor;
     }
 
-    if ( px >= ox + ow / 2 - 3 && py >= oy + oh - 6 && px <= ox + ow / 2 + 3 && py <= oy + oh )
+    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy + oh - QMIN( oh / 3, sz ) && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 ) && py <= oy + oh )
     {
         _modType = MT_RESIZE_DN;
         return Qt::sizeVerCursor;
     }
 
-    if ( px >= ox + ow - 6 && py >= oy && px <= ox + ow && py <= oy + 6 )
+    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy && px <= ox + ow && py <= oy + QMIN( oh / 3, sz) )
     {
         _modType = MT_RESIZE_RU;
         return Qt::sizeBDiagCursor;
     }
 
-    if ( px >= ox + ow - 6 && py >= oy + oh / 2 - 3 && px <= ox + ow && py <= oy + oh / 2 + 3 )
+    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 ) && px <= ox + ow && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2) )
     {
         _modType = MT_RESIZE_RT;
         return Qt::sizeHorCursor;
     }
 
-    if ( px >= ox + ow - 6 && py >= oy + oh - 6 && px <= ox + ow && py <= oy + oh )
+    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh - QMIN( oh / 3, sz)  && px <= ox + ow && py <= oy + oh )
     {
         _modType = MT_RESIZE_RD;
         return Qt::sizeFDiagCursor;
