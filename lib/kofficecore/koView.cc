@@ -17,10 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koView.h"
-#include "koDocument.h"
-#include "koMainWindow.h"
-#include "koFrame.h"
+#include <koView.h>
+#include <koDocument.h>
+#include <koMainWindow.h>
+#include <koFrame.h>
 
 #include <kinstance.h>
 #include <kstddirs.h>

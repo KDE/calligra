@@ -19,15 +19,15 @@
 
 #include <fstream>
 
-#include "koDocument.h"
-#include "koDocumentChild.h"
-#include "koView.h"
-#include "koApplication.h"
-#include "koMainWindow.h"
-#include "koStream.h"
-#include "koQueryTrader.h"
-#include "koFilterManager.h"
-#include "koDocumentInfo.h"
+#include <koDocument.h>
+#include <koDocumentChild.h>
+#include <koView.h>
+#include <koApplication.h>
+#include <koMainWindow.h>
+#include <koStream.h>
+#include <koQueryTrader.h>
+#include <koFilterManager.h>
+#include <koDocumentInfo.h>
 
 #include <koStore.h>
 #include <koBinaryStore.h>
@@ -875,4 +875,4 @@ void KoDocument::removeShell( KoMainWindow *shell )
   d->m_shells.removeRef( shell );
 }
 
-#include "koDocument.moc"
+#include <koDocument.moc>
