@@ -23,7 +23,6 @@
 #include <unistd.h>
 #endif
 
-#include <qregexp.h>
 #include <qmessagebox.h>
 #include <qptrlist.h>
 #include <applixwordimport.h>
@@ -692,9 +691,9 @@ APPLIXWORDImport::replaceSpecial (QString &textstr)
   int ok, pos;
 
    // 1. Replace Part for this characters: <, >, &
-   textstr.replace (QRegExp ("&"), "&amp;");
-   textstr.replace (QRegExp ("<"), "&lt;");
-   textstr.replace (QRegExp (">"), "&gt;");
+   textstr.replace ('&', "&amp;");
+   textstr.replace ('<', "&lt;");
+   textstr.replace ('>', "&gt;");
 
 
    // 2. Replace part for this characters: applixwear qoutes

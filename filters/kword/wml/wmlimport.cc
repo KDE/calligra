@@ -23,7 +23,6 @@
 #include <unistd.h>
 #endif
 
-#include <qregexp.h>
 #include <qfileinfo.h>
 #include <qvaluelist.h>
 #include <qfont.h>
@@ -168,9 +167,9 @@ bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList,
 
   // encode the text for XML-ness
   text = atext;
-  text.replace( QRegExp("&"), "&amp;" );
-  text.replace( QRegExp("<"), "&lt;" );
-  text.replace( QRegExp(">"), "&gt;" );
+  text.replace( '&', "&amp;" );
+  text.replace( '<', "&lt;" );
+  text.replace( '>', "&gt;" );
 
   // formats, taken from formatList
   WMLFormatList::iterator it;

@@ -35,7 +35,6 @@
 #include <core/vimage.h>
 #include <qcolor.h>
 #include <qfile.h>
-#include <qregexp.h>
 #include <kfilterdev.h>
 
 typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
@@ -133,7 +132,7 @@ SvgImport::convert()
 	{
 		// allow for viewbox def with ',' or whitespace
 		QString viewbox( docElem.attribute( "viewBox" ) );
-		QStringList points = QStringList::split( ' ', viewbox.replace( QRegExp(","), " ").simplifyWhiteSpace() );
+		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplifyWhiteSpace() );
 
 		gc->matrix.scale( width / points[2].toFloat() , height / points[3].toFloat() );
 		m_outerRect.setWidth( m_outerRect.width() * ( points[2].toFloat() / width ) );
@@ -502,7 +501,7 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 	else if( command == "font-family" )
 	{
 		QString family = params;
-		family.replace( QRegExp( "'" ) , QChar( ' ' ) );
+		family.replace( '\'' ) , QChar( ' ' ) );
 		gc->font.setFamily( family );
 	}
 	else if( command == "font-size" )
@@ -675,9 +674,9 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			bool bFirst = true;
 
 			QString points = b.attribute( "points" ).simplifyWhiteSpace();
-			points.replace( QRegExp( "," ), " " );
-			points.replace( QRegExp( "\r" ), "" );
-		    points.replace( QRegExp( "\n" ), "" );
+			points.replace( ',' ), ' ' );
+			points.remove( '\r' );
+		        points.removr( '\n' );
 			QStringList pointList = QStringList::split( ' ', points );
 			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); it++ )
 			{

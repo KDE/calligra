@@ -235,7 +235,7 @@ void DocBookWorker::ProcessTableData ( const Table &table )
 
         doFullDocument ( *(*cellIt).paraList );
 
-        tableText += "        <ENTRY>" + outputText.replace ( '\n' , "" ) + "</ENTRY>\n";
+        tableText += "        <ENTRY>" + outputText.remove ( '\n' ) + "</ENTRY>\n";
 
         outputText = tmpBuf;
     }

@@ -19,7 +19,6 @@
 #include "misc.h"
 
 #include <math.h>
-#include <qregexp.h>
 #include <qfontmetrics.h>
 #include <qfontdatabase.h>
 #include <kglobal.h>
@@ -181,7 +180,7 @@ void Font::init(const QString &n)
     if ( _data==0 ) {
 //        kdDebug(30516) << "font " << n << endl;
         QString name = n;
-        name.replace(QRegExp("oblique"), "italic"); // QRegExp(...) for Qt 3.0
+        name.replace("oblique", "italic");
 
         // check if known font
         _data = new Data;

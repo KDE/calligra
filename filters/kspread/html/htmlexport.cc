@@ -20,7 +20,6 @@
 
 #include <htmlexport.h>
 
-#include <qregexp.h>
 #include <qfile.h>
 
 #include <kdebug.h>

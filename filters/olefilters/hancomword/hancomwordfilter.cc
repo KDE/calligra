@@ -21,7 +21,6 @@
 #include <qfont.h>
 #include <qstring.h>
 #include <qtextstream.h>
-#include <qregexp.h>
 
 #include <filterbase.h>
 #include <koGlobal.h>
@@ -120,7 +119,7 @@ static QString processPlainDocument( QString plaindoc )
   for( int i = 0; i < paragraphs.count(); i++ )
   {
       QString text = paragraphs[i];
-      text.replace( QRegExp("\r"), " " );
+      text.replace( '\r', ' ' );
       content.append( processPlainParagraph( text ) );
   }
 

@@ -23,7 +23,6 @@
 #include <unistd.h>
 #endif
 
-#include <qregexp.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
 #include <qfont.h>
@@ -134,12 +133,11 @@ QString PalmDocImport::processPlainParagraph( QString text )
   layout.append( "</LAYOUT>\n" );
 
   // encode text for XML-ness
-  // FIXME could be faster without QRegExp
-  text.replace( QRegExp("&"), "&amp;" );
-  text.replace( QRegExp("<"), "&lt;" );
-  text.replace( QRegExp(">"), "&gt;" );
-  text.replace( QRegExp("\""), "&quot;" );
-  text.replace( QRegExp("'"), "&apos;" );
+  text.replace( '&', "&amp;" );
+  text.replace( '<', "&lt;" );
+  text.replace( '>', "&gt;" );
+  text.replace( '"', "&quot;" );
+  text.replace( '\'', "&apos;" );
 
   // construct the <PARAGRAPH>
   result.append( "<PARAGRAPH>\n" );
@@ -162,7 +160,7 @@ QString PalmDocImport::processPlainDocument( QString plaindoc )
   for( int i = 0; i < paragraphs.count(); i++ )
   {
       QString text = paragraphs[i];
-      text.replace( QRegExp("\n"), " " );
+      text.replace( '\n', ' ' );
       content.append( processPlainParagraph( text ) );
   }
 

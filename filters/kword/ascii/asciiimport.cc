@@ -29,7 +29,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qregexp.h>
+// #include <qregexp.h> // Currently not needed (due to disabled code)
 #include <qtextcodec.h>
 #include <qfile.h>
 #include <qtextstream.h>
@@ -638,7 +638,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
              {
              // save and remove tabs at beginning of the line
              text = *Line;  // copy
-             Line->replace(QRegExp("^[\\ \t]*"), "");
+             Line->remove(QRegExp("^[\\ \t]*"));
              }
 
          // find column positions and record text fields
@@ -855,13 +855,13 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
                      {
                      type = "6";
                      // delete * at beginning of line
-                     text.replace( QRegExp("^[ \t]*\\* "), "");
+                     text.remove( QRegExp("^[ \t]*\\* ") );
                      }
                   else if( listtype[begin] == dash) // write out a dash list
                      {
                      type = "7";
                      // delete - at beginning of line
-                     text.replace( QRegExp("^[ \t]*\\- "), "");
+                     text.remove( QRegExp("^[ \t]*\\- ") );
                      }
                   else if( listtype[begin] == none) // write out a paragraph
                      type = "";

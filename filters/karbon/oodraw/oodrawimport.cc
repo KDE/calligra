@@ -22,7 +22,6 @@
 
 #include <math.h>
 
-#include <qregexp.h>
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qdir.h>
@@ -656,7 +655,7 @@ OoDrawImport::parseViewBox( const QDomElement& object )
 	{
 		// allow for viewbox def with ',' or whitespace
 		QString viewbox( object.attribute( "svg:viewBox" ) );
-		QStringList points = QStringList::split( ' ', viewbox.replace( QRegExp(","), " ").simplifyWhiteSpace() );
+		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplifyWhiteSpace() );
 
 		rect.setX( points[0].toFloat() );
 		rect.setY( points[1].toFloat() );

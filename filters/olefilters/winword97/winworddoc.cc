@@ -22,7 +22,6 @@
 #include <ktempfile.h>
 #include <properties.h>
 #include <qfile.h>
-#include <qregexp.h>
 #include <qcolor.h>
 #include <winworddoc.h>
 #include <typeinfo>
@@ -272,21 +271,18 @@ void WinWordDoc::encode(QString &text)
     // accidentally converting user text into one of the other escape
     // sequences.
 
-    text.replace(QRegExp("&"), "&amp;");
-    text.replace(QRegExp("<"), "&lt;");
-
-    // Strictly, there is no need to encode >, but we do so to for safety.
-
-    text.replace(QRegExp(">"), "&gt;");
+    text.replace('&', "&amp;");
+    text.replace('<', "&lt;");
+    text.replace('>', "&gt;"); // Needed to avoid ]]>
 
     // Strictly, there is no need to encode " or ', but we do so to allow
     // them to co-exist!
 
-    text.replace(QRegExp("\""), "&quot;");
-    text.replace(QRegExp("'"), "&apos;");
+    text.replace('"', "&quot;");
+    text.replace('\'', "&apos;");
 
     // Replace ASCII 12 with a page break.
-    text.replace(QRegExp("\14"), "</TEXT>\n<LAYOUT>\n<PAGEBREAKING hardFrameBreakAfter=\"true\" /></LAYOUT>\n</PARAGRAPH>\n<PARAGRAPH>\n<TEXT>");
+    text.replace(char(12), "</TEXT>\n<LAYOUT>\n<PAGEBREAKING hardFrameBreakAfter=\"true\" /></LAYOUT>\n</PARAGRAPH>\n<PARAGRAPH>\n<TEXT>");
 
 }
 
