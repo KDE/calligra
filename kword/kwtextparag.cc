@@ -885,3 +885,10 @@ void KWTextParag::saveParagLayout( const KoParagLayout& layout, QDomElement & pa
         }
     }
 }
+
+void KWTextParag::join( QTextParag *parag )
+{
+    m_layout.pageBreaking &= ~(KoParagLayout::HardFrameBreakBefore|KoParagLayout::HardFrameBreakAfter);
+    KoTextParag::join( parag );
+}
+

@@ -80,6 +80,7 @@ public:
     static KoParagLayout loadParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
     static void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
+    virtual void join( QTextParag *parag );
 protected:
     virtual void drawFormattingChars( QPainter &painter, const QString &s, int start, int len,
                                       int startX, int lastY, int baseLine, int h, // in LU
