@@ -75,9 +75,11 @@ Bugfixes:
 - Fix autocorrection (crash/change language etc...)
 - Fix update sidebar
 - Fix key event when text object is protect content.
+- Fix group object : allow to change text object attribute, fix load close object etc...
 
 Crashes:
 - Fixed crash when we close kword and "special char dialogbox" is not closed
 - Fixed several memory leaks
 - Fixed crash when we cancel insert time/date variable.
 - Fixed crash when we duplicate page and there was an embedded document.
+- Fixed crash when we split view and we try to open menu when factory() is null

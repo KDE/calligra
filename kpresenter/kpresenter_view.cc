@@ -4887,28 +4887,28 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
 
 void KPresenterView::openPopupMenuTextObject( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
      static_cast<QPopupMenu*>(factory()->container("textobject_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuPartObject( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
      static_cast<QPopupMenu*>(factory()->container("partobject_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuRectangleObject( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
      static_cast<QPopupMenu*>(factory()->container("rectangleobject_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuGraphMenu(const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
      static_cast<QPopupMenu*>(factory()->container("graphmenu_popup",this))->popup(_point);
 }
@@ -4916,14 +4916,14 @@ void KPresenterView::openPopupMenuGraphMenu(const QPoint & _point )
 
 void KPresenterView::openPopupMenuPieObject( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
      static_cast<QPopupMenu*>(factory()->container("piemenu_popup",this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     static_cast<QPopupMenu*>(factory()->container("sidebarmenu_popup",this))->popup(_point);
 
@@ -4931,7 +4931,7 @@ void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
 
 void KPresenterView::openPopupMenuPicObject(const QPoint & _point)
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     static_cast<QPopupMenu*>(factory()->container("picmenu_popup",this))->popup(_point);
 
@@ -4939,7 +4939,7 @@ void KPresenterView::openPopupMenuPicObject(const QPoint & _point)
 
 void KPresenterView::openPopupMenuPolygonObject( const QPoint &_point )
 {
-    if ( !koDocument()->isReadWrite() )
+    if ( !koDocument()->isReadWrite() || !factory())
         return;
     static_cast<QPopupMenu*>( factory()->container( "polygonobject_popup", this ) )->popup( _point );
 }
@@ -6633,7 +6633,7 @@ void KPresenterView::changeHelpLinePosition()
 
 void KPresenterView::openPopupMenuHelpLine( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() || !m_pKPresenterDoc->showHelplines())
+    if(!koDocument()->isReadWrite() || !factory() || !m_pKPresenterDoc->showHelplines())
         return;
     static_cast<QPopupMenu*>(factory()->container("helpline_popup",this))->popup(_point);
 }
@@ -6694,7 +6694,7 @@ void KPresenterView::changeHelpPointPosition()
 
 void KPresenterView::openPopupMenuHelpPoint( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() || !m_pKPresenterDoc->showHelplines())
+    if(!koDocument()->isReadWrite() || !factory()|| !m_pKPresenterDoc->showHelplines())
         return;
     static_cast<QPopupMenu*>(factory()->container("helppoint_popup",this))->popup(_point);
 }
@@ -6718,7 +6718,7 @@ void KPresenterView::addHelpPoint()
 void KPresenterView::openPopupMenuZoom( const QPoint & _point )
 {
     //for the future or today :)
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     actionZoomSelectedObject->setEnabled( m_canvas->isOneObjectSelected());
     int nbObj=(m_pKPresenterDoc->stickyPage()->objectList().count()-2)+m_canvas->activePage()->objectList().count();
@@ -6814,7 +6814,7 @@ void KPresenterView::flipVertical()
 
 void KPresenterView::openPopupMenuFlipObject( const QPoint &_point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     static_cast<QPopupMenu*>(factory()->container("flip_popup",this))->popup(_point);
 }
@@ -7076,7 +7076,7 @@ void KPresenterView::closeObject()
 
 void KPresenterView::openPopupMenuCloseObject( const QPoint &_point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     static_cast<QPopupMenu*>(factory()->container("closed_popup",this))->popup(_point);
 }
