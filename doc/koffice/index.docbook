@@ -162,7 +162,26 @@ STUFF</para></sect1>
 
 <chapter id="firststeps">
 <title>First steps in &KOffice;</title>
-<para></para>
+<para>At this point you (hopefully) have installed &KOffice;.  This chapter wants to make your first steps in the world of &KOffice;
+a little easier.</para>
+<sect1 id="startkofficeapps"><title>How to start &KOffice; applications</title>
+<para>
+After you've installed &KOffice; there are several ways how to start the different
+applications:
+<itemizedlist>
+<listitem><para>You can start an application from the commandline (e.g. from a <application>konsole</application> window) by
+typing its name, followed by pressing <keycap>RETURN</keycap>, e.g. <command>kword</command>. You may want to add a trailing &amp; 
+(e.g.: <command>kword &amp;</command>) if you want to continue working on the <application>konsole</application>.</para></listitem>
+<listitem><para></para></listitem>
+<listitem><para>You can start the applications from <application>kicker</application>, the KDE panel. It depends on your distribution
+where you'll find the &KOffice; menu, but most likely it will be in the "applications" menu. If you can't find &KOffice; applications in
+your <application>kicker</application> menu, maybe you haven't restarted kicker after installing &KOffice;. To restart <application>kicker</application>
+click on "Restart" in the "Panel" menu.</para></listitem>
+<listitem><para>If the mimetypes have been installed (don't worry, they <emphasis>should</emphasis> have), you can click on the icon of a
+&KOffice; document and the corresponding application will be started to edit this document. Remember KDE uses a single-click to do this.</para></listitem>
+</itemizedlist>
+
+</para>
 </chapter>
 
 <chapter id="kparts">
@@ -247,8 +266,61 @@ try inserting other parts or even parts in parts.
 </chapter>
 
 <chapter id="customization">
-<title>Customizing &KOffice;</title>
-<para>This chapter shows you how to customize KOffice to suit your needs.</para>
+<title>Optimizing &KOffice; and Your System</title>
+<para>While &KOffice; should work quite nice out of the box, there may well be some things
+to optimize to get the best out of &KOffice;. This chapter shows you what you might want to do
+to achieve the best results with your new office suite.</para>
+<sect1 id="thefontissue"><title>Optimizing Font Output</title>
+<para>
+Fonts are a difficult topic on X Windows. In this section we'll cover some problems that are
+frequently reported by people using &KOffice;. Some problems are not just &KOffice;s fault, but
+depend on your system configuration, which is why you may need to modify system configuration
+files in order to solve them. If you don't have access to the root account on your system, please
+ask your system operator about this and point him or her to this manual. As the topic of fonts is
+too complex to cover all of it here, you may want to consult the 
+<ulink url="http://pegasus.rutgers.edu/~elflord/font_howto/html/">Font HOWTO</ulink> from which
+I've taken the following information. You will find more details there.
+</para>
+<sect2><title>How to Get Nicely Scaled Fonts on Screen</title>
+<para>
+STUFF
+</para>
+</sect2>
+<sect2><title>How to Get Correct Printout</title>
+<para>
+While &KOffice; automatically can handle all X11 fonts <emphasis>on screen</emphasis>, printout 
+can pose a problem: on most systems, printing is done via <application>ghostscript</application>. Now,
+while &KOffice; knows the font names used by X Windows, it does normally <emphasis>not</emphasis>
+know the font names used by ghostscript. &KOffice; tries to guess these names, which unfortunately
+doesn't work all of the time.
+</para>
+<para>
+This problem can be solved, although this is not that easy. Actually, maybe you are using a distribution
+which has done most work for you already (so if you have no reason to complain about printout you can
+skip this section). What you have to do is to tell <application>ghostscript</application> how to 
+translate the (guessed) font names &KOffice; uses to its own font names. This can be done by adding
+lines to a file called <filename>Fontmap</filename>. An alias line in <filename>Fontmap</filename>
+looks like the following example:</para>
+<example><title>An alias in the ghostscript Fontmap</title>
+<screen>
+	/Algerian-Roman /Algerian       ;</screen>
+</example>
+<para>
+Please note that a space before the ';' is mandatory. In this example, Algerian-Roman is the name 
+&KOffice; uses for Algerian. You'll have to add such lines for the fonts &KOffice; doesn't display correctly.
+To make this task easier, Donovan Rebbechi has written a perl script you can find at 
+<ulink url="http://pegasus.rutgers.edu/~elflord/font_howto/kwdfont">http://pegasus.rutgers.edu/~elflord/font_howto/kwdfont</ulink>.
+Assuming that you have a fontfile <filename>/usr/share/ghostscript/fonts/fontfile.ttf</filename> you'll enter
+<screen>
+kwdfont /usr/share/ghostscript/fonts/fontfile.ttf
+</screen>
+to get the appropriate aliases. The script should mork in most cases. As mentioned, you should
+have a look at the <ulink url="http://pegasus.rutgers.edu/~elflord/font_howto/html/">Font HOWTO</ulink>
+for more accurate and in-depth information.
+</para>
+</sect2>
+</sect1>
+
 <sect1 id="customgui"><title>Customizing the &KOffice; GUI</title>
 <para>
 While &KOffice; will come out of the box with a GUI that should suit most people's needs,
@@ -371,8 +443,8 @@ in the <filename>example</filename> directory.
 <chapter id="legal">
 <title>Copyright and Licensing</title>
 <para>
-KOffice is copyrighted by the KOffice team.
-KOffice is licensed mainly under the terms of the <ulink url="common/gpl-license.html">GNU GPL</ulink>.
+&KOffice; is copyrighted by the &KOffice; team.
+&KOffice; is licensed mainly under the terms of the <ulink url="common/gpl-license.html">GNU GPL</ulink>.
 </para>
 <para>
 Some programs are licensed under the terms of the Artistic License. FIXME: put artistic-license.html in common!
