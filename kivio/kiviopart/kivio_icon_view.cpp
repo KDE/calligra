@@ -103,7 +103,7 @@ void KivioIconViewItem::setStencilSpawner( KivioStencilSpawner *pSpawn )
 
     if( !m_pSpawner )
     {
-        setText( "Untitled" );
+        setText( i18n("untitled stencil", "Untitled") );
     }
     else
     {

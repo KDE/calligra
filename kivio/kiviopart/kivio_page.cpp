@@ -81,7 +81,7 @@ KivioPage::KivioPage( KivioMap *_map, const char *_name )
 
   // Make sure the layers auto-delete themselves
   m_pCurLayer = new KivioLayer(this);
-  m_pCurLayer->setName("Layer 1");
+  m_pCurLayer->setName(i18n("Layer 1"));
   m_lstLayers.append( m_pCurLayer );
   m_lstLayers.setAutoDelete(true);
 
