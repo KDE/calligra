@@ -4,7 +4,7 @@
 #include "kwordframeset.h"
 #include "kworddocument.h"
 
-StackItem::StackItem() : elementType( ElementTypeUnknown )
+StackItem::StackItem() : elementType( ElementTypeUnknown ), m_currentFrameset( 0 ), m_paragraph( 0 )
 {
 }
 
@@ -12,7 +12,7 @@ StackItem::~StackItem()
 {
 }
 
-KWordParser::KWordParser( KWordDocument* kwordDocument ) : m_kwordDocument(kwordDocument), m_currentFrameset(0)
+KWordParser::KWordParser( KWordDocument* kwordDocument ) : m_kwordDocument(kwordDocument)
 {
     parserStack.setAutoDelete( true );
     StackItem* bottom = new StackItem;
@@ -23,6 +23,63 @@ KWordParser::KWordParser( KWordDocument* kwordDocument ) : m_kwordDocument(kword
 KWordParser::~KWordParser( void )
 {
     parserStack.clear();
+}
+
+bool KWordParser::startElementParagraph( const QString&, const QXmlAttributes&, StackItem *stackItem )
+{
+    if ( stackItem->elementType == ElementTypeUnknownFrameset )
+    {
+        stackItem->elementType = ElementTypeIgnore;
+        return true;
+    }
+
+    stackItem->elementType = ElementTypeParagraph;
+    
+    if ( stackItem->m_currentFrameset )
+    {
+        stackItem->m_paragraph = new KWordParagraph;
+    }
+    else
+    {
+        return false;
+    }    
+    return true;
+}
+
+bool KWordParser::startElementFrame( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem )
+{
+    if ( stackItem->elementType == ElementTypeFrameset )
+    {
+        stackItem->elementType = ElementTypeEmpty;
+        if ( stackItem->m_currentFrameset )
+        {
+            const int num = ++stackItem->m_currentFrameset->m_numFrames;
+            for (int i = 0; i < attributes.count(); ++i )
+            {
+                QString attrName ( name );
+                attrName += ':';
+                attrName += QString::number( num );
+                attrName += ':';
+                attrName += attributes.qName( i );
+                stackItem->m_currentFrameset->m_frameData[ attrName ] = attributes.value( i );
+                qDebug("FrameData: %s = %s", attrName.latin1(), attributes.value( i ).latin1() );
+            }
+            
+        }
+        else
+        {
+            //kdError(30520) << "Data of <FRAMESET> not found" << endl;
+            qDebug("Data of <FRAMESET> not found");
+            return false;
+        }
+    }
+    else if ( stackItem->elementType != ElementTypeUnknownFrameset )
+    {
+        //kdError(30520) << "<FRAME> not child of <FRAMESET>" << endl;
+        qDebug("<FRAME> not child of <FRAMESET>");
+        return false;
+    }
+    return true;
 }
 
 bool KWordParser::startElementFrameset( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem )
@@ -49,19 +106,20 @@ bool KWordParser::startElementFrameset( const QString& name, const QXmlAttribute
             
             KWordNormalTextFrameset* frameset = new KWordNormalTextFrameset( frameType, frameInfo, attributes.value( "name" ) );
             m_kwordDocument->m_normalTextFramesetList.append( frameset );
-            m_currentFrameset = m_kwordDocument->m_normalTextFramesetList.current();
+            stackItem->m_currentFrameset = m_kwordDocument->m_normalTextFramesetList.current();
         }
         else
         {
             qDebug("Tables are not supported yet!");
+            stackItem->elementType = ElementTypeUnknownFrameset;
         }
     }
     else
     {
-        // Frame of unknown/unsupport type
+        // Frame of unknown/unsupported type
         //kdWarning(30520) << "Unknown/unsupported <FRAMESET> type! Type: " << frameTypeStr << " Info: " << frameInfoStr << emdl;
         qDebug("Unknown <FRAMESET> type! Type: %i Info: %i", frameType, frameInfo);
-        stackItem->elementType = ElementTypeUnknown;
+        stackItem->elementType = ElementTypeUnknownFrameset;
     }
     return true;
 }
@@ -115,7 +173,28 @@ bool KWordParser::startElement( const QString&, const QString&, const QString& n
 
     bool success=false;
 
-    if ( name == "FRAMESET" )
+    if ( name == "TEXT" )
+    {
+        if ( stackItem->elementType == ElementTypeParagraph )
+        {
+            stackItem->elementType = ElementTypeText;
+            stackItem->m_paragraph->m_text = QString::null;
+        }
+        else
+        {
+            stackItem->elementType = ElementTypeIgnore;
+        }
+        success = true;
+    }
+    else if ( name == "PARAGRAPH" )
+    {
+        success = startElementParagraph( name, attributes, stackItem );
+    }
+    else if ( name == "FRAME" )
+    {
+        success = startElementFrame( name, attributes, stackItem );
+    }
+    else if ( name == "FRAMESET" )
     {
         success = startElementFrameset( name, attributes, stackItem );
     }
@@ -167,7 +246,29 @@ bool KWordParser :: endElement( const QString&, const QString& , const QString& 
 
     bool success=false;
     
-    if ( name == "DOC" )
+    StackItem *stackItem=parserStack.pop();
+        
+    if ( stackItem->elementType == ElementTypeParagraph )
+    {
+        // We have a KWordParagraph defined only on our stack, so we delete it in all cases.
+        if ( name == "PARAGRAPH" )
+        {
+            if ( stackItem->m_currentFrameset && stackItem->m_paragraph )
+            {
+               if ( stackItem->m_currentFrameset->addParagraph( *stackItem->m_paragraph ) )
+               {
+                   success = true;
+               }
+            }
+        }
+        if ( !success)
+        {
+            qDebug("Something when wrong when closing paragraph. Probably mismatched tags!");
+        }
+        delete stackItem->m_paragraph;
+        stackItem->m_paragraph = 0;
+    }
+    else if ( name == "DOC" )
     {
         success = true;
     }
@@ -175,8 +276,6 @@ bool KWordParser :: endElement( const QString&, const QString& , const QString& 
     {
         success = true; // No problem, so authorisation to continue parsing
     }
-
-    StackItem *stackItem=parserStack.pop();
     
     if (!success)
     {
@@ -187,5 +286,64 @@ bool KWordParser :: endElement( const QString&, const QString& , const QString& 
     
     delete stackItem;
     
+    return success;
+}
+
+bool KWordParser :: characters ( const QString & ch )
+{
+#if 0
+    // DEBUG start
+    if (ch=="\n")
+    {
+        kdDebug(30520) << indent << " (LINEFEED)" << endl;
+    }
+    else if (ch.length()> 40)
+    {   // 40 characters are enough (especially for image data)
+        kdDebug(30520) << indent << " :" << ch.left(40) << "..." << endl;
+    }
+    else
+    {
+        kdDebug(30520) << indent << " :" << ch << ":" << endl;
+    }
+    // DEBUG end
+#endif
+
+    if (parserStack.isEmpty())
+    {
+        //kdError(30520) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
+        qDebug("Stack is empty!! Aborting! (in KWordParser::characters)");
+        return false;
+    }
+
+    bool success=false;
+
+    StackItem *stackItem = parserStack.current();
+
+    if ( stackItem->elementType == ElementTypeText )
+    { 
+        // <TEXT>
+        if ( stackItem->m_paragraph )
+        {
+            stackItem->m_paragraph->m_text += ch;
+            success = true;
+        }
+        else
+            success = false;
+    }
+    else if (stackItem->elementType==ElementTypeEmpty)
+    {
+        success=ch.stripWhiteSpace().isEmpty();
+        if (!success)
+        {
+            // We have a parsing error, so abort!
+            // kdError(30520) << "Empty element "<< stackItem->itemName <<" is not empty! Aborting! (in KWordParser::characters)" << endl;
+            qDebug("Empty element %s  is not empty! Aborting! (in KWordParser::characters)", stackItem->itemName.latin1());
+        }
+    }
+    else
+    {
+        success=true;
+    }
+
     return success;
 }
