@@ -3017,7 +3017,7 @@ void KWTextFrameSetEdit::setUnderline( bool on ) {
 void KWTextFrameSetEdit::setStrikeOut( bool on ) {
     KWTextFormat format( *m_currentFormat );
     format.setStrikeOut( on);
-    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Format );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, KWTextFormat::StrikeOut );
 }
 
 QColor KWTextFrameSetEdit::textColor() const {
