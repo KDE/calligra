@@ -180,7 +180,7 @@ protected:
    */
   QTextStream* m_outStream;
   /**
-   * Used for @ref #m_stream
+   * Used for @ref #m_outStream
    */
   QIODevice* m_outDevice;
   /**
