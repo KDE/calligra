@@ -20,6 +20,8 @@
 #include <kppixmapobject.h>
 #include <kpgradient.h>
 
+#include "KPPixmapObjectIface.h"
+
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qfileinfo.h>
@@ -56,6 +58,14 @@ KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection, const KPIma
 
     setPixmap( key );
 }
+
+DCOPObject* KPPixmapObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPPixmapObjectIface( this );
+    return dcop;
+}
+
 
 /*================================================================*/
 KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )

@@ -43,6 +43,8 @@ public:
 
     KPPixmapObject &operator=( const KPPixmapObject & );
 
+    virtual DCOPObject* dcopObject();
+
     // Only used as a default value in the filedialog, in changePicture
     // Don't use for anything else
     QString getFileName() const

@@ -18,6 +18,7 @@
 */
 
 #include <kpautoformobject.h>
+#include "KPAutoFormObjectIface.h"
 #include <kpresenter_utils.h>
 #include <kpgradient.h>
 
@@ -74,6 +75,14 @@ KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
 {
     return *this;
 }
+
+DCOPObject* KPAutoformObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPAutoFormObjectIface( this );
+    return dcop;
+}
+
 
 /*====================== set filename ============================*/
 void KPAutoformObject::setFileName( const QString & _filename )

@@ -29,6 +29,7 @@
 #define RAD_FACTOR 180.0 / M_PI
 
 class KPGradient;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPAutoformObject                                        */
@@ -44,6 +45,8 @@ public:
     virtual ~KPAutoformObject() {}
 
     KPAutoformObject &operator=( const KPAutoformObject & );
+
+    virtual DCOPObject* dcopObject();
 
     virtual void setFileName( const QString &_filename );
     virtual void setLineBegin( LineEnd _lineBegin )
