@@ -92,7 +92,7 @@ public:
         SdAll = SdPen | SdBrush | SdGradient | SdEndBeginLine
     };
 
-    StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SdAll );
+    StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SdAll, bool _noStickyObj = true );
     ~StyleDia();
 
     void setPen( const QPen &_pen );
@@ -133,7 +133,7 @@ private:
     QSlider *xfactor, *yfactor;
     QLabel *xfactorLabel, *yfactorLabel;
     KPGradient *gradient;
-    bool lockUpdate;
+    bool lockUpdate, stickyObj;
     int flags;
 
 private slots:

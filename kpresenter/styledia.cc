@@ -129,13 +129,15 @@ void PBPreview::drawContents( QPainter *painter )
 /******************************************************************/
 
 /*==============================================================*/
-StyleDia::StyleDia( QWidget* parent, const char* name, int flags_ )
+StyleDia::StyleDia( QWidget* parent, const char* name, int flags_, bool _stickyObj )
     : QTabDialog( parent, name, true ), flags( flags_ )
 {
     lockUpdate = true;
+    stickyObj = _stickyObj;
     setupTab1();
     setupTab2();
-    setupTab3();
+    if (stickyObj)
+        setupTab3();
     lockUpdate = false;
 
     if ( flags & SdPen )
@@ -677,13 +679,16 @@ int StyleDia::getGYFactor()
 
 void StyleDia::setSticky( bool s )
 {
-    sticky->setChecked( s );
+    if( stickyObj)
+        sticky->setChecked( s );
 }
 
 
 bool StyleDia::isSticky()
 {
-    return sticky->isChecked();
+    if( stickyObj )
+        return sticky->isChecked();
+    return false;
 }
 
 #include <styledia.moc>

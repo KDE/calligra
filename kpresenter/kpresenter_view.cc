@@ -917,7 +917,18 @@ void KPresenterView::extraPenBrush()
         styleDia = 0;
     }
     KPrPage * page=m_canvas->activePage();
-    styleDia = new StyleDia( this, "StyleDia", m_canvas->getPenBrushFlags() );
+    bool canHaveStickyObj = true;
+    if(m_canvas->numberOfObjectSelected()==1)
+    {
+        KPObject *obj=m_canvas->getSelectedObj();
+        //disable this action when we select a header/footer
+        if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
+        {
+            canHaveStickyObj = false;
+        }
+    }
+
+    styleDia = new StyleDia( this, "StyleDia", m_canvas->getPenBrushFlags(),canHaveStickyObj );
     styleDia->setPen( page->getPen( pen ) );
     styleDia->setBrush( page->getBrush( brush ) );
     styleDia->setLineBegin( page->getLineBegin( lineBegin ) );
