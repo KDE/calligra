@@ -28,12 +28,53 @@
 
 #include <komlMime.h>
 #include <koStream.h>
+#include <kword_utils.h>
 
 #include <strstream>
 #include <fstream>
 #include <unistd.h>
 
 #include <qimage.h>
+
+/******************************************************************/
+/* Class: KWCharAnchor						  */
+/******************************************************************/
+
+/*================================================================*/
+KWCharAnchor::KWCharAnchor() :
+    KWCharAttribute()
+{
+    classId = ID_KWCharAnchor;
+    anchored = false;
+    origin = QPoint( 0, 0 );
+}
+
+/*================================================================*/
+void KWCharAnchor::setAnchored( bool _anchored )
+{
+    anchored = _anchored;
+}
+
+/*================================================================*/
+void KWCharAnchor::setOrigin( QPoint _origin )
+{
+    // If the origin is being changed, and the anchoring logic is enabled,
+    // signal the derived object to move!
+    if ( anchored )
+    {
+        unsigned int dx = _origin.x() - origin.x();
+        unsigned int dy = _origin.y() - origin.y();
+
+        moveBy( dx, dy );
+    }
+    origin = _origin;
+}
+
+/*================================================================*/
+void KWCharAnchor::save( ostream &out )
+{
+    out << indent << "<ANCHORS " << correctQString( anchorFor() ).latin1() << "/>" << endl;
+}
 
 /******************************************************************/
 /* Class: KWString						  */
@@ -261,6 +302,23 @@ void KWString::insert( unsigned int _pos, KWCharFootNote *_fn )
 }
 
 /*================================================================*/
+void KWString::insert( unsigned int _pos, KWCharAnchor *_anchor )
+{
+    assert( _pos <= _len_ );
+
+    unsigned int l = _len_;
+
+    resize( _len_ + 1 );
+
+    if ( _pos < l )
+	memmove( _data_ + _pos + 1, _data_ + _pos, sizeof( KWChar ) * ( l - _pos ) );
+
+    _data_[ _pos ].c = KWSpecialChar;
+    _data_[ _pos ].attrib = _anchor;
+    cache.insert( _pos, KWSpecialChar );
+}
+
+/*================================================================*/
 void KWString::clear()
 {
     remove( 0, size() );
@@ -365,6 +423,12 @@ void KWString::saveFormat( ostream &out )
 		out << etag << "</FORMAT>" << endl;
 	    } break;
 	    case ID_KWCharFootNote: {
+		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">"
+		    << endl;
+		_data_[ i ].attrib->save( out );
+		out << etag << "</FORMAT>" << endl;
+	    } break;
+	    case ID_KWCharAnchor: {
 		out << otag << "<FORMAT id=\"" << _data_[ i ].attrib->getClassId() << "\" pos=\"" << i << "\">"
 		    << endl;
 		_data_[ i ].attrib->save( out );
@@ -556,6 +620,46 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 
 		    doc->getFootNoteManager().insertFootNoteInternal( fn );
 		} break;
+		case ID_KWCharAnchor: {
+                    KWCharAnchor *anchor = NULL;
+
+		    while ( parser.open( 0L, tag ) ) {
+			KOMLParser::parseTag( tag.c_str(), name, lst );
+
+			if ( name == "ANCHORS" ) {
+			    KOMLParser::parseTag( tag.c_str(), name, lst );
+			    vector<KOMLAttrib>::const_iterator it = lst.begin();
+			    for ( ; it != lst.end(); it++ ) {
+				if ( ( *it ).m_strName == "grpMgr" ) {
+                                    KWGroupManager *group = new KWGroupManager( doc );
+	                            group->setName( QString( ( *it ).m_strValue.c_str() ) );
+	                            group->setAnchored( true );
+		                    doc->addGroupManager( group );
+                                    anchor = group;
+				}
+                                else {
+			            cerr << "Unknown attrib 'ANCHORS:" << ( *it ).m_strName << "'" << endl;
+				}
+		            }
+		        }
+		        else {
+		            cerr << "Unknown tag '" << tag << "' in FORMAT" << endl;
+		        }
+
+			if ( !parser.close( tag ) ) {
+			    cerr << "ERR: Closing Child" << endl;
+			    return;
+			}
+		    }
+
+                    // If we managed to find a valid anchor, store it.
+                    if ( anchor )
+                    {
+		        freeChar( _data_[ __pos ], doc, allowRemoveFn );
+		        _data_[ __pos ].c = KWSpecialChar;
+		        _data_[ __pos ].attrib = anchor;
+                    }
+		} break;
 		default: break;
 		}
 		_load = false;
@@ -647,6 +751,11 @@ KWChar* KWString::copy( KWChar *_data, unsigned int _len )
 		f->setFormat( attrib->getFormat() );
 		__data[ i ].attrib = f;
 	    } break;
+	    case ID_KWCharAnchor: {
+		KWGroupManager *attrib = dynamic_cast<KWGroupManager*>( _data[ i ].attrib );
+	        KWGroupManager *a = new KWGroupManager( *attrib );
+		__data[ i ].attrib = a;
+	    } break;
 	    }
 	}
 	else __data[ i ].attrib = 0L;
@@ -694,6 +803,11 @@ KWChar& KWString::copy( KWChar _c )
 						    getFootNote()->copy() );
 	    f->setFormat( attrib->getFormat() );
 	    c->attrib = f;
+	} break;
+	case ID_KWCharAnchor: {
+	    KWGroupManager *attrib = dynamic_cast<KWGroupManager*>( _c.attrib );
+	    KWGroupManager *a = new KWGroupManager( *attrib );
+	    c->attrib = a;
 	} break;
 	}
     }
@@ -867,6 +981,14 @@ QString KWString::decoded()
 
     str.append( "_" );
 
+    // When encoding the run-time form of text to its stored form,
+    // be sure to do the conversion for "&amp;" to "&" first to avoid
+    // accidentally converting user text into one of the other escape
+    // sequences. 
+    //
+    // Note that the conversion for "&amp;" allows for coexistance
+    // with QDom-based input filters.
+    str.replace( QRegExp( "&" ), "&amp;" );
     str.replace( QRegExp( "<" ), "&lt;" );
     str.replace( QRegExp( ">" ), "&gt;" );
 
@@ -902,6 +1024,13 @@ void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 	    if ( allowRemoveFn ) {
 		_doc->getFootNoteManager().
 		    removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
+	    }
+	    delete _char.attrib;
+	} break;
+	case ID_KWCharAnchor: {
+            KWCharFootNote *anchor = (KWCharFootNote *)_char.attrib;
+	    if ( allowRemoveFn ) {
+		cerr << "TBD: implement delete table" << endl;
 	    }
 	    delete _char.attrib;
 	} break;
