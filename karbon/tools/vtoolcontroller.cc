@@ -40,6 +40,7 @@
 VToolController::VToolController( KarbonPart *part ) : m_part( part )
 {
 	//m_tools.setAutoDelete( true );
+	m_activeTool = 0L;
 }
 
 void
@@ -61,6 +62,7 @@ VToolController::init()
 	m_starTool			= new VStarTool( m_part );
 	m_textTool			= new VTextTool( m_part, "" );
 	m_clipartTool		= new VClipartTool( m_part, "" );
+	m_activeTool		= m_selectTool;
 }
 
 VToolController::~VToolController()
@@ -102,9 +104,8 @@ void
 VToolController::registerTool( VTool *tool )
 {
 	if( !m_tools.find( tool->name() ) )
-	m_tools.insert( tool->name(), tool );
-	m_activeTool = tool;
-	kdDebug() << "active tool : " << m_activeTool->name() << endl;
+		m_tools.insert( tool->name(), tool );
+	//kdDebug() << "active tool : " << m_activeTool->name() << endl;
 }
 
 bool
