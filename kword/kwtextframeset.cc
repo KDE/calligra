@@ -1904,8 +1904,11 @@ QString KWTextFrameSet::textChangedCase(const QString _text,TypeOfCase _type)
             {
                 if(text.at(i)!=' ')
                 {
-                    if((i==0 &&text.at(i)!=' ') ||(text.at(i)!=' '&& text.at(QMAX(i-1,0))==' ')||(text.at(i)!=' '&& text.at(QMAX(i-1,0))=='\n'))
+                    QChar prev = text.at(QMAX(i-1,0));
+                    if(i==0 || prev  == ' ' || prev == '\n' || prev == '\t')
                         text=text.replace(i, 1, text.at(i).upper() );
+                    else
+                        text=text.replace(i, 1, text.at(i).lower() );
                 }
             }
             break;

@@ -44,12 +44,12 @@ KWChangeCaseDia::KWChangeCaseDia( QWidget *parent, const char *name )
     QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Case:" ),page );
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
-    m_upperCase=new QRadioButton( i18n("Uppercase"), grp );
-    m_lowerCase=new QRadioButton( i18n("Lowercase"), grp );
+    m_upperCase=new QRadioButton( i18n("&Uppercase"), grp );
+    m_lowerCase=new QRadioButton( i18n("&Lowercase"), grp );
 
-    m_titleCase=new QRadioButton( i18n("Title Case"), grp );
+    m_titleCase=new QRadioButton( i18n("T&itle Case"), grp );
 
-    m_toggleCase=new QRadioButton( i18n("Toggle Case"), grp );
+    m_toggleCase=new QRadioButton( i18n("&Toggle Case"), grp );
 
     m_upperCase->setChecked(true);
     grp->setRadioButtonExclusive( TRUE );
