@@ -104,7 +104,7 @@ VMToolSelect::createCmd( const QPoint& p, double d1, double d2 )
 	}
 }
 
-bool
+/*bool
 VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 {
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
@@ -256,5 +256,5 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 	}
 
 	return false;
-}
+}*/
 
