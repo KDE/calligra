@@ -2,6 +2,7 @@
 /* this is for Tru64 Unix (alias OSF, alias Digital Unix) */
 
 #ifdef __osf__
+#define RTLD_GLOBAL 0
 #ifdef __cplusplus
 #include <iostream.h>
 #endif
