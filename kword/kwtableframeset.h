@@ -221,6 +221,13 @@ public:
         return static_cast<KWTableFrameSet *>( m_fs );
     }
 
+    virtual void drawContents( QPainter * painter, const QRect & crect,
+                               QColorGroup & cg, bool onlyChanged, bool resetChanged )
+    {
+        if (m_currentCell)
+            m_currentCell->drawContents( painter, crect, cg, onlyChanged, resetChanged );
+    }
+
     // Forward all events to the current cell
     virtual void keyPressEvent( QKeyEvent * e ) { m_currentCell->keyPressEvent( e ); }
     virtual void mousePressEvent( QMouseEvent * e );
