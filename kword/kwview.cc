@@ -5103,6 +5103,20 @@ void KWView::switchModeView()
     actionInsertFootEndNote->setEnabled( state );
     actionViewFooter->setEnabled( state );
     actionViewHeader->setEnabled( state );
+    actionShowDocStruct->setEnabled(state);
+    if ( !state )
+    {
+        if ( m_doc->showdocStruct() )
+        {
+            m_doc->setShowDocStruct(false);
+            m_doc->reorganizeGUI();
+        }
+    }
+    else
+    {
+        m_doc->setShowDocStruct(actionShowDocStruct->isChecked());
+        m_doc->reorganizeGUI();
+    }
     //switch to main frameset when we switch in text-view mode
     //otherwise we can edit a footnote frame or header/footer
     if ( !state )
