@@ -72,20 +72,9 @@ void KWContents::createContents()
         }
     }
 
-#if 0
-    QList<KoTabulator> tabList;
-    KoTabulator *tab = new KoTabulator;
-    tab->ptPos = fs->getFrame( 0 )->width() - 10;
-    tab->mmPos = POINT_TO_MM( tab->ptPos );
-    tab->inchPos = POINT_TO_INCH( tab->ptPos );
-    tab->type = T_RIGHT;
-    tabList.append( tab );
-#endif
-
     // Create new very first paragraph
     KWTextParag *parag = static_cast<KWTextParag *>( textdoc->createParag( textdoc, 0, textdoc->firstParag(), true ) );
     parag->append( i18n( "Table of Contents" ) );
-    //parag->setInfo( KWParag::PI_CONTENTS );
     KWStyle * style = findOrCreateTOCStyle( -1 ); // "Contents Title"
     parag->setParagLayout( style->paragLayout() );
     parag->setFormat( 0, parag->string()->length(), textdoc->formatCollection()->format( &style->format() ) );
@@ -122,8 +111,6 @@ void KWContents::createContents()
     {
         KWTextParag * parag = mapIt.key(); // Parag in the TOC
         KWTextParag * p = mapIt.data();    // Parag in the body
-        // TODO pl->setTabList( tabList );
-        // TODO parag->insertTab( txt.length() );
 
         // Find page number for paragraph
         QPoint pt;
@@ -141,43 +128,10 @@ void KWContents::createContents()
         parag->setFormat( 0, parag->string()->length(), textdoc->formatCollection()->format( &tocStyle->format() ) );
     }
 
-    // Is that "jump to next page" ? We need that then.
+    //TODO
     //if ( parag->getNext() )
     //    parag->getNext()->setHardBreak( TRUE );
 }
-
-#if 0
-void KWContents::restoreParagList( QValueList<int> paragIds )
-{
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ));
-    ASSERT(fs); if (!fs) return;
-    QTextDocument * textdoc = fs->textDocument();
-
-    for ( QTextParag *p = textdoc->firstParag(); p ; p = p->next() )
-    {
-        if ( paragIds.contains( p->paragId() ) )
-        {
-            paragIds.remove( p->paragId() );
-            m_paragList.append( p );
-            if ( m_paragIds.isEmpty() )   // done
-                break;
-        }
-        // Note that we skip paragraphs that have been manually added in the middle of the TOC
-    }
-    ASSERT( paragIds.isEmpty() );
-}
-
-QValueList<int> saveParagList() const
-{
-    QValueList<int> result;
-    QListIterator<QTextParag> it( m_paragList );
-    for ( ; it.current() ; ++it )
-    {
-        result.append( it.current()->paragId() );
-    }
-    return result;
-}
-#endif
 
 KWStyle * KWContents::findOrCreateTOCStyle( int depth )
 {
@@ -200,6 +154,16 @@ KWStyle * KWContents::findOrCreateTOCStyle( int depth )
             style->paragLayout().topBorder = Border( Qt::black, Border::SOLID, 1 );
             style->paragLayout().bottomBorder = Border( Qt::black, Border::SOLID, 1 );
             style->paragLayout().alignment = Qt::AlignCenter;
+        }
+        else
+        {
+            KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ));
+            KoTabulatorList tabList;
+            KoTabulator tab;
+            tab.ptPos = fs->getFrame( 0 )->width() - 10; // not sure why that much is necessary....
+            tab.type = T_RIGHT;
+            tabList.append( tab );
+            style->paragLayout().setTabList( tabList );
         }
         m_doc->addStyleTemplate( style );             // register the new style
         m_doc->updateAllStyleLists();                 // show it in the UI
