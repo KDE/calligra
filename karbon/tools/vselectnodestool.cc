@@ -54,7 +54,7 @@ VSelectNodesTool::activate()
 		view()->statusMessage()->setText( i18n( "EditNode" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->showHandle( false );
-	view()->part()->document().selection()->setState( VObject::editnodes );
+	view()->part()->document().selection()->setSelectObjects( false );
 }
 
 void
@@ -90,7 +90,7 @@ VSelectNodesTool::draw()
 			recalc();
 		}
 
-		VDrawSelection op( m_objects, painter );
+		VDrawSelection op( m_objects, painter, true );
 		VObjectListIterator itr = m_objects;
         for( ; itr.current(); ++itr )
         {
@@ -143,6 +143,10 @@ VSelectNodesTool::mouseButtonPress()
 	m_state = normal;
 
 	recalc();
+
+	view()->part()->document().selection()->setState( VObject::edit );
+	view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	view()->part()->document().selection()->setState( VObject::selected );
 
 	draw();
 }
@@ -225,7 +229,7 @@ VSelectNodesTool::recalc()
 			if( itr.current()->state() != VObject::deleted )
 			{
 				copy = itr.current()->clone();
-				copy->setState( VObject::selected );
+				copy->setState( VObject::edit );
 				op.visit( *copy );
 				m_objects.append( copy );
 			}

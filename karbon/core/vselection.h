@@ -125,6 +125,8 @@ public:
 
 	void showHandle( bool handle = true ) { m_showhandle = handle; }
 
+	virtual void setSelectObjects( bool selectObjects = true ) { m_selectObjects = selectObjects; }
+
 private:
 	/**
 	 * Show/Hide handle.

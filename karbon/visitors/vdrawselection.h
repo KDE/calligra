@@ -30,13 +30,15 @@
 class VDrawSelection : public VVisitor
 {
 public:
-	VDrawSelection( const VObjectList& selection, VPainter *painter ) : m_selection( selection ), m_painter( painter ) {}
+	VDrawSelection( const VObjectList& selection, VPainter *painter, bool nodeediting = false )
+		: m_selection( selection ), m_painter( painter ), m_nodeediting( nodeediting ) {}
 
 	virtual void visitVComposite( VComposite& composite );
 
 private:
 	VObjectList		m_selection;
 	VPainter		*m_painter;
+	bool			m_nodeediting;
 };
 
 #endif

@@ -36,6 +36,8 @@ VSelection::VSelection( VObject* parent )
 	m_handleRect = new KoRect[ 10 ];
 	setStroke( VStroke( VColor( Qt::black ) ) );
 	setFill( VFill() );
+
+	m_selectObjects = true;
 }
 
 VSelection::VSelection( const VSelection& selection )
@@ -48,6 +50,7 @@ VSelection::VSelection( const VSelection& selection )
 		append( itr.current() );	// Don't clone objects here.
 
 	m_showhandle = true;
+	m_selectObjects = selection.m_selectObjects;
 }
 
 VSelection::~VSelection()
@@ -163,7 +166,7 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 	if( objects().count() == 0 || state() == VObject::edit )
 		return;
 
-	VDrawSelection op( m_objects, painter );
+	VDrawSelection op( m_objects, painter, !m_selectObjects );
 	op.visit( *static_cast<VDocument*>( parent() ) );
 
 	// get bounding box:
