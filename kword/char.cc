@@ -148,8 +148,11 @@ QString KWString::toString(unsigned int _pos,unsigned int _len)
 {
   QString str = "";
   
-  for (unsigned int i = _pos;i <= _len + _pos;i++)
-    str += _data_[i].c;
+  if (_pos + _len <= _len_)
+    {
+      for (unsigned int i = _pos;i <= _len + _pos;i++)
+	str += _data_[i].c;
+    }
 
   return QString(str);
 }

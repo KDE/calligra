@@ -307,6 +307,10 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 		lineStartPos = lineEndPos;
 	    }
 	} while( ret );    
+	cursorGotoLineStart( _painter );
+	while (ptPos < WantedPtPos && textPos < lineEndPos && !isCursorAtLineEnd()){
+	  cursorGotoRight( _painter);
+	}
     }
     else {
 	// Re-Enter the current paragraph
@@ -320,11 +324,11 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 		lineStartPos = lineEndPos;
 	    }
 	} while(lineEndPos < tmpPos);    
-    }
     
-    cursorGotoLineStart( _painter );
-    while (ptPos < WantedPtPos && textPos < lineEndPos - 1 && !isCursorAtLineEnd()){
-      cursorGotoRight( _painter);
+	cursorGotoLineStart( _painter );
+	while (ptPos < WantedPtPos && textPos < lineEndPos - 1 && !isCursorAtLineEnd()){
+	  cursorGotoRight( _painter);
+	}
     }
     //during_vertical_cursor_movement = TRUE;
 }
@@ -603,10 +607,6 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter )
 {
-//   if (parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT || 
-//       parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
-//     calcTextLen();
-  
     ptTextLen = 0;
     specialHeight = 0;
 
@@ -927,67 +927,3 @@ void KWFormatContext::selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPa
   if (goLeft) _fc1.cursorGotoLeft(painter);
 }
 
-void KWFormatContext::calcTextLen()
-{
-  // Reggie: this is DOG SLOW and has to be done better
-
-  ptTextLen = 0;
-  
-  unsigned int pos = lineStartPos,tmpPTPos = 0,_ptPos = 0;
-  KWChar *text = parag->getText();
-  unsigned int indent;
-  if ( lineStartPos == 0 )
-    {
-      // Reset font size, color etc. to the documents default
-      setDefaults( document );
-      // Change fonts & stuff to match the paragraphs layout
-      apply( parag->getParagLayout()->getFormat() );
-      
-      indent = parag->getParagLayout()->getPTFirstLineLeftIndent();
-    }
-    else
-      indent = parag->getParagLayout()->getPTLeftIndent();
-    
-  // Calculate the shift for the first visible character. This may be the counter, too
-  unsigned int xShift = document->getPTLeftBorder() + ( column - 1 ) * ( document->getPTColumnWidth() + document->getPTColumnSpacing() )
-    + indent;
-  
-  tmpFormat.apply( *this );
-  KWDisplayFont *font = tmpFormat.loadFont( document );
-  displayFont = font;
-
-
-  while ( _ptPos < xShift + document->getPTColumnWidth() - indent && pos < getParag()->getTextLen())
-    {
-      char c = text[ pos ].c;
-      
-      if ( c != 0 && text[ pos ].attrib )
-	{
-	  // Handle font formats here.
-	  assert( text[ pos ].attrib->getClassId() == ID_KWCharFormat );
-	  KWCharFormat *f = (KWCharFormat*)text[ pos ].attrib;
-	  apply( *f->getFormat() );
-	}
-      
-      if (c == ' ')
-	{
-	  ptTextLen += tmpPTPos;
-	  tmpPTPos = 0;
-	}
-	
-      // Do we have some format definition here ?
-      if ( c == 0 )
-	;
-      else // A usual character ...
-	{ 
-	  _ptPos += font->getPTWidth( c );
-	  tmpPTPos += font->getPTWidth( c );
-	  pos++;
-	}
-    }
-
-  if ( textPos >= parag->getTextLen() - 1 )
-    ptTextLen += tmpPTPos - 16;
-
-  debug("%d %d",lineStartPos,ptTextLen);
-}

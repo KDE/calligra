@@ -27,6 +27,7 @@
 #include <qwidget.h>
 #include <qkeycode.h>
 #include <qpixmap.h>
+#include <qclipboard.h>
 
 #include <X11/Xlib.h>
 #include <kapp.h>
@@ -114,6 +115,7 @@ public:
 
   void editCut();
   void editCopy();
+  void editPaste(QString _string);
 
 public slots:
   void newLeftIndent(int _left)

@@ -37,6 +37,7 @@ class KWPaintWindow;
 #include <qcolor.h>
 #include <qfont.h>
 #include <qmessagebox.h>
+#include <qclipboard.h>
 
 #include <koRuler.h>
 #include <kcolordlg.h>

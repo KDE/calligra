@@ -167,8 +167,6 @@ public:
     void selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPainter &painter);
 
 protected:
-    void calcTextLen();
-
     unsigned int ptTextLen;
     unsigned int ptAscender;
     unsigned int ptDescender;

@@ -16,6 +16,8 @@
 #ifndef presstructview_h
 #define presstructview_h
 
+#include <stdlib.h>
+
 #include <qwidget.h>
 #include <qevent.h>
 #include <qdialog.h>
@@ -23,6 +25,7 @@
 #include <qpixmap.h>
 #include <qlist.h>
 #include <qcolor.h>
+#include <qfile.h>
 
 #include <knewpanner.h>
 #include <ktreelist.h>
@@ -79,6 +82,7 @@ protected:
   void setupTreeView();
   void fillWithPageInfo(KPBackGround *_page,int _num);
   void fillWithObjInfo(KPObject *_obj,int _num);
+  QString getColor(QColor _color);
 
   KNewPanner *panner;
   KTreeList *treelist;

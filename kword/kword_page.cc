@@ -111,34 +111,47 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 /*================================================================*/
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
-  mousePressed = true;
-
-  unsigned int mx = e->x() + xOffset;
-  unsigned int my = e->y() + yOffset;
-      
-  QPainter _painter;
-  _painter.begin(this);
-
-  if (doc->has_selection())
+  switch (e->button())
     {
-      doc->drawSelection(_painter,xOffset,yOffset);
-      doc->setSelection(false);
-    }  
-
-  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-  markerIsVisible = false;
-  
-  fc->cursorGotoPixelLine(mx,my,_painter);
-  fc->cursorGotoPixelInLine(mx,my,_painter);
-      
-  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-  markerIsVisible = true;
-
-  _painter.end();
-
-  doc->setSelStart(*fc);
-  doc->setSelEnd(*fc);
-  doc->setSelection(false);
+    case LeftButton:
+      {
+	mousePressed = true;
+	
+	unsigned int mx = e->x() + xOffset;
+	unsigned int my = e->y() + yOffset;
+	
+	QPainter _painter;
+	_painter.begin(this);
+	
+	if (doc->has_selection())
+	  {
+	    doc->drawSelection(_painter,xOffset,yOffset);
+	    doc->setSelection(false);
+	  }  
+	
+	doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+	markerIsVisible = false;
+	
+	fc->cursorGotoPixelLine(mx,my,_painter);
+	fc->cursorGotoPixelInLine(mx,my,_painter);
+	
+	doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+	markerIsVisible = true;
+	
+	_painter.end();
+	
+	doc->setSelStart(*fc);
+	doc->setSelEnd(*fc);
+	doc->setSelection(false);
+      } break;
+    case MidButton:
+      {
+	QClipboard *cb = QApplication::clipboard();
+	if (cb->text())
+	  editPaste(cb->text());
+      } break;
+    default: break;
+    }
 }
 
 /*================================================================*/
@@ -253,6 +266,15 @@ void KWPage::editCopy()
       buffer.fill(white);
       repaint(false);
     }
+}
+
+/*================================================================*/
+void KWPage::editPaste(QString _string)
+{
+  doc->paste(fc,_string,this);
+  buffer.fill(white);
+  doc->setSelection(false);
+  recalcCursor();
 }
 
 /*================================================================*/

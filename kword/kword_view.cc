@@ -264,6 +264,9 @@ void KWordView_impl::editCopy()
 /*===============================================================*/
 void KWordView_impl::editPaste()
 {
+  QClipboard *cb = QApplication::clipboard();
+  if (cb->text())
+    gui->getPaperWidget()->editPaste(cb->text());
 }
 
 /*===============================================================*/

@@ -117,7 +117,29 @@ void PresStructViewer::setupTreeView()
     {
       kpobject = doc->objectList()->at(i);
       obj_name.sprintf("%s (%d)",i18n(ObjName[static_cast<int>(kpobject->getType())]),i + 1);
-      item = new KTreeListItem(obj_name.data(),new QPixmap(pixdir + "/kpresenter/toolbar/dot.xpm"));
+
+      QString str;
+      switch (kpobject->getType())
+	{
+	case OT_RECT: str = "mini_rect.xpm";
+	  break;
+	case OT_PICTURE: str = "mini_picture.xpm";
+	  break;
+	case OT_CLIPART: str = "mini_clipart.xpm";
+	  break;
+	case OT_LINE: str = "mini_line.xpm";
+	  break;
+	case OT_ELLIPSE: str = "mini_circle.xpm";
+	  break;
+	case OT_TEXT: str = "mini_text.xpm";
+	  break;
+	case OT_AUTOFORM: str = "mini_autoform.xpm";
+	  break;
+	default: str = "dot.xpm";
+	  break;
+	}
+
+      item = new KTreeListItem(obj_name.data(),new QPixmap(pixdir + "/kpresenter/toolbar/" + str));
       pgnum = doc->getPageOfObj(i,0,0);
       if (pgnum != -1)
 	{
@@ -229,4 +251,39 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
   list->appendItem(i18n("Objectspecific Effect"));
   list->changeItemPart(i18n(Effect2Name[static_cast<int>(_obj->getEffect2())]),
 		       list->count() - 1,1);
+
+  switch (_obj->getType())
+    {
+    case OT_RECT:
+      {
+	list->appendItem(i18n("Pen:"));
+	if (dynamic_cast<KPRectObject*>(_obj)->getPen() == NoPen)
+	  list->changeItemPart("No Pen",list->count() - 1,1);
+	else
+	  list->changeItemPart(getColor(dynamic_cast<KPRectObject*>(_obj)->getPen().color()),list->count() - 1,1);
+      } break;
+    default: break;
+    }
+}
+
+/*================================================================*/
+QString PresStructViewer::getColor(QColor _color)
+{
+//   QFile rgbFile("/usr/X11R6/lib/X11/rgb.txt");
+  QString str;
+  
+//   if (rgbFile.exists())
+//     {
+//       int r,g,b;
+//       QString tmp;
+
+//       _color.rgb(&r,&g,&b);
+//       tmp.sprintf("%3d %3d %3d",r,g,b);
+
+//       str = tmp;
+//     }
+//   else
+    str.sprintf("(%d,%d,%d)",_color.red(),_color.green(),_color.blue());
+    
+  return str;
 }

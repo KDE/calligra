@@ -177,3 +177,10 @@ Reggie, 4.10.1998:
 - I think I fixed now all redraw problems when selecting text
   (it's flickering now a bit, but I'll fix that too one time :-)
 - Implemented simple Cut&Copy (ASCII text)
+
+Reggie, 5.10.1998:
+------------------
+- Some cleanups
+- Bugfixes in copy to clipboard
+- Implemented Paste (ASCII text)
+- Bugfix in cursor navigation

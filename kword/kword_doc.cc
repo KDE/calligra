@@ -783,6 +783,7 @@ void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_pain
 	      tmpFC1 = selEnd;
 	      break;
 	    }
+	  parag = parag->getNext();
 	}
       tmpFC1.getParag()->deleteText(tmpFC1.getTextPos(),tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos());
       parag = tmpFC1.getParag()->getNext();
@@ -857,6 +858,7 @@ void KWordDocument_impl::copySelectedText()
 	      tmpFC1 = selEnd;
 	      break;
 	    }
+	  parag = parag->getNext();
 	}
  
       clipString = tmpFC1.getParag()->getKWString()->toString(tmpFC1.getTextPos(),tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos());
@@ -864,13 +866,70 @@ void KWordDocument_impl::copySelectedText()
       while (parag && parag != tmpFC2.getParag())
 	{
 	  clipString += "\n";
-	  clipString += parag->getKWString()->toString(0,parag->getTextLen());
+	  if (parag->getTextLen() > 0)
+	    clipString += parag->getKWString()->toString(0,parag->getTextLen());
+	  else
+	    clipString += " ";
 	  parag = parag->getNext();
 	}
       clipString += "\n";
-      clipString += tmpFC2.getParag()->getKWString()->toString(0,tmpFC2.getTextPos());
+      if (tmpFC2.getParag()->getTextLen() > 0)
+	clipString += tmpFC2.getParag()->getKWString()->toString(0,tmpFC2.getTextPos());
     }
 
   QClipboard *cb = QApplication::clipboard();
   cb->setText(clipString.data());
 }
+
+/*================================================================*/
+void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
+{
+  QStrList strList;
+  int index;
+  QPainter p;
+
+  if (_string.isEmpty()) return;
+
+  while (true)
+    {
+      index = _string.find('\n',0);
+      if (index == -1) break;
+      
+      if (index > 0)
+	strList.append(QString(_string.left(index)));
+      _string.remove(0,index + 1);
+    }
+  
+  if (!_string.isEmpty())
+    strList.append(QString(_string));
+
+  if (!strList.isEmpty())
+    {
+      unsigned int len;
+      QString str;
+      KWFormat *format = new KWFormat(this);
+      format->setDefaults(this);
+      
+      for (unsigned int i = 0; i < strList.count();i++)
+	{
+	  str = QString(strList.at(i));
+	  len = str.length();
+	  _fc->getParag()->insertText(_fc->getTextPos(),str);
+	  _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+	  
+	  // HACK: SLOW!!
+	  p.begin(_page);
+	  for (unsigned int j = 0;j < len;j++)
+	    _fc->cursorGotoRight(p);
+	  p.end();
+
+	  if (i < strList.count() - 1)
+	    {
+	      QKeyEvent ev(Event_KeyPress,Key_Return,13,0);
+	      _page->keyPressEvent(&ev);
+	    }
+	}
+    }
+}
+
+
