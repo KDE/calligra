@@ -17,7 +17,7 @@ function checkname()
     mimetypes=`grep ^MimeType $f|sed -e 's/.*=//;s/;/,/g;'`
     servicetypes=`grep ^ServiceTypes $f|sed -e 's/.*=//;s/$/,/g'`
     fulllist="$mimetypes,$servicetypes"
-    if echo $fulllist | grep -q "KOfficePart,"; then
+    if echo $fulllist | grep "KOfficePart," >/dev/null 2>/dev/null; then
       echo "ok, this is a KOfficePart"
     else
       echo '**** KOfficePart not in list of types !'
@@ -27,7 +27,7 @@ function checkname()
     fi
     nativemime=`grep X-KDE-NativeMimeType $f`
     echo Native mimetype : $nativemime
-    if echo $nativemime | grep -q "application/x-$instance"; then
+    if echo $nativemime | grep "application/x-$instance" >/dev/null 2>/dev/null; then
       found=1
     fi
   fi
