@@ -199,6 +199,8 @@ public:
     KPTextObject* insertTextObject( const QRect& );
     void insertPicture( const QRect &_r );
     void insertClipart( const QRect &_r );
+    void changeClipart( const QString &file );
+    void changePicture( const QString & filename );
 
     int numberOfObjectSelected();
     KPObject *getSelectedObj();

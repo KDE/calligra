@@ -6150,3 +6150,16 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
         m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+x);
     }
 }
+
+
+void KPrCanvas::changeClipart( const QString &file )
+{
+    m_activePage->changeClipart( file );
+    m_view->kPresenterDoc()->stickyPage()->changeClipart( file );
+}
+
+void KPrCanvas::changePicture( const QString & filename )
+{
+    m_activePage->changePicture( filename );
+    m_view->kPresenterDoc()->stickyPage()->changePicture( filename );
+}

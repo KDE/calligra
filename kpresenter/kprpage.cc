@@ -2543,8 +2543,6 @@ void KPrPage::changePicture( const QString & filename )
 	    break;
 	}
     }
-
-    m_doc->setModified(true);
 }
 
 void KPrPage::changeClipart( const QString & filename )
@@ -2567,8 +2565,6 @@ void KPrPage::changeClipart( const QString & filename )
 	    break;
 	}
     }
-
-    m_doc->setModified(true);
 }
 
 

@@ -3495,8 +3495,8 @@ void KPresenterView::changePicture( const QString & filename )
     if (!KIO::NetAccess::download( url, file ))
         return;
 
-    if ( !file.isEmpty() )
-      m_canvas->activePage()->changePicture( file );
+    if ( !file.isEmpty() && (file!=filename))
+      m_canvas->changePicture( file );
 }
 
 /*====================== change clipart =========================*/
@@ -3517,8 +3517,8 @@ void KPresenterView::changeClipart( const QString & filename )
     if (!KIO::NetAccess::download( url, file ))
         return;
 
-    if ( !file.isEmpty() )
-        m_canvas->activePage()->changeClipart( file );
+    if ( !file.isEmpty() && (file!=filename) )
+        m_canvas->changeClipart( file );
 }
 
 /*====================== resize event ===========================*/
