@@ -1095,7 +1095,7 @@ don't put a </?xml...> at the end of the file!).
         TYPE, and another one depending on the type.
 -->
 <!ELEMENT VARIABLE
-    (TYPE,(DATE|TIME|PGNUM|CUSTOM|MAILMERGE|FIELD|LINK|NOTE))>
+    (TYPE,(DATE|TIME|PGNUM|CUSTOM|MAILMERGE|FIELD|LINK|NOTE|FOOTNOTE))>
 
 <!--    Variable type
         Attributes:
