@@ -21,6 +21,7 @@
 #include <qlist.h>
 #include <qstringlist.h>
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -36,7 +37,8 @@ struct KFormulaDocument::KFormulaDocument_Impl {
 
 
     KFormulaDocument_Impl()
-            : leftBracketChar('('), rightBracketChar(')'), formula(0)
+            : leftBracketChar('('), rightBracketChar(')'),
+              syntaxHighlighting(true), formula(0)
     {
         formulae.setAutoDelete(false);
     }
@@ -83,6 +85,11 @@ struct KFormulaDocument::KFormulaDocument_Impl {
     QString selectedName;
 
     /**
+     * Whether we want coloured formulae.
+     */
+    bool syntaxHighlighting;
+
+    /**
      * The active formula.
      */
     KFormulaContainer* formula;
@@ -116,8 +123,6 @@ struct KFormulaDocument::KFormulaDocument_Impl {
     QList<KFormulaContainer> formulae;
 };
 
-
-const ContextStyle& KFormulaDocument::getContextStyle() const { return impl->contextStyle; }
 
 double KFormulaDocument::getXResolution() const { return impl->contextStyle.getXResolution(); }
 double KFormulaDocument::getYResolution() const { return impl->contextStyle.getYResolution(); }
@@ -159,7 +164,7 @@ KFormulaDocument::KFormulaDocument(KActionCollection* collection,
 
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
-    impl->syntaxHighlightingAction->setChecked(impl->contextStyle.getSyntaxHighlighting());
+    impl->syntaxHighlightingAction->setChecked(impl->syntaxHighlighting);
 
     if (his == 0) {
         impl->history = new KCommandHistory(collection);
@@ -189,6 +194,16 @@ KFormulaDocument::KFormulaDocument(KCommandHistory* his)
 KFormulaDocument::~KFormulaDocument()
 {
     delete impl;
+}
+
+
+const ContextStyle& KFormulaDocument::getContextStyle(bool forPrinting) const
+{
+    // Make sure not to change anything depending on `forPrinting' that
+    // would require a new calculation of the formula.
+    //kdDebug() << "KFormulaDocument::activate: forPrinting=" << forPrinting << endl;
+    impl->contextStyle.setSyntaxHighlighting( forPrinting ? false : impl->syntaxHighlighting );
+    return impl->contextStyle;
 }
 
 
@@ -540,7 +555,7 @@ void KFormulaDocument::insertSymbol()
 
 void KFormulaDocument::toggleSyntaxHighlighting()
 {
-    impl->contextStyle.setSyntaxHighlighting(impl->syntaxHighlightingAction->isChecked());
+    impl->syntaxHighlighting = impl->syntaxHighlightingAction->isChecked();
 
     KFormulaContainer* f;
     for (f=impl->formulae.first(); f != 0; f=impl->formulae.next()) {

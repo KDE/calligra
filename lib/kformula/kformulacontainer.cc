@@ -27,9 +27,10 @@
 
 #include <qstring.h>
 
+#include <kdebug.h>
 #include <klocale.h>
-
 #include <koprinter.h>
+
 #include "MatrixDialog.h"
 #include "bracketelement.h"
 #include "contextstyle.h"
@@ -223,7 +224,7 @@ void KFormulaContainer::draw(QPainter& painter, const QRect& r, const QColorGrou
 
 void KFormulaContainer::draw(QPainter& painter, const QRect& r)
 {
-    rootElement()->draw(painter, r, document()->getContextStyle());
+    rootElement()->draw(painter, r, document()->getContextStyle(painter.device()->devType() == QInternal::Printer));
 }
 
 
@@ -715,7 +716,7 @@ void KFormulaContainer::print(KPrinter& printer)
     //printer.setFullPage(true);
     QPainter painter;
     if (painter.begin(&printer)) {
-        rootElement()->draw(painter, boundingRect(), document()->getContextStyle());
+        rootElement()->draw(painter, boundingRect(), document()->getContextStyle(true));
     }
 }
 
