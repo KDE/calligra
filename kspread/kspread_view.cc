@@ -88,6 +88,7 @@
 #include "kspread_dlg_goto.h"
 #include "kspread_dlg_validity.h"
 #include "kspread_dlg_pasteinsert.h"
+#include "kspread_dlg_showColRow.h"
 #include "kspread_undo.h"
 
 #include "handler.h"
@@ -335,6 +336,14 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                   actionCollection(), "insertColumn" );
     m_insertRow = new KAction( i18n("Insert Row(s)"), "insert_table_row", 0, this, SLOT( insertRow() ),
                                actionCollection(), "insertRow" );
+    m_hideRow = new KAction( i18n("Hide Row(s)"), "hide_table_row", 0, this, SLOT( hideRow() ),
+                               actionCollection(), "hideRow" );
+    m_showRow = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this, SLOT( showRow() ),
+                               actionCollection(), "showRow" );
+    m_hideColumn = new KAction( i18n("Hide Column(s)"), "hide_table_column", 0, this, SLOT( hideColumn() ),
+                               actionCollection(), "hideColumn" );
+    m_showColumn = new KAction( i18n("Show Column(s)"), "show_table_column", 0, this, SLOT( showColumn() ),
+                               actionCollection(), "showColumn" );
     m_insertCell = new KAction( i18n("Insert Cell(s) ..."), "insertcell", 0, this, SLOT( slotInsert() ),
                                actionCollection(), "insertCell" );
     m_removeCell = new KAction( i18n("Remove Cell(s) ..."), "removecell", 0, this, SLOT( slotRemove() ),
@@ -850,6 +859,26 @@ void KSpreadView::insertColumn()
     updateEditWidget();
 }
 
+void KSpreadView::hideColumn()
+{
+    if ( !m_pTable )
+        return;
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0|| r.right()==0x7FFF)
+        m_pTable->hideColumn( m_pCanvas->markerColumn() );
+    else
+        m_pTable->hideColumn( r.left(),(r.right()-r.left()) );
+}
+
+void KSpreadView::showColumn()
+{
+    if ( !m_pTable )
+        return;
+    KSpreadShowColRow *dlg=new KSpreadShowColRow( this,"showCol",KSpreadShowColRow::Column);
+    dlg->show();
+
+}
+
 void KSpreadView::insertRow()
 {
     if ( !m_pTable )
@@ -861,6 +890,26 @@ void KSpreadView::insertRow()
         m_pTable->insertRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
+}
+
+void KSpreadView::hideRow()
+{
+    if ( !m_pTable )
+        return;
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0 || r.bottom()==0x7FFF)
+        m_pTable->hideRow( m_pCanvas->markerRow() );
+    else
+        m_pTable->hideRow( r.top(),(r.bottom()-r.top()) );
+}
+
+void KSpreadView::showRow()
+{
+    if ( !m_pTable )
+        return;
+    KSpreadShowColRow *dlg=new KSpreadShowColRow( this,"showRow",KSpreadShowColRow::Row);
+    dlg->show();
+
 }
 
 void KSpreadView::fontSelected( const QString &_font )
@@ -1878,6 +1927,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_pPopupColumn->insertSeparator();
     m_insertColumn->plug( m_pPopupColumn );
     m_deleteColumn->plug( m_pPopupColumn );
+    m_hideColumn->plug( m_pPopupColumn );
 
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
 
@@ -1918,6 +1968,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_pPopupRow->insertSeparator();
     m_insertRow->plug( m_pPopupRow );
     m_deleteRow->plug( m_pPopupRow );
+    m_hideRow->plug( m_pPopupRow );
 
     QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupRow->popup( _point );

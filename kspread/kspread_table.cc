@@ -2428,6 +2428,56 @@ void KSpreadTable::removeRow( int row,int nbRow,bool makeUndo )
     emit sig_updateView( this );
 }
 
+void KSpreadTable::hideRow( int _row,int nbRow )
+{
+    m_pDoc->setModified( true );
+    for(int i=0;i<=nbRow;i++)
+        {
+        RowLayout *rl=nonDefaultRowLayout(_row+i);
+        rl->setHide(true);
+        }
+    emit sig_updateVBorder( this );
+    emit sig_updateView( this );
+}
+
+void KSpreadTable::showRow( int _row,int nbRow )
+{
+    m_pDoc->setModified( true );
+    for(int i=0;i<=nbRow;i++)
+        {
+        RowLayout *rl=nonDefaultRowLayout(_row+i);
+        rl->setHide(false);
+        }
+    emit sig_updateVBorder( this );
+    emit sig_updateView( this );
+}
+
+
+void KSpreadTable::hideColumn( int _col,int nbCol )
+{
+   m_pDoc->setModified( true );
+   for(int i=0;i<=nbCol;i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
+        cl->setHide(true);
+        }
+   emit sig_updateHBorder( this );
+   emit sig_updateView( this );
+}
+
+void KSpreadTable::showColumn( int _col,int nbCol )
+{
+   m_pDoc->setModified( true );
+   for(int i=0;i<=nbCol;i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
+        cl->setHide(false);
+        }
+   emit sig_updateHBorder( this );
+   emit sig_updateView( this );
+}
+
+
 void KSpreadTable::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref)
 {
 KSpreadCell* c = m_cells.firstCell();

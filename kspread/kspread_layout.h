@@ -538,6 +538,9 @@ public:
      */
     void setTopBorderPen( const QPen& p );
 
+    void setHide(bool _hide) { m_bHide=_hide;}
+    bool isHide() { return m_bHide;}
+
 protected:
     /**
      * @reimp
@@ -569,7 +572,7 @@ protected:
     int m_iRow;
 
     bool m_bDisplayDirtyFlag;
-
+    bool m_bHide;
     RowLayout* m_next;
     RowLayout* m_prev;
 };
@@ -653,6 +656,10 @@ public:
      */
     void setLeftBorderPen( const QPen& p );
 
+    void setHide(bool _hide) { m_bHide=_hide;}
+    bool isHide() { return m_bHide;}
+
+
 protected:
     /**
      * @reimp
@@ -684,6 +691,8 @@ protected:
     int m_iColumn;
 
     bool m_bDisplayDirtyFlag;
+
+    bool m_bHide;
 
     ColumnLayout* m_next;
     ColumnLayout* m_prev;

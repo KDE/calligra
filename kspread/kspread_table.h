@@ -479,6 +479,16 @@ public:
      * Deletes the row @p row and redraws the table.
      */
     void removeRow( int row,int nbRow=0,bool makeUndo=true );
+    /**
+    * hide row
+    */
+    void hideRow( int row,int nbRow=0 );
+    void showRow( int row,int NbRow=0 );
+    /**
+    * hide column
+    */
+    void hideColumn( int col,int NbCol=0 );
+    void showColumn( int col,int NbCol=0 );
 
     int adjustColumn( const QPoint &_marker, int _col = -1 );
     int adjustRow( const QPoint &_marker, int _row = -1 );

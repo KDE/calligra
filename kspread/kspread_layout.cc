@@ -1647,6 +1647,7 @@ RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
     m_fHeight = POINT_TO_MM(heightOfRow);
     m_iRow = _row;
     m_bDefault = false;
+    m_bHide=false;
 }
 
 RowLayout::~RowLayout()
@@ -1679,6 +1680,8 @@ void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
 
 int RowLayout::height( KSpreadCanvas *_canvas )
 {
+  if(m_bHide)
+        return 0;
   if ( _canvas )
     return (int)( MM_TO_POINT(_canvas->zoom() * m_fHeight));
   else
@@ -1690,6 +1693,8 @@ QDomElement RowLayout::save( QDomDocument& doc, int yshift )
     QDomElement row = doc.createElement( "row" );
     row.setAttribute( "height", m_fHeight );
     row.setAttribute( "row", m_iRow - yshift );
+    if( m_bHide)
+        row.setAttribute( "hide", (int)m_bHide );
     QDomElement format = saveLayout( doc );
     row.appendChild( format );
     return row;
@@ -1717,6 +1722,13 @@ bool RowLayout::load( const QDomElement& row, int yshift, PasteMode sp)
     {
 	kdDebug(36001) << "Value row=" << m_iRow << " out of range" << endl;
 	return false;
+    }
+
+    if( row.hasAttribute( "hide" ) )
+    {
+        m_bHide = (int)row.attribute("hide").toInt( &ok );
+        if(!ok)
+                return false;
     }
 
     QDomElement f = row.namedItem( "format" ).toElement();
@@ -1808,6 +1820,7 @@ ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout(
   m_fWidth = POINT_TO_MM(colWidth);
   m_iColumn = _column;
   m_bDefault=false;
+  m_bHide=false;
   m_prev = 0;
   m_next = 0;
 }
@@ -1843,6 +1856,8 @@ void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
 
 int ColumnLayout::width( KSpreadCanvas *_canvas )
 {
+  if(m_bHide)
+        return 0;
   if ( _canvas )
     return (int)(MM_TO_POINT( _canvas->zoom() * m_fWidth));
   else
@@ -1854,6 +1869,8 @@ QDomElement ColumnLayout::save( QDomDocument& doc, int xshift )
   QDomElement col = doc.createElement( "column" );
   col.setAttribute( "width", m_fWidth );
   col.setAttribute( "column", m_iColumn - xshift );
+  if( m_bHide)
+        col.setAttribute( "hide", (int)m_bHide );
   QDomElement format = saveLayout( doc );
   col.appendChild( format );
   return col;
@@ -1882,6 +1899,12 @@ bool ColumnLayout::load( const QDomElement& col, int xshift,PasteMode sp )
     {
 	kdDebug(36001) << "Value col=" << m_iColumn << " out of range" << endl;
 	return false;
+    }
+    if( col.hasAttribute( "hide" ) )
+    {
+        m_bHide = (int)col.attribute("hide").toInt( &ok );
+        if(!ok)
+                return false;
     }
 
     QDomElement f = col.namedItem( "format" ).toElement();

@@ -671,7 +671,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         m_iExtraXCells = 0;
         m_iExtraYCells = 0;
     }
-
+    ColumnLayout *cl1 = m_pTable->columnLayout( column() );
+    if( cl1->isHide())
+        return;
     /**
      * RichText
      */
@@ -2684,6 +2686,26 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         //hide zero
         if(m_pTable->getHideZero() &&  m_bValue &&   m_dValue * faktor(column(),row())==0)
                 m_strOutText="";
+        ColumnLayout *cl1 = m_pTable->columnLayout( column() );
+        if( cl1->isHide())
+        {
+            //clear extracell
+            if ( !m_bForceExtraCells )
+                {
+                        for ( int x = m_iColumn; x <= m_iColumn + m_iExtraXCells; ++x )
+                                for ( int y = m_iRow; y <= m_iRow + m_iExtraYCells; ++y )
+                                        if ( x != m_iColumn || y != m_iRow )
+                                        {
+                                        KSpreadCell *cell = m_pTable->cellAt( x, y );
+                                        cell->unobscure();
+                                        }
+
+                m_iExtraXCells = 0;
+                m_iExtraYCells = 0;
+                }
+
+            m_strOutText="";
+        }
 
         conditionAlign( _painter, _col, _row );
 
@@ -2780,6 +2802,10 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 m_strOutText=tmpText;
         if(m_pTable->getHideZero() &&  m_bValue &&   m_dValue * faktor(column(),row())==0)
                 m_strOutText=tmpText;
+        cl1 = m_pTable->columnLayout( column() );
+        if( cl1->isHide())
+                m_strOutText=tmpText;
+
     }
 
     // Dont draw page borders or the marker when printing

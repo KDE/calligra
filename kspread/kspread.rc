@@ -58,10 +58,14 @@
   <Menu name="Row"><text>&amp;Row</text>
     <Action name="resizeRow"/>
     <Action name="equalizeRow"/>
+    <Action name="hideRow"/>
+    <Action name="showRow"/>
   </Menu>
   <Menu name="Column"><text>&amp;Column</text>
     <Action name="resizeCol"/>
     <Action name="equalizeCol"/>
+    <Action name="hideColumn"/>
+    <Action name="showColumn"/>
   </Menu>
   <Action name="tableFormat"/>
  </Menu>
