@@ -31,6 +31,12 @@ VSelectObjects::visitVComposite( VComposite& composite )
 	if( composite.state() == VObject::deleted )
 		return;
 
+	if( m_select ) // in this mode everything is selected
+	{
+		m_selection.append( &composite );
+		setSuccess();
+		return;
+	}
 
 	bool selected = false;
 
@@ -98,7 +104,6 @@ VSelectObjects::visitVComposite( VComposite& composite )
 			}
 		}
 	}
-
 
 	if( selected )
 	{
