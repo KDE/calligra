@@ -22,44 +22,20 @@
 
 */
 
-#ifndef GridDialog_h
-#define GridDialog_h
+#ifndef units_h_
+#define units_h_
 
-#include <qdialog.h>
-#include <qradiobt.h>
-#include <qchkbox.h>
-#include <kspinbox.h>
-#include "Canvas.h"
-#include "FloatSpinBox.h"
-#include "UnitBox.h"
-
-class GridDialog : public QDialog {
-  Q_OBJECT
-public:
-  GridDialog (QWidget* parent = 0L, const char* name = 0L);
-  
-  float horizontalDistance (); 
-  float verticalDistance (); 
-  bool showGrid ();
-  bool snapToGrid ();
-
-  void setDistances (float h, float v);
-  void setSnapToGridOn (bool flag);
-  void setShowGridOn (bool flag);
-
-
-
-  static void setupGrid (Canvas* canvas);
-
-protected:
-  QWidget* createGridWidget (QWidget* parent);
-
-private slots:
-  void helpPressed ();
-
-private:
-  QCheckBox *gbutton, *sbutton;
-  UnitBox *hspinbox, *vspinbox;
+enum MeasurementUnit { 
+  UnitPoint, UnitMillimeter, UnitInch 
 };
+
+float cvtPtToMm (float value);
+float cvtPtToInch (float value);
+float cvtInchToPt (float value);
+float cvtMmToPt (float value);
+float cvtPtToUnit (MeasurementUnit unit, float value);
+float cvtUnitToPt (MeasurementUnit unit, float value);
+
+const char* unitToString (MeasurementUnit unit);
 
 #endif

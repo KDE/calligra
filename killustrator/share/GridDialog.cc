@@ -69,8 +69,8 @@ GridDialog::GridDialog (QWidget* parent, const char* name) :
 
   vl->activate ();
  
-  setMinimumSize (260, 220);
-  setMaximumSize (260, 220);
+  setMinimumSize (280, 220);
+  setMaximumSize (290, 220);
 }
 
 QWidget* GridDialog::createGridWidget (QWidget* parent) {
@@ -81,17 +81,17 @@ QWidget* GridDialog::createGridWidget (QWidget* parent) {
 
   box = new QGroupBox (w);
   box->setTitle (i18n ("Distance"));
-  box->setGeometry (10, 10, 210, 90);
+  box->setGeometry (10, 10, 260, 90);
 
   QLabel* label = new QLabel (box);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Horizontally"));
   label->move (20, 20);
 
-  hspinbox = new FloatSpinBox (box);
+  hspinbox = new UnitBox (box);
   hspinbox->setFormatString ("%-3.3f");
   hspinbox->setEditable (true);
-  hspinbox->setRange (1, 1000);
+  hspinbox->setRange (0, 1000);
   hspinbox->move (100, 20);
  
   label = new QLabel (box);
@@ -99,10 +99,10 @@ QWidget* GridDialog::createGridWidget (QWidget* parent) {
   label->setText (i18n ("Vertically"));
   label->move (20, 55);
 
-  vspinbox = new FloatSpinBox (box);
+  vspinbox = new UnitBox (box);
   vspinbox->setFormatString ("%-3.3f");
   vspinbox->setEditable (true);
-  vspinbox->setRange (1, 1000);
+  vspinbox->setRange (0, 1000);
   vspinbox->move (100, 55);
 
   gbutton = new QCheckBox (w);
@@ -114,7 +114,7 @@ QWidget* GridDialog::createGridWidget (QWidget* parent) {
   sbutton->setGeometry (10, 130, 200, 15);
 
   w->setMinimumSize (230, 160);
-  w->setMaximumSize (230, 160);
+  w->setMaximumSize (330, 160);
   return w;
 }
 

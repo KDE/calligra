@@ -79,10 +79,9 @@ QWidget* TransformationDialog::createPositionWidget (QWidget* parent) {
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Horizontal:"));
-  label->setFixedHeight (label->sizeHint ().height ());
   label->move (20, 20);
 
-  horizPosition = new FloatSpinBox (w);
+  horizPosition = new UnitBox (w);
   horizPosition->setRange (-1000.0, 1000.0);
   horizPosition->setStep (0.1);
   horizPosition->setEditable (true);
@@ -91,10 +90,9 @@ QWidget* TransformationDialog::createPositionWidget (QWidget* parent) {
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Vertical:"));
-  label->setFixedHeight (label->sizeHint ().height ());
   label->move (20, 50);
 
-  vertPosition = new FloatSpinBox (w);
+  vertPosition = new UnitBox (w);
   vertPosition->setRange (-1000.0, 1000.0);
   vertPosition->setStep (0.1);
   vertPosition->setEditable (true);
@@ -147,10 +145,9 @@ QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Horizontal:"));
-  label->setFixedHeight (label->sizeHint ().height ());
   label->move (20, 65);
 
-  horizDim = new FloatSpinBox (w);
+  horizDim = new UnitBox (w);
   horizDim->setRange (-1000.0, 1000.0);
   horizDim->setStep (0.1);
   horizDim->setEditable (true);
@@ -159,10 +156,9 @@ QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Vertical:"));
-  label->setFixedHeight (label->sizeHint ().height ());
   label->move (20, 95);
 
-  vertDim = new FloatSpinBox (w);
+  vertDim = new UnitBox (w);
   vertDim->setRange (-1000.0, 1000.0);
   vertDim->setStep (0.1);
   vertDim->setEditable (true);
@@ -217,10 +213,9 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
   label = new QLabel (box);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Horizontal:"));
-  label->setFixedHeight (label->sizeHint ().height ());
   label->move (20, 20);
 
-  horizRotCenter = new FloatSpinBox (box);
+  horizRotCenter = new UnitBox (box);
   horizRotCenter->setRange (-1000.0, 1000.0);
   horizRotCenter->setStep (0.1);
   horizRotCenter->setEditable (true);
@@ -229,10 +224,9 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
   label = new QLabel (box);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Vertical:"));
-  label->setFixedHeight (label->sizeHint ().height ());
   label->move (20, 50);
 
-  vertRotCenter = new FloatSpinBox (box);
+  vertRotCenter = new UnitBox (box);
   vertRotCenter->setRange (-1000.0, 1000.0);
   vertRotCenter->setStep (0.1);
   vertRotCenter->setEditable (true);

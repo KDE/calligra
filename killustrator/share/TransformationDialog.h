@@ -33,6 +33,7 @@
 #include "GObject.h"
 #include "CommandHistory.h"
 #include "FloatSpinBox.h"
+#include "UnitBox.h"
 
 class TransformationDialog : public QTabDialog {
   Q_OBJECT
@@ -68,19 +69,19 @@ private:
 
   QPushButton *applyBttn[4], *applyToDupBttn[4];
 
-  FloatSpinBox *horizPosition;
-  FloatSpinBox *vertPosition;
+  UnitBox *horizPosition;
+  UnitBox *vertPosition;
   QCheckBox *relativePosition;
 
   FloatSpinBox *rotAngle;
-  FloatSpinBox *horizRotCenter;
-  FloatSpinBox *vertRotCenter;
+  UnitBox *horizRotCenter;
+  UnitBox *vertRotCenter;
   QCheckBox *relativeRotCenter;
 
   QPushButton *horizMirror, *vertMirror;
 
   QRadioButton *absolute, *percent;
-  FloatSpinBox *horizDim, *vertDim;
+  UnitBox *horizDim, *vertDim;
   QCheckBox *proportional;
 };
 
