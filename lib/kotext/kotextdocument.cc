@@ -261,7 +261,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
 #endif
 
-    if ( sx > 0 || sy > 0 )
+    if ( sx != 0 || sy != 0 )
     {
         painter->save();
         painter->translate( sx, sy );
