@@ -46,6 +46,7 @@ protected:
   QCheckBox *m_pFormula;
   QCheckBox *m_pAutoCalc;
   QCheckBox *m_pGrid;
+  QCheckBox *m_pPrintGrid;
   QCheckBox *m_pColumn;
   QCheckBox *m_pLcMode;
   QCheckBox *m_pHideZero;

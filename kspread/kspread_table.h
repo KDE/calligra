@@ -630,9 +630,25 @@ public:
 
     void setValidity( const QPoint &_marker,KSpreadValidity tmp );
 
-    bool getShowGrid() const {return m_bShowGrid;}
+    /**
+     * Returns, if the grid shall be shown on the screen
+     */
+    bool getShowGrid() const { return m_bShowGrid; }
 
-    void setShowGrid(bool _showGrid) {m_bShowGrid=_showGrid;}
+    /**
+     * Sets, if the grid shall be shown on the screen
+     */
+    void setShowGrid( bool _showGrid ) { m_bShowGrid=_showGrid; }
+
+    /**
+     * Returns, if the grid shall be shown on printouts
+     */
+    bool getPrintGrid() const { return m_bPrintGrid; }
+    
+    /**
+     * Sets, if the grid shall be shown on printouts
+     */
+    void setPrintGrid( bool _printGrid ) { m_bPrintGrid=_printGrid; }
 
     bool getShowFormula() const {return m_bShowFormula;}
 
@@ -1232,7 +1248,14 @@ protected:
     static int s_id;
     static QIntDict<KSpreadTable>* s_mapTables;
 
+    /**
+     * Show the grid on the screen
+     */
     bool m_bShowGrid;
+    /**
+     * Show the grid when making printout
+     */
+    bool m_bPrintGrid;
     bool m_bShowFormula;
     bool m_bAutoCalc;
     bool m_bLcMode;

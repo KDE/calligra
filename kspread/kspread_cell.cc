@@ -1957,7 +1957,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
   if ( left_pen.style() == Qt::NoPen &&
        ( !m_pObscuringCell || m_pObscuringCell->column() == cellRef.x()))
   {
-    if( table()->getShowGrid() && !painter.device()->isExtDev())
+    if( table()->getShowGrid() )
     {
       int dt = 0;
       QPen t = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
@@ -1980,7 +1980,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
   if ( top_pen.style() == Qt::NoPen &&
        ( !m_pObscuringCell || m_pObscuringCell->row() == cellRef.y() ))
   {
-    if( table()->getShowGrid() && !painter.device()->isExtDev())
+    if( table()->getShowGrid() )
     {
       QPen l = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
       QPen r = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->rightBorderPen( cellRef.x(), cellRef.y() - 1 );

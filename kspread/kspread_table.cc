@@ -245,6 +245,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
 
   setHidden( false );
   m_bShowGrid=true;
+  m_bPrintGrid=false;
   m_bShowFormula=false;
   m_bLcMode=false;
   m_bShowColumnNumber=false;
@@ -5082,11 +5083,17 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 {
     kdDebug(36001)<<"PRINTING ...."<<endl;
 
-    // Override the current grid pen setting
-    QPen gridPen = m_pDoc->defaultGridPen();
-    QPen nopen;
-    nopen.setStyle( NoPen );
-    m_pDoc->setDefaultGridPen( nopen );
+    // Override the current grid pen setting, when set to disable
+    QPen gridPen;
+    bool oldShowGrid = m_bShowGrid;
+    m_bShowGrid = m_bPrintGrid;
+    if ( !m_bPrintGrid )
+    {
+	gridPen = m_pDoc->defaultGridPen();
+	QPen nopen;
+	nopen.setStyle( NoPen );
+	m_pDoc->setDefaultGridPen( nopen );
+    }
 
     //
     // Find maximum right/bottom cell with content
@@ -5279,8 +5286,12 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
             _printer->newPage();
     }
 
-    // Restore the grid pen
-    m_pDoc->setDefaultGridPen( gridPen );
+    if ( !m_bPrintGrid )
+    {
+	// Restore the grid pen
+	m_pDoc->setDefaultGridPen( gridPen );
+    }
+    m_bShowGrid = oldShowGrid;
 }
 
 void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const QRect& view )
@@ -5470,6 +5481,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", m_strName );
     table.setAttribute( "grid", (int)m_bShowGrid);
+    table.setAttribute( "printGrid", (int)m_bPrintGrid);
     table.setAttribute( "hide", (int)m_bTableHide);
     table.setAttribute( "formular", (int)m_bShowFormula);
     table.setAttribute( "borders", (int)m_bShowPageBorders);
@@ -5548,6 +5560,11 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     if( table.hasAttribute( "grid" ) )
     {
         m_bShowGrid = (int)table.attribute("grid").toInt( &ok );
+        // we just ignore 'ok' - if it didn't work, go on
+    }
+    if( table.hasAttribute( "printGrid" ) )
+    {
+        m_bPrintGrid = (int)table.attribute("printGrid").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "hide" ) )

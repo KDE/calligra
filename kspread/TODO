@@ -31,10 +31,12 @@ Other things: (please add the things you are working on!)
         (You can have an algorithm from me,
         if you are interested in implementing this -  Norbert)
 - Printing:
-        - print grid
         - expand selection to page
         - fit selection to page
         - print selection only
+- Sheet layout:
+        - Move sheet properties to seperate dialog (they are currently part of KSpread config dialog)
+        - Make headers/footers part of sheet not map (so each sheet has it's own header/footer)
 - Scenerios
 - Locked areas (for formulas with a matrix as result)
 - Multible Operations (in Excel: "Data"->"Table")
