@@ -42,6 +42,7 @@ KoVariableSettings::KoVariableSettings()
     m_startingpage = 1;
     m_displayLink = true;
     m_displayComment = true;
+    m_underlineLink = true;
 }
 
 void KoVariableSettings::save( QDomElement &parentElem )
@@ -53,6 +54,7 @@ void KoVariableSettings::save( QDomElement &parentElem )
         elem.setAttribute( "startingPageNumber", m_startingpage );
     }
     elem.setAttribute("displaylink",(int)m_displayLink);
+    elem.setAttribute("underlinelink",(int)m_underlineLink);
     elem.setAttribute("displaycomment",(int)m_displayComment);
 }
 
@@ -65,6 +67,8 @@ void KoVariableSettings::load( QDomElement &elem )
             m_startingpage = e.attribute("startingPageNumber").toInt();
         if(e.hasAttribute("displaylink"))
             m_displayLink=(bool)e.attribute("displaylink").toInt();
+        if(e.hasAttribute("underlinelink"))
+            m_underlineLink=(bool)e.attribute("underlinelink").toInt();
         if(e.hasAttribute("displaycomment"))
             m_displayComment=(bool)e.attribute("displaycomment").toInt();
     }
@@ -1239,6 +1243,8 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int 
 
     bool linkColor=m_varColl->variableSetting()->displayLink();
     QFont font( f->screenFont( zh ) );
+    if ( m_varColl->variableSetting()->underlineLink())
+        font.setUnderline(true);
     p->save();
     QColor textColor=linkColor ? Qt::blue :  f->color();
     if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow

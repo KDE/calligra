@@ -47,14 +47,17 @@ class KoVariableSettings
  public:
     KoVariableSettings();
     virtual ~KoVariableSettings() {}
-    int startingPage(){return m_startingpage;}
+    int startingPage()const{return m_startingpage;}
     void setStartingPage(int _startingpage){ m_startingpage=_startingpage;}
 
-    bool displayLink(){return m_displayLink;}
+    bool displayLink()const{return m_displayLink;}
     void setDisplayLink( bool b){ m_displayLink=b;}
 
-    bool displayComment(){return m_displayComment;}
+    bool displayComment()const {return m_displayComment;}
     void setDisplayComment( bool b){ m_displayComment=b;}
+
+    bool underlineLink()const {return m_underlineLink;}
+    void setUnderlineLink( bool b){ m_underlineLink=b;}
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
@@ -63,6 +66,7 @@ class KoVariableSettings
     int m_startingpage;
     bool m_displayLink;
     bool m_displayComment;
+    bool m_underlineLink;
 };
 
 /**
