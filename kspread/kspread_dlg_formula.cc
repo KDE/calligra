@@ -1502,7 +1502,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.nb_param=3;
         tmp.firstElementLabel=i18n("Text");
         tmp.secondElementLabel=i18n("Position (int)");
-        tmp.thirdElementLabel=i18n("Lenght (int)");
+        tmp.thirdElementLabel=i18n("Length (int)");
         tmp1=i18n("The mid() function returns a substring that contains\n"
                  "the len characters of this string, starting\n"
                 "at position index.\n");
@@ -1630,8 +1630,8 @@ void KSpreadDlgFormula::changeFunction()
         else if(m_funcName=="INVBINO")
         {
                 tmp.secondElementLabel=i18n("Number of failure");
-                tmp.thirdElementLabel=i18n("Probabity of failure");
-                tmp1=i18n("The INVBINO function returns the negative binomial \n"
+                tmp.thirdElementLabel=i18n("Probability of failure");
+                tmp1=i18n("The INVBINO function returns the negative binomial\n"
                         "distribution. The first parameter is the number of failure,\n"
                         "the second parameter is the number of failure, and\n"
                         "the third is the probability of failure. The number of\n"
