@@ -35,7 +35,7 @@ KisTool::KisTool(KisDoc *doc, const char * /*name*/) //: QObject(doc, name)
 {
 	m_pDoc = doc;
 	m_pView = doc -> currentView();
-	assert(m_pView);
+	Q_ASSERT(m_pView);
 	m_Cursor = KisCursor::arrowCursor();
 }
 
@@ -439,6 +439,11 @@ QDomElement KisTool::saveSettings(QDomDocument& /*doc*/) const
 bool KisTool::loadSettings(QDomElement& /*elem*/)
 {
 	return false;
+}
+
+void KisTool::update(QPainter& /*gc*/)
+{
+	kdDebug() << "KisTool::update\n";
 }
 
 #include "kis_tool.moc"
