@@ -121,7 +121,7 @@ QString ValueFormatter::formatText (const KSpreadValue &value,
   if( !postfix.isEmpty())
     str += ' ' + postfix;
   
-  kdDebug() << "ValueFormatter says: " << str << endl;
+  //kdDebug() << "ValueFormatter says: " << str << endl;
   return str;
 }
 
