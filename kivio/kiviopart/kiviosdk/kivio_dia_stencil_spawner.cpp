@@ -616,8 +616,8 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
 							kivioPointElement.setAttribute("type", "bezier");
 							kivioShape.appendChild(kivioPointElement);
-							//lastControlX = currentControlX;
-							//lastControlY = currentControlY;
+							lastControlX = currentControlX;
+							lastControlY = currentControlY;
 							lastPointX = currentPointX;
 							lastPointY = currentPointY;
 						}
@@ -640,8 +640,8 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							kivioShape.appendChild(kivioPointElement);
 
 							kivioPointElement = kivio.createElement("KivioPoint");
-							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio((2*(currentPointX-currentControlX)),true) * m_xscale));
-							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio((2*(currentPointY-currentControlY)), false) * m_yscale));
+							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio((2.0 * lastPointX-lastControlX),true) * m_xscale));
+							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio((2.0 * lastPointY-lastControlY), false) * m_yscale));
 							kivioPointElement.setAttribute("type", "bezier");
 							kivioShape.appendChild(kivioPointElement);
 
@@ -656,8 +656,8 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(currentPointY, false) * m_yscale));
 							kivioPointElement.setAttribute("type", "bezier");
 							kivioShape.appendChild(kivioPointElement);
-							//lastControlX = currentControlX;
-							//lastControlY = currentControlY;
+							lastControlX = currentControlX;
+							lastControlY = currentControlY;
 							lastPointX = currentPointX;
 							lastPointY = currentPointY;
 						}
