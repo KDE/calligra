@@ -93,6 +93,7 @@ KivioOptionsDialog::KivioOptionsDialog(KivioView* parent, const char* name)
   initPage();
   initGrid();
   initGuides();
+  unitChanged(parent->doc()->units());
 }
 
 void KivioOptionsDialog::initPage()
@@ -162,7 +163,7 @@ void KivioOptionsDialog::initGrid()
     kapp->iconLoader()->loadIcon("grid", KIcon::Toolbar, 32));
   m_gridIndex = pageIndex(page);
 
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->units();
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
   double pgw = KoUnit::ptToUnit(m_layout.ptWidth, unit);
   double pgh = KoUnit::ptToUnit(m_layout.ptHeight, unit);
@@ -246,7 +247,7 @@ void KivioOptionsDialog::initGuides()
   orientBGrp->insert(m_orientHorizRBtn);
   orientBGrp->insert(m_orientVertRBtn);
   QLabel* posLbl = new QLabel(i18n("&Position:"), m_propertiesGrp);
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  KoUnit::Unit unit = view->doc()->units();
   m_posUSpin = new KoUnitDoubleSpinBox(m_propertiesGrp, 0.0, 0.0, 0.0, unit);
   posLbl->setBuddy(m_posUSpin);
 
