@@ -2,6 +2,5 @@
 	needs=x11\
 	section=Apps/Editors\
 	title="KSpread"\
-	command=kspread\
-	icon="/usr/share/icons/locolor/16x16/apps/kspread.png"
+	command=kspread
 

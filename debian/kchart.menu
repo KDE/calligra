@@ -2,6 +2,5 @@
 	needs=x11\
 	section=Apps/Math\
 	title="KChart"\
-	command=kchart\
-	icon="/usr/share/icons/locolor/16x16/apps/kchart.png"
+	command=kchart
 

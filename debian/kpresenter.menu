@@ -2,6 +2,5 @@
 	needs=x11\
 	section=Apps/Tools\
 	title="KPresenter"\
-	command=kpresenter\
-	icon="/usr/share/icons/locolor/16x16/apps/kpresenter.png"
+	command=kpresenter
 
