@@ -25,6 +25,7 @@
 #include <qprogressdialog.h>
 #include <qlabel.h>
 #include <qgroupbox.h>
+#include <qcursor.h>
 
 #include <koAutoFormat.h>
 #include <koAutoFormatDia.h>
@@ -77,6 +78,7 @@
 #include "configfootnotedia.h"
 #include <qrichtext_p.h>
 #include <kaccel.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
@@ -783,7 +785,6 @@ void KWView::setupActions()
                             0,  actionCollection(), "border_style" );
     connect( actionBorderStyle, SIGNAL( activated( const QString & ) ),
              this, SLOT( borderStyle( const QString & ) ) );
-
     QStringList lst;
     lst << KoBorder::getStyle( KoBorder::SOLID );
     lst << KoBorder::getStyle( KoBorder::DASH );
@@ -792,14 +793,24 @@ void KWView::setupActions()
     lst << KoBorder::getStyle( KoBorder::DASH_DOT_DOT );
     lst << KoBorder::getStyle( KoBorder::DOUBLE_LINE );
     actionBorderStyle->setItems( lst );
-    actionBorderWidth = new KSelectAction( i18n( "Border Width" ), 0,
-                                                 actionCollection(), "border_width" );
-    connect( actionBorderWidth, SIGNAL( activated( const QString & ) ),
-             this, SLOT( borderWidth( const QString & ) ) );
-    lst.clear();
-    for ( unsigned int i = 1; i < 10; i++ )
-        lst << QString::number( i );
-    actionBorderWidth->setItems( lst );
+
+    actionBorderWidth = new KAction( i18n("Border Width"), "border_width", 0,
+                this, SLOT( borderWidth() ),
+                actionCollection(), "border_width" );
+    rb_borderWidthPopup = new QPopupMenu();
+    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width1" ), this, SLOT( borderWidth1() ) );
+    rb_borderWidthPopup->insertSeparator( -1 );
+    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width2" ), this, SLOT( borderWidth2() ) );
+    rb_borderWidthPopup->insertSeparator( -1 );
+    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width3" ), this, SLOT( borderWidth3() ) );
+    rb_borderWidthPopup->insertSeparator( -1 );
+    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width4" ), this, SLOT( borderWidth4() ) );
+    rb_borderWidthPopup->insertSeparator( -1 );
+    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width5" ), this, SLOT( borderWidth5() ) );
+    rb_borderWidthPopup->insertSeparator( -1 );
+    rb_borderWidthPopup->insertItem( KWBarIcon( "pen_width6" ), this, SLOT( borderWidth6() ) );
+    rb_borderWidthPopup->setMouseTracking( true );
+    rb_borderWidthPopup->setCheckable( false );
 
     actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color",true );
     actionBorderColor->setDefaultColor(QColor());
@@ -2332,7 +2343,7 @@ void KWView::deleteFrame( bool _warning )
 
             KoTextDocument * textdoc = textfs->textDocument();
             KoTextParag * parag = textdoc->firstParag();
-            if ( parag && parag->string()->length() > 0 )
+            if ( parag && parag->string()->length() > 1 )
             {
                 int result = KMessageBox::warningContinueCancel(
                     this,
@@ -4444,13 +4455,19 @@ void KWView::borderColor()
     borderSet();
 }
 
-void KWView::borderWidth( const QString &width )
+void KWView::borderWidth( ) {
+    //m_canvas->setToolEditMode( TEM_MOUSE );
+    QPoint pnt( QCursor::pos() );
+    rb_borderWidthPopup->popup( pnt );
+}
+
+void KWView::borderWidth( int width )
 {
-    m_border.common.setPenWidth( width.toInt());
-    m_border.left.setPenWidth(m_border.common.penWidth());
-    m_border.right.setPenWidth(m_border.common.penWidth());
-    m_border.top.setPenWidth(m_border.common.penWidth());
-    m_border.bottom.setPenWidth(m_border.common.penWidth());
+    m_border.common.setPenWidth( width );
+    m_border.left.setPenWidth( width );
+    m_border.right.setPenWidth( width );
+    m_border.top.setPenWidth( width );
+    m_border.bottom.setPenWidth( width );
     borderSet();
     m_gui->canvasWidget()->setFocus();
 }
@@ -4570,7 +4587,6 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void KWView::borderShowValues()
 {
-    actionBorderWidth->setCurrentItem( (int)m_border.common.penWidth() - 1 );
     actionBorderStyle->setCurrentItem( (int)m_border.common.getStyle() );
 }
 
@@ -6021,7 +6037,8 @@ KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view )
     canvas = new KWCanvas( viewMode, left, doc, this );
 
     QValueList<int> l;
-    l << 0;
+    l << 10;
+    l << 90;
     panner->setSizes( l );
 
     KoPageLayout layout = doc->pageLayout();
@@ -6100,10 +6117,10 @@ void KWGUI::reorganize()
         if(docStruct->isHidden()) {
             docStruct->show();
             if(panner->sizes()[0] < 50) {
-                QValueList<int> sizes;
-                sizes.append(100);
-                sizes.append(panner->sizes()[0] + panner->sizes()[1] - 100);
-                panner->setSizes(sizes);
+                QValueList<int> l;
+                l << 100;
+                l << width()-100;
+                panner->setSizes( l );
             }
         }
     } else
