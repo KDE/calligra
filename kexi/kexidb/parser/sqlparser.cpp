@@ -820,11 +820,20 @@
 
 	void parseData(KexiDB::Parser *p, const char *data)
 	{
-		dummy = new KexiDB::TableSchema();
+		if (!dummy)
+			dummy = new KexiDB::TableSchema();
 		parser = p;
 		field = 0;
 		fieldList.clear();
 		requiresTable = false;
+
+		if (!data) {
+			KexiDB::ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
+			parser->setError(err);
+			yyerror("");
+			return;
+		}
+	
 		tokenize(data);
 		yyparse();
 
@@ -860,7 +869,7 @@
 		{
 			KexiDB::ParserError err(i18n("Field List Error"), i18n("Table '%1' does not exist").arg(table), ctoken, current);
 			parser->setError(err);
-			yyerror("field list error");
+			yyerror("fieldlisterror");
 		}
 		else
 		{
@@ -2368,7 +2377,7 @@ yyreduce:
 			{
 				KexiDB::ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
 				parser->setError(err);
-				yyerror("field list error");
+				yyerror("fieldlisterror");
 			}	
 		}
 	}
