@@ -125,6 +125,8 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_bDontCheckUpperWord=false;
   m_bDontCheckTitleCase=false;
   m_unit = KoUnit::U_MM;
+
+  m_iZoom = 100;
 }
 
 bool KSpreadDoc::initDoc()
@@ -641,7 +643,6 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
         return;
 
     kdDebug(36001)<<"paintContent-------------------------------------\n";
-    // ### TODO support zooming
     painter.save();
 
     painter.scale(zoomX, zoomY);
@@ -879,9 +880,9 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, QRect viewRect,
   if (paintRight && paintBottom)
   {
     /* then the 'handle' in the bottom right corner is visible. */
-    painter.drawLine( right, top, right, bottom - 2 );
+    painter.drawLine( right, top, right, bottom - 3 );
     painter.drawLine( left - 2 + l, bottom, right - 3, bottom );
-    painter.fillRect( right - 2, bottom - 1, 5, 5, painter.pen().color() );
+    painter.fillRect( right - 2, bottom - 2, 5, 5, painter.pen().color() );
   }
   else
   {
