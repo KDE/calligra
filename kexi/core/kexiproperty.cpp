@@ -474,6 +474,14 @@ KexiProperty::format(const QVariant &v)
 		case QVariant::Font:
 		{
 			QFont f = v.toFont();
+			int w = f.weight();
+			QString wstr;
+			if (w<=QFont::Light) wstr=i18n("Light")+" ";
+			else if (w<=QFont::Normal) wstr="";
+			else wstr=i18n("Bold")+" ";
+			if (f.italic())
+				wstr += (i18n("Italic")+" ");
+			return f.family() + " " + wstr + QString::number(f.pointSize());
 			return QString(f.family() + " " + QString::number(f.pointSize()));
 		}
 		case QVariant::Double:
