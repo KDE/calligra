@@ -1,0 +1,2 @@
+# Come back if you're maintained
+DO_NOT_COMPILE="$DO_NOT_COMPILE kontour"
