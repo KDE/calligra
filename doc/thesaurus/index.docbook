@@ -19,19 +19,20 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2002-06-16</date>
-<releaseinfo>0.90.00</releaseinfo>
+<date>2003-04-12</date>
+<releaseinfo>0.95.00</releaseinfo>
 
 <copyright>
 <year>2002</year>
+<year>2003</year>
 <holder>Daniel Naber</holder>
 </copyright>
 
 <abstract>
 <para>
-&kthesaurus; lists words related to a search term and offers a user interface
-to &wordnet;, an online lexical reference system. Only the English language 
-is supported.
+&kthesaurus; lists words related to a given term and offers a user interface
+to &wordnet;, a powerful lexical reference system. By default, only the
+English language is supported.
 </para>
 </abstract>
 
@@ -57,7 +58,7 @@ built from a subset of <link linkend="frontend">&wordnet;</link>.
 The results are listed in three
 categories: <guilabel>Synonyms</guilabel>, <guilabel>More general
 words</guilabel> (hypernyms), <guilabel>More specific
-words</guilabel> (hyponyms). Synonyms are words with a similar meaning. 
+words</guilabel> (hyponyms). Synonyms are words with a very similar meaning. 
 They do not necessarily apply to all senses of each word, so you cannot 
 always replace a word with any synonym.</para>
 
@@ -90,11 +91,22 @@ meaning, so one word may appear in more than one list at the same time.</para></
 </itemizedlist>
 
 <para>On the other hand, a few words have been added (function words like <quote>if</quote>
-and very few words specific to &kde;). Just like in &wordnet;, only the
-English language is supported.</para>
+and very few words specific to &kde;).</para>
 
 <para>Please do <emphasis>not</emphasis> report bugs in the thesaurus
 to the &wordnet; project, but to &kde;.</para>
+
+</chapter>
+
+
+<chapter id="languages">
+<title>Using languages besides English</title>
+
+<para>By default, only the English language is supported 
+in &kthesaurus;. You can check out
+<ulink url="http://www.koffice.org/downloads/#thesauri">the
+KOffice download page</ulink> the see which other languages 
+are available.</para>
 
 </chapter>
 
