@@ -63,9 +63,6 @@ protected:
 public slots:
     void slotEffectDiaOk();
 
-signals:
-    void effectDiaOk();
-
 protected slots:
     void disappearChanged();
     void num1Changed( int num );

@@ -36,7 +36,6 @@ class QScrollBar;
 class AFChoose;
 class StyleDia;
 class PgConfDia;
-class EffectDia;
 class RotateDia;
 class ShadowDia;
 class KPPresStructView;
@@ -391,7 +390,6 @@ protected:
     AFChoose *afChoose;
     StyleDia *styleDia;
     PgConfDia *pgConfDia;
-    EffectDia *effectDia;
     RotateDia *rotateDia;
     ShadowDia *shadowDia;
     KPPresStructView *presStructView;

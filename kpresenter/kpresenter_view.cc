@@ -169,7 +169,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     afChoose = 0;
     styleDia = 0;
     pgConfDia = 0;
-    effectDia = 0;
     rotateDia = 0;
     shadowDia = 0;
     presStructView = 0;
@@ -955,21 +954,15 @@ void KPresenterView::screenPresStructView()
 /*===============================================================*/
 void KPresenterView::screenAssignEffect()
 {
-    if ( effectDia ) {
-	QObject::disconnect( effectDia, SIGNAL( effectDiaOk() ), this, SLOT( effectOk() ) );
-	effectDia->close();
-	delete effectDia;
-	effectDia = 0;
-    }
-
     page->setToolEditMode( TEM_MOUSE );
 
     QList<KPObject> objs;
     if ( page->canAssignEffect( objs ) ) {
-	effectDia = new EffectDia( this, "Effect", objs, this );
+        EffectDia *effectDia = new EffectDia( this, "Effect", objs, this );
 	effectDia->setCaption( i18n( "KPresenter - Assign effects" ) );
-	QObject::connect( effectDia, SIGNAL( effectDiaOk() ), this, SLOT( effectOk() ) );
-	effectDia->show();
+	if(effectDia->exec())
+            effectOk();
+        delete effectDia;
     }
 }
 
