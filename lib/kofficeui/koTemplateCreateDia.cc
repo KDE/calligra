@@ -227,13 +227,11 @@ void KoTemplateCreateDia::slotOk() {
     icon+=".png";
 
     // try to find the extension for the template file :P
-    unsigned int k=0;
-    unsigned int foo=m_file.length();
-    while(m_file[foo-k]!=QChar('.') && k<=foo) {
-        ++k;
-    }
-    if(k<foo)
-        file+=m_file.right(k);
+    const int pos = m_file.findRev( '.' );
+    if ( pos > -1 )
+        file += m_file.right( pos );
+    else
+        kdWarning(30004) << "Template extension not found!" << endl;
 
     KoTemplate *t=new KoTemplate(d->m_name->text(), QString::null, ".source/"+file, tmpIcon, false, true);
     if(!group->add(t)) {
