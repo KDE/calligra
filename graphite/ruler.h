@@ -60,9 +60,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mouseDoubleClickEvent(QMouseEvent *);
-    void resizeEvent(QResizeEvent *e);
 
-    void drawContents(QPainter *painter) { m_orientation==Qt::Horizontal ? drawHorizontal(painter) : drawVertical(painter); }
+    void drawContents(QPainter *p) { m_orientation==Qt::Horizontal ? drawHorizontal(p) : drawVertical(p); }
 
 private slots:
     void rbPT() { setUnit(GraphiteGlobal::Pt); emit unitChanged(GraphiteGlobal::Pt); }
@@ -74,15 +73,14 @@ private:
     Ruler &operator=(const Ruler &rhs);
     enum Action { A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM };
 
-    void drawHorizontal(QPainter *painter);
-    void drawVertical(QPainter *painter);
+    void drawHorizontal(QPainter *p);
+    void drawVertical(QPainter *p);
 
     QWidget *m_canvas;
     Qt::Orientation m_orientation;
     Graphite::PageLayout m_layout;
     double m_zoomedRes;
     double m_1_zoomedRes; // 1/m_zoomedRes
-    QPixmap m_buffer;
     GraphiteGlobal::Unit m_unit;
     int m_dx, m_dy;
     int m_MX, m_MY;

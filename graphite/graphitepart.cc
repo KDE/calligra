@@ -20,10 +20,12 @@
 #include <qpainter.h>
 #include <qevent.h>
 
+//#include <kglobal.h>
+//#include <kconfig.h>
 #include <kaction.h>
 #include <kstdaction.h>
-#include <kdebug.h>
 #include <kcommand.h>
+#include <kdebug.h>
 
 #include <graphiteview.h>
 #include <graphitefactory.h>
@@ -51,6 +53,7 @@ GraphitePart::~GraphitePart() {
 bool GraphitePart::initDoc() {
     // If nothing is loaded, do initialize here (TODO)
     // Show the "template" dia
+    //KConfig *config=KGlobal::config();
     return true;
 }
 
