@@ -323,19 +323,23 @@ KarbonView::dropEvent( QDropEvent *e )
 void
 KarbonView::print( KPrinter &printer )
 {
+	// TODO : ultimately use plain QPainter here as that is better suited to print system
 	kdDebug(38000) << "KarbonView::print" << endl;
 	VQPainter p( ( QPaintDevice * ) & printer, width(), height() );
 	p.begin();
 	p.setZoomFactor( 1.0 );
 	QWMatrix mat;
-    mat.scale( 1, -1 );
+	mat.scale( 1, -1 );
 	mat.translate( 0, -part()->document().height() );
-    p.setWorldMatrix( mat );
+	p.setWorldMatrix( mat );
 
 	// print the doc using QPainter at zoom level 1
 	// TODO : better use eps export?
 	// TODO : use real page layout stuff
 	KoRect rect( 0, 0, width(), height() );
+	p.setPen(Qt::NoPen);
+	p.setBrush(Qt::white);
+	p.drawRect(rect);
 
 	part()->document().draw( &p, &rect );
 
