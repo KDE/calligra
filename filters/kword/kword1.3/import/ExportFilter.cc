@@ -117,7 +117,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
 {
     QString strReturn;
     QChar ch;
-    int spaceNumber=-1; // How many spaces are *still* to write (-1 == none; 0 == we had just one space, not any further needed)
+    int spaceNumber = 0; // How many spaces should be written
 
     for (uint i=0; i<strText.length(); i++)
     {
@@ -125,14 +125,18 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
 
         if (ch!=' ')
         {
-            // The next character is not a space anymore
+            // The next character is not a space (anymore)
             if ( spaceNumber > 0 )
             {
-                strReturn+="<text:s text:c=\"";
-                strReturn+=QString::number(spaceNumber);
-                strReturn+="\"/>";
+                strReturn += ' '; // Always write one space
+                if ( spaceNumber > 1 )
+                {
+                    strReturn += "<text:s text:c=\"";
+                    strReturn += QString::number( spaceNumber - 1 );
+                    strReturn += "\"/>";
+                }
             }
-            spaceNumber=-1;
+            spaceNumber = 0;
         }
 
         // ### TODO: would be switch/case or if/elseif the best?
@@ -150,14 +154,13 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
             }
         case 32: // Space
             {
-                if (spaceNumber>=0)
+                if ( spaceNumber > 0 )
                 {
-                    spaceNumber++;
+                    ++spaceNumber;
                 }
                 else
                 {
-                    strReturn+=' '; // The first one has to be written
-                    spaceNumber=0;
+                    spaceNumber = 1;
                 }
                 break;
             }
@@ -212,6 +215,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
     if ( spaceNumber > 0 )
     {
         // The last characters were spaces
+        // We do not care about writing a real space (also to avoid to have <tag> </tag>)
         strReturn+="<text:s text:c=\"";
         strReturn+=QString::number(spaceNumber);
         strReturn+="\"/>";
