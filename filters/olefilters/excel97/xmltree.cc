@@ -3000,7 +3000,7 @@ bool XMLTree::_shrfmla(Q_UINT32 size, QDataStream &body)
 
 	QByteArray a;
 
-//	body.readRawBytes(store, dataLen);
+	body.readRawBytes(store, dataLen);
 
 	a.setRawData(store, dataLen);
 
@@ -3009,7 +3009,8 @@ bool XMLTree::_shrfmla(Q_UINT32 size, QDataStream &body)
 
 	shrfmlalist.append(new SharedFormula(firstrow, lastrow, firstcol, lastcol, &fbody));
 
-//	delete []store;
+	a.resetRawData(store, dataLen);
+	delete []store;
 
 	return true;
 }
