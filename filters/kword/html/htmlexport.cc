@@ -469,7 +469,7 @@ class ClassExportFilterBase
         virtual ~ClassExportFilterBase(void) {}
     public: //Non-virtual
         bool filter(const QString  &filenameIn, const QString  &filenameOut);
-        QString escapeText(QString& str) const;
+        QString escapeText(const QString& str) const;
         QString getHtmlOpeningTagExtraAttributes(void) const;
     public: //virtual
         virtual bool isXML(void) const {return false;}
@@ -680,28 +680,49 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, ClassE
 
 // ClassExportFilterBase
 
-const QString strAmp ("&amp;");
-const QString strLt  ("&lt;");
-const QString strGt  ("&gt;");
-//const QString strApos("&apos;");  //Only predefined in XHTML
-const QString strQuot("&quot;");
+QString ClassExportFilterBase::escapeText(const QString& strIn) const
+{
+    QString strReturn;
+    QChar ch;
 
-const QRegExp regExpAmp ("&");
-const QRegExp regExpLt  ("<");
-const QRegExp regExpGt  (">");
-//const QRegExp regExpApos("'");    //Only predefined in XHTML
-const QRegExp regExpQuot("\"");
+    for (uint i=0; i<strIn.length(); i++)
+    {
+        ch=strIn[i];
+        switch (ch.unicode())
+        {
+        case 38: // &
+            {
+                strReturn+="&amp;";
+                break;
+            }
+        case 60: // <
+            {
+                strReturn+="&lt;";
+                break;
+            }
+        case 62: // >
+            {
+                strReturn+="&gt;";
+                break;
+            }
+        case 34: // "
+            {
+                strReturn+="&quot;";
+                break;
+            }
+        // NOTE: the apostrophe ' is not escaped,
+        // NOTE:  as HTML does not define &apos; by default (only XML/XHTML does)
+        default:
+            {
+                // TODO: verify that the character ch can be expressed in the
+                // TODO:  encoding in which we will write the HTML file.
+                strReturn+=ch;
+                break;
+            }
+        }
+    }
 
-
-QString ClassExportFilterBase::escapeText(QString& strIn) const
-{// TODO: escape text that cannot be encoded in the current encoding!
-    //Code all possible predefined HTML entities
-    QString str(strIn);
-    str.replace (regExpAmp , strAmp)
-       .replace (regExpLt  , strLt)
-       .replace (regExpGt  , strGt)
-       .replace (regExpQuot, strQuot);
-    return str;
+    return strReturn;
 }
 
 bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &filenameOut)
@@ -829,9 +850,9 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
     streamOut << stringBufOut;
 
     // Add the tail of the file
-    streamOut << "</body>" << endl << "</html>" << endl;
+    streamOut << "</body>\n</html>\n";
 
-    fileOut.close (); //Really close the file
+    fileOut.close();
     return true;
 
 }
@@ -883,8 +904,8 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
 
             if ((*paraFormatDataIt).missing)
-            {   //Format is not issued from KWord. Therefore is only the layout
-                // So it is only the text
+            {   // Format is not issued from KWord.
+				//  So it is only the text (no additional formating.)
                 if (outputText==" ")
                 {//Just a space as text. Therefore we must use a non-breaking space.
                     outputText += "&nbsp;";
@@ -898,7 +919,7 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
             }
 
             // TODO: first and last characters of partialText should not be a space (white space problems!)
-            // TODO: replace multiple spaces in non-breaking spaces!
+            // TODO: replace multiple spaces into non-breaking spaces!
             // Opening elements
 
             QString fontName = (*paraFormatDataIt).fontName;
@@ -1505,10 +1526,7 @@ void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, Value
             }
             outputText+="; ";
 
-            // Give the font size relatively (be kind with people with impered vision)
-            // TODO: option to give absolute font sizes
-            int size=(*paraFormatDataIt).fontSize;
-            // 12pt is considered the normal size // TODO: relative to layout!
+            const int size=(*paraFormatDataIt).fontSize;
             if (size>0)
             {
                 // We use absolute font sizes.
@@ -1560,8 +1578,8 @@ void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, Value
                 //Code all possible predefined HTML entities
                 outputText += escapeText(partialText);
             }
-            // Closing elements
 
+			// Closing elements
             if ( 2==(*paraFormatDataIt).verticalAlignment )
             {
                 outputText+="</sup>"; //Superscript
@@ -1730,10 +1748,7 @@ QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, c
     }
     strElement+="; ";
 
-    // Give the font size relatively (be kind with people with impered vision)
-    // TODO: option to give absolute font sizes
-    int size=layout.formatData.fontSize;
-    // 12pt is considered the normal size // TODO: relative to layout!
+    const int size=layout.formatData.fontSize;
     if (size>0)
     {
         // We use absolute font sizes.

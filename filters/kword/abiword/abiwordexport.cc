@@ -513,24 +513,58 @@ static void CreateMissingFormatData(QString &paraText, ValueListFormatData &para
     }
 }
 
+static QString EscapeText(const QString& strIn)
+{
+    QString strReturn;
+    QChar ch;
+
+    for (uint i=0; i<strIn.length(); i++)
+    {
+        ch=strIn[i];
+        switch (ch.unicode())
+        {
+        case 38: // &
+            {
+                strReturn+="&amp;";
+                break;
+            }
+        case 60: // <
+            {
+                strReturn+="&lt;";
+                break;
+            }
+        case 62: // >
+            {
+                strReturn+="&gt;";
+                break;
+            }
+        case 34: // "
+            {
+                strReturn+="&quot;";
+                break;
+            }
+        case 39: // '
+            {
+                strReturn+="&apos;";
+                break;
+            }
+        default:
+            {
+                strReturn+=ch;
+                break;
+            }
+        }
+    }
+
+    return strReturn;
+}
+
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
 static void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText )
 {
-    const QString strAmp ("&amp;");
-    const QString strLt  ("&lt;");
-    const QString strGt  ("&gt;");
-    const QString strApos("&apos;");
-    const QString strQuot("&quot;");
-
-    const QRegExp regExpAmp ("&");
-    const QRegExp regExpLt  ("<");
-    const QRegExp regExpGt  (">");
-    const QRegExp regExpApos("'");
-    const QRegExp regExpQuot("\"");
-
     if ( paraText.length () > 0 )
     {
         CreateMissingFormatData(paraText,paraFormatDataList);
@@ -543,14 +577,9 @@ static void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraF
               paraFormatDataIt != paraFormatDataList.end ();
               paraFormatDataIt++ )
         {
-            //Retrieve text
-            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-            //Code all possible predefined XML entities
-            partialText.replace (regExpAmp , strAmp); //Must be the first!!
-            partialText.replace (regExpLt  , strLt);
-            partialText.replace (regExpGt  , strGt);
-            partialText.replace (regExpApos, strApos);
-            partialText.replace (regExpQuot, strQuot);
+            // Retrieve text and escape it
+            partialText=EscapeText(
+                paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
 
             if ((*paraFormatDataIt).abiprops.isEmpty())
             {
@@ -582,7 +611,6 @@ static void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraF
     }
 
 }
-
 
 static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText )
 {
@@ -677,10 +705,9 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         outputText += "<pbr/>";
     }
 
-
     ProcessParagraphData ( paraText, paraFormatDataList, outputText );
 
-    // Before closing the paragrapgh, test if we have a opage break
+    // Before closing the paragraph, test if we have a page break
     if (paraLayout.pageBreakAfter)
     {
         // We have a page break after the paragraph
@@ -751,7 +778,6 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, QString   &outputTe
 {
     AllowNoAttributes (myNode);
 
-    // We have the advantage that for styles, KWord and AbiWord have nearly the same way.
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
     ProcessSubtags (myNode, tagProcessingList, outputText);
