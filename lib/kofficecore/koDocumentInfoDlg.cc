@@ -40,6 +40,7 @@
 #include <kabc/stdaddressbook.h>
 #include <kdeversion.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <ktar.h>
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -157,7 +158,11 @@ void KoDocumentInfoDlg::loadFromKABC()
 
   KABC::Addressee addr = ab->whoAmI();
   if ( addr.isEmpty() )
+  {
+    KMessageBox::sorry( 0L, i18n( "No personal contact data set, please use the option \
+                                  \"Set as Personal Contact Data\" from the \"Edit\" menu in KAddressbook to set one." ) );
     return;
+  }
 
   d->m_leFullName->setText( addr.formattedName() );
   d->m_leInitial->setText( addr.givenName()[ 0 ] + ". " +
