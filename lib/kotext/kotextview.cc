@@ -30,13 +30,19 @@
 #include <krun.h>
 #include <kmessagebox.h>
 
-struct KoTextView::KoTextViewPrivate
+class KoTextView::KoTextViewPrivate
 {
+public:
     KoTextViewPrivate()
     {
         m_currentUnicodeNumber = 0;
     }
-    int m_currentUnicodeNumber; // For the alt+0123 feature
+
+    void appendDigit( int digit ) { m_currentUnicodeNumber = 10 * m_currentUnicodeNumber + digit; }
+    int currentUnicodeNumber() const { return m_currentUnicodeNumber; }
+    void clearCurrentUnicodeNumber() { m_currentUnicodeNumber = 0; }
+private:
+    int m_currentUnicodeNumber; // For the alt+123 feature
 };
 
 KoTextView::KoTextView( KoTextObject *textobj )
@@ -246,10 +252,22 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                 }*/
                 QString text = e->text();
 
-                insertText( text );
+                // Alt+123 feature
+                if ( ( e->state() & AltButton ) && text[0].isDigit() )
+                {
+                    while ( text[0].isDigit() ) {
+                        d->appendDigit( text[0].digitValue() );
+                        text.remove( 0, 1 );
+                    }
+                }
 
-                doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
-                              m_cursor->index() - 1, text[ text.length() - 1 ] );
+                if ( !text.isEmpty() )
+                {
+                    insertText( text );
+
+                    doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
+                                  m_cursor->index() - 1, text[ text.length() - 1 ] );
+                }
                 break;
             }
             // We should use KAccel instead, to make this configurable !
@@ -287,6 +305,18 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
 void KoTextView::insertText( const QString &text )
 {
     textObject()->insert( m_cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
+}
+
+void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
+{
+    if ( e->key() == Key_Alt && d->currentUnicodeNumber() >= 32 )
+    {
+        QString text = QChar( d->currentUnicodeNumber() );
+        d->clearCurrentUnicodeNumber();
+        insertText( text );
+        doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()),
+                      m_cursor->index() - 1, text[ text.length() - 1 ] );
+    }
 }
 
 void KoTextView::moveCursor( CursorAction action, bool select )

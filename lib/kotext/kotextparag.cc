@@ -221,13 +221,16 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
         width = zh->layoutUnitToPixelX( width );
         height = zh->layoutUnitToPixelY( y, height );
-        QString prefix = m_layout.counter->prefix()+ ' '/*the trailing space*/;
-        int posPrefix=0;
-        for ( unsigned int i = 0; i < prefix.length(); i++ )
-            posPrefix += zh->layoutUnitToPixelX(format->width( prefix,i));
+        QString prefix = m_layout.counter->prefix();
+	if ( !prefix.isEmpty() )
+	{
+	    prefix += ' '/*the trailing space, part of the prefix*/;
+            int posPrefix=0;
+            for ( unsigned int i = 0; i < prefix.length(); i++ )
+                posPrefix += zh->layoutUnitToPixelX(format->width( prefix,i));
 
-        p->drawText( x-posPrefix, y - h + base, prefix );
-
+            p->drawText( x-posPrefix, y - h + base, prefix );
+        }
 
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
         // Draw the bullet.
@@ -258,7 +261,8 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             default:
                 break;
         }
-        p->drawText( x , y - h + base, suffix );
+	if ( !suffix.isEmpty() )
+            p->drawText( x , y - h + base, suffix );
     }
     else
     {
@@ -447,7 +451,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
             continue;
         if ( !lastFormat->inFont( ch.c ) )
         {
-            kdDebug() << "KoTextParag::drawParagString char not in font" << endl;
+            //kdDebug() << "KoTextParag::drawParagString char not in font" << endl;
             int w = ch.pixelwidth;
             int height = zh->layoutUnitToPixelY( ch.ascent() ) / 2; // we use half ascent and 0 descent
             int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
@@ -459,12 +463,13 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
         }
     }
 
-    drawFormattingChars( painter, s, start, len,
-                         startX, lastY, baseLine, h,
-                         startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
-                         drawSelections,
-                         lastFormat, i, selectionStarts,
-                         selectionEnds, cg, rightToLeft );
+    if ( textDocument()->drawFormattingChars() )
+        drawFormattingChars( painter, s, start, len,
+                             startX, lastY, baseLine, h,
+                             startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
+                             drawSelections,
+                             lastFormat, i, selectionStarts,
+                             selectionEnds, cg, rightToLeft );
 
 }
 
@@ -483,6 +488,8 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
     // 1) Sort out the color
     QColor textColor( lastFormat->color() );
+    if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
+        textColor = shadowColor();
     if ( !textColor.isValid() ) // Resolve the color at this point
         textColor = KoTextFormat::defaultTextColor( &painter );
 
@@ -569,6 +576,8 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 // Reimplemented from QTextParag
 void KoTextParag::drawCursor( QPainter &painter, QTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg )
 {
+    if ( textDocument()->drawingShadow() )
+        return; // No shadow of the cursor ;)
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) + cursor->parag()->at( cursor->index() )->pixelxadj;
     //qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
@@ -598,8 +607,9 @@ void KoTextParag::copyParagData( QTextParag *_parag )
             styleApplied = true;
         }
     }
-    else
-        kdWarning() << "Paragraph has no style " << paragId() << endl;
+    // This should never happen in KWord, but it happens in KPresenter
+    //else
+    //    kdWarning() << "Paragraph has no style " << paragId() << endl;
 
     // No "following style" setting, or same style -> copy layout & format of previous paragraph
     if (!styleApplied)
@@ -716,6 +726,50 @@ int KoTextParag::nextTab( int chnum, int x )
     }
     // No tab list (or no more tabs), use tab-stop-width. QTextParag has the code :)
     return QTextParag::nextTab( chnum, x );
+}
+
+void KoTextParag::setShadow( double dist, short int direction, const QColor &col )
+{
+    m_layout.shadowDistance = dist;
+    m_layout.shadowDirection = direction;
+    m_layout.shadowColor = col;
+    invalidate(0);
+}
+
+int KoTextParag::shadowX( KoZoomHandler *zh ) const
+{
+    switch ( m_layout.shadowDirection )
+    {
+    case KoParagLayout::SD_LEFT_BOTTOM:
+    case KoParagLayout::SD_LEFT:
+    case KoParagLayout::SD_LEFT_UP:
+        return - zh->zoomItX( m_layout.shadowDistance );
+    case KoParagLayout::SD_UP:
+    case KoParagLayout::SD_BOTTOM:
+        return 0;
+    case KoParagLayout::SD_RIGHT_UP:
+    case KoParagLayout::SD_RIGHT:
+    case KoParagLayout::SD_RIGHT_BOTTOM:
+        return zh->zoomItX( m_layout.shadowDistance );
+    }
+}
+
+int KoTextParag::shadowY( KoZoomHandler *zh ) const
+{
+    switch ( m_layout.shadowDirection )
+    {
+    case KoParagLayout::SD_LEFT_UP:
+    case KoParagLayout::SD_UP:
+    case KoParagLayout::SD_RIGHT_UP:
+        return - zh->zoomItY( m_layout.shadowDistance );
+    case KoParagLayout::SD_LEFT:
+    case KoParagLayout::SD_RIGHT:
+        return 0;
+    case KoParagLayout::SD_LEFT_BOTTOM:
+    case KoParagLayout::SD_BOTTOM:
+    case KoParagLayout::SD_RIGHT_BOTTOM:
+        return zh->zoomItY( m_layout.shadowDistance );
+    }
 }
 
 void KoTextParag::applyStyle( KoStyle *style )

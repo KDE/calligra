@@ -318,6 +318,7 @@ KoNumPreview::KoNumPreview( QWidget* parent, const char* name )
     m_zoomHandler = new KoZoomHandler;
     //FIXME QFONT()
     m_textdoc = new KoTextDocument( m_zoomHandler, new KoTextFormatCollection( KoGlobal::defaultFont() ));
+    m_textdoc->setWidth(1000);
     KoTextParag * parag = static_cast<KoTextParag *>(m_textdoc->firstParag());
     parag->insert( 0, i18n("Normal paragraph text") );
 }
@@ -1241,6 +1242,13 @@ void KoParagCounterWidget::numStyleChanged() {
     bool hasStart = !sr->listStyle() && !sr->style() == KoParagCounter::STYLE_NONE;
     lStart->setEnabled( hasStart );
     spnStart->setEnabled( hasStart );
+    if ( sr->listStyle() ) // we selected a bullet -> erase prefix/suffix.
+                           // due to default value of suffix='.', it's too easy to end up
+                           // with a bullet + a dot.
+    {
+        sSuffix->setText( QString::null );
+        sPrefix->setText( QString::null );
+    }
     changeKWSpinboxType();
     updatePreview();
 }

@@ -47,8 +47,9 @@ public:
            Borders = 16,
            Tabulator = 32,
            PageBreaking = 64,
+           Shadow = 128,
            /* Style is maybe missing */
-           All = Alignment | BulletNumber | Margins | LineSpacing | Borders | Tabulator | PageBreaking
+           All = Alignment | BulletNumber | Margins | LineSpacing | Borders | Tabulator | PageBreaking | Shadow
     } Flags;
 
     /** Page breaking flags */
@@ -67,6 +68,19 @@ public:
     double margins[5];
     enum { LS_ONEANDHALF = -1, LS_DOUBLE = -2 };
     double lineSpacing;
+    double shadowDistance;
+    QColor shadowColor;
+    enum {
+        SD_LEFT_UP = 1,
+        SD_UP = 2,
+        SD_RIGHT_UP = 3,
+        SD_RIGHT = 4,
+        SD_RIGHT_BOTTOM = 5,
+        SD_BOTTOM = 6,
+        SD_LEFT_BOTTOM = 7,
+        SD_LEFT = 8
+    };
+    short int shadowDirection;
     KoBorder leftBorder, rightBorder, topBorder, bottomBorder;
     /** can be 0 if no counter set */
     KoParagCounter* counter;

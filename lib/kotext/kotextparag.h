@@ -107,6 +107,17 @@ public:
     /** Set tabulator positions */
     void setTabList( const KoTabulatorList &tabList );
 
+    /** Get shadow distance */
+    double shadowDistance() const { return m_layout.shadowDistance; }
+    int shadowX( KoZoomHandler *zh ) const;
+    int shadowY( KoZoomHandler *zh ) const;
+    /** Get shadow color */
+    QColor shadowColor() const { return m_layout.shadowColor; }
+    /** Get shadow direction */
+    short int shadowDirection() const { return m_layout.shadowDirection; }
+    /** Set shadow distance, direction and color */
+    void setShadow( double dist, short int direction, const QColor &col );
+
     /** Set a @p custom item at position @p index, with format @p currentFormat (convenience method) */
     void setCustomItem( int index, KoTextCustomItem * custom, QTextFormat * currentFormat );
     /** Remove the custom item from position @p index, but doesn't delete it */
@@ -130,15 +141,14 @@ public:
     /** @return the parag rect, in pixels. This takes care of some rounding problems */
     QRect pixelRect( KoZoomHandler* zh ) const;
 
+    virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,
+			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
 
 #ifndef NDEBUG
     void printRTDebug( int );
 #endif
 
 protected:
-    virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,
-			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
-
     /** Draw the complete label (i.e. heading/list numbers/bullets) for this paragraph. */
     virtual void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
     virtual void copyParagData( QTextParag *_parag );

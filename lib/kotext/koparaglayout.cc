@@ -42,6 +42,9 @@ void KoParagLayout::operator=( const KoParagLayout &layout )
         counter = 0L;
     lineSpacing = layout.lineSpacing;
     style = layout.style;
+    shadowDistance = layout.shadowDistance;
+    shadowColor = layout.shadowColor;
+    shadowDirection = layout.shadowDirection;
     setTabList( layout.tabList() );
 }
 
@@ -82,8 +85,12 @@ int KoParagLayout::compare( const KoParagLayout & layout ) const
         flags |= LineSpacing;
     //if ( style != layout.style )
     //    flags |= Style;
-    if ( m_tabList != m_tabList )
+    if ( m_tabList != layout.m_tabList )
         flags |= Tabulator;
+    if ( shadowDistance != layout.shadowDistance
+         || ( shadowDistance > 0 && shadowColor != layout.shadowColor )
+         || ( shadowDistance > 0 && shadowDirection != layout.shadowDirection ) )
+         flags |= Shadow;
     return flags;
 }
 
@@ -100,6 +107,9 @@ void KoParagLayout::initialise()
     bottomBorder.ptWidth = 0;
     pageBreaking = 0;
     style = 0L;
+    shadowDistance = 0;
+    shadowColor = QColor();
+    shadowDirection = SD_RIGHT_BOTTOM;
     m_tabList.clear();
 }
 

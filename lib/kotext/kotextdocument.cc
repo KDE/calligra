@@ -169,7 +169,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
     }
 }
 
-void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int cx, int cy, int cw, int ch,
+void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
                                        KoZoomHandler* zoomHandler, bool drawCursor,
                                        QTextCursor *cursor, bool resetChanged, bool drawFormattingChars )
@@ -178,12 +178,21 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     kdDebug() << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
 #endif
     m_bDrawFormattingChars=drawFormattingChars;
+    int sx = 0, sy = 0;
+    if ( parag->shadowDistance() )
+    {
+        sx = parag->shadowX( zoomHandler );
+        sy = parag->shadowY( zoomHandler );
+    }
     QPainter *painter = 0;
     if ( resetChanged )
 	parag->setChanged( FALSE );
     QRect rect = static_cast<KoTextParag *>(parag)->pixelRect( zoomHandler );
+    rect.rRight() += sx;
+    rect.rBottom() += sy;
     QRect ir( rect );
     QRect crect( cx, cy, cw, ch ); // in pixels
+    QBrush brush = parag->backgroundColor() ? *parag->backgroundColor() : cg.brush( QColorGroup::Base );
 
 #ifdef DEBUG_PAINTING
     kdDebug() << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
@@ -197,6 +206,9 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     //	useDoubleBuffer = TRUE;
     if ( p->device()->devType() == QInternal::Printer )
 	useDoubleBuffer = FALSE;
+    // Can't handle transparency using double-buffering, in case of rotation/scaling (due to bitBlt)
+    if ( !p->worldMatrix().isIdentity() && brush == Qt::NoBrush )
+        useDoubleBuffer = FALSE;
 
     if ( useDoubleBuffer  ) {
 	painter = new QPainter;
@@ -210,6 +222,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
 	} else {
 	    painter->begin( doubleBuffer );
 	}
+
     } else {
 	painter = p;
 	painter->translate( ir.x(), ir.y() );
@@ -219,20 +232,20 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
     //painter->setBrushOrigin( painter->brushOrigin() + ir.topLeft() );
 
     if ( useDoubleBuffer || is_printer( painter ) ) {
-	if ( !parag->backgroundColor() )
-	    painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ),
-			       cg.brush( QColorGroup::Base ) );
+        // Transparent -> grab background from p's device
+        if ( brush == Qt::NoBrush ) {
+            bitBlt( doubleBuffer, 0, 0, p->device(),
+                    ir.x() + (int)p->translationX(), ir.y() + (int)p->translationY(),
+                    ir.width(), ir.height() );
+        }
 	else
-	    painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ),
-			       *parag->backgroundColor() );
+        {
+	    painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ), brush );
+        }
     } else {
 	if ( cursor && cursor->parag() == parag ) {
-	    if ( !parag->backgroundColor() )
-		painter->fillRect( QRect( zoomHandler->layoutUnitToPixelX( parag->at( cursor->index() )->x ), 0, 2, ir.height() ),
-				   cg.brush( QColorGroup::Base ) );
-	    else
-		painter->fillRect( QRect( zoomHandler->layoutUnitToPixelX( parag->at( cursor->index() )->x ), 0, 2, ir.height() ),
-				   *parag->backgroundColor() );
+            painter->fillRect( QRect( zoomHandler->layoutUnitToPixelX( parag->at( cursor->index() )->x ), 0, 2, ir.height() ),
+                               brush );
 	}
     }
 
@@ -247,6 +260,17 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int 
 #ifdef DEBUG_PAINTING
     kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
 #endif
+
+    if ( sx > 0 || sy > 0 )
+    {
+        painter->save();
+        painter->translate( sx, sy );
+        m_bDrawingShadow = true;
+        parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
+                      crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
+        painter->restore();
+    }
+    m_bDrawingShadow = false;
 
     parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
                   crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );

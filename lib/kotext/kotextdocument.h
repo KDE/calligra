@@ -26,6 +26,7 @@ class KoZoomHandler;
 class KoTextFormatCollection;
 class KoParagVisitor;
 class KoTextFormatter;
+class KoTextParag;
 
 /**
  * This is our QTextDocument reimplementation, to create KoTextParags instead of QTextParags,
@@ -94,27 +95,31 @@ public:
 
     /** Draw a single paragraph (used by drawWYSIWYG and by KWTextFrameSet::drawCursor).
      * Equivalent to QTextDocument::draw, but modified for wysiwyg */
-    void drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int cx, int cy, int cw, int ch,
+    void drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
                            QPixmap *&doubleBuffer, const QColorGroup &cg,
                            KoZoomHandler* zoomHandler,
                            bool drawCursor, QTextCursor *cursor,
                            bool resetChanged = TRUE,
 			   bool drawFormattingChars = FALSE);
 
-    bool drawFormattingChars(){ return m_bDrawFormattingChars;}
+    /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagString */
+    bool drawFormattingChars() const { return m_bDrawFormattingChars; }
+    /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
+    bool drawingShadow() const { return m_bDrawingShadow; }
 
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,
                                   KoZoomHandler* zoomHandler, const QBrush *paper = 0 );
 
 private:
+    QPixmap *bufferPixmap( const QSize &s );
     // The zoom handler used when formatting
     // (due to the pixelx/pixelww stuff in KoTextFormatter)
     KoZoomHandler * m_zoomHandler;
-    QPixmap *bufferPixmap( const QSize &s );
-    bool m_bDestroying;
     QPixmap *ko_buf_pixmap;
+    bool m_bDestroying;
     bool m_bDrawFormattingChars;
+    bool m_bDrawingShadow;
 };
 
 /**
