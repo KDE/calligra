@@ -71,6 +71,9 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public QDict<KexiProp
 		*/
 		QString typeName() const { return m_typeName; }
 
+		/*! Removes all properties from the buffer and destroys them. */
+		virtual void clear();
+
 		void debug();
 
 	signals:

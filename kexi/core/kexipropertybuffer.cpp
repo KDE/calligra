@@ -43,10 +43,11 @@ KexiPropertyBuffer::changeProperty(const QString &property, const QVariant &valu
 		return;
 
 	kdDebug() << "KexiPropertyBuffer::changeProperty(): changing: " << property 
-		<< " from '" << prop->value().toString() << "' to '" 
-		<< value.toString() << "'" << endl;
+		<< " from '" << (prop->value().toString().isNull() ? QString("NULL") : prop->value().toString())
+		<< "' to '" << (value.toString().isNull() ? QString("NULL") : value.toString()) << "'" << endl;
 
-	if (prop->value() != value) {
+	if (prop->value() != value 
+	 && !(prop->value().type()==QVariant::String && prop->value().toString().isEmpty() && value.toString().isEmpty())) {
 		prop->setValue(value);
 		emit propertyChanged(*this, *prop);
 	}
@@ -57,6 +58,12 @@ KexiPropertyBuffer::add(KexiProperty *property)
 {
 	insert(property->name(), property);
 	m_list.append( property );
+}
+
+void KexiPropertyBuffer::clear()
+{
+	m_list.clear();
+	QDict<KexiProperty>::clear();
 }
 
 void KexiPropertyBuffer::debug()
