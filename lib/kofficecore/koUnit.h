@@ -22,6 +22,7 @@
 #define kounit_h
 #include <qstring.h>
 #include <qstringlist.h>
+#include <math.h> // for floor
 
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
@@ -70,47 +71,47 @@ public:
     /// Prepare ptValue to be displayed in pt
     static double toPoint( double ptValue ) {
         // No conversion, only rounding (to 0.001 precision)
-        return qRound( ptValue * 1000.0 ) / 1000.0;
+        return floor( ptValue * 1000.0 ) / 1000.0;
     }
 
     /// Prepare ptValue to be displayed in mm
     static double toMM( double ptValue ) {
         // "mm" values are rounded to 0.0001 millimeters
-        return qRound( POINT_TO_MM( ptValue ) * 10000.0 ) / 10000.0;
+        return floor( POINT_TO_MM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
     /// Prepare ptValue to be displayed in cm
     static double toCM( double ptValue ) {
-        return qRound( POINT_TO_CM( ptValue ) * 10000.0 ) / 10000.0;
+        return floor( POINT_TO_CM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
     /// Prepare ptValue to be displayed in dm
     static double toDM( double ptValue ) {
-        return qRound( POINT_TO_DM( ptValue ) * 10000.0 ) / 10000.0;
+        return floor( POINT_TO_DM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
     /// Prepare ptValue to be displayed in inch
     static double toInch( double ptValue ) {
         // "in" values are rounded to 0.00001 inches
-        return qRound( POINT_TO_INCH( ptValue ) * 100000.0 ) / 100000.0;
+        return floor( POINT_TO_INCH( ptValue ) * 100000.0 ) / 100000.0;
     }
 
     /// Prepare ptValue to be displayed in pica
     static double toPI( double ptValue ) {
         // "pi" values are rounded to 0.00001 inches
-        return qRound( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
+        return floor( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
     }
 
     /// Prepare ptValue to be displayed in didot
     static double toDD( double ptValue ) {
         // "dd" values are rounded to 0.00001 inches
-        return qRound( POINT_TO_DD( ptValue ) * 100000.0 ) / 100000.0;
+        return floor( POINT_TO_DD( ptValue ) * 100000.0 ) / 100000.0;
     }
 
     /// Prepare ptValue to be displayed in cicero
     static double toCC( double ptValue ) {
         // "cc" values are rounded to 0.00001 inches
-        return qRound( POINT_TO_CC( ptValue ) * 100000.0 ) / 100000.0;
+        return floor( POINT_TO_CC( ptValue ) * 100000.0 ) / 100000.0;
     }
 
     /**
