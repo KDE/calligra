@@ -49,8 +49,8 @@ KivioArrowHeadAction::KivioArrowHeadAction(const QString &text, const QString &p
   m_endPopup->setCheckable(true);
   m_popup->insertItem(i18n("Start Arrowhead"), m_startPopup);
   m_popup->insertItem(i18n("End Arrowhead"), m_endPopup);
-  loadArrowHeads(m_startPopup, false);
-  loadArrowHeads(m_endPopup, true);
+  loadArrowHeads(m_startPopup);
+  loadArrowHeads(m_endPopup);
   m_currentStart = m_currentEnd = 0;
   m_startPopup->setItemChecked(0, true);
   m_endPopup->setItemChecked(0, true);
@@ -158,20 +158,11 @@ int KivioArrowHeadAction::plug( QWidget* widget, int index)
   return -1;
 }
 
-void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup, bool inverted)
+void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup)
 {
   QBitmap mask;
   QPixmap pixAll = Kivio::arrowHeadPixmap();
   int tw = popup->fontMetrics().width(" 99:");
-
-  if (inverted) {
-    QPixmap tpix(pixAll.width(),pixAll.height());
-    QPainter tp(&tpix);
-    tp.scale(-1,1);
-    tp.drawPixmap(-pixAll.width()+1,0,pixAll);
-    tp.end();
-    pixAll = tpix;
-  }
 
   QPixmap pix(pixAll.width() + tw + 3, 17);
   QPainter p(&pix, popup);
