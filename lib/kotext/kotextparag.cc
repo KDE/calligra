@@ -249,7 +249,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height );
 
-            p->drawText( xBullet + width, y + base, suffix, -1, rtl ? QPainter::RTL : QPainter::LTR );
+            p->drawText( xBullet + width, y + base, suffix, -1 );
         }
     }
     else
@@ -264,7 +264,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         {
             counterText += ' ' /*the space after the bullet (before in RTL mode)*/;
 
-            p->drawText( xLeft, y + base, counterText, -1, rtl ? QPainter::RTL : QPainter::LTR );
+            p->drawText( xLeft, y + base, counterText, -1 );
         }
     }
     p->restore();

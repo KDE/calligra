@@ -444,8 +444,11 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
         tmp = ' ';
         break;
     }
-    tmp.prepend( prefix() );
-    tmp.append( suffix() );
+    // We want the '.' to be before the number in a RTL parag,
+    // but we can't paint the whole string using QPainter::RTL direction, otherwise
+    // '10' becomes '01'.
+    tmp.prepend( paragraph->string()->isRightToLeft() ? suffix() : prefix() );
+    tmp.append( paragraph->string()->isRightToLeft() ? prefix() : suffix() );
 
     // Find the number of missing parents, and add dummy text for them.
     int missingParents;
