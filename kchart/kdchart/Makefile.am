@@ -28,31 +28,38 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 noinst_HEADERS =	KDChart.h 		\
 			KDChartAreaPainter.h	\
 			KDChartAxesPainter.h	\
-			KDChartAxisParams.h	\
 			KDChartBarPainter.h	\
 			KDChartBWPainter.h	\
-			KDChartCustomBox.h 	\
 			KDChartData.h 		\
-			KDChartDataRegion.h	\
-			KDChartEnums.h	 	\
 			KDChartHiLoPainter.h	\
 			KDChartLinesPainter.h	\
 			KDChartNotEnoughSpaceException.h	\
 			KDChartPainter.h	\
-			KDChartParams.h		\
 			KDChartPiePainter.h	\
 			KDChartPolarPainter.h	\
-			KDChartPropertySet.h	\
 			KDChartRingPainter.h	\
 			KDChartTextPiece.h	\
 			KDChartUnknownTypeException.h	\
-			KDChartWidget.h		\
 			KDDrawText.h 		\
-			KDFrame.h 		\
-			KDFrameProfileSection.h \
 			KDXMLTools.h
 METASOURCES = AUTO
 
 INCLUDES  = -I../include $(all_includes)
 
-include_HEADERS = KDChartData.h KDChartTableBase.h KDChartListTable.h KDChartVectorTable.h KDChartTable.h
+include_HEADERS =	KDChartData.h		\
+			KDChartTableBase.h	\
+			KDChartListTable.h	\
+			KDChartVectorTable.h	\
+			KDChartTable.h		\
+			KDChartParams.h		\
+			KDFrameProfileSection.h	\
+			KDChartPropertySet.h	\
+			KDChartDataRegion.h	\
+			KDFrame.h		\
+			KDChartGlobal.h		\
+			KDChartWidget.h		\
+			KDChartCustomBox.h	\
+			KDChartEnums.h		\
+			KDChartTextPiece.h	\
+			KDChartAxisParams.h
+
