@@ -93,8 +93,16 @@ void KoBgSpellCheck::clearIgnoreWordAll( )
 
 void KoBgSpellCheck::startBackgroundSpellCheck()
 {
-    if ( !m_bSpellCheckEnabled || !m_bgSpell.currentTextObj )
+    if ( !m_bSpellCheckEnabled )
         return;
+    //re-test text obj
+    if ( !m_bgSpell.currentTextObj )
+        m_bgSpell.currentTextObj = nextTextObject(m_bgSpell.currentTextObj );
+    if ( !m_bgSpell.currentTextObj )
+    {
+        QTimer::singleShot( 1000, this, SLOT( startBackgroundSpellCheck() ) );
+        return;
+    }
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::startBackgroundSpellCheck" << endl;
 #endif
@@ -132,6 +140,11 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
 
 void KoBgSpellCheck::spellCheckerReady()
 {
+    //necessary to restart to beginning otherwise we don't check
+    //other parag
+    if (m_bgSpell.currentTextObj)
+        m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
+
     //kdDebug() << "KWDocument::spellCheckerReady" << endl;
     QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
 }

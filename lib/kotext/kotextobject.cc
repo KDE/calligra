@@ -109,12 +109,14 @@ int KoTextObject::availableHeight() const
 
 void KoTextObject::slotParagraphModified(KoTextParag *parag)
 {
+    m_needsSpellCheck = true;
     if (parag )
         parag->string()->setNeedsSpellCheck( true );
 }
 
 void KoTextObject::slotParagraphCreated(KoTextParag * parag)
 {
+    m_needsSpellCheck = true;
     if (parag )
         parag->string()->setNeedsSpellCheck( true );
 }
