@@ -22,6 +22,7 @@
 #define kppointobject_h
 
 #include "kpobject.h"
+#include <koStyleStack.h>
 
 class KPPointObject : public KPShadowObject
 {
@@ -35,7 +36,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
-    virtual void loadOasis( const QDomElement &element );
+    virtual void loadOasis( const QDomElement &element, const KoStyleStack & styleStack );
 
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }

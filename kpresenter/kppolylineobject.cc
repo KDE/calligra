@@ -66,8 +66,8 @@ double KPPolylineObject::load(const QDomElement &element)
     return KPPointObject::load( element );
 }
 
-void KPPolylineObject::loadOasis(const QDomElement &element)
+void KPPolylineObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
 {
     kdDebug()<<"void KPPolylineObject::loadOasis(const QDomElement &element)************\n";
-    KPPointObject::loadOasis( element );
+    KPPointObject::loadOasis( element,styleStack );
 }

@@ -74,7 +74,7 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPLineObject::loadOasis(const QDomElement &element)
+void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
 {
     KPShadowObject::loadOasis(element);
     double x1 = KoUnit::parseValue( element.attribute( "svg:x1" ) );
@@ -103,6 +103,40 @@ void KPLineObject::loadOasis(const QDomElement &element)
     e.appendChild( linetype );
     //todo line type
 #endif
+    if ( styleStack.hasAttribute( "draw:marker-start" ) )
+    {
+        QString type = styleStack.attribute( "draw:marker-start" );
+        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
+             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
+            lineBegin =  L_ARROW;
+        else if ( type == "Square" )
+            lineBegin =  L_SQUARE;
+        else if ( type == "Circle" || type == "Square 45" )
+            lineBegin = L_CIRCLE;
+        else if ( type == "Line Arrow" )
+            lineBegin = L_LINE_ARROW;
+        else if ( type == "Dimension Lines" )
+            lineBegin = L_DIMENSION_LINE;
+        else if ( type == "Double Arrow" )
+            lineBegin = L_DOUBLE_LINE_ARROW;
+    }
+    if ( styleStack.hasAttribute( "draw:marker-end" ) )
+    {
+        QString type = styleStack.attribute( "draw:marker-start" );
+        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
+             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
+            lineEnd =  L_ARROW;
+        else if ( type == "Square" )
+            lineEnd =  L_SQUARE;
+        else if ( type == "Circle" || type == "Square 45" )
+            lineEnd = L_CIRCLE;
+        else if ( type == "Line Arrow" )
+            lineEnd = L_LINE_ARROW;
+        else if ( type == "Dimension Lines" )
+            lineEnd = L_DIMENSION_LINE;
+        else if ( type == "Double Arrow" )
+            lineEnd = L_DOUBLE_LINE_ARROW;
+    }
 }
 
 double KPLineObject::load(const QDomElement &element)

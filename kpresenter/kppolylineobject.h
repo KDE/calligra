@@ -22,6 +22,7 @@
 #define kppolylineobject_h
 
 #include "kppointobject.h"
+#include <koStyleStack.h>
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -45,7 +46,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
-    virtual void loadOasis(const QDomElement &element);
+    virtual void loadOasis(const QDomElement &element, const KoStyleStack & styleStack);
 
 };
 

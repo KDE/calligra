@@ -1010,13 +1010,14 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             }
             else if ( name == "draw:rect" ) // rectangle
             {
-                kdDebug()<<" loadRect :"<<endl;
+                fillStyleStack( o, oasisStyles );
                 KPRectObject *kprectobject = new KPRectObject();
                 kprectobject->loadOasis(o);
                 newpage->appendObject(kprectobject);
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" )
             {
+                fillStyleStack( o, oasisStyles );
                 if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
                 {
                     KPPieObject *kppieobject = new KPPieObject();
@@ -1032,16 +1033,19 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             }
             else if ( name == "draw:line" ) // line
             {
+                fillStyleStack( o, oasisStyles );
                 KPLineObject *kplineobject = new KPLineObject();
-                kplineobject->loadOasis(o);
+                kplineobject->loadOasis(o, m_styleStack);
                 newpage->appendObject(kplineobject);
             }
             else if (name=="draw:polyline") { // polyline
+                fillStyleStack( o, oasisStyles );
                 KPPolylineObject *kppolylineobject = new KPPolylineObject();
-                kppolylineobject->loadOasis(o);
+                kppolylineobject->loadOasis(o, m_styleStack);
                 newpage->appendObject(kppolylineobject);
             }
             else if (name=="draw:polygon") { // polygon
+                fillStyleStack( o, oasisStyles );
                 KPPolygonObject *kpPolygonObject = new KPPolygonObject();
                 kpPolygonObject->loadOasis( o );
                 newpage->appendObject(kpPolygonObject);
