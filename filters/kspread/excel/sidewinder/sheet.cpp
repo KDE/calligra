@@ -78,13 +78,31 @@ Sheet::Sheet( Workbook* wb )
 
 Sheet::~Sheet()
 {
-  // TODO delete all cells, columns, rows
+  clear();
   delete d;
 }
 
 Workbook* Sheet::workbook()
 {
   return d->workbook;
+}
+
+void Sheet::clear()
+{
+  // delete all cells
+  std::map<unsigned,Cell*>::iterator cell_it;
+  for( cell_it = d->cells.begin(); cell_it != d->cells.end(); ++cell_it )
+    delete cell_it->second;
+  
+  // delete all columns
+  std::map<unsigned,Column*>::iterator col_it;
+  for( col_it = d->columns.begin(); col_it != d->columns.end(); ++col_it )
+    delete col_it->second;
+  
+  // delete all rows
+  std::map<unsigned,Row*>::iterator row_it;
+  for( row_it = d->rows.begin(); row_it != d->rows.end(); ++row_it )
+    delete row_it->second;
 }
 
 UString Sheet::name() const

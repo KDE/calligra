@@ -42,6 +42,11 @@ public:
   // get workbook that owns this sheet
   Workbook* workbook();
 
+  /*
+   * Clears the sheet, i.e. makes it as if it is just constructed.
+   */
+  void clear(); 
+  
   void setName( const UString& name );
 
   UString name() const;
