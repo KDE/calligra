@@ -201,9 +201,9 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
             m_alignX = KSpreadFormat::Undefined;
         m_featuresSet |= SAlignX;
     }
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "vertical-align" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
     {
-        str = styleStack.attributeNS( KoXmlNS::fo, "vertical-align" );
+        str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
         if ( str == "bottom" )
             m_alignY = KSpreadFormat::Bottom;
         else if ( str =="top" )
@@ -829,7 +829,7 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
 
     if ( featureSet( SAlignY ) && alignY() != KSpreadFormat::Middle )
     {
-        style.addProperty( "fo:vertical-align", ( alignY() == KSpreadFormat::Bottom ? "bottom" : "top" ) );
+        style.addProperty( "style:vertical-align", ( alignY() == KSpreadFormat::Bottom ? "bottom" : "top" ) );
     }
 
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )

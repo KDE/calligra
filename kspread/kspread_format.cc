@@ -246,7 +246,7 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
     {
         KSpreadFormat::AlignY align = m_pStyle->alignY(  );
         if ( align != KSpreadFormat::Bottom ) // default in OpenCalc
-            currentCellStyle.addProperty( "fo:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
+            currentCellStyle.addProperty( "style:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
     }
 
     if ( hasProperty( KSpreadFormat::PIndent,true ) || hasNoFallBackProperties( KSpreadFormat::PIndent ) )
@@ -418,7 +418,7 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, 
     {
         KSpreadFormat::AlignY align = alignY( _col, _row );
         if ( align != KSpreadFormat::Bottom ) // default in OpenCalc
-            currentCellStyle.addProperty( "fo:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
+            currentCellStyle.addProperty( "style:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
     }
 
     if ( hasProperty( KSpreadFormat::PIndent ) || !hasNoFallBackProperties( KSpreadFormat::PIndent ) )
@@ -1211,9 +1211,9 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-left" ) )
         setIndent(  KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-left" ) ) );
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "vertical-align" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
     {
-        QString s = styleStack.attributeNS( KoXmlNS::fo, "vertical-align" );
+        QString s = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
         if ( s == "middle" )
             setAlignY( KSpreadFormat::Middle );
         else if ( s == "bottom" )
