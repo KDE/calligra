@@ -86,10 +86,10 @@ and upper bounds and so on. And of course there is the main
 list. What's the one we've just seen.</para>
 
 <para>Writing a formula means to fill the empty list with letters,
-figures and mathematical symbols. That's straight foreward. Use your
-keyboard. As soon as you type something the "empty" symbol will
-vanish. You will see the thing you inserted instead. New chars are
-always put at the current cursor position.</para>
+figures and mathematical symbols. That is straightforward: use your
+keyboard. As soon as you type something the "empty" symbol will vanish
+and you will see whatever you have inserted instead. New characters
+are always put at the current cursor position.</para>
 
 <para>There is a toolbar called "Add" that allows you to create more
 complex elements. There are indexes, fractions, roots and
