@@ -2128,33 +2128,49 @@ void KWView::textColor()
 /*======================= text align left =======================*/
 void KWView::textAlignLeft()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setAlign(Qt::AlignLeft);
+    if ( actionFormatAlignLeft->isChecked() )
+    {
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit )
+            edit->setAlign(Qt::AlignLeft);
+    } else
+        actionFormatAlignLeft->setChecked( true );
 }
 
 /*======================= text align center =====================*/
 void KWView::textAlignCenter()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setAlign(Qt::AlignCenter);
+    if ( actionFormatAlignCenter->isChecked() )
+    {
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit )
+            edit->setAlign(Qt::AlignCenter);
+    } else
+        actionFormatAlignCenter->setChecked( true );
 }
 
 /*======================= text align right ======================*/
 void KWView::textAlignRight()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
+    if ( actionFormatAlignRight->isChecked() )
+    {
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit )
         edit->setAlign(Qt::AlignRight);
+    } else
+        actionFormatAlignRight->setChecked( true );
 }
 
 /*======================= text align block ======================*/
 void KWView::textAlignBlock()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setAlign(Qt3::AlignJustify);
+    if ( actionFormatAlignBlock->isChecked() )
+    {
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit )
+            edit->setAlign(Qt3::AlignJustify);
+    } else
+        actionFormatAlignBlock->setChecked( true );
 }
 
 /*====================== list ========================*/
