@@ -16,7 +16,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_functions_information.cc  kspread_functions_engineering.cc \
 	kspread_functions_logic.cc kspread_functions_financial.cc \
 	kspread_functions_trig.cc kspread_functions_datetime.cc \
-	kspread_functions_statistical.cc kspread_functions_text.cc \
+	kspread_functions_statistical.cc kspread_functions_text.cc kspread_functions_reference.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	kspread_dlg_cons.cc kspread_util.cc kspread_functions_database.cc \
