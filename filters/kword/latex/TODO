@@ -1,0 +1,21 @@
+VERSION 1
+	- texte		DONE
+		* accent ==> accent are converted in 2 caract.
+		  so, some carc, at the end, are lost.
+		* big parag must be truncated. see above.
+		* ...
+	- layout conception ok => implementation
+	- titre		LAYOUT MUST BE DONE BEFORE THAT
+	- puce		
+	- footnote, head
+	- clean codes :)))
+
+VERSION 2
+	- table
+	- picture
+	- personalization
+
+VERSION 3
+	- parts
+	- math
+	- figure

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Export=text/x-tex
+Implemented=file
+Import=application/x-kword
+Name=KWord LATEX Export Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Library=liblatexexport
+X-KDE-LibraryDependencies=
+X-KDE-LibraryMajor=0
+X-KDE-LibraryMinor=0
+
