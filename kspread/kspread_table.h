@@ -729,6 +729,8 @@ protected:
     /**
      * Prints the page specified by 'page_range'.
      *
+     * @return the last vertical line which was printed plus one.
+     *
      * @paran _page_rangs QRect defines a rectangle of cells which should be painted
      *                    to the device 'prn'.
      */

@@ -3815,8 +3815,6 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
     nopen.setStyle( NoPen );
     m_pDoc->setDefaultGridPen( nopen );
 
-    unsigned int pages = 1;
-
     //
     // Find maximum right/bottom cell with content
     //
@@ -3826,18 +3824,37 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
-	if ( c->column() > cell_range.right() )
-	    cell_range.setRight( c->column() );
-	if ( c->row() > cell_range.bottom() )
-	    cell_range.setBottom( c->row() );
+	if ( c->needsPrinting() )
+        {
+	    if ( c->column() > cell_range.right() )
+		cell_range.setRight( c->column() );
+	    if ( c->row() > cell_range.bottom() )
+		cell_range.setBottom( c->row() );
+	}
     }
 
+    // Now look at the children
+    QListIterator<KoDocumentChild> cit( m_pDoc->children() );
+    for( ; cit.current(); ++cit )
+    {
+	QRect bound = cit.current()->boundingRect();
+	int dummy;
+	int i = leftColumn( bound.right(), dummy );
+	if ( i > cell_range.right() )
+	    cell_range.setRight( i );
+	i = topRow( bound.bottom(), dummy );
+	if ( i > cell_range.bottom() )
+	    cell_range.setBottom( i );
+    }
+    
+    
     //
     // Find out how many pages need printing
     // and which cells to print on which page.
     //
     QValueList<QRect> page_list;
-
+    QValueList<QRect> page_frame_list;
+    
     // How much space is on every page for table content ?
     QRect rect;
     rect.setCoords( 0, 0, (int)( MM_TO_POINT ( m_pDoc->printableWidth() )),
@@ -3891,8 +3908,35 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	    right = page_range.right();
 	    left = page_range.right() + 1;
 	    bottom = page_range.bottom();
+	
+	    //
+	    // Test wether there is anything on the page at all.
+	    //
 	    
-	    page_list.append( page_range );
+	    // Look at the cells
+	    bool empty = TRUE;
+	    for( int r = page_range.top(); r <= page_range.bottom(); ++r )
+		for( int c = page_range.left(); c <= page_range.right(); ++c )
+		    if ( cellAt( c, r )->needsPrinting() )
+			empty = FALSE;
+		
+	    // Look for children
+	    QRect view( columnPos( page_range.left() ), rowPos( page_range.top() ),
+			rect.width(), rect.height() );
+
+	    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+	    for( ; it.current(); ++it )
+	    {
+		QRect bound = it.current()->boundingRect();
+		if ( bound.intersects( view ) )
+		    empty = FALSE;
+	    }
+	    
+	    if ( !empty )
+	    {
+		page_list.append( page_range );
+		page_frame_list.append( view );
+	    }
 	}
 
 	top = bottom + 1;
@@ -3905,8 +3949,10 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
     //
     // Print all pages in the list
     //
+        
     QValueList<QRect>::Iterator it = page_list.begin();
-    for( ; it != page_list.end(); ++it )
+    QValueList<QRect>::Iterator fit = page_frame_list.begin();
+    for( ; it != page_list.end(); ++it, ++fit, ++pagenr )
     {
 	// print head line
 	QFont font( "Times", 10 );
@@ -3949,13 +3995,13 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	painter.translate( MM_TO_POINT ( m_pDoc->leftBorder()),
 			   MM_TO_POINT ( m_pDoc->topBorder() ));
 	// Print the page
-	printPage( painter, *it, rect );
+	printPage( painter, *it, *fit );
+	
 	painter.translate( - MM_TO_POINT ( m_pDoc->leftBorder()),
 			   - MM_TO_POINT ( m_pDoc->topBorder() ));
 
-	if ( pages < page_list.count() )
+	if ( pagenr < page_list.count() )
 	    _printer->newPage();
-	pagenr++;
     }
     
     // Restore the grid pen
@@ -3981,7 +4027,8 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 	    ColumnLayout *col_lay = columnLayout( x );
 
 	    KSpreadCell *cell = cellAt( x, y );
-	    cell->paintCell( view, _painter, xpos, ypos, x, y, col_lay, row_lay );
+	    QRect r( 0, 0, view.width(), view.height() );
+	    cell->paintCell( r, _painter, xpos, ypos, x, y, col_lay, row_lay );
 	    
 	    xpos += col_lay->width();
 	}
@@ -3995,9 +4042,18 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     QListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
     {
-	if ( ((KSpreadChild*)it.current())->table() == this )
+	qDebug("Testing child %i/%i %i/%i against view %i/%i %i/%i",
+	       it.current()->contentRect().left(),
+	       it.current()->contentRect().top(),
+	       it.current()->contentRect().right(),
+	       it.current()->contentRect().bottom(),
+	       view.left(), view.top(), view.right(), view.bottom() );
+
+	QRect bound = it.current()->boundingRect();
+	if ( ((KSpreadChild*)it.current())->table() == this && bound.intersects( view ) )
         {
 	    _painter.save();
+	    _painter.translate( -view.left(), -view.top() );
 	    
 	    it.current()->transform( _painter );
 	    it.current()->document()->paintEverything( _painter,

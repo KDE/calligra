@@ -234,8 +234,16 @@ public:
      *
      * @return TRUE if there is no content.
      */
-    virtual bool isEmpty() const;
-
+    bool isEmpty() const;
+    /**
+     * @return TRUE if the cell should be printed in a print out.
+     *         That si the case if it has any content, border, backgroundcolor,
+     *         or background brush.
+     *
+     * @see KSpreadTable::print
+     */
+    bool needsPrinting() const;
+    
     /**
      * Tells whether the cell contains, text, a formula, richtext or a visual formula.
      */

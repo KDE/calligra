@@ -357,6 +357,23 @@ void KSpreadCell::setLayoutDirtyFlag()
 	m_pObscuringCell->setLayoutDirtyFlag();
 }
 
+bool KSpreadCell::needsPrinting() const
+{
+    if ( isDefault() )
+	return FALSE;
+
+    if ( !m_strText.isEmpty() )
+	return TRUE;
+
+    if ( hasProperty( PTopBorder ) || hasProperty( PLeftBorder ) ||
+	 hasProperty( PRightBorder ) || hasProperty( PBottomBorder ) ||
+	 hasProperty( PFallDiagonal ) || hasProperty( PGoUpDiagonal ) ||
+	 hasProperty( PBackgroundBrush ) || hasProperty( PBackgroundColor ) )
+	return TRUE;
+    
+    return FALSE;
+}
+
 bool KSpreadCell::isEmpty() const
 {
   if ( isDefault() )
@@ -2079,7 +2096,10 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if ( m_pObscuringCell )
 	selected = m_pTable->selectionRect().contains( QPoint( m_pObscuringCell->column(),
 								    m_pObscuringCell->row() ) );
-
+    // Dont draw any selection when printing.
+    if ( _painter.device()->isExtDev() )
+	selected = FALSE;
+    
     QColorGroup defaultColorGroup = QApplication::palette().active();
 
     QRect m = m_pTable->marker();
@@ -2350,7 +2370,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     else if ( !m_strOutText.isEmpty() )
     {
-	if ( selected )
+	if ( selected && ( _col != m.left() || _row != m.top() )  )
         {
 	    QPen p( m_textPen );
 	    p.setColor( defaultColorGroup.highlightedText() );
@@ -2511,6 +2531,10 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	}
     }
 
+    // Dont draw page borders or the marker when printing
+    if ( _painter.device()->isExtDev() )
+	return;
+    
     // Draw page borders
     if ( m_pTable->isShowPageBorders() )
     {
