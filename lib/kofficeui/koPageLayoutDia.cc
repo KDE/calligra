@@ -574,7 +574,7 @@ void KoPageLayoutDia::setupTab2()
 /*================================================================*/
 void KoPageLayoutDia::setupTab3()
 {
-    QWidget *tab3 = addPage(i18n( "C&olumns" ));
+    QWidget *tab3 = addPage(i18n( "Col&umns" ));
 
     QGridLayout *grid3 = new QGridLayout( tab3, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
