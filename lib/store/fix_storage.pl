@@ -109,12 +109,12 @@ sub fixLine {
   }
 # Replace pictures by images, as cliparts will never work with only this script.
   elsif($line =~ m%\s*\<PICTURE%) {
-      $line =~ s%\<PICTURES\>%\<PIXMAPS\>% ;
-      $line =~ s%\<PICTURE\>%\<IMAGE\>% ;
+      $line =~ s%\<PICTURES%\<PIXMAPS% ;
+      $line =~ s%\<PICTURE%\<IMAGE% ;
   }
   elsif($line =~ m%\s*\</PICTURE%) {
-      $line =~ s%\</PICTURES\>%\</PIXMAPS\>% ;
-      $line =~ s%\</PICTURE\>%\</IMAGE\>% ;
+      $line =~ s%\</PICTURES%\</PIXMAPS% ;
+      $line =~ s%\</PICTURE%\</IMAGE% ;
   }
   return $line;
 }
