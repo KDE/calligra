@@ -75,6 +75,8 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 				view->zoomFactor() );
 		}
 	}
+	else
+		m_isDragging = false;
 }
 
 bool

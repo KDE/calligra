@@ -75,17 +75,8 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 				view->zoomFactor() );
 		}
 	}
-	/*else
-	{
-		painter.setPen( Qt::DotLine );
-
-		painter.moveTo( m_fp.x(), m_fp.y() );
-		painter.lineTo( m_lp.x(), m_fp.y() );
-		painter.lineTo( m_lp.x(), m_lp.y() );
-		painter.lineTo( m_fp.x(), m_lp.y() );
-		painter.lineTo( m_fp.x(), m_fp.y() );
-
-	}*/
+	else
+		m_isDragging = false;
 }
 
 bool
