@@ -1153,7 +1153,6 @@ void StyleDia::slotMarginsChanged( double val)
     }
 }
 
-
 void StyleDia::slotUpdateWidthForHeight( double height )
 {
     if ( !isKeepRatio() ) return;
@@ -1292,7 +1291,6 @@ bool StyleDia::isProtected() const
 {
     return protect->isChecked();
 }
-
 
 bool StyleDia::protectNoChange()const
 {

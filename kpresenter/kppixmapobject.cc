@@ -409,8 +409,10 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
             QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
             _painter->drawPixmap( rect, tmpPix );
         }
-        else
+        else {
             _painter->drawPixmap( rect, _pixmap );
+            kdDebug(33001) << k_funcinfo << "generating pixmap" << endl;
+        }
     }
 
     // Draw border

@@ -1404,8 +1404,7 @@ void KPresenterView::screenAssignEffect()
     if ( m_canvas->canAssignEffect( objs ) ) {
         EffectDia *effectDia = new EffectDia( this, "Object Effect", objs, this );
         effectDia->setCaption( i18n( "Object Effect" ) );
-        if(effectDia->exec())
-            effectOk();
+        effectDia->exec(); //the dialog executes the command itself
         delete effectDia;
     }
 }
@@ -2330,13 +2329,12 @@ void KPresenterView::newPageLayout( KoPageLayout _layout )
     updateRuler();
 }
 
-
 void KPresenterView::updateRuler()
 {
     //update koruler
     QRect r=m_canvas->activePage()->getZoomPageRect();
-    getHRuler()->setFrameStartEnd( r.left() , r.right()/*+m_canvas->diffx()*/ );
-    getVRuler()->setFrameStartEnd( r.top() , r.bottom()/*+m_canvas->diffy()*/ );
+    getHRuler()->setFrameStartEnd( r.left(), r.right()/*+m_canvas->diffx()*/ );
+    getVRuler()->setFrameStartEnd( r.top(), r.bottom()/*+m_canvas->diffy()*/ );
 }
 
 void KPresenterView::createGUI()
@@ -3749,10 +3747,6 @@ void KPresenterView::transEffectOk()
     kPresenterDoc()->addCommand( transEffectCmd );
 }
 
-void KPresenterView::effectOk()
-{
-}
-
 void KPresenterView::rotateOk()
 {
     float _newAngle=rotateDia->angle();
@@ -3781,14 +3775,18 @@ void KPresenterView::shadowOk()
 {
     KMacroCommand *macro=0L;
 
-    KCommand *cmd=m_canvas->activePage()->shadowObj(shadowDia->shadowDirection(),shadowDia->shadowDistance(),shadowDia->shadowColor());
+    KCommand *cmd=m_canvas->activePage()->shadowObj(shadowDia->shadowDirection(),
+                                                    shadowDia->shadowDistance(),
+                                                    shadowDia->shadowColor());
     if( cmd)
     {
         if ( !macro )
             macro=new KMacroCommand(i18n( "Change Shadow" ));
         macro->addCommand(cmd);
     }
-    cmd=stickyPage()->shadowObj(shadowDia->shadowDirection(),shadowDia->shadowDistance(),shadowDia->shadowColor());
+    cmd=stickyPage()->shadowObj(shadowDia->shadowDirection(),
+                                shadowDia->shadowDistance(),
+                                shadowDia->shadowColor());
     if( cmd)
     {
         if ( !macro )
@@ -4070,8 +4068,6 @@ void KPresenterView::updateReadWrite( bool readwrite )
 
 void KPresenterView::setupPopupMenus()
 {
-    QPixmap pixmap;
-
     // create right button object align menu
     rb_oalign = new QPopupMenu();
     Q_CHECK_PTR( rb_oalign );
@@ -4712,14 +4708,14 @@ void KPresenterView::openPopupMenuObject( const QString & name, const QPoint & _
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    static_cast<QPopupMenu*>(factory()->container(name, this))->popup(_point);
+    dynamic_cast<QPopupMenu*>(factory()->container(name, this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    static_cast<QPopupMenu*>(factory()->container("sidebarmenu_popup", this))->popup(_point);
+    dynamic_cast<QPopupMenu*>(factory()->container("sidebarmenu_popup", this))->popup(_point);
 }
 
 void KPresenterView::renamePageTitle()
@@ -5769,7 +5765,6 @@ void KPresenterView::slotUpdateRuler()
     }
 }
 
-
 // This handles Tabulators _only_
 void KPresenterView::slotHRulerDoubleClicked( double ptpos )
 {
@@ -6220,7 +6215,6 @@ void KPresenterView::updateStyleList()
     bool isText=!m_canvas->applicableTextInterfaces().isEmpty();
     actionFormatStyleMenu->setEnabled( isText );
     actionFormatStyle->setEnabled(isText);
-
 }
 
 void KPresenterView::extraStylist()

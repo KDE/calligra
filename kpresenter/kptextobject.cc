@@ -157,7 +157,6 @@ void KPTextObject::slotParagraphDeleted(KoTextParag*_parag)
     m_doc->spellCheckParagraphDeleted( _parag,  this);
 }
 
-
 QBrush KPTextObject::getBrush() const
 {
     QBrush tmpBrush(brush);
@@ -504,9 +503,7 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         QString strLineType=KoTextFormat::underlineStyleToString( lastFormat->underlineLineStyle() );
         element.setAttribute( "underlinestyleline", strLineType );
         if ( lastFormat->textUnderlineColor().isValid() )
-        {
             element.setAttribute( "underlinecolor", lastFormat->textUnderlineColor().name() );
-        }
     }
     if ( lastFormat->strikeOutLineType()!= KoTextFormat::S_NONE )
     {

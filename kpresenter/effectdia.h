@@ -77,8 +77,6 @@ public slots:
 
 protected slots:
     void disappearChanged();
-    void num1Changed( int num );
-    void num2Changed( int num );
     void appearEffectChanged( int num );
     void disappearEffectChanged( int num );
     void appearSoundEffectChanged();

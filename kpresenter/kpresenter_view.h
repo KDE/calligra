@@ -600,7 +600,6 @@ protected slots:
     void styleOk();
     void pgConfOk();
     void transEffectOk();
-    void effectOk();
     void rotateOk();
     void shadowOk();
     void pddClosed();

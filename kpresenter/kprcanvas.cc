@@ -4215,9 +4215,6 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     //m_view->setDiffX( -static_cast<int>( MM_TO_POINT( left_margin ) ) );
     //m_view->setDiffY( -static_cast<int>( MM_TO_POINT( top_margin ) ) );
 
-    //QColor c = kapp->winStyleHighlightColor();
-    //kapp->setWinStyleHighlightColor( colorGroup().highlight() ); // deprecated in Qt3
-
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               printer->toPage() - printer->fromPage() + 2, this );
 
@@ -4269,7 +4266,6 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     //m_view->setDiffY( _yOffset );
 
     progress.setProgress( printer->toPage() - printer->fromPage() + 2 );
-    //kapp->setWinStyleHighlightColor( c );
 
     currPresPage = 1;
     currPresStep = 0;

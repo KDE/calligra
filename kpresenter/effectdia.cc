@@ -326,8 +326,7 @@ void EffectDia::slotEffectDiaOk()
     eff.a_fileName = requester1->url();
     eff.d_fileName = requester2->url();
 
-    EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), objs,
-                                          oldEffects, eff );
+    EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), objs, oldEffects, eff );
     effectCmd->execute();
     view->kPresenterDoc()->addCommand( effectCmd );
     accept();
@@ -346,14 +345,6 @@ void EffectDia::disappearChanged()
 
     if ( !view->kPresenterDoc()->spManualSwitch() )
         timerOfDisappear->setEnabled( disappear->isChecked() );
-}
-
-void EffectDia::num1Changed( int /*num*/ )
-{
-}
-
-void EffectDia::num2Changed( int /*num*/ )
-{
 }
 
 void EffectDia::appearEffectChanged( int num )
