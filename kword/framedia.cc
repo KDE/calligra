@@ -282,13 +282,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grid1->addWidget(sideHeads, row, 0);
 
         sideGrid = new QGridLayout( sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
-        sideTitle1 = new QLabel ( i18n("Size ( %1 ):").arg(doc->getUnitName()),sideHeads);
+        sideTitle1 = new QLabel ( i18n("Size (%1):").arg(doc->getUnitName()),sideHeads);
         sideTitle1->resize(sideTitle1->sizeHint());
         sideGrid->addWidget(sideTitle1,1,0);
         sideWidth= new QLineEdit(sideHeads,"");
         sideWidth->setMaxLength(6);
         sideGrid->addWidget(sideWidth,1,1);
-        sideTitle2 = new QLabel( i18n("Gap size ( %1 ):").arg(doc->getUnitName()),sideHeads);
+        sideTitle2 = new QLabel( i18n("Gap size (%1):").arg(doc->getUnitName()),sideHeads);
         sideTitle2->resize(sideTitle2->sizeHint());
         sideGrid->addWidget(sideTitle2,2,0);
         sideGap = new QLineEdit(sideHeads,"");
@@ -354,7 +354,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     runGrid->addWidget( rRunNo, 1, 1 );
     connect( rRunNo, SIGNAL( clicked() ), this, SLOT( runNoClicked() ) );
 
-    rRunBounding = new QRadioButton( i18n( "Run around the &bounding rectangle of this frame" ), runGroup );
+    rRunBounding = new QRadioButton( i18n( "Run around the &boundary rectangle of this frame" ), runGroup );
     runGrid->addWidget( rRunBounding, 2, 1 );
     connect( rRunBounding, SIGNAL( clicked() ), this, SLOT( runBoundingClicked() ) );
 
@@ -367,7 +367,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     grid2->addWidget( runGroup, 0, 0 );
     grid2->addMultiCellWidget( runGroup, 0, 0, 0, 1 );
 
-    lRGap = new QLabel( i18n( "Run around gap ( %1 ):" ).arg(doc->getUnitName()), tab2 );
+    lRGap = new QLabel( i18n( "Run around gap (%1):" ).arg(doc->getUnitName()), tab2 );
     lRGap->resize( lRGap->sizeHint() );
     lRGap->setAlignment( AlignRight | AlignVCenter );
     grid2->addWidget( lRGap, 1, 0 );

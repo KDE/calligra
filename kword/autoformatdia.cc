@@ -161,7 +161,7 @@ void KWAutoFormatDia::setupTab1()
 
     cbUpperCase = new QCheckBox( tab1 );
     cbUpperCase->setText( i18n( "Convert first letter from the first word of a sentence automatically\n"
-                                "to &Upper Case ( e.g. \"bla. this is a Test\" to \"bla. This is a Test\" )" ) );
+                                "to &Upper Case (e.g. \"bla. this is a Test\" to \"bla. This is a Test\")" ) );
     cbUpperCase->resize( cbUpperCase->sizeHint() );
 
     cbUpperCase->setChecked( m_autoFormat.getConfigUpperCase() );
@@ -170,7 +170,7 @@ void KWAutoFormatDia::setupTab1()
 
     cbUpperUpper = new QCheckBox( tab1 );
     cbUpperUpper->setText( i18n( "Convert two Upper &Case letters to one Upper Case and one Lower Case letter.\n"
-                                 "( e.g. HEllo to Hello )" ) );
+                                 "(e.g. HEllo to Hello)" ) );
     cbUpperUpper->resize( cbUpperUpper->sizeHint() );
     cbUpperUpper->setChecked( m_autoFormat.getConfigUpperUpper() );
     ( void )new QWidget( tab1 );

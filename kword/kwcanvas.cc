@@ -1524,7 +1524,7 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     }
     if(colorChanged)
     {
-        KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame BackGroundColor"),frameindexList,oldColor,_backColor);
+        KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame Background Color"),frameindexList,oldColor,_backColor);
         m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
     }
@@ -1539,12 +1539,12 @@ void KWCanvas::editFrameProperties()
     KWFrameSet *fs = frame->getFrameSet();
     if ( fs->isAHeader() )
     {
-        KMessageBox::sorry( this, i18n( "This is a header frame. It can not be edited."), i18n( "Frame Properties"  ) );
+        KMessageBox::sorry( this, i18n( "This is a header frame. It cannot be edited."), i18n( "Frame Properties"  ) );
         return;
     }
     if ( fs->isAFooter() )
     {
-        KMessageBox::sorry( this, i18n( "This is a footer frame. It can not be edited."),i18n( "Frame Properties"  ) );
+        KMessageBox::sorry( this, i18n( "This is a footer frame. It cannot be edited."),i18n( "Frame Properties"  ) );
         return;
     }
 

@@ -222,7 +222,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
 
     m_nbPagePerRow=new KIntNumInput(nbPagePerRow, tmpQGroupBox );
     m_nbPagePerRow->setRange(1, 10, 1);
-    m_nbPagePerRow->setLabel(i18n("Preview mode - Number of page per row:"));
+    m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pages per row:"));
     lay1->addWidget(m_nbPagePerRow);
 
     box->addWidget( tmpQGroupBox);

@@ -273,7 +273,7 @@ void KWStyleManager::save() {
 void KWStyleManager::addStyle() {
     save();
 
-    QString str = i18n( "New Style Template ( %1 )" ).arg(numStyles++);
+    QString str = i18n( "New Style Template (%1)" ).arg(numStyles++);
     if ( m_currentStyle )
     {
         m_currentStyle = new KWStyle( *m_currentStyle ); // Create a new style, initializing from the current one

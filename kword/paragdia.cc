@@ -405,7 +405,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     QGroupBox * indentFrame = new QGroupBox( i18n( "Indent" ), this );
     QGridLayout * indentGrid = new QGridLayout( indentFrame, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel * lLeft = new QLabel( i18n("Left ( %1 ):").arg(unitName), indentFrame );
+    QLabel * lLeft = new QLabel( i18n("Left (%1):").arg(unitName), indentFrame );
     lLeft->setAlignment( AlignRight );
     indentGrid->addWidget( lLeft, 1, 0 );
 
@@ -418,7 +418,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     indentGrid->addWidget( eLeft, 1, 1 );
     connect( eLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftChanged( const QString & ) ) );
 
-    QLabel * lRight = new QLabel( i18n("Right ( %1 ):").arg(unitName), indentFrame );
+    QLabel * lRight = new QLabel( i18n("Right (%1):").arg(unitName), indentFrame );
     lRight->setAlignment( AlignRight );
     indentGrid->addWidget( lRight, 2, 0 );
 
@@ -431,7 +431,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     indentGrid->addWidget( eRight, 2, 1 );
     connect( eRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightChanged( const QString & ) ) );
 
-    QLabel * lFirstLine = new QLabel( i18n("First Line ( %1 ):").arg(unitName), indentFrame );
+    QLabel * lFirstLine = new QLabel( i18n("First Line (%1):").arg(unitName), indentFrame );
     lFirstLine->setAlignment( AlignRight );
     indentGrid->addWidget( lFirstLine, 3, 0 );
 
@@ -478,7 +478,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     cSpacing->insertItem( i18n( "Line spacing value", "Single" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "1.5 lines" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "Double" ) );
-    cSpacing->insertItem( i18n( "Custom ( %1 )" ).arg(unitName) );
+    cSpacing->insertItem( i18n( "Custom (%1)" ).arg(unitName) );
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
@@ -505,7 +505,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     QGridLayout * pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2,
                                                 KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel * lBefore = new QLabel( i18n("Before ( %1 ):").arg(unitName), pSpaceFrame );
+    QLabel * lBefore = new QLabel( i18n("Before (%1):").arg(unitName), pSpaceFrame );
     lBefore->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lBefore, 1, 0 );
 
@@ -518,7 +518,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     connect( eBefore, SIGNAL( textChanged( const QString & ) ), this, SLOT( beforeChanged( const QString & ) ) );
     pSpaceGrid->addWidget( eBefore, 1, 1 );
 
-    QLabel * lAfter = new QLabel( i18n("After ( %1 ):").arg(unitName), pSpaceFrame );
+    QLabel * lAfter = new QLabel( i18n("After (%1):").arg(unitName), pSpaceFrame );
     lAfter->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lAfter, 2, 0 );
 
