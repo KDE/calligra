@@ -5,9 +5,9 @@ LDADD = ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la ..
 
 ####### Files
 
-bin_PROGRAMS = kspread
+bin_PROGRAMS = kspread.bin
 
-kspread_SOURCES = kmetaedit.cc kspread_emacs.cc kspread_main.cc \
+kspread_bin_SOURCES = kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_shell.cc kspread_doc.cc \
 	kspread.cc kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_python.cc kspread_autofill.cc \
@@ -43,10 +43,11 @@ SUFFIXES = .h .moc
 
 ####### Build rules
 
-idl: kspread.idl
-	idl --query-server-for-narrow -I$(idldir) kspread.idl
+kspread.h: kspread.idl
+	$(IDL) --query-server-for-narrow -I$(idldir) kspread.idl
 
 
+kspread.cc: kspread.h
 kspread_dlg_layout.cc: kspread_dlg_layout.moc
 kspread_dlg_paper.cc: kspread_dlg_paper.moc
 kspread_dlg_paper_border.cc: kspread_dlg_paper_border.moc
