@@ -57,6 +57,7 @@
 #include <klineedit.h>
 #include <koRect.h>
 #include <kmessagebox.h>
+#include <kdeversion.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -296,7 +297,11 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     lab->setText( i18n( "Background color of objects in editing mode:" ) );
     grid1->addWidget( lab, 0, 0 );
 
-    bgColor = new KColorButton( tmpQGroupBox );
+    bgColor = new KColorButton( oldBgColor,
+#if KDE_VERSION >= 305
+                                oldBgColor,
+#endif
+                                tmpQGroupBox );
     bgColor->setColor( oldBgColor );
     grid1->addWidget( bgColor, 1, 0 );
 
@@ -305,8 +310,11 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     lab->setText( i18n( "Grid color:" ) );
     grid1->addWidget( lab, 2, 0 );
 
-    gridColor = new KColorButton( tmpQGroupBox );
-    gridColor->setColor( oldGridColor );
+    gridColor = new KColorButton( oldGridColor,
+#if KDE_VERSION >= 305
+                                  oldGridColor,
+#endif
+                                  tmpQGroupBox );
     grid1->addWidget( gridColor, 3, 0 );
 
     box->addWidget( tmpQGroupBox );
