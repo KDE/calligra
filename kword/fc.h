@@ -30,8 +30,10 @@ public:
     enum LayoutError {COLUMN_TOO_TALL, PAPER_HEIGHT_TOO_SMALL, NO_ERROR};
 
     KWFormatContext( KWordDocument *_doc, unsigned int _frameSet );
-    ~KWFormatContext();
 
+    bool operator>( const KWFormatContext &fc );
+    bool operator<( const KWFormatContext &fc );
+    
     void init( KWParag *_parag, bool _fromStart = true,
                int _frame = -1, int _page = -1 );
     void enterNextParag();

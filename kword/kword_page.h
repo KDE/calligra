@@ -205,7 +205,8 @@ protected slots:
     void blinkCursor();
     void stopBlinkCursor();
     void contentsWillMove( int, int );
-
+    void doAutoScroll();
+    
 protected:
     unsigned int ptLeftBorder();
     unsigned int ptRightBorder();
@@ -290,6 +291,9 @@ protected:
     bool allowBreak1( KWFormatContext *paintfc, unsigned int i );
     void repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASAP = true );
 
+    void startKeySelection();
+    void continueKeySelection();
+    
     KWordDocument *doc;
     bool markerIsVisible;
 
@@ -338,7 +342,7 @@ protected:
 
     KWGroupManager *curTable;
 
-    QTimer blinkTimer;
+    QTimer blinkTimer, scrollTimer;
     bool cursorIsVisible;
 
     XKeyboardControl kbdc;
@@ -347,7 +351,8 @@ protected:
 
     KWParag *cachedParag;
     QStringList cachedLines;
-
+    KWFormatContext *oldFc;
+    
 };
 
 #endif

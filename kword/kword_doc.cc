@@ -2342,9 +2342,15 @@ void KWordDocument::insertPicture( QString _filename, KWPage *_paperWidget )
 }
 
 /*================================================================*/
-void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset )
+void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset, 
+                                   KWFormatContext *_selStart, KWFormatContext *_selEnd )
 {
-    if ( !selStart.getParag() || !selEnd.getParag() )
+    if ( !_selStart )
+        _selStart = &selStart; 
+    if ( !_selEnd )
+        _selEnd = &selEnd; 
+    
+    if ( !_selStart->getParag() || !selEnd.getParag() )
         return;
 
     _painter.save();
@@ -2354,37 +2360,37 @@ void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset 
     _painter.setBrush( black );
     _painter.setPen( NoPen );
 
-    KWFormatContext tmpFC2( this, selStart.getFrameSet() - 1 );
-    KWFormatContext tmpFC1( this, selStart.getFrameSet() - 1 );
+    KWFormatContext tmpFC2( this, _selStart->getFrameSet() - 1 );
+    KWFormatContext tmpFC1( this, _selStart->getFrameSet() - 1 );
 
-    if ( selStart.getParag() == selEnd.getParag() )
+    if ( _selStart->getParag() == _selEnd->getParag() )
     {
-        if ( selStart.getTextPos() < selEnd.getTextPos() )
+        if ( _selStart->getTextPos() < _selEnd->getTextPos() )
         {
-            tmpFC1 = selStart;
-            tmpFC2 = selEnd;
+            tmpFC1 = *_selStart;
+            tmpFC2 = *_selEnd;
         }
         else
         {
-            tmpFC1 = selEnd;
-            tmpFC2 = selStart;
+            tmpFC1 = *_selEnd;
+            tmpFC2 = *_selStart;
         }
     }
     else
     {
-        KWParag *parag = getFirstParag( selStart.getFrameSet() - 1 );
+        KWParag *parag = getFirstParag( _selStart->getFrameSet() - 1 );
         while ( parag )
         {
-            if ( parag == selStart.getParag() )
+            if ( parag == _selStart->getParag() )
             {
-                tmpFC1 = selStart;
-                tmpFC2 = selEnd;
+                tmpFC1 = *_selStart;
+                tmpFC2 = *_selEnd;
                 break;
             }
-            if ( parag == selEnd.getParag() )
+            if ( parag == _selEnd->getParag() )
             {
-                tmpFC2 = selStart;
-                tmpFC1 = selEnd;
+                tmpFC2 = *_selStart;
+                tmpFC1 = *_selEnd;
                 break;
             }
             parag = parag->getNext();

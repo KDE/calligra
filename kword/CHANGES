@@ -1276,3 +1276,13 @@ Reggie, 7.6 - 9.6 1999
 
 BUTTTTHH (tm): I didn't test it lot yet, so many things are for sure broken. I'll do
 testing + fixing + more cleanups from now on
+
+Reggie, 10.6.1999:
+------------------
+- More cleanups in KWPage
+- Selecting text with the keyboard is nearly completly
+  flicker-free now :-))
+- Started re-implementing autoscrolling and selecting
+  text when setting/moving the cursor with the mouse
+  (but doesn't work at all at the moment :-P )
+

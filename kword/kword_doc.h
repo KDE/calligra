@@ -278,7 +278,8 @@ public:
     { selEnd = _fc; }
     KWFormatContext *getSelEnd()
     { return &selEnd; }
-    void drawSelection( QPainter &_painter, int xOffset, int yOffset );
+    void drawSelection( QPainter &_painter, int xOffset, int yOffset,
+                        KWFormatContext *_selStart = 0L, KWFormatContext *_selEnd = 0L );
     void setSelection( bool _has )
     { hasSelection = _has; }
     bool has_selection()

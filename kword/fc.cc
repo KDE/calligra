@@ -45,10 +45,40 @@ KWFormatContext::KWFormatContext( KWordDocument *_doc, unsigned int _frameSet )
 }
 
 /*================================================================*/
-KWFormatContext::~KWFormatContext()
+bool KWFormatContext::operator<( const KWFormatContext &fc )
 {
+    if ( fc.parag == parag )
+        return fc.textPos > textPos;
+    
+    // Reggie: That's unefficient, but I have no better idea :-(
+    KWParag *p = parag->getNext();
+    while ( p )
+    {
+        if ( p == fc.parag )
+            return true;
+        p = p->getNext();
+    }
+    
+    return false;
 }
 
+/*================================================================*/
+bool KWFormatContext::operator>( const KWFormatContext &fc )
+{
+    if ( fc.parag == parag )
+        return fc.textPos < textPos;
+    
+    // Reggie: That's unefficient, but I have no better idea :-(
+    KWParag *p = parag->getPrev();
+    while ( p )
+    {
+        if ( p == fc.parag )
+            return true;
+        p = p->getPrev();
+    }
+    
+    return false;
+}
 
 /*================================================================*/
 void KWFormatContext::init( KWParag *_parag, bool _fromStart,
