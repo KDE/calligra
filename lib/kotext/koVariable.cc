@@ -40,12 +40,7 @@
 class KoVariableSettings::KoVariableSettingPrivate
 {
 public:
-    KoVariableSettingPrivate()
-        {
-            m_lastPrinting = QDate();
-            m_createFile = QDate();
-            m_modifyFile = QDate();
-        }
+    KoVariableSettingPrivate() {}
     QDate m_lastPrinting;
     QDate m_createFile;
     QDate m_modifyFile;
@@ -65,7 +60,7 @@ KoVariableSettings::KoVariableSettings()
 KoVariableSettings::~KoVariableSettings()
 {
     delete d;
-    d=0;
+    d = 0;
 }
 
 QDate KoVariableSettings::lastPrinting() const
@@ -193,21 +188,21 @@ void KoVariableSettings::load( QDomElement &elem )
 KoVariableDateFormat::KoVariableDateFormat() : KoVariableFormat()
 {
     m_bShort = false;
-    m_strFormat="";
 }
 
 QString KoVariableDateFormat::convert( const QVariant& data ) const
 {
     if ( data.type() != QVariant::Date )
     {
-        kdDebug(32500)<<" Error in KoVariableDateFormat::convert. Value is a " << data.typeName() << endl;
+        kdDebug(32500)<<" Error in KoVariableDateFormat::convert. Value is a "
+                      << data.typeName() << "(" << data.type() << ")" << endl;
         return QString::null;
     }
     if ( !data.toDate().isValid() )
         return QString("");
 
-    if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())  // FIXME: "Locale" is I18N !
-	return KGlobal::locale()->formatDate( data.toDate(),m_bShort );
+    if (m_strFormat.lower()=="locale" || m_strFormat.isEmpty())
+	return KGlobal::locale()->formatDate( data.toDate(), m_bShort );
 
     QString tmp=data.toDate().toString(m_strFormat);
     tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(data.toDate().month(), false)); //long possessive month name
@@ -217,7 +212,7 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 
 QCString KoVariableDateFormat::key() const
 {
-    return QCString("DATE") + (m_bShort ? '1' : '0')+m_strFormat.utf8();
+    return QCString("DATE") + (m_bShort ? '1' : '0') + m_strFormat.utf8();
 }
 
 void KoVariableDateFormat::load( const QCString &key )
@@ -228,11 +223,10 @@ void KoVariableDateFormat::load( const QCString &key )
         m_bShort = (params[0] == '1');
         m_strFormat = QString::fromUtf8( key.mid( 5 ) ); // skip "DATE" and the 0/1
     }
-    // TODO else: use the last setting ?  (useful for the interactive case)
 }
 
-KoVariableTimeFormat::KoVariableTimeFormat():KoVariableFormat(){
-    m_strFormat="";
+KoVariableTimeFormat::KoVariableTimeFormat() : KoVariableFormat()
+{
 }
 
 void KoVariableTimeFormat::load( const QCString &key )
@@ -246,7 +240,8 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
 {
     if ( time.type() != QVariant::Time )
     {
-        kdDebug(32500)<<" Error in KoVariableTimeFormat::convert. Value is a " << time.typeName() << endl;
+        kdDebug(32500)<<" Error in KoVariableTimeFormat::convert. Value is a "
+                      << time.typeName() << "(" << time.type() << ")" << endl;
         return QString::null;
     }
 
@@ -450,12 +445,12 @@ void KoVariableCollection::changeFormatOfVariable()
             KoDateVariable *date=dynamic_cast<KoDateVariable*>(m_varSelected);
             if(date)
             {
-                static_cast<KoVariableDateFormat*>(date->variableFormat())->m_strFormat=(*it).format;
+                static_cast<KoVariableDateFormat*>(date->variableFormat())->setDateFormat( (*it).format );
             }
             KoTimeVariable *time=dynamic_cast<KoTimeVariable*>(m_varSelected);
             if(time)
             {
-                static_cast<KoVariableTimeFormat*>(time->variableFormat())->m_strFormat=(*it).format;
+                static_cast<KoVariableTimeFormat*>(time->variableFormat())->setTimeFormat( (*it).format );
             }
             recalcVariables(m_varSelected);
         }
@@ -465,80 +460,6 @@ void KoVariableCollection::changeFormatOfVariable()
 void KoVariableCollection::setVariableSelected(KoVariable * var)
 {
     m_varSelected=var;
-}
-
-QPtrList<KAction> KoVariableCollection::variableActionList()
-{
-    QPtrList<KAction> listAction=QPtrList<KAction>();
-    if( !m_varSelected)
-        return listAction;
-    else
-    {
-        QStringList list=m_varSelected->subTypeText();
-        QStringList::ConstIterator it = list.begin();
-        for ( int i = 0; it != list.end() ; ++it, ++i )
-        {
-            if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
-            {
-                KAction * act = new KAction( (*it));
-                connect( act, SIGNAL(activated()),this, SLOT(changeTypeOfVariable()) );
-
-                m_variableSubTextMap.insert( act, i );
-                listAction.append( act );
-            }
-        }
-        if(m_varSelected->type() == VT_DATE || m_varSelected->type() == VT_TIME )
-        {
-            list=m_varSelected->subTypeFormat();
-            it = list.begin();
-            for ( int i = 0; it != list.end() ; ++it, ++i )
-            {
-                if( i == 0)
-                    listAction.append( new KActionSeparator() );
-
-                if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
-                {
-                    VariableSubFormatDef v;
-                    switch(m_varSelected->type())
-                    {
-                    case VT_DATE:
-                    {
-                        QDate ct=QDate::currentDate();
-                        if((*it)==i18n("Locale").lower())
-                            v.translatedString=KGlobal::locale()->formatDate( ct );
-                        else
-			{
-			    QString tmp=ct.toString(*it);
-			    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(ct.month(), false)); //long possessive month name
-			    tmp.replace("PPP", KGlobal::locale()->monthNamePossessive(ct.month(), true)); //short possessive month name
-                            v.translatedString=tmp;
-                        }
-			v.format=(*it);
-                        break;
-                    }
-                    case  VT_TIME:
-                    {
-                        QTime ct=QTime::currentTime();
-                        if((*it)==i18n("Locale").lower())
-                            v.translatedString=KGlobal::locale()->formatTime( ct );
-                        else
-                            v.translatedString=ct.toString(*it);
-                        v.format=*it;
-                        break;
-                    }
-                    default:
-                        break;
-                    }
-                    KAction * act = new KAction(v.translatedString);
-                    connect( act, SIGNAL(activated()),this, SLOT(changeFormatOfVariable()) );
-                    m_variableSubFormatMap.insert( act, v );
-                    listAction.append( act );
-                }
-            }
-        }
-    }
-
-    return listAction;
 }
 
 /******************************************************************/
@@ -1000,14 +921,13 @@ QString KoTimeVariable::fieldCode()
 void KoTimeVariable::resize()
 {
     KoTextFormat * fmt = format();
-    QString oldLanguage;
-    if ( !fmt->language().isEmpty())
+    if ( !fmt->language().isEmpty() )
     {
-        oldLanguage=KGlobal::locale()->language();
-         bool changeLanguage = KGlobal::locale()->setLanguage( fmt->language() );
-         KoVariable::resize();
-         if ( changeLanguage )
-             KGlobal::locale()->setLanguage( oldLanguage );
+        QString oldLanguage = KGlobal::locale()->language();
+        bool changeLanguage = KGlobal::locale()->setLanguage( fmt->language() );
+        KoVariable::resize();
+        if ( changeLanguage )
+            KGlobal::locale()->setLanguage( oldLanguage );
     }
     else
         KoVariable::resize();

@@ -125,7 +125,11 @@ public:
 
     virtual QCString key() const;
     virtual void load( const QCString &key );
-    QString m_strFormat;
+
+    void setDateFormat( const QString& format ) {
+        m_strFormat = format;
+    }
+    QString m_strFormat; // HACK, MOVE ME
 private:
     bool m_bShort;
 };
@@ -137,8 +141,12 @@ public:
     QString convert(const QVariant& data )const;
     virtual QCString key() const;
     virtual void load( const QCString & /*key*/ );
-    QString m_strFormat;
-    // TODO custom time formats
+
+    void setTimeFormat( const QString& format ) {
+        m_strFormat = format;
+    }
+    QString m_strFormat; // HACK, MOVE ME
+private:
 };
 
 class KoVariableStringFormat : public KoVariableFormat
@@ -243,8 +251,6 @@ public:
 
     void setVariableSelected(KoVariable * var);
     KoVariable *selectedVariable()const {return m_varSelected;}
-
-    virtual QPtrList<KAction> variableActionList();
 
  signals:
     void repaintVariable();
