@@ -39,9 +39,6 @@
 #include <zlib.h>
 #include "processors.h"
 
-//Temporary
-#undef USE_QDOMDOCUMENT
-
 ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
@@ -336,16 +333,18 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &)
 }
 
 static void ProcessHardBreakTag ( QDomNode myNode, void *tagData, QString &)
-{   // <HRDBREAK> not documented
+{   // <HRDBREAK> not documented!
     bool *hardBreak = (bool *) tagData;
 
+    int frameBreak=0; // Break in frame or page (if I have understand well!) (Default: no page break)
+
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("frame", NULL, NULL )); //What means this attribute?
+    attrProcessingList.append ( AttrProcessing ("frame", "int", (void*) frameBreak));
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode);
 
-    *hardBreak=true; //As long as we have no documentation of this tag, we can only do this!
+    *hardBreak=(1==frameBreak);
 }
 
 // ProcessParagraphData () mangles the pure text through the
@@ -378,7 +377,7 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
         {
             //Retrieve text
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-            //Code all posible predefined XML entities
+            //Code all possible predefined XML entities
             partialText.replace (regExpAmp , strAmp); //Must be the first!!
             partialText.replace (regExpLt  , strLt);
             partialText.replace (regExpGt  , strGt);
@@ -388,13 +387,13 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
 
             if ((*paraFormatDataIt).abiprops.isEmpty())
             {
-                //It's just normal text, so no "props" attribute
+                //It's just normal text, so there is no "props" attribute
                 //Should rarely happen, as we have always the font name and size
                 //Note: you must use a <c> tag!
                 outputText += "<c>";
             }
             else
-            { //Text with properties: embed it in a <c> tag!
+            { //Text with properties
                 outputText += "<c props=\"";
                 outputText += (*paraFormatDataIt).abiprops;
                 outputText += "\">";
@@ -416,7 +415,8 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     QValueList<FormatData> paraFormatDataList;
     QString paraLayout;
     QValueList<TagProcessing> tagProcessingList;
-    bool hardbreak=false;
+    bool hardbreak=false; // Have we an hard break?
+	
     tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,       (void *) &paraText           ) );
     tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag,    (void *) &paraFormatDataList ) );
     tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,     (void *) &paraLayout         ) );
@@ -465,7 +465,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         outputText += "<p style=\"Normal\">";  //Warning: No trailing white space or else it's in the text!!!
     }
 #else
-    outputText += "<p>";
+    outputText += "<p>";  //Warning: No trailing white space or else it's in the text!!!
 #endif
     ProcessParagraphData ( paraText, paraFormatDataList, outputText );
     outputText += "</p>\n";
@@ -635,34 +635,40 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
     koStoreIn.close ();
 
     QDomDocument qDomDocumentIn;
-    
+
     // let parse the buffer just read from the file
     qDomDocumentIn.setContent(byteArrayIn);
-    
+
     QDomNode docNodeIn = qDomDocumentIn.documentElement ();
 
     QString stringBufOut;
 
     // Make the file header
-    
+
     // First the XML header in UTF-8 version
     // (AbiWord and QString handles UTF-8 well, so we stay with this encoding!)
     stringBufOut = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     // First magic: "<abiword"
-    stringBufOut += "<abiword version=\"unnumbered\">\n";	
+    stringBufOut += "<abiword version=\"unnumbered\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
     stringBufOut += "<!-- This file is an AbiWord document. -->\n";
+    // Do we need the full four line comment header?
+    stringBufOut += "\n";
+
+    // Put the rest of the information in the way AbiWord puts its debug info!
     // Say who we are in case we have a bug in our filter output!
-    stringBufOut += "<!-- File exported by KWord (www.koffice.org) -->\n";
+    stringBufOut += "<!-- KWord_Home_Page = http://www.koffice.org -->\n";
+    // Put the CVS version keyword into the file
+    stringBufOut += "<!-- KWord_Export_Filter_Version = ";
+    QString strVersion("$Version$");
+    // Eliminate the dollar signs
+    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
+    stringBufOut += strVersion.replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
+    stringBufOut += " -->\n";
 
 #if 1
-    // Some security to see if I have forgotten "make install"
-    // (But put in the form AbiWord puts its debug info.)
+    // Some security to see if I have forgotten to run "make install"
     // (Can be deleted when the filter will be stable.)
-    stringBufOut += "<!-- Build_CompileTime = " __TIME__ " -->\n";
-    stringBufOut += "<!-- Build_CompileDate = " __DATE__ " -->\n";
- 
-    // As you are doing it, put date and time also in a debug stream
     kdDebug() << "abiwordexport.cc " << __DATE__ " " __TIME__ << endl;
 #endif
 
@@ -688,7 +694,7 @@ const bool ABIWORDExport::filter(const QString  &filenameIn,
 
     kdDebug() << "AbiWord Filter: -" << strExt << "-" << endl;
 
-    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
+    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (standard extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
     {// GZipped
         success=writeOutputFileGZipped(filenameOut,strOut);
