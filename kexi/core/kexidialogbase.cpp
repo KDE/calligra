@@ -49,30 +49,36 @@ KexiDialogBase::KexiDialogBase(QWidget *parent, const char *name) : QWidget(pare
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {
-	myDock=m_mainWindow->createDockWidget( "Widget", 
-		(icon()?(*(icon())):SmallIcon("kexi")), 0, caption());
-	myDock->setWidget(this);
-	myDock->setEnableDocking(KDockWidget::DockFullDocking);
-	myDock->setDockSite(KDockWidget::DockFullDocking);
-	myDock->setDockWindowType(NET::Normal);
-	myDock->setDockWindowTransient(m_mainWindow,true);
+	myDock=0;
+	if (! ((m_mainWindow->windowMode()==KexiMainWindow::MDIWindowMode) && (wt==DocumentWindow)))
+        {
+		myDock=m_mainWindow->createDockWidget( "Widget", 
+			(icon()?(*(icon())):SmallIcon("kexi")), 0, caption());
+		myDock->setWidget(this);
+		myDock->setEnableDocking(KDockWidget::DockFullDocking);
+		myDock->setDockSite(KDockWidget::DockFullDocking);
+		myDock->setDockWindowType(NET::Normal);
+		myDock->setDockWindowTransient(m_mainWindow,true);
+	}
 
 	if (wt==DocumentWindow) {
-		if ((s_activeDocumentWindow==0) || (s_activeDocumentWindow->myDock==0)) {
-			if (m_mainWindow->windowMode()==KexiMainWindow::SingleWindowMode)
-				myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockTop, 100);
+		if (myDock!=0) {
+			if ((s_activeDocumentWindow==0) || (s_activeDocumentWindow->myDock==0)) {
+				if (m_mainWindow->windowMode()==KexiMainWindow::SingleWindowMode)
+					myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockTop, 100);
+				else
+					myDock->toDesktop();
+			}
 			else
-				myDock->toDesktop();
-
+				myDock->manualDock(s_activeDocumentWindow->myDock,KDockWidget::DockCenter);
 		}
-		else
-			myDock->manualDock(s_activeDocumentWindow->myDock,KDockWidget::DockCenter);
 		s_DocumentWindows->insert(0,this);
 		s_activeDocumentWindow=this;
 	}
 	else {
 		if ((s_activeToolWindow==0) || (s_activeToolWindow->myDock==0)) {
-			if (m_mainWindow->windowMode()==KexiMainWindow::SingleWindowMode)
+			if ( (m_mainWindow->windowMode()==KexiMainWindow::SingleWindowMode) ||
+				(m_mainWindow->windowMode()==KexiMainWindow::MDIWindowMode))
 				myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockLeft, 20);
 			else
 				myDock->toDesktop();
@@ -83,7 +89,7 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 		s_activeToolWindow=this;
 	}
 	
-	myDock->makeDockVisible();
+	if (myDock) myDock->makeDockVisible();
 }
 
 void KexiDialogBase::focusInEvent ( QFocusEvent *)

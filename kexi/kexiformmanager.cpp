@@ -60,14 +60,14 @@ void KexiFormManager::clear()
 {
 }
 
-void KexiFormManager::showForm(const QString& name, Mode, KexiWorkspace *parent)
+void KexiFormManager::showForm(const QString& name, Mode, QWidget *parent)
 {
 	Item *item=m_forms[name];
 	if (!item) return;
 	if (item->form.isNull())
 	{
         	item->form = new KexiFormBase(parent, "form",name);
-                parent->addItem(item->form);
+                static_cast<KexiWorkspace*>(parent->qt_cast("KexiWorkspace"))->addItem(item->form);
                 item->form->show();
 	}
 	else

@@ -43,8 +43,11 @@ void KexiSetupWizard::accept() {
         config->setGroup("views");
         if (multipleWindows->isChecked())
 		config->writeEntry("windowMode","multipleWindows" );
-	else
+	else 
+	if (singleWindow->isChecked())
 		config->writeEntry("windowMode","singleWindow" );
+	else
+		config->writeEntry("windowMode","MDIWindows" );
 
         config->setGroup("setupWizard");
 	config->writeEntry("startup","false");

@@ -38,6 +38,12 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Plain</enum>
+                </property>
                 <property name="pixmap">
                     <pixmap>image0</pixmap>
                 </property>
@@ -132,15 +138,32 @@
             </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>layout6</cstring>
+                    <cstring>layout5</cstring>
                 </property>
                 <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="2" column="1">
+                    <spacer row="2" column="2">
                         <property name="name">
-                            <cstring>spacer8_2</cstring>
+                            <cstring>spacer6</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>16</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <spacer row="0" column="1">
+                        <property name="name">
+                            <cstring>spacer8</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -151,11 +174,11 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>30</height>
+                                <height>40</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QButtonGroup" row="1" column="1">
+                    <widget class="QButtonGroup" row="1" column="1" rowspan="2" colspan="1">
                         <property name="name">
                             <cstring>buttonGroup1</cstring>
                         </property>
@@ -183,25 +206,6 @@
                                     <bool>false</bool>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>pixmapLabel2_2</cstring>
-                                </property>
-                                <property name="pixmap">
-                                    <pixmap>image2</pixmap>
-                                </property>
-                                <property name="scaledContents">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="1" column="1">
-                                <property name="name">
-                                    <cstring>singleWindow</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Show all views within the main window</string>
-                                </property>
-                            </widget>
                             <widget class="QRadioButton" row="0" column="1">
                                 <property name="name">
                                     <cstring>multipleWindows</cstring>
@@ -213,11 +217,49 @@
                                     <bool>true</bool>
                                 </property>
                             </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pixmapLabel2_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image2</pixmap>
+                                </property>
+                                <property name="scaledContents">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>pixmapLabel2_2_2</cstring>
+                                </property>
+                                <property name="pixmap">
+                                    <pixmap>image2</pixmap>
+                                </property>
+                                <property name="scaledContents">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="2" column="1">
+                                <property name="name">
+                                    <cstring>MDIWindows</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show document views in MDI style</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="1">
+                                <property name="name">
+                                    <cstring>singleWindow</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show all views within the main window</string>
+                                </property>
+                            </widget>
                         </grid>
                     </widget>
-                    <spacer row="0" column="1">
+                    <spacer row="3" column="1">
                         <property name="name">
-                            <cstring>spacer8</cstring>
+                            <cstring>spacer8_2</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -228,7 +270,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>30</height>
+                                <height>40</height>
                             </size>
                         </property>
                     </spacer>
@@ -244,24 +286,7 @@
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>30</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <spacer row="1" column="2">
-                        <property name="name">
-                            <cstring>spacer6</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>30</width>
+                                <width>16</width>
                                 <height>20</height>
                             </size>
                         </property>

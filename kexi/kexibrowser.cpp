@@ -158,7 +158,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 			if ( r->type() == KexiBrowserItem::Child)
 			{
 			    kexi->project()->formManager()->showForm(r->identifier(), KexiFormManager::View,
-				kexi->mainWindow()->workspace()); 
+				kexi->mainWindow()->workspaceWidget()); 
 
 //    			    KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form",r->identifier());
 //			    kexi->mainWindow()->workspace()->addItem(fb);
@@ -171,7 +171,7 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child )
 			{
-				KexiDataTable *kt = new KexiDataTable(kexi->mainWindow(), r->text(0), "table");
+				KexiDataTable *kt = new KexiDataTable(kexi->mainWindow()->workspaceWidget(), r->text(0), "table");
 				if(kt->executeQuery("select * from " + r->text(0)))
 				{
 					kt->show();
@@ -218,14 +218,14 @@ void KexiBrowser::slotAlterTable()
 	
 	if ( r->type() == KexiBrowserItem::Child )
 	{
-		KexiAlterTable* kat = new KexiAlterTable(kexi->mainWindow(), r->text(0), "alterTable");
+		KexiAlterTable* kat = new KexiAlterTable(kexi->mainWindow()->workspaceWidget(), r->text(0), "alterTable");
 		kat->show();
 	}
 }
 
 void KexiBrowser::slotCreateQuery()
 {
-	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow(), "query");
+	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), "query");
 	kqd->show();
 }
 

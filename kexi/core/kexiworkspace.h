@@ -1,39 +1,28 @@
 #ifndef KEXIWORKSPACE_H
 #define KEXIWORKSPACE_H
 
-#include <qworkspace.h>
 #include <qguardedptr.h>
-
-#include <kstatusbar.h>
-
 
 class KexiDialogBase;
 class KexiMainWindow;
 
-class KexiWorkspace : public KStatusBar
+class KexiWorkspace
 {
-	Q_OBJECT
 	
 	public:
-		KexiWorkspace(QWidget *parent=0, const char *name=0, KexiMainWindow* mw=0);
-		~KexiWorkspace();
+		KexiWorkspace(){};
+		virtual ~KexiWorkspace(){};
 		
-		void addItem(KexiDialogBase *newItem);
+		virtual void addItem(KexiDialogBase *newItem)=0;
 		
-		unsigned int count() { return no; };
+		virtual unsigned int count()=0;
 
-		virtual QSize sizeHint() const;
-		virtual QSize minimumSizeHint() const;
+		virtual KexiDialogBase * activeDocumentView()=0;
 		
 	protected:
-		unsigned int no;
-
-	protected slots:
-		void takeItem(KexiDialogBase *delItem);
-		void slotWindowActivated(QWidget*);
+		virtual void takeItem(KexiDialogBase *delItem)=0;
+		virtual void slotWindowActivated(QWidget*)=0;
 	private:
-	QGuardedPtr<KexiDialogBase> m_activeDialog;
-	KexiMainWindow *m_mainwindow;
 };
 
 #endif

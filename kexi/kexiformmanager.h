@@ -8,6 +8,7 @@ class QStringList;
 class QDomDocument;
 class KexiFormBase;
 class KexiWorkspace;
+class QWidget;
 
 class KexiFormManager
 {
@@ -22,7 +23,7 @@ public:
 	bool deleteForm(const QString& name);
 	QString newForm();
 	void clear();
-	void showForm(const QString& name, Mode, KexiWorkspace *parent);
+	void showForm(const QString& name, Mode, QWidget *parent);
 
 protected:
 	class Item
