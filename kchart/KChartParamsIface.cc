@@ -222,6 +222,26 @@ void KChartParamsIface::setThreeDLineDepth( int depth )
     params->setThreeDLineDepth( depth );
 }
 
+int KChartParamsIface::threeDLineXRotation() const
+{
+    return params->threeDLineXRotation();
+}
+
+void KChartParamsIface::setThreeDLineXRotation( int degrees )
+{
+    params->setThreeDLineXRotation( degrees );
+}
+
+void KChartParamsIface::setThreeDLineYRotation( int degrees )
+{
+    params->setThreeDLineYRotation(degrees );
+}
+
+int KChartParamsIface::threeDLineYRotation() const
+{
+    return params->threeDLineYRotation();
+}
+
 bool KChartParamsIface::showGrid()
 {
     return params->showGrid();

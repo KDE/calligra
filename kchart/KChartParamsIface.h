@@ -59,6 +59,11 @@ k_dcop:
     virtual void setThreeDLines(bool b);
     virtual void setThreeDLineDepth( int depth );
     virtual int threeDLineDepth() const;
+    virtual int threeDLineXRotation() const;
+    virtual void setThreeDLineXRotation( int degrees );
+    virtual void setThreeDLineYRotation( int degrees );
+    virtual int threeDLineYRotation() const;
+
 
     //pie config
     virtual bool threeDPies();
