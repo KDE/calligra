@@ -41,6 +41,9 @@
 // for getenv ()
 #include <stdlib.h>
 #include <fstream.h>
+#include <iostream>
+
+using namespace std;
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
