@@ -37,6 +37,7 @@ public:
 
 k_dcop:
     virtual int numPages() const;
+    /// 0-based
     virtual DCOPRef page( int num );
 
     virtual DCOPRef masterPage();
@@ -207,6 +208,10 @@ k_dcop:
     void setPresentationName( const QString &_name );
 
     QStringList presentationList();
+
+    /// Repaint document. Call this after moving or resizing an object, for instance.
+    /// @since 1.4
+    void repaint();
 
 private:
     KPresenterDoc *doc;

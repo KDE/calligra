@@ -32,8 +32,10 @@
 #include <kcommand.h>
 #include "kprcommand.h"
 
-KPresenterPageIface::KPresenterPageIface( KPrPage *_page )
-    : DCOPObject()
+KPresenterPageIface::KPresenterPageIface( KPrPage *_page, int pgnum )
+    // Make up a nice DCOPObject name like "Document-0 Page-1".
+    // ### But the page number will be stale if pages are added/removed/moved around....
+    : DCOPObject( QCString( _page->kPresenterDoc()->dcopObject()->objId() ) + " Page-" + QString::number( pgnum ).latin1() )
 {
     m_page = _page;
 }

@@ -691,3 +691,8 @@ QStringList KPresenterDocIface::presentationList()
     return doc->presentationList();
 }
 
+void KPresenterDocIface::repaint()
+{
+    doc->repaint( false );
+}
+

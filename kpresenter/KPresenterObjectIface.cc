@@ -285,3 +285,13 @@ bool KPresenterObjectIface::isKeepRatio() const
 {
     return obj->isKeepRatio();
 }
+
+void KPresenterObjectIface::move( double x, double y )
+{
+    obj->setOrig( x, y );
+}
+
+void KPresenterObjectIface::resize( double width, double height )
+{
+    obj->setSize( width, height );
+}

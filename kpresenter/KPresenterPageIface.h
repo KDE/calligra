@@ -32,7 +32,7 @@ class KPresenterPageIface :public DCOPObject
 {
     K_DCOP
 public:
-    KPresenterPageIface( KPrPage *_page );
+    KPresenterPageIface( KPrPage *_page, int pgnum );
 
 k_dcop:
     virtual DCOPRef object( int num );

@@ -38,6 +38,11 @@ public:
 k_dcop:
     int getType() const;
 
+    /// @since 1.4
+    void move( double x, double y );
+    /// @since 1.4
+    void resize( double width, double height );
+
     bool isSelected() const;
     float angle() const;
     int shadowDistance() const;

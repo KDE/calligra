@@ -113,8 +113,12 @@ KPrPage::~KPrPage()
 
 DCOPObject* KPrPage::dcopObject()
 {
-    if ( !m_dcop )
-        m_dcop = new KPresenterPageIface( this );
+    if ( !m_dcop ) {
+        // 0-based. 1-based would be nicer for the dcop user, but well, docs and views are 0-based,
+	// and the page(int) DCOP call is 0-based.
+        int pgnum = m_doc->pageList().findRef( this );
+        m_dcop = new KPresenterPageIface( this, pgnum );
+    }
 
     return m_dcop;
 }
@@ -2528,7 +2532,7 @@ QString KPrPage::pageTitle( const QString &_title ) const
 
     QPtrList<KPTextObject> objs;
 
-    // Create list of text objects in page pgNum
+    // Create list of text objects in this page
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
