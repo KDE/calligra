@@ -676,47 +676,46 @@ public:
     /**
      * Returns, if the grid shall be shown on the screen
      */
-    bool getShowGrid() const { return m_bShowGrid; }
+    bool getShowGrid() const;
 
     /**
      * Sets, if the grid shall be shown on the screen
      */
-    void setShowGrid( bool _showGrid ) { m_bShowGrid=_showGrid; }
+    void setShowGrid( bool _showGrid );
 
     /**
      * Sets, if formula shall be shown instead of the result
      */
-    bool getShowFormula() const {return m_bShowFormula;}
+    bool getShowFormula() const;
 
-    void setShowFormula(bool _showFormula) {m_bShowFormula=_showFormula;}
+    void setShowFormula(bool _showFormula);
 
     /**
      * Sets, if indicator must be shown when the cell holds a formula
      */
-    bool getShowFormulaIndicator() const {return m_bShowFormulaIndicator;}
+    bool getShowFormulaIndicator() const;
 
-    void setShowFormulaIndicator(bool _showFormulaIndicator)
-        {m_bShowFormulaIndicator=_showFormulaIndicator;}
+    void setShowFormulaIndicator(bool _showFormulaIndicator);
 
-    bool getLcMode() const {return m_bLcMode;}
+    bool getLcMode() const;
 
-    void setLcMode(bool _lcMode) {m_bLcMode=_lcMode;}
+    void setLcMode(bool _lcMode);
 
-    bool getAutoCalc() const {return m_bAutoCalc;}
+    bool getAutoCalc() const;
 
-    void setAutoCalc(bool _AutoCalc) {m_bAutoCalc=_AutoCalc;}
+    void setAutoCalc(bool _AutoCalc);
 
-    bool getShowColumnNumber() const {return m_bShowColumnNumber;}
+    bool getShowColumnNumber() const;
 
-    void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
+    void setShowColumnNumber(bool _showColumnNumber);
 
-    bool getHideZero() const {return m_bHideZero;}
+    bool getHideZero() const;
 
-    void setHideZero(bool _hideZero) {m_bHideZero=_hideZero;}
+    void setHideZero(bool _hideZero);
 
-    bool getFirstLetterUpper() const {return m_bFirstLetterUpper;}
+    bool getFirstLetterUpper() const;
 
-    void setFirstLetterUpper(bool _firstUpper) {m_bFirstLetterUpper=_firstUpper;}
+    void setFirstLetterUpper(bool _firstUpper);
 
     void mergeCells( const QRect &area );
     void dissociateCell( const QPoint &cellRef );
@@ -776,11 +775,11 @@ public:
     /**
      * @return true if this table is hidden
      */
-    bool isHidden()const { return m_bTableHide; }
+    bool isHidden()const;
     /**
      * Hides or shows this tables
      */
-    void setHidden( bool hidden ) { m_bTableHide=hidden; }
+    void setHidden( bool hidden );
 
     /**
      * For internal use only.
@@ -821,9 +820,9 @@ public:
     void setShowPageBorders( bool _b );
 
     void addCellBinding( CellBinding *_bind );
-    void removeCellBinding( CellBinding *_bind );
-    CellBinding* firstCellBinding() { return m_lstCellBindings.first(); }
-    CellBinding* nextCellBinding() { return m_lstCellBindings.next(); }
+    void removeCellBinding( CellBinding *_bind );    
+    CellBinding* firstCellBinding();    
+    CellBinding* nextCellBinding();
 
     /**
      * Used by the 'chart' to get the table on which the chart is build.
@@ -1210,14 +1209,6 @@ protected:
      */
     bool m_bShowPageBorders;
 
-    /**
-     * List of all cell bindings. For example charts use bindings to get
-     * informed about changing cell contents.
-     *
-     * @see #addCellBinding
-     * @see #removeCellBinding
-     */
-    QPtrList<CellBinding> m_lstCellBindings;
 
     /**
      * The label returned by @ref #columnLabel
@@ -1254,8 +1245,6 @@ protected:
 
     bool m_bScrollbarUpdates;
     bool m_bRightToLeft;
-
-    bool m_bTableHide;
 
     static int s_id;
     static QIntDict<KSpreadSheet>* s_mapTables;

@@ -223,9 +223,23 @@ public:
   
   QString name;
   int id;
-    
+
+  // true if sheet is hidden    
+  bool hide;
+
   // password of protected sheet
   QCString password;
+  
+  bool rightToLeft;
+
+  bool showGrid;
+  bool showFormula;
+  bool showFormulaIndicator;
+  bool autoCalc;
+  bool lcMode;
+  bool showColumnNumber;
+  bool hideZero;
+  bool firstLetterUpper;
   
   // clusters to hold objects
   KSpreadCluster cells;
@@ -247,6 +261,10 @@ public:
   // to get font metrics
   QPainter *painter;
   QWidget *widget;
+  
+  // List of all cell bindings. For example charts use bindings to get
+  // informed about changing cell contents.
+  QPtrList<CellBinding> cellBindings;
 };
  
 int KSpreadSheet::s_id = 0L;
@@ -261,13 +279,13 @@ KSpreadSheet* KSpreadSheet::find( int _id )
 }
 
 KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const char *_name )
-  : QObject( map, _name ),
-    m_bRightToLeft( false )
+  : QObject( map, _name )
 {
   if ( s_mapTables == 0L )
     s_mapTables = new QIntDict<KSpreadSheet>;
     
   d = new SheetPrivate;
+  d->rightToLeft = false;
 
   d->id = s_id++;
   s_mapTables->insert( d->id, this );
@@ -283,7 +301,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
   d->name = tableName;
 
   dcopObject();
-  m_lstCellBindings.setAutoDelete( FALSE );
+  d->cellBindings.setAutoDelete( FALSE );
 
 
   // m_lstChildren.setAutoDelete( true );
@@ -311,16 +329,16 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
   m_bScrollbarUpdates = true;
 
   setHidden( false );
-  m_bShowGrid=true;
-  m_bShowFormula=false;
-  m_bShowFormulaIndicator=true;
+  d->showGrid=true;
+  d->showFormula=false;
+  d->showFormulaIndicator=true;
   m_bShowPageBorders = FALSE;
 
-  m_bLcMode=false;
-  m_bShowColumnNumber=false;
-  m_bHideZero=false;
-  m_bFirstLetterUpper=false;
-  m_bAutoCalc=true;
+  d->lcMode=false;
+  d->showColumnNumber=false;
+  d->hideZero=false;
+  d->firstLetterUpper=false;
+  d->autoCalc=true;
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
@@ -355,6 +373,96 @@ int KSpreadSheet::id() const
 {
   return d->id;
 }    
+
+bool KSpreadSheet::isHidden() const
+{
+  return d->hide;
+}    
+
+void KSpreadSheet::setHidden( bool hidden )
+{
+  d->hide = hidden;
+}    
+
+bool KSpreadSheet::getShowGrid() const 
+{ 
+    return d->showGrid;
+}
+
+void KSpreadSheet::setShowGrid( bool _showGrid )
+{ 
+    d->showGrid=_showGrid; 
+}
+
+bool KSpreadSheet::getShowFormula() const 
+{
+    return d->showFormula;
+}
+
+void KSpreadSheet::setShowFormula( bool _showFormula ) 
+{
+    d->showFormula=_showFormula;
+}
+
+bool KSpreadSheet::getShowFormulaIndicator() const 
+{
+    return d->showFormulaIndicator;
+}
+
+void KSpreadSheet::setShowFormulaIndicator( bool _showFormulaIndicator )
+{
+    d->showFormulaIndicator=_showFormulaIndicator;
+}
+
+bool KSpreadSheet::getLcMode() const 
+{
+    return d->lcMode;
+}
+
+void KSpreadSheet::setLcMode( bool _lcMode )
+{
+    d->lcMode=_lcMode;
+}
+
+bool KSpreadSheet::getAutoCalc() const
+{
+    return d->autoCalc;
+}
+
+void KSpreadSheet::setAutoCalc( bool _AutoCalc )
+{
+    d->autoCalc=_AutoCalc;
+}
+ 
+bool KSpreadSheet::getShowColumnNumber() const
+{
+    return d->showColumnNumber;
+}
+
+void KSpreadSheet::setShowColumnNumber( bool _showColumnNumber ) 
+{
+    d->showColumnNumber=_showColumnNumber;
+}
+
+bool KSpreadSheet::getHideZero() const
+{
+    return d->hideZero;
+}
+
+void KSpreadSheet::setHideZero( bool _hideZero )
+{
+    d->hideZero=_hideZero;
+}
+
+bool KSpreadSheet::getFirstLetterUpper() const 
+{
+    return d->firstLetterUpper;
+}
+
+void KSpreadSheet::setFirstLetterUpper( bool _firstUpper )
+{
+    d->firstLetterUpper=_firstUpper;
+}
 
 bool KSpreadSheet::isEmpty( unsigned long int x, unsigned long int y ) const
 {
@@ -449,6 +557,16 @@ QPainter& KSpreadSheet::painter()
 QWidget* KSpreadSheet::widget()const
 { 
     return d->widget; 
+}
+
+CellBinding* KSpreadSheet::firstCellBinding() 
+{ 
+    return d->cellBindings.first(); 
+}
+    
+CellBinding* KSpreadSheet::nextCellBinding() 
+{ 
+    return d->cellBindings.next(); 
 }
     
 void KSpreadSheet::setDefaultHeight( double height )
@@ -6216,21 +6334,21 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 {
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", d->name );
-    table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
+    table.setAttribute( "columnnumber", (int)d->showColumnNumber);
     table.setAttribute( "borders", (int)m_bShowPageBorders);
-    table.setAttribute( "hide", (int)m_bTableHide);
-    table.setAttribute( "hidezero", (int)m_bHideZero);
-    table.setAttribute( "firstletterupper", (int)m_bFirstLetterUpper);
-    table.setAttribute( "grid", (int)m_bShowGrid );
+    table.setAttribute( "hide", (int)d->hide);
+    table.setAttribute( "hidezero", (int)d->hideZero);
+    table.setAttribute( "firstletterupper", (int)d->firstLetterUpper);
+    table.setAttribute( "grid", (int)d->showGrid );
     table.setAttribute( "printGrid", (int)d->print->printGrid() );
     table.setAttribute( "printCommentIndicator", (int)d->print->printCommentIndicator() );
     table.setAttribute( "printFormulaIndicator", (int)d->print->printFormulaIndicator() );
     if ( d->doc->specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
-      table.setAttribute( "formular", (int)m_bShowFormula); //Was named different
+      table.setAttribute( "formular", (int)d->showFormula); //Was named different
     else
-      table.setAttribute( "showFormula", (int)m_bShowFormula);
-    table.setAttribute( "showFormulaIndicator", (int)m_bShowFormulaIndicator);
-    table.setAttribute( "lcmode", (int)m_bLcMode);
+      table.setAttribute( "showFormula", (int)d->showFormula);
+    table.setAttribute( "showFormulaIndicator", (int)d->showFormulaIndicator);
+    table.setAttribute( "lcmode", (int)d->lcMode);
     table.setAttribute( "borders1.2", 1);
     if ( !d->password.isNull() )
     {
@@ -6411,7 +6529,7 @@ bool KSpreadSheet::isLoading()
 
 void KSpreadSheet::checkContentDirection( QString const & name )
 {
-  bool rtl = m_bRightToLeft;
+  bool rtl = d->rightToLeft;
 
   kdDebug() << "name.isRightToLeft(): " << name.isRightToLeft() << ", RTL: " << rtl << endl;
 
@@ -6424,12 +6542,12 @@ void KSpreadSheet::checkContentDirection( QString const & name )
   if ( (name.isRightToLeft())  ||  (name.left(3) == "rtl")  )
   {
     kdDebug() << "Table direction set to right to left" << endl;
-    m_bRightToLeft = true;
+    d->rightToLeft = true;
   }
   else
-    m_bRightToLeft = false;
+    d->rightToLeft = false;
 
-  if ( rtl != m_bRightToLeft )
+  if ( rtl != d->rightToLeft )
     emit sig_refreshView();
 }
 
@@ -6586,7 +6704,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                 if ( properties.hasAttribute( "table:display" ) )
                 {
                     bool visible = (properties.attribute( "table:display" ) == "true" ? true : false );
-                    m_bTableHide = !visible;
+                    d->hide = !visible;
                 }
             }
             if ( style->hasAttribute( "style:master-page-name" ) )
@@ -6759,7 +6877,7 @@ void KSpreadSheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
         if ( str.contains( "formulas" ) )
         {
             //todo it's not implemented
-            m_bShowFormula = true;
+            d->showFormula = true;
         }
         if ( str.contains( "zero-values" ) )
         {
@@ -7309,10 +7427,10 @@ void KSpreadSheet::loadOasisSettings( const QDomElement& setting )
 
 void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
-    settingsWriter.addConfigItem( "ShowZeroValues", m_bHideZero );
-    settingsWriter.addConfigItem( "ShowGrid", m_bShowGrid );
+    settingsWriter.addConfigItem( "ShowZeroValues", d->hideZero );
+    settingsWriter.addConfigItem( "ShowGrid", d->showGrid );
     //not define into oo spec
-    settingsWriter.addConfigItem( "FirstLetterUpper", m_bFirstLetterUpper);
+    settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper);
 }
 
 
@@ -7359,7 +7477,7 @@ QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
     pageMaster.addChildElement( "headerfooter", elementContents );
     pageStyle.addAttribute( "style:master-page-name", mainStyles.lookup( pageMaster, "Standard" ) );
 
-    pageStyle.addProperty( "table:display", !m_bTableHide );
+    pageStyle.addProperty( "table:display", !d->hide );
     return mainStyles.lookup( pageStyle, "ta" );
 }
 
@@ -7487,7 +7605,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
 
     if( table.hasAttribute( "grid" ) )
     {
-        m_bShowGrid = (int)table.attribute("grid").toInt( &ok );
+        d->showGrid = (int)table.attribute("grid").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "printGrid" ) )
@@ -7507,23 +7625,23 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     }
     if( table.hasAttribute( "hide" ) )
     {
-        m_bTableHide = (int)table.attribute("hide").toInt( &ok );
+        d->hide = (int)table.attribute("hide").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "showFormula" ) )
     {
-        m_bShowFormula = (int)table.attribute("showFormula").toInt( &ok );
+        d->showFormula = (int)table.attribute("showFormula").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     //Compatibility with KSpread 1.1.x
     if( table.hasAttribute( "formular" ) )
     {
-        m_bShowFormula = (int)table.attribute("formular").toInt( &ok );
+        d->showFormula = (int)table.attribute("formular").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "showFormulaIndicator" ) )
     {
-        m_bShowFormulaIndicator = (int)table.attribute("showFormulaIndicator").toInt( &ok );
+        d->showFormulaIndicator = (int)table.attribute("showFormulaIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "borders" ) )
@@ -7533,22 +7651,22 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     }
     if( table.hasAttribute( "lcmode" ) )
     {
-        m_bLcMode = (int)table.attribute("lcmode").toInt( &ok );
+        d->lcMode = (int)table.attribute("lcmode").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "columnnumber" ) )
     {
-        m_bShowColumnNumber = (int)table.attribute("columnnumber").toInt( &ok );
+        d->showColumnNumber = (int)table.attribute("columnnumber").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "hidezero" ) )
     {
-        m_bHideZero = (int)table.attribute("hidezero").toInt( &ok );
+        d->hideZero = (int)table.attribute("hidezero").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "firstletterupper" ) )
     {
-        m_bFirstLetterUpper = (int)table.attribute("firstletterupper").toInt( &ok );
+        d->firstLetterUpper = (int)table.attribute("firstletterupper").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
 
@@ -7770,14 +7888,14 @@ void KSpreadSheet::setShowPageBorders( bool b )
 
 void KSpreadSheet::addCellBinding( CellBinding *_bind )
 {
-  m_lstCellBindings.append( _bind );
+  d->cellBindings.append( _bind );
 
   d->doc->setModified( true );
 }
 
 void KSpreadSheet::removeCellBinding( CellBinding *_bind )
 {
-  m_lstCellBindings.removeRef( _bind );
+  d->cellBindings.removeRef( _bind );
 
   d->doc->setModified( true );
 }
