@@ -21,3 +21,7 @@ No idea if it is usefull; but it is a sin to let a good URL get lost...
     More info on gnumeric:
     http://www.object-refinery.com/jworkbook/
 
+
+cvs page for file format: (url gave by Jody Goldberg <jody@gnome.org>)
+http://cvs.gnome.org/viewcvs/gnumeric/gnumeric.xsd?rev=1.11&view=markup
+http://cvs.gnome.org/viewcvs/gnumeric/plugins/xml_sax/xml-sax-read.c?rev=1.132&view=markup
