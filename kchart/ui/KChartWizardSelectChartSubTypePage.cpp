@@ -2,8 +2,9 @@
 
 #include "KChartWizardSelectChartSubTypePage.h"
 
-KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent ) :
-  QWidget( parent )
+KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent, KChart* chart ) :
+  QWidget( parent ),
+  _chart( chart )
 {
 }
 

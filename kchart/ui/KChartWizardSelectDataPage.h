@@ -7,6 +7,8 @@ class QLineEdit;
 
 class KChartWizardSelectDataPage : public QWidget
 {
+friend class KChartWizard;
+
 public:
   KChartWizardSelectDataPage( QWidget* parent );
 

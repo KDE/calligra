@@ -7,6 +7,8 @@
 #include "KChartWizardSetupDataPage.h"
 #include "KChartWizardLabelsLegendPage.h"
 #include "KChartWizardSetupAxesPage.h"
+
+#include <qlined.h>
 #include <qwidget.h>
 
 KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name, 
@@ -33,7 +35,8 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
 
   // Second page: select the major chart type
   _selectcharttypepage = new KWizardPage;
-  QWidget* selectcharttypewidget = new KChartWizardSelectChartTypePage( this );
+  QWidget* selectcharttypewidget = new KChartWizardSelectChartTypePage( this,
+																		_chart );
   _selectcharttypepage->w = selectcharttypewidget;
   _selectcharttypepage->title = i18n( "Select chart type" );
   _selectcharttypepage->enabled = true;
@@ -41,7 +44,7 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
 
   // Third page: select the minor chart type
   _selectchartsubtypepage = new KWizardPage;
-  QWidget* selectchartsubtypewidget = new KChartWizardSelectChartSubTypePage( this );
+  QWidget* selectchartsubtypewidget = new KChartWizardSelectChartSubTypePage( this, _chart );
   _selectchartsubtypepage->w = selectchartsubtypewidget;
   _selectchartsubtypepage->title = i18n( "Select chart subtype" );
   _selectchartsubtypepage->enabled = true;
@@ -83,4 +86,16 @@ KChartWizard::~KChartWizard()
   delete _setupdatapage;
   delete _labelslegendpage;
   delete _axespage;
+}
+
+
+void KChartWizard::setDataArea( QString area )
+{
+  selectDataPage()->rangeED->setText( area );
+}
+
+
+QString KChartWizard::dataArea() const
+{
+  return selectDataPage()->rangeED->text();
 }

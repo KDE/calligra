@@ -4,6 +4,12 @@
 #include "kwizard.h"
 
 class KChart;
+class KChartWizardSetupAxesPage;
+class KChartWizardLabelsLegendPage;
+class KChartWizardSelectChartSubTypePage;
+class KChartWizardSelectDataPage;
+class KChartWizardSetupDataPage;
+class KChartWizardSelectChartTypePage;
 
 class KChartWizard : public KWizard
 {
@@ -14,8 +20,29 @@ public:
     ~KChartWizard();
 
   KChart* chart() const { return _chart; }
+  void setDataArea( QString area ); 
+  QString dataArea() const;
 
 private:
+  KChartWizardSelectDataPage* selectDataPage() const {
+	return (KChartWizardSelectDataPage*)_selectdatapage->w;
+  }
+  KChartWizardSelectChartTypePage* selectChartTypePage() const {
+	return (KChartWizardSelectChartTypePage*)_selectcharttypepage->w;
+  }
+  KChartWizardSelectChartSubTypePage* selectChartSubTypePage() const {
+	return (KChartWizardSelectChartSubTypePage*)_selectchartsubtypepage->w;
+  }
+  KChartWizardSetupDataPage* setupDataPage() const {
+	return (KChartWizardSetupDataPage*)_setupdatapage->w;
+  }
+  KChartWizardLabelsLegendPage* labelsLegendPage() const {
+	return (KChartWizardLabelsLegendPage*)_labelslegendpage->w;
+  }
+  KChartWizardSetupAxesPage* axesPage() const {
+	return (KChartWizardSetupAxesPage*)_axespage->w;
+  }
+
   KChart* _chart;
   KWizardPage* _selectdatapage;
   KWizardPage* _selectcharttypepage;

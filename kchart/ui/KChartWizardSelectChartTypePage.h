@@ -1,33 +1,41 @@
 #ifndef _KCHARTWIZARDSELECTCHARTTYPEPAGE_H
 #define _KCHARTWIZARDSELECTCHARTTYPEPAGE_H
 
+#include <qpixmap.h>
 #include <qwidget.h>
 
 class QFrame;
+class QPushButton;
+class QButtonGroup;
+class KChart;
 
 class KChartWizardSelectChartTypePage : public QWidget
 {
+  Q_OBJECT 
+
 public:
-  KChartWizardSelectChartTypePage( QWidget* parent );
+  KChartWizardSelectChartTypePage( QWidget* parent, KChart* chart );
+
+private slots:
+  void chartTypeSelected( int type );
 
 private:
-  QFrame* newFrame( int x, int y );
-
-  QFrame* frame1;
-  QFrame* frame2;
-  QFrame* frame3;
-  QFrame* frame4;
-  QFrame* frame5;
-  QFrame* frame6;
-  QFrame* frame7;
-  QFrame* frame8;
-  QFrame* frame9;
-  QFrame* frame10;
-  QFrame* frame11;
-  QFrame* frame12;
-  QFrame* frame13;
-  QFrame* frame14;
-  QFrame* frame15;
+  KChart* _chart;
+  QButtonGroup* _typeBG;
+  QPushButton* _barsPB;
+  QPushButton* _linesPB;
+  QPushButton* _linespointsPB;
+  QPushButton* _areaPB;
+  QPushButton* _pointsPB;
+  QPushButton* _piePB;
+  QPushButton* _pie3DPB;
+  QPixmap _barsPM;
+  QPixmap _linesPM;
+  QPixmap _linespointsPM;
+  QPixmap _areaPM;
+  QPixmap _pointsPM;
+  QPixmap _piePM;
+  QPixmap _pie3DPM;
 };
 
 

@@ -3,12 +3,15 @@
 
 #include <qwidget.h>
 
+class KChart;
+
 class KChartWizardSelectChartSubTypePage : public QWidget
 {
 public:
-  KChartWizardSelectChartSubTypePage( QWidget* parent );
+  KChartWizardSelectChartSubTypePage( QWidget* parent, KChart* chart );
 
 private:
+  KChart* _chart;
 };
 
 
