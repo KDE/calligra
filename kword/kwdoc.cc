@@ -160,8 +160,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
 
-    m_formulaDocument = new KFormula::Document( kapp->config(), actionCollection(), m_commandHistory );
-
     setEmpty();
     setModified(false);
 
@@ -176,6 +174,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_pasteFramesetsMap = 0L;
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl=new KWVariableCollection;
+    m_formulaDocument = 0L; // created on demand
 
     m_slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
@@ -185,20 +184,32 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_hasTOC=false;
 
     initConfig();
-    getFormulaDocument()->setZoom( m_zoomedResolutionX, m_zoomedResolutionY, false, false );
 
     // Get default font from the KWord config file
     KConfig *config = KWFactory::global()->config();
-    QString defaultFontname="Sans serif,12,-1,5,50,0,0,0,0,0";
+    QString defaultFontname;
     if( config->hasGroup("Document defaults") ) {
         config->setGroup("Document defaults" );
-        defaultFontname=config->readEntry("DefaultFont", defaultFontname);
+        defaultFontname=config->readEntry("DefaultFont");
+    }
+    // If not found, fallback to the KDE-wide font (the one from KControl's font module)
+    if ( defaultFontname.isEmpty() )
+    {
+        config->setGroup("General");
+        defaultFontname=config->readEntry("font","Sans serif,12,-1,5,50,0,0,0,0,0");
     }
     m_defaultFont= QFont();
     m_defaultFont.fromString(defaultFontname);
+    // Try to force a scalable font. ### That might not be enough, if asking for "fixed"
+    // or some other bitmap-only font. We should probably use QFontDatabase to find a good font then.
+    m_defaultFont.setStyleStrategy( QFont::ForceOutline );
 
-    // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
-    m_defaultFont.setPointSize( ptToLayoutUnitPt( QFontInfo(m_defaultFont).pointSize() ) );
+    int ptSize = m_defaultFont.pointSize();
+    if ( ptSize == -1 ) // specified with a pixel size ?
+        ptSize = QFontInfo(m_defaultFont).pointSize();
+
+    // Zoom its size to layout units
+    m_defaultFont.setPointSize( ptToLayoutUnitPt( ptSize ) );
 
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
@@ -303,7 +314,8 @@ void KWDocument::saveConfig()
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
 {
     KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
-    getFormulaDocument()->setZoomAndResolution( zoom, dpiX, dpiY, false, forPrint );
+    if ( m_formulaDocument )
+        m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY, false, forPrint );
 
     newZoomAndResolution( updateViews, forPrint );
 }
@@ -2052,7 +2064,8 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
         m_zoomedResolutionY = zoomY;
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
-        getFormulaDocument()->setZoom( zoomX, zoomY, false, forPrint );
+        if ( m_formulaDocument )
+            m_formulaDocument->setZoom( zoomX, zoomY, false, forPrint );
     }
 
     QRect rect( _rect );
@@ -2760,6 +2773,13 @@ void KWDocument::invalidate()
 
 KFormula::Document* KWDocument::getFormulaDocument()
 {
+    if (!m_formulaDocument) {
+        m_formulaDocument = new KFormula::Document( kapp->config(), actionCollection(), m_commandHistory );
+        m_formulaDocument->setZoomAndResolution( m_zoom,
+                                                 qRound(INCH_TO_POINT( m_resolutionX )), // re-calculate dpiX and dpiY
+                                                 qRound(INCH_TO_POINT( m_resolutionY )),
+                                                 false, false );
+    }
     return m_formulaDocument;
 }
 

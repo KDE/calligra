@@ -271,7 +271,9 @@ void KWView::initGui()
     // This is probably to emit currentMouseModeChanged and set the cursor
     m_gui->canvasWidget()->setMouseMode( m_gui->canvasWidget()->mouseMode() );
 
-    showFormulaToolbar( FALSE );
+    //showFormulaToolbar( FALSE ); // not called, to avoid creating the formula-document if not necessary
+    if(shell())
+      shell()->showToolbar( "formula_toolbar", false );
 
     // Prevention against applyMainWindowSettings hiding the statusbar
     KStatusBar * sb = statusBar();
