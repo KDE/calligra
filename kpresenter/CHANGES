@@ -9,6 +9,7 @@ Fixes:
 - paste image gives tiny initial object (#59058)
 - setting the font size in the toolbar doesn't work (#39786)
 - objects disappears on the rightside of a dinA0 presentation (#37370)
+- large unwanted offset in print preview and printing (#56123)
 
 New features:
 - flip groups horizontally/vertically (#45561)
