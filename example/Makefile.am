@@ -10,6 +10,7 @@ libexamplepart_la_LIBADD = $(LIB_KOFFICEUI)
 
 ## The kdeinit loadable module and executable
 kdeinit_LTLIBRARIES = example.la
+lib_LTLIBRARIES =
 bin_PROGRAMS =
 example_la_SOURCES = main.cc
 example_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
