@@ -25,12 +25,12 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qvaluelist.h>
-#include <view.h>
 
 class QHBox;
 class KoKoolBar;
 class KoDocumentEntry;
 class KoShellFrame;
+class KoView;
 
 class KoShellWindow : public KoMainWindow
 {
@@ -38,27 +38,28 @@ class KoShellWindow : public KoMainWindow
 
 public:
 
-  // C++
   KoShellWindow();
   virtual ~KoShellWindow();
-/*
-  virtual void cleanUp();
-*/
-  virtual bool newPage( KoDocumentEntry& _e );
-/*  virtual bool closeApplication();
-  virtual bool saveAllPages();
-  virtual void releasePages();
-*/  
+
+  virtual bool openDocument( const KURL & url );
+
   virtual QString configFile() const;
 
-  virtual QString nativeFormatPattern() const { return QString::null; }
-  virtual QString nativeFormatName() const { return QString::null; }
-  
+  virtual QString nativeFormatPattern() const;
+  virtual QString nativeFormatName() const;
+
+  bool newPage( KoDocumentEntry& _e );
+
+/*
+  bool saveAllPages();
+  void releasePages();
+*/  
+
 protected slots:
 /*
-  void slotFileNew();*/
+  void slotFileNew();
   void slotFileOpen();
-/*  void slotFileSave();
+  void slotFileSave();
   void slotFileSaveAs();
   void slotFilePrint();
   void slotFileClose();
@@ -68,26 +69,15 @@ protected slots:
   
 protected:
 
-  virtual KoDocument* createDoc() { return 0L; }
+  virtual KoDocument* createDoc();
 
   struct Page
   {
     KoDocument *m_pDoc;
-    View *m_pView;
+    KoView *m_pView;
     int m_id;
   };
   
-/*
-  virtual KOffice::Document_ptr document();
-  virtual KOffice::View_ptr view();
-
-  virtual bool printDlg();
-  virtual void helpAbout();
-  virtual int documentCount();
-
-  bool isModified();
-  bool requestClose();
-*/
   QValueList<Page> m_lstPages;
   QValueList<Page>::Iterator m_activePage;
 
@@ -99,13 +89,12 @@ protected:
   QValueList<KoDocumentEntry> m_lstComponents;
   QMap<int,KoDocumentEntry*> m_mapComponents;
 
-  QValueList<Page>::Iterator m_konqueror;
+  // Saved between openDocument and createDoc
+  QString m_mimeType;
 
   KoShellFrame *m_pFrame;
 
   QHBox *m_pLayout;
-  
-  static QList<KoShellWindow>* s_lstShells;
 };
 
 class KoShellFrame : public QWidget
@@ -114,13 +103,13 @@ class KoShellFrame : public QWidget
 public:
   KoShellFrame( QWidget *parent );
   
-  void setView( View *view );
+  void setView( KoView *view );
   
 protected:
   virtual void resizeEvent( QResizeEvent * );
   
 private:
-  View *m_pView;
+  KoView *m_pView;
 };
 
 #endif // __koshell_window_h__

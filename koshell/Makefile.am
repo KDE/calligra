@@ -13,8 +13,9 @@ noinst_HEADERS = koshell_shell.h
 
 METASOURCES = koshell_shell.moc
 
-rcdir = $(kde_datadir)/koshell
-rc_DATA = koshell_shell.rc
+# The ui standards provide it all for us, currently.
+# rcdir = $(kde_datadir)/koshell
+# rc_DATA = koshell_shell.rc
 
 ####### Implicit rules
 
