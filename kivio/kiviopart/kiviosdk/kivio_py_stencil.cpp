@@ -871,20 +871,43 @@ void KivioPyStencil::setTextFont( const QFont &f )
     float fs = f.pointSizeFloat();
     QString family = f.family();
 
+    int bold     = f.bold();
+    int italic   = f.italic();
+    int underline= f.underline();
+
     PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "fontsize"  , Py_BuildValue("f",fs ) ) ;
     PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "font"  , Py_BuildValue("s",family.latin1() ) ) ;
+    PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "bold"  , Py_BuildValue("i",bold ) ) ;
+    PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "italic"  , Py_BuildValue("i",italic ) ) ;
+    PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "underline"  , Py_BuildValue("i",underline ) ) ;
 }
 
 QFont KivioPyStencil::textFont()
 {
     PyObject *fn = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "font" );
     PyObject *fs = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "fontsize" );
+    PyObject *bd = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "bold" );
+    PyObject *it = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "italic" );
+    PyObject *ul = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "underline" );
 
     QFont f;
 
     if ( fs )
         if ( PyNumber_Check(fs))
             f.setPointSize( PyInt_AsLong( PyNumber_Int(fs)));
+
+    if ( bd )
+        if ( PyNumber_Check(bd))
+            f.setBold( PyInt_AsLong( PyNumber_Int(bd)));
+
+    if ( it )
+        if ( PyNumber_Check(it))
+            f.setItalic( PyInt_AsLong( PyNumber_Int(it)));
+
+    if ( ul )
+        if ( PyNumber_Check(ul))
+            f.setUnderline( PyInt_AsLong( PyNumber_Int(ul)));
+
     if ( fn )
         if ( PyString_Check(fn))
             f.setFamily( PyString_AsString(fn));
