@@ -263,7 +263,7 @@ bool KPresenterShell::saveDocument( const char *_url, const char *_format )
         _format = "application/x-kPresenter";
 
     if ( QFile::exists( _url ) ) {
-	QString cmd = "cp %1 %2~";
+	QString cmd = "cp -f %1 %2~";
 	cmd = cmd.arg( _url ).arg( _url );
 	system( cmd.latin1() );
     }
