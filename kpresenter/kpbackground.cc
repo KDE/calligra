@@ -53,6 +53,9 @@ KPBackGround::KPBackGround( KPrPage *_page )
     xfactor = 100;
     yfactor = 100;
     pageTimer = 1;
+
+    m_presSpeed = 5;//medium as in oo.
+
     soundEffect = false;
     soundFileName = QString::null;
 
@@ -348,6 +351,13 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     if ( !transition.isEmpty() )
         stylepageauto.addProperty( "presentation:transition-style", transition );
 
+    if ( m_presSpeed != 5 )
+    {
+        if ( m_presSpeed == 10 )
+            stylepageauto.addProperty( "presentation:transition-speed", "fast" );
+        else if ( m_presSpeed = 1 )
+            stylepageauto.addProperty( "presentation:transition-speed", "slow" );
+    }
     if ( !m_page->isSlideSelected() )
         stylepageauto.addProperty( "presentation:visibility", "hidden" );
 
@@ -597,12 +607,15 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         QString speed = styleStack.attribute( "presentation:transition-speed", QString::null, "drawing-page" );
         if ( speed == "slow" )
         {
+            m_presSpeed = 1;
         }
         else if ( speed == "medium" )
         {
+            m_presSpeed = 5;
         }
         else if ( speed == "fast" )
         {
+            m_presSpeed = 10;
         }
         else
             kdDebug()<<" transition-speed not defined :"<<speed<<endl;

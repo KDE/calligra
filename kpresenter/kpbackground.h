@@ -113,6 +113,9 @@ public:
     QString getPageSoundFileName() const
         { return soundFileName; }
 
+    PresSpeed getPresSpeed() const { return m_presSpeed; }
+    void setPresSpeed( PresSpeed _presSpeed ) { m_presSpeed = _presSpeed; }
+
     // Draw the background.
     // Uses the @p zoomHandler to determine the size of the background
     void draw( QPainter *_painter, const KoZoomHandler* zoomHandler,
@@ -152,6 +155,7 @@ private:
     PageEffect pageEffect;
     // Sound played when showing this page
     QString soundFileName;
+    PresSpeed m_presSpeed;
 
     // Background picture
     KoPicture backPicture;
