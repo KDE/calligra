@@ -367,7 +367,7 @@ bool KPObject::haveAnimation() const
         return true;
 }
 
-bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId )
+bool KPObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int objectId )
 {
     if ( effect != EF_NONE || !a_fileName.isEmpty() )
     {
@@ -441,7 +441,11 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
         }
         animation.endElement();
     }
+    return true;
+}
 
+bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int objectId )
+{
 
     //FIXME oo doesn't support hide animation object
     if ( effect3 != EF3_NONE || !d_fileName.isEmpty())

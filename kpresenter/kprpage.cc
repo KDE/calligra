@@ -67,6 +67,7 @@
 struct listAnimation {
     KPObject *obj;
     int objIndex;
+    bool appear;
 };
 
 typedef QMap<int, QPtrList<listAnimation> > lstMap;
@@ -128,23 +129,49 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
         if ( !stickyObj && it.current()->haveAnimation() )
         {
             kdDebug()<<" it.current()->haveAnimation() \n";
-            listAnimation *lst = new listAnimation;
-            lst->obj = it.current();
-            lst->objIndex = indexObj;
-            kdDebug()<<" indexObj :"<<indexObj<<endl;
-            lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getAppearStep() );
-            if ( tmp!= listObjectAnimation.end() )
+            if ( it.current()->getEffect() != EF_NONE || !it.current()->getAppearSoundEffectFileName().isEmpty())
             {
-                kdDebug()<<" group already exist \n";
-                tmp.data().append( lst );
+                listAnimation *lstappear = new listAnimation;
+                lstappear->obj = it.current();
+                lstappear->objIndex = indexObj;
+                lstappear->appear = true;
+                kdDebug()<<" indexObj :"<<indexObj<<endl;
+                lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getAppearStep() );
+                if ( tmp!= listObjectAnimation.end() )
+                {
+                    kdDebug()<<" group already exist \n";
+                    tmp.data().append( lstappear );
+                }
+                else
+                {
+                    kdDebug()<<" create new list \n";
+                    QPtrList<listAnimation> tmp2;
+                    tmp2.append( lstappear );
+                    listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
+                }
             }
-            else
+            if ( it.current()->getEffect3() != EF3_NONE || !( it.current()->getDisappearSoundEffectFileName() ).isEmpty())
             {
-                kdDebug()<<" create new list \n";
-                QPtrList<listAnimation> tmp2;
-                tmp2.append( lst );
-                listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
+                listAnimation *lstappear = new listAnimation;
+                lstappear->obj = it.current();
+                lstappear->objIndex = indexObj;
+                lstappear->appear = false;
+                kdDebug()<<" indexObj :"<<indexObj<<endl;
+                lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getDisappearStep() );
+                if ( tmp!= listObjectAnimation.end() )
+                {
+                    kdDebug()<<" group already exist \n";
+                    tmp.data().append( lstappear );
+                }
+                else
+                {
+                    kdDebug()<<" create new list \n";
+                    QPtrList<listAnimation> tmp2;
+                    tmp2.append( lstappear );
+                    listObjectAnimation.insert( it.current()->getDisappearStep(), tmp2 );
+                }
             }
+
         }
         ++indexObj;
     }
@@ -160,7 +187,10 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
             if ( it.data().count() == 1 )
             {
                 kdDebug()<<" add unique element \n";
-                it.data().at( 0 )->obj->saveOasisObjectStyleAnimation( animationTmpWriter, it.data().at( 0 )->objIndex );
+                if ( it.data().at( 0 )->appear )
+                    it.data().at( 0 )->obj->saveOasisObjectStyleShowAnimation( animationTmpWriter, it.data().at( 0 )->objIndex );
+                else
+                    it.data().at( 0 )->obj->saveOasisObjectStyleHideAnimation( animationTmpWriter, it.data().at( 0 )->objIndex );
             }
             else if ( it.data().count() > 1 )
             {
@@ -171,7 +201,10 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                     if ( list.at(i) )
                     {
                         kdDebug()<<" add group element : "<<i<<endl;
-                        list.at(i)->obj->saveOasisObjectStyleAnimation( animationTmpWriter, list.at(i)->objIndex );
+                        if ( list.at(i)->appear )
+                            list.at(i)->obj->saveOasisObjectStyleShowAnimation( animationTmpWriter, list.at(i)->objIndex );
+                        else
+                            list.at(i)->obj->saveOasisObjectStyleHideAnimation( animationTmpWriter, list.at(i)->objIndex );
                     }
                 }
                 animationTmpWriter.endElement();
