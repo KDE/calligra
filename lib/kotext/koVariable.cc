@@ -864,8 +864,8 @@ QStringList KoDateVariable::actionTexts()
     lst << i18n( "Current Date (fixed)" );
     lst << i18n( "Current Date (variable)" );
     lst << i18n( "Date of Last Printing" );
-    lst << i18n( "Date of Create of File" );
-    lst << i18n( "Date of Modification of File" );
+    lst << i18n( "Date of File Creation" );
+    lst << i18n( "Date of File Modification" );
     return lst;
 }
 
@@ -1403,7 +1403,7 @@ QString KoFieldVariable::fieldCode()
         return i18n("Abstract");
         break;
     case VST_INITIAL:
-        return i18n("Initial");
+        return i18n("Initials");
         break;
     }
     return i18n("Field");
@@ -1454,7 +1454,7 @@ void KoFieldVariable::recalc()
         case VST_DIRECTORYNAME:
             value = m_doc->url().directory();
             break;
-	case VST_PATHFILENAME:
+	    case VST_PATHFILENAME:
             value=m_doc->url().path();
             break;
         case VST_FILENAMEWITHOUTEXTENSION:
@@ -1556,7 +1556,7 @@ QStringList KoFieldVariable::actionTexts()
     lst << i18n( "File Name Without Extension" );
     lst << i18n( "Directory Name" ); // is "Name" necessary ?
     lst << i18n( "Directory && File Name" );
-    lst << i18n( "Initial" );
+    lst << i18n( "Initials" );
     return lst;
 }
 
