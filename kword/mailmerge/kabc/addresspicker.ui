@@ -54,9 +54,6 @@
                     <property name="text">
                         <string>&amp;Add &gt;&gt;</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                 </widget>
                 <widget class="KPushButton">
                     <property name="name">
@@ -67,9 +64,6 @@
                     </property>
                     <property name="text">
                         <string>&lt;&lt; &amp;Remove</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
                     </property>
                 </widget>
                 <spacer>
@@ -100,9 +94,6 @@
             </property>
             <property name="text">
                 <string>Save as &amp;Distribution List...</string>
-            </property>
-            <property name="accel">
-                <string>Alt+D</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Save selected single entries to a new distribution list.</string>
@@ -209,9 +200,6 @@
             </property>
             <property name="text">
                 <string>Address B&amp;ook...</string>
-            </property>
-            <property name="accel">
-                <string>Alt+O</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Launch KAddressbook</string>
