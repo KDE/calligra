@@ -1,6 +1,16 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kexi" version="96">
 <MenuBar>
+  <Menu name="edit"><text>&amp;Edit</text>
+    <Merge/>
+  </Menu>
+  <Menu name="view"><text>&amp;View</text>
+    <Action name="view_newview"/>
+    <ActionList name="view_closeallviews"/>
+    <Separator/>
+    <Action name="show_nav"/>
+    <Action name="show_contexthelp"/>
+  </Menu>
   <Menu name="project" noMerge="1">
     <text>&amp;Project</text>
     <Merge/>
@@ -10,19 +20,12 @@
     <Separator/>
     <Action name="project_props"/>
   </Menu>
-<Menu name="view"><text>&amp;View</text>
-  <Action name="view_newview"/>
-  <ActionList name="view_closeallviews"/>
-  <Separator/>
-  <Action name="show_nav"/>
-  <Action name="show_contexthelp"/>
-</Menu>
-<Menu name="settings"><text>&amp;Settings</text>
- <Separator group="settings_show"/>
- <Action name="kexi_settings" group="settings_configure"/>
-</Menu>
-<Menu name="help">
-  <Menu name="help_licenses" noMerge="1"><text>Other &amp;Licenses</text>
+  <Menu name="settings"><text>&amp;Settings</text>
+    <Separator group="settings_show"/>
+    <Action name="kexi_settings" group="settings_configure"/>
+  </Menu>
+  <Menu name="help">
+    <Menu name="help_licenses" noMerge="1"><text>Other &amp;Licenses</text>
     <Merge />
   </Menu>
   <Separator/>
