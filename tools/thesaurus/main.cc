@@ -122,18 +122,18 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     
     connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
     connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_syn, SIGNAL(clicked(const QString &)),
-        this, SLOT(slotSetReplaceTerm(const QString &)));
+    connect(m_thes_syn, SIGNAL(selectionChanged(QListBoxItem *)),
+        this, SLOT(slotSetReplaceTerm(QListBoxItem *)));
 
     connect(m_thes_hyper, SIGNAL(clicked(QListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
     connect(m_thes_hyper, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(clicked(const QString &)),
-        this, SLOT(slotSetReplaceTerm(const QString &)));
+    connect(m_thes_hyper, SIGNAL(selectionChanged(QListBoxItem *)),
+        this, SLOT(slotSetReplaceTerm(QListBoxItem *)));
 
     connect(m_thes_hypo, SIGNAL(clicked(QListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
     connect(m_thes_hypo, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(clicked(const QString &)),
-        this, SLOT(slotSetReplaceTerm(const QString &)));
+    connect(m_thes_hypo, SIGNAL(selectionChanged(QListBoxItem *)),
+        this, SLOT(slotSetReplaceTerm(QListBoxItem *)));
 
     // double click:
     connect(m_thes_syn, SIGNAL(selected(const QString &)),
@@ -315,6 +315,13 @@ void Thesaurus::slotForward()
 }
 
 // Triggered when a word is selected in the list box.
+void Thesaurus::slotSetReplaceTerm(QListBoxItem *item)
+{
+    if( ! item )
+        return;
+    m_replace->setText(item->text());
+}
+
 void Thesaurus::slotSetReplaceTerm(const QString &term)
 {
     if( m_replacement && term != m_no_match ) {

@@ -74,6 +74,7 @@ protected slots:
     void slotUpdateNavButtons();
     void slotGotoHistory(int index);
 
+    void slotSetReplaceTerm(QListBoxItem *item);
     void slotSetReplaceTerm(const QString &term);
 
     void slotBack();
