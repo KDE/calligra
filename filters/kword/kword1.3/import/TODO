@@ -1,7 +1,8 @@
 Register a kdebug area (as soon as KDE 3.3 is open)
-Remove KWEFBaseWorker
 KWord 0.8 support (text images...)
+KFormula (frameType==4)
 
+(probably more...)
 
 === Old OOWriter To-Do List ===
 Paragraph direction
@@ -17,4 +18,4 @@ Bookmarks
 Embedded objects
 Spellcheck settings?
 Cursor position, etc.
-(probably more...)
+
