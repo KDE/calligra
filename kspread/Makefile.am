@@ -1,6 +1,6 @@
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES  = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) \
-	-I$(srcdir)/dialogs \
+	-I$(srcdir)/dialogs -I$(srcdir)/tests \
 	$(KOSCRIPT_INCLUDES) -I$(top_srcdir)/interfaces \
 	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
 
@@ -73,7 +73,7 @@ libkspreadcommon_la_SOURCES =  \
 
 libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 libkspreadcommon_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
-	dialogs/libdialogs.la \
+	dialogs/libdialogs.la tests/libtests.la \
 	$(LIB_KOSCRIPT) $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell
 
 libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
@@ -100,7 +100,7 @@ kde_services_DATA = kspreadpart.desktop
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc kspread_readonly.rc
 
-SUBDIRS = dialogs . plugins pics dtd toolbar extensions tablestyles templates
+SUBDIRS = dialogs tests . plugins pics dtd toolbar extensions tablestyles templates 
 
 parser:
 	flex lex.l
@@ -111,5 +111,5 @@ parser:
 messages: rc.cpp
 	$(EXTRACTRC) --tag-group=koffice extensions/*.xml > xml_doc.cc
 	$(EXTRACTRC) dialogs/*.ui >> rc.cpp
-	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h dialogs/*.cc -o $(podir)/kspread.pot
+	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h dialogs/*.cc tests/*.cc -o $(podir)/kspread.pot
 	-rm xml_doc.cc
