@@ -142,6 +142,8 @@ public:
         leftMargin=0;
 	rightMargin=0;   
 	textIndent=0;
+	margin_bottom=0;
+        margin_top=0;
     }
     ~StackItem()
     {
@@ -168,6 +170,8 @@ public:
     double      leftMargin;
     double      rightMargin;
     double      textIndent;
+    double      margin_bottom;
+    double      margin_top;
 };
 
 class StackItemStack : public QPtrStack<StackItem>
@@ -252,7 +256,12 @@ static inline double IndentPos( QString _str)
       d=_str.toDouble();
       d=MillimetresToPoints(d);
     }
-  else
+  else if((pos=_str.contains("pt")))
+    {
+      _str=_str.left (_str.length()-pos  );
+      d=_str.toDouble();
+    }
+  else 
     {
       kdWarning(30506) << "unknown indent pos: " << _str << endl;
     }
@@ -379,6 +388,18 @@ void PopulateProperties(StackItem* stackItem,
     if(!strTextIndent.isEmpty())
       {
 	stackItem->textIndent=IndentPos(strTextIndent);
+      }
+
+    QString strTopMargin=abiPropsMap["margin-top"].getValue();
+    if(!strTopMargin.isEmpty())
+      {
+	stackItem->margin_top=IndentPos(strTopMargin);
+      }
+
+    QString strBottomMargin=abiPropsMap["margin-bottom"].getValue();
+    if(!strBottomMargin.isEmpty())
+      {
+	stackItem->margin_bottom=IndentPos(strBottomMargin);
       }
 }
 
@@ -562,7 +583,15 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
 	   element.setAttribute("first",stackItem->textIndent);
 	 layoutElement.appendChild(element);
     }
-
+    if (stackItem->margin_bottom || stackItem->margin_top )
+    {
+         element=mainDocument.createElement("OFFSETS");
+	 if(stackItem->margin_bottom)
+	   element.setAttribute("after",stackItem->margin_bottom);
+	 if(stackItem->margin_top)
+	   element.setAttribute("before",stackItem->margin_top);
+	 layoutElement.appendChild(element);
+    }
 
     QDomElement formatElementOut=mainDocument.createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
