@@ -25,6 +25,8 @@
 #include <core/vpath.h>
 #include <core/vdocument.h>
 
+class VGroup;
+
 class SvgImport : public KoFilter
 {
 	Q_OBJECT
@@ -36,6 +38,7 @@ public:
 	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 
 protected:
+	void parseGroup( VGroup *, const QDomElement & );
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();

@@ -104,13 +104,27 @@ SvgImport::parseGObject( VObject *object, const QDomElement &e )
 
 void
 SvgImport::convert()
-{	
+{
 	QDomElement docElem = inpdoc.documentElement();
+	parseGroup( 0L, docElem );
+}
 
-	QDomElement b = docElem.firstChild().toElement();
+void
+SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
+{
+	QDomElement b = e.firstChild().toElement();
 	for( ; !b.isNull(); b = b.nextSibling().toElement() )
 	{
-		if( b.tagName() == "rect" )
+		if( b.tagName() == "g" )
+		{
+			VGroup *group = new VGroup( grp );
+			parseGroup( group, b );
+			if( grp )
+				grp->append( group );
+			else
+				m_document.append( group );
+		}
+		else if( b.tagName() == "rect" )
 		{
 			int x = b.attribute( "x" ).toInt();
 			int y = b.attribute( "y" ).toInt();
@@ -119,7 +133,10 @@ SvgImport::convert()
 			VObject *rect = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
 			//QDomElement object = b.namedItem( "polyline" ).namedItem( "gobject" ).toElement();
 			//parseGObject( rect, object );
-			m_document.append( rect );
+			if( grp )
+				grp->append( rect );
+			else
+				m_document.append( rect );
 		}
 		else if( b.tagName() == "ellipse" )
 		{
@@ -132,7 +149,10 @@ SvgImport::convert()
 			// Append the ellipse to the document
 			VObject *ellipse = new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
 			//parseGObject( ellipse, object );
-			m_document.append( ellipse );
+			if( grp )
+				grp->append( ellipse );
+			else
+				m_document.append( ellipse );
 		}
 		else if( b.tagName() == "circle" )
 		{
@@ -142,7 +162,10 @@ SvgImport::convert()
 			// Append the ellipse to the document
 			VObject *circle = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
 			//parseGObject( circle, object );
-			m_document.append( circle );
+			if( grp )
+				grp->append( circle );
+			else
+				m_document.append( circle );
 		}
 		else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
 		{
@@ -166,7 +189,10 @@ SvgImport::convert()
 			}
 			if( b.tagName() == "polygon" ) path->close();
 			//parseGObject( path, object );
-			m_document.append( path );	
+			if( grp )
+				grp->append( path );
+			else
+				m_document.append( path );	
 		}
 	}
 	
