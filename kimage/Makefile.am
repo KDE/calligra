@@ -2,7 +2,7 @@
 INCLUDES  = $(all_includes) -I$(idldir)
 LDFLAGS =   $(all_libraries)
 LDADD =  -lkfile -lkfm -lkdeui -lkdecore -lqt $(LIBMICO) -lXext \
-	-lX11 -lkom -lop
+	-lX11 -lkom -lop -lkoml -lkofficecore -lkofficeui
 
 ####### Files
 
