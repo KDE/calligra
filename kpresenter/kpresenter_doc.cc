@@ -158,6 +158,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     int ptSize = m_defaultFont.pointSize();
     if ( ptSize == -1 ) // specified with a pixel size ?
         ptSize = QFontInfo(m_defaultFont).pointSize();
+    // Ok, this is KPresenter. A default font of 10 makes no sense. Let's go for 20.
+    ptSize = QMIN( 20, ptSize );
 
     // Zoom its size to layout units
     m_defaultFont.setPointSize( m_zoomHandler->ptToLayoutUnitPt( ptSize ) );
@@ -2705,7 +2707,7 @@ void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
         if ( !formatElem.isNull() )
             sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont() );
         else
-            kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
+            kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 #endif
         // Style created, now let's try to add it
 

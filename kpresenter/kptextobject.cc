@@ -737,14 +737,14 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
             style = doc->styleCollection()->findStyle( styleName );
             if (!style)
             {
-                kdError(32001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
+                kdError(33001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
                 style = doc->styleCollection()->findStyle( "Standard" );
             }
             //else kdDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
         }
         else
         {
-            kdError(32001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
+            kdError(33001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
             style = doc->styleCollection()->findStyle( "Standard" );
         }
         Q_ASSERT(style);
@@ -1166,7 +1166,7 @@ KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString 
     // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
     // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
 
-    //kdDebug(32001) << "KWTextFrameSet::pasteKWord" << endl;
+    //kdDebug(33001) << "KWTextFrameSet::pasteKPresenter" << endl;
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste Text") );
     if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
@@ -1818,7 +1818,7 @@ void KPTextView::dropEvent( QDropEvent * e )
         dropPoint=doc->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );
-        kdDebug(32001) << "KPTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
+        kdDebug(33001) << "KPTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
         if ( ( e->source() == m_canvas ) &&
              e->action() == QDropEvent::Move ) {
