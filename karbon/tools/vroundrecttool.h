@@ -21,15 +21,17 @@
 #ifndef __VROUNDRECTTOOL_H__
 #define __VROUNDRECTTOOL_H__
 
+
 #include <qgroupbox.h>
 
 #include <klocale.h>
 
 #include "vshapetool.h"
 
-class KDoubleNumInput;
 class KarbonPart;
 class QLabel;
+class VUnitDoubleSpinBox;
+
 
 class VRoundRectTool : public VShapeTool
 {
@@ -37,13 +39,24 @@ public:
 	VRoundRectTool( KarbonView* view );
 	virtual ~VRoundRectTool();
 
-	virtual QWidget *optionsWidget() { return m_optionsWidget; }
-	virtual QString name() { return i18n( "Round rectangle tool" ); }
-	virtual QString icon() { return "14_roundrect"; }
+	virtual QWidget *optionsWidget()
+	{
+		return m_optionsWidget;
+	}
+
+	virtual QString name()
+	{
+		return i18n( "Round rectangle tool" );
+	}
+
+	virtual QString icon()
+	{
+		return "14_roundrect";
+	}
 
 	virtual VComposite* shape( bool interactive = false ) const;
 
-    void refreshUnit();
+	void refreshUnit();
 
 private:
 	class VRoundRectOptionsWidget : public QGroupBox
@@ -60,12 +73,13 @@ private:
 		void refreshUnit ();
 
 	private:
-		KDoubleNumInput		*m_width;
-		KDoubleNumInput		*m_height;
-		KDoubleNumInput		*m_round;
-		KarbonPart			*m_part;
-		QLabel				*m_heightLabel;
-		QLabel				*m_widthLabel;
+		KarbonPart* m_part;
+
+		VUnitDoubleSpinBox* m_width;
+		VUnitDoubleSpinBox* m_height;
+		VUnitDoubleSpinBox* m_round;
+		QLabel* m_heightLabel;
+		QLabel* m_widthLabel;
 	};
 
 	VRoundRectOptionsWidget* m_optionsWidget;

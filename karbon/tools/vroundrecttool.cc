@@ -27,27 +27,20 @@
 #include "karbon_part.h"
 #include "vroundrect.h"
 #include "vroundrecttool.h"
+#include "vunitspinbox.h"
 
 
 VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* part, QWidget* parent, const char* name )
-	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part)
+		: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
-	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-
-	m_width = new KDoubleNumInput( 0,this );
-	m_width->setSuffix( m_part->getUnitName() );
-	m_width->setRange( 0, 1000, 0.1 );
+	m_width = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-
-	m_height = new KDoubleNumInput( 0, this );
-	m_height->setSuffix( m_part->getUnitName() );
-	m_height->setRange( 0, 1000, 0.1 );
+	m_height = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 
 	new QLabel( i18n( "Edge radius:" ), this );
-	m_round = new KDoubleNumInput( 0,this );
-	m_round->setRange( 0, 1000, 0.1 );
+	m_round = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );
@@ -74,30 +67,30 @@ VRoundRectTool::VRoundRectOptionsWidget::round() const
 void
 VRoundRectTool::VRoundRectOptionsWidget::setWidth( double value )
 {
-    m_width->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+	m_width->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void
 VRoundRectTool::VRoundRectOptionsWidget::setHeight( double value )
 {
-    m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
+	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void
 VRoundRectTool::VRoundRectOptionsWidget::setRound( double value )
 {
-    m_round->setValue( value);
+	m_round->setValue( value );
 }
 
 void
 VRoundRectTool::VRoundRectOptionsWidget::refreshUnit ()
 {
-    m_width->setSuffix(m_part->getUnitName());
-    m_height->setSuffix(m_part->getUnitName());
+	m_width->setUnit( m_part->getUnit() );
+	m_height->setUnit( m_part->getUnit() );
 }
 
 VRoundRectTool::VRoundRectTool( KarbonView* view )
-	: VShapeTool( view, i18n( "Insert Round Rectangle" ) )
+		: VShapeTool( view, i18n( "Insert Round Rectangle" ) )
 {
 	// Create config dialog:
 	m_optionsWidget = new VRoundRectOptionsWidget( view->part() );
@@ -113,7 +106,7 @@ VRoundRectTool::~VRoundRectTool()
 
 void VRoundRectTool::refreshUnit()
 {
-    m_optionsWidget->refreshUnit();
+	m_optionsWidget->refreshUnit();
 }
 
 VComposite*

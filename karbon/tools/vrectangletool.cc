@@ -29,12 +29,14 @@
 #include "vrectangletool.h"
 #include "vunitspinbox.h"
 
+
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
 	m_width = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
 	m_height = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 
@@ -92,7 +94,7 @@ VRectangleTool::~VRectangleTool()
 void
 VRectangleTool::refreshUnit()
 {
-    m_optionsWidget->refreshUnit();
+	m_optionsWidget->refreshUnit();
 }
 
 VComposite *

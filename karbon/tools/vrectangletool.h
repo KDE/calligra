@@ -21,15 +21,17 @@
 #ifndef __VRECTANGLETOOL_H__
 #define __VRECTANGLETOOL_H__
 
+
 #include <qgroupbox.h>
 
 #include <klocale.h>
 
 #include "vshapetool.h"
 
-class VUnitDoubleSpinBox;
 class KarbonPart;
 class QLabel;
+class VUnitDoubleSpinBox;
+
 
 class VRectangleTool : public VShapeTool
 {
