@@ -153,14 +153,14 @@ void CustomSlideShowDia::slotCopy()
 
 
 DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, QStringList & _listPage, const char* name )
-    : KDialogBase( parent, name, true, i18n("Define Slide Show Custom"), Ok|Cancel )
+    : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
 {
     init();
     listSlide->insertStringList( _listPage );
 }
 
 DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList& _listPage, QStringList &_customListPage, const char* name )
-    : KDialogBase( parent, name, true, i18n("Define Slide Show Custom"), Ok|Cancel )
+    : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
 {
     init();
     m_name->setText( _customName );
