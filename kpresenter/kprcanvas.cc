@@ -1350,8 +1350,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 m_view->brushColorChanged( m_view->getBrush() );
 	    } break;
             case INS_FREEHAND: {
-                m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
-                                         ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                m_dragEndPoint = QPoint( e->x() + diffx(), e->y() + diffy() );
+
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
