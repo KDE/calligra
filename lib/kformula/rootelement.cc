@@ -270,11 +270,11 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
-void RootElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+void RootElement::dispatchFontCommand( FontCommand* cmd )
 {
-    content->setCharStyle( list, cs );
+    content->dispatchFontCommand( cmd );
     if (hasIndex()) {
-        index->setCharStyle( list, cs );
+        index->dispatchFontCommand( cmd );
     }
 }
 

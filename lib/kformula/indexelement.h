@@ -83,7 +83,10 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
-    virtual void setCharStyle( ElementStyleList& list, CharStyle cs );
+    /**
+     * Dispatch this FontCommand to all our TextElement children.
+     */
+    virtual void dispatchFontCommand( FontCommand* cmd );
 
     // navigation
     //

@@ -513,14 +513,14 @@ void MatrixElement::draw( QPainter& painter, const LuPixelRect& rect,
 }
 
 
-void MatrixElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+void MatrixElement::dispatchFontCommand( FontCommand* cmd )
 {
     uint rows = getRows();
     uint columns = getColumns();
 
     for (uint r = 0; r < rows; r++) {
         for (uint c = 0; c < columns; c++) {
-            getElement(r, c)->setCharStyle( list, cs );
+            getElement(r, c)->dispatchFontCommand( cmd );
         }
     }
 }
@@ -1136,6 +1136,10 @@ KCommand* MultilineSequenceElement::input( Container* container, QKeyEvent* even
         Request newline( req_addNewline );
         return buildCommand( container, &newline );
     }
+    case Qt::Key_Tab: {
+        Request r( req_addTabMark );
+        return buildCommand( container, &r );
+    }
     }
     return inherited::input( container, event );
 }
@@ -1565,12 +1569,12 @@ void MultilineElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
-void MultilineElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+void MultilineElement::dispatchFontCommand( FontCommand* cmd )
 {
     uint count = content.count();
     for ( uint i = 0; i < count; ++i ) {
         MultilineSequenceElement* line = content.at(i);
-        line->setCharStyle( list, cs );
+        line->dispatchFontCommand( cmd );
     }
 }
 

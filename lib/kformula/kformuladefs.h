@@ -139,6 +139,15 @@ enum CharStyle {
 };
 
 
+enum CharFamily {
+    normalFamily,
+    scriptFamily,
+    frakturFamily,
+    doubleStruckFamily,
+    anyFamily
+};
+
+
 /**
  * The struct used to store static font data.
  */
@@ -247,7 +256,8 @@ enum RequestID {
     req_removeColumn,
     req_removeRow,
     req_formatBold,
-    req_formatItalic
+    req_formatItalic,
+    req_formatFamily
 };
 
 
@@ -327,6 +337,13 @@ public:
     CharStyleRequest( RequestID id, bool bold, bool italic ) : Request( id ), m_bold( bold ), m_italic( italic ) {}
     bool bold() const { return m_bold; }
     bool italic() const { return m_italic; }
+};
+
+class CharFamilyRequest : public Request {
+    CharFamily m_charFamily;
+public:
+    CharFamilyRequest( CharFamily cf ) : Request( req_formatFamily ), m_charFamily( cf ) {}
+    CharFamily charFamily() const { return m_charFamily; }
 };
 
 

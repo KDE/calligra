@@ -22,6 +22,7 @@
 #define KFORMULACOMMAND_H
 
 #include <qptrlist.h>
+#include <qvaluevector.h>
 
 #include <kcommand.h>
 
@@ -379,24 +380,76 @@ private:
 
 
 /**
+ * Base for all font commands that act on the current selection.
+ * Implements the visitor pattern.
+ */
+class FontCommand : public Command {
+public:
+    FontCommand( const QString& name, Container* document );
+
+    /**
+     * Collects all elements that are to be modified.
+     */
+    void addTextElement( TextElement* element ) { list.append(element); }
+
+    /**
+     * Collects all parent elements those children are to be changend.
+     */
+    void addElement( BasicElement* element ) { elementList.append( element ); }
+
+protected:
+
+    QPtrList<TextElement>& childrenList() { return list; }
+
+    void collectChildren();
+
+private:
+
+    /**
+     * the list where all elements are stored that are removed
+     * from the tree.
+     */
+    QPtrList<TextElement> list;
+
+    QPtrList<BasicElement> elementList;
+};
+
+
+/**
  * Changes the char style of a number of elements an their children.
  */
-class CharStyleCommand : public Command {
+class CharStyleCommand : public FontCommand {
 public:
     CharStyleCommand( CharStyle cs, const QString& name, Container* document );
 
     virtual void execute();
     virtual void unexecute();
 
-    /**
-     * Collects all elements that are to be changend.
-     */
-    void addElement( BasicElement* element ) { elementList.append( element ); }
+private:
+
+    typedef QValueVector<CharStyle> StyleList;
+
+    StyleList styleList;
+    CharStyle charStyle;
+};
+
+
+/**
+ * Changes the char family of a number of elements an their children.
+ */
+class CharFamilyCommand : public FontCommand {
+public:
+    CharFamilyCommand( CharFamily cf, const QString& name, Container* document );
+
+    virtual void execute();
+    virtual void unexecute();
 
 private:
-    BasicElement::ElementStyleList styleList;
-    QPtrList<BasicElement> elementList;
-    CharStyle charStyle;
+
+    typedef QValueVector<CharFamily> FamilyList;
+
+    FamilyList familyList;
+    CharFamily charFamily;
 };
 
 

@@ -26,10 +26,13 @@
 #include "basicelement.h"
 #include "contextstyle.h"
 #include "elementtype.h"
+#include "fontstyle.h"
 #include "formulaelement.h"
+#include "kformulacommand.h"
 #include "sequenceelement.h"
-#include "textelement.h"
 #include "symboltable.h"
+#include "textelement.h"
+
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -104,7 +107,7 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
 
     QFontMetrics fm( font );
-    QChar ch = getRealCharacter();
+    QChar ch = getRealCharacter(context);
     if ( ch != QChar::null ) {
         QRect bound = fm.boundingRect( ch );
         setWidth( context.ptToLayoutUnitPt( fm.width( ch ) ) );
@@ -150,7 +153,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     //kdDebug( DEBUGID ) << "TextElement::draw width: " << getWidth() << endl;
     //kdDebug( DEBUGID ) << endl;
 
-    QChar ch = getRealCharacter();
+    QChar ch = getRealCharacter(context);
     if ( ch != QChar::null ) {
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
                           context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
@@ -178,17 +181,34 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 }
 
 
-void TextElement::setCharStyle( ElementStyleList& list,
-                                CharStyle cs )
+void TextElement::dispatchFontCommand( FontCommand* cmd )
 {
-    list.push_back( ElementStylePair( this, charStyle ) );
+    cmd->addTextElement( this );
+}
+
+void TextElement::setCharStyle( CharStyle cs )
+{
     charStyle = cs;
     formula()->changed();
 }
 
-QChar TextElement::getRealCharacter()
+void TextElement::setCharFamily( CharFamily cf )
+{
+    charFamily = cf;
+    formula()->changed();
+}
+
+QChar TextElement::getRealCharacter(const ContextStyle& context)
 {
     if ( !isSymbol() ) {
+        const FontStyle& fontStyle = context.fontStyle();
+        const AlphaTable* alphaTable = fontStyle.alphaTable();
+        if ( alphaTable != 0 ) {
+            AlphaTableEntry ate = alphaTable->entry( character, charFamily, charStyle );
+            if ( ate.valid() ) {
+                return ate.pos;
+            }
+        }
         return character;
     }
     else {
@@ -200,6 +220,14 @@ QChar TextElement::getRealCharacter()
 QFont TextElement::getFont(const ContextStyle& context)
 {
     if ( !isSymbol() ) {
+        const FontStyle& fontStyle = context.fontStyle();
+        const AlphaTable* alphaTable = fontStyle.alphaTable();
+        if ( alphaTable != 0 ) {
+            AlphaTableEntry ate = alphaTable->entry( character, charFamily, charStyle );
+            if ( ate.valid() ) {
+                return ate.font;
+            }
+        }
         QFont font;
         if (getElementType() != 0) {
             font = getElementType()->getFont(context);
@@ -267,6 +295,14 @@ void TextElement::writeDom(QDomElement element)
     case italicChar: element.setAttribute("STYLE", "italic"); break;
     case boldItalicChar: element.setAttribute("STYLE", "bolditalic"); break;
     }
+
+    switch ( charFamily ) {
+    case normalFamily: element.setAttribute("FAMILY", "normal"); break;
+    case scriptFamily: element.setAttribute("FAMILY", "script"); break;
+    case frakturFamily: element.setAttribute("FAMILY", "fraktur"); break;
+    case doubleStruckFamily: element.setAttribute("FAMILY", "doublestruck"); break;
+    case anyFamily: break;
+    }
 }
 
 /**
@@ -324,6 +360,24 @@ bool TextElement::readAttributesFromDom(QDomElement element)
     else {
         charStyle = anyChar;
     }
+
+    QString familyStr = element.attribute( "FAMILY" );
+    if ( familyStr == "normal" ) {
+        charFamily = normalFamily;
+    }
+    else if ( familyStr == "script" ) {
+        charFamily = scriptFamily;
+    }
+    else if ( familyStr == "fraktur" ) {
+        charFamily = frakturFamily;
+    }
+    else if ( familyStr == "doublestruck" ) {
+        charFamily = doubleStruckFamily;
+    }
+    else {
+        charFamily = anyFamily;
+    }
+
     return true;
 }
 

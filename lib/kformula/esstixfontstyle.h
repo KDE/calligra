@@ -12,7 +12,7 @@ public:
 
     EsstixAlphaTable();
 
-    virtual AlphaTableEntry entry( char pos, Family family, bool bold, bool italic );
+    virtual AlphaTableEntry entry( char pos, CharFamily family, CharStyle style ) const;
 
 private:
 

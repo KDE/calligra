@@ -105,42 +105,42 @@ private:
 };
 
 
-class MathFontsConfigurePage : public QObject
-{
-    Q_OBJECT
-public:
+// class MathFontsConfigurePage : public QObject
+// {
+//     Q_OBJECT
+// public:
 
-    MathFontsConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name = 0 );
-    void apply();
-    void slotDefault();
+//     MathFontsConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name = 0 );
+//     void apply();
+//     void slotDefault();
 
-    QValueVector<QString>::iterator findUsedFont( QString name );
+//     QValueVector<QString>::iterator findUsedFont( QString name );
 
-protected slots:
+// protected slots:
 
-    void slotAddFont();
-    void slotRemoveFont();
-    void slotMoveUp();
-    void slotMoveDown();
+//     void slotAddFont();
+//     void slotRemoveFont();
+//     void slotMoveUp();
+//     void slotMoveDown();
 
-private:
+// private:
 
-    void setupLists( const QStringList& usedFonts );
+//     void setupLists( const QStringList& usedFonts );
 
-    Document* m_document;
-    QWidget* m_view;
-    KConfig* m_config;
+//     Document* m_document;
+//     QWidget* m_view;
+//     KConfig* m_config;
 
-    KListView* availableFonts;
-    KListView* requestedFonts;
+//     KListView* availableFonts;
+//     KListView* requestedFonts;
 
-    KPushButton* addFont;
-    KPushButton* removeFont;
-    KPushButton* moveUp;
-    KPushButton* moveDown;
+//     KPushButton* addFont;
+//     KPushButton* removeFont;
+//     KPushButton* moveUp;
+//     KPushButton* moveDown;
 
-    QValueVector<QString> usedFontList;
-};
+//     QValueVector<QString> usedFontList;
+// };
 
 
 KFORMULA_NAMESPACE_END

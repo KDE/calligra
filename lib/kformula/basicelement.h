@@ -41,6 +41,7 @@ KFORMULA_NAMESPACE_BEGIN
 class ComplexElement;
 class Container;
 class ElementType;
+class FontCommand;
 class FormulaCursor;
 class FormulaElement;
 class SequenceElement;
@@ -160,15 +161,10 @@ public:
                        const LuPixelPoint& parentOrigin ) = 0;
 
 
-    typedef std::pair<BasicElement*, CharStyle> ElementStylePair;
-    typedef QValueList<ElementStylePair> ElementStyleList;
-
     /**
-     * Set this element and all childrens char style.
-     * Each element that changes its style must a itself and it's old
-     * style to the list. Else the change cannot be undone.
+     * Dispatch this FontCommand to all our TextElement children.
      */
-    virtual void setCharStyle( ElementStyleList&, CharStyle ) {}
+    virtual void dispatchFontCommand( FontCommand* /*cmd*/ ) {}
 
     // navigation
     //

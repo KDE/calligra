@@ -246,12 +246,12 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
-void SequenceElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+void SequenceElement::dispatchFontCommand( FontCommand* cmd )
 {
     QPtrListIterator<BasicElement> it( children );
     for ( ; it.current(); ++it ) {
         BasicElement* child = it.current();
-        child->setCharStyle( list, cs );
+        child->dispatchFontCommand( cmd );
     }
 }
 
@@ -1025,8 +1025,22 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
             }
             return cmd;
         }
-    }
         break;
+    }
+    case req_formatFamily: {
+        FormulaCursor* cursor = container->activeCursor();
+        if ( cursor->isSelection() ) {
+            CharFamilyRequest* cfr = static_cast<CharFamilyRequest*>( request );
+            CharFamily cf = cfr->charFamily();
+            CharFamilyCommand* cmd = new CharFamilyCommand( cf, i18n( "Change Char Family" ), container );
+            int end = cursor->getSelectionEnd();
+            for ( int i = cursor->getSelectionStart(); i<end; ++i ) {
+                cmd->addElement( children.at( i ) );
+            }
+            return cmd;
+        }
+        break;
+    }
     default:
         break;
     }

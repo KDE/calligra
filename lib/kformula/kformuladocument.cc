@@ -119,6 +119,8 @@ struct Document::Document_Impl {
     KSelectAction* rightBracket;
     SymbolAction* symbolNamesAction;
 
+    KSelectAction* fontFamily;
+
     SymbolType leftBracketChar;
     SymbolType rightBracketChar;
     QString selectedName;
@@ -215,6 +217,8 @@ KSelectAction* Document::getSymbolNamesAction()  { return impl->symbolNamesActio
 KToggleAction* Document::getSyntaxHighlightingAction() { return impl->syntaxHighlightingAction; }
 KToggleAction* Document::getFormatBoldAction()   { return impl->formatBoldAction; }
 KToggleAction* Document::getFormatItalicAction() { return impl->formatItalicAction; }
+
+KSelectAction* Document::getFontFamilyAction() { return impl->fontFamily; }
 
 Container* Document::formula() const { return impl->formula; }
 
@@ -709,6 +713,16 @@ void Document::createActions(KActionCollection* collection)
                                                0, this, SLOT(symbolNames()),
                                                collection, "formula_symbolnames");
 
+    QStringList ff;
+    ff.append( i18n( "Normal" ) );
+    ff.append( i18n( "Script" ) );
+    ff.append( i18n( "Fraktur" ) );
+    ff.append( i18n( "Double Struck" ) );
+    impl->fontFamily = new KSelectAction(i18n("Font Family"),
+                                         0, this, SLOT(fontFamily()),
+                                         collection, "formula_fontfamily");
+    impl->fontFamily->setItems( ff );
+
     impl->actionsCreated = true;
 }
 
@@ -1059,9 +1073,6 @@ void Document::toggleSyntaxHighlighting()
 void Document::textBold()
 {
     if ( hasFormula() ) {
-        //FormulaCursor* cursor = formula()->activeCursor();
-        //formula()->setCharStyle( getFormatBoldAction()->isChecked(),
-        //                         getFormatItalicAction()->isChecked() );
         CharStyleRequest r( req_formatBold,
                             getFormatBoldAction()->isChecked(),
                             getFormatItalicAction()->isChecked() );
@@ -1072,9 +1083,6 @@ void Document::textBold()
 void Document::textItalic()
 {
     if ( hasFormula() ) {
-        //FormulaCursor* cursor = formula()->activeCursor();
-        //formula()->setCharStyle( getFormatBoldAction()->isChecked(),
-        //                         getFormatItalicAction()->isChecked() );
         CharStyleRequest r( req_formatItalic,
                             getFormatBoldAction()->isChecked(),
                             getFormatItalicAction()->isChecked() );
@@ -1136,6 +1144,24 @@ void Document::symbolNames()
 {
     impl->selectedName = impl->symbolNamesAction->currentText();
 }
+
+
+void Document::fontFamily()
+{
+    if ( hasFormula() ) {
+        int i = impl->fontFamily->currentItem();
+        CharFamily cf = anyFamily;
+        switch( i ) {
+        case 0: cf = normalFamily; break;
+        case 1: cf = scriptFamily; break;
+        case 2: cf = frakturFamily; break;
+        case 3: cf = doubleStruckFamily; break;
+        }
+        CharFamilyRequest r( cf );
+        formula()->performRequest( &r );
+    }
+}
+
 
 void Document::undo()
 {

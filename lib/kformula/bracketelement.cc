@@ -77,9 +77,9 @@ BasicElement* SingleContentElement::goToPos( FormulaCursor* cursor, bool& handle
     return 0;
 }
 
-void SingleContentElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+void SingleContentElement::dispatchFontCommand( FontCommand* cmd )
 {
-    content->setCharStyle( list, cs );
+    content->dispatchFontCommand( cmd );
 }
 
 void SingleContentElement::moveLeft(FormulaCursor* cursor, BasicElement* from)

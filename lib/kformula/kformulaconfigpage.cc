@@ -297,225 +297,225 @@ void ConfigurePage::updateFontLabel( QFont font, QLabel* label )
 }
 
 
-class UsedFontItem : public KListViewItem {
-public:
-    UsedFontItem( MathFontsConfigurePage* page, QListView* parent, QString font )
-        : KListViewItem( parent, font ), m_page( page ) {}
+// class UsedFontItem : public KListViewItem {
+// public:
+//     UsedFontItem( MathFontsConfigurePage* page, QListView* parent, QString font )
+//         : KListViewItem( parent, font ), m_page( page ) {}
 
-    int compare( QListViewItem* i, int col, bool ascending ) const;
+//     int compare( QListViewItem* i, int col, bool ascending ) const;
 
-private:
-    MathFontsConfigurePage* m_page;
-};
+// private:
+//     MathFontsConfigurePage* m_page;
+// };
 
-int UsedFontItem::compare( QListViewItem* i, int, bool ) const
-{
-    QValueVector<QString>::iterator lhsIt = m_page->findUsedFont( text( 0 ) );
-    QValueVector<QString>::iterator rhsIt = m_page->findUsedFont( i->text( 0 ) );
-    if ( lhsIt < rhsIt ) {
-        return -1;
-    }
-    else if ( lhsIt > rhsIt ) {
-        return 1;
-    }
-    return 0;
-}
+// int UsedFontItem::compare( QListViewItem* i, int, bool ) const
+// {
+//     QValueVector<QString>::iterator lhsIt = m_page->findUsedFont( text( 0 ) );
+//     QValueVector<QString>::iterator rhsIt = m_page->findUsedFont( i->text( 0 ) );
+//     if ( lhsIt < rhsIt ) {
+//         return -1;
+//     }
+//     else if ( lhsIt > rhsIt ) {
+//         return 1;
+//     }
+//     return 0;
+// }
 
-MathFontsConfigurePage::MathFontsConfigurePage( Document* document, QWidget* view,
-                                                KConfig* config, QVBox* box, char* name )
-    : QObject( box->parent(), name ), m_document( document ), m_view( view ), m_config( config )
-{
-    QWidget* fontWidget = new QWidget( box );
-    QGridLayout* fontLayout = new QGridLayout( fontWidget, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
+// MathFontsConfigurePage::MathFontsConfigurePage( Document* document, QWidget* view,
+//                                                 KConfig* config, QVBox* box, char* name )
+//     : QObject( box->parent(), name ), m_document( document ), m_view( view ), m_config( config )
+// {
+//     QWidget* fontWidget = new QWidget( box );
+//     QGridLayout* fontLayout = new QGridLayout( fontWidget, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QHBoxLayout* hLayout = new QHBoxLayout( 0, 0, 6 );
+//     QHBoxLayout* hLayout = new QHBoxLayout( 0, 0, 6 );
 
-    availableFonts = new KListView( fontWidget );
-    availableFonts->addColumn( i18n( "Available Fonts" ) );
-    hLayout->addWidget( availableFonts );
+//     availableFonts = new KListView( fontWidget );
+//     availableFonts->addColumn( i18n( "Available Fonts" ) );
+//     hLayout->addWidget( availableFonts );
 
-    QVBoxLayout* vLayout = new QVBoxLayout( 0, 0, 6 );
-    QSpacerItem* spacer1 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    vLayout->addItem( spacer1 );
+//     QVBoxLayout* vLayout = new QVBoxLayout( 0, 0, 6 );
+//     QSpacerItem* spacer1 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+//     vLayout->addItem( spacer1 );
 
-    addFont = new KPushButton( fontWidget );
-    addFont->setText( "->" );
-    vLayout->addWidget( addFont );
+//     addFont = new KPushButton( fontWidget );
+//     addFont->setText( "->" );
+//     vLayout->addWidget( addFont );
 
-    removeFont = new KPushButton( fontWidget );
-    removeFont->setText( "<-" );
-    vLayout->addWidget( removeFont );
+//     removeFont = new KPushButton( fontWidget );
+//     removeFont->setText( "<-" );
+//     vLayout->addWidget( removeFont );
 
-    QSpacerItem* spacer2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    vLayout->addItem( spacer2 );
+//     QSpacerItem* spacer2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+//     vLayout->addItem( spacer2 );
 
-    hLayout->addLayout( vLayout );
+//     hLayout->addLayout( vLayout );
 
-    vLayout = new QVBoxLayout( 0, 0, 6 );
+//     vLayout = new QVBoxLayout( 0, 0, 6 );
 
-    moveUp = new KPushButton( fontWidget );
-    moveUp->setText( i18n( "Up" ) );
-    vLayout->addWidget( moveUp );
+//     moveUp = new KPushButton( fontWidget );
+//     moveUp->setText( i18n( "Up" ) );
+//     vLayout->addWidget( moveUp );
 
-    requestedFonts = new KListView( fontWidget );
-    requestedFonts->addColumn( i18n( "Used Fonts" ) );
-    vLayout->addWidget( requestedFonts );
+//     requestedFonts = new KListView( fontWidget );
+//     requestedFonts->addColumn( i18n( "Used Fonts" ) );
+//     vLayout->addWidget( requestedFonts );
 
-    moveDown = new KPushButton( fontWidget );
-    moveDown->setText( i18n( "Down" ) );
-    vLayout->addWidget( moveDown );
+//     moveDown = new KPushButton( fontWidget );
+//     moveDown->setText( i18n( "Down" ) );
+//     vLayout->addWidget( moveDown );
 
-    hLayout->addLayout( vLayout );
+//     hLayout->addLayout( vLayout );
 
-    fontLayout->addLayout( hLayout, 0, 0 );
+//     fontLayout->addLayout( hLayout, 0, 0 );
 
-//     connect( availableFonts, SIGNAL( executed( QListViewItem* ) ),
-//              this, SLOT( slotAddFont() ) );
-//     connect( requestedFonts, SIGNAL( executed( QListViewItem* ) ),
-//              this, SLOT( slotRemoveFont() ) );
-    connect( addFont, SIGNAL( clicked() ), this, SLOT( slotAddFont() ) );
-    connect( removeFont, SIGNAL( clicked() ), this, SLOT( slotRemoveFont() ) );
-    connect( moveUp, SIGNAL( clicked() ), this, SLOT( slotMoveUp() ) );
-    connect( moveDown, SIGNAL( clicked() ), this, SLOT( slotMoveDown() ) );
+// //     connect( availableFonts, SIGNAL( executed( QListViewItem* ) ),
+// //              this, SLOT( slotAddFont() ) );
+// //     connect( requestedFonts, SIGNAL( executed( QListViewItem* ) ),
+// //              this, SLOT( slotRemoveFont() ) );
+//     connect( addFont, SIGNAL( clicked() ), this, SLOT( slotAddFont() ) );
+//     connect( removeFont, SIGNAL( clicked() ), this, SLOT( slotRemoveFont() ) );
+//     connect( moveUp, SIGNAL( clicked() ), this, SLOT( slotMoveUp() ) );
+//     connect( moveDown, SIGNAL( clicked() ), this, SLOT( slotMoveDown() ) );
 
-    const ContextStyle& contextStyle = document->getContextStyle( true );
-    const SymbolTable& symbolTable = contextStyle.symbolTable();
-    const QStringList& usedFonts = contextStyle.requestedFonts();
+//     const ContextStyle& contextStyle = document->getContextStyle( true );
+//     const SymbolTable& symbolTable = contextStyle.symbolTable();
+//     const QStringList& usedFonts = contextStyle.requestedFonts();
 
-    QMap<QString, QString> fontMap;
-//    symbolTable.findAvailableFonts( &fontMap );
+//     QMap<QString, QString> fontMap;
+// //    symbolTable.findAvailableFonts( &fontMap );
 
-    setupLists( usedFonts );
-}
+//     setupLists( usedFonts );
+// }
 
-void MathFontsConfigurePage::apply()
-{
-    QStringList strings;
-    std::copy( usedFontList.begin(), usedFontList.end(), std::back_inserter( strings ) );
+// void MathFontsConfigurePage::apply()
+// {
+//     QStringList strings;
+//     std::copy( usedFontList.begin(), usedFontList.end(), std::back_inserter( strings ) );
 
-    m_config->setGroup( "kformula Font" );
-    m_config->writeEntry( "usedMathFonts", strings );
+//     m_config->setGroup( "kformula Font" );
+//     m_config->writeEntry( "usedMathFonts", strings );
 
-    ContextStyle& contextStyle = m_document->getContextStyle( true );
-    contextStyle.setRequestedFonts( strings );
-}
+//     ContextStyle& contextStyle = m_document->getContextStyle( true );
+//     contextStyle.setRequestedFonts( strings );
+// }
 
-void MathFontsConfigurePage::slotDefault()
-{
-    QStringList usedFonts;
+// void MathFontsConfigurePage::slotDefault()
+// {
+//     QStringList usedFonts;
 
-    usedFonts.push_back( "esstixone" );
-    usedFonts.push_back( "esstixtwo" );
-    usedFonts.push_back( "esstixthree" );
-    usedFonts.push_back( "esstixfour" );
-    usedFonts.push_back( "esstixfive" );
-    usedFonts.push_back( "esstixsix" );
-    usedFonts.push_back( "esstixseven" );
-    usedFonts.push_back( "esstixeight" );
-    usedFonts.push_back( "esstixnine" );
-    usedFonts.push_back( "esstixten" );
-    usedFonts.push_back( "esstixeleven" );
-    usedFonts.push_back( "esstixtwelve" );
-    usedFonts.push_back( "esstixthirteen" );
-    usedFonts.push_back( "esstixfourteen" );
-    usedFonts.push_back( "esstixfifteen" );
-    usedFonts.push_back( "esstixsixteen" );
-    usedFonts.push_back( "esstixseventeen" );
+//     usedFonts.push_back( "esstixone" );
+//     usedFonts.push_back( "esstixtwo" );
+//     usedFonts.push_back( "esstixthree" );
+//     usedFonts.push_back( "esstixfour" );
+//     usedFonts.push_back( "esstixfive" );
+//     usedFonts.push_back( "esstixsix" );
+//     usedFonts.push_back( "esstixseven" );
+//     usedFonts.push_back( "esstixeight" );
+//     usedFonts.push_back( "esstixnine" );
+//     usedFonts.push_back( "esstixten" );
+//     usedFonts.push_back( "esstixeleven" );
+//     usedFonts.push_back( "esstixtwelve" );
+//     usedFonts.push_back( "esstixthirteen" );
+//     usedFonts.push_back( "esstixfourteen" );
+//     usedFonts.push_back( "esstixfifteen" );
+//     usedFonts.push_back( "esstixsixteen" );
+//     usedFonts.push_back( "esstixseventeen" );
 
-    usedFontList.clear();
-    requestedFonts->clear();
-    availableFonts->clear();
+//     usedFontList.clear();
+//     requestedFonts->clear();
+//     availableFonts->clear();
 
-    setupLists( usedFonts );
-}
+//     setupLists( usedFonts );
+// }
 
-QValueVector<QString>::iterator MathFontsConfigurePage::findUsedFont( QString name )
-{
-    return std::find( usedFontList.begin(), usedFontList.end(), name );
-}
+// QValueVector<QString>::iterator MathFontsConfigurePage::findUsedFont( QString name )
+// {
+//     return std::find( usedFontList.begin(), usedFontList.end(), name );
+// }
 
-void MathFontsConfigurePage::setupLists( const QStringList& usedFonts )
-{
-    const ContextStyle& contextStyle = m_document->getContextStyle( true );
-    const SymbolTable& symbolTable = contextStyle.symbolTable();
+// void MathFontsConfigurePage::setupLists( const QStringList& usedFonts )
+// {
+//     const ContextStyle& contextStyle = m_document->getContextStyle( true );
+//     const SymbolTable& symbolTable = contextStyle.symbolTable();
 
-    QMap<QString, QString> fontMap;
-//    symbolTable.findAvailableFonts( &fontMap );
+//     QMap<QString, QString> fontMap;
+// //    symbolTable.findAvailableFonts( &fontMap );
 
-    for ( QStringList::const_iterator it = usedFonts.begin(); it != usedFonts.end(); ++it ) {
-        QMap<QString, QString>::iterator font = fontMap.find( *it );
-        if ( font != fontMap.end() ) {
-            fontMap.erase( font );
-            new UsedFontItem( this, requestedFonts, *it );
-            usedFontList.push_back( *it );
-        }
-    }
-    for ( QMap<QString, QString>::iterator it = fontMap.begin(); it != fontMap.end(); ++it ) {
-        new KListViewItem( availableFonts, it.key() );
-    }
-}
+//     for ( QStringList::const_iterator it = usedFonts.begin(); it != usedFonts.end(); ++it ) {
+//         QMap<QString, QString>::iterator font = fontMap.find( *it );
+//         if ( font != fontMap.end() ) {
+//             fontMap.erase( font );
+//             new UsedFontItem( this, requestedFonts, *it );
+//             usedFontList.push_back( *it );
+//         }
+//     }
+//     for ( QMap<QString, QString>::iterator it = fontMap.begin(); it != fontMap.end(); ++it ) {
+//         new KListViewItem( availableFonts, it.key() );
+//     }
+// }
 
-void MathFontsConfigurePage::slotAddFont()
-{
-    QListViewItem* fontItem = availableFonts->selectedItem();
-    if ( fontItem ) {
-        QString fontName = fontItem->text( 0 );
-        //availableFonts->takeItem( fontItem );
-        delete fontItem;
+// void MathFontsConfigurePage::slotAddFont()
+// {
+//     QListViewItem* fontItem = availableFonts->selectedItem();
+//     if ( fontItem ) {
+//         QString fontName = fontItem->text( 0 );
+//         //availableFonts->takeItem( fontItem );
+//         delete fontItem;
 
-        new UsedFontItem( this, requestedFonts, fontName );
-        usedFontList.push_back( fontName );
-    }
-}
+//         new UsedFontItem( this, requestedFonts, fontName );
+//         usedFontList.push_back( fontName );
+//     }
+// }
 
-void MathFontsConfigurePage::slotRemoveFont()
-{
-    QListViewItem* fontItem = requestedFonts->selectedItem();
-    if ( fontItem ) {
-        QString fontName = fontItem->text( 0 );
-        QValueVector<QString>::iterator it = std::find( usedFontList.begin(), usedFontList.end(), fontName );
-        if ( it != usedFontList.end() ) {
-            usedFontList.erase( it );
-        }
-        //requestedFonts->takeItem( fontItem );
-        delete fontItem;
-        new KListViewItem( availableFonts, fontName );
-    }
-}
+// void MathFontsConfigurePage::slotRemoveFont()
+// {
+//     QListViewItem* fontItem = requestedFonts->selectedItem();
+//     if ( fontItem ) {
+//         QString fontName = fontItem->text( 0 );
+//         QValueVector<QString>::iterator it = std::find( usedFontList.begin(), usedFontList.end(), fontName );
+//         if ( it != usedFontList.end() ) {
+//             usedFontList.erase( it );
+//         }
+//         //requestedFonts->takeItem( fontItem );
+//         delete fontItem;
+//         new KListViewItem( availableFonts, fontName );
+//     }
+// }
 
-void MathFontsConfigurePage::slotMoveUp()
-{
-    QListViewItem* fontItem = requestedFonts->selectedItem();
-    if ( fontItem ) {
-        QString fontName = fontItem->text( 0 );
-        QValueVector<QString>::iterator it = std::find( usedFontList.begin(), usedFontList.end(), fontName );
-        if ( it != usedFontList.end() ) {
-            uint pos = it - usedFontList.begin();
-            if ( pos > 0 ) {
-                QValueVector<QString>::iterator before = it-1;
-                std::swap( *it, *before );
-                requestedFonts->sort();
-            }
-        }
-    }
-}
+// void MathFontsConfigurePage::slotMoveUp()
+// {
+//     QListViewItem* fontItem = requestedFonts->selectedItem();
+//     if ( fontItem ) {
+//         QString fontName = fontItem->text( 0 );
+//         QValueVector<QString>::iterator it = std::find( usedFontList.begin(), usedFontList.end(), fontName );
+//         if ( it != usedFontList.end() ) {
+//             uint pos = it - usedFontList.begin();
+//             if ( pos > 0 ) {
+//                 QValueVector<QString>::iterator before = it-1;
+//                 std::swap( *it, *before );
+//                 requestedFonts->sort();
+//             }
+//         }
+//     }
+// }
 
-void MathFontsConfigurePage::slotMoveDown()
-{
-    QListViewItem* fontItem = requestedFonts->selectedItem();
-    if ( fontItem ) {
-        QString fontName = fontItem->text( 0 );
-        QValueVector<QString>::iterator it = std::find( usedFontList.begin(), usedFontList.end(), fontName );
-        if ( it != usedFontList.end() ) {
-            uint pos = it - usedFontList.begin();
-            if ( pos < usedFontList.size()-1 ) {
-                QValueVector<QString>::iterator after = it+1;
-                std::swap( *it, *after );
-                requestedFonts->sort();
-            }
-        }
-    }
-}
+// void MathFontsConfigurePage::slotMoveDown()
+// {
+//     QListViewItem* fontItem = requestedFonts->selectedItem();
+//     if ( fontItem ) {
+//         QString fontName = fontItem->text( 0 );
+//         QValueVector<QString>::iterator it = std::find( usedFontList.begin(), usedFontList.end(), fontName );
+//         if ( it != usedFontList.end() ) {
+//             uint pos = it - usedFontList.begin();
+//             if ( pos < usedFontList.size()-1 ) {
+//                 QValueVector<QString>::iterator after = it+1;
+//                 std::swap( *it, *after );
+//                 requestedFonts->sort();
+//             }
+//         }
+//     }
+// }
 
 KFORMULA_NAMESPACE_END
 

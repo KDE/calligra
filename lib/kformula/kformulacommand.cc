@@ -349,31 +349,79 @@ void KFCChangeBaseSize::unexecute()
 }
 
 
+FontCommand::FontCommand( const QString& name, Container* document )
+    : Command( name, document )
+{
+    list.setAutoDelete( false );
+    elementList.setAutoDelete( false );
+}
+
+
+void FontCommand::collectChildren()
+{
+    list.clear();
+    uint count = elementList.count();
+    for ( uint i=0; i<count; ++i ) {
+        elementList.at( i )->dispatchFontCommand( this );
+    }
+}
+
 
 CharStyleCommand::CharStyleCommand( CharStyle cs, const QString& name, Container* document )
-    : Command( name, document ), charStyle( cs )
+    : FontCommand( name, document ), charStyle( cs )
 {
-    elementList.setAutoDelete( false );
 }
 
 void CharStyleCommand::execute()
 {
+    collectChildren();
+
     styleList.clear();
-    uint count = elementList.count();
+    uint count = childrenList().count();
+    styleList.reserve( count );
     for ( uint i=0; i<count; ++i ) {
-        elementList.at( i )->setCharStyle( styleList, charStyle );
+        styleList[i] = childrenList().at( i )->getCharStyle();
+        childrenList().at( i )->setCharStyle( charStyle );
     }
     testDirty();
 }
 
 void CharStyleCommand::unexecute()
 {
-    BasicElement::ElementStyleList tmp;
-    for ( BasicElement::ElementStyleList::iterator iter = styleList.begin();
-          iter != styleList.end();
-          ++iter ) {
-        //BasicElement::ElementStylePair pair = *iter;
-        ( *iter ).first->setCharStyle( tmp, ( *iter ).second );
+    uint count = childrenList().count();
+    styleList.reserve( count );
+    for ( uint i=0; i<count; ++i ) {
+        childrenList().at( i )->setCharStyle( styleList[i] );
+    }
+    testDirty();
+}
+
+
+CharFamilyCommand::CharFamilyCommand( CharFamily cf, const QString& name, Container* document )
+    : FontCommand( name, document ), charFamily( cf )
+{
+}
+
+void CharFamilyCommand::execute()
+{
+    collectChildren();
+
+    familyList.clear();
+    uint count = childrenList().count();
+    familyList.reserve( count );
+    for ( uint i=0; i<count; ++i ) {
+        familyList[i] = childrenList().at( i )->getCharFamily();
+        childrenList().at( i )->setCharFamily( charFamily );
+    }
+    testDirty();
+}
+
+void CharFamilyCommand::unexecute()
+{
+    uint count = childrenList().count();
+    familyList.reserve( count );
+    for ( uint i=0; i<count; ++i ) {
+        childrenList().at( i )->setCharFamily( familyList[i] );
     }
     testDirty();
 }

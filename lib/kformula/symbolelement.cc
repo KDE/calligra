@@ -304,14 +304,14 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
-void SymbolElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+void SymbolElement::dispatchFontCommand( FontCommand* cmd )
 {
-    content->setCharStyle( list, cs );
+    content->dispatchFontCommand( cmd );
     if ( hasUpper() ) {
-        upper->setCharStyle( list, cs );
+        upper->dispatchFontCommand( cmd );
     }
     if ( hasLower() ) {
-        lower->setCharStyle( list, cs );
+        lower->dispatchFontCommand( cmd );
     }
 }
 

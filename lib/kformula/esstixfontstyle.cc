@@ -83,34 +83,37 @@ EsstixAlphaTable::EsstixAlphaTable()
 
 
 AlphaTableEntry EsstixAlphaTable::entry( char pos,
-                                         Family family,
-                                         bool /*bold*/,
-                                         bool /*italic*/ )
+                                         CharFamily family,
+                                         CharStyle /*style*/ ) const
 {
     AlphaTableEntry entry;
-    entry.pos = -1;
 
     // This is very font specific.
     switch( family ) {
         //case normal:
-    case script:
+    case scriptFamily:
         if ( ( ( pos >= 'A' ) && ( pos <= 'Z' ) ) ||
              ( ( pos >= 'a' ) && ( pos <= 'z' ) ) ) {
             entry.pos = pos;
             entry.font = script_font;
         }
-    case fraktur:
+        break;
+    case frakturFamily:
         if ( ( ( pos >= 'A' ) && ( pos <= 'Z' ) ) ||
              ( ( pos >= 'a' ) && ( pos <= 'z' ) ) ) {
             entry.pos = pos;
             entry.font = fraktur_font;
         }
-    case double_struck:
+        break;
+    case doubleStruckFamily:
         if ( ( ( pos >= 'A' ) && ( pos <= 'Z' ) ) ||
              ( ( pos >= '0' ) && ( pos <= '9' ) ) ) {
             entry.pos = pos;
             entry.font = double_struck_font;
         }
+        break;
+    default:
+        break;
     }
 
     return entry;

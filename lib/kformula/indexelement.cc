@@ -503,26 +503,26 @@ void IndexElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
-void IndexElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+void IndexElement::dispatchFontCommand( FontCommand* cmd )
 {
-    content->setCharStyle( list, cs );
+    content->dispatchFontCommand( cmd );
     if (hasUpperLeft()) {
-        upperLeft->setCharStyle( list, cs );
+        upperLeft->dispatchFontCommand( cmd );
     }
     if (hasUpperMiddle()) {
-        upperMiddle->setCharStyle( list, cs );
+        upperMiddle->dispatchFontCommand( cmd );
     }
     if (hasUpperRight()) {
-        upperRight->setCharStyle( list, cs );
+        upperRight->dispatchFontCommand( cmd );
     }
     if (hasLowerLeft()) {
-        lowerLeft->setCharStyle( list, cs );
+        lowerLeft->dispatchFontCommand( cmd );
     }
     if (hasLowerMiddle()) {
-        lowerMiddle->setCharStyle( list, cs );
+        lowerMiddle->dispatchFontCommand( cmd );
     }
     if (hasLowerRight()) {
-        lowerRight->setCharStyle( list, cs );
+        lowerRight->dispatchFontCommand( cmd );
     }
 }
 

@@ -166,10 +166,10 @@ void FractionElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
-void FractionElement::setCharStyle( ElementStyleList& list, CharStyle cs )
+void FractionElement::dispatchFontCommand( FontCommand* cmd )
 {
-    numerator->setCharStyle( list, cs );
-    denominator->setCharStyle( list, cs );
+    numerator->dispatchFontCommand( cmd );
+    denominator->dispatchFontCommand( cmd );
 }
 
 /**

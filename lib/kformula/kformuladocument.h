@@ -184,6 +184,8 @@ public:
     KToggleAction* getFormatBoldAction();
     KToggleAction* getFormatItalicAction();
 
+    KSelectAction* getFontFamilyAction();
+
     SymbolType leftBracketChar() const;
     SymbolType rightBracketChar() const;
 
@@ -245,6 +247,8 @@ public slots:
     void delimiterLeft();
     void delimiterRight();
     void symbolNames();
+
+    void fontFamily();
 
 private:
 

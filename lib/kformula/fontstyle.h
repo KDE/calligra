@@ -56,6 +56,8 @@ private:
 class AlphaTableEntry {
 public:
 
+    AlphaTableEntry() : pos( -1 ) {}
+
     bool valid() const { return pos > -1; }
 
     QFont font;
@@ -69,10 +71,8 @@ public:
 class AlphaTable {
 public:
 
-    enum Family { /*normal,*/ script, fraktur, double_struck };
-
     virtual ~AlphaTable() {}
-    virtual AlphaTableEntry entry( char pos, Family family, bool bold, bool italic ) = 0;
+    virtual AlphaTableEntry entry( char pos, CharFamily family, CharStyle style ) const = 0;
 };
 
 

@@ -86,7 +86,16 @@ public:
                        ContextStyle::IndexStyle istyle,
                        const LuPixelPoint& parentOrigin );
 
-    virtual void setCharStyle( ElementStyleList& list, CharStyle cs );
+    /**
+     * Dispatch this FontCommand to all our TextElement children.
+     */
+    virtual void dispatchFontCommand( FontCommand* cmd );
+
+    CharStyle getCharStyle() const { return charStyle; }
+    void setCharStyle( CharStyle cs );
+
+    CharFamily getCharFamily() const { return charFamily; }
+    void setCharFamily( CharFamily cf );
 
     /**
      * Moves the cursor away from the given child. The cursor is
@@ -137,7 +146,7 @@ protected:
     /**
      * @returns the char that is used to draw with the given font.
      */
-    QChar getRealCharacter();
+    QChar getRealCharacter(const ContextStyle& context);
 
     /**
      * @returns the font to be used for the element.
@@ -167,6 +176,12 @@ private:
      * The attribute of the char. "anyChar" means leave the default.
      */
     CharStyle charStyle;
+
+    /**
+     * Very rarely used so it's actually a shame to have it here.
+     * There should be a better way to store font attributes.
+     */
+    CharFamily charFamily;
 };
 
 
