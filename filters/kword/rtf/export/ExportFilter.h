@@ -62,8 +62,6 @@ public:
 
 private:
     QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
-    QString openParagraph(const QString& str, const LayoutData& layout, bool inTable=false);
-    QString closeParagraph(const QString& str, const LayoutData& layout);
     QString openSpan(const FormatData& formatOrigin, const FormatData& format);
     QString closeSpan(const FormatData& formatOrigin, const FormatData& format);
     QString escapeRtfText ( const QString& text ) const;
@@ -101,6 +99,7 @@ protected:
     bool m_paperOrientation;
     double m_paperWidth, m_paperHeight;
     double m_paperMarginTop, m_paperMarginLeft, m_paperMarginBottom, m_paperMarginRight;
+    QString prefix;
 };
 
 #endif /* EXPORTFILTERFULLPOWER_H */
