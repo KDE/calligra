@@ -1444,8 +1444,6 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       {
       case Key_Return:
       case Key_Enter:
-	  
-	  
 	  switch( tmpMoveTo)
 	      {
 	      case Bottom :
@@ -1506,8 +1504,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  }
 	      case Left :
 		  {
-		      if ( !m_bChoose && markerColumn() == 1 )
-			  return;
+		      /*if ( !m_bChoose && markerColumn() == 1 )
+			return;*/
 		      if ( m_bChoose && chooseMarkerColumn() == 1 )
 			  return;
 		      
@@ -1537,8 +1535,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  }
 	      case Right :
 		  {
-		      if ( !m_bChoose && markerColumn() == 26*26)
-			  return;
+		      /*if ( !m_bChoose && markerColumn() == 26*26)
+			return;*/
 		      if ( m_bChoose && chooseMarkerColumn() == 26*26 )
 			  return;
 		      if ( m_bChoose )
