@@ -23,13 +23,12 @@
 
 #include <qwidget.h>
 
-
-class QTextEdit;
 class QPainter;
 
 class KPresenterDoc;
 class KPresenterView;
 class KPrinter;
+class KTextEdit;
 
 class NoteBar : public QWidget
 {
@@ -54,7 +53,7 @@ private slots:
     void slotRedoAvailable( bool );
 
 private:
-    ::QTextEdit *textEdit;
+    ::KTextEdit *textEdit;
 
     KPresenterView *view;
 

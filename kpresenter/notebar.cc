@@ -20,7 +20,6 @@
 
 
 #include <qlayout.h>
-#include <qtextedit.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qsimplerichtext.h>
@@ -28,6 +27,7 @@
 #include <kglobalsettings.h>
 #include <kprinter.h>
 #include <kdebug.h>
+#include <ktextedit.h>
 
 #include <notebar.h>
 #include <kpresenter_view.h>
@@ -41,7 +41,7 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterView *_view )
       initialize( true )
 {
     QBoxLayout *topLayout = new QVBoxLayout( this, 2 );
-    textEdit = new QTextEdit( this );
+    textEdit = new KTextEdit( this );
 
     QFont font = KoGlobal::defaultFont();
     textEdit->setCurrentFont( font );
