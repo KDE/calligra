@@ -35,6 +35,9 @@ k_dcop:
 	void setText( QString text );
 	QString text();
 
+	void setFontSize( int pointSize );
+	int fontSize();
+
 private:
 	VText	*m_text;
 };

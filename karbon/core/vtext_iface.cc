@@ -37,3 +37,17 @@ VTextIface::text()
 	return m_text->text();
 }
 
+void
+VTextIface::setFontSize( int pointSize )
+{
+	QFont font = m_text->font();
+	font.setPointSize( pointSize );
+	m_text->setFont( font );
+}
+
+int
+VTextIface::fontSize()
+{
+	return m_text->font().pointSize();
+}
+
