@@ -94,7 +94,7 @@ private:
 
     // Convert from Word number format codes to our own number format.
 
-    char *list(unsigned nfc) const;
+    const char *list(unsigned nfc) const;
     char numbering(unsigned nfc) const;
 
     // Convert from Word character format to our own format.

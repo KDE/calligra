@@ -794,7 +794,7 @@ QString WinWordDoc::colour(
     return result;
 }
 
-char *WinWordDoc::list(unsigned nfc) const
+const char *WinWordDoc::list(unsigned nfc) const
 {
     static const char *listStyle[6] =
     {
