@@ -84,13 +84,13 @@ class KWDocStructTableItem : public QObject,
     Q_OBJECT
 
 public:
-    KWDocStructTableItem( QListViewItem *_parent, QString _text, KWGroupManager *_table, KWGUI*__parent );
+    KWDocStructTableItem( QListViewItem *_parent, QString _text, KWTableFrameSet *_table, KWGUI*__parent );
 
 public slots:
     void slotDoubleClicked( QListViewItem *_item );
 
 protected:
-    KWGroupManager *table;
+    KWTableFrameSet *table;
     KWGUI *gui;
 
 };

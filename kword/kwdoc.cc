@@ -1374,13 +1374,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
 
         switch ( frameType ) {
             case FT_TEXT: {
-                KWTextFrameSet *fs = new KWTextFrameSet( this );
-                fs->setVisible( _visible );
-                fs->setName( fsname );
-                fs->load( framesetElem );
-                fs->setFrameInfo( frameInfo );
-                fs->setIsRemoveableHeader( removeable );
-
+                KWTextFrameSet *fs;
                 if ( !_name.isEmpty() ) {
                     KWGroupManager *grpMgr = 0L;
                     if ( getNumGroupManagers() > 0 ) {
@@ -1398,15 +1392,27 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                         grpMgr->setName( _name );
                         addGroupManager( grpMgr );
                     }
-                    fs->setGroupManager( grpMgr );
-                    grpMgr->addFrameSet( fs, _row, _col );
-                    KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
-                    if ( cell ) {
-                        cell->rows = _rows;
-                        cell->cols = _cols;
-                    }
-                } else
+                    fs = new KWGroupManager::Cell( grpMgr, _row, _col );
+                    fs->setVisible( _visible );
+                    fs->setName( fsname );
+                    fs->load( framesetElem );
+                    fs->setFrameInfo( frameInfo );
+                    fs->setIsRemoveableHeader( removeable );
+                    KWGroupManager::Cell *cell = (KWGroupManager::Cell *)fs;
+                    cell->m_rows = _rows;
+                    cell->m_cols = _cols;
+//                    grpMgr->addCell( cell, _row, _col );
+                }
+                else
+                {
+                    fs = new KWTextFrameSet( this );
+                    fs->setVisible( _visible );
+                    fs->setName( fsname );
+                    fs->load( framesetElem );
+                    fs->setFrameInfo( frameInfo );
+                    fs->setIsRemoveableHeader( removeable );
                     frames.append( fs );
+                }
 
                 // Old file format had autoCreateNewFrame as a frameset attribute,
                 // and our templates still use that.
@@ -2576,11 +2582,11 @@ void KWDocument::printDebug() {
         kdDebug() << " |  Info: " << infoFrameset[ frameset->getFrameInfo() ] << endl;
         if(frameset->getGroupManager()) {
             kdDebug() << " |  Groupmanager: " << frameset->getGroupManager() << endl;
-            KWGroupManager::Cell *cell = frameset->getGroupManager()->getCell(frameset);
-            kdDebug() << " |  |- row :" << cell->row << endl;
-            kdDebug() << " |  |- col :" << cell->col << endl;
-            kdDebug() << " |  |- rows:" << cell->rows << endl;
-            kdDebug() << " |  +- cols:" << cell->cols << endl;
+            KWGroupManager::Cell *cell = (KWGroupManager::Cell *)frameset;
+            kdDebug() << " |  |- row :" << cell->m_row << endl;
+            kdDebug() << " |  |- col :" << cell->m_col << endl;
+            kdDebug() << " |  |- rows:" << cell->m_rows << endl;
+            kdDebug() << " |  +- cols:" << cell->m_cols << endl;
         }
         QListIterator<KWFrame> frameIt = frameset->frameIterator();
         for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {

@@ -47,10 +47,12 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     cmdMoveFrame=0L;
 
-    trows = 7;
-    tcols = 5;
-    twid = TblAuto;
-    thei = TblAuto;
+    // Default table parameters.
+    m_table.rows = 3;
+    m_table.cols = 2;
+    m_table.width = TblAuto;
+    m_table.height = TblAuto;
+    m_table.useAnchor = false;
 
     curTable = 0L;
 
@@ -264,8 +266,8 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
                                        frameRect.right() + 1, frameRect.bottom()  + 1 );
                     painter->drawLine( frameRect.x() - 1, frameRect.bottom() + 1,
                                        frameRect.right() + 1, frameRect.bottom() + 1 );
-                    uint row = frameset->getGroupManager()->getCell( frameset )->row;
-                    uint col = frameset->getGroupManager()->getCell( frameset )->col;
+                    uint row = ((KWTableFrameSet::Cell *)frameset)->m_row;
+                    uint col = ((KWTableFrameSet::Cell *)frameset)->m_col;
                     if ( row == 0 ) // draw top only for 1st row
                         painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
                                            frameRect.right() + 1, frameRect.y() - 1 );
@@ -425,7 +427,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
 
         KWFrameSet *fs = doc->getFrameSet( x, y );
         if ( currentSelection != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) { // is table and we hold shift
-            fs->getGroupManager()->selectUntil( fs );
+            fs->getGroupManager()->selectUntil( (KWTableFrameSet::Cell *)fs );
             curTable = fs->getGroupManager();
         } else if ( currentSelection == 0 ) { // none selected
             selectAllFrames( FALSE );
@@ -784,7 +786,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
             for ( unsigned int i = 0; i < updates.count(); i++ ) {
                 KWGroupManager *grpMgr = updates.at( i );
                 for ( unsigned k = 0; k < grpMgr->getNumCells(); k++ ) {
-                    KWFrame * frame = grpMgr->getCell( k )->frameSet->getFrame( 0 );
+                    KWFrame * frame = grpMgr->getCell( k )->getFrame( 0 );
                     QRect oldRect( *frame );
                     frame->moveBy( mx - oldMx, my - oldMy );
                     if ( frame->x() < 0 || frame->right() > static_cast<int>( doc->paperWidth() ) || frame->y() < 0 ) {
@@ -843,7 +845,7 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
 
     if ( deleteMovingRect ) {
 #if 0
-        if ( useAnchor ) {
+        if ( m_table.useAnchor ) {
             p.drawLine( anchor->getOrigin(), m_insRect.topLeft() );
         }
 #endif
@@ -851,7 +853,7 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
     }
     else {
 #if 0
-        if ( useAnchor ) {
+        if ( m_table.useAnchor ) {
             KWGroupManager *grpMgr;
             grpMgr = new KWGroupManager( doc );
             insertAnchor( grpMgr );
@@ -871,7 +873,7 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
         m_insRect.setHeight( m_insRect.height() - (my - oldMy) / doc->zoomedResolutionY() );
     }
 #if 0
-    if ( useAnchor ) {
+    if ( m_table.useAnchor ) {
         p.drawLine( anchor->getOrigin(), m_insRect.topLeft() );
     }
 #endif
@@ -1045,7 +1047,7 @@ void KWCanvas::mrCreateTable()
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
-        if ( tcols * minFrameWidth + m_insRect.x() > doc->paperWidth() )
+        if ( m_table.cols * minFrameWidth + m_insRect.x() > doc->paperWidth() )
             {
                 KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
                                            "is not enough space available."));
@@ -1053,7 +1055,7 @@ void KWCanvas::mrCreateTable()
         else {
             KWGroupManager *grpMgr;
 
-            /*if ( useAnchor ) {
+            /*if ( m_table.useAnchor ) {
                 grpMgr = static_cast<KWGroupManager *>(anchor);
                 } else*/
                 grpMgr = new KWGroupManager( doc );
@@ -1075,19 +1077,18 @@ void KWCanvas::mrCreateTable()
             }
             grpMgr->setName( _name );
             doc->addGroupManager( grpMgr );
-            for ( unsigned int i = 0; i < trows; i++ ) {
-                for ( unsigned int j = 0; j < tcols; j++ ) {
-                    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-                    KWFrame *frame = new KWFrame(_frameSet, m_insRect.x(), m_insRect.y(), (doc->paperWidth() - m_insRect.x())/tcols, m_insRect.height() );
+            for ( unsigned int i = 0; i < m_table.rows; i++ ) {
+                for ( unsigned int j = 0; j < m_table.cols; j++ ) {
+                    KWTableFrameSet::Cell *_frameSet = new KWTableFrameSet::Cell( grpMgr, i, j );
+                    KWFrame *frame = new KWFrame(_frameSet, m_insRect.x(), m_insRect.y(), (doc->paperWidth() - m_insRect.x())/m_table.cols, m_insRect.height() );
                     _frameSet->addFrame( frame );
                     frame->setFrameBehaviour(AutoExtendFrame);
                     frame->setNewFrameBehaviour(NoFollowup);
-                    _frameSet->setGroupManager( grpMgr );
-                    grpMgr->addFrameSet( _frameSet, i, j );
+//                    grpMgr->addCell( _frameSet, i, j );
                 }
             }
             grpMgr->init( m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height(),
-                          twid, thei );
+                          m_table.width, m_table.height );
             grpMgr->recalcRows();
         }
         doc->updateAllFrames();
@@ -1095,7 +1096,7 @@ void KWCanvas::mrCreateTable()
         repaintAll();
     }
     setMouseMode( MM_EDIT );
-    useAnchor = false;
+    m_table.useAnchor = false;
 }
 
 void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )

@@ -9,6 +9,7 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 kwtextparag.cc kwstyle.cc \
 		paragdia.cc searchdia.cc \
 		kwframe.cc kwtextframeset.cc kwgroupmanager.cc \
+                kwtableframeset.cc \
 		framedia.cc kcharselectdia.cc kwutils.cc preview.cc \
                 tabledia.cc insdia.cc deldia.cc docstruct.cc \
                 kwimage.cc kwdrag.cc kwconfig.cc \

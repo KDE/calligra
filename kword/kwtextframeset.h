@@ -26,7 +26,7 @@
 #include "kwtextparag.h"
 class KWStyle;
 class KWDrag;
-class KWTextFrameSet;
+class KWDocument;
 class KWTextFormat;
 
 /**

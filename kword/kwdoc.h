@@ -27,7 +27,7 @@ class KWPictureFrameSet;
 class KWSerialLetterDataBase;
 class KWContents;
 class KWFrameSet;
-class KWGroupManager;
+class KWTableFrameSet;
 class KWPartFrameSet;
 class KWStyle;
 class KWFrame;
@@ -249,10 +249,10 @@ public:
 
     bool canResize( KWFrameSet *frameset, KWFrame *frame, int page, int diff );
 
-    void addGroupManager( KWGroupManager *gm ) { grpMgrs.append( gm ); }
+    void addGroupManager( KWTableFrameSet *gm ) { grpMgrs.append( gm ); }
     unsigned int getNumGroupManagers() { return grpMgrs.count(); }
-    KWGroupManager *getGroupManager( int i ) { return grpMgrs.at( i ); }
-    void delGroupManager( KWGroupManager *g, bool deleteit = true );
+    KWTableFrameSet *getGroupManager( int i ) { return grpMgrs.at( i ); }
+    void delGroupManager( KWTableFrameSet *g, bool deleteit = true );
 
     //void enableEmbeddedParts( bool f );
 
@@ -271,7 +271,7 @@ public:
 
     void addCommand( KCommand * cmd );
 
-    void updateTableHeaders( QList<KWGroupManager> &grpMgrs );
+    void updateTableHeaders( QList<KWTableFrameSet> &grpMgrs );
 
     //QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
 
@@ -461,7 +461,7 @@ private:
     KWImageCollection m_imageCollection;
     QList<KWFrameSet> frames;
     QList<KWStyle> m_styleList;
-    QList<KWGroupManager> grpMgrs;
+    QList<KWTableFrameSet> grpMgrs;
 
     // Cached value for findStyle()
     KWStyle *m_lastStyle;

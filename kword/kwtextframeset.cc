@@ -613,14 +613,11 @@ void KWTextFrameSet::save( QDomElement &parentElem )
     if ( grpMgr ) {
         framesetElem.setAttribute( "grpMgr", correctQString( grpMgr->getName() ) );
 
-        unsigned int _row = 0, _col = 0;
-        _row=grpMgr->getCell( this )->row;
-        _col=grpMgr->getCell( this )->col;
-        KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
-        framesetElem.setAttribute( "row", _row );
-        framesetElem.setAttribute( "col", _col );
-        framesetElem.setAttribute( "rows", cell->rows );
-        framesetElem.setAttribute( "cols", cell->cols );
+        KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
+        framesetElem.setAttribute( "row", cell->m_row );
+        framesetElem.setAttribute( "col", cell->m_col );
+        framesetElem.setAttribute( "rows", cell->m_rows );
+        framesetElem.setAttribute( "cols", cell->m_cols );
     }
 
     framesetElem.setAttribute( "frameType", static_cast<int>( getFrameType() ) );

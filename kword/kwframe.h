@@ -34,7 +34,7 @@
 class KWFrame;
 class KWDocument;
 class KWChild;
-class KWGroupManager;
+class KWTableFrameSet;
 class KFormulaContainer;
 class KFormulaView;
 class KWResizeHandle;
@@ -376,10 +376,10 @@ public:
     int getCurrent() { return current; }
 
     /** make this frameset part of a groupmanager
-     * @see KWGroupManager
+     * @see KWTableFrameSet
      */
-    void setGroupManager( KWGroupManager *gm ) { grpMgr = gm; }
-    KWGroupManager *getGroupManager() { return grpMgr; }
+    void setGroupManager( KWTableFrameSet *gm ) { grpMgr = gm; }
+    KWTableFrameSet *getGroupManager() { return grpMgr; }
 
     /** table headers can created by the groupmanager, we store the fact that
      this is one in here. */
@@ -423,7 +423,7 @@ protected:
 
     FrameInfo frameInfo;
     int current;
-    KWGroupManager *grpMgr;
+    KWTableFrameSet *grpMgr;
     bool removeableHeader, visible;
     QString name;
 

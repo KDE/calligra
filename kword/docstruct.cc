@@ -102,7 +102,7 @@ void KWDocStructTableItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
         {
-            KWFrame *frame = table->getFrameSet( 0, 0 )->getFrame( 0 );
+            KWFrame *frame = table->getCell( 0, 0 )->getFrame( 0 );
             gui->canvasWidget()->scrollToOffset( frame->x(), frame->y() );
         }
 }

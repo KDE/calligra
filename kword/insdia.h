@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 
-class KWGroupManager;
+class KWTableFrameSet;
 class KWDocument;
 class KWCanvas;
 class QWidget;
@@ -42,7 +42,7 @@ class KWInsertDia : public KDialogBase
 
 public:
     enum InsertType {ROW, COL};
-    KWInsertDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWDocument *_doc, InsertType _type, KWCanvas *_canvas );
+    KWInsertDia( QWidget *parent, const char *name, KWTableFrameSet *_grpMgr, KWDocument *_doc, InsertType _type, KWCanvas *_canvas );
 
 protected:
     void setupTab1();
@@ -55,7 +55,7 @@ protected:
     QLabel *rc;
     QSpinBox *value;
 
-    KWGroupManager *grpMgr;
+    KWTableFrameSet *grpMgr;
     KWDocument *doc;
     InsertType type;
     KWCanvas *canvas;

@@ -32,7 +32,7 @@ class KWFrame;
 class KWFrameSet;
 class KWFrameSetEdit;
 class KWTextFrameSet;
-class KWGroupManager;
+class KWTableFrameSet;
 class KWFrameMoveCommand;
 namespace Qt3 {
 class QTextCursor;
@@ -112,26 +112,30 @@ public:
 
     void updateCurrentFormat();
 
-    //table
-    unsigned int tableRows() {return trows;}
-    unsigned int tableCols() {return tcols;};
-    KWTblCellSize tableWidthMode(){return twid;}
-    KWTblCellSize tableHeightMode(){return thei;}
+    // Table creation support.
+    unsigned int tableRows() { return m_table.rows; }
+    unsigned int tableCols() { return m_table.cols; }
+    KWTblCellSize tableWidthMode() { return m_table.width; }
+    KWTblCellSize tableHeightMode() { return m_table.height; }
+    bool tableIsFloating() { return m_table.useAnchor; }
 
     void setTableConfig( unsigned int rows, unsigned int cols,
                          KWTblCellSize wid, KWTblCellSize hei,
-                         bool isFloating) {
-        useAnchor = isFloating;
-        trows = rows; tcols = cols;
-        twid = wid; thei = hei;
+                         bool isFloating)
+    {
+        m_table.rows = rows;
+        m_table.cols = cols;
+        m_table.width = wid;
+        m_table.height = hei;
+        m_table.useAnchor = isFloating;
     }
 
-    KWGroupManager * getTable();
+    KWTableFrameSet * getTable();
 
-    KWGroupManager *getCurrentTable() { return curTable; }
+    KWTableFrameSet *getCurrentTable() { return curTable; }
 
     //delete frame
-    void deleteTable( KWGroupManager *groupManager );
+    void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
     //move canvas
@@ -205,13 +209,18 @@ private:
     QString m_PixmapName; // when inserting a pixmap
     KoDocumentEntry m_partEntry; // when inserting a part
 
-    // Anchor support
-    bool useAnchor;
+    // Table creation support.
+    struct
+    {
+        unsigned int cols;
+        unsigned int rows;
+        KWTblCellSize width;
+        KWTblCellSize height;
 
-    //table
-    unsigned int tcols, trows;
-    KWTblCellSize twid, thei;
-    KWGroupManager *curTable;
+        // Anchor support
+        bool useAnchor;
+    } m_table;
+    KWTableFrameSet *curTable;
     KWFrameMoveCommand *cmdMoveFrame;
 };
 
