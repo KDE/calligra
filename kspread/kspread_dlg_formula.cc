@@ -21,6 +21,7 @@
 #include <qlayout.h>
 #include <qtabwidget.h>
 #include <qsizepolicy.h>
+#include <qvalidator.h>
 
 #include "kspread_dlg_formula.h"
 #include "kspread_view.h"
@@ -476,6 +477,23 @@ static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescriptio
     
     label->setText( desc->param( param ).helpText() );
     label->show();
+    KSpreadParameterType elementType = desc->param( param ).type();
+	
+    switch( elementType )
+    {
+    case KSpread_String:
+    case KSpread_Boolean:
+    case KSpread_Any:
+      edit->clearValidator ();
+      break;
+    case KSpread_Float:
+      edit->setValidator(new QDoubleValidator (edit));
+      break;
+    case KSpread_Int:
+      edit->setValidator(new QIntValidator (edit));
+      break;
+      }
+
 }
 
 void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )

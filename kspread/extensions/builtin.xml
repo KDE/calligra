@@ -382,7 +382,7 @@
       <Type>Int</Type>
       <Parameter>
 	<Comment>The value to convert</Comment>
-	<Type>Int</Type>
+	<Type>String</Type>
       </Parameter>
       <Help>
 	<Text>The HEX2DEC() function returns the value formatted as a decimal number.</Text>
@@ -2055,7 +2055,7 @@
       </Parameter>
       <Parameter>
 	<Comment>Probability of success</Comment>
-	<Type>Int</Type>
+	<Type>Double</Type>
       </Parameter>
       <Help>
 	<Text>The BINO function returns the binomial distribution. The first parameter is the number of trials, the second parameter is the number of successes, and the third is the probability of success. The number of trials should be bigger than the number of successes and the probability should be smaller or equal to 1.</Text>
@@ -2150,7 +2150,7 @@
       </Parameter>
       <Parameter>
 	<Comment>Probability of failure</Comment>
-	<Type>Int</Type>
+	<Type>Double</Type>
       </Parameter>
       <Help>
 	<Text>The INVBINO function returns the negative binomial distribution. The first parameter is the number of trials, the second parameter is the number of failures, and the third is the probability of failure. The number of trials should be bigger than the number of failures and the probability should be smaller or equal to 1.</Text>
