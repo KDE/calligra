@@ -1,0 +1,120 @@
+/* This file is part of the KDE project
+   Copyright (C) 2002, The Karbon Developers
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+
+*/
+
+#include <klocale.h>
+#include <kfiledialog.h>
+#include <kdebug.h>
+
+#include "imagetoolplugin.h"
+#include <karbon_part_base.h>
+#include <karbon_part.h>
+#include <karbon_view_base.h>
+#include <karbon_view.h>
+#include <core/vcanvas.h>
+#include <core/vimage.h>
+#include <core/vselection.h>
+#include <kgenericfactory.h>
+
+typedef KGenericFactory<VImageTool, KarbonViewBase> ImageToolPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( karbon_imagetoolplugin, ImageToolPluginFactory( "karbonimagetoolplugin" ) );
+
+VImageTool::VImageTool( KarbonViewBase* view, const char *name, const QStringList & )
+	: VTool( (KarbonView *)view, name ), VKarbonPlugin( view, name )
+{
+	registerTool( this );
+}
+
+VImageTool::~VImageTool()
+{
+}
+
+QString
+VImageTool::contextHelp()
+{
+	QString s = i18n( "<qt><b>Image tool:</b><br>" );
+	return s;
+}
+
+void
+VImageTool::activate()
+{
+	//view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+}
+
+QString
+VImageTool::statusText()
+{
+	return i18n( "Image Tool" );
+}
+
+void
+VImageTool::deactivate()
+{
+}
+
+void
+VImageTool::mouseButtonRelease()
+{
+	QString fname = KFileDialog::getOpenFileName( QString::null, "*.jpg *.gif *.png", view(), i18n( "Choose the image to add" ) );
+	kdDebug() << "Image name : " << fname.latin1() << endl;
+
+	VImage *image = new VImage( 0L, fname );
+	VInsertImageCmd *cmd = new VInsertImageCmd( &view()->part()->document(), i18n( "Insert Image" ), image );
+
+	view()->part()->addCommand( cmd, true );
+	//view()->selectionChanged();
+}
+
+VImageTool::VInsertImageCmd::VInsertImageCmd( VDocument* doc, const QString& name, VImage *image )
+	: VCommand( doc, name, "frame_image" ), m_image( image )
+{
+}
+
+void
+VImageTool::VInsertImageCmd::execute()
+{
+	if( !m_image )
+		return;
+
+	if( m_image->state() == VObject::deleted )
+		m_image->setState( VObject::normal );
+	else
+	{
+		m_image->setState( VObject::normal );
+		document()->append( m_image );
+		document()->selection()->clear();
+		document()->selection()->append( m_image );
+	}
+															
+	setSuccess( true );
+}
+
+void
+VImageTool::VInsertImageCmd::unexecute()
+{
+	if( !m_image )
+		return;
+
+	document()->selection()->take( *m_image );
+	m_image->setState( VObject::deleted );
+
+	setSuccess( false );
+}
+

@@ -1,1 +1,1 @@
-SUBDIRS = flattenpath roundcorners insertknots whirlpinch zoomtool
+SUBDIRS = flattenpath roundcorners insertknots whirlpinch zoomtool imagetool
