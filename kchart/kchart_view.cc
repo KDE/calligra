@@ -201,7 +201,7 @@ void KChartView::createTempData()
 
 void KChartView::edit()
 {
-    kchartDataEditor ed;
+    kchartDataEditor ed(this);
     KChartParams* params=((KChartPart*)koDocument())->params();
 
     KoChart::Data *dat = (( (KChartPart*)koDocument())->data());

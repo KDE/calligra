@@ -19,6 +19,19 @@ kchartDataEditor::kchartDataEditor() :
 
 }
 
+kchartDataEditor::kchartDataEditor(QWidget* parent) :
+    KDialog(parent,"KChart Data Editor",true)
+{
+    setCaption(i18n("KChart Data Editor"));
+    _widget = new SheetDlg(this,"SheetWidget");
+    _widget->setGeometry(0,0,520,400);
+    _widget->show();
+    resize(520,400);
+    setMaximumSize(size());
+    setMinimumSize(size());
+
+}
+
 void kchartDataEditor::setData( KoChart::Data* dat )
 {
     unsigned int rowsCount, colsCount;
