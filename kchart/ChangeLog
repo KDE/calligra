@@ -1,5 +1,11 @@
 2005-03-13  Inge Wallin  <inge@lysator.liu.se>
 
+	Make the page layout dialog better looking.
+	* kchartPageLayout.cc (constructor): Place settings inside a
+	button box.
+	
+	----------------------------------------------------------------
+
 	Clean out old cruft from the data editor.
 	*  kchartDataEditor.{h,cc} (setLegend): removed
 	(getLegend): removed

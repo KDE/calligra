@@ -32,7 +32,7 @@ Item								   Prio Status
       version of KDChart.
       - Save row and column labels	 				--
       - Load row and column labels	 				--
-  + 101290: KChrt changes font for axes when Polar chart is chosen    1	KDCH
+  + 101290: KChart changes font for axes when Polar chart is chosen   1	KDCH
        Fixed by new KDChart version
 
 * Wishes
@@ -41,6 +41,7 @@ Item								   Prio Status
       - Save / Load							done
       - Manipulate with GUI						done
       - Paint chart using it						done
+  + 99391: Linear or Logarithmic scale for Y axis		     S2 DONE
 
 * Issues with KSpread
   + Handling: The chart changes size when selected and unselected.    2 KSPR
@@ -48,12 +49,11 @@ Item								   Prio Status
   + Labels are no longer generated correctly.			      1	DONE
 
 * Other fixes
-  + Include me in Authors					      2	DONE
-  + Can HiLo charts be made thicker than one pixel?                   3 ----
-    New page in config dialog like pie settings?
   + Tooltips & What's this help all over the program?		     S1 ----
   + Remove the predefined bar chart?				      2 ----
-  + Make the settings in Edit->"Page Layout" clearer?		      2 ----
+  + Include me in Authors					      2	DONE
+  + Can HiLo charts be made thicker than one pixel? No.		      3 DONE
+  + Make the settings in Edit->"Page Layout" clearer?		      2 DONE
   + Singular or plural for tooltips, not both.			     S1 DONE
 
   + Fix ChangeLog re: bug titles.					DONE

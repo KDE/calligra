@@ -25,6 +25,7 @@
 #include <qlayout.h>
 #include <klocale.h>
 #include <qlabel.h>
+#include <qgroupbox.h>
 
 namespace KChart
 {
@@ -33,8 +34,20 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
 	: KDialogBase( parent, name, TRUE,i18n("Page Layout"),KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Apply , KDialogBase::Ok,true )
 {
     params=_params;
+#if 0
     QWidget *page = new QWidget( this );
+#else
+    QGroupBox* page = new QGroupBox( 2, Qt::Horizontal, i18n("Margins"),
+				     this );
+#endif
     setMainWidget(page);
+
+    // FIXME: The following code is strange, since it is written to
+    // use a grid layout with a standard QWidget.  However, with the
+    // QGroupBox, it looks better, and since it actually works, there
+    // is no immediate need for rewriting.  In the sake of clarity, it
+    // should be done though, and we should use the layout
+    // capabilities of the groupbox instead..
 
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
@@ -69,7 +82,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
     grid->addWidget(bottomBorder,3,1);
 
     init();
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect( this, SIGNAL( okClicked() ),    this, SLOT( slotOk() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotReset() ));
 
@@ -77,9 +90,9 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
 
 void KChartPageLayout::init()
 {
-    oldGlobalLeadingRight = params->globalLeadingRight();
-    oldGlobalLeadingLeft = params->globalLeadingLeft();
-    oldGlobalLeadingTop = params->globalLeadingTop();
+    oldGlobalLeadingRight  = params->globalLeadingRight();
+    oldGlobalLeadingLeft   = params->globalLeadingLeft();
+    oldGlobalLeadingTop    = params->globalLeadingTop();
     oldGlobalLeadingBottom = params->globalLeadingBottom();
     slotReset();
 }
