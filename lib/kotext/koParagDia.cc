@@ -729,6 +729,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     indentGrid->addWidget( lLeft, 2, 0 );
 
     eLeft = new KDoubleNumInput( indentFrame );
+    eLeft->setRange( 0, 9999, 1, false);
     indentGrid->addWidget( eLeft, 2, 1 );
     connect( eLeft, SIGNAL( valueChanged(double ) ), this, SLOT( leftChanged( double ) ) );
 
@@ -737,6 +738,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     indentGrid->addWidget( lRight, 3, 0 );
 
     eRight = new KDoubleNumInput( indentFrame );
+    eRight->setRange( 0, 9999, 1, false);
     indentGrid->addWidget( eRight, 3, 1 );
     connect( eRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged( double ) ) );
 
@@ -745,6 +747,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     indentGrid->addWidget( lFirstLine, 4, 0 );
 
     eFirstLine = new KDoubleNumInput( indentFrame );
+    eFirstLine->setRange( -9999, 9999, 1, false);
     connect( eFirstLine, SIGNAL( valueChanged( double ) ), this, SLOT( firstChanged( double ) ) );
     indentGrid->addWidget( eFirstLine, 4, 1 );
 
@@ -788,6 +791,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
     eSpacing = new KDoubleNumInput( spacingFrame );
+    eSpacing->setRange( 0, 9999, 1, false);
     connect( eSpacing, SIGNAL( valueChanged( double ) ), this, SLOT( spacingChanged( double ) ) );
     spacingGrid->addWidget( eSpacing, 1, 1 );
 
@@ -809,6 +813,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     pSpaceGrid->addWidget( lBefore, 1, 0 );
 
     eBefore = new KDoubleNumInput( pSpaceFrame );
+    eBefore->setRange( 0 , 9999, 1, false);
     connect( eBefore, SIGNAL( valueChanged( double ) ), this, SLOT( beforeChanged( double ) ) );
     pSpaceGrid->addWidget( eBefore, 1, 1 );
 
@@ -817,6 +822,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     pSpaceGrid->addWidget( lAfter, 2, 0 );
 
     eAfter = new KDoubleNumInput( pSpaceFrame );
+    eAfter->setRange( 0 , 9999, 1, false);
     connect( eAfter, SIGNAL( valueChanged( double ) ), this, SLOT( afterChanged( double ) ) );
     pSpaceGrid->addWidget( eAfter, 2, 1 );
 
