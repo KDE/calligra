@@ -354,6 +354,8 @@ void KoStyleManager::deleteStyle() {
 
 void KoStyleManager::moveUpStyle()
 {
+    if ( m_currentStyle )
+        save();
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
     for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next(), ++pos )
@@ -384,6 +386,8 @@ void KoStyleManager::moveUpStyle()
 
 void KoStyleManager::moveDownStyle()
 {
+    if ( m_currentStyle )
+        save();
     unsigned int pos = 0;
     QString currentStyleName=m_stylesList->currentText ();
     for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next(), ++pos )
