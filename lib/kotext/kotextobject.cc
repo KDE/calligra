@@ -618,7 +618,7 @@ void KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newStyle,
             c1.setIndex( 0 );
             QTextCursor c2( textdoc );
             c2.setParag( lastParag );
-            c2.setIndex( lastParag->string()->length()-1 );
+            c2.setIndex( lastParag->string()->length() );
             undoRedoInfo.clear();
             undoRedoInfo.type = UndoRedoInfo::Invalid; // same trick
             readFormats( c1, c2 ); // gather char-format info but not paraglayouts nor customitems
