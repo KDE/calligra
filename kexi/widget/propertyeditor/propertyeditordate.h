@@ -38,7 +38,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDate : public KexiPropertySubEdito
 		PropertyEditorDate(QWidget *parent, KexiProperty *property, const char *name=0);
 		~PropertyEditorDate() {;}
 
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 
 	protected slots:
@@ -57,7 +57,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorTime : public KexiPropertySubEdito
 		PropertyEditorTime(QWidget *parent, KexiProperty *property, const char *name=0);
 		~PropertyEditorTime() {;}
 
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 
 	protected slots:
@@ -76,7 +76,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDateTime : public KexiPropertySubE
 		PropertyEditorDateTime(QWidget *parent, KexiProperty *property, const char *name=0);
 		~PropertyEditorDateTime() {;}
 
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 
 	protected slots:

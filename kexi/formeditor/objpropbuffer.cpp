@@ -39,7 +39,7 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(QObject *parent, const char *name)
 }
 
 void
-ObjectPropertyBuffer::changeProperty(const char *property, const QVariant &value)
+ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &value)
 {
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
 	KexiPropertyBuffer::changeProperty(property, value);
@@ -123,7 +123,7 @@ ObjectPropertyBuffer::setForm(Form *form)
 }
 
 bool
-ObjectPropertyBuffer::showProperty(QObject *obj, const char *property)
+ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 {
 	QWidget *w = (QWidget*)obj;
 	if(!isTopWidget(w))

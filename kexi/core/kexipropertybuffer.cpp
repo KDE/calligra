@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003   Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,29 +25,54 @@
 
 KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const QString &type_name)
  : QObject(parent, type_name.latin1())
-	,PropertyBuffer()
+	,QDict<KexiProperty>(101)
 	,m_typeName( type_name )
 {
-}
-
-void
-KexiPropertyBuffer::changeProperty(const char *property, const QVariant &value)
-{
-	kdDebug() << "KexiPropertyBuffer::changeProperty(): changing: " << property << endl;
-	
-	(*this)[property].setValue(value);
-	
-	emit propertyChanged(property, value);
-}
-
-void
-KexiPropertyBuffer::add(const KexiProperty &property)
-{
-	insert(property.name(), property);
+	setAutoDelete( true );
 }
 
 KexiPropertyBuffer::~KexiPropertyBuffer()
 {
 }
 
+void
+KexiPropertyBuffer::changeProperty(const QString &property, const QVariant &value)
+{
+	KexiProperty *prop = find(property);
+	if (!prop)
+		return;
+
+	kdDebug() << "KexiPropertyBuffer::changeProperty(): changing: " << property 
+		<< " from '" << prop->value().toString() << "' to '" 
+		<< value.toString() << "'" << endl;
+
+	if (prop->value() != value) {
+		prop->setValue(value);
+		emit propertyChanged(property, value);
+	}
+}
+
+void
+KexiPropertyBuffer::add(KexiProperty *property)
+{
+	insert(property->name(), property);
+	m_list.append( property );
+}
+
+void KexiPropertyBuffer::debug()
+{
+	kdDebug() << "KexiPropertyBuffer: typeName='" << m_typeName << "'" << endl;
+	if (isEmpty()) {
+		kdDebug() << "<EMPTY>" << endl;
+		return;
+	}
+	kdDebug() << count() << " properties:" << endl;
+
+	KexiProperty::ListIterator it(m_list);
+	for (;it.current();++it) {
+		it.current()->debug();
+	}
+}
+
 #include "kexipropertybuffer.moc"
+

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,12 +65,12 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 	Q_OBJECT
 
 	public:
-		/*! Creates an empty KexiPropertyEditor with \a parent as parent widget. If \a AutoSync == true,
+		/*! Creates an empty KexiPropertyEditor with \a parent as parent widget. If \a autoSync == true,
 		    properties values are automatically synced as soon as editor contents change (eg the user types text, etc.)
 		    and the values are written in the buffer. Otherwise, buffer is updated only when selected item changes 
 		    or user presses Enter key. Each property can overwrite this if its autoSync() == 0 or 1.
 		*/
-		KexiPropertyEditor(QWidget *parent=0, bool AutoSync=false, const char *name=0);
+		KexiPropertyEditor(QWidget *parent=0, bool autoSync=true, const char *name=0);
 		~KexiPropertyEditor();
 
 		/*! Reset the list, ie clears all items in the list.

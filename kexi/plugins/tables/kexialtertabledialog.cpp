@@ -94,21 +94,25 @@ void KexiAlterTableDialog::init()
 		QString typeName = "KexiDB::Field::" + field->typeGroupString();
 		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this, typeName);
 
-		KexiProperty prop("type", QVariant(field->type()), i18n("Type"));
-		prop.setVisible(false);
+		KexiProperty *prop = new KexiProperty("type", QVariant(field->type()), i18n("Type"));
+		prop->setVisible(false);
 		buff->add(prop);
 
-		const QStringList list = KexiDB::typeNamesForGroup(field->typeGroup());
-		if (list.count()>1) {//there are more than 1 type name
-			buff->add(KexiProperty("subType", QVariant(), list, i18n("Subtype")));
+		const QStringList slist = KexiDB::typeStringsForGroup(field->typeGroup());
+		const QStringList nlist = KexiDB::typeNamesForGroup(field->typeGroup());
+		kdDebug() << "KexiAlterTableDialog::init(): subType strings: " << 
+			slist.join("|") << "\nnames: " << nlist.join("|") << endl;
+		if (slist.count()>1) {//there is more than 1 type name
+			buff->add(new KexiProperty("subType", field->typeString(), slist, nlist, i18n("Subtype")));
 		}
 		
-		buff->add(KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
+		buff->add(new KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
 		int len = field->length();
 		if(len == 0)
 			len = field->precision();
 
-		buff->insert("len", KexiProperty("length", QVariant(200), i18n("Length")));
+		buff->add(new KexiProperty("length", (int)field->length()/*200?*/, i18n("Length")));
+
 		m_fields.insert(i, buff);
 	}
 
@@ -213,12 +217,13 @@ bool KexiAlterTableDialog::beforeSwitchTo(int)
 	int i=0;
 	for(KexiTableItem *it = data->first(); it; it = data->next())
 	{
-		if(!it->at(0).toString().isEmpty())
+		KexiProperty *prop = (*m_fields.at(i))["pkey"];
+		if (prop && !it->at(0).toString().isEmpty())
 		{
 			KexiDB::Field *f = new KexiDB::Field(nt);
 			f->setName(it->at(0).toString());
 			f->setType((KexiDB::Field::Type)it->at(1).toInt());
-			f->setPrimaryKey(m_fields.at(i)->find("pkey").data().value().toBool());
+			f->setPrimaryKey(prop->value().toBool());
 
 			nt->addField(f);
 		}

@@ -36,7 +36,7 @@ class KEXIPROPERTYEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		ObjectPropertyBuffer(QObject *parent, const char *name=0);
 		~ObjectPropertyBuffer();
 
-		void	changeProperty(const char *property, const QVariant &value);
+		void	changeProperty(const QString &property, const QVariant &value);
 		void	setObject(QObject *obj);
 		void	setList(KexiPropertyEditor *list);
 		void    setForm(Form *form);
@@ -44,12 +44,12 @@ class KEXIPROPERTYEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void    checkModifiedProp();
 		
 	signals:
-		void	nameChanged(const char *oldname, const QString &newname);
-		void	propertyChanged(QObject *, const char *property, const QVariant &v);
+		void	nameChanged(const QString &oldname, const QString &newname);
+		void	propertyChanged(QObject *, const QString &property, const QVariant &v);
 
 	protected:
 		bool    isTopWidget(QWidget *w);
-		bool    showProperty(QObject *obj, const char *property);
+		bool    showProperty(QObject *obj, const QString &property);
 	
 	private:
 		QObject		*m_object;

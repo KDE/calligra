@@ -62,7 +62,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEdito
 		PropertyEditorList(QWidget *parent, KexiProperty *property, const char *name=0);
 		~PropertyEditorList() {;}
 
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 		
 		void setList(QStringList l);
@@ -82,7 +82,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorMultiList : public KexiPropertySub
 		PropertyEditorMultiList(QWidget *parent, KexiProperty *property, const char *name=0);
 		~PropertyEditorMultiList() {;}
 
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 		
 		void setList(QStringList l);
@@ -102,7 +102,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorCursor : public PropertyEditorList
 		PropertyEditorCursor(QWidget *parent, KexiProperty *property, const char *name=0);
 		~PropertyEditorCursor() {;}
 
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 };
 

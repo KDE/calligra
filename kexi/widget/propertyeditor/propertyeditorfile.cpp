@@ -54,7 +54,7 @@ PropertyEditorFile::PropertyEditorFile(QWidget *parent, KexiProperty *property, 
 }
 
 QVariant
-PropertyEditorFile::getValue()
+PropertyEditorFile::value()
 {
 	return QVariant(m_url.path());
 }
@@ -171,7 +171,7 @@ PropertyEditorPixmap::eventFilter(QObject *o, QEvent *ev)
 }
 
 QVariant
-PropertyEditorPixmap::getValue()
+PropertyEditorPixmap::value()
 {
 	return *(m_label->pixmap());
 }

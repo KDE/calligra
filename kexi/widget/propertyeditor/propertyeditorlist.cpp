@@ -134,12 +134,16 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 	m_combo->setEditable(true);
 	m_combo->setInsertionPolicy(QComboBox::NoInsertion);
 	m_combo->setAutoCompletion(true);
-	if(property->list())
+	if(m_property->names() && m_property->keys())
 	{
-		m_combo->insertStringList(*(property->list()));
-		m_combo->setCurrentText(property->value().asString());
-		KCompletion *comp = m_combo->completionObject();
-		comp->insertItems(*(property->list()));
+		m_combo->insertStringList(*(m_property->names()));
+		int idx = m_property->keys()->findIndex( property->value().asString() );
+		if (idx>=0) {
+//			m_combo->setCurrentText(property->value().asString());
+			m_combo->setCurrentItem(idx);
+			KCompletion *comp = m_combo->completionObject();
+			comp->insertItems(*(m_property->names()));
+		}
 	}
 	m_combo->show();
 
@@ -148,9 +152,15 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 }
 
 QVariant
-PropertyEditorList::getValue()
+PropertyEditorList::value()
 {
-	return QVariant(m_combo->currentText());
+	if (!m_property->keys() || !m_property->names())
+		return QVariant();
+	int idx = m_combo->currentItem();
+	if (idx<0)
+		return QVariant();
+	return QVariant( (*m_property->keys())[idx] );
+//	return QVariant(m_combo->currentText());
 }
 
 void
@@ -182,13 +192,23 @@ PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, KexiProperty *
 	m_combo->setGeometry(frameGeometry());
 	m_combo->setInsertionPolicy(QComboBox::NoInsertion);
 	m_combo->setAutoCompletion(true);
-	if(property->list())
+//	if(property->list())
+	if(m_property->names() && m_property->keys())
 	{
+		m_combo->insertStringList(*(m_property->names()));
+		int idx = m_property->keys()->findIndex( property->value().asString() );
+		if (idx>=0) {
+			m_combo->setCurrentItem(idx);
+			KCompletion *comp = m_combo->completionObject();
+			comp->insertItems(*(m_property->names()));
+//js TODO
+		}
+/*original code:
 		m_combo->insertStringList(*(property->list()));
 		m_combo->setSelected(property->value().asStringList());
 		m_combo->setEditText(property->value().toStringList().join("|"));
 		KCompletion *comp = m_combo->completionObject();
-		comp->insertItems(*(property->list()));
+		comp->insertItems(*(property->list()));*/
 	}
 	m_combo->show();
 
@@ -197,7 +217,7 @@ PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, KexiProperty *
 }
 
 QVariant
-PropertyEditorMultiList::getValue()
+PropertyEditorMultiList::value()
 {
 	return QVariant(m_combo->getSelected());
 }
@@ -249,7 +269,7 @@ PropertyEditorCursor::PropertyEditorCursor(QWidget *parent, KexiProperty *proper
 }
 
 QVariant
-PropertyEditorCursor::getValue()
+PropertyEditorCursor::value()
 {
 	return QCursor(m_combo->currentItem());
 }

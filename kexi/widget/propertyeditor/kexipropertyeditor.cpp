@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,7 +39,7 @@
 #include "kexipropertyeditor.h"
 
 
-KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool AutoSync, const char *name)
+KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const char *name)
  : KListView(parent, name)
 {
 	addColumn(i18n("Property"), 145);
@@ -47,7 +48,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool AutoSync, const cha
 	m_buffer = 0;
 	m_topItem = 0;
 	m_editItem = 0;
-	m_sync = AutoSync;
+	m_sync = autoSync;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
@@ -101,7 +102,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 		case QVariant::CString:
 			editor = new PropertyEditorInput(viewport(), i->property());
 			break;
-   
+
 		case QVariant::Int:
 			editor = new PropertyEditorSpin(viewport(), i->property());
 			break;
@@ -192,54 +193,61 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 {
 	if(m_currentEditor)
 	{
-		QVariant value = m_currentEditor->getValue();
-		m_editItem->setValue(value);
+		QVariant value = m_currentEditor->value();
+//js: not needed		m_editItem->setValue(value);
 		bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ? 
 		         m_sync : (bool)m_editItem->property()->autoSync();
 		if(m_buffer && sync)
 		{
-			if(m_editItem->depth()==1) {
+			m_buffer->changeProperty(m_editItem->name(), value);//getComposedValue());
+/*			if(m_editItem->depth()==1) {
 				m_buffer->changeProperty(m_editItem->name().latin1(), value);
 			}
 			else if(m_editItem->depth()==2)
 			{
 				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
-				m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
-			}
+//js: TODO				m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
+			}*/
 		}
 		else
 		{
 			if(m_editItem->depth()==2)
 			{
 				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
-				parent->getComposedValue();
+//js: TODO				parent->getComposedValue();
 			}
 		}
-		emit valueChanged(m_editItem->text(0), value);
+		m_editItem->updateValue();
+		emit valueChanged(m_editItem->name(), value);
 	}
 }
 
 void
 KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
 {
+	kdDebug() << "KexiPropertyEditor::slotEditorAccept" << endl;
+
 	if(m_currentEditor)
 	{
-		QVariant value = m_currentEditor->getValue();
-		m_editItem->setValue(value);
+		QVariant value = m_currentEditor->value();
+//js: not needed		m_editItem->setValue(value);
 		if(m_buffer)
 		{
-			if(m_editItem->depth()==1) {
+			m_buffer->debug();
+			m_buffer->changeProperty(m_editItem->name(), value);//getComposedValue());
+/*			if(m_editItem->depth()==1) {
 				m_buffer->changeProperty(m_editItem->name().latin1(), value);
 			}
 			else if(m_editItem->depth()==2)
 			{
 				KexiPropertyEditorItem *parent = static_cast<KexiPropertyEditorItem*>(m_editItem->parent());
-				m_buffer->changeProperty(parent->name().latin1(), parent->getComposedValue());
-			}
+				m_buffer->changeProperty(parent->name(), parent->value());//getComposedValue());
+			}*/
 		}
 //		m_currentEditor->hide();
 //		m_currentEditor->clearFocus();
-		emit valueChanged(m_editItem->text(0), value);
+		m_editItem->updateValue();
+		emit valueChanged(m_editItem->name(), value); //todo: only when changed
 	}
 }
 
@@ -252,14 +260,15 @@ KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor *editor)
 		         m_sync : (bool)m_editItem->property()->autoSync();
 		if(!sync)
 		{
-			m_editItem->setValue(m_editItem->property()->value());
+			//js: not needed m_editItem->setValue(m_editItem->property()->value());
 			m_currentEditor->setValue(m_editItem->property()->value());
 		}
 		else
 		{
-			m_editItem->setValue(m_editItem->oldValue());
-			m_currentEditor->setValue(m_editItem->oldValue());
+			//js: not needed m_editItem->setValue(m_editItem->oldValue());
+			m_currentEditor->setValue(m_editItem->property()->oldValue());
 		}
+		m_editItem->updateValue();
 	}
 //	editor->hide();
 //	editor->setFocusPolicy(QWidget::NoFocus);
@@ -337,16 +346,18 @@ KexiPropertyEditor::fill()
 	if (!m_buffer)
 		return;
 
-	KexiPropertyBuffer::Iterator it;
+	KexiProperty::ListIterator it(*m_buffer->list());
 	
 	if(!m_topItem)
 	{
 		m_topItem = new KexiPropertyEditorItem(this,"Top Item");
 	}
 	
-	for(it = m_buffer->begin(); it != m_buffer->end(); ++it)
+	for(;it.current(); ++it)
 	{
-		new KexiPropertyEditorItem(m_topItem, &(it.data()) );
+		if (it.current()->isVisible()) {
+			new KexiPropertyEditorItem(m_topItem, it.current());
+		}
 	}
 }
 
@@ -355,10 +366,13 @@ KexiPropertyEditor::resetItem()
 {
 	if(m_editItem)
 	{
-		if(m_currentEditor)
-			m_currentEditor->setValue(m_editItem->oldValue());
-		else
-			m_editItem->setValue(m_editItem->oldValue());
+		if(m_currentEditor) {
+			m_currentEditor->setValue(m_editItem->property()->oldValue());
+		}
+
+		m_editItem->property()->setValue( m_editItem->property()->oldValue(), false );
+//js: not needed		else
+//js: not needed			m_editItem->setValue(m_editItem->property()->oldValue());
 	}
 }
 

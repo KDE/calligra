@@ -272,9 +272,9 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
  * e.g. bool editor: toggle true/false,
  * enum editor: select next value (circularly),
  * fire selection dialog for filename editor, color editor, pixmap editor, etc.
- * expand childred for cells of type like "Rect"
+ * expand children for cells of type like "Rect"
  * other types- by default: just move cursor to editor
-
+-add subproperties for KexiProperty, (usable for eg. type of Rect), and a pointer to parent property
 
 Detailed TODO for Beta3:
 1. Finish Startup Framework (see above: MOST RECENT TODO)
@@ -305,6 +305,16 @@ Detailed TODO for Beta3:
 -add "key" information icon @ the left hand of line with primary key(s)
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
 -KexiProperty: make it really shared (using QShared?)
+
+2004-02-17
+- KexiDB::typeStringsForGroup() ustility function added
+- KexiDB::Field: array of field type names fixed
+Kexi Property Framework improved:
+- properties can be nested, e.g. for Rect type there are automatically 
+   created two properties: x and y
+- pointer to a parent property is kept, if present
+- all data is stored in KexiProperty and KexiPropertyBuffer, not just in GUI objects
+
 
 2004-02-12
 - typeName() added to KexiPropertyBuffer

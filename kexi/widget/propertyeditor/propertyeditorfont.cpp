@@ -55,7 +55,7 @@ PropertyEditorFont::PropertyEditorFont(QWidget *parent, KexiProperty *property, 
 }
 
 QVariant
-PropertyEditorFont::getValue()
+PropertyEditorFont::value()
 {
 	return QVariant(m_font);
 }
@@ -117,7 +117,7 @@ PropertyEditorColor::PropertyEditorColor(QWidget *parent, KexiProperty *property
 
  
  QVariant
-PropertyEditorColor::getValue()
+PropertyEditorColor::value()
 {
 	return m_button->color();
 }

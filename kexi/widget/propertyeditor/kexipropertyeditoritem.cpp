@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +36,7 @@
 
 // Helper class for QSizePolicy Editor
 
-class KEXIPROPERTYEDITOR_EXPORT spHelper
+class spHelper
 {
 	public:
 	spHelper() {;}
@@ -111,27 +112,49 @@ valueToCursorName(int shape)
 	}
 }
 
-// KexiPropertyEditorItem
+// ======== KexiPropertyEditorItem ============================
 
 KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property)
- : KListViewItem(parent, property->desc(), format(property->value()))
+ : KListViewItem(parent, property->desc().isEmpty() ? property->name() : property->desc()
+	, format(property->value()))
 {
-	m_value = property->value();
-	m_oldvalue = m_value;
+//	m_value = property->value();
+//	m_oldvalue = m_value;
 	m_property=property;
-	m_childprop = 0;
-	m_children = 0;
-	
+//	m_childprop = 0;
+
+	//add children
+	KexiProperty::List *children = m_property->children();
+	if (children) {
+		m_children = new ChildDict();
+		KexiProperty::ListIterator it(*children);
+		for (;it.current();++it) {
+			m_children->insert( it.current()->name(), new KexiPropertyEditorItem(this, it.current()) );
+		}
+	}
+	else {
+		m_children = 0;
+	}
+
+#if 0
 	switch(property->type())
 	{
 		case QVariant::Size:
 		{
-			m_childprop = new QPtrList<KexiProperty>();
+			//m_childprop = new QPtrList<KexiProperty>();
 			QSize s = m_value.toSize();
-			KexiProperty *width = new KexiProperty(i18n("width"), s.width() );
-			m_childprop->append(width);
-			KexiProperty *height = new KexiProperty(i18n("height"), s.height() );
-			m_childprop->append(height);
+			if (!children())
+				return;
+			createChildItem("width");
+			createChildItem("height");
+
+			m_children->insert("width", new KexiPropertyEditorItem(this, width));
+			m_children->insert("height", new KexiPropertyEditorItem(this, height));
+			children()->at("width")
+//			KexiProperty *width = new KexiProperty("width", s.width(), i18n("width") );
+//			m_childprop->append(width);
+//			KexiProperty *height = new KexiProperty("height", s.height(), i18n("height") );
+//			m_childprop->append(height);
 			
 			m_children = new ChildDict();
 			m_children->insert("width", new KexiPropertyEditorItem(this, width));
@@ -209,30 +232,39 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, K
 			return;
 		}
 	}
-	
-	m_childprop->setAutoDelete(true);
+
+#endif
+//	m_childprop->setAutoDelete(true);
+	updateValue();
 }
 
 KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, const QString &text)
  : KListViewItem(parent, text, "")
 {
-	m_value = "";
+//	m_value = "";
 	m_property= new KexiProperty();
-	m_oldvalue=m_value;
-	m_childprop = 0;
+//	m_oldvalue=m_value;
+//	m_childprop = 0;
 	m_children = 0;
 	setSelectable(false);
 	setOpen(true);
 }
 
+/*KexiPropertyEditorItem* KexiPropertyEditorItem::createChildItem(const QString& name)
+{
+	KexiProperty *childProp = m_property->child(name);
+	if (!childProp)
+		return 0;
+	return new KexiPropertyEditorItem(this, childProp);
+}*/
 
-void
+/*void
 KexiPropertyEditorItem::setValue(QVariant value)
 {
 	setText(1, format(value));
 	m_value = value;
 }
-
+*/
 
 void
 KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align)
@@ -241,7 +273,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 	
 	if(column == 1)
 	{
-		switch(m_value.type())
+		switch(m_property->type())
 		{
 			case QVariant::Pixmap:
 			{
@@ -252,7 +284,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 			case QVariant::Color:
 			{
 				p->fillRect(0,0,width,height(), QBrush(backgroundColor()));
-				QColor ncolor = m_value.toColor();
+				QColor ncolor = m_property->value().toColor();
 				p->setBrush(ncolor);
 				p->drawRect(margin, margin, width - 2*margin, height() - 2*margin);
 				QColorGroup nGroup(cg);
@@ -261,7 +293,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 			case QVariant::Bool:
 			{
 				p->fillRect(0,0,width,height(), QBrush(backgroundColor()));
-				if(m_value.toBool())
+				if(m_property->value().toBool())
 				{
 					p->drawPixmap(margin, height()/2 -8, SmallIcon("button_ok"));
 					p->drawText(QRect(margin+20,0,width,height()-1), Qt::AlignVCenter, i18n("Yes"));
@@ -305,7 +337,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, text(0));
 		p->restore();
 		
-		p->setPen( QColor(200,200,200) ); //like in t.v.
+		p->setPen( QColor(200,200,200) ); //like in table view
 		p->drawLine(width-1, 0, width-1, height()-1);
 	}
 	
@@ -421,6 +453,7 @@ KexiPropertyEditorItem::format(const QVariant &v)
 	}
 }
 
+#if 0
 QVariant
 KexiPropertyEditorItem::getComposedValue()
 {
@@ -430,11 +463,11 @@ KexiPropertyEditorItem::getComposedValue()
 		{
 			QSize s;
 			QVariant v;
-			v = (*m_children)["width"]->value();
+			v = (*m_children)["width"]->property()->value();
 			s.setWidth(v.toInt());
 			(*m_children)["width"]->property()->setValue(v.toInt());
 			
-			v = (*m_children)["height"]->value();
+			v = (*m_children)["height"]->property()->value();
 			s.setHeight(v.toInt());
 			(*m_children)["height"]->property()->setValue(v.toInt());
 			
@@ -510,7 +543,9 @@ KexiPropertyEditorItem::getComposedValue()
 	
 	}
 }
+#endif
 
+/* let's move this to KexiProperty?
 void
 KexiPropertyEditorItem::updateChildValue()
 {
@@ -526,7 +561,7 @@ KexiPropertyEditorItem::updateChildValue()
 		(*m_children)["height"]->property()->setValue(r.height());
 		(*m_children)["height"]->setValue(r.height());
 	}
-}
+}*/
 
 KexiPropertyEditorItem::~KexiPropertyEditorItem()
 {
@@ -537,12 +572,17 @@ KexiPropertyEditorItem::~KexiPropertyEditorItem()
 		case QVariant::Size:
 		case QVariant::SizePolicy:
 		{
-			delete m_childprop;
-			delete m_children;
+//			delete m_childprop;
+//			delete m_children;
 		}
 		default:
 		{
 			return;
 		}
 	}
+}
+
+void KexiPropertyEditorItem::updateValue()
+{
+	setText( 1, format( m_property->valueText() ) );
 }

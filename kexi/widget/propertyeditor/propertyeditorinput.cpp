@@ -51,7 +51,7 @@ PropertyEditorInput::slotTextChanged(const QString &text)
 }
 
 QVariant
-PropertyEditorInput::getValue()
+PropertyEditorInput::value()
 {
 	return QVariant(m_lineedit->text());
 }
@@ -103,7 +103,7 @@ PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, KexiProperty *property, 
 }
 
 QVariant
-PropertyEditorSpin::getValue()
+PropertyEditorSpin::value()
 {
 	return QVariant(m_spinBox->value());
 }
@@ -160,7 +160,7 @@ PropertyEditorDblSpin::PropertyEditorDblSpin(QWidget *parent, KexiProperty *prop
 }
 
 QVariant
-PropertyEditorDblSpin::getValue()
+PropertyEditorDblSpin::value()
 {
 	return QVariant(m_spinBox->value());
 }
@@ -205,7 +205,7 @@ PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, 
 }
 
 QVariant
-PropertyEditorBool::getValue()
+PropertyEditorBool::value()
 {
 	return QVariant(m_toggle->isOn(), 3);
 }

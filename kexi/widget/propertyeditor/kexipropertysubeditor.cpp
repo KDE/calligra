@@ -26,6 +26,7 @@ KexiPropertySubEditor::KexiPropertySubEditor(QWidget *parent, KexiProperty *prop
  : QWidget(parent, name)
 {
 	m_childWidget = 0;
+	m_property = property;
 }
 
 bool
@@ -82,7 +83,7 @@ KexiPropertySubEditor::setWidget(QWidget *w)
 }
 
 QVariant
-KexiPropertySubEditor::getValue()
+KexiPropertySubEditor::value()
 {
 	return QVariant("");
 }

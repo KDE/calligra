@@ -37,7 +37,7 @@ PropertyEditorDate::PropertyEditorDate(QWidget *parent, KexiProperty *property, 
 }
 
 QVariant
-PropertyEditorDate::getValue()
+PropertyEditorDate::value()
 {
 	return QVariant(m_dateedit->date());
 }
@@ -68,7 +68,7 @@ PropertyEditorTime::PropertyEditorTime(QWidget *parent, KexiProperty *property, 
 }
 
 QVariant
-PropertyEditorTime::getValue()
+PropertyEditorTime::value()
 {
 	return QVariant(m_timeedit->time());
 }
@@ -100,7 +100,7 @@ PropertyEditorDateTime::PropertyEditorDateTime(QWidget *parent, KexiProperty *pr
 }
 
 QVariant
-PropertyEditorDateTime::getValue()
+PropertyEditorDateTime::value()
 {
 	return QVariant(m_datetime->dateTime());
 }

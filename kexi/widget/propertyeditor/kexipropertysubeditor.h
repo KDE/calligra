@@ -35,7 +35,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 		~KexiPropertySubEditor();
 
 		virtual bool		eventFilter(QObject* watched, QEvent* e);
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual void		setValue(const QVariant &value);
 
 		//! Sets \a w as editor 's widget, ie the widget which events are filtered and which is resized.
@@ -52,8 +52,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 	protected:
 		virtual void		resizeEvent(QResizeEvent *ev);
 
-	private:
-		QWidget			*m_childWidget;
+		KexiProperty *m_property;
+		QWidget *m_childWidget;
 };
 
 #endif

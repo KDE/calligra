@@ -21,30 +21,34 @@ test::test()
 {
     setXMLFile("testui.rc");
 
-	m_buffer = new KexiPropertyBuffer(this);
-	m_buffer->insert("Name", KexiProperty("Name", "Name"));
-	(*m_buffer)["Name"].setAutoSync(1);
+	m_buffer = new KexiPropertyBuffer(this, "test");
+	m_buffer->add(new KexiProperty("Name", "Name"));
+	(*m_buffer)["Name"]->setAutoSync(1);
 	
-	m_buffer->insert("Int", KexiProperty("Int", 2));
-	m_buffer->insert("Double", KexiProperty("Double", 3.1415));
-	m_buffer->insert("Rect", KexiProperty("Rect", this->geometry()));
-	m_buffer->insert("Color", KexiProperty("Color", this->paletteBackgroundColor()));
+	m_buffer->add(new KexiProperty("Int", 2, "Int"));
+	m_buffer->add(new KexiProperty("Double", 3.1415,"Double"));
+	m_buffer->add(new KexiProperty("Rect", this->geometry(),"Rect"));
+	m_buffer->add(new KexiProperty("Color", this->paletteBackgroundColor(),"Color"));
 	const QPixmap *pix = this->icon();
-	m_buffer->insert("pixmap", KexiProperty("pixmap", *pix) );
-	m_buffer->insert("font", KexiProperty("font", this->font()) );
+	m_buffer->add(new KexiProperty("Pixmap", *pix,"Pixmap") );
+	m_buffer->add(new KexiProperty("Font", this->font(),"Font") );
 	
-	QStringList list;
-	list.append("MyItem");
-	list.append("OtherItem");
-	list.append("Item");
-	m_buffer->insert("list", KexiProperty("list","Item 1" , list));
+	QStringList list;//keys
+	list.append("myitem");
+	list.append("otheritem");
+	list.append("item");
+	QStringList name_list;
+	name_list.append("My Item");
+	name_list.append("Other Item");
+	name_list.append("Item");
+	m_buffer->add(new KexiProperty("List", "myitem", list, name_list, "List"));
 	
 	bool boolean=false;
-	m_buffer->insert("bool", KexiProperty("bool", QVariant(boolean, 4)));
+	m_buffer->add(new KexiProperty("Bool", QVariant(boolean, 4), "Bool"));
 	
-	m_buffer->insert("date", KexiProperty("date", QDate::currentDate()));
-	m_buffer->insert("time", KexiProperty("time", QTime::currentTime()));
-	m_buffer->insert("datetime", KexiProperty("datetime", QDateTime::currentDateTime()));
+	m_buffer->add(new KexiProperty("Date", QDate::currentDate(),"Date"));
+	m_buffer->add(new KexiProperty("Time", QTime::currentTime(),"Time"));
+	m_buffer->add(new KexiProperty("DateTime", QDateTime::currentDateTime(),"DateTime"));
 	
 	KexiPropertyEditor *edit = new KexiPropertyEditor(this,false);
 	setCentralWidget(edit);

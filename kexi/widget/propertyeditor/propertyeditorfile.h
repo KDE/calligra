@@ -37,7 +37,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEdito
 		PropertyEditorFile(QWidget *parent, KexiProperty *property, const char *name=0);
 		~PropertyEditorFile() {;}
 
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 		
 		void setFilter(QString filter, bool add);
@@ -63,7 +63,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorPixmap : public KexiPropertySubEdi
 		PropertyEditorPixmap(QWidget *parent, KexiProperty *property, const char *name=0);
 		~PropertyEditorPixmap();
 
-		virtual QVariant	getValue();
+		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
 		virtual bool		eventFilter(QObject *o, QEvent *e);
 		void			resizeEvent(QResizeEvent *ev);

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +34,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin)
 	setIcon(*mainWin->icon());
 
 	QHBoxLayout *lyr = new QHBoxLayout(this);
-	m_editor = new KexiPropertyEditor(this, false /*AutoSync*/, "propeditor");
+	m_editor = new KexiPropertyEditor(this, true /*AutoSync*/, "propeditor");
 	lyr->addWidget(m_editor);
 	setFocusProxy(m_editor);
 }

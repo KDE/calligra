@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004   Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 #define KEXIPROPERTY_H
 
 #include <qvariant.h>
+#include <qdict.h>
 
 class QObject;
 class QString;
@@ -48,6 +50,11 @@ class QStringList;
 class KEXICORE_EXPORT KexiProperty
 {
 	public:
+		typedef QDict<KexiProperty> Dict;
+		typedef QPtrList<KexiProperty> List;
+		typedef QPtrListIterator<KexiProperty> ListIterator;
+//		typedef QMap<QString,KexiProperty> Map;
+
 //		/*! Creates a simple property with \a name as name and \a value as value. */
 //		KexiProperty(const QString &name, QVariant value);
 
@@ -56,10 +63,13 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty(const QString &name, QVariant value, const QString &desc = QString::null);
 
 		/*! Creates a list property with \a name as name, \a value as value 
-		  and \a list as the list of all possible values for \a value.
-		  The user will be able to choose a value in \a list.
+		  and \a key_list as the list of all possible keys. Value must be one of the keys.
+		  \a name_list is a list of i18n'ed names that will be visible ont he screen,
+		  instead of keys.
+		  The user will be able to choose a value from \a key_list.
 		*/
-		KexiProperty(const QString &name, QVariant value, const QStringList &list, 
+		KexiProperty(const QString &name, const QString &value, 
+		 const QStringList &key_list, const QStringList &name_list, 
 		 const QString &desc = QString::null);
 
 		//! Copy constructor.
@@ -72,14 +82,40 @@ class KEXICORE_EXPORT KexiProperty
 		
 		const KexiProperty& operator=(const KexiProperty &property);
 
+		/*! Adds \a prop as a child of this property. 
+		 The children will be owned by this property */
+		void addChild(KexiProperty *prop);
+
+		/*! \return parent for this property or NULL if this property has not parent.
+		 Properies that have parents, are called subproperties. For example property of type
+		 "Rectangle" has 4 subproperties: x, y, width, height. 
+		 Any change made to any subproperty is transferred to its parent property (if present),
+		 So both property and its parent becomes changed. */
+		KexiProperty *parent() const;
+
+		/*! \return a map of all children for this property, or NULL of there 
+		 is no children for this property */
+		KexiProperty::List* children() const { return m_children_list; }
+
+		/*! \return a child property for \a name, or NULL if there is not property with that name. */
+		KexiProperty *child(const QString& name);
+
 		//! \return property name.
 		QString		name() const { return m_name; }
+
 		//! \return property value.
-		QVariant	value() const { return m_value; }
+		QVariant	value() const;
+
+		/*! \return property value converted to text that can be displayed.
+		 If this is a list property, name for currently selected key (value) is returned,
+		  otherwise value (converted to text) is just returned. */
+		QString valueText() const;
+
 		/*! Sets this property value to a new value \a v. If this is a first change, 
 		 and \a saveOldValue is true, an old value is saved, and can be later retrieved
 		 using oldValue(). If \a saveOldValue if false, old value is cleared and the 
 		 property looks loke it was not changed.
+		 It the property has a parent property, the parent has set "changed" flag when needed.
 		*/
 		void setValue(const QVariant &v, bool saveOldValue = true);
 
@@ -87,12 +123,24 @@ class KEXICORE_EXPORT KexiProperty
 		 The old value is saved on first change.
 		*/
 		QVariant	oldValue() const { return m_oldValue; }
+
 		//! \return property i18n'ed description.
 		QString		desc() const { return m_desc; }
+
 		/*! \return the QVariant::Type of property value and QVariant::StringList if this is a list property. */
 		QVariant::Type  type() const;
-		/*! \return a pointer to the QStringList containing all possible values for this property. */
-		QStringList*	list() const{ return m_list;}
+
+		/*! \return a pointer to the string list containing all possible keys for this property
+		 or NULL if this is not a property of type stringlist. The values in this list are ordered, 
+		 so the first key element is associated with first element from the list returned by 
+		 KexiProperty::names(), and so on. */
+		QStringList* keys() const;
+
+		/*! \return a pointer to the string list containing all possible i18n'd names for this property
+		 or NULL if this is not a property of type stringlist. 
+		 @sa keys() */
+		QStringList* names() const;
+
 		/*! \return 1 if the property should be synced automatically in Property Editor 
 		  as soon as editor contents change (e.g. when the user types text). If autoSync() == 0, property value 
 		  will be updated when the user presses Enter or when another editor gets the focus.
@@ -107,23 +155,40 @@ class KEXICORE_EXPORT KexiProperty
 		void setAutoSync(int sync) { m_autosync = sync; }
 
 		//! \return true is this preperty value is changed. 
-		bool changed() const { return m_changed; }
+		bool changed() const;
+
 		/*! Marks this property as changed if \a set is true, or unchanged if \a set is true. */
 		void setChanged(bool set);
 
 		/*! \return visiblility of this property. Property can be hidden, what can usually mean that 
-		 it wont be available to the GUI (or scripting). After construction, property is visible. */
-		bool isVisible( bool v ) const { return m_visible; }
+		 it wont be available to the GUI (or scripting). After construction, property is visible. 
+		 Parent property's visibility has a priority over visiblitity of this property. */
+		bool isVisible() const;
 
-		/*! Sets visiblility of this property to \a v. */
+		/*! Sets visiblility of this property to \a v. \sa isVisible() */
 		void setVisible( bool v ) { m_visible=v; }
+
+		void debug();
+	protected:
+		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue), 
+		 but \a v is set for the child named \a childName. */
+		void setValue(const QString& childName, const QVariant &v, bool saveOldValue = true);
+
 	private:
+		void init(QVariant value);
+
 		QString		m_name;
 		QString		m_desc;
 		QVariant	m_value;
 		QVariant	m_oldValue;
-		QStringList	*m_list;
-		int		m_autosync;
+		class KexiPropertyListData;
+		KexiPropertyListData *m_list;
+//		QMap<QString,QString> *m_list;
+		KexiProperty* m_parent;
+		KexiProperty::Dict* m_children_dict;
+		KexiProperty::List* m_children_list;
+
+		int m_autosync;
 		bool m_changed : 1;
 		bool m_visible : 1;
 };
