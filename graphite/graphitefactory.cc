@@ -47,7 +47,7 @@ GraphiteFactory::~GraphiteFactory() {
     s_global=0;
 }
 
-KParts::Part* GraphiteFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & ) {
+KParts::Part* GraphiteFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & ) {
 
     bool bWantKoDocument=(strcmp(classname, "KoDocument")==0);
 
@@ -56,7 +56,6 @@ KParts::Part* GraphiteFactory::createPart( QWidget *parentWidget, const char *wi
     if (!bWantKoDocument)
         part->setReadWrite(false);
 
-    emit objectCreated(part);
     return part;
 }
 

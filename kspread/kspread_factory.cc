@@ -61,7 +61,7 @@ KSpreadFactory::~KSpreadFactory()
   s_dcopObject = 0L;
 }
 
-KParts::Part* KSpreadFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KSpreadFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
   bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
@@ -70,7 +70,6 @@ KParts::Part* KSpreadFactory::createPart( QWidget *parentWidget, const char *wid
   if ( !bWantKoDocument )
     doc->setReadWrite( false );
 
-  emit objectCreated( doc );
   return doc;
 }
 

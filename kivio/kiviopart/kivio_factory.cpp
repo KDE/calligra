@@ -58,7 +58,7 @@ KivioFactory::~KivioFactory()
   }
 }
 
-KParts::Part* KivioFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KivioFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
   bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
@@ -67,7 +67,6 @@ KParts::Part* KivioFactory::createPart( QWidget *parentWidget, const char *widge
   if ( !bWantKoDocument )
     doc->setReadWrite( false );
 
-  emit objectCreated( doc );
   return doc;
 }
 

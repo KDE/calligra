@@ -58,7 +58,7 @@ KWFactory::~KWFactory()
     s_global=0L;
 }
 
-KParts::Part* KWFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KWFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
@@ -67,7 +67,6 @@ KParts::Part* KWFactory::createPart( QWidget *parentWidget, const char *widgetNa
     if ( !bWantKoDocument )
       doc->setReadWrite( false );
 
-    emit objectCreated(doc);
     return doc;
 }
 

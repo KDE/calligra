@@ -35,7 +35,7 @@ public:
     KisFactory( QObject* parent = 0, const char* name = 0 );
     ~KisFactory();
 
-    virtual KParts::Part *createPart( 
+    virtual KParts::Part *createPartObject( 
         QWidget *parentWidget = 0, 
         const char *widgetName = 0, 
         QObject *parent = 0, 

@@ -31,7 +31,7 @@ public:
     KWFactory( QObject* parent = 0, const char* name = 0 );
     ~KWFactory();
 
-    virtual KParts::Part* createPart( QWidget * = 0, const char * = 0, QObject* parent = 0, const char* name = 0, const char* classname = "KoDocument", const QStringList &args = QStringList() );
+    virtual KParts::Part* createPartObject( QWidget * = 0, const char * = 0, QObject* parent = 0, const char* name = 0, const char* classname = "KoDocument", const QStringList &args = QStringList() );
 
     static KInstance* global();
 

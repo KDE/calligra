@@ -76,7 +76,7 @@ KisFactory::~KisFactory()
     Create the document
 */
 
-KParts::Part* KisFactory::createPart( QWidget *parentWidget,
+KParts::Part* KisFactory::createPartObject( QWidget *parentWidget,
     const char *widgetName, QObject* parent,
     const char* name, const char* classname, const QStringList & )
 {
@@ -88,7 +88,6 @@ KParts::Part* KisFactory::createPart( QWidget *parentWidget,
     if ( !bWantKoDocument )
         doc->setReadWrite( false );
 
-    emit objectCreated(doc);
     return doc;
 }
 
