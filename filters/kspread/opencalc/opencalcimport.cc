@@ -768,7 +768,6 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, KSpreadSheet * tab
   kdDebug() << endl << "Reading in rows " << endl;
 
   int i   = 1;
-  int j   = 1;
   int row = 1;
   int columns = 1;
   int backupRow = 1;
@@ -1732,7 +1731,13 @@ void OpenCalcImport::loadBorder( KSpreadFormat * layout, QString const & borderD
     layout->setRightBorderPen( pen );
   else if ( pos == Bottom )
     layout->setBottomBorderPen( pen );
-
+  else if ( pos == Border )
+  {
+    layout->setLeftBorderPen( pen );
+    layout->setTopBorderPen( pen );
+    layout->setRightBorderPen( pen );
+    layout->setBottomBorderPen( pen );
+  }
   // TODO Diagonals
 }
 
@@ -1842,6 +1847,12 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
   if ( property.hasAttribute( "fo:border-left" ) )
   {
     loadBorder( layout, property.attribute( "fo:border-left" ), Left );
+    // TODO: style:border-line-width-left
+  }
+
+  if ( property.hasAttribute( "fo:border" ) )
+  {
+    loadBorder( layout, property.attribute( "fo:border" ), Border );
     // TODO: style:border-line-width-left
   }
 }

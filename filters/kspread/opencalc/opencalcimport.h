@@ -55,7 +55,7 @@ class OpenCalcImport : public KoFilter
     bool    isRange;
   };
 
-  enum bPos { Left, Top, Right, Bottom, Fall, GoUp };
+  enum bPos { Left, Top, Right, Bottom, Fall, GoUp, Border };
 
   KSpreadDoc *    m_doc;
   KSpreadFormat * m_defaultLayout;
