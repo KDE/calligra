@@ -2163,12 +2163,12 @@ bool XMLTree::_vcenter(Q_UINT32, QDataStream &body)
     
     if(vcenter)
     {
-	// FIXME: Add functionality to ksprad
+	// FIXME: Add functionality to kspread
 	kdDebug(s_area) << "Printing Information: Center vertically when printing!" << endl;
     }
     else
     {
-	// FIXME: Add functionality to ksprad
+	// FIXME: Add functionality to kspread
 	kdDebug(s_area) << "Printing Information: Don't center vertically when printing!" << endl;
     }
     
