@@ -88,21 +88,21 @@ void KSpreadPaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
     QGroupBox *group = new QGroupBox( i18n("General Options"), tab );
     vbox->addWidget( group );
 
-    QVBoxLayout *optionsVbox = new QVBoxLayout( group,
+    QHBoxLayout *optionsHbox = new QHBoxLayout( group,
                                                 2 * KDialog::marginHint(),
                                                 KDialog::spacingHint() );
 
     pPrintGrid = new QCheckBox ( i18n("Print &grid"), group );
     pPrintGrid->setChecked( print->printGrid() );
-    optionsVbox->addWidget( pPrintGrid );
+    optionsHbox->addWidget( pPrintGrid );
 
     pPrintCommentIndicator = new QCheckBox ( i18n("Print &comment indicator"), group );
     pPrintCommentIndicator->setChecked( print->printCommentIndicator() );
-    optionsVbox->addWidget( pPrintCommentIndicator );
+    optionsHbox->addWidget( pPrintCommentIndicator );
 
     pPrintFormulaIndicator = new QCheckBox ( i18n("Print &formula indicator"), group );
     pPrintFormulaIndicator->setChecked( print->printFormulaIndicator() );
-    optionsVbox->addWidget( pPrintFormulaIndicator );
+    optionsHbox->addWidget( pPrintFormulaIndicator );
 }
 
 void KSpreadPaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
