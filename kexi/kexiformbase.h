@@ -22,6 +22,7 @@
 #include "kexidialogbase.h"
 
 /**
+  *@author Joseph Wenninger
   *@author lucijan busch
   */
 
@@ -51,6 +52,9 @@ class KexiFormBase : public KexiDialogBase
 		void resizeEvent(QResizeEvent *ev);
 		
 		void insertWidget(QWidget *widget, int x, int y, int w, int h);
+		void installEventFilterRecursive(QObject *obj);
+
+
 		
 		QWidget	*m_pendingWidget;
 		
@@ -75,6 +79,7 @@ class KexiFormBase : public KexiDialogBase
 	protected slots:
 		void slotWidgetLineEdit();
 		void slotWidgetPushButton();
+		void slotWidgetURLRequester();
 		
 		bool eventFilter(QObject *obj, QEvent *ev);
 

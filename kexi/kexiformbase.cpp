@@ -33,8 +33,10 @@
 #include <qpixmap.h>
 #include <qcolor.h>
 #include <qpushbutton.h>
+#include <kurlrequester.h>
 
 
+#include <qobjectlist.h>
 
 #include "kexiformbase.h"
 
@@ -70,6 +72,9 @@ void KexiFormBase::initActions()
 
         KAction *actionWidgetPushButton = new KAction(i18n("Push Button"), "button",
                 Key_F6, this, SLOT(slotWidgetPushButton()), actionCollection(), "widget_push_button");
+
+        KAction *actionWidgetURLRequest = new KAction(i18n("URL Request"), "button",
+                Key_F7, this, SLOT(slotWidgetURLRequester()), actionCollection(), "widget_url_requester");
 	setXMLFile("kexiformeditorui.rc");
 }
 
@@ -118,6 +123,12 @@ void KexiFormBase::slotWidgetLineEdit()
 void KexiFormBase::slotWidgetPushButton()
 {
 	m_pendingWidget = new QPushButton("push button", this);
+	m_widgetRectRequested = true;
+}
+
+void KexiFormBase::slotWidgetURLRequester()
+{
+	m_pendingWidget = new KURLRequester("urlrequest", this);
 	m_widgetRectRequested = true;
 }
 
@@ -189,6 +200,24 @@ void KexiFormBase::paintEvent(QPaintEvent *ev)
 	p.end();
 }
 
+
+void KexiFormBase::installEventFilterRecursive(QObject *obj)
+{
+	obj->installEventFilter(this);
+	if ( obj->children() )
+	{
+		QObjectListIt it( *obj->children() );
+		QObject *obj1;
+        	while( (obj1=it.current()) != 0 )
+		{
+			++it;
+			if (obj1->isWidgetType())
+		    	installEventFilterRecursive(obj1);
+            	}
+        }
+
+}
+
 void KexiFormBase::mouseReleaseEvent(QMouseEvent *ev)
 {
 	if(m_widgetRect)
@@ -199,8 +228,12 @@ void KexiFormBase::mouseReleaseEvent(QMouseEvent *ev)
 		m_widgetRectBY = 0;
 		m_widgetRectEX = 0;
 		m_widgetRectEY = 0;
-		m_pendingWidget->installEventFilter(this);
+
+		installEventFilterRecursive(m_pendingWidget);
+
 		m_widgetRect = false;
+
+
 		repaint();
 	}
 }
@@ -223,6 +256,8 @@ bool KexiFormBase::eventFilter(QObject *obj, QEvent *ev)
 	{
 		case QEvent::MouseButtonPress:
 			m_activeWidget=static_cast<QWidget*>(obj);
+			while (!(m_activeWidget->parentWidget(true)==this))
+				m_activeWidget=m_activeWidget->parentWidget();
 			m_activeMoveWidget=m_activeWidget;
 			m_moveBX=static_cast<QMouseEvent*>(ev)->x();
 			m_moveBY=static_cast<QMouseEvent*>(ev)->y();
@@ -235,8 +270,15 @@ bool KexiFormBase::eventFilter(QObject *obj, QEvent *ev)
 		case QEvent::MouseMove:
 			if (m_activeMoveWidget)
 			{
-				m_activeMoveWidget->move(m_activeMoveWidget->x()+static_cast<QMouseEvent*>(ev)->x()-m_moveBX,
-					m_activeMoveWidget->y()+static_cast<QMouseEvent*>(ev)->y()-m_moveBY);
+				int tmpx,tmpy;
+		                tmpx = (((float)(m_activeMoveWidget->x()+static_cast<QMouseEvent*>(ev)->x()-m_moveBX))/
+					((float)m_dotSpacing)+0.5);
+		                tmpx*=m_dotSpacing;
+		                tmpy = (((float)(m_activeMoveWidget->y()+static_cast<QMouseEvent*>(ev)->y()-m_moveBY))/
+					((float)m_dotSpacing)+0.5);
+		                tmpy*=m_dotSpacing;
+				if ((tmpx!=m_activeMoveWidget->x()) ||(tmpy!=m_activeMoveWidget->y()) )
+					m_activeMoveWidget->move(tmpx,tmpy);
 			}
 			return true;
 			break;

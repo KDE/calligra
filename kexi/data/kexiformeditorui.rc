@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformeditor" version="0.1">
+<kpartgui name="kexiformeditor" version="0.2">
 
 <ToolBar name="widgets">
 	<Text>Widgets</Text>
 	<Action name="widget_line_edit"/>
 	<Action name="widget_push_button"/>
+	<Action name="widget_url_requester"/>
 </ToolBar>
 
 </kpartgui>
