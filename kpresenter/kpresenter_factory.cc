@@ -68,7 +68,10 @@ KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
 KPresenterFactory::~KPresenterFactory()
 {
     if ( s_global )
+    {
+      delete s_global->aboutData();
       delete s_global;
+    }
 }
 
 QObject* KPresenterFactory::create( QObject* parent, const char* name,

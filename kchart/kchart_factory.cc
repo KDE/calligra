@@ -32,7 +32,10 @@ KChartFactory::KChartFactory( QObject* parent, const char* name )
 KChartFactory::~KChartFactory()
 {
     if ( s_global )
+    {
+      delete s_global->aboutData();
       delete s_global;
+    }
 }
 
 QObject* KChartFactory::create( QObject* parent, const char* name, const char *classname, const QStringList & )

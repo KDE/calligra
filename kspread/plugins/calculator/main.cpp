@@ -63,6 +63,7 @@ CalcFactory::CalcFactory( QObject* parent, const char* name )
 
 CalcFactory::~CalcFactory()
 {
+    delete s_global; 
 }
 
 QObject* CalcFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
@@ -73,7 +74,9 @@ QObject* CalcFactory::create( QObject* parent, const char* name, const char* /*c
 	return 0;
     }
 
-    return new Calculator( (KSpreadView*)parent, name );
+    QObject *obj = new Calculator( (KSpreadView*)parent, name );
+    emit objectCreated( obj );
+    return obj;
 }
 
 KInstance* CalcFactory::global()

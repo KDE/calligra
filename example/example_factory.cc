@@ -26,7 +26,10 @@ ExampleFactory::ExampleFactory( QObject* parent, const char* name )
 ExampleFactory::~ExampleFactory()
 {
     if ( s_global )
+    {
+      delete s_global->aboutData();
       delete s_global;
+    }
 }
 
 QObject* ExampleFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )

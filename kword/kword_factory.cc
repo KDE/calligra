@@ -68,7 +68,10 @@ KWordFactory::KWordFactory( QObject* parent, const char* name )
 KWordFactory::~KWordFactory()
 {
     if ( s_global )
+    {
+      delete s_global->aboutData();
       delete s_global;
+    }
 }
 
 QObject* KWordFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )

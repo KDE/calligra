@@ -68,8 +68,8 @@ KisFactory::~KisFactory()
 {
   delete s_pserver;
   delete s_rserver;
-  if ( s_global )
-    delete s_global;
+  delete s_aboutData;
+  delete s_global;
 }
 
 QObject* KisFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )

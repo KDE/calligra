@@ -42,7 +42,10 @@ GraphiteFactory::GraphiteFactory(QObject *parent, const char *name)
 
 GraphiteFactory::~GraphiteFactory() {
     if (s_global)
+    {
+        delete s_global->aboutData();
         delete s_global;
+    }
 }
 
 QObject *GraphiteFactory::create(QObject *parent, const char *name, const char *classname, const QStringList &) {
