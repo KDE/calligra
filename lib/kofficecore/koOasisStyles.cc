@@ -60,7 +60,7 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
         for ( ; !master.isNull() ; master = master.nextSibling().toElement() ) {
             if ( master.tagName() ==  "style:master-page" ) {
                 QString name = master.attribute( "style:name" );
-                //kdDebug(30003) << "Master style: '" << name << "' loaded " << endl;
+                kdDebug(30003) << "Master style: '" << name << "' loaded " << endl;
                 m_masterPages.insert( name, new QDomElement( master ) );
             } else
                 // OASIS docu mentions style:handout-master and draw:layer-set here
@@ -69,7 +69,7 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
     }
 
 
-    //kdDebug(30003) << "Starting reading in office:styles" << endl;
+    kdDebug(30003) << "Starting reading in office:styles" << endl;
 
     QDomElement officeStyle = docElement.namedItem( "office:styles" ).toElement();
 
@@ -134,7 +134,8 @@ void KoOasisStyles::insertStyle( const QDomElement& e )
 
     QString name = e.attribute( "style:name" );
     if ( tagName == "style:style"
-         || tagName == "style:page-master"
+         || tagName == "style:page-master" // OO-1.1 compatibility (probably not useful)
+         || tagName == "style:page-layout"
          || tagName == "style:font-decl"
          || tagName == "style:presentation-page-layout" )
     {

@@ -1132,14 +1132,14 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QString masterPageName = "Standard"; // use default layout as fallback
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
     Q_ASSERT( master );
-    QDomElement *style =master ? oasisStyles.styles()[master->attribute( "style:page-master-name" )] : 0;
+    QDomElement *style =master ? oasisStyles.styles()[master->attribute( "style:page-layout-name" )] : 0;
     QDomElement *backgroundStyle = oasisStyles.styles()[ "Standard-background"];
     kdDebug()<<"Standard background "<<backgroundStyle<<endl;
     // parse all pages
     Q_ASSERT( style );
     if ( style )
     {
-        QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+        QDomElement properties( style->namedItem( "style:page-layout-properties" ).toElement() );
         if ( !properties.isNull() )
         {
             __pgLayout.ptWidth = KoUnit::parseValue(properties.attribute( "fo:page-width" ) );

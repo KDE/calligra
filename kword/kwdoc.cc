@@ -1071,11 +1071,11 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // But, hmm, in a doc with only a table there was no reference to the master page at all...
     QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
-    QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attribute( "style:page-master-name" )] : 0;
+    QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attribute( "style:page-layout-name" )] : 0;
     Q_ASSERT( masterPageStyle );
     if ( masterPageStyle )
     {
-        QDomElement properties( masterPageStyle->namedItem( "style:properties" ).toElement() );
+        QDomElement properties( masterPageStyle->namedItem( "style:page-layout-properties" ).toElement() );
         m_pageLayout.orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
         double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
         double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
