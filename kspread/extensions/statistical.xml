@@ -272,7 +272,7 @@
     </Function>
 
     <Function>
-      <Name>VARIANCE</Name>
+      <Name>VAR</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -295,15 +295,17 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The VARIANCE() function calculates the variance of each parameter which are members of a population.</Text>
-	<Syntax>VARIANCE(value;value;...)</Syntax>
-	<Example>VARIANCE(12;5;7) equals 8.666...</Example>
-	<Example>VARIANCE(15;80;3) equals 1144.22...</Example>
+	<Text>The VAR() function calculates the estimates variance based on a sample.</Text>
+	<Syntax>VAR(value;value;...)</Syntax>
+	<Example>VAR(12;5;7) equals 13</Example>
+	<Example>VAR(15;80;3) equals 1716.333...</Example>
+	<Example>VAR(6;7;8) equals 1</Example>
+	<Related>VARP</Related>
       </Help>
     </Function>
 
     <Function>
-      <Name>STDDEV</Name>
+      <Name>VARP</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -326,8 +328,74 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text></Text>
-	<Syntax>STDDEV(value;value;...)</Syntax>
+	<Text>The VARP() function calculates the variance based on an entire population.</Text>
+	<Syntax>VARP(value;value;...)</Syntax>
+	<Example>VARP(12;5;7) equals 8.666...</Example>
+	<Example>VARP(15;80;3) equals 1144.22...</Example>
+	<Example>VARP(6;7;8) equals 0.6666667...</Example>
+	<Related>VAR</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>STDEV</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>Estimates standard deviation based on a sample. The standard deviation is a measure of how widely values are dispersed from the average value.</Text>
+	<Syntax>STDEV(value;value;...)</Syntax>
+	<Example>STDEV(6;7;8) equals 1</Example>
+	<Related>STDEVP</Related> 
+      </Help>
+    </Function>
+    
+    <Function>
+      <Name>STDEVP</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>Calculates standard deviation based on an entire population</Text>
+	<Syntax>STDEVP(value;value;...)</Syntax>
+	<Example>STDEVP(6;7;8) equals 0.816497...</Example>
+	<Related>STDEV</Related> 
       </Help>
     </Function>
     
