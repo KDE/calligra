@@ -233,7 +233,7 @@ void KHTMLReader::parse_head(DOM::Element e) {
 bool KHTMLReader::parseTag(DOM::Element e) {
 	_PP(p);
 	_PP(br);
-	_PP(table);
+	// _PP(table); <- disabled for beta.
 	_PP(pre);
 	_PP(ul);
 	_PP(ol);
