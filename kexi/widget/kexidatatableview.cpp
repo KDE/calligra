@@ -57,21 +57,26 @@ KexiDataTableView::init()
 
 void KexiDataTableView::setData(KexiDB::Cursor *cursor)
 {
-	if (!m_first || !cursor)
+	if (!m_first)
+		clearAll();
+	if (!cursor || cursor!=m_cursor)
 		clearAll();
 
 	m_cursor = cursor;
 
-	if (!m_cursor)
+	if (!m_cursor || (cursor->fieldCount()<1))
 		return;
 
+/*TODO	uint i = 0;
+	KexiDB::Field *f = m_cursor->query()
+	m_cursor->fieldCount(); i++)
 	for(uint i = 0; i < m_cursor->fieldCount(); i++)
 	{
 //		QVariant defaultval = QVariant("");
 //		addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),
 //		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
 		addColumn("named", QVariant::String, true);
-	}
+	}*/
 
 
 #if 0

@@ -21,7 +21,7 @@
 #ifndef KEXIDATATABLEVIEW_H
 #define KEXIDATATABLEVIEW_H
 
-#include "kexitableview.h"
+#include <tableview/kexitableview.h>
 
 class KexiTableItem;
 class QVariant;
