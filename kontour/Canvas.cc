@@ -144,6 +144,9 @@ void Canvas::updateBuf(const QRect &rect)
 
   p.restore();
 
+  if(mGDoc->showHelplines())
+    drawHelplines(p, rect);
+
   p.end();
 }
 
@@ -288,20 +291,19 @@ void Canvas::drawTmpHelpline(int x, int y, bool horizH)
 
 void Canvas::addHelpline(int x, int y, bool horizH)
 {
-/*  double pos = -1;
-  tmpHorizHelpline = tmpVertHelpline = -1;
-  // convert into mGDoc coordinates
-  // and add helpline
+  double pos;
   if(horizH)
   {
-    pos = double(y - m_relativePaperArea.top()) / zoomFactor();
-    mGDoc->addHorizHelpline (pos);
+    pos = static_cast<double>(y - mYOffset) / zoomFactor();
+    mGDoc->addHorizHelpline(pos);
+    repaint(0, y, width(), 1);
   }
   else
   {
-    pos = double(x - m_relativePaperArea.left()) / zoomFactor();
-    mGDoc->addVertHelpline (pos);
-  }*/
+    pos = static_cast<double>(x - mXOffset) / zoomFactor();
+    mGDoc->addVertHelpline(pos);
+    repaint(x, 0, 1, height());
+  }
 }
 
 bool Canvas::eventFilter(QObject *o, QEvent *e)
@@ -343,6 +345,8 @@ void Canvas::resizeEvent(QResizeEvent *)
   vBar->setValue(mYCenter - mYOffset);
   mWidthH = width() / 2;
   mHeightH = height() / 2;
+  updateBuf();
+  repaint();
 }
 
 void Canvas::paintEvent(QPaintEvent *e)
@@ -410,6 +414,8 @@ void Canvas::scrollX(int v)
 {
   mXOffset = mXCenter - v;
   emit offsetXChanged(mXOffset);
+//  bitBlt(buffer, 0, rect.y(), buffer, 0, rect.y(), buffer.width(), rect.height());
+  updateBuf();
   repaint();
 }
 
@@ -417,6 +423,7 @@ void Canvas::scrollY(int v)
 {
   mYOffset = mYCenter - v;
   emit offsetYChanged(mYOffset);
+  updateBuf();
   repaint();
 }
 

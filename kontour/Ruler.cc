@@ -221,7 +221,7 @@ void Ruler::mouseReleaseEvent(QMouseEvent *me)
   {
     isMousePressed = false;
     emit drawHelpline(-1, -1, mOrientation == Horizontal);
-    emit addHelpline(me->x() - 20, me->y() - 20, mOrientation==Horizontal);
+    emit addHelpline(me->x() - 20, me->y() - 20, mOrientation == Horizontal);
   }
 }
 

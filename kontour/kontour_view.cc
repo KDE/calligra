@@ -286,11 +286,11 @@ void KontourView::setupCanvas()
 
 //    connect(canvas,SIGNAL(rightButtonAtSelectionClicked(int,int)),this,SLOT(popupForSelection()));
 
-  // helpline creation
+  /* helpline creation */
   connect(hRuler, SIGNAL(drawHelpline(int, int, bool)), mCanvas, SLOT(drawTmpHelpline(int, int, bool)));
   connect(vRuler, SIGNAL(drawHelpline(int, int, bool)), mCanvas, SLOT(drawTmpHelpline(int, int, bool)));
-//    connect (hRuler, SIGNAL (addHelpline(int, int, bool)), this, SLOT(slotAddHelpline(int, int, bool)));
-//    connect (vRuler, SIGNAL (addHelpline(int, int, bool)), this, SLOT(slotAddHelpline(int, int, bool)));
+  connect(hRuler, SIGNAL(addHelpline(int, int, bool)), mCanvas, SLOT(addHelpline(int, int, bool)));
+  connect(vRuler, SIGNAL(addHelpline(int, int, bool)), mCanvas, SLOT(addHelpline(int, int, bool)));
 
   setFocusPolicy(QWidget::StrongFocus);
   setFocusProxy(mCanvas);
@@ -810,10 +810,6 @@ void KontourView::setZoom( double zoom ) {
 double KontourView::zoom() const {
     return mCanvas->getZoomFactor();
 }
-
-void KontourView::slotAddHelpline(int x, int y, bool d) {
-    m_showHelplines->setChecked(true);
-    mCanvas->addHelpline(x, y, d);
-}*/
+*/
 
 #include "kontour_view.moc"
