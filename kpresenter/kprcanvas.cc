@@ -156,15 +156,13 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         connect( m_view->kPresenterDoc(), SIGNAL( sig_terminateEditing( KPTextObject * ) ),
                  this, SLOT( terminateEditing( KPTextObject * ) ) );
     }
-
 }
 
 KPrCanvas::~KPrCanvas()
 {
-    // disconnect signals to avoid crashes on exit
-    // (exitEditMode emits signals)
-    disconnect( this, SIGNAL( updateSideBarItem(int) ), 0, 0 );
-    disconnect( this, SIGNAL( objectSelectedChanged() ), 0, 0 );
+    // block all signals (save for destroyed()) to avoid crashes on exit
+    // (exitEditMode) emits signals
+    blockSignals(true);
 
     // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
 
@@ -174,6 +172,7 @@ KPrCanvas::~KPrCanvas()
 
     stopSound();
     delete soundPlayer;
+    blockSignals(false);
 }
 
 void KPrCanvas::scrollX( int x )
@@ -376,19 +375,17 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
         if( m_view->kPresenterDoc()->isHeaderFooter(it.current()) || it.current()->isProtect())
             selectionMode=SM_PROTECT;
 
-        if (
-            ( rect2.intersects( it.current()->getBoundingRect() ) && editMode ) ||
-            ( !editMode &&
-              it.current()->getPresNum() <= static_cast<int>( currPresStep ) &&
-              ( !it.current()->getDisappear() || it.current()->getDisappear() &&
-                it.current()->getDisappearNum() > static_cast<int>( currPresStep ) ) ) )
+        if ( ( rect2.intersects( it.current()->getBoundingRect() ) && editMode )
+             || ( !editMode && it.current()->getPresNum() <= static_cast<int>( currPresStep )
+                  && ( !it.current()->getDisappear() || it.current()->getDisappear()
+                       && it.current()->getDisappearNum() > static_cast<int>( currPresStep ) ) ) )
 
         {
             if ( inEffect && it.current()->getPresNum() >= static_cast<int>( currPresStep ) )
                 continue;
 
-            if ( !editMode && doSpecificEffects && static_cast<int>( currPresStep ) == it.current()->getPresNum()
-                 && !goingBack )
+            if ( !editMode && doSpecificEffects && !goingBack
+                 && static_cast<int>( currPresStep ) == it.current()->getPresNum() )
             {
                 //kdDebug(33001) << "                 setSubPresStep " << subPresStep << endl;
                 it.current()->setSubPresStep( subPresStep );
@@ -2002,10 +1999,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
     }
 
     if ( !editMode && !drawMode && !presMenu->isVisible() && fillBlack )
-    {
         setCursor( blankCursor );
-    }
-
 }
 
 void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
@@ -2348,8 +2342,8 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
         QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
                                                 e->oldSize() ) );
 #else
-    QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->screenGeometry(this).size(),
-                                            e->oldSize() ) );
+        QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->screenGeometry(this).size(),
+                                                e->oldSize() ) );
 #endif
     if ( editMode ) // ### what happens in fullscreen mode ? No double-buffering !?!?
         buffer.resize( size() );
