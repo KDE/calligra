@@ -18,6 +18,7 @@
 */
 
 #include "kspread_selection.h"
+#include "kspread_canvas.h"
 #include "kspread_cell.h"
 #include "kspread_table.h"
 #include "kspread_view.h"
@@ -103,10 +104,11 @@ QRect KSpreadSelection::getSelectionHandleArea(KSpreadCanvas* canvas)
 
   xpos = m_pView->activeTable()->columnPos( column, canvas );
   ypos = m_pView->activeTable()->rowPos( row, canvas );
-  width = cell->width( column );
-  height = cell->height( row );
+  width = cell->width( column, canvas );
+  height = cell->height( row, canvas );
 
-  QRect handle( (xpos + width - 2), (ypos + height - 1), 5, 5);
+  QRect handle( (xpos + width - 2), (ypos + height - 1), 
+                (int) (5 * canvas->zoom()), (int) (5 * canvas->zoom()) );
   return handle;
 }
 
