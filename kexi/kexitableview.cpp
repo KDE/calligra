@@ -949,8 +949,8 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 //		int cw = columnWidth( m_curCol );
 		int rh = rowHeight( m_curRow );
 //		ensureVisible( columnPos( m_curCol ) + cw / 2, rowPos( m_curRow ) + rh / 2, cw / 2, rh / 2 );
-		ensureVisible(0, rowPos(m_curRow), 0, rh);
 //		center(columnPos(m_curCol) + cw / 2, rowPos(m_curRow) + rh / 2, cw / 2, rh / 2);
+		ensureVisible(columnPos(m_curCol), rowPos(m_curRow), columnWidth(m_curCol), rh);
 		updateCell( oldRow, oldCol );
 		updateCell( m_curRow, m_curCol );
 		m_pRecordMarker->setCurrentRow(m_curRow);
@@ -1020,22 +1020,18 @@ void KexiTableView::slotAutoScroll()
 		switch(m_scrollDirection)
 		{
 			case ScrollDown:
-//				if(m_curRow + 1 <= m_numRows)
-					setCursor(m_curRow + 1, m_curCol);
+				setCursor(m_curRow + 1, m_curCol);
 				break;
 
 			case ScrollUp:
-//				if(m_curRow - 1 >= 0)
-					setCursor(m_curRow - 1, m_curCol);
+				setCursor(m_curRow - 1, m_curCol);
 				break;
 			case ScrollLeft:
-//				if(m_curCol - 1 <= m_numCols)
-					setCursor(m_curRow, m_curCol - 1);
+				setCursor(m_curRow, m_curCol - 1);
 				break;
 
 			case ScrollRight:
-//				if(m_curCol - 1 >= m_numRows)
-					setCursor(m_curRow, m_curCol + 1);
+				setCursor(m_curRow, m_curCol + 1);
 				break;
 		}
 	}

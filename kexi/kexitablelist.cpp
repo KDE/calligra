@@ -43,8 +43,8 @@ void KexiTableList::setSorting(int key, bool order=true, short type=1)
 	m_type = type;
 	switch(m_type)
 	{
-		case 2:
-		case 3:
+		case QVariant::Bool:
+		case QVariant::Int:
 			cmpFunc = &KexiTableList::cmpInt;
 			break;
 		default:
@@ -59,7 +59,7 @@ int KexiTableList::compareItems(Item item1, Item item2)
 
 int KexiTableList::cmpInt(Item item1, Item item2)
 {
-	return m_order* ( ((KexiTableItem *)item1)->getInt(m_key) - ((KexiTableItem *)item2)->getInt(m_key) );
+	return m_order* (((KexiTableItem *)item1)->getInt(m_key) - ((KexiTableItem *)item2)->getInt(m_key));
 }
 
 

@@ -24,6 +24,9 @@
 #include <qsqlquery.h>
 #include <qsqlerror.h>
 #include <qvariant.h>
+#include <qlayout.h>
+#include <qstatusbar.h>
+#include <qdatetime.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -34,27 +37,24 @@
 #include "kexidatatable.h" 
  
 KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
-	: KexiTableView(parent, name)
+	: KexiWidget(parent, name)
 {
+	QGridLayout *g = new QGridLayout(this);
+	m_tableView = new KexiTableView(this);
+	m_statusBar = new QStatusBar(this);
+
 	setCaption(i18n(caption + " - table"));
 
-	if(width() > parent->width())
-	{
-		kdDebug() << "the width is higher..." << endl;
-		setBaseSize(parent->width(), height());
-	}
-
-	if(height() > parent->height())
-	{
-		setBaseSize(width(), parent->height());
-	}
-
-	connect(this, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
+	g->addWidget(m_tableView,	0,	0);
+	g->addWidget(m_statusBar,	1,	0);
+	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
 }
 
 bool
 KexiDataTable::executeQuery(QString queryStatement)
 {
+	QTime t;
+	t.start();
 	QSqlDatabase *db = kexi->project()->db();
 	QSqlQuery query(queryStatement);
 
@@ -76,17 +76,20 @@ KexiDataTable::executeQuery(QString queryStatement)
 		//WARNING: look for the type!!!
 		kdDebug() << "KexiDataTable::executeQuery: " << record.field(i)->name() << endl;
 		
-		addColumn(record.field(i)->name(), record.field(i)->type(), true);
+		m_tableView->addColumn(record.field(i)->name(), record.field(i)->type(), true);
 	}
 
 	while(query.next())
 	{
-		KexiTableItem *it = new KexiTableItem(this);
+		KexiTableItem *it = new KexiTableItem(m_tableView);
 		for(unsigned int i=0; i < fields; i++)
 		{
 			it->setValue(i, query.value(i));
 		}
 	}
+	
+	m_statusBar->message(QString::number(query.numRowsAffected()) + " rows in " + QString::number(t.elapsed()) + "ms");
+	
 	return true;
 }
 

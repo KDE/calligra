@@ -184,8 +184,9 @@ void KexiFormBase::insertWidget(QWidget *widget, int x, int y, int w, int h)
 {
 	widget->move(x, y);
 	widget->resize(w, h);
-	widget->show();
+	widget->hide();
 	widget->setFocusPolicy(QWidget::NoFocus);
+//	widget->repaint();
 //	grabMouse();
 //	grabKeyboard();
 }

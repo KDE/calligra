@@ -37,6 +37,10 @@ class KexiTableRM;
 class KexiTableItem;
 //class KexiTableList;
 
+/*
+	this class provides a tablewidget ;)
+*/
+
 class KexiTableView : public QScrollView
 {
 	friend class KexiTableItem;
