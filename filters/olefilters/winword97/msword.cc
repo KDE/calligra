@@ -638,16 +638,21 @@ void MsWord::getStyles()
     ptr += MsWordGenerated::read(ptr, &cbStshi);
     if (cbStshi > sizeof(stshi))
     {
-        kdError(s_area) << "MsWord::getStyles: unsupported STSHI size " << cbStshi << endl;
-        return;
+        // We simply discard parts of the STSHI we do not understand.
+
+        kdDebug(s_area) << "MsWord::getStyles: unsupported STSHI size " << cbStshi << endl;
+        MsWordGenerated::read(ptr, &stshi);
+        ptr += cbStshi;
     }
+    else
+    {
+        // We know that older/smaller STSHIs can simply be zero extended into our STSHI.
+        // So, we overwrite anything that is not valid with zeros.
 
-    // We know that older/smaller STSHIs can simply be zero extended into our STSHI.
-    // So, we overwrite anything that is not valid with zeros.
-
-    ptr += MsWordGenerated::read(ptr, &stshi);
-    memset(((char *)&stshi) + cbStshi, 0, sizeof(stshi) - cbStshi);
-    ptr -= sizeof(stshi) - cbStshi;
+        ptr += MsWordGenerated::read(ptr, &stshi);
+        memset(((char *)&stshi) + cbStshi, 0, sizeof(stshi) - cbStshi);
+        ptr -= sizeof(stshi) - cbStshi;
+    }
 
     // Construct the array of styles, and then walk the array reading in the style definitions.
 
