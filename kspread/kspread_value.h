@@ -120,38 +120,38 @@ class KSpreadValue
     /**
      * Returns true if empty.
      */
-    bool isEmpty(){ return type() == Empty; }
+    bool isEmpty() const { return type() == Empty; }
 
     /**
      * Returns true if the type of this value is Boolean.
      */
-    bool isBoolean(){ return type() == Boolean; }
+    bool isBoolean() const { return type() == Boolean; }
 
     /**
      * Returns true if the type of this value is integer.
      */
-    bool isInteger(){ return type() == Integer; }
+    bool isInteger() const { return type() == Integer; }
 
     /**
      * Returns true if the type of this value is floating-point.
      */
-    bool isFloat(){ return type() == Float; }
+    bool isFloat() const { return type() == Float; }
 
     /**
      * Returns true if the type of this value is either 
      * integer or floating-point.
      */
-    bool isNumber(){ return (type() == Integer) || (type() == Float); }
+    bool isNumber() const { return (type() == Integer) || (type() == Float); }
 
     /**
      * Returns true if the type of this value is string.
      */
-    bool isString(){ return type() == String; }
+    bool isString() const { return type() == String; }
 
     /**
      * Returns true if this value holds error information.
      */
-    bool isError(){ return type() == Error; }
+    bool isError() const { return type() == Error; }
 
     /**
      * Sets this value to boolean value.
