@@ -33,7 +33,7 @@
 
 XmlParser::XmlParser(const char *data, const char *charset)
 {
-	_document     = data;
+	_document     = (char*)data;
 	_charset      = charset;	
 	_index        = 0;
 	_childCurrent = 0;

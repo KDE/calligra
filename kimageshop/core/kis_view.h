@@ -221,7 +221,7 @@ class KisView : public KoView
     float   zoomFactor();
     void    setZoomFactor( float zf );
     
-    KisImage* currentViewImage() { return m_pImage; } 
+    const KisImage* currentViewImage() { return m_pImage; } 
       
  private:
 

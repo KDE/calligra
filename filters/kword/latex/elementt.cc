@@ -27,7 +27,7 @@ void ElementT::set_texte(const TextZone* text)
 {
 	if(_texte == 0)
 		_texte = new TextZone;
-	_texte = text;	
+	_texte = (TextZone*)text;	
 }
 
 void ElementT::rem_texte()

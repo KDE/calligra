@@ -62,7 +62,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
     s_rserver = new KisResourceServer;
 
     QString FileName = locateLocal("kis", "krayon.log", s_global);  
-    char *latinFileName = FileName.latin1();
+    const char *latinFileName = FileName.latin1();
     KisLog::setLogFile(latinFileName);
   
     log() << "Starting Krayon" << endl;

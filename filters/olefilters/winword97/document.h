@@ -33,7 +33,7 @@ DESCRIPTION
 
 class myFile;
 
-class Document: private MsWord
+class Document: protected MsWord
 {
 protected:
 
