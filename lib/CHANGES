@@ -6,4 +6,12 @@ Changes after KOffice-1.2
 Changes after KOffice-1.3-beta1
 ===============================
 - Support for opening backup files (e.g. foo.kwd~)
-- KoText: Fixed drawing of word-by-word underline and strikeout
+- Page Layout Dialog: validate user input to prevent nonsense (e.g. margins wider than page)
+- KoText:
+  Fixed drawing of word-by-word underline and strikeout
+  Repainting fixes (in multiline paragraphs)
+  Linespacing fixes (at-least and multiple work as advertised, added "fixed")
+  Major reduction of the memory usage per paragraph
+  Hyphenation fixes (support for breaking the same words more than once)
+  Shadow is now a character property (instead of a paragraph property)
+
