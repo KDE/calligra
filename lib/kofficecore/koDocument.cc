@@ -79,7 +79,14 @@ const int KoDocument::s_defaultAutoSave = 300; // 5 minutes
 class KoDocument::Private
 {
 public:
-    Private() : m_numOperations( 0 ) {}
+    Private() :
+        m_specialOutputFlag( 0 ),
+        m_dcopObject( 0L ),
+        filterManager( 0L ),
+        modifiedAfterAutosave( false ),
+        m_numOperations( 0 ),
+        m_autosaving( false )
+        {}
 
     QPtrList<KoView> m_views;
     QPtrList<KoDocumentChild> m_children;
@@ -165,13 +172,10 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
 
     d = new Private;
     m_bEmpty = TRUE;
-    d->m_dcopObject = 0L;
     connect( &d->m_autoSaveTimer, SIGNAL( timeout() ), this, SLOT( slotAutoSave() ) );
     setAutoSave( s_defaultAutoSave );
     d->m_bSingleViewMode = singleViewMode;
-    d->filterManager = 0L;
-    d->modifiedAfterAutosave=false;
-    d->m_autosaving = false;
+
 
     // the parent setting *always* overrides! (Simon)
     if ( parent )
@@ -757,7 +761,7 @@ void KoDocument::savePreview( KoStore* store )
     QPixmap pix = generatePreview(QSize(256, 256));
     // Reducing to 8bpp reduces file sizes quite a lot.
     QImage image = pix.convertToImage().convertDepth(8, Qt::AvoidDither | Qt::DiffuseDither);
-    
+
     QByteArray imageData;
     QDataStream imageStream(imageData, IO_WriteOnly);
     imageStream << image;
