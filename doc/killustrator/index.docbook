@@ -7,7 +7,7 @@
 <bookinfo>
 <title>The KIllustrator Handbook</title>
 <mediaobject>
-<imageobject><imagedata fileref="logo" format="png"></imageobject>
+<imageobject><imagedata fileref="logo.png"></imageobject>
 <textobject><phrase>KIllustrator logo</phrase></textobject>
 </mediaobject>
 <author>
