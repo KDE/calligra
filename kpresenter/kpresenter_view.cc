@@ -377,7 +377,9 @@ KPresenterView::~KPresenterView()
     delete pgConfDia;
     delete rotateDia;
     delete shadowDia;
-
+    delete rb_pstyle;
+    delete rb_pwidth;
+    delete afChoose;
 }
 
 /*=========================== file print =======================*/
