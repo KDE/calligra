@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ExportDialogUI</class>
 <comment>Export dialog for KWord's HTML export filter</comment>
 <author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
@@ -76,6 +76,12 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
                 </spacer>
                 <widget class="QComboBox" row="2" column="1">
                     <property name="name">
@@ -128,7 +134,7 @@
                         <cstring>radioEndOfLineLF</cstring>
                     </property>
                     <property name="text">
-                        <string>Line &amp;feed only</string>
+                        <string>Line &amp;feed only (Unix)</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -139,7 +145,7 @@
                         <cstring>radioEndOfLineCRLF</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Both: line feed and carriage return</string>
+                        <string>&amp;Both: line feed and carriage return (DOS/Windows)</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -168,6 +174,12 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
         </spacer>
     </vbox>
 </widget>
@@ -179,4 +191,7 @@
     <tabstop>radioEndOfLineCR</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>qwidget.h</includehint>
+</includehints>
 </UI>
