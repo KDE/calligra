@@ -28,6 +28,7 @@
 #include <qobject.h>
 #include <kaction.h>
 #include "qrichtext_p.h"
+#include <qvariant.h>
 
 class QDomElement;
 // Always add new types at the _end_ of this list (but before VT_ALL of course).
@@ -88,13 +89,15 @@ public:
     /** Create a format from this key.
      */
     virtual void load( const QCString &key ) = 0;
+    virtual QString convert(const QVariant& data )const = 0;
 };
 
 class KoVariableDateFormat : public KoVariableFormat
 {
 public:
     KoVariableDateFormat();
-    QString convert( const QDate & date ) const;
+    QString convert(const QVariant& data )const;
+
     virtual QCString key() const;
     virtual void load( const QCString &key );
     QString m_strFormat;
@@ -106,7 +109,7 @@ class KoVariableTimeFormat : public KoVariableFormat
 {
 public:
     KoVariableTimeFormat();
-    QString convert( const QTime & time ) const;
+    QString convert(const QVariant& data )const;
     virtual QCString key() const;
     virtual void load( const QCString & /*key*/ );
     QString m_strFormat;
@@ -117,7 +120,8 @@ class KoVariableStringFormat : public KoVariableFormat
 {
 public:
     KoVariableStringFormat() : KoVariableFormat() {}
-    QString convert( const QString & string ) const;
+    QString convert(const QVariant& data )const;
+
     virtual QCString key() const;
     virtual void load( const QCString & /*key*/ ) {}
 };
@@ -126,7 +130,7 @@ class KoVariableNumberFormat : public KoVariableFormat
 {
 public:
     KoVariableNumberFormat() : KoVariableFormat() {}
-    QString convert( int number ) const;
+    QString convert(const QVariant& data )const;
     virtual QCString key() const;
     virtual void load( const QCString & /*key*/ ) {}
 };
@@ -313,6 +317,7 @@ protected:
     virtual void saveVariable( QDomElement &parentElem ) = 0;
     KoVariableFormat *m_varFormat;
     KoVariableCollection *m_varColl;
+    QVariant m_varType;
 };
 
 /**
@@ -332,8 +337,7 @@ public:
     virtual void recalc();
 
     virtual QString text();
-    //QDate date() const { return m_date; }
-    void setDate( const QDate & _date ) { m_date = _date; }
+    void setDate( const QDate & _date ) { m_varType = QVariant(_date); }
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
@@ -343,7 +347,6 @@ public:
 
 protected:
     short int m_subtype;
-    QDate m_date;
 };
 
 /**
@@ -362,9 +365,8 @@ public:
 
     virtual void recalc();
 
-    //QTime time() const { return m_time; }
     virtual QString text();
-    void setTime( const QTime & _time ) { m_time = _time; }
+    void setTime( const QTime & _time ) { m_varType = QVariant(_time); }
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
@@ -375,7 +377,6 @@ public:
 
 protected:
     short int m_subtype;
-    QTime m_time;
 };
 
 
@@ -395,14 +396,13 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    QString name() const { return m_name; }
+    QString name() const { return m_varType.toString(); }
     virtual void recalc();
     virtual QString text() { return value(); } // use a format when they are customizable
     QString value() const;
     void setValue( const QString &v );
 
 protected:
-    QString m_name;
 };
 
 
@@ -434,7 +434,7 @@ public:
 
     virtual void recalc();
     virtual QString text() { return value(); } // use a format when they are customizable
-    QString value() const { return m_value; }
+    QString value() const { return m_varType.toString(); }
 
     static QStringList actionTexts();
 
@@ -443,7 +443,6 @@ public:
 
 protected:
     short int m_subtype;
-    QString m_value;
     KoDocument *m_doc;
 };
 
@@ -460,12 +459,10 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QString text();
-    QString name() const { return m_name; }
+    QString name() const { return m_varType.toString(); }
     virtual QString value() const;
 
 protected:
-    QString m_name;
-
 };
 
 /**
@@ -491,9 +488,9 @@ public:
 
     // For the 'current page' variable. This is called by the app e.g. when painting
     // a given page (see KWTextFrameSet::drawFrame and KPTextObject::recalcPageNum)
-    void setPgNum( int pgNum ) { m_pgNum = pgNum; }
+    void setPgNum( int pgNum ) { m_varType = QVariant( pgNum); }
     // For the 'current section title' variable. Same thing.
-    void setSectionTitle( const QString& title ) { m_str = title; }
+    void setSectionTitle( const QString& title ) { m_varType = QVariant( title); }
 
     short int subtype() const { return m_subtype; }
 
@@ -504,8 +501,6 @@ public:
     virtual void load( QDomElement &elem );
 protected:
     short int m_subtype;
-    int m_pgNum;
-    QString m_str;
 };
 
 class KoLinkVariable : public KoVariable
@@ -523,19 +518,18 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QString text() { return value(); }
-    QString value() const { return m_linkName; }
+    QString value() const { return m_varType.toString(); }
     QString url() const { return m_url;}
 
     virtual void recalc();
 
     void setLink(const QString & _linkName, const QString &_url)
 	{
-	    m_linkName=_linkName;
+	    m_varType=QVariant(_linkName);
 	    m_url=_url;
 	}
 
 protected:
-    QString m_linkName;
     QString m_url;
 };
 
@@ -555,12 +549,9 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QString text();
-    QString note() const { return m_note; }
-    void setNote( const QString & _note) { m_note = _note; }
+    QString note() const { return m_varType.toString(); }
+    void setNote( const QString & _note) { m_varType = QVariant(_note); }
     virtual void recalc();
-
-protected:
-    QString m_note;
 };
 
 
