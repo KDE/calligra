@@ -365,7 +365,7 @@ Oasis File Format:
 
 Todo:
 -----
--> save/load validation
+-> save/load validation (in progress)
 -> save/load conditional cell attribute
 -> save/load font format
 -> save/load formula

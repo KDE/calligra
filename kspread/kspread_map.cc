@@ -89,6 +89,13 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
 
 bool KSpreadMap::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
 {
+    if ( !m_strPassword.isEmpty() )
+    {
+        xmlWriter.addAttribute("table:structure-protected", "true" );
+        QCString str = KCodecs::base64Encode( m_strPassword );
+        xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
+    }
+
     KSpreadGenValidationStyles valStyle;
 
     KTempFile bodyTmpFile;
@@ -152,6 +159,21 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
 
 bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles )
 {
+    if ( body.hasAttribute( "table:structure-protected" ) )
+    {
+        kdDebug()<<" table:structure-protected !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        QCString passwd( "" );
+        if ( body.hasAttribute( "table:protection-key" ) )
+        {
+            QString p = body.attribute( "table:protection-key" );
+            QCString str( p.latin1() );
+            kdDebug(30518) << "Decoding password: " << str << endl;
+            passwd = KCodecs::base64Decode( str );
+        }
+        //todo remove me !!!!!!!! FIXME
+        kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
+        m_strPassword = passwd;
+    }
     QDomNode tableNode = body.namedItem( "table:table" );
 
     // sanity check
