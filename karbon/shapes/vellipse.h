@@ -42,7 +42,7 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 	virtual void load( const QDomElement& element );
-	virtual bool loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles );
+	virtual bool loadOasis( const QDomElement &element, KoOasisContext &context );
 
 protected:
 	void init();

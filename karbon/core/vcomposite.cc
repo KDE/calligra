@@ -365,7 +365,7 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 }
 
 bool
-VPath::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
+VPath::loadOasis( const QDomElement &element, KoOasisContext &context )
 {
 	setState( normal );
 
@@ -379,7 +379,7 @@ VPath::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
 	if( !trafo.isEmpty() )
 		transform( trafo );
 
-	return true;
+	return VObject::loadOasis( element, context );
 }
 
 void

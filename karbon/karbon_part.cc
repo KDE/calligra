@@ -30,7 +30,9 @@
 #include <koTemplateChooseDia.h>
 #include <koStoreDevice.h>
 #include <koOasisStyles.h>
+#include <kooasiscontext.h>
 #include <koxmlwriter.h>
+#include "kovariable.h"
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -188,7 +190,7 @@ KarbonPart::saveXML()
 }
 
 bool
-KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, KoStore * )
+KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, KoStore *store )
 {
 	kdDebug(38000) << "Start loading OASIS document..." << endl;
 
@@ -230,7 +232,10 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, KoStore *
 	else
 		return false;
 
-	m_doc.loadOasis( page, styles );
+	KoVariableFormatCollection varFormatColl;
+	KoVariableCollection varColl( new KoVariableSettings(), &varFormatColl );
+	KoOasisContext context( this, varColl, styles, store );
+	m_doc.loadOasis( page, context );
 
 	return true;
 }

@@ -157,7 +157,7 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &main
 }
 
 bool
-VRectangle::loadOasis( const QDomElement &element, KoOasisStyles & )
+VRectangle::loadOasis( const QDomElement &element, KoOasisContext &context )
 {
 	setState( normal );
 
@@ -176,7 +176,7 @@ VRectangle::loadOasis( const QDomElement &element, KoOasisStyles & )
 	if( !trafo.isEmpty() )
 		transform( trafo );
 
-	return true;
+	return VObject::loadOasis( element, context );
 }
 
 void

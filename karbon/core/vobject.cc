@@ -27,7 +27,10 @@
 
 #include <koStore.h>
 #include <koGenStyles.h>
+#include <koStyleStack.h>
 #include <koxmlwriter.h>
+#include <kooasiscontext.h>
+#include <koOasisStyles.h>
 
 VObject::VObject( VObject* parent, VState state ) : m_dcop( 0L )
 {
@@ -142,12 +145,49 @@ VObject::load( const QDomElement& element )
 }
 
 bool
-VObject::loadOasis( const QDomElement &object, KoOasisStyles &styles )
+VObject::loadOasis( const QDomElement &object, KoOasisContext &context )
 {
+	if( !m_stroke )
+		m_stroke = new VStroke( this );
+
+	if( !m_fill )
+		m_fill = new VFill();
+
+	if( object.hasAttribute( "draw:style-name" ) )
+	{
+		//kdDebug()<<"draw:style-name :"<<object.attribute( "draw:style-name" )<<endl;
+		addStyles( context.oasisStyles().styles()[object.attribute( "draw:style-name" )], context );
+	}
+
+	KoStyleStack &styleStack = context.styleStack();
+	styleStack.setTypeProperties( "graphic" );
+	if( styleStack.hasAttribute( "draw:stroke" ))
+	{
+		if( styleStack.attribute( "draw:stroke" ) == "solid" )
+		{
+			m_stroke->setType( VStroke::solid );
+			m_stroke->setColor( QColor( styleStack.attribute( "svg:stroke-color" ) ) );
+		}
+		if( styleStack.attribute( "draw:fill" ) == "solid" )
+		{
+			m_fill->setType( VFill::solid );
+			m_fill->setColor( QColor( styleStack.attribute( "draw:fill-color" ) ) );
+		}
+	}
 	/*if( object.hasAttribute( "draw:style-name" ) )
 	{
 		const QDomElement *style = styles.styles()[ object.attribute( "draw:style-name" ) ];
 	}*/
+	return true;
+}
+
+void
+VObject::addStyles( const QDomElement* style, KoOasisContext & context )
+{
+	// this function is necessary as parent styles can have parents themself
+	if( style->hasAttribute( "style:parent-style-name" ) )
+		addStyles( context.oasisStyles().styles()[style->attribute( "style:parent-style-name" )], context );
+	context.addStyles( style );
 }
 
 VDocument *

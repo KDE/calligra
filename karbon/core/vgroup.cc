@@ -25,6 +25,8 @@
 
 #include <koStore.h>
 #include <koxmlwriter.h>
+#include <kooasiscontext.h>
+#include <koStyleStack.h>
 
 #include "vcomposite.h"
 #include "shapes/vellipse.h"
@@ -186,7 +188,7 @@ VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyl
 }
 
 bool
-VGroup::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
+VGroup::loadOasis( const QDomElement &element, KoOasisContext &context )
 {
 	m_objects.setAutoDelete( true );
 	m_objects.clear();
@@ -199,30 +201,34 @@ VGroup::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
 		{
 			QDomElement e = list.item( i ).toElement();
 
+			context.styleStack().save();
+
 			if( e.tagName() == "draw:path" )
 			{
 				VPath* composite = new VPath( this );
-				composite->loadOasis( e, oasisStyles );
+				composite->loadOasis( e, context );
 				append( composite );
 			}
 			else if( e.tagName() == "draw:ellipse" )
 			{
 				VEllipse* ellipse = new VEllipse( this );
-				ellipse->loadOasis( e, oasisStyles );
+				ellipse->loadOasis( e, context );
 				append( ellipse );
 			}
 			else if( e.tagName() == "draw:rect" )
 			{
 				VRectangle* rectangle = new VRectangle( this );
-				rectangle->loadOasis( e, oasisStyles );
+				rectangle->loadOasis( e, context );
 				append( rectangle );
 			}
 			else if( e.tagName() == "draw:g" )
 			{
 				VGroup* group = new VGroup( this );
-				group->loadOasis( e, oasisStyles );
+				group->loadOasis( e, context );
 				append( group );
 			}
+
+			context.styleStack().restore();
 		}
 	}
 

@@ -31,7 +31,7 @@ libkarbonbase_la_LDFLAGS = $(KDE_RPATH) -version-info 2:0:0 -no-undefined
 libkarbonbase_la_LIBADD = $(LIB_KOFFICEUI)
 
 libkarboncommon_la_LDFLAGS = $(KDE_RPATH) $(LIBFREETYPE_RPATH)
-libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) \
+libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOTEXT) \
 	dockers/libkarbondockers.la \
 	widgets/libkarbonwidgets.la \
 	render/libvpainter.la \

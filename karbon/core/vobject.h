@@ -34,7 +34,7 @@ class VVisitor;
 class DCOPObject;
 class KoStore;
 class KoXmlWriter;
-class KoOasisStyles;
+class KoOasisContext;
 class KoGenStyles;
 
 /**
@@ -143,7 +143,7 @@ public:
 	 */
 	virtual void load( const QDomElement& element );
 
-	virtual bool loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles );
+	virtual bool loadOasis( const QDomElement &element, KoOasisContext &context );
 
 	/**
 	 * Create an exact copy of this object.
@@ -163,6 +163,9 @@ public:
 	void setName( const QString & );
 
 	VDocument *document() const;
+
+protected:
+	void addStyles( const QDomElement* style, KoOasisContext & context );
 
 protected:
 	/// Bounding box.

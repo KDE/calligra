@@ -185,7 +185,7 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 }
 
 bool
-VEllipse::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
+VEllipse::loadOasis( const QDomElement &element, KoOasisContext &context )
 {
 	setState( normal );
 
@@ -213,7 +213,7 @@ VEllipse::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
 	if( !trafo.isEmpty() )
 		transform( trafo );
 
-	return true;
+	return VObject::loadOasis( element, context );
 }
 
 void
