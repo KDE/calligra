@@ -75,6 +75,30 @@ public:
 
   // syntax version of the opened file
   int syntaxVersion;
+
+  // hold the KScript Interpreter.
+  KSpreadInterpreter::Ptr interpreter;
+
+  /**
+   * This list contains the logical names of all modules
+   * which contains KSpread extensions. These modules are
+   * located in the apps/kspread directory in the global
+   * and the users environment. If a module of the same name
+   * exists in both environments, then the most specific one
+   * is in this list and the other one is dropped.
+   */
+  QStringList kscriptModules;
+  
+  // for undo/redoc 
+  KSpreadUndo *undoBuffer;
+
+  // TRUE if loading is in process, otherwise FALSE.
+  // This flag is used to avoid updates etc. during loading.
+  bool isLoading;
+
+  QPen defaultGridPen;
+  QColor pageBorderColor;
+
 };
 
 /*****************************************************************************
@@ -94,13 +118,13 @@ QPtrList<KSpreadDoc>& KSpreadDoc::documents()
 }
 
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-    m_pageBorderColor( Qt::red )
+  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   d = new DocPrivate;
   
   d->map = 0;
   d->styleManager = new KSpreadStyleManager();
+  d->pageBorderColor = Qt::red;
   
   QFont f( KoGlobal::defaultFont() );
 
@@ -128,18 +152,18 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   d->tableId = 1;
   m_dcop = 0;
-  m_bLoading = false;
+  d->isLoading = false;
   m_numOperations = 1; // don't start repainting before the GUI is done...
 
-  m_defaultGridPen.setColor( lightGray );
-  m_defaultGridPen.setWidth( 1 );
-  m_defaultGridPen.setStyle( SolidLine );
+  d->defaultGridPen.setColor( lightGray );
+  d->defaultGridPen.setWidth( 1 );
+  d->defaultGridPen.setStyle( SolidLine );
 
   initInterpreter();
 
   d->map = new KSpreadMap( this, "Map" );
 
-  m_pUndoBuffer = new KSpreadUndo( this );
+  d->undoBuffer = new KSpreadUndo( this );
 
   // Make us scriptable if the document has a name
   if ( name )
@@ -286,6 +310,41 @@ KSpreadStyleManager* KSpreadDoc::styleManager()
 int KSpreadDoc::syntaxVersion() const
 {
   return d->syntaxVersion;
+}
+
+KSpreadInterpreter* KSpreadDoc::interpreter() const
+{
+  return d->interpreter;
+}
+
+KSpreadUndo* KSpreadDoc::undoBuffer() const
+{
+  return d->undoBuffer;
+}
+
+bool KSpreadDoc::isLoading() const
+{
+  return d->isLoading;
+}
+
+const QPen& KSpreadDoc::defaultGridPen()
+{
+  return d->defaultGridPen;
+}
+
+void KSpreadDoc::changeDefaultGridPenColor( const QColor &_col)
+{
+  d->defaultGridPen.setColor(_col);
+}
+
+QColor KSpreadDoc::pageBorderColor() const 
+{ 
+  return d->pageBorderColor; 
+}
+
+void KSpreadDoc::changePageBorderColor( const QColor  & _color) 
+{ 
+  d->pageBorderColor = _color; 
 }
 
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
@@ -446,14 +505,14 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   dt.start();
 
   emit sigProgress( 0 );
-  m_bLoading = TRUE;
+  d->isLoading = TRUE;
   m_spellListIgnoreAll.clear();
   // <spreadsheet>
   QDomElement spread = doc.documentElement();
 
   if ( spread.attribute( "mime" ) != "application/x-kspread" && spread.attribute( "mime" ) != "application/vnd.kde.kspread" )
   {
-    m_bLoading = false;
+    d->isLoading = false;
     setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" ).arg( spread.attribute("mime") ) );
     return false;
   }
@@ -528,7 +587,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     if ( !d->styleManager->loadXML( styles ) )
     {
       setErrorMessage( i18n( "Styles cannot be loaded." ) );
-      m_bLoading = false;
+      d->isLoading = false;
       return false;
     }
   }
@@ -538,12 +597,12 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   if ( mymap.isNull() )
   {
       setErrorMessage( i18n("Invalid document. No map tag.") );
-      m_bLoading = false;
+      d->isLoading = false;
       return false;
   }
   if ( !d->map->loadXML( mymap ) )
   {
-      m_bLoading = false;
+      d->isLoading = false;
       return false;
   }
 
@@ -658,7 +717,7 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 {
   kdDebug(36001) << "------------------------ COMPLETING --------------------" << endl;
 
-  m_bLoading = false;
+  d->isLoading = false;
 
   //  d->map->update();
 
@@ -692,7 +751,7 @@ bool KSpreadDoc::docData( QString const & xmlTag, QDomElement & data )
 
 void KSpreadDoc::setDefaultGridPen( const QPen& p )
 {
-  m_defaultGridPen = p;
+  d->defaultGridPen = p;
 }
 
 KSpreadSheet* KSpreadDoc::createTable()
@@ -747,18 +806,18 @@ void KSpreadDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 
 void KSpreadDoc::initInterpreter()
 {
-  m_pInterpreter = new KSpreadInterpreter( this );
+  d->interpreter = new KSpreadInterpreter( this );
 
   // Create the module which is used to evaluate all formulas
-  m_module = m_pInterpreter->module( "kspread" );
-  m_context.setScope( new KSScope( m_pInterpreter->globalNamespace(), m_module ) );
+  m_module = d->interpreter->module( "kspread" );
+  m_context.setScope( new KSScope( d->interpreter->globalNamespace(), m_module ) );
 
   // Find all scripts
-  m_kscriptModules = KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.ks", TRUE );
+  d->kscriptModules = KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.ks", TRUE );
 
   // Remove dupes
   QMap<QString,QString> m;
-  for( QStringList::Iterator it = m_kscriptModules.begin(); it != m_kscriptModules.end(); ++it )
+  for( QStringList::Iterator it = d->kscriptModules.begin(); it != d->kscriptModules.end(); ++it )
   {
     int pos = (*it).findRev( '/' );
     if ( pos != -1 )
@@ -778,7 +837,7 @@ void KSpreadDoc::initInterpreter()
     kdDebug(36001) << "SCRIPT="<<  mip.key() << ", " << mip.data() << endl;
     KSContext context;
     QStringList args;
-    if ( !m_pInterpreter->runModule( context, mip.key(), mip.data(), args ) )
+    if ( !d->interpreter->runModule( context, mip.key(), mip.data(), args ) )
     {
         if ( context.exception() )
             KMessageBox::error( 0L, context.exception()->toString( context ) );
@@ -795,17 +854,17 @@ void KSpreadDoc::destroyInterpreter()
 
     m_module = 0;
 
-    m_pInterpreter = 0;
+    d->interpreter = 0;
 }
 
 void KSpreadDoc::undo()
 {
-  m_pUndoBuffer->undo();
+  d->undoBuffer->undo();
 }
 
 void KSpreadDoc::redo()
 {
-  m_pUndoBuffer->redo();
+  d->undoBuffer->redo();
 }
 
 void KSpreadDoc::enableUndo( bool _b )
@@ -1311,7 +1370,7 @@ KSpreadDoc::~KSpreadDoc()
     saveConfig();
   destroyInterpreter();
 
-  delete m_pUndoBuffer;
+  delete d->undoBuffer;
 
   delete m_dcop;
   s_docs->removeRef(this);

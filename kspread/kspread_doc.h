@@ -142,7 +142,7 @@ public:
   /**
    * @return the KScript Interpreter used by this document.
    */
-  KSpreadInterpreter* interpreter()const { return m_pInterpreter; }
+  KSpreadInterpreter* interpreter()const;
 
   /**
    * Kills the interpreter and creates a new one and
@@ -171,7 +171,7 @@ public:
    * @return the object that is respnsible for keeping track
    *         of the undo buffer.
    */
-  KSpreadUndo * undoBuffer()const { return m_pUndoBuffer; }
+  KSpreadUndo * undoBuffer()const;
 
   // virtual void printMap( QPainter & _painter );
 
@@ -181,10 +181,10 @@ public:
   /**
    * @return TRUE if the document is currently loading.
    */
-  bool isLoading() const { return m_bLoading; }
+  bool isLoading() const;
 
   void setDefaultGridPen( const QPen & );
-  const QPen & defaultGridPen() { return m_defaultGridPen; }
+  const QPen & defaultGridPen() ;
 
   virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false, 
                              double zoomX = 1.0, double zoomY = 1.0 );
@@ -289,10 +289,10 @@ public:
   void setShowTabBar(bool _tabbar) {  m_bShowTabBar=_tabbar;}
   bool getShowTabBar()const { return  m_bShowTabBar;}
 
-  void changeDefaultGridPenColor( const QColor &_col){m_defaultGridPen.setColor(_col);}
+  void changeDefaultGridPenColor( const QColor &_col);
 
-  QColor pageBorderColor() const { return m_pageBorderColor; }
-  void changePageBorderColor( const QColor  & _color) { m_pageBorderColor = _color; }
+  QColor pageBorderColor() const;
+  void changePageBorderColor( const QColor  & _color);
 
   /**
    * show/hide comment indicator
@@ -466,36 +466,6 @@ protected:
    * Destroys the interpreter.
    */
   void destroyInterpreter();
-
-  /**
-   * This variable hold the KScript Interpreter.
-   */
-  KSpreadInterpreter::Ptr m_pInterpreter;
-
-  /**
-   * This list contains the logical names of all modules
-   * which contains KSpread extensions. These modules are
-   * located in the apps/kspread directory in the global
-   * and the users environment. If a module of the same name
-   * exists in both environments, then the most specific one
-   * is in this list and the other one is dropped.
-   */
-  QStringList m_kscriptModules;
-  /**
-   * Used for undo.
-   */
-  KSpreadUndo *m_pUndoBuffer;
-
-  /**
-   * TRUE if loading is in process, otherwise FALSE.
-   * This flag is used to avoid updates etc. during loading.
-   *
-   * @see #isLoading
-   */
-  bool m_bLoading;
-
-  QPen m_defaultGridPen;
-  QColor m_pageBorderColor;
 
   /**
    * This DCOP object represents the document.
