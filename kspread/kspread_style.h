@@ -131,6 +131,7 @@ class KSpreadStyle
 
   bool   hasProperty( Properties p ) const;
   bool   hasFeature( FlagsSet f, bool withoutParent ) const;
+  uint   features() const { return m_featuresSet; }
 
   uint bottomPenValue() const { return m_bottomPenValue; }
   uint rightPenValue() const { return m_rightPenValue; }

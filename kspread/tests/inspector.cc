@@ -26,6 +26,7 @@
 #include <kdialogbase.h>
 
 #include "kspread_cell.h"
+#include "kspread_style.h"
 #include "kspread_sheet.h"
 #include "dependencies.h"
 
@@ -59,6 +60,11 @@ static QString boolAsString( bool b )
   else return QString( "False" );
 }
 
+static QString hexintAsString( long l )
+{
+    return QString("0%1").arg(l, 8, 16);
+}
+
 static QString dirAsString( KSpreadSheet::LayoutDirection dir )
 {
   QString str;
@@ -84,6 +90,7 @@ void Inspector::Private::handleCell()
 
   new QListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );    
   new QListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
+  new QListViewItem( cellView, "Properties", hexintAsString( static_cast<long>(cell->kspreadStyle()->features()) ) );
   new QListViewItem( cellView, "Text", cell->text() );
   new QListViewItem( cellView, "Text (Displayed)", cell->strOutText() );
 
