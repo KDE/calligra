@@ -55,7 +55,7 @@ const bool ExcelFilter::filter()
     if (opcode == 0) break;
      *s >> size;
     if (size > MAX_RECORD_SIZE)
-      kdError(30511) << "ExcelFilter: Record larger than MAX_RECORD_SIZE!" << endl;
+      kdError(30511) << "Record larger than MAX_RECORD_SIZE!" << endl;
     s->readRawBytes(buffer, size);
     rec.setRawData(buffer,size);
 
@@ -66,9 +66,6 @@ const bool ExcelFilter::filter()
 
     if (biff[i].opcode == opcode) {
       m_success = (tree->*(biff[i].func))(size, *body);
-    }
-    else {
-      kdDebug(30511) << "ExcelFilter: Oops, unknown opcode " << opcode << endl;
     }
     delete body;
     rec.resetRawData(buffer, size);

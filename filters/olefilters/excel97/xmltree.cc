@@ -17,6 +17,8 @@
 */
 
 #include <xmltree.h>
+#include <qstringlist.h>
+#include <kdebug.h>
 
 const char *palette[65] = {
   "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff",
@@ -31,6 +33,9 @@ const char *palette[65] = {
   "#666699", "#969696", "#003366", "#339966", "#003300", "#333300",
   "#993300", "#993366", "#333399", "#333333", "#ffffff"
 };
+
+const int ndays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const int ldays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 XMLTree::XMLTree():QObject(),table(0L), fontCount(0), footerCount(0),
                           headerCount(0), xfCount(0)
@@ -146,6 +151,36 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
   }
 }
 
+void XMLTree::getDate(int date, int& year, int& month, int& day)
+{
+  year = 0;
+
+  while (date > (((year % 4) == 0) ? 366 : 365))
+    date -= ((year++%4) == 0) ? 366 : 365;
+		
+  if (date1904 == 1)
+    year += 4;		
+
+  if ((year % 4) == 0) {	
+      for (month = 0; month < 12; ++month) {
+	if (date <= ldays[month])
+	  break;
+	date -= ldays[month];
+      }
+  }
+  else {
+    for (month = 0; month < 12; ++month) {
+      if (date <= ndays[month])
+	break;
+      date -= ndays[month];
+    }
+  }
+
+  ++month;
+  day = (date == 0) ? 1 : date;
+  year += 1900;
+}
+
 const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 {
   QString s;
@@ -167,113 +202,117 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
   if ((xfs[xf]->align >> 3) & 0x01 == 1)
     format.setAttribute("multirow", "yes");
 
-  switch (xfs[xf]->ifmt)
-    {
-    case 0x00:  // General
-      format.setAttribute("precision", "-1");
-      break;
-    case 0x01:  // Number 0
-      format.setAttribute("precision", "-1");
-      break;
-    case 0x02:  // Number       0.00
-      format.setAttribute("precision", "2");
-      break;
-    case 0x03:  // Number w/comma       0,000
-      format.setAttribute("precision", "-1");
-      break;
-    case 0x04:  // Number w/comma       0,000.00
-      format.setAttribute("precision", "2");
-      break;
-    case 0x05:  // Number currency
-    case 0x06:
-    case 0x07:
-    case 0x08:
-      format.setAttribute("precision", "2");
-      format.setAttribute("format", "10");
-      format.setAttribute("faktor", "1");
-      break;
-    case 0x09:  // Percent 0%
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "25");
-      format.setAttribute("faktor", "100");
-      break;
-    case 0x0A:  // Percent 0.00%
-      format.setAttribute("precision", "2");
-      format.setAttribute("format", "25");
-      format.setAttribute("faktor", "100");
-      break;
-    case 0x0B:  // Scientific 0.00+E00
-      format.setAttribute("precision", "2");
-      format.setAttribute("format", "0");
-      break;
-    case 0x0C:  // Fraction 1 number  e.g. 1/2, 1/3
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x0D:  // Fraction 2 numbers  e.g. 1/50, 25/33
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x0E:  // Date: m-d-y
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x0F:  // Date: d-mmm-yy
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x10:  // Date: d-mmm
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x11:  // Date: mmm-yy
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x12:  // Time: h:mm AM/PM
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x13:  // Time: h:mm:ss AM/PM
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x14:  // Time: h:mm
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x15:  // Time: h:mm:ss
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x2a:  // Number currency
-    case 0x2c:
-      format.setAttribute("precision", "2");
-      format.setAttribute("format", "10");
-      format.setAttribute("faktor", "1");
-      break;
-    case 0x2D:  // Time: mm:ss
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x2E:  // Time: [h]:mm:ss
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x2F:  // Time: mm:ss.0
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x31:  // Text
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    default:    // Unsupported...but, if we are here, its a number
-      s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
-                              formats[xfs[xf]->ifmt]->cch);
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-    }
+  switch (xfs[xf]->ifmt) {
+  case 0x00:  // We need this to avoid 'default'
+    break;
+  case 0x01:  // Number 0
+    format.setAttribute("precision", "0");
+    break;
+  case 0x02:  // Number       0.00
+    format.setAttribute("precision", "2");
+    break;
+  case 0x03:  // Number w/comma       0,000
+    format.setAttribute("precision", "0");
+    break;
+  case 0x04:  // Number w/comma       0,000.00
+    format.setAttribute("precision", "2");
+    break;
+  case 0x05:  // Number currency
+  case 0x06:
+  case 0x07:
+  case 0x08:
+    format.setAttribute("precision", "2");
+    format.setAttribute("format", "10");
+    break;
+  case 0x09:  // Percent 0%
+    format.setAttribute("precision", "0");
+    format.setAttribute("format", "25");
+    format.setAttribute("faktor", "100");
+    break;
+  case 0x0A:  // Percent 0.00%
+    format.setAttribute("precision", "2");
+    format.setAttribute("format", "25");
+    format.setAttribute("faktor", "100");
+    break;
+  case 0x0B:  // Scientific 0.00+E00
+    format.setAttribute("precision", "2");
+    format.setAttribute("format", "30");
+    break;
+  case 0x0C:  // Fraction 1 number  e.g. 1/2, 1/3
+    format.setAttribute("precision", "-1");
+    format.setAttribute("format", "0");
+    break;
+  case 0x0D:  // Fraction 2 numbers  e.g. 1/50, 25/33
+    format.setAttribute("precision", "-1");
+    format.setAttribute("format", "0");
+    break;
+  case 0x0E:	// Date
+    format.setAttribute("format", "35");
+    break;
+  case 0x0F:	// Date
+    format.setAttribute("format", "200");
+    break;
+  case 0x10:	// Date
+    format.setAttribute("format", "35");
+    break;
+  case 0x11:	// Date
+    format.setAttribute("format", "206");
+    break;
+  case 0x12:  // Time: h:mm AM/PM
+    format.setAttribute("format", "50");
+    break;
+  case 0x13:  // Time: h:mm:ss AM/PM
+    format.setAttribute("format", "51");
+    break;
+  case 0x14:  // Time: h:mm
+    format.setAttribute("format", "50");
+    break;
+  case 0x15:  // Time: h:mm:ss
+    format.setAttribute("format", "51");
+    break;
+  case 0x2a:  // Number currency
+  case 0x2c:
+    format.setAttribute("precision", "2");
+    format.setAttribute("format", "10");
+    format.setAttribute("faktor", "1");
+    break;
+  case 0x2D:  // Time: mm:ss
+    format.setAttribute("format", "51");
+    break;
+  case 0x2E:  // Time: [h]:mm:ss
+    format.setAttribute("format", "51");
+    break;
+  case 0x2F:  // Time: mm:ss.0
+    format.setAttribute("format", "51");
+    break;
+  case 0xA4:	// Date
+    format.setAttribute("format", "215");
+    break;
+  case 0xA5:	// Date
+    format.setAttribute("format", "204");
+    break;
+  case 0xA6:	// Date
+    format.setAttribute("format", "200");
+    break;
+  case 0xA7:	// Date
+    format.setAttribute("format", "212");
+    break;
+  case 0xA8:	// Date
+    format.setAttribute("format", "203");
+    break;
+  case 0xA9:	// Date
+    format.setAttribute("format", "202");
+    break;
+  case 0xAA:	// Date
+    format.setAttribute("format", "207");
+    break;
+  case 0xAB:	// Date
+    format.setAttribute("format", "209");
+    break;
+  default:    
+    s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
+			    formats[xfs[xf]->ifmt]->cch);
+  }
 
   getFont(xf, format, fontid);
   getPen(xf, format, fontid);
@@ -281,32 +320,396 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
   return format;
 }
 
-bool XMLTree::_1904(Q_UINT16, QDataStream&)
+const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rgce)
 {
-  return true;
+  double number;
+  Q_UINT8 byte, ptg;
+  Q_UINT16 integer;
+  Q_INT16 refRow, refColumn, refRowLast, refColumnLast;
+  QString str;
+  QStringList parsedFormula;
+  QStringList::Iterator stringPtr;
+
+  parsedFormula.append("=");
+
+  while (!rgce.eof()) {
+    rgce >> ptg;
+    switch (ptg) {
+    case 0x03:  // ptgAdd
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "+";
+      break;
+    case 0x04:  // ptgSub
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "-";
+      break;
+    case 0x05:  // ptgMul
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "*";
+      break;
+    case 0x06:  // ptgDiv
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "/";
+      break;
+    case 0x07:  // ptgPower
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "^"; // Hmmm, not supported by kspread.
+      break;
+    case 0x08:  // ptgConcat
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "&";
+      break;
+    case 0x09:  // ptgLT
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "<";
+      break;
+    case 0x0a:  // ptgLE
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "<=";
+      break;
+    case 0x0b:  // ptgEQ
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "==";
+      break;
+    case 0x0c:  // ptgGE
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = ">=";
+      break;
+    case 0x0d:  // ptgGT
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = ">";
+      break;
+    case 0x0e:  // ptgNE
+      stringPtr = parsedFormula.fromLast();
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty());
+      *stringPtr = "!=";
+      break;
+    case 0x15:  // ptgParen
+      stringPtr = parsedFormula.fromLast();
+      --stringPtr;
+      *stringPtr += ")";
+      ++stringPtr;
+      do {
+	--stringPtr;
+	--stringPtr;
+      } while (!(*stringPtr).isEmpty() && (*stringPtr) != "=");
+      ++stringPtr;
+      (*stringPtr).prepend("(");
+      break;
+    case 0x19:  // ptgAttr
+      rgce >> byte >> integer;
+      if (byte & 0x10) {
+	stringPtr = parsedFormula.fromLast();
+	--stringPtr;
+	*stringPtr += ")";
+	(*stringPtr).prepend("sum(");
+	}
+      break;
+    case 0x1d:  // ptgBool
+      rgce >> byte;
+      if (byte == 1)
+	parsedFormula.append("True");
+      else
+	parsedFormula.append("False");
+      parsedFormula.append("");
+      break;
+    case 0x1e:  // ptgInt
+      rgce >> integer;
+      parsedFormula.append(QString::number((int) integer));
+      parsedFormula.append("");
+      break;
+    case 0x1f:  // ptgNum
+      rgce >> number;
+      parsedFormula.append(QString::number(number));
+      parsedFormula.append("");
+      break;
+    case 0x21:  // ptgFunc
+    case 0x41:
+      rgce >> integer;
+      stringPtr = parsedFormula.fromLast();
+      --stringPtr;
+      *stringPtr += ")";
+
+      switch (integer) {
+      case 15:  // sin
+	(*stringPtr).prepend("sin(");
+	break;
+      case 16:  // cos
+	(*stringPtr).prepend("cos(");
+	break;
+      case 17:  // tan
+	(*stringPtr).prepend("tan(");
+	break;
+      case 18:  // atan
+	(*stringPtr).prepend("atan(");
+	break;
+      case 19:  // pi
+	parsedFormula.append("PI()");
+	parsedFormula.append("");
+	break;
+      case 20:  // sqrt
+	(*stringPtr).prepend("sqrt(");
+	break;
+      case 21:  // exp
+	(*stringPtr).prepend("exp(");
+	break;
+      case 22:  // ln
+	(*stringPtr).prepend("ln(");
+	break;
+      case 23:  // log
+	(*stringPtr).prepend("log(");
+	break;
+      case 24:  // fabs
+	(*stringPtr).prepend("fabs(");
+	break;
+      case 25:  // floor
+	(*stringPtr).prepend("floor(");
+	break;
+      case 26:  // sign
+	(*stringPtr).prepend("sign(");
+	break;
+      case 39:  // mod
+	--stringPtr;
+	*stringPtr = ",";
+	--stringPtr;
+	(*stringPtr).prepend("MOD(");
+	break;
+      case 97:  // atan2
+	--stringPtr;
+	*stringPtr = ",";
+	--stringPtr;
+	(*stringPtr).prepend("atan2(");
+	break;
+      case 98:  // asin
+	(*stringPtr).prepend("asin(");
+	break;
+      case 99:  // acos
+	(*stringPtr).prepend("acos(");
+	break;
+      case 184:  // fact
+	(*stringPtr).prepend("fact(");
+	break;
+      case 212:  // ceil
+	*stringPtr = ""; // no exact match, so we have to workaround
+	--stringPtr;
+	*stringPtr = "";
+	--stringPtr;
+	*stringPtr += ")";
+	(*stringPtr).prepend("ceil(");
+	break;
+      case 229:  // sinh
+	(*stringPtr).prepend("sinh(");
+	break;
+      case 230:  // cosh
+	(*stringPtr).prepend("cosh(");
+	break;
+      case 231:  // tanh
+	(*stringPtr).prepend("tanh(");
+	break;
+      case 232:  // asinh
+	(*stringPtr).prepend("asinh(");
+	break;
+      case 233:  // acosh
+	(*stringPtr).prepend("acosh(");
+	break;
+      case 337:  // pow
+	--stringPtr;
+	*stringPtr = ",";
+	--stringPtr;
+	(*stringPtr).prepend("pow(");
+	break;
+      case 342:  // radian
+	(*stringPtr).prepend("radian(");
+	break;
+      case 343:  // degree
+	(*stringPtr).prepend("degree(");
+	break;
+      default:
+	kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
+	break;
+      }
+      break;
+    case 0x22:  // ptgFuncVar
+    case 0x42:
+      rgce >> byte >> integer;
+      stringPtr = parsedFormula.fromLast();
+      --stringPtr;
+      *stringPtr += ")";
+      ++stringPtr;
+      for (; byte > 1; --byte) {
+	--stringPtr;
+	--stringPtr;
+	*stringPtr = ",";
+      } 
+      --stringPtr;
+
+      switch (integer) {
+      case 4:  // sum
+	(*stringPtr).prepend("sum(");
+	break;
+      case 5:  // average
+	(*stringPtr).prepend("average(");
+	break;
+      case 6:  // min
+	(*stringPtr).prepend("min(");
+	break;
+      case 7:  // max
+	(*stringPtr).prepend("max(");
+	break;
+      case 183:  // multiply
+	(*stringPtr).prepend("multiply(");
+	break;
+      case 197:  // ent
+	(*stringPtr).prepend("ENT(");
+	*stringPtr += ")"; // no exact match, so we have to workaround
+	++stringPtr;
+	*stringPtr = ""; 
+	++stringPtr;
+	*stringPtr = "";
+	break;
+      default:
+	kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
+	break;
+      }
+      break;
+    case 0x24:  // ptgRef
+    case 0x44:
+      if (biff == BIFF_8) { 
+	rgce >> refRow >> refColumn;
+	if (refColumn & 0x8000)
+	  refRow += -1*row;
+	if (refColumn & 0x4000) {
+	  refColumn &= 0x3fff;
+	  refColumn += -1*column;
+	}
+      } else {
+	rgce >> refRow >> byte;
+	refColumn = byte; 
+	if (refRow & 0x8000)
+	  refRow += -1*row;
+	if (refRow & 0x4000) {
+	  refRow &= 0x3fff;
+	  refColumn += -1*column;
+	}
+      }
+      str = "#";
+      str += QString::number((int) refColumn);
+      str += "#";
+      str += QString::number((int) refRow);
+      str += "#";
+      parsedFormula.append(str);
+      parsedFormula.append("");
+      break;
+    case 0x25:  // ptgArea
+    case 0x45:
+      if (biff == BIFF_8) { 
+	rgce >> refRow >> refRowLast >> refColumn >> refColumnLast;
+	if (refColumn & 0x8000)
+	  refRow += -1*row;
+	if (refColumn & 0x4000) {
+	  refColumn &= 0x3fff;
+	  refColumn += -1*column;
+	}
+	if (refColumnLast & 0x8000)
+	  refRowLast += -1*row;
+	if (refColumnLast & 0x4000) {
+	  refColumnLast &= 0x3fff;
+	  refColumnLast += -1*column;
+	}
+      } else {
+	rgce >> refRow >> refRowLast >> byte;
+	refColumn = byte;
+	rgce >> byte;
+	refColumnLast = byte;
+	if (refRow & 0x8000)
+	  refRow += -1*row;
+	if (refRow & 0x4000) {
+	  refColumn &= 0x3fff;
+	  refColumn += -1*column;
+	}
+	if (refRowLast & 0x8000)
+	  refRowLast += -1*row;
+	if (refRowLast & 0x4000) {
+	  refColumnLast &= 0x3fff;
+	  refColumnLast += -1*column;
+	}
+      }
+      str = "#";
+      str += QString::number((int) refColumn);
+      str += "#";
+      str += QString::number((int) refRow);
+      str += "#:#";
+      str += QString::number((int) refColumnLast);
+      str += "#";
+      str += QString::number((int) refRowLast);
+      str += "#";
+      parsedFormula.append(str);
+      parsedFormula.append("");
+      break;
+    default:
+      kdDebug(30511) << "Formula contains unhandled ptg " << ptg << endl;
+      break;
+    }
+  }
+  kdDebug(30511) << "Formula: " << parsedFormula.join("") << endl;
+  return parsedFormula.join("");
 }
 
-bool XMLTree::_addin(Q_UINT16, QDataStream&)
+bool XMLTree::_1904(Q_UINT16 size, QDataStream& body)
 {
-  return true;
-}
+  body >> date1904;
 
-bool XMLTree::_addmenu(Q_UINT16, QDataStream&)
-{
   return true;
 }
 
 bool XMLTree::_array(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_autofilter(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_autofilterinfo(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -316,12 +719,20 @@ bool XMLTree::_backup(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_blank(Q_UINT16, QDataStream&)
+bool XMLTree::_blank(Q_UINT16, QDataStream& body)
 {
+  Q_UINT16 row, column, xf;
+
+  body >> row >> column >> xf;
+  QDomElement e = root->createElement("cell");
+  e.appendChild(getFormat(xf));
+  e.setAttribute("row", (int) ++row);
+  e.setAttribute("column", (int) ++column);
+  table->appendChild(e);
   return true;
 }
 
-bool XMLTree::_bof(Q_UINT16 /*size*/, QDataStream& body)
+bool XMLTree::_bof(Q_UINT16, QDataStream& body)
 {
   Q_UINT16 type;
 
@@ -347,7 +758,7 @@ bool XMLTree::_boolerr(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_bottommargin(Q_UINT16 /*size*/, QDataStream& body)
+bool XMLTree::_bottommargin(Q_UINT16, QDataStream& body)
 {
   double value;
   body >> value;
@@ -397,16 +808,6 @@ bool XMLTree::_boundsheet(Q_UINT16 /*size*/, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_calccount(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_calcmode(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_cf(Q_UINT16, QDataStream&)
 {
   return true;
@@ -417,17 +818,12 @@ bool XMLTree::_condfmt(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_codename(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_codepage(Q_UINT16, QDataStream&)
 {
   return true;
 }
 
-bool XMLTree::_colinfo(Q_UINT16 /*size*/, QDataStream& body)
+bool XMLTree::_colinfo(Q_UINT16, QDataStream& body)
 {
   Q_UINT16 first, last, width;
 
@@ -448,11 +844,6 @@ bool XMLTree::_cont(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_coordlist(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_country(Q_UINT16, QDataStream&)
 {
   return true;
@@ -468,26 +859,6 @@ bool XMLTree::_dbcell(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_dcon(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_dconbin(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_dconname(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_dconref(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_defaultrowheight(Q_UINT16, QDataStream&)
 {
   return true;
@@ -498,42 +869,7 @@ bool XMLTree::_defcolwidth(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_delmenu(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_delta(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_dimensions(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_docroute(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_dsf(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_dv(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_dval(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_edg(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -574,21 +910,6 @@ bool XMLTree::_filesharing(Q_UINT16, QDataStream&)
 }
 
 bool XMLTree::_filesharing2(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_filtermode(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_fngroupcount(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_fngroupname(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -653,17 +974,27 @@ bool XMLTree::_format(Q_UINT16 /*size*/, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_formula(Q_UINT16, QDataStream&)
+bool XMLTree::_formula(Q_UINT16 /*size*/, QDataStream& body)
 {
+  Q_UINT16 row, column, xf, skip;
+
+  body >> row >> column >> xf;
+  body >> skip >> skip >> skip >> skip >> skip >> skip >> skip >> skip;
+
+  QDomElement e = root->createElement("cell");
+  e.appendChild(getFormat(xf));
+  e.setAttribute("row", (int) row+1);
+  e.setAttribute("column", (int) column+1);
+
+  QDomElement text = root->createElement("text");
+  text.appendChild(root->createTextNode(getFormula(row, column, body)));
+  e.appendChild(text);
+  table->appendChild(e);
+  
   return true;
 }
 
 bool XMLTree::_gcw(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_gridset(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -698,11 +1029,6 @@ bool XMLTree::_header(Q_UINT16 /*size*/, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_hideobj(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_hlink(Q_UINT16, QDataStream&)
 {
   return true;
@@ -714,26 +1040,6 @@ bool XMLTree::_horizontalpagebreaks(Q_UINT16, QDataStream&)
 }
 
 bool XMLTree::_imdata(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_index(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_interfaceend(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_interfacehdr(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_iteration(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -775,7 +1081,6 @@ bool XMLTree::_labelsst(Q_UINT16 /*size*/, QDataStream& body)
   text.appendChild(root->createTextNode(*sst[isst]));
   e.appendChild(text);
   table->appendChild(e);
-
   return true;
 }
 
@@ -788,57 +1093,35 @@ bool XMLTree::_leftmargin(Q_UINT16 /*size*/, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_lhngraph(Q_UINT16, QDataStream&)
+bool XMLTree::_mulblank(Q_UINT16 size, QDataStream& body)
 {
-  return true;
-}
-
-bool XMLTree::_lhrecord(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_lpr(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_mms(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_msodrawing(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_msodrawinggroup(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_msodrawingselection(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_mulblank(Q_UINT16, QDataStream&)
-{
+  Q_UINT16 row, xf, last, first;
+  
+  body >> row >> first;
+  last = (size-6)/2;
+  for (int i=0; i < last-first; ++i) {
+    body >> xf;
+    QDomElement e = root->createElement("cell");
+    e.appendChild(getFormat(xf));
+    e.setAttribute("row", row+1);
+    e.setAttribute("column", first+i+1);
+    table->appendChild(e);
+  }
   return true;
 }
 
 bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
 {
-  int i;
   double value = 0;
+
   QString s;
+
   Q_UINT16 first, last, row, xf;
   Q_UINT32 number, t[2];
 
   body >> row >> first;
   last = (size-6)/6;
-  for (i=0; i < last-first+1; ++i) {
+  for (int i=0; i < last-first; ++i) {
     body >> xf >> number;
 
     switch (number & 0x03) {
@@ -860,13 +1143,36 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
       break;
     }
 
+    switch (xfs[xf]->ifmt) {
+    case 14: // Dates
+    case 15:
+    case 16:
+    case 17:
+    case 164: // These are undocumented
+    case 168:
+    case 165:
+    case 166:
+    case 167:
+    case 169:
+    case 170:
+    case 171:
+      int year, month, day;
+      getDate((int) value, year, month, day);
+      s.sprintf("%d/%d/%d", year, month, day);
+      break;
+    default: // Number
+      s = QString::number(value, 'f');
+      break;
+    }
+
     QDomElement e = root->createElement("cell");
     e.appendChild(getFormat(xf));
-    QString s=QString::number(value, 'f');
     e.setAttribute("row", row+1);
     e.setAttribute("column", first+i+1);
+
     QDomElement text = root->createElement("text");
     text.appendChild(root->createTextNode(s));
+
     e.appendChild(text);
     table->appendChild(e);
   }
@@ -904,31 +1210,6 @@ bool XMLTree::_number(Q_UINT16 /*size*/, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_obj(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_objprotect(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_obproj(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_olesize(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_palette(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_pane(Q_UINT16, QDataStream&)
 {
   return true;
@@ -944,32 +1225,7 @@ bool XMLTree::_password(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_pls(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_precision(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_printgridlines(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_printheaders(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_protect(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_prot4rev(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -980,16 +1236,6 @@ bool XMLTree::_qsi(Q_UINT16, QDataStream&)
 }
 
 bool XMLTree::_recipname(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_refmode(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_refreshall(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -1006,9 +1252,12 @@ bool XMLTree::_rightmargin(Q_UINT16 /*size*/, QDataStream& body)
 bool XMLTree::_rk(Q_UINT16 /*size*/, QDataStream& body)
 {
   double value = 0;
+
   QString s;
+
   Q_UINT32 number, t[2];
   Q_UINT16 row, column, xf;
+
   body >> row >> column >> xf >> number;
 
   switch (number & 0x03) {
@@ -1029,14 +1278,37 @@ bool XMLTree::_rk(Q_UINT16 /*size*/, QDataStream& body)
     value = (double) (number >> 2) / 100;
     break;
   }
+  
+  switch (xfs[xf]->ifmt) {
+  case 14: // Dates
+  case 15:
+  case 16:
+  case 17:
+  case 164: // These are undocumented
+  case 168:
+  case 165:
+  case 166:
+  case 167:
+  case 169:
+  case 170:
+  case 171:
+    int year, month, day;
+    getDate((int) value, year, month, day);
+    s.sprintf("%d/%d/%d", year, month, day);
+    break;
+  default: // Number
+    s = QString::number(value, 'f');
+    break;
+  }
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  s = QString::number(value, 'f');
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
+
   QDomElement text = root->createElement("text");
   text.appendChild(root->createTextNode(s));
+
   e.appendChild(text);
   table->appendChild(e);
 
@@ -1057,37 +1329,7 @@ bool XMLTree::_row(Q_UINT16 /*size*/, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_rstring(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_saverecalc(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_scenario(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_scenman(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_scenprotect(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_scl(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_selection(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -1107,11 +1349,6 @@ bool XMLTree::_sort(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_sound(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_sst(Q_UINT16 /*size*/, QDataStream& body)
 {
   char *name;
@@ -1125,7 +1362,8 @@ bool XMLTree::_sst(Q_UINT16 /*size*/, QDataStream& body)
     body >> cch >> grbit;
     name = new char[cch+1];
     body.readRawBytes(name, cch);
-    name[cch]='\0';    s = new QString(name);
+    name[cch]='\0';    
+    s = new QString(name);
     sst.insert(i, s);
     delete[] name;
   }
@@ -1139,156 +1377,6 @@ bool XMLTree::_standardwidth(Q_UINT16, QDataStream&)
 }
 
 bool XMLTree::_string(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_style(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sub(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_supbook(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxdb(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxdbex(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxdi(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxex(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxext(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxfdbtype(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxfilt(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxformat(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxformula(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxfmla(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxidstm(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxivd(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxli(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxname(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxpair(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxpi(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxrule(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxstring(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxselect(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxtbl(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxtbpg(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxtbrgiitm(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxvd(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxvdex(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxvi(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxview(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_sxvs(Q_UINT16, QDataStream&)
 {
   return true;
 }
@@ -1308,52 +1396,12 @@ bool XMLTree::_table(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_templt(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_topmargin(Q_UINT16 /*size*/, QDataStream& body)
 {
   double value;
   body >> value;
   (paper.namedItem("borders")).toElement().setAttribute("top", value);
 
-  return true;
-}
-
-bool XMLTree::_txo(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_uddesc(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_uncalced(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_userbview(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_usersviewbegin(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_usersviewend(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_useselfs(Q_UINT16, QDataStream&)
-{
   return true;
 }
 
@@ -1377,12 +1425,7 @@ bool XMLTree::_window2(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_windowprotect(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
-bool XMLTree::_writeaccess(Q_UINT16 /*size*/, QDataStream& body)
+bool XMLTree::_writeaccess(Q_UINT16, QDataStream& body)
 {
   Q_UINT8 length;
 
@@ -1413,11 +1456,6 @@ bool XMLTree::_wsbool(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_xct(Q_UINT16, QDataStream&)
-{
-  return true;
-}
-
 bool XMLTree::_xf(Q_UINT16 /*size*/, QDataStream& body)
 {
   xf_rec *x = new xf_rec;
@@ -1425,11 +1463,6 @@ bool XMLTree::_xf(Q_UINT16 /*size*/, QDataStream& body)
   body >> x->borderStyle >> x->sideBColor >> x->topBColor >> x->cellColor;
   xfs.insert(xfCount++, x);
 
-  return true;
-}
-
-bool XMLTree::_xl5modify(Q_UINT16, QDataStream&)
-{
   return true;
 }
 
