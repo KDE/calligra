@@ -5,6 +5,10 @@
 #ifndef __VTEXT_H__
 #define __VTEXT_H__
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <qptrlist.h>
 #include <qstring.h>
 #include <qfont.h>
@@ -38,9 +42,9 @@ public:
 	void setState( const VState state );
 
 private:
-#ifdef XFTFREETYPE
+#ifdef HAVE_FREETYPE
 	void traceText( const QString &text );
-#endif
+#endif // HAVE_FREETYPE
 
 	QString m_text;
 	VObjectList m_glyphs;

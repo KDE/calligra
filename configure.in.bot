@@ -1,0 +1,10 @@
+if test -z "$LIBFREETYPE_LIBS"; then
+  echo ""
+  echo "You're missing libfreetype. karbon will be compiled without text support."
+  echo "You can download libfreetype from"
+  echo "http://www.freetype.org/"
+  echo ""
+  echo "Please remove the file config.cache after installing any libraries"
+  echo "so that configure will find them next time."
+  echo ""
+fi

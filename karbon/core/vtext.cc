@@ -10,7 +10,7 @@
 
 #include <kdebug.h>
 
-#ifdef XFTFREETYPE
+#ifdef HAVE_FREETYPE
 
 #include <X11/Xft/Xft.h>
 #include <X11/Xft/XftFreetype.h>
@@ -85,7 +85,7 @@ FT_Outline_Funcs OutlineMethods =
 	0
 };
 
-#endif
+#endif // HAVE_FREETYPE
 
 VText::VText()
 {
@@ -134,7 +134,7 @@ VText::draw( VPainter* painter, const QRect& rect,
 	//if( !rect.intersects( boundingBox( zoomFactor ) ) )
 	//	return;
 
-#ifdef XFTFREETYPE
+#ifdef HAVE_FREETYPE
 
 	// setup glyphs
 	if( m_glyphs.count() == 0 )
@@ -143,7 +143,7 @@ VText::draw( VPainter* painter, const QRect& rect,
 		setState( state() );
 	}
 
-#endif
+#endif // HAVE_FREETYPE
 
 	// draw glyphs
 	VObjectListIterator itr = m_glyphs;
@@ -242,7 +242,7 @@ VText::load( const QDomElement& element )
 	}
 }
 
-#ifdef XFTFREETYPE
+#ifdef HAVE_FREETYPE
 
 void VText::traceText( const QString &text )
 {
@@ -331,5 +331,4 @@ void VText::traceText( const QString &text )
 	}
 }
 
-#endif
-
+#endif // HAVE_FREETYPE
