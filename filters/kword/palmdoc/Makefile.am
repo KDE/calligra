@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes) -I$(srcdir)/../libexport $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes)
 libpalmdocimport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
 libpalmdocimport_la_LIBADD = $(KOFFICE_LIBS)
 libpalmdocexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
