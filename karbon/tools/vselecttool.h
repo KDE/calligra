@@ -24,6 +24,7 @@ public:
 
 protected:
 	void setCursor( const QPoint & ) const;
+	virtual void mousePressed( QMouseEvent * );
 
 private:
 	enum { normal, moving, scaling, rotating } m_state;

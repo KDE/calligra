@@ -24,6 +24,7 @@ public:
 
 protected:
 	void setCursor( const QPoint & ) const;
+	virtual void mousePressed( QMouseEvent * );
 
 private:
 	KoPoint m_sp;

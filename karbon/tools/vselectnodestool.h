@@ -23,6 +23,7 @@ public:
 
 protected:
 	void setCursor( const KoPoint & ) const;
+	virtual void mousePressed( QMouseEvent * );
 
 private:
 	enum { normal, dragging, moving } m_state;

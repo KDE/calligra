@@ -29,6 +29,23 @@ VShearTool::~VShearTool()
 }
 
 void
+VShearTool::mousePressed( QMouseEvent *mouse_event )
+{
+	view()->painterFactory()->painter()->end();
+
+	m_fp.setX( mouse_event->pos().x() );
+	m_fp.setY( mouse_event->pos().y() );
+	m_lp.setX( mouse_event->pos().x() );
+	m_lp.setY( mouse_event->pos().y() );
+
+	m_activeNode = view()->part()->document().selection()->handleNode( mouse_event->pos() );
+
+	// draw initial object:
+	drawTemporaryObject();
+	m_isDragging = true;
+}
+
+void
 VShearTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Shear" ) );
@@ -182,19 +199,7 @@ VShearTool::eventFilter( QEvent* event )
 	// the whole story starts with this event:
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
-		view()->painterFactory()->painter()->end();
-
-		m_fp.setX( mouse_event->pos().x() );
-		m_fp.setY( mouse_event->pos().y() );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		m_activeNode = view()->part()->document().selection()->handleNode( mouse_event->pos() );
-
-		// draw initial object:
-		drawTemporaryObject();
-		m_isDragging = true;
-
+		mousePressed( static_cast<QMouseEvent *>( event ) );
 		return true;
 	}
 

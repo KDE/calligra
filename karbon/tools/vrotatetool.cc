@@ -34,6 +34,23 @@ VRotateTool::~VRotateTool()
 }
 
 void
+VRotateTool::mousePressed( QMouseEvent *mouse_event )
+{
+	view()->painterFactory()->painter()->end();
+
+	m_fp.setX( mouse_event->pos().x() );
+	m_fp.setY( mouse_event->pos().y() );
+	m_lp.setX( mouse_event->pos().x() );
+	m_lp.setY( mouse_event->pos().y() );
+
+	m_activeNode = view()->part()->document().selection()->handleNode( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
+
+	// draw initial object:
+	drawTemporaryObject();
+	m_isDragging = true;
+}
+
+void
 VRotateTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Rotate" ) );
@@ -184,19 +201,7 @@ VRotateTool::eventFilter( QEvent* event )
 	// the whole story starts with this event:
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
-		view()->painterFactory()->painter()->end();
-
-		m_fp.setX( mouse_event->pos().x() );
-		m_fp.setY( mouse_event->pos().y() );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		m_activeNode = view()->part()->document().selection()->handleNode( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
-
-		// draw initial object:
-		drawTemporaryObject();
-		m_isDragging = true;
-
+		mousePressed( static_cast<QMouseEvent *>( event ) );
 		return true;
 	}
 

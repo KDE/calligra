@@ -26,6 +26,8 @@ public:
 	void drawTemporaryObject();
 
 	virtual void showDialog() const;
+protected:
+	virtual void mousePressed( QMouseEvent * );
 
 private:
 	VGradientDlg* m_dialog;
