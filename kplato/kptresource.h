@@ -35,6 +35,7 @@ class KPTTask;
 class KPTNode;
 class KPTResource;
 class KPTProject;
+class KPTCalendar;
 class QTime;
 
 /**
@@ -112,6 +113,9 @@ class KPTResourceGroup {
 
           void addNode(const KPTNode *node) { m_nodes.append(node); }
           void clearNodes() { m_nodes.clear(); }
+
+          KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
+
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
@@ -125,6 +129,8 @@ class KPTResourceGroup {
         QPtrList<KPTResourceGroup> m_requires;
 
         QPtrList<KPTNode> m_nodes; //The nodes that want resources from us
+
+        KPTCalendar *m_defaultCalendar;
 };
 
 /**

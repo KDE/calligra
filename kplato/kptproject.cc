@@ -24,6 +24,7 @@
 #include "kptduration.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
+#include "kptcalendar.h"
 
 #include <qdom.h>
 #include <qstring.h>
@@ -58,6 +59,7 @@ KPTProject::KPTProject(KPTNode *parent)
     m_maxNodeId = 0;
     m_maxGroupId = 0;
     m_maxResourceId = 0;
+
 }
 
 
@@ -338,26 +340,54 @@ bool KPTProject::load(QDomElement &element) {
 		        delete child;
             }
 	    } else if (e.tagName() == "resource-group") {
-		    // Load the resources
-		    KPTResourceGroup *child = new KPTResourceGroup(this);
+		// Load the resources
+		KPTResourceGroup *child = new KPTResourceGroup(this);
     		if (child->load(e)) {
-                addResourceGroup(child);
-            } else {
-		        // TODO: Complain about this
-		        delete child;
-            }
+                    addResourceGroup(child);
+                } else {
+                    // TODO: Complain about this
+                    delete child;
+                }
 	    } else if (e.tagName() == "appointment") {
-		    // Load the appointments. Resources and tasks must allready loaded
-		    KPTAppointment *child = new KPTAppointment();
+                // Load the appointments. Resources and tasks must allready loaded
+                KPTAppointment *child = new KPTAppointment();
     		if (! child->load(e, *this)) {
-		        // TODO: Complain about this
-                kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
-		        delete child;
-            }
+                    // TODO: Complain about this
+                    kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
+		    delete child;
+                }
+	    } else if (e.tagName() == "calendar") {
+		// Load the calendar.
+		KPTCalendar *child = new KPTCalendar();
+    		if (child->load(e)) {
+                    addCalendar(child);
+                } else {
+		    // TODO: Complain about this
+                    kdError()<<k_funcinfo<<"Failed to load calendar"<<endl;
+		    delete child;
+                }
 	    }
 	}
     }
-
+    // fix calendar references
+    QPtrListIterator<KPTCalendar> calit(m_calendars);
+    for (; calit.current(); ++calit) {
+        if (calit.current()->id() == calit.current()->parentId()) {
+            kdError()<<k_funcinfo<<"Calendar want itself as parent"<<endl;
+            continue;
+        }
+        QPtrListIterator<KPTCalendar> cals(m_calendars);
+        for (; cals.current(); ++cals) {
+            if (cals.current()->id() == calit.current()->parentId()) {
+                if (cals.current()->hasParent(calit.current())) {
+                    kdError()<<k_funcinfo<<"Avoid circular dependancy"<<endl;
+                } else {
+                    calit.current()->setParent(cals.current());
+                }
+                break;
+            }
+        }
+    }
     return true;
 }
 
@@ -381,6 +411,16 @@ void KPTProject::save(QDomElement &element)  {
     me.appendChild(e);
     endNode.save(e);
 
+    // save calendars
+    QPtrListIterator<KPTCalendar> calit(m_calendars);
+    for (int i=1; calit.current(); ++calit) {
+        if (!calit.current()->isDeleted())
+            calit.current()->setId(i++);
+    }
+    for (calit.toFirst(); calit.current(); ++calit) {
+        calit.current()->save(me);
+    }
+    
     // save project resources
     m_maxGroupId = 0; m_maxResourceId = 0;  // we'll generate fresh ones
     QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
@@ -741,6 +781,10 @@ QPtrList<KPTAppointment> KPTProject::appointments(const KPTNode *node) {
     return a;
 }
 
+void KPTProject::addCalendar(KPTCalendar *calendar) {
+    m_calendars.append(calendar);
+}
+
 #ifndef NDEBUG
 void KPTProject::printDebug(bool children, QCString indent) {
 
@@ -756,5 +800,12 @@ void KPTProject::printDebug(bool children, QCString indent) {
 
     KPTNode::printDebug(children, indent);
 }
-
+void KPTProject::printCalendarDebug(QCString indent) {
+    kdDebug()<<indent<<"-------- Calendars debug printout --------"<<endl;
+    QPtrListIterator<KPTCalendar> it = m_calendars;
+    for (; it.current(); ++it) {
+        it.current()->printDebug(indent + "--");
+        kdDebug()<<endl;
+    }
+}
 #endif

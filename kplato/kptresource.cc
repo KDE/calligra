@@ -21,6 +21,7 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptdatetime.h"
+#include "kptcalendar.h"
 
 #include <kdebug.h>
 

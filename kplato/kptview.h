@@ -74,6 +74,7 @@ protected slots:
     void slotAddSubTask();
     void slotAddMilestone();
     void slotProjectEdit();
+    void slotProjectCalendar();
     void slotProjectCalculate();
     void slotReportDesign();
     void slotReportGenerate(int);

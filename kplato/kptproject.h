@@ -28,10 +28,12 @@
 #include "defs.h"
 
 #include <qmap.h>
+#include <qptrlist.h>
 
 #include <list>
 #include <algorithm>
 
+class KPTCalendar;
 
 //#define DEBUGPERT
 /**
@@ -138,6 +140,10 @@ public:
 
     QPtrList<KPTAppointment> appointments(const KPTNode *node);
 
+    KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
+    const QPtrList<KPTCalendar> &calendars() const { return m_calendars; }
+    void addCalendar(KPTCalendar *calendar);
+
 protected:
     /**
      * @return The start node.
@@ -183,6 +189,9 @@ protected:
 
     QPtrList<KPTResourceGroup> m_resourceGroups;
 
+    KPTCalendar *m_defaultCalendar;
+    QPtrList<KPTCalendar> m_calendars;
+
 private:
     // we need unique id's for referencing objects when saving/loading
     QMap<int, KPTNode *>m_nodeMap;
@@ -193,8 +202,10 @@ private:
     int m_maxResourceId; // the highest id in map
 
 #ifndef NDEBUG
+#include <qcstring.h>
 public:
     void printDebug(bool children, QCString indent);
+    void printCalendarDebug(QCString indent="");
 #ifdef DEBUGPERT
     static void pert_test();
     static void printTree(KPTNode *n, QString s);

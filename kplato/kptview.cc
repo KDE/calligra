@@ -33,7 +33,7 @@
 #include "kptresourceview.h"
 #include "kptresourcedialog.h"
 #include "kptresource.h"
-
+#include "kptcalendarlistdialog.h"
 #include "kptcanvasitem.h"
 
 #include "KDGanttView.h"
@@ -139,6 +139,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     // ------ Project
     new KAction(i18n("Edit Main Project..."), "project_edit", 0, this,
 		SLOT(slotProjectEdit()), actionCollection(), "project_edit");
+    new KAction(i18n("Edit calendar..."), "project_calendar", 0, this,
+		SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
     new KAction(i18n("Calculate..."), "project_calculate", 0, this,
 		SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
 
@@ -268,6 +270,13 @@ void KPTView::slotProjectEdit() {
     if (dia->exec())
 	    slotUpdate(true);
 
+    delete dia;
+}
+
+void KPTView::slotProjectCalendar() {
+    KPTCalendarListDialog *dia = new KPTCalendarListDialog(getProject());
+    if (dia->exec()) {
+    }
     delete dia;
 }
 
