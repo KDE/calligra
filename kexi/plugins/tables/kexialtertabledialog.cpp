@@ -225,12 +225,14 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiProper
 		prop->setValue( visible ? KexiDB::Field::defaultTextLength() : 0, false );
 		changed = true;
 	}
+#ifndef KEXI_NO_UNFINISHED
 	prop = &buf["precision"];
 	visible = KexiDB::Field::isFPNumericType(fieldType);
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		changed = true;
 	}
+#endif
 	prop = &buf["allowEmpty"];
 	visible = KexiDB::Field::hasEmptyProperty(fieldType);
 	if (prop->isVisible()!=visible) {
@@ -269,7 +271,10 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 		slist.join("|") << "\nnames: " << nlist.join("|") << endl;
 	buff->add(prop = new KexiProperty("subType", field->typeString(), slist, nlist, i18n("Subtype")));
 
-	buff->add( new KexiProperty("caption", QVariant(field->caption()), i18n("Caption") ) );
+	buff->add( prop = new KexiProperty("caption", QVariant(field->caption()), i18n("Caption") ) );
+#ifdef KEXI_NO_UNFINISHED
+	prop->setVisible(false);
+#endif
 
 	buff->add( prop = new KexiProperty("description", QVariant(field->description())) );
 	prop->setVisible(false);//always hidden
@@ -279,9 +284,15 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 	buff->add( prop = new KexiProperty("length", (int)field->length()/*200?*/, i18n("Length")));
 
 	buff->add( prop = new KexiProperty("precision", (int)field->precision()/*200?*/, i18n("Precision")));
+#ifdef KEXI_NO_UNFINISHED
+	prop->setVisible(false);
+#endif
 
 //TODO: set reasonable default for column width...
-	buff->add( new KexiProperty("width", (int)field->width()/*200?*/, i18n("Column width")));
+	buff->add( prop = new KexiProperty("width", (int)field->width()/*200?*/, i18n("Column width")));
+#ifdef KEXI_NO_UNFINISHED
+	prop->setVisible(false);
+#endif
 
 	buff->add( prop = new KexiProperty("defaultValue", field->defaultValue()/*200?*/, i18n("Default value")));
 //TODO: show this after we get properly working editor for QVariant:
