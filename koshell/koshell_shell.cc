@@ -60,6 +60,20 @@ KoShellWindow::KoShellWindow()
                                        (*it).name(),
 				       this, SLOT( slotKoolBar( int, int ) ) );
       m_mapComponents[ id ] = *it;
+
+      // Build list of patterns for all supported KOffice documents...
+      QString nativeMimeType = (*it).service()->property( "X-KDE-NativeMimeType" ).toString();
+      //kdDebug() << nativeMimeType << endl;
+      if ( !nativeMimeType.isEmpty() )
+      {
+        KMimeType::Ptr mime = KMimeType::mimeType( nativeMimeType );
+        if (mime)
+        {
+          if ( !m_filter.isEmpty() )
+            m_filter += " ";
+          m_filter += mime->patterns().join(" ");
+        }
+      }
   }
 
   m_grpDocuments = m_pKoolBar->insertGroup(i18n("Documents"));
@@ -94,9 +108,7 @@ QString KoShellWindow::nativeFormatName() const
 
 QString KoShellWindow::nativeFormatPattern() const
 {
-  // TODO get this from the desktop files
-  // KoDocumentEntry::query(), then get hold of the service pointers
-  return "*.kwd *.ksp *.kpr";
+  return m_filter; // "*.kwd *.ksp *.kpr";
 }
 
 bool KoShellWindow::openDocument( const KURL & url )
