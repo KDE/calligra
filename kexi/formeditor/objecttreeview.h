@@ -28,7 +28,7 @@ class ObjectTreeItem;
 class Form;
 
 //! An item in ObjectTreeView associated to an ObjectTreeItem.
-class KEXIPROPERTYEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
+class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 {
 	public:
 		ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item);
