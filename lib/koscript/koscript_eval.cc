@@ -226,6 +226,31 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
   // Binary operator
   EVAL_OPS( context, l, r, false );
 
+
+  //allows 5+date or 5+time
+  //before you can just make time+5 and date +5
+ if ( r.value()->type() == KSValue::TimeType )
+  {
+      if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) )
+          return false;
+      QTime t = r.value()->timeValue();
+      t = t.addSecs( l.value()->intValue() );
+      FILL_VALUE( context, l, r );
+      context.value()->setValue( t );
+      return TRUE;
+  }
+  else if ( r.value()->type() == KSValue::DateType )
+  {
+      if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) )
+          return false;
+      QDate d = r.value()->dateValue();
+      d = d.addDays( l.value()->intValue() );
+      FILL_VALUE( context, l, r );
+      context.value()->setValue( d );
+      return TRUE;
+  }
+
+
   if ( l.value()->type() == KSValue::TimeType )
   {
       if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
@@ -342,6 +367,48 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
   }
 
   EVAL_OPS( context, l, r, false );
+
+  //allows 5-date and 5-time
+  if ( r.value()->type() == KSValue::TimeType )
+  {
+      if ( KSUtil::checkType( context, l.value(), KSValue::TimeType, false ) )
+      {
+          QTime d = r.value()->timeValue();
+          int diff = d.secsTo( l.value()->timeValue() );
+          FILL_VALUE( context, l, r );
+          context.value()->setValue( (KScript::Long) diff );
+          return TRUE;
+      }
+
+      if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) )
+          return false;
+      QTime t = r.value()->timeValue();
+      t = t.addSecs( -l.value()->intValue() );
+      FILL_VALUE( context, l, r );
+      context.value()->setValue( t );
+      return TRUE;
+  }
+  else if ( r.value()->type() == KSValue::DateType )
+  {
+      if ( KSUtil::checkType( context, l.value(), KSValue::DateType, false ) )
+      {
+          QDate d = r.value()->dateValue();
+          int diff = d.daysTo( l.value()->dateValue() );
+          FILL_VALUE( context, l, r );
+          context.value()->setValue( (KScript::Long)diff );
+          return TRUE;
+      }
+
+      if ( !KSUtil::checkType( context, l.value(), KSValue::IntType, true ) )
+          return false;
+      QDate d = r.value()->dateValue();
+      d = d.addDays( -l.value()->intValue() );
+      FILL_VALUE( context, l, r );
+      context.value()->setValue( d );
+      return TRUE;
+  }
+
+
 
   if ( l.value()->type() == KSValue::TimeType )
   {
