@@ -254,7 +254,7 @@
         <Syntax>BOOL2STRING(value)</Syntax>
         <Example>BOOL2STRING(True) returns "True"</Example>
         <Example>BOOL2STRING(False) returns "False"</Example>
-        <Example>upper(BOOL2STRING(find("nan";"banane"))) returns TRUE</Example>
+        <Example>upper(BOOL2STRING(find("nan";"banana"))) returns TRUE</Example>
       </Help>
     </Function>
 
@@ -266,9 +266,7 @@
         <Type range="false">Boolean</Type>
       </Parameter>
       <Help>
-        <Text>The BOOL2INT() function returns a integer value for a
-given bool value. This method is intended for using a bool in methods
-which require an int or float</Text>
+        <Text>The BOOL2INT() function returns an integer value for a given bool value. This method is intended for using a bool in methods which require an int or float</Text>
         <Syntax>BOOL2INT(value)</Syntax>
         <Example>BOOL2INT(True) returns 1</Example>
         <Example>BOOL2INT(False) returns 0</Example>
@@ -901,8 +899,7 @@ which require an int or float</Text>
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The PROPER() function converts the first letter of each
-word to uppercase and turns the rest to lowercase.</Text>
+	<Text>The PROPER() function converts the first letter of each word to uppercase and the rest of the letters to lowercase.</Text>
 	<Syntax>PROPER(string)</Syntax>
 	<Example>PROPER("this is a title") returns "This Is A Title"</Example>
       </Help>
@@ -947,9 +944,9 @@ word to uppercase and turns the rest to lowercase.</Text>
 	<Type range="false">Boolean</Type>
       </Parameter>
       <Help>
-	<Text>The REPLACE() function replace a string s1 in the string s with string2.</Text>
+	<Text>The REPLACE() function replaces a string s1 in the string s with string s2.</Text>
 	<Syntax>REPLACE(string; string1; string2; boolean)</Syntax>
-	<Example>REPLACE("KOffice"; "Office"; "KSpread", TRUE) returns "KSpread"</Example>
+	<Example>REPLACE("KOffice"; "Office"; "Spread", TRUE) returns "KSpread"</Example>
       </Help>
     </Function>
 
@@ -1178,9 +1175,9 @@ word to uppercase and turns the rest to lowercase.</Text>
       </Parameter>
       <Help>
 	<Text>The GCD() function returns the greatest common denominator for two or more float values</Text>
-	<Syntax>LCM(value; value)</Syntax>
-	<Example>LCM(6;4) returns 2</Example>
-	<Example>LCM(16;12) returns 4</Example>
+	<Syntax>GCD(value; value)</Syntax>
+	<Example>GCD(6;4) returns 2</Example>
+	<Example>GCD(16;12) returns 4</Example>
       </Help>
     </Function>
 
