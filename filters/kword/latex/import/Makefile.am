@@ -2,7 +2,7 @@ SUBDIRS = parser
 
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes) -Iparser
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes) -I${srcdir}/parser
 liblateximport_la_LDFLAGS	= -module -avoid-version -no-undefined
 liblateximport_la_LIBADD = $(KOFFICE_LIBS) -Lparser -llatexparser
 
