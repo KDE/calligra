@@ -2332,6 +2332,11 @@ void KPresenterDocument_impl::copyObjs(int diffx,int diffy)
 		  clipStr += str;
 		  clipStr += "}";
 
+		  clipStr += "[ANGLE]{";
+		  sprintf(str,"%f",objPtr->angle);
+		  clipStr += str;
+		  clipStr += "}";
+
 		  clipStr += "[NEW_OBJECT_END]";
 		}
 	    }
@@ -2413,6 +2418,8 @@ void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
 		    objPtr->objType = (ObjType)atoi(value);
 		  else if (tag == "OBJ_X" && objPtr)
 		    objPtr->ox = atoi(value) + diffx;
+		  else if (tag == "ANGLE" && objPtr)
+		    objPtr->angle = atof(value);
 		  else if (tag == "OBJ_Y" && objPtr)
 		    objPtr->oy = atoi(value) + diffy;
 		  else if (tag == "OBJ_W" && objPtr)
