@@ -19,9 +19,15 @@
 
 #include "kptpart.h"
 #include "kptview.h"
+#include "kptfactory.h"
 #include "kptproject.h"
 
 #include <qpainter.h>
+#include <qfileinfo.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <koTemplateChooseDia.h>
 
 KPTPart::KPTPart( QWidget *parentWidget, const char *widgetName,
 		  QObject* parent, const char* name, bool singleViewMode )
@@ -37,9 +43,36 @@ KPTPart::~KPTPart()
 
 bool KPTPart::initDoc()
 {
-    // If nothing is loaded, do initialize here
-    return TRUE;
+    bool result = true;
+    QString templateDoc;
+    KoTemplateChooseDia::ReturnType ret;
+
+    ret = KoTemplateChooseDia::choose(KPTFactory::global(), templateDoc,
+				      "application/x-kplato", "*.kpt",
+				      i18n("KPlato"),
+				      KoTemplateChooseDia::Everything,
+				      "kplato_template");
+    if (ret == KoTemplateChooseDia::Template) {
+        QFileInfo fileInfo(templateDoc);
+        QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName()
+			 + ".kptt" );
+        resetURL();
+        result = loadNativeFormat(fileName);
+    } else if (ret == KoTemplateChooseDia::File) {
+        KURL url(templateDoc);
+        kdDebug() << "KPTPart::initDoc opening URL " << url.prettyURL() <<endl;
+        result = openURL(url);
+    } else if (ret == KoTemplateChooseDia::Empty) {
+        QString fileName(locate("kplato_template", "Simple/Plain.kpt",
+				KPTFactory::global()));
+        resetURL();
+        result = loadNativeFormat(fileName);
+    }
+
+    setModified(false);
+    return result;
 }
+
 
 KoView* KPTPart::createViewInstance( QWidget* parent, const char* name )
 {
