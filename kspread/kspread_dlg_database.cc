@@ -77,7 +77,6 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   if ( !name )
     setName( "KSpreadDatabaseDlg" );
 
-  resize( 590, 480 ); 
   setCaption( i18n( "Insert data from database" ) );
 
   // database page
