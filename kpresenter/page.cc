@@ -1105,11 +1105,18 @@ void Page::startScreenPresentation()
       objPtr = objList()->at(i);
 
       // igiiiiiiit - but it helps a little bit....
-      objPtr->oy -= (int)(_presFakt * (float)(pgNum) * (float)(QApplication::desktop()->height() / 
-							       (400 - (QApplication::desktop()->height()/5))));
+      //objPtr->oy -= (int)(_presFakt * (float)(pgNum) * (float)(QApplication::desktop()->height() / 
+      //(400 - (QApplication::desktop()->height()/5))));
 
       objPtr->ow = (int)((float)objPtr->ow * _presFakt);
       objPtr->oh = (int)((float)objPtr->oh * _presFakt);
+
+      pgNum = getPageOfObj(objPtr->objNum,_presFakt);
+      objPtr = objList()->at(i);
+      objPtr->oy = objPtr->ooy; 
+      objPtr->oy -= getPageSize(pgNum).y() + diffy();
+      objPtr->oy = (int)((float)objPtr->oy * _presFakt);
+      objPtr->oy += getPageSize(pgNum,_presFakt).y() + diffy();
 
       // correct calculated zoom-values
       if (objPtr->ox + objPtr->ow > getPageSize(1,_presFakt).x()+diffx() + getPageSize(1,_presFakt).width())
