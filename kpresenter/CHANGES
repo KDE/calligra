@@ -5,4 +5,4 @@ Changes after KPresenter 1.1
 - Thumbnail mode for the sidebar
 - Add notebar
 - Add a real statusbar
-- Add New Tool : freehand, polyline, quadric bezier curve, cubic bezier curve
+- Add New Tool : freehand, polyline, quadric bezier curve, cubic bezier curve, convex/concave polygon

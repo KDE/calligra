@@ -32,6 +32,7 @@
 #include <kppolylineobject.h>
 #include <kpquadricbeziercurveobject.h>
 #include <kpcubicbeziercurveobject.h>
+#include <kppolygonobject.h>
 
 #include <kdebug.h>
 
@@ -207,6 +208,11 @@ void KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
                         KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
                         kpCubicBezierCurveObject->load( current );
                         objects.append( kpCubicBezierCurveObject );
+                    } break;
+                    case OT_POLYGON: {
+                        KPPolygonObject *kpPolygonObject = new KPPolygonObject();
+                        kpPolygonObject->load( current );
+                        objects.append( kpPolygonObject );
                     } break;
                     case OT_GROUP: {
                         KPGroupObject *kpgroupobject = new KPGroupObject();

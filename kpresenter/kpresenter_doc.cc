@@ -39,6 +39,7 @@
 #include <kppolylineobject.h>
 #include <kpquadricbeziercurveobject.h>
 #include <kpcubicbeziercurveobject.h>
+#include <kppolygonobject.h>
 
 #include <qpopupmenu.h>
 #include <qclipboard.h>
@@ -1136,6 +1137,16 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 } else
                     _objectList->append( kpCubicBezierCurveObject );
             } break;
+            case OT_POLYGON: {
+                KPPolygonObject *kpPolygonObject = new KPPolygonObject();
+                kpPolygonObject->load( obj );
+                if ( _paste ) {
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this );
+                    insertCmd->execute();
+                    addCommand( insertCmd );
+                } else
+                    _objectList->append( kpPolygonObject );
+            } break;
             case OT_GROUP: {
                 KPGroupObject *kpgroupobject = new KPGroupObject();
                 kpgroupobject->load(obj, this);
@@ -1916,6 +1927,60 @@ bool KPresenterDoc::setRectSettings( int _rx, int _ry )
 }
 
 /*================================================================*/
+bool KPresenterDoc::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
+{
+    bool ret = false;
+    bool changed = false;
+
+    KPObject *kpobject = 0;
+    QPtrList<KPObject> _objects;
+    QPtrList<PolygonSettingCmd::PolygonSettings> _oldSettings;
+    PolygonSettingCmd::PolygonSettings _newSettings, *tmp;
+
+    _objects.setAutoDelete( false );
+    _oldSettings.setAutoDelete( false );
+
+    _newSettings.checkConcavePolygon = _checkConcavePolygon;
+    _newSettings.cornersValue = _cornersValue;
+    _newSettings.sharpnessValue = _sharpnessValue;
+
+    for ( unsigned int i = 0; i < objectList()->count(); ++i ) {
+        kpobject = objectList()->at( i );
+        if ( kpobject->getType() == OT_POLYGON ) {
+            if ( kpobject->isSelected() ) {
+                tmp = new PolygonSettingCmd::PolygonSettings;
+                dynamic_cast<KPPolygonObject*>( kpobject )->getPolygonSettings( &tmp->checkConcavePolygon,
+                                                                                &tmp->cornersValue,
+                                                                                &tmp->sharpnessValue );
+                _oldSettings.append( tmp );
+                _objects.append( kpobject );
+
+                if( !changed && ( tmp->checkConcavePolygon !=_newSettings.checkConcavePolygon
+                                  || tmp->cornersValue != _newSettings.cornersValue
+                                  || tmp->sharpnessValue != _newSettings.sharpnessValue ) )
+                    changed = true;
+                ret = true;
+            }
+        }
+    }
+
+    if ( !_objects.isEmpty() && changed ) {
+        PolygonSettingCmd *polygonSettingCmd = new PolygonSettingCmd( i18n( "Change Polygon Settings" ), _oldSettings,
+                                                                      _newSettings, _objects, this );
+        addCommand( polygonSettingCmd );
+        polygonSettingCmd->execute();
+    }
+    else {
+        _oldSettings.setAutoDelete( true );
+        _oldSettings.clear();
+    }
+
+    setModified( true );
+
+    return ret;
+}
+
+/*================================================================*/
 bool KPresenterDoc::setPenColor( QColor c, bool fill )
 {
     KPObject *kpobject = 0;
@@ -2048,6 +2113,15 @@ bool KPresenterDoc::setPenColor( QColor c, bool fill )
 		ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
 		ret = true;
 	    } break;
+            case OT_POLYGON: {
+                ptmp->pen = QPen( dynamic_cast<KPPolygonObject*>( kpobject )->getPen() );
+                btmp->brush = dynamic_cast<KPPolygonObject*>( kpobject )->getBrush();
+                btmp->fillType = dynamic_cast<KPPolygonObject*>( kpobject )->getFillType();
+                btmp->gColor1 = dynamic_cast<KPPolygonObject*>( kpobject )->getGColor1();
+                btmp->gColor2 = dynamic_cast<KPPolygonObject*>( kpobject )->getGColor2();
+                btmp->gType = dynamic_cast<KPPolygonObject*>( kpobject )->getGType();
+                ret = true;
+            } break;
 	    default: break;
 	    }
 	    _oldPen.append( ptmp );
@@ -2182,6 +2256,15 @@ bool KPresenterDoc::setBrushColor( QColor c, bool fill )
 		btmp->gType = dynamic_cast<KPClipartObject*>( kpobject )->getGType();
 		ret = true;
 	    } break;
+            case OT_POLYGON: {
+                ptmp->pen = QPen( dynamic_cast<KPPolygonObject*>( kpobject )->getPen() );
+                btmp->brush = QBrush( dynamic_cast<KPPolygonObject*>( kpobject )->getBrush() );
+                btmp->fillType = dynamic_cast<KPPolygonObject*>( kpobject )->getFillType();
+                btmp->gColor1 = dynamic_cast<KPPolygonObject*>( kpobject )->getGColor1();
+                btmp->gColor2 = dynamic_cast<KPPolygonObject*>( kpobject )->getGColor2();
+                btmp->gType = dynamic_cast<KPPolygonObject*>( kpobject )->getGType();
+                ret = true;
+            } break;
 	    default: continue; break;
 	    }
 	    _oldPen.append( ptmp );
@@ -2380,6 +2463,9 @@ QPen KPresenterDoc::getPen( QPen pen )
             case OT_CUBICBEZIERCURVE:
 		return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getPen();
+                break;
 	    default: break;
 	    }
 	}
@@ -2498,6 +2584,9 @@ QBrush KPresenterDoc::getBrush( QBrush brush )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getBrush();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getBrush();
+                break;
 	    default: break;
 	    }
 	}
@@ -2539,6 +2628,9 @@ FillType KPresenterDoc::getFillType( FillType ft )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getFillType();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getFillType();
+                break;
 	    default: break;
 	    }
 	}
@@ -2580,6 +2672,9 @@ QColor KPresenterDoc::getGColor1( QColor g1 )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getGColor1();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getGColor1();
+                break;
 	    default: break;
 	    }
 	}
@@ -2621,6 +2716,9 @@ QColor KPresenterDoc::getGColor2( QColor g2 )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getGColor2();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getGColor2();
+                break;
 	    default: break;
 	    }
 	}
@@ -2662,6 +2760,9 @@ BCType KPresenterDoc::getGType( BCType gt )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getGType();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getGType();
+                break;
 	    default: break;
 	    }
 	}
@@ -2703,6 +2804,9 @@ bool KPresenterDoc::getGUnbalanced( bool  unbalanced )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getGUnbalanced();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getGUnbalanced();
+                break;
 	    default: break;
 	    }
 	}
@@ -2744,6 +2848,9 @@ int KPresenterDoc::getGXFactor( int xfactor )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getGXFactor();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getGXFactor();
+                break;
 	    default: break;
 	    }
 	}
@@ -2785,6 +2892,9 @@ int KPresenterDoc::getGYFactor( int yfactor )
 	    case OT_TEXT:
 		return dynamic_cast<KPTextObject*>( kpobject )->getGYFactor();
 		break;
+            case OT_POLYGON:
+                return dynamic_cast<KPPolygonObject*>( kpobject )->getGYFactor();
+                break;
 	    default: break;
 	    }
 	}
@@ -2880,6 +2990,33 @@ int KPresenterDoc::getRndY( int _ry )
     }
 
     return _ry;
+}
+
+/*================================================================*/
+bool KPresenterDoc::getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue )
+{
+    KPObject *kpobject = 0;
+
+    for ( unsigned int i = 0; i < objectList()->count(); ++i ) {
+        kpobject = objectList()->at( i );
+        if ( kpobject->isSelected() && kpobject->getType() == OT_POLYGON ) {
+            bool tmp_checkConcavePolygon;
+            int tmp_cornersValue;
+            int tmp_sharpnessValue;
+
+            dynamic_cast<KPPolygonObject*>( kpobject )->getPolygonSettings( &tmp_checkConcavePolygon,
+                                                                            &tmp_cornersValue,
+                                                                            &tmp_sharpnessValue );
+
+            *_checkConcavePolygon = tmp_checkConcavePolygon;
+            *_cornersValue = tmp_cornersValue;
+            *_sharpnessValue = tmp_sharpnessValue;
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /*======================== lower objects =========================*/
@@ -3185,6 +3322,25 @@ void KPresenterDoc::insertCubicBezierCurve( const QPointArray &points, const QPo
     kpCubicBezierCurveObject->setSelected( true );
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, this );
+    insertCmd->execute();
+    addCommand( insertCmd );
+}
+
+/*======================= insert polygon ===========================*/
+void KPresenterDoc::insertPolygon( const QPointArray &points, QRect r, QPen pen, QBrush brush, FillType ft,
+                                   QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor,
+                                   int diffx, int diffy, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
+{
+    QSize size( r.width(), r.height() );
+
+    KPPolygonObject *kpPolygonObject = new KPPolygonObject( points, size, pen, brush, ft,
+                                                            g1, g2, gt, unbalanced, xfactor, yfactor,
+                                                            _checkConcavePolygon, _cornersValue, _sharpnessValue );
+    kpPolygonObject->setOrig( r.x() + diffx, r.y() + diffy );
+    kpPolygonObject->setSize( r.width(), r.height() );
+    kpPolygonObject->setSelected( true );
+
+    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this );
     insertCmd->execute();
     addCommand( insertCmd );
 }

@@ -570,6 +570,36 @@ protected:
 };
 
 /******************************************************************/
+/* Class: PolygonSettingCmd                                       */
+/******************************************************************/
+
+class PolygonSettingCmd : public KCommand
+{
+public:
+    struct PolygonSettings
+    {
+        bool checkConcavePolygon;
+        int cornersValue;
+        int sharpnessValue;
+    };
+
+    PolygonSettingCmd( const QString &_name, QPtrList<PolygonSettings> &_oldSettings,
+                       PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+    ~PolygonSettingCmd();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+
+    KPresenterDoc *doc;
+    QPtrList<PolygonSettings> oldSettings;
+    QPtrList<KPObject> objects;
+    PolygonSettings newSettings;
+
+};
+
+/******************************************************************/
 /* Class: RectValueCmd                                            */
 /******************************************************************/
 

@@ -43,6 +43,7 @@ class ShadowDia;
 class KPPresStructView;
 class ConfPieDia;
 class ConfRectDia;
+class ConfPolygonDia;
 class QToolButton;
 class SideBar;
 class NoteBar;
@@ -155,11 +156,13 @@ public slots:
     void toolsPolyline();
     void toolsQuadricBezierCurve();
     void toolsCubicBezierCurve();
+    void toolsConvexOrConcavePolygon();
 
     // extra menu
     void extraPenBrush();
     void extraConfigPie();
     void extraConfigRect();
+    void extraConfigPolygon();
     void extraRaise();
     void extraLower();
     void extraRotate();
@@ -408,6 +411,7 @@ public:
     void openPopupMenuClipObject(const QPoint & _point);
     void openPopupMenuSideBar(const QPoint & _point);
     void openPopupMenuPicObject(const QPoint & _point);
+    void openPopupMenuPolygonObject( const QPoint &_point );
 
     void penColorChanged( const QPen & _pen );
     void brushColorChanged( const QBrush & _brush );
@@ -431,6 +435,11 @@ public:
     // Used by Page to plug/unplug the datatool actions
     QPtrList<KAction>& actionList() { return m_actionList; }
 
+    // for Polygon object
+    bool getCheckConcavePolygon() { return checkConcavePolygon; }
+    int getCornersValue() { return cornersValue; }
+    int getSharpnessValue() { return sharpnessValue; }
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -444,6 +453,7 @@ protected slots:
     void psvClosed();
     void confPieOk();
     void confRectOk();
+    void confPolygonOk();
 
     // scrolling
     void scrollH( int );
@@ -555,6 +565,7 @@ private:
     KPPresStructView *presStructView;
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
+    ConfPolygonDia *confPolygonDia;
 
     // default pen and brush
     QPen pen;
@@ -570,6 +581,11 @@ private:
     int pieLength, pieAngle;
     int rndX, rndY;
     bool sticky;
+
+    // for Convex/Concave Polygon
+    bool checkConcavePolygon;
+    int cornersValue;
+    int sharpnessValue;
 
     // the page
     Page *page;
@@ -629,6 +645,7 @@ private:
     KToggleAction *actionToolsPolyline;
     KToggleAction *actionToolsQuadricBezierCurve;
     KToggleAction *actionToolsCubicBezierCurve;
+    KToggleAction *actionToolsConvexOrConcavePolygon;
     KoPartSelectAction *actionToolsObject;
 
     KAction *actionTextFont;
@@ -654,6 +671,7 @@ private:
     KAction *actionExtraPenBrush;
     KAction *actionExtraConfigPie;
     KAction *actionExtraConfigRect;
+    KAction *actionExtraConfigPolygon;
     KAction *actionExtraRaise;
     KAction *actionExtraLower;
     KAction *actionExtraRotate;

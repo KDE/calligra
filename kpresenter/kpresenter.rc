@@ -49,6 +49,7 @@
   <Action name="extra_penbrush"/>
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
+  <Action name="extra_configpolygon"/>
   <Separator/>
   <Action name="extra_lower"/>
   <Action name="extra_raise"/>
@@ -131,6 +132,7 @@
   <Action name="tools_rectangle"/>
   <Action name="tools_circle"/>
   <Action name="tools_pie"/>
+  <Action name="tools_polygon"/>
   <Action name="tools_text"/>
   <Action name="tools_autoform"/>
   <Action name="tools_diagramm"/>
@@ -176,6 +178,7 @@
   <Action name="tools_rectangle"/>
   <Action name="tools_circle"/>
   <Action name="tools_pie"/>
+  <Action name="tools_polygon"/>
   <Action name="tools_text"/>
   <Action name="tools_autoform"/>
   <Action name="tools_diagramm"/>
@@ -187,6 +190,7 @@
   <Action name="extra_penbrush"/>
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
+  <Action name="extra_configpolygon"/>
   <Action name="extra_linebegin"/>
   <Action name="extra_lineend"/>
   <Action name="extra_penstyle"/>
@@ -494,5 +498,33 @@
  <Separator/>
  <Action name="open_link"/>
  <ActionList name="datatools_link"/>
+</Menu>
+<Menu name="polygonobject_popup">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_delete"/>
+  <Separator/>
+  <Action name="extra_rotate"/>
+  <Action name="extra_shadow"/>
+  <Separator/>
+  <Action name="extra_configpolygon"/>
+  <Separator/>
+  <Action name="object_properties"/>
+  <Separator/>
+  <Action name="screen_assigneffect"/>
+  <Separator/>
+  <Menu name="Align Objects"><text>&amp;Align Objects</text>
+   <Action name="extra_alignleft"/>
+   <Separator/>
+   <Action name="extra_aligncenterh"/>
+   <Separator/>
+   <Action name="extra_alignright"/>
+   <Separator/>
+   <Action name="extra_aligntop"/>
+   <Separator/>
+   <Action name="extra_aligncenterv"/>
+   <Separator/>
+   <Action name="extra_alignbottom"/>
+  </Menu>
 </Menu>
 </kpartgui>

@@ -154,6 +154,9 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num )
     case OT_CUBICBEZIERCURVE:
       setPixmap( 0, KPBarIcon( "cubicbeziercurve" ) );
       break;
+    case OT_POLYGON:
+      setPixmap( 0, KPBarIcon( "mini_polygon" ) );
+      break;
     case OT_GROUP:
       setPixmap( 0, KPBarIcon( "group" ) );
       break;

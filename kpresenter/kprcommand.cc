@@ -31,6 +31,7 @@
 #include <kppolylineobject.h>
 #include <kpquadricbeziercurveobject.h>
 #include <kpcubicbeziercurveobject.h>
+#include <kppolygonobject.h>
 
 #include <kptextobject.h>
 #include <kppixmapobject.h>
@@ -1049,6 +1050,18 @@ void PenBrushCmd::execute()
 	    dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->setLineEnd( newPen.lineEnd );
 	    doc->repaint( kpobject );
 	    break;
+        case OT_POLYGON:
+            dynamic_cast<KPPolygonObject*>( kpobject )->setPen( newPen.pen );
+            dynamic_cast<KPPolygonObject*>( kpobject )->setBrush( newBrush.brush );
+            dynamic_cast<KPPolygonObject*>( kpobject )->setFillType( newBrush.fillType );
+            dynamic_cast<KPPolygonObject*>( kpobject )->setGColor1( newBrush.gColor1 );
+            dynamic_cast<KPPolygonObject*>( kpobject )->setGColor2( newBrush.gColor2 );
+            dynamic_cast<KPPolygonObject*>( kpobject )->setGType( newBrush.gType );
+            dynamic_cast<KPPolygonObject*>( kpobject )->setGUnbalanced( newBrush.unbalanced );
+            dynamic_cast<KPPolygonObject*>( kpobject )->setGXFactor( newBrush.xfactor );
+            dynamic_cast<KPPolygonObject*>( kpobject )->setGYFactor( newBrush.yfactor );
+            doc->repaint( kpobject );
+	    break;
 	default: break;
 	}
     }
@@ -1232,6 +1245,21 @@ void PenBrushCmd::unexecute()
 		doc->repaint( kpobject );
 	    }
 	} break;
+        case OT_POLYGON: {
+            if ( oldPen.count() > i )
+                dynamic_cast<KPPolygonObject*>( kpobject )->setPen( oldPen.at( i )->pen );
+            if ( oldBrush.count() > i ) {
+                dynamic_cast<KPPolygonObject*>( kpobject )->setBrush( oldBrush.at( i )->brush );
+                dynamic_cast<KPPolygonObject*>( kpobject )->setFillType( oldBrush.at( i )->fillType );
+                dynamic_cast<KPPolygonObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
+                dynamic_cast<KPPolygonObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
+                dynamic_cast<KPPolygonObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
+                dynamic_cast<KPPolygonObject*>( kpobject )->setGUnbalanced( oldBrush.at( i )->unbalanced );
+                dynamic_cast<KPPolygonObject*>( kpobject )->setGXFactor( oldBrush.at( i )->xfactor );
+                dynamic_cast<KPPolygonObject*>( kpobject )->setGYFactor( oldBrush.at( i )->yfactor );
+            }
+            doc->repaint( kpobject );
+        } break;
 	default: break;
 	}
     }
@@ -1378,6 +1406,54 @@ void PieValueCmd::unexecute()
     doc->repaint( false );
 }
 
+/******************************************************************/
+/* Class: PolygonSettingCmd                                       */
+/******************************************************************/
+
+/*======================== constructor ===========================*/
+PolygonSettingCmd::PolygonSettingCmd( const QString &_name, QPtrList<PolygonSettings> &_oldSettings,
+                                      PolygonSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
+    : KCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
+{
+    objects.setAutoDelete( false );
+    oldSettings.setAutoDelete( false );
+    doc = _doc;
+    newSettings = _newSettings;
+
+    for ( unsigned int i = 0; i < objects.count(); ++i )
+        objects.at( i )->incCmdRef();
+}
+
+/*======================== destructor ============================*/
+PolygonSettingCmd::~PolygonSettingCmd()
+{
+    for ( unsigned int i = 0; i < objects.count(); ++i )
+        objects.at( i )->decCmdRef();
+    oldSettings.setAutoDelete( true );
+    oldSettings.clear();
+}
+
+/*====================== execute =================================*/
+void PolygonSettingCmd::execute()
+{
+    for ( unsigned int i = 0; i < objects.count(); ++i )
+        dynamic_cast<KPPolygonObject*>( objects.at( i ) )->setPolygonSettings( newSettings.checkConcavePolygon,
+                                                                               newSettings.cornersValue,
+                                                                               newSettings.sharpnessValue );
+
+    doc->repaint( false );
+}
+
+/*====================== unexecute ===============================*/
+void PolygonSettingCmd::unexecute()
+{
+    for ( unsigned int i = 0; i < objects.count(); ++i )
+        dynamic_cast<KPPolygonObject*>( objects.at( i ) )->setPolygonSettings( oldSettings.at( i )->checkConcavePolygon,
+                                                                               oldSettings.at( i )->cornersValue,
+                                                                               oldSettings.at( i )->sharpnessValue );
+
+    doc->repaint( false );
+}
 
 /******************************************************************/
 /* Class: RectValueCmd                                            */

@@ -541,6 +541,17 @@ void Page::mousePressEvent( QMouseEvent *e )
                     m_pointArray.putPoints( m_indexPointArray, 1, m_dragStartPoint.x(), m_dragStartPoint.y() );
                     ++m_indexPointArray;
                 } break;
+                case INS_POLYGON: {
+                    deSelectAllObj();
+                    mousePressed = true;
+                    insRect = QRect( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                     ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy(), 0, 0 );
+
+                    m_indexPointArray = 0;
+                    m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                               ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                    m_dragEndPoint = m_dragStartPoint;
+                } break;
                 default: {
                     deSelectAllObj();
                     mousePressed = true;
@@ -622,6 +633,12 @@ void Page::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
                     selectObj( kpobject );
                     view->openPopupMenuPartObject( pnt );
+                    mousePressed = false;
+                } else if ( kpobject->getType() == OT_POLYGON ) {
+                    if ( state )
+                        deSelectAllObj();
+                    selectObj( kpobject );
+                    view->openPopupMenuPolygonObject( pnt );
                     mousePressed = false;
                 } else {
                     if ( state )
@@ -977,6 +994,9 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     case INS_FREEHAND:
         if ( !m_pointArray.isNull() ) insertFreehand( m_pointArray );
         break;
+    case INS_POLYGON:
+        if ( !m_pointArray.isNull() ) insertPolygon( m_pointArray );
+        break;
     default: break;
     }
     emit objectSelectedChanged();
@@ -1221,6 +1241,19 @@ void Page::mouseMoveEvent( QMouseEvent *e )
             case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:{
                 drawCubicBezierCurve( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
                                       ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+
+                mouseSelectedObject = true;
+
+                view->penColorChanged( view->getPen() );
+                view->brushColorChanged( view->getBrush() );
+            } break;
+            case INS_POLYGON: {
+                drawPolygon( m_dragStartPoint, m_dragEndPoint ); // erase old polygon
+
+                m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
+                                         ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+
+                drawPolygon( m_dragStartPoint, m_dragEndPoint ); // draw new polygon
 
                 mouseSelectedObject = true;
 
@@ -3510,8 +3543,8 @@ void Page::insertFreehand( const QPointArray &_pointArray )
     QPointArray::Iterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         QPoint point = (*it);
-        int tmpX = point.x() - ox;
-        int tmpY = point.y() - oy;
+        int tmpX = point.x() - ox + diffx();
+        int tmpY = point.y() - oy + diffy();
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3537,8 +3570,8 @@ void Page::insertPolyline( const QPointArray &_pointArray )
     QPointArray::Iterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         QPoint point = (*it);
-        int tmpX = point.x() - ox;
-        int tmpY = point.y() - oy;
+        int tmpX = point.x() - ox + diffx();
+        int tmpY = point.y() - oy + diffy();
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3619,8 +3652,8 @@ void Page::insertCubicBezierCurve( const QPointArray &_pointArray )
     QPointArray::Iterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         QPoint point = (*it);
-        int tmpX = point.x() - ox;
-        int tmpY = point.y() - oy;
+        int tmpX = point.x() - ox + diffx();
+        int tmpY = point.y() - oy + diffy();
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3629,8 +3662,8 @@ void Page::insertCubicBezierCurve( const QPointArray &_pointArray )
     QPointArray tmpAllPoints;
     for ( it = _allPoints.begin(); it != _allPoints.end(); ++it ) {
         QPoint point = (*it);
-        int tmpX = point.x() - ox;
-        int tmpY = point.y() - oy;
+        int tmpX = point.x() - ox + diffx();
+        int tmpY = point.y() - oy + diffy();
         tmpAllPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3643,6 +3676,35 @@ void Page::insertCubicBezierCurve( const QPointArray &_pointArray )
         view->kPresenterDoc()->insertQuadricBezierCurve( tmpPoints, tmpAllPoints, _rect, view->getPen(),
                                                          view->getLineBegin(), view->getLineEnd(), diffx(), diffy() );
     }
+
+    m_pointArray = QPointArray();
+    m_indexPointArray = 0;
+}
+
+/*================================================================*/
+void Page::insertPolygon( const QPointArray &_pointArray )
+{
+    QPointArray points( _pointArray );
+    QRect rect = points.boundingRect();
+
+    int ox = rect.x() + diffx();
+    int oy = rect.y() + diffy();
+    unsigned int index = 0;
+
+    QPointArray tmpPoints;
+    QPointArray::Iterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        QPoint point = (*it);
+        int tmpX = point.x() - ox + diffx();
+        int tmpY = point.y() - oy + diffy();
+        tmpPoints.putPoints( index, 1, tmpX,tmpY );
+        ++index;
+    }
+
+    view->kPresenterDoc()->insertPolygon( tmpPoints, rect, view->getPen(), view->getBrush(), view->getFillType(),
+                                          view->getGColor1(), view->getGColor2(), view->getGType(), view->getGUnbalanced(),
+                                          view->getGXFactor(), view->getGYFactor(), diffx(), diffy(),
+                                          view->getCheckConcavePolygon(), view->getCornersValue(), view->getSharpnessValue() );
 
     m_pointArray = QPointArray();
     m_indexPointArray = 0;
@@ -4702,6 +4764,61 @@ double Page::getAngle( QPoint p1, QPoint p2 )
     }
 
     return _angle;
+}
+
+void Page::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
+{
+    bool checkConcavePolygon = view->getCheckConcavePolygon();
+    int cornersValue = view->getCornersValue();
+    int sharpnessValue = view->getSharpnessValue();
+
+    QPainter p;
+    p.begin( this );
+    p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+    p.setRasterOp( Qt::NotROP );
+
+    double angle = 2 * M_PI / cornersValue;
+    double dx = fabs( startPoint.x () - endPoint.x () );
+    double dy =  fabs( startPoint.y () - endPoint.y () );
+    double radius = (dx > dy ? dx / 2.0 : dy / 2.0);
+
+    double xoff = startPoint.x() + ( startPoint.x() < endPoint.x() ? radius : -radius );
+    double yoff = startPoint.y() + ( startPoint.y() < endPoint.y() ? radius : -radius );
+
+    QPointArray points( checkConcavePolygon ? cornersValue * 2 : cornersValue );
+    points.setPoint( 0, (int)xoff, (int)( -radius + yoff ) );
+
+    if ( checkConcavePolygon ) {
+        angle = angle / 2.0;
+        double a = angle;
+        double r = radius - ( sharpnessValue / 100.0 * radius );
+        for ( int i = 1; i < cornersValue * 2; ++i ) {
+            double xp, yp;
+            if ( i % 2 ) {
+                xp =  r * sin( a );
+                yp = -r * cos( a );
+            }
+            else {
+                xp = radius * sin( a );
+                yp = -radius * cos( a );
+            }
+            a += angle;
+            points.setPoint( i, (int)( xp + xoff ), (int)( yp + yoff ) );
+        }
+    }
+    else {
+        double a = angle;
+        for ( int i = 1; i < cornersValue; ++i ) {
+            double xp = radius * sin( a );
+            double yp = -radius * cos( a );
+            a += angle;
+            points.setPoint( i, (int)( xp + xoff ), (int)( yp + yoff ) );
+        }
+    }
+    p.drawPolygon( points );
+    p.end();
+
+    m_pointArray = points;
 }
 
 #include <page.moc>

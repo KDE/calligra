@@ -57,6 +57,7 @@ public:
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
+    virtual void setSize( int _width, int _height );
     virtual void resizeBy( QSize _size );
     virtual void resizeBy( int _dx, int _dy );
 

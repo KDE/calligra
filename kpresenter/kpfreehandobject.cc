@@ -42,7 +42,7 @@ KPFreehandObject::KPFreehandObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPFreehandObject::KPFreehandObject(  const QPointArray &_points, QSize _size, QPen _pen, 
+KPFreehandObject::KPFreehandObject(  const QPointArray &_points, QSize _size, QPen _pen,
                                      LineEnd _lineBegin, LineEnd _lineEnd )
     : KPObject(), pen( _pen )
 {
@@ -258,7 +258,7 @@ void KPFreehandObject::paint( QPainter* _painter )
     int _w = pen.width();
 
     QPointArray pointArray = points;
-    if ( !move ) {
+    if ( !move && _w > 1 ) {
         double fx = (double)( (double)( ext.width() - _w ) / (double)ext.width() );
         double fy = (double)( (double)( ext.height() - _w ) / (double)ext.height() );
 
@@ -326,6 +326,16 @@ void KPFreehandObject::paint( QPainter* _painter )
     }
 }
 
+void KPFreehandObject::setSize( int _width, int _height )
+{
+    KPObject::setSize( _width, _height );
+
+    double fx = (double)( (double)ext.width() / (double)origSize.width() );
+    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+
+    updatePoints( fx, fy );
+}
+
 void KPFreehandObject::resizeBy( QSize _size )
 {
     resizeBy( _size.width(), _size.height() );
@@ -337,7 +347,7 @@ void KPFreehandObject::resizeBy( int _dx, int _dy )
 
     double fx = (double)( (double)ext.width() / (double)origSize.width() );
     double fy = (double)( (double)ext.height() / (double)origSize.height() );
-    
+
     updatePoints( fx, fy );
 }
 

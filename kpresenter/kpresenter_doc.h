@@ -137,6 +137,7 @@ public:
     bool setLineEnd( LineEnd );
     bool setPieSettings( PieType, int, int );
     bool setRectSettings( int, int );
+    bool setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
     void setPageEffect( unsigned int, PageEffect );
     bool setPenColor( QColor, bool );
     bool setBrushColor( QColor, bool );
@@ -171,6 +172,7 @@ public:
     int getPieLength( int );
     int getPieAngle( int );
     bool getSticky( bool );
+    bool getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue );
 
     // raise and lower objs
     void raiseObjs( int, int );
@@ -195,6 +197,9 @@ public:
 
     void insertQuadricBezierCurve( const QPointArray &, const QPointArray &, QRect, QPen, LineEnd, LineEnd, int, int );
     void insertCubicBezierCurve( const QPointArray &, const QPointArray &, QRect, QPen, LineEnd, LineEnd, int, int );
+
+    void insertPolygon( const QPointArray &, QRect, QPen, QBrush, FillType, QColor, QColor, BCType,
+                        bool ,int, int, int, int, bool, int, int );
 
     // get list of pages and objects
     QPtrList<KPBackGround> *backgroundList() { return &_backgroundList; }

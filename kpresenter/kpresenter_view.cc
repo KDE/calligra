@@ -45,6 +45,7 @@
 
 #include <confpiedia.h>
 #include <confrectdia.h>
+#include <confpolygondia.h>
 #include <kppartobject.h>
 #include <textdialog.h>
 #include <sidebar.h>
@@ -235,6 +236,9 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_spell.kspell = 0;
     automaticScreenPresFirstTimer = true;
     m_actionList.setAutoDelete( true );
+    checkConcavePolygon = false;
+    cornersValue = 3;
+    sharpnessValue = 0;
 
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
@@ -811,15 +815,20 @@ void KPresenterView::toolsCubicBezierCurve()
         actionToolsCubicBezierCurve->setChecked(true);
 }
 
+/*============== insert convex or concave polygon ===============*/
+void KPresenterView::toolsConvexOrConcavePolygon()
+{
+    if ( actionToolsConvexOrConcavePolygon->isChecked() ) {
+        page->setToolEditMode( INS_POLYGON, false );
+        page->deSelectAllObj();
+    }
+    else
+        actionToolsConvexOrConcavePolygon->setChecked(true);
+}
+
 /*===============================================================*/
 void KPresenterView::extraPenBrush()
 {
-    if ( styleDia ) {
-	QObject::disconnect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
-	styleDia->close();
-	delete styleDia;
-	styleDia = 0;
-    }
     styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc->getPenBrushFlags() );
     styleDia->setPen( m_pKPresenterDoc->getPen( pen ) );
     styleDia->setBrush( m_pKPresenterDoc->getBrush( brush ) );
@@ -836,19 +845,16 @@ void KPresenterView::extraPenBrush()
     styleDia->setCaption( i18n( "KPresenter - Pen and Brush" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
     page->setToolEditMode( TEM_MOUSE );
-    styleDia->show();
+    styleDia->exec();
+
+    QObject::disconnect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
+    delete styleDia;
+    styleDia = 0;
 }
 
 /*===============================================================*/
 void KPresenterView::extraConfigPie()
 {
-    if ( confPieDia ) {
-	QObject::disconnect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
-	confPieDia->close();
-	delete confPieDia;
-	confPieDia = 0;
-    }
-
     confPieDia = new ConfPieDia( this, "ConfPageDia" );
     confPieDia->setMaximumSize( confPieDia->width(), confPieDia->height() );
     confPieDia->setMinimumSize( confPieDia->width(), confPieDia->height() );
@@ -859,19 +865,16 @@ void KPresenterView::extraConfigPie()
     confPieDia->setCaption( i18n( "KPresenter - Configure Pie/Arc/Chord" ) );
     QObject::connect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
     page->setToolEditMode( TEM_MOUSE );
-    confPieDia->show();
+    confPieDia->exec();
+
+    QObject::disconnect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
+    delete confPieDia;
+    confPieDia = 0;
 }
 
 /*===============================================================*/
 void KPresenterView::extraConfigRect()
 {
-    if ( confRectDia ) {
-	QObject::disconnect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
-	confRectDia->close();
-	delete confRectDia;
-	confRectDia = 0;
-    }
-
     confRectDia = new ConfRectDia( this, "ConfRectDia" );
     confRectDia->setMaximumSize( confRectDia->width(), confRectDia->height() );
     confRectDia->setMinimumSize( confRectDia->width(), confRectDia->height() );
@@ -879,7 +882,40 @@ void KPresenterView::extraConfigRect()
     confRectDia->setCaption( i18n( "KPresenter - Configure Rectangle" ) );
     QObject::connect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
     page->setToolEditMode( TEM_MOUSE );
-    confRectDia->show();
+    confRectDia->exec();
+
+    QObject::disconnect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
+    delete confRectDia;
+    confRectDia = 0;
+}
+
+/*===============================================================*/
+void KPresenterView::extraConfigPolygon()
+{
+    bool _checkConcavePolygon;
+    int _cornersValue;
+    int _sharpnessValue;
+
+    if ( !kPresenterDoc()->getPolygonSettings( &_checkConcavePolygon, &_cornersValue, &_sharpnessValue ) ) {
+        _checkConcavePolygon = checkConcavePolygon;
+        _cornersValue = cornersValue;
+        _sharpnessValue = sharpnessValue;
+    }
+
+    confPolygonDia = new ConfPolygonDia( this, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
+    confPolygonDia->setMaximumSize( confPolygonDia->width(), confPolygonDia->height() );
+    confPolygonDia->setMinimumSize( confPolygonDia->width(), confPolygonDia->height() );
+    confPolygonDia->setCaption( i18n( "KPresenter - Configure Polygon" ) );
+
+    QObject::connect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
+
+    page->setToolEditMode( TEM_MOUSE );
+
+    confPolygonDia->exec();
+
+    QObject::disconnect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
+    delete confPolygonDia;
+    confPolygonDia = 0;
 }
 
 /*===============================================================*/
@@ -2271,6 +2307,11 @@ void KPresenterView::setupActions()
                                                      actionCollection(), "tools_cubicbeziercurve" );
     actionToolsCubicBezierCurve->setExclusiveGroup( "tools" );
 
+    actionToolsConvexOrConcavePolygon = new KToggleAction( i18n( "Co&nvex/Concave Polygon" ), "polygon", 0,
+                                                           this, SLOT( toolsConvexOrConcavePolygon() ),
+                                                           actionCollection(), "tools_polygon" );
+    actionToolsConvexOrConcavePolygon->setExclusiveGroup( "tools" );
+
     // ----------------- text actions
 
     actionTextFont = new KAction( i18n( "&Font..." ), 0,
@@ -2380,6 +2421,11 @@ void KPresenterView::setupActions()
 					 "rectangle2", 0,
 					 this, SLOT( extraConfigRect() ),
 					 actionCollection(), "extra_configrect" );
+
+    actionExtraConfigPolygon = new KAction( i18n( "Configure Po&lygon..." ),
+                                            "edit_polygon", 0,
+                                            this, SLOT( extraConfigPolygon() ),
+                                            actionCollection(), "extra_configpolygon" );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), "raise",
 				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
@@ -2997,6 +3043,18 @@ void KPresenterView::confRectOk()
     if ( !m_pKPresenterDoc->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() ) ) {
 	rndX = confRectDia->getRndX();
 	rndY = confRectDia->getRndY();
+    }
+}
+
+/*================================================================*/
+void KPresenterView::confPolygonOk()
+{
+    if ( !m_pKPresenterDoc->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
+                                                confPolygonDia->getCornersValue(),
+                                                confPolygonDia->getSharpnessValue() ) ) {
+        checkConcavePolygon = confPolygonDia->getCheckConcavePolygon();
+        cornersValue = confPolygonDia->getCornersValue();
+        sharpnessValue = confPolygonDia->getSharpnessValue();
     }
 }
 
@@ -3882,6 +3940,12 @@ void KPresenterView::openPopupMenuPicObject(const QPoint & _point)
 
 }
 
+void KPresenterView::openPopupMenuPolygonObject( const QPoint &_point )
+{
+    if ( !koDocument()->isReadWrite() )
+        return;
+    static_cast<QPopupMenu*>( factory()->container( "polygonobject_popup", this ) )->popup( _point );
+}
 
 void KPresenterView::renamePageTitle()
 {

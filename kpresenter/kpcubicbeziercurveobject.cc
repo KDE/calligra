@@ -264,7 +264,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter )
     int _w = pen.width();
 
     QPointArray pointArray = allPoints;
-    if ( !move ) {
+    if ( !move && _w > 1 ) {
         double fx = (double)( (double)( ext.width() - _w ) / (double)ext.width() );
         double fy = (double)( (double)( ext.height() - _w ) / (double)ext.height() );
 
@@ -329,6 +329,16 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter )
             }
         }
     }
+}
+
+void KPCubicBezierCurveObject::setSize( int _width, int _height )
+{
+    KPObject::setSize( _width, _height );
+
+    double fx = (double)( (double)ext.width() / (double)origSize.width() );
+    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+
+    updatePoints( fx, fy );
 }
 
 void KPCubicBezierCurveObject::resizeBy( QSize _size )

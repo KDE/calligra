@@ -275,6 +275,7 @@ protected:
     void insertFreehand( const QPointArray &_pointArray );
     void insertPolyline( const QPointArray &_pointArray );
     void insertCubicBezierCurve( const QPointArray &_pointArray );
+    void insertPolygon( const QPointArray &_pointArray );
 
     void selectNext();
     void selectPrev();
@@ -355,6 +356,8 @@ private:
     void playSound( const QString &soundFileName );
 
     QRect getDrawRect( const QPointArray &_points );
+
+    void drawPolygon( const QPoint &startPoint, const QPoint &endPoint );
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
