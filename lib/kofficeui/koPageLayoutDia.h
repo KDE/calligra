@@ -43,7 +43,7 @@
 #define PG_US_LETTER_HEIGHT  279.0
 #define PG_US_LEGAL_WIDTH    216.0
 #define PG_US_LEGAL_HEIGHT   356.0
-#define PG_SCREEN_WIDTH      240.0
+#define PG_SCREEN_WIDTH      230.0
 #define PG_SCREEN_HEIGHT     180.0
 
 // enums

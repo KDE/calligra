@@ -229,7 +229,8 @@ void KoPageLayoutDia::setupTab1()
   epgWidth->setFrame(true);
   epgWidth->resize(epgWidth->sizeHint().width()/2,epgWidth->sizeHint().height());
   formatGrid->addWidget(epgWidth,3,0);
-  epgWidth->setEnabled(false);
+  if (layout.format != PG_CUSTOM)
+    epgWidth->setEnabled(false);
   connect(epgWidth,SIGNAL(returnPressed()),this,SLOT(rPressed()));
   connect(epgWidth,SIGNAL(returnPressed()),this,SLOT(widthChanged()));
   connect(epgWidth,SIGNAL(textChanged(const char*)),this,SLOT(widthChanged()));
@@ -247,7 +248,8 @@ void KoPageLayoutDia::setupTab1()
   epgHeight->setFrame(true);
   epgHeight->resize(epgHeight->sizeHint().width()/2,epgHeight->sizeHint().height());
   formatGrid->addWidget(epgHeight,3,1);
-  epgHeight->setEnabled(false);
+  if (layout.format != PG_CUSTOM)
+    epgHeight->setEnabled(false);
   connect(epgHeight,SIGNAL(returnPressed()),this,SLOT(rPressed()));
   connect(epgHeight,SIGNAL(returnPressed()),this,SLOT(heightChanged()));
   connect(epgHeight,SIGNAL(textChanged(const char*)),this,SLOT(heightChanged()));
