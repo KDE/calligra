@@ -1121,16 +1121,17 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
 
     parentMenu->popupMenu()->clear();
     QStringList files = KWFactory::global()->dirs()->findAllResources( "expression", "*.xml", TRUE );
+    int i = 0;
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
     {
-        createExpressionActions( parentMenu,*it );
+        createExpressionActions( parentMenu,*it, i );
     }
     delete m_personalShortCut;
     m_personalShortCut=0L;
 
 }
 
-void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename )
+void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i )
 {
     QFile file( filename );
     if ( !file.open( IO_ReadOnly ) )
@@ -1174,12 +1175,13 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                             if ( m_personalShortCut && m_personalShortCut->contains(text))
                             {
                                 act = new KAction( text, (*m_personalShortCut)[text], this, SLOT( insertExpression() ),
-                                                         actionCollection(), "expression-action" );
+                                                         actionCollection(),QString("expression-action_%1").arg(i).latin1() );
 
                             }
                             else
                                 act = new KAction( text, 0, this, SLOT( insertExpression() ),
-                                                   actionCollection(), "expression-action" );
+                                                   actionCollection(), QString("expression-action_%1").arg(i).latin1() );
+                            i++;
                             act->setGroup("expression-action");
                             subMenu->insert( act );
                         }
@@ -1247,6 +1249,7 @@ void KWView::refreshCustomMenu()
     KAction * act=0;
     QStringList lst;
     QString varName;
+    int i = 0;
     for ( ; it.current() ; ++it )
     {
         KoVariable *var = it.current();
@@ -1256,10 +1259,13 @@ void KWView::refreshCustomMenu()
             if ( !lst.contains( varName) )
             {
                  lst.append( varName );
+                 QCString name = QString("custom-action_%1").arg(i).latin1();
+
                  act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
-                                    actionCollection(), "custom-action" );
+                                    actionCollection(), name );
                  act->setGroup( "custom-action" );
                  actionInsertCustom->insert( act );
+                 i++;
             }
         }
     }
@@ -1267,7 +1273,7 @@ void KWView::refreshCustomMenu()
     if(state)
         actionInsertCustom->popupMenu()->insertSeparator();
 
-    act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), "custom-action" );
+    act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(),QString("custom-action_%1").arg(i).latin1());
 
 
     actionEditCustomVarsEdit->setEnabled( state );
