@@ -941,16 +941,27 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, KoStore*
     QDomNode drawPage = body.namedItem( "draw:page" );
     if ( drawPage.isNull() ) // no slides? give up.
         return false;
+    // parse all pages
+    int pos = 0;
+    for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling(), pos++ )
+    {
+        kdDebug ()<<"insert new page "<<endl;
+        KPrPage *newpage=new KPrPage(this);
+        m_pageList.insert( pos,newpage);
+    }
 
     //todo load format
     setModified(false);
 
     ignoreSticky = TRUE;
-
+    kdDebug()<<" _ clean :"<<_clean<<endl;
     if(_clean)
     {
         setModified(false);
+#if 0   //FIXME
+        //it crashed, I don't know why for the moment.
         startBackgroundSpellCheck();
+#endif
     }
 
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
