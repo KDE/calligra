@@ -44,6 +44,12 @@
 
 #define KEXI_IS_VERSION(a,b,c) ( KEXI_VERSION >= KEXI_MAKE_VERSION(a,b,c) )
 
+#define kexidbg  kdDebug(44010)   //! General debug area for Kexi
+#define kexicoredbg  kdDebug(44020)   //! Debug area for Kexi Core
+#define kexipluginsdbg kdDebug(44021) //! Debug area for Kexi Plugins
+#define kexiwarn  kdWarning(44010)
+#define kexicorewarn kdWarning(44020)
+#define kexipluginswarn kdWarning(44021)
 
 /**
  * Namespace for general Kexi functions.
