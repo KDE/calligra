@@ -961,7 +961,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
         { "FILEPASS",       0x002f, &XMLTree::_filepass },
         { "FILESHARING",    0x005b, &XMLTree::_filesharing },
         { "FILESHARING2",   0x00a5, &XMLTree::_filesharing2 },
-	{ "FILTERMODE",     0x009b, 0 /* &XMLTree::_filtermode */ }
+	{ "FILTERMODE",     0x009b, 0 /* &XMLTree::_filtermode */ },
         { "FNGROUPCOUNT",   0x009c, 0 /* &XMLTree::_fngroupcount */ },
         { "FNGROUPNAME",    0x009a, 0 /* &XMLTree::_fngroupname */ },
 	{ "FONT",           0x0031, &XMLTree::_font },
