@@ -2988,10 +2988,10 @@ void KSpreadCell::checkFormat(bool _formular)
                         }
                 }
         }
-    val=m_strText.toDouble(&ok);
+    val=tmpText.toDouble(&ok);
     if(ok)
         {
-        if(m_strText.contains('E')||m_strText.contains('e'))
+        if(tmpText.contains('E')||tmpText.contains('e'))
                 {
                 m_dValue=val;
                 m_bValue = true;
