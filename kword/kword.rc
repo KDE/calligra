@@ -35,7 +35,6 @@
   <ActionList name="view_split" />
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
-  <Action name="view_tablegrid"/>
   <Separator/>
   <Action name="view_header"/>
   <Action name="view_footer"/>

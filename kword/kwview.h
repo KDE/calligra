@@ -148,7 +148,6 @@ public slots:
 
     void viewFormattingChars();
     void viewFrameBorders();
-    void viewTableGrid();
     void viewHeader();
     void viewFooter();
     void viewFootNotes();
@@ -292,7 +291,6 @@ protected:
 
     KToggleAction *actionViewFormattingChars;
     KToggleAction *actionViewFrameBorders;
-    KToggleAction *actionViewTableGrid;
     KToggleAction *actionViewHeader;
     KToggleAction *actionViewFooter;
     KToggleAction *actionViewFootNotes;

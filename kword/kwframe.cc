@@ -448,12 +448,8 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
             w = 1;
         }
         w = ( w + 1 ) / 2;
-        //kdDebug() << "KWFrameSet::drawBorders left. w=" << w
-        //          << " Drawing line from " << frameRect.x() - w << "," << frameRect.y()
-        //          << " to " << frameRect.x() - w << "," << frameRect.bottom() + 1 << endl;
         painter->drawLine( frameRect.x() - w, frameRect.y(),
                            frameRect.x() - w, frameRect.bottom() + 1 );
-
 
         // Top
         w = frame->getTopBorder().ptWidth;
@@ -467,9 +463,8 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
             w = 1;
         }
         w = ( w + 1 ) / 2;
-        painter->drawLine( frameRect.x(), frameRect.y() - w,
+        painter->drawLine( frameRect.x(),         frameRect.y() - w,
                            frameRect.right() + 1, frameRect.y() - w );
-
     }
     painter->restore();
 }

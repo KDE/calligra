@@ -181,7 +181,6 @@ void KWView::initGui()
         gui->showGUI();
     actionToolsEdit->setChecked( TRUE );
     actionViewFrameBorders->setChecked( doc->getViewFrameBorders() );
-    actionViewTableGrid->setChecked( doc->getViewTableGrid());
     actionViewFormattingChars->setChecked( doc->getViewFormattingChars());
 
     actionViewHeader->setChecked(doc->isHeaderVisible());
@@ -246,9 +245,6 @@ void KWView::setupActions()
     actionViewFrameBorders = new KToggleAction( i18n( "Frame &Borders" ), 0,
                                                    this, SLOT( viewFrameBorders() ),
                                                    actionCollection(), "view_frameborders" );
-    actionViewTableGrid = new KToggleAction( i18n( "&Table Grid" ), 0,
-                                             this, SLOT( viewTableGrid() ),
-                                                   actionCollection(), "view_tablegrid" );
     actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
                                           this, SLOT( viewHeader() ),
                                           actionCollection(), "view_header" );
@@ -286,7 +282,7 @@ void KWView::setupActions()
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
 
-    (void) new KAction( i18n( "&Picture As Character..." ), "picture", Key_F2,
+    (void) new KAction( i18n( "&Picture Inline..." ), "picture", Key_F2,
                         this, SLOT( insertPicture() ),
                         actionCollection(), "insert_picture" );
 
@@ -895,7 +891,6 @@ void KWView::updateReadWrite( bool readwrite )
         actionEditCopy->setEnabled( true );
         actionViewFormattingChars->setEnabled( true );
         actionViewFrameBorders->setEnabled( true );
-        actionViewTableGrid->setEnabled( true );
         actionViewHeader->setEnabled( true );
         actionViewFooter->setEnabled( true );
         actionViewFootNotes->setEnabled( true );
@@ -1188,13 +1183,6 @@ void KWView::viewFormattingChars()
 void KWView::viewFrameBorders()
 {
     doc->setViewFrameBorders(actionViewFrameBorders->isChecked());
-    gui->canvasWidget()->repaintAll();
-}
-
-/*===============================================================*/
-void KWView::viewTableGrid()
-{
-    doc->setViewTableGrid( actionViewTableGrid->isChecked());
     gui->canvasWidget()->repaintAll();
 }
 

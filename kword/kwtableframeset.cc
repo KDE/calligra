@@ -1243,129 +1243,100 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
 {
     painter->save();
 
-    QListIterator<Cell> cells( m_cells );
-    for ( ; cells.current() ; ++cells )
+    for ( unsigned i =0; i < frames.count() ; i++)
     {
-        Cell *cell = cells.current();
-        for ( unsigned i =0; i < frames.count() ; i++) {
-            KWFrame *frame = frames.at(i);
-            // ## TODO port to outerRect ( see KWFrameSet )
-            QRect frameRect( m_doc->zoomRect(  *frame ) );
-            frameRect.rLeft() -= 1;
-            frameRect.rTop() -= 1;
-            frameRect.rRight() += 1;
-            frameRect.rBottom() += 1;
-            //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
-            if ( !crect.intersects( frameRect ) )
-                continue;
+        KWFrame *frame = frames.at(i);
+        // ## TODO port to outerRect ( see KWFrameSet )
+        QRect frameRect( m_doc->zoomRect(  *frame ) );
+//        frameRect.rLeft() -= 1;
+//        frameRect.rTop() -= 1;
+//        frameRect.rRight() += 1;
+//        frameRect.rBottom() += 1;
+        if ( !crect.intersects( frameRect ) )
+            continue;
 
-            region = region.subtract( frameRect );
+        region = region.subtract( frameRect );
 
-            // Set the background color.
-            painter->setBrush( frame->getBackgroundColor() );
-            painter->setPen( lightGray );
+        // Set the background color.
+        painter->setBrush( frame->getBackgroundColor() );
 
-            // Draw default borders using view settings except when printing, or disabled.
-#ifdef TABLES_HAD_PROPER_BORDER_SUPPORT
-            QPen viewSetting( lightGray );
-            if ( ( painter->device()->devType() == QInternal::Printer ) ||
-                !m_doc->getViewFrameBorders() )
+        // Draw default borders using view settings except when printing, or disabled.
+        QPen viewSetting( lightGray );
+        if ( ( painter->device()->devType() == QInternal::Printer ) ||
+            !m_doc->getViewFrameBorders() )
+        {
+            viewSetting.setColor( frame->getBackgroundColor().color() );
+        }
+
+        // Draw borders either as the user defined them, or using the view settings.
+
+        // Right
+        int w = frame->getRightBorder().ptWidth;
+        if ( w > 0 )
+        {
+            painter->setPen( Border::borderPen( frame->getRightBorder() ) );
+        }
+        else
+        {
+            painter->setPen( viewSetting );
+            w = 1;
+        }
+
+        // Borders should be drawn _outside_ of the frame area
+        // otherwise the frames will erase the border when painting themselves.
+
+        w = ( w + 1 ) / 2; // at least 1
+        painter->drawLine( frameRect.right() + w, frameRect.y(),
+                           frameRect.right() + w, frameRect.bottom() + 1 );
+
+        // Bottom
+        w = frame->getBottomBorder().ptWidth;
+        if ( w > 0 )
+        {
+            painter->setPen( Border::borderPen( frame->getBottomBorder() ) );
+        }
+        else
+        {
+            painter->setPen( viewSetting );
+            w = 1;
+        }
+        w = ( w + 1 ) / 2;
+        painter->drawLine( frameRect.x(),         frameRect.bottom() + w,
+                           frameRect.right() + 1, frameRect.bottom() + w );
+
+//        if ( cell->m_col == 0 ) // draw left only for 1st column.
+        {
+            // Left
+            w = frame->getLeftBorder().ptWidth;
+            if ( w > 0 )
             {
-                viewSetting.setColor( frame->getBackgroundColor().color() );
-            }
-#else
-            painter->setPen( black );
-#endif // TABLES_HAD_PROPER_BORDER_SUPPORT
-
-            // Draw borders either as the user defined them, or using the view settings.
-            // Always draw right and bottom:
-#ifdef TABLES_HAD_PROPER_BORDER_SUPPORT
-            if ( frame->getRightBorder().ptWidth > 0 )
-            {
-                painter->setPen( Border::borderPen( frame->getRightBorder() ) );
+                painter->setPen( Border::borderPen( frame->getLeftBorder() ) );
             }
             else
             {
                 painter->setPen( viewSetting );
+                w = 1;
             }
-            int w = frame->getRightBorder().ptWidth;
-            if ( !( w & 1 ) )
-                w--;
-            w /= 2;
-            painter->drawLine( frameRect.right() - w, frameRect.y(),
-                                frameRect.right() - w, frameRect.bottom() + 1 );
-
-            if ( frame->getBottomBorder().ptWidth > 0 )
+            w = ( w + 1 ) / 2;
+            painter->drawLine( frameRect.x() - w, frameRect.y(),
+                               frameRect.x() - w, frameRect.bottom() + 1 );
+        }
+//        if ( cell->m_row == 0 ) // draw top only for 1st row.
+        {
+            // Top
+            w = frame->getTopBorder().ptWidth;
+            if ( w > 0 )
             {
-                painter->setPen( Border::borderPen( frame->getBottomBorder() ) );
+                painter->setPen( Border::borderPen( frame->getTopBorder() ) );
             }
             else
             {
                 painter->setPen( viewSetting );
+                w = 1;
             }
-            w = frame->getBottomBorder().ptWidth;
-            if ( !( w & 1 ) )
-                w--;
-            painter->drawLine( frameRect.x(), frameRect.bottom() - w,
-                                frameRect.right() + 1,
-                                frameRect.bottom() - w );
-#else
-            int startX;
-            int startY;
-            int endX;
-            int endY;
-
-            startX = frameRect.right() + 1;
-            startY = frameRect.y();
-            endX = startX;
-            endY = frameRect.bottom();
-//            painter->drawLine( startX, startY, endX, endY );
-painter->drawRect (frameRect);
-            startX = frameRect.x();
-            startY = frameRect.bottom();
-            endX = frameRect.right() + 1;
-            endY = startY;
-//            painter->drawLine( startX, startY, endX, endY );
-#endif // TABLES_HAD_PROPER_BORDER_SUPPORT
-
-//            if ( cell->m_col == 0 ) // draw left only for 1st column.
-            {
-#ifdef TABLES_HAD_PROPER_BORDER_SUPPORT
-                if ( frame->getLeftBorder().ptWidth > 0 )
-                {
-                    painter->setPen( Border::borderPen( frame->getLeftBorder() ) );
-                }
-                else
-                {
-                    painter->setPen( viewSetting );
-                }
-                painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
-                                    frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
-#else
-//                painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
-//                                frameRect.x() - 1, frameRect.bottom() + 1 );
-#endif // TABLES_HAD_PROPER_BORDER_SUPPORT
-            }
-
-//            if ( cell->m_row == 0 ) // draw top only for 1st row.
-            {
-#ifdef TABLES_HAD_PROPER_BORDER_SUPPORT
-                if ( frame->getTopBorder().ptWidth > 0 )
-                {
-                    painter->setPen( Border::borderPen( frame->getTopBorder() ) );
-                }
-                else
-                {
-                    painter->setPen( viewSetting );
-                }
-                painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
-                                    frameRect.right() + 1,
-                                    frameRect.y() + frame->getTopBorder().ptWidth / 2 );
-#else
-//                painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
-//                                frameRect.right() + 1, frameRect.y() - 1 );
-#endif // TABLES_HAD_PROPER_BORDER_SUPPORT
-            }
+            w = ( w + 1 ) / 2;
+            painter->drawLine( frameRect.x(),         frameRect.y() - w,
+                               frameRect.right() + 1, frameRect.y() - w );
         }
     }
     painter->restore();
@@ -1391,8 +1362,6 @@ void KWTableFrameSet::save( QDomElement &parentElem ) {
         m_cells.at(i)->save(parentElem);
     }
 }
-
-
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
     KWTextFrameSet( table->m_doc )
