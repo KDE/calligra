@@ -24,6 +24,7 @@
 #include <qpainter.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "kdualcolorbtn.h"
 #include "colordialog.h"
@@ -48,8 +49,6 @@ ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
   m_pRGBWidget = new RGBWidget(this);
   m_pRGBWidget->setBackgroundColor(blue);
   m_pGradient = new GradientFrame(this);
-  m_pGradient->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  m_pGradient->setBackgroundColor(white);
   m_pColorButton = new KDualColorButton(this);
   
   m_pGrayButton = new QPushButton("Gray", this);
@@ -60,6 +59,10 @@ ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
 
   m_fg = KColor(255,255,255);;
   m_bg = KColor(0,0,0);
+
+  QObject::connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), m_pGradient, SLOT(slotSetColor1(const QColor &)));
+  QObject::connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), m_pGradient, SLOT(slotSetColor2(const QColor &)));
+  QObject::connect(m_pGradient, SIGNAL(colorSelected(const QColor &)), m_pColorButton, SLOT(slotSetForeground(const QColor &)));
 }
 
 ColorChooserWidget::~ColorChooserWidget() {}
@@ -83,24 +86,69 @@ void ColorChooserWidget::resizeEvent(QResizeEvent *e)
 GradientFrame::GradientFrame(QWidget *parent) : QFrame(parent)
 {
   setFrameStyle(Panel | Sunken);
+  setBackgroundMode(NoBackground);
+
   m_c1 = QColor(255,255,255);
   m_c2 = QColor(0,0,0);
+
+  m_colorChanged = false;
 }
 GradientFrame::~GradientFrame() {}
 
+void GradientFrame::slotSetColor1(const QColor& c)
+{
+  m_c1 = c;
+  m_colorChanged = true;
+  m_pixChanged = true;
+  repaint();
+}
+
+void GradientFrame::slotSetColor2(const QColor& c)
+{
+  m_c2 = c;
+  m_colorChanged = true;
+  repaint();
+}
+
 void GradientFrame::drawContents(QPainter *p)
 {
-  QPixmap *pm;
   QRect r = contentsRect();
 
-  if (m_pm.size() != r.size())
+  if ((m_pm.size() != r.size()) || m_colorChanged)
 	{
 	  m_pm.resize(r.width(), r.height());
 	  KPixmapEffect::gradient(m_pm, m_c1, m_c2, KPixmapEffect::HorizontalGradient);
+	  m_colorChanged = false;
+	  m_pixChanged = true;
 	}
   
-  pm = &m_pm;
-  p->drawPixmap(0, 0, *pm);
+  p->drawPixmap(r.left(), r.top(), m_pm);
+}
+
+void GradientFrame::mousePressEvent (QMouseEvent *e)
+{
+  if (e->button() & LeftButton)
+    {
+      QColor c = colorAt(QPoint(e->pos().x() - contentsRect().left(), e->pos().y() - contentsRect().top()));
+	  kdebug(KDEBUG_INFO, 0, "GradientFrame -> emit colorSelected()");
+	  emit colorSelected(c);
+	}
+  else
+	QFrame::mousePressEvent(e);
+}
+
+const QColor GradientFrame::colorAt (const QPoint& p)
+{
+  if (!contentsRect().contains(p))
+	return QColor(255,255,255);
+
+  if (m_pixChanged)
+	{
+	  m_pmImage = m_pm.convertToImage();
+	  m_pixChanged = false;
+	}
+
+  return QColor(m_pmImage.pixel(p.x(), p.y()));
 }
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent) {}

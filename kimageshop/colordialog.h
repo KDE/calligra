@@ -82,14 +82,27 @@ class GradientFrame : public QFrame
  
  public:
   GradientFrame(QWidget *parent = 0L);
-  ~GradientFrame();
+  virtual ~GradientFrame();
+
+  const QColor colorAt(const QPoint&);
 
  protected:
   virtual void drawContents (QPainter *);
+  virtual void mousePressEvent (QMouseEvent *);
+  
+ public slots:
+  void slotSetColor1(const QColor&);
+  void slotSetColor2(const QColor&);
+
+ signals:
+  void  colorSelected(const QColor&);
 
  protected:
-  QColor m_c1, m_c2;
-  KPixmap m_pm;
+  QColor    m_c1, m_c2;
+  KPixmap   m_pm;
+  QImage    m_pmImage;
+  bool      m_colorChanged;
+  bool      m_pixChanged;
 };
 
 #endif
