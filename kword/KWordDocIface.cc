@@ -210,3 +210,46 @@ bool KWordDocIface::viewFrameBorders() const
 {
     return doc->viewFrameBorders();
 }
+
+void KWordDocIface::setHeaderVisible( bool b)
+{
+    doc->setHeaderVisible(b);
+    doc->refreshGUIButton();
+}
+
+void KWordDocIface::setFooterVisible( bool b)
+{
+    doc->setFooterVisible( b);
+    doc->refreshGUIButton();
+}
+
+void KWordDocIface::setViewFrameBorders( bool b )
+{
+    doc->setViewFrameBorders( b );
+    doc->refreshGUIButton();
+}
+
+void KWordDocIface::setShowRuler(bool b)
+{
+    doc->setShowRuler(b);
+    doc->refreshGUIButton();
+    doc->reorganizeGUI();
+}
+
+bool KWordDocIface::viewFormattingChars() const
+{
+    return doc->viewFormattingChars();
+}
+
+void KWordDocIface::setViewFormattingChars(bool b)
+{
+    doc->setViewFormattingChars(b);
+    doc->refreshGUIButton();
+}
+
+void KWordDocIface::setShowDocStruct(bool b)
+{
+    doc->setShowDocStruct(b);
+    doc->refreshGUIButton();
+    doc->reorganizeGUI();
+}

@@ -3129,5 +3129,10 @@ QPtrList<KoTextObject> KWDocument::frameTextObject() const
     return lst;
 }
 
+void KWDocument::refreshGUIButton()
+{
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->initGUIButton();
+}
 
 #include "kwdoc.moc"

@@ -497,6 +497,8 @@ public:
 
     void updateContentsSize(){emit newContentsSize();}
 
+    void refreshGUIButton();
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void newContentsSize();

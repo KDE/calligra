@@ -66,11 +66,20 @@ k_dcop:
 
     virtual void setUndoRedoLimit(int _val);
 
-    bool showRuler() const;
-    bool dontCheckUpperWord();
-    bool dontCheckTitleCase() const;
-    bool showdocStruct() const;
-    bool viewFrameBorders() const; 
+    virtual bool showRuler() const;
+    virtual bool dontCheckUpperWord();
+    virtual bool dontCheckTitleCase() const;
+    virtual bool showdocStruct() const;
+    virtual bool viewFrameBorders() const; 
+
+    virtual bool viewFormattingChars() const; 
+    virtual void setViewFormattingChars(bool _b);
+
+    virtual void setHeaderVisible( bool );
+    virtual void setFooterVisible( bool );
+    virtual void setViewFrameBorders( bool b );
+    virtual void setShowRuler(bool b);
+    virtual void setShowDocStruct(bool _b);
 
     virtual void recalcAllVariables();
     virtual void recalcVariables(int _var);

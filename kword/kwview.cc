@@ -254,12 +254,7 @@ void KWView::initGui()
     if ( m_gui )
         m_gui->showGUI();
     setTool( KWCanvas::MM_EDIT );
-    actionViewFrameBorders->setChecked( viewFrameBorders() );
-    actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
-    actionShowDocStruct->setChecked(m_doc->showdocStruct());
-
-    actionViewHeader->setChecked(m_doc->isHeaderVisible());
-    actionViewFooter->setChecked(m_doc->isFooterVisible());
+    initGUIButton();
     actionFormatDecreaseIndent->setEnabled(false);
     //setNoteType(m_doc->getNoteType(), false);
 
@@ -286,6 +281,18 @@ void KWView::initGui()
     //at the beginning actionBackgroundColor should be active
     actionBackgroundColor->setEnabled(true);
 
+}
+
+
+void KWView::initGUIButton()
+{
+    actionViewFrameBorders->setChecked( viewFrameBorders() );
+    actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
+    actionShowDocStruct->setChecked(m_doc->showdocStruct());
+
+    actionViewHeader->setChecked(m_doc->isHeaderVisible());
+    actionViewFooter->setChecked(m_doc->isFooterVisible());
+
     QString mode=m_gui->canvasWidget()->viewMode()->type();
     if(mode=="ModePreview")
         actionViewPreviewMode->setChecked(true);
@@ -295,7 +302,6 @@ void KWView::initGui()
         actionViewPageMode->setChecked(true);
     else
         actionViewPageMode->setChecked(true);
-
 }
 
 void KWView::setupActions()

@@ -163,6 +163,8 @@ public:
 
     void displayFrameInlineInfo();
 
+    void initGUIButton();
+
 public slots:
     void fileStatistics();
     void editCut();
