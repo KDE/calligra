@@ -43,16 +43,16 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	x2 = 300.0; y2 = 200.0;
 	path->arcTo(x1,y1,x2,y2,100.0);
 	x1 = 300.0; y1 = 300.0;
-	x2 = 200.0; y2 = 300.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
-	x1 = 100.0; y1 = 300.0;
+	x2 = 400.0; y2 = 200.0;
+	path->arcTo(x1,y1,x2,y2,50.0);
+/*	x1 = 100.0; y1 = 300.0;
 	x2 = 100.0; y2 = 200.0;
 	path->arcTo(x1,y1,x2,y2,100.0);
 	x1 = 100.0; y1 = 100.0;
 	x2 = 200.0; y2 = 100.0;
-	path->arcTo(x1,y1,x2,y2,100.0);
+	path->arcTo(x1,y1,x2,y2,100.0);*/
 
-	path->translate( 50.0, 0.0 );
+	path->translate( 100.0, 0.0 );
 	m_objects.append( path );
 
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

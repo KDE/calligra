@@ -1,7 +1,7 @@
 #ifndef __VOBJECT_H__
 #define __VOBJECT_H__
 
-#include "vrect.h"
+#include <qrect.h>
 
 class QPainter;
 
@@ -15,8 +15,11 @@ public:
 	//virtual void rotate( const double& deg ) = 0;
 	//virtual void scale( const double& dx, const double& dy ) = 0;
 
-private:
-	VRect m_boundingBox;
+	// QRect as boundingBox is sufficent since it's not used for calculating intersections
+	virtual const QRect& boundingBox() const = 0;
+
+protected:
+	QRect m_boundingBox;
 };
 
 #endif

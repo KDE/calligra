@@ -38,6 +38,8 @@ VPath::draw( QPainter& p, const QRect& rect, const double& zoomFactor  )
 // - Qt's quadBezier() looks ugly for small arcs. think about stealing
 //   a better routine from someone
 
+	p.save();
+
 	// walk down all Segments and add their QPoints into a QPointArray
 
 	Segment* segment = m_segments.first();	// first segment
@@ -52,6 +54,13 @@ VPath::draw( QPainter& p, const QRect& rect, const double& zoomFactor  )
 		{
 			qpa.resize( qpa.size()+1 );
 			qpa.setPoint( qpa.size()-1, segment->p3->getQPoint( zoomFactor ) );
+
+// demo-hack: draw controll points
+			p.setPen( Qt::black );
+			p.drawRect(
+				segment->p3->getQPoint( zoomFactor ).x()-3,
+				segment->p3->getQPoint( zoomFactor ).y()-3, 6, 6 );
+
 		}
 	}
 
@@ -73,17 +82,46 @@ VPath::draw( QPainter& p, const QRect& rect, const double& zoomFactor  )
 			qpa.resize( size1+size2 );
 			for ( unsigned int i=0; i<size2; i++ )
 				qpa.setPoint( size1+i, pa.point(i) );
+// demo-hack: draw controll points
+			p.setPen( Qt::black );
+			p.drawRect(
+				prevPoint->getQPoint( zoomFactor ).x()-3,
+				prevPoint->getQPoint( zoomFactor ).y()-3, 6, 6 );
+			p.drawRect(
+				segment->p1->getQPoint( zoomFactor ).x()-3,
+				segment->p1->getQPoint( zoomFactor ).y()-3, 6, 6 );
+			p.drawRect(
+				segment->p2->getQPoint( zoomFactor ).x()-3,
+				segment->p2->getQPoint( zoomFactor ).y()-3, 6, 6 );
+			p.drawRect(
+				segment->p3->getQPoint( zoomFactor ).x()-3,
+				segment->p3->getQPoint( zoomFactor ).y()-3, 6, 6 );
+
+
+// demo-hack: draw bezier control-lines
+			p.setPen( QPen( Qt::black, 1, Qt::DotLine ) );
+			p.drawLine(
+				prevPoint->getQPoint( zoomFactor ),
+				segment->p1->getQPoint( zoomFactor ) );
+			p.drawLine(
+				segment->p2->getQPoint( zoomFactor ),
+				segment->p3->getQPoint( zoomFactor ) );
+
 		}
 		else
 		{
 			// draw a line:
 			qpa.resize( qpa.size()+1 );
 			qpa.setPoint( qpa.size()-1, segment->p3->getQPoint( zoomFactor ) );
+
+// demo-hack: draw controll points
+			p.setPen( Qt::black );
+			p.drawPoint( segment->p3->getQPoint( zoomFactor ) );
+
 		}
 		prevPoint = segment->p3; // need previous point to calculate bezier-qpoints
 	}
 
-	p.save();
 	p.setPen( Qt::black );
 	p.setBrush( QColor( 205, 201, 165 ) );
 
@@ -143,7 +181,7 @@ VPath::curveTo( const double& x1, const double& y1, const double& x2,
 
 void
 VPath::arcTo( const double& x1, const double& y1,
-    const double& x2, const double& y2, const double& r )
+	const double& x2, const double& y2, const double& r )
 {
 	// parts of this routine are taken from GNU ghostscript
 
@@ -164,29 +202,29 @@ VPath::arcTo( const double& x1, const double& y1,
 	// we take advantage of D10*D12=d10*d12*cos(a), |D10xD12|=d10*d12*sin(a)
 	// and tan(a/2)=sin(a)/[1-cos(a)].
 	double num   = dx10*dy12 - dy10*dx12;
-	double denom = sqrt(dsq10*dsq12) - dx10*dx12 + dy10*dy12;
+	double denom = sqrt( dsq10*dsq12 ) - dx10*dx12 + dy10*dy12;
 
-    if ( denom==0 )			// points are co-linear
+	if ( denom==0 )			// points are co-linear
 		lineTo( x1, y1 );	// just add a line to first point
     else
     {
 		// calculate distances from P1 to tangent points:
-		double dist = fabs(r*num/denom);
-		double d1t0 = dist/sqrt(dsq10);
-		double d1t1 = dist/sqrt(dsq12);
+		double dist = fabs( r*num / denom );
+		double d1t0 = dist / sqrt(dsq10);
+		double d1t1 = dist / sqrt(dsq12);
 
 // TODO: check for r<0
 
-		double bx0 = x1+dx10*d1t0;
-		double by0 = y1+dy10*d1t0;
+		double bx0 = x1 + dx10*d1t0;
+		double by0 = y1 + dy10*d1t0;
 
 		// if (bx0,by0) deviates from current point, add a line to it:
-		// TODO: decide via radius<XXX or sthg?
+// TODO: decide via radius<XXX or sthg?
 		if ( bx0 != m_segments.getLast()->p3->x() || by0 != m_segments.getLast()->p3->y() )
 			lineTo( bx0, by0 );
 
-		double bx3 = x1+dx12*d1t1;
-		double by3 = y1+dy12*d1t1;
+		double bx3 = x1 + dx12*d1t1;
+		double by3 = y1 + dy12*d1t1;
 
 		// the two bezier-control points are located on the tangents at a fraction
 		// of the distance [tangent points<->tangent intersection].
@@ -211,7 +249,27 @@ VPath::arcTo( const double& x1, const double& y1,
 		m_segments.getLast()->p1 = new VPoint( bx1, by1 );
 		m_segments.getLast()->p2 = new VPoint( bx2, by2 );
 		m_segments.getLast()->p3 = new VPoint( bx3, by3 );
-    }
+	}
+}
+
+void
+VPath::close()
+{
+// TODO: dont "close" a single line
+	// draw a line if last point differs from first point
+	if ( *(m_segments.getFirst()->p3) != *(m_segments.getLast()->p3) )
+		lineTo( m_segments.getFirst()->p3->x(), m_segments.getFirst()->p3->y() );
+
+	// do nothing if first and last point are the same (eg only first point exists):
+	if ( m_segments.getFirst()->p3!=m_segments.getLast()->p3 )
+	{
+		if ( m_segments.getLast()->p3->unref()==0 )
+			delete m_segments.getLast()->p3;
+
+		m_segments.getLast()->p3 = m_segments.getFirst()->p3;
+
+		m_isClosed = true;
+	}
 }
 
 void
@@ -234,22 +292,8 @@ VPath::translate( const double& dx, const double& dy )
 	}
 }
 
-void
-VPath::close()
+const QRect&
+VPath::boundingBox() const
 {
-// TODO: dont "close" a single line
-	// draw a line if last point differs from first point
-	if ( *(m_segments.getFirst()->p3) != *(m_segments.getLast()->p3) )
-		lineTo( m_segments.getFirst()->p3->x(), m_segments.getFirst()->p3->y() );
-
-	// do nothing if first and last point are the same (eg only first point exists):
-	if ( m_segments.getFirst()->p3!=m_segments.getLast()->p3 )
-	{
-		if ( m_segments.getLast()->p3->unref()==0 )
-			delete m_segments.getLast()->p3;
-
-		m_segments.getLast()->p3 = m_segments.getFirst()->p3;
-
-		m_isClosed = true;
-	}
+	return m_boundingBox;
 }
