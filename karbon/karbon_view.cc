@@ -968,6 +968,9 @@ KarbonView::zoomChanged()
 		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoomFactor ),
 								  int( ( part()->pageLayout().ptHeight + 80 ) * zoomFactor ) );
 
+	VPainter *painter = painterFactory()->editpainter();
+	painter->setZoomFactor( zoomFactor );
+
 	m_canvas->repaintAll();
 
 	m_canvas->setFocus();

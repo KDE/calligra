@@ -93,8 +93,7 @@ void
 VSelectTool::draw()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
-//	view()->canvasWidget()->setYMirroring( true );
-	painter->setZoomFactor( view()->zoom() );
+	//painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();

@@ -62,8 +62,7 @@ void
 VRotateTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-//	view()->canvasWidget()->setYMirroring( true );
-	painter->setZoomFactor( view()->zoom() );
+	//painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
 	VObjectListIterator itr = m_objects;

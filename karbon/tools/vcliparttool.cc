@@ -284,8 +284,6 @@ VClipartTool::draw()
 	if( ( m_clipart ) && ( m_bottomright.x() - m_topleft.x() != 0 ) && ( m_bottomright.y() - m_topleft.y() != 0 ) )
 	{
 		VPainter* painter = view()->painterFactory()->editpainter();
-//		view()->canvasWidget()->setYMirroring( true );
-		painter->setZoomFactor( view()->zoom() );
 		painter->setRasterOp( Qt::NotROP );
 
 		QWMatrix mat( m_bottomright.x() - m_topleft.x(), 0, 0, m_bottomright.y() - m_topleft.y(), m_topleft.x(), m_topleft.y() );

@@ -57,11 +57,9 @@ void
 VShearTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-//	view()->canvasWidget()->setYMirroring( true );
 	painter->setRasterOp( Qt::NotROP );
 
 	VObjectListIterator itr = m_objects;
-	painter->setZoomFactor( view()->zoom() );
 	for( ; itr.current(); ++itr )
 		itr.current()->draw( painter, &itr.current()->boundingBox() );
 }

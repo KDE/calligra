@@ -141,8 +141,6 @@ QString VPatternTool::contextHelp()
 void VPatternTool::draw()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
-//	view()->canvasWidget()->setYMirroring( true );
-	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
 	painter->setPen( Qt::DotLine );

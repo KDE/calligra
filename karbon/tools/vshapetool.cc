@@ -62,8 +62,6 @@ void
 VShapeTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-//	view()->canvasWidget()->setYMirroring( true );
-	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
 	VComposite* composite = shape();

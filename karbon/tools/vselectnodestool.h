@@ -45,6 +45,7 @@ private:
 	void recalc();
 
 	// A list of temporary objects:
+	VObjectList m_selectionCopy;
 	VObjectList m_objects;
 
 	KoPoint m_current;

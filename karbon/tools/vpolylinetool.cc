@@ -130,8 +130,6 @@ void
 VPolylineTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-//	view()->canvasWidget()->setYMirroring( true );
-	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
 	if( m_bezierPoints.count() > 2 )
@@ -162,8 +160,6 @@ VPolylineTool::drawBezierVector( KoPoint& start, KoPoint& end )
 	VPainter* painter = view()->painterFactory()->editpainter();
 
 	painter->save();
-//	view()->canvasWidget()->setYMirroring( true );
-	painter->setZoomFactor( view()->zoom() );
 
 	float zoomFactor = view()->zoom();
 
