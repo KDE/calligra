@@ -856,10 +856,18 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
     if ( start+len < length() && at( start+len )->lineStart )
     {
+#ifdef DEBUG_PAINT
+        kdDebug(32500) << "we are drawing the end of line " << line << endl;
+        kdDebug(32500) << "line is auto-hyphenated: " << lineHyphenated( line ) << endl;
+#endif
         bool drawHyphen = at( start+len-1 )->c.unicode() == 0xad;
         drawHyphen = drawHyphen || lineHyphenated( line );
-        if ( drawHyphen )
+        if ( drawHyphen ) {
+#ifdef DEBUG_PAINT
+            kdDebug(32500) << "drawing hyphen at x=" << startX+bw << endl;
+#endif
             painter.drawText( startX + bw, lastY + baseLine, "\xad" );
+        }
     }
 
 	// Paint a zigzag line for "wrong" background spellchecking checked words:

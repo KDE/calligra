@@ -607,6 +607,9 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
     if ( last >= 0 && last < string->length() ) {
         KoTextStringChar &chr = string->at( last );
 	line->w = chr.x + chr.width; //string->width( last );
+        // Add width of hyphen (so that it appears)
+        if ( line->hyphenated )
+            line->w += KoTextZoomHandler::ptToLayoutUnitPt( chr.format()->refFontMetrics().width( QChar(0xad) ) );
         kdDebug() << "koFormatLine: line->w=" << line->w << endl;
     } else
 	line->w = 0;
