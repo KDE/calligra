@@ -378,7 +378,7 @@ void setColInfo(QDomNode * sheet, KSpreadSheet * table)
     if (e.hasAttribute("Unit"))
     {
       //  xmm = (x_points) * (1 inch / 72 points) * (25.4 mm/ 1 inch)
-      cl->setWidth((e.attribute("Unit").toDouble()*4)/3);
+      cl->setDblWidth(e.attribute("Unit").toDouble());
       //cl->setWidth(e.attribute("Unit").toInt());
     }
     table->insertColumnFormat(cl);
@@ -423,7 +423,7 @@ void setRowInfo(QDomNode *sheet, KSpreadSheet *table)
     {
       double dbl = e.attribute( "Unit" ).toDouble( &ok );
       if ( ok )
-        rl->setHeight( dbl );
+        rl->setDblHeight( dbl );
     }
     table->insertRowFormat(rl);
     rowinfo = rowinfo.nextSibling();
