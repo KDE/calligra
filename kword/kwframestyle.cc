@@ -68,6 +68,29 @@ KWFrameStyle* KWFrameStyleCollection::findStyleShortCut( const QString & _shortC
 KWFrameStyle* KWFrameStyleCollection::findFrameStyle( const QString & _name )
 {
     // Caching, to speed things up
+    if ( m_lastStyle && m_lastStyle->name() == _name )
+        return m_lastStyle;
+
+    QPtrListIterator<KWFrameStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->name() == _name ) {
+            m_lastStyle = styleIt.current();
+            m_lastStyleName == styleIt.current()->displayName();
+            return m_lastStyle;
+        }
+    }
+
+    if( _name == "Plain" )
+        return m_styleList.at(0); // fallback..
+
+    return 0L;
+}
+
+
+KWFrameStyle* KWFrameStyleCollection::findTranslatedFrameStyle( const QString & _name )
+{
+    // Caching, to speed things up
     if ( m_lastStyle && m_lastStyleName == _name )
         return m_lastStyle;
 

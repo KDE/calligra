@@ -41,7 +41,14 @@ public:
 
     const QPtrList<KWFrameStyle> & frameStyleList() const { return m_styleList; }
 
+    /**
+     * find frame style based on the untranslated name @p name
+     */
     KWFrameStyle* findFrameStyle( const QString & name );
+    /**
+     * find frame style based on the translated name @p name
+     */
+    KWFrameStyle* findTranslatedFrameStyle( const QString & name );
     KWFrameStyle* findStyleShortCut( const QString & _shortCut );
     /**
      * Return style number @p i.
