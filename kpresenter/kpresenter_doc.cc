@@ -387,11 +387,14 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl;
     out << indent << "<PRESSPEED value=\"" << static_cast<int>( presSpeed ) << "\"/>" << endl;
 
-    out << otag << "<SELSLIDES>" << endl;
-    QValueList<bool>::Iterator sit = m_selectedSlides.begin();
-    for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i )
-	out << indent << "<SLIDE nr=\"" << i << "\" show=\"" << ( *sit ) << "\"/>" << endl;
-    out << etag << "</SELSLIDES>" << endl;
+    if ( saveOnlyPage != -1 )
+    {
+        out << otag << "<SELSLIDES>" << endl;
+        QValueList<bool>::Iterator sit = m_selectedSlides.begin();
+        for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i )
+            out << indent << "<SLIDE nr=\"" << i << "\" show=\"" << ( *sit ) << "\"/>" << endl;
+        out << etag << "</SELSLIDES>" << endl;
+    }
 
     // Write "OBJECT" tag for every child
     QListIterator<KoDocumentChild> chl( children() );
@@ -401,6 +404,11 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
         for ( unsigned int j = 0; j < _objectList->count(); j++ )
         {
             kpobject = _objectList->at( j );
+            if ( saveOnlyPage != -1 ) {
+                int pg = getPageOfObj( j, 0, 0 ) - 1;
+                if ( saveOnlyPage != pg )
+                    continue;
+            }
             if ( kpobject->getType() == OT_PART &&
                  dynamic_cast<KPPartObject*>( kpobject )->getChild() == chl.current() )
             {
