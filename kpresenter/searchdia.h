@@ -23,7 +23,6 @@
 #include "qrichtext_p.h"
 #include "kptextobject.h"
 #include <koSearchDia.h>
-using namespace Qt3;
 
 class KPrCanvas;
 class KMacroCommand;
@@ -49,7 +48,7 @@ public:
     ~KPrFindReplace();
     
     virtual void emitNewCommand(KCommand *);
-    virtual void highlightPortion(Qt3::QTextParag * parag, int index, int length, KoTextDocument *textdoc);
+    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc);
 
 private:
     KPrCanvas *m_canvas;

@@ -4592,19 +4592,19 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
 
     switch(currentFormat.vAlign())
       {
-      case QTextFormat::AlignSuperScript:
+      case KoTextFormat::AlignSuperScript:
 	{
 	  actionFormatSub->setChecked( false );
 	  actionFormatSuper->setChecked( true );
 	  break;
 	}
-      case QTextFormat::AlignSubScript:
+      case KoTextFormat::AlignSubScript:
 	{
 	  actionFormatSub->setChecked( true );
 	  actionFormatSuper->setChecked( false );
 	  break;
 	}
-      case QTextFormat::AlignNormal:
+      case KoTextFormat::AlignNormal:
       default:
 	{
 	  actionFormatSub->setChecked( false );
@@ -4691,7 +4691,7 @@ void KPresenterView::spellCheckerReady()
         m_spell.spellCurrTextObjNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug() << "KPresenterView::spellCheckerReady spell-checking frameset " << spellCurrTextObjNum << endl;
 
-        Qt3::QTextParag * p = textobj->textDocument()->firstParag();
+        KoTextParag * p = textobj->textDocument()->firstParag();
         QString text;
         bool textIsEmpty=true;
         while ( p ) {
@@ -4756,7 +4756,7 @@ void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringL
     KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
     Q_ASSERT( textobj );
     if ( !textobj ) return;
-    Qt3::QTextParag * p = textobj->textDocument()->firstParag();
+    KoTextParag * p = textobj->textDocument()->firstParag();
     while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
@@ -4775,7 +4775,7 @@ void KPresenterView::spellCheckerCorrected( const QString &old, const QString &c
     KPTextObject * textobj = m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
     Q_ASSERT( textobj );
     if ( !textobj ) return;
-    Qt3::QTextParag * p = textobj->textDocument()->firstParag();
+    KoTextParag * p = textobj->textDocument()->firstParag();
     while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
@@ -4784,7 +4784,7 @@ void KPresenterView::spellCheckerCorrected( const QString &old, const QString &c
     Q_ASSERT( p );
     if ( !p ) return;
     textobj->highlightPortion( p, pos, old.length(), m_canvas );
-    QTextCursor cursor( textobj->textDocument() );
+    KoTextCursor cursor( textobj->textDocument() );
     cursor.setParag( p );
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)
@@ -5708,7 +5708,7 @@ void KPresenterView::textStyleSelected( int index )
         {
             KoTextObject *textObject = it.current()->textObject();
             textObject->textDocument()->selectAll( KoTextDocument::Temp );
-            KCommand *cmd = textObject->applyStyle( 0L, m_pKPresenterDoc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, QTextFormat::Format, true, true );
+            KCommand *cmd = textObject->applyStyle( 0L, m_pKPresenterDoc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, true );
             textObject->textDocument()->removeSelection( KoTextDocument::Temp );
             if (cmd)
                 globalCmd->addCommand( cmd );

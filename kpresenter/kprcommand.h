@@ -691,14 +691,14 @@ protected:
 /******************************************************************/
 /* Class: KPrPasteTextCommand                                     */
 /******************************************************************/
-class KPrPasteTextCommand : public Qt3::QTextCommand
+class KPrPasteTextCommand : public KoTextDocCommand
 {
 public:
     KPrPasteTextCommand( KoTextDocument *d, int parag, int idx,
                     const QCString & data );
     ~KPrPasteTextCommand() {}
-    Qt3::QTextCursor *execute( Qt3::QTextCursor *c );
-    Qt3::QTextCursor *unexecute( Qt3::QTextCursor *c );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
 protected:
     int m_parag;
     int m_idx;

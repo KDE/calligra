@@ -37,9 +37,7 @@
 #include <qrichtext_p.h>
 #include <kotextobject.h>
 #include <kostyle.h>
-#include <kotextdocument.h>
 #include <kotextformatter.h>
-#include <kotextformat.h>
 #include <kozoomhandler.h>
 #include "KPTextViewIface.h"
 #include "KPTextObjectIface.h"
@@ -51,7 +49,6 @@
 #include "koAutoFormat.h"
 #include <koparagcounter.h>
 #include <kaction.h>
-#include <kotextparag.h>
 #include <qpopupmenu.h>
 #include <koVariable.h>
 #include <koVariableDlgs.h>
@@ -237,7 +234,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
 // Special method for drawing a text object that is being edited
 void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                         bool onlyChanged, QTextCursor* cursor, bool resetChanged )
+                         bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
 {
     _painter->save();
     _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
@@ -250,7 +247,7 @@ void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
 // Common functionality for the above 2 methods
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                         bool onlyChanged, QTextCursor* cursor, bool resetChanged,
+                         bool onlyChanged, KoTextCursor* cursor, bool resetChanged,
                          bool drawingShadow,bool drawContour )
 {
     double ow = ext.width();
@@ -323,7 +320,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
 // This method simply draws the paragraphs in the given painter
 // Assumes the painter is already set up correctly.
-void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
+void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
 {
     //kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
@@ -346,7 +343,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
             drawParags( _painter, zoomHandler, cg, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
             break;
         default:
-            /*Qt3::QTextParag * lastFormatted =*/ textDocument()->drawWYSIWYG(
+            /*KoTextParag * lastFormatted =*/ textDocument()->drawWYSIWYG(
                 _painter, r.x(), r.y(), r.width(), r.height(),
                 cg, zoomHandler,
                 onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled()&& editMode );
@@ -355,7 +352,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     else
     {
         //kdDebug() << "KPTextObject::drawText r=" << DEBUGRECT(r) << endl;
-        /*Qt3::QTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
+        /*KoTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
             cg, zoomHandler,
             onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled() && editMode );
@@ -365,7 +362,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
 int KPTextObject::getSubPresSteps() const
 {
     int paragraphs = 0;
-    Qt3::QTextParag * parag = m_textobj->textDocument()->firstParag();
+    KoTextParag * parag = m_textobj->textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
         paragraphs++;
     return paragraphs;
@@ -604,7 +601,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n )
     }
     //TODO FIXME : value is correct, but format is not good :(
     if(n.hasAttribute(attrVertAlign))
-        format.setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
+        format.setVAlign( static_cast<KoTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
 
 
     //kdDebug()<<"loadFormat :"<<format.key()<<endl;
@@ -849,7 +846,7 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc, KPrPage *page )
     }
 
     pgnum+=1;
-    QPtrListIterator<Qt3::QTextCustomItem> cit( textDocument()->allCustomItems() );
+    QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         KPrPgNumVariable * var = dynamic_cast<KPrPgNumVariable *>( cit.current() );
@@ -877,7 +874,7 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
         editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
 
     QRect r = zoomHandler->zoomRect( KoRect( 0, 0, ext.width(), ext.height() ) );
-    Qt3::QTextParag *parag = textDocument()->firstParag();
+    KoTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         if ( !parag->isValid() )
             parag->format();
@@ -898,7 +895,7 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
         false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/ ,true/*, resetChanged*/,m_doc->backgroundSpellCheckEnabled() && editMode );
 }
 
-void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
+void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
     //kdDebug() << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << endl;
     KoZoomHandler *zh = m_doc->zoomHandler();
@@ -984,7 +981,7 @@ void KPTextObject::removeHighlight ()
     m_textobj->removeHighlight();
 }
 
-void KPTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int length, KPrCanvas*/*_canvas*/ )
+void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas*/*_canvas*/ )
 {
     m_textobj->highlightPortion( parag, index, length );
 #if 0
@@ -996,7 +993,7 @@ void KPTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int len
 #endif
 }
 
-KCommand * KPTextObject::pasteKPresenter( QTextCursor * cursor, const QCString & data, bool removeSelected )
+KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString & data, bool removeSelected )
 {
     // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
     // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
@@ -1038,7 +1035,7 @@ void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,c
     shadowDirection = _direction;
     shadowColor = _color;
 #endif
-    Qt3::QTextParag *parag = textDocument()->firstParag();
+    KoTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         // The double->int conversion for shadowDistance assumes pt=pixel. Bah.
         static_cast<KoTextParag *>(parag)->setShadow( (int)_distance, _direction, _color );
@@ -1206,7 +1203,7 @@ void KPTextView::ensureCursorVisible()
     kdDebug()<<"KPTextView::ensureCursorVisible() : not implemented\n";
 }
 
-void KPTextView::doAutoCompletion( QTextCursor* cursor, KoTextParag *parag, int index )
+void KPTextView::doAutoCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
 {
     if( m_kptextobj->kPresenterDocument()->allowAutoFormat() )
     {
@@ -1217,7 +1214,7 @@ void KPTextView::doAutoCompletion( QTextCursor* cursor, KoTextParag *parag, int 
 }
 
 
-void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
+void KPTextView::doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
     if( m_kptextobj->kPresenterDocument()->allowAutoFormat())
     {
@@ -1264,8 +1261,8 @@ void KPTextView::showFormat( KoTextFormat *format )
 
 void KPTextView::pgUpKeyPressed()
 {
-    QTextCursor *cursor = textView()->cursor();
-    Qt3::QTextParag *s = cursor->parag();
+    KoTextCursor *cursor = textView()->cursor();
+    KoTextParag *s = cursor->parag();
     s = textDocument()->firstParag();
 
     textView()->cursor()->setParag( s );
@@ -1274,8 +1271,8 @@ void KPTextView::pgUpKeyPressed()
 
 void KPTextView::pgDownKeyPressed()
 {
-    QTextCursor *cursor = textView()->cursor();
-    Qt3::QTextParag *s = cursor->parag();
+    KoTextCursor *cursor = textView()->cursor();
+    KoTextParag *s = cursor->parag();
     s = textDocument()->lastParag();
     cursor->setParag( s );
     cursor->setIndex( s->length() - 1 );
@@ -1475,8 +1472,8 @@ void KPTextView::insertVariable( KoVariable *var )
 
 KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
 {
-    QTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
-    QTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
+    KoTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+    KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
 
     QString text;
 
@@ -1492,7 +1489,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
     {
         text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
         m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(c1.parag()),elem, c1.index(), c1.parag()->length()-2);
-        Qt3::QTextParag *p = c1.parag()->next();
+        KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             text += p->string()->toString() + "\n";
             m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(p),elem, 0, p->length()-2);
@@ -1545,7 +1542,7 @@ void KPTextView::dropEvent( QDropEvent * e )
     if ( doc->isReadWrite() && KPrTextDrag::canDecode( e ) )
     {
         e->acceptAction();
-        QTextCursor dropCursor( textDocument() );
+        KoTextCursor dropCursor( textDocument() );
         QPoint dropPoint=e->pos() - doc->zoomHandler()->zoomPoint( kpTextObject()->getOrig());
         dropPoint=doc->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));

@@ -44,7 +44,6 @@
 #include <kotextobject.h>
 #include "kprtextdocument.h"
 #include <koVariable.h>
-using namespace Qt3;
 #include <kdebug.h>
 #include "kprvariable.h"
 #include <koRect.h>
@@ -1562,13 +1561,13 @@ void ResizeCmd::unexecute( bool _repaint )
 
 KPrPasteTextCommand::KPrPasteTextCommand( KoTextDocument *d, int parag, int idx,
                                 const QCString & data )
-    : QTextCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
+    : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
 {
 }
 
-QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
+KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
 {
-    Qt3::QTextParag *firstParag = doc->paragAt( m_parag );
+    KoTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
@@ -1667,9 +1666,9 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
 }
 
 
-QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
+KoTextCursor * KPrPasteTextCommand::unexecute( KoTextCursor *c )
 {
-    Qt3::QTextParag *firstParag = doc->paragAt( m_parag );
+    KoTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
@@ -1678,7 +1677,7 @@ QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
     cursor.setIndex( m_idx );
     doc->setSelectionStart( KoTextDocument::Temp, &cursor );
 
-    Qt3::QTextParag *lastParag = doc->paragAt( m_lastParag );
+    KoTextParag *lastParag = doc->paragAt( m_lastParag );
     if ( !lastParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
         return 0;

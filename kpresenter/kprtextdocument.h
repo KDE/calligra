@@ -20,7 +20,7 @@
 #ifndef kprtextdocument_h
 #define kprtextdocument_h
 
-#include "kotextdocument.h"
+#include "qrichtext_p.h"
 
 class KPTextObject;
 class KoTextFormatCollection;

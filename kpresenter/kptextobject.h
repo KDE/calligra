@@ -85,11 +85,11 @@ public:
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 			bool drawingShadow, bool drawContour );
-    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged, bool drawingShadow,bool drawContour );
+    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged, bool drawingShadow,bool drawContour );
     void paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                      bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+                      bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
 
-    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
+    void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
 
     virtual void extendObject2Contents( KPresenterView *view = 0 );
 
@@ -107,9 +107,9 @@ public:
     void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
     void removeHighlight ();
-    void highlightPortion( Qt3::QTextParag * parag, int index, int length, KPrCanvas */*_canvas*/ );
+    void highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas */*_canvas*/ );
 
-    KCommand * pasteKPresenter( QTextCursor * cursor, const QCString & data, bool removeSelected );
+    KCommand * pasteKPresenter( KoTextCursor * cursor, const QCString & data, bool removeSelected );
 
     void saveParagraph( QDomDocument& doc,
 			KoTextParag * parag,
@@ -133,7 +133,7 @@ protected:
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);
 
     virtual void loadKTextObject( const QDomElement &e, int type );
-    void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+    void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
     void drawParags( QPainter *p, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
@@ -214,10 +214,10 @@ protected slots:
 
 protected:
     // Reimplemented from KoTextView
-    virtual void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
+    virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
 
-    virtual void doAutoCompletion( QTextCursor* cursor, KoTextParag *parag, int index );
+    virtual void doAutoCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
 
     virtual void showFormat( KoTextFormat *format ) ;
 

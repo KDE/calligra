@@ -28,9 +28,7 @@
 class KPresenterDoc;
 class KoVariable;
 class KoPgNumVariable;
-namespace Qt3 {
-class QTextFormat;
-}
+class KoTextFormat;
 
 class KPrVariableCollection : public KoVariableCollection 
 {

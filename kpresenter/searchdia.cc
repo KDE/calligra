@@ -27,7 +27,6 @@
 #include <kcommand.h>
 #include <koSearchDia.h>
 #include "kprtextdocument.h"
-#include <kotextdocument.h>
 
 KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoSearchDia * dialog ,KPTextView *textView ,const QPtrList<KoTextObject> & lstObject)
     :KoFindReplace( canvas, dialog,textView ,lstObject)
@@ -51,7 +50,7 @@ void KPrFindReplace::emitNewCommand(KCommand *cmd)
     m_canvas->getView()->kPresenterDoc()->addCommand(cmd);
 }
 
-void KPrFindReplace::highlightPortion(Qt3::QTextParag * parag, int index, int length, KoTextDocument *_textdoc)
+void KPrFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *_textdoc)
 {
     KPrTextDocument *textdoc=static_cast<KPrTextDocument *>(_textdoc);
     textdoc->textObject()->highlightPortion( parag, index, length,m_canvas );
