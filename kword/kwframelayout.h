@@ -110,15 +110,17 @@ public:
         : m_headersFooters( headersFooters ), m_footnotes( footnotes ), m_endnotes( endnotes ), m_doc( doc )
         {}
 
+    enum { DontRemovePages = 1 };
     /**
      * The main method of this file. Do the frame layout.
      * @param mainTextFrameSet if set, its frames will be resized. Usually: set in WP mode, not set in DTP mode.
      * @param numColumns number of columns to create for the main textframeset. Only relevant if mainTextFrameSet!=0.
      * @param fromPage first page to layout ( 0-based )
      * @param toPage last page to layout ( 0-based )
+     * @param flags see enum above
      */
     void layout( KWFrameSet* mainTextFrameSet, int numColumns,
-                 int fromPage, int toPage );
+                 int fromPage, int toPage, uint flags );
 
 protected:
     void resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect );

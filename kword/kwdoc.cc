@@ -729,7 +729,7 @@ private:
 };
 
 /* append headers and footers if needed, and create enough pages for all the existing frames */
-void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
+void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint flags )
 {
     if ( m_lstFrameSet.isEmpty() )
         return;
@@ -1013,7 +1013,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         if ( fromPage > toPage ) // this can happen with "endnotes only" pages :)
             fromPage = toPage; // ie. start at the last real page
         KWFrameLayout frameLayout( this, headerFooterList, footnotesHFList, endnotesHFList );
-        frameLayout.layout( frameset, m_pageColumns.columns, fromPage, toPage );
+        frameLayout.layout( frameset, m_pageColumns.columns, fromPage, toPage, flags );
 
         // If the number of pages changed, update views and variables etc.
         // (now that the frame layout has been done)
@@ -2864,7 +2864,7 @@ QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const //
            - AND the frame is set to be reconnected or copied
            -  */
 #ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::insertPage looking at frame " << frame << ", pageNum=" << frame->pageNum() << " from " << frameSet->getName() << endl;
+        kdDebug(32002) << "KWDocument::framesToCopyOnNewPage looking at frame " << frame << ", pageNum=" << frame->pageNum() << " from " << frameSet->getName() << endl;
         static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
         kdDebug(32002) << "   frame->newFrameBehavior()==" << newFrameBh[frame->newFrameBehavior()] << endl;
 #endif
@@ -2939,7 +2939,11 @@ void KWDocument::afterAppendPage( int pageNum )
     emit newContentsSize();
 
     if ( isHeaderVisible() || isFooterVisible() || m_bHasEndNotes )
-        recalcFrames( pageNum );  // Get headers and footers on the new page
+    {
+        // Get headers and footers on the new page
+        // This shouldn't delete the newly created page because it's still empty though
+        recalcFrames( pageNum, -1, KWFrameLayout::DontRemovePages );
+    }
     // else: is there a call to updateAllFrames missing?
 
     recalcVariables( VT_PGNUM );

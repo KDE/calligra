@@ -498,7 +498,8 @@ public:
     void setFooterVisible( bool f );
     bool hasEndNotes() const;
 
-    void recalcFrames( int fromPage = 0, int toPage = -1 );
+    // flags: see KWFrameLayout
+    void recalcFrames( int fromPage = 0, int toPage = -1, uint flags = 0 );
 
     KoHFType getHeaderType() const { return m_pageHeaderFooter.header; }
     KoHFType getFooterType() const { return m_pageHeaderFooter.footer; }

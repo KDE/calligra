@@ -56,7 +56,7 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
 /////
 
 void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
-                            int fromPage, int toPage )
+                            int fromPage, int toPage, uint flags )
 {
     // Just debug stuff
 #ifdef DEBUG_FRAMELAYOUT
@@ -354,9 +354,12 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
     } // for all pages
 
-    // Check if the last page is now empty (e.g. this can happen when removing
-    // some text above an endnote, so the endnote moves up)
-    m_doc->tryRemovingPages();
+    if ( ! ( flags & DontRemovePages ) )
+    {
+        // Check if the last page is now empty (e.g. this can happen when removing
+        // some text above an endnote, so the endnote moves up)
+        m_doc->tryRemovingPages();
+    }
 
     int pages = m_doc->numPages();
     // Final cleanup: delete all frames after lastFrameNumber in each frameset
