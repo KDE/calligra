@@ -34,7 +34,7 @@ public:
   StencilBarMoveManager();
   ~StencilBarMoveManager();
 
-  bool isWorking() { return working; }
+  bool isWorking()const { return working; }
 
   void doXResize( QWidget*, bool mirror );
   void doYResize( QWidget*, bool mirror );
@@ -54,16 +54,16 @@ public:
   void move( int rx, int ry) {setGeometry(rx, ry, w, h); }
   void move( const QPoint& p ) {setGeometry(p.x(), p.y(), w, h); }
 
-  int x() {return xp;}
-  int y() {return yp;}
-  int width() {return w;}
-  int height() {return h;}
+  int x()const {return xp;}
+  int y() const  {return yp;}
+  int width()const {return w;}
+  int height()const {return h;}
 
-  bool isXMirror(){ return mirrorX; }
-  bool isYMirror(){ return mirrorY; }
+  bool isXMirror() const { return mirrorX; }
+  bool isYMirror() const{ return mirrorY; }
 
   void stop ();
-  QWidget* getWidget(){ return widget; }
+  QWidget* getWidget()const{ return widget; }
 
 signals:
   void positionChanged();

@@ -50,6 +50,7 @@ StencilBarMoveManager::StencilBarMoveManager()
 StencilBarMoveManager::~StencilBarMoveManager()
 {
   stop();
+  delete timer;
 }
 
 void StencilBarMoveManager::doMove( QWidget* _w )
