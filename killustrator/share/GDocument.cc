@@ -53,6 +53,12 @@ GDocument::GDocument () {
 }
 
 GDocument::~GDocument () {
+  if (! objects.isEmpty ()) {
+    QListIterator<GObject> it (objects);
+    for (; it.current (); ++it)
+      it.current ()->unref ();
+    objects.clear ();
+  }
 }
 
 void GDocument::initialize () {
