@@ -280,6 +280,15 @@ bool QWinMetaFile::load( QBuffer &buffer )
         for ( i=0; i<rdSize && !st.eof(); i++ )
             st >> cmd->parm[ i ];
 
+        if ( rdFunc == 0x020B ) {         // SETWINDOWORG: dimensions
+            mBBox.setLeft( cmd->parm[ 1 ] );
+            mBBox.setTop( cmd->parm[ 0 ] );
+        }
+        if ( rdFunc == 0x020C ) {         // SETWINDOWEXT: dimensions
+            mBBox.setWidth( ABS(cmd->parm[ 1 ]) );
+            mBBox.setHeight( ABS(cmd->parm[ 0 ]) );
+        }
+
         if ( i<rdSize )
         {
             //debug( "file truncated: %s", aFileName.ascii() );
@@ -472,16 +481,24 @@ QColor QWinMetaFile::color( short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowOrg( short, short* parm )
 {
-    QRect r = mPainter.window();
-    mPainter.setWindow( parm[ 1 ], parm[ 0 ], r.width(), r.height() );
+    mBBox.setLeft( parm[ 1 ] );
+    mBBox.setTop( parm[ 0 ] );
+
+    mPainter.translate( -parm[ 1 ], -parm[ 0 ] );
 }
 
 
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowExt( short, short* parm )
 {
+    mBBox.setWidth( ABS( parm[ 1 ] ) );
+    mBBox.setHeight( ABS( parm[ 0 ] ) );
+
     QRect r = mPainter.window();
-    mPainter.setWindow( r.left(), r.top(), parm[ 1 ], parm[ 0 ] );
+
+    mPainter.translate( mBBox.left(), mBBox.top() );
+    mPainter.scale( (double)r.width() / (double)parm[ 1 ],  (double)r.height() / (double)parm[ 0 ] );
+    mPainter.translate( -mBBox.left(), -mBBox.top() );
 }
 
 
