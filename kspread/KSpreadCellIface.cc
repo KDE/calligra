@@ -253,6 +253,8 @@ void KSpreadCellIface::setFormatType(const QString &_formatType)
     cell->setPrecision(2);
     if(_formatType=="Number")
         format=KSpreadCell::Number;
+    else if (_formatType=="Text")
+        format=KSpreadCell::Text_format;
     else if(_formatType=="Money")
         format=KSpreadCell::Money;
     else if(_formatType=="Percentage")
@@ -300,6 +302,9 @@ QString KSpreadCellIface::getFormatType() const
     QString stringFormat;
     switch( cell->getFormatType(m_point.x(), m_point.y()))
         {
+        case KSpreadCell::Text_format:
+            stringFormat="Text";
+            break;
         case KSpreadCell::Number:
                 stringFormat="Number";
                 break;
