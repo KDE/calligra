@@ -799,7 +799,7 @@ QString fontTableMarkup(QString fontName, QValueList< FontTable > &fontTable,
       }  // end switch
    fontHeader += "\\fcharset0\\fprq2 "; // font definition
    fontHeader += fontName;
-   fontHeader += " ;}"; // end font table entry
+   fontHeader += ";}"; // end font table entry
    return font;  // this is the font selection markup
 
    }  // end fontTableMarkup()
