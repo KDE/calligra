@@ -115,6 +115,7 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	m_queries.resize(101);
 	m_cursors.resize(101);
 //	d->m_transactions.resize(101);//woohoo! so many transactions?
+	m_sql.reserve(0x4000);
 }
 
 void Connection::destroy()
@@ -801,7 +802,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 #define C_INS_REC(args, vals) \
 	bool Connection::insertRecord(KexiDB::TableSchema &tableSchema args) {\
 		KexiDBDbg<<"******** "<< QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + vals + ")" <<endl; \
-		return drv_executeSQL( \
+		return executeSQL( \
 		 QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + vals + ")" \
 		); \
 	}
@@ -832,7 +833,7 @@ C_INS_REC_ALL
 		QString value; \
 		Field::List *flist = fields.fields(); \
 		vals \
-		return drv_executeSQL( \
+		return executeSQL( \
 			QString("INSERT INTO ") + \
 		((fields.fields()->first() && fields.fields()->first()->table()) ? fields.fields()->first()->table()->name() : "??") \
 		+ "(" + fields.sqlFieldsList() + ") VALUES (" + value + ")" \
@@ -851,24 +852,25 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 {
 	Field::List *fields = tableSchema.fields();
 	Field *f = fields->first();
-	QString s_val; 
-	s_val.reserve(4096);
+//	QString s_val; 
+//	s_val.reserve(4096);
+	m_sql = QString::null;
 	QValueList<QVariant>::iterator it = values.begin();
 	int i=0;
 	while (f && (it!=values.end())) {
-		if (!s_val.isEmpty())
-			s_val += ",";
-		s_val += m_driver->valueToSQL( f, *it );
+		if (m_sql.isEmpty())
+			m_sql = QString("INSERT INTO ") + tableSchema.name() + " VALUES (";
+		else
+			m_sql += ",";
+		m_sql += m_driver->valueToSQL( f, *it );
 		KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it ) << endl;
 		++it;
 		f=fields->next();
 	}
-	KexiDBDbg<<"******** "<< 
-	(QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + s_val + ")") <<endl;
-	
-	return drv_executeSQL(
-		QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + s_val + ")"
-	);
+	m_sql += ")";
+
+	KexiDBDbg<<"******** "<< m_sql << endl;
+	return executeSQL(m_sql);
 }
 
 bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
@@ -877,24 +879,35 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 	Field *f = flist->first();
 	if (!f)
 		return false;
-
-	QString s_val; 
-	s_val.reserve(4096);
+//	QString s_val; 
+//	s_val.reserve(4096);
+	m_sql = QString::null;
 	QValueList<QVariant>::iterator it = values.begin();
 	int i=0;
 	while (f && (it!=values.end())) {
-		if (!s_val.isEmpty())
-			s_val += ",";
-		s_val += m_driver->valueToSQL( f, *it );
+		if (m_sql.isEmpty())
+			m_sql = QString("INSERT INTO ") + flist->first()->table()->name() + "("
+				+ fields.sqlFieldsList() + ") VALUES (";
+		else
+			m_sql += ",";
+		m_sql += m_driver->valueToSQL( f, *it );
 		KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it ) << endl;
 		++it;
 		f=flist->next();
 	}
+	m_sql += ")";
 	
-	return drv_executeSQL(
-		QString("INSERT INTO ") + flist->first()->table()->name() + "("
-		 + fields.sqlFieldsList() + ") VALUES (" + s_val + ")"
-	);
+	return executeSQL(m_sql);
+}
+
+bool Connection::executeSQL( const QString& statement )
+{
+	m_sql = statement; //remember for error handling
+	if (!drv_executeSQL( m_sql )) {
+		setError(ERR_SQL_EXECUTION_ERROR, i18n("Error while executing SQL statement."));
+		return false;
+	}
+	return true;
 }
 
 QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
@@ -1127,21 +1140,21 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	return commitAutoCommitTransaction(trans);
 }
 
-//! internal
 bool Connection::removeObject( uint objId )
 {
+	clearError();
 	//remove table schema from kexi__* tables
-	TableSchema *ts = m_tables_byname["kexi__objects"];
-	if (!KexiDB::deleteRow(*this, ts, "o_id", objId)) //schema entry
+	if (!KexiDB::deleteRow(*this, m_tables_byname["kexi__objects"], "o_id", objId) //schema entry
+		|| !KexiDB::deleteRow(*this, m_tables_byname["kexi__objectdata"], "o_id", objId)) {//data blocks
+		setError(ERR_DELETE_SERVER_ERROR, i18n("Could not remove object's data."));
 		return false;
-	ts = m_tables_byname["kexi__objectdata"];
-	if (!KexiDB::deleteRow(*this, ts, "o_id", objId)) //schema entry
-		return false;
+	}
 	return true;
 }
 
 bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 {
+	clearError();
 	if (!tableSchema)
 		return false;
 
@@ -1154,7 +1167,7 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 //js TODO DO THIS INSIDE TRANSACTION!!!!
 
 	m_sql = "DROP TABLE " + tableSchema->name();
-	if (!drv_executeSQL(m_sql))
+	if (!executeSQL(m_sql))
 		return false;
 
 	TableSchema *ts = m_tables_byname["kexi__fields"];
@@ -1174,6 +1187,7 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 
 bool Connection::dropTable( const QString& table )
 {
+	clearError();
 	TableSchema* ts = tableSchema( table );
 	if (!ts) {
 		return false;
@@ -1183,6 +1197,7 @@ bool Connection::dropTable( const QString& table )
 
 bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 {
+	clearError();
 	if (!querySchema)
 		return false;
 
@@ -1214,7 +1229,7 @@ bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 {
 	m_sql = createTableStatement(tableSchema);
 	KexiDBDbg<<"******** "<<m_sql<<endl;
-	return drv_executeSQL(m_sql);
+	return executeSQL(m_sql);
 }
 
 bool Connection::drv_createTable( const QString& tableSchemaName )
@@ -1398,19 +1413,19 @@ bool Connection::setAutoCommit(bool on)
 
 TransactionData* Connection::drv_beginTransaction()
 {
-	if (!drv_executeSQL( "BEGIN" ))
+	if (!executeSQL( "BEGIN" ))
 		return 0;
 	return new TransactionData(this);
 }
 
 bool Connection::drv_commitTransaction(TransactionData *)
 {
-	return drv_executeSQL( "COMMIT" );
+	return executeSQL( "COMMIT" );
 }
 
 bool Connection::drv_rollbackTransaction(TransactionData *)
 {
-	return drv_executeSQL( "ROLLBACK" );
+	return executeSQL( "ROLLBACK" );
 }
 
 bool Connection::drv_setAutoCommit(bool /*on*/)
@@ -1553,7 +1568,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 	FieldList *fl = ts->subList("o_id", "o_type", "o_name", "o_caption", "o_desc");
 	if (!fl)
 		return false;
-	return drv_executeSQL(QString("update kexi__objects set o_type=%2, o_caption=%3, o_desc=%4 where o_id=%1")
+	return executeSQL(QString("update kexi__objects set o_type=%2, o_caption=%3, o_desc=%4 where o_id=%1")
 		.arg(sdata.id()).arg(sdata.type())
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.caption()))
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
@@ -1890,7 +1905,6 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//update the record:
-	m_sql.reserve(4096);
 	m_sql = "UPDATE " + query.parentTable()->name() + " SET ";
 	QString sqlset, sqlwhere;
 	sqlset.reserve(1024);
@@ -1920,7 +1934,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	m_sql += (sqlset + " WHERE " + sqlwhere);
 	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
 
-	bool res = drv_executeSQL(m_sql);
+	bool res = executeSQL(m_sql);
 
 	if (!res) {
 		setError(ERR_UPDATE_SERVER_ERROR, i18n("Row updating on the server failed."));
@@ -1953,7 +1967,6 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 
 	//insert the record:
-	m_sql.reserve(4096);
 	m_sql = "INSERT INTO " + query.parentTable()->name() + " (";
 	QString sqlcols, sqlvals;
 	sqlcols.reserve(1024);
@@ -1970,7 +1983,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
 	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
 
-	bool res = drv_executeSQL(m_sql);
+	bool res = executeSQL(m_sql);
 
 	if (!res) {
 		setError(ERR_INSERT_SERVER_ERROR, i18n("Row inserting on the server failed."));
@@ -2025,7 +2038,6 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 	
 	//update the record:
-	m_sql.reserve(4096);
 	m_sql = "DELETE FROM " + query.parentTable()->name() + " WHERE ";
 	QString sqlwhere;
 	sqlwhere.reserve(1024);
@@ -2048,7 +2060,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 	m_sql += sqlwhere;
 	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
 
-	bool res = drv_executeSQL(m_sql);
+	bool res = executeSQL(m_sql);
 
 	if (!res) {
 		setError(ERR_DELETE_SERVER_ERROR, i18n("Row deleting on the server failed."));

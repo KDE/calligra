@@ -76,7 +76,7 @@ bool pqxxSqlConnection::drv_getDatabasesList( QStringList &list )
 {
     KexiDBDrvDbg << "pqxxSqlConnection::drv_getDatabaseList" << endl;
 
-    if (drv_executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
+    if (executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
     {
         std::string N;
         for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
@@ -98,7 +98,7 @@ bool pqxxSqlConnection::drv_createDatabase( const QString &dbName )
 {
     KexiDBDrvDbg << "pqxxSqlConnection::drv_createDatabase: " << dbName << endl;
 
-    if (drv_executeSQL("CREATE DATABASE " + escapeName(dbName)))
+    if (executeSQL("CREATE DATABASE " + escapeName(dbName)))
         return true;
 
     return false;
@@ -196,7 +196,7 @@ bool pqxxSqlConnection::drv_dropDatabase( const QString &dbName )
     KexiDBDrvDbg << "pqxxSqlConnection::drv_dropDatabase: " << dbName << endl;
 
     //FIXME Maybe should check that dbname is no the currentdb
-    if (drv_executeSQL("DROP DATABASE " + escapeName(dbName)))
+    if (executeSQL("DROP DATABASE " + escapeName(dbName)))
         return true;
 
     return false;

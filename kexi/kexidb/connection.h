@@ -435,6 +435,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		bool dropQuery( KexiDB::QuerySchema* querySchema );
 
+		/*! Removes information about object with \a objId 
+		 from internal "kexi__object" and "kexi__objectdata" tables.
+		 \return true on success. */
+		bool removeObject( uint objId );
+
 		/*! \return first field from \a fieldlist that has system name, 
 		 null if there are no such field.
 		 For checking Driver::isSystemFieldName() is used, so this check can 
@@ -511,7 +516,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Executes query \a statement, but without returning resulting 
 		 rows (used mostly for functional queries). 
 		 Only use this method if you really need. */
-		virtual bool drv_executeSQL( const QString& statement ) = 0;
+		bool executeSQL( const QString& statement );
 
 		/*! returns "SELECT ..." statement's string needed for executing query 
 		 defined by \a querySchema.
@@ -560,6 +565,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! For reimplemenation: disconnects database
 			\return true on success. */
 		virtual bool drv_disconnect() = 0;
+
+		/*! Executes query \a statement, but without returning resulting 
+		 rows (used mostly for functional queries). 
+		 Only use this method if you really need. */
+		virtual bool drv_executeSQL( const QString& statement ) = 0;
 
 		/*! For reimplemenation: loads list of databases' names available for this connection
 		 and adds these names to \a list. If your server is not able to offer such a list,
@@ -780,10 +790,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 To avoid having deleted table object on its list. */
 		void removeMe(TableSchema *ts);
 				
-		/*! Helper function: removes information about object with ID \a objId 
-		 from internal kexi__object table. \return true on success. */
-		bool removeObject( uint objId );
-
 		QGuardedPtr<ConnectionData> m_data;
 		QString m_name;
 		QString m_usedDatabase; //!< database name that is opened now

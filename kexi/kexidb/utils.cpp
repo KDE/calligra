@@ -29,19 +29,19 @@ using namespace KexiDB;
 
 bool KexiDB::deleteRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval)
 {
-	return table!=0 && conn.drv_executeSQL("DELETE FROM " + table->name() + " WHERE " + keyname + "=" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ));
+	return table!=0 && conn.executeSQL("DELETE FROM " + table->name() + " WHERE " + keyname + "=" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ));
 }
 
 bool KexiDB::deleteRow(Connection &conn, TableSchema *table, const QString &keyname, int keyval)
 {
-	return table!=0 && conn.drv_executeSQL("DELETE FROM " + table->name() + " WHERE " + keyname + "=" + conn.driver()->valueToSQL( Field::Integer, QVariant(keyval) ));
+	return table!=0 && conn.executeSQL("DELETE FROM " + table->name() + " WHERE " + keyname + "=" + conn.driver()->valueToSQL( Field::Integer, QVariant(keyval) ));
 }
 
 bool KexiDB::replaceRow(Connection &conn, TableSchema *table, const QString &keyname, const QString &keyval, const QString &valname, QVariant val, int ftype)
 {
 	if (!table || !KexiDB::deleteRow(conn, table, keyname, keyval))
 		return false;
-	return conn.drv_executeSQL("INSERT INTO " + table->name() + " (" + keyname + "," + valname + ") VALUES (" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ) + "," + conn.driver()->valueToSQL( ftype, val) + ")");
+	return conn.executeSQL("INSERT INTO " + table->name() + " (" + keyname + "," + valname + ") VALUES (" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ) + "," + conn.driver()->valueToSQL( ftype, val) + ")");
 }
 
 //! Cache

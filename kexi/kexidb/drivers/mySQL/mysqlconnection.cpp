@@ -138,7 +138,7 @@ bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
 bool MySqlConnection::drv_createDatabase( const QString &dbName) {
      KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName << endl;
         
-	if (drv_executeSQL("CREATE DATABASE " + (dbName)))
+	if (executeSQL("CREATE DATABASE " + (dbName)))
         return true;
 
     return false;

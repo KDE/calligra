@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
@@ -62,6 +62,9 @@
 //! errors related to data deleting on the server
 #define ERR_DELETE_NULL_PKEY_FIELD 250 //!< null pkey field on updating
 #define ERR_DELETE_SERVER_ERROR 251 //!< error @ the server side during data deleting
+
+#define ERR_SQL_EXECUTION_ERROR 260 //!< general server error for sql statement execution
+                                    //! Usually returned by Connection::executeSQL()
 
 #define ERR_OTHER 0xffff //!< use this if you have not (yet?) the name for given error 
 
