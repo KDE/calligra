@@ -36,7 +36,7 @@ Shell* ExamplePart::createShell()
 
     return shell;}
 
-void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool transparent )
+void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/ )
 {
     // ####### handle transparency
     
