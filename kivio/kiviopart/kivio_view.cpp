@@ -169,6 +169,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( m_pTabBar,
            SIGNAL(tabChanged(const QString&)),
            SLOT( changePage(const QString&)));
+  connect( m_pTabBar, SIGNAL( doubleClicked() ), SLOT( renamePage() ) );
 
   // Scroll Bar
   QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);

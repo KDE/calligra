@@ -117,7 +117,8 @@ signals:
      * KivioView to change its active page, too.
      */
     void tabChanged( const QString& _text );
-
+    
+    void doubleClicked();
 
 public slots:
     void scrollLeft();

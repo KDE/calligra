@@ -350,7 +350,7 @@ void KivioTabBar::slotRename()
 
     bool ok;
     QString activeName = page->pageName();
-    QString newName = KInputDialog::getText( i18n("Page Name"), i18n("Enter page name:"), activeName, &ok, this );
+    QString newName = KInputDialog::getText( i18n("Rename Page"), i18n("Enter page name:"), activeName, &ok, this );
 
     // Have a different name ?
     if ( ok ) // User pushed an OK button.
@@ -571,7 +571,7 @@ void KivioTabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
     if ( !m_pView->koDocument()->isReadWrite() )
         return;
-    slotRename();
+    emit doubleClicked();
 }
 
 void KivioTabBar::hidePage()
