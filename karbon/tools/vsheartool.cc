@@ -67,6 +67,7 @@ VShearTool::draw()
 void
 VShearTool::setCursor() const
 {
+	if( isDragging() ) return;
 	switch( view()->part()->document().selection()->handleNode( last() ) )
 	{
 		case node_lt:
