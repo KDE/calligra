@@ -18,56 +18,13 @@ AM_ENABLE_STATIC(no)
 KDE_PROG_LIBTOOL
 AC_PATH_KDE 
 
+KDE_CHECK_MICO
+KDE_CHECK_MINI_STL
 
-AC_MSG_CHECKING(for MICO)
-AC_ARG_WITH(micodir,
-  [--with-micodir=micodir   where mico is installed ],
-  kde_micodir=$withval,
-  kde_micodir=/usr/local
-)
-AC_MSG_RESULT($kde_micodir)
-MICO_INCLUDES=-I$kde_micodir/include
-AC_SUBST(MICO_INCLUDES)
-MICO_LDFLAGS=-L$kde_micodir/lib
-AC_SUBST(MICO_LDFLAGS)
-LIBMICO="-lmico2.0.5 -ldl"
-AC_SUBST(LIBMICO)
-IDL=$kde_micodir/bin/idl
-AC_SUBST(IDL)
-
-idldir="\$(prefix)/idl"
+idldir="\$(includedir)/idl"
 AC_SUBST(idldir)
 
-AC_MSG_CHECKING(if we use mico's mini-STL)
-AC_TRY_COMPILE(
-[#include <CORBA.h>
-#include <mico/template_impl.h>
-#include <algorithm>       
-],
-[ ; ],
-kde_mini_stl=no,
-kde_mini_stl=yes)
-
-AC_MSG_RESULT($kde_mini_stl)
-if test "$kde_mini_stl" = "yes"; then
-  AC_DEFINE_UNQUOTED(HAVE_MINI_STL)
-fi
-
-
-AC_ARG_WITH(pythondir, 
-[ --with-pythondir=pythondir    use python installed in pythondir ],
-[
-  PYTHONDIR=$withval
-], PYTHONDIR=/usr/local
-)
-
-PYTHONINC=-I$PYTHONDIR/include/python1.5
-PYTHONLIB=-L$PYTHONDIR/lib/python1.5/config
-LIBPYTHON=-lpython1.5
-
-AC_SUBST(PYTHONINC)
-AC_SUBST(PYTHONLIB)
-AC_SUBST(LIBPYTHON)
+KDE_CHECK_PYTHON
 
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT(Makefile \

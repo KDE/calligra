@@ -28,7 +28,10 @@ SUFFIXES = .h .moc
 ####### Build rules
 
 idl: img.idl
-	idl --query-server-for-narrow -I$(KDEDIR)/idl img.idl
+	@echo idl --query-server-for-narrow -I$(idldir) img.idl ;\
+	olddir=$(idldir) ;\
+	idl --query-server-for-narrow -I$(idldir) img.idl ;\
+	sed -e "s,#include \"$$olddir/,#include <,;s,.h\",.h>," img.h > img.h.new && mv img.h.new img.h
 
 img_doc.cc: img_doc.moc
 img_main.cc: img_main.moc

@@ -159,11 +159,15 @@ Check, if your compiler is installed correctly and if you have used the
 same compiler to compile qt and kdelibs as you did use now])
 fi
 
-AC_MSG_CHECKING(for KDE paths)
-eval `./conftest 2>&5`
+AC_MSG_CHECKING([for KDE paths])
+if eval `./conftest 2>&5`; then
+  AC_MSG_RESULT(done)
+else
+  AC_MSG_RESULT(problems)
+fi
+
 ./conftest 2> /dev/null >&5 # make an echo for config.log
 kde_have_all_paths=yes
-
 AC_LANG_CPLUSPLUS
 
 if test "$kde_have_all_paths" = "yes"; then
@@ -195,13 +199,10 @@ if test -z "$kde_htmldir" || test -z "$kde_appsdir" ||
    test -z "$kde_mimedir" || test -z "$kde_toolbardir" ||
    test -z "$kde_wallpaperdir" || test -z "$kde_bindir" ||
    test -z "$kde_partsdir" || test "$kde_have_all_paths" != "yes"; then
-  AC_MSG_RESULT(problems)
   kde_have_all_paths=no
   AC_MSG_ERROR([configure could not run a little KDE program to test the environment. 
 Since it had compiled and linked before, it must be a strange problem on your system.
 Look at config.log for details. If you are not able to fix this, please contact Stephan Kulow <coolo@kde.org>.])
-else
-  AC_MSG_RESULT(done)
 fi
 
 if test -n "$install_root"; then
@@ -1752,6 +1753,7 @@ kde_cv_libgpp_includes=no
      fi
    done
 ])
+
 AC_MSG_RESULT($kde_cv_libgpp_includes)
 if test "$kde_cv_libgpp_includes" != "no"; then
   all_includes="-I$kde_cv_libgpp_includes $all_includes"
@@ -1759,3 +1761,89 @@ fi
 ])
 ])
 
+
+AC_DEFUN(KDE_CHECK_MICO,
+[
+AC_MSG_CHECKING(for MICO)
+AC_ARG_WITH(micodir,
+  [--with-micodir=micodir   where mico is installed ],
+  kde_micodir=$withval,
+  kde_micodir=/usr/local
+)
+AC_MSG_RESULT($kde_micodir)
+if test ! -r  $kde_micodir/include/CORBA.h; then
+  AC_MSG_ERROR([No CORBA.h found, specify another micodir])
+fi
+
+MICO_INCLUDES=-I$kde_micodir/include
+AC_SUBST(MICO_INCLUDES)
+MICO_LDFLAGS=-L$kde_micodir/lib
+AC_SUBST(MICO_LDFLAGS)
+LIBMICO="-lmico2.0.5 -ldl"
+AC_SUBST(LIBMICO)
+IDL=$kde_micodir/bin/idl
+AC_SUBST(IDL)
+])
+
+
+AC_DEFUN(KDE_CHECK_MINI_STL,
+[
+AC_REQUIRE([KDE_CHECK_MICO])
+AC_MSG_CHECKING(if we use mico's mini-STL)
+AC_CACHE_VAL(kde_cv_have_mini_stl,
+[
+AC_TRY_COMPILE(
+[
+#include <CORBA.h>
+#include <mico/template_impl.h>
+#include <algorithm>       
+],
+[],
+kde_cv_have_mini_stl=no,
+kde_cv_have_mini_stl=yes)
+])
+
+
+AC_MSG_RESULT($kde_cv_have_mini_stl)
+if test "$kde_cv_have_mini_stl" = "yes"; then
+  AC_DEFINE_UNQUOTED(HAVE_MINI_STL)
+fi
+])
+
+])
+
+AC_DEFUN(KDE_CHECK_PYTHON,
+[
+AC_MSG_CHECKING([for Python1.5])
+
+AC_ARG_WITH(pythondir, 
+[ --with-pythondir=pythondir    use python installed in pythondir ],
+[
+  ac_python_dir=$withval
+], ac_python_dir=/usr/local
+)
+
+python_incdirs="$ac_python_dir/include/python1.5 /usr/include/python1.5 /usr/local/include/python1.5 /usr/local/include"
+AC_FIND_FILE(Python.h, $python_incdirs, python_incdir)
+if test ! -r $python_incdir/Python.h; then
+  AC_MSG_ERROR(Python.h not found.)
+fi
+
+PYTHONINC=-I$python_incdir
+
+python_libdirs="$ac_python_dir/lib/python1.5/config /usr/lib/python1.5/config /usr/local/python1.5/config"
+AC_FIND_FILE(libpython1.5.a, $python_libdirs, python_libdir)
+if test ! -r $python_libdir/libpython1.5.a; then
+  AC_MSG_ERROR(libpython1.5.a not found.)
+fi
+
+PYTHONLIB=-L$python_libdir
+LIBPYTHON=-lpython1.5
+
+AC_SUBST(PYTHONINC)
+AC_SUBST(PYTHONLIB)
+AC_SUBST(LIBPYTHON)
+
+AC_MSG_RESULT(header $python_incdir library $python_libdir)
+
+])
