@@ -33,6 +33,8 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
+#include <qpainter.h>
+#include <qbitmap.h>
 
 #include <koColorChooser.h>
 #include <klocale.h>
@@ -115,14 +117,48 @@ QTabWidget(parent, name)
   round->setToggleButton(true);
   round->setMaximumWidth(JOIN_WIDTH);
   round->setMaximumHeight(JOIN_HEIGHT);
+  /*round->setMinimumWidth(JOIN_WIDTH);
+  round->setMinimumHeight(JOIN_HEIGHT);*/
+  QPixmap pix(JOIN_WIDTH, JOIN_HEIGHT);
+  QBitmap bmap(JOIN_WIDTH, JOIN_HEIGHT);
+  pix.fill();
+  QPainter p(&pix);
+  QPen pen;
+  pen.setColor(Qt::black);
+  pen.setWidth(8);
+  pen.setJoinStyle(Qt::RoundJoin);
+  p.setPen(pen);
+  QPointArray pa;
+  pa.setPoints(3, JOIN_WIDTH / 3, JOIN_HEIGHT - 1, JOIN_WIDTH / 3, JOIN_HEIGHT / 3, JOIN_WIDTH - 1, JOIN_HEIGHT / 3);
+  p.drawPolyline(pa);
+  bmap = pix;
+  pix.setMask(bmap);
+  round->setPixmap(pix);
+
   QPushButton *miter = new QPushButton(mJoinBox);
   miter->setToggleButton(true);
   miter->setMaximumWidth(JOIN_WIDTH);
   miter->setMaximumHeight(JOIN_HEIGHT);
+  pix.fill();
+  pen.setJoinStyle(Qt::MiterJoin);
+  p.setPen(pen);
+  p.drawPolyline(pa);
+  bmap = pix;
+  pix.setMask(bmap);
+  miter->setPixmap(pix);
+
   QPushButton *bevel = new QPushButton(mJoinBox);
   bevel->setToggleButton(true);
   bevel->setMaximumWidth(JOIN_WIDTH);
   bevel->setMaximumHeight(JOIN_HEIGHT);
+  pix.fill();
+  pen.setJoinStyle(Qt::BevelJoin);
+  p.setPen(pen);
+  p.drawPolyline(pa);
+  bmap = pix;
+  pix.setMask(bmap);
+  bevel->setPixmap(pix);
+
   connect(mJoinBox, SIGNAL(pressed(int)), this, SLOT(slotJoinPressed(int)));
 
   /* Cap style selection */
@@ -137,14 +173,39 @@ QTabWidget(parent, name)
   cround->setToggleButton(true);
   cround->setMaximumWidth(CAP_WIDTH);
   cround->setMaximumHeight(CAP_HEIGHT);
+  pix.fill();
+  pen.setCapStyle(Qt::RoundCap);
+  p.setPen(pen);
+  pa.setPoints(2, CAP_WIDTH / 3, CAP_HEIGHT / 2, CAP_WIDTH - 1, CAP_HEIGHT / 2);
+  p.drawPolyline(pa);
+  bmap = pix;
+  pix.setMask(bmap);
+  cround->setPixmap(pix);
+
   QPushButton *square = new QPushButton(mCapBox);
   square->setToggleButton(true);
   square->setMaximumWidth(CAP_WIDTH);
   square->setMaximumHeight(CAP_HEIGHT);
+  pix.fill();
+  pen.setCapStyle(Qt::SquareCap);
+  p.setPen(pen);
+  p.drawPolyline(pa);
+  bmap = pix;
+  pix.setMask(bmap);
+  square->setPixmap(pix);
+
   QPushButton *flat = new QPushButton(mCapBox);
   flat->setToggleButton(true);
   flat->setMaximumWidth(CAP_WIDTH);
   flat->setMaximumHeight(CAP_HEIGHT);
+  pix.fill();
+  pen.setCapStyle(Qt::FlatCap);
+  p.setPen(pen);
+  p.drawPolyline(pa);
+  bmap = pix;
+  pix.setMask(bmap);
+  flat->setPixmap(pix);
+
   connect(mCapBox, SIGNAL(pressed(int)), this, SLOT(slotCapPressed(int)));
 
   insertTab(outlineColor, "Color");
