@@ -197,8 +197,8 @@ class KexiMainWindowImpl::Private
 		bool final : 1;
 
 	Private(KexiMainWindowImpl* w)
-		: wnd(w)
-		, dialogs(401)
+		: dialogs(401)
+		, wnd(w)
 	{
 		propEditorToolWindow=0;
 		final = false;
@@ -987,6 +987,7 @@ void KexiMainWindowImpl::slotLastActions()
 	if (mdiMode()==KMdi::ChildframeMode) {
 		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+		Q_UNUSED(ds);
 //1		ds->resize(ds->width()*3, ds->height());
 //1		ds->setSeparatorPos(30, true);
 //1		ds->setForcedFixedWidth( dw, 200 );
@@ -1053,7 +1054,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 	}
 #endif
 
-	int w = d->propEditor->width();
+//	int w = d->propEditor->width();
 /*    KMdiToolViewAccessor *tmp=createToolWindow();
     tmp->setWidgetToWrap(d->propEditor);
 	d->propEditor->show(); // I'm not sure, if this is a bug in kdockwidget, which I would better fix there
@@ -1507,12 +1508,12 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 //			d->propBuffer = d->curDialog->propertyBuffer();
 //			d->propEditor->editor()->setBuffer( d->propBuffer );
 //		}
-		if (d->curDialog->currentViewMode()!=0) //on opening new dialog it can be 0; we don't want this
+		if (d->curDialog && d->curDialog->currentViewMode()!=0) //on opening new dialog it can be 0; we don't want this
 			d->updatePropEditorVisibility(d->curDialog->currentViewMode());
 	}
 
 	//update caption...
-	if (update_dlg_caption) {
+	if (update_dlg_caption) {//d->curDialog is != null for sure
 		slotCaptionForCurrentMDIChild(d->curDialog->mdiParent()->state()==KMdiChildFrm::Maximized);
 	}
 //	if (!d->curDialog.isNull())
