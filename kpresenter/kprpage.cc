@@ -3169,10 +3169,10 @@ bool KPrPage::haveASelectedPictureObj()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected() && it.current()->getType() != OT_CLIPART)
-            return false;
+        if(it.current()->isSelected() && it.current()->getType() == OT_CLIPART)
+            return true;
     }
-    return true;
+    return false;
 }
 
 KoRect KPrPage::getBoundingRect(const KoRect &rect, KoZoomHandler *zoomhandler)

@@ -2019,9 +2019,9 @@ void KPrCanvas::printRTDebug( int info )
 bool KPrCanvas::haveASelectedPictureObj()
 {
     bool state=m_activePage->haveASelectedPictureObj();
-    if(!state)
-        return false;
-    return m_view->kPresenterDoc()->stickyPage();
+    if(state)
+        return true;
+    return m_view->kPresenterDoc()->stickyPage()->haveASelectedPictureObj();
 }
 
 QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
@@ -2326,14 +2326,14 @@ bool KPrCanvas::canAssignEffect( QPtrList<KPObject> &objs ) const
 
     return !objs.isEmpty();
 }
-
+ 
 /*================================================================*/
 bool KPrCanvas::isOneObjectSelected()
 {
     bool state=m_activePage->isOneObjectSelected();
     if( state)
         return true;
-    return m_view->kPresenterDoc()->stickyPage();
+    return m_view->kPresenterDoc()->stickyPage()->isOneObjectSelected();
 }
 
 /*================================================================*/
@@ -5075,7 +5075,7 @@ bool KPrCanvas::oneObjectTextExist()
     bool state=m_activePage->oneObjectTextExist();
     if(state)
         return true;
-    return m_view->kPresenterDoc()->stickyPage();
+    return m_view->kPresenterDoc()->stickyPage()->oneObjectTextExist();
 }
 
 KPrPage* KPrCanvas::activePage()
