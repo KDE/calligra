@@ -24,16 +24,15 @@ KRTFToken* KRTFTokenizer::nextToken()
     QString text;
     QString param;
     KRTFToken* token = new KRTFToken( this );
-    int ch = _file->getch();
-
-    // skip leading whitespace
-    while( isspace( ch ) && !_file->atEnd() )
-	ch=_file->getch();
-
     if( _file->atEnd() ) {
 	token->_type = TokenEOF;
 	return token;
     }
+    int ch = _file->getch();
+    // skip leading whitespace
+    while( (isspace( ch )) && (!_file->atEnd()) )
+	ch=_file->getch();
+
 
 
     // first find out what this is
@@ -68,8 +67,8 @@ KRTFToken* KRTFTokenizer::nextToken()
 	}
 	// ch is not alpha, control word is over, let´s see what we do about it
 	if( ch == ' ' ) {
-	    // space: part of the control word, which ends here
-	    text += ' ';
+	    // space: part of the control word, which ends here FIXME really ?
+	    //text += ' ';
 	} else if( isdigit( ch ) || ( ch == '-' ) ) {
 	    // digit or hyphen, build up numeric parameter
 	    param += (char)ch;
@@ -89,7 +88,7 @@ KRTFToken* KRTFTokenizer::nextToken()
     case ::PlainText:
 	// everything until next backslash, opener or closer
 	ch = _file->getch();
-	while( ch != '\\' && ch != '{'  && ch != '}' ) {
+	while( ch != '\\' && ch != '{'  && ch != '}' && !_file->atEnd() ) {
 	    text += (char)ch;
 	    ch = _file->getch();
 	}

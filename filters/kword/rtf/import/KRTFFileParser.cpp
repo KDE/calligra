@@ -59,10 +59,10 @@ bool KRTFFileParser::parse()
 	{ qWarning((token->_text +" headerparse\n").latin1()); return false; }
     KRTFDocumentParser document( _tokenizer, _store,&_dom );
     if( !document.parse() )
-	{ qWarning((token->_text +" documentparse\n").latin1()); return false; }
+	{ qWarning((token->_text +" error documentparse\n").latin1()); return false; }
     token = _tokenizer->nextToken();
     if( token->_type != CloseGroup )
-	{ qWarning((token->_text +" no closegroup\n").latin1());  }
+	{ qWarning((token->_text +" warning: no closegroup\n").latin1());  }
 
    QCString strOut=_dom.toCString();
    _store->write((const char *)strOut, strOut.length());

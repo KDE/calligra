@@ -24,6 +24,7 @@
 
 class KInstance;
 
+
 class RTFImportFactory : public KLibFactory
 {
     Q_OBJECT
