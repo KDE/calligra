@@ -2047,7 +2047,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     sprintf( buffer, "%i", i );
     sizelist[i-4] = CORBA::string_dup( buffer );
   }
-  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const QString & ) ),
+  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, false, SIGNAL( activated( const QString & ) ),
 							this, "textSizeSelected", true,
 							i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
   m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,8);
@@ -2059,7 +2059,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   fonts.length( fontList.count() );
   for(unsigned int i = 0;i < fontList.count(); i++ )
     fonts[i] = CORBA::string_dup( fontList.at(i) );
-  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
+  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, false, SIGNAL( activated( const QString & ) ), this,
 							"textFontSelected", true, i18n("Font List"),
 							200, -1, OpenPartsUI::AtBottom );
   tbFont.setFamily(fontList.at(0));
@@ -2135,7 +2135,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
       sprintf(buffer,"%i",i);
       spclist[i] = CORBA::string_dup(buffer);
     }
-  m_idComboText_LineSpacing = m_vToolBarText->insertCombo(spclist,ID_LINE_SPC,true,SIGNAL(activated(const QString &)),
+  m_idComboText_LineSpacing = m_vToolBarText->insertCombo(spclist,ID_LINE_SPC,false,SIGNAL(activated(const QString &)),
 							  this,"textLineSpacing",true,i18n("Line Spacing (in pt)"),
 							  60,-1,OpenPartsUI::AtBottom);
   spc = 0;
@@ -2217,7 +2217,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     widthlist[i-1] = CORBA::string_dup( buffer );
   }
   tmpBrd.ptWidth = 1;
-  m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, true, SIGNAL( activated( const QString & ) ),
+  m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, false, SIGNAL( activated( const QString & ) ),
 							   this, "textBorderWidth", true, i18n("Paragraph Border Width"),
 							   60, -1, OpenPartsUI::AtBottom );
 
@@ -2273,7 +2273,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2( colpix, ID_FBORDER_COLOR, SIGNAL( clicked() ), this, "frameBorderColor",
 							      true, i18n("Frame Border Color"), -1);
 
-  m_idComboFrame_BorderWidth = m_vToolBarFrame->insertCombo( widthlist, ID_FBRD_WIDTH, true, SIGNAL( activated( const QString & ) ),
+  m_idComboFrame_BorderWidth = m_vToolBarFrame->insertCombo( widthlist, ID_FBRD_WIDTH, false, SIGNAL( activated( const QString & ) ),
 							   this, "frameBorderWidth", true, i18n("Frame Border Width"),
 							   60, -1, OpenPartsUI::AtBottom );
 
