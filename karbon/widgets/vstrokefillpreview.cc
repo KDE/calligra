@@ -45,15 +45,16 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->setPen( Qt::NoPen );
 	if( s.type() != stroke_none )
 	{
-		/*if( s.type() == stroke_gradient )
+		if( s.type() == stroke_gradient )
 		{
-			VStroke stroke;
-			stroke = s;
-			stroke.gradient().setOrigin( KoPoint( 20, 10 ) );
-			stroke.gradient().setVector( KoPoint( 20, 40 ) );
-			m_painter->setBrush( stroke );
+			VFill fill;
+			fill.gradient() = s.gradient();
+			fill.gradient().setOrigin( KoPoint( 20, 10 ) );
+			fill.gradient().setVector( KoPoint( 20, 40 ) );
+			fill.setType( fill_gradient );
+			m_painter->setBrush( fill );
 		}
-		else*/
+		else
 			m_painter->setBrush( s.color() );
 
 		m_painter->newPath();
