@@ -2108,7 +2108,7 @@ void QTextDocument::setFormat( int id, QTextFormat *f, int flags )
     c1.parag()->setFormat( c1.index(), c1.parag()->length() - c1.index(), f, TRUE, flags );
     QTextParag *p = c1.parag()->next();
     while ( p && p != c2.parag() ) {
-	p->setFormat( 0, p->length() - 1, f, TRUE, flags );
+	p->setFormat( 0, p->length() /*- 1 removed, bug #26064*/, f, TRUE, flags );
 	p = p->next();
     }
     c2.parag()->setFormat( 0, c2.index(), f, TRUE, flags );
