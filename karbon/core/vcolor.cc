@@ -299,8 +299,10 @@ VColor::save( QDomElement& element ) const
 	QDomElement me = element.ownerDocument().createElement( "COLOR" );
 	element.appendChild( me );
 
-	me.setAttribute( "colorSpace", m_colorSpace );
-	me.setAttribute( "opacity", m_opacity );
+	if( m_colorSpace != rgb )
+		me.setAttribute( "colorSpace", m_colorSpace );
+	if( m_opacity != 1.0 )
+		me.setAttribute( "opacity", m_opacity );
 
 	if( m_colorSpace == gray )
 		me.setAttribute( "v", m_value[0] );
