@@ -218,6 +218,11 @@ public:
    */
   KoViewChild *child( KoDocument *document );
 
+public slots:
+
+    virtual void newView();
+    virtual void closeAllViews();
+
 
 protected:
   /**
@@ -237,6 +242,11 @@ protected:
    * your view to allow/disallow editing of the document.
    */
   virtual void updateReadWrite( bool readwrite ) = 0;
+
+  virtual void setupGlobalActions( void );
+
+  KAction *actionNewView;
+  KAction *actionCloseAllViews;
 
 signals:
   void activated( bool active );

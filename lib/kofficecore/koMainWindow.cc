@@ -140,9 +140,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
 
     // set up the action list for the splitter stuff
-    d->m_splitViewActionList.append(new KAction(i18n("New View"), 0,
-        this, SLOT(slotNewView()),
-        actionCollection(), "view_newview"));
     d->m_splitViewActionList.append(new KAction(i18n("Close All Views"), 0,
         this, SLOT(slotCloseAllViews()),
         actionCollection(), "view_closeallviews"));
@@ -188,6 +185,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
 KoMainWindow::~KoMainWindow()
 {
+    kdDebug(30003) << "KoMainWindow::~KoMainWindow" << endl;
     // The doc and view might still exist (this is the case when closing the window)
     if (d->m_rootDoc)
         d->m_rootDoc->removeShell(this);
@@ -613,13 +611,6 @@ void KoMainWindow::slotSplitView() {
     d->m_rootViews->current()->setPartManager( d->m_manager );
     d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->current() );
     d->m_removeView->setEnabled(true);
-}
-
-void KoMainWindow::slotNewView() {
-    kdDebug(30003) << "KoMainWindow::slotNewView() called" << endl;
-    KoMainWindow *shell = d->m_rootDoc->createShell();
-    shell->setRootDocument(d->m_rootDoc);
-    shell->show();
 }
 
 void KoMainWindow::slotCloseAllViews() {

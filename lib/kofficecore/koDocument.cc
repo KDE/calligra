@@ -150,6 +150,7 @@ KoDocument::~KoDocument()
     d->m_views.remove();
   }
 
+  kdDebug(30003) << "KoDocument::~KoDocument() shells:" << d->m_shells.count() << endl;
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
