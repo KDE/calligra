@@ -1023,7 +1023,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </screen>
 </para>
 </chapter>
-<![ %addindex; [ &docindex; ]]>
+<![ %addindex; [ &documentation.index; ]]>
 </book>
 <!--
 Local Variables:
