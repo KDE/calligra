@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+                 2001       Sven Leiber         <s.leiber@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,12 +23,18 @@
 #include "kwtextparag.h"
 #include "kwtextdocument.h"
 #include "kwtextframeset.h"
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kinstance.h>
 #include <kconfig.h>
+#include <kstddirs.h>
+
 #include <qrichtext_p.h>
 #include <qvector.h>
+#include <qfile.h>
+#include <qdom.h>
+
 #include <kotextobject.h>
 
 
@@ -47,6 +54,7 @@ void KWAutoFormat::readConfig()
     // Read the autoformat configuration
     // This is done on demand (when typing the first char, or when opening the config dialog)
     // so that loading is faster and to avoid doing it for readonly documents.
+    KLocale klocale("kword");
     if ( m_configRead )
         return;
     KConfig * config = m_doc->instance()->config();
@@ -64,24 +72,34 @@ void KWAutoFormat::readConfig()
     Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
     config->setGroup( "AutoFormatEntries" );
 
-    QStringList find, replace;
-    if ( config->hasKey( "Find" ) ) // Note that this allows saving an empty list and not getting the defaults
-        find = config->readListEntry( "Find" );
-    else
-        find << "(C)" << "(c)" << "(R)" << "(r)";
-    if ( config->hasKey( "Replace" ) )
-        replace = config->readListEntry( "Replace" );
-    else
-        replace << "©" << "©" << "®" << "®";
+    bool fileNotFound = false;
+    QFile xmlFile;
 
-    QStringList::Iterator fit = find.begin();
-    QStringList::Iterator rit = replace.begin();
-    m_maxFindLength=0;
-    for ( ; fit != find.end() && rit != replace.end() ; ++fit, ++rit )
-    {
-        m_entries.insert( ( *fit ), KWAutoFormatEntry( ( *rit ) ) );
-        m_maxFindLength=QMAX(m_maxFindLength,(*fit).length());
+    xmlFile.setName(KWFactory::global()->dirs()->findResource("autocorrect", klocale.languageList().front() + ".xml"));
+    if(!xmlFile.open(IO_ReadOnly)) {
+        xmlFile.setName(KWFactory::global()->dirs()->findResource("autocorrect","autocorrect.xml"));
+    if(!xmlFile.open(IO_ReadOnly)) {
+        kdDebug()<<"xmlFile.name :"<<xmlFile.name()<<endl;
+	fileNotFound = true;
+      }
     }
+
+    if(!fileNotFound) {
+      QDomDocument doc;
+      if(!doc.setContent(&xmlFile)) {
+        //return;
+      }
+      if(doc.doctype().name() != "autocorrection") {
+        //return;
+      }
+      QDomElement de = doc.documentElement();
+      QDomNodeList nl = de.childNodes();
+      m_maxFindLength=nl.count();
+      for(int i = 0; i < m_maxFindLength; i++) {
+          m_entries.insert( nl.item(i).toElement().attribute("find"), KWAutoFormatEntry(nl.item(i).toElement().attribute("replace")) );
+      }
+    }
+    xmlFile.close();
 
     buildMaxLen();
 
@@ -96,6 +114,7 @@ void KWAutoFormat::readConfig()
 void KWAutoFormat::saveConfig()
 {
     KConfig * config = m_doc->instance()->config();
+    KLocale klocale("kword");
     KConfigGroupSaver cgs( config, "AutoFormat" );
     config->writeEntry( "ConvertUpperCase", m_convertUpperCase );
     config->writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
@@ -103,21 +122,34 @@ void KWAutoFormat::saveConfig()
     config->writeEntry( "TypographicQuotesEnd", QString( m_typographicQuotes.end ) );
     config->writeEntry( "TypographicQuotesEnabled", m_typographicQuotes.replace );
     config->setGroup( "AutoFormatEntries" );
-    QStringList find, replace;
     KWAutoFormatEntryMap::Iterator it = m_entries.begin();
 
     //refresh m_maxFindLength
     m_maxFindLength=0;
+
+    QDomDocument doc("autocorrection");
+    QDomElement items;
+    items = doc.createElement("items");
+    QDomElement data;
     for ( ; it != m_entries.end() ; ++it )
     {
-        find.append( it.key() );
-        replace.append( it.data().replace() );
+	data = doc.createElement("item");
+	data.setAttribute("find", it.key());
+	data.setAttribute("replace", it.data().replace());
+	items.appendChild(data);
+
         m_maxFindLength=QMAX(m_maxFindLength,it.key().length());
-
     }
+    doc.appendChild(items);
+    QFile f(locateLocal("data", "kword/autocorrect/"+klocale.languageList().front() + ".xml"));
+    if(!f.open(IO_WriteOnly)) {
+        kdDebug()<<"Error during saving...........\n";
+	return;
+    }
+    QTextStream ts(&f);
+    doc.save(ts, 2);
+    f.close();
 
-    config->writeEntry( "Find", find );
-    config->writeEntry( "Replace", replace );
 
     config->writeEntry( "UpperCaseExceptions",upperCaseExceptions );
 

@@ -50,7 +50,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc
 
-SUBDIRS = . toolbar templates dtd pics expression
+SUBDIRS = . toolbar templates dtd pics expression autocorrect
 
 messages: rc.cpp
 	perl ../kspread/extracti18n expression/*.xml > xml_doc.cc
