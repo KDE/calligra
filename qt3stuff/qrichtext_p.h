@@ -201,7 +201,7 @@ public:
     QMemArray<QTextStringChar> rawData() const { return data; }
 
     void operator=( const QString &s ) { clear(); insert( 0, s, 0 ); }
-    void operator+=( const QString &s ) { insert( length(), s, 0 ); }
+    void operator+=( const QString &s );
     void prepend( const QString &s ) { insert( 0, s, 0 ); }
 
 private:
@@ -376,7 +376,7 @@ public:
     QTextCustomItem( QTextDocument *p );
     virtual ~QTextCustomItem();
 
-    virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg ) = 0;
+    virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected ) = 0;
 
     virtual void adjustToPainter( QPainter* ) { width = 0; }
 
@@ -446,7 +446,7 @@ public:
 
     QString richText() const;
 
-    void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 
 private:
     QRegion* reg;
@@ -464,7 +464,7 @@ public:
     QTextHorizontalLine( QTextDocument *p );
     ~QTextHorizontalLine();
     void adjustToPainter( QPainter* );
-    void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
     QString richText() const;
 
     bool ownLine() const { return TRUE; }
@@ -498,7 +498,7 @@ public:
 
     virtual void registerFloatingItem( QTextCustomItem* item, bool right = FALSE );
     virtual void unregisterFloatingItem( QTextCustomItem* item );
-    virtual void drawFloatingItems(QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    virtual void drawFloatingItems(QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
     virtual void adjustFlow( int  &yp, int w, int h, QTextParag *parag, bool pages = TRUE );
 
     virtual bool isEmpty() { return leftItems.isEmpty() && rightItems.isEmpty(); }
@@ -558,7 +558,7 @@ public:
     QTextDocument* richText()  const { return richtext; }
     QTextTable* table() const { return parent; }
 
-    void draw( int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    void draw( int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 
     QBrush *backGround() const { return background; }
     virtual void invalidate() { cached_width = -1; cached_sizehint = -1; }
@@ -600,7 +600,7 @@ public:
     void adjustToPainter( QPainter *p );
     void verticalBreak( int  y, QTextFlow* flow );
     void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch,
-	       const QColorGroup& cg );
+	       const QColorGroup& cg, bool selected );
 
     bool noErase() const { return TRUE; };
     bool ownLine() const { return TRUE; }
@@ -684,7 +684,7 @@ public:
     };
 
     QTextDocument( QTextDocument *p );
-    QTextDocument( QTextDocument *p, QTextFormatCollection *f );
+    QTextDocument( QTextDocument *d, QTextFormatCollection *f );
     ~QTextDocument();
     QTextDocument *parent() const { return par; }
     QTextParag *parentParag() const { return parParag; }
@@ -1065,6 +1065,8 @@ public:
 
     void setListStyle( QStyleSheetItem::ListStyle ls );
     QStyleSheetItem::ListStyle listStyle() const;
+    void setListValue( int v ) { list_val = v; }
+    int listValue() const { return list_val; }
 
     void setList( bool b, int listStyle );
     void incDepth();
@@ -1240,6 +1242,7 @@ private:
     QTextParagData *eData;
     QPainter *pntr;
     QTextCommandHistory *commandHistory;
+    int list_val;
 
 };
 
@@ -1351,7 +1354,7 @@ public:
     QTextFormat();
     virtual ~QTextFormat() {}
     QTextFormat( const QStyleSheetItem *s );
-    QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * parent = 0L );
+    QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection *parent = 0 );
     QTextFormat( const QTextFormat &fm );
     QTextFormat makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const;
     QTextFormat& operator=( const QTextFormat &fm );
@@ -1453,10 +1456,8 @@ public:
     virtual QTextFormat *format( QTextFormat *of, QTextFormat *nf, int flags );
     virtual QTextFormat *format( const QFont &f, const QColor &c );
     virtual void remove( QTextFormat *f );
-
     virtual QTextFormat *createFormat( const QTextFormat &f ) { return new QTextFormat( f ); }
     virtual QTextFormat *createFormat( const QFont &f, const QColor &c ) { return new QTextFormat( f, c, this ); }
-
     void debug();
 
     void setPainter( QPainter *p );
@@ -1481,6 +1482,26 @@ private:
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+inline int QTextString::length() const
+{
+    return data.size();
+}
+
+inline void QTextString::operator+=( const QString &s )
+{
+    insert( length(), s, 0 );
+}
+
+inline int QTextParag::length() const
+{
+    return str->length();
+}
+
+inline QRect QTextParag::rect() const
+{
+    return r;
+}
 
 inline QTextParag *QTextCursor::parag() const
 {
@@ -1944,21 +1965,11 @@ inline QString QTextString::toReverseString() const
     return s;
 }
 
-inline int QTextString::length() const
-{
-    return data.size();
-}
-
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 inline QTextStringChar *QTextParag::at( int i ) const
 {
     return &str->at( i );
-}
-
-inline int QTextParag::length() const
-{
-    return str->length();
 }
 
 inline bool QTextParag::isValid() const
@@ -1986,11 +1997,6 @@ inline void QTextParag::append( const QString &s, bool reallyAtEnd )
 	insert( str->length(), s );
     else
 	insert( QMAX( str->length() - 1, 0 ), s );
-}
-
-inline QRect QTextParag::rect() const
-{
-    return r;
 }
 
 inline QTextParag *QTextParag::prev() const
@@ -2082,10 +2088,8 @@ inline void QTextParag::setParagId( int i )
 
 inline int QTextParag::paragId() const
 {
-#if 0
     if ( id == -1 )
 	qWarning( "invalid parag id!!!!!!!! (%p)", this );
-#endif
     return id;
 }
 
@@ -2293,7 +2297,7 @@ inline int QTextParag::customItems() const
 inline QBrush *QTextParag::background() const
 {
     return tc ? tc->backGround() : 0;
-};
+}
 
 
 inline void QTextParag::setDocumentRect( const QRect &r )

@@ -679,8 +679,6 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s )
 	if ( pos.y() >= r.y() && pos.y() <= r.y() + r.height() || !s->next() )
 	    break;
 	s = s->next();
-        //if ( !s )
-        //    break;
     }
 
     if ( !s )
@@ -1088,8 +1086,8 @@ void QTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
     QTextFormat *f = 0;
     if ( doc->useFormatCollection() ) {
 	f = string->at( idx )->format();
-	//if ( idx == string->length() - 1 && idx > 0 )
-	//    f = string->at( idx - 1 )->format();
+	if ( idx == string->length() - 1 && idx > 0 )
+	    f = string->at( idx - 1 )->format();
 	if ( f->isMisspelled() ) {
 	    f->removeRef();
 	    f = doc->formatCollection()->format( f->font(), f->color() );
@@ -1224,10 +1222,10 @@ QTextDocument::QTextDocument( QTextDocument *p )
     init();
 }
 
-QTextDocument::QTextDocument( QTextDocument *p, QTextFormatCollection *c )
+QTextDocument::QTextDocument( QTextDocument *p, QTextFormatCollection *f )
     : par( p ), parParag( 0 ), tc( 0 ), tArray( 0 ), tStopWidth( 0 )
 {
-    fCollection = c;
+    fCollection = f;
     init();
 }
 
@@ -1438,6 +1436,7 @@ void QTextDocument::setRichTextInternal( const QString &text )
     QString doc = text;
     int depth = 0;
     bool hasNewPar = TRUE;
+    QStyleSheetItem::ListStyle curListStyle;
     while ( pos < int( doc.length() ) ) {
 	if (hasPrefix(doc, pos, '<' ) ){
 	    if (!hasPrefix(doc, pos+1, QChar('/'))) {
@@ -1462,6 +1461,28 @@ void QTextDocument::setRichTextInternal( const QString &text )
 			    break;
 			curtag = tags.pop();
 			depth--;
+		    }
+		    if ( nstyle->name() == "ol" ) {
+			curListStyle = nstyle->listStyle();
+			QMap<QString, QString>::Iterator it = attr.find( "type" );
+			if ( it != attr.end() ) {
+			    QString sl = *it;
+			    if ( sl == "1" ) {
+				curListStyle = QStyleSheetItem::ListDecimal;
+			    } else if ( sl == "a" ) {
+				curListStyle =  QStyleSheetItem::ListLowerAlpha;
+			    } else if ( sl == "A" ) {
+				curListStyle = QStyleSheetItem::ListUpperAlpha;
+			    } else {
+				sl = sl.lower();
+				if ( sl == "square" )
+				    curListStyle = QStyleSheetItem::ListSquare;
+				else if ( sl == "disc" )
+				curListStyle = QStyleSheetItem::ListDisc;
+				else if ( sl == "circle" )
+				    curListStyle = QStyleSheetItem::ListCircle;
+			    }
+			}
 		    }
 		}
 
@@ -1496,6 +1517,7 @@ void QTextDocument::setRichTextInternal( const QString &text )
 		    curpar->at( index )->setCustomItem( custom );
 		    curpar->addCustomItem();
 		    registerCustomItem( custom, curpar );
+		    hasNewPar = FALSE;
 		} else if ( !emptyTag ) {
 		    tags += curtag;
 		    if ( nstyle ) {
@@ -1513,12 +1535,16 @@ void QTextDocument::setRichTextInternal( const QString &text )
 			if ( nstyle->displayMode() != QStyleSheetItem::DisplayInline )
 			    NEWPAROPEN(nstyle);
 			if ( nstyle->displayMode() == QStyleSheetItem::DisplayListItem )
-			    curpar->setListStyle( curtag.style->listStyle() );
+			    curpar->setListStyle( curListStyle );
 			curtag.style = nstyle;
 			curtag.wsm = nstyle->whiteSpaceMode();
 			curtag.format = curtag.format.makeTextFormat( nstyle, attr );
 			if ( nstyle->displayMode() != QStyleSheetItem::DisplayInline )
 			    curpar->setFormat( &curtag.format );
+			if ( nstyle->name() == "li" ) {
+			    if ( attr.find( "value" ) != attr.end() )
+				curpar->setListValue( (*attr.find( "value" )).toInt() );
+			}
 		    }
 		    curtag.name = tagname;
 		    if ( curtag.name == "a" && attr.find( "name" ) != attr.end() && doc[ pos] == '<' )	// hack to be sure
@@ -1660,7 +1686,10 @@ QString QTextDocument::richText( QTextParag *p ) const
 		    for ( int i = lastItems.size(); i < (int)items.size(); ++i ) {
 			if ( items[ i ]->name().isEmpty() )
 			    continue;
-			s += "<" + items[ i ]->name() + align_to_string( items[ i ]->name(), p->alignment() ) + ">";
+			if ( items[ i ]->name() == "li" && p->listValue() != -1 )
+			    s += "<li value=\"" + QString::number( p->listValue() ) + "\">";
+			else
+			    s += "<" + items[ i ]->name() + align_to_string( items[ i ]->name(), p->alignment() ) + ">";
 		    }
 		} else {
 		    QString end;
@@ -1672,7 +1701,10 @@ QString QTextDocument::richText( QTextParag *p ) const
 		    s += end;
 		}
 		lastItems = items;
-		s += "<" + item->name() + align_to_string( item->name(), p->alignment() ) + ">" +
+		if ( item->name() == "li" && p->listValue() != -1 )
+		    s += "<li value=\"" + QString::number( p->listValue() ) + "\">";
+		else
+		    s += "<" + item->name() + align_to_string( item->name(), p->alignment() ) + ">" +
 		     p->richText() + "</" + item->name() + ">\n";
 	    } else {
 		QString end;
@@ -2399,7 +2431,7 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 	painter->translate( 0, -parag->rect().y() );
 	QRect cr( cx, cy, cw, ch );
 	cr = cr.intersect( QRect( 0, parag->rect().y(), parag->rect().width(), parag->rect().height() ) );
-	flow()->drawFloatingItems( painter, cr.x(), cr.y(), cr.width(), cr.height(), cg );
+	flow()->drawFloatingItems( painter, cr.x(), cr.y(), cr.width(), cr.height(), cg, FALSE );
 	painter->translate( 0, +parag->rect().y() );
     }
 
@@ -2454,7 +2486,6 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
     QPainter painter;
 
     while ( parag ) {
-	//qDebug("draw: formatting %d", parag->paragId());
 	lastFormatted = parag;
 	if ( !parag->isValid() )
 	    parag->format();
@@ -2473,7 +2504,6 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 		if ( verticalBreak() && flow() )
 		    flow()->draw( p, cx, cy, cw, ch );
 
-		//qDebug("draw: we're past cy+ch=%d returning lastFormatted=%d", cy+ch, parag->paragId());
 		return lastFormatted;
 	    }
 	    parag = parag->next();
@@ -2498,7 +2528,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	    QRect cr( cx, cy, cw, ch );
 	    cr = cr.intersect( QRect( 0, parag->rect().y() + parag->rect().height(), parag->document()->width(),
 				      parag->document()->height() - ( parag->rect().y() + parag->rect().height() ) ) );
-	    flow()->drawFloatingItems( p, cr.x(), cr.y(), cr.width(), cr.height(), cg );
+	    flow()->drawFloatingItems( p, cr.x(), cr.y(), cr.width(), cr.height(), cg, FALSE );
 	}
     }
 
@@ -2511,7 +2541,6 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	flow()->draw( p, cx, cy, cw, ch );
 
     tmpCursor = 0;
-    //qDebug("draw: all done. returning lastFormatted=%d", parag->paragId());
     return lastFormatted;
 }
 
@@ -3013,6 +3042,7 @@ QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool u
       tArray( 0 ), tabStopWidth( 0 ), eData( 0 ), pntr( 0 )
 {
     visible = TRUE;
+    list_val = -1;
     newLinesAllowed = FALSE;
     splittedInside = FALSE;
     lastInFrame = FALSE;
@@ -3066,7 +3096,6 @@ QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool u
     firstPProcess = TRUE;
 
     str = new QTextString();
-    formatCollection()->defaultFormat()->addRef();
     str->insert( 0, " ", formatCollection()->defaultFormat() );
 }
 
@@ -3159,17 +3188,13 @@ void QTextParag::join( QTextParag *s )
     else if ( doc )
 	doc->setLastParag( this );
 
-  bool hasTrailingSpace = length() > 0 && at( length() - 1 )->c == ' ';
-  // keep existing trailing space if we already have one and we're joining to an empty parag
-  if ( !hasTrailingSpace || s->length() > 1 )
-  {
     int start = str->length();
-    if ( hasTrailingSpace ) {
+    if ( length() > 0 && at( length() - 1 )->c == ' ' ) {
 	remove( length() - 1, 1 );
 	--start;
     }
     append( s->str->toString(), TRUE );
-    //qDebug("copying %d chars", s->length());
+
     for ( int i = 0; i < s->length(); ++i ) {
 	if ( !doc || doc->useFormatCollection() ) {
 	    s->str->at( i ).format()->addRef();
@@ -3183,10 +3208,7 @@ void QTextParag::join( QTextParag *s )
 	    doc->registerCustomItem( item, this );
 	}
     }
-  }
-  //else
-    //qDebug("join: empty parag -> not copying");
-  ASSERT(str->at(str->length()-1).c == ' ');
+    ASSERT(str->at(str->length()-1).c == ' ');
 
     if ( !extraData() && s->extraData() ) {
 	setExtraData( s->extraData() );
@@ -3260,7 +3282,7 @@ void QTextParag::format( int start, bool doMove )
     r.setWidth( documentWidth() );
     if ( p )
 	p->lastInFrame = FALSE;
-formatAgain:
+ formatAgain:
     if ( doc ) {
 	for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() ) {
 	    i->ypos = r.y();
@@ -3422,7 +3444,7 @@ void QTextParag::setFormat( int index, int len, QTextFormat *f, bool useCollecti
     if ( index > str->length() - 1 )
 	index = str->length() - 1;
     if ( index + len >= str->length() )
-	len = str->length() - index;
+	len = str->length() - index - 1; // I had removed the -1 ... ## to be checked
 
     QTextFormatCollection *fc = 0;
     if ( useCollection )
@@ -3632,7 +3654,8 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 		bw = cw;
 	    } else {
 		if ( chr->customItem()->placement() == QTextCustomItem::PlaceInline ) {
-		    chr->customItem()->draw( &painter, chr->x, cy, clipx - r.x(), clipy - r.y(), clipw, cliph, cg );
+		    chr->customItem()->draw( &painter, chr->x, cy, clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
+					     nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] >= i );
 		    paintStart = i+1;
 		    paintEnd = -1;
 		    lastFormat = chr->format();
@@ -3712,6 +3735,8 @@ void QTextParag::drawParagString( QPainter &painter, const QString &s, int start
 				      QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
 				      const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool /*rightToLeft*/ )
 {
+    if ( start + len == length() )
+	len--;
     QString str( s );
     if ( str[ (int)str.length() - 1 ].unicode() == 0xad )
 	str.remove( str.length() - 1, 1 );
@@ -4737,10 +4762,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    continue;
 	}
 	if ( isWrapEnabled() && ( lastBreak != -1 || allowBreakInWords() ) &&
-	      ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
-	      wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
-	      wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
-	      parag->isNewLinesAllowed() && lastChr == '\n' ) {
+	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
+	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
+	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
+	       parag->isNewLinesAllowed() && lastChr == '\n' ) {
 	    if ( wrapAtColumn() != -1 )
 		minw = QMAX( minw, x + ww );
 	    if ( lastBreak < 0 ) {
@@ -4876,7 +4901,7 @@ QTextFormatCollection::QTextFormatCollection()
     qDebug("QTextFormatCollection::QTextFormatCollection %p", this);
 #endif
     defFormat = new QTextFormat( QApplication::font(),
-				     QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
+				 QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
     lastFormat = cres = 0;
     cflags = -1;
     cKey.setAutoDelete( TRUE );
@@ -5515,7 +5540,30 @@ void QTextImage::adjustToPainter( QPainter* p )
     height = int( height * scale_factor( metrics.logicalDpiY() ) );
 }
 
-void QTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
+#if !defined(Q_WS_X11)
+#include <qbitmap.h>
+#include <qcleanuphandler.h>
+static QPixmap *qrt_selection = 0;
+static QCleanupHandler<QPixmap> qrt_cleanup_pixmap;
+static void qrt_createSelectionPixmap( const QColorGroup &cg )
+{
+    qrt_selection = new QPixmap( 2, 2 );
+    qrt_cleanup_pixmap.add( qrt_selection );
+    qrt_selection->fill( Qt::color0 );
+    QBitmap m( 2, 2 );
+    m.fill( Qt::color1 );
+    QPainter p( &m );
+    p.setPen( Qt::color0 );
+    for ( int j = 0; j < 2; ++j ) {
+	p.drawPoint( j % 2, j );
+    }
+    p.end();
+    qrt_selection->setMask( m );
+    qrt_selection->fill( cg.highlight() );
+}
+#endif
+
+void QTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     if ( placement() != PlaceInline ) {
 	x = xpos;
@@ -5544,10 +5592,22 @@ void QTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch
 
     if ( placement() != PlaceInline && !QRect( xpos, ypos, width, height ).intersects( QRect( cx, cy, cw, ch ) ) )
 	return;
+
     if ( placement() == PlaceInline )
 	p->drawPixmap( x , y, pm );
     else
 	p->drawPixmap( cx , cy, pm, cx - x, cy - y, cw, ch );
+
+    if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
+	p->save();
+#if defined(Q_WS_X11)
+	p->fillRect( QRect( QPoint( x, y ), pm.size() ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+#else // in WIN32 Dense4Pattern doesn't work correctly (transparency problem), so work around it
+	if ( !qrt_selection )
+	    qrt_createSelectionPixmap( cg );
+	p->drawTiledPixmap( x, y, pm.width(), pm.height(), *qrt_selection );
+#endif
+    }
 }
 
 void QTextHorizontalLine::adjustToPainter( QPainter* p )
@@ -5574,7 +5634,7 @@ QString QTextHorizontalLine::richText() const
     return "<hr>";
 }
 
-void QTextHorizontalLine::draw( QPainter* p, int x, int y, int , int , int , int , const QColorGroup& cg )
+void QTextHorizontalLine::draw( QPainter* p, int x, int y, int , int , int , int , const QColorGroup& cg, bool selected )
 {
     QRect r( x, y, width, height);
     if ( is_printer( p ) || ( p && p->device() && p->device()->devType() == QInternal::Printer ) ) {
@@ -5583,6 +5643,8 @@ void QTextHorizontalLine::draw( QPainter* p, int x, int y, int , int , int , int
 	p->drawLine( r.left()-1, y + height / 2, r.right() + 1, y + height / 2 );
 	p->setPen( oldPen );
     } else {
+	if ( selected )
+	    p->fillRect( r.left(), y, r.right(), y + height, cg.highlight() );
 	qDrawShadeLine( p, r.left() - 1, y + height / 2, r.right() + 1, y + height / 2, cg, TRUE, height / 8 );
     }
 }
@@ -6039,19 +6101,19 @@ void QTextFlow::registerFloatingItem( QTextCustomItem* item, bool right )
     }
 }
 
-void QTextFlow::drawFloatingItems( QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg )
+void QTextFlow::drawFloatingItems( QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     QTextCustomItem *item;
     for ( item = leftItems.first(); item; item = leftItems.next() ) {
 	if ( item->xpos == -1 || item->ypos == -1 )
 	    continue;
-	item->draw( p, item->xpos, item->ypos, cx, cy, cw, ch, cg );
+	item->draw( p, item->xpos, item->ypos, cx, cy, cw, ch, cg, selected );
     }
 
     for ( item = rightItems.first(); item; item = rightItems.next() ) {
 	if ( item->xpos == -1 || item->ypos == -1 )
 	    continue;
-	item->draw( p, item->xpos, item->ypos, cx, cy, cw, ch, cg );
+	item->draw( p, item->xpos, item->ypos, cx, cy, cw, ch, cg, selected );
     }
 }
 
@@ -6202,7 +6264,7 @@ void QTextTable::verticalBreak( int  yt, QTextFlow* flow )
     height += shift;
 }
 
-void QTextTable::draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
+void QTextTable::draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     if ( placement() != PlaceInline ) {
 	x = xpos;
@@ -6219,7 +6281,7 @@ void QTextTable::draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch,
 	     QRect( cx, cy, cw, ch ).intersects( QRect( x + outerborder + cell->geometry().x(),
 							y + outerborder + cell->geometry().y(),
 							cell->geometry().width(), cell->geometry().height() ) ) ) {
-	    cell->draw( x+outerborder, y+outerborder, cx, cy, cw, ch, cg );
+	    cell->draw( x+outerborder, y+outerborder, cx, cy, cw, ch, cg, selected );
 	    if ( border ) {
 		QRect r( x+outerborder+cell->geometry().x() - us_ib,
 			 y+outerborder+cell->geometry().y() - us_ib,
@@ -6684,7 +6746,7 @@ QPainter* QTextTableCell::painter() const
     return parent->painter;
 }
 
-void QTextTableCell::draw( int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
+void QTextTableCell::draw( int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool )
 {
     if ( cached_width != geom.width() ) {
 	richtext->doLayout( painter(), geom.width() );
