@@ -212,6 +212,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 		for( ; itr.current(); ++itr )
 		{
 			VSegmentListIterator jtr( *( itr.current() ) );
+			++jtr;
 			for( ; jtr.current(); ++jtr )
 			{
 				painter->newPath();
@@ -252,7 +253,6 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 
 						painter->strokePath();
 					}
-
 
 					// Draw control node1:
 					painter->newPath();
