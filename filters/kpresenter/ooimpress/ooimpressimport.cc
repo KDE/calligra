@@ -969,7 +969,24 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
             m_styleStack.setMark( 1 ); // we have to remove the spans styles
             fillStyleStack( ts.toElement() );
-            textData = ts.text();
+
+            // We do a look ahead to eventually find a text:span that contains
+            // only a line-break. If found, we'll add it to the current string
+            // and move on to the next sibling.
+            QDomNode next = n.nextSibling();
+            if ( !next.isNull() )
+            {
+                QDomNode lineBreak = next.namedItem( "text:line-break" );
+                if ( !lineBreak.isNull() ) // found a line-break
+                {
+                    textData = ts.text() + "\n";
+                    n = n.nextSibling(); // move on to the next sibling
+                }
+                else
+                    textData = ts.text();
+            }
+            else
+                textData = ts.text();
         }
         else
             textData = t.data();
