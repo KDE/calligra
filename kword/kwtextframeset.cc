@@ -806,9 +806,13 @@ void KWTextFrameSet::load( QDomElement &attributes )
     }
 
     if ( !lastParagraph )                // We created no paragraph
-        textdoc->setFirstParag( 0L );
+    {
+        // Create an empty one, then. See KWTextDocument ctor.
+        textdoc->clear( true );
+    }
+    else
+        textdoc->setLastParag( lastParagraph );
 
-    textdoc->setLastParag( lastParagraph );
     m_lastFormatted = textdoc->firstParag();
     //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
 }
