@@ -71,9 +71,8 @@ public:
    *  @param _constr is a constraint expression as used by KDEDs trader interface.
    *                 You can use it to set additional restrictions on the available
    *                 components.
-   *  @param _count  is the amount of query results we are interested in.
    */
-  static QValueList<KoDocumentEntry> query( const QString &  _constr = "", unsigned int _count = 1 );
+  static QValueList<KoDocumentEntry> query( const QString &  _constr = QString::null );
 
   /**
    *  This is only a convenience function.
@@ -145,7 +144,7 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static QValueList<KoFilterEntry> query( const QString & _constr = "", unsigned int _count = 100 );
+  static QValueList<KoFilterEntry> query( const QString & _constr = QString::null );
 
 private:
   KService::Ptr m_service;
@@ -192,7 +191,7 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static QValueList<KoFilterDialogEntry> query( const QString & _constr = "", unsigned int _count = 100 );
+  static QValueList<KoFilterDialogEntry> query( const QString & _constr = QString::null );
 
 private:
   KService::Ptr m_service;

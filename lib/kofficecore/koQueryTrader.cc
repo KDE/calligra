@@ -79,7 +79,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
     return vec[0];
 }
 
-QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr, unsigned int _count )
+QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
 {
   QValueList<KoDocumentEntry> lst;
 
@@ -89,8 +89,6 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr, uns
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   kdDebug() << "KoDocumentEntry::query " << _constr << " got " << max << " offers " << endl;
-  if ( max > _count )
-    max = _count;
   for( unsigned int i = 0; i < max; i++ )
   {
     // Parse the service
@@ -121,9 +119,9 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
   implemented = service->property( "Implemented" ).toString();
 }
 
-QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr, unsigned int _count )
+QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr )
 {
-  kdDebug(30003) << "KoFilterEntry::query( " << _constr << ", " << _count << endl;
+  kdDebug(30003) << "KoFilterEntry::query( " << _constr << endl;
   QValueList<KoFilterEntry> lst;
 
   KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilter", _constr );
@@ -131,8 +129,6 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const QString & _constr, unsigne
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   kdDebug(30003) << "Query returned " << max << " offers" << endl;
-  if ( max > _count )
-    max = _count;
   for( unsigned int i = 0; i < max; i++ )
   {
     KoFilterEntry f( *it );
@@ -177,9 +173,9 @@ KoFilterDialogEntry::KoFilterDialogEntry( KService::Ptr service )
   exportDescription = service->property( "ExportDescription" ).toString();
 }
 
-QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const QString & _constr, unsigned int _count )
+QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const QString & _constr )
 {
-  kdDebug(30003) << "KoFilterDialogEntry::query( " << _constr << ", " << _count << endl;
+  kdDebug(30003) << "KoFilterDialogEntry::query( " << _constr << ", " << endl;
   QValueList<KoFilterDialogEntry> lst;
 
   KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilterDialog", _constr );
@@ -187,8 +183,6 @@ QValueList<KoFilterDialogEntry> KoFilterDialogEntry::query( const QString & _con
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   kdDebug(30003) << "Query returned " << max << " offers" << endl;
-  if ( max > _count )
-    max = _count;
   for( unsigned int i = 0; i < max; i++ )
   {
     KoFilterDialogEntry f( *it );

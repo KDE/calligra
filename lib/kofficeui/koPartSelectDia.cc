@@ -51,7 +51,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 	     this, SLOT( selectionChanged( QListViewItem * ) ) );
 
     // Query for documents
-    m_lstEntries = KoDocumentEntry::query( QString::null, 100 );
+    m_lstEntries = KoDocumentEntry::query();
     QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
