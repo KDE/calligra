@@ -1,6 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="kivio" version="23">
+<kpartgui name="kivio" version="24">
   <MenuBar>
+    <Menu name="file">
+      <Action name="installStencilSet"/>
+      <Separator/>
+    </Menu>
     <Menu name="Edit"><text>&amp;Edit</text>
       <Action name="koffice_undo"/>
       <Action name="koffice_redo"/>
@@ -67,7 +71,6 @@
     <Menu name="settings"><text>&amp;Settings</text>
       <Separator group="settings_show"/>
       <Action name="options" group="settings_configure"/>
-      <Action name="installStencilSet" group="settings_configure"/>
     </Menu>
   </MenuBar>
   

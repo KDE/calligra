@@ -521,7 +521,7 @@ void KivioView::setupActions()
   connect( m_setArrowHeads, SIGNAL(startChanged(int)), SLOT(slotSetStartArrow(int)));
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
 
-  KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options" );
+  KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options");
 
   (void) new KAction(i18n("Install Stencil Set..."), 0, this,
     SLOT(installStencilSet()), actionCollection(), "installStencilSet");
