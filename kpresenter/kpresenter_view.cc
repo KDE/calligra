@@ -1300,8 +1300,8 @@ void KPresenterView::textAlignCenter()
 {
     if ( !actionTextAlignCenter->isChecked() )
 	return;
-    tbAlign = Qt::AlignHCenter;
-    page->setTextAlign( Qt::AlignHCenter );
+    tbAlign = Qt::AlignCenter;
+    page->setTextAlign( Qt::AlignCenter );
 }
 
 /*===============================================================*/

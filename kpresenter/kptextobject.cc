@@ -1,8 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
-#include "kptextobject.h"
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -366,8 +364,24 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     // ### fix this loop (Werner)
     while ( parag ) {
         QDomElement paragraph=doc.createElement(tagP);
+        int tmpAlign=0;
+        switch(parag->alignment())
+        {
+        case Qt::AlignLeft:
+            tmpAlign=1;
+            break;
+        case Qt::AlignRight:
+            tmpAlign=2;
+            break;
+        case Qt::AlignCenter:
+            tmpAlign=4;
+            break;
+        default:
+            tmpAlign=1;
+        }
+        paragraph.setAttribute(attrAlign, tmpAlign);
+
 #if 0
-        paragraph.setAttribute(attrAlign, parag->alignment());
         paragraph.setAttribute(attrType, (int)parag->type());
         paragraph.setAttribute(attrDepth, parag->listDepth());
         KTextEditFormat *lastFormat = 0;
@@ -442,7 +456,16 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             else
                 lastParag->setType( (KTextEditParag::Type)e.attribute( attrType ).toInt() );
 #endif
-            lastParag->setAlignment( e.attribute( attrAlign ).toInt() ); // TODO check/convert values
+            int tmpAlign=e.attribute( attrAlign ).toInt();
+            if(tmpAlign==1)
+                lastParag->setAlignment(Qt::AlignLeft);
+            else if(tmpAlign==2)
+                lastParag->setAlignment(Qt::AlignRight);
+            else if(tmpAlign==4)
+                lastParag->setAlignment(Qt::AlignCenter);
+            else
+                kdDebug()<<"Error in e.attribute( attrAlign ).toInt()\n";
+
             // ## lastParag->setListDepth( e.attribute( attrDepth ).toInt() ); // TODO check/convert values
             lineSpacing = QMAX( e.attribute( attrLineSpacing ).toInt(), lineSpacing );
             paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
