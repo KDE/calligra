@@ -17,26 +17,25 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <powerpoint.h>
+#include <pptxml.h>
 #include <powerpointfilter.h>
 
 PowerPointFilter::PowerPointFilter(
     const myFile &mainStream,
-    const myFile &currentUser) : FilterBase()
+    const myFile &currentUser):
+        FilterBase()
 {
-    m_mainStream = mainStream;
-    m_currentUser = currentUser;
+    m_tree = new PptXml(mainStream, currentUser);
 }
 
 PowerPointFilter::~PowerPointFilter()
 {
+    delete m_tree;
 }
 
 const bool PowerPointFilter::filter()
 {
-    Powerpoint *myDoc = new Powerpoint();
-
-    return myDoc->parse(m_mainStream, m_currentUser);
+    return m_tree->convert();
 }
 
 const QDomDocument * const PowerPointFilter::part() {

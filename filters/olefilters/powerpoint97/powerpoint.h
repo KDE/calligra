@@ -31,14 +31,9 @@ DESCRIPTION
 #include <qdatastream.h>
 #include <qlist.h>
 #include <qmap.h>
-#include <qobject.h>
 
-class Powerpoint:
-    public QObject
+class Powerpoint
 {
-
-    Q_OBJECT
-
 public:
 
     // Construction.
@@ -54,6 +49,12 @@ public:
     bool parse(
         QDataStream &mainStream,
         QDataStream &currentUser);
+
+protected:
+
+    virtual void gotSlideText(
+        unsigned textType,
+        const QString &text) = 0;
 
 private:
     Powerpoint(const Powerpoint &);
@@ -74,6 +75,13 @@ private:
     myFile m_mainStream;
     QMap<unsigned, unsigned> m_persistentReferences;
     QList<unsigned> m_slidePersists;
+    unsigned m_editDepth;
+    enum
+    {
+        PASS_GET_SLIDE_REFERENCES,
+        PASS_GET_SLIDE_CONTENTS
+    } m_pass;
+    unsigned m_textType;
 
     // Common Header.
 
@@ -275,4 +283,4 @@ private:
     void opViewInfo(Header &op, U32 bytes, QDataStream &operands);
     void opViewInfoAtom(Header &op, U32 bytes, QDataStream &operands);
 };
-#endif // POWERPOINT_H
+#endif

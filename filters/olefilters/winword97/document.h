@@ -136,6 +136,8 @@ protected:
         MsWordGenerated::TAP &row) = 0;
 
 private:
+    Document(const Document &);
+    const Document &operator=(const Document &);
 
     // Error handling and reporting support.
 

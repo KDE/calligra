@@ -7,9 +7,9 @@ LDFLAGS	= $(all_libraries)
 
 noinst_LTLIBRARIES = libpowerpoint97.la
 
-libpowerpoint97_la_SOURCES = powerpointfilter.cc powerpoint.cc
+libpowerpoint97_la_SOURCES = powerpointfilter.cc powerpoint.cc pptdoc.cc pptxml.cc
 
-noinst_HEADERS = powerpointfilter.h powerpoint.h
+noinst_HEADERS = powerpointfilter.h powerpoint.h pptdoc.h pptxml.h
 
 METASOURCES = AUTO
 
