@@ -17,6 +17,7 @@ libkexipart_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  kexiDB/libkexidb.la form
 lib_LTLIBRARIES = kexi.la
 kexi_la_SOURCES = main.cpp
 kexi_la_LDFLAGS = $(all_libraries) -module -avoid-version
+kexi_la_LIBADD = $(LIB_KOFFICECORE)
 
 ## The executable
 bin_PROGRAMS = kexi
