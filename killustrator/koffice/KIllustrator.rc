@@ -3,8 +3,6 @@
  <Menu name="file"><text>File</text>
   <Action name="import"/>
   <Action name="export"/>
-  <Separator/>
-  <Action name="documentInfo"/>
  </Menu>
  <Menu name="edit"><text>Edit</text>
   <Action name="undo"/>
@@ -67,6 +65,7 @@
   <Action name="blend"/>
  </Menu>
  <Menu name="options"><text>Options</text>
+  <Action name="loadPalette"/>
   <Action name="options"/>
  </Menu>
 </MenuBar>

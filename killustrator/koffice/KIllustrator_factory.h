@@ -4,6 +4,7 @@
 #include <koFactory.h>
 
 class KInstance;
+class KAboutData;
 
 class KIllustratorFactory : public KoFactory
 {
@@ -15,7 +16,8 @@ public:
     virtual QObject* create( QObject* parent = 0, const char* oname = 0, const char* name = "QObject", const QStringList &args = QStringList() );
 
     static KInstance* global();
-
+    static KAboutData* aboutData();
+                                             
 private:
     static KInstance* s_global;
 };

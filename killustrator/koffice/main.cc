@@ -23,8 +23,12 @@
 #include <klocale.h>
 #include <dcopclient.h>
 
-static const char* description=I18N_NOOP("KOffice Illustrator Program");
-static const char* version="0.1";
+#include "KIllustrator_factory.h"
+
+extern "C"
+{
+  void* init_libkillustrator ();
+}
 
 static const KCmdLineOptions options[]=
 {
@@ -34,15 +38,11 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "killustrator", I18N_NOOP("KIllustrator"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Kai-Uwe Sattler");
-    aboutData.addAuthor("Kai-Uwe Sattler",0, "kus@iti.cs.uni-magdeburg.de");
-    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init( argc, argv, KIllustratorFactory::aboutData ());
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
-
+    init_libkillustrator ();
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "killustrator" );
 

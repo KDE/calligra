@@ -36,4 +36,4 @@ rcdir = $(kde_datadir)/killustrator
 rc_DATA = KIllustrator.rc
 
 # SUBDIRS =  . plugins pics dtd toolbar
-
+SUBDIRS = templates

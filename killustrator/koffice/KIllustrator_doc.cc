@@ -32,10 +32,11 @@
 #include "Coord.h"
 
 #include <qmessagebox.h>
-
+#include <qstring.h>
+#include <qfileinfo.h>
 #include <klocale.h>
 #include <kstddirs.h>
-
+#include <koTemplateChooseDia.h>                                                
 #include <koQueryTrader.h>
 #include <koStore.h>
 
@@ -130,6 +131,7 @@ bool KIllustratorDocument::completeSaving (KoStore* store)
 
 void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 {
+  cout << "KIllustrator: insetPart !!!!!!!!!!!!!!!!!!!!!" << endl;
     KoDocument* doc = e.createDoc();
     if ( !doc )
 	return;
@@ -166,7 +168,7 @@ void KIllustratorDocument::changeChildGeometry (KIllustratorChild* child, const 
 
 bool KIllustratorDocument::initDoc()
 {
-  return true;
+  return insertNewTemplate (0, 0, true);
 }
 
 KoView* KIllustratorDocument::createView( QWidget* parent, const char* name )
@@ -197,6 +199,33 @@ void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, b
 GDocument* KIllustratorDocument::gdoc()
 {
     return m_gdocument;
+}
+
+bool KIllustratorDocument::insertNewTemplate (int, int, bool clean) {
+  QString templ;
+  KoTemplateChooseDia::ReturnType ret;
+
+  ret = KoTemplateChooseDia::choose (KIllustratorFactory::global(), 
+				     templ,
+				     "application/x-killustrator", "*.kil",
+				     "KIllustrator", 
+				     KoTemplateChooseDia::Everything,
+				     "killustrator_template", true);   
+  if (ret == KoTemplateChooseDia::Template) {
+    QFileInfo fileInfo (templ);
+    QString fileName (fileInfo.dirPath (true) + "/" + 
+		      fileInfo.baseName () + ".kil");
+    // load it 
+    setModified (true);
+    return true;
+  } else if (ret == KoTemplateChooseDia::File) {
+    // load it 
+    setModified (true);
+    return true;
+  } else if ( ret == KoTemplateChooseDia::Empty ){
+    return true;
+  } else
+    return false;
 }
 
 #include "KIllustrator_doc.moc"

@@ -265,8 +265,9 @@ private slots:
     void slotDeleteNode( bool );
     void slotSplitLine( bool );
     void slotLayers();
-    void slotDocumentInfo();
+  void slotDocumentInfo();
   void slotViewZoom (const QString&);
+  void slotLoadPalette ();
 
 protected:
   KIllustratorDocument *m_pDoc;
@@ -329,6 +330,7 @@ protected:
     KAction* m_convertToCurve;
     KAction* m_blend;
     KAction* m_options;
+    KAction* m_loadPalette;
     KColorBarAction* m_colorBar;
     KToggleAction* m_selectTool;
     KToggleAction* m_pointTool;

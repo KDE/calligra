@@ -138,7 +138,7 @@ void KIllustratorView::createGUI()
     // File menu
     m_import = new KAction( i18n("Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
     m_export = new KAction( i18n("Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
-    m_docInfo = new KAction( i18n("Document Info..."), 0, this, SLOT( slotDocumentInfo() ), actionCollection(), "documentInfo" );
+    //    m_docInfo = new KAction( i18n("Document Info..."), 0, this, SLOT( slotDocumentInfo() ), actionCollection(), "documentInfo" );
 	
     // Insert menu
     m_insertBitmap = new KAction( i18n("Insert Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
@@ -200,6 +200,7 @@ void KIllustratorView::createGUI()
     m_blend = new KAction( i18n("Blend ..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
 
     // Extras menu
+    m_loadPalette = new KAction( i18n("Load Palette ..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" );
     m_options = new KAction( i18n("Options ..."), 0, this, SLOT( slotOptions() ), actionCollection(), "options" );
 
     //
@@ -216,10 +217,10 @@ void KIllustratorView::createGUI()
     zooms << "1000%";
 
     ((KSelectAction *) m_viewZoom)->setItems (zooms);
-    ((KSelectAction *) m_viewZoom)->setCurrentItem (2);
     connect (((KSelectAction *) m_viewZoom), 
 	     SIGNAL(activated(const QString &)), 
              this, SLOT(slotViewZoom(const QString &))); 
+    ((KSelectAction *) m_viewZoom)->setCurrentItem (2);
     // Colorbar action
 
     QValueList<QColor> colorList;
@@ -1200,6 +1201,10 @@ void KIllustratorView::slotLayers()
 
 void KIllustratorView::slotDocumentInfo () {
   DocumentInfo::showInfo (m_pDoc->gdoc ());
+}
+
+void KIllustratorView::slotLoadPalette () {
+  // TODO
 }
 
 void KIllustratorView::slotViewZoom (const QString& s) {
