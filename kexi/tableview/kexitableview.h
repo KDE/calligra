@@ -206,9 +206,13 @@ public:
 	/*! Enables or disables vertical scrollbar's. */
 	void setScrollbarToolTipsEnabled(bool set);
 
+	/*! \return currently selected column number or -1. */
 	int currentColumn() const;
+
+	/*! \return currently selected row number or -1. */
 	int currentRow() const;
 
+	/*! \return currently selected item (row data) or null. */
 	KexiTableItem *selectedItem() const;
 
 	/*! \return number of rows in this view. */
@@ -381,7 +385,8 @@ public slots:
 	 differ from actual position. */
 	void setCursor(int row, int col = -1, bool forceSet = false);
 
-	/*! Clears current selection. */
+	/*! Clears current selection. Current row and column will be now unspecified:
+	 currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
 	void clearSelection();
 
 	void selectRow(int row);
@@ -406,7 +411,8 @@ public slots:
 	void deleteCurrentRow();
 
 	/*! Inserts one empty row above row \a row. If \a row is -1 (the default),
-	 new row is inserted above current row.
+	 new row is inserted above the current row (or above 1st row if there is no current).
+	 A new item becomes current if row is -1 or if row is equal currentRow().
 	 This method does nothing if:
 	 -inserting flag is disabled (see isInsertingEnabled())
 	 -read-only flag is set (see isReadOnly())
@@ -459,6 +465,8 @@ public slots:
 	void setDropsAtRowEnabled(bool set);
 
 signals:
+	void dataSet( KexiTableViewData *data );
+
 	void itemSelected(KexiTableItem *);
 	void cellSelected(int col, int row);
 
@@ -467,7 +475,7 @@ signals:
 	void itemMouseReleased(KexiTableItem *, int row, int col);
 
 	void dragOverRow(KexiTableItem *item, int row, QDragMoveEvent* e);
-	void droppedAtRow(KexiTableItem *item, int row, QDropEvent *e);
+	void droppedAtRow(KexiTableItem *item, int row, QDropEvent *e, KexiTableItem*& newItem);
 
 	/*! Data has been refreshed on-screen - emitted from initDataContents(). */
 	void dataRefreshed();
@@ -628,6 +636,9 @@ protected:
 	 to double-check if deleting is allowed. \return true on success. */
 	bool deleteItem(KexiTableItem *item);//, bool moveCursor=true);
 
+	/*! Inserts newItem at \a row. -1 means current row. Used by insertEmptyRow(). */
+	void insertItem(KexiTableItem *newItem, int row = -1);
+
 	/*! For reimplementation: called by deleteItem(). If returns false, deleting is aborted.
 	 Default implementation just returns true. */
 	virtual bool beforeDeleteItem(KexiTableItem *item);
@@ -645,6 +656,7 @@ protected:
 	int validRowNumber(const QString& text);
 
 	void removeEditor();
+
 
 	//--------------------------
 		

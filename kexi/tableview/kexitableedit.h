@@ -146,9 +146,20 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		virtual int widthForValue( QVariant &val, QFontMetrics &fm );
 
 		/*! \return total size of this editor, including any buttons, etc. (if present). 
-		 Reimpelment this if you want to return more appropriate size. THis impelmentation just
+		 Reimpelment this if you want to return more appropriate size. This impelmentation just
 		 returns QWidget::size(). */
 		virtual QSize totalSize() { return QWidget::size(); }
+
+		/*! \return true if this editor offers a widget (e.g. line edit) that we can move focus to.
+		 Editor for boolean values has this set to false (see KexiBoolTableEdit). 
+		 You can override this flag by changing m_hasFocusableWidget in your subclass' constructor. */
+		bool hasFocusableWidget() const { return m_hasFocusableWidget; }
+
+		/*! Allows to define reaction for clicking on cell's contents. 
+		 Currently it's used for editor of type boolean, where we want to toggle true/false
+		 on single mouse click. \sa hasFocusableWidget(), KexiBoolTableEdit. 
+		 Default implementation does nothing. */
+		virtual void clickedOnContents() {};
 
 	signals:
 		void editRequested();
@@ -183,6 +194,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		int m_rightMargin;
 
 		QScrollView* m_scrollView;
+
+		bool m_hasFocusableWidget : 1;
 	private:
 		QWidget* m_view;
 };

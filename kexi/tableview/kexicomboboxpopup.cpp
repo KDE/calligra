@@ -146,8 +146,9 @@ void KexiComboBoxPopup::setDataInternal( KexiTableViewData *data, bool owner )
 
 void KexiComboBoxPopup::updateSize()
 {
-	d->tv->adjustColumnWidthToContents( -1 ); //TODO: not only for column 0, if there are more columns!
-	                                         //TODO: check if the width is not too big
+//	d->tv->adjustColumnWidthToContents( -1 ); //TODO: not only for column 0, if there are more columns!
+//	                                         //TODO: check if the width is not too big
+	d->tv->adjustHorizontalHeaderSize();
 //	d->tv->adjustColumnWidthToContents( 0 ); //TODO: not only for column 0, if there are more columns!
 //	                                         //TODO: check if the width is not too big
 	const int rows = QMIN( d->max_rows, d->tv->rows() );

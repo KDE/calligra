@@ -113,7 +113,8 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		void setRelatedData(KexiTableViewData *data);
 
 		/*! For not-db-aware data only:
-		 Related data \a data for this column, what defines simple one-field. \sa setRelatedData() */
+		 Related data \a data for this column, what defines simple one-field. 
+		 Null by default. \sa setRelatedData() */
 		KexiTableViewData *relatedData() const { return m_relatedData; }
 
 		KexiDB::Field* field;
@@ -247,8 +248,10 @@ public:
 	 Uses column's caption to address the column in buffer 
 	 if the buffer is of simple type, or db-aware buffer if (isDBAware()==true).
 	 (then fields are addressed with KexiDB::Field, instead of caption strings).
+	 If \a allowSignals is true (the default), aboutToChangeCell() signal is emitted.
 	 \sa KexiDB::RowEditBuffer */
-	bool updateRowEditBuffer(KexiTableItem *item, int colnum, QVariant newval);
+	bool updateRowEditBuffer(KexiTableItem *item, int colnum, QVariant newval, 
+		bool allowSignals = true);
 
 	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }
 

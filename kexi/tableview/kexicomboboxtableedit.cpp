@@ -25,6 +25,7 @@
 #include "kexicomboboxtableedit.h"
 #include "kexicomboboxpopup.h"
 #include "kexitableview.h"
+#include "kexitableitem.h"
 #include "kexi_utils.h"
 
 #include <kpushbutton.h>
@@ -104,13 +105,33 @@ void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 {
 //	m_combo->setCurrentItem(m_origValue.toInt() - 1);
 	if (add.isEmpty()) {
-		const int row = m_origValue.toInt();
-		m_lineedit->setText( field()->enumHint(row) );
+		KexiTableViewData *relData = column()->relatedData();
+		QString stringValue;
+		if (relData) {
+			//use 'related table data' model
+//			KexiTableItem *it = m_popup ? m_popup->tableView()->selectedItem() : 0;
+//			if (it)
+			stringValue = m_origValue.toString();
+//				stringValue = it->at(1).toString();
+		}
+		else {
+			//use 'enum hints' model
+			const int row = m_origValue.toInt();
+			stringValue = field()->enumHint(row);
+		}
+		m_lineedit->setText( stringValue );
+		
 		if (m_popup) {
 			if (m_origValue.isNull())
 				m_popup->tableView()->clearSelection();
-			else
-				m_popup->tableView()->selectRow(m_origValue.toInt());
+			else {
+				if (relData) {
+					//TODO: select proper row using m_origValue key
+				}
+				else {
+					m_popup->tableView()->selectRow(m_origValue.toInt());
+				}
+			}
 		}
 	}
 	else {
@@ -168,11 +189,21 @@ QVariant KexiComboBoxTableEdit::value(bool &ok)
 {
 	ok = true;
 	if (m_popup) {
-		const int row = m_popup->tableView()->currentRow();
-		if (row>=0)
-			return QVariant( row );
+		KexiTableViewData *relData = column()->relatedData();
+		if (relData) {
+			//use 'related table data' model
+			KexiTableItem *it = m_popup->tableView()->selectedItem();
+			return it ? it->at(0) : QVariant();
+		}
+		else {
+			//use 'enum hints' model
+			const int row = m_popup->tableView()->currentRow();
+			if (row>=0)
+				return QVariant( row );
 //		else
 //			return m_origValue; //QVariant();
+		}
+
 	}
 	if (m_lineedit->text().isEmpty())
 		return QVariant();
@@ -232,8 +263,20 @@ void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, QVariant v
 	KexiTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
 	if (focused && (w > m_button->width()))
 		w -= (m_button->width() - x);
-	if (!val.isNull())
-		txt = field()->enumHint( val.toInt() );
+	if (!val.isNull()) {
+		KexiTableViewData *relData = column()->relatedData();
+		if (relData) {
+			//use 'related table data' model
+//			KexiTableItem *it = m_popup->tableView()->selectedItem();
+//			if (it)
+//				stringValue = it->at(1).toString();
+			txt = val.toString();
+		}
+		else {
+			//use 'enum hints' model
+			txt = field()->enumHint( val.toInt() );
+		}
+	}
 }
 
 void KexiComboBoxTableEdit::slotButtonClicked()
@@ -351,7 +394,19 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 
 void KexiComboBoxTableEdit::slotItemSelected(KexiTableItem*)
 {
-	m_lineedit->setText( field()->enumHint( m_popup->tableView()->currentRow() ) );
+	QString stringValue;
+	KexiTableViewData *relData = column()->relatedData();
+	if (relData) {
+		//use 'related table data' model
+		KexiTableItem *it = m_popup->tableView()->selectedItem();
+		if (it)
+			stringValue = it->at(1).toString();
+	}
+	else {
+		//use 'enum hints' model
+		stringValue = field()->enumHint( m_popup->tableView()->currentRow() );
+	}
+	m_lineedit->setText( stringValue );
 	m_lineedit->end(false);
 	m_lineedit->selectAll();
 }

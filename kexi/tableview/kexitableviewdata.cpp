@@ -396,10 +396,11 @@ bool KexiTableViewData::isDBAware()
 }
 
 bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item, 
-	int colnum, QVariant newval)
+	int colnum, QVariant newval, bool allowSignals)
 {
 	m_result.clear();
-	emit aboutToChangeCell(item, colnum, newval, &m_result);
+	if (allowSignals)
+		emit aboutToChangeCell(item, colnum, newval, &m_result);
 	if (!m_result.success)
 		return false;
 

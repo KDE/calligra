@@ -62,8 +62,9 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
 #endif
 	}
 
-	m_rightMargin = 0;//TODO
+	m_hasFocusableWidget = true;
 
+	m_rightMargin = 0;//TODO
 }
 
 /*KexiTableEdit::KexiTableEdit(QVariant value, QWidget* parent, const char* name)
@@ -193,22 +194,6 @@ void KexiTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 		align |= AlignRight;
 		if (!val.isNull())
 			txt = QString::number(num);
-	}
-	else if (m_column->field->type() == KexiDB::Field::Boolean) {
-		int s = QMAX(h - 5, 12);
-		s = QMIN( h-3, s );
-		s = QMIN( w-3, s );//avoid too large box
-//		QRect r(w/2 - s/2 + x, h/2 - s/2 - 1, s, s);
-		QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
-		p->setPen(QPen(colorGroup().text(), 1));
-		p->drawRect(r);
-		if (val.asBool())
-		{
-			p->drawLine(r.x(), r.y(), r.right(), r.bottom());
-			p->drawLine(r.x(), r.bottom(), r.right(), r.y());
-//			p->drawLine(r.x() + 2, r.y() + 2, r.right() - 1, r.bottom() - 1);
-//			p->drawLine(r.x() + 2, r.bottom() - 2, r.right() - 1, r.y() + 1);
-		}
 	}
 /*MOVE TO Date editor!!!!
 else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time

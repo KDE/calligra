@@ -64,6 +64,7 @@
 #include "kexiinputtableedit.h"
 #include "kexicomboboxtableedit.h"
 #include "kexiblobtableedit.h"
+#include "kexibooltableedit.h"
 
 #include "kexitableview_p.h"
 
@@ -89,6 +90,9 @@ void KexiTableView::initCellEditorFactories()
 
 	item = new KexiComboBoxEditorFactoryItem();
 	KexiCellEditorFactory::registerItem( KexiDB::Field::Enum, *item );
+
+	item = new KexiBoolEditorFactoryItem();
+	KexiCellEditorFactory::registerItem( KexiDB::Field::Boolean, *item );
 
 	//default type
 	item = new KexiInputEditorFactoryItem();
@@ -427,6 +431,8 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 
 	initDataContents();
 
+	emit dataSet( m_data );
+
 //	QSize s(tableSize());
 //	resizeContents(s.width(),s.height());
 }
@@ -586,16 +592,29 @@ void KexiTableView::insertEmptyRow(int row)
 		|| (row!=-1 && row >= (rows()+isInsertingEnabled()?1:0) ) )
 		return;
 
-	d->pCurrentItem = new KexiTableItem(columns());
-	m_data->insertRow(*d->pCurrentItem, d->curRow);
+	KexiTableItem *newItem = new KexiTableItem(columns());
+	insertItem(newItem, row);
+}
+
+void KexiTableView::insertItem(KexiTableItem *newItem, int row)
+{
+	bool changeCurrent = (row==-1 || row==d->curRow);
+	if (changeCurrent) {
+		row = (d->curRow >= 0 ? d->curRow : 0);
+		d->pCurrentItem = newItem;
+		d->curRow = row;
+	}
+	m_data->insertRow(*newItem, row);
 
 	QSize s(tableSize());
 	resizeContents(s.width(),s.height());
 
 	//redraw only this row and below:
 	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
-	updateContents( columnPos( leftcol ), rowPos(d->curRow), 
-		clipper()->width(), clipper()->height() - (rowPos(d->curRow) - contentsY()) );
+//	updateContents( columnPos( leftcol ), rowPos(d->curRow), 
+//		clipper()->width(), clipper()->height() - (rowPos(d->curRow) - contentsY()) );
+	updateContents( columnPos( leftcol ), rowPos(row), 
+		clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
 
 	d->pVerticalHeader->addLabel();
 
@@ -1088,7 +1107,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 	p->setPen(pen);
 
-	if (d->pEditor && row == d->curRow && col == d->curCol) //don't paint contents of edited cell
+	if (d->pEditor && row == d->curRow && col == d->curCol //don't paint contents of edited cell
+		&& d->pEditor->hasFocusableWidget() //..if it's visible
+	   )
 		return;
 
 	KexiTableEdit *edit = editor( col, /*ignoreMissingEditor=*/true );
@@ -1115,8 +1136,16 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	QVariant cell_value;
 	if ((uint)col < item->count()) {
 		if (d->pCurrentItem == item) {
-			//we're displaying values from edit buffer, if available
-			cell_value = *bufferedValueAt(col);
+			if (d->pEditor && row == d->curRow && col == d->curCol && !d->pEditor->hasFocusableWidget()) {
+				//we're over editing cell and the editor has no widget
+				// - we're displaying internal values, not buffered
+				bool ok;
+				cell_value = d->pEditor->value(ok);
+			}
+			else {
+				//we're displaying values from edit buffer, if available
+				cell_value = *bufferedValueAt(col);
+			}
 		}
 		else {
 			cell_value = item->at(col);
@@ -1404,7 +1433,6 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		if(columnType(d->curCol) == KexiDB::Field::Boolean && columnEditable(d->curCol))
 		{
 			boolToggled();
-			updateCell( d->curRow, d->curCol );
 		}
 #if 0 //js: TODO
 		else if(columnType(d->curCol) == QVariant::StringList && columnEditable(d->curCol))
@@ -1499,8 +1527,8 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 
 void KexiTableView::startEditCurrentCell()
 {
-	if (columnType(d->curCol) == KexiDB::Field::Boolean)
-		return;
+//	if (columnType(d->curCol) == KexiDB::Field::Boolean)
+//		return;
 	if (isReadOnly() || !columnEditable(d->curCol))
 		return;
 	if (d->pEditor)
@@ -1602,7 +1630,12 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			e->accept();
 			return;
 		} else if (e->key() == Key_Return || e->key() == Key_Enter) {
-			acceptEditor();
+			if (columnType(d->curCol) == KexiDB::Field::Boolean) {
+				boolToggled();
+			}
+			else {
+				acceptEditor();
+			}
 			e->accept();
 			return;
 		}
@@ -1755,13 +1788,20 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			}
 		}
 		break;
-
 	case Key_Enter:
 	case Key_Return:
 	case Key_F2:
 		if (nobtn && !ro && columnEditable(curCol)) {
-			startEditCurrentCell();
-			return;
+			if (columnType(d->curCol) == KexiDB::Field::Boolean) {
+				if (e->key()==Key_Enter || e->key()==Key_Return) {
+					boolToggled();
+					return;
+				}
+			}
+			else {
+				startEditCurrentCell();
+				return;
+			}
 		}
 		break;
 	case Key_Backspace:
@@ -1829,12 +1869,19 @@ void KexiTableView::emitSelected()
 
 void KexiTableView::boolToggled()
 {
-	int s = d->pCurrentItem->at(d->curCol).toInt();
+	startEditCurrentCell();
+	if (d->pEditor) {
+		d->pEditor->clickedOnContents();
+	}
+	acceptEditor();
+	updateCell(d->curRow, d->curCol);
+
+/*	int s = d->pCurrentItem->at(d->curCol).toInt();
 	QVariant oldValue=d->pCurrentItem->at(d->curCol);
 	(*d->pCurrentItem)[d->curCol] = QVariant(s ? 0 : 1);
 	updateCell(d->curRow, d->curCol);
-	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol, oldValue);
-	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);
+//	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol, oldValue);
+//	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);*/
 }
 
 void KexiTableView::clearSelection()
@@ -1844,6 +1891,7 @@ void KexiTableView::clearSelection()
 	int oldCol = d->curCol;
 	d->curRow = -1;
 	d->curCol = -1;
+	d->pCurrentItem = 0;
 	updateRow( oldRow );
 	setNavRowNumber(-1);
 }
@@ -2020,91 +2068,16 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 	d->pEditor = editor( col );
 	if (!d->pEditor)
 		return;
-/*
-	KexiTableViewColumn *tvcol = m_data->column(col);
-	int t = tvcol->field->type();
-
-	//find the editor for this column
-	d->pEditor = d->editors[ tvcol ];
-	if (!d->pEditor) {//not found: create
-		d->pEditor = KexiCellEditorFactory::createEditor(*m_data->column(col)->field, viewport());
-		if (!d->pEditor) {//create error!
-			//js TODO: show error???
-			cancelRowEdit();
-			return;
-		}
-		d->pEditor->installEventFilter(this);
-		if (d->pEditor->view())
-			d->pEditor->view()->installEventFilter(this);
-		//store
-		d->editors.insert( tvcol, d->pEditor );
-	}*/
 
 	d->pEditor->init(*bufferedValueAt(col), addText, removeOld);
-	moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
-
-/*
-	if (t==KexiDB::Field::BLOB) {
-//			d->pEditor = new KexiBlobTableEdit(val, *m_data->column(col)->field, addText, viewport());
-			d->pEditor = new KexiBlobTableEdit(val, *m_data->column(col)->field, viewport());
-			d->pEditor->resize(columnWidth(d->curCol)-1, 150);
-			moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
-	}
-	else if(t == KexiDB::Field::Enum) {
-			d->pEditor = new KexiComboBoxTableEdit(val, *m_data->column(col)->field, addText, viewport());
-			d->pEditor->resize(columnWidth(d->curCol)-1, 150);
-			moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
-	}
-
-#if 0 //todo(js)
-		case QVariant::StringList:
-			d->pEditor = new KexiComboBoxTableEdit(static_cast<KexiDB::Field::Type>(val.toInt()),
-				QStringList(), viewport(), "inPlaceEd");
-			break;
-		case QVariant::Date:
-			d->pEditor = new KexiDateTableEdit(val, viewport(), "inPlaceEd");
-			kdDebug(44021) << "date editor created..." << endl;
-			break;
-#endif
-	else {//default editor
-#if 0 //todo(js)
-			d->pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd",
-			 d->pColumnDefaults.at(col)->toStringList());
-#else
-			d->pEditor = new KexiInputTableEdit(val, *m_data->column(col)->field, addText, viewport());
-//			d->pEditor = new KexiInputTableEdit(val, t, addText, viewport(), "inPlaceEd",
-//			 QStringList());
-#endif
-//already done in editor			static_cast<KexiInputTableEdit*>(d->pEditor)->end(false);
-	}
-
-#ifdef Q_WS_WIN
-//TODO
-	if (columnType(col)==KexiDB::Field::Date) {
-		moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow)-1);
-		d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight()+1);
-	}
-	else {
-		moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow)-1);
-		d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight());
-	}
-#else
-	if (columnType(col)==KexiDB::Field::Date) {
-		moveChild(d->pEditor, columnPos(d->curCol)-0, rowPos(d->curRow)-2);
-		d->pEditor->resize(columnWidth(d->curCol)+0, rowHeight()+3);
-	}
-	else {
+	if (d->pEditor->hasFocusableWidget()) {
 		moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
-		d->pEditor->resize(columnWidth(d->curCol)-2, rowHeight()-1);
+
+		d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight()-1);
+		d->pEditor->show();
+
+		d->pEditor->setFocus();
 	}
-#endif
-//	moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
-*/
-
-	d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight()-1);
-	d->pEditor->show();
-
-	d->pEditor->setFocus();
 
 	if (startRowEdit)
 		emit rowEditStarted(d->curRow);
@@ -2268,7 +2241,14 @@ void KexiTableView::contentsDropEvent(QDropEvent *ev)
 		QPoint p = ev->pos();
 		int row = rowAt(p.y());
 		KexiTableItem *item = m_data->at(row);
-		emit droppedAtRow(item, row, ev);
+		KexiTableItem *newItem = 0;
+		emit droppedAtRow(item, row, ev, newItem);
+		if (newItem) {
+			const int realRow = (row==d->curRow ? -1 : row);
+			insertItem(newItem, realRow);
+			setCursor(row, 0);
+//			d->pCurrentItem = newItem;
+		}
 	}
 }
 
