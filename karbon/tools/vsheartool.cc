@@ -70,7 +70,6 @@ VShearTool::setCursor( const QPoint &p ) const
 void
 VShearTool::drawTemporaryObject()
 {
-	kdDebug() << "VShearTool::drawTemporaryObject" << endl;
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
@@ -111,8 +110,6 @@ VShearTool::drawTemporaryObject()
 			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
 			m_s2 = 0;
 		}
-	kdDebug() << " m_s1 : " << m_s1 << endl;
-	kdDebug() << " m_s2 : " << m_s2 << endl;
 		// shear operation
 		QWMatrix mat;
 		mat.translate( m_fp.x() / view()->zoom(), m_fp.y() / view()->zoom() );

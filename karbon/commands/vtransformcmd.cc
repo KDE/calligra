@@ -24,6 +24,8 @@ VTransformCmd::VTransformCmd( VDocument *doc, const QString& name )
 	m_selection = m_doc->selection()
 		? new VSelection( *m_doc->selection() )
 		: new VSelection();
+
+	m_selectedSubObjects = false;
 }
 
 VTransformCmd::~VTransformCmd()
