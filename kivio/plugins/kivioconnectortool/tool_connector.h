@@ -46,6 +46,10 @@ class ConnectorTool : public Kivio::MouseTool
   public slots:
     void setActivated(bool a);
   
+  protected slots:
+    void activateStraight();
+    void activatePolyline();
+  
   signals:
     void operationDone();
   

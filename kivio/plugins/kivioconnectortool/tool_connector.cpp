@@ -48,13 +48,16 @@ ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Co
 {
   m_connectorAction = new KToggleAction(i18n("Straight Connector"), "kivio_connector", 0, actionCollection(), "connector");
   connect(m_connectorAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
+  connect(m_connectorAction, SIGNAL(activated()), this, SLOT(activateStraight()));
   m_connectorAction->setExclusiveGroup("ConnectorTool");
 
   m_polyLineAction = new KToggleAction(i18n("Polyline Connector"), "kivio_connector", 0,
     actionCollection(), "polyLineConnector");
   connect(m_polyLineAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
+  connect(m_polyLineAction, SIGNAL(activated()), this, SLOT(activatePolyline()));
   m_polyLineAction->setExclusiveGroup("ConnectorTool");
   
+  m_type = StraightConnector;
   m_mode = stmNone;
   m_pDragData = 0;
 
@@ -106,13 +109,6 @@ bool ConnectorTool::processEvent( QEvent* e )
 void ConnectorTool::setActivated(bool a)
 {
   if(a) {
-    if(!m_polyLineAction->isChecked()) {
-      m_connectorAction->setChecked(true);
-      m_type = StraightConnector;
-    } else {
-      m_type = PolyLineConnector;
-    }
-    
     view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
     m_pStencil = 0;
@@ -122,6 +118,7 @@ void ConnectorTool::setActivated(bool a)
     m_pStencil = 0;
     delete m_pDragData;
     m_pDragData = 0;
+    m_type = StraightConnector;
     m_connectorAction->setChecked(false);
     m_polyLineAction->setChecked(false);
   }
@@ -311,6 +308,20 @@ void ConnectorTool::endRubberBanding(QMouseEvent *)
 {
   connector(view()->canvasWidget()->rect());
   m_pStencil = 0;
+}
+
+void ConnectorTool::activateStraight()
+{
+  m_type = StraightConnector;
+  m_connectorAction->setChecked(true);
+  m_polyLineAction->setChecked(false);
+}
+
+void ConnectorTool::activatePolyline()
+{
+  m_type = PolyLineConnector;
+  m_connectorAction->setChecked(false);
+  m_polyLineAction->setChecked(true);
 }
 
 #include "tool_connector.moc"
