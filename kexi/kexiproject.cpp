@@ -87,18 +87,6 @@ KexiProject::saveProject()
 //	QDomText tPass = domDoc.createTextNode(m_cred.password);
 //	passElement.appendChild(tPass);
 
-	for(QStringList::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
-	{
-		QDomElement refs = domDoc.createElement("references");
-		projectElement.appendChild(refs);
-
-		QDomElement ref = domDoc.createElement("embedded");
-		refs.appendChild(ref);
-
-		QDomText tref = domDoc.createTextNode((*it));
-		ref.appendChild(tref);
-	}
-	
 	QDomText tPass;
 	
 	if(m_cred.savePassword)
@@ -118,6 +106,19 @@ KexiProject::saveProject()
 	QDomText tSavePass = domDoc.createTextNode(boolToString(m_cred.savePassword));
 	savePassElement.appendChild(tSavePass);
 
+	QDomElement refs = domDoc.createElement("references");
+	projectElement.appendChild(refs);
+
+	for(QStringList::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
+	{
+
+		QDomElement ref = domDoc.createElement("embedded");
+		refs.appendChild(ref);
+
+		QDomText tref = domDoc.createTextNode((*it));
+		ref.appendChild(tref);
+	}
+
 	QByteArray data = domDoc.toCString();
 	data.resize(data.size()-1);
 
@@ -134,7 +135,7 @@ KexiProject::saveProject()
 		
 		delete store;
 		m_modified = false;
-		kexi->mainWindow()->slotProjectModified();
+//		kexi->mainWindow()->slotProjectModified();
 		return true;
 	}
 
@@ -188,6 +189,19 @@ KexiProject::loadProject(const QString& url)
 	QDomElement passElement = projectData.namedItem("password").toElement();
 	QDomElement savePassElement = projectData.namedItem("savePassword").toElement();
 
+	QDomElement fileRefs = projectData.namedItem("referenzes").toElement();
+	for(QDomNode n = fileRefs.firstChild(); !n.isNull(); n.nextSibling())
+	{
+		QString reference = n.toText().data();
+		kdDebug() << "KexiProject::loadProject(): reference " << reference << endl;
+		if(reference.contains(".query") != 0)
+		{
+			QStringList pList = QStringList::split("/", reference, false);
+			QString qName=(*pList.end()).left((*pList.end()).contains("."));
+			kdDebug() << "KexiProject::loadProject(): adding Q: " << qName << endl;
+		}
+	}
+
 	Credentials parsedCred;
 	parsedCred.driver   = engineElement.text();
 	parsedCred.host     = hostElement.text();
@@ -219,7 +233,8 @@ KexiProject::loadProject(const QString& url)
 	initDbConnection(parsedCred);
 	
 	m_modified = mod;
-	kexi->mainWindow()->slotProjectModified();
+	emit docModified();
+//	kexi->mainWindow()->slotProjectModified();
 	
 	kdDebug() << "File opened!" << endl;
 	
@@ -249,7 +264,8 @@ KexiProject::initDbConnection(const Credentials &cred, const bool create)
 		m_cred = cred;
 		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
 		m_modified = true;
-		kexi->mainWindow()->slotProjectModified();
+//		kexi->mainWindow()->slotProjectModified();
+		emit docModified();
 		return true;
 	}
 	else
@@ -292,7 +308,8 @@ KexiProject::clear()
 {
 	m_url = "";
 	m_modified = false;
-	kexi->mainWindow()->slotProjectModified();
+//	kexi->mainWindow()->slotProjectModified();
+	emit docModified();
 }
 
 void
@@ -301,6 +318,12 @@ KexiProject::addFileReference(QString path)
 	m_fileReferences.append(path);
 }
 
+void
+KexiProject::setModified()
+{
+	m_modified = true;
+	emit docModified();
+}
 
 QString
 KexiProject::boolToString(bool b)

@@ -275,7 +275,7 @@ KexiQueryDesigner::slotSave(KoStore *store)
 
 		if(store)
 		{
-			store->open("/query/" + m_identifier + ".xml");
+			store->open("/query/" + m_identifier + ".query");
 			store->write(data);
 			store->close();
 		}

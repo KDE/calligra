@@ -23,7 +23,6 @@
 #define KEXI_PROJECT_H
 
 #include <qobject.h>
-//#include <qsqldatabase.h>
 
 #include "kexiDB/kexidb.h"
 #include "kexiformmanager.h"
@@ -59,7 +58,9 @@ public:
 	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
 	void clear();
-	
+
+	void setModified();
+
 	KexiDB* db() { return m_db; };
 	KexiFormManager *formManager() {return m_formManager;}
 	QString url() { return m_url; }

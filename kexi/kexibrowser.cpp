@@ -250,8 +250,12 @@ void KexiBrowser::slotCreateQuery()
 	{
 		KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow()->workspaceWidget(), name, "query");
 		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, name);
-		kexi->project()->addFileReference("/query/" + name + ".xml");
+		kexi->project()->addFileReference("/query/" + name + ".query");
+		m_queries->setOpen(true);
 		kqd->show();
+
+		kexi->project()->setModified();
+
 	}
 }
 
