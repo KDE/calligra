@@ -1,9 +1,13 @@
 [Desktop Entry]
 Name=KChart
-Name[eo]=Kartoj
 Name[hu]=KGrafikon
+Name[is]=Rit
+Name[mk]=K-график
 Name[no]=KChat
-Comment=
+Name[pt]=Gráficos
+Name[sv]=Diagram
+Comment=Chart
+Comment[mk]=Конфигурација што води по едноставни чекори
 Exec=kchart
 X-KDE-Library=libkchart
 X-KDE-LibraryMajor=1
