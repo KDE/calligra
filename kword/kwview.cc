@@ -98,9 +98,9 @@
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
 {
-    doc = 0L;
-    gui = 0;
-    kspell = 0;
+    m_doc = _doc;
+    m_gui = 0;
+    m_kspell = 0;
     m_border.left.color = white;
     m_border.left.style = Border::SOLID;
     m_border.left.ptWidth = 0;
@@ -114,10 +114,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_actionList.setAutoDelete( true );
     searchEntry = 0L;
     replaceEntry = 0L;
-    doc = _doc;
     backColor = QBrush( white );
     // Default values.
-    m_zoomViewModeNormal = doc->zoom();
+    m_zoomViewModeNormal = m_doc->zoom();
     m_zoomViewModePreview = 33;
 
     setInstance( KWFactory::global() );
@@ -131,41 +130,41 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     createKWGUI();
     initConfig();
 
-    connect( doc, SIGNAL( pageNumChanged() ),
+    connect( m_doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
 
-    connect( doc, SIGNAL( docStructureChanged(TypeStructDocItem) ),
+    connect( m_doc, SIGNAL( docStructureChanged(TypeStructDocItem) ),
              this, SLOT( docStructChanged(TypeStructDocItem)) );
 
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 
-    connect( gui->canvasWidget(), SIGNAL(currentFrameSetEditChanged()),
+    connect( m_gui->canvasWidget(), SIGNAL(currentFrameSetEditChanged()),
              this, SLOT(slotFrameSetEditChanged()) );
 
-    connect( gui->canvasWidget(), SIGNAL(currentMouseModeChanged(MouseMode)),
+    connect( m_gui->canvasWidget(), SIGNAL(currentMouseModeChanged(MouseMode)),
              this, SLOT(setTool(MouseMode)));
 
     // Cut and copy are directly connected to the selectionChanged signal
-    if ( doc->isReadWrite() )
-        connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+    if ( m_doc->isReadWrite() )
+        connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
                  actionEditCut, SLOT(setEnabled(bool)) );
     else
         actionEditCut->setEnabled( false );
 
-    connect( gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+    connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
 
-    connect( gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
+    connect( m_gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
              this, SLOT(frameSelectedChanged()));
 
-    connect( gui->canvasWidget(), SIGNAL(docStructChanged(TypeStructDocItem)),
+    connect( m_gui->canvasWidget(), SIGNAL(docStructChanged(TypeStructDocItem)),
              this, SLOT(docStructChanged(TypeStructDocItem)));
     if(shell())
-        connect( shell(), SIGNAL( documentSaved()),doc,SLOT(slotDocumentInfoModifed() ) );
+        connect( shell(), SIGNAL( documentSaved()), m_doc,SLOT(slotDocumentInfoModifed() ) );
 
-    gui->canvasWidget()->updateCurrentFormat();
-    setFocusProxy( gui->canvasWidget() );
+    m_gui->canvasWidget()->updateCurrentFormat();
+    setFocusProxy( m_gui->canvasWidget() );
 
     KStatusBar * sb = statusBar();
     ASSERT(sb);
@@ -177,7 +176,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 KWView::~KWView()
 {
     // Delete gui while we still exist ( it needs documentDeleted() )
-    delete gui;
+    delete m_gui;
     delete m_sbPageLabel;
 }
 
@@ -195,21 +194,21 @@ void KWView::initConfig()
       ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
       ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
       ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-      getGUI()->getDocument()->setKSpellConfig(ksconfig);
+      m_doc->setKSpellConfig(ksconfig);
   }
   if(config->hasGroup("Interface" ) )
   {
       config->setGroup( "Interface" );
-      getGUI()->getDocument()->setGridY(config->readNumEntry("GridY",10));
-      getGUI()->getDocument()->setGridX(config->readNumEntry("GridX",10));
+      m_doc->setGridY(config->readNumEntry("GridY",10));
+      m_doc->setGridX(config->readNumEntry("GridX",10));
       // Config-file value in mm, default 10 pt
       double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
-      doc->setIndentValue(indent);
+      m_doc->setIndentValue(indent);
       changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
 
-      doc->setShowRuler(config->readBoolEntry("Rulers",true));
-      doc->setAutoSave((config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()))*60);
-      doc->setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
+      m_doc->setShowRuler(config->readBoolEntry("Rulers",true));
+      m_doc->setAutoSave((config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()))*60);
+      m_doc->setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
   }
 }
 
@@ -223,25 +222,25 @@ void KWView::initGui()
 {
     clipboardDataChanged();
 
-    if ( gui )
-        gui->showGUI();
+    if ( m_gui )
+        m_gui->showGUI();
     setTool( MM_EDIT );
-    actionViewFrameBorders->setChecked( doc->getViewFrameBorders() );
-    actionViewFormattingChars->setChecked( doc->getViewFormattingChars());
+    actionViewFrameBorders->setChecked( m_doc->getViewFrameBorders() );
+    actionViewFormattingChars->setChecked( m_doc->getViewFormattingChars());
 
-    actionViewHeader->setChecked(doc->isHeaderVisible());
-    actionViewFooter->setChecked(doc->isFooterVisible());
+    actionViewHeader->setChecked(m_doc->isHeaderVisible());
+    actionViewFooter->setChecked(m_doc->isFooterVisible());
     actionFormatDecreaseIndent->setEnabled(false);
-    //setNoteType(doc->getNoteType(), false);
+    //setNoteType(m_doc->getNoteType(), false);
 
     actionFormatColor->setColor( Qt::black );
 
     //refresh zoom combobox
-    changeZoomMenu( doc->zoom() );
-    showZoom( doc->zoom() );
+    changeZoomMenu( m_doc->zoom() );
+    showZoom( m_doc->zoom() );
 
-    MouseMode mouseMode=gui->canvasWidget()->getMouseMode();
-    gui->canvasWidget()->setMouseMode( mouseMode );
+    MouseMode mouseMode=m_gui->canvasWidget()->getMouseMode();
+    m_gui->canvasWidget()->setMouseMode( mouseMode );
 
     showFormulaToolbar( FALSE );
 
@@ -699,7 +698,7 @@ void KWView::fileStatistics()
     ulong charsWithoutSpace = 0L;
     ulong words = 0L;
     ulong sentences = 0L;
-    QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
+    QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( ; framesetIt.current(); ++framesetIt )
     {
         KWFrameSet *frameSet = framesetIt.current();
@@ -733,20 +732,20 @@ void KWView::createKWGUI()
     // setup GUI
     setupActions();
 
-    gui = new KWGUI( this, doc, this );
-    gui->setGeometry( 0, 0, width(), height() );
-    gui->show();
+    m_gui = new KWGUI( this, this );
+    m_gui->setGeometry( 0, 0, width(), height() );
+    m_gui->show();
 }
 
 void KWView::showFormulaToolbar( bool show )
 {
   // This might not be exactly the right place. But these actions
   // must be enabled when a formula is active...
-  doc->getFormulaDocument()->getMakeGreekAction()->setEnabled( show );
-  doc->getFormulaDocument()->getAddGenericUpperAction()->setEnabled( show );
-  doc->getFormulaDocument()->getAddGenericLowerAction()->setEnabled( show );
-  doc->getFormulaDocument()->getRemoveEnclosingAction()->setEnabled( show );
-  doc->getFormulaDocument()->getInsertSymbolAction()->setEnabled( show );
+  m_doc->getFormulaDocument()->getMakeGreekAction()->setEnabled( show );
+  m_doc->getFormulaDocument()->getAddGenericUpperAction()->setEnabled( show );
+  m_doc->getFormulaDocument()->getAddGenericLowerAction()->setEnabled( show );
+  m_doc->getFormulaDocument()->getRemoveEnclosingAction()->setEnabled( show );
+  m_doc->getFormulaDocument()->getInsertSymbolAction()->setEnabled( show );
   if(shell())
       shell()->showToolbar( "formula_toolbar", show );
 }
@@ -755,7 +754,7 @@ void KWView::updatePageInfo()
 {
     if ( m_sbPageLabel )
     {
-        KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+        KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit )
             m_currentPage = edit->currentFrame()->pageNum();
         /*kdDebug() << this << " KWView::updatePageInfo m_currentPage=" << m_currentPage
@@ -764,12 +763,12 @@ void KWView::updatePageInfo()
 
         // ### TODO what's the current page when we have no edit object (e.g. frames are selected) ?
         // To avoid bugs, apply max page number in case a page was removed.
-        m_currentPage = QMIN( m_currentPage, doc->getPages()-1 );
+        m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
 
-        m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(doc->getPages())+' ' );
-        QPoint rulerTopLeft = gui->canvasWidget()->rulerPos();
-        gui->getHorzRuler()->setOffset( rulerTopLeft.x(), 0 );
-        gui->getVertRuler()->setOffset( 0, rulerTopLeft.y() );
+        m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ' );
+        QPoint rulerTopLeft = m_gui->canvasWidget()->rulerPos();
+        m_gui->getHorzRuler()->setOffset( rulerTopLeft.x(), 0 );
+        m_gui->getVertRuler()->setOffset( 0, rulerTopLeft.y() );
     }
 }
 
@@ -782,7 +781,7 @@ void KWView::pageNumChanged()
 void KWView::updateFrameStatusBarItem()
 {
     KStatusBar * sb = statusBar();
-    int nbFrame=doc->getSelectedFrames().count();
+    int nbFrame=m_doc->getSelectedFrames().count();
     if ( sb && nbFrame > 0 )
     {
         if ( !m_sbFramesLabel )
@@ -792,9 +791,9 @@ void KWView::updateFrameStatusBarItem()
         }
         if ( nbFrame == 1 )
         {
-            KWUnit::Unit unit = doc->getUnit();
-            QString unitName = doc->getUnitName();
-            KWFrame * frame = doc->getFirstSelectedFrame();
+            KWUnit::Unit unit = m_doc->getUnit();
+            QString unitName = m_doc->getUnitName();
+            KWFrame * frame = m_doc->getFirstSelectedFrame();
             m_sbFramesLabel->setText( i18n( "Statusbar info", "%1. Frame: %2, %3  -  %4, %5 (width: %6, height: %7) (%8)" )
                                       .arg( frame->getFrameSet()->getName() )
                                       .arg( KWUnit::userValue( frame->left(), unit ) )
@@ -818,7 +817,7 @@ void KWView::updateFrameStatusBarItem()
 void KWView::clipboardDataChanged()
 {
     // Can we paste into something ?
-    if ( !gui || !gui->canvasWidget()->currentFrameSetEdit() || !doc->isReadWrite() )
+    if ( !m_gui || !m_gui->canvasWidget()->currentFrameSetEdit() || !m_doc->isReadWrite() )
     {
         actionEditPaste->setEnabled(false);
         return;
@@ -842,9 +841,9 @@ void KWView::setupPrinter( KPrinter &prt )
     prt.setPageSelection( KPrinter::ApplicationSide );
     prt.setCurrentPage( currentPage() + 1 );
 #endif
-    prt.setMinMax( 1, doc->getPages() );
+    prt.setMinMax( 1, m_doc->getPages() );
 
-    KoPageLayout pgLayout = doc->pageLayout();
+    KoPageLayout pgLayout = m_doc->pageLayout();
 
     prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pgLayout.format ) ) );
 
@@ -857,31 +856,31 @@ void KWView::setupPrinter( KPrinter &prt )
 void KWView::print( KPrinter &prt )
 {
     // Don't repaint behind the print dialog until we're done zooming/unzooming the doc
-    gui->canvasWidget()->setUpdatesEnabled(false);
-    gui->canvasWidget()->viewport()->setCursor( waitCursor );
+    m_gui->canvasWidget()->setUpdatesEnabled(false);
+    m_gui->canvasWidget()->viewport()->setCursor( waitCursor );
 
     prt.setFullPage( true );
 
     // ### HACK: disable zooming-when-printing if embedded parts are used.
     // No koffice app supports zooming in paintContent currently.
     bool doZoom = true;
-    QListIterator<KWFrameSet> fit = doc->framesetsIterator();
+    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() && doZoom ; ++fit )
         if ( fit.current()->getFrameType() == FT_PART )
             doZoom = false;
 
-    int oldZoom = doc->zoom();
+    int oldZoom = m_doc->zoom();
     // We don't get valid metrics from the printer - and we want a better resolution
     // anyway (it's the PS driver that takes care of the printer resolution).
     QPaintDeviceMetrics metrics( &prt );
-    //doc->setZoomAndResolution( 100, metrics.logicalDpiX(), metrics.logicalDpiY(), false );
+    //m_doc->setZoomAndResolution( 100, metrics.logicalDpiX(), metrics.logicalDpiY(), false );
     if ( doZoom )
-        doc->setZoomAndResolution( 100, 300, 300, false );
+        m_doc->setZoomAndResolution( 100, 300, 300, false );
     //kdDebug() << "KWView::print zoom&res set" << endl;
 
     bool serialLetter = FALSE;
 #if 0
-    QList<KWVariable> *vars = doc->getVariables();
+    QList<KWVariable> *vars = m_doc->getVariables();
     KWVariable *v = 0;
     for ( v = vars->first(); v; v = vars->next() ) {
         if ( v->getType() == VT_SERIALLETTER ) {
@@ -890,8 +889,8 @@ void KWView::print( KPrinter &prt )
         }
     }
 
-    if ( !doc->getSerialLetterDataBase() ||
-         doc->getSerialLetterDataBase()->getNumRecords() == 0 )
+    if ( !m_doc->getSerialLetterDataBase() ||
+         m_doc->getSerialLetterDataBase()->getNumRecords() == 0 )
         serialLetter = FALSE;
 #endif
     //float left_margin = 0.0;
@@ -900,7 +899,7 @@ void KWView::print( KPrinter &prt )
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    doc->getPageLayout( pgLayout, cl, hf );
+    m_doc->getPageLayout( pgLayout, cl, hf );
     KoPageLayout oldPGLayout = pgLayout;
 
     if ( pgLayout.format == PG_SCREEN )
@@ -910,7 +909,7 @@ void KWView::print( KPrinter &prt )
         pgLayout.ptLeft += 25.8;         // Not sure why we need this....
         pgLayout.ptRight += 15.0;
         // TODO the other units. Well, better get rid of the multiple-unit thing.
-        doc->setPageLayout( pgLayout, cl, hf );
+        m_doc->setPageLayout( pgLayout, cl, hf );
     }
 
     if ( !serialLetter ) {
@@ -918,32 +917,32 @@ void KWView::print( KPrinter &prt )
         painter.begin( &prt );
         if ( doZoom )
             painter.scale( metrics.logicalDpiX() / 300.0, metrics.logicalDpiY() / 300.0 );
-        gui->canvasWidget()->print( &painter, &prt );
+        m_gui->canvasWidget()->print( &painter, &prt );
         painter.end();
     } else {
 #if 0
         QPainter painter;
         painter.begin( &prt );
-        for ( int i = 0; i < doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
-            doc->setSerialLetterRecord( i );
-            gui->canvasWidget()->print( &painter, &prt, left_margin, top_margin );
-            if ( i < doc->getSerialLetterDataBase()->getNumRecords() - 1 )
+        for ( int i = 0; i < m_doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
+            m_doc->setSerialLetterRecord( i );
+            m_gui->canvasWidget()->print( &painter, &prt, left_margin, top_margin );
+            if ( i < m_doc->getSerialLetterDataBase()->getNumRecords() - 1 )
                 prt.newPage();
         }
-        doc->setSerialLetterRecord( -1 );
+        m_doc->setSerialLetterRecord( -1 );
         painter.end();
 #endif
     }
 
     if ( pgLayout.format == PG_SCREEN )
-        doc->setPageLayout( oldPGLayout, cl, hf );
+        m_doc->setPageLayout( oldPGLayout, cl, hf );
 
-    doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
+    m_doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
     //kdDebug() << "KWView::print zoom&res reset" << endl;
 
-    gui->canvasWidget()->setUpdatesEnabled(true);
-    gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
-    doc->repaintAllViews();
+    m_gui->canvasWidget()->setUpdatesEnabled(true);
+    m_gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
+    m_doc->repaintAllViews();
 }
 
 void KWView::showFormat( const QTextFormat &currentFormat )
@@ -986,11 +985,11 @@ void KWView::showFormat( const QTextFormat &currentFormat )
 
 void KWView::showRulerIndent( double _leftMargin, double _firstLine )
 {
-  KoRuler * hRuler = gui ? gui->getHorzRuler() : 0;
+  KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
   if ( hRuler )
   {
-      hRuler->setFirstIndent( KWUnit::userValue( _firstLine + _leftMargin, doc->getUnit() ) );
-      hRuler->setLeftIndent( KWUnit::userValue( _leftMargin, doc->getUnit() ) );
+      hRuler->setFirstIndent( KWUnit::userValue( _firstLine + _leftMargin, m_doc->getUnit() ) );
+      hRuler->setLeftIndent( KWUnit::userValue( _leftMargin, m_doc->getUnit() ) );
       actionFormatDecreaseIndent->setEnabled( _leftMargin>0);
   }
 }
@@ -1118,7 +1117,7 @@ void KWView::setTool( MouseMode _mouseMode )
 
 void KWView::showStyle( const QString & styleName )
 {
-    QListIterator<KWStyle> styleIt( doc->styleList() );
+    QListIterator<KWStyle> styleIt( m_doc->styleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
         if ( styleIt.current()->name() == styleName ) {
@@ -1132,7 +1131,7 @@ void KWView::updateStyleList()
 {
     QString currentStyle = actionFormatStyle->currentText();
     QStringList lst;
-    QListIterator<KWStyle> styleIt( doc->styleList() );
+    QListIterator<KWStyle> styleIt( m_doc->styleList() );
     for (; styleIt.current(); ++styleIt ) {
         lst << i18n("KWord style", styleIt.current()->name().utf8()); // try to translate the name, if standard
     }
@@ -1142,28 +1141,28 @@ void KWView::updateStyleList()
 
 void KWView::editCut()
 {
-    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->cut();
 }
 
 void KWView::editCopy()
 {
-    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->copy();
 }
 
 void KWView::editPaste()
 {
-    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->paste();
 }
 
 void KWView::editSelectAll()
 {
-    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->selectAll();
 }
@@ -1172,10 +1171,10 @@ void KWView::editFind()
 {
     if (!searchEntry)
         searchEntry = new KWSearchContext();
-    KWSearchDia dialog( gui->canvasWidget(), "find", searchEntry );
+    KWSearchDia dialog( m_gui->canvasWidget(), "find", searchEntry );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        KWFindReplace find( gui->canvasWidget(), &dialog );
+        KWFindReplace find( m_gui->canvasWidget(), &dialog );
         find.proceed();
     }
 }
@@ -1186,17 +1185,17 @@ void KWView::editReplace()
         searchEntry = new KWSearchContext();
     if (!replaceEntry)
         replaceEntry = new KWSearchContext();
-    KWReplaceDia dialog( gui->canvasWidget(), "replace", searchEntry, replaceEntry );
+    KWReplaceDia dialog( m_gui->canvasWidget(), "replace", searchEntry, replaceEntry );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        KWFindReplace replace( gui->canvasWidget(), &dialog );
+        KWFindReplace replace( m_gui->canvasWidget(), &dialog );
         replace.proceed();
     }
 }
 
 void KWView::editDeleteFrame()
 {
-    QList<KWFrame> frames=doc->getSelectedFrames();
+    QList<KWFrame> frames=m_doc->getSelectedFrames();
     ASSERT( frames.count() == 1 ); // the action isn't enabled otherwise.
     if( frames.count() != 1)
         return;
@@ -1217,15 +1216,15 @@ void KWView::editDeleteFrame()
                                                           "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
         if (result != KMessageBox::Continue)
             return;
-        doc->deleteTable( fs->getGroupManager() );
+        m_doc->deleteTable( fs->getGroupManager() );
         return;
     }
 
     if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT) {
-        if ( doc->processingType() == KWDocument::WP && doc->getFrameSetNum( fs ) == 0 )
+        if ( m_doc->processingType() == KWDocument::WP && m_doc->getFrameSetNum( fs ) == 0 )
             return;
 
-        KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(doc->getFrameSet( 0 ) );
+        KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ) );
         if ( !textfs )
             return;
 
@@ -1241,7 +1240,7 @@ void KWView::editDeleteFrame()
                                                         i18n("Delete Frame"), i18n("&Delete"));
 
             if (result == KMessageBox::Continue)
-                doc->deleteFrame( theFrame );
+                m_doc->deleteFrame( theFrame );
             return;
         }
 
@@ -1252,23 +1251,23 @@ void KWView::editDeleteFrame()
                                                     i18n("Delete Frame"),
                                                     i18n("&Delete"));
     if (result == KMessageBox::Continue)
-        doc->deleteFrame( theFrame );
+        m_doc->deleteFrame( theFrame );
 }
 
 void KWView::editCustomVars()
 {
-    KWCustomVariablesDia dia( this, doc->getVariables() );
+    KWCustomVariablesDia dia( this, m_doc->getVariables() );
     if(dia.exec())
-        doc->recalcVariables( VT_CUSTOM );
+        m_doc->recalcVariables( VT_CUSTOM );
 }
 
 void KWView::editSerialLetterDataBase()
 {
 #if 0
-    KWSerialLetterEditor *dia = new KWSerialLetterEditor( this, doc->getSerialLetterDataBase() );
+    KWSerialLetterEditor *dia = new KWSerialLetterEditor( this, m_doc->getSerialLetterDataBase() );
     dia->exec();
-    gui->canvasWidget()->recalcWholeText();
-    gui->canvasWidget()->repaintScreen( FALSE );
+    m_gui->canvasWidget()->recalcWholeText();
+    m_gui->canvasWidget()->repaintScreen( FALSE );
     delete dia;
 #endif
 }
@@ -1277,10 +1276,10 @@ void KWView::viewPageMode()
 {
     if ( actionViewPageMode->isChecked() )
     {
-        m_zoomViewModePreview = doc->zoom();
+        m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
-        gui->canvasWidget()->switchViewMode( new KWViewModeNormal( gui->canvasWidget()) );
+        m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_gui->canvasWidget()) );
     }
     else
         actionViewPageMode->setChecked( true ); // always one has to be checked !
@@ -1290,10 +1289,10 @@ void KWView::viewPreviewMode()
 {
     if ( actionViewPreviewMode->isChecked() )
     {
-        m_zoomViewModeNormal = doc->zoom();
+        m_zoomViewModeNormal = m_doc->zoom();
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview, false );
-        gui->canvasWidget()->switchViewMode( new KWViewModePreview( gui->canvasWidget(),doc->getNbPagePerRow() ) );
+        m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_gui->canvasWidget(),m_doc->getNbPagePerRow() ) );
     }
     else
         actionViewPreviewMode->setChecked( true ); // always one has to be checked !
@@ -1351,39 +1350,39 @@ void KWView::showZoom( int zoom )
 
 void KWView::viewFormattingChars()
 {
-    doc->setViewFormattingChars(actionViewFormattingChars->isChecked());
-    gui->canvasWidget()->repaintAll();
+    m_doc->setViewFormattingChars(actionViewFormattingChars->isChecked());
+    m_gui->canvasWidget()->repaintAll();
 }
 
 void KWView::viewFrameBorders()
 {
-    doc->setViewFrameBorders(actionViewFrameBorders->isChecked());
-    gui->canvasWidget()->repaintAll();
+    m_doc->setViewFrameBorders(actionViewFrameBorders->isChecked());
+    m_gui->canvasWidget()->repaintAll();
 }
 
 void KWView::viewHeader()
 {
-    doc->setHeaderVisible( actionViewHeader->isChecked() );
-    doc->updateResizeHandles( );
+    m_doc->setHeaderVisible( actionViewHeader->isChecked() );
+    m_doc->updateResizeHandles( );
     /*
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    doc->getPaeLayout( pgLayout, cl, hf );
-    doc->setPageLayout( pgLayout, cl, hf );
+    m_doc->getPaeLayout( pgLayout, cl, hf );
+    m_doc->setPageLayout( pgLayout, cl, hf );
     */
 }
 
 void KWView::viewFooter()
 {
-    doc->setFooterVisible( actionViewFooter->isChecked() );
-    doc->updateResizeHandles( );
+    m_doc->setFooterVisible( actionViewFooter->isChecked() );
+    m_doc->updateResizeHandles( );
     /*
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    doc->getPageLayout( pgLayout, cl, hf );
-    doc->setPageLayout( pgLayout, cl, hf );
+    m_doc->getPageLayout( pgLayout, cl, hf );
+    m_doc->setPageLayout( pgLayout, cl, hf );
     */
 }
 
@@ -1409,7 +1408,7 @@ void KWView::viewEndNotes()
 void KWView::setNoteType( KWFootNoteManager::NoteType nt, bool change)
 {
     if (change)
-        doc->setNoteType( nt );
+        m_doc->setNoteType( nt );
     switch (nt)
     {
       case KWFootNoteManager::FootNotes:
@@ -1435,33 +1434,33 @@ void KWView::viewZoom( const QString &s )
     int zoom = z.toInt(&ok);
     //bad value
     if(!ok)
-        zoom=doc->zoom();
+        zoom=m_doc->zoom();
     else if(zoom<10 ) //zoom should be >10
-        zoom=doc->zoom();
+        zoom=m_doc->zoom();
     //refresh menu
     changeZoomMenu( zoom );
     //refresh menu item
     showZoom(zoom);
-    //apply zoom if zoom!=doc->zoom()
-    if(zoom != doc->zoom() )
+    //apply zoom if zoom!=m_doc->zoom()
+    if(zoom != m_doc->zoom() )
     {
         setZoom( zoom, true );
 
-        doc->updateResizeHandles();
+        m_doc->updateResizeHandles();
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
             edit->ensureCursorVisible();
     }
 
-    gui->canvasWidget()->setFocus();
+    m_gui->canvasWidget()->setFocus();
 
 }
 
 void KWView::setZoom( int zoom, bool updateViews )
 {
-    doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews );
-    gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
-    gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
+    m_doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews );
+    m_gui->getHorzRuler()->setZoom( m_doc->zoomedResolutionX() );
+    m_gui->getVertRuler()->setZoom( m_doc->zoomedResolutionY() );
 }
 
 void KWView::insertPicture()
@@ -1478,14 +1477,14 @@ void KWView::insertPicture(const QString &filename)
         {
             // ### Old way: edit->insertPicture( filename );
             // New way:
-            KWPictureFrameSet *frameset = new KWPictureFrameSet( doc, QString::null );
+            KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
             QPixmap pix( filename );
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-            int width = qRound( (double)pix.width() * doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-            int height = qRound( (double)pix.height() * doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            int width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+            int height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
             frameset->setFileName( filename, QSize( width, height ) );
-            doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
-            KWFrame *frame = new KWFrame(frameset, 0, 0, doc->unzoomItX( width ), doc->unzoomItY( height ) );
+            m_doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
+            KWFrame *frame = new KWFrame(frameset, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
             frameset->addFrame( frame, false );
             edit->insertFloatingFrameSet( frameset, i18n("Insert Picture Inline") );
             frameset->finalize(); // done last since it triggers a redraw
@@ -1547,7 +1546,7 @@ void KWView::insertVariable()
 void KWView::insertFootNoteEndNote()
 {
 #if 0
-    int start = doc->getFootNoteManager().findStart( gui->canvasWidget()->getCursor() );
+    int start = m_doc->getFootNoteManager().findStart( m_gui->canvasWidget()->getCursor() );
 
     if ( start == -1 )
     {
@@ -1556,8 +1555,8 @@ void KWView::insertFootNoteEndNote()
                                   "endnotes into the first frameset."),
                             i18n("Insert Footnote/Endnote"));
     } else {
-        KWFootNoteDia dia( 0L, "", doc, gui->canvasWidget(), start,
-                 doc->getNoteType() == KWFootNoteManager::FootNotes );
+        KWFootNoteDia dia( 0L, "", m_doc, m_gui->canvasWidget(), start,
+                 m_doc->getNoteType() == KWFootNoteManager::FootNotes );
         dia.show();
     }
 #endif
@@ -1599,7 +1598,7 @@ void KWView::formatFont()
 
         delete fontDia;
     }
-    gui->canvasWidget()->setFocus();
+    m_gui->canvasWidget()->setFocus();
 }
 
 void KWView::formatParagraph()
@@ -1610,7 +1609,7 @@ void KWView::formatParagraph()
         KWParagDia *paragDia = new KWParagDia( this, "",
                                                KWParagDia::PD_SPACING | KWParagDia::PD_ALIGN |
                                                KWParagDia::PD_BORDERS |
-                                               KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, doc );
+                                               KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_doc );
         paragDia->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
@@ -1624,14 +1623,14 @@ void KWView::formatParagraph()
         if(paragDia->isLeftMarginChanged())
         {
             edit->setMargin( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
-            gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), doc->getUnit() ) );
+            m_gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
         }
 
         if(paragDia->isRightMarginChanged())
         {
             edit->setMargin( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
             //koRuler doesn't support setRightIndent
-            //gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), doc->getUnit() ) );
+            //m_gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
         }
         if(paragDia->isSpaceBeforeChanged())
             edit->setMargin( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
@@ -1642,8 +1641,8 @@ void KWView::formatParagraph()
         if(paragDia->isFirstLineChanged())
         {
             edit->setMargin( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
-            gui->getHorzRuler()->setFirstIndent(
-                KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), doc->getUnit() ) );
+            m_gui->getHorzRuler()->setFirstIndent(
+                KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );
         }
 
         if(paragDia->isAlignChanged())
@@ -1672,12 +1671,12 @@ void KWView::formatParagraph()
 
 void KWView::formatPage()
 {
-    if( !doc->isReadWrite())
+    if( !m_doc->isReadWrite())
         return;
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter kwhf;
-    doc->getPageLayout( pgLayout, cl, kwhf );
+    m_doc->getPageLayout( pgLayout, cl, kwhf );
 
     pageLayout tmpOldLayout;
     tmpOldLayout._pgLayout=pgLayout;
@@ -1686,7 +1685,7 @@ void KWView::formatPage()
 
     KoHeadFoot hf;
     int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | DISABLE_UNIT;
-    if ( doc->processingType() == KWDocument::WP )
+    if ( m_doc->processingType() == KWDocument::WP )
         flags = flags | COLUMNS;
     else
         flags = flags | DISABLE_BORDERS;
@@ -1701,23 +1700,23 @@ void KWView::formatPage()
         KWTextFrameSetEdit *edit = currentTextEdit();
         if (edit)
             edit->textFrameSet()->clearUndoRedoInfo();
-        KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,tmpOldLayout,tmpNewLayout ) ;
-        doc->addCommand(cmd);
+        KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
+        m_doc->addCommand(cmd);
 
-        doc->setPageLayout( pgLayout, cl, kwhf );
-        doc->updateRuler();
+        m_doc->setPageLayout( pgLayout, cl, kwhf );
+        m_doc->updateRuler();
 
-        doc->updateResizeHandles();
+        m_doc->updateResizeHandles();
 #if 0
-        gui->canvasWidget()->frameSizeChanged( pgLayout );
+        m_gui->canvasWidget()->frameSizeChanged( pgLayout );
 #endif
     }
 }
 
 void KWView::formatFrameSet()
 {
-    if ( doc->getFirstSelectedFrame() )
-      gui->canvasWidget()->editFrameProperties();
+    if ( m_doc->getFirstSelectedFrame() )
+      m_gui->canvasWidget()->editFrameProperties();
     else // TODO enable/disable the action depending on whether a frame is selected, instead
         KMessageBox::sorry( this,
                             i18n("Sorry, you have to select a frame first."),
@@ -1726,15 +1725,15 @@ void KWView::formatFrameSet()
 
 void KWView::extraSpelling()
 {
-    if (kspell) return; // Already in progress
+    if (m_kspell) return; // Already in progress
     m_spellCurrFrameSetNum = -1;
     startKSpell();
 }
 
 void KWView::extraAutoFormat()
 {
-    doc->getAutoFormat()->readConfig();
-    KWAutoFormatDia dia( this, 0, doc->getAutoFormat() );
+    m_doc->getAutoFormat()->readConfig();
+    KWAutoFormatDia dia( this, 0, m_doc->getAutoFormat() );
     dia.show();
 }
 
@@ -1743,7 +1742,7 @@ void KWView::extraStylist()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->hideCursor();
-    KWStyleManager * styleManager = new KWStyleManager( this, doc );
+    KWStyleManager * styleManager = new KWStyleManager( this, m_doc );
     styleManager->show();
     delete styleManager;
     if ( edit )
@@ -1754,13 +1753,13 @@ void KWView::extraCreateTemplate()
 {
     int width = 60;
     int height = 60;
-    double ratio = doc->ptPaperHeight() / doc->ptPaperWidth();
+    double ratio = m_doc->ptPaperHeight() / m_doc->ptPaperWidth();
     if ( ratio > 1 )
         width = qRound( 60 / ratio );
     else
         height = qRound( 60 / ratio );
-    double zoom = (double)width / doc->ptPaperWidth();
-    int oldZoom = doc->zoom();
+    double zoom = (double)width / m_doc->ptPaperWidth();
+    int oldZoom = m_doc->zoom();
     setZoom( qRound( 100 * zoom ), false );
     kdDebug() << "KWView::extraCreateTemplate ratio=" << ratio << " preview size: " << width << "," << height
               << " zoom:" << zoom << endl;
@@ -1768,13 +1767,13 @@ void KWView::extraCreateTemplate()
     pix.fill( Qt::white );
     QPainter painter;
     painter.begin( &pix );
-    QRect pageRect( 0, 0, doc->paperWidth(), doc->paperHeight() );
+    QRect pageRect( 0, 0, m_doc->paperWidth(), m_doc->paperHeight() );
 
     KWViewModeNormal * viewMode = new KWViewModeNormal( 0L );
     QColorGroup cg = QApplication::palette().active();
 
     // Draw all framesets contents
-    QListIterator<KWFrameSet> fit = doc->framesetsIterator();
+    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
@@ -1789,7 +1788,7 @@ void KWView::extraCreateTemplate()
     KTempFile tempFile( QString::null, ".kwt" );
     tempFile.setAutoDelete(true);
 
-    doc->saveNativeFormat( tempFile.name() );
+    m_doc->saveNativeFormat( tempFile.name() );
 
     KoTemplateCreateDia::createTemplate( "kword_template", KWFactory::global(),
                                          tempFile.name(), pix, this );
@@ -1803,7 +1802,7 @@ void KWView::extraCreateTemplate()
 void KWView::toolsEdit()
 {
     if ( actionToolsEdit->isChecked() )
-        gui->canvasWidget()->setMouseMode( MM_EDIT );
+        m_gui->canvasWidget()->setMouseMode( MM_EDIT );
     else
         actionToolsEdit->setChecked( true ); // always one has to be checked !
 }
@@ -1811,7 +1810,7 @@ void KWView::toolsEdit()
 void KWView::toolsEditFrame()
 {
     if ( actionToolsEditFrames->isChecked() )
-        gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
+        m_gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
     else
         actionToolsEditFrames->setChecked( true ); // always one has to be checked !
 }
@@ -1820,7 +1819,7 @@ void KWView::toolsEditFrame()
 void KWView::toolsCreateText()
 {
     if ( actionToolsCreateText->isChecked() )
-        gui->canvasWidget()->setMouseMode( MM_CREATE_TEXT );
+        m_gui->canvasWidget()->setMouseMode( MM_CREATE_TEXT );
     else
         actionToolsCreateText->setChecked( true ); // always one has to be checked !
 }
@@ -1832,15 +1831,15 @@ void KWView::toolsCreatePix()
         actionToolsCreatePix->setChecked( true ); // always one has to be checked !
         return;
     }
-    gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
 
 
     QString file = selectPicture();
     if ( !file.isEmpty() ) {
-        gui->canvasWidget()->setMouseMode( MM_CREATE_PIX );
-        gui->canvasWidget()->setPixmapFilename( file );
+        m_gui->canvasWidget()->setMouseMode( MM_CREATE_PIX );
+        m_gui->canvasWidget()->setPixmapFilename( file );
     } else
-        gui->canvasWidget()->setMouseMode( MM_EDIT );
+        m_gui->canvasWidget()->setMouseMode( MM_EDIT );
 }
 
 QString KWView::selectPicture()
@@ -1866,8 +1865,8 @@ QString KWView::selectPicture()
 
 void KWView::insertTable()
 {
-    KWCanvas * canvas = gui->canvasWidget();
-    KWTableDia *tableDia = new KWTableDia( this, 0, canvas, doc,
+    KWCanvas * canvas = m_gui->canvasWidget();
+    KWTableDia *tableDia = new KWTableDia( this, 0, canvas, m_doc,
                                            canvas->tableRows(),
                                            canvas->tableCols(),
                                            canvas->tableWidthMode(),
@@ -1883,8 +1882,8 @@ void KWView::insertFormula()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
-        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, QString::null );
-        doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
+        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( m_doc, QString::null );
+        m_doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
         frameset->addFrame( frame, false );
         edit->insertFloatingFrameSet( frameset, i18n("Insert Formula") );
@@ -1893,8 +1892,8 @@ void KWView::insertFormula()
         // Strange, seems we need this - hmm, do we, still ?
         edit->getCursor()->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
         edit->getCursor()->parag()->setChanged( true );
-        doc->slotRepaintChanged( edit->frameSet() );
-        doc->refreshDocStructure(FT_FORMULA);
+        m_doc->slotRepaintChanged( edit->frameSet() );
+        m_doc->refreshDocStructure(FT_FORMULA);
     }
 }
 
@@ -1905,33 +1904,33 @@ void KWView::toolsPart()
         actionToolsCreatePart->setChecked( true ); // always one has to be checked !
         return;
     }
-    gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
 
     KoDocumentEntry pe = KoPartSelectDia::selectPart( this );
     if ( pe.isEmpty() )
         return;
 
-    gui->canvasWidget()->setMouseMode( MM_CREATE_PART );
-    gui->canvasWidget()->setPartEntry( pe );
+    m_gui->canvasWidget()->setMouseMode( MM_CREATE_PART );
+    m_gui->canvasWidget()->setPartEntry( pe );
 }
 
 void KWView::tableInsertRow()
 {
-    gui->canvasWidget()->setMouseMode( MM_EDIT );
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
-    KWInsertDia dia( this, "", table, doc, KWInsertDia::ROW, gui->canvasWidget() );
+    KWInsertDia dia( this, "", table, m_doc, KWInsertDia::ROW, m_gui->canvasWidget() );
     dia.setCaption( i18n( "Insert Row" ) );
     dia.show();
 }
 
 void KWView::tableInsertCol()
 {
-    gui->canvasWidget()->setMouseMode( MM_EDIT );
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
     // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
-    if ( table->boundingRect().right() + 62 > static_cast<int>( doc->ptPaperWidth() ) )
+    if ( table->boundingRect().right() + 62 > static_cast<int>( m_doc->ptPaperWidth() ) )
     {
         KMessageBox::sorry( this,
                             i18n( "There is not enough space at the right of the table\n"
@@ -1940,7 +1939,7 @@ void KWView::tableInsertCol()
     }
     else
     {
-        KWInsertDia dia( this, "", table, doc, KWInsertDia::COL, gui->canvasWidget() );
+        KWInsertDia dia( this, "", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
         dia.setCaption( i18n( "Insert Column" ) );
         dia.show();
     }
@@ -1948,9 +1947,9 @@ void KWView::tableInsertCol()
 
 void KWView::tableDeleteRow()
 {
-    gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
     if ( table->getRows() == 1 )
     {
@@ -1963,12 +1962,12 @@ void KWView::tableDeleteRow()
                                                     i18n("&Delete"));
         if (result == KMessageBox::Continue)
         {
-            doc->deleteTable( table );
+            m_doc->deleteTable( table );
         }
     }
     else
     {
-        KWDeleteDia dia( this, "", table, doc, KWDeleteDia::ROW, gui->canvasWidget() );
+        KWDeleteDia dia( this, "", table, m_doc, KWDeleteDia::ROW, m_gui->canvasWidget() );
         dia.setCaption( i18n( "Delete Row" ) );
         dia.show();
     }
@@ -1977,9 +1976,9 @@ void KWView::tableDeleteRow()
 
 void KWView::tableDeleteCol()
 {
-    gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
     if ( table->getCols() == 1 )
     {
@@ -1992,12 +1991,12 @@ void KWView::tableDeleteCol()
                                                     i18n("&Delete"));
         if (result == KMessageBox::Continue)
         {
-            doc->deleteTable( table );
+            m_doc->deleteTable( table );
         }
     }
     else
     {
-        KWDeleteDia dia( this, "", table, doc, KWDeleteDia::COL, gui->canvasWidget() );
+        KWDeleteDia dia( this, "", table, m_doc, KWDeleteDia::COL, m_gui->canvasWidget() );
         dia.setCaption( i18n( "Delete Column" ) );
         dia.show();
     }
@@ -2005,9 +2004,9 @@ void KWView::tableDeleteCol()
 
 void KWView::tableJoinCells()
 {
-    //gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
+    //m_gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
 
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
     if ( !table->joinCells() )
     {
@@ -2017,11 +2016,11 @@ void KWView::tableJoinCells()
                             i18n( "Join Cells" ) );
         return;
     }
-    doc->layout();
-    //KoRect r = doc->zoomRect( table->boundingRect() );
-    //gui->canvasWidget()->repaintScreen( r, TRUE );
-    gui->canvasWidget()->repaintAll();
-    gui->canvasWidget()->emitFrameSelectedChanged();
+    m_doc->layout();
+    //KoRect r = m_doc->zoomRect( table->boundingRect() );
+    //m_gui->canvasWidget()->repaintScreen( r, TRUE );
+    m_gui->canvasWidget()->repaintAll();
+    m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
 /*
 void KWView::tableSplitCellsVerticaly()
@@ -2045,10 +2044,10 @@ void KWView::tableSplitCells() {
 
 void KWView::tableSplitCells(int cols, int rows)
 {
-    //gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
+    //m_gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
 
-    QList <KWFrame> selectedFrames = doc->getSelectedFrames();
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if ( !table && selectedFrames.count() > 0) {
         table=selectedFrames.at(0)->getFrameSet()->getGroupManager();
     }
@@ -2067,18 +2066,18 @@ void KWView::tableSplitCells(int cols, int rows)
                             i18n("There is not enough space to split the cell into that many parts, make it bigger first"),
                             i18n("Split Cells") );
     }
-    //KoRect r = doc->zoomRect( table->boundingRect() );
-    //gui->canvasWidget()->repaintScreen( r, TRUE );
-    doc->updateAllFrames();
-    doc->layout();
-    gui->canvasWidget()->repaintAll();
+    //KoRect r = m_doc->zoomRect( table->boundingRect() );
+    //m_gui->canvasWidget()->repaintScreen( r, TRUE );
+    m_doc->updateAllFrames();
+    m_doc->layout();
+    m_gui->canvasWidget()->repaintAll();
 }
 
 void KWView::tableUngroupTable()
 {
-    gui->canvasWidget()->setMouseMode( MM_EDIT );
+    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
 
     // Use a macro command because we may have to make the table non-floating first
@@ -2092,25 +2091,25 @@ void KWView::tableUngroupTable()
 
     KWUngroupTableCommand *cmd = new KWUngroupTableCommand( QString::null, table );
     macroCmd->addCommand( cmd );
-    doc->addCommand( macroCmd );
+    m_doc->addCommand( macroCmd );
     macroCmd->execute(); // do it all
 }
 
 void KWView::tableDelete()
 {
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     ASSERT(table);
-    doc->deleteTable( table );
+    m_doc->deleteTable( table );
 }
 
 void KWView::textStyleSelected( int index )
 {
-    if(gui->canvasWidget()->currentFrameSetEdit())
+    if(m_gui->canvasWidget()->currentFrameSetEdit())
     {
-        KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
+        KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
         if ( edit )
-            edit->applyStyle( doc->styleAt( index ) );
-        gui->canvasWidget()->setFocus(); // the combo keeps focus...
+            edit->applyStyle( m_doc->styleAt( index ) );
+        m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
     }
 }
 
@@ -2119,7 +2118,7 @@ void KWView::textSizeSelected( int size )
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setPointSize( size );
-    gui->canvasWidget()->setFocus(); // the combo keeps focus...
+    m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
 void KWView::textFontSelected( const QString & font )
@@ -2127,7 +2126,7 @@ void KWView::textFontSelected( const QString & font )
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->setFamily( font );
-    gui->canvasWidget()->setFocus(); // the combo keeps focus...
+    m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
 void KWView::textBold()
@@ -2265,7 +2264,7 @@ void KWView::editPersonalExpr()
 {
    KWEditPersonnalExpression *personalDia=new KWEditPersonnalExpression( this,"personnal" );
    if(personalDia->exec())
-       doc->refreshMenuExpression();
+       m_doc->refreshMenuExpression();
    delete personalDia;
 }
 
@@ -2276,11 +2275,11 @@ void KWView::textIncreaseIndent()
     if ( edit )
     {
         double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-        double indent = doc->getIndentValue();
+        double indent = m_doc->getIndentValue();
         double newVal = leftMargin + indent;
         // Test commented out. This breaks with the DTP case... The user can put
         // a frame anywhere, even closer to the edges than left/right border allows (DF).
-        //if( newVal <= (doc->ptPaperWidth()-doc->ptRightBorder()-doc->ptLeftBorder()))
+        //if( newVal <= (m_doc->ptPaperWidth()-m_doc->ptRightBorder()-m_doc->ptLeftBorder()))
         {
             edit->setMargin( QStyleSheetItem::MarginLeft, newVal );
         }
@@ -2295,7 +2294,7 @@ void KWView::textDecreaseIndent()
         double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
         if ( leftMargin > 0 )
         {
-            double indent = doc->getIndentValue();
+            double indent = m_doc->getIndentValue();
             double newVal = leftMargin - indent;
             edit->setMargin( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
         }
@@ -2376,7 +2375,7 @@ void KWView::borderWidth( const QString &width )
     m_border.top.ptWidth = m_border.common.ptWidth;
     m_border.bottom.ptWidth = m_border.common.ptWidth;
     borderSet();
-    gui->canvasWidget()->setFocus();
+    m_gui->canvasWidget()->setFocus();
 }
 
 void KWView::borderStyle( const QString &style )
@@ -2387,7 +2386,7 @@ void KWView::borderStyle( const QString &style )
     m_border.top.style = m_border.common.style;
     m_border.bottom.style = m_border.common.style;
     borderSet();
-    gui->canvasWidget()->setFocus();
+    m_gui->canvasWidget()->setFocus();
 }
 
 void KWView::backgroundColor()
@@ -2395,8 +2394,8 @@ void KWView::backgroundColor()
     // This action is disabled when no frame is selected.
     // So here we know that a frame is selected.
     backColor = actionBackgroundColor->color();
-    if ( gui )
-        gui->canvasWidget()->setFrameBackgroundColor( backColor );
+    if ( m_gui )
+        m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
 }
 
 void KWView::borderSet()
@@ -2435,14 +2434,14 @@ void KWView::borderSet()
              || (!actionBorderLeft->isChecked() && !actionBorderRight->isChecked()
                  && !actionBorderBottom->isChecked() && !actionBorderTop->isChecked()))
         {
-            gui->canvasWidget()->setOutlineFrameBorder( m_border.common, actionBorderLeft->isChecked() );
+            m_gui->canvasWidget()->setOutlineFrameBorder( m_border.common, actionBorderLeft->isChecked() );
         }
         else
         {
-            gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
-            gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
-            gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
-            gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
+            m_gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
+            m_gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
+            m_gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
+            m_gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
         }
     }
 }
@@ -2450,7 +2449,7 @@ void KWView::borderSet()
 void KWView::resizeEvent( QResizeEvent *e )
 {
     QWidget::resizeEvent( e );
-    if ( gui ) gui->resize( width(), height() );
+    if ( m_gui ) m_gui->resize( width(), height() );
 }
 
 void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -2470,7 +2469,7 @@ void KWView::borderShowValues()
 
 void KWView::tabListChanged( const KoTabulatorList & tabList )
 {
-    if(!doc->isReadWrite())
+    if(!m_doc->isReadWrite())
         return;
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit)
@@ -2483,14 +2482,14 @@ void KWView::newPageLayout( KoPageLayout _layout )
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
-    doc->getPageLayout( pgLayout, cl, hf );
+    m_doc->getPageLayout( pgLayout, cl, hf );
 
     pageLayout tmpOldLayout;
     tmpOldLayout._pgLayout=pgLayout;
     tmpOldLayout._cl=cl;
     tmpOldLayout._hf=hf;
 
-    doc->setPageLayout( _layout, cl, hf );
+    m_doc->setPageLayout( _layout, cl, hf );
 
     pageLayout tmpNewLayout;
     tmpNewLayout._pgLayout=_layout;
@@ -2500,12 +2499,12 @@ void KWView::newPageLayout( KoPageLayout _layout )
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
         edit->textFrameSet()->clearUndoRedoInfo();
-    KWPageLayoutCommand *cmd = new KWPageLayoutCommand( i18n("Change Layout"),doc,tmpOldLayout,tmpNewLayout ) ;
-    doc->addCommand(cmd);
+    KWPageLayoutCommand *cmd = new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
+    m_doc->addCommand(cmd);
 
-    doc->updateRuler();
+    m_doc->updateRuler();
 
-    doc->updateResizeHandles();
+    m_doc->updateResizeHandles();
 }
 
 void KWView::newFirstIndent( double _firstIndent )
@@ -2525,7 +2524,7 @@ void KWView::newLeftIndent( double _leftIndent)
 
 void KWView::openPopupMenuEditText( const QPoint & _point )
 {
-    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     QString menuName;
     if (edit)
         menuName=edit->getPopupName();
@@ -2560,13 +2559,13 @@ void KWView::openPopupMenuChangeAction( const QPoint & _point )
 
 void KWView::updatePopupMenuChangeAction()
 {
-    KWFrame *frame=doc->getFirstSelectedFrame();
+    KWFrame *frame=m_doc->getFirstSelectedFrame();
     // Warning, frame can be 0L !
 
     // if a header/footer etc. Dont show the popup.
     if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY)
         return;
-    int nbFrame=doc->getSelectedFrames().count();
+    int nbFrame=m_doc->getSelectedFrames().count();
     // enable delete
     actionEditDelFrame->setEnabled(true && nbFrame==1);
 
@@ -2574,7 +2573,7 @@ void KWView::updatePopupMenuChangeAction()
     if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
         {
             // if frameset 0 disable delete
-            if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0))
+            if(m_doc->processingType()  == KWDocument::WP && frame->getFrameSet() == m_doc->getFrameSet(0))
                 {
                     actionEditDelFrame->setEnabled(false);
                 }
@@ -2586,7 +2585,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
     if(!koDocument()->isReadWrite() )
         return;
     updatePopupMenuChangeAction();
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if(!table)
         ((QPopupMenu*)factory()->container("frame_popup",this))->popup(_point);
     else
@@ -2596,22 +2595,22 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 void KWView::startKSpell()
 {
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
-    kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), doc->getKSpellConfig() );
+    m_kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
 
-    QObject::connect( kspell, SIGNAL( death() ),
+    QObject::connect( m_kspell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
-    QObject::connect( kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
+    QObject::connect( m_kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
                       this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
-    QObject::connect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
+    QObject::connect( m_kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
                       this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
-    QObject::connect( kspell, SIGNAL( done( const QString & ) ),
+    QObject::connect( m_kspell, SIGNAL( done( const QString & ) ),
                       this, SLOT( spellCheckerDone( const QString & ) ) );
 }
 
 void KWView::spellCheckerReady()
 {
-    for ( unsigned int i = m_spellCurrFrameSetNum + 1; i < doc->getNumFrameSets(); i++ ) {
-        KWFrameSet *frameset = doc->getFrameSet( i );
+    for ( unsigned int i = m_spellCurrFrameSetNum + 1; i < m_doc->getNumFrameSets(); i++ ) {
+        KWFrameSet *frameset = m_doc->getFrameSet( i );
         if ( !frameset->isVisible() || frameset->getFrameType() != FT_TEXT )
             continue;
         m_spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
@@ -2626,21 +2625,21 @@ void KWView::spellCheckerReady()
             p = p->next();
         }
         text += '\n';
-        kspell->check( text );
+        m_kspell->check( text );
         return;
     }
     //kdDebug() << "KWView::spellCheckerReady done" << endl;
 
     // Done
-    kspell->cleanUp();
-    delete kspell;
-    kspell = 0;
+    m_kspell->cleanUp();
+    delete m_kspell;
+    m_kspell = 0;
 }
 
 void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
 {
     //kdDebug() << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
-    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( m_doc->getFrameSet( m_spellCurrFrameSetNum ) );
     ASSERT( fs );
     if ( !fs ) return;
     QTextParag * p = fs->textDocument()->firstParag();
@@ -2652,14 +2651,14 @@ void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
     ASSERT( p );
     if ( !p ) return;
     //kdDebug() << "KWView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
-    fs->highlightPortion( p, pos, old.length(), gui->canvasWidget() );
+    fs->highlightPortion( p, pos, old.length(), m_gui->canvasWidget() );
 }
 
 void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
 {
     //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 
-    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( m_doc->getFrameSet( m_spellCurrFrameSetNum ) );
     ASSERT( fs );
     if ( !fs ) return;
     QTextParag * p = fs->textDocument()->firstParag();
@@ -2670,7 +2669,7 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     }
     ASSERT( p );
     if ( !p ) return;
-    fs->highlightPortion( p, pos, old.length(), gui->canvasWidget() );
+    fs->highlightPortion( p, pos, old.length(), m_gui->canvasWidget() );
 
     QTextCursor cursor( fs->textDocument() );
     cursor.setParag( p );
@@ -2681,15 +2680,15 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
 
 void KWView::spellCheckerDone( const QString & )
 {
-    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( m_doc->getFrameSet( m_spellCurrFrameSetNum ) );
     ASSERT( fs );
     if ( fs )
         fs->removeHighlight();
 
-    int result = kspell->dlgResult();
-    kspell->cleanUp();
-    delete kspell;
-    kspell = 0;
+    int result = m_kspell->dlgResult();
+    m_kspell->cleanUp();
+    delete m_kspell;
+    m_kspell = 0;
 
     if ( result != KS_CANCEL && result != KS_STOP )
     {
@@ -2700,9 +2699,9 @@ void KWView::spellCheckerDone( const QString & )
 
 void KWView::spellCheckerFinished()
 {
-    KSpell::spellStatus status = kspell->status();
-    delete kspell;
-    kspell = 0;
+    KSpell::spellStatus status = m_kspell->status();
+    delete m_kspell;
+    m_kspell = 0;
     if (status == KSpell::Error)
     {
         KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
@@ -2712,7 +2711,7 @@ void KWView::spellCheckerFinished()
     {
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
-    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( doc->getFrameSet( m_spellCurrFrameSetNum ) );
+    KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>( m_doc->getFrameSet( m_spellCurrFrameSetNum ) );
     ASSERT( fs );
     if ( fs )
         fs->removeHighlight();
@@ -2730,9 +2729,9 @@ void KWView::configure()
 
 KWTextFrameSetEdit *KWView::currentTextEdit()
 {
-    if (!gui)
+    if (!m_gui)
         return 0L;
-    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         return dynamic_cast<KWTextFrameSetEdit *>(edit->currentTextEdit());
     return 0L;
@@ -2787,27 +2786,27 @@ void KWView::slotFrameSetEditChanged()
     // Set the "frame start" in the ruler (tabs are relative to that position)
     if ( edit )
     {
-        QPoint p = doc->zoomPoint( edit->currentFrame()->topLeft() );
-        p = gui->canvasWidget()->viewMode()->normalToView( p );
-        gui->getHorzRuler()->setFrameStart( p.x() );
+        QPoint p = m_doc->zoomPoint( edit->currentFrame()->topLeft() );
+        p = m_gui->canvasWidget()->viewMode()->normalToView( p );
+        m_gui->getHorzRuler()->setFrameStart( p.x() );
     }
 
 }
 
 void KWView::frameSelectedChanged()
 {
-    int nbFrame=doc->getSelectedFrames().count();
+    int nbFrame=m_doc->getSelectedFrames().count();
     actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
     if ( !currentTextEdit() && (nbFrame==1) )
     {
-        KWFrameSet * fs = doc->getFirstSelectedFrame()->getFrameSet();
+        KWFrameSet * fs = m_doc->getFirstSelectedFrame()->getFrameSet();
         actionEditDelFrame->setEnabled( !fs->isAHeader() && !fs->isAFooter() );
     } else
         actionEditDelFrame->setEnabled( false );
 
     actionBackgroundColor->setEnabled( nbFrame >= 1 );
 
-    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
 
     bool state=(table && nbFrame==1);
@@ -2825,14 +2824,14 @@ void KWView::frameSelectedChanged()
     actionTableDelete->setEnabled( state );
     actionTableUngroup->setEnabled( state );
 
-    doc->refreshFrameBorderButton();
+    m_doc->refreshFrameBorderButton();
 
     updateFrameStatusBarItem();
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)
 {
-    KWDocStruct *m_pDocStruct=gui->getDocStruct();
+    KWDocStruct *m_pDocStruct=m_gui->getDocStruct();
     if(m_pDocStruct)
         m_pDocStruct->getDocStructTree()->refreshTree(_type);
 }
@@ -2845,22 +2844,22 @@ bool KWView::doubleClickActivation() const
 
 QWidget* KWView::canvas()
 {
-    return gui->canvasWidget()->viewport();
+    return m_gui->canvasWidget()->viewport();
 }
 
 int KWView::canvasXOffset() const
 {
-    return gui->canvasWidget()->contentsX();
+    return m_gui->canvasWidget()->contentsX();
 }
 
 int KWView::canvasYOffset() const
 {
-    return gui->canvasWidget()->contentsY();
+    return m_gui->canvasWidget()->contentsY();
 }
 
 void KWView::canvasAddChild( KoViewChild *child )
 {
-    gui->canvasWidget()->addChild( child->frame() );
+    m_gui->canvasWidget()->addChild( child->frame() );
 }
 
 /******************************************************************/
@@ -2882,13 +2881,13 @@ void KWLayoutWidget::resizeEvent( QResizeEvent *e )
 /******************************************************************/
 /* Class: KWGUI                                                */
 /******************************************************************/
-KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
+KWGUI::KWGUI( QWidget *parent, KWView *_view )
     : QWidget( parent, "" )
 {
-    doc = _doc;
     view = _view;
 
     r_horz = r_vert = 0;
+    KWDocument * doc = view->kWordDocument();
 
     panner = new QSplitter( Qt::Horizontal, this );
     docStruct = new KWDocStruct( panner, doc, this );
@@ -2965,7 +2964,7 @@ void KWGUI::resizeEvent( QResizeEvent *e )
 void KWGUI::reorganize()
 {
     int space=20;
-    if(doc->getShowRuler())
+    if(view->kWordDocument()->getShowRuler())
     {
         r_vert->show();
         r_horz->show();
@@ -2988,7 +2987,7 @@ void KWGUI::reorganize()
 
 void KWGUI::unitChanged( QString u )
 {
-    doc->setUnit( KWUnit::unit( u ) );
+    view->kWordDocument()->setUnit( KWUnit::unit( u ) );
 }
 
 #include "kwview.moc"

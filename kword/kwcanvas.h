@@ -62,7 +62,7 @@ public:
     KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui);
     virtual ~KWCanvas();
 
-    KWDocument * kWordDocument() const { return doc; }
+    KWDocument * kWordDocument() const { return m_doc; }
     KWGUI * gui() const { return m_gui; }
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
@@ -223,7 +223,7 @@ private:
     void printRTDebug( int );
 #endif
 
-    KWDocument *doc;
+    KWDocument *m_doc;
     KWFrameSetEdit *m_currentFrameSetEdit;
     KWGUI *m_gui;
     QTimer *scrollTimer;

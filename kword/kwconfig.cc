@@ -85,7 +85,7 @@ configureSpellPage::configureSpellPage( KWView *_view, QWidget *parent , char *n
   QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Spelling"));
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
-  _spellConfig  = new KSpellConfig(tmpQGroupBox ,0L ,m_pView->getGUI()->getDocument()->getKSpellConfig(), false );
+  _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
   grid1->addWidget(_spellConfig,0,0);
   box->addWidget( tmpQGroupBox);
 }
@@ -99,7 +99,7 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
-  m_pView->getGUI()->getDocument()->setKSpellConfig(*_spellConfig);
+  m_pView->kWordDocument()->setKSpellConfig(*_spellConfig);
 }
 
 void configureSpellPage::slotDefault()
@@ -117,7 +117,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    KWUnit::Unit unit = m_pView->getGUI()->getDocument()->getUnit();
+    KWUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
     box->setSpacing( 10 );
@@ -211,7 +211,7 @@ void configureInterfacePage::apply()
     int valY=gridY->value();
     int nbRecent=recentFiles->value();
     bool ruler=showRuler->isChecked();
-    KWDocument * doc = m_pView->getGUI()->getDocument();
+    KWDocument * doc = m_pView->kWordDocument();
 
     config->setGroup( "Interface" );
     if(valX!=doc->gridX())
@@ -264,7 +264,7 @@ void configureInterfacePage::slotDefault()
     gridX->setValue(10);
     gridY->setValue(10);
     m_nbPagePerRow->setValue(4);
-    KWDocument * doc = m_pView->getGUI()->getDocument();
+    KWDocument * doc = m_pView->kWordDocument();
     double newIndent = KWUnit::userValue( MM_TO_POINT( 10 ), doc->getUnit() );
     indent->setValue( (int)newIndent );
     recentFiles->setValue(10);

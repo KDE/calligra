@@ -91,7 +91,8 @@ public:
 
 //    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
-    KWGUI *getGUI() { return gui; }
+    KWDocument *kWordDocument() { return m_doc; }
+    KWGUI *getGUI() { return m_gui; }
     void updateStyleList();
 
     void initGui();
@@ -284,7 +285,7 @@ protected:
     void startKSpell();
 
 private:
-    KWDocument *doc;
+    KWDocument *m_doc;
 
     KAction *actionEditCut;
     KAction *actionEditCopy;
@@ -390,13 +391,13 @@ private:
 
     QList<KAction> m_actionList; // for the kodatatools
 
-    KWGUI *gui;
+    KWGUI *m_gui;
 
     KWSearchContext *searchEntry, *replaceEntry;
     QBrush backColor;
 
     // Spell-checking
-    KSpell *kspell;
+    KSpell *m_kspell;
     int m_spellCurrFrameSetNum;
 
     int m_currentPage; // 0-based current page number
@@ -435,9 +436,7 @@ class KWGUI : public QWidget
     Q_OBJECT
 
 public:
-    KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view );
-
-    KWDocument *getDocument() { return doc; }
+    KWGUI( QWidget *parent, KWView *_view );
 
     void showGUI();
 
@@ -460,7 +459,6 @@ protected:
 
     KoRuler *r_vert, *r_horz;
     KWCanvas *canvas;
-    KWDocument *doc;
     KWView *view;
     KoTabChooser *tabChooser;
     KWDocStruct *docStruct;
