@@ -1882,8 +1882,8 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_resizeColumn->plug( m_pPopupColumn );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
     m_pPopupColumn->insertSeparator();
-    m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column(s)"), this, SLOT( slotPopupInsertColumn() ) );
-    m_pPopupColumn->insertItem( KSBarIcon("delete_table_col"),i18n("Remove Column(s)"), this, SLOT( slotPopupRemoveColumn() ) );
+    m_insertColumn->plug( m_pPopupColumn );
+    m_deleteColumn->plug( m_pPopupColumn );
 
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
 
@@ -1894,23 +1894,7 @@ void KSpreadView::slotPopupAdjustColumn()
 {
     if ( !m_pTable )
        return;
-    /*QRect selection( m_pTable->selectionRect() );
-    for(int i=selection.left();i<=selection.right();i++)
-        canvasWidget()->hBorderWidget()->adjustColumn(i);*/
-}
-
-void KSpreadView::slotPopupInsertColumn()
-{
-    m_pTable->insertColumn( m_pHBorderWidget->markerColumn() );
-
-    updateEditWidget();
-}
-
-void KSpreadView::slotPopupRemoveColumn()
-{
-    m_pTable->removeColumn( m_pHBorderWidget->markerColumn() );
-
-    updateEditWidget();
+    canvasWidget()->adjustArea();
 }
 
 void KSpreadView::popupRowMenu(const QPoint & _point )
@@ -1938,8 +1922,8 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_resizeRow->plug( m_pPopupRow );
     m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
     m_pPopupRow->insertSeparator();
-    m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row(s)"), this, SLOT( slotPopupInsertRow() ) );
-    m_pPopupRow->insertItem( KSBarIcon("delete_table_row"),i18n("Remove Row(s)"), this, SLOT( slotPopupRemoveRow() ) );
+    m_insertRow->plug( m_pPopupRow );
+    m_deleteRow->plug( m_pPopupRow );
 
     QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupRow->popup( _point );
@@ -1949,23 +1933,7 @@ void KSpreadView::slotPopupAdjustRow()
 {
     if ( !m_pTable )
        return;
-    /*QRect selection( m_pTable->selectionRect() );
-    for(int i=selection.top();i<=selection.bottom();i++)
-        canvasWidget()->vBorderWidget()->adjustRow(i);*/
-}
-
-void KSpreadView::slotPopupInsertRow()
-{
-    m_pTable->insertRow( m_pVBorderWidget->markerRow() );
-
-    updateEditWidget();
-}
-
-void KSpreadView::slotPopupRemoveRow()
-{
-    m_pTable->removeRow( m_pVBorderWidget->markerRow() );
-
-    updateEditWidget();
+    canvasWidget()->adjustArea();
 }
 
 void KSpreadView::openPopupMenu( const QPoint & _point )

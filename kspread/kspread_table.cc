@@ -4820,6 +4820,43 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
         {
             r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
         }
+
+        if ( m_rctSelection.left() != 0 && m_rctSelection.bottom() == 0x7FFF )
+        {
+            KSpreadCell* c = m_cells.firstCell();
+            for( ;c; c = c->nextCell() )
+            {
+                int col = c->column();
+                if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+                {
+                    if( !c->isEmpty() && !c->isObscured())
+                    {
+                        c->conditionAlign(painter(),col,c->row());
+                        if( c->textWidth() > long_max )
+                                {
+                                int indent=0;
+                                int a = c->align(c->column(),c->row());
+                                if ( a == KSpreadCell::Undefined )
+                                        {
+                                        if ( c->isValue() || c->isDate() || c->isTime())
+                                                a = KSpreadCell::Right;
+                                        else
+                                                a = KSpreadCell::Left;
+                                        }
+
+                                if(  a==KSpreadCell::Left)
+                                        indent=c->getIndent(c->column(),c->row() );
+                                long_max = indent+c->textWidth() +
+                                       c->leftBorderWidth(c->column(),c->row() ) +
+                                       c->rightBorderWidth(c->column(),c->row() );
+                                }
+
+                    }
+                }
+            }
+        }
+        else
+        {
         int x = _col;
         for ( int y = r.top(); y <= r.bottom(); y++ )
         {
@@ -4849,10 +4886,9 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
                                 cell->rightBorderWidth(cell->column(),cell->row() );
                                 }
 
-            }
+                        }
+                }
         }
-
-
     }
     //add 4 because long_max is the long of the text
     //but column has borders
@@ -4895,24 +4931,45 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
         {
             r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
         }
-        int y=_row;
-        for ( int x = r.left(); x <= r.right(); x++ )
+
+        if ( m_rctSelection.left() != 0 && m_rctSelection.right() == 0x7FFF )
         {
-            KSpreadCell *cell = cellAt( x, y );
-            if(cell != m_pDefaultCell && !cell->isEmpty()
-            && !cell->isObscured())
+            KSpreadCell* c = m_cells.firstCell();
+            for( ;c; c = c->nextCell() )
             {
-                cell->conditionAlign(painter(),x,y);
-                if(cell->textHeight()>long_max )
-                    long_max = cell->textHeight() +
-                               cell->topBorderWidth(cell->column(),cell->row() ) +
-                               cell->bottomBorderWidth(cell->column(),cell->row() );
+                int row = c->row();
+                if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+                {
+                    if(!c->isEmpty() && !c->isObscured())
+                    {
+                        c->conditionAlign(painter(),c->column(),row);
+                        if(c->textHeight()>long_max)
+                            long_max = c->textHeight() +
+                                       c->topBorderWidth(c->column(),c->row() ) +
+                                       c->bottomBorderWidth(c->column(),c->row() );
 
-
+                    }
+                }
             }
         }
+        else
+        {
+        int y=_row;
+        for ( int x = r.left(); x <= r.right(); x++ )
+                {
+                KSpreadCell *cell = cellAt( x, y );
+                if(cell != m_pDefaultCell && !cell->isEmpty()
+                        && !cell->isObscured())
+                        {
+                        cell->conditionAlign(painter(),x,y);
+                        if(cell->textHeight()>long_max )
+                                long_max = cell->textHeight() +
+                                        cell->topBorderWidth(cell->column(),cell->row() ) +
+                                        cell->bottomBorderWidth(cell->column(),cell->row() );
+                        }
+                }
+        }
     }
-
     //add 4 because long_max is the long of the text
     //but column has borders
     if( long_max == 0 )

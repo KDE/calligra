@@ -303,10 +303,6 @@ protected slots:
      */
     void slotPopupAdjustColumn();
     void slotPopupAdjustRow();
-    void slotPopupInsertRow();
-    void slotPopupRemoveRow();
-    void slotPopupInsertColumn();
-    void slotPopupRemoveColumn();
 
     /**
      * Scroll @ref #tabBar.
