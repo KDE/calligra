@@ -18,6 +18,11 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// don't remove, --enable-final breaks otherwise because of some
+// stupid X headers (Werner)
+#ifdef Unsorted
+#undef Unsorted
+#endif
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
