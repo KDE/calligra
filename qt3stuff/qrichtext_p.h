@@ -1085,6 +1085,7 @@ public:
     bool isVisible() const { return visible; }
 
     bool isLastInFrame() const { return lastInFrame; }
+    void setMovedDown( bool b ) { movedDown = b; }
     bool isMovedDown() const { return movedDown; }
 
     QTextParag *prev() const;
