@@ -792,8 +792,8 @@ don't put a </?xml...> at the end of the file!).
         align's value is one of: 'left', 'right', 'center', 'justify'
         It can also be 'auto' for styles, meaning right for RTL text, left otherwise.
 
-        dir: Indicates the direction of the paragraph. 'L' or 'R' for Left and Right.
-        Left by default.
+        dir: Indicates the direction of the paragraph. 'L' or 'R' for left-to-right and right-to-left.
+        Automatic direction (dependent on first character) is the default.
 -->
 <!ELEMENT FLOW
     EMPTY>
