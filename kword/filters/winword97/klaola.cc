@@ -32,6 +32,8 @@ KLaola::KLaola(myFile file) {
 
 KLaola::~KLaola() {
 
+    kdebug(KDEBUG_INFO, 31000, "DTOR");
+
     if(bigBlockDepot) {
         delete [] bigBlockDepot;
         bigBlockDepot=0L;
@@ -44,68 +46,180 @@ KLaola::~KLaola() {
         delete [] smallBlockFile;
         smallBlockFile=0L;
     }
+
+    kdebug(KDEBUG_INFO, 31000, "vor Liste 1");
+
+    QList<OLETree> *tmpList;
+    OLETree *node;
+    for(tmpList=treeList.first();tmpList!=0;tmpList=treeList.next()) {
+        for(node=tmpList->first();node!=0;node=tmpList->next()) {
+            delete node;
+            node=0L;
+        }
+        delete tmpList;
+        tmpList=0L;
+    }
+
+    kdebug(KDEBUG_INFO, 31000, "nach Liste 1");
+
+    OLEInfo *info;
+    for(info=ppsList.first();info!=0;info=ppsList.next()) {
+        delete info;
+        info=0L;
+    }
+
+    kdebug(KDEBUG_INFO, 31000, "DTOR-ENDE :)");
 }
 
-//QList<OLENode> KLaola::parseRootDir() {
+QList<OLENode> KLaola::parseRootDir() {
 
-    /*OLENode *node;
+    QList<OLENode> tmpOLENodeList;
+    QList<long> tmp;
+    tmp=path;
+
+    path.clear();
+
+    long p=0;
+    path.append(&p);
+
+    tmpOLENodeList=parseCurrentDir();
+
+    path=tmp;
+
+    return tmpOLENodeList;
+}
+
+QList<OLENode> KLaola::parseCurrentDir() {
+
+    OLENode *node;
+    QList<OLETree> *tmpList;
     QList<OLENode> nodeList;
-    OLETree *tmp;
+    OLETree *tree;
+    OLEInfo *info;
 
-    tmp=tree.first();
-    //tmp=tmp.subtree.first();
-    */
-//}
+    kdebug(KDEBUG_INFO, 31000, "parseCurrentDir, Anfang");
 
-//QList<OLENode> KLaola::parseCurrentDir() {
-//}
+    tmpList=treeList.take(*(path.getLast()));   // this line is strange...
 
-//bool KLaola::enterDir(long handle) {
-//}
+    kdebug(KDEBUG_INFO, 31000, "parseCurrentDir, Liste geholt");
 
-//bool KLaola::leaveDir() {
-//}
+    for(tree=tmpList->first();tree!=0;tree=tmpList->next()) {
+        node=new OLENode;
 
-//QList<long> KLaola::currentPath() {
-//}
+        info=ppsList.take(tree->handle);
+        node->handle=info->handle;
+        node->name=info->name;
+        node->type=info->type;
 
-//OLEInfo *KLaola::streamInfo(long handle) {
+        nodeList.append(node);
+    }
+    return nodeList;
+}
 
-/*    OLEInfo *tmp, ret;
-    bool found=false;
+bool KLaola::enterDir(long handle) {
 
-    tmp=ppsList.first();
+    QList<OLENode> dir;
+    OLENode *node;
 
-    do {
-        if(strcmp(tmp->name, (const char*)file)==0) {
-            found=true;
-            memcpy(&ret, tmp, sizeof(OLEInfo));
+    dir=parseCurrentDir();
+
+    node=dir.first();
+    while(node!=0) {
+        if(node->handle==handle && node->type==1) {
+            long *tmp=new long[1];
+            tmp[0]=handle;
+
+            path.append(tmp);
+
+            delete [] tmp;
+
+            return true;
         }
-        else
-            tmp=ppsList.next();
-    } while(tmp!=0 && !found);
+        node=dir.next();
+    }
+    return false;
+}
+
+bool KLaola::leaveDir() {
+    if(path.count()>1) {
+        path.removeLast();
+        return true;
+    }
+    return false;
+}
+
+QList<long> KLaola::currentPath() {
+    return path;
+}
+
+OLEInfo KLaola::streamInfo(long handle) {
+
+    OLEInfo *tmp, ret;
+
+    tmp=ppsList.take(handle);
+
+    ret.handle=tmp->handle;
+    ret.name=tmp->name;
+    ret.nameSize=tmp->nameSize;
+    ret.type=tmp->type;
+    ret.prev=tmp->prev;
+    ret.next=tmp->next;
+    ret.dir=tmp->dir;
+    ret.ts1s=tmp->ts1s;
+    ret.ts1d=tmp->ts1d;
+    ret.ts2s=tmp->ts2s;
+    ret.ts2d=tmp->ts2d;
+    ret.sb=tmp->sb;
+    ret.size=tmp->size;
 
     return ret;
-*/
-//}
+}
 
-//QString &KLaola::stream(long handle) {
+QString KLaola::stream(long handle) {
 
-/*    OLEInfo *info;
+    OLEInfo *info;
+    QString ret;
+    char *p;
 
-    info=streamInfo(dir, file);
-    ret.size=info.size;
+    info=ppsList.take(handle);
 
-    if(info.size>=0x1000)
-        ret.stream=(char*)readBBStream(info.sb);
+    if(info->size>=0x1000)
+        p=(char*)readBBStream(info->sb);
     else
-        ret.stream=(char*)readSBStream(info.sb);
+        p=(char*)readSBStream(info->sb);
 
+    ret=p;
+
+    delete [] p;
     return ret;
-*/
-//}
+}
 
 void KLaola::testIt() {
+
+    QList<OLENode> dir;
+    OLENode *node;
+    OLEInfo info;
+    QString foo, tmp;
+
+    dir=parseRootDir();
+
+    for(node=dir.first();node!=0;node=dir.next()) {
+        info=streamInfo(node->handle);
+
+        foo.setNum(info.handle);
+        foo+="   ";
+        foo+=info.name;
+        foo+="   ";
+
+        tmp.setNum(info.sb);
+        foo+=tmp;
+        foo+="   ";
+
+        tmp.setNum(info.size);
+        foo+=tmp;
+
+        kdebug(KDEBUG_INFO, 31000, (const char*)foo);
+    }
 }
 
 bool KLaola::parseHeader() {
@@ -119,10 +233,6 @@ bool KLaola::parseHeader() {
     num_of_bbd_blocks=read32(0x2c);
     root_startblock=read32(0x30);
     sbd_startblock=read32(0x3c);
-
-    // QString foo;
-    // foo.setNum(root_startblock);
-    // kdebug(KDEBUG_INFO, 31000, (const char*)foo);
 
     for(unsigned int i=0;i<num_of_bbd_blocks;++i)
         bbd_list[i]=read32(0x4c+i);
@@ -158,10 +268,21 @@ void KLaola::readRootList() {
         pos=nextBigBlock(pos);
     }
 
-    createTree(tree, 0);   // build the tree with a recursive method :)
+    QList<OLETree> *tmpList=new QList<OLETree>;
+    treeList.append(tmpList);
 
-    path.append(0);    // current dir == root dir
+    createTree(0, 0);   // build the tree with a recursive method :)
 
+    long *p=new long[1];
+    p[0]=0;
+
+    path.setAutoDelete(true);
+    path.append(p);    // current dir == root dir
+
+    if(p) {
+        delete [] p;
+        p=0L;
+    }
 }
 
 void KLaola::readPPSEntry(long pos, long handle) {
@@ -194,22 +315,31 @@ void KLaola::readPPSEntry(long pos, long handle) {
     }
 }
 
-void KLaola::createTree(QList<OLETree> &subtree, long handle) {
+void KLaola::createTree(long handle, short index) {
 
     OLEInfo *info=ppsList.take(handle);
-
-    if(info->prev!=-1)
-        createTree(subtree, info->prev);
+    QList<OLETree> *tmpList;
 
     OLETree *node=new OLETree;
     node->handle=handle;
-    subtree.append(node);
+    node->subtree=-1;
 
-    if(info->dir!=-1)
-        createTree(node->subtree, info->dir);
+    if(info->prev!=-1)
+        createTree(info->prev, index);
+
+    if(info->dir!=-1) {
+        tmpList=new QList<OLETree>;
+        treeList.append(tmpList);
+        node->subtree=treeList.at();
+
+        createTree(info->dir, node->subtree);
+    }
+
+    tmpList=treeList.take(index);
+    tmpList->append(node);
 
     if(info->next!=-1)
-        createTree(subtree, info->next);
+        createTree(info->next, index);
 }
 
 unsigned char *KLaola::readBBStream(long start) {

@@ -46,7 +46,7 @@ struct OLENode {
 // For internal use only!
 struct OLETree {
     long handle;
-    QList<OLETree> subtree;
+    short subtree;
 };
 
 
@@ -57,15 +57,15 @@ public:
     ~KLaola();
 
 
-    QList<OLENode> parseRootDir();     // TODO
-    QList<OLENode> parseCurrentDir();  // TODO
+    QList<OLENode> parseRootDir();
+    QList<OLENode> parseCurrentDir();
 
-    bool enterDir(long handle);        // TODO
-    bool leaveDir();                   // TODO
-    QList<long> currentPath();         // TODO
+    bool enterDir(long handle);
+    bool leaveDir();
+    QList<long> currentPath();
 
-    OLEInfo *streamInfo(long handle);  // TODO
-    QString &stream(long handle);      // TODO
+    OLEInfo streamInfo(long handle);
+    QString stream(long handle);       // Note: 512 byte blocks!
 
     void testIt();                     // dump some info (similar to "lls"
                                        // of the LAOLA-project), TODO
@@ -77,7 +77,7 @@ private:
     void readSmallBlockFile();
     void readRootList();
     void readPPSEntry(long pos, long handle);
-    void createTree(QList<OLETree> &subtree, long handle);
+    void createTree(long handle, short index);
     unsigned char *readBBStream(long start);
     unsigned char *readSBStream(long start);
 
@@ -86,7 +86,7 @@ private:
     inline unsigned short read16(int i);
     inline unsigned long read32(int i);
 
-    QList<OLETree> tree;
+    QList<QList<OLETree> > treeList;
     QList<OLEInfo> ppsList;
     QList<long> path;
 
