@@ -43,7 +43,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 	if( event && event->type() == QEvent::MouseButtonPress )
 	{
 		QMouseEvent *e = static_cast<QMouseEvent *>( event );
-		if( e->x() >= 20 && e->x() <= 40 && e->y() >= 20 && e->y() <= 50 )
+		if( e->x() >= 15 && e->x() <= 45 && e->y() >= 20 && e->y() <= 50 )
 		{
 			VFillDlg* dialog = new VFillDlg( m_part );
 			connect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
@@ -51,7 +51,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			delete dialog;
 			disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
 		}
-		else if( e->x() >= 10 && e->x() <= 30 && e->y() >= 10 && e->y() <= 40 )
+		else if( e->x() >= 5 && e->x() <= 35 && e->y() >= 10 && e->y() <= 40 )
 		{
 			VStrokeDlg* dialog = new VStrokeDlg( m_part );
 			connect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SIGNAL( strokeChanged( const VStroke & ) ) );
@@ -94,11 +94,16 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 			m_painter->setBrush( s.color() );
 
 		m_painter->newPath();
-		m_painter->moveTo( KoPoint( 10.0, 10.0 ) );
-		m_painter->lineTo( KoPoint( 30.0, 10.0 ) );
-		m_painter->lineTo( KoPoint( 30.0, 40.0 ) );
-		m_painter->lineTo( KoPoint( 10.0, 40.0 ) );
-		m_painter->lineTo( KoPoint( 10.0, 10.0 ) );
+		m_painter->moveTo( KoPoint( 5.0, 10.0 ) );
+		m_painter->lineTo( KoPoint( 35.0, 10.0 ) );
+		m_painter->lineTo( KoPoint( 35.0, 40.0 ) );
+		m_painter->lineTo( KoPoint( 5.0, 40.0 ) );
+		m_painter->lineTo( KoPoint( 5.0, 10.0 ) );
+		m_painter->moveTo( KoPoint( 9.0, 14.0 ) );
+		m_painter->lineTo( KoPoint( 31.0, 14.0 ) );
+		m_painter->lineTo( KoPoint( 31.0, 36.0 ) );
+		m_painter->lineTo( KoPoint( 9.0, 36.0 ) );
+		m_painter->lineTo( KoPoint( 9.0, 14.0 ) );
 		m_painter->fillPath();
 	}
 
@@ -124,11 +129,11 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 			m_painter->setBrush( f.color() );
 
 		m_painter->newPath();
-		m_painter->moveTo( KoPoint( 20.0, 20.0 ) );
-		m_painter->lineTo( KoPoint( 40.0, 20.0 ) );
-		m_painter->lineTo( KoPoint( 40.0, 50.0 ) );
-		m_painter->lineTo( KoPoint( 20.0, 50.0 ) );
-		m_painter->lineTo( KoPoint( 20.0, 20.0 ) );
+		m_painter->moveTo( KoPoint( 15.0, 20.0 ) );
+		m_painter->lineTo( KoPoint( 45.0, 20.0 ) );
+		m_painter->lineTo( KoPoint( 45.0, 50.0 ) );
+		m_painter->lineTo( KoPoint( 15.0, 50.0 ) );
+		m_painter->lineTo( KoPoint( 15.0, 20.0 ) );
 		m_painter->fillPath();
 	}
 	m_painter->end();
