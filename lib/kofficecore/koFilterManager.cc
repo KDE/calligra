@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+                 2000 Werner Trobin <wtrobin@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,22 +18,55 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koFilterManager.h>
+
 #include <qfile.h>
-#ifndef USE_QFD
-#include <koFilterManager.moc>
-#endif
+#include <qapp.h>
+
+#include <kmimetype.h>
+#include <kurl.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <ktempfile.h>
+#include <kfiledialog.h>
+#include <koDocument.h>
+#include <koFilter.h>
+#include <koFilterDialog.h>
+#include <koFilterManager.h>
+
+#include <unistd.h>
+#include <assert.h>
+
+
+class KoFilterManagerPrivate {
+
+public:
+    KoFilterManagerPrivate() { prepare=false; }
+    ~KoFilterManagerPrivate() {}
+    
+    QString tmpFile;
+    QString exportFile;
+    QString native_format, mime_type;
+    bool prepare;
+    QValueList<KoFilterEntry> m_vec;
+    PreviewStack *ps;
+    mutable QMap<QString, int> dialogMap;
+    QMap<int, KoFilterDialog*> originalDialogs;
+    QString config;  // stores the config information
+};
+
 
 KoFilterManager* KoFilterManager::s_pSelf = 0;
 
 KoFilterManager* KoFilterManager::self()
 {
     if( s_pSelf == 0 )
-    {
         s_pSelf = new KoFilterManager;
-        s_pSelf->prepare=false;
-    }
     return s_pSelf;
+}
+
+KoFilterManager::KoFilterManager() {
+    d=new KoFilterManagerPrivate;
 }
 
 const QString KoFilterManager::fileSelectorList( const Direction &direction, const char *_format,
@@ -54,10 +88,8 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
 
     if ( _native_pattern && _native_name )
     {
-#ifndef USE_QFD
         ret += _native_pattern;
         ret += "|";
-#endif
         ret += _native_name;
         ret += " (";
         ret += _native_pattern;
@@ -84,10 +116,8 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
                 s = patterns[j];
                 if ( !ret.isEmpty() )
                     ret += "\n";
-#ifndef USE_QFD
                 ret += s;
                 ret += "|";
-#endif
                 if ( direction == Import )
                     ret += vec[i].importDescription;
                 else
@@ -101,9 +131,7 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
         {
             if ( !ret.isEmpty() )
                 ret += "\n";
-#ifndef USE_QFD
             ret += "*.*|";
-#endif
             if ( direction == Import )
                 ret += vec[i].importDescription;
             else
@@ -115,15 +143,12 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
     {
         if ( !ret.isEmpty() )
             ret += "\n";
-#ifndef USE_QFD
         ret += "*.*|";
-#endif
         ret += i18n( "All files (*.*)" );
     }
     return ret;
 }
 
-#ifndef USE_QFD
 const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                  const Direction &direction,
                                  const char *_format,
@@ -131,92 +156,19 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                  const char *_native_name,
                                  const bool allfiles ) {
 
-    unsigned i, j;
     QString service;
+    d->config=QString::null;   // reset the config string
 
-    config=QString::null;   // reset the config string
-
-    if ( direction == Import )
-        service = "Export == '";
-    else
-        service = "Import == '";
-    service += _format;
-    service += "'";
-
-    QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
-
-    QString filters;
-
-    if ( _native_pattern && _native_name )
-    {
-        filters += _native_pattern;
-        filters += "|";
-        filters += _native_name;
-        filters += " (";
-        filters += _native_pattern;
-        filters += ")";
-    }
-
-    for( i = 0; i < vec.count(); ++i )
-    {
-        KMimeType::Ptr t;
-        QString mime;
-        if ( direction == Import )
-            mime = vec[i].import;
-        else
-            mime = vec[i].export_;
-
-        t = KMimeType::mimeType( mime );
-        // Did we get exact this mime type ?
-        if ( t && mime == t->name() )
-        {
-            QStringList patterns = t->patterns();
-            const char* s;
-            for( j = 0; j < patterns.count(); ++j )
-            {
-                s = patterns[j];
-                if ( !filters.isEmpty() )
-                    filters += "\n";
-                filters += s;
-                filters += "|";
-                if ( direction == Import )
-                    filters += vec[i].importDescription;
-                else
-                    filters += vec[i].exportDescription;
-                filters += " (";
-                filters += s;
-                filters += ")";
-            }
-        }
-        else
-        {
-            if ( !filters.isEmpty() )
-                filters += "\n";
-            filters += "*.*|";
-            if ( direction == Import )
-                filters += vec[i].importDescription;
-            else
-                filters += vec[i].exportDescription;
-            filters += " (*.*)";
-        }
-    }
-    if( allfiles )
-    {
-        if ( !filters.isEmpty() )
-            filters += "\n";
-        filters += "*.*|";
-        filters += i18n( "All files (*.*)" );
-    }
-
-    dialog->setFilter(filters);
+    dialog->setFilter(fileSelectorList(direction, _format, _native_pattern,
+				       _native_name, allfiles));
 
     QValueList<KoFilterDialogEntry> vec1 = KoFilterDialogEntry::query( service );
 
-    ps=new PreviewStack(0L, "preview stack", this);
+    d->ps=new PreviewStack(0L, "preview stack", this);
 
     unsigned int id;                 // id for the next widget
 
-    for(i=0, id=1; i<vec1.count(); ++i) {
+    for(unsigned int i=0, id=1; i<vec1.count(); ++i) {
         KMimeType::Ptr t;
         QString mime;
         if ( direction == Import )
@@ -234,25 +186,25 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
             QStringList patterns = t->patterns();
             QString tmp;
             unsigned short k;
-            for(j=0; j<patterns.count(); ++j) {
+            for(unsigned int j=0; j<patterns.count(); ++j) {
                 tmp=patterns[j];
                 k=0;
 
                 while(tmp[tmp.length()-k]!=QChar('.')) {
                     ++k;
                 }
-                dialogMap.insert(tmp.right(k), id);
+                d->dialogMap.insert(tmp.right(k), id);
             }
-            ps->addWidget(filterdia, id);
-            originalDialogs.insert(id, filterdia);
+            d->ps->addWidget(filterdia, id);
+            d->originalDialogs.insert(id, filterdia);
             ++id;
         }
     }
-    if(!dialogMap.isEmpty()) {
-        dialog->setPreviewWidget(ps);
+    if(!d->dialogMap.isEmpty()) {
+        dialog->setPreviewWidget(d->ps);
 	if(direction==Export) {
 	    QObject::connect(dialog, SIGNAL(filterChanged(const QString &)),
-			     ps, SLOT(filterChanged(const QString &)));
+			     d->ps, SLOT(filterChanged(const QString &)));
 	}
     }	
     return true;
@@ -260,13 +212,13 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
 void KoFilterManager::cleanUp() {
 
-    if(!dialogMap.isEmpty() && ps!=0L && !ps->isHidden()) {
-        int id=ps->id(ps->visibleWidget());
+    if(!d->dialogMap.isEmpty() && d->ps!=0L && !d->ps->isHidden()) {
+        int id=d->ps->id(d->ps->visibleWidget());
         if(id!=0) {
-            KoFilterDialog *dia=originalDialogs.find(id).data();
+            KoFilterDialog *dia=d->originalDialogs.find(id).data();
             if(dia!=0L) {
-                config=dia->state();
-                kdDebug(30003) << config << endl;
+                d->config=dia->state();
+                kdDebug(30003) << d->config << endl;
             }
             else
                 kdWarning(30003) << "default dia - no config!" << endl;
@@ -276,14 +228,13 @@ void KoFilterManager::cleanUp() {
 
 const int KoFilterManager::findWidget(const QString &ext) const {
 
-    QMap<QString, int>::Iterator it=dialogMap.find(ext);
+    QMap<QString, int>::Iterator it=d->dialogMap.find(ext);
 
-    if(it!=dialogMap.end())
+    if(it!=d->dialogMap.end())
         return it.data();
     else
 	return 0;  // default Widget
 }
-#endif
 
 const QString KoFilterManager::import( const QString & _file, const char *_native_format,
 				       KoDocument *document )
@@ -338,11 +289,7 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
 	    if (tempFile.status() != 0)
 		return "";
 	    tempfname = QFile::encodeName(tempFile.name());
-#ifndef USE_QFD
-	    ok=filter->filter( file, tempfname, mimeType, _native_format, config );
-#else
-	    ok=filter->filter( file, tempfname, mimeType, _native_format );
-#endif
+	    ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
 	}
 	else if(vec[i].implemented.lower()=="qdom" &&                // As long as some parts use KOML we have to make
 		(strcmp(document->className(), "KSpreadDoc")==0 ||   // sure that we only allow parts which implement
@@ -351,7 +298,7 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
 		 strcmp(document->className(), "KImageDocument")==0)) {
 	    kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
 	    QDomDocument qdoc;
-	    ok=filter->I_filter( file, mimeType, qdoc, _native_format, config);
+	    ok=filter->I_filter( file, mimeType, qdoc, _native_format, d->config);
 	    if(ok) {
 		ok=document->loadXML(qdoc);
                 if (!ok)
@@ -361,7 +308,7 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
 	}
 	else if(vec[i].implemented.lower()=="kodocument") {
 	    kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
-	    ok=filter->I_filter( file, document, mimeType, _native_format, config);
+	    ok=filter->I_filter( file, document, mimeType, _native_format, d->config);
 	    if(ok)
 		document->changedByFilter();
 	}
@@ -376,9 +323,9 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
 const QString KoFilterManager::prepareExport( const QString & file, const char *_native_format,
 					      const KoDocument *document )
 {
-    exportFile=file;
-    native_format=_native_format;
-    KURL url( exportFile );
+    d->exportFile=file;
+    d->native_format=_native_format;
+    KURL url( d->exportFile );
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
     QCString mimeType;
@@ -397,7 +344,7 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
         return file;
     }
 
-    mime_type=mimeType;   // needed for export_ :)
+    d->mime_type=mimeType;   // needed for export_ :)
 
     QString constr = "Export == '";
     constr += mimeType;
@@ -414,7 +361,7 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
         return file;
     }
 
-    m_vec=vec;
+    d->m_vec=vec;
 
     unsigned int i=0;
     bool ok=false;
@@ -427,7 +374,7 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
 	if(vec[i].implemented.lower()=="file")
 	    tmpFileNeeded=true;
 	else if(vec[i].implemented.lower()=="kodocument") {
-	    ok=filter->E_filter(QCString(file), document, QCString(_native_format), QCString(mimeType), config);
+	    ok=filter->E_filter(QCString(file), document, QCString(_native_format), QCString(mimeType), d->config);
 	    // if(ok)
 	    //	document->changedByFilter();
 	}
@@ -439,38 +386,34 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
 	KTempFile tempFile; // create with default file prefix, extension and mode
 	if (tempFile.status() != 0)
 	    return file;
-	tmpFile = tempFile.name();
-	prepare=true;	
-	return tmpFile;
+	d->tmpFile = tempFile.name();
+	d->prepare=true;	
+	return d->tmpFile;
     }
     return file;
 }
 
 const bool KoFilterManager::export_() {
 
-    prepare=false;
+    d->prepare=false;
 
     unsigned int i=0;
     bool ok=false;
-    while(i<m_vec.count() && !ok) {
-	if(m_vec[i].implemented.lower()=="file") {
-	    KoFilter* filter = m_vec[i].createFilter();
+    while(i<d->m_vec.count() && !ok) {
+	if(d->m_vec[i].implemented.lower()=="file") {
+	    KoFilter* filter = d->m_vec[i].createFilter();
 	    ASSERT( filter );
-#ifndef USE_QFD
-	    ok=filter->filter( QCString(tmpFile), QCString(exportFile), QCString(native_format), QCString(mime_type), config );
-#else
-	    ok=filter->filter( QCString(tmpFile), QCString(exportFile), QCString(native_format), QCString(mime_type) );
-#endif
+	    ok=filter->filter( QCString(d->tmpFile), QCString(d->exportFile), QCString(d->native_format),
+			       QCString(d->mime_type), d->config );
 	    delete filter;
 	}
         ++i;
     }
     // Done, remove temporary file
-    unlink( tmpFile.ascii() );
+    unlink( d->tmpFile.local8Bit() );
     return true;
 }
 
-#ifndef USE_QFD
 //////////////////////////////////////////////////////////////////////////////
 // PreviewStack
 
@@ -526,4 +469,4 @@ void PreviewStack::change(const QString &ext) {
         }
     }
 }
-#endif
+#include <koFilterManager.moc>

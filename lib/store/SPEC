@@ -2,11 +2,12 @@
 -                                                                             -
 -   KOffice Storage Format Specification - Version 2.0                        -
 -                                                                             -
--   by Werner, last changed: 990913 by David                                  -
+-   by Werner, last changed: 20000504 by Werner                               -
 -                                                                             -
 - History :                                                                   -
 -  Version 1.0 : binary store                                                 -
 -  Version 2.0 : tar.gz store                                                 -
+-  Version 2.1 : cleaned up                                                   -
 -                                                                             -
 -------------------------------------------------------------------------------
 
@@ -16,15 +17,18 @@ and binary data (e.g. pictures, movies, sounds) via a simple tar.gz-structure.
 The support class for the tar format is kdelibs/kio/ktar.*, written by Torben
 and finished by David.
 
-The obvious gain of that type of storage is that it's 100% non-proprietary as it
-uses only the already available formats (XML, pictures, tar.gz, ...) and tools (tar, gzip).
+The obvious gain of that type of storage is that it's 100% non-proprietary as
+it uses only the already available formats (XML, pictures, tar.gz, ...) and
+tools (tar, gzip).
 It enables anybody to hack directly into the document, for instance to update
 an image (faster than launching the application), or to write scripts
 that generate koffice documents ! :)
-Later, someone will be able to easily write an import filter for any other office-suite
-application out there, either reading the whole tar.gz file, or (for simple documents) by
-accepting XML as input (and then the user can extract the XML file by himself).
-It also generates much smaller files than the old binary store, since everything's gzipped.
+Later, someone will be able to easily write an import filter for any other
+office-suite application out there, either reading the whole tar.gz file, or
+(for simple documents) by accepting XML as input (and then the user can extract
+the XML file by himself).
+It also generates much smaller files than the old binary store, since
+everything's gzipped.
 
 1) Name of the KOffice Files:
 As some people suggested using a "tgz"-ending is stupid, I'll drop it :)
@@ -37,13 +41,13 @@ have to write a lab-report. Coincidence? I think not >:) You surely will have
 some text, the readings, some formulas and a few pictures (e.g. circuit
 diagram,...).
 The main document will be a KWord-file. In this file you embed some KSpread-
-tables, some KDiagram-charts, the KFormulas, and some picture-frames. You save
+tables, some KChart-diagramms, the KFormulas, and some picture-frames. You save
 the whole crap and name it "lab-report.kwd". Here is what the contents of the
 tar.gz file will look like :
 
 maindoc.xml     -- The main XML file containing the KWord document
 part0.xml                  -- for instance a KSpread embedded table
-part1.xml                  -- say a KDiagramm chart
+part1.xml                  -- say a KChart diagramm
 part2.xml                  -- why not a KIllustrator drawing
 part2/pictures/
 part2/pictures/picture0.jpg
@@ -57,15 +61,14 @@ cliparts/      -- Cliparts embedded in the main KWord document
 cliparts/clipart0.wmf
 ...
 
-Still TODO for the specification :
-Currently if a document has no child document, no picture, and no embedded parts,
-then it's saved as a plain xml file. Do we want to keep that ? It makes it a bit harder
-to write filters or scripts using the files (since we have to use "file" or read the first 4
-bytes of the file). But OTOH it makes the file easier to manipulate. Tell me.
+If there is only a "plain" document we create a tgz file containing only the
+maindoc.xml file.
 
 Still TODO for the implementation :
-* rename the pictures when saving them, using sequential numbers (to be implemented in KoStore)
-(or better, a common class for image collections - currently discussed with Reggie)
+* rename the pictures when saving them, using sequential numbers (to be
+implemented in KoStore)
+(or better, a common class for image collections - currently discussed with
+Reggie)
 
 Thank you for your attention,
 Werner <wtrobin@carinthia.com> and David <faure@kde.org>

@@ -1,3 +1,21 @@
+/* This file is part of the KOffice libraries
+   Copyright (C) 2000 Werner Trobin <wtrobin@mandrakesoft.com>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #ifndef __koffice_filter_h__
 #define __koffice_filter_h__
 
@@ -9,12 +27,18 @@ class KoStore;
 class KoDocument;
 
 /**
- * This is an abstract base class for filters. Please overload the
- * method you "like best" and adapt the .desktop-file.
- * See koffice/filters/HOWTO for further information!
+ * This is an abstract base class for filters. Please reimplement the
+ * method you "like best" (i.e. best matching your needs for the filter).
+ * See koffice/filters/HOWTO for further information on filter development!
+ * @ref KoFilterManager
+ * @ref KoFilterDialog
  *
+ * @author Werner Trobin
  * @short Abstract base class for filters
  */
+
+// Note: This class has to be derived from QObject, because we open the
+// filter libs dynamically (KLibLoader)!
 class KoFilter : public QObject {
 
     Q_OBJECT
@@ -24,14 +48,16 @@ public:
 
     /**
      * This method takes a file as input and outputs a file. (This is the
-     * "traditional way" of filtering. It's not very fast (because of all
-     * the tmp files, but it's easy and you don't have to know the internals
+     * "traditional way" of filtering). Your filter should open and read
+     * the input file, convert the contents, and write the resulting
+     * (filtered) file to the disk. It's not very fast (because of all
+     * the tmp files, but it's easy and your filter doesn't rely on internals
      * of the app.
      * @param fileIn 	The name of the file to filter (input file)
      * @param fileOut 	Save the converted stuff to that file (output file)
-     * @param from 	Mimetype of the input file
-     * @param to 	Mimetype of the output file
-     * @param config   	A String which can be used to pass configure information
+     * @param from 	Mimetype of the input
+     * @param to 	Mimetype of the output
+     * @param config   	A String which can be used to pass configure information (see HOWTO)
      * @return 		If the method returns true the filtering was successful
      */
     virtual const bool filter(const QCString &fileIn, const QCString &fileOut,
@@ -39,14 +65,14 @@ public:
                               const QString &config=QString::null);
 
     /**
-     * This one takes a file as input and writes in a QDomDocument. It's
-     * slightly faster then the first one, but you need a part which uses
-     * QDom (e.g. KSpread, KIS,...- but NOT KWord, KPresenter!).
+     * Takes a file as input and writes the converted information in a
+     * QDomDocument. It's slightly faster than the first one, but you need
+     * a part which uses QDom (e.g. KSpread, KIS,...- but NOT KWord, KPresenter!).
      * This one can only be used as import filter!!! (hence the I_ :)
      * @param file 	The filename of the input file
-     * @param from 	Mimetype of the input file
-     * @param to 	Mimetype of the output file
-     * @param doc	The empty document, for the filter to fill in
+     * @param from 	Mimetype of the input
+     * @param to 	Mimetype of the output
+     * @param doc	An empty QDomDocument, write the converted information in there
      * @param config   	A String which can be used to pass configure information
      * @return 		If the method returns true the filtering was successful
      */
@@ -56,12 +82,14 @@ public:
 
     /**
      * This is the most hacky method(tm) available. Here you have direct
-     * access to the (empty) KoDocument. Overload this method if you want
-     * to IMPORT data.
+     * access to the (empty) KoDocument. Reimplement this method if you want
+     * to IMPORT data directly into a KoDocument. Note: This one is needed
+     * only for very special filters which have to transfer huge amounts of
+     * data (e.g. image import). Normally you shouldn't use this one!!!
      * @param file 	The filename of the input file
-     * @param document 	The KoDocument of the part
-     * @param from 	Mimetype of the input file
-     * @param to 	Mimetype of the output file
+     * @param document 	The (empty) KoDocument of the part
+     * @param from 	Mimetype of the input
+     * @param to 	Mimetype of the output
      * @param config   	A String which can be used to pass configure information
      * @return 		If the method returns true the filtering was successful
      */
@@ -72,11 +100,14 @@ public:
     /**
      * This is another very nasty method. Here you have direct access to the
      * "full" KoDocument (read only, if you don't cast away the constness :)
-     * Overload this method if you want to EXPORT data.
+     * Reimplement this method if you want to EXPORT data. Note: Normally you
+     * won't need direct access to the document! Use this method only in very
+     * special clases where everything else is impossible! Beware of corrupting
+     * the document!!!
      * @param file 	The filename of the input file
      * @param document 	The KoDocument of the part
-     * @param from 	Mimetype of the input file
-     * @param to 	Mimetype of the output file
+     * @param from 	Mimetype of the input
+     * @param to 	Mimetype of the output
      * @param config   	A String which can be used to pass configure information
      * @return 		If the method returns true the filtering was successful
      */

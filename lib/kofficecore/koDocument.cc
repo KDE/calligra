@@ -40,6 +40,7 @@
 #include <komlStreamFeed.h>
 
 #include <klocale.h>
+#include <kmimetype.h>
 #include <kapp.h>
 #include <kdebug.h>
 #include <kmessagebox.h>

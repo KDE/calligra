@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+                 2000 Werner Trobin <wtrobin@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,61 +21,52 @@
 #ifndef __koffice_filter_manager_h__
 #define __koffice_filter_manager_h__
 
-#include <qstring.h>
-#include <qmessagebox.h>
-#include <qstringlist.h>
 #include <qmap.h>
 #include <qwidgetstack.h>
-#include <qwidget.h>
-#include <qlabel.h>
 
-#ifndef USE_QFD
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <kfiledialog.h>
-#include <kmessagebox.h>
-#endif
-#include <kurl.h>
 #include <koQueryTypes.h>
-#include <koFilter.h>
-#ifndef USE_QFD
-#include <koFilterDialog.h>
-#endif
-#include <klocale.h>
-#include <kmimetype.h>
-#include <kdebug.h>
-#include <ktempfile.h>
-#include <koDocument.h>
-
-#include <assert.h>
-#include <unistd.h>
 
 class QDomDocument;
-#ifndef USE_QFD
+
+class KFileDialog;
+class KoDocument;
+class KoFilterDialog;
+class KURL;
+
+class KoFilterManagerPrivate;
 class PreviewStack;
-#endif
+
 /**
- *  This class manages all filters for a KOffice application.
+ *  This class manages all filters for a KOffice application. Normally
+ *  you won't have to use it, since KoMainWindow takes care of loading
+ *  and saving documents.
  *
  *  This class follows the singleton pattern. You don't create objects of this
  *  class directly, but rather use the static method @ref #self.
  *
+ *  @short The class managing all the filters.
+ *  @ref KoFilter
+ *  @ref KoFilterDialog
+ *
  *  @author Kalle Dalheimer <kalle@kde.org>
  *  @author Torben Weis <weis@kde.org>
- *  @author Werner Trobin <wtrobin@carinthia.com>
+ *  @author Werner Trobin <wtrobin@mandrakesoft.com>
  *  @version $Id$
  */
 class KoFilterManager
 {
 public:
-    enum Direction { Import, Export };
     /**
-     * Returns a string list that is suitable for passing to
-     * KFileDialog::setFilters().
+     * Are we importing (loading) or exporting (saving) a file?
+     */
+    enum Direction { Import, Export };
+
+    /**
+     * Returns a string list (packed into a string) that is suitable for
+     * passing to KFileDialog::setFilters().
      *
-     * @param direction Whether the dialog is for opening or for
-     * saving. Is either KoFilterManager::Import or
-     * KoFilterManager::Export.
+     * @param direction Whether the dialog is for opening or for saving.
+     *                  It is either KoFilterManager::Import or KoFilterManager::Export.
      * @param _format is the mimetype that has to be exported/imported,
      *                for example "application/x-kspread".
      * @param _native_pattern is the filename pattern for the native format
@@ -92,15 +84,13 @@ public:
                               const char *_native_name,
                               const bool allfiles ) const;
 
-#ifndef USE_QFD
     /**
-     * Prepares the KFileDialog. This means it adds the available
+     * Prepares a KFileDialog instance. This means it adds the available
      * filters and dialogs.
      *
      * @param dialog The dialog you want to prepare
-     * @param direction Whether the dialog is for opening or for
-     * saving. Is either KoFilterManager::Import or
-     * KoFilterManager::Export.
+     * @param direction Whether the dialog is for opening or for saving.
+     *                  It is either KoFilterManager::Import or KoFilterManager::Export.
      * @param _format is the mimetype that has to be exported/imported,
      *                for example "application/x-kspread".
      * @param _native_pattern is the filename pattern for the native format
@@ -112,7 +102,7 @@ public:
      *                        This variable may be 0L, then no native format
      *                        is added.
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
-     * @return Sucess?
+     * @return Have we been sucessful?
      */
     const bool prepareDialog( KFileDialog *dialog,
 			      const Direction &direction,
@@ -122,15 +112,10 @@ public:
 			      const bool allfiles );
 
     /**
-     * Cleans up the KFileDialog (deletes all the stuff)
+     * Cleans up the prepared KFileDialog (deletes all the stuff)
      * and saves the dialog config. Please don't forget to call it!
      */
     void cleanUp();
-
-    // Get the ID of the QWidget in the Stack which matches this
-    // extension. (internal)
-    const int findWidget(const QString &ext) const;
-#endif
 
     /**
      * Import a file by applying a filter
@@ -164,24 +149,27 @@ public:
     static KoFilterManager* self();
 
 protected:
-    KoFilterManager() {}
+    KoFilterManager();
+    KoFilterManager &operator=(const KoFilterManager &);
 
 private:
+    /**
+     *	Get the ID of the QWidget in the Stack which matches this
+     *  extension. (internal)
+     */
+    const int findWidget(const QString &ext) const;
+
+    friend class PreviewStack;
+
     static KoFilterManager* s_pSelf;
-    QString tmpFile;
-    QString exportFile;
-    QString native_format, mime_type;
-    bool prepare;
-    QValueList<KoFilterEntry> m_vec;
-#ifndef USE_QFD
-    PreviewStack *ps;
-    mutable QMap<QString, int> dialogMap;
-    QMap<int, KoFilterDialog*> originalDialogs;
-    QString config;  // stores the config information
-#endif
+    KoFilterManagerPrivate *d;
 };
 
-#ifndef USE_QFD
+
+/**
+ * This class is used internally by KoFilterManager to stack all the
+ * available dialgos. (internal)
+ */
 class PreviewStack : public QWidgetStack {
 
     Q_OBJECT
@@ -190,17 +178,20 @@ public:
     PreviewStack(QWidget *parent, const char *name, KoFilterManager *m);
     virtual ~PreviewStack();
 
+    // As the stack can be hidden/visible one has to know the status
     const bool isHidden() const { return hidden; }
 
 public slots:
+    // The URL has changed -> show the correct dialog
     void showPreview(const KURL &url);
+    // When exporting (saving) we can only check adapt
+    // the dialog via the filter b/c there is no URL
     void filterChanged(const QString &filter);
 
 private:
     void change(const QString &ext);
-    
+
     const KoFilterManager * const mgr;
     bool hidden;
 };
-#endif
 #endif  // __koffice_filter_manager_h__
