@@ -36,6 +36,7 @@ namespace KoPictureType
     {
         TypeUnknown = 0,
         TypeImage,          // Image, QImage-based
+        TypeEps,
         TypeClipart         // Clipart, QPicture-based
     };
 };

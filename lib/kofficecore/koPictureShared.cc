@@ -27,6 +27,7 @@
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 #include "koPictureImage.h"
+#include "koPictureEps.h"
 #include "koPictureClipart.h"
 #include "koPictureShared.h"
 
@@ -297,9 +298,7 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     }
     else if (mode=="eps")
     {
-        KoPictureImage* image=new KoPictureImage();
-        image->setResampleOnResize( true );
-        m_base=image;
+        m_base=new KoPictureEps();
     }
     else
     {   // TODO: test if QImageIO really knows the file format

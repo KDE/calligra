@@ -23,12 +23,23 @@
 #include <qpixmap.h>
 
 #include <kdebug.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 
+static int s_useSlowResizeMode = -1; // unset
+
 KoPictureBase::KoPictureBase(void)
 {
+    // Slow mode can be very slow, especially at high zoom levels -> configurable
+    if ( s_useSlowResizeMode == -1 )
+    {
+        KConfigGroup group( KGlobal::config(), "KOfficeImage" );
+        s_useSlowResizeMode = group.readNumEntry( "HighResolution", 1 );
+        kdDebug(30003) << "HighResolution = " << s_useSlowResizeMode << endl;
+    }
 }
 
 KoPictureBase::~KoPictureBase(void)
@@ -99,3 +110,7 @@ QString KoPictureBase::getMimeType(const QString&) const
     return QString(NULL_MIME_TYPE);
 }
 
+bool KoPictureBase::isSlowResizeModeAllowed(void) const
+{
+    return s_useSlowResizeMode != 0;
+}

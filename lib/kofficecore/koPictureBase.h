@@ -98,6 +98,7 @@ public:
 
     virtual QString getMimeType(const QString& extension) const;
 
+    bool isSlowResizeModeAllowed(void) const;
 };
 
 #endif /* __koPictureBase_h__ */

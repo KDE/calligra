@@ -17,32 +17,32 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef __koPictureImage_h__
-#define __koPictureImage_h__
+#ifndef __koPictureEps_h__
+#define __koPictureEps_h__
 
 #include <qstring.h>
 
 class QPainter;
 class QSize;
-class KoPictureImagePrivate;
+class KoPictureEpsPrivate;
 
 // TODO: fix documentation
 
 /**
- * KoPictureImage is a container class for a QImage-based picture
+ * KoPictureImage is a container class for a EPS picture
  */
-class KoPictureImage : public KoPictureBase
+class KoPictureEps : public KoPictureBase
 {
 public:
     /**
      * Default constructor.
      */
-    KoPictureImage();
+    KoPictureEps();
 
     /**
      * Destructor.
      */
-    virtual ~KoPictureImage();
+    virtual ~KoPictureEps();
 
     KoPictureType::Type getType(void) const;
 
@@ -87,9 +87,9 @@ protected:
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
 
 private:
-    QImage  m_originalImage;
     QByteArray m_rawData;
     QPixmap m_cachedPixmap;
+    QSize m_originalSize;
     QSize m_cachedSize;
     /**
      * true, if the last cached image was done using fast mode.
@@ -100,4 +100,4 @@ private:
     Private* d;
 };
 
-#endif /* __koPictureImage_h__ */
+#endif /* __koPictureEps_h__ */

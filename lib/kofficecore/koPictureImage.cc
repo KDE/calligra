@@ -24,16 +24,14 @@
 #include <qpixmap.h>
 #include <qapplication.h>
 
-#include <kconfig.h>
-#include <kglobal.h>
+#include <kdebug.h>
 #include <kmimetype.h>
 
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 #include "koPictureImage.h"
-#include <kdebug.h>
 
-KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true), m_resampleOnResize(false)
+KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
 {
     // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
     m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
@@ -71,15 +69,10 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     }
 
     // Slow mode can be very slow, especially at high zoom levels -> configurable
-    static int s_useSlowResizeMode = -1; // unset
-    if ( s_useSlowResizeMode == -1 )
+    if ( !isSlowResizeModeAllowed() )
     {
-        KConfigGroup group( KGlobal::config(), "KOfficeImage" );
-        s_useSlowResizeMode = group.readNumEntry( "HighResolution", 1 );
-    }
-    if ( s_useSlowResizeMode == 0 )
-    {
-        fastMode = true; // The user has forbidden to use slow mode!
+        kdDebug(30003) << "User has disallowed slow mode!" << endl;
+        fastMode = true;
     }
 
     // Use QImage::scale if we have fastMode==true
@@ -90,34 +83,8 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     }
     else
     {
-        if ( m_resampleOnResize )
-        {
-            QApplication::setOverrideCursor( Qt::waitCursor );
-            QBuffer buffer( m_rawData );
-            buffer.open( IO_ReadOnly );
-            QImageIO io( &buffer, 0 );
-            QCString params;
-            params.setNum( size.width() );
-            params += ':';
-            QCString height;
-            height.setNum( size.height() );
-            params += height;
-            io.setParameters( params );
-            io.read();
-            QImage image = io.image();
-            if ( image.size() != size ) // this can happen due to rounding problems
-            {
-                //kdDebug() << "fixing size to " << size.width() << "x" << size.height()
-                //          << " (was " << image.width() << "x" << image.height() << ")" << endl;
-                image = image.scale( size ); // hmm, smoothScale instead?
-            }
-            m_cachedPixmap = image;
-            QApplication::restoreOverrideCursor();
-            m_cacheIsInFastMode=false;
-        }
-        else
-            m_cachedPixmap = m_originalImage.smoothScale( size );
-
+        m_cachedPixmap = m_originalImage.smoothScale( size );
+        m_cacheIsInFastMode=false;
     }
     m_cachedSize=size;
 }
