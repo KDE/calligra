@@ -1258,9 +1258,7 @@ void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
         int y = formulaView->getCursorPoint().y();
         m_canvas->ensureVisible( x, y );
     }
-    QRect dirty = formulaView->getDirtyArea();
-    dirty.moveBy( -m_canvas->contentsX(), -m_canvas->contentsY() );
-    m_canvas->viewport()->update( dirty );
+    m_canvas->repaintChanged( formulaFrameSet() );
 }
 
 
