@@ -471,7 +471,7 @@ void KoTemplateChooseDia::setupDialog()
 	}
 
 	if ( cancelQuits() )
-	    setButtonCancelText(i18n("&Quit"));
+	    setButtonCancel( KStdGuiItem::quit() );
 
 	d->tabWidget = new QTabWidget( d->m_mainwidget, "tabWidget" );
 	maingrid->addWidget( d->tabWidget, 0, 0 );
