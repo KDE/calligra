@@ -1,12 +1,5 @@
-#1########################################################!@#$
-####   Makefile.am generated automatically by KDEStudio   ####
-#### WARNING! All changes made in this part will be lost! ####
-##############################################################
-SUBDIRS = kiviopart plugins
-EXTRA_DIST = kivio.studio res.cpp
-##############################################################
-####                  END KDEStudio part                  ####
-#2########################################################!@#$
+SUBDIRS = kiviopart plugins templates
+EXTRA_DIST = res.cpp
 
 package-messages:
 	$(MAKE) -f admin/Makefile.common package-messages

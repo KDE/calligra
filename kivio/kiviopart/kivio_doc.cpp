@@ -183,10 +183,18 @@ bool KivioDoc::initDoc()
   if ( ret == KoTemplateChooseDia::File ) {
     KURL url(f);
     return openURL(url);
+  } else if ( ret == KoTemplateChooseDia::Template ) {
+    QFileInfo fileInfo( f );
+    QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kft" );
+    resetURL();
+    bool ok = loadNativeFormat( fileName );
+    KivioPage *t = createPage();
+    m_pMap->addPage( t );
+    setEmpty();
+    return ok;
   } else if ( ret == KoTemplateChooseDia::Empty ) {
     KivioPage *t = createPage();
     m_pMap->addPage( t );
-    resetURL();
     setEmpty();
     return true;
   } else {
@@ -336,7 +344,10 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     setUnits(Kivio::convToKoUnit(u));
   }
 
-  gridData.load(kivio,"grid");
+  if(kivio.hasAttribute("gridIsShow")) {
+    gridData.load(kivio,"grid");
+  }
+
   return true;
 }
 

@@ -82,6 +82,7 @@ KInstance* KivioFactory::global()
   if ( !s_global )
   {
     s_global = new KInstance(aboutData());
+    s_global->dirs()->addResourceType( "kivio_template", KStandardDirs::kde_default("data") + "kivio/templates/" );
     s_global->dirs()->addResourceType( "toolbar", KStandardDirs::kde_default("data") + "koffice/toolbar/");
     s_global->iconLoader()->addAppDir("koffice");
   }

@@ -54,6 +54,6 @@ void KivioGridData::load(const QDomElement& element, const QString& name)
   QColor def(QColor(228, 228, 228));
   color = XmlReadColor(element, name + "Color", def);
 
-  isSnap = (bool)element.attribute(name + "IsSnap", "0").toInt();
-  isShow = (bool)element.attribute(name + "IsShow", "0").toInt();
+  isSnap = (bool)element.attribute(name + "IsSnap", "1").toInt();
+  isShow = (bool)element.attribute(name + "IsShow", "1").toInt();
 }
