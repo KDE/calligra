@@ -353,7 +353,7 @@ void KSpreadTabBar::slotRename()
 
     bool ok;
     QString activeName = table->tableName();
-    QString newName = KLineEditDlg::getText( i18n("Rename Table"),i18n("Table Name:"), activeName, &ok, this );
+    QString newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Rename Sheet:"), activeName, &ok, this );
 
     // Have a different name ?
     if ( ok ) // User pushed an OK button.
@@ -361,7 +361,7 @@ void KSpreadTabBar::slotRename()
         if ( (newName.stripWhiteSpace()).isEmpty() ) // Table name is empty.
         {
             KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Table name cannot be empty."), i18n("Change Table Name") );
+            KMessageBox::information( this, i18n("Sheet name cannot be empty."), i18n("Change Sheet Name") );
             // Recursion
             slotRename();
         }
@@ -371,7 +371,7 @@ void KSpreadTabBar::slotRename()
             if ( !table->setTableName( newName ) )
             {
                 KNotifyClient::beep();
-                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Table Name") );
+                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Sheet Name") );
                 // Recursion
                 slotRename();
              }

@@ -260,7 +260,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   if ( !_name )
   {
       QCString s;
-      s.sprintf("Table%i", s_id );
+      s.sprintf("Sheet%i", s_id );
       QObject::setName( s.data() );
   }
   m_iScrollPosX=0;

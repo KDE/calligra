@@ -34,6 +34,8 @@
   <Action name="showPageBorders"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
+  <Action name="insertTable"/>
+  <Separator/>       
   <Menu name="Comment"><text>Commen&amp;t</text>
     <Action name="addmodifycomment"/>
     <Action name="showcomment"/>
@@ -56,6 +58,12 @@
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
   <Action name="paperLayout"/>
+  <Separator/>
+  <Menu name="Sheet"><text>&amp;Sheet</text>
+  <Action name="removeTable"/>
+  <Action name="hideTable"/>
+  <Action name="showTable"/>
+  </Menu>
   <Separator/>
   <Action name="adjust"/>
   <Menu name="Row"><text>&amp;Row</text>
@@ -96,21 +104,15 @@
   <Action name="insertCell"/>
   <Action name="removeCell"/>
   <Separator/>
-  <Action name="goalSeek"/>
-  <Action name="consolidate"/>
-  <Action name="textToColumns"/>
-  <Action name="oszi"/>
- </Menu>
- <Menu name="table"><text>Ta&amp;ble</text>
-  <Action name="insertTable"/>
-  <Action name="removeTable"/>
-  <Action name="hideTable"/>
-  <Action name="showTable"/>
-  <Separator/>
   <Action name="mergecell"/>
   <Action name="dissociatecell"/>
   <Separator/>
   <Action name="showArea"/>
+  <Separator/>
+  <Action name="goalSeek"/>
+  <Action name="consolidate"/>
+  <Action name="textToColumns"/>
+  <Action name="oszi"/>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
   <Action name="spelling"/>

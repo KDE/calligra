@@ -954,53 +954,53 @@ void KSpreadView::initializeTextPropertyActions()
 
 void KSpreadView::initializeTableActions()
 {
-  m_insertTable = new KAction( i18n("Insert Table"),"inserttable", 0, this,
+  m_insertTable = new KAction( i18n("Sheet"),"inserttable", 0, this,
                                SLOT( insertTable() ), actionCollection(),
                                "insertTable" );
-  m_insertTable->setToolTip(i18n("Insert a new spreadsheet."));
+  m_insertTable->setToolTip(i18n("Insert a new sheet."));
 
-  m_removeTable = new KAction( i18n("Remove Table"), "delete_table",0,this,
+  m_removeTable = new KAction( i18n("Remove Sheet"), "delete_table",0,this,
                                SLOT( removeTable() ), actionCollection(),
                                "removeTable" );
-  m_removeTable->setToolTip(i18n("Remove the spreadsheet."));
+  m_removeTable->setToolTip(i18n("Remove the active sheet."));
 
-  m_renameTable=new KAction( i18n("Rename Table..."),0,this,
+  m_renameTable=new KAction( i18n("Rename Sheet..."),0,this,
                              SLOT( slotRename() ), actionCollection(),
                              "renameTable" );
-  m_renameTable->setToolTip(i18n("Rename the spreadsheet."));
+  m_renameTable->setToolTip(i18n("Rename the active sheet."));
 
-  m_nextTable = new KAction( i18n("Next Table"), CTRL + Key_PageDown, this,
+  m_nextTable = new KAction( i18n("Next Sheet"), CTRL + Key_PageDown, this,
                              SLOT( nextTable() ), actionCollection(),
                              "nextTable");
-  m_nextTable->setToolTip(i18n("Move to the next spreadsheet."));
+  m_nextTable->setToolTip(i18n("Move to the next sheet."));
 
-  m_prevTable = new KAction( i18n("Previous Table"), CTRL + Key_PageUp, this,
+  m_prevTable = new KAction( i18n("Previous Sheet"), CTRL + Key_PageUp, this,
                              SLOT( previousTable() ), actionCollection(),
                              "previousTable");
-  m_prevTable->setToolTip(i18n("Move to the previous spreadsheet."));
+  m_prevTable->setToolTip(i18n("Move to the previous sheet."));
 
-  m_firstTable = new KAction( i18n("First Table"), 0, this,
+  m_firstTable = new KAction( i18n("First Sheet"), 0, this,
                               SLOT( firstTable() ), actionCollection(),
                               "firstTable");
-  m_firstTable->setToolTip(i18n("Move to the first spreadsheet."));
+  m_firstTable->setToolTip(i18n("Move to the first dsheet."));
 
-  m_lastTable = new KAction( i18n("Last Table"), 0, this,
+  m_lastTable = new KAction( i18n("Last Sheet"), 0, this,
                              SLOT( lastTable() ), actionCollection(),
                              "lastTable");
-  m_lastTable->setToolTip(i18n("Move to the last spreadsheet."));
+  m_lastTable->setToolTip(i18n("Move to the last sheet."));
 
-  m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()),
+  m_showTable = new KAction(i18n("Show Sheet"),0 ,this,SLOT( showTable()),
                             actionCollection(), "showTable" );
-  m_showTable->setToolTip(i18n("Show a hidden spreadsheet."));
+  m_showTable->setToolTip(i18n("Show a hidden sheet."));
 
-  m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()),
+  m_hideTable = new KAction(i18n("Hide Sheete"),0 ,this,SLOT( hideTable()),
                             actionCollection(), "hideTable" );
-  m_hideTable->setToolTip(i18n("Hide the spreadsheet."));
+  m_hideTable->setToolTip(i18n("Hide the active sheet."));
 
-  m_tableFormat = new KAction( i18n("Table Style..."), 0, this,
+  m_tableFormat = new KAction( i18n("Sheet Style..."), 0, this,
                                SLOT( tableFormat() ), actionCollection(),
                                "tableFormat" );
-  m_tableFormat->setToolTip(i18n("Set the spreadsheet formatting."));
+  m_tableFormat->setToolTip(i18n("Set the worksheet formatting."));
 }
 
 void KSpreadView::initializeSpellChecking()
@@ -2609,7 +2609,7 @@ void KSpreadView::showTable()
 {
     if ( !m_pTable )
         return;
-    KSpreadshow dlg( this, "Table show");
+    KSpreadshow dlg( this, "Sheet show");
     dlg.exec();
 }
 
@@ -4113,11 +4113,11 @@ void KSpreadView::removeTable()
    if ( doc()->map()->count() <= 1||(m_pTabBar->listshow().count()<=1) )
     {
         KNotifyClient::beep();
-        KMessageBox::sorry( this, i18n("You cannot delete the only table of the map."), i18n("Remove Table") ); // FIXME bad english? no english!
+        KMessageBox::sorry( this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet") ); // FIXME bad english? no english!
         return;
     }
     KNotifyClient::beep();
-    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active table.\nDo you want to continue?"),i18n("Remove Table"));
+    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active sheet.\nDo you want to continue?"),i18n("Remove Sheet"));
 
     if ( ret == KMessageBox::Yes )
     {

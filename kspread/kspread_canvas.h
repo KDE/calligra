@@ -116,7 +116,7 @@ public:
   /**
      * If the user chooses some cells during editing a formula, then
      * this function returns the length of the textual representation.
-     * For example the user selects "Table1!A1:B2" then this function
+     * For example the user selects "Sheet1!A1:B2" then this function
      * returns 12.
      */
     int chooseTextLen() const { return length_namecell; }

@@ -132,7 +132,7 @@ preference::preference( KSpreadView* _view, QVBox *box, char *name )
 
   m_pView = _view;
 
-  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Table"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Sheet"), box, "GroupBox" );
 
   m_pFormula= new QCheckBox(i18n("Show &formula"),tmpQGroupBox);
   m_pFormula->setChecked(m_pView->activeTable()->getShowFormula());

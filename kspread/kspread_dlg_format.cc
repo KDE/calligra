@@ -35,7 +35,7 @@
 
 
 KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
-    : KDialogBase( view, name, TRUE,i18n("Table Style"),Ok|Cancel )
+    : KDialogBase( view, name, TRUE,i18n("Sheet Style"),Ok|Cancel )
 {
     for( int i = 0; i < 16; ++i )
 	m_cells[ i ] = 0;
@@ -57,7 +57,7 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     for( ; it != lst.end(); ++it )
     {
 	KSimpleConfig cfg( *it, TRUE );
-	cfg.setGroup( "Table-Style" );
+	cfg.setGroup( "Sheet-Style" );
 
 	Entry e;
 	e.config = *it;

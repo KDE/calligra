@@ -29,7 +29,7 @@
 
 
 KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
-	: KDialogBase( parent, name,TRUE,i18n("Table hidden"),Ok|Cancel )
+	: KDialogBase( parent, name,TRUE,i18n("Sheet hidden"),Ok|Cancel )
 {
   m_pView = parent;
   QWidget *page = new QWidget( this );
