@@ -70,7 +70,8 @@ void RectangularSelectTool::mousePress( QMouseEvent* event )
 
     if( event->button() == LeftButton )
     {
-        if(m_drawn) // erase old rectangle
+        // erase old rectangle
+        if(m_drawn) 
         {
             m_drawn = false;
            
@@ -101,8 +102,7 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
 
 void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 {
-    if (m_pDoc->isEmpty())
-        return;
+    if (m_pDoc->isEmpty()) return;
     
     if( ( m_dragging ) && ( event->button() == LeftButton ) )
     {
@@ -115,11 +115,11 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
         /* jwc - leave selection rectange boundary on screen
         it is only drawn to canvas, not to retained imagePixmap,
         and therefore will disappear when another tool action is used */
-        // drawRect( m_dragStart, m_dragEnd ); 
         
         /* get selection rectangle after mouse is released
         there always is one, even if width and height are 0 
-        left and right, top and bottom are sometimes reversed! */
+        left and right, top and bottom are sometimes reversed! 
+        I think there is a Qt method we can use to do this, though */
         
         if(zStart.x() <= zEnd.x())
         {
@@ -144,22 +144,26 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
         }
                     
         KisImage *img = m_pDoc->current();
-       
+        if(!img) return;
+        
+        KisLayer *lay = img->getCurrentLayer();
+        if(!lay) return;
+        
         // if there are several partially overlapping or interior
         // layers we must be sure to draw only on the current one
-        // imageExtents() will not do as it's the union of all layers
-        if (img && m_selectRect.intersects(img->getCurrentLayer()->layerExtents()))
+        if (m_selectRect.intersects(lay->layerExtents()))
         {
-            m_selectRect = m_selectRect.intersect(img->getCurrentLayer()->layerExtents());
+            m_selectRect = m_selectRect.intersect(lay->layerExtents());
 
-            m_pDoc->getSelection()->setRect(m_selectRect);
+            // the selection class handles getting the selection
+            // content from the given rectangular area
+            m_pDoc->getSelection()->setRectangularSelection(m_selectRect, lay);
 
             kdDebug(0) << "selectRect" 
             << " left: "   << m_selectRect.left() 
             << " top: "    << m_selectRect.top()
             << " right: "  << m_selectRect.right() 
-            << " bottom: " << m_selectRect.bottom()
-            << endl;
+            << " bottom: " << m_selectRect.bottom() << endl;
         }    
     }
 }

@@ -16,8 +16,8 @@
   <Action name="tool_colorpicker"/>  
   
   <Action name="tool_select_rectangular"/>
+  <Action name="tool_select_elliptical"/>  
   <Action name="tool_select_polygonal"/>
-  <Action name="tool_select_elliptical"/>
   <Action name="tool_select_contiguous"/>
 
   <Action name="tool_pen"/>
@@ -195,8 +195,8 @@
 
 <ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
   <Action name="tool_select_rectangular"/>
+  <Action name="tool_select_elliptical"/>  
   <Action name="tool_select_polygonal"/>
-  <Action name="tool_select_elliptical"/>
   <Action name="tool_select_contiguous"/>
 </ToolBar>
 

@@ -93,6 +93,9 @@ bool PasteTool::setClip()
     mHotSpotY = 0;
     mHotSpot = QPoint(mHotSpotX, mHotSpotY);
     
+    if(!clipImage.hasAlphaBuffer())
+        kdDebug() << "paste tool - clipImage has no alpha buffer!" << endl;
+        
     return true;
 }
 
@@ -165,8 +168,9 @@ bool PasteTool::pasteColor(QPoint pos)
 
     bool grayscale = false;
     bool colorBlending = false;
-    bool alpha = (img->colorMode() == cm_RGBA);
-  
+    bool layerAlpha = (img->colorMode() == cm_RGBA);
+    bool imageAlpha = qimg->hasAlphaBuffer();
+      
     for (int y = sy; y <= ey; y++)
     {
         for (int x = sx; x <= ex; x++)
@@ -179,6 +183,10 @@ bool PasteTool::pasteColor(QPoint pos)
             // pixel value in scanline at x offset to right
             uint *p = (uint *)qimg->scanLine(y) + x;
             
+            // if the alpha value of the pixel in the selection
+            // image is 0, don't paint the pixel.  It's transparent.
+            if((imageAlpha) && (((*p) >> 24) == 0)) continue;
+                        
             if(colorBlending)
             {
                 // make mud!
@@ -197,7 +205,7 @@ bool PasteTool::pasteColor(QPoint pos)
 	            lay->setPixel(2, startx + x, starty + y, qBlue(*p));
             }
                        	  
-            if (alpha)
+            if (layerAlpha)
 	        {
 	            a = lay->pixel(3, startx + x, starty + y);
                 if(grayscale)

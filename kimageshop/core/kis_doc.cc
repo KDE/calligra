@@ -958,30 +958,33 @@ bool KisDoc::LayerToQtImage(QImage *qimg, KisView *pView, QRect & clipRect)
 }
 
 /*
-  set selection for document
+    setSelection - set selection for document
 */    
-void KisDoc::setSelection(QRect & rect)
+void KisDoc::setSelection(QRect & r)
 {
-    m_pSelection->setRect(rect);
+    m_pSelection->setBounds(r);
 }
         
 /*
-  clear selection for document - 
+    clearSelection - clear selection for document 
 */    
 void KisDoc::clearSelection()
 {
     m_pSelection->setNull();
 }
 
+
 /*
-  clear selection for document - 
+   hasSelection - does this document have a document-wide selection?
 */    
 bool KisDoc::hasSelection()
 {
-    return (m_pSelection->getRect().isNull() ? false : true);
+    return (m_pSelection->getRectangle().isNull() ? false : true);
 }
 
-
+/*
+    removeClipImage - delete the current clip image and nullify it
+*/
 void KisDoc::removeClipImage()
 {
     if(m_pClipImage != 0L)
@@ -992,9 +995,42 @@ void KisDoc::removeClipImage()
 }
 
 /*
-    set current selection or clip image for the document
+    setClipImage - set current clip image for the document from the selection
 */
+bool KisDoc::setClipImage()
+{
+    KisImage *img = current();
+    if(!img) return false;
+    
+    KisLayer *lay = img->getCurrentLayer();
+    if(!lay) return false;
+    
+    if(m_pClipImage != 0L)
+    { 
+        delete m_pClipImage;
+        m_pClipImage = 0L;
+    }   
+    
+    QRect selectRect = getSelection()->getRectangle();
 
+    // create a clip image same size, depth, etc., as selection image     
+    m_pClipImage = new QImage(selectRect.width(), selectRect.height(), 32);
+    if(!m_pClipImage) return false;
+    
+    // we will need alpha channel for masking the unselected pixels out
+    m_pClipImage->setAlphaBuffer(true);
+    
+    // make a deep copy of the selection image, if there is one
+    if(getSelection()->getImage().isNull())
+        return false;
+    else    
+        *m_pClipImage = getSelection()->getImage();
+    
+    return true;
+}
+
+// old version
+#if 0
 bool KisDoc::setClipImage()
 {
     KisImage *img = current();
@@ -1006,7 +1042,7 @@ bool KisDoc::setClipImage()
         m_pClipImage = 0L;
     }   
     
-    QRect selectRect = getSelection()->getRect();
+    QRect selectRect = getSelection()->getRectangle();
      
     m_pClipImage = new QImage(selectRect.width(), selectRect.height(), 32);
     if(!m_pClipImage) return false;
@@ -1055,7 +1091,7 @@ bool KisDoc::setClipImage()
     
     return true;    
 }
-
+#endif
 
 KisImage* KisDoc::newImage(const QString& n, int width, int height, 
     cMode cm , uchar bitDepth )

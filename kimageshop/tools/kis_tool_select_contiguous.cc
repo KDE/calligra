@@ -136,7 +136,7 @@ void ContiguousSelectTool::mouseRelease( QMouseEvent* event )
             m_selectRect.setBottom(zStart.y());            
         }
                     
-        m_pDoc->getSelection()->setRect(m_selectRect);
+        m_pDoc->getSelection()->setBounds(m_selectRect);
 
         kdDebug(0) << "selectRect" 
             << " left: "   << m_selectRect.left() 

@@ -142,7 +142,9 @@ void EllipticalSelectTool::mouseRelease( QMouseEvent* event )
             m_selectRect.setBottom(zStart.y());            
         }
                     
-        m_pDoc->getSelection()->setRect(m_selectRect);
+        // m_pDoc->getSelection()->setBounds(m_selectRect);
+        m_pDoc->getSelection()->setEllipticalSelection( m_selectRect,
+            m_pDoc->current()->getCurrentLayer());
 
         kdDebug(0) << "selectRect" 
             << " left: "   << m_selectRect.left() 
@@ -167,7 +169,7 @@ void EllipticalSelectTool::drawRect( const QPoint& start, const QPoint& end )
     /* adjust for scroll ofset as this draws on the canvas, not on
     the image itself QRect(left, top, width, height) */
     
-    p.drawRect( QRect(start.x() + m_view->xPaintOffset() 
+    p.drawEllipse( QRect(start.x() + m_view->xPaintOffset() 
                                 - (int)(zF * m_view->xScrollOffset()),
                       start.y() + m_view->yPaintOffset() 
                                 - (int)(zF * m_view->yScrollOffset()), 

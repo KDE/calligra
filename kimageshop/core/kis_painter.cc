@@ -102,7 +102,7 @@ bool KisPainter::toLayer(QRect paintRect)
     if (!lay) return false;
     
     QImage *qimg = &painterImage;
-    kdDebug(0) << "qimg "  << " width " << qimg->width() 
+    kdDebug(0) << "painter pixmap "  << " width " << qimg->width() 
     << " height " << qimg->height() << endl;    
     
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
@@ -131,6 +131,7 @@ bool KisPainter::toLayer(QRect paintRect)
   
     clipRect = clipRect.intersect(lay->imageExtents());
 
+#if 0
     kdDebug(0) << "clipRect.intersect(lay->imageExtents()" << " left " << clipRect.left() 
     << " top " << clipRect.top() << " width " << clipRect.width() 
     << " height " << clipRect.height() << endl;
@@ -148,10 +149,11 @@ bool KisPainter::toLayer(QRect paintRect)
         return false;
         
     clipRect = clipRect.intersect(img->imageExtents());
-    
+
     kdDebug(0) << "clipRect.intersect(img->imageExtents()" << " left " << clipRect.left() 
     << " top " << clipRect.top() << " width " << clipRect.width() 
     << " height " << clipRect.height() << endl;
+#endif
     
     int sx = clipRect.left();
     int sy = clipRect.top();

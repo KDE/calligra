@@ -869,7 +869,6 @@ void KisView::setupActions()
     m_layer_mirrorY->setEnabled( false );
     
     m_tool_select_polygonal->setEnabled( false );
-    m_tool_select_elliptical->setEnabled( false );
     m_tool_select_contiguous->setEnabled( false );
 }
 
