@@ -105,10 +105,12 @@ bool KexiProject::initDoc()
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {
 		clear();
+		loadHandlers();
 		QObject *newDlg = KParts::ComponentFactory::createInstanceFromLibrary<QObject>( "kexiprojectwizard", this );
 		ok=(static_cast<KexiCreateProjectIface*>(newDlg->qt_cast("KexiCreateProjectIface"))->execute())==QDialog::Accepted;
 		delete newDlg;
 	} else if (ret==KoTemplateChooseDia::File) {
+		loadHandlers();
 		KURL url(filename);
 		kdDebug()<<"kexi: opening file: "<<url.prettyURL()<<endl;
 		ok=openURL(url);
@@ -256,8 +258,9 @@ void KexiProject::loadReferences(QDomElement &fileRefs)
 
 bool KexiProject::loadXML( QIODevice *, const QDomDocument &domDoc )
 {
+	loadHandlers();
 	setModified(false);
-	kdDebug()<<"KexiProject::loadXML"<<endl;
+	kdDebug()<<"*********KexiProject::loadXML**********"<<endl;
 	QDomElement prE=domDoc.documentElement();
 	for (QDomElement el=prE.firstChild().toElement();!el.isNull();el=el.nextSibling().toElement())
 	{
@@ -268,6 +271,7 @@ bool KexiProject::loadXML( QIODevice *, const QDomDocument &domDoc )
 		else if (tagname=="references")
 			loadReferences(el);
 		else {
+			kdDebug()<<"Trying to find a part capable of handling node \""<<tagname<<"\""<<endl;
 			for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())
 			hand->loadXML(domDoc,el);
 		}
@@ -357,6 +361,13 @@ KexiProject::addFileReference(FileReference fileref)
 {
 //	if(m_fileReferences.findIndex(fileref) != -1)
 		m_fileReferences.insert(fileref.location, fileref);
+}
+
+void
+KexiProject::removeFileReference(FileReference fileref)
+{
+//	if(m_fileReferences.findIndex(fileref) != -1)
+		m_fileReferences.remove(fileref.location);
 }
 
 QString

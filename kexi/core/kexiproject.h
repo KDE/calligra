@@ -89,6 +89,7 @@ public:
 
 
 	void addFileReference(FileReference);
+	void removeFileReference(FileReference);
 	References fileReferences(const QString &group);
 
 	bool initDBConnection(KexiDBConnection *c, KoStore *store = 0);
