@@ -480,6 +480,10 @@ public:
     *   @param recalc do an updateFrames()
     */
     void delFrame( KWFrame *frm, bool remove = true, bool recalc = true ); // calls the virtual one
+
+    /// Called by delFrame when it really deletes a frame (remove=true), to remove it from the table too
+    virtual void frameDeleted( KWFrame* /*frm*/, bool /*recalc*/ ) {}
+
     void deleteAllFrames();
     void deleteAllCopies(); // for headers/footers only
 

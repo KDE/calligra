@@ -2462,6 +2462,12 @@ void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
     KWTextFrameSet::addFrame(_frame, recalc);
 }
 
+void KWTableFrameSet::Cell::frameDeleted( KWFrame* frm, bool recalc )
+{
+    if(getGroupManager())
+        getGroupManager()->delFrame( frm, false, recalc );
+}
+
 double KWTableFrameSet::Cell::leftBorder() {
     double b = frame(0)->leftBorder().width();
     if(b==0.0)

@@ -129,8 +129,10 @@ void KWFrame::setBackgroundColor( const QBrush &_color )
 int KWFrame::pageNum() const
 {
     Q_ASSERT( m_frameSet );
-    if ( !m_frameSet )
+    if ( !m_frameSet ) {
+        kdDebug() << k_funcinfo << this << " has no frameset!" << endl;
         return 0;
+    }
     return pageNum( m_frameSet->kWordDocument() );
 }
 
@@ -613,6 +615,7 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
     if ( frames.findRef( _frame ) != -1 )
         return;
 
+    //kdDebug(32001) << k_funcinfo << getName() << " adding frame" <<  _frame << " recalc=" << recalc << endl;
     frames.append( _frame );
     _frame->setFrameSet(this);
     if(recalc)
@@ -621,17 +624,22 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 
 void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
 {
+    //kdDebug(32001) << k_funcinfo << getName() << " deleting frame" <<  _num << " remove=" << remove << " recalc=" << recalc << endl;
     KWFrame *frm = frames.at( _num );
     Q_ASSERT( frm );
-    frm->setFrameSet(0L);
     if ( !remove )
     {
         frames.take( _num );
         if (frm->isSelected()) // get rid of the resize handles
             frm->setSelected(false);
+        frm->setFrameSet(0L);
     }
-    else
+    else {
+        // ###### should something similar be done when just removing a frame from the list?
+        frameDeleted( frm, recalc ); // inform kwtableframeset if necessary
         frames.remove( _num );
+        //kdDebug(32001) << k_funcinfo << frm << " deleted. Now I have " << frames.count() << " frames" << endl;
+    }
 
     if ( recalc )
         updateFrames();
@@ -639,7 +647,7 @@ void KWFrameSet::delFrame( unsigned int _num, bool remove, bool recalc )
 
 void KWFrameSet::delFrame( KWFrame *frm, bool remove, bool recalc )
 {
-    kdDebug(32001) << "KWFrameSet::delFrame " << frm << " remove=" << remove << endl;
+    //kdDebug(32001) << "KWFrameSet::delFrame " << frm << " remove=" << remove << endl;
     int _num = frames.findRef( frm );
     Q_ASSERT( _num != -1 );
     if ( _num == -1 )

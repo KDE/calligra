@@ -3426,6 +3426,7 @@ QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted ) const {
 
 KWFrame *KWDocument::getFirstSelectedFrame() const
 {
+    // ### This should be done much more efficiently (caching?). It's called all the time.
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
