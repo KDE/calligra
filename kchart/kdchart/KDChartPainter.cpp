@@ -21,9 +21,7 @@
 #include <KDChartAreaPainter.h>
 #include <KDChartLinesPainter.h>
 #include <KDChartPiePainter.h>
-#if KDCHART_VERSION >= 200
 #include <KDChartPolarPainter.h>
-#endif
 #include <KDChartRingPainter.h>
 #include <KDChartHiLoPainter.h>
 #include <KDChartTextPiece.h>
