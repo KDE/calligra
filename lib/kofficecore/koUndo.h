@@ -26,6 +26,10 @@
 
 #define MAX_UNDO_REDO 100
 
+class KoCommand;
+
+typedef QList<KoCommand> KoCommandList;
+
 /**
  *  The KoCommand class is an abstract command.
  *  This class has to be derived to use it.
@@ -69,6 +73,8 @@ public:
   QString name()
   { return m_name; }
 
+  void setName( const QString& _name ) { m_name = _name; };
+
 private:
 
   QString m_name;
@@ -101,7 +107,7 @@ public:
    *
    *  @see KoCommand
    */
-  void addCommand( KoCommand* _command );
+  void addCommand( KoCommand *_command );
 
   /**
    *  Makes the last command undone.
@@ -131,9 +137,11 @@ public:
    */
   QString getRedoName();
 
+  int count() { return m_history.count(); }
+
 private:
 
-  QList<KoCommand> m_history;
+  KoCommandList m_history;
   int m_current;
 
 signals:
@@ -144,7 +152,7 @@ signals:
    *  @param _undo New text of the actual undo command.
    *  @param _redo New text of the actual redo command.
    */
-  void undoRedoChanged( const QString& _undo, const QString& _redo );
+  void undoRedoChanged( QString, QString );
 };
 
 #endif // __koffice_undo_h__
