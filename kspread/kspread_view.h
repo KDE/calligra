@@ -66,7 +66,7 @@ class DCOPObject;
 #include <koView.h>
 #include <koDocument.h>
 #include <koToolBox.h>
-#include <koDataTool.h>
+#include <kdatatool.h>
 #include <kglobalsettings.h>
 
 /**
@@ -595,7 +595,7 @@ private:
    struct ToolEntry
    {
      QString command;
-     KoDataToolInfo info;
+     KDataToolInfo info;
    };
    QPtrList<ToolEntry> m_lstTools;
 

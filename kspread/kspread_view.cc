@@ -2316,11 +2316,11 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;
-      QValueList<KoDataToolInfo> tools = KoDataToolInfo::query( "QString", "text/plain", m_pDoc->instance() );
+      QValueList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", m_pDoc->instance() );
       if( tools.count() > 0 )
       {
         m_pPopupMenu->insertSeparator();
-        QValueList<KoDataToolInfo>::Iterator entry = tools.begin();
+        QValueList<KDataToolInfo>::Iterator entry = tools.begin();
         for( ; entry != tools.end(); ++entry )
         {
           QStringList lst = (*entry).userCommands();
@@ -2358,7 +2358,7 @@ void KSpreadView::slotActivateTool( int _id )
 
   ToolEntry* entry = m_lstTools.at( _id - m_popupMenuFirstToolId );
 
-  KoDataTool* tool = entry->info.createTool();
+  KDataTool* tool = entry->info.createTool();
   if ( !tool )
   {
       kdDebug(36001) << "Could not create Tool" << endl;
