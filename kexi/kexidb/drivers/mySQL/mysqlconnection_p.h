@@ -38,20 +38,20 @@ class QString;
 
 namespace NAMESPACE {
 
+class ConnectionData;
+
 //! Internal MySQL connection data.
 /*! Provides a low-level API for accessing MySQL databases, that can
     be shared by any module that needs direct access to the underlying
     database.  Used by the KexiDB and KexiMigration drivers.
  */
-
 class MySqlConnectionInternal
 {
 	public:
 		MySqlConnectionInternal();
 		~MySqlConnectionInternal();
 		//! Connect to a MySQL database
-		bool db_connect(QCString host, QCString user, QCString password,
-		                unsigned short int port, QString socket);
+		bool db_connect(const KexiDB::ConnectionData& data);
 		//! Disconnect from the database
 		bool db_disconnect();
 

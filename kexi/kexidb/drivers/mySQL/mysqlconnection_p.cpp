@@ -27,6 +27,8 @@ Boston, MA 02111-1307, USA.
 
 #include "mysqlconnection_p.h"
 
+#include <kexidb/connectiondata.h>
+
 #ifdef MYSQLMIGRATE_H
 #define NAMESPACE KexiMigration
 #else
@@ -63,40 +65,51 @@ void MySqlConnectionInternal::storeError()
     none is specified).  If the server is on a remote machine, then a port is 
     the port that the remote server is listening on.
  */
-bool MySqlConnectionInternal::db_connect(QCString host, QCString user,
-  QCString password, unsigned short int port, QString socket)
+//bool MySqlConnectionInternal::db_connect(QCString host, QCString user,
+//  QCString password, unsigned short int port, QString socket)
+bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 {
 	if (!(mysql = mysql_init(mysql)))
 		return false;
 
 	KexiDBDrvDbg << "MySqlConnectionInternal::connect()" << endl;
 	QCString localSocket;
-	if (host.isEmpty() || (host=="localhost")) {
-		if (socket.isEmpty()) {
-			QStringList sockets;
-#ifndef Q_WS_WIN
-			sockets.append("/var/lib/mysql/mysql.sock");
-			sockets.append("/var/run/mysqld/mysqld.sock");
-			sockets.append("/tmp/mysql.sock");
-	
-			for(QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); it++)
-			{
-				if(QFile(*it).exists()) {
-					localSocket = ((QString)(*it)).local8Bit();
-					break;
+	QString hostName = data.hostName;
+	if (hostName.isEmpty() || hostName.lower()=="localhost") {
+		if (data.useLocalSocketFile) {
+			if (data.localSocketFileName.isEmpty()) {
+	//! @todo move the list of default sockets to a generic method
+				QStringList sockets;
+	#ifndef Q_WS_WIN
+				sockets.append("/var/lib/mysql/mysql.sock");
+				sockets.append("/var/run/mysqld/mysqld.sock");
+				sockets.append("/tmp/mysql.sock");
+		
+				for(QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); it++)
+				{
+					if(QFile(*it).exists()) {
+						localSocket = ((QString)(*it)).local8Bit();
+						break;
+					}
 				}
+	#endif
 			}
-#endif
+			else
+				localSocket = QFile::encodeName(data.localSocketFileName);
 		}
-		else
-			localSocket=socket.local8Bit();
+		else {
+			//we're not using local socket
+			hostName = "127.0.0.1"; //this will force mysql to connect to localhost
+		}
 	}
 
-	mysql_real_connect(mysql, host, user, password, 0, port, localSocket, 0);
+/*! @todo is latin1() encoding here valid? waht about using UTF for passwords? */
+	mysql_real_connect(mysql, hostName.latin1(), data.userName.latin1(), 
+		data.password.latin1(), 0, data.port, localSocket, 0);
 	if(mysql_errno(mysql) == 0)
 		return true;
 
-	storeError(); //store error msg, if any - can be destroyed after disconenct()
+	storeError(); //store error msg, if any - can be destroyed after disconnect()
 	db_disconnect();
 //	setError(ERR_DB_SPECIFIC,err);
 	return false;

@@ -50,12 +50,7 @@ MySqlConnection::~MySqlConnection() {
 }
 
 bool MySqlConnection::drv_connect() {
-  return d->db_connect(
-		m_data->hostName.local8Bit(), 
-		m_data->userName.local8Bit(),
-		m_data->password.local8Bit(),
-		m_data->port,
-		m_data->localSocketFileName);
+  return d->db_connect(*m_data);
 }
 
 bool MySqlConnection::drv_disconnect() {
