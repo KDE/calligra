@@ -9,13 +9,11 @@ INCLUDES = \
 noinst_LTLIBRARIES = libkarbonvisitors.la
 
 noinst_HEADERS = \
-	vboolean.h \
 	vselectnodes.h \
 	vselectobjects.h \
 	vtransformnodes.h 
 
 libkarbonvisitors_la_SOURCES = \
-	vboolean.cc \
 	vselectnodes.cc \
 	vselectobjects.cc \
 	vtransformnodes.cc 

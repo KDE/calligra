@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
@@ -19,15 +20,47 @@
 
 
 #include <qptrlist.h>
-#include <qvaluelist.h>
 
-#include "vboolean.h"
+#include <klocale.h>
+
+#include "vbooleancmd.h"
 #include "vpath.h"
 #include "vsegment.h"
+#include "vselection.h"
 
+
+VBooleanCmd::VBooleanCmd( VDocument *doc, VBooleanType type )
+	: VCommand( doc, i18n( "Boolean Operation" ) )
+{
+	m_selection = document()->selection()->clone();
+	m_type = type;
+}
+
+VBooleanCmd::~VBooleanCmd()
+{
+	delete( m_selection );
+}
+
+void
+VBooleanCmd::execute()
+{
+	VObjectListIterator itr( m_selection->objects() );
+	for ( ; itr.current() ; ++itr )
+	{
+// TODO: pair wise visiting.
+	}
+
+//	document()->append(  );
+	document()->selection()->clear();
+}
+
+void
+VBooleanCmd::unexecute()
+{
+}
 
 bool
-VBoolean::visit( VObject& object1, VObject& object2 )
+VBooleanCmd::visit( VObject& object1, VObject& object2 )
 {
 	m_path1 = 0L;
 	m_path2 = 0L;
@@ -38,7 +71,7 @@ VBoolean::visit( VObject& object1, VObject& object2 )
 }
 
 void
-VBoolean::visitVPath( VPath& path )
+VBooleanCmd::visitVPath( VPath& path )
 {
 	if( m_path1 == 0L )
 		m_path1 = &path;
@@ -50,7 +83,7 @@ VBoolean::visitVPath( VPath& path )
 }
 
 void
-VBoolean::recursiveSubdivision(
+VBooleanCmd::recursiveSubdivision(
 	const VSegment& segment1, double t0_1, double t1_1,
 	const VSegment& segment2, double t0_2, double t1_2,
 	VParamList& params1, VParamList& params2 )
@@ -148,7 +181,7 @@ VBoolean::recursiveSubdivision(
 }
 
 void
-VBoolean::doIt()
+VBooleanCmd::doIt()
 {
 	if( m_path1 == 0L || m_path2 == 0L )
 		return;

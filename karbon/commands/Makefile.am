@@ -7,6 +7,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 noinst_LTLIBRARIES = libkarboncommands.la
 
 noinst_HEADERS = \
+	vbooleancmd.h \
 	vcleanupcmd.h \
 	vcommand.h \
 	vdeletecmd.h \
@@ -24,6 +25,7 @@ noinst_HEADERS = \
 	vzordercmd.h
 
 libkarboncommands_la_SOURCES = \
+	vbooleancmd.cc \
 	vcleanupcmd.cc \
 	vcommand.cc \
 	vdeletecmd.cc \

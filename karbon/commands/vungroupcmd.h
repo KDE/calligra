@@ -38,7 +38,7 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-private:
+protected:
 	VObjectList m_objects;
 
 	VGroup* m_group;

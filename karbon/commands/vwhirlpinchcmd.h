@@ -38,10 +38,10 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-private:
 	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVPath( VPath& path );
 
+protected:
 	VSelection* m_selection;
 
 	KoPoint m_center;

@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
@@ -17,49 +18,56 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VBOOLEAN_H__
-#define __VBOOLEAN_H__
+#ifndef __VBOOLEANCMD_H__
+#define __VBOOLEANCMD_H__
 
 
 #include <qvaluelist.h>
 
-#include "vvisitor.h"
+#include "vcommand.h"
 
+
+class VPath;
 class VSegment;
+class VSelection;
 
 
-class VBoolean : public VVisitor
+class VBooleanCmd : public VCommand
 {
 public:
 	enum VBooleanType
 	{
-		bool_intersect,
-		bool_union,
-		bool_xor,
-		bool_subtract
+		intersect,
+		shape_union,
+		shape_xor,
+		substract
 	};
 
-	VBoolean( VBooleanType type = bool_intersect ) { m_type = type; }
-	virtual ~VBoolean() {}
+	VBooleanCmd( VDocument* doc, VBooleanType type = intersect );
+	virtual ~VBooleanCmd();
 
-	VBooleanType type() const { return m_type; }
-	void setType( VBooleanType type ) { m_type = type; }
+	virtual void execute();
+	virtual void unexecute();
 
 	// We can only visit object pairs:
-	virtual bool visit( VObject& /*object*/ )
-		{ return false; }
+	virtual bool visit( VObject& /*object*/ ) { return false; }
+	
+	// A pair visit() function.
 	bool visit( VObject& object1, VObject& object2 );
 
 	virtual void visitVPath( VPath& path );
 
-private:
-	void doIt();
-
+protected:
 	typedef QValueList<double> VParamList;
+
 	void recursiveSubdivision(
 		const VSegment& segment1, double t0_1, double t1_1,
 		const VSegment& segment2, double t0_2, double t1_2,
 		VParamList& params1, VParamList& params2 );
+
+	void doIt();
+
+	VSelection* m_selection;
 
 	VBooleanType m_type;
 	VPath* m_path1;

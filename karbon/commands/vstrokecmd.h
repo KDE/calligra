@@ -76,7 +76,7 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-private:
+protected:
 	VSelection* m_selection;
 
 	const VStroke *m_stroke;

@@ -36,9 +36,9 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-private:
 	virtual void visitVPath( VPath& path );
 
+protected:
 	VSelection* m_selection;
 
 	double m_radius;

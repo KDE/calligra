@@ -35,7 +35,6 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-private:
 	virtual void visitVLayer( VLayer& layer );
 };
 

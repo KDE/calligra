@@ -18,6 +18,7 @@ REAL BUGS:
 -	copying works wrong: the last selected shape is pasted instead of the shape one copied
 
 TODO:
+-	lenny: remove bool return value from VVIsitor once VSelect* are commands
 -	polylinetool seems to generate flat beziers instead of lines. this gives unexpected results
 	in "round corners".
 -	VImage

@@ -33,7 +33,7 @@
 class VDocument;
 
 
-class VCommand : public KNamedCommand, protected VVisitor
+class VCommand : public KNamedCommand, public VVisitor
 {
 public:
 	VCommand( VDocument* doc, const QString& name )

@@ -37,7 +37,7 @@ public:
 
 	virtual VObject* createPath();
 
-private:
+protected:
 	QFont m_font;
 	QString m_text;
 };

@@ -43,7 +43,7 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
-private:
+protected:
 	VSelection* m_selection;
 	VOrder m_state;
 };

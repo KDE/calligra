@@ -24,32 +24,35 @@
 #include "vcommand.h"
 #include "vobject.h"
 
+
 class VDocument;
 class VLayer;
 
+
 class VLayerCommand : public VCommand
 {
-	public:
-		/**
-		 * The different type of layer commands.
-		 */
-		enum VOrder {
-			AddLayer,
-			RaiseLayer,
-			LowerLayer,
-			DeleteLayer
-		};
+public:
+	/**
+	 * The different type of layer commands.
+	 */
+	enum VOrder {
+		AddLayer,
+		RaiseLayer,
+		LowerLayer,
+		DeleteLayer
+	};
 
-		VLayerCommand( VDocument* doc, const QString& name, VLayer* layer, VOrder order );
-		virtual ~VLayerCommand() {}
-		
-		virtual void execute();
-		virtual void unexecute();
+	VLayerCommand( VDocument* doc, const QString& name, VLayer* layer, VOrder order );
+	virtual ~VLayerCommand() {}
+	
+	virtual void execute();
+	virtual void unexecute();
 
-	protected:
-		VLayer*           m_layer;
-		VOrder            m_order;
-		VObject::VState   m_oldState;
-}; // VLayerCommand
+protected:
+	VLayer*           m_layer;
+	VOrder            m_order;
+	VObject::VState   m_oldState;
+};
 
-#endif /* _VLAYERCOMMAND_H_ */
+#endif
+
