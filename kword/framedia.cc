@@ -746,7 +746,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
         }
     }
     if(amount==0) {
-        rNewFrameset->setChecked(true);
+        rNewFrameset->setChecked(/*true*/false);
         rNewFrameset->setEnabled(false);
         rExistingFrameset->setEnabled(false);
         lFrameSList->setEnabled(false);
@@ -1538,7 +1538,6 @@ bool KWFrameDia::applyChanges()
                     cmd->execute();
                     macroCmd->addCommand(cmd);
                 }
-
             }
         }
         // NewFrameBehavior
