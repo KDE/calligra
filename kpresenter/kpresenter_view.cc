@@ -303,7 +303,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     if ( m_pKPresenterDoc->isReadWrite() )
     {
         connect( m_canvas, SIGNAL(selectionChanged(bool)),
-                 actionEditCut, SLOT(slotChangeCutState(bool )/*setEnabled(bool)*/) );
+                 this, SLOT(slotChangeCutState(bool )/*setEnabled(bool)*/) );
     }
     else
     {
@@ -3421,10 +3421,6 @@ void KPresenterView::objectSelectedChanged()
     actionScreenAssignEffect->setEnabled(state&&!headerfooterselected);
     actionEditDelete->setEnabled(state&&!headerfooterselected);
     actionEditCut->setEnabled(state&&!headerfooterselected);
-
-    KPTextView *edit=m_canvas->currentTextObjectView();
-    if ( edit && edit->kpTextObject()->isProtectContent())
-        actionEditCut->setEnabled( false );
 
 
 
