@@ -271,13 +271,18 @@ void KPTView::slotOpenNode() {
 	if (m_tab->visibleWidget() == m_ganttview)
 	{
         KPTNode *node = m_ganttview->currentNode();
-        if (node)
-		    node->openDialog();
+        if (node) {
+		    if ( node->openDialog() ) {
+				slotUpdate(true);
+			}
+		}
 		return;
 	}
 	if (m_tab->visibleWidget() == m_pertview)
 	{
-	    m_pertview->currentNode()->openDialog();
+	    if ( m_pertview->currentNode()->openDialog() ) {
+			slotUpdate(true);
+		}
 		return;
 	}
 }
