@@ -14,7 +14,7 @@ class QActionCollection;
 
 class KGObject : public QObject {
 
-    Q_OBJECT
+    //Q_OBJECT
 
 public:
     KGObject();
@@ -39,7 +39,7 @@ public:
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect boundingRect() const = 0;             // the bounding rectangle of this object
 
-    const QActionCollection* popupActions() const { return popup; } // return all the actions provided from
+    const QActionCollection popupActions() const { return popup; } // return all the actions provided from
                                                                    // that object. Don't forget to init it!
 
     // (TODO)
@@ -50,8 +50,8 @@ public:
     // Rotation ja/nein?
     // Linieneigenschaften (Farbe, Style, Breite,...)
     // ...
-signals:
-    void requestRepaint();  // maybe only for a specific region? (requestRepaint(const QRect &))???
+//signals:
+    //void requestRepaint();  // maybe only for a specific region? (requestRepaint(const QRect &))???
 
 private:
     KGObject &operator=(const KGObject &rhs);    // don't assign the objects, clone them
@@ -61,7 +61,7 @@ private:
     mutable bool boundingRectDirty;              // is the cached bounding rect still correct?
     mutable QRect bounds;                        // bounding rect (cache)
 
-    QActionCollection *popup;                     // all the actions which are available
+    QActionCollection popup;                     // all the actions which are available
 };
 
 
@@ -70,7 +70,7 @@ private:
 // the plain KGObject
 class KGFilledObject : public KGObject {
 
-    Q_OBJECT
+    //Q_OBJECT
 
 public:
     // fill style, color, brush,...

@@ -19,8 +19,7 @@ libkgraph_la_SOURCES = kgraph_shell.cc kgraph_part.cc \
 kgraph_SOURCES = main.cc
 
 noinst_HEADERS =  kgraph_global.h kgraph_shell.h \
-    kgraph_part.h kgraph_view.h kgraph_factory.h \
-    kgobject.h
+    kgraph_part.h kgraph_view.h kgraph_factory.h 
 
 libkgraph_la_METASOURCES = AUTO
 
