@@ -3928,7 +3928,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
 
-    if(!activeTable()->getWordSpelling( selectionInfo() ))
+    if(!activeTable()->getWordSpelling( selectionInfo() ).isEmpty())
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;
