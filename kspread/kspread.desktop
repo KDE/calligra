@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KSpread
 Name[da]=Kregneark
+Name[eo]=Tablekalkulo
 Name[hu]=KSzámolótábla
 Name[is]=Töflureiknir
 Name[pt]=Folha de Cálculo
@@ -14,6 +15,7 @@ Comment[ca]=La fulla de càlcul de Torben
 Comment[cs]=Torbenùv tabulkový procesor
 Comment[da]=Torbens regneark
 Comment[de]=Torbens Tabellenkalkulation
+Comment[eo]=Tabelkalkula programo
 Comment[es]=Hoja de Cálculo de Torben
 Comment[fi]=Torbenin taulukkolaskenta
 Comment[fr]=Tableur de Torben
@@ -32,6 +34,6 @@ MimeType=application/x-kspread
 X-KDE-RepoIds=IDL:KSpread/DocumentFactory:1.0#KSpread
 X-KDE-ActivationMode=shared
 Type=OpenPart
-Icon=kspread.xpm
-MiniIcon=kspread.xpm
+Icon=lo-kspread.png
+MiniIcon=mini-kspread.png
 ServiceTypes=KOfficeDocument
