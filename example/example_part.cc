@@ -25,6 +25,7 @@
 ExamplePart::ExamplePart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
+    setInstance( ExampleFactory::global(), false );
 }
 
 bool ExamplePart::initDoc()
