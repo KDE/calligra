@@ -147,7 +147,16 @@ SvgImport::convert()
 #define DPI 90
 
 double
-SvgImport::parseUnit( const QString &unit )
+SvgImport::toPercentage( const QString &s )
+{
+	if( s.endsWith( "%" ) )
+		return s.toDouble();
+	else
+		return s.toDouble() * 100.0;
+}
+
+double
+SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 {
 	// TODO : percentage?
 	bool ok = false;
@@ -167,6 +176,15 @@ SvgImport::parseUnit( const QString &unit )
 			value = value * DPI;
 		else if( unit.right( 2 ) == "pt" )
 			value = ( value / 72.0 ) * DPI;
+		else if( unit.right( 1 ) == "%" )
+		{
+			if( horiz && vert )
+				value = ( value / 100.0 ) * (sqrt( pow( bbox.width(), 2 ) + pow( bbox.height(), 2 ) ) / sqrt( 2 ) );
+			else if( horiz )
+				value = ( value / 100.0 ) * bbox.width();
+			else if( vert )
+				value = ( value / 100.0 ) * bbox.height();
+		}
 	}
 	else
 	{
@@ -272,10 +290,20 @@ SvgImport::parseGradient( const QDomElement &e )
 		gradhelper.gradient = m_gradients[ href ].gradient;
 	}
 
+	gradhelper.bbox = e.attribute( "gradientUnits" ) != "userSpaceOnUse";
+
 	if( e.tagName() == "linearGradient" )
 	{
-		gradhelper.gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
-		gradhelper.gradient.setVector( KoPoint( e.attribute( "x2" ).toDouble(), e.attribute( "y2" ).toDouble() ) );
+		if( gradhelper.bbox )
+		{
+			gradhelper.gradient.setOrigin( KoPoint( toPercentage( e.attribute( "x1" ) ), toPercentage( e.attribute( "y1" ) ) ) );
+			gradhelper.gradient.setVector( KoPoint( toPercentage( e.attribute( "x2" ) ), toPercentage( e.attribute( "y2" ) ) ) );
+		}
+		else
+		{
+			gradhelper.gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
+			gradhelper.gradient.setVector( KoPoint( e.attribute( "x2" ).toDouble(), e.attribute( "y2" ).toDouble() ) );
+		}
 	}
 	else
 	{
@@ -296,12 +324,11 @@ SvgImport::parseGradient( const QDomElement &e )
 	parseColorStops( &gradhelper.gradient, e );
 	//gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
 	gradhelper.gradientTransform = parseTransform( e.attribute( "gradientTransform" ) );
-	gradhelper.bbox = e.attribute( "gradientUnits" ) != "userSpaceOnUse";
 	m_gradients.insert( e.attribute( "id" ), gradhelper );
 }
 
 void
-SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &params )
+SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, const QString &params )
 {
 	VColor fillcolor = gc->fill.color();
 	VColor strokecolor = gc->stroke.color();
@@ -316,6 +343,24 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 			unsigned int end = params.findRev(")");
 			QString key = params.mid( start, end - start );
 			gc->fill.gradient() = m_gradients[ key ].gradient;
+			if( m_gradients[ key ].bbox )
+			{
+				// adjust to bbox
+				KoRect bbox = obj->boundingBox();
+				kdDebug() << "bbox x : " << bbox.x() << endl;
+				kdDebug() << "bbox y : " << bbox.y() << endl;
+				double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
+				double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
+				gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
+				offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
+				offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
+				gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
+				kdDebug() << offsety << endl;
+				kdDebug() << gc->fill.gradient().origin().x() << endl;
+				kdDebug() << gc->fill.gradient().origin().y() << endl;
+				kdDebug() << gc->fill.gradient().vector().x() << endl;
+				kdDebug() << gc->fill.gradient().vector().y() << endl;
+			}
 			gc->fill.gradient().transform( m_gradients[ key ].gradientTransform );
 			gc->fill.gradient().transform( gc->matrix );
 			gc->fill.setType( VFill::grad );
@@ -426,29 +471,29 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 
 	// try normal PA
 	if( !e.attribute( "fill" ).isEmpty() )
-		parsePA( gc, "fill", e.attribute( "fill" ) );
+		parsePA( obj, gc, "fill", e.attribute( "fill" ) );
 	if( !e.attribute( "fill-rule" ).isEmpty() )
-		parsePA( gc, "fill-rule", e.attribute( "fill-rule" ) );
+		parsePA( obj, gc, "fill-rule", e.attribute( "fill-rule" ) );
 	if( !e.attribute( "stroke" ).isEmpty() )
-		parsePA( gc, "stroke", e.attribute( "stroke" ) );
+		parsePA( obj, gc, "stroke", e.attribute( "stroke" ) );
 	if( !e.attribute( "stroke-width" ).isEmpty() )
-		parsePA( gc, "stroke-width", e.attribute( "stroke-width" ) );
+		parsePA( obj, gc, "stroke-width", e.attribute( "stroke-width" ) );
 	if( !e.attribute( "stroke-linejoin" ).isEmpty() )
-		parsePA( gc, "stroke-linejoin", e.attribute( "stroke-linejoin" ) );
+		parsePA( obj, gc, "stroke-linejoin", e.attribute( "stroke-linejoin" ) );
 	if( !e.attribute( "stroke-linecap" ).isEmpty() )
-		parsePA( gc, "stroke-linecap", e.attribute( "stroke-linecap" ) );
+		parsePA( obj, gc, "stroke-linecap", e.attribute( "stroke-linecap" ) );
 	if( !e.attribute( "stroke-dasharray" ).isEmpty() )
-		parsePA( gc, "stroke-dasharray", e.attribute( "stroke-dasharray" ) );
+		parsePA( obj, gc, "stroke-dasharray", e.attribute( "stroke-dasharray" ) );
 	if( !e.attribute( "stroke-dashoffset" ).isEmpty() )
-		parsePA( gc, "stroke-dashoffset", e.attribute( "stroke-dashoffset" ) );
+		parsePA( obj, gc, "stroke-dashoffset", e.attribute( "stroke-dashoffset" ) );
 	if( !e.attribute( "stroke-opacity" ).isEmpty() )
-		parsePA( gc, "stroke-opacity", e.attribute( "stroke-opacity" ) );
+		parsePA( obj, gc, "stroke-opacity", e.attribute( "stroke-opacity" ) );
 	if( !e.attribute( "stroke-miterlimit" ).isEmpty() )
-		parsePA( gc, "stroke-miterlimit", e.attribute( "stroke-miterlimit" ) );
+		parsePA( obj, gc, "stroke-miterlimit", e.attribute( "stroke-miterlimit" ) );
 	if( !e.attribute( "fill-opacity" ).isEmpty() )
-		parsePA( gc, "fill-opacity", e.attribute( "fill-opacity" ) );
+		parsePA( obj, gc, "fill-opacity", e.attribute( "fill-opacity" ) );
 	if( !e.attribute( "opacity" ).isEmpty() )
-		parsePA( gc, "opacity", e.attribute( "opacity" ) );
+		parsePA( obj, gc, "opacity", e.attribute( "opacity" ) );
 
 	// try style attr
 	QString style = e.attribute( "style" ).simplifyWhiteSpace();
@@ -458,7 +503,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		QStringList substyle = QStringList::split( ':', (*it) );
 		QString command	= substyle[0].stripWhiteSpace();
 		QString params	= substyle[1].stripWhiteSpace();
-		parsePA( gc, command, params );
+		parsePA( obj, gc, command, params );
 	}
 
 	obj->setFill( gc->fill );

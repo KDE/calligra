@@ -73,12 +73,13 @@ protected:
 
 	void parseGroup( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
-	void parsePA( GraphicsContext *, const QString &, const QString & );
+	void parsePA( VObject *, GraphicsContext *, const QString &, const QString & );
 	void parseGradient( const QDomElement & );
 	void parseColorStops( VGradient *, const QDomElement & );
-	double parseUnit( const QString & );
+	double parseUnit( const QString &, bool horiz = false, bool vert = false, KoRect bbox = KoRect() );
 	QWMatrix parseTransform( const QString & );
 	void parseColor( VColor &, const QString & );
+	double toPercentage( const QString & );
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
