@@ -5339,7 +5339,12 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
             QString str = error.attribute( "table:message-type" );
             if ( str == "warning" )
                 d->extra()->validity->m_action = Warning;
-            kdDebug()<<" str :"<<str<<endl;
+            else if ( str == "information" )
+                d->extra()->validity->m_action = Information;
+            else if ( str == "stop" )
+                d->extra()->validity->m_action = Stop;
+            else
+                kdDebug()<<"validation : message type unknown  :"<<str<<endl;
         }
 
         QDomElement attrText = error.namedItem( "text:p" ).toElement();
