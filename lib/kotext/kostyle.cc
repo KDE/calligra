@@ -331,7 +331,7 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
 void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
 {
     // Load name
-    m_name = styleElem.attribute( "style:name" );
+    m_name = styleElem.attribute( "style:display-name" );
 
     // OOo hack
     //m_bOutline = m_name.startsWith( "Heading" );

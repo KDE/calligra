@@ -64,10 +64,6 @@ public:
     };
 
     // This class is used as a struct, which explains the public vars :)
-    /**
-     * Alignment flag (AlignAuto/AlignLeft/AlignRight/AlignJustify)
-     */
-    int alignment;
     /** left, right, top, bottom, firstLineSpacing - in pt */
     double margins[5];
     /**
@@ -88,10 +84,12 @@ public:
     void setLineSpacingValue(double _value) { lineSpacing = _value;}
 
     static QString* shadowCssCompat; // used for compat with koffice-1.2 when loading
+
     char unused;          // for future use
     char pageBreaking;    // Page breaking flags
     char direction;       // QChar::Direction
-    char unused2;         // for future use
+    /// Alignment flag (AlignAuto/AlignLeft/AlignRight/AlignJustify)
+    char alignment; // Qt::AlignmentFlags
     KoBorder leftBorder, rightBorder, topBorder, bottomBorder;
     /** can be 0 if no counter set */
     KoParagCounter* counter;
@@ -125,6 +123,11 @@ public:
     static void loadOasisParagLayout( KoParagLayout& layout, KoOasisContext& context );
     /// Save this parag layout to Oasis XML
     void saveOasis( KoGenStyle& gs ) const;
+
+    /// Convert an alignment string into an alignment flag (load)
+    static Qt::AlignmentFlags loadOasisAlignment( const QCString& str );
+    /// Convert an alignment flag into an alignment string (save)
+    static QCString saveOasisAlignment( Qt::AlignmentFlags alignment );
 
 private:
     KoTabulatorList m_tabList;

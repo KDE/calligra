@@ -1892,11 +1892,18 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         QString autoListStyleName = mainStyles.lookup( listStyle, "L", true );
         writer.addAttribute( "text:style-name", autoListStyleName );
     }
-    // TODO: level for headings
     writer.startElement( outline ? "text:h" : "text:p", false /*no indent inside this tag*/ );
-    if ( outline && m_layout.style->paragLayout().counter )
-        writer.addAttribute( "text:outline-level", (int)m_layout.style->paragLayout().counter->depth() );
+    if ( outline && paragCounter ) {
+        writer.addAttribute( "text:outline-level", (int)m_layout.counter->depth() + 1 );
+    }
     writer.addAttribute( "text:style-name", autoParagStyleName );
+
+    if ( paragCounter ) {
+        // This is to help export filters
+        writer.startElement( "text:number" );
+        writer.addTextNode( m_layout.counter->text( this ) );
+        writer.endElement();
+    }
 
     if ( to == -1 ) {
         // Save the whole parag. If length() == 1 (only trailing space),

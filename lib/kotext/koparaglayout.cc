@@ -394,6 +394,27 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
     }
 }
 
+//static
+Qt::AlignmentFlags KoParagLayout::loadOasisAlignment( const QCString& str )
+{
+    return str == "left" ? Qt::AlignLeft :
+        str == "right" ? Qt::AlignRight :
+        str == "center" ? Qt::AlignHCenter :
+        str == "justify" ? Qt::AlignJustify :
+        str == "start" ? Qt::AlignAuto // i.e. direction-dependent
+        : Qt::AlignAuto; // default (can't happen unless spec is extended)
+}
+
+//static
+QCString KoParagLayout::saveOasisAlignment( Qt::AlignmentFlags alignment )
+{
+   return alignment == Qt::AlignLeft ? "left" :
+       alignment == Qt::AlignRight ? "right" :
+       alignment == Qt::AlignHCenter ? "center" :
+       alignment == Qt::AlignJustify ? "justify" :
+       "start"; // i.e. direction-dependent
+}
+
 void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext& context )
 {
     context.styleStack().setTypeProperties( "paragraph" );
@@ -403,13 +424,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     // code from OoWriterImport::writeLayout
     if ( context.styleStack().hasAttribute( "fo:text-align" ) ) {
         QCString align = context.styleStack().attribute( "fo:text-align" ).latin1();
-        layout.alignment =
-            align == "left" ? Qt::AlignLeft :
-            align == "right" ? Qt::AlignRight :
-            align == "center" ? Qt::AlignHCenter :
-            align == "justify" ? Qt::AlignJustify :
-            align == "start" ? Qt::AlignAuto // i.e. direction-dependent
-            : Qt::AlignAuto; // default (can't happen unless spec is extended)
+        layout.alignment = loadOasisAlignment( align );
     }
 
     if ( context.styleStack().hasAttribute( "style:writing-mode" ) ) { // http://web4.w3.org/TR/xsl/slice7.html#writing-mode
@@ -758,12 +773,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
 
 void KoParagLayout::saveOasis( KoGenStyle& gs ) const
 {
-    gs.addProperty( "fo:text-align",
-                    alignment == Qt::AlignLeft ? "left" :
-                    alignment == Qt::AlignRight ? "right" :
-                    alignment == Qt::AlignHCenter ? "center" :
-                    alignment == Qt::AlignJustify ? "justify" :
-                    "start" ); // i.e. direction-dependent
+    gs.addProperty( "fo:text-align", saveOasisAlignment( (Qt::AlignmentFlags)alignment ).data() );
     gs.addProperty( "style:writing-mode", direction == QChar::DirR ? "rl-tb" : "lr-tb" );
     gs.addPropertyPt( "fo:margin-left", margins[QStyleSheetItem::MarginLeft] );
     gs.addPropertyPt( "fo:margin-right", margins[QStyleSheetItem::MarginRight] );

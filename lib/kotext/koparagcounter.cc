@@ -148,16 +148,30 @@ void KoParagCounter::load( QDomElement & element )
 static int importCounterType( QChar numFormat )
 {
     if ( numFormat == '1' )
-        return 1;
+        return KoParagCounter::STYLE_NUM;
     if ( numFormat == 'a' )
-        return 2;
+        return KoParagCounter::STYLE_ALPHAB_L;
     if ( numFormat == 'A' )
-        return 3;
+        return KoParagCounter::STYLE_ALPHAB_U;
     if ( numFormat == 'i' )
-        return 4;
+        return KoParagCounter::STYLE_ROM_NUM_L;
     if ( numFormat == 'I' )
-        return 5;
-    return 0;
+        return KoParagCounter::STYLE_ROM_NUM_U;
+    return KoParagCounter::STYLE_NONE;
+}
+
+// should only be called with style != none and != a bullet.
+static QChar exportCounterType( KoParagCounter::Style style )
+{
+    static const int s_oasisCounterTypes[] =
+        { '\0', '1', 'a', 'A', 'i', 'I',
+          '\0', '\0', // custombullet, custom
+          0x2022, // circle -> small disc
+          0xE00A, // square
+          0x25CF, // disc -> large disc
+          0x27A2  // box -> right-pointing triangle
+        };
+    return QChar( s_oasisCounterTypes[ style ] );
 }
 
 void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
@@ -184,25 +198,29 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, b
         if ( !bulletChar.isEmpty() ) {
             // Reverse engineering, I found those codes:
             switch( bulletChar[0].unicode() ) {
-            case 0x2022: // small disc
+            case 0x2022: // small disc -> circle
+                m_style = STYLE_CIRCLEBULLET;
+                break;
+            case 0x25CF: // large disc -> disc
                 m_style = STYLE_DISCBULLET;
                 break;
-            case 0x25CF: // large disc
-                m_style = STYLE_DISCBULLET;
+            case 0xE00C: // losange - TODO in kotext. Not in OASIS either (reserved Unicode area!)
+                m_style = STYLE_BOXBULLET;
                 break;
-            case 0xE00C: // losange - TODO in KWord. Not in OASIS either (reserved Unicode area!)
-                m_style = STYLE_DISCBULLET;
-                break;
-            case 0xE00A: // square. Not in OASIS (reserved Unicode area!)
+            case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
                 m_style = STYLE_SQUAREBULLET;
                 break;
-            case 0x2794: // arrow
             case 0x27A2: // two-colors right-pointing triangle
+                         // mapping (both ways) to box for now.
+                m_style = STYLE_BOXBULLET;
+                break;
+            case 0x2794: // arrow
             case 0x2717: // cross
             case 0x2714: // checkmark
                 m_customBulletChar = bulletChar[0];
                 // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
                 m_customBulletFont = listStyleProperties.attribute( "style:font-name" );
+                // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                 break;
             default:
                 kdWarning() << "Unhandled bullet code 0x" << QString::number( m_customBulletChar.unicode(), 16 ) << endl;
@@ -219,7 +237,9 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, b
 
 void KoParagCounter::saveOasis( KoGenStyle& listStyle )
 {
-    // TODO invent a display:name. Not really easy, since we don't have user-visible list styles.
+    Q_ASSERT( m_style != STYLE_NONE );
+    // We're supposed to invent a display:name and save it in the list style, so OOo displays it.
+    // Not really easy, since we don't have user-visible list styles. Bah.
 
     // Prepare a sub-xmlwriter for the list-level-style-* element
     QBuffer buffer;
@@ -234,22 +254,36 @@ void KoParagCounter::saveOasis( KoGenStyle& listStyle )
     if ( isBullet() )
     {
         // TODO implement
+        QChar bulletChar;
         if ( (Style)m_style == STYLE_CUSTOMBULLET )
         {
-            // TODO text:bullet-char etc.
+            bulletChar = m_customBulletChar;
+            // TODO font (text style)
         }
+        else
+        {
+            bulletChar = exportCounterType( (Style)m_style );
+        }
+        listLevelWriter.addAttribute( "text:bullet-char", QString( bulletChar ) );
     }
     else
     {
         listLevelWriter.addAttribute( "style:num-prefix", m_prefix );
         listLevelWriter.addAttribute( "style:num-suffix", m_suffix );
         listLevelWriter.addAttribute( "text:display-levels", m_displayLevels );
-        // start-value/m_restartCounter is saved by kotextparag itself. ### TODO: save for paragstyles?
-        // TODO m_align => fo:text-align
+        if ( (Style)m_style == STYLE_CUSTOM )
+            ; // not implemented
+        else
+            listLevelWriter.addAttribute( "style:num-format", QString( exportCounterType( (Style)m_style ) ) );
+        // m_startNumber/m_restartCounter is saved by kotextparag itself. ### TODO: save for paragstyles?
     }
+    // m_numbering isn't saved, it's set depending on context (NUM_CHAPTER for headings).
 
-    // TODO save m_cache.text
-    // TODO finish oasis saving
+    listLevelWriter.startElement( "style:list-level-properties" );
+    listLevelWriter.addAttribute( "fo:text-align", KoParagLayout::saveOasisAlignment( (Qt::AlignmentFlags)m_align ) );
+    // OASIS has other style properties: text:space-before (indent), text:min-label-width (TODO),
+    // text:min-label-distance, style:font-name (for bullets), image size and vertical alignment.
+    listLevelWriter.endElement();
 
     listLevelWriter.endElement();
     QString listLevelContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
