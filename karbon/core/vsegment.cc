@@ -50,6 +50,7 @@ VSegment::VSegment()
 	m_next = 0L;
 
 	m_type = segment_begin;
+	m_ctrlPointFixing = segment_none;
 	m_smooth = false;
 }
 
@@ -63,6 +64,7 @@ VSegment::VSegment( const VSegment& segment )
 	m_point[2] = segment.m_point[2];
 
 	m_type = segment.m_type;
+	m_ctrlPointFixing = segment.m_ctrlPointFixing;
 	m_smooth = segment.m_smooth;
 }
 
@@ -82,14 +84,6 @@ VSegment::isFlat( double flatness ) const
 			height( m_prev->m_point[2], m_point[0], m_point[2] )
 				< flatness &&
 			height( m_prev->m_point[2], m_point[1], m_point[2] )
-				< flatness;
-	else if( m_type == segment_curve1 )
-		return
-			height( m_prev->m_point[2], m_point[1], m_point[2] )
-				< flatness;
-	else if( m_type == segment_curve2 )
-		return
-			height( m_prev->m_point[2], m_point[0], m_point[2] )
 				< flatness;
 
 	return false;
@@ -114,9 +108,9 @@ VSegment::point( double t ) const
 	KoPoint q[3];
 
 	q[0] = m_prev->m_point[2];
+	q[1] = m_point[0];
+	q[2] = m_point[1];
 	q[3] = m_point[2];
-	q[1] = m_type == segment_curve1 ? q[0] : m_point[0];
-	q[2] = m_type == segment_curve2 ? q[3] : m_point[1];
 
 	// de casteljau algorithm:
 	for( uint j = 1; j <= 3; ++j )
@@ -131,7 +125,7 @@ VSegment::point( double t ) const
 }
 
 KoPoint
-VSegment::derive( double t ) const
+VSegment::derive( double /*t*/ ) const
 {
 // TODO
 	return KoPoint();
@@ -173,23 +167,7 @@ VSegment::boundingBox() const
 			rect.setBottom( m_prev->m_point[2].y() );
 	}
 
-	if(
-		m_type == segment_curve1 ||
-		m_type == segment_curve )
-	{
-		if( m_point[1].x() < rect.left() )
-			rect.setLeft( m_point[1].x() );
-		if( m_point[1].x() > rect.right() )
-			rect.setRight( m_point[1].x() );
-		if( m_point[1].y() < rect.top() )
-			rect.setTop( m_point[1].y() );
-		if( m_point[1].y() > rect.bottom() )
-			rect.setBottom( m_point[1].y() );
-	}
-
-	if(
-		m_type == segment_curve2 ||
-		m_type == segment_curve )
+	if( m_type == segment_curve )
 	{
 		if( m_point[0].x() < rect.left() )
 			rect.setLeft( m_point[0].x() );
@@ -199,6 +177,15 @@ VSegment::boundingBox() const
 			rect.setTop( m_point[0].y() );
 		if( m_point[0].y() > rect.bottom() )
 			rect.setBottom( m_point[0].y() );
+
+		if( m_point[1].x() < rect.left() )
+			rect.setLeft( m_point[1].x() );
+		if( m_point[1].x() > rect.right() )
+			rect.setRight( m_point[1].x() );
+		if( m_point[1].y() < rect.top() )
+			rect.setTop( m_point[1].y() );
+		if( m_point[1].y() > rect.bottom() )
+			rect.setBottom( m_point[1].y() );
 	}
 
 	return rect;
@@ -225,9 +212,9 @@ VSegment::splitAt( double t )
 
 	// these references make our life a bit easier:
 	KoPoint& p0 = m_prev->m_point[2];
+	KoPoint& p1 = m_point[0];
+	KoPoint& p2 = m_point[1];
 	KoPoint& p3 = m_point[2];
-	KoPoint& p1 = m_type == segment_curve1 ? p0 : m_point[0];
-	KoPoint& p2 = m_type == segment_curve2 ? p3 : m_point[1];
 
 	// calculate the 2 new beziers:
 	segment->m_point[0] = p0 + ( p1 - p0 ) * t;
@@ -241,14 +228,8 @@ VSegment::splitAt( double t )
 	segment->m_point[2] =
 		segment->m_point[1] + ( p1 - segment->m_point[1] ) * t;
 
-	// and finally set the new segment type properly:
-	if( m_type == segment_curve1 )
-	{
-		segment->m_type = segment_curve1;
-		m_type = segment_curve;
-	}
-	else
-		segment->m_type = segment_curve;
+	// set the new segment type:
+	segment->m_type = segment_curve;
 
 	return segment;
 }
@@ -265,19 +246,12 @@ VSegment::convertToCurve( double t )
 
 	if( m_type == segment_line )
 	{
-		m_point[0] =
-			m_prev->m_point[2] +
-			( m_point[2] - m_prev->m_point[2] ) * t;
-		m_point[1] =
-			m_prev->m_point[2] +
-			( m_point[2] - m_prev->m_point[2] ) * ( 1.0 - t );
+		m_point[0] = point( t );
+		m_point[1] = point( 1.0 - t );
 	}
-	else if( m_type == segment_curve1 )
-		m_point[0] = m_prev->m_point[2];
-	else if( m_type == segment_curve2 )
-		m_point[1] = m_point[2];
 
 	m_type = segment_curve;
+	m_ctrlPointFixing = segment_none;
 }
 
 bool
@@ -312,6 +286,10 @@ void
 VSegment::save( QDomElement& element ) const
 {
 	QDomElement me;
+	element.appendChild( me );
+
+	if( m_ctrlPointFixing )
+		me.setAttribute( "ctrlPointFixing", m_ctrlPointFixing );
 
 	if( m_type == segment_curve )
 	{
@@ -320,22 +298,6 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "y1", m_point[0].y() );
 		me.setAttribute( "x2", m_point[1].x() );
 		me.setAttribute( "y2", m_point[1].y() );
-		me.setAttribute( "x3", m_point[2].x() );
-		me.setAttribute( "y3", m_point[2].y() );
-	}
-	else if( m_type == segment_curve1 )
-	{
-		me = element.ownerDocument().createElement( "CURVE1" );
-		me.setAttribute( "x2", m_point[1].x() );
-		me.setAttribute( "y2", m_point[1].y() );
-		me.setAttribute( "x3", m_point[2].x() );
-		me.setAttribute( "y3", m_point[2].y() );
-	}
-	else if( m_type == segment_curve2 )
-	{
-		me = element.ownerDocument().createElement( "CURVE2" );
-		me.setAttribute( "x1", m_point[0].x() );
-		me.setAttribute( "y1", m_point[0].y() );
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
@@ -351,16 +313,21 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x", m_point[2].x() );
 		me.setAttribute( "y", m_point[2].y() );
 	}
-	else
-		return;
-
-	element.appendChild( me );
-
 }
 
 void
 VSegment::load( const QDomElement& element )
 {
+	switch( element.attribute( "ctrlPointFixing", "0" ).toUShort() )
+	{
+		case 1:
+			m_ctrlPointFixing = segment_first; break;
+		case 2:
+			m_ctrlPointFixing = segment_second; break;
+		default:
+			m_ctrlPointFixing = segment_none;
+	}
+
 	if( element.tagName() == "CURVE" )
 	{
 		m_type = segment_curve;
@@ -368,22 +335,6 @@ VSegment::load( const QDomElement& element )
 		m_point[0].setY( element.attribute( "y1" ).toDouble() );
 		m_point[1].setX( element.attribute( "x2" ).toDouble() );
 		m_point[1].setY( element.attribute( "y2" ).toDouble() );
-		m_point[2].setX( element.attribute( "x3" ).toDouble() );
-		m_point[2].setY( element.attribute( "y3" ).toDouble() );
-	}
-	else if( element.tagName() == "CURVE1" )
-	{
-		m_type = segment_curve1;
-		m_point[1].setX( element.attribute( "x2" ).toDouble() );
-		m_point[1].setY( element.attribute( "y2" ).toDouble() );
-		m_point[2].setX( element.attribute( "x3" ).toDouble() );
-		m_point[2].setY( element.attribute( "y3" ).toDouble() );
-	}
-	else if( element.tagName() == "CURVE2" )
-	{
-		m_type = segment_curve2;
-		m_point[0].setX( element.attribute( "x1" ).toDouble() );
-		m_point[0].setY( element.attribute( "y1" ).toDouble() );
 		m_point[2].setX( element.attribute( "x3" ).toDouble() );
 		m_point[2].setY( element.attribute( "y3" ).toDouble() );
 	}
@@ -400,3 +351,4 @@ VSegment::load( const QDomElement& element )
 		m_point[2].setY( element.attribute( "y" ).toDouble() );
 	}
 }
+

@@ -41,7 +41,7 @@ VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
 		segmentList.current()->convertToCurve();
 
 
-		delta = segmentList.current()->knot2() - m_center;
+		delta = segmentList.current()->knot() - m_center;
 		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
 		if( dist < m_radius )
@@ -59,7 +59,7 @@ VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
 			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 			m.translate( m_center.x(), m_center.y() );
 
-			segmentList.current()->setKnot2( delta.transform( m ) );
+			segmentList.current()->setKnot( delta.transform( m ) );
 		}
 
 

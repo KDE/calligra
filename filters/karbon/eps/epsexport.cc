@@ -188,40 +188,20 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 					itr.current()->ctrlPoint1().y() << " " <<
 					itr.current()->ctrlPoint2().x() << " " <<
 					itr.current()->ctrlPoint2().y() << " " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					"c\n";
-			break;
-			case segment_curve1:
-				*m_stream <<
-					itr.current()->knot1().x() << " " <<
-					itr.current()->knot1().y() << " " <<
-					itr.current()->ctrlPoint2().x() << " " <<
-					itr.current()->ctrlPoint2().y() << " " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					"c\n";
-			break;
-			case segment_curve2:
-				*m_stream <<
-					itr.current()->ctrlPoint1().x() << " " <<
-					itr.current()->ctrlPoint1().y() << " " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
+					itr.current()->knot().x() << " " <<
+					itr.current()->knot().y() << " " <<
 					"c\n";
 			break;
 			case segment_line:
 				*m_stream <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
+					itr.current()->knot().x() << " " <<
+					itr.current()->knot().y() << " " <<
 					"l\n";
 			break;
 			case segment_begin:
 				*m_stream <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
+					itr.current()->knot().x() << " " <<
+					itr.current()->knot().y() << " " <<
 					"m\n";
 			break;
 			default:

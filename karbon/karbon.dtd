@@ -63,7 +63,7 @@
 -->
 
 <!ELEMENT SEGMENTS MOVE ( LINE | CURVE )+ >
-<!ATTLIST SEGMENTS isClosed ( 0 | 1 ) "1"   
+<!ATTLIST SEGMENTS isClosed ( 0 | 1 ) "1"
 >
 
 <!--
@@ -81,7 +81,8 @@
 >
 
 <!ELEMENT CURVE EMPTY >
-<!ATTLIST CURVE x1 CDATA #IMPLIED
+<!ATTLIST CURVE ctrlPointFixing ( 0 | 1 | 2 ) "0"
+               x1 CDATA #IMPLIED
                y1 CDATA #IMPLIED  
                x2 CDATA #IMPLIED
                y2 CDATA #IMPLIED

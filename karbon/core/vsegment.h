@@ -26,10 +26,16 @@ enum VSegmentType
 {
 	segment_begin,		// initial moveto
 	segment_curve,		// curveto (bezier)
-	segment_curve1,		// + first ctrl-point is identical to first knot.
-	segment_curve2,		// + last ctrl-point is identical to last knot.
 	segment_line		// lineto
 };
+
+enum VCtrlPointFixing
+{
+	segment_none   = 0,
+	segment_first  = 1,
+	segment_second = 2
+};
+
 
 class VSegment
 {
@@ -41,18 +47,21 @@ public:
 	VSegment( const VSegment& segment );
 
 	VSegmentType type() const { return m_type; }
-	void setType( VSegmentType t ) { m_type = t; }
+	void setType( VSegmentType type ) { m_type = type; }
+
+	VCtrlPointFixing ctrlPointFixing() const
+		{ return m_ctrlPointFixing; }
+	void setCtrlPointFixing( VCtrlPointFixing fixing )
+		{ m_ctrlPointFixing = fixing; }
 
 	const KoPoint& ctrlPoint1() const { return m_point[0]; }
 	const KoPoint& ctrlPoint2() const { return m_point[1]; }
 
-	/// Make sure yourself this segment has m_prev != 0L.
-	const KoPoint& knot1() const { return m_prev->m_point[2]; }
-	const KoPoint& knot2() const { return m_point[2]; }
+	const KoPoint& knot() const { return m_point[2]; }
 
 	void setCtrlPoint1( const KoPoint& p ) { m_point[0] = p; }
 	void setCtrlPoint2( const KoPoint& p ) { m_point[1] = p; }
-	void setKnot2( const KoPoint& p ) { m_point[2] = p; }
+	void setKnot( const KoPoint& p ) { m_point[2] = p; }
 
 	const VSegment* prev() const { return m_prev; }
 	const VSegment* next() const { return m_next; }
@@ -101,6 +110,7 @@ private:
 	VSegment* m_next;
 
 	VSegmentType m_type;
+	VCtrlPointFixing m_ctrlPointFixing;
 	bool m_smooth;			// first ctrl-point is "smooth".
 	KoPoint m_point[3];
 };

@@ -43,7 +43,7 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	else
 	{
 		newList.moveTo(
-			segmentList.current()->knot2() );
+			segmentList.current()->knot() );
 	}
 
 

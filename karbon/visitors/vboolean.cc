@@ -58,8 +58,8 @@ VBoolean::recursiveSubdivision(
 		// calculate intersection of line segments:
 		if( segment2.isFlat() )
 		{
-			KoPoint v1  = segment1.knot2() - segment1.knot1();
-			KoPoint v2  = segment2.knot2() - segment2.knot1();
+			KoPoint v1  = segment1.knot() - segment1.prev()->knot();
+			KoPoint v2  = segment2.knot() - segment2.prev()->knot();
 
 			double det = v2.x() * v1.y() - v2.y() * v1.x();
 
@@ -67,7 +67,7 @@ VBoolean::recursiveSubdivision(
 				return;
 			else
 			{
-				KoPoint v = segment2.knot1() - segment1.knot1();
+				KoPoint v = segment2.prev()->knot() - segment1.prev()->knot();
 				const double one_det = 1.0 / det;
 
 				double t1 = one_det * ( v2.x() * v.y() - v2.y() * v.x() );
@@ -84,7 +84,7 @@ VBoolean::recursiveSubdivision(
 		{
 			// "copy segment" and split it at midpoint:
 			VSegmentList list2( 0L );
-			list2.moveTo( segment2.knot1() );
+			list2.moveTo( segment2.prev()->knot() );
 			list2.append( new VSegment( segment2 ) );
 			list2.insert( list2.current()->splitAt( 0.5 ) );
 
@@ -102,7 +102,7 @@ VBoolean::recursiveSubdivision(
 	{
 		// "copy segment" and split it at midpoint:
 		VSegmentList list1( 0L );
-		list1.moveTo( segment1.knot1() );
+		list1.moveTo( segment1.prev()->knot() );
 		list1.append( new VSegment( segment1 ) );
 		list1.insert( list1.current()->splitAt( 0.5 ) );
 
@@ -121,7 +121,7 @@ VBoolean::recursiveSubdivision(
 		{
 			// "copy segment" and split it at midpoint:
 			VSegmentList list2( 0L );
-			list2.moveTo( segment2.knot1() );
+			list2.moveTo( segment2.prev()->knot() );
 			list2.append( new VSegment( segment2 ) );
 			list2.insert( list2.current()->splitAt( 0.5 ) );
 

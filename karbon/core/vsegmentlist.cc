@@ -148,7 +148,7 @@ VSegmentList::~VSegmentList()
 const KoPoint&
 VSegmentList::currentPoint() const
 {
-	return getLast()->knot2();
+	return getLast()->knot();
 }
 
 bool
@@ -159,7 +159,7 @@ VSegmentList::moveTo( const KoPoint& p )
 	// move "begin" when path is still empty:
 	if( getLast()->type() == segment_begin )
 	{
-		getLast()->setKnot2( p );
+		getLast()->setKnot( p );
 		return true;
 	}
 
@@ -173,7 +173,7 @@ VSegmentList::lineTo( const KoPoint& p )
 
 	VSegment* s = new VSegment();
 	s->setType( segment_line );
-	s->setKnot2( p );
+	s->setKnot( p );
 	append( s );
 
 	return true;
@@ -189,7 +189,7 @@ VSegmentList::curveTo(
 	s->setType( segment_curve );
 	s->setCtrlPoint1( p1 );
 	s->setCtrlPoint2( p2 );
-	s->setKnot2( p3 );
+	s->setKnot( p3 );
 	append( s );
 
 	return true;
@@ -201,9 +201,10 @@ VSegmentList::curve1To( const KoPoint& p2, const KoPoint& p3 )
 	if( isClosed() ) return false;
 
 	VSegment* s = new VSegment();
-	s->setType( segment_curve1 );
+	s->setType( segment_curve );
+	s->setCtrlPointFixing( segment_first );
 	s->setCtrlPoint2( p2 );
-	s->setKnot2( p3 );
+	s->setKnot( p3 );
 	append( s );
 
 	return true;
@@ -215,9 +216,10 @@ VSegmentList::curve2To( const KoPoint& p1, const KoPoint& p3 )
 	if( isClosed() ) return false;
 
 	VSegment* s = new VSegment();
-	s->setType( segment_curve2 );
+	s->setType( segment_curve );
+	s->setCtrlPointFixing( segment_second );
 	s->setCtrlPoint1( p1 );
-	s->setKnot2( p3 );
+	s->setKnot( p3 );
 	append( s );
 
 	return true;
@@ -312,22 +314,22 @@ VSegmentList::close()
 	// move end-segment if we are already closed:
 	if( m_isClosed )
 	{
-		getLast()->setKnot2( getFirst()->knot2() );
+		getLast()->setKnot( getFirst()->knot() );
 	}
 	// append a line, if necessary:
 	else
 	{
 		if(
-			getLast()->knot2().isNear(
-				getFirst()->knot2(), VGlobal::isNearRange ) )
+			getLast()->knot().isNear(
+				getFirst()->knot(), VGlobal::isNearRange ) )
 		{
 			// move last knot:
-			getLast()->setKnot2( getFirst()->knot2() );
+			getLast()->setKnot( getFirst()->knot() );
 		}
 		else
 		{
 			// add a line:
-			lineTo( getFirst()->knot2() );
+			lineTo( getFirst()->knot() );
 		}
 
 		m_isClosed = true;
@@ -370,7 +372,7 @@ VSegmentList::transform( const QWMatrix& m )
 	{
 		segment->setCtrlPoint1( segment->ctrlPoint1().transform( m ) );
 		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m ) );
-		segment->setKnot2( segment->knot2().transform( m ) );
+		segment->setKnot( segment->knot().transform( m ) );
 
 		segment = segment->m_next;
 	}

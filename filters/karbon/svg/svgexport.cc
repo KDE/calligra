@@ -166,36 +166,18 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 					itr.current()->ctrlPoint1().y() << " " <<
 					itr.current()->ctrlPoint2().x() << " " <<
 					itr.current()->ctrlPoint2().y() << " " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y();
-			break;
-			case segment_curve1:
-				*m_stream << " C " <<
-					itr.current()->knot1().x() << " " <<
-					itr.current()->knot1().y() << " " <<
-					itr.current()->ctrlPoint2().x() << " " <<
-					itr.current()->ctrlPoint2().y() << " " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y();
-			break;
-			case segment_curve2:
-				*m_stream << " C " << 
-					itr.current()->ctrlPoint1().x() << " " <<
-					itr.current()->ctrlPoint1().y() << " " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y() << " " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y();
+					itr.current()->knot().x() << " " <<
+					itr.current()->knot().y();
 			break;
 			case segment_line:
 				*m_stream << " L " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y();
+					itr.current()->knot().x() << " " <<
+					itr.current()->knot().y();
 			break;
 			case segment_begin:
 				*m_stream << " M " <<
-					itr.current()->knot2().x() << " " <<
-					itr.current()->knot2().y();
+					itr.current()->knot().x() << " " <<
+					itr.current()->knot().y();
 			break;
 			default:
 			break;

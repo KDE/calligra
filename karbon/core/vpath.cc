@@ -87,23 +87,13 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					painter->curveTo(
 						jtr.current()->ctrlPoint1(),
 						jtr.current()->ctrlPoint2(),
-						jtr.current()->knot2() );
-				else if( jtr.current()->type() == segment_curve1  )
-					painter->curveTo(
-						jtr.current()->knot1(),
-						jtr.current()->ctrlPoint2(),
-						jtr.current()->knot2() );
-				else if( jtr.current()->type() == segment_curve2  )
-					painter->curveTo(
-						jtr.current()->ctrlPoint1(),
-						jtr.current()->knot2(),
-						jtr.current()->knot2() );
+						jtr.current()->knot() );
 				else if( jtr.current()->type() == segment_line )
 				{
-					painter->lineTo( jtr.current()->knot2() );
+					painter->lineTo( jtr.current()->knot() );
 				}
 				else
-					painter->moveTo( jtr.current()->knot2() );
+					painter->moveTo( jtr.current()->knot() );
 			}
 		}
 
@@ -136,23 +126,13 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					painter->curveTo(
 						jtr.current()->ctrlPoint1(),
 						jtr.current()->ctrlPoint2(),
-						jtr.current()->knot2() );
-				else if( jtr.current()->type() == segment_curve1  )
-					painter->curveTo(
-						jtr.current()->knot1(),
-						jtr.current()->ctrlPoint2(),
-						jtr.current()->knot2() );
-				else if( jtr.current()->type() == segment_curve2  )
-					painter->curveTo(
-						jtr.current()->ctrlPoint1(),
-						jtr.current()->knot2(),
-						jtr.current()->knot2() );
+						jtr.current()->knot() );
 				else if( jtr.current()->type() == segment_line )
 				{
-					painter->lineTo( jtr.current()->knot2() );
+					painter->lineTo( jtr.current()->knot() );
 				}
 				else
-					painter->moveTo( jtr.current()->knot2() );
+					painter->moveTo( jtr.current()->knot() );
 			}
 
 			painter->strokePath();
@@ -200,20 +180,20 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 
 				painter->moveTo(
 					KoPoint(
-						jtr.current()->knot2().x() - 2 / zoomFactor,
-						jtr.current()->knot2().y() - 2 / zoomFactor ) );
+						jtr.current()->knot().x() - 2 / zoomFactor,
+						jtr.current()->knot().y() - 2 / zoomFactor ) );
 				painter->lineTo(
 					KoPoint(
-						jtr.current()->knot2().x() + 2 / zoomFactor,
-						jtr.current()->knot2().y() - 2 / zoomFactor ) );
+						jtr.current()->knot().x() + 2 / zoomFactor,
+						jtr.current()->knot().y() - 2 / zoomFactor ) );
 				painter->lineTo(
 					KoPoint(
-						jtr.current()->knot2().x() + 2 / zoomFactor,
-						jtr.current()->knot2().y() + 2 / zoomFactor ) );
+						jtr.current()->knot().x() + 2 / zoomFactor,
+						jtr.current()->knot().y() + 2 / zoomFactor ) );
 				painter->lineTo(
 					KoPoint(
-						jtr.current()->knot2().x() - 2 / zoomFactor,
-						jtr.current()->knot2().y() + 2 / zoomFactor ) );
+						jtr.current()->knot().x() - 2 / zoomFactor,
+						jtr.current()->knot().y() + 2 / zoomFactor ) );
 				painter->fillPath();
 			}
 		}
