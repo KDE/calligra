@@ -18,7 +18,7 @@
 */
 
 #include "main.h"
-
+#include <kmessagebox.h>
 #include <klocale.h>
 #include <kspell.h>
 #include <kdebug.h>
@@ -84,6 +84,7 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
 	kdDebug(31000) << "SpellChecker does only accept datatype QString" << endl;
 	return FALSE;
     }
+
     if ( mimetype != "text/plain" )
     {
 	kdDebug(31000) << "SpellChecker does only accept mimetype text/plain" << endl;
@@ -91,20 +92,29 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
     }
 
     // Get data
-    //QString buffer = *((QString*)data);
     spellStruct tmpStruct = *((spellStruct*)data);
     QString buffer = tmpStruct._data;
     buffer = buffer.stripWhiteSpace();
 
     // #### handle errors
     // Call the spell checker
-    //KSpell::modalCheck( buffer, _ksconf );
-    KSpell::modalCheck( buffer, tmpStruct._ksconf );
+    KSpell::spellStatus status=(KSpell::spellStatus)KSpell::modalCheck( buffer, tmpStruct._ksconf );
 
+    if (status == KSpell::Error)
+    {
+        KMessageBox::sorry(0L, i18n("ISpell could not be started.\n"
+                                      "Please make sure you have ISpell properly configured and in your PATH."));
+    }
+    else if (status == KSpell::Crashed)
+    {
+        KMessageBox::sorry(0L, i18n("ISpell seems to have crashed."));
+    }
+    else
+    {
     // Set data
-    //*((QString*)data) = buffer;
     tmpStruct._data=buffer;
     *((spellStruct*)data) = tmpStruct;
+    }
     return TRUE;
 }
 
