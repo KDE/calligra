@@ -1143,13 +1143,17 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
         KWFrame * lastRealFrame = 0L;
         //double lastRealFrameTop = 0;
         //double totalHeight = 0; // in pt, to avoid accumulating rounding errors
-        for ( ; frameIt.current(); ++frameIt )
+        for ( ; frameIt.current(); )
         {
             KWFrame *frame = frameIt.current();
+            ++frameIt; // Point to the next one, to detect "last copy"
             // The settings come from this frame
             KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-
-            drawFrameAndBorders( frame, p, crect, cg, onlyChanged, resetChanged, edit,
+            bool lastCopy = !frameIt.current() || !frameIt.current()->isCopy();
+            drawFrameAndBorders( frame, p, crect, cg, onlyChanged,
+                                 // Only reset the changed flag in the last copy of a given frame (#60678)
+                                 resetChanged && lastCopy,
+                                 edit,
                                  viewMode, settingsFrame, true /*transparency & double-buffering*/ );
             if ( !lastRealFrame || !frame->isCopy() )
             {
