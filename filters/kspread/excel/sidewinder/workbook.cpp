@@ -41,6 +41,7 @@ Workbook::Workbook()
 
 Workbook::~Workbook()
 {
+  clear();
   delete d;
 }
 
