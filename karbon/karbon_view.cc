@@ -8,6 +8,7 @@
 #include <qdragobject.h>
 #include <qiconset.h>
 #include <qpainter.h>
+#include <qtoolbutton.h>
 
 #include <kaction.h>
 #include <kcolordrag.h>
@@ -64,7 +65,6 @@
 #include "vqpainter.h"
 //#include "vtext.h"
 #include "vselection.h"
-#include "vtoolcontainer.h"
 #include "vstrokefillpreview.h"
 #include "vstatebutton.h"
 #include <kaction.h>
@@ -85,6 +85,8 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	setAcceptDrops( true );
 
 	setXMLFile( QString::fromLatin1( "karbon.rc" ) );
+	m_strokeFillPreview = 0L;
+	m_done = false;
 	initActions();
 	m_dcop = 0;
 	dcopObject(); // build it
@@ -103,11 +105,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setPinch( 0.0 );
 	m_whirlPinchDlg->setRadius( 100.0 );
 
-	// widgets:
-	m_canvas = new VCanvas( this, part );
-	m_canvas->viewport()->installEventFilter( this );
-	m_canvas->setGeometry( 0, 0, width(), height() );
-
 	// tools:
 	m_ellipseTool = new VEllipseTool( this );
 	m_gradTool = new VGradientTool( this );
@@ -122,10 +119,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_spiralTool = new VSpiralTool( this );
 	m_starTool = new VStarTool( this );
 
-	// set up factory
-	m_painterFactory = new VPainterFactory;
-	m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
-	m_painterFactory->setEditPainter( canvasWidget()->viewport(), width(), height() );
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
@@ -144,8 +137,19 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	// initial tool is select-tool:
 	m_currentTool = m_selectTool;
-	selectTool();
 	reorganizeGUI();
+
+	// widgets:
+	m_canvas = new VCanvas( this, part );
+	m_canvas->viewport()->installEventFilter( this );
+	m_canvas->setGeometry( 0, 0, width(), height() );
+
+	// set up factory
+	m_painterFactory = new VPainterFactory;
+	m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
+	m_painterFactory->setEditPainter( canvasWidget()->viewport(), width(), height() );
+
+	selectTool();
 	zoomChanged();
 }
 
@@ -172,12 +176,9 @@ KarbonView::~KarbonView()
 	delete( m_spiralTool );
 	delete( m_starTool );
 	// widgets:
-#if 0
-	delete ( m_toolbox );
-#endif
 	delete ( m_status );
 	delete ( m_painterFactory );
-        delete ( m_canvas );
+	delete ( m_canvas );
 	delete ( m_dcop );
 }
 
@@ -501,6 +502,35 @@ KarbonView::editNodeTool()
 void
 KarbonView::rotateTool()
 {
+	/*if( !m_done )
+	{
+	// set up the new button group
+	QButtonGroup *grp = new QButtonGroup( 2, Horizontal, shell()->toolBar( "Toolbox" ) );
+	grp->setInsideSpacing( 2 );
+	grp->setInsideMargin( 5 );
+	grp->setExclusive( true );
+
+	// get the buttons
+	QPtrList<QToolButton> buttons;
+	QLayoutIterator it( shell()->toolBar( "Toolbox" )->boxLayout()->iterator() );
+	while( it.current() != 0 )
+	{
+		if( dynamic_cast<QToolButton *>( it.current()->widget() ) )
+			buttons.append( dynamic_cast<QToolButton *>( it.current()->widget() ) );
+		++it;
+	}
+
+	// move to the new button group
+	QPtrListIterator<QToolButton> itr = buttons;
+	while( itr.current() != 0 )
+	{
+		itr.current()->reparent( grp, QPoint( 0, 10 ) );
+		itr.current()->setToggleButton( true );
+		++itr;
+	}
+	shell()->toolBar( "Toolbox" )->insertWidget( 1, 30, grp );
+		m_done = true;
+	}*/
 	m_currentTool->deactivate();
 	m_currentTool = m_rotateTool;
 	m_currentTool->activate();
@@ -708,7 +738,7 @@ KarbonView::slotStrokeChanged( const VStroke &c )
 
 	m_part->addCommand( new VStrokeCmd( &m_part->document(), &c ), true );
 
-	m_toolbox->strokeFillPreview()->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
+	m_strokeFillPreview->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
 }
 
 void
@@ -718,7 +748,7 @@ KarbonView::slotFillChanged( const VFill &f )
 
 	m_part->addCommand( new VFillCmd( &m_part->document(), f ), true );
 
-	m_toolbox->strokeFillPreview()->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
+	m_strokeFillPreview->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
 }
 
 void
@@ -769,6 +799,7 @@ KarbonView::refreshView()
 void
 KarbonView::initActions()
 {
+
 	// edit ----->
 	KStdAction::cut( this,
 		SLOT( editCut() ), actionCollection(), "edit_cut" );
@@ -836,10 +867,10 @@ KarbonView::initActions()
 		i18n( "S&inus" ), "14_sinus", 0, this,
 		SLOT( sinusTool() ), actionCollection(), "tool_sinus" );
 	m_editNodeToolAction = new KToggleAction(
-		i18n( "&Manipulate nodes" ), "editnode", 0, this,
+		i18n( "&Manipulate nodes" ), "14_selectnodes", 0, this,
 		SLOT( editNodeTool() ), actionCollection(), "tool_editnode" );
 	m_selectToolAction = new KToggleAction(
-		i18n( "&Select Objects" ), "select", 0, this,
+		i18n( "&Select Objects" ), "14_select", 0, this,
 		SLOT( selectTool() ), actionCollection(), "tool_select" );
 	m_rotateToolAction = new KToggleAction(
 		i18n( "&Rotate Objects" ), "14_rotate", 0, this,
@@ -854,7 +885,7 @@ KarbonView::initActions()
 		i18n( "S&tar" ), "14_star", 0, this,
 		SLOT( starTool() ), actionCollection(), "tool_star" );
 	m_gradToolAction = new KToggleAction(
-		i18n( "G&radient" ), "14_gradienttool", 0, this,
+		i18n( "G&radient" ), "14_gradient", 0, this,
 		SLOT( gradTool() ), actionCollection(), "tool_grad" );
 	/*m_textToolAction = new KToggleAction(
 		i18n( "Text" ), "14_text", 0, this,
@@ -868,6 +899,7 @@ KarbonView::initActions()
 	m_selectToolAction->setExclusiveGroup( "Tools" );
 	m_editNodeToolAction->setExclusiveGroup( "Tools" );
 	m_rotateToolAction->setExclusiveGroup( "Tools" );
+	m_shearToolAction->setExclusiveGroup( "Tools" );
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
 	m_gradToolAction->setExclusiveGroup( "Tools" );
@@ -980,66 +1012,60 @@ KarbonView::initActions()
 	connect( m_joinStyle, SIGNAL(clicked()), this, SLOT(slotJoinStyleClicked()) );
 
 	// toolbox ---->
-	m_toolbox = VToolContainer::instance( m_part, this );
-	m_toolbox->strokeFillPreview()->update( part()->document().defaultStroke(), part()->document().defaultFill() );
-
-	connect(
-		m_toolbox, SIGNAL( selectToolActivated() ),
-		this, SLOT( selectTool() ) );
-	connect(
-		m_toolbox, SIGNAL( editNodeToolActivated() ),
-		this, SLOT( editNodeTool() ) );
-	connect(
-		m_toolbox, SIGNAL( rotateToolActivated() ),
-		this, SLOT( rotateTool() ) );
-	connect(
-		m_toolbox, SIGNAL( shearToolActivated() ),
-		this, SLOT( shearTool() ) );
-	connect(
-		m_toolbox, SIGNAL( ellipseToolActivated() ),
-		this, SLOT( ellipseTool() ) );
-	connect(
-		m_toolbox, SIGNAL( rectangleToolActivated() ),
-		this, SLOT( rectangleTool() ) );
-	connect(
-		m_toolbox, SIGNAL( roundRectToolActivated() ),
-		this, SLOT( roundRectTool() ) );
-	connect(
-		m_toolbox, SIGNAL( polygonToolActivated() ),
-		this, SLOT( polygonTool() ) );
-	connect(
-		m_toolbox, SIGNAL( starToolActivated() ),
-		this, SLOT( starTool() ) );
-	connect(
-		m_toolbox, SIGNAL( gradToolActivated() ),
-		this, SLOT( gradTool() ) );
-	connect(
-		m_toolbox, SIGNAL( sinusToolActivated() ),
-		this, SLOT( sinusTool() ) );
-	connect(
-		m_toolbox, SIGNAL( spiralToolActivated() ),
-		this, SLOT( spiralTool() ) );
-	connect(
-		m_toolbox, SIGNAL( textToolActivated() ),
-		this, SLOT( textTool() ) );
-	connect(
-		m_toolbox, SIGNAL( solidFillActivated() ),
-		this, SLOT( solidFillClicked() ) );
-	connect(
-		m_toolbox, SIGNAL( strokeActivated() ),
-		this, SLOT( strokeClicked() ) );
-	connect(
-		m_toolbox, SIGNAL( strokeChanged( const VStroke & ) ),
-		this, SLOT( slotStrokeChanged( const VStroke & ) ) );
-	connect( m_toolbox, SIGNAL( fillChanged( const VFill & ) ),
-		this, SLOT( slotFillChanged( const VFill & ) ) );
-
-	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
-	m_toolbox->show();
+	if( !m_strokeFillPreview )
+	{
+		m_strokeFillPreview = new VStrokeFillPreview( m_part, shell()->toolBar( "Toolbox" ) );
+		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ),
+				this, SLOT( selectionChanged() ) );
+		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ),
+				this, SLOT( selectionChanged() ) );
+		shell()->toolBar( "Toolbox" )->insertWidget( 10, 30, m_strokeFillPreview );
+		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
+	}
 
 	m_configureAction = new KAction(
 		i18n( "Configure Karbon..." ), "configure", 0, this,
 		SLOT( configure() ), actionCollection(), "configure" );
+}
+
+void
+//KarbonView::partSelectEvent( KParts::PartSelectEvent *ev )
+KarbonView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+	kdDebug() << "KarbonView::partSelectEvent" << endl;
+	KoView::guiActivateEvent( ev );
+	//KoView::partSelectEvent( ev );
+	/*QButtonGroup *grp = new QButtonGroup( 2, Horizontal, shell()->toolBar( "Toolbox" ) );
+	grp->setInsideSpacing( 2 );
+	grp->setInsideMargin( 5 );
+	grp->setExclusive( true );
+
+	// get the buttons
+	QPtrList<QToolButton> buttons;
+	QLayoutIterator it( shell()->toolBar( "Toolbox" )->boxLayout()->iterator() );
+	int i = 0;
+			kdDebug() << "ri : " << i++ << endl;
+	while( it.current() != 0 )
+	{
+			kdDebug() << "i : " << i++ << endl;
+		if( dynamic_cast<QToolButton *>( it.current()->widget() ) )
+		{
+			kdDebug() << "i : " << i++ << endl;
+			buttons.append( dynamic_cast<QToolButton *>( it.current()->widget() ) );
+		}
+		++it;
+	}
+
+	// move to the new button group
+	QPtrListIterator<QToolButton> itr = buttons;
+	while( itr.current() != 0 )
+	{
+		itr.current()->reparent( grp, QPoint( 0, 10 ) );
+		itr.current()->setToggleButton( true );
+		++itr;
+	}
+	shell()->toolBar( "Toolbox" )->insertWidget( 1, 30, grp );*/
+		//m_done = true;
 }
 
 void
@@ -1089,14 +1115,14 @@ KarbonView::selectionChanged()
 {
 	if( part()->document().selection()->objects().count() > 0)
 	{
-		m_toolbox->strokeFillPreview()->update( *part()->document().selection()->objects().getFirst()->stroke(),
+		m_strokeFillPreview->update( *part()->document().selection()->objects().getFirst()->stroke(),
 												*part()->document().selection()->objects().getFirst()->fill() );
 		m_setLineWidth->setEnabled( true );
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 	}
 	else
 	{
-		m_toolbox->strokeFillPreview()->update( part()->document().defaultStroke(), part()->document().defaultFill() );
+		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
 		m_setLineWidth->setEnabled( false );
 	}
 }

@@ -46,10 +46,10 @@ class VSpiralTool;
 class VStarTool;
 class VStroke;
 class VTool;
-class VToolContainer;
 class VTransformDlg;
 class VWhirlPinchDlg;
 class VStateButton;
+class VStrokeFillPreview;
 
 class KarbonView : public KoView
 {
@@ -159,6 +159,7 @@ protected:
 	virtual void resizeEvent( QResizeEvent* event );
 	void dragEnterEvent( QDragEnterEvent *e );
 	void dropEvent ( QDropEvent *e );
+	virtual void guiActivateEvent( KParts::GUIActivateEvent * );
 
 private:
 	void initActions();
@@ -230,11 +231,13 @@ private:
 	VTransformDlg* m_TransformDlg;
 
 	//toolbox
-	KSharedPtr< VToolContainer > m_toolbox;
 	DCOPObject* m_dcop;
 
 	//status bar message
 	QLabel* m_status;
+
+	VStrokeFillPreview *m_strokeFillPreview;
+	bool m_done;
 };
 
 #endif
