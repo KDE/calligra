@@ -76,6 +76,20 @@ DCOPObject* KPPolygonObject::dcopObject()
     return dcop;
 }
 
+bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    xmlWriter.startElement( "draw:polygon" );
+    //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
+    //save object name and other generic attribute
+    //KPObject::saveOasis( xmlWriter );
+    saveOasisPosObject(xmlWriter );
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+    xmlWriter.endElement();
+    return true;
+}
+
+
 QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment = KP2DObject::save( doc, offset );

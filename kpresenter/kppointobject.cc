@@ -93,6 +93,11 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    //todo save
+    return true;
+}
 
 void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation )
 {

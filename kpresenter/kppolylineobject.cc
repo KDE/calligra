@@ -66,6 +66,20 @@ double KPPolylineObject::load(const QDomElement &element)
     return KPPointObject::load( element );
 }
 
+bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter )
+{
+    xmlWriter.startElement( "draw:polyline" );
+    //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
+    //save object name and other generic attribute
+    //KPObject::saveOasis( xmlWriter );
+    saveOasisPosObject(xmlWriter );
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+    xmlWriter.endElement();
+    return true;
+}
+
+
 void KPPolylineObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
 {
     kdDebug()<<"void KPPolylineObject::loadOasis(const QDomElement &element)************\n";
