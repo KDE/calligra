@@ -24,6 +24,7 @@
 #include <qstring.h>
 
 #include "kivio_stencil_spawner.h"
+#include <config.h>
 
 #ifdef HAVE_PYTHON
 
