@@ -169,11 +169,15 @@ bool KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *s
             {
                 KoStoreDevice dev(store);
                 if (koffice11)
+                {
                     if ( !c.saveAsKOffice1Dot1(&dev) )
                         return false;
+                }
                 else
+                {
                     if ( ! c.save(&dev) )
                         return false; // e.g. bad image?
+                }
                 if ( !store->close() )
                     return false; // e.g. disk full
             }
