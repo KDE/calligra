@@ -4162,6 +4162,8 @@ bool KSpreadTable::areaIsEmpty(const QRect &area, TestType _type)
                             return false;
                         break;
                     case ConditionalCellAttribute:
+                        if ( c->conditionList().count()> 0)
+                            return false;
                         break;
                     }
                 }
@@ -4195,6 +4197,8 @@ bool KSpreadTable::areaIsEmpty(const QRect &area, TestType _type)
                             return false;
                         break;
                     case ConditionalCellAttribute:
+                        if ( c->conditionList().count()> 0)
+                            return false;
                         break;
                     }
                 }
@@ -4230,6 +4234,8 @@ bool KSpreadTable::areaIsEmpty(const QRect &area, TestType _type)
                             return false;
                         break;
                     case ConditionalCellAttribute:
+                        if ( cell->conditionList().count()> 0)
+                            return false;
                         break;
                     }
                 }
