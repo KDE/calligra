@@ -106,7 +106,7 @@ KSpreadFunctionParameter::KSpreadFunctionParameter( const QDomElement& element )
 	    {
 		m_type = toType( e.text() );
 		if ( e.hasAttribute( "range" ))
-		{ 
+		{
 		  if (e.attribute("range").lower() == "true")
 		    m_range = TRUE;
 		}
@@ -221,7 +221,7 @@ QString KSpreadFunctionDescription::toQML() const
 
     if ( !m_examples.isEmpty() )
     {
-	text += i18n("<h2>Example</h2><ul>");
+	text += i18n("<h2>Examples</h2><ul>");
 	QStringList::ConstIterator it = m_examples.begin();
 	for( ; it != m_examples.end(); ++it )
 	{
@@ -233,7 +233,7 @@ QString KSpreadFunctionDescription::toQML() const
 
     if ( !m_related.isEmpty() )
     {
-	text += i18n("<h2>Related Function</h2><ul>");
+	text += i18n("<h2>Related Functions</h2><ul>");
 	QStringList::ConstIterator it = m_related.begin();
 	for( ; it != m_related.end(); ++it )
 	{
@@ -262,19 +262,19 @@ KSpreadFunctionRepository* KSpreadFunctionRepository::self()
         // register all built-in functions
         KSpreadRegisterConversionFunctions();
         KSpreadRegisterDatabaseFunctions();
-        KSpreadRegisterDateTimeFunctions();    
-        KSpreadRegisterEngineeringFunctions(); 
-        KSpreadRegisterFinancialFunctions();   
-        KSpreadRegisterInformationFunctions();   
-        KSpreadRegisterLogicFunctions();       
-        KSpreadRegisterMathFunctions();        
+        KSpreadRegisterDateTimeFunctions();
+        KSpreadRegisterEngineeringFunctions();
+        KSpreadRegisterFinancialFunctions();
+        KSpreadRegisterInformationFunctions();
+        KSpreadRegisterLogicFunctions();
+        KSpreadRegisterMathFunctions();
         KSpreadRegisterReferenceFunctions();
         KSpreadRegisterStatisticalFunctions();
-        KSpreadRegisterTextFunctions();        
-        KSpreadRegisterTrigFunctions();   
+        KSpreadRegisterTextFunctions();
+        KSpreadRegisterTrigFunctions();
 
         // find all XML description files
-        QStringList files = 
+        QStringList files =
            KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.xml", TRUE );
         for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
 	    s_self->loadFile( *it );
@@ -330,7 +330,7 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
 			}
 		    }
 		}
-		
+
 		group = "";
 	    }
 	}
@@ -406,7 +406,7 @@ void KSpreadFunctionRepository::registerFunction( const QString& _name, KSpreadF
 
     function = new KSpreadFunction();
     function->name = name;
-    function->functionPtr  = _func;   
+    function->functionPtr  = _func;
 
     m_functions.replace( name, function );
 }
