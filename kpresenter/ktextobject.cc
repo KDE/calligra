@@ -1704,7 +1704,7 @@ void KTextObject::clear(bool init=true)
 }
 
 /*==================== return ascii text =========================*/
-QString KTextObject::toASCII(bool linebreak=true)
+QString KTextObject::toASCII(bool linebreak=true,bool makelist=true)
 {
   QString str;
 
@@ -1721,21 +1721,24 @@ QString KTextObject::toASCII(bool linebreak=true)
 
       // TODO: Alignment
 
-      switch (objType())
+      if (makelist)
 	{
-	case PLAIN: break;
-	case UNSORT_LIST: str += "- "; break;
-	case ENUM_LIST:
-	  {
-	    if (objEnumListType.type == NUMBER)
-	      chr.sprintf("%s%d%s ",(const char*)objEnumListType.before,i+objEnumListType.start,
-		      (const char*)objEnumListType.after);
-	    else
-	      chr.sprintf("%s%c%s ",(const char*)objEnumListType.before,i+objEnumListType.start,
-		      (const char*)objEnumListType.after);	      
-	    str += chr;
-	  } break;
-	default: break;
+	  switch (objType())
+	    {
+	    case PLAIN: break;
+	    case UNSORT_LIST: str += "- "; break;
+	    case ENUM_LIST:
+	      {
+		if (objEnumListType.type == NUMBER)
+		  chr.sprintf("%s%d%s ",(const char*)objEnumListType.before,i+objEnumListType.start,
+			      (const char*)objEnumListType.after);
+		else
+		  chr.sprintf("%s%c%s ",(const char*)objEnumListType.before,i+objEnumListType.start,
+			      (const char*)objEnumListType.after);	      
+		str += chr;
+	      } break;
+	    default: break;
+	    }
 	}
 
       for (j = 0;j < txtParagraph->lines();j++)
@@ -1743,12 +1746,15 @@ QString KTextObject::toASCII(bool linebreak=true)
 	  txtLine = txtParagraph->lineAt(j);
 	  if (j > 0)
 	    {
-	      switch (objType())
+	      if (makelist)
 		{
-		case PLAIN: break;
-		case UNSORT_LIST: str += "  "; break;
-		case ENUM_LIST: str += space.left(chr.length()); break;
-		default: break;
+		  switch (objType())
+		    {
+		    case PLAIN: break;
+		    case UNSORT_LIST: str += "  "; break;
+		    case ENUM_LIST: str += space.left(chr.length()); break;
+		    default: break;
+		    }
 		}
 	    }
 
@@ -3834,7 +3840,7 @@ bool KTextObject::searchFirst(QString text,TxtCursor *from,TxtCursor *to,bool ca
 /*====================== search next =============================*/
 bool KTextObject::searchNext(QString text,TxtCursor *from,TxtCursor *to,bool caseSensitive)
 {
-  QString contents = toASCII(false);
+  QString contents = toASCII(false,false);
   contents.replace("\n","");
 
   if (!contents.isEmpty())
@@ -3888,7 +3894,7 @@ bool KTextObject::searchFirstRev(QString text,TxtCursor *from,TxtCursor *to,bool
 /*====================== search next reverse =====================*/
 bool KTextObject::searchNextRev(QString text,TxtCursor *from,TxtCursor *to,bool caseSensitive)
 {
-  QString contents = toASCII(false);
+  QString contents = toASCII(false,false);
   contents.replace("\n","");
 
   if (!contents.isEmpty())
@@ -4633,7 +4639,7 @@ void KTextObject::recalc(bool breakAllLines=true)
       {
 	QFontMetrics fm(objEnumListType.font);
 	char chr[12];
-	sprintf(chr,"%s99 %s",(const char*)objEnumListType.before,(const char*)objEnumListType.after);
+	sprintf(chr,"%s999 %s",(const char*)objEnumListType.before,(const char*)objEnumListType.after);
 	xstart = fm.width(chr);
       } break;
     case UNSORT_LIST:

@@ -1119,9 +1119,10 @@ public:
 
   /**
    * Returns the text of the KTextObject as ASCII-Text in a string.
-   * If linebreak is <i>true</i> for each linebreak a \n is used.
+   * If linebreak is <i>true</i> for each linebreak a \n is used. If <i>makelist</i> is true, lists
+   * are converted to ASCII as well.
    */
-  QString toASCII(bool linebreak=true);
+  QString toASCII(bool linebreak=true,bool makelist=true);
 
   /**
    * For compatibility to QMultiLineEdit. It just calls @ref toASCII.
