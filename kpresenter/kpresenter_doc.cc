@@ -1362,6 +1362,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     kpclipartobject->setOrig(kpclipartobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this , m_pageWhereLoadObject);
                     macro->addCommand( insertCmd );
+                    kpclipartobject->reload();
                     createMacro=true;
 #if 0
                     insertCmd->execute();
@@ -1413,6 +1414,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                     kppixmapobject->setOrig(kppixmapobject->getOrig().x(),offset);
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
+                    kppixmapobject->reload();
                     createMacro=true;
 
 #if 0
