@@ -104,7 +104,7 @@ KParts::PartManager *KoView::partManager() const
   return d->m_manager;
 }
 
-KAction *KoView::action( const QDomElement &element )
+KAction *KoView::action( const QDomElement &element ) const
 {
   static QString attrName = QString::fromLatin1( "name" );
   QString name = element.attribute( attrName );
