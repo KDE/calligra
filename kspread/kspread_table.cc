@@ -5908,6 +5908,10 @@ void KSpreadTable::paste( const QPoint &_marker,bool makeUndo, PasteMode sp, Ope
 
 void KSpreadTable::pasteTextPlain( QMimeSource * _mime, const QPoint &_marker)
 {
+  QString tmp;
+  tmp= QString::fromLocal8Bit(_mime->encodedData( "text/plain" ));
+  if(tmp.isEmpty())
+    return;
   KSpreadCell* cell = cellAt( _marker.x(), _marker.y() );
   if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -5919,7 +5923,7 @@ void KSpreadTable::pasteTextPlain( QMimeSource * _mime, const QPoint &_marker)
       cell = new KSpreadCell( this, _marker.x(), _marker.y() );
       insertCell( cell ); 
     }
-  cell->setCellText( QString::fromLocal8Bit(_mime->encodedData( "text/plain" )));
+  cell->setCellText( tmp );
   cell->updateChart();
   m_pDoc->setModified( true );
   
