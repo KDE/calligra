@@ -56,10 +56,6 @@ k_dcop:
     void setTypeOfCalc( const QString & calc );
     QString typeOfCalc() const;
 
-    void setBackupFile( bool _b );
-    bool backupFile()const;
-
-
 private:
     KSpreadDoc* doc;
 };

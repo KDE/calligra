@@ -240,13 +240,3 @@ QString KSpreadDocIface::typeOfCalc() const
     }
 }
 
-void KSpreadDocIface::setBackupFile( bool _b )
-{
-    doc->setBackupFile( _b);
-}
-
-bool KSpreadDocIface::backupFile()const
-{
-    return doc->backupFile();
-}
-
