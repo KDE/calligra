@@ -431,6 +431,8 @@ void KWFootNoteVariable::finalize()
 
 void KWFootNoteVariable::resize()
 {
+    kdDebug()<<" this :" <<this<<endl;
+    kdDebug()<<" m_deleted :"<<m_deleted<<endl;
     if ( m_deleted )
         return;
     KoTextFormat *fmt = format();
@@ -487,7 +489,7 @@ void KWFootNoteVariable::setDeleted( bool del )
 
     if (!del)
         m_frameset->layout(); // format its text, so that it resizes the frame
-
+    KoVariable::setDeleted( del );
     // Does this compress? Probably not.
     m_doc->delayedRepaintAllViews();
 }
