@@ -422,7 +422,7 @@ QString WinWordDoc::generateFormats(
 #ifdef __GNUC__
 #warning: disabling killustrator-embedded images
 #endif
-//#define KILLUSTRATOR_WORKS_AGAIN
+#define KILLUSTRATOR_WORKS_AGAIN
 #ifdef KILLUSTRATOR_WORKS_AGAIN
             VectorGraphic *vectorGraphic = static_cast<VectorGraphic *>(run.data());
             QString ourKey;
