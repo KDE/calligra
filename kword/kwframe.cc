@@ -1289,6 +1289,18 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
                 reg -= r; // subtract
             }
         }
+
+	// clip inline frames against their 'parent frames' (=the frame containing the anchor of the frame.)
+	KWFrameSet *parentFrameset= this;
+    	KWFrame *parentFrame=frame;
+    	while (parentFrameset->isFloating()) {
+		parentFrameset=parentFrameset->anchorFrameset();
+		parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
+		QRect r = painter->xForm( viewMode->normalToView( parentFrame->outerRect() ) );
+		reg &= r;
+    	}
+
+
         return reg;
     } else return QRegion();
 }
