@@ -44,10 +44,9 @@ class KWordFrameSetIface;
 
 class RemovedRow;
 class RemovedColumn;
+
 /**
- * Class: KWTableFrameSet
- *
- * This class implements tables by acting as the manager for
+ * @brief This class implements tables by acting as the manager for
  * the frame(set)s which make up the table cells.
  *
  * We have a cell structure which contains one frameset, because
@@ -55,8 +54,6 @@ class RemovedColumn;
  * exactly one frame. Therefore the terms cell, frameSet and frame
  * can be used to describe the same thing: one table-cell
  */
-
-
 class KWTableFrameSet : public KWFrameSet
 {
     Q_OBJECT
@@ -168,7 +165,7 @@ public:
     };
 
     /** The three different types of TableIterators */
-    enum {
+    enum VisitType {
         /**
          * This iterator visits each grid position once, ie every
          * location in the m_rowArray rows. When some cells are joined, this
