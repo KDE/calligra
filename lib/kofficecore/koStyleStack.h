@@ -55,7 +55,14 @@
 class KOFFICECORE_EXPORT  KoStyleStack
 {
 public:
+    /**
+     * Create a OASIS style stack
+     */
     KoStyleStack();
+    /**
+     * Create a style stack based on other namespaces than OASIS - used for OOo-1.1 import.
+     */
+    KoStyleStack( const char* styleNSURI, const char* foNSURI );
     virtual ~KoStyleStack();
 
     /**
@@ -150,6 +157,9 @@ public:
     void setTypeProperties(const char* typeProperties);
 
 private:
+    bool isUserStyle( const QDomElement& e ) const;
+
+private:
     /// For save/restore: stack of "marks". Each mark is an index in m_stack.
     QValueStack<int> m_marks;
 
@@ -159,9 +169,17 @@ private:
      */
     QValueList<QDomElement> m_stack;
 
-    KoStyleStack( const KoStyleStack& );
-    void operator=( const KoStyleStack& );
     QCString m_propertiesTagName;
+
+    const char* m_styleNSURI;
+    const char* m_foNSURI;
+
+    class KoStyleStackPrivate;
+    KoStyleStackPrivate *d;
+
+    // forbidden
+    void operator=( const KoStyleStack& );
+    KoStyleStack( const KoStyleStack& );
 };
 
 #endif /* KOSTYLESTACK_H */

@@ -20,14 +20,21 @@
 
 #include "koStyleStack.h"
 #include "koUnit.h"
-#include "koxmlns.h"
 #include "kodom.h"
+#include "koxmlns.h"
 
 #include <kdebug.h>
 
 //#define DEBUG_STYLESTACK
 
 KoStyleStack::KoStyleStack()
+    : m_styleNSURI( KoXmlNS::style ), m_foNSURI( KoXmlNS::fo )
+{
+    clear();
+}
+
+KoStyleStack::KoStyleStack( const char* styleNSURI, const char* foNSURI )
+    : m_propertiesTagName( "properties" ), m_styleNSURI( styleNSURI ), m_foNSURI( foNSURI )
 {
     clear();
 }
@@ -135,7 +142,7 @@ QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const ch
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, KoXmlNS::style, m_propertiesTagName );
+        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( properties.hasAttributeNS( nsURI, name ) )
             return properties.attributeNS( nsURI, name, QString::null );
         if ( detail && properties.hasAttributeNS( nsURI, fullName ) )
@@ -156,7 +163,7 @@ bool KoStyleStack::hasAttributeNS( const char* nsURI, const char* name, const ch
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, KoXmlNS::style, m_propertiesTagName );
+        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( properties.hasAttributeNS( nsURI, name ) ||
              ( detail && properties.hasAttributeNS( nsURI, fullName ) ) )
             return true;
@@ -176,9 +183,9 @@ double KoStyleStack::fontSize() const
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, KoXmlNS::style, m_propertiesTagName ).toElement();
-        if ( properties.hasAttributeNS( KoXmlNS::fo, name ) ) {
-            const QString value = properties.attributeNS( KoXmlNS::fo, name, QString::null );
+        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
+        if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
+            const QString value = properties.attributeNS( m_foNSURI, name, QString::null );
             if ( value.endsWith( "%" ) )
                 percent *= value.toDouble() / 100.0;
             else
@@ -223,7 +230,7 @@ bool KoStyleStack::hasChildNodeNS( const char* nsURI, const char* localName ) co
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, KoXmlNS::style, m_propertiesTagName );
+        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         if ( !KoDom::namedItemNS( properties, nsURI, localName ).isNull() )
             return true;
     }
@@ -238,7 +245,7 @@ QDomElement KoStyleStack::childNodeNS( const char* nsURI, const char* localName)
     while ( it != m_stack.begin() )
     {
         --it;
-        QDomElement properties = KoDom::namedItemNS( *it, KoXmlNS::style, m_propertiesTagName );
+        QDomElement properties = KoDom::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
         QDomElement e = KoDom::namedItemNS( properties, nsURI, localName );
         if ( !e.isNull() )
             return e;
@@ -247,11 +254,11 @@ QDomElement KoStyleStack::childNodeNS( const char* nsURI, const char* localName)
     return QDomElement();          // a null element
 }
 
-static bool isUserStyle( const QDomElement& e )
+bool KoStyleStack::isUserStyle( const QDomElement& e ) const
 {
-    QDomElement parent = e.parentNode().toElement();
+    const QDomElement parent = e.parentNode().toElement();
     //kdDebug(30003) << k_funcinfo << "tagName=" << e.tagName() << " parent-tagName=" << parent.tagName() << endl;
-    return parent.localName() == "styles" && parent.namespaceURI() == KoXmlNS::office;
+    return parent.localName() == "styles" /*&& parent.namespaceURI() == KoXmlNS::office*/;
 }
 
 QString KoStyleStack::userStyleName() const
@@ -262,7 +269,7 @@ QString KoStyleStack::userStyleName() const
         --it;
         //kdDebug(30003) << k_funcinfo << (*it).attribute("style:name") << endl;
         if ( isUserStyle( *it ) )
-            return (*it).attributeNS( KoXmlNS::style, "name", QString::null );
+            return (*it).attributeNS( m_styleNSURI, "name", QString::null );
     }
     // Can this ever happen?
     return "Standard";

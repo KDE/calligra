@@ -1695,7 +1695,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
     // Parse every child node of the parent
     // Can't use forEachElement here since we also care about text nodes
     QDomNode node;
-    for ( node = parent.firstChild(); !node.isNull(); node = node.nextSibling() ) \
+    for ( node = parent.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
         QDomElement ts = node.toElement();
         QString textData;
