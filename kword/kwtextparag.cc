@@ -733,8 +733,7 @@ KWParagLayout::KWParagLayout()
     initialise();
 }
 
-// Create a KWParagLayout from an existing paragraph's layout (copy constructor).
-KWParagLayout::KWParagLayout( const KWParagLayout &layout )
+void KWParagLayout::operator=( const KWParagLayout &layout )
 {
     alignment = layout.alignment;
     for ( int i = 0 ; i < 5 ; ++i )

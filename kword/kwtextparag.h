@@ -45,7 +45,7 @@ class KWParagLayout
 {
 public:
     KWParagLayout();
-    KWParagLayout( const KWParagLayout &parag );
+    KWParagLayout( const KWParagLayout &layout ) { operator=( layout ); }
     // Load from XML, optionally using styles from document.
     KWParagLayout( QDomElement & parentElem, KWDocument *doc = 0L );
 
@@ -68,6 +68,7 @@ public:
     void setTabList( const KoTabulatorList & tabList ) { m_tabList = tabList; }
     KoTabulatorList tabList() const { return m_tabList; }
 
+    void operator=( const KWParagLayout & );
 private:
     QString m_styleName;
     KoTabulatorList m_tabList;
