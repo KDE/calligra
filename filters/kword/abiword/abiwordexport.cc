@@ -34,8 +34,12 @@
 
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
-#include <kdebug.h>
+
 #include <qdom.h>
+
+#include <kdebug.h>
+
+#include <koGlobal.h>
 
 #include "processors.h"
 #include "kqiodevicegzip.h"
@@ -763,40 +767,90 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
 
     switch (format)
     {
-        // European A formats
-        case 0: // A3
+        // ISO A formats
+        case PG_DIN_A0: // ISO A0
+        {
+            outputText += "pagetype=\"A0\" width=\"84.1\" height=\"118.0\" units=\"cm\" ";
+            break;
+        }
+        case PG_DIN_A1: // ISO A1
+        {
+            outputText += "pagetype=\"A1\" width=\"59.4\" height=\"84.1\" units=\"cm\" ";
+            break;
+        }
+        case PG_DIN_A2: // ISO A2
+        {
+            outputText += "pagetype=\"A2\" width=\"42.0\" height=\"59.4\" units=\"cm\" ";
+            break;
+        }
+        case PG_DIN_A3: // ISO A3
         {
             outputText += "pagetype=\"A3\" width=\"29.7\" height=\"42.0\" units=\"cm\" ";
             break;
         }
-        case 1: // A4
+        case PG_DIN_A4: // ISO A4
         {
             outputText += "pagetype=\"A4\" width=\"21.0\" height=\"29.7\" units=\"cm\" ";
             break;
         }
-        case 2: // A5
+        case PG_DIN_A5: // ISO A5
         {
             outputText += "pagetype=\"A5\" width=\"14.8\" height=\"21.0\" units=\"cm\" ";
             break;
         }
-        // European B formats
-        case 7: // B5
+        case PG_DIN_A6: // ISO A6
+        {
+            outputText += "pagetype=\"A6\" width=\"10.5\" height=\"14.8\" units=\"cm\" ";
+            break;
+        }
+        // ISO B formats
+        case PG_DIN_B0: // ISO B0
+        {
+            outputText += "pagetype=\"B0\" width=\"100.0\" height=\"141.0\" units=\"cm\" ";
+            break;
+        }
+        case PG_DIN_B1: // ISO B1
+        {
+            outputText += "pagetype=\"B1\" width=\"70.7\" height=\"100.0\" units=\"cm\" ";
+            break;
+        }
+        case PG_DIN_B2: // ISO B2
+        {
+            outputText += "pagetype=\"B2\" width=\"50.0\" height=\"70.7\" units=\"cm\" ";
+            break;
+        }
+        case PG_DIN_B3: // ISO B3
+        {
+            outputText += "pagetype=\"B3\" width=\"35.3\" height=\"50.0\" units=\"cm\" ";
+            break;
+        }
+        case PG_DIN_B4: // ISO B4
+        {
+            outputText += "pagetype=\"B4\" width=\"25.8\" height=\"35.3\" units=\"cm\" ";
+            break;
+        }
+        case PG_DIN_B5: // ISO B5
         {
             outputText += "pagetype=\"B5\" width=\"17.6\" height=\"25.0\" units=\"cm\" ";
             break;
         }
+        case PG_DIN_B6: // ISO B6
+        {
+            outputText += "pagetype=\"B6\" width=\"12.5\" height=\"17.6\" units=\"cm\" ";
+            break;
+        }
         // American formats
-        case 3: // Letter
+        case PG_US_LETTER: // US Letter
         {
             outputText += "pagetype=\"Letter\" width=\"8.5\" height=\"11.0\" units=\"inch\" ";
             break;
         }
-        case 4: // Legal
+        case PG_US_LEGAL: // US Legal
         {
             outputText += "pagetype=\"Legal\" width=\"8.5\" height=\"14.0\" units=\"inch\" ";
             break;
         }
-        case 8: // US Executive (does not exists in AbiWord!)
+        case PG_US_EXECUTIVE: // US Executive (does not exists in AbiWord!)
         {
             // FIXME/TODO: AbiWord (CVS 2001-04-25) seems not to like custom formats, so avoid them for now!
 #if 0
@@ -807,9 +861,14 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
 #endif
             break;
         }
-        // Other!
-        case 5: // Screen
-        case 6: // Custom
+        // Other format not supported yet by AbiWord CVS 2001-04-25)
+        case PG_DIN_A7: // ISO A7
+        case PG_DIN_A8: // ISO A8
+        case PG_DIN_A9: // ISO A9
+        case PG_DIN_B10: // ISO B10
+        // Other formats
+        case PG_SCREEN: // Screen
+        case PG_CUSTOM: // Custom
         default:
         {
              // FIXME/TODO: AbiWord (CVS 2001-04-25) seems not to like custom formats, so avoid them for now!

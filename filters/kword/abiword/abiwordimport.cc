@@ -31,7 +31,9 @@
 #include <qxml.h>
 #include <qdom.h>
 #include <qstack.h>
+
 #include <ktempfile.h>
+#include <koGlobal.h>
 
 #include "processors.h"
 #include "kqiodevicegzip.h"
@@ -651,41 +653,100 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
     {
         kwordHeight = CentimetresToPoints(29.7);
         kwordWidth  = CentimetresToPoints(21.0);
-        kwordFormat = 1; // A4
+        kwordFormat = PG_DIN_A4; // ISO A4
     }
     else if (strPageType=="Letter")
     {
         kwordHeight = InchesToPoints(11.0);
         kwordWidth  = InchesToPoints( 8.5);
-        kwordFormat = 3; // US Letter
+        kwordFormat = PG_US_LETTER; // US Letter
     }
-    // Other European formats that KWord knows
+    // Other ISO formats that KWord and AbiWord know
+    else if (strPageType=="A0")
+    {
+        kwordHeight = CentimetresToPoints(118.0);
+        kwordWidth  = CentimetresToPoints(84.1);
+        kwordFormat = PG_DIN_A0; // ISO A0
+    }
+    else if (strPageType=="A1")
+    {
+        kwordHeight = CentimetresToPoints(84.1);
+        kwordWidth  = CentimetresToPoints(59.4);
+        kwordFormat = PG_DIN_A1; // ISO A1
+    }
+    else if (strPageType=="A2")
+    {
+        kwordHeight = CentimetresToPoints(59.4);
+        kwordWidth  = CentimetresToPoints(42.0);
+        kwordFormat = PG_DIN_A2; // ISO A2
+    }
     else if (strPageType=="A3")
     {
         kwordHeight = CentimetresToPoints(42.0);
         kwordWidth  = CentimetresToPoints(29.7);
-        kwordFormat = 0; // A3
+        kwordFormat = PG_DIN_A3; // ISO A3
     }
     else if (strPageType=="A5")
     {
         kwordHeight = CentimetresToPoints(21.0);
         kwordWidth  = CentimetresToPoints(14.8);
-        kwordFormat = 2; // A5
+        kwordFormat = PG_DIN_A5; // ISO A5
+    }
+    else if (strPageType=="A6")
+    {
+        kwordHeight = CentimetresToPoints(14.8);
+        kwordWidth  = CentimetresToPoints(10.5);
+        kwordFormat = PG_DIN_A6; // ISO A6
+    }
+    else if (strPageType=="B0")
+    {
+        kwordHeight = CentimetresToPoints(141.0);
+        kwordWidth  = CentimetresToPoints(100.0);
+        kwordFormat = PG_DIN_B0; // ISO B0
+    }
+    else if (strPageType=="B1")
+    {
+        kwordHeight = CentimetresToPoints(100.0);
+        kwordWidth  = CentimetresToPoints(70.7);
+        kwordFormat = PG_DIN_B1; // ISO B1
+    }
+    else if (strPageType=="B2")
+    {
+        kwordHeight = CentimetresToPoints(70.7);
+        kwordWidth  = CentimetresToPoints(50.0);
+        kwordFormat = PG_DIN_B2; // ISO B2
+    }
+    else if (strPageType=="B3")
+    {
+        kwordHeight = CentimetresToPoints(50.0);
+        kwordWidth  = CentimetresToPoints(35.3);
+        kwordFormat = PG_DIN_B3; // ISO B3
+    }
+    else if (strPageType=="B4")
+    {
+        kwordHeight = CentimetresToPoints(35.3);
+        kwordWidth  = CentimetresToPoints(25.8);
+        kwordFormat = PG_DIN_B4; // ISO B4
     }
     else if (strPageType=="B5")
     {
         kwordHeight = CentimetresToPoints(25.0);
         kwordWidth  = CentimetresToPoints(17.6);
-        kwordFormat = 7; // B5
+        kwordFormat = PG_DIN_B5; // ISO B5
     }
-    // Other American format that KWord knows
+    else if (strPageType=="B6")
+    {
+        kwordHeight = CentimetresToPoints(17.6);
+        kwordWidth  = CentimetresToPoints(12.5);
+        kwordFormat = PG_DIN_B6; // ISO B6
+    }
+    // Other American format that KWord and AbiWord know
     else if (strPageType=="Legal")
     {
         kwordHeight = InchesToPoints(14.0);
         kwordWidth  = InchesToPoints( 8.5);
-        kwordFormat = 4; // US Legal
+        kwordFormat = PG_US_LEGAL; // US Legal
     }
-    // Note: KWord's "US Executive" format is not known by AbiWord (CVS 2001-04-24)
     else
         // We do not know the format, so we must use the values in the attributes
     {
@@ -730,7 +791,7 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
             kwordWidth  = CentimetresToPoints(21.0);
         }
 
-        kwordFormat = 6; // Say that we are a custom format!
+        kwordFormat = PG_CUSTOM; // Say that we are a custom format!
     }
 
 
