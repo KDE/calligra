@@ -322,7 +322,7 @@ public:
 
 
     enum { LS_CUSTOM = 0, LS_SINGLE = 10, LS_ONEANDHALF = 15, LS_DOUBLE = 20,
-      LS_ATLEAST = 30, LS_EXACTLY = 40, LS_MULTIPLE = 50 };
+      LS_ATLEAST = 30, LS_MULTIPLE = 40 };
 
     QString     styleName;
     QString     styleFollowing;
