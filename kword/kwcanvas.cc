@@ -2107,6 +2107,11 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                              edit->setUnderline(!format->font().underline());
                              return true;
                          }
+                         else if(keyev->key()==Key_B)
+                         {
+                             edit->setBold(!format->font().bold());
+                             return true;
+                         }
                      }
                  }
              }
