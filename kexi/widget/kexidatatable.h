@@ -22,11 +22,14 @@
 #ifndef KEXIDATATABLE_H
 #define KEXIDATATABLE_H
 
+#include <kxmlguiclient.h>
 #include "kexidialogbase.h"
 
 class KexiTableItem;
 class QStatusBar;
 class QLineEdit;
+class QComboBox;
+class QLabel;
 
 class KPrinter;
 
@@ -36,6 +39,17 @@ class KexiView;
 class KexiTableView;
 class KexiDB;
 class KexiProjectHandlerItem;
+class KexiDataTable;
+
+
+class TableGUIClient : public KXMLGUIClient
+{
+	public:
+		TableGUIClient(KexiDataTable *t);
+		~TableGUIClient();
+
+};
+
 
 class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 {
@@ -49,13 +63,19 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		bool executeQuery(const QString &query);
 		void setDataSet(KexiDBRecordSet *rec);
 
-		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
-#ifndef KEXI_NO_PRINT
-		virtual void print(KPrinter &printer);
-#endif
+		virtual KXMLGUIClient *guiClient();
 		bool readOnly();
+
+		bool isSarchVisible() { return m_searchVisible; }
+
+		#ifndef KEXI_NO_PRINT
+		virtual void print(KPrinter &printer);
+		#endif
+
 	public slots:
 		virtual void setFocus();
+		void setSearchVisible(bool visible);
+
 	protected slots:
 		void init(QString caption, QString identifier, bool embedd);
 		void slotItemChanged(KexiTableItem *i, int col, QVariant oldValue);
@@ -66,13 +86,23 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		 uint record, QVariant &value);
 		void slotRemoved(QObject *sender, const QString &table, uint record);
 
-		void slotSearchChanged(const QString &);
 		void recordInsertFinished(KexiDBUpdateRecord*);
+
+		void slotSearchChanged(const QString &);
+		void slotSerachColChanged(int index);
+		void slotTableSearchChanged(int col);
+
 	private:
+		//gui
 		KexiTableView	*m_tableView;
 		QStatusBar	*m_statusBar;
 		QLineEdit	*m_search;
+		QComboBox	*m_searchCol;
+		QLabel		*m_lSearch;
 
+		bool		m_searchVisible;
+
+		//db stuff
 		KexiDBRecordSet	*m_record;
 
 		bool		m_first;

@@ -29,10 +29,12 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpopupmenu.h>
+#include <qcombobox.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kactionclasses.h>
 #include "koApplication.h"
 
 
@@ -64,6 +66,7 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, KexiProjectHandlerI
 void
 KexiDataTable::init(QString caption, QString identifier, bool embedd)
 {
+	m_searchVisible=false;
 	m_record=0;
 	setCaption(i18n("%1 - Table").arg(caption));
 
@@ -72,14 +75,23 @@ KexiDataTable::init(QString caption, QString identifier, bool embedd)
 	m_tableView->m_editOnDubleClick = true;
 	m_statusBar = new QStatusBar(this);
 #ifndef KEXI_NO_DATATABLE_SEARCH
-	QLabel *lSearch = new QLabel(i18n("Search:"), this);
+	// greate linux mess ;)
+	m_searchVisible=true;
+	m_lSearch = new QLabel(i18n("Search:"), this);
+	m_searchCol = new QComboBox(this);
 	m_search = new QLineEdit("", this);
+
+	g->addWidget(m_lSearch,			0,	0);
+	g->addWidget(m_searchCol,		0,	1);
+	g->addWidget(m_search,			0,	2);
+
 	connect(m_search, SIGNAL(textChanged(const QString &)), this, SLOT(slotSearchChanged(const QString &)));
-	g->addWidget(lSearch,			0,	0);
-	g->addWidget(m_search,			0,	1);
+	connect(m_searchCol, SIGNAL(activated(int)), this, SLOT(slotSerachColChanged(int)));
+	connect(m_tableView, SIGNAL(sortedColumnChanged(int)), this, SLOT(slotTableSearchChanged(int)));
 #endif
-	g->addMultiCellWidget(m_tableView,	1,	1,	0,	1);
-	g->addMultiCellWidget(m_statusBar,	2,	2,	0,	1);
+
+	g->addMultiCellWidget(m_tableView,	1,	1,	0,	2);
+	g->addMultiCellWidget(m_statusBar,	2,	2,	0,	2);
 
 	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int,QVariant)), this, SLOT(slotItemChanged(KexiTableItem *, int,QVariant)));
 //	connect(m_tableView, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
@@ -138,6 +150,7 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 
 		m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),
 		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
+		m_searchCol->insertItem(m_record->fieldName(i));
 	}
 
 	int record = 0;
@@ -346,12 +359,6 @@ KexiDataTable::slotRemoved(QObject *sender, const QString &table, uint record)
 	}
 }
 
-void
-KexiDataTable::slotSearchChanged(const QString &findQuery)
-{
-	kdDebug() << "KexiDataTable::slotSearchChanged()" << endl;
-	m_tableView->findString(findQuery);
-}
 
 void
 KexiDataTable::slotContextMenu(KexiTableItem *i, int col, const QPoint &pos)
@@ -403,6 +410,79 @@ KexiDataTable::setFocus()
 	else {
 		m_tableView->selectRow( m_tableView->rows()-1 );
 	}
+}
+
+void
+KexiDataTable::slotSerachColChanged(int index)
+{
+//thanks to the german trains i
+//could extend search function while driving to
+//LinuxTag
+// -- cosider that as a diary entry ;)
+	m_tableView->setSorting(index);
+	m_search->setText("");
+	m_search->setFocus();
+}
+
+void
+KexiDataTable::slotSearchChanged(const QString &findQuery)
+{
+	kdDebug() << "KexiDataTable::slotSearchChanged()" << endl;
+	if(m_tableView->sorting() != m_searchCol->currentItem())
+		m_tableView->setSorting(m_searchCol->currentItem());
+	m_tableView->findString(findQuery);
+}
+
+void
+KexiDataTable::slotTableSearchChanged(int col)
+{
+	//i have to say programming in trains is a joy!
+
+	#ifndef KEXI_NO_DATATABLE_SEARCH
+	m_searchCol->setCurrentItem(col);
+	#endif
+}
+
+void
+KexiDataTable::setSearchVisible(bool visible)
+{
+	#ifdef KEXI_NO_DATATABLE_SEARCH
+	// avoid calling stuff which doesn't exist
+	return;
+	#endif
+
+	if(visible)
+	{
+		m_lSearch->show();
+		m_searchCol->show();
+		m_search->show();
+	}
+	else
+	{
+		m_lSearch->hide();
+		m_searchCol->hide();
+		m_search->hide();
+	}
+
+	m_searchVisible = visible;
+}
+
+
+KXMLGUIClient *
+KexiDataTable::guiClient()
+{
+	return new TableGUIClient(this);
+}
+
+//GUI client implementation follows...
+TableGUIClient::TableGUIClient(KexiDataTable *t)
+{
+	setXMLFile("kexitableview.rc");
+	new KToggleAction(i18n("Show incremental search"), 0, t, SLOT(showIS), 0, "showISearch");
+}
+
+TableGUIClient::~TableGUIClient()
+{
 }
 
 #include "kexidatatable.moc"

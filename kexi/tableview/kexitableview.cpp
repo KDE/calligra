@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Till Busch <till@bux.at>
-   Lucijan Busch <lucijan@gmx.at>
+   Copyright (c) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
@@ -102,7 +102,7 @@ if(m_rowHeight < 17)
 	m_pColumnDefaults = new QPtrList<QVariant>;
 	m_deletionPolicy = NoDelete;
 	//m_additionPolicy = NoAdd;
-  setAdditionPolicy( NoAdd );
+	setAdditionPolicy( NoAdd );
 
 	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
@@ -1271,6 +1271,8 @@ void KexiTableView::columnSort(int col)
 
 	}
 //	updateContents( 0, 0, viewport()->width(), viewport()->height());
+
+	emit sortedColumnChanged(col);
 }
 
 void KexiTableView::columnWidthChanged( int col, int, int )

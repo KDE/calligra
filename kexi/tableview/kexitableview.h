@@ -54,8 +54,6 @@ class KexiTableEdit;
 
 /*
 	this class provides a tablewidget ;)
-	since this class is shared with another projcet
-	please use #ifdef USE_KDE if you use kde-classes, thank you
 */
 
 class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView
@@ -81,6 +79,7 @@ public:
 	void setSorting(int col, bool ascending=true);
 
 	QVariant::Type			columnType(int col);
+	QVariant			columnDefault(int col);
 	bool				columnEditable(int col);
 	inline KexiTableItem		*itemAt(int row);
 
@@ -224,6 +223,7 @@ signals:
 	void			addRecordRequest();
 	void			dropped(QDropEvent *);
 	void			contextMenuRequested(KexiTableItem *, int col, const QPoint &);
+	void			sortedColumnChanged(int col);
 
 protected:
 	// cursor position
@@ -306,6 +306,11 @@ inline bool	KexiTableView::columnEditable(int col)
 		return true;
 
 	return false;
+}
+
+inline QVariant KexiTableView::columnDefault(int col)
+{
+	return *m_pColumnDefaults->at(col);
 }
 
 #endif

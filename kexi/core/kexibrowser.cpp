@@ -57,7 +57,7 @@ KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectHandler *part
 
 	addColumn("");
 	setShowToolTips(true);
-//(JS)	setResizeMode(QListView::LastColumn);
+//	setResizeMode(QListView::LastColumn);
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
@@ -75,11 +75,11 @@ void
 KexiBrowser::addGroup(KexiProjectHandler *part)
 {
 	//A littlebit hacky at the moment
-	KexiBrowserItem *item = new KexiBrowserItem(this, 
+	KexiBrowserItem *item = new KexiBrowserItem(this,
 		part->proxy(static_cast<KexiDialogBase*>(parent()->parent())->kexiView())
 	);
 	setRootIsDecorated(true);
-	
+
 	item->setPixmap(0, part->groupPixmap());
 	item->setOpen(true);
 	m_baseItems.insert(part->mime(), item);
@@ -180,7 +180,6 @@ KexiBrowser::slotExecuteItem(QListViewItem *item)
 				it->item()->handler()->proxy(
 					static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
 				)->executeItem(it->item()->fullIdentifier());
-//				)->executeItem(it->identifier());
 			}
 		}
 	}

@@ -255,6 +255,7 @@ KexiDBConnection::loadInfo(QDomElement &rootElement)
 void
 KexiDBConnection::writeInfo(KexiDB* destDB,int priority)
 {
+#if 0
 	bool firstEntry=false;
 	if (priority==0) {
 		/* try to create the needed table */
@@ -273,14 +274,15 @@ KexiDBConnection::writeInfo(KexiDB* destDB,int priority)
 		kdbt.addField(KexiDBField("kexipassword",KexiDBField::SQLVarchar,
 			KexiDBField::CCNone,20));
 
-		firstEntry=!destDB->createTable(kdbt);
+		//firstEntry=!destDB->createTable(kdbt);
 		/* perhaps error checking should be done here */
+		//what a good idea :)
 	}
 	if (firstEntry) {
 	} else {
 	/*  here checks for insert/update are needed */
 	}
-
+#endif
 }
 
 

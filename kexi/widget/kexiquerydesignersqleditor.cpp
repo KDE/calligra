@@ -45,7 +45,7 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(m_doc);
 	for(uint i=0; i < hl->hlModeCount(); i++)
 	{
-		if(hl->hlModeName(i) == "SQL")
+		if(hl->hlModeName(i) == "SQL-MySQL")
 		{
 			hl->setHlMode(i);
 			break;
