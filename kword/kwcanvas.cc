@@ -87,9 +87,12 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     slotNewContentsSize();
 
-    // Create the current frameset-edit last, to have everything ready for it
-    m_mouseMode = (MouseMode) -1;
     setMouseMode( MM_EDIT );
+    // Create the current frameset-edit last, to have everything ready for it
+    KWFrameSet * fs = doc->getFrameSet( 0 );
+    ASSERT( fs );
+    if ( fs )
+        m_currentFrameSetEdit = fs->createFrameSetEdit( this );
 }
 
 KWCanvas::~KWCanvas()
