@@ -533,6 +533,12 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
         KScript::Long result = r.value()->intValue() * l.value()->intValue();
         FILL_VALUE( context, l, r );
         context.value()->setValue( result );
+
+        // chance to overflow ? promote to double
+        KScript::Double v = r.value()->doubleValue() * l.value()->doubleValue();
+        if( fabs( v ) > 1e9 ) 
+          context.value()->setValue( v );
+
         return true;
       }
     case KSValue::DoubleType:
