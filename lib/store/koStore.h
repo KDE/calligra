@@ -169,6 +169,29 @@ public:
    */
   void popDirectory();
 
+  /**
+   * Imports a local file into a store
+   * @param fileName file on hard disk
+   * @param destName file in the store
+   */
+  bool addLocalFile( const QString &fileName, const QString &destName );
+
+  /**
+   * Imports a local directory
+   * @param dirPath path to the directory on a disk
+   * @param dest path in the store where the direcotry should get saved
+   * @returns the directory index
+   */
+  QStringList addLocalDirectory( const QString &dirPath, const QString &dest );
+
+
+  /**
+   * Extracts a file out of the store
+   * @param srcName file in the store
+   * @param fileName file on a disk
+   */
+  bool extractFile( const QString &srcName, const QString &fileName );
+
   // See QIODevice
   bool at( QIODevice::Offset pos );
   QIODevice::Offset at() const;

@@ -32,6 +32,7 @@
 
 #include <qfileinfo.h>
 #include <qfile.h>
+#include <qdir.h>
 
 //#define DefaultFormat KoStore::Tar
 #define DefaultFormat KoStore::Zip
@@ -369,6 +370,100 @@ void KoStore::popDirectory()
   enterAbsoluteDirectory( QString::null );
   enterDirectory( m_directoryStack.pop() );
 }
+
+bool KoStore::addLocalFile( const QString &fileName, const QString &destName )
+{
+  QFileInfo fi( fileName );
+  uint size = fi.size();
+  QFile file( fileName );
+  if ( !file.open( IO_ReadOnly ))
+  {
+    return false;
+  }
+
+  if ( !open ( destName ) )
+  {
+    return false;
+  }
+
+  QByteArray data ( 8 * 1024 );
+
+  uint total = 0;
+  for ( int block = 0; ( block = file.readBlock ( data.data(), data.size() ) ) > 0; total += block )
+  {
+    write( data );
+  }
+  Q_ASSERT( total == size );
+
+  close();
+  file.close();
+
+  return true;
+}
+
+bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
+{
+  if ( !open ( srcName ) )
+    return false;
+
+  QFile file( fileName );
+
+  if( !file.open ( IO_WriteOnly ) )
+  {
+    close();
+    return false;
+  }
+
+  QByteArray data ( 8 * 1024 );
+  uint total = 0;
+  for( int block = 0; ( block = read ( data.data(), data.size() ) ) > 0; total += block )
+  {
+    file.writeBlock ( data.data(), data.size() );
+  }
+
+  if( size() != -1 )
+  	Q_ASSERT( total == size() );
+
+  file.close();
+  close();
+
+  return true;
+}
+
+QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &destName )
+{
+  QString dot = ".";
+  QString dotdot = "..";
+  QStringList content;
+
+  QDir dir(dirPath);
+  if ( !dir.exists() )
+    return 0;
+
+  QStringList files = dir.entryList();
+  for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
+  {
+     if ( *it != dot && *it != dotdot )
+     {
+        QString currentFile = dirPath + "/" + *it;
+        QString dest = destName.isEmpty() ? *it : (destName + "/" + *it);
+
+        QFileInfo fi ( currentFile );
+        if ( fi.isFile() )
+        {
+          addLocalFile ( currentFile, dest );
+          content.append(dest);
+        }
+        else if ( fi.isDir() )
+        {
+          content += addLocalDirectory ( currentFile, dest );
+        }
+     }
+  }
+
+  return content;
+}
+
 
 bool KoStore::at( QIODevice::Offset pos )
 {
