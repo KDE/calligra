@@ -314,6 +314,32 @@ KexiDB Drivers
 - move to SQLITE3 (later it will be harder to do)
 -....
 
+TODO: add kexi__toremove table, and use it to remove objects on begin connection
+
+2004-08-25
+Core
+- KexiSharedActionHost::invalidateSharedActions(QObject *o)
+	if o is not KexiDialogBase or its child,
+	only invalidate actions if these come from mainwindow's KActionCollection
+	(thus part-actions are untouched when the focus is e.g. in the Property Editor.
+- KexiViewBase::setDirty() -do not signal 'dirty' flag's changes if no change
+- ObjectStatus now also stores related KexiDB::Obeject's, for more verbose errors
+KexiDB
+- Field::isAutoIncrementEnabled() added + some checks for 'autoincrement' flag
+- fixed saving SQL statements for possible later error messages. 
+  Object class now also better handles previous server error messages and numbers.
+- KexiDB::getHTMLErrorMesage() improved, it's more verbose in certain cases
+TableView
+- "yes" button for "do you want to delete row?" dlg has "Delete row" text 
+  (as KDE HIG requires)
+- cell-cursor's is position not reset after initDataContents() on show()
+  if it was set before KexiTableView widget showing.
+Table Designer
+- many validations added related to primary key and autonumber properties
+- On table creation (or altering), if there is no primary key, user is asked 
+  if it should be added (automatically). 
+  Useful setting "dont show this again" added for this as well.
+
 2004-08-24
 Table View
 - redraw fixed -very special case: If you're during editing a new row, and click 
@@ -329,6 +355,8 @@ Form Designer
 Table Designer
 - "autonumber" property is now visible
 - icons added to propertybuffer
+Form Module
+- kexidbwidgets.so ported to win32
 
 2004-08-23
 Table Designer

@@ -12,6 +12,7 @@ Group: PropertyEditor
 
 Group: Notification Messages
 -dontAskBeforeDeleteRow [boolean]
+-autogeneratePrimaryKeysOnTableDesignSaving [boolean]
 
 Group: Startup
 -OpenExistingType [File|Server]

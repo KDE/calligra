@@ -394,6 +394,8 @@ QString KexiAlterTableDialog::messageForSavingChanges(bool &emptyTable)
 
 bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
+	if (!m_view->acceptRowEdit())
+		return false;
 /*	if (mode==Kexi::DesignViewMode) {
 		initData();
 		return true;
@@ -649,6 +651,32 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 		return false;
 	}
 	bool ok = true;
+	//check for pkey; automatically add a pkey if user wanted
+	if (!d->primaryKeyExists) {
+		const int res = KMessageBox::questionYesNoCancel(this, i18n("<p>There is not <b>primary key</b> defined.</p>"
+			"<p>Although a primary key is not required, it is needed for creating relations between database tables. "
+			"Do you want to add primary key automatically now?</p>"
+			"<p>If you want to add a primary key by hand, press \"Cancel\" to cancel saving table design.</p>"),
+			QString::null, KGuiItem(i18n("&Add a primary key"), "key"), KStdGuiItem::no(), 
+				"autogeneratePrimaryKeysOnTableDesignSaving");
+		if (res==KMessageBox::Cancel) {
+			cancel = true;
+			return false;
+		}
+		else if (res==KMessageBox::Yes) {
+			m_view->insertEmptyRow(0);
+			m_view->setCursor(0, COLUMN_ID_NAME);
+			//name and type
+			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_NAME, QVariant("id"));
+			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_TYPE, QVariant(KexiDB::Field::IntegerGroup-1/*counting from 0*/));
+			if (!m_view->data()->saveRowChanges(*m_view->selectedItem(), true)) {
+				cancel = true;
+				return false;
+			}
+			slotTogglePrimaryKey();
+		}
+	}
+
 	//check for duplicates
 	KexiPropertyBuffer *b = 0;
 	bool no_fields = true;
@@ -758,7 +786,8 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 		//todo
 		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 		ok = conn->createTable(tempData()->table);
-		//todo: show err...?
+		if (!ok)
+			parentDialog()->setStatus(conn, "");
 	}
 
 	if (ok) {
@@ -800,6 +829,8 @@ bool KexiAlterTableDialog::storeData(bool &cancel)
 	if (ok) {
 		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 		ok = conn->alterTable(*tempData()->table, *newTable);
+		if (!ok)
+			parentDialog()->setStatus(conn, "");
 	}
 	if (ok) {
 		//change current schema
