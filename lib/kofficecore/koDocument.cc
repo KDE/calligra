@@ -1812,6 +1812,11 @@ KService::Ptr KoDocument::readNativeService( KInstance *instance )
 {
     QString instname = instance ? instance->instanceName() : kapp->instanceName();
 
+    // ###### TODO after 1.3: replace all this with
+    // instname.prepend( "kde-");
+    // KService::serviceByStorageId( instname );
+    // as advised by Waldo. (KDE-3.2 API for the XDG .desktop files)
+
     // Try by path first, so that we find the global one (which has the native mimetype)
     // even if the user created a kword.desktop in ~/.kde/share/applnk or any subdir of it.
     // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
