@@ -47,7 +47,7 @@
 #include "kontour_global.h"
 #include "kontour_doc.h"
 #include "kontour_factory.h"
-#include "kontour_viewiface.h"
+#include "kontour_view_iface.h"
 #include "GDocument.h"
 #include "GPage.h"
 #include "GObject.h"
@@ -58,9 +58,10 @@
 #include "ToolController.h"
 #include "SelectTool.h"
 #include "EditPointTool.h"
+#include "ZoomTool.h"
 #include "RectTool.h"
 #include "OvalTool.h"
-#include "ZoomTool.h"
+#include "InsertImageTool.h"
 #include "LayerPanel.h"
 #include "StylePanel.h"
 #include "TransformPanel.h"
@@ -393,6 +394,9 @@ void KontourView::setupTools()
 
   mOvalTool = new OvalTool("Oval", tcontroller);
   tcontroller->registerTool(mOvalTool);
+
+  mInsertImageTool = new InsertImageTool("InsertImage", tcontroller);
+  tcontroller->registerTool(mInsertImageTool);
 
   tcontroller->initToolBar();
   tcontroller->selectTool("Select");

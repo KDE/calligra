@@ -159,9 +159,8 @@ SetPropertyCmd(aGDoc, i18n("Set fill opacity"))
 
 void SetFillCmd::execute()
 {
-  kdDebug() << ">>>>>>>>>>>>>>>>" << fill << endl;
   for(unsigned int i = 0; i < objects.count(); i++)
-    objects[i]->style()->outlineOpacity(fill);
+    objects[i]->style()->filled(fill);
   document()->activePage()->updateSelection();
 }
 
@@ -175,7 +174,7 @@ SetPropertyCmd(aGDoc, i18n("Set fill opacity"))
 void SetFillOpacityCmd::execute()
 {
   for(unsigned int i = 0; i < objects.count(); i++)
-    objects[i]->style()->outlineOpacity(opacity);
+    objects[i]->style()->fillOpacity(opacity);
   document()->activePage()->updateSelection();
 }
 

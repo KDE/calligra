@@ -2,8 +2,8 @@
 
   $Id$
 
-  This file is part of KIllustrator.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  This file is part of Kontour.
+  Copyright (C) 2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,24 +22,20 @@
 
 */
 
-#ifndef __CreateImageCmd_h__
-#define __CreateImageCmd_h__
+#ifndef __InsertImageTool_h__
+#define __InsertImageTool_h__
 
-#include <Command.h>
+#include "Tool.h"
 
-class GImage;
-
-class CreateImageCmd : public Command
+class InsertImageTool : public Tool
 {
+  Q_OBJECT
 public:
-  CreateImageCmd(GDocument *aGDoc, GImage *image);
-  ~CreateImageCmd();
+  InsertImageTool(QString aId, ToolController *tc);
 
-  void execute();
-  void unexecute();
-
-private:
-  GImage *object;
+  void activate();
+  void deactivate();
+  void processEvent(QEvent *e);
 };
 
 #endif

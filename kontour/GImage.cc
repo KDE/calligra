@@ -26,13 +26,14 @@
 #include "GImage.h"
 
 #include <qdom.h>
+#include <qimage.h>
 
 #include <klocale.h>
 
-GImage::GImage(const QString &filename):
+GImage::GImage(const KURL &url):
 GObject()
 {
-  if (url.isLocalFile ()) {
+/*  if (url.isLocalFile ()) {
     pix = new QPixmap (url.path ());
     if (pix->isNull ()) {
       delete pix;
@@ -45,13 +46,13 @@ GObject()
     width = pix->width ();
     height = pix->height ();
   }
-  calcBoundingBox ();
+  calcBoundingBox ();*/
 }
 
 GImage::GImage(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
-
+/*
     url=element.attribute("src");
     if (url.isLocalFile ()) {
         pix = new QPixmap (url.path ());
@@ -65,18 +66,18 @@ GObject(element.namedItem("go").toElement())
         width = pix->width ();
         height = pix->height ();
     }
-    calcBoundingBox ();
+    calcBoundingBox ();*/
 }
 
 GImage::GImage(const GImage &obj):
 GObject(obj)
 {
-  url = obj.url;
+/*  url = obj.url;
   if (obj.pix)
     pix = new QPixmap (*obj.pix);
   width = obj.width;
   height = obj.height;
-  calcBoundingBox ();
+  calcBoundingBox ();*/
 }
 
 GImage::~GImage()
@@ -85,7 +86,7 @@ GImage::~GImage()
     delete mImage;
 }
 
-GObject *GImage::copy()
+GObject *GImage::copy() const
 {
   return new GImage(*this);
 }
@@ -98,7 +99,6 @@ QString GImage::typeName() const
 QDomElement GImage::writeToXml(QDomDocument &document)
 {
   QDomElement image = document.createElement("image");
-  image.setAttribute("src", url.url());
   image.appendChild(GObject::writeToXml(document));
   return image;
 }
@@ -143,7 +143,7 @@ GPath *GImage::convertToPath() const
 
 bool GImage::isConvertible() const
 {
- return false;
+  return false;
 }
 
 #include "GImage.moc"

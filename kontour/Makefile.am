@@ -42,6 +42,7 @@ libkontourpart_la_SOURCES = \
 	GPath.cc \
 	GOval.cc \
 	GRect.cc \
+	GImage.cc \
 	GStyle.cc \
 	GStyleList.cc \
 	LayerPanel.cc \
@@ -51,9 +52,10 @@ libkontourpart_la_SOURCES = \
 	ToolController.cc \
 	SelectTool.cc \
 	EditPointTool.cc \
+	ZoomTool.cc \
 	RectTool.cc \
 	OvalTool.cc \
-	ZoomTool.cc \
+	InsertImageTool.cc \
 	Handle.cc \
 	Command.cc \
 	CopyCmd.cc \
@@ -70,11 +72,12 @@ libkontourpart_la_SOURCES = \
 	SetPropertyCmd.cc \
 	CreateOvalCmd.cc \
 	CreateRectCmd.cc \
+	CreateImageCmd.cc \
 	OptionsDialog.cc \
 	UnitBox.cc \
 	units.cc \
-	kontour_viewiface.skel \
-	kontour_viewiface.cc
+	kontour_view_iface.skel \
+	kontour_view_iface.cc
 
 libkontourpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkontourpart_la_LIBADD = $(top_builddir)/lib/kofficeui/libkofficeui.la $(LIB_KOPAINTER)

@@ -29,19 +29,21 @@
 #include <GObject.h>
 
 class QImage;
+class QDomElement;
+class KURL;
 
 class GImage : public GObject
 {
   Q_OBJECT
 public:
-  GImage(const QString &filename);
+  GImage(const KURL &url);
   GImage(const QDomElement &element);
   GImage(const GImage &obj);
   ~GImage();
 
   GObject *copy() const;
 
-  QString typeName () const;
+  QString typeName() const;
   QDomElement writeToXml(QDomDocument &document);
   void draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 

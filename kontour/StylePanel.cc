@@ -202,7 +202,6 @@ void OutlinePanel::slotUpdate()
   else
   {
     bool b = mView->activeDocument()->activePage()->getSelection().first()->style()->stroked();
-    kdDebug(38000) << "EEEFDDGHDFG = "<< b << endl;
     mStroked->setChecked(b);
     mStartArrowBox->setEnabled(b);
     mEndArrowBox->setEnabled(b);
@@ -355,7 +354,6 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mPaintingBox->insertItem(i18n("No"));
   mPaintingBox->insertItem(i18n("Color"));
   mPaintingBox->insertItem(i18n("Gradient"));
-  mPaintingBox->insertItem(i18n("Pattern"));
   mPaintingBox->insertItem(i18n("Bitmap"));
   mPaintingBox->setCurrentItem(0);
 
@@ -384,18 +382,35 @@ QDockWindow(QDockWindow::InDock, parent, name)
   setCaption(i18n("Painting"));
 }
 
-void PaintPanel::slotUpdate()
+void PaintPanel::slotUpdate(bool pages)
 {
+  int f;
+  if(mView->activeDocument()->activePage()->selectionIsEmpty())
+    f = mView->activeDocument()->styles()->style()->filled();
+  else
+    f = mView->activeDocument()->activePage()->getSelection().first()->style()->filled();
+  mPaintingBox->setCurrentItem(f);
+  if(f == 0)
+    mOpacityBox->setEnabled(false);
+  else
+    mOpacityBox->setEnabled(true);
+  if(pages)
+  {
+    QWidget *p = mTab->currentPage();
+    mTab->removePage(mPaintPanel);
+    mTab->removePage(mBitmapPanel);
+    if(f == 1)
+      mTab->insertTab(mPaintPanel, i18n("Color"));
+    else if(f == 3)
+      mTab->insertTab(mBitmapPanel, i18n("Bitmap"));
+    mTab->showPage(p);
+  }
   if(mView->activeDocument()->activePage()->selectionIsEmpty())
   {
-    int f = mView->activeDocument()->styles()->style()->filled();
-    mPaintingBox->setCurrentItem(f);
     mOpacityBox->setValue(mView->activeDocument()->styles()->style()->fillOpacity());
   }
   else
   {
-    int f = mView->activeDocument()->activePage()->getSelection().first()->style()->filled();
-    mPaintingBox->setCurrentItem(f);
     mOpacityBox->setValue(mView->activeDocument()->activePage()->getSelection().first()->style()->fillOpacity());
   }
 }
@@ -427,7 +442,7 @@ void PaintPanel::slotChangeOpacity(int o)
     KontourDocument *doc = (KontourDocument *)mView->koDocument();
     doc->history()->addCommand(cmd);
   }
-  slotUpdate();
+  slotUpdate(false);
 }
 
 void PaintPanel::slotChangeColor(const KoColor &c)
@@ -442,7 +457,7 @@ void PaintPanel::slotChangeColor(const KoColor &c)
     KontourDocument *doc = (KontourDocument *)mView->koDocument();
     doc->history()->addCommand(cmd);
   }
-  slotUpdate();
+  slotUpdate(false);
 }
 
 #include "StylePanel.moc"

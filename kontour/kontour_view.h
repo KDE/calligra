@@ -48,9 +48,10 @@ class KSelectAction;
 class KPopupMenu;
 class SelectTool;
 class EditPointTool;
+class ZoomTool;
 class RectTool;
 class OvalTool;
-class ZoomTool;
+class InsertImageTool;
 class QDockArea;
 class QButton;
 class QScrollBar;
@@ -228,11 +229,12 @@ private:
   /* Tools */
   ToolController *tcontroller;
 
-  SelectTool *mSelectTool;
-  EditPointTool *mEditPointTool;
-  ZoomTool *mZoomTool;
-  RectTool *mRectTool;
-  OvalTool *mOvalTool;
+  SelectTool          *mSelectTool;
+  EditPointTool       *mEditPointTool;
+  ZoomTool            *mZoomTool;
+  RectTool            *mRectTool;
+  OvalTool            *mOvalTool;
+  InsertImageTool     *mInsertImageTool;
 
   /* */
   bool mShowRulers;

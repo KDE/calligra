@@ -79,7 +79,7 @@ public:
   PaintPanel(KontourView *aView, QWidget *parent = 0L, const char *name = 0L);
 
 public slots:
-  void slotUpdate();
+  void slotUpdate(bool pages = true);
 
 private slots:
   void slotChangeFilled(int f);

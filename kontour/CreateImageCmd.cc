@@ -26,31 +26,29 @@
 
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GPage.h"
 #include "GImage.h"
 
-InsertPixmapCmd::InsertPixmapCmd (GDocument* doc, const QString &fname) :
- Command(i18n("Insert Pixmap"))
+CreateImageCmd::CreateImageCmd(GDocument *aGDoc, GImage *image):
+Command(aGDoc, i18n("Create Image"))
 {
-  document = doc;
-  filename = fname;
-  pixmap = 0L;
+  object = image;
+  object->ref();
 }
 
-InsertPixmapCmd::~InsertPixmapCmd () {
-  if (pixmap)
-    pixmap->unref ();
+CreateImageCmd::~CreateImageCmd()
+{
+  if(object)
+    object->unref();
 }
 
-void InsertPixmapCmd::execute () {
-  if (pixmap)
-    pixmap->unref ();
-
-  pixmap = new GPixmap (document, filename);
-  document->activePage()->insertObject (pixmap);
+void CreateImageCmd::execute()
+{
+  document()->activePage()->insertObject(object);
 }
 
-void InsertPixmapCmd::unexecute () {
-  if (pixmap)
-    document->activePage()->deleteObject (pixmap);
+void CreateImageCmd::unexecute()
+{
+  document()->activePage()->deleteObject(object);
 }
-
