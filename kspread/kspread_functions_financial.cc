@@ -309,3 +309,36 @@ bool kspreadfunc_sln( KSContext& context )
 
   return true;
 }
+
+// Function: SYD
+/* sum-of-years digits depreciation */
+bool kspreadfunc_syd( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 4, "SYD", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
+    return false;
+
+  double cost = args[0]->doubleValue();
+  double salvage_value = args[1]->doubleValue();
+  double life = args[2]->doubleValue();
+  double period = args[3]->doubleValue();
+
+  // sentinel check
+  if( life <= 0.0 ) return false;
+
+  context.setValue( new KSValue( ( ( (cost - salvage_value) * (life - period + 1) * 2) /
+     (life * (life + 1.0) ) ) ) ) ;
+
+  return true;
+}
+
