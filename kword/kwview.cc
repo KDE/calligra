@@ -2018,7 +2018,7 @@ void KWView::updateTableStyleList()
         {
             if ( !act->shortcut().toString().isEmpty())
                 shortCut.insert( act->name(), KShortcut( act->shortcut()));
-            actionFrameStyleMenu->remove( act );
+            actionTableStyleMenu->remove( act );
             delete act;
         }
         else
@@ -2028,7 +2028,7 @@ void KWView::updateTableStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        QCString name = QString("framestyle_%1").arg(i).latin1();
+        QCString name = QString("tablestyle_%1").arg(i).latin1();
         if ( shortCut.contains(name))
         {
 
