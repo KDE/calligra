@@ -3806,7 +3806,8 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
     KoViewChild *viewChild;
 
     QWMatrix m = matrix();
-//    m.translate( int( m_pCanvas->xOffset() ), int( m_pCanvas->yOffset() ) );
+    m.translate( m_pCanvas->xOffset() / m_pDoc->zoomedResolutionX(),
+                 m_pCanvas->yOffset() / m_pDoc->zoomedResolutionY() );
 
     KoDocumentChild *docChild = selectedChild();
     if ( docChild )
@@ -3833,9 +3834,6 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
             if ( docChild->frameRegion( m ).contains( pos ) )
                 return 0;
     }
-//FIXME: Following is untested
-    QPoint pos2( int( m_pDoc->unzoomItX( pos.x() ) ),
-                 int( m_pDoc->unzoomItY( pos.y() ) ) );
 
     QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     for (; it.current(); ++it )
@@ -3843,7 +3841,7 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
         // Is the child document on the visible table ?
         if ( ((KSpreadChild*)it.current())->table() == m_pTable )
         {
-            KoDocument *doc = it.current()->hitTest( pos2, m );
+            KoDocument *doc = it.current()->hitTest( pos, m );
             if ( doc )
                 return doc;
         }
