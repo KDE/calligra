@@ -20,6 +20,7 @@
 #include <qstring.h>
 
 #include <iostream>
+#include <koStream.h>
 
 class KWordDocument_impl;
 

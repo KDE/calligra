@@ -96,7 +96,6 @@ public:
   virtual CORBA::Boolean init();
 
   // C++
-  virtual bool load(istream& in,bool _randomaccess);
   virtual bool load(KOMLParser& parser);
   virtual bool loadChildren(OPParts::MimeMultipartDict_ptr _dict);
   virtual bool save(ostream& out);
@@ -274,6 +273,8 @@ protected:
   
   virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height);
   QPen setBorderPen(KWParagLayout::Border _brd);
+
+  void loadParagraphs(KOMLParser&,vector<KOMLAttrib>&);
 
   QList<KWordView_impl> m_lstViews;
   QList<KWordChild> m_lstChildren;

@@ -204,13 +204,174 @@ bool KWordDocument_impl::loadChildren(OPParts::MimeMultipartDict_ptr _dict)
 /*================================================================*/
 bool KWordDocument_impl::load(KOMLParser& parser)
 {
+  init();
+
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+
+  KoPageLayout __pgLayout;
+  __pgLayout.unit = PG_MM;
+  KoColumns __columns;
+
+  
+  // DOC
+  if (!parser.open("DOC",tag))
+    {
+      cerr << "Missing DOC" << endl;
+      return false;
+    }
+  
+  KOMLParser::parseTag( tag.c_str(), name, lst );
+  vector<KOMLAttrib>::const_iterator it = lst.begin();
+  for(;it != lst.end();it++)
+    {
+      if ((*it).m_strName == "mime")
+	{
+	  if ((*it).m_strValue != "application/x-kword")
+	    {
+	      cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	      return false;
+	    }
+	}
+    }
+
+  // PAPER
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      
+      if (name == "OBJECT")
+	{
+	  KWordChild *ch = new KWordChild(this);
+	  ch->load(parser,lst);
+	  insertChild(ch);
+	}
+      else if (name == "PAPER")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "format")
+		__pgLayout.format = (KoFormat)atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "orientation")
+		__pgLayout.orientation = (KoOrientation)atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "width")
+		__pgLayout.width = static_cast<double>(atof((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "height")
+		__pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "columns")
+		__columns.columns = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "column_spacing")
+		__columns.columnSpacing = atoi((*it).m_strValue.c_str());
+	      else
+		cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
+	    }
+
+	  // PAPERBORDERS, HEAD, FOOT
+	  while (parser.open(0L,tag))
+	    {
+	      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      if (name == "PAPERBORDERS")
+		{    
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "left")
+			__pgLayout.left = (double)atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "top")
+			__pgLayout.top = (double)atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "right")
+			__pgLayout.right = (double)atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "bottom")
+			__pgLayout.bottom = (double)atof((*it).m_strValue.c_str());
+		      else
+			cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
+		    } 
+		}
+	      else
+		cerr << "Unknown tag '" << tag << "' in PAPER" << endl;    
+	      
+	      if (!parser.close(tag))
+		{
+		  cerr << "ERR: Closing Child" << endl;
+		  return false;
+		}
+	    }
+
+	}
+      
+      else if (name == "PARAGRAPHS")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  loadParagraphs(parser,lst);
+	}
+
+      else
+	cerr << "Unknown tag '" << tag << "' in the DOCUMENT" << endl;    
+	
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return false;
+	}
+    }
+
+  setPageLayout(__pgLayout,__columns);
+
   return true;
 }
 
 /*================================================================*/
-bool KWordDocument_impl::load(istream &in,bool _randomaccess)
+void KWordDocument_impl::loadParagraphs(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
-  return true;
+  string tag;
+  string name;
+
+  KWParag *last = 0L;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      
+      // paragraph
+      if (name == "PARAGRAPH")
+	{    
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+
+	  if (!last)
+	    {
+	      delete parags;
+	      parags = new KWParag(this,0L,0L,defaultParagLayout);
+	      parags->insertText(0," ");
+	      parags->load(parser,lst);
+	      last = parags;
+	    }
+	  else
+	    {
+	      last = new KWParag(this,last,0L,defaultParagLayout);
+	      last->load(parser,lst);
+	    }
+	}
+      else
+	cerr << "Unknown tag '" << tag << "' in PARAGRAPHS" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
 }
 
 /*================================================================*/

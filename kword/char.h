@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+#include <koStream.h>
+
 enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2};
  
 class KWCharAttribute
@@ -112,6 +114,7 @@ public:
 
   QString toString(unsigned int _pos,unsigned int _len);
   void saveFormat(ostream &out);
+  void loadFormat(KOMLParser&,vector<KOMLAttrib>&);
 
 protected:
   KWChar* alloc(unsigned int _size);

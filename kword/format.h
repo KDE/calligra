@@ -10,6 +10,7 @@ class KWordDocument_impl;
 #include <qstring.h>
 
 #include <iostream>
+#include <koStream.h>
 
 /**
  * This class is used to change the texts format within a paragraph.

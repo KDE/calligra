@@ -10,6 +10,7 @@ class KWParagLayout;
 #include <qcolor.h>
 
 #include <iostream>
+#include <koStream.h>
 
 /**
  * A KWParagLayout-Instance provides all information neccessary to format a given
@@ -152,6 +153,7 @@ public:
     KWParagLayout* getFollowingParagLayout() { return followingParagLayout; }  
 
     void save(ostream &out);
+    void load(KOMLParser&,vector<KOMLAttrib>&);
 
 protected:
     Flow flow;

@@ -201,6 +201,7 @@ protected:
   KWFormat format;
   
   bool mousePressed;
+  bool inKeyEvent;
 
 };
 

@@ -38,7 +38,7 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   paint_directly = false;
   has_to_copy = false;
     
-  calcVisiblePages();
+  if (doc) calcVisiblePages();
 
   QPainter painter;
   painter.begin(&buffer);
@@ -51,6 +51,8 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   setCursor(ibeamCursor);
   mousePressed = false;
   setMouseTracking(true);
+
+  inKeyEvent = false;
 
   //recalcText();
 //   debug("recalc text");
@@ -385,6 +387,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 /*================================================================*/
 void KWPage::keyPressEvent(QKeyEvent *e)
 {
+  inKeyEvent = true;
   unsigned int oldPage = fc->getPage();
   KWParag* oldParag = fc->getParag();
 
@@ -424,6 +427,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		  repaint(false);
 		  kbdc.auto_repeat_mode = repeat;
 		  XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+		  inKeyEvent = false;
 		  return;
 		}
 	      else
@@ -499,6 +503,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    inKeyEvent = false;
 	    return;
 	  }
       } break;
@@ -539,6 +544,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    inKeyEvent = false;
 	    return;
 	  }
       } break;
@@ -579,6 +585,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    inKeyEvent = false;
 	    return;
 	  }
       } break;
@@ -619,6 +626,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+	    inKeyEvent = false;
 	    return;
 	  }
       } break;
@@ -661,6 +669,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
 	  }
 
+	inKeyEvent = false;
 	return;
 
       } break;
@@ -767,6 +776,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
 	      }
 
+	    inKeyEvent = false;
 	    return;
 	  }
 
@@ -956,6 +966,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
       gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
     }
+  inKeyEvent = false;
 }
 
 /*================================================================*/
@@ -1083,7 +1094,7 @@ void KWPage::formatChanged(KWFormat &_format)
 {
   format = _format;
 
-  if (doc->has_selection())
+  if (doc->has_selection() && !inKeyEvent)
     {
       doc->setFormat(format);
       recalcCursor();

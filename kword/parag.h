@@ -12,6 +12,7 @@ class KWordDocument_impl;
 
 #include <assert.h>
 #include <iostream>
+#include <koStream.h>
 
 /**
  * This class hold a real paragraph. It tells abou the text in this
@@ -125,6 +126,7 @@ public:
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
   
     void save(ostream &out);
+    void load(KOMLParser&,vector<KOMLAttrib>&);
 
 protected:
     /**

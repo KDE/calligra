@@ -7,7 +7,6 @@
 
 #include <koIMR.h>
 #include <komlMime.h>
-#include <koStream.h>
 #include <strstream>
 #include <fstream>
 #include <unistd.h>
@@ -137,8 +136,64 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 void KWParag::save(ostream &out)
 {
   out << indent << "<TEXT value=\"" << text << "\"/>" << endl;
+  out << otag << "<FORMATS>" << endl;
   text.saveFormat(out);
+  out << etag << "</FORMATS>" << endl;
   out << otag << "<LAYOUT>" << endl;
   paragLayout->save(out);
   out << etag << "</LAYOUT>" << endl;
 }
+void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
+  string tag;
+  string name;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      
+      // text
+      if (name == "TEXT")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		text.insert(text.size(),(*it).m_strValue.c_str());
+	    }
+	}
+
+      // format
+      else if (name == "FORMATS")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  text.loadFormat(parser,lst);
+	}
+
+      // layout
+      else if (name == "LAYOUT")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  paragLayout->load(parser,lst);
+	}
+
+      else
+	cerr << "Unknown tag '" << tag << "' in LINE_OBJECT" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
+}
+

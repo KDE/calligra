@@ -225,3 +225,8 @@ Reggie, 10.10.1998:
 Reggie, 11.10.1998:
 -------------------
 - Implemented saving documents (XML)
+
+Reggie, 12.10.1998:
+-------------------
+- Fixed a bug with a painter which I forgot to end
+- Started implementing loading of documents (XML)

@@ -3,7 +3,6 @@
 
 #include <koIMR.h>
 #include <komlMime.h>
-#include <koStream.h>
 #include <strstream>
 #include <fstream>
 #include <unistd.h>

@@ -3,7 +3,6 @@
 
 #include <koIMR.h>
 #include <komlMime.h>
-#include <koStream.h>
 #include <strstream>
 #include <fstream>
 #include <unistd.h>
@@ -112,4 +111,8 @@ void KWParagLayout::save(ostream &out)
       << top.color.blue() << "\" style=\"" << static_cast<int>(top.style) << "\" width=\"" << top.ptWidth << "\"/>" << endl; 
   out << indent << "<BOTTOM_BORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
       << bottom.color.blue() << "\" style=\"" << static_cast<int>(bottom.style) << "\" width=\"" << bottom.ptWidth << "\"/>" << endl; 
+}
+
+void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
 }

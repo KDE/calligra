@@ -5,7 +5,6 @@
 
 #include <koIMR.h>
 #include <komlMime.h>
-#include <koStream.h>
 #include <strstream>
 #include <fstream>
 #include <unistd.h>
@@ -212,6 +211,10 @@ void KWString::saveFormat(ostream &out)
       _data_[start].attrib->save(out);
       out << etag << "</FORMAT>" << endl;
     }
+}
+
+void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
 }
 
 void KWString::resize(unsigned int _size,bool del = true)
