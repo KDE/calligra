@@ -301,9 +301,9 @@ private:
     bool m_active;
     QPtrList<Cell> m_cells;
     /** The list of page boundaries.
-    *   Each page the table spans has an entry in this list which points to the last _line_ 
+    *   Each page the table spans has an entry in this list which points to the last _line_
     *   on a page.
-    *   For a 1 page table there is no page break; and therefor for such tables this list is 
+    *   For a 1 page table there is no page break; and therefor for such tables this list is
     *   empty.
     */
     QValueList<unsigned int> m_pageBoundaries;
@@ -358,7 +358,7 @@ public:
     virtual void selectAll() { if ( m_currentCell ) m_currentCell->selectAll(); }
 
     // Set the cell which is currently being edited
-    void setCurrentCell( KWFrameSet * fs );
+    void setCurrentCell( KWFrameSet * fs, bool eraseSelection=true );
     void setCurrentCell( const KoPoint & dPoint );
 
 protected:

@@ -3550,4 +3550,26 @@ int KWDocument::maxZOrder( int pageNum) const
     return maxZOrder;
 }
 
+
+int KWDocument::numberOfTextFrameSet( KWFrameSet* fs )
+{
+    QPtrList<KWTextFrameSet> textFramesets;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit ) {
+        fit.current()->addTextFrameSets(textFramesets);
+    }
+    return textFramesets.findRef( static_cast<KWTextFrameSet*>(fs) );
+}
+
+KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num )
+{
+    QPtrList<KWTextFrameSet> textFramesets;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit ) {
+        fit.current()->addTextFrameSets(textFramesets);
+    }
+    return textFramesets.at( _num );
+
+}
+
 #include "kwdoc.moc"

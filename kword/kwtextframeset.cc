@@ -2297,7 +2297,8 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 
     KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( text );
-    kd->setFrameSetNumber( textFrameSet()->kWordDocument()->frameSetNum(textFrameSet()) );
+    //kd->setFrameSetNumber( textFrameSet()->kWordDocument()->frameSetNum(textFrameSet()) );
+    kd->setFrameSetNumber( textFrameSet()->kWordDocument()->numberOfTextFrameSet( textFrameSet()) );
     kd->setKWord( domDoc.toCString() );
     kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
     return kd;
@@ -2441,7 +2442,8 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             int numberFrameSet=-1;
             numberFrameSet=KWTextDrag::decodeFrameSetNumber( e );
             //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
-            KWFrameSet *frameset= frameSet()->kWordDocument()->frameSet( numberFrameSet );
+            //KWFrameSet *frameset= frameSet()->kWordDocument()->frameSet( numberFrameSet );
+            KWFrameSet *frameset= frameSet()->kWordDocument()->textFrameSetFromIndex(  numberFrameSet );
             KWTextFrameSet *tmp=dynamic_cast<KWTextFrameSet*>(frameset);
             tmp=tmp ? tmp:textFrameSet();
             if( tmp )

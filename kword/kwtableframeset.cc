@@ -2102,10 +2102,10 @@ void KWTableFrameSetEdit::setCurrentCell( const KoPoint & dPoint )
         setCurrentCell( fs );
 }
 
-void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs )
+void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs, bool eraseSelection )
 {
     if ( m_currentCell )
-        m_currentCell->terminate();
+        m_currentCell->terminate(eraseSelection);
     delete m_currentCell;
     m_currentCell =  fs->createFrameSetEdit( m_canvas );
     m_currentFrame = fs->frame( 0 );
@@ -2211,14 +2211,14 @@ void KWTableFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &n, co
         KWFrameSet *fs = tableFrameSet()->getCellByPos( d.x(), d.y() );
         kdDebug(32004)<<"fs :"<<fs <<endl;
         if(fs && fs != m_currentCell->frameSet())
-            setCurrentCell(fs);
+            setCurrentCell(fs, false);
         if(m_currentCell)
             m_currentCell->dragMoveEvent( e, n, d );
     }
     else
     {
         setCurrentCell( d );
-        kdDebug(32004)<<"apres m_currentCell :"<<m_currentCell<<endl;
+        kdDebug(32004)<<"after m_currentCell :"<<m_currentCell<<endl;
         if(m_currentCell)
             m_currentCell->dragMoveEvent( e, n, d );
     }
