@@ -40,9 +40,15 @@ public:
 	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 
 protected:
-	struct GraphicsContext
+	class GraphicsContext
 	{
-		VFill fill;
+	public:
+		GraphicsContext()
+		{
+			stroke.setType( VStroke::none ); // default is no stroke
+		}
+		VFill	fill;
+		VStroke	stroke;
 	};
 
 	void parseGroup( VGroup *, const QDomElement & );

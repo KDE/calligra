@@ -113,13 +113,12 @@ void
 SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 {
 	VFill fill;
+	VStroke stroke;
 	GraphicsContext *gc = new GraphicsContext;
 	// set as default
 	if( m_gc.current() )
-	{
-		obj->setFill( m_gc.current()->fill );
 		*gc = *( m_gc.current() );
-	}
+
 	QColor c;
 	if( !e.attribute( "fill" ).isEmpty() )
 	{
@@ -128,6 +127,8 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		fill.setColor( color );
 		gc->fill = fill;
 	}
+	obj->setFill( gc->fill );
+	obj->setStroke( gc->stroke );
 	m_gc.push( gc );
 }
 
