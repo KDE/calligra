@@ -40,9 +40,9 @@ KexiDataSourceDlg::KexiDataSourceDlg(KexiProject *p, QWidget *parent, const char
 	m_name = new QLineEdit(this);
 
 
-	QPushButton *btnOk = new QPushButton(i18n("&ok"), this);
+	QPushButton *btnOk = new QPushButton(i18n("&OK"), this);
 	connect(btnOk, SIGNAL(clicked()), this, SLOT(accept()));
-	QPushButton *btnCancel = new QPushButton(i18n("&cancel"), this);
+	QPushButton *btnCancel = new QPushButton(i18n("&Cancel"), this);
 	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 
 	QGridLayout *g = new QGridLayout(this);

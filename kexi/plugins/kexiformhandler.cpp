@@ -77,8 +77,8 @@ KexiFormHandler::hookIntoView(KexiView *view)
 void
 KexiFormHandler::store(KoStore *store)
 {
-        for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
-        {
+    for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
+    {
 		KexiFormHandlerItem *fhi=static_cast<KexiFormHandlerItem*>(it.current());
 		fhi->store(store);
 	}

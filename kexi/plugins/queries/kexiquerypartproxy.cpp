@@ -41,13 +41,12 @@ KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
 	m_queryPart=part;
 	kdDebug() << "KexiQueryPartProxy::KexiQueryPartProxy()" << endl;
 
-        (void) new KAction(i18n("Create &Query..."), 0,
-                this,SLOT(slotCreateQuery()), actionCollection(), "querypart_create");
+    (void) new KAction(i18n("Create &Query..."), 0,
+                       this,SLOT(slotCreateQuery()), actionCollection(), "querypart_create");
 
-        setXMLFile("kexiquerypartui.rc");
+    setXMLFile("kexiquerypartui.rc");
 
-        view->insertChildClient(this);
-
+    view->insertChildClient(this);
 }
 
 
@@ -65,7 +64,7 @@ KexiQueryPartProxy::itemContext(const QString& identifier)
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Open Query"), SLOT(slotOpen(const QString &)));
 	m->insertAction(i18n("Delete Query"), SLOT(slotDelete(const QString &)));
-	
+
 	return m;
 }
 
@@ -80,19 +79,19 @@ KexiQueryPartProxy::executeItem(const QString& identifier)
 void
 KexiQueryPartProxy::slotCreateQuery()
 {
-        bool ok = false;
-        QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query name:"), "", &ok, kexiView());
+    bool ok = false;
+    QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query name:"), "", &ok, kexiView());
 
-        if(ok && name.length() > 0)
-        {
+    if(ok && name.length() > 0)
+    {
 		KexiQueryPartItem *it;
-                part()->items()->insert(name,it=new KexiQueryPartItem(part(), name, "kexi/query", name));
-                KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it);
-                emit m_queryPart->itemListChanged(part());
-                kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
+        part()->items()->insert(name,it=new KexiQueryPartItem(part(), name, "kexi/query", name));
+        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it);
+        emit m_queryPart->itemListChanged(part());
+        kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
 		kqd->show();
-                kexiView()->project()->setModified(true);
-        }
+        kexiView()->project()->setModified(true);
+    }
 }
 
 void
@@ -103,8 +102,8 @@ KexiQueryPartProxy::slotOpen(const QString& identifier)
 	KexiQueryPartItem *it1=static_cast<KexiQueryPartItem*>(it->qt_cast("KexiQueryPartItem"));
 	if (!it1) return;
 
-        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "oq",it1);
-        kqd->show();
+    KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "oq",it1);
+    kqd->show();
 }
 
 void

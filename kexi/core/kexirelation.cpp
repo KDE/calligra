@@ -49,7 +49,7 @@ void KexiRelation::incUsageCount(){m_usageCount++;}
 void KexiRelation::decUsageCount()
 {
 	m_usageCount--;
-	if (!m_usageCount) 
+	if (!m_usageCount)
 	{
 		m_undoStack.clear();
 	}
@@ -68,101 +68,100 @@ void KexiRelation::updateRelationList(QObject *who,RelationList relationList)
 
 void KexiRelation::storeRelations(KoStore *store)
 {
-        QDomDocument domDoc("Relations");
-        domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+    QDomDocument domDoc("Relations");
+    domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
 
-        QDomElement relationsElement = domDoc.createElement("Relations");
-        domDoc.appendChild(relationsElement);
+    QDomElement relationsElement = domDoc.createElement("Relations");
+    domDoc.appendChild(relationsElement);
 
-        for(RelationList::Iterator it = m_relationList.begin(); it != m_relationList.end(); it++)
-        {
-                QDomElement relationElement = domDoc.createElement("Relation");
-                relationsElement.appendChild(relationElement);
+    for(RelationList::Iterator it = m_relationList.begin(); it != m_relationList.end(); it++)
+    {
+        QDomElement relationElement = domDoc.createElement("Relation");
+        relationsElement.appendChild(relationElement);
 
-                QDomElement sourceTable = domDoc.createElement("sourcetable");
-                relationElement.appendChild(sourceTable);
-                QDomText tSourceTable = domDoc.createTextNode((*it).srcTable);
-                sourceTable.appendChild(tSourceTable);
+        QDomElement sourceTable = domDoc.createElement("sourcetable");
+        relationElement.appendChild(sourceTable);
+        QDomText tSourceTable = domDoc.createTextNode((*it).srcTable);
+        sourceTable.appendChild(tSourceTable);
 
-                QDomElement sourceField = domDoc.createElement("sourcefield");
-                relationElement.appendChild(sourceField);
-                QDomText tSourceField = domDoc.createTextNode((*it).srcField);
-                sourceField.appendChild(tSourceField);
+        QDomElement sourceField = domDoc.createElement("sourcefield");
+        relationElement.appendChild(sourceField);
+        QDomText tSourceField = domDoc.createTextNode((*it).srcField);
+        sourceField.appendChild(tSourceField);
 
-                QDomElement targetTable = domDoc.createElement("targettable");
-                relationElement.appendChild(targetTable);
-                QDomText tTargetTable = domDoc.createTextNode((*it).rcvTable);
-                targetTable.appendChild(tTargetTable);
+        QDomElement targetTable = domDoc.createElement("targettable");
+        relationElement.appendChild(targetTable);
+        QDomText tTargetTable = domDoc.createTextNode((*it).rcvTable);
+        targetTable.appendChild(tTargetTable);
 
-                QDomElement targetField = domDoc.createElement("targetfield");
-                relationElement.appendChild(targetField);
-                QDomText tTargetField = domDoc.createTextNode((*it).rcvField);
-                targetField.appendChild(tTargetField);
+        QDomElement targetField = domDoc.createElement("targetfield");
+        relationElement.appendChild(targetField);
+        QDomText tTargetField = domDoc.createTextNode((*it).rcvField);
+        targetField.appendChild(tTargetField);
 
-                kdDebug() << "KexiRelationView::storeRelatoins() srcTable: " << (*it).srcTable << endl;
-                kdDebug() << "KexiRelationView::storeRelatoins() srcField: " << (*it).srcField << endl;
-                kdDebug() << "KexiRelationView::storeRelatoins() rcvTable: " << (*it).rcvTable << endl;
-                kdDebug() << "KexiRelationView::storeRelatoins() rcvField: " << (*it).rcvField << endl;
-        }
+        kdDebug() << "KexiRelationView::storeRelatoins() srcTable: " << (*it).srcTable << endl;
+        kdDebug() << "KexiRelationView::storeRelatoins() srcField: " << (*it).srcField << endl;
+        kdDebug() << "KexiRelationView::storeRelatoins() rcvTable: " << (*it).rcvTable << endl;
+        kdDebug() << "KexiRelationView::storeRelatoins() rcvField: " << (*it).rcvField << endl;
+    }
 
-        QByteArray data = domDoc.toCString();
-        data.resize(data.size()-1);
+    QByteArray data = domDoc.toCString();
+    data.resize(data.size()-1);
 
-        if(store)
-        {
-                store->open("relations.xml");
-                store->write(data);
-                store->close();
-        }
+    if(store)
+    {
+        store->open("relations.xml");
+        store->write(data);
+        store->close();
+    }
 
 	m_undoStack.clear();
 	m_usageCount=0;
-        return false;
+    return false;
 
 }
 
 void KexiRelation::loadRelations(KoStore *store)
 {
-	m_relationList.clear();	
-        if(!store->open("relations.xml"))
+	m_relationList.clear();
+    if(!store->open("relations.xml"))
         return;
 
-        QDomDocument inBuf;
+    QDomDocument inBuf;
 
-        //error reporting
-        QString errorMsg;
-        int errorLine;
-        int errorCol;
+    //error reporting
+    QString errorMsg;
+    int errorLine;
+    int errorCol;
 
-        bool parsed = inBuf.setContent(store->device(), false, &errorMsg, &errorLine, &errorCol);
-        store->close();
+    bool parsed = inBuf.setContent(store->device(), false, &errorMsg, &errorLine, &errorCol);
+    store->close();
 
-        if(!parsed)
-        {
-                kdDebug() << "coudn't parse:" << endl;
-                kdDebug() << "error: " << errorMsg << " line: " << errorLine << " col: " << errorCol << endl;
-                return;
-        }
+    if(!parsed)
+    {
+        kdDebug() << "coudn't parse:" << endl;
+        kdDebug() << "error: " << errorMsg << " line: " << errorLine << " col: " << errorCol << endl;
+        return;
+    }
 
-        QDomElement element = inBuf.namedItem("Relations").toElement();
-        for(QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling())
-        {
-                SourceConnection con;
-                QDomElement sourceTable = n.namedItem("sourcetable").toElement();
-                QDomElement sourceField = n.namedItem("sourcefield").toElement();
-                QDomElement targetTable = n.namedItem("targettable").toElement();
-                QDomElement targetField = n.namedItem("targetfield").toElement();
+    QDomElement element = inBuf.namedItem("Relations").toElement();
+    for(QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling())
+    {
+        SourceConnection con;
+        QDomElement sourceTable = n.namedItem("sourcetable").toElement();
+        QDomElement sourceField = n.namedItem("sourcefield").toElement();
+        QDomElement targetTable = n.namedItem("targettable").toElement();
+        QDomElement targetField = n.namedItem("targetfield").toElement();
 
-                con.srcTable = sourceTable.text();
-                con.srcField = sourceField.text();
-                con.rcvTable = targetTable.text();
-                con.rcvField = targetField.text();
-                m_relationList.append(con);
-        }
+        con.srcTable = sourceTable.text();
+        con.srcField = sourceField.text();
+        con.rcvTable = targetTable.text();
+        con.rcvField = targetField.text();
+        m_relationList.append(con);
+    }
 	m_undoStack.clear();
 	m_usageCount=0;
-
 }
 
 KexiRelation::~KexiRelation()

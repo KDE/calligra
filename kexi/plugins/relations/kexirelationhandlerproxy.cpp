@@ -39,13 +39,12 @@ KexiRelationHandlerProxy::KexiRelationHandlerProxy(KexiRelationHandler *part,Kex
 {
 	kdDebug() << "KexiRelationHandlerProxy::KexiRelationHandlerProxy()" << endl;
 
-        KAction *createAction = new KAction(i18n("Relations"), "relation",
-                this,SLOT(slotShowRelationEditor()), actionCollection(), "relations");
+    KAction *createAction = new KAction(i18n("Relations"), "relation",
+                                        this,SLOT(slotShowRelationEditor()), actionCollection(), "relations");
 
-        setXMLFile("kexirelationhandlerui.rc");
+    setXMLFile("kexirelationhandlerui.rc");
 
-        view->insertChildClient(this);
-
+    view->insertChildClient(this);
 }
 
 
@@ -72,8 +71,8 @@ KexiRelationHandlerProxy::executeItem(const QString&)
 void
 KexiRelationHandlerProxy::slotShowRelationEditor()
 {
-        KexiRelationDialog *krd = new KexiRelationDialog(kexiView(), 0);
-        krd->show();
+    KexiRelationDialog *krd = new KexiRelationDialog(kexiView(), 0);
+    krd->show();
 }
 
 #include "kexirelationhandlerproxy.moc"

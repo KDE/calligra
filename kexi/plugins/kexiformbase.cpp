@@ -72,7 +72,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 
 			m_label = new KAction(i18n("Text Label"), "label",
 				Key_F4, actionCollection(), "widget_label");
-			
+
 		        m_lineedit = new KAction(i18n("Line Edit"), "lineedit",
                 		Key_F5, actionCollection(), "widget_line_edit");
 
@@ -153,7 +153,7 @@ KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 
 
 KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, const QString &s, const char *name, QString identifier, KFormEditor::WidgetContainer *content)
-	: KexiDialogBase(view,parent,identifier.latin1())
+	: KexiDialogBase(view,parent,identifier.utf8())
 {
 	setMinimumWidth(50);
 	setMinimumHeight(50);
@@ -164,7 +164,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	m_project = view->project();
 	m_item = item;
 
-	setCaption(i18n("%1").arg(identifier));
+	setCaption(identifier);
 
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));

@@ -77,7 +77,7 @@ DCOPObject* KexiView::dcopObject()
 {
 	if ( !dcop )
 		dcop = new KexiViewIface( this );
-	
+
 	return dcop;
 }
 
@@ -141,8 +141,7 @@ void KexiView::initHelper()
         m_help->setCloseMode(QDockWindow::Always);
 //	mainWindow()->moveDockWindow(help,DockLeft);
 	mainWindow()->moveDockWindow(m_help, DockLeft);*/
-	m_help->setContextHelp(i18n("welcome"), i18n("kexi is based on relational databases. Before you start creating tables you should think about the general <a>database-design</a>."));
-
+	m_help->setContextHelp(i18n("Welcome"), i18n("kexi is based on relational databases. Before you start creating tables you should think about the general <a>database design</a>."));
 }
 
 void KexiView::initActions()
@@ -271,7 +270,7 @@ void KexiView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 		for (QDockWindow *w=m_dockWins.first();w;w=m_dockWins.next()) {
 			w->hide();
 		}
-		
+
 	}
     KoView::guiActivateEvent( ev );
 }

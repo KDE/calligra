@@ -73,11 +73,11 @@ void KexiQueryPart::store (KoStore *ks)
 {
 	kdDebug() << "KexiQueryPart::store(KoStore*)" << endl;
 
-        for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
-        {
+    for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
+    {
 		KexiQueryPartItem *qpi=static_cast<KexiQueryPartItem*>(it.current());
 		qpi->store(ks);
-        }
+    }
 }
 
 void KexiQueryPart::load (KoStore *ks)
@@ -100,8 +100,8 @@ void KexiQueryPart::load (KoStore *ks)
 
 void KexiQueryPart::hookIntoView(KexiView *view)
 {
-        KexiQueryPartProxy *prx=new KexiQueryPartProxy(this,view);
-        insertIntoViewProxyMap(view,prx);
+    KexiQueryPartProxy *prx=new KexiQueryPartProxy(this,view);
+    insertIntoViewProxyMap(view,prx);
 }
 
 

@@ -40,13 +40,12 @@ KexiKugarHandlerProxy::KexiKugarHandlerProxy(KexiKugarHandler *part,KexiView *vi
 	m_kugarManager=part;
 	kdDebug() << "KexiKugarHandlerProxy::KexiKugarHandlerProxy()" << endl;
 
-        (void*) new KAction(i18n("Create &Report ..."), 0,
-                this,SLOT(slotCreateReport()), actionCollection(), "kugarhandler_create");
+    (void*) new KAction(i18n("Create &Report ..."), 0,
+                        this,SLOT(slotCreateReport()), actionCollection(), "kugarhandler_create");
 
-        setXMLFile("kexikugarhandlerui.rc");
+    setXMLFile("kexikugarhandlerui.rc");
 
-        view->insertChildClient(this);
-
+    view->insertChildClient(this);
 }
 
 
@@ -55,7 +54,7 @@ KexiKugarHandlerProxy::groupContext()
 {
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Report"), SLOT(slotCreateReport()));
-	m->insertAction(i18n("Report Generator Licensing"),SLOT(slotGeneratorLicense()));	
+	m->insertAction(i18n("Report Generator Licensing"),SLOT(slotGeneratorLicense()));
 	return m;
 }
 
@@ -67,7 +66,7 @@ KexiKugarHandlerProxy::itemContext(const QString& identifier)
 	m->insertAction(i18n("Edit Report"), SLOT(slotEdit(const QString&)));
 	m->insertAction(i18n("Delete Report"), SLOT(slotDelete(const QString&)));
 	m->insertAction(i18n("Create New Report"), SLOT(slotCreateReport()));
-	m->insertAction(i18n("Report Generator Licensing"),SLOT(slotGeneratorLicense()));	
+	m->insertAction(i18n("Report Generator Licensing"),SLOT(slotGeneratorLicense()));
 	return m;
 }
 
@@ -76,7 +75,7 @@ void KexiKugarHandlerProxy::slotGeneratorLicense()
 {
 	KexiKugarLicense *lic=new KexiKugarLicense(0,0,true);
 	lic->exec();
-	delete lic;	
+	delete lic;
 }
 
 void

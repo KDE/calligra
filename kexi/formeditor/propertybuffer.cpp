@@ -39,7 +39,7 @@ PropertyBuffer::changeProperty(QObject *o, const char *property, const QVariant 
 		{
 			if(i->name() == "name")
 			{
-				emit nameChanged(o, value.toString().latin1());
+				emit nameChanged(o, value.toString());
 			}
 			i->setValue(value);
 			emit propertyChanged(o, property, value);
@@ -51,7 +51,7 @@ PropertyBuffer::changeProperty(QObject *o, const char *property, const QVariant 
 	append(i);
 	emit propertyChanged(o, property, value);
 	if(i->name() == "name")
-		emit nameChanged(i->object(), value.toString().latin1());
+		emit nameChanged(i->object(), value.toString());
 }
 
 PropertyBuffer::~PropertyBuffer()

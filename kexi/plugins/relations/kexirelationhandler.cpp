@@ -66,8 +66,8 @@ KexiRelationHandler::itemPixmap()
 
 void KexiRelationHandler::hookIntoView(KexiView *view)
 {
-        KexiRelationHandlerProxy *prx=new KexiRelationHandlerProxy(this,view);
-        insertIntoViewProxyMap(view,prx);
+    KexiRelationHandlerProxy *prx=new KexiRelationHandlerProxy(this,view);
+    insertIntoViewProxyMap(view,prx);
 }
 
 QWidget *

@@ -9,8 +9,10 @@
 #include <koStore.h>
 
 KexiKugarHandlerItem::KexiKugarHandlerItem(KexiKugarHandler *parent, const QString& name, const QString& mime,
-                                const QString& identifier):KexiProjectHandlerItem(parent,name,mime,identifier),
-				m_designer(0),m_viewer(0) {
+                                           const QString& identifier)
+    : KexiProjectHandlerItem(parent,name,mime,identifier),
+      m_designer(0),m_viewer(0)
+{
 	m_storedDataSets.resize(51);
 	m_storedDataSets.setAutoDelete(true);
 	QString tmpPath=parent->tempPath();
@@ -39,7 +41,6 @@ KexiKugarHandlerItem::~KexiKugarHandlerItem() {
 		"/"+shortIdentifier()+"/template.kut", "/reports/"+shortIdentifier()+"/template.kut"));
 	projectPart()->kexiProject()->removeFileReference(FileReference("reports",
 		"/"+shortIdentifier()+"/template.kukexi", "/reports/"+shortIdentifier()+"/template.kukexi"));
-
 }
 
 const QString &KexiKugarHandlerItem::reportTemplate() const {
@@ -49,17 +50,17 @@ const QString &KexiKugarHandlerItem::reportTemplate() const {
 KoDocument *KexiKugarHandlerItem::designer(bool newReport) {
 	if (m_designer) return m_designer;
 
-        QStringList config;
-        config<<"plugin=kudesigner_kexiplugin";
-        config<<"forcePropertyEditorPosition=left";
-        m_designer=KParts::ComponentFactory::createPartInstanceFromLibrary<KoDocument>(QFile::encodeName("libkudesignerpart"),
-                        0,0,this,0,config);
-        if (newReport) {
-                if (!m_designer->initDoc() ) {
+    QStringList config;
+    config<<"plugin=kudesigner_kexiplugin";
+    config<<"forcePropertyEditorPosition=left";
+    m_designer=KParts::ComponentFactory::createPartInstanceFromLibrary<KoDocument>(QFile::encodeName("libkudesignerpart"),
+                                                                                   0,0,this,0,config);
+    if (newReport) {
+        if (!m_designer->initDoc() ) {
 			delete m_designer;
 			m_designer=0;
-                }
-        } else {
+        }
+    } else {
 		if (!m_designer->openURL(m_tempPath+"template.kut")) {
 			delete m_designer;
 			m_designer=0;
@@ -94,8 +95,8 @@ const QStringList &KexiKugarHandlerItem::storedDatasets() const {
 }
 
 void KexiKugarHandlerItem::setStoredDataset(const QString &datasetName, const QString &data) {
-	m_storedDataSets.replace(datasetName,new QString(data));	
-	
+	m_storedDataSets.replace(datasetName,new QString(data));
+
 	if (!m_storedDataSetNames.contains(datasetName))
 		m_storedDataSetNames.append(datasetName);
 

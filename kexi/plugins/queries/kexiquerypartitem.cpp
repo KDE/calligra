@@ -26,7 +26,7 @@
 #include <koStore.h>
 
 KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
-		const QString& name, const QString& mime, 
+		const QString& name, const QString& mime,
 		const QString& identifier)
 	:KexiProjectHandlerItem(parent,name,mime,identifier)
 {
@@ -59,12 +59,12 @@ void KexiQueryPartItem::store(KoStore* store) {
 	QDomDocument domDoc("Query");
 	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
-        QDomElement docElement = domDoc.createElement("query");
+    QDomElement docElement = domDoc.createElement("query");
 	domDoc.appendChild(docElement);
-        QDomElement nameElement = domDoc.createElement("name");
+    QDomElement nameElement = domDoc.createElement("name");
 	QDomText attrName = domDoc.createTextNode(identifier());
-        nameElement.appendChild(attrName);
-        docElement.appendChild(nameElement);
+    nameElement.appendChild(attrName);
+    docElement.appendChild(nameElement);
 
 	QDomElement sqlElement = domDoc.createElement("sql");
 	QDomText attrSql;
@@ -74,8 +74,8 @@ void KexiQueryPartItem::store(KoStore* store) {
 
 	docElement.appendChild(sqlElement);
 
-        QDomElement itemsElement = domDoc.createElement("items");
-        docElement.appendChild(itemsElement);
+    QDomElement itemsElement = domDoc.createElement("items");
+    docElement.appendChild(itemsElement);
 
 	for (QueryEntryList::const_iterator it=m_queryEntryList.begin();it!=m_queryEntryList.end();++it) {
 		QDomElement item = domDoc.createElement("item");
@@ -84,18 +84,18 @@ void KexiQueryPartItem::store(KoStore* store) {
 		item.setAttribute("shown",(*it).show?"true":"false");
 		item.setAttribute("orC",(*it).orC);
 		item.setAttribute("andC",(*it).andC);
-                itemsElement.appendChild(item);
+        itemsElement.appendChild(item);
 	}
 
 
-        QDomElement paramsElement = domDoc.createElement("parameters");
-        docElement.appendChild(paramsElement);
+    QDomElement paramsElement = domDoc.createElement("parameters");
+    docElement.appendChild(paramsElement);
 
 	for (KexiDataProvider::ParameterList::const_iterator it=m_params.begin();it!=m_params.end();++it) {
 		QDomElement param = domDoc.createElement("parameter");
 		param.setAttribute("name",(*it).name);
 		param.setAttribute("type",(*it).type);
-                paramsElement.appendChild(param);
+        paramsElement.appendChild(param);
 	}
 
 
@@ -105,14 +105,14 @@ void KexiQueryPartItem::store(KoStore* store) {
                 QDomText tPreparsed = domDoc.createTextNode(m_editor->getQuery());
                 preparsed.appendChild(tPreparsed); */
 
-        QByteArray data = domDoc.toCString();
-        data.resize(data.size()-1);
+    QByteArray data = domDoc.toCString();
+    data.resize(data.size()-1);
 
 	if(store) {
-        	store->open("/query/" + identifier() + ".query");
-                store->write(data);
-                store->close();
-        }
+        store->open("/query/" + identifier() + ".query");
+        store->write(data);
+        store->close();
+    }
 
 }
 
@@ -135,12 +135,12 @@ void KexiQueryPartItem::load(KoStore* store) {
 				for (QDomElement itemTag=readTag.firstChild().toElement();
 				!itemTag.isNull(); itemTag=itemTag.nextSibling().toElement()) {
 					m_queryEntryList.append(QueryEntry(
-						itemTag.attribute("source"),
-						itemTag.attribute("field"),
-						itemTag.attribute("shown")=="true",
-						itemTag.attribute("orC"),
-						itemTag.attribute("andC")
-					));	
+                                                itemTag.attribute("source"),
+                                                itemTag.attribute("field"),
+                                                itemTag.attribute("shown")=="true",
+                                                itemTag.attribute("orC"),
+                                                itemTag.attribute("andC")
+					));
 				}
 			}
 			else
@@ -148,11 +148,11 @@ void KexiQueryPartItem::load(KoStore* store) {
 			if (readTag.tagName()=="parameters") {
 				kdDebug()<<"Parameters tag found"<<endl;
 				for (QDomElement paramTag=readTag.firstChild().toElement();
-				!paramTag.isNull(); paramTag=paramTag.nextSibling().toElement()) {
+                     !paramTag.isNull(); paramTag=paramTag.nextSibling().toElement()) {
 					m_params.append(KexiDataProvider::Parameter(
-						paramTag.attribute("name"),
-						paramTag.attribute("type").toInt()
-					));	
+                                        paramTag.attribute("name"),
+                                        paramTag.attribute("type").toInt()
+                                        ));
 				}
 
 			}

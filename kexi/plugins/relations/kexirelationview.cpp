@@ -90,7 +90,7 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 
 
 	connect(c, SIGNAL(moved(KexiRelationViewTableContainer *)), this,
-	 SLOT(containerMoved(KexiRelationViewTableContainer *)));
+            SLOT(containerMoved(KexiRelationViewTableContainer *)));
 
 }
 
@@ -121,7 +121,8 @@ KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 	kdDebug() << "KexiRelationView::addConnection(): finalSRC = " << m_tables[conn.srcTable] << endl;
 
 
-	KexiRelationViewConnection *connView = new KexiRelationViewConnection(m_tables[conn.srcTable], m_tables[conn.rcvTable], conn.srcField, conn.rcvField);
+	KexiRelationViewConnection *connView = new KexiRelationViewConnection(m_tables[conn.srcTable], m_tables[conn.rcvTable],
+                                                                          conn.srcField, conn.rcvField);
 	m_connectionViews.append(connView);
 	updateContents(connView->connectionRect());
 
@@ -171,7 +172,7 @@ KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 }
 
 void
-KexiRelationView::setReadOnly(bool b) 
+KexiRelationView::setReadOnly(bool b)
 {
 	m_readOnly=b;
 	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)

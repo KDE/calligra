@@ -56,7 +56,7 @@ KexiKugarHandler::~KexiKugarHandler()
 QString
 KexiKugarHandler::name()
 {
-	return QString(i18n("Reports"));
+	return i18n("Reports");
 }
 
 QString
@@ -85,8 +85,8 @@ KexiKugarHandler::itemPixmap()
 
 void KexiKugarHandler::hookIntoView(KexiView *view)
 {
-        KexiKugarHandlerProxy *prx=new KexiKugarHandlerProxy(this,view);
-        insertIntoViewProxyMap(view,prx);
+    KexiKugarHandlerProxy *prx=new KexiKugarHandlerProxy(this,view);
+    insertIntoViewProxyMap(view,prx);
 }
 
 
@@ -120,34 +120,32 @@ void KexiKugarHandler::editReport(KexiView *view,const QString &identifier)
 
 void KexiKugarHandler::createReport(KexiView *view)
 {
-        bool ok = false;
-        QString name = KLineEditDlg::getText(i18n("New Report"), i18n("Report Name:"), "", &ok, view);
+    bool ok = false;
+    QString name = KLineEditDlg::getText(i18n("New Report"), i18n("Report Name:"), "", &ok, view);
 
-        if(ok && name.length() > 0)
-        {
+    if(ok && name.length() > 0)
+    {
 		QString id=nextID();
 		KexiKugarHandlerItem *item;
-                items()->insert(id,item=new KexiKugarHandlerItem(this, name, "kexi/reports", id));
+        items()->insert(id,item=new KexiKugarHandlerItem(this, name, "kexi/reports", id));
 		if (!item->designer(true))
 		{
-			items()->remove(id);			
+			items()->remove(id);
 			return;
 		}
 		KexiKugarDesignerWrapper *kw=new KexiKugarDesignerWrapper(view,0,"kugar_editview",item,true);
-                kexiProject()->setModified(true);
-                emit itemListChanged(this);
-        }
+        kexiProject()->setModified(true);
+        emit itemListChanged(this);
+    }
 
 
 //        KexiKugarWrapper *kw = new KexiKugarWrapper(kexiView(), 0, "identifier", "kugar_view");
 //      kw->show();
-
 }
 
 void KexiKugarHandler::view(KexiView *view, const QString &identifier)
 {
-        KexiKugarWrapper *kw = new KexiKugarWrapper(view, 0, "identifier", "kugar_view");
-
+    KexiKugarWrapper *kw = new KexiKugarWrapper(view, 0, "identifier", "kugar_view");
 }
 
 QString KexiKugarHandler::tempPath()
@@ -159,41 +157,40 @@ QString KexiKugarHandler::tempPath()
 
 void KexiKugarHandler::store (KoStore *ks)
 {
-        kdDebug() << "KexiKugarHandler::store(KoStore*)" << endl;
+    kdDebug() << "KexiKugarHandler::store(KoStore*)" << endl;
 
-        for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
-        {
+    for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
+    {
 		KexiKugarHandlerItem *khi=static_cast<KexiKugarHandlerItem*>(it.current());
 		khi->store(ks);
-        }
+    }
 }
 
 void KexiKugarHandler::saveXML(QDomDocument& domDoc)
 {
-        QDomElement reports = domDoc.createElement("reports");
-        domDoc.documentElement().appendChild(reports);
+    QDomElement reports = domDoc.createElement("reports");
+    domDoc.documentElement().appendChild(reports);
 
-        for(KexiProjectHandler::ItemIterator it(*(items()));it.current();++it)
-        {
+    for(KexiProjectHandler::ItemIterator it(*(items()));it.current();++it)
+    {
 		QDomElement itemElement=domDoc.createElement("report");
 		itemElement.setAttribute("name",(*it)->name());
 		itemElement.setAttribute("id",(*it)->shortIdentifier());
 		reports.appendChild(itemElement);
-        }
-
+    }
 }
 
 void KexiKugarHandler::loadXML(const QDomDocument &doc, const QDomElement &elem)
 {
 	kdDebug()<<"KexiKugarHandler::loadXML *****"<<endl;
-        ItemList *list=items();
-        list->clear();
+    ItemList *list=items();
+    list->clear();
 
 	if (elem.tagName()=="reports") {
 		for (QDomElement el=elem.firstChild().toElement();!el.isNull();el=el.nextSibling().toElement()) {
-	                KexiKugarHandlerItem *item;
-			QString id=el.attribute("id");
-        	        list->insert(id,item=new KexiKugarHandlerItem(this, el.attribute("name"), "kexi/reports", id));
+            KexiKugarHandlerItem *item;
+            QString id=el.attribute("id");
+            list->insert(id,item=new KexiKugarHandlerItem(this, el.attribute("name"), "kexi/reports", id));
 			if (id>=nextFreeID) {
 				nextFreeID=id;
 				nextID();
@@ -209,14 +206,13 @@ void KexiKugarHandler::load (KoStore *ks)
 	kdDebug()<<"KexiKugarHandler::load ******"<<endl;
 	QString tmp=tempPath();
 	if (tmp.isEmpty()) return;
-        References fileRefs = kexiProject()->fileReferences("reports");
+    References fileRefs = kexiProject()->fileReferences("reports");
 
-        for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
-        {
-                kdDebug() << "KexiKugarHandler::load() added " << (*it).name << endl;
+    for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
+    {
+        kdDebug() << "KexiKugarHandler::load() added " << (*it).name << endl;
 		ks->extractFile((*it).location,tmp+(*it).name);
-        }
-
+    }
 }
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_kugar, KGenericFactory<KexiKugarHandler> )

@@ -73,7 +73,7 @@ DCOPObject* KexiProject::dcopObject()
 {
 	if ( !dcop )
 		dcop = new KexiProjectIface( this );
-	
+
 	return dcop;
 }
 
@@ -121,8 +121,8 @@ bool KexiProject::initDoc()
 KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
 {
 	kdDebug() << "KoView* KexiProject::createViewInstance()" << endl;
-    	KexiView *v= new KexiView( KexiView::MDIWindowMode,this, parent, name );
-        for(KexiProjectHandler *part = m_parts->first(); part; part = m_parts->next())
+    KexiView *v= new KexiView( KexiView::MDIWindowMode,this, parent, name );
+    for(KexiProjectHandler *part = m_parts->first(); part; part = m_parts->next())
 		part->hookIntoView(v);
 	return v;
 }
@@ -342,9 +342,9 @@ KexiProject::providers(const QString &interfaceName)
 {
 	ProviderList l;
 	for (KexiProjectHandler *h=m_parts->first();h;h=m_parts->next())
-        {
-                if (h->qt_cast(interfaceName.latin1())) l.append(h);
-        }
+    {
+        if (h->qt_cast(interfaceName.latin1())) l.append(h);
+    }
 	return l;
 }
 

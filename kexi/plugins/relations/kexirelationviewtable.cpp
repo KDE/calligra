@@ -49,7 +49,7 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 	QLabel *l = new KexiRelationViewTableContainerHeader(table, this);
 	l->setPaletteBackgroundColor(colorGroup().highlight());
 	g->addWidget(l, 0, 0);
-	
+
 	QPushButton *btnClose = new QPushButton("x", this, "x");
 	btnClose->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	btnClose->setFixedSize(15, 15);
@@ -88,7 +88,7 @@ KexiRelationViewTableContainer::mousePressEvent(QMouseEvent *ev)
 	m_mousePressed = true;
 	m_bX = ev->x();
 	m_bY = ev->y();
-	
+
 	QFrame::mousePressEvent(ev);
 }
 
@@ -156,7 +156,7 @@ KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
 
 KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(const QString& text,QWidget *parent)
 	:QLabel(text,parent),m_dragging(false) {
-	installEventFilter(this);	
+	installEventFilter(this);
 }
 
 KexiRelationViewTableContainerHeader::~KexiRelationViewTableContainerHeader() {
@@ -183,7 +183,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev)
 					m_offsetX+=newPos.x();
 					if (m_offsetX>0) {
 						newPos.setX(m_offsetX);
-						m_offsetX=0;	
+						m_offsetX=0;
 					}
 					else newPos.setX(0);
 				}
@@ -197,7 +197,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev)
 					m_offsetY+=newPos.y();
 					if (m_offsetY>0) {
 						newPos.setY(m_offsetY);
-						m_offsetY=0;	
+						m_offsetY=0;
 					}
 					else newPos.setY(0);
 				}
@@ -225,7 +225,7 @@ void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev) {
 }
 
 void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
-	kdDebug()<<"KexiRelationViewTableContainerHeader::Mouse Release Event"<<endl;	
+	kdDebug()<<"KexiRelationViewTableContainerHeader::Mouse Release Event"<<endl;
 	m_dragging=false;
 }
 
@@ -234,7 +234,8 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 
 
 
-KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table, QStringList fields, const char *name)
+KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table,
+                                             QStringList fields, const char *name)
  : KListView(parent)
 {
 	m_fieldList = fields;
@@ -319,8 +320,6 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 	QListViewItem *recever = itemAt(ev->pos());
 	if(recever)
 	{
-
-
 		QString srcTable;
 		QString dummy;
 		QString srcField;

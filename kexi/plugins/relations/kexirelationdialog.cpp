@@ -40,7 +40,6 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 {
 	setCaption(i18n("Relations"));
 
-
 	m_db = kexiProject()->db();
 
 	QHBox *hbox = new QHBox(this);

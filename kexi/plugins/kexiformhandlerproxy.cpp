@@ -35,12 +35,12 @@
 KexiFormHandlerProxy::KexiFormHandlerProxy(KexiFormHandler *handler, KexiView *view)
  : KexiProjectHandlerProxy(handler, view), KXMLGUIClient()
 {
-        (void) new KAction(i18n("Create &Form..."), 0,
-                this,SLOT(slotCreate()), actionCollection(), "formpart_create");
+    (void) new KAction(i18n("Create &Form..."), 0,
+                       this,SLOT(slotCreate()), actionCollection(), "formpart_create");
 
-        setXMLFile("kexiformpartui.rc");
+    setXMLFile("kexiformpartui.rc");
 
-        view->insertChildClient(this);
+    view->insertChildClient(this);
 
 	m_formHandler = handler;
 }
@@ -51,7 +51,7 @@ KexiFormHandlerProxy::groupContext()
 	kdDebug() << "KexiFormHandlerProxy::groupContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Form..."), SLOT(slotCreate()));
-	
+
 	return m;
 }
 
@@ -80,7 +80,7 @@ KexiFormHandlerProxy::slotCreate()
 		QString name = d->name();
 		KexiFormHandlerItem *i = new KexiFormHandlerItem(part(), name, name);
 		part()->items()->insert(name, i);
-                emit m_formHandler->itemListChanged(part());
+        emit m_formHandler->itemListChanged(part());
 		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, d->source(), "nform", name);
 		nform->show();
 		kexiView()->project()->addFileReference(FileReference("Forms",name,"/form/" + name + ".ui"));

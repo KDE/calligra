@@ -105,15 +105,15 @@ void KexiQueryDesignerGuiEditor::appendLine(const QString &source, const QString
 {
 	uint i=0;
 	uint tid=0;
-        for(QStringList::Iterator it = m_sourceList.begin(); it != m_sourceList.end(); it++)
+    for(QStringList::Iterator it = m_sourceList.begin(); it != m_sourceList.end(); it++)
+    {
+        if(source == (*it))
         {
-                if(source == (*it))
-                {
 			tid=i;
-                        break;
-                }
-                i++;
+            break;
         }
+        i++;
+    }
 
 	m_insertItem->setValue(0,tid);
 	m_insertItem->setValue(1,field);
@@ -122,11 +122,11 @@ void KexiQueryDesignerGuiEditor::appendLine(const QString &source, const QString
 	m_insertItem->setValue(4,orC);
 	m_insertItem->setInsertItem(false);
 
-        KexiTableItem *newInsert = new KexiTableItem(m_designTable);
-        newInsert->setValue(0, 0);
-        newInsert->setValue(2, true);
-        newInsert->setInsertItem(true);
-        m_insertItem = newInsert;
+    KexiTableItem *newInsert = new KexiTableItem(m_designTable);
+    newInsert->setValue(0, 0);
+    newInsert->setValue(2, true);
+    newInsert->setInsertItem(true);
+    m_insertItem = newInsert;
 }
 
 void
@@ -136,10 +136,10 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 
 	QString srcTable;
 	QString srcField;
-        QString dummy;
-        //better check later if the source is really a table
-        KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
-        kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
+    QString dummy;
+    //better check later if the source is really a table
+    KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
+    kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
 
 
 	uint i=0;
