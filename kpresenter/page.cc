@@ -173,9 +173,9 @@ void Page::drawBackground( QPainter *painter, QRect rect )
 		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt ).x(),
 						     getPageSize( i, _presFakt ).y() ), editMode );
 	    else
-		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt, false ).x() + 
+		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt, false ).x() +
 						     view->kPresenterDoc()->getLeftBorder() * _presFakt,
-						     getPageSize( i, _presFakt, false ).y() + 
+						     getPageSize( i, _presFakt, false ).y() +
 						     view->kPresenterDoc()->getTopBorder() * _presFakt ),
 				    editMode );
 	}
@@ -478,7 +478,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
 			}
 		    }
 		}
-		MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object( s )" ), 
+		MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object( s )" ),
 						      QPoint( mx - firstX, my - firstY ),
 						      _objects, view->kPresenterDoc() );
 		view->kPresenterDoc()->commands()->addCommand( moveByCmd );
@@ -706,6 +706,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 
 	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
 	     toolEditMode == TEM_MOUSE ) {
+	    bool cursorAlreadySet = FALSE;
 	    if ( (int)objectList()->count() - 1 >= 0 ) {
 		for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
 		    kpobject = objectList()->at( i );
@@ -713,13 +714,18 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		    QPoint pnt = kpobject->getOrig();
 		    if ( QRect( pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() ).
 			 contains( QPoint( e->x(), e->y() ) ) ) {
-			if ( kpobject->isSelected() )
+			if ( kpobject->isSelected() ) {
 			    setCursor( kpobject->getCursor( QPoint( e->x(), e->y() ), diffx(), diffy(), modType ) );
-			return;
+			    cursorAlreadySet = TRUE;
+			    break;
+			}
 		    }
 		}
 	    }
-	    setCursor( arrowCursor );
+	    if ( !cursorAlreadySet )
+		setCursor( arrowCursor );
+	    else
+		return;
 	} else if ( mousePressed ) {
 	    int mx = e->x();
 	    int my = e->y();

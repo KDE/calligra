@@ -447,58 +447,48 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oy = orig.y() - _diffy;
     int ow = ext.width();
     int oh = ext.height();
-    QRect r;
 
     _painter->save();
-    r = _painter->viewport();
+    QRect ov = _painter->viewport();
 
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
-    int pw = pen.width();
+    int penw = pen.width() / 2;
 
     _painter->save();
-    _painter->setViewport( ox, oy, r.width(), r.height() );
-    if ( fillType == FT_BRUSH || !gradient )
-	_painter->drawRect( pw, pw, ext.width() - 2 * pw, ext.height() - 2 * pw );
-    else
-    {
-	if ( angle == 0 )
-	    _painter->drawPixmap( pw, pw, *gradient->getGradient(), 0, 0, ow - 2 * pw, oh - 2 * pw );
+    _painter->setViewport( 0, 0, ov.width(), ov.height() );
+    if ( angle == 0 ) {
+	_painter->setPen( Qt::NoPen );
+	_painter->setBrush( brush );
+	if ( fillType == FT_BRUSH || !gradient )
+	    _painter->drawRect( ox + penw, oy + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
 	else
-	{
-	    QPixmap pix( ow - 2 * pw, oh - 2 * pw );
-	    QPainter p;
-	    p.begin( &pix );
-	    p.drawPixmap( 0, 0, *gradient->getGradient() );
-	    p.end();
+	    _painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(), 
+				  0, 0, ow - 2 * penw, oh - 2 * penw );
 
-	    _painter->drawPixmap( pw, pw, pix );
-	}
-
+	QRect r2 = _painter->viewport();
+	_painter->save();
+	_painter->setViewport( ox + 1, oy + 1, ext.width() - 2, ext.height() - 2 );
+	_painter->drawPicture( *picture );
+	_painter->setViewport( r2 );
+	_painter->restore();
+	
 	_painter->setPen( pen );
 	_painter->setBrush( Qt::NoBrush );
-	_painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
-    }
-    _painter->setViewport( r );
-    _painter->restore();
+	_painter->drawRect( ox + penw, oy + penw, ow - 2 * penw, oh - 2 * penw );
+    } else {
+	QRect r = _painter->viewport();
+	_painter->setViewport( ox, oy, r.width(), r.height() );
 
-    // ********* TODO: shadow for cliparts
-
-    _painter->save();
-    r = _painter->viewport();
-    _painter->setViewport( ox + 1, oy + 1, ext.width() - 2, ext.height() - 2 );
-
-    if ( angle == 0 )
-	_painter->drawPicture( *picture );
-    else
-    {
-	QRect br = QRect( 0, 0, ow, oh );
+	QRect br( QPoint( 0, 0 ), ext );
 	int pw = br.width();
 	int ph = br.height();
-	int yPos = -br.y();
-	int xPos = -br.x();
+	QRect rr = br;
+	int pixYPos = -rr.y();
+	int pixXPos = -rr.x();
 	br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+	rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
 	QWMatrix m, mtx;
 	mtx.rotate( angle );
@@ -512,13 +502,28 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 	pnt.drawPicture( *picture );
 	pnt.end();
 
-	_painter->setViewport( ox, oy, r.width(), r.height() );
 	_painter->setWorldMatrix( m );
 
-	_painter->drawPixmap( br.left() + xPos, br.top() + yPos, pm );
+	_painter->setPen( Qt::NoPen );
+	_painter->setBrush( brush );
+
+	if ( fillType == FT_BRUSH || !gradient )
+	    _painter->drawRect( rr.left() + pixXPos + penw, 
+				rr.top() + pixYPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+	else
+	    _painter->drawPixmap( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, 
+				  *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+
+	_painter->drawPixmap( br.left() + pixXPos, br.top() + pixYPos, pm );
+
+	_painter->setPen( pen );
+	_painter->setBrush( Qt::NoBrush );
+	_painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ow - 2 * penw, oh - 2 * penw );
+
+	_painter->setViewport( r );
     }
 
-    _painter->setViewport( r );
+    _painter->setViewport( ov );
     _painter->restore();
 
     KPObject::draw( _painter, _diffx, _diffy );

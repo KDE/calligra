@@ -68,16 +68,21 @@ void KPPartObject::rotate( float _angle )
     child->setRotation( _angle );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
 			     getOrig().y() + getSize().height() / 2 ) );
+    if ( fillType == FT_GRADIENT && gradient )
+	gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
 void KPPartObject::setSize( int _width, int _height )
 {
     KPObject::setSize( _width, _height );
+    if ( move ) return;
 
     child->setGeometry( QRect( orig, ext ) );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
 				     getOrig().y() + getSize().height() / 2 ) );
+    if ( fillType == FT_GRADIENT && gradient )
+	gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
@@ -125,10 +130,13 @@ void KPPartObject::moveBy( int _dx, int _dy )
 void KPPartObject::resizeBy( int _dx, int _dy )
 {
     KPObject::resizeBy( _dx, _dy );
+    if ( move ) return;
 
     child->setGeometry( QRect( orig, ext ) );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
 				     getOrig().y() + getSize().height() / 2 ) );
+    if ( fillType == FT_GRADIENT && gradient )
+	gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
@@ -146,7 +154,7 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int oh = ext.height();
 //     QRect r;
 
-    int penw = pen.width();
+    int penw = pen.width() / 2;
 
     _painter->save();
     _painter->translate( -_diffx, -_diffy );

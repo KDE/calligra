@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -48,7 +48,8 @@ KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection )
 }
 
 /*================== overloaded constructor ======================*/
-KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, QDateTime _lastModified )
+KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, 
+				QDateTime _lastModified )
     : KPObject()
 {
     pixmapCollection = _pixmapCollection;
@@ -505,7 +506,7 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
-    int penw = pen.width();
+    int penw = pen.width() / 2;
 
     if ( shadowDistance > 0 )
     {
@@ -558,23 +559,21 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
     _painter->restore();
     _painter->save();
 
-    if ( angle == 0 )
-    {
+    if ( angle == 0 ) {
 	_painter->setPen( Qt::NoPen );
 	_painter->setBrush( brush );
 	if ( fillType == FT_BRUSH || !gradient )
 	    _painter->drawRect( ox + penw, oy + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
 	else
-	    _painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+	    _painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(), 
+				  0, 0, ow - 2 * penw, oh - 2 * penw );
 
 	_painter->drawPixmap( ox, oy, *pixmap );
 
 	_painter->setPen( pen );
 	_painter->setBrush( Qt::NoBrush );
 	_painter->drawRect( ox + penw, oy + penw, ow - 2 * penw, oh - 2 * penw );
-    }
-    else
-    {
+    } else {
 	r = _painter->viewport();
 	_painter->setViewport( ox, oy, r.width(), r.height() );
 
@@ -598,9 +597,11 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
 	_painter->setBrush( brush );
 
 	if ( fillType == FT_BRUSH || !gradient )
-	    _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+	    _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, 
+				ext.width() - 2 * penw, ext.height() - 2 * penw );
 	else
-	    _painter->drawPixmap( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+	    _painter->drawPixmap( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, 
+				  *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
 	_painter->drawPixmap( rr.left() + pixXPos, rr.top() + pixYPos, *pixmap );
 

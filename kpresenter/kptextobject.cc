@@ -395,7 +395,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
-    int penw = pen.width();
+    int penw = pen.width() / 2;
 
     if ( shadowDistance > 0 )
     {

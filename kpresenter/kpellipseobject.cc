@@ -472,7 +472,7 @@ void KPEllipseObject::paint( QPainter* _painter )
 	int oh = ext.height();
 
 	_painter->setPen( pen );
-	int pw = pen.width();
+	int pw = pen.width() / 2;
 	_painter->setBrush( brush );
 	_painter->drawEllipse( pw, pw, ow - 2 * pw, oh - 2 * pw );
     }
@@ -480,7 +480,7 @@ void KPEllipseObject::paint( QPainter* _painter )
     {
 	int ow = ext.width();
 	int oh = ext.height();
-	int pw = pen.width();
+	int pw = pen.width() / 2;
 
 	int ox = _painter->viewport().x() + static_cast<int>( _painter->worldMatrix().dx() ) + pw;
 	int oy = _painter->viewport().y() + static_cast<int>( _painter->worldMatrix().dy() ) + pw;

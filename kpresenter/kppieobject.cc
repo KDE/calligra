@@ -547,7 +547,7 @@ void KPPieObject::paint( QPainter* _painter )
     int oh = ext.height();
 
     _painter->setPen( pen );
-    int pw = pen.width();
+    int pw = pen.width() / 2;
     _painter->setBrush( brush );
 
     switch ( pieType )

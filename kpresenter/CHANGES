@@ -536,3 +536,10 @@ Reggie, 14.11.1999:
 Reggie, 17.11.1999:
 -------------------
 - Fixes
+
+Reggie, 21-22.11.1999:
+-------------------
+- Fixed drawing frames of some objects
+- Fixed drawiing frame + background of rotated cliparts
+- Fix in resizing embedded parts
+- Fix in setting cursor in page

@@ -286,13 +286,13 @@ void KPRectObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    for( ; it != lst.end(); it++ )
 	    {
 		if ( ( *it ).m_strName == "red" )
-		    brush.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), brush.color().green(), 
+		    brush.setColor( QColor( atoi( ( *it ).m_strValue.c_str() ), brush.color().green(),
 					    brush.color().blue() ) );
 		if ( ( *it ).m_strName == "green" )
-		    brush.setColor( QColor( brush.color().red(), atoi( ( *it ).m_strValue.c_str() ), 
+		    brush.setColor( QColor( brush.color().red(), atoi( ( *it ).m_strValue.c_str() ),
 					    brush.color().blue() ) );
 		if ( ( *it ).m_strName == "blue" )
-		    brush.setColor( QColor( brush.color().red(), brush.color().green(), 
+		    brush.setColor( QColor( brush.color().red(), brush.color().green(),
 					    atoi( ( *it ).m_strValue.c_str() ) ) );
 		if ( ( *it ).m_strName == "style" )
 		    brush.setStyle( ( Qt::BrushStyle )atoi( ( *it ).m_strValue.c_str() ) );
@@ -494,7 +494,7 @@ void KPRectObject::paint( QPainter* _painter )
     int oh = ext.height();
 
     _painter->setPen( pen );
-    int pw = pen.width();
+    int pw = pen.width() / 2;
     _painter->setBrush( brush );
     if ( xRnd == 0 && yRnd == 0 )
 	_painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
@@ -507,7 +507,7 @@ void KPRectObject::paint( QPainter* _painter )
 	int oh = ext.height();
 
 	_painter->setPen( pen );
-	int pw = pen.width();
+	int pw = pen.width() / 2;
 	_painter->setBrush( brush );
 	if ( xRnd == 0 && yRnd == 0 )
 	    _painter->drawRect( pw, pw, ow - 2 * pw, oh - 2 * pw );
@@ -520,7 +520,7 @@ void KPRectObject::paint( QPainter* _painter )
 	{
 	    int ow = ext.width();
 	    int oh = ext.height();
-	    int pw = pen.width();
+	    int pw = pen.width() / 2;
 
 	    if ( angle == 0 )
 		_painter->drawPixmap( pw, pw, *gradient->getGradient(), 0, 0, ow - 2 * pw, oh - 2 * pw );
