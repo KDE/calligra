@@ -232,7 +232,7 @@ namespace MSWrite
 		static const Word textWidthDefault = Word (Inch2Twip (6));
 		static const Word magic256Default = Word (256);
 		static const Word headerFromTopDefault = Word (Inch2Twip (0.75));
-		static const Word footerFromTopDefault = Word (Inch2Twip (11.0/*m_pageHeight*/ - 0.75));
+		static const Word footerFromTopDefault = Word (Inch2Twip (10.25 /*11.0 (m_pageHeight) - 0.75*/));
 		static const Word magic720Default = Word (720);
 		static const Word zeroDefault = Word (0);
 		static const Word magic1080Default = Word (1080);
