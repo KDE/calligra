@@ -57,7 +57,7 @@
                     <widget class="QListView" row="2" column="0">
                         <column>
                             <property name="text">
-                                <string>Available tables:</string>
+                                <string>Available Tables</string>
                             </property>
                             <property name="clickable">
                                 <bool>false</bool>
@@ -91,7 +91,7 @@
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Delimiter line</string>
+                            <string>Delimiter Line</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -232,7 +232,7 @@
                                     <cstring>m_radioOther</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Other</string>
+                                    <string>Other:</string>
                                 </property>
                             </widget>
                             <widget class="QLineEdit" row="1" column="2">

@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Style, Fonts and Colors</string>
+        <string>Style, Fonts &amp; Colors</string>
     </property>
     <grid>
         <property name="name">
@@ -459,7 +459,7 @@
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>Phisics Highlight</string>
+                                        <string>Physics Highlight</string>
                                     </property>
                                 </item>
                                 <property name="name">

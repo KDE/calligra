@@ -85,7 +85,7 @@
                             <cstring>m_eachChangeLabel</cstring>
                         </property>
                         <property name="text">
-                            <string>At each change in</string>
+                            <string>At each change in:</string>
                         </property>
                     </widget>
                     <widget class="QListView" row="5" column="0">

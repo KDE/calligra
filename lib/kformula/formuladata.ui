@@ -85,7 +85,7 @@
             <widget class="KComboBox">
                 <item>
                     <property name="text">
-                        <string>LaTex</string>
+                        <string>LaTeX</string>
                     </property>
                 </item>
                 <item>
@@ -195,7 +195,7 @@
                         </item>
                         <item>
                             <property name="text">
-                                <string>Like other Index</string>
+                                <string>Like Other Index</string>
                             </property>
                         </item>
                         <property name="name">
@@ -218,7 +218,7 @@
                 <cstring>tab</cstring>
             </property>
             <attribute name="title">
-                <string>LaTex</string>
+                <string>LaTeX</string>
             </attribute>
         </widget>
         <widget class="QWidget">
