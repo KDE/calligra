@@ -108,7 +108,9 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
         return;
     //re-test text obj
     if ( !m_bgSpell.currentTextObj )
+    {
         m_bgSpell.currentTextObj = nextTextObject(m_bgSpell.currentTextObj );
+    }
     if ( !m_bgSpell.currentTextObj )
     {
         QTimer::singleShot( 1000, this, SLOT( startBackgroundSpellCheck() ) );
@@ -120,6 +122,7 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
 
     m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
     nextParagraphNeedingCheck();
+
     //kdDebug(32500) << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
 
     if ( !m_bgSpell.currentTextObj || !m_bgSpell.currentParag ) {
@@ -149,7 +152,6 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     }
     m_bgSpell.kspell->setIgnoreUpperWords( m_bDontCheckUpperWord );
     m_bgSpell.kspell->setIgnoreTitleCase( m_bDontCheckTitleCase );
-
     if ( !needsWait )
         spellCheckerReady();
 }
@@ -177,7 +179,7 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
         return;
     }
     KoTextParag* parag = m_bgSpell.currentParag;
-    if ( parag->string()->needsSpellCheck() )
+    if ( parag && parag->string() && parag->string()->needsSpellCheck() )
     {
         return;
     }
