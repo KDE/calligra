@@ -50,7 +50,8 @@
 #include <htmlexport.h>
 #include <htmlexport.moc>
 
-#include "ExportTagProcessing.h"
+#include <TagProcessing.h>
+
 #include "ExportDialog.h"
 #include "ExportFilterBase.h"
 #include "ExportFilterSpartan.h"

@@ -42,7 +42,9 @@
 
 #include <koGlobal.h>
 
-#include "ExportTagProcessing.h"
+#include <TagProcessing.h>
+#include <KWEFStructures.h>
+
 #include "kqiodevicegzip.h"
 
 ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
@@ -81,56 +83,6 @@ class ClassExportFilterBase
 public:
     ClassExportFilterBase(void) {}
     virtual ~ClassExportFilterBase(void) {}
-};
-
-// Counter structure, for LayoutData
-class CounterData
-{
-public:
-    CounterData()
-        : numbering (NUM_NONE), style (STYLE_NONE), depth(0), start(0), customCharacter(0)
-        {}
-
-    enum Numbering
-    {
-        NUM_LIST = 0,       // Numbered as a list item.
-        NUM_CHAPTER = 1,    // Numbered as a heading.
-        NUM_NONE = 2        // No counter.
-    };
-    enum Style
-    {
-        STYLE_NONE = 0,
-        STYLE_NUM = 1, STYLE_ALPHAB_L = 2, STYLE_ALPHAB_U = 3,
-        STYLE_ROM_NUM_L = 4, STYLE_ROM_NUM_U = 5, STYLE_CUSTOMBULLET = 6,
-        STYLE_CUSTOM = 7, STYLE_CIRCLEBULLET = 8, STYLE_SQUAREBULLET = 9,
-        STYLE_DISCBULLET = 10
-    };
-    Numbering numbering;
-    Style style;
-    /*unsigned*/ int depth;
-    int start;
-    QString lefttext;
-    QString righttext;
-
-    int /*QChar*/ customCharacter;
-    QString customFont;
-    //QString custom;
-};
-
-// Paragraph layout
-class LayoutData
-{
-public:
-    LayoutData() :indentFirst(0.0), indentLeft(0.0), indentRight(0.0),
-     pageBreakBefore(false),pageBreakAfter(false)
-     { }
-
-    QString styleName;
-    QString alignment;
-    CounterData counter;
-    QString abiprops; // AbiWord properties
-    double indentFirst, indentLeft, indentRight;
-    bool pageBreakBefore, pageBreakAfter;
 };
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase*)
@@ -339,34 +291,6 @@ static void ProcessVertAlignTag (QDomNode myNode, void* , QString& abiprops, Cla
     // if the value is not the one of the two mentioned then we consider that we have nothing special!
 }
 
-// FormatData is a container for data retreived from the FORMAT tag
-// and its subtags to be used in the PARAGRAPH tag.
-
-class FormatData
-{
-    public:
-        FormatData ()
-        {}
-        FormatData ( int p,
-                     int l )
-                     : pos (p), len (l), realLen (l)
-        {}
-
-        int pos; // Start of text to which this format applies
-        int len; // Length of text to which this format applies
-        int realLen; //Real length of text (in case "len" is not the truth!)
-
-        QString abiprops; // Value of the "props" attribute
-                          // of Abiword's "<c>"	tag
-};
-
-class ValueListFormatData : public QValueList<FormatData>
-{
-public:
-    ValueListFormatData (void) { }
-    virtual ~ValueListFormatData (void) { }
-};
-
 static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* exportFilter)
 {
     // To use in <LAYOUT> or <STYLE> elements
@@ -496,31 +420,6 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, ClassExp
     AllowNoAttributes (myNode);
 
     AllowNoSubtags (myNode);
-}
-
-static void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
-{
-    ValueListFormatData::Iterator  paraFormatDataIt;
-    unsigned int lastPos=0; // last position
-
-    paraFormatDataIt = paraFormatDataList.begin ();
-    while (paraFormatDataIt != paraFormatDataList.end ())
-    {
-        if (static_cast<unsigned int>((*paraFormatDataIt).pos)>lastPos)
-        {
-            //We must add a FormatData
-            FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos);
-            paraFormatDataList.insert(paraFormatDataIt,formatData);
-        }
-        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).realLen;
-        paraFormatDataIt++; // To the next one, please!
-    }
-    // Add the last one if needed
-    if (paraText.length()>lastPos)
-    {
-        FormatData formatData(lastPos,paraText.length()-lastPos);
-        paraFormatDataList.append(formatData);
-    }
 }
 
 static QString EscapeText(const QString& strIn)

@@ -1,10 +1,11 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes) -I../libexport
+
 libabiwordimport_la_LDFLAGS	= -module -avoid-version -no-undefined
 libabiwordimport_la_LIBADD = $(KOFFICE_LIBS)
 libabiwordexport_la_LDFLAGS	= -module -avoid-version -no-undefined
-libabiwordexport_la_LIBADD = $(KOFFICE_LIBS)
+libabiwordexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.la
 
 ####### Files
 
@@ -13,10 +14,10 @@ kde_module_LTLIBRARIES = libabiwordimport.la libabiwordexport.la
 libabiwordimport_la_SOURCES = abiwordimport.cc abiwordimport_factory.cc \
 kqiodevicegzip.cc
 libabiwordexport_la_SOURCES = abiwordexport.cc abiwordexport_factory.cc \
-ExportTagProcessing.cc kqiodevicegzip.cc
+kqiodevicegzip.cc
 
 noinst_HEADERS = abiwordimport.h abiwordimport_factory.h abiwordexport.h \
-abiwordexport_factory.h ExportTagProcessing.h kqiodevicegzip.h
+abiwordexport_factory.h kqiodevicegzip.h
 
 METASOURCES = AUTO
 

@@ -1,12 +1,12 @@
 ####### General stuff
 
-INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes) -I../libexport
 
 libhtmlimport_la_LDFLAGS = -module -avoid-version -no-undefined
 libhtmlexport_la_LDFLAGS = -module -avoid-version -no-undefined
 
 libhtmlimport_la_LIBADD = $(KOFFICE_LIBS)
-libhtmlexport_la_LIBADD = $(KOFFICE_LIBS)
+libhtmlexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.la
 
 ####### Files
 
@@ -17,14 +17,14 @@ htmlimportsax.cc ImportTags.cc ImportParser.cc\
 ImportListener.cc ImportEntities.cc ImportDialog.cc ImportDialogUI.ui
 
 libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc\
-ExportDialog.cc ExportDialogUI.ui ExportTagProcessing.cc ExportFilterBase.cc\
+ExportDialog.cc ExportDialogUI.ui ExportFilterBase.cc\
 ExportFilterSpartan.cc ExportFilterDirect.cc ExportFilterStyle.cc\
 ExportFilterFullPower.cc
 
 noinst_HEADERS = htmlimport.h htmlimport_factory.h htmlimportsax.h\
 htmlexport.h htmlexport_factory.h\
 ImportTags.h ImportParser.h ImportListener.h ImportEntities.h\
-ExportDialog.h ExportDialogUI.h ExportTagProcessing.h ImportDialog.h\
+ExportDialog.h ExportDialogUI.h ImportDialog.h\
 ImportDialogUI.h ExportFilterBase.h ExportFilterSpartan.h ExportFilterDirect.h\
 ExportFilterStyle.h ExportFilterFullPower.h
 

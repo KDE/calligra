@@ -20,7 +20,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "ExportTagProcessing.h"
+#include <TagProcessing.h>
+
 #include "ExportFilterBase.h"
 #include "ExportFilterFullPower.h"
 

@@ -1,1 +1,1 @@
-SUBDIRS = ascii applixword html docbook latex abiword rtf wordperfect
+SUBDIRS = libexport ascii applixword html docbook latex abiword rtf wordperfect
