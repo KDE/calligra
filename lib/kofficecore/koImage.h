@@ -1,24 +1,131 @@
+/* This file is part of the KDE project
+   Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 #ifndef __koImage_h__
 #define __koImage_h__
 
 #include <qimage.h>
-#include <qshared.h>
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qmap.h>
 
-#include <assert.h>
+class KoImagePrivate;
+class QDomElement;
+class QDomDocument;
 
-template <class T> class KoImagePrivate;
+/**
+ * KoImageKey is the structure describing an image in a unique way.
+ * It currently includes the original path to the image and the modification
+ * date.
+ */
+struct KoImageKey
+{
+    /**
+     * Default constructor. Creates a null key
+     */
+    KoImageKey()
+        : m_filename(), m_lastModified()
+        {}
+
+    /**
+     * Constructs a key, from a filename and a modification date
+     * Storing the modification date as part of the key allows the user
+     * to update the file and import it into the application again, without
+     * the application reusing the old copy from the collection.
+     */
+    KoImageKey( const QString &fn, const QDateTime &mod )
+        : m_filename( fn ), m_lastModified( mod )
+        {}
+    /**
+     * Copy constructor
+     */
+    KoImageKey( const KoImageKey &key )
+        : m_filename( key.m_filename ), m_lastModified( key.m_lastModified )
+        {}
+
+    /**
+     * Assignment operator
+     */
+    KoImageKey &operator=( const KoImageKey &key ) {
+        m_filename = key.m_filename;
+        m_lastModified = key.m_lastModified;
+        return *this;
+    }
+
+    /**
+     * Comparison operator
+     */
+    bool operator==( const KoImageKey &key ) const {
+        return ( key.m_filename == m_filename &&
+                 key.m_lastModified == m_lastModified );
+    }
+
+    /**
+     * Comparison operator - used for sorting in the collection's map
+     */
+    bool operator<( const KoImageKey &key ) const {
+        return key.toString() < toString();
+    }
+
+    /**
+     * Convert this key into a string representation of it
+     */
+    QString toString() const {
+        return QString::fromLatin1( "%1_%2" ).arg( m_filename ).arg( m_lastModified.toString() );
+    }
+
+    /**
+     * Save this key in XML.
+     */
+    void saveAttributes( QDomElement &elem );
+    /**
+     * Load this key from XML.
+     * The default date and default time are used if the XML doesn't specify any date & time (compat)
+     */
+    void loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime );
+
+    /**
+     * Returns the format in which to save this image
+     * (this is determined from the filename).
+     */
+    QString format() const;
+
+
+    /**
+     * First part of the key: the filename
+     */
+    QString filename() const { return m_filename; }
+    /**
+     * Second part of the key: the modification date
+     */
+    QDateTime lastModified() const { return m_lastModified; }
+
+protected:
+    QString m_filename;
+    QDateTime m_lastModified;
+};
 
 /**
  * KoImage is a container class for holding a QImage, a cached QPixmap version
- * of it, right together associated with a Key (for storage in a
+ * of it, right together associated with a key (for storage in a
  * @ref KoImageCollection). While KoImage itself is implicitly shared, note
  * that the contained QImage is explicitly shared, as documented in the
  * Qt documentation.
  */
-template <class Key>
 class KoImage
 {
 public:
@@ -32,7 +139,7 @@ public:
      * QImage. Note that KoImage will create a copy of the
      * provided QImage.
      */
-    KoImage( const Key &key, const QImage &image );
+    KoImage( const KoImageKey &key, const QImage &image );
 
     /**
      * Copy constructor.
@@ -62,9 +169,9 @@ public:
     QPixmap pixmap() const;
 
     /**
-     * Retrieve the Key structure describing the image in a unique way.
+     * Retrieve the key structure describing the image in a unique way.
      */
-    Key key() const;
+    KoImageKey key() const;
 
     /**
      * Returns true if the image is null. A null image is created using the
@@ -91,143 +198,7 @@ public:
     KoImage scale( const QSize &size ) const;
 
 private:
-    KoImagePrivate<Key> *d;
+    KoImagePrivate *d;
 };
-
-/**
- * @internal
- */
-template <class Key>
-class KoImagePrivate : public QShared
-{
-public:
-    QImage m_image;
-    KoImage<Key> m_originalImage;
-    Key m_key;
-    mutable QPixmap m_cachedPixmap;
-};
-
-template <class Key>
-KoImage<Key>::KoImage()
-{
-    d = 0;
-}
-
-template <class Key>
-KoImage<Key>::KoImage( const Key &key, const QImage &image )
-{
-    d = new KoImagePrivate<Key>;
-    d->m_image = image.copy();
-    d->m_key = key;
-}
-
-template <class Key>
-KoImage<Key>::KoImage( const KoImage &other )
-{
-    d = 0;
-    (*this) = other;
-}
-
-template <class Key>
-KoImage<Key>::~KoImage()
-{
-    if ( d && d->deref() )
-        delete d;
-}
-
-template <class Key>
-KoImage<Key> &KoImage<Key>::operator=( const KoImage<Key> &_other )
-{
-    KoImage<Key> &other = const_cast<KoImage<Key> &>( _other );
-
-    if ( other.d )
-        other.d->ref();
-
-    if ( d && d->deref() )
-        delete d;
-
-    d = other.d;
-
-    return *this;
-}
-
-template <class Key>
-QImage KoImage<Key>::image() const
-{
-    if ( !d) return QImage();
-    return d->m_image;
-}
-
-template <class Key>
-QPixmap KoImage<Key>::pixmap() const
-{
-    if ( !d ) return QPixmap();
-
-    if ( d->m_cachedPixmap.isNull() )
-        d->m_cachedPixmap = d->m_image; // automatic conversion using assignment operator
-    return d->m_cachedPixmap;
-}
-
-template <class Key>
-Key KoImage<Key>::key() const
-{
-    if ( !d ) return Key();
-
-    return d->m_key;
-}
-
-template <class Key>
-bool KoImage<Key>::isNull() const
-{
-    return d == 0 || d->m_image.isNull();
-}
-
-template <class Key>
-QSize KoImage<Key>::size() const
-{
-    if ( !d ) return QSize();
-
-    return d->m_image.size();
-}
-
-template <class Key>
-QSize KoImage<Key>::originalSize() const
-{
-    if ( !d ) return QSize();
-
-    KoImage<Key> originalImage;
-
-    if ( !d->m_originalImage.isNull() )
-        originalImage = d->m_originalImage;
-    else
-        originalImage = *this;
-
-    return originalImage.size();
-}
-
-template <class Key>
-KoImage<Key> KoImage<Key>::scale( const QSize &size ) const
-{
-    if ( !d )
-        return *this;
-
-    KoImage<Key> originalImage;
-
-    if ( !d->m_originalImage.isNull() )
-        originalImage = d->m_originalImage;
-    else
-        originalImage = *this;
-
-    if ( originalImage.size() == size )
-        return originalImage;
-
-    QImage scaledImg = originalImage.image().smoothScale( size.width(), size.height() );
-
-    KoImage<Key> result( d->m_key, scaledImg );
-    assert( result.d );
-    result.d->m_originalImage = originalImage;
-
-    return result;
-}
 
 #endif

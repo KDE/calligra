@@ -14,6 +14,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koMainWindow.cc koPrintPreview.cc \
 	koApplication.cc koQueryTrader.cc \
 	koDataTool.cc koFilter.cc \
+	koImage.cc koImageCollection.cc \
 	koDocumentInfo.cc koFilterDialog.cc \
 	koView.cc koFrame.cc handler.cpp koDocumentChild.cc \
 	koDocumentInfoDlg.cc koFactory.cc koChild.cc \
