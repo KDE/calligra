@@ -456,7 +456,16 @@ Reggie, 16.9.1999:
 - It's possible now to assign an effect for screenpresentations
   to multiple objects at the same time if multiple objs are selected
 
-Reggie, 15.1.1999:
+Reggie, 15.10.1999:
 ---------------
 - Fixed refcounting in collections => fixed some segfaults
 - Some other small fixes
+
+Reggie, 20.10.1999:
+------------------
+- Key_Escape exits edit mode of textobjects
+- Some code cleanups
+- Fixed splitting paragraphs in the KTextObject
+- setiing textobj type (enumlist, bullet list, normal text) works now if
+  you just select the textobject, no need to switch to edit mode (same
+  for indents, etc.)

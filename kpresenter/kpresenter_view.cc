@@ -1190,13 +1190,16 @@ void KPresenterView::mtextFont()
 /*===============================================================*/
 void KPresenterView::textEnumList()
 {
-    if ( page->kTxtObj() ) {
-	int _type = page->kTxtObj()->enumListType().type;
-	QFont _font = page->kTxtObj()->enumListType().font;
-	QColor _color = page->kTxtObj()->enumListType().color;
-	QString _before = page->kTxtObj()->enumListType().before;
-	QString _after = page->kTxtObj()->enumListType().after;
-	int _start = page->kTxtObj()->enumListType().start;
+    KTextObject *txtObj = page->kTxtObj();
+    if ( !txtObj )
+	txtObj = page->haveASelectedTextObj();
+    if ( txtObj ) {
+	int _type = txtObj->enumListType().type;
+	QFont _font = txtObj->enumListType().font;
+	QColor _color = txtObj->enumListType().color;
+	QString _before = txtObj->enumListType().before;
+	QString _after = txtObj->enumListType().after;
+	int _start = txtObj->enumListType().start;
 
 	if ( KEnumListDia::enumListDia( _type, _font, _color, _before, _after, _start, fontList ) ) {
 	    KTextObject::EnumListType elt;
@@ -1206,49 +1209,80 @@ void KPresenterView::textEnumList()
 	    elt.before = _before;
 	    elt.after = _after;
 	    elt.start = _start;
-	    page->kTxtObj()->setEnumListType( elt );
+	    txtObj->setEnumListType( elt );
 	}
 
-	page->kTxtObj()->setObjType( KTextObject::ENUM_LIST );
+	txtObj->setObjType( KTextObject::ENUM_LIST );
+
+	if ( !page->kTxtObj() )
+	    page->repaint( FALSE );
     }
 }
 
 /*===============================================================*/
 void KPresenterView::textUnsortList()
 {
-    if ( page->kTxtObj() ) {
-	QList<QFont> *_font = page->kTxtObj()->unsortListType().font;
-	QList<QColor> *_color = page->kTxtObj()->unsortListType().color;
-	QList<QChar> *_c = page->kTxtObj()->unsortListType().chr;
+    KTextObject *txtObj = page->kTxtObj();
+    if ( !txtObj )
+	txtObj = page->haveASelectedTextObj();
+    if ( txtObj ) {
+	QList<QFont> *_font = txtObj->unsortListType().font;
+	QList<QColor> *_color = txtObj->unsortListType().color;
+	QList<QChar> *_c = txtObj->unsortListType().chr;
 
 	if ( KCharSelectDia::selectChar( _font, _color, _c ) ) {
 	    KTextObject::UnsortListType ult;
 	    ult.font = _font;
 	    ult.color = _color;
 	    ult.chr = _c;
-	    page->kTxtObj()->setUnsortListType( ult );
+	    txtObj->setUnsortListType( ult );
 	}
 
-	page->kTxtObj()->setObjType( KTextObject::UNSORT_LIST );
+	txtObj->setObjType( KTextObject::UNSORT_LIST );
+
+	if ( !page->kTxtObj() )
+	    page->repaint( FALSE );
     }
 }
 
 /*===============================================================*/
 void KPresenterView::textNormalText()
 {
-    if ( page->kTxtObj() ) page->kTxtObj()->setObjType( KTextObject::PLAIN );
+    KTextObject *txtObj = page->kTxtObj();
+    if ( !txtObj )
+	txtObj = page->haveASelectedTextObj();
+    if ( txtObj ) { 
+	txtObj->setObjType( KTextObject::PLAIN );
+	if ( !page->kTxtObj() )
+	    page->repaint( FALSE );
+    }
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthPlus()
 {
-    if ( page->kTxtObj() ) page->kTxtObj()->incDepth();
+    KTextObject *txtObj = page->kTxtObj();
+    if ( !txtObj )
+	txtObj = page->haveASelectedTextObj();
+    if ( txtObj ) { 
+	txtObj->incDepth();
+	if ( !page->kTxtObj() )
+	    page->repaint( FALSE );
+    }
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthMinus()
 {
-    if ( page->kTxtObj() ) page->kTxtObj()->decDepth();
+    KTextObject *txtObj = page->kTxtObj();
+    if ( !txtObj )
+	txtObj = page->haveASelectedTextObj();
+    if ( txtObj ) {
+	txtObj->decDepth();
+	if ( !page->kTxtObj() )
+	    page->repaint( FALSE );
+	
+    }
 }
 
 /*===============================================================*/

@@ -328,28 +328,22 @@ void TxtCursor::calcPos()
     //debug( "calc pos begin" );
 
     // if the textobject is valid
-    if ( txtObj )
-    {
+    if ( txtObj ) {
 	int l1 = 0, l2 = 0, i, j;
 
-	for ( i = 0; i < txtObj->paragraphs(); i++ )
-	{
+	for ( i = 0; i < txtObj->paragraphs(); i++ ) {
 	    paragraphPtr = txtObj->paragraphAt( i );
 
 	    // if the cursor is in the current paragraph
-	    if ( absPos >= l1 && absPos < l1 + paragraphPtr->paragraphLength() )
-	    {
-
+	    if ( absPos >= l1 && absPos < l1 + paragraphPtr->paragraphLength() ) {
 		// calculate first values
 		paragraph = i;
 		inParagraph = absPos - l1;
-		for ( j = 0; j < paragraphPtr->lines(); j++ )
-		{
+		for ( j = 0; j < paragraphPtr->lines(); j++ ) {
 		    linePtr = paragraphPtr->lineAt( j );
 
 		    // if the cursor is in the current line
-		    if ( inParagraph >= l2 && inParagraph < l2 + linePtr->lineLength() )
-		    {
+		    if ( inParagraph >= l2 && inParagraph < l2 + linePtr->lineLength() ) {
 
 			// calculate other values
 			line = j;
@@ -3974,8 +3968,7 @@ void KTextObject::paintEvent( QPaintEvent *e )
 	QTableView::paintEvent( e );
 
     // erase unused space
-    if ( totalHeight() < height() && !drawPic )
-    {
+    if ( totalHeight() < height() && !drawPic ) {
 	p.begin( this );
 	p.setPen( NoPen );
 	p.setBrush( backgroundColor() );
@@ -4069,19 +4062,16 @@ void KTextObject::resizeEvent( QResizeEvent* e )
 void KTextObject::keyPressEvent( QKeyEvent* e )
 {
     //debug( "keyPressEvent begin" );
-    if ( showCursor() )
-    {
+    if ( showCursor() ) {
 	int i = 0;
 	bool drawAbove = false;
 	changedParagraphs.clear();
 	bool drawFullPara = false;
 	bool doDelete = true;
 
-	if ( drawSelection )
-	{
+	if ( drawSelection ) {
 	    if ( e->key() == Key_Return || e->key() == Key_Enter || e->key() == Key_Delete
-		 || e->key() == Key_Backspace || e->ascii() && e->ascii() > 31 )
-	    {
+		 || e->key() == Key_Backspace || e->ascii() && e->ascii() > 31 ) {
 		cutRegion();
 		_modified = true;
 		doDelete = false;
@@ -4090,8 +4080,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 		 !( e->key() == Key_Right && e->state() & ShiftButton ) &&
 		 !( e->key() == Key_Left && e->state() & ShiftButton ) &&
 		 !( e->key() == Key_Up && e->state() & ShiftButton ) &&
-		 !( e->key() == Key_Down && e->state() & ShiftButton ) )
-	    {
+		 !( e->key() == Key_Down && e->state() & ShiftButton ) ) {
 		if ( drawSelection && startCursor.positionAbs() != stopCursor.positionAbs() )
 		    copyRegion();
 		drawSelection = false;
@@ -4111,10 +4100,8 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 	changedParagraphs.clear();
 
 	// react on the pressed key
-	switch ( e->key() )
-	{
-	case Key_Right:
-	{
+	switch ( e->key() ) {
+	case Key_Right: {
 	    if ( e->state() & ControlButton )
 		txtCursor->wordForward();
 	    else
@@ -4125,8 +4112,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 
 	    cursorChanged = true;
 	} break;
-	case Key_Left:
-	{
+	case Key_Left: {
 	    if ( e->state() & ControlButton )
 		txtCursor->wordBackward();
 	    else
@@ -4137,8 +4123,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 
 	    cursorChanged = true;
 	} break;
-	case Key_Up:
-	{
+	case Key_Up: {
 	    txtCursor->lineUp();
 
 	    if ( e->state() & ShiftButton )
@@ -4146,8 +4131,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 
 	    cursorChanged = true;
 	} break;
-	case Key_Down:
-	{
+	case Key_Down: {
 	    txtCursor->lineDown();
 
 	    if ( e->state() & ShiftButton )
@@ -4155,55 +4139,44 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 
 	    cursorChanged = true;
 	} break;
-	case Key_Return: case Key_Enter:
-	{
+	case Key_Return: case Key_Enter: {
 	    _modified = true;
 	    splitParagraph();
 	    drawBelow = true;
 	    drawAbove = true;
 	    cursorChanged = true;
 	} break;
-	case Key_Backspace:
-	{
-	    if ( doDelete )
-	    {
+	case Key_Backspace: {
+	    if ( doDelete ) {
 		_modified = true;
 		if ( kbackspace() )
 		    drawBelow = true;
-		else
-		{
+		else {
 		    drawBelow = false;
 		    drawFullPara = true;
 		}
 	    }
 	    cursorChanged = true;
 	} break;
-	case Key_Delete:
-	{
-	    if ( doDelete )
-	    {
+	case Key_Delete: {
+	    if ( doDelete ) {
 		_modified = true;
 		if ( kdelete() )
 		    drawBelow = true;
-		else
-		{
+		else {
 		    drawBelow = false;
 		    drawFullPara = true;
 		}
 	    }
 	    cursorChanged = true;
 	} break;
-	default:
-	{
-	    if ( !e->text().isEmpty() )
-	    {
+	default: {
+	    if ( !e->text().isEmpty() ) {
 		_modified = true;
-		for ( unsigned int i = 0; i < e->text().length(); i++ )
-		{
+		for ( unsigned int i = 0; i < e->text().length(); i++ ) {
 		    if ( insertChar( e->text()[ i ] ) )
 			drawBelow = true;
-		    else
-		    {
+		    else {
 			drawBelow = false;
 			drawFullPara = true;
 		    }
@@ -4215,19 +4188,14 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 
 	// if only one line has changed, redraw it
 	if ( oldCursor->positionParagraph() == txtCursor->positionParagraph() &&
-	     oldCursor->positionLine() == txtCursor->positionLine() )
-	{
+	     oldCursor->positionLine() == txtCursor->positionLine() ) {
 	    drawParagraph = txtCursor->positionParagraph();
 	    drawLine = txtCursor->positionLine();
 	    if ( drawFullPara ) drawLine = -1;
 	    updateCell( txtCursor->positionParagraph(), 0, false );
 	    drawLine = -1;
 	    drawParagraph = -1;
-	}
-
-	// else redraw both lines
-	else
-	{
+	} else { // else redraw both lines
 	    drawParagraph = txtCursor->positionParagraph();
 	    drawLine = txtCursor->positionLine();
 	    if ( drawFullPara ) drawLine = -1;
@@ -4241,8 +4209,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 	}
 
 	// if a line and everything below should be drawn
-	if ( drawBelow )
-	{
+	if ( drawBelow ) {
 	    //oldCursor->calcPos();
 	    TxtCursor *minCursor = txtCursor->minCursor(oldCursor);
 	    drawParagraph = minCursor->positionParagraph();
@@ -4255,8 +4222,7 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 	    drawBelow = false;
 	}
 
-	if ( drawAbove )
-	{
+	if ( drawAbove ) {
 	    drawLine = -1;
 	    drawParagraph = -1;
 	    updateCell( i, 0, false );
@@ -4278,8 +4244,7 @@ void KTextObject::mousePressEvent( QMouseEvent *e )
 
     emit giveMeFocus();
 
-    if ( e->button() != RightButton )
-    {
+    if ( e->button() != RightButton ) {
 	drawSelection = false;
 
 	redrawSelection( startCursor, stopCursor );
@@ -4287,33 +4252,26 @@ void KTextObject::mousePressEvent( QMouseEvent *e )
 	stopCursor.setPositionAbs( 0 );
     }
 
-    switch ( e->button() )
-    {
-    case LeftButton:
-    {
+    switch ( e->button() ) {
+    case LeftButton: {
 	bool dummy;
 	mousePressed = true;
 	startCursor = getCursorPos( e->x(), e->y(), dummy, true, true );
 	stopCursor = getCursorPos( e->x(), e->y(), dummy, true, true );
     } break;
-    case MidButton:
-    {
+    case MidButton: {
 	bool dummy;
 	getCursorPos( e->x(), e->y(), dummy, true, true );
 	mousePressed = false;
 	paste();
     } break;
-    case RightButton:
-    {
+    case RightButton: {
 	mousePressed = false;
 
-	if ( drawSelection && startCursor.positionAbs() != stopCursor.positionAbs() )
-	{
+	if ( drawSelection && startCursor.positionAbs() != stopCursor.positionAbs() ) {
 	    rbMenu->setItemEnabled( CB_CUT, true );
 	    rbMenu->setItemEnabled( CB_COPY, true );
-	}
-	else
-	{
+	} else {
 	    rbMenu->setItemEnabled( CB_CUT, false );
 	    rbMenu->setItemEnabled( CB_COPY, false );
 	}
@@ -4335,8 +4293,7 @@ void KTextObject::mousePressEvent( QMouseEvent *e )
 /*====================== mouse release event ======================*/
 void KTextObject::mouseReleaseEvent( QMouseEvent *e )
 {
-    if ( mousePressed )
-    {
+    if ( mousePressed ) {
 	mousePressed = false;
 	bool dummy;
 
@@ -4346,8 +4303,7 @@ void KTextObject::mouseReleaseEvent( QMouseEvent *e )
 	else
 	    startCursor = cursor;
 
-	if ( stopCursor.positionAbs() != startCursor.positionAbs() )
-	{
+	if ( stopCursor.positionAbs() != startCursor.positionAbs() ) {
 	    drawSelection = true;
 	    copyRegion();
 	}
@@ -4424,18 +4380,15 @@ void KTextObject::mouseDoubleClickEvent( QMouseEvent * )
 /*=================== recalcualte everything =====================*/
 void KTextObject::recalc( bool breakAllLines )
 {
-    switch ( obType )
-    {
+    switch ( obType ) {
     case PLAIN: xstart = 0; break;
-    case ENUM_LIST:
-    {
+    case ENUM_LIST: {
 	QFontMetrics fm( objEnumListType.font );
 	char chr[ 12 ];
 	sprintf( chr, "%s99 %s", objEnumListType.before.data(), objEnumListType.after.data() );
 	xstart = fm.width( chr );
     } break;
-    case UNSORT_LIST:
-    {
+    case UNSORT_LIST: {
 	QFontMetrics fm( *objUnsortListType.font->at( 0 ) );
 	xstart = fm.width( *objUnsortListType.chr->at( 0 ) ) + fm.width( *objUnsortListType.chr->at( 0 ) ) / 3;
     } break;
@@ -4451,24 +4404,19 @@ void KTextObject::recalc( bool breakAllLines )
     else breakLines = breakAllLines;
 
     //debug( "break lines begin" );
-    for ( paragraphPtr = paragraphList.first(); paragraphPtr != 0; paragraphPtr = paragraphList.next() )
-    {
+    for ( paragraphPtr = paragraphList.first(); paragraphPtr != 0; paragraphPtr = paragraphList.next() ) {
 	// break the lines, and resize the cell
-	if ( breakAllLines || breakLines && changedParagraphs.containsRef( ( int* )( paragraphList.at() ) ) )
-	{
+	if ( breakAllLines || breakLines && changedParagraphs.containsRef( ( int* )( paragraphList.at() ) ) ) {
 	    //debug( "break line: %d", paragraphList.at() );
 	    if ( regexpMode )
 		paragraphPtr->setRegExpList( &regExpList );
 
-	    if ( linebreak_width < 1 )
-	    {
+	    if ( linebreak_width < 1 ) {
 		paragraphPtr->breakLines( cellWidth( 0 ) - getLeftIndent( paragraphList.at() ),
 					  regexpMode, composerMode );
 		cellWidths.at( 0 )->wh = width() - xstart;
 		if ( tableFlags() & Tbl_vScrollBar ) cellWidths.at( 0 )->wh -= verticalScrollBar()->width();
-	    }
-	    else
-	    {
+	    } else {
 		paragraphPtr->break_Lines( linebreak_width - getLeftIndent( paragraphList.at() ),
 					   regexpMode, composerMode );
 		_width = max(_width,static_cast<int>(paragraphPtr->width()));
@@ -4524,11 +4472,9 @@ void KTextObject::splitParagraph()
     changedParagraphs.append( ( int* )( para ) );
 
     // if the cursor is at the beginning of a line
-    if ( txtCursor->positionInLine() == 0 )
-    {
+    if ( txtCursor->positionInLine() == 0 ) {
 	// if the cursor is in the first line -> just append an empty paragraph below
-	if ( line == 0 )
-	{
+	if ( line == 0 ) {
 	    lin = new TxtLine();
 	    lin->append( " ", currFont, currColor, TxtObj::NORMAL, TxtObj::SEPARATOR );
 	    para1->append( lin );
@@ -4536,11 +4482,7 @@ void KTextObject::splitParagraph()
 
 	    delete para2;
 	    delete para3;
-	}
-
-	// if the cursor is in another line
-	else
-	{
+	} else { // if the cursor is in another line
 	    // 1. paragraph: text before the line, in which the cursor is
 	    for ( i = 0; i < static_cast<int>( line ); i++ )
 		para1->append( paragraphAt( para )->lineAt( i ) );
@@ -4580,14 +4522,11 @@ void KTextObject::splitParagraph()
 	// move cursor forward
 	txtCursor->setMaxPosition( textLength() );
 	txtCursor->charForward();
-    }
-
-    // if the cursor is at the end of a line
-    else if ( txtCursor->positionInLine() == paragraphAt( para )->lineAt( txtCursor->positionLine() )->lineLength()-1 )
-    {
+    } else if ( txtCursor->positionInLine() == paragraphAt( para )->lineAt( txtCursor->positionLine() )->lineLength()-1 ) {
+	// if the cursor is at the end of a line
+	
 	// if the cursor is in the last line, just insert an empty paragraph below
-	if ( line == paragraphAt( para )->lines()-1 )
-	{
+	if ( line == paragraphAt( para )->lines()-1 ) {
 	    lin = new TxtLine();
 	    lin->append( "  ", currFont, currColor, TxtObj::NORMAL, TxtObj::SEPARATOR );
 	    para1->setHorzAlign( paragraphAt( para )->horzAlign() );
@@ -4597,11 +4536,7 @@ void KTextObject::splitParagraph()
 	    delete para2;
 	    delete para3;
 	    do_key_delete = true;
-	}
-
-	// if the cursor is in another line
-	else
-	{
+	} else { // if the cursor is in another line
 	    // 1. paragraph: text before the line, in which the cursor is, and text of the line in which the cursor is
 	    for ( i = 0; i <= static_cast<int>( line ); i++ )
 		para1->append( paragraphAt( para )->lineAt( i ) );
@@ -4641,11 +4576,7 @@ void KTextObject::splitParagraph()
 	// move cursor forward
 	txtCursor->setMaxPosition( textLength() );
 	txtCursor->charForward();
-    }
-
-    // if the cursor is anywhere else in the line
-    else
-    {
+    } else { // if the cursor is anywhere else in the line
 	// create two empty paragraphs
 	lin = new TxtLine();
 	para1->append( lin );
@@ -4669,7 +4600,9 @@ void KTextObject::splitParagraph()
 	for ( i = 0; i <= lin->getAfterObj( inLine ); i++ )
 	    para1->append( lin->itemAt( i ) );
 
-	// insert the objects, which are after the cursor, into the secont paragraph
+	para1->append( new TxtObj( " ", currFont, currColor, TxtObj::NORMAL, TxtObj::SEPARATOR ) ); 
+	
+	// insert the objects, which are after the cursor, into the second paragraph
 	for ( i = lin->getBeforeObj( inLine ); i < static_cast<int>( lin->items() ); i++ )
 	    para2->append( lin->itemAt( i ) );
 
@@ -4688,7 +4621,8 @@ void KTextObject::splitParagraph()
 	delete para3;
 
 	// if the remembered object ( type ) is not a separator -> move cursor one position forward
-	if ( obj && obj->type() != TxtObj::SEPARATOR ) txtCursor->charForward();
+	if ( obj && obj->type() != TxtObj::SEPARATOR ) 
+	    txtCursor->charForward();
     }
 
     // insert the new row into the table
@@ -4712,12 +4646,12 @@ void KTextObject::joinParagraphs( int p1, int p2 )
 	qWarning( "KTextObject::joinParagraphs(): p1 or p2 out of range" );
 	return;
     }
-    
+
     if ( txtCursor->positionParagraph() > paragraphs() - 1 ) {
 	qWarning( "KTextObject::joinParagraphs(): txtCursor->positionParagraph() out of range" );
 	return;
     }
-    
+
     _modified = true;
 
     int para1n = min(p1,p2);
@@ -4881,13 +4815,10 @@ bool KTextObject::insertChar( QChar c )
     bool insertC = true;
     int cursorPlus = 0;
 
-    if ( !autoReplace.isEmpty() )
-    {
+    if ( !autoReplace.isEmpty() ) {
 	AutoReplace *ar;
-	for ( ar = autoReplace.first(); ar != 0; ar = autoReplace.next() )
-	{
-	    if ( ar->c == c )
-	    {
+	for ( ar = autoReplace.first(); ar != 0; ar = autoReplace.next() ) {
+	    if ( ar->c == c ) {
 		str.insert( 0, ar->replace );
 		insertC = false;
 		cursorPlus = ar->replace.length() - 1;
@@ -4909,62 +4840,46 @@ bool KTextObject::insertChar( QChar c )
 
     changedParagraphs.append( ( int* )( para ) );
 
-    switch ( c )
-    {
-
-	// separator
-    case ' ':
-    {
-	if ( lin->getInObj( inLine ) != -1 ) lin->splitObj( inLine );
+    switch ( c ) {
+    case ' ': {
+	if ( lin->getInObj( inLine ) != -1 ) 
+	    lin->splitObj( inLine );
 	if ( lin->getAfterObj( inLine ) != -1 )
 	    objPos = lin->getAfterObj( inLine )+1;
 	else
 	    objPos = lin->getBeforeObj( inLine );
-	if ( static_cast<int>( objPos ) != -1 )
-	{
+	if ( static_cast<int>( objPos ) != -1 ) {
 	    obj = new TxtObj( " ", currFont, currColor, TxtObj::NORMAL, TxtObj::SEPARATOR );
 	    lin->insert( objPos, obj );
 	}
     } break;
-
-    // other chars
-    default:
-    {
-	if ( lin->getInObj( inLine ) != -1 )
-	{
-	    if ( sameEffects( lin->itemAt( lin->getInObj( inLine ) ) ) )
-	    {
+    default: {
+	if ( lin->getInObj( inLine ) != -1 ) {
+	    if ( sameEffects( lin->itemAt( lin->getInObj( inLine ) ) ) ) {
 		objPos = lin->getInObj( inLine );
 		for ( i = 0; i < objPos; i++ )
 		    w += lin->itemAt( i )->textLength();
 		lin->itemAt( objPos )->insert( inLine-w, str.data() );
 		break;
-	    }
-	    else
+	    } else
 		lin->splitObj( inLine );
 	}
 	if ( lin->getAfterObj( inLine ) != -1 &&
 	     lin->itemAt( lin->getAfterObj( inLine ) )->type() != TxtObj::SEPARATOR &&
-	     sameEffects( lin->itemAt( lin->getAfterObj( inLine ) ) ) )
-	{
+	     sameEffects( lin->itemAt( lin->getAfterObj( inLine ) ) ) ) {
 	    objPos = lin->getAfterObj( inLine );
 	    lin->itemAt( objPos )->append( str.data() );
-	}
-	else if ( lin->getBeforeObj( inLine ) != -1 &&
+	} else if ( lin->getBeforeObj( inLine ) != -1 &&
 		  lin->itemAt( lin->getBeforeObj( inLine ) )->type() != TxtObj::SEPARATOR &&
-		  sameEffects( lin->itemAt( lin->getBeforeObj( inLine ) ) ) )
-	{
+		  sameEffects( lin->itemAt( lin->getBeforeObj( inLine ) ) ) ) {
 	    objPos = lin->getBeforeObj( inLine );
 	    lin->itemAt( objPos )->insert( 0, str.data() );
-	}
-	else
-	{
+	} else {
 	    if ( lin->getAfterObj( inLine ) != -1 )
 		objPos = lin->getAfterObj( inLine )+1;
 	    else
 		objPos = lin->getBeforeObj( inLine );
-	    if ( static_cast<int>( objPos ) != -1 )
-	    {
+	    if ( static_cast<int>( objPos ) != -1 ) {
 		obj = new TxtObj( str.data(), currFont, currColor, TxtObj::NORMAL, TxtObj::TEXT );
 		lin->insert( objPos, obj );
 	    }

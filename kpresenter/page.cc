@@ -692,49 +692,40 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
 /*==================== handle mouse moved ========================*/
 void Page::mouseMoveEvent( QMouseEvent *e )
 {
-    if ( editMode )
-    {
+    if ( editMode ) {
 	view->setRulerMousePos( e->x(), e->y() );
 
 	KPObject *kpobject;
 
-	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) && toolEditMode == TEM_MOUSE )
-	{
+	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) && 
+	     toolEditMode == TEM_MOUSE ) {
 	    setCursor( arrowCursor );
-	    if ( (int)objectList()->count() - 1 >= 0 )
-	    {
-		for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
-		{
+	    if ( (int)objectList()->count() - 1 >= 0 ) {
+		for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
 		    kpobject = objectList()->at( i );
 		    QSize s = kpobject->getSize();
 		    QPoint pnt = kpobject->getOrig();
-		    if ( QRect( pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() ).contains( QPoint( e->x(), e->y() ) ) )
-		    {
+		    if ( QRect( pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() ).
+			 contains( QPoint( e->x(), e->y() ) ) ) {
 			if ( kpobject->isSelected() )
 			    setCursor( kpobject->getCursor( QPoint( e->x(), e->y() ), diffx(), diffy(), modType ) );
 			return;
 		    }
 		}
 	    }
-	}
-	else if ( mousePressed )
-	{
+	} else if ( mousePressed ) {
 	    int mx = e->x();
 	    int my = e->y();
 	    mx = ( mx / rastX() ) * rastX();
 	    my = ( my / rastY() ) * rastY();
 
-	    switch ( toolEditMode )
-	    {
-	    case TEM_MOUSE:
-	    {
+	    switch ( toolEditMode ) {
+	    case TEM_MOUSE: {
 		oldMx = ( oldMx / rastX() ) * rastX();
 		oldMy = ( oldMy / rastY() ) * rastY();
 
-		if ( modType == MT_NONE )
-		{
-		    if ( drawRubber )
-		    {
+		if ( modType == MT_NONE ) {
+		    if ( drawRubber ) {
 			QPainter p;
 			p.begin( this );
 			p.setRasterOp( NotROP );
@@ -745,19 +736,14 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			p.drawRect( rubber );
 			p.end();
 		    }
-		}
-		else if ( modType == MT_MOVE )
-		{
+		} else if ( modType == MT_MOVE ) {
 		    QPainter p;
 		    p.begin( this );
 
-		    if ( (int)objectList()->count() - 1 >= 0 )
-		    {
-			for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
-			{
+		    if ( (int)objectList()->count() - 1 >= 0 ) {
+			for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
 			    kpobject = objectList()->at( i );
-			    if ( kpobject->isSelected() )
-			    {
+			    if ( kpobject->isSelected() ) {
 				kpobject->setMove( true );
 				kpobject->draw( &p, diffx(), diffy() );
 				kpobject->moveBy( QPoint( mx - oldMx, my - oldMy ) );
@@ -767,9 +753,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		    }
 
 		    p.end();
-		}
-		else if ( modType != MT_NONE && resizeObjNum != -1 )
-		{
+		} else if ( modType != MT_NONE && resizeObjNum != -1 ) {
 		    QPainter p;
 		    p.begin( this );
 
@@ -782,18 +766,15 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		    int dx = mx - oldMx;
 		    int dy = my - oldMy;
 
-		    switch ( modType )
-		    {
-		    case MT_RESIZE_LU:
-		    {
+		    switch ( modType ) {
+		    case MT_RESIZE_LU: {
 			if ( keepRatio && ratio != 0.0 )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
 				break;
 			kpobject->moveBy( QPoint( dx, dy ) );
 			kpobject->resizeBy( QSize( -dx, -dy ) );
 		    } break;
-		    case MT_RESIZE_LF:
-		    {
+		    case MT_RESIZE_LF: {
 			dy = 0;
 			if ( keepRatio && ratio != 0.0 )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
@@ -801,37 +782,32 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			kpobject->moveBy( QPoint( dx, 0 ) );
 			kpobject->resizeBy( QSize( -dx, -dy ) );
 		    } break;
-		    case MT_RESIZE_LD:
-		    {
+		    case MT_RESIZE_LD: {
 			if ( keepRatio && ratio != 0.0 )
 			    break;
 			kpobject->moveBy( QPoint( dx, 0 ) );
 			kpobject->resizeBy( QSize( -dx, dy ) );
 		    } break;
-		    case MT_RESIZE_RU:
-		    {
+		    case MT_RESIZE_RU: {
 			if ( keepRatio && ratio != 0.0 )
 			    break;
 			kpobject->moveBy( QPoint( 0, dy ) );
 			kpobject->resizeBy( QSize( dx, -dy ) );
 		    } break;
-		    case MT_RESIZE_RT:
-		    {
+		    case MT_RESIZE_RT: {
 			dy = 0;
 			if ( keepRatio && ratio != 0.0 )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
 				break;
 			kpobject->resizeBy( QSize( dx, dy ) );
 		    } break;
-		    case MT_RESIZE_RD:
-		    {
+		    case MT_RESIZE_RD: {
 			if ( keepRatio && ratio != 0.0 )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
 				break;
 			kpobject->resizeBy( QSize( dx, dy ) );
 		    } break;
-		    case MT_RESIZE_UP:
-		    {
+		    case MT_RESIZE_UP: {
 			dx = 0;
 			if ( keepRatio && ratio != 0.0 )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
@@ -839,8 +815,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			kpobject->moveBy( QPoint( 0, dy ) );
 			kpobject->resizeBy( QSize( -dx, -dy ) );
 		    } break;
-		    case MT_RESIZE_DN:
-		    {
+		    case MT_RESIZE_DN: {
 			dx = 0;
 			if ( keepRatio && ratio != 0.0 )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
@@ -856,8 +831,8 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		oldMx = e->x();
 		oldMy = e->y();
 	    } break;
-	    case INS_TEXT: case INS_OBJECT: case INS_TABLE: case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM:
-	    {
+	    case INS_TEXT: case INS_OBJECT: case INS_TABLE: 
+	    case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM: {
 		QPainter p( this );
 		p.setPen( QPen( black, 1, SolidLine ) );
 		p.setBrush( NoBrush );
@@ -869,8 +844,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.drawRect( insRect );
 		p.end();
 	    } break;
-	    case INS_ELLIPSE:
-	    {
+	    case INS_ELLIPSE: {
 		QPainter p( this );
 		p.setPen( QPen( black, 1, SolidLine ) );
 		p.setBrush( NoBrush );
@@ -882,8 +856,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.drawEllipse( insRect );
 		p.end();
 	    } break;
-	    case INS_RECT:
-	    {
+	    case INS_RECT: {
 		QPainter p( this );
 		p.setPen( QPen( black, 1, SolidLine ) );
 		p.setBrush( NoBrush );
@@ -895,8 +868,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.drawRoundRect( insRect, view->getRndX(), view->getRndY() );
 		p.end();
 	    } break;
-	    case INS_LINE:
-	    {
+	    case INS_LINE: {
 		QPainter p( this );
 		p.setPen( QPen( black, 1, SolidLine ) );
 		p.setBrush( NoBrush );
@@ -908,40 +880,42 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		p.drawLine( insRect.topLeft(), insRect.bottomRight() );
 		p.end();
 	    } break;
-	    case INS_PIE:
-	    {
+	    case INS_PIE: {
 		QPainter p( this );
 		p.setPen( QPen( black, 1, SolidLine ) );
 		p.setBrush( NoBrush );
 		p.setRasterOp( NotROP );
-		if ( insRect.width() != 0 && insRect.height() != 0 )
-		{
-		    switch ( view->getPieType() )
-		    {
+		if ( insRect.width() != 0 && insRect.height() != 0 ) {
+		    switch ( view->getPieType() ) {
 		    case PT_PIE:
-			p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2, insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
+			p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2, 
+				   insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 			break;
 		    case PT_ARC:
-			p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2, insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
+			p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2, 
+				   insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 			break;
 		    case PT_CHORD:
-			p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2, insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
+			p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2, 
+				     insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 			break;
 		    default: break;
 		    }
 		}
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
-		switch ( view->getPieType() )
-		{
+		switch ( view->getPieType() ) {
 		case PT_PIE:
-		    p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2, insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
+		    p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2, 
+			       insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 		    break;
 		case PT_ARC:
-		    p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2, insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
+		    p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2, 
+			       insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 		    break;
 		case PT_CHORD:
-		    p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2, insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
+		    p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2, 
+				 insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 		    break;
 		default: break;
 		}
@@ -949,9 +923,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 	    } break;
 	    }
 	}
-    }
-    else if ( !editMode && drawMode )
-    {
+    } else if ( !editMode && drawMode ) {
 	QPainter p;
 	p.begin( this );
 	p.setPen( view->kPresenterDoc()->presPen() );
@@ -1015,10 +987,29 @@ void Page::keyPressEvent( QKeyEvent *e )
 	    slotGotoPage(); break;
 	default: break;
 	}
-    } else if ( editNum != -1 )
-	QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->
-				 getKTextObject(), e );
-    else {
+    } else if ( editNum != -1 ) {
+	if ( e->key() == Key_Escape ) {
+	    KPObject *kpobject = objectList()->at( editNum );
+	    editNum = -1;
+	    if ( kpobject->getType() == OT_TEXT ) {
+		KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+		kpobject->deactivate();
+		kptextobject->getKTextObject()->clearFocus();
+		disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
+			    this, SLOT( toFontChanged( QFont* ) ) );
+		disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ),
+			    this, SLOT( toColorChanged( QColor* ) ) );
+		disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
+			    this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
+		kptextobject->getKTextObject()->setShowCursor( false );
+	    } else if ( kpobject->getType() == OT_PART ) {
+		kpobject->deactivate();
+		_repaint( kpobject );
+	    }
+	} else if ( objectList()->at( editNum )->getType() == OT_TEXT )
+	    QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->
+				     getKTextObject(), e );
+    } else {
 	switch ( e->key() ) {
 	case Key_Next:
 	    view->screenNext(); break;
@@ -1053,7 +1044,8 @@ void Page::resizeEvent( QResizeEvent *e )
     if ( editMode )
 	QWidget::resizeEvent( e );
     else
-	QWidget::resizeEvent( new QResizeEvent( QSize( QApplication::desktop()->width(), QApplication::desktop()->height() ),
+	QWidget::resizeEvent( new QResizeEvent( QSize( QApplication::desktop()->width(), 
+						       QApplication::desktop()->height() ),
 						e->oldSize() ) );
     if ( editMode )
 	buffer.resize( size() );
@@ -1064,10 +1056,8 @@ int Page::getObjectAt( int x, int y )
 {
     KPObject *kpobject = 0;
 
-    if ( (int)objectList()->count() - 1 >= 0 )
-    {
-	for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- )
-	{
+    if ( (int)objectList()->count() - 1 >= 0 ) {
+	for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- ) {
 	    kpobject = objectList()->at( i );
 	    if ( kpobject->contains( QPoint( x, y ), diffx(), diffy() ) )
 		return i;
@@ -3285,21 +3275,18 @@ void Page::selectNext()
 
     if ( view->kPresenterDoc()->numSelected() == 0 )
 	objectList()->at( 0 )->setSelected( true );
-    else
-    {
+    else {
 	int i = objectList()->findRef( view->kPresenterDoc()->getSelectedObj() );
-	if ( i < static_cast<int>( objectList()->count() ) - 1 )
-	{
+	if ( i < static_cast<int>( objectList()->count() ) - 1 ) {
 	    view->kPresenterDoc()->deSelectAllObj();
 	    objectList()->at( ++i )->setSelected( true );
-	}
-	else
-	{
+	} else {
 	    view->kPresenterDoc()->deSelectAllObj();
 	    objectList()->at( 0 )->setSelected( true );
 	}
     }
-    if ( !QRect( diffx(), diffy(), width(), height() ).contains( view->kPresenterDoc()->getSelectedObj()->getBoundingRect( 0, 0 ) ) )
+    if ( !QRect( diffx(), diffy(), width(), height() ).
+	 contains( view->kPresenterDoc()->getSelectedObj()->getBoundingRect( 0, 0 ) ) )
 	view->makeRectVisible( view->kPresenterDoc()->getSelectedObj()->getBoundingRect( 0, 0 ) );
     _repaint( false );
 }
@@ -3311,16 +3298,12 @@ void Page::selectPrev()
 
     if ( view->kPresenterDoc()->numSelected() == 0 )
 	objectList()->at( objectList()->count() - 1 )->setSelected( true );
-    else
-    {
+    else {
 	int i = objectList()->findRef( view->kPresenterDoc()->getSelectedObj() );
-	if ( i > 0 )
-	{
+	if ( i > 0 ) {
 	    view->kPresenterDoc()->deSelectAllObj();
 	    objectList()->at( --i )->setSelected( true );
-	}
-	else
-	{
+	} else {
 	    view->kPresenterDoc()->deSelectAllObj();
 	    objectList()->at( objectList()->count() - 1 )->setSelected( true );
 	}
@@ -3457,8 +3440,7 @@ void Page::slotGotoPage()
     int pg = currPresPage;
     pg = KPGotoPage::gotoPage( slideList, pg, this );
 
-    if ( pg != static_cast<int>( currPresPage ) )
-    {
+    if ( pg != static_cast<int>( currPresPage ) ) {
 	currPresPage = pg;
 	slideListIterator = slideList.find( currPresPage );
 	editMode = false;
