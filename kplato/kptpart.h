@@ -58,6 +58,7 @@ public:
     virtual bool loadXML(QIODevice *, const QDomDocument &document);
     virtual QDomDocument saveXML();
 
+    bool saveOasis(KoStore*, KoXmlWriter*) { return false; }
     bool loadOasis(const QDomDocument &, KoOasisStyles &, const QDomDocument&, KoStore *) { return false; }
 
     void addCommand(KCommand * cmd, bool execute=true);
