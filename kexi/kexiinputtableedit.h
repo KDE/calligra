@@ -26,9 +26,9 @@
 class KexiInputTableEdit : public QLineEdit
 {
 	Q_OBJECT
-	
+
 	public:
-		KexiInputTableEdit(QVariant value, QVariant::Type type, QWidget *parent, const char *name=0);
+		KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov=QString::null, bool mark=false, QWidget *parent=0, const char *name=0);
 		~KexiInputTableEdit();
 
 		virtual QVariant value();
@@ -41,6 +41,9 @@ class KexiInputTableEdit : public QLineEdit
 		
 		QVariant::Type	m_type;
 		QVariant	m_value;
+
+		bool		m_calculatedCell;
+
 	signals:
 		void hintClicked();
 };

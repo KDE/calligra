@@ -738,6 +738,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		m_curRow = m_numRows-1;
 		break;
 
+    case Key_Shift:
+    		break;
+
 	#warning this needs work!
 	case Key_Return:
 		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
@@ -869,7 +872,7 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 
 		default:
 //			m_pEditor = new QLineEdit(val + addText, viewport(), "inPlaceEd");
-			m_pEditor = new KexiInputTableEdit(val, columnType(col), viewport(), "inPlaceEd");
+			m_pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd");
 			m_pEditor->end(false);
 			if(backspace)
 				m_pEditor->backspace();

@@ -24,12 +24,42 @@
 
 #include "kexiinputtableedit.h"
 
-KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QWidget *parent, const char *name)
+KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov, bool mark, QWidget *parent, const char *name)
  : QLineEdit(parent, name)
 {
 	m_type = type;
 	m_value = value;
-	setText(value.toString());
+//	setText(value.toString());
+	if(ov != QString::null)
+	{
+		switch(m_type)
+		{
+			case QVariant::Double:
+				if(ov == KGlobal::_locale->decimalSymbol() || ov == KGlobal::_locale->monetaryDecimalSymbol())
+					setText(ov);
+					
+			case QVariant::Int:
+				if(ov == KGlobal::_locale->negativeSign())
+					setText(ov);
+
+			case QVariant::UInt:
+				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
+					setText(ov); 
+					break;
+				
+				if(ov == "=")
+					m_calculatedCell = true;
+					setText(ov);
+					break;
+				
+
+				default:
+					setText(ov);
+					break;
+		}
+	}
+
+	m_calculatedCell = false;
 }
 
 void
@@ -45,7 +75,12 @@ KexiInputTableEdit::keyPressEvent(QKeyEvent *ev)
 				QLineEdit::keyPressEvent(ev);
 
 		case QVariant::UInt:
-			qDebug("KexiInputTableEdit::keyPressEvent() num field");
+			if(m_calculatedCell)
+			{
+				QLineEdit::keyPressEvent(ev);
+				break;
+			}
+			
 			switch(ev->key())
 			{
 				case Key_0:
@@ -58,7 +93,6 @@ KexiInputTableEdit::keyPressEvent(QKeyEvent *ev)
 				case Key_7:
 				case Key_8:
 				case Key_9:
-				case Key_Backspace:
 				case Key_Return:
 				case Key_Enter:
 				case Key_Insert:
@@ -73,14 +107,21 @@ KexiInputTableEdit::keyPressEvent(QKeyEvent *ev)
 				case Key_Down:
 				case Key_Prior:
 				case Key_Next:
+				case Key_Escape:
 					QLineEdit::keyPressEvent(ev);
 					break;
+				
+				case Key_Equal:
+					m_calculatedCell = true;
+					break;
+				
+				case Key_Backspace:
+					if(text() == "=")
+						m_calculatedCell = false;
+					QLineEdit::keyPressEvent(ev);
 
 				default:
-					if(ev->text() == KGlobal::_locale->thousandsSeparator())
-						QLineEdit::keyPressEvent(ev);
 					break;
-//					ev->accept();
 			}
 			
 			break;
@@ -102,15 +143,72 @@ KexiInputTableEdit::value()
 		case QVariant::Int:
 		case QVariant::Double:
 //			QString v;
-			qDebug("KexiInputTableEdit::value() converting => %s", text().latin1());
-			v = text().replace(QRegExp("\\" + KGlobal::_locale->thousandsSeparator()), "");
-			v = v.replace(QRegExp("\\" + KGlobal::_locale->decimalSymbol()), ".");
-			v = v.replace(QRegExp("\\" + KGlobal::_locale->negativeSign()), "-");
-			qDebug("KexiInputTableEdit::value() converting => %s", v.latin1());
-			return QVariant(v);
+			if(!m_calculatedCell)
+			{
+				qDebug("KexiInputTableEdit::value() converting => %s", text().latin1());
+				v = text().replace(QRegExp("\\" + KGlobal::_locale->thousandsSeparator()), "");
+				v = v.replace(QRegExp("\\" + KGlobal::_locale->decimalSymbol()), ".");
+				v = v.replace(QRegExp("\\" + KGlobal::_locale->negativeSign()), "-");
+				qDebug("KexiInputTableEdit::value() converting => %s", v.latin1());
+				return QVariant(v);
+			}
+			else
+			{
+				//ok here should the formula be parsed so, just feel like in perl :)
+				double result = 0;
+				QString real = text().right(text().length() - 1);
+				real = real.replace(QRegExp("\\" + KGlobal::_locale->thousandsSeparator()), "");
+				real = real.replace(QRegExp("\\" + KGlobal::_locale->decimalSymbol()), ".");
+//				qDebug("KexiInputTableEdit::value() calculating '%s'", real.latin1());
+				QStringList values = QStringList::split(QRegExp("[\+|\*|\/|-]"), real, false);
+				QStringList ops = QStringList::split(QRegExp("[0-9]{1,8}(?:\\.[0-9]+)?"), real, false);
+
+				double lastValue = 0;
+				QString lastOp = "";
+				for(int i=0; i < values.count(); i++)
+				{
+					double next;
+					
+					QString op = QString((*ops.at(i))).stripWhiteSpace();
+					
+					if((*values.at(i+1)) && i == 0)
+					{
+						double local = (*values.at(i)).toDouble();
+						next = (*values.at(i+1)).toDouble();
+
+						QString op = (*ops.at(i));
+						if(op == "+")
+							result = local + next;
+						else if(op == "-")
+							result = local - next;
+						else if(op == "*")
+							result = local * next;
+						else
+							result = local / next;
+					}
+					else if((*values.at(i+1)))
+					{
+						next = (*values.at(i+1)).toDouble();
+
+						QString op = QString((*ops.at(i))).stripWhiteSpace();
+						if(op == "+")
+							result = result + next;
+						else if(op == "-")
+							result = result - next;
+						else if(op == "*")
+							result = result * next;
+						else
+							result = result / next;	
+					}
+					
+				}
+				
+				return QVariant(result);
+				
+			}
+			break;
 		
 		default:
-			qDebug("KexiInputTableEdit::value()... not much"); 
 			return QVariant(text());
 	}
 //	return QVariant(0);

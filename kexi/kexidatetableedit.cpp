@@ -38,7 +38,7 @@
 #include "kexidatetableedit.h"
 
 KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *name)
-  : KexiInputTableEdit(v, QVariant::Date, parent, name)
+  : KexiInputTableEdit(v, QVariant::Date, QString::null, false, parent, name)
 {
 	m_data = v;
 	
