@@ -105,14 +105,16 @@ class KisView : public KoView
     void slotUpdateImage();
     void slotDocUpdated();
     void slotDocUpdated(const QRect&);
-    
+
     void slotSetKrayon(const KisKrayon *);
     void slotSetBrush(const KisBrush *);
     void slotSetPattern(const KisPattern *);
     void slotSetFGColor(const KisColor&);
     void slotSetBGColor(const KisColor&);
+    void slotSetPaintOffset();
 
     void slotTabSelected(const QString& name);
+
     void slotHalt();
     void slotGimp();
     
@@ -238,6 +240,7 @@ class KisView : public KoView
     virtual void resizeEvent( QResizeEvent* );
     virtual void updateReadWrite( bool readwrite );
 
+    void setupPixmap();
     void setupPainter();
     void setupCanvas();
     void setupSideBar();
@@ -257,6 +260,7 @@ class KisView : public KoView
 
     int 	xPaintOffset();
     int 	yPaintOffset();
+    
     int     xScrollOffset() { return m_pHorz->value(); }
     int     yScrollOffset() { return m_pVert->value(); }
     void    scrollTo( QPoint p );
@@ -269,7 +273,8 @@ class KisView : public KoView
     void	zoom_out( int x, int y );
     float   zoomFactor();
     void    setZoomFactor( float zf );
-          
+    QPixmap *pixmap() { return m_pPixmap; };
+             
  private:
 
     // import/export actions
@@ -327,10 +332,10 @@ class KisView : public KoView
     FillTool            *m_pFillTool;
     StampTool           *m_pStampTool;
     
-    const KisKrayon       *m_pKrayon;   // current krayon for this view   
-    const KisBrush        *m_pBrush;    // current brush for this view
-    const KisPattern      *m_pPattern;  // current for this view pattern
-    const KisImage        *m_pImage;    // current image for this view
+    const KisKrayon     *m_pKrayon;   // current krayon for this view   
+    const KisBrush      *m_pBrush;    // current brush for this view
+    const KisPattern    *m_pPattern;  // current for this view pattern
+    const KisImage      *m_pImage;    // current image for this view
 
     // sidebar dock widgets
     KisKrayonChooser     *m_pKrayonChooser;    
@@ -346,6 +351,7 @@ class KisView : public KoView
     GradientEditorDialog *m_pGradientEditorDialog;
 
     KisCanvas            *m_pCanvas;
+    QPixmap              *m_pPixmap;
     KisPainter           *m_pPainter;
     KisSideBar           *m_pSideBar;
     QScrollBar           *m_pHorz, *m_pVert;
@@ -358,6 +364,7 @@ class KisView : public KoView
     KHelpMenu            *m_helpMenu;
 
     float		         m_zoomFactor;
+    bool                 buttonIsDown;
 };
 
 #endif

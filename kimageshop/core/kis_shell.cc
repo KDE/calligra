@@ -37,12 +37,16 @@
 KisShell::KisShell( const char* name )
     : KoMainWindow( KisFactory::global(), name )
 {
+#if 0
     m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
 
     m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), 
         ID_STATUSBAR_INFOTEXT );
 
-    statusBarLabel()->setText(i18n("Krayon Status Bar"));    
+#endif
+    
+    statusBarLabel()->setText(i18n("Krayon Status Bar"));
+
 }
 
 
@@ -77,7 +81,7 @@ void KisShell::slotFileNew()
     else
     {
         if(!doc->slotNewImage())
-kdDebug(0) << "KisShell::slotFileNew() can't create new image" << endl;        
+            kdDebug(0) << "KisShell::slotFileNew() can't create new image" << endl;        
     }
 }
 
@@ -88,7 +92,7 @@ void KisShell::slotFileNewDocument()
     if(doc)
     {
         if(!doc->slotNewImage())
-kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;                
+            kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;                
     }
 }
 
@@ -100,7 +104,7 @@ void KisShell::slotFileAddNewImage()
     if(doc)
     {
         if(!doc->slotNewImage())
-kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;                        
+            kdDebug(0) << "KisShell::slotFileNewDocument() can't create new image" << endl;                        
     }
 }
 

@@ -35,8 +35,6 @@
 #include "kis_selection.h"
 #include "kis_framebuffer.h"
 
-class KisBrush;
-class KisSelection;
 class NewDialog;
 
 /*
@@ -98,6 +96,11 @@ public:
 	 * Remove img from our list and delete it.
 	 */
     void removeImage( KisImage *img );
+
+	/*
+	 * Return apointer to the current view.
+	 */
+    KisView* currentView();
 
 	/*
 	 * Return apointer to the current image.
@@ -175,7 +178,7 @@ public:
     void clearSelection();
 
     /*
-	 *  clear selection for document - 
+	 *  does the document have a selection ? 
 	 */    
     bool hasSelection();
     

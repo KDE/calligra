@@ -1,5 +1,5 @@
 /*
- *  kis_doc.cc - part of KImageShop
+ *  kis_doc.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
@@ -69,7 +69,7 @@
 #define KIS_DEBUG(AREA, CMD)
 
 /*
-    KisDoc - ko virtual method implemented
+    KisDoc - constructor ko virtual method implemented
 */
 
 KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
@@ -93,7 +93,7 @@ kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl;
 }
 
 /*
-    Init doc - ko virtual method implemented
+    initDoc - ko virtual method implemented
 */
 
 bool KisDoc::initDoc()
@@ -106,7 +106,6 @@ KisTimer::start();
     name.sprintf("image%d", m_Images.count() + 1);
     
     // choose dialog for open mode  
-
     QString templ;
     KoTemplateChooseDia::ReturnType ret;
 
@@ -118,7 +117,9 @@ KisTimer::start();
               "krayon_template");
 
     // create document from template - use default 
-    // 512x512 RGBA image
+    // 512x512 RGBA image util we have real templates
+    // however, this will never happen because KoTemplateChossDia
+    // returns false if there is no templae selected
     
     if (ret == KoTemplateChooseDia::Template) 
     {
@@ -153,7 +154,8 @@ KisTimer::start();
     } 
 
 KisTimer::stop("initDoc()");
-
+    
+    currentShell();
     return ok;    
 }
 
@@ -476,7 +478,8 @@ kdDebug(0) << "KisDoc::completeLoading() leaving" << endl;
 
 
 /*
-    Set current image - generic
+    setCurrentImage - using pointer to a KisImage - this is
+    normally done from the view.
 */
 
 void KisDoc::setCurrentImage(KisImage *img)
@@ -512,7 +515,7 @@ void KisDoc::setCurrentImage(KisImage *img)
 
 
 /*
-    Set current image by name
+    setCurrentImage - by name
 */
 
 void KisDoc::setCurrentImage(const QString& _name)
@@ -533,7 +536,7 @@ void KisDoc::setCurrentImage(const QString& _name)
 
 
 /*
-    rename an image - from menu or click on image tab
+    renameImage - from menu or click on image tab
 */
 
 void KisDoc::renameImage(QString & oldName, QString & newName)
@@ -555,7 +558,7 @@ void KisDoc::renameImage(QString & oldName, QString & newName)
 
 
 /*
-    build list of images by name
+    images - build list of images by name
 */
 
 QStringList KisDoc::images()
@@ -572,14 +575,36 @@ QStringList KisDoc::images()
     return lst;
 }
 
-
+/*
+    isEmpty - has no image.  This is not an error condition but
+    still need to be check occasionally for operations which 
+    require an image
+*/
 bool KisDoc::isEmpty()
 {
     if (m_pCurrent) return false;
     return true;
 }
 
+/*
+    currentView - pointer to current view for this doc
+*/
+KisView *KisDoc::currentView()
+{
+    KisView *v = 0L;
+    for( v = (KisView*)firstView(); v != 0L; v = (KisView*)nextView() )
+    {
+        // how to tell which of these is current?  too much encapsualtion!
+        //v->enableUndo( _b );
+    }
 
+    return v;
+}
+
+
+/*
+    currentImage - name of current image
+*/
 QString KisDoc::currentImage()
 {
     if (m_pCurrent) return m_pCurrent->name();
@@ -587,12 +612,22 @@ QString KisDoc::currentImage()
 }
 
 
+/*
+    current - pointer to current image
+*/
 KisImage* KisDoc::current()
 {
     return m_pCurrent;
 }
 
 
+/*
+    currentShell - pointer to current main window for doc
+    this seems the only way to access the status bar which
+    belongs to the KoMainWindow, not the view .  However, this
+    doesn't work.  Like so much else in koffice, it is perpetually
+    being redesigned and doesn't work, but uses lots of memory.
+*/
 KoMainWindow * KisDoc::currentShell()
 {
     int shellCount = 0;
@@ -661,7 +696,9 @@ KisDoc::~KisDoc()
     Note that only the current visible layer(s) will be saved
     usually one needs to merge all layers first, as with Gimp
     The format the image is saved in is determined solely by 
-    the file extension used.
+    the file extension used. (Although the name of the original
+    file, if any, should be the default along with its extension
+    and related image type).
     
     This will only save at the display depth of the hardware -
     often 16 bit.  To insure 32 bit images being exported, we
@@ -681,7 +718,8 @@ bool KisDoc::saveAsQtImage( QString file, bool wholeImage)
         w = current()->getCurrentLayer()->layerExtents().width();
         h = current()->getCurrentLayer()->layerExtents().height();
     }
-    else
+    // current layer only
+    else 
     {
         x = 0;
         y = 0;
@@ -722,10 +760,7 @@ bool KisDoc::saveAsQtImage( QString file, bool wholeImage)
 /*
     Copy a QImage exactly into the current image's active layer, 
     pixel by pixel using scanlines,  fully 32 bit even if the alpha 
-    channel isn't used. This provides a  basis for a clipboard buffer 
-    and a Krayon blit routine, with custom modifiers to blend, apply 
-    various filters and raster operations,  and many other neat 
-    effects.  -jwc-
+    channel isn't used. 
 */
 
 bool KisDoc::QtImageToLayer(QImage *qimg, KisView *pView)
@@ -1034,8 +1069,8 @@ void KisDoc::slotRemoveImage( const QString& _name )
 }
 
 /*
-    Create a new image for this document and set the current image to it
-    There can be more than one image for each doc
+    slotnewImage - Create a new image for this document and set the 
+    current image to it. There can be more than one image for each doc
 */
 
 bool KisDoc::slotNewImage()
@@ -1147,7 +1182,9 @@ KoView* KisDoc::createViewInstance( QWidget* parent, const char* name )
 
 
 /*
-    Create view shell or top level window for document
+    creatShell - Create view shell or top level window for document
+    The document can have more than one shell if there are multiple
+    views (not split) each with its own shell window
 */
 
 KoMainWindow* KisDoc::createShell()
@@ -1196,7 +1233,7 @@ void KisDoc::paintPixmap(QPainter *p, QRect area)
 */
 void KisDoc::slotImageUpdated()
 {
-    emit docUpdated();
+    // emit docUpdated();
 }
 
 /*

@@ -153,6 +153,9 @@ void KisImage::markDirty( QRect r )
 /*
     
 */
+
+#define TEST_PIXMAP_IMAGE
+
 void KisImage::slotUpdateTimeOut()
 {
     // if tile is dirty, 
@@ -167,7 +170,9 @@ void KisImage::slotUpdateTimeOut()
 	    if (m_dirty[y * m_xTiles + x])
 	    {
 	        m_dirty[y * m_xTiles + x] = false;
+#ifndef TEST_PIXMAP_IMAGE            
 		    emit updated(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
+#endif            
 	    }
 }
 

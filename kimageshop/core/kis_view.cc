@@ -1,5 +1,5 @@
 /*
- *  kis_view.cc - part of KImageShop
+ *  kis_view.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *                1999 Michael Koch    <koch@kde.org>
@@ -104,6 +104,7 @@
 #include <kdebug.h>
 #include "kis_timer.h"
 
+//#define TEST_PIXMAP
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
@@ -117,54 +118,43 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 
     QObject::connect( m_pDoc, SIGNAL( docUpdated( ) ),
                     this, SLOT( slotDocUpdated ( ) ) );
+                    
     QObject::connect( m_pDoc, SIGNAL( docUpdated( const QRect& ) ),
                     this, SLOT( slotDocUpdated ( const QRect& ) ) );
 
     m_fg = KisColor::black();
     m_bg = KisColor::white();
+    
+    buttonIsDown = false;
 
     m_pTool     = 0L;
     m_pBrush    = 0L;
     m_pPattern  = 0L;
-         
-    // this is the original configuration that works but tools
-    // need to be set up before canvas ? 
-    
+    m_pPixmap   = 0L;
+                 
     setupPainter();
-
     setupCanvas();
-
+#ifdef TEST_PIXMAP
+    setupPixmap();
+#endif    
     setupScrollBars();
-
     setupRulers();
-
     setupTabBar();
-
-KisTimer::start();    
     setupActions();
-KisTimer::stop("setupActions()");
-
     setupDialogs();
-
-KisTimer::start();
     setupSideBar();
-KisTimer::stop("setupSideBar()");    
-
-KisTimer::start();
     setupTools();
-KisTimer::stop("setupTools()");        
-
 }
 
 KisView::~KisView()
 {
+    if(m_pPixmap) delete m_pPixmap;
 }
 
 void KisView::setupPainter()
 {
     m_pPainter = new KisPainter(m_pDoc, this);
 }
-
 
 
 /*
@@ -190,7 +180,17 @@ void KisView::setupCanvas()
 
 
 /*
-    SideBar - has tabs for brushes, layers and channels
+    Canvas pixmap for offscreen paint device
+*/
+
+void KisView::setupPixmap()
+{
+    m_pPixmap = new QPixmap();
+}
+
+
+/*
+    SideBar - has tabs for brushes, layers, channels, etc.
 */
 
 void KisView::setupSideBar()
@@ -316,7 +316,7 @@ void KisView::setupRulers()
 }
 
 /*
-    TabBar for the image itself
+    TabBar for the image(s)
 */
 
 void KisView::setupTabBar()
@@ -349,10 +349,14 @@ void KisView::setupTabBar()
     QObject::connect( m_pTabLast, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollLast() ) );
 }
 
-
+/*
+    set up and create tools - possibly no need to create all these objects
+    until we first click on them - only create default tool to  start.
+*/
 void KisView::setupTools()
 {
     m_pZoomTool = new ZoomTool(this);
+    m_pMoveTool = new MoveTool(m_pDoc);
 
     m_pRectangularSelectTool = new RectangularSelectTool( m_pDoc, this, m_pCanvas );
     m_pPolygonalSelectTool = new PolygonalSelectTool( m_pDoc, this, m_pCanvas );
@@ -360,7 +364,6 @@ void KisView::setupTools()
     m_pContiguousSelectTool = new ContiguousSelectTool( m_pDoc, this, m_pCanvas );
 
     m_pPasteTool = new PasteTool( m_pDoc, this, m_pCanvas );
-    m_pMoveTool = new MoveTool(m_pDoc);
     m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
     m_pAirBrushTool = new AirBrushTool(m_pDoc, this, m_pBrush);
     m_pPenTool = new PenTool(m_pDoc, this, m_pCanvas, m_pBrush);
@@ -384,7 +387,7 @@ void KisView::setupTools()
 /*
     -jwc- todo: gradient dialog should be a tool options dialog 
     setupDialogs should be used for docking and undocking
-    tabbed widgets in the sidebar, which can also be dialog
+    tabbed widgets in the sidebar, which can also be dialogs
 */
 void KisView::setupDialogs()
 {
@@ -738,9 +741,9 @@ void KisView::setupActions()
         "edit", 0, this, SLOT( preferences() ),
         actionCollection(), "preferences");
 
-	// krayon box toolbar actions 
+	 // krayon box toolbar actions - these will be used only
+     // to dock and undock wideget in the krayon box
 
-      /*
       m_dialog_colors = new KToggleAction( i18n("&Colors"),
         "color_dialog", 0, this, SLOT( dialog_colors() ),
         actionCollection(), "colors_dialog");
@@ -764,7 +767,6 @@ void KisView::setupActions()
       m_dialog_channels = new KToggleAction( i18n("Channels"),
         "channel_dialog", 0, this, SLOT( dialog_channels() ),
         actionCollection(), "channels_dialog");
-     */
      
      // help actions - these are standard kde actions
 
@@ -796,14 +798,15 @@ void KisView::setupActions()
     m_tool_select_polygonal->setEnabled( false );
     m_tool_select_elliptical->setEnabled( false );
     m_tool_select_contiguous->setEnabled( false );
-    
 }
+
 
 void KisView::slotHalt()
 {
     KMessageBox::error(NULL, 
         "STOP! In the name of Love ...", "System Error", FALSE); 
 }
+
 
 void KisView::slotGimp()
 {
@@ -812,23 +815,40 @@ void KisView::slotGimp()
     // save current image, export to xcf, open in gimp - coming!
 }
 
+
 void KisView::slotTabSelected(const QString& name)
 {
     m_pDoc->setCurrentImage(name);
     resizeEvent(0L);
 }
 
+
 void KisView::showScrollBars()
 {
     resizeEvent(0L);
 }
 
+
+/*
+    resizeEvent - only via a QResizeEvent are things shown
+    in the view.  To start, nothing is shown.  The first
+    resize comes when the objects to be shown are created.
+*/
 void KisView::resizeEvent(QResizeEvent*)
 {
+    // sidebar width right or left side
     int rsideW = 0; 
     int lsideW = 0;
     
-    // show or hide sidebar - important!
+    // ruler thickness
+    int ruler = 20; 
+
+    // tab bar dimensions
+    int tbarOffset = 64; 
+    int tbarBtnH = 16;
+    int tbarBtnW = 16;
+    
+    // show or hide sidebar
     if(!m_pSideBar)
     {
         rsideW = 0;
@@ -857,8 +877,7 @@ void KisView::resizeEvent(QResizeEvent*)
     }        
     
     // sidebar geometry - only set if visible and NOT free floating
-    if (m_pSideBar 
-    && !m_float_side_bar->isChecked() && m_side_bar->isChecked())
+    if (m_pSideBar && !m_float_side_bar->isChecked() && m_side_bar->isChecked())
     {
         if(m_lsidebar->isChecked())
             m_pSideBar->setGeometry(0, 0, lsideW, height());
@@ -869,33 +888,49 @@ void KisView::resizeEvent(QResizeEvent*)
     }
     
     // ruler geometry
-    m_pHRuler->setGeometry(20 + lsideW, 0, width() - 20 - rsideW -lsideW, 20);
-    m_pVRuler->setGeometry( 0 + lsideW, 20, 20, height()-36);
+    m_pHRuler->setGeometry(ruler + lsideW, 0, 
+        width() - ruler - rsideW - lsideW, ruler);
+    m_pVRuler->setGeometry( 0 + lsideW, ruler, 
+        ruler, height() - (ruler + tbarBtnH));
 
     // tabbar control buttons
-    m_pTabFirst->setGeometry(0 + lsideW, height()-16, 16, 16);
+    m_pTabFirst->setGeometry(0 + lsideW, height() - tbarBtnH, 
+        tbarBtnW, tbarBtnH);
     m_pTabFirst->show();
     
-    m_pTabLeft->setGeometry(16 + lsideW, height()-16, 16, 16);
+    m_pTabLeft->setGeometry(tbarBtnW + lsideW, height() - tbarBtnH, 
+        tbarBtnW, tbarBtnH);
     m_pTabLeft->show();
     
-    m_pTabRight->setGeometry(32 + lsideW, height()-16, 16, 16);
+    m_pTabRight->setGeometry(2 * tbarBtnW + lsideW, height() - tbarBtnH, 
+        tbarBtnW, tbarBtnH);
     m_pTabRight->show();
     
-    m_pTabLast->setGeometry(48 + lsideW, height()-16, 16, 16);
+    m_pTabLast->setGeometry(3 * tbarBtnW + lsideW, height() - tbarBtnH, 
+        tbarBtnW, tbarBtnH);
     m_pTabLast->show();
 
     // KisView heigth/width - ruler heigth/width
-    int drawH = height() - 20 - 16;
-    int drawW = width() - 20 - lsideW - rsideW;
+    int drawH = height() - ruler - tbarBtnH;
+    int drawW = width() - ruler - lsideW - rsideW;
+
+    // doc width and height are exactly same as the
+    // current image's width and height
+    int docW = docWidth();    
     int docH = docHeight();
-    int docW = docWidth();
 
     // adjust for zoom scaling - the higher the scaling,
     // the larger the image in direct proportion
-    docH = (int)((zoomFactor()) * docH);
     docW = (int)((zoomFactor()) * docW);
+    docH = (int)((zoomFactor()) * docH);
     
+    // resize the pixmap for drawing zoomed doc content.
+    // this must be done *before* canvas is shown
+
+#ifdef TEST_PIXMAP
+    m_pPixmap->resize(drawW, drawH);
+#endif
+
     // scrollbar geometry
     
      // we need no scrollbars
@@ -906,64 +941,67 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pVert->setValue(0);
         m_pHorz->setValue(0);
 
-        m_pCanvas->setGeometry(20 + lsideW, 20, drawW, drawH);
+        m_pCanvas->setGeometry(ruler + lsideW, ruler, drawW, drawH);
         m_pCanvas->show();
 
-        m_pTabBar->setGeometry(64 + lsideW, height() - 16, 
-           width() - rsideW -lsideW - 64, 16);
+        m_pTabBar->setGeometry(tbarOffset + lsideW, height() - tbarBtnH, 
+           width() - rsideW - lsideW - tbarOffset, tbarBtnH);
         m_pTabBar->show();
     }
-    // we need a horizontal scrollbar
+    // we need a horizontal scrollbar only
     else if (docH <= drawH) 
     {
         m_pVert->hide();
         m_pVert->setValue(0);
 
         m_pHorz->setRange(0, docW - drawW);
-        m_pHorz->setGeometry(64 + lsideW + (width() - rsideW -lsideW - 64)/2, 
-            height() - 16, (width() - rsideW -lsideW - 64)/2, 16);
+        m_pHorz->setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset)/2, 
+            height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
         m_pHorz->show();
 
-        m_pCanvas->setGeometry(20 + lsideW, 20, drawW, drawH);
+        m_pCanvas->setGeometry(ruler + lsideW, ruler, drawW, drawH);
         m_pCanvas->show();
 
-        m_pTabBar->setGeometry(64 + lsideW, height() - 16 , 
-           (width() - rsideW - lsideW - 64)/2, 16);
+        m_pTabBar->setGeometry(tbarOffset + lsideW, height() - tbarBtnH, 
+           (width() - rsideW - lsideW - tbarOffset)/2, tbarBtnH);
         m_pTabBar->show();
     }
-    // we need a vertical scrollbar
+    // we need a vertical scrollbar only
     else if(docW <= drawW) 
     {
         m_pHorz->hide();
         m_pHorz->setValue(0);
 
         m_pVert->setRange(0, docH - drawH);
-        m_pVert->setGeometry(width() - 16 - rsideW, 20, 16, height()-36);
+        m_pVert->setGeometry(width() - tbarBtnW - rsideW, ruler, 
+            tbarBtnW, height() - (ruler + tbarBtnH));
         m_pVert->show();
       
-        m_pCanvas->setGeometry(20 + lsideW, 20, drawW-16, drawH);
+        m_pCanvas->setGeometry(ruler + lsideW, ruler, drawW - tbarBtnW, drawH);
         m_pCanvas->show();
        
-        m_pTabBar->setGeometry(64 + lsideW, height() - 16, 
-           width() - rsideW -lsideW - 64, 16);
+        m_pTabBar->setGeometry(tbarOffset + lsideW, height() - tbarBtnH, 
+           width() - rsideW -lsideW - tbarOffset, tbarBtnH);
         m_pTabBar->show();
     }
-    else // we need both scrollbars
+    // we need both scrollbars
+    else 
     {
         m_pVert->setRange(0, docH - drawH);
-        m_pVert->setGeometry(width() - 16 - rsideW, 20, 16, height() - 36);    
+        m_pVert->setGeometry(width() - tbarBtnW - rsideW, ruler, 
+            tbarBtnW, height() - (ruler + tbarBtnH));    
         m_pVert->show();
       
         m_pHorz->setRange(0, docW - drawW);
-        m_pHorz->setGeometry(64 + lsideW + (width() - rsideW -lsideW - 64)/2, 
-           height()-16, (width() - rsideW -lsideW - 64)/2, 16);
+        m_pHorz->setGeometry(tbarOffset + lsideW + (width() - rsideW -lsideW - tbarOffset)/2, 
+           height() - tbarBtnH, (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
         m_pHorz->show();
       
-        m_pCanvas->setGeometry(20 + lsideW, 20, drawW-16, drawH);
+        m_pCanvas->setGeometry(ruler + lsideW, ruler, drawW - tbarBtnW, drawH);
         m_pCanvas->show();
 
-        m_pTabBar->setGeometry(64 + lsideW, height() - 16 , 
-                (width() - rsideW -lsideW - 64)/2, 16);
+        m_pTabBar->setGeometry(tbarOffset + lsideW, height() - tbarBtnH, 
+                (width() - rsideW -lsideW - tbarOffset)/2, tbarBtnH);
         m_pTabBar->show();
     }
 
@@ -983,7 +1021,10 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pHRuler->setOffset(-xPaintOffset());
         
     m_pHRuler->show();    
-    m_pVRuler->show();    
+    m_pVRuler->show();
+    
+    //kdDebug() << "Canvas width: "   << m_pCanvas->width() 
+    //   << " Canvas Height: " << m_pCanvas->height() << endl;
 }
 
 
@@ -991,20 +1032,39 @@ void KisView::updateReadWrite( bool /*readwrite*/ )
 {
 }
 
+
+/* 
+    scrollH - This sends a paint event to canvas,
+    and it is handled in canvasGotPaintEvent().
+    How to repaint canvas while scrolling with a
+    high zoom factor ? Here we need some indicator
+    that the screen is being updated. 
+*/
 void KisView::scrollH(int)
 {
     m_pHRuler->setOffset(m_pHorz->value());
-    m_pCanvas->repaint();
+        m_pCanvas->repaint();
 }
 
-
+/* 
+    scrollV - This sends a paint event to canvas,
+    and it is handled in canvasGotPaintEvent()
+    How to repaint canvas while scrolling with a
+    high zoom factor ? Here we need some indicator
+    that the screen is being updated. 
+*/
 void KisView::scrollV(int)
 {
     m_pVRuler->setOffset(m_pVert->value());
-    m_pCanvas->repaint();
+        m_pCanvas->repaint();
 }
 
-
+/*
+    slotUpdateImage - a cheap hack to mark the
+    entire image dirty to force a repaint AND to
+    send a fake resize event to force the view to
+    show the scrollbars
+*/
 void KisView::slotUpdateImage()
 {
   KisImage* img = m_pDoc->current();
@@ -1016,80 +1076,64 @@ void KisView::slotUpdateImage()
   }   
 }
 
+
+/*
+    slotDocUpdated - response to a signal from 
+    the document that something has changed and that we
+    need to update the canvas -  no size of update area given, 
+    so show entire image (that portion which should be shown 
+    in canvas viewport).
+*/
 void KisView::slotDocUpdated()
 {
+    // kdDebug() << "slotDocUpdated()" << endl;
     m_pCanvas->repaint();
 }
 
-
+/*
+    slotDocUpdated - response to a signal from 
+    the document that something has changed and that we
+    need to update the canvas -  a definite update area 
+    is given, so only update that update rectangle.
+*/
 void KisView::slotDocUpdated(const QRect& rect)
 {
+    //kdDebug() << "slotDocUpdated(const QRect& rect)" << endl;
+
     KisImage* img = m_pDoc->current();
     if (!img) return;
 
-    QRect r = rect;
+    QRect ur = rect;
+    
+    ur = ur.intersect(img->imageExtents());
+    ur.setBottom(ur.bottom()+1);
+    ur.setRight(ur.right()+1);
 
-    r = r.intersect(img->imageExtents());
-    r.setBottom(r.bottom()+1);
-    r.setRight(r.right()+1);
-
-    int xt = xPaintOffset() + r.x() - m_pHorz->value();
-    int yt = yPaintOffset() + r.y() - m_pVert->value();
+    int xt = xPaintOffset() + ur.x() - m_pHorz->value();
+    int yt = yPaintOffset() + ur.y() - m_pVert->value();
 
     QPainter p;
-
     p.begin( m_pCanvas );
     p.scale( zoomFactor(), zoomFactor() ); 
     p.translate(xt, yt);
 
-    // let the document draw the image
-    koDocument()->paintEverything( p, r, FALSE, this );
+    // let the document draw the image 
+   
+    koDocument()->paintEverything( p, ur, FALSE, this );
     p.end();
 }
 
-void KisView::canvasGotMousePressEvent( QMouseEvent *e )
-{
-    QMouseEvent ev( QEvent::MouseButtonPress,
-        QPoint( e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value()),
-		        e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value())), 
-        e->globalPos(), e->button(), e->state() );
-
-    emit canvasMousePressEvent( &ev );
-}
-
-
-void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
-{
-    int x = e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value());
-    int y = e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value());
-
-    QMouseEvent ev( QEvent::MouseMove, QPoint(x, y), 
-        e->globalPos(), e->button(), e->state() );
-
-    emit canvasMouseMoveEvent( &ev );
-}
-
-
-void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
-{
-    QMouseEvent ev( QEvent::MouseButtonRelease, 
-        QPoint(e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value()),
-			   e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value())),
-        e->globalPos(), e->button(), e->state() );
-
-    emit canvasMouseReleaseEvent( &ev );
-}
-
-
 /*
-    update canvas regardless of paint event
+    updateCanvas - update canvas regardless of paint event
     for transferring offscreen imagePixmap updates
-    that do not generate paint events (how could they?)
-    to view screen or viewport - IMPORTANT
+    that do not generate paint events to view screen 
+    or viewport.
 */
 
 void KisView::updateCanvas( QRect & ur )
 {
+    //kdDebug() << "updateCanvas(QRect & ur)" << endl;
+
     KisImage* img = m_pDoc->current();
     if (!img)
     {
@@ -1105,20 +1149,34 @@ void KisView::updateCanvas( QRect & ur )
     QPainter p;
     p.begin( m_pCanvas);
 
-    // FIXME: Michael, you scale the whole image, 
-    // that makes it dog slow, scale just the area you need.
-    // John - this needs to be done in by creating an intermediate
-    // QPixmap the size of the viewport. 
     p.scale( zoomFactor(), zoomFactor() );
 
     // draw background
     p.eraseRect( 0, 0, xPaintOffset(), height() );
     p.eraseRect( xPaintOffset(), 0, width(), yPaintOffset() );
-    p.eraseRect( xPaintOffset(), yPaintOffset() + docHeight(), width(), height() );
-    p.eraseRect( xPaintOffset() + docWidth(), yPaintOffset(), width(), height() );
+    p.eraseRect( xPaintOffset(), yPaintOffset() + docHeight(), 
+        width(), height() );
+    p.eraseRect( xPaintOffset() + docWidth(), yPaintOffset(), 
+        width(), height() );
 
-    // draw the image
-    ur.moveBy( - xPaintOffset() + m_pHorz->value() , - yPaintOffset() + m_pVert->value());
+    // reduce size of update rectangle by inverse of zoom factor
+    // only do this at higher zooms because otherwise the overhead
+    // of this scaling isn't worth it. 
+        
+    if(zoomFactor() > 1.0)
+    {
+        int urW = ur.width();
+        int urH = ur.height();
+    
+        urW = (int)((float)(urW)/zoomFactor());
+        urH = (int)((float)(urH)/zoomFactor());
+    
+        ur.setWidth(urW);
+        ur.setHeight(urH);
+    }
+
+    ur.moveBy( - xPaintOffset() + m_pHorz->value(), 
+        - yPaintOffset() + m_pVert->value());
     ur = ur.intersect(img->imageExtents());
 
     ur.setBottom(ur.bottom()+1);
@@ -1144,6 +1202,8 @@ void KisView::updateCanvas( QRect & ur )
 
 void KisView::canvasGotPaintEvent( QPaintEvent*e )
 {
+    //kdDebug() << "canvasGotPaintEvent()" << endl;
+    
     KisImage* img = m_pDoc->current();
     if (!img)
     {
@@ -1155,22 +1215,49 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
         return;
     }
 
-    QPainter p;
     QRect ur = e->rect(); 
+   
+    QPainter p;
     p.begin( m_pCanvas );
-
-    /* FIXME: Michael, you scale the whole image, 
-    that makes it dog slow, scale just the are you need. */
     p.scale( zoomFactor(), zoomFactor() );
  
-    // draw background
+    // this has no effect so long as paint offsets are zero    
     p.eraseRect( 0, 0, xPaintOffset(), height() );
     p.eraseRect( xPaintOffset(), 0, width(), yPaintOffset() );
-    p.eraseRect( xPaintOffset(), yPaintOffset() + docHeight(), width(), height() );
-    p.eraseRect( xPaintOffset() + docWidth(), yPaintOffset(), width(), height() );
 
-    // draw the image
-    ur.moveBy( - xPaintOffset() + m_pHorz->value() , - yPaintOffset() + m_pVert->value());
+    // erase area to the right of canvas
+    p.eraseRect( xPaintOffset(), yPaintOffset() + docHeight(), 
+        width(), height() );
+
+    // erase area below the canvas
+    p.eraseRect( xPaintOffset() + docWidth(), yPaintOffset(), 
+        width(), height() );
+
+    // reduce size of update rectangle by inverse of zoom factor
+    // also reduce offset into image by same factor (1/zoomFactor())
+    // only do this at higher zooms because otherwise the overhead
+    // of this scaling isn't worth it. 
+        
+    if(zoomFactor() > 1.0)
+    {
+        int urL = ur.left();
+        int urT = ur.top();    
+        int urW = ur.width();
+        int urH = ur.height();
+    
+        urL = (int)((float)(urL)/zoomFactor());
+        urT = (int)((float)(urT)/zoomFactor());
+        urW = (int)((float)(urW)/zoomFactor());
+        urH = (int)((float)(urH)/zoomFactor());
+    
+        ur.setLeft(urL);
+        ur.setTop(urT);
+        ur.setWidth(urW);
+        ur.setHeight(urH);
+    }
+
+    ur.moveBy( - xPaintOffset() + m_pHorz->value(), 
+        - yPaintOffset() + m_pVert->value());
     ur = ur.intersect(img->imageExtents());
 
     ur.setBottom(ur.bottom()+1);
@@ -1188,18 +1275,71 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
 
     p.translate(xt, yt);
 
-    // ### This is the place where image is drawn to view ###
+    // This is the place where image is drawn to view 
 
     koDocument()->paintEverything( p, ur, FALSE, this );
     p.end();
 }
 
 
+/*
+    canvasGotMousePressEvent - just passes the signal on 
+    to the appropriate tool
+*/
+void KisView::canvasGotMousePressEvent( QMouseEvent *e )
+{
+    buttonIsDown = true;
+    
+    QMouseEvent ev( QEvent::MouseButtonPress,
+        QPoint( e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value()),
+		        e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value())), 
+        e->globalPos(), e->button(), e->state() );
+
+    emit canvasMousePressEvent( &ev );
+}
+
+
+/*
+    canvasGotMouseMoveEvent - just passes the signal on 
+    to the appropriate tool
+*/
+void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
+{
+    int x = e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value());
+    int y = e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value());
+
+    QMouseEvent ev( QEvent::MouseMove, QPoint(x, y), 
+        e->globalPos(), e->button(), e->state() );
+
+    emit canvasMouseMoveEvent( &ev );
+}
+
+/*
+    canvasGotMouseReleaseEvent - just passes the signal on 
+    to the appropriate tool
+*/
+void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
+{
+    buttonIsDown = false;
+
+    QMouseEvent ev( QEvent::MouseButtonRelease, 
+        QPoint(e->pos().x() - xPaintOffset() + (int)(zoomFactor() * m_pHorz->value()),
+			   e->pos().y() - yPaintOffset() + (int)(zoomFactor() * m_pVert->value())),
+        e->globalPos(), e->button(), e->state() );
+
+    emit canvasMouseReleaseEvent( &ev );
+}
+
+
+
 void KisView::activateTool(KisTool* t)
 {
     if (!t) return;
     
+    // remove the selection outline, if any
     if(m_pTool) m_pTool->clearOld();
+
+    // prevent old tool from receiving events from canvas
     if(m_pTool) QObject::disconnect(m_pTool);
 
     m_pTool = t;
@@ -1468,7 +1608,7 @@ void KisView::crop()
     // be handled by the framebuffer object, not the doc
     if(!m_pDoc->QtImageToLayer(&cImage, this))
     {
-         kdDebug(0) << "crop: can't load image into layer." << endl;        
+        kdDebug(0) << "crop: can't load image into layer." << endl;        
     }
 
     slotUpdateImage();
@@ -1496,8 +1636,9 @@ void KisView::unSelectAll()
     m_pDoc->clearSelection();
 }
 
+
 /*
- *      dialog action slots
+ *      Zooming
  */
 
 void KisView::zoom( int _x, int _y, float zf )
@@ -1597,9 +1738,9 @@ void KisView::updateToolbarButtons()
 }
 
 
-/*
+/*-------------------------------
     layer action slots
- */
+--------------------------------*/
 
 /* 
     Properties dialog for the current layer. 
@@ -1795,7 +1936,7 @@ void KisView::save_layer_as_image()
 
 void KisView::insert_layer_image(bool newImage)
 {
-    KURL url = KFileDialog::getOpenURL( getenv("HOME"),
+    KURL url = KFileDialog::getOpenURL( QString::null,
         KisUtil::readFilters(), 0, i18n("Image file for layer") );
 
     if( !url.isEmpty() )
@@ -1866,8 +2007,7 @@ void KisView::insert_layer_image(bool newImage)
         // a new image or just a new layer was created for it above.
         if(!m_pDoc->QtImageToLayer(&fileImage, this))
         {
-            kdDebug(0) 
-                << "inset_layer_image: Can't load image into layer." << endl;
+            kdDebug(0) << "inset_layer_image: Can't load image into layer." << endl;
         }
 
         slotUpdateImage();
@@ -1877,7 +2017,7 @@ void KisView::insert_layer_image(bool newImage)
 
 void KisView::save_layer_image(bool mergeLayers)
 {
-    KURL url = KFileDialog::getSaveURL( getenv("HOME"),
+    KURL url = KFileDialog::getSaveURL( QString::null,
         KisUtil::readFilters(), 0, i18n("Image file for layer") );
 
     if( !url.isEmpty() )
@@ -1895,6 +2035,7 @@ void KisView::save_layer_image(bool mergeLayers)
             kdDebug(0) << "Can't save doc as image" << endl;
     }
 }
+
 
 void KisView::layer_scale_smooth()
 {
@@ -1978,9 +2119,9 @@ void KisView::layer_mirrorY()
 
 }
 
-/*
- * image action slots
- */
+/*--------------------------
+    image action slots
+--------------------------*/
 
 void KisView::add_new_image_tab()
 {
@@ -2022,9 +2163,9 @@ void KisView::merge_linked_layers()
 }
 
 
-/*
- * misc action slots
- */
+/*------------------------------------
+  Preferences and configuration slots
+---------------------------------------*/
 
 void KisView::showMenubar()
 {
@@ -2060,61 +2201,65 @@ void KisView::showSidebar()
 void KisView::floatSidebar()
 {
     KFloatingDialog *f = (KFloatingDialog *)m_pSideBar;
+    f->setDocked(!m_float_side_bar->isChecked());
 
-    if (m_float_side_bar->isChecked())
-    {
-        f->setDocked(false);
-    }
-    else
-    {
-        f->setDocked(true);
-    } 
-    
     // force resize to show scrollbars, etc
     resizeEvent(0L);
 }
 
+/*
+    leftSidebar -this does nothing except force a resize to show scrollbars
+    Repositioning of sidebar is handled by resizeEvent() entirley
+*/
 void KisView::leftSidebar()
 {
-    if (m_lsidebar->isChecked())
-    {
-        kdDebug() << "Left sidebar is checked" << endl;
-    }
-    else
-    {
-        kdDebug() << "Left sidebar is unchecked" << endl;
-    } 
-    
-    // force resize to show scrollbars, etc
     resizeEvent(0L);
 }
 
+/*
+    saveOptions - here we need to write entries to a congig
+    file.
+*/
 void KisView::saveOptions()
 {
 }
 
 
+/*
+    preferences - the main Krayon preferences dialog - modeled
+    after the konqeror prefs dialog - quite nice compound dialog
+*/
 void KisView::preferences()
 {
     PreferencesDialog::editPreferences();
 }
 
 
+/*
+    docWidth - simply returns the width of the document which is
+    exactly the same as the width of the current image
+*/
 int KisView::docWidth()
 {
-    if (m_pDoc->current())
-	    return m_pDoc->current()->width();
-    else
-	    return 0;
+    if (m_pDoc->current()) return m_pDoc->current()->width();
+    else return 0;
 }
 
+/*
+    docHeight - simply returns the width of the document which is
+    exactly the same as the width of the current image
+*/
 
 int KisView::docHeight()
 {
-    if (m_pDoc->current())
-	    return m_pDoc->current()->height();
-    else
-	    return 0;
+    if (m_pDoc->current()) return m_pDoc->current()->height();
+    else return 0;
+}
+
+
+void KisView::slotSetPaintOffset()
+{
+    // dialog to set x and y paint offsets
 }
 
 
