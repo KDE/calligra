@@ -56,4 +56,5 @@ MAKE IT NICE:
 -	pass all dialogs a parent
 -	introduce centroid() for vpath. problem: CM for beziers?
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
+-	try to import gimps gradient format, even look to make it the default?
 
