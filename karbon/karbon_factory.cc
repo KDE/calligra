@@ -18,21 +18,23 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <kaboutdata.h>
-#include <kinstance.h>
 #include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kinstance.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
+#include "karbon_resourceserver.h"
 
 #include <kdebug.h>
 
-#include "karbon_resourceserver.h"
 
 KarbonResourceServer* KarbonFactory::s_rserver = 0;
+
 
 extern "C"
 {
@@ -46,7 +48,7 @@ KInstance* KarbonFactory::s_instance = 0L;
 KAboutData* KarbonFactory::s_aboutData = 0L;
 
 KarbonFactory::KarbonFactory( QObject* parent, const char* name )
-	: KoFactory( parent, name )
+		: KoFactory( parent, name )
 {
 	instance();
 }
@@ -63,20 +65,20 @@ KarbonFactory::~KarbonFactory()
 
 KParts::Part*
 KarbonFactory::createPartObject( QWidget* parentWidget, const char* widgetName,
-	QObject* parent, const char* name, const char* classname, const QStringList& )
+								 QObject* parent, const char* name, const char* classname, const QStringList& )
 {
 	// If classname is "KoDocument", our host is a koffice application
 	// otherwise, the host wants us as a simple part, so switch to readonly and
- 	// single view.
+	// single view.
 	bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
 	// parentWidget and widgetName are used by KoDocument for the
- 	// "readonly+singleView" case.
+	// "readonly+singleView" case.
 	KarbonPart* part =
 		new KarbonPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
-	if ( !bWantKoDocument )
-	  part->setReadWrite( false );
+	if( !bWantKoDocument )
+		part->setReadWrite( false );
 
 	return part;
 }
@@ -84,17 +86,17 @@ KarbonFactory::createPartObject( QWidget* parentWidget, const char* widgetName,
 KAboutData*
 KarbonFactory::aboutData()
 {
-	if ( !s_aboutData )
+	if( !s_aboutData )
 	{
 		s_aboutData = new KAboutData(
-			"karbon",
-			I18N_NOOP( "Karbon14" ),
-			"0.0.1",
-			I18N_NOOP( "Yet another vector graphics application." ),
-			KAboutData::License_GPL,
-			I18N_NOOP( "(c) 2001, 2002 The Karbon Developers" ),
-			I18N_NOOP( "You are invited to participate in any way." ),
-			I18N_NOOP( "http://www.xs4all.nl/~rwlbuis/karbon/" ) );
+						  "karbon",
+						  I18N_NOOP( "Karbon14" ),
+						  "0.0.1",
+						  I18N_NOOP( "Yet another vector graphics application." ),
+						  KAboutData::License_GPL,
+						  I18N_NOOP( "(c) 2001, 2002 The Karbon Developers" ),
+						  I18N_NOOP( "You are invited to participate in any way." ),
+						  I18N_NOOP( "http://www.xs4all.nl/~rwlbuis/karbon/" ) );
 		s_aboutData->addAuthor(
 			"Lennart Kudling",
 			0,
@@ -115,15 +117,16 @@ KarbonFactory::aboutData()
 			0,
 			"benoit.vautrin@free.fr",
 			0 );
-// TODO: add the names of some helpfull souls
+		// TODO: add the names of some helpfull souls
 	}
+
 	return s_aboutData;
 }
 
 KInstance*
 KarbonFactory::instance()
 {
-	if ( !s_instance )
+	if( !s_instance )
 	{
 		s_instance = new KInstance( aboutData() );
 		// Add any application-specific resource directories here
@@ -131,18 +134,19 @@ KarbonFactory::instance()
 		// Tell the iconloader about share/apps/koffice/icons
 		s_instance->iconLoader()->addAppDir( "koffice" );
 
-		s_instance->dirs()->addResourceType("kis_brushes",
-						            KStandardDirs::kde_default("data") + "krita/brushes/");
+		s_instance->dirs()->addResourceType( "kis_brushes",
+											  KStandardDirs::kde_default( "data" ) + "krita/brushes/" );
 
-		s_instance->dirs()->addResourceType("kis_pattern",
-						            KStandardDirs::kde_default("data") + "krita/patterns/");
+		s_instance->dirs()->addResourceType( "kis_pattern",
+											  KStandardDirs::kde_default( "data" ) + "krita/patterns/" );
 
-		s_instance->dirs()->addResourceType("karbon_gradient",
-						            KStandardDirs::kde_default("data") + "karbon/gradients/");
+		s_instance->dirs()->addResourceType( "karbon_gradient",
+											  KStandardDirs::kde_default( "data" ) + "karbon/gradients/" );
 
-		s_instance->dirs()->addResourceType("karbon_clipart",
-						            KStandardDirs::kde_default("data") + "karbon/cliparts/");
+		s_instance->dirs()->addResourceType( "karbon_clipart",
+											  KStandardDirs::kde_default( "data" ) + "karbon/cliparts/" );
 	}
+
 	return s_instance;
 }
 
@@ -150,7 +154,9 @@ KarbonResourceServer *KarbonFactory::rServer()
 {
 	if( !s_rserver )
 		s_rserver = new KarbonResourceServer;
+
 	return s_rserver;
 }
 
 #include "karbon_factory.moc"
+

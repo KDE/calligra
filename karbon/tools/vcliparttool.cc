@@ -18,26 +18,28 @@
    Boston, MA 02111-1307, USA.
 */
 
+
+#include <qcursor.h>
+#include <qfileinfo.h>
+#include <qhbuttongroup.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
-#include <qhbuttongroup.h>
-#include <qfileinfo.h>
-#include <qlabel.h>
-#include <qcursor.h>
 
-#include <kiconloader.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include "karbon_factory.h"
+#include "karbon_part.h"
 #include "karbon_resourceserver.h"
 #include "karbon_view.h"
-#include "karbon_part.h"
-#include "vobject.h"
-#include "vkopainter.h"
-#include "vpainterfactory.h"
 #include "vcliparttool.h"
 #include "vdocument.h"
+#include "vkopainter.h"
+#include "vobject.h"
+#include "vpainterfactory.h"
 #include "vselection.h"
+
 
 VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double height, QString filename )
 		: m_filename( filename ), m_width( width ), m_height( height )
@@ -65,32 +67,32 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 	validThumb = true;
 
 	m_delete = QFileInfo( filename ).isWritable();
-} // VClipartIconItem::VClipartIconItem
+}
 
 
 VClipartIconItem::VClipartIconItem( const VClipartIconItem& item )
 		: KoIconItem( item )
 {
-	m_clipart     = item.m_clipart->clone();
-	m_filename    = item.m_filename;
-	m_delete      = item.m_delete;
-	m_pixmap      = item.m_pixmap;
+	m_clipart = item.m_clipart->clone();
+	m_filename = item.m_filename;
+	m_delete = item.m_delete;
+	m_pixmap = item.m_pixmap;
 	m_thumbPixmap = item.m_thumbPixmap;
-	validPixmap   = item.validPixmap;
-	validThumb    = item.validThumb;
-	m_width       = item.m_width;
-	m_height      = item.m_height;
-} // VClipartIconItem::VClipartIconItem
+	validPixmap = item.validPixmap;
+	validThumb = item.validThumb;
+	m_width = item.m_width;
+	m_height = item.m_height;
+}
 
 VClipartIconItem::~VClipartIconItem()
 {
 	delete m_clipart;
-} // VClipartIconItem::~VClipartIconItem
+}
 
 VClipartIconItem* VClipartIconItem::clone()
 {
 	return new VClipartIconItem( *this );
-} // VClipartIconItem::clone
+}
 
 VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent )
 		: QFrame( parent ), m_view( view )
@@ -122,104 +124,121 @@ VClipartWidget::VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, Karbon
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 	//connect( m_deleteClipartButton, SIGNAL( clicked() ), this, SLOT( deleteClipart() ) );
 	connect( m_clipartChooser, SIGNAL( selected( KoIconItem* ) ), this, SLOT( clipartSelected( KoIconItem* ) ) );
-	
+
 	m_clipartChooser->setAutoDelete( false );
 	VClipartIconItem* item = 0L;
+
 	for( item = clipartItems->first(); item; item = clipartItems->next() )
 		m_clipartChooser->addItem( item );
+
 	m_clipartItem = clipartItems->first()->clone();
-} // VClipartWidget::VClipartWidget
+}
 
 VClipartWidget::~VClipartWidget()
 {
-} // VClipartWidget::~VClipartWidget
+}
 
 VClipartIconItem* VClipartWidget::selectedClipart()
 {
 	return m_clipartItem;
-} // VClipartWidget::selectedItem
+}
 
-void VClipartWidget::clipartSelected( KoIconItem* item )
+void
+VClipartWidget::clipartSelected( KoIconItem* item )
 {
-	if ( item )
+	if( item )
 	{
 		delete m_clipartItem;
-		VClipartIconItem* clipartItem = (VClipartIconItem*)item;
+		VClipartIconItem* clipartItem = ( VClipartIconItem* ) item;
 		m_deleteClipartButton->setEnabled( clipartItem->canDelete() );
 		m_selectedItem = clipartItem;
-		m_clipartItem  = clipartItem->clone();
+		m_clipartItem = clipartItem->clone();
 	}
-} // VClipartWidget::clipartSelected
+}
 
-void VClipartWidget::addClipart()
+void
+VClipartWidget::addClipart()
 {
 	VObject* clipart = 0L;
 	VSelection* selection = m_view->part()->document().selection();
-	if ( selection->objects().count() == 1 )
+
+	if( selection->objects().count() == 1 )
 		clipart = selection->objects().getFirst()->clone();
-	if ( selection->objects().count() > 1 )
+
+	if( selection->objects().count() > 1 )
 	{
 		QPtrVector<VObject> objects;
 		selection->objects().toVector( &objects );
 		VGroup* group = new VGroup( 0L );
+
 		for( unsigned int i = 0; i < objects.count(); i++ )
-			group->append( objects[i]->clone() );
+			group->append( objects[ i ]->clone() );
+
 		clipart = group;
 	}
-	if ( clipart )
+
+	if( clipart )
 	{
 		KoRect clipartBox = clipart->boundingBox();
 		double scaleFactor = 1. / QMAX( clipartBox.width(), clipartBox.height() );
 		QWMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
 		clipart->transform( trMatrix );
-		 // center the clipart
+		// center the clipart
 		trMatrix.reset();
 		double size = QMAX( clipart->boundingBox().width(), clipart->boundingBox().height() );
 		trMatrix.translate( ( size - clipart->boundingBox().width() ) / 2, ( size - clipart->boundingBox().height() ) / 2 );
 		clipart->transform( trMatrix );
-		 // remove Y-mirroring
+		// remove Y-mirroring
 		trMatrix.reset();
 		trMatrix.scale( 1, -1 );
 		trMatrix.translate( 0, -1 );
 		clipart->transform( trMatrix );
 		m_clipartChooser->addItem( KarbonFactory::rServer()->addClipart( clipart, clipartBox.width(), clipartBox.height() ) );
 	}
-	m_clipartChooser->updateContents();
-} // VClipartWidget::addClipart
 
-void VClipartWidget::deleteClipart()
+	m_clipartChooser->updateContents();
+}
+
+void
+VClipartWidget::deleteClipart()
 {
 	VClipartIconItem* clipartItem = m_clipartItem;
 	KarbonFactory::rServer()->removeClipart( clipartItem );
 	m_clipartChooser->removeItem( m_selectedItem );
 	m_clipartChooser->updateContents();
-} // VClipartWidget::deleteClipart
+}
 
-void VClipartWidget::slotButtonClicked( int id )
+void
+VClipartWidget::slotButtonClicked( int id )
 {
 	switch( id )
 	{
-		case 0: addClipart();
-				break;
-		case 1: //importClipart();
-				break;
-		case 2: deleteClipart();
-				break;
-	} 
-} // VClipartWidget::slotButtonClicked
+		case 0:
+			addClipart();
+			break;
+
+		case 1:  //importClipart();
+			break;
+
+		case 2:
+			deleteClipart();
+			break;
+	}
+}
 
 VClipartTool::VClipartTool( KarbonView* view )
 		: VTool( view )
 {
 	m_optionsWidget = new VClipartWidget( KarbonFactory::rServer()->cliparts(), view );
-} // VClipartTool::VClipartTool
+}
 
 VClipartTool::~VClipartTool()
 {
 	delete m_optionsWidget;
-} // VClipartTool::~VClipartTool
+}
 
-QString VClipartTool::contextHelp()
+QString
+VClipartTool::contextHelp()
 {
 	QString s = "<qt><b>Clipart tool:</b><br>";
 	s += "Choose the clipart in the options docker.<br>";
@@ -228,17 +247,19 @@ QString VClipartTool::contextHelp()
 	s += "While dragging press<br> - <i>SHIFT</i> to place the clipart using the original height/width ratio of the clipart,<br>";
 	s += " - <i>CTRL</i> to make it centered.</qt>";
 	return s;
-} // VClipartTool::contextHelp
+}
 
-void VClipartTool::activate()
+void
+VClipartTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Clipart Tool" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-} // VClipartTool::activate
+}
 
-void VClipartTool::draw()
+void
+VClipartTool::draw()
 {
-	if ( ( m_clipart ) && ( m_bottomright.x() - m_topleft.x() != 0 ) && ( m_bottomright.y() - m_topleft.y() != 0 ) )
+	if( ( m_clipart ) && ( m_bottomright.x() - m_topleft.x() != 0 ) && ( m_bottomright.y() - m_topleft.y() != 0 ) )
 	{
 		VPainter* painter = view()->painterFactory()->editpainter();
 		view()->canvasWidget()->setYMirroring( true );
@@ -250,9 +271,10 @@ void VClipartTool::draw()
 		m_clipart->draw( painter, &m_clipart->boundingBox() );
 		m_clipart->transform( mat.invert() );
 	}
-} // VClipartTool::draw
+}
 
-void VClipartTool::mouseButtonPress()
+void
+VClipartTool::mouseButtonPress()
 {
 	m_keepRatio = false;
 
@@ -261,46 +283,50 @@ void VClipartTool::mouseButtonPress()
 	m_clipart->setState( VObject::edit );
 
 	m_topleft = m_bottomright = last();
-	
-	draw();
-} // VClipartTool::mouseButtonPress
 
-void VClipartTool::mouseButtonRelease()
+	draw();
+}
+
+void
+VClipartTool::mouseButtonRelease()
 {
 	double s = QMAX( m_optionsWidget->selectedClipart()->originalWidth(), m_optionsWidget->selectedClipart()->originalHeight() );
-	if ( m_clipart )
+
+	if( m_clipart )
 	{
 		QWMatrix mat( s, 0, 0, -s, first().x() - ( s / 2 ), first().y() + ( s / 2 ) );
 		m_clipart->transform( mat );
 		VClipartCmd* cmd = new VClipartCmd(
-			&view()->part()->document(),
-			name(),
-			m_clipart );
+							   &view()->part()->document(),
+							   name(),
+							   m_clipart );
 
 		view()->part()->addCommand( cmd, true );
 		view()->selectionChanged();
 
 		delete m_clipart;
 	}
-} // VClipartTool::mouseButtonRelease
+}
 
-void VClipartTool::mouseDrag()
+void
+VClipartTool::mouseDrag()
 {
-	if ( m_clipart )
+	if( m_clipart )
 	{
 		draw();
 
 		double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
-		if ( m_centered )
-			if ( m_keepRatio )
+
+		if( m_centered )
+			if( m_keepRatio )
 				m_topleft.setCoords( first().x() - s, first().y() + s );
 			else
 				m_topleft.setCoords( first().x() - ( last().x() - first().x() ), first().y() + ( first().y() - last().y() ) );
-		else 
+		else
 			m_topleft = first();
 
-		if ( m_keepRatio )
-			if ( m_centered )
+		if( m_keepRatio )
+			if( m_centered )
 				m_bottomright.setCoords( m_topleft.x() + s * 2, m_topleft.y() - s * 2 );
 			else
 				m_bottomright.setCoords( m_topleft.x() + s, m_topleft.y() - s );
@@ -309,23 +335,25 @@ void VClipartTool::mouseDrag()
 
 		draw();
 	}
-} // VClipartTool::mouseDrag
+}
 
-void VClipartTool::mouseDragRelease()
+void
+VClipartTool::mouseDragRelease()
 {
-	if ( m_clipart )
+	if( m_clipart )
 	{
 		double s = QMAX( last().x() - first().x(), -last().y() + first().y() );
-		if ( m_centered )
-			if ( m_keepRatio )
+
+		if( m_centered )
+			if( m_keepRatio )
 				m_topleft.setCoords( first().x() - s, first().y() + s );
 			else
 				m_topleft.setCoords( first().x() - ( last().x() - first().x() ), first().y() + ( first().y() - last().y() ) );
 		else
 			m_topleft = first();
 
-		if ( m_keepRatio )
-			if ( m_centered )
+		if( m_keepRatio )
+			if( m_centered )
 				m_bottomright.setCoords( m_topleft.x() + s * 2, m_topleft.y() - s * 2 );
 			else
 				m_bottomright.setCoords( m_topleft.x() + s, m_topleft.y() - s );
@@ -333,52 +361,61 @@ void VClipartTool::mouseDragRelease()
 			m_bottomright = last();
 
 		QWMatrix mat( m_bottomright.x() - m_topleft.x(), 0, 0, m_bottomright.y() - m_topleft.y(), m_topleft.x(), m_topleft.y() );
+
 		m_clipart->transform( mat );
+
 		VClipartCmd* cmd = new VClipartCmd(
-			&view()->part()->document(),
-			name(),
-			m_clipart );
+							   &view()->part()->document(),
+							   name(),
+							   m_clipart );
 
 		view()->part()->addCommand( cmd, true );
+
 		view()->selectionChanged();
 
 		delete m_clipart;
 	}
-} // VClipartTool::mouseDragRelease
+}
 
-void VClipartTool::mouseDragShiftPressed()
+void
+VClipartTool::mouseDragShiftPressed()
 {
 	m_keepRatio = true;
-} // VClipartTool::mouseDragShiftPressed
+}
 
-void VClipartTool::mouseDragShiftReleased()
+void
+VClipartTool::mouseDragShiftReleased()
 {
 	m_keepRatio = false;
-} // VClipartTool::mouseDragShiftReleased
+}
 
-void VClipartTool::mouseDragCtrlPressed()
+void
+VClipartTool::mouseDragCtrlPressed()
 {
 	m_centered = true;
-} // VClipartTool::mouseDragCtrlPressed
+}
 
-void VClipartTool::mouseDragCtrlReleased()
+void
+VClipartTool::mouseDragCtrlReleased()
 {
 	m_centered = false;
-} // VClipartTool::mouseDragCtrlReleased
+}
 
-void VClipartTool::cancel()
+void
+VClipartTool::cancel()
 {
 	draw();
-	
+
 	delete m_clipart;
-} // VClipartTool::cancel
+}
 
 VClipartTool::VClipartCmd::VClipartCmd( VDocument* doc, const QString& name, VObject* clipart )
 		: VCommand( doc, name ), m_clipart( clipart->clone() ), m_executed( false )
 {
-} // VClipartTool::VClipartCmd::VClipartCmd
+}
 
-void VClipartTool::VClipartCmd::execute()
+void
+VClipartTool::VClipartCmd::execute()
 {
 	if( !m_clipart )
 		return;
@@ -392,18 +429,22 @@ void VClipartTool::VClipartCmd::execute()
 		document()->selection()->clear();
 		document()->selection()->append( m_clipart );
 	}
-	m_executed = true;
-} // VClipartTool::VClipartCmd::execute
 
-void VClipartTool::VClipartCmd::unexecute()
+	m_executed = true;
+}
+
+void
+VClipartTool::VClipartCmd::unexecute()
 {
 	if( !m_clipart )
 		return;
 
 	document()->selection()->take( *m_clipart );
+
 	m_clipart->setState( VObject::deleted );
-	
+
 	m_executed = false;
-} // VClipartTool::VClipartCmd::unexecute
+}
 
 #include "vcliparttool.moc"
+

@@ -17,29 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef VLAYER_IFACE_H
-#define VLAYER_IFACE_H
+#ifndef __VLAYER_IFACE_H__
+#define __VLAYER_IFACE_H__
 
-#include <dcopref.h>
-#include <dcopobject.h>
+
 #include <qstring.h>
 
+#include <dcopobject.h>
+#include <dcopref.h>
+
 class VLayer;
+
 
 class VLayerIface : public DCOPObject
 {
 	K_DCOP
-public:
-	VLayerIface( VLayer *layer_ );
-k_dcop:
-    void setName( const QString& name ) ;
-    QString name() const;
 
-    void setSelected( bool state );
-    bool selected()const;
+public:
+	VLayerIface( VLayer* layer );
+
+k_dcop:
+	void setName( const QString& name );
+	QString name() const;
+
+	void setSelected( bool state );
+	bool selected() const;
 
 private:
-	VLayer *m_layer;
+	VLayer* m_layer;
 };
 
 #endif
+

@@ -16,11 +16,11 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-
 */
 
-#ifndef _VTEXTTOOL_H_
-#define _VTEXTTOOL_H_
+#ifndef __VTEXTTOOL_H__
+#define __VTEXTTOOL_H__
+
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -30,215 +30,239 @@
 #include "qgroupbox.h"
 
 #include "vcommand.h"
-#include "vtool.h"
 #include "vtext.h"
+#include "vtool.h"
 
 class KarbonView;
-class QPushButton;
 class KFontCombo;
 class KIntNumInput;
 class QCheckBox;
 class QLineEdit;
-class VTextTool;
+class QPushButton;
 class QTabWidget;
-
 class ShadowWidget;
+class VTextTool;
+
 
 class ShadowPreview : public QWidget
 {
 	Q_OBJECT
-	
-	public:
-		ShadowPreview( ShadowWidget* parent  );
-		~ShadowPreview();
 
-	signals:
-		void changed( int angle, int distance, bool );
+public:
+	ShadowPreview( ShadowWidget* parent );
+	~ShadowPreview();
 
-	protected:
-		virtual void mouseReleaseEvent( QMouseEvent* );
-		virtual void paintEvent( QPaintEvent* );
+signals:
+	void changed( int angle, int distance, bool );
 
-	private:
-		ShadowWidget*   m_parent;
-}; // ShadowPreview
+protected:
+	virtual void mouseReleaseEvent( QMouseEvent* );
+	virtual void paintEvent( QPaintEvent* );
+
+private:
+	ShadowWidget* m_parent;
+};
+
 
 class ShadowWidget : public QGroupBox
 {
 	Q_OBJECT
-	
-	public:
-		ShadowWidget( QWidget* parent, const char* name, int angle, int distance, bool translucent );
-		~ShadowWidget();
-		
-		void setUseShadow( bool use );
-		bool useShadow();
-		void setShadowAngle( int angle );
-		int shadowAngle();
-		void setShadowDistance( int distance );
-		int shadowDistance();
-		void setTranslucent( bool translucent );
-		bool isTranslucent();
 
-	public slots:
-		void setShadowValues( int angle, int distance, bool translucent );
-		void updatePreview( int );
-		void updatePreview();
+public:
+	ShadowWidget( QWidget* parent, const char* name, int angle, int distance, bool translucent );
+	~ShadowWidget();
 
-	protected:
-		QCheckBox*     m_useShadow;
-		KIntNumInput*  m_angle;
-		KIntNumInput*  m_distance;
-		QCheckBox*     m_translucent;
-		ShadowPreview* m_preview;
-}; // ShadowWidget
+	void setUseShadow( bool use );
+	bool useShadow();
+	void setShadowAngle( int angle );
+	int shadowAngle();
+	void setShadowDistance( int distance );
+	int shadowDistance();
+	void setTranslucent( bool translucent );
+	bool isTranslucent();
+
+public slots:
+	void setShadowValues( int angle, int distance, bool translucent );
+	void updatePreview( int );
+	void updatePreview();
+
+protected:
+	QCheckBox* m_useShadow;
+	KIntNumInput* m_angle;
+	KIntNumInput* m_distance;
+	QCheckBox* m_translucent;
+	ShadowPreview* m_preview;
+};
+
 
 class VTextOptionsWidget : public QFrame
 {
 	Q_OBJECT
 
-	public:
-		VTextOptionsWidget( VTextTool* tool, QWidget* parent = 0L );
-		~VTextOptionsWidget();
+public:
+	VTextOptionsWidget( VTextTool* tool, QWidget* parent = 0L );
+	~VTextOptionsWidget();
 
-		void setFont( const QFont& font );
-		QFont font();
-		void setText( const QString& text );
-		QString text();
-		void setPosition( VText::Position position );
-		VText::Position position();
-		void setAlignment( VText::Alignment alignment );
-		VText::Alignment alignment();
-		void setUseShadow( bool state );
-		bool useShadow();
-		void setShadow( int angle, int distance, bool translucent );
-		bool translucentShadow();
-		int shadowAngle();
-		int shadowDistance();
+	void setFont( const QFont& font );
+	QFont font();
+	void setText( const QString& text );
+	QString text();
+	void setPosition( VText::Position position );
+	VText::Position position();
+	void setAlignment( VText::Alignment alignment );
+	VText::Alignment alignment();
+	void setUseShadow( bool state );
+	bool useShadow();
+	void setShadow( int angle, int distance, bool translucent );
+	bool translucentShadow();
+	int shadowAngle();
+	int shadowDistance();
 
-	public slots:
-		void valueChanged( int );
-		void accept();
-		void textChanged( const QString& );
-		void editBasePath();
-		void convertToShapes();
+public slots:
+	void valueChanged( int );
+	void accept();
+	void textChanged( const QString& );
+	void editBasePath();
+	void convertToShapes();
 
-	protected:
-		QTabWidget*   m_tabWidget;
-		KFontCombo*   m_fontCombo;
-		QCheckBox*    m_boldCheck;
-		QCheckBox*    m_italicCheck;
-		KIntNumInput* m_fontSize;
-		QLineEdit*    m_textEditor;
-		ShadowWidget* m_shadow;
-		QComboBox*    m_textAlignment;
-		QComboBox*    m_textPosition;
-		QPushButton*  m_editBasePath;
-		QPushButton*  m_convertToShapes;
-		
-		VTextTool*    m_tool;
-}; // VTextOptionsWidget
+protected:
+	QTabWidget* m_tabWidget;
+	KFontCombo* m_fontCombo;
+	QCheckBox* m_boldCheck;
+	QCheckBox* m_italicCheck;
+	KIntNumInput* m_fontSize;
+	QLineEdit* m_textEditor;
+	ShadowWidget* m_shadow;
+	QComboBox* m_textAlignment;
+	QComboBox* m_textPosition;
+	QPushButton* m_editBasePath;
+	QPushButton* m_convertToShapes;
+
+	VTextTool* m_tool;
+};
+
 
 class VTextTool : public VTool, public VVisitor
 {
+public:
+	VTextTool( KarbonView* view );
+	~VTextTool();
+
+	virtual QString name()
+	{
+		return i18n( "Text tool" );
+	}
+
+	virtual QString contextHelp();
+	virtual QWidget* optionsWidget()
+	{
+		return m_optionsWidget;
+	}
+
+	virtual void activate();
+	virtual void deactivate();
+
+	virtual void mouseButtonPress();
+	virtual void mouseButtonRelease();
+	virtual void mouseDrag();
+	virtual void mouseDragRelease();
+	virtual void textChanged();
+	virtual void accept();
+	virtual void cancel();
+	virtual void editBasePath();
+	virtual void convertToShapes();
+
+	virtual void visitVComposite( VComposite& composite );
+	virtual void visitVDocument( VDocument& )
+	{}
+
+	virtual void visitVGroup( VGroup& )
+	{}
+
+	virtual void visitVLayer( VLayer& )
+	{}
+
+	virtual void visitVPath( VPath& path );
+	virtual void visitVText( VText& text );
+
+private:
+	class VTextCmd : public VCommand
+	{
 	public:
-		VTextTool( KarbonView* view );
-		~VTextTool();
-		
-		virtual QString name() { return i18n( "Text tool" ); }
-		virtual QString contextHelp();
-		virtual QWidget* optionsWidget() { return m_optionsWidget; }
+		VTextCmd( VDocument* doc, const QString& name, VText* text );
+		VTextCmd( VDocument* doc, const QString& name, VText* text,
+				  const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
+				  bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow );
+		virtual ~VTextCmd();
 
-		virtual void activate();
-		virtual void deactivate();
-
-		virtual void mouseButtonPress();
-		virtual void mouseButtonRelease();
-		virtual void mouseDrag();
-		virtual void mouseDragRelease();
-		virtual void textChanged();
-		virtual void accept();
-		virtual void cancel();
-		virtual void editBasePath();
-		virtual void convertToShapes();
-
-		virtual void visitVComposite( VComposite& composite );
-		virtual void visitVDocument( VDocument& ) {}
-		virtual void visitVGroup( VGroup& ) {}
-		virtual void visitVLayer( VLayer& ) {}
-		virtual void visitVPath( VPath& path );
-		virtual void visitVText( VText& text );
+		virtual void execute();
+		virtual void unexecute();
+		virtual bool isExecuted()
+		{
+			return m_executed;
+		}
 
 	private:
-		class VTextCmd : public VCommand
+		class VTextModifPrivate
 		{
-			public:
-				VTextCmd( VDocument* doc, const QString& name, VText* text );
-				VTextCmd( VDocument* doc, const QString& name, VText* text,
-						const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
-						bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow );
-				virtual ~VTextCmd();
+		public:
+			VTextModifPrivate() : oldBasePath( 0L ), newBasePath( 0L )
+			{}
 
-				virtual void execute();
-				virtual void unexecute();
-				virtual bool isExecuted() { return m_executed; }
+			QFont oldFont;
+			QFont newFont;
+			VPath oldBasePath;
+			VPath newBasePath;
+			VText::Position oldPosition;
+			VText::Position newPosition;
+			VText::Alignment oldAlignment;
+			VText::Alignment newAlignment;
+			QString oldText;
+			QString newText;
+			bool oldUseShadow;
+			bool newUseShadow;
+			int oldShadowAngle;
+			int newShadowAngle;
+			int oldShadowDistance;
+			int newShadowDistance;
+			bool oldTranslucentShadow;
+			bool newTranslucentShadow;
+		};
 
-			private:
-				class VTextModifPrivate 
-				{
-					public:
-						VTextModifPrivate() : oldBasePath( 0L ), newBasePath( 0L ) {}
-					
-						QFont            oldFont;
-						QFont            newFont;
-						VPath            oldBasePath;
-						VPath            newBasePath;
-						VText::Position  oldPosition;
-						VText::Position  newPosition;
-						VText::Alignment oldAlignment;
-						VText::Alignment newAlignment;
-						QString          oldText;
-						QString          newText;
-						bool             oldUseShadow;
-						bool             newUseShadow;
-						int              oldShadowAngle;
-						int              newShadowAngle;
-						int              oldShadowDistance;
-						int              newShadowDistance;
-						bool             oldTranslucentShadow;
-						bool             newTranslucentShadow;
-				}; // VTextModifPrivate
-				
-				KarbonView*         m_view;
-				VText*              m_text;
-				bool                m_executed;
-				VTextModifPrivate*  m_textModifications;
-		}; // VTextCmd
-		
-		class VTextToCompositeCmd : public VCommand
+		KarbonView* m_view;
+		VText* m_text;
+		bool m_executed;
+		VTextModifPrivate* m_textModifications;
+	};
+
+	class VTextToCompositeCmd : public VCommand
+	{
+	public:
+		VTextToCompositeCmd( VDocument* doc, const QString& name, VText* text );
+		virtual ~VTextToCompositeCmd();
+
+		virtual void execute();
+		virtual void unexecute();
+		virtual bool isExecuted()
 		{
-			public:
-				VTextToCompositeCmd( VDocument* doc, const QString& name, VText* text );
-				virtual ~VTextToCompositeCmd();
+			return m_executed;
+		}
 
-				virtual void execute();
-				virtual void unexecute();
-				virtual bool isExecuted() { return m_executed; }
+	private:
+		VText* m_text;
+		VGroup* m_group;
+		bool m_executed;
+	};
 
-			private:
-				VText*   m_text;
-				VGroup*  m_group;
-				bool     m_executed;
-		}; // VTextToCompositeCmd
+	void drawPathCreation();
+	void drawEditedText();
 
-		void drawPathCreation();
-		void drawEditedText();
-		
-		VTextOptionsWidget* m_optionsWidget;
-		KoPoint             m_last;
-		VText*              m_text;
-		VText*              m_editedText;
-		bool                m_creating;
-}; // VtextTool
+	VTextOptionsWidget* m_optionsWidget;
+	KoPoint m_last;
+	VText* m_text;
+	VText* m_editedText;
+	bool m_creating;
+};
 
-#endif /* _VTEXTTOOL_H_ */
+#endif
+

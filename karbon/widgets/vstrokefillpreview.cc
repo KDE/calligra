@@ -19,6 +19,7 @@
 
 #include <qcolor.h>
 
+#include <kdebug.h>
 #include <koPoint.h>
 
 #include "karbon_part.h"
@@ -29,8 +30,6 @@
 #include "vstroke.h"
 #include "vstrokedlg.h"
 #include "vstrokefillpreview.h"
-
-#include <kdebug.h>
 
 #define PANEL_SIZEX		50.0
 #define PANEL_SIZEY		50.0
@@ -56,11 +55,13 @@ VStrokeFillPreview::VStrokeFillPreview(
 		: QFrame( parent, name ), m_part( part )
 {
 	setFocusPolicy( QWidget::NoFocus );
+
 #if QT_VERSION < 0x030100
 	setFrameStyle( QFrame::Panel | QFrame::Sunken );
 #else
 	setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
 #endif
+
 	installEventFilter( this );
 
 	m_pixmap.resize( PANEL_SIZEX, PANEL_SIZEY );
@@ -75,22 +76,32 @@ VStrokeFillPreview::~VStrokeFillPreview()
 void
 VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
-	bitBlt( this, ( width() - PANEL_SIZEX ) / 2, ( height() - PANEL_SIZEY ) / 2, &m_pixmap, 0, 0, PANEL_SIZEX, PANEL_SIZEY );
+	bitBlt( this,
+		( width() - PANEL_SIZEX ) / 2, ( height() - PANEL_SIZEY ) / 2,
+		&m_pixmap,
+		0, 0, PANEL_SIZEX, PANEL_SIZEY );
+
 	QFrame::paintEvent( event );
 }
 
 bool
 VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 {
-	QMouseEvent *e = static_cast<QMouseEvent *>( event );
+	QMouseEvent* e = static_cast<QMouseEvent *>( event );
+
 	int ex = e->x() - int( ( width() - PANEL_SIZEX ) / 2 );
 	int ey = e->y() - int( ( height() - PANEL_SIZEY ) / 2 );
+
 	if( event && event->type() == QEvent::MouseButtonPress )
 	{
 		if( ex >= FILL_TOPX && ex <= FILL_BOTTOMX && ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
 			emit fillSelected();
-		else if( ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX && ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
+		else if(
+			ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX &&
+			ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
+		{
 			emit strokeSelected();
+		}
 	}
 
 	if( event && event->type() == QEvent::MouseButtonDblClick )
@@ -112,9 +123,9 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			disconnect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SIGNAL( strokeChanged( const VStroke & ) ) );
 		}
 	}
+
 	return false;
 }
-
 
 void
 VStrokeFillPreview::update( const VStroke &s, const VFill &f )
@@ -124,10 +135,11 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	// draw checkerboard
 	VFill fill;
 	m_painter->setPen( Qt::NoPen );
-	for(unsigned int y = 0;y < PANEL_SIZEX;y += 10)
-		for(unsigned int x = 0;x < PANEL_SIZEX;x += 10)
+
+	for( unsigned int y = 0; y < PANEL_SIZEX; y += 10 )
+		for( unsigned int x = 0;x < PANEL_SIZEX;x += 10 )
 		{
-			fill.setColor( ( ( (x + y) % 20 ) == 0 ) ? QColor( 153, 153, 153 ) : QColor( 102, 102, 102 ) );
+			fill.setColor( ( ( ( x + y ) % 20 ) == 0 ) ? QColor( 153, 153, 153 ) : QColor( 102, 102, 102 ) );
 			m_painter->setBrush( fill );
 			m_painter->newPath();
 			m_painter->moveTo( KoPoint( x, y ) );
@@ -142,14 +154,17 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	stroke.setLineWidth( 2.0 );
 
 	m_painter->setPen( Qt::NoPen );
+
 	if( s.type() != VStroke::none )
 	{
 		VFill fill;
+
 		if( s.type() != VStroke::solid )
 		{
 			if( s.type() == VStroke::grad )
 			{
 				fill.gradient() = s.gradient();
+
 				if( s.gradient().type() == VGradient::linear )
 				{
 					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 10 ) );
@@ -160,6 +175,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 25 ) );
 					fill.gradient().setVector( KoPoint( FILL_TOPX, 40 ) );
 				}
+
 				fill.setType( VFill::grad );
 			}
 			else
@@ -172,7 +188,9 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		}
 		else
 			fill.setColor( s.color() );
+
 		fill.setFillRule( VFill::evenOdd );
+
 		m_painter->setBrush( fill );
 
 		m_painter->newPath();
@@ -194,8 +212,10 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		VFill fill;
 		fill.setFillRule( VFill::evenOdd );
 		fill.setColor( Qt::white );
+
 		m_painter->setBrush( fill );
 		m_painter->setPen( Qt::NoPen );
+
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
 		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_TOPY ) );
@@ -218,6 +238,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	stroke.setColor( color );
 	m_painter->setBrush( Qt::NoBrush );
 	m_painter->setPen( stroke );
+
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
 	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_TOPY - 1 ) );
@@ -227,6 +248,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	color.set( 0.5, 0.5, 0.5 );
 	stroke.setColor( color );
 	m_painter->setPen( stroke );
+
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
 	m_painter->lineTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_BOTTOMY + 1 ) );
@@ -244,6 +266,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	color.set( 1.0, 1.0, 1.0 );
 	stroke.setColor( color );
 	m_painter->setPen( stroke );
+
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
 	m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_BOTTOMY_INNER - 1 ) );
@@ -254,6 +277,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	{
 		stroke.setColor( Qt::red );
 		m_painter->setPen( stroke );
+
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( STROKE_BOTTOMX, STROKE_TOPY ) );
 		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_BOTTOMY ) );
@@ -266,6 +290,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		{
 			VFill fill;
 			fill = f;
+
 			if( f.type() == VFill::grad )
 			{
 				if( f.gradient().type() == VGradient::linear )
@@ -286,6 +311,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 				fill.pattern().setVector( KoPoint( 30, 10 ) );
 				fill.setType( VFill::patt );
 			}
+
 			m_painter->setBrush( fill );
 		}
 		else
@@ -296,7 +322,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
 		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
 		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
 		m_painter->fillPath();
 	}
 	else
@@ -305,12 +331,13 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		fill.setColor( Qt::white );
 		m_painter->setBrush( fill );
 		m_painter->setPen( Qt::NoPen );
+
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
 		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
 		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
 		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
-		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
 		m_painter->fillPath();
 	}
 
@@ -319,6 +346,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	color.set( 1.0, 1.0, 1.0 );
 	stroke.setColor( color );
 	m_painter->setPen( stroke );
+
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
 	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
@@ -328,6 +356,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	color.set( 0.5, 0.5, 0.5 );
 	stroke.setColor( color );
 	m_painter->setPen( stroke );
+
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
 	m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );

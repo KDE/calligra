@@ -17,40 +17,46 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KARBON_PART_IFACE_H
-#define KARBON_PART_IFACE_H
+#ifndef __KARBON_PART_IFACE_H__
+#define __KARBON_PART_IFACE_H__
 
-#include <KoDocumentIface.h>
-#include <dcopref.h>
 
 #include <qstring.h>
 
+#include <dcopref.h>
+#include <KoDocumentIface.h>
+
+
 class KarbonPart;
+
 
 class KarbonPartIface : virtual public KoDocumentIface
 {
 	K_DCOP
+
 public:
-	KarbonPartIface( KarbonPart *part_ );
+	KarbonPartIface( KarbonPart* part );
+
 k_dcop:
 	void selectAllObjects();
 	void deselectAllObjects();
 
-	bool showStatusBar () const;
-	void setShowStatusBar (bool b);
-	void setUndoRedoLimit( int _undo );
+	bool showStatusBar() const;
+	void setShowStatusBar( bool b );
+	void setUndoRedoLimit( int undo );
 	void initConfig();
 	int maxRecentFiles() const;
 	void clearHistory();
 	QString unitName() const;
 
-    void setBackupFile( bool _b );
-    bool backupFile()const;
-    int nbLayer()const;
-    DCOPRef activeLayer();
+	void setBackupFile( bool b );
+	bool backupFile() const;
+	int nbLayer() const;
+	DCOPRef activeLayer();
 
 private:
-	KarbonPart *m_part;
+	KarbonPart* m_part;
 };
 
 #endif
+

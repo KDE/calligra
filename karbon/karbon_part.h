@@ -21,18 +21,22 @@
 #ifndef __KARBON_PART_H__
 #define __KARBON_PART_H__
 
+
 #include <qptrlist.h>
+
 #include <koDocument.h>
 #include <koUnit.h>
+
 #include "vcolor.h"
 #include "vdocument.h"
 #include "vlayer.h"
 
 class DCOPObject;
-class QRect;
 class KoRect;
+class QRect;
 class VCommand;
 class VCommandHistory;
+
 
 /**
  * Keeps track of visual per document properties.
@@ -40,29 +44,34 @@ class VCommandHistory;
  * It loads initial settings and applies them to the document and its views.
  * Finally a dcop interface is set up here.
  */
+
 class KarbonPart : public KoDocument
 {
 	Q_OBJECT
+
 public:
-	KarbonPart( QWidget* parentWidget = 0, const char* widgetName = 0,
-		QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+	KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
+				QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
 	virtual ~KarbonPart();
 
 	virtual void paintContent( QPainter& painter, const QRect& rect,
-								bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+							   bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
 	/// standard koDocument inherited methods
 	virtual bool initDoc();
 
-	/// file -> open calls this method
+	/// file-> open calls this method
 	virtual bool loadXML( QIODevice*, const QDomDocument& document );
-	/// file -> save and file -> save as call this method
+	/// file-> save and file-> save as call this method
 	virtual QDomDocument saveXML();
 
-    virtual DCOPObject* dcopObject();
+	virtual DCOPObject* dcopObject();
 
 	// access static document:
-	VDocument& document() { return m_doc; }
+	VDocument& document()
+	{
+		return m_doc;
+	}
 
 	/// insert a new vobject
 	void insertObject( VObject* object );
@@ -72,11 +81,18 @@ public:
 
 	// Clear history.
 	void clearHistory();
-	
-	/// access the command history:
-	VCommandHistory* commandHistory() { return m_commandHistory; }
 
-	bool showStatusBar() const { return m_bShowStatusBar; }
+	/// access the command history:
+	VCommandHistory* commandHistory()
+	{
+		return m_commandHistory;
+	}
+
+	bool showStatusBar() const
+	{
+		return m_bShowStatusBar;
+	}
+
 	void setShowStatusBar( bool b );
 	/// update attached view(s) on the current doc settings
 	/// at this time only the status bar is handled
@@ -85,16 +101,28 @@ public:
 	void setUndoRedoLimit( int undos );
 
 	void initConfig();
-	int maxRecentFiles() const { return m_maxRecentFiles; }
-	QString getUnitName()const { return KoUnit::unitName( m_unit ); }
-	KoUnit::Unit getUnit()const { return m_unit; }
-	void setUnit(KoUnit::Unit _unit);
+	int maxRecentFiles() const
+	{
+		return m_maxRecentFiles;
+	}
+
+	QString getUnitName() const
+	{
+		return KoUnit::unitName( m_unit );
+	}
+
+	KoUnit::Unit getUnit() const
+	{
+		return m_unit;
+	}
+
+	void setUnit( KoUnit::Unit _unit );
 	void initUnit();
 
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
-	void repaintAllViews( const KoRect & );
+	void repaintAllViews( const KoRect& );
 	void slotDocumentRestored();
 	void slotCommandExecuted();
 
@@ -114,3 +142,4 @@ private:
 };
 
 #endif
+

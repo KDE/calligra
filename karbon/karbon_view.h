@@ -79,13 +79,16 @@ class VStateButton;
 class VStroke;
 class VStrokeDocker;
 class VStrokeFillPreview;
+
 #ifdef HAVE_KARBONTEXT
 class VTextTool;
 #endif
+
 class VTool;
 class VToolBox;
 class VTransformDlg;
 class VWhirlPinchDlg;
+
 
 class KarbonView : public KoView, public KXMLGUIBuilder
 {
@@ -93,40 +96,65 @@ class KarbonView : public KoView, public KXMLGUIBuilder
 
 public:
 	KarbonView( KarbonPart* part, QWidget* parent = 0L,
-		const char* name = 0L );
+				const char* name = 0L );
 	virtual ~KarbonView();
 
 	virtual DCOPObject* dcopObject();
 
 	virtual void paintEverything( QPainter &p, const QRect &rect,
-		bool transparent = false );
+								  bool transparent = false );
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
-	virtual QWidget* canvas() { return m_canvas; }
-	VCanvas* canvasWidget() const { return m_canvas; }
+	virtual QWidget* canvas()
+	{
+		return m_canvas;
+	}
 
-	VPainterFactory* painterFactory() const { return m_painterFactory; }
+	VCanvas* canvasWidget() const
+	{
+		return m_canvas;
+	}
+
+	VPainterFactory* painterFactory() const
+	{
+		return m_painterFactory;
+	}
 
 	// printing support, override from KoView
 	virtual void setupPrinter( KPrinter &printer );
 	virtual void print( KPrinter& printer );
 
-	KarbonPart* part() const { return m_part; }
+	KarbonPart* part() const
+	{
+		return m_part;
+	}
 
-	VLayersDocker* layersDocker() const 
-		{ return m_layersDocker; }
+	VLayersDocker* layersDocker() const
+	{
+		return m_layersDocker;
+	}
+
 	VContextHelpDocker* contextHelpDocker() const
-		{ return m_contextHelpDocker; }
+	{
+		return m_contextHelpDocker;
+	}
+
 	VToolOptionsDocker* toolOptionsDocker() const
-		{ return m_toolOptionsDocker; }
+	{
+		return m_toolOptionsDocker;
+	}
 
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
-	void setLineWidth( double val);
+	void setLineWidth( double val );
 
-	QLabel* statusMessage() const { return m_status; }
-	void setUnit(KoUnit::Unit _unit);
+	QLabel* statusMessage() const
+	{
+		return m_status;
+	}
+
+	void setUnit( KoUnit::Unit _unit );
 
 public slots:
 	// editing:
@@ -198,7 +226,7 @@ protected slots:
 	// Toolbox dialogs.
 	void solidFillClicked();
 	void strokeClicked();
-	void slotStrokeChanged(  const VStroke & );
+	void slotStrokeChanged( const VStroke& );
 	void slotFillChanged( const VFill & );
 	void slotJoinStyleClicked();
 	void slotCapStyleClicked();
@@ -297,3 +325,4 @@ private:
 };
 
 #endif
+

@@ -21,22 +21,26 @@
 #ifndef __KARBON_FACTORY_H__
 #define __KARBON_FACTORY_H__
 
+
 #include <koFactory.h>
 
-class KInstance;
 class KAboutData;
+class KInstance;
+
 class KarbonResourceServer;
+
 
 class KarbonFactory : public KoFactory
 {
 	Q_OBJECT
+
 public:
 	KarbonFactory( QObject* parent = 0, const char* name = 0 );
 	~KarbonFactory();
 
 	virtual KParts::Part* createPartObject( QWidget *parentWidget = 0,
-		const char* widgetName = 0, QObject* parent = 0, const char* name = 0,
-		const char* classname = "KoDocument", const QStringList& args = QStringList() );
+											const char* widgetName = 0L, QObject* parent = 0L, const char* name = 0L,
+											const char* classname = "KoDocument", const QStringList& args = QStringList() );
 
 	static KInstance* instance();
 	static KAboutData* aboutData();
@@ -46,7 +50,8 @@ public:
 private:
 	static KInstance*	s_instance;
 	static KAboutData*	s_aboutData;
-	static KarbonResourceServer   *s_rserver;
+	static KarbonResourceServer* s_rserver;
 };
 
 #endif
+

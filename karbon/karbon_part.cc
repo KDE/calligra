@@ -18,17 +18,17 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <qdom.h>
+#include <qfileinfo.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
-#include <qfileinfo.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <koTemplateChooseDia.h>
 
-#include "vlayersdocker.h"
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_part_iface.h"
@@ -39,14 +39,16 @@
 #include "vpainterfactory.h"
 #include "vselection.h"
 #include "vcanvas.h"
+#include "vlayersdocker.h"
+
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
-	QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      m_unit( KoUnit::U_MM )
+						QObject* parent, const char* name, bool singleViewMode )
+		: KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+		m_unit( KoUnit::U_MM )
 {
 	setInstance( KarbonFactory::instance(), false );
 	m_bShowStatusBar = true;
@@ -60,7 +62,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	initConfig();
 
 	if( name )
-	dcopObject();
+		dcopObject();
 }
 
 KarbonPart::~KarbonPart()
@@ -72,10 +74,10 @@ KarbonPart::~KarbonPart()
 
 DCOPObject* KarbonPart::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KarbonPartIface( this );
+	if( !dcop )
+		dcop = new KarbonPartIface( this );
 
-    return dcop;
+	return dcop;
 }
 
 
@@ -86,9 +88,10 @@ KarbonPart::initDoc()
 	KoTemplateChooseDia::ReturnType result;
 
 	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, "application/x-karbon",
-										"*.karbon", i18n("Karbon14"), KoTemplateChooseDia::Everything, "karbon_template");
+										  "*.karbon", i18n( "Karbon14" ), KoTemplateChooseDia::Everything, "karbon_template" );
 	m_doc.setWidth( KoUnit::ptFromUnit( PG_A4_WIDTH, KoUnit::U_MM ) );
 	m_doc.setHeight( KoUnit::ptFromUnit( PG_A4_HEIGHT, KoUnit::U_MM ) );
+
 	if( result == KoTemplateChooseDia::Template )
 	{
 		QFileInfo fileInfo( file );
@@ -173,13 +176,13 @@ KarbonPart::addCommand( VCommand* cmd, bool repaint )
 void
 KarbonPart::slotDocumentRestored()
 {
-    setModified( false );
+	setModified( false );
 }
 
 void
 KarbonPart::slotCommandExecuted()
 {
-    setModified( true );
+	setModified( true );
 }
 
 void
@@ -192,6 +195,7 @@ void
 KarbonPart::repaintAllViews( bool repaint )
 {
 	QPtrListIterator<KoView> itr( views() );
+
 	for( ; itr.current() ; ++itr )
 		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( repaint );
 }
@@ -200,13 +204,14 @@ void
 KarbonPart::repaintAllViews( const KoRect &rect )
 {
 	QPtrListIterator<KoView> itr( views() );
+
 	for( ; itr.current() ; ++itr )
 		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( rect );
 }
 
 void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,
-	bool /*transparent*/, double zoomX, double /*zoomY*/ )
+						  bool /*transparent*/, double zoomX, double /*zoomY*/ )
 {
 	kdDebug() << "**** part->paintContent()" << endl;
 	painter.eraseRect( rect );
@@ -228,10 +233,11 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 
 	m_doc.selection()->clear();
 	QPtrListIterator<VLayer> itr( m_doc.layers() );
+
 	for( ; itr.current(); ++itr )
 	{
-	    KoRect r = KoRect::fromQRect( rect );
-	    itr.current()->draw( p, &r );
+		KoRect r = KoRect::fromQRect( rect );
+		itr.current()->draw( p, &r );
 	}
 
 	p->end();
@@ -239,15 +245,16 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 }
 
 void
-KarbonPart::setShowStatusBar (bool b)
+KarbonPart::setShowStatusBar( bool b )
 {
 	m_bShowStatusBar = b;
 }
 
 void
-KarbonPart::reorganizeGUI ()
+KarbonPart::reorganizeGUI()
 {
 	QPtrListIterator<KoView> itr( views() );
+
 	for( ; itr.current(); ++itr )
 	{
 		static_cast<KarbonView*>( itr.current() )->reorganizeGUI();
@@ -272,14 +279,14 @@ KarbonPart::initConfig()
 		setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
 		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", VGlobal::maxRecentFiles );
 		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
-                setBackupFile( config->readNumEntry("BackupFile", true));
-
+		setBackupFile( config->readNumEntry( "BackupFile", true ) );
 	}
 
 	if( config->hasGroup( "Misc" ) )
 	{
 		config->setGroup( "Misc" );
 		int undos = config->readNumEntry( "UndoRedo", -1 );
+
 		if( undos != -1 )
 			setUndoRedoLimit( undos );
 	}
@@ -288,25 +295,28 @@ KarbonPart::initConfig()
 void
 KarbonPart::initUnit()
 {
-    //load unit config after we load file.
-    //load it for new file or empty file
-    KConfig *config = KarbonPart::instance()->config();
-    if( config->hasGroup( "Misc" ) )
-    {
-        config->setGroup( "Misc" );
-        m_unit=KoUnit::unit( config->readEntry("Units", KoUnit::unitName( KoUnit::U_MM ) ) );
-    }
+	//load unit config after we load file.
+	//load it for new file or empty file
+	KConfig* config = KarbonPart::instance()->config();
+
+	if( config->hasGroup( "Misc" ) )
+	{
+		config->setGroup( "Misc" );
+		m_unit = KoUnit::unit( config->readEntry( "Units", KoUnit::unitName( KoUnit::U_MM ) ) );
+	}
 }
 
 void
-KarbonPart::setUnit(KoUnit::Unit _unit)
+KarbonPart::setUnit( KoUnit::Unit _unit )
+
 {
-    m_unit=_unit;
-    QPtrListIterator<KoView> itr( views() );
-    for( ; itr.current(); ++itr )
-    {
-        static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
-    }
+	m_unit = _unit;
+	QPtrListIterator<KoView> itr( views() );
+
+	for( ; itr.current(); ++itr )
+	{
+		static_cast<KarbonView*>( itr.current() )->setUnit( _unit );
+	}
 }
 
 #include "karbon_part.moc"

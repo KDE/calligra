@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
- 
+
    Original work :
    kis_resourceserver.h - part of KImageShop
- 
+
    Copyright (c) 1999 Matthias Elter <elter@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -23,38 +23,65 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KARBONRESOURCESERVER_H
-#define KARBONRESOURCESERVER_H
+#ifndef __KARBONRESOURCESERVER_H__
+#define __KARBONRESOURCESERVER_H__
+
 
 #include <qptrlist.h>
 #include <qstring.h>
 
-#include "vpattern.h"
-#include "vgradient.h"
 #include "vcliparttool.h"
+#include "vgradient.h"
+#include "vpattern.h"
 
-class VGradientListItem;
 class VGradient;
+class VGradientListItem;
 class VObject;
+
 
 class KarbonResourceServer
 {
+
 public:
 	KarbonResourceServer();
 	virtual ~KarbonResourceServer();
 
-	int patternCount() { return m_patterns.count(); }
-	QPtrList<KoIconItem> patterns() { return m_patterns; }
+	int patternCount()
+	{
+		return m_patterns.count();
+	}
+
+	QPtrList<KoIconItem> patterns()
+	{
+		return m_patterns;
+	}
+
 	VPattern* addPattern( const QString& tilename );
 	void removePattern( VPattern* pattern );
 
-	int gradientCount() { return m_gradients->count(); }
-	QPtrList<VGradientListItem>* gradients() { return m_gradients; }
+	int gradientCount()
+	{
+		return m_gradients->count();
+	}
+
+	QPtrList<VGradientListItem>* gradients()
+	{
+		return m_gradients;
+	}
+
 	VGradientListItem* addGradient( VGradient* gradient );
 	void removeGradient( VGradientListItem* gradient );
 
-	int clipartCount() { return m_cliparts->count(); }
-	QPtrList<VClipartIconItem>* cliparts() { return m_cliparts; }
+	int clipartCount()
+	{
+		return m_cliparts->count();
+	}
+
+	QPtrList<VClipartIconItem>* cliparts()
+	{
+		return m_cliparts;
+	}
+
 	VClipartIconItem* addClipart( VObject* clipart, double width, double height );
 	void removeClipart( VClipartIconItem* clipartIcon );
 
@@ -63,14 +90,15 @@ protected:
 
 	void loadGradient( const QString& filename );
 	void saveGradient( VGradient* gradient, const QString& filename );
-	
+
 	void loadClipart( const QString& filename );
 	void saveClipart( VObject* object, double width, double height, const QString& filename );
- 
+
 private:
-	QPtrList<KoIconItem>         m_patterns;
+	QPtrList<KoIconItem> m_patterns;
 	QPtrList<VGradientListItem>* m_gradients;
-	QPtrList<VClipartIconItem>*  m_cliparts;
+	QPtrList<VClipartIconItem>* m_cliparts;
 };
 
 #endif
+

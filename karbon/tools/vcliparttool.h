@@ -21,19 +21,20 @@
 #ifndef __VCLIPARTTOOL_H__
 #define __VCLIPARTTOOL_H__
 
-#include <qstring.h>
+
 #include <qpixmap.h>
+#include <qstring.h>
 
-#include <koPoint.h>
 #include <koIconChooser.h>
+#include <koPoint.h>
 
-#include "vtool.h"
 #include "vcommand.h"
+#include "vtool.h"
 
-
-class VObject;
-class QToolButton;
 class QHButtonGroup;
+class QToolButton;
+class VObject;
+
 
 class VClipartIconItem : public KoIconItem
 {
@@ -41,29 +42,60 @@ public:
 	VClipartIconItem( const VObject* clipart, double width, double height, QString filename );
 	VClipartIconItem( const VClipartIconItem& item );
 	~VClipartIconItem();
-		
-	virtual QPixmap& thumbPixmap() const { return (QPixmap&)m_thumbPixmap; }
-	virtual QPixmap& pixmap() const { return (QPixmap&)m_pixmap; }
-	const VObject* clipart() const { return m_clipart; }
-	QString filename() const { return m_filename; }
-	bool canDelete() const { return m_delete; }
-	double originalWidth() const { return m_width; }
-	double originalHeight() const { return m_height; }
+
+	virtual QPixmap& thumbPixmap() const
+	{
+		return ( QPixmap& ) m_thumbPixmap;
+	}
+
+	virtual QPixmap& pixmap() const
+	{
+		return ( QPixmap& ) m_pixmap;
+	}
+
+	const VObject* clipart() const
+	{
+		return m_clipart;
+	}
+
+	QString filename() const
+	{
+		return m_filename;
+	}
+
+	bool canDelete() const
+	{
+		return m_delete;
+	}
+
+	double originalWidth() const
+	{
+		return m_width;
+	}
+
+	double originalHeight() const
+	{
+		return m_height;
+	}
+
 	VClipartIconItem* clone();
 
 private:
-	QPixmap  m_pixmap;
-	QPixmap  m_thumbPixmap;
+	QPixmap m_pixmap;
+	QPixmap m_thumbPixmap;
 	VObject* m_clipart;
-	QString  m_filename;
-	bool     m_delete;
-	double   m_width;
-	double   m_height;
-}; // VClipartIconItem
+	QString m_filename;
+	bool m_delete;
+	double m_width;
+	double m_height;
+}
+
+; // VClipartIconItem
 
 class VClipartWidget : public QFrame
 {
-Q_OBJECT
+	Q_OBJECT
+
 public:
 	VClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonView* view, QWidget* parent = 0L );
 	~VClipartWidget();
@@ -78,14 +110,14 @@ public slots:
 	void slotButtonClicked( int id );
 
 private:
-	KoIconChooser*        m_clipartChooser;
-	QHButtonGroup*        m_buttonGroup;
-	QToolButton*          m_importClipartButton;
-	QToolButton*          m_deleteClipartButton;
-	KarbonView*           m_view;
-	VClipartIconItem*     m_clipartItem;
-	VClipartIconItem*     m_selectedItem;
-}; // VClipartWidget
+	KoIconChooser* m_clipartChooser;
+	QHButtonGroup* m_buttonGroup;
+	QToolButton* m_importClipartButton;
+	QToolButton* m_deleteClipartButton;
+	KarbonView* m_view;
+	VClipartIconItem* m_clipartItem;
+	VClipartIconItem* m_selectedItem;
+};
 
 class VClipartTool : public VTool
 {
@@ -95,9 +127,16 @@ public:
 
 	virtual void activate();
 
-	virtual QString name() { return "Clipart tool"; }
+	virtual QString name()
+	{
+		return "Clipart tool";
+	}
+
 	virtual QString contextHelp();
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QWidget* optionsWidget()
+	{
+		return m_optionsWidget;
+	}
 
 protected:
 	virtual void draw();
@@ -113,27 +152,33 @@ protected:
 	virtual void cancel();
 
 private:
+
 	class VClipartCmd : public VCommand
 	{
-		public:
-			VClipartCmd( VDocument* doc, const QString& name, VObject* clipart );
-			virtual ~VClipartCmd() {}
+	public:
+		VClipartCmd( VDocument* doc, const QString& name, VObject* clipart );
+		virtual ~VClipartCmd()
+		{}
 
-			virtual void execute();
-			virtual void unexecute();
-			virtual bool isExecuted() { return m_executed; }
+		virtual void execute();
+		virtual void unexecute();
+		virtual bool isExecuted()
+		{
+			return m_executed;
+		}
 
-		private:
-			VObject* m_clipart;
-			bool     m_executed;
-	}; // VClipartCmd
+	private:
+		VObject* m_clipart;
+		bool m_executed;
+	};
 
-	VObject*        m_clipart;
-	KoPoint         m_topleft;
-	KoPoint         m_bottomright;
+	VObject* m_clipart;
+	KoPoint m_topleft;
+	KoPoint m_bottomright;
 	VClipartWidget* m_optionsWidget;
-	bool            m_keepRatio;
-	bool            m_centered;
-}; // VClipartTool
+	bool m_keepRatio;
+	bool m_centered;
+};
 
-#endif /* __VCLIPARTTOOL_H__ */
+#endif
+

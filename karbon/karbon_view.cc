@@ -115,7 +115,7 @@
 #include "vpath.h"
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
-	: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
+		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
 {
 	setInstance( KarbonFactory::instance() );
 	setAcceptDrops( true );
@@ -127,7 +127,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	else
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 
-	m_dcop = 0;
+	m_dcop = 0L;
+
 	dcopObject(); // build it
 
 	if( shell() )
@@ -149,40 +150,50 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	// tools:
 	m_selectTool = new VSelectTool( this );
+
 	if( shell() )
 	{
-		m_ellipseTool		= new VEllipseTool( this );
-		m_gradTool			= new VGradientTool( this );
-		m_polygonTool		= new VPolygonTool( this );
-		m_rectangleTool		= new VRectangleTool( this );
-		m_rotateTool		= new VRotateTool( this );
-		m_roundRectTool		= new VRoundRectTool( this );
-		m_selectNodesTool	= new VSelectNodesTool( this );
-		m_shearTool			= new VShearTool( this );
-		m_sinusTool			= new VSinusTool( this );
-		m_spiralTool		= new VSpiralTool( this );
-		m_starTool			= new VStarTool( this );
-		m_polylineTool		= new VPolylineTool( this );
-		m_clipartTool		= new VClipartTool( this );
-		m_patternTool		= new VPatternTool( this );
+		m_ellipseTool = new VEllipseTool( this );
+		m_gradTool = new VGradientTool( this );
+		m_polygonTool = new VPolygonTool( this );
+		m_rectangleTool = new VRectangleTool( this );
+		m_rotateTool = new VRotateTool( this );
+		m_roundRectTool = new VRoundRectTool( this );
+		m_selectNodesTool = new VSelectNodesTool( this );
+		m_shearTool = new VShearTool( this );
+		m_sinusTool = new VSinusTool( this );
+		m_spiralTool = new VSpiralTool( this );
+		m_starTool = new VStarTool( this );
+		m_polylineTool = new VPolylineTool( this );
+		m_clipartTool = new VClipartTool( this );
+		m_patternTool = new VPatternTool( this );
 	}
+
 #ifdef HAVE_KARBONTEXT
 	m_textTool = new VTextTool( this );
+
 #endif
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
+
 	m_status->setAlignment( AlignLeft | AlignVCenter );
+
 	m_status->setMinimumWidth( 300 );
+
 	addStatusBarItem( m_status, 0 );
 
 	initActions();
 
-	m_toolbox			= 0L;
-	m_layersDocker		= 0L;
-	m_strokeFillPreview	= 0L;
-	m_ColorManager		= 0L;
-	m_strokeDocker		= 0L;
+	m_toolbox = 0L;
+
+	m_layersDocker = 0L;
+
+	m_strokeFillPreview = 0L;
+
+	m_ColorManager = 0L;
+
+	m_strokeDocker = 0L;
 
 	if( shell() )
 	{
@@ -219,6 +230,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 KarbonView::~KarbonView()
 {
 	// dialogs:
+
 	if( shell() )
 	{
 		delete( m_insertKnotsDlg );
@@ -233,6 +245,7 @@ KarbonView::~KarbonView()
 
 	// tools:
 	delete( m_selectTool );
+
 	if( shell() )
 	{
 		delete( m_ellipseTool );
@@ -249,14 +262,19 @@ KarbonView::~KarbonView()
 		delete( m_clipartTool );
 		delete( m_patternTool );
 	}
+
 #ifdef HAVE_KARBONTEXT
 	delete( m_textTool );
+
 #endif
 
 	// widgets:
 	delete( m_status );
+
 	delete( m_painterFactory );
+
 	delete( m_canvas );
+
 	delete( m_dcop );
 }
 
@@ -265,25 +283,27 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 {
 	if( element.attribute( "name" ) == "toolbox" )
 	{
-		m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox");
-		connect( m_toolbox, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
-		connect( m_toolbox, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
-		connect( m_toolbox, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
-		connect( m_toolbox, SIGNAL( shearToolActivated() ),			this, SLOT( shearTool() ) );
-		connect( m_toolbox, SIGNAL( rectangleToolActivated() ),		this, SLOT( rectangleTool() ) );
-		connect( m_toolbox, SIGNAL( roundRectToolActivated() ),		this, SLOT( roundRectTool() ) );
-		connect( m_toolbox, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
-		connect( m_toolbox, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
-		connect( m_toolbox, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
-		connect( m_toolbox, SIGNAL( sinusToolActivated() ),			this, SLOT( sinusTool() ) );
-		connect( m_toolbox, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
-		connect( m_toolbox, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
-		connect( m_toolbox, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
-		connect( m_toolbox, SIGNAL( clipartToolActivated() ),		this, SLOT( clipartTool() ) );
-		connect( m_toolbox, SIGNAL( patternToolActivated() ),		this, SLOT( patternTool() ) );
+		m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox" );
+		connect( m_toolbox, SIGNAL( selectToolActivated() ), this, SLOT( selectTool() ) );
+		connect( m_toolbox, SIGNAL( selectNodesToolActivated() ), this, SLOT( selectNodesTool() ) );
+		connect( m_toolbox, SIGNAL( rotateToolActivated() ), this, SLOT( rotateTool() ) );
+		connect( m_toolbox, SIGNAL( shearToolActivated() ), this, SLOT( shearTool() ) );
+		connect( m_toolbox, SIGNAL( rectangleToolActivated() ), this, SLOT( rectangleTool() ) );
+		connect( m_toolbox, SIGNAL( roundRectToolActivated() ), this, SLOT( roundRectTool() ) );
+		connect( m_toolbox, SIGNAL( ellipseToolActivated() ), this, SLOT( ellipseTool() ) );
+		connect( m_toolbox, SIGNAL( polygonToolActivated() ), this, SLOT( polygonTool() ) );
+		connect( m_toolbox, SIGNAL( starToolActivated() ), this, SLOT( starTool() ) );
+		connect( m_toolbox, SIGNAL( sinusToolActivated() ), this, SLOT( sinusTool() ) );
+		connect( m_toolbox, SIGNAL( spiralToolActivated() ), this, SLOT( spiralTool() ) );
+		connect( m_toolbox, SIGNAL( gradToolActivated() ), this, SLOT( gradTool() ) );
+		connect( m_toolbox, SIGNAL( polylineToolActivated() ), this, SLOT( polylineTool() ) );
+		connect( m_toolbox, SIGNAL( clipartToolActivated() ), this, SLOT( clipartTool() ) );
+		connect( m_toolbox, SIGNAL( patternToolActivated() ), this, SLOT( patternTool() ) );
 #ifdef HAVE_KARBONTEXT
-		connect( m_toolbox, SIGNAL( textToolActivated() ),			this, SLOT( textTool() ) );
+
+		connect( m_toolbox, SIGNAL( textToolActivated() ), this, SLOT( textTool() ) );
 #endif
+
 		if( shell() )
 		{
 			m_strokeFillPreview = m_toolbox->strokeFillPreview();
@@ -304,7 +324,8 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			m_toolOptionsDocker->show();
 			selectTool();
 		}
-		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0);
+
+		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
 		return m_toolbox;
 	}
 
@@ -313,7 +334,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 
 void
 KarbonView::removeContainer( QWidget *container, QWidget *parent,
-			                QDomElement &element, int id )
+							 QDomElement &element, int id )
 {
 	if( m_toolbox )
 	{
@@ -323,8 +344,9 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 		delete m_toolOptionsDocker;
 		delete m_layersDocker;
 		m_toolbox = 0L;
-		return;
+		return ;
 	}
+
 	KXMLGUIBuilder::removeContainer( container, parent, element, id );
 }
 
@@ -340,8 +362,7 @@ KarbonView::dcopObject()
 
 void
 KarbonView::updateReadWrite( bool /*rw*/ )
-{
-}
+{}
 
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
@@ -367,7 +388,7 @@ KarbonView::dropEvent ( QDropEvent *e )
 	QColor color;
 	VColor realcolor;
 
-	if( KColorDrag::decode( e, color) )
+	if( KColorDrag::decode( e, color ) )
 	{
 		float r = color.red() / 255.0;
 		float g = color.green() / 255.0;
@@ -384,13 +405,12 @@ KarbonView::dropEvent ( QDropEvent *e )
 
 void
 KarbonView::setupPrinter( KPrinter& /*printer*/ )
-{
-}
+{}
 
 void
 KarbonView::print( KPrinter &printer )
 {
-	VQPainter p( (QPaintDevice *)&printer, width(), height() );
+	VQPainter p( ( QPaintDevice * ) & printer, width(), height() );
 	p.begin();
 	p.setZoomFactor( 1.0 );
 
@@ -399,42 +419,45 @@ KarbonView::print( KPrinter &printer )
 	// TODO : use real page layout stuff
 	QPtrListIterator<VLayer> i = part()->document().layers();
 	KoRect rect( 0, 0, width(), height() );
+
 	for( ; i.current(); ++i )
 		//if( i.current()->visible() )
-			i.current()->draw( &p, &rect );
+		i.current()->draw( &p, &rect );
 
 	p.end();
 }
 
 void
 KarbonView::editCut()
-{
-}
+{}
 
 void
 KarbonView::editCopy()
-{
-}
+{}
 
 void
 KarbonView::editPaste()
 {
 	VObjectListIterator itr( part()->document().selection()->objects() );
 	VObjectList selection;
+
 	for( ; itr.current() ; ++itr )
 	{
 		VObject *temp = itr.current()->clone();
 		temp->transform( QWMatrix().translate( VGlobal::copyOffset, VGlobal::copyOffset ) );
 		selection.append( temp );
 	}
+
 	part()->document().selection()->clear();
 	// Calc new selection
 	VObjectListIterator itr2( selection );
+
 	for( ; itr2.current() ; ++itr2 )
 	{
 		part()->insertObject( itr2.current() );
 		part()->document().selection()->append( itr2.current() );
 	}
+
 	part()->repaintAllViews();
 }
 
@@ -445,6 +468,7 @@ KarbonView::editSelectAll()
 
 	if( part()->document().selection()->objects().count() > 0 )
 		part()->repaintAllViews();
+
 	selectionChanged();
 }
 
@@ -456,30 +480,33 @@ KarbonView::editDeselectAll()
 		part()->document().selection()->clear();
 		part()->repaintAllViews();
 	}
+
 	selectionChanged();
 }
 
 void
 KarbonView::editDeleteSelection()
 {
-kdDebug() << "*********" << endl;
- if ( part()->document().selection()->objects().count()>0)
- {
-     part()->addCommand(
-         new VDeleteCmd( &part()->document() ),
-         true );
- }
+	kdDebug() << "*********" << endl;
+
+	if( part()->document().selection()->objects().count() > 0 )
+	{
+		part()->addCommand(
+			new VDeleteCmd( &part()->document() ),
+			true );
+	}
 }
 
 void
 KarbonView::editPurgeHistory()
 {
-// TODO: check for history size != 0
+	// TODO: check for history size != 0
+
 	if( KMessageBox::warningContinueCancel( this,
-		i18n( "This action cannot be undone later. Do you really want to continue?" ),
-		i18n( "Purge History" ),
-		i18n( "C&ontinue" ),	// TODO: is there a constant for this?
-		"edit_purge_history" ) )
+			i18n( "This action cannot be undone later. Do you really want to continue?" ),
+			i18n( "Purge History" ),
+			i18n( "C&ontinue" ),		// TODO: is there a constant for this?
+			"edit_purge_history" ) )
 	{
 		// Use the VCleanUp command to remove "deleted"
 		// objects from all layers.
@@ -536,30 +563,30 @@ KarbonView::ungroupSelection()
 void
 KarbonView::dummyForTesting()
 {
-kdDebug() << "KarbonView::dummyForTesting()" << endl;
+	kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
 	VPath s( 0L );
-	s.moveTo( KoPoint(100,100) );
-	s.lineTo( KoPoint(100,300) );
-	s.lineTo( KoPoint(400,300) );
-	s.lineTo( KoPoint(400,100) );
+	s.moveTo( KoPoint( 100, 100 ) );
+	s.lineTo( KoPoint( 100, 300 ) );
+	s.lineTo( KoPoint( 400, 300 ) );
+	s.lineTo( KoPoint( 400, 100 ) );
 	s.close();
-kdDebug() << "***" << s.counterClockwise() << endl;
+	kdDebug() << "***" << s.counterClockwise() << endl;
 
 	VPath t( 0L );
-	t.moveTo( KoPoint(100,100) );
-	t.lineTo( KoPoint(100,300) );
-	t.lineTo( KoPoint(400,300) );
-	t.lineTo( KoPoint(400,100) );
+	t.moveTo( KoPoint( 100, 100 ) );
+	t.lineTo( KoPoint( 100, 300 ) );
+	t.lineTo( KoPoint( 400, 300 ) );
+	t.lineTo( KoPoint( 400, 100 ) );
 	t.close();
 
 	t.revert();
 
-kdDebug() << "***" << t.counterClockwise() << endl;
+	kdDebug() << "***" << t.counterClockwise() << endl;
 
-//	part()->document().append( p );
+	//	part()->document().append( p );
 
-//	part()->repaintAllViews();
+	//	part()->repaintAllViews();
 }
 
 void
@@ -663,9 +690,13 @@ KarbonView::selectTool()
 {
 	if( m_currentTool == m_selectTool )
 		m_toolOptionsDocker->show();
+
 	m_currentTool->deactivate();
+
 	m_currentTool = m_selectTool;
+
 	m_currentTool->activateAll();
+
 	m_canvas->repaintAll();
 }
 
@@ -674,9 +705,13 @@ KarbonView::selectNodesTool()
 {
 	if( m_currentTool == m_selectNodesTool )
 		m_toolOptionsDocker->show();
+
 	m_currentTool->deactivate();
+
 	m_currentTool = m_selectNodesTool;
+
 	m_currentTool->activateAll();
+
 	m_canvas->repaintAll();
 }
 
@@ -685,9 +720,13 @@ KarbonView::rotateTool()
 {
 	if( m_currentTool == m_rotateTool )
 		m_toolOptionsDocker->show();
+
 	m_currentTool->deactivate();
+
 	m_currentTool = m_rotateTool;
+
 	m_currentTool->activateAll();
+
 	m_canvas->repaintAll();
 }
 
@@ -695,14 +734,16 @@ void
 KarbonView::textTool()
 {
 #ifdef HAVE_KARBONTEXT
+
 	if( m_currentTool == m_textTool )
-			m_toolOptionsDocker->show();
+		m_toolOptionsDocker->show();
 	else
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_textTool;
 		m_currentTool->activateAll();
 	}
+
 #endif
 }
 
@@ -711,9 +752,13 @@ KarbonView::shearTool()
 {
 	if( m_currentTool == m_shearTool )
 		m_toolOptionsDocker->show();
+
 	m_currentTool->deactivate();
+
 	m_currentTool = m_shearTool;
+
 	m_currentTool->activateAll();
+
 	m_canvas->repaintAll();
 }
 
@@ -734,7 +779,7 @@ void
 KarbonView::spiralTool()
 {
 	if( m_currentTool == m_spiralTool )
-			m_toolOptionsDocker->show();
+		m_toolOptionsDocker->show();
 	else
 	{
 		m_currentTool->deactivate();
@@ -818,7 +863,7 @@ KarbonView::pathInsertKnots()
 	if( m_insertKnotsDlg->exec() )
 	{
 		part()->addCommand( new VInsertKnotsCmd(
-			&part()->document(), m_insertKnotsDlg->knots() ), true );
+								 &part()->document(), m_insertKnotsDlg->knots() ), true );
 	}
 }
 
@@ -828,7 +873,7 @@ KarbonView::pathFlatten()
 	if( m_flattenDlg->exec() )
 	{
 		part()->addCommand( new VFlattenCmd(
-			&part()->document(), m_flattenDlg->flatness() ), true );
+								 &part()->document(), m_flattenDlg->flatness() ), true );
 	}
 }
 
@@ -838,7 +883,7 @@ KarbonView::pathRoundCorners()
 	if( m_roundCornersDlg->exec() )
 	{
 		part()->addCommand( new VRoundCornersCmd(
-			&part()->document(), m_roundCornersDlg->radius() ), true );
+								 &part()->document(), m_roundCornersDlg->radius() ), true );
 	}
 }
 
@@ -848,10 +893,10 @@ KarbonView::pathWhirlPinch()
 	if( m_whirlPinchDlg->exec() )
 	{
 		part()->addCommand( new VWhirlPinchCmd(
-			&part()->document(),
-			m_whirlPinchDlg->angle(),
-			m_whirlPinchDlg->pinch(),
-			m_whirlPinchDlg->radius() ), true );
+								 &part()->document(),
+								 m_whirlPinchDlg->angle(),
+								 m_whirlPinchDlg->pinch(),
+								 m_whirlPinchDlg->radius() ), true );
 	}
 }
 
@@ -860,10 +905,12 @@ void
 KarbonView::viewModeChanged()
 {
 	canvasWidget()->pixmap()->fill();
+
 	if( m_viewAction->currentItem() == 1 )
 		m_painterFactory->setWireframePainter( canvasWidget()->pixmap(), width(), height() );
 	else
 		m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
+
 	m_canvas->repaintAll();
 }
 
@@ -873,22 +920,27 @@ KarbonView::zoomChanged()
 	bool bOK;
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	// above 2000% probably doesnt make sense... (Rob)
+
 	if( zoomFactor > 20 )
 	{
 		zoomFactor = 20;
 		m_zoomAction->changeItem( m_zoomAction->currentItem(), " 2000%" );
 	}
+
 	setZoom( zoomFactor );
 	// TODO : I guess we should define a document size member at this point...
 	//kdDebug() << "part()->pageLayout().ptWidth :" << part()->pageLayout().ptWidth << endl;
 	//kdDebug() << "part()->pageLayout().ptHeight :" << part()->pageLayout().ptHeight << endl;
 	// TODO : the default shouldnt be necessary?
+
 	if( int( part()->pageLayout().ptWidth ) == 0 || int( part()->pageLayout().ptHeight ) == 0 )
 		m_canvas->resizeContents( int( 640 * zoomFactor ), int( 900 * zoomFactor ) );
 	else
 		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoomFactor ),
-									int( ( part()->pageLayout().ptHeight + 80 ) * zoomFactor ) );
+								  int( ( part()->pageLayout().ptHeight + 80 ) * zoomFactor ) );
+
 	m_canvas->repaintAll();
+
 	m_canvas->setFocus();
 }
 
@@ -897,11 +949,11 @@ KarbonView::solidFillClicked()
 {
 	if( shell() && shell()->rootView() == this )
 	{
-		VFillDlg* dialog = new VFillDlg( part() );
-		connect(dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
+		VFillDlg * dialog = new VFillDlg( part() );
+		connect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 		dialog->exec();
 		delete dialog;
-		disconnect(dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
+		disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 	}
 }
 
@@ -910,11 +962,11 @@ KarbonView::strokeClicked()
 {
 	if( shell() && shell()->rootView() == this )
 	{
-		VStrokeDlg* dialog = new VStrokeDlg( part() );
-		connect(dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
+		VStrokeDlg * dialog = new VStrokeDlg( part() );
+		connect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
 		dialog->exec();
 		delete dialog;
-		disconnect(dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
+		disconnect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
 	}
 }
 
@@ -944,11 +996,12 @@ void
 KarbonView::slotJoinStyleClicked()
 {
 	VObjectListIterator itr( part()->document().selection()->objects() );
+
 	for( ; itr.current() ; ++itr )
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
 		stroke.setParent( itr.current() );
-		stroke.setLineJoin( (VStroke::VLineJoin)m_joinStyle->getState() );
+		stroke.setLineJoin( ( VStroke::VLineJoin ) m_joinStyle->getState() );
 		itr.current()->setStroke( stroke );
 	}
 
@@ -959,11 +1012,12 @@ void
 KarbonView::slotCapStyleClicked()
 {
 	VObjectListIterator itr( part()->document().selection()->objects() );
+
 	for( ; itr.current() ; ++itr )
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
 		stroke.setParent( itr.current() );
-		stroke.setLineCap( (VStroke::VLineCap)m_capStyle->getState() );
+		stroke.setLineCap( ( VStroke::VLineCap ) m_capStyle->getState() );
 		itr.current()->setStroke( stroke );
 	}
 
@@ -973,16 +1027,16 @@ KarbonView::slotCapStyleClicked()
 void
 KarbonView::setLineWidth()
 {
-    setLineWidth( m_setLineWidth->value() );
+	setLineWidth( m_setLineWidth->value() );
 	selectionChanged();
 }
 
 //necessary for dcop call !
 void
-KarbonView::setLineWidth( double val)
+KarbonView::setLineWidth( double val )
 {
 	part()->addCommand( new VStrokeLineWidthCmd( &part()->document(), val ), true );
-	return;
+	return ;
 }
 
 void
@@ -1050,17 +1104,17 @@ KarbonView::initActions()
 
 	// edit ----->
 	KStdAction::cut( this,
-		SLOT( editCut() ), actionCollection(), "edit_cut" );
+					 SLOT( editCut() ), actionCollection(), "edit_cut" );
 	KStdAction::copy( this,
-		SLOT( editCopy() ), actionCollection(), "edit_copy");
+					  SLOT( editCopy() ), actionCollection(), "edit_copy" );
 	KStdAction::paste( this,
-		SLOT( editPaste() ), actionCollection(), "edit_paste" );
-  	KStdAction::selectAll( this,
-		SLOT( editSelectAll() ), actionCollection(), "edit_select_all" );
+					   SLOT( editPaste() ), actionCollection(), "edit_paste" );
+	KStdAction::selectAll( this,
+						   SLOT( editSelectAll() ), actionCollection(), "edit_select_all" );
 	new KAction(
 		i18n( "&Deselect All" ), QKeySequence( "Ctrl+D" ), this,
 		SLOT( editDeselectAll() ), actionCollection(), "edit_deselect_all" );
-  	new KAction(
+	new KAction(
 		i18n( "D&elete" ), "editdelete", QKeySequence( "Del" ), this,
 		SLOT( editDeleteSelection() ), actionCollection(), "edit_delete" );
 	new KAction(
@@ -1070,23 +1124,23 @@ KarbonView::initActions()
 
 	// object ----->
 	new KAction(
-		i18n( "Bring to &Front" ), 0, QKeySequence("Shift+PgUp"), this,
+		i18n( "Bring to &Front" ), 0, QKeySequence( "Shift+PgUp" ), this,
 		SLOT( selectionBringToFront() ), actionCollection(), "object_move_totop" );
 	new KAction(
-		i18n( "&Raise" ), 0, QKeySequence("Ctrl+PgUp"), this,
+		i18n( "&Raise" ), 0, QKeySequence( "Ctrl+PgUp" ), this,
 		SLOT( selectionMoveUp() ), actionCollection(), "object_move_up" );
 	new KAction(
-		i18n( "&Lower" ), 0, QKeySequence("Ctrl+PgDown"), this,
+		i18n( "&Lower" ), 0, QKeySequence( "Ctrl+PgDown" ), this,
 		SLOT( selectionMoveDown() ), actionCollection(), "object_move_down" );
 	new KAction(
-		i18n( "Send to &Back" ), 0, QKeySequence("Shift+PgDown"), this,
+		i18n( "Send to &Back" ), 0, QKeySequence( "Shift+PgDown" ), this,
 		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
 	m_groupObjects = new KAction(
-		i18n( "&Group Objects" ), "14_group", QKeySequence("Ctrl+G"), this,
-		SLOT( groupSelection() ), actionCollection(), "selection_group" );
+						 i18n( "&Group Objects" ), "14_group", QKeySequence( "Ctrl+G" ), this,
+						 SLOT( groupSelection() ), actionCollection(), "selection_group" );
 	m_ungroupObjects = new KAction(
-		i18n( "&Ungroup Objects" ), "14_ungroup", QKeySequence("Ctrl+U"), this,
-		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
+						   i18n( "&Ungroup Objects" ), "14_ungroup", QKeySequence( "Ctrl+U" ), this,
+						   SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	new KAction(
 		i18n( "&Translate" ), "14_translate", 0, this,
 		SLOT( objectTrafoTranslate() ), actionCollection(), "object_trafo_translate" );
@@ -1144,30 +1198,30 @@ KarbonView::initActions()
 
 	// view ----->
 	m_viewAction = new KSelectAction(
-		i18n( "View &Mode" ), 0, this,
-		SLOT( viewModeChanged() ), actionCollection(), "view_mode" );
+					   i18n( "View &Mode" ), 0, this,
+					   SLOT( viewModeChanged() ), actionCollection(), "view_mode" );
 
 	m_zoomAction = new KSelectAction(
-		i18n( "&Zoom" ), 0, this,
-		SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
+					   i18n( "&Zoom" ), 0, this,
+					   SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
 
 	QStringList mstl;
 	mstl
-		<< i18n( "Normal" )
-		<< i18n( "Wireframe" );
+	<< i18n( "Normal" )
+	<< i18n( "Wireframe" );
 	m_viewAction->setItems( mstl );
 	m_viewAction->setCurrentItem( 0 );
 	m_viewAction->setEditable( false );
 
 	QStringList stl;
 	stl
-		<< i18n( "   25%" )
-		<< i18n( "   50%" )
-		<< i18n( "  100%" )
-		<< i18n( "  200%" )
-		<< i18n( "  300%" )
-		<< i18n( "  400%" )
-		<< i18n( "  800%" );
+	<< i18n( "   25%" )
+	<< i18n( "   50%" )
+	<< i18n( "  100%" )
+	<< i18n( "  200%" )
+	<< i18n( "  300%" )
+	<< i18n( "  400%" )
+	<< i18n( "  800%" );
 
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
@@ -1195,7 +1249,7 @@ KarbonView::initActions()
 
 	// line width
 
-	m_setLineWidth = new TKUFloatSpinBoxAction( i18n("Set Line Width"), "linewidth", 0, actionCollection(), "setLineWidth" );
+	m_setLineWidth = new TKUFloatSpinBoxAction( i18n( "Set Line Width" ), "linewidth", 0, actionCollection(), "setLineWidth" );
 	m_setLineWidth->setIconMode( TK::IconOnly );
 	m_setLineWidth->setDecimals( 1 );
 	m_setLineWidth->setMinValue( 0.0 );
@@ -1206,33 +1260,37 @@ KarbonView::initActions()
 	// set up join style widget
 	m_joinStyle = new VStateButton( this );
 	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_bevel" ) ) );
-    m_joinStyle->addState( new QPixmap( DesktopIcon( "join_miter" ) ) );
-    m_joinStyle->addState( new QPixmap( DesktopIcon( "join_round" ) ) );
-    m_joinStyle->setState( 0 );
+	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_miter" ) ) );
+	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_round" ) ) );
+	m_joinStyle->setState( 0 );
 #if KDE_VERSION >= 305
-	new KWidgetAction( m_joinStyle, i18n("Set Join Style"), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
+
+	new KWidgetAction( m_joinStyle, i18n( "Set Join Style" ), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
 #endif
+
 	connect( m_joinStyle, SIGNAL( clicked() ), this, SLOT( slotJoinStyleClicked() ) );
 
 	// set up cap style widget
 	m_capStyle = new VStateButton( this );
 	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_butt" ) ) );
-    m_capStyle->addState( new QPixmap( DesktopIcon( "cap_square" ) ) );
-    m_capStyle->addState( new QPixmap( DesktopIcon( "cap_round" ) ) );
-    m_capStyle->setState( 0 );
+	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_square" ) ) );
+	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_round" ) ) );
+	m_capStyle->setState( 0 );
 #if KDE_VERSION >= 305
-	new KWidgetAction( m_capStyle, i18n("Set Cap Style"), 0, this, SLOT( slotCapStyleClicked() ), actionCollection(), "setCapStyle" );
+
+	new KWidgetAction( m_capStyle, i18n( "Set Cap Style" ), 0, this, SLOT( slotCapStyleClicked() ), actionCollection(), "setCapStyle" );
 #endif
+
 	connect( m_capStyle, SIGNAL( clicked() ), this, SLOT( slotCapStyleClicked() ) );
 
 	m_configureAction = new KAction(
-		i18n( "Configure Karbon..." ), "configure", 0, this,
-		SLOT( configure() ), actionCollection(), "configure" );
+							i18n( "Configure Karbon..." ), "configure", 0, this,
+							SLOT( configure() ), actionCollection(), "configure" );
 }
 
 void
 KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/,
-	bool /*transparent*/)
+							 bool /*transparent*/ )
 {
 	kdDebug() << "view->paintEverything()" << endl;
 }
@@ -1261,7 +1319,7 @@ KarbonView::reorganizeGUI()
 void
 KarbonView::setNumberOfRecentFiles( int number )
 {
-	if( shell() ) // 0 when embedded into konq !
+	if( shell() )	// 0L when embedded into konq !
 		shell()->setMaxRecentItems( number );
 }
 
@@ -1276,15 +1334,17 @@ void
 KarbonView::selectionChanged()
 {
 	int count = part()->document().selection()->objects().count();
-	if( count > 0)
+
+	if( count > 0 )
 	{
-		VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
+		VGroup * group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
 		m_groupObjects->setEnabled( count > 1 );
 		m_ungroupObjects->setEnabled( group && ( count == 1 ) );
+
 		if( count == 1 )
 		{
 			m_strokeFillPreview->update( *part()->document().selection()->objects().getFirst()->stroke(),
-													*part()->document().selection()->objects().getFirst()->fill() );
+										 *part()->document().selection()->objects().getFirst()->fill() );
 			m_strokeDocker->setStroke( *( part()->document().selection()->objects().getFirst()->stroke() ) );
 		}
 		else
@@ -1299,9 +1359,10 @@ KarbonView::selectionChanged()
 		part()->document().selection()->setFill( *( part()->document().selection()->objects().getFirst()->fill() ) );
 		m_setLineWidth->setEnabled( true );
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
+
 		if( m_ColorManager->isStrokeDocker() )
 		{
-			VColor *c = new VColor ( part()->document().selection()->objects().getFirst()->stroke()->color() );
+			VColor * c = new VColor ( part()->document().selection()->objects().getFirst()->stroke()->color() );
 			m_ColorManager->setColor( c );
 		}
 		else
@@ -1320,13 +1381,14 @@ KarbonView::selectionChanged()
 	}
 }
 
-void KarbonView::setUnit(KoUnit::Unit /*_unit*/)
+void KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 {
-    m_ellipseTool->refreshUnit();
-    m_rectangleTool->refreshUnit();
-    m_sinusTool->refreshUnit();
-    m_starTool->refreshUnit();
-    m_roundRectTool->refreshUnit();
+	m_ellipseTool->refreshUnit();
+	m_rectangleTool->refreshUnit();
+	m_sinusTool->refreshUnit();
+	m_starTool->refreshUnit();
+	m_roundRectTool->refreshUnit();
 }
 
 #include "karbon_view.moc"
+

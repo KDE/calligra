@@ -17,86 +17,91 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <dcopclient.h>
+
+#include <kapplication.h>
 
 #include "karbon_part.h"
 #include "karbon_part_iface.h"
 #include "vselection.h"
-#include <kapplication.h>
 
-KarbonPartIface::KarbonPartIface( KarbonPart *part_ )
-	: KoDocumentIface( part_ )
+
+KarbonPartIface::KarbonPartIface( KarbonPart* part )
+		: KoDocumentIface( part )
 {
-    m_part = part_;
+	m_part = part;
 }
 
 void KarbonPartIface::selectAllObjects()
 {
-    m_part->document().selection()->append();
+	m_part->document().selection()->append();
 }
 
 void KarbonPartIface::deselectAllObjects()
 {
-    m_part->document().selection()->clear();
+	m_part->document().selection()->clear();
 }
 
 bool KarbonPartIface::showStatusBar () const
 {
-    return m_part->showStatusBar();
+	return m_part->showStatusBar();
 }
 
-void KarbonPartIface::setShowStatusBar (bool b)
+void KarbonPartIface::setShowStatusBar ( bool b )
 {
-    m_part->setShowStatusBar( b );
-    m_part->reorganizeGUI();
+	m_part->setShowStatusBar( b );
+	m_part->reorganizeGUI();
 }
 
-void KarbonPartIface::setUndoRedoLimit( int _undo )
+void KarbonPartIface::setUndoRedoLimit( int undo )
 {
-    m_part->setUndoRedoLimit( _undo );
+	m_part->setUndoRedoLimit( undo );
 }
 
 void KarbonPartIface::initConfig()
 {
-    m_part->initConfig();
+	m_part->initConfig();
 }
 
 int KarbonPartIface::maxRecentFiles() const
 {
-    return m_part->maxRecentFiles();
+	return m_part->maxRecentFiles();
 }
 
 
 void KarbonPartIface::clearHistory()
 {
-    m_part->clearHistory();
+	m_part->clearHistory();
 }
 
 
 QString KarbonPartIface::unitName() const
 {
-    return m_part->getUnitName();
+	return m_part->getUnitName();
 }
 
-void KarbonPartIface::setBackupFile( bool _b )
+void KarbonPartIface::setBackupFile( bool b )
 {
-    m_part->setBackupFile( _b);
+	m_part->setBackupFile( b );
 }
 
-bool KarbonPartIface::backupFile()const
+bool KarbonPartIface::backupFile() const
 {
-    return m_part->backupFile();
+	return m_part->backupFile();
 }
 
-int KarbonPartIface::nbLayer()const
+int KarbonPartIface::nbLayer() const
 {
-    return m_part->document().layers().count();
+	return m_part->document().layers().count();
 }
 
 DCOPRef KarbonPartIface::activeLayer()
 {
-    if ( !m_part->document().activeLayer() )
-        return DCOPRef();
-    return DCOPRef( kapp->dcopClient()->appId(),
-		    m_part->document().activeLayer()->dcopObject()->objId() );
+	if( !m_part->document().activeLayer() )
+		return DCOPRef();
+
+	return DCOPRef( kapp->dcopClient()->appId(),
+					m_part->document().activeLayer()->dcopObject()->objId() );
 }
+

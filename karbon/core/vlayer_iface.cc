@@ -17,36 +17,40 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <dcopclient.h>
 
 #include "vlayer.h"
 #include "vlayer_iface.h"
-#include <dcopclient.h>
 
-VLayerIface::VLayerIface( VLayer *layer_ )
+
+VLayerIface::VLayerIface( VLayer* layer )
 	: DCOPObject( )
 {
-    m_layer = layer_;
+	m_layer = layer;
 }
 
-
-void VLayerIface::setName( const QString& name )
+void
+VLayerIface::setName( const QString& name )
 {
-    m_layer->setName( name );
+	m_layer->setName( name );
 }
 
-QString VLayerIface::name() const
+QString
+VLayerIface::name() const
 {
-    return m_layer->name();
+	return m_layer->name();
 }
 
-void VLayerIface::setSelected( bool state )
+void
+VLayerIface::setSelected( bool state )
 {
-    m_layer->setSelected( state );
+	m_layer->setSelected( state );
 }
 
-bool VLayerIface::selected()const
+bool
+VLayerIface::selected() const
 {
-    return m_layer->selected();
+	return m_layer->selected();
 }
 

@@ -17,51 +17,56 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KARBON_VIEW_IFACE_H
-#define KARBON_VIEW_IFACE_H
+#ifndef __KARBON_VIEW_IFACE_H__
+#define __KARBON_VIEW_IFACE_H__
 
-#include <KoViewIface.h>
 
 #include <qstring.h>
 
+#include <KoViewIface.h>
+
 class KarbonView;
+
 
 class KarbonViewIface : public KoViewIface
 {
-    K_DCOP
+	K_DCOP
+
 public:
-    KarbonViewIface( KarbonView *view_ );
+	KarbonViewIface( KarbonView* view );
+
 k_dcop:
-    void editCut();
-    void editCopy();
-    void editPaste();
-    void editSelectAll();
-    void editDeselectAll();
-    void editDeleteSelection();
-    void editPurgeHistory();
+	void editCut();
+	void editCopy();
+	void editPaste();
+	void editSelectAll();
+	void editDeselectAll();
+	void editDeleteSelection();
+	void editPurgeHistory();
 
-    void objectMoveToTop();
-    void objectMoveToBottom();
-    void objectMoveUp();
-    void objectMoveDown();
+	void objectMoveToTop();
+	void objectMoveToBottom();
+	void objectMoveUp();
+	void objectMoveDown();
 
-    double zoomFactor() const;
+	double zoomFactor() const;
 
-    // TODO: remove this someday:
-    void dummyForTesting();
+	// TODO: remove this someday:
+	void dummyForTesting();
 
-    void groupSelection();
-    void ungroupSelection();
-    void configure();
-    void setLineWidth( double val);
+	void groupSelection();
+	void ungroupSelection();
+	void configure();
+	void setLineWidth( double val );
 
-    void insertKnots();
-    void pathFlatten();
-    void pathRoundCorners();
-    void pathWhirlPinch();
+	void insertKnots();
+	void pathFlatten();
+	void pathRoundCorners();
+	void pathWhirlPinch();
 
 private:
-    KarbonView *m_view;
+	KarbonView* m_view;
 };
 
 #endif
+

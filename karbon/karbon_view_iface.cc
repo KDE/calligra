@@ -17,16 +17,17 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <dcopclient.h>
 
 #include "karbon_view.h"
 #include "karbon_view_iface.h"
 
 
-KarbonViewIface::KarbonViewIface( KarbonView *view_ )
-	: KoViewIface( view_ )
+KarbonViewIface::KarbonViewIface( KarbonView* view )
+		: KoViewIface( view )
 {
-	m_view = view_;
+	m_view = view;
 }
 
 void
@@ -110,42 +111,42 @@ KarbonViewIface::dummyForTesting()
 
 void KarbonViewIface::groupSelection()
 {
-    m_view->groupSelection();
+	m_view->groupSelection();
 }
 
 void KarbonViewIface::ungroupSelection()
 {
-    m_view->ungroupSelection();
+	m_view->ungroupSelection();
 }
 
 void KarbonViewIface::configure()
 {
-    m_view->configure();
+	m_view->configure();
 }
 
-void KarbonViewIface::setLineWidth( double val)
+void KarbonViewIface::setLineWidth( double val )
 {
-    m_view->setLineWidth( val );
+	m_view->setLineWidth( val );
 }
 
 
 void KarbonViewIface::insertKnots()
 {
-    m_view->pathInsertKnots();
+	m_view->pathInsertKnots();
 }
 
 void KarbonViewIface::pathFlatten()
 {
-    m_view->pathFlatten();
+	m_view->pathFlatten();
 }
 
 void KarbonViewIface::pathRoundCorners()
 {
-    m_view->pathRoundCorners();
+	m_view->pathRoundCorners();
 }
 
 void KarbonViewIface::pathWhirlPinch()
 {
-    m_view->pathWhirlPinch();
+	m_view->pathWhirlPinch();
 }
 
