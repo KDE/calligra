@@ -30,6 +30,7 @@
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
+#include "vimage.h"
 #include "vstroke.h"
 #include "vvisitor.h"
 #include "vclipgroup.h"
@@ -189,6 +190,12 @@ VGroup::load( const QDomElement& element )
 				VClipGroup* grp = new VClipGroup( this );
 				grp->load( e );
 				append( grp );
+			}
+			else if( e.tagName() == "IMAGE" )
+			{
+				VImage* img = new VImage( this );
+				img->load( e );
+				append( img );
 			}
 			else if( e.tagName() == "TEXT" )
 			{
