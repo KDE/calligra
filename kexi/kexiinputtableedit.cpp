@@ -36,7 +36,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	m_view = new QLineEdit(this, "tableLineEdit");
 	m_view->installEventFilter(this);
 	static_cast<QLineEdit*>(m_view)->setFrame(false);
-	
+
 	if(ov != QString::null)
 	{
 		switch(m_type)
@@ -44,21 +44,21 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 			case QVariant::Double:
 				if(ov == KGlobal::_locale->decimalSymbol() || ov == KGlobal::_locale->monetaryDecimalSymbol())
 					static_cast<QLineEdit*>(m_view)->setText(ov);
-					
+
 			case QVariant::Int:
 				if(ov == KGlobal::_locale->negativeSign())
 					static_cast<QLineEdit*>(m_view)->setText(ov);
 
 			case QVariant::UInt:
 				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
-					static_cast<QLineEdit*>(m_view)->setText(ov); 
+					static_cast<QLineEdit*>(m_view)->setText(ov);
 					break;
-				
+
 				if(ov == "=")
 					m_calculatedCell = true;
 					static_cast<QLineEdit*>(m_view)->setText(ov);
 					break;
-				
+
 
 			default:
 				static_cast<QLineEdit*>(m_view)->setText(ov);
@@ -87,17 +87,17 @@ KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 		{
 			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
 			kdDebug() << "KeyPress = " << ev->text() << endl;
-			
+
 			switch(m_type)
 			{
 				case QVariant::Double:
 					if(ev->text() == KGlobal::_locale->decimalSymbol() || ev->text() == KGlobal::_locale->monetaryDecimalSymbol())
 						return false;
-						
+
 				case QVariant::Int:
 					if(ev->text() == KGlobal::_locale->negativeSign())
 						return false;
-						
+
 				case QVariant::UInt:
 					if(m_calculatedCell)
 					{
@@ -204,10 +204,10 @@ KexiInputTableEdit::value()
 				for(int i=0; i < values.count(); i++)
 				{
 					double next;
-					
+
 					QString op = QString((*ops.at(i))).stripWhiteSpace();
-					
-					if((*values.at(i+1)) && i == 0)
+
+					if(!((*values.at(i+1)).isEmpty()) && i == 0)
 					{
 						double local = (*values.at(i)).toDouble();
 						next = (*values.at(i+1)).toDouble();
@@ -222,7 +222,7 @@ KexiInputTableEdit::value()
 						else
 							result = local / next;
 					}
-					else if((*values.at(i+1)))
+					else if(!(*values.at(i+1)).isEmpty())
 					{
 						next = (*values.at(i+1)).toDouble();
 
@@ -234,16 +234,16 @@ KexiInputTableEdit::value()
 						else if(op == "*")
 							result = result * next;
 						else
-							result = result / next;	
+							result = result / next;
 					}
-					
+
 				}
-				
+
 				return QVariant(result);
-				
+
 			}
 			break;
-		
+
 		default:
 			return QVariant(static_cast<QLineEdit*>(m_view)->text());
 	}
