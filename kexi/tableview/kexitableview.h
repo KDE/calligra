@@ -192,6 +192,14 @@ public:
 	/*! \return true if filtering is enabled. */
 	bool filteringEnabled() const;
 		
+	/*! Added for convenience: configure this table view 
+	 to behave more like spreadsheet (it's used for things like alter-table view).
+	 - hides navigator
+	 - disables sorting, inserting and filtering
+	 - enables accepting row after cell accepting; see setAcceptsRowEditAfterCellAccepting()
+	 - enables inserting empty row; see setEmptyRowInsertingEnabled() */
+	void setSpreadSheetMode();
+
 	int currentColumn() const;
 	int currentRow() const;
 
@@ -336,8 +344,9 @@ public slots:
 	//! Sorts all rows by column selected with setSorting()
 	void sort();
 
-	/*! Adjusts column's width to its (current) contents. */
-	void adjustColumnWidthToContents(int colNum);
+	/*! Adjusts \a colNum column's width to its (current) contents. 
+	 If \a colNum == -1, all columns' width is adjusted. */
+	void adjustColumnWidthToContents(int colNum = -1);
 
 	//! Sets width of column width to \a width.
 	void setColumnWidth(int col, int width);

@@ -2859,8 +2859,15 @@ KexiDB::Field* KexiTableView::field(int colNum) const
 
 void KexiTableView::adjustColumnWidthToContents(int colNum)
 {
-	if (columns()<=colNum || colNum<0)
+	if (columns()<=colNum || colNum < -1)
 		return;
+
+	if (colNum==-1) {
+		const int cols = columns();
+		for (int i=0; i<columns(); i++)
+			adjustColumnWidthToContents(i);
+		return;
+	}
 
 	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( columnType(colNum) );
 	if (!item)
@@ -2885,12 +2892,16 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 	}
 	if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH )
 		maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
-	d->pTopHeader->resizeSection( colNum, maxw );
+	setColumnWidth( colNum, maxw );
 }
 
 void KexiTableView::setColumnWidth(int colNum, int width)
 {
+	if (columns()<=colNum || colNum < 0)
+		return;
+	const int oldWidth = d->pTopHeader->sectionSize( colNum );
 	d->pTopHeader->resizeSection( colNum, width );
+	slotTopHeaderSizeChange( colNum, oldWidth, d->pTopHeader->sectionSize( colNum ) );
 }
 
 void KexiTableView::setColumnStretchEnabled( bool set, int colNum )
@@ -3123,6 +3134,16 @@ void KexiTableView::setFilteringEnabled(bool set)
 bool KexiTableView::filteringEnabled() const
 {
 	return d->filteringEnabled;
+}
+
+void KexiTableView::setSpreadSheetMode()
+{
+	setNavigatorEnabled( false );
+	setSortingEnabled( false );
+	setInsertingEnabled( false );
+	setAcceptsRowEditAfterCellAccepting( true );
+	setFilteringEnabled( false );
+	setEmptyRowInsertingEnabled( true );
 }
 
 int KexiTableView::validRowNumber(const QString& text)
