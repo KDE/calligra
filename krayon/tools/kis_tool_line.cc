@@ -129,34 +129,32 @@ void LineTool::optionsDialog()
     int  old_lineOpacity      = lineOpacity;
     bool old_useRegions       = useRegions;
     
-    ToolOptionsDialog *pOptsDialog 
-        = new ToolOptionsDialog(tt_linetool, ts);
+    ToolOptionsDialog OptsDialog(tt_linetool, ts);
 
-    pOptsDialog->exec();
+    OptsDialog.exec();
     
-    if(!pOptsDialog->result() == QDialog::Accepted)
+    if(OptsDialog.result() != QDialog::Accepted)
         return;
-    else {
-        lineThickness = pOptsDialog->lineToolTab()->thickness();
-        lineOpacity   = pOptsDialog->lineToolTab()->opacity();
-        usePattern    = pOptsDialog->lineToolTab()->usePattern();
-        useGradient   = pOptsDialog->lineToolTab()->useGradient();
-        useRegions    = pOptsDialog->lineToolTab()->solid();
 
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient 
-             || old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
-             || old_useRegions != useRegions ) {    
-            KisPainter *p = m_pView->kisPainter();
-    
-            p->setLineThickness( lineThickness );
-            p->setLineOpacity( lineOpacity );
-            p->setPatternFill( usePattern );
-            p->setGradientFill( useGradient );
+    lineThickness = OptsDialog.lineToolTab()->thickness();
+    lineOpacity   = OptsDialog.lineToolTab()->opacity();
+    usePattern    = OptsDialog.lineToolTab()->usePattern();
+    useGradient   = OptsDialog.lineToolTab()->useGradient();
+    useRegions    = OptsDialog.lineToolTab()->solid();
 
-            // set line tool settings
+    // User change value ?
+    if ( old_usePattern != usePattern || old_useGradient != useGradient 
+		    || old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+		    || old_useRegions != useRegions ) {    
+	    KisPainter *p = m_pView->kisPainter();
+
+	    p->setLineThickness( lineThickness );
+	    p->setLineOpacity( lineOpacity );
+	    p->setPatternFill( usePattern );
+	    p->setGradientFill( useGradient );
+
+	    // set line tool settings
 	    m_pDoc->setModified( true );
-        }
     }
 }
 

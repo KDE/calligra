@@ -329,34 +329,32 @@ void AirBrushTool::mouseRelease(QMouseEvent *e)
 
 void AirBrushTool::optionsDialog()
 {
-    ToolOptsStruct ts;
+	ToolOptsStruct ts;
 
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.opacity          = opacity;
+	ts.usePattern       = usePattern;
+	ts.useGradient      = useGradient;
+	ts.opacity          = opacity;
 
-    bool old_usePattern   = usePattern;
-    bool old_useGradient  = useGradient;
-    unsigned int  old_opacity      = opacity;
+	bool old_usePattern   = usePattern;
+	bool old_useGradient  = useGradient;
+	unsigned int  old_opacity      = opacity;
 
-    ToolOptionsDialog *pOptsDialog
-        = new ToolOptionsDialog(tt_airbrushtool, ts);
+	ToolOptionsDialog OptsDialog(tt_airbrushtool, ts);
 
-    pOptsDialog->exec();
+	OptsDialog.exec();
 
-    if(!pOptsDialog->result() == QDialog::Accepted)
-        return;
-    else {
-        opacity       = pOptsDialog->airBrushToolTab()->opacity();
-        usePattern    = pOptsDialog->airBrushToolTab()->usePattern();
-        useGradient   = pOptsDialog->airBrushToolTab()->useGradient();
+	if(OptsDialog.result() != QDialog::Accepted)
+		return;
 
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
-            // set airbrush tool settings
-            m_pDoc->setModified( true );
-        }
-    }
+	opacity       = OptsDialog.airBrushToolTab()->opacity();
+	usePattern    = OptsDialog.airBrushToolTab()->usePattern();
+	useGradient   = OptsDialog.airBrushToolTab()->useGradient();
+
+	// User change value ?
+	if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
+		// set airbrush tool settings
+		m_pDoc->setModified( true );
+	}
 }
 
 void AirBrushTool::setupAction(QObject *collection)

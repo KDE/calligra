@@ -281,24 +281,22 @@ void EraserTool::optionsDialog()
     bool old_useGradient    = useGradient;
     unsigned int  old_opacity    = opacity;
 
-    ToolOptionsDialog *pOptsDialog
-        = new ToolOptionsDialog(tt_erasertool, ts);
+    ToolOptionsDialog OptsDialog(tt_erasertool, ts);
 
-    pOptsDialog->exec();
+    OptsDialog.exec();
 
-    if(!pOptsDialog->result() == QDialog::Accepted)
+    if(OptsDialog.result() != QDialog::Accepted)
         return;
-    else {
-        opacity   = pOptsDialog->eraserToolTab()->opacity();
-        usePattern    = pOptsDialog->eraserToolTab()->usePattern();
-        useGradient   = pOptsDialog->eraserToolTab()->useGradient();
+        
+    opacity   = OptsDialog.eraserToolTab()->opacity();
+    usePattern    = OptsDialog.eraserToolTab()->usePattern();
+    useGradient   = OptsDialog.eraserToolTab()->useGradient();
 
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient 
-             || old_opacity != opacity ) {
-            // set eraser tool settings
-            m_pDoc->setModified( true );
-        }
+    // User change value ?
+    if ( old_usePattern != usePattern || old_useGradient != useGradient 
+		    || old_opacity != opacity ) {
+	    // set eraser tool settings
+	    m_pDoc->setModified( true );
     }
 }
 

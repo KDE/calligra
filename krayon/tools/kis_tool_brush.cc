@@ -278,23 +278,21 @@ void BrushTool::optionsDialog()
     bool old_useGradient  = useGradient;
     unsigned int  old_opacity      = opacity;
 
-    ToolOptionsDialog *pOptsDialog
-        = new ToolOptionsDialog(tt_brushtool, ts);
+    ToolOptionsDialog OptsDialog(tt_brushtool, ts);
 
-    pOptsDialog->exec();
+    OptsDialog.exec();
 
-    if(!pOptsDialog->result() == QDialog::Accepted)
+    if(OptsDialog.result() != QDialog::Accepted)
         return;
-    else {
-        opacity      = pOptsDialog->brushToolTab()->opacity();
-        usePattern   = pOptsDialog->brushToolTab()->usePattern();
-        useGradient  = pOptsDialog->brushToolTab()->useGradient();
+        
+    opacity      = OptsDialog.brushToolTab()->opacity();
+    usePattern   = OptsDialog.brushToolTab()->usePattern();
+    useGradient  = OptsDialog.brushToolTab()->useGradient();
 
-        // User change value ?
-        if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
-            // set brush tool settings
-            m_pDoc->setModified( true );
-        }
+    // User change value ?
+    if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
+	    // set brush tool settings
+	    m_pDoc->setModified( true );
     }
 }
 
