@@ -51,6 +51,10 @@ class KexiDBForm : public QWidget, public KFormDesigner::FormWidget
 
 		virtual QSize sizeHint() const;
 
+//TODO: COMPILE fix, Cedric: what's up with these methods?
+		virtual void initBuffer() {};
+		virtual void clearForm() {};
+
 	private:
 		/*QString m_ds;
 		bool m_nav;
