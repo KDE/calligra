@@ -1719,7 +1719,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   }
   else
   { //control button pressed
-
+      if(!make_select)
+	  table->unselect();
       int x, x0, y, y0 ;
       bool emptycell;
 
@@ -3561,7 +3562,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   for ( int x = left_col; x <= right_col; x++ )
   {
     bool highlighted = ( area && x >= selection.left() && x <= selection.right());
-    bool selected = ( highlighted && selection.bottom() == 0x7FFF && (selection.right()!=0x7FFF) );
+    bool selected = ( highlighted && selection.bottom() == 0x7FFF && selection.top()==1 && (selection.right()!=0x7FFF) );
 
     ColumnLayout *col_lay = table->columnLayout( x );
 
