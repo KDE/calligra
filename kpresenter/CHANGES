@@ -250,3 +250,7 @@ Reggie, 26.5.1999:
 - Started implementing the option to let objects disappear in screenpresentations: Configuration,
   Loading/Saving and Undo/Redo already works. I'll implement the disappearing (with effects of course :-)
   tomorrow...
+
+Reggie, 28.5.1999:
+------------------
+- Some QStrList -> QStringList

@@ -17,7 +17,7 @@
 #include <qpushbt.h>
 #include <qlayout.h>
 #include <qcombo.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 
 #include <qchkbox.h>
 #include <qlined.h>
@@ -37,7 +37,7 @@
 
 /*======================= constructor ============================*/
 KEnumListDia::KEnumListDia( QWidget* parent, const char* name, int __type, QFont __font,
-                            QColor __color, QString __before, QString __after, int __start, QStrList _fontList )
+                            QColor __color, QString __before, QString __after, int __start, QStringList _fontList )
     : QDialog( parent, name, true )
 {
     _type = __type;
@@ -58,10 +58,16 @@ KEnumListDia::KEnumListDia( QWidget* parent, const char* name, int __type, QFont
     grid->addWidget( lFont, 0, 0 );
 
     fontCombo = new QComboBox( false, this );
-    fontCombo->insertStrList( &fontList );
+    fontCombo->insertStringList( fontList );
     fontCombo->resize( fontCombo->sizeHint() );
-    fontList.find( _font.family() );
-    fontCombo->setCurrentItem( fontList.at() );
+    QValueList<QString>::Iterator it = fontList.find( _font.family().lower() );
+    if ( it != fontList.end() )
+    {
+        int pos = 0;
+        QValueList<QString>::Iterator it2 = fontList.begin();
+        for ( ; it != it2; ++it2, ++pos );
+        fontCombo->setCurrentItem( pos );
+    }
     grid->addMultiCellWidget( fontCombo, 1, 1, 0, 2 );
     connect( fontCombo, SIGNAL( activated( const QString & ) ), this, SLOT( fontSelected( const QString & ) ) );
 
@@ -228,7 +234,7 @@ KEnumListDia::~KEnumListDia()
 
 /*====================== show enum list dialog ===================*/
 bool KEnumListDia::enumListDia( int& __type, QFont& __font, QColor& __color,
-                                QString& __before, QString& __after, int& __start, QStrList _fontList )
+                                QString& __before, QString& __after, int& __start, QStringList _fontList )
 {
     bool res = false;
 
@@ -255,7 +261,7 @@ bool KEnumListDia::enumListDia( int& __type, QFont& __font, QColor& __color,
 /*=========================== Font selected =====================*/
 void KEnumListDia::fontSelected( const QString &_family )
 {
-    _font.setFamily( _family );
+    _font.setFamily( _family.lower() );
 }
 
 /*===================== size selected ===========================*/

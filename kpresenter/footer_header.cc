@@ -28,6 +28,7 @@
 #include <qpushbutton.h>
 #include <qhbox.h>
 #include <qpixmap.h>
+#include <qstringlist.h>
 #include <qstrlist.h>
 #include <qcombobox.h>
 
@@ -110,11 +111,16 @@ void KPFooterHeaderEditor::setupHeader()
     htool2 = new KToolBar( back );
     htool2->enableMoving( false );
 
-    QStrList fontList;
+    QStringList fontList;
     KPresenterView::getFonts( fontList );
 
     h_font = 99;
-    htool2->insertCombo( &fontList, h_font, true,
+    QStrList lst;
+    QValueList<QString>::Iterator it = fontList.begin();
+    for ( ; it != fontList.end(); ++it )
+        lst.append( *it );
+    
+    htool2->insertCombo( &lst, h_font, true,
                          SIGNAL( activated( const QString & ) ), this,
                          SLOT( headerFont( const QString & ) ), true, i18n( "Font List" ), 200 );
 
@@ -218,11 +224,16 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2 = new KToolBar( back );
     ftool2->enableMoving( false );
 
-    QStrList fontList;
+    QStringList fontList;
     KPresenterView::getFonts( fontList );
 
+    QStrList lst;
+    QValueList<QString>::Iterator it = fontList.begin();
+    for ( ; it != fontList.end(); ++it )
+        lst.append( *it );
+
     f_font = 99;
-    ftool2->insertCombo( &fontList, f_font, true,
+    ftool2->insertCombo( &lst, f_font, true,
                          SIGNAL( activated( const QString & ) ), this,
                          SLOT( footerFont( const QString & ) ), true, i18n( "Font List" ), 200 );
 
@@ -576,7 +587,7 @@ void KPFooterHeaderEditor::headerFontChanged( QFont *f )
 
     for ( int i = 0; i < combo->count(); i++ )
     {
-        if ( combo->text( i ) == f->family() )
+        if ( combo->text( i ).lower() == f->family().lower() )
         {
             combo->setCurrentItem( i );
             break;
@@ -622,7 +633,7 @@ void KPFooterHeaderEditor::footerFontChanged( QFont *f )
 
     for ( int i = 0; i < combo->count(); i++ )
     {
-        if ( combo->text( i ) == f->family() )
+        if ( combo->text( i ).lower() == f->family().lower() )
         {
             combo->setCurrentItem( i );
             break;

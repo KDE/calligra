@@ -2227,10 +2227,14 @@ void KPresenterView::fontChanged( QFont* font )
         m_vToolBarText->setButton( ID_BOLD, tbFont.bold() );
         m_vToolBarText->setButton( ID_ITALIC, tbFont.italic() );
         m_vToolBarText->setButton( ID_UNDERLINE, tbFont.underline() );
-        int pos = fontList.find( tbFont.family() );
-        cerr << "Setting to number " << pos << endl;
-        m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, pos );
-        cerr << "Never reached" << endl;
+        QValueList<QString>::Iterator it = fontList.begin();
+        QValueList<QString>::Iterator it2 = fontList.find( tbFont.family().lower() );
+        if ( it2 != fontList.end() ) 
+        {
+            int pos = 0;
+            for ( ; it != it2; ++it, ++pos );
+            m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, pos );
+        }
         m_vToolBarText->setCurrentComboItem( ID_FONT_SIZE, tbFont.pointSize()-4 );
     }
 }
@@ -3717,12 +3721,12 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
     OpenPartsUI::StrList fonts;
     fonts.length( fontList.count() );
     for( unsigned int i = 0; i < fontList.count(); i++ )
-        fonts[ i ] = CORBA::string_dup( fontList.at( i ) );
+        fonts[ i ] = CORBA::string_dup( fontList[ i ] );
     toolTip = Q2C( i18n( "Font List" ) );
     m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
                                                           "fontSelected", true, toolTip,
                                                           200, -1, OpenPartsUI::AtBottom );
-    tbFont.setFamily( fontList.at( 0 ) );
+    tbFont.setFamily( fontList[ 0 ] );
     m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, 0 );
 
     m_vToolBarText->insertSeparator( -1 );
@@ -4266,7 +4270,7 @@ QString KPresenterView::colorToPixString( QColor c )
 }
 
 /*===================== load not KDE installed fonts =============*/
-void KPresenterView::getFonts( QStrList &lst )
+void KPresenterView::getFonts( QStringList &lst )
 {
     int numFonts;
     Display *kde_display;
@@ -4276,7 +4280,7 @@ void KPresenterView::getFonts( QStrList &lst )
 
     kde_display = kapp->getDisplay();
 
-    bool have_installed = kapp->getKDEFonts( &lst );
+    bool have_installed = kapp->getKDEFonts( lst );
 
     if ( have_installed )
         return;
@@ -4316,11 +4320,10 @@ void KPresenterView::getFonts( QStrList &lst )
         if ( !qfontname.contains( "open look", TRUE ) )
         {
             if( qfontname != "nil" ){
-                if( lst.find( qfontname ) == -1 )
-                    lst.inSort( qfontname );
+                if( lst.find( qfontname ) == lst.end() )
+                    lst.append( qfontname );
             }
         }
-
 
         fontNames ++;
 

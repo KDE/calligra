@@ -44,11 +44,11 @@ public:
     static const int ALPHABETH = 2;
 
     // constructor - destructor
-    KEnumListDia( QWidget*, const char*, int, QFont, QColor, QString, QString, int, QStrList );
+    KEnumListDia( QWidget*, const char*, int, QFont, QColor, QString, QString, int, QStringList );
     ~KEnumListDia();
 
     // show enum list dialog
-    static bool enumListDia( int&, QFont&, QColor&, QString&, QString&, int&, QStrList );
+    static bool enumListDia( int&, QFont&, QColor&, QString&, QString&, int&, QStringList );
 
     // return values
     int type() {return _type; }
@@ -79,7 +79,7 @@ protected:
     QString _after;
     int _start;
 
-    QStrList fontList;
+    QStringList fontList;
 
 protected slots:
     void fontSelected( const QString & );

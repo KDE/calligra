@@ -193,7 +193,7 @@ void KCharSelectDia::depthSelected( int d )
     lPreview->setText( *vChr->at( d ) );
     charSelect->setChar( *vChr->at( d ) );
 
-    charSelect->setFont( vFont->at( d )->family() );
+    charSelect->setFont( vFont->at( d )->family().lower() );
 
     colorButton->setColor( *vColor->at( d ) );
     colorChanged( *vColor->at( d ) );

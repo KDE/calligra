@@ -22,7 +22,7 @@
 #include <qlist.h>
 #include <qpen.h>
 #include <qbrush.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qcolor.h>
 #include <qfont.h>
 
@@ -320,7 +320,7 @@ public:
     static QString colorToPixString( QColor );
 
     // get fonts
-    static void getFonts( QStrList &lst );
+    static void getFonts( QStringList &lst );
 
 public slots:
 
@@ -684,7 +684,7 @@ protected:
     QFont tbFont;
     TxtParagraph::HorzAlign tbAlign;
     QColor tbColor;
-    QStrList fontList;
+    QStringList fontList;
 
     bool m_bRectSelection;
     KRect m_rctRectSelection;
