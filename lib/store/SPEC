@@ -1,0 +1,67 @@
+-------------------------------------------------------------------------------
+-                                                                             -
+-   KOffice Storage Format Specification - Version 2.0                        -
+-                                                                             -
+-   by Werner, last changed: 990911 by David                                  -
+-                                                                             -
+- History :                                                                   -
+-  Version 1.0 : binary store                                                 -
+-  Version 2.0 : tar.gz store                                                 -
+-                                                                             -
+-------------------------------------------------------------------------------
+
+The purpose of this document is to define a common KOffice Storage Structure.
+Torben, Reggie, and all the others agreed on storing embedded KOffice Parts
+and binary data (e.g. pictures, movies, sounds) via a simple tar.gz-structure.
+The support class for the tar format is kdelibs/kio/ktar.*, written by Torben
+and finished by David.
+
+The obvious gain of that type of storage is that it's 100% non-proprietary as it
+uses only the already available formats (XML, pictures, tar.gz, ...) and tools (tar, gzip).
+If enables anybody to hack directly into the document, for instance to update
+an image (faster than launching the application), or to write scripts
+that generate koffice documents ! :)
+Later, someone will be able to easily write an import filter for any other office-suite
+application out there, either reading the whole tar.gz file, or (for simple documents) by
+accepting XML as input (and then the user can extract the XML file by himself).
+
+1) Name of the KOffice Files:
+As some people suggested using a "tgz"-ending is stupid, I'll drop it :)
+Just use the "normal" endings like "MyLetter.kwd", "Sales.ksp", or 
+"Meeting.kpr".
+
+2) Internal Structure:
+I don't like theoretic explanations so I'd give a simple example: Assume you
+have to write a lab-report. Coincidence? I think not >:) You surely will have
+some text, the readings, some formulas and a few pictures (e.g. circiut
+diagram,...).
+The main document will be a KWord-file. In this file you embed some KSpread-
+tables, some KDiagram-charts, the KFormulas, and some picture-frames. You save
+the whole crap and name it "lab-report.kwd". Here is what the contents of the
+tar.gz file will look like :
+
+maindoc.xml     -- The main XML file containing the KWord document
+part0.xml                  -- for instance a KSpread embedded table
+part1.xml                  -- say a KDiagramm chart
+part2.xml                  -- why not a KIllustrator drawing
+part2_pictures/
+part2_pictures/picture0.jpg
+part2_pictures/picture1.bmp
+pictures/       -- Pictures embedded in the main KWord document
+pictures/picture0.jpg
+pictures/picture1.bmp
+...          
+
+Still TODO for the specification :
+Currently if a document has no child document, no picture, and no embedded parts,
+then it's saved as a plain xml file. Do we want to keep that ? It makes it a bit harder
+to write filters or scripts using the files (since we have to use "file" or read the first 4
+bytes of the file). But OTOH it makes the file easier to manipulate. Tell me.
+
+Still TODO for the implementation :
+* rename the pictures when saving them, using sequential numbers (to be implemented in KoStore)
+* ability to save embedded part's pictures (like part2_pictures, above)
+
+Thank you for your attention,
+Werner <wtrobin@carinthia.com> and David <faure@kde.org>
+
