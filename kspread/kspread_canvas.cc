@@ -1097,6 +1097,12 @@ void KSpreadCanvas::mouseDoubleClickEvent( QMouseEvent*  )
     createEditor();
 }
 
+void KSpreadCanvas::wheelEvent( QWheelEvent* _ev )
+{
+  if ( vertScrollBar() )
+    QApplication::sendEvent( vertScrollBar(), _ev );
+}
+
 void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 {
   if ( m_pDoc->isLoading() )
@@ -2268,6 +2274,12 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
+void KSpreadVBorder::wheelEvent( QWheelEvent* _ev )
+{
+  if ( m_pCanvas->vertScrollBar() )
+    QApplication::sendEvent( m_pCanvas->vertScrollBar(), _ev );
+}
+
 void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 {
     KSpreadTable *table = m_pCanvas->activeTable();
@@ -2624,6 +2636,12 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     }
     setCursor( arrowCursor );
   }
+}
+
+void KSpreadHBorder::wheelEvent( QWheelEvent* _ev )
+{
+  if ( m_pCanvas->horzScrollBar() )
+    QApplication::sendEvent( m_pCanvas->horzScrollBar(), _ev );
 }
 
 void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )

@@ -306,7 +306,8 @@ protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
-    virtual void mouseDoubleClickEvent( QMouseEvent*);
+    virtual void mouseDoubleClickEvent( QMouseEvent* );
+    virtual void wheelEvent( QWheelEvent* );
     virtual void focusInEvent( QFocusEvent* );
     virtual void focusOutEvent( QFocusEvent* );
 
@@ -480,6 +481,7 @@ protected:
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseDoubleClickEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
+    virtual void wheelEvent( QWheelEvent* );
     void paintSizeIndicator( int mouseX, bool firstTime );
 
     KSpreadCanvas *m_pCanvas;
@@ -542,6 +544,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
+    virtual void wheelEvent( QWheelEvent* );
     void paintSizeIndicator( int mouseY, bool firstTime );
 
     KSpreadCanvas *m_pCanvas;
