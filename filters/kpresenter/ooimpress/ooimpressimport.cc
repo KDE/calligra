@@ -373,6 +373,9 @@ bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &setti
                         if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")=="SnapLinesDrawing" ) )
                         {
                             kdDebug()<<"SnapLinesDrawing****************:"<<viewItem.text()<<endl;
+                            parseHelpLine( doc, helpLineElement, viewItem.text() );
+                            //display it by default
+                            helpLineElement.setAttribute( "show", true );
                             foundElement = true;
                             break;
                         }
@@ -386,6 +389,50 @@ bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &setti
     return foundElement;
 }
 
+void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElement, const QString &text )
+{
+    //todo oo save its value in mm and kpresenter in double
+    QString str;
+    int newPos = text.length()-1; //start to element = 1
+    for ( int pos = text.length()-1; pos >=0;--pos )
+    {
+        if ( text[pos]=='P' )
+        {
+
+            //point
+            str = text.mid( pos+1, ( newPos-pos ) );
+            QDomElement point=doc.createElement("HelpPoint");
+
+            kdDebug()<<" point element  :"<< str <<endl;
+            QStringList listVal = QStringList::split( ",", str );
+            point.setAttribute("posX", listVal[0]);
+            point.setAttribute("posY", listVal[1]);
+            helpLineElement.appendChild( point );
+            newPos = pos-1;
+        }
+        else if ( text[pos]=='V' )
+        {
+            QDomElement lines=doc.createElement("Vertical");
+            //vertical element
+            str = text.mid( pos+1, ( newPos-pos ) );
+            kdDebug()<<" vertical  :"<< str <<endl;
+            lines.setAttribute( "value",  str  );
+            helpLineElement.appendChild( lines );
+            newPos = pos-1;
+
+        }
+        else if ( text[pos]=='H' )
+        {
+            //horizontal element
+            QDomElement lines=doc.createElement("Horizontal");
+            str = text.mid( pos+1, ( newPos-pos ) );
+            kdDebug()<<" horizontal  :"<< str <<endl;
+            lines.setAttribute( "value", str  );
+            helpLineElement.appendChild( lines );
+            newPos = pos-1;
+        }
+    }
+}
 
 void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement, double offset, bool sticky)
 {
