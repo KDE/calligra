@@ -555,10 +555,10 @@ bool KWFrameSet::load( QDomElement& element )
 
     KWParag *last = 0L;
 
-    QDomElement fs = element.namedItem( "FRAMES" );
+    QDomElement fs = element.namedItem( "FRAMES" ).toElement();
+    KWFrame rect;
     if ( !fs.isNull() ) {
 	QDomElement f = fs.firstChild().toElement();
-	KWFrame rect;
 	for( ; !f.isNull(); f = f.nextSibling().toElement() ) {
 	    KWParagLayout::Border l, r, t, b;
 	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
