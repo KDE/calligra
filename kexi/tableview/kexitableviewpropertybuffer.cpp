@@ -33,8 +33,8 @@ KexiTableViewPropertyBuffer::KexiTableViewPropertyBuffer(KexiViewBase *view, Kex
 {
 	m_buffers.setAutoDelete(true);
 
-	connect(m_tableView, SIGNAL(dataSet( KexiTableViewData *data )),
-		this, SLOT(slotDataSet( KexiTableViewData *data )));
+	connect(m_tableView, SIGNAL(dataSet(KexiTableViewData*)),
+		this, SLOT(slotDataSet(KexiTableViewData*)));
 	connect(m_tableView, SIGNAL(cellSelected(int,int)), 
 		this, SLOT(slotCellSelected(int,int)));
 
