@@ -20,7 +20,7 @@ Bugfixes:
 - Fix applying changes for bold and italic attribute with cell layout dialog
 - Fix paper size for custom layout in paper layout dialog
 - Fix enable/disable sort button when we select just one cel
-
+- Fix precision when displaying numbers in scientific format
 - Fix moving widgets in validity dialog
 
 
