@@ -1120,12 +1120,12 @@ void KoTextCursor::gotoNextWord()
     }
 }
 
-bool KoTextCursor::atParagStart()
+bool KoTextCursor::atParagStart() const
 {
     return idx == 0;
 }
 
-bool KoTextCursor::atParagEnd()
+bool KoTextCursor::atParagEnd() const
 {
     return idx == string->length() - 1;
 }

@@ -293,8 +293,8 @@ public:
     void killLine();
     void indent();
 
-    bool atParagStart();
-    bool atParagEnd();
+    bool atParagStart() const;
+    bool atParagEnd() const;
 
     void setIndex( int i, bool restore = TRUE );
 
