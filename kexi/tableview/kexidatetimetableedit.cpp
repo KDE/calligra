@@ -278,4 +278,4 @@ KexiTableEdit* KexiDateTimeEditorFactoryItem::createEditor(
 	return new KexiDateTimeTableEdit(column, parent);
 }
 
-#include "KexiDateTimeTableEdit.moc"
+#include "kexidatetimetableedit.moc"

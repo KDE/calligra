@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
  */
 
-#include "Kexitimetableedit.h"
+#include "kexitimetableedit.h"
 #include "kexidatetimeeditor_p.h"
 
 #include <qapplication.h>
@@ -200,4 +200,4 @@ KexiTableEdit* KexiTimeEditorFactoryItem::createEditor(
 	return new KexiTimeTableEdit(column, parent);
 }
 
-#include "KexiTimeTableEdit.moc"
+#include "kexitimetableedit.moc"
