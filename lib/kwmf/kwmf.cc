@@ -95,7 +95,9 @@ void KWmf::genericArc(
     startAngle = 180 * startAngle / PI;
     stopAngle = 180 * stopAngle / PI;
 
-    gotEllipse(m_dc, type, centre, ellipse.size() / 2, startAngle, stopAngle);
+    gotEllipse(m_dc, type, centre, ellipse.size() / 2,
+               static_cast<unsigned int>(startAngle),
+               static_cast<unsigned int>(stopAngle));
 }
 
 int KWmf::handleIndex(void) const

@@ -490,10 +490,10 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   parentView()->canvasAddChild( this );
 
   QRect geom = child->geometry();
-  m_frame->setGeometry( geom.x() * parentView()->zoom() - parentView()->canvasXOffset(),
-                        geom.y() * parentView()->zoom() - parentView()->canvasYOffset(),
-                        geom.width() * parentView()->zoom(),
-                        geom.height() * parentView()->zoom() );
+  m_frame->setGeometry( static_cast<int>(geom.x() * parentView()->zoom()) - parentView()->canvasXOffset(),
+                        static_cast<int>(geom.y() * parentView()->zoom()) - parentView()->canvasYOffset(),
+                        static_cast<int>(geom.width() * parentView()->zoom()),
+                        static_cast<int>(geom.height() * parentView()->zoom()) );
 
   m_frame->show();
   m_frame->raise();

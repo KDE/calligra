@@ -28,7 +28,6 @@
 
 class KoTemplateTree;
 class KoTemplateGroup;
-class KIO::Job;
 
 class MyIconCanvas : public KIconCanvas
 {
