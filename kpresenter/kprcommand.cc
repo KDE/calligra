@@ -43,29 +43,6 @@
 using namespace Qt3;
 #include <kdebug.h>
 
-/******************************************************************/
-/* Class: TextCmd						  */
-/******************************************************************/
-
-/*======================== constructor ===========================*/
-TextCmd::TextCmd(QString name, KPresenterDoc *doc, KPTextObject *tObj)
-    : KCommand(name), document(doc), textObject(tObj) {
-}
-
-/*====================== execute =================================*/
-void TextCmd::execute()
-{
-/*    textObject->ktextobject.redo();
-      document->repaint(textObject);*/
-}
-
-/*====================== unexecute ===============================*/
-void TextCmd::unexecute()
-{
-/*    textObject->ktextobject.undo();
-      document->repaint(textObject);*/
-}
-
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */

@@ -48,24 +48,6 @@ class KPresenterView;
 class KPClipartObject;
 class KoParagLayout;
 
-/******************************************************************/
-/* Class: TextCmd                                               */
-/******************************************************************/
-
-class TextCmd : public KCommand
-{
-public:
-    TextCmd(QString name, KPresenterDoc *doc, KPTextObject *tObj);
-    ~TextCmd() {}
-
-    virtual void execute();
-    virtual void unexecute();
-
-private:
-
-    KPresenterDoc *document;
-    KPTextObject *textObject;
-};
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */
