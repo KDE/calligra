@@ -113,7 +113,7 @@ class KSPREAD_EXPORT KSpreadCell : public KSpreadFormat
 public:
 
     KSpreadCell( KSpreadSheet *_sheet, int _column, int _row );
-    KSpreadCell( KSpreadSheet *_sheet, KSpreadStyle * _style, 
+    KSpreadCell( KSpreadSheet *_sheet, KSpreadStyle * _style,
 		 int _column, int _row );
 
     /**
@@ -244,7 +244,7 @@ public:
 
     void saveOasisValue (KoXmlWriter &xmlWriter);
 
-    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles );
+    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, bool force = false, bool copy = false );
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite, bool paste = false );

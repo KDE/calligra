@@ -112,7 +112,7 @@ public:
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
     virtual bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
-    virtual QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle ,int _col, int _row );
+    virtual QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle ,int _col, int _row , bool force = false, bool copy = false);
     virtual QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle );
     void saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font );
 

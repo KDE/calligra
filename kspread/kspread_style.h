@@ -121,7 +121,7 @@ class KSpreadStyle
 
     QString saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
     void loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element );
-    QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
+    static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
 
 
   bool release();
