@@ -294,7 +294,8 @@ void ASCIIImport::oldWayConvert(QTextStream& stream, QDomDocument& mainDocument,
 
             const int length = strLine.length();
             if (strLine.at(length-1) == '-')
-                strLine = strLine.left(length-1);  // remove the - at line end
+                // replace the hard hyphen - at line end by a soft hyphen
+                strLine.at(length-1)=QChar(173);
             else
                 strLine += ' '; // add space to end of line
 
