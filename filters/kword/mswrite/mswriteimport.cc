@@ -211,7 +211,7 @@ int MSWRITEImport::documentStartWrite (const int firstPageNumber)
 	}
 
 	// start document
-	// TODO: error checking   
+	// TODO: error checking
 	tagWrite ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 	tagWrite ("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.2//EN\" \"http://www.koffice.org/DTD/kword-1.2.dtd\">");
 	tagWrite ("<DOC xmlns=\"http://www.koffice.org/DTD/kword\" mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">");
@@ -408,7 +408,7 @@ int MSWRITEImport::headerStartWrite (void)
 	// except, if the header is NOT on the first page, then make an empty "First Page Header"
 	// by setting "visible=1"
 	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"1\" name=\"First Page Header\" visible=\"%i\">",
-						(!isHeaderOnFirstPage ()) ? 1 : 0);
+					(!isHeaderOnFirstPage ()) ? 1 : 0);
 	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 					m_headerFromTop, m_headerFromTop, m_left, m_right);
@@ -464,6 +464,7 @@ int MSWRITEImport::footerStartWrite (void)
 	tagWrite ("<FRAME runaround=\"1\" copy=\"1\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 					m_footerFromTop, m_footerFromTop, m_left, m_right);
+					
 	return 0;
 }
 
@@ -486,6 +487,8 @@ int MSWRITEImport::paraInfoStartWrite (const MSWRITE_FPROP_PAP & /*pap*/)
 	// reset charInfo counters
 	m_charInfoCountStart = 0;
 	m_charInfoCountLen = 0;
+	
+	m_paraIsImage = false;
 	
 	return 0;
 }
@@ -525,10 +528,40 @@ int MSWRITEImport::paraInfoEndWrite (const MSWRITE_FPROP_PAP &pap)
 		int indentLeft = pap.getLeftIndent ();
 		int indentRight = pap.getRightIndent ();
 
-		/*debug ("raw indent:  first: %i  left: %i  right: %i\n",
-					indentFirst, indentLeft, indentRight);*/
+#if 0
+		debug ("raw indent:  first: %i  left: %i  right: %i\n",
+					indentFirst, indentLeft, indentRight);
+#endif
 
-		if (pap.isObject ())
+		// Correct indentation in Header and Footer:
+		//
+		// For unknown reasons, Write adds the leftMargin to the leftIndent
+		// and rightMargin to rightIndent in the Header and Footer only but
+		// does not touch the leftIndentFirstLine
+		//
+		// TODO: move to MSWriteLib
+		// TODO: what if it's an image in the header/footer?
+		if (pap.isHeader () || pap.isFooter ())
+		{
+			WORD leftMargin = sectionProperty->getLeftMargin ();
+			WORD rightMargin = sectionProperty->getRightMargin ();
+
+#if 0
+			debug ("\thead|foot adjust: left: %i-%i=%i  right: %i-%i=%i\n",
+						indentLeft, leftMargin, indentLeft - leftMargin,
+						indentRight, rightMargin, indentRight - rightMargin);
+#endif
+
+			// adjust
+			indentLeft -= leftMargin;
+			indentRight -= rightMargin;
+
+			// prevent negative indents
+			if (indentLeft < 0) indentLeft = 0;
+			if (indentRight < 0) indentRight = 0; 
+		}
+
+		if (m_paraIsImage /*pap.isObject ()*/)
 		{
 			// MSWrite _always_ ignores "First Line Indent" if it's an object
 			if (indentFirst)
@@ -1040,6 +1073,7 @@ int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
 
 	// if anchored images could be positioned properly, this wouldn't be needed
 	m_objectHorizOffset = horizOffsetTwips / 20;;
+	m_paraIsImage = true;
 
 	return 0;
 }

@@ -149,6 +149,7 @@ private:
 	int m_objectUpto;
 
 	int m_objectHorizOffset;
+	bool m_paraIsImage;
 
 	// XML output that is held back until after "Text Frameset 1" is output
 	// (i.e. header & footer)
