@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="79">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="80">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -322,9 +322,9 @@
   <Menu name="Vertical Alignment"><text>Vertical Alignment</text>
    <Action name="align_top"/>
    <Separator/>
-   <Action name="align_bottom"/>
-   <Separator/>
    <Action name="align_center"/>
+   <Separator/>
+   <Action name="align_bottom"/>
   </Menu>
   <Separator/>
   <Action name="extendobjectheight"/>
