@@ -4346,7 +4346,6 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	{
 		chr = at( i );
                 bool isLowercase = chr->c.upper() != chr->c;
-                kdDebug() << "c=" << QString(chr->c) << " isLowercase=" << isLowercase << endl;
 	        int cw = chr->width;
 			// check for cursor mark
 		if ( cursor && this == cursor->parag() && i == cursor->index() ) {
