@@ -747,6 +747,7 @@ void ReportCanvas::keyPressEvent( QKeyEvent *e )
         switch ( e->key() ) {
             case Qt::Key_Delete:
                 qDebug("Deleting selection");
+		unselectItem(item);
                 ( (MyCanvas*) canvas() )->templ->removeSection( (CanvasBand *) item );
                 clearRequest();
                 return;
