@@ -454,4 +454,6 @@ Click <guibutton>OK</guibutton>.  The expression is now part of the current grou
 </sect1>
 <!-- Not currently implemented in kword.....
 <sect1 id="endnotes-and-footnotes"><title>Endnotes/Footnotes</title><para></para></sect1> -->
-
+<sect1 id="comments"><title>Document Comments </title>
+<para></para>
+</sect1>

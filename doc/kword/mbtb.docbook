@@ -751,18 +751,14 @@ for editing your document.</para>
 </varlistentry>
 
 <varlistentry>
-<term>
+<term id="preview-mode-menu">
 <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Preview View</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>This changes &kword; from a single page view, to a multiple page view suitable for evaluating document flow and formatting.</para>
-<para>The number of pages shown in preview mode can be adjusted by selecting <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure &kword;</guimenuitem>
-</menuchoice> from the menubar.  Then select <guilabel>Interface</guilabel> from the sidebar.  Near the bottom of the dialog box is a spin
-box labled <guilabel>Preview mode - Number of pages per row</guilabel>.
-Adjust this spin box to increase or decrease the size of the preview pages.</para>
+<para>The number of pages shown in preview mode <link linkend="opt-ui">can be adjusted</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1161,7 +1157,7 @@ including size, headers and footers.</action> For more details, go to
 </varlistentry>
 
 <varlistentry>
-<term>
+<term id="menu-format-stylist">
 <menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;&Alt;<keycap>S</keycap></keycombo>
@@ -1239,7 +1235,7 @@ before the frame is deleted.</action></para>
 </varlistentry>
 
 <varlistentry>
-<term>
+<term id="menu-raise-frame">
 <menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo>
@@ -1256,7 +1252,7 @@ using the menubar. </para>
 </varlistentry>
 
 <varlistentry>
-<term>
+<term id="menu-lower-frame">
 <menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo>

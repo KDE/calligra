@@ -62,7 +62,7 @@ as of the date included in the note.</para>
 <row><entry></entry><entry>Columns </entry><entry>Checked (April 20, 2002)</entry></row>
 <row><entry></entry><entry>Lists </entry><entry>Checked (April 20, 2002)</entry></row>
 <row><entry></entry><entry>Tables </entry><entry>Checked (April 20, 2002)</entry></row>
-<row><entry></entry><entry>Headers/Footers </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>Headers/Footers </entry><entry>Checked (May 6, 2002)</entry></row>
 <row><entry></entry><entry>Creating Templates/Saving a document as a template </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry></row>
 
@@ -111,9 +111,9 @@ as of the date included in the note.</para>
 <row><entry></entry></row>
 
 <row><entry>KWord Options </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Configure Key Bindings </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Configure Toolbars </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>KWord Options </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>Configure Key Bindings </entry><entry>Checked (May 6, 2002)</entry></row>
+<row><entry></entry><entry>Configure Toolbars </entry><entry>Checked (May 6, 2002)</entry></row>
+<row><entry></entry><entry>KWord Options </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Questions and Answers </entry><entry></entry><entry>Checked (March 23, 2002)</entry></row>
@@ -147,7 +147,7 @@ as of the date included in the note.</para>
 <row><entry></entry><entry>WordPerfect Filter </entry><entry>Written</entry></row>
 <row><entry></entry></row>
 
-<row><entry>Key Bindings Summary </entry><entry></entry><entry>Needs Updates</entry></row>
+<row><entry>Key Bindings Summary </entry><entry></entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>KWord file format </entry><entry></entry><entry>Checked (April 17, 2002)</entry></row>
@@ -158,6 +158,7 @@ as of the date included in the note.</para>
 
 <row><entry>Sections to be added</entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Thesaurus</entry><entry></entry></row>
+<row><entry></entry><entry>Completion</entry><entry></entry></row>
 
 </tbody>
 </tgroup>
