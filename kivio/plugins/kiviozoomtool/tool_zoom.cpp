@@ -176,7 +176,7 @@ void ZoomTool::processEvent(QEvent* e)
     }
 }
 
-void ZoomTool::activateGUI(KXMLGUIFactory* factory)
+void ZoomTool::activateGUI(KXMLGUIFactory* /*factory*/)
 {
 }
 
