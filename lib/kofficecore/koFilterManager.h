@@ -151,14 +151,16 @@ public:
      * @return the filename (some /tmp/ name) to which the original file should
      * be saved. The export_() function fetches this file and saves it to the _url
      * @param _url the location where the converted file will be stored
+     * @param _native_format the application's native file format
+     * @param outputFormat the format in which to save
      */
-    QString prepareExport( const QString &_url, const char *_native_format,
-				 const KoDocument *document );
+    QString prepareExport( const QString &_url, const QCString & _native_format,
+                           const QCString & outputFormat, const KoDocument *document );
     /**
      * Performs the "real" exporting - don't call this function directly! It will
      * be called from KoMainWindow::saveDocument()
      */
-    const bool export_();
+    bool export_();
 
     static void incRef();
     static void decRef();

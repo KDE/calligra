@@ -169,9 +169,10 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                  const QString & _native_name,
                                  bool allfiles ) {
 
+    QString nativeFormat = QString::fromLatin1(_format);
     QString service;
     service = "'";
-    service += QString::fromLatin1(_format);
+    service += nativeFormat;
     service += "' in ";
     if ( direction == Import )
         service += "Export";
@@ -186,7 +187,7 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
     QStringList mimes;
 
     if ( !_native_name.isEmpty() )
-        mimes += QString::fromLatin1(_format);
+        mimes += nativeFormat;
     for( unsigned int i = 0; i < vec.count(); ++i )
     {
         if ( direction == Import )
@@ -194,7 +195,10 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         else
             mimes += vec[i].export_;
     }
-    dialog->setMimeFilter( mimes );
+    if ( direction == Import )
+        dialog->setMimeFilter( mimes );
+    else
+        dialog->setMimeFilter( mimes, nativeFormat );
 
 #else // kdelibs == 2.1
     dialog->setFilter(fileSelectorList(direction, _format, _native_pattern,
@@ -426,7 +430,9 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
     return QString::null;
 }
 
-QString KoFilterManager::prepareExport( const QString & file, const char *_native_format,
+QString KoFilterManager::prepareExport( const QString & file,
+                                        const QCString & _native_format,
+                                        const QCString & outputFormat,
                                         const KoDocument *document )
 {
     d->exportFile=file;
@@ -434,27 +440,12 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
     d->document=document;
     KURL url( d->exportFile );
 
-    KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
-    QString mimeType;
-    if (t && t->name() != "application/octet-stream") {
-        kdDebug(s_area) << "Found MimeType " << t->name() << endl;
-        mimeType = t->name();
-    }
-    else {
-        kdDebug(s_area) << "No MimeType found. Setting " << _native_format << endl;
-        mimeType = _native_format;
-    }
+    ASSERT( outputFormat != _native_format );
 
-    if ( mimeType == _native_format )
-    {
-        kdDebug(s_area) << "Native format, returning without conversion. " << endl;
-        return file;
-    }
-
-    d->mime_type=mimeType;   // needed for export_ :)
+    d->mime_type=outputFormat;   // needed for export_ :)
 
     QString constr = "'";
-    constr += mimeType;
+    constr += outputFormat;
     constr += "' in Export and '";
     constr += _native_format;
     constr += "' in Import";
@@ -462,7 +453,7 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
     {
-        QString tmp = i18n("Could not export file of type\n%1").arg( t->name() );
+        QString tmp = i18n("Could not export file of type\n%1").arg( outputFormat );
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, tmp, i18n("Missing export filter") );
         return QString::null;
@@ -481,7 +472,7 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
         if(vec[i].implemented.lower()=="file")
             tmpFileNeeded=true;
         else if(vec[i].implemented.lower()=="kodocument") {
-            ok=filter->E_filter(file, document, _native_format, mimeType, d->config);
+            ok=filter->E_filter(file, document, _native_format, outputFormat, d->config);
             // if(ok)
             //  document->changedByFilter();
             const_cast<KoDocument*>(document)->slotProgress(-1);
@@ -502,7 +493,7 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
     return file;
 }
 
-const bool KoFilterManager::export_() {
+bool KoFilterManager::export_() {
 
     d->prepare=false;
 

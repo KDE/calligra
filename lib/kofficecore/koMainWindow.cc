@@ -435,16 +435,16 @@ bool KoMainWindow::saveDocument( bool saveas )
                                                _native_format, nativeFormatPattern(),
                                                nativeFormatName(), true);
         KURL newURL;
+        QCString outputFormat = _native_format;
 
         bool bOk;
         do {
             bOk=true;
             if(dialog->exec()==QDialog::Accepted) {
                 newURL=dialog->selectedURL();
-                if ( newURL.isLocalFile() )
-                    KRecentDocument::add(newURL.path(-1));
-                else
-                    KRecentDocument::add(newURL.url(-1), true);
+#ifdef HAVE_KDEPRINT // only in kdelibs > 2.1
+                outputFormat=dialog->currentMimeFilter().latin1();
+#endif
             }
             else
             {
@@ -458,7 +458,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                 break;
             }
 
-            // HACK - should we add extension() to KURL ?
+#ifndef HAVE_KDEPRINT // No need to force the extension anymore, with the new kfiledialog stuff
             if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
                 // assume that the pattern ends with .extension
                 QString s( dialog->currentFilter() );
@@ -467,6 +467,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 
                 newURL.setPath( newURL.path() + extension );
             }
+#endif
 
             if ( KIO::NetAccess::exists( newURL ) ) { // this file exists => ask for confirmation
                 bOk = KMessageBox::questionYesNo( this,
@@ -479,6 +480,13 @@ bool KoMainWindow::saveDocument( bool saveas )
         delete dialog;
         if (bOk) {
             m_recent->addURL( newURL );
+            if ( newURL.isLocalFile() )
+                KRecentDocument::add(newURL.path(-1));
+            else
+                KRecentDocument::add(newURL.url(-1), true);
+#ifdef HAVE_KDEPRINT
+            pDoc->setOutputMimeType( outputFormat );
+#endif
             bool ret = pDoc->saveAs( newURL );
             pDoc->setTitleModified();
             disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));

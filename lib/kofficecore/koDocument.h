@@ -159,6 +159,13 @@ public:
   KService::Ptr nativeService();
 
   /**
+   * Set the format in which the document should be saved.
+   * This is called on loading, and in "save as", so you shouldn't
+   * have to call it.
+   */
+  void setOutputMimeType( const QCString & mimeType );
+
+  /**
    *  Create a new view for the document.
    */
   KoView *createView( QWidget *parent = 0, const char *name = 0 );

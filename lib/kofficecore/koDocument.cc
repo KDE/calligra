@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
+#include "koDocument.h"
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -69,26 +71,28 @@ using namespace std;
 class KoDocumentPrivate
 {
 public:
-  KoDocumentPrivate()
-  {
-  }
-  ~KoDocumentPrivate()
-  {
-  }
+    KoDocumentPrivate()
+    {
+    }
+    ~KoDocumentPrivate()
+    {
+    }
 
-  QList<KoView> m_views;
-  QList<KoDocumentChild> m_children;
-  QList<KoMainWindow> m_shells;
+    QList<KoView> m_views;
+    QList<KoDocumentChild> m_children;
+    QList<KoMainWindow> m_shells;
 
-  bool m_bSingleViewMode;
-  mutable bool m_changed;
+    bool m_bSingleViewMode;
+    mutable bool m_changed;
 
-  QWidget *m_wrapperWidget;
+    QWidget *m_wrapperWidget;
 
-  QValueList<QDomDocument> m_viewBuildDocuments;
-  KoDocumentIface * m_dcopObject;
+    QValueList<QDomDocument> m_viewBuildDocuments;
+    KoDocumentIface * m_dcopObject;
 
-  KoDocumentInfo *m_docInfo;
+    KoDocumentInfo *m_docInfo;
+
+    QCString outputMimeType;
 };
 
 // Used in singleViewMode
@@ -196,8 +200,17 @@ bool KoDocument::saveFile()
   if ( !kapp->inherits( "KoApplication" ) )
     return false;
 
+  QCString _native_format = nativeFormatMimeType();
+#ifdef HAVE_KDEPRINT
+  // The output format is set by koMainWindow, and by openFile
+  QCString outputMimeType = d->outputMimeType;
+  ASSERT( !outputMimeType.isEmpty() );
+  if ( outputMimeType.isEmpty() )
+      outputMimeType = _native_format;
+#else // old method
   KMimeType::Ptr t = KMimeType::findByURL( m_url, 0, TRUE );
   QCString outputMimeType = t->name().latin1();
+#endif
 
   QApplication::setOverrideCursor( waitCursor );
 
@@ -213,13 +226,12 @@ bool KoDocument::saveFile()
         //cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
         //system( cmd.local8Bit() );
   }
-  QCString _native_format = nativeFormatMimeType();
   bool ret;
   if ( outputMimeType != _native_format ) {
     kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
     // Not native format : save using export filter
     d->m_changed=false;
-    QString nativeFile=KoFilterManager::self()->prepareExport( m_file, _native_format, this);
+    QString nativeFile=KoFilterManager::self()->prepareExport( m_file, _native_format, outputMimeType, this);
     kdDebug(30003) << "Temp native file " << nativeFile << endl;
 
     if(d->m_changed==false && nativeFile!=m_file) {
@@ -244,6 +256,11 @@ bool KoDocument::saveFile()
   }
   QApplication::restoreOverrideCursor();
   return ret;
+}
+
+void KoDocument::setOutputMimeType( const QCString & mimeType )
+{
+    d->outputMimeType = mimeType;
 }
 
 KAction *KoDocument::action( const QDomElement &element ) const
@@ -634,9 +651,10 @@ bool KoDocument::openFile()
   }
 
   d->m_changed=false;
+  QCString _native_format = nativeFormatMimeType();
 
   // Launch a filter if we need one for this url ?
-  QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType(), this );
+  QString importedFile = KoFilterManager::self()->import( m_file, _native_format, this );
 
   kdDebug(30003) << "KoDocument::openFile - importedFile " << importedFile << endl;
 
@@ -655,7 +673,7 @@ bool KoDocument::openFile()
   }
   else {
     // The filter did it all. Ok if it changed something...
-    ok=d->m_changed;
+    ok = d->m_changed;
   }
 
   if ( importedFile != m_file )
@@ -675,6 +693,11 @@ bool KoDocument::openFile()
     QWidget *view = createView( d->m_wrapperWidget );
     view->show();
   }
+
+  // We decided not to save in the file's original format by default
+  // ( KWord isn't a text editor or a MSWord editor :)
+  // The risk of losing formatting information is too high currently.
+  d->outputMimeType = _native_format;
 
   return ok;
 }
@@ -935,3 +958,4 @@ DCOPObject * KoDocument::dcopObject()
 }
 
 #include "koDocument.moc"
+
