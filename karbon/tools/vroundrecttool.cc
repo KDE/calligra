@@ -88,6 +88,7 @@ VRoundRectTool::VRoundRectOptionsWidget::refreshUnit ()
 {
 	m_width->setUnit( m_part->unit() );
 	m_height->setUnit( m_part->unit() );
+	m_round->setUnit( m_part->unit() );
 }
 
 VRoundRectTool::VRoundRectTool( KarbonView* view )
@@ -120,7 +121,7 @@ VRoundRectTool::shape( bool interactive ) const
 				m_p,
 				KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ),
 				KoUnit::ptFromUnit( m_optionsWidget->height(), view()->part()->unit() ),
-				m_optionsWidget->round() );
+				KoUnit::ptFromUnit( m_optionsWidget->round(), view()->part()->unit() ) );
 	}
 	else
 		return
@@ -129,6 +130,6 @@ VRoundRectTool::shape( bool interactive ) const
 				m_p,
 				m_d1,
 				m_d2,
-				m_optionsWidget->round() );
+				KoUnit::ptFromUnit( m_optionsWidget->round(), view()->part()->unit() ) );
 }
 
