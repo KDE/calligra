@@ -288,6 +288,7 @@ protected slots:
     void modifyClicked();
     void delClicked();
     void slotDoubleClicked( QListBoxItem * );
+    void slotTabValueChanged( const QString &);
 
 protected:
     void setActiveItem(double value);

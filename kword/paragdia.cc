@@ -1411,7 +1411,9 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * p
 	bDel->setEnabled(false);
 	bModify->setEnabled(false);
     }
-
+    bAdd->setEnabled(false);
+    connect(eTabPos,SIGNAL(textChanged ( const QString & )),
+            this, SLOT(slotTabValueChanged( const QString & )));
     connect(bAdd,SIGNAL(clicked ()),this,SLOT(addClicked()));
     connect(bModify,SIGNAL(clicked ()),this,SLOT(modifyClicked()));
     connect(bDel,SIGNAL(clicked ()),this,SLOT(delClicked()));
@@ -1419,6 +1421,11 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * p
             this,SLOT(slotDoubleClicked( QListBoxItem * ) ));
     connect(lTabs,SIGNAL(clicked( QListBoxItem * ) ),
             this,SLOT(slotDoubleClicked( QListBoxItem * ) ));
+}
+
+void KWParagTabulatorsWidget::slotTabValueChanged( const QString &_text )
+{
+    bAdd->setEnabled(!_text.isEmpty());
 }
 
 void KWParagTabulatorsWidget::addClicked()
