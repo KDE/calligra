@@ -190,9 +190,8 @@ public:
     virtual bool endElement( const QString&, const QString& , const QString& qName);
     virtual bool characters ( const QString & ch );
 protected:
-	bool clearStackUntilParagraph(StackItemStack& auxilaryStack);
-	void unclearStack(StackItemStack& auxilaryStack);
-	bool complexForcedBreak(StackItem* stackItem, const bool pageBreak);
+    bool clearStackUntilParagraph(StackItemStack& auxilaryStack);
+    bool complexForcedBreak(StackItem* stackItem, const bool pageBreak);
 private:
     void createMainFramesetElement(void);
     QString indent; //DEBUG
@@ -855,10 +854,20 @@ bool StructureParser::complexForcedBreak(StackItem* stackItem, const bool pageBr
     bool success=StartElementBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement,pageBreak);
 
     // Now restore the stack
-    unclearStack(auxilaryStack);
 
-    // At the end, set the position to 0
-    structureStack.current()->pos=0;
+    StackItem* stackCurrent=structureStack.current();
+    StackItem* item;
+    while (auxilaryStack.count()>0)
+    {
+        item=auxilaryStack.pop();
+        // We cannot put back the item on the stack like that.
+        // We must set a few values for each item.
+        item->pos=0; // Start at position 0
+        item->stackElementParagraph=stackCurrent->stackElementParagraph; // new <PARAGRAPH>
+        item->stackElementText=stackCurrent->stackElementText; // new <TEXT>
+        item->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // new <FORMATS>
+        structureStack.push(item);
+    }
 
     return success;
 }
@@ -1114,14 +1123,6 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
                 return false;
             }
         }
-    }
-}
-
-void StructureParser::unclearStack(StackItemStack& auxilaryStack)
-{
-    while (auxilaryStack.count()>0)
-    {
-        structureStack.push(auxilaryStack.pop());
     }
 }
 
