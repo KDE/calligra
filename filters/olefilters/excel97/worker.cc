@@ -637,7 +637,7 @@ bool Worker::op_chart_axis(Q_UINT32, QDataStream &body)
 
 bool Worker::op_chart_tick(Q_UINT32, QDataStream &body)
 {
-	Q_UINT8 major, minor, pos, flags;
+	Q_UINT8 major, minor, pos, flags = 0; // FIXME: flags!
 	Q_UINT16 r, g, b;
 	
 	body >> major >> minor >> pos;
@@ -1532,7 +1532,7 @@ bool Worker::op_setup(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_shrfmla(Q_UINT32 size, QDataStream &body)
+bool Worker::op_shrfmla(Q_UINT32 /*size*/, QDataStream &/*body*/)
 {
 	/*
 	Q_UINT16 firstrow, lastrow;
