@@ -60,3 +60,8 @@ bool KWordFrameSetIface::isVisible() const
 {
     return m_frame->isVisible();
 }
+
+bool KWordFrameSetIface::isFloating() const
+{
+    return m_frame->isFloating();
+}
