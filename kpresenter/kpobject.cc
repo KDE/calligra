@@ -595,23 +595,16 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         }
         else
             kdDebug()<<" not supported :"<<effectStr<<endl;
-#if 0
-        // sound effect
-        QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
-        if (!origSoundEff.isNull())
+        QDomElement sound = animation->namedItem( "presentation:sound" ).toElement();
+        if ( !sound.isNull() )
         {
-            QString soundUrl = storeSound(origSoundEff, sound, doc);
-
-            if (!soundUrl.isNull())
+            kdDebug()<<" object has sound effect \n";
+            if ( sound.hasAttribute( "xlink:href" ) )
             {
-                QDomElement pseElem = doc.createElement("APPEARSOUNDEFFECT");
-                pseElem.setAttribute("appearSoundEffect", 1);
-                pseElem.setAttribute("appearSoundFileName", soundUrl);
-
-                e.appendChild(pseElem);
+                a_fileName =sound.attribute( "xlink:href" );
+                appearSoundEffect = true;
             }
         }
-#endif
     }
 
     animation = 0L;
@@ -662,24 +655,16 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         //FIXME allow to save/load this attribute
         if ( effect3 != EF3_NONE )
             disappear = true;
-#if 0
-        // sound effect
-        QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
-        if (!origSoundEff.isNull())
+        QDomElement sound = animation->namedItem( "presentation:sound" ).toElement();
+        if ( !sound.isNull() )
         {
-            QString soundUrl = storeSound(origSoundEff, sound, doc);
-
-            if (!soundUrl.isNull())
+            kdDebug()<<" object has sound effect \n";
+            if ( sound.hasAttribute( "xlink:href" ) )
             {
-                QDomElement pseElem = doc.createElement("APPEARSOUNDEFFECT");
-                pseElem.setAttribute("appearSoundEffect", 1);
-                pseElem.setAttribute("appearSoundFileName", soundUrl);
-
-                e.appendChild(pseElem);
+                d_fileName =sound.attribute( "xlink:href" );
+                disappearSoundEffect = true;
             }
         }
-#endif
-
     }
     //shadow
 #if 0 //move it to kptextobject
