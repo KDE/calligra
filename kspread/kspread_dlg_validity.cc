@@ -78,11 +78,11 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     choose->resize( choose->sizeHint() );
     grid1->addWidget(choose,1,1);
     QStringList list;
-    list+=i18n("Equal");
-    list+=i18n("superior");
-    list+=i18n("inferior");
-    list+=i18n("superior or equal");
-    list+=i18n("inferior or equal");
+    list+=i18n("equal to");
+    list+=i18n("greater than");
+    list+=i18n("less than");
+    list+=i18n("equal to or greater than");
+    list+=i18n("equal to or less than");
     list+=i18n("between");
     list+=i18n("different from");
     choose->insertStringList(list);

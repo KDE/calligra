@@ -93,11 +93,11 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QStrin
   grid1->activate();
   QStringList list;
   list+=i18n("<none>");
-  list+=i18n("Equal");
-  list+=i18n("superior");
-  list+=i18n("inferior");
-  list+=i18n("superior or equal");
-  list+=i18n("inferior or equal");
+  list+=i18n("equal to");
+  list+=i18n("greater than");
+  list+=i18n("less than");
+  list+=i18n("equal to or greater than");
+  list+=i18n("equal to or less than");
   list+=i18n("between");
   list+=i18n("different from");
 
