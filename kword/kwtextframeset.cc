@@ -53,7 +53,9 @@
 #include "KWordFootNoteFrameSetIface.h"
 #include "KWordFrameSetIface.h"
 #include <kdebug.h>
+#if ! KDE_IS_VERSION(3,1,90)
 #include <kdebugclasses.h>
+#endif
 #include <assert.h>
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY

@@ -3,7 +3,7 @@
 #include "kwdoc.h"
 #include <qtimer.h>
 
-//#define DEBUG_FRAMELAYOUT
+#define DEBUG_FRAMELAYOUT
 
 #ifdef NDEBUG
 #undef DEBUG_FRAMELAYOUT
@@ -489,6 +489,7 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
                      top, ptColumnWidth, bottom - top );
         uint frameNum = pageNum * numColumns + col;
         KWFrame* frame;
+        kdDebug() << k_funcinfo << " frameNum=" << frameNum << " numframes=" << mainTextFrameSet->getNumFrames() << endl;
         if ( frameNum < mainTextFrameSet->getNumFrames() ) {
             // Resize existing frame
             frame = mainTextFrameSet->frame( frameNum );

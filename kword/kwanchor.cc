@@ -22,8 +22,10 @@
 #include "kwdoc.h"
 #include "kwviewmode.h"
 #include <kdebug.h>
+#include <kdeversion.h>
+#if ! KDE_IS_VERSION(3,1,90)
 #include <kdebugclasses.h>
-
+#endif
 
 KWAnchor::KWAnchor( KoTextDocument *textDocument, KWFrameSet * frameset, int frameNum )
     : KoTextCustomItem( textDocument),

@@ -23,7 +23,9 @@
 
 #include <kapplication.h> // for KDE_VERSION
 #include <kdebug.h>
+#if ! KDE_IS_VERSION(3,1,90)
 #include <kdebugclasses.h>
+#endif
 #include <klibloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -318,12 +320,13 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     // Try to force a scalable font.
     m_defaultFont.setStyleStrategy( QFont::ForceOutline );
-    //kdDebug() << "Default font: requested family: " << m_defaultFont.family() << endl;
-    //kdDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
 
     int ptSize = m_defaultFont.pointSize();
     if ( ptSize == -1 ) // specified with a pixel size ?
         ptSize = QFontInfo(m_defaultFont).pointSize();
+
+    //kdDebug() << "Default font: requested family: " << m_defaultFont.family() << endl;
+    //kdDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
 
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
