@@ -346,6 +346,16 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_sbObjectLabel = 0L; // Only added when objects are selected
     m_sbSavingLabel = 0L; // use when saving file
 
+    //when kword is embedded into konqueror apply a zoom=100
+    //in konqueror we can't change zoom -- ### TODO ?
+    if(!m_pKPresenterDoc->isReadWrite())
+    {
+        setZoom( 100, true );
+        slotUpdateRuler();
+        initGui();
+    }
+
+
     setAcceptDrops( TRUE );
 }
 
