@@ -299,6 +299,7 @@ public:
   void insertChild( KoDocumentChild *child ) { KoDocument::insertChild( child ); }
 
   void initConfig();
+    void saveConfig();
   void refreshLocale();
 
   void emitBeginOperation();

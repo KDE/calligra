@@ -425,6 +425,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
 
     QObject::connect( m_pDoc, SIGNAL( sig_refreshLocale() ), this, SLOT( slotRefreshLocale()));
+    viewZoom(QString::number(m_pDoc->zoom()) );
 
 }
 
@@ -670,7 +671,7 @@ void KSpreadView::initializeGlobalOperationActions()
   lst1 << "500%";
 
   m_viewZoom->setItems( lst1 );
-  m_viewZoom->setCurrentItem( 4 );
+  //m_viewZoom->setCurrentItem( 4 );
 
   m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");

@@ -183,6 +183,16 @@ bool KSpreadDoc::initDoc()
 }
 
 
+void KSpreadDoc::saveConfig()
+{
+    if ( isEmbedded() )
+        return;
+    KConfig *config = KSpreadFactory::global()->config();
+    config->setGroup( "Parameters" );
+    config->writeEntry( "Zoom", m_iZoom );
+
+}
+
 void KSpreadDoc::initConfig()
 {
     KSpellConfig ksconfig;
@@ -206,8 +216,16 @@ void KSpreadDoc::initConfig()
       config->setGroup( "KSpread Page Layout" );
       setUnit( (KoUnit::Unit)config->readNumEntry( "Default unit page" ,0));
     }
-}
+    if( config->hasGroup("Parameters" ))
+    {
+        config->setGroup( "Parameters" );
+        m_iZoom = config->readNumEntry( "Zoom", 100 );
+    }
+    else
+      m_iZoom = 100;
 
+
+}
 
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 {
@@ -504,7 +522,6 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
   kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
   setModified( FALSE );
-
   return true;
 }
 
@@ -946,6 +963,9 @@ void KSpreadDoc::RetrieveMarkerInfo(const QRect &marker, KSpreadTable* table,
 
 KSpreadDoc::~KSpreadDoc()
 {
+    //don't save config when kword is embedded into konqueror
+    if(isReadWrite())
+        saveConfig();
   destroyInterpreter();
 
   delete m_pUndoBuffer;
