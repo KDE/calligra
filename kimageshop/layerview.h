@@ -22,6 +22,8 @@ class LayerView : public QTableView
 
 public:
 
+  enum action { VISIBLE, SELECT, LINKING, OPACITY, RENAME, ADDLAYER, REMOVELAYER, ADDMASK, REMOVEMASK, UPPERLAYER, LOWERLAYER, FRONTLAYER, BACKLAYER };
+
   LayerView(QWidget* _parent = 0, const char* _name = 0 );
   LayerView(KImageShopDoc* doc, QWidget* _parent = 0, const char* name = 0 );
 

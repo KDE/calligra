@@ -24,21 +24,39 @@
 #include <qpoint.h>
 
 #include "tool.h"
+#include "kimageshop_undo.h"
+
+class MoveCommand : public KImageShopCommand
+{
+public:
+
+  MoveCommand( KImageShopDoc *doc, int layer, QPoint oldpos, QPoint newpos );
+
+  virtual void execute();
+  virtual void unexecute();
+
+private:
+
+  int m_layer;
+  QPoint m_oldPos;
+  QPoint m_newPos;
+};
 
 class MoveTool : public Tool
 {
- public:
-  MoveTool(KImageShopDoc *doc);
+public:
+  MoveTool( KImageShopDoc *doc );
   ~MoveTool();
 
-  virtual char* toolName() { return CORBA::string_dup("MoveTool"); }
+  virtual char* toolName() { return CORBA::string_dup( "MoveTool" ); }
 
-  virtual void mousePress(const KImageShop::MouseEvent& e); 
-  virtual void mouseMove(const KImageShop::MouseEvent& e);
-  virtual void mouseRelease(const KImageShop::MouseEvent& e);
+  virtual void mousePress( const KImageShop::MouseEvent& e ); 
+  virtual void mouseMove( const KImageShop::MouseEvent& e );
+  virtual void mouseRelease( const KImageShop::MouseEvent& e );
 
- protected:
+protected:
   QPoint m_dragStart;
+  QPoint m_dragPosition;
   bool   m_dragging;
 };
 

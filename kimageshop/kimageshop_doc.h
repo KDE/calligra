@@ -27,6 +27,7 @@
 #include <koFrame.h>
 #include <koDocument.h>
 #include <koPrintExt.h>
+#include <koUndo.h>
 
 #include "kimageshop.h"
 #include "kimageshop_view.h"
@@ -42,7 +43,8 @@ class KImageShopDoc : public Canvas,
 {
   Q_OBJECT
     
- public:
+public:
+
   KImageShopDoc(int w = 510, int h = 510);
   ~KImageShopDoc();
 
@@ -72,17 +74,25 @@ class KImageShopDoc : public Canvas,
   bool openDocument( const char* _filename, const char* _format = 0L );
   bool saveDocument( const char* _filename, const char* _format = 0L );
 
+  KoCommandHistory* commandHistory() { return &m_commands; };
+
 public slots:
- void slotUpdateViews(const QRect &area);
+
+  void slotUpdateViews( const QRect &area );
+  void slotUndoRedoChanged( QString _undo, QString _redo );
 
 signals:
-  void sigUpdateView(const QRect &area);
+
+  void sigUpdateView( const QRect &area );
   
 protected:
+
   virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
 
   // List of views, that are connectet to the document.
   QList<KImageShopView> m_lstViews;
+
+  KoCommandHistory m_commands;
 
   QString m_strImageFormat;
   bool m_bEmpty;

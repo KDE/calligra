@@ -58,6 +58,9 @@ public:
   Layer* getCurrentLayer()
   { return currentLayer; }
 
+  int getCurrentLayerIndex()
+  { return layers.find( currentLayer ); }
+
   /**
    *  Defines the current layedr.
    */

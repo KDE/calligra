@@ -37,6 +37,9 @@ MoveTool
  - derived from Tool
  - move layers/selections
 
+MoveCommand
+ - command fot moving layers (undo/redo)
+
 BrushTool
  - derived from Tool
  - paint with a brush on the canvas
@@ -49,17 +52,20 @@ Layer
  - a image layer
 
 LayerList
-- a list if several layers
+ - a list if several layers
 
 Channel
  - a layer channel
 
 LayerDialog
-- a non-modal dialog for editing layers
+ - a non-modal dialog for editing layers
 
 LayerView
-- a view for all layers in a canvas
-- provides context menu when clicking RMB for each layer
+ - a view for all layers in a canvas
+ - provides context menu when clicking RMB for each layer
+
+KImageShopCommand
+- generic command class
 
 Ideas:
 ------

@@ -94,6 +94,9 @@ public slots:
   virtual void slotActivateBrushTool();
   virtual void slotActivateZoomTool();
 
+  void changeUndo( QString, bool );
+  void changeRedo( QString, bool );
+
 protected:
 
   virtual void init();
@@ -112,6 +115,10 @@ protected:
 
   void editUndo();
   void editRedo();
+  void editCut();
+  void editCopy();
+  void editPaste();
+
   void viewLayerDialog();
 
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
@@ -120,6 +127,9 @@ protected:
   OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Undo;
   CORBA::Long m_idMenuEdit_Redo;
+  CORBA::Long m_idMenuEdit_Cut;
+  CORBA::Long m_idMenuEdit_Copy;
+  CORBA::Long m_idMenuEdit_Paste;
 
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_LayerDialog;

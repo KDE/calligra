@@ -18,46 +18,87 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <klocale.h>
+
 #include "movetool.h"
 #include "kimageshop_doc.h"
 
-MoveTool::MoveTool(KImageShopDoc *doc) : Tool(doc)
+MoveCommand::MoveCommand( KImageShopDoc *doc, int layer, QPoint oldpos, QPoint newpos )
+  : KImageShopCommand( i18n( "Move layer" ), doc )
+  , m_layer( layer )
+  , m_oldPos( oldpos )
+  , m_newPos( newpos )
+{
+}
+
+void MoveCommand::execute()
+{
+   m_pDoc->setCurrentLayer( m_layer );
+   QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
+   m_pDoc->moveLayer( m_oldPos.x(), m_oldPos.y() );
+   updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
+   m_pDoc->compositeImage( updateRect );
+}
+
+void MoveCommand::unexecute()
+{
+   m_pDoc->setCurrentLayer( m_layer );
+   QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
+   m_pDoc->moveLayer( m_newPos.x(), m_newPos.y() );
+   updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
+   m_pDoc->compositeImage( updateRect );
+}
+
+MoveTool::MoveTool( KImageShopDoc *doc )
+  : Tool( doc )
 {
   m_dragging = false;
 }
 
-MoveTool::~MoveTool() {}
-
-void MoveTool::mousePress(const KImageShop::MouseEvent& e)
+MoveTool::~MoveTool()
 {
-  if(!e.leftButton)
+}
+
+void MoveTool::mousePress( const KImageShop::MouseEvent& e )
+{
+  if( !e.leftButton )
     return;
+
   m_dragging = true;
-  m_dragStart.setX(e.posX);
-  m_dragStart.setY(e.posY);
+  m_dragStart.setX( e.posX );
+  m_dragStart.setY( e.posY );
 } 
 
-void MoveTool::mouseMove(const KImageShop::MouseEvent& e)
+void MoveTool::mouseMove( const KImageShop::MouseEvent& e )
 {
-  if(m_dragging)
-    {
-      QPoint pos(e.posX, e.posY);
-      QPoint dragSize = pos - m_dragStart;
+  if( m_dragging )
+  {
+    QPoint pos( e.posX, e.posY );
 
-      QRect updateRect(m_pDoc->getCurrentLayer()->imageExtents());
-      m_pDoc->moveLayer(dragSize.x(), dragSize.y());
-      updateRect=updateRect.unite(m_pDoc->getCurrentLayer()->imageExtents());
-      m_pDoc->compositeImage(updateRect);
+    m_dragPosition = pos - m_dragStart;
 
-      m_dragStart = pos;
+    QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
+    m_pDoc->moveLayer( m_dragPosition.x(), m_dragPosition.y() );
+    updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
+    m_pDoc->compositeImage( updateRect );
 
-      m_pDoc->slotUpdateViews(updateRect);
-    }
+    m_dragStart = pos;
+
+    m_pDoc->slotUpdateViews( updateRect );
+  }
 }
 
-void MoveTool::mouseRelease(const KImageShop::MouseEvent& e)
+void MoveTool::mouseRelease( const KImageShop::MouseEvent& e )
 {
-  if (!e.leftButton)
+  if( !e.leftButton )
     return;
+
+  cout << "Michael : add move command" << endl;
+
+  MoveCommand *moveCommand = new MoveCommand( m_pDoc, m_pDoc->getCurrentLayerIndex(), m_dragStart, m_dragPosition );
+
+  m_pDoc->commandHistory()->addCommand( moveCommand );
+
   m_dragging = false;
 }
+

@@ -75,27 +75,28 @@ void LayerView::init( KImageShopDoc* doc )
 
   QPopupMenu *submenu = new QPopupMenu();
  
-  submenu->insertItem( i18n( "Upper" ), 21 );
-  submenu->insertItem( i18n( "Lower" ), 22 );
-  submenu->insertItem( i18n( "Most front" ), 23 );
-  submenu->insertItem( i18n( "Most back" ), 24 );
+  submenu->insertItem( i18n( "Upper" ), UPPERLAYER );
+  submenu->insertItem( i18n( "Lower" ), LOWERLAYER );
+  submenu->insertItem( i18n( "Most front" ), FRONTLAYER );
+  submenu->insertItem( i18n( "Most back" ), BACKLAYER );
 
   m_contextmenu = new QPopupMenu();
 
   m_contextmenu->setCheckable(TRUE);
 
-  m_contextmenu->insertItem( i18n( "Visible" ), 1 );
+  m_contextmenu->insertItem( i18n( "Visible" ), VISIBLE );
+  m_contextmenu->insertItem( i18n( "Select"), SELECT );
   m_contextmenu->insertItem( i18n( "Level" ), submenu );
-  m_contextmenu->insertItem( i18n( "Linked"), 2 );
-  m_contextmenu->insertItem( i18n( "Opacity"), 3 );
-  m_contextmenu->insertItem( i18n( "Rename"), 4 );
+  m_contextmenu->insertItem( i18n( "Linked"), LINKING );
+  m_contextmenu->insertItem( i18n( "Opacity"), OPACITY );
+  m_contextmenu->insertItem( i18n( "Rename"), RENAME );
 
   m_contextmenu->insertSeparator();
 
-  m_contextmenu->insertItem( i18n( "Add Layer" ), 11 );
-  m_contextmenu->insertItem( i18n( "Remove Layer"), 12 );
-  m_contextmenu->insertItem( i18n( "Add Mask" ), 13 );
-  m_contextmenu->insertItem( i18n( "Remove Mask"), 14 );
+  m_contextmenu->insertItem( i18n( "Add Layer" ), ADDLAYER );
+  m_contextmenu->insertItem( i18n( "Remove Layer"), REMOVELAYER );
+  m_contextmenu->insertItem( i18n( "Add Mask" ), ADDMASK );
+  m_contextmenu->insertItem( i18n( "Remove Mask"), REMOVEMASK );
 
   connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
   connect( submenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
@@ -141,8 +142,8 @@ void LayerView::updateTable()
 
 void LayerView::update_contextmenu( int _index )
 {
-  m_contextmenu->setItemChecked( 1, m_doc->layerList().at( _index )->isVisible() );
-  m_contextmenu->setItemChecked( 2, m_doc->layerList().at( _index )->isLinked() );
+  m_contextmenu->setItemChecked( VISIBLE, m_doc->layerList().at( _index )->isVisible() );
+  m_contextmenu->setItemChecked( LINKING, m_doc->layerList().at( _index )->isLinked() );
 }
 
 void LayerView::selectLayer( int _index )
@@ -186,28 +187,28 @@ void LayerView::slotMenuAction( int _id )
 {
   switch( _id )
   {
-    case 1:
+    case VISIBLE:
       slotInverseVisibility( m_selected );
       break;
-    case 2:
+    case LINKING:
       slotInverseLinking( m_selected );
       break;
-    case 3:
+    case OPACITY:
       cerr << "Michael : Opacity" << endl;
       break;
-    case 4:
+    case RENAME:
       slotRenameLayer( m_selected );
       break;
-    case 11:
+    case ADDLAYER:
       slotAddLayer();
       break;
-    case 12:
+    case REMOVELAYER:
       slotRemoveLayer();
       break;
-    case 21:
+    case UPPERLAYER:
       slotUpperLayer();
       break;
-    case 22:
+    case LOWERLAYER:
       slotLowerLayer();
       break;
     default:
@@ -281,11 +282,10 @@ void LayerView::slotUpperLayer()
 {
   int newpos = m_selected > 0 ? m_selected - 1 : 0;
 
-  m_doc->upperLayer( m_selected );
-  repaint();
-
   if( m_selected != newpos )
   {
+    m_doc->upperLayer( m_selected );
+    repaint();
     swapLayers( m_selected, newpos );
   }
 }
@@ -294,11 +294,10 @@ void LayerView::slotLowerLayer()
 {
   int newpos = ( m_selected + 1 ) < m_doc->layerList().count() ? m_selected + 1 : m_selected;
 
-  m_doc->lowerLayer( m_selected );
-  repaint();
-
   if( m_selected != newpos )
   {
+    m_doc->lowerLayer( m_selected );
+    repaint();
     swapLayers( m_selected, newpos );
   }
 }

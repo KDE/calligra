@@ -41,7 +41,9 @@
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388
 
-KImageShopDoc::KImageShopDoc(int w, int h) : Canvas(w, h)
+KImageShopDoc::KImageShopDoc( int _width, int _height )
+  : Canvas( _width, _height )
+  , m_commands()
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
@@ -51,6 +53,8 @@ KImageShopDoc::KImageShopDoc(int w, int h) : Canvas(w, h)
   kimgioRegister();
 
   m_lstViews.setAutoDelete(false);
+
+  QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ), this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
 }
 
 KImageShopDoc::~KImageShopDoc()
@@ -524,6 +528,18 @@ void KImageShopDoc::setModified( bool _c )
 bool KImageShopDoc::isEmpty()
 {
   return m_bEmpty;
+}
+
+void KImageShopDoc::slotUndoRedoChanged( QString _undo, QString _redo )
+{
+  if( !m_lstViews.isEmpty() )
+  {
+    for( KImageShopView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+    {
+      viewPtr->changeUndo( _undo, !_undo.isEmpty() );
+      viewPtr->changeRedo( _redo, !_redo.isEmpty() );
+    }
+  }
 }
 
 #include "kimageshop_doc.moc"
