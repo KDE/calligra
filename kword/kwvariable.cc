@@ -103,10 +103,10 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
             return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
         }
         else if ( localName.endsWith("table-count" ) ||
-                  localName.endsWith("text:object-count" ) ||
-                  localName.endsWith("text:image-count" ) ||
-                  localName.endsWith("text:paragraph-count" ) ||
-                  localName.endsWith("text:word-count" ) )
+                  localName.endsWith("object-count" ) ||
+                  localName.endsWith("image-count" ) ||
+                  localName.endsWith("paragraph-count" ) ||
+                  localName.endsWith("word-count" ) )
         {
             QString key = "NUMBER";
             int type = VT_STATISTIC;
