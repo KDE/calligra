@@ -528,7 +528,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mousePressEvent( e );
-                m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
             }
             break;
         case MM_EDIT_FRAME:

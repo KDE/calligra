@@ -639,6 +639,10 @@ void KWView::updatePageInfo()
         int pgNum = edit->currentFrame()->getPageNum() + 1;
         statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(pgNum).arg(doc->getPages())+' ', statusPage );
     }
+    if(edit)
+    {
+        gui->getVertRuler()->setOffset( 0, -gui->canvasWidget()->getVertRulerPos() );
+    }
 }
 
 /*================================================================*/
