@@ -540,9 +540,12 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                             actionCollection(), "spelling" );
 
     QStringList lst;
-    lst.append( "sum");
-    lst.append( "cos");
-    lst.append( "sqrt");
+    lst.append( "SUM");
+    lst.append( "AVERAGE");
+    lst.append( "IF");
+    lst.append( "COUNT");
+    lst.append( "MIN");
+    lst.append( "MAX");
     lst.append( i18n("Others...") );
     ((KSelectAction*) m_formulaSelection)->setItems( lst );
     m_formulaSelection->setCurrentItem(0);

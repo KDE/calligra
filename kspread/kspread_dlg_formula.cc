@@ -37,7 +37,7 @@
 #include <qpushbutton.h>
 
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
-    : KDialogBase( parent, name,false,i18n("Formula Editor"), Ok|Cancel )
+    : KDialogBase( parent, name,false,i18n("Math Expression"), Ok|Cancel )
 {
     m_pView = parent;
     m_focus = 0;
@@ -613,9 +613,6 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     int pos = result->cursorPosition();
     result->setText( m_leftText+functions->text( functions->currentItem() ) + "()" + m_rightText);
 
-    if (result->text()[0] != '=')
-      result->setText("=" + result->text());
-
     //
     // Put focus somewhere is there are no QLineEdits visible
     //
@@ -671,6 +668,7 @@ void KSpreadDlgFormula::slotShowFunction( const QString& function )
 
     // select the category
     QString category = desc->group();
+    typeFunction->setCurrentText( category );
     slotActivated( category );
 
     // select the function
