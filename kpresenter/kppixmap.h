@@ -59,6 +59,8 @@ public:
   virtual void addRef();
   virtual bool removeRef();
 
+  static QString string_to_native_string(const char* _pixmap);
+
 protected:
   KPPixmap()
     {;}

@@ -155,3 +155,23 @@ QString KPPixmap::load_pixmap_native_format(const char *_file)
   
   return str;
 }
+
+/*========================== convert string to pixmap ============*/
+QString KPPixmap::string_to_native_string(const char *_pixmap)
+{
+  if (_pixmap == 0L || _pixmap[0] == 0)
+    return QString();
+  
+  char* pos = const_cast<char*>(&_pixmap[0]);
+  
+  while (*pos)
+    {
+      if (*pos == '\"')
+	*pos = 1;
+      
+      pos++;
+    }
+
+  return QString(_pixmap);
+}
+

@@ -1297,8 +1297,12 @@ void KPresenterDocument_impl::changePicture(QString filename,int diffx,int diffy
       kpobject = objectList()->at(i);
       if (kpobject->isSelected() && kpobject->getType() == OT_PICTURE)
 	{
-	  dynamic_cast<KPPixmapObject*>(kpobject)->setFileName(filename);
-	  repaint(false);
+	  KPPixmapObject *pix = new KPPixmapObject(&_pixmapCollection,filename);
+
+	  ChgPixCmd *chgPixCmd = new ChgPixCmd(i18n("Change pixmap"),dynamic_cast<KPPixmapObject*>(kpobject),
+					       pix,this);
+	  chgPixCmd->execute();
+	  _commands.addCommand(chgPixCmd);
 	  break;
 	}
     }
