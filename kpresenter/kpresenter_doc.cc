@@ -1240,10 +1240,15 @@ void KPresenterDoc::loadTitle( const QDomElement &element )
         {
             //test if there is a page at this index
             //=> don't add new page if there is again a page
-            if(i>(m_pageList.count()-1))
-                m_pageList.append(new KPrPage(this));
-            m_pageList.at(i)->insertManualTitle(title.attribute("title"));
-            i++;
+            if(!m_pageWhereLoadObject)
+            {
+                if(i>(m_pageList.count()-1))
+                    m_pageList.append(new KPrPage(this));
+                m_pageList.at(i)->insertManualTitle(title.attribute("title"));
+                i++;
+            }
+            else
+                m_pageWhereLoadObject->insertManualTitle(title.attribute("title"));
         }
         title=title.nextSibling().toElement();
     }
@@ -1259,10 +1264,15 @@ void KPresenterDoc::loadNote( const QDomElement &element )
         {
             //test if there is a page at this index
             //=> don't add new page if there is again a page
-            if(i>(m_pageList.count()-1))
-                m_pageList.append(new KPrPage(this));
-            m_pageList.at(i)->setNoteText(note.attribute("note"));
-            i++;
+            if(!m_pageWhereLoadObject)
+            {
+                if(i>(m_pageList.count()-1))
+                    m_pageList.append(new KPrPage(this));
+                m_pageList.at(i)->setNoteText(note.attribute("note"));
+                i++;
+            }
+            else
+                m_pageWhereLoadObject->setNoteText(note.attribute("note"));
         }
         note=note.nextSibling().toElement();
     }
