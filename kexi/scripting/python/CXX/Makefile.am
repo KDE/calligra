@@ -17,7 +17,7 @@ SUBDIRS = .
 
 INCLUDES = $(PYTHON_INCLUDE) $(all_includes)
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+KDE_CXXFLAGS += $(USE_EXCEPTIONS)
 
 clean:
 	@rm -f *.o 2> /dev/null
