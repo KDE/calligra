@@ -3689,7 +3689,7 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
 void KSpreadVBorder::updateRows( int from, int to )
 {
-    KSpreadTable *table = m_pCanvas->activeTable();
+    KSpreadSheet *table = m_pCanvas->activeTable();
     if ( !table )
         return;
 
@@ -4260,7 +4260,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
 
 void KSpreadHBorder::updateColumns( int from, int to )
 {
-    KSpreadTable *table = m_pCanvas->activeTable();
+    KSpreadSheet *table = m_pCanvas->activeTable();
     if ( !table )
         return;
 
