@@ -4003,7 +4003,11 @@ void KPresenterView::screenPenWidth( const QString &item )
 void KPresenterView::screenPenColor()
 {
     QColor c = kPresenterDoc()->presPen().color();
-    if ( KColorDialog::getColor( c ) ) {
+    if ( KColorDialog::getColor( c ,
+#if KDE_VERSION >= 305
+                                 Qt::red
+#endif
+             ) ) {
 	QPen p = kPresenterDoc()->presPen();
 	p.setColor( c );
 	kPresenterDoc()->setPresPen( p );
