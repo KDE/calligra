@@ -987,6 +987,12 @@ void KWView::clipboardDataChanged()
 /*=========================== file print =======================*/
 void KWView::setupPrinter( KPrinter &prt )
 {
+    //recalc time and date variable before to print
+    //it's necessary otherwise we print a document
+    //with a bad date and time
+    m_doc->recalcVariables(  VT_TIME );
+    m_doc->recalcVariables(  VT_DATE );
+
 #ifdef HAVE_KDEPRINT
     prt.setPageSelection( KPrinter::ApplicationSide );
     prt.setCurrentPage( currentPage() + 1 );
