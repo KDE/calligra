@@ -3922,27 +3922,15 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     QDomDocument doc = saveCellRect( rct );
 
     // Save to buffer
-    QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    QTextStream str( &buffer );
+    str.setEncoding( QTextStream::UnicodeUTF8 );
     str << doc;
-
-    // This is a terrible hack to store unicode
-    // data in a QCString in a way that
-    // QCString::length() == QCString().size().
-    // This allows us to treat the QCString like a QByteArray later on.
-    QCString s = buffer.utf8();
-
-    printf("COPY %s\n", s.data() );
-
-    int len = s.length();
-    char tmp = s[ len - 1 ];
-    s.resize( len );
-    *( s.data() + len - 1 ) = tmp;
-
-    buffer = QString::null;
+    buffer.close();
 
     QStoredDrag* data = new QStoredDrag( "application/x-kspread-snippet" );
-    data->setEncodedData( s );
+    data->setEncodedData( buffer.buffer() );
 
     QApplication::clipboard()->setData( data );
 }
