@@ -46,7 +46,7 @@
 static KivioStencilSpawnerInfo sinfo = KivioStencilSpawnerInfo( "Ian Reinhart Geiser", "SML Connector", "SML Connector", "SML Based Connector", "0.1", "http://localhost/", "", "off" );
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY( sml_connector, KGenericFactory<KivioSMLConnectorFactory>( "KivioSMLConnectorFactory" ) );
+K_EXPORT_COMPONENT_FACTORY( sml_connector, KGenericFactory<KivioSMLConnectorFactory>( "KivioSMLConnectorFactory" ) )
 
 KivioSMLConnectorFactory::KivioSMLConnectorFactory( QObject *parent, const char* name, const QStringList& args ) :
 		KivioStencilFactory( parent, name, args )
