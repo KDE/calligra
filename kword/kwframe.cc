@@ -1703,8 +1703,8 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     // there is no need to move the KFormulaContainer anymore, it remains at (0,0).
     formula->moveTo( 0, 0 );
 
-    connect(formula, SIGNAL(formulaChanged(int, int)),
-            this, SLOT(slotFormulaChanged(int, int)));
+    connect( formula, SIGNAL( formulaChanged( double, double ) ),
+             this, SLOT( slotFormulaChanged( double, double ) ) );
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Formula %1" ) );
     else
@@ -1773,25 +1773,20 @@ void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const 
     }
 }
 
-void KWFormulaFrameSet::slotFormulaChanged( int width, int height )
+void KWFormulaFrameSet::slotFormulaChanged( double width, double height )
 {
     if ( frames.isEmpty() )
         return;
 
-    int newWidth = static_cast<int>( static_cast<double>( width ) /
-                                     kWordDocument()->zoomedResolutionX() ) + 2;
-    int newHeight = static_cast<int>( static_cast<double>( height ) /
-                                      kWordDocument()->zoomedResolutionY() ) + 1;
-
     double oldWidth = frames.first()->width();
     double oldHeight = frames.first()->height();
 
-    frames.first()->setWidth( newWidth );
-    frames.first()->setHeight( newHeight );
+    frames.first()->setWidth( width );
+    frames.first()->setHeight( height );
 
     updateFrames();
     kWordDocument()->layout();
-    if ( ( oldWidth != newWidth ) || ( oldHeight != newHeight ) ) {
+    if ( ( oldWidth != width ) || ( oldHeight != height ) ) {
         kWordDocument()->repaintAllViews( false );
         kWordDocument()->updateRulerFrameStartEnd();
     }
@@ -1841,9 +1836,7 @@ void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)
 
 void KWFormulaFrameSet::zoom( bool forPrint )
 {
-    if ( !frames.isEmpty() )
-    {
-        formula->recalc();
+    if ( !frames.isEmpty() ) {
         KWFrameSet::zoom( forPrint );
     }
 }
@@ -1897,13 +1890,13 @@ void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
         case Qt::Key_Left:
             if ( formulaView->isHome() ) {
                 // leave left
-                return;
+                //return;
             }
             break;
         case Qt::Key_Right:
             if ( formulaView->isEnd() ) {
                 // leave right
-                return;
+                //return;
             }
             break;
         }
@@ -1911,32 +1904,29 @@ void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
     formulaView->keyPressEvent( event );;
 }
 
-void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
+void KWFormulaFrameSetEdit::mousePressEvent( QMouseEvent* event,
+                                             const QPoint&,
+                                             const KoPoint& pos )
 {
     // [Note that this method is called upon RMB and MMB as well, now]
-    QPoint nPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
-    nPoint.setX( event->pos().x()-nPoint.x() );
-    nPoint.setY( event->pos().y()-nPoint.y() );
-    QMouseEvent e( event->type(), nPoint, event->button(), event->state() );
-    formulaView->mousePressEvent( &e );
+    KoPoint tl = m_currentFrame->topLeft();
+    formulaView->mousePressEvent( event, pos-tl );
 }
 
-void KWFormulaFrameSetEdit::mouseMoveEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
+void KWFormulaFrameSetEdit::mouseMoveEvent( QMouseEvent* event,
+                                            const QPoint&,
+                                            const KoPoint& pos )
 {
-    QPoint nPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
-    nPoint.setX( event->pos().x()-nPoint.x() );
-    nPoint.setY( event->pos().y()-nPoint.y() );
-    QMouseEvent e( event->type(), nPoint, event->button(), event->state() );
-    formulaView->mouseMoveEvent( &e );
+    KoPoint tl = m_currentFrame->topLeft();
+    formulaView->mouseMoveEvent( event, pos-tl );
 }
 
-void KWFormulaFrameSetEdit::mouseReleaseEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
+void KWFormulaFrameSetEdit::mouseReleaseEvent( QMouseEvent* event,
+                                               const QPoint&,
+                                               const KoPoint& pos )
 {
-    QPoint nPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
-    nPoint.setX( event->pos().x()-nPoint.x() );
-    nPoint.setY( event->pos().y()-nPoint.y() );
-    QMouseEvent e( event->type(), nPoint, event->button(), event->state() );
-    formulaView->mouseReleaseEvent( &e );
+    KoPoint tl = m_currentFrame->topLeft();
+    formulaView->mouseReleaseEvent( event, pos-tl );
 }
 
 void KWFormulaFrameSetEdit::focusInEvent()

@@ -292,13 +292,13 @@ void KWDocument::saveConfig()
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
 {
     KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
+    getFormulaDocument()->setZoomAndResolution( zoom, dpiX, dpiY, false, forPrint );
+
     newZoomAndResolution( updateViews, forPrint );
 }
 
 void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 {
-    getFormulaDocument()->setZoom( m_zoomedResolutionX, m_zoomedResolutionY, updateViews, forPrint );
-
     // Update all fonts
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -2044,7 +2044,9 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     {
         m_zoomedResolutionX = zoomX;
         m_zoomedResolutionY = zoomY;
-        newZoomAndResolution( false, painter.device() && painter.device()->devType() == QInternal::Printer );
+        bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
+        newZoomAndResolution( false, forPrint );
+        getFormulaDocument()->setZoom( zoomX, zoomY, false, forPrint );
     }
 
     QRect rect( _rect );

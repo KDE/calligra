@@ -756,7 +756,7 @@ public:
 
 protected slots:
 
-    void slotFormulaChanged(int width, int height);
+    void slotFormulaChanged( double width, double height );
 
 private:
     KFormula::Container* formula;
