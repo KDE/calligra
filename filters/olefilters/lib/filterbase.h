@@ -61,6 +61,13 @@ signals:
         const QString &extension,
         unsigned int length,
         const char *data);
+    void signalSavePart(
+        const QString &nameIN,
+        QString &storageId,
+        const QString &extension,
+        const char *mimeType,
+        unsigned int length,
+        const char *data);
     void signalPart(const char *nameIN, QString &storageId, QString &mimeType);
     void signalGetStream(const int &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
