@@ -64,7 +64,7 @@ libkarboncore_la_SOURCES = \
 	vtext_iface.cc \
 	vtext_iface.skel \
 	vclipgroup.cc
-libkarboncore_la_LIBADD = $(LIB_FONTCONFIG_LIBS)
+libkarboncore_la_LIBADD = $(LIBFONTCONFIG_LIBS)
 
 libkarboncore_la_METASOURCES = \
 	AUTO
