@@ -201,6 +201,7 @@ void OutlinePanel::slotUpdate()
   else
   {
     bool b = mView->activeDocument()->activePage()->getSelection().first()->style()->stroked();
+    kdDebug(38000) << "EEEFDDGHDFG = "<< b << endl;
     mStroked->setChecked(b);
     mStartArrowBox->setEnabled(b);
     mEndArrowBox->setEnabled(b);
@@ -225,7 +226,10 @@ void OutlinePanel::slotChangeStroked(bool b)
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->stroked(b);
+    kdDebug(38000) << "---SET = "<< b << endl;
+    SetOutlineCmd *cmd = new SetOutlineCmd(mView->activeDocument(), b);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }
@@ -261,9 +265,9 @@ void OutlinePanel::slotChangeColor(const KoColor &c)
   }
   else
   {
-    QPtrListIterator<GObject> it(mView->activeDocument()->activePage()->getSelection());
-    for(; it.current(); ++it)
-      (*it)->style()->outlineColor(c);
+    SetOutlineColorCmd *cmd = new SetOutlineColorCmd(mView->activeDocument(), c);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }
@@ -405,8 +409,9 @@ void PaintPanel::slotChangeFilled(int f)
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->filled(f);
-    //SetPropertyCmd
+    SetFillCmd *cmd = new SetFillCmd(mView->activeDocument(), f);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }
@@ -419,7 +424,9 @@ void PaintPanel::slotChangeOpacity(int o)
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->fillOpacity(o);
+    SetFillOpacityCmd *cmd = new SetFillOpacityCmd(mView->activeDocument(), o);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }
@@ -432,9 +439,9 @@ void PaintPanel::slotChangeColor(const KoColor &c)
   }
   else
   {
-    QPtrListIterator<GObject> it(mView->activeDocument()->activePage()->getSelection());
-    for(; it.current(); ++it)
-      (*it)->style()->fillColor(c);
+    SetFillColorCmd *cmd = new SetFillColorCmd(mView->activeDocument(), c);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }

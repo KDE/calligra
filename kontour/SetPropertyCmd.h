@@ -104,4 +104,34 @@ private:
   KoOutline::Cap cap;
 };
 
+class SetFillCmd : public SetPropertyCmd
+{
+public:
+  SetFillCmd(GDocument *aGDoc, int f);
+  void execute();
+
+private:
+  int fill;
+};
+
+class SetFillOpacityCmd : public SetPropertyCmd
+{
+public:
+  SetFillOpacityCmd(GDocument *aGDoc, int o);
+  void execute();
+
+private:
+  int opacity;
+};
+
+class SetFillColorCmd : public SetPropertyCmd
+{
+public:
+  SetFillColorCmd(GDocument *aGDoc, const KoColor &c);
+  void execute();
+
+private:
+  KoColor color;
+};
+
 #endif

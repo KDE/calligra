@@ -347,28 +347,33 @@ void GPath::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, 
   setPen(p);
   setBrush(p);
   KoVectorPath *v = new KoVectorPath;
+  KoPoint c, c1, c2;
 
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
     GSegment *s = *seg;
     if(s->type() == 'm')
     {
-      v->moveTo(s->point(0).x(), s->point(0).y());
+      c = s->point(0).transform(tmpMatrix);
+      v->moveTo(c.x(), c.y());
     }
     else if(s->type() == 'l')
     {
-      v->lineTo(s->point(0).x(), s->point(0).y());
+      c = s->point(0).transform(tmpMatrix);
+      v->lineTo(c.x(), c.y());
     }
     else if(s->type() == 'c')
     {
-      v->lineTo(s->point(0).x(), s->point(0).y());
-//      v->bezierTo(s->point(0).x(), s->point(0).y(), s->point(1).x(), s->point(1).y(), s->point(2).x(), s->point(2).y());
+      c = s->point(0).transform(tmpMatrix);
+      c1 = s->point(1).transform(tmpMatrix);
+      c2 = s->point(2).transform(tmpMatrix);
+      v->bezierTo(c.x(), c.y(), c1.x(), c1.y(), c2.x(), c2.y());
     }
   }
   v->end();
   QWMatrix m;
   m = m.translate(aXOffset, aYOffset);
-  v->transform(m * tmpMatrix);
+  v->transform(m);
   p->drawVectorPath(v);
   delete v;
   if(withBasePoints)

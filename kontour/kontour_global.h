@@ -31,6 +31,7 @@
 
 namespace Kontour
 {
+  static const char *mime = "application/x-kontour";
   const double nearDistance = 4.0;
   const double minZoomFactor = 0.06;
   const double maxZoomFactor = 100.0;

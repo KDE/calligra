@@ -40,8 +40,8 @@ Command(aGDoc, name)
   QPtrListIterator<GObject> it(document()->activePage()->getSelection());
   for(unsigned int i = 0; it.current(); ++it, ++i)
   {
-//    (*it)->ref();
-//    objects.insert(i, (*it));
+    (*it)->ref();
+    objects.insert(i, (*it));
 //    states[i] = *((*it)->style());
   }
 }
@@ -74,6 +74,7 @@ void SetOutlineCmd::execute()
 {
   for(unsigned int i = 0; i < objects.count(); i++)
     objects[i]->style()->stroked(outline);
+  document()->activePage()->updateSelection();
 }
 
 
@@ -87,6 +88,7 @@ void SetOutlineOpacityCmd::execute()
 {
   for(unsigned int i = 0; i < objects.count(); i++)
     objects[i]->style()->outlineOpacity(opacity);
+  document()->activePage()->updateSelection();
 }
 
 
@@ -100,6 +102,7 @@ void SetOutlineColorCmd::execute()
 {
   for(unsigned int i = 0; i < objects.count(); i++)
     objects[i]->style()->outlineColor(color);
+  document()->activePage()->updateSelection();
 }
 
 
@@ -119,6 +122,7 @@ void SetOutlineWidthCmd::execute()
   document()->activePage()->updateSelection();
 }
 
+
 SetJoinStyleCmd::SetJoinStyleCmd(GDocument *aGDoc, KoOutline::Join j):
 SetPropertyCmd(aGDoc, i18n("Set join style"))
 {
@@ -132,6 +136,7 @@ void SetJoinStyleCmd::execute()
   document()->activePage()->updateSelection();
 }
 
+
 SetCapStyleCmd::SetCapStyleCmd(GDocument *aGDoc, KoOutline::Cap c):
 SetPropertyCmd(aGDoc, i18n("Set cap style"))
 {
@@ -142,5 +147,48 @@ void SetCapStyleCmd::execute()
 {
   for(unsigned int i = 0; i < objects.count(); i++)
     objects[i]->style()->capStyle(cap);
+  document()->activePage()->updateSelection();
+}
+
+
+SetFillCmd::SetFillCmd(GDocument *aGDoc, int f):
+SetPropertyCmd(aGDoc, i18n("Set fill opacity"))
+{
+  fill = f;
+}
+
+void SetFillCmd::execute()
+{
+  kdDebug() << ">>>>>>>>>>>>>>>>" << fill << endl;
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->style()->outlineOpacity(fill);
+  document()->activePage()->updateSelection();
+}
+
+
+SetFillOpacityCmd::SetFillOpacityCmd(GDocument *aGDoc, int o):
+SetPropertyCmd(aGDoc, i18n("Set fill opacity"))
+{
+  opacity = o;
+}
+
+void SetFillOpacityCmd::execute()
+{
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->style()->outlineOpacity(opacity);
+  document()->activePage()->updateSelection();
+}
+
+
+SetFillColorCmd::SetFillColorCmd(GDocument *aGDoc, const KoColor &c):
+SetPropertyCmd(aGDoc, i18n("Set fill color"))
+{
+  color = c;
+}
+
+void SetFillColorCmd::execute()
+{
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->style()->fillColor(color);
   document()->activePage()->updateSelection();
 }

@@ -3,7 +3,7 @@
   $Id$
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -135,7 +135,7 @@ void GRect::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, 
   KoVectorPath *v = KoVectorPath::rectangle(sPoint.x(), sPoint.y(), ePoint.x() - sPoint.x(), ePoint.y() - sPoint.y(), 0.5 * mXRoundness * (ePoint.x() - sPoint.x()), 0.5 * mYRoundness * (ePoint.y() - sPoint.y()));
   QWMatrix m;
   m = m.translate(aXOffset, aYOffset);
-  v->transform(m * tmpMatrix);
+  v->transform(tmpMatrix * m);
   p->drawVectorPath(v);
   delete v;
 }
