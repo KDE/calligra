@@ -57,7 +57,7 @@ bool MySqlConnection::drv_connect()
         KexiDBDrvDbg << "MySqlConnection::connect()" << endl;
 	QString socket;
 	if (m_data->hostName.isEmpty() || (m_data->hostName=="localhost")) {
-		if (m_data->fileName().isEmpty()) {
+		if (m_data->localSocketFileName.isEmpty()) {
 	                QStringList sockets;
 	                sockets.append("/var/lib/mysql/mysql.sock");
 	                sockets.append("/var/run/mysqld/mysqld.sock");
@@ -70,7 +70,7 @@ bool MySqlConnection::drv_connect()
 					break;
 				}
 	                }
-        	} else socket=m_data->fileName();
+        	} else socket=m_data->localSocketFileName;
 	}
 
 
@@ -136,7 +136,12 @@ bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
 	
 
 bool MySqlConnection::drv_createDatabase( const QString &dbName) {
-	return false; //TODO
+     KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName << endl;
+        
+	if (drv_executeSQL("CREATE DATABASE " + (dbName)))
+        return true;
+
+    return false;
 }
 
 bool MySqlConnection::drv_useDatabase( const QString &dbName) {

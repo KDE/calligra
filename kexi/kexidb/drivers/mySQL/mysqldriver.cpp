@@ -55,7 +55,7 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 	beh->ROW_ID_FIELD_NAME="_ROWID";//(js): ok??
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
-	m_typeNames[Field::Byte]="UNSIGNED TINYINT";
+	m_typeNames[Field::Byte]="TINYINT";
 	m_typeNames[Field::ShortInteger]="SMALLINT";
 	m_typeNames[Field::Integer]="INT";
 	m_typeNames[Field::BigInteger]="BIGINT";

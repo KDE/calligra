@@ -33,8 +33,8 @@ class Connection;
 class DriverManager;
 class ODBCDriverPrivate;
 
-
-/**
+//! ODBC database driver.
+/*!
  * This is the ODBC Driver for Kexi.
  * @author Matt Rogers <matt.rogers@kdemail.net>
  */

@@ -31,7 +31,7 @@ namespace KexiDB {
 class KEXI_DB_EXPORT Object
 {
 	public:
-		//! \return true if there was error during last operation on the object.
+		/*! \return true if there was error during last operation on the object. */
 		bool error() { return m_hasError; }
 
 		/*! \return (localized) error message if there was error during last operation on the object,

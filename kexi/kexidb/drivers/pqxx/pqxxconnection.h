@@ -18,11 +18,13 @@
 #include "pqxxcursor.h"
 #include <pqxx/all.h>
 
+
+namespace KexiDB
+{
+
 /**
 @author Adam Pigg
 */
-namespace KexiDB
-{
 class pqxxSqlConnection : public Connection
 {
 	Q_OBJECT

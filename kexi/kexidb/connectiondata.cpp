@@ -28,6 +28,8 @@
 
 using namespace KexiDB;
 
+namespace KexiDB {
+
 class ConnectionData::Private {
 public:
 	Private() { 
@@ -36,6 +38,8 @@ public:
 	~Private() {}
 	bool dummy;
 };
+
+}; // namespace KexiDB
 
 /*================================================================*/
 

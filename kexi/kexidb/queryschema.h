@@ -76,14 +76,14 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 */
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field, bool visible = true);
 
-		//! \return field's \a number visibility. By default field is visible.
+		/*! \return field's \a number visibility. By default field is visible. */
 		bool isFieldVisible(uint number) const;
 
 		//! Sets field's \a number visibility to \a v.
 		void setFieldVisible(uint number, bool v);
 
 #if 0
-		//! \return field's visibility. By default field is visible.
+		/*! \return field's visibility. By default field is visible. */
 		bool isFieldVisible(KexiDB::Field *f) const;
 
 		//! Sets field's visibility.
@@ -192,7 +192,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		*/
 		QValueVector<uint> pkeyFieldsOrder();
 
-		//! \return a preset statement (if any)
+		/*! \return a preset statement (if any). */
 		QString      statement() { return m_statement; }
 
 		//! forces a query statement (i.e. no statement is composed from QuerySchema's content)
@@ -288,10 +288,10 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		
 		virtual ~QueryAsterisk();
 
-		/*! \return query object for that this asterisk object is defined */
+		/*! \return Query object for that this asterisk object is defined */
 		QuerySchema *query() const { return static_cast<QuerySchema*>(m_parent); }
 
-		/*! \return table schema for this asterisk 
+		/*! \return Table schema for this asterisk 
 		 if it has "single-table" type (1st type) 
 		 or NULL if it has "all-tables" type (2nd type) defined. */
 		virtual TableSchema* table() const { return m_table; }
@@ -308,7 +308,7 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		 if the asterisk has "single-tables" type (2nd type).*/
 		bool isAllTableAsterisk() const { return m_table==NULL; }
 		
-		//! \return string for debugging purposes.
+		/*! \return String for debugging purposes. */
 		virtual QString debugString() const;
 
 	

@@ -762,9 +762,9 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			v += m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
 		}
 		else {
-			if (field->isUnsigned())
-				v += (m_driver->beh->UNSIGNED_TYPE_KEYWORD + " ");
 			v += m_driver->m_typeNames[field->m_type];
+			if (field->isUnsigned())
+				v += (" " + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
 			if (field->m_length>0)
 				v += QString("(%1)").arg(field->m_length);
 			if (field->isAutoIncrement())

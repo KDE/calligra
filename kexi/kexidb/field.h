@@ -34,6 +34,7 @@ class TableSchema;
 class FieldList;
 class Expression;
 
+//! Meta-data for a field
 /*! KexiDB::Field provides information about single database field.
 */
 class KEXI_DB_EXPORT Field
@@ -48,30 +49,30 @@ class KEXI_DB_EXPORT Field
 		/*! Unified (most common used) types of fields. */
 		enum Type
 		{
-			InvalidType = 0,   /*! type that cannot be supported or is not implemented */
-			Byte = 1,          /*! 1 byte, signed or unsigned */
-			ShortInteger = 2,  /*! 2 bytes, signed or unsigned */
-			Integer = 3,       /*! 4 bytes, signed or unsigned */
-			BigInteger = 4,    /*! 8 bytes, signed or unsigned */
-//			AutoIncrement, /* 4 bytes, like LongInteger, used for keys */
-			Boolean = 5,       /*! 0 or 1 */
-			Date = 6,          /*! */
-			DateTime = 7,      /*! */
-			Time = 8,          /*! */
-			Float = 9,         /*! 4 bytes */
-			Double = 10,       /*! 8 bytes */
-			Text = 11,         /*! other name: Varchar; no more than 200 bytes, for efficiency */
-			LongText = 12,     /*! other name: Memo. More than 200 bytes*/
-			BLOB = 13,         /*! large binary object */
+			InvalidType = 0, /*!< Unsupported/Unimplemented type */
+			Byte = 1,        /*!< 1 byte, signed or unsigned */
+			ShortInteger = 2,/*!< 2 bytes, signed or unsigned */
+			Integer = 3,     /*!< 4 bytes, signed or unsigned */
+			BigInteger = 4,  /*!< 8 bytes, signed or unsigned */
+//			AutoIncrement,/* 4 bytes, like LongInteger, used for keys */
+			Boolean = 5,     /*!< 0 or 1 */
+			Date = 6,        /*!< */
+			DateTime = 7,	   /*!< */
+			Time = 8,        /*!< */
+			Float = 9,       /*!< 4 bytes */
+			Double = 10,     /*!< 8 bytes */
+			Text = 11,       /*!< other name: Varchar; no more than 200 bytes, for efficiency */
+			LongText = 12,   /*!< other name: Memo. More than 200 bytes*/
+			BLOB = 13,       /*!< large binary object */
 
-			LastType = 13,     /*! This line should be at the end of the list of types! */
+			LastType = 13,   /*!< This line should be at the end of the list of types! */
 			
 			//! special, interanal types:
-			Asterisk = 128,    /*! type used in QueryAsterisk subclass objects only,
+			Asterisk = 128,  /*!< type used in QueryAsterisk subclass objects only,
 			                       not used in table definitions,
 			                       but only in query definitions */
-			Enum = 129,        /*! an integer internal with a string list of hints */
-			Map = 130          /*! mapping from string to string list (more generic than Enum */
+			Enum = 129,      /*!< an integer internal with a string list of hints */
+			Map = 130        /*!< mapping from string to string list (more generic than Enum */
 		};
 
 		static int defaultTextLength() { return 200; }
@@ -179,7 +180,7 @@ class KEXI_DB_EXPORT Field
 		 not greater than Field::LastType) */
 		static QString typeGroupString(uint typeGroup);
 
-		//! \return the name of this field
+		/* ! \return the name of this field */
 		inline QString name() const { return m_name; }
 		
 		/*! \return table schema of table that owns this field. */
@@ -261,31 +262,31 @@ class KEXI_DB_EXPORT Field
 
 		inline QVariant defaultValue() const { return m_defaultValue; }
 		
-		//! \return length of text is the field type is text
+		/*! \return length of text is the field type is text. */
 		inline uint length() const { return m_length; }
 
 		/*! \return precision for numeric and other fields that have both length 
-		 and precision (floating point types) */
+		 and precision (floating point types). */
 		inline uint precision() const { return m_precision; } 
 
-		//! \return the constraints defined for this field
+		/*! \return the constraints defined for this field. */
 		inline uint constraints() const { return m_constraints; }
 
-		//! \return order of this field in containing table (counting starts from 0)
-		//! (-1 if unspecified)
+		/*! \return order of this field in containing table (counting starts from 0)
+		(-1 if unspecified). */
 		inline int order() const { return m_order; }
 
-		//! \return caption of this field
+		/*! \return caption of this field. */
 		inline QString caption() const { return m_caption; }
 
-		//! \return caption of this field or - if empty - return its name
+		/*! \return caption of this field or - if empty - return its name. */
 		inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
 
-		//! \return description text for this field
+		/*! \return description text for this field. */
 		inline QString description() const { return m_desc; }
 
-		//! \return width of this field (usually in pixels or points)
-		//! 0 (the default) means there is no hint for the width
+		/*! \return width of this field (usually in pixels or points)
+		0 (the default) means there is no hint for the width. */
 		inline uint width() const { return m_width; }
 		
 		//! if the type has the unsigned attribute
@@ -293,11 +294,13 @@ class KEXI_DB_EXPORT Field
 
 //		virtual bool isBinary() const;
 
-		//! \return true if this field has EMPTY property (i.e. it is of type string or is a BLOB)
+		/*! \return true if this field has EMPTY property (i.e. it is of type
+		string or is a BLOB). */
 		inline bool hasEmptyProperty() const { return Field::hasEmptyProperty(m_type); }
 
 		/*! static version of hasEmptyProperty() method
-		 *! \return true if this field has EMPTY property (i.e. it is of type string or is a BLOB) */
+		 \return true if this field has EMPTY property (i.e. it is of type
+		 string or is a BLOB) */
 		static bool hasEmptyProperty(uint type);
 
 		void setType(Type t);
@@ -388,11 +391,11 @@ class KEXI_DB_EXPORT Field
 		*/
 		inline bool isQueryAsterisk() const { return m_type == Asterisk; }
 		
-		//! \return string for debugging purposes.
+		/*! \return string for debugging purposes. */
 		virtual QString debugString() const;
 
-		/*! \return KexiDB::Expression object if the field value is a result expression. 
-		 Unless the expression is set with setExpresion(), it is null.
+		/*! \return KexiDB::Expression object if the field value is a result
+		 expression.  Unless the expression is set with setExpresion(), it is null.
 		*/
 		inline KexiDB::Expression *expression() { return m_expr; }
 
@@ -404,7 +407,7 @@ class KEXI_DB_EXPORT Field
 		*/
 		void setExpression(KexiDB::Expression *expr);
 //<TMP>
-		/*! Returns the hints for enum fields */
+		/*! \return the hints for enum fields. */
 		QValueVector<QString> enumHints() const { return m_hints; }
 		QString enumHint(uint num) { return (num < m_hints.size()) ? m_hints.at(num) : QString::null; }
 		/*! sets the hint for enum fields */

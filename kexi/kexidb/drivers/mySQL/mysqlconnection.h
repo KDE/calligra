@@ -33,14 +33,16 @@ typedef struct st_mysql MYSQL;
 
 class MySqlRecordSet;
 class MySqlResult;
-/*!
- * should overwrite kexiDB/kexiDB
- * all other members ar done by the
- * baseclass
- */
+
 
 namespace KexiDB {
 
+
+/*!
+ * Should override kexiDB/kexiDB
+ * all other members are done by the
+ * base class.
+ */
 class KEXIDB_MYSQL_DRIVER_EXPORT MySqlConnection : public Connection
 {
 	Q_OBJECT

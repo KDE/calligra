@@ -29,6 +29,62 @@
 #define KEXIDB_VERSION_MAJOR 1
 #define KEXIDB_VERSION_MINOR 2
 
+
+/*! \namespace KexiDB 
+\brief Kexi database backend drivers.
+
+\section Framework
+DriverManager 
+
+Database access
+ - Connection
+ - ConnectionData
+ 
+Database structure
+ - Schema
+  - tableschema
+  - queryschema
+  - indexschema
+
+Stored in the database.
+
+
+Data representation
+ - Record
+ - Field
+
+ 
+\section Drivers
+
+Drivers are loaded using DriverManager::driver(const QString& name).  The names
+of drivers are given in their drivers <tt>.desktop</tt> file in the
+X-Kexi-DriverName field.
+
+KexiDB supports two kinds of databases: file-based and network-based databases.
+The type of a driver is available from several places. The X-Kexi-DriverType
+field in the driver's <tt>.desktop</tt> file, is read by the DriverManager and
+available by calling DriverManager::driverInfo(const QString &name) and using
+the Driver::Info#fileBased member from the result. Given a reference to a
+Driver, its type can also be found directly using Driver::isFileDriver() const.
+
+Each database backend driver consists of three main classes: a driver,
+a connection and a cursor class, e.g SQLiteDriver, SQLiteConnection,
+SQLiteCursor.
+
+The driver classes subclass the Driver class.  They set Driver#m_typeNames,
+which maps KexiDB's Field::Type on to the types supported by the database.  They also
+provide functions for escaping strings and checking table names.  These may be
+used, for example, on a database backend that uses the database name as a
+filename.  In this case, it should be ensured that all the characters in the
+database name are valid characters in a filename.
+
+The connection classes subclass the Connection class, and include most of the
+calls to the native database API.
+
+The cursor classes subclass Cursor, and implement cursor functionality specific
+to the database backend.
+
+*/
 namespace KexiDB {
 
 #ifndef KEXI_DB_EXPORT

@@ -48,7 +48,7 @@ class KEXI_DB_EXPORT SchemaData
 		QString description() const { return m_desc; }
 		void setDescription(const QString& desc) { m_desc=desc; }
 
-		//! \return debug string useful for debugging
+		/*! \return debug string useful for debugging */
 		virtual QString schemaDataDebugString() const;
 		
 		/*! \return true if this is schema of native database object,

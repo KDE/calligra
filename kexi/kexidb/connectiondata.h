@@ -26,6 +26,9 @@
 
 namespace KexiDB {
 
+/*! ConnectionDataBase is a helper class for ConnectionData.  It
+ is not intended to be instantiated explicitly.  Instead, use the
+ ConnectionData class. */
 /*! @internal
  Used by ConnectionData. 
  It is easier to internally operate on non-QObject-derived object, 
@@ -122,6 +125,7 @@ class ConnectionDataBase
 		QString m_dbFileName;
 };
 
+//! Database specific connection data, e.g. host, port.
 /*! Connection data, once configured, can be later stored for reuse.
 */
 class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase

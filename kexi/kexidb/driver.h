@@ -40,9 +40,11 @@ class DriverManager;
 class DriverBehaviour;
 class DriverPrivate;
 
+//! Generic database abstraction.
 /*! This class is a prototype of the database driver.
- Driver allows create new connections and groups these as a parent.
- Before destrucion, connections are destructed.
+ Driver allows new connections to be created, and groups
+ these as a parent.
+ Before destruction, connections are destructed.
 
 */
 class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
@@ -88,7 +90,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 */
 		Connection *createConnection( ConnectionData &conn_data );
 
-		/*! \return list of created connections. */
+		/*! \return List of created connections. */
 		const QPtrList<Connection> connectionsList() const;
 
 //		/*! \return a name equal to the service name (X-Kexi-DriverName) 
@@ -105,10 +107,10 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! Info about the driver as a service. */
 		const KService* service() const { return m_service; }
 
-		/*! \return true if this driver is file-based */
+		/*! \return <tt>true</tt> if this driver is file-based */
 		bool isFileDriver() const { return m_isFileDriver; }
 
-		/*! \return true if \a n is a system object's name, 
+		/*! \return <tt>true</tt> if \a n is a system object's name, 
 		 eg. name of build-in system table that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
 		 a given driver implementation. 
@@ -119,12 +121,12 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual bool isSystemObjectName( const QString& n ) const;
 
-		/*! \return true if \a n is a kexibd-related 'system' object's name, 
-		 i.e. when \a n starts with "kexi__" prefix.
+		/*! \return <tt>true</tt> if \a n is a kexibd-related 'system' object's
+		 name, i.e. when \a n starts with "kexi__" prefix.
 		*/
 		static bool isKexiDBSystemObjectName( const QString& n );
 
-		/*! \return true if \a n is a system database's name, 
+		/*! \return <tt>true</tt> if \a n is a system database's name, 
 		 eg. name of build-in, system database that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
 		 a given driver implementation. For implemenation.
@@ -132,7 +134,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual bool isSystemDatabaseName( const QString& n ) const = 0;
 
-		/*! \return true if \a n is a system field's name, build-in system 
+		/*! \return <tt>true</tt> if \a n is a system field's name, build-in system 
 		 field that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
 		 a given driver implementation. For implemenation.
@@ -140,10 +142,12 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual bool isSystemFieldName( const QString& n ) const = 0;
 
-		//! \return driver's features that are combination of Driver::Features enum.
+		/*! \return Driver's features that are combination of Driver::Features
+		enum. */
 		int features() const { return m_features; }
 
-		//! \return true if transaction are supported (single or multiple)
+		/*! \return <tt>true</tt> if transaction are supported (single or 
+		 multiple). */
 		bool transactionsSupported() const { return m_features & (SingleTransactions | MultipleTransactions); }
 		
 		/*! SQL-implementation-dependent name of given type */
@@ -152,7 +156,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! used when we do not have Driver instance yet */
 		static QString defaultSQLTypeName(int id_t);
 		
-		/*! \return true if this driver's implementation is valid. 
+		/*! \return <tt>true</tt> if this driver's implementation is valid.
 		 Just few constriants are checked to ensure that driver 
 		 developer didn't forget about something. 
 		 This method is called automatically on createConnection(),
@@ -173,7 +177,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			return valueToSQL( (field ? field->type() : Field::InvalidType), v );
 		}
 
-		/*! driver-specific string escaping */
+		/*! Driver-specific string escaping. */
 		virtual QString escapeString(const QString& str) const = 0;
 		virtual QCString escapeString(const QCString& str) const = 0;
 

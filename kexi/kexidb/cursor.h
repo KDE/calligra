@@ -32,8 +32,8 @@ namespace KexiDB {
 
 class RowEditBuffer;
 
-/*! Provides database cursor functionality.
-
+//! Provides database cursor functionality.
+/*!
 	Cursor can be defined in two ways:
 
 	-# by passing QuerySchema object to Connection::executeQuery() or Connection::prepareQuery();
@@ -201,7 +201,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 string is returned ) if your engine has no such capability. */
 		virtual QString serverErrorMsg() const { return QString::null; }
 	
-		//! \return debug information.
+		/*! \return Debug information. */
 		QString debugString() const;
 		
 		//! Outputs debug information.

@@ -46,6 +46,7 @@ class Driver;
 class ConnectionPrivate;
 class RowEditBuffer;
 
+//! Database connection API, allowing queries and updates.
 /*! This class represents a database connection established with given database source.
 */
 class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
