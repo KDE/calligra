@@ -128,6 +128,8 @@ public:
 
     bool isASelectedTextObj();
 
+    void setMouseSelectedObject(bool b);
+
 public slots:
     void exitEditMode();
 

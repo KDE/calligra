@@ -1258,6 +1258,13 @@ void Page::deSelectAllObj()
     emit objectSelectedChanged();
 }
 
+
+void Page::setMouseSelectedObject(bool b)
+{
+    mouseSelectedObject = b;
+    emit objectSelectedChanged();
+}
+
 /*======================== setup menus ===========================*/
 void Page::setupMenus()
 {

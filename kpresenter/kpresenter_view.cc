@@ -329,7 +329,7 @@ void KPresenterView::editPaste()
             m_pKPresenterDoc->pasteObjs( data->encodedData("application/x-kpresenter-selection"),
                                          xOffset, yOffset, currPg );
 
-            page->mouseSelectedObject = true;
+            page->setMouseSelectedObject(true);
         }
     } else {
 	page->kTxtObj()->paste();
@@ -910,6 +910,7 @@ void KPresenterView::extraGroup()
 {
     page->setToolEditMode( TEM_MOUSE );
     m_pKPresenterDoc->groupObjects();
+    objectSelectedChanged();
 }
 
 /*===============================================================*/
@@ -917,6 +918,7 @@ void KPresenterView::extraUnGroup()
 {
     page->setToolEditMode( TEM_MOUSE );
     m_pKPresenterDoc->ungroupObjects();
+    objectSelectedChanged();
 }
 
 /*========================== screen config pages ================*/
@@ -2049,7 +2051,7 @@ void KPresenterView::objectSelectedChanged()
     actionExtraRotate->setEnabled(state);
     actionExtraShadow->setEnabled(state);
     actionExtraAlignObjs->setEnabled(state);
-    actionExtraGroup->setEnabled(state);
+    actionExtraGroup->setEnabled(state && m_pKPresenterDoc->numSelected()>1);
     actionExtraUnGroup->setEnabled(state);
     actionExtraAlignObjLeft->setEnabled(state);
     actionExtraAlignObjCenterH->setEnabled(state);
@@ -2077,6 +2079,10 @@ void KPresenterView::objectSelectedChanged()
     actionTextBold->setEnabled(isText);
     actionTextItalic->setEnabled(isText);
     actionTextUnderline->setEnabled(isText);
+
+    actionEditCopy->setEnabled(state || isText);
+    actionEditCut->setEnabled(state || isText);
+
 }
 
 /*=========== take changes for backgr dialog =====================*/

@@ -193,7 +193,7 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->setToggle( h_aright, true );
 
     htool2->insertSeparator();
-
+    headerAlignLeft();
     h_pgnum = 8;
 #if 0 // note: Don't forget to add the functionality before enabling again :)
     htool2->insertButton( KPBarIcon( "pgnum" ), h_pgnum,
@@ -316,7 +316,7 @@ void KPFooterHeaderEditor::setupFooter()
                           SIGNAL( clicked() ), this,
                           SLOT( footerAlignRight() ), true, i18n( "Align Right" ) );
     ftool2->setToggle( f_aright, true );
-
+    footerAlignLeft();
     ftool2->insertSeparator();
 
     f_pgnum = 8;
