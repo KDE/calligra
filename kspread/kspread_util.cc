@@ -486,7 +486,7 @@ bool util_isRowSelected(const QRect &selection)
 }
 
 //used in KSpreadView::slotRename
-bool util_validateTableName(QString name)
+bool util_validateTableName(const QString &name)
 {
   if (name[0] == ' ')
   {

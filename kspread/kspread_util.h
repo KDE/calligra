@@ -209,7 +209,7 @@ bool util_isAllSelected(const QRect &selection);
 bool util_isColumnSelected(const QRect &selection);
 bool util_isRowSelected(const QRect &selection);
 
-bool util_validateTableName(QString name);
+bool util_validateTableName(const QString &name);
 
 QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc );
 QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc );
