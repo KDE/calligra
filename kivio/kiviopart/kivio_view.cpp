@@ -801,6 +801,7 @@ void KivioView::toggleShowGrid(bool b)
   KivioGridData d = m_pDoc->grid();
   d.isShow = b;
   m_pDoc->setGrid(d);
+  m_pDoc->setModified( true );
 }
 
 void KivioView::slotUpdateGrid()
@@ -815,6 +816,7 @@ void KivioView::toggleSnapGrid(bool b)
   KivioGridData d = m_pDoc->grid();
   d.isSnap = b;
   m_pDoc->setGrid(d);
+  m_pDoc->setModified( true );
 }
 
 void KivioView::customEvent( QCustomEvent* e )
