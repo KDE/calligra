@@ -1176,16 +1176,11 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         }
 #endif
 
-    QDomElement mailmerge = word.namedItem( "SERIALL" ).toElement();
+    QDomElement mailmerge = word.namedItem( "MAILMERGE" ).toElement();
     if (mailmerge!=QDomElement())
         {
              m_slDataBase->load(mailmerge);
         }
-/*
-        else if ( name == "SERIALL" ) {
-            parser.parseTag( tag, name, lst );
-            m_slDataBase->load( parser, lst );
-        } */
 
     emit sigProgress(15);
 
@@ -1948,12 +1943,8 @@ QDomDocument KWDocument::saveXML()
     }
 #endif
 
-    QDomElement serialLetter=m_slDataBase->save(doc);
-    kwdoc.appendChild(serialLetter);
-/*
-    out << otag << "<SERIALL>" << endl;
-    m_slDataBase->save( out );
-    out << etag << "</SERIALL>" << endl; */
+    QDomElement mailMerge=m_slDataBase->save(doc);
+    kwdoc.appendChild(mailMerge);
 
     // Write "OBJECT" tag for every child
     QPtrListIterator<KoDocumentChild> chl( children() );

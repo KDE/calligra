@@ -58,7 +58,7 @@ public:
 
 
 /**
- * Serial letter variable
+ * Mail Merge variable
  */
 class KWMailMergeVariable : public KoMailMergeVariable
 {

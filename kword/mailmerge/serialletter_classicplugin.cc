@@ -89,10 +89,12 @@ void KWClassicSerialDataSource::removeEntry( const QString &name )
 
 void KWClassicSerialDataSource::removeRecord( int i )
 {
-    if ( i < 0 || i > (int)db.count() - 1 )
+    if ( (i < 0) || (i > (int)db.count() - 1) )
         return;
 
-    Db::Iterator it = db.at( i );
+	kdDebug()<<QString("Removing record %1").arg(i)<<endl;
+
+    Db::Iterator it = db.at( i);
     db.remove( it );
 }
 
@@ -238,6 +240,11 @@ KWClassicMailMergeEditorList::KWClassicMailMergeEditorList( QWidget *parent, KWC
     currentRecord = -1;
 }
 
+void KWClassicMailMergeEditorList::invalidateCurrentRecord()
+{
+	currentRecord=-1;
+}
+
 KWClassicMailMergeEditorList::~KWClassicMailMergeEditorList()
 {
     if ( currentRecord == -1 )
@@ -378,7 +385,8 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
 
     if ( db->getNumRecords() > 0 ) {
         records->setValue( 1 );
-        dbList->updateItems();
+	dbList->displayRecord(0);
+//        dbList->updateItems();
     } else {
         first->setEnabled(false);
         back_->setEnabled(false);
@@ -464,6 +472,7 @@ void KWClassicMailMergeEditor::removeRecord()
         return;
 
     db->removeRecord( records->value() - 1 );
+    dbList->invalidateCurrentRecord();
     if ( db->getNumRecords() > 0 ) {
         records->setRange( records->minValue(), records->maxValue() - 1 );
         records->setValue( 1 );

@@ -348,9 +348,11 @@ void KWView::setupActions()
                         this, SLOT( editMailMergeDataBase() ),
                         actionCollection(), "edit_sldatabase" );
 
-    (void) new  KWMailMergeLabelAction::KWMailMergeLabelAction( i18n("Drag me"), 0,
+    
+    (void) new  KWMailMergeLabelAction::KWMailMergeLabelAction( i18n("Drag Mail Merge Variable"), 0,
                     this, SLOT(editMailMergeDataBase()), actionCollection(), "mailmerge_draglabel" );
-
+    
+//    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert mailmerge var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
 
     // -------------- Frame menu
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,
@@ -518,7 +520,6 @@ void KWView::setupActions()
     */
 
 
-    // TODO at the moment serial letters don't work correctly
     addVariableActions( VT_MAILMERGE, KoMailMergeVariable::actionTexts(), actionInsertVariable, QString::null );
 
     actionInsertVariable->popupMenu()->insertSeparator();

@@ -118,6 +118,7 @@ public:
     KWClassicMailMergeEditorList( QWidget *parent, KWClassicSerialDataSource *db_ );
     virtual ~KWClassicMailMergeEditorList();
 
+    void invalidateCurrentRecord();
     void updateItems();
     void displayRecord( int i );
 

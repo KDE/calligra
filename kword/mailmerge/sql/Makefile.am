@@ -17,7 +17,8 @@ kwmailmerge_qtsqldb_power_la_LIBADD = ../../libkwmailmerge_interface.la $(LIB_KD
 
 METASOURCES = AUTO
 
-services_DATA=kwserialletter_qtsqldb.desktop kwserialletter_qtsqldb_power.desktop
+#services_DATA=kwserialletter_qtsqldb.desktop kwserialletter_qtsqldb_power.desktop
+services_DATA=kwserialletter_qtsqldb_power.desktop
 servicesdir=$(kde_servicesdir)
 
 SUBDIRS = .

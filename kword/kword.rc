@@ -190,12 +190,13 @@
   <Action name="border_color"/>
   <Action name="border_backgroundcolor"/>
 </ToolBar>
+<!--
 <ToolBar hidden="true" name="mailmerge_toolbar" position="top"><Text>MailMerge</Text>
   <Action name="mailmerge_draglabel"/>
   <Action name="mailmerge_varchooser"/>
   <Action name="edit_sldatabase"/>
-
 </ToolBar>
+-->
 <ToolBar hidden="true" name="formula_toolbar" position="bottom"><Text>Formula</Text>
   <Action name="formula_addtext"/>
   <Action name="formula_addroot"/>

@@ -56,7 +56,7 @@ QStringList KWMailMergeDataBase::availablePlugins()
 	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
 	{
 		tmp.append((*it)->property("X-KDE-InternalName").toString());
-		kdDebug()<<"Found serial letter plugin: "<< (*it)->name()<<endl;
+		kdDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
 	}
 	return tmp;
 }
@@ -108,7 +108,7 @@ KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type)
 	//Only for debugging
 	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
 	{
-		kdDebug()<<"Found serial letter plugin: "<< (*it)->name()<<endl;
+		kdDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
 	}
 
 	if (!pluginOffers.count())
@@ -255,7 +255,7 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
 QDomElement KWMailMergeDataBase::save(QDomDocument &doc) const
 {
 	kdDebug()<<"KWMailMergeDataBase::save()"<<endl;
-	QDomElement parentElem=doc.createElement("SERIALL");
+	QDomElement parentElem=doc.createElement("MAILMERGE");
 	if (plugin)
 	{
 		kdDebug()<<"KWMailMergeDataBase::save() There is really something to save"<<endl;
