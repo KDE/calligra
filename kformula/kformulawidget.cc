@@ -24,15 +24,13 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
-//#include <klocale.h>
-//#include <kstdaction.h>
 
 #include <basicelement.h>
 #include <formulacursor.h>
 #include <formulaelement.h>
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
-#include <kformulawidget.h>
+#include "kformulawidget.h"
 
 
 KFormulaWidget::KFormulaWidget(KFormula::Container* doc,

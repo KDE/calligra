@@ -73,4 +73,4 @@ KInstance* KFormulaFactory::global()
     return s_global;
 }
 
-#include <kformula_factory.moc>
+#include "kformula_factory.moc"
