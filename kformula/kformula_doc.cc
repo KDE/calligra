@@ -32,6 +32,7 @@
 #include <qprinter.h>
 
 #include <unistd.h>
+#include <config.h>
 
 #include <kaboutdialog.h>
 #include <kaction.h>
@@ -61,7 +62,6 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     // the modify flag
     connect(history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));
     connect(history, SIGNAL(documentRestored()), this, SLOT(documentRestored()));
-    history->documentSaved();
 }
 
 
@@ -77,7 +77,9 @@ QDomDocument KFormulaDoc::saveXML()
 {
     QDomDocument doc("FORMULA");
     formula->save(doc);
+#ifdef HAVE_KDEPRINT // i.e. kdelibs > 2.1
     history->documentSaved();
+#endif
     return doc;
 }
 
@@ -89,7 +91,9 @@ bool KFormulaDoc::loadXML(QIODevice *, const QDomDocument& doc)
 
     if (formula->load(doc)) {
         history->clear();
+#ifdef HAVE_KDEPRINT // i.e. kdelibs > 2.1
         history->documentSaved();
+#endif
         return true;
     }
     return false;
