@@ -122,6 +122,10 @@ void DependencyManager::cellChanged (const KSpreadPoint &cell)
 {
   KSpreadCell *c = cell.cell();
   
+  // empty or default cell? do nothing
+  if( c->isDefault() )
+    return;
+  
   //if the cell contains the circle error, we mustn't do anything
   if (c->testFlag (KSpreadCell::Flag_CircularCalculation))
     return;
@@ -319,6 +323,8 @@ void DependencyList::generateDependencies (const KSpreadPoint &cell)
 
   //new dependencies only need to be generated if the cell contains a formula
   KSpreadCell *c = sheet->cellAt (cell.column(), cell.row());
+  if( c->isDefault() )
+    return;
   if (!c->isFormula())
     return;
   
