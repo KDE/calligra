@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -31,6 +32,8 @@
 #include <qpixmap.h>
 #include <qcolor.h>
 #include <qpushbutton.h>
+
+
 
 #include "kexiformbase.h"
 
@@ -108,17 +111,23 @@ void KexiFormBase::mouseMoveEvent(QMouseEvent *ev)
 	if(m_widgetRectRequested)
 	{
 		m_widgetRect = true;
-		m_widgetRectBX = ev->x();
-		m_widgetRectBY = ev->y();
-		m_widgetRectEX = ev->x();
-		m_widgetRectEY = ev->x();
+		m_widgetRectBX = (((float)ev->x())/((float)m_dotSpacing)+0.5);
+		m_widgetRectBX*=m_dotSpacing;
+		m_widgetRectBY = (((float)ev->y())/((float)m_dotSpacing)+0.5);
+		m_widgetRectBY*=m_dotSpacing;
+		m_widgetRectEX = m_widgetRectBX;
+		m_widgetRectEY = m_widgetRectBY;
 		m_widgetRectRequested = false;
 	}
 
 	if(m_widgetRect)
 	{
-		m_widgetRectEX = ev->x();
-		m_widgetRectEY = ev->y();
+                m_widgetRectEX = (((float)ev->x())/((float)m_dotSpacing)+0.5);
+		m_widgetRectEX*=m_dotSpacing;
+                m_widgetRectEY = (((float)ev->y())/((float)m_dotSpacing)+0.5);
+		m_widgetRectEY*=m_dotSpacing;
+//		m_widgetRectEX = ev->x();
+//		m_widgetRectEY = ev->y();
 		repaint();
 	}
 }
@@ -160,7 +169,7 @@ void KexiFormBase::paintEvent(QPaintEvent *ev)
 	{
 		QPen wpen(black, 2);
 		p.setPen(wpen);
-		p.drawRect(m_widgetRectBX, m_widgetRectBY, m_widgetRectEX, m_widgetRectEY);
+		p.drawRect(m_widgetRectBX, m_widgetRectBY, m_widgetRectEX-m_widgetRectBX, m_widgetRectEY-m_widgetRectBY);
 	}
 	p.end();
 }
@@ -169,7 +178,8 @@ void KexiFormBase::mouseReleaseEvent(QMouseEvent *ev)
 {
 	if(m_widgetRect)
 	{
-		insertWidget(m_pendingWidget, m_widgetRectBX, m_widgetRectBY, m_widgetRectEX, m_widgetRectEY);
+		insertWidget(m_pendingWidget, m_widgetRectBX, m_widgetRectBY,
+			m_widgetRectEX-m_widgetRectBX, m_widgetRectEY-m_widgetRectBY);
 		m_widgetRectBX = 0;
 		m_widgetRectBY = 0;
 		m_widgetRectEX = 0;
@@ -184,7 +194,7 @@ void KexiFormBase::insertWidget(QWidget *widget, int x, int y, int w, int h)
 {
 	widget->move(x, y);
 	widget->resize(w, h);
-	widget->hide();
+	widget->show();
 	widget->setFocusPolicy(QWidget::NoFocus);
 //	widget->repaint();
 //	grabMouse();
