@@ -140,6 +140,7 @@ KWordFilter::parse (const QString & filename)
       int len;
       Token *t = it.current ();
       Token::Type type = t->type ();
+
       switch (type)
         {
 
@@ -312,7 +313,6 @@ KWordFilter::parse (const QString & filename)
         };
 
     }
-
 
   QString content = root;
 

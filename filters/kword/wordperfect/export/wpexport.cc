@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Ariya Hidayat <ariyahidayat@yahoo.de>
+   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,32 +17,60 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <config.h>
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#include <qtextcodec.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qtextstream.h>
 
 #include <kdebug.h>
-#include <qdom.h>
-#include <qfile.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 
-#include "wpexport.h"
-#include "wpexport.moc"
+#include <KWEFBaseWorker.h>
+#include <KWEFKWordLeader.h>
+
+#include <wpexport.h>
+#include <wp5.h>
+#include <wp6.h>
 
 typedef KGenericFactory<WPExport, KoFilter> WPExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwpexport, WPExportFactory( "wpexport" ) );
 
-
-WPExport::WPExport(KoFilter *, const char *, const QStringList&) :
+WPExport::WPExport( KoFilter *, const char *, const QStringList& ):
                      KoFilter()
 {
 }
 
-KoFilter::ConversionStatus WPExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus 
+WPExport::convert( const QCString& from, 
+  const QCString& to )
 {
   // check for proper conversion
-  if ( to != "application/wordperfect" || from != "application/x-kword" )
-      return KoFilter::NotImplemented;
+  if( to!= "application/wordperfect" || from != "application/x-kword" )
+     return KoFilter::NotImplemented;
 
-  kdDebug() << "KWord WordPerfect filter: sorry, export is not supported now " << endl;
+  // TODO ask user for version 5.x or 6/7/8/9
+  int version = 6;
 
-  return KoFilter::NotImplemented;
+  KWEFBaseWorker* worker;
+  if( version == 5 ) worker = new WPFiveWorker();
+  else worker = new WPSixWorker();
+
+  KWEFKWordLeader* leader = new KWEFKWordLeader( worker );
+
+  KoFilter::ConversionStatus result;
+  result = leader->convert( m_chain, from, to );
+
+  delete worker;
+  delete leader;
+
+  return result; 
 }
+
+#include "wpexport.moc"

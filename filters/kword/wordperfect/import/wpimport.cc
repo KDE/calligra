@@ -56,7 +56,6 @@ KoFilter::ConversionStatus WPImport::convert( const QCString& from, const QCStri
   // sentinel check
   if( root.isEmpty() ) return KoFilter::StupidError;
 
-
   // prepare storage
   KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
 

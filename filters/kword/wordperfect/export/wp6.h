@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Ariya Hidayat <ariyahidayat@yahoo.de>
+   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,24 +17,32 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __WPEXPORT_H
-#define __WPEXPORT_H
+#ifndef __WP6_H
+#define __WP6_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <KWEFStructures.h>
+#include <KWEFBaseWorker.h>
 
-#include <koFilter.h>
-#include <koStore.h>
+class QString;
+class QFile;
+class QDataStream;
 
-
-class WPExport : public KoFilter {
-
-    Q_OBJECT
-
+class WPSixWorker : public KWEFBaseWorker
+{
   public:
-
-    WPExport(KoFilter *parent, const char *name, const QStringList&);
-    virtual ~WPExport() {}
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    WPSixWorker(void)  { }
+    virtual ~WPSixWorker(void) { }
+    virtual bool doOpenFile(const QString& filenameOut, const QString& to);
+    virtual bool doCloseFile(void);
+    virtual bool doOpenDocument(void);
+    virtual bool doCloseDocument(void);
+    virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
+        const ValueListFormatData& paraFormatDataList);
+  private:
+    QString filename;
+    QFile outfile;
+    QDataStream output;
+    Q_UINT32 document_area_ptr;
 };
-#endif // __WPEXPORT_H
+
+#endif //__WP6_H
