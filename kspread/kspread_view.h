@@ -543,8 +543,6 @@ private:
 
 
   /* helper functions */
-  void initializeAreaOperationActions();
-  void initializeGlobalOperationActions();
   void adjustMapActions( bool mode );
   void adjustActions( bool mode );
   void adjustActions( KSpreadSheet const * const table,

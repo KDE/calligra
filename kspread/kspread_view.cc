@@ -499,6 +499,7 @@ public:
     KAction* insertFromTextfile;
     KAction* insertFromClipboard;
     KAction* transform;
+    KAction* sort;
     KAction* sortDec;
     KAction* sortInc;
     KAction* fillRight;
@@ -509,8 +510,8 @@ public:
     KAction* definePrintRange;
     KAction* resetPrintRange;
     KToggleAction* showPageBorders;
-    KAction* recalc_worksheet;
-    KAction* recalc_workbook;
+    KAction* recalcWorksheet;
+    KAction* recalcWorkbook;
     KToggleAction* protectSheet;
     KToggleAction* protectDoc;
 
@@ -538,7 +539,6 @@ public:
     KSelectAction* formulaSelection;
     KAction* insertLink;
     KSelectAction* viewZoom;
-    KAction* sort;
     KAction* consolidate;
     KAction* goalSeek;
     KAction* subTotals;
@@ -547,10 +547,9 @@ public:
     KAction* createTemplate;
     KoPartSelectAction *insertPart;
     KAction* insertChartFrame;
-    KAction* sortList;
+    KAction* customList;
     KAction* spellChecking;
     KAction* preference;
-    KAction* help;
 
     // running calculation
     KToggleAction* calcNone;
@@ -984,6 +983,63 @@ void ViewPrivate::initActions()
       0, view, SLOT( insertFromClipboard() ), ac, "insertFromClipboard");
   actions->insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection."));
 
+  actions->transform = new KAction( i18n("Transform Object..."), "rotate",
+      0, view, SLOT( transformPart() ), ac, "transform" );
+  actions->transform->setToolTip(i18n("Rotate the contents of the cell."));
+  actions->transform->setEnabled( FALSE );
+  QObject::connect( actions->transform, SIGNAL( activated() ),
+      view, SLOT( transformPart() ) );
+
+  actions->sort = new KAction( i18n("&Sort..."),
+      0, view, SLOT( sort() ), ac, "sort" );
+  actions->sort->setToolTip(i18n("Sort a group of cells."));
+
+  actions->sortDec = new KAction( i18n("Sort &Decreasing"), "sort_decrease",
+      0, view, SLOT( sortDec() ), ac, "sortDec" );
+  actions->sortDec->setToolTip(i18n("Sort a group of cells in decreasing (last to first) order."));
+
+  actions->sortInc = new KAction( i18n("Sort &Increasing"), "sort_incr",
+      0, view, SLOT( sortInc() ), ac, "sortInc" );
+  actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order."));
+
+  actions->paperLayout = new KAction( i18n("Page Layout..."),
+      0, view, SLOT( paperLayoutDlg() ), ac, "paperLayout" );
+  actions->paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout."));
+
+  actions->definePrintRange = new KAction( i18n("Define Print Range"),
+      0, view, SLOT( definePrintRange() ), ac, "definePrintRange" );
+  actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
+
+  actions->resetPrintRange = new KAction( i18n("Reset Print Range"),
+      0, view, SLOT( resetPrintRange() ), ac, "resetPrintRange" );
+  actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
+
+  actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"),
+      0, ac, "showPageBorders");
+  QObject::connect( actions->showPageBorders, SIGNAL( toggled( bool ) ),
+      view, SLOT( togglePageBorders( bool ) ) );
+  actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
+
+  actions->recalcWorksheet = new KAction( i18n("Recalculate Sheet"),
+      Qt::SHIFT + Qt::Key_F9, view, SLOT( recalcWorkSheet() ), ac, "RecalcWorkSheet" );
+  actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet."));
+
+  actions->recalcWorkbook = new KAction( i18n("Recalculate Workbook"),
+      Qt::Key_F9, view, SLOT( recalcWorkBook() ), ac, "RecalcWorkBook" );
+  actions->recalcWorkbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets."));
+
+  actions->protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ),
+      0, ac, "protectSheet" );
+  actions->protectSheet->setToolTip( i18n( "Protect the sheet from being modified." ) );
+  QObject::connect( actions->protectSheet, SIGNAL( toggled( bool ) ),
+      view, SLOT( toggleProtectSheet( bool ) ) );
+
+  actions->protectDoc = new KToggleAction( i18n( "Protect &Doc..." ),
+      0, ac, "protectDoc" );
+  actions->protectDoc->setToolTip( i18n( "Protect the document from being modified." ) );
+  QObject::connect( actions->protectDoc, SIGNAL( toggled( bool ) ),
+      view, SLOT( toggleProtectDoc( bool ) ) );
+
   // -- editing actions --
 
   actions->copy = KStdAction::copy( view, SLOT( copySelection() ), ac, "copy" );
@@ -1031,9 +1087,71 @@ void ViewPrivate::initActions()
 
   // -- misc actions --
 
+  actions->styleDialog = new KAction( i18n( "Style Manager..." ),
+      0, view, SLOT( styleDialog() ), ac, "styles" );
+  actions->styleDialog->setToolTip( i18n( "Edit and organize cell styles." ) );
+
+  actions->autoSum = new KAction( i18n("Autosum"), "black_sum",
+      0, view, SLOT( autoSum() ), ac, "autoSum" );
+  actions->autoSum->setToolTip(i18n("Insert the 'sum' function"));
+
   actions->spellChecking = KStdAction::spelling( view, SLOT( extraSpelling() ),
       ac, "spelling" );
   actions->spellChecking->setToolTip(i18n("Check the spelling."));
+
+  actions->formulaSelection = new KSelectAction(i18n("Formula Selection"),
+      0, ac, "formulaSelection");
+  actions->formulaSelection->setToolTip(i18n("Insert a function."));
+  QStringList lst;
+  lst.append( "SUM");
+  lst.append( "AVERAGE");
+  lst.append( "IF");
+  lst.append( "COUNT");
+  lst.append( "MIN");
+  lst.append( "MAX");
+  lst.append( i18n("Others...") );
+  ((KSelectAction*) actions->formulaSelection)->setItems( lst );
+  actions->formulaSelection->setComboWidth( 80 );
+  actions->formulaSelection->setCurrentItem(0);
+  QObject::connect( actions->formulaSelection, SIGNAL( activated( const QString& ) ),
+      view, SLOT( formulaSelection( const QString& ) ) );
+
+  actions->viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0, ac, "view_zoom" );
+  QObject::connect( actions->viewZoom, SIGNAL( activated( const QString & ) ),
+      view, SLOT( viewZoom( const QString & ) ) );
+  actions->viewZoom->setEditable(true);
+  view->changeZoomMenu( doc->zoom() );
+
+  actions->consolidate = new KAction( i18n("&Consolidate..."),
+      0, view, SLOT( consolidate() ), ac, "consolidate" );
+  actions->consolidate->setToolTip(i18n("Create a region of summary data from a group of similar regions."));
+
+  actions->goalSeek = new KAction( i18n("&Goal Seek..."),
+      0, view, SLOT( goalSeek() ), ac, "goalSeek" );
+  actions->goalSeek->setToolTip( i18n("Repeating calculation to find a specific value.") );
+
+  actions->subTotals = new KAction( i18n("&Subtotals..."),
+      0, view, SLOT( subtotals() ), ac, "subtotals" );
+  actions->subTotals->setToolTip( i18n("Create different kind of subtotals to a list or database.") );
+
+  actions->textToColumns = new KAction( i18n("&Text to Columns..."),
+      0, view, SLOT( textToColumns() ), ac, "textToColumns" );
+  actions->textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns.") );
+
+  actions->multipleOperations = new KAction( i18n("&Multiple Operations..."),
+      0, view, SLOT( multipleOperations() ), ac, "multipleOperations" );
+  actions->multipleOperations->setToolTip( i18n("Apply the same formula to various cells using different values for the parameter.") );
+
+  actions->createTemplate = new KAction( i18n( "&Create Template From Document..." ),
+      0, view, SLOT( createTemplate() ), ac, "createTemplate" );
+
+  actions->customList = new KAction( i18n("Custom Lists..."),
+      0, view, SLOT( sortList() ), ac, "sortlist" );
+  actions->customList->setToolTip(i18n("Create custom lists for sorting or autofill."));
+
+  actions->preference = new KAction( i18n("Configure KSpread..."),"configure",
+      0, view, SLOT( preference() ), ac, "preference" );
+  actions->preference->setToolTip(i18n("Set various KSpread options."));
 
   // -- navigation actions --
 
@@ -1302,8 +1420,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
         connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
 
     d->initActions();
-    initializeAreaOperationActions();
-    initializeGlobalOperationActions();
 
     QPtrListIterator<KSpreadSheet> it( d->doc->map()->tableList() );
     for( ; it.current(); ++it )
@@ -1361,149 +1477,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     adjustActions( !d->activeSheet->isProtected() );
     adjustMapActions( !d->map->isProtected() );
-}
-
-
-void KSpreadView::initializeAreaOperationActions()
-{
-
-  d->actions->sortList = new KAction( i18n("Custom Lists..."), 0, this,
-                            SLOT( sortList() ), actionCollection(),
-                            "sortlist" );
-  d->actions->sortList->setToolTip(i18n("Create custom lists for sorting or autofill."));
-
-  d->actions->sort = new KAction( i18n("&Sort..."), 0, this, SLOT( sort() ),
-                        actionCollection(), "sort" );
-  d->actions->sort->setToolTip(i18n("Sort a group of cells."));
-
-  d->actions->autoSum = new KAction( i18n("Autosum"), "black_sum", 0, this,
-                           SLOT( autoSum() ), actionCollection(), "autoSum" );
-  d->actions->autoSum->setToolTip(i18n("Insert the 'sum' function"));
-
-  d->actions->sortDec = new KAction( i18n("Sort &Decreasing"), "sort_decrease", 0, this,
-                           SLOT( sortDec() ), actionCollection(), "sortDec" );
-  d->actions->sortDec->setToolTip(i18n("Sort a group of cells in decreasing (last to first) order."));
-
-  d->actions->sortInc = new KAction( i18n("Sort &Increasing"), "sort_incr", 0, this,
-                           SLOT( sortInc() ), actionCollection(), "sortInc" );
-  d->actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order."));
-
-  d->actions->goalSeek = new KAction( i18n("&Goal Seek..."), 0, this,
-                            SLOT( goalSeek() ), actionCollection(), "goalSeek" );
-  d->actions->goalSeek->setToolTip( i18n("Repeating calculation to find a specific value.") );
-
-  d->actions->multipleOperations = new KAction( i18n("&Multiple Operations..."), 0, this,
-                            SLOT( multipleOperations() ), actionCollection(), "multipleOperations" );
-  d->actions->multipleOperations->setToolTip( i18n("Apply the same formula to various cells using different values for the parameter.") );
-
-  d->actions->subTotals = new KAction( i18n("&Subtotals..."), 0, this,
-                             SLOT( subtotals() ), actionCollection(), "subtotals" );
-  d->actions->subTotals->setToolTip( i18n("Create different kind of subtotals to a list or database.") );
-
-  d->actions->textToColumns = new KAction( i18n("&Text to Columns..."), 0, this,
-                            SLOT( textToColumns() ), actionCollection(), "textToColumns" );
-  d->actions->textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns.") );
-
-  d->actions->consolidate = new KAction( i18n("&Consolidate..."), 0, this,
-                               SLOT( consolidate() ), actionCollection(),
-                               "consolidate" );
-  d->actions->consolidate->setToolTip(i18n("Create a region of summary data from a group of similar regions."));
-}
-
-void KSpreadView::initializeGlobalOperationActions()
-{
-  d->actions->recalc_workbook = new KAction( i18n("Recalculate Workbook"), Key_F9, this,
-                                   SLOT( recalcWorkBook() ), actionCollection(),
-                                   "RecalcWorkBook" );
-  d->actions->recalc_workbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets."));
-
-  d->actions->recalc_worksheet = new KAction( i18n("Recalculate Sheet"), SHIFT + Key_F9,
-                                    this, SLOT( recalcWorkSheet() ),
-                                    actionCollection(), "RecalcWorkSheet" );
-  d->actions->recalc_worksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet."));
-
-  d->actions->preference = new KAction( i18n("Configure KSpread..."),"configure", 0, this,
-                              SLOT( preference() ), actionCollection(),
-                              "preference" );
-  d->actions->preference->setToolTip(i18n("Set various KSpread options."));
-
-  d->actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"), 0,
-                                         actionCollection(), "showPageBorders");
-  connect( d->actions->showPageBorders, SIGNAL( toggled( bool ) ), this,
-           SLOT( togglePageBorders( bool ) ) );
-  d->actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
-
-  d->actions->protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ), 0,
-                                      actionCollection(), "protectSheet" );
-  d->actions->protectSheet->setToolTip( i18n( "Protect the sheet from being modified." ) );
-  connect( d->actions->protectSheet, SIGNAL( toggled( bool ) ), this,
-           SLOT( toggleProtectSheet( bool ) ) );
-
-  d->actions->protectDoc = new KToggleAction( i18n( "Protect &Doc..." ), 0,
-                                      actionCollection(), "protectDoc" );
-  d->actions->protectDoc->setToolTip( i18n( "Protect the document from being modified." ) );
-  connect( d->actions->protectDoc, SIGNAL( toggled( bool ) ), this,
-           SLOT( toggleProtectDoc( bool ) ) );
-
-  d->actions->viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
-                                  actionCollection(), "view_zoom" );
-
-  connect( d->actions->viewZoom, SIGNAL( activated( const QString & ) ),
-           this, SLOT( viewZoom( const QString & ) ) );
-  d->actions->viewZoom->setEditable(true);
-  changeZoomMenu( d->doc->zoom() );
-
-  d->actions->formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
-                                         actionCollection(), "formulaSelection");
-  d->actions->formulaSelection->setToolTip(i18n("Insert a function."));
-  QStringList lst;
-  lst.append( "SUM");
-  lst.append( "AVERAGE");
-  lst.append( "IF");
-  lst.append( "COUNT");
-  lst.append( "MIN");
-  lst.append( "MAX");
-  lst.append( i18n("Others...") );
-  ((KSelectAction*) d->actions->formulaSelection)->setItems( lst );
-  d->actions->formulaSelection->setComboWidth( 80 );
-  d->actions->formulaSelection->setCurrentItem(0);
-  connect( d->actions->formulaSelection, SIGNAL( activated( const QString& ) ),
-           this, SLOT( formulaSelection( const QString& ) ) );
-
-
-  d->actions->transform = new KAction( i18n("Transform Object..."), "rotate", 0, this,
-                             SLOT( transformPart() ),
-                             actionCollection(), "transform" );
-  d->actions->transform->setToolTip(i18n("Rotate the contents of the cell."));
-
-
-
-  d->actions->transform->setEnabled( FALSE );
-  connect( d->actions->transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
-
-
-  d->actions->paperLayout = new KAction( i18n("Page Layout..."), 0, this,
-                               SLOT( paperLayoutDlg() ), actionCollection(),
-                               "paperLayout" );
-  d->actions->paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout."));
-
-  d->actions->definePrintRange = new KAction( i18n("Define Print Range"), 0, this,
-                                    SLOT( definePrintRange() ), actionCollection(),
-                                    "definePrintRange" );
-  d->actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
-
-  d->actions->resetPrintRange = new KAction( i18n("Reset Print Range"), 0, this,
-                                   SLOT( resetPrintRange() ), actionCollection(),
-                                   "resetPrintRange" );
-  d->actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
-
-  d->actions->createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this,
-                                  SLOT( createTemplate() ), actionCollection(), "createTemplate" );
-
-  d->actions->styleDialog = new KAction( i18n( "Style Manager..." ), 0, this, SLOT( styleDialog() ),
-                               actionCollection(), "styles" );
-  d->actions->styleDialog->setToolTip( i18n( "Edit and organize cell styles." ) );
-
 }
 
 KSpreadView::~KSpreadView()
@@ -4495,8 +4468,8 @@ void KSpreadView::adjustActions( bool mode )
   d->actions->clearComment->setEnabled( mode );
   d->actions->clearValidity->setEnabled( mode );
   d->actions->clearConditional->setEnabled( mode );
-  d->actions->recalc_workbook->setEnabled( mode );
-  d->actions->recalc_worksheet->setEnabled( mode );
+  d->actions->recalcWorkbook->setEnabled( mode );
+  d->actions->recalcWorksheet->setEnabled( mode );
   d->actions->adjust->setEnabled( mode );
   d->actions->editCell->setEnabled( mode );
   if( !mode )
