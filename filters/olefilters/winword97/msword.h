@@ -51,12 +51,6 @@ public:
         const myFile &dataStream);
     virtual ~MsWord();
 
-    // Metadata.
-
-    QString m_title;
-    QString m_subject;
-    QString m_author;
-    QString m_lastRevisedBy;
     const FIB &fib() const;
 
     // Call the parse() function to process the document. The callbacks return
@@ -308,18 +302,10 @@ public:
 
 protected:
     virtual void gotDocumentInformation(
-        const QString &fullName,
-	const QString &title,
-	const QString &company,
-	const QString &email,
-	const QString &telephone,
-	const QString &fax,
-	const QString &postalCode,
-	const QString &country,
-	const QString &city,
-	const QString &street,
-	const QString &docTitle,
-	const QString &docAbstract) = 0;
+        const QString &title,
+        const QString &subject,
+        const QString &author,
+        const QString &lastRevisedBy) = 0;
     virtual void gotParagraph(
         const QString &text,
         const PAP &pap,
@@ -387,10 +373,6 @@ protected:
         Properties **data;
         QString *names;
     } m_styles;
-
-    // Get the metadata for the file.
-
-    void readAssociatedStrings();
 
 protected:
     // Error handling and reporting support.
@@ -461,6 +443,10 @@ private:
     QString m_tableText[MAX_TABLE_SIZE];
     PAP m_tableStyle[MAX_TABLE_SIZE];
     CHPXarray m_tableRuns[MAX_TABLE_SIZE];
+
+    // Get the metadata for the file.
+
+    void readAssociatedStrings();
 
     // Get the styles in the style sheet into the cache.
 

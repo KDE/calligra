@@ -484,23 +484,14 @@ QString WinWordDoc::generateFormats(
     return formats;
 }
 
-void WinWordDoc::gotAuthorAndDocumentInformation(
-    const QString &fullName,
+void WinWordDoc::gotDocumentInformation(
     const QString &title,
-    const QString &company,
-    const QString &email,
-    const QString &telephone,
-    const QString &fax,
-    const QString &postalCode,
-    const QString &country,
-    const QString &city,
-    const QString &street,
-    const QString &docTitle,
-    const QString &docAbstract)
+    const QString &subject,
+    const QString &author,
+    const QString &lastRevisedBy)
 {
-    emit signalSaveDocumentInformation(fullName, title, company, email, telephone, fax, postalCode, country, city, street, docTitle, docAbstract);
+    emit signalSaveDocumentInformation(author, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, title, QString::null);
 }
-
 
 void WinWordDoc::gotError(
     const QString &text)

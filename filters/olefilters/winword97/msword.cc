@@ -1157,6 +1157,9 @@ void MsWord::parse()
             m_fib.fcMac,
             false);
     }
+
+    // Now deliver the document Metadata.
+    //readAssociatedStrings();
 }
 
 //
@@ -1185,6 +1188,10 @@ void MsWord::readAssociatedStrings()
         ibstAssocCriteria6,
         ibstAssocCriteria7
     } ibst;
+    QString title;
+    QString subject;
+    QString author;
+    QString lastRevisedBy;
 
     const U8 *ptr = m_tableStream + m_fib.fcSttbfAssoc; //lcbSttbfAssoc.
 
@@ -1203,12 +1210,12 @@ void MsWord::readAssociatedStrings()
         kdError(s_area) << "MsWord::getAssociatedStrings: insufficient data " << endl;
         return;
     }
-    m_title = data.strings[ibstAssocTitle];
-    m_subject = data.strings[ibstAssocSubject];
-    m_author = data.strings[ibstAssocAuthor];
-    m_lastRevisedBy = data.strings[ibstAssocLastRevBy];
+    title = data.strings[ibstAssocTitle];
+    subject = data.strings[ibstAssocSubject];
+    author = data.strings[ibstAssocAuthor];
+    lastRevisedBy = data.strings[ibstAssocLastRevBy];
 
-    gotDocumentInformation(m_author, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, m_title, QString::null);
+    gotDocumentInformation(title, subject, author, lastRevisedBy);
 }
 
 // Create a cache of information about fonts. The information is indexed by font code.

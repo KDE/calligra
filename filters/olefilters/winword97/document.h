@@ -244,19 +244,6 @@ public:
     friend class Attributes;
 
 protected:
-    virtual void gotAuthorAndDocumentInformation(
-        const QString &fullName,
-        const QString &title,
-        const QString &company,
-        const QString &email,
-        const QString &telephone,
-        const QString &fax,
-        const QString &postalCode,
-        const QString &country,
-        const QString &city,
-        const QString &street,
-        const QString &docTitle,
-        const QString &docAbstract) = 0;
     virtual void gotError(
         const QString &text) = 0;
     virtual void gotParagraph(
@@ -293,19 +280,6 @@ private:
     unsigned m_imageNumber;
 
     // Override the base class functions.
-    void gotDocumentInformation(
-        const QString &fullName,
-        const QString &title,
-        const QString &company,
-        const QString &email,
-        const QString &telephone,
-        const QString &fax,
-        const QString &postalCode,
-        const QString &country,
-        const QString &city,
-        const QString &street,
-        const QString &docTitle,
-        const QString &docAbstract);
     void gotParagraph(
         const QString &text,
         const PAP &pap,

@@ -121,21 +121,13 @@ private:
     QString generateFormats(
         Attributes &attributes);
 
-    void gotAuthorAndDocumentInformation(
-        const QString &fullName,
-        const QString &title,
-        const QString &company,
-        const QString &email,
-        const QString &telephone,
-        const QString &fax,
-        const QString &postalCode,
-        const QString &country,
-        const QString &city,
-        const QString &street,
-	const QString &docTitle,
-	const QString &docAbstract);
     void gotError(
         const QString &text);
+    void gotDocumentInformation(
+	const QString &title,
+	const QString &subject,
+	const QString &author,
+	const QString &lastRevisedBy);
     void gotParagraph(
         const QString &text,
         Attributes &style);
