@@ -13,7 +13,7 @@ build up several columns using a different frame for each column.</para>
 </note>
 
 <para>To change the number and width of columns select <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
 from the menubar.</para>
 
 <para>This will bring up a dialog box.</para>

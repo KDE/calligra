@@ -23,7 +23,7 @@ if the differences are still unclear.</para>
 the size and shape of the main frame by setting the paper size and the margins. </para>
 
 <para>Formatting the page is usually done by selecting: <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
 from the menubar.</para>
 
 <tip>
@@ -175,7 +175,7 @@ be ignored.</para>
 size and shape of all the frames individually. </para>
 
 <para>Formatting the page is usually done by selecting: <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
 from the menu bar.</para>
 
 <tip>

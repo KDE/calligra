@@ -120,7 +120,7 @@ the previous options.</para>
 <title>Change the placement of the footnotes</title>
 <para>You can determine how much space separates the main text frame and the footnotes.  Select 
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
 from the menubar. This will bring up a dialog:</para>
 
 <screenshot>
@@ -181,7 +181,7 @@ appear <emphasis>before</emphasis> the endnote number.</para>
 <title>Change the placement of the endnotes</title>
 <para>You can determine how much space separates the main text frame and the footnotes.  Select 
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
 from the menubar. This will bring up a dialog:</para>
 
 <screenshot>

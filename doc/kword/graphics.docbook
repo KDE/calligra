@@ -22,7 +22,7 @@ the menubar</para>
 </listitem>
 
 <listitem>
-<para>Using the keyboard shortcut: <keycap>F3</keycap></para>
+<para>Using the keyboard shortcut: <keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo></para>
 </listitem>
 
 <listitem>

@@ -1179,7 +1179,15 @@ Examples of whitespace characters are spaces, tabs, and carrage returns.</para><
 <sect1 id="spell-check">
 <title>Spell Checking</title>
 <indexterm><primary>spelling</primary><secondary>check spelling of document</secondary></indexterm>
-
+<para>&kword; can compare each word in your document to several commonly available dictionaries.  It will offer you 
+the opportunity to change any words it believes are mispelled.</para>
+<note><para>By default, if any text in the document is selected, 
+&kword; only checks the spelling of currently selected text.</para>  
+<para>If you want to check the spelling of a 
+specific part of your document, simply <link linkend="select">select the text</link> you want to check the 
+spelling of.</para>
+<para>To check the entire document, leave all text in the document unsellected, and &kword; will check 
+the entire document.</para></note>
 <para>The <guilabel>Spell Checking...</guilabel> command can be invoked
 2 ways:</para>
 

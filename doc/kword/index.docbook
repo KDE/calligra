@@ -64,7 +64,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2003-01-31</date>
+<date>2003-02-01</date>
 <releaseinfo>1.03.00</releaseinfo>
 
 <abstract>
@@ -120,6 +120,9 @@ TODO:
 - Convert table to text (MB and text)
 - Sort text (MB and text)
 - type anywhere cursor
+- hyphenation
+- shadow text
+- Personal path page.
 
 -->
 
@@ -532,7 +535,7 @@ from the menubar.</para></listitem>
 <listitem><para>Click once in the text box labeled <guilabel>Document Title</guilabel> with the &LMB; and enter
 the desired document title.</para></listitem>
 <listitem><para>Click on the <guibutton>OK</guibutton> button.</para></listitem>
-<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Page</guimenuitem></menuchoice>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
 <listitem><para>Click on the <guilabel>Header and Footer</guilabel> tab.</para></listitem>
 <listitem><para>Select <guilabel>Different header for even and odd pages</guilabel>.</para></listitem>
@@ -1442,7 +1445,7 @@ Frame</link></entry>
 <row>
 <entry><link linkend="menu-insert-picture">Insert
 Picture</link></entry>
-<entry><keycombo action="simul"><keycap>F3</keycap></keycombo></entry>
+<entry><keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo></entry>
 </row>
 
 <row>

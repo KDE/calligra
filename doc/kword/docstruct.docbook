@@ -61,4 +61,14 @@ frame title with the &RMB;.  A submenu will appear.  Select <guilabel>Select Fra
 frame title with the &RMB;.  A submenu will appear.  Select <guilabel>Edit Text Frameset</guilabel> from the menu.</para>
 </sect2>
 
+<sect2 id="doc-structure-properties"><title>Edit a framesets properties using the document structure window</title>
+<para>To change the properties of a frame or frameset, click on the
+frame title with the &RMB;.  A submenu will appear.  Select <guilabel>Edit Frameset Properties</guilabel> from the menu.</para>
+</sect2>
+
+<sect2 id="doc-structure-delete"><title>Delete frame or frameset using the document structure window</title>
+<para>To delete a frame or frameset, click on the
+frame title with the &RMB;.  A submenu will appear.  Select <guilabel>Delete Frameset</guilabel> from the menu.</para>
+</sect2>
+
 </sect1>

@@ -142,6 +142,10 @@ to the right of the radio button labeled <guilabel>Open a recent document</guila
 <para>Once the filename is selected in this drop down box, click on <guibutton>OK</guibutton> and &kword;
 will load the template.</para>
 
+<note><para>If you delete or move a file, it will still appear in the drop down list.</para><para>If you select a deleted or otherwise unavailable file 
+to be opened by &kword;, the <guibutton>OK</guibutton> will turn from black to grey. This indicates you will not be 
+able to open that file.</para></note>
+
 </sect3>
 <sect3 id="loading-empty-doc">
 <title>Loading an Empty Document</title>
