@@ -59,7 +59,7 @@ void CreateRectangleCmd::execute () {
     object->addPoint (2, spos);
     object->addPoint (3, spos);
     object->setEndPoint (epos);
-    object->ref ();
+    //    object->ref ();
   }
   document->insertObject (object);
 }

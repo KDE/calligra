@@ -260,6 +260,7 @@ public:
 
   void ref ();
   void unref ();
+  unsigned int ref_count () const { return rcount; }
 
   virtual const char* typeName () = 0;
 

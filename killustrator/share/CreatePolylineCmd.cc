@@ -55,7 +55,7 @@ void CreatePolylineCmd::execute () {
     QListIterator<Coord> it (points);
     for (int i = 0; it.current (); ++it, ++i)
       object->addPoint (i, *(it.current ()));
-    object->ref ();
+    //    object->ref ();
   }
   document->insertObject (object);
 }

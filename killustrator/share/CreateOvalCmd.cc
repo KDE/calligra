@@ -55,7 +55,7 @@ void CreateOvalCmd::execute () {
     object = new GOval (cflag);
     object->setStartPoint (spos);
     object->setEndPoint (epos);
-    object->ref ();
+    //    object->ref ();
   }
   document->insertObject (object);
 }

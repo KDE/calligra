@@ -57,7 +57,7 @@ void CreatePolygonCmd::execute () {
     // create polygon
     object = new GPolygon (GPolygon::PK_Polygon);
     object->setSymmetricPolygon (spos, epos, nCorners, isConcave, sharpness);
-    object->ref ();
+    //    object->ref ();
   }
   document->insertObject (object);
 }

@@ -110,6 +110,7 @@ int GDocument::getPaperHeight () const {
 }
 
 void GDocument::insertObject (GObject* obj) {
+  obj->ref ();
   objects.append (obj);
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
   setModified ();
@@ -210,6 +211,7 @@ void GDocument::deleteSelectedObjects () {
     GObject* obj = objects.first ();
     while (obj != NULL) {
       if (obj->isSelected ()) {
+	disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
 	obj->unref ();
 	objects.remove ();
 	obj = objects.current ();
@@ -238,6 +240,7 @@ void GDocument::deleteObject (GObject* obj) {
     }
     objects.removeRef (obj);
     last = 0L;
+    disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
     obj->unref ();
     if (selected) {
       selBoxIsValid = false;

@@ -53,7 +53,7 @@ void CreateTextCmd::execute () {
     object = new GText ();
     object->setOrigin (origin);
     object->setText (text);
-    object->ref ();
+    //    object->ref ();
   }
   document->insertObject (object);
 }
