@@ -128,12 +128,12 @@ AC_OUTPUT( \
 	katabase/lib/katabasecore/Makefile \
 	katabase/lib/katabaseui/Makefile \
 	katabase/kdb/Makefile \
-        katabase/kformviewer/Makefile \
-        katabase/kformeditor/Makefile \
+	katabase/kformviewer/Makefile \
+	katabase/kformeditor/Makefile \
 	katabase/kformeditor/pics/Makefile \
-        katabase/kformeditor/toolbar/Makefile \
-        katabase/kformeditor/cursors/Makefile \
-        katabase/kformeditor/formassistent/Makefile \
+	katabase/kformeditor/toolbar/Makefile \
+	katabase/kformeditor/cursors/Makefile \
+	katabase/kformeditor/formassistent/Makefile \
 	katabase/ktables/Makefile \
 	katabase/ktables/pics/Makefile \
 	katabase/doc/Makefile \
@@ -156,6 +156,9 @@ AC_OUTPUT( \
 	kimage/Makefile \
 	kimage/pics/Makefile \
 	kimageshop/Makefile \
+	kimageshop/widgets/Makefile \
+	kimageshop/dialogs/Makefile \
+	kimageshop/tools/Makefile \
 	kimageshop/pics/Makefile \
 	kimageshop/data/Makefile \
 	kimageshop/data/brushes/Makefile \
