@@ -387,7 +387,63 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = doc->unzoomPoint( normalPoint );
 
-    if ( e->button() == RightButton ) {
+    if ( e->button() == LeftButton )
+	m_mousePressed = true;
+
+    // Only edit-mode (and only LMB) allowed on read-only documents (to select text)
+    if ( !doc->isReadWrite() && ( m_mouseMode != MM_EDIT || e->button() != LeftButton ) )
+       return;
+
+    // This code here is common to all mouse buttons, so that RMB and MMB place the cursor (or select the frame) too
+    switch ( m_mouseMode ) {
+        case MM_EDIT:
+        {
+            KWFrameSet *fs = doc->getFrameSet( docPoint.x(), docPoint.y() );
+            bool emitChanged = false; // to emit only once
+            if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
+            {
+                // Terminate edition of that frameset
+                m_currentFrameSetEdit->terminate();
+                delete m_currentFrameSetEdit;
+                m_currentFrameSetEdit = 0L;
+                emitChanged = true;
+                repaintAll();
+            }
+            // Edit the frameset under the mouse, if any
+            if ( fs && !m_currentFrameSetEdit )
+            {
+                m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+                emitChanged = true;
+            }
+
+            if ( m_currentFrameSetEdit )
+                m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
+
+            if ( emitChanged )
+                emit currentFrameSetEditChanged();
+
+        }
+        break;
+        case MM_EDIT_FRAME:
+            mpEditFrame( e, normalPoint.x(), normalPoint.y() );
+            break;
+        case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
+        case MM_CREATE_FORMULA:
+            if ( e->button() == LeftButton )
+                mpCreate( normalPoint.x(), normalPoint.y() );
+            break;
+        case MM_CREATE_PIX:
+            if ( e->button() == LeftButton )
+                mpCreatePixmap( normalPoint.x(), normalPoint.y() );
+            break;
+        default: break;
+    }
+
+    if ( e->button() == MidButton ) {
+        if ( doc->isReadWrite() && m_currentFrameSetEdit && m_mouseMode == MM_EDIT )
+            m_currentFrameSetEdit->paste();
+    }
+    else if ( e->button() == RightButton ) {
         if(!doc->isReadWrite()) // The popups are not available in readonly mode, since the GUI isn't built...
             return;
         // rmb menu
@@ -403,8 +459,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             case MM_CREATE_FORMULA:
             case MM_CREATE_PIX:
             {
-                // Select the frame first
-                mpEditFrame( e, normalPoint.x(), normalPoint.y() );
                 if (!doc->getFrameSet( docPoint.x(), docPoint.y() ))
                     m_gui->getView()->openPopupMenuChangeAction( QCursor::pos() );
                 else
@@ -424,63 +478,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             default: break;
         }
         m_mousePressed = false;
-        return;
-    }
-
-    if ( e->button() == LeftButton ) {
-	m_mousePressed = true;
-        // Only edit-mode allowed on read-only documents (to select text)
-        if(!doc->isReadWrite() && m_mouseMode != MM_EDIT)
-            return;
-
-        switch ( m_mouseMode ) {
-        case MM_EDIT:
-            {
-                KWFrameSet *fs = doc->getFrameSet( docPoint.x(), docPoint.y() );
-                bool emitChanged = false; // to emit only once
-                if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
-                {
-                    // Terminate edition of that frameset
-                    m_currentFrameSetEdit->terminate();
-                    delete m_currentFrameSetEdit;
-                    m_currentFrameSetEdit = 0L;
-                    emitChanged = true;
-                    repaintAll();
-                }
-                // Edit the frameset under the mouse, if any
-                if ( fs && !m_currentFrameSetEdit )
-                {
-                    m_currentFrameSetEdit = fs->createFrameSetEdit( this );
-                    emitChanged = true;
-                }
-
-                if ( m_currentFrameSetEdit )
-                    m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
-
-                if ( emitChanged )
-                    emit currentFrameSetEditChanged();
-
-            }
-            break;
-        case MM_EDIT_FRAME:
-            mpEditFrame( e, normalPoint.x(), normalPoint.y() );
-            break;
-        case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
-        case MM_CREATE_FORMULA:
-            mpCreate( normalPoint.x(), normalPoint.y() );
-            break;
-        case MM_CREATE_PIX:
-            mpCreatePixmap( normalPoint.x(), normalPoint.y() );
-            break;
-        default: break;
-        }
-        // The "edit" modes don't modify the doc (on mouse-press). The "create" ones do.
-        if ( m_mouseMode != MM_EDIT && m_mouseMode != MM_EDIT_FRAME )
-            doc->setModified( TRUE );
-
-    } else if ( e->button() == MidButton ) {
-        if(doc->isReadWrite() && m_currentFrameSetEdit && m_mouseMode == MM_EDIT)
-            m_currentFrameSetEdit->paste();
     }
 }
 
@@ -512,6 +509,8 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
 
 void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 {
+    kdDebug() << "KWCanvas::mmEditFrameResize top,bottom,left,right: "
+              << top << "," << bottom << "," << left << "," << right << endl;
     // This one is called by KWResizeHandle
 
     // Can't resize the main frame of a WP document
@@ -532,41 +531,47 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     int my = ( mousep.y() / rastY ) * rastY;
     double x = mx / doc->zoomedResolutionX();
     double y = my / doc->zoomedResolutionY();
+    int page = static_cast<int>( y / doc->ptPaperHeight() );
+    int oldPage = static_cast<int>( frame->top() / doc->ptPaperHeight() );
 
     // Calculate new frame coordinates, using minimum sizes, and keeping it in the bounds of the page
     double newLeft = frame->left();
     double newTop = frame->top();
     double newRight = frame->right();
     double newBottom = frame->bottom();
+    if ( page == oldPage )
+    {
 
-    if ( top && newTop != y && !fs->isAFooter() )
-    {
-        if (newBottom - y < minFrameHeight+5)
-            y = newBottom - minFrameHeight - 5;
-        y = QMAX( y, doc->ptPageTop( frame->pageNum() ) );
-        newTop = y;
-    } else if ( bottom && newBottom != y && !fs->isAHeader() )
-    {
-        if (y - newTop < minFrameHeight+5)
-            y = newTop + minFrameHeight + 5;
-        y = QMIN( y, doc->ptPageTop( frame->pageNum() + 1 ) );
-        newBottom = y;
+        kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
+
+        if ( top && newTop != y && !fs->isAFooter() )
+        {
+            if (newBottom - y < minFrameHeight+5)
+                y = newBottom - minFrameHeight - 5;
+            y = QMAX( y, doc->ptPageTop( frame->pageNum() ) );
+            newTop = y;
+        } else if ( bottom && newBottom != y && !fs->isAHeader() )
+        {
+            if (y - newTop < minFrameHeight+5)
+                y = newTop + minFrameHeight + 5;
+            y = QMIN( y, doc->ptPageTop( frame->pageNum() + 1 ) );
+            newBottom = y;
+        }
+
+        if ( left && newLeft != x && !fs->isAHeader() && !fs->isAFooter() )
+        {
+            if (newRight - x < minFrameWidth)
+                x = newRight - minFrameWidth - 5;
+            x = QMAX( x, 0 );
+            newLeft = x;
+        } else if ( right && newRight != x && !fs->isAHeader() && !fs->isAFooter() )
+        {
+            if (x - newLeft < minFrameWidth)
+                x = newLeft + minFrameWidth + 5; // why +5 ?
+            x = QMIN( x, doc->ptPaperWidth() );
+            newRight = x;
+        }
     }
-
-    if ( left && newLeft != x && !fs->isAHeader() && !fs->isAFooter() )
-    {
-        if (newRight - x < minFrameWidth)
-            x = newRight - minFrameWidth - 5;
-        x = QMAX( x, 0 );
-        newLeft = x;
-    } else if ( right && newRight != x && !fs->isAHeader() && !fs->isAFooter() )
-    {
-        if (x - newLeft < minFrameWidth)
-            x = newLeft + minFrameWidth + 5; // why +5 ?
-        x = QMIN( x, doc->ptPaperWidth() );
-        newRight = x;
-    }
-
     // Keep copy of old rectangle, for repaint()
     QRect oldRect = m_viewMode->normalToView( frame->outerRect() );
 
@@ -574,6 +579,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     frame->setTop(newTop);
     frame->setRight(newRight);
     frame->setBottom(newBottom);
+
+    kdDebug() << "KWCanvas::mmEditFrameResize new rect " << DEBUGRECT( *frame ) << endl;
 
 #if 0
     int drawX, drawWidth, drawY, drawHeight;
@@ -612,7 +619,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     // Move the bounding rect containing all the selected frames
     KoRect oldBoundingRect = m_boundingRect;
     //int page = doc->getPageOfRect( m_boundingRect );
-    //kdDebug() << "KWCanvas::mmEditFrameMove cx=" << cx << " page=" << page
+    //kdDebug() << "KWCanvas::mmEditFrameMove cx=" << cx
     //          << "  boundingrect=" << DEBUGRECT(m_boundingRect) << endl;
 
     // (x and y separately for a better behaviour at limit of page)
@@ -644,10 +651,30 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         m_boundingRect.moveBy( 0, 1 - m_boundingRect.top() );
         adjustPosNeeded = true;
     }
-    else if ( m_boundingRect.bottom() > ( doc->getPages()+1 ) * doc->ptPaperHeight() - 1 )
+    else if ( m_boundingRect.bottom() > doc->getPages() * doc->ptPaperHeight() - 1 )
     {
-        m_boundingRect.moveBy( 0, ( doc->getPages()+1 ) * doc->ptPaperHeight() - 1 - m_boundingRect.bottom() );
+        m_boundingRect.moveBy( 0, doc->getPages() * doc->ptPaperHeight() - 1 - m_boundingRect.bottom() );
         adjustPosNeeded = true;
+    }
+    // Another annoying case is if the top and bottom points are not in the same page....
+    int topPage = static_cast<int>( m_boundingRect.top() / doc->ptPaperHeight() );
+    int bottomPage = static_cast<int>( m_boundingRect.bottom() / doc->ptPaperHeight() );
+    kdDebug() << "KWCanvas::mmEditFrameMove topPage=" << topPage << " bottomPage=" << bottomPage << endl;
+    if ( topPage != bottomPage )
+    {
+        KoPoint p( m_boundingRect.topLeft() );
+        // Choose the closest page...
+        ASSERT( topPage + 1 == bottomPage ); // Not too sure what to do otherwise
+        double topPart = (bottomPage * doc->ptPaperHeight()) - m_boundingRect.top();
+        if ( topPart > m_boundingRect.height() / 2 )
+            // Most of the rect is in the top page
+            p.setY( bottomPage * doc->ptPaperHeight() - m_boundingRect.height() - 1 );
+        else
+            // Moost of the rect is in the bottom page
+            p.setY( bottomPage * doc->ptPaperHeight() + 1 );
+        kdDebug() << "KWCanvas::mmEditFrameMove y set to " << p.y() << endl;
+
+        m_boundingRect.moveTopLeft( p );
     }
 
     /*kdDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
@@ -812,6 +839,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
 
 void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHandle's mouseReleaseEvents
 {
+    //kdDebug() << "KWCanvas::mrEditFrame" << endl;
     KWFrame *firstFrame = doc->getFirstSelectedFrame();
     if (!firstFrame) return;
 #if 0
@@ -822,6 +850,7 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
     m_gui->getHorzRuler()->setFrameStart( p.x() );
     // Only done with X since this is for relative position of tabs
 
+    //kdDebug() << "KWCanvas::mrEditFrame frameMoved=" << frameMoved << " frameResized=" << frameResized << endl;
     if ( frameMoved || frameResized )
     {
         KWTableFrameSet *table = firstFrame->getFrameSet()->getGroupManager();

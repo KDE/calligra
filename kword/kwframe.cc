@@ -1232,8 +1232,11 @@ KWPartFrameSetEdit::~KWPartFrameSetEdit()
     kdDebug() << "KWPartFrameSetEdit::~KWPartFrameSetEdit" << endl;
 }
 
-void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & )
+void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const KoPoint & )
 {
+    if ( e->button() != Qt::LeftButton )
+        return;
+
     // activate child part
     partFrameSet()->updateFrames();
     KoDocument* part = partFrameSet()->getChild()->document();
@@ -1409,6 +1412,7 @@ void KWFormulaFrameSetEdit::keyPressEvent(QKeyEvent* event)
 void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
 {
     // TODO pass the zoomed or unzoomed coordinates - kformula doesn't know about the real coordinates
+    // [Note that this method is called upon RMB and MMB as well, now]
     formulaView->mousePressEvent(event);
 }
 

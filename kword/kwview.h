@@ -359,6 +359,8 @@ private:
 
     KAction *actionConfigure;
 
+    QList<KAction> m_actionList; // for the kodatatools
+
     KWGUI *gui;
 
     KWSearchContext *searchEntry, *replaceEntry;

@@ -165,7 +165,10 @@ QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
     int row = static_cast<int>( p.y() / ( paperHeight + m_spacing ) );
     int yInPage = p.y() - row * ( paperHeight + m_spacing );
     int page = row * m_pagesPerRow + col;
-    return QPoint( xInPage, yInPage + doc->pageTop( page ) );
+    if ( page > doc->getPages() - 1 ) // [this happens when moving frames around and going out of the pages]
+        return QPoint( paperWidth, doc->pageTop( doc->getPages() ) );
+    else // normal case
+        return QPoint( xInPage, yInPage + doc->pageTop( page ) );
 }
 
 void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )

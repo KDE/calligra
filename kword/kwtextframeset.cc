@@ -40,11 +40,13 @@
 #include <qdragobject.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <koDataTool.h>
 
 #include <kdebug.h>
 
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
+//#define DEBUG_FORMAT_MORE
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
@@ -1219,10 +1221,12 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
+#ifdef DEBUG_FORMAT_MORE
     kdDebug(32002) << "KWTextFrameSet::formatMore " << name()
                    << " lastFormatted id=" << lastFormatted->paragId()
                    << " to=" << to << " viewsBottom=" << viewsBottom
                    << " availableHeight=" << m_availableHeight << endl;
+#endif
 
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
@@ -1234,21 +1238,28 @@ void KWTextFrameSet::formatMore()
           lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
           ( i < to || bottom <= viewsBottom ) ; ++i )
     {
+#ifdef DEBUG_FORMAT_MORE
         kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
+#endif
         lastFormatted->format();
         bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
         lastFormatted = lastFormatted->next();
+#ifdef DEBUG_FORMAT_MORE
         kdDebug() << "KWTextFrameSet::formatMore bottom=" << bottom << " lastFormatted=" << lastFormatted << endl;
+#endif
     }
+#ifdef DEBUG_FORMAT_MORE
     kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. "
       << " bottom=" << bottom
       << " Setting m_lastFormatted to " << lastFormatted
       << endl;
+#endif
     m_lastFormatted = lastFormatted;
 
     if ( bottom != -1 && ( ( bottom > m_availableHeight ) ||   // this parag is already off page
                            ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) ) ) // or next parag will be off page
     {
+#ifdef DEBUG_FORMAT_MORE
         if(lastFormatted)
             kdDebug(32002) << "KWTextFrameSet::formatMore We need more space."
                            << " bottom=" << bottom + lastFormatted->rect().height()
@@ -1256,6 +1267,7 @@ void KWTextFrameSet::formatMore()
         else
             kdDebug(32002) << "KWTextFrameSet::formatMore We need more space."
                            << " bottom2=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
+#endif
 
         if ( !frames.isEmpty() )
         {
@@ -1381,7 +1393,9 @@ kdDebug() << "Deleting page: " << lastPage<< "\n";
     else
     {
         interval = QMAX( 0, interval );
-        //kdDebug(32002) << "KWTextFrameSet::formatMore all formatted" << endl;
+#ifdef DEBUG_FORMAT_MORE
+        kdDebug(32002) << "KWTextFrameSet::formatMore all formatted" << endl;
+#endif
     }
 }
 
@@ -2812,6 +2826,12 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
         placeCursor( mousePos );
         ensureCursorVisible();
 
+        if ( e->button() != LeftButton )
+        {
+            emit showCursor();
+            return;
+        }
+
         QTextDocument * textdoc = textDocument();
         if ( textdoc->inSelection( QTextDocument::Standard, mousePos ) ) {
             mightStartDrag = TRUE;
@@ -2890,20 +2910,26 @@ void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent *, const QPoint &, const
 void KWTextFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & )
 {
     inDoubleClick = TRUE;
-    QTextCursor c1 = *cursor;
-    QTextCursor c2 = *cursor;
-    c1.gotoWordLeft();
-    c2.gotoWordRight();
-
-    textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
-    textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
+    *cursor = selectWordUnderCursor();
     textFrameSet()->selectionChangedNotify();
     // No auto-copy, will readd with Qt 3 using setSelectionMode(true/false)
     // But auto-copy in readonly mode, since there is no action available in that case.
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         copy();
+}
 
-    *cursor = c2;
+QTextCursor KWTextFrameSetEdit::selectWordUnderCursor()
+{
+    QTextCursor c1 = *cursor;
+    QTextCursor c2 = *cursor;
+    if ( cursor->index() > 0 && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() )
+        c1.gotoWordLeft();
+    if ( !cursor->parag()->at( cursor->index() )->c.isSpace() && !cursor->atParagEnd() )
+        c2.gotoWordRight();
+
+    textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
+    textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
+    return c2;
 }
 
 void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
@@ -3398,6 +3424,86 @@ void KWTextFrameSetEdit::showCurrentFormat()
     KWTextFormat format = *m_currentFormat;
     format.setPointSize( textFrameSet()->docFontSize( m_currentFormat ) ); // "unzoom" the font size
     m_canvas->gui()->getView()->showFormat( format );
+}
+
+QList<KAction> KWTextFrameSetEdit::dataToolActionList()
+{
+    m_singleWord = false;
+    m_wordUnderCursor = QString::null;
+    QString text;
+    if ( textFrameSet()->hasSelection() )
+    {
+        text = textFrameSet()->selectedText();
+        if ( text.find(' ') == -1 && text.find('\t') == -1 )
+            m_singleWord = true;
+    }
+    else // No selection -> get word under cursor
+    {
+        selectWordUnderCursor();
+        text = textFrameSet()->selectedText();
+        textDocument()->removeSelection( QTextDocument::Standard );
+        m_singleWord = true;
+        m_wordUnderCursor = text;
+    }
+    if ( text.isEmpty() ) // Nothing to apply a tool to
+        return QList<KAction>();
+
+    KWDocument * doc = frameSet()->kWordDocument();
+    // Any tool that works on plain text is relevant
+    QValueList<KoDataToolInfo> tools = KoDataToolInfo::query( "QString", "text/plain", doc );
+
+    // Add tools that work on a single word if that is the case
+    if ( m_singleWord )
+        tools += KoDataToolInfo::query( "QString", "application/x-singleword", doc );
+
+    // Maybe one day we'll have tools that link to kwordpart (later: qt3), to act on formatted text
+    tools += KoDataToolInfo::query( "QTextString", "application/x-qrichtext", doc );
+
+    return KoDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KoDataToolInfo &, const QString & ) ) );
+}
+
+void KWTextFrameSetEdit::slotToolActivated( const KoDataToolInfo & info, const QString & command )
+{
+    KoDataTool* tool = info.createTool( frameSet()->kWordDocument() );
+    if ( !tool )
+    {
+        kdWarning() << "Could not create Tool !" << endl;
+        return;
+    }
+
+    kdDebug() << "KWTextFrameSetEdit::slotToolActivated command=" << command
+              << " dataType=" << info.dataType() << endl;
+
+    QString text;
+    if ( textFrameSet()->hasSelection() )
+        text = textFrameSet()->selectedText();
+    else
+        text = m_wordUnderCursor;
+
+    // Preferred type is richtext
+    QString mimetype = "application/x-qrichtext";
+    QString datatype = "QTextString";
+    // If unsupported, try text/plain
+    if ( !info.mimeTypes().contains( mimetype ) )
+    {
+        mimetype = "text/plain";
+        datatype = "QString";
+    }
+    // If unsupported (and if we have a single word indeed), try application/x-singleword
+    if ( !info.mimeTypes().contains( mimetype ) && m_singleWord )
+        mimetype = "application/x-singleword";
+
+    kdDebug() << "Running tool with datatype=" << datatype << " mimetype=" << mimetype << endl;
+
+    if ( tool->run( command, &text, datatype, mimetype) )
+    {
+        kdDebug() << "Tool ran. Text is now " << text << endl;
+        if ( !textFrameSet()->hasSelection() )
+            selectWordUnderCursor();
+        // ### TODO replace selection with 'text'
+    }
+
+    delete tool;
 }
 
 #include "kwtextframeset.moc"

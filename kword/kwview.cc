@@ -109,7 +109,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_border.common.style = Border::SOLID;
     m_border.common.ptWidth = 1;
     m_currentPage = 0;
-
+    m_actionList.setAutoDelete( true );
     searchEntry = 0L;
     replaceEntry = 0L;
     doc = _doc;
@@ -2492,7 +2492,25 @@ void KWView::openPopupMenuEditText( const QPoint & _point )
     if (edit)
         menuName=edit->getPopupName();
     if(!menuName.isEmpty())
-        ((QPopupMenu*)factory()->container(menuName,this))->popup(_point);
+    {
+        QPopupMenu * popup = ((QPopupMenu*)factory()->container(menuName,this));
+        ASSERT(popup);
+        if (popup)
+        {
+            KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
+            if (textedit)
+            {
+                // Removed previous stuff
+                unplugActionList( "datatools" );
+                m_actionList.clear();
+                m_actionList = textedit->dataToolActionList();
+                kdDebug() << "KWView::openPopupMenuEditText plugging actionlist with " << m_actionList.count() << " actions" << endl;
+                plugActionList( "datatools", m_actionList );
+                popup->popup(_point); // using exec() here breaks the spellcheck tool (event loop pb)
+            } else
+                popup->popup(_point);
+        }
+    }
 }
 
 void KWView::openPopupMenuChangeAction( const QPoint & _point )
@@ -2612,14 +2630,17 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     QTextCursor cursor( fs->textDocument() );
     cursor.setParag( p );
     cursor.setIndex( pos );
+    // Remember formatting
+    QTextFormat * format = p->at( pos )->format();
+    format->addRef();
     // Remove the match
     fs->removeSelectedText( &cursor, KWTextFrameSet::HighlightSelection );
     // Insert the replacement
-    QTextFormat * format = p->at( pos )->format();
     // TODO a macro command somehow
     fs->insert( &cursor, static_cast<KWTextFormat *>(format),
                 corr, true, false,
                 i18n("Insert Replacement") );
+    format->removeRef();
 }
 
 void KWView::spellCheckerDone( const QString & )

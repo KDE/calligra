@@ -30,6 +30,8 @@ class KWDrag;
 class KWDocument;
 class KWTextFormat;
 class KWViewMode;
+class KAction;
+class KoDataToolInfo;
 
 /**
  * Class: KWTextFrameSet
@@ -100,6 +102,10 @@ public:
     /** return true if some text is selected */
     bool hasSelection() const {
         return textdoc->hasSelection( QTextDocument::Standard );
+    }
+    /** returns the selected text [without formatting] if hasSelection() */
+    QString selectedText() const {
+        return textdoc->selectedText( QTextDocument::Standard );
     }
 
     virtual void drawContents( QPainter *p, const QRect &r,
@@ -349,6 +355,8 @@ public:
 
     const KWParagLayout & currentParagLayout() const { return m_paragLayout; }
 
+    QList<KAction> dataToolActionList();
+
 public slots:
     void updateUI( bool updateFormat = true );
     void ensureCursorVisible();
@@ -358,6 +366,7 @@ public slots:
 
 protected:
     void placeCursor( const QPoint &pos /* in internal coordinates */ );
+    QTextCursor selectWordUnderCursor();
     void selectAll( bool select ) { textFrameSet()->selectAll( select ); }
     KWDrag * newDrag( QWidget * parent ) const;
 
@@ -366,6 +375,7 @@ private slots:
     void startDrag();
     void setCursor( QTextCursor * _cursor ) { *cursor = *_cursor; }
     void showCurrentFormat();
+    void slotToolActivated( const KoDataToolInfo & info, const QString & command );
 
 private:
 
@@ -396,9 +406,12 @@ private:
     QTextCursor *cursor;
     KWTextFormat *m_currentFormat;
     QTimer *blinkTimer, *dragStartTimer;
+    QString m_wordUnderCursor;
+    bool m_singleWord;
     bool cursorVisible;
     bool blinkCursorVisible;
     bool inDoubleClick;
     bool mightStartDrag;
 };
+
 #endif
