@@ -9,8 +9,10 @@ Until beta1:
 ------------
 
 - bug fixes :-)
-- perfomance enhancements
-- support up to 2^15 columns and rows, formerly it was 676 columns and 10000 rows
+- performance enhancements
+- support up to 2^15 columns and rows, formerly it was 676 columns and 10000
+  rows
+
 - add support for spell-check
 - many new built-in functions (see detailed list below)
 - function name is now case-insensitive
@@ -41,8 +43,8 @@ New functions added:
 After Beta1:
 ------------
 - Bug fixes
-- auto continuation support for every direction and all types supported in KSpread
-  and for more complex series like 1,3,4,6,...
+- auto continuation support for every direction and all types supported in
+  KSpread and for more complex series like 1,3,4,6,...
 - just one "copy" instead of "copy" and "copy as text"
 - insertion of series supports now doubles and decreasing series
 
