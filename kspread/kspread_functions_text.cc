@@ -534,6 +534,59 @@ bool kspreadfunc_sleek( KSContext& context )
     return true;
 }
 
+// Function: SUBSTITUTE
+bool kspreadfunc_substitute( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  int num = 1;
+  bool all = true;
+
+  if ( KSUtil::checkArgumentsCount( context, 4, "SUBSTITUTE", false ) )
+  {
+    if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
+      return false;
+    num = args[3]->intValue(); 
+    all = false;
+  }
+  else
+  if ( !KSUtil::checkArgumentsCount( context, 3, "SUBSTITUTE", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+      return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+      return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
+      return false;
+
+  QString text = args[0]->stringValue();
+  QString old_text = args[1]->stringValue();
+  QString new_text = args[2]->stringValue();
+
+  if( num <= 0 ) return false;
+
+  QString result = text;
+
+  int p = result.find( old_text );
+  while ( ( p != -1 ) && ( num > 0 ) )
+  {
+    result.replace( p, old_text.length(), new_text );
+    p = result.find( old_text );
+    if( !all ) num--;
+  }
+
+  context.setValue( new KSValue( result ) );
+
+  return true;
+
+
+  context.setValue( new KSValue( result ));
+  return true;
+}
+
 // Function: T
 bool kspreadfunc_t( KSContext& context )
 {

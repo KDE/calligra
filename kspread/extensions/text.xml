@@ -48,6 +48,36 @@
     </Function>
 
     <Function>
+      <Name>SUBSTITUTE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Text for which you want to substitute</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Part of text you want to replace</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>New text which will replace</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Occurrence of replace</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUBSTITUTE() substitutes new_text for old_text in a text string. If instance_num is specified, only that instance of old_text is replaced. Otherwise, every occurrence of old_text is changed to new_text. Use SUBSTITUTE when you want to replace specific text, use REPLACE when you want to replace any text that occurs in a specific location.</Text>
+	<Syntax>SUBSTITUTE(text; old_text; new_text; instance_num)</Syntax>
+	<Example>SUBSTITUTE("Cost Data";"Cost";"Sales") returns "Sales Data"</Example>
+	<Example>SUBSTITUTE("Qtr 1, 2001";"1";"3";1) returns "Qtr 3, 2001"</Example>
+	<Example>SUBSTITUTE("Qtr 1, 2001";"1";"3";4) returns "Qtr 3, 2003"</Example>
+        <Related>REPLACE</Related>
+        <Related>FIND</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>T</Name>
       <Type>String</Type>
       <Parameter>

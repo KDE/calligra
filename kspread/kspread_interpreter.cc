@@ -651,7 +651,7 @@ static const functionEntry funcTab[] = {
   { "RIGHT", kspreadfunc_right },
   //{ "SEARCH", kspreadfunc_search },
   { "SLEEK", kspreadfunc_sleek },
-  //{ "SUBSTITUTE", kspreadfunc_substitute },
+  { "SUBSTITUTE", kspreadfunc_substitute },
   { "T", kspreadfunc_t },
   { "TEXT", kspreadfunc_text },
   { "TOGGLE", kspreadfunc_toggle },
