@@ -107,35 +107,35 @@ binary-arch: build install binary-indep
 	list=`cd debian/tmp && find ./ -type l -name "lib*.so" | sed -e 's#^./##'` ;\
 	dh_movefiles -pkoffice-dev $$list usr/lib/*.a usr/include/kde
 	dh_movefiles -pkchart usr/bin/kchart usr/share/apps/kchart/* \
-		etc/kde2/applnk/Office/kchart.desktop \
+		usr/share/applnk/Office/kchart.desktop \
 		usr/share/mimelnk/application/x-kchart.desktop \
 		usr/share/man/man1/kchart*
 	dh_movefiles -pkillustrator usr/bin/killustrator \
 		usr/share/apps/killustrator/* \
 		usr/share/doc/kde/HTML/en/killustrator/* \
 		usr/share/doc/koffice/killustrator/* \
-		etc/kde2/applnk/Office/killustrator.desktop \
+		usr/share/applnk/Office/killustrator.desktop \
 		usr/share/mimelnk/application/x-killustrator.desktop \
 		usr/share/man/man1/killustrator*
 	dh_movefiles -pkpresenter usr/bin/kpresenter \
 		usr/share/apps/kpresenter/* \
 		usr/share/doc/kde/HTML/en/kpresenter/* \
 		usr/share/doc/koffice/kpresenter/* \
-		etc/kde2/applnk/Office/kpresenter.desktop \
+		usr/share/applnk/Office/kpresenter.desktop \
 		usr/share/mimelnk/application/x-kpresenter.desktop \
 		usr/share/man/man1/kpresenter*
 	dh_movefiles -pkspread usr/bin/kspread \
 		usr/share/apps/kspread/* \
 		usr/share/doc/kde/HTML/en/kspread/*  \
 		usr/share/doc/koffice/kspread/* \
-		etc/kde2/applnk/Office/kspread.desktop \
+		usr/share/applnk/Office/kspread.desktop \
 		usr/share/mimelnk/application/x-kspread.desktop \
 		usr/share/man/man1/kspread*
 	dh_movefiles -pkword usr/bin/kword \
 		usr/share/apps/kword/* \
 		usr/share/doc/kde/HTML/en/kword/* \
 		usr/share/doc/koffice/kword/* \
-		etc/kde2/applnk/Office/kword.desktop \
+		usr/share/applnk/Office/kword.desktop \
 		usr/share/mimelnk/application/x-kword.desktop \
 		usr/share/man/man1/kword*
 	dh_installdocs
