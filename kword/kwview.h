@@ -30,6 +30,8 @@
 #include <koPageLayoutDia.h>
 #include <koView.h>
 
+class DCOPObject;
+
 class KWDocStruct;
 class KoRuler;
 class KWCanvas;
@@ -76,6 +78,8 @@ class KWView : public KoView
 public:
     KWView( QWidget *_parent, const char *_name, KWDocument *_doc );
     virtual ~KWView();
+
+    virtual DCOPObject* dcopObject();
 
     // Those methods update the UI (from the given formatting info)
     // They do NOT do anything to the text
@@ -449,6 +453,8 @@ private:
 
     KCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;
+
+    DCOPObject *dcop;
 
     KWSearchContext *m_searchEntry, *m_replaceEntry;
     KWFindReplace *m_findReplace;

@@ -98,11 +98,17 @@
 
 #include <stdlib.h>
 
+#include <KWordViewIface.h>
+
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
 {
     m_doc = _doc;
     m_gui = 0;
+
+    dcop = 0;
+    dcopObject(); // build it
+
     m_spell.kspell = 0;
     m_border.left.color = white;
     m_border.left.style = KoBorder::SOLID;
@@ -215,7 +221,17 @@ KWView::~KWView()
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
     delete m_sbPageLabel;
+    delete dcop;
 }
+
+DCOPObject* KWView::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KWordViewIface( this );
+
+    return dcop;
+}
+
 
 void KWView::clearSelection()
 {

@@ -21,7 +21,8 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		variable.cc variabledlgs.cc serialletter.cc \
 		kwchangecasedia.cc kweditpersonnalexpressiondia.cc \
 		splitcellsdia.cc kwinsertpicdia.cc kwunit.cc \
-		kwinsertlink.cc
+		kwinsertlink.cc KWordDocIface.skel KWordDocIface.cc \
+		KWordViewIface.skel KWordViewIface.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell

@@ -68,6 +68,8 @@
 
 #include <kspell.h>
 
+#include <KWordDocIface.h>
+
 //#define DEBUG_PAGES
 
 #undef getPointBasedAttribute
@@ -148,6 +150,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
       m_unit( KWUnit::U_MM ), // footNoteManager( this ),
       urlIntern()
 {
+    dcop = 0;
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
     m_styleList.setAutoDelete( false );
@@ -218,7 +221,22 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     // so let's have a Standard style at least
     KWStyle * standardStyle = new KWStyle( "Standard" ); // This gets translated later on
     addStyleTemplate( standardStyle );
+
+    if ( name )
+	dcopObject();
+
 }
+
+/*==============================================================*/
+DCOPObject* KWDocument::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KWordDocIface( this );
+
+    return dcop;
+}
+
+
 
 KWDocument::~KWDocument()
 {

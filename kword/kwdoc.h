@@ -44,6 +44,8 @@ class KCommandHistory;
 class KWVariable;
 class KWVariableFormatCollection;
 
+class DCOPObject;
+
 class QFont;
 class QStringList;
 class QRect;
@@ -501,6 +503,9 @@ public:
     static QColor resolveBgColor( const QColor & col, QPainter * painter );
     static QColor defaultBgColor( QPainter * painter );
 
+
+    virtual DCOPObject* dcopObject();
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void newContentsSize();
@@ -540,6 +545,8 @@ protected:
     void initConfig();
     void saveConfig();
     void initUnit();
+
+    DCOPObject *dcop;
 
 private:
     QPtrList<KWView> m_lstViews;
