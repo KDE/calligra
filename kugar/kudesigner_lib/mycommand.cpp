@@ -90,7 +90,7 @@ KCommandHistory::KCommandHistory(QActionCollection * actionCollection, bool with
     if (withMenus)
     {
         KToolBarPopupAction * undo = new KToolBarPopupAction( i18n("&Undo"), "undo",
-                                          KStdAccel::key(KStdAccel::Undo), this, SLOT( undo() ),
+                                          KStdAccel::shortcut(KStdAccel::Undo), this, SLOT( undo() ),
                                           actionCollection, KStdAction::stdName( KStdAction::Undo ) );
         connect( undo->popupMenu(), SIGNAL( aboutToShow() ), this, SLOT( slotUndoAboutToShow() ) );
         connect( undo->popupMenu(), SIGNAL( activated( int ) ), this, SLOT( slotUndoActivated( int ) ) );
@@ -98,7 +98,7 @@ KCommandHistory::KCommandHistory(QActionCollection * actionCollection, bool with
         m_undoPopup = undo->popupMenu();
 
         KToolBarPopupAction * redo = new KToolBarPopupAction( i18n("&Redo"), "redo",
-                                          KStdAccel::key(KStdAccel::Redo), this, SLOT( redo() ),
+                                          KStdAccel::shortcut(KStdAccel::Redo), this, SLOT( redo() ),
                                           actionCollection, KStdAction::stdName( KStdAction::Redo ) );
         connect( redo->popupMenu(), SIGNAL( aboutToShow() ), this, SLOT( slotRedoAboutToShow() ) );
         connect( redo->popupMenu(), SIGNAL( activated( int ) ), this, SLOT( slotRedoActivated( int ) ) );
