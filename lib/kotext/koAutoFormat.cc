@@ -236,7 +236,8 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     if ( !m_configRead )
         readConfig();
 
-    if ( !m_convertUpperUpper && !m_convertUpperCase
+    if ( !m_useBulletStyle && !m_removeSpaceBeginEndLine && !m_autoDetectUrl
+         && !m_convertUpperUpper && !m_convertUpperCase
          && !m_typographicQuotes.replace && m_entries.count()==0)
         return;
 
