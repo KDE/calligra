@@ -98,6 +98,7 @@ public:
     void configAutoDetectUrl(bool _au);
     void configIgnoreDoubleSpace( bool _ids);
     void configRemoveSpaceBeginEndLine( bool _space);
+    void configUseBulletStyle( bool _ubs);
 
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
@@ -115,6 +116,9 @@ public:
 
     bool getConfigRemoveSpaceBeginEndLine() const
     { return m_removeSpaceBeginEndLine;}
+
+    bool getConfigUseBulletSyle() const
+    { return m_useBulletStyle;}
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -177,6 +181,7 @@ private:
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
     bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;
+    bool m_useBulletStyle;
     TypographicQuotes m_typographicQuotes;
 
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;

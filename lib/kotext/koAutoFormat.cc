@@ -34,6 +34,8 @@
 #include <kglobal.h>
 #include <koDocument.h>
 #include "koVariable.h"
+#include "koparagcounter.h"
+
 /******************************************************************/
 /* Class: KoAutoFormat						  */
 /******************************************************************/
@@ -67,6 +69,8 @@ void KoAutoFormat::readConfig()
     m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
     m_ignoreDoubleSpace = config.readBoolEntry("IgnoreDoubleSpace",false);
     m_removeSpaceBeginEndLine = config.readBoolEntry("RemoveSpaceBeginEndLine",false);
+
+    m_useBulletStyle = config.readBoolEntry("UseBulletStyle",false);
 
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicQuotes.begin = begin[0];
@@ -149,6 +153,8 @@ void KoAutoFormat::saveConfig()
 
     config.writeEntry( "IgnoreDoubleSpace",m_ignoreDoubleSpace );
     config.writeEntry( "RemoveSpaceBeginEndLine",m_removeSpaceBeginEndLine );
+
+    config.writeEntry( "UseBulletStyle", m_useBulletStyle);
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -249,7 +255,7 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
     if( ch =='\n' )
     {
-        if( m_removeSpaceBeginEndLine && index > 1)
+        if( (m_removeSpaceBeginEndLine && index > 1) || m_useBulletStyle)
             doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj );
     }
 
@@ -477,6 +483,27 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
 {
     KoTextString *s = parag->string();
     bool refreshCursor=false;
+    QChar ch = s->at( 0 ).c;
+    KoTextDocument * textdoc = parag->textDocument();
+    QTextCursor cursor( parag->document() );
+    if( m_useBulletStyle && ch =='*' && (s->at(1).c).isSpace() && parag->string()->length()>3)
+    {
+        cursor.setParag( parag );
+        cursor.setIndex( 0 );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setIndex( 2 );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        txtObj->removeSelectedText( &cursor, KoTextObject::HighlightSelection,QString::null, false  );
+
+        KoParagCounter c;
+        c.setNumbering( KoParagCounter::NUM_LIST );
+        c.setStyle( KoParagCounter::STYLE_DISCBULLET );
+        parag->setCounter(c);
+        static_cast<KoTextParag*>(parag->next())->setCounter(c);
+    }
+
+
+
     for ( int i = 0 ; i < parag->string()->length() ; i++ )
     {
         QChar ch = s->at( i ).c;
@@ -484,8 +511,6 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
         {
             if( i == 0 )
                 break;
-            KoTextDocument * textdoc = parag->textDocument();
-            QTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( 0 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -503,8 +528,6 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
         {
             if( i == parag->string()->length()-1 )
                 break;
-            KoTextDocument * textdoc = parag->textDocument();
-            QTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( i+1 );
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
@@ -569,6 +592,11 @@ void KoAutoFormat::configIgnoreDoubleSpace( bool _ids)
 void KoAutoFormat::configRemoveSpaceBeginEndLine( bool _space)
 {
     m_removeSpaceBeginEndLine=_space;
+}
+
+void KoAutoFormat::configUseBulletStyle( bool _ubs)
+{
+    m_useBulletStyle=_ubs;
 }
 
 bool KoAutoFormat::isUpper( const QChar &c )

@@ -215,6 +215,12 @@ void KoAutoFormatDia::setupTab1()
     cbRemoveSpaceBeginEndLine->setChecked( m_autoFormat.getConfigRemoveSpaceBeginEndLine());
     ( void )new QWidget( tab1 );
 
+    cbUseBulletStyle=new QCheckBox( tab1 );
+    cbUseBulletStyle->setText( i18n( "Use bullet style - * " ) );
+    cbUseBulletStyle->resize( cbUseBulletStyle->sizeHint() );
+    cbUseBulletStyle->setChecked( m_autoFormat.getConfigUseBulletSyle());
+    ( void )new QWidget( tab1 );
+
     slotChangeState(state);
 }
 
