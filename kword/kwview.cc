@@ -2739,18 +2739,22 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
 {
     if ( makeInline )
     {
+        const double widthLimit = m_doc->unzoomItX( m_doc->paperWidth() - m_doc->leftBorder() - m_doc->rightBorder() - m_doc->zoomItX( 10 ) );
+        const double heightLimit = m_doc->unzoomItY( m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
         fsInline = 0L;
-        uint width = 0;
-        uint height = 0;
+        double width = 0.0;
+        double height = 0.0;
+        KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
+
+        frameset->loadPicture( filename );
         if ( isClipart )
         {
-            KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
-            frameset->loadPicture( filename );
-            //frameset->setKeepAspectRatio( _keepRatio);
-            fsInline = frameset;
+            frameset->setKeepAspectRatio( false ); // KWord 1.2 does not support "keep aspect ratio" for cliparts
+
             // Set an initial size
-            width = m_doc->zoomItX( 100 );
-            height = m_doc->zoomItY( 100 );
+            QSize size=frameset->picture().getOriginalSize(); // Get the bounding rectangle
+            width = size.width();
+            height = size.height();
         }
         else
         {
@@ -2759,18 +2763,20 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
                 pixmapSize = QPixmap( filename ).size();
 
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-            width = qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-            height = qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
-            // Apply reasonable limits
-            width = QMIN( width, m_doc->paperWidth() - m_doc->leftBorder() - m_doc->rightBorder() - m_doc->zoomItX( 10 ) );
-            height = QMIN( height, m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
+            // ### TODO/FIXME: is the qRound really necessary?
+            width = m_doc->unzoomItX( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) ) );
+            height = m_doc->unzoomItY( qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) ) );
 
-            KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
-            frameset->loadPicture( filename, QSize( width, height ) );
             frameset->setKeepAspectRatio( _keepRatio);
-            fsInline = frameset;
+
         }
-        KWFrame *frame = new KWFrame( fsInline, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
+
+        // Apply reasonable limits
+        width = kMin( width, widthLimit );
+        height = kMin( height, heightLimit );
+
+        fsInline = frameset;
+        KWFrame *frame = new KWFrame ( fsInline, 0, 0, width, height );
         fsInline->addFrame( frame, false );
         m_gui->canvasWidget()->inlinePictureStarted();
         showMouseMode( KWCanvas::MM_EDIT );
@@ -5222,15 +5228,14 @@ void KWView::changePicture()
     QString file,oldFile;
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    oldFile=frameset->image().getKey().filename();
+    oldFile=frameset->picture().getKey().filename();
     KURL url(oldFile);
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 
-    // ### TODO: do we need to do something if a image becomes a clipart or vice-versa?
     if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage + KWInsertPicDia::SelectClipart, oldFile ) )
     {
-        KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Picture"), FrameIndex(frame), oldFile, file, true ) ;
+        KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change Picture"), FrameIndex(frame), oldFile, file) ;
 
         frameset->loadPicture( file );
         m_doc->frameChanged( frame );

@@ -645,53 +645,33 @@ void KWFrameResizeCommand::unexecute()
     doc->frameChanged( frame );
 }
 
-KWFrameChangePictureClipartCommand::KWFrameChangePictureClipartCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile, bool _isAPicture ) :
+KWFrameChangePictureCommand::KWFrameChangePictureCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile ) :
     KNamedCommand(name),
     m_indexFrame(_frameIndex),
     m_oldFile(_oldFile),
-    m_newFile(_newFile),
-    m_isAPicture(_isAPicture)
+    m_newFile(_newFile)
 {
 }
 
-void KWFrameChangePictureClipartCommand::execute()
+void KWFrameChangePictureCommand::execute()
 {
     KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
     Q_ASSERT( frameSet );
     KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
     Q_ASSERT( frame );
     KWDocument * doc = frameSet->kWordDocument();
-    if(m_isAPicture)
-    {
-        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-        frameset->loadPicture( m_newFile , doc->zoomRect( *frame ).size() );
-    }
-    else
-    {
-        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-        frameset->loadPicture( m_newFile );
-    }
+    KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
+    frameset->loadPicture( m_newFile );
     doc->frameChanged( frame );
 }
 
-void KWFrameChangePictureClipartCommand::unexecute()
+void KWFrameChangePictureCommand::unexecute()
 {
     KWFrameSet *frameSet =m_indexFrame.m_pFrameSet;
     KWFrame *frame=frameSet->frame(m_indexFrame.m_iFrameIndex);
     KWDocument * doc = frameSet->kWordDocument();
-    if(m_isAPicture)
-    {
-        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-        frameset->loadPicture( m_oldFile , doc->zoomRect( *frame ).size() );
-    }
-    else
-    {
-        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-        frameset->loadPicture( m_oldFile );
-    }
-
-
-    //update frames
+    KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
+    frameset->loadPicture( m_oldFile );
     doc->frameChanged( frame );
 }
 

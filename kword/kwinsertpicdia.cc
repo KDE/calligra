@@ -188,7 +188,7 @@ int KWInsertPicDia::selectPictureDia( QString &filename, int flags, const QStrin
         mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     KFileDialog fd( _path, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( mimetypes );
-    fd.setCaption(i18n("Choose Image"));
+    fd.setCaption(i18n("Choose Image")); // ### TODO: rename to "Choose Picture"
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
     {
@@ -201,30 +201,6 @@ int KWInsertPicDia::selectPictureDia( QString &filename, int flags, const QStrin
     }
     return 0;
 }
-
-
-
-#if 0
-void KWInsertPicDia::slotChooseClipart()
-{
-    if ( KWInsertPicDia::selectClipartDia(m_filename ) )
-    {
-    }
-}
-
-bool KWInsertPicDia::selectClipartDia( QString &filename, const QString & _path)
-{
-    KFileDialog fd( _path, KoPictureFilePreview::clipartPattern(), 0, 0, true );
-    fd.setCaption(i18n("Choose Clipart"));
-    QString file = selectPicture( fd );
-    if ( !file.isEmpty() )
-    {
-        filename = file;
-        return true;
-    }
-    return false;
-}
-#endif
 
 QString KWInsertPicDia::selectPicture( KFileDialog & fd )
 {

@@ -1760,18 +1760,11 @@ KWordFrameSetIface* KWPictureFrameSet::dcopObject()
     return m_dcop;
 }
 
-
-void KWPictureFrameSet::loadPicture( const QString & fileName, const QSize & /*_imgSize*/ )
-// _imgSize is not needed anymore with KoPicture
-{
-    loadPicture(fileName);
-}
-
 void KWPictureFrameSet::loadPicture( const QString & fileName)
 {
     KoPictureCollection *collection = m_doc->pictureCollection();
 
-    m_image = collection->loadPicture( fileName );
+    m_picture = collection->loadPicture( fileName );
 }
 
 void KWPictureFrameSet::setSize( const QSize & /*_imgSize*/ )
@@ -1800,10 +1793,10 @@ QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
     if (m_doc->specialOutputFlag()==KoDocument::SaveAsKOffice1dot1)
     {
         // KWord 1.1 file format
-        QString strElementName=m_image.isClipartAsKOffice1Dot1() ? QString( "CLIPART" ) : QString( "IMAGE" );
+        QString strElementName=m_picture.isClipartAsKOffice1Dot1() ? QString( "CLIPART" ) : QString( "IMAGE" );
         imageElem = parentElem.ownerDocument().createElement( strElementName );
         framesetElem.appendChild( imageElem );
-        if ( !m_image.isClipartAsKOffice1Dot1() )
+        if ( !m_picture.isClipartAsKOffice1Dot1() )
         {
             // KWord 1.1 does not save keepAspectRaio for a clipart
             imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
@@ -1820,7 +1813,7 @@ QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
     }
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
-    m_image.getKey().saveAttributes( elem );
+    m_picture.getKey().saveAttributes( elem );
     return framesetElem;
 }
 
@@ -1850,8 +1843,8 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
         {
             KoPictureKey key;
             key.loadAttributes( keyElement );
-            m_image.clear();
-            m_image.setKey( key );
+            m_picture.clear();
+            m_picture.setKey( key );
             m_doc->addPictureRequest( this );
         }
         else
@@ -1861,8 +1854,8 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
             if ( !filenameElement.isNull() )
             {
                 QString filename = filenameElement.attribute( "value" );
-                m_image.clear();
-                m_image.setKey( KoPictureKey( filename ) );
+                m_picture.clear();
+                m_picture.setKey( KoPictureKey( filename ) );
                 m_doc->addPictureRequest( this );
             }
             else
@@ -1881,7 +1874,7 @@ void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, co
 #ifdef DEBUG_DRAW
     kdDebug(32001) << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
 #endif
-    m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
+    m_picture.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
 }
 
@@ -1899,12 +1892,12 @@ FrameSetType KWPictureFrameSet::type( void )
 
 FrameSetType KWPictureFrameSet::typeAsKOffice1Dot1( void )
 {
-    return m_image.isClipartAsKOffice1Dot1()?FT_CLIPART:FT_PICTURE;
+    return m_picture.isClipartAsKOffice1Dot1()?FT_CLIPART:FT_PICTURE;
 }
 
 bool KWPictureFrameSet::keepAspectRatio() const
 {
-    return ( m_keepAspectRatio && ( !m_image.isClipartAsKOffice1Dot1() ) );
+    return ( m_keepAspectRatio && ( !m_picture.isClipartAsKOffice1Dot1() ) );
 }
 
 void KWPictureFrameSet::setKeepAspectRatio( bool b )
@@ -1919,7 +1912,7 @@ void KWPictureFrameSet::printDebug( KWFrame *frame )
     KWFrameSet::printDebug( frame );
     if ( !isDeleted() )
     {
-        kdDebug(32001) << "Image: key=" << m_image.getKey().toString() << endl;
+        kdDebug(32001) << "Image: key=" << m_picture.getKey().toString() << endl;
     }
 }
 #endif

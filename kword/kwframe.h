@@ -810,13 +810,10 @@ public:
 
     virtual FrameSetType typeAsKOffice1Dot1( void );
 
-    void setPicture( const KoPicture &image ) { m_image = image; }
-    KoPicture image() const { return m_image; }
-    KoPicture picture() const { return m_image; }
+    void setPicture( const KoPicture &picture ) { m_picture = picture; }
+    KoPicture picture() const { return m_picture; }
 
-    KoPictureKey key() const { return m_image.getKey(); }
-
-    void loadPicture( const QString &fileName, const QSize &_imgSize );
+    KoPictureKey key() const { return m_picture.getKey(); }
 
     void loadPicture( const QString &fileName );
 
@@ -850,8 +847,8 @@ public:
     bool keepAspectRatio() const;
     void setKeepAspectRatio( bool b );
 protected:
-    /// The image
-    KoPicture m_image;
+    /// The picture
+    KoPicture m_picture;
     bool m_keepAspectRatio;
     /// Cache the finalSize parameter of the method resizeFrame for drawFrame
     bool m_finalSize;

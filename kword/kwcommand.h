@@ -211,11 +211,11 @@ protected:
 /**
  * Command created when we changed a clipart or picture
  */
-class KWFrameChangePictureClipartCommand : public KNamedCommand
+class KWFrameChangePictureCommand : public KNamedCommand
 {
 public:
-    KWFrameChangePictureClipartCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile, bool _isAPicture) ;
-    ~KWFrameChangePictureClipartCommand() {}
+    KWFrameChangePictureCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile) ;
+    ~KWFrameChangePictureCommand() {}
 
     void execute();
     void unexecute();
@@ -224,7 +224,6 @@ protected:
     FrameIndex m_indexFrame;
     QString m_oldFile;
     QString m_newFile;
-    bool m_isAPicture;
 };
 
 /**

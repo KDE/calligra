@@ -42,6 +42,6 @@ void KWordPictureFrameSetIface::setKeepAspectRatio( bool b )
 
 void KWordPictureFrameSetIface::loadImage( QString image )
 {
-  m_frame->loadPicture( image, QSize() );
+  m_frame->loadPicture( image );
   m_frame->kWordDocument()->slotRepaintChanged( m_frame );
 }
