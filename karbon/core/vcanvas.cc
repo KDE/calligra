@@ -58,6 +58,11 @@ VCanvas::VCanvas( KarbonViewBase* view, KarbonPartBase* part )
 	m_bScrolling = false;
 }
 
+VCanvas::~VCanvas()
+{
+	delete m_pixmap;
+}
+
 void
 VCanvas::setPos( const KoPoint& p )
 {
