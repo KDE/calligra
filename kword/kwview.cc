@@ -5910,6 +5910,7 @@ void KWView::savePicture()
                                     i18n("Save Picture"));
                 return;
             }
+            // ### TODO: (JJ:) network transparency, use KIO::NetAccess::upload
             QFile file( url.path() );
             if ( file.open( IO_ReadWrite ) ) {
                 picture.save( &file );
@@ -7066,7 +7067,7 @@ void KWView::addPersonalExpression()
     doc.setContent( &file );
     file.close();
 
-    QString group = "";
+    QString group;
     QMap<QString, QStringList>lstOfPersonalExp;
     QStringList list;
     QDomNode n = doc.documentElement().firstChild();
