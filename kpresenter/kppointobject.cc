@@ -129,7 +129,7 @@ void KPPointObject::loadOasisMarker( KoOasisContext & context )
 
 void KPPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info )
 {
-    kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
+    //kdDebug()<<"void KPPointObject::loadOasis( const QDomElement &element )*************\n";
     KPShadowObject::loadOasis( element, context, info );
     //load point.
     QStringList ptList = QStringList::split(' ', element.attribute("draw:points"));
