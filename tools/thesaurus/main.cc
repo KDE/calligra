@@ -25,12 +25,12 @@
 /*
 FIXME:
 -Fix "no mimesource" warning of QTextBrowser
--Sort case-insensitively
 -click in thesaurus doesn't always select immediately
 -See the fixme's in the source below
 
 TODO:
--Add part of speech information
+-Add part of speech information?
+-If no match was found, use KSpell to offer alternative spellings
 -Add back/forward buttons
 -Don't start WordNet before its tab is activated?
 -Move the edit field outside the tabs and make it work for both
@@ -348,27 +348,27 @@ void Thesaurus::thesExited(KProcess *)
 
     m_thes_syn->clear();
     if( syn.size() > 0 ) {
+        syn = sortQStringList(syn);
         m_thes_syn->insertStringList(syn);
     } else {
         m_thes_syn->insertItem(i18n("No match"));
     }
-    m_thes_syn->sort();
     
     m_thes_hyper->clear();
     if( hyper.size() > 0 ) {
+        hyper = sortQStringList(hyper);
         m_thes_hyper->insertStringList(hyper);
     } else {
         m_thes_hyper->insertItem(i18n("No match"));
     }
-    m_thes_hyper->sort();
 
     m_thes_hypo->clear();
     if( hypo.size() > 0 ) {
+        hypo = sortQStringList(hypo);
         m_thes_hypo->insertStringList(hypo);
     } else {
         m_thes_hypo->insertItem(i18n("No match"));
     }
-    m_thes_hypo->sort();
 
     QApplication::restoreOverrideCursor();
 }
@@ -647,6 +647,25 @@ QString Thesaurus::formatLine(QString l)
     re.setMinimal(false);    // greedy again
 
     return l;
+}
+
+/** Sort a list case insensitively. */
+QStringList Thesaurus::sortQStringList(QStringList list)
+{
+	// Sort list case-insensitive. This looks strange but using a QMap
+	// is even suggested by the Qt documentation.
+	QMap<QString,QString> map_list;
+	for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
+		QString str = *it;
+		map_list[str.lower()] = str;
+	}
+	list.clear();
+	QMap<QString,QString>::Iterator it;
+	// Qt doc: "the items are alphabetically sorted [by key] when iterating over the map":
+	for( it = map_list.begin(); it != map_list.end(); ++it ) {
+		list.append(it.data());
+	}
+	return list;
 }
 
 #include "main.moc"

@@ -1,5 +1,5 @@
 /*
-   $Id: $
+   $Id$
    This file is part of the KDE project
    Copyright (C) 2001 Daniel Naber <daniel.naber@t-online.de>
 */
@@ -78,6 +78,7 @@ protected:
     void findTermThesaurus(const QString &term);
     void findTermWordnet(const QString &term);
     QString formatLine(QString l);
+    QStringList sortQStringList(QStringList list);
 
     KProcess *m_thesproc;
     QString m_thesproc_stdout;
