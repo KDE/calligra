@@ -120,13 +120,13 @@ void KexiKugarHandler::editReport(KexiView *view,const QString &identifier)
 void KexiKugarHandler::createReport(KexiView *view)
 {
     bool ok = false;
-    QString name = KLineEditDlg::getText(i18n("New Report"), i18n("Report name:"), "", &ok, view);
+    QString title = KLineEditDlg::getText(i18n("New Report"), i18n("Report name:"), "", &ok, view);
 
-    if(ok && name.length() > 0)
+    if(ok && title.length() > 0)
     {
 		QString id=nextID();
 		KexiKugarHandlerItem *item;
-        items()->insert(id,item=new KexiKugarHandlerItem(this, name, "kexi/reports", id));
+        items()->insert(id,item=new KexiKugarHandlerItem(this, id, "kexi/reports", title));
 		if (!item->designer(true))
 		{
 			items()->remove(id);
@@ -144,7 +144,15 @@ void KexiKugarHandler::createReport(KexiView *view)
 
 void KexiKugarHandler::view(KexiView *view, const QString &identifier)
 {
+kdDebug() << "localIdentifier(identifier)="<< localIdentifier(identifier) << endl;
+
+  QDictIterator<KexiKugarHandlerItem> it( *(QDict<KexiKugarHandlerItem>*)(items()) );
+      for( ; it.current(); ++it ) {
+      kdDebug() << "key='" <<it.currentKey() << "' fullId=" << it.current()->fullIdentifier() << " title=" << it.current()->title() << endl;
+      }
+      
         KexiKugarHandlerItem *item=(KexiKugarHandlerItem*)((*items())[localIdentifier(identifier)]);
+//        KexiKugarHandlerItem *item=(KexiKugarHandlerItem*)((*items())["C"]);
         if (item) {
 		item->view(view);
 	} else {
@@ -193,7 +201,10 @@ void KexiKugarHandler::loadXML(const QDomDocument &doc, const QDomElement &elem)
 		for (QDomElement el=elem.firstChild().toElement();!el.isNull();el=el.nextSibling().toElement()) {
             KexiKugarHandlerItem *item;
             QString id=el.attribute("id");
-            list->insert(id,item=new KexiKugarHandlerItem(this, el.attribute("name"), "kexi/reports", id));
+
+	kdDebug()<<"KexiKugarHandler::loadXML: id=" <<id<<endl;
+
+            list->insert(id,item=new KexiKugarHandlerItem(this, id, "kexi/reports", el.attribute("name")));
 			if (id>=nextFreeID) {
 				nextFreeID=id;
 				nextID();

@@ -46,11 +46,11 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy *pro
 }
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item)
- : KListViewItem(parent, item->name())
+ : KListViewItem(parent, item->title())
 {
 	m_mime = item->mime();
-	m_name = item->name();
-	m_identifier = item->identifier();
+	m_name = item->title();
+	m_identifier = item->fullIdentifier();
 	m_item = item;
 	m_proxy = 0;
 }
@@ -66,11 +66,11 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString na
 }
 
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item)
- : KListViewItem(parent, item->name())
+ : KListViewItem(parent, item->title())
 {
 	m_mime = item->mime();
-	m_name = item->name();
-	m_identifier = item->identifier();
+	m_name = item->title();
+	m_identifier = item->fullIdentifier();
 	m_item = item;
 	m_proxy = 0;
 }

@@ -33,7 +33,7 @@ KexiKugarWrapper::KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* item,co
                                 QWidget *parent, const char *name)
 	: KexiDialogBase(view,parent,name),m_part(0)
 {
-	setCaption(i18n("Report %1").arg(item->name()));
+	setCaption(i18n("Report %1").arg(item->title()));
 
 	KIconLoader *iloader = KGlobal::iconLoader();
 	setIcon(iloader->loadIcon("form", KIcon::Small));

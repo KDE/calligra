@@ -42,7 +42,8 @@ KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *handler, const QS
 	m_storedDataSets.setAutoDelete(true);
 	QString tmpPath=dynamic_cast<KexiKugarHandler*>(handler)->tempPath();
 	if (!tmpPath.isEmpty()) {
-		m_tempPath=tmpPath+fullIdentifier();
+//js		m_tempPath=tmpPath+fullIdentifier();
+		m_tempPath=tmpPath+identifier();
 		kdDebug()<<"KexiKugarHandlerItem::creating directory: "<<m_tempPath<<endl;
 		if (mkdir(QFile::encodeName(m_tempPath),0700)!=0) {
 			kdDebug()<<"FAILED"<<endl;
@@ -59,9 +60,11 @@ KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *handler, const QS
 			}
 
 			handler->kexiProject()->addFileReference(FileReference("reports",
-				"/"+fullIdentifier()+"/template.kut", "/reports/"+fullIdentifier()+"/template.kut"));
+				"/"+identifier()+"/template.kut", "/reports/"+identifier()+"/template.kut"));
+//js				"/"+fullIdentifier()+"/template.kut", "/reports/"+fullIdentifier()+"/template.kut"));
 			handler->kexiProject()->addFileReference(FileReference("reports",
-				"/"+fullIdentifier()+"/template.kukexi", "/reports/"+fullIdentifier()+"/template.kukexi"));
+				"/"+identifier()+"/template.kukexi", "/reports/"+identifier()+"/template.kukexi"));
+//js				"/"+fullIdentifier()+"/template.kukexi", "/reports/"+fullIdentifier()+"/template.kukexi"));
 		}
 	}
 }
@@ -166,6 +169,7 @@ void KexiKugarHandlerItem::view(KexiView *view) {
 }
 
 QString KexiKugarHandlerItem::generateDataFile() {
+kdDebug() << "templateInfo='" <<m_tempPath+"template.kukexi"<<endl;
 	KSimpleConfig templateInfo(m_tempPath+"template.kukexi",true);
 	QDomDocument doc("KugarData");
 	doc.appendChild(doc.createElement("KugarData"));
