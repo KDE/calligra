@@ -27,11 +27,15 @@
 #endif
 
 #include <stdio.h>
+#include <fstream.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <qprinter.h>
+#include <qdatetime.h>
+#include "version.h"
 #include "Painter.h"
 #include "EPSExport.h"
+#include "Canvas.h"
 
 EPSExport::EPSExport () {
 }
@@ -44,6 +48,7 @@ bool EPSExport::setup (GDocument *doc, const char* fmt) {
 }
 
 bool EPSExport::exportToFile (GDocument* doc) {
+#ifdef NOT_MORE
   const char* tmpname = tempnam (NULL, "killu");
   /*
    * Step 1: print the document to PostScript
@@ -73,4 +78,37 @@ bool EPSExport::exportToFile (GDocument* doc) {
   int result = system (cmd);
   unlink (tmpname);
   return (result == 0);
+#endif
+
+  ofstream epsStream (outputFileName ());
+  if (!epsStream)
+    return false;
+
+  // bounding box
+  Rect box = doc->boundingBoxForAllObjects ();
+
+  // write header
+  epsStream  << "%!PS-Adobe-2.0 EPSF-2.0\n"
+	     << "%%Title: " << (const char *) doc->fileName () << "\n"
+	     << "%%Creator: KIllustrator " << APP_VERSION << "\n"
+	     << "%%CreationDate: " << QDateTime::currentDateTime ().toString ()
+	     << '\n'
+	     << "%%BoundingBox: " 
+	     << box.left () << ' '
+	     << doc->getPaperHeight () - box.bottom () << ' '
+	     << box.right () << ' '
+	     << doc->getPaperHeight () - box.top () << '\n'
+	     << "%%EndComments"
+	     << endl;
+  Canvas::writePSProlog (epsStream);
+  epsStream << "/PaperWidth " << doc->getPaperWidth () << " def\n"
+            << "/PaperHeight " << doc->getPaperHeight () << " def\n"
+            << "InitTMatrix\n";
+
+  // write objects
+  QListIterator<GObject> it = doc->getObjects ();
+  for (; it.current (); ++it) 
+    it.current ()->writeToPS (epsStream);
+
+  return true;
 }
