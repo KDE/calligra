@@ -195,6 +195,12 @@ public:
   void popDirectory();
 
   /**
+   * @return true if the given file exists in the current directory,
+   * i.e. if open(fileName) will work.
+   */
+  bool hasFile( const QString& fileName );
+
+  /**
    * Imports a local file into a store
    * @param fileName file on hard disk
    * @param destName file in the store
@@ -276,6 +282,10 @@ protected:
    */
   virtual bool enterAbsoluteDirectory( const QString& path ) = 0;
 
+  /**
+   * Check if a file exists inside the store.
+   * @param absPath the absolute path inside the store, i.e. not relative to the current directory
+   */
   virtual bool fileExists( const QString& absPath ) = 0;
 
 private:

@@ -137,13 +137,13 @@ KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, cons
 #else
         KIO::NetAccess::download( url, tmpFile );
 #endif
-  
+
     if (!downloaded)
     {
       kdError(s_area) << "Could not download file!" << endl;
       backend = DefaultFormat; // will create a "bad" store (bad()==true)
     }
-    else if ( backend == Auto ) 
+    else if ( backend == Auto )
     {
       QFile file( tmpFile );
       if ( file.open( IO_ReadOnly ) )
@@ -619,4 +619,9 @@ bool KoStore::enterDirectoryInternal( const QString& directory )
 void KoStore::disallowNameExpansion( void )
 {
     m_namingVersion = NAMING_VERSION_RAW;
+}
+
+bool KoStore::hasFile( const QString& fileName )
+{
+  return fileExists( currentPath() + fileName );
 }
