@@ -896,10 +896,16 @@ void KWFrameSet::updateFrames()
             {
                 if ( fIt.current() != frameMaybeOnTop ) // Skip identity case ;)
                 {
-                    // Handle case of z-order equality the same way as the old code worked:
-                    // the order in the main frameset list is what counts.
-                    if ( ( fIt.current()->zOrder() == frameMaybeOnTop->zOrder() && foundThis )
-                         || fIt.current()->zOrder() < frameMaybeOnTop->zOrder() )
+                    KWFrame *parentFrame = fIt.current();
+                    KWFrameSet *parentFrameset= parentFrame->frameSet();
+                    while (parentFrameset->isFloating()) {
+                      parentFrameset=parentFrameset->anchorFrameset();
+                      KWFrame *oldParentFrame = parentFrame;
+                      parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
+                      if(!parentFrame)
+                          parentFrame = oldParentFrame;
+                    }
+		    if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
                     {
                         KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
                         if( !intersect.isEmpty() )
@@ -1300,11 +1306,8 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 		}
     	}
 
-	// if this frame was not inline, parentFrame == frame so normal clipping happens.
-	// but an inline frame we clip only against the parent frames and the frames above the parent frame.
-	// because we can't trust the z-order of an inline frame.
         {
-            QPtrListIterator<KWFrame> fIt( parentFrame->framesOnTop() );
+            QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
             for ( ; fIt.current() ; ++fIt )
             {
                 QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
