@@ -22,7 +22,6 @@ SHAPES = \
 	xor.xpm \
 	icon.xpm
 
-EXTRA_DIST = $(SHAPES)
+EXTRA_DIST = $(SHAPES) desc
 
-logic_DATA = $(SHAPES)
-
+logic_DATA = $(SHAPES) desc
