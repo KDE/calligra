@@ -31,7 +31,7 @@ KexiDBForm::KexiDBForm(QWidget *parent, const char *name/*, KexiDB::Connection *
  : KexiGradientWidget(parent, name)
  , KexiDataItemInterface()
 {
-	setDisplayMode( KexiGradientWidget::SimpleGradient );
+//test	setDisplayMode( KexiGradientWidget::SimpleGradient );
 
 	//m_conn = conn;
 	kexipluginsdbg << "KexiDBForm::KexiDBForm(): " << endl;
