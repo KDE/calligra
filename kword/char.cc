@@ -1025,20 +1025,6 @@ QString KWString::decoded()
 }
 
 /*================================================================*/
-/* obsolete
-QCString KWString::utf8( bool _decoded )
-{
-    QString str;
-    if ( _decoded )
-        str = decoded();
-    else
-        str = toString();
-
-    return QCString( str.utf8() );
-}
-*/
-
-/*================================================================*/
 void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 {
     if ( _char.attrib ) {
@@ -1059,7 +1045,7 @@ void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
         case ID_KWCharAnchor: {
             delete _char.attrib;
         } break;
-        default: ; //assert( 0 );
+        default: ;
         }
         _char.attrib = 0L;
         if ( _char.autoformat )
