@@ -112,8 +112,8 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
   }
 
   QDomDocument styles;
-  QByteArray content = store->device()->readAll();
-  m_content.setContent( content );
+
+  m_content.setContent( store->device() );
   store->close();
 
   //kdDebug() << "m_content.toCString() :" << m_content.toCString() << endl;
@@ -121,8 +121,7 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
 
   if ( store->open( "styles.xml" ) )
   {
-    content = store->device()->readAll();
-    styles.setContent( content );
+    styles.setContent( store->device() );
     store->close();
 
     //kdDebug() << "styles.toCString() :" << styles.toCString() << endl;
@@ -133,8 +132,7 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
 
   if ( store->open( "meta.xml" ) )
   {
-    content = store->device()->readAll();
-    m_meta.setContent( content );
+    m_meta.setContent( store->device() );
     store->close();
 
     kdDebug() << "File containing meta definitions loaded" << endl;
@@ -144,8 +142,7 @@ KoFilter::ConversionStatus OoImpressImport::openFile()
 
   if ( store->open( "settings.xml" ) )
   {
-    content = store->device()->readAll();
-    m_settings.setContent( content );
+    m_settings.setContent( store->device() );
     store->close();
 
     kdDebug() << "File containing settings loaded" << endl;
