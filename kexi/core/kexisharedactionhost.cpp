@@ -114,13 +114,11 @@ KMainWindow* KexiSharedActionHost::mainWindow() const
 
 void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 {
-	if (!o)
-		return;
-	KexiActionProxy *p = d->actionProxies[ o ];
+	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
 	for (KActionPtrList::Iterator it=d->sharedActions.begin(); it!=d->sharedActions.end(); ++it) {
 //			setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 		(*it)->setEnabled(p && p->isAvailable((*it)->name()));
-		kdDebug() << "Action " << (*it)->name() << (p->isAvailable((*it)->name()) ? " enabled." : " disabled.") << endl;
+		kdDebug() << "Action " << (*it)->name() << (p && p->isAvailable((*it)->name()) ? " enabled." : " disabled.") << endl;
 	}
 }
 

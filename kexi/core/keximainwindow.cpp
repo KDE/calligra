@@ -371,6 +371,7 @@ void KexiMainWindow::invalidateProjectWideActions()
 	d->action_project_properties->setEnabled(d->prj);
 	d->action_close->setEnabled(d->prj);
 	d->action_view_nav->setEnabled(d->prj);
+	d->action_project_relations->setEnabled(d->prj);
 
 	const bool have_dialog = d->curDialog;
 	//VIEW MENU
@@ -1118,6 +1119,8 @@ KexiMainWindow::slotProjectClose()
 
 void KexiMainWindow::slotProjectRelations()
 {
+	if (!d->prj)
+		return;
 	KexiDialogBase *d = KexiInternalPart::createDialogInstance("relation", this);
 	if (d)
 		d->activate();
