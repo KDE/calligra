@@ -1089,7 +1089,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         {
             switch ((*it).m_type)
             {
-                case 0: default: strLayout += "\\tql"; break; // ### TODO: does \tql exists?
+                case 0: default:  break; // left tab is default
                 case 1:  strLayout += "\\tqc"; break;
                 case 2:  strLayout += "\\tqr"; break;
                 case 3:  strLayout += "\\tqdec"; break;
