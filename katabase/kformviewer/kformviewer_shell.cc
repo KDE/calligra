@@ -95,7 +95,7 @@ void KformViewerShell::setDocument( KformViewerDoc *_doc )
 
   m_pDoc = _doc;
   m_pDoc->_ref();
-  m_pView = _doc->createFormView( getFrame() );
+  m_pView = _doc->createFormView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
@@ -133,7 +133,7 @@ bool KformViewerShell::newDocument()
     return false;
   }
 
-  m_pView = m_pDoc->createFormView( getFrame() );
+  m_pView = m_pDoc->createFormView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   kdebug( KDEBUG_INFO, 0, "*1) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
@@ -182,7 +182,7 @@ bool KformViewerShell::openDocument( const char *_url, const char *_format )
   }
   debug( "Hier muss er herkommen" );
 
-  m_pView = m_pDoc->createFormView( getFrame() );
+  m_pView = m_pDoc->createFormView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
