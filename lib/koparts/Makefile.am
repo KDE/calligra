@@ -16,7 +16,5 @@ include_HEADERS = container.h  handler.h  part.h    shell.h    view.h \
 		  frame.h      plugin.h  toolbox.h  \
 		kcoloractions.h
 
-libkoparts_la_METASOURCES = container.moc  handler.moc  part.moc    shell.moc    view.moc \
-			   frame.moc      plugin.moc  toolbox.moc  \
-			kcoloractions.moc
+METASOURCES = AUTO
 
