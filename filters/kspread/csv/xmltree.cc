@@ -23,21 +23,20 @@
 #include <kdebug.h>
 
 
-XMLTree::XMLTree(const QString & inputFileName)
+XMLTree::XMLTree(QDomDocument &qdoc) : root(qdoc)
 {
-  root = new QDomDocument("spreadsheet");
-
-  root->appendChild( root->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  doc = root->createElement( "spreadsheet" );
+  root.setName("spreadsheet");
+  root.appendChild( root.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  doc = root.createElement( "spreadsheet" );
 
   doc.setAttribute("editor", "KSpread CSV Filter");
   doc.setAttribute("mime", "application/x-kspread");
-  root->appendChild(doc);
+  root.appendChild(doc);
 
-  QDomElement paper = root->createElement("paper");
+  QDomElement paper = root.createElement("paper");
   paper.setAttribute("format", "A4");
   paper.setAttribute("orientation", "Portrait");
-  QDomElement borders = root->createElement( "borders" );
+  QDomElement borders = root.createElement( "borders" );
   borders.setAttribute( "left", 20 );
   borders.setAttribute( "top", 20 );
   borders.setAttribute( "right", 20 );
@@ -45,12 +44,12 @@ XMLTree::XMLTree(const QString & inputFileName)
   paper.appendChild( borders );
   doc.appendChild(paper);
 
-  map = root->createElement("map");
+  map = root.createElement("map");
   doc.appendChild(map);
 
-  table = root->createElement("table");
+  table = root.createElement("table");
 
-  table.setAttribute("name", inputFileName);
+  table.setAttribute("name", "foobar");
   map.appendChild(table);
 
   row = 1;
@@ -59,8 +58,7 @@ XMLTree::XMLTree(const QString & inputFileName)
 
 XMLTree::~XMLTree()
 {
-    // How to delete the QDomDocument??? (Werner)
-    //if(root)
+    //if(root)      // We're using fancy references, now! (Werner)
     //delete root;
 }
 
@@ -71,9 +69,10 @@ const QString XMLTree::part()
 
   QTime tmr;
   tmr.start();
-  kDebugInfo( 31501, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+  kdDebug(31501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
-  root->save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 :( )
+  root.save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 with a
+                 // quite small file :( )
 
 // David: gdb says that QString::replace calls itself recursively an enormous amount of time
 // This is called by QStringBuffer::writeBlock (), called by QTextStream::writeBlock ()
@@ -81,8 +80,8 @@ const QString XMLTree::part()
 //
 // And this looks related to the UTF 8 encoding ...
 
-  kDebugInfo( 31501, (const char*)QString::number((int)tmr.elapsed()));
-  kDebugInfo( 31501, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+  kdDebug(31501) << (const char*)QString::number((int)tmr.elapsed()) << endl;
+  kdDebug(31501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
   t << '\0';
 
@@ -91,14 +90,14 @@ const QString XMLTree::part()
 
 bool XMLTree::cell( const QString & contents )
 {
-  QDomElement e = root->createElement("cell");
+  QDomElement e = root.createElement("cell");
   //e.appendChild(getFormat(xf));
   //e.appendChild(getFont(xf));
 
   e.setAttribute("row", row);
   e.setAttribute("column", column++);
 
-  QDomElement format=root->createElement("format");
+  QDomElement format=root.createElement("format");
   format.setAttribute("float", "3");
   format.setAttribute("alignY", "2");
   format.setAttribute("floatcolor", "2");
@@ -106,46 +105,46 @@ bool XMLTree::cell( const QString & contents )
   format.setAttribute("precision", "-1");
   format.setAttribute("align", "4");
 
-  QDomElement pen=root->createElement("pen");
+  QDomElement pen=root.createElement("pen");
   pen.setAttribute("width", "1");
   pen.setAttribute("style", "0");
   pen.setAttribute("color", "#000000");
 
-  QDomElement lborder=root->createElement("left-border");
+  QDomElement lborder=root.createElement("left-border");
   lborder.appendChild(pen);
   format.appendChild(lborder);
 
-  pen=root->createElement("pen");
+  pen=root.createElement("pen");
   pen.setAttribute("width", "1");
   pen.setAttribute("style", "0");
   pen.setAttribute("color", "#000000");
 
-  QDomElement tborder=root->createElement("top-border");
+  QDomElement tborder=root.createElement("top-border");
   tborder.appendChild(pen);
   format.appendChild(tborder);
 
-  pen=root->createElement("pen");
+  pen=root.createElement("pen");
   pen.setAttribute("width", "1");
   pen.setAttribute("style", "0");
   pen.setAttribute("color", "#000000");
 
-  QDomElement fdia=root->createElement("fall-diagonal");
+  QDomElement fdia=root.createElement("fall-diagonal");
   fdia.appendChild(pen);
   format.appendChild(fdia);
 
-  pen=root->createElement("pen");
+  pen=root.createElement("pen");
   pen.setAttribute("width", "1");
   pen.setAttribute("style", "0");
   pen.setAttribute("color", "#000000");
 
-  QDomElement udia=root->createElement("up-diagonal");
+  QDomElement udia=root.createElement("up-diagonal");
   udia.appendChild(pen);
   format.appendChild(udia);
 
   e.appendChild(format);
 
-  QDomElement text=root->createElement("text");
-  text.appendChild(root->createTextNode(contents));
+  QDomElement text=root.createElement("text");
+  text.appendChild(root.createTextNode(contents));
   e.appendChild(text);
 
   table.appendChild(e);

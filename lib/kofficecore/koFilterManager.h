@@ -168,7 +168,6 @@ private:
     QString exportFile;
     QString native_format, mime_type;
     bool prepare;
-    const QDomDocument *qdoc;
     QValueList<KoFilterEntry> m_vec;
 #ifndef USE_QFD
     PreviewStack *ps;
@@ -191,6 +190,7 @@ public:
 
 public slots:
     void showPreview(const KURL &url);
+    void filterChanged(const QString &filter);
 
 private:
     const KoFilterManager * const mgr;

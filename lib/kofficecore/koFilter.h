@@ -49,9 +49,10 @@ public:
      * @param config   	A String which can be used to pass configure information
      * @return 		A ptr to the QDomDocument you created.
      */
-    virtual const QDomDocument *I_filter(const QCString &file, const QCString &from,
-					 const QCString &to, const QString &config=QString::null);
-    
+    virtual const bool I_filter(const QCString &file, const QCString &from,
+				QDomDocument &, const QCString &to,
+				const QString &config=QString::null);
+
     /**
      * This is the most hacky method(tm) available. Here you have direct
      * access to the (empty) KoDocument. Overload this method if you want

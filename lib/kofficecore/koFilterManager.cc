@@ -30,7 +30,6 @@ KoFilterManager* KoFilterManager::self()
     {
         s_pSelf = new KoFilterManager;
         s_pSelf->prepare=false;
-	s_pSelf->qdoc=0L;
     }
     return s_pSelf;
 }
@@ -133,6 +132,9 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     unsigned i, j;
     QString service;
+    
+    config=QString::null;   // reset the config string
+    
     if ( direction == Import )
         service = "Export == '";
     else
@@ -238,8 +240,6 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                 while(tmp[tmp.length()-k]!=QChar('.')) {
                     ++k;
                 }
-                //kDebugInfo(30003, "Extension:");
-                //kDebugInfo(30003, tmp.right(k));
                 dialogMap.insert(tmp.right(k), id);
             }
             ps->addWidget(filterdia, id);
@@ -247,8 +247,13 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
             ++id;
         }
     }
-    if(!dialogMap.isEmpty())
+    if(!dialogMap.isEmpty()) {
         dialog->setPreviewWidget(ps);
+	if(direction==Export) {
+	    QObject::connect(dialog, SIGNAL(filterChanged(const QString &)),
+			     ps, SLOT(filterChanged(const QString &)));
+	}
+    }	
     return true;
 }
 
@@ -270,13 +275,12 @@ void KoFilterManager::cleanUp() {
 
 const int KoFilterManager::findWidget(const QString &ext) const {
 
-    QMap<QString, int>::Iterator it;
-    it=dialogMap.find(ext);
-
+    QMap<QString, int>::Iterator it=dialogMap.find(ext);
+    
     if(it!=dialogMap.end())
         return it.data();
     else
-        return 0;  // default Widget
+	return 0;  // default Widget
 }
 #endif
 
@@ -284,7 +288,6 @@ const QString KoFilterManager::import( const QString & file, const char *_native
 				       KoDocument *document )
 {
     KURL url( file );
-    qdoc=0L;
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     QCString mimeType;
@@ -343,9 +346,12 @@ const QString KoFilterManager::import( const QString & file, const char *_native
 		 strcmp(document->className(), "KisDoc")==0 ||
 		 strcmp(document->className(), "KImageDocument")==0)) {
 	    kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
-	    qdoc=filter->I_filter(QCString(file), QCString(mimeType), QCString(_native_format), config);
-	    if(qdoc!=0L && (ok=document->loadXML(*qdoc)))
+	    QDomDocument qdoc;
+	    ok=filter->I_filter(QCString(file), QCString(mimeType), qdoc, QCString(_native_format), config);
+	    if(ok) {
+		ok=document->loadXML(qdoc);
 		document->changedByFilter();
+	    }
 	}
 	else if(vec[i].implemented.lower()=="kodocument") {
 	    kdDebug(30003) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
@@ -501,6 +507,36 @@ void PreviewStack::showPreview(const KURL &url) {
     }
     else {
         raiseWidget(id);
+        if(hidden) {
+            show();
+            hidden=false;
+        }
+    }
+}
+
+void PreviewStack::filterChanged(const QString &filter) {
+
+    QString ext=filter.mid(1);
+
+    if(ext.isNull()) {
+	if(!hidden) {
+            hide();
+            hidden=true;
+        }
+        return;
+    }
+    // do we have a dialog for that extension? (0==we don't have one)
+    unsigned short id=mgr->findWidget(ext);
+    
+    if(id==0) {
+        if(!hidden) {
+            hide();
+            hidden=true;
+        }
+        return;
+    }
+    else {
+	raiseWidget(id);
         if(hidden) {
             show();
             hidden=false;

@@ -41,7 +41,8 @@ public:
     CSVFilter(KoFilter *parent, QString name);
     virtual ~CSVFilter() {}
     /** filtering :) */
-    virtual const QDomDocument *I_filter(const QCString &file, const QCString &from,
-					 const QCString &to, const QString &config=QString::null);
+    virtual const bool I_filter(const QCString &file, const QCString &from,
+				QDomDocument &document, const QCString &to,
+				const QString &config=QString::null);
 };
 #endif // CSVFILTER_H

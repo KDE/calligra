@@ -30,14 +30,11 @@ class XMLTree
 public:
   // Create a tree.
   // inputFileName is only used in order to name the table
-  XMLTree(const QString & inputFileName);
+  XMLTree(QDomDocument &qdoc);
   ~XMLTree();
 
   // Return the whole XML as QString
   const QString part();
-    
-  // Return the QDomDocument
-  const QDomDocument *document() { return root; }
 
   // Create a new cell
   bool cell( const QString & contents );
@@ -50,7 +47,7 @@ public:
 
 private:
   int row, column;
-  QDomDocument *root;
+  QDomDocument &root;
   QDomElement doc, map, table;
 };
 

@@ -26,8 +26,9 @@ CSVFilter::CSVFilter(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
 }
 
-const QDomDocument *CSVFilter::I_filter(const QCString &file, const QCString &from,
-					const QCString &to, const QString &config) {
+const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
+			       QDomDocument &document, const QCString &to,
+			       const QString &config) {
 
     bool bSuccess=true;
 
@@ -43,7 +44,7 @@ const QDomDocument *CSVFilter::I_filter(const QCString &file, const QCString &fr
     }
 
     QTextStream inputStream(&in);
-    XMLTree tree("foo");
+    XMLTree tree(document);
 
     /*
     KGlobal::locale()->enableNumericLocale();
@@ -129,7 +130,12 @@ const QDomDocument *CSVFilter::I_filter(const QCString &file, const QCString &fr
         }
     }
 
-    //QCString tmp=tree.part().utf8();
+    //for debuggging only
+    //kdDebug(30003) << "XXYYYYYYZZ" << endl;
+    //QString s=tree.part();
+    //kdDebug(30003) << "Size: " << s.length() << endl
+    //		   << "String: " << s << endl;
+    //kdDebug(30003) << "XXYYYYYYZZ" << endl;
 
     //KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
     //if(!out.open("root", "")) {
@@ -143,6 +149,5 @@ const QDomDocument *CSVFilter::I_filter(const QCString &file, const QCString &fr
     //out.close();
 
     in.close();
-
-    return tree.document();
+    return bSuccess;
 }
