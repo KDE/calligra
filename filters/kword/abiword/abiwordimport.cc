@@ -66,6 +66,7 @@ public:
 bool AbiPropsMap::setProperty(QString newName, QString newValue)
 {
     replace(newName,AbiProps(newValue));
+    return true;
 }
 
 // Treat the "props" attribute of AbiWord's tags and split it in separates names and values
@@ -135,6 +136,9 @@ public:
         green=0;
         blue=0;
         textPosition=0;
+	textBgRed=0;
+        textBgGreen=0;
+        textBgBlue=0;
     }
     ~StackItem()
     {
@@ -154,6 +158,9 @@ public:
     int         red;
     int         green;
     int         blue;
+    int         textBgRed;
+    int         textBgGreen;
+    int         textBgBlue;
     int         textPosition; //Normal (0), subscript(1), superscript (2)
 };
 
@@ -256,11 +263,19 @@ void PopulateProperties(StackItem* stackItem,
     QString strColour=abiPropsMap["color"].getValue();
     if (!strColour.isEmpty())
     {
-        // we have a new colour, so decode it!
-        long int colour=strColour.toLong(NULL,16);
-        stackItem->red  =(colour&0xFF0000)>>16;
-        stackItem->green=(colour&0x00FF00)>>8;
-        stackItem->blue =(colour&0x0000FF);
+      QColor col(strColour);      
+      stackItem->red  =col.red();
+      stackItem->green=col.green();
+      stackItem->blue =col.blue();
+   }
+
+    QString strBackgroundTextColor=abiPropsMap["bgcolor"].getValue();
+    if(!strBackgroundTextColor.isEmpty())
+    {
+      QColor col(strBackgroundTextColor);      
+      stackItem->textBgRed  =col.red();
+      stackItem->textBgGreen=col.green();
+      stackItem->textBgBlue =col.blue();
     }
 
     QString strFontSize=abiPropsMap["font-size"].getValue();
@@ -386,11 +401,20 @@ bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const
     }
 
     if (stackItem->red || stackItem->green || stackItem->blue)
-    {
-        QDomElement fontElementOut=mainDocument.createElement("COLOR");
+     {
+         QDomElement fontElementOut=mainDocument.createElement("COLOR");
         fontElementOut.setAttribute("red",stackItem->red);
         fontElementOut.setAttribute("green",stackItem->green);
         fontElementOut.setAttribute("blue",stackItem->blue);
+	formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+     }
+
+    if (stackItem->textBgRed || stackItem->textBgGreen || stackItem->textBgBlue)
+    {
+        QDomElement fontElementOut=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
+        fontElementOut.setAttribute("red",stackItem->textBgRed);
+        fontElementOut.setAttribute("green",stackItem->textBgGreen);
+        fontElementOut.setAttribute("blue",stackItem->textBgBlue);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
 	return true;
@@ -514,6 +538,15 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
         element.setAttribute("red",stackItem->red);
         element.setAttribute("green",stackItem->green);
         element.setAttribute("blue",stackItem->blue);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
+    }
+
+   if (stackItem->textBgRed || stackItem->textBgGreen || stackItem->textBgBlue)
+    {
+        element=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
+        element.setAttribute("red",stackItem->textBgRed);
+        element.setAttribute("green",stackItem->textBgGreen);
+        element.setAttribute("blue",stackItem->textBgBlue);
         formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
