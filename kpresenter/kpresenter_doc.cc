@@ -982,8 +982,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     if ( !isReadWrite())
         getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
 
-    // TODO MAILMERGE
-
     KoOasisContext context( this, *m_varColl, oasisStyles, store );
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
