@@ -302,6 +302,10 @@ bool MapEntities::initMapEntities (void)
     addEntity( "lsaquo"   , 8249 );
     addEntity( "rsaquo"   , 8250 );
     addEntity( "euro"     , 8364 );
+    
+    // Aditional ones (non-HTML 4.01)
+
+    addEntity( "apos"     ,   39 ); // apos is only defined for XHTML
 
     return true;
 }
