@@ -8,6 +8,8 @@
 
 // define some often used mathematical constants et al:
 
+// TODO: optimize those values.
+
 namespace VGlobal
 {
 	const double pi			=  3.14159265358979323846;	// pi
@@ -25,10 +27,20 @@ namespace VGlobal
 	const double veryLargeNumber = 1.0e8;
 	const double verySmallNumber = 1.0e-8;
 
-	/// A bezier with this flatness is considered "flat". Used in subdividing.
+	/**
+	 * A bezier with this flatness is considered "flat". Used in subdividing.
+	 */
 	const double flatnessTolerance = 0.5;
 
-	/// A range for KoPoint::isNear() check.
+	/**
+	 * A tolerance used to approximate bezier lengths.
+	 */
+	const double lengthTolerance = 0.01;
+
+	/**
+	 * A range for KoPoint::isNear() check, to decide if a KoPoint "is the same"
+	 * as another.
+	 */
 	const double isNearRange = 0.01;
 
 

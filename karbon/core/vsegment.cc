@@ -56,8 +56,10 @@ VSegment::VSegment()
 
 VSegment::VSegment( const VSegment& segment )
 {
-	m_prev = 0L;
-	m_next = 0L;
+	// copying m_prev/m_next has some advantages ( see vsegment::length() ).
+	// inserting a segment into a vsegmentlist overwrites these anyway:
+	m_prev = segment.m_prev;
+	m_next = segment.m_next;
 
 	m_point[0] = segment.m_point[0];
 	m_point[1] = segment.m_point[1];
@@ -193,19 +195,116 @@ VSegment::pointAndDerive( double t, KoPoint& p, KoPoint& der ) const
 }
 
 double
-VSegment::length() const
+VSegment::length( double t ) const
 {
 	if( !m_prev )
 		return 0.0;
 
-// TODO: length for all other segment types:
+	// length of a line:
 	if( m_type == segment_line )
+	{
 		return
 			sqrt(
-				( m_point[2].x() - m_prev->m_point[2].x() ) *
-				( m_point[2].x() - m_prev->m_point[2].x() ) +
-				( m_point[2].y() - m_prev->m_point[2].y() ) *
-				( m_point[2].y() - m_prev->m_point[2].y() ) );
+				t * (
+					( m_point[2].x() - m_prev->m_point[2].x() ) *
+					( m_point[2].x() - m_prev->m_point[2].x() ) +
+					( m_point[2].y() - m_prev->m_point[2].y() ) *
+					( m_point[2].y() - m_prev->m_point[2].y() ) ) );
+	}
+	// length of a bezier:
+	else if( m_type == segment_curve )
+	{
+		// This algortihm is based on an idea by Jens Gravesen <gravesen@mat.dth.dk>.
+		// We calculate the chord length chord=|P0P3| and the length of the control point
+		// polygon poly=|P0P1|+|P1P2|+|P2P3|. The approximation for the bezier length is
+		// 0.5 * poly + 0.5 * chord. poly - chord is a measure for the error.
+		// We subdivide each segment until the error is smaller than a given tolerance
+		// and add up the subresults.
+
+
+		// "copy segment" splitted a t into a vsegmentlist:
+		VSegmentList list( 0L );
+		list.moveTo( prev()->knot() );
+
+		// most of the time we'll need the length of the whole segment:
+		if( t == 1.0 )
+			list.append( this->clone() );
+		else
+		{
+			VSegment* copy = this->clone();
+			list.append( copy->splitAt( t ) );
+			delete copy;
+		}
+
+
+		double chord;
+		double poly;
+
+		double length = 0.0;
+
+		while( list.current() )
+		{
+			chord =
+				sqrt(
+						( list.current()->m_point[2].x() -
+							list.current()->m_prev->m_point[2].x() ) *
+						( list.current()->m_point[2].x() -
+							list.current()->m_prev->m_point[2].x() )
+					+
+						( list.current()->m_point[2].y() -
+							list.current()->m_prev->m_point[2].y() ) *
+						( list.current()->m_point[2].y() -
+							list.current()->m_prev->m_point[2].y() ) );
+
+			poly =
+				sqrt(
+						( list.current()->m_point[0].x() -
+							list.current()->m_prev->m_point[2].x() ) *
+						( list.current()->m_point[0].x() -
+							list.current()->m_prev->m_point[2].x() )
+					+
+						( list.current()->m_point[0].y() -
+							list.current()->m_prev->m_point[2].y() ) *
+						( list.current()->m_point[0].y() -
+							list.current()->m_prev->m_point[2].y() ) )
+				+ sqrt(
+						( list.current()->m_point[1].x() -
+							list.current()->m_point[0].x() ) *
+						( list.current()->m_point[1].x() -
+							list.current()->m_point[0].x() )
+					+
+						( list.current()->m_point[1].y() -
+							list.current()->m_point[0].y() ) *
+						( list.current()->m_point[1].y() -
+							list.current()->m_point[0].y() ) )
+				+ sqrt(
+						( list.current()->m_point[2].x() -
+							list.current()->m_point[1].x() ) *
+						( list.current()->m_point[2].x() -
+							list.current()->m_point[1].x() )
+					+
+						( list.current()->m_point[2].y() -
+							list.current()->m_point[1].y() ) *
+						( list.current()->m_point[2].y() -
+							list.current()->m_point[1].y() ) );
+
+			if(
+				poly &&
+				( poly - chord ) / poly > VGlobal::lengthTolerance )
+			{
+				// split at midpoint:
+				list.insert(
+					list.current()->splitAt( 0.5 ) );
+			}
+			else
+			{
+				length += 0.5 * poly + 0.5 * chord;
+				list.next();
+			}
+		}
+
+		return length;
+	}
 	else
 		return 0.0;
 }

@@ -24,10 +24,20 @@ public:
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 
 private:
+	/**
+	 * Calculates the parameter where to split each segment to insert the "round
+	 * corner".
+	 */
 	double parameter( const VSegment& segment ) const;
-	void roundCorner(
-		const VSegment& current, const VSegment& next, VSegmentList& segmentList ) const;
 
+	/**
+	 * Rounds the corner of the two segments "*segmentList.current()" and "next".
+	 * The result is appended to newList.
+	 */
+	void roundCorner(
+		VSegmentList& segmentList, const VSegment& next, VSegmentList& newList ) const;
+
+	/// The "radius" of the round corners.
 	double m_radius;
 };
 

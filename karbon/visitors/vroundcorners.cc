@@ -34,7 +34,10 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 	segmentList.first();
 
 	// begin:
-	if( segmentList.isClosed() )
+	if(
+		segmentList.isClosed() &&
+		segmentList.current()->type() != segment_curve &&	// we never touch
+		segmentList.getLast()->type() != segment_curve )	// bezier/bezier joins.
 	{
 		newList.moveTo(
 			segmentList.current()->next()->point(
@@ -52,20 +55,36 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 		segmentList.next() && 
 		segmentList.current()->next() )
 	{
-		roundCorner(
-			*segmentList.current(),
-			*segmentList.current()->next(),
-			newList );
+		if(
+			segmentList.current()->type() != segment_curve &&
+			segmentList.current()->next()->type() != segment_curve )
+		{
+			roundCorner(
+				segmentList,
+				*segmentList.current()->next(),
+				newList );
+		}
+		else
+		{
+		}
 	}
 
 
 	// end:
 	if( segmentList.isClosed() )
 	{
-		roundCorner(
-			*segmentList.current(),
-			*segmentList.getFirst()->next(),
-			newList );
+		if(
+			segmentList.current()->type() != segment_curve &&
+			segmentList.getFirst()->type() != segment_curve )
+		{
+			roundCorner(
+				segmentList,
+				*segmentList.getFirst()->next(),
+				newList );
+		}
+		else
+		{
+		}
 
 		newList.close();
 	}
@@ -85,23 +104,24 @@ VRoundCorners::parameter( const VSegment& segment ) const
 {
 	return
 		segment.length() > 2 * m_radius
+// TODO: this very calculation isnt quite correct. it assumes uniform velocity:
 			? m_radius / segment.length()
 			: 0.5;
 }
 
 void
 VRoundCorners::roundCorner(
-	const VSegment& current, const VSegment& next, VSegmentList& segmentList ) const
+	VSegmentList& segmentList, const VSegment& next, VSegmentList& newList ) const
 {
-	double t1 = parameter( current );
+	double t1 = parameter( *segmentList.current() );
 	double t2 = parameter( next );
 
-	segmentList.lineTo(
-		current.point( 1.0 - t1 ) );
+	newList.lineTo(
+		segmentList.current()->point( 1.0 - t1 ) );
 
 	// robust concerning to small segments:
-	segmentList.curveTo(
-		current.point( 1.0 - 0.5 * t1 ),
+	newList.curveTo(
+		segmentList.current()->point( 1.0 - 0.5 * t1 ),
 		next.point( 0.5 * t2 ),
 		next.point( t2 ) );
 }

@@ -16,11 +16,6 @@
 class QDomElement;
 
 
-// line- and all the various other (bezier-)segment types are so similar in practise
-// that we only need to have one segment-class.
-// this leads to a waste of KoPoints for e.g. line-segments. otoh memory is cheap
-// and human resources are expensive. ;)
-
 // segment types:
 enum VSegmentType
 {
@@ -36,6 +31,12 @@ enum VCtrlPointFixing
 	segment_second = 2
 };
 
+
+/**
+ * A class representing lines and beziers. We waste some KoPoints, if we
+ * would use only lines, but this makes it easy to convert the segment types
+ * into each other.
+ */
 
 class VSegment
 {
@@ -65,31 +66,40 @@ public:
 	const VSegment* prev() const { return m_prev; }
 	const VSegment* next() const { return m_next; }
 
-	/// Returns true if segment is flat.
+	/**
+	 * Returns true if the segment is flat.
+	 */
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
-	/// Returns the point on this segment for 0 <= t <= 1.
+	/**
+	 * Returns the point on this segment for 0 <= t <= 1.
+	 */
 	KoPoint point( double t ) const;
 
-	/// Returns the derivative of this segment for 0 <= t <= 1.
+	/**
+	 * Returns the derivative of this segment for 0 <= t <= 1.
+	 */
 	KoPoint derive( double t ) const;
 
 	/**
-	 * In case you need the point and the derivative at once for 0 <= t <= 1,
-	 * use this function since it is more efficient.  First KoPoint
-	 * is the point, the second KoPoint is the derivative.
+	 * In case you need the point and the derivative at the same time
+	 * for 0 <= t <= 1, use this function since it is more efficient.
+	 * First KoPoint is the point, the second KoPoint is the derivative.
 	 */
 	void pointAndDerive( double t, KoPoint& p, KoPoint& der ) const;
 
-// TODO: currently return 0.0 for segments != lines:
-	/// Returns the arc length.
-	double length() const;
+	/**
+	 * Returns the arc length from 0 to 0 <= t <= 1.
+	 */
+	double length( double t = 1.0 ) const;
 
-	/// Calculates the bounding box.
+	/**
+	 * Returns the bounding box.
+	 */
 	KoRect boundingBox() const;
 
 	/**
-	 *  Splits segment at 0 <= t <= 1. Returns the first segment and transforms
+	 *  Splits the segment at 0 <= t <= 1. Returns the first segment and transforms
 	 *  the current one to the second segment. Make sure yourself, this segment
 	 *  has a m_prev != 0L and t is in proper range.
 	 */
@@ -101,7 +111,9 @@ public:
 	 */
 	void convertToCurve( double t = 1.0 / 3.0 );
 
-	/// Returns true if lines A0A1 and B0B1 intersect.
+	/**
+	 * Returns true if lines A0A1 and B0B1 intersect.
+	 */
 	static bool linesIntersect(
 		const KoPoint& a0,
 		const KoPoint& a1,
@@ -111,6 +123,9 @@ public:
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
+	/**
+	 * Returns a pointer to a copy of this segment.
+	 */
 	VSegment* clone() const;
 
 private:

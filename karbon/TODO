@@ -12,6 +12,7 @@ REAL BUGS:
 OPTIMIZATION:
 -	make fill/stroke shared so copying for undo/redo is more efficient
 -	transform() bbox too and dont recalculate it
+-	check places we use sqrt() if these are really necessary
 
 MAKE IT NICE:
 -	add validators to all tool-dialog input-fields
