@@ -849,13 +849,12 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
         if ( progress->wasCancelled() )
             return false;
         // start of a table
-        if ( parag->at(0)->isCustom())
+/*        if ( parag->at(0)->isCustom())
         {
             KoLinkVariable *var=dynamic_cast<KoLinkVariable *>(parag->at(0)->customItem());
             if(!var)
                 continue;
-        }
-
+                }*/
         bool hasTrailingSpace = true;
         if ( !selected ) {
             s = parag->string()->toString();
