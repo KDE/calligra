@@ -1253,7 +1253,6 @@ void MsWord::readFonts()
 
 	    ptr += read(ptr, &data);
             m_fonts.count++;
-        kdDebug(s_area) << "MsWord::readFonts: font "<<m_fonts.count<<"="<<data.xszFfn << endl;
         }
         ptr = m_tableStream + m_fib.fcSttbfffn;
     }
