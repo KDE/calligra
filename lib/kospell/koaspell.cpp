@@ -62,7 +62,7 @@ KOASpell::KOASpell( KOSpellConfig *_ksc )
 //TODO FIXME !!!! KOSpellConfig not used.
 void KOASpell::initSpell(KOSpellConfig *_ksc)
 {
-
+    Q_UNUSED( _ksc );
     m_bIgnoreUpperWords=false;
     m_bIgnoreTitleCase=false;
     autocorrect = false;
@@ -106,8 +106,8 @@ bool KOASpell::initConfig(const QString & language)
 {
     config = new_aspell_config();
     kdDebug(30006)<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
-
-    aspell_config_replace(config, "lang", language.isEmpty() ? (ksconfig->dictionary().isEmpty() ? "fr": ksconfig->dictionary().latin1()) : language.latin1() );
+    Q_ASSERT( ksconfig->client() == KOS_CLIENT_ASPELL );
+    aspell_config_replace(config, "lang", language.isEmpty() ? (ksconfig->dictionary().isEmpty() ? "en": ksconfig->dictionary().latin1()) : language.latin1() );
 
     kdDebug(30006)<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
 
@@ -118,6 +118,8 @@ bool KOASpell::initConfig(const QString & language)
         delete_aspell_can_have_error(ret);
         return false;
     }
+    /**
+       My version of aspell uses the iso-8859-x syntax for those...
     switch (ksconfig->encoding())
     {
     case KOS_E_LATIN1:
@@ -147,7 +149,7 @@ bool KOASpell::initConfig(const QString & language)
         //todo
 	break;
     }
-
+    */
     aspell_config_replace(config, "ignore-case", ksconfig->ignoreCase()?"true" : "false" );
     aspell_config_replace(config, "ignore-accents", ksconfig->ignoreAccent()?"true" : "false" );
 

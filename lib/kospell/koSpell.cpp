@@ -193,8 +193,6 @@ void KOSpell::initSpell( KOSpellConfig *_ksc )
 
     replacelist += ksconfig->replaceAllList();
     m_status = Starting;
-
-
 }
 
 void KOSpell::setIgnoreUpperWords(bool _ignore)
