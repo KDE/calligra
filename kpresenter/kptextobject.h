@@ -228,8 +228,10 @@ public:
 
     void keyPressEvent( QKeyEvent * );
     void keyReleaseEvent( QKeyEvent * );
+    void imStartEvent( QIMEvent * );
+    void imComposeEvent( QIMEvent * );
+    void imEndEvent( QIMEvent * );
     void mousePressEvent( QMouseEvent *, const QPoint &);
-
     void mouseMoveEvent( QMouseEvent *, const QPoint & );
     void mouseReleaseEvent( QMouseEvent *, const QPoint & );
     void mouseDoubleClickEvent( QMouseEvent *, const QPoint &);

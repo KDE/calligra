@@ -2012,6 +2012,21 @@ void KPTextView::keyReleaseEvent( QKeyEvent *e )
     handleKeyReleaseEvent(e);
 }
 
+void KPTextView::imStartEvent( QIMEvent *e )
+{
+    handleImStartEvent(e);
+}
+
+void KPTextView::imComposeEvent( QIMEvent *e )
+{
+    handleImComposeEvent(e);
+}
+
+void KPTextView::imEndEvent( QIMEvent *e )
+{
+    handleImEndEvent(e);
+}
+
 void KPTextView::clearSelection()
 {
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )

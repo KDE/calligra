@@ -538,6 +538,9 @@ protected:
     virtual void dropEvent( QDropEvent *e );
     virtual void keyPressEvent( QKeyEvent *e );
     virtual void keyReleaseEvent( QKeyEvent *e );
+    virtual void imStartEvent( QIMEvent * e );
+    virtual void imComposeEvent( QIMEvent * e );
+    virtual void imEndEvent( QIMEvent * e );
 
     void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush ) const;
 

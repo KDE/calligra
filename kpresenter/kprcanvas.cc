@@ -2363,6 +2363,35 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
     }
 }
 
+void KPrCanvas::imStartEvent( QIMEvent * e )
+{
+    if ( editNum && m_currentTextObjectView )
+    {
+        if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
+            m_currentTextObjectView->imStartEvent( e );
+        else
+            KMessageBox::information(this, i18n("Read-only content cannot be changed. No modifications will be accepted."));
+    }
+}
+
+void KPrCanvas::imComposeEvent( QIMEvent * e )
+{
+    if ( editNum && m_currentTextObjectView )
+    {
+        if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
+            m_currentTextObjectView->imComposeEvent( e );
+    }
+}
+
+void KPrCanvas::imEndEvent( QIMEvent * e )
+{
+    if ( editNum && m_currentTextObjectView )
+    {
+        if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
+            m_currentTextObjectView->imEndEvent( e );
+    }
+}
+
 void KPrCanvas::resizeEvent( QResizeEvent *e )
 {
     if ( editMode )
