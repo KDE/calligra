@@ -178,12 +178,9 @@ private:
     QDomElement mainFramesetElement;
 };
 
-static bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* stackCurrent, QString strStyle)
+static bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCurrent */, QString strStyle)
 {
     // TODO: do real CSS2 (this is just a very narrow part of its possibilities)
-    QDomNode nodeOut=stackCurrent->stackNode;
-    QDomNode nodeOut2=stackCurrent->stackNode2;
-
     // Initialize the QStrings with the previous values of the properties they represent!
     QString strFontStyle(stackItem->italic?"italic":"");
     QString strWeight(stackItem->bold?"bold":"");
@@ -204,10 +201,6 @@ static bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* stackCurre
     css2StylesList.append( CSS2Styles("font-family",&strFontFamily));
     kdDebug(30503)<< "========== style=\"" << strStyle << "\"" << endl;
     TreatCSS2Styles(strStyle,css2StylesList);
-    stackItem->elementType=ElementTypeSpan;
-    stackItem->stackNode=nodeOut;   // <TEXT>
-    stackItem->stackNode2=nodeOut2; // <FORMATS>
-    stackItem->pos=stackCurrent->pos; //Propagate the position
 
     stackItem->italic=(strFontStyle=="italic");
     stackItem->bold=(strWeight=="bold");
@@ -277,11 +270,17 @@ bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QStri
         {
             return false;
         }
+        QDomNode nodeOut=stackCurrent->stackNode;
+        QDomNode nodeOut2=stackCurrent->stackNode2;
+        stackItem->stackNode=nodeOut;   // <TEXT>
+        stackItem->stackNode2=nodeOut2; // <FORMATS>
+        stackItem->pos=stackCurrent->pos; //Propagate the position
+        stackItem->elementType=ElementTypeSpan;
     }
     else
-    {//we are not nested correctly, so consider it a parse error!
-        kdError(30503) << "Import: parse error <span> tag not nested in neither a <p>  nor a <span> tag" << endl;
-        return false;
+    {   // We are nested in an unsupported element, so we cannot do much!
+        kdError(30503) << "<span> tag not nested in neither a <p> nor a <span> tag (or a similar tag)" << endl;
+        stackItem->elementType=ElementTypeUnknown; // Eat the content of the element!
     }
     return true;
 }
@@ -364,7 +363,7 @@ bool EndElementSpan (StackItem* stackItem, StackItem* stackCurrent)
 
 // Element <p>
 
-bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& mainFramesetElement, const QXmlAttributes& attributes)
+bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& mainFramesetElement, const QString& strStyle)
 {
     QDomNode nodeOut=stackCurrent->stackNode;
     //We use mainFramesetElement here not to be dependant that <section> has happened before
@@ -394,9 +393,9 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     css2StylesList.append( CSS2Styles("font-size",&strFontSize));
     css2StylesList.append( CSS2Styles("font-family",&strFontFamily));
     css2StylesList.append( CSS2Styles("text-align",&strFlow));
-	
-    kdDebug(30503)<< "========== style=\"" << attributes.value("style") << "\"" << endl;
-    TreatCSS2Styles(attributes.value("style"),css2StylesList);
+
+    kdDebug(30503)<< "========== style=\"" << strStyle << "\"" << endl;
+    TreatCSS2Styles(strStyle,css2StylesList);
 
     stackItem->elementType=ElementTypeParagraph;
     stackItem->stackNode=textElementOut; // <TEXT>
@@ -601,7 +600,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         {
             if (name=="p")
             {
-                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,attributes);
+                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,attributes.value("style"));
             }
             else if (name=="b")
             {
@@ -623,15 +622,37 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         }
     case 2:
         {
-            if (name[0]=='h')
+            if (name=="hr")
+            {
+                nomatch=true; // TODO: implement <hr> correctly!
+            }
+            else if(name[0]=='h')
             { // <h1> ... <h6> (many other tags are catched too but do not exist.)
-                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,attributes);
+                QString strStyle;
+                strStyle="font-weight:bold";
+                strStyle+=attributes.value("style");
+                success=StartElementP(stackItem,structureStack.current(),mainFramesetElement,strStyle);
             }
             else
             {
                 nomatch=true;
             }
             break;
+        }
+    case 3:
+        {
+            if (name=="sub")
+            {
+               success=StartElementSpan(stackItem,structureStack.current(),"text-position:subscript");
+            }
+            else if (name=="sup")
+            {
+               success=StartElementSpan(stackItem,structureStack.current(),"text-position:superscript");
+            }
+            else
+            {
+                nomatch=true;
+            }
         }
     case 4:
         {
@@ -640,7 +661,8 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
                 success=StartElementSpan(stackItem,structureStack.current(),attributes.value("style"));
             }
             else if (name=="body")
-            {//Not really needed, as it is the default behaviour for now!
+            {
+                // Just tell that we are the <body> element.
                 stackItem->elementType=ElementTypeBody;
                 stackItem->stackNode=structureStack.current()->stackNode;
                 success=true;
@@ -659,11 +681,21 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
 
     if (nomatch)
-    { // The element has not yet been treated, so make a default action
-        // TODO: consider the unknown of the elemnt as <span> if it is embedded in <p> or <span>
-        stackItem->elementType=ElementTypeUnknown;
-        stackItem->stackNode=structureStack.current()->stackNode;
-        success=true;
+    {
+        // The element has not yet been treated, so make a default action
+        if ((structureStack.current()->elementType==ElementTypeParagraph)||(structureStack.current()->elementType==ElementTypeSpan))
+        {
+            // We are in a <p> or <span> element (or compatible)
+            // We do not know the element but treat it as <span> (with empty style not to have secondary effects.)
+            success=StartElementSpan(stackItem,structureStack.current(),QString::null);
+        }
+        else
+        {
+            // We are not in a paragraph, so we must discard the element's content.
+            stackItem->elementType=ElementTypeUnknown;
+            stackItem->stackNode=structureStack.current()->stackNode;
+            success=true;
+        }
     }
     if (success)
     {
