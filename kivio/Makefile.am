@@ -1,5 +1,4 @@
 SUBDIRS = kiviopart plugins templates
-EXTRA_DIST = res.cpp
 
 package-messages:
 	$(MAKE) -f admin/Makefile.common package-messages

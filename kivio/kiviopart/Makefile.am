@@ -1,14 +1,6 @@
 SUBDIRS = ui kiviosdk tools pics tiles stencils .
 
-kde_module_LTLIBRARIES = libkiviopart.la
-libkiviopart_la_LIBADD = \
-		$(top_builddir)/kivio/kiviopart/tools/libtools.la\
-		$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
-		$(top_builddir)/kivio/kiviopart/ui/libui.la \
-		$(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
-
 INCLUDES = -I$(srcdir)/ui\
-	-Iui\
 	-I$(srcdir)/kiviosdk\
 	-I$(srcdir)/tools\
 	$(KOFFICE_INCLUDES)\
@@ -16,107 +8,66 @@ INCLUDES = -I$(srcdir)/ui\
 	-I$(top_srcdir)/lib/kformula\
 	$(all_includes)
 
-libkiviopart_la_METASOURCES = AUTO
-libkiviopart_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp kivio_tabbar.cpp 	kivio_view.cpp kivio_map.cpp kivio_page.cpp kivio_dlg_pageshow.cpp kivio_zoomaction.cpp 	kivio_icon_view.cpp kivio_config.cpp kivio_spawner_drag.cpp kivio_intra_stencil_data.cpp	kivio_stackbar.cpp stencilbarbutton.cpp stencilbardockmanager.cpp stencilbarmovemanager.cpp	tooldockbase.cpp tooldockmanager.cpp stencil_text_dlg.cpp kivio_grid_data.cpp kivio_guidelines.cpp	kivio_stencil_geometry_panel.cpp kivio_viewmanager_panel.cpp KIvioViewIface.skel	KIvioViewIface.cc KIvioDocIface.skel KIvioDocIface.cc KIvioMapIface.skel KIvioMapIface.cc	KIvioPageIface.skel KIvioPageIface.cc kivio_command.cc KIvioLayerIface.skel KIvioLayerIface.cc	kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp KIvioStencilIface.skel	KIvioStencilIface.cc kiviodragobject.cpp
 
-EXTRA_DIST = \
-		main.cpp\
-		kivio_canvas.cpp\
-		kivio_canvas.h\
-		kivio_doc.cpp\
-		kivio_doc.h\
-		kivio_factory.cpp\
-		kivio_factory.h\
-		kivio_tabbar.cpp\
-		kivio_tabbar.h\
-		kivio_view.cpp\
-		kivio_view.h\
-		kivio_map.cpp\
-		kivio_map.h\
-		kivio_page.cpp\
-		kivio_page.h\
-		kivio.desktop\
-		x-kivio.desktop\
-		kivio.rc\
-		kivio_readonly.rc\
-		kivio_dlg_pageshow.cpp\
-		kivio_dlg_pageshow.h\
-		kivio_zoomaction.cpp\
-		kivio_zoomaction.h\
-		kivio_icon_view.cpp\
-		kivio_icon_view.h\
-		kivio_config.cpp\
-		kivio_config.h\
-		kivio_spawner_drag.cpp\
-		kivio_spawner_drag.h\
-		kivio_intra_stencil_data.cpp\
-		kivio_intra_stencil_data.h\
-		toolbarseparator.cpp\
-		toolbarseparator.h\
-		kivio_stackbar.cpp\
-		kivio_stackbar.h\
-		stencilbarbutton.cpp\
-		stencilbarbutton.h\
-		stencilbardockmanager.cpp\
-		stencilbardockmanager.h\
-		stencilbarmovemanager.cpp\
-		stencilbarmovemanager.h\
-		tooldockbase.cpp\
-		tooldockbase.h\
-		tooldockmanager.cpp\
-		tooldockmanager.h\
-		stencil_text_dlg.cpp\
-		stencil_text_dlg.h\
-		lo16-app-kivio.png\
-		lo22-app-kivio.png\
-		lo32-app-kivio.png\
-		hi48-app-kivio.png\
-		hi16-app-kivio.png\
-		hi22-app-kivio.png\
-		hi32-app-kivio.png\
-		kivio_grid_data.cpp\
-		kivio_grid_data.h\
-		kivio_guidelines.cpp\
-		kivio_guidelines.h\
-		kivio_stencil_geometry_panel.cpp\
-		kivio_stencil_geometry_panel.h\
-		kivio_viewmanager_panel.cpp\
-		kivio_viewmanager_panel.h \
-		KIvioViewIface.skel KIvioViewIface.cc KIvioViewIface.h \
-		KIvioDocIface.skel KIvioDocIface.cc KIvioDocIface.h \
-		KIvioMapIface.skel KIvioMapIface.cc KIvioMapIface.h \
-		KIvioPageIface.skel KIvioPageIface.cc KIvioPageIface.h \
-		kivio_command.cc kivio_command.h KIvioLayerIface.cc \
-		KIvioLayerIface.h \
-		kivioglobal.h \
-		kivioarrowheadaction.h \
-		kivioarrowheadaction.cpp \
-		kiviodragobject.h \
-		kiviodragobject.cpp
-
-
-lib_LTLIBRARIES = kivio.la
-kivio_la_SOURCES = main.cpp
-kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
-kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
+kde_module_LTLIBRARIES = libkiviopart.la
 
 libkiviopart_la_LDFLAGS = -avoid-version -module $(all_libraries) -no-undefined
 
+libkiviopart_la_LIBADD = \
+	$(top_builddir)/kivio/kiviopart/tools/libtools.la\
+	$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
+	$(top_builddir)/kivio/kiviopart/ui/libui.la \
+	$(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
+
+libkiviopart_la_METASOURCES = AUTO
+
+libkiviopart_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp \
+	kivio_tabbar.cpp kivio_view.cpp kivio_map.cpp kivio_page.cpp \
+	kivio_dlg_pageshow.cpp kivio_zoomaction.cpp kivio_icon_view.cpp \
+	kivio_config.cpp kivio_spawner_drag.cpp kivio_intra_stencil_data.cpp \
+	kivio_stackbar.cpp stencilbarbutton.cpp stencilbardockmanager.cpp \
+	stencilbarmovemanager.cpp tooldockbase.cpp tooldockmanager.cpp \
+	stencil_text_dlg.cpp kivio_grid_data.cpp kivio_guidelines.cpp \
+	kivio_stencil_geometry_panel.cpp kivio_viewmanager_panel.cpp \
+	KIvioViewIface.skel KIvioViewIface.cc KIvioDocIface.skel KIvioDocIface.cc \
+	KIvioMapIface.skel KIvioMapIface.cc KIvioPageIface.skel KIvioPageIface.cc \
+	kivio_command.cc KIvioLayerIface.skel KIvioLayerIface.cc kivioglobal.cpp \
+	kiviostencilsetaction.cpp kivioarrowheadaction.cpp KIvioStencilIface.skel \
+	KIvioStencilIface.cc kiviodragobject.cpp
+
+
+lib_LTLIBRARIES = kivio.la
+
+kivio_la_SOURCES = main.cpp
+
+kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
+
+kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
+
+
 bin_PROGRAMS = kivio
+
 kivio_SOURCES = dummy.cpp
+
 kivio_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+
 kivio_LDADD = kivio.la
+
 
 dummy.cpp:
 	echo > dummy.cpp
 
+
 kdelnk_DATA = kivio.desktop
 kdelnkdir = $(kde_appsdir)/Office
+
 
 rc_DATA = kivio.rc kivio_readonly.rc
 rcdir = $(kde_datadir)/kivio
 
+
 KDE_ICON = kivio
+
 
 kivio_view.lo: ui/kivio_protection_panel_base.h \
 	ui/kivio_layer_panel_base.h ui/kivio_birdeye_panel_base.h \
