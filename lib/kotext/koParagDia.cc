@@ -47,7 +47,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     stylesList()
 {
     noSignals = true;
-    QVBoxLayout *vbox = new QVBoxLayout( this,KDialog::marginHint(), KDialog::spacingHint() );
+    QVBoxLayout *vbox = new QVBoxLayout( this,0, 0/*KDialog::marginHint(), KDialog::spacingHint()*/ );
     gStyle = new QGroupBox( i18n( "Style" ), this, "styleLayout" );
     vbox->addWidget( gStyle);
     QGridLayout * grid = new QGridLayout(gStyle, 12, 5, KDialog::marginHint(), KDialog::spacingHint());
