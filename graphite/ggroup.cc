@@ -49,8 +49,10 @@ GGroup::GGroup(const GGroup &rhs) : GObject(rhs), m_iterator(0L) {
     }
 }
 
-GGroup::GGroup(const QDomElement &element) : GObject(element.namedItem("gobject").toElement()),
-                                             m_iterator(0L) {
+GGroup::GGroup(const QDomElement &element) :
+    GObject(element.namedItem(QString::fromLatin1("gobject")).toElement()),
+    m_iterator(0L) {
+
     if(!m_ok)
 	return;
 
@@ -164,8 +166,10 @@ const GObject *GGroup::current() const {
 
 QDomElement GGroup::save(QDomDocument &doc) const {
 
-    QDomElement element=doc.createElement("ggroup");
-    QDomElement children=doc.createElement("children");
+    static QString tagGGroup=QString::fromLatin1("ggroup");
+    static QString tagChildren=QString::fromLatin1("children");
+    QDomElement element=doc.createElement(tagGGroup);
+    QDomElement children=doc.createElement(tagChildren);
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it) {

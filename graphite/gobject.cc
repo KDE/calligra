@@ -123,7 +123,7 @@ void GObjectM9r::createPropertyDialog() {
 
     // Add an information frame
     QFrame *information=addPage(i18n("Information"), i18n("Information about the Object"),
-				BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
+				BarIcon(QString::fromLatin1("exec"), 32, KIcon::DefaultState, GraphiteFactory::global()));
     QGridLayout *grid=new QGridLayout(information, 9, 5, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
     QLabel *label=new QLabel(i18n("Name:"), information);
@@ -191,7 +191,7 @@ void G1DObjectM9r::createPropertyDialog() {
 
     // Add a pen property page
     QFrame *frame=addPage(i18n("Pen"), i18n("Pen Settings"),
-			  BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
+			  BarIcon(QString::fromLatin1("exec"), 32, KIcon::DefaultState, GraphiteFactory::global()));
 
     QGridLayout *grid=new QGridLayout(frame, 4, 4, KDialog::marginHint(), KDialog::spacingHint());
 
@@ -292,7 +292,7 @@ void G2DObjectM9r::createPropertyDialog() {
 
     // Wow - the fill style page :)
     QFrame *fill=addPage(i18n("Fill Style"), i18n("Fill Style Settings"),
-			 BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
+			 BarIcon(QString::fromLatin1("exec"), 32, KIcon::DefaultState, GraphiteFactory::global()));
     QBoxLayout *mainbox=new QHBoxLayout(fill, KDialog::marginHint(), KDialog::spacingHint());
     QBoxLayout *leftbox=new QVBoxLayout(mainbox, 0, 0);
     mainbox->setStretchFactor(leftbox, 1);
@@ -515,22 +515,38 @@ QDomElement GObject::save(QDomDocument &doc) const {
     // would call GObject). The returned DOM Element has
     // to be saved. On loading, this Element is passed to
     // the XML CTOR of the superclass :)
-    QDomElement e=doc.createElement("gobject");
-    e.setAttribute("name", m_name);
-    e.setAttribute("state", m_state);
-    e.setAttribute("angle", m_angle);
-    QDomElement format=doc.createElement("format");
-    format.setAttribute("fillStyle", m_fillStyle);
-    format.setAttribute("brushStyle", m_brush.style());
-    format.setAttribute("brushColor", m_brush.color().name());
-    QDomElement gradient=doc.createElement("gradient");
-    gradient.setAttribute("colorA", m_gradient.ca.name());
-    gradient.setAttribute("colorB", m_gradient.cb.name());
-    gradient.setAttribute("type", m_gradient.type);
-    gradient.setAttribute("xfactor", m_gradient.xfactor);
-    gradient.setAttribute("yfactor", m_gradient.yfactor);
+    static QString tagObject=QString::fromLatin1("gobject");
+    static QString attrName=QString::fromLatin1("name");
+    static QString attrState=QString::fromLatin1("state");
+    static QString attrAngle=QString::fromLatin1("angle");
+    static QString tagFormat=QString::fromLatin1("format");
+    static QString attrFillStyle=QString::fromLatin1("fillStyle");
+    static QString attrBrushStyle=QString::fromLatin1("brushStyle");
+    static QString attrBrushColor=QString::fromLatin1("brushColor");
+    static QString tagGradient=QString::fromLatin1("gradient");
+    static QString attrColorA=QString::fromLatin1("colorA");
+    static QString attrColorB=QString::fromLatin1("colorB");
+    static QString attrType=QString::fromLatin1("type");
+    static QString attrXFactor=QString::fromLatin1("xfactor");
+    static QString attrYFactor=QString::fromLatin1("yfactor");
+    static QString tagPen=QString::fromLatin1("pen");
+    
+    QDomElement e=doc.createElement(tagObject);
+    e.setAttribute(attrName, m_name);
+    e.setAttribute(attrState, m_state);
+    e.setAttribute(attrAngle, m_angle);
+    QDomElement format=doc.createElement(tagFormat);
+    format.setAttribute(attrFillStyle, m_fillStyle);
+    format.setAttribute(attrBrushStyle, m_brush.style());
+    format.setAttribute(attrBrushColor, m_brush.color().name());
+    QDomElement gradient=doc.createElement(tagGradient);
+    gradient.setAttribute(attrColorA, m_gradient.ca.name());
+    gradient.setAttribute(attrColorB, m_gradient.cb.name());
+    gradient.setAttribute(attrType, m_gradient.type);
+    gradient.setAttribute(attrXFactor, m_gradient.xfactor);
+    gradient.setAttribute(attrYFactor, m_gradient.yfactor);
     format.appendChild(gradient);
-    format.appendChild(doc.createElement("pen", m_pen));
+    format.appendChild(doc.createElement(tagPen, m_pen));
     e.appendChild(format);		
     return e;
 }
@@ -558,7 +574,7 @@ GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
 GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(100),
 					       m_boundingRectDirty(true), m_ok(false) {
 
-    if(element.tagName()!="gobject")
+    if(element.tagName()!=QString::fromLatin1("gobject"))
 	return;
 
     bool ok;

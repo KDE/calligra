@@ -66,7 +66,7 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
     // test
     // TODO: Check the view - if it's the same as "before" -> ok :)
-    GObject *o=new GGroup("foo");
+    GObject *o=new GGroup(QString::fromLatin1("foo"));
     GObjectM9r *m=o->createM9r(this, view);
     QRect r;
     m->mousePressEvent(e, r);

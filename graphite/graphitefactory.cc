@@ -76,7 +76,7 @@ KInstance *GraphiteFactory::global() {
     if (!s_global) {
         s_global=new KInstance(aboutData());
 	// Tell the iconloader about share/apps/koffice/icons
-	s_global->iconLoader()->addAppDir("koffice");
+	s_global->iconLoader()->addAppDir(QString::fromLatin1("koffice"));
     }
     return s_global;
 }

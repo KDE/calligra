@@ -35,18 +35,20 @@ GLine::GLine(const QString &name) : GObject(name) {
 GLine::GLine(const GLine &rhs) : GObject(rhs), m_a(rhs.a()), m_b(rhs.b()) {
 }
 
-GLine::GLine(const QDomElement &element) : GObject(element.namedItem("gobject").toElement()) {
+GLine::GLine(const QDomElement &element) :
+    GObject(element.namedItem(QString::fromLatin1("gobject")).toElement()) {
 
     if(!m_ok)
 	return;
 
     bool ok;
+    static QString tagGLine=QString::fromLatin1("gline");
     static QString tagStart=QString::fromLatin1("start");
     static QString tagEnd=QString::fromLatin1("end");
     static QString attrX=QString::fromLatin1("x");
     static QString attrY=QString::fromLatin1("y");
 
-    if(element.tagName()!="gline") {
+    if(element.tagName()!=tagGLine) {
 	m_ok=false;
 	return;
     }
@@ -92,14 +94,19 @@ GLine *GLine::instantiate(const QDomElement &element) const {
 
 QDomElement GLine::save(QDomDocument &doc) const {
 
-    QDomElement e=doc.createElement("gline");
-    QDomElement point=doc.createElement("start");
-    point.setAttribute("x", m_a.x());
-    point.setAttribute("y", m_a.y());
+    static QString tagGLine=QString::fromLatin1("gline");
+    static QString tagStart=QString::fromLatin1("start");
+    static QString tagEnd=QString::fromLatin1("end");
+    static QString attrX=QString::fromLatin1("x");
+    static QString attrY=QString::fromLatin1("y");
+    QDomElement e=doc.createElement(tagGLine);
+    QDomElement point=doc.createElement(tagStart);
+    point.setAttribute(attrX, m_a.x());
+    point.setAttribute(attrY, m_a.y());
     e.appendChild(point);
-    point=doc.createElement("end");
-    point.setAttribute("x", m_b.x());
-    point.setAttribute("y", m_b.y());
+    point=doc.createElement(tagEnd);
+    point.setAttribute(attrX, m_b.x());
+    point.setAttribute(attrY, m_b.y());
     e.appendChild(point);
     e.appendChild(GObject::save(doc));
     return e;

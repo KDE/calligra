@@ -26,7 +26,7 @@
 GObjectFactory *GObjectFactory::m_self=0L;
 
 GObjectFactory *GObjectFactory::self() {
-    
+
     if(m_self==0)
 	m_self=new GObjectFactory();
     return m_self;
@@ -69,5 +69,6 @@ GObjectFactory::GObjectFactory() : m_registry(17, false) {
 
     // set up the dict with all the types we are aware of
     m_registry.setAutoDelete(true);
-    registerPrototype("gline", new GLine("line"));
+    registerPrototype(QString::fromLatin1("gline"),
+		      new GLine(QString::fromLatin1("line")));
 }

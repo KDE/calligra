@@ -32,7 +32,7 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
 			   const char *name) : KoView(doc, parent, name) {
 
     setInstance(GraphiteFactory::global());
-    setXMLFile("graphite.rc");
+    setXMLFile(QString::fromLatin1("graphite.rc"));
 
     m_canvas=new GCanvas(this, doc);
 }

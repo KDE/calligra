@@ -32,11 +32,11 @@ public:
     GraphiteShell(const char *name=0);
     ~GraphiteShell();
 
-    QString nativeFormatPattern() const { return "*.gra"; }
+    QString nativeFormatPattern() const { return QString::fromLocal8Bit("*.gra"); }
     QString nativeFormatName() const;
 
 protected:
-    virtual void slotFilePrint();    
+    virtual void slotFilePrint();
     virtual KoDocument *createDoc();
 };
 #endif
