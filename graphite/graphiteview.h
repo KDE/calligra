@@ -44,6 +44,7 @@ protected slots:
     void slotViewZoom(int item);
 
     void recalcRulers(int x, int y);
+    void rulerUnitChanged(QString unit);
 
 protected:
     void resizeEvent(QResizeEvent *e);
@@ -51,6 +52,9 @@ protected:
     virtual void updateReadWrite(bool readwrite);
 
 private:
+    void setupActions();
+    void setupRulers();
+
     GCanvas *m_canvas;
     KoRuler *m_vert, *m_horiz;
     int m_oldX, m_oldY;

@@ -749,7 +749,7 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty
 	m_gradient.xfactor=1;
 	m_gradient.yfactor=1;
     }
-    m_ok=true;   // CTOR has been successful :)
+    m_ok=true;   // CTOR has been completed successfully :)
 }
 
 
