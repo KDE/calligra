@@ -137,7 +137,8 @@ void TKSelectColorAction::updatePixmap(TKToolBarButton* b)
 
 void TKSelectColorAction::setCurrentColor( const QColor& color )
 {
-  m_pCurrentColor = color;
+    m_pCurrentColor = color;
+    setActiveColor( color );
   updatePixmap();
 }
 
@@ -173,6 +174,7 @@ void TKSelectColorAction::panelColorSelected( const QColor& color )
 {
   m_pMenu->hide();
   setCurrentColor(color);
+
   activate();
 }
 
@@ -283,7 +285,7 @@ void TKColorPanel::addToGrid( TKColorPanelButton* f )
 
 void TKColorPanel::setActiveColor( const QColor& color )
 {
-  TKColorPanelButton* b = m_pColorDict[m_activeColor.name()];
+    TKColorPanelButton* b = m_pColorDict[m_activeColor.name()];
   if (b)
     b->setActive(false);
 
