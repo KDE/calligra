@@ -10,7 +10,7 @@ libkexidb_la_SOURCES = kexidbinterfacemanager.cpp kexidbfield.cpp kexidbrecordse
 	kexidbwatcher.cpp kexidbtable.cpp kexidbupdaterecord.cpp
 
 libkexidb_la_LIBADD = $(LIB_KPARTS)
-libkexidb_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) --no-undefined
+libkexidb_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 kde_servicetypes_DATA = kexidbdriver.desktop
 
