@@ -486,7 +486,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                                      nativeFormatName(), true);
         KURL newURL;
         QCString outputFormat = _native_format;
-
+        kdDebug() << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
         bool bOk;
         do {
             bOk=true;
@@ -494,9 +494,6 @@ bool KoMainWindow::saveDocument( bool saveas )
                 newURL=dialog->selectedURL();
 #if KDE_VERSION >= 220 // only in kdelibs > 2.1
                 outputFormat=dialog->currentMimeFilter().latin1();
-#else
-                KMimeType::Ptr t = KMimeType::findByURL( newURL, 0, TRUE );
-                outputFormat = t->name().latin1();
 #endif
             }
             else
@@ -539,6 +536,12 @@ bool KoMainWindow::saveDocument( bool saveas )
                 KRecentDocument::add(newURL.path(-1));
             else
                 KRecentDocument::add(newURL.url(-1), true);
+
+#if KDE_VERSION < 220
+            KMimeType::Ptr t = KMimeType::findByURL( newURL, 0, TRUE );
+            outputFormat = t->name().latin1();
+#endif
+
             pDoc->setOutputMimeType( outputFormat );
             if ( outputFormat != _native_format )
             {
