@@ -5112,10 +5112,10 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 	  setValue( text );
 	}
     }
-
-    // boolean value
     if( element.hasAttribute( "table:value-type" ) )
-        if( element.attribute( "table:value-type" ) == "boolean" )
+    {
+        QString valuetype = element.attribute( "table:value-type" );
+        if( valuetype == "boolean" )
         {
             QString val = element.attribute( "table:boolean-value" );
             if( ( val == "true" ) || ( val == "false" ) )
@@ -5127,19 +5127,15 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         }
 
     // integer and floating-point value
-    if( element.hasAttribute( "table:value-type" ) )
-        if( element.attribute( "table:value-type" ) == "float" )
+        else if( valuetype == "float" )
         {
             bool ok = false;
             double value = element.attribute( "table:value" ).toDouble( &ok );
             if( ok ) setValue( value );
         }
 
-    // currency value
-    if( element.hasAttribute( "table:value-type" ) )
-    {
-        QString valuetype = element.attribute( "table:value-type" );
-        if( valuetype == "currency" )
+        // currency value
+        else if( valuetype == "currency" )
         {
             bool ok = false;
             double value = element.attribute( "table:value" ).toDouble( &ok );
