@@ -231,6 +231,9 @@ KexiPropertyEditor::slotColumnSizeChanged(int section, int, int newS)
 		}
 		else
 		{
+		if(m_defaults->isVisible())
+			m_currentEditor->resize(newS - m_defaults->width(), m_currentEditor->height());
+		else
 			m_currentEditor->resize(newS, m_currentEditor->height());
 		}
 	}
@@ -299,7 +302,7 @@ KexiPropertyEditor::resizeEvent(QResizeEvent *ev)
 		QPoint p = viewport()->mapTo(this, QPoint(r.x() + r.width() - m_defaults->width(), r.y()));
 		m_defaults->move(p.x(), p.y());
 		if(m_currentEditor)
-			m_currentEditor->resize(r.width() - m_defaults->width(), m_currentEditor->y());
+			m_currentEditor->resize(columnWidth(1) - m_defaults->width(), m_currentEditor->height());
 	}
 	
 }
