@@ -167,12 +167,16 @@ static void translate_string( QString& str )
 %}
 
 %option noyywrap
+%option stack
 
 /* allow localized input of integer/fp literals, send  T_COMMA for ';' (Werner) */
 %s KSPREAD
 
 /* standard ASCII stuff, C-like fp literals, T_COMMA for - yay! - ',' (Werner) */
 %s PLAIN
+
+/* hack around a kregexp issue ($[0-9] is a group, but nothing else) (Werner) */
+%s REGEXP_GROUP
 
 /*--------------------------------------------------------------------------*/
 /* Note: All the "special" shortcuts are prefixed with "Plain_" or "KSpread_" */
@@ -336,7 +340,19 @@ KScript_Identifier      [_a-zA-Z][a-zA-Z0-9_]*
 "+="                    return T_PLUS_ASSIGN;
 "-="                    return T_MINUS_ASSIGN;
 "$_"                    return T_LINE;
-"$"                     return T_DOLLAR;
+"$"                     {
+                                yy_push_state( REGEXP_GROUP );
+                                return T_DOLLAR;
+                        }
+<REGEXP_GROUP>{Digit}   {
+                                yy_pop_state();
+                                yylval._int = ascii_to_longlong( 10, yytext );
+                                return T_INTEGER_LITERAL;
+                        }
+<REGEXP_GROUP>.         {
+                                yy_pop_state();
+                                yyless(0);
+                        }
 
 const                   return T_CONST;
 FALSE                   return T_FALSE;
