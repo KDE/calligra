@@ -45,7 +45,76 @@ BezierTool::BezierTool (CommandHistory* history) : Tool (history) {
 }
 
 void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == Event_MouseButtonPress) {
+  if (e->type () == Event_KeyPress) {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Escape && curve != 0L) {
+      /*
+       * Abort the last operation
+       */
+      if (newObj) {
+	if (last < 5) {
+          // no valid curve - delete it
+          doc->deleteObject (curve);
+          curve = 0L;
+	}
+	else { // valid curve
+	  int last_valid = last - ((last - 5) % 3);
+	  // for a new object we have to remove the last points
+	  for (int i = last; i > last_valid; i--)
+	    curve->removePoint (i);
+
+          CreateBezierCmd *cmd = new CreateBezierCmd (doc, curve);
+          history->addCommand (cmd);
+	  doc->setLastObject (curve);
+        }
+      }
+      else { // segments were added
+	QList<Coord> points;
+	points.setAutoDelete (true);
+	if (addAtEnd) {
+	  int last_valid = last - ((last - 5) % 3);
+	  int i;
+
+	  for (i = last; i > last_valid; i--)
+	    curve->removePoint (i);
+
+	  for (int i = oldNumOfPoints; i < (int) curve->numOfPoints (); i++)
+	    points.append (new Coord (curve->getPoint (i)));
+
+	  if (points.count () > 0) {
+	    last = last - points.count () + 1;
+	    AddLineSegmentCmd *cmd =  
+	      new AddLineSegmentCmd (doc, curve, last_valid - 2, points);
+	    history->addCommand (cmd);
+	  }
+	}
+	else { // not at end of the curve
+	  int diff = curve->numOfPoints () - oldNumOfPoints;
+	  if (diff > 0) {
+	    // something was added
+	    if (last == 1) {
+	      // incomplete segment
+	      for (int i = 0; i < 3; i++)
+		curve->removePoint (0);
+	      diff -= 3;
+	    }
+	    if (diff > 0) {
+	      // line segment was complete
+	      for (int i = 0; i < diff; i++) 
+		points.append (new Coord (curve->getPoint (i)));
+	      AddLineSegmentCmd *cmd =  
+		new AddLineSegmentCmd (doc, curve, 0, points);
+	      history->addCommand (cmd);
+	    }
+	  }
+	}
+      }
+      if (curve)
+	curve->setWorkingSegment (-1);
+      curve = 0L; last = 0;
+    }
+  }
+  else if (e->type () == Event_MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () != LeftButton)
       return;
@@ -57,26 +126,34 @@ void BezierTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       newObj = true;
       addAtEnd = true;
 
-      QList<GObject> olist;
-      // look for existing bezier curves with an
-      // end point near the mouse pointer
-      if (doc->findContainingObjects (xpos, ypos, olist)) {
-	QListIterator<GObject> it (olist);
-	while (it.current ()) {
-	  if (it.current ()->isA ("GBezier")) {
-	    GBezier* obj = (GBezier *) it.current ();
-	    if (((last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1)
-		&& obj->isEndPoint (last) 
-		&& (last == 1 || last == (int) obj->numOfPoints () - 2)) {
-	      curve = obj;
-	      addAtEnd = (last != 1);
-	      newObj = false;
-	      oldNumOfPoints = obj->numOfPoints ();
+      GBezier* obj = 0L;
+ 
+      if (me->state () & ShiftButton) {
+	obj = (GBezier *) doc->findNextObject (xpos, ypos, "GBezier");
+      }
+      else {
+	QList<GObject> olist;
+	// look for existing bezier curves with an
+	// end point near the mouse pointer
+	if (doc->findContainingObjects (xpos, ypos, olist)) {
+	  QListIterator<GObject> it (olist);
+	  while (it.current ()) {
+	    if (it.current ()->isA ("GBezier")) {
+	      obj = (GBezier *) it.current ();
 	      break;
 	    }
+	    ++it;
 	  }
-	  ++it;
 	}
+      }
+	
+      if (obj && ((last = obj->getNeighbourPoint (Coord (xpos, ypos))) != -1)
+	  && obj->isEndPoint (last) 
+	  && (last == 1 || last == (int) obj->numOfPoints () - 2)) {
+	curve = obj;
+	addAtEnd = (last != 1);
+	newObj = false;
+	oldNumOfPoints = obj->numOfPoints ();
       }
       
       if (curve == 0L) {
