@@ -1,7 +1,7 @@
 ###### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KSTORE_INCLUDES) $(KOFFICECORE_INCLUDES) $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/kospell $(KSTORE_INCLUDES) $(KOFFICECORE_INCLUDES) $(all_includes)
 
 ####### Files
 
