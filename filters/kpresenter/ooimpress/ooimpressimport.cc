@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
    Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
@@ -1244,6 +1245,14 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
         //kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
 
+        if (m_styleStack.hasAttribute("fo:language")) {
+            QString lang = m_styleStack.attribute("fo:language");
+            if (lang=="en")
+                text.setAttribute("language", "en_US");
+            else
+                text.setAttribute("language", lang);
+        }
+
         // parse the text-properties
         if ( m_styleStack.hasAttribute( "fo:color" ) )
             text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
@@ -1264,26 +1273,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         if ( m_styleStack.hasAttribute( "fo:font-style" ) )
             if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
                 text.setAttribute( "italic", 1 );
-        if ( m_styleStack.hasAttribute( "style:text-crossing-out" ) )
-        {
-            QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
-            if ( strikeOutType =="double-line" )
-            {
-                text.setAttribute( "strikeOut", "double" );
-                text.setAttribute( "strikeoutstyleline", "solid" );
-            }
-            else if ( strikeOutType == "single-line" )
-            {
-                text.setAttribute( "strikeOut", "single" );
-                text.setAttribute( "strikeoutstyleline", "solid" );
-            }
-            else if ( strikeOutType =="thick-line" )
-            {
-                text.setAttribute( "strikeOut", "single-bold" );
-                text.setAttribute( "strikeoutstyleline", "solid" );
-            }
 
-        }
         if ( m_styleStack.hasAttribute( "style:text-position" ) )
         {
             QString textPos =m_styleStack.attribute( "style:text-position" );
@@ -1306,6 +1296,31 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute( "relativetextsize", value / 100 );
             }
         }
+
+        // strikeout
+        if ( m_styleStack.hasAttribute( "style:text-crossing-out" )
+             && m_styleStack.attribute("style:text-crossing-out") != "none")
+        {
+            QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
+            if ( strikeOutType =="double-line" )
+            {
+                text.setAttribute( "strikeOut", "double" );
+                text.setAttribute( "strikeoutstyleline", "solid" );
+            }
+            else if ( strikeOutType =="thick-line" )
+            {
+                text.setAttribute( "strikeOut", "single-bold" );
+                text.setAttribute( "strikeoutstyleline", "solid" );
+            }
+            else //if ( strikeOutType == "single-line" ) //fall back to the default strikeout
+            {
+                text.setAttribute( "strikeOut", "single" );
+                text.setAttribute( "strikeoutstyleline", "solid" );
+            }
+
+        }
+
+        // underlining
         if ( m_styleStack.hasAttribute( "style:text-underline" ) )
         {
             QString underType = m_styleStack.attribute( "style:text-underline" );
@@ -1330,7 +1345,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             }
             else if ( underType == "wave" )
             {
-                //not implemented into kpresenter
+                //TODO not implemented into kpresenter
                 text.setAttribute( "underline", "wave" );
                 text.setAttribute( "underlinestyleline", "solid" );
                 text.setAttribute( "underlinecolor", underLineColor );

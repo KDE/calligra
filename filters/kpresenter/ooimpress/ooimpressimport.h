@@ -1,3 +1,4 @@
+// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
    Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
@@ -161,4 +162,3 @@ private:
 };
 
 #endif
-
