@@ -202,9 +202,7 @@ AC_OUTPUT( \
 	katabase/doc/ktables/Makefile \
 	katabase/doc/ktables/en/Makefile \
 	kchart/Makefile	\
-	kchart/core/Makefile \
 	kchart/pics/Makefile \
-	kchart/ui/Makefile \
 	kformula/Makefile \
 	kformula/pics/Makefile \
 	killustrator/Makefile \
@@ -255,8 +253,6 @@ AC_OUTPUT( \
 	kword/filters/Makefile \
 	kword/filters/ascii/Makefile \
 	kword/filters/html/Makefile \
-	kdiagramm/Makefile \
-	kdiagramm/pics/Makefile \
 	koshell/Makefile \
 	lib/Makefile \
 	lib/kscript/Makefile \
