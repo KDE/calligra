@@ -45,7 +45,7 @@ int main( int argc, char **argv )
 
     KoApplication app;
 
-    QLabel* splash = 0;
+/*    QLabel* splash = 0;
     bool showSplash = true;
     if ( showSplash ) {
       QString icon;
@@ -69,16 +69,16 @@ int main( int argc, char **argv )
       splash->show();
       splash->repaint(false);
       QApplication::flushX();
-    }
+    }*/
 
     app.dcopClient()->attach();
     app.dcopClient()->registerAs("kivio");
 
-    if (!app.start()) {
-      delete splash;
+   if (!app.start()) {
+//      delete splash;
       return 1;
     }
-    delete splash;
-    app.exec();
-    return 0;
+//    delete splash;
+    return app.exec();
+//    return 0;
 }
