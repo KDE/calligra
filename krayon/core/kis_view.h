@@ -68,6 +68,7 @@ class ZoomTool;
 class KisGradient;
 class LineTool;
 class PolyLineTool;
+class PolyGonTool;
 class RectangleTool;
 class EllipseTool;
 class ColorPicker;
@@ -222,6 +223,7 @@ class KisView : public KoView
     void tool_eraser();
     void tool_line();
     void tool_polyline();
+    void tool_polygon();
     void tool_rectangle();
     void tool_ellipse();
     void tool_colorpicker();
@@ -303,7 +305,8 @@ class KisView : public KoView
     *m_tool_colorpicker, *m_tool_colorchanger, 
     *m_tool_fill, *m_tool_stamp, *m_tool_paste,
     *m_tool_airbrush, *m_tool_eraser,
-    *m_tool_line, *m_tool_polyline, *m_tool_rectangle, *m_tool_ellipse;
+    *m_tool_line, *m_tool_polyline, *m_tool_polygon,
+    *m_tool_rectangle, *m_tool_ellipse;
 
     KisDoc                *m_pDoc;  // always needed
     KisTool               *m_pTool; // current active tool
@@ -324,6 +327,7 @@ class KisView : public KoView
 
     LineTool            *m_pLineTool;
     PolyLineTool        *m_pPolyLineTool;
+    PolyGonTool         *m_pPolyGonTool;
     RectangleTool       *m_pRectangleTool;
     EllipseTool         *m_pEllipseTool;   
     ColorPicker         *m_pColorPicker;

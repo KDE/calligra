@@ -102,8 +102,33 @@ void EllipseTool::mouseRelease( QMouseEvent* event )
         drawEllipse( m_dragStart, m_dragEnd );
         m_dragging = false;
 
+        // get topLeft and bottomRight.
+        int maxX = 0, maxY = 0;
+        int minX = 0, minY = 0;
+
+        if ( m_dragStart.x() > m_dragEnd.x() ) {
+            maxX = m_dragStart.x();
+            minX = m_dragEnd.x();
+        }
+        else {
+            maxX = m_dragEnd.x();
+            minX = m_dragStart.x();
+        }
+
+        if ( m_dragStart.y() > m_dragEnd.y() ) {
+            maxY = m_dragStart.y();
+            minY = m_dragEnd.y();
+        }
+        else {
+            maxY = m_dragEnd.y();
+            minY = m_dragStart.y();
+        }
+
+        QPoint topLeft = QPoint( minX, minY );
+        QPoint bottomRight = QPoint( maxX, maxY );
+        QRect rect = QRect( zoomed( topLeft ), zoomed( bottomRight ) );
+
         // draw final ellipse onto layer    
-        QRect rect(zoomed(m_dragStart), zoomed(m_dragEnd));
         KisPainter *p = m_pView->kisPainter();
         p->drawEllipse( rect );
     }    

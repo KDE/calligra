@@ -26,6 +26,7 @@
   <Action name="tool_eraser"/>  
   <Action name="tool_line"/>
   <Action name="tool_polyline"/>
+  <Action name="tool_polygon"/>
   <Action name="tool_rectangle"/>
   <Action name="tool_ellipse"/>      
   <Action name="tool_fill"/>
@@ -192,6 +193,8 @@
   <Action name="refresh_canvas"/>
   <Action name="next_layer"/>  
   <Action name="panic_button"/>
+  <Action name="zoom_in"/>
+  <Action name="zoom_out"/>
 </ToolBar>
 
 <ToolBar name="selection_tools" position="top"><Text>Selection Tools</Text>
@@ -209,6 +212,7 @@
 
   <Action name="tool_line"/>    
   <Action name="tool_polyline"/>
+  <Action name="tool_polygon"/>
   <Action name="tool_rectangle"/>
   <Action name="tool_ellipse"/>      
 

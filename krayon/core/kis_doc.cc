@@ -333,6 +333,9 @@ QDomElement KisDoc::saveToolSettings( QDomDocument &doc )
     // save polyline tool settings
     tool.appendChild( savePolylineToolSettings( doc ) );
 
+    // save polygon tool settings
+    tool.appendChild( savePolygonToolSettings( doc ) );
+
     // save rectangle tool settings
     tool.appendChild( saveRectangleToolSettings( doc ) );
 
@@ -436,6 +439,25 @@ QDomElement KisDoc::savePolylineToolSettings( QDomDocument &doc )
     polylineTool.setAttribute( "fillWithGradient", static_cast<int>( polylineToolSettings.fillWithGradient ) );
 
     return polylineTool;
+}
+
+// save polygon tool settings
+QDomElement KisDoc::savePolygonToolSettings( QDomDocument &doc )
+{
+    // polygon tool element
+    QDomElement polygonTool = doc.createElement( "polygonTool" ); 
+
+    polygonTool.setAttribute( "thickness", polygonToolSettings.thickness );
+    polygonTool.setAttribute( "opacity", polygonToolSettings.opacity );
+    polygonTool.setAttribute( "corners", polygonToolSettings.corners );
+    polygonTool.setAttribute( "sharpness", polygonToolSettings.sharpness );
+    polygonTool.setAttribute( "fillInteriorRegions", static_cast<int>( polygonToolSettings.fillInteriorRegions ) );
+    polygonTool.setAttribute( "useCurrentPattern", static_cast<int>( polygonToolSettings.useCurrentPattern ) );
+    polygonTool.setAttribute( "fillWithGradient", static_cast<int>( polygonToolSettings.fillWithGradient ) );
+    polygonTool.setAttribute( "polygon", static_cast<int>( polygonToolSettings.polygon ) );
+    polygonTool.setAttribute( "concavePolygon", static_cast<int>( polygonToolSettings.concavePolygon ) );
+
+    return polygonTool;
 }
 
 // save rectangle tool settings
@@ -798,6 +820,8 @@ void KisDoc::loadToolSettings( QDomElement &elem )
             loadLineToolSettings( tool );
         else if ( tool.tagName() == "polylineTool" )
             loadPolylineToolSettings( tool );
+        else if ( tool.tagName() == "polygonTool" )
+            loadPolygonToolSettings( tool );
         else if ( tool.tagName() == "rectangleTool" )
             loadRectangleToolSettings( tool );
         else if ( tool.tagName() == "ellipseTool" )
@@ -867,6 +891,20 @@ void KisDoc::loadPolylineToolSettings( QDomElement &elem )
     polylineToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
     polylineToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
 
+}
+
+// load polygon tool settings
+void KisDoc::loadPolygonToolSettings( QDomElement &elem )
+{
+    polygonToolSettings.thickness = elem.attribute( "thickness" ).toInt();
+    polygonToolSettings.opacity = elem.attribute( "opacity" ).toInt();
+    polygonToolSettings.corners = elem.attribute( "corners" ).toInt();
+    polygonToolSettings.sharpness = elem.attribute( "sharpness" ).toInt();
+    polygonToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
+    polygonToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
+    polygonToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
+    polygonToolSettings.polygon = static_cast<bool>( elem.attribute( "polygon" ).toInt() );
+    polygonToolSettings.concavePolygon = static_cast<bool>( elem.attribute( "concavePolygon" ).toInt() );
 }
 
 // load rectangle tool settings
@@ -1990,6 +2028,12 @@ void KisDoc::setLineToolSettings( LineToolSettings s )
 void KisDoc::setPolylineToolSettings( PolylineToolSettings s )
 {
     polylineToolSettings = s;
+}
+
+// Set Polygon tool settings
+void KisDoc::setPolygonToolSettings( PolygonToolSettings s )
+{
+    polygonToolSettings = s;
 }
 
 // Set Rectangle tool settings

@@ -91,6 +91,7 @@
 #include "kis_tool_pen.h"
 #include "kis_tool_line.h"
 #include "kis_tool_polyline.h"
+#include "kis_tool_polygon.h"
 #include "kis_tool_rectangle.h"
 #include "kis_tool_ellipse.h"
 #include "kis_tool_colorpicker.h"
@@ -473,6 +474,8 @@ void KisView::setupTools()
         = new LineTool( m_pDoc, this, m_pCanvas );
     m_pPolyLineTool 
         = new PolyLineTool( m_pDoc, this, m_pCanvas );
+    m_pPolyGonTool 
+        = new PolyGonTool( m_pDoc, this, m_pCanvas );
     m_pRectangleTool 
         = new RectangleTool( m_pDoc, this, m_pCanvas );
     m_pEllipseTool 
@@ -674,6 +677,12 @@ void KisView::setupActions()
         actionCollection(), "tool_polyline");
 
     m_tool_polyline->setExclusiveGroup( "tools" );
+
+    m_tool_polygon = new KToggleAction( i18n("&Polygon tool"),
+        "polygon", 0, this, SLOT( tool_polygon() ),
+        actionCollection(), "tool_polygon");
+
+    m_tool_polygon->setExclusiveGroup( "tools" );
 
     m_tool_rectangle = new KToggleAction( i18n("&Rectangle tool"),
         "rectangle", 0, this, SLOT( tool_rectangle() ),
@@ -1757,6 +1766,14 @@ void KisView::tool_line()
 void KisView::tool_polyline()
 {
     activateTool( m_pPolyLineTool );
+}
+
+/*
+    tool_polygon - draw a polygon using KisPainter
+*/
+void KisView::tool_polygon()
+{
+    activateTool( m_pPolyGonTool );
 }
 
 /*

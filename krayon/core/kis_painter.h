@@ -44,11 +44,13 @@ public:
     void drawRectangle(QRect & rectint);    
     void drawEllipse(int x, int y, int w, int h);
     void drawEllipse(QRect & rect);
+    void drawPolygon(QPointArray & points, QRect & rect);
 
     void  setLineThickness(int t)    { lineThickness = t;}
     void  setLineOpacity(int o)      { lineOpacity = o;}
     void  setFilledEllipse(bool f)   { filledEllipse = f;}
     void  setFilledRectangle(bool f) { filledRectangle = f;}
+    void  setFilledPolygon(bool f)   { filledPolygon = f;}
     void  setGradientFill(bool g)    { gradientFill = g;}
     void  setGradientLine(bool g)    { gradientLine = g;}
     void  setPatternFill(bool p)     { patternFill = p;}
@@ -69,6 +71,7 @@ private:
     int  lineOpacity;
     bool filledEllipse;
     bool filledRectangle;
+    bool filledPolygon;
     bool gradientFill;
     bool gradientLine;
     bool patternFill;

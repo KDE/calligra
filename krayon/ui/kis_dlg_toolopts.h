@@ -21,13 +21,17 @@
 #ifndef __tooloptionsdialog_h__
 #define __tooloptionsdialog_h__
 
-#include <qspinbox.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
+#include <qlabel.h>
+#include <qradiobutton.h>
 
 #include <kdialog.h>
+#include <knuminput.h>
 
 class QVBoxLayout;
+class QRadioButton;
+class KIntNumInput;
 
 enum tooltype 
 {
@@ -44,7 +48,8 @@ enum tooltype
     tt_colorpickertool,
     tt_movetool,
     tt_stamptool,
-    tt_pastetool
+    tt_pastetool,
+    tt_polygontool
 };
 
 struct ToolOptsStruct
@@ -56,10 +61,15 @@ struct ToolOptsStruct
     int penOpacity;
     
     int opacity;
+
+    int polygonCorners;
+    int polygonSharpness;
     
     bool fillShapes;
     bool usePattern;
     bool useGradient;
+    bool convexPolygon;
+    bool concavePolygon;
 };
 
 
@@ -76,26 +86,34 @@ public:
     int  penThreshold() { return mpPenThreshold->value(); };
     int  density()      { return mpDensity->value(); };
     int  granularuty()  { return mpGranularity->value(); };
+    int  corners()      { return mpCorners->value(); };
+    int  sharpness()    { return mpSharpness->value(); };
     
     bool solid()        { return mpSolid->isChecked(); };
     bool usePattern()   { return mpUsePattern->isChecked(); };
     bool useGradient()  { return mpUseGradient->isChecked(); };
     bool blendPattern() { return mpBlendPattern->isChecked(); };
     bool blendGradient(){ return mpBlendGradient->isChecked(); };
+    bool convexPolygon()  { return mpConvexPolygon->isChecked(); };
+    bool concavePolygon() { return mpConcavePolygon->isChecked(); };
     
 protected:
 
-    QSpinBox  *mpThickness;
-    QSpinBox  *mpOpacity;
-    QSpinBox  *mpPenThreshold;
-    QSpinBox  *mpDensity;
-    QSpinBox  *mpGranularity;
+    KIntNumInput  *mpThickness;
+    KIntNumInput  *mpOpacity;
+    KIntNumInput  *mpPenThreshold;
+    KIntNumInput  *mpDensity;
+    KIntNumInput  *mpGranularity;
+    KIntNumInput  *mpCorners;
+    KIntNumInput  *mpSharpness;
         
     QCheckBox *mpSolid;
     QCheckBox *mpUsePattern;
     QCheckBox *mpUseGradient;
     QCheckBox *mpBlendPattern;
-    QCheckBox *mpBlendGradient;    
+    QCheckBox *mpBlendGradient;
+    QRadioButton *mpConvexPolygon;
+    QRadioButton *mpConcavePolygon;
 };
 
 
@@ -186,6 +204,24 @@ public:
         const char *name = 0 );
 };
 
+class PolygonPreview;
+class PolygonToolTab : public KisToolTab
+{
+  Q_OBJECT
+
+public:
+
+    PolygonToolTab( ToolOptsStruct ts,  QWidget *parent = 0, 
+
+        const char *name = 0 );
+private:
+    PolygonPreview *preview;
+
+private slots:
+    void slotConvexPolygon(); 
+    void slotConcavePolygon(); 
+};
+
 
 class ToolOptionsDialog : public KDialog
 {
@@ -220,6 +256,9 @@ public:
     StampToolTab *stampToolTab()      
         { return pStampToolTab; }
 
+    PolygonToolTab *polygonToolTab()      
+        { return pPolygonToolTab; }
+
 private:
 
     NullToolTab     *pNullToolTab;
@@ -230,6 +269,7 @@ private:
     EraserToolTab   *pEraserToolTab;
     FillToolTab     *pFillToolTab;
     StampToolTab    *pStampToolTab;    
+    PolygonToolTab  *pPolygonToolTab;
 };
 
 #endif // __tooloptionsdialog.h__

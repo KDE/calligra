@@ -406,5 +406,37 @@ void KisPainter::drawEllipse(int x, int y, int w, int h)
          kdDebug() << "error drawing ellipse" << endl;          
 }
 
+/*
+    draw polygon
+*/
+void KisPainter::drawPolygon(QPointArray & points, QRect & rect)
+{
+    QPainter p( &painterPixmap );
+    
+    // constructs a pen with the given line thickness
+    // color is always black - it is changed by krayon
+    // to the current fgColor when drawn to layer
+    QPen pen( Qt::black, lineThickness );
+    p.setPen( pen );
+    
+    // constructs a brush with a solid pattern if
+    // we want to fill the ellipse
+    QBrush brush( Qt::black );
+    if ( filledPolygon )
+        p.setBrush( brush );
+    
+    p.drawPolygon( points );
+
+    // account for line thickness in update rectangle
+    QRect ur( rect );
+    ur.setLeft( rect.left() - lineThickness );
+    ur.setTop( rect.top() - lineThickness );    
+    ur.setRight( rect.right() + lineThickness );
+    ur.setBottom( rect.bottom() + lineThickness );
+
+    if ( !toLayer( ur ) ) 
+        kdDebug() << "error drawing polygon" << endl;          
+}
+
 #include "kis_painter.moc"
 

@@ -104,6 +104,12 @@ void PolyLineTool::mousePress( QMouseEvent* event )
     {   
         m_dragging = false;
         finish(event->pos());
+        m_dragEnd = event->pos();
+ 
+        // draw final line into layer
+        KisPainter *p = m_pView->kisPainter();
+        p->drawLine( zoomed(m_dragStart.x()), zoomed(m_dragStart.y()),
+                     zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
     }    
 }
 

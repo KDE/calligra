@@ -311,6 +311,29 @@ public:
     void setPolylineToolSettings( PolylineToolSettings s );
 
     /* 
+     * Polygon tool settings 
+     */
+    struct PolygonToolSettings {
+        PolygonToolSettings() {
+            thickness = 4;
+            opacity = 255;
+            corners = 3;
+            sharpness = 0;
+            fillInteriorRegions = false;
+            useCurrentPattern = false;
+            fillWithGradient = false;
+            polygon = true;
+            concavePolygon = false;
+        }
+
+        uint thickness, opacity, corners, sharpness;
+        bool fillInteriorRegions, useCurrentPattern, fillWithGradient, polygon, concavePolygon;
+    };
+
+    PolygonToolSettings getPolyGonToolSettings() const { return polygonToolSettings; }
+    void setPolygonToolSettings( PolygonToolSettings s );
+
+    /* 
      * Rectangle tool settings 
      */
     struct RectangleToolSettings {
@@ -470,6 +493,9 @@ protected:
     /* save polyline tool settings */
     QDomElement savePolylineToolSettings( QDomDocument &doc );
 
+    /* save polygon tool settings */
+    QDomElement savePolygonToolSettings( QDomDocument &doc );
+
     /* save rectangle tool settings */
     QDomElement saveRectangleToolSettings( QDomDocument &doc );
 
@@ -519,6 +545,9 @@ protected:
     /* load polyline tool settings */
     void loadPolylineToolSettings( QDomElement &elem );
 
+    /* load polygon tool settings */
+    void loadPolygonToolSettings( QDomElement &elem );
+
     /* load rectangle tool settings */
     void loadRectangleToolSettings( QDomElement &elem );
 
@@ -567,6 +596,7 @@ private:
     EraserToolSettings      eraserToolSettings;
     LineToolSettings        lineToolSettings;
     PolylineToolSettings    polylineToolSettings;
+    PolygonToolSettings     polygonToolSettings;
     RectangleToolSettings   rectangleToolSettings;
     EllipseToolSettings     ellipseToolSettings;
     FillerToolSettings      fillerToolSettings;

@@ -25,10 +25,14 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
+#include <qvbuttongroup.h>
+#include <qvgroupbox.h> 
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "kis_dlg_toolopts.h"
+#include "kis_dlg_toolopts_polygon_preview.h"
 
 /*
     ToolOptionsDialog constructor.  This widget shows options for only
@@ -100,6 +104,13 @@ ToolOptionsDialog::ToolOptionsDialog( tooltype tt, ToolOptsStruct ts,
             layout->addWidget(pStampToolTab);    
             break;
 
+        case tt_polygontool:
+
+            pPolygonToolTab = new PolygonToolTab(ts, 
+                static_cast<QWidget *>(this));
+            layout->addWidget(pPolygonToolTab);    
+            break;
+
         default:
             // we really should show global option settings here
             pNullToolTab = new NullToolTab(ts, 
@@ -152,21 +163,17 @@ NullToolTab::NullToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
-    mpThickness = new QSpinBox( 1, 16, 1, this );
-    mpThickness->setValue( ts.lineThickness );
-    QLabel* tlabel = new QLabel( mpThickness, 
-        i18n("Line Thickness"), this );
+    mpThickness = new KIntNumInput( ts.lineThickness, this );
+    mpThickness->setRange( 1, 16, 1 );
+    mpThickness->setLabel( i18n( "Line Thickness:" ) );
 
-    grid->addWidget( tlabel, 0, 0 );
-    grid->addWidget( mpThickness, 0, 1 );
+    grid->addWidget( mpThickness, 0, 0 );
 
-    mpOpacity = new QSpinBox( 0, 255, 32, this );
-    mpOpacity->setValue( ts.lineOpacity );
-    QLabel* olabel = new QLabel( mpOpacity, 
-        i18n("Opacity"), this );
+    mpOpacity = new KIntNumInput( ts.lineOpacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
 
-    grid->addWidget( olabel, 1, 0 );
-    grid->addWidget( mpOpacity, 1, 1 );
+    grid->addWidget( mpOpacity, 1, 0 );
 
     mpSolid = new QCheckBox( this );
     mpSolid->setChecked( ts.fillShapes );
@@ -198,21 +205,17 @@ LineToolTab::LineToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
-    mpThickness = new QSpinBox( 1, 16, 1, this );
-    mpThickness->setValue( ts.lineThickness );
-    QLabel* tlabel = new QLabel( mpThickness, 
-        i18n("T&hickness"), this );
+    mpThickness = new KIntNumInput( ts.lineThickness, this );
+    mpThickness->setRange( 1, 16, 1 );
+    mpThickness->setLabel( i18n( "Thickness:" ) );
 
-    grid->addWidget( tlabel, 0, 0 );
-    grid->addWidget( mpThickness, 0, 1 );
+    grid->addWidget( mpThickness, 0, 0 );
 
-    mpOpacity = new QSpinBox( 0, 255, 32, this );
-    mpOpacity->setValue( ts.lineOpacity );
-    QLabel* olabel = new QLabel( mpOpacity, 
-        i18n("&Opacity"), this );
+    mpOpacity = new KIntNumInput( ts.lineOpacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
 
-    grid->addWidget( olabel, 1, 0 );
-    grid->addWidget( mpOpacity, 1, 1 );
+    grid->addWidget( mpOpacity, 1, 0 );
 
     mpSolid = new QCheckBox( this );
     mpSolid->setChecked( ts.fillShapes );
@@ -253,13 +256,11 @@ FillToolTab::FillToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
-    mpOpacity = new QSpinBox( 0, 255, 32, this );
-    mpOpacity->setValue( ts.opacity );
-    QLabel* olabel = new QLabel( mpOpacity, 
-        i18n("Opacity"), this );
+    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
 
-    grid->addWidget( olabel, 0, 0 );
-    grid->addWidget( mpOpacity, 0, 1 );
+    grid->addWidget( mpOpacity, 0, 0 );
 
     mpUsePattern = new QCheckBox( this );
     mpUsePattern->setChecked( ts.usePattern );
@@ -292,21 +293,17 @@ PenToolTab::PenToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
     QGridLayout* grid = new QGridLayout(lout, 2, 4);
 
-    mpOpacity = new QSpinBox( 0, 255, 32, this );
-    mpOpacity->setValue( ts.opacity );
-    QLabel* olabel = new QLabel( mpOpacity, 
-        i18n("Opacity"), this );
+    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
 
-    grid->addWidget( olabel, 0, 0 );
-    grid->addWidget( mpOpacity, 0, 1 );
+    grid->addWidget( mpOpacity, 0, 0 );
 
-    mpPenThreshold = new QSpinBox( 0, 255, 32, this );
-    mpPenThreshold->setValue( ts.penThreshold );
-    QLabel* tlabel = new QLabel( mpPenThreshold, 
-        i18n("Paint Threshold"), this );
+    mpPenThreshold = new KIntNumInput( ts.penThreshold, this );
+    mpPenThreshold->setRange( 0, 255, 32 );
+    mpPenThreshold->setLabel( i18n( "Paint Threshold:" ) );
 
-    grid->addWidget( tlabel, 1, 0 );
-    grid->addWidget( mpPenThreshold, 1, 1 );
+    grid->addWidget( mpPenThreshold, 1, 0 );
 
     mpUsePattern = new QCheckBox( this );
     mpUsePattern->setChecked( ts.usePattern );
@@ -338,13 +335,11 @@ BrushToolTab::BrushToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
-    mpOpacity = new QSpinBox( 0, 255, 32, this );
-    mpOpacity->setValue( ts.opacity );
-    QLabel* olabel = new QLabel( mpOpacity, 
-        i18n("&Opacity"), this );
+    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
 
-    grid->addWidget( olabel, 0, 0 );
-    grid->addWidget( mpOpacity, 0, 1 );
+    grid->addWidget( mpOpacity, 0, 0 );
 
     mpUseGradient = new QCheckBox( this );
     mpUseGradient->setChecked( ts.useGradient );
@@ -375,13 +370,11 @@ EraserToolTab::EraserToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
-    mpOpacity = new QSpinBox( 0, 255, 32, this );
-    mpOpacity->setValue( ts.opacity );
-    QLabel* olabel = new QLabel( mpOpacity, 
-        i18n("&Opacity"), this );
+    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
 
-    grid->addWidget( olabel, 0, 0 );
-    grid->addWidget( mpOpacity, 0, 1 );
+    grid->addWidget( mpOpacity, 0, 0 );
 
     mpUseGradient = new QCheckBox( this );
     mpUseGradient->setChecked( ts.fillShapes );
@@ -410,13 +403,11 @@ AirBrushToolTab::AirBrushToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
     QGridLayout* grid = new QGridLayout(lout, 2, 3);
 
-    mpOpacity = new QSpinBox( 0, 255, 32, this );
-    mpOpacity->setValue( ts.opacity );
-    QLabel* olabel = new QLabel( mpOpacity, 
-        i18n("&Opacity"), this );
+    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
 
-    grid->addWidget( olabel, 0, 0 );
-    grid->addWidget( mpOpacity, 0, 1 );
+    grid->addWidget( mpOpacity, 0, 0 );
 
     mpUseGradient = new QCheckBox( this );
     mpUseGradient->setChecked( ts.useGradient );
@@ -447,13 +438,11 @@ StampToolTab::StampToolTab( ToolOptsStruct ts,
     QVBoxLayout* lout = new QVBoxLayout( this, 4 );    
     QGridLayout* grid = new QGridLayout(lout, 2, 2);
 
-    mpOpacity = new QSpinBox( 0, 255, 32, this );
-    mpOpacity->setValue( ts.opacity );
-    QLabel* olabel = new QLabel( mpOpacity, 
-        i18n("&Opacity"), this );
+    mpOpacity = new KIntNumInput( ts.opacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
 
-    grid->addWidget( olabel, 0, 0 );
-    grid->addWidget( mpOpacity, 0, 1 );
+    grid->addWidget( mpOpacity, 0, 0 );
 
     mpUseGradient = new QCheckBox( this );
     mpUseGradient->setChecked( ts.useGradient );
@@ -464,5 +453,98 @@ StampToolTab::StampToolTab( ToolOptsStruct ts,
     grid->addWidget( mpUseGradient, 1, 1 );
 }
 
+/*
+    PolygonToolTab
+*/
+PolygonToolTab::PolygonToolTab( ToolOptsStruct ts,
+    QWidget *_parent, const char *_name  )
+    : KisToolTab(ts, _parent, _name )
+{
+    QVBoxLayout *lout = new QVBoxLayout( this, 8 );
+    QGridLayout *grid = new QGridLayout( lout, 10, 30 );
+
+    QButtonGroup *group = new QVButtonGroup( this );
+
+    mpConvexPolygon = new QRadioButton( i18n( "Polygon" ), group );
+    mpConvexPolygon->setChecked( ts.convexPolygon );
+    connect( mpConvexPolygon, SIGNAL( clicked() ), this, SLOT( slotConvexPolygon() ) );
+
+    mpConcavePolygon = new QRadioButton( i18n( "Concave Polygon" ), group );
+    mpConcavePolygon->setChecked( ts.concavePolygon );
+    connect( mpConcavePolygon, SIGNAL( clicked() ), this, SLOT( slotConcavePolygon() ) );
+
+    grid->addWidget( group, 0, 0 );
+
+    mpCorners = new KIntNumInput( ts.polygonCorners, this );
+    mpCorners->setRange( 3, 100, 1 );
+    mpCorners->setLabel( i18n( "Corners:" ) );
+    grid->addWidget( mpCorners, 1, 0 );
+
+    mpSharpness = new KIntNumInput( ts.polygonSharpness, this );
+    mpSharpness->setRange( 0, 100, 1 );
+    mpSharpness->setLabel( i18n( "Sharpness:" ) );
+    grid->addWidget( mpSharpness, 2, 0 );
+
+    if ( !ts.concavePolygon )
+        mpSharpness->setEnabled( false );
+
+    mpThickness = new KIntNumInput( ts.lineThickness, this );
+    mpThickness->setRange( 1, 16, 1 );
+    mpThickness->setLabel( i18n( "Thickness:" ) );
+    grid->addWidget( mpThickness, 3, 0 );
+
+    mpOpacity = new KIntNumInput( ts.lineOpacity, this );
+    mpOpacity->setRange( 0, 255, 32 );
+    mpOpacity->setLabel( i18n( "Opacity:" ) );
+    grid->addWidget( mpOpacity, 4, 0 );
+
+
+    mpSolid = new QCheckBox( this );
+    mpSolid->setChecked( ts.fillShapes );
+    QLabel* slabel = new QLabel( mpSolid, i18n("Fill Interior Regions"), this );
+
+    grid->addWidget( slabel, 5, 0 );
+    grid->addWidget( mpSolid, 5, 1 );
+
+    mpUsePattern = new QCheckBox( this );
+    mpUsePattern->setChecked( ts.usePattern );
+    QLabel *plabel = new QLabel( mpUsePattern, i18n("Use Current Pattern"), this );
+
+    grid->addWidget( plabel, 6, 0 );
+    grid->addWidget( mpUsePattern, 6, 1 );
+    
+    mpUseGradient = new QCheckBox( this );
+    mpUseGradient->setChecked( ts.useGradient );
+    QLabel *glabel = new QLabel( mpUseGradient, i18n("Fill with Gradient"), this );
+
+    grid->addWidget( glabel, 7, 0 );
+    grid->addWidget( mpUseGradient, 7, 1 );
+
+
+    preview = new PolygonPreview( this, 0L, ts.polygonCorners, ts.polygonSharpness, ts.concavePolygon, ts.lineThickness );
+    grid->addMultiCellWidget( preview, 0, 7, 2, 30 );
+    grid->setColStretch( 30, 1 );
+    grid->setRowStretch( 7, 1 );
+    connect ( mpConvexPolygon, SIGNAL( clicked() ), preview,
+              SLOT( slotConvexPolygon() ) );
+    connect ( mpConcavePolygon, SIGNAL( clicked() ), preview,
+              SLOT( slotConcavePolygon() ) );
+    connect( mpCorners, SIGNAL( valueChanged( int ) ), preview,
+             SLOT( slotConersValue( int ) ) );
+    connect( mpSharpness, SIGNAL( valueChanged( int ) ), preview,
+             SLOT( slotSharpnessValue( int ) ) );
+    connect( mpThickness, SIGNAL( valueChanged( int ) ), preview,
+             SLOT( slotThicknessValue( int ) ) );
+}
+
+void PolygonToolTab::slotConvexPolygon()
+{
+    mpSharpness->setEnabled( false );
+}
+
+void PolygonToolTab::slotConcavePolygon()
+{
+    mpSharpness->setEnabled( true );
+}
 
 #include "kis_dlg_toolopts.moc"
