@@ -1763,9 +1763,16 @@ KexiMainWindowImpl::showErrorMessage(const QString &message, Kexi::ObjectStatus 
 {
 	if (status && status->error()) {
 		QString msg = message;
-		if (status->message.isEmpty())
-			msg += (QString("<br><br>") + status->message);
-		showErrorMessage(msg, status->description);
+		QString desc;
+		if (!status->message.isEmpty()) {
+			if (status->description.isEmpty()) {
+				desc = status->message;
+			} else {
+				msg += (QString("<br><br>") + status->message);
+				desc = status->description;
+			}
+		}
+		showErrorMessage(msg, desc);
 	}
 	else {
 		showErrorMessage(message);
@@ -1783,58 +1790,66 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 	const QString& messageWhenAskingForName )
 {
 	cancelled=false;
-	if (dlg->neverSaved()) {
-		//data was never saved in the past -we need to create a new object at the backend
-		if (!d->nameDialog) {
-			d->nameDialog = new KexiNameDialog(
-				messageWhenAskingForName, this, "nameDialog");
-			//check if that name is allowed
-			d->nameDialog->widget()->addNameSubvalidator(
-				new Kexi::KexiDBObjectNameValidator(project()->dbConnection()->driver(), 0, "sub"));
-		}
-		else {
-			d->nameDialog->widget()->setMessageText( messageWhenAskingForName );
-		}
-		d->nameDialog->widget()->setCaptionText(dlg->partItem()->caption());
-		d->nameDialog->widget()->setNameText(dlg->partItem()->name());
-		d->nameDialog->setCaption(i18n("Save Object As"));
-		d->nameDialog->setDialogIcon( DesktopIcon( dlg->itemIcon(), KIcon::SizeMedium ) );
-		bool found;
-		do {
-			if (d->nameDialog->exec()!=QDialog::Accepted) {
-				cancelled=true;
-				return true;
-			}
-			//check if that name already exists
-			KexiDB::SchemaData tmp_sdata;
-			found = project()->dbConnection()->findObjectSchemaData(
-					dlg->part()->info()->projectPartID(),
-					d->nameDialog->widget()->nameText(), tmp_sdata );
-			if (found) {
-				KMessageBox::information(this, i18n("%1 \"%2\" already exists.\nPlease choose other name.")
-					.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
-				continue;
-			}
-		}
-		while (found);
-
-		const int oldItemID = dlg->partItem()->identifier();
-		//update name and caption
-		dlg->partItem()->setName( d->nameDialog->widget()->nameText() );
-		dlg->partItem()->setCaption( d->nameDialog->widget()->captionText() );
-
-		if (!dlg->storeNewData())
-			return false;
-
-		//update navigator
-		d->nav->addItem(dlg->partItem());
-		//item id changed to final one: update association in dialogs' dictionary
-		d->dialogs.take(oldItemID);
-		d->dialogs.insert(dlg->partItem()->identifier(), dlg);
-		return true;
+	if (!dlg->neverSaved()) {
+		//data was saved in the past -just save again
+		const bool r = dlg->storeData();
+		if (!r)
+			showErrorMessage(i18n("Saving \"%1\" object failed.").arg(dlg->partItem()->name()),
+				d->curDialog);
+		return r;
 	}
-	//data was saved in the past -just save again
-	return dlg->storeData();
+
+	//data was never saved in the past -we need to create a new object at the backend
+	if (!d->nameDialog) {
+		d->nameDialog = new KexiNameDialog(
+			messageWhenAskingForName, this, "nameDialog");
+		//check if that name is allowed
+		d->nameDialog->widget()->addNameSubvalidator(
+			new Kexi::KexiDBObjectNameValidator(project()->dbConnection()->driver(), 0, "sub"));
+	}
+	else {
+		d->nameDialog->widget()->setMessageText( messageWhenAskingForName );
+	}
+	d->nameDialog->widget()->setCaptionText(dlg->partItem()->caption());
+	d->nameDialog->widget()->setNameText(dlg->partItem()->name());
+	d->nameDialog->setCaption(i18n("Save Object As"));
+	d->nameDialog->setDialogIcon( DesktopIcon( dlg->itemIcon(), KIcon::SizeMedium ) );
+	bool found;
+	do {
+		if (d->nameDialog->exec()!=QDialog::Accepted) {
+			cancelled=true;
+			return true;
+		}
+		//check if that name already exists
+		KexiDB::SchemaData tmp_sdata;
+		found = project()->dbConnection()->findObjectSchemaData(
+				dlg->part()->info()->projectPartID(),
+				d->nameDialog->widget()->nameText(), tmp_sdata );
+		if (found) {
+			KMessageBox::information(this, i18n("%1 \"%2\" already exists.\nPlease choose other name.")
+				.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
+			continue;
+		}
+	}
+	while (found);
+
+	const int oldItemID = dlg->partItem()->identifier();
+	//update name and caption
+	dlg->partItem()->setName( d->nameDialog->widget()->nameText() );
+	dlg->partItem()->setCaption( d->nameDialog->widget()->captionText() );
+
+	if (!dlg->storeNewData()) {
+		showErrorMessage(i18n("Saving new \"%1\" object failed.").arg(dlg->partItem()->name()),
+			d->curDialog);
+		return false;
+	}
+
+	//update navigator
+	d->nav->addItem(dlg->partItem());
+	//item id changed to final one: update association in dialogs' dictionary
+	d->dialogs.take(oldItemID);
+	d->dialogs.insert(dlg->partItem()->identifier(), dlg);
+	return true;
 }
 
 bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool layoutTaskBar)
