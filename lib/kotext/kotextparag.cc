@@ -485,16 +485,26 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         // drawBorders paints outside the give rect, so we need to 'subtract' the border
         // width on all sides.
         r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.width(), zh, 0 ) );
-        // ## documentWidth breaks with variable width. Maybe use currentDrawnFrame() ?
+        // ## TODO: ####### documentWidth breaks with variable width. Maybe use currentDrawnFrame() ?
+        // Impossible in kotext. We need a "doc width for this parag value stored in the parag", or a callback.
+
         // The +1 is because if border is 1 pixel, nothing to subtract. 2 pixels -> subtract 1.
-        r.setRight( zh->layoutUnitToPixelX(documentWidth()) - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) + 1 );
+        r.setRight( zh->layoutUnitToPixelX(documentWidth()) - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) );
         r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
+
         int lastLine = lines() - 1;
-        r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) ) );
+        // We need to start from the pixelRect, to make sure the bottom border is entirely painted.
+        // This is a case where we DO want to subtract pixels to pixels...
+        int paragBottom = pixelRect(zh).height()-1;
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
-        // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
+        // If we have a bottom border, then we rather exclude the linespacing. Looks nicer. OO does that too.
         if ( m_layout.bottomBorder.width() > 0 )
-            r.rBottom() /*-= zh->layoutUnitToPixelY(lineSpacing( lastLine ))*/ + 1;
+            paragBottom -= zh->layoutUnitToPixelY( lineSpacing( lastLine ) );
+        paragBottom -= KoBorder::zoomWidthY( m_layout.bottomBorder.width(), zh, 0 );
+        //kdDebug(32500) << "Parag border: paragBottom=" << paragBottom
+        //               << " bottom border width = " << KoBorder::zoomWidthY( m_layout.bottomBorder.width(), zh, 0 ) << endl;
+        r.setBottom( paragBottom );
+
         //kdDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " LU (" << zh->layoutUnitToPixelX(documentWidth()) << " pixels) bordersRect=" << r << endl;
         KoBorder::drawBorders( painter, zh, r,
                                m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
