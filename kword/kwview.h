@@ -35,6 +35,7 @@
 #include <koView.h>
 #include <kshortcut.h>
 class DCOPObject;
+class KURL;
 
 class KoPicture;
 class KWDocStruct;
@@ -183,7 +184,6 @@ public:
     void updateHeader();
     void switchModeView();
     void changeFootNoteMenuItem( bool b);
-    void insertFile(const QString & path);
     void insertFile(const KURL& _url);
     void configureSpellChecker();
     void testAndCloseAllFrameSetProtectedContent();
