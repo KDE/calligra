@@ -109,7 +109,7 @@ public:
     virtual void editFind();
     virtual void editDeleteFrame();
     virtual void editReconnectFrame();
-    
+
     virtual void newView();
     virtual void viewFormattingChars();
     virtual void viewFrameBorders();
@@ -163,7 +163,7 @@ public:
     virtual void tableSplitCells();
     virtual void tableUngroupTable();
     virtual void tableDelete();
-    
+
     virtual void helpContents();
     virtual void helpAbout();
     virtual void helpAboutKOffice();
@@ -249,7 +249,6 @@ public slots:
     void searchDiaClosed();
 
     void clipboardDataChanged();
-    void selectionOnOff();
 
 protected:
     // C++
@@ -294,7 +293,7 @@ protected:
     CORBA::Long m_idMenuEdit_Find;
     CORBA::Long m_idMenuEdit_DeleteFrame;
     CORBA::Long m_idMenuEdit_ReconnectFrame;
-    
+
     // view menu
     OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
@@ -362,7 +361,7 @@ protected:
     CORBA::Long m_idMenuTable_SplitCells;
     CORBA::Long m_idMenuTable_UngroupTable;
     CORBA::Long m_idMenuTable_Delete;
-    
+
     // help menu
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_Contents;

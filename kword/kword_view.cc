@@ -221,25 +221,6 @@ void KWordView::clipboardDataChanged()
 }
 
 /*================================================================*/
-void KWordView::selectionOnOff()
-{
-//     if ( m_pKWordDoc->has_selection() )
-//     {
-//         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, true );
-//         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, true );
-//         m_vToolBarEdit->setItemEnabled( ID_EDIT_CUT, true );
-//         m_vToolBarEdit->setItemEnabled( ID_EDIT_COPY, true );
-//     }
-//     else
-//     {
-//         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, false );
-//         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, false );
-//         m_vToolBarEdit->setItemEnabled( ID_EDIT_CUT, false );
-//         m_vToolBarEdit->setItemEnabled( ID_EDIT_COPY, false );
-//     }
-}
-
-/*================================================================*/
 void KWordView::cleanUp()
 {
     cerr << "void KWordView::cleanUp()" << endl;
@@ -939,8 +920,6 @@ void KWordView::insertFootNoteEndNote()
                                                           "endotes into the first frameset!" ), i18n( "OK" ) );
     else
     {
-        //debug( "NUMBER: %d", start );
-
         KWFootNoteDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget(), start );
         dia.setCaption( i18n( "Insert Footnote/Endnote" ) );
         dia.show();
@@ -1326,7 +1305,7 @@ void KWordView::tableDelete()
                                                             "or select it to delete it!" ), i18n( "OK" ) );
     else
         gui->getPaperWidget()->deleteTable( grpMgr );
-    
+
 }
 
 /*===============================================================*/
@@ -2010,7 +1989,6 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
        this, CORBA::string_dup( "helpAboutKDE" ) ); */
 
     QObject::connect( kapp->clipboard(), SIGNAL( dataChanged() ), this, SLOT( clipboardDataChanged() ) );
-    QObject::connect( m_pKWordDoc, SIGNAL( selectionOnOff() ), this, SLOT( selectionOnOff() ) );
 
     return true;
 }
@@ -2511,7 +2489,6 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     gui->getPaperWidget()->init();
 
     clipboardDataChanged();
-    selectionOnOff();
 
     gui->getPaperWidget()->repaintScreen( true );
 
@@ -2569,33 +2546,6 @@ QString KWordView::colorToPixString( QColor c, PType _type )
         pix += "\"............agghhiia\",\n";
         pix += "\"............aaaaaaaa\"};\n";
 
-//        pix += "\" 20 20 3 1 \", \n";
-
-//      pix += "\"  c none \", \n";
-//      pix += "\". c black \", \n";
-//      line.sprintf( "\"+ c #%02X%02X%02X \", \n", r, g, b );
-//      pix += line.copy();
-
-//      pix += "\"                    \", \n";
-//      pix += "\"                    \", \n";
-//      pix += "\"  ..............    \", \n";
-//      pix += "\"   ............     \", \n";
-//      pix += "\"        ..          \", \n";
-//      pix += "\"        ..          \", \n";
-//      pix += "\"        ..          \", \n";
-//      pix += "\"        ..          \", \n";
-//      pix += "\"        ..          \", \n";
-//      pix += "\"        ..          \", \n";
-//      pix += "\"        ..          \", \n";
-//      pix += "\"        .++++++++   \", \n";
-//      pix += "\"        .++++++++   \", \n";
-//      pix += "\"        +++++++++   \", \n";
-//      pix += "\"        +++++++++   \", \n";
-//      pix += "\"        +++++++++   \", \n";
-//      pix += "\"        +++++++++   \", \n";
-//      pix += "\"        +++++++++   \", \n";
-//      pix += "\"                    \", \n";
-//      pix += "\"                    \"}; \n";
     } break;
     case FRAME_COLOR:
     {
@@ -3087,9 +3037,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     r_horz->hide();
     r_vert->hide();
 
-    //setFocusProxy( paperWidget );
     paperWidget->show();
-    //paperWidget->setFocusPolicy( QWidget::StrongFocus );
     docStruct->show();
 
     reorganize();

@@ -126,7 +126,7 @@ public:
     void editCopy();
     void editPaste( QString _string, const QString &_mime = "text/plain" );
     void deleteTable( KWGroupManager *g );
-    
+
     void recalcText();
     void recalcWholeText( bool _cursor = false, bool _fast = false );
     void recalcWholeText( KWParag *start, unsigned int fs );
@@ -250,7 +250,6 @@ protected:
     virtual void viewportDragLeaveEvent( QDragLeaveEvent *e );
     virtual void viewportDropEvent( QDropEvent *e );
     virtual void viewportResizeEvent( QResizeEvent *e );
-    virtual void resizeEvent( QResizeEvent *e );
     bool isInSelection( KWFormatContext *_fc );
 
     void startProcessKeyEvent();

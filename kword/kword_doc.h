@@ -392,9 +392,6 @@ public:
 
     KWAutoFormat &getAutoFormat() { return autoFormat; }
 
-    void emitSelectioOnOff()
-    { emit selectionOnOff(); }
-
     void setPageLayoutChanged( bool c )
     { pglChanged = c; }
     bool getPageLayoutChanged()
@@ -408,7 +405,6 @@ signals:
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
     void sig_updateChildGeometry( KWordChild *_child );
     void sig_removeObject( KWordChild *_child );
-    void selectionOnOff();
 
 protected slots:
     void slotUndoRedoChanged( QString, QString );
