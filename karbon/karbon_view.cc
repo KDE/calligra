@@ -907,7 +907,7 @@ KarbonView::initActions()
 				i18n( "Configure Karbon..." ), "configure", 0, this,
 				SLOT( configure() ), actionCollection(), "configure" );
 
-	new KAction( i18n( "Configure Page &Layout..." ), 0, this,
+	new KAction( i18n( "Page &Layout..." ), 0, this,
 			SLOT( pageLayout() ), actionCollection(), "page_layout" );
 	m_contextHelpAction = new KoContextHelpAction( actionCollection(), this );
 }
