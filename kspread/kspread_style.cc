@@ -630,43 +630,101 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
 {
-    KoGenStyle currentCellStyle( KoGenStyle::STYLE_NUMERIC_DATE );
+    QString format;
+    bool locale = false;
     switch( m_formatType )
     {
     case ShortDate_format:
+        //format;
+        locale = true;
+        break;
     case TextDate_format:
+        //format;
+        locale = true;
+        break;
     case date_format1:
+        format = "dd-MMM-yy";
+        break;
     case date_format2:
+        format = "dd-MMM-yyyy";
+        break;
     case date_format3:
+        format = "dd-MM";
+        break;
     case date_format4:
+        format = "dd-MM";
+        break;
     case date_format5:
+        format = "dd/MM/yy";
+        break;
     case date_format6:
+        format = "dd/MM/yyyy";
+        break;
     case date_format7:
+        format = "MMM-yy";
+        break;
     case date_format8:
+        format = "MMMM-yy";
+        break;
     case date_format9:
+        format = "MMMM-yyyy";
+        break;
     case date_format10:
+        format;/*"F-99" it doesn't exist into qdate*/
+        break;
     case date_format11:
+        format = "dd/MMM";
+        break;
     case date_format12:
+        format = "dd/MM";
+        break;
     case date_format13:
+        format = "dd/MMM/yyyy";
+        break;
     case date_format14:
+        format = "yyyy/MMM/dd";
+        break;
     case date_format15:
+        format = "yyyy-MMM-dd";
+        break;
     case date_format16:
+        format = "yyyy/MM/dd";
+        break;
     case date_format17:
+        format = "d MMMM yyyy";
+        break;
     case date_format18:
+        format = "MM/dd/yyyy";
+        break;
     case date_format19:
+        format = "MM/dd/yy";
+        break;
     case date_format20:
+        format = "MMM/dd/yy";
+        break;
     case date_format21:
+        format = "MMM/dd/yyyy";
+        break;
     case date_format22:
+        format = "MMM-yyyy";
+        break;
     case date_format23:
+        format = "yyyy";
+        break;
     case date_format24:
+        format = "yy";
+        break;
     case date_format25:
+        format = "yyyy/MM/dd";
+        break;
     case date_format26:
+        format = "yyyy/MMM/dd";
         break;
     default:
         kdDebug()<<"this date format is not defined ! :"<<m_formatType<<endl;
         break;
     }
-    return mainStyles.lookup( currentCellStyle, "N" );
+    return KoOasisStyles::saveOasisDateStyle( mainStyles, format, locale );
 }
 
 QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
