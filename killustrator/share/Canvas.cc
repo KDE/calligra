@@ -404,7 +404,7 @@ void Canvas::updateRegion (const Rect& reg)
   QRect clip = m.map (QRect (int (r.left ()*zoomFactor + mXOffset), int (r.top ()*zoomFactor + mYOffset),
                              int (r.width ()), int (r.height ())));
    
-  kdDebug(0) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;
+  //kdDebug(0) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;
 
   
 
