@@ -552,7 +552,7 @@ static const short yycheck[] = {    43,
     -1,    -1,    -1,    -1,    -1,    76
 };
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/share/bison.simple"
+#line 3 "/usr/lib/bison.simple"
 /* This file comes from bison-1.28.  */
 
 /* Skeleton output parser for bison,
@@ -582,11 +582,6 @@ static const short yycheck[] = {    43,
   when the %semantic_parser declaration is not specified in the grammar.
   It was written by Richard Stallman by simplifying the hairy parser
   used when %semantic_parser is specified.  */
-
-#ifndef YYPARSE_RETURN_TYPE
-#define YYPARSE_RETURN_TYPE int
-#endif
-
 
 #ifndef YYSTACK_USE_ALLOCA
 #ifdef alloca
@@ -771,7 +766,7 @@ __yy_memcpy (char *to, char *from, unsigned int count)
 #endif
 #endif
 
-#line 222 "/usr/share/bison.simple"
+#line 217 "/usr/lib/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -795,15 +790,13 @@ __yy_memcpy (char *to, char *from, unsigned int count)
 /* Prevent warning if -Wstrict-prototypes.  */
 #ifdef __GNUC__
 #ifdef YYPARSE_PARAM
-YYPARSE_RETURN_TYPE
-yyparse (void *);
+int yyparse (void *);
 #else
-YYPARSE_RETURN_TYPE
-yyparse (void);
+int yyparse (void);
 #endif
 #endif
 
-YYPARSE_RETURN_TYPE
+int
 yyparse(YYPARSE_PARAM_ARG)
      YYPARSE_PARAM_DECL
 {
@@ -831,9 +824,7 @@ yyparse(YYPARSE_PARAM_ARG)
 #endif
 
   int yystacksize = YYINITDEPTH;
-#ifndef YYSTACK_USE_ALLOCA
   int yyfree_stacks = 0;
-#endif
 
 #ifdef YYPURE
   int yychar;
@@ -918,7 +909,6 @@ yynewstate:
       if (yystacksize >= YYMAXDEPTH)
 	{
 	  yyerror("parser stack overflow");
-#ifndef YYSTACK_USE_ALLOCA
 	  if (yyfree_stacks)
 	    {
 	      free (yyss);
@@ -927,7 +917,6 @@ yynewstate:
 	      free (yyls);
 #endif
 	    }
-#endif	    
 	  return 2;
 	}
       yystacksize *= 2;
@@ -2026,7 +2015,7 @@ case 139:
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 554 "/usr/share/bison.simple"
+#line 543 "/usr/lib/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -2224,7 +2213,6 @@ yyerrhandle:
 
  yyacceptlab:
   /* YYACCEPT comes here.  */
-#ifndef YYSTACK_USE_ALLOCA
   if (yyfree_stacks)
     {
       free (yyss);
@@ -2233,12 +2221,10 @@ yyerrhandle:
       free (yyls);
 #endif
     }
-#endif
   return 0;
 
  yyabortlab:
   /* YYABORT comes here.  */
-#ifndef YYSTACK_USE_ALLOCA
   if (yyfree_stacks)
     {
       free (yyss);
@@ -2247,7 +2233,6 @@ yyerrhandle:
       free (yyls);
 #endif
     }
-#endif    
   return 1;
 }
 #line 965 "yacc.yy"
