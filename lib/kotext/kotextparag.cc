@@ -431,28 +431,19 @@ int KoTextParag::lineSpacing( int line ) const
 QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
 {
     QRect rct( zh->layoutUnitToPixel( rect() ) );
-    // Both of those workarounds don't appear to be necessary anymore
-    // after the qRound->int fix in KoZoomHandler::layoutUnitToPixel.
-    // To be checked.
-#if 0
-    // QRect-semantics and rounding problem... The height is wrong.
-    rct.setHeight( zh->layoutUnitToPixelY( rect().height() ) );
+    kdDebug(32500) << "   pixelRect for parag " << paragId()
+                   << ": rect=" << rect() << " pixelRect=" << rct << endl;
 
-    kdDebug(32500) << "KoTextParag::pixelRect was:" << zh->layoutUnitToPixel( rect() ).height()
-              << " is now:" << rct.height() << endl;
-#endif
-#if 0
     // After division we almost always end up with the top overwriting the bottom of the parag above
     if ( prev() )
     {
         QRect prevRect( zh->layoutUnitToPixel( prev()->rect() ) );
         if ( rct.top() < prevRect.bottom() + 1 )
         {
-            kdDebug(32500) << "pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
+            kdDebug(32500) << "   pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
             rct.setTop( prevRect.bottom() + 1 );
         }
     }
-#endif
     return rct;
 }
 
@@ -501,7 +492,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
         if ( m_layout.bottomBorder.width() > 0 )
             r.rBottom() /*-= zh->layoutUnitToPixelY(lineSpacing( lastLine ))*/ + 1;
-        //kdDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
+        //kdDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " bordersRect=" << r << endl;
         KoBorder::drawBorders( painter, zh, r,
                                m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
                                0, QPen() );

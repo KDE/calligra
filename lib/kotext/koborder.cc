@@ -86,6 +86,8 @@ QPen KoBorder::borderPen( const KoBorder & _brd, int width, QColor defaultColor 
         break;
     }
 
+    // Wide pens need SquareCap otherwise the last pixel isn't being drawn!
+    pen.setCapStyle( QPen::SquareCap );
     return pen;
 }
 
@@ -179,8 +181,8 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
     int leftBorderPenWidth = zoomWidthX( leftBorder.penWidth(), zoomHandler, minborder );
     int rightBorderPenWidth = zoomWidthX( rightBorder.penWidth(), zoomHandler, minborder );
 
-    //kdDebug(32500) << "KoBorder::drawBorders top=" << topBorderWidth << " bottom=" << bottomBorderWidth
-    //          << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
+    kdDebug(32500) << "KoBorder::drawBorders widths: top=" << topBorderWidth << " bottom=" << bottomBorderWidth
+                   << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
 
     QColor defaultColor = KoTextFormat::defaultTextColor( &painter );
 
@@ -236,7 +238,13 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
             painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
         }
         else
-            painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
+        {
+            int yBottom = rect.bottom()+bottomBorderWidth;
+            /*kdDebug(32500) << " pen=" << painter.pen() << " rect=" << rect
+                           << " painting from " << x << "," << rect.top()-topBorderWidth
+                           << " to " << x << "," << yBottom << endl;*/
+            painter.drawLine( x, rect.top()-topBorderWidth, x, yBottom );
+        }
     }
     if ( rightBorderWidth > 0 )
     {

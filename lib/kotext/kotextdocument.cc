@@ -141,204 +141,9 @@ bool KoTextDocument::visitFromTo( KoTextParag *firstParag, int firstIndex, KoTex
     }
 }
 
-// SYNC start - from here until end mark, modified copies of KoTextDocument methods
 static bool is_printer( QPainter *p )
 {
     return p && p->device() && p->device()->devType() == QInternal::Printer;
-}
-
-void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg,
-                                              KoZoomHandler* zoomHandler, const QBrush *paper )
-{
-    if ( !firstParag() )
-	return;
-
-    Q_ASSERT( (m_drawingFlags & DrawSelections) == 0 );
-    if (m_drawingFlags & DrawSelections)
-           kdDebug() << kdBacktrace();
-    if ( paper ) {
-	p->setBrushOrigin( -(int)p->translationX(),
-			   -(int)p->translationY() );
-	p->fillRect( cr, *paper );
-    }
-
-    KoTextParag *parag = firstParag();
-    while ( parag ) {
-	if ( !parag->isValid() )
-	    parag->format();
-
-	QRect pr( parag->pixelRect( zoomHandler ) );
-        pr.setLeft( 0 );
-        pr.setWidth( QWIDGETSIZE_MAX );
-        // The cliprect is checked in layout units, in KoTextParag::paint
-        QRect crect_lu( parag->rect() );
-
-	if ( !cr.isNull() && !cr.intersects( pr ) ) {
-	    parag = parag->next();
-	    continue;
-	}
-	p->translate( 0, pr.y() );
-        QBrush brush = /*parag->backgroundColor() ? *parag->backgroundColor() :*/
-            cg.brush( QColorGroup::Base );
-        if ( brush != Qt::NoBrush )
-	    p->fillRect( QRect( 0, 0, pr.width(), pr.height() ), brush );
-        //p->setBrushOrigin( p->brushOrigin() + QPoint( 0, pr.y() ) );
-	parag->paint( *p, cg, 0, FALSE,
-                      crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
-	p->translate( 0, -pr.y() );
-        //p->setBrushOrigin( p->brushOrigin() - QPoint( 0, pr.y() ) );
-	parag = parag->next();
-    }
-}
-
-void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
-                                       QPixmap *&doubleBuffer, const QColorGroup &cg,
-                                       KoZoomHandler* zoomHandler, bool drawCursor,
-                                       KoTextCursor *cursor, bool resetChanged, uint drawingFlags )
-{
-#ifdef DEBUG_PAINTING
-    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
-#endif
-    m_drawingFlags = drawingFlags;
-    int sx = 0, sy = 0; // used to be for shadow (which has now moved to KoTextFormat)
-    QPainter *painter = 0;
-    // Those three rects are in pixels, in the document coordinates (0,0 == topleft of first parag)
-    QRect rect = parag->pixelRect( zoomHandler ); // the parag rect
-    rect.rRight() += QABS( sx );
-    rect.rBottom() += QABS( sy);
-
-    int offsetY = 0;
-    // Start painting from a given line number.
-    if ( parag->lineChanged() > -1 )
-    {
-        offsetY = zoomHandler->layoutUnitToPixelY( parag->lineY( parag->lineChanged() ) - parag->topMargin() );
-#ifdef DEBUG_PAINTING
-        kdDebug(32500) << " Repainting from lineChanged=" << parag->lineChanged() << " -> adding " << offsetY << " to rect" << endl;
-#endif
-        // Skip the lines that are not repainted by moving Top. The bottom doesn't change.
-        rect.rTop() += offsetY;
-    }
-
-    QRect crect( cx, cy, cw, ch ); // the overall crect
-    QRect ir( rect ); // will be the rect to be repainted
-    QBrush brush = /*parag->backgroundColor() ? *parag->backgroundColor() :*/
-        cg.brush( QColorGroup::Base );
-    // No need to brush plain white on a printer. Brush all other cases (except "full transparent" case).
-    bool needBrush = brush.style() != Qt::NoBrush &&
-                     !(brush.style() == Qt::SolidPattern && brush.color() == Qt::white && p->device()->devType() == QInternal::Printer);
-
-    bool useDoubleBuffer = !parag->document()->parent();
-    if ( p->device()->devType() == QInternal::Printer )
-	useDoubleBuffer = FALSE;
-    // Can't handle transparency using double-buffering, in case of rotation/scaling (due to bitBlt)
-    // The test on mat is almost like isIdentity(), but allows for translation.
-    //// ##### The way to fix this: initialize the pixmap to be fully transparent instead
-    // of being white.
-    QWMatrix mat = p->worldMatrix();
-    if ( ( mat.m11() != 1.0 || mat.m22() != 1.0 || mat.m12() != 0.0 || mat.m21() != 0.0 )
-         && brush.style() != Qt::SolidPattern )
-        useDoubleBuffer = FALSE;
-
-#ifdef DEBUG_PAINTING
-    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG parag->rect=" << parag->rect()
-                   << " pixelRect(ir)=" << ir
-                   << " crect (pixels)=" << crect
-                   << " useDoubleBuffer=" << useDoubleBuffer << endl;
-#endif
-
-    if ( useDoubleBuffer  ) {
-	painter = new QPainter;
-	if ( cx >= 0 && cy >= 0 )
-	    ir = ir.intersect( crect );
-	if ( !doubleBuffer ||
-	     ir.width() > doubleBuffer->width() ||
-	     ir.height() > doubleBuffer->height() ) {
-	    doubleBuffer = bufferPixmap( ir.size() );
-	    painter->begin( doubleBuffer );
-	} else {
-	    painter->begin( doubleBuffer );
-	}
-
-    } else {
-        p->save();
-	painter = p;
-	painter->translate( ir.x(), ir.y() );
-    }
-    // Until the next translate(), (0,0) in the painter will be at ir.topLeft() in reality
-    //kdDebug() << "KoTextDocument::drawParagWYSIWYG ir=" << ir << endl;
-
-
-    // Cumulate ir.x(), ir.y() with the current brush origin
-    //painter->setBrushOrigin( painter->brushOrigin() + ir.topLeft() );
-
-    if ( useDoubleBuffer || is_printer( painter ) ) {
-        // Transparent -> grab background from p's device
-        if ( brush.style() != Qt::SolidPattern ) {
-            bitBlt( doubleBuffer, 0, 0, p->device(),
-                    ir.x() + (int)p->translationX(), ir.y() + (int)p->translationY(),
-                    ir.width(), ir.height() );
-        }
-    }
-    if ( needBrush )
-        painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ), brush );
-
-    // Now revert the previous painter translation, and instead make (0,0) the topleft of the PARAGRAPH
-    painter->translate( rect.x() - ir.x(), rect.y() - ir.y() );
-#ifdef DEBUG_PAINTING
-    //kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
-#endif
-    //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
-
-    // The cliprect is checked in layout units, in KoTextParag::paint
-    QRect crect_lu( zoomHandler->pixelToLayoutUnit( crect ) );
-#ifdef DEBUG_PAINTING
-    //kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG crect_lu=" << crect_lu << endl;
-#endif
-
-    // paintDefault will paint line 'lineChanged' at its normal Y position.
-    // But the buffer-pixmap below starts at Y. We need to translate by -Y
-    // so that the painting happens at the right place.
-    painter->translate( 0, -offsetY );
-
-    parag->paint( *painter, cg, drawCursor ? cursor : 0, (m_drawingFlags & DrawSelections),
-                  crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
-
-
-    if ( useDoubleBuffer ) {
-	delete painter;
-	painter = 0;
-	p->drawPixmap( ir.topLeft(), *doubleBuffer, QRect( QPoint( 0, 0 ), ir.size() ) );
-#if 0 // for debug!
-        p->save();
-        p->setPen( Qt::blue );
-        p->drawRect( ir.x(), ir.y(), ir.width(), ir.height() );
-        p->restore();
-#endif
-    } else {
-        // undo previous translations, painter is 'p', i.e. will be used later on
-        p->restore();
-	//painter->translate( -ir.x(), -ir.y() );
-        //painter->translate( 0, +offsetY );
-        //painter->setBrushOrigin( painter->brushOrigin() - ir.topLeft() );
-    }
-
-    if ( needBrush ) {
-        int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
-#ifdef DEBUG_PAINTING
-//        kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG my rect is: " << rect << endl;
-#endif
-        if ( rect.x() + rect.width() < docright ) {
-#ifdef DEBUG_PAINTING
-            kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
-#endif
-            p->fillRect( rect.x() + rect.width(), rect.y(),
-                         docright - ( rect.x() + rect.width() ),
-                         rect.height(), cg.brush( QColorGroup::Base ) );
-        }
-    }
-
-    if ( resetChanged )
-	parag->setChanged( FALSE );
 }
 
 KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
@@ -347,7 +152,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
                                           bool resetChanged, uint drawingFlags )
 {
     m_drawingFlags = drawingFlags;
-    if ( p->device()->devType() == QInternal::Printer ) {
+    if ( is_printer( p ) ) {
     // This stuff relies on doLayout()... simpler to just test for Printer.
     // If someone understand doLayout() please tell me (David)
     /*if ( isWithoutDoubleBuffer() || par && par->withoutDoubleBuffer ) { */
@@ -366,9 +171,10 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 
     QPixmap *doubleBuffer = 0;
     QPainter painter;
+    // All the coordinates in this method are in view pixels
     QRect crect( cx, cy, cw, ch );
 #ifdef DEBUG_PAINTING
-    kdDebug(32500) << "KoTextDocument::drawWYSIWYG crect=" << crect << endl;
+    kdDebug(32500) << "\nKoTextDocument::drawWYSIWYG crect=" << crect << endl;
 #endif
 
     // Space above first parag
@@ -380,7 +186,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
         r &= crect;
         if ( !r.isEmpty() ) {
 #ifdef DEBUG_PAINTING
-            kdDebug(32500) << "KoTextDocument::drawWYSIWYG space above first parag: " << r << " (pixels)" << endl;
+            kdDebug(32500) << " drawWYSIWYG: space above first parag: " << r << " (pixels)" << endl;
             p->fillRect( r, cg.brush( QColorGroup::Base ) );
 #endif
         }
@@ -393,11 +199,13 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 
 	QRect ir = parag->pixelRect( zoomHandler );
 #ifdef DEBUG_PAINTING
-        kdDebug(32500) << "KoTextDocument::drawWYSIWYG ir=" << ir << endl;
+        kdDebug(32500) << " drawWYSIWYG: ir=" << ir << endl;
 #endif
 	if ( isPageBreakEnabled() && parag->next() )
         {
             int nexty = parag->next()->pixelRect(zoomHandler).y();
+            // Test ir.y+ir.height, which is the first pixel _under_ the parag
+            // (as opposed ir.bottom() which is the last pixel of the parag)
 	    if ( ir.y() + ir.height() < nexty ) {
 		QRect r( 0, ir.y() + ir.height(),
 			 zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() ),
@@ -406,7 +214,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 		if ( !r.isEmpty() )
                 {
 #ifdef DEBUG_PAINTING
-                    kdDebug(32500) << "KoTextDocument::drawWYSIWYG space between parag " << parag->paragId() << " and " << parag->next()->paragId() << " : " << r << " (pixels)" << endl;
+                    kdDebug(32500) << " drawWYSIWYG: space between parag " << parag->paragId() << " and " << parag->next()->paragId() << " : " << r << " (pixels)" << endl;
 #endif
 		    p->fillRect( r, cg.brush( QColorGroup::Base ) );
                 }
@@ -462,11 +270,201 @@ floating:
     return lastFormatted;
 }
 
+void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg,
+                                              KoZoomHandler* zoomHandler, const QBrush *paper )
+{
+    if ( !firstParag() )
+	return;
+
+    Q_ASSERT( (m_drawingFlags & DrawSelections) == 0 );
+    if (m_drawingFlags & DrawSelections)
+           kdDebug() << kdBacktrace();
+    if ( paper ) {
+	p->setBrushOrigin( -(int)p->translationX(),
+			   -(int)p->translationY() );
+	p->fillRect( cr, *paper );
+    }
+
+    KoTextParag *parag = firstParag();
+    while ( parag ) {
+	if ( !parag->isValid() )
+	    parag->format();
+
+	QRect pr( parag->pixelRect( zoomHandler ) );
+        pr.setLeft( 0 );
+        pr.setWidth( QWIDGETSIZE_MAX );
+        // The cliprect is checked in layout units, in KoTextParag::paint
+        QRect crect_lu( parag->rect() );
+
+	if ( !cr.isNull() && !cr.intersects( pr ) ) {
+	    parag = parag->next();
+	    continue;
+	}
+	p->translate( 0, pr.y() );
+        QBrush brush = /*parag->backgroundColor() ? *parag->backgroundColor() :*/
+            cg.brush( QColorGroup::Base );
+        if ( brush != Qt::NoBrush )
+	    p->fillRect( QRect( 0, 0, pr.width(), pr.height() ), brush );
+        //p->setBrushOrigin( p->brushOrigin() + QPoint( 0, pr.y() ) );
+	parag->paint( *p, cg, 0, FALSE,
+                      crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
+	p->translate( 0, -pr.y() );
+        //p->setBrushOrigin( p->brushOrigin() - QPoint( 0, pr.y() ) );
+	parag = parag->next();
+    }
+}
+
+// Called by drawWYSIWYG and the app's drawCursor
+void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
+                                       QPixmap *&doubleBuffer, const QColorGroup &cg,
+                                       KoZoomHandler* zoomHandler, bool drawCursor,
+                                       KoTextCursor *cursor, bool resetChanged, uint drawingFlags )
+{
+#ifdef DEBUG_PAINTING
+    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
+#endif
+    m_drawingFlags = drawingFlags;
+    QPainter *painter = 0;
+    // Those three rects are in pixels, in the document coordinates (0,0 == topleft of first parag)
+    QRect rect = parag->pixelRect( zoomHandler ); // the parag rect
+
+    int offsetY = 0;
+    // Start painting from a given line number.
+    if ( parag->lineChanged() > -1 )
+    {
+        offsetY = zoomHandler->layoutUnitToPixelY( parag->lineY( parag->lineChanged() ) - parag->topMargin() );
+#ifdef DEBUG_PAINTING
+        kdDebug(32500) << " Repainting from lineChanged=" << parag->lineChanged() << " -> adding " << offsetY << " to rect" << endl;
+#endif
+        // Skip the lines that are not repainted by moving Top. The bottom doesn't change.
+        rect.rTop() += offsetY;
+    }
+
+    QRect crect( cx, cy, cw, ch ); // the overall crect
+    QRect ir( rect ); // will be the rect to be repainted
+    QBrush brush = /*parag->backgroundColor() ? *parag->backgroundColor() :*/
+        cg.brush( QColorGroup::Base );
+    // No need to brush plain white on a printer. Brush all other cases (except "full transparent" case).
+    bool needBrush = brush.style() != Qt::NoBrush &&
+                     !(brush.style() == Qt::SolidPattern && brush.color() == Qt::white && is_printer(p));
+
+    bool useDoubleBuffer = !parag->document()->parent();
+    if ( is_printer(p) )
+	useDoubleBuffer = FALSE;
+    // Can't handle transparency using double-buffering, in case of rotation/scaling (due to bitBlt)
+    // The test on mat is almost like isIdentity(), but allows for translation.
+    //// ##### The way to fix this: initialize the pixmap to be fully transparent instead
+    // of being white.
+    QWMatrix mat = p->worldMatrix();
+    if ( ( mat.m11() != 1.0 || mat.m22() != 1.0 || mat.m12() != 0.0 || mat.m21() != 0.0 )
+         && brush.style() != Qt::SolidPattern )
+        useDoubleBuffer = FALSE;
+
+#ifdef DEBUG_PAINTING
+    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG parag->rect=" << parag->rect()
+                   << " pixelRect(ir)=" << ir
+                   << " crect (pixels)=" << crect
+                   << " useDoubleBuffer=" << useDoubleBuffer << endl;
+#endif
+
+    if ( useDoubleBuffer  ) {
+	painter = new QPainter;
+	if ( cx >= 0 && cy >= 0 )
+	    ir = ir.intersect( crect );
+	if ( !doubleBuffer ||
+	     ir.width() > doubleBuffer->width() ||
+	     ir.height() > doubleBuffer->height() )
+        {
+	    doubleBuffer = bufferPixmap( ir.size() );
+        }
+        painter->begin( doubleBuffer );
+
+    } else {
+        p->save();
+	painter = p;
+	painter->translate( ir.x(), ir.y() );
+    }
+    // Until the next translate(), (0,0) in the painter will be at ir.topLeft() in reality
+    //kdDebug() << "KoTextDocument::drawParagWYSIWYG ir=" << ir << endl;
+
+
+    // Cumulate ir.x(), ir.y() with the current brush origin
+    //painter->setBrushOrigin( painter->brushOrigin() + ir.topLeft() );
+
+    if ( useDoubleBuffer || is_printer( painter ) ) {
+        // Transparent -> grab background from p's device
+        if ( brush.style() != Qt::SolidPattern ) {
+            bitBlt( doubleBuffer, 0, 0, p->device(),
+                    ir.x() + (int)p->translationX(), ir.y() + (int)p->translationY(),
+                    ir.width(), ir.height() );
+        }
+    }
+    if ( needBrush )
+        painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ), brush );
+
+    // Now revert the previous painter translation, and instead make (0,0) the topleft of the PARAGRAPH
+    painter->translate( rect.x() - ir.x(), rect.y() - ir.y() );
+#ifdef DEBUG_PAINTING
+    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
+#endif
+    //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
+
+    // The cliprect is checked in layout units, in KoTextParag::paint
+    QRect crect_lu( zoomHandler->pixelToLayoutUnit( crect ) );
+#ifdef DEBUG_PAINTING
+    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG crect_lu=" << crect_lu << endl;
+#endif
+
+    // paintDefault will paint line 'lineChanged' at its normal Y position.
+    // But the buffer-pixmap below starts at Y. We need to translate by -Y
+    // so that the painting happens at the right place.
+    painter->translate( 0, -offsetY );
+
+    parag->paint( *painter, cg, drawCursor ? cursor : 0, (m_drawingFlags & DrawSelections),
+                  crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
+
+
+    if ( useDoubleBuffer ) {
+	delete painter;
+	painter = 0;
+	p->drawPixmap( ir.topLeft(), *doubleBuffer, QRect( QPoint( 0, 0 ), ir.size() ) );
+#if 0 // for debug!
+        p->save();
+        p->setPen( Qt::blue );
+        p->drawRect( ir.x(), ir.y(), ir.width(), ir.height() );
+        p->restore();
+#endif
+    } else {
+        // undo previous translations, painter is 'p', i.e. will be used later on
+        p->restore();
+	//painter->translate( -ir.x(), -ir.y() );
+        //painter->translate( 0, +offsetY );
+        //painter->setBrushOrigin( painter->brushOrigin() - ir.topLeft() );
+    }
+
+    if ( needBrush ) {
+        int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
+#ifdef DEBUG_PAINTING
+//        kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG my rect is: " << rect << endl;
+#endif
+        if ( rect.x() + rect.width() < docright ) {
+#ifdef DEBUG_PAINTING
+            kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
+#endif
+            p->fillRect( rect.x() + rect.width(), rect.y(),
+                         docright - ( rect.x() + rect.width() ),
+                         rect.height(), cg.brush( QColorGroup::Base ) );
+        }
+    }
+
+    if ( resetChanged )
+	parag->setChanged( FALSE );
+}
+
+
 KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
 {
     return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
-
-// SYNC end - end of modified copies of KoTextDocument methods
 
 #include "kotextdocument.moc"

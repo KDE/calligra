@@ -79,6 +79,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         }
 
     }
+    // Now add the rest of the top margin (e.g. the one for the border)
+    y += parag->topMargin() - parag->breakableTopMargin();
     int lineHeight = 0;
     int len = parag->length();
 
