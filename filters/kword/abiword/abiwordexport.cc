@@ -40,6 +40,7 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <kfilterdev.h>
 
 #include <koGlobal.h>
 
@@ -690,9 +691,8 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
     // TODO: replace it with KFilterDev
     //
     QIODevice* ioDevice=NULL;
-    //Choose if gzipped or not
 
-    //At first, find the last extension
+    //Find the last extension
     QString strExt;
     const int result=filenameOut.findRev('.');
     if (result>=0)
@@ -700,6 +700,26 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
         strExt=filenameOut.mid(result);
     }
 
+#if 0
+    QString strMime; // Mime type of the compressor (default: unknown)
+
+    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
+        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
+    {
+        // Compressed with gzip
+        strMime="application/x-gzip";
+        kdDebug(30506) << "Compression: gzip" << endl;
+    }
+    else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
+        ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
+    {
+        // Compressed with bzip2
+        strMime="application/x-bzip2";
+        kdDebug(30506) << "Compression: bzip2" << endl;
+    }
+
+    ioDevice = KFilterDev::deviceForFile(filenameOut,strMime);
+#else
     if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (standard extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
     {// GZipped
@@ -709,6 +729,7 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
     {// Uncompressed
         ioDevice=new QFile(filenameOut);
     }
+#endif
 
     if (!ioDevice)
     {

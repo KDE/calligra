@@ -31,6 +31,7 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <kfilterdev.h>
 
 #include <koGlobal.h>
 
@@ -1398,6 +1399,47 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
 
+#if 0
+    // We have an AbiWord file that may be compressed
+
+    QString strMime; // Mime type of the compressor (default: unknown)
+
+    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
+        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
+    {
+        // Compressed with gzip
+        strMime="application/x-gzip";
+        kdDebug(30506) << "Compression: gzip" << endl;
+    }
+    else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
+        ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
+    {
+        // Compressed with bzip2
+        strMime="application/x-bzip2";
+        kdDebug(30506) << "Compression: bzip2" << endl;
+    }
+
+    QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
+
+    if (!in->open(IO_ReadOnly))
+    {
+        kdError(30506) << "Cannot open file! Aborting!" << endl;
+        delete in;
+        return false;
+    }
+
+    QXmlInputSource source(in); // Read the file
+
+    in->close();
+
+    if (!reader.parse( source ))
+    {
+        kdError(30506) << "Import (COMPRESSED): Parsing unsuccessful. Aborting!" << endl;
+        delete in;
+        return false;
+    }
+    delete in;
+#else
     if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
     {   //The input file is compressed
@@ -1428,6 +1470,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
             return false;
         }
     }
+#endif
 
     KoStore out=KoStore(fileOut, KoStore::Write);
     if(!out.open("root"))
