@@ -28,6 +28,7 @@
 #include <komlWriter.h>
 
 #include <qstring.h>
+#include <qcstring.h>
 
 #include "wordfilter.h"
 #include "myfile.h"

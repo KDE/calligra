@@ -98,7 +98,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         str=myWordFilter->kwdFile();
     else 
         // Ohh, something went wrong - Sorry...
-        // Let´s tell the user that this filter is crappy.
+        // Let's tell the user that this filter is crappy.
 
         str+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\" url=\"/home/koffice/empty.kwd\">
@@ -115,7 +115,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
   <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">
    <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>
    <PARAGRAPH>
-    <TEXT>This filter is still crappy and it was not able to convert your document... IÂ´m very sorry about this. Maybe you can mail this document (of course compressed) to wtrobin@carinthia.com that I can improve this filter.</TEXT>
+    <TEXT>This filter is still crappy and it was not able to convert your document... I'm very sorry about this. Maybe you can mail this document (of course compressed) to wtrobin@carinthia.com that I can improve this filter.</TEXT>
     <INFO info=\"0\"/>
     <HARDBRK frame=\"0\"/>
     <FORMATS>
@@ -151,10 +151,13 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
   </FRAMESETS>
 </DOC>";
     
-    len = str.length();
+    QCString cstr=QCString(str.utf8());
+
+    len = cstr.length();
     data.length(len);
-    for(CORBA::ULong i = 0;i < len;++i)
-        data[i] = QChar(str[i]);
+    
+    for(CORBA::ULong i=0;i<len;++i)
+        data[i]=cstr[i];
 
     delete [] buffer;
     buffer=0L;
