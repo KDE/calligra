@@ -50,7 +50,7 @@
 #include "kexiformbase.h"
 #include "kexiprojectproperties.h"
 #include "kexiproject.h"
-#include "kexirelation.h"
+#include "kexirelationdialog.h"
 #include "KexiViewIface.h"
 
 KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, const char *name ) : KoView(part,parent,name)
@@ -258,7 +258,7 @@ KexiView::slotSettings()
 void
 KexiView::slotShowRelations()
 {
-	KexiRelation *r = new KexiRelation(this,workspaceWidget(), "relations");
+	KexiRelationDialog *r = new KexiRelationDialog(this,workspaceWidget(), "relations");
 	r->show();
 }
 

@@ -23,6 +23,7 @@
 #include "kexi_factory.h"
 #include "kexiview.h"
 #include "kexicreateproject.h"
+#include "kexirelation.h"
 
 #include <koStore.h>
 
@@ -43,7 +44,7 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
     kdDebug()<<"creating KexDB instance"<<endl;
     m_db = new KexiDB(this);
     m_formManager=new KexiFormManager(this);
-    m_url = "";
+    m_relationManager=new KexiRelation(this);
     if ( name )
         dcopObject();
 
@@ -53,6 +54,8 @@ KexiProject::~KexiProject()
 {
     delete dcop;
 }
+
+KexiRelation *KexiProject::relationManager() { return m_relationManager;}
 
 DCOPObject* KexiProject::dcopObject()
 {
@@ -349,7 +352,6 @@ KexiProject::initHostConnection(const Credentials &cred)
 void
 KexiProject::clear()
 {
-	m_url = "";
         setModified( false);
 //	kexi->mainWindow()->slotProjectModified();
 }

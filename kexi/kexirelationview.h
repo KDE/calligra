@@ -27,6 +27,7 @@
 #include <qcstring.h>
 
 #include <klistview.h>
+#include <kexirelation.h>
 
 //#include <qlistview.h>
 
@@ -42,17 +43,7 @@ typedef struct RelationSource
 	KexiRelationViewTable	*columnView;
 };
 
-typedef struct SourceConnection
-{
-	QString	srcTable;
-	QString	rcvTable;
-	QString	srcField;
-	QString	rcvField;
-	QRect	geometry;
-};
-
 typedef QMap<QString, RelationSource> TableList;
-typedef QValueList<SourceConnection> ConnectionList;
 
 class KexiRelationView : public QScrollView
 {
@@ -65,7 +56,7 @@ class KexiRelationView : public QScrollView
 		void		addTable(const QString &table, QStringList columns);
 		void		addConnection(SourceConnection con);
 
-		ConnectionList	getConnections()const { return m_connections; };
+		RelationList	getConnections()const { return m_connections; };
 
 	public slots:
 		void		slotTableScrolling(QString);
@@ -88,7 +79,7 @@ class KexiRelationView : public QScrollView
 		int		m_grabOffsetY;
 
 		TableList	m_tables;
-		ConnectionList	m_connections;
+		RelationList	m_connections;
 };
 
 class KexiRelationViewTable : public KListView

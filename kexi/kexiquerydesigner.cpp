@@ -22,6 +22,7 @@
 #include <qdom.h>
 #include <qwidgetstack.h>
 #include <qcstring.h>
+#include <qstatusbar.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -111,12 +112,16 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, QString ide
 
 	m_widgetStack->raiseWidget(m_editor);
 
-        m_tb = new KMultiTabBar(this,KMultiTabBar::Horizontal);
+	QStatusBar *sb=new QStatusBar(this);
+        m_tb = new KMultiTabBar(sb,KMultiTabBar::Horizontal);
+	m_tb->setFixedWidth(80);
+	sb->addWidget(m_tb);
 	m_tb->showActiveTabTexts(false);
         addTab(SmallIcon("state_edit"), "Graphical Designer", m_editor,m_widgetStack->id(m_editor));
         addTab(SmallIcon("state_sql"), "Sql Editor", m_sqlView,m_widgetStack->id(m_sqlView));
         addTab(SmallIcon("table"), "Result", m_view,m_widgetStack->id(m_view));
-	l->addWidget(m_tb);
+	sb->setFixedHeight(sb->sizeHint().height());
+	l->addWidget(sb);
 	l->activate();
 //	activateActions();
 //	connect(kexi->project(), SIGNAL(saving()), this, SLOT(slotSave()));

@@ -26,6 +26,7 @@
 
 class KexiDoc;
 class DCOPObject;
+class KexiRelation;
 
 struct FileReference
 {
@@ -76,11 +77,10 @@ public:
 
         KexiDB* db()const { return m_db; };
         KexiFormManager *formManager()const {return m_formManager;}
-        QString url()const { return m_url; }
         bool dbIsAvaible()const { return m_dbAvaible; }
         QString boolToString(bool b);
         bool stringToBool(const QString &s);
-
+	KexiRelation *relationManager();
 signals:
         void dbAvaible();
         void saving(KoStore *);
@@ -110,10 +110,10 @@ private:
         KexiDB*         m_db;
         KexiFormManager *m_formManager;
         Credentials     m_cred;
-        QString         m_url;
         bool            m_dbAvaible;
         References      m_fileReferences;
         Groups          m_refGroups;
+	KexiRelation	*m_relationManager;
     DCOPObject *dcop;
 
 };

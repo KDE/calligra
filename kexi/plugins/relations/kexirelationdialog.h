@@ -17,50 +17,41 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIRELATION_H
-#define KEXIRELATION_H
+#ifndef KEXIRELATIONDIALOG_H
+#define KEXIRELATIONDIALOG_H
 
 #include <qvaluelist.h>
-#include <qvaluestack.h>
 
-typedef struct SourceConnection
-{
-        QString srcTable;
-        QString rcvTable;
-        QString srcField;
-        QString rcvField;
-        QRect   geometry;
-};
+#include "kexidialogbase.h"
+#include "kexirelationview.h"
+
+class QComboBox;
+class KoStore;
+class KexiDB;
+
 
 typedef QValueList<SourceConnection> RelationList;
 
-class KexiProject;
-class KoStore;
-
-class KexiRelation : public QObject
+class KexiRelationDialog : public KexiDialogBase
 {
 	Q_OBJECT
 
 	public:
-		KexiRelation(KexiProject *parent, const char *name="relationmanager");
-		~KexiRelation();
+		KexiRelationDialog(KexiView *view,QWidget *parent, const char *name="relations", bool embedd=false);
+		~KexiRelationDialog();
 
-		RelationList projectRelations();
-		void updateRelationList(QObject *who, RelationList relationList);
-		void storeRelations(KoStore *store);
-		void loadRelations(KoStore *store);
-		void incUsageCount();
-		void decUsageCount();
+		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
-	signals:
-		void relationListUpdated(QObject *sender);
-		
+
+		KexiRelationView	*view()const { return m_view; }
+	public slots:
+		void			slotAddTable();
+		void			slotSave(KoStore *store);
+
 	private:
-		typedef QValueStack<RelationList> UndoRedoStack;
-		RelationList m_relationList;
-		KexiProject *m_parent;
-		UndoRedoStack m_undoStack;
-		int m_usageCount;
+		KexiDB			*m_db;
+		QComboBox		*m_tableCombo;
+		KexiRelationView	*m_view;
 };
 
 #endif

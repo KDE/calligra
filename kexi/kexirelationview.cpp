@@ -94,7 +94,7 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 		}
 	}
 
-	for(ConnectionList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
+	for(RelationList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
 	{
 		SourceConnection *c = &(*itC);
 
@@ -227,7 +227,7 @@ KexiRelationView::contentsMouseMoveEvent(QMouseEvent *ev)
 		updateContents(old);
 		updateContents((*m_floatingSource).geometry);
 
-		for(ConnectionList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
+		for(RelationList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
 		{
 			if((*itC).srcTable == (*m_floatingSource).table || (*itC).rcvTable == (*m_floatingSource).table)
 			{
@@ -253,7 +253,7 @@ KexiRelationView::contentsMouseReleaseEvent(QMouseEvent *ev)
 void
 KexiRelationView::slotTableScrolling(QString table)
 {
-	for(ConnectionList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
+	for(RelationList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
 	{
 		if((*itC).srcTable == table || (*itC).rcvTable == table)
 		{

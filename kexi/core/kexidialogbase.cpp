@@ -61,7 +61,7 @@ KexiView *KexiDialogBase::kexiView()const
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {
-	showMaximized();
+//	showMaximized();
 	return;
 #if 0
 	myDock=0;

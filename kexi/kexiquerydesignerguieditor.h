@@ -33,7 +33,7 @@ class QPushButton;
 class KexiDB;
 class KexiTableView;
 class KexiTableItem;
-class KexiRelation;
+class KexiRelationDialog;
 
 struct InvolvedTable
 {
@@ -80,7 +80,7 @@ class KexiQueryDesignerGuiEditor : public QWidget
 	private:
 		KexiDB			*m_db;
 
-		KexiRelation		*m_tables;
+		KexiRelationDialog	*m_tables;
 		KexiTableView		*m_designTable;
 
 		KexiQueryDesigner	*m_parent;

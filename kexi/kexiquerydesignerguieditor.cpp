@@ -30,7 +30,7 @@
 #include "kexitableview.h"
 #include "kexitableitem.h"
 #include "kexiquerydesignerguieditor.h"
-#include "kexirelation.h"
+#include "kexirelationdialog.h"
 #include "kexiproject.h"
 #include "kexiview.h"
 
@@ -40,7 +40,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_db = view->project()->db();
 	m_parent = myparent;
 
-	m_tables = new KexiRelation(view,this, "querytables", true);
+	m_tables = new KexiRelationDialog(view,this, "querytables", true);
 
 	m_designTable = new KexiTableView(this);
 	m_designTable->m_editOnDubleClick = true;

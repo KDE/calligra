@@ -7,7 +7,7 @@ libkexipart_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp \
 	kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h \
 	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp \
-	kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationview.cpp kexiformbase.cpp \
+	kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationdialog.cpp kexirelationview.cpp kexiformbase.cpp \
 	kexicomboboxtableedit.cpp kexitableedit.cpp KexiViewIface.skel KexiViewIface.cpp KexiProjectIface.skel KexiProjectIface.cpp
 
 libkexipart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
