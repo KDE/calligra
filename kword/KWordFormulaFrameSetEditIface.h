@@ -57,6 +57,7 @@ k_dcop:
     void addMatrix( uint rows, uint columns );
     void addOneByTwoMatrix();
     void addNameSequence();
+    void addNegThinSpace();
 
     void addLowerLeftIndex();
     void addUpperLeftIndex();

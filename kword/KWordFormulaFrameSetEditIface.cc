@@ -269,3 +269,8 @@ void KWordFormulaFrameSetEditIface::addText( const QString &str )
 {
     m_framesetedit->getFormulaView()->addText( str );
 }
+
+void KWordFormulaFrameSetEditIface::addNegThinSpace()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addNegThinSpace();
+}
