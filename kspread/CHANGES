@@ -10,6 +10,7 @@ since 1.3
 - multiple steps undo and redo
 - fix problem where hidden sheet is simply appended in the tab bar
   (when it is shown again).
+- fix bug #74091: wrong special paste from cell with formula
 
 changes for 1.3.2
 ================= 
