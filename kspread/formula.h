@@ -228,19 +228,30 @@ protected:
  *
  */
 
-class Formula : public DocBase
+class Formula
 {
   public:
   
     /*
-     * Creates a formula.
+     * Creates a formula. It must be owned by a cell.
      */
-    Formula (DocInfo *docinfo, KSpreadCell *_cell = 0);
+    Formula( KSpreadCell *cell );
+    
+    /*
+     * Creates a formula that is not owned by any cell.
+     * This might be useful in some cases.
+     */
+    Formula();
     
     /*
      * Destroys the formula.
      */
     ~Formula();
+    
+    /*
+     * Returns the cell which owns this formula.
+     */
+    KSpreadCell* cell();
     
     /*
      * Sets the expression for this formula.

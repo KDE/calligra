@@ -82,8 +82,8 @@ TestRunner::TestRunner(DocInfo *docinfo, KSpreadSheet *sheet):
   // add all tests here !!
   addTester( new ValueTester() );
   addTester( new StyleClusterTester(sheet) );
-  addTester( new FormulaParserTester(docinfo) );
-  addTester( new FormulaEvalTester(docinfo) );
+  addTester( new FormulaParserTester() );
+  addTester( new FormulaEvalTester() );
 }
 
 TestRunner::~TestRunner()

@@ -28,8 +28,7 @@
 
 using namespace KSpread;
 
-FormulaParserTester::FormulaParserTester(DocInfo *docinfo): Tester(),
-    DocBase (docinfo)
+FormulaParserTester::FormulaParserTester(): Tester()
 {
 }
 
@@ -86,7 +85,7 @@ void FormulaParserTester::checkParse( const char *file, int line, const char* ms
 {
   testCount++;
   
-  Formula f (di);
+  Formula f;
   QString expr = formula;
   expr.prepend( '=' );
   f.setExpression( expr );
@@ -165,8 +164,7 @@ void FormulaParserTester::run()
   CHECK_PARSE( "+1.23E", QString::null );  
 }
 
-FormulaEvalTester::FormulaEvalTester(DocInfo *docinfo): Tester(),
-    DocBase(docinfo)
+FormulaEvalTester::FormulaEvalTester(): Tester()
 {
 }
 
@@ -180,7 +178,7 @@ void FormulaEvalTester::checkEval( const char *file, int line, const char* msg,
 {
   testCount++;
   
-  Formula f (di);
+  Formula f;
   QString expr = formula;
   expr.prepend( '=' );
   f.setExpression( expr );

@@ -21,31 +21,28 @@
 #define KSPREAD_FORMULA_TESTER
 
 #include <qstring.h>
+#include <kspread_value.h>
 
 #include "tester.h"
 
-#include <kspread_value.h>
-#include <docbase.h>
-
-class KLocale;
 
 namespace KSpread
 {
 
-class FormulaParserTester: public Tester, public DocBase
+class FormulaParserTester: public Tester
 {
 public:
-  FormulaParserTester(DocInfo *docinfo);
+  FormulaParserTester();
   virtual QString name();
   virtual void run();
 private:
   void checkParse( const char *file, int line, const char* msg, const QString&, const QString& );
 };
 
-class FormulaEvalTester: public Tester, public DocBase
+class FormulaEvalTester: public Tester
 {
 public:
-  FormulaEvalTester(DocInfo *docinfo);
+  FormulaEvalTester();
   virtual QString name();
   virtual void run();
 private:

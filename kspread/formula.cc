@@ -21,11 +21,13 @@
 
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
+#include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_value.h"
 
 #include "valuecalc.h"
 #include "valueconverter.h"
+#include "valueparser.h"
 
 #include "functions.h"
 
@@ -92,9 +94,9 @@ class Formula::Private
 {
 public:
   Formula *formula;
+  KSpreadCell *cell;
   bool dirty;
   bool valid;
-  KSpreadCell *cell;
   QString expression;
   QValueVector<Opcode> codes;
   QValueVector<KSpreadValue> constants;
@@ -369,10 +371,17 @@ static bool isIdentifier( QChar ch )
 
 // Constructor
 
-Formula::Formula (DocInfo *docinfo, KSpreadCell *cell) : DocBase (docinfo)
+Formula::Formula( KSpreadCell *cell )
 {
   d = new Private;
   d->cell = cell;
+  clear();
+}
+
+Formula::Formula()
+{
+  d = new Private;
+  d->cell = 0;
   clear();
 }
 
@@ -382,6 +391,11 @@ Formula::~Formula()
 {
   delete d;
 }
+
+KSpreadCell* Formula::cell()
+{
+  return d->cell;
+}  
 
 // Sets a new expression for this formula.
 // note that both the real lex and parse processes will happen later on
@@ -408,7 +422,8 @@ bool Formula::isValid() const
 {
   if( d->dirty )
   {
-    Tokens tokens = scan( d->expression );
+    KLocale* locale = d->cell ? d->cell->locale() : 0;
+    Tokens tokens = scan( d->expression, locale );
     if( tokens.valid() )
       compile( tokens );
     else
@@ -435,7 +450,8 @@ void Formula::clear()
 
 Tokens Formula::tokens() const
 {
-  return scan( d->expression );
+  KLocale* locale = d->cell ? d->cell->locale() : 0;
+  return scan( d->expression, locale );
 }
 
 Tokens Formula::scan( const QString& expr, KLocale* locale )
@@ -1102,10 +1118,26 @@ KSpreadValue Formula::eval() const
   unsigned index;
   KSpreadValue val1, val2;
   QString c;
-  KSpreadSheet *sheet = 0;
-  if (d->cell)
-    sheet = d->cell->sheet();
   QValueVector<KSpreadValue> args;
+
+  KSpreadSheet *sheet = 0;
+  ValueParser* parser = 0;
+  ValueConverter* converter = 0;
+  ValueCalc* calc = 0;
+  
+  if( d->cell )
+  {
+    sheet = d->cell->sheet();
+    converter = sheet->doc()->converter();
+    calc = sheet->doc()->calc();
+  }
+  else
+  {
+    parser = new ValueParser( KGlobal::locale() );
+    converter = new ValueConverter( parser );
+    calc = new ValueCalc( converter );
+  }
+  
 
   Function* function;
   
@@ -1138,7 +1170,7 @@ KSpreadValue Formula::eval() const
 
       // unary operation
       case Opcode::Neg:
-        val1 = converter()->asFloat (stack.pop());
+        val1 = converter->asFloat (stack.pop());
         if( val1.isError() ) return KSpreadValue::errorVALUE();
         stack.push( -val1.asFloat() );
         break;
@@ -1148,7 +1180,7 @@ KSpreadValue Formula::eval() const
       case Opcode::Add:
         val2 = stack.pop();
         val1 = stack.pop();
-        val2 = calc()->add( val1, val2 );
+        val2 = calc->add( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
@@ -1156,7 +1188,7 @@ KSpreadValue Formula::eval() const
       case Opcode::Sub:
         val2 = stack.pop();
         val1 = stack.pop();
-        val2 = calc()->sub( val1, val2 );
+        val2 = calc->sub( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
@@ -1164,7 +1196,7 @@ KSpreadValue Formula::eval() const
       case Opcode::Mul:
         val2 = stack.pop();
         val1 = stack.pop();
-        val2 = calc()->mul( val1, val2 );
+        val2 = calc->mul( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
@@ -1173,7 +1205,7 @@ KSpreadValue Formula::eval() const
         val2 = stack.pop();
         val1 = stack.pop();
         if( val1.isZero() ) return KSpreadValue::errorDIV0();
-        val2 = calc()->div( val1, val2 );
+        val2 = calc->div( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
@@ -1181,16 +1213,16 @@ KSpreadValue Formula::eval() const
       case Opcode::Pow:
         val2 = stack.pop();
         val1 = stack.pop();
-        val2 = calc()->pow( val1, val2 );
+        val2 = calc->pow( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       // string concatenation
       case Opcode::Concat:
-        val1 = converter()->asString( stack.pop());
+        val1 = converter->asString( stack.pop());
         if( val1.isError() ) return KSpreadValue::errorVALUE();
-        val2 = converter()->asString( stack.pop());
+        val2 = converter->asString( stack.pop());
         if( val2.isError() ) return KSpreadValue::errorVALUE();
         val1.setValue( val2.asString().append( val1.asString() ) );
         stack.push( val1 );
@@ -1198,7 +1230,7 @@ KSpreadValue Formula::eval() const
 
       // logical not
       case Opcode::Not:
-        val1 = converter()->asBoolean( stack.pop());
+        val1 = converter->asBoolean( stack.pop());
         if( val1.isError() ) return KSpreadValue::errorVALUE();
         val1.setValue( !val1.asBoolean() );
         stack.push( val1 );
@@ -1289,7 +1321,7 @@ KSpreadValue Formula::eval() const
         for( ; index; index-- )
           args.insert( args.begin(), stack.pop() );
         // function name as string value
-        val1 = converter()->asString (stack.pop());
+        val1 = converter->asString (stack.pop());
         if( val1.isError() )
           return KSpreadValue::errorVALUE();
         function = FunctionRepository::self()->function ( val1.asString() );
@@ -1325,9 +1357,11 @@ QString Formula::dump() const
   }
 
   result = QString("Expression: [%1]\n").arg( d->expression );
+#if 0  
   KSpreadValue value = eval();
   result.append( QString("Result: %1\n").arg(
-      converter()->asString(value).asString() ) );
+      converter->asString(value).asString() ) );
+#endif
 
   result.append("  Constants:\n");
   for( unsigned c = 0; c < d->constants.count(); c++ )
