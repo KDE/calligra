@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="96">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="97">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -571,6 +571,7 @@
  <ActionList name="datatools"/>
  <Action name="ignore_all"/>
  <Action name="add_word_to_dictionary"/>
+ <ActionList name="spell_result_action"/>
 </Menu>
 <Menu name="custom_var_popup">
  <Action name="text_default"/>

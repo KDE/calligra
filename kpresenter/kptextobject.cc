@@ -1971,6 +1971,7 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
     QString word = wordUnderCursor( *cursor() );
     view->unplugActionList( "datatools" );
     view->unplugActionList( "datatools_link" );
+    view->unplugActionList( "spell_result_action" );
     view->unplugActionList( "variable_action" );
     QPtrList<KAction> &variableList = view->variableActionList();
     variableList.clear();
@@ -2009,7 +2010,10 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
             else
             {
                 if ( singleWord )
+                {
+                    view->plugActionList( "spell_result_action", view->listOfResultOfCheckWord( word ) );
                     popup = view->popupMenu("text_popup_spell");
+                }
                 else
                     popup = view->popupMenu("text_popup");
             }
