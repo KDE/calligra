@@ -63,4 +63,8 @@ AC_SUBST(LIBART_RPATH)
 
 if test -z "$LIBART_LIBS"; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
+else
+	dnl for the filters subdir
+	KARBONDIR=karbon
+	AC_SUBST(KARBONDIR)
 fi
