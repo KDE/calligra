@@ -120,6 +120,8 @@ public slots:
 
     QString refLink() {return m_refLink;}
 
+    void openLink();
+
 protected slots:
     /** Start a drag */
     virtual void startDrag() = 0;

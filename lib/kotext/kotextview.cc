@@ -27,6 +27,8 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include <koDataTool.h>
+#include <krun.h>
+#include <kmessagebox.h>
 
 KoTextView::KoTextView( KoTextObject *textobj )
 {
@@ -817,7 +819,6 @@ void KoTextView::slotToolActivated( const KoDataToolInfo & info, const QString &
     kdDebug() << "Running tool with datatype=" << datatype << " mimetype=" << mimetype << endl;
 
     QString origText = text;
-    kdDebug()<<"text :"<<text <<" command " << command<<"datatype :"<<datatype<<" mimetype :"<<mimetype<<endl;
     if ( tool->run( command, &text, datatype, mimetype) )
     {
         kdDebug() << "Tool ran. Text is now " << text << endl;
@@ -833,5 +834,15 @@ void KoTextView::slotToolActivated( const KoDataToolInfo & info, const QString &
 
     delete tool;
 }
+
+void KoTextView::openLink()
+{
+    if(m_refLink.find("http://")!=-1 || m_refLink.find("mailto:")!=-1
+       || m_refLink.find("ftp://")!=-1 || m_refLink.find("file:")!=-1)
+        (void) new KRun(m_refLink  );
+    else
+        KMessageBox::sorry(0L,i18n("%1 is not a valid link.").arg(m_refLink));//TODO FIX english
+}
+
 
 #include "kotextview.moc"
