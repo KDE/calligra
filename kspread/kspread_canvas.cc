@@ -776,6 +776,24 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
+  double width  = 0.0;
+  double height = 0.0;
+  int i;
+  QRect rct( selectionInfo()->selection() );
+  int bot   = rct.bottom();
+  int right = rct.right();
+  for ( i = rct.left(); i <= right; ++i )
+  {
+    width += table->columnFormat( i )->dblWidth( this );
+  }
+  for ( i = rct.top(); i <= bot; ++i )
+  {
+    height += table->rowFormat( i )->dblHeight( this );
+  }
+  
+  QRect r1( xpos - 2, ypos - 2, width + 1, height + 2 );
+  QRect r2( xpos + 2, ypos + 2, width - 12, height - 8 );
+  
   QRect selectionHandle = m_pView->selectionInfo()->selectionHandleArea();
 
   // Test whether the mouse is over some anchor
@@ -805,8 +823,17 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( !table->isProtected() )
       setCursor( KCursor::handCursor() );
   }
+  else if ( ( col == rct.left() || col - 1 == rct.right() 
+              || row == rct.top() || row - 1 == rct.bottom() )
+            && col >= rct.left() && col - 1 <= rct.right()
+            && row >= rct.top() && row - 1 <= rct.bottom()
+            && r1.contains( QPoint( ev_PosX, ev_PosY ) )
+            && !r2.contains( QPoint( ev_PosX, ev_PosY ) ) )
+           
+    setCursor( KCursor::handCursor() );
   else
     setCursor( arrowCursor );
+
 
   // No marking, selecting etc. in progess? Then quit here.
   if ( m_eMouseAction == NoAction )
@@ -998,8 +1025,10 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   {
     // start drag ?
-    double xpos = m_pView->activeTable()->dblColumnPos( selectionInfo()->selection().left() );
-    double ypos = m_pView->activeTable()->dblRowPos( selectionInfo()->selection().top() );
+    double xpos;
+    double ypos;
+    int col  = table->leftColumn( ev_PosX, xpos );
+    int row  = table->topRow( ev_PosY, ypos );
     double width  = 0.0;
     double height = 0.0;
     int i;
@@ -1015,12 +1044,16 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
       height += table->rowFormat( i )->dblHeight( this );
     }
 
-    QRect r1( xpos - 1, ypos - 1, width + 3, height + 3 );
-    QRect r2( xpos + 3, ypos + 3, width - 6, height - 6 );
+    QRect r1( xpos - 2, ypos - 2, width + 1, height + 2 );
+    QRect r2( xpos + 2, ypos + 2, width - 8, height - 8 );
 
     m_dragStart.setX( -1 );
 
-    if ( r1.contains( QPoint( ev_PosX, ev_PosY ) )
+    if ( ( col == rct.left() || col - 1 == rct.right() 
+           || row == rct.top() || row - 1 == rct.bottom() )
+         && col >= rct.left() && col - 1 <= rct.right()
+         && row >= rct.top() && row - 1 <= rct.bottom()
+         && r1.contains( QPoint( ev_PosX, ev_PosY ) )
          && !r2.contains( QPoint( ev_PosX, ev_PosY ) ) )
     {
       m_dragStart.setX( (int) ev_PosX );
@@ -1111,6 +1144,7 @@ void KSpreadCanvas::startTheDrag()
 
   // right area for start dragging
   KSpreadTextDrag * d = new KSpreadTextDrag( this );
+  setCursor( KCursor::handCursor() );
 
   QRect rct( selectionInfo()->selection() );
   QDomDocument doc = table->saveCellRect( rct );
@@ -1127,6 +1161,7 @@ void KSpreadCanvas::startTheDrag()
   d->setKSpread( buffer.buffer() );
 
   d->dragCopy();
+  setCursor( KCursor::arrowCursor() );
 }
 
 void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
