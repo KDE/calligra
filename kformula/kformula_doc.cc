@@ -135,15 +135,12 @@ bool KFormulaDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDom
     // we don't have settings into kformula (for the moment)
     // necessary to adapt kformula code to load MathML format with Oasis Extension.
     
-    // ### TODO: not finished!
-    // The code below is similar to the one in the MathML import filter
-    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
-    KFormula::Document* document = new KFormula::Document;
-    wrapper->document( document );
-    KFormula::Container* formula = document->createFormula();
-    formula->loadMathML( doc );
-    delete wrapper;    
-    return true;
+    if ( document->loadOasis( doc ) ) {
+        history->clear();
+        history->documentSaved();
+        return true;
+    }
+    return false;
 }
 
 bool KFormulaDoc::loadXML(QIODevice *, const QDomDocument& doc)
