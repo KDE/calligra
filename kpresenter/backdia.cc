@@ -78,9 +78,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 {
     lockUpdate = true;
 
-#if MASTERPAGE
     oldUseMasterBackground=m_page->useMasterBackground();
-#endif
     oldBackType=backType;
     oldBackColor1=backColor1;
     oldBackColor2 = backColor2;
@@ -100,13 +98,11 @@ BackDia::BackDia( QWidget* parent, const char* name,
     QVBoxLayout *vbox = new QVBoxLayout( hbox );
     vbox->setSpacing( KDialog::spacingHint() );
 
-#if MASTERPAGE
     m_useMasterBackground = new QCheckBox( i18n( "Use Slide Master Background" ), page );
     connect( m_useMasterBackground, SIGNAL( clicked() ),
              this, SLOT( updateConfiguration() ) );
     m_useMasterBackground->setChecked( m_page->useMasterBackground() );
     vbox->addWidget( m_useMasterBackground );
-#endif
 
     vbox->addWidget( new QLabel( i18n( "Background type:" ), page ) );
 
@@ -232,9 +228,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
 void BackDia::slotReset()
 {
-#if MASTERPAGE
     m_useMasterBackground->setChecked( oldUseMasterBackground );
-#endif
     backCombo->setCurrentItem( (int)oldBackType );
     color1Choose->setColor( oldBackColor1 );
     color2Choose->setColor( oldBackColor2 );
@@ -273,10 +267,8 @@ void BackDia::updateConfiguration()
     if ( lockUpdate )
         return;
 
-#if MASTERPAGE
     tabWidget->setEnabled( !m_useMasterBackground->isChecked() );
     backCombo->setEnabled( !m_useMasterBackground->isChecked() );
-#endif
 
     if ( getBackColorType() == BCT_PLAIN )
     {
@@ -376,12 +368,10 @@ KPBackGround::Settings BackDia::getBackGround() const
                                    getBackView() );
 }
 
-#if MASTERPAGE
 bool BackDia::useMasterBackground() const
 {
     return m_useMasterBackground->isChecked();
 }
-#endif
 
 void BackDia::selectPic()
 {

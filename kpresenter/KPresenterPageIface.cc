@@ -734,7 +734,6 @@ void KPresenterPageIface::setFooter( bool b )
 }
 
 
-#if MASTERPAGE
 void KPresenterPageIface::setUseMasterBackground( bool useMasterBackground )
 {
     m_page->setUseMasterBackground( useMasterBackground );
@@ -744,4 +743,3 @@ bool KPresenterPageIface::useMasterBackground() const
 {
     return m_page->useMasterBackground();
 }
-#endif

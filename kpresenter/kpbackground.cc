@@ -121,7 +121,6 @@ void KPBackGround::reload()
 
 QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
 {
-#if MASTERPAGE
     QString tag = m_page->masterPage() == 0 ? "MASTERPAGE" : "PAGE";
     QDomElement page=doc.createElement( tag );
     QDomElement element;
@@ -133,68 +132,61 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     }
     else
     {
-#else
-    QDomElement page=doc.createElement("PAGE");
-    QDomElement element;
-#endif
 
-    if (backType!=BT_COLOR) {
-        element=doc.createElement("BACKTYPE");
-        element.setAttribute("value", static_cast<int>( backType ));
-        page.appendChild(element);
-    }
-
-    if (backView!=BV_CENTER) {
-        element=doc.createElement("BACKVIEW");
-        element.setAttribute("value", static_cast<int>( backView ));
-        page.appendChild(element);
-    }
-
-    if (backColor1!=Qt::white) {
-        element=doc.createElement("BACKCOLOR1");
-        element.setAttribute("color", backColor1.name());
-        page.appendChild(element);
-    }
-
-    if (backColor2!=Qt::white) {
-        element=doc.createElement("BACKCOLOR2");
-        element.setAttribute("color", backColor2.name());
-        page.appendChild(element);
-    }
-
-    if (bcType!=BCT_PLAIN) {
-        element=doc.createElement("BCTYPE");
-        element.setAttribute("value", static_cast<int>( bcType ));
-        page.appendChild(element);
-    }
-
-    if (xfactor!=100 || yfactor!=100 || unbalanced) {
-        element=doc.createElement("BGRADIENT");
-        element.setAttribute("unbalanced", static_cast<int>( unbalanced ));
-        element.setAttribute("xfactor", xfactor);
-        element.setAttribute("yfactor", yfactor);
-        page.appendChild(element);
-    }
-
-    if ( !backPicture.isNull() && ( ( backType == BT_PICTURE ) || ( backType == BT_CLIPART ) ) )
-    {
-        if (saveAsKOffice1Dot1) // KOffice 1.1
-        {
-            if ( backPicture.isClipartAsKOffice1Dot1() )
-                element=doc.createElement( "BACKCLIPKEY" );
-            else
-                element = doc.createElement( "BACKPIXKEY" );
+        if (backType!=BT_COLOR) {
+            element=doc.createElement("BACKTYPE");
+            element.setAttribute("value", static_cast<int>( backType ));
+            page.appendChild(element);
         }
-        else
-            element = doc.createElement( "BACKPICTUREKEY" );
 
-        backPicture.getKey().saveAttributes( element );
-        page.appendChild( element );
-    }
-#if MASTERPAGE
-    }
-#endif
+        if (backView!=BV_CENTER) {
+            element=doc.createElement("BACKVIEW");
+            element.setAttribute("value", static_cast<int>( backView ));
+            page.appendChild(element);
+        }
 
+        if (backColor1!=Qt::white) {
+            element=doc.createElement("BACKCOLOR1");
+            element.setAttribute("color", backColor1.name());
+            page.appendChild(element);
+        }
+
+        if (backColor2!=Qt::white) {
+            element=doc.createElement("BACKCOLOR2");
+            element.setAttribute("color", backColor2.name());
+            page.appendChild(element);
+        }
+
+        if (bcType!=BCT_PLAIN) {
+            element=doc.createElement("BCTYPE");
+            element.setAttribute("value", static_cast<int>( bcType ));
+            page.appendChild(element);
+        }
+
+        if (xfactor!=100 || yfactor!=100 || unbalanced) {
+            element=doc.createElement("BGRADIENT");
+            element.setAttribute("unbalanced", static_cast<int>( unbalanced ));
+            element.setAttribute("xfactor", xfactor);
+            element.setAttribute("yfactor", yfactor);
+            page.appendChild(element);
+        }
+
+        if ( !backPicture.isNull() && ( ( backType == BT_PICTURE ) || ( backType == BT_CLIPART ) ) )
+        {
+            if (saveAsKOffice1Dot1) // KOffice 1.1
+            {
+                if ( backPicture.isClipartAsKOffice1Dot1() )
+                    element=doc.createElement( "BACKCLIPKEY" );
+                else
+                    element = doc.createElement( "BACKPIXKEY" );
+            }
+            else
+                element = doc.createElement( "BACKPICTUREKEY" );
+
+            backPicture.getKey().saveAttributes( element );
+            page.appendChild( element );
+        }
+    }
 
     return page;
 }
@@ -446,7 +438,6 @@ void KPBackGround::loadOasis(KoOasisContext & context )
 
 void KPBackGround::load( const QDomElement &element )
 {
-#if MASTERPAGE
     QDomElement e=element.namedItem("BACKMASTER").toElement();
     if ( !e.isNull() )
     {
@@ -454,166 +445,161 @@ void KPBackGround::load( const QDomElement &element )
     }
     else
     {
-    e=element.namedItem("BACKTYPE").toElement();
-#else    
-    QDomElement e=element.namedItem("BACKTYPE").toElement();
-#endif
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        setBackType(static_cast<BackType>(tmp));
-    }
-    e=element.namedItem("BACKVIEW").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        setBackView(static_cast<BackView>(tmp));
-    }
-    e=element.namedItem("BACKCOLOR1").toElement();
-    if(!e.isNull()) {
-        int red=0, green=0, blue=0;
-        if(e.hasAttribute("red"))
-            red=e.attribute("red").toInt();
-        if(e.hasAttribute("green"))
-            green=e.attribute("green").toInt();
-        if(e.hasAttribute("blue"))
-            blue=e.attribute("blue").toInt();
-        if(e.hasAttribute("color"))
-            setBackColor1(QColor(e.attribute("color")));
-        else
-            setBackColor1(QColor(red, green, blue));
-    }
-    e=element.namedItem("BACKCOLOR2").toElement();
-    if(!e.isNull()) {
-        int red=0, green=0, blue=0;
-        if(e.hasAttribute("red"))
-            red=e.attribute("red").toInt();
-        if(e.hasAttribute("green"))
-            green=e.attribute("green").toInt();
-        if(e.hasAttribute("blue"))
-            blue=e.attribute("blue").toInt();
-        if(e.hasAttribute("color"))
-            setBackColor2(QColor(e.attribute("color")));
-        else
-            setBackColor2(QColor(red, green, blue));
-    }
-    e=element.namedItem("BGRADIENT").toElement();
-    if(!e.isNull()) {
-        int xf=0, yf=0, unbalanced=0;
-        if(e.hasAttribute("xfactor"))
-            xf=e.attribute("xfactor").toInt();
-        setBackXFactor(xf);
-        if(e.hasAttribute("yfactor"))
-            yf=e.attribute("yfactor").toInt();
-        setBackYFactor(yf);
-        if(e.hasAttribute("unbalanced"))
-            unbalanced=e.attribute("unbalanced").toInt();
-        setBackUnbalanced(static_cast<bool>(unbalanced));
-    }
-    e=element.namedItem("BCTYPE").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        setBackColorType(static_cast<BCType>(tmp));
-    }
-    e=element.namedItem("BACKPICTUREKEY").toElement();
-    if(!e.isNull()) {
-        KoPictureKey key;
-        key.loadAttributes( e );
-        backPicture.clear();
-        backPicture.setKey( key );
-        // Image will be set by reload(), called by completeLoading()
-    }
-    e=element.namedItem("BACKPIXKEY").toElement();
-    if(!e.isNull()) {
-        KoPictureKey key;
-        key.loadAttributes( e );
-        backPicture.clear();
-        backPicture.setKey( key );
-        // Image will be set by reload(), called by completeLoading()
-    }
-    else {
-        // try to find a BACKPIX tag if the BACKPIXKEY is not available...
-        KoPictureKey key;
-        e=element.namedItem("BACKPIX").toElement();
+        e=element.namedItem("BACKTYPE").toElement();
         if(!e.isNull()) {
-            bool openPic = true;
-            QString _data;
-            QString _fileName;
-            if(e.hasAttribute("data"))
-                _data=e.attribute("data");
-            if ( _data.isEmpty() )
-                openPic = true;
+            int tmp=0;
+            if(e.hasAttribute("value"))
+                tmp=e.attribute("value").toInt();
+            setBackType(static_cast<BackType>(tmp));
+        }
+        e=element.namedItem("BACKVIEW").toElement();
+        if(!e.isNull()) {
+            int tmp=0;
+            if(e.hasAttribute("value"))
+                tmp=e.attribute("value").toInt();
+            setBackView(static_cast<BackView>(tmp));
+        }
+        e=element.namedItem("BACKCOLOR1").toElement();
+        if(!e.isNull()) {
+            int red=0, green=0, blue=0;
+            if(e.hasAttribute("red"))
+                red=e.attribute("red").toInt();
+            if(e.hasAttribute("green"))
+                green=e.attribute("green").toInt();
+            if(e.hasAttribute("blue"))
+                blue=e.attribute("blue").toInt();
+            if(e.hasAttribute("color"))
+                setBackColor1(QColor(e.attribute("color")));
             else
-                openPic = false;
-            if(e.hasAttribute("filename"))
-                _fileName=e.attribute("filename");
-            if ( !_fileName.isEmpty() )
-            {
-                if ( int _envVarB = _fileName.find( '$' ) >= 0 )
+                setBackColor1(QColor(red, green, blue));
+        }
+        e=element.namedItem("BACKCOLOR2").toElement();
+        if(!e.isNull()) {
+            int red=0, green=0, blue=0;
+            if(e.hasAttribute("red"))
+                red=e.attribute("red").toInt();
+            if(e.hasAttribute("green"))
+                green=e.attribute("green").toInt();
+            if(e.hasAttribute("blue"))
+                blue=e.attribute("blue").toInt();
+            if(e.hasAttribute("color"))
+                setBackColor2(QColor(e.attribute("color")));
+            else
+                setBackColor2(QColor(red, green, blue));
+        }
+        e=element.namedItem("BGRADIENT").toElement();
+        if(!e.isNull()) {
+            int xf=0, yf=0, unbalanced=0;
+            if(e.hasAttribute("xfactor"))
+                xf=e.attribute("xfactor").toInt();
+            setBackXFactor(xf);
+            if(e.hasAttribute("yfactor"))
+                yf=e.attribute("yfactor").toInt();
+            setBackYFactor(yf);
+            if(e.hasAttribute("unbalanced"))
+                unbalanced=e.attribute("unbalanced").toInt();
+            setBackUnbalanced(static_cast<bool>(unbalanced));
+        }
+        e=element.namedItem("BCTYPE").toElement();
+        if(!e.isNull()) {
+            int tmp=0;
+            if(e.hasAttribute("value"))
+                tmp=e.attribute("value").toInt();
+            setBackColorType(static_cast<BCType>(tmp));
+        }
+        e=element.namedItem("BACKPICTUREKEY").toElement();
+        if(!e.isNull()) {
+            KoPictureKey key;
+            key.loadAttributes( e );
+            backPicture.clear();
+            backPicture.setKey( key );
+            // Image will be set by reload(), called by completeLoading()
+        }
+        e=element.namedItem("BACKPIXKEY").toElement();
+        if(!e.isNull()) {
+            KoPictureKey key;
+            key.loadAttributes( e );
+            backPicture.clear();
+            backPicture.setKey( key );
+            // Image will be set by reload(), called by completeLoading()
+        }
+        else {
+            // try to find a BACKPIX tag if the BACKPIXKEY is not available...
+            KoPictureKey key;
+            e=element.namedItem("BACKPIX").toElement();
+            if(!e.isNull()) {
+                bool openPic = true;
+                QString _data;
+                QString _fileName;
+                if(e.hasAttribute("data"))
+                    _data=e.attribute("data");
+                if ( _data.isEmpty() )
+                    openPic = true;
+                else
+                    openPic = false;
+                if(e.hasAttribute("filename"))
+                    _fileName=e.attribute("filename");
+                if ( !_fileName.isEmpty() )
                 {
-                    int _envVarE = _fileName.find( '/', _envVarB );
-                    QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
-                    _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
+                    if ( int _envVarB = _fileName.find( '$' ) >= 0 )
+                    {
+                        int _envVarE = _fileName.find( '/', _envVarB );
+                        QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
+                        _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
+                    }
                 }
-            }
-            if ( openPic )
-                // !! this loads it from the disk (unless it's in the image collection already)
-                backPicture = pictureCollection()->loadPicture( _fileName );
-            else
-            {
-                KoPictureKey key( _fileName );
-                backPicture.clear();
-                backPicture.setKey(key);
-                QByteArray rawData=_data.utf8(); // XPM is normally ASCII, therefore UTF-8
-                rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
-                QBuffer buffer(rawData);
-                backPicture.loadXpm(&buffer);
-            }
+                if ( openPic )
+                    // !! this loads it from the disk (unless it's in the image collection already)
+                    backPicture = pictureCollection()->loadPicture( _fileName );
+                else
+                {
+                    KoPictureKey key( _fileName );
+                    backPicture.clear();
+                    backPicture.setKey(key);
+                    QByteArray rawData=_data.utf8(); // XPM is normally ASCII, therefore UTF-8
+                    rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
+                    QBuffer buffer(rawData);
+                    backPicture.loadXpm(&buffer);
+                }
 
 #if 0
-            if ( ext == orig_size.toQSize() )
-                ext = backPicture.size();
+                if ( ext == orig_size.toQSize() )
+                    ext = backPicture.size();
 
-            backPicture = backPicture.scale( ext );
+                backPicture = backPicture.scale( ext );
 #endif
-        }
-    }
-    e=element.namedItem("BACKCLIPKEY").toElement();
-    if(!e.isNull()) {
-        KoPictureKey clipKey;
-        clipKey.loadAttributes( e );
-        backPicture.clear();
-        backPicture.setKey(clipKey);
-        // Picture will be set by reload(), called by completeLoading()
-    }
-    else {
-        // try to find a BACKCLIP tag if the BACKCLIPKEY is not available...
-        e=element.namedItem("BACKCLIP").toElement();
-        if(!e.isNull()) {
-            QString _fileName;
-            if(e.hasAttribute("filename"))
-                _fileName=e.attribute("filename");
-            if ( !_fileName.isEmpty() )
-            {
-                if ( int _envVarB = _fileName.find( '$' ) >= 0 )
-                {
-                    int _envVarE = _fileName.find( '/', _envVarB );
-                    QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
-                    _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
-                }
             }
-            //KPClipartKey clipKey( _fileName, QDateTime( pictureCollection()->tmpDate(),
-            //                                            pictureCollection()->tmpTime() ) );
-            backPicture = pictureCollection()->loadPicture( _fileName ); // load from disk !
+        }
+        e=element.namedItem("BACKCLIPKEY").toElement();
+        if(!e.isNull()) {
+            KoPictureKey clipKey;
+            clipKey.loadAttributes( e );
+            backPicture.clear();
+            backPicture.setKey(clipKey);
+            // Picture will be set by reload(), called by completeLoading()
+        }
+        else {
+            // try to find a BACKCLIP tag if the BACKCLIPKEY is not available...
+            e=element.namedItem("BACKCLIP").toElement();
+            if(!e.isNull()) {
+                QString _fileName;
+                if(e.hasAttribute("filename"))
+                    _fileName=e.attribute("filename");
+                if ( !_fileName.isEmpty() )
+                {
+                    if ( int _envVarB = _fileName.find( '$' ) >= 0 )
+                    {
+                        int _envVarE = _fileName.find( '/', _envVarB );
+                        QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
+                        _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
+                    }
+                }
+                //KPClipartKey clipKey( _fileName, QDateTime( pictureCollection()->tmpDate(),
+                //                                            pictureCollection()->tmpTime() ) );
+                backPicture = pictureCollection()->loadPicture( _fileName ); // load from disk !
+            }
         }
     }
-#if MASTERPAGE
-    }
-#endif
 }
 
 void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect )

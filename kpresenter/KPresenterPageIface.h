@@ -133,10 +133,8 @@ k_dcop:
     bool hasFooter()const;
     void setHeader( bool b );
     void setFooter( bool b );
-#if MASTERPAGE
     void setUseMasterBackground( bool useMasterBackground );
     bool useMasterBackground() const;
-#endif
 
 private:
     KPrPage *m_page;

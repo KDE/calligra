@@ -763,10 +763,8 @@ QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
             continue;
         fragment.appendChild( m_pageList.at(i)->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ));
     }
-#if MASTERPAGE
     // save backgound of masterpage
     fragment.appendChild( m_masterPage->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ) );
-#endif
     return fragment;
 }
 
@@ -2417,23 +2415,19 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
             m_pageWhereLoadObject->load(page);
         else
         {
-#if MASTERPAGE
             if ( page.tagName() == "MASTERPAGE" )
             {
                 m_masterPage->load( page );
             }
             else
             {
-#endif
-            //test if there is a page at this index
-            //=> don't add new page if there is again a page
-            if ( i > ( (int)m_pageList.count() - 1 ) )
-                m_pageList.append( new KPrPage( this, m_masterPage ) );
-            m_pageList.at(i)->load(page);
-            i++;
-#if MASTERPAGE
+                //test if there is a page at this index
+                //=> don't add new page if there is again a page
+                if ( i > ( (int)m_pageList.count() - 1 ) )
+                    m_pageList.append( new KPrPage( this, m_masterPage ) );
+                m_pageList.at(i)->load(page);
+                i++;
             }
-#endif
         }
         page=page.nextSibling().toElement();
     }

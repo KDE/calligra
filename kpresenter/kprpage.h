@@ -292,10 +292,8 @@ public:
     QString getPageSoundFileName()const;
 
 
-#if MASTERPAGE 
     void setUseMasterBackground( bool useMasterBackground );
     bool useMasterBackground() const;
-#endif
 
     /**
      * return the list of steps where objects appear/disappear.
@@ -400,9 +398,7 @@ private:
 
     QString m_pictureFile;
     bool m_bHasHeader, m_bHasFooter;
-#if MASTERPAGE 
     bool m_useMasterBackground;
-#endif
 
     /**
      * The page effect

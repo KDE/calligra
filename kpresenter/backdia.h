@@ -75,9 +75,7 @@ public:
              int _xfactor, int _yfactor, KPrPage *m_page  );
 
     KPBackGround::Settings getBackGround() const;
-#if MASTERPAGE
     bool useMasterBackground() const;
-#endif
 
 protected:
     void showEvent( QShowEvent *e );
@@ -102,11 +100,9 @@ private:
     bool picChanged, lockUpdate;
     QLabel *labXFactor, *labYFactor;
     QTabWidget *tabWidget;
-#if MASTERPAGE
     QCheckBox *m_useMasterBackground;
 
     bool oldUseMasterBackground;
-#endif
     BackType oldBackType;
     QColor oldBackColor1;
     QColor oldBackColor2;

@@ -112,9 +112,7 @@ class SetBackCmd : public KNamedCommand
 public:
     SetBackCmd( const QString &name, const KPBackGround::Settings &settings,
                 const KPBackGround::Settings &oldSettings,
-#if MASTERPAGE
                 bool useMasterBackground,
-#endif
                 bool takeGlobal, KPresenterDoc *doc, KPrPage *page );
 
     virtual void execute();
@@ -124,10 +122,8 @@ protected:
 
     KPBackGround::Settings m_settings;
     KPBackGround::Settings m_oldSettings;
-#if MASTERPAGE
     bool m_useMasterBackground;
     bool m_oldUseMasterBackground;
-#endif
     bool m_takeGlobal;
     KPresenterDoc *m_doc;
     KPrPage *m_page;
@@ -407,6 +403,20 @@ class BrushCmd : public KNamedCommand
 {
 public:
     struct Brush {
+        Brush() {}
+        Brush( QBrush _brush, QColor _gColor1, QColor _gColor2,
+               BCType _gType, FillType _fillType, bool _unbalanced, 
+               int _xfactor, int _yfactor )
+            : brush( _brush )
+            , gColor1( _gColor1 )
+            , gColor2( _gColor2 )
+            , gType( _gType )
+            , fillType( _fillType )
+            , unbalanced( _unbalanced )
+            , xfactor( _xfactor )
+            , yfactor( _yfactor )
+            {}
+
         QBrush brush;
         QColor gColor1;
         QColor gColor2;
