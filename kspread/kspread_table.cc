@@ -352,20 +352,23 @@ int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas )
         _left = 0;
 
     int col = 1;
-    int x = columnLayout( col )->width( _canvas );
+    double left = (double)_left;
+    double x = columnLayout( col )->dblWidth( _canvas );
     while ( x < _xpos )
     {
         // Should never happen
         if ( col > KS_colMax - 1 )
 	{
 	    kdDebug(36001) << "KSpreadTable:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
-            return 1;
+	    _left = (int)left;
+	    return 1;
 	}
-        _left += columnLayout( col )->width( _canvas );
+        left += columnLayout( col )->dblWidth( _canvas );
         col++;
-        x += columnLayout( col )->width( _canvas );
+        x += columnLayout( col )->dblWidth( _canvas );
     }
 
+    _left = (int)left;
     return col;
 }
 
@@ -375,7 +378,7 @@ int KSpreadTable::rightColumn( int _xpos, KSpreadCanvas *_canvas )
         _xpos += _canvas->xOffset();
 
     int col = 1;
-    int x = 0;
+    double x = 0.0;
     while ( x < _xpos )
     {
         // Should never happen
@@ -384,7 +387,7 @@ int KSpreadTable::rightColumn( int _xpos, KSpreadCanvas *_canvas )
 	    kdDebug(36001) << "KSpreadTable:rightColumn: invalid column (col: " << col << ")" << endl;
             return KS_colMax + 1;
 	}
-        x += columnLayout( col )->width( _canvas );
+        x += columnLayout( col )->dblWidth( _canvas );
         col++;
     }
 
@@ -402,20 +405,23 @@ int KSpreadTable::topRow( int _ypos, int & _top, KSpreadCanvas *_canvas )
         _top = 0;
 
     int row = 1;
-    int y = rowLayout( row )->height( _canvas );
+    double top = (double)_top;
+    double y = rowLayout( row )->dblHeight( _canvas );
     while ( y < _ypos )
     {
         // Should never happen
         if ( row > KS_rowMax - 1 )
         {
             kdDebug(36001) << "KSpreadTable:topRow: invalid row (row: " << row + 1 << ")" << endl;
+            _top = (int)top;
             return 1;
         }
-        _top += rowLayout( row )->height( _canvas );
+        top += rowLayout( row )->dblHeight( _canvas );
         row++;
-        y += rowLayout( row )->height( _canvas);
+        y += rowLayout( row )->dblHeight( _canvas );
     }
 
+    _top = (int)top;
     return row;
 }
 
@@ -425,7 +431,7 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
         _ypos += _canvas->yOffset();
 
     int row = 1;
-    int y = 0;
+    double y = 0.0;
     while ( y < _ypos )
     {
         // Should never happen
@@ -434,7 +440,7 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
 	    kdDebug(36001) << "KSpreadTable:bottomRow: invalid row (row: " << row << ")" << endl;
             return KS_rowMax + 1;
 	}
-        y += rowLayout( row )->height( _canvas );
+        y += rowLayout( row )->dblHeight( _canvas );
         row++;
     }
 
@@ -443,7 +449,7 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
 
 int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
 {
-    int x = 0;
+    double x = 0.0;
     if ( _canvas )
       x -= _canvas->xOffset();
     for ( int col = 1; col < _col; col++ )
@@ -452,18 +458,18 @@ int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
         if ( col > KS_colMax )
 	{
 	    kdDebug(36001) << "KSpreadTable:columnPos: invalid column (col: " << col << ")" << endl;
-            return x;
+            return (int)x;
 	}
 
-        x += columnLayout( col )->width( _canvas );
+        x += columnLayout( col )->dblWidth( _canvas );
     }
 
-    return x;
+    return (int)x;
 }
 
 int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
 {
-    int y = 0;
+    double y = 0.0;
     if ( _canvas )
       y -= _canvas->yOffset();
 
@@ -499,13 +505,13 @@ kdDebug(36001) << endl;
         if ( row > KS_rowMax )
 	{
 	    kdDebug(36001) << "KSpreadTable:rowPos: invalid row (row: " << row << ")" << endl;
-            return y;
+            return (int)y;
 	}
 
-        y += rowLayout( row )->height( _canvas );
+        y += rowLayout( row )->dblHeight( _canvas );
     }
 
-    return y;
+    return (int)y;
 }
 
 void KSpreadTable::adjustSizeMaxX ( int _x )

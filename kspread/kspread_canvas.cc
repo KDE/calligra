@@ -3122,6 +3122,8 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   int ypos;
   int top_row = table->topRow( _ev->rect().y(), ypos, m_pCanvas );
   int bottom_row = table->bottomRow( _ev->rect().bottom(), m_pCanvas );
+  double dblYpos = (double)ypos;
+  int height = 0;
 
   QRect selection( table->selection() );
 
@@ -3139,24 +3141,25 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
     RowLayout *row_lay = table->rowLayout( y );
 
+    //The width is the width of a column plus the delta between dblYpos and ypos
+    height = int( ( dblYpos - ypos ) + row_lay->dblHeight( m_pCanvas ) );
+
     if ( selected )
     {
       QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH,
-                  row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1,
-                  &fillSelected );
+      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, height,
+                       colorGroup(), FALSE, 1, &fillSelected );
     }
     else if ( highlighted )
     {
       QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH,
-                  row_lay->height( m_pCanvas ), colorGroup(), true, 1,
-                  &fillHighlighted );
+      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, height,
+                       colorGroup(), true, 1, &fillHighlighted );
     }
     else
     {
       QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, &fill );
+      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, height, colorGroup(), FALSE, 1, &fill );
     }
 
     char buffer[ 20 ];
@@ -3172,10 +3175,11 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
       painter.setFont( boldFont );
     int len = painter.fontMetrics().width(buffer );
     if(!row_lay->isHide())
-        painter.drawText( (YBORDER_WIDTH-len)/2, ypos +
-                    ( row_lay->height( m_pCanvas ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
+        painter.drawText( ( YBORDER_WIDTH-len )/2, ypos +
+                    ( height + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
 
-    ypos += row_lay->height( m_pCanvas );
+    dblYpos += row_lay->dblHeight( m_pCanvas );
+    ypos = (int)dblYpos;
   }
   m_pCanvas->updatePosWidget();
   painter.end();
@@ -3661,6 +3665,8 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   int xpos;
   int left_col = table->leftColumn( _ev->rect().x(), xpos, m_pCanvas );
   int right_col = table->rightColumn( _ev->rect().right(), m_pCanvas );
+  double dblXpos = (double)xpos;
+  int width = 0;
 
   QRect selection( table->selection() );
 
@@ -3682,23 +3688,25 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
     ColumnLayout *col_lay = table->columnLayout( x );
 
+    //The width is the width of a column plus the delta between dblXpos and xpos
+    width = int( ( dblXpos-xpos ) + col_lay->dblWidth( m_pCanvas ) );
+
     if ( selected )
     {
       QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
-      qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
-                  XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fillSelected );
+      qDrawShadePanel( &painter, xpos, 0, width, XBORDER_HEIGHT, 
+                       colorGroup(), FALSE, 1, &fillSelected );
     }
     else if ( highlighted )
     {
       QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
-                  XBORDER_HEIGHT, colorGroup(), true, 1, &fillHighlighted );
+      qDrawShadePanel( &painter, xpos, 0, width, XBORDER_HEIGHT,
+                       colorGroup(), true, 1, &fillHighlighted );
     }
     else
     {
       QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
-                  XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
+      qDrawShadePanel( &painter, xpos, 0, width, XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
     }
 
     // Reset painter
@@ -3710,25 +3718,26 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     else if ( highlighted )
       painter.setFont( boldFont );
     if(!m_pView->activeTable()->getShowColumnNumber())
-        {
+    {
         int len = painter.fontMetrics().width( util_encodeColumnLabelText( x ) );
         if(!col_lay->isHide())
-                painter.drawText( xpos + ( col_lay->width( m_pCanvas ) - len ) / 2,
-                      ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
-                        painter.fontMetrics().descent() ) / 2,
-                        util_encodeColumnLabelText( x ) );
-        }
+            painter.drawText( xpos + ( width - len ) / 2,
+                  ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
+                    painter.fontMetrics().descent() ) / 2,
+                    util_encodeColumnLabelText( x ) );
+    }
     else
-        {
+    {
         QString tmp;
         int len = painter.fontMetrics().width( tmp.setNum(x) );
         if(!col_lay->isHide())
-                painter.drawText( xpos + ( col_lay->width( m_pCanvas ) - len ) / 2,
-                      ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
-                        painter.fontMetrics().descent() ) / 2,
-                        tmp.setNum(x) );
-        }
-    xpos += col_lay->width( m_pCanvas );
+            painter.drawText( xpos + ( width - len ) / 2,
+                  ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
+                    painter.fontMetrics().descent() ) / 2,
+                    tmp.setNum(x) );
+    }
+    dblXpos += col_lay->dblWidth( m_pCanvas );
+    xpos = (int)dblXpos;
   }
   m_pCanvas->updatePosWidget();
   painter.end();
