@@ -1156,6 +1156,7 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
                     m_currentTextObjectView=kptextobject->createKPTextView(this);
 
 		    setTextBackground( kptextobject );
+                    setCursor( arrowCursor );
 		    editNum = i;
 		    break;
 		} else if ( kpobject->getType() == OT_PART ) {
