@@ -365,11 +365,10 @@ void KWPage::vmmEditFrameSizeAll( int mx, int my )
 }
 
 /*================================================================*/
-void KWPage::vmmEditFrameSizeVert( int, int my )
-{
-    int frameset = 0;
-    KWFrame *frame = doc->getFirstSelectedFrame( frameset );
-    if ( frameset < 1 && doc->getProcessingType() == KWordDocument::WP )
+void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool left, bool right ) {
+
+    KWFrame *frame = doc->getFirstSelectedFrame();
+    if ( doc->getProcessingType() == KWordDocument::WP  && frame->getFrameSet() == doc->getFrameSet(0))
         return;
 
     QPainter p;
@@ -378,218 +377,85 @@ void KWPage::vmmEditFrameSizeVert( int, int my )
     p.setPen( black );
     p.setBrush( NoBrush );
 
-    if ( deleteMovingRect )
-        p.drawRect( !doc->getFrameSet( frameset )->getGroupManager() ? frame->x() - contentsX() :
-                    doc->getFrameSet( frameset )->getGroupManager()->getBoundingRect().x() - contentsX(),
-                    frame->y() - contentsY(),
-                    !doc->getFrameSet( frameset )->getGroupManager() ? frame->width() :
-                    doc->getFrameSet( frameset )->getGroupManager()->getBoundingRect().width(), frame->height() );
 
-    if ( (int)my < frame->top() + frame->height() / 2 ) {
-        if ( isAHeader( doc->getFrameSet( frameset )->getFrameInfo() ) )
-            return;
-        frame->setHeight( frame->height() + ( oldMy - my ) );
-        frame->moveBy( 0, my - oldMy );
-        if ( frame->x() < 0 ||
-             frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->right() > static_cast<int>( ptPaperWidth() ) ||
-             frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
-                                 + 1 ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
-            frame->setHeight( frame->height() - ( oldMy - my ) );
-            frame->moveBy( 0, -my + oldMy );
+    if ( deleteMovingRect ){ // erase old one.
+        int drawX, drawWidth, drawY, drawHeight;
+        drawX=frame->left();
+        drawWidth=frame->width();
+        drawY=frame->top();
+        drawHeight=frame->height();
+        if(frame->getFrameSet()->getGroupManager()) { // is table
+            if(!(top || bottom)) { /// full height.
+                drawY=frame->getFrameSet()->getGroupManager()->getBoundingRect().y()- contentsY();
+                drawHeight=frame->getFrameSet()->getGroupManager()->getBoundingRect().height();
+            } else if(!(left || right)) { // full width.
+                drawX=frame->getFrameSet()->getGroupManager()->getBoundingRect().x() - contentsX();
+                drawWidth=frame->getFrameSet()->getGroupManager()->getBoundingRect().width();
+            }
         }
-    } else {
-        if ( isAFooter( doc->getFrameSet( frameset )->getFrameInfo() ) )
-            return;
-        frame->setHeight( frame->height() + ( my - oldMy ) );
-        if ( frame->x() < 0 ||
-             frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->right() > static_cast<int>( ptPaperWidth() ) ||
-             frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
-                                 + 1 ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 )
-            frame->setHeight( frame->height() - ( my - oldMy ) );
-    }
-    p.drawRect( !doc->getFrameSet( frameset )->getGroupManager() ? frame->x() - contentsX() :
-                doc->getFrameSet( frameset )->getGroupManager()->getBoundingRect().x() - contentsX(),
-                frame->y() - contentsY(),
-                !doc->getFrameSet( frameset )->getGroupManager() ? frame->width() :
-                doc->getFrameSet( frameset )->getGroupManager()->getBoundingRect().width(), frame->height() );
-    p.end();
-}
-
-/*================================================================*/
-void KWPage::vmmEditFrameSizeHorz( int mx, int )
-{
-    int frameset = 0;
-    KWFrame *frame = doc->getFirstSelectedFrame( frameset );
-    if ( doc->getFrameSet( frameset )->getFrameInfo() != FI_BODY )
-        return;
-    if ( frameset < 1 && doc->getProcessingType() != KWordDocument::DTP )
-        return;
-
-    QPainter p;
-    p.begin( viewport() );
-    p.setRasterOp( NotROP );
-    p.setPen( black );
-    p.setBrush( NoBrush );
-
-    if ( deleteMovingRect )
-        p.drawRect( frame->x() - contentsX(),
-                    !doc->getFrameSet( frameset )->getGroupManager() ? frame->y() - contentsY() :
-                    doc->getFrameSet( frameset )->getGroupManager()->getBoundingRect().y() - contentsY(),
-                    frame->width(),
-                    !doc->getFrameSet( frameset )->getGroupManager() ? frame->height() :
-                    doc->getFrameSet( frameset )->getGroupManager()->getBoundingRect().height() );
-
-    if ( (int)mx < frame->left() + frame->width() / 2 ) {
-        frame->setWidth( frame->width() + ( oldMx - mx ) );
-        frame->moveBy( (int)mx - oldMx, 0 );
-        if ( frame->x() < 0 ||
-             frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->right() > static_cast<int>( ptPaperWidth() ) ||
-             frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
-                                 + 1 ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
-            frame->setWidth( frame->width() - ( oldMx - mx ) );
-            frame->moveBy( -mx + oldMx, 0 );
-        }
-    } else {
-        frame->setWidth( frame->width() + ( (int)mx - oldMx ) );
-        if ( frame->x() < 0 ||
-             frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->right() > static_cast<int>( ptPaperWidth() ) ||
-             frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
-                                 + 1 ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 )
-            frame->setWidth( frame->width() - ( mx - oldMx ) );
-    }
-    p.drawRect( frame->x() - contentsX(),
-                !doc->getFrameSet( frameset )->getGroupManager() ? frame->y() - contentsY() :
-                doc->getFrameSet( frameset )->getGroupManager()->getBoundingRect().y() - contentsY(), frame->width(),
-                !doc->getFrameSet( frameset )->getGroupManager() ? frame->height() :
-                doc->getFrameSet( frameset )->getGroupManager()->getBoundingRect().height() );
-    p.end();
-}
-
-/*================================================================*/
-void KWPage::vmmEditFrameFDiag( int mx, int my )
-{
-    int frameset = 0;
-    KWFrame *frame = doc->getFirstSelectedFrame( frameset );
-    if ( doc->getFrameSet( frameset )->getFrameInfo() != FI_BODY )
-        return;
-    if ( frameset < 1 && doc->getProcessingType() == KWordDocument::WP )
-        return;
-
-    QPainter p;
-    p.begin( viewport() );
-    p.setRasterOp( NotROP );
-    p.setPen( black );
-    p.setBrush( NoBrush );
-
-    if ( deleteMovingRect )
-        p.drawRect( frame->x() - contentsX(), frame->y() - contentsY(), frame->width(), frame->height() );
-
-    if ( (int)mx < frame->left() + frame->width() / 2 ) {
-        frame->setWidth( frame->width() + ( oldMx - mx ) );
-        frame->setHeight( frame->height() + ( oldMy - my ) );
-        frame->moveBy( mx - oldMx, my - oldMy );
-        if ( frame->x() < 0 ||
-             frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->right() > static_cast<int>( ptPaperWidth() ) ||
-             frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
-                                 + 1 ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
-            frame->setWidth( frame->width() - ( oldMx - mx ) );
-            frame->setHeight( frame->height() - ( oldMy - my ) );
-            frame->moveBy( -mx + oldMx, -my + oldMy );
-        }
-    } else {
-        frame->setWidth( frame->width() + ( mx - oldMx ) );
-        frame->setHeight( frame->height() + ( my - oldMy ) );
-        if ( frame->x() < 0 ||
-             frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->right() > static_cast<int>( ptPaperWidth() ) ||
-             frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
-                                 + 1 ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
-            frame->setWidth( frame->width() - ( mx - oldMx ) );
-            frame->setHeight( frame->height() - ( my - oldMy ) );
-        }
+        p.drawRect( drawX, drawY, drawWidth, drawHeight );
     }
 
-    p.drawRect( frame->x() - contentsX(), frame->y() - contentsY(), frame->width(), frame->height() );
-    p.end();
-}
+    int newX1 = frame->left();
+    int newY1 = frame->top();
+    int newX2 = frame->right();
+    int newY2 = frame->bottom();
+    if(top && newY1 != my) {
+        bool move=true;
+        if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
+        if(newY2-my < minFrameHeight+5) my=newY2-minFrameHeight-5;
+        if(my < (int)( frame->getPageNum() * ptPaperHeight())) 
+            my = frame->getPageNum() * ptPaperHeight();
 
-/*================================================================*/
-void KWPage::vmmEditFrameBDiag( int mx, int my )
-{
-    int frameset = 0;
-    KWFrame *frame = doc->getFirstSelectedFrame( frameset );
-    if ( doc->getFrameSet( frameset )->getFrameInfo() != FI_BODY )
-        return;
-    if ( frameset < 1 && doc->getProcessingType() == KWordDocument::WP )
-        return;
+        if(move) newY1=my;
+    } else if(bottom && newY2 != my) {
+        bool move=true;
+        if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
+        if(my-newY1 < minFrameHeight+5) my=newY1+minFrameHeight+5;
+        if(my >= (int)((frame->getPageNum()+1) * ptPaperHeight())) 
+            my = (frame->getPageNum()+1) * ptPaperHeight();
 
-    QPainter p;
-    p.begin( viewport() );
-    p.setRasterOp( NotROP );
-    p.setPen( black );
-    p.setBrush( NoBrush );
-
-    if ( deleteMovingRect )
-        p.drawRect( frame->x() - contentsX(), frame->y() - contentsY(), frame->width(), frame->height() );
-
-    if ( (int)mx > frame->left() + frame->width() / 2 ) {
-        frame->setWidth( frame->width() + ( mx - oldMx ) );
-        frame->setHeight( frame->height() + ( oldMy - my ) );
-        frame->moveBy( 0, my - oldMy );
-        if ( frame->x() < 0 ||
-             frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->right() > static_cast<int>( ptPaperWidth() ) ||
-             frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
-                                 + 1 ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
-            frame->setWidth( frame->width() - ( mx - oldMx ) );
-            frame->setHeight( frame->height() - ( oldMy - my ) );
-            frame->moveBy( 0, -my + oldMy );
-        }
-    } else {
-        frame->setWidth( frame->width() + ( oldMx - mx ) );
-        frame->setHeight( frame->height() + ( my - oldMy ) );
-        frame->moveBy( mx - oldMx, 0 );
-        if ( frame->x() < 0 ||
-             frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->right() > static_cast<int>( ptPaperWidth() ) ||
-             frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) )
-                                 + 1 ) *
-             static_cast<int>( ptPaperHeight() ) ||
-             frame->height() < 2 * doc->getRastY() - 2 || frame->width() < 2 * doc->getRastX() - 2 ) {
-            frame->setWidth( frame->width() - ( oldMx - mx ) );
-            frame->setHeight( frame->height() - ( my - oldMy ) );
-            frame->moveBy( -mx + oldMx, 0 );
-        }
+        if(move) newY2=my;
     }
 
-    p.drawRect( frame->x() - contentsX(), frame->y() - contentsY(), frame->width(), frame->height() );
+    if(left && newX1 != mx) {
+        bool move=true;
+        if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
+        if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
+        if(newX2-mx < minFrameWidth) mx=newX2-minFrameHeight-5;
+        if(mx <= 0) mx=0;
+
+        if(move) newX1=mx;
+    } else if(right && newX2 != mx) {
+        bool move=true;
+        if(isAHeader(frame->getFrameSet()->getFrameInfo())) move=false;
+        if(isAFooter(frame->getFrameSet()->getFrameInfo())) move=false;
+        if(mx-newX1 < minFrameWidth) mx=newX1+minFrameHeight+5;
+        if(mx > ptPaperWidth()) 
+            mx = ptPaperWidth();
+
+        if(move) newX2=mx;
+    }
+    frame->setLeft(newX1);
+    frame->setTop(newY1);
+    frame->setRight(newX2);
+    frame->setBottom(newY2);
+
+    int drawX, drawWidth, drawY, drawHeight;
+    drawX=frame->left();
+    drawWidth=frame->width();
+    drawY=frame->top();
+    drawHeight=frame->height();
+    if(frame->getFrameSet()->getGroupManager()) { // is table
+        if(!(top || bottom)) { /// full height.
+            drawY=frame->getFrameSet()->getGroupManager()->getBoundingRect().y()- contentsY();
+            drawHeight=frame->getFrameSet()->getGroupManager()->getBoundingRect().height();
+        } else if(!(left || right)) { // full width.
+            drawX=frame->getFrameSet()->getGroupManager()->getBoundingRect().x() - contentsX();
+            drawWidth=frame->getFrameSet()->getGroupManager()->getBoundingRect().width();
+        }
+    }
+    p.drawRect( drawX, drawY, drawWidth, drawHeight );
     p.end();
 }
 
@@ -1049,25 +915,18 @@ void KWPage::vmrEdit()
 /*================================================================*/
 void KWPage::vmrEditFrame( int mx, int my )
 {
-    selectedFrameSet = selectedFrame = -1;
-    int frameset = doc->getFrameSet( mx, my );
-    int frame = -1;
-    if ( frameset != -1 ) {
-        frame = doc->getFrameSet( frameset )->getFrame( mx, my );
-        if ( frame != -1 ) {
-            if ( doc->getProcessingType() == KWordDocument::DTP )
-                setRuler2Frame( frameset, frame );
-            gui->getHorzRuler()->setFrameStart( doc->getFrameSet( frameset )->getFrame( frame )->x() );
-        }
-    }
-    selectedFrame = frame;
-    selectedFrameSet = frameset;
+    int frameset=0; 
+    KWFrame *frame= doc->getFirstSelectedFrame(frameset);
+    /*if ( doc->getProcessingType() == KWordDocument::DTP )
+        setRuler2Frame( frameset, frame ); */
+    gui->getHorzRuler()->setFrameStart( frame->x() );
+    
     if ( mouseMoved ) {
         doc->recalcFrames();
         doc->updateAllFrames();
-        if(doc->getFrameSet(selectedFrameSet)->getGroupManager()) {
-            doc->getFrameSet(selectedFrameSet)->getGroupManager()->recalcCols();
-            doc->getFrameSet(selectedFrameSet)->getGroupManager()->recalcRows();
+        if(frame->getFrameSet()->getGroupManager()) {
+            frame->getFrameSet()->getGroupManager()->recalcCols();
+            frame->getFrameSet()->getGroupManager()->recalcRows();
         }
         recalcAll = TRUE;
         recalcText();
@@ -5406,28 +5265,28 @@ void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
     my = ( my / page->doc->getRastY() ) * page->doc->getRastY();
     switch ( direction ) {
     case LeftUp:
-        page->vmmEditFrameFDiag( mx, my );
+        page->vmmEditFrameResize( mx, my, true, false, true, false );
         break;
     case Up:
-        page->vmmEditFrameSizeVert( mx, my );
+        page->vmmEditFrameResize( mx, my ,true, false, false, false);
         break;
     case RightUp:
-        page->vmmEditFrameBDiag( mx, my );
+        page->vmmEditFrameResize( mx, my, true, false, false, true );
         break;
     case Right:
-        page->vmmEditFrameSizeHorz( mx, my );
+        page->vmmEditFrameResize( mx, my, false, false, false, true );
         break;
     case RightDown:
-        page->vmmEditFrameFDiag( mx, my );
+        page->vmmEditFrameResize( mx, my, false, true, false, true );
         break;
     case Down:
-        page->vmmEditFrameSizeVert( mx, my );
+        page->vmmEditFrameResize( mx, my, false, true, false, false );
         break;
     case LeftDown:
-        page->vmmEditFrameBDiag( mx, my );
+        page->vmmEditFrameResize( mx, my, false, true, true, false );
         break;
     case Left:
-        page->vmmEditFrameSizeHorz( mx, my );
+        page->vmmEditFrameResize( mx, my , false, false, true, false);
         break;
     }
     page->oldMy = my;

@@ -107,13 +107,16 @@ void KWFrameDia::init() {
             setupTab4();
         } else if(frameType == FT_TEXT) {
             if(! (frame->getFrameSet() &&
-                frame->getFrameSet()->getGroupManager())) { // table
+                frame->getFrameSet()->getGroupManager())) { // not a table
                 setupTab1();
                 setupTab2();
                 setupTab3();
             }
             setupTab4();
-            if(! frame->getFrameSet()) // first creation
+            if(frame->getFrameSet() &&
+                frame->getFrameSet()->getGroupManager()) { // table
+                grp1->setEnabled(false);
+            } else if(! frame->getFrameSet()) // first creation
                showPage(2);
         } else if(frameType == FT_PICTURE) {
             setupTab1();

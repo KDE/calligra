@@ -4,6 +4,8 @@ TODO-List:
 
 Bugs; in order or importance:
 
+- Releasing the mouse after a move/rescale OUTSIDE the page *boom*
+- When table cells are outside of the page (partly is enough) the table-redrawing screws.
 - Refuse to delete anchor.
 - When deleting table delete anchor
 - Revert resizing policy. Implement minimum size of frames.
