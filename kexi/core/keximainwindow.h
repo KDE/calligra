@@ -89,6 +89,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		virtual tristate saveObject( KexiDialogBase *dlg,
 			const QString& messageWhenAskingForName = QString::null ) = 0;
 	
+		virtual tristate closeDialog(KexiDialogBase *dlg) = 0;
 
 	protected slots:
 		virtual void slotObjectRenamed(const KexiPart::Item &item) = 0;
