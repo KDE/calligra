@@ -470,7 +470,11 @@ bool KWord13Parser::startElementAnchor( const QString& name, const QXmlAttribute
 	    kdError(30520) << "Anchor to an empty frameset name! Aborting!" << endl;
 	    return false;
 	}
-	// ### TODO: set anchor to the format
+	if ( m_currentFormat )
+	{
+	    KWord13FormatSix* six = (KWord13FormatSix*) m_currentFormat;
+	    six->m_anchorName = frameset;
+	}
 	// add frameset name to the list of anchored framesets
 	if ( m_kwordDocument->m_anchoredFramesetNames.find( frameset ) == m_kwordDocument->m_anchoredFramesetNames.end() )
 	{
