@@ -885,7 +885,7 @@ void KFormulaView::fontSelected(const char *font)
 
     TextElement *te = dynamic_cast<TextElement*>(el);
 
-    if (te)
+    if (te==0)
 	return;
 
     if (font == "(default)") 
