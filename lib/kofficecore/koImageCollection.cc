@@ -65,7 +65,7 @@ KoImage KoImageCollection::loadImage( const QString &fileName )
     return i;
 }
 
-void KoImageCollection::saveToStore( KoStore *_store, QValueList<KoImageKey> keys, const QString & prefix )
+void KoImageCollection::saveToStore( KoStore *_store, QValueList<KoImageKey> keys, const QString & prefix ) const
 {
     int i = 0;
     QValueList<KoImageKey>::Iterator it = keys.begin();
@@ -93,7 +93,7 @@ void KoImageCollection::saveToStore( KoStore *_store, QValueList<KoImageKey> key
     }
 }
 
-QDomElement KoImageCollection::saveXML( QDomDocument &doc, QValueList<KoImageKey> keys, const QString & prefix )
+QDomElement KoImageCollection::saveXML( QDomDocument &doc, QValueList<KoImageKey> keys, const QString & prefix ) const
 {
     QDomElement pixmaps = doc.createElement( "PIXMAPS" );
     int i = 0;

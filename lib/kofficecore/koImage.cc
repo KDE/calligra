@@ -146,7 +146,7 @@ KoImage KoImage::scale( const QSize &size ) const
 
 //////////
 
-void KoImageKey::saveAttributes( QDomElement &elem )
+void KoImageKey::saveAttributes( QDomElement &elem ) const
 {
     QDate date = m_lastModified.date();
     QTime time = m_lastModified.time();

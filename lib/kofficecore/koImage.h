@@ -91,7 +91,7 @@ struct KoImageKey
     /**
      * Save this key in XML.
      */
-    void saveAttributes( QDomElement &elem );
+    void saveAttributes( QDomElement &elem ) const;
     /**
      * Load this key from XML.
      * The default date and default time are used if the XML doesn't specify any date & time (compat)

@@ -62,13 +62,13 @@ public:
      * (usually: isStoredExtern() ? QString::null : url().url() + "/",
      * where 'this' is the document)
      */
-    void saveToStore( KoStore * store, QValueList<KoImageKey> keys, const QString & prefix );
+    void saveToStore( KoStore * store, QValueList<KoImageKey> keys, const QString & prefix ) const;
 
     /**
      * Generate the <PIXMAPS> tag, that saves the key and the related
      * relative path in the store (e.g. pictures/picture1.ext) for each pixmap.
      */
-    QDomElement saveXML( QDomDocument &doc, QValueList<KoImageKey> keys, const QString & prefix );
+    QDomElement saveXML( QDomDocument &doc, QValueList<KoImageKey> keys, const QString & prefix ) const;
 
     typedef QMap<KoImageKey, QString> StoreMap;
     /**
