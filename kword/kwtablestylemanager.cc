@@ -150,9 +150,8 @@ void KWTableStylePreview::setTableStyle( KWTableStyle *_tableStyle )
 
 void KWTableStyleListItem::switchStyle()
 {
-    if ( m_changedTableStyle )
-        delete m_changedTableStyle;
-    
+    delete m_changedTableStyle;
+
     if ( m_origTableStyle )
         m_changedTableStyle = new KWTableStyle( *m_origTableStyle );
 }
@@ -287,7 +286,7 @@ void KWTableStyleManager::setupMain()
     m_frameStyle = new QComboBox( adjustBox );
     m_style = new QComboBox( adjustBox );
     updateAllStyleCombos();
-    
+
     connect( m_frameStyle, SIGNAL( activated(int) ), this, SLOT( selectFrameStyle(int) ) );
     connect( m_style, SIGNAL( activated(int) ), this, SLOT( selectStyle(int) ) );
 
@@ -329,7 +328,7 @@ void KWTableStyleManager::switchStyle()
         m_tableStyles.at(num)->switchStyle();
     else
         m_currentTableStyle = m_tableStyles.at(num)->changedTableStyle();
-        
+
     updateGUI();
 
     noSignals=false;
@@ -412,7 +411,7 @@ void KWTableStyleManager::deleteStyle()
         m_tableStyles.at(cur)->deleteStyle( m_currentTableStyle );
         m_currentTableStyle = 0L;
     }
-    
+
     // Update GUI
     m_stylesList->removeItem( m_stylesList->currentItem() );
     numTableStyles--;
@@ -561,10 +560,10 @@ void KWTableStyleManager::changeStyle()
     KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleCollection()->styleList());
     styleManager->exec();
 
-// 2. Apply changes    
+// 2. Apply changes
     updateAllStyleCombos();
     updateGUI();
-    
+
 // 3. Cleanup
     delete styleManager;
 }
@@ -575,7 +574,7 @@ void KWTableStyleManager::updateAllStyleCombos()
     unsigned int oldFSindex = 0;
     QString oldS = "";
     QString oldFS = "";
-    
+
     if (m_style->currentItem()>=0) {
         oldSindex = m_style->currentItem();
         oldS = m_style->currentText();
@@ -598,9 +597,9 @@ void KWTableStyleManager::updateAllStyleCombos()
     if ( ( m_frameStyle->count()!=m_doc->frameStyleCollection()->frameStyleList().count() ) && ( m_frameStyle->listBox()->findItem( oldFS ) ) ) {
         oldFSindex = m_frameStyle->listBox()->index( m_frameStyle->listBox()->findItem( oldFS ) );
     }
-    
+
     // Update the comboboxes
-                       
+
     m_frameStyle->clear();
     QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
@@ -608,7 +607,7 @@ void KWTableStyleManager::updateAllStyleCombos()
         m_frameStyle->insertItem( styleIt.current()->name() );
     }
     m_frameStyle->setCurrentItem( oldFSindex );
-    
+
     m_style->clear();
     QPtrListIterator<KWStyle> styleIt2( m_doc->styleCollection()->styleList() );
     for ( int pos = 0 ; styleIt2.current(); ++styleIt2, ++pos )
@@ -621,7 +620,7 @@ void KWTableStyleManager::updateAllStyleCombos()
 void KWTableStyleManager::selectFrameStyle(int index)
 {
     kdDebug() << "KWTableStyleManager::selectFrameStyle index " << index << endl;
-    
+
     if ( (index>=0) && ( index < m_doc->frameStyleCollection()->frameStyleList().count() ) )
         m_currentTableStyle->setFrameStyle( m_doc->frameStyleCollection()->frameStyleAt(index) );
     save();

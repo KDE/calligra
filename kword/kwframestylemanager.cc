@@ -94,8 +94,7 @@ void KWFrameStylePreview::setFrameStyle( KWFrameStyle *_frameStyle )
 
 void KWFrameStyleListItem::switchStyle()
 {
-    if ( m_changedFrameStyle )
-        delete m_changedFrameStyle;
+    delete m_changedFrameStyle;
 
     if ( m_origFrameStyle )
         m_changedFrameStyle = new KWFrameStyle( *m_origFrameStyle );

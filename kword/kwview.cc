@@ -3897,21 +3897,19 @@ void KWView::textBold()
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    bool createmacro=false;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Bold") );
+    KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setBoldCommand( actionFormatBold->isChecked() );
         if (cmd)
         {
-            createmacro=true;
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Make Text Bold") );
             macroCmd->addCommand(cmd);
         }
     }
-    if(createmacro)
+    if(macroCmd)
         m_doc->addCommand(macroCmd);
-    else
-        delete macroCmd;
 
 }
 
@@ -3919,64 +3917,58 @@ void KWView::textItalic()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    bool createmacro=false;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Italic") );
+    KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setItalicCommand( actionFormatItalic->isChecked() );
         if (cmd)
         {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Make Text Italic") );
             macroCmd->addCommand( cmd );
-            createmacro=true;
         }
     }
-    if( createmacro)
+    if( macroCmd)
         m_doc->addCommand( macroCmd );
-    else
-        delete macroCmd;
 }
 
 void KWView::textUnderline()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Underline Text") );
-    bool createmacro=false;
+    KMacroCommand* macroCmd = 0L;
 
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setUnderlineCommand( actionFormatUnderline->isChecked() );
         if ( cmd )
         {
-            createmacro=true;
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Underline Text") );
             macroCmd->addCommand( cmd );
         }
     }
-    if(createmacro)
+    if(macroCmd)
         m_doc->addCommand( macroCmd );
-    else
-        delete macroCmd;
 }
 
 void KWView::textStrikeOut()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    bool createmacro=false;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Strike out Text") );
+    KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setStrikeOutCommand( actionFormatStrikeOut->isChecked() );
         if ( cmd )
         {
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Strike out Text") );
             macroCmd->addCommand( cmd );
-            createmacro=true;
         }
     }
-    if( createmacro)
+    if( macroCmd)
         m_doc->addCommand( macroCmd );
-    else
-        delete macroCmd;
 }
 
 void KWView::textColor()
@@ -3990,21 +3982,19 @@ void KWView::textColor()
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    bool createmacro=false;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Color") );
+    KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setTextColorCommand( actionFormatColor->color() );
         if ( cmd )
         {
-            createmacro=true;
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Set Text Color") );
             macroCmd->addCommand( cmd );
         }
     }
-    if( createmacro)
+    if( macroCmd)
         m_doc->addCommand( macroCmd );
-    else
-        delete macroCmd;
 }
 
 void KWView::textAlignLeft()
@@ -4013,21 +4003,19 @@ void KWView::textAlignLeft()
     {
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
-        bool createmacro=false;
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Left-align Text") );
+        KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setAlignCommand( Qt::AlignLeft );
             if (cmd)
             {
-                createmacro=true;
+                if ( !macroCmd)
+                    macroCmd = new KMacroCommand( i18n("Left-align Text") );
                 macroCmd->addCommand( cmd );
             }
         }
-        if( createmacro )
+        if( macroCmd )
             m_doc->addCommand( macroCmd );
-        else
-            delete macroCmd;
     }
     else
         actionFormatAlignLeft->setChecked( true );
@@ -4039,21 +4027,19 @@ void KWView::textAlignCenter()
     {
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Center Text") );
-        bool createmacro=false;
+        KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setAlignCommand( Qt::AlignCenter );
             if (cmd)
             {
-                createmacro=true;
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Center Text") );
                 macroCmd->addCommand( cmd );
             }
         }
-        if( createmacro )
+        if( macroCmd )
             m_doc->addCommand( macroCmd );
-        else
-            delete macroCmd;
     }
     else
         actionFormatAlignCenter->setChecked( true );
@@ -4065,21 +4051,19 @@ void KWView::textAlignRight()
     {
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
-        bool createmacro=false;
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Right-align Text") );
+        KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setAlignCommand( Qt::AlignRight );
             if ( cmd )
             {
-                createmacro=true;
+                if (!macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Right-align Text") );
                 macroCmd->addCommand( cmd );
             }
         }
-        if( createmacro)
+        if( macroCmd)
             m_doc->addCommand( macroCmd );
-        else
-            delete macroCmd;
     }
     else
         actionFormatAlignRight->setChecked( true );
@@ -4091,21 +4075,19 @@ void KWView::textAlignBlock()
     {
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
-        bool createmacro=false;
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Justify Text") );
+        KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setAlignCommand( Qt::AlignJustify );
             if ( cmd )
             {
-                createmacro=true;
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Justify Text") );
                 macroCmd->addCommand( cmd );
             }
         }
-        if( createmacro)
+        if( macroCmd)
             m_doc->addCommand( macroCmd );
-        else
-            delete macroCmd;
     }
     else
         actionFormatAlignBlock->setChecked( true );
@@ -4134,44 +4116,40 @@ void KWView::slotCounterStyleSelected()
 
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
-        bool createmacro=false;
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change List Type") );
+        KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setCounterCommand( c );
             if ( cmd )
             {
-                createmacro=true;
+                if ( !macroCmd )
+                    macroCmd=new KMacroCommand( i18n("Change List Type") );
                 macroCmd->addCommand( cmd );
             }
         }
-        if( createmacro)
+        if( macroCmd)
             m_doc->addCommand( macroCmd );
-        else
-            delete macroCmd;
     }
 }
 
 void KWView::textSuperScript()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
-    bool createmacro=false;
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Superscript") );
+    KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setTextSuperScriptCommand(actionFormatSuper->isChecked());
         if (cmd)
         {
-            createmacro=true;
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Make Text Superscript") );
             macroCmd->addCommand(cmd);
         }
     }
-    if( createmacro)
+    if( macroCmd)
         m_doc->addCommand(macroCmd);
-    else
-        delete macroCmd;
 }
 
 void KWView::textSubScript()
@@ -4179,21 +4157,19 @@ void KWView::textSubScript()
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    bool createmacro=false;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Subscript") );
+    KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setTextSubScriptCommand(actionFormatSub->isChecked());
         if (cmd)
         {
-            createmacro=true;
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Make Text Subscript") );
             macroCmd->addCommand(cmd);
         }
     }
-    if( createmacro )
+    if( macroCmd )
         m_doc->addCommand(macroCmd);
-    else
-        delete macroCmd;
 }
 
 void KWView::changeCaseOfText()
@@ -4201,24 +4177,22 @@ void KWView::changeCaseOfText()
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    bool createmacro=false;
     KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Case of Text") );
+        KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setChangeCaseOfTextCommand(caseDia->getTypeOfCase());
             if (cmd)
             {
-                createmacro=true;
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Change Case of Text") );
                 macroCmd->addCommand(cmd);
             }
         }
-        if( createmacro )
+        if( macroCmd )
             m_doc->addCommand(macroCmd);
-        else
-            delete macroCmd;
     }
     delete caseDia;
 }
@@ -4272,23 +4246,21 @@ void KWView::textDecreaseIndent()
 void KWView::textDefaultFormat()
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
-    bool createmacro=false;
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Default Format") );
+    KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setDefaultFormatCommand();
         if (cmd)
         {
-            createmacro=true;
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Default Format") );
             macroCmd->addCommand(cmd);
         }
     }
-    if( createmacro)
+    if( macroCmd)
         m_doc->addCommand(macroCmd);
-    else
-        delete macroCmd;
 }
 
 
