@@ -5602,7 +5602,7 @@ void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
         double width = zoomHandler()->resolutionX() * zoomHandler()->unzoomItY( rect.width() );
         zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
                          qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
-        m_canvas->scrollCanvas( zoomHandler()->unzoomRect( rect) );
+        m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
     }
     else
     {
@@ -6154,7 +6154,8 @@ void KPresenterView::zoomSelectedObject()
         viewZoom( QString::number(zoom ) );
 
         m_canvas->setToolEditMode( TEM_MOUSE );
-        m_canvas->scrollCanvas( rect );
+        m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
+
     }
 }
 

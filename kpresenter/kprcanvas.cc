@@ -6413,6 +6413,13 @@ KPrPage *KPrCanvas::stickyPage() const
     return m_view->kPresenterDoc()->stickyPage();
 }
 
+void KPrCanvas::scrollTopLeftPoint( const QPoint & pos )
+{
+    m_view->getHScrollBar()->setValue( pos.x() );
+    m_view->getVScrollBar()->setValue( pos.y() );
+
+}
+
 void KPrCanvas::scrollCanvas(const KoRect & oldPos)
 {
     QRect rect=m_view->zoomHandler()->zoomRect(oldPos);

@@ -240,7 +240,7 @@ public:
 
     KoRect objectSelectedBoundingRect() const;
 
-    void scrollCanvas(const KoRect& oldPos);
+    void scrollTopLeftPoint( const QPoint & pos );
 
 public slots:
     void exitEditMode();
@@ -391,7 +391,7 @@ protected:
     void tmpMoveHelpLine( const QPoint & newPos);
 
     void moveHelpPoint( const QPoint & newPos );
-
+    void scrollCanvas(const KoRect& oldPos);
 private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);
