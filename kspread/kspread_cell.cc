@@ -2578,7 +2578,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
     // Point the little corner if there is a comment attached
     // to this cell.
-    if( !comment(column(),row()).isEmpty() && rl->height()>2 && cl->width()>10)
+    if( !comment(column(),row()).isEmpty() && rl->height()>2 && cl->width()>10
+&&!_painter.device()->isExtDev())
     {
         QPointArray point( 3 );
         point.setPoint( 0,_tx + w2 - 10, _ty );
