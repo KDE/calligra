@@ -57,6 +57,9 @@ class KWEFKWordLeader
         bool doOpenStyles (void);
         bool doCloseStyles (void);
         bool doFullDefineStyle (LayoutData& layout);
+        bool doOpenSpellCheckIgnoreList (void);
+        bool doCloseSpellCheckIgnoreList (void);
+        bool doFullSpellCheckIgnoreWord (const QString& ignoreword);
     protected: // leader/worker functions
         bool doOpenFile (const QString& filenameOut, const QString& to);
         bool doCloseFile (void);

@@ -65,6 +65,9 @@ class KWEFBaseWorker
         virtual bool doOpenStyles (void); // Like HTML's <style>
         virtual bool doCloseStyles (void); // Like HTML's </style>
         virtual bool doFullDefineStyle (LayoutData& layout); // Defines a single style
+        virtual bool doOpenSpellCheckIgnoreList (void); // like AbiWord's <ignorewords> and KWord's <SPELLCHECKIGNORELIST>
+        virtual bool doCloseSpellCheckIgnoreList (void); // like AbiWord's </ignorewords> and Kwords </SPELLCHECKIGNORELIST>
+        virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); // like AbiWord's <iw> and Kwords </SPELLCHECKIGNOREWORD>
     protected:
         KWEFKWordLeader* m_kwordLeader;
 };

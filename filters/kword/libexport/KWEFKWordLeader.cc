@@ -197,6 +197,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                        << AttrProcessing ( "col",       "int",     (void *) &col       )
                        << AttrProcessing ( "rows",      "int",     (void *) &rows      )
                        << AttrProcessing ( "cols",      "int",     (void *) &cols      )
+                       << AttrProcessing ( "protectSize","",       NULL                )
                         ;
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -401,6 +402,36 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 }
 
 
+static void ProcessSpellCheckIgnoreWordTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
+{
+    QString ignoreword;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList
+        << AttrProcessing ( "word", "QString", &ignoreword )
+        ;
+    ProcessAttributes (myNode, attrProcessingList);
+
+    leader->doFullSpellCheckIgnoreWord (ignoreword);
+
+    AllowNoSubtags (myNode, leader);
+}
+
+
+static void ProcessSpellCheckIgnoreListTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
+{
+    AllowNoAttributes (myNode);
+
+    leader->doOpenSpellCheckIgnoreList ();
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "SPELLCHECKIGNOREWORD", ProcessSpellCheckIgnoreWordTag, leader );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    leader->doCloseSpellCheckIgnoreList ();
+}
+
+
 static void ProcessPixmapsKeyTag ( QDomNode         myNode,
                                    void            *tagData,
                                    KWEFKWordLeader *leader )
@@ -491,7 +522,14 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
 
     leader->doOpenHead();
 
-    // At first, process <PAPER>, even if mostly the output will need to be delayed.
+    // At first, process <SPELLCHECKIGNORELIST>, even if mostly it will not be needed
+    QDomNode nodeIgnoreList=myNode.namedItem("SPELLCHECKIGNORELIST");
+    if ( nodeIgnoreList.isNull () )
+        kdDebug (30508) << "No <SPELLCHECKIGNORELIST>" << endl; // Most files will not have it!
+    else
+        ProcessSpellCheckIgnoreListTag (nodeIgnoreList, NULL, leader);
+
+    // Process <PAPER> now, even if mostly the output will need to be delayed.
     QDomNode nodePaper=myNode.namedItem("PAPER");
     if ( nodePaper.isNull () )
         kdWarning (30508) << "No <PAPER>" << endl;
@@ -580,6 +618,12 @@ DO_VOID_DEFINITION (doOpenDocument)
 DO_VOID_DEFINITION (doCloseDocument)
 DO_VOID_DEFINITION (doOpenStyles)
 DO_VOID_DEFINITION (doCloseStyles)
+DO_VOID_DEFINITION (doOpenHead)
+DO_VOID_DEFINITION (doCloseHead)
+DO_VOID_DEFINITION (doOpenBody)
+DO_VOID_DEFINITION (doCloseBody)
+DO_VOID_DEFINITION (doOpenSpellCheckIgnoreList)
+DO_VOID_DEFINITION (doCloseSpellCheckIgnoreList)
 
 bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
 {
@@ -597,12 +641,6 @@ bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList)
 
     return false;
 }
-
-
-DO_VOID_DEFINITION (doOpenHead)
-DO_VOID_DEFINITION (doCloseHead)
-DO_VOID_DEFINITION (doOpenBody)
-DO_VOID_DEFINITION (doCloseBody)
 
 
 bool KWEFKWordLeader::doFullPaperFormat ( const int format, const double width, const double height, const int orientation )
@@ -629,6 +667,15 @@ bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 
     return false;
 }
+
+bool KWEFKWordLeader::doFullSpellCheckIgnoreWord (const QString& ignoreword)
+{
+    if ( m_worker )
+        return m_worker->doFullSpellCheckIgnoreWord (ignoreword);
+
+    return false;
+}
+
 
 static bool ParseFile ( QIODevice* subFile, QDomDocument& doc)
 {
