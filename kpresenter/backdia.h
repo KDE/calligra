@@ -108,7 +108,7 @@ private:
     BackPreview *preview;
     bool picChanged, clipChanged, lockUpdate;
     QDateTime picLastModified, clipLastModified;
-
+    QLabel *labXFactor, *labYFactor;
     QTabWidget *tabWidget;
 
 private slots:

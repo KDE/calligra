@@ -151,14 +151,14 @@ BackDia::BackDia( QWidget* parent, const char* name,
              this, SLOT( updateConfiguration() ) );
     unbalanced->setChecked( _unbalanced );
 
-    (void)new QLabel( i18n( "X-Factor:" ), colorTab );
+    labXFactor =new QLabel( i18n( "X-Factor:" ), colorTab );
 
     xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
              this, SLOT( updateConfiguration() ) );
     xfactor->setValue( _xfactor );
 
-    (void)new QLabel( i18n( "Y-Factor:" ), colorTab );
+    labYFactor=new QLabel( i18n( "Y-Factor:" ), colorTab );
 
     yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
@@ -286,19 +286,31 @@ void BackDia::updateConfiguration()
     if ( lockUpdate )
         return;
 
-    if ( getBackColorType() == BCT_PLAIN ) {
+    if ( getBackColorType() == BCT_PLAIN )
+    {
         unbalanced->setEnabled( false );
         xfactor->setEnabled( false );
         yfactor->setEnabled( false );
+        labXFactor->setEnabled(false);
+        labYFactor->setEnabled(false);
         color2Choose->setEnabled( false );
-    } else {
+    }
+    else
+    {
         unbalanced->setEnabled( true );
-        if ( unbalanced->isChecked() ) {
+        if ( unbalanced->isChecked() )
+        {
             xfactor->setEnabled( true );
             yfactor->setEnabled( true );
-        } else {
+            labXFactor->setEnabled(true);
+            labYFactor->setEnabled(true);
+        }
+        else
+        {
             xfactor->setEnabled( false );
             yfactor->setEnabled( false );
+            labXFactor->setEnabled(false);
+            labYFactor->setEnabled(false);
         }
         color2Choose->setEnabled( true );
     }
