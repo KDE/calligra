@@ -74,6 +74,8 @@
     <Action name="formula_addlowerindex"/>
     <Action name="formula_removeenclosing"/>
     <Action name="formula_makegreek"/>
+    <Action name="formula_insertsymbol"/>
+    <Action name="formula_syntaxhighlighting"/>
  </Menu>
  </Menu>
  <Menu name="frames"><text>Fra&amp;mes</text>
@@ -194,6 +196,10 @@
   <Action name="formula_addlowerright"/>
   <Action name="formula_typeleft"/>
   <Action name="formula_typeright"/>
+  <Separator/>
+  <Action name="formula_symbolnames"/>
+  <Separator/>
+  <Action name="formula_insertsymbol"/>
 </ToolBar>
 <StatusBar/>
 <Menu name="text_popup">

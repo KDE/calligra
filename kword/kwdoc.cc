@@ -747,6 +747,7 @@ KWDocument::~KWDocument()
 {
     delete contents;
     delete m_autoFormat;
+    delete m_formulaDocument;
     delete m_commandHistory;
     delete m_fontList;
 }

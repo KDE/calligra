@@ -675,6 +675,7 @@ void KWView::showFormulaToolbar( bool show )
   doc->getFormulaDocument()->getAddGenericUpperAction()->setEnabled( show );
   doc->getFormulaDocument()->getAddGenericLowerAction()->setEnabled( show );
   doc->getFormulaDocument()->getRemoveEnclosingAction()->setEnabled( show );
+  doc->getFormulaDocument()->getInsertSymbolAction()->setEnabled( show );
 
   shell()->showToolbar( "formula_toolbar", show );
 }
