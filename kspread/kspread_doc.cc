@@ -236,11 +236,12 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   m_bLoading = TRUE;
 
   // <spreadsheet>
-  if ( doc.doctype().name() != "spreadsheet" )
-  {
-    m_bLoading = false;
-    return false;
-  }
+  // TBD: this check removed since the value is not set by filters for embedded objects.
+  //if ( doc.doctype().name() != "spreadsheet" )
+  //{
+  //  m_bLoading = false;
+  //  return false;
+  //}
   QDomElement spread = doc.documentElement();
 
   if ( spread.attribute( "mime" ) != "application/x-kspread" )
