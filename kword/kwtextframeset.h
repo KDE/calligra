@@ -33,6 +33,8 @@ class KWTextFormat;
 class KWViewMode;
 class KAction;
 class KoDataToolInfo;
+class KWVariable;
+
 
 //#define TIMING_FORMAT
 //#include <qdatetime.h>
@@ -370,6 +372,9 @@ public:
 
     void insertParagraph();
     void insertVariable( int type, int subtype = 0 );
+    void insertCustomVariable( const QString &name);
+    void insertVariable( KWVariable *var);
+
     void insertSpecialChar(QChar _c);
     void insertExpression(const QString &_c);
     void insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName );

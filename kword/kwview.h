@@ -269,6 +269,11 @@ public slots:
     void slotUpdateRuler();
     void slotEmbedImage( const QString &filename );
 
+    void insertCustomVariable();
+
+    void insertNewCustomVariable();
+
+    void refreshCustomMenu();
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -327,6 +332,8 @@ private:
     };
     typedef QMap<KAction *, VariableDef> VariableDefMap;
     KActionMenu *actionInsertExpression;
+
+    KActionMenu *actionInsertCustom;
 
     VariableDefMap m_variableDefMap;
     KAction *actionInsertFormula;

@@ -140,6 +140,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( m_doc, SIGNAL( docStructureChanged(int) ),
              this, SLOT( docStructChanged(int)) );
 
+    connect( m_doc, SIGNAL( sig_refreshMenuCustomVariable()),
+             this, SLOT( refreshCustomMenu()));
+
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 
@@ -382,13 +385,19 @@ void KWView::setupActions()
     addVariableActions( VT_DATE, KWDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
     addVariableActions( VT_TIME, KWTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
     addVariableActions( VT_PGNUM, KWPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
+    /*
     addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
+    */
+
+     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
+                                            actionCollection(), "insert_custom" );
+     actionInsertVariable->insert(actionInsertCustom);
+     refreshCustomMenu();
     /*
 
     TODO for the moment serail letter doesn't work.
     addVariableActions( VT_SERIALLETTER, KWSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
     */
-
 
     actionInsertExpression = new KActionMenu( i18n( "&Expression" ),
                                             actionCollection(), "insert_expression" );
@@ -716,6 +725,53 @@ void KWView::addVariableActions( int type, const QStringList & texts,
             parentMenu->insert( act );
         }
     }
+}
+
+void KWView::refreshCustomMenu()
+{
+    actionInsertCustom->popupMenu()->clear();
+    QListIterator<KWVariable> it( m_doc->getVariables() );
+    KAction * act=0;
+    QStringList lst;
+    QString varName;
+    for ( ; it.current() ; ++it )
+    {
+        KWVariable *var = it.current();
+        if ( var->type() == VT_CUSTOM )
+        {
+            varName=( (KWCustomVariable*) var )->name();
+            if ( !lst.contains( varName) )
+            {
+                 lst.append( varName );
+                 act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
+                                    actionCollection(), "custom-action" );
+                 actionInsertCustom->insert( act );
+            }
+        }
+    }
+
+    actionInsertCustom->popupMenu()->insertSeparator();
+
+    act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), "custom-action" );
+    actionInsertCustom->insert( act );
+}
+
+
+void KWView::insertCustomVariable()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KAction * act = (KAction *)(sender());
+        edit->insertCustomVariable(act->text());
+    }
+}
+
+void KWView::insertNewCustomVariable()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_CUSTOM, 0 );
 }
 
 void KWView::fileStatistics()

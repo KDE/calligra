@@ -2463,6 +2463,12 @@ void KWDocument::registerVariable( KWVariable *var )
     variables.append( var );
 }
 
+
+void KWDocument::refreshMenuCustomVariable()
+{
+   emit sig_refreshMenuCustomVariable();
+}
+
 void KWDocument::unregisterVariable( KWVariable *var )
 {
     variables.take( variables.findRef( var ) );

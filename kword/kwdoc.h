@@ -467,6 +467,8 @@ public:
 
     void refreshMenuExpression();
 
+    void refreshMenuCustomVariable();	
+
     // Convert a color into a color to be displayed for it
     // (when using color schemes, we still want to print black on white)
     static QColor resolveTextColor( const QColor & col, QPainter * painter );
@@ -481,6 +483,8 @@ signals:
 
     void docStructureChanged(int);
     void sig_terminateEditing( KWFrameSet * fs );
+
+    void sig_refreshMenuCustomVariable();
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );

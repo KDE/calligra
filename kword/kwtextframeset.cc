@@ -3925,6 +3925,15 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
                             customItemsMap );
 }
 
+
+void KWTextFrameSetEdit::insertCustomVariable( const QString &name)
+{
+     KWVariable * var = 0L;
+     KWDocument * doc = frameSet()->kWordDocument();
+     var = new KWCustomVariable( textFrameSet(),name, doc->variableFormat( VT_CUSTOM ) );
+     insertVariable( var);
+}
+
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )
 {
     kdDebug() << "KWTextFrameSetEdit::insertVariable " << type << endl;
@@ -3947,6 +3956,12 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     else
         var = KWVariable::createVariable( type, subtype, textFrameSet() );
 
+    insertVariable( var);
+
+}
+
+void KWTextFrameSetEdit::insertVariable( KWVariable *var)
+{
     if ( var )
     {
         CustomItemsMap customItemsMap;
@@ -3962,6 +3977,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         cursor->parag()->invalidate(0);
         cursor->parag()->setChanged( true );
         frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
+        frameSet()->kWordDocument()->refreshMenuCustomVariable();
     }
 }
 
