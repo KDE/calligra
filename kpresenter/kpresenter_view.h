@@ -420,7 +420,6 @@ protected:
     // GUI
     void setupPopupMenus();
     void setupScrollbars();
-    void setupAccelerators();
     void setupRulers();
 
     void keyPressEvent( QKeyEvent* );

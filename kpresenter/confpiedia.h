@@ -31,7 +31,7 @@
 #endif
 
 class QLabel;
-class KRestrictedLine;
+class QLineEdit;
 class QGroupBox;
 class QPushButton;
 class QComboBox;
@@ -98,7 +98,7 @@ public:
 
 protected:
     QLabel *lType, *lAngle, *lLen;
-    KRestrictedLine *eAngle, *eLen;
+    QLineEdit *eAngle, *eLen;
     QGroupBox *gSettings, *gPreview;
     PiePreview *piePreview;
     QPushButton *okBut, *applyBut, *cancelBut;

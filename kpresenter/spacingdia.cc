@@ -19,6 +19,7 @@
 #include <qlabel.h>
 #include <qpushbt.h>
 #include <qstring.h>
+#include <qvalidator.h>
 
 #include <krestrictedline.h>
 #include <kapp.h>
@@ -41,7 +42,8 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     lLineSpacing->move( 10, 10 );
     lLineSpacing->resize( lLineSpacing->sizeHint() );
 
-    eLineSpacing = new KRestrictedLine( this, "", "0123456789" );
+    eLineSpacing = new QLineEdit( this );
+    eLineSpacing->setValidator( new QIntValidator( eLineSpacing ) );
     eLineSpacing->move( lLineSpacing->width() + 15, 10 );
     eLineSpacing->resize( eLineSpacing->sizeHint().width() / 2, eLineSpacing->sizeHint().height() );
     str.sprintf( "%d", _lineSpacing );
@@ -51,7 +53,8 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     lDistBefore->move( 10, eLineSpacing->y() + eLineSpacing->height() + 10 );
     lDistBefore->resize( lDistBefore->sizeHint() );
 
-    eDistBefore = new KRestrictedLine( this, "", "0123456789" );
+    eDistBefore = new QLineEdit( this );
+    eDistBefore->setValidator( new QIntValidator( eDistBefore ) );
     eDistBefore->move( lDistBefore->width() + 15, lDistBefore->y() );
     eDistBefore->resize( eDistBefore->sizeHint().width() / 2, eDistBefore->sizeHint().height() );
     str.sprintf( "%d", _distBefore );
@@ -61,7 +64,8 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     lDistAfter->move( 10, eDistBefore->y() + eDistBefore->height() + 10 );
     lDistAfter->resize( lDistAfter->sizeHint() );
 
-    eDistAfter = new KRestrictedLine( this, "", "0123456789" );
+    eDistAfter = new QLineEdit( this );
+    eDistAfter->setValidator( new QIntValidator( eDistAfter ) );
     eDistAfter->move( lDistAfter->width() + 15, lDistAfter->y() );
     eDistAfter->resize( eDistAfter->sizeHint().width() / 2, eDistAfter->sizeHint().height() );
     str.sprintf( "%d", _distAfter );

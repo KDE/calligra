@@ -26,6 +26,7 @@
 #include <qfont.h>
 #include <qfontmet.h>
 #include <qwmatrix.h>
+#include <qvalidator.h>
 
 #include <qpoint.h>
 #include <qrect.h>
@@ -104,7 +105,8 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
     deg180->resize( deg270->size() );
     degCustom->resize( degCustom->sizeHint() );
 
-    custom = new KRestrictedLine( angle, "", "0123456789." );
+    custom = new QLineEdit( angle );
+    custom->setValidator( new QDoubleValidator( custom ) );
     custom->resize( custom->sizeHint().width() / 2, custom->sizeHint().height() );
     custom->setText( "0.0" );
 

@@ -22,7 +22,8 @@
 #include <qcolor.h>
 #include <qpainter.h>
 #include <qcombobox.h>
-#include <krestrictedline.h>
+#include <qvalidator.h>
+
 #include <kapp.h>
 
 #include <klocale.h>
@@ -100,7 +101,8 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
     lAngle->resize( lAngle->sizeHint() );
     lAngle->move( lType->x(), cType->y() + cType->height() + 20 );
 
-    eAngle = new KRestrictedLine( gSettings, "", "0123456789" );
+    eAngle = new QLineEdit( gSettings );
+    eAngle->setValidator( new QIntValidator( eAngle ) ); 
     eAngle->resize( eAngle->sizeHint() );
     eAngle->move( lAngle->x(), lAngle->y() + lAngle->height() + 5 );
     connect( eAngle, SIGNAL( textChanged( const QString & ) ), this, SLOT( angleChanged( const QString & ) ) );
@@ -109,7 +111,8 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
     lLen->resize( lLen->sizeHint() );
     lLen->move( eAngle->x(), eAngle->y() + eAngle->height() + 20 );
 
-    eLen = new KRestrictedLine( gSettings, "", "0123456789" );
+    eLen = new QLineEdit( gSettings );
+    eLen->setValidator( new QIntValidator( eLen ) );
     eLen->resize( eLen->sizeHint() );
     eLen->move( lLen->x(), lLen->y() + lLen->height() + 5 );
     connect( eLen, SIGNAL( textChanged( const QString & ) ), this, SLOT( lengthChanged( const QString & ) ) );

@@ -21,7 +21,7 @@
 #include <qstring.h>
 
 #include <kcolorbtn.h>
-#include <krestrictedline.h>
+#include <qlineedit.h>
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -63,15 +63,9 @@ private:
     // dialog objecsts
     QWidget *general, *objects;
     QLabel *lRastX, *lRastY, *lBackCol;
-    KRestrictedLine *eRastX, *eRastY;
+    QLineEdit *eRastX, *eRastY;
     QGroupBox *txtObj;
     KColorButton *bBackCol;
 
 };
-#endif //OPTIONDIA_H
-
-
-
-
-
-
+#endif

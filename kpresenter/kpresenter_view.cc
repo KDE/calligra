@@ -373,7 +373,6 @@ void KPresenterView::editDelPage()
     {
         delPageDia = new DelPageDia( this, "", m_pKPresenterDoc, getCurrPgNum() );
         delPageDia->setCaption( i18n( "KPresenter - Delete Page" ) );
-        //delPageDia->resize(delPageDia->minimumSize());
         QObject::connect( delPageDia, SIGNAL( deletePage( int, DelPageMode ) ), this, SLOT( delPageOk( int, DelPageMode ) ) );
         delPageDia->show();
     }
@@ -457,7 +456,6 @@ void KPresenterView::insertPage()
 
     insPageDia = new InsPageDia( this, "", m_pKPresenterDoc, getCurrPgNum() );
     insPageDia->setCaption( i18n( "KPresenter - Insert Page" ) );
-    //insPageDia->resize(insPageDia->minimumSize());
     QObject::connect( insPageDia, SIGNAL( insertPage( int, InsPageMode, InsertPos ) ), this, SLOT( insPageOk( int, InsPageMode, InsertPos ) ) );
     insPageDia->show();
 }
@@ -482,12 +480,6 @@ void KPresenterView::insertPicture()
     page->setCursor( waitCursor );
     if ( !file.isEmpty() ) m_pKPresenterDoc->insertPicture( file.data(), xOffset, yOffset );
     page->setCursor( c );
-
-//   QEvent ev( Event_Leave );
-//   QMouseEvent mev( Event_MouseButtonRelease,
-//        QCursor::pos(), LeftButton, LeftButton );
-//   QApplication::sendEvent( m_rToolBarInsert->getButton( m_idButtonInsert_Picture ), &ev );
-//   QApplication::sendEvent( m_rToolBarInsert->getButton( m_idButtonInsert_Picture ), &mev );
 }
 
 /*====================== insert a clipart =======================*/
@@ -497,12 +489,6 @@ void KPresenterView::insertClipart()
     page->deSelectAllObj();
     QString file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0L );
     if ( !file.isEmpty() ) m_pKPresenterDoc->insertClipart( file.data(), xOffset, yOffset );
-
-//   QEvent ev( Event_Leave );
-//   QMouseEvent mev( Event_MouseButtonRelease,
-//        QCursor::pos(), LeftButton, LeftButton );
-//   QApplication::sendEvent( m_rToolBarInsert->getButton( m_idButtonInsert_Clipart ), &ev );
-//   QApplication::sendEvent( m_rToolBarInsert->getButton( m_idButtonInsert_Clipart ), &mev );
 }
 
 /*=========================== insert line =======================*/
@@ -1012,10 +998,6 @@ void KPresenterView::screenStart()
             page->setFocusPolicy( QWidget::StrongFocus );
             page->setFocus();
         }
-//         QPainter p;
-//         p.begin( page );
-//         presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
-//         p.end();
 
         if ( !kPresenterDoc()->spManualSwitch() )
         {
@@ -1087,7 +1069,6 @@ void KPresenterView::screenPrev()
             yOffset = ( page->presPage() - 1 ) * kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
             if ( page->height() > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
                 yOffset -= ( page->height() - kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
-            //yOffset -= kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
             page->repaint( false );
             page->setFocus();
@@ -1097,9 +1078,6 @@ void KPresenterView::screenPrev()
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
             page->setFocus();
         }
-//         QPainter p( page );
-//         presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
-//         p.end();
     }
     else
         vert->setValue( yOffset - kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() );
@@ -1115,9 +1093,7 @@ void KPresenterView::screenNext()
             yOffset = ( page->presPage() - 1 ) * kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
             if ( page->height() > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
                 yOffset -= ( page->height() - kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
-            //yOffset += kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
-            //page->repaint( false );
             page->setFocus();
         }
         else
@@ -1125,9 +1101,6 @@ void KPresenterView::screenNext()
             page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
             page->setFocus();
         }
-//         QPainter p( page );
-//         presentParts( page->presFakt(), &p, QRect( 0, 0, 0, 0 ), xOffset, yOffset );
-//         p.end();
     }
     else
         vert->setValue( yOffset + kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() );
@@ -1147,7 +1120,7 @@ void KPresenterView::screenSkip()
 /*========================== screen full screen ================*/
 void KPresenterView::screenFullScreen()
 {
-    warning( "Screenpresentations only work in FULLSCREEN mode at the moment!" );
+    qWarning( "Screenpresentations only work in FULLSCREEN mode at the moment!" );
 }
 
 /*========================== screen pen/marker =================*/
@@ -1700,7 +1673,6 @@ void KPresenterView::afChooseOk( const QString & c )
     QString fileName( afDir + "/kpresenter/autoforms/" + fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf" );
 
     page->deSelectAllObj();
-    //m_pKPresenterDoc->insertAutoform( pen, brush, lineBegin, lineEnd, fillType, gColor1, gColor2, gType, fileName, xOffset, yOffset );
 
     page->deSelectAllObj();
     page->setToolEditMode( INS_AUTOFORM );
@@ -3092,8 +3064,6 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_vMenuText_TAlign->setItemChecked( m_idMenuText_TAlign_Left, true );
     m_vMenuScreen_PenWidth->setItemChecked( m_idMenuScreen_PenW3, true );
 
-//   setupAccelerators();
-
     return true;
 }
 
@@ -3659,53 +3629,6 @@ void KPresenterView::setupScrollbars()
     if ( page && !presStarted ) page->resize( widget()->width()-16, widget()->height()-16 );
     vert->setGeometry( widget()->width()-16, 0, 16, widget()->height()-16 );
     horz->setGeometry( 0, widget()->height()-16, widget()->width()-16, 16 );
-}
-
-/*======================= setup accellerators ==================*/
-void KPresenterView::setupAccelerators()
-{
-//   // edit menu
-//   m_vMenuEdit->setAccel( CTRL + Key_Z, m_idMenuEdit_Undo );
-//   m_vMenuEdit->setAccel( CTRL + Key_X, m_idMenuEdit_Cut );
-//   m_vMenuEdit->setAccel( CTRL + Key_C, m_idMenuEdit_Copy );
-//   m_vMenuEdit->setAccel( CTRL + Key_V, m_idMenuEdit_Paste );
-//   m_vMenuEdit->setAccel( CTRL + Key_F, m_idMenuEdit_Find );
-//   m_vMenuEdit->setAccel( CTRL + Key_R, m_idMenuEdit_FindReplace );
-
-//   // insert menu
-//   m_vMenuInsert->setAccel( ALT + Key_N, m_idMenuInsert_Page );
-//   m_vMenuInsert->setAccel( Key_F1, m_idMenuInsert_Picture );
-//   m_vMenuInsert->setAccel( Key_F2, m_idMenuInsert_Clipart );
-//   m_vMenuInsert->setAccel( Key_F11, m_idMenuInsert_Autoform );
-
-//   // tools menu
-//   m_vMenuInsert->setAccel( Key_F3, m_idMenuTools_Line );
-//   m_vMenuInsert->setAccel( Key_F4, m_idMenuTools_LineVert );
-//   m_vMenuInsert->setAccel( Key_F5, m_idMenuTools_LineD1 );
-//   m_vMenuInsert->setAccel( Key_F6, m_idMenuTools_LineD2 );
-//   m_vMenuInsert->setAccel( Key_F7, m_idMenuTools_RectangleNormal );
-//   m_vMenuInsert->setAccel( Key_F8, m_idMenuTools_RectangleRound );
-//   m_vMenuInsert->setAccel( Key_F9, m_idMenuTools_Circle );
-//   m_vMenuInsert->setAccel( Key_F10, m_idMenuTools_Text );
-//   m_vMenuInsert->setAccel( Key_F12, m_idMenuTools_Part );
-
-//   // extra menu
-//   m_vMenuExtra->setAccel( CTRL + Key_P, m_idMenuExtra_PenBrush );
-//   m_vMenuExtra->setAccel( CTRL + Key_Minus, m_idMenuExtra_Lower );
-//   m_vMenuExtra->setAccel( CTRL + Key_Plus, m_idMenuExtra_Raise );
-//   m_vMenuExtra->setAccel( ALT + Key_R, m_idMenuExtra_Rotate );
-//   m_vMenuExtra->setAccel( ALT + Key_S, m_idMenuExtra_Shadow );
-
-//   // screen menu
-//   m_vMenuScreen->setAccel( ALT + Key_A, m_idMenuScreen_AssignEffect );
-//   m_vMenuScreen->setAccel( CTRL + Key_G, m_idMenuScreen_Start );
-//   m_vMenuScreen->setAccel( Key_Home, m_idMenuScreen_First );
-//   m_vMenuScreen->setAccel( Key_End, m_idMenuScreen_Last );
-//   m_vMenuScreen->setAccel( Key_Prior, m_idMenuScreen_Prev );
-//   m_vMenuScreen->setAccel( Key_Next, m_idMenuScreen_Next );
-
-//   // help menu
-//   m_vMenuHelp->setAccel( CTRL + Key_H, m_idMenuHelp_Contents );
 }
 
 /*==============================================================*/

@@ -26,7 +26,6 @@ class KPresenterView;
 class QWidget;
 class QComboBox;
 class QLabel;
-class KRestrictedLine;
 class QPushButton;
 class QCheckBox;
 class QVBox;
@@ -47,20 +46,20 @@ public:
 
 protected:
     void resizeEvent( QResizeEvent *e );
-    
+
     QComboBox *cEffect, *cEffect2, *cDisappear;
     QLabel *lEffect, *lEffect2, *lNum, *lDisappear, *lDEffect;
     QSpinBox *eNum,*eDisappear;
     QPushButton *cancelBut, *okBut;
     QCheckBox *disappear;
     QVBox *back;
-    
+
     int objNum, pageNum;
     KPresenterView *view;
 
 public slots:
     void slotEffectDiaOk();
-        
+
 signals:
     void effectDiaOk();
 
@@ -68,7 +67,7 @@ protected slots:
     void disappearChanged();
     void num1Changed( int num );
     void num2Changed( int num );
-    
+
 };
 
 #endif //EFFECTDIA_H

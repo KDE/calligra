@@ -21,6 +21,7 @@
 #include <qchkbox.h>
 #include <qstring.h>
 #include <qgrpbox.h>
+#include <qvalidator.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -54,13 +55,15 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
     lRastX->resize( dummy, lRastX->height() );
     lRastY->resize( dummy, lRastY->height() );
 
-    eRastX = new KRestrictedLine( general, "eRastX", "0123456789" );
+    eRastX = new QLineEdit( general );
+    eRastX->setValidator( new QIntValidator( eRastX ) );
     eRastX->setText( "20" );
     eRastX->move( lRastX->x()+lRastX->width()+10, lRastX->y() );
     eRastX->resize( eRastX->sizeHint().width()/2, eRastX->sizeHint().height() );
     eRastX->setMaxLength( 2 );
 
-    eRastY = new KRestrictedLine( general, "eRastY", "0123456789" );
+    eRastY = new QLineEdit( general );
+    eRastY->setValidator( new QIntValidator( eRastY ) );
     eRastY->setText( "20" );
     eRastY->move( lRastY->x()+lRastY->width()+10, lRastY->y() );
     eRastY->resize( eRastY->sizeHint().width()/2, eRastY->sizeHint().height() );

@@ -22,6 +22,7 @@
 #include <qcolor.h>
 #include <qpainter.h>
 #include <qpen.h>
+#include <qvalidator.h>
 
 #include <klocale.h>
 #include <krestrictedline.h>
@@ -70,7 +71,8 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     lRndX->resize( lRndX->sizeHint() );
     lRndX->move( 10, 20 );
 
-    eRndX = new KRestrictedLine( gSettings, "", "0123456789" );
+    eRndX = new QLineEdit( gSettings );
+    eRndX->setValidator( new QIntValidator( eRndX ) );
     eRndX->resize( eRndX->sizeHint() );
     eRndX->move( lRndX->x(), lRndX->y() + lRndX->height() + 5 );
     connect( eRndX, SIGNAL( textChanged( const QString & ) ), this, SLOT( rndXChanged( const QString & ) ) );
@@ -79,7 +81,8 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     lRndY->resize( lRndY->sizeHint() );
     lRndY->move( eRndX->x(), eRndX->y() + eRndX->height() + 20 );
 
-    eRndY = new KRestrictedLine( gSettings, "", "0123456789" );
+    eRndY = new QLineEdit( gSettings );
+    eRndY->setValidator( new QIntValidator( eRndY ) );
     eRndY->resize( eRndY->sizeHint() );
     eRndY->move( lRndY->x(), lRndY->y() + lRndY->height() + 5 );
     connect( eRndY, SIGNAL( textChanged( const QString & ) ), this, SLOT( rndYChanged( const QString & ) ) );

@@ -66,7 +66,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name )
 {
     setWFlags( WResizeNoErase );
-    
+
     if ( parent )
     {
         mousePressed = false;
@@ -214,8 +214,6 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 /*==================== handle mouse pressed ======================*/
 void Page::mousePressEvent( QMouseEvent *e )
 {
-    //setFocus();
-
     if ( e->state() & ControlButton )
         keepRatio = true;
 
@@ -236,20 +234,15 @@ void Page::mousePressEvent( QMouseEvent *e )
             kpobject->deactivate();
             kptextobject->getKTextObject()->clearFocus();
             disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( toFontChanged( QFont* ) ) );
-            //disconnect( kptextobject->getKTextObject(), SIGNAL( giveMeFocus() ), view, SLOT( sendFocusEvent() ) );
             disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( toColorChanged( QColor* ) ) );
             disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
                         this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
             kptextobject->getKTextObject()->setShowCursor( false );
-            //setFocusProxy( 0 );
-            //setFocusPolicy( QWidget::NoFocus );
         }
         else if ( kpobject->getType() == OT_PART )
         {
             kpobject->deactivate();
             _repaint( kpobject );
-            //setFocusProxy( 0 );
-            //setFocusPolicy( QWidget::NoFocus );
             return;
         }
     }
@@ -508,7 +501,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
                     {
                         kpobject = objectList()->at( i );
-                        //if ( rubber.intersects( kpobject->getBoundingRect( diffx(), diffy() ) ) )
                         if ( kpobject->intersects( rubber, diffx(), diffy() ) )
                             selectObj( kpobject );
                     }
@@ -903,16 +895,14 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                     case MT_RESIZE_LD:
                     {
                         if ( keepRatio && ratio != 0.0 )
-                            //if ( !calcRatio( dx, dy, kpobject, ratio ) )
-                                break;
+                            break;
                         kpobject->moveBy( QPoint( dx, 0 ) );
                         kpobject->resizeBy( QSize( -dx, dy ) );
                     } break;
                     case MT_RESIZE_RU:
                     {
                         if ( keepRatio && ratio != 0.0 )
-                            //if ( !calcRatio( dx, dy, kpobject, ratio ) )
-                                break;
+                            break;
                         kpobject->moveBy( QPoint( 0, dy ) );
                         kpobject->resizeBy( QSize( dx, -dy ) );
                     } break;
@@ -1088,7 +1078,6 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
                     kptextobject->getKTextObject()->setBackgroundColor( txtBackCol() );
                     kptextobject->getKTextObject()->setShowCursor( true );
                     connect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( toFontChanged( QFont* ) ) );
-                    //connect( kptextobject->getKTextObject(), SIGNAL( giveMeFocus() ), view, SLOT( sendFocusEvent() ) );
                     connect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( toColorChanged( QColor* ) ) );
                     connect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
                              this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
@@ -1185,26 +1174,13 @@ int Page::getObjectAt( int x, int y )
 /*================================================================*/
 int Page::diffx( int /*i*/ )
 {
-    //if ( i == -1 )
     return view->getDiffX();
-
-//   if ( editMode )
-//     return view->getDiffX();
-
-//   return static_cast<int>( view->getDiffX() + view->kPresenterDoc()->getLeftBorder() * _presFakt );
 }
 
 /*================================================================*/
 int Page::diffy( int /*i*/ )
 {
-    //if ( i == -1 )
     return view->getDiffY();
-
-//   if ( editMode )
-//     return view->getDiffY();
-
-//   return static_cast<int>( view->getDiffY() + ( ( i + 1 ) * view->kPresenterDoc()->getTopBorder() +
-//                        i * view->kPresenterDoc()->getBottomBorder() ) * _presFakt );
 }
 /*======================= select object ==========================*/
 void Page::selectObj( int num )
@@ -1729,20 +1705,15 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
             kpobject->deactivate();
             kptextobject->getKTextObject()->clearFocus();
             disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( toFontChanged( QFont* ) ) );
-            //disconnect( kptextobject->getKTextObject(), SIGNAL( giveMeFocus() ), view, SLOT( sendFocusEvent() ) );
             disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( toColorChanged( QColor* ) ) );
             disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
                         this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
             kptextobject->getKTextObject()->setShowCursor( false );
-            //setFocusProxy( 0 );
-            //setFocusPolicy( QWidget::NoFocus );
         }
         else if ( kpobject->getType() == OT_PART )
         {
             kpobject->deactivate();
             _repaint( kpobject );
-            //setFocusProxy( 0 );
-            //setFocusPolicy( QWidget::NoFocus );
         }
     }
 
@@ -1791,8 +1762,6 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
     currPresStep = *presStepList.begin();
     subPresStep = 0;
     repaint( true );
-    //setFocusPolicy( QWidget::StrongFocus );
-    //setFocus();
     setCursor( blankCursor );
 
     view->kPresenterDoc()->getHeaderFooterEdit()->updateSizes();
@@ -1886,7 +1855,7 @@ bool Page::pNext( bool )
     else
     {
         QValueList<int>::Iterator test(  slideListIterator );
-        if ( /*currPresPage + 1 > pageNums()*/ ++test == slideList.end() )
+        if ( ++test == slideList.end() )
         {
             for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
             {
@@ -1986,7 +1955,7 @@ bool Page::pPrev( bool /*manual*/ )
     }
     else
     {
-        if ( /*currPresPage-1 <= 0*/ slideListIterator == slideList.begin() )
+        if ( slideListIterator == slideList.begin() )
         {
             presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
             currPresStep = *presStepList.begin();
@@ -3128,7 +3097,6 @@ void Page::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int 
 
     QPainter p;
     p.begin( screen );
-    //p.begin( this );
 
     if ( _w != 0 || _h != 0 )
     {
@@ -3256,12 +3224,7 @@ void Page::editSelectedTextArea()
 
                     kpobject->activate( this, diffx(), diffy() );
                     kptextobject->getKTextObject()->setBackgroundColor( txtBackCol() );
-                    //setFocusProxy( kptextobject->getKTextObject() );
-                    //setFocusPolicy( QWidget::StrongFocus );
-                    //kptextobject->getKTextObject()->setFocus();
-                    //kptextobject->getKTextObject()->setShowCursor( true );
                     connect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( toFontChanged( QFont* ) ) );
-                    //connect( kptextobject->getKTextObject(), SIGNAL( giveMeFocus() ), view, SLOT( sendFocusEvent() ) );
                     connect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( toColorChanged( QColor* ) ) );
                     connect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
                              this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
@@ -3385,20 +3348,15 @@ void Page::setToolEditMode( ToolEditMode _m )
             kpobject->deactivate();
             kptextobject->getKTextObject()->clearFocus();
             disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( toFontChanged( QFont* ) ) );
-            //disconnect( kptextobject->getKTextObject(), SIGNAL( giveMeFocus() ), view, SLOT( sendFocusEvent() ) );
             disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( toColorChanged( QColor* ) ) );
             disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
                         this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
             kptextobject->getKTextObject()->setShowCursor( false );
-            //setFocusProxy( 0 );
-            //setFocusPolicy( QWidget::NoFocus );
         }
         else if ( kpobject->getType() == OT_PART )
         {
             kpobject->deactivate();
             _repaint( kpobject );
-            //setFocusProxy( 0 );
-            //setFocusPolicy( QWidget::NoFocus );
         }
     }
 

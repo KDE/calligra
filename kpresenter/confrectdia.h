@@ -27,7 +27,7 @@
 
 class QPainter;
 class QLabel;
-class KRestrictedLine;
+class QLineEdit;
 class QGroupBox;
 class QPushButton;
 
@@ -74,7 +74,7 @@ public:
 
 protected:
     QLabel *lRndX, *lRndY;
-    KRestrictedLine *eRndX, *eRndY;
+    QLineEdit *eRndX, *eRndY;
     QGroupBox *gSettings, *gPreview;
     RectPreview *rectPreview;
     QPushButton *okBut, *applyBut, *cancelBut;

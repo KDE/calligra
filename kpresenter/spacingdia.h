@@ -23,7 +23,7 @@
 #endif
 
 class QLabel;
-class KRestrictedLine;
+class QLineEdit;
 class QPushButton;
 class QWidget;
 
@@ -40,7 +40,7 @@ public:
 
 protected:
     QLabel *lLineSpacing, *lDistBefore, *lDistAfter;
-    KRestrictedLine *eLineSpacing, *eDistBefore, *eDistAfter;
+    QLineEdit *eLineSpacing, *eDistBefore, *eDistAfter;
     QPushButton *cancelBut, *okBut;
 
 public slots:

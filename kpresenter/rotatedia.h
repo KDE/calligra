@@ -26,7 +26,7 @@
 class QRadioButton;
 class QWidget;
 class QPainter;
-class KRestrictedLine;
+class QLineEdit;
 class QGroupBox;
 class QPushButton;
 
@@ -70,7 +70,7 @@ public:
 
 protected:
     QRadioButton *deg0, *deg90, *deg180, *deg270, *degCustom;
-    KRestrictedLine *custom;
+    QLineEdit *custom;
     QGroupBox *angle, *preview;
     RotatePreview *rPreview;
     QPushButton *okBut, *applyBut, *cancelBut;
