@@ -114,7 +114,7 @@ class KSBuiltinStruct;
 
 class KSBuiltinStructClass : public KSStructClass
 {
-    friend KSBuiltinStruct;
+    friend class KSBuiltinStruct;
 public:
     KSBuiltinStructClass( KSModule* module, const QString& name );
     virtual ~KSBuiltinStructClass() { }
