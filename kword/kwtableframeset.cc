@@ -366,6 +366,10 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
 void KWTableFrameSet::recalcRows(int _col, int _row) {
     kdDebug(32004) << getName() << " KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;
+    
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+    kdDebug(32004) << "Has temporary headers: " << m_hasTmpHeaders << endl;
+#endif
 
     // check/set sizes of frames
     unsigned int row=0,col=0;
@@ -432,7 +436,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             }
         } // for each column
 
-#if 0
+#ifdef SUPPORT_MULTI_PAGE_TABLES // 0
     kdDebug(32004) << " activeCell: " << activeCell->firstRow() << ","<< activeCell->firstCol() << endl;
     kdDebug(32004) << " activeCell height. Cur:  " << activeCell->frame(0)->height() << ", minFrameHeight: "<< activeCell->frame(0)->minFrameHeight() << endl;
     kdDebug(32004) << " minHeightOtherCols: " << minHeightOtherCols << endl;
@@ -621,14 +625,19 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             
             QValueList<double>::iterator tmp = m_rowPositions.at(breakRow);
             diff += topOfPage - (*tmp); // diff between bottom of last row on page and top of new page
-#ifdef SUPPORT_MULTI_PAGE_TABLES
+#if 0 // def SUPPORT_MULTI_PAGE_TABLES
             kdDebug(32004) << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
-
+            
+            // ### TODO: unfinished, does not work!
+            m_rowPositions.insert( tmp, topOfPage );
+            (*tmp) += diff; // ### ?
+            breakRow -= 2; // ### ?
+            lineNumber++;
 #else
 //kdDebug() << "diff += " <<  topOfPage  << " - " << (*tmp) << ". diff += " << topOfPage - (*tmp) <<" ="<< diff  << endl;
-#endif
             lineNumber++;
             m_rowPositions.insert(j, topOfPage);
+#endif
 
             // insert new pageBound. It points to last LINE on previous page
             pageBound = m_pageBoundaries.insert(pageBound, breakRow);
@@ -668,6 +677,10 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
             (*j) += diff;
         }
+        else if ( diff < 0 )
+        {
+            kdWarning(32004) << "Negative diff: " << diff << endl;
+        }
 #else
         //if(diff > 0)  kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
         if(diff > 0)
@@ -675,7 +688,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 #endif
         lineNumber++;
         
-#ifdef SUPPORT_MULTI_PAGE_TABLES
+#if 0 // def SUPPORT_MULTI_PAGE_TABLES
         // Note: produces much ouput!
         int i = 1; // DEBUG
         for ( QValueList<double>::iterator itDebug = m_rowPositions.begin(); itDebug != m_rowPositions.end(); ++itDebug, ++i )
