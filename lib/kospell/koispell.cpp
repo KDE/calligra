@@ -79,50 +79,15 @@ enum {
 
 
 
-KOISpell::KOISpell (QWidget *_parent, const QString &_caption,
+
+
+KOISpell::KOISpell( QWidget *_parent, const QString &_caption,
 		QObject *obj, const char *slot, KOSpellConfig *_ksc,
-		bool _progressbar, bool _modal)
-    :KOSpell(_parent,_caption,_ksc,_modal,/*_autocorrect*/false)
+		bool _progressbar, bool _modal, KOSpellerType _type )
+    :KOSpell(_parent,_caption,_ksc,_modal,/*_autocorrect*/false,  _type)
 {
-
-  m_bIgnoreUpperWords=false;
-  m_bIgnoreTitleCase=false;
-
-  autoDelete = false;
-  modaldlg = _modal;
-  progressbar = _progressbar;
-
-  proc=0;
-  ksdlg=0;
-
-  texmode=dlgon=FALSE;
-
-  dialogsetup = FALSE;
-  progres=10;
-  curprog=0;
-
-  dialogwillprocess=FALSE;
-  dialog3slot="";
-
-  personaldict=FALSE;
-  dlgresult=-1;
-
-  caption=_caption;
-
-  parent=_parent;
-
-  trystart=0;
-  maxtrystart=2;
-
-  if ( obj && slot )
-      // caller wants to know when kspell is ready
-      connect (this, SIGNAL (ready(KOSpell *)), obj, slot);
-  else
-      // Hack for modal spell checking
-      connect (this, SIGNAL (ready(KOSpell *)), this, SLOT( slotModalReady() ) );
-  proc=new KProcIO(codec);
-
-  startIspell();
+  initialize( _parent, _caption, obj, slot, _ksc,
+              _progressbar, _modal );
 }
 
 void KOISpell::startIspell()
@@ -158,6 +123,30 @@ void KOISpell::startIspell()
     if (ksconfig->client() == KOS_CLIENT_ISPELL /*|| ksconfig->client() == KOS_CLIENT_ASPELL*/)
     {
         *proc << "-a" << "-S";
+        switch ( type )
+        {
+        case HTML:
+            //different for aspell/ispell
+            if ( ksconfig->client() == KOS_CLIENT_ISPELL )
+                *proc << "-h";
+            else
+                *proc << "-H";
+            break;
+        case TeX:
+            //same for aspell and ispell
+            *proc << "-t";
+            break;
+        case Nroff:
+            //only ispell supports
+            if ( ksconfig->client() == KOS_CLIENT_ISPELL )
+                *proc << "-n";
+            break;
+        case Text:
+        default:
+            //nothing
+            break;
+        }
+
         if (ksconfig->noRootAffix())
         {
             *proc<<"-m";
@@ -1123,7 +1112,7 @@ void KOISpell::emitDeath()
   bool deleteMe = autoDelete; // Can't access object after next call!
   emit death();
   if (deleteMe)
-     delete this;
+     deleteLater();
 }
 
 void KOISpell::setProgressResolution (unsigned int res)
@@ -1211,3 +1200,47 @@ void KOISpell::slotModalSpellCheckerFinished( )
 }
 
 
+void KOISpell::initialize( QWidget *_parent, const QString &_caption,
+                         QObject *obj, const char *slot, KOSpellConfig *_ksc,
+                         bool _progressbar, bool _modal )
+{
+
+  m_bIgnoreUpperWords=false;
+  m_bIgnoreTitleCase=false;
+
+  autoDelete = false;
+  modaldlg = _modal;
+  progressbar = _progressbar;
+
+  proc=0;
+  ksdlg=0;
+
+  texmode=dlgon=FALSE;
+
+  dialogsetup = FALSE;
+  progres=10;
+  curprog=0;
+
+  dialogwillprocess=FALSE;
+  dialog3slot="";
+
+  personaldict=FALSE;
+  dlgresult=-1;
+
+  caption=_caption;
+
+  parent=_parent;
+
+  trystart=0;
+  maxtrystart=2;
+
+  if ( obj && slot )
+      // caller wants to know when kspell is ready
+      connect (this, SIGNAL (ready(KOSpell *)), obj, slot);
+  else
+      // Hack for modal spell checking
+      connect (this, SIGNAL (ready(KOSpell *)), this, SLOT( slotModalReady() ) );
+  proc=new KProcIO(codec);
+
+  startIspell();
+}

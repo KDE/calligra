@@ -36,9 +36,9 @@ class KOISpell :  public KOSpell
 
 public:
 
-    KOISpell(QWidget *parent, const QString &caption,
-             QObject *receiver, const char *slot, KOSpellConfig *kcs=0,
-             bool progressbar = TRUE, bool modal = FALSE );
+    KOISpell( QWidget *_parent, const QString &_caption,
+              QObject *obj, const char *slot, KOSpellConfig *_ksc = 0,
+              bool _progressbar = TRUE, bool _modal = FALSE, KOSpellerType type= Text );
 
     virtual void cleanUp ();
 
@@ -137,6 +137,9 @@ protected:
     bool cleanFputsWord (const QString & s, bool appendCR=TRUE);
     void startIspell();
     bool writePersonalDictionary ();
+    void initialize( QWidget *_parent, const QString &_caption,
+                     QObject *obj, const char *slot, KOSpellConfig *_ksc,
+                     bool _progressbar, bool _modal );
 };
 
 

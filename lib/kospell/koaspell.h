@@ -38,7 +38,7 @@ class KOASpell : public KOSpell
 public:
 
     KOASpell(QWidget *parent, const QString &caption,KOSpellConfig *kcs=0,
-             bool modal = FALSE, bool _autocorrect =FALSE );
+             bool modal = FALSE, bool _autocorrect =FALSE, KOSpellerType _type = Text);
 
     /*
      * Create a simple kospell class without dialogbox

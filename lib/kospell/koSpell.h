@@ -31,15 +31,31 @@ class KOSpell : public QObject
     Q_OBJECT
 public:
     enum spellStatus { Starting = 0, Running, Cleaning, Finished, Error, Crashed, FinishedNoMisspellingsEncountered };
+
+/**
+     * These are possible types of documents which the spell checker can check.
+     *
+     * @li @p Text  - The default type, checks every word
+     * @li @p HTML  - For HTML/SGML/XML documents, will skip the tags,
+     * @li @p TeX   - For TeX/LaTeX documents, will skip commands,
+     * @li @p Nroff - For nroff/troff documents.
+     *
+     * Please note that not every option is supported on every type of
+     * checker (e.g. ASpell doesn't support Nroff). In case a type
+     * of a document is not supported the default Text option will
+     * be used.
+     */
+    enum KOSpellerType { Text = 0, HTML, TeX, Nroff };
+
     ~KOSpell();
     //slot necessary for old lib
     //receive used this by default
-    static KOSpell *createKoSpell( QWidget *parent, const QString &caption, QObject *receiver, const char *slot,KOSpellConfig *kcs, bool modal, bool _autocorrect );
+    static KOSpell *createKoSpell( QWidget *parent, const QString &caption, QObject *receiver, const char *slot,KOSpellConfig *kcs, bool modal, bool _autocorrect, KOSpellerType type = Text);
 
     static int modalCheck( QString& text, KOSpellConfig * kcs );
 
 
-   /**
+    /**
      * Cleans up ISpell.
      *
      * Write out the personal dictionary and close ISpell's
@@ -149,33 +165,33 @@ public:
      * misspelled word in a document.
      */
     void moveDlg (int x, int y);
-  /**
-   * Gets the result code of the dialog box.
-   *
-   * After calling checkWord, you can use this to get the dialog box's
-   *  result code.
-   * The possible
-   *  values are (from kspelldlg.h):
-   *    @li KS_CANCEL
-   *    @li KS_REPLACE
-   *    @li KS_REPLACEALL
-   *    @li KS_IGNORE
-   *    @li KS_IGNOREALL
-   *    @li KS_ADD
-   *    @li KS_STOP
-   *
-   */
-  int dlgResult () const
-    { return dlgresult; }
-  /**
-   * Returns list of suggested word replacements.
-   *
-   * After calling @ref checkWord() (an in response to
-   *  a @ref misspelled() signal you can
-   *  use this to get the list of
-   *  suggestions (if any were available).
-   */
-  QStringList suggestions () const { return sugg; }
+    /**
+     * Gets the result code of the dialog box.
+     *
+     * After calling checkWord, you can use this to get the dialog box's
+     *  result code.
+     * The possible
+     *  values are (from kspelldlg.h):
+     *    @li KS_CANCEL
+     *    @li KS_REPLACE
+     *    @li KS_REPLACEALL
+     *    @li KS_IGNORE
+     *    @li KS_IGNOREALL
+     *    @li KS_ADD
+     *    @li KS_STOP
+     *
+     */
+    int dlgResult () const
+        { return dlgresult; }
+    /**
+     * Returns list of suggested word replacements.
+     *
+     * After calling @ref checkWord() (an in response to
+     *  a @ref misspelled() signal you can
+     *  use this to get the list of
+     *  suggestions (if any were available).
+     */
+    QStringList suggestions () const { return sugg; }
 signals:
 
     /**
@@ -297,7 +313,7 @@ protected:
     void misspellingWord (const QString & originalword, const QStringList & suggestions, unsigned int pos);
 
     KOSpell(QWidget *parent, const QString &caption,KOSpellConfig *kcs=0,
-            bool modal = FALSE, bool _autocorrect =FALSE );
+            bool modal = FALSE, bool _autocorrect =FALSE, KOSpellerType type = Text );
     KOSpell( KOSpellConfig *_ksc );
 
     bool endOfResponse;
@@ -318,6 +334,7 @@ protected:
     bool dialogwillprocess;
 
     KOSpellConfig *ksconfig;
+    KOSpellerType type;
     spellStatus m_status;
     int lastpos;
     bool modaldlg;

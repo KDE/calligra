@@ -84,8 +84,8 @@ void KOASpell::initSpell(KOSpellConfig *_ksc)
 
 KOASpell::KOASpell (QWidget *_parent, const QString &_caption,
 		KOSpellConfig *_ksc,
-		bool _modal,  bool _autocorrect)
-    :KOSpell(_parent,_caption,_ksc,_modal,_autocorrect)
+		bool _modal,  bool _autocorrect, KOSpellerType _type)
+    :KOSpell(_parent,_caption,_ksc,_modal,_autocorrect, _type )
 {
     initSpell(_ksc);
     autocorrect = _autocorrect;

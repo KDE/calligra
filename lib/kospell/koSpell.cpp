@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include "koSpelldlg.h"
 
-KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObject *receiver, const char *slot, KOSpellConfig *_kcs, bool modal, bool _autocorrect )
+KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObject *receiver, const char *slot, KOSpellConfig *_kcs, bool modal, bool _autocorrect, KOSpellerType type )
 {
     KOSpellConfig *ksc;
     if (_kcs!=0)
@@ -47,13 +47,13 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
     {
         kdDebug(30006)<<" KOS_CLIENT_ISPELL :*************\n";
         return new KOISpell(parent, caption,
-                            receiver, slot, ksc/*config all other parameter*/ );
+                            receiver, slot, ksc/*config all other parameter*/, type );
     }
 #ifdef HAVE_LIBASPELL
     else if (clt == KOS_CLIENT_ASPELL)
     {
         kdDebug(30006)<<" KOS_CLIENT_ASPELL :**************\n";
-        return new KOASpell(parent,caption,ksc,modal,_autocorrect);
+        return new KOASpell(parent,caption,ksc,modal,_autocorrect, type);
     }
 #endif
 #if 0
@@ -63,7 +63,7 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
 #endif
     kdDebug(30006)<<" default !!!!!!!!!!!!!!!!!!!!!!!!!\n";
      return new KOISpell(parent, caption,
-                            receiver, slot, ksc/*config all other parameter*/ );
+                            receiver, slot, ksc/*config all other parameter*/, type );
 
 }
 
@@ -93,14 +93,16 @@ int KOSpell::modalCheck( QString& text, KOSpellConfig * _ksc )
 
 
 KOSpell::KOSpell(QWidget *_parent, const QString &_caption,KOSpellConfig *kcs,
-            bool modal, bool _autocorrect )
+            bool modal, bool _autocorrect, KOSpellerType _type  )
 {
+    type=_type;
     ksdlg = 0L;
     parent=_parent;
     modaldlg=modal;
     autocorrect = _autocorrect;
     caption = _caption;
     initSpell( kcs );
+
 }
 
 KOSpell::KOSpell( KOSpellConfig *_ksc )
