@@ -755,6 +755,7 @@ QColor WinWordDoc::colorForNumber(QString number, int defaultcolor)
     switch(number.toInt())
     {
 	case 0:
+	    return QColor("white");
 	case 1:
 	    return QColor("black");
 	case 2:
