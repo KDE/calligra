@@ -87,7 +87,7 @@ void KDiagrammShell::setDocument( KDiagrammDoc *_doc )
 
   m_pDoc = _doc;
   m_pDoc->_ref();
-  m_pView = _doc->createDiagrammView( getFrame() );
+  m_pView = _doc->createDiagrammView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
@@ -124,7 +124,7 @@ bool KDiagrammShell::newDocument()
     return false;
   }
 
-  m_pView = m_pDoc->createDiagrammView( getFrame() );
+  m_pView = m_pDoc->createDiagrammView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
@@ -169,7 +169,7 @@ bool KDiagrammShell::openDocument( const char *_url, const char *_format )
   if ( !m_pDoc->loadFromURL( _url, _format ) )
     return false;
 
-  m_pView = m_pDoc->createDiagrammView( getFrame() );
+  m_pView = m_pDoc->createDiagrammView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
