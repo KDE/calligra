@@ -47,30 +47,47 @@ int KWFootNoteManager::findStart(KWFormatContext *_fc,QPainter &p)
   if (_fc->getFrameSet() > 1)
     return -1;
 
+  if (footNotes.isEmpty())
+    return start;
+  
   KWFormatContext fc(doc,_fc->getFrameSet());
   fc.init(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(_fc->getFrameSet() - 1))->getFirstParag(),p);
   int curr = start;
   KWParag *parag = fc.getParag();
-
+  unsigned int found = 0;
+  
   while (parag != _fc->getParag())
     {
       KWString *str = parag->getKWString();
       for (unsigned int i = 0;i < str->size();i++)
 	{
+	  if (found == footNotes.count())
+	    return curr;
 	  if (str->data()[i].attrib->getClassId() == ID_KWCharFootNote)
-	    curr = dynamic_cast<KWCharFootNote*>(str->data()[i].attrib)->getFootNote()->getEnd() + 1;
+	    {
+	      curr = dynamic_cast<KWCharFootNote*>(str->data()[i].attrib)->getFootNote()->getEnd() + 1;
+	      found++;
+	    }
 	}
 
-      parag = fc.getParag()->getNext();
+      parag = parag->getNext();
     }
+
+  if (found == footNotes.count())
+    return curr;
 
   if (parag)
     {
       KWString *str = parag->getKWString();
       for (unsigned int i = 0;i < str->size() && i <= _fc->getTextPos();i++)
 	{
+	  if (found == footNotes.count())
+	    return curr;
 	  if (str->data()[i].attrib->getClassId() == ID_KWCharFootNote)
-	    curr = dynamic_cast<KWCharFootNote*>(str->data()[i].attrib)->getFootNote()->getEnd() + 1;
+	    {
+	      curr = dynamic_cast<KWCharFootNote*>(str->data()[i].attrib)->getFootNote()->getEnd() + 1;
+	      found++;
+	    }
 	}
     }
 
@@ -86,7 +103,7 @@ void KWFootNoteManager::insertFootNote(KWFootNote *fn)
       recalc();
       return;
     }
-  
+
   int i = 1;
   KWFootNote *_fn = 0L;
   for (_fn = footNotes.first();_fn;_fn = footNotes.next(),i++)
@@ -97,7 +114,16 @@ void KWFootNoteManager::insertFootNote(KWFootNote *fn)
 	  break;
 	}
     }
-  
+
+  recalc();
+}
+
+/*================================================================*/
+void KWFootNoteManager::removeFootNote(KWFootNote *fn)
+{
+  int n = footNotes.findRef(fn);
+  if (n != -1)
+    footNotes.take(n);
   recalc();
 }
 

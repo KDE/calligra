@@ -348,12 +348,12 @@ void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page
   if (_check && _format == format || !m_vToolBarText) return;
 
   if (gui && gui->getPaperWidget() && gui->getPaperWidget()->getCursor() && gui->getPaperWidget()->getCursor()->getParag()
-      && gui->getPaperWidget()->getCursor()->getParag()->getKWString()->data()[gui->getPaperWidget()->getCursor()->getTextPos() - 1].attrib
       && gui->getPaperWidget()->getCursor()->getTextPos() > 0
+      && gui->getPaperWidget()->getCursor()->getParag()->getKWString()->data()[gui->getPaperWidget()->getCursor()->getTextPos() - 1].attrib
       && gui->getPaperWidget()->getCursor()->getParag()->
       getKWString()->data()[gui->getPaperWidget()->getCursor()->getTextPos() - 1].attrib->getClassId() == ID_KWCharFootNote)
     return;
-  
+
   format = _format;
 
   if (_format.getUserFont()->getFontName())
@@ -1007,7 +1007,7 @@ void KWordView::insertFootNoteEndNote()
       KWFootNote *fn = new KWFootNote(m_pKWordDoc,lfi);
       fn->setBefore("[");
       fn->setAfter("]");
-      
+
       // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
       gui->getPaperWidget()->insertFootNote(fn);

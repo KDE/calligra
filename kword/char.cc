@@ -12,24 +12,26 @@
 #include "kword_doc.h"
 #include "frame.h"
 
-KWString::KWString(QString _str)
+KWString::KWString(QString _str,KWordDocument *_doc)
 {
   if (_str == 0L)
-  {
-    _data_ = 0L;
-    _len_ = 0;
-    _max_ = 0;
-    return;
-  }
+    {
+      _data_ = 0L;
+      _len_ = 0;
+      _max_ = 0;
+      return;
+    }
 
-  _len_ = strlen( _str );
+  _len_ = strlen(_str);
   _max_ = _len_;
 
   _data_ = alloc( _len_ );
 
   unsigned int i = 0;
-  while( _str[i] != 0L )
+  while(_str[i] != 0L)
     _data_[i].c = _str[i++];
+
+  doc = _doc;
 }
 
 KWString::KWString(const KWString &_string)
@@ -37,6 +39,7 @@ KWString::KWString(const KWString &_string)
   _data_ = copy(_string._data_,_string._len_);
   _len_ = _string._len_;
   _max_ = _string._max_;
+  doc = _string.doc;
 }
 
 KWString &KWString::operator=(const KWString &_string)
@@ -44,29 +47,30 @@ KWString &KWString::operator=(const KWString &_string)
   _data_ = copy(_string._data_,_string._len_);
   _len_ = _string._len_;
   _max_ = _string._max_;
-
+  doc = _string.doc;
+  
   return *this;
 }
 
-KWChar* KWString::alloc( unsigned int _len )
+KWChar* KWString::alloc(unsigned int _len)
 {
-  KWChar *c = new KWChar[ _len ];
+  KWChar *c = new KWChar[_len];
 
   KWChar *p = c;
-  for( unsigned int i = 0; i < _len; ++i )
-  {
-    p->c = 0;
-    p->attrib = 0L;
-    p++;
-  }
+  for (unsigned int i = 0;i < _len;++i)
+    {
+      p->c = 0;
+      p->attrib = 0L;
+      p++;
+    }
 
   return c;
 }
 
-void KWString::free( KWChar* _data, unsigned int _len )
+void KWString::free(KWChar* _data,unsigned int _len)
 {
-  for( unsigned int i = 0; i < _len; ++i )
-    freeChar( _data[ i ] );
+  for(unsigned int i = 0;i < _len;++i)
+    freeChar(_data[i],doc);
 }
 
 void KWString::append(KWChar *_text,unsigned int _len)
@@ -82,59 +86,59 @@ void KWString::append(KWChar *_text,unsigned int _len)
     }
 }
 
-void KWString::insert( unsigned int _pos,QString _text)
+void KWString::insert(unsigned int _pos,QString _text)
 {
-  assert( _pos <= _len_ );
+  assert(_pos <= _len_);
 
-  unsigned int nl = strlen( _text );
+  unsigned int nl = strlen(_text);
 
   unsigned int l = _len_;
 
-  resize( _len_ + nl );
+  resize(_len_ + nl);
 
-  if ( _pos < l )
-    memmove( _data_ + _pos + nl, _data_ + _pos, sizeof(KWChar) * ( l - _pos ) );
+  if (_pos < l)
+    memmove(_data_ + _pos + nl,_data_ + _pos,sizeof(KWChar) * (l - _pos));
 
-  for( unsigned int i = 0; i < nl; ++i )
+  for (unsigned int i = 0;i < nl;++i)
     {
-      _data_[ _pos + i ].c = _text[i];
-      _data_[ _pos + i ].attrib = 0L;
+      _data_[_pos + i].c = _text[i];
+      _data_[_pos + i].attrib = 0L;
     }
 }
 
-void KWString::insert( unsigned int _pos,KWString *_text)
+void KWString::insert(unsigned int _pos,KWString *_text)
 {
-  assert( _pos <= _len_ );
+  assert(_pos <= _len_);
 
   unsigned int nl = _text->size();
 
   unsigned int l = _len_;
 
-  resize( _len_ + nl );
+  resize(_len_ + nl);
 
-  if ( _pos < l )
-    memmove( _data_ + _pos + nl, _data_ + _pos, sizeof(KWChar) * ( l - _pos ) );
+  if (_pos < l)
+    memmove(_data_ + _pos + nl,_data_ + _pos,sizeof(KWChar) * (l - _pos));
 
-  for( unsigned int i = 0; i < nl; ++i )
+  for (unsigned int i = 0;i < nl;++i)
     {
-      _data_[ _pos + i ].c = _text->data()[i].c;
-      _data_[ _pos + i ].attrib = _text->data()[i].attrib;
+      _data_[_pos + i].c = _text->data()[i].c;
+      _data_[_pos + i].attrib = _text->data()[i].attrib;
     }
 }
 
-void KWString::insert( unsigned int _pos, const char _c )
+void KWString::insert(unsigned int _pos,const char _c)
 {
-  assert( _pos <= _len_ );
+  assert(_pos <= _len_);
 
   unsigned int l = _len_;
 
-  resize( _len_ + 1 );
+  resize(_len_ + 1);
 
-  if ( _pos < l )
-    memmove( _data_ + _pos + 1, _data_ + _pos, sizeof(KWChar) * ( l - _pos ) );
+  if (_pos < l)
+    memmove(_data_ + _pos + 1,_data_ + _pos,sizeof(KWChar) * (l - _pos));
 
-  _data_[ _pos ].c = _c;
-  _data_[ _pos ].attrib = 0L;
+  _data_[_pos].c = _c;
+  _data_[_pos].attrib = 0L;
 }
 
 void KWString::insert(unsigned int _pos,KWCharImage *_image)
@@ -197,12 +201,12 @@ void KWString::insert(unsigned int _pos,KWCharFootNote *_fn)
   _data_[ _pos ].attrib = _fn;
 }
 
-bool KWString::remove( unsigned int _pos,unsigned int _len = 1 )
+bool KWString::remove(unsigned int _pos,unsigned int _len = 1)
 {
   if (_pos + _len <= _len_ && (int)_pos >= 0)
     {
       for (unsigned int i = _pos;i < _pos + _len;i++)
-	freeChar(_data_[i]);
+	freeChar(_data_[i],doc);
 
       memmove(_data_ + _pos,_data_ + _pos + _len,sizeof(KWChar) * (_len_ - _pos - _len));
       resize(_len_ - _len,false);
@@ -354,7 +358,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		    for (unsigned int i = __pos;i < __pos + __len;i++)
 		      {
 			if (static_cast<int>(i) > static_cast<int>(size() - 1)) break;
-			freeChar(_data_[i]);
+			freeChar(_data_[i],doc);
 			_kwformat = new KWCharFormat(format);
 			_data_[i].attrib = _kwformat;
 			format->incRef();
@@ -370,7 +374,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		    QString key;
 		    image = _doc->getImageCollection()->getImage(*_image,key);
 		    _kwimage = new KWCharImage(image);
-		    freeChar(_data_[__pos]);
+		    freeChar(_data_[__pos],doc);
 		    _data_[__pos].c = 0;
 		    _data_[__pos].attrib = _kwimage;
 		    delete _image;
@@ -379,7 +383,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		case ID_KWCharTab:
 		  {
 		    _kwtab = new KWCharTab();
-		    freeChar(_data_[__pos]);
+		    freeChar(_data_[__pos],doc);
 		    _data_[__pos].c = 0;
 		    _data_[__pos].attrib = _kwtab;
 		  } break;
@@ -432,7 +436,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 			    _format = new KWFormat();
 			    _format->load(parser,lst,_doc);
 			    format = _doc->getFormatCollection()->getFormat(*_format);
-			    freeChar(_data_[__pos]);
+			    freeChar(_data_[__pos],doc);
 			    v->setFormat(format);
 			    _data_[__pos].attrib = v;
 			    _data_[__pos].c = 0;
@@ -468,31 +472,31 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 
 void KWString::resize(unsigned int _size,bool del = true)
 {
-  if ( _size == _len_ )
+  if (_size == _len_)
     return;
 
-  if ( _size < _len_ )
-  {
-    if (del) free( _data_ + _size, _len_ - _size );
-    _len_ = _size;
+  if (_size < _len_)
+    {
+      if (del) free(_data_ + _size,_len_ - _size);
+      _len_ = _size;
 
-    return;
-  }
+      return;
+    }
 
   /* _size > _len_ */
-  if ( _size < _max_ )
-  {
-    _len_ = _size;
-    return;
-  }
+  if (_size < _max_)
+    {
+      _len_ = _size;
+      return;
+    }
 
   // Alloc some bytes more => faster when increasing size in steps of 1
-  KWChar *d = alloc( _size + 10 );
-  if ( _data_ )
-  {
-    memcpy( d, _data_, _len_ * sizeof(KWChar) );
-    delete []_data_;
-  }
+  KWChar *d = alloc(_size + 10);
+  if (_data_)
+    {
+      memcpy(d,_data_,_len_ * sizeof(KWChar));
+      delete [] _data_;
+    }
 
   _data_ = d;
   _len_ = _size;
@@ -712,24 +716,27 @@ int KWString::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _i
   return -1;
 }
 
-void freeChar( KWChar& _char )
-{
-  if ( _char.attrib )
-  {
-    switch( _char.attrib->getClassId() )
-      {
-      case ID_KWCharFormat:
-      case ID_KWCharImage:
-      case ID_KWCharTab:
-      case ID_KWCharVariable:
-      case ID_KWCharFootNote:
-	delete _char.attrib;
-	break;
-      default:
-	assert( 0 );
-      }
-    _char.attrib = 0L;
-  }
+void freeChar(KWChar& _char,KWordDocument *_doc)
+{	
+  if (_char.attrib)
+    {
+      switch(_char.attrib->getClassId())
+	{
+	case ID_KWCharFormat:
+	case ID_KWCharImage:
+	case ID_KWCharTab:
+	case ID_KWCharVariable:
+	  delete _char.attrib;
+	  break;
+	case ID_KWCharFootNote:
+	  {
+	    _doc->getFootNoteManager().removeFootNote(dynamic_cast<KWCharFootNote*>(_char.attrib)->getFootNote());
+	    delete _char.attrib;
+	  } break;
+	default: assert(0);
+	}
+      _char.attrib = 0L;
+    }
 }
 
 ostream& operator<<(ostream &out,KWString &_string)

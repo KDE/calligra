@@ -13,6 +13,7 @@
 
 KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, KWParag* _next,
 		 KWParagLayout* _paragLayout, bool useForFirst)
+  : text(_doc)
 {
   prev = _prev;
   next = _next;
@@ -43,6 +44,7 @@ KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, 
 }
 
 KWParag::KWParag(const KWParag& _parag)
+  : text(_parag.document)
 {
   prev = _parag.prev;
   next = _parag.next;
@@ -257,7 +259,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 	    }
 	continue;
 	}
-      freeChar(text.data()[_pos + i]);
+      freeChar(text.data()[_pos + i],document);
       KWFormat *format = document->getFormatCollection()->getFormat(_format);
       KWCharFormat *f = new KWCharFormat(format);
       text.data()[_pos + i].attrib = f;
@@ -406,7 +408,7 @@ void KWParag::applyStyle(QString _style)
 		{
 		  f = *f2;
 		  f.setUserFont(pl->getFormat().getUserFont());
-		  freeChar(text.data()[i]);
+		  freeChar(text.data()[i],document);
 		  KWFormat *format = document->getFormatCollection()->getFormat(f);
 		  KWCharFormat *fm = new KWCharFormat(format);
 		  text.data()[i].attrib = fm;
@@ -426,7 +428,7 @@ void KWParag::applyStyle(QString _style)
 		{
 		  f = *f2;
 		  f.setUserFont(pl->getFormat().getUserFont());
-		  freeChar(text.data()[i]);
+		  freeChar(text.data()[i],document);
 		  KWFormat *format = document->getFormatCollection()->getFormat(f);
 		  KWCharFormat *fm = new KWCharFormat(format);
 		  text.data()[i].attrib = fm;
@@ -448,7 +450,7 @@ void KWParag::applyStyle(QString _style)
 		  QColor c = paragLayout->getFormat().getColor();
 		  f = pl->getFormat();
 		  f.setColor(c);
-		  freeChar(text.data()[i]);
+		  freeChar(text.data()[i],document);
 		  KWFormat *format = document->getFormatCollection()->getFormat(f);
 		  KWCharFormat *fm = new KWCharFormat(format);
 		  text.data()[i].attrib = fm;
@@ -469,7 +471,7 @@ void KWParag::applyStyle(QString _style)
 		  QColor c = paragLayout->getFormat().getColor();
 		  f = pl->getFormat();
 		  f.setColor(c);
-		  freeChar(text.data()[i]);
+		  freeChar(text.data()[i],document);
 		  KWFormat *format = document->getFormatCollection()->getFormat(f);
 		  KWCharFormat *fm = new KWCharFormat(format);
 		  text.data()[i].attrib = fm;

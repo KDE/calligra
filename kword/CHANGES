@@ -1023,3 +1023,13 @@ Reggie, 3.4.1999:
   - Footnote-Manager calculates/updates numbers correctly
   - Implemented Formatting/Displaying
 - Fixed formatting of inserted variables
+
+Reggie, 4.4.1999:
+-----------------
+- More work on footnotes/endnotes
+  - Implemented Removing footnotes/endnotes
+  - When removing footnotes/endnotes, the Footnote-Manager
+    updates the numbers correctly
+  - Speed improvement and fix for calculation the start number of a new footnote
+- Improved and fixed some stuff in KWString
+- Fix in KWordView::setFormat (doesn't segfault in stupid cases anymore)

@@ -147,19 +147,19 @@ struct KWChar
 class KWString
 {
 public:
-  KWString()
-    { _max_ = 0; _len_ = 0; _data_ = 0L; }
-  KWString(QString _text);
+  KWString(KWordDocument *_doc)
+  { _max_ = 0; _len_ = 0; _data_ = 0L; doc = _doc; }
+  KWString(QString _text,KWordDocument *_doc);
   KWString(const KWString &_string);
   ~KWString()
-    { free(_data_,_len_); delete [] _data_; }
+  { free(_data_,_len_); delete [] _data_; }
 
   KWString &operator=(const KWString &_string);
 
   unsigned int size()
-    { return _len_; }
+  { return _len_; }
   unsigned int max()
-    { return _max_; }
+  { return _max_; }
   void append(KWChar *_text,unsigned int _len);
   void insert(unsigned int _pos,QString _text);
   void insert(unsigned int _pos,KWString *_text);
@@ -173,17 +173,19 @@ public:
   KWChar* split(unsigned int _pos);
 
   KWChar* data()
-    { return _data_; }
+  { return _data_; }
 
   QString toString(unsigned int _pos,unsigned int _len);
   void saveFormat(ostream &out);
-  void loadFormat(KOMLParser&,vector<KOMLAttrib>&,KWordDocument*,KWTextFrameSet*);
+  void loadFormat(KOMLParser &parser,vector<KOMLAttrib> &lst,KWordDocument *_doc,KWTextFrameSet *_frameset);
 
   int find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole);
   int find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false);
   int findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole);
   int findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false);
 
+  KWordDocument *getDocument() { return doc; }
+  
 protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);
@@ -192,10 +194,11 @@ protected:
   unsigned int _len_;
   unsigned int _max_;
   KWChar* _data_;
-
+  KWordDocument *doc;
+  
 };
 
-void freeChar(KWChar& _char);
+void freeChar(KWChar& _char,KWordDocument *_doc);
 ostream& operator<<(ostream &out,KWString &_string);
 
 #endif

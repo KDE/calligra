@@ -2630,7 +2630,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	  // ---------------- MIME: application/x-kword
 	  else
 	    {
-	      KWString *str = new KWString();
+	      KWString *str = new KWString(this);
 	      *str = *firstParag->getKWString();
 	      _fc->getParag()->insertText(_fc->getTextPos(),str);
 
@@ -2681,7 +2681,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	    }
 	  else
 	    {
-	      KWString *str = new KWString();
+	      KWString *str = new KWString(this);
 	      *str = *firstParag->getKWString();
 	      _fc->getParag()->insertText(_fc->getTextPos(),str);
 
@@ -2693,7 +2693,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	      QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
 	      _page->keyPressEvent(&ev);
 
-	      KWString *str2 = new KWString();
+	      KWString *str2 = new KWString(this);
 	      *str2 = *firstParag->getNext()->getKWString();
 	      _fc->getParag()->insertText(_fc->getTextPos(),str2);
 
@@ -2751,7 +2751,7 @@ void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWF
 	    }
 	  else
 	    {
-	      KWString *str = new KWString();
+	      KWString *str = new KWString(this);
 	      *str = *firstParag->getKWString();
 	      _fc->getParag()->insertText(_fc->getTextPos(),str);
 

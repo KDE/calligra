@@ -43,6 +43,7 @@ public:
   void setShowFootNotesSuperscript(bool _s) { superscript = _s; }
 
   void insertFootNote(KWFootNote *fn);
+  void removeFootNote(KWFootNote *fn);
   
 protected:
   KWordDocument *doc;
@@ -82,7 +83,7 @@ public:
 
   void setBefore(const QString &_before) { before = _before; }
   void setAfter(const QString &_after) { after = _after; }
-  
+
 protected:
   void makeText();
 
