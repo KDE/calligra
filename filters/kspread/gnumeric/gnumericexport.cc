@@ -1351,6 +1351,27 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
                 if (!cell->isDefault() && !cell->isEmpty())
                 {
+                    if ( cell->isFormula() )
+                    {
+                        text = cell->text(); // untested
+                        isLink = false;
+                    }
+                    else if ( !cell->link().isEmpty() )
+                    {
+                        isLink = true;
+                        isLinkBold = false;
+                        isLinkItalic = false;
+                        //TODO FIXME
+                        linkUrl = cell->link();
+                        linkText = cell->text();
+
+                    }
+                    else
+                    {
+                        text = cell->text();
+                        isLink = false;
+                    }
+#if 0
                     switch (cell->content())
                     {
                     case KSpreadCell::Text:
@@ -1398,6 +1419,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                         text = cell->text();
                         break;
                     }
+#endif
                 }
 
                 if (!cell->isDefault())
