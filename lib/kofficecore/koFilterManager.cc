@@ -281,7 +281,7 @@ QString KoFilterManager::import( const QString &_file, QString &mimeType,
         mimeType = t->name();
     }
     else {
-        kdError(s_area) << "No MimeType found." << endl;
+        kdError(s_area) << "No MimeType found for " << _file << endl;
         return QString::null;
     }
 
@@ -292,9 +292,7 @@ QString KoFilterManager::import( const QString &_file, QString &mimeType,
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
     {
-        QString tmp = i18n("Could not import file of type\n%1").arg( t->name() );
-        QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0L, tmp, i18n("Missing import filter") );
+        kdError(s_area) << "No filter found for " << mimeType << endl;
         return QString::null;
     }
 
