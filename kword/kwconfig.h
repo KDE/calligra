@@ -59,6 +59,7 @@ private:
     int oldNbRecentFiles;
     KConfig* config;
     int oldAutoSaveValue;
+    KIntNumInput *m_nbPagePerRow;
 };
 
 class KWConfig : public KDialogBase

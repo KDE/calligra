@@ -458,6 +458,9 @@ public:
     double getIndentValue() { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
 
+    int getNbPagePerRow() { return m_iNbPagePerRow; }
+    void setNbPagePerRow(int _nb) { m_iNbPagePerRow=_nb; }
+
     /**
      * @returns the document for the formulas
      */
@@ -473,8 +476,6 @@ public:
     void updateResizeHandles();
 
     void refreshDocStructure(FrameType);
-
-    void updateTextCustomItem();
 
     // Convert a color into a color to be displayed for it
     // (when using color schemes, we still want to print black on white)
@@ -587,6 +588,8 @@ private:
     double m_indent; // in pt
 
     bool m_bShowRuler;
+
+    int m_iNbPagePerRow;
 };
 
 

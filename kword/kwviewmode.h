@@ -85,8 +85,8 @@ public:
 class KWViewModePreview : public KWViewMode
 {
 public:
-    KWViewModePreview( KWCanvas * canvas ) : KWViewMode( canvas ),
-        m_pagesPerRow(4), // TODO make configurable somehow
+    KWViewModePreview( KWCanvas * canvas, int _nbPagePerRow=4 ) : KWViewMode( canvas ),
+        m_pagesPerRow(_nbPagePerRow), // TODO make configurable somehow
         m_spacing(10)
     {}
     virtual ~KWViewModePreview() {}
@@ -95,6 +95,9 @@ public:
     virtual QPoint viewToNormal( const QPoint & vPoint );
     virtual QSize contentsSize();
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
+
+    void setPagesPerRow(int _nb) {m_pagesPerRow=_nb;}
+    int pagesPerRow() {return m_pagesPerRow;}
 
 private:
     int m_pagesPerRow;

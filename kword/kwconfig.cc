@@ -134,7 +134,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
 
     oldNbRecentFiles=10;
     oldAutoSaveValue=1;
-
+    int nbPagePerRow=4;
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
@@ -144,6 +144,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
         oldNbRecentFiles=config->readNumEntry("NbRecentFile",10);
         m_bShowRuler=config->readBoolEntry("Rulers",true);
         oldAutoSaveValue=config->readNumEntry("AutoSave",1);
+        nbPagePerRow=config->readNumEntry("nbPagePerRow",4);
     }
 
 
@@ -194,6 +195,11 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     indent->setLabel(i18n("1 is a unit name", "Indent in %1").arg(unitText));
     lay1->addWidget(indent);
 
+    m_nbPagePerRow=new KIntNumInput(nbPagePerRow, tmpQGroupBox );
+    m_nbPagePerRow->setRange(1, 10, 1);
+    m_nbPagePerRow->setLabel(i18n("Preview mode - Number of page per row:"));
+    lay1->addWidget(m_nbPagePerRow);
+
     box->addWidget( tmpQGroupBox);
 }
 
@@ -241,15 +247,20 @@ void configureInterfacePage::apply()
         config->writeEntry( "AutoSave", autoSaveVal );
         doc->setAutoSave(autoSaveVal*60);
     }
+    int nbPageByRow=m_nbPagePerRow->value();
+    if(nbPageByRow!=doc->getNbPagePerRow())
+    {
 
-
-
+        config->writeEntry("nbPagePerRow",nbPageByRow);
+        doc->setNbPagePerRow(nbPageByRow);
+    }
 }
 
 void configureInterfacePage::slotDefault()
 {
     gridX->setValue(10);
     gridY->setValue(10);
+    m_nbPagePerRow->setValue(4);
     KWDocument * doc = m_pView->getGUI()->getDocument();
     double newIndent = KWUnit::userValue( MM_TO_POINT( 10 ), doc->getUnit() );
     indent->setValue( (int)newIndent );

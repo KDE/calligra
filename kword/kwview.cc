@@ -201,6 +201,7 @@ void KWView::initConfig()
 
       doc->setShowRuler(config->readBoolEntry("Rulers",true));
       doc->setAutoSave((config->readNumEntry("AutoSave",1))*60);
+      doc->setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
   }
 }
 
@@ -1218,7 +1219,7 @@ void KWView::editCustomVars()
 {
     KWCustomVariablesDia dia( this, doc->getVariables() );
     dia.exec();
-    doc->updateTextCustomItem();
+    doc->recalcVariables( VT_CUSTOM );
 }
 
 void KWView::editSerialLetterDataBase()
@@ -1239,7 +1240,7 @@ void KWView::viewPageMode()
         m_zoomViewModePreview = doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal );
-        gui->canvasWidget()->switchViewMode( new KWViewModeNormal( gui->canvasWidget() ) );
+        gui->canvasWidget()->switchViewMode( new KWViewModeNormal( gui->canvasWidget()) );
     }
     else
         actionViewPageMode->setChecked( true ); // always one has to be checked !
@@ -1252,7 +1253,7 @@ void KWView::viewPreviewMode()
         m_zoomViewModeNormal = doc->zoom();
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview );
-        gui->canvasWidget()->switchViewMode( new KWViewModePreview( gui->canvasWidget() ) );
+        gui->canvasWidget()->switchViewMode( new KWViewModePreview( gui->canvasWidget(),doc->getNbPagePerRow() ) );
     }
     else
         actionViewPreviewMode->setChecked( true ); // always one has to be checked !

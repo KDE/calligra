@@ -126,6 +126,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_gridX = m_gridY = 10;
     m_indent = MM_TO_POINT( 10.0 );
 
+    m_iNbPagePerRow=4;
+
     m_bShowRuler=true;
 
     _viewFormattingChars = FALSE;
@@ -216,15 +218,6 @@ void KWDocument::newZoomAndResolution( bool updateViews )
         emit newContentsSize();
         repaintAllViews( true );
     }
-}
-
-void KWDocument::updateTextCustomItem()
-{
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-        fit.current()->resizeTextCustomItem();
-    layout();
-    repaintAllViews();
 }
 
 bool KWDocument::initDoc()
@@ -2336,7 +2329,6 @@ void KWDocument::unregisterVariable( KWVariable *var )
 
 void KWDocument::recalcVariables( int type )
 {
-    //kdDebug() << "KWDocument::recalcVariables " << type << endl;
     bool update = false;
     QListIterator<KWVariable> it( variables );
     for ( ; it.current() ; ++it )
@@ -2348,7 +2340,10 @@ void KWDocument::recalcVariables( int type )
         }
     }
     if ( update )
+    {
+        layout();
         repaintAllViews();
+    }
 }
 
 void KWDocument::setVariableValue( const QString &name, const QString &value )

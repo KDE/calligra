@@ -80,8 +80,6 @@ public:
     virtual void zoom();
     void unzoom();
 
-    virtual void resizeTextCustomItem();
-
     // Return the user-visible (document) font size for this format
     // (since fonts are zoomed in the formats)
     // The @p format must be part of the format collection.

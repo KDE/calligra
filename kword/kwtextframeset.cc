@@ -891,7 +891,9 @@ void KWTextFrameSet::zoom()
     textDocument()->setTabStops( textDocument()->formatCollection()->defaultFormat()->width( 'x' ) * 8 );
 
     // Zoom all custom items
-    resizeTextCustomItem();
+    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+        static_cast<KWTextCustomItem *>( cit.current() )->resize();
 
     // Mark all paragraphs as changed !
     for ( KWTextParag * s = static_cast<KWTextParag *>( textdoc->firstParag() ) ; s ; s = static_cast<KWTextParag *>( s->next() ) )
@@ -906,13 +908,6 @@ void KWTextFrameSet::zoom()
     m_availableHeight = -1; // to be recalculated
     //emit ensureCursorVisible(); // not here. We don't want this when saving.
     KWFrameSet::zoom();
-}
-
-void KWTextFrameSet::resizeTextCustomItem()
-{
-    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
-    for ( ; cit.current() ; ++cit )
-        static_cast<KWTextCustomItem *>( cit.current() )->resize();
 }
 
 void KWTextFrameSet::unzoom()
@@ -1326,7 +1321,7 @@ kdDebug() << "Deleting page: " << lastPage<< "\n";
                     m_doc->removePage( lastPage );
                 } else if(m_doc->processingType() == KWDocument::WP && m_doc->getFrameSet(0) == this) {
                     break;
-                } else 
+                } else
                     delFrame(frames.last());
             }
         }
