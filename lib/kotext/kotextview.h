@@ -82,10 +82,13 @@ public:
 
     void setDefaultFormat();
 
+    void setTextBackgroundColor(const QColor &);
+
     QColor textColor() const;
     QFont textFont() const;
     QString textFontFamily()const;
 
+    QColor textBackgroundColor()const;
 
     // -- Paragraph settings --
     KCommand * setCounterCommand( const KoParagCounter & counter );

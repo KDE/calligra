@@ -29,7 +29,7 @@ using namespace Qt3;
 class KoTextFormat : public QTextFormat
 {
 public:
-    KoTextFormat() : QTextFormat() {}
+    KoTextFormat();
     virtual ~KoTextFormat() {}
     //KoTextFormat( const QStyleSheetItem *s );
     KoTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
@@ -43,7 +43,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending QTextFormat's enum */
-    enum { StrikeOut = 256, CharSet = 512 };
+    enum { StrikeOut = 256 , CharSet = 512, TextBackgroundColor = 1024 };
 
     void setPointSizeFloat( float );
     float pointSizeFloat() const { return fn.pointSizeFloat(); }
@@ -54,8 +54,12 @@ public:
      * default for the color scheme is' */
     static QColor defaultTextColor( QPainter * painter );
 
+    void setTextBackgroundColor(const QColor &);
+    QColor textBackgroundColor()const {return m_textBackColor;}
+
 protected:
     virtual void generateKey();
+    QColor m_textBackColor;
 
     // NOTE: adding a member var here will make KoTextFormat bigger than QTextFormat,
     // which might break some casts somewhere. We'll need to do this, but carefully :)

@@ -32,14 +32,13 @@ KoTextFormatCollection::KoTextFormatCollection( const QFont & defaultFont )
 
 QTextFormat * KoTextFormatCollection::format( const QFont &fn, const QColor &c )
 {
-    //kdDebug() << "KoTextFormatCollection::format font, color " << endl;
     if ( m_cachedFormat && m_cfont == fn && m_ccol == c ) {
         m_cachedFormat->addRef();
         return m_cachedFormat;
     }
 
     QString key = QTextFormat::getKey( fn, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
-    //kdDebug() << "format() textformat=" << this << " pointsizefloat=" << fn.pointSizeFloat() << endl;
+    kdDebug() << "format() textformat=" << this << " pointsizefloat=" << fn.pointSizeFloat() << endl;
     // SYNC any changes with generateKey below
     ASSERT( !key.contains( '+' ) );
     key += '+';
@@ -48,6 +47,7 @@ QTextFormat * KoTextFormatCollection::format( const QFont &fn, const QColor &c )
     key += QString::number( (int)(fn.pointSizeFloat() * 10) );
     key += '/';
     key += QString::number( (int)fn.charSet() );
+
     m_cachedFormat = static_cast<KoTextFormat *>( dict().find( key ) );
     m_cfont = fn;
     m_ccol = c;
@@ -72,9 +72,16 @@ void KoTextFormatCollection::remove( QTextFormat *f )
 
 ///
 
+KoTextFormat::KoTextFormat()
+    : QTextFormat()
+{
+    m_textBackColor=QColor();
+}
+
 KoTextFormat::KoTextFormat( const KoTextFormat & fm )
     : QTextFormat( fm )
 {
+    m_textBackColor=fm.textBackgroundColor();
     //kdDebug() << "KoTextFormat::KoTextFormat(copy of " << (void*)&fm << " " << fm.key() << ")"
     //          << " pointSizeFloat:" << fn.pointSizeFloat() << endl;
 }
@@ -88,10 +95,11 @@ void KoTextFormat::copyFormat( const QTextFormat & nf, int flags )
         fn.setStrikeOut( nf.font().strikeOut() );
     if ( flags & KoTextFormat::CharSet )
         fn.setCharSet( nf.font().charSet() );
+    if( flags & KoTextFormat::TextBackgroundColor)
+        setTextBackgroundColor(static_cast<const KoTextFormat *>(&nf)->textBackgroundColor());
     update();
-    //kdDebug() << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf
-    //          << " " << nf.key() " flags=" << flags
-    //          << " ==> result " << this << " " << key() << endl;
+    //kdDebug() << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
+    //        << " ==> result " << this << " " << key() << endl;
 }
 
 void KoTextFormat::setPointSizeFloat( float size )
@@ -118,6 +126,14 @@ void KoTextFormat::setCharset( QFont::CharSet charset )
     update();
 }
 
+void KoTextFormat::setTextBackgroundColor(const QColor &_col)
+{
+    if(m_textBackColor==_col)
+        return;
+    m_textBackColor=_col;
+    update();
+}
+
 void KoTextFormat::generateKey()
 {
     QTextFormat::generateKey();
@@ -130,6 +146,8 @@ void KoTextFormat::generateKey()
     k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';
     k += QString::number( (int)fn.charSet() );
+    k += '/';
+    k += m_textBackColor.name();
     setKey( k );
     //kdDebug() << "generateKey textformat=" << this << " k=" << k << " pointsizefloat=" << fn.pointSizeFloat() << endl;
 }
@@ -157,7 +175,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::StrikeOut;
     if ( fn.charSet() != format.fn.charSet() )
         flags |= KoTextFormat::CharSet;
-
+    if ( textBackgroundColor() != format.textBackgroundColor() )
+        flags |= KoTextFormat::TextBackgroundColor;
     return flags;
 }
 

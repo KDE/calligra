@@ -580,6 +580,17 @@ void KoTextView::setStrikeOut( bool on ) {
     textObject()->setFormat( m_cursor, m_currentFormat, &format, KoTextFormat::StrikeOut );
 }
 
+void KoTextView::setTextBackgroundColor(const QColor & _col){
+    KoTextFormat format( *m_currentFormat );
+    format.setTextBackgroundColor(_col);
+    textObject()->setFormat( m_cursor, m_currentFormat, &format, KoTextFormat::TextBackgroundColor );
+}
+
+QColor KoTextView::textBackgroundColor() const {
+    return m_currentFormat->textBackgroundColor();
+}
+
+
 QColor KoTextView::textColor() const {
     return m_currentFormat->color();
 }

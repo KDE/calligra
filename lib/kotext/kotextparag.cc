@@ -431,10 +431,9 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                                    QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
 {
-    KoTextFormat localFormat( *static_cast<KoTextFormat *>(lastFormat) );
+    KoTextFormat localFormat=(*static_cast<KoTextFormat *>(lastFormat));
     if ( !lastFormat->color().isValid() ) // Resolve the color at this point
         localFormat.setColor( KoTextFormat::defaultTextColor( &painter ) );
-
     bool forPrint = ( painter.device()->devType() == QInternal::Printer );
     KoZoomHandler * zh = textDocument()->zoomHandler();
     localFormat.setPointSizeFloat( zh->layoutUnitToFontSize( localFormat.font().pointSize(), forPrint ) );
@@ -445,6 +444,10 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     lastFormat = &localFormat;
 
     //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
+
+    if ( localFormat.textBackgroundColor().isValid() )
+        painter.fillRect( startX, lastY, bw, h,localFormat.textBackgroundColor() );
+
     int startXpix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
     //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startXpix << endl;
     //kdDebug() << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
@@ -483,6 +486,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                          lastY, baseLine, bw, h, drawSelections,
                          lastFormat, i, selectionStarts,
                          selectionEnds, cg, rightToLeft );
+
 }
 
 // Reimplemented from QTextParag
