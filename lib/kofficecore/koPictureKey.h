@@ -114,6 +114,8 @@ public:
      */
     QDateTime lastModified() const { return m_lastModified; }
 
+    void setKeyFromFile (const QString& filename);
+
 protected:
     QString m_filename;
     QDateTime m_lastModified;

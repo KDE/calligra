@@ -19,6 +19,7 @@
 */
 
 #include <qdatetime.h>
+#include <qfileinfo.h>
 #include <qdom.h>
 
 #include <kdebug.h>
@@ -154,3 +155,9 @@ QString KoPictureKey::toString() const
         .arg(m_lastModified.toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(m_filename);
 }
 
+void KoPictureKey::setKeyFromFile (const QString& filename)
+{
+    QFileInfo inf(filename);
+    m_filename = filename;
+    m_lastModified = inf.lastModified();
+}

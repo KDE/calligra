@@ -19,7 +19,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qfileinfo.h>
 #include <qdom.h>
 
 #include <kdebug.h>
@@ -78,7 +77,8 @@ KoPicture KoPictureCollection::downloadPicture(const KURL& url)
     
     KoPicture pic;
     kdDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
-  
+
+    // ### FIXME: key is not set!  
     if (pic.download(url))
         insertPicture(pic.getKey(), pic);
     else
@@ -91,8 +91,8 @@ KoPicture KoPictureCollection::loadPicture(const QString& fileName)
 {
     kdDebug(30003) << "KoPictureCollection::loadPicture " << fileName << endl;
     // Check the last modified date of the file, as it is now.
-    QFileInfo inf(fileName);
-    KoPictureKey key(fileName, inf.lastModified());
+    KoPictureKey key;
+    key.setKeyFromFile(fileName);
 
     KoPicture c = findPicture(key);
     if (c.isNull())
