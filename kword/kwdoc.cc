@@ -77,14 +77,6 @@ KWChild::~KWChild()
 {
 }
 
-KoDocument *KWChild::hitTest( const QPoint &p, const QWMatrix &m )
-{
-  // This was meant to disable part activation on RMB ... but it breaks
-  // part activation with LMB
-  //return 0L;
-  return KoDocumentChild::hitTest( p, m );
-}
-
 /******************************************************************/
 /* Class: KWCommandHistory                                        */
 /******************************************************************/
@@ -338,11 +330,6 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
     KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
     if ( m_formulaDocument )
         m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
-}
-
-KoDocument *KWDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
-{
-    return KoDocument::hitTest( pos, matrix );
 }
 
 KWTextFrameSet * KWDocument::textFrameSet ( unsigned int _num ) const

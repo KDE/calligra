@@ -3866,7 +3866,9 @@ void KWView::openPopupMenuChangeAction( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("action_popup",this))->popup(_point);
+    QPopupMenu* popup = static_cast<QPopupMenu *>(factory()->container("action_popup",this));
+    if ( popup )
+        popup->popup(_point);
 }
 
 // ### DF: I don't see the purpose of that method. frameSelectedChanged() does this already.

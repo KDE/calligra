@@ -90,8 +90,6 @@ public:
     KWDocument* parent()
     { return m_pKWordDoc; }
 
-    virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
-
 protected:
     KWDocument *m_pKWordDoc;
 
@@ -135,8 +133,6 @@ public:
     virtual QDomDocument saveXML();
     void processImageRequests();
     void processAnchorRequests();
-
-    virtual KoDocument *hitTest( const QPoint &pos, const QWMatrix &matrix );
 
     int syntaxVersion( ) const { return m_syntaxVersion; }
 
