@@ -678,30 +678,30 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             {
                 kdDebug(30515) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
                 // We have an image, a clipart or a table
-
-                if (!content.isEmpty())
-		{
-		str += m_prefix;
-		str += markup;
-		str += " {";
-		str += content;
-		str += "}";
-		str += m_eol;
-		content="";
-		if (!m_inTable)
-		{
-		    m_prefix="\\par";
-		}
-		} 
-		
-                if (6==(*paraFormatDataIt).frameAnchor.type)
+               
+		if (6==(*paraFormatDataIt).frameAnchor.type)
                 {
 
+
+		    if (!content.isEmpty())
+		    {
+			str += m_prefix;
+			str += markup;
+			str += " {";
+			str += content;
+			str += "}";
+			str += m_eol;
+			content = QString::null;
+			if (!m_inTable)
+			{
+			    m_prefix = "\\par";
+			}
+		    } 
 		    str += makeTable((*paraFormatDataIt).frameAnchor);
 		}
                 else if (2==(*paraFormatDataIt).frameAnchor.type)
                 {
-                    str += makeImage((*paraFormatDataIt).frameAnchor);
+                    content += makeImage((*paraFormatDataIt).frameAnchor);
                 
                 }
 	    }
