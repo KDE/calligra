@@ -22,7 +22,7 @@
 
 #include "karbon_view.h"
 #include "karbon_view_iface.h"
-
+#include "vcanvas.h"
 
 KarbonViewIface::KarbonViewIface( KarbonView* view )
 		: KoViewIface( view )
@@ -148,5 +148,10 @@ void KarbonViewIface::pathRoundCorners()
 void KarbonViewIface::pathWhirlPinch()
 {
 	//m_view->pathWhirlPinch();
+}
+
+void KarbonViewIface::repaint()
+{
+	m_view->canvasWidget()->repaintAll();
 }
 

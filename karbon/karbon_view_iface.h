@@ -64,6 +64,8 @@ k_dcop:
 	void pathRoundCorners();
 	void pathWhirlPinch();
 
+	void repaint();
+
 private:
 	KarbonView* m_view;
 };
