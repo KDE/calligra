@@ -169,6 +169,14 @@ void KexiDataTable::reloadActions()
 }
 
 void
+KexiDataTable::updateActions(bool activated)
+{
+	setAvailable("data_sort_az", m_view->isSortingEnabled());
+	setAvailable("data_sort_za", m_view->isSortingEnabled());
+	KexiViewBase::updateActions(activated);
+}
+
+void
 KexiDataTable::setData(KexiDB::Cursor *c)
 {
 	if (!m_view->isA("KexiDataTableView"))

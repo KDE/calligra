@@ -77,7 +77,11 @@ namespace Kexi
 	 Empty strings are not changed.
 	*/
 	KEXICORE_EXPORT QString string2Identifier(const QString &s);
-	
+
+	/*! \return useful message "Value of "valueName" column must be an identifier.
+	  "v" is not a valid identifier.". It is also used by IdentifierValidator.  */
+	KEXICORE_EXPORT QString identifierExpectedMessage(const QString &valueName, const QVariant& v);
+
 	//! Validates input for identifier name.
 	class KEXICORE_EXPORT IdentifierValidator : public KexiValidator
 	{

@@ -83,6 +83,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiViewBase
 	protected:
 		void initActions();
 		void init();
+		virtual void updateActions(bool activated);
 
 		KexiTableView *m_view;
 };

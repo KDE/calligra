@@ -438,7 +438,7 @@ tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
 	tristate res = true;
 	if (mode==Kexi::DataViewMode) {
 		if (!dirty() && parentDialog()->neverSaved()) {
-			KMessageBox::information(this, i18n("Cannot switch to data view, because table design is empty.\n"
+			KMessageBox::sorry(this, i18n("Cannot switch to data view, because table design is empty.\n"
 				"First, please create your design.") );
 			return cancelled;
 		}
@@ -770,14 +770,14 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 		}
 	}
 	if (res && no_fields) {//no fields added
-		KMessageBox::information(this, 
+		KMessageBox::sorry(this, 
 			i18n("You have added no fields.\nEvery table should have at least one field.") );
 		res = cancelled;
 	}
 	if (res && b && i<(int)d->buffers->size()) {//found a duplicate
 		m_view->setCursor(i, COLUMN_ID_NAME);
 		m_view->startEditCurrentCell();
-		KMessageBox::information(this, 
+		KMessageBox::sorry(this, 
 			i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. "
 			"Correct name of the field.")
 			.arg((*b)["name"].value().toString()) );

@@ -354,6 +354,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			QString fieldName = (*buf)["field"].value().toString();
 			bool fieldVisible = (*buf)["visible"].value().toBool();
 			QString criteriaStr = (*buf)["criteria"].value().toString();
+			QCString alias = (*buf)["alias"].value().toCString();
 			KexiDB::BaseExpr *criteriaExpr = 0;
 			if (!criteriaStr.isEmpty()) {
 				criteriaExpr = parseCriteriaString(fieldName, criteriaStr);
@@ -401,6 +402,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 					temp->query->addField(f, fieldVisible);
 					if (fieldVisible)
 						fieldsFound = true;
+					if (!alias.isEmpty())
+						temp->query->setColumnAlias( temp->query->fieldCount()-1, alias );
 				}
 			}
 		}
@@ -477,7 +480,7 @@ tristate
 KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 {
 	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query)) {
-		//this is not a SWITCH but fresh opening in this view mode
+		//this is not a SWITCH but a fresh opening in this view mode
 		if (!m_dialog->neverSaved()) {
 			if (!loadLayout()) {
 				//err msg
@@ -505,10 +508,17 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 		//todo: load global query properties
 	}
 	else if (mode==Kexi::DataViewMode) {
-		d->dataTable->tableView()->ensureCellVisible(0,0);
-		d->dataTable->tableView()->setCursor(0,0);
+		//this is just a SWITCH from data view
+		//set cursor if needed:
+		if (d->dataTable->tableView()->currentRow()<0 
+			|| d->dataTable->tableView()->currentColumn()<0)
+		{
+			d->dataTable->tableView()->ensureCellVisible(0,0);
+			d->dataTable->tableView()->setCursor(0,0);
+		}
 	}
 	tempData()->queryChangedInPreviousView = false;
+	setFocus(); //to allow shared actions proper update
 	return true;
 }
 
@@ -612,8 +622,7 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 		KexiTableItem *newItem = createNewRow(tableName, fieldName); //, columnAlias);
 		d->dataTable->tableView()->insertItem(newItem, row_num);
 		//create buffer
-		createPropertyBuffer( row_num, tableName, fieldName, true/*new one*/ );
-		KexiPropertyBuffer &buf = *propertyBuffer();
+		KexiPropertyBuffer &buf = *createPropertyBuffer( row_num, tableName, fieldName, true/*new one*/ );
 		if (!columnAlias.isEmpty()) {//add alias
 			buf["alias"].setValue(columnAlias, false);
 		}
@@ -683,7 +692,7 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 
 	// Save SQL without driver-escaped keywords.
 	QString sqlText = 
-	  mainWin()->project()->dbConnection()->selectStatement( *temp->query, false );
+	  mainWin()->project()->dbConnection()->selectStatement( *temp->query, KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary );
 	if (!storeDataBlock( sqlText, "sql" )) {
 		return false;
 	}
@@ -1071,6 +1080,9 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 	buff->add(prop = new KexiProperty("caption", QVariant(QString::null), i18n("Caption") ) );
 	if (asterisk)
 		prop->setVisible(false);
+#ifdef KEXI_NO_UNFINISHED
+		prop->setVisible(false);
+#endif
 
 	buff->add(prop = new KexiProperty("alias", QVariant(QString::null), i18n("Alias")) );
 	if (asterisk)
@@ -1094,6 +1106,9 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 	buff->add(prop = new KexiProperty("criteria", QVariant(QString::null)) );
 	prop->setVisible(false);
 
+	connect(buff, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)),
+		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
+
 	d->buffers->insert(row, buff, newOne);
 	return buff;
 }
@@ -1101,6 +1116,22 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 void KexiQueryDesignerGuiEditor::setFocus()
 {
 	d->dataTable->setFocus();
+}
+
+void KexiQueryDesignerGuiEditor::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property)
+{
+	const QCString& pname = property.name();
+/*
+ * TODO (js) use KexiProperty::setValidator(QString) when implemented as described in TODO #60 
+ */
+	if (pname=="alias" || pname=="name") {
+		const QVariant& v = property.value();
+		if (!v.toString().stripWhiteSpace().isEmpty() && !Kexi::isIdentifier( v.toString() )) {
+			KMessageBox::sorry(this,
+				Kexi::identifierExpectedMessage(property.desc(), v.toString()));
+			property.resetValue();
+		}
+	}
 }
 
 #include "kexiquerydesignerguieditor.moc"

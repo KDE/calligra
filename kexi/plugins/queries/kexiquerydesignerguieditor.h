@@ -131,6 +131,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query);
 		void showFieldsForQuery(KexiDB::QuerySchema *query);
 
+		void slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);
+
 	private:
 		KexiQueryDesignerGuiEditorPrivate *d;
 };

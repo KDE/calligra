@@ -98,9 +98,9 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 (thus part-actions are untouched when the focus is e.g. in the Property Editor.
 
 		 Call this method when it is known that some actions need invalidation 
-		 (e.g. when new window is activated). See how it is used in KexiMainWindow.
+		 (e.g. when new window is activated). See how it is used in KexiMainWindowImpl.
 		*/
-		void invalidateSharedActions(QObject *o);
+		virtual void invalidateSharedActions(QObject *o);
 
 		void setActionAvailable(const char *action_name, bool avail);
 

@@ -299,7 +299,7 @@ void KexiViewBase::updateActions(bool activated)
 {
 	//do nothing here
 	//do the same for children :)
-	for (QPtrListIterator<KexiViewBase> it(m_children); it.current(); ++it) {
+ 	for (QPtrListIterator<KexiViewBase> it(m_children); it.current(); ++it) {
 		it.current()->updateActions(activated);
 	}
 }
