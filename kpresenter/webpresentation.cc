@@ -186,7 +186,9 @@ KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
     : config( webPres.config ), author( webPres.author ), title( webPres.title ), email( webPres.email ),
       slideInfos( webPres.slideInfos ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
       textColor( webPres.textColor ), path( webPres.path ), xml( webPres.xml),
-      zoom( webPres.zoom ), timeBetweenSlides ( webPres.timeBetweenSlides ), m_encoding( webPres.m_encoding ), m_bWriteHeader( webPres.m_bWriteHeader ), m_bWriteFooter( webPres.m_bWriteFooter ), m_bLoopSlides( webPres.m_bLoopSlides )
+      m_bWriteHeader( webPres.m_bWriteHeader ),
+      m_bWriteFooter( webPres.m_bWriteFooter ), m_bLoopSlides( webPres.m_bLoopSlides ),
+      timeBetweenSlides ( webPres.timeBetweenSlides ), zoom( webPres.zoom ), m_encoding( webPres.m_encoding )
 {
     doc = webPres.doc;
     view = webPres.view;
