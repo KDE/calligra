@@ -2406,9 +2406,7 @@ void KWView::deleteFrame( bool _warning )
                           "The contents of this Frameset will not appear "
                           "anymore!\n"
                           "Are you sure you want to do that?").arg(fs->getName()),
-                    i18n("Delete Frame"), i18n("&Delete"),
-                    "DeleteLastFrameConfirmation",
-                    true );
+                    i18n("Delete Frame"), i18n("&Delete"));
 
                 if (result != KMessageBox::Continue)
                     return;
