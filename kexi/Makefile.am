@@ -22,10 +22,6 @@ dummy.cc:
 
 SUBDIRS = kexiDB formeditor core tableview widget . plugins pics data interfaces filters
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
--DKEXIFILTER_EXPORT= -DKFORMEDITOR_EXPORT= -DKEXI_HAND_TBL_EXPORT= -DKEXI_HAND_QUERY_EXPORT= \
--DKEXI_HAND_RELAT_EXPORT= -DKEXI_HAND_FORM_EXPORT= -DKEXIEXTWIDGETS_EXPORT= -DKEXIDATATABLE_EXPORT=
-
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop
 
@@ -70,3 +66,4 @@ messages: rc.cpp
 #uncomment this if you like doxygen docs for Kexi
 #include $(top_srcdir)/../admin/Doxyfile.am
 
+include $(top_srcdir)/kexi/Makefile.global
