@@ -552,7 +552,7 @@ void KIllustrator::initToolBars () {
   editPointToolbar->enable (KToolBar::Hide);
   editPointToolbar->move (10000, 10000);
   editPointToolbar->setBarPos (KToolBar::Floating);
-  editPointToolbar->setFullWidth ();
+  editPointToolbar->setFullSize ();
   addToolBar (editPointToolbar);
 
   // Saving of toolbar positions
