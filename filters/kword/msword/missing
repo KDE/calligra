@@ -18,7 +18,6 @@ Missing (not in any particular order):
   method. KWord doesn't really care about sections right now, but it should at
   least read the first SEP to determine the page properties (size, orientation,
   borders).
-- Forced page breaks aren't handled at all
 - The filter should read the STTBFASSOC (a bunch of strings containing the
   author, title, keywords,...) for documentinfo.xml
 

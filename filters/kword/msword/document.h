@@ -20,9 +20,13 @@ public:
     Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement );
     virtual ~Document();
 
+    virtual void endBody();
+
     virtual void paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap );
     virtual void paragraphEnd();
     virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
+
+    virtual void pageBreak();
 
 private:
     void writeOutParagraph( const QString& name, const QString& text );
@@ -32,6 +36,7 @@ private:
     QDomElement& m_mainFramesetElement;
     QDomElement m_formats;
     int m_index;
+    bool m_pageBreak;
     wvWare::SharedPtr<const wvWare::Word97::PAP> m_pap;
     KWordCharacterHandler* m_handler;
 };

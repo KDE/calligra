@@ -26,8 +26,8 @@ wvWare::U8 KWordCharacterHandler::nonRequiredHyphen()
 
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
-    : wvWare::LLDocument( fileName ), m_mainDocument( mainDocument ),
-      m_mainFramesetElement( mainFramesetElement ), m_index( 0 )
+    : wvWare::LLDocument( fileName ), m_paragraph( QString::null ), m_mainDocument( mainDocument ),
+      m_mainFramesetElement( mainFramesetElement ), m_index( 0 ), m_pageBreak( false )
 {
     m_handler = new KWordCharacterHandler;
     parser()->setSpecialCharacterHandler( m_handler );
@@ -38,17 +38,25 @@ Document::~Document()
     delete m_handler;
 }
 
+void Document::endBody()
+{
+    if ( !m_paragraph.isNull() )
+        writeOutParagraph( "Standard", m_paragraph );
+}
+
 void Document::paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap )
 {
-    m_paragraph = QString::null;
-    m_index = 0;
+    // First write out the old paragraph
+    if ( !m_paragraph.isNull() )
+        writeOutParagraph( "Standard", m_paragraph );
+
     m_formats = m_mainDocument.createElement( "FORMATS" );
     m_pap = pap;
 }
 
 void Document::paragraphEnd()
 {
-    writeOutParagraph( "Standard", m_paragraph );
+    // nothing for now
 }
 
 void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
@@ -81,6 +89,11 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
     m_index += text.length();
 }
 
+void Document::pageBreak()
+{
+    m_pageBreak = true;
+}
+
 void Document::writeOutParagraph( const QString& name, const QString& text )
 {
     QDomElement paragraphElementOut=m_mainDocument.createElement("PARAGRAPH");
@@ -110,6 +123,16 @@ void Document::writeOutParagraph( const QString& name, const QString& text )
     flowElement.setAttribute("align",alignment);
     layoutElement.appendChild(flowElement);
 
+    if ( m_pageBreak ) {
+        m_pageBreak = false;
+        QDomElement pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
+        pageBreak.setAttribute( "hardFrameBreakAfter", "true" );
+        layoutElement.appendChild( pageBreak );
+    }
+
     textElement.appendChild(m_mainDocument.createTextNode(text));
     textElement.normalize(); // Put text together (not sure if needed)
-}  // WriteOutParagraph
+
+    m_paragraph = QString( "" );
+    m_index = 0;
+}
