@@ -49,7 +49,7 @@ Ruler::Ruler (Orientation o, MeasurementUnit mu, QWidget *parent,
   orientation = o;
   munit = mu;
   zoom = 1.0;
-  firstVisible = 0;
+  zeroPoint = 0;
   buffer = 0L;
   currentPosition = -1;
 
@@ -136,82 +136,75 @@ void Ruler::setMeasurementUnit (MeasurementUnit mu) {
   repaint ();
 }
 
-void Ruler::setZoomFactor (float zf, int xpos, int ypos) {
-  zoom = zf;
-  if (orientation == Horizontal)
-    firstVisible = -xpos;
-  else
-    firstVisible = -ypos;
-  recalculateSize (0L);
-  drawRuler ();
-  updatePointer (currentPosition, currentPosition);
-  repaint ();
-}
-
-void Ruler::updatePointer (int x, int y) {
-  if (! buffer)
-    return;
-
-  QRect r1, r2;
-  int pos = 0;
-
-  if (orientation == Horizontal) {
-    if (currentPosition != -1) {
-      pos = qRound (currentPosition * zoom
-                    - (firstVisible >= 0 ? 0 : firstVisible)
-                    - MARKER_WIDTH / 2);
-      r1 = QRect (pos - (firstVisible >= 0 ? firstVisible : 0),
-                  1, MARKER_WIDTH, MARKER_HEIGHT);
-      bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
-    }
-    if (x != -1) {
-      pos = qRound (x * zoom - (firstVisible >= 0 ? 0 : firstVisible)
-                    - MARKER_WIDTH / 2);
-      r2 = QRect (pos - (firstVisible >= 0 ? firstVisible : 0),
-                  1, MARKER_WIDTH, MARKER_HEIGHT);
-      bitBlt (bg, 0, 0, buffer, pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
-      bitBlt (buffer, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
-      currentPosition = x;
-    }
-  }
-  else {
-    if (currentPosition != -1) {
-      pos = qRound (currentPosition * zoom
-                    - (firstVisible >= 0 ? 0 : firstVisible)
-                    - MARKER_HEIGHT / 2);
-      r1 = QRect (1, pos - (firstVisible >= 0 ? firstVisible : 0),
-                  MARKER_HEIGHT, MARKER_WIDTH);
-      bitBlt (buffer, 1, pos, bg, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
-    }
-    if (y != -1) {
-      pos = qRound (y * zoom - (firstVisible >= 0 ? 0 : firstVisible)
-                    - MARKER_HEIGHT / 2);
-      r2 = QRect (1, pos -  (firstVisible >= 0 ? firstVisible : 0),
-                  MARKER_HEIGHT, MARKER_WIDTH);
-      bitBlt (bg, 0, 0, buffer, 1, pos, MARKER_HEIGHT, MARKER_WIDTH);
-      bitBlt (buffer, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
-      currentPosition = y;
-    }
-  }
-  repaint (r1.unite (r2));
-}
-
-/*void Ruler::updateVisibleArea (int xpos, int ypos)
+void Ruler::setZoomFactor (float zf, int xpos, int ypos)
 {
+   zoom = zf;
    if (orientation == Horizontal)
-      firstVisible = -xpos;
+      zeroPoint = -xpos;
    else
-      firstVisible = -ypos;
+      zeroPoint = -ypos;
+   recalculateSize (0L);
    drawRuler ();
+   updatePointer (currentPosition, currentPosition);
    repaint ();
-}*/
+}
+
+void Ruler::updatePointer (int x, int y)
+{
+   if (! buffer)
+      return;
+
+   QRect r1, r2;
+   int pos = 0;
+
+   if (orientation == Horizontal)
+   {
+      //kdDebug()<<"Ruler::updatePointer ( "<<x<<" | "<<y<<" ) zoom is "<<zoom<<endl;
+      if (currentPosition != -1)
+      {
+         pos=currentPosition-MARKER_WIDTH/2;
+
+         r1=QRect(pos,1,MARKER_WIDTH, MARKER_HEIGHT);
+         bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+         //kdDebug()<<"Ruler::updatePointer() old pos: "<<pos<<endl;
+      }
+      if (x != -1)
+      {
+         pos=x-MARKER_WIDTH/2;
+         r2=QRect(pos,1,MARKER_WIDTH,MARKER_HEIGHT);
+
+         bitBlt (bg, 0, 0, buffer, pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
+         bitBlt (buffer, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+         currentPosition = x;
+         //kdDebug()<<"Ruler::updatePointer() new pos x: "<<pos<<" currentPos: "<<x<<endl;
+      }
+   }
+   else
+   {
+      if (currentPosition != -1)
+      {
+         pos=currentPosition-MARKER_HEIGHT/2;
+         r1 = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
+         bitBlt (buffer, 1, pos, bg, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+      }
+      if (y != -1)
+      {
+         pos=y-MARKER_HEIGHT/2;
+         r2 = QRect (1, pos,MARKER_HEIGHT, MARKER_WIDTH);
+         bitBlt (bg, 0, 0, buffer, 1, pos, MARKER_HEIGHT, MARKER_WIDTH);
+         bitBlt (buffer, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+         currentPosition = y;
+      }
+   }
+   repaint (r1.unite (r2));
+}
 
 void Ruler::updateVisibleArea (const QRect& area)
 {
    if (orientation == Horizontal)
-      firstVisible = area.x();
+      zeroPoint = area.x();
    else
-      firstVisible = area.y();
+      zeroPoint = area.y();
    drawRuler ();
    repaint ();
 }
@@ -225,28 +218,15 @@ void Ruler::paintEvent (QPaintEvent *e)
 
    if (orientation == Horizontal)
    {
-      //kdDebug()<<"Ruler::paintEvent(): firstVis: "<<firstVisible<<" e->x: "<<rect.x()<<" e->y: "<<rect.y()<<" e->w: "<<rect.width()<<" e->h: "<<rect.height()<<endl;
-/*      if (firstVisible >= 0)
-      {
-         bitBlt (this, rect.x (), rect.y (), buffer,
-                 rect.x () + firstVisible/2, rect.y (),
-                 rect.width (), rect.height ());
-      }
-      else*/
-         bitBlt (this, rect.x (), rect.y (), buffer,
-                 rect.x (), rect.y (),
-                 rect.width (), rect.height ());
+      bitBlt (this, rect.x (), rect.y (), buffer,
+              rect.x (), rect.y (),
+              rect.width (), rect.height ());
    }
    else
    {
-      /*if (firstVisible >= 0)
-         bitBlt (this, rect.x (), rect.y (), buffer,
-                 rect.x (), rect.y () + firstVisible,
-                 rect.width (), rect.height ());
-      else*/
-         bitBlt (this, rect.x (), rect.y (), buffer,
-                 rect.x (), rect.y (),
-                 rect.width (), rect.height ());
+      bitBlt (this, rect.x (), rect.y (), buffer,
+              rect.x (), rect.y (),
+              rect.width (), rect.height ());
    }
    QFrame::paintEvent (e);
 }
@@ -275,7 +255,7 @@ void Ruler::drawRuler ()
       step = 30 / (100.0 * zoom);
       if(step == 0)
          step = 1;
-      start = (int)(firstVisible / zoom);
+      start = (int)(zeroPoint / zoom);
       break;
    case UnitInch:
       s1 = cvtInchToPt(0.1) * zoom > 3.0;
@@ -284,7 +264,7 @@ void Ruler::drawRuler ()
       step = 24 / (cvtInchToPt(1.0) * zoom);
       if(step == 0)
          step = 1;
-      start = 10*(int)(cvtPtToInch(firstVisible) / zoom);
+      start = 10*(int)(cvtPtToInch(zeroPoint) / zoom);
       break;
    case UnitCentimeter:
    case UnitMillimeter:
@@ -294,7 +274,7 @@ void Ruler::drawRuler ()
       step = 30 / (cvtMmToPt(10.0) * zoom);
       if(step == 0)
          step = 1;
-      start = (int)(cvtPtToMm(firstVisible) / zoom);
+      start = (int)(cvtPtToMm(zeroPoint) / zoom);
       break;
    case UnitPica:
       s1 = cvtPicaToPt(1.0) * zoom > 3.0;
@@ -303,7 +283,7 @@ void Ruler::drawRuler ()
       step = 30 / (cvtPicaToPt(10.0) * zoom);
       if(step == 0)
          step = 1;
-      start = (int)(cvtPtToPica(firstVisible) / zoom);
+      start = (int)(cvtPtToPica(zeroPoint) / zoom);
       break;
    case UnitDidot:
       s1 = cvtDidotToPt(10.0) * zoom > 3.0;
@@ -312,7 +292,7 @@ void Ruler::drawRuler ()
       step = 30 / (cvtDidotToPt(100.0) * zoom);
       if(step == 0)
          step = 1;
-      start = (int)(cvtPtToDidot(firstVisible) / zoom);
+      start = (int)(cvtPtToDidot(zeroPoint) / zoom);
       break;
    case UnitCicero:
       s1 = cvtCiceroToPt(1.0) * zoom > 3.0;
@@ -321,7 +301,7 @@ void Ruler::drawRuler ()
       step = 30 / (cvtCiceroToPt(10.0) * zoom);
       if(step == 0)
          step = 1;
-      start = (int)(cvtPtToCicero(firstVisible) / zoom);
+      start = (int)(cvtPtToCicero(zeroPoint) / zoom);
       break;
    }
 
@@ -333,7 +313,7 @@ void Ruler::drawRuler ()
          {
             do
             {
-               pos = (int)(start * zoom - firstVisible);
+               pos = (int)(start * zoom - zeroPoint);
                if( s3 && start % 100 == 0 )
                   p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
                if( s2 && start % 50 == 0 )
@@ -350,7 +330,7 @@ void Ruler::drawRuler ()
          {
             do
             {
-               pos = (int)(cvtMmToPt(start) * zoom - firstVisible);
+               pos = (int)(cvtMmToPt(start) * zoom - zeroPoint);
                if( s3 && start % 10 == 0 )
                   p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
                if( s2 && start % 5 == 0 )
@@ -367,7 +347,7 @@ void Ruler::drawRuler ()
       {
          do
          {
-            pos = (int)(cvtMmToPt(start) * zoom - firstVisible);
+            pos = (int)(cvtMmToPt(start) * zoom - zeroPoint);
             if( s3 && start % 10 == 0 )
                p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
             if( s2 && start % 5 == 0 )
@@ -384,7 +364,7 @@ void Ruler::drawRuler ()
          {
             do
             {
-               pos = (int)(cvtDidotToPt(start) * zoom - firstVisible);
+               pos = (int)(cvtDidotToPt(start) * zoom - zeroPoint);
                if( s3 && start % 100 == 0 )
                   p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
                if( s2 && start % 50 == 0 )
@@ -401,7 +381,7 @@ void Ruler::drawRuler ()
          {
             do
             {
-               pos = (int)(cvtCiceroToPt(start) * zoom - firstVisible);
+               pos = (int)(cvtCiceroToPt(start) * zoom - zeroPoint);
                if( s3 && start % 10 == 0 )
                   p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
                if( s2 && start % 5 == 0 )
@@ -418,7 +398,7 @@ void Ruler::drawRuler ()
          {
             do
             {
-               pos = (int)(cvtPicaToPt(start) * zoom - firstVisible);
+               pos = (int)(cvtPicaToPt(start) * zoom - zeroPoint);
                if( s3 && start % 10 == 0 )
                   p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
                if( s2 && start % 5 == 0 )
@@ -435,7 +415,7 @@ void Ruler::drawRuler ()
          {
             do
             {
-               pos = (int)(cvtInchToPt(start/10.0) * zoom - firstVisible);
+               pos = (int)(cvtInchToPt(start/10.0) * zoom - zeroPoint);
                if( s3 && start % 10 == 0 )
                   p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
                if( s2 && start % 5 == 0 )
@@ -460,71 +440,74 @@ void Ruler::drawRuler ()
          {
             do
             {
-	  pos = (int)(start * zoom  - firstVisible);
-	  if( s3 && start % 100 == 0 )
-	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
-	  if( s2 && start % 50 == 0 )
-	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
-	  if( s1 && start % 10 == 0 )
-	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % (step * 100) == 0 )
-           drawNum (p, 2, pos, start, false);
-	  start++;
-         }while(pos < buffer->height());
-        break;
-      }
-    case UnitDidot:
-      {
-       do{
-	  pos = (int)(cvtDidotToPt(start) * zoom - firstVisible);
-          if( s3 && start % 100 == 0 )
-	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
-	  if( s2 && start % 50 == 0 )
-	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
-	  if( s1 && start % 10 == 0 )
-	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % (step * 100) == 0 )
-           drawNum (p, 2, pos, start, false);
-	  start++;
-         }while(pos < buffer->height());
-        break;
-      }
-    case UnitMillimeter:
-      {
-       do{
-	  pos = (int)(cvtMmToPt(start) * zoom - firstVisible);
-	  if( s3 && start % 10 == 0 )
-	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
-	  if( s2 && start % 5 == 0 )
-	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
-	  if( s1 )
-	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, 2, pos, start, false);
-	  start++;
-         }while(pos < buffer->height());
-        break;
-      }
-    case UnitCentimeter:
-      {
-       do{
-	  pos = (int)(cvtMmToPt(start) * zoom - firstVisible);
-	  if( s3 && start % 10 == 0 )
-	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
-	  if( s2 && start % 5 == 0 )
-	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
-	  if( s1 )
-	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, 2, pos, start/10, false);
-	  start++;
-         }while(pos < buffer->height());
-        break;
-      }
-    case UnitCicero:
-      {
+               pos = (int)(start * zoom  - zeroPoint);
+               if( s3 && start % 100 == 0 )
+                  p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
+               if( s2 && start % 50 == 0 )
+                  p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
+               if( s1 && start % 10 == 0 )
+                  p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
+               if( start % (step * 100) == 0 )
+                  drawNum (p, 2, pos, start, false);
+               start++;
+            } while(pos < buffer->height());
+            break;
+         }
+      case UnitDidot:
+         {
+            do
+            {
+               pos = (int)(cvtDidotToPt(start) * zoom - zeroPoint);
+               if( s3 && start % 100 == 0 )
+                  p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
+               if( s2 && start % 50 == 0 )
+                  p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
+               if( s1 && start % 10 == 0 )
+                  p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
+               if( start % (step * 100) == 0 )
+                  drawNum (p, 2, pos, start, false);
+               start++;
+            } while(pos < buffer->height());
+            break;
+         }
+      case UnitMillimeter:
+         {
+            do
+            {
+               pos = (int)(cvtMmToPt(start) * zoom - zeroPoint);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
+               if( s1 )
+                  p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
+               if( start % (step * 10) == 0 )
+                  drawNum (p, 2, pos, start, false);
+               start++;
+            } while(pos < buffer->height());
+            break;
+         }
+      case UnitCentimeter:
+         {
+            do
+            {
+               pos = (int)(cvtMmToPt(start) * zoom - zeroPoint);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
+               if( s1 )
+                  p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
+               if( start % (step * 10) == 0 )
+                  drawNum (p, 2, pos, start/10, false);
+               start++;
+            } while(pos < buffer->height());
+            break;
+         }
+      case UnitCicero:
+         {
         do{
-	  pos = (int)(cvtCiceroToPt(start) * zoom - firstVisible);
+	  pos = (int)(cvtCiceroToPt(start) * zoom - zeroPoint);
           if( s3 && start % 10 == 0 )
 	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
 	  if( s2 && start % 5 == 0 )
@@ -540,7 +523,7 @@ void Ruler::drawRuler ()
     case UnitPica:
       {
         do{
-	  pos = (int)(cvtPicaToPt(start) * zoom - firstVisible);
+	  pos = (int)(cvtPicaToPt(start) * zoom - zeroPoint);
 	  if( s3 && start % 10 == 0 )
 	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
 	  if( s2 && start % 5 == 0 )
@@ -555,7 +538,7 @@ void Ruler::drawRuler ()
       }
     case UnitInch:
       do {
-	  pos = (int)(cvtInchToPt(start/10.0) * zoom - firstVisible);
+	  pos = (int)(cvtInchToPt(start/10.0) * zoom - zeroPoint);
 	  if( s3 && start % 10 == 0 )
 	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
 	  if( s2 && start % 5 == 0 )
@@ -608,10 +591,10 @@ void Ruler::mouseMoveEvent ( QMouseEvent * me){
        (different place: update the helpline position in the status bar)*/
    if (isMousePressed) {
      emit drawHelpline (me->x () +
-                       (orientation == Horizontal ? firstVisible : 0) -
+                       (orientation == Horizontal ? zeroPoint : 0) -
                        RULER_SIZE,
                        me->y () +
-                       (orientation == Vertical ? firstVisible : 0) -
+                       (orientation == Vertical ? zeroPoint : 0) -
                        RULER_SIZE,
                        (orientation==Horizontal) ? true : false );
    }
@@ -621,10 +604,10 @@ void Ruler::mouseReleaseEvent ( QMouseEvent * me){
   if (isMousePressed) {
      isMousePressed = false;
      emit addHelpline (me->x () +
-                       (orientation == Horizontal ? firstVisible : 0) -
+                       (orientation == Horizontal ? zeroPoint : 0) -
                        RULER_SIZE,
                        me->y () +
-                       (orientation == Vertical ? firstVisible : 0) -
+                       (orientation == Vertical ? zeroPoint : 0) -
                        RULER_SIZE,
                        (orientation==Horizontal) ? true : false );
   }

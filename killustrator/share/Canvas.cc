@@ -277,9 +277,8 @@ void Canvas::setZoomFactor (float factor, int centerX, int centerY)
    hBar->blockSignals(false);
    vBar->blockSignals(false);
 
-   emit visibleAreaChanged(m_visibleArea);
    emit zoomFactorChanged (zoomFactor);
-
+   emit visibleAreaChanged(m_visibleArea);
 };
 
 void Canvas::setZoomFactor (float factor)
@@ -408,7 +407,7 @@ void Canvas::propagateMouseEvent (QMouseEvent *e)
                   qRound (float(e->y() + m_visibleArea.top()) / zoomFactor));
   QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
   
-  emit mousePositionChanged (new_ev.x(), new_ev.y());
+  emit mousePositionChanged (e->x(), e->y());
 
   // ensure visibility
   if (ensureVisibilityFlag)

@@ -82,7 +82,7 @@ private:
   MeasurementUnit munit;
   Orientation orientation;
   QPixmap *buffer;
-  int firstVisible;
+  int zeroPoint;
   int currentPosition;
   QPixmap *marker, *bg;
 };
