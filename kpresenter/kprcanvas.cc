@@ -533,7 +533,7 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
     QPen _pen = QPen( doc->gridColor(), 6, Qt::DotLine );
     painter->save();
     painter->setPen( _pen );
-    QRect pageRect=activePage()->getZoomPageRect();
+    QRect pageRect = m_activePage->getZoomPageRect();
 
     int zoomedX,  zoomedY;
     double offsetX = doc->getGridX();
@@ -583,7 +583,7 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2) const
     QPen _pen = QPen( Qt::black, 1, Qt::DotLine );
     painter->save();
     painter->setPen( _pen );
-    QRect pageRect=activePage()->getZoomPageRect();
+    QRect pageRect = m_activePage->getZoomPageRect();
     for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
     {
         double vi = *i ;
@@ -5409,7 +5409,7 @@ bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
 
 int KPrCanvas::numberOfObjectSelected() const
 {
-    int nb=activePage()->numSelected();
+    int nb = m_activePage->numSelected();
 #if ! MASTERPAGE
     nb += m_activePage->masterPage()->numSelected();
 #endif
@@ -5418,7 +5418,7 @@ int KPrCanvas::numberOfObjectSelected() const
 
 KPObject *KPrCanvas::getSelectedObj() const
 {
-    KPObject *obj=activePage()->getSelectedObj();
+    KPObject *obj = m_activePage->getSelectedObj();
 #if ! MASTERPAGE
     if(obj)
         return obj;
@@ -5430,7 +5430,7 @@ KPObject *KPrCanvas::getSelectedObj() const
 int KPrCanvas::getPenBrushFlags() const
 {
     int flags=0;
-    flags=activePage()->getPenBrushFlags(activePage()->objectList());
+    flags = m_activePage->getPenBrushFlags( m_activePage->objectList() );
 #if ! MASTERPAGE
     flags |= m_activePage->masterPage()->getPenBrushFlags( m_activePage->masterPage()->objectList() );
 #endif
@@ -5992,11 +5992,11 @@ void KPrCanvas::alignObjects( AlignType at )
     QPtrList<KPObject> objects;
 #if MASTERPAGE
     {
-        QPtrListIterator<KPObject> it( activePage()->objectList() );
+        QPtrListIterator<KPObject> it( m_activePage->objectList() );
 #else
     for ( int i = 0; i < 2; ++i )
     {
-        QPtrListIterator<KPObject> it( i == 0 ? activePage()->objectList() : m_activePage->masterPage()->objectList() );
+        QPtrListIterator<KPObject> it( i == 0 ? m_activePage->objectList() : m_activePage->masterPage()->objectList() );
 #endif
         for ( ; it.current() ; ++it )
         {
@@ -6578,9 +6578,9 @@ ImageEffect KPrCanvas::getImageEffect(ImageEffect eff) const
 KPPixmapObject * KPrCanvas::getSelectedImage() const
 {
 #if MASTERPAGE
-    return activePage()->getSelectedImage();
+    return m_activePage->getSelectedImage();
 #else
-    KPPixmapObject *obj=activePage()->getSelectedImage();
+    KPPixmapObject *obj = m_activePage->getSelectedImage();
     if(obj)
         return obj;
     obj = m_activePage->masterPage()->getSelectedImage();
