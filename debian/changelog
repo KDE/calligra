@@ -5,6 +5,7 @@ koffice (2.1-cvs20010219-1) unstable; urgency=low
   * Applying debconf i18n patch (Closes: #84263)
   * Changing section for kspread (Closes: #85892)
   * Fixes grid color (Closes: #76651)
+  * Adding in dependency for debconf
  
  -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 19 Feb 2001 06:00:00 -0700
 

@@ -16,7 +16,7 @@ Package: koffice-libs
 Architecture: any
 Section: libs
 Replaces: koffice, koffice-common, kspread (<< 2.1-20010101-0), kivio (<< 2.1-20010101-0)
-Depends: ${shlibs:Depends}, kdebase-libs
+Depends: ${shlibs:Depends}, kdebase-libs, debconf (>= 0.3.83)
 Suggests: kdebase
 Conflicts: koffice, koffice-common
 Description: KDE Office Suite (Common libraries and binaries)
