@@ -116,6 +116,8 @@ void ApplicationWindowSpell::spellCheckerMisspelling( const QString &text, const
 void ApplicationWindowSpell::spellCheckerCorrected( const QString &orig , const QString & newWord , unsigned int pos )
 {
     kdDebug()<<"void ApplicationWindowSpell::spellCheckerCorrected( const QString &, const QString &, unsigned int ) :"<<orig<<" new :"<<newWord<<" pos :"<<pos <<endl;
+    multi->removeSelectedText();
+    multi->insert( newWord,0/*parag*/, pos);
 }
 
 void ApplicationWindowSpell::spellCheckerDone( const QString & text)
