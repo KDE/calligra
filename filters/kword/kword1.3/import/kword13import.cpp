@@ -108,7 +108,7 @@ bool KWord13Import::postParse( KoStore* store, KWord13Document& doc )
 
 KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const QCString& to )
 {
-    if ( to != "application/vnd.sun.xml.writer"  // ### TODO: OASIS
+    if ( to != "application/vnd.oasis.openoffice.text"
         || from != "application/x-kword" )
     {
         return KoFilter::NotImplemented;
