@@ -54,10 +54,23 @@ void TextElement::calcSizes(ContextStyle& context, int parentSize)
     font.setPointSize(mySize);
 
     QFontMetrics fm(font);
-    setWidth(fm.width(character));
+/*    setWidth(fm.width(character));
     setHeight(fm.height());
     setMidline(getHeight() / 2);
     baseline = fm.ascent();
+*/
+    QRect bound=fm.boundingRect(character);
+    bound.moveBy(0,fm.strikeOutPos());
+//    cerr << character << "  Top:" << bound.top() << "Bottom:" << bound.bottom() <<endl;
+
+    setWidth(fm.width(character));
+    setHeight(bound.height());
+
+    baseline = -bound.top()+fm.strikeOutPos();
+    setMidline(-bound.top());
+
+//    cerr << character << "  baseline:" << baseline <<endl;
+//    cerr << character << "  midline:" << getMidline() <<endl;
 
     
 }
@@ -72,7 +85,7 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
 {
     int mySize = QMAX(parentSize + getRelativeSize(), 10);
     //context.setupPainter(painter);
-    //cerr << "TextElement::draw: " << parentOrigin.x()+getX() << " " << parentOrigin.y()+getY()+baseline << " " << character << "\n";
+//    cerr << "TextElement::draw: " << getY() << " " << getY()+baseline << " " << character << "\n";
     QFont font = getFont(context);
     font.setPointSize(mySize);
     painter.setFont(font);
