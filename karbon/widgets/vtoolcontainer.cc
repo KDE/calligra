@@ -152,8 +152,9 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	dlggroup->insert( button, Gradient );
 
 	//dialog buttons
-	m_dualColorButton = new KDualColorButton( this );
-	m_strokeFillPreview = new VStrokeFillPreview( m_part, this );
+	//m_dualColorButton = new KDualColorButton( this );
+	QGroupBox *box = new QGroupBox( 1, Qt::Vertical, this );
+	m_strokeFillPreview = new VStrokeFillPreview( m_part, box );
 
 	connect(
 		m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ),
@@ -162,8 +163,8 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 		m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ),
 		this, SIGNAL( fillChanged( const VFill & ) ) );
 
-	m_dualColorButton->setMaximumWidth( 30 );
-	m_dualColorButton->setMaximumHeight( 30 );
+	//m_dualColorButton->setMaximumWidth( 30 );
+	//m_dualColorButton->setMaximumHeight( 30 );
 }
 
 VToolContainer::~VToolContainer()
