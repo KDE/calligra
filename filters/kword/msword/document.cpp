@@ -170,7 +170,7 @@ void Document::sectionStart()
         elementPaper.setAttribute("format",paperFormat);
 
         elementPaper.setAttribute("orientation", landscape ? PG_LANDSCAPE : PG_PORTRAIT );
-        elementPaper.setAttribute("columns",1); // TODO
+        elementPaper.setAttribute("columns", sep->ccolM1 + 1 );
         elementPaper.setAttribute("columnspacing", (double)sep->dxaColumns / 20.0);
         elementPaper.setAttribute("hType",0); // TODO
         elementPaper.setAttribute("fType",0); // TODO
