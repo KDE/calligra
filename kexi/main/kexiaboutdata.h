@@ -43,17 +43,18 @@ KAboutData *newKexiAboutData()
 		"submit@bugs.kde.org"
 	);
 	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@kde.org");
-	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Developer"),"psn@linux.se");
-	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Form Designer, UIModes & much more"), "jowenn@kde.org");
-	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");
-	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Code cleanings"), "montel@kde.org");
-	aboutData->addAuthor("Till Busch", I18N_NOOP("Bugfixes, Original Table Widget"), "till@bux.at");
 	aboutData->addAuthor("Cedric Pasteur", I18N_NOOP("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
 	aboutData->addAuthor("Jaroslaw Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
+	aboutData->addAuthor("Adam Pigg", I18N_NOOP("PostgreSQL database driver"), "adam@piggz.fsnet.co.uk");
+	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Former Developer"),"psn@linux.se");
+	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Original Form Designer, Original UIModes & much more"), "jowenn@kde.org");
+	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");
+	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Original code cleanings"), "montel@kde.org");
+	aboutData->addAuthor("Till Busch", I18N_NOOP("Bugfixes, Original Table Widget"), "till@bux.at");
 	aboutData->addCredit("Daniel Molkentin",I18N_NOOP("Initial design improvements"),  "molkentin@kde.org");
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and UI-Research"), "kristof.borrey@skynet.be");
-	aboutData->setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"), I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 	aboutData->addCredit("Tomas Krassnig", I18N_NOOP("Coffee sponsoring"), "tkrass05@hak1.at");
+	aboutData->setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"), I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 #if defined(OOPL_VERSION) && defined(Q_WS_WIN)
 	aboutData->setProgramLogo(KEXI_APP_LOGO);
 #endif
