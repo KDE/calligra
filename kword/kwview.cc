@@ -5606,7 +5606,7 @@ void KWView::changeFootEndNoteState()
 {
     bool rw = koDocument()->isReadWrite();
     KWTextFrameSetEdit * edit = currentTextEdit();
-    bool state= state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager() && !edit->frameSet()->isFootEndNote();
+    bool state= edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager() && !edit->frameSet()->isFootEndNote();
     QString mode=m_gui->canvasWidget()->viewMode()->type();
     state =state && (mode!="ModeText");
     actionInsertFootEndNote->setEnabled( state && (edit && (edit->frameSet()==m_doc->frameSet(0))));
