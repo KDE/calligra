@@ -213,7 +213,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
-  QGrid *grid = d->m_dialog->addGridPage( 2, QGrid::Horizontal, i18n( "About" ) );
+  QGrid *grid = d->m_dialog->addGridPage( 2, QGrid::Horizontal, i18n( "about the document", "About" ) );
   grid->setMargin(KDialog::marginHint());
   grid->setSpacing(KDialog::spacingHint());
 
