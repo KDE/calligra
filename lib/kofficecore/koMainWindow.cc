@@ -693,7 +693,7 @@ bool KoMainWindow::saveDocument( bool saveas )
     QCString _native_format = pDoc->nativeFormatMimeType();
     QCString oldOutputFormat = pDoc->outputMimeType();
     int oldSpecialOutputFlag = pDoc->specialOutputFlag();
-    QString suggestedFilename = pDoc->url().path();
+    KURL suggestedURL = pDoc->url();
 
     QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export );
     if (mimeFilter.findIndex (oldOutputFormat) < 0 && !isExporting())
@@ -704,6 +704,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         // dialog and then tries to just plain Save ---
 
         // suggest a different filename extension (yes, we fortunately don't all live in a world of magic :))
+        QString suggestedFilename = suggestedURL.fileName ();
         if ( !suggestedFilename.isEmpty () ) // ".kwd" looks strange for a name
         {
             int c = suggestedFilename.findRev ('.');
@@ -719,9 +720,14 @@ bool KoMainWindow::saveDocument( bool saveas )
             }
             else  // current filename extension wrong anyway
             {
-                // this assumes that a . signifies an extension, not just a .
-                suggestedFilename = suggestedFilename.left (c);
+                if (c > 0)
+                {
+                    // this assumes that a . signifies an extension, not just a .
+                    suggestedFilename = suggestedFilename.left (c);
+                }
             }
+            
+            suggestedURL.setFileName (suggestedFilename);
         }
 
         // force the user to choose outputMimeType
@@ -736,7 +742,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog *dialog = new KoFileDialog(isExporting() ? d->m_lastExportURL.path() : suggestedFilename,
+        KoFileDialog *dialog = new KoFileDialog(isExporting() ? d->m_lastExportURL.url () : suggestedURL.url (),
                                                 QString::null, this, "file dialog", true);
 
         if (!isExporting())
