@@ -1412,6 +1412,8 @@ KexiMainWindowImpl::slotProjectSave()
 		return;
 	bool cancelled;
 	saveObject( d->curDialog, cancelled );
+	updateAppCaption();
+	invalidateActions();
 }
 
 void
@@ -1632,7 +1634,11 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled ) //, 
 		}
 		while (found);
 
-		return dlg->storeNewData();
+		if (!dlg->storeNewData())
+			return false;
+		
+		d->nav->addItem(dlg->partItem());
+		return true;
 	}
 	return dlg->storeData();
 }
