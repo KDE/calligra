@@ -3062,3 +3062,9 @@ void KPresenterView::updateSideBar( int, int pg )
     emit currentPageChanged( currPg );
     sidebar->setCurrentPage( currPg );
 }
+
+void KPresenterView::updateSideBarItem( int pagenr )
+{
+    //kdDebug() << "KPresenterView::updateSideBarItem " << pagenr << endl;
+    sidebar->updateItem( pagenr );
+}

@@ -58,6 +58,7 @@
 #include <kglobal.h>
 #include <kapp.h>
 #include <ktempfile.h>
+#include <kdebug.h>
 
 #include <stdlib.h>
 
@@ -130,27 +131,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
 Page::~Page()
 {
     // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
-    if ( editNum != -1 ) {
-        KPObject *kpobject = objectList()->at( editNum );
-        editNum = -1;
-        if ( kpobject->getType() == OT_TEXT ) {
-            KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-            kptextobject->deactivate( view->kPresenterDoc() );
-            kptextobject->getKTextObject()->clearFocus();
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
-                        this, SLOT( toFontChanged( const QFont & ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
-                        this, SLOT( toColorChanged( const QColor & ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
-                        this, SLOT( toAlignChanged( int ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
-                        this, SLOT( exitEditMode() ) );
-        } else if ( kpobject->getType() == OT_PART ) {
-            kpobject->deactivate();
-            _repaint( kpobject );
-            return;
-        }
-    }
+    exitEditMode();
 
     delete alignMenu1;
     delete alignMenu2;
@@ -303,27 +284,7 @@ void Page::mousePressEvent( QMouseEvent *e )
 
     resizeObjNum = -1;
 
-    if ( editNum != -1 ) {
-        kpobject = objectList()->at( editNum );
-        editNum = -1;
-        if ( kpobject->getType() == OT_TEXT ) {
-            KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-            kptextobject->deactivate( view->kPresenterDoc() );
-            kptextobject->getKTextObject()->clearFocus();
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
-                        this, SLOT( toFontChanged( const QFont & ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
-                        this, SLOT( toColorChanged( const QColor & ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
-                        this, SLOT( toAlignChanged( int ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
-                        this, SLOT( exitEditMode() ) );
-        } else if ( kpobject->getType() == OT_PART ) {
-            kpobject->deactivate();
-            _repaint( kpobject );
-            return;
-        }
-    }
+    exitEditMode();
 
     if ( editMode ) {
         if ( e->button() == LeftButton ) {
@@ -1083,24 +1044,7 @@ void Page::keyPressEvent( QKeyEvent *e )
 	}
     } else if ( editNum != -1 ) {
 	if ( e->key() == Key_Escape ) {
-	    KPObject *kpobject = objectList()->at( editNum );
-	    editNum = -1;
-	    if ( kpobject->getType() == OT_TEXT ) {
-		KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-		kptextobject->deactivate( view->kPresenterDoc() );
-		kptextobject->getKTextObject()->clearFocus();
-		disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
-			    this, SLOT( toFontChanged( const QFont & ) ) );
-		disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
-			    this, SLOT( toColorChanged( const QColor & ) ) );
-		disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
-			    this, SLOT( toAlignChanged( int ) ) );
-		disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
-			    this, SLOT( exitEditMode() ) );
-	    } else if ( kpobject->getType() == OT_PART ) {
-		kpobject->deactivate();
-		_repaint( kpobject );
-	    }
+            exitEditMode();
 	} else if ( objectList()->at( editNum )->getType() == OT_TEXT )
 	    QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->
 				     getKTextObject(), e );
@@ -1800,26 +1744,7 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
 
     tmpObjs.clear();
 
-    if ( editNum != -1 ) {
-	kpobject = objectList()->at( editNum );
-	editNum = -1;
-	if ( kpobject->getType() == OT_TEXT ) {
-	    KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-	    kptextobject->deactivate( view->kPresenterDoc() );
-	    kptextobject->getKTextObject()->clearFocus();
-	    disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
-			this, SLOT( toFontChanged( const QFont & ) ) );
-	    disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
-			this, SLOT( toColorChanged( const QColor & ) ) );
-	    disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
-			this, SLOT( toAlignChanged( int ) ) );
-	    disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
-			this, SLOT( exitEditMode() ) );
-	} else if ( kpobject->getType() == OT_PART ) {
-	    kpobject->deactivate();
-	    _repaint( kpobject );
-	}
-    }
+    exitEditMode();
 
     int i;
 
@@ -3452,35 +3377,13 @@ void Page::insertFormula( QRect _r )
 /*================================================================*/
 void Page::setToolEditMode( ToolEditMode _m, bool updateView )
 {
-    KPObject *kpobject = 0;
-
-    if ( editNum != -1 ) {
-        kpobject = objectList()->at( editNum );
-        editNum = -1;
-        if ( kpobject->getType() == OT_TEXT ) {
-            KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-            kptextobject->deactivate( view->kPresenterDoc() );
-            kptextobject->getKTextObject()->clearFocus();
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
-                        this, SLOT( toFontChanged( const QFont & ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
-                        this, SLOT( toColorChanged( const QColor & ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
-                        this, SLOT( toAlignChanged( int ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
-                        this, SLOT( exitEditMode() ) );
-        } else if ( kpobject->getType() == OT_PART ) {
-            kpobject->deactivate();
-            _repaint( kpobject );
-        }
-    }
-
+    exitEditMode();
     toolEditMode = _m;
 
     if ( toolEditMode == TEM_MOUSE ) {
         setCursor( arrowCursor );
         for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
-            kpobject = objectList()->at( i );
+            KPObject *kpobject = objectList()->at( i );
             if ( kpobject->contains( QCursor::pos(), diffx(), diffy() ) ) {
                 if ( kpobject->isSelected() )
                     setCursor( kpobject->getCursor( QCursor::pos(), diffx(), diffy(), modType ) );
@@ -4041,6 +3944,15 @@ void Page::exitEditMode()
                         this, SLOT( toAlignChanged( int ) ) );
             disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
                         this, SLOT( exitEditMode() ) );
+
+            //kdDebug() << "Page::exitEditMode page=" << currPgNum()-1 << endl;
+            // Title of slide may have changed
+            view->updateSideBarItem( currPgNum()-1 );
+
+        } else if ( kpobject->getType() == OT_PART ) {
+            kpobject->deactivate();
+            _repaint( kpobject );
+            return;
         }
     }
 }

@@ -18,6 +18,7 @@ public:
     void setCurrentPage( int pg );
     void setOn( int pg, bool on );
     QSize sizeHint() const { return QSize( 120, KListView::sizeHint().height() ); }
+    void updateItem( int pagenr );
 
 protected:
     void contentsDropEvent( QDropEvent *e );

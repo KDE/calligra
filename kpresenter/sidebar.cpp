@@ -2,6 +2,7 @@
 #include "kpresenter_doc.h"
 #include <qheader.h>
 #include <qtimer.h>
+#include <kdebug.h>
 
 SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     : KListView( parent ), doc( d ), view( v )
@@ -32,20 +33,38 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
 
 void SideBar::rebuildItems()
 {
-    QMap< QString, bool > checkedMap;
+    // Map: page number -> checked
+    QMap< int, bool > checkedMap;
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
-	checkedMap.insert( it.current()->text( 0 ), ( (QCheckListItem*)it.current() )->isOn() );
+	checkedMap.insert( it.current()->text(1).toInt(), ( (QCheckListItem*)it.current() )->isOn() );
 
     clear();
+    // Rebuild all the items
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
 	QCheckListItem *item = new QCheckListItem( this, "", QCheckListItem::CheckBox );
 	QString title = doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) );
-	QMap< QString, bool >::Iterator bit;
-	item->setOn( ( bit = checkedMap.find( title ) ) != checkedMap.end() ? *bit : TRUE );
-	item->setText( 1, QString( "%1" ).arg( i + 1 ) );
+	QMap< int, bool >::Iterator bit = checkedMap.find( i + 1 );
+	item->setOn( bit != checkedMap.end() ? *bit : TRUE );
+	item->setText( 1, QString::number( i + 1 ) ); // page number
 	item->setText( 0, title );
     }
+}
+
+void SideBar::updateItem( int pagenr )
+{
+    // Find item
+    QListViewItemIterator it( this );
+    for ( ; it.current(); ++it )
+    {
+	if ( it.current()->text(1).toInt() == pagenr+1 )
+        {
+            QString title = doc->getPageTitle( pagenr, i18n( "Slide %1" ).arg( pagenr + 1 ) );
+            it.current()->setText( 0, title );
+            return;
+        }
+    }
+    kdWarning() << "Item for page " << pagenr << " not found" << endl;
 }
 
 void SideBar::itemClicked( QListViewItem *i )

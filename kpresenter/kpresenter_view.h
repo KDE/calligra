@@ -309,6 +309,8 @@ public:
      */
     int canvasYOffset() const;
 
+    void updateSideBarItem( int pagenr );
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -348,7 +350,7 @@ protected slots:
 
     void search();
     void updateSideBar( int, int );
-    
+
 protected:
 
 // ********* functions ***********
