@@ -21,6 +21,12 @@
 
 #include "ustring.h"
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
+
 #define USTRING_SIMPLIFIED
 
 
@@ -34,10 +40,6 @@
 
 
 #ifndef USTRING_SIMPLIFIED
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -118,7 +120,7 @@ bool Swinder::isPosInf(double d)
 #endif
 
 #ifdef USTRING_SIMPLIFIED
-bool Swinder::isNegInf(double d)
+bool Swinder::isNegInf(double d) 
 {
   return false;
 }
