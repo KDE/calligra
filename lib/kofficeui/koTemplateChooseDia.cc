@@ -360,6 +360,10 @@ void MyIconCanvas::loadDir( const QString &dirname, const QString &filter )
     if( !filter.isEmpty() )
 	d.setNameFilter(filter);
 
-    if( d.exists() )
-	loadFiles(d.entryList( QDir::Files | QDir::Readable, QDir::Name ));
+    if( d.exists() ) {
+	QStringList files=d.entryList( QDir::Files | QDir::Readable, QDir::Name );
+	for(unsigned int i=0; i<files.count(); ++i)
+	    files[i]=dirname + QChar('/') + files[i];		
+	loadFiles(files);
+    }
 }

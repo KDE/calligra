@@ -83,8 +83,12 @@ void AFChoose::setupTabs()
 	    // Changes for the new KIconLoaderCanvas (Werner)
 	    QDir d( grpPtr->dir.absFilePath() );
 	    d.setNameFilter( "*.png" );
-	    if( d.exists() )
-		grpPtr->loadWid->loadFiles(d.entryList( QDir::Files | QDir::Readable, QDir::Name ));
+	    if( d.exists() ) {
+		QStringList files=d.entryList( QDir::Files | QDir::Readable, QDir::Name );
+		for(unsigned int i=0; i<files.count(); ++i)
+		    files[i]=grpPtr->dir.absFilePath() + QChar('/') + files[i];		
+		grpPtr->loadWid->loadFiles(files);
+	    }
 	    //grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.png");
 	    grpPtr->loadWid->setBackgroundColor(colorGroup().base());
 	    grpPtr->loadWid->show();
