@@ -5975,14 +5975,15 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
 void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const QRect& view, const QPoint _childOffset )
 {
-    // kdDebug(36001) << "Rect x=" << page_range->left() << " y=" << page_range->top() << ", w="
-    // << page_range->width() << " h="  << page_range->height() << endl;
+//      kdDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", w="
+//      << page_range.width() << " h="  << page_range.height() << "  offsetx: "<< _childOffset.x()
+//      << "  offsety: " << _childOffset.y() << endl;
 
     //Don't paint on the page borders
     QRegion clipRegion( MM_TO_POINT ( leftBorder() ), 
                         MM_TO_POINT ( topBorder() ), 
-                        _childOffset.x() + page_range.width(), 
-                        _childOffset.y() + page_range.height() );
+                        _childOffset.x() + view.width(), 
+                        _childOffset.y() + view.height() );
     _painter.setClipRegion( clipRegion );
 
     //
