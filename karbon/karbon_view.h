@@ -64,15 +64,15 @@ public:
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
 	virtual QWidget* canvas() { return m_canvas; }
-	VCanvas* canvasWidget() { return m_canvas; }
+	VCanvas* canvasWidget()const { return m_canvas; }
 
-	VPainterFactory* painterFactory() { return m_painterFactory; }
+	VPainterFactory* painterFactory()const { return m_painterFactory; }
 
 	// printing support, override from KoView
 	virtual void setupPrinter( KPrinter &printer );
 	virtual void print( KPrinter& printer );
 
-	KarbonPart* part() { return m_part; }
+	KarbonPart* part()const { return m_part; }
 
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
