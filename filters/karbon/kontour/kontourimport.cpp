@@ -39,7 +39,7 @@ KontourImport::~KontourImport()
 KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QCString& to)
 {
     // check for proper conversion
-    if ( to != "application/x-karbon" || from != "application/x-kontour" || from != "application/x-killustrator")
+    if ( to != "application/x-karbon" || ( from != "application/x-kontour" && from != "application/x-killustrator") )
         return KoFilter::NotImplemented;
 
 
@@ -67,7 +67,7 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 
 // Do the conversion stuff here. For notes how to get the input/output
     // locations please refer to koffice/lib/kofficecore/koFilterChain.h
-	
+
 	convert();
 
     //return KoFilter::NotImplemented; // Change to KoFilter::OK if the conversion
