@@ -271,20 +271,10 @@ void Kivio1DStencil::paintConnectorTargets( KivioIntraStencilData * )
 
 void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 {
-    // Handle Width
-    const float HW = 6.0f;
-    const float HWP1 = HW+1.0f;
-
-    // Handle Width Over 2
-    const float HWo2 = HW/2.0f;
-
-    // Stencil data
-    float scale = pData->scale;
     KivioPainter *painter = pData->painter;
-    float x1, y1;
+    float x1, y1, scale;
 
-    painter->setLineWidth(1.0f);
-    painter->setFGColor(QColor(0,0,0));
+    scale = pData->scale;
 
     KivioConnectorPoint *p = m_pConnectorPoints->first();
     while( p )
@@ -302,15 +292,19 @@ void Kivio1DStencil::paintSelectionHandles( KivioIntraStencilData *pData )
        }
        else
        {
-	  x1 = p->x() * scale - HWo2;
-	  y1 = p->y() * scale - HWo2;
-	  
-	  if( p->target() )
-	     painter->setBGColor(QColor(200,0,0));
+	  x1 = p->x() * scale;
+	  y1 = p->y() * scale;
+
+	  int flag = (p->target()) ? KivioPainter::cpfConnected : 0;
+
+	  if( p == m_pStart )
+	     painter->drawHandle( x1, y1, KivioPainter::cpfStart | flag );
+	  else if( p == m_pEnd )
+	     painter->drawHandle( x1, y1, KivioPainter::cpfEnd | flag );
+	  else if( p->connectable() )
+	     painter->drawHandle( x1, y1, KivioPainter::cpfConnectable | flag );
 	  else
-	     painter->setBGColor(QColor(0,200,0));
-	  
-	  painter->fillRect( x1, y1, HWP1, HWP1 );
+	     painter->drawHandle( x1, y1, flag );
        }
 
         p = m_pConnectorPoints->next();

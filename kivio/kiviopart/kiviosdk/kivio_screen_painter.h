@@ -85,7 +85,9 @@ public:
     void drawText( int x, int y, int w, int h, int tf,
                 const QString &str );
 
-    void drawPixmap( int, int, const QPixmap & );    
+    void drawPixmap( float, float, const QPixmap & );    
+
+    void drawHandle( float, float, int );
 };
 
 #endif

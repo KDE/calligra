@@ -894,7 +894,63 @@ void KivioScreenPainter::drawText( int x, int y, int w, int h, int tf, const QSt
     m_pPainter->drawText( x, y, w, h, tf, str );
 }
 
-void KivioScreenPainter::drawPixmap( int x, int y, const QPixmap &pix )
+void KivioScreenPainter::drawPixmap( float x, float y, const QPixmap &pix )
 {
-  m_pPainter->drawPixmap( x, y, pix );
+   PAINTER_CHECK();
+  m_pPainter->drawPixmap( (int)x, (int)y, pix );
+}
+
+void KivioScreenPainter::drawHandle( float x, float y, int flags )
+{
+   PAINTER_CHECK();
+   QColor fillColor;
+   QBrush b;
+   QPen p;
+
+   const float HW = 6.0f;
+   const float HWP1 = HW+1.0f;
+   const float HWo2 = HW/2.0f;
+
+   float x1, y1;
+
+   if( flags & cpfConnected )
+   {
+      fillColor = QColor(200,0,0);
+   }
+   else
+   {
+      fillColor = QColor(0,200,0);
+   }
+
+   b.setColor(fillColor);
+   b.setStyle(Qt::SolidPattern);
+   p.setColor(QColor(0,0,0));
+   m_pPainter->setPen(p);
+   m_pPainter->setBrush(b);
+
+
+   x1 = x - HWo2;
+   y1 = y - HWo2;
+
+   // first fill it
+//   m_pPainter->fillRect( x1, y1, HWP1, HWP1, b );
+   m_pPainter->drawRect( x1, y1, HWP1, HWP1 );
+
+   // Now put something in it if needed
+   if( flags & cpfStart )
+   {
+      m_pPainter->drawLine( x, y1+2, x, y1+4 );
+      m_pPainter->drawLine( x1+2, y, x1+4, y );
+   }
+   else if( flags & cpfEnd )
+   {
+      m_pPainter->drawLine( x1+2, y1+2, x1+4, y1+4 );
+      m_pPainter->drawLine( x1+2, y1+4, x1+4, y1+2 );
+   }
+   else if( flags & cpfConnectable )
+   {
+      b.setColor(QColor(0,0,0));
+
+      m_pPainter->fillRect(x-1,y-1,3,3, b);
+   }
 }

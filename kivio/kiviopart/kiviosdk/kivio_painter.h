@@ -55,7 +55,7 @@ public:
     |*| PROPERTY SETTINGS
     |*|
     |*| (probably don't need to reimplement -- unless you are optimizing)
-    \*/    
+    \*/
     virtual float lineWidth() const;
     virtual void setLineWidth( const float &f );
     
@@ -119,7 +119,20 @@ public:
     
     
     // These shouldn't be used for anything except the screen painter right now...
-    virtual void drawPixmap( int, int, const QPixmap & ) {;}
+    virtual void drawPixmap( float, float, const QPixmap & ) {;}
+
+    /*\
+    |*| Miscellaneous Functions
+    |*| note: These don't need to be implemented by everything
+    \*/
+    // connector point flags
+    enum {
+       cpfConnectable=0x1,
+       cpfStart=0x2,
+       cpfEnd=0x4,
+       cpfConnected=0x8
+    };
+    virtual void drawHandle( float, float, int ) { ; }
 };
 
 #endif

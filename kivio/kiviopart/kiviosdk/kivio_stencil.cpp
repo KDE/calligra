@@ -108,8 +108,8 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 
     KivioPainter *painter = pData->painter;
 
-    newX = m_x * scale - HWo2;
-    newY = m_y * scale - HWo2;
+    newX = m_x * scale;
+    newY = m_y * scale;
     newW = m_w * scale;
     newH = m_h * scale;
 
@@ -117,6 +117,7 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
     painter->setBGColor( QColor(0,200,0) );
     painter->setLineWidth(1.0f);
 
+/*
     painter->fillRect( newX,                newY,               HWP1, HWP1 );
     painter->fillRect( newX + newW/2.0f,    newY,               HWP1, HWP1 );
     painter->fillRect( newX + newW,         newY,               HWP1, HWP1 );
@@ -127,6 +128,17 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
     painter->fillRect( newX,                newY + newH,        HWP1, HWP1 );
     painter->fillRect( newX + newW/2.0f,    newY + newH,        HWP1, HWP1 );
     painter->fillRect( newX + newW,         newY + newH,        HWP1, HWP1 );
+*/
+    painter->drawHandle( newX,                newY,               0 );
+    painter->drawHandle( newX + newW/2.0f,    newY,               0 );
+    painter->drawHandle( newX + newW,         newY,               0 );
+
+    painter->drawHandle( newX,                newY + newH/2.0f,   0 );
+    painter->drawHandle( newX + newW,         newY + newH/2.0f,   0 );
+
+    painter->drawHandle( newX,                newY + newH,        0 );
+    painter->drawHandle( newX + newW/2.0f,    newY + newH,        0 );
+    painter->drawHandle( newX + newW,         newY + newH,        0 );
 }
 
 KivioCollisionType KivioStencil::checkForCollision( KivioPoint *, float )

@@ -131,3 +131,20 @@
       and added a grayscale gradient of colors. Capitalized all color names.
     - Implemented snap-to-guides
     - Fixed the stencils which went out of their bounding-boxes, now they don't.
+
+(Dave Marotti)
+12/25/2000
+    - Damn I suck, working on Christmas :(  Oh well, gotta do something while the
+      food is cooking.
+    - Created a new base stencils type, Kivio1DStencil, which can be used to make
+      connector stencils which need width.  It is going to deprecate
+      KivioBaseConnectorStencil and I will remove that class in the future.
+    - Made KivioBaseTargetStencil easier to use.
+    - Added tkmath.h.  It contains vector functions and classes and a few other
+      math related functions like a line-collision detection routine which allows
+      for a threshold.
+    - Modified straight_connector to use Kivio1DStencil as it's parent class.
+    - Unified the handle drawing code.  Now it's part of the KivioPainter classes.
+      Start points are drawn with a plus in the box, endpoints are drawn with an
+      x in the box, connectable points are drawn with a smaller box inside the
+      box, and others are just plain green. When connected, they turn red.
