@@ -67,7 +67,7 @@ BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
         LuPoint myPos(parentOrigin.x() + getX(),
-                     parentOrigin.y() + getY());
+                      parentOrigin.y() + getY());
 
         uint count = children.count();
         for (uint i = 0; i < count; i++) {
@@ -76,7 +76,7 @@ BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
             if (e != 0) {
                 if (!handled) {
                     handled = true;
-                    if ((point.x() - myPos.x()) < (e->getX() + e->getWidth()/2)) {
+                    if ((point.x() - myPos.x()) < (e->getX() + e->getWidth()*2/3)) {
                         cursor->setTo(this, children.find(e));
                     }
                     else {
@@ -93,14 +93,9 @@ BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
             if (dx < child->getX()) {
-                if (i > 0) {
-                    cursor->setTo(this, i-1);
-                    handled = true;
-                    return children.at(i-1);
-                }
-                else {
-                    break;
-                }
+                cursor->setTo( this, i );
+                handled = true;
+                return children.at( i );
             }
         }
 
@@ -317,7 +312,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
     }
     else {
         painter.setPen( QPen( Qt::white,
-                              context.layoutUnitToPixelX( context.getLineWidth() ) ) );
+                              context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
         const LuPoint& point = cursor->getCursorPoint();
         const LuRect& size = cursor->getCursorSize();
         if ( smallCursor ) {

@@ -333,6 +333,9 @@ void View::mouseReleaseEvent( QMouseEvent* event, const LuPoint& pos )
 
 void View::mouseDoubleClickEvent( QMouseEvent*, const LuPoint& )
 {
+    cursor()->moveRight( WordMovement );
+    cursor()->moveLeft( SelectMovement | WordMovement );
+    emitCursorChanged();
 }
 
 void View::mouseMoveEvent( QMouseEvent* event, const LuPoint& pos )
