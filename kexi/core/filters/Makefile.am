@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libkexifilter.la
 
-INCLUDES = -I../.. $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi $(KOFFICE_INCLUDES) $(all_includes)
 
 SUBDIRS = .
 
