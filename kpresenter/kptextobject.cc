@@ -145,7 +145,7 @@ void KPTextObject::resizeBy( int _dx, int _dy )
     KPObject::resizeBy( _dx, _dy );
     if ( move )
         return;
-
+    textDocument()->setWidth( KoTextZoomHandler::ptToLayoutUnit( getSize().width() ) );
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
 }
