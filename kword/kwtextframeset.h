@@ -120,6 +120,8 @@ public:
     void selectionChangedNotify( bool enableActions = true );
     QRect paragRect( QTextParag * parag ) const;
 
+    void findPosition( const QPoint &cPoint, QTextParag * & parag, int & index );
+
     // Highlighting support (for search/replace, spellchecking etc.)
     void highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas );
     void removeHighlight();

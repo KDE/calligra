@@ -862,12 +862,15 @@ bool KWFrameDia::applyChanges()
         // Floating
         if ( floating->isChecked() && !fs->isFloating() )
         {
-            // ### turn non-floating frame into floating frame (but where to insert the anchor ??)
+            // turn non-floating frame into floating frame
+            fs->setFloating();
+            doc->repaintAllViews();
         }
         else if ( !floating->isChecked() && fs->isFloating() )
         {
-            // turn floating-frame into non-floating frame (should be easier)
+            // turn floating-frame into non-floating frame
             fs->setFixed();
+            doc->repaintAllViews();
         }
     }
     if ( tab2 )

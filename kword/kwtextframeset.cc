@@ -2112,6 +2112,26 @@ QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
     return QRect( topLeft, bottomRight );
 }
 
+void KWTextFrameSet::findPosition( const QPoint &cPoint, QTextParag * & parag, int & index )
+{
+    QTextCursor cursor( textdoc );
+
+    QPoint iPoint;
+    if ( contentsToInternal( cPoint, iPoint ) )
+    {
+        cursor.place( iPoint, textdoc->firstParag() );
+        parag = cursor.parag();
+        index = cursor.index();
+    }
+    else
+    {
+        // Not found, maybe under everything ?
+        parag = textdoc->lastParag();
+        if ( parag )
+            index = parag->length() - 1;
+    }
+}
+
 void KWTextFrameSet::highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas )
 {
     removeHighlight(); // remove previous highlighted selection

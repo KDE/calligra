@@ -402,6 +402,8 @@ public:
     void setCurrent( int i ) { current = i; }
     int getCurrent() { return current; }
 
+    /** Make this frameset floating, as close to its current position as possible. */
+    void setFloating();
     /** Make this frameset floating, with the anchor at @p parag,@p index in the text frameset @p textfs */
     void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index );
     /** Make this frameset fixed, i.e. not anchored */

@@ -486,6 +486,26 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
     painter->restore();
 }
 
+void KWFrameSet::setFloating()
+{
+    // Find main text frame
+    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWTextFrameSet * frameSet = dynamic_cast<KWTextFrameSet *>( fit.current() );
+        if ( !frameSet || frameSet->getFrameInfo() != FI_BODY )
+            continue;
+
+        QTextParag* parag = 0L;
+        int index = 0;
+        QPoint cPoint( qRound( frames.first()->x() ), qRound( frames.first()->y() ) );
+        frameSet->findPosition( cPoint, parag, index );
+        setAnchored( frameSet, static_cast<KWTextParag *>( parag ), index );
+        frameSet->layout();
+        return;
+    }
+}
+
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index )
 {
     if ( isFloating() )
