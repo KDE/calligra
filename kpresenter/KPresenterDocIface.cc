@@ -696,3 +696,12 @@ void KPresenterDocIface::repaint()
     doc->repaint( false );
 }
 
+void KPresenterDocIface::setConfigToolTipCompletion( bool b )
+{
+    doc->getAutoFormat()->configToolTipCompletion( b );
+}
+
+bool KPresenterDocIface::configToolTipCompletion() const
+{
+    return doc->getAutoFormat()->getConfigToolTipCompletion();
+}

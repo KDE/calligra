@@ -126,6 +126,9 @@ k_dcop:
     void setConfigAddCompletionWord( bool b );
     bool configAddCompletionWord() const;
 
+    void setConfigToolTipCompletion( bool b );
+    bool configToolTipCompletion() const;
+
     bool configIncludeTwoUpperUpperLetterException() const;
     void setConfigIncludeTwoUpperUpperLetterException( bool b);
 

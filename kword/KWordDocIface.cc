@@ -374,6 +374,16 @@ bool KWordDocIface::configCompletion() const
     return doc->getAutoFormat()->getConfigCompletion();
 }
 
+void KWordDocIface::setConfigToolTipCompletion( bool b )
+{
+    doc->getAutoFormat()->configToolTipCompletion( b );
+}
+
+bool KWordDocIface::configToolTipCompletion() const
+{
+    return doc->getAutoFormat()->getConfigToolTipCompletion();
+}
+
 void KWordDocIface::setConfigAppendSpace( bool b)
 {
     doc->getAutoFormat()->configAppendSpace( b );

@@ -111,8 +111,12 @@ k_dcop:
     void setConfigAutoNumberStyle( bool b );
     bool configAutoNumberStyle() const;
 
+    void setConfigToolTipCompletion( bool b );
+    bool configToolTipCompletion() const;
+
     void setConfigCompletion( bool b );
     bool configCompletion() const;
+
 
     void setConfigAppendSpace( bool b);
     bool configAppendSpace() const;
