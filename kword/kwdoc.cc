@@ -1104,7 +1104,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             // Not in KWord: color, distance before and after separator
 
             QString style = footnoteSep.attributeNS( KoXmlNS::style, "line-style", QString::null );
-            if ( style == "solid" )
+            if ( style == "solid" || style.isEmpty() )
                 m_footNoteSeparatorLineType =SLT_SOLID;
             else if ( style == "dash" )
                 m_footNoteSeparatorLineType = SLT_DASH;
@@ -1115,14 +1115,14 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
             else if ( style == "dot-dot-dash" )
                 m_footNoteSeparatorLineType = SLT_DASH_DOT_DOT;
             else
-                kdDebug()<<" m_footNoteSeparatorLineType undefined  : "<<style<<endl;
+                kdDebug() << "Unknown value for m_footNoteSeparatorLineType: " << style << endl;
 
             QString pos = footnoteSep.attributeNS( KoXmlNS::style, "adjustment", QString::null );
             if ( pos =="centered" )
                 m_footNoteSeparatorLinePos = SLP_CENTERED;
             else if ( pos =="right")
                 m_footNoteSeparatorLinePos = SLP_RIGHT;
-            else if ( pos =="left" )
+            else // if ( pos =="left" )
                 m_footNoteSeparatorLinePos = SLP_LEFT;
         }
 

@@ -141,16 +141,27 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
         if ( frame )
             return true;
     }
-#if 0 // Anchored-to-paragraph table. This is the only supported way in OASIS currently.
+
+    // Anchored-to-paragraph table. This is the only supported way in OASIS currently,
     // [this is being debated as we speak]
-    // TODO: support loading this; this is mandatory in any case.
-    // but for now - we don't save things that way, so no way to test.
+    // and it's anyway the way OOo-2 saves tables.
     else if ( localName == "table" && tag.namespaceURI() == KoXmlNS::table )
     {
-        loadOasisTable( tag, context );
+        KWDocument* doc = m_textfs->kWordDocument();
+        KWOasisLoader loader( doc );
+        KWTableFrameSet* table = loader.loadOasisTable( tag, context );
+        table->finalize();
+        // Create paragraph for this table
+        KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
+        if ( !lastParagraph )        // First parag
+            setFirstParag( parag );
+        lastParagraph = parag;
+        // Put inline table in that paragraph
+        parag->insert( 0, KoTextObject::customItemChar() );
+        table->setAnchorFrameset( m_textfs );
+        parag->setCustomItem( 0, table->createAnchor( m_textfs->textDocument(), 0 ), 0 );
         return true;
     }
-#endif
     else if ( localName == "table-of-content" && tag.namespaceURI() == KoXmlNS::text )
     {
         loadOasisTOC( tag, context, lastParagraph, styleColl, nextParagraph );
