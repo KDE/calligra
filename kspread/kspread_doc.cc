@@ -809,8 +809,12 @@ void KSpreadDoc::initPython()
 	   f[ f.size() - 1 ] != '%' && f[ f.size() - 1 ] != '~' )
       {  
 	cerr << "Executing " << f << endl;
-	int res = m_pPython->runFile( f.c_str() );
-	cerr << "Done result=" << res << endl;
+        //if (strcmp(f.c_str(),"/opt/kde/share/apps/kspread/scripts/xcllib.py") != 0)
+	//{
+          int res = m_pPython->runFile( f.c_str() );
+          cerr << "Done result=" << res << endl; 
+        //}
+ 	//else cerr << "DISABLED !!" << endl;
       }
     }
 
@@ -851,6 +855,18 @@ void KSpreadDoc::initPython()
     closedir( dp );
 }
 
+void KSpreadDoc::runPythonCode()
+{
+  // here we could at least pop up a lineedit dialog asking for the function
+  // to execute, or show the list of functions. For now run the whole script.
+  char * code = (char *) m_pMap->getPythonCode();
+  cerr << "runPythonCode : code=" << code << endl;
+  if (code) {
+    int res = m_pPython->runCodeStr( KPythonModule::PY_STATEMENT, code );
+    cerr << "runPythonCode : result=" << res << endl;
+  }
+}
+
 bool KSpreadDoc::editPythonCode()
 {
   if ( m_pEditor == 0L )
@@ -858,9 +874,11 @@ bool KSpreadDoc::editPythonCode()
   if ( !m_pEditor->isOk() )
     return FALSE;
   
+  debug("KSpreadDoc::editPythonCode()");
   m_pMap->movePythonCodeToFile();
   
   m_editorBuffer = m_pEditor->openFile( m_pMap->getPythonCodeFile() ).copy();
+  debug(m_editorBuffer);
   m_pEditor->show();
   
   return TRUE;
@@ -872,14 +890,16 @@ void KSpreadDoc::endEditPythonCode()
     return;
   if ( !m_pEditor->isOk() )
     return;
-  if ( !m_editorBuffer.isNull() && m_editorBuffer.length() > 0 )
+  if ( m_editorBuffer.isNull() )
     return;
   
+  debug("KSpreadDoc::endEditPythonCode()");
   m_pEditor->saveBuffer( m_editorBuffer );
   m_pEditor->killBuffer( m_editorBuffer );
   m_pEditor->hide();
   
   m_pMap->getPythonCodeFromFile();
+  m_bModified = TRUE;
   
   m_editorBuffer = 0L;
 }

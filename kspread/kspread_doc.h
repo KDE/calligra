@@ -205,6 +205,7 @@ public:
   KSpreadPythonModule *pythonModule() { return m_pPython; }
   void reloadScripts();
   
+  void runPythonCode();
   bool editPythonCode();
   void endEditPythonCode();
   

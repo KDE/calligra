@@ -344,6 +344,8 @@ bool KSpreadMap::getPythonCodeFromFile()
 {
     if ( !m_bPythonCodeInFile )
 	return TRUE;
+
+    debug("KSpreadMap::getPythonCodeFromFile()");
     
     FILE *f = fopen( m_strPythonCodeFile, "r" );
     if ( f == 0L )
@@ -365,7 +367,7 @@ bool KSpreadMap::getPythonCodeFromFile()
     fclose( f );
     
     m_bPythonCodeInFile = FALSE;
-
+    debug("getFromFile (%s): code = %s",m_strPythonCodeFile.data(),m_strPythonCode.data());
     return TRUE;
 }
 

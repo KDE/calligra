@@ -107,6 +107,7 @@ public:
   bool getPythonCodeFromFile();
   const char* getPythonCodeFile() { return m_strPythonCodeFile.data(); }
   bool isPythonCodeInFile() { return m_bPythonCodeInFile; }
+  const char* getPythonCode() { return m_strPythonCode.data(); }
   
   void update();
   

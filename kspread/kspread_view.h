@@ -445,6 +445,10 @@ public:
      * Menu Scripts->Reload Scripts
      */
     void reloadScripts();
+    /**
+     * Menu Scripts->Run Local Script
+     */
+    void runLocalScript();
     
     /**
      * Menu View->New View
@@ -749,6 +753,7 @@ protected:
     CORBA::Long m_idMenuScripts_EditGlobal;
     CORBA::Long m_idMenuScripts_EditLocal;
     CORBA::Long m_idMenuScripts_Reload;
+    CORBA::Long m_idMenuScripts_Run;
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_About;
     CORBA::Long m_idMenuHelp_Using;

@@ -746,6 +746,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuScripts_EditGlobal = m_vMenuScripts->insertItem( i18n( "Edit &global scripts..." ), this, "editGlobalScripts", 0 );
   m_idMenuScripts_EditLocal = m_vMenuScripts->insertItem( i18n( "Edit &local script" ), this, "editLocalScripts", 0 );
   m_idMenuScripts_Reload = m_vMenuScripts->insertItem( i18n( "&Reload scripts" ), this, "reloadScripts", 0 );
+  m_idMenuScripts_Run = m_vMenuScripts->insertItem( i18n( "R&un local script" ), this, "runLocalScript", 0 );
 
   // Help
   m_vMenuHelp = _menubar->helpMenu();
@@ -898,7 +899,15 @@ void KSpreadView::italic()
 
 void KSpreadView::reloadScripts()
 {
-  m_pDoc->reloadScripts();
+  m_pDoc->reloadScripts(); // reload global scripts
+  m_pDoc->endEditPythonCode(); // get local scripts from file -> probably
+  // should be moved to another menu item. Hum, not sure about the UI.
+}
+
+void KSpreadView::runLocalScript()
+{
+  debug("KSpreadView::runLocalScript()");
+  m_pDoc->runPythonCode();
 }
 
 void KSpreadView::editGlobalScripts()

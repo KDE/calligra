@@ -70,6 +70,7 @@ module KSpread
 		slot void editGlobalScripts();
 		slot void editLocalScripts();
 		slot void reloadScripts();
+		slot void runLocalScript();
 		slot void helpUsing();
 		slot void deleteRow();
 		slot void deleteColumn();

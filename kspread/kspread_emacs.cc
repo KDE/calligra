@@ -27,14 +27,25 @@
 KEmacs::KEmacs()
 {
     emacsPID = 1;
-    
-    int i = system( "gnuclient -q" );
-    if ( i != 0 )
+
+    // Is emacs running ?
+
+    // First try the fuser trick
+    QString command;
+    command.sprintf("/usr/sbin/fuser -s -n tcp %d",21490 + getuid());
+    int ret = system( command.data() );
+    if ( ret != 0 )
     {
-	int j = system( "emacs &" );
-	if ( j != 0 )
-	    emacsPID = 0;
-	sleep( 5 );
+        // If it didn't work (fuser not present or xemacs not launched),
+        // try gnuclient -q (might create a new window !)
+        ret = system( "gnuclient -q" );
+        if ( ret != 0 )
+        {
+            ret = system( "emacs &" ); // shouldn't that be 'xemacs' ?
+            if ( ret != 0 )
+                emacsPID = 0;
+            sleep( 5 );
+        }
     }
     
 }
@@ -93,7 +104,7 @@ bool KEmacs::switchToBuffer( const char *_buffer )
 bool KEmacs::killBuffer( const char *_buffer )
 {
     QString cmd;
-    cmd.sprintf( "gnudoit '(kill-to-buffer \"%s\")'", _buffer );
+    cmd.sprintf( "gnudoit '(kill-buffer \"%s\")'", _buffer );
     QString erg = runCmd( cmd );
 
     return !( erg.isNull() );
