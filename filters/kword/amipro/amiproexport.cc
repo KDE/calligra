@@ -94,10 +94,8 @@ bool AmiProWorker::doOpenDocument(void)
   for( int i=0; i<sizeof(magic)/sizeof(magic[0]); i++ )
     result += "\t\t" + QString::number(magic[i]) + "\n";
 
-  result += ">\n";
   result += "[elay]\n";
   result += "[edoc]\n";
-  result += ">\n";
 
   m_bold = m_italic = m_underline =
   m_strike, m_subscript, m_superscript = FALSE;
