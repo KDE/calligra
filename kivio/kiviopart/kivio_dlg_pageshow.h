@@ -19,29 +19,27 @@
 #ifndef __kivio_dlg_pageshow__
 #define __kivio_dlg_pageshow__
 
-#include <qdialog.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qlistbox.h>
 #include <qlabel.h>
 
+#include <kdialogbase.h>
+
 class KivioView;
 
-class KivioPageShow: public QDialog
+class KivioPageShow: public KDialogBase
 { Q_OBJECT
 public:
   KivioPageShow( KivioView* parent, const char* name );
 
 public slots:
   void slotOk();
-  void slotClose();
   void slotDoubleClicked(QListBoxItem *);
 
 protected:
   KivioView* m_pView;
   QListBox * list;
-  QPushButton* m_pOk;
-  QPushButton* m_pClose;
 };
 
 #endif

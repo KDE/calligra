@@ -31,47 +31,37 @@
 #include <kbuttonbox.h>
 #include <qstrlist.h>
 #include <qptrlist.h>
-#include <kdialog.h>
 
 KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
-: QDialog( parent, name,TRUE )
+: KDialogBase( parent, name, true, i18n("Show Page"), Ok|Cancel, Ok )
 {
   m_pView = parent;
 
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  QWidget* view = new QWidget(this);
+  setMainWidget(view);
+
+  QVBoxLayout *lay1 = new QVBoxLayout( view );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
 
-  QLabel *label = new QLabel( i18n("Select hidden page to show:"), this );
+  QLabel *label = new QLabel( i18n("Select hidden page to show:"), view );
   lay1->addWidget( label );
 
-  list=new QListBox(this);
+  list = new QListBox(view);
   lay1->addWidget( list );
 
-  setCaption( i18n("Show Page") );
-
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "&Close" ) );
-  bb->layout();
-  lay1->addWidget( bb );
   QString text;
   QStringList::Iterator it;
-  QStringList tabsList=m_pView->tabBar()->listhide();
-  for ( it = tabsList.begin(); it != tabsList.end(); ++it )
-    	{
-    	text=*it;
-    	list->insertItem(text);
-    	}
-  if(!list->count())
-  	m_pOk->setEnabled(false);
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-  connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
-  resize( 200, 150 );
+  QStringList tabsList = m_pView->tabBar()->listhide();
 
+  for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+  {
+    text = *it;
+    list->insertItem(text);
+  }
+
+  connect( list, SIGNAL(doubleClicked(QListBoxItem *)), this, SLOT(slotDoubleClicked(QListBoxItem *)));
+  resize( 200, 150 );
 }
 
 void KivioPageShow::slotDoubleClicked(QListBoxItem *)
@@ -95,8 +85,4 @@ void KivioPageShow::slotOk()
   accept();
 }
 
-void KivioPageShow::slotClose()
-{
-  reject();
-}
 #include "kivio_dlg_pageshow.moc"
