@@ -444,12 +444,6 @@ VKoPainter::setRasterOp( Qt::RasterOp  )
 {
 }
 
-KoRect
-VKoPainter::boundingBox() const
-{
-	return m_bbox;
-}
-
 void
 VKoPainter::clampToViewport( int &x0, int &y0, int &x1, int &y1 )
 {

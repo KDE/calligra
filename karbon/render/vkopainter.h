@@ -94,9 +94,6 @@ public:
 	virtual QPaintDevice *device() { return m_target; } 
 	unsigned char *buffer() { return m_buffer; }
 
-	// get the bbox of the currently built path
-	KoRect boundingBox() const;
-
 private:
 	void drawVPath( struct _ArtVpath * );
 	void applyGradient( _ArtSVP *, bool );
@@ -119,7 +116,6 @@ private:
 	VFill *m_fill;
 	VFillRule m_fillRule;
 	double m_zoomFactor;
-	KoRect m_bbox;
 	QPtrList<_ArtSVP> m_clipPaths;
 
 	bool m_bDrawNodes;

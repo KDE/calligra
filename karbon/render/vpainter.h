@@ -97,8 +97,6 @@ public:
 
 	// access to device
 	virtual QPaintDevice *device() = 0;
-
-	virtual KoRect boundingBox() const { return KoRect(); }
 };
 
 #endif
