@@ -642,6 +642,9 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     QString style; // Style attribute for <p> element
     QString props; // Props attribute for <p> element
 
+#if 1
+    style=paraLayout.styleName;
+#else
     if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
     {
         const int depth = paraLayout.counter.depth + 1;
@@ -654,6 +657,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         // TODO: use AbiWord's full style capacity
         style = "Normal";
     }
+#endif
 
     // Check if the current alignment is a valid one for AbiWord.
     if ( (paraLayout.alignment == "left") || (paraLayout.alignment == "right")
@@ -767,36 +771,73 @@ static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText,
     ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 }
 
-static void ProcessStyleTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter )
+static void ProcessStyleTag (QDomNode myNode, void *, QString   &strStyles, ClassExportFilterBase* exportFilter )
 {
     AllowNoAttributes (myNode);
 
+    LayoutData *layout = new LayoutData (); // TODO: memory error recovery
+    FormatData formatData(-1,-1);
+    QString strDummy;
+
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "NAME",          NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "NAME",          ProcessLayoutNameTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "FOLLOWING",     NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FLOW",          NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "INDENTS",       NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "COUNTER",       NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",          ProcessLayoutFlowTag,   (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "INDENTS",       ProcessIndentsTag,      (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",       ProcessCounterTag,      (void *) &layout->counter ) );
     tagProcessingList.append ( TagProcessing ( "LINESPACING",   NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "LEFTBORDER",    NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "RIGHTBORDER",   NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "TOPBORDER",     NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "BOTTOMBORDER",  NULL, NULL ) );
-    tagProcessingList.append ( TagProcessing ( "FORMAT",        NULL, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+    tagProcessingList.append ( TagProcessing ( "FORMAT",        ProcessSingleFormatTag, (void *) &formatData ) );
+    tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",  ProcessLineBreakingTag, (void *) layout ) );
+    ProcessSubtags (myNode, tagProcessingList, strDummy,exportFilter);
+
+    strStyles+="<s name=\"";
+    strStyles+=layout->styleName; // TODO: cook the style name to the standard style names in AbiWord
+    strStyles+="\"";
+    if ( layout->counter.numbering == CounterData::NUM_CHAPTER )
+    {
+        strStyles+=" level=\"";
+        strStyles+=QString::number(layout->counter.depth+1,10);
+        strStyles+="\"";
+    }
+
+    const int result=formatData.abiprops.findRev(";");
+    if (result>=0)
+    {
+        // Remove the last semi-comma and the space thereafter
+        formatData.abiprops.remove(result,2);
+    }
+    strStyles+=" props=\"";
+    strStyles+=formatData.abiprops;  // Be careful that layout->abiprops is empty!
+    strStyles+="\"/>\n";
+
+    delete layout;
 }
 
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter )
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, ClassExportFilterBase* exportFilter )
 {
     AllowNoAttributes (myNode);
 
+    QString strStyles;
+
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+    ProcessSubtags (myNode, tagProcessingList, strStyles,exportFilter);
+
+    if (!strStyles.isEmpty())
+    {
+        outputText+="<styles>\n";
+        outputText+=strStyles;
+        outputText+="</styles>\n";
+    }
 }
 
 static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase*)
 {
+
     int format=-1;
     int orientation=-1;
     double width=-1.0;
@@ -960,16 +1001,35 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, ClassE
     attrProcessingList.append ( AttrProcessing ( "mime",          "", NULL ) );
     attrProcessingList.append ( AttrProcessing ( "syntaxVersion", "", NULL ) );
     ProcessAttributes (myNode, attrProcessingList);
+    // TODO: verify syntax version and perhaps mime
+
+
+    // We process the tag in some groups to have the order
+    //  like the AbiWord file format wants it.
 
     QValueList<TagProcessing> tagProcessingList;
+
+    // <styles>
+    tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+
+    // TODO: list
+
+    // <paper>
+    tagProcessingList.clear();
     tagProcessingList.append ( TagProcessing ( "PAPER",       ProcessPaperTag,     NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+
+    // the rest: <FRAMESETS> give <section>
+    tagProcessingList.clear();
     tagProcessingList.append ( TagProcessing ( "ATTRIBUTES",  NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FOOTNOTEMGR", NULL,                NULL ) );
-    tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
     ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
+
+    // TODO: <data>
 }
 
 bool ABIWORDExport::filter(const QString  &filenameIn,
