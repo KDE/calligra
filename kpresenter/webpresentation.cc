@@ -166,7 +166,7 @@ void KPWebPresentation::initCreation( QProgressBar *progressBar )
 	filename = pics[index] + format;
 	system( QString( "cp %1 %2/pics/%3" ).
 		arg( locate("appdata", "slideshow/" + filename) ).
-		arg( path ).arg( filename );
+		arg( path ).arg( filename ));
 	p = progressBar->progress();
 	progressBar->setProgress( ++p );
 	kapp->processEvents();
