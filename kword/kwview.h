@@ -490,7 +490,7 @@ protected:
 
 
     void startKSpell();
-    void clearSpellChecker();
+    void clearSpellChecker(bool cancelSpellCheck = false );
 
     QValueList<QString> getInlineFramesets( const QDomNode &framesetElem );
 

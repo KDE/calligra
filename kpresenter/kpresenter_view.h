@@ -781,7 +781,7 @@ protected:
     void spellCheckerRemoveHighlight();
 
 private:
-    void clearSpellChecker();
+    void clearSpellChecker(bool cancelSpellCheck = false);
 
 // ********** variables **********
 

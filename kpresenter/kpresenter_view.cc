@@ -4914,10 +4914,7 @@ void KPresenterView::spellCheckerCancel()
 #ifdef HAVE_LIBKSPELL2
     kdDebug()<<"void KPresenterView::spellCheckerCancel() \n";
     spellCheckerRemoveHighlight();
-    //we add command :( => don't add command and reverte changes
-    clearSpellChecker();
-
-//we cancel spell check so perhaps reverse all changes
+    clearSpellChecker(true);
 #endif
 }
 
@@ -4938,7 +4935,7 @@ void KPresenterView::spellCheckerRemoveHighlight()
 }
 
 
-void KPresenterView::clearSpellChecker()
+void KPresenterView::clearSpellChecker(bool cancelSpellCheck)
 {
 #ifdef HAVE_LIBKSPELL2
     kdDebug() << "KPresenterView::clearSpellChecker()" << endl;
@@ -4949,8 +4946,17 @@ void KPresenterView::clearSpellChecker()
     delete m_spell.dlg;
     m_spell.dlg = 0L;
 
-    if(m_spell.macroCmdSpellCheck)
-        m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+    if ( m_spell.macroCmdSpellCheck )
+    {
+        if ( !cancelSpellCheck )
+            m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+        else
+        {
+            //reverte all changes
+            m_spell.macroCmdSpellCheck->unexecute();
+            delete m_spell.macroCmdSpellCheck;
+        }
+    }
     m_spell.macroCmdSpellCheck=0L;
 
     m_spell.replaceAll.clear();

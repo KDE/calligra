@@ -5383,7 +5383,7 @@ void KWView::spellCheckerDone( const QString & )
 #endif
 }
 
-void KWView::clearSpellChecker()
+void KWView::clearSpellChecker(bool cancelSpellCheck)
 {
 #ifdef HAVE_LIBKSPELL2
     kdDebug(32001) << "KWView::clearSpellChecker" << endl;
@@ -5394,10 +5394,17 @@ void KWView::clearSpellChecker()
 
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
-
-    if(m_spell.macroCmdSpellCheck)
-        m_doc->addCommand(m_spell.macroCmdSpellCheck);
-
+    if ( m_spell.macroCmdSpellCheck )
+    {
+        if ( !cancelSpellCheck )
+            m_doc->addCommand(m_spell.macroCmdSpellCheck);
+        else
+        {
+            //reverte all changes
+            m_spell.macroCmdSpellCheck->unexecute();
+            delete m_spell.macroCmdSpellCheck;
+        }
+    }
     m_spell.macroCmdSpellCheck=0L;
     m_spell.replaceAll.clear();
     //m_doc->setReadWrite(true);
@@ -5410,9 +5417,7 @@ void KWView::spellCheckerCancel()
     kdDebug()<<"void KWView::spellCheckerCancel() \n";
     spellCheckerRemoveHighlight();
     //we add command :( => don't add command and reverte changes
-    clearSpellChecker();
-
-//we cancel spell check so perhaps reverse all changes
+    clearSpellChecker(true);
 #endif
 }
 
