@@ -35,10 +35,18 @@ public:
                       const KoHeadFoot& headfoot,
                       int tabs, KoUnit::Unit unit,
                       KSpreadTable *table, KSpreadView *view);
+
+    bool eventFilter( QObject* obj, QEvent* ev );
+
 protected slots:
     virtual void slotOk();
+    virtual void slotCancel();
+    void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+
 protected:
     void initTab();
+protected:
+  virtual void closeEvent ( QCloseEvent * );
 private:
     KSpreadTable *m_table;
     QCheckBox *pPrintGrid;
@@ -47,6 +55,7 @@ private:
     QLineEdit *ePrintRange;
     QLineEdit *eRepeatCols;
     QLineEdit *eRepeatRows;
+    QLineEdit *m_focus;
 };
 
 #endif

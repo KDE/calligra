@@ -4130,6 +4130,10 @@ void KSpreadView::layoutDlg()
 
 void KSpreadView::paperLayoutDlg()
 {
+    if ( m_pCanvas->editor() )
+    {
+        m_pCanvas->deleteEditor( true ); // save changes
+    }
     m_pTable->paperLayoutDlg(this);
 }
 

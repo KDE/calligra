@@ -29,16 +29,22 @@
 #include <kspread_util.h>
 #include <kspread_doc.h>
 #include <kspread_view.h>
+#include <kdebug.h>
+#include <kapplication.h>
 
 KSpreadPaperLayout::KSpreadPaperLayout( QWidget* parent, const char* name,
                                         const KoPageLayout& layout,
                                         const KoHeadFoot& headfoot,
                                         int tabs, KoUnit::Unit unit,
                                         KSpreadTable *table, KSpreadView *view)
-    :KoPageLayoutDia( parent, name, layout, headfoot, tabs, unit),
+    :KoPageLayoutDia( parent, name, layout, headfoot, tabs, unit, false /*no modal*/),
      m_table( table)
 {
     initTab();
+    connect( view, SIGNAL( sig_selectionChanged( KSpreadTable*, const QRect& ) ),
+             this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
+    qApp->installEventFilter( this );
+    m_focus= 0L;
 }
 
 void KSpreadPaperLayout::initTab()
@@ -223,7 +229,47 @@ void KSpreadPaperLayout::slotOk()
                               m_table->localizeHeadFootLine( hf.footRight ) );
 
     m_table->doc()->setUnit( unit );
-    KDialogBase::slotOk();
+    accept();
+    delete this;
 }
+
+void KSpreadPaperLayout::closeEvent ( QCloseEvent * )
+{
+    delete this;
+}
+
+void KSpreadPaperLayout::slotSelectionChanged( KSpreadTable* /*_table*/, const QRect& _selection )
+{
+  if ( _selection.left() == 0 || _selection.top() == 0 ||
+       _selection.right() == 0 || _selection.bottom() == 0 )
+    return;
+
+  QString area = util_rangeName( _selection );
+  if ( m_focus )
+      m_focus->setText( area );
+}
+
+void KSpreadPaperLayout::slotCancel()
+{
+  reject();
+  delete this;
+}
+
+bool KSpreadPaperLayout::eventFilter( QObject* obj, QEvent* ev )
+{
+    if ( obj == ePrintRange && ev->type() == QEvent::FocusIn )
+        m_focus = ePrintRange;
+#if 0 //for the moment we can rescue column range or row range
+    else if ( obj == eRepeatCols && ev->type() == QEvent::FocusIn )
+        m_focus = eRepeatCols;
+    else if ( obj == eRepeatRows && ev->type() == QEvent::FocusIn )
+        m_focus = eRepeatRows;
+#endif
+    else
+        return false;
+
+    return false;
+}
+
 
 #include "kspread_dlg_paperlayout.moc"

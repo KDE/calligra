@@ -7312,8 +7312,8 @@ void KSpreadTable::paperLayoutDlg(KSpreadView *view)
 
 
     KSpreadPaperLayout *dlg=new KSpreadPaperLayout( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit, this, view);
-    dlg->exec();
-    delete dlg;
+    dlg->show();
+    // dlg destroys itself
 }
 
 void KSpreadTable::definePrintRange (KSpreadSelection* selectionInfo)
