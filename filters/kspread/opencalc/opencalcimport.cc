@@ -1791,11 +1791,14 @@ void OpenCalcImport::loadBorder( KSpreadFormat * layout, QString const & borderD
     pen.setStyle( Qt::SolidLine );
   else
   {
-    // TODO:
+#if 0
+    // TODO: not supported by oocalc
     pen.setStyle( Qt::DashLine );
     pen.setStyle( Qt::DotLine );
     pen.setStyle( Qt::DashDotLine );
     pen.setStyle( Qt::DashDotDotLine );
+#endif
+    pen.setStyle( Qt::SolidLine ); //default.
   }
 
   ++p2;
@@ -1820,7 +1823,7 @@ void OpenCalcImport::loadBorder( KSpreadFormat * layout, QString const & borderD
     layout->setRightBorderPen( pen );
     layout->setBottomBorderPen( pen );
   }
-  // TODO Diagonals
+  // TODO Diagonals not supported by oocalc
 }
 
 void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement const & property ) const
