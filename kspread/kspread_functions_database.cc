@@ -62,14 +62,36 @@ typedef QValueList<Condition> ConditionList;
 };
 
 // prototypes
-bool kspreadfunc_dsum( KSContext& context );
+bool kspreadfunc_daverage( KSContext & context );
+bool kspreadfunc_dcount( KSContext & context );
+bool kspreadfunc_dcounta( KSContext & context );
+bool kspreadfunc_dget( KSContext & context );
+bool kspreadfunc_dmax( KSContext & context );
+bool kspreadfunc_dmin( KSContext & context );
+bool kspreadfunc_dproduct( KSContext & context );
+bool kspreadfunc_dstdev( KSContext & context );
+bool kspreadfunc_dstdevp( KSContext & context );
+bool kspreadfunc_dsum( KSContext & context );
+bool kspreadfunc_dvar( KSContext & context );
+bool kspreadfunc_dvarp( KSContext & context );
 
 // registers all math functions
 void KSpreadRegisterDatabaseFunctions()
 {
   KSpreadFunctionRepository * repo = KSpreadFunctionRepository::self();
 
+  repo->registerFunction( "DAVERAGE",   kspreadfunc_daverage );
+  repo->registerFunction( "DCOUNT",     kspreadfunc_dcount );
+  repo->registerFunction( "DCOUNTA",    kspreadfunc_dcounta );
+  repo->registerFunction( "DGET",       kspreadfunc_dget );
+  repo->registerFunction( "DMAX",       kspreadfunc_dmax );
+  repo->registerFunction( "DMIN",       kspreadfunc_dmin );
+  repo->registerFunction( "DPRODUCT",   kspreadfunc_dproduct );
+  repo->registerFunction( "DSTDEV",     kspreadfunc_dstdev );
+  repo->registerFunction( "DSTDEVP",    kspreadfunc_dstdevp );
   repo->registerFunction( "DSUM",       kspreadfunc_dsum );
+  repo->registerFunction( "DVAR",       kspreadfunc_dvar );
+  repo->registerFunction( "DVARP",      kspreadfunc_dvarp );
 }
 
 /*********************************************************************
@@ -348,7 +370,7 @@ QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadTable * table, int
   {
     cell = table->cellAt( column, row );
     kdDebug() << "Cell: " << column << ", " << row << " - " << cell->strOutText() << endl;
-    if ( cell->isDefault() || !cell->isNumeric() )
+    if ( cell->isDefault() )
       continue;
 
     // go through conditions
@@ -440,4 +462,684 @@ bool kspreadfunc_dsum( KSContext & context )
 
   return true;
 }
+
+// Function: DAVERAGE
+bool kspreadfunc_daverage( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DAVERAGE", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  int    count = 0;
+  double sum   = 0;
+
+  KSpreadCell * cell = cells->first();
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      ++count;
+      sum += cell->valueDouble();
+    }
+
+    cell = cells->next();
+  }
+
+  context.setValue( new KSValue( (double) ( sum / count) ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DCOUNT
+bool kspreadfunc_dcount( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DCOUNT", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  int count = 0;
+
+  KSpreadCell * cell = cells->first();
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      ++count;
+    }
+
+    cell = cells->next();
+  }
+
+  context.setValue( new KSValue( count ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DCOUNTA
+bool kspreadfunc_dcounta( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DCOUNTA", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  int count = 0;
+
+  KSpreadCell * cell = cells->first();
+  while ( cell )
+  {
+    if ( !cell->isEmpty() )
+      ++count;
+
+    cell = cells->next();
+  }
+
+  context.setValue( new KSValue( count ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DGET
+bool kspreadfunc_dget( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DGET", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  double value = 0.0;
+  int count = 0;
+
+  KSpreadCell * cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      ++count;
+      if ( count > 1 )
+        return false;
+
+      value = cell->valueDouble();
+    }
+
+    cell = cells->next();
+  }
+
+  if ( count == 0 )
+    return false;
+
+  context.setValue( new KSValue( value ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DMAX
+bool kspreadfunc_dmax( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DMAX", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  double max = 0.0;
+
+  KSpreadCell * cell = cells->first();
+  if ( cell && cell->isNumeric() )
+    max = cell->valueDouble();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      if ( cell->valueDouble() > max )
+        max = cell->valueDouble();
+    }
+
+    cell = cells->next();
+  }
+
+  context.setValue( new KSValue( max ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DMIN
+bool kspreadfunc_dmin( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DMIN", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  double min = 0.0;
+
+  KSpreadCell * cell = cells->first();
+  if ( cell && cell->isNumeric() )
+    min = cell->valueDouble();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      if ( cell->valueDouble() < min )
+        min = cell->valueDouble();
+    }
+
+    cell = cells->next();
+  }
+
+  context.setValue( new KSValue( min ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DPRODUCT
+bool kspreadfunc_dproduct( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DPRODUCT", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  double product = 1.0;
+  int count = 0;
+  
+  KSpreadCell * cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      ++count;
+      product *= cell->valueDouble();
+    }
+
+    cell = cells->next();
+  }
+
+  if ( count == 0 )
+    return false;
+
+  context.setValue( new KSValue( product ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DSTDEV
+bool kspreadfunc_dstdev( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DSTDEV", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  double sum = 0.0;
+  int count = 0;
+  
+  KSpreadCell * cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      sum += cell->valueDouble();
+      ++count;
+    }
+
+    cell = cells->next();
+  }
+
+  if ( count == 0 )
+    return false;
+
+  double average = sum / count; 
+  double result = 0.0;
+  
+  cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      result += ( ( cell->valueDouble() - average ) * ( cell->valueDouble() - average ) );
+    }
+
+    cell = cells->next();
+  }
+
+
+  context.setValue( new KSValue( sqrt( result / ( ( double )( count - 1 ) ) ) ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DSTDEVP
+bool kspreadfunc_dstdevp( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DSTDEVP", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  double sum = 0.0;
+  int count = 0;
+  
+  KSpreadCell * cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      sum += cell->valueDouble();
+      ++count;
+    }
+
+    cell = cells->next();
+  }
+
+  if ( count == 0 )
+    return false;
+
+  double average = sum / count; 
+  double result = 0.0;
+  
+  cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      result += ( ( cell->valueDouble() - average ) * ( cell->valueDouble() - average ) );
+    }
+
+    cell = cells->next();
+  }
+
+  context.setValue( new KSValue( sqrt( result / count ) ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DVAR
+bool kspreadfunc_dvar( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DVAR", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  double sum = 0.0;
+  int count = 0;
+  
+  KSpreadCell * cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      sum += cell->valueDouble();
+      ++count;
+    }
+
+    cell = cells->next();
+  }
+
+  if ( count == 0 )
+    return false;
+
+  double average = sum / count; 
+  double result = 0.0;
+  
+  cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      result += ( ( cell->valueDouble() - average ) * ( cell->valueDouble() - average ) );
+    }
+
+    cell = cells->next();
+  }
+
+  context.setValue( new KSValue( result / (double) (count - 1) ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+// Function: DVARP
+bool kspreadfunc_dvarp( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args  = context.value()->listValue();
+  QValueList<KSValue::Ptr> & extra = context.extraData()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "DVARP", true ) )
+    return false;
+
+  KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+
+  KSpreadRange db( extra[0]->stringValue(), map, table );
+  KSpreadRange conditions( extra[2]->stringValue(), map, table );
+
+  if ( !db.isValid() || !conditions.isValid() )
+    return false;
+  
+  int fieldIndex = getFieldIndex( args[1]->stringValue(), db.range, table );
+  if ( fieldIndex == -1 )
+    return false;
+
+  kdDebug() << "Fieldindex: " << fieldIndex << endl;
+
+  QPtrList<KSpreadDB::ConditionList> * cond = new QPtrList<KSpreadDB::ConditionList>();
+  cond->setAutoDelete( true );
+
+  parseConditions( cond, db.range, conditions.range, table );
+
+  QPtrList<KSpreadCell> * cells = getCellList( db.range, table, fieldIndex, cond );
+
+  double sum = 0.0;
+  int count = 0;
+  
+  KSpreadCell * cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      sum += cell->valueDouble();
+      ++count;
+    }
+
+    cell = cells->next();
+  }
+
+  if ( count == 0 )
+    return false;
+
+  double average = sum / count; 
+  double result = 0.0;
+  
+  cell = cells->first();
+
+  while ( cell )
+  {
+    if ( cell->isNumeric() )
+    {
+      result += ( ( cell->valueDouble() - average ) * ( cell->valueDouble() - average ) );
+    }
+
+    cell = cells->next();
+  }
+
+  context.setValue( new KSValue( result / count ) );
+
+  delete cond;
+  delete cells;
+
+  return true;
+}
+
+
 

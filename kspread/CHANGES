@@ -32,7 +32,8 @@ Financial:
 - PPMT, DDB
 
 Database:
-- DSUM
+- DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN,
+  DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP
 
 Obsolete formulas:
 - variance, stddev (was stddevp in fact)
