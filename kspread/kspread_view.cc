@@ -6626,9 +6626,9 @@ void KSpreadView::paintUpdates()
   m_pCanvas->paintUpdates();
 }
 
-QPoint KSpreadView::markerFromSheet( KSpreadSheet *_sheet ) const
+QPoint KSpreadView::markerFromSheet( KSpreadSheet *_sheet )
 {
-    QMapIterator<KSpreadSheet*, QPoint> it2 = savedMarkers.find(_sheet);
+   	QMapIterator<KSpreadSheet*, QPoint> it2 = savedMarkers.find(_sheet);
     QPoint newMarker = (it2 == savedMarkers.end()) ? QPoint(1,1) : *it2;
     return newMarker;
 }
