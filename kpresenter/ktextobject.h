@@ -1069,6 +1069,10 @@ public:
    */
   void setHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
     {changeHorzAlign(ha,p);};
+
+  /**
+   * Returns the horizontal align of the paragraph <i>p</i>.
+   */
   TxtParagraph::HorzAlign horzAlign(int p = -1);
 
   /**
@@ -1747,6 +1751,21 @@ public:
    */
   void setAutoFocus(bool _auto)
     { autoFocus = _auto; }
+
+  /**
+   * Sets the font for the whole text.
+   */
+  void setFontToAll(QFont _font);
+
+  /**
+   * Sets the color for the whole text.
+   */
+  void setColorToAll(QColor _color);
+
+  /**
+   * Sets the horizontal alignment for the whole text.
+   */
+  void setHorzAlignToAll(TxtParagraph::HorzAlign _align);
 
 signals:
 

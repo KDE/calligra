@@ -124,8 +124,9 @@ bool KPresenterShell::newDocument()
   m_pView->setMode( KOffice::View::RootMode );
   cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   m_pView->setMainWindow( interface() );
-  
+
   setRootPart( m_pView->id() );
+  
   interface()->setActivePart( m_pView->id() );
   
   if( m_pFileMenu )

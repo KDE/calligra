@@ -184,7 +184,7 @@ void KPObject::zoomOrig()
 /*======================== draw ==================================*/
 void KPObject::draw(QPainter *_painter,int _diffx,int _diffy)
 {
-  if (dSelection && selected)
+  if (dSelection && selected || dSelection && getType() == OT_TEXT)
     {
       _painter->save();
       QRect r = _painter->viewport();
@@ -257,14 +257,27 @@ void KPObject::paintSelection(QPainter *_painter)
 
   _painter->setRasterOp(NotROP);
   
-  _painter->fillRect(0,0,6,6,black);
-  _painter->fillRect(0,ext.height() / 2 - 3,6,6,black);
-  _painter->fillRect(0,ext.height() - 6,6,6,black);
-  _painter->fillRect(ext.width() - 6,0,6,6,black);
-  _painter->fillRect(ext.width() - 6,ext.height() / 2 - 3,6,6,black);
-  _painter->fillRect(ext.width() - 6,ext.height() - 6,6,6,black);
-  _painter->fillRect(ext.width() / 2 - 3,0,6,6,black);
-  _painter->fillRect(ext.width() / 2 - 3,ext.height() - 6,6,6,black);
+  if (getType() == OT_TEXT)
+    {
+      _painter->setPen(QPen(black,1,DotLine));
+      _painter->setBrush(NoBrush);
+      _painter->drawRect(0,0,ext.width(),ext.height());
+    }
+
+  _painter->setPen(QPen(black,1,SolidLine));
+  _painter->setBrush(black);
+
+  if (selected)
+    {
+      _painter->fillRect(0,0,6,6,black);
+      _painter->fillRect(0,ext.height() / 2 - 3,6,6,black);
+      _painter->fillRect(0,ext.height() - 6,6,6,black);
+      _painter->fillRect(ext.width() - 6,0,6,6,black);
+      _painter->fillRect(ext.width() - 6,ext.height() / 2 - 3,6,6,black);
+      _painter->fillRect(ext.width() - 6,ext.height() - 6,6,6,black);
+      _painter->fillRect(ext.width() / 2 - 3,0,6,6,black);
+      _painter->fillRect(ext.width() / 2 - 3,ext.height() - 6,6,6,black);
+    }
 
   _painter->setRasterOp(rop);
   _painter->restore();

@@ -4027,6 +4027,45 @@ bool KTextObject::replaceNextRev(QString search,QString replace,TxtCursor *from,
   return found;
 }
 
+/*================================================================*/
+void KTextObject::setFontToAll(QFont _font)
+{
+  for (unsigned int i = 0;i < paragraphList.count();i++)
+    {
+      for (unsigned int j = 0;j < paragraphList.at(i)->lines();j++)
+	{
+	  for (unsigned int k = 0;k < paragraphList.at(i)->lineAt(j)->items();k++)
+	    {
+	      paragraphList.at(i)->lineAt(j)->itemAt(k)->setFont(_font);
+	    }
+	}
+    }
+}
+
+/*================================================================*/
+void KTextObject::setColorToAll(QColor _color)
+{
+  for (unsigned int i = 0;i < paragraphList.count();i++)
+    {
+      for (unsigned int j = 0;j < paragraphList.at(i)->lines();j++)
+	{
+	  for (unsigned int k = 0;k < paragraphList.at(i)->lineAt(j)->items();k++)
+	    {
+	      paragraphList.at(i)->lineAt(j)->itemAt(k)->setColor(_color);
+	    }
+	}
+    }
+}
+
+/*================================================================*/
+void KTextObject::setHorzAlignToAll(TxtParagraph::HorzAlign _align)
+{
+  for (unsigned int i = 0;i < paragraphList.count();i++)
+    {
+      paragraphList.at(i)->setHorzAlign(_align);
+    }
+}
+
 /*====================== paint cell ==============================*/
 void KTextObject::paintCell(class QPainter* painter,int row,int)
 {

@@ -52,7 +52,7 @@
 #include "resizecmd.h"
 
 class KPresenterView;
-class kPresenterDoc;
+class KPresenterDoc;
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -106,6 +106,9 @@ public:
   void print(QPainter*,QPrinter*,float,float);
 
   void editSelectedTextArea();
+  void setPartEntry(KoPartEntry *pe)
+    { partEntry = pe; }
+  void setToolEditMode(ToolEditMode _m);
 
 public slots:
 
@@ -113,9 +116,9 @@ public slots:
   void clipCut();
   void clipCopy();
   void clipPaste();
-  void deleteObjs() {view->kPresenterDoc()->deleteObjs(); setCursor(arrowCursor);}
-  void rotateObjs() {view->extraRotate(); setCursor(arrowCursor);}
-  void shadowObjs() {view->extraShadow(); setCursor(arrowCursor);}
+  void deleteObjs() {view->kPresenterDoc()->deleteObjs(); setToolEditMode(toolEditMode);}
+  void rotateObjs() {view->extraRotate(); setToolEditMode(toolEditMode);}
+  void shadowObjs() {view->extraShadow(); setToolEditMode(toolEditMode);}
   
 protected:
   
@@ -177,6 +180,17 @@ protected:
   void doObjEffects();
   void drawObject(KPObject*,QPixmap*,int,int,int,int,int,int);
 
+  void insertText(QRect);
+  void insertLineH(QRect);
+  void insertLineV(QRect);
+  void insertLineD1(QRect);
+  void insertLineD2(QRect);
+  void insertNRect(QRect);
+  void insertRRect(QRect);
+  void insertEllipse(QRect);
+  void insertPie(QRect);
+  void insertObject(QRect);
+
   // variables
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
   QPopupMenu *alignMenu1,*alignMenu2,*alignMenu3,*alignMenu4,*alignMenu5;
@@ -195,7 +209,10 @@ protected:
   int firstX,firstY;
   bool drawRubber;
   QRect rubber,oldBoundingRect;
-
+  ToolEditMode toolEditMode;
+  QRect insRect;
+  KoPartEntry* partEntry;
+  
 public slots:
   void chPic();
   void chClip();

@@ -234,12 +234,12 @@ public:
   void insertClipart(QString,int,int);
   void changePicture(QString,int,int);
   void changeClipart(QString,int,int);
-  void insertLine(QPen,LineEnd,LineEnd,LineType,int,int);
-  void insertRectangle(QPen,QBrush,RectType,FillType,QColor,QColor,BCType,int,int);
-  void insertCircleOrEllipse(QPen,QBrush,FillType,QColor,QColor,BCType,int,int);
-  void insertPie(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+  void insertLine(QRect,QPen,LineEnd,LineEnd,LineType,int,int);
+  void insertRectangle(QRect,QPen,QBrush,RectType,FillType,QColor,QColor,BCType,int,int);
+  void insertCircleOrEllipse(QRect,QPen,QBrush,FillType,QColor,QColor,BCType,int,int);
+  void insertPie(QRect,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
 		 BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy);
-  void insertText(int,int);
+  void insertText(QRect,int,int);
   void insertAutoform(QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,QString,int,int);
   
   // get list of pages and objects

@@ -184,6 +184,12 @@ void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
     }
   setSize(ext.width(),ext.height());
+
+  if (ktextobject.items() > 0)
+    {
+      ktextobject.setFont(ktextobject.itemAt(0)->font());
+      ktextobject.setColor(ktextobject.itemAt(0)->color());
+    }
 }
 
 /*========================= draw =================================*/

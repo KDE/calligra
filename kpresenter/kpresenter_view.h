@@ -17,7 +17,7 @@
 
 class KPresenterView;
 class KPresenterShell;
-class KPresenterDocument;
+class KPresenterDoc;
 class KPresenterChild;
 class BackDia;
 class Page;
@@ -152,6 +152,7 @@ public:
 
   // insert menu
   virtual void insertPage();
+  virtual void insertMouse();
   virtual void insertPicture();
   virtual void insertClipart();
   virtual void insertLine();
@@ -262,7 +263,6 @@ public:
   void changePicture(unsigned int,const char*);
   void changeClipart(unsigned int,QString);
 
-  QPen getPen() {return pen;} 
   void presentParts(float,QPainter*,QRect,int,int);
   void hideParts();
   void showParts();
@@ -289,6 +289,20 @@ public:
   void makeRectVisible(QRect _rect);
 
   void restartPresStructView();
+
+  PieType getPieType() { return pieType; }
+  int getPieAngle() { return pieAngle; }
+  int getPieLength() { return pieLength; }
+  QPen getPen() {return pen;} 
+  QBrush getBrush() {return brush;} 
+  LineEnd getLineBegin() {return lineBegin;} 
+  LineEnd getLineEnd() {return lineEnd;} 
+  QColor getGColor1() {return gColor1;}
+  QColor getGColor2() {return gColor2;}
+  BCType getGType() {return gType;}
+  FillType getFillType() {return fillType;}
+
+  void setTool(ToolEditMode toolEditMode);
 
 public slots:
 
@@ -526,6 +540,7 @@ protected:
 
   // insert toolbar
   OpenPartsUI::ToolBar_var m_vToolBarInsert;
+  CORBA::Long m_idButtonInsert_Mouse;
   CORBA::Long m_idButtonInsert_Picture;
   CORBA::Long m_idButtonInsert_Clipart;
   CORBA::Long m_idButtonInsert_Line;
@@ -628,6 +643,23 @@ protected:
   QSize oldSize;
 
   int screensaver_pid;
+
+  static const int ID_TOOL_MOUSE = 2;
+  static const int ID_TOOL_LINE = 3;
+  static const int ID_TOOL_RECT = 4;
+  static const int ID_TOOL_ELLIPSE = 5;
+  static const int ID_TOOL_TEXT = 6;
+  static const int ID_TOOL_PIE = 7;
+  static const int ID_TOOL_OBJECT = 8;
+  static const int ID_TEXT_COLOR = 9;
+  static const int ID_ALEFT = 10;
+  static const int ID_ACENTER = 11;
+  static const int ID_ARIGHT = 12;
+  static const int ID_BOLD = 13;
+  static const int ID_ITALIC = 14;
+  static const int ID_UNDERLINE = 15;
+  static const int ID_FONT_LIST = 16;
+  static const int ID_FONT_SIZE = 17;
 };
 
 #endif

@@ -74,10 +74,10 @@ KPresenterDoc::KPresenterDoc()
   _orastY = 10;
   _oxRnd = 20;
   _oyRnd = 20;
-  _txtBackCol = white;
-  _txtSelCol = lightGray;
-  _otxtBackCol = white;
-  _otxtSelCol = lightGray;
+  _txtBackCol = lightGray;
+  _txtSelCol = black;
+  _otxtBackCol = lightGray;
+  _otxtSelCol = black;
   _pageLayout.format = PG_SCREEN;
   _pageLayout.orientation = PG_PORTRAIT;
   _pageLayout.width = PG_SCREEN_WIDTH;
@@ -100,6 +100,58 @@ KPresenterDoc::KPresenterDoc()
 
   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
+
+/*====================== constructor =============================*/
+// KPresenterDoc::KPresenterDoc(const CORBA::BOA::ReferenceData &_refdata)
+//   : KPresenter::KPresenterDocument_skel(_refdata), _pixmapCollection(), _gradientCollection(), _commands()
+// {
+//   ADD_INTERFACE("IDL:OPParts/Print:1.0")
+//   // Use CORBA mechanism for deleting views
+//   m_lstViews.setAutoDelete(false);
+//   m_lstChildren.setAutoDelete(true);
+
+//   m_bModified = false;
+
+//   // init
+//   _objectList.setAutoDelete(false);
+//   _backgroundList.setAutoDelete(true);
+//   _spInfinitLoop = false;
+//   _spManualSwitch = true;
+//   _rastX = 20;
+//   _rastY = 20;
+//   _xRnd = 20;
+//   _yRnd = 20;
+//   _orastX = 10;
+//   _orastY = 10;
+//   _oxRnd = 20;
+//   _oyRnd = 20;
+//   _txtBackCol = white;
+//   _txtSelCol = lightGray;
+//   _otxtBackCol = white;
+//   _otxtSelCol = lightGray;
+//   _pageLayout.format = PG_SCREEN;
+//   _pageLayout.orientation = PG_PORTRAIT;
+//   _pageLayout.width = PG_SCREEN_WIDTH;
+//   _pageLayout.height = PG_SCREEN_HEIGHT;
+//   _pageLayout.left = 0;
+//   _pageLayout.right = 0;
+//   _pageLayout.top = 0;
+//   _pageLayout.bottom = 0;
+//   _pageLayout.unit = PG_MM;
+//   _pageLayout.ptWidth = cMM_TO_POINT(PG_SCREEN_WIDTH);
+//   _pageLayout.ptHeight = cMM_TO_POINT(PG_SCREEN_HEIGHT);
+//   _pageLayout.ptLeft = 0;
+//   _pageLayout.ptRight = 0;
+//   _pageLayout.ptTop = 0;
+//   _pageLayout.ptBottom = 0;
+//   setPageLayout(_pageLayout,0,0);
+//   objStartY = 0;
+//   insertNewTemplate(0,0,true);
+//   _presPen = QPen(red,3,SolidLine);
+//   presSpeed = PS_NORMAL;
+
+//   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
+// }
 
 /*====================== destructor ==============================*/
 KPresenterDoc::~KPresenterDoc()
@@ -1428,11 +1480,11 @@ void KPresenterDoc::changeClipart(QString filename,int diffx,int diffy)
 }
 
 /*===================== insert a line ===========================*/
-void KPresenterDoc::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType lt,int diffx,int diffy)
+void KPresenterDoc::insertLine(QRect r,QPen pen,LineEnd lb,LineEnd le,LineType lt,int diffx,int diffy)
 {
   KPLineObject *kplineobject = new KPLineObject(pen,lb,le,lt);
-  kplineobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
-  kplineobject->setSize(150,150);
+  kplineobject->setOrig(r.x() + diffx,r.y() + diffy);
+  kplineobject->setSize(r.width(),r.height());
   kplineobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert line"),kplineobject,this);
@@ -1443,12 +1495,12 @@ void KPresenterDoc::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType lt,int di
 }
 
 /*===================== insert a rectangle =======================*/
-void KPresenterDoc::insertRectangle(QPen pen,QBrush brush,RectType rt,FillType ft,QColor g1,QColor g2,
-					      BCType gt,int diffx,int diffy)
+void KPresenterDoc::insertRectangle(QRect r,QPen pen,QBrush brush,RectType rt,FillType ft,QColor g1,QColor g2,
+				    BCType gt,int diffx,int diffy)
 {
   KPRectObject *kprectobject = new KPRectObject(pen,brush,rt,ft,g1,g2,gt,getRndX(),getRndY());
-  kprectobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
-  kprectobject->setSize(150,150);
+  kprectobject->setOrig(r.x() + diffx,r.y() + diffy);
+  kprectobject->setSize(r.width(),r.height());
   kprectobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert rectangle"),kprectobject,this);
@@ -1459,12 +1511,12 @@ void KPresenterDoc::insertRectangle(QPen pen,QBrush brush,RectType rt,FillType f
 }
 
 /*===================== insert a circle or ellipse ===============*/
-void KPresenterDoc::insertCircleOrEllipse(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
-						    BCType gt,int diffx,int diffy)
+void KPresenterDoc::insertCircleOrEllipse(QRect r,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+					  BCType gt,int diffx,int diffy)
 {
   KPEllipseObject *kpellipseobject = new KPEllipseObject(pen,brush,ft,g1,g2,gt);
-  kpellipseobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
-  kpellipseobject->setSize(150,150);
+  kpellipseobject->setOrig(r.x() + diffx,r.y() + diffy);
+  kpellipseobject->setSize(r.width(),r.height());
   kpellipseobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert ellipse"),kpellipseobject,this);
@@ -1475,12 +1527,12 @@ void KPresenterDoc::insertCircleOrEllipse(QPen pen,QBrush brush,FillType ft,QCol
 }
 
 /*================================================================*/
-void KPresenterDoc::insertPie(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
-					BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy)
+void KPresenterDoc::insertPie(QRect r,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+			      BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy)
 {
   KPPieObject *kppieobject = new KPPieObject(pen,brush,ft,g1,g2,gt,pt,_angle,_len,lb,le);
-  kppieobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
-  kppieobject->setSize(150,150);
+  kppieobject->setOrig(r.x() + diffx,r.y() + diffy);
+  kppieobject->setSize(r.width(),r.height());
   kppieobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert pie/arc/chord"),kppieobject,this);
@@ -1491,11 +1543,11 @@ void KPresenterDoc::insertPie(QPen pen,QBrush brush,FillType ft,QColor g1,QColor
 }
 
 /*===================== insert a textobject =====================*/
-void KPresenterDoc::insertText(int diffx,int diffy)
+void KPresenterDoc::insertText(QRect r,int diffx,int diffy)
 {
   KPTextObject *kptextobject = new KPTextObject();
-  kptextobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
-  kptextobject->setSize(170,150);
+  kptextobject->setOrig(r.x() + diffx,r.y() + diffy);
+  kptextobject->setSize(r.width(),r.height());
   kptextobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert text"),kptextobject,this);

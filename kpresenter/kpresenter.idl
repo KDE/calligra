@@ -23,6 +23,7 @@ module KPresenter
       slot void newView();
       
       slot void insertPage();
+      slot void insertMouse();
       slot void insertPicture();
       slot void insertClipart();
       slot void insertLine();
