@@ -217,6 +217,7 @@ VColor::save( QDomElement& element ) const
 	element.appendChild( me );
 
 	me.setAttribute( "colorSpace", m_colorSpace );
+	me.setAttribute( "opacity", m_opacity );
 
 	if( m_colorSpace == gray )
 		me.setAttribute( "v", m_value[0] );
@@ -245,6 +246,8 @@ VColor::load( const QDomElement& element )
 		default:
 			m_colorSpace = rgb;
 	}
+
+	m_opacity = element.attribute( "opacity", "1.0" ).toFloat();
 
 	if( m_colorSpace == gray )
 		m_value[0] = element.attribute( "v", "0.0" ).toFloat();
