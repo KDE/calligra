@@ -1960,7 +1960,6 @@ void KWView::updateStyleList()
             QCString name = tmp->shortCutName().latin1();
             if ( shortCut.contains(name))
             {
-                kdDebug()<<" shortCut.contains(name) :"<<(shortCut)[name].toString() <<" name !"<<name<<endl;
                 act = new KToggleAction( (*it),
                                          (shortCut)[name], this, SLOT( slotStyleSelected() ),
                                          actionCollection(), name );
