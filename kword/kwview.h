@@ -226,6 +226,7 @@ public slots:
     void tableUngroupTable();
     void tableDelete();
 
+    void slotStyleSelected();
     void textStyleSelected( int );
     void textSizeSelected( int );
     void increaseFontSize();
@@ -434,6 +435,7 @@ private:
     KFontSizeAction *actionFormatFontSize;
     KFontAction *actionFormatFontFamily;
     KSelectAction *actionFormatStyle;
+    KActionMenu *actionFormatStyleMenu;
     KToggleAction *actionFormatBold;
     KToggleAction *actionFormatItalic;
     KToggleAction *actionFormatUnderline;

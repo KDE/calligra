@@ -108,6 +108,10 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
              SLOT( slotAvailableHeightNeeded() ) );
     connect( m_textobj, SIGNAL( afterFormatting( int, KoTextParag*, bool* ) ),
              SLOT( slotAfterFormatting( int, KoTextParag*, bool* ) ) );
+    //connect( m_textobj, SIGNAL( formattingFirstParag() ),
+    //         SLOT( slotFormattingFirstParag() ) );
+    //connect( m_textobj, SIGNAL( chapterParagraphFormatted( KoTextParag * ) ),
+    //         SLOT( slotChapterParagraphFormatted( KoTextParag * ) ) );
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( repaintChanged( KoTextObject* ) ),
@@ -356,11 +360,17 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     for ( ; cit.current() ; ++cit )
     {
         KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
-        if ( var && !var->isDeleted() && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
+        if ( var && !var->isDeleted() )
         {
-            //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
-            //          << " and invalidating parag " << var->paragraph() << endl;
-            var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+            if ( var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
+            {
+                //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
+                //          << " and invalidating parag " << var->paragraph() << endl;
+                var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+            } else if ( var->subtype() == KWPgNumVariable::VST_CURRENT_SECTION )
+            {
+                var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNum() ) );
+            }
             var->resize();
             var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
             var->paragraph()->setChanged( true );
@@ -1346,8 +1356,9 @@ void KWTextFrameSet::printDebug()
         for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
         {
             QPtrListIterator<KWFrame> it( *m_framesInPage[i] );
+            int pgNum = i + m_firstPage;
             for ( ; it.current() ; ++it )
-                kdDebug() << i + m_firstPage << ": " << it.current() << "   " << DEBUGRECT( *it.current() )
+                kdDebug() << "  " << pgNum << ": " << it.current() << "   " << DEBUGRECT( *it.current() )
                           << " internalY=" << it.current()->internalY() << endl;
         }
     }
@@ -1420,7 +1431,7 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
         textDocument()->setLastParag( lastParagraph );
 
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-    kdDebug(32001) << "KWTextFrameSet::load done" << endl;
+    //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
 }
 
 void KWTextFrameSet::zoom( bool forPrint )
@@ -2101,7 +2112,6 @@ KCommand *KWTextFrameSet::setParagLayoutFormatCommand( KoParagLayout *newLayout,
 {
     return m_textobj->setParagLayoutFormatCommand(newLayout, flags, marginIndex);
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 

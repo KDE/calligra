@@ -75,6 +75,7 @@ class KoTextParag;
 #include <qmap.h>
 #include <qptrlist.h>
 #include <qfont.h>
+#include <qvaluevector.h>
 
 /******************************************************************/
 /* Class: KWChild                                              */
@@ -489,10 +490,11 @@ public:
 
     void updateZoomRuler();
 
-
+    // ## rename!
     void hasTOC(bool _b){ m_hasTOC=_b;}
-
     bool isTOC(){return m_hasTOC;}
+
+    QString sectionTitle( int pageNum ) const;
 
     void updateRulerFrameStartEnd();
     void updateFrameStatusBarItem();
@@ -547,6 +549,7 @@ protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
+    void slotChapterParagraphFormatted( KoTextParag* parag );
 
 protected:
     void nextParagraphNeedingCheck();
@@ -649,6 +652,10 @@ private:
     KWBgSpellCheck *m_bgSpellCheck;
     KSpellConfig *m_pKSpellConfig;
     KoStyleCollection *m_styleColl;
+
+    /** Page number -> section title array, for the Section variable.
+     * Note that pages without a section title don't appear in the array. */
+    QValueVector< QString > m_sectionTitles;
 };
 
 

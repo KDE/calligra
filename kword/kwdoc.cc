@@ -48,6 +48,7 @@
 #include "kwtextimage.h"
 #include <kdebug.h>
 
+#include <koparagcounter.h>
 #include <kotextobject.h>
 #include <kspell.h>
 #include <qtimer.h>
@@ -1402,6 +1403,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     //kdDebug(32001) << "KWDocument::loadXML done" << endl;
 
     setModified( false );
+
+    // Connect to notifications from main text-frameset
+    KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
+    if ( frameset )
+        connect( frameset->textObject(), SIGNAL( chapterParagraphFormatted( KoTextParag * ) ),
+                 SLOT( slotChapterParagraphFormatted( KoTextParag * ) ) );
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
 
@@ -2863,6 +2870,9 @@ void KWDocument::printDebug()
         if ( frameset->isVisible() )
             frameset->printDebug();
     }
+
+    for ( uint pgNum = 0 ; pgNum < m_sectionTitles.size() ; ++pgNum )
+        kdDebug() << "Page " << pgNum << "  Section: '" << m_sectionTitles[ pgNum ] << "'"<< endl;
     /*
     kdDebug() << "# Images: " << getImageCollection()->iterator().count() <<endl;
     QDictIterator<KWImage> it( getImageCollection()->iterator() );
@@ -3299,5 +3309,120 @@ KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
         return obj;
     return 0L;
 }
+
+void KWDocument::slotChapterParagraphFormatted( KoTextParag* /*parag*/ )
+{
+    // Attempt at invalidating from the parag's page only
+    // But that's not good enough - if a header gets moved down,
+    // we also need to invalidate the previous page, from where the paragraph disappeared.
+    /*
+      KoPoint p;
+    KWFrame* frame = internalToDocument( parag->rect().topLeft(), p );
+    Q_ASSERT( frame );
+    if ( frame )
+        // Remove any information from this page and further pages.
+        m_sectionTitles.resize( frame->pageNum() );
+    */
+
+    m_sectionTitles.resize( 0 ); // clear up the entire cache
+
+    // Don't store info from parag into m_sectionTitles here.
+    // It breaks when having two headings in the same page
+    // (or if it keeps existing info then it can't update properly)
+}
+
+QString KWDocument::sectionTitle( int pageNum ) const
+{
+    //kdDebug() << "KWDocument::sectionTitle(pageNum=" << pageNum << ") m_sectionTitles.size()=" << m_sectionTitles.size() << endl;
+    // First look in the cache. If info is present, it's uptodate (see slotChapterParagraphFormatted)
+    if ( (int)m_sectionTitles.size() > pageNum )
+    {
+        // Look whether this page has a section title, and if not, go back pages, one by one
+        for ( int i = pageNum; i >= 0 ; --i )
+        {
+            const QString& s = m_sectionTitles[i];
+            if ( !s.isEmpty() )
+            {
+                // Update cache, to make this faster next time
+                if ( pageNum > (int)m_sectionTitles.size()-1 )
+                    const_cast<KWDocument*>(this)->m_sectionTitles.resize( pageNum + 1 );
+                const_cast<KWDocument*>(this)->m_sectionTitles[ pageNum ] = s;
+                return s;
+            }
+        }
+    }
+
+    // If not in the cache, determine from the paragraphs in the page.
+
+    if ( m_lstFrameSet.isEmpty() )
+        return QString::null;
+    // We use the "main" frameset to determine section titles.
+    KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
+    if ( !frameset )
+        return QString::null;
+    QPtrList<KWFrame> frames( framesInPage( pageNum ) );
+    QPtrListIterator<KWFrame> frameIt( frames );
+    // Filter out frames, we want only frames of 'frameset'
+    while( frameIt.current() && frameIt.current()->frameSet() != frameset )
+        ++frameIt;
+
+    if ( !frameIt.current() )
+        return QString::null;
+
+    // Look at all frames in the page, and keep min and max LU positions
+    int topLUpix = frameIt.current()->internalY();
+    int bottomLUpix = topLUpix + ptToLayoutUnitPixY( frameIt.current()->height() );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        if ( frameIt.current()->frameSet() == frameset )
+        {
+            int y = frameIt.current()->internalY();
+            topLUpix = QMIN( topLUpix, y );
+            bottomLUpix = QMAX( bottomLUpix, y + ptToLayoutUnitPixY( frameIt.current()->height() ) );
+        }
+    }
+
+    KoTextParag* parag = frameset->textDocument()->firstParag();
+    //kdDebug() << "KWDocument::sectionTitle " << pageNum
+    //          << " topLUpix=" << topLUpix << " bottomLUpix=" << bottomLUpix << endl;
+
+    for ( ; parag ; parag = parag->next() )
+    {
+        if ( parag->rect().bottom() < topLUpix ) // too early
+            continue;
+        if ( parag->rect().top() > bottomLUpix ) // done
+            break;
+        if ( parag->counter() && parag->counter()->numbering() == KoParagCounter::NUM_CHAPTER
+             && parag->counter()->depth() == 0 )
+        {
+            QString txt = parag->string()->toString();
+            txt = txt.left( txt.length() - 1 ); // remove trailing space
+#ifndef NDEBUG // not needed, just checking
+            KoPoint p;
+            KWFrame* frame = frameset->internalToDocument( parag->rect().topLeft(), p );
+            Q_ASSERT( frame );
+            if ( frame ) {
+                int pgNum = frame->pageNum();
+                if( pgNum != pageNum )
+                    kdWarning() << "sectionTitle: was looking for pageNum " << pageNum << ", got frame " << frame << " page " << pgNum << endl;
+            }
+            //kdDebug() << "KWDocument::sectionTitle " << txt << endl;
+#endif
+            // Ensure array is big enough
+            if ( pageNum > (int)m_sectionTitles.size()-1 )
+                const_cast<KWDocument*>(this)->m_sectionTitles.resize( pageNum + 1 );
+            const_cast<KWDocument*>(this)->m_sectionTitles[ pageNum ] = txt;
+            return txt;
+        }
+    }
+
+    // No heading found in page.
+    // Try going back to previous pages to find one - recursively.
+    if ( pageNum > 0 )
+        return sectionTitle( pageNum - 1 );
+    // First page, no heading found
+    return QString::null;
+}
+
 
 #include "kwdoc.moc"

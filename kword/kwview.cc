@@ -496,16 +496,13 @@ void KWView::setupActions()
     addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
     addVariableActions( VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
     addVariableActions( VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
+    addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
 
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
                                             actionCollection(), "insert_custom" );
-     actionInsertVariable->insert(actionInsertCustom);
+    actionInsertVariable->insert(actionInsertCustom);
 
-    addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
-    /*
-    addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
-    */
-
+    //addVariableActions( VT_CUSTOM, KWCustomVariable::actionTexts(), actionInsertVariable, QString::null );
 
     addVariableActions( VT_MAILMERGE, KoMailMergeVariable::actionTexts(), actionInsertVariable, QString::null );
 
@@ -604,13 +601,14 @@ void KWView::setupActions()
     connect( actionFormatFontFamily, SIGNAL( activated( const QString & ) ),
              this, SLOT( textFontSelected( const QString & ) ) );
 
+    actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ), 0,
+                                           actionCollection(), "format_stylemenu" );
     actionFormatStyle = new KSelectAction( i18n( "St&yle" ), 0,
                                            actionCollection(), "format_style" );
+    // In fact, binding a key to this action will simply re-apply the current style. Why not.
+    //actionFormatStyle->setShortcutConfigurable( false );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
-#if KDE_VERSION >= 305
-    actionFormatStyle->setRemoveAmpersandsInCombo( true );
-#endif
     updateStyleList();
 
     actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
@@ -1604,7 +1602,12 @@ void KWView::showStyle( const QString & styleName )
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
         if ( styleIt.current()->name() == styleName ) {
+            // Select style in combo
             actionFormatStyle->setCurrentItem( pos );
+            // Check the appropriate action among the actionFormatStyleMenu actions
+            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( QString("style_%1").arg(pos).latin1() ));
+            if ( act )
+                act->setChecked( true );
             return;
         }
     }
@@ -1612,13 +1615,24 @@ void KWView::showStyle( const QString & styleName )
 
 void KWView::updateStyleList()
 {
-    // Save current style - we have to assume the auto-accels won't change :}
     QString currentStyle = actionFormatStyle->currentText();
+    // Generate list of styles
     QStringList lst;
     QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
-    for (; styleIt.current(); ++styleIt ) {
-        lst << styleIt.current()->translatedName();
+    int pos = -1;
+    for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
+        QString name = styleIt.current()->translatedName();
+        lst << name;
+        if ( pos == -1 && name == currentStyle )
+            pos = i;
     }
+    // Fill the combo - using a KSelectAction
+    actionFormatStyle->setItems( lst );
+    if ( pos > -1 )
+        actionFormatStyle->setCurrentItem( pos );
+
+    // Fill the menu - using a KActionMenu, so that it's possible to bind keys
+    // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
 #if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
@@ -1626,11 +1640,24 @@ void KWView::updateStyleList()
 #else
     lstWithAccels = lst;
 #endif
-    actionFormatStyle->setItems( lstWithAccels );
-    uint pos = 0;
-    for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++pos )
-        if ( (*it) == currentStyle )
-            actionFormatStyle->setCurrentItem( pos );
+    // Delete previous style actions
+    for ( uint i = 0; ; ++i )
+    {
+        KAction* act = actionCollection()->action( QString("style_%1").arg(i).latin1() );
+        if ( act )
+            actionFormatStyleMenu->remove( act );
+        else
+            break; // no gaps. As soon as style_N doesn't exist, we're done
+    }
+    uint i = 0;
+    for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
+    {
+        KToggleAction* act = new KToggleAction( (*it),
+                                                0, this, SLOT( slotStyleSelected() ),
+                                                actionCollection(), QString("style_%1").arg(i).latin1() );
+        act->setExclusiveGroup( "styleList" );
+        actionFormatStyleMenu->insert( act );
+    }
 }
 
 void KWView::editCut()
@@ -3176,6 +3203,19 @@ void KWView::tableDelete()
     m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
 
+// Called when selecting a style in the Format / Style menu
+void KWView::slotStyleSelected()
+{
+    QString actionName = QString::fromLatin1(sender()->name());
+    if ( actionName.startsWith( "style_" ) )
+    {
+        QString styleStr = actionName.mid(6);
+        kdDebug() << "KWView::slotStyleSelected " << styleStr << endl;
+        textStyleSelected( styleStr.toInt() );
+    }
+}
+
+// Called by the above, and when selecting a style in the style combobox
 void KWView::textStyleSelected( int index )
 {
     if ( m_gui->canvasWidget()->currentFrameSetEdit() )
@@ -4252,6 +4292,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatFontSize->setEnabled( rw );
     actionFormatFontFamily->setEnabled( rw );
     actionFormatStyle->setEnabled( rw );
+    actionFormatStyleMenu->setEnabled( rw );
     actionFormatBold->setEnabled( rw );
     actionFormatItalic->setEnabled( rw );
     actionFormatUnderline->setEnabled( rw );
