@@ -5,7 +5,7 @@ dnl
 dnl  Original author Mike Gleason mgleason@NcFTP.com
 dnl
 dnl
-AC_DEFUN(kexi_LIB_READLINE, [
+AC_DEFUN([kexi_LIB_READLINE], [
 AC_MSG_CHECKING([for GNU Readline library])
 
 kexi_cv_lib_readline=no
