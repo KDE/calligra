@@ -780,8 +780,7 @@ don't put a </?xml...> at the end of the file!).
                 The text that is printed right of the last numeral
                 A usual value for this one is "." (dot).
 
-        bullet  The character code (in UTF-8) that is the custom bullet (for type=6)
-                (TODO/FIXME: it is not in UTF-8, it is the unicode value (no, not as character reference))
+        bullet  The unicode character code that is the custom bullet (for type=6)
         bulletfont
                 The font to use for the custom bullet can be found in (use "symbol" if in doubt)
         customdef
