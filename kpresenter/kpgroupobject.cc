@@ -150,10 +150,10 @@ bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoSavingContext& context, 
 }
 
 
-void KPGroupObject::loadOasisGroupObject( KPresenterDoc *_doc, int pos, KPrPage * newpage, QDomNode &element, KoOasisContext & context, QDomElement *animation)
+void KPGroupObject::loadOasisGroupObject( KPresenterDoc *_doc, int pos, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     //in oasis format we don't save pos.
-    //KPObject::loadOasis( element, context, animation );
+    //KPObject::loadOasis( element, context, info );
     updateObjs = false;
     _doc->loadOasisObject( pos, newpage,element, context, this);
     QPtrListIterator<KPObject> it( objects );

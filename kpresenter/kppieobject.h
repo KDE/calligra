@@ -83,7 +83,7 @@ public:
 
     virtual double load(const QDomElement &element);
     virtual void flip(bool horizontal );
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
 
     virtual KoSize getRealSize() const;
     virtual KoPoint getRealOrig() const;

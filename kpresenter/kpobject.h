@@ -38,6 +38,7 @@
 #include <koOasisStyles.h>
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
+#include "kprloadinginfo.h"
 
 class KoSavingContext;
 class QPainter;
@@ -128,7 +129,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info);
 
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext &context, int indexObj ) =0;
 
@@ -362,7 +363,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );
     virtual void saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto );
@@ -433,7 +434,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
 
     virtual void flip(bool horizontal );
 

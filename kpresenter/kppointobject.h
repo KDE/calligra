@@ -38,7 +38,7 @@ public:
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context );
 
     virtual double load( const QDomElement &element );
-    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, QDomElement *animation );
+    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info );
 
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }

@@ -85,10 +85,10 @@ bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, 
 }
 
 
-void KPRectObject::loadOasis(const QDomElement &element, KoOasisContext&context, QDomElement *animation)
+void KPRectObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KPRectObject::loadOasis(const QDomElement &element)******************\n";
-    KP2DObject::loadOasis(element, context, animation);
+    KP2DObject::loadOasis(element, context, info);
     //I don't think that RNDS exist into openoffice
     if ( element.hasAttribute( "draw:corner-radius" ) )
     {

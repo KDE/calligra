@@ -481,7 +481,7 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
     return true;
 }
 
-void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     if(element.hasAttribute( "draw:name" ))
        objectName = element.attribute("draw:name");
@@ -497,10 +497,10 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
             kdDebug()<<" transform action :"<<transform<<endl;
             if( transform.contains("rotate ("))
                 {
-                    kdDebug()<<" rotate object \n";
+                    //kdDebug()<<" rotate object \n";
                     transform = transform.remove("rotate (" );
                     transform = transform.left(transform.find(")"));
-                    kdDebug()<<" transform :"<<transform<<endl;
+                    //kdDebug()<<" transform :"<<transform<<endl;
                     bool ok;
                     double radian = transform.toDouble(&ok);
                     if( ok )
@@ -511,6 +511,9 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
                         angle = 0.0;
                 }
         }
+    QDomElement *animation = 0L;
+    if( element.hasAttribute("draw:id"))
+        animation = info->animationShowById(element.attribute("draw:id"));
 
     if( animation)
     {
@@ -588,10 +591,13 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
                 e.appendChild(pseElem);
             }
         }
-
 #endif
     }
-#if 0 //hide object
+
+    animation = 0L;
+    if( element.hasAttribute("draw:id"))
+        animation = info->animationHideById(element.attribute("draw:id"));
+
     if( animation)
     {
         kdDebug()<<" load animation style **************************************\n";
@@ -603,39 +609,41 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
             if (dir=="from-right")
                 effect3 = EF3_WIPE_RIGHT;
             else if (dir=="from-left")
-                effect = EF3_WIPE_LEFT;
+                effect3 = EF3_WIPE_LEFT;
             else if (dir=="from-top")
-                effect=  EF3_WIPE_TOP;
+                effect3 =  EF3_WIPE_TOP;
             else if (dir=="from-bottom")
-                effect = EF3_WIPE_BOTTOM;
+                effect3 = EF3_WIPE_BOTTOM;
             else
                 kdDebug()<<" not supported :"<<effectStr<<endl;
         }
         else if (effectStr=="move")
         {
             if (dir=="from-right")
-                effect = EF_GO_RIGHT;
+                effect3 = EF3_GO_RIGHT;
             else if (dir=="from-left")
-                effect = EF_GO_LEFT;
+                effect3 = EF3_GO_LEFT;
             else if (dir=="from-top")
-                effect = EF_GO_TOP;
+                effect3 = EF3_GO_TOP;
             else if (dir=="from-bottom")
-                effect = EF_GO_BOTTOM;
+                effect3 = EF3_GO_BOTTOM;
             else if (dir=="from-upper-right")
-                effect = EF_GO_RIGHT_TOP;
+                effect3 = EF3_GO_RIGHT_TOP;
             else if (dir=="from-lower-right")
-                effect = EF_GO_RIGHT_BOTTOM;
+                effect3 = EF3_GO_RIGHT_BOTTOM;
             else if (dir=="from-upper-left")
-                effect = EF_GO_LEFT_TOP;
+                effect3 = EF3_GO_LEFT_TOP;
             else if (dir=="from-lower-left")
-                effect = EF_GO_LEFT_BOTTOM;
+                effect3 = EF3_GO_LEFT_BOTTOM;
             else
                 kdDebug ()<<" not supported :"<<effectStr<<endl;
         }
         else
             kdDebug()<<" not supported :"<<effectStr<<endl;
+        //FIXME allow to save/load this attribute
+        if ( effect3 != EF3_NONE )
+            disappear = true;
     }
-#endif
     //shadow
 #if 0 //move it to kptextobject
     if ( !element.hasAttribute( "type" ) ||
@@ -1473,10 +1481,10 @@ QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles )
     //    <draw:stroke-dash draw:name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
 }
 
-void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
-    KPObject::loadOasis(element, context, animation);
+    KPObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:stroke", QString::null,"graphic" ))
     {
@@ -1883,11 +1891,11 @@ QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles )
 }
 
 
-void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
 
-    KPShadowObject::loadOasis(element, context, animation);
+    KPShadowObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     if ( styleStack.hasAttribute( "draw:fill", QString::null, "graphic" ) )
     {

@@ -1246,18 +1246,18 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
     {
         QDomElement o = object.toElement();
         QString name = o.tagName();
-        QDomElement * animationShow = 0L;
         kdDebug()<<" name :"<<name<<endl;
+#if 0
         if( o.hasAttribute("draw:id"))
             animationShow = m_loadingInfo->animationShowById(o.attribute("draw:id"));
-
+#endif
         context.styleStack().save();
 
         if ( name == "draw:text-box" ) // textbox
         {
             fillStyleStack( o, context );
              KPTextObject *kptextobject = new KPTextObject( this );
-            kptextobject->loadOasis(o, context, animationShow);
+            kptextobject->loadOasis(o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kptextobject );
             else
@@ -1267,7 +1267,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         {
             fillStyleStack( o, context );
             KPRectObject *kprectobject = new KPRectObject();
-            kprectobject->loadOasis(o, context , animationShow);
+            kprectobject->loadOasis(o, context , m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kprectobject );
             else
@@ -1279,7 +1279,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
             {
                 KPPieObject *kppieobject = new KPPieObject();
-                kppieobject->loadOasis(o, context, animationShow);
+                kppieobject->loadOasis(o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kppieobject );
                 else
@@ -1288,7 +1288,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             else  // circle or ellipse
             {
                 KPEllipseObject *kpellipseobject = new KPEllipseObject();
-                kpellipseobject->loadOasis(o,context, animationShow);
+                kpellipseobject->loadOasis(o,context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kpellipseobject );
                 else
@@ -1299,13 +1299,13 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         {
             fillStyleStack( o, context );
             KPLineObject *kplineobject = new KPLineObject();
-            kplineobject->loadOasis(o, context, animationShow);
+            kplineobject->loadOasis(o, context, m_loadingInfo);
             newpage->appendObject(kplineobject);
         }
         else if (name=="draw:polyline") { // polyline
             fillStyleStack( o, context );
             KPPolylineObject *kppolylineobject = new KPPolylineObject();
-            kppolylineobject->loadOasis(o, context, animationShow);
+            kppolylineobject->loadOasis(o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kppolylineobject );
             else
@@ -1314,7 +1314,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         else if (name=="draw:polygon") { // polygon
             fillStyleStack( o, context );
             KPPolygonObject *kpPolygonObject = new KPPolygonObject();
-            kpPolygonObject->loadOasis( o, context, animationShow);
+            kpPolygonObject->loadOasis( o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kpPolygonObject );
             else
@@ -1324,7 +1324,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         {
             fillStyleStack( o, context );
             KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
-            kppixmapobject->loadOasis( o, context, animationShow);
+            kppixmapobject->loadOasis( o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kppixmapobject );
             else
@@ -1350,7 +1350,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             {
                 kdDebug()<<"Cubicbeziercurve \n";
                 KPCubicBezierCurveObject *kpCurveObject = new KPCubicBezierCurveObject();
-                kpCurveObject->loadOasis( o, context, animationShow);
+                kpCurveObject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kpCurveObject );
                 else
@@ -1361,7 +1361,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             {
                 kdDebug()<<"Quadricbeziercurve \n";
                 KPQuadricBezierCurveObject *kpQuadricObject = new KPQuadricBezierCurveObject();
-                kpQuadricObject->loadOasis( o, context, animationShow);
+                kpQuadricObject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kpQuadricObject );
                 else
@@ -1371,7 +1371,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             {
                 kdDebug()<<"KPFreehandObject \n";
                 KPFreehandObject *kpFreeHandObject = new KPFreehandObject();
-                kpFreeHandObject->loadOasis( o, context, animationShow);
+                kpFreeHandObject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kpFreeHandObject );
                 else
@@ -1384,7 +1384,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
             KPGroupObject *kpgroupobject = new KPGroupObject();
             QDomNode nodegroup = object.firstChild();
 
-            kpgroupobject->loadOasisGroupObject( this, pos, newpage, object, context, animationShow);
+            kpgroupobject->loadOasisGroupObject( this, pos, newpage, object, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kpgroupobject );
             else

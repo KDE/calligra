@@ -69,7 +69,7 @@ bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContex
     return true;
 }
 
-void KPCubicBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  QDomElement *animation )
+void KPCubicBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo* info )
 {
     //todo
     //we use draw:path

@@ -84,8 +84,8 @@ bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& conte
 }
 
 
-void KPPolylineObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+void KPPolylineObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KPPolylineObject::loadOasis(const QDomElement &element)************\n";
-    KPPointObject::loadOasis( element,context, animation );
+    KPPointObject::loadOasis( element,context, info );
 }

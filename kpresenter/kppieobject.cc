@@ -117,10 +117,10 @@ bool KPPieObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, i
 }
 
 
-void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     kdDebug()<<"void KPPieObject::loadOasis(const QDomElement &element) ***************\n";
-    KP2DObject::loadOasis(element, context, animation);
+    KP2DObject::loadOasis(element, context, info);
     QString kind = element.attribute( "draw:kind" );
     if ( kind == "section" )
         pieType = PT_PIE;

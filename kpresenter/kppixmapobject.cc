@@ -181,9 +181,9 @@ bool KPPixmapObject::saveOasisImage( KoXmlWriter &xmlWriter, KoGenStyles& mainSt
 }
 
 
-void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
+void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
-    KP2DObject::loadOasis( element, context, animation );
+    KP2DObject::loadOasis( element, context, info );
     const QString href( element.attribute("xlink:href") );
     kdDebug()<<" href: "<<href<<endl;
     if ( !href.isEmpty() && href[0] == '#' )

@@ -238,9 +238,9 @@ void KPTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto )
 }
 
 void KPTextObject::loadOasis(const QDomElement &element, KoOasisContext& context,
-                             QDomElement *animation )
+                             KPRLoadingInfo *info )
 {
-    KP2DObject::loadOasis(element, context, animation);
+    KP2DObject::loadOasis(element, context, info);
     //todo other attribute
     KoStyleStack &styleStack = context.styleStack();
     if( styleStack.hasAttribute( "fo:padding-top", QString::null,"graphic" ) )
