@@ -4131,11 +4131,5 @@
     <superscript super="rd" find="3rd" />
     <superscript super="th" find="othernb" />
   </SuperScript>
-  <DoubleQuote>
-    <doublequote begin="
-  </DoubleQuote>
-  <SimpleQuote>
-    <simplequote begin="
-  </SimpleQuote>
 </Word>
 
