@@ -3,6 +3,9 @@ Changes after KWord 1.3 rc (1.2.94)
 - Fixed crash in table operations (#66349)
 - Fixed crash in table iterator
 - Fixed "edit frameset" for tables in doc structure panel (#67084)
+- Save "no underline" explicitely if the paraglayout says "underline" but the
+  user removed the underline (#67735)
+- Fixed successive image DnD
 
 Changes after KWord 1.3 beta4
 =============================
