@@ -777,13 +777,13 @@ KWFramePartInternalCommand::KWFramePartInternalCommand( const QString &name, KWP
 
 void KWFramePartInternalCommand::execute()
 {
-    m_part->getChild()->document()->setStoreInternal(true);    
+    m_part->getChild()->document()->setStoreInternal(true);
 }
 
 void KWFramePartInternalCommand::unexecute()
 {
-    m_part->getChild()->document()->setStoreInternal(false);    
-    m_part->getChild()->document()->setURL( m_url );    
+    m_part->getChild()->document()->setStoreInternal(false);
+    m_part->getChild()->document()->setURL( m_url );
 }
 
 
@@ -795,12 +795,12 @@ KWFramePartExternalCommand::KWFramePartExternalCommand( const QString &name, KWP
 
 void KWFramePartExternalCommand::execute()
 {
-    m_part->getChild()->document()->setStoreInternal(false);    
+    m_part->getChild()->document()->setStoreInternal(false);
 }
 
 void KWFramePartExternalCommand::unexecute()
 {
-    m_part->getChild()->document()->setStoreInternal(true);    
+    m_part->getChild()->document()->setStoreInternal(true);
 }
 
 
@@ -1168,6 +1168,7 @@ void KWDeleteTableCommand::execute()
     kdDebug() << "KWDeleteTableCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->removeFrameSet(m_pTable);
+    m_pTable->setVisible( false );
     doc->refreshDocStructure((int)Tables);
     doc->updateAllFrames();
     doc->layout();
@@ -1180,6 +1181,7 @@ void KWDeleteTableCommand::unexecute()
 {
     kdDebug() << "KWDeleteTableCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
+    m_pTable->setVisible( true );
     doc->addFrameSet(m_pTable);
     doc->refreshDocStructure((int)Tables);
     doc->updateAllFrames();

@@ -291,6 +291,7 @@ public:
     virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
     virtual KWAnchor * createAnchor( KoTextDocument *txt, int frameNum );
 
+    virtual void setVisible( bool v );
     virtual bool canRemovePage( int num );
 
     void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );

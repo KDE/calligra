@@ -1343,7 +1343,7 @@ MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
 {
     bool canMove = isMoveable();
     KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-    MouseMeaning defaultCursor = ( canMove && !isFloating() ) ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
+    MouseMeaning defaultCursor = canMove ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
     // See if we're over a frame border
     KWFrame * frame = frameByBorder( nPoint );
     if ( frame )
@@ -1473,8 +1473,10 @@ bool KWFrameSet::isVisible( KWViewMode* viewMode ) const
         return false;
     if ( isAFooter() && !m_doc->isFooterVisible() )
         return false;
-    if (viewMode && !viewMode->isFrameSetVisible(this))
+    if ( viewMode && !viewMode->isFrameSetVisible(this) )
         return false;
+    if ( isFloating() && !anchorFrameset()->isVisible( viewMode ) )
+         return false;
 
     KoHFType ht = m_doc->getHeaderType();
     KoHFType ft = m_doc->getFooterType();

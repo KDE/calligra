@@ -1970,6 +1970,14 @@ void KWTableFrameSet::finalize( ) {
     KWFrameSet::finalize();
 }
 
+void KWTableFrameSet::setVisible( bool v )
+{
+    for(QPtrListIterator<Cell> cellIter(m_cells); cellIter.current(); ++cellIter) {
+        cellIter.current()->setVisible( v );
+    }
+    KWFrameSet::setVisible( v );
+}
+
 bool KWTableFrameSet::canRemovePage( int num ) {
     /*  This one is a lot simpler then the one it overrides, we simply don't have
         to check if the frame contains something, the simple existence of a frame
