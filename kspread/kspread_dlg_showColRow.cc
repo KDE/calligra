@@ -94,7 +94,7 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   resize( 200, 150 );
-
+  setFocus();
 }
 
 void KSpreadShowColRow::slotDoubleClicked(QListBoxItem *)

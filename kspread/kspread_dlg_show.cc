@@ -53,7 +53,7 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   resize( 200, 150 );
-
+  setFocus();
 }
 
 void KSpreadshow::slotDoubleClicked(QListBoxItem *)
