@@ -1673,6 +1673,8 @@ void KWCanvas::copySelectedFrames()
                     }
                 }
                 foundOne = true;
+                if ( isTable ) // Copy tables only once, even if they have many cells selected
+                    break;
             }
         }
     }
