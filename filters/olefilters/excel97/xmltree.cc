@@ -284,7 +284,9 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 
     int angle = xfs[xf]->align >> 8;
     format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
-
+    int indent = xfs[xf]->indent & 0x0f;
+    if( indent !=0)
+      format.setAttribute("indent", (indent*10));
     if ((xfs[xf]->align >> 3) & 0x01 == 1)
         format.setAttribute("multirow", "yes");
 
@@ -1038,24 +1040,24 @@ bool XMLTree::_font(Q_UINT16, QDataStream& body)
 
 bool XMLTree::_footer(Q_UINT16, QDataStream& body)
 {
-    if (footerCount++ == 0)
-    {
+if (footerCount++ == 0)
+  {
         Q_UINT8 cch;
 
         body >> cch;
         if (!cch) return true;
         char *name = new char[cch];
         body.readRawBytes(name, cch);
-
+	
         QString s = QString::fromLatin1(name, cch);
-
+	
         QDomElement e = root->createElement("foot");
         QDomElement text = root->createElement("center");
         text.appendChild(root->createTextNode(s));
         e.appendChild(text);
         paper.appendChild(e);
         delete []name;
-    }
+	}
     return true;
 }
 
