@@ -718,6 +718,8 @@ public:
     bool isFloating() const { return m_anchorTextFs; }
     /// Return the frameset in which our anchor is - assuming isFloating()
     KWTextFrameSet * anchorFrameset() const { return m_anchorTextFs; }
+    /// Sets the frameset in which we are about to become inline. Used for OASIS loading.
+    void setAnchorFrameset(KWTextFrameSet * textfs) { m_anchorTextFs = textfs; }
     /// Return the anchor object for this frame number
     KWAnchor * findAnchor( int frameNum );
     /// Tell this frame the format of it's anchor

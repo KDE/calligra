@@ -2295,9 +2295,9 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent )
     }
 #else
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles );
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Flat );
 
-    // Save user styles as KoGenStyle objects ######### needed?
+    // Save user styles as KoGenStyle objects - useful when pasting to another document
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
     KoSavingContext::StyleNameMap map = doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
     savingContext.setStyleNameMap( map );

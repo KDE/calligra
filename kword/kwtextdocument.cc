@@ -24,6 +24,7 @@
 #include "kwtextparag.h"
 #include "kwloadinginfo.h"
 #include "kwvariable.h"
+#include "kwanchor.h"
 
 #include <kooasiscontext.h>
 
@@ -218,7 +219,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                     context.fillStyleStack( spanElem, "text:style-name" );
                     text = spanElem.text();
                 }
-                textData = '#'; // hyperlink placeholder
+                textData = KoTextObject::customItemChar(); // hyperlink placeholder
                 // unused tag.attribute( "office:name" )
                 KoVariableCollection& coll = context.variableCollection();
                 customItem = new KoLinkVariable( this, text, href,
@@ -260,7 +261,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
         }
         else if ( tagName == "text:footnote" || tagName == "text:endnote" )
         {
-            textData = '#'; // anchor placeholder
+            textData = KoTextObject::customItemChar(); // anchor placeholder
             loadOasisFootnote( tag, context, customItem );
             return true;
         }
@@ -276,8 +277,16 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 // Hmm, if this is a continuation frame of a non-inline frameset,
                 // it's going to inline the whole frameset...
                 // ###### In fact this shows we should inline frames, not framesets, in KWord (!!!!) (big TODO)
-                fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
+                textData = KoTextObject::customItemChar();
+                fs->setAnchorFrameset( m_textfs );
+                customItem = fs->createAnchor( m_textfs->textDocument(), 0 /*frame number; TODO somehow*/ );
+
+                // bad way: doing it all by hand. Doesn't work, pos is no reference(!)
+                //parag->insert( index, KoTextObject::customItemChar() );
+                //fs->setAnchored( m_textfs, parag, pos, false /*no placeholder yet*/, false /*don't repaint yet*/ );
+                //++pos;
             }
+            return true;
         }
     }
     return false;

@@ -3257,9 +3257,9 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
     const QCString cstr = domDoc.toCString();
 #else // oasis format
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles );
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Flat );
 
-    // Save user styles as KoGenStyle objects ######### needed?
+    // Save user styles as KoGenStyle objects - useful when pasting into another document
     KWDocument * doc = frameSet()->kWordDocument();
     KoSavingContext::StyleNameMap map = doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
     savingContext.setStyleNameMap( map );

@@ -1632,8 +1632,9 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
         {
             KoTextParag* parag = m_lastFormatted;
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug(32500) << "formatMore formatting id=" << parag->paragId() << endl;
+            kdDebug(32500) << "formatMore formatting " << parag << " id=" << parag->paragId() << endl;
 #endif
+            assert( parag->string() ); // i.e. not deleted
             parag->format();
             bottom = parag->rect().top() + parag->rect().height();
 #if 0 //def DEBUG_FORMAT_MORE

@@ -1031,7 +1031,6 @@ void KWFrameSet::setFloating()
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */, bool repaint )
 {
-    kdDebug(32001) << "KWFrameSet::setAnchored " << textfs << " " << paragId << " " << index << " " << placeHolderExists << endl;
     KWTextParag * parag = static_cast<KWTextParag *>( textfs->textDocument()->paragAt( paragId ) );
     Q_ASSERT( parag );
     if ( parag )
@@ -1040,6 +1039,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bo
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KoTextParag* parag, int index, bool placeHolderExists /* = false */, bool repaint )
 {
+    kdDebug(32001) << "KWFrameSet::setAnchored " << textfs << " " << parag->paragId() << " " << index << " " << placeHolderExists << endl;
     Q_ASSERT( textfs );
     Q_ASSERT( parag );
     if ( isFloating() )
@@ -2226,7 +2226,13 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context
     writer.addAttribute( "xlink:type", "simple" );
     writer.addAttribute( "xlink:show", "embed" );
     writer.addAttribute( "xlink:actuate", "onLoad" );
-    writer.addAttribute( "xlink:href", "#"+ m_doc->pictureCollection()->getOasisFileName(m_picture) );
+    if ( context.savingMode() == KoSavingContext::Store )
+        writer.addAttribute( "xlink:href", "#"+ m_doc->pictureCollection()->getOasisFileName(m_picture) );
+    else {
+        writer.startElement( "office:binary-data" );
+        m_picture.saveAsBase64( writer );
+        writer.endElement();
+    }
     writer.endElement();
 
     writer.endElement(); // draw:frame
@@ -2235,34 +2241,48 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context
 
 void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& tag, KoOasisContext& context )
 {
-    const QString href( tag.attribute("xlink:href") );
-    if ( !href.isEmpty() && href[0] == '#' )
+    kdDebug() << k_funcinfo << endl;
+    KoPictureKey key;
+    QDomNode binaryData = tag.namedItem( "office:binary-data" );
+    if ( !binaryData.isNull() )
     {
-        QString strExtension;
-        const int result=href.findRev(".");
-        if (result>=0)
-        {
-            strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
-        }
-        QString filename(href.mid(1));
-        const KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
+        QCString data = binaryData.toElement().text().latin1();
+        m_picture.loadFromBase64( data );
+        key = KoPictureKey("nofile", QDateTime::currentDateTime(Qt::UTC));
         m_picture.setKey(key);
-
-        KoStore* store = context.store();
-        if ( store->open( filename ) )
-        {
-            KoStoreDevice dev(store);
-            if ( !m_picture.load( &dev, strExtension ) )
-                kdWarning(30518) << "Cannot load picture: " << filename << " " << href << endl;
-            store->close();
-        }
-        m_doc->pictureCollection()->insertPicture( key, m_picture );
-
-        context.styleStack().save();
-        context.fillStyleStack( frame, "draw:style-name" ); // get the style for the graphics element
-        loadOasisFrame( frame, context );
-        context.styleStack().restore();
     }
+    else
+    {
+        const QString href( tag.attribute("xlink:href") );
+        if ( !href.isEmpty() && href[0] == '#' )
+        {
+            QString strExtension;
+            const int result=href.findRev(".");
+            if (result>=0)
+            {
+                strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
+            }
+            QString filename(href.mid(1));
+            key = KoPictureKey(filename, QDateTime::currentDateTime(Qt::UTC));
+            m_picture.setKey(key);
+
+            KoStore* store = context.store();
+            assert( store );
+            if ( store->open( filename ) )
+            {
+                KoStoreDevice dev(store);
+                if ( !m_picture.load( &dev, strExtension ) )
+                    kdWarning(30518) << "Cannot load picture: " << filename << " " << href << endl;
+                store->close();
+            }
+        }
+    }
+
+    m_doc->pictureCollection()->insertPicture( key, m_picture );
+    context.styleStack().save();
+    context.fillStyleStack( frame, "draw:style-name" ); // get the style for the graphics element
+    loadOasisFrame( frame, context );
+    context.styleStack().restore();
 }
 
 void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,

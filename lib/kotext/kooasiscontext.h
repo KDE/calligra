@@ -106,9 +106,17 @@ private:
 class KoSavingContext
 {
 public:
-    KoSavingContext( KoGenStyles& mainStyles );
+    enum SavingMode { Store, Flat };
+
+    /// Constructor
+    /// @param mainStyles
+    /// @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
+    KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode );
 
     KoGenStyles& mainStyles() { return m_mainStyles; }
+
+    /// @return the saving mode: Store (a KoStore will be used) or Flat (all data must be inline in the XML)
+    SavingMode savingMode() const { return m_savingMode; }
 
     typedef QMap<KoParagStyle*, QString> StyleNameMap;
 
@@ -127,6 +135,7 @@ public:
 private:
     KoGenStyles& m_mainStyles;
     StyleNameMap m_styleNameMap;
+    SavingMode m_savingMode;
 
     class Private;
     Private *d;

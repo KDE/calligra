@@ -1892,6 +1892,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         if ( ch.isCustom() ) {
             KoTextCustomItem* customItem = ch.customItem();
             customItem->saveOasis( writer, context );
+            startPos = i + 1;
         }
     }
 

@@ -107,8 +107,8 @@ KoOasisContext::~KoOasisContext()
 
 ////
 
-KoSavingContext::KoSavingContext( KoGenStyles& mainStyles )
-    : m_mainStyles( mainStyles )
+KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode )
+    : m_mainStyles( mainStyles ),
+      m_savingMode( savingMode )
 {
-
 }

@@ -936,7 +936,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     recalcVariables( VT_TIME );
 
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles );
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
     KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );

@@ -2595,7 +2595,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     m_syntaxVersion = CURRENT_SYNTAX_VERSION; // todo clean this up
 
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles );
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
     KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );

@@ -573,10 +573,13 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
 
     m_format.save( gs );
 
-    if ( m_name.isEmpty() )
-        return genStyles.lookup( gs, "U", true );
-    else // try to preserve existing internal name
+    // try to preserve existing internal name, if it looks adequate (no spaces)
+    // ## TODO: check XML-Schemacs NCName conformity
+    bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
+    if ( nameIsConform )
         return genStyles.lookup( gs, m_name, false );
+    else
+        return genStyles.lookup( gs, "U", true );
 }
 
 const KoParagLayout & KoParagStyle::paragLayout() const

@@ -1566,6 +1566,7 @@ KoTextParag::~KoTextParag()
 {
     //kdDebug(32500) << "KoTextParag::~KoTextParag " << this << " id=" << paragId() << endl;
     delete str;
+    str = 0;
 //    if ( doc && p == doc->minwParag ) {
 //	doc->minwParag = 0;
 //	doc->minw = 0;
