@@ -55,11 +55,9 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		 */
 		IndexSchema(TableSchema *tableSchema);
 
-//		/*! Constructs empty index schema object 
-//		 that is assigned to \a table.
-//		 Any fields added with addField() won't be owned by index.  */
-//		IndexSchema(TableSchema *table);
-		
+		/*! Copy constructor. */
+		IndexSchema(const IndexSchema& idx);
+
 		/*! Destroys the index. Field objects are not deleted.
 		 All Reference objects listed in referencesFrom() list 
 		 are destroyed (these are also detached from 

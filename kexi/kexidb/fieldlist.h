@@ -43,7 +43,10 @@ class KEXI_DB_EXPORT FieldList
 		 \sa isOwner()
 		*/
 		FieldList(bool owner = false);
-		
+
+		/*! Copy constructor. */
+		FieldList(const FieldList& fl);
+
 		/*! Destroys the list. If the list owns fields (see constructor),
 		 these are also deleted. */
 		virtual ~FieldList();

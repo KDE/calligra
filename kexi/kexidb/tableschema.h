@@ -50,6 +50,10 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		TableSchema(const QString & name);
 		TableSchema();
+
+		/*! Copy constructor. */
+		TableSchema(const TableSchema& ts);
+		
 		virtual ~TableSchema();
 //		QStringList primaryKeys() const;
 //		bool hasPrimaryKeys() const;

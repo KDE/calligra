@@ -91,6 +91,22 @@ Field::Field(const QString& name, Type ctype,
 	}
 }
 
+/*! Copy constructor. */
+Field::Field(const Field& f)
+{
+	(*this) = f;
+	if (f.m_expr) {//deep copy the expresion
+		m_expr = new Expression(*f.m_expr);
+		m_expr->m_field = this;
+	} else
+		m_expr = 0;
+}
+
+Field::~Field()
+{
+	delete m_expr;
+}
+
 QVariant::Type Field::variantType(uint type)
 {
 	switch(type)
@@ -123,12 +139,6 @@ QVariant::Type Field::variantType(uint type)
 
 	return QVariant::Invalid;
 }
-
-
-Field::~Field() {
-	delete m_expr;
-}
-
 
 QString Field::typeName(uint type)
 {

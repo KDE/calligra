@@ -141,6 +141,9 @@ class KEXI_DB_EXPORT Field
 			const QString& caption = QString::null, const QString& helpText = QString::null,
 			uint width = 0);
 
+		/*! Copy constructor. */
+		Field(const Field& f);
+
 		virtual ~Field();
 
 		//! Converts field \a type to QVariant equivalent as accurate as possible
@@ -366,6 +369,7 @@ class KEXI_DB_EXPORT Field
 
 
 	friend class Connection;
+	friend class FieldList;
 	friend class TableSchema;
 	friend class QuerySchema;
 };

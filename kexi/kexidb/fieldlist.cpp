@@ -27,12 +27,27 @@
 using namespace KexiDB;
 
 FieldList::FieldList(bool owner)
+ //reasonable sizes: TODO
+ : m_fields_by_name(101)
 {
 	m_fields.setAutoDelete( owner );
 	m_fields_by_name.setAutoDelete( false );
-	//reasonable sizes: TODO
-	m_fields_by_name.resize(101);
 	m_autoinc_fields = 0;
+}
+
+FieldList::FieldList(const FieldList& fl)
+ : m_fields_by_name( fl.m_fields_by_name.size() )
+{
+	m_fields.setAutoDelete( fl.m_fields.autoDelete() );
+	m_fields_by_name.setAutoDelete( false );
+	m_autoinc_fields = 0;
+
+	//deep copy for the fields
+	for (Field::ListIterator f_it(fl.m_fields); f_it.current(); ++f_it) {
+		Field *f = new Field( *f_it.current() );
+		f->m_parent = this;
+		addField( f );
+	}
 }
 
 FieldList::~FieldList()

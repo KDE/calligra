@@ -53,7 +53,30 @@ TableSchema::TableSchema()
 	m_indices.append(m_pkey);
 }
 
-// used by Conenction
+TableSchema::TableSchema(const TableSchema& ts)
+	: FieldList(static_cast<const FieldList&>(ts))
+	, SchemaData(static_cast<const SchemaData&>(ts))
+	, m_conn( ts.m_conn )
+	, m_query(0) //not cached
+	, m_isKexiDBSystem(false)
+{
+	m_name = ts.m_name;
+	m_indices.setAutoDelete( true );
+	m_pkey = 0; //will be copied
+
+	//deep copy all members
+	IndexSchema::ListIterator idx_it(ts.m_indices);
+	for (;idx_it.current();++idx_it) {
+		IndexSchema *idx = new IndexSchema(*idx_it.current());
+		idx->m_tableSchema = this;
+		if (idx->isPrimaryKey()) {//assign pkey
+			m_pkey = idx;
+		}
+		m_indices.append(idx);
+	}
+}
+
+// used by Connection
 TableSchema::TableSchema(Connection *conn, const QString & name)
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
