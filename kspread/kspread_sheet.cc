@@ -5515,7 +5515,7 @@ struct GetWordSpellingWorker : public KSpreadSheet::CellWorker {
     void doWork( KSpreadCell* c, bool cellRegion, int, int ) {
 	if ( !c->isObscured() || cellRegion /* ### ??? */ ) {
 	    if ( !c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty() && !c->isTime()
-		 && !c->isDate() 
+		 && !c->isDate()
 		 && !c->text().isEmpty())
 	    {
 		listWord+=c->text()+'\n';
@@ -7685,7 +7685,7 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
         xmlWriter.startElement( "table:table-column" );
         xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( styleCurrent, "co" ) );
         KoGenStyle styleColCurrent( KSpreadDoc::STYLE_CELL, "table-cell" );
-        column->saveOasisCellStyle(styleColCurrent );
+        column->saveOasisCellStyle(styleColCurrent,mainStyles );
         //FIXME doesn't create format if it's default format
         xmlWriter.addAttribute( "table:default-cell-style-name", mainStyles.lookup( styleColCurrent, "ce" ) );//TODO fixme create style from cell
         if ( hide )

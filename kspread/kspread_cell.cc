@@ -2565,7 +2565,7 @@ void KSpreadCell::paintText( QPainter& painter,
         tmpPen.setColor( Qt::red );
     }
   }
-  
+
   // Check for blue color, for hyperlink
   if( !link().isEmpty() )
   {
@@ -3861,7 +3861,7 @@ void KSpreadCell::setDisplayText( const QString& _text )
       }
     }
   }
-  
+
   /**
    * Some numeric value or a string.
    */
@@ -3880,7 +3880,7 @@ void KSpreadCell::setDisplayText( const QString& _text )
 void KSpreadCell::setLink( const QString& link )
 {
   d->extra()->link = link;
-  
+
   if( !link.isEmpty() && d->strText.isEmpty() )
     setCellText( link );
 }
@@ -4534,9 +4534,9 @@ void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 
 
 
-void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle )
+void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles)
 {
-    KSpreadFormat::saveOasisCellStyle( currentCellStyle, column(), row() );
+    KSpreadFormat::saveOasisCellStyle( currentCellStyle, mainStyles, column(), row() );
     if ( d->hasExtra() && d->extra()->conditions )
         d->extra()->conditions->saveOasisConditions( currentCellStyle );
 }
@@ -4562,7 +4562,7 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
     }
 #endif
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_CELL,"table-cell" );
-    saveOasisCellStyle( currentCellStyle );
+    saveOasisCellStyle( currentCellStyle,mainStyles );
     xmlwriter.addAttribute( "table:style-name", mainStyles.lookup( currentCellStyle, "ce" ) );
     // group empty cells with the same style
     if ( isEmpty() && !hasProperty( KSpreadFormat::PComment ) && !isObscuringForced() && !isForceExtraCells() )
@@ -4572,7 +4572,7 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
       {
         KSpreadCell *nextCell = m_pTable->cellAt( j, row );
         KoGenStyle nextCellStyle( KSpreadDoc::STYLE_CELL,"table-cell" );
-        nextCell->saveOasisCellStyle( nextCellStyle );
+        nextCell->saveOasisCellStyle( nextCellStyle,mainStyles );
 
         if ( nextCell->isEmpty() && !nextCell->hasProperty( KSpreadFormat::PComment )
              && ( nextCellStyle==currentCellStyle ) && !isObscuringForced() && !isForceExtraCells() )
@@ -5659,7 +5659,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
       QString qml_text;
       QString tag;
       QString qml_link;
-      
+
       for( unsigned i = 1; i < t.length(); i++ )
       {
         QChar ch = t[i];
@@ -5680,17 +5680,17 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
             if( tag.endsWith( "\"" ) )
               qml_link = tag.mid( 8, tag.length()-9 );
             tag = QString::null;
-          }  
+          }
         }
         else
         {
-          if( !inside_tag ) 
+          if( !inside_tag )
             qml_text += ch;
           else
             tag += ch;
         }
-      }      
-      
+      }
+
       if( !qml_link.isEmpty() )
         d->extra()->link = qml_link;
       d->strText = qml_text;
@@ -5972,7 +5972,7 @@ QString KSpreadCell::testAnchor( int x, int y ) const
 {
   if( link().isEmpty() )
     return QString::null;
-  
+
   KSpreadDoc* doc = m_pTable->doc();
   int x1 = doc->zoomItX( d->textX );
   int y1 = doc->zoomItX( d->textY - d->textHeight );
@@ -5981,8 +5981,8 @@ QString KSpreadCell::testAnchor( int x, int y ) const
 
   if( x > x1 ) if( x < x2 )
   if( y > y1 ) if( y < y2 )
-    return link();  
-    
+    return link();
+
   return QString::null;
 }
 
