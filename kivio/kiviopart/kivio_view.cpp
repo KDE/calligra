@@ -94,9 +94,7 @@
 #include "kivio_birdeye_panel.h"
 #include "export_page_dialog.h"
 
-#include "gridsetupdialog.h"
 #include "aligndialog.h"
-#include "guidessetupdialog.h"
 #include "kiviooptionsdialog.h"
 
 #include "stencilbardockmanager.h"
