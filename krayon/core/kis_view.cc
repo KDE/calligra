@@ -1415,12 +1415,12 @@ void KisView::activateTool(KisTool* t)
 	// prevent old tool from receiving events from canvas
 	if(m_pTool) {
 		m_pTool -> clearOld();
+		m_pTool -> setChecked(false);
 		QObject::disconnect(m_pTool);
 	}
 
 	m_pTool = t;
 	m_pTool -> setChecked(true);
-	m_pTool -> setChecked(false);
 	m_pTool -> setBrush(m_pBrush);
 	m_pTool -> setPattern(m_pPattern);
 
