@@ -207,7 +207,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 	if( state() == selected )
 	{
 		itr.toFirst();
-		++itr;		// Skip "begin".
+		//++itr;		// Skip "begin".
 
 		for( ; itr.current(); ++itr )
 		{
