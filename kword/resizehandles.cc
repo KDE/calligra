@@ -128,7 +128,7 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
 
     // Deselect all other frames
     KWDocument * doc = frame->frameSet()->kWordDocument();
-    for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
+    for ( unsigned int i = 0; i < doc->numFrameSets(); ++i ) {
         fs = doc->frameSet( i );
         for ( unsigned int j = 0; j < fs->getNumFrames(); ++j ) {
             frm = fs->frame( j );

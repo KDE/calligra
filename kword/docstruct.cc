@@ -410,7 +410,7 @@ void KWDocStructRootItem::setupArrangement()
     QListViewItem *item = 0L;
     QString _name;
 
-    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
@@ -475,7 +475,7 @@ void KWDocStructRootItem::setupTextFrames()
     QString _name;
     KWDocStructFrameItem *child;
 
-    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
@@ -525,7 +525,7 @@ void KWDocStructRootItem::setupFormulaFrames()
     QString _name;
     KWDocStructFormulaItem *child;
 
-    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_FORMULA &&
@@ -561,7 +561,7 @@ void KWDocStructRootItem::setupTables()
     QString _name;
     KWDocStructTableItem *child;
 
-    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         KWFrameSet *fs = doc->frameSet(i);
         if ( fs->type() != FT_TABLE)
@@ -602,7 +602,7 @@ void KWDocStructRootItem::setupPictures()
     KWDocStructPictureItem *child;
 
     int j = 0;
-    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_PICTURE && frameset->getNumFrames()>0)
@@ -639,7 +639,7 @@ void KWDocStructRootItem::setupEmbedded()
     QString _name;
     KWDocStructPartItem *child;
 
-    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
         if ( frameset->type() == FT_PART && frameset->getNumFrames()>0)
@@ -780,7 +780,7 @@ bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
     KWTextParag *parag = 0L;
     KoTextDocument * textdoc=0L;
 
-    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->frameSet( i );
         switch ( _type )

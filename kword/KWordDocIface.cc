@@ -34,7 +34,7 @@ KWordDocIface::KWordDocIface( KWDocument *doc_ )
 
 DCOPRef KWordDocIface::textFrameSet( int num )
 {
-    if( num>= (int)doc->getNumFrameSets())
+    if( num>= (int)doc->numFrameSets())
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->textFrameSet( num)->dcopObject()->objId() );
@@ -42,7 +42,7 @@ DCOPRef KWordDocIface::textFrameSet( int num )
 
 DCOPRef KWordDocIface::frameSet( int num )
 {
-    if( num>= (int)doc->getNumFrameSets())
+    if( num>= (int)doc->numFrameSets())
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->frameSet( num)->dcopObject()->objId() );
@@ -50,7 +50,7 @@ DCOPRef KWordDocIface::frameSet( int num )
 
 int KWordDocIface::numFrameSets()const
 {
-    return doc->getNumFrameSets();
+    return doc->numFrameSets();
 }
 
 unsigned int KWordDocIface::nbColumns()const

@@ -918,7 +918,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
 
         // Then from the other frames ( framesetNum > 0 )
         double maxBottom = 0;
-        for (int m = getNumFrameSets() - 1; m > 0; m-- )
+        for (int m = numFrameSets() - 1; m > 0; m-- )
         {
             KWFrameSet *fs=frameSet(m);
             if ( fs->isVisible() && !fs->isAHeader() && !fs->isAFooter() && !fs->isFloating() && !fs->isFootEndNote() )
@@ -1677,7 +1677,7 @@ void KWDocument::endOfLoading()
     }
 
     // do some sanity checking on document.
-    for (int i = getNumFrameSets()-1; i>-1; i--) {
+    for (int i = numFrameSets()-1; i>-1; i--) {
         KWFrameSet *fs = frameSet(i);
         if(!fs) {
             kdWarning() << "frameset " << i << " is NULL!!" << endl;
@@ -4121,7 +4121,7 @@ bool KWDocument::isOnlyOneFrameSelected() {
 void KWDocument::setFramePadding( double l, double r, double t, double b )
 {
     // todo, make this more OO, and update the tableheaders as well..
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
+    for ( unsigned int i = 0; i < numFrameSets(); i++ ) {
         if ( frameSet( i )->hasSelectedFrame() ) {
             KWFrameSet *frameset = frameSet( i );
             for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
@@ -4315,7 +4315,7 @@ void KWDocument::printDebug()
     kdDebug() << "Header visible: " << isHeaderVisible() << endl;
     kdDebug() << "Footer visible: " << isFooterVisible() << endl;
     kdDebug() << "Units: " << getUnit() <<endl;
-    kdDebug() << "# Framesets: " << getNumFrameSets() <<endl;
+    kdDebug() << "# Framesets: " << numFrameSets() <<endl;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( unsigned int iFrameset = 0; fit.current() ; ++fit, iFrameset++ )
     {

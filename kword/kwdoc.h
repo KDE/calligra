@@ -215,7 +215,7 @@ public:
     KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L, bool firstNonSelected = false );
 
     /// Return the total number of framesets
-    unsigned int getNumFrameSets() const
+    unsigned int numFrameSets() const
     { return m_lstFrameSet.count(); }
 
     /// Generate a new name for a frameset. @p templateName must contain a %1 [for a number].
