@@ -31,13 +31,13 @@ KPPolyLineObjectIface::KPPolyLineObjectIface( KPPolylineObject *_obj )
    obj = _obj;
 }
 
-void KPPolyLineObjectIface::horizontalFlips()
+void KPPolyLineObjectIface::horizontalFlip()
 {
     //todo repaint it
     obj->flip(true );
 }
 
-void KPPolyLineObjectIface::verticalFlips()
+void KPPolyLineObjectIface::verticalFlip()
 {
     //todo repaint it
     obj->flip( false );

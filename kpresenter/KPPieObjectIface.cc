@@ -78,12 +78,12 @@ void KPPieObjectIface::setLineEnd( const QString & type)
     obj->setLineEnd(lineEndBeginFromString( type ));
 }
 
-void KPPieObjectIface::horizontalFlips()
+void KPPieObjectIface::horizontalFlip()
 {
     obj->flip( true);
 }
 
-void KPPieObjectIface::verticalFlips()
+void KPPieObjectIface::verticalFlip()
 {
     obj->flip( false );
 }

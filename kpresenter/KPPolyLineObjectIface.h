@@ -33,8 +33,8 @@ public:
     KPPolyLineObjectIface( KPPolylineObject *obj_ );
 
 k_dcop:
-    void horizontalFlips();
-    void verticalFlips();
+    void horizontalFlip();
+    void verticalFlip();
     void closeObject();
     bool isClosed()const;
 private:

@@ -55,12 +55,12 @@ QString KPLineObjectIface::lineEnd() const
     return lineEndBeginName( type );
 }
 
-void KPLineObjectIface::horizontalFlips()
+void KPLineObjectIface::horizontalFlip()
 {
     obj->flip( true);
 }
 
-void KPLineObjectIface::verticalFlips()
+void KPLineObjectIface::verticalFlip()
 {
     obj->flip( false );
 }

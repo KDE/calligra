@@ -55,13 +55,13 @@ QString KPFreehandObjectIface::lineEnd() const
     return lineEndBeginName( type );
 }
 
-void KPFreehandObjectIface::horizontalFlips()
+void KPFreehandObjectIface::horizontalFlip()
 {
     //todo repaint it
     obj->flip(true );
 }
 
-void KPFreehandObjectIface::verticalFlips()
+void KPFreehandObjectIface::verticalFlip()
 {
     //todo repaint it
     obj->flip( false );

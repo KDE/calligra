@@ -40,7 +40,7 @@ bool KPPixmapObjectIface::swapRGB() const
     return obj->getPictureSwapRGB();
 }
 
-bool KPPixmapObjectIface::grayscal() const
+bool KPPixmapObjectIface::grayscale() const
 {
     return obj->getPictureGrayscal();
 }
@@ -55,7 +55,7 @@ int KPPixmapObjectIface::pictureMirrorType() const
     return obj->getPictureMirrorType();
 }
 
-int KPPixmapObjectIface::bright() const
+int KPPixmapObjectIface::brightness() const
 {
     return obj->getPictureBright();
 }
@@ -65,7 +65,7 @@ void KPPixmapObjectIface::setDepth(int depth )
     obj->setPictureDepth(depth);
 }
 
-void KPPixmapObjectIface::setBright(int bright )
+void KPPixmapObjectIface::setBrightness(int bright )
 {
     obj->setPictureBright(bright);
 }
@@ -75,7 +75,7 @@ void KPPixmapObjectIface::setSwapRGB(bool swapRGB )
     obj->setPictureSwapRGB(swapRGB);
 }
 
-void KPPixmapObjectIface::setGrayscal( bool grayscal )
+void KPPixmapObjectIface::setGrayscale( bool grayscal )
 {
     obj->setPictureGrayscal(grayscal);
 }

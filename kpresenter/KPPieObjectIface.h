@@ -41,8 +41,8 @@ k_dcop:
     void setPieType( const QString & type );
     virtual void setLineBegin( const QString &);
     virtual void setLineEnd(const QString & );
-    void horizontalFlips();
-    void verticalFlips();
+    void horizontalFlip();
+    void verticalFlip();
 
 private:
     KPPieObject *obj;

@@ -56,12 +56,12 @@ QString KPQuadricBezierCurveObjectIface::lineEnd() const
     return lineEndBeginName( type );
 }
 
-void KPQuadricBezierCurveObjectIface::horizontalFlips()
+void KPQuadricBezierCurveObjectIface::horizontalFlip()
 {
     obj->flip( true );
 }
 
-void KPQuadricBezierCurveObjectIface::verticalFlips()
+void KPQuadricBezierCurveObjectIface::verticalFlip()
 {
     obj->flip( false );
 }

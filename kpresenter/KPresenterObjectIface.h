@@ -81,8 +81,8 @@ k_dcop:
     QString disappearSoundEffectFileName() const;
     QString typeString() const;
 
-    void setProtect( bool b );
-    bool isProtect() const;
+    void setProtected( bool b );
+    bool isProtected() const;
 
     void setKeepRatio( bool b );
     bool isKeepRatio() const;

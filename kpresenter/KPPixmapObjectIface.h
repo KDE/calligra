@@ -37,14 +37,14 @@ k_dcop:
     QString fileName() const;
     int depth() const;
     bool swapRGB() const;
-    bool grayscal() const;
+    bool grayscale() const;
     int pictureMirrorType() const;
-    int bright() const;
+    int brightness() const;
 
     void setDepth(int depth );
-    void setBright(int bright );
+    void setBrightness(int bright );
     void setSwapRGB(bool swapRGB );
-    void setGrayscal( bool grayscal );
+    void setGrayscale( bool grayscal );
     void loadImage( const QString & fileName );
     void setPictureMirrorType(const QString & _mirror);
 

@@ -262,12 +262,12 @@ void KPresenterObjectIface::setEffect3(const QString & effect)
 
 }
 
-void KPresenterObjectIface::setProtect( bool b )
+void KPresenterObjectIface::setProtected( bool b )
 {
     obj->setProtect(b);
 }
 
-bool KPresenterObjectIface::isProtect() const
+bool KPresenterObjectIface::isProtected() const
 {
     return obj->isProtect();
 }
