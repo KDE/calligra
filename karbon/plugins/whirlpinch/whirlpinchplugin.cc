@@ -183,59 +183,64 @@ VWhirlPinchCmd::visitVPath( VPath& path )
 			dist /= m_radius;
 
 			// pinch:
+			m.translate( m_center.x(), m_center.y() );
 			m.scale(
 				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
 				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
 
 			// whirl:
 			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
-			m.translate( m_center.x(), m_center.y() );
+			m.translate( -m_center.x(), -m_center.y() );
 
-			path.current()->setKnot( delta.transform( m ) );
+			path.current()->setKnot( path.current()->knot().transform( m ) );
 		}
 
-
-		delta = path.current()->point( 0 ) - m_center;
-		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
-
-		if( dist < m_radius )
+		if( path.current()->type() == VSegment::curve )
 		{
-			m.reset();
+			delta = path.current()->point( 0 ) - m_center;
+			dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
-			dist /= m_radius;
+			if( dist < m_radius )
+			{
+				m.reset();
 
-			// Pinch.
-			m.scale(
-				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
-				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
+				dist /= m_radius;
 
-			// Whirl.
-			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
-			m.translate( m_center.x(), m_center.y() );
+				// Pinch.
+				m.translate( m_center.x(), m_center.y() );
+				m.scale(
+					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
+					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
 
-			path.current()->setPoint( 0, delta.transform( m ) );
-		}
+				// Whirl.
+				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
+				m.translate( -m_center.x(), -m_center.y() );
+
+				path.current()->setPoint( 0, path.current()->point(0).transform( m ) );
+			}
 
 
-		delta = path.current()->point( 1 ) - m_center;
-		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+			delta = path.current()->point( 1 ) - m_center;
+			dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
-		if( dist < m_radius )
-		{
-			m.reset();
+			if( dist < m_radius )
+			{
+				m.reset();
 
-			dist /= m_radius;
+				dist /= m_radius;
 
-			// Pinch.
-			m.scale(
-				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
-				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
+				// Pinch.
+				m.translate( m_center.x(), m_center.y() );
+				m.scale(
+					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
+					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
 
-			// Whirl.
-			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
-			m.translate( m_center.x(), m_center.y() );
+				// Whirl.
+				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
+				m.translate( -m_center.x(), -m_center.y() );
 
-			path.current()->setPoint( 1, delta.transform( m ) );
+				path.current()->setPoint( 1, path.current()->point(1).transform( m ) );
+			}
 		}
 
 
