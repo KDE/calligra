@@ -24,7 +24,7 @@
 #include <qstringlist.h>
 #include <qptrlist.h>
 #include <koRuler.h>
-#include <kwunit.h>
+#include <koUnit.h>
 #include <qdict.h>
 #include <qlineedit.h>
 #include "kotextparag.h"
@@ -92,7 +92,7 @@ class KoIndentSpacingWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoIndentSpacingWidget( KWUnit::Unit unit, QWidget * parent, const char * name = 0 );
+    KoIndentSpacingWidget( KoUnit::Unit unit, QWidget * parent, const char * name = 0 );
     virtual ~KoIndentSpacingWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -121,7 +121,7 @@ private:
     QComboBox *cSpacing;
     QCheckBox *cKeepLinesTogether, *cHardBreakBefore, *cHardBreakAfter;
     KPagePreview *prev1;
-    KWUnit::Unit m_unit;
+    KoUnit::Unit m_unit;
 };
 
 /**
@@ -285,7 +285,7 @@ class KoParagTabulatorsWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagTabulatorsWidget( KWUnit::Unit unit, double _frameWidth, QWidget * parent, const char * name = 0 );
+    KoParagTabulatorsWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent, const char * name = 0 );
     virtual ~KoParagTabulatorsWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -326,7 +326,7 @@ protected:
     QPushButton* bDelete;
 
     KoTabulatorList m_tabList;
-    KWUnit::Unit m_unit;
+    KoUnit::Unit m_unit;
     double m_toplimit;
     bool noSignals;
 };
@@ -344,7 +344,7 @@ class KoParagDia : public KDialogBase
 public:
     enum { PD_SPACING = 1, PD_ALIGN = 2, PD_BORDERS = 4, PD_NUMBERING = 8, PD_TABS = 16 };
 
-    KoParagDia( QWidget*, const char*, int flags, KWUnit::Unit unit, double _frameWidth=-1);
+    KoParagDia( QWidget*, const char*, int flags, KoUnit::Unit unit, double _frameWidth=-1);
     ~KoParagDia();
 
     int getFlags() { return m_flags; }

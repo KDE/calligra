@@ -27,6 +27,7 @@
 #include <kiconloader.h>
 #include <qpainter.h>
 #include <qpopupmenu.h>
+#include <koUnit.h>
 
 class KoRulerPrivate {
 public:
@@ -886,13 +887,13 @@ void KoRuler::setUnit( const QString& _unit )
 
     if ( unit == "mm" ) {
         d->rb_menu->setItemChecked( d->mMM, true );
-        layout.unit = PG_MM;
+        layout.unit = KoUnit::U_MM;
     } else if ( unit == "pt" ) {
         d->rb_menu->setItemChecked( d->mPT, true );
-        layout.unit = PG_PT;
+        layout.unit = KoUnit::U_PT;
     } else if ( unit == "inch" ) {
         d->rb_menu->setItemChecked( d->mINCH, true );
-        layout.unit = PG_INCH;
+        layout.unit = KoUnit::U_INCH;
     }
     repaint( false );
 }

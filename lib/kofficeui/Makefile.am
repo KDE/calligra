@@ -11,7 +11,7 @@ SUBDIRS = . pics
 
 lib_LTLIBRARIES = libkofficeui.la
 
-libkofficeui_la_SOURCES = koGlobal.cc koFind.cc koReplace.cc \
+libkofficeui_la_SOURCES = koGlobal.cc koUnit.cc koFind.cc koReplace.cc \
         koPageLayoutDia.cc \
 	koPartSelectDia.cc koPartSelectAction.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
@@ -21,7 +21,7 @@ libkofficeui_la_SOURCES = koGlobal.cc koFind.cc koReplace.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
 	koFontDia.cc koCharSelectDia.cc koInsertLink.cc
 
-include_HEADERS = koGlobal.h koFind.h koReplace.h \
+include_HEADERS = koGlobal.h koUnit.h koFind.h koReplace.h \
 	koPageLayoutDia.h \
 	koPartSelectDia.h koPartSelectAction.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \

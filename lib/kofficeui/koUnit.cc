@@ -17,19 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koGlobal.h>
-#include "kwunit.h"
+//#include <koGlobal.h>
+#include "koUnit.h"
 #include <klocale.h>
 
-QString KWUnit::unitDescription( Unit _unit )
+QString KoUnit::unitDescription( Unit _unit )
 {
     switch ( _unit )
     {
-    case KWUnit::U_MM:
+    case KoUnit::U_MM:
         return i18n("Millimeters (mm)");
-    case KWUnit::U_INCH:
+    case KoUnit::U_INCH:
         return i18n("Inches (inch)");
-    case KWUnit::U_PT:
+    case KoUnit::U_PT:
         return i18n("Points (pt)" );
     default:
         return i18n("Error!");

@@ -21,7 +21,7 @@
 #define koGlobal_h
 
 #include <qstringlist.h>
-
+#include <koUnit.h>
 // paper formats ( mm ) - public for compat reasons, but DO NOT USE in new programs !
 // See KoPageFormat's methods instead.
 #define PG_A3_WIDTH		297.0
@@ -128,15 +128,6 @@ namespace KoPageFormat
 
 };
 
-/**
- *  Represents the length unit that is used by an app.
- *  Possible values are for millimeter, points and inches.
- */
-enum KoUnit {
-    PG_MM = 0,
-    PG_PT = 1,
-    PG_INCH = 2
-};
 
 /**
  * Header/Footer type.
@@ -162,7 +153,7 @@ struct KoPageLayout
     KoOrientation orientation;
 
     /** The user's preferred unit. Should probably be removed later. */
-    KoUnit unit;
+    KoUnit::Unit unit;
 
     /** Page width in pt */
     double ptWidth;
@@ -195,7 +186,7 @@ struct KoPageLayout
 	if ( unit != l.unit )
 	    return false;
 	switch( unit ) {
-	case PG_PT: {
+	case KoUnit::U_PT: {
 	    return ( ptWidth == l.ptWidth &&
 		     ptHeight == l.ptHeight &&
 		     ptLeft == l.ptLeft &&
@@ -203,7 +194,7 @@ struct KoPageLayout
 		     ptTop == l.ptTop &&
 		     ptBottom == l.ptBottom );
 	}
-	case PG_MM: {
+	case KoUnit::U_MM: {
 	    return ( mmWidth == l.mmWidth &&
 		     mmHeight == l.mmHeight &&
 		     mmLeft == l.mmLeft &&
@@ -211,7 +202,7 @@ struct KoPageLayout
 		     mmTop == l.mmTop &&
 		     mmBottom == l.mmBottom );
 	}
-	case PG_INCH: {
+	case KoUnit::U_INCH: {
 	    return ( inchWidth == l.inchWidth &&
 		     inchHeight == l.inchHeight &&
 		     inchLeft == l.inchLeft &&
@@ -257,16 +248,7 @@ struct KoKWHeaderFooter
     double inchFooterBodySpacing;
 };
 
-// 1 inch ^= 72 pt
-// 1 inch ^= 25.399956 mm (-pedantic ;p)
-// Note: I don't use division but multiplication with the inverse value
-// because it's faster ;p (Werner)
-#define POINT_TO_MM(px) ((px)*0.352777167)
-#define MM_TO_POINT(mm) ((mm)*2.83465058)
-#define POINT_TO_INCH(px) ((px)*0.01388888888889)
-#define INCH_TO_POINT(inch) ((inch)*72.0)
-#define MM_TO_INCH(mm) ((mm)*0.039370147)
-#define INCH_TO_MM(inch) ((inch)*25.399956)
+
 
 
 #endif // koGlobal

@@ -17,15 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef kwunit_h
-#define kwunit_h
+#ifndef kounit_h
+#define kounit_h
+#include <qstring.h>
+
+// 1 inch ^= 72 pt
+// 1 inch ^= 25.399956 mm (-pedantic ;p)
+// Note: I don't use division but multiplication with the inverse value
+// because it's faster ;p (Werner)
+#define POINT_TO_MM(px) ((px)*0.352777167)
+#define MM_TO_POINT(mm) ((mm)*2.83465058)
+#define POINT_TO_INCH(px) ((px)*0.01388888888889)
+#define INCH_TO_POINT(inch) ((inch)*72.0)
+#define MM_TO_INCH(mm) ((mm)*0.039370147)
+#define INCH_TO_MM(inch) ((inch)*25.399956)
 
 /**
  * KWord stores everthing in pt (using "double") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  */
-class KWUnit
+class KoUnit
 {
 public:
     enum Unit {
@@ -95,5 +107,6 @@ public:
     // Get the full (translated) description of a unit
     static QString unitDescription( Unit _unit );
 };
+
 
 #endif

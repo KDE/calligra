@@ -34,6 +34,7 @@
 #include <qspinbox.h>
 
 #include <klocale.h>
+#include <koUnit.h>
 
 
 /******************************************************************/
@@ -218,7 +219,7 @@ KoPageLayout KoPageLayoutDia::standardLayout()
     _layout.mmRight = 20.0;
     _layout.mmTop = 20.0;
     _layout.mmBottom = 20.0;
-    _layout.unit = PG_MM;
+    _layout.unit = KoUnit::U_MM;
     _layout.ptWidth = MM_TO_POINT( PG_A4_WIDTH );
     _layout.ptHeight = MM_TO_POINT( PG_A4_HEIGHT );
     _layout.ptLeft = MM_TO_POINT( 20.0 );
@@ -254,13 +255,13 @@ KoColumns KoPageLayoutDia::getColumns()
     cl.columns = nColumns->value();
 
     switch ( layout.unit ) {
-    case PG_MM:
+    case KoUnit::U_MM:
         cl.ptColumnSpacing = MM_TO_POINT( nCSpacing->text().toDouble() );
         break;
-    case PG_PT:
+    case KoUnit::U_PT:
         cl.ptColumnSpacing = nCSpacing->text().toDouble();
         break;
-    case PG_INCH:
+    case KoUnit::U_INCH:
         cl.ptColumnSpacing = INCH_TO_POINT( nCSpacing->text().toDouble() );
         break;
     }
@@ -279,7 +280,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
         kwhf.header = HF_EO_DIFF;
 
     switch ( layout.unit ) {
-        case PG_MM: {
+        case KoUnit::U_MM: {
             kwhf.mmHeaderBodySpacing = nHSpacing->text().toDouble();
             kwhf.ptHeaderBodySpacing = MM_TO_POINT( kwhf.mmHeaderBodySpacing );
             kwhf.inchHeaderBodySpacing = MM_TO_INCH( kwhf.mmHeaderBodySpacing );
@@ -287,7 +288,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
             kwhf.ptFooterBodySpacing = MM_TO_POINT( kwhf.mmFooterBodySpacing );
             kwhf.inchFooterBodySpacing = MM_TO_INCH( kwhf.mmFooterBodySpacing );
         } break;
-        case PG_PT: {
+        case KoUnit::U_PT: {
             kwhf.ptHeaderBodySpacing = nHSpacing->text().toDouble();
             kwhf.mmHeaderBodySpacing = POINT_TO_MM( kwhf.ptHeaderBodySpacing );
             kwhf.inchHeaderBodySpacing = POINT_TO_INCH( kwhf.ptHeaderBodySpacing );
@@ -295,7 +296,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
             kwhf.mmFooterBodySpacing = POINT_TO_MM( kwhf.ptFooterBodySpacing );
             kwhf.inchFooterBodySpacing = POINT_TO_INCH( kwhf.ptFooterBodySpacing );
         } break;
-        case PG_INCH: {
+        case KoUnit::U_INCH: {
             kwhf.inchHeaderBodySpacing = nHSpacing->text().toDouble();
             kwhf.ptHeaderBodySpacing = INCH_TO_POINT( kwhf.inchHeaderBodySpacing );
             kwhf.mmHeaderBodySpacing = INCH_TO_MM( kwhf.inchHeaderBodySpacing );
@@ -338,12 +339,7 @@ void KoPageLayoutDia::setupTab1()
         grid1->addWidget( cpgUnit, 1, 0 );
         connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( unitChanged( int ) ) );
     } else {
-        QString str;
-        switch ( layout.unit ) {
-        case PG_MM: str = i18n("mm"); break;
-        case PG_PT: str = i18n("pt"); break;
-        case PG_INCH: str = i18n("inches"); break;
-        }
+        QString str=KoUnit::unitDescription(layout.unit);
 
         lpgUnit = new QLabel( i18n("All values are given in %1.").arg(str), tab1 );
         grid1->addWidget( lpgUnit, 0, 0 );
@@ -575,7 +571,7 @@ void KoPageLayoutDia::setValuesTab1Helper() {
     QString tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
 
     switch ( layout.unit ) {
-        case PG_MM: {
+        case KoUnit::U_MM: {
             tmp1=QString::number(layout.mmWidth, 'f', 2);
             tmp2=QString::number(layout.mmHeight, 'f', 2);
             tmp3=QString::number(layout.mmLeft, 'f', 2);
@@ -583,7 +579,7 @@ void KoPageLayoutDia::setValuesTab1Helper() {
             tmp5=QString::number(layout.mmTop, 'f', 2);
             tmp6=QString::number(layout.mmBottom, 'f', 2);
         } break;
-        case PG_PT: {
+        case KoUnit::U_PT: {
             tmp1=QString::number(layout.ptWidth, 'f', 2);
             tmp2=QString::number(layout.ptHeight, 'f', 2);
             tmp3=QString::number(layout.ptLeft, 'f', 2);
@@ -591,7 +587,7 @@ void KoPageLayoutDia::setValuesTab1Helper() {
             tmp5=QString::number(layout.ptTop, 'f', 2);
             tmp6=QString::number(layout.ptBottom, 'f', 2);
         } break;
-        case PG_INCH: {
+        case KoUnit::U_INCH: {
             tmp1=QString::number(layout.inchWidth, 'f', 2);
             tmp2=QString::number(layout.inchHeight, 'f', 2);
             tmp3=QString::number(layout.inchLeft, 'f', 2);
@@ -692,12 +688,7 @@ void KoPageLayoutDia::setupTab3()
     nColumns->setValue( cl.columns );
     connect( nColumns, SIGNAL( valueChanged( int ) ), this, SLOT( nColChanged( int ) ) );
 
-    QString str;
-    switch ( layout.unit ) {
-    case PG_MM: str = i18n("mm"); break;
-    case PG_PT: str = i18n("pt"); break;
-    case PG_INCH: str = i18n("inches"); break;
-    }
+    QString str=KoUnit::unitDescription( layout.unit );
 
     QLabel *lCSpacing = new QLabel( i18n("Column Spacing (%1):").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
@@ -712,13 +703,13 @@ void KoPageLayoutDia::setupTab3()
 
     double columnSpacing = 0;
     switch ( layout.unit ) {
-    case PG_MM:
+    case KoUnit::U_MM:
         columnSpacing = POINT_TO_MM( cl.ptColumnSpacing ); // TODO rounding
         break;
-    case PG_PT:
+    case KoUnit::U_PT:
         columnSpacing = cl.ptColumnSpacing;
         break;
-    case PG_INCH:
+    case KoUnit::U_INCH:
         columnSpacing = POINT_TO_INCH( cl.ptColumnSpacing );
         break;
     }
@@ -751,12 +742,7 @@ void KoPageLayoutDia::setupTab3()
 /*================================================================*/
 void KoPageLayoutDia::setupTab4()
 {
-    QString str;
-    switch ( layout.unit ) {
-    case PG_MM: str = i18n("mm"); break;
-    case PG_PT: str = i18n("pt"); break;
-    case PG_INCH: str = i18n("inches"); break;
-    }
+    QString str=KoUnit::unitDescription(layout.unit);
 
     QWidget *tab4 = addPage(i18n( "Header and Footer" ));
     QGridLayout *grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
@@ -793,11 +779,11 @@ void KoPageLayoutDia::setupTab4()
     headerGrid->addWidget( nHSpacing, 4, 1 );
 
     switch ( layout.unit ) {
-    case PG_MM: nHSpacing->setText( QString::number( kwhf.mmHeaderBodySpacing ) );
+    case KoUnit::U_MM: nHSpacing->setText( QString::number( kwhf.mmHeaderBodySpacing ) );
         break;
-    case PG_PT: nHSpacing->setText( QString::number( kwhf.ptHeaderBodySpacing ) );
+    case KoUnit::U_PT: nHSpacing->setText( QString::number( kwhf.ptHeaderBodySpacing ) );
         break;
-    case PG_INCH: nHSpacing->setText( QString::number( kwhf.inchHeaderBodySpacing ) );
+    case KoUnit::U_INCH: nHSpacing->setText( QString::number( kwhf.inchHeaderBodySpacing ) );
         break;
     }
 
@@ -857,11 +843,11 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->addWidget( nFSpacing, 4, 1 );
 
     switch ( layout.unit ) {
-    case PG_MM: nFSpacing->setText( QString::number( kwhf.mmFooterBodySpacing ) );
+    case KoUnit::U_MM: nFSpacing->setText( QString::number( kwhf.mmFooterBodySpacing ) );
         break;
-    case PG_PT: nFSpacing->setText( QString::number( kwhf.ptFooterBodySpacing ) );
+    case KoUnit::U_PT: nFSpacing->setText( QString::number( kwhf.ptFooterBodySpacing ) );
         break;
-    case PG_INCH: nFSpacing->setText( QString::number( kwhf.inchFooterBodySpacing ) );
+    case KoUnit::U_INCH: nFSpacing->setText( QString::number( kwhf.inchFooterBodySpacing ) );
         break;
     }
 
@@ -911,7 +897,7 @@ void KoPageLayoutDia::updatePreview( KoPageLayout )
 /*===================== unit changed =============================*/
 void KoPageLayoutDia::unitChanged( int _unit )
 {
-    layout.unit = static_cast<KoUnit>( _unit );
+    layout.unit = static_cast<KoUnit::Unit>( _unit );
     setValuesTab1Helper();
     updatePreview( layout );
 }
@@ -944,15 +930,15 @@ void KoPageLayoutDia::formatChanged( int _format )
 
         QString tmp1, tmp2;
         switch ( layout.unit ) {
-            case PG_MM: {
+            case KoUnit::U_MM: {
                 tmp1=QString::number(layout.mmWidth, 'f', 2);
                 tmp2=QString::number(layout.mmHeight, 'f', 2);
             } break;
-            case PG_PT: {
+            case KoUnit::U_PT: {
                 tmp1=QString::number(layout.ptWidth, 'f', 2);
                 tmp2=QString::number(layout.ptHeight, 'f', 2);
             } break;
-            case PG_INCH: {
+            case KoUnit::U_INCH: {
                 tmp1=QString::number(layout.inchWidth, 'f', 2);
                 tmp2=QString::number(layout.inchHeight, 'f', 2);
             } break;
@@ -974,7 +960,7 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
     if ( ( KoOrientation )_orientation != layout.orientation ) {
 
         switch ( layout.unit ) {
-            case PG_MM:
+            case KoUnit::U_MM:
                 layout.mmWidth = epgWidth->text().toDouble();
                 layout.mmHeight = epgHeight->text().toDouble();
                 layout.mmLeft = ebrLeft->text().toDouble();
@@ -994,7 +980,7 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
                 layout.inchTop = MM_TO_INCH( layout.mmTop );
                 layout.inchBottom = MM_TO_INCH( layout.mmBottom );
                 break;
-            case PG_PT:
+            case KoUnit::U_PT:
                 layout.ptWidth = epgWidth->text().toDouble();
                 layout.ptHeight = epgHeight->text().toDouble();
                 layout.ptLeft = ebrLeft->text().toDouble();
@@ -1014,7 +1000,7 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
                 layout.inchTop = POINT_TO_INCH( layout.ptTop );
                 layout.inchBottom = POINT_TO_INCH( layout.ptBottom );
                 break;
-            case PG_INCH:
+            case  KoUnit::U_INCH:
                 layout.inchWidth = epgWidth->text().toDouble();
                 layout.inchHeight = epgHeight->text().toDouble();
                 layout.inchLeft = ebrLeft->text().toDouble();
@@ -1088,17 +1074,17 @@ void KoPageLayoutDia::changed(QLineEdit *line, double &mm, double &pt, double &i
     if ( line->text().toDouble()<0)
         line->setText( i18n("0.00") );
     switch ( layout.unit ) {
-        case PG_MM: {
+        case KoUnit::U_MM: {
             mm = line->text().toDouble();
             pt = MM_TO_POINT( mm );
             inch = MM_TO_INCH( mm );
         } break;
-        case PG_PT: {
+        case KoUnit::U_PT: {
             pt = line->text().toDouble();
             mm = POINT_TO_MM( pt );
             inch = POINT_TO_INCH( pt );
         } break;
-        case PG_INCH: {
+        case KoUnit::U_INCH: {
             inch = line->text().toDouble();
             mm = INCH_TO_MM( inch );
             pt = INCH_TO_POINT( inch );
@@ -1160,13 +1146,13 @@ void KoPageLayoutDia::nColChanged( int _val )
 void KoPageLayoutDia::nSpaceChanged( const QString &_val )
 {
     switch ( layout.unit ) {
-    case PG_MM:
+    case KoUnit::U_MM:
         cl.ptColumnSpacing = MM_TO_POINT( _val.toDouble() );
         break;
-    case PG_PT:
+    case KoUnit::U_PT:
         cl.ptColumnSpacing = _val.toDouble();
         break;
-    case PG_INCH:
+    case KoUnit::U_INCH:
         cl.ptColumnSpacing = INCH_TO_POINT( _val.toDouble() );
         break;
     }
