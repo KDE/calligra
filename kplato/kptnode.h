@@ -73,15 +73,22 @@ class KPTNode {
         // Building a house requires the table to be finished, therefor the house-building
         // is time dependent on the table-building. So a child of the table-building node is the 
         // house-building node.
-/*
-    Make 2 sets of these methods, one set for the parents and one for the children.
-        int numDependNodes() const { return m_dependNodes.count(); }
-        virtual void addDependNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        virtual void insertDependNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        void delDependNode( KPTNode *node, bool remove=false);
-        void delDependNode( int number, bool remove=false);
-        KPTNode *getDependNode( int number) { return m_dependNodes.at(number); } 
-*/
+
+        int numDependChildNodes() const { return m_dependChildNodes.count(); }
+        virtual void addDependChildNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
+        virtual void addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime *lag);
+        virtual void insertDependChildNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
+        void delDependChildNode( KPTNode *node, bool remove=false);
+        void delDependChildNode( int number, bool remove=false);
+        KPTRelation *getDependChildNode( int number) { return m_dependChildNodes.at(number); } 
+
+        int numDependParentNodes() const { return m_dependParentNodes.count(); }
+        virtual void addDependParentNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
+        virtual void addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime *lag);
+        virtual void insertDependParentNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
+        void delDependParentNode( KPTNode *node, bool remove=false);
+        void delDependParentNode( int number, bool remove=false);
+        KPTRelation *getDependParentNode( int number) { return m_dependParentNodes.at(number); } 
 
         void setStartTime(QDateTime *startTime) { m_startTime=startTime; }
         QDateTime *startTime() { return m_startTime; }
@@ -120,6 +127,7 @@ class KPTNode {
          */
         QDateTime *getDelay();
 
+        void setName(QString name) { m_name=name; }
         QString name() const { return m_name; }
 
     protected:

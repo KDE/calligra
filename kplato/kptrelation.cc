@@ -32,7 +32,7 @@ KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingR
     m_child=child;
     m_timingType=tt;
     m_timingRelation=tr;
-    // m_lag=new QTime(0); // TODO
+    m_lag=new QDateTime(QDate(0,1,1));
 }
 
 KPTRelation::~KPTRelation() {

@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptnode.h"
+#include <qlist.h>
 
 KPTNode::KPTNode() : m_nodes(), m_dependChildNodes(), m_dependParentNodes(), m_risk() {
         m_name="";
@@ -64,5 +65,40 @@ void KPTNode::addChildNode( KPTNode *node) {
 
 QDateTime *KPTNode::getDelay() {
     return 0L;
+}
+
+void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p) {
+    addDependChildNode(node,t,p,new QDateTime(*(new QDate(1,0,0))));
+}
+
+void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime *lag) {
+    m_dependChildNodes.append(new KPTRelation(this, node, t, p, lag));
+}
+
+void KPTNode::insertDependChildNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
+}
+
+void KPTNode::delDependChildNode( KPTNode *node, bool remove) {
+}
+
+void KPTNode::delDependChildNode( int number, bool remove) {
+}
+
+
+void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p) {
+    addDependParentNode(node,t,p,new QDateTime(*(new QDate(1,0,0))));
+}
+
+void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, QDateTime *lag) {
+    m_dependChildNodes.append(new KPTRelation(node, this, t, p, lag));
+}
+
+void KPTNode::insertDependParentNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
+}
+
+void KPTNode::delDependParentNode( KPTNode *node, bool remove) {
+}
+
+void KPTNode::delDependParentNode( int number, bool remove) {
 }
 
