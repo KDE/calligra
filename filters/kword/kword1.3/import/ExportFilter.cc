@@ -912,12 +912,20 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
 #undef ALLOW_TABLE
 
+#ifdef ALLOW_TABLE
+// ### TODO: make it a member of OOWriterWorker (when table support will work)
+static QString cellToProperties( const TableCell& cell, QString& key)
+{
+    return QString::null;
+}
+#endif
+
 // ### TODO: table support
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
     const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) );
-    const QString tableName( QString( "Table" ) + QString:.number( m_tableNumber ) ); // m_tableNumber was already increased
+    const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
 
     kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
@@ -926,7 +934,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
     *m_streamOut << "<table:table table:name=\""
         << escapeOOText( tableName )
-        << "\ table:style-name=\""
+        << "\" table:style-name=\""
         << escapeOOText( automaticTableStyle )
         << "\" >\n";
 
@@ -935,6 +943,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     QString delayedAutomaticStyles; // Automatic styles for the columns
 
     QValueList<TableCell>::ConstIterator itCell;
+
     for ( itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); ++itCell )
     {
@@ -944,11 +953,11 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         const double width = (*itCell).frame.right - (*itCell).frame.left;
         tableWidth += width; // ###TODO any modifier needed?
 
-        const QString automaticCellStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
-        kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle /* << " key: " << styleKey */ << endl;
+        const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
+        kdDebug(30520) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
 
         delayedAutomaticStyles += "  <style:style";
-        delayedAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
+        delayedAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
         delayedAutomaticStyles += " style:family=\"table-column\"";
         delayedAutomaticStyles += ">\n";
         delayedAutomaticStyles += "   <style:properties ";
@@ -960,7 +969,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
         // ### TODO: find a way how to use table:number-columns-repeated > 1
         *m_streamOut << "<table:column table:style-name=\""
-            << escapeOOText( automaticStyle )
+            << escapeOOText( automaticColumnStyle )
             << "\" table:number-columns-repeated=\"1\"/>\n";
     }
 
@@ -984,7 +993,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     int rowCurrent = 1; // Not 0 as for the other filters, as we have already opened the first row
 
 
-    QValueList<TableCell>::ConstIterator itCell;
+    ulong cellNumber = 0L;
 
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
@@ -997,7 +1006,13 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
             *m_streamOut << "<table:row>\n";
         }
 
-        *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\"### TODO\">\n";
+        const QString automaticCellStyle ( makeAutomaticStyleName( tableName + ".Cell", cellNumber ) );
+        QString key;
+        const QString props ( cellToProperties( (*itCell), key ) );
+        kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+
+        *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
+            << escapeOOText( automaticCellStyle) << "\">\n";
 
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
