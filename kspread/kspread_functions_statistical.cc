@@ -205,16 +205,10 @@ bool kspreadfunc_skew_est( KSContext & context )
 
   res = 0.0;
 
-  kdDebug() << "Average: " << avg << endl;
-
   if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
     return false;
 
-  kdDebug() << "Stdev: " << res << endl;
-
   res = sqrt( res / ((double)(number - 1) ) );
-
-  kdDebug() << "Stdev: " << res << endl;
 
   if ( res == 0.0 )
     return false;
@@ -222,8 +216,6 @@ bool kspreadfunc_skew_est( KSContext & context )
   if ( !kspreadfunc_skew_helper( context, args, tskew, avg, res ) )
     return false;
 
-  kdDebug() << "Skew: " << tskew << endl;
-  
   res = ( ( tskew * number ) / ( number - 1 ) ) / ( number - 2 );
 
   context.setValue( new KSValue( res ) );
@@ -248,7 +240,6 @@ bool kspreadfunc_skew_pop( KSContext & context )
 
   double avg = res / (double) number;
 
-  kdDebug() << "Average: " << avg << endl;
   res = 0.0;
 
   if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
@@ -256,16 +247,12 @@ bool kspreadfunc_skew_pop( KSContext & context )
 
   res = sqrt( res / number );
 
-  kdDebug() << "Stdevp: " << res << endl;
-
   if ( res == 0.0 )
     return false;
 
   if ( !kspreadfunc_skew_helper( context, args, tskew, avg, res ) )
     return false;
 
-  kdDebug() << "Skew: " << tskew << endl;
-  
   res = tskew / number;
 
   context.setValue( new KSValue( res ) );
@@ -619,7 +606,6 @@ bool kspreadfunc_geomean_helper( KSContext & context, QValueList<KSValue::Ptr> &
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       double d = (*it)->doubleValue();
-      kdDebug() << "args[i]: " << d << endl;
       
       if ( d <= 0 )
         return false;
@@ -666,7 +652,6 @@ bool kspreadfunc_harmean_helper( KSContext & context, QValueList<KSValue::Ptr> &
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       double d = (*it)->doubleValue();
-      kdDebug() << "args[i]: " << d << endl;
       
       if ( d <= 0 )
         return false;
@@ -767,11 +752,8 @@ bool kspreadfunc_devsq( KSContext & context )
   double res = 0.0;
   int number = 0;
 
-  kdDebug() << "DevSQ" << endl;
   if ( !kspreadfunc_average_helper( context, args, res, number, false ) )
     return false;
-
-  kdDebug() << "DevSQ: " << number << " - " << res << endl;
 
   if ( number == 0 )
   {
@@ -781,8 +763,6 @@ bool kspreadfunc_devsq( KSContext & context )
 
   double avg = res / (double) number;
 
-  kdDebug() << "Average: " << avg << endl;
-  
   res = 0.0;
 
   if ( !kspreadfunc_devsq_helper( context, args, res, avg ) )
@@ -832,12 +812,8 @@ bool kspreadfunc_kurtosis_est( KSContext & context )
 
   double avg = res / (double) number;
 
-  kdDebug() << "Average: " << avg << endl;
-
   if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
     return false;
-
-  kdDebug() << "Stdev: " << res << endl;
 
   if ( res == 0.0 )
     return false;
@@ -870,12 +846,8 @@ bool kspreadfunc_kurtosis_pop( KSContext & context )
 
   double avg = res / (double) number;
 
-  kdDebug() << "Average: " << avg << endl;
-
   if ( !kspreadfunc_stddev_helper( context, args, res, avg, false ) )
     return false;
-
-  kdDebug() << "Stdev: " << res << endl;
 
   if ( res == 0.0 )
     return false;
@@ -1219,15 +1191,12 @@ bool kspreadfunc_stddev( KSContext& context )
   if ( number == 0 )
       return false;
 
-  kdDebug() << "STDEV: Number: " << number << ", result: " << result << endl;
-
   if ( b )
   {
     avera  = result / number;
     result = 0.0;
     bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, false );
 
-    kdDebug() << "STDEV: result: " << result << endl;
     if (b)
       context.setValue( new KSValue(sqrt(result / ((double)(number - 1)) )) );
   }
@@ -1246,15 +1215,11 @@ bool kspreadfunc_stddeva( KSContext & context )
   if ( number == 0 )
       return false;
 
-  kdDebug() << "STDEVA: Number: " << number << ", result: " << result << endl;
-
   if ( b )
   {
     avera  = result / number;
     result = 0.0;
     bool b = kspreadfunc_stddev_helper( context, context.value()->listValue(), result, avera, true );
-
-    kdDebug() << "STDEVA: result: " << result << endl;
 
     if (b)
       context.setValue( new KSValue(sqrt(result / ((double)(number - 1)) )) );

@@ -51,8 +51,6 @@ uint EDate::greg2jul( QDate const & date )
 
 void EDate::jul2greg( double num, int & y, int & m, int & d )
 {
-  kdDebug() << "Here" << endl;
-  
   QDate date = QDate( 1899, 12, 31 );
   
   date = date.addDays( (int) num );
@@ -72,8 +70,6 @@ void EDate::jul2greg( double num, int & y, int & m, int & d )
   else if (i == g_dateSerial_19000228 + 1)
     kdWarning() << "Request for date 02/29/1900." << endl;
   
-  kdDebug() << "num: " << num << ", i: " << i << " - " << i + g_dateOrigin << endl;
-
   QDate::julianToGregorian( i + g_dateOrigin, y, m, d );
 }
 
@@ -81,47 +77,38 @@ void EDate::jul2greg( double num, int & y, int & m, int & d )
 
 bool getDate( KSContext & context, KSValue::Ptr & arg, QDate & date )
 {
-  kdDebug() << "Here" << endl;
   if ( !KSUtil::checkType( context, arg, KSValue::DateType, true ) )
   {
-    kdDebug() << "Here1" << endl;
     if ( !KSUtil::checkType( context, arg, KSValue::StringType, true ) )
     {
-      kdDebug() << "Here2" << endl;
       if ( !KSUtil::checkType( context, arg, KSValue::DoubleType, true ) )
         return false;
 
-      kdDebug() << "Here3" << endl;
       double d = arg->doubleValue();
 
       int y = 0; 
       int m = 0; 
       int day = 0;
-      kdDebug() << "D: " << d << endl;
       EDate::jul2greg( d, y, m, day );
-      kdDebug() << "Alive" << endl;
+
       date.setYMD( y, m, day );
-      kdDebug() << "Alive2" << endl;
 
       return true;
     }
     else
     {
-      kdDebug() << "Here4" << endl;
       QString s = arg->stringValue();
       bool valid = false;
-      kdDebug() << "S: " << s << endl;
+
       date = KGlobal::locale()->readDate( s, &valid );
       if ( !valid )
         return false;
 
-      kdDebug() << "Here end s" << endl;
       return true;
     }
   }
   else 
   {
-    kdDebug() << "Here5" << endl;
     date = arg->dateValue();
     return true;
   }
@@ -150,8 +137,6 @@ void addMonths( QDate & date, int months )
 
 void subMonths( QDate & date, int months )
 {
-  kdDebug() << "Subtract: " << months << endl;
-  
   int d = date.day();
   int m = date.month() - months;
   int y = date.year();
@@ -205,21 +190,15 @@ int daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
   month2 = date2.month();
   year2  = date2.year();
 
-  kdDebug() << "day1: " << day1 << ", day2: " << day2 << endl;
-
   years  = year2  - year1;
   months = month2 - month1 + years * 12;
   days   = day2   - day1;
-
-  kdDebug() << "Months: " << months << ", Days: " << days << ", Basis: " << basis << endl;
 
   isLeapYear = QDate::leapYear( year1 );
 
   switch (basis) 
   {
    case 0:
-    kdDebug() << "D: " << months * 30 + days << endl;
-
     if ( month1 == 2 && month2 != 2 && year1 == year2 ) 
     {
       if ( isLeapYear )
@@ -313,15 +292,12 @@ bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> &
     }
     else if ( aMode )
     {
-      kdDebug() << "'A' - Mode" << endl;
       if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
       {
-        kdDebug() << "String: " << (*it)->stringValue() << endl;
         ++number;
       }
       else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
       {
-        kdDebug() << "Bool: " << (*it)->boolValue() << endl;
         result += ( (*it)->boolValue() ? 1.0 : 0.0 );
         ++number;
       }

@@ -195,24 +195,16 @@ bool kspreadfunc_coupnum( KSContext & context )
   int months = maturity.month() - settlement.month() 
     + 12 * ( maturity.year() - settlement.year() );
 
-  kdDebug() << "Months: " << months << endl;
-
   subMonths( cDate, months );
 
   if ( eom && maturity.daysInMonth() == maturity.day() )
   {
-    kdDebug() << "EOM" << endl;
     while( cDate.daysInMonth() != cDate.day() )
       cDate.addDays( 1 );
   }
 
-  kdDebug() << "CDate: " << cDate.day() << "." << cDate.month() << "; Settlement "
-            << settlement.day() << "." << settlement.month() << endl;
-
   if ( settlement.day() >= cDate.day() )
     --months;
-
-  kdDebug() << "Months: " << months << ", Freq: " << frequency << endl;
 
   result = ( 1 + months / ( 12 / frequency ) );
 
@@ -277,8 +269,6 @@ bool kspreadfunc_accrint( KSContext& context )
 
   double d = daysBetweenDates( maturity, settlement, basis );
   double y = daysPerYear( maturity, basis );
-
-  kdDebug() << "Days: " << d << endl;
 
   if ( d < 0 || y <= 0 || par <= 0 || rate <= 0 )
     return false;
@@ -490,8 +480,6 @@ bool kspreadfunc_tbilleq( KSContext& context )
   if ( settlement > maturity || discount < 0 || days > 265 )
     return false;
 
-  kdDebug() << "Days: " << days << endl;
-
   double divisor = 360.0 - discount * days;
 
   if ( divisor == 0 )
@@ -633,7 +621,6 @@ bool kspreadfunc_intrate( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 5, "INTRATE", true ) )
   {
-    kdDebug() << "Here2" << endl;
     if ( !KSUtil::checkArgumentsCount( context, 4, "INTRATE", true ) )
       return false;
   }
@@ -644,8 +631,6 @@ bool kspreadfunc_intrate( KSContext& context )
     
     basis = args[4]->intValue();
   }
-
-  kdDebug() << "Here1" << endl;
 
   QDate settlement;
   QDate maturity;
@@ -670,15 +655,10 @@ bool kspreadfunc_intrate( KSContext& context )
   double d = daysBetweenDates( settlement, maturity, basis );
   double y = daysPerYear( settlement, basis );
 
-  kdDebug() << "Here4, d: " << d << ", y: " << y << "; I: " << investment << ", B: " << basis << endl;
-
   if ( d <= 0 || y <= 0 || investment == 0 || basis < 0 || basis > 4 )
     return false;
 
-  kdDebug() << "Here5" << endl;
   double result = ( redemption -investment ) / investment * ( y / d );
-
-  kdDebug() << "Result: " << result << endl;
 
   context.setValue( new KSValue( result ) );
   return true;
@@ -773,7 +753,6 @@ bool kspreadfunc_nper( KSContext& context )
 
   if ( KSUtil::checkArgumentsCount( context, 5, "NPER", true ) )
   {
-    kdDebug() << "Here" << endl;
     if ( !KSUtil::checkType( context, args[4], KSValue::IntType, true ) )
       return false;
     if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
@@ -785,7 +764,6 @@ bool kspreadfunc_nper( KSContext& context )
   else
   if ( KSUtil::checkArgumentsCount( context, 4, "NPER", true ) )
   {
-    kdDebug() << "Here 2" << endl;
     type = 0;
     if ( !KSUtil::checkType( context, args[3], KSValue::DoubleType, true ) )
       return false;
@@ -795,7 +773,6 @@ bool kspreadfunc_nper( KSContext& context )
   else
   if ( !KSUtil::checkArgumentsCount( context, 3, "NPER", false ) )
     return false;
-  kdDebug() << "Here 3" << endl;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
@@ -810,7 +787,6 @@ bool kspreadfunc_nper( KSContext& context )
 
   if ( rate <= 0.0 )
     return false;
-  kdDebug() << "Here 4" << endl;
 
   // taken from Gnumeric
   double d  = ( pmt * ( 1.0 + rate * type ) - fv * rate );
@@ -820,11 +796,8 @@ bool kspreadfunc_nper( KSContext& context )
   double tmp = (pmt * (1.0 + rate * type) - fv * rate) /
 	  (pv * rate + pmt * (1.0 + rate * type));
 
-  kdDebug() << "Res: " << res << ", tmp: " << tmp << endl;
-        
   if ( res <= 0.0 )
     return false;
-  kdDebug() << "Here 5" << endl;
 
   context.setValue( new KSValue( log( res ) / log( 1.0 + rate ) ) );
   return true;
