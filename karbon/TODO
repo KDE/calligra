@@ -1,4 +1,3 @@
--	go for drawCubicBezier(), the ps backend produces "curveto"s
 -	fix crash (something to do with static of current tool?)
 	when loading or adding new view
 -	fix tool-bar
