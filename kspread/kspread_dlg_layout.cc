@@ -3296,7 +3296,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grid2 = new QGridLayout(grp, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-    multi = new QCheckBox( i18n("Go to line automatically"), grp);
+    multi = new QCheckBox( i18n("Wrap text"), grp);
 
     grid2->addWidget(multi, 1, 0);
     multi->setChecked(dlg->bMultiRow);
