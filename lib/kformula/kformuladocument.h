@@ -110,6 +110,7 @@ public:
 
     /**
      * Load a OASIS content.xml DomDocument
+     * @since 1.4
      */
     bool loadOasis( QDomDocument doc );
     
