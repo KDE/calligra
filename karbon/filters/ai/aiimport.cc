@@ -60,7 +60,8 @@ AiImport::convert( const QCString& from, const QCString& to )
         {
 		fileIn.close();
 		return KoFilter::CreationError;
-        }  
+        }
+	m_buffer = getHeader() + m_buffer + getFooter();
 
         kdDebug() << m_buffer << endl;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
@@ -98,14 +99,18 @@ void AiImport::gotEndTag (const char *tagName){
 }
 
 void AiImport::parsingStarted(){
-  m_buffer += getHeader();
+//  QString str = getHeader();
+//  m_buffer += str;
+//  qDebug ("buffer is\n %s", m_buffer.latin1());
+
 }
 
 void AiImport::parsingFinished(){
-  m_buffer += getFooter();
+//  m_buffer += getFooter();
 }
 
 void AiImport::parsingAborted(){
+//  qDebug ("parsing aborted called");
   m_buffer = "";
 }
 

@@ -31,7 +31,7 @@ int iswhitespace(char c){
 }
 
 int isspecial(char c){
-  return (c=='*')/* ||(c=='/') */ ||(c=='_');
+  return (c=='*')||(c=='_')||(c=='?')||(c=='~')||(c=='-')||(c=='^')||(c=='`')||(c=='!')||(c=='.')||(c=='@')||(c=='&')||(c=='$')||(c=='=');
 }
 
 const char*statetoa (State state){
@@ -48,6 +48,8 @@ const char*statetoa (State state){
     case State_BlockEnd : return "block end";
     case State_ArrayStart : return "array start";
     case State_ArrayEnd : return "array end";
+    case State_Byte : return "byte";
+    case State_ByteArray : return "byte array";
     default : return "unknown";
   }
 }
@@ -74,6 +76,7 @@ static Transition transitions[] = {
   { State_Start, '}', State_BlockEnd, Action_Copy},
   { State_Start, '[', State_ArrayStart, Action_Copy},
   { State_Start, ']', State_ArrayEnd, Action_Copy},
+  { State_Start, '<', State_ByteArray, Action_Ignore},
   { State_Start, CATEGORY_ANY, State_Start, Action_Abort},
 //  { State_Array, CATEGORY_ALPHA, State_Array, Action_Copy},
 //  { State_Array, CATEGORY_DIGIT, State_Array, Action_Copy},
@@ -84,15 +87,22 @@ static Transition transitions[] = {
   { State_Integer, CATEGORY_WHITESPACE, State_Start, Action_Output},
   { State_Integer, ']', State_Start, Action_OutputUnget},
   { State_Integer, '.', State_Float, Action_Copy},
+  { State_Integer, '}', State_Start, Action_OutputUnget},
+  { State_Integer, '#', State_Byte, Action_Copy },
+  { State_Integer, '/', State_Start, Action_OutputUnget },
   { State_Integer, CATEGORY_ANY, State_Start, Action_Abort},
   { State_Float, CATEGORY_DIGIT, State_Float, Action_Copy},
   { State_Float, CATEGORY_WHITESPACE, State_Start, Action_Output},
+  { State_Float, ']', State_Start, Action_OutputUnget},
+  { State_Float, '}', State_Start, Action_OutputUnget},
   { State_Float, CATEGORY_ANY, State_Start, Action_Abort},
   { State_String, ')', State_Start, Action_Output},
   { State_String, CATEGORY_ANY, State_String, Action_Copy},
   { State_Token, CATEGORY_DIGIT, State_Token, Action_Copy},
   { State_Token, CATEGORY_ALPHA, State_Token, Action_Copy},
   { State_Token, CATEGORY_SPECIAL, State_Token, Action_Copy},
+  { State_Token, '}', State_Start, Action_OutputUnget},
+  { State_Token, ']', State_Start, Action_OutputUnget},
   { State_Token, CATEGORY_WHITESPACE, State_Start, Action_Output},
   { State_Token, '{', State_BlockStart, Action_Output},
   { State_Token, '}', State_BlockEnd, Action_Output},
@@ -103,7 +113,18 @@ static Transition transitions[] = {
   { State_ArrayEnd, CATEGORY_ANY, State_Start, Action_OutputUnget },
   { State_Reference, CATEGORY_ALPHA, State_Reference, Action_Copy },
   { State_Reference, CATEGORY_DIGIT, State_Reference, Action_Copy },
+  { State_Reference, CATEGORY_SPECIAL, State_Reference, Action_Copy },
+  { State_Reference, '#', State_Reference, Action_Copy },
   { State_Reference, CATEGORY_ANY, State_Start, Action_OutputUnget },
+  { State_Byte, CATEGORY_DIGIT, State_Byte, Action_Copy},
+  { State_Byte, CATEGORY_ALPHA, State_Byte, Action_Copy},
+  { State_Byte, CATEGORY_WHITESPACE, State_Start, Action_Output},
+  { State_Byte, '/', State_Start, Action_OutputUnget },
+  { State_ByteArray, CATEGORY_ALPHA, State_ByteArray, Action_Copy },
+  { State_ByteArray, CATEGORY_DIGIT, State_ByteArray, Action_Copy },
+  { State_ByteArray, CATEGORY_WHITESPACE, State_ByteArray, Action_Ignore },
+  { State_ByteArray, '>', State_Start, Action_Output },
+  { State_ByteArray, CATEGORY_ANY, State_Start, Action_Abort },
   { State_Start, STOP, State_Start, Action_Abort}
 };
 
@@ -199,6 +220,14 @@ void AILexer::doOutput ()
       break;
     case State_ArrayEnd :
       gotArrayEnd ();
+      break;
+    case State_Byte :
+      qDebug ("TODO: handle byte: %s", m_buffer.latin1());
+      gotIntValue (0);
+      break;
+    case State_ByteArray :
+      qDebug ("TODO: handle byte array: %s", m_buffer.latin1());
+      gotStringValue ("");
       break;
     default:
       qWarning ( "unknown state: %d", m_curState );

@@ -36,6 +36,8 @@ typedef enum {
   State_BlockEnd,
   State_ArrayStart,
   State_ArrayEnd,
+  State_Byte,
+  State_ByteArray,
 } State;
 
 typedef enum {

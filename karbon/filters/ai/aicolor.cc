@@ -56,7 +56,7 @@ AIColor::AIColor( double gray ){
 }
 
 AIColor::~AIColor(){
-  if (_freedata) free (_freedata);
+//  if (_freedata) free (_freedata);
 }
 
 void AIColor::toRGB (double &r, double &g, double &b)

@@ -19,6 +19,7 @@
 #define KARBONAIPARSERBASE_H
 
 #include <aiparserbase.h>
+#include <qptrlist.h>
 #include <qstring.h>
 #include <qpair.h>
 #include <qptrlist.h>

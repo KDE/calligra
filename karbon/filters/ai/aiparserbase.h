@@ -109,8 +109,8 @@ typedef enum {
 typedef enum {
   CO_BeginSetup, CO_EndSetup,
   CO_BeginProlog, CO_EndProlog,
-/**/  CO_BeginProcSet, CO_EndProcSet,
-/**/  CO_BeginEncoding, CO_EndEncoding,
+  CO_BeginProcSet, CO_EndProcSet,
+  CO_BeginEncoding, CO_EndEncoding,
 /**/  CO_BeginPattern, CO_EndPattern,
 /**/  CO_IncludeFile,
 /**/  CO_BeginDocument, CO_EndDocument,
@@ -141,6 +141,15 @@ typedef enum {
 /**/  CO_PageOrigin,
 /**/  CO_PrinterName,
 /**/  CO_PrinterRect,
+
+  // AI8
+  CO_BeginBrushPattern, CO_EndBrushPattern,
+  CO_BeginGradient, CO_EndGradient,
+  CO_BeginPalette, CO_EndPalette,
+
+  // other
+  CO_BeginResource, CO_EndResource,
+  CO_IncludeFont,
 
   CO_Ignore
 } CommentOperation;
@@ -268,6 +277,8 @@ public:
 
   bool parse (QIODevice& fin);
 };
+
+const void aiotoa (AIOperation &data);
 
 #endif
 

@@ -113,12 +113,14 @@ void KarbonAIParserBase::gotPathElement (PathElement &element){
 
 // generic
 void KarbonAIParserBase::gotFillPath (bool closed, bool reset, FillMode fm){
+  qDebug ("found fill path");
   doOutputCurrentPath (POT_Filled, closed);
   if (reset) m_curPath.clear();
 }
 
 // generic
 void KarbonAIParserBase::gotIgnorePath (bool closed, bool reset){
+  qDebug ("found ignore path");
   doOutputCurrentPath (POT_Ignore, closed);
   if (reset) m_curPath.clear();
 }
@@ -126,6 +128,7 @@ void KarbonAIParserBase::gotIgnorePath (bool closed, bool reset){
 
 // generic
 void KarbonAIParserBase::gotStrokePath (bool closed) {
+  qDebug ("found stroke path");
   doOutputCurrentPath (POT_Stroked, closed);
   m_curPath.clear();
 }

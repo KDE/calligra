@@ -105,12 +105,14 @@ static CommentOperationMapping commentMappings[] = {
   { "BeginProlog", CO_BeginProlog },
   { "BeginSetup", CO_BeginSetup },
   { "BeginProcSet", CO_BeginProcSet },
+  { "BeginResource", CO_BeginResource },
   { "BeginEncoding", CO_BeginEncoding },
   { "BeginPattern", CO_BeginPattern },
   { "Trailer", CO_Trailer },
   { "EndProlog", CO_EndProlog },
   { "EndSetup", CO_EndSetup },
   { "EndProcSet", CO_EndProcSet },
+  { "EndResource", CO_EndResource },
   { "EndEncoding", CO_EndEncoding },
   { "EndPattern", CO_EndPattern },
 
@@ -147,6 +149,14 @@ static CommentOperationMapping commentMappings[] = {
   { "PrinterRect",  CO_PrinterRect },
   { "Note",  CO_Note },
 
+  { "IncludeFont",  CO_IncludeFont },
+  { "BeginBrushPattern", CO_BeginBrushPattern },
+  { "EndBrushPattern", CO_EndBrushPattern },
+  { "BeginGradient", CO_BeginGradient },
+  { "EndGradient", CO_EndGradient },
+  { "BeginPalette", CO_BeginPalette },
+  { "EndPalette", CO_EndPalette },
+
   { NULL, CO_Other }
 };
 
@@ -167,10 +177,25 @@ void AIParserBase::gotComment (const char *value) {
     case CO_EndSetup :
       break;
     case CO_BeginProlog :
+    case CO_BeginProcSet :
+    case CO_BeginResource :
+    case CO_BeginEncoding :
+    case CO_IncludeFont :
+    case CO_BeginBrushPattern :
+    case CO_BeginGradient :
+    case CO_BeginPalette :
     case CO_Trailer :
+      qDebug ("start ignoring");
       m_ignoring = true;
       break;
     case CO_EndProlog :
+    case CO_EndProcSet :
+    case CO_EndResource :
+    case CO_EndEncoding :
+    case CO_EndBrushPattern :
+    case CO_EndGradient :
+    case CO_EndPalette :
+      qDebug ("stop ignoring");
       m_ignoring = false;
       break;
     case CO_Ignore :
@@ -227,6 +252,8 @@ void AIParserBase::gotComment (const char *value) {
 
 void AIParserBase::handleElement (AIElement &element)
 {
+  if (m_ignoring) return;
+
   if (m_sink == DS_Array)
   {
     QValueVector<AIElement> &elementArray = m_arrayStack.top();
@@ -265,6 +292,7 @@ void AIParserBase::gotReference (const char *value) {
 
 void AIParserBase::gotArrayStart () {
   if (m_ignoring) return;
+  qDebug ("got array start");
 
   QValueVector<AIElement> array;
   m_arrayStack.push (array);
@@ -273,6 +301,9 @@ void AIParserBase::gotArrayStart () {
 }
 
 void AIParserBase::gotArrayEnd () {
+  if (m_ignoring) return;
+  qDebug ("got array end");
+
   QValueVector<AIElement> stackArray = m_arrayStack.pop();
 
   if (m_arrayStack.empty())
@@ -408,17 +439,21 @@ void AIParserBase::gotToken (const char *value) {
 
   if (m_sink == DS_Array)
   {
+    qDebug ("token in array");
     QString op (value);
     AIElement realElement (op, AIElement::Operator);
     m_stack.push (realElement);
 
     return;
   }
+//  qDebug ("got token %s",value);
 
   AIOperation op = getAIOperation (value);
   PathElement pathElement;
   double fval;
   int ival;
+
+//  aiotoa (op);
 
   switch (op) {
     case AIO_SetFillColorCMYK :
@@ -609,6 +644,8 @@ void AIParserBase::gotToken (const char *value) {
 }
 
 bool AIParserBase::handlePS (const char *operand){
+  if (m_ignoring) return false;
+
   PSOperation psop = getPSOperation (operand);
 
   switch (psop)
@@ -712,14 +749,14 @@ CommentOperation AIParserBase::getCommentOperation (const char *command) {
 
 void AIParserBase::gotFillColor (AIColor &color) {
 /*  double r, g, b;
-  Color.toRGB (color, r, g, b);
+  color.toRGB (r, g, b);
   qDebug ( "got fill color: %f %f %f ", r, g, b ); */
 }
 
 void AIParserBase::gotStrokeColor (AIColor &color) {
 /*  double r, g, b;
-  Color.toRGB (color, r, g, b);
-  qDebug ( "got stroke color: %f %f %f ", r, g, b );  */
+  color.toRGB (r, g, b);
+  qDebug ( "got stroke color: %f %f %f ", r, g, b ); */
 }
 
 void AIParserBase::gotFlatness (double val) {
@@ -853,7 +890,7 @@ bool AIParserBase::getRectangle (const char* input, int &llx, int &lly, int &urx
   QString s(input);
   if (s.contains ("(atend)")) return false;
   QStringList values = QStringList::split (" ", input);
-
+  if (values.size() < 5) return false;
   llx = values[1].toInt();
   lly = values[2].toInt();
   urx = values[3].toInt();
@@ -867,6 +904,8 @@ bool AIParserBase::getPoint (const char* input, int &x, int &y) {
 
   QString s(input);
   QStringList values = QStringList::split (" ", input);
+
+  if (values.size() < 3) return false;
 
   x = values[1].toInt();
   y = values[2].toInt();
@@ -975,3 +1014,62 @@ const void stacktoa2 (const QValueStack<QValueVector<AIElement> >&data)
   }
 }
 
+const void aiotoa (AIOperation &data)
+{
+  switch (data)
+  {
+    case AIO_SetFillColorCMYK : qDebug ("AIO_SetFillColorCMYK"); break;
+    case AIO_SetStrokeColorCMYK : qDebug ("AIO_SetStrokeColorCMYK"); break;
+    case AIO_SetFillColorGray : qDebug ("AIO_SetFillColorGray"); break;
+    case AIO_SetStrokeColorGray : qDebug ("AIO_SetStrokeColorGray"); break;
+    case AIO_SetFillColorCustom : qDebug ("AIO_SetFillColorCustom"); break;
+    case AIO_SetStrokeColorCustom : qDebug ("AIO_SetStrokeColorCustom"); break;
+    case AIO_SetFillPattern : qDebug ("AIO_SetFillPattern"); break;
+    case AIO_SetStrokePattern : qDebug ("AIO_SetStrokePattern"); break;
+    case AIO_SetFillOverprinting : qDebug ("AIO_SetFillOverprinting"); break;
+    case AIO_SetStrokeOverprinting : qDebug ("AIO_SetStrokeOverprinting"); break;
+    case AIO_SetFlatness : qDebug ("AIO_SetFlatness"); break;
+    case AIO_SetLineCap : qDebug ("AIO_SetLineCap"); break;
+    case AIO_SetLineJoin : qDebug ("AIO_SetLineJoin"); break;
+    case AIO_SetLineWidth : qDebug ("AIO_SetLineWidth"); break;
+    case AIO_SetMiterLimit : qDebug ("AIO_SetMiterLimit"); break;
+    case AIO_SetDash : qDebug ("AIO_SetDash"); break;
+    case AIO_BeginGroupClip : qDebug ("AIO_BeginGroupClip"); break;
+    case AIO_EndGroupClip : qDebug ("AIO_EndGroupClip"); break;
+    case AIO_MoveTo : qDebug ("AIO_MoveTo"); break;
+    case AIO_LineToCorner : qDebug ("AIO_LineToCorner"); break;
+    case AIO_LineToSmooth : qDebug ("AIO_LineToSmooth"); break;
+    case AIO_CurveToSmooth : qDebug ("AIO_CurveToSmooth"); break;
+    case AIO_CurveToCorner : qDebug ("AIO_CurveToCorner"); break;
+    case AIO_CurveToOmitC1Smooth : qDebug ("AIO_CurveToOmitC1Smooth"); break;
+    case AIO_CurveToOmitC1Corner : qDebug ("AIO_CurveToOmitC1Corner"); break;
+    case AIO_CurveToOmitC2Smooth : qDebug ("AIO_CurveToOmitC2Smooth"); break;
+    case AIO_CurveToOmitC2Corner : qDebug ("AIO_CurveToOmitC2Corner"); break;
+    case AIO_PathIgnoreNoReset : qDebug ("AIO_PathIgnoreNoReset"); break;
+    case AIO_PathIgnoreNoResetClose : qDebug ("AIO_PathIgnoreNoResetClose"); break;
+    case AIO_PathClipPath : qDebug ("AIO_PathClipPath"); break;
+    case AIO_PathIgnoreReset : qDebug ("AIO_PathIgnoreReset"); break;
+    case AIO_PathIgnoreResetClose : qDebug ("AIO_PathIgnoreResetClose"); break;
+    case AIO_PathFillNonZero : qDebug ("AIO_PathFillNonZero"); break;
+    case AIO_PathFillNonZeroClose : qDebug ("AIO_PathFillNonZeroClose"); break;
+    case AIO_PathStroke : qDebug ("AIO_PathStroke"); break;
+    case AIO_PathStrokeClose : qDebug ("AIO_PathStrokeClose"); break;
+    case AIO_PathFillNoReset : qDebug ("AIO_PathFillNoReset"); break;
+    case AIO_PathFillNoResetClose : qDebug ("AIO_PathFillNoResetClose"); break;
+    case AIO_FontEncoding : qDebug ("AIO_FontEncoding"); break;
+    case AIO_PatternDefinition : qDebug ("AIO_PatternDefinition"); break;
+    case AIO_SetCurrentText : qDebug ("AIO_SetCurrentText"); break;
+    case AIO_TextBlockFillStroke : qDebug ("AIO_TextBlockFillStroke"); break;
+    case AIO_TextBlockFill : qDebug ("AIO_TextBlockFill"); break;
+    case AIO_TextBlockAppend : qDebug ("AIO_TextBlockAppend"); break;
+    case AIO_TextBlockIgnore : qDebug ("AIO_TextBlockIgnore"); break;
+    case AIO_TextBlockStroke : qDebug ("AIO_TextBlockStroke"); break;
+    case AIO_TextOutput : qDebug ("AIO_TextOutput"); break;
+    case AIO_TextBlockEnd : qDebug ("AIO_TextBlockEnd"); break;
+    case AIO_GsaveIncludeDocument : qDebug ("AIO_GsaveIncludeDocument"); break;
+    case AIO_Grestore : qDebug ("AIO_Grestore"); break;
+    case AIO_LockElement : qDebug ("AIO_LockElement"); break;
+    case AIO_SetWindingOrder : qDebug ("AIO_SetWindingOrder"); break;
+    default : qDebug ("unknown");
+  }
+}
