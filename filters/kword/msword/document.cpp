@@ -123,7 +123,7 @@ void Document::processStyles()
                 styleElem.appendChild( element );
             }
 
-            writeLayout( styleElem, &style->pap() );
+            writeLayout( styleElem, style->paragraphProperties().pap() );
 
             writeFormat( styleElem, &style->chp(), 0L /*all of it, no ref chp*/, 0, 0 );
         }
@@ -448,7 +448,7 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
     if ( m_paragraphProperties )
     {
         // Write out the properties of the paragraph
-        writeLayout( layoutElement, &m_paragraphProperties->pap() );
+        writeLayout( layoutElement, m_paragraphProperties->pap() );
     }
 
     textElement.appendChild(m_mainDocument.createTextNode(text));
@@ -458,35 +458,35 @@ void Document::writeOutParagraph( const QString& styleName, const QString& text 
     m_oldLayout = layoutElement; // Keep a reference to the old layout for some hacks
 }
 
-void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PAP* pap )
+void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PAP& pap )
 {
     // Always write out the alignment, it's required
     QDomElement flowElement = m_mainDocument.createElement("FLOW");
-    QString alignment = Conversion::alignment( pap->jc );
+    QString alignment = Conversion::alignment( pap.jc );
     flowElement.setAttribute( "align", alignment );
     parentElement.appendChild( flowElement );
 
-    //kdDebug() << k_funcinfo << " dxaLeft1=" << pap->dxaLeft1 << " dxaLeft=" << pap->dxaLeft << " dxaRight=" << pap->dxaRight << " dyaBefore=" << pap->dyaBefore << " dyaAfter=" << pap->dyaAfter << " lspd=" << pap->lspd.dyaLine << "/" << pap->lspd.fMultLinespace << endl;
+    //kdDebug() << k_funcinfo << " dxaLeft1=" << pap.dxaLeft1 << " dxaLeft=" << pap.dxaLeft << " dxaRight=" << pap.dxaRight << " dyaBefore=" << pap.dyaBefore << " dyaAfter=" << pap.dyaAfter << " lspd=" << pap.lspd.dyaLine << "/" << pap.lspd.fMultLinespace << endl;
 
-    if ( pap->dxaLeft1 || pap->dxaLeft || pap->dxaRight )
+    if ( pap.dxaLeft1 || pap.dxaLeft || pap.dxaRight )
     {
         QDomElement indentsElement = m_mainDocument.createElement("INDENTS");
         // 'first' is relative to 'left' in both formats
-        indentsElement.setAttribute( "first", (double)pap->dxaLeft1 / 20.0 );
-        indentsElement.setAttribute( "left", (double)pap->dxaLeft / 20.0 );
-        indentsElement.setAttribute( "right", (double)pap->dxaRight / 20.0 );
+        indentsElement.setAttribute( "first", (double)pap.dxaLeft1 / 20.0 );
+        indentsElement.setAttribute( "left", (double)pap.dxaLeft / 20.0 );
+        indentsElement.setAttribute( "right", (double)pap.dxaRight / 20.0 );
         parentElement.appendChild( indentsElement );
     }
-    if ( pap->dyaBefore || pap->dyaAfter )
+    if ( pap.dyaBefore || pap.dyaAfter )
     {
         QDomElement offsetsElement = m_mainDocument.createElement("OFFSETS");
-        offsetsElement.setAttribute( "before", (double)pap->dyaBefore / 20.0 );
-        offsetsElement.setAttribute( "after", (double)pap->dyaAfter / 20.0 );
+        offsetsElement.setAttribute( "before", (double)pap.dyaBefore / 20.0 );
+        offsetsElement.setAttribute( "after", (double)pap.dyaAfter / 20.0 );
         parentElement.appendChild( offsetsElement );
     }
 
     // Linespacing
-    QString lineSpacing = Conversion::lineSpacing( pap->lspd );
+    QString lineSpacing = Conversion::lineSpacing( pap.lspd );
     if ( lineSpacing != "0" )
     {
         QDomElement lineSpacingElem = m_mainDocument.createElement( "LINESPACING" );
@@ -494,50 +494,50 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
         parentElement.appendChild( lineSpacingElem );
     }
 
-    if ( pap->fKeep || pap->fKeepFollow || pap->fPageBreakBefore )
+    if ( pap.fKeep || pap.fKeepFollow || pap.fPageBreakBefore )
     {
         QDomElement pageBreak = m_mainDocument.createElement( "PAGEBREAKING" );
-        if ( pap->fKeep )
+        if ( pap.fKeep )
             pageBreak.setAttribute("linesTogether", "true");
-        if ( pap->fPageBreakBefore )
+        if ( pap.fPageBreakBefore )
             pageBreak.setAttribute("hardFrameBreak", "true" );
-        if ( pap->fKeepFollow )
+        if ( pap.fKeepFollow )
             pageBreak.setAttribute("keepWithNext", "true" );
         parentElement.appendChild( pageBreak );
     }
 
     // Borders
-    if ( pap->brcTop.brcType )
+    if ( pap.brcTop.brcType )
     {
         QDomElement borderElement = m_mainDocument.createElement( "TOPBORDER" );
-        Conversion::setBorderAttributes( borderElement, pap->brcTop );
+        Conversion::setBorderAttributes( borderElement, pap.brcTop );
         parentElement.appendChild( borderElement );
     }
-    if ( pap->brcBottom.brcType )
+    if ( pap.brcBottom.brcType )
     {
         QDomElement borderElement = m_mainDocument.createElement( "BOTTOMBORDER" );
-        Conversion::setBorderAttributes( borderElement, pap->brcBottom );
+        Conversion::setBorderAttributes( borderElement, pap.brcBottom );
         parentElement.appendChild( borderElement );
     }
-    if ( pap->brcLeft.brcType )
+    if ( pap.brcLeft.brcType )
     {
         QDomElement borderElement = m_mainDocument.createElement( "LEFTBORDER" );
-        Conversion::setBorderAttributes( borderElement, pap->brcLeft );
+        Conversion::setBorderAttributes( borderElement, pap.brcLeft );
         parentElement.appendChild( borderElement );
     }
-    if ( pap->brcRight.brcType )
+    if ( pap.brcRight.brcType )
     {
         QDomElement borderElement = m_mainDocument.createElement( "RIGHTBORDER" );
-        Conversion::setBorderAttributes( borderElement, pap->brcRight );
+        Conversion::setBorderAttributes( borderElement, pap.brcRight );
         parentElement.appendChild( borderElement );
     }
 
     // Tabulators
-    if ( pap->itbdMac )
+    if ( pap.itbdMac )
     {
-        for ( int i = 0 ; i < pap->itbdMac ; ++i )
+        for ( int i = 0 ; i < pap.itbdMac ; ++i )
         {
-            const wvWare::Word97::TabDescriptor &td = pap->rgdxaTab[i];
+            const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
             QDomElement tabElement = m_mainDocument.createElement( "TABULATOR" );
             tabElement.setAttribute( "ptpos", (double)td.dxaTab / 20.0 );
             //kdDebug() << "ptpos=" << (double)td.dxaTab / 20.0 << endl;
@@ -564,7 +564,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
         }
     }
 
-    if ( pap->ilfo > 0 )
+    if ( pap.ilfo > 0 )
     {
         const wvWare::ListInfo* listInfo = m_paragraphProperties->listInfo();
         Q_ASSERT( listInfo );
@@ -576,7 +576,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
             counterElement.setAttribute( "start", listInfo->startAt() );
             // Now we need to parse the text, to try and convert msword's powerful list template
             // stuff, into what KWord can do right now.
-            int depth = pap->ilvl; /*both are 0 based*/
+            int depth = pap.ilvl; /*both are 0 based*/
             counterElement.setAttribute( "depth", depth );
             wvWare::UString text = listInfo->text().text;
             QString prefix, suffix;
