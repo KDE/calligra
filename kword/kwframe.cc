@@ -948,56 +948,59 @@ void KWFrameSet::updateFrames()
         m_framesInPage[pg - m_firstPage]->append( fIt.current() );
     }
 
-    // Iterate over ALL framesets, to find those which have frames on top of us.
-    // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
-    // So we want it cached.
-    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
-    for (; framesetIt.current(); ++framesetIt )
+    if ( m_doc->viewMode()->hasFrames() )
     {
-        KWFrameSet *frameSet = framesetIt.current();
-        if ( !frameSet->isVisible() )
-            continue;
-
-        // Floating frames are not "on top", they are "inside".
-        if ( frameSet->isFloating() )
-            continue;
-
-        //kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
-
-        QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-        for ( ; frameIt.current(); ++frameIt )
+        // Iterate over ALL framesets, to find those which have frames on top of us.
+        // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
+        // So we want it cached.
+        QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+        for (; framesetIt.current(); ++framesetIt )
         {
-            KWFrame *frameMaybeOnTop = frameIt.current();
-            // Is this frame over any of our frames ?
-            QPtrListIterator<KWFrame> fIt( frameIterator() );
-            for ( ; fIt.current(); ++fIt )
+            KWFrameSet *frameSet = framesetIt.current();
+            if ( !frameSet->isVisible() )
+                continue;
+
+            // Floating frames are not "on top", they are "inside".
+            if ( frameSet->isFloating() )
+                continue;
+
+            //kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
+
+            QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+            for ( ; frameIt.current(); ++frameIt )
             {
-                if ( fIt.current() != frameMaybeOnTop ) // Skip identity case ;)
+                KWFrame *frameMaybeOnTop = frameIt.current();
+                // Is this frame over any of our frames ?
+                QPtrListIterator<KWFrame> fIt( frameIterator() );
+                for ( ; fIt.current(); ++fIt )
                 {
-                    KWFrame *parentFrame = fIt.current();
-                    KWFrameSet *parentFrameset= parentFrame->frameSet();
-                    while (parentFrameset->isFloating()) {
-                      parentFrameset=parentFrameset->anchorFrameset();
-                      KWFrame *oldParentFrame = parentFrame;
-                      parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
-                      if(!parentFrame)
-                          parentFrame = oldParentFrame;
-                    }
-                    //kdDebug() << "KWFrameSet::updateFrames comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
-		    if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
+                    if ( fIt.current() != frameMaybeOnTop ) // Skip identity case ;)
                     {
-                        KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
-                        if( !intersect.isEmpty() )
+                        KWFrame *parentFrame = fIt.current();
+                        KWFrameSet *parentFrameset= parentFrame->frameSet();
+                        while (parentFrameset->isFloating()) {
+                            parentFrameset=parentFrameset->anchorFrameset();
+                            KWFrame *oldParentFrame = parentFrame;
+                            parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
+                            if(!parentFrame)
+                                parentFrame = oldParentFrame;
+                        }
+                        //kdDebug() << "KWFrameSet::updateFrames comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
+                        if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
                         {
+                            KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
+                            if( !intersect.isEmpty() )
+                            {
 #if 0
-                            kdDebug(32002)
-                                << "KWFrameSet::updateFrames adding frame "
-                                << frameMaybeOnTop << " (zorder: " << frameMaybeOnTop->zOrder() << ")"
-                                << " on top of frame " << fIt.current() << " (zorder: " << fIt.current()->zOrder() << ")"
-                                << "\n   intersect: " << intersect
-                                << " (zoomed: " << m_doc->zoomRect( intersect ) << endl;
+                                kdDebug(32002)
+                                    << "KWFrameSet::updateFrames adding frame "
+                                    << frameMaybeOnTop << " (zorder: " << frameMaybeOnTop->zOrder() << ")"
+                                    << " on top of frame " << fIt.current() << " (zorder: " << fIt.current()->zOrder() << ")"
+                                    << "\n   intersect: " << intersect
+                                    << " (zoomed: " << m_doc->zoomRect( intersect ) << endl;
 #endif
-                            fIt.current()->addFrameOnTop( frameMaybeOnTop );
+                                fIt.current()->addFrameOnTop( frameMaybeOnTop );
+                            }
                         }
                     }
                 }
@@ -1046,104 +1049,110 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                    << endl;
 #endif
     m_currentDrawnCanvas = canvas;
-    QPtrListIterator<KWFrame> frameIt( frameIterator() );
-    KWFrame * lastRealFrame = 0L;
-    double lastRealFrameTop = 0;
-    double totalHeight = 0; // in pt, to avoid accumulating rounding errors
-    for ( ; frameIt.current(); ++frameIt )
+    if ( viewMode->hasFrames() )
     {
-        KWFrame *frame = frameIt.current();
-        if ( !frame->isValid() )
+        QPtrListIterator<KWFrame> frameIt( frameIterator() );
+        KWFrame * lastRealFrame = 0L;
+        double lastRealFrameTop = 0;
+        double totalHeight = 0; // in pt, to avoid accumulating rounding errors
+        for ( ; frameIt.current(); ++frameIt )
         {
-            kdDebug(32002) << "KWFrameSet::drawContents invalid frame " << frame << endl;
-            continue;
-        }
-
-        QRect r(crect);
-        QRect normalFrameRect( m_doc->zoomRect( frame->innerRect() ) );
-        //normalFrameRect.setTop( normalFrameRect.top()+m_doc->zoomItY(frame->bTop()));
-        //normalFrameRect.setBottom( normalFrameRect.bottom()-m_doc->zoomItY(frame->bBottom()));
-
-        QRect frameRect( viewMode->normalToView( normalFrameRect ) );
-        r = r.intersect( frameRect );
-#ifdef DEBUG_DRAW
-        kdDebug(32002) << "                    frame=" << frame << " " << *frame << endl;
-        kdDebug(32002) << "                    normalFrameRect=" << normalFrameRect << " frameRect=" << frameRect << endl;
-        kdDebug(32002) << "                    crect=" << crect << " intersec=" << r << " todraw=" << !r.isEmpty() << endl;
-#endif
-        if ( !r.isEmpty() )
-        {
-            // This translates the coordinates in the document contents
-            // ( frame and r are up to here in this system )
-            // into the frame's own coordinate system.
-            int offsetX = normalFrameRect.left();
-            double frameTopPt = ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight;
-            int offsetY = normalFrameRect.top() - m_doc->zoomItY( frameTopPt );
-
-            QRect fcrect = viewMode->viewToNormal( r );
-#ifdef DEBUG_DRAW
-            kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << fcrect << "."
-                      << " Will move by (" << -offsetX << ", -(" << normalFrameRect.top() << "-" << m_doc->zoomItY(frameTopPt) << ") == " << -offsetY << ")." << endl;
-#endif
-            // y=-1 means all (in QRT), so let's not go there !
-            //QPoint tl( QMAX( 0, fcrect.left() - offsetX ), QMAX( 0, fcrect.top() - offsetY ) );
-            //fcrect.moveTopLeft( tl );
-            fcrect.moveBy( -offsetX, -offsetY );
-            Q_ASSERT( fcrect.x() >= 0 );
-            Q_ASSERT( fcrect.y() >= 0 );
-
-            // fcrect is now the portion of the frame to be drawn,
-            // in the frame's coordinates and in pixels
-#ifdef DEBUG_DRAW
-            kdDebug() << "KWFrameSet::drawContents in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
-#endif
-            // The settings come from this frame
-            KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-
-            QRegion reg = frameClipRegion( p, frame, r, viewMode, onlyChanged );
-            if ( !reg.isEmpty() )
+            KWFrame *frame = frameIt.current();
+            if ( !frame->isValid() )
             {
-                p->save();
-                p->setClipRegion( reg );
-
-                p->translate( r.x() - fcrect.x(), r.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
-                p->setBrushOrigin( p->brushOrigin() + r.topLeft() - fcrect.topLeft() );
-
-                QBrush bgBrush( settingsFrame->backgroundColor() );
-                bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
-                cg.setBrush( QColorGroup::Base, bgBrush );
-                drawFrame( frame, p, fcrect, cg, onlyChanged, resetChanged, edit );
-
-                p->restore();
+                kdDebug(32002) << "KWFrameSet::drawContents invalid frame " << frame << endl;
+                continue;
             }
-        }
-        if(! getGroupManager()) {
-            QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-            r = crect.intersect( outerRect );
+
+            QRect r(crect);
+            QRect normalFrameRect( m_doc->zoomRect( frame->innerRect() ) );
+            //normalFrameRect.setTop( normalFrameRect.top()+m_doc->zoomItY(frame->bTop()));
+            //normalFrameRect.setBottom( normalFrameRect.bottom()-m_doc->zoomItY(frame->bBottom()));
+
+            QRect frameRect( viewMode->normalToView( normalFrameRect ) );
+            r = r.intersect( frameRect );
+#ifdef DEBUG_DRAW
+            kdDebug(32002) << "                    frame=" << frame << " " << *frame << endl;
+            kdDebug(32002) << "                    normalFrameRect=" << normalFrameRect << " frameRect=" << frameRect << endl;
+            kdDebug(32002) << "                    crect=" << crect << " intersec=" << r << " todraw=" << !r.isEmpty() << endl;
+#endif
             if ( !r.isEmpty() )
             {
-                // Now draw the frame border
-                // Clip frames on top if onlyChanged, but don't clip to the frame
-                QRegion reg = frameClipRegion( p, frame, r, viewMode, onlyChanged, false );
+                // This translates the coordinates in the document contents
+                // ( frame and r are up to here in this system )
+                // into the frame's own coordinate system.
+                int offsetX = normalFrameRect.left();
+                double frameTopPt = ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight;
+                int offsetY = normalFrameRect.top() - m_doc->zoomItY( frameTopPt );
+
+                QRect fcrect = viewMode->viewToNormal( r );
+#ifdef DEBUG_DRAW
+                kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << fcrect << "."
+                          << " Will move by (" << -offsetX << ", -(" << normalFrameRect.top() << "-" << m_doc->zoomItY(frameTopPt) << ") == " << -offsetY << ")." << endl;
+#endif
+                // y=-1 means all (in QRT), so let's not go there !
+                //QPoint tl( QMAX( 0, fcrect.left() - offsetX ), QMAX( 0, fcrect.top() - offsetY ) );
+                //fcrect.moveTopLeft( tl );
+                fcrect.moveBy( -offsetX, -offsetY );
+                Q_ASSERT( fcrect.x() >= 0 );
+                Q_ASSERT( fcrect.y() >= 0 );
+
+                // fcrect is now the portion of the frame to be drawn,
+                // in the frame's coordinates and in pixels
+#ifdef DEBUG_DRAW
+                kdDebug() << "KWFrameSet::drawContents in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
+#endif
+                // The settings come from this frame
+                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+
+                QRegion reg = frameClipRegion( p, frame, r, viewMode, onlyChanged );
                 if ( !reg.isEmpty() )
                 {
                     p->save();
                     p->setClipRegion( reg );
-                    KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-                    drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
-                    drawMargins( frame, p, r, cg, viewMode );
+
+                    p->translate( r.x() - fcrect.x(), r.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
+                    p->setBrushOrigin( p->brushOrigin() + r.topLeft() - fcrect.topLeft() );
+
+                    QBrush bgBrush( settingsFrame->backgroundColor() );
+                    bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
+                    cg.setBrush( QColorGroup::Base, bgBrush );
+                    drawFrame( frame, p, fcrect, cg, onlyChanged, resetChanged, edit );
 
                     p->restore();
-                }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+                }
             }
-        }
+            if(! getGroupManager()) {
+                QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+                r = crect.intersect( outerRect );
+                if ( !r.isEmpty() )
+                {
+                    // Now draw the frame border
+                    // Clip frames on top if onlyChanged, but don't clip to the frame
+                    QRegion reg = frameClipRegion( p, frame, r, viewMode, onlyChanged, false );
+                    if ( !reg.isEmpty() )
+                    {
+                        p->save();
+                        p->setClipRegion( reg );
+                        KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+                        drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
+                        drawMargins( frame, p, r, cg, viewMode );
 
-        if ( !lastRealFrame || !frame->isCopy() )
-        {
-            lastRealFrame = frame;
-            lastRealFrameTop = totalHeight;
+                        p->restore();
+                    }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+                }
+            }
+
+            if ( !lastRealFrame || !frame->isCopy() )
+            {
+                lastRealFrame = frame;
+                lastRealFrameTop = totalHeight;
+            }
+            totalHeight += frame->innerHeight();
         }
-        totalHeight += frame->innerHeight();
+    } else {
+        // Text view mode
+        drawFrame( 0L /*frame*/, p, crect, cg, onlyChanged, resetChanged, edit );
     }
     m_currentDrawnCanvas = 0L;
 }

@@ -154,6 +154,11 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
 #ifdef DEBUG_DTI
     kdDebug() << "KWTextFrameSet::documentToInternal dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
+    if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
+        iPoint = QPoint( m_doc->ptToLayoutUnitPixX( dPoint.x() ),
+                         m_doc->ptToLayoutUnitPixY( dPoint.y() ) );
+        return frames.getFirst();
+    }
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
     int pageNum = static_cast<int>( dPoint.y() / m_doc->ptPaperHeight() );
     QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
@@ -187,6 +192,13 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
 #ifdef DEBUG_DTI
     kdDebug() << "KWTextFrameSet::documentToInternalMouseSelection dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
+    if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
+        relPos = InsideFrame;
+        iPoint = QPoint( m_doc->ptToLayoutUnitPixX( dPoint.x() ),
+                         m_doc->ptToLayoutUnitPixY( dPoint.y() ) );
+        return frames.getFirst();
+    }
+
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
     int pageNum = static_cast<int>( dPoint.y() / m_doc->ptPaperHeight() );
     QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
@@ -297,6 +309,10 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
 #ifdef DEBUG_ITD
     kdDebug() << "KWTextFrameSet::internalToDocumentWithHint hintDPoint: " << hintDPoint.x() << "," << hintDPoint.y() << endl;
 #endif
+    if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
+        dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) );
+        return frames.getFirst();
+    }
     KWFrame *lastFrame = 0L;
     QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
@@ -379,26 +395,29 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 {
     //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
     m_currentDrawnFrame = theFrame;
-    // Update variables for each frame (e.g. for page-number)
-    // If more than KWPgNumVariable need this functionality, create an intermediary base class
-    QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
-    for ( ; cit.current() ; ++cit )
+    if ( theFrame ) // 0L in the text viewmode
     {
-        KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
-        if ( var && !var->isDeleted() )
+        // Update variables for each frame (e.g. for page-number)
+        // If more than KWPgNumVariable need this functionality, create an intermediary base class
+        QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
+        for ( ; cit.current() ; ++cit )
         {
-            if ( var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
+            KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
+            if ( var && !var->isDeleted() )
             {
-                //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
-                //          << " and invalidating parag " << var->paragraph() << endl;
-                var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
-            } else if ( var->subtype() == KWPgNumVariable::VST_CURRENT_SECTION )
-            {
-                var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNum() ) );
+                if ( var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
+                {
+                    //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
+                    //          << " and invalidating parag " << var->paragraph() << endl;
+                    var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+                } else if ( var->subtype() == KWPgNumVariable::VST_CURRENT_SECTION )
+                {
+                    var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNum() ) );
+                }
+                var->resize();
+                var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
+                var->paragraph()->setChanged( true );
             }
-            var->resize();
-            var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
-            var->paragraph()->setChanged( true );
         }
     }
 
@@ -439,7 +458,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 
     // Blank area under the very last paragraph - QRT draws it up to textdoc->height,
     // we have to draw it from there up to the bottom of the last frame.
-    if ( !lastFormatted || lastFormatted == textDocument()->lastParag() )
+    if ( theFrame && ( !lastFormatted || lastFormatted == textDocument()->lastParag() ) )
     {
         // This is drawing code, so we convert everything to pixels
         //int docHeight = m_doc->layoutUnitToPixelY( textDocument()->height() );
@@ -462,10 +481,16 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
     m_currentDrawnCanvas = canvas;
     KWViewMode *viewMode = canvas->viewMode();
+    bool hasFrames = viewMode->hasFrames();
     m_currentViewMode = viewMode;
     m_currentDrawnFrame = theFrame;
 
-    QRect normalFrameRect( m_doc->zoomRect( theFrame->innerRect() ) );
+    QRect normalFrameRect;
+    if (hasFrames)
+        normalFrameRect = m_doc->zoomRect( theFrame->innerRect() );
+    else
+        normalFrameRect = QRect( QPoint(0, 0), viewMode->contentsSize() );
+
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
     int lineY;
     // Cursor height, in pixels
@@ -479,7 +504,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
               << "   cursorHeight=" << cursorHeight << endl;
 #endif
     KoPoint dPoint;
-    KoPoint hintDPoint = theFrame->innerRect().topLeft();
+    KoPoint hintDPoint = theFrame ? theFrame->innerRect().topLeft() : KoPoint();
     if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
     {
 #ifdef DEBUG_CURSOR
@@ -513,8 +538,11 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                   << " clip(view, after intersect)=" << clip << endl;
 #endif
 
-        QRegion reg = frameClipRegion( p, theFrame, clip, viewMode, true );
-        if ( !reg.isEmpty() )
+        QRegion reg;
+        if ( hasFrames )
+            reg = frameClipRegion( p, theFrame, clip, viewMode, true );
+
+        if ( !hasFrames || !reg.isEmpty() )
         {
 #ifdef DEBUG_CURSOR
             // for debug only!
@@ -522,27 +550,30 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
 #endif
 
             p->save();
+            QColorGroup cg = QApplication::palette().active();
 
-            p->setClipRegion( reg );
-            // translate to qrt coords - after setting the clip region !
-            // see internalToDocumentWithHint
-            int translationX = viewFrameRect.left();
-            int translationY = viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() );
+            if ( hasFrames )
+            {
+                p->setClipRegion( reg );
+                // translate to qrt coords - after setting the clip region !
+                // see internalToDocumentWithHint
+                int translationX = viewFrameRect.left();
+                int translationY = viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() );
 #ifdef DEBUG_CURSOR
-            kdDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() ) << endl;
+                kdDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() ) << endl;
 #endif
-            p->translate( translationX, translationY );
-            p->setBrushOrigin( p->brushOrigin().x() + translationX, p->brushOrigin().y() + translationY );
+                p->translate( translationX, translationY );
+                p->setBrushOrigin( p->brushOrigin().x() + translationX, p->brushOrigin().y() + translationY );
 
-            // The settings come from this frame
-            KWFrame * settings = settingsFrame( theFrame );
+                // The settings come from this frame
+                KWFrame * settings = settingsFrame( theFrame );
+
+                QBrush bgBrush( settings->backgroundColor() );
+                bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
+                cg.setBrush( QColorGroup::Base, bgBrush );
+            }
 
             QPixmap *pix = 0;
-            QColorGroup cg = QApplication::palette().active();
-            QBrush bgBrush( settings->backgroundColor() );
-            bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
-            cg.setBrush( QColorGroup::Base, bgBrush );
-
             bool wasChanged = cursor->parag()->hasChanged();
             cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
             textDocument()->drawParagWYSIWYG(
@@ -2737,7 +2768,7 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
 
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         return;
-    if ( !m_currentFrame )
+    if ( m_canvas->viewMode()->hasFrames() && !m_currentFrame )
         return;
 
     QPainter p( m_canvas->viewport() );

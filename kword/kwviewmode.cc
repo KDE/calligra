@@ -315,6 +315,8 @@ KWTextFrameSet * KWViewModeText::textFrameSet() const
 
 QPoint KWViewModeText::normalToView( const QPoint & nPoint )
 {
+    return nPoint;
+#if 0
     KWTextFrameSet * textfs = textFrameSet();
     if ( !textfs )
         return nPoint;
@@ -332,11 +334,15 @@ QPoint KWViewModeText::normalToView( const QPoint & nPoint )
                         << nPoint.x() << "," << nPoint.y() << endl;
             return nPoint;
         }
+        return nPoint;
     }
+#endif
 }
 
 QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
 {
+    return vPoint;
+#if 0
     KWTextFrameSet * textfs = textFrameSet();
     QRect contentsRect( QPoint(0,0), contentsSize() );
     if ( !textfs || !contentsRect.contains(vPoint) )
@@ -354,7 +360,9 @@ QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
                         << " (vPoint: " << vPoint << ")" << endl;
             return vPoint;
         }
+        return vPoint;
     }
+#endif
 }
 
 QSize KWViewModeText::contentsSize()
@@ -441,7 +449,7 @@ void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPa
     QSize cSize = contentsSize();
     layout.ptWidth = m_doc->unzoomItX( cSize.width() );
     layout.ptHeight = m_doc->unzoomItY( cSize.height() );
-    kdDebug() << "KWViewModeText::setPageLayout layout size " << layout.ptWidth << "x" << layout.ptHeight << endl;
+    //kdDebug() << "KWViewModeText::setPageLayout layout size " << layout.ptWidth << "x" << layout.ptHeight << endl;
     layout.ptLeft = 0;
     layout.ptRight = 0;
     layout.ptTop = 0;

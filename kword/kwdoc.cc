@@ -2328,6 +2328,8 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
 
 KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool firstNonSelected )
 {
+    if ( !m_viewMode->hasFrames() )
+        return 0L;
 #ifdef DEBUG_FRAMESELECT
     kdDebug(32001) << "KWDocument::frameUnderMouse nPoint=" << nPoint << " firstNonSelected=" << firstNonSelected << endl;
 #endif

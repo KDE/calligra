@@ -92,6 +92,9 @@ public:
     // TODO: maybe this should be more fine-grained.
     virtual bool shouldFormatVertically() { return true; }
 
+    // Does this viewmode know anything about frames?
+    virtual bool hasFrames() { return true; }
+
     // Return the name of the viewmode, used for loading/saving.
     virtual const QString type() = 0;
 
@@ -197,6 +200,7 @@ public:
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
     virtual const QString type() {return "ModeText";}
     virtual bool shouldFormatVertically() { return false; }
+    virtual bool hasFrames() { return false; }
 
     virtual bool isFrameSetVisible( const KWFrameSet* fs );
 };
