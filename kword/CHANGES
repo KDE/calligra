@@ -484,3 +484,8 @@ Reggie, 9.12.1998:
 ------------------
 - Templates are searched in the local kdedir (~/.kde/share/apps/kword/templates) now too
 - More work on tabs (started with right aligned tabs)
+
+Reggie, 11.12.1998:
+-------------------
+- When applying paragraph settings and multiple paragraphs are selected, the settings
+  are applied to all selected paragraphs.

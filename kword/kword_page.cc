@@ -2342,7 +2342,20 @@ void KWPage::frameDiaClosed()
 /*================================================================*/
 void KWPage::applyStyle(QString _style)
 {
-  fc->getParag()->applyStyle(_style);
+  if (!doc->has_selection())
+    fc->getParag()->applyStyle(_style);
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->applyStyle(_style);
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+
   dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(fc->getFrameSet() - 1))->updateCounters();
   recalcAll = true; 
   recalcText(); 
@@ -2429,3 +2442,218 @@ void KWPage::forceFullUpdate()
   gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
   format = *((KWFormat*)fc);
 }
+/*================================================================*/
+void KWPage::setFlow(KWParagLayout::Flow _flow)
+{ 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setFlow(_flow); 
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setFlow(_flow);
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+}
+
+/*================================================================*/
+void KWPage::setLeftIndent(float _left)
+{ 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setMMLeftIndent(static_cast<unsigned int>(_left)); 
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setMMLeftIndent(static_cast<unsigned int>(_left)); 
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+}
+
+/*================================================================*/
+void KWPage::setFirstLineIndent(float _first)
+{ 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setMMFirstLineLeftIndent(static_cast<unsigned int>(_first)); 
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setMMFirstLineLeftIndent(static_cast<unsigned int>(_first)); 
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+}
+
+/*================================================================*/
+void KWPage::setSpaceBeforeParag(float _before)
+{ 
+  recalcAll = true; 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setMMParagHeadOffset(static_cast<unsigned int>(_before));
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setMMParagHeadOffset(static_cast<unsigned int>(_before));
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+  recalcAll = false; 
+}
+
+/*================================================================*/
+void KWPage::setSpaceAfterParag(float _after)
+{ 
+  recalcAll = true; 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setMMParagFootOffset(static_cast<unsigned int>(_after));
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setMMParagFootOffset(static_cast<unsigned int>(_after));
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+  recalcAll = false; 
+}
+
+/*================================================================*/
+void KWPage::setLineSpacing(unsigned int _spacing)
+{ 
+  recalcAll = true; 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setPTLineSpacing(_spacing);
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setPTLineSpacing(_spacing);
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+  recalcAll = false; 
+}
+
+/*================================================================*/
+void KWPage::setParagLeftBorder(KWParagLayout::Border _brd)
+{ 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setLeftBorder(_brd); 
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setLeftBorder(_brd);
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+}
+
+/*================================================================*/
+void KWPage::setParagRightBorder(KWParagLayout::Border _brd)
+{ 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setRightBorder(_brd); 
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setRightBorder(_brd);
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+}
+
+/*================================================================*/
+void KWPage::setParagTopBorder(KWParagLayout::Border _brd)
+{ 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setTopBorder(_brd); 
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setTopBorder(_brd);
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+}
+
+/*================================================================*/
+void KWPage::setParagBottomBorder(KWParagLayout::Border _brd)
+{ 
+  if (!doc->has_selection())
+    fc->getParag()->getParagLayout()->setBottomBorder(_brd); 
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->getParagLayout()->setBottomBorder(_brd);
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+}
+
+/*================================================================*/
+void KWPage::tabListChanged(QList<KoTabulator> *_tablist)
+{ 
+  if (!doc->has_selection())
+    fc->getParag()->tabListChanged(_tablist); 
+  else
+    {
+      KWParag *p = doc->getSelStart()->getParag();
+      while (p && p != doc->getSelEnd()->getParag()->getNext())
+	{
+	  p->tabListChanged(_tablist); 
+	  p = p->getNext();
+	}
+      recalcCursor(false,-1,doc->getSelStart());
+      recalcCursor(false,-1,doc->getSelEnd());
+    }
+  recalcCursor(); 
+}
+

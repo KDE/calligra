@@ -91,30 +91,17 @@ public:
   void scroll(int dx,int dy);
 
   void formatChanged(KWFormat &_format,bool _redraw = true);
-  void setFlow(KWParagLayout::Flow _flow)
-    { fc->getParag()->getParagLayout()->setFlow(_flow); recalcCursor(); }
-  void setLeftIndent(float _left)
-    { fc->getParag()->getParagLayout()->setMMLeftIndent(static_cast<unsigned int>(_left)); recalcCursor(); }
-  void setFirstLineIndent(float _first)
-    { fc->getParag()->getParagLayout()->setMMFirstLineLeftIndent(static_cast<unsigned int>(_first)); recalcCursor(); }
-  void setSpaceBeforeParag(float _before)
-    { fc->getParag()->getParagLayout()->setMMParagHeadOffset(static_cast<unsigned int>(_before));
-    recalcAll = true; recalcCursor(); recalcAll = false; }
-  void setSpaceAfterParag(float _after)
-    { fc->getParag()->getParagLayout()->setMMParagFootOffset(static_cast<unsigned int>(_after));
-    recalcAll = true; recalcCursor(); recalcAll = false; }
-  void setLineSpacing(unsigned int _spacing)
-    { fc->getParag()->getParagLayout()->setPTLineSpacing(_spacing);
-    recalcAll = true; recalcCursor(); recalcAll = false; }
+  void setFlow(KWParagLayout::Flow _flow);
+  void setLeftIndent(float _left);
+  void setFirstLineIndent(float _first);
+  void setSpaceBeforeParag(float _before);
+  void setSpaceAfterParag(float _after);
+  void setLineSpacing(unsigned int _spacing);
 
-  void setParagLeftBorder(KWParagLayout::Border _brd)
-    { fc->getParag()->getParagLayout()->setLeftBorder(_brd); recalcCursor(); }
-  void setParagRightBorder(KWParagLayout::Border _brd)
-    { fc->getParag()->getParagLayout()->setRightBorder(_brd); recalcCursor(); }
-  void setParagTopBorder(KWParagLayout::Border _brd)
-    { fc->getParag()->getParagLayout()->setTopBorder(_brd); recalcCursor(); }
-  void setParagBottomBorder(KWParagLayout::Border _brd)
-    { fc->getParag()->getParagLayout()->setBottomBorder(_brd); recalcCursor(); }
+  void setParagLeftBorder(KWParagLayout::Border _brd);
+  void setParagRightBorder(KWParagLayout::Border _brd);
+  void setParagTopBorder(KWParagLayout::Border _brd);
+  void setParagBottomBorder(KWParagLayout::Border _brd);
 
   KWParagLayout::Flow getFlow()
     { return fc->getParag()->getParagLayout()->getFlow(); }
@@ -185,8 +172,7 @@ public slots:
   void mmCreatePix()
     { setMouseMode(MM_CREATE_PIX); mmUncheckAll(); mm_menu->setItemChecked(mm_create_pix,true); }
   void femProps();
-  void tabListChanged(QList<KoTabulator> *_tablist)
-    { fc->getParag()->tabListChanged(_tablist); recalcCursor(); }
+  void tabListChanged(QList<KoTabulator> *_tablist);
 
 protected slots:
   void frameDiaClosed();
