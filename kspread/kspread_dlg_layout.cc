@@ -348,6 +348,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
         for ( int y = _top; y <= _bottom; y++ )
         {
           KSpreadCell *obj = table->cellAt( x, y );
+
+          if ( obj->isObscuringForced() )
+            continue;
+
           initParameters( obj,x,y);
           if ( eStyle != obj->style() )
             eStyle = KSpreadCell::ST_Undef;
