@@ -165,26 +165,7 @@ void VPolylineTool::mouseButtonPress()
 		bezierPoints.removeLast();
 		bezierPoints.append( new KoPoint( last() ) );
 	}
-	else
-	{
-		VPainter* painter = view()->painterFactory()->editpainter();
-		painter->save();
-		view()->canvasWidget()->setYMirroring( true );
-		painter->setZoomFactor( view()->zoom() );
-		float zoomFactor = view()->zoom();
-		painter->setRasterOp( Qt::XorROP );
-		painter->newPath();
-		painter->setPen( Qt::yellow );
-		float width = 2.0;
-		painter->moveTo( KoPoint( last().x() - width / zoomFactor, last().y() - width / zoomFactor ) );
-		painter->lineTo( KoPoint( last().x() + width / zoomFactor, last().y() - width / zoomFactor ) );
-		painter->lineTo( KoPoint( last().x() + width / zoomFactor, last().y() + width / zoomFactor ) );
-		painter->lineTo( KoPoint( last().x() - width / zoomFactor, last().y() + width / zoomFactor ) );
-		painter->lineTo( KoPoint( last().x() - width / zoomFactor, last().y() - width / zoomFactor ) );
-		painter->strokePath();
-		painter->restore();
-	}
-	
+
 	lastVectorEnd = lastVectorStart = last();
 
 	bezierPoints.append( new KoPoint( last() ) );
