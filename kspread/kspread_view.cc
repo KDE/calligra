@@ -786,13 +786,13 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 void KSpreadView::enableUndo( bool _b )
 {
     m_undo->setEnabled( _b );
-    m_undo->setText(i18n("Undo : ") +m_pDoc->undoBuffer()->getUndoTitle());
+    m_undo->setText(i18n("Undo : %1").arg(m_pDoc->undoBuffer()->getUndoTitle()));
 }
 
 void KSpreadView::enableRedo( bool _b )
 {
     m_redo->setEnabled( _b );
-    m_redo->setText(i18n("Redo : ") +m_pDoc->undoBuffer()->getRedoTitle());
+    m_redo->setText(i18n("Redo : %1") .arg(m_pDoc->undoBuffer()->getRedoTitle()));
 }
 
 void KSpreadView::undo()
