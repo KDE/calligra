@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libkrosspython.la
 libkrosspython_la_SOURCES = \
     pythonextension.cpp \
     pythonmodule.cpp \
+    pythonscript.cpp \
     pythoninterpreter.cpp
 
 libkrosspython_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) -Wnounresolved

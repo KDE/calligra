@@ -170,13 +170,15 @@ namespace Kross { namespace Api {
              * are able to handle call's by just implementating
              * this function.
              *
+             * \throws TypeException if the object or the name
+             *         is not callable.
              * \param name Each call has a name that says what
              *        should be called. In the case of a \a Class
              *        the name is the functionname.
              * \param arguments The list of arguments passed to
              *        the call.
              * \return The call-result as Object* instance or
-             *         NULL if the call failed.
+             *         NULL if the call has no result.
              */
             virtual Object* call(const QString& name, List* arguments);
 

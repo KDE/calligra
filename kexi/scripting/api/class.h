@@ -25,6 +25,7 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "object.h"
 #include "list.h"
@@ -119,6 +120,9 @@ namespace Kross { namespace Api {
              * \param name The functionname. Each function this
              *        Object holds should have a different
              *        name cause they are access by they name.
+             *        If name is QString::null or empty, a
+             *        self-reference to this instance is
+             *        returned.
              * \param arguments The list of arguments.
              * \return An Object representing the call result
              *         or NULL if there doesn't exists such a
@@ -127,7 +131,8 @@ namespace Kross { namespace Api {
             virtual Object* call(const QString& name, List* arguments)
             {
                 Function* f = m_functions[name];
-                if(! f) return 0;
+                if(! f) // no function with that name, pass call to super class
+                    return Object::call(name, arguments);
                 T *self = static_cast<T*>(this);
 
                 QValueList<Object*>& arglist = arguments->getValue();

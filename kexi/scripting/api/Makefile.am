@@ -7,6 +7,8 @@ libkrossapi_la_SOURCES = \
     variant.cpp \
     list.cpp \
     argument.cpp \
+    qtobject.cpp \
+    signalhandler.cpp \
     script.cpp \
     interpreter.cpp
 

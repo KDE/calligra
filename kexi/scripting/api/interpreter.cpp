@@ -18,7 +18,9 @@
  ***************************************************************************/
 
 #include "interpreter.h"
+#include "script.h"
 #include "../main/manager.h"
+#include "../main/scriptcontainer.h"
 
 using namespace Kross::Api;
 

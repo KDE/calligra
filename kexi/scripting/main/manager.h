@@ -21,16 +21,17 @@
 #define KROSS_API_MANAGER_H
 
 #include <qstring.h>
-//#include <qvaluelist.h>
 #include <qmap.h>
 //#include <qvariant.h>
 //#include <kdebug.h>
 
+class QObject;
+
 namespace Kross { namespace Api {
 
     // Forward declarations.
+    class ScriptContainer;
     class Interpreter;
-    class Script;
     class Object;
 
     /**
@@ -94,17 +95,31 @@ namespace Kross { namespace Api {
             bool addModule(Object* module);
 
             /**
-             * Return the existing \a Script with scriptname
-             * or create a new \a Script instance and associate
+             * Add a QObject to publish it's slots, signals
+             * and properties by using \a Kross::Api::QtObject
+             * as QObject-wrapper.
+             *
+             * \param object The QObject to wrap and publish.
+             * \param name The name the QObject should be
+             *        accessible as. If QString::null, then
+             *        the QObject's name() will be used.
+             * \return true if the QObject was successfully
+             *         added else false.
+             */
+            bool addQObject(QObject* object, const QString& name = QString::null);
+
+            /**
+             * Return the existing \a ScriptContainer with scriptname
+             * or create a new \a ScriptContainer instance and associate
              * the passed scriptname with it.
              *
              * \param scriptname The name of the script. This
              *        should be unique for each \a Script and
              *        could be something like the filename.
-             * \return The \a Script instance matching to
+             * \return The \a ScriptContainer instance matching to
              *         scriptname.
              */
-            Script* getScript(const QString& scriptname);
+            ScriptContainer* getScriptContainer(const QString& scriptname);
 
             /**
              * Return the \a Interpreter instance defined by
@@ -120,7 +135,7 @@ namespace Kross { namespace Api {
 
         private:
             /// List of script instances.
-            QMap<QString, Script*> m_scripts;
+            QMap<QString, ScriptContainer*> m_scriptcontainers;
             /// List of interpreter instances.
             QMap<QString, Interpreter*> m_interpreter;
             /// List of avaible modules.

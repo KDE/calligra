@@ -18,14 +18,17 @@
  ***************************************************************************/
 
 #include "../main/manager.h"
+#include "../main/scriptcontainer.h"
 
 #include "../api/object.h"
 #include "../api/class.h"
 //#include "../api/module.h"
 
-#include "../api/script.h"
+//#include "../api/script.h"
 #include "../api/interpreter.h"
 #include "../kexidb/kexidbmodule.h"
+
+#include "testobject.h"
 
 #include <qstring.h>
 #include <qfile.h>
@@ -45,29 +48,6 @@ static KCmdLineOptions options[] =
     //{ "functionname <functioname>", I18N_NOOP("Execute the function in the defined scriptfile."), "" },
     //{ "functionargs <functioarguments>", I18N_NOOP("List of arguments to pass to the function on execution."), "" },
     { 0, 0, 0 }
-};
-
-class TestObject : public QObject
-{
-        Q_OBJECT
-    signals:
-        void testSignal();
-    public slots:
-        void testSlot() {
-            kdDebug() << "TestObject::testSlot called" << endl;
-            emit testSignal();
-        }
-        void testSignalSlot() {
-            kdDebug() << "TestObject::testSignalSlot called" << endl;
-        }
-    public:
-        TestObject() : QObject(app) {
-            kdDebug() << "TestObject::TestObject called" << endl;
-            connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
-        }
-        ~TestObject() {
-            kdDebug() << "TestObject::~TestObject called" << endl;
-        }
 };
 
 /*
@@ -93,7 +73,6 @@ void runInterpreter(const QString& interpretername, const QString& script)
             if(! interpreter->execute())
                 kdWarning() << "Interpreter failed to execute script!" << endl;
         }
-        //TODO garbage collect them too?
         delete module; module = 0;
     }
     delete manager;
@@ -111,22 +90,52 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         return;
     }
 
+    //TESTCASE
+    TestObject* testobject = new TestObject(app);
+    manager->addQObject(testobject);
+
     // Add modules that should be accessible by scripting. Those
     // modules are wrappers around functionality you want to be
     // able to access from within scripts. You don't need to take
     // care of freeing them cause that will be done by Kross.
-    //manager->addModule( new Kross::KexiDB::TestModule() );
+    // Modules are shared between the ScriptContainer instances.
     manager->addModule( new Kross::KexiDB::KexiDBModule() );
+    manager->addModule( new Kross::KexiDB::TestModule() ); //testcase
 
     // To represent a script that shgould be executed Kross uses
     // the Script container class. You are able to fill them with
     // what is needed and just execute them.
-    Kross::Api::Script* script = manager->getScript("MyScriptName");
-    //script->enableModule("KexiDB");
-    script->setInterpreter(interpretername);
-    script->setCode(scriptcode);
-    script->execute();
-    //delete script; // not needed cause Kross::Api::Manager will take care of it.
+    Kross::Api::ScriptContainer* scriptcontainer = manager->getScriptContainer("MyScriptName");
+    //scriptcontainer->enableModule("KexiDB");
+    scriptcontainer->setInterpreterName(interpretername);
+    scriptcontainer->setCode(scriptcode);
+
+scriptcontainer->setFunctionName("testobjectCallback");
+//scriptcontainer->setFunctionArguments();
+
+    try {
+        scriptcontainer->execute();
+scriptcontainer->callFunction();
+testobject->testSlot();
+    }
+    catch(Kross::Api::Exception& e) {
+        kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
+    }
+
+    //delete scriptcontainer; // not needed cause Kross::Api::Manager will take care of it.
+
+/*TESTCASE
+    Kross::Api::ScriptContainer* sc2 = manager->getScriptContainer("MyScriptName222");
+    sc2->setInterpreterName(interpretername);
+    sc2->setCode(scriptcode);
+    try {
+        sc2->execute();
+    }
+    catch(Kross::Api::Exception& e) {
+        kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
+    }
+    //delete sc2;
+*/
 
     // Finally free our manager.
     delete manager;
@@ -157,14 +166,6 @@ int main(int argc, char **argv)
         QString scriptcode = f.readAll();
         f.close();
         runInterpreter(interpretername, scriptcode);
-
-        /*TODO
-        //second execution crashes cause it seems we don't cleaned
-        //everything well at this point. Grrr, guess to use KShared
-        //wasn't the best design-decision :-/
-
-        runInterpreter(interpretername, scriptcode);
-        */
     }
     else {
         kdWarning() << "Failed to load scriptfile: " << filename << endl;

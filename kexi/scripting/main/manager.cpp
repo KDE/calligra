@@ -23,7 +23,11 @@
 #include "../python/pythoninterpreter.h"
 #include "../kjs/kjsinterpreter.h"
 #include "../api/object.h"
-#include "../api/script.h"
+#include "../api/qtobject.h"
+//#include "../api/script.h"
+#include "scriptcontainer.h"
+
+#include <qobject.h>
 
 using namespace Kross::Api;
 
@@ -33,7 +37,7 @@ Manager::Manager()
 
 Manager::~Manager()
 {
-    for(QMap<QString, Script*>::Iterator sit = m_scripts.begin(); sit != m_scripts.end(); ++sit)
+    for(QMap<QString, ScriptContainer*>::Iterator sit = m_scriptcontainers.begin(); sit != m_scriptcontainers.end(); ++sit)
         delete sit.data();
     for(QMap<QString, Interpreter*>::Iterator iit = m_interpreter.begin(); iit != m_interpreter.end(); ++iit)
         delete iit.data();
@@ -70,12 +74,17 @@ bool Manager::addModule(Object* module)
     return true;
 }
 
-Script* Manager::getScript(const QString& scriptname)
+bool Manager::addQObject(QObject* object, const QString& name)
 {
-    if(m_scripts.contains(scriptname))
-        return m_scripts[scriptname];
-    Script* script = new Script(this);
-    m_scripts.replace(scriptname, script);
+    return addModule(new QtObject(object, name.isEmpty() ? object->name() : name));
+}
+
+ScriptContainer* Manager::getScriptContainer(const QString& scriptname)
+{
+    if(m_scriptcontainers.contains(scriptname))
+        return m_scriptcontainers[scriptname];
+    ScriptContainer* script = new ScriptContainer(this, scriptname);
+    m_scriptcontainers.replace(scriptname, script);
     return script;
 }
 

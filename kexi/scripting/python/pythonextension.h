@@ -36,9 +36,11 @@
 #include "../api/object.h"
 #include "../api/list.h"
 #include "../api/class.h"
-#include "pythoninterpreter.h"
 
 namespace Kross { namespace Python {
+
+    // Forward declaration.
+    class PythonScript;
 
     /**
      * The PythonExtension is a wrapper-object to let C++ and
@@ -48,7 +50,8 @@ namespace Kross { namespace Python {
      */
     class PythonExtension : public Py::PythonExtension<PythonExtension>
     {
-            friend class PythonInterpreter;
+            friend class PythonScript;
+
         public:
 
             /**
@@ -64,9 +67,35 @@ namespace Kross { namespace Python {
              */
             virtual ~PythonExtension();
 
-            virtual Py::Object getattr(const char*);
-            virtual Py::Object getattr_methods(const char*);
+            /**
+             * Overloaded method to handle attribute calls
+             * from within python.
+             *
+             * \param name The name of the attribute that
+             *        should be handled.
+             * \return An \a Py::Object that could be
+             *         a value or a callable object. Python
+             *         will decide what to do with the
+             *         returnvalue.
+             */
+            virtual Py::Object getattr(const char* name);
 
+            /**
+             * Overloaded method to handle method calls
+             * from within python. This function behaves
+             * similar as the \a getattr but should return
+             * callable objects or None if there is no
+             * method with such name.
+             *
+             * \param name The name of the callable object
+             *        that should be returned.
+             */
+            virtual Py::Object getattr_methods(const char* name);
+
+            /**
+             * Return the \a Kross::Api::Object this
+             * PythonExtension wraps.
+             */
             Kross::Api::Object* getObject();
 
             //virtual Py::Object repr() { return Py::String(m_object->getName().latin1()); }
@@ -74,7 +103,9 @@ namespace Kross { namespace Python {
             //virtual int print(FILE *, int) {}
 
         private:
+            /// The \a Kross::Api::Object this PythonExtension wraps.
             Kross::Api::Object* m_object;
+            /// Internal value used by our dirty hack to handle calls more flexible.
             QString m_methodname;
 
             /**

@@ -30,6 +30,8 @@ namespace Kross { namespace Api {
 
     // Forward declaration.
     class Manager;
+    class ScriptContainer;
+    class Script;
 
     /**
      * Base class for interpreters.
@@ -46,6 +48,11 @@ namespace Kross { namespace Api {
 
             /**
              * Constructor.
+             *
+             * \param manager The \a Manager instance used to
+             *        create this interpreter.
+             * \param interpretername The name of the interpreter.
+             *        This could be something like "kjs" or "python".
              */
             Interpreter(Manager* manager, const QString& interpretername);
 
@@ -71,28 +78,14 @@ namespace Kross { namespace Api {
             virtual const QStringList mimeTypes() = 0;
 
             /**
-             * Execute a scriptcode-string. Use \a setScript to
-             * set the string that should be executed via this
-             * function.
+             * Create and return a new interpreter dependend
+             * \a Script instance.
              *
-             * \param code The scriptcode to execute.
-             * \return true if execution was successfully else false.
+             * \param scriptcontainer The \a ScriptContainer
+             *        to use for the \a Script instance.
+             * \return The from \a Script inherited instance.
              */
-            virtual bool execute(const QString& code) = 0;
-
-            /**
-             * Execute a function in a script-string. This function
-             * behaves similar as the one above.
-             *
-             * \throw Kross::Api::Exception if execution failes.
-             * \param code The scriptcode to execute.
-             * \param name The name of the function to execute.
-             * \param args The arguments passed to the function as
-             *        \a List object.
-             * \return A \a Object object representing the returnvalue
-             *         of the function call.
-             */
-            virtual Kross::Api::Object* execute(const QString& code, const QString& name, Kross::Api::List* args) = 0;
+            virtual Script* createScript(ScriptContainer* scriptcontainer) = 0;
 
         protected:
             /// The Manager class this instance is child of.

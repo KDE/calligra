@@ -1,5 +1,5 @@
 /***************************************************************************
- * script.h
+ * pythonscript.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,50 +17,35 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_API_SCRIPT_H
-#define KROSS_API_SCRIPT_H
+#ifndef KROSS_PYTHON_PYTHONSCRIPT_H
+#define KROSS_PYTHON_PYTHONSCRIPT_H
 
-#include <qstring.h>
+#include <Python.h>
+#include "CXX/Objects.hxx"
+//#include "CXX/Extensions.hxx"
 
-namespace Kross { namespace Api {
+//#include <qstring.h>
+//#include <qvariant.h>
+//#include <qobject.h>
+//#include <kdebug.h>
+#include "../api/script.h"
 
-    // Forward declarations.
-    class Object;
-    class Interpreter;
-    class ScriptContainer;
-    class List;
+namespace Kross { namespace Python {
 
-    /**
-     * Base class for interpreter dependend functionality
-     * each script spends.
-     */
-    class Script
+    // Forward declaration.
+    class PythonModuleManager;
+
+    class PythonScript : public Kross::Api::Script
     {
         public:
+            explicit PythonScript(Kross::Api::Interpreter* interpreter, Kross::Api::ScriptContainer* scriptcontainer);
+            virtual ~PythonScript();
 
-            /**
-             * Constructor.
-             */
-            Script(Interpreter* interpreter, ScriptContainer* scriptcontainer);
+            virtual Kross::Api::Object* execute();
+            virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args);
 
-            /**
-             * Destructor.
-             */
-            virtual ~Script();
-
-            /**
-             * Execute the script.
-             */
-            virtual Kross::Api::Object* execute() = 0;
-
-            /**
-             * Call a function.
-             */
-            virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args) = 0;
-
-        protected:
-            Interpreter* m_interpreter;
-            ScriptContainer* m_scriptcontainer;
+        private:
+            Py::Module* m_module;
     };
 
 }}

@@ -20,6 +20,8 @@
 #include "kexidbmodule.h"
 #include "kexidbdrivermanager.h"
 
+#include <kdebug.h>
+
 using namespace Kross::KexiDB;
 
 KexiDBModule::KexiDBModule()

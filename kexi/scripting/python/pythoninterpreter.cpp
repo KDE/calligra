@@ -18,19 +18,16 @@
  ***************************************************************************/
 
 #include "pythoninterpreter.h"
+#include "pythonscript.h"
 #include "pythonmodule.h"
 //#include "pythonextension.h"
-
 #include "../api/variant.h"
-
-#include "CXX/Objects.hxx"
-//#include "CXX/Extensions.hxx"
 
 using namespace Kross::Python;
 
 PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString& interpretername)
     : Kross::Api::Interpreter(manager, interpretername)
-    , tstate(0)
+    , m_globalthreadstate(0)
 {
     //kdDebug() << "Py_GetVersion()=" << Py_GetVersion() << " Py_GetPath()=" << Py_GetPath() << endl;
 
@@ -38,27 +35,57 @@ PythonInterpreter::PythonInterpreter(Kross::Api::Manager* manager, const QString
     Py_SetProgramName(const_cast<char*>("Kross"));
 
     // Initialize python.
-    if(! Py_IsInitialized())
-        Py_Initialize();
+    //if(! Py_IsInitialized()) Py_Initialize();
+    Py_Initialize();
 
     // Set arguments.
     //PySys_SetArgv(argc, argv);
     //PySys_SetPath(Py_GetPath());
 
-    // We will use an own thread for execution.
+    // First we have to initialize threading if python supports it.
     PyEval_InitThreads();
-    m_gtstate = PyEval_SaveThread();
+    m_globalthreadstate = PyEval_SaveThread();
+
+    // We use an own interpreter.
+    PyEval_AcquireLock();
+    m_threadstate = Py_NewInterpreter();
+
+    // Initialize the main module.
+    m_mainmodule = new Py::Module("__main__");
+
+    // Initialize the module manager.
+    m_modulemanager = new PythonModuleManager(this);
+
+    // Prepare the global scope accessible by all PythonScript
+    // instances. We import the global accessible Kross module.
+    Py::Dict moduledict = m_mainmodule->getDict();
+    QString s = "import Kross\n"
+                "globalvar = 0\n"
+                "def maintestfunc():\n"
+                "    print \"this is maintestfunc!\"\n"
+                "    return \"this is the maintestfunc return value!\"\n";
+    PyObject* run = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
+    if(! run)
+        throw Kross::Api::RuntimeException(i18n("Failed to prepare the __main__ module."));
 }
 
 PythonInterpreter::~PythonInterpreter()
 {
-    if(m_gtstate) {
-        // Free the used thread.
-        PyEval_AcquireThread(m_gtstate);
+    // Free the main module.
+    delete m_mainmodule; m_mainmodule = 0;
 
-        // Finalize python.
-        Py_Finalize();
-    }
+    // Free the module manager.
+    delete m_modulemanager; m_modulemanager = 0;
+
+    // Free the used interpreter.
+    Py_EndInterpreter(m_threadstate);
+    PyEval_ReleaseLock();
+
+    // Free the used thread.
+    PyEval_AcquireThread(m_globalthreadstate);
+
+    // Finalize python.
+    Py_Finalize();
 }
 
 const QStringList PythonInterpreter::mimeTypes()
@@ -66,136 +93,8 @@ const QStringList PythonInterpreter::mimeTypes()
     return QStringList() << "text/x-python" << "application/x-python";
 }
 
-bool PythonInterpreter::init()
+Kross::Api::Script* PythonInterpreter::createScript(Kross::Api::ScriptContainer* scriptcontainer)
 {
-    if(! m_gtstate) {
-        kdWarning() << "PythonInterpreter::init(): PyEval_SaveThread() failed." << endl;
-        return false;
-    }
-    if(tstate) {
-        kdWarning() << "PythonInterpreter::init(): Interpreter wasn't released." << endl;
-        return false;
-    }
-
-    // Execution will be done in it's own locked interpreter instance.
-    PyEval_AcquireLock();
-    tstate = Py_NewInterpreter();
-    if(! tstate) {
-        kdWarning() << "Py_NewInterpreter() failed. Execution aborted." << endl;
-        return false;
-    }
-
-    // Create modules
-    QMap<QString, Kross::Api::Object*> modules = m_manager->getModules();
-    for(QMap<QString, Kross::Api::Object*>::Iterator it = modules.begin(); it != modules.end(); ++it) {
-        PythonModule* pythonmodule = new PythonModule(it.key().latin1(), it.data());
-        m_pythonmodules.replace(it.key(), pythonmodule);
-    }
-
-    return true;
-}
-
-bool PythonInterpreter::finesh()
-{
-    // Explicit free the modules.
-    for(QMap<QString, PythonModule*>::Iterator it = m_pythonmodules.begin(); it != m_pythonmodules.end(); ++it) {
-        //kdDebug() << "Deleting PythonModule name=" << it.key() << endl;
-        delete it.data();
-    }
-
-    // Execution is done. Free the interpreter.
-    Py_EndInterpreter(tstate);
-    tstate = 0;
-
-    // Release the lock.
-    PyEval_ReleaseLock();
-
-    return true;
-}
-
-bool PythonInterpreter::execute(const QString& code)
-{
-    //TESTCASE
-    /*
-    try {
-        QValueList<Kross::Api::Object*> list;
-        list.append( Kross::Api::Variant::create("This is the argument passed from within c/c++") );
-        Kross::Api::Object* o = execute("myfunc", Kross::Api::List::create(list));
-        kdDebug() << "RETURNVALUE => " << Kross::Api::Variant::toString(o) << endl;
-        return true;
-    }
-    catch(Kross::Api::Exception& e) {
-        kdDebug() << QString("myException => %1: %2").arg(e.type()).arg(e.description()) << endl;
-        return false;
-    }
-    catch(Py::Exception&) {
-        kdDebug() << "UNKNOWN EXCEPTION !!!" << endl;
-        return false;
-    }
-    */
-
-    if(! init() || code.isEmpty()) return false;
-    int r = PyRun_SimpleString((char*)code.latin1());
-    return finesh() && r == 0;
-}
-
-Kross::Api::Object* PythonInterpreter::execute(const QString& code, const QString& name, Kross::Api::List* args)
-{
-    QString scriptcode = code;
-    if(scriptcode.isEmpty())
-        throw Kross::Api::AttributeException(i18n("No scriptcode to execute."));
-
-    // Initialize
-    if(! init())
-        throw Kross::Api::RuntimeException(i18n("Failed to initialize interpreter."));
-
-    // We need to use the dictonary of the main module. After PyRun_String
-    // we are able to access that way the parsed script and determinate the
-    // function to execute.
-    Py::Module module("__main__");
-    Py::Dict moduledict = module.getDict();
-
-    // Parse the script.
-    PyObject* run = PyRun_String((char*)scriptcode.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
-    if(! run) {
-        Py::Object errobj = Py::value(Py::Exception()); // get last error
-        finesh();
-        throw Kross::Api::RuntimeException(i18n("Python Exception: %1").arg(errobj.as_string().c_str()));
-    }
-    Py_XDECREF(run); // not any longer needed
-
-    // Try to determinate the function we like to execute.
-    PyObject* func = PyDict_GetItemString(moduledict.ptr(), name.latin1());
-    if(! func) {
-        finesh();
-        throw Kross::Api::AttributeException(i18n("No such function."));
-    }
-    Py::Callable funcobject(func, true); // the funcobject takes care of freeing our func pyobject.
-
-    // Check if the object is really a function and therefore callable.
-    if(! funcobject.isCallable()) {
-        finesh();
-        throw Kross::Api::AttributeException(i18n("Function is not callable."));
-    }
-
-    Py::Object result = Py::None();
-    try {
-        // Call the function.
-        result = funcobject.apply(PythonExtension::toPyTuple(args));
-    }
-    catch(Kross::Api::Exception& e) {
-        finesh();
-        throw e;
-    }
-    catch(Py::Exception& e) {
-        Py::Object errobj = Py::value(e);
-        finesh();
-        throw Kross::Api::RuntimeException(i18n("Python Exception: %1").arg(errobj.as_string().c_str()));
-    }
-
-    if(! finesh())
-        throw Kross::Api::RuntimeException(i18n("Failed to finalize interpreter."));
-
-    return PythonExtension::toObject(result);
+    return new PythonScript(this, scriptcontainer);
 }
 

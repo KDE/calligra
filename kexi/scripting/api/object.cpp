@@ -98,11 +98,10 @@ void Object::removeAllChildren()
     m_children.clear();
 }
 
-Object* Object::call(const QString&, List*)
+Object* Object::call(const QString& name, List*)
 {
-#ifdef KROSS_API_OBJECT_DEBUG
-    kdDebug() << "Kross::Api::Object::call() on not callable object." << endl;
-#endif
-    return 0;
+    if(name.isEmpty()) // return a self-reference if no functionname is defined
+        return this;
+    throw TypeException(i18n("Object '%1' has no function named '%2'.").arg(getName()).arg(name));
 }
 

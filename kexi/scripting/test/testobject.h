@@ -1,5 +1,5 @@
 /***************************************************************************
- * script.h
+ * testobject.h
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,53 +17,32 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_API_SCRIPT_H
-#define KROSS_API_SCRIPT_H
+#ifndef KROSS_TEST_TESTOBJECT_H
+#define KROSS_TEST_TESTOBJECT_H
 
+#include <qobject.h>
 #include <qstring.h>
 
-namespace Kross { namespace Api {
+class TestObject : public QObject
+{
+        Q_OBJECT
 
-    // Forward declarations.
-    class Object;
-    class Interpreter;
-    class ScriptContainer;
-    class List;
+        //Q_PROPERTY(QString testProperty READ testProperty WRITE setTestProperty)
 
-    /**
-     * Base class for interpreter dependend functionality
-     * each script spends.
-     */
-    class Script
-    {
-        public:
+    public:
+        TestObject(QObject* parent);
+        ~TestObject();
 
-            /**
-             * Constructor.
-             */
-            Script(Interpreter* interpreter, ScriptContainer* scriptcontainer);
+        //QString m_prop;
+        //QString testProperty() const { return m_prop; }
+        //void setTestProperty(QString prop) { m_prop = prop; }
 
-            /**
-             * Destructor.
-             */
-            virtual ~Script();
-
-            /**
-             * Execute the script.
-             */
-            virtual Kross::Api::Object* execute() = 0;
-
-            /**
-             * Call a function.
-             */
-            virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args) = 0;
-
-        protected:
-            Interpreter* m_interpreter;
-            ScriptContainer* m_scriptcontainer;
-    };
-
-}}
+    signals:
+        void testSignal();
+    public slots:
+        void testSlot();
+    private slots:
+        void testSignalSlot();
+};
 
 #endif
-

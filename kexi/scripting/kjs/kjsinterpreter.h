@@ -25,7 +25,9 @@
 
 #include "../api/object.h"
 #include "../api/interpreter.h"
+#include "../api/script.h"
 #include "../main/manager.h"
+#include "../main/scriptcontainer.h"
 
 namespace Kross { namespace Kjs {
 
@@ -60,18 +62,9 @@ namespace Kross { namespace Kjs {
             virtual const QStringList mimeTypes();
 
             /**
-             * Execute/interpret a KJS-string.
-             *
-             * See \see Kross::Api::Interpreter::execute()
+             * Return a \a PythonScript instance.
              */
-            virtual bool execute(const QString& code);
-
-            /**
-             * Execute a function in a KJS-string.
-             *
-             * See \see Kross::Api::Interpreter::executeFunction
-             */
-            virtual Kross::Api::Object* execute(const QString& code, const QString& name, Kross::Api::List* args);
+            virtual Kross::Api::Script* createScript(Kross::Api::ScriptContainer* scriptcontainer);
 
         private:
 

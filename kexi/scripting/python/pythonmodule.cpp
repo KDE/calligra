@@ -18,41 +18,41 @@
  ***************************************************************************/
 
 #include "pythonmodule.h"
+#include "pythoninterpreter.h"
 
 #include <kdebug.h>
 
 using namespace Kross::Python;
 
-PythonModule::PythonModule(const char *name, Kross::Api::Object* object)
-    : Py::ExtensionModule<PythonModule>(name)
-    , m_object(object)
+PythonModuleManager::PythonModuleManager(PythonInterpreter* interpreter)
+    : Py::ExtensionModule<PythonModuleManager>("Kross")
+    , m_interpreter(interpreter)
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
-    kdDebug() << QString("Kross::Python::PythonModule::Constructor name='%1'").arg(name) << endl;
+    kdDebug() << QString("Kross::Python::PythonModuleManager::Constructor") << endl;
 #endif
 
-    add_varargs_method("get", &PythonModule::get, "FIXME: Documentation");
+    add_varargs_method("get", &PythonModuleManager::get, "FIXME: Documentation");
+    initialize("FIXME: Documentation"); //TODO initialize( object->getDescription().latin1() );
 
-    Kross::Api::ObjectMap children = object->getChildren();
-    for(Kross::Api::ObjectMap::Iterator it = children.begin(); it != children.end(); ++it) {
-#ifdef KROSS_PYTHON_MODULE_DEBUG
-        kdDebug() << QString("Kross::Python::PythonModule adding extension '%1'.").arg(it.key()) << endl;
-#endif
-        PythonExtension* extension = new PythonExtension(it.data());
-        m_extensions.replace(it.key(), extension);
-    }
-
-    initialize( object->getDescription().latin1() );
+    /*
+    Py::Dict moduledict = module().getDict();
+    Py::List l = moduledict.keys();
+    for(Py::List::size_type i=0; i < l.length(); ++i)
+        kdDebug() << QString("PythonModuleManager::PythonModuleManager(): Module Dictonary item key='%1' value='%2'")
+                     .arg( l[i].str().as_string().c_str() )
+                     .arg( moduledict[l[i]].str().as_string().c_str() ) << endl;
+    */
 }
 
-PythonModule::~PythonModule()
+PythonModuleManager::~PythonModuleManager()
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
-    kdDebug() << QString("Kross::Python::PythonModule::Destructor name='%1'").arg(name().c_str()) << endl;
+    kdDebug() << QString("Kross::Python::PythonModuleManager::Destructor name='%1'").arg(name().c_str()) << endl;
 #endif
 }
 
-Py::Object PythonModule::get(const Py::Tuple& args)
+Py::Object PythonModuleManager::get(const Py::Tuple& args)
 {
     if(args.size() < 1)
         throw Py::TypeError("Too few arguments.");
@@ -60,14 +60,19 @@ Py::Object PythonModule::get(const Py::Tuple& args)
         throw Py::TypeError("Too many arguments.");
     if(! args[0].isString())
         throw Py::TypeError("String argument expected.");
+
     QString name = args[0].as_string().c_str();
-    if(! m_extensions.contains(name))
-        throw Py::TypeError(QString("Unknown argument '%1'.").arg(name).latin1());
-    PythonExtension* extension = m_extensions[name];
-    Kross::Api::Object* obj = extension ? extension->getObject() : 0;
-    if(! obj)
-        throw Py::RuntimeError(QString("There exists no such object '%1'.").arg(name).latin1());
-    //kdDebug() << "PythonModule::getObject name=" << name << " obj->getName()=" << (obj->getName().isNull() ? QString("<NULL>") : obj->getName()) << endl;
-    return Py::asObject(extension);
+
+    Kross::Api::Object* module = m_interpreter->m_manager->getModule(name);
+    if(! module)
+        throw Py::TypeError(QString("Unknown module '%1'.").arg(name).latin1());
+
+    if(m_modules.contains(name))
+        return Py::asObject(m_modules[name]);
+
+    PythonExtension* pythonmodule = new PythonExtension(module);
+    m_modules.replace(name, pythonmodule);
+    return Py::asObject(pythonmodule);
 }
+
 

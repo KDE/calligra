@@ -3,6 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 noinst_LTLIBRARIES = libkrossmain.la
 
 libkrossmain_la_SOURCES = \
+    scriptcontainer.cpp \
     manager.cpp
 
 libkrossmain_la_LDFLAGS = $(all_libraries) -Wnounresolved

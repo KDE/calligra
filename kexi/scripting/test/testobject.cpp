@@ -1,5 +1,5 @@
 /***************************************************************************
- * script.h
+ * testobject.cpp
  * This file is part of the KDE project
  * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
  *
@@ -17,53 +17,31 @@
  * Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#ifndef KROSS_API_SCRIPT_H
-#define KROSS_API_SCRIPT_H
+#include "testobject.h"
 
-#include <qstring.h>
+#include <kdebug.h>
 
-namespace Kross { namespace Api {
+TestObject::TestObject(QObject* parent)
+    : QObject(parent, "TestObject")
+{
+    kdDebug() << "TestObject::TestObject called" << endl;
+    connect(this, SIGNAL(testSignal()), this, SLOT(testSignalSlot()));
+}
 
-    // Forward declarations.
-    class Object;
-    class Interpreter;
-    class ScriptContainer;
-    class List;
+TestObject::~TestObject()
+{
+    kdDebug() << "TestObject::~TestObject called" << endl;
+}
 
-    /**
-     * Base class for interpreter dependend functionality
-     * each script spends.
-     */
-    class Script
-    {
-        public:
+void TestObject::testSlot()
+{
+    kdDebug() << "TestObject::testSlot called" << endl;
+    emit testSignal();
+}
 
-            /**
-             * Constructor.
-             */
-            Script(Interpreter* interpreter, ScriptContainer* scriptcontainer);
+void TestObject::testSignalSlot()
+{
+    kdDebug() << "TestObject::testSignalSlot called" << endl;
+}
 
-            /**
-             * Destructor.
-             */
-            virtual ~Script();
-
-            /**
-             * Execute the script.
-             */
-            virtual Kross::Api::Object* execute() = 0;
-
-            /**
-             * Call a function.
-             */
-            virtual Kross::Api::Object* callFunction(const QString& name, Kross::Api::List* args) = 0;
-
-        protected:
-            Interpreter* m_interpreter;
-            ScriptContainer* m_scriptcontainer;
-    };
-
-}}
-
-#endif
 

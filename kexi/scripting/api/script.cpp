@@ -18,60 +18,20 @@
  ***************************************************************************/
 
 #include "script.h"
-#include "../api/object.h"
-#include "../api/list.h"
-#include "../main/manager.h"
-
-#include "../api/interpreter.h"
+#include "object.h"
+#include "list.h"
+#include "interpreter.h"
+#include "../main/scriptcontainer.h"
 
 using namespace Kross::Api;
 
-Script::Script(Manager* manager)
-    : QObject()
-    , m_manager(manager)
+Script::Script(Interpreter* interpreter, ScriptContainer* scriptcontainer)
+    : m_interpreter(interpreter)
+    , m_scriptcontainer(scriptcontainer)
 {
 }
 
 Script::~Script()
 {
-}
-
-const QString& Script::getCode()
-{
-    return m_code;
-}
-
-void Script::setCode(const QString& code)
-{
-    m_code = code;
-}
-
-const QString& Script::getInterpreter()
-{
-    return m_interpreter;
-}
-
-void Script::setInterpreter(const QString& interpreter)
-{
-    m_interpreter = interpreter;
-}
-
-bool Script::execute()
-{
-    Interpreter* interpreter = m_manager->getInterpreter(m_interpreter);
-    if(! interpreter) return false;
-    return interpreter->execute(m_code);
-}
-
-const QVariant& Script::execute(const QString& name, const QVariant& args)
-{
-    //TODO
-}
-
-Kross::Api::Object* Script::execute(const QString& name, Kross::Api::List* args)
-{
-    Interpreter* interpreter = m_manager->getInterpreter(m_interpreter);
-    if(! interpreter) return false;
-    return interpreter->execute(m_code, name, args);
 }
 

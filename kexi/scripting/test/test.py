@@ -2,27 +2,22 @@
 # the Kross python-interface to access KexiDB
 # functionality from within Python.
 
-#import sys
-
-# Import the KexiDB module.
-#from Kross import KexiDB
-import KexiDB
-
-# Let's use a class for testing cause it just
-# enables the Python way to do it :)
+# Class to test the KexiDB functionality.
 class KexiDBClass:
 
     # Constructor.
     def __init__(self):
+        # The KexiDB module spends us access to the KexiDB functionality.
+        self.kexidbmodule = Kross.get("KexiDB")
         # Create and remember the drivermanager.
-        self.drivermanager = KexiDB.get("DriverManager")
+        self.drivermanager = self.kexidbmodule.DriverManager()
 
     # Print informations about the KexiDB module.
     def printKexiDB(self):
-        print "KexiDB = %s %s" % (str(KexiDB),dir(KexiDB))
+        print "KexiDB = %s %s" % (str(self.kexidbmodule),dir(self.kexidbmodule))
         # Each object has __name__ and __doc__
-        print "KexiDB.__name__ = %s" % KexiDB.__name__
-        print "KexiDB.__doc__ = %s" % KexiDB.__doc__
+        print "KexiDB.__name__ = %s" % self.kexidbmodule.__name__
+        print "KexiDB.__doc__ = %s" % self.kexidbmodule.__doc__
         # Print some infos about the drivermanager.
         print "drivermanager = %s %s" % str(self.drivermanager,dir(self.drivermanager))
         # The drivermanager holds a list of drivers he supports.
@@ -53,10 +48,14 @@ class KexiDBClass:
     def driver(self, drivername):
         return self.drivermanager.driver(drivername)
 
+    # Return a new KexiDBConnectionData object.
+    def getConnectionData(self):
+        return self.drivermanager.connectionData()
+
     # Open a connection to a filebased driver.
     def connectWithFile(self, driver, filename):
         # First we need a new connectiondata object.
-        connectiondata = self.drivermanager.connectionData()
+        connectiondata = self.getConnectionData()
         # Fill the new connectiondata object with what we need to connect.
         connectiondata.setConnName("myFileConnection")
         connectiondata.setFileName(filename)
@@ -111,6 +110,7 @@ class KexiDBClass:
         query = myfileconnection.queryStringList("SELECT * FROM table1", 0)
         print "queryStringList = %s" % query
 
+    # Walk through the KexiDBCursor and print all item values.
     def printQueryCursor(self, cursor):
         if cursor == None:
             raise("ERROR: executeQuery failed!")
@@ -128,9 +128,11 @@ class KexiDBClass:
             # Move to the next item
             cursor.moveNext()
 
+    # Similar to printQueryCursor
     def printQuerySchema(self, connection, queryschema):
         return self.printQueryCursor(connection.executeQuerySchema(queryschema))
 
+    # Similar to printQueryCursor
     def printQueryString(self, connection, sqlstring):
         return self.printQueryCursor(connection.executeQueryString(sqlstring))
 
@@ -161,28 +163,21 @@ class KexiDBClass:
         print "alterTableName from=%s to=%s tableschema=%s" % (tablename, newtablename, tableschema)
         connection.alterTableName(tableschema, newtablename)
 
-def myTestFunc():
-    print "myTestFunc() called !!!"
-    return "This is the returnvalue!"
-
-if __name__ == '__main__':
-
-    print "BEGIN KROSS::KEXIDB TEST ###############################################"
-
+def testKexiDB():
+    global KexiDBClass
     mykexidbclass = KexiDBClass()
     #mykexidbclass.printKexiDB()
 
     mydriver = mykexidbclass.driver("SQLite3")
     #mykexidbclass.printDriverManger(mydriver)
 
-    myfileconnection = mykexidbclass.connectWithFile(mydriver, "/home/snoopy/New_database.kexi")
+    myfileconnection = mykexidbclass.connectWithFile(mydriver, "/home/snoopy/test.kexi")
     #mykexidbclass.printConnection(myfileconnection)
     #mykexidbclass.testParser(myfileconnection, "SELECT * from table1")
 
-    #mykexidbclass.printQuerySingleString(myfileconnection, "SELECT * FROM table1")
-    #mykexidbclass.printQueryStringList(myfileconnection, "SELECT * FROM table1")
-
-    mykexidbclass.printQueryString(myfileconnection, "SELECT * FROM table2")
+    #mykexidbclass.printQuerySingleString(myfileconnection, "SELECT * FROM dept")
+    #mykexidbclass.printQueryStringList(myfileconnection, "SELECT * FROM dept")
+    mykexidbclass.printQueryString(myfileconnection, "SELECT * FROM dept")
 
     #myqueryschema = mykexidbclass.drivermanager.querySchema()
     #myqueryschema.setName("myqueryname")
@@ -195,22 +190,44 @@ if __name__ == '__main__':
     #mykexidbclass.dropTable(myfileconnection, "mytable123")
     #mykexidbclass.alterTableName(myfileconnection, "table1", "table111")
 
-    #############################################################
-    # TODO
-
     #TODO: new table isn't usuable!!!
     #ts1 = myfileconnection.tableSchema("table2")
     #ts2 = mykexidbclass.drivermanager.tableSchema("table4")
     #mykexidbclass.addField(ts2, "MyField 111111111")
     #print "myfileconnection.alterTable = %s" % myfileconnection.alterTable(ts1, ts2)
-
-    # TEST
+    #TEST
     #bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& values)
     #myfileconnection.insertRecord(KexiDBField, ("field1", "field2"))
-
     #del(mycursor)
     #del(myfileconnection)
     #del(mydriver)
     #del(mykexidbclass)
 
-    print "END KROSS::KEXIDB TEST ###############################################"
+def testfunc(msg):
+    global globalvar
+    globalvar = globalvar + 1
+    print "testfunc() returnvalue msg='%s' globalvar='%s'" % (msg,globalvar)
+    return "this is the __main__.testfunc() returnvalue!"
+
+def testobjectCallback():
+    print "testobjectCallback() returnvalue !!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    return "this is the __main__.testobjectCallback() returnvalue!"
+
+print "########## BEGIN ##########"
+testKexiDB()
+
+#testfunc("from __main__")
+#maintestfunc()
+#print __name__
+#print mymodule.exttest()
+testobject = Kross.get("TestObject")
+print "testobject = %s %s" % (str(testobject),dir(testobject))
+print "propertyNames = %s" % testobject.propertyNames()
+print "slotNames = %s" % testobject.slotNames()
+print "signalNames = %s" % testobject.signalNames()
+testobject.connect("testSignal()","testobjectCallback")
+testobject.signal("testSignal()")
+testobject.slot("testSlot()")
+testobject.disconnect("testSignal()")
+
+print "########## END ##########"

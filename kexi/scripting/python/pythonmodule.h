@@ -29,21 +29,39 @@
 
 #include "../main/config.h"
 #include "../api/object.h"
+#include "../api/script.h"
 #include "pythonextension.h"
 
 namespace Kross { namespace Python {
 
-    class PythonModule : public Py::ExtensionModule<PythonModule>
+    // Forward declaration.
+    class PythonInterpreter;
+
+    /**
+     * The PythonModuleManager is the common python object to
+     * access all the functionality Kross spends from within
+     * python.
+     */
+    class PythonModuleManager : public Py::ExtensionModule<PythonModuleManager>
     {
         public:
-            PythonModule(const char *name, Kross::Api::Object*);
-            virtual ~PythonModule();
 
-            //const std::string& name() const { return m_object->getName().latin1(); }
+            /**
+             * Constructor.
+             *
+             * \param interpreter The \a PythonInterpreter instance
+             *        used to create this PythonModuleManager.
+             */
+            PythonModuleManager(PythonInterpreter* interpreter);
+
+            /**
+             * Destructor.
+             */
+            virtual ~PythonModuleManager();
 
         private:
-            Kross::Api::Object* m_object;
-            QMap<QString, PythonExtension*> m_extensions;
+            PythonInterpreter* m_interpreter;
+            QMap<QString, PythonExtension*> m_modules;
 
             Py::Object get(const Py::Tuple&);
     };
