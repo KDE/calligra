@@ -210,7 +210,7 @@ void OLEFilter::slotSaveDocumentInformation(
     QString data = info->save().toString();
     int length = data.utf8().length();
 
-    if(!store->write(data.utf8(), length))
+    if(store->write(data.utf8(), length) != length)
 	kdError(s_area) << "OLEFilter::slotSaveDocumentInformation(): Could not write to KoStore!" << endl;
     store->close();
 }
@@ -246,7 +246,7 @@ void OLEFilter::slotSavePic(
             return;
         }
         // Write it to the gzipped tar file
-        bool ret = store->write(data, length);
+        bool ret = store->write(data, length) == length;
         if (!ret)
             kdError(s_area) << "OLEFilter::slotSavePic(): Could not write to KoStore!" << endl;
         store->close();
@@ -490,7 +490,7 @@ file.close();
         }
 
         // Write it to the gzipped tar file
-        bool ret = store->write(file.data(), file.length());
+        bool ret = store->write(file.data(), file.length()) == file.length();
         if (!ret)
             kdError(s_area) << "OLEFilter::slotSavePic(): Could not write to KoStore!" << endl;
         store->close();
