@@ -99,13 +99,13 @@ public:
 
     // Mouse press
     void mpEditFrame( QMouseEvent *e, const QPoint& nPoint );
-    void mpCreate( int mx, int my );
-    void mpCreatePixmap( int mx, int my );
+    void mpCreate( const QPoint& normalPoint );
+    void mpCreatePixmap( const QPoint& normalPoint );
     // Mouse move
     void mmEdit( int /*mx*/, int /*my*/ );  // mouse move in edit mode (with button pressed)
     void mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid );
-    void mmEditFrameMove( int mx, int my );
-    void mmCreate( int mx, int my );
+    void mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed );
+    void mmCreate( const QPoint& normalPoint );
     // Mouse release
     void mrEditFrame( QMouseEvent *e, const QPoint &nPoint );
     void mrCreateText();
@@ -161,8 +161,7 @@ public:
     void emitFrameSelectedChanged();
 
 protected:
-    /** Set format changes on selection on current cursor */
-    void setFormat( QTextFormat *, int flags);
+    void applyGrid( KoPoint &p );
 
     /**
      * Reimplemented from QScrollView, to draw the contents of the canvas

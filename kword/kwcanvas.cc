@@ -392,29 +392,25 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
 
     viewport()->setCursor( m_doc->getMouseCursor( nPoint, e && e->state() & ControlButton ) );
 
-    m_deleteMovingRect = FALSE;
+    m_deleteMovingRect = false;
 }
 
-void KWCanvas::mpCreate( int mx, int my )
+void KWCanvas::mpCreate( const QPoint& normalPoint )
 {
-    mx = ( mx / m_doc->gridX() ) * m_doc->gridX();
-    my = ( my / m_doc->gridX() ) * m_doc->gridY();
-    double x = mx / m_doc->zoomedResolutionX();
-    double y = my / m_doc->zoomedResolutionY();
-    m_insRect.setCoords( x, y, 0, 0 );
-    m_deleteMovingRect = FALSE;
+    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    applyGrid( docPoint );
+    m_insRect.setCoords( docPoint.x(), docPoint.y(), 0, 0 );
+    m_deleteMovingRect = false;
 }
 
-void KWCanvas::mpCreatePixmap( int mx, int my )
+void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
 {
     if ( !m_pictureFilename.isEmpty() )
     {
         // Apply grid for the first corner only
-        mx = ( mx / m_doc->gridX() ) * m_doc->gridX();
-        my = ( my / m_doc->gridX() ) * m_doc->gridY();
-        double x = mx / m_doc->zoomedResolutionX();
-        double y = my / m_doc->zoomedResolutionY();
-        m_insRect.setCoords( x, y, 0, 0 );
+        KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+        applyGrid( docPoint );
+        m_insRect.setCoords( docPoint.x(), docPoint.y(), 0, 0 );
         m_deleteMovingRect = false;
 
         if ( !m_isClipart && !m_pixmapSize.isEmpty() )
@@ -423,10 +419,10 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
             uint width = qRound( (double)m_pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
             uint height = qRound( (double)m_pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
             // Apply reasonable limits
-            width = QMIN( width, m_doc->paperWidth() - mx - 5 );
-            height = QMIN( height, m_doc->paperHeight()- my - 5 );
+            width = QMIN( width, m_doc->paperWidth() - normalPoint.x() - 5 );
+            height = QMIN( height, m_doc->paperHeight()- normalPoint.y() - 5 );
 
-            QPoint nPoint( mx + width, my + height );
+            QPoint nPoint( normalPoint.x() + width, normalPoint.y() + height );
             QPoint vPoint = m_viewMode->normalToView( nPoint );
             vPoint = contentsToViewport( vPoint );
             QRect viewportRect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
@@ -492,11 +488,11 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
         case MM_CREATE_FORMULA:
             if ( e->button() == LeftButton )
-                mpCreate( normalPoint.x(), normalPoint.y() );
+                mpCreate( normalPoint );
             break;
         case MM_CREATE_PIX:
             if ( e->button() == LeftButton )
-                mpCreatePixmap( normalPoint.x(), normalPoint.y() );
+                mpCreatePixmap( normalPoint );
             break;
         default: break;
     }
@@ -587,18 +583,12 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
     mousep = m_viewMode->viewToNormal( mousep );
 
-    int mx = mousep.x();
-    int my = mousep.y();
+    KoPoint docPoint = m_doc->unzoomPoint( mousep );
     // Apply the grid, unless Shift is pressed
     if ( !noGrid )
-    {
-        int rastX = m_doc->gridX();
-        int rastY = m_doc->gridY();
-        mx = ( mx / rastX ) * rastX ;
-        my = ( my / rastY ) * rastY;
-    }
-    double x = mx / m_doc->zoomedResolutionX();
-    double y = my / m_doc->zoomedResolutionY();
+        applyGrid( docPoint );
+    double x = docPoint.x();
+    double y = docPoint.y();
     int page = static_cast<int>( y / m_doc->ptPaperHeight() );
     int oldPage = static_cast<int>( frame->top() / m_doc->ptPaperHeight() );
     ASSERT( oldPage == frame->pageNum() );
@@ -722,40 +712,46 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     m_gui->getView()->updateFrameStatusBarItem();
 }
 
-void KWCanvas::mmEditFrameMove( int mx, int my )
+void KWCanvas::applyGrid( KoPoint &p )
 {
-    bool adjustPosNeeded = false;
-    double cx = mx / m_doc->zoomedResolutionX();
-    double cy = my / m_doc->zoomedResolutionY();
+    p.setX( static_cast<int>( p.x() / m_doc->gridX() ) * m_doc->gridX() );
+    p.setY( static_cast<int>( p.y() / m_doc->gridY() ) * m_doc->gridY() );
+}
+
+void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
+{
+    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
     // Move the bounding rect containing all the selected frames
     KoRect oldBoundingRect = m_boundingRect;
     //int page = m_doc->getPageOfRect( m_boundingRect );
-    //kdDebug() << "KWCanvas::mmEditFrameMove cx=" << cx
-    //          << "  boundingrect=" << DEBUGRECT(m_boundingRect) << endl;
+    kdDebug() << "KWCanvas::mmEditFrameMove docPoint.x=" << docPoint.x()
+              << "  boundingrect=" << DEBUGRECT(m_boundingRect) << endl;
 
     // (x and y separately for a better behaviour at limit of page)
     KoPoint p( m_boundingRect.topLeft() );
-    //kdDebug() << "KWCanvas::mmEditFrameMove hotspot.x=" << m_hotSpot.x() << " cx=" << cx << endl;
-    p.setX( cx - m_hotSpot.x() );
-    //kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << p.x() << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove hotspot.x=" << m_hotSpot.x() << endl;
+    p.setX( docPoint.x() - m_hotSpot.x() );
+    if ( !shiftPressed ) // Shift disables the grid
+        applyGrid( p );
+    kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << p.x() << endl;
     m_boundingRect.moveTopLeft( p );
-    //kdDebug() << "KWCanvas::mmEditFrameMove boundingrect now " << DEBUGRECT(m_boundingRect) << endl;
+    kdDebug() << "KWCanvas::mmEditFrameMove boundingrect now " << DEBUGRECT(m_boundingRect) << endl;
     // But not out of the margins
     if ( m_boundingRect.left() < 1 ) // 1 pt margin to avoid drawing problems
     {
         p.setX( 1 );
         m_boundingRect.moveTopLeft( p );
-        adjustPosNeeded = true;
     }
     else if ( m_boundingRect.right() > m_doc->ptPaperWidth() - 1 )
     {
         p.setX( m_doc->ptPaperWidth() - m_boundingRect.width() - 2 );
         m_boundingRect.moveTopLeft( p );
-        adjustPosNeeded = true;
     }
     // Now try Y
     p = m_boundingRect.topLeft();
-    p.setY( cy - m_hotSpot.y() );
+    p.setY( docPoint.y() - m_hotSpot.y() );
+    if ( !shiftPressed ) // Shift disables the grid
+        applyGrid( p );
     m_boundingRect.moveTopLeft( p );
     // -- Don't limit to the current page. Let the user move a frame between pages --
     // But we still want to limit to 0 - lastPage
@@ -763,14 +759,12 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     {
         p.setY( 1 );
         m_boundingRect.moveTopLeft( p );
-        adjustPosNeeded = true;
     }
     else if ( m_boundingRect.bottom() > m_doc->getPages() * m_doc->ptPaperHeight() - 1 )
     {
         kdDebug() << "KWCanvas::mmEditFrameMove limiting to last page" << endl;
         p.setY( m_doc->getPages() * m_doc->ptPaperHeight() - m_boundingRect.height() - 2 );
         m_boundingRect.moveTopLeft( p );
-        adjustPosNeeded = true;
     }
     // Another annoying case is if the top and bottom points are not in the same page....
     int topPage = static_cast<int>( m_boundingRect.top() / m_doc->ptPaperHeight() );
@@ -795,7 +789,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     /*kdDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
               << m_boundingRect.top() - oldBoundingRect.top() << endl;
     kdDebug() << " boundingX+hotspotX=" << m_boundingRect.left() + m_hotSpot.x() << endl;
-    kdDebug() << " cx=" << cx << endl;*/
+    kdDebug() << " docPoint.x()=" << docPoint.x() << endl;*/
 
     QList<KWTableFrameSet> tablesMoved;
     tablesMoved.setAutoDelete( FALSE );
@@ -874,26 +868,10 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     repaintContents( repaintRegion.boundingRect() );
 
     m_gui->getView()->updateFrameStatusBarItem();
-
-    // Doesn't work ! It makes the cursor jump.
-    // I have tried every combination of contentsToViewport and viewport()->mapToGlobal etc., no luck
-    /*if ( adjustPosNeeded )
-    {
-        QPoint pos = mapToGlobal( m_doc->zoomPoint( m_boundingRect.topLeft() + m_hotSpot ) );
-        kdDebug() << "ADJUSTING ptcoordX=" << m_boundingRect.left()+m_hotSpot.x()
-                  << " globalCoordX=" << pos.x() << " currentGlobalX=" << QCursor::pos().x() << endl;
-        QCursor::setPos( pos );
-    }*/
 }
 
-void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
+void KWCanvas::mmCreate( const QPoint& normalPoint ) // Mouse move when creating a frame
 {
-    if ( m_mouseMode != MM_CREATE_PIX )
-    {
-        mx = ( mx / m_doc->gridX() ) * m_doc->gridX();
-        my = ( my / m_doc->gridY() ) * m_doc->gridY();
-    }
-
     QPainter p;
     p.begin( viewport() );
     p.translate( -contentsX(), -contentsY() );
@@ -908,15 +886,19 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
     KoRect oldRect = m_insRect;
 
     // Resize the rectangle
-    m_insRect.setRight( mx / m_doc->zoomedResolutionX() );
-    m_insRect.setBottom( my / m_doc->zoomedResolutionY() );
+    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    if ( m_mouseMode != MM_CREATE_PIX )
+        applyGrid( docPoint );
+
+    m_insRect.setRight( docPoint.x() );
+    m_insRect.setBottom( docPoint.y() );
 
     // But not out of the page
     KoRect r = m_insRect.normalize();
     if ( m_doc->isOutOfPage( r, page ) )
     {
         m_insRect = oldRect;
-        // #### QCursor::setPos( viewport()->mapToGlobal( m_insRect.bottomRight() ) );
+        // #### QCursor::setPos( viewport()->mapToGlobal( zoomPoint( m_insRect.bottomRight() ) ) );
     }
 
     // Apply keep-aspect-ratio feature
@@ -977,21 +959,12 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 else if ( m_doc->isReadWrite() )
                 {
                     if ( viewport()->cursor().shape() == SizeAllCursor )
-                    {
-                        int mx = normalPoint.x();
-                        int my = normalPoint.y();
-                        if ( !( e->state() & ShiftButton ) ) // Shift disables the grid
-                        {
-                            mx = ( mx / m_doc->gridX() ) * m_doc->gridX();
-                            my = ( my / m_doc->gridY() ) * m_doc->gridY();
-                        }
-                        mmEditFrameMove( mx, my );
-                    }
+                        mmEditFrameMove( normalPoint, e->state() & ShiftButton );
                 }
             } break;
             case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART:
             case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
-                mmCreate( normalPoint.x(), normalPoint.y() );
+                mmCreate( normalPoint );
             default: break;
         }
     } else {

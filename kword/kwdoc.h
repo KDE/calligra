@@ -265,6 +265,7 @@ public:
 
     void updateAllFrames();
 
+    // The grid is in _pt_ now
     int gridX() { return m_gridX; }
     int gridY() { return m_gridY; }
     void setGridX(int _gridx) { m_gridX = _gridx; }
