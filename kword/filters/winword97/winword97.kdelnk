@@ -2,6 +2,7 @@
 [KDE Desktop Entry]
 MimeType=text/winword97
 Comment=Winword97 Document
+Comment[da]=Winword97 dokument
 Comment[fr]=Document Winword97
 Comment[pt_BR]=Documento Winword97
 DefaultApp=kword

@@ -1,9 +1,11 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KWordWinword97Filter
+Name[da]=KWordWinwordFilter
 Name[fr]=Filtre Winword97 vers KWord
 Exec=kword_winword97.bin --server
 Comment=Werner's KWord Winword97 Filter
+Comment[da]=Werner's KWord Winword97 filter
 Comment[fr]=Filtre Winword97 vers KWord de Werner
 Comment[pt_BR]=Filtro do KWord para WinWord97
 Export=application/x-kword
