@@ -208,7 +208,7 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
     int p;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         int pgNum = slideInfos[i].pageNumber;
-        view->getCanvas()->drawPageInPix( pix, pgNum, zoom );
+        view->getCanvas()->drawPageInPix( pix, pgNum, zoom, true /*force real variable value*/ );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
 
         pix.save( filename, format.upper().latin1() );   //lukas: provide the option to choose image quality

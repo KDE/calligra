@@ -71,6 +71,7 @@
 #include "kprpage.h"
 #include <kmessagebox.h>
 #include <math.h>
+#include <kprvariable.h>
 
 /******************************************************************/
 /* class KPrCanvas - KPrCanvas                                    */
@@ -3321,13 +3322,23 @@ bool KPrCanvas::isOneObjectSelected() const
 /*================================================================*/
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom )
+void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRealVariableValue )
 {
     //kdDebug(33001) << "Page::drawPageInPix" << endl;
     currPresPage = pgnum + 1;
 
     int oldZoom = m_view->kPresenterDoc()->zoomHandler()->zoom();
+    bool oldDisplayFieldValue = false;
     m_view->zoomDocument(zoom);
+    if ( forceRealVariableValue )
+    {
+        oldDisplayFieldValue = m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayFiedCode();
+        if ( oldDisplayFieldValue )
+        {
+            m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
+            m_view->kPresenterDoc()->recalcVariables(  VT_ALL );
+        }
+    }
 
     QRect rect = m_view->kPresenterDoc()->pageList().at(pgnum)->getZoomPageRect( );
     _pix.resize( rect.size() );
@@ -3353,6 +3364,15 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom )
 
     editMode = _editMode;
     p.end();
+
+    if ( forceRealVariableValue )
+    {
+        if ( oldDisplayFieldValue )
+        {
+            m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->setDisplayFiedCode(true);
+            m_view->kPresenterDoc()->recalcVariables(  VT_ALL );
+        }
+    }
 
     m_view->zoomDocument(oldZoom);
 }

@@ -148,7 +148,7 @@ public:
     void setAutoForm( const QString &_autoform )
     { autoform = _autoform; }
 
-    void drawPageInPix( QPixmap&, int pgnum, int zoom );
+    void drawPageInPix( QPixmap&, int pgnum, int zoom, bool forceRealVariableValue = false );
 
     void gotoPage( int pg );
 
