@@ -130,8 +130,8 @@ public:
     double getReductionFactor( TextStyle tstyle ) const;
 
     luPt getBaseSize() const;
-    pt baseSize() const { return m_baseSize; }
-    void setBaseSize( pt pointSize );
+    int baseSize() const { return m_baseSize; }
+    void setBaseSize( int pointSize );
     void setSizeFactor( double factor );
 
     TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
@@ -249,7 +249,7 @@ private:
     /**
      * The (font) size of the formula's main sequence.
      */
-    pt m_baseSize;
+    int m_baseSize;
 
     /**
      * Hack! Each formula might set this to a value not too far from one

@@ -63,12 +63,6 @@ public:
     virtual ~PlainCommand();
 
     /**
-     * A command might have no effect.
-     * @returns true if nothing happened.
-     */
-    virtual bool isSenseless() { return false; }
-
-    /**
      * debug only.
      */
     static int getEvilDestructionCount() { return evilDestructionCount; }
@@ -261,7 +255,7 @@ public:
      * A command might have no effect.
      * @returns true if nothing happened.
      */
-    virtual bool isSenseless() { return removedList.isEmpty(); }
+    //virtual bool isSenseless() { return removedList.isEmpty(); }
 
 private:
 
@@ -298,8 +292,6 @@ public:
 
     virtual void execute();
     virtual void unexecute();
-
-    virtual bool isSenseless() { return element == 0; }
 
 private:
     BasicElement* element;

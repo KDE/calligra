@@ -108,7 +108,7 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual Command* buildCommand( Container*, Request* );
+    virtual KCommand* buildCommand( Container*, Request* );
 
     /**
      * @returns our documents symbol table

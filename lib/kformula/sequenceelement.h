@@ -238,7 +238,7 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual Command* buildCommand( Container*, Request* );
+    virtual KCommand* buildCommand( Container*, Request* );
 
 
     /**
@@ -246,8 +246,8 @@ public:
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual Command* input( Container* container, QChar ch );
-    virtual Command* input( Container* container, QKeyEvent* event );
+    virtual KCommand* input( Container* container, QChar ch );
+    virtual KCommand* input( Container* container, QKeyEvent* event );
 
     /**
      * Stores the given childrens dom in the element.
@@ -422,7 +422,7 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual Command* buildCommand( Container*, Request* );
+    virtual KCommand* buildCommand( Container*, Request* );
 
 
     /**
@@ -430,7 +430,7 @@ public:
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual Command* input( Container* container, QChar ch );
+    virtual KCommand* input( Container* container, QChar ch );
 
     /**
      * Sets a new type. This is done during parsing.
@@ -476,6 +476,8 @@ protected:
     virtual bool isFirstOfToken( BasicElement* ) { return false; }
 
 private:
+
+    KCommand* compactExpressionCmd( Container* container );
 
     QString buildName();
 };

@@ -206,13 +206,13 @@ void Artwork::calcSizes( const ContextStyle& style,
         }
         break;
     case Integral:
-        calcCharSize( style, 1.5*mySize, integralChar );
+        calcCharSize( style, qRound( 1.5*mySize ), integralChar );
         break;
     case Sum:
-        calcCharSize( style, 1.5*mySize, summationChar );
+        calcCharSize( style, qRound( 1.5*mySize ), summationChar );
         break;
     case Product:
-        calcCharSize( style, 1.5*mySize, productChar );
+        calcCharSize( style, qRound( 1.5*mySize ), productChar );
         break;
     }
 }
@@ -363,13 +363,13 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
     case EmptyBracket:
         break;
     case Integral:
-        drawCharacter(painter, style, myX, myY, 1.5*mySize, integralChar);
+        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), integralChar);
         break;
     case Sum:
-        drawCharacter(painter, style, myX, myY, 1.5*mySize, summationChar);
+        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), summationChar);
         break;
     case Product:
-        drawCharacter(painter, style, myX, myY, 1.5*mySize, productChar);
+        drawCharacter(painter, style, myX, myY, qRound( 1.5*mySize ), productChar);
         break;
     }
 
@@ -509,9 +509,9 @@ void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const
     QRect lowerBound = fm.boundingRect(lowercorner);
     QRect lineBound = fm.boundingRect(line);
 
-    pt ptX = style.layoutUnitToPixelX( x );
-    pt ptY = style.layoutUnitToPixelY( y );
-    pt height = style.layoutUnitToPixelY( getHeight() );
+    pixel ptX = style.layoutUnitToPixelX( x );
+    pixel ptY = style.layoutUnitToPixelY( y );
+    pixel height = style.layoutUnitToPixelY( getHeight() );
 
 //     p.setPen( Qt::red );
 //     //p.drawRect( ptX, ptY, upperBound.width(), upperBound.height() + lowerBound.height() );
@@ -525,18 +525,18 @@ void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const
 
     // for printing
     //pt safety = lineBound.height() / 10.0;
-    pt safety = 0;
+    pixel safety = 0;
 
-    pt gap = height - upperBound.height() - lowerBound.height();
-    pt lineHeight = lineBound.height() - safety;
-    int lineCount = static_cast<int>( gap / lineHeight );
-    pt start = upperBound.height()-lineBound.top() - safety;
+    pixel gap = height - upperBound.height() - lowerBound.height();
+    pixel lineHeight = lineBound.height() - safety;
+    int lineCount = qRound( static_cast<double>( gap ) / lineHeight );
+    pixel start = upperBound.height()-lineBound.top() - safety;
 
     for (int i = 0; i < lineCount; i++) {
         p.drawText( ptX, ptY+start+i*lineHeight, QString(QChar(line)));
     }
-    pt remaining = gap - lineCount*lineHeight;
-    pt dist = ( lineHeight - remaining ) / 2;
+    pixel remaining = gap - lineCount*lineHeight;
+    pixel dist = ( lineHeight - remaining ) / 2;
     p.drawText( ptX, ptY+height-upperBound.height()+dist-lineBound.height()-lineBound.top(),
                 QString( QChar( line ) ) );
 }
@@ -586,9 +586,9 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
     QRect middleBound = fm.boundingRect(middle);
     QRect lineBound = fm.boundingRect(line);
 
-    pt ptX = style.layoutUnitToPixelX( x );
-    pt ptY = style.layoutUnitToPixelY( y );
-    pt height = style.layoutUnitToPixelY( getHeight() );
+    pixel ptX = style.layoutUnitToPixelX( x );
+    pixel ptY = style.layoutUnitToPixelY( y );
+    pixel height = style.layoutUnitToPixelY( getHeight() );
 
     //p.setPen(Qt::gray);
     //p.drawRect(x, y, upperBound.width() + offset, height);
@@ -603,16 +603,16 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
     // If the world was perfect and the urw-symbol font correct
     // this could be 0.
     //lu safety = lineBound.height() / 10;
-    pt safety = 0;
+    pixel safety = 0;
 
-    pt lineHeight = lineBound.height() - safety;
-    pt gap = height/2 - upperBound.height() - middleBound.height() / 2;
+    pixel lineHeight = lineBound.height() - safety;
+    pixel gap = height/2 - upperBound.height() - middleBound.height() / 2;
 
     if (gap > 0) {
         QString ch = QString(QChar(line));
-        int lineCount = static_cast<int>( gap / lineHeight ) + 1;
+        int lineCount = qRound( gap / lineHeight ) + 1;
 
-        pt start = (height - middleBound.height()) / 2 + safety;
+        pixel start = (height - middleBound.height()) / 2 + safety;
         for (int i = 0; i < lineCount; i++) {
             p.drawText( ptX, ptY-lineBound.top()+QMAX( start-(i+1)*lineHeight,
                                                        upperBound.width() ),

@@ -271,14 +271,12 @@ void Document::initSymbolNamesAction()
 
 ContextStyle& Document::getContextStyle( bool edit )
 {
-    lazyInit();
     impl->contextStyle.setEdit( edit );
     return impl->contextStyle;
 }
 
 void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-    //lazyInit();
     impl->contextStyle.setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
@@ -299,7 +297,6 @@ void Document::setZoom( double zoomX, double zoomY, bool updateViews, bool forPr
 void Document::registerFormula( Container* f )
 {
     lazyInit();
-    //Container* f = new Container(this);
     impl->formulae.append(f);
 }
 

@@ -111,8 +111,6 @@ Container::Container(Document* doc)
     impl = new Container_Impl(doc);
     impl->rootElement = new FormulaElement(this);
     impl->activeCursor = impl->internCursor = createCursor();
-    connect(this, SIGNAL(commandExecuted()),
-            document()->getHistory(), SIGNAL(commandExecuted()));
     doc->registerFormula( this );
     recalc();
 }
@@ -348,17 +346,10 @@ void Container::cut()
 }
 
 
-void Container::execute(PlainCommand* command)
+void Container::execute(KCommand* command)
 {
     if ( command != 0 ) {
-        command->execute();
-        if (!command->isSenseless()) {
-            getHistory()->addCommand(command, false);
-            emit commandExecuted();
-        }
-        else {
-            delete command;
-        }
+        getHistory()->addCommand(command);
     }
 }
 
@@ -405,7 +396,7 @@ int Container::fontSize() const
     }
     else {
         const ContextStyle& context = document()->getContextStyle();
-        return static_cast<int>( context.baseSize() );
+        return qRound( context.baseSize() );
     }
 }
 
@@ -546,7 +537,7 @@ QImage Container::drawImage( int width, int height )
                      static_cast<double>( height )/static_cast<double>( realHeight ) );
 
     int oldZoom = context.zoom();
-    context.setZoomAndResolution( oldZoom*f, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    context.setZoomAndResolution( qRound( oldZoom*f ), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 
     kdDebug( DEBUGID ) << "Container::drawImage "
                        << "(" << width << " " << height << ")"

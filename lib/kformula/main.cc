@@ -130,8 +130,8 @@ void ScrollView::focusInEvent(QFocusEvent*)
 void ScrollView::cursorChanged(bool visible, bool /*selecting*/)
 {
     if (visible) {
-        double x = child->getCursorPoint().x();
-        double y = child->getCursorPoint().y();
+        int x = child->getCursorPoint().x();
+        int y = child->getCursorPoint().y();
         ensureVisible(x, y);
     }
 }

@@ -224,7 +224,12 @@ public slots:
 
 private:
 
+    /**
+     * Needs to be called when the first formula is created.
+     * The zoom functions must work before lazyInit was called.
+     */
     void lazyInit();
+
     void initSymbolNamesAction();
 
     /**

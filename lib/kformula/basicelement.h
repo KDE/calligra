@@ -34,9 +34,10 @@
 
 class QKeyEvent;
 
+class KCommand;
+
 KFORMULA_NAMESPACE_BEGIN
 
-class Command;
 class ComplexElement;
 class Container;
 class ElementType;
@@ -288,14 +289,14 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual Command* buildCommand( Container*, Request* ) { return 0; }
+    virtual KCommand* buildCommand( Container*, Request* ) { return 0; }
 
     /**
      * Parses the input. It's the container which does create
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
      */
-    virtual Command* input( Container*, QKeyEvent* ) { return 0; }
+    virtual KCommand* input( Container*, QKeyEvent* ) { return 0; }
 
     // basic support
 

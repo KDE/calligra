@@ -74,7 +74,7 @@ void ContextStyle::readConfig( KConfig* config )
     fontName = config->readEntry( "operatorFont", "Times,12,-1,5,50,0,0,0,0,0" );
     operatorFont.fromString( fontName );
     QString baseSize = config->readEntry( "baseSize", "20" );
-    m_baseSize = baseSize.toDouble();
+    m_baseSize = baseSize.toInt();
 
     m_requestedFonts = config->readListEntry( "usedMathFonts" );
     if ( m_requestedFonts.size() == 0 ) {
@@ -191,7 +191,7 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 
 luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return static_cast<luPt>( ptToLayoutUnitPt( m_sizeFactor*m_baseSize*getReductionFactor( tstyle ) ) );
+    return qRound( ptToLayoutUnitPt( m_sizeFactor*m_baseSize*getReductionFactor( tstyle ) ) );
 }
 
 luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
@@ -236,7 +236,7 @@ luPt ContextStyle::getBaseSize() const
     return static_cast<luPt>( ptToLayoutUnitPt( m_sizeFactor*m_baseSize ) );
 }
 
-void ContextStyle::setBaseSize( pt size )
+void ContextStyle::setBaseSize( int size )
 {
     //kdDebug( 40000 ) << "ContextStyle::setBaseSize" << endl;
     if ( size != m_baseSize ) {

@@ -129,7 +129,7 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
                      ContextStyle::normal, LuPixelPoint() );
 }
 
-Command* FormulaElement::buildCommand( Container* container, Request* request )
+KCommand* FormulaElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
     case req_compactExpression:

@@ -24,6 +24,7 @@
 #include <qpainter.h>
 #include <qpaintdevice.h>
 
+#include <kcommand.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -732,7 +733,7 @@ BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direct
         }
     }
     else {
-        if ( cursor->getPos() < static_cast<int>( children.count() ) ) {
+        if ( cursor->getPos() < qRound( children.count() ) ) {
             return children.at( cursor->getPos() );
         }
     }
@@ -793,7 +794,7 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
 }
 
 
-Command* SequenceElement::buildCommand( Container* container, Request* request )
+KCommand* SequenceElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
     case req_addText: {
@@ -908,6 +909,22 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
         }
         else {
             DirectedRemove* dr = static_cast<DirectedRemove*>( request );
+
+            // empty removes are not legal!
+            if ( !cursor->isSelection() ) {
+                if ( countChildren() > 0 ) {
+                    if ( ( cursor->getPos() == 0 ) && ( dr->direction() == beforeCursor ) ) {
+                        return 0;
+                    }
+                    if ( ( cursor->getPos() == countChildren() ) && ( dr->direction() == afterCursor ) ) {
+                        return 0;
+                    }
+                }
+                else if ( getParent() == 0 ) {
+                    return 0;
+                }
+            }
+
             KFCRemove* command = new KFCRemove( container, dr->direction() );
             return command;
         }
@@ -946,7 +963,7 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
 }
 
 
-Command* SequenceElement::input( Container* container, QKeyEvent* event )
+KCommand* SequenceElement::input( Container* container, QKeyEvent* event )
 {
     QChar ch = event->text().at( 0 );
     if ( ch.isPrint() ) {
@@ -1023,7 +1040,7 @@ Command* SequenceElement::input( Container* container, QKeyEvent* event )
 }
 
 
-Command* SequenceElement::input( Container* container, QChar ch )
+KCommand* SequenceElement::input( Container* container, QChar ch )
 {
     int latin1 = ch.latin1();
     switch (latin1) {
@@ -1297,19 +1314,24 @@ void NameSequence::moveWordRight( FormulaCursor* cursor )
 }
 
 
-Command* NameSequence::buildCommand( Container* container, Request* request )
+KCommand* NameSequence::compactExpressionCmd( Container* container )
+{
+    BasicElement* element = replaceElement( container->document()->getSymbolTable() );
+    if ( element != 0 ) {
+        getParent()->selectChild( container->activeCursor(), this );
+
+        KFCReplace* command = new KFCReplace( i18n( "Add Element" ), container );
+        command->addElement( element );
+        return command;
+    }
+    return 0;
+}
+
+KCommand* NameSequence::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
-    case req_compactExpression: {
-        BasicElement* element = replaceElement( container->document()->getSymbolTable() );
-        if ( element != 0 ) {
-            getParent()->selectChild( container->activeCursor(), this );
-
-            KFCReplace* command = new KFCReplace( i18n( "Add Element" ), container );
-            command->addElement( element );
-            return command;
-        }
-    }
+    case req_compactExpression:
+        return compactExpressionCmd( container );
     case req_addSpace:
     case req_addIndex:
     case req_addMatrix:
@@ -1326,7 +1348,7 @@ Command* NameSequence::buildCommand( Container* container, Request* request )
 }
 
 
-Command* NameSequence::input( Container* container, QChar ch )
+KCommand* NameSequence::input( Container* container, QChar ch )
 {
     int latin1 = ch.latin1();
     switch (latin1) {
@@ -1338,8 +1360,20 @@ Command* NameSequence::input( Container* container, QChar ch )
     case '}':
     case ']':
     case ')':
-    case '\\':
+    case '\\': {
+//         KCommand* compact = compactExpressionCmd( container );
+//         KCommand* cmd = static_cast<SequenceElement*>( getParent() )->input( container, ch );
+//         if ( compact != 0 ) {
+//             KMacroCommand* macro = new KMacroCommand( cmd->name() );
+//             macro->addCommand( compact );
+//             macro->addCommand( cmd );
+//             return macro;
+//         }
+//         else {
+//             return cmd;
+//         }
         break;
+    }
     case '{':
     case ' ': {
         Request r( req_compactExpression );

@@ -50,7 +50,7 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual Command* buildCommand( Container*, Request* );
+    virtual KCommand* buildCommand( Container*, Request* );
 };
 
 
@@ -106,7 +106,7 @@ public:
 };
 
 
-Command* MatrixSequenceElement::buildCommand( Container* container, Request* request )
+KCommand* MatrixSequenceElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
     case req_appendColumn:

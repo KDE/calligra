@@ -90,29 +90,27 @@ bool TextElement::isInvisible() const
 void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle /*istyle*/)
 {
     luPt mySize = context.getAdjustedSize( tstyle );
+    //kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = getFont( context );
-    font.setPointSize( mySize );
+    font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
 
     QFontMetrics fm( font );
     QChar ch = getRealCharacter();
     if ( ch != QChar::null ) {
         QRect bound = fm.boundingRect( ch );
-
-        setWidth( fm.width( ch ) );
-        setHeight( bound.height() );
-        setBaseline( -bound.top() );
-        //setMidline( getBaseline() - fm.strikeOutPos() );
+        setWidth( context.ptToLayoutUnitPt( fm.width( ch ) ) );
+        setHeight( context.ptToLayoutUnitPt( bound.height() ) );
+        setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
     }
     else {
-        setWidth( static_cast<int>( context.getEmptyRectWidth() * 2./3. ) );
-        setHeight( static_cast<int>( context.getEmptyRectHeight() * 2./3. ) );
+        setWidth( qRound( context.getEmptyRectWidth() * 2./3. ) );
+        setHeight( qRound( context.getEmptyRectHeight() * 2./3. ) );
         setBaseline( getHeight() );
-        //setMidline( getBaseline() / 2 );
     }
 
-    //kdDebug( DEBUGID ) << "bound.height(): " << bound.height() << endl;
-    //kdDebug( DEBUGID ) << "bound.top(): " << bound.top() << endl;
+    //kdDebug( DEBUGID ) << "height: " << getHeight() << endl;
+    //kdDebug( DEBUGID ) << "width: " << getWidth() << endl;
 }
 
 /**
@@ -134,10 +132,12 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& r,
 
     luPt mySize = context.getAdjustedSize( tstyle );
     QFont font = getFont( context );
-    font.setPointSize( static_cast<int>( context.layoutUnitToFontSize( mySize, false ) ) );
+    font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
     painter.setFont( font );
 
     //kdDebug( DEBUGID ) << "TextElement::draw font=" << font.rawName() << endl;
+    //kdDebug( DEBUGID ) << "TextElement::draw size=" << mySize << endl;
+    //kdDebug( DEBUGID ) << "TextElement::draw size=" << context.layoutUnitToFontSize( mySize, false ) << endl;
 
     QChar ch = getRealCharacter();
     if ( ch != QChar::null ) {

@@ -300,11 +300,6 @@ signals:
     void formulaLoaded(FormulaElement*);
 
     /**
-     * A command has been executed.
-     */
-    void commandExecuted();
-
-    /**
      * We've got a new base size.
      */
     void baseSizeChanged( int );
@@ -349,7 +344,7 @@ private:
     /**
      * Execute the command if it makes sense.
      */
-    void execute(PlainCommand *command);
+    void execute(KCommand *command);
 
     /**
      * Emits a signal if the cursor had moved.

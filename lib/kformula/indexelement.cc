@@ -46,11 +46,11 @@ public:
      * @returns the command that performs the requested action with
      * the containers active cursor.
      */
-    virtual Command* buildCommand( Container*, Request* );
+    virtual KCommand* buildCommand( Container*, Request* );
 };
 
 
-Command* IndexSequenceElement::buildCommand( Container* container, Request* request )
+KCommand* IndexSequenceElement::buildCommand( Container* container, Request* request )
 {
     switch ( *request ) {
     case req_addIndex: {
@@ -324,12 +324,12 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
     if (content->isTextOnly()) {
         luPt mySize = style.getAdjustedSize( tstyle );
         QFont font = style.getDefaultFont();
-        font.setPointSize( mySize );
+        font.setPointSizeFloat( style.layoutUnitToFontSize( mySize, false ) );
 
         QFontMetrics fm(font);
         LuPixelRect bound = fm.boundingRect('x');
 
-        luPixel exBaseline = -bound.top();
+        luPixel exBaseline = style.ptToLayoutUnitPt( -bound.top() );
 
         // the upper half
         ulOffset = ulHeight + exBaseline - content->getBaseline();
