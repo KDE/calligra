@@ -32,8 +32,7 @@
 #include <ktrader.h>
 #include <kactivator.h>
 
-// debug
-#include <stdio.h>
+#include <kdebug.h>
 
 /**
  * Port from KOffice Trader to KTrader/KActivator (kded) by Simon Hausmann
@@ -142,25 +141,25 @@ const KoDocumentEntry& KoDocumentEntry::operator=( const KoDocumentEntry& e )
 KOffice::Document_ptr KoDocumentEntry::createDoc()
 {
   ASSERT( !CORBA::is_nil( reference ) );
-  printf("Narrow factory\n");
+  kdebug(0, 30003, "Narrow factory\n");
   KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( reference );
   if( CORBA::is_nil( factory ) )
   {
     QString tmp( i18n("Server %1 does not implement a KOffice factory" ) );
     tmp = tmp.arg( name );
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "Ok" ) );
     return 0;
   }
-  printf("Create\n");
+  kdebug(0, 30003, "Create\n");
   KOffice::Document_ptr doc = factory->create();
   if( CORBA::is_nil( doc ) )
   {
     QString tmp( i18n("Server %1 did not create a document" ) );
     tmp = tmp.arg( name );
-    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "Ok" ) );
     return 0;
   }
-  printf("Create done\n");
+  kdebug(0, 30003, "Create done\n");
   return doc;
 }
 
@@ -259,6 +258,7 @@ KoFilterEntry::KoFilterEntry( const KoComponentEntry& _e ) : KoComponentEntry( _
 
 QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_count*/ )
 {
+  kdebug(0, 30003, "KoFilterEntry::query( %s, <ignored> )", _constr );
   QValueList<KoFilterEntry> lst;
 
   KTrader *trader = KdedInstance::self()->ktrader();
@@ -268,6 +268,7 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
+  kdebug(0, 30003, "Query returned %d offers\n", max);
   for( unsigned int i = 0; i < max; i++ )
   {
     KoFilterEntry f( koParseFilterProperties( *it ) );
@@ -284,7 +285,7 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
 
     // We need a virtual object reference
     f.reference = activator->activateService( (*it)->name(), repoId, tag );
-    printf("Created %p\n",f.reference);
+    kdebug(0, 30003, "Created %p\n",f.reference);
 
     // Append converted offer
     lst.append( f );
