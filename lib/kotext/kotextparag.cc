@@ -374,19 +374,17 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     //kdDebug() << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
     //kdDebug() << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << endl;
     //kdDebug() << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
-#if 1
+
     // We force the alignment to justify during drawing, so that drawParagString is called
     // for at most one word at a time, never more. This allows to make the spaces slightly
     // bigger to compensate for the rounding problems.
     int realAlignment = alignment();
     setAlignmentDirect( Qt::AlignJustify );
-#endif
+
     //qDebug("KoTextParag::paint %p", this);
     QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
-#if 1
     setAlignmentDirect( realAlignment );
-#endif
 
     // Now draw paragraph border
     if ( m_layout.hasBorder() &&!textDocument()->drawingShadow())
@@ -428,7 +426,6 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     assert(zh);
 
     //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
-
 
     // Calculate startX in pixels (using the xadj value of the corresponding char)
     int startX_pix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;

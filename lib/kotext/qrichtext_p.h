@@ -383,9 +383,13 @@ public:
     virtual ~QTextCustomItem();
     virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected ) = 0;
 
+    // Called whenever this item is being moved by the text formatter
     virtual void move( int x, int y ) { xpos = x; ypos = y; }
     int x() const { return xpos; }
     int y() const { return ypos; }
+
+    // Called when the format of the character is being changed, see KoTextStringChar::setFormat
+    virtual void setFormat( QTextFormat * ) { }
 
     virtual void setPainter( QPainter*, bool adjust );
 

@@ -3485,6 +3485,8 @@ void KoTextStringChar::setFormat( QTextFormat *f )
 	    d.custom->custom = 0;
 	}
 	d.custom->format = f;
+        if ( d.custom->custom )
+            d.custom->custom->setFormat( f );
     }
 }
 
@@ -4217,14 +4219,8 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	       ( paintEnd != -1 && at( paintEnd )->c.unicode() == 0xad ) || chr->c.unicode() == 0xad ||
 	       selectionChange || chr->isCustom() ) ) {
 	    if ( paintStart <= paintEnd ) {
-		// ### temporary hack until I get the new placement/shaping stuff working
-		int x = startX;
-		if ( ( alignment() & Qt::AlignJustify ) == Qt::AlignJustify && paintEnd > 0 && // ## out-of-bounds access fix (when paintEnd is 0, e.g. empty paragraphs)
-		     at( paintEnd )->c.isSpace() ) {
-		    int add = str->at(paintEnd).x - str->at(paintEnd-1).x - str->width(paintEnd-1);
-		    bw += ( lastDirection ? 0 : add );
-		}
-		drawParagString( painter, qstr, paintStart, paintEnd - paintStart + 1, x, lastY,
+                // QRT hack removed from this place, it broke justified spaces
+		drawParagString( painter, qstr, paintStart, paintEnd - paintStart + 1, startX, lastY,
 				 lastBaseLine, bw, lasth, drawSelections,
 				 lastFormat, i, selectionStarts, selectionEnds, cg, lastDirection );
 	    }
