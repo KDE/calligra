@@ -137,6 +137,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 \return newly created part item or NULL on any error. */
 		KexiPart::Item* createPartItem(KexiPart::Info *info);
 
+#if 0 //remove?
 		/*! Creates object using data provided by \a dlg dialog. 
 		 Dialog's \a item (KexiDialog::partItem()) must not be stored 
 		 (KexiPart::Item::neverStored()==false) and created 
@@ -145,7 +146,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 (stored in the backend), because previously there was temporary one set.
 		 \return true for successfully created object or false on any error. */
 		bool createObject(KexiDialogBase *dlg);
-//		bool createObject(KexiMainWindow *wnd, KexiPart::Item& item);
+#endif
 
 		KexiDB::Parser* sqlParser();
 

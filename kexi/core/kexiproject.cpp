@@ -397,6 +397,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info)
 	return item;
 }
 
+#if 0 //remove?
 bool KexiProject::createObject(KexiDialogBase *dlg)
 {
 	if (!dlg || !dlg->schemaData())
@@ -448,6 +449,7 @@ bool KexiProject::createObject(KexiDialogBase *dlg)
 	it->setCaption(dlg->caption());*/
 	return true;
 }
+#endif
 
 KexiDB::Parser* KexiProject::sqlParser()
 {
