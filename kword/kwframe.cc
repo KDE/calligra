@@ -534,9 +534,9 @@ void KWFrameSet::updateFrames()
                 {
                     //kdDebug() << "KWFrameSet::updateFrames adding frame on top " << DEBUGRECT(intersect)
                     //          << " (zoomed: " << DEBUGRECT( kWordDocument()->zoomRect( intersect ) ) << endl;
-                    m_framesOnTop.append( FrameOnTop( intersect, frameOnTop->getRunAround() ) );
+                    m_framesOnTop.append( FrameOnTop( intersect, frameOnTop ) );
                     // ## We could also store which frame (frameOnTop) this is upon, to make lookups faster !
-                    // (TODO)
+                    // In fact this means moving framesontop to KWFrame (TODO)
                 }
             }
         }
@@ -983,7 +983,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
         for ( ; fIt != m_framesOnTop.end() ; ++fIt )
         {
-            QRect r = painter->xForm( viewMode->normalToView( doc->zoomRect( (*fIt).outerRect ) ) );
+            QRect r = painter->xForm( viewMode->normalToView( (*fIt).frame->outerRect() ) );
             //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
             reg -= r; // subtract
         }

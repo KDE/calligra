@@ -232,7 +232,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
 
         QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
         //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
-        bool printing = painter->device()->devType() == QInternal::Printer;
+        //bool printing = painter->device()->devType() == QInternal::Printer;
         painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
         // for debugging :)
         //painter->setPen( QPen(Qt::blue, 1, DashLine) );  painter->drawRect( blank );
@@ -392,9 +392,9 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
     for ( ; fIt != m_framesOnTop.end() && from < to ; ++fIt )
     {
-        if ( (*fIt).runAround == RA_BOUNDINGRECT )
+        if ( (*fIt).frame->getRunAround() == RA_BOUNDINGRECT )
         {
-            QRect frameRect = kWordDocument()->zoomRect( (*fIt).outerRect );
+            QRect frameRect = (*fIt).frame->outerRect();
 #ifdef DEBUG_FLOW
             kdDebug() << "getMargins found frame at " << DEBUGRECT(frameRect) << endl;
 #endif
@@ -580,9 +580,9 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
     for ( ; fIt != m_framesOnTop.end() ; ++fIt )
     {
-        if ( (*fIt).runAround == RA_SKIP )
+        if ( (*fIt).frame->getRunAround() == RA_SKIP )
         {
-            QRect rectOnTop = kWordDocument()->zoomRect( (*fIt).outerRect );
+            QRect rectOnTop = (*fIt).frame->outerRect();
             QPoint iTop, iBottom; // top and bottom in internal coordinates
             if ( normalToInternal( rectOnTop.topLeft(), iTop ) &&
                  normalToInternal( rectOnTop.bottomLeft(), iBottom ) &&

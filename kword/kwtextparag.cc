@@ -901,7 +901,7 @@ void KWTextParag::printRTDebug( int info )
     if ( next() && next()->paragId() != paragId() + 1 )
         kdWarning() << "Next paragraph " << next() << " has ID " << next()->paragId() << endl;
     if ( !next() )
-        kdWarning() << "next is 0L" << endl;
+        kdDebug() << "next is 0L" << endl;
     /*
       static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
       QVector<QStyleSheetItem> vec = styleSheetItems();

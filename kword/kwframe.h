@@ -461,10 +461,10 @@ protected:
     QList<KWFrame> frames;        // Our frames
     struct FrameOnTop {
         FrameOnTop() {} // for QValueList
-        FrameOnTop( const KoRect & rect, RunAround ra )
-            : outerRect( rect ), runAround( ra ) {}
-        KoRect outerRect;
-        RunAround runAround;
+        FrameOnTop( const KoRect & r, KWFrame * f )
+            : intersection( r ), frame( f ) {}
+        KoRect intersection;
+        KWFrame * frame;
     };
     QValueList<FrameOnTop> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
 
