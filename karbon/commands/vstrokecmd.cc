@@ -123,6 +123,16 @@ VStrokeCmd::execute()
 				stroke.setColor( m_stroke.color() );
 				stroke.setType( VStroke::solid );
 			}
+			else if( m_stroke.type() == VStroke::grad )
+			{
+				stroke.gradient() = m_stroke.gradient();
+				stroke.setType( VStroke::grad );
+			}
+			else if( m_stroke.type() == VStroke::patt )
+			{
+				stroke.pattern() = m_stroke.pattern();
+				stroke.setType( VStroke::patt );
+			}
 		}
 		itr.current()->setStroke( stroke );
 	}
