@@ -67,7 +67,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		/*! Closes previously opened cursor. 
 			If the cursor is closed, nothing happens. */
 		virtual bool close();
-		/*! \retutn logically or'd cursor's options, 
+		/*! \return logically or'd cursor's options, 
 			selected from Cursor::Options enum. */
 		uint options() const { return m_options; }
 		/*! \returns true if cursor is buffered. */
