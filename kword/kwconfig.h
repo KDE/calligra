@@ -121,11 +121,22 @@ private:
     QCheckBox *m_cursorInProtectedArea;
 };
 
+class ConfigurePathPage : public QObject
+{
+    Q_OBJECT
+public:
+    ConfigurePathPage( KWView *_view, QVBox *box, char *name = 0 );
+    void slotDefault();
+private:
+    KWView* m_pView;
+    KConfig* config;
+};
+
 class KWConfig : public KDialogBase
 {
     Q_OBJECT
 public:
-    enum { KW_KSPELL=1,KP_INTERFACE=2,KP_MISC=4, KP_DOCUMENT=8, KP_FORMULA=16};
+    enum { KW_KSPELL=1,KP_INTERFACE=2,KP_MISC=4, KP_DOCUMENT=8, KP_FORMULA=16, KP_PATH = 32};
     KWConfig( KWView* parent );
     void openPage(int flags);
 public slots:
@@ -137,6 +148,7 @@ private:
     ConfigureMiscPage *m_miscPage;
     ConfigureDefaultDocPage *m_defaultDocPage;
     KFormula::ConfigurePage *m_formulaPage;
+    ConfigurePathPage *m_pathPage;
     KWDocument *m_doc;
 };
 

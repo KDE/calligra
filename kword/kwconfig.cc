@@ -83,6 +83,11 @@ KWConfig::KWConfig( KWView* parent )
   QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
                               loadIcon("misc") );
   m_miscPage=new ConfigureMiscPage(parent, page3);
+
+  QVBox *page6 = addVBoxPage( i18n("Path"), i18n("Path Settings"),
+                              loadIcon("path") );
+  m_pathPage=new ConfigurePathPage(parent, page6);
+
   m_doc = parent->kWordDocument();
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
@@ -99,6 +104,8 @@ void KWConfig::openPage(int flags)
         showPage(2 );
     else if(flags & KP_FORMULA)
         showPage(3);
+    else if ( flags & KP_PATH )
+        showPage(4);
 }
 
 void KWConfig::slotApply()
@@ -131,23 +138,26 @@ void KWConfig::slotDefault()
 {
     switch(activePageIndex())
     {
-        case 0:
-            m_interfacePage->slotDefault();
-            break;
-        case 1:
-            m_defaultDocPage->slotDefault();
-            break;
-        case 2:
-            m_spellPage->slotDefault();
-            break;
-        case 3:
-            m_formulaPage->slotDefault();
-            break;
-        case 4:
-            m_miscPage->slotDefault();
-            break;
-        default:
-            break;
+    case 0:
+        m_interfacePage->slotDefault();
+        break;
+    case 1:
+        m_defaultDocPage->slotDefault();
+        break;
+    case 2:
+        m_spellPage->slotDefault();
+        break;
+    case 3:
+        m_formulaPage->slotDefault();
+        break;
+    case 4:
+        m_miscPage->slotDefault();
+        break;
+    case 5:
+        m_pathPage->slotDefault();
+        break;
+    default:
+        break;
     }
 }
 
@@ -841,6 +851,19 @@ void ConfigureDefaultDocPage::selectNewDefaultFont() {
         fontName->setText(font->family() + ' ' + QString::number(font->pointSize()));
         fontName->setFont(*font);
     }
+}
+
+ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
+ : QObject( box->parent(), name )
+{
+    m_pView=_view;
+    KWDocument * doc = m_pView->kWordDocument();
+    config = KWFactory::global()->config();
+}
+
+void ConfigurePathPage::slotDefault()
+{
+    //todo
 }
 
 #include "kwconfig.moc"

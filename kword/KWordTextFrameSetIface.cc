@@ -258,3 +258,13 @@ bool KWordTextFrameSetIface::isProtectContent() const
 }
 
 
+bool KWordTextFrameSetIface::textShadow() const
+{
+    return m_frametext->textObject()->textShadow();
+}
+
+void KWordTextFrameSetIface::setTextShadow( bool b )
+{
+    KCommand *cmd=m_frametext->textObject()->setShadowTextCommand( b );
+    delete cmd;
+}

@@ -72,13 +72,16 @@ k_dcop:
     bool textUnderline()const;
     bool textDoubleUnderline()const;
 
-
-
     bool textStrikeOut()const;
     bool textSubScript() const;
     bool textSuperScript() const;
     void setProtectContent ( bool _protect );
     bool isProtectContent() const;
+
+
+    bool textShadow() const;
+    void setTextShadow( bool b );
+
 
 private:
     KWTextFrameSet *m_frametext;
