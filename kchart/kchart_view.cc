@@ -99,7 +99,7 @@ void KChartView::cleanUp()
   KoViewIf::cleanUp();
 }
 
-bool KChartView::event( const char* _event, const CORBA::Any& _value )
+bool KChartView::event( const QCString &_event, const CORBA::Any& _value )
 {
     cerr << "Got Event: " << _event << "\n";
   EVENT_MAPPER( _event, _value );

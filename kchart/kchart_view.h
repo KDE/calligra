@@ -97,7 +97,7 @@ protected:
     // C++
     virtual void init();
     // IDL
-    virtual bool event( const char* _event, const CORBA::Any& _value );
+    virtual bool event( const QCString& _event, const CORBA::Any& _value );
     // C++
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
