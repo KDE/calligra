@@ -2,11 +2,11 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) \
 -I$(top_srcdir)/lib/kscript -I$(top_builddir)/lib/kscript
 
 kspread_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kspread_LDADD = ../kchart/libkchart.la libkspread.la ../lib/kofficeui/libkofficeui.la
+kspread_LDADD = libkspread.la
 
 libkspread_la_LDFLAGS = -avoid-version -module -no-undefined
 
-libkspread_la_LIBADD = $(all_libraries) ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
+libkspread_la_LIBADD = $(all_libraries) ../kchart/libkchart.la ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
 
 ####### Files
 
