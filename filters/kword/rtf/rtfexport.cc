@@ -45,8 +45,10 @@ static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &p
     paraFormatDataIt = paraFormatDataList.begin ();
     while (paraFormatDataIt != paraFormatDataList.end ())
     {
+        // Some default values!
 		int pos;
 		int len;
+
 		if (1==(*paraFormatDataIt).id)
 		{
 			pos=(*paraFormatDataIt).text.pos;
@@ -62,6 +64,11 @@ static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &p
 			pos=(*paraFormatDataIt).tableAnchor.pos;
 			len=1;
 		}
+        else
+        {   // Give default values if we do not know the value of "id"
+            pos=lastPos;
+            len=1;
+        }
         if (pos>lastPos)
         {
             //We must add a FormatData
@@ -96,8 +103,6 @@ void ProcessParagraphData ( QString                     &paraText,
 
     if ( paraText.length () > 0 )
     {
-		CreateMissingFormatData(paraText,paraFormatDataList);
-		
         QValueList<FormatData>::Iterator  paraFormatDataIt;
 
         for ( paraFormatDataIt = paraFormatDataList.begin ();
@@ -1013,6 +1018,7 @@ void ProcessParagraph ( QString &paraText,
     int firstIndent;  // indentation of the first line
     int leftIndent;  // indentation of the feft side of the paragraph
 
+    CreateMissingFormatData(paraText,paraFormatDataList);
 
     outputText += "\n\\pard ";  // set paragraph settings to defaults
 
