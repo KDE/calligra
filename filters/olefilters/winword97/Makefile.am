@@ -9,7 +9,7 @@ noinst_LTLIBRARIES = libwinword97.la
 
 libwinword97_la_SOURCES = wordfilter.cc winworddoc.cc \
 paragraph.cc picture.cc style.cc stylesheet.cc misc.cc \
-section.cc
+section.cc msword.cc mswordgenerated.cc
 
 noinst_HEADERS = winworddoc.h fib.h wordfilter.h \
 paragraph.h picture.h style.h stylesheet.h misc.h \
@@ -20,7 +20,7 @@ doptypography.h dttm.h fld.h fspa.h ftxbxs.h lfo.h \
 lfolvl.h lspd.h lstf.h lvlf.h numrm.h olst.h pap.h \
 papx.h papx_fkp.h pgd.h phe.h picf.h plcf.h prm.h \
 rr.h rs.h sed.h sep.h sepx.h shd.h tap.h tbd.h tc.h \
-tlp.h wkb.h
+tlp.h wkb.h msword.h mswordgenerated.h
 
 METASOURCES = AUTO
 

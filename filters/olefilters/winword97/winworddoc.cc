@@ -19,32 +19,29 @@
 
 #include <winworddoc.h>
 
+// TBD: move to .h file and then recompile...
+static QString m_body;
+
 WinWordDoc::WinWordDoc(QDomDocument &part, const myFile &mainStream,
                        const myFile &table0Stream, const myFile &table1Stream,
-                       const myFile &dataStream) : m_part(part), m_main(mainStream),
-                       m_data(dataStream) {
+                       const myFile &dataStream) : 
+	MsWord(mainStream.data, table0Stream.data, table1Stream.data, dataStream.data),
+	m_part(part), m_main(mainStream), m_data(dataStream) {
 
     m_success=true;
     m_ready=false;
-    m_fib=0L;
     m_styleSheet=0L;
-    m_pcdCount=0;
     m_atrdCount=0;
     m_bkfCount=0;
     m_bklCount=0;
 
-    readFIB();
-
-    if(m_fib->fEncrypted==1) {
-        kDebugError(31000, "WinWordDoc::WinWordDoc(): Sorry - the document is encrypted.");
-        m_success=false;
-    }
-    if(m_fib->fWhichTblStm==0)
+    if(m_fib.fWhichTblStm==0)
         m_table=table0Stream;
     else
         m_table=table1Stream;
 
-    m_styleSheet=new StyleSheet(m_table, m_fib);
+    //m_styleSheet=new StyleSheet(m_table, &m_fib);
+    m_body = QString("");
     // print some debug info
     // FIBInfo();
 }
@@ -57,9 +54,7 @@ WinWordDoc::~WinWordDoc() {
     m_table.data=0L;
     delete [] m_data.data;
     m_data.data=0L;
-    delete m_fib;
-    m_fib=0L;
-    delete m_styleSheet;
+    //delete m_styleSheet;
     m_styleSheet=0L;
 
     m_grpXst.stringList.clear();
@@ -81,7 +76,9 @@ WinWordDoc::~WinWordDoc() {
         delete [] *tmp;
         *tmp=0L;
     }
+
     m_assocStrings.extraData.clear();
+    // TBD; delete m_body;
 }
 
 const bool WinWordDoc::convert() {
@@ -89,32 +86,37 @@ const bool WinWordDoc::convert() {
     if(!m_success || m_ready)
         return false;
     browseDop();                  // DOP==Document Properties
-    if(!locatePCD())              // get some information about our piece table
-        return false;
-    if(!checkBinTables())         // are the bin tables ok (==not compressed)
-        return false;
+//    if(!checkBinTables())         // are the bin tables ok (==not compressed)
+//        return false;
     locateATRD();
     locateBKF();
     locateBKL();
-    readCommentStuff();
-    sttbf(m_assocStrings, m_fib->fcSttbfAssoc, m_fib->lcbSttbfAssoc, m_table.data);
+    //readCommentStuff();
+    //sttbf(m_assocStrings, m_fib.fcSttbfAssoc, m_fib.lcbSttbfAssoc, m_table.data);
 
     // FFN, FRD - TODO(?)
 
-    if(m_fib->fComplex==0)
-        convertSimple();
-    else
-        convertComplex();
+    getText();
 
-    m_ready=true;
+    m_success=true;
+
     return m_success;
+}
+
+void WinWordDoc::gotText(const QString &data)
+{
+    m_body.append("<PARAGRAPH><TEXT>");
+    m_body.append(data);
+    m_body.append("</TEXT></PARAGRAPH>\n");
 }
 
 const QDomDocument * const WinWordDoc::part() {
     if(m_ready && m_success)
         return &m_part;
     else {
-        m_part.setContent(QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >\n"
+        QString newstr;
+
+        newstr=QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >\n"
             "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\">\n"
             " <PAPER format=\"1\" ptWidth=\"595\" ptHeight=\"841\" mmWidth =\"210\" mmHeight=\"297\" inchWidth =\"8.26772\" inchHeight=\"11.6929\" orientation=\"0\" columns=\"1\" ptColumnspc=\"2\" mmColumnspc=\"1\" inchColumnspc=\"0.0393701\" hType=\"0\" fType=\"0\" ptHeadBody=\"9\" ptFootBody=\"9\" mmHeadBody=\"3.5\" mmFootBody=\"3.5\" inchHeadBody=\"0.137795\" inchFootBody=\"0.137795\">\n"
             "  <PAPERBORDERS mmLeft=\"10\" mmTop=\"15\" mmRight=\"10\" mmBottom=\"15\" ptLeft=\"28\" ptTop=\"42\" ptRight=\"28\" ptBottom=\"42\" inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\"/>\n"
@@ -127,7 +129,11 @@ const QDomDocument * const WinWordDoc::part() {
             " </FOOTNOTEMGR>\n"
             " <FRAMESETS>\n"
             "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
-            "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n"
+            "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n");
+        if (m_success)
+            newstr.append(m_body);
+        else
+            newstr.append(
             "   <PARAGRAPH>\n"
             "    <TEXT>This filter is still crappy and it obviously was not able to convert your document...</TEXT>\n"
             "    <INFO info=\"0\"/>\n"
@@ -158,45 +164,24 @@ const QDomDocument * const WinWordDoc::part() {
             "      <VERTALIGN value=\"0\"/>\n"
             "     </FORMAT> \n"
             "    </LAYOUT>\n"
-            "   </PARAGRAPH>\n"
+            "   </PARAGRAPH>\n");
+        newstr.append(
             "  </FRAMESET>\n"
             "  </FRAMESETS>\n"
-            "</DOC>\n"));
+            "</DOC>\n");
+        m_part.setContent(newstr);
+        m_ready=true;
         return &m_part;
     }
 }
 
-const PCD WinWordDoc::pcd(const int &pos) {
-
-    PCD pcd;
-    pcd.ok=false;
-
-    if(m_pcdCount==0)
-        return pcd;       // undefined, so don't call this one
-                          // before you call locatePieceTbl()!
-
-    int tmpPos=m_pcdPCDBase+pos*8;
-    unsigned short *tmp=(unsigned short*)&pcd;
-
-    *tmp=read16(m_table.data+tmpPos);
-    pcd.fc=read32(m_table.data+tmpPos+2);
-    if((pcd.fc & 0x40000000) == 0x40000000) {
-        pcd.fc=(pcd.fc & 0xBFFFFFFF)/2;
-        pcd.unicode=false;
-    }
-    else
-        pcd.unicode=true;
-    pcd.prm=read16(m_table.data+tmpPos+6);
-    pcd.ok=true;
-    return pcd;
-}
-
-const ATRD WinWordDoc::atrd(const int &pos) {
+/*
+const ATRD WinWordDoc::atrd(const long &pos) {
 
     ATRD atrd;
     atrd.ok=false;
     if(m_atrdCount!=0) {
-        unsigned int base=m_atrdBase+pos*30;
+        unsigned long base=m_atrdBase+pos*30;
         for(unsigned short i=0;i<10;++i)
                 atrd.xstUsrInitl[i]=read16(m_table.data+base+i);
             atrd.ibst=read16(m_table.data+base+20);
@@ -208,12 +193,12 @@ const ATRD WinWordDoc::atrd(const int &pos) {
     return atrd;
 }
 
-const BKF WinWordDoc::bkf(const int &pos) {
+const BKF WinWordDoc::bkf(const long &pos) {
 
     BKF bkf;
     bkf.ok=false;
     if(m_bkfCount!=0) {
-        unsigned int base=m_bkfBase+pos*4;
+        unsigned long base=m_bkfBase+pos*4;
         unsigned short *tmp;
         bkf.ibkl=read16(m_table.data+base);
         tmp=(unsigned short*)&bkf;
@@ -224,7 +209,7 @@ const BKF WinWordDoc::bkf(const int &pos) {
     return bkf;
 }
 
-const BKL WinWordDoc::bkl(const int &pos) {
+const BKL WinWordDoc::bkl(const long &pos) {
 
     BKL bkl;
     bkl.ok=false;
@@ -234,8 +219,8 @@ const BKL WinWordDoc::bkl(const int &pos) {
     }
     return bkl;
 }
-
-void WinWordDoc::sttbf(STTBF &sttbf, const unsigned int &fc, const unsigned int &lcb,
+*/
+void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned long &lcb,
                               const unsigned char * const stream) {
 
     if(lcb==0) {
@@ -245,7 +230,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned int &fc, const unsigned int 
     }
 
     QString str;
-    unsigned int base=fc+4;
+    unsigned long base=fc+4;
     unsigned short len, i, j;
     bool unicode=false;
     unsigned short numStrings=read16(stream+fc);
@@ -282,7 +267,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned int &fc, const unsigned int 
                     kDebugInfo(31000, "WinWordDoc::sttbf(): extra data");
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
                     kDebugInfo(31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    kDebugInfo(31000, (const char*)QString::number((int)sttbf.extraDataLen));
+                    kDebugInfo(31000, (const char*)QString::number((long)sttbf.extraDataLen));
                     for(j=0; j<sttbf.extraDataLen; ++base)
                         tmpArray[j]=*(stream+base);
                     kDebugInfo(31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -309,12 +294,12 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned int &fc, const unsigned int 
                 sttbf.stringList.append(str);
                 kDebugInfo(31000, str);
                 base+=j;
-
+                
                 if(sttbf.extraDataLen!=0) {
                     kDebugInfo(31000, "WinWordDoc::sttbf(): extra data");
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
                     kDebugInfo(31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    kDebugInfo(31000, (const char*)QString::number((int)sttbf.extraDataLen));
+                    kDebugInfo(31000, (const char*)QString::number((long)sttbf.extraDataLen));
                     for(j=0; j<sttbf.extraDataLen; ++base)
                         tmpArray[j]=*(stream+base);
                     kDebugInfo(31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -330,88 +315,41 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned int &fc, const unsigned int 
 void WinWordDoc::FIBInfo() {
 
     kDebugInfo(31000, "WinWordDoc::FIBInfo() - start -----------------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->wIdent))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->nFib))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->nProduct))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->lid))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.wIdent))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.nFib))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.nProduct))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.lid))));
     kDebugInfo(31000, "some bits -----------------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fDot))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fGlsy))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fComplex))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fHasPic))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->cQuickSaves))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fEncrypted))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fWhichTblStm))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fReadOnlyRecommended))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fWriteReservation))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fExtChar))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fLoadOverride))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fFarEast))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fCrypto))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fDot))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fGlsy))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fComplex))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fHasPic))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.cQuickSaves))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fEncrypted))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fWhichTblStm))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fReadOnlyRecommended))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fWriteReservation))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fExtChar))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fLoadOverride))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fFarEast))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fCrypto))));
     kDebugInfo(31000, "--------------------------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->nFibBack))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->lKey))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->envr))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.nFibBack))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.lKey))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.envr))));
     kDebugInfo(31000, "bits - bits - bits -------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fMac))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fEmptySpecial))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fLoadOverridePage))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fFutureSavedUndo))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fWord97Saved))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fSpare0))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fMac))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fEmptySpecial))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fLoadOverridePage))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fFutureSavedUndo))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fWord97Saved))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fSpare0))));
     kDebugInfo(31000, "--------------------------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->chs))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->chsTables))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fcMin))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<int>(m_fib->fcMac))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.chs))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.chsTables))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fcMin))));
+    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fcMac))));
     kDebugInfo(31000, "--------------------------");
-}
-
-void WinWordDoc::readFIB() {
-
-    m_fib=new FIB;
-    unsigned short *tmpS;
-    unsigned int *tmpL;
-    int i;
-
-    m_fib->wIdent=read16(m_main.data);
-    m_fib->nFib=read16(m_main.data+2);
-    m_fib->nProduct=read16(m_main.data+4);
-    m_fib->lid=read16(m_main.data+6);
-    m_fib->pnNext=read16(m_main.data+8);
-    tmpS=(unsigned short*)m_fib;
-    tmpS+=5;
-    *tmpS=read16(m_main.data+10);
-    m_fib->nFibBack=read16(m_main.data+12);
-
-    m_fib->lKey=read32(m_main.data+14);
-
-    m_fib->envr=*(m_main.data+18);
-    *((unsigned char*)m_fib+19)=*(m_main.data+19);
-
-    m_fib->chs=read16(m_main.data+20);
-    m_fib->chsTables=read16(m_main.data+22);
-
-    m_fib->fcMin=read32(m_main.data+24);
-    m_fib->fcMac=read32(m_main.data+28);
-
-    m_fib->csw=read16(m_main.data+32);
-
-    tmpS=(unsigned short*)&m_fib->wMagicCreated;
-    for(i=0; i<15; ++i, ++tmpS)
-        *tmpS=read16(m_main.data+34+2*i);
-
-    tmpL=(unsigned int*)&m_fib->cbMac;
-    for(i=0; i<22; ++i, ++tmpL)
-        *tmpL=read32(m_main.data+64+4*i);
-
-    m_fib->cfclcb=read16(m_main.data+152);
-
-    tmpL=(unsigned int*)&m_fib->fcStshfOrig;
-    for(i=0; i<186; ++i, ++tmpL)
-        *tmpL=read32(m_main.data+154+4*i);
-
-    m_fib->ok=true;
 }
 
 void WinWordDoc::convertSimple() {
@@ -422,63 +360,35 @@ void WinWordDoc::convertComplex() {
     m_success=false;
 }
 
-const bool WinWordDoc::locatePCD() {
-
-    int tmp=m_fib->fcClx, size;
-    QString r;
-    bool found=false;
-
-    while(*(m_table.data+tmp)==1 && tmp<static_cast<int>(m_fib->fcClx+m_fib->lcbClx))
-        tmp+=read16(m_table.data+tmp+1)+3;
-
-    if(*(m_table.data+tmp)==2) {
-        found=true;
-        ++tmp;
-        size=read32(m_table.data+tmp);
-        m_pcdCPBase=tmp+4;
-        if((size-4)%12!=0) {
-            kDebugError(31000, "WinWordDoc::locatePieceTbl(): Sumting Wong (inside joke(tm))");
-            found=false;
-        }
-        m_pcdCount=static_cast<unsigned int>((size-4)/12);
-        m_pcdPCDBase=(m_pcdCount+1)*4+m_pcdCPBase;
-    }
-    else {
-        m_success=false;
-        kDebugError(31000, "WinWordDoc::locatePieceTbl(): Can't locate the piece table");
-    }
-    return found;
-}
-
 void WinWordDoc::locateATRD() {
 
-    if(m_fib->lcbPlcfandRef!=0) {
-        m_atrdCount=static_cast<unsigned short>((m_fib->lcbPlcfandRef-4)/34); // 34 == (sizeof(ATRD)==30 + sizeof(int))
-        m_atrdBase=m_fib->fcPlcfandRef+(m_atrdCount+1)*4;
+    if(m_fib.lcbPlcfandRef!=0) {
+        m_atrdCount=static_cast<unsigned short>((m_fib.lcbPlcfandRef-4)/34); // 34 == (sizeof(ATRD)==30 + sizeof(long))
+        m_atrdBase=m_fib.fcPlcfandRef+(m_atrdCount+1)*4;
     }
 }
 
 void WinWordDoc::locateBKF() {
 
-    if(m_fib->lcbPlcfAtnbkf!=0) {
-        m_bkfCount=static_cast<unsigned short>((m_fib->lcbPlcfAtnbkf-4)/8);
-        m_bkfBase=m_fib->fcPlcfAtnbkf+(m_bkfCount+1)*4;
+    if(m_fib.lcbPlcfAtnbkf!=0) {
+        m_bkfCount=static_cast<unsigned short>((m_fib.lcbPlcfAtnbkf-4)/8);
+        m_bkfBase=m_fib.fcPlcfAtnbkf+(m_bkfCount+1)*4;
     }
 }
 
 void WinWordDoc::locateBKL() {
 
-    if(m_fib->lcbPlcfAtnbkl!=0) {
-        m_bklCount=static_cast<unsigned short>((m_fib->lcbPlcfAtnbkl-4)/6);
-        m_bklBase=m_fib->fcPlcfAtnbkl+(m_bklCount+1)*4;
+    if(m_fib.lcbPlcfAtnbkl!=0) {
+        m_bklCount=static_cast<unsigned short>((m_fib.lcbPlcfAtnbkl-4)/6);
+        m_bklBase=m_fib.fcPlcfAtnbkl+(m_bklCount+1)*4;
     }
 }
 
 const bool WinWordDoc::checkBinTables() {
 
     bool notCompressed=false;
-    if(m_fib->pnFbpChpFirst==0xfffff && m_fib->pnFbpPapFirst==0xfffff &&
-       m_fib->pnFbpLvcFirst==0xfffff)
+    if(m_fib.pnFbpChpFirst==0xfffff && m_fib.pnFbpPapFirst==0xfffff &&
+       m_fib.pnFbpLvcFirst==0xfffff)
         notCompressed=true;
     else {
         kDebugInfo(31000, "WinWordDoc::checkBinTables(): Sigh! It's compressed...");
@@ -488,10 +398,16 @@ const bool WinWordDoc::checkBinTables() {
 }
 
 void WinWordDoc::browseDop() {
-    // TODO, but currently I don't have any information
+    // TODO
 }
 
 void WinWordDoc::readCommentStuff() {
-    sttbf(m_grpXst, m_fib->fcGrpXstAtnOwners, m_fib->lcbGrpXstAtnOwners, m_table.data);
-    sttbf(m_atnbkmk, m_fib->fcSttbfAtnbkmk, m_fib->lcbSttbfAtnbkmk, m_table.data);
+    sttbf(m_grpXst, m_fib.fcGrpXstAtnOwners, m_fib.lcbGrpXstAtnOwners, m_table.data);
+    sttbf(m_atnbkmk, m_fib.fcSttbfAtnbkmk, m_fib.lcbSttbfAtnbkmk, m_table.data);
 }
+
+
+
+
+
+

@@ -28,8 +28,8 @@
 #include <section.h>
 #include <myfile.h>
 #include <misc.h>
-#include <fib.h>
-#include <pcd.h>
+#include <msword.h>
+//#include <pcd.h>
 #include <atrd.h>
 #include <sttbf.h>
 #include <bkf.h>
@@ -39,8 +39,8 @@
 
 #include <kdebug.h>
 
-class WinWordDoc {
-
+class WinWordDoc: private MsWord
+{
 public:
     WinWordDoc(QDomDocument &part, const myFile &mainStream,
                const myFile &table0Stream, const myFile &table1Stream,
@@ -53,19 +53,16 @@ public:
     const QDomDocument * const part();
 
     /////////////////////////////////////////////////////////////
-    const PCD pcd(const int &pos);
-    const unsigned short numPCD() { return m_pcdCount; }
-
-    const ATRD atrd(const int &pos);
+    const ATRD atrd(const long &pos);
     const unsigned short numATRD() { return m_atrdCount; }
 
-    const BKF bkf(const int &pos);
+    const BKF bkf(const long &pos);
     const unsigned short numBKF() { return m_bkfCount; }
 
-    const BKL bkl(const int &pos);
-    const unsigned short numBKL() { return m_bklCount; }
+    const BKL bkl(const long &pos);
+    const unsigned short numBKsL() { return m_bklCount; }
 
-    void sttbf(STTBF &sttbf, const unsigned int &fc, const unsigned int &lcb,
+    void sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned long &lcb,
                const unsigned char * const stream);
     //////////////////////////////////////////////////////////
 
@@ -74,12 +71,10 @@ private:
     const WinWordDoc &operator=(const WinWordDoc &);
 
     void FIBInfo();
-    void readFIB();
 
     void convertSimple();
     void convertComplex();
 
-    const bool locatePCD();
     void locateATRD();
     void locateBKF();
     void locateBKL();
@@ -89,21 +84,28 @@ private:
     void readCommentStuff();
 
     bool m_success, m_ready;
-    FIB *m_fib;
     QDomDocument m_part;
     myFile m_main, m_table, m_data;
 
     // Stylesheet
     StyleSheet *m_styleSheet;
-    // Piece table (pt), PCD stuff
-    unsigned int m_pcdCount, m_pcdCPBase, m_pcdPCDBase;
+    void gotText(const QString &data);
     // ATRD
-    unsigned int m_atrdBase, m_atrdCount;
+    unsigned long m_atrdBase, m_atrdCount;
     // BKF
-    unsigned int m_bkfBase, m_bkfCount;
+    unsigned long m_bkfBase, m_bkfCount;
     // BKL
-    unsigned int m_bklBase, m_bklCount;
+    unsigned long m_bklBase, m_bklCount;
 
     STTBF m_grpXst, m_atnbkmk, m_assocStrings;
+
+    // Since there is no way to fill m_part incrementally with XML content,
+    // we will fill m_body instead.
+
+//    QString m_body;
+
 };
 #endif // WINWORDDOC_H
+
+
+
