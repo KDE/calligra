@@ -3108,7 +3108,7 @@ void KSpreadCell::checkValue()
     */
     QTime tmpTime;
 
-    /*if((tmpTime=KGlobal::locale()->readTime(m_strText)).isValid())
+    if(!(tmpTime=KGlobal::locale()->readTime(m_strText)).isNull())
         {
         m_bTime = true;
         m_dValue = 0;
@@ -3117,7 +3117,7 @@ void KSpreadCell::checkValue()
         m_Time=tmpTime;
         m_strText=KGlobal::locale()->formatTime(m_Time,true);
         return;
-        }*/
+        }
 
     QDate tmpDate;
     if((tmpDate=KGlobal::locale()->readDate(m_strText)).isValid())
@@ -3859,7 +3859,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         minutes=t.mid(pos+1,((pos1-1)-pos)).toInt();
         seconde=t.right(t.length()-pos1-1).toInt();
         m_Time=QTime(hours,minutes,seconde);
-        if(m_Time.isValid() )
+        if(!m_Time.isNull() )
                 setCellText(KGlobal::locale()->formatTime(m_Time,true),false);
         else
                 setCellText( pasteOperation( t, m_strText, op ), false );
