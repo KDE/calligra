@@ -73,7 +73,6 @@
 #include <koUnitWidgets.h>
 #include <koApplication.h>
 #include <kotabbar.h>
-#include <kozoomaction.h>
 #include <koPageLayoutDia.h>
 
 #include "kivio_view.h"
@@ -482,10 +481,6 @@ void KivioView::setupActions()
   connect( snapGuides, SIGNAL(toggled(bool)), SLOT(toggleSnapGuides(bool)));
   //--
 
-  m_viewZoom = new KoZoomAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "viewZoom" );
-  m_viewZoom->setWhatsThis(i18n("This allows you to zoom in or out of a document. You can either choose one of the predefined zoomfactors or enter a new zoomfactor (in percent)."));
-  connect(m_viewZoom, SIGNAL(zoomChanged(const QString&)), SLOT(viewZoom(const QString&)));
-
   m_setArrowHeads = new KivioArrowHeadAction(i18n("Arrowheads"), "arrowheads", actionCollection(), "arrowHeads");
   m_setArrowHeads->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
   connect( m_setArrowHeads, SIGNAL(endChanged(int)), SLOT(slotSetEndArrow(int)));
@@ -799,9 +794,8 @@ void KivioView::viewZoom(int zoom)
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
   KoView::setZoom(zoomHandler()->zoomedResolutionY());
-  showZoom(zoom);
   
-  emit zoomChanged();
+  emit zoomChanged(zoom);
 }
 
 KivioPage* KivioView::activePage()
@@ -1814,11 +1808,6 @@ void KivioView::viewZoom(const QString& s)
   if(zoom != zoomHandler()->zoom()) {
     viewZoom(zoom);
   }
-}
-
-void KivioView::showZoom(int z)
-{
-  m_viewZoom->setZoom(z);
 }
 
 void KivioView::textAlignLeft()

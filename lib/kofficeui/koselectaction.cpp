@@ -118,7 +118,6 @@ int KoSelectAction::plug(QWidget* widget, int index)
       bar->insertButton( iconSet().pixmap(), id_, SIGNAL( clicked() ), this,
                           SLOT( slotActivated() ), isEnabled(), plainText(),
                           index );
-      kdDebug() << "ICON1" << endl;
     } else {
       KInstance *instance;
 
@@ -128,7 +127,6 @@ int KoSelectAction::plug(QWidget* widget, int index)
         instance = KGlobal::instance();
       }
 
-      kdDebug() << "ICON2" << endl;
       bar->insertButton( icon(), id_, SIGNAL( clicked() ), this,
                           SLOT( slotActivated() ), isEnabled(), plainText(),
                           index, instance );

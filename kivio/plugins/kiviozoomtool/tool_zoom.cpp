@@ -33,6 +33,7 @@
 #include <kozoomhandler.h>
 #include <koPoint.h>
 #include <kstdaction.h>
+#include <kozoomaction.h>
 
 #include <qapplication.h>
 #include <qcursor.h>
@@ -50,6 +51,11 @@ ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Too
   connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_panAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
+  KoZoomAction* viewZoom = new KoZoomAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "viewZoom" );
+  viewZoom->setWhatsThis(i18n("This allows you to zoom in or out of a document. You can either choose one of the predefined zoomfactors or enter a new zoomfactor (in percent)."));
+  connect(viewZoom, SIGNAL(zoomChanged(const QString&)), parent, SLOT(viewZoom(const QString&)));
+  connect(parent, SIGNAL(zoomChanged(int)), viewZoom, SLOT(setZoom(int)));
+  
   m_pPlus = KStdAction::zoomIn(this, SLOT(zoomPlus()), actionCollection(), "zoomPlus");
   m_pPlus->setWhatsThis(i18n("You can zoom in on the document by pressing this button."));
 

@@ -34,7 +34,7 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   m_zoomHandler = new KoZoomHandler;
 
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*)), SLOT(slotUpdateView(KivioPage*)) );
-  connect( m_pView, SIGNAL(zoomChanged()), SLOT(canvasZoomChanged()));
+  connect( m_pView, SIGNAL(zoomChanged(int)), SLOT(canvasZoomChanged()));
   connect( m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateVisibleArea()));
 
   zoomIn = new KAction( i18n("Zoom In"), "kivio_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );

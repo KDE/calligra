@@ -67,7 +67,6 @@ class KoUnitDoubleSpinBox;
 class KStatusBarLabel;
 class KoLineWidthAction;
 class KoLineStyleAction;
-class KoZoomAction;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -147,7 +146,7 @@ class KivioView : public KoView
     QPtrList<KAction> layerActionList();
 
   signals:
-    void zoomChanged();
+    void zoomChanged(int);
 
   protected:
     void createGeometryDock();
@@ -269,14 +268,14 @@ class KivioView : public KoView
     void arrowHeadFormat();
 
     void clipboardDataChanged();
+    
   protected:
     void setupActions();
     void initActions();
 
     virtual void updateReadWrite( bool readwrite );
     virtual void partActivateEvent(KParts::PartActivateEvent* event);
-
-    void showZoom(int z);
+  
   private:
     KivioCanvas *m_pCanvas;
     KoTabBar *m_pTabBar;
@@ -291,7 +290,6 @@ class KivioView : public KoView
     KAction* m_arrowHeadsMenuAction;
     KAction* m_menuTextFormatAction;
     KAction* m_menuStencilConnectorsAction;
-    KoZoomAction* m_viewZoom;
 
     TKSelectColorAction *m_setFGColor;
     TKSelectColorAction *m_setBGColor;
@@ -309,8 +307,6 @@ class KivioView : public KoView
     KToggleAction* m_textVAlignSub;
 
     KivioArrowHeadAction* m_setArrowHeads;
-
-    KoUnitDoubleSpinBox *m_setLineWidth;
 
     QStringList m_lineWidthList;
 

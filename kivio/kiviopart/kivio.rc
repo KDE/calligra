@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="19">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="20">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="koffice_undo"/>
@@ -26,8 +26,6 @@
    <Separator/>
    <Action name="snapGrid"/>
    <Action name="snapGuides"/>
-   <Separator/>
-   <Action name="viewZoom"/>
    <Separator/>
    <Menu name="Docker"><text>&amp;Docker</text>
      <Action name="stencilGeometry"/>
@@ -81,8 +79,6 @@
   <Action name="cutStencil"/>
   <Action name="copyStencil"/>
   <Action name="pasteStencil"/>
-  <Separator/>
-  <Action name="viewZoom"/>
 </ToolBar>
 <ToolBar name="FormatToolBar" fullWidth="false"><text>Format</text>
   <Action name="setFGColor"/>
