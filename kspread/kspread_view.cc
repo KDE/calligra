@@ -6610,11 +6610,13 @@ void KSpreadView::popupTabBarMenu( const QPoint & _point )
     {
       d->actions->removeSheet->setEnabled( false );
       d->actions->hideSheet->setEnabled( false );
+      d->actions->showSheet->setEnabled( false );
     }
     else
     {
       d->actions->removeSheet->setEnabled( state);
       d->actions->hideSheet->setEnabled( state );
+      d->actions->showSheet->setEnabled( doc()->map()->hiddenSheets().count()>0 );
     }
     if ( !d->doc || !d->workbook || d->workbook->isProtected() )
     {
