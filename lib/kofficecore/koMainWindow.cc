@@ -107,20 +107,19 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     setXMLFile( locate( "data", "koffice/koffice_shell.rc" ) );
 
-    /*KAction* fnew =*/ new KAction( i18n("New"), KofficeBarIcon( "filenew" ), KStdAccel::key(KStdAccel::New), this, SLOT( slotFileNew() ),
-			  actionCollection(), "filenew" );
-    /*KAction* open =*/ new KAction( i18n("Open ..."), KofficeBarIcon( "fileopen" ), KStdAccel::key(KStdAccel::Open), this, SLOT( slotFileOpen() ),
-			  actionCollection(), "fileopen" );
-    /*KAction* save =*/ new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), KStdAccel::key(KStdAccel::Save), this, SLOT( slotFileSave() ),
-			  actionCollection(), "filesave" );
-    /*KAction* saveAs =*/ new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ),
-			    actionCollection(), "filesaveas" );
-    /*KAction* print = */new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), KStdAccel::key(KStdAccel::Print), this, SLOT( slotFilePrint() ),
-			  actionCollection(), "fileprint" );
-    /*KAction* close =*/ new KAction( i18n("Close"), KofficeBarIcon( "close" ), KStdAccel::key(KStdAccel::Close), this, SLOT( slotFileClose() ),
-			  actionCollection(), "fileclose" );
-    /*KAction* quit =*/ new KAction( i18n("Quit"), KofficeBarIcon( "exit" ), KStdAccel::key(KStdAccel::Quit), this, SLOT( slotFileQuit() ),
-			  actionCollection(), "quit" );
+    new KAction( i18n("New"), KofficeBarIcon( "filenew" ), KStdAccel::key(KStdAccel::New),
+                 this, SLOT( slotFileNew() ), actionCollection(), "filenew" );
+    new KAction( i18n("Open..."), KofficeBarIcon( "fileopen" ), KStdAccel::key(KStdAccel::Open),
+                 this, SLOT( slotFileOpen() ), actionCollection(), "fileopen" );
+    new KAction( i18n("Save"), KofficeBarIcon( "filefloppy" ), KStdAccel::key(KStdAccel::Save),
+                 this, SLOT( slotFileSave() ), actionCollection(), "filesave" );
+    new KAction( i18n("Save as..."), 0, this, SLOT( slotFileSaveAs() ), actionCollection(), "filesaveas" );
+    new KAction( i18n("Print..."), KofficeBarIcon( "fileprint" ), KStdAccel::key(KStdAccel::Print),
+                 this, SLOT( slotFilePrint() ), actionCollection(), "fileprint" );
+    new KAction( i18n("Close"), KofficeBarIcon( "close" ), KStdAccel::key(KStdAccel::Close),
+                 this, SLOT( slotFileClose() ), actionCollection(), "fileclose" );
+    //new KAction( i18n("Quit"), KofficeBarIcon( "exit" ), KStdAccel::key(KStdAccel::Quit),
+    //             this, SLOT( slotFileQuit() ), actionCollection(), "quit" );
 
     KHelpMenu * m_helpMenu = new KHelpMenu( this );
     KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), actionCollection(), "contents" );
