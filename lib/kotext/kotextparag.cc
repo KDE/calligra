@@ -210,6 +210,8 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             for ( unsigned int i = 0; i < prefix.length(); i++ )
                 posPrefix += zh->layoutUnitToPixelX(format->width( prefix,i));
 
+            KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x , base, width, y - h  );
+
             p->drawText( x-posPrefix, y - h + base, prefix );
         }
 
@@ -240,18 +242,28 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
                     bulletFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( bulletFont );
                 }
+
+                KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x - width , base, width, y - h  );
+
                 p->drawText( x - width, y - h + base, m_layout.counter->customBulletCharacter() );
                 break;
             default:
                 break;
         }
 	if ( !suffix.isEmpty() )
+        {
+            KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x , base, size, y - h  );
+
             p->drawText( x , y - h + base, suffix );
+        }
     }
     else
     {
         // There are no bullets...any parent bullets have already been suppressed.
         // Just draw the text! Note: one space is always appended.
+        KoTextParag::drawUnderlineDoubleUnderline( p, format, zh, format->screenFont( zh ) , textColor, x - size , base, size, y - h );
+
+
         QString counterText = m_layout.counter->text( this );
         if ( !counterText.isEmpty() )
             p->drawText( x - size, y - h + base, counterText + ' ' );
