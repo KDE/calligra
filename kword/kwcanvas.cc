@@ -1902,8 +1902,8 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
 {
     //QPoint nPointTop = m_viewMode->viewToNormal( QPoint( cx, cy ) );
     QPoint nPointBottom = m_viewMode->viewToNormal( QPoint( cx + visibleWidth(), cy + visibleHeight() ) );
-    //kdDebug() << "KWCanvas::slotContentsMoving cx=" << cx << " cy=" << cy
-    //          << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
+    //kdDebug() << "KWCanvas::slotContentsMoving cx=" << cx << " cy=" << cy << endl;
+    //kdDebug() << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
     // Update our "formatted paragraphs needs" in the text framesets
     QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1914,7 +1914,9 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
             fs->updateViewArea( this, nPointBottom );
         }
     }
-    updateRulerOffsets();
+    // cx and cy contain the future values for contentsx and contentsy, so we need to
+    // pass them to updateRulerOffsets.
+    updateRulerOffsets( cx, cy );
 }
 
 void KWCanvas::slotNewContentsSize()
@@ -1951,13 +1953,20 @@ void KWCanvas::scrollToOffset( const KoPoint & d )
 #endif
 }
 
-void KWCanvas::updateRulerOffsets()
+void KWCanvas::updateRulerOffsets( int cx, int cy )
 {
+    if ( cx == -1 && cy == -1 )
+    {
+        cx = contentsX();
+        cy = contentsY();
+    }
     // The offset is usually just the scrollview offset
     // But we also need to offset to the current page, for the graduations
     QPoint pc = pageCorner();
-    m_gui->getHorzRuler()->setOffset( contentsX() - pc.x(), 0 );
-    m_gui->getVertRuler()->setOffset( 0, contentsY() - pc.y() );
+    //kdDebug() << "KWCanvas::updateRulerOffsets contentsX=" << cx << ", contentsY=" << cy << endl;
+    m_gui->getHorzRuler()->setOffset( cx - pc.x(), 0 );
+    m_gui->getVertRuler()->setOffset( 0, cy - pc.y() );
+
 }
 
 QPoint KWCanvas::pageCorner()
