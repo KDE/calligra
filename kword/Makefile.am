@@ -50,4 +50,6 @@ rc_DATA = kword.rc
 SUBDIRS = . toolbar templates dtd pics expression
 
 messages: rc.cpp
+	perl ../kspread/extracti18n expression/*.xml > xml_doc.cc
 	$(XGETTEXT) rc.cpp *.cc kwaboutdata.h -o $(podir)/kword.pot
+	-rm xml_doc.cc
