@@ -266,6 +266,8 @@ int iclient;            // defaults to ispell, may be aspell, too
     //replace it !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     QStringList langfnames;
 
+    virtual void showEvent( QShowEvent* );
+
 signals:
     void configChanged();
 

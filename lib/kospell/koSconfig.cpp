@@ -38,7 +38,9 @@
 class KOSpellConfigPrivate
 {
 public:
+    KOSpellConfigPrivate() : shown( false ) {}
     QStringList replacelist;
+    bool shown; // false initially, true after the first showEvent
 };
 
 
@@ -207,7 +209,8 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     glay->addMultiCellWidget( cbDontCheckTitleCase, 9,9,0 ,2 );
 
 
-    fillInDialog();
+    // Will be done at showEvent time
+    //fillInDialog();
 }
 
 KOSpellConfig::~KOSpellConfig ()
@@ -832,8 +835,10 @@ void KOSpellConfig::operator= (const KOSpellConfig &ksc)
   setIgnoreAccent (ksc.ignoreAccent());
   setIgnoreCase (ksc.ignoreCase());
 
-
-  fillInDialog();
+  if ( isVisible() )
+      fillInDialog();
+  else
+      d->shown = false; // will force a fillInDialog when showing
 }
 
 void KOSpellConfig::setIgnoreList (QStringList _ignorelist)
@@ -1023,6 +1028,16 @@ int KOSpellConfig::indexFromLanguageFileName( const QString &name)
     return whichelement;
 }
 
+
+void KOSpellConfig::showEvent( QShowEvent* ev )
+{
+    if ( !d->shown )
+    {
+        d->shown = true;
+        fillInDialog();
+    }
+    QWidget::showEvent( ev );
+}
 
 #include "koSconfig.moc"
 
