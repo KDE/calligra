@@ -23,6 +23,11 @@
 
 #include <kapp.h>
 
+
+#ifndef OLDCODE
+#include <qmessagebox.h>
+#endif
+
 const int scaleFactor[] = {
 	1,
 	2,
@@ -42,6 +47,18 @@ const unsigned int MAX_LINIEN_SECTIONS = 24;
 const unsigned int MAX_KREIS_SECTIONS = 8;
 const unsigned int MAX_FARBEN = 8;
 const double KREIS_CUTOFF = 1.0;
+
+#ifndef OLDCODE
+#include "KChartAreaPainter.h"
+#include "KChartBarsPainter.h"
+#include "KChartLinesPainter.h"
+#include "KoDiagrammBarConfigDialog.h"
+#include "KoDiagrammAreaConfigDialog.h"
+#include "KoDiagrammPieConfigDialog.h"
+#include "KoDiagrammLinesConfigDialog.h"
+#include "KoDiagrammLinesPointsConfigDialog.h"
+#include "KoDiagrammPointsConfigDialog.h"
+#endif
 
 bool operator < ( const pair<double, string>& x, const pair<double, string>& y)
 {
@@ -75,6 +92,17 @@ void KoDiagrammView::paintEvent( QPaintEvent *_ev )
   painter.end();
 }
 
+
+#ifndef OLDCODE
+void KoDiagrammView::mousePressEvent( QMouseEvent* ev )
+{
+	if( ev->button() != RightButton )
+		QWidget::mousePressEvent( ev );
+	else
+		m_diagramm.config( this );
+}
+#endif
+
 /////////////////////////////////////////////////////////////////////////////
 // KoDiagramm message handlers
 
@@ -105,6 +133,67 @@ static void drawPie( QPainter& _painter, const QRect& _rect, int _a, int _alen )
 {
   _painter.drawPie( _rect, 90 * 16 - _a, - _alen );
 }
+
+
+#ifndef OLDCODE
+void KoDiagramm::config( QWidget* parent )
+{
+	switch( m_lastPainterType ) {
+	case Bars:
+		{
+			KoDiagrammBarConfigDialog* dlg = new
+				KoDiagrammBarConfigDialog( &_params, parent );
+			dlg->exec();
+			delete dlg;
+			break;
+		}
+	case Area:
+		{
+			KoDiagrammAreaConfigDialog* dlg = new
+				KoDiagrammAreaConfigDialog( &_params, parent );
+			dlg->exec();
+			delete dlg;
+			break;
+		}
+	case Pie:
+		{
+			KoDiagrammPieConfigDialog* dlg = new
+				KoDiagrammPieConfigDialog( &_params, parent );
+			dlg->exec();
+			delete dlg;
+			break;
+		}
+	case Lines:
+		{
+			KoDiagrammLinesConfigDialog* dlg = new
+				KoDiagrammLinesConfigDialog( &_params, parent );
+			dlg->exec();
+			delete dlg;
+			break;
+		}
+	case LinesPoints:
+		{
+			KoDiagrammLinesPointsConfigDialog* dlg = new
+				KoDiagrammLinesPointsConfigDialog( &_params, parent );
+			dlg->exec();
+			delete dlg;
+			break;
+		}
+	case Points:
+		{
+			KoDiagrammPointsConfigDialog* dlg = new
+				KoDiagrammPointsConfigDialog( &_params, parent );
+			dlg->exec();
+			delete dlg;
+			break;
+		}
+	default:
+		QMessageBox::warning( parent, "KDiagramm", "Sorry, there is not yet a configuration dialog for this type of chart", "OK" );
+	}
+}
+#endif
+
+
 
 void KoDiagramm::paint( QPainter& painter, int width, int height )
 {
@@ -140,10 +229,33 @@ void KoDiagramm::paint( QPainter& painter, int width, int height )
   }
 }
 
+
+#ifndef OLDCODE
+void KoDiagramm::setupPainter( QPainter& painter )
+{
+	painter.setPen( _params._fgcolor );
+	painter.setPen( _params._bgcolor );
+	painter.eraseRect( painter.window() );
+	painter.setBackgroundMode( _params._transparency ? TransparentMode :
+							   OpaqueMode );
+}
+#endif
+
+
+
 // Sauelendiagramm
 ///////////////////////////////////////////////////////////////////////
 void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height )
 {
+#ifndef OLDCODE
+	if( m_lastPainterType != Bars ) {
+		delete _chartpainter;
+		_chartpainter = new KChartBarsPainter( &_params );
+		m_lastPainterType = Bars;
+	}
+	setupPainter( painter );
+	_chartpainter->paintChart( &painter, &m_table );
+#else
   // Farben
   enum { FRONT, TOP, RIGHT };
 
@@ -376,6 +488,7 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
       painter.drawText( rcDraw.left() + nCount * nSection + nSection / 2 - tmp.width()/2,
 			rcDraw.bottom() + painter.fontMetrics().ascent(), s );
   }
+#endif
 }
 
 
@@ -636,6 +749,25 @@ void KoDiagramm::drawDiagrammKreis( QPainter &painter, int _width, int _height )
 ///////////////////////////////////////////////////////////////////////
 void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height )
 {
+#ifndef OLDCODE
+	if( m_diaType == DT_LINIEN ) {
+		if( m_lastPainterType != Lines ) {
+			delete _chartpainter;
+			_chartpainter = new KChartLinesPainter( &_params );
+			m_lastPainterType = Lines;
+		}
+		setupPainter( painter );
+		_chartpainter->paintChart( &painter, &m_table );
+	} else if( m_diaType == DT_AREA ) {
+		if( m_lastPainterType != Area ) {
+			delete _chartpainter;
+			_chartpainter = new KChartAreaPainter( &_params );
+			m_lastPainterType = Area;
+		}
+		setupPainter( painter );
+		_chartpainter->paintChart( &painter, &m_table );
+	}
+#else
   // Exception
   if ( m_table.xDesc.count() < 2 )
     return;
@@ -914,6 +1046,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
     line++;
     y += painter.fontMetrics().height() * 3 / 2;
   }
+#endif
 }
 
 

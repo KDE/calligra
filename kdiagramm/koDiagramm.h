@@ -36,6 +36,11 @@ struct table_t
   data_t data;
 };
 
+#ifndef OLDCODE
+#include "KoDiagrammParameters.h"
+class KChartPainter;
+#endif
+
 #include <qcolor.h>
 #include <qrect.h>
 #include <qpoint.h>
@@ -46,6 +51,13 @@ struct table_t
 class KoDiagramm
 {
 public:
+#ifndef OLDCODE
+	KoDiagramm() {
+		m_lastPainterType = NoneYet;
+		_chartpainter = 0;
+	}
+#endif
+
   enum dia_type { DT_KREIS, DT_SAEULEN,	DT_KREIS_ODER_SAEULEN, DT_LINIEN, DT_AREA };
   enum data_type { DAT_NUMMER, DAT_GEB,	DAT_DAUER };
 
@@ -54,11 +66,18 @@ public:
   void clearData();
 
   void paint( QPainter& painter, int width, int height );
-  
+
+#ifndef OLDCODE
+	void config( QWidget* parent );
+#endif
+
 protected:  
   void drawDiagrammKreis( QPainter& painter, int _width, int _height );
   void drawDiagrammLinien( QPainter& painter, int _width, int _height );
   void drawDiagrammSaeulen( QPainter& painter, int _width, int _height );
+#ifndef OLDCODE
+	void setupPainter( QPainter& painter );
+#endif
 
   /* void FormatAnzahl ( double val, QString& out );
   void FormatGebuehr ( double val, QString& out );
@@ -71,6 +90,11 @@ protected:
   QString m_curTitle;
   dia_type m_diaType;
   data_type m_dataType;
+#ifndef OLDCODE
+	KChartType m_lastPainterType;
+	KChartPainter* _chartpainter;
+	KoDiagrammParameters _params;
+#endif
 };
 
 class KoDiagrammView : public QWidget
@@ -84,6 +108,9 @@ public:
 
   void paintEvent( QPaintEvent *_ev );
   void resizeEvent( QResizeEvent *_ve );
+#ifndef OLDCODE
+	void mousePressEvent( QMouseEvent* ev );
+#endif
   
 protected:
   KoDiagramm m_diagramm;
