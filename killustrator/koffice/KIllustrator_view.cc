@@ -194,7 +194,7 @@ void KIllustratorView::createMyGUI()
     KToggleAction *m_zoomTool = new KToggleAction( i18n("Zoom"), "zoomtool", CTRL+Key_0, actionCollection(), "zoom" );
     m_zoomTool->setExclusiveGroup( "Tools" );
     connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
-    KToggleAction *m_insertPartTool = new KToggleAction( i18n("InsertPart"), "parts", 0, actionCollection(), "insertpart" );
+    KToggleAction *m_insertPartTool = new KToggleAction( i18n("Insert Part"), "parts", 0, actionCollection(), "insertpart" );
     m_insertPartTool->setExclusiveGroup( "Tools" );
     connect( m_insertPartTool, SIGNAL( toggled( bool ) ), this, SLOT( slotInsertPartTool( bool ) ) );
 
