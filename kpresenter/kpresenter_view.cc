@@ -2671,6 +2671,11 @@ void KPresenterView::setupActions()
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
 
+    actionChangeLink=new KAction( i18n("Change Link"), 0,
+                                  this,SLOT(changeLink()),
+                                  actionCollection(), "change_link");
+
+
     m_variableDefMap.clear();
     actionInsertVariable = new KActionMenu( i18n( "&Variable" ),
                                             actionCollection(), "insert_variable" );
@@ -4057,6 +4062,32 @@ void KPresenterView::insertLink()
             edit->insertLink(link, ref);
     }
 }
+
+void KPresenterView::changeLink()
+{
+    KPTextView * edit = m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        KoLinkVariable * var=edit->linkVariable();
+        if(var)
+        {
+            QString oldhref= var->url();
+            QString oldLinkName=var->value();
+            QString link=oldLinkName;
+            QString ref=oldhref;
+            if(KoInsertLinkDia::createLinkDia(link, ref))
+            {
+                if(!link.isEmpty() && !ref.isEmpty())
+                {
+                    KPrChangeLinkVariable*cmd=new KPrChangeLinkVariable( i18n("Change link"), m_pKPresenterDoc,oldhref, ref, oldLinkName,link, var);
+                    cmd->execute();
+                    m_pKPresenterDoc->addCommand(cmd);
+                }
+            }
+        }
+    }
+}
+
 
 void KPresenterView::showFormat( const KoTextFormat &currentFormat )
 {

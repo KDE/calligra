@@ -49,6 +49,7 @@ class KPClipartObject;
 class KoParagLayout;
 class KPrPage;
 class KoCustomVariable;
+class KoLinkVariable;
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */
@@ -775,5 +776,22 @@ class KPrChangeCustomVariableValue : public KNamedCommand
     QString oldValue;
     KoCustomVariable *m_var;
 };
+
+class KPrChangeLinkVariable : public KNamedCommand
+{
+ public:
+    KPrChangeLinkVariable( const QString &name, KPresenterDoc *_doc,const QString & _oldHref, const QString & _newHref, const QString & _oldLink,const QString &_newLink, KoLinkVariable *var);
+    ~KPrChangeLinkVariable(){};
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    QString oldHref;
+    QString newHref;
+    QString oldLink;
+    QString newLink;
+    KoLinkVariable *m_var;
+};
+
 
 #endif

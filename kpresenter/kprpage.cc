@@ -1326,7 +1326,7 @@ void KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
     if ( !doc || !doc->initDoc() ) {
 	return;
     }
-    QRect r=_rect.toQRect();
+    QRect r=m_doc->zoomHandler()->zoomRect(_rect);
     KPresenterChild* ch = new KPresenterChild( m_doc, doc, r );
 
     m_doc->insertObject( ch );

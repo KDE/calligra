@@ -279,6 +279,7 @@ public slots:
     void slotSpecialCharDlgClosed();
 
     void insertLink();
+    void changeLink();
 
     void slotSoftHyphen();
 
@@ -759,6 +760,9 @@ private:
 
     KAction* actionInsertSpecialChar;
     KAction *actionInsertLink;
+
+    KAction * actionChangeLink;
+
     KAction *actionFormatParag;
     KAction *actionOpenLink;
     KAction *actionIncreaseFontSize;
