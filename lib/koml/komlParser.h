@@ -32,6 +32,14 @@ struct KOMLAttrib
     QString m_strValue;
 };
 
+/**
+ * This class used to be a custom-made XML parser, and has been turned
+ * into a wrapper on top of QDom. It still exists only for KWord and KPresenter,
+ * as an intermediate step in the porting to QDom.
+ *
+ * DO NOT USE THIS CLASS IN NEW CODE !
+ * @deprecated
+ */
 class KOMLParser
 {
 public:
