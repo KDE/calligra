@@ -30,6 +30,7 @@ module Chart
  interface SimpleChart
  {
 	void fill( in Range range, in Matrix matrix );
+	void showWizard();
  };
 
 };
