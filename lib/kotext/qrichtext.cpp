@@ -5674,6 +5674,11 @@ void QTextFormat::copyFormat( const QTextFormat & nf, int flags )
 	missp = nf.missp;
     if ( flags & QTextFormat::VAlign )
 	ha = nf.ha;
+    if ( flags & QTextFormat::Link )
+    {
+        anchor_href = nf.anchor_href;
+        anchor_name = nf.anchor_name;
+    }
     update();
 }
 

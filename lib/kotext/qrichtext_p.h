@@ -1409,8 +1409,9 @@ public:
 	Color = 32,
 	Misspelled = 64,
 	VAlign = 128,
+	Link = 256,
 	Font = Bold | Italic | Underline | Family | Size,
-	Format = Font | Color | Misspelled | VAlign
+	Format = Font | Color | Misspelled | VAlign | Link
     };
 
     enum VerticalAlignment { AlignNormal, AlignSubScript, AlignSuperScript };
@@ -1450,6 +1451,9 @@ public:
     void setColor( const QColor &c );
     void setMisspelled( bool b );
     void setVAlign( VerticalAlignment a );
+    void setAnchorName(const QString &anchor);
+    void setAnchorHref(const QString &anchor);
+    void setUseLinkColor( bool b);
 
     bool operator==( const QTextFormat &f ) const;
     QTextFormatCollection *parent() const;
@@ -1859,6 +1863,23 @@ inline void QTextFormat::setStyle( const QString &s )
 {
     style = s;
     updateStyleFlags();
+}
+
+inline void QTextFormat::setAnchorName(const QString &anchor)
+{
+    if(!anchor.isEmpty())
+	anchor_name=anchor;
+}
+
+inline void QTextFormat::setAnchorHref(const QString &anchor)
+{
+    if(!anchor.isEmpty())
+	anchor_href=anchor;
+}
+
+inline void QTextFormat::setUseLinkColor( bool _b)
+{
+    linkColor=_b;
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
