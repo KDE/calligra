@@ -42,7 +42,7 @@ public:
 	bool checkcol(int col)
 		{ return (col >= m_fc && col <= m_lc); }
 
-	QDataStream &stream() { return *m_stream; }
+	QDataStream *stream() { return m_stream; }
 
 private:
 	int m_fr, m_lr, m_fc, m_lc;

@@ -691,7 +691,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 				Q_UINT16 tlrow, tlcol;
 				rgce >> tlrow >> tlcol;
 				
-				kdDebug(s_area) << "WARNING: ptgExpr formula not supported, yet. Requested in Row " << row << " Col " << column << " !" << endl;
+				kdDebug(s_area) << "WARNING: ptgExpr requested in Row " << row << " Col " << column << " !" << endl;
 				kdDebug(s_area) << "HASH Table: top-Left-Row " << tlrow << ", top-Left-Col " << tlcol << endl;
 
 				SharedFormula *fmla;
@@ -700,6 +700,10 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 					if(fmla->checkrow(tlrow) && fmla->checkcol(tlcol))
 					{
 						kdDebug(s_area) << "*********** Found a shared formula for this row/col!" << endl;
+
+						kdDebug() << "***************************** START!" << endl;
+						QString formula = getFormula(row, column, *fmla->stream());
+						kdDebug() << "***************************** END!" << endl;									
 					}
 				}
 	
@@ -3004,10 +3008,10 @@ bool XMLTree::_shrfmla(Q_UINT32 size, QDataStream &body)
 
 	a.setRawData(store, dataLen);
 
-	QDataStream fbody(a, IO_ReadOnly);
-	fbody.setByteOrder(QDataStream::LittleEndian);
+	QDataStream *fbody = new QDataStream(a, IO_ReadOnly);
+	fbody->setByteOrder(QDataStream::LittleEndian);
 
-	shrfmlalist.append(new SharedFormula(firstrow, lastrow, firstcol, lastcol, &fbody));
+	shrfmlalist.append(new SharedFormula(firstrow, lastrow, firstcol, lastcol, fbody));
 
 	a.resetRawData(store, dataLen);
 	delete []store;
