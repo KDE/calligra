@@ -284,11 +284,16 @@ void KprKword::convert()
                 {
                     strikeOutStyleLine = textElem.attribute("strikeoutstyleline");
                 }
+                QString strikeOutValue;
+                if ( textElem.hasAttribute("strikeOut"))
+                {
+                    strikeOutValue = textElem.attribute("strikeOut");
+                }
 
-                if( textElem.attribute("strikeOut").toInt())
+                if( !strikeOutValue.isEmpty())
                 {
                     QDomElement e = outdoc.createElement("STRIKEOUT");
-                    e.setAttribute( "value", 1 );
+                    e.setAttribute( "value", strikeOutValue );
                     if ( !strikeOutStyleLine.isEmpty())
                         e.setAttribute("styleline", strikeOutStyleLine);
                     outFormatElem.appendChild( e );
