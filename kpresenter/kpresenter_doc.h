@@ -38,6 +38,7 @@ class KPresenterView;
 
 #include "kppixmapcollection.h"
 #include "kpgradientcollection.h"
+#include "kpclipartcollection.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>
@@ -361,7 +362,7 @@ protected:
     void loadBackground( KOMLParser&, vector<KOMLAttrib>& );
     void loadObjects( KOMLParser&, vector<KOMLAttrib>&, bool _paste = false );
     virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
-    
+
     // ************ variables ************
 
     struct PixCache
@@ -407,6 +408,7 @@ protected:
 
     KPPixmapCollection _pixmapCollection;
     KPGradientCollection _gradientCollection;
+    KPClipartCollection _clipartCollection;
 
     CommandHistory _commands;
     bool pasting;
@@ -417,6 +419,7 @@ protected:
     KPFooterHeaderEditor *headerFooterEdit;
 
     QValueList<KPPixmapDataCollection::Key> pixmapCollectionKeys;
+    QValueList<KPClipartCollection::Key> clipartCollectionKeys;
     KoPageLayout __pgLayout;
 
 };

@@ -116,10 +116,33 @@ void QWinMetaFile::singleStep( bool ss )
 }
 
 //-----------------------------------------------------------------------------
-bool QWinMetaFile::load( const QString aFileName )
+bool QWinMetaFile::load( const QString &filename )
 {
-    QFile file( aFileName );
-    QFileInfo fi( file );
+    QFile file( filename );
+
+    if ( !file.exists() )
+    {
+        debug( "File %s does not exist", filename.latin1() );
+        return false;
+    }
+
+    if ( !file.open( IO_ReadOnly ) )
+    {
+        debug( "Cannot open file %s", filename.latin1() );
+        return false;
+    }
+
+    QByteArray ba = file.readAll();
+    file.close();
+
+    QBuffer buffer( ba );
+    buffer.open( IO_ReadOnly );
+    return load( buffer );
+}
+
+//-----------------------------------------------------------------------------
+bool QWinMetaFile::load( QBuffer &buffer )
+{
     QDataStream st;
     WmfEnhMetaHeader eheader;
     WmfMetaHeader header;
@@ -134,17 +157,7 @@ bool QWinMetaFile::load( const QString aFileName )
     if ( mFirstCmd ) delete mFirstCmd;
     mFirstCmd = NULL;
 
-    if ( !file.exists() )
-    {
-        debug( "File %s does not exist", aFileName.ascii() );
-        return FALSE;
-    }
-    if ( !file.open( IO_ReadOnly ) )
-    {
-        debug( "Cannot open file %s", aFileName.ascii() );
-        return FALSE;
-    }
-    st.setDevice( &file );
+    st.setDevice( &buffer );
     st.setByteOrder( QDataStream::LittleEndian ); // Great, I love Qt !
 
     //----- Read placeable metafile header
@@ -180,10 +193,10 @@ bool QWinMetaFile::load( const QString aFileName )
         mBBox.setWidth( ABS( pheader.bbox.right - pheader.bbox.left ) );
         mBBox.setHeight( ABS( pheader.bbox.bottom - pheader.bbox.top ) );
     }
-    else file.at( 0 );
+    else buffer.at( 0 );
 
     //----- Read as enhanced metafile header
-    filePos = file.at();
+    filePos = buffer.at();
     st >> eheader.iType;
     st >> eheader.nSize;
     st >> eheader.rclBounds.left;
@@ -229,7 +242,7 @@ bool QWinMetaFile::load( const QString aFileName )
     else // no, not enhanced
     {
         //----- Read as enhanced metafile header
-        file.at( filePos );
+        buffer.at( filePos );
         st >> header.mtType;
         st >> header.mtHeaderSize;
         st >> header.mtVersion;
@@ -272,12 +285,12 @@ bool QWinMetaFile::load( const QString aFileName )
 
         if ( i<rdSize )
         {
-            debug( "file truncated: %s", aFileName.ascii() );
+            //debug( "file truncated: %s", aFileName.ascii() );
             return FALSE;
         }
     }
 
-    file.close();
+    buffer.close();
     return TRUE;
 }
 

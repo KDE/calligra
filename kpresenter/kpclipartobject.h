@@ -17,9 +17,12 @@
 #define kpclipartobject_h
 
 #include "kpobject.h"
-#include "kpclipart.h"
+#include "kpclipartcollection.h"
+
+#include <qdatetime.h>
 
 class KPGradient;
+class QPicture;
 
 /******************************************************************/
 /* Class: KPClipartObject                                         */
@@ -28,13 +31,12 @@ class KPGradient;
 class KPClipartObject : public KPObject
 {
 public:
-    KPClipartObject();
-    KPClipartObject( QString _filename );
+    KPClipartObject( KPClipartCollection *_clipartCollection );
+    KPClipartObject( KPClipartCollection *_clipartCollection, const QString &_filename, QDateTime _lastModified );
     virtual ~KPClipartObject()
     {}
-    
-    virtual void setFileName( QString _filename )
-    { filename = _filename; clipart.setClipartName( filename ); }
+
+    virtual void setFileName( const QString &_filename, QDateTime _lastModified );
     virtual void setPen( QPen _pen )
     { pen = _pen; }
     virtual void setBrush( QBrush _brush )
@@ -47,10 +49,13 @@ public:
     virtual void setGType( BCType _gType )
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; redrawPix = true; }
 
+    void reload()
+    { setFileName( key.filename, key.lastModified ); }
+
     virtual ObjType getType()
     { return OT_CLIPART; }
     virtual QString getFileName()
-    { return filename; }
+    { return key.filename; }
     virtual QPen getPen()
     { return pen; }
     virtual QBrush getBrush()
@@ -72,10 +77,13 @@ public:
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 
+    KPClipartCollection::Key getKey()
+    { return key; }
+    
 protected:
-    QString filename;
-    KPClipart clipart;
-
+    QPicture *picture;
+    KPClipartCollection::Key key;
+    
     QPen pen;
     QBrush brush;
     QColor gColor1, gColor2;
@@ -85,7 +93,8 @@ protected:
     KPGradient *gradient;
     QPixmap pix;
     bool redrawPix;
-
+    KPClipartCollection *clipartCollection;
+    
 };
 
 #endif

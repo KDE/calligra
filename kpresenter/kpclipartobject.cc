@@ -18,14 +18,15 @@
 
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <qfileinfo.h>
 
 /******************************************************************/
 /* Class: KPClipartObject                                        */
 /******************************************************************/
 
 /*================ default constructor ===========================*/
-KPClipartObject::KPClipartObject()
-    : KPObject(), filename(), clipart()
+KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection )
+    : KPObject()
 {
     brush = Qt::NoBrush;
     gradient = 0;
@@ -35,11 +36,13 @@ KPClipartObject::KPClipartObject()
     pen = QPen( Qt::black, 1, Qt::NoPen );
     gColor1 = Qt::red;
     gColor2 = Qt::green;
+    clipartCollection = _clipartCollection;
+    picture = 0L;
 }
 
 /*================== overloaded constructor ======================*/
-KPClipartObject::KPClipartObject( QString _filename )
-    : KPObject(), filename( _filename ), clipart( filename )
+KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection, const QString &_filename, QDateTime _lastModified )
+    : KPObject()
 {
     brush = Qt::NoBrush;
     gradient = 0;
@@ -49,6 +52,32 @@ KPClipartObject::KPClipartObject( QString _filename )
     pen = QPen( Qt::black, 1, Qt::NoPen );
     gColor1 = Qt::red;
     gColor2 = Qt::green;
+    clipartCollection = _clipartCollection;
+
+    if ( !_lastModified.isValid() )
+    {
+        QFileInfo inf( _filename );
+        _lastModified = inf.lastModified();
+    }
+
+    picture = 0L;
+    setFileName( _filename, _lastModified );
+}
+
+/*================================================================*/
+void KPClipartObject::setFileName( const QString &_filename, QDateTime _lastModified )
+{
+    if ( !_lastModified.isValid() )
+    {
+        QFileInfo inf( _filename );
+        _lastModified = inf.lastModified();
+    }
+
+    if ( picture )
+        clipartCollection->removeRef( key );
+
+    key = KPClipartCollection::Key( _filename, _lastModified );
+    picture = clipartCollection->findClipart( key );
 }
 
 /*================================================================*/
@@ -109,7 +138,7 @@ void KPClipartObject::save( ostream& out )
         << static_cast<int>( effect2 ) << "\"/>" << endl;
     out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
     out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
-    out << indent << "<FILENAME filename=\"" << filename.ascii() << "\"/>" << endl;
+    out << indent << "<KEY " << key << " />" << endl;
     out << indent << "<FILLTYPE value=\"" << static_cast<int>( fillType ) << "\"/>" << endl;
     out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
         << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
@@ -131,7 +160,7 @@ void KPClipartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // orig
         if ( name == "ORIG" )
         {
@@ -229,10 +258,42 @@ void KPClipartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             for( ; it != lst.end(); it++ )
             {
                 if ( ( *it ).m_strName == "filename" )
-                    filename = ( *it ).m_strValue.c_str();
-    
+                    key.filename = ( *it ).m_strValue.c_str();
+
             }
-            setFileName( filename );
+
+            key.lastModified.setDate( clipartCollection->tmpDate() );
+            key.lastModified.setTime( clipartCollection->tmpTime() );
+        }
+
+        // key
+        else if ( name == "KEY" )
+        {
+            int year, month, day, hour, minute, second, msec;
+
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "filename" )
+                    key.filename = ( *it ).m_strValue.c_str();
+                else if ( ( *it ).m_strName == "year" )
+                    year = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "month" )
+                    month = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "day" )
+                    day = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "hour" )
+                    hour = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "minute" )
+                    minute = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "second" )
+                    second = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "msec" )
+                    msec = atoi( ( *it ).m_strValue.c_str() );
+            }
+            key.lastModified.setDate( QDate( year, month, day ) );
+            key.lastModified.setTime( QTime( hour, minute, second, msec ) );
         }
 
         // pen
@@ -335,6 +396,9 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
         return;
     }
 
+    if ( !picture )
+        return;
+
     int ox = orig.x() - _diffx;
     int oy = orig.y() - _diffy;
     int ow = ext.width();
@@ -364,7 +428,7 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
             p.begin( &pix );
             p.drawPixmap( 0, 0, *gradient->getGradient() );
             p.end();
-    
+
             _painter->drawPixmap( pw, pw, pix );
         }
 
@@ -382,7 +446,7 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     _painter->setViewport( ox + 1, oy + 1, ext.width() - 2, ext.height() - 2 );
 
     if ( angle == 0 )
-        _painter->drawPicture( *clipart.getPic() );
+        _painter->drawPicture( *picture );
     else
     {
         KRect br = KRect( 0, 0, ow, oh );
@@ -401,7 +465,7 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
         pm.fill( Qt::white );
         QPainter pnt;
         pnt.begin( &pm );
-        pnt.drawPicture( *clipart.getPic() );
+        pnt.drawPicture( *picture );
         pnt.end();
 
         _painter->setViewport( ox, oy, r.width(), r.height() );

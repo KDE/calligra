@@ -22,8 +22,9 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ChgClipCmd::ChgClipCmd( QString _name, KPClipartObject *_object, QString _oldName, QString _newName, KPresenterDoc *_doc )
-    : Command( _name ), oldName( _oldName ), newName( _newName )
+ChgClipCmd::ChgClipCmd( QString _name, KPClipartObject *_object, KPClipartCollection::Key _oldKey, 
+                        KPClipartCollection::Key _newKey, KPresenterDoc *_doc )
+    : Command( _name ), oldKey( _oldKey ), newKey( _newKey )
 {
     object = _object;
     doc = _doc;
@@ -39,14 +40,14 @@ ChgClipCmd::~ChgClipCmd()
 /*======================== execute ===============================*/
 void ChgClipCmd::execute()
 {
-    object->setFileName( newName );
+    object->setFileName( newKey.filename, newKey.lastModified );
     doc->repaint( object );
 }
 
 /*====================== unexecute ===============================*/
 void ChgClipCmd::unexecute()
 {
-    object->setFileName( oldName );
+    object->setFileName( oldKey.filename, oldKey.lastModified );
     doc->repaint( object );
 }
 

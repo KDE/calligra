@@ -42,8 +42,9 @@ public:
     virtual ~QWinMetaFile();
 
     /** Load WMF file. Returns TRUE on success. */
-    virtual bool load( const QString fileName );
-
+    virtual bool load( const QString &fileName );
+    virtual bool load( QBuffer &buffer );
+    
     /** Paint metafile to given paint-device. Returns TRUE on success. */
     virtual bool paint( const QPaintDevice* target );
 

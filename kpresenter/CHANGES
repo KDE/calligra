@@ -237,3 +237,10 @@ Reggie, 20.5.1999:
 ------------------
 - Fixed drawing background and borders Textobjects and embedded Partobjects
   (background and borders were not rotated when the object was rotated)
+
+Reggie, 22 - 23.5.1999:
+-----------------------
+- Small fixes in the pixmap collection
+- Implemented a clipart collection simlar to the pixmap collection
+- Cliparts are now saved into KPresenter docments (using KoStore)
+  (old docs can be still loaded)

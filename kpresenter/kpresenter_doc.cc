@@ -58,6 +58,8 @@
 #include <qmap.h>
 #include <qdatetime.h>
 #include <qimage.h>
+#include <qpicture.h>
+#include <qbuffer.h>
 
 #include <kurl.h>
 
@@ -106,7 +108,7 @@ KPresenterChild::~KPresenterChild()
 
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc()
-    : _pixmapCollection(), _gradientCollection(), _commands(), _hasHeader( false ),
+    : _pixmapCollection(), _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
       _hasFooter( false )
 {
     ADD_INTERFACE( "IDL:KOffice/Print:1.0" )
@@ -328,6 +330,18 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 
     out << etag << "</PIXMAPS>" << endl;
 
+    out << otag << "<CLIPARTS>" << endl;
+
+    QMap< KPClipartCollection::Key, QPicture >::Iterator it2 = _clipartCollection.begin();
+
+    for( ; it2 != _clipartCollection.end(); ++it2 )
+    {
+        KPClipartCollection::Key key = it2.key();
+        out << indent << "<KEY " << key << " />" << endl;
+    }
+
+    out << etag << "</CLIPARTS>" << endl;
+
     out << etag << "</DOC>" << endl;
 
     setModified( false );
@@ -383,7 +397,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 {
     if ( !_store )
         return true;
-    
+
     CORBA::String_var u = url();
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
@@ -401,6 +415,26 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
             _store->open( u2, mime.lower() );
             ostorestream out( _store );
             out << it.data();
+            out.flush();
+            _store->close();
+        }
+    }
+
+    QMap< KPClipartCollection::Key, QPicture >::Iterator it2 = _clipartCollection.begin();
+
+    for( ; it2 != _clipartCollection.end(); ++it2 )
+    {
+        if ( _clipartCollection.references( it2.key() ) > 0 &&
+             !it2.key().filename.isEmpty() )
+        {
+            QString u2 = u.in();
+            u2 += "/";
+            u2 += it2.key().toString();
+
+            QString mime = "clipart/wmf";
+            _store->open( u2, mime.lower() );
+            ostorestream out( _store );
+            out << it2.data();
             out.flush();
             _store->close();
         }
@@ -821,6 +855,62 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
             }
         }
 
+        else if ( name == "CLIPARTS" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+            }
+
+            while ( parser.open( 0L, tag ) )
+            {
+                KPClipartCollection::Key key;
+                int year, month, day, hour, minute, second, msec;
+
+                KOMLParser::parseTag( tag.c_str(), name, lst );
+                if ( name == "KEY" )
+                {
+                    KOMLParser::parseTag( tag.c_str(), name, lst );
+                    vector<KOMLAttrib>::const_iterator it = lst.begin();
+                    for( ; it != lst.end(); it++ )
+                    {
+                        if ( ( *it ).m_strName == "filename" )
+                            key.filename = ( *it ).m_strValue.c_str();
+                        else if ( ( *it ).m_strName == "year" )
+                            year = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "month" )
+                            month = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "day" )
+                            day = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "hour" )
+                            hour = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "minute" )
+                            minute = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "second" )
+                            second = atoi( ( *it ).m_strValue.c_str() );
+                        else if ( ( *it ).m_strName == "msec" )
+                            msec = atoi( ( *it ).m_strValue.c_str() );
+                        else
+                            cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
+                    }
+                    key.lastModified.setDate( QDate( year, month, day ) );
+                    key.lastModified.setTime( QTime( hour, minute, second, msec ) );
+
+                    clipartCollectionKeys.append( key );
+                }
+                else
+                    cerr << "Unknown tag '" << tag << "' in CLIPARTS" << endl;
+
+                if ( !parser.close( tag ) )
+                {
+                    cerr << "ERR: Closing Child" << endl;
+                    QApplication::restoreOverrideCursor();
+                    return false;
+                }
+            }
+        }
+
         else
             cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;
 
@@ -847,7 +937,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
             if ( kpobject->getType() == OT_PICTURE )
                 dynamic_cast<KPPixmapObject*>( kpobject )->reload();
         }
-        
+
         _pixmapCollection.setAllowChangeRef( true );
         _pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
     }
@@ -980,7 +1070,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
             } break;
             case OT_CLIPART:
             {
-                KPClipartObject *kpclipartobject = new KPClipartObject();
+                KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection );
                 kpclipartobject->load( parser, lst );
 
                 if ( _paste )
@@ -1068,17 +1158,35 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
             _pixmapCollection.getPixmapDataCollection().insertPixmapData( it.node->data, img );
         }
 
+        QValueListIterator<KPClipartCollection::Key> it2 = clipartCollectionKeys.begin();
+
+        for ( ; it2 != clipartCollectionKeys.end(); ++it2 )
+        {
+            QString u = str.in();
+            u += "/";
+            u += it2.node->data.toString();
+
+            QPicture pic;
+            QCString buf;
+
+            _store->open( u, 0L );
+            {
+                istorestream in( _store );
+                in >> pic;
+            }
+            _store->close();
+
+            _clipartCollection.insertClipart( it2.node->data, pic );
+        }
 
         KPObject *kpobject = 0L;
         for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
         {
             if ( kpobject->getType() == OT_PICTURE )
                 dynamic_cast<KPPixmapObject*>( kpobject )->reload();
+            else if ( kpobject->getType() == OT_CLIPART )
+                dynamic_cast<KPClipartObject*>( kpobject )->reload();
         }
-
-//     KPBackGround *kpbackground = 0L;
-//     for ( kpbackground = _backgroundList.first(); kpbackground; kpbackground = _backgroundList.next() )
-//         kpbackground->restore();
 
     }
     setPageLayout( __pgLayout, 0, 0 );
@@ -1240,7 +1348,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore=true )
 {
 
-    KPBackGround *kpbackground = new KPBackGround( &_pixmapCollection, &_gradientCollection, this );
+    KPBackGround *kpbackground = new KPBackGround( &_pixmapCollection, &_gradientCollection, &_clipartCollection, this );
     _backgroundList.append( kpbackground );
 
     if ( _restore )
@@ -1323,7 +1431,7 @@ void KPresenterDoc::setBackPixFilename( unsigned int pageNum, QString backPix )
 {
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
     QDateTime dt;
-    
+
     if ( !QFileInfo( backPix ).exists() )
     {
         for ( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
@@ -1335,7 +1443,7 @@ void KPresenterDoc::setBackPixFilename( unsigned int pageNum, QString backPix )
             }
         }
     }
-    
+
     if ( pageNum < _backgroundList.count() )
         backgroundList()->at( pageNum )->setBackPixmap( backPix, dt );
     m_bModified = true;
@@ -1344,8 +1452,23 @@ void KPresenterDoc::setBackPixFilename( unsigned int pageNum, QString backPix )
 /*==================== set background clipart ====================*/
 void KPresenterDoc::setBackClipFilename( unsigned int pageNum, QString backClip )
 {
+    QMap< KPClipartCollection::Key, QPicture >::Iterator it = _clipartCollection.begin();
+    QDateTime dt;
+
+    if ( !QFileInfo( backClip ).exists() )
+    {
+        for ( ; it != _clipartCollection.end(); ++it )
+        {
+            if ( it.key().filename == backClip )
+            {
+                dt = it.key().lastModified;
+                break;
+            }
+        }
+    }
+
     if ( pageNum < _backgroundList.count() )
-        backgroundList()->at( pageNum )->setBackClipFilename( backClip );
+        backgroundList()->at( pageNum )->setBackClipFilename( backClip, dt );
     m_bModified = true;
 }
 
@@ -2604,7 +2727,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 {
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
     QDateTime dt;
-    
+
     if ( !QFileInfo( filename ).exists() )
     {
         for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
@@ -2616,7 +2739,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
             }
         }
     }
-    
+
     KPPixmapObject *kppixmapobject = new KPPixmapObject( &_pixmapCollection, filename, dt );
     kppixmapobject->setOrig( ( ( diffx + _x ) / _rastX ) * _rastX, ( ( diffy + _y ) / _rastY ) * _rastY );
     kppixmapobject->setSelected( true );
@@ -2631,7 +2754,22 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 /*=================== insert a clipart ==========================*/
 void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
 {
-    KPClipartObject *kpclipartobject = new KPClipartObject( filename );
+    QMap< KPClipartCollection::Key, QPicture >::Iterator it = _clipartCollection.begin();
+    QDateTime dt;
+
+    if ( !QFileInfo( filename ).exists() )
+    {
+        for ( ; it != _clipartCollection.end(); ++it )
+        {
+            if ( it.key().filename == filename )
+            {
+                dt = it.key().lastModified;
+                break;
+            }
+        }
+    }
+
+    KPClipartObject *kpclipartobject = new KPClipartObject( &_clipartCollection, filename, dt );
     kpclipartobject->setOrig( ( ( diffx + 10 ) / _rastX ) * _rastX, ( ( diffy + 10 ) / _rastY ) * _rastY );
     kpclipartobject->setSize( 150, 150 );
     kpclipartobject->setSelected( true );
@@ -2650,7 +2788,7 @@ void KPresenterDoc::changePicture( QString filename, int diffx, int diffy )
 
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
     QDateTime dt;
-    
+
     if ( !QFileInfo( filename ).exists() )
     {
         for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it )
@@ -2662,7 +2800,7 @@ void KPresenterDoc::changePicture( QString filename, int diffx, int diffy )
             }
         }
     }
-    
+
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
     {
         kpobject = objectList()->at( i );
@@ -2684,6 +2822,21 @@ void KPresenterDoc::changePicture( QString filename, int diffx, int diffy )
 /*======================= change clipart ========================*/
 void KPresenterDoc::changeClipart( QString filename, int diffx, int diffy )
 {
+    QMap< KPClipartCollection::Key, QPicture >::Iterator it = _clipartCollection.begin();
+    QDateTime dt;
+
+    if ( !QFileInfo( filename ).exists() )
+    {
+        for ( ; it != _clipartCollection.end(); ++it )
+        {
+            if ( it.key().filename == filename )
+            {
+                dt = it.key().lastModified;
+                break;
+            }
+        }
+    }
+
     KPObject *kpobject = 0;
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
@@ -2692,7 +2845,8 @@ void KPresenterDoc::changeClipart( QString filename, int diffx, int diffy )
         if ( kpobject->isSelected() && kpobject->getType() == OT_CLIPART )
         {
             ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change clipart" ), dynamic_cast<KPClipartObject*>( kpobject ),
-                                                     dynamic_cast<KPClipartObject*>( kpobject )->getFileName(), filename, this );
+                                                     dynamic_cast<KPClipartObject*>( kpobject )->getKey(),
+                                                     KPClipartCollection::Key( filename, dt ), this );
             chgClipCmd->execute();
             _commands.addCommand( chgClipCmd );
             break;

@@ -43,8 +43,8 @@
 
 /*================================================================*/
 KPBackGround::KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCollection *_gradientCollection,
-                            KPresenterDoc *_doc )
-    : backClipFilename(), backClip(), footerHeight( 0 )
+                            KPClipartCollection *_clipartCollection, KPresenterDoc *_doc )
+    : footerHeight( 0 )
 {
     backType = BT_COLOR;
     backView = BV_CENTER;
@@ -55,8 +55,10 @@ KPBackGround::KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCol
 
     pixmapCollection = _pixmapCollection;
     gradientCollection = _gradientCollection;
+    clipartCollection = _clipartCollection;
     backPix = 0L;
     gradient = 0L;
+    picture = 0L;
 
     doc = _doc;
 }
@@ -90,12 +92,22 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
 }
 
 /*================================================================*/
-void KPBackGround::setBackClipFilename( QString _filename )
+void KPBackGround::setBackClipFilename( const QString &_filename, QDateTime _lastModified )
 {
-    if ( _filename.isEmpty() ) return;
+    if ( backType != BT_CLIPART )
+        return;
 
-    backClipFilename = _filename;
-    backClip.setClipartName( _filename );
+    if ( !_lastModified.isValid() )
+    {
+        QFileInfo inf( _filename );
+        _lastModified = inf.lastModified();
+    }
+
+    if ( picture )
+        clipartCollection->removeRef( clipKey );
+
+    clipKey = KPClipartCollection::Key(_filename, _lastModified );
+    picture = clipartCollection->findClipart( clipKey );
 }
 
 /*================================================================*/
@@ -147,6 +159,9 @@ void KPBackGround::restore()
     if ( backType == BT_PICTURE )
         setBackPixmap( key.dataKey.filename, key.dataKey.lastModified );
 
+    if ( backType == BT_CLIPART )
+        setBackClipFilename( clipKey.filename, clipKey.lastModified );
+
     if ( backType != BT_PICTURE && backPix )
     {
         pixmapCollection->removeRef( key );
@@ -184,8 +199,8 @@ void KPBackGround::save( ostream& out )
     if ( backPix && backType == BT_PICTURE )
         out << indent << "<BACKPIXKEY " << key << " />" << endl;
 
-    if ( !backClipFilename.isEmpty() && backType == BT_CLIPART )
-        out << indent << "<BACKCLIP filename=\"" << backClipFilename.ascii() << "\"/>" << endl;
+    if ( picture && backType == BT_CLIPART )
+        out << indent << "<BACKCLIPKEY " << clipKey << " />" << endl;
 
     out << indent << "<PGEFFECT value=\"" << static_cast<int>( pageEffect ) << "\"/>" << endl;
 }
@@ -366,6 +381,36 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 pixmapCollection->getPixmapDataCollection().setPixmapOldVersion( key.dataKey );
         }
 
+        // back clipart
+        else if ( name == "BACKCLIPKEY" )
+        {
+            int year, month, day, hour, minute, second, msec;
+
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "filename" )
+                    clipKey.filename = ( *it ).m_strValue.c_str();
+                else if ( ( *it ).m_strName == "year" )
+                    year = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "month" )
+                    month = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "day" )
+                    day = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "hour" )
+                    hour = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "minute" )
+                    minute = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "second" )
+                    second = atoi( ( *it ).m_strValue.c_str() );
+                else if ( ( *it ).m_strName == "msec" )
+                    msec = atoi( ( *it ).m_strValue.c_str() );
+            }
+            clipKey.lastModified.setDate( QDate( year, month, day ) );
+            clipKey.lastModified.setTime( QTime( hour, minute, second, msec ) );
+        }
+
         // backclip
         else if ( name == "BACKCLIP" )
         {
@@ -385,13 +430,15 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                             _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
                         }
                     }
-                    setBackClipFilename( _fileName );
+                    clipKey.filename = _fileName;
+                    clipKey.lastModified.setDate( clipartCollection->tmpDate() );
+                    clipKey.lastModified.setTime( clipartCollection->tmpTime() );
                 }
             }
         }
 
         else
-            cerr << "Unknown tag '" << tag << "' in PAGE" << endl;
+            cerr << "Unknown tag '" << tag << "' in CLPARTOBJECT" << endl;
 
         if ( !parser.close( tag ) )
         {
@@ -524,7 +571,8 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const KPoint &_offset )
 /*================================================================*/
 void KPBackGround::drawBackClip( QPainter *_painter )
 {
-    _painter->drawPicture( *backClip.getPic() );
+    if ( picture )
+        _painter->drawPicture( *picture );
 }
 
 /*================================================================*/

@@ -24,6 +24,7 @@
 #include "global.h"
 #include "kpclipart.h"
 #include "kppixmapcollection.h"
+#include "kpclipartcollection.h"
 
 #include <koStream.h>
 #include <iostream.h>
@@ -32,6 +33,7 @@ class KPresenterDoc;
 class QPainter;
 class QPixmap;
 class KPGradientCollection;
+class QPicture;
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
@@ -41,7 +43,7 @@ class KPBackGround
 {
 public:
     KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCollection *_gradientCollection,
-                  KPresenterDoc *_doc );
+                  KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
     virtual ~KPBackGround()
     {; }
 
@@ -56,9 +58,7 @@ public:
     virtual void setBackColorType( BCType _bcType )
     { removeGradient(); bcType = _bcType; }
     void setBackPixmap( const QString &_filename, QDateTime _lastModified );
-    void reload()
-    { }
-    virtual void setBackClipFilename( QString _filename );
+    virtual void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
     virtual void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
 
@@ -80,7 +80,7 @@ public:
     virtual QString getBackPixFilename()
     { return key.dataKey.filename; }
     virtual QString getBackClipFilename()
-    { return backClipFilename; }
+    { return clipKey.filename; }
     virtual PageEffect getPageEffect()
     { return pageEffect; }
 
@@ -107,15 +107,16 @@ protected:
     QColor backColor1;
     QColor backColor2;
     BCType bcType;
-    QString backClipFilename;
     PageEffect pageEffect;
 
     QPixmap *backPix;
     KPPixmapCollection::Key key;
     KPPixmapCollection *pixmapCollection;
     KPGradientCollection *gradientCollection;
+    KPClipartCollection *clipartCollection;
     QPixmap *gradient;
-    KPClipart backClip;
+    QPicture *picture;
+    KPClipartCollection::Key clipKey;
 
     KSize ext;
     KPresenterDoc *doc;
