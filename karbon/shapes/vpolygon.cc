@@ -25,6 +25,8 @@
 #include "vtransformcmd.h"
 #include <klocale.h>
 #include <koUnit.h>
+#include <koStore.h>
+#include <koxmlwriter.h>
 #include <vdocument.h>
 
 VPolygon::VPolygon( VObject* parent, VState state ) 
@@ -101,6 +103,19 @@ VPolygon::save( QDomElement& element ) const
 
 		writeTransform( me );
 	}
+}
+
+void
+VPolygon::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+	docWriter->startElement( "draw:polygon" );
+
+	docWriter->addAttribute( "svg:points", m_points );
+
+	if( !VObject::name().isEmpty() )
+		docWriter->addAttribute( "draw:name", VObject::name() );
+
+	docWriter->endElement();
 }
 
 void

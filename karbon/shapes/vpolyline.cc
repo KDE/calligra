@@ -25,6 +25,9 @@
 #include <klocale.h>
 #include <vdocument.h>
 
+#include <koStore.h>
+#include <koxmlwriter.h>
+
 VPolyline::VPolyline( VObject* parent, VState state )
 	: VPath( parent, state )
 {
@@ -91,6 +94,19 @@ VPolyline::save( QDomElement& element ) const
 
 		writeTransform( me );
 	}
+}
+
+void
+VPolyline::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+	docWriter->startElement( "draw:polyline" );
+
+	docWriter->addAttribute( "svg:points", m_points );
+
+	if( !VObject::name().isEmpty() )
+		docWriter->addAttribute( "draw:name", VObject::name() );
+
+	docWriter->endElement();
 }
 
 void

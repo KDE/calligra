@@ -24,6 +24,8 @@
 
 #include <koPoint.h>
 #include <koRect.h>
+#include <koStore.h>
+#include <koxmlwriter.h>
 
 #include "vcomposite.h"
 #include "vcomposite_iface.h"
@@ -348,6 +350,20 @@ VPath::save( QDomElement& element ) const
 	}
 }
 
+void
+VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+	docWriter->startElement( "draw:path" );
+
+	QString d;
+	saveSvgPath( d );
+	docWriter->addAttribute( "svg:d", d );
+
+	if( !VObject::name().isEmpty() )
+		docWriter->addAttribute( "draw:name", VObject::name() );
+
+	docWriter->endElement();
+}
 
 void
 VPath::load( const QDomElement& element )

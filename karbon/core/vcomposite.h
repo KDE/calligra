@@ -187,6 +187,7 @@ public:
 
 
 	virtual void save( QDomElement& element ) const;
+	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter );
 	virtual void load( const QDomElement& element );
 
 	virtual VPath* clone() const;

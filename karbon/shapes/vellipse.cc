@@ -22,6 +22,8 @@
 #include "vtransformcmd.h"
 #include <klocale.h>
 #include <koUnit.h>
+#include <koStore.h>
+#include <koxmlwriter.h>
 #include <vglobal.h>
 #include <vdocument.h>
 #include <qdom.h>
@@ -143,6 +145,23 @@ VEllipse::save( QDomElement& element ) const
 
 		writeTransform( me );
 	}
+}
+
+void
+VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+	docWriter->startElement( "draw:ellipse" );
+
+	//save all into pt
+	docWriter->addAttributePt( "svg:cx", m_center.x() );
+	docWriter->addAttributePt( "svg:cy", m_center.y() );
+	docWriter->addAttributePt( "svg:rx", m_rx );
+	docWriter->addAttributePt( "svg:ry", m_ry );
+
+	if( !VObject::name().isEmpty() )
+		docWriter->addAttribute( "draw:name", VObject::name() );
+
+	docWriter->endElement();
 }
 
 void
