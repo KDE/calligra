@@ -511,10 +511,10 @@ void KuDesignerDoc::deleteContents()
     {
         delete docCanvas;
 	docCanvas = 0;
-    }	
+    }
 }
 
-MyCanvas *KuDesignerDoc::canvas()
+MyCanvas *KuDesignerDoc::canvas()const
 {
     return docCanvas;
 }
