@@ -350,7 +350,7 @@ SVGPathParser::parseSVG( const QString &s, bool process )
 					if( process )
 						calculateArc( relative, curx, cury, angle, tox, toy, rx, ry, largeArc, sweep );
 					else
-						svgArcTo( tox, toy, rx, ry, angle, largeArc, sweep, relative );
+						svgArcTo( tox, toy, rx, ry, angle, largeArc, sweep, !relative );
 				}
 			}
 
