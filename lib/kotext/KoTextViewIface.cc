@@ -129,6 +129,18 @@ QColor KoTextViewIface::textUnderlineColor() const
     return m_textView->textUnderlineColor();
 }
 
+bool KoTextViewIface::textShadow() const
+{
+    return m_textView->textShadow();
+}
+
+void KoTextViewIface::setTextShadow( bool _shadow)
+{
+    KCommand *cmd=m_textView->setShadowTextCommand(_shadow);
+    delete cmd;
+}
+
+
 void KoTextViewIface::setUnderlineColor( const QColor & color )
 {
     KCommand *cmd=m_textView->setUnderlineColorCommand(color);

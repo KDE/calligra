@@ -328,3 +328,14 @@ QString KPTextObjectIface::verticalAlignment() const
     }
     return QString::null;
 }
+
+bool KPTextObjectIface::textShadow() const
+{
+    return m_textobject->textObject()->textShadow();
+}
+
+void KPTextObjectIface::setTextShadow( bool b )
+{
+    KCommand *cmd=m_textobject->textObject()->setShadowTextCommand( b );
+    delete cmd;
+}

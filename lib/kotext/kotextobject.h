@@ -110,6 +110,8 @@ public:
 
     KCommand *setSpellCheckingLanguage(const QString &);
 
+    KCommand *setShadowTextCommand( bool _b );
+
 
     QColor textColor() const;
     QFont textFont() const;

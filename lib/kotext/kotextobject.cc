@@ -2298,6 +2298,14 @@ KCommand *KoTextFormatInterface::setAlignCommand(int align)
     return setParagLayoutFormatCommand(&format,KoParagLayout::Alignment);
 }
 
+KCommand *KoTextFormatInterface::setShadowTextCommand( bool _b )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setShadowText( _b );
+    return setFormatCommand( &format, KoTextFormat::ShadowText );
+}
+
+
 #if 0
 void KoTextFormatInterface::setAlign(int align)
 {

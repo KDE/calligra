@@ -47,6 +47,7 @@ k_dcop:
     void setTextSuperScript(bool on);
     void setUnderlineColor( const QColor & color );
     void setDefaultFormat();
+    void setTextShadow( bool _shadow);
 
     QColor textColor() const;
     QString textFontFamily()const;
@@ -60,6 +61,7 @@ k_dcop:
     bool textStrikeOut()const;
     bool textSubScript() const;
     bool textSuperScript() const;
+    bool textShadow() const;
 
     void setTextColor(const QColor &color);
     void setTextBackgroundColor(const QColor &);

@@ -88,6 +88,9 @@ k_dcop:
     void setVerticalAligment( const QString & type);
     QString verticalAlignment() const;
 
+    bool textShadow() const;
+    void setTextShadow( bool b );
+
 private:
     KPTextObject *m_textobject;
 };
