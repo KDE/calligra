@@ -119,7 +119,6 @@ class StackItem
 public:
     StackItem()
     {
-        fontName="times"; //Default font
         fontSize=0; //No explicit font size
         italic=false;
         bold=false;
@@ -200,7 +199,7 @@ bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttr
         QString strTextPosition("old");
         QString strColour("old");
         QString strFontSize("old");
-        QString strFontFamily(stackItem->fontName);
+        QString strFontFamily("old");
 
         abiPropsList.append( AbiProps("font-style",&strFontStyle));
         abiPropsList.append( AbiProps("font-weight",&strWeight));
@@ -294,10 +293,12 @@ bool charactersElementC (StackItem* stackItem, const QString & ch)
     nodeOut2.appendChild(formatElementOut); //Append to <FORMATS>
     stackItem->pos+=ch.length(); // Adapt new starting position
 
-    //Note: the <FONT> tag is mandatory for KWord (FIXME: not anymore in KWord 0.9)
-    QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
-    fontElementOut.setAttribute("name",stackItem->fontName); // Font name
-    formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    if (!stackItem->fontName.isEmpty())
+    {
+        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
+        fontElementOut.setAttribute("name",stackItem->fontName); // Font name
+        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    }
 
     if (stackItem->fontSize)
     {
@@ -396,7 +397,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     abiPropsList.append( AbiProps("font-size",&strFontSize));
     abiPropsList.append( AbiProps("font-family",&strFontFamily));
     abiPropsList.append( AbiProps("text-align",&strFlow));
-	
+
     kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
     // Treat the props attributes in the two available flavors: lower case and upper case.
     TreatAbiProps(attributes.value("props"),abiPropsList);
@@ -459,7 +460,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     if (!strFontFamily.isEmpty())
     {
         // TODO: transform the font-family in a font we have on the system on which KWord runs.
-        stackItem->fontName="times";
+        stackItem->fontName=strFontFamily;
     }
 
     // Now we populate the layout
@@ -501,10 +502,12 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     QDomElement formatElementOut=layoutElement.ownerDocument().createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
 
-    //Note: the <FONT> tag is mandatory for KWord (FIXME: not anymore in KWord 0.9)
-    QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("FONT");
-    fontElementOut.setAttribute("name",stackItem->fontName); // Font name
-    formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    if (!stackItem->fontName.isEmpty())
+    {
+        QDomElement fontElementOut=formatElementOut.ownerDocument().createElement("FONT");
+        fontElementOut.setAttribute("name",stackItem->fontName); // Font name
+        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    }
 
     if (stackItem->fontSize)
     {
@@ -999,7 +1002,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     out.write((const char*)strOut, strOut.length());
     out.close();
 
-#if 0
+#if 1
     kdDebug(30506) << qDomDocumentOut.toString();
 #endif
 

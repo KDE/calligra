@@ -52,7 +52,6 @@ public:
     StackItem()
     {
         elementName="-none-";
-        fontName="times"; //Default font
         fontSize=0; //No explicit font size
         italic=false;
         bold=false;

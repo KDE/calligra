@@ -108,7 +108,7 @@ bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCurrent *
     QString strTextPosition("old");
     QString strColour("old");
     QString strFontSize("old");
-    QString strFontFamily(stackItem->fontName);
+    QString strFontFamily("old");
 
     QValueList<CSS2Styles> css2StylesList;
 
@@ -223,10 +223,12 @@ bool charactersElementSpan (StackItem* stackItem, const QString & ch)
     nodeOut2.appendChild(formatElementOut); //Append to <FORMATS>
     stackItem->pos+=ch.length(); // Adapt new starting position
 
-    //Note: the <FONT> tag is mandatory for KWord (FIXME: not anymore in KWord 0.9)
-    QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
-    fontElementOut.setAttribute("name",stackItem->fontName); // Font name
-    formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    if (!stackItem->fontName.isEmpty())
+    {
+        QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
+        fontElementOut.setAttribute("name",stackItem->fontName); // Font name
+        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    }
 
     if (stackItem->fontSize)
     {
@@ -397,7 +399,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     if (!strFontFamily.isEmpty())
     {
         // TODO: transform the font-family in a font we have on the system on which KWord runs.
-        stackItem->fontName="times";
+        stackItem->fontName=strFontFamily;
     }
 
 	// Now we populate the layout
@@ -439,9 +441,12 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     QDomElement formatElementOut=layoutElement.ownerDocument().createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
 
-    element=formatElementOut.ownerDocument().createElement("FONT");
-    element.setAttribute("name",stackItem->fontName); // Font name
-    formatElementOut.appendChild(element); //Append to <FORMAT>
+    if (!stackItem->fontName.isEmpty())
+    {
+        element=formatElementOut.ownerDocument().createElement("FONT");
+        element.setAttribute("name",stackItem->fontName); // Font name
+        formatElementOut.appendChild(element); //Append to <FORMAT>
+    }
 
     element=formatElementOut.ownerDocument().createElement("SIZE");
     element.setAttribute("value",(stackItem->fontSize>0)?(stackItem->fontSize):12);
