@@ -28,7 +28,7 @@ KInstance* KFormulaFactory::s_global = 0;
 
 KAboutData* KFormulaFactory::aboutData()
 {
-      KAboutData *aboutData= new KAboutData( "kformula","I18N_NOOP("KFormula")",
+      KAboutData *aboutData= new KAboutData( "kformula", I18N_NOOP("KFormula"),
         version, description, KAboutData::License_GPL,
         "(c) 1998-2000, Andrea Rizzi");
       aboutData->addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
