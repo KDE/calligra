@@ -96,7 +96,7 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     }
     else
     {
-        kdDebug(30003) << "Re-sample!" << endl;
+        kdDebug(30003) << "Sampling!" << endl;
         QApplication::setOverrideCursor( Qt::waitCursor );
         QBuffer buffer( m_rawData );
         buffer.open( IO_ReadOnly );
@@ -116,6 +116,7 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
             //          << " (was " << image.width() << "x" << image.height() << ")" << endl;
             image = image.scale( size ); // hmm, smoothScale instead?
         }
+        kdDebug(30003) << "Image parameters: " << image.width() << "x" << image.height() << "x" << image.depth() << endl;
         m_cachedPixmap = image;
         QApplication::restoreOverrideCursor();
         m_cacheIsInFastMode=false;
@@ -126,7 +127,6 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode)
 
 void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
 {
-    //kdDebug() << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
     if ( !width || !height )
         return;
 
@@ -146,7 +146,8 @@ bool KoPictureEps::extractPostScriptStream( void )
     kdDebug(30003) << "KoPictureEps::extractPostScriptStream" << endl;
     QDataStream data( m_rawData, IO_ReadOnly );
     data.setByteOrder( QDataStream::LittleEndian );
-    Q_UINT32 offset, length;
+    Q_UINT32 magic, offset, length;
+    data >> magic;
     data >> offset;
     data >> length;
     if ( !length )
@@ -184,7 +185,7 @@ bool KoPictureEps::load(QIODevice* io, const QString& /*extension*/)
         if (!extractPostScriptStream()) // Changes m_rawData
             return false;
     }
-
+    
     QTextStream stream(m_rawData, IO_ReadOnly);
     QString lineBox;
     QString line( stream.readLine() );
