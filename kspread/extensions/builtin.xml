@@ -2620,6 +2620,30 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>LOGNORMDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>probability value for which the standard logarithmic distribution is to be calculated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>mean value of the standard logarithmic distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>standard deviation of the standard logarithmic distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the cumulative lognormal distribution.
+        </Text>
+        <Syntax>LOGNORMDIST(Number;MV;STD)</Syntax>
+        <Example>LOGNORMDIST(0.1;0;1) equals 0.01</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>

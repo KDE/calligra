@@ -2393,6 +2393,32 @@ static bool kspreadfunc_normdist(KSContext& context ) {
   return true;
 }
 
+static bool kspreadfunc_lognormdist(KSContext& context ) {
+  //returns the cumulative lognormal distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  
+  if ( !KSUtil::checkArgumentsCount( context, 3, "LOGNORMDIST", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double mue = args[1]->doubleValue();
+  double sigma = args[2]->doubleValue();
+
+  if (sigma <= 0.0 || x <= 0.0)
+    return false;
+  else
+    context.setValue( new KSValue(0.5 + gauss_helper((log(x)-mue)/sigma)));
+
+  return true;
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
@@ -4891,6 +4917,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "FISHER", new KSValue( new KSBuiltinFunction( module, "FISHER", kspreadfunc_fisher) ) );
   module->addObject( "FISHERINV", new KSValue( new KSBuiltinFunction( module, "FISHERINV", kspreadfunc_fisherinv) ) );
   module->addObject( "NORMDIST", new KSValue( new KSBuiltinFunction( module, "NORMDIST", kspreadfunc_normdist) ) );
+  module->addObject( "LOGNORMDIST", new KSValue( new KSBuiltinFunction( module, "LOGNORMDIST", kspreadfunc_lognormdist) ) );
 
   return module;
 }
