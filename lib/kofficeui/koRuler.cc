@@ -245,7 +245,7 @@ void KoRuler::drawTabs( QPainter &_painter )
     for ( unsigned int i = 0;i < d->tabList.count();i++ ) {
         _tab = d->tabList.at( i );
         ptPos = double2Int(zoomIt(_tab->ptPos)) - diffx + ( frameStart == -1 ? double2Int( zoomIt(layout.ptLeft) ) :
-                                                            zoomIt(frameStart) );
+                                                            frameStart );
         switch ( _tab->type ) {
         case T_LEFT: {
             ptPos -= 4;
@@ -424,7 +424,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             p.setRasterOp( NotROP );
             p.setPen( QPen( black, 1, SolidLine ) );
             double pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
-            pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)));
+            pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(frameStart));
             int i_pt=double2Int(pt);
             p.drawLine( i_pt, 0, i_pt, d->canvas->height() );
             p.end();
@@ -454,7 +454,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             break;
         default: break;
         }
-        _tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart)) ));
+        _tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : frameStart) ) );
         _tab->mmPos = POINT_TO_MM( _tab->ptPos );
         _tab->inchPos = POINT_TO_INCH( _tab->ptPos );
 
@@ -538,7 +538,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
             p.setRasterOp( NotROP );
             p.setPen( QPen( black, 1, SolidLine ) );
             double pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
-            pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)));
+            pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(frameStart));
             int i_pt=double2Int(pt);
             p.drawLine( i_pt, 0, i_pt, d->canvas->height() );
             p.end();
@@ -608,8 +608,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     d->currTab = -1;
                     for ( unsigned int i = 0; i < d->tabList.count(); i++ ) {
                         pos = double2Int(zoomIt(d->tabList.at( i )->ptPos)) - diffx + ( frameStart == -1 ?
-                                                                             double2Int(zoomIt(layout.ptLeft)) :
-                                                                             zoomIt(frameStart));
+                                                                             double2Int(zoomIt(layout.ptLeft)) : frameStart);
                         if ( mx > pos - 5 && mx < pos + 5 ) {
                             setCursor( sizeHorCursor );
                             d->action = A_TAB;
@@ -731,7 +730,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             p.setRasterOp( NotROP );
                             p.setPen( QPen( black, 1, SolidLine ) );
                             double pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
-                            double fr=(frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(zoomIt(frameStart)) );
+                            double fr=(frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(frameStart) );
                             int pt_fr=double2Int(pt+fr);
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
                             d->tabList.at( d->currTab )->ptPos = unZoomIt(static_cast<double>(mx) - fr );

@@ -1047,9 +1047,9 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
         // Change fonts & stuff to match the paragraphs layout
         apply( parag->getParagLayout()->getFormat() );
 
-        indent = static_cast<int>(parag->getParagLayout()->getFirstLineLeftIndent().pt());
+        indent = static_cast<int>(parag->getParagLayout()->getFirstLineLeftIndent().pt()*doc->getZoom())/100;
     } else {
-        indent = static_cast<int>(parag->getParagLayout()->getLeftIndent().pt());
+        indent = static_cast<int>(parag->getParagLayout()->getLeftIndent().pt()*doc->getZoom())/100;
     }
 
     indent += _left;

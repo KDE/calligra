@@ -468,12 +468,12 @@ bool KWParagLayout::getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsi
     unsigned int ptPos = 0;
 
     for ( unsigned int i = 0; i < tabList.count(); i++ ) {
-        ptPos = static_cast<int>(tabList.at( i )->ptPos) + _lBorder;
+        ptPos = static_cast<int>(tabList.at( i )->ptPos * document->getZoom()/100) + _lBorder;
         if ( ptPos > _ptPos && ptPos < _rBorder && ( _best == -1 ||
-                                                     ptPos < static_cast<unsigned int>( tabList.at( _best )->ptPos ) ) )
+                                                     ptPos < static_cast<unsigned int>( tabList.at( _best )->ptPos * document->getZoom()/100) ) )
             _best = i;
         if ( ptPos <= _ptPos && ptPos > _lBorder && ( _mostLeft == -1 ||
-                                                      ptPos < static_cast<unsigned int>( tabList.at( _mostLeft )->ptPos ) ) )
+                                                      ptPos < static_cast<unsigned int>( tabList.at( _mostLeft )->ptPos * document->getZoom()/100) ) )
             _mostLeft = i;
     }
 

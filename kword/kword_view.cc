@@ -2489,7 +2489,7 @@ void KWordView::newPageLayout( KoPageLayout _layout )
     gui->getVertRuler()->setPageLayout( _layout );
 
     gui->getPaperWidget()->frameSizeChanged( _layout );
-    gui->getPaperWidget()->repaintScreen( TRUE );
+    gui->getPaperWidget()->forceFullUpdate();
 }
 
 /*================================================================*/
