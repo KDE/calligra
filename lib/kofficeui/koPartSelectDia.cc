@@ -17,6 +17,8 @@
     Boston, MA 02111-1307, USA.
 */
 
+#include <koQueryTypes.h>
+
 #include "koPartSelectDia.h"
 
 #include <klocale.h>
@@ -36,15 +38,21 @@
  */
 class KoBeListBoxItem : public QListBoxItem
 {
+
 public:
+
   KoBeListBoxItem( const char *s, const QPixmap p ) : QListBoxItem(), pm(p)
   { setText( s ); }
+
 protected:
+
   virtual void paint( QPainter * );
   virtual int height( const QListBox * ) const;
   virtual int width( const QListBox * ) const;
   virtual const QPixmap *pixmap() const { return &pm; }
+
 private:
+
   QPixmap pm;
 };
 

@@ -27,29 +27,45 @@
 #include <qvaluelist.h>
 
 /**
- * This dialog presents the user all available
- * KOffice components ( KSpread,KWord etc ) with name
- * and mini icon. The user may select one and
- * the corresponding KoDocumentEntry is returned.
+ *  This dialog presents the user all available
+ *  KOffice components ( KSpread,KWord etc ) with name
+ *  and mini icon. The user may select one and
+ *  the corresponding KoDocumentEntry is returned.
  */
 class KoPartSelectDia : public DlgPartSelectData
 {
+
     Q_OBJECT
+
 public:
-    KoPartSelectDia( QWidget* parent = NULL, const char* name = NULL );
+
+    /**
+     *  Constructor.
+     */
+    KoPartSelectDia( QWidget* _parent = NULL, const char* _name = NULL );
+
+    /**
+     *  Destructor.
+     */
     virtual ~KoPartSelectDia();
   
+    /**
+     *  Retrieves the result of the part selection.
+     *
+     *  @return A document entry.
+     */
     KoDocumentEntry result();
 
     /**
-     * Convenience function for using the dialog.
+     *  Convenience function for using the dialog.
      *
-     * @returns the KoDocumentEntry of the selected KOffice components
-     *          or an empty entry.
+     *  @returns the KoDocumentEntry of the selected KOffice components
+     *           or an empty entry.
      */
     static KoDocumentEntry selectPart();
 
 private:
+
     QValueList<KoDocumentEntry> m_lstEntries;
 };
 
