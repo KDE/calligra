@@ -56,6 +56,9 @@ struct View::View_Impl {
 
     ~View_Impl()
     {
+        if ( document->activeCursor() == cursor ) {
+            document->setActiveCursor( 0 );
+        }
         delete cursor;
     }
 
