@@ -560,7 +560,9 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
 
         if ( m_autoChangeFormat && index > 3)
         {
-            doAutoChangeFormat( textEditCursor, parag,index, word, txtObj );
+            KCommand *cmd =doAutoChangeFormat( textEditCursor, parag,index, word, txtObj );
+            if ( cmd )
+                txtObj->emitNewCommand( cmd );
 
         }
         if ( m_autoDetectUrl && index > 0 )
@@ -568,17 +570,33 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
             doAutoDetectUrl( textEditCursor, parag,index, word, txtObj );
         }
         if ( m_autoReplaceNumber )
-            doAutoReplaceNumber( textEditCursor, parag, index, word, txtObj );
+        {
+            KCommand *cmd = doAutoReplaceNumber( textEditCursor, parag, index, word, txtObj );
+            if ( cmd )
+                txtObj->emitNewCommand( cmd );
+        }
     }
 
     if( ch =='\n' )
     {
         if( m_removeSpaceBeginEndLine && index > 1)
-            doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj );
+        {
+            KCommand *cmd =doRemoveSpaceBeginEndLine( textEditCursor, parag, txtObj );
+            if ( cmd )
+                txtObj->emitNewCommand( cmd );
+        }
         if( m_useBulletStyle  && index > 3)
-            doUseBulletStyle( textEditCursor, parag, txtObj, index );
+        {
+            KCommand *cmd =doUseBulletStyle( textEditCursor, parag, txtObj, index );
+            if ( cmd )
+                txtObj->emitNewCommand( cmd );
+        }
         if( m_useAutoNumberStyle && index > 3 )
-            doUseNumberStyle( textEditCursor, parag, txtObj, index );
+        {
+            KCommand *cmd =doUseNumberStyle( textEditCursor, parag, txtObj, index );
+            if ( cmd )
+                txtObj->emitNewCommand( cmd );
+        }
         if( m_convertUpperUpper && m_includeTwoUpperLetterException )
             doAutoIncludeUpperUpper(textEditCursor, parag, txtObj );
         if( m_convertUpperCase && m_includeAbbreviation )
@@ -627,17 +645,25 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
             delete macro;
 
         if( m_bAutoSuperScript && m_superScriptEntries.count()>0)
-            doAutoSuperScript( textEditCursor, parag, newPos, lastWord, txtObj  );
+        {
+            KCommand * cmd =doAutoSuperScript( textEditCursor, parag, newPos, lastWord, txtObj  );
+            if ( cmd )
+                txtObj->emitNewCommand( cmd);
+        }
 
 
     }
     if ( ch == '"' && m_typographicDoubleQuotes.replace )
     {
-        doTypographicQuotes( textEditCursor, parag, index,txtObj, true /*double quote*/ );
+        KCommand *cmd =doTypographicQuotes( textEditCursor, parag, index,txtObj, true /*double quote*/ );
+        if ( cmd )
+            txtObj->emitNewCommand( cmd);
     }
     else if ( ch == '\'' && m_typographicDoubleQuotes.replace )
     {
-        doTypographicQuotes( textEditCursor, parag, index,txtObj, false /* simple quote*/ );
+        KCommand *cmd =doTypographicQuotes( textEditCursor, parag, index,txtObj, false /* simple quote*/ );
+        if ( cmd )
+            txtObj->emitNewCommand( cmd);
     }
 }
 
@@ -701,7 +727,7 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
     return 0L;
 }
 
-void KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
+KCommand *KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
 {
     //kdDebug() << "KoAutoFormat::doTypographicQuotes" << endl;
     KoTextDocument * textdoc = parag->textDocument();
@@ -730,9 +756,9 @@ void KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTextPara
         else
             replacement = m_typographicSimpleQuotes.begin;
     }
-    txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,
+    return txtObj->replaceSelectionCommand( textEditCursor, replacement,
                               KoTextObject::HighlightSelection,
-                              i18n("Typographic quote") ));
+                                            i18n("Typographic quote") );
 }
 
 KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag *parag,
@@ -826,11 +852,11 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
     return cmd;
 }
 
-void KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
+KCommand * KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
 {
     unsigned int length = word.length();
     if ( length != 3 )
-        return;
+        return 0L;
     KoTextDocument * textdoc = parag->textDocument();
     int start = index - length;
     if( word == QString("1/2") || word == QString("1/4") || word == QString("3/4") )
@@ -849,14 +875,15 @@ void KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTextPara
         else if (word == QString("3/4") )
             replacement=QString("¾");
         QString cmdName=i18n("Autocorrect (replace 1/2... with ")+QString("½...)");
-        txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,
+        KCommand *cmd =txtObj->replaceSelectionCommand( textEditCursor, replacement,
                                                            KoTextObject::HighlightSelection,
-                                                                cmdName ));
+                                                                cmdName );
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
         txtObj->emitShowCursor();
+        return cmd;
     }
-
+    return 0L;
 }
 
 void KoAutoFormat::detectStartOfLink(const QString &word)
@@ -966,7 +993,7 @@ void KoAutoFormat::doAutoIncludeAbbreviation(KoTextCursor* /*textEditCursor*/, K
 }
 
 
-void KoAutoFormat::doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
+KCommand * KoAutoFormat::doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
 {
     bool underline = (word.at(0)=='_' && word.at(word.length()-1)=='_');
     bool bold = (word.at(0)=='*' && word.at(word.length()-1)=='*');
@@ -1004,14 +1031,15 @@ void KoAutoFormat::doAutoChangeFormat( KoTextCursor *textEditCursor, KoTextParag
             newFormat->setUnderline(true);
             macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::Underline , false,KoTextObject::HighlightSelection  ));
         }
-        txtObj->emitNewCommand(macro);
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
         txtObj->emitShowCursor();
+        return macro;
     }
+    return 0L;
 }
 
-void KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
+KCommand *KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
 {
     KoTextDocument * textdoc = parag->textDocument();
     KoTextCursor cursor( parag->document() );
@@ -1071,12 +1099,13 @@ void KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTextPar
         cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
         if(cmd)
             macroCmd->addCommand(cmd);
-        txtObj->emitNewCommand(macroCmd);
+        return macroCmd;
     }
+    return 0L;
 
 }
 
-void KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
+KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTextParag *parag, KoTextObject *txtObj, int& index )
 {
     KoTextDocument * textdoc = parag->textDocument();
     KoTextCursor cursor( parag->document() );
@@ -1135,13 +1164,14 @@ void KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTextPar
             cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
             if(cmd)
                 macroCmd->addCommand(cmd);
-            txtObj->emitNewCommand(macroCmd);
+            return macroCmd;
         }
     }
+    return 0L;
 }
 
 
-void KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
 {
     KoTextString *s = parag->string();
     bool refreshCursor=false;
@@ -1199,17 +1229,18 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTe
 
     if( refreshCursor)
     {
-        txtObj->emitNewCommand(macroCmd);
         txtObj->emitHideCursor();
         textEditCursor->setParag( parag->next() );
         //textEditCursor->cursorgotoRight();
         txtObj->emitShowCursor();
+        return macroCmd;
     }
     else
         delete macroCmd;
+    return 0L;
 }
 
-void KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
+KCommand *KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
 {
     KoAutoFormatEntryMap::Iterator it = m_superScriptEntries.begin();
     bool found = false;
@@ -1257,8 +1288,9 @@ void KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag 
         cursor.setIndex( start + word.length() -1 );
         textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
         newFormat->setVAlign(KoTextFormat::AlignSuperScript);
-        txtObj->emitNewCommand( txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::VAlign , false,KoTextObject::HighlightSelection  ));
+        return (txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::VAlign , false,KoTextObject::HighlightSelection  ));
     }
+    return 0L;
 }
 
 bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
