@@ -26,6 +26,7 @@
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
 #include <koDocumentInfo.h>
+#include <kofficeversion.h>
 
 #include <kspread_map.h>
 #include <kspread_sheet.h>
@@ -130,7 +131,9 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     str += "<meta http-equiv=\"Content-Type\" ";
     str += "content=\"text/html; charset=UTF-8\">\n";
     str += "<meta name=\"Generator\" ";
-    str += "content=\"KSpread HTML Export Filter Version = 0.2\">\n";
+    str += "content=\"KSpread HTML Export Filter Version = ";
+    str += KOFFICE_VERSION_STRING; 
+    str += "\">\n";
     // I have no idea where to get the document name from :-(  table->tableName()
     str += "<title>" + title + "</title>\n";
     str += "</head>\n";
