@@ -2328,8 +2328,9 @@ void KWView::editFind()
         m_searchEntry = new KoSearchContext();
     KWTextFrameSetEdit * edit = currentTextEdit();
     bool hasSelection = edit && edit->textFrameSet()->hasSelection();
+    bool hasCursor = edit != 0L;
 
-    KoSearchDia dialog( m_gui->canvasWidget(), "find", m_searchEntry, hasSelection );
+    KoSearchDia dialog( m_gui->canvasWidget(), "find", m_searchEntry, hasSelection, hasCursor );
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
@@ -2347,8 +2348,9 @@ void KWView::editReplace()
 
     KWTextFrameSetEdit * edit = currentTextEdit();
     bool hasSelection = edit && edit->textFrameSet()->hasSelection();
+    bool hasCursor = edit != 0L;
 
-    KoReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry, hasSelection );
+    KoReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry, hasSelection, hasCursor );
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
