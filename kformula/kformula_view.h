@@ -24,7 +24,7 @@
 class FormulaCursor;
 class KAction;
 class KFormulaDoc;
-class KFormulaView;
+class KFormulaPartView;
 class KFormulaWidget;
 class KSelectAction;
 class QPaintEvent;
@@ -37,13 +37,13 @@ class QScrollView;
 /**
  * The parts view.
  */
-class KFormulaView : public KoView
+class KFormulaPartView : public KoView
 {
     Q_OBJECT
 
 public:
-    KFormulaView(KFormulaDoc* _doc, QWidget* _parent=0, const char* _name=0);
-    virtual ~KFormulaView();
+    KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent=0, const char* _name=0);
+    virtual ~KFormulaPartView();
 
     virtual void setupPrinter( QPrinter &printer );
     virtual void print( QPrinter &printer );

@@ -98,7 +98,7 @@ bool KFormulaDoc::loadXML(QIODevice *, const QDomDocument& doc)
 
 KoView* KFormulaDoc::createViewInstance(QWidget* _parent, const char *name)
 {
-    return new KFormulaView(this, _parent, name);
+    return new KFormulaPartView(this, _parent, name);
 }
 
 void KFormulaDoc::commandExecuted()

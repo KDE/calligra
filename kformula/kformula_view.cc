@@ -40,7 +40,7 @@
 #include "matrixwidget.h"
 
 
-KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _name)
+KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const char* _name)
         : KoView( _doc, _parent, _name ), m_pDoc(_doc)
 {
 //    setWidget( this );
@@ -307,27 +307,27 @@ KFormulaView::KFormulaView(KFormulaDoc* _doc, QWidget* _parent, const char* _nam
 }
 
 
-KFormulaView::~KFormulaView()
+KFormulaPartView::~KFormulaPartView()
 {
     delete mn_indexList;
 }
 
-void KFormulaView::focusInEvent(QFocusEvent*)
+void KFormulaPartView::focusInEvent(QFocusEvent*)
 {
     // After saving the focus doesn't come back to the formulaWidget
     // so the cursor is not shown. (very bad)
-    //cerr << "KFormulaView::focusInEvent(QFocusEvent*)\n";
+    //cerr << "KFormulaPartView::focusInEvent(QFocusEvent*)\n";
     formulaWidget->setFocus();
 }
 
-void KFormulaView::updateReadWrite(bool readwrite)
+void KFormulaPartView::updateReadWrite(bool readwrite)
 {
     formulaWidget->setReadOnly(!readwrite);
     setEnabled(readwrite);
 }
 
 
-void KFormulaView::setEnabled(bool enabled)
+void KFormulaPartView::setEnabled(bool enabled)
 {
     addBracketAction->setEnabled(enabled);
     addFractionAction->setEnabled(enabled);
@@ -344,13 +344,13 @@ void KFormulaView::setEnabled(bool enabled)
     removeEnclosingAction->setEnabled(enabled);
 }
 
-void KFormulaView::resizeEvent( QResizeEvent * )
+void KFormulaPartView::resizeEvent( QResizeEvent * )
 {
     scrollview->setGeometry(0, 0, width(), height());
 }
 
 
-// void KFormulaView::slotTypeChanged( const BasicElement *elm)
+// void KFormulaPartView::slotTypeChanged( const BasicElement *elm)
 // {
 
 // //    actionElement_Font_Element->setEnabled(false);
@@ -454,7 +454,7 @@ void KFormulaView::resizeEvent( QResizeEvent * )
 //}
 
 
-void KFormulaView::modifyMatrix(QString str)
+void KFormulaPartView::modifyMatrix(QString str)
 {
 //     int x,y,old;
 //     BasicElement *el=m_pDoc->currentElement();
@@ -481,7 +481,7 @@ void KFormulaView::modifyMatrix(QString str)
 }
 
 
-void KFormulaView::reduce()
+void KFormulaPartView::reduce()
 {
 //     if(m_pDoc->currentElement()==0) 
 //       return;
@@ -501,7 +501,7 @@ void KFormulaView::reduce()
 //     update();
 }
 
-void KFormulaView::enlarge()
+void KFormulaPartView::enlarge()
 {
 //     if(m_pDoc->currentElement()==0) 
 //       return;
@@ -526,7 +526,7 @@ void KFormulaView::enlarge()
 }
 
 
-void KFormulaView::fractionAlignM()
+void KFormulaPartView::fractionAlignM()
 {
 //   if(!((KToggleAction*)actionElement_Fraction_VA_M)->isChecked())
 //       if( (((KToggleAction*)actionElement_Fraction_VA_D)->isChecked())
@@ -544,7 +544,7 @@ void KFormulaView::fractionAlignM()
 //     update();
 }
 
-void KFormulaView::fractionAlignU()
+void KFormulaPartView::fractionAlignU()
 {
 //     if(!((KToggleAction*)actionElement_Fraction_VA_U)->isChecked())
 //     if( (((KToggleAction*)actionElement_Fraction_VA_D)->isChecked())
@@ -562,7 +562,7 @@ void KFormulaView::fractionAlignU()
 //     update();
 }
 
-void KFormulaView::fractionAlignD()
+void KFormulaPartView::fractionAlignD()
 {
 //     if(!((KToggleAction*)actionElement_Fraction_VA_D)->isChecked())
 //     if( (((KToggleAction*)actionElement_Fraction_VA_M)->isChecked())
@@ -579,7 +579,7 @@ void KFormulaView::fractionAlignD()
 //     update();
 }
 
-void KFormulaView::fractionAlignL()
+void KFormulaPartView::fractionAlignL()
 {
 //     QString content=m_pDoc->currentElement()->getContent();
 //     content[2]='L';
@@ -590,7 +590,7 @@ void KFormulaView::fractionAlignL()
 //     update();
 }
 
-void KFormulaView::fractionAlignR()
+void KFormulaPartView::fractionAlignR()
 {
 //     QString content=m_pDoc->currentElement()->getContent();
 //     content[2]='R';
@@ -601,7 +601,7 @@ void KFormulaView::fractionAlignR()
 //     update();
 }
 
-void KFormulaView::fractionAlignC()
+void KFormulaPartView::fractionAlignC()
 {
 //     QString content=m_pDoc->currentElement()->getContent();
 //     content[2]='C';
@@ -612,12 +612,12 @@ void KFormulaView::fractionAlignC()
 //     update();
 }
 
-void KFormulaView::fractionDist()
+void KFormulaPartView::fractionDist()
 {
 
 }
 
-void KFormulaView::fractionDistMore()
+void KFormulaPartView::fractionDistMore()
 {
 //     QString content=m_pDoc->currentElement()->getContent();
  
@@ -630,7 +630,7 @@ void KFormulaView::fractionDistMore()
 //     update();
 }
 
-void KFormulaView::fractionDistLess()
+void KFormulaPartView::fractionDistLess()
 {
 //     QString content=m_pDoc->currentElement()->getContent();
 //     int space=content.right(content.length()-3).toInt()-1;
@@ -645,7 +645,7 @@ void KFormulaView::fractionDistLess()
 //     update();
 }
 
-void KFormulaView::fontSwitch()
+void KFormulaPartView::fontSwitch()
 {
 //   if(m_vToolBarFont->isButtonOn(m_idButtonFont_2)) warning("element");
 //    if(m_vToolBarFont->isButtonOn(m_idButtonFont_3)) warning("index");
@@ -653,7 +653,7 @@ void KFormulaView::fontSwitch()
 //    if(m_vToolBarFont->isButtonOn(m_idButtonFont_5)) warning("next");
 }
 
-void KFormulaView::bold(bool b)
+void KFormulaPartView::bold(bool b)
 {
 //     BasicElement *el=m_pDoc->currentElement();
 //     if (el==0)
@@ -667,7 +667,7 @@ void KFormulaView::bold(bool b)
 //     update();
 }
 
-void KFormulaView::italic(bool b)
+void KFormulaPartView::italic(bool b)
 {
 //     BasicElement *el=m_pDoc->currentElement();
 //     if (el==0)
@@ -681,7 +681,7 @@ void KFormulaView::italic(bool b)
 //     update();
 }
 
-void KFormulaView::underline(bool b)
+void KFormulaPartView::underline(bool b)
 {
 //    BasicElement *el=m_pDoc->currentElement();
 //     if (el==0)
@@ -695,14 +695,14 @@ void KFormulaView::underline(bool b)
 //     update();
 }
 
-void KFormulaView::indexList()
+void KFormulaPartView::indexList()
 {
 //     //kdDebug(39001)<<"index\n";
 //     QPoint pnt(QCursor::pos());
 //     mn_indexList->popup(pnt);
 }
 
-void KFormulaView::sizeSelected(int size)
+void KFormulaPartView::sizeSelected(int size)
 {
 //     BasicElement *el=m_pDoc->currentElement();
 //     if (el==0)
@@ -712,7 +712,7 @@ void KFormulaView::sizeSelected(int size)
 //     update();
 }
 
-void KFormulaView::fontSelected( const QString& font)
+void KFormulaPartView::fontSelected( const QString& font)
 {
 
 //     BasicElement *el=m_pDoc->currentElement();
@@ -730,17 +730,17 @@ void KFormulaView::fontSelected( const QString& font)
 //     update();
 }
 
-void KFormulaView::modeSelected(char *)
+void KFormulaPartView::modeSelected(char *)
 {
     kdDebug(39001) <<"mode\n";
 }
 
-void KFormulaView::textFont()
+void KFormulaPartView::textFont()
 {
     kdDebug(39001) <<"Slot textFont\n";
 }
 
-void KFormulaView::textSplit()
+void KFormulaPartView::textSplit()
 {
     kdDebug(39001) <<"Slot textSplit\n";
 
@@ -759,29 +759,29 @@ void KFormulaView::textSplit()
 
 }
 
-void KFormulaView::togglePixmap()
+void KFormulaPartView::togglePixmap()
 {
     kdDebug(39001) <<"Slot togglePixmap\n";
 }
 
-void KFormulaView::integralLower()
+void KFormulaPartView::integralLower()
 {
     kdDebug(39001) <<"Slot integralLower\n";
     //m_pDoc->addChild(2);
 }
 
-void KFormulaView::integralHigher()
+void KFormulaPartView::integralHigher()
 {
     kdDebug(39001) <<"Slot integralHigher\n";
     //m_pDoc->addChild(1);
 }
 
-void KFormulaView::bracketType()
+void KFormulaPartView::bracketType()
 {
     kdDebug(39001) <<"Slot bracketType\n";
 }
 
-void KFormulaView::matrixSet()
+void KFormulaPartView::matrixSet()
 {
 //     MatrixSetupWidget *ms=new MatrixSetupWidget();
 //     ms->setString(m_pDoc->currentElement()->getContent());
@@ -789,32 +789,32 @@ void KFormulaView::matrixSet()
 //     ms->show();
 }
 
-void KFormulaView::matrixRemRow()
+void KFormulaPartView::matrixRemRow()
 {
     kdDebug(39001) <<"Slot matrixRemRow\n";
 }
 
-void KFormulaView::matrixRemCol()
+void KFormulaPartView::matrixRemCol()
 {
     kdDebug(39001) <<"Slot matrixRemCol\n";
 }
 
-void KFormulaView::matrixInsRow()
+void KFormulaPartView::matrixInsRow()
 {
     kdDebug(39001) <<"Slot matrixInsRow\n";
 }
 
-void KFormulaView::matrixInsCol()
+void KFormulaPartView::matrixInsCol()
 {
     kdDebug(39001) <<"Slot matrixInsCol\n";
 }
 
-void KFormulaView::fractionHAlign()
+void KFormulaPartView::fractionHAlign()
 {
     kdDebug(39001) <<"Slot fractionHAlign\n";
 }
 
-void KFormulaView::toggleMidline()
+void KFormulaPartView::toggleMidline()
 {
 //     kdDebug(39001) <<"Slot toggleMidline\n";
 //     QString content=m_pDoc->currentElement()->getContent();
@@ -825,46 +825,46 @@ void KFormulaView::toggleMidline()
 //     update();
 }
 
-void KFormulaView::symbolType()
+void KFormulaPartView::symbolType()
 {
     kdDebug(39001) <<"Slot symbolType\n";
 }
 
-void KFormulaView::DecorationType()
+void KFormulaPartView::DecorationType()
 {
     kdDebug(39001) <<"Slot decorationType\n";
 }
 
-void KFormulaView::remove()
+void KFormulaPartView::remove()
 {
     kdDebug(39001) <<"Slot remove\n";
 }
 
-void KFormulaView::elementColor()
+void KFormulaPartView::elementColor()
 {
     kdDebug(39001) <<"Slot elementColor\n";
 }
 
-void KFormulaView::generalColor()
+void KFormulaPartView::generalColor()
 {
     kdDebug(39001) <<"Slot generalColor\n";
 }
 
-void KFormulaView::generalFont()
+void KFormulaPartView::generalFont()
 {
     kdDebug(39001) <<"Slot generalFont\n";
 }
 
-void KFormulaView::setupPrinter(QPrinter&)
+void KFormulaPartView::setupPrinter(QPrinter&)
 {
 }
 
-void KFormulaView::print(QPrinter& printer)
+void KFormulaPartView::print(QPrinter& printer)
 {
     m_pDoc->getFormula()->print(printer);
 }
 
-void KFormulaView::cursorChanged(bool visible, bool selecting)
+void KFormulaPartView::cursorChanged(bool visible, bool selecting)
 {
     cutAction->setEnabled(visible && selecting);
     copyAction->setEnabled(visible && selecting);
