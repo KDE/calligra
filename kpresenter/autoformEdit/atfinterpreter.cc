@@ -28,6 +28,54 @@ const char ATFInterpreter::Y_BG[]     = "Y {";
 const char ATFInterpreter::ATTR_BG[]  = "ATTRIB {";
 const char ATFInterpreter::END[]       = "}";
 
+  // fields
+const int ATFInterpreter::ST_WIDTH    = 1;
+const int ATFInterpreter::ST_HEIGHT   = 2;
+const int ATFInterpreter::ST_VARIABLE = 3;
+const int ATFInterpreter::ST_NUMBER   = 4;
+const int ATFInterpreter::ST_OPERATOR = 5;
+
+  // operators
+const char ATFInterpreter::OP_EQUAL   = '=';
+const char ATFInterpreter::OP_PLUS    = '+';
+const char ATFInterpreter::OP_MINUS   = '-';
+const char ATFInterpreter::OP_MULT    = '*';
+const char ATFInterpreter::OP_DIV     = '/';
+const char ATFInterpreter::COMMENT    = '#';
+
+  // allowed variables
+const char ATFInterpreter::VAR_1      = 'a';
+const char ATFInterpreter::VAR_2      = 'b';
+const char ATFInterpreter::VAR_3      = 'c';
+const char ATFInterpreter::VAR_4      = 'd';
+const char ATFInterpreter::VAR_5      = 'e';
+const char ATFInterpreter::VAR_6      = 'f';
+const char ATFInterpreter::VAR_X      = 'x';
+const char ATFInterpreter::VAR_Y      = 'y';
+const char ATFInterpreter::VAR_VARIA  = 'v';
+const char ATFInterpreter::VAR_PW     = 'p';
+const char ATFInterpreter::VAR_W      = 'w';
+const char ATFInterpreter::VAR_H      = 'h';
+
+  // level (depth) of the syntax
+const int ATFInterpreter::LEVEL_NULL  = 0;
+const int ATFInterpreter::LEVEL_POINT = 1;
+const int ATFInterpreter::LEVEL_X     = 2;
+const int ATFInterpreter::LEVEL_Y     = 3;
+const int ATFInterpreter::LEVEL_ATTR  = 4;
+
+  // numbers
+const char ATFInterpreter::NUM_0      = '0';
+const char ATFInterpreter::NUM_1      = '1';
+const char ATFInterpreter::NUM_2      = '2';
+const char ATFInterpreter::NUM_3      = '3';
+const char ATFInterpreter::NUM_4      = '4';
+const char ATFInterpreter::NUM_5      = '5';
+const char ATFInterpreter::NUM_6      = '6';
+const char ATFInterpreter::NUM_7      = '7';
+const char ATFInterpreter::NUM_8      = '8';
+const char ATFInterpreter::NUM_9      = '9';
+
 /******************************************************************/
 /* class ATFInterpreter                                           */
 /******************************************************************/

@@ -93,19 +93,19 @@ public:
 protected:
 
   // fields
-  static const int ST_WIDTH    = 1;
-  static const int ST_HEIGHT   = 2;
-  static const int ST_VARIABLE = 3;
-  static const int ST_NUMBER   = 4;
-  static const int ST_OPERATOR = 5;
+  static const int ST_WIDTH;
+  static const int ST_HEIGHT;
+  static const int ST_VARIABLE;
+  static const int ST_NUMBER;
+  static const int ST_OPERATOR;
 
   // operators
-  static const char OP_EQUAL   = '=';
-  static const char OP_PLUS    = '+';
-  static const char OP_MINUS   = '-';
-  static const char OP_MULT    = '*';
-  static const char OP_DIV     = '/';
-  static const char COMMENT    = '#';
+  static const char OP_EQUAL;
+  static const char OP_PLUS;
+  static const char OP_MINUS;
+  static const char OP_MULT;
+  static const char OP_DIV;
+  static const char COMMENT;
 
   // block (structure) beginnings - ends
   static const char PNT_BG[];
@@ -115,37 +115,37 @@ protected:
   static const char END[];
 
   // allowed variables
-  static const char VAR_1      = 'a';
-  static const char VAR_2      = 'b';
-  static const char VAR_3      = 'c';
-  static const char VAR_4      = 'd';
-  static const char VAR_5      = 'e';
-  static const char VAR_6      = 'f';
-  static const char VAR_X      = 'x';
-  static const char VAR_Y      = 'y';
-  static const char VAR_VARIA  = 'v';
-  static const char VAR_PW     = 'p';
-  static const char VAR_W      = 'w';
-  static const char VAR_H      = 'h';
+  static const char VAR_1;
+  static const char VAR_2;
+  static const char VAR_3;
+  static const char VAR_4;
+  static const char VAR_5;
+  static const char VAR_6;
+  static const char VAR_X;
+  static const char VAR_Y;
+  static const char VAR_VARIA;
+  static const char VAR_PW;
+  static const char VAR_W;
+  static const char VAR_H;
 
   // level (depth) of the syntax
-  static const int LEVEL_NULL  = 0;
-  static const int LEVEL_POINT = 1;
-  static const int LEVEL_X     = 2;
-  static const int LEVEL_Y     = 3;
-  static const int LEVEL_ATTR  = 4;
+  static const int LEVEL_NULL;
+  static const int LEVEL_POINT;
+  static const int LEVEL_X;
+  static const int LEVEL_Y;
+  static const int LEVEL_ATTR;
 
   // numbers
-  static const char NUM_0      = '0';
-  static const char NUM_1      = '1';
-  static const char NUM_2      = '2';
-  static const char NUM_3      = '3';
-  static const char NUM_4      = '4';
-  static const char NUM_5      = '5';
-  static const char NUM_6      = '6';
-  static const char NUM_7      = '7';
-  static const char NUM_8      = '8';
-  static const char NUM_9      = '9';
+  static const char NUM_0;
+  static const char NUM_1;
+  static const char NUM_2;
+  static const char NUM_3;
+  static const char NUM_4;
+  static const char NUM_5;
+  static const char NUM_6;
+  static const char NUM_7;
+  static const char NUM_8;
+  static const char NUM_9;
 
   // structure of coordinates
   struct Coord
