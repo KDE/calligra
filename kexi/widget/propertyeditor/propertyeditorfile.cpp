@@ -38,9 +38,9 @@ PropertyEditorFile::PropertyEditorFile(QWidget *parent, KexiProperty *property, 
 	m_lineedit = new KLineEdit(this);
 	m_lineedit->resize(width(), height());
 
-	m_button = new KPushButton(i18n("..."), this);
-	m_button->resize(height()-10, height()-15);
-	m_button->move(width() - height() -2, 2);
+	m_button = new KPushButton(i18n(" ... "), this);
+	m_button->resize(height(), height()-15);
+	m_button->move(width() - m_button->width() -1, 2);
 	
 	m_lineedit->setText(property->value().toString());
 	m_lineedit->show();
@@ -78,7 +78,7 @@ void
 PropertyEditorFile::resizeEvent(QResizeEvent *ev)
 {
 	m_lineedit->resize(ev->size());
-	m_button->move(ev->size().width() - ev->size().height() -2, 2);
+	m_button->move(ev->size().width() - m_button->width()-1, 2);
 }
 
 

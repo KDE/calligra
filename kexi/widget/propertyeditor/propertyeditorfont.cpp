@@ -39,9 +39,9 @@ PropertyEditorFont::PropertyEditorFont(QWidget *parent, KexiProperty *property, 
 	m_label = new QLabel(this);
 	m_label->resize(width(), height());
 
-	m_button = new KPushButton(i18n("..."), this);
-	m_button->resize(height()-10, height()-15);
-	m_button->move(width() - height() -2, 2);
+	m_button = new KPushButton(i18n(" ... "), this);
+	m_button->resize(height(), height()-15);
+	m_button->move(width() - m_button->width(), 2);
 	
 	m_label->setText(m_font.family() + " " + QString::number(m_font.pointSize()) );
 	m_label->setBackgroundMode(Qt::PaletteBase);
@@ -76,7 +76,7 @@ void
 PropertyEditorFont::resizeEvent(QResizeEvent *ev)
 {
 	m_label->resize(ev->size());
-	m_button->move(ev->size().width() - ev->size().height() -2, 2);
+	m_button->move(ev->size().width() - m_button->width(), 2);
 }
 
 

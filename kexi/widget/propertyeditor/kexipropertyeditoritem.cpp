@@ -24,7 +24,9 @@
 #include <qfont.h>
 #include <qpoint.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
+#include <kglobal.h>
 #include <klocale.h>
 
 #include "kexipropertyeditoritem.h"
@@ -33,6 +35,7 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, KexiProperty *
  : KListViewItem(parent, property->name(), format(property->value()))
 {
 	m_value = property->value();
+	m_oldvalue = m_value;
 	m_property=property;
 	m_childprop = 0;
 	m_children = 0;
@@ -133,26 +136,49 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 		{
 			case QVariant::Pixmap:
 			{
+				p->eraseRect(0,0,width,height());
 				p->drawPixmap(1, 1, m_value.toPixmap());
-				return;
+				break;
 			}
 			case QVariant::Color:
 			{
+				p->eraseRect(0,0,width,height());
 				QColor ncolor = m_value.toColor();
 				p->setBrush(ncolor);
 				p->drawRect(2, 2, width - 2, height() - 2);
 				QColorGroup nGroup(cg);
-				return;
+				break;
 			}
-
+			case QVariant::Bool:
+			{
+				p->eraseRect(0,0,width,height());
+				if(m_value.toBool())
+				{
+					p->drawPixmap(1, 1, SmallIcon("button_ok"));
+					p->drawText(20, height() -3, i18n("True"));
+				}
+				else
+				{
+					p->drawPixmap(1, 1, SmallIcon("button_cancel"));
+					p->drawText(20, height()-3, i18n("False"));
+				}
+				break;
+			}
+			
 			default:
 			{
 				KListViewItem::paintCell(p, cg, column, width, align);
-				return;
+				break;
 			}
 		}
 	}
+	else
+	{
 	KListViewItem::paintCell(p, cg, column, width, align);
+	}
+	p->setBrush(Qt::lightGray);
+	//p->drawLine(0, height(), width, height() );
+	//p->drawLine(width, 0, width, height());
 }
 
 
@@ -189,6 +215,11 @@ KexiPropertyEditorItem::format(const QVariant &v)
 		{
 			QFont f = v.toFont();
 			return QString(f.family() + " " + QString::number(f.pointSize()));
+		}
+		case QVariant::Double:
+		{
+			QString s = KGlobal::locale()->formatNumber(v.toDouble());
+			return s;
 		}
 		default:
 		{

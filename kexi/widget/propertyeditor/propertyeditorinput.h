@@ -20,12 +20,13 @@
 #ifndef PROPERTYEDITORINPUT_H
 #define PROPERTYEDITORINPUT_H
 
+#include <knuminput.h>
+
 #include "kexipropertysubeditor.h"
 
 class QLineEdit;
-class KDoubleSpinBox;
-class KIntSpinBox;
 class KexiProperty;
+class KPushButton;
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEditor
 {
@@ -46,6 +47,15 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEdit
 
 //INT
 
+class KEXIPROPERTYEDITOR_EXPORT PropIntSpinBox : public KIntSpinBox
+{
+	Q_OBJECT
+	
+	public:
+	PropIntSpinBox(int lower, int upper, int step, int value, int base, QWidget *parent, const char *name);
+	~PropIntSpinBox() {;}
+};
+
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEditor
 {
 	Q_OBJECT
@@ -65,6 +75,14 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEdito
 
 
 //DOUBLE
+class KEXIPROPERTYEDITOR_EXPORT PropDoubleSpinBox : public KDoubleSpinBox
+{
+	Q_OBJECT
+	
+	public:
+	PropDoubleSpinBox(QWidget *parent);
+	~PropDoubleSpinBox() {;}
+};
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEditor
 {
@@ -81,6 +99,25 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEd
 
 	protected:
 		KDoubleSpinBox		*m_spinBox;
+};
+
+//BOOL EDITOR
+
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorBool : public KexiPropertySubEditor
+{
+	Q_OBJECT
+
+	public:
+		PropertyEditorBool(QWidget *parent, KexiProperty *property, const char *name=0);
+		~PropertyEditorBool() {;}
+
+		virtual QVariant	getValue();
+		
+	protected slots:
+		void			setState(bool state);
+		
+	protected:
+		KPushButton		*m_toggle;
 };
 
 #endif

@@ -16,9 +16,14 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include <qiconset.h>
 
 #include <klineedit.h>
 #include <knuminput.h>
+#include <kpushbutton.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
 #include <kdebug.h>
 
@@ -53,10 +58,17 @@ PropertyEditorInput::getValue()
 
 //INT
 
+PropIntSpinBox::PropIntSpinBox(int lower, int upper, int step, int value, int base=10, QWidget *parent=0, const char *name=0) 
+: KIntSpinBox(lower, upper, step, value, base, parent, name)
+{
+	editor()->setAlignment(Qt::AlignLeft);
+}
+
+
 PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent,property, name)
 {
-	m_spinBox = new KIntSpinBox(0,50000, 1, 0, 10, this);
+	m_spinBox = new PropIntSpinBox(0,50000, 1, 0, 10, this);
 	m_spinBox->resize(width(), height());
 	m_spinBox->setValue(property->value().toInt());
 	m_spinBox->show();
@@ -79,10 +91,17 @@ PropertyEditorSpin::valueChange(int)
 
 //DOUBLE
 
+PropDoubleSpinBox::PropDoubleSpinBox(QWidget *parent=0) 
+: KDoubleSpinBox(parent)
+{
+	editor()->setAlignment(Qt::AlignLeft);
+}
+
+
 PropertyEditorDblSpin::PropertyEditorDblSpin(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
-	m_spinBox = new KDoubleSpinBox(this);
+	m_spinBox = new PropDoubleSpinBox(this);
 	m_spinBox->resize(width(), height());
 	m_spinBox->setValue(property->value().toDouble());
 	m_spinBox->show();
@@ -103,5 +122,52 @@ PropertyEditorDblSpin::valueChange(int)
 	emit changed(this);
 }
 
+
+/*********************
+ * BOOL-EDITOR       *
+ *********************/
+
+PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, const char *name)
+ : KexiPropertySubEditor(parent, property, name)
+{
+	m_toggle = new KPushButton(this);
+	m_toggle->setToggleButton(true);
+	m_toggle->resize(width(), height());
+	
+	connect(m_toggle, SIGNAL(toggled(bool)), this, SLOT(setState(bool)));
+	if(property->value().toBool())
+		m_toggle->setOn(true);
+	else
+	{
+		m_toggle->toggle();
+		m_toggle->setOn(false);
+	}
+	
+	m_toggle->show();
+	setWidget(m_toggle);
+}
+
+QVariant
+PropertyEditorBool::getValue()
+{
+	return QVariant(m_toggle->isOn(), 3);
+}
+
+void
+PropertyEditorBool::setState(bool state)
+{
+	if(state)
+	{
+		m_toggle->setIconSet(QIconSet(SmallIcon("button_ok")));
+		m_toggle->setText(i18n("True"));
+	}
+	else
+	{
+		m_toggle->setIconSet(QIconSet(SmallIcon("button_cancel")));
+		m_toggle->setText(i18n("False"));
+	}
+
+	emit changed(this);
+}
 
 #include "propertyeditorinput.moc"

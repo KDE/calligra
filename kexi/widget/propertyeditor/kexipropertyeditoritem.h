@@ -39,12 +39,15 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		const QString	name() { return m_property->name(); }
 		QVariant::Type	type() { return m_property->type(); }
 		QVariant	value() { return m_value; }
+		QVariant	oldValue() { return m_oldvalue; }
 		KexiProperty*	property() { return m_property;}
 
 		void		setValue(QVariant value);
 		QVariant	getComposedValue();
 
 		static QString	format(const QVariant &s);
+		
+		bool		modified() { return !(m_value==m_oldvalue);}
 
 	protected slots:
 		void childChanged(KexiPropertyEditorItem *item);
@@ -54,6 +57,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 
 	private:
 		QVariant	m_value;
+		QVariant	m_oldvalue;
 		KexiProperty	*m_property;
 		QPtrList<KexiProperty>	*m_childprop;
 		ChildDict	*m_children;

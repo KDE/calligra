@@ -23,6 +23,8 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kpushbutton.h>
+#include <kiconloader.h>
 
 #include "kexipropertyeditoritem.h"
 #include "kexipropertybuffer.h"
@@ -41,17 +43,22 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, con
 	addColumn(i18n("Value"), 100);
 
 	m_currentEditor = 0;
+	m_buffer = 0;
 	m_returnToAccept = returnToAccept;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
 
-	m_buffer = 0;
+	m_defaults = new KPushButton(this);
+	m_defaults->setPixmap(SmallIcon("reload"));
+	m_defaults->hide();
+	connect(m_defaults, SIGNAL(clicked()), this, SLOT(resetItem()));
 	
 	QColorGroup cg = this->colorGroup();
 //	setAlternateBackground(cg.highlight().light(120));
 	setFullWidth(true);
 	setRootIsDecorated(true);
+	setShowSortIndicator(true);
 }
 
 
@@ -76,6 +83,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 	{
 		m_editItem->setValue(m_currentEditor->getValue());
 		delete m_currentEditor;
+		m_defaults->hide();
 	}
 
 	KexiPropertySubEditor *editor=0;
@@ -135,11 +143,25 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 
 	connect(editor, SIGNAL(changed(KexiPropertySubEditor *)), this,
 		SLOT(slotValueChanged(KexiPropertySubEditor *)));
+	if(!i->modified())
+	{
 	editor->setGeometry(geometry);
 	editor->resize(geometry.width(), geometry.height());
+	}
+	else
+	{
+	kdDebug() << "modified editor" << endl;
+	m_defaults->resize(geometry.height(), geometry.height());
+	QPoint p = viewport()->mapTo(this, QPoint(geometry.x() + geometry.width() - m_defaults->width(), geometry.y()));
+	m_defaults->move(p.x(), p.y());
+	editor->resize(geometry.width()-m_defaults->width(), geometry.height());
+	m_defaults->show();
+	}
 	editor->show();
 	addChild(editor);
 	moveChild(editor, geometry.x(), geometry.y());
+	
+	editor->setFocus();
 
 	m_currentEditor = editor;
 	m_editItem = i;
@@ -175,6 +197,7 @@ KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
 	if(m_currentEditor)
 	{
 		m_currentEditor->hide();
+		m_currentEditor->setFocusPolicy(QWidget::NoFocus);
 	}
 }
 
@@ -182,6 +205,7 @@ void
 KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor *editor)
 {
 	editor->hide();
+	editor->setFocusPolicy(QWidget::NoFocus);
 }
 
 void
@@ -236,6 +260,12 @@ KexiPropertyEditor::fill()
 	}
 }
 
+void
+KexiPropertyEditor::resetItem()
+{
+	if(m_editItem)
+		m_editItem->setValue(m_editItem->oldValue());
+}
 
 
 KexiPropertyEditor::~KexiPropertyEditor()

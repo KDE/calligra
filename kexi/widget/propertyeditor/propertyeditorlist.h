@@ -26,7 +26,7 @@
 
 #include "kexipropertysubeditor.h"
 
-class QComboBox;
+class KComboBox;
 class QStringList;
 class KexiProperty;
 
@@ -46,18 +46,9 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEdito
 		void valueChanged();
 
 	protected:
-		QComboBox		*m_combo;
+		KComboBox		*m_combo;
 };
 
-class KEXIPROPERTYEDITOR_EXPORT PropertyEditorBool : public PropertyEditorList
-{
-	Q_OBJECT
 
-	public:
-		PropertyEditorBool(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorBool() {;}
-
-		virtual QVariant	getValue();
-};
 
 #endif

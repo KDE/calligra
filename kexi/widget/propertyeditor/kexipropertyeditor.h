@@ -28,6 +28,7 @@ class KexiProperty;
 class KexiPropertyBuffer;
 class KexiPropertyEditorItem;
 class KexiPropertySubEditor;
+class KPushButton;
 
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 {
@@ -45,6 +46,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 	public slots:
 		void	slotClicked(QListViewItem *i);
+		void    resetItem();
 
 	protected slots:
 		void	slotEditorAccept(KexiPropertySubEditor *editor);
@@ -61,6 +63,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		KexiPropertyEditorItem	*m_editItem;
 		bool 			m_returnToAccept;
 		KexiPropertyBuffer	*m_buffer;
+		KPushButton		*m_defaults;
 };
 
 #endif

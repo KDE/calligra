@@ -17,8 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qcombobox.h>
-
+#include <kcombobox.h>
 #include <klocale.h>
 
 #include "propertyeditorlist.h"
@@ -27,10 +26,12 @@
 PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
-	m_combo = new QComboBox(this);
+	m_combo = new KComboBox(this);
 
 	m_combo->setFocusPolicy(QWidget::StrongFocus);
 	m_combo->setGeometry(frameGeometry());
+	m_combo->setEditable(true);
+	m_combo->setAutoCompletion(true);
 	if(property->list())
 	{
 	m_combo->insertStringList(*(property->list()));
@@ -58,31 +59,6 @@ void
 PropertyEditorList::valueChanged()
 {
 	emit changed(this);
-}
-
-/*********************
- * BOOL-EDITOR       *
- *********************/
-
-PropertyEditorBool::PropertyEditorBool(QWidget *parent, KexiProperty *property, const char *name)
- : PropertyEditorList(parent, property, name)
-{
-	m_combo->insertItem(i18n("True"));
-	m_combo->insertItem(i18n("False"));
-
-	if(property->value().toBool())
-		m_combo->setCurrentItem(0);
-	else
-		m_combo->setCurrentItem(1);
-}
-
-QVariant
-PropertyEditorBool::getValue()
-{
-	if(m_combo->currentItem() == 0)
-		return QVariant(true, 1);
-	else
-		return QVariant(false, 1);
 }
 
 #include "propertyeditorlist.moc"
