@@ -35,12 +35,11 @@ will appear.  Select <guimenuitem>Paragraph...</guimenuitem>.</para>
 </itemizedlist>
 <para>A dialog will appear.</para>
 
-<para>The <guilabel>Paragraph Settings</guilabel> dialog consists of six tabbed sections
+<para>The <guilabel>Paragraph Settings</guilabel> dialog consists of five tabbed sections
 labeled <link linkend="indents-and-spaces">Indent and Spacing</link>, <link
 linkend="para-aligns">Aligns</link>, <link linkend="para-borders">Borders</link>,
-<link linkend="para-bullets-and-numbers">Bullets/Numbering</link>, 
-<link linkend="tab-stops">Tabulators</link>, and <link
-linkend="para-shadow">Shadow</link>.</para>
+<link linkend="para-bullets-and-numbers">Bullets/Numbering</link>, and
+<link linkend="tab-stops">Tabulators</link>.</para>
 
 <sect2 id="indents-and-spaces">
 <title>Indents and Spaces</title>

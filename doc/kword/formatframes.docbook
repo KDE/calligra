@@ -275,7 +275,7 @@ where the frame goes and how large it is.</para>
 
 <para>If you put a mark in the check box labeled <guilabel>Frame is inline</guilabel>, the frame size and position will
 be determined by the location of the placeholder in the text.  For a definition of inline frames, click
-<glossterm linkend="definlineframe">here</glossterm>.</para>
+<glossterm linkend="definlineframe">here</glossterm>. Selecting this option disables the <guilabel>Position Spin boxes</guilabel>.</para>
 
 <para>If you put a mark in the check box labeled <guilabel>Protect size and position</guilabel>, the frame size and position will
 be fixed at their current location.  You will not be able to move the frame on the page until this box is unchecked.</para>
@@ -290,7 +290,7 @@ page.</para>
 <guilabel>Height:</guilabel> and <guilabel>Width:</guilabel> in the text boxes provided.  These two measurements are
 relative to the top left corner of the frame you specified above. not to the size of the page.</para>
 </sect4>
-<sect4 id="format-frame-geometry-margin"><title>Determine Size and Position</title>
+<sect4 id="format-frame-geometry-margin"><title>Determine Margins in the Frame</title>
 
 <para>Using the boxes labeled
 <guilabel>Left:</guilabel>, <guilabel>Right:</guilabel>, <guilabel>Top:</guilabel> and <guilabel>Bottom:</guilabel>, you can establish
@@ -322,12 +322,13 @@ become 1 cm in size.</para>
 
 <para>The right side of the dialog shows a preview of the current background.</para>
 
-<para>Begin by selecting the color of the background.  Click on the button labeled 
+<para>Begin by selecting the primary color of the background by clicking on the button labeled 
 <guibutton>Background Color:</guibutton>.  The color is selected using the
 <link linkend="select-colors">Color selection dialog</link>.</para>
 
-<para>Once the color is selected, select the fill style from the combo box labeled
-<guilabel>Background Style</guilabel>.</para>
+<para>Once the color is selected, you can select the fill style from the combo box labeled
+<guilabel>Background Style</guilabel>. Fill styles can be used to create diagonal lines,or reduce the relative density of color 
+applied to the background. After selecting your fill style, a sample will appear in the preview on the right. </para>
 
 <para>Select <guibutton>OK</guibutton> to accept all of your changes.</para>
 <para>Select <guibutton>Cancel</guibutton> to forget all of your changes.</para>
@@ -369,7 +370,7 @@ from the menubar. A dialog box will appear.</para>
 
 <para>All of the currently defined framestyles are listed in the listbox on the left.  The currently selected framestyle is highlighted, and 
 the name of the currently selected framestyle is listed in the text box labeled <guilabel>Name</guilabel>. (In this example, 
-the currently selected framestyle is <emphasis>Light gray</emphasis>.)</para>
+the currently selected framestyle is <emphasis>Light Gray</emphasis>.)</para>
 <para>Select the name of the framestyle you want to change by clicking on the name of the framestyle in the listbox on the left.</para>
 <para>There are three tabs in on the right side of the dialog box:  <guilabel>General</guilabel>, <guilabel>Borders</guilabel> 
 and <guilabel>Background</guilabel></para>
@@ -405,6 +406,9 @@ of the previously selected framestyle.</para>
 <para>Choose a name for your new framestyle, and type it in the text box labeled <guilabel>Name</guilabel>.</para>
 <para>You can now change your frame border and background options.  For details, see 
 <link linkend="framestyle-edit">Editing a framestyle</link>.</para>
+<para>When you are finished creating your framestyle, click <guibutton>OK</guibutton>, and your framestyle is saved.</para>
+<note><para>Framestyles are specific for each document.  A framestyle created in one document can not be used in another document unless you 
+<link linkend="framestyle-import">import the framestyle</link> from that document.</para></note>
 </sect3>
 
 <sect3 id="framestyle-delete">
@@ -421,8 +425,7 @@ from the menubar. A dialog box will appear.</para>
 <imagedata fileref="framestylist.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>Select the framestyle you want to delete from the list at the left.
-Select the framestyle by clicking once with the &LMB; in the list on the left.</para>
+<para>Select the framestyle you want to delete by clicking once with the &LMB; in the list on the left.</para>
 <para>Click on the <guibutton>Delete</guibutton> button.</para>
 <note><para>&kword; will not allow you to delete the <emphasis>Plain</emphasis> framestyle. </para></note>
 </sect3>
