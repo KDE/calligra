@@ -920,7 +920,6 @@ static QString cellToProperties( const TableCell& cell, QString& key)
 }
 #endif
 
-// ### TODO: table support
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
@@ -947,7 +946,8 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     for ( itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); ++itCell )
     {
-        if ( (*itCell).row != 1 )
+        kdDebug(30520) << "Column: " << (*itCell).col << endl;
+        if ( (*itCell).row )
             break; // We have finished the first row
 
         const double width = (*itCell).frame.right - (*itCell).frame.left;
@@ -990,7 +990,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     // ### TODO: automatic styles
 
     *m_streamOut << "<table:row>\n";
-    int rowCurrent = 1; // Not 0 as for the other filters, as we have already opened the first row
+    int rowCurrent = 0;
 
 
     ulong cellNumber = 0L;
@@ -1010,6 +1010,15 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         QString key;
         const QString props ( cellToProperties( (*itCell), key ) );
         kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+
+        m_contentAutomaticStyles += "  <style:style";
+        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
+        m_contentAutomaticStyles += " style:family=\"table-cell\"";
+        m_contentAutomaticStyles += ">\n";
+        m_contentAutomaticStyles += "   <style:properties ";
+        m_contentAutomaticStyles += props;
+        m_contentAutomaticStyles += "/>\n";
+        m_contentAutomaticStyles += "  </style:style>\n";
 
         *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
             << escapeOOText( automaticCellStyle) << "\">\n";
