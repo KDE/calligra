@@ -160,11 +160,10 @@ void DragBarButton::drawButton( QPainter* paint )
   p2 += QPoint(2, 0);
   qDrawShadeLine( &pixPainter, p1, p2, g, true, 0, 1 );
 
-// Temporary fix
-//  if (m_bMouseOn) {
-  int z = m_bClose ? 1:0;
-  pixPainter.drawPixmap(pixSize.width() - 20 + z, (pixSize.height() - m_pClosePix->height()) / 2 + z, *m_pClosePix);
-//  }
+  if (m_bMouseOn) {
+    int z = m_bClose ? 1:0;
+    pixPainter.drawPixmap(pixSize.width() - 20 + z, (pixSize.height() - m_pClosePix->height()) / 2 + z, *m_pClosePix);
+  }
 
   if(m_orientation == Qt::Vertical) {
     paint->drawPixmap(0, 0, pix);
@@ -222,7 +221,14 @@ QSize DragBarButton::sizeHint() const
 void DragBarButton::mousePressEvent( QMouseEvent* ev )
 {
   m_bClose = false;
-  QRect closeRect(width()-20,0,m_pClosePix->width(),height());
+  QRect closeRect;
+
+  if(m_orientation == Qt::Vertical) {
+    closeRect.setRect(width() - 20, 0, m_pClosePix->width(), height());
+  } else {
+    closeRect.setRect(0, 20 - m_pClosePix->width(), width(), m_pClosePix->width());
+  }
+
   if ( closeRect.contains(ev->pos())) {
     m_bClose = true;
     repaint();
@@ -238,7 +244,14 @@ void DragBarButton::mouseReleaseEvent( QMouseEvent* ev )
   if ( m_bClose ) {
     m_bClose = false;
     repaint();
-    QRect closeRect(width()-20,0,m_pClosePix->width(),height());
+    QRect closeRect;
+
+    if(m_orientation == Qt::Vertical) {
+      closeRect.setRect(width() - 20, 0, m_pClosePix->width(), height());
+    } else {
+      closeRect.setRect(0, 20 - m_pClosePix->width(), width(), m_pClosePix->width());
+    }
+
     if ( closeRect.contains(ev->pos()))
     {
        kdDebug(43000) << "DragBarButton::mouseReleaseEvent() - Emitting closeRequest" << endl;
