@@ -2538,9 +2538,16 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 	useDoubleBuffer = FALSE;
 
     if ( useDoubleBuffer  ) {
-	painter = new QPainter;
 	if ( cx >= 0 && cy >= 0 )
+        {
 	    ir = ir.intersect( QRect( cx, cy, cw, ch ) );
+            if (ir.isEmpty())
+                useDoubleBuffer = FALSE;
+        }
+    }
+
+    if ( useDoubleBuffer  ) {
+	painter = new QPainter;
 	if ( !doubleBuffer ||
 	     ir.width() > doubleBuffer->width() ||
 	     ir.height() > doubleBuffer->height() ) {
