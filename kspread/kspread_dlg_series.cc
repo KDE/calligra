@@ -26,6 +26,7 @@
 #include "kspread_table.h"
 #include "kspread_map.h"
 #include <qlayout.h>
+#include <qlabel.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
@@ -119,9 +120,9 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   grid1->addRowSpacing(1,gb->height());
 
   grid1->activate();
-  
+
   start->setFocus();
-  
+
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 }

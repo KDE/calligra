@@ -23,7 +23,7 @@ DCOPRef KSpreadMapIface::table( const QString& name )
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
 
-DCOPRef KSpreadMapIface::table( int index )
+DCOPRef KSpreadMapIface::tableByIndex( int index )
 {
     KSpreadTable* t = m_map->tableList().at( index );
     if ( !t )

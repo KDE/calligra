@@ -19,6 +19,7 @@
 */
 
 #include <qprinter.h>
+#include <qgroupbox.h>
 
 #include "kspread_dlg_preference.h"
 #include "kspread_view.h"

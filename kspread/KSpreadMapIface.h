@@ -20,12 +20,12 @@ public:
 
 k_dcop:
     virtual DCOPRef table( const QString& name );
-    virtual DCOPRef table( int index );
+    virtual DCOPRef tableByIndex( int index );
     virtual int tableCount() const;
     virtual QStringList tableNames() const;
     virtual QValueList<DCOPRef> tables();
     virtual DCOPRef insertTable( const QString& name );
-    
+
 private:
     KSpreadMap* m_map;
 };

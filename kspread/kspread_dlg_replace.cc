@@ -26,6 +26,7 @@
 #include "kspread_doc.h"
 #include "kspread_table.h"
 #include <qlayout.h>
+#include <qlabel.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
@@ -72,7 +73,7 @@ KSpreadReplaceDlg::KSpreadReplaceDlg( KSpreadView* parent, const char* name,cons
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   lay1->addWidget( bb);
-  
+
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 }
@@ -85,14 +86,14 @@ void KSpreadReplaceDlg::slotOk()
 	accept();
 	return;
     }
-    
+
     // Nothing to find ?
     if ( l_find->text().isEmpty() )
     {
 	 KMessageBox::error( this, i18n("You must enter some text to search for.") );
 	 return;
     }
-    
+
     // Do the replacement.
     if( !( m_pView->activeTable()->replace( marker,l_find->text(),
 					    l_replace->text(),

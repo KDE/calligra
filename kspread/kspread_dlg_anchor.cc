@@ -27,6 +27,7 @@
 #include "kspread_table.h"
 
 #include <qlayout.h>
+#include <qlabel.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
