@@ -73,26 +73,26 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     left->setSpacing( KDialog::spacingHint() );
 
     // ------------------------ settings
-    gSettings = new QGroupBox( 4, Qt::Vertical, i18n( "Rounding" ), this );
 
-    lRndX = new QLabel( i18n( "Vertical declination:" ), gSettings );
-
-    eRndX = new KIntNumInput( gSettings );
+    lRndX = new QLabel( i18n( "Vertical declination:" ), this );
+    left->addWidget( lRndX );
+    
+    eRndX = new KIntNumInput( this );
     eRndX->setRange(0, 100);
     eRndX->setSuffix(" %");
+    left->addWidget( eRndX );
     connect( eRndX, SIGNAL( valueChanged( int ) ), this, SLOT( rndXChanged( int ) ) );
 
-    lRndY = new QLabel( i18n( "Horizontal declination:" ), gSettings );
-
-    eRndY = new KIntNumInput( gSettings );
+    lRndY = new QLabel( i18n( "Horizontal declination:" ), this );
+    left->addWidget( lRndY );
+    
+    eRndY = new KIntNumInput( this );
     eRndY->setRange(0, 100);
     eRndY->setSuffix(" %");
-
+    left->addWidget( eRndY );
     connect( eRndY, SIGNAL( valueChanged( int ) ), this, SLOT( rndYChanged( int ) ) );
 
-    left->addWidget( gSettings );
-
-    QSpacerItem *spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
     left->addItem(spacer);
 
     // ------------------------ preview

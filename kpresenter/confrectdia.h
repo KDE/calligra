@@ -73,7 +73,6 @@ protected:
     bool m_bRndXChanged, m_bRndYChanged;
     QLabel *lRndX, *lRndY;
     KIntNumInput *eRndX, *eRndY;
-    QGroupBox *gSettings;
     RectPreview *rectPreview;
     int xRnd, yRnd;
     int oldXRnd, oldYRnd;

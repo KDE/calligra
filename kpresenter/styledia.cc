@@ -134,34 +134,25 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     : QWidget( parent, name ), m_flags(flags), m_bLineBeginChanged(false), m_bLineEndChanged(false),
       m_bColorChanged(false), m_bStyleChanged(false), m_bWidthChanged(false)
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    QHBoxLayout *config = new QHBoxLayout( layout );
-
-    layout->setMargin( KDialog::marginHint() );
-    layout->setSpacing( KDialog::spacingHint() );
-    config->setSpacing( KDialog::spacingHint() );
-
-    QVBox *left = new QVBox( this );
-    config->addWidget( left );
-    QVBox *right = new QVBox( this );
-    config->addWidget( right );
-
-    left->setSpacing( KDialog::spacingHint() );
-    right->setSpacing( KDialog::spacingHint() );
-
-    QLabel *l = new QLabel( i18n( "Pen color:" ), left );
-    l->setFixedHeight( l->sizeHint().height() );
-
+    QVBoxLayout *clayout = new QVBoxLayout( this );
+    
+    clayout->setMargin( KDialog::marginHint() );
+    clayout->setSpacing( KDialog::spacingHint() );
+    
+    QLabel *l = new QLabel( i18n( "Color:" ), this );
+    clayout->addWidget(l);
+    
     choosePCol = new KColorButton( Qt::black,
                                    Qt::black,
-                                   left );
+                                   this );
     connect( choosePCol, SIGNAL( changed( const QColor& ) ),
              this, SLOT( slotColorChanged() ) );
+    clayout->addWidget(choosePCol);
+    
+    l = new QLabel( i18n( "Style:" ), this);
+    clayout->addWidget(l);
 
-    l = new QLabel( i18n( "Pen style:" ), left );
-    l->setFixedHeight( l->sizeHint().height() );
-
-    choosePStyle = new KComboBox( false, left, "PStyle" );
+    choosePStyle = new KComboBox( false, this, "PStyle" );
     choosePStyle->insertItem( i18n( "No Pen" ) );
     choosePStyle->insertItem( i18n( "Solid Line" ) );
     choosePStyle->insertItem( i18n( "Dash Line ( ---- )" ) );
@@ -170,21 +161,27 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     choosePStyle->insertItem( i18n( "Dash Dot Dot Line ( -**- )" ) );
     connect( choosePStyle, SIGNAL( activated( int ) ),
              this, SLOT( slotStyleChanged() ) );
-
-    l = new QLabel( i18n( "Pen width:" ), left );
-    l->setFixedHeight( l->sizeHint().height() );
-
-    choosePWidth = new KIntNumInput( 1, left );
+    clayout->addWidget(choosePStyle);
+    
+    l = new QLabel( i18n( "Width:" ), this );
+    clayout->addWidget(l);
+    
+    choosePWidth = new KIntNumInput( 1, this );
     choosePWidth->setSuffix(" pt"); // TODO use unit here, make it use i18n at the same time.
     choosePWidth->setRange( 1, 10, 1 );
     connect( choosePWidth, SIGNAL( valueChanged( int ) ),
              this, SLOT( slotWidthChanged() ) );
+    clayout->addWidget(choosePWidth);
 
-    QGroupBox *grp = new QGroupBox(2, Qt::Horizontal, i18n("Line Ends"), right);
-
+    QGroupBox *grp = new QGroupBox(2, Qt::Horizontal, i18n("Arrow Style"), this);
+    QVBoxLayout *grplayout = new QVBoxLayout( grp );
+    grplayout->setMargin( KDialog::marginHint() );
+    grplayout->setSpacing( KDialog::spacingHint() );
+    clayout->addWidget(grp);
+    
     l = new QLabel( i18n( "Begin:" ), grp );
-    l->setFixedHeight( l->sizeHint().height() );
-
+    grplayout->addWidget(l);
+       
     clineBegin = new KComboBox( false, grp, "lineBegin" );
     clineBegin->insertItem( i18n("Normal") );
     clineBegin->insertItem( i18n("Arrow") );
@@ -194,13 +191,14 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     clineBegin->insertItem( i18n("Dimension Line") );
     clineBegin->insertItem( i18n("Double Arrow") );
     clineBegin->insertItem( i18n("Double Line Arrow") );
-
+    grplayout->addWidget(clineBegin);
+    
     connect( clineBegin, SIGNAL( activated( int ) ),
              this, SLOT( slotLineBeginChanged() ) );
 
     l = new QLabel( i18n( "End:" ), grp );
-    l->setFixedHeight( l->sizeHint().height() );
-
+    grplayout->addWidget(l);
+    
     clineEnd = new KComboBox( false, grp, "lineEnd" );
     clineEnd->insertItem( i18n("Normal") );
     clineEnd->insertItem( i18n("Arrow") );
@@ -212,22 +210,14 @@ ConfPenDia::ConfPenDia( QWidget* parent, const char* name, int flags)
     clineEnd->insertItem( i18n("Double Line Arrow") );
     connect( clineEnd, SIGNAL( activated( int ) ),
              this, SLOT( slotLineEndChanged() ) );
-
+    grplayout->addWidget(clineEnd);
+    
     if ( !(m_flags & StyleDia::SdEndBeginLine) )
         grp->setEnabled(false);
-
-    //hack for better layout
-    l = new QLabel( " ", right );
-    l->setFixedHeight( l->sizeHint().height() );
-    l = new QLabel( " ", right );
-    l->setFixedHeight( clineEnd->sizeHint().height() );
-
-    layout->addWidget( new QWidget( this ) );
-
     penPrev = new PBPreview( this, "penPrev", PBPreview::Pen );
-    layout->addWidget( penPrev );
-
-    layout->addWidget( new QWidget( this ) );
+    clayout->addWidget(penPrev);
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    clayout->addItem( spacer );
 }
 
 ConfPenDia::~ConfPenDia()

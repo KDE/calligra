@@ -80,26 +80,26 @@ KPConfig::KPConfig( KPresenterView* parent )
 
     page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                         BarIcon("spellcheck", KIcon::SizeMedium) );
-    _spellPage=new ConfigureSpellPage(parent, page);
+    _spellPage=new configureSpellPage(parent, page);
 
     page = addVBoxPage( i18n("Misc"), i18n("Misc"),
                         BarIcon("misc", KIcon::SizeMedium) );
-    _miscPage=new ConfigureMiscPage(parent, page);
+    _miscPage=new configureMiscPage(parent, page);
 
     page = addVBoxPage( i18n("Document"), i18n("Document Settings"),
                         BarIcon("document", KIcon::SizeMedium) );
 
-    _defaultDocPage=new ConfigureDefaultDocPage(parent, page);
+    _defaultDocPage=new configureDefaultDocPage(parent, page);
 
     page = addVBoxPage( i18n("Tools"), i18n("Default Tools Settings"),
                         BarIcon("configure", KIcon::SizeMedium) );
 
-    _toolsPage=new ConfigureToolsPage(parent, page);
+    _toolsPage=new configureToolsPage(parent, page);
 
     page = addVBoxPage( i18n("Paths"), i18n("Path Settings"),
                         BarIcon("path") );
 
-    m_pathPage=new ConfigurePathPage(parent, page);
+    m_pathPage=new configurePathPage(parent, page);
 
     connect( this, SIGNAL( okClicked() ),this, SLOT( slotApply() ) );
 }
@@ -182,24 +182,17 @@ void KPConfig::slotDefault()
 configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *parent , char *name )
     :QWidget ( parent,name )
 {
+    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+    
     m_pView=_view;
     config = KPresenterFactory::global()->config();
 
     KoUnit::Unit unit = m_pView->kPresenterDoc()->getUnit();
 
-    QVBoxLayout *box = new QVBoxLayout( this );
-    box->setMargin( KDialog::spacingHint() );
-    box->setSpacing( KDialog::marginHint() );
-
     oldNbRecentFiles=10;
     double ptIndent = MM_TO_POINT(10.0);
     bool bShowRuler=true;
     bool oldShowStatusBar = true;
-
-    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Interface"), this );
-    tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
-    tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
-    QVBoxLayout *lay1 = new QVBoxLayout( tmpQGroupBox->layout() );
 
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
@@ -210,36 +203,34 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 
     }
 
-    showRuler= new QCheckBox(i18n("Show rulers"),tmpQGroupBox);
+    showRuler= new QCheckBox(i18n("Show rulers"),this);
     showRuler->setChecked(bShowRuler);
-    lay1->addWidget(showRuler);
+    box->addWidget(showRuler);
 
-    showStatusBar = new QCheckBox(i18n("Show status bar"),tmpQGroupBox);
+    showStatusBar = new QCheckBox(i18n("Show status bar"),this);
     showStatusBar->setChecked(oldShowStatusBar);
-    lay1->addWidget(showStatusBar);
+    box->addWidget(showStatusBar);
 
 
-    recentFiles=new KIntNumInput( oldNbRecentFiles, tmpQGroupBox );
+    recentFiles=new KIntNumInput( oldNbRecentFiles, this);
     recentFiles->setRange(1, 20, 1);
     recentFiles->setLabel(i18n("Number of recent files:"));
 
-    lay1->addWidget(recentFiles);
+    box->addWidget(recentFiles);
 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
     double val = KoUnit::ptToUnit( ptIndent, unit );
-    indent = new KDoubleNumInput( val, tmpQGroupBox );
+    indent = new KDoubleNumInput( val, this);
     indent->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
 
 
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Paragraph indent by toolbar buttons:"));
 
-    lay1->addWidget(indent);
+    box->addWidget(indent);
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    lay1->addItem( spacer);
-
-    box->addWidget( tmpQGroupBox );
+    box->addItem( spacer);
 }
 
 void configureInterfacePage::apply()
@@ -301,37 +292,30 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
 
     oldBgColor = m_pView->kPresenterDoc()->txtBackCol();
     oldGridColor = m_pView->kPresenterDoc()->gridColor();
-    QVBoxLayout *box = new QVBoxLayout( this );
-    box->setMargin( KDialog::marginHint() );
-    box->setSpacing( KDialog::spacingHint() );
+    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Colors"), this );
-    tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
-    tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *grid1 = new QGridLayout( tmpQGroupBox->layout(), 5, 1);
-    QLabel *lab = new QLabel( tmpQGroupBox, "label20" );
-    lab->setText( i18n( "Background color of objects in editing mode:" ) );
-    grid1->addWidget( lab, 0, 0 );
+    QLabel *lab = new QLabel( this, "label20" );
+    lab->setText( i18n( "Background object color:" ) );
+    box->addWidget(lab);
 
     bgColor = new KColorButton( oldBgColor,
                                 oldBgColor,
-                                tmpQGroupBox );
+                                this );
     bgColor->setColor( oldBgColor );
-    grid1->addWidget( bgColor, 1, 0 );
+    box->addWidget(bgColor);
 
 
-    lab = new QLabel( tmpQGroupBox, "label20" );
+    lab = new QLabel( this, "label20" );
     lab->setText( i18n( "Grid color:" ) );
-    grid1->addWidget( lab, 2, 0 );
+    box->addWidget(lab);
 
     gridColor = new KColorButton( oldGridColor,
                                   oldGridColor,
-                                  tmpQGroupBox );
-    grid1->addWidget( gridColor, 3, 0 );
+                                  this );
+    box->addWidget(gridColor);
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    box->addItem( spacer);
 
-    grid1->setRowStretch( 4, 1);
-
-    box->addWidget( tmpQGroupBox );
 }
 
 void configureColorBackground::apply()
@@ -368,13 +352,12 @@ void configureColorBackground::slotDefault()
 
 
 
-ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char *name )
-    : QObject( box->parent(), name )
+configureSpellPage::configureSpellPage( KPresenterView *_view, QWidget *parent, char *name )
+    : QWidget( parent, name )
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();
-
-    m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kPresenterDoc()->getKOSpellConfig(), true);
+    m_spellConfigWidget = new KoSpellConfigWidget( parent, m_pView->kPresenterDoc()->getKOSpellConfig(), true);
 #if 0
     if( config->hasGroup("KSpell kpresenter") )
     {
@@ -387,7 +370,7 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
     m_spellConfigWidget->addIgnoreList( m_pView->kPresenterDoc()->spellListIgnoreAll() );
 }
 
-void ConfigureSpellPage::apply()
+void configureSpellPage::apply()
 {
 
     KOSpellConfig *_spellConfig = m_spellConfigWidget->spellConfig();
@@ -417,17 +400,20 @@ void ConfigureSpellPage::apply()
     doc->enableBackgroundSpellCheck( state );
 }
 
-void ConfigureSpellPage::slotDefault()
+void configureSpellPage::slotDefault()
 {
     m_spellConfigWidget->setDefault();
 }
 
-ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *name )
-    : QObject( box->parent(), name )
+configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, char *name )
+    : QWidget( parent, name )
 {
+    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+
     m_pView=_view;
     config = KPresenterFactory::global()->config();
-    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Misc"), box, "GroupBox" );
+
+    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Misc"), this, "GroupBox" );
     tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
     tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
     QGridLayout *grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
@@ -469,7 +455,9 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_cbPrintNotes->setChecked(m_printNotes);
     grid->addWidget(m_cbPrintNotes,7,0);
 
-    tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Grid"), box, "GroupBox" );
+    box->addWidget(tmpQGroupBox);
+
+    tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Grid"), this, "GroupBox" );
     tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
     tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
     grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
@@ -492,9 +480,15 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     resolutionY->setRange( KoUnit::ptToUnit(10.0,unit), KoUnit::ptToUnit(rect.width(), unit), KoUnit::ptToUnit( 1,unit ), false);
 
     grid->addWidget(resolutionY, 3, 0);
+    box->addWidget(tmpQGroupBox);
+
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    box->addItem( spacer);
+
+
 }
 
-KCommand * ConfigureMiscPage::apply()
+KCommand * configureMiscPage::apply()
 {
     config->setGroup( "Misc" );
     int newUndo=m_undoRedoLimit->value();
@@ -569,7 +563,7 @@ KCommand * ConfigureMiscPage::apply()
     return macroCmd;
 }
 
-void ConfigureMiscPage::slotDefault()
+void configureMiscPage::slotDefault()
 {
     m_undoRedoLimit->setValue(30);
     m_displayLink->setChecked(true);
@@ -583,9 +577,11 @@ void ConfigureMiscPage::slotDefault()
     resolutionX->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
 }
 
-ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *box, char *name )
-    : QObject( box->parent(), name )
+configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget *parent, char *name )
+    : QWidget( parent, name )
 {
+    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+
     m_pView=_view;
     config = KPresenterFactory::global()->config();
     KPresenterDoc *doc = m_pView->kPresenterDoc();
@@ -601,7 +597,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
         m_oldHyphenation = config->readBoolEntry( "hyphenation", m_oldHyphenation);
     }
 
-    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
+    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), this, "GroupBox" );
     gbDocumentDefaults->setMargin( KDialog::marginHint() );
     gbDocumentDefaults->setInsideSpacing( 5 );
 
@@ -648,7 +644,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     m_autoHyphenation = new QCheckBox( i18n("Automatic hyphenation"), gbDocumentDefaults);
     m_autoHyphenation->setChecked( m_oldHyphenation );
 
-    QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
+    box->addWidget(gbDocumentDefaults);
+
+    QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), this );
     gbDocumentSettings->setMargin( KDialog::marginHint() );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
@@ -675,8 +673,8 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
 
     m_tabStopWidth->setRange( KoUnit::ptToUnit( MM_TO_POINT(2),doc->getUnit() ) , KoUnit::ptToUnit( rect.width(), doc->getUnit() ) , 0.1, false);
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
-
-    QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), box );
+    box->addWidget(gbDocumentSettings);
+    QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), this );
     gbDocumentCursor->setMargin( KDialog::marginHint() );
     gbDocumentCursor->setInsideSpacing( KDialog::spacingHint() );
 
@@ -685,15 +683,19 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
 
     m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
     m_directInsertCursor->setChecked(doc->insertDirectCursor());
+    box->addWidget(gbDocumentCursor);
 
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    box->addItem(spacer);
+	    
 }
 
-ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
+configureDefaultDocPage::~configureDefaultDocPage()
 {
     delete font;
 }
 
-KCommand *ConfigureDefaultDocPage::apply()
+KCommand *configureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
     KPresenterDoc* doc = m_pView->kPresenterDoc();
@@ -763,7 +765,7 @@ KCommand *ConfigureDefaultDocPage::apply()
     return macro;
 }
 
-void ConfigureDefaultDocPage::slotDefault()
+void configureDefaultDocPage::slotDefault()
 {
     autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
     m_variableNumberOffset->setValue(1);
@@ -775,7 +777,7 @@ void ConfigureDefaultDocPage::slotDefault()
     m_autoHyphenation->setChecked( false );
 }
 
-void ConfigureDefaultDocPage::selectNewDefaultFont() {
+void configureDefaultDocPage::selectNewDefaultFont() {
     QStringList list;
     KFontChooser::getFontList(list,  KFontChooser::SmoothScalableFonts);
     KFontDialog dlg( m_pView, "Font Selector", false, true, list, true );
@@ -789,16 +791,16 @@ void ConfigureDefaultDocPage::selectNewDefaultFont() {
     }
 }
 
-ConfigureToolsPage::ConfigureToolsPage( KPresenterView *_view, QVBox *box, char *name )
-    : QObject( box->parent(), name )
+configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, char *name )
+    : QWidget( parent, name )
 {
+    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+
     m_pView = _view;
     config = KPresenterFactory::global()->config();
     m_pView->getCanvas()->deSelectAllObj();
 
-    QTabWidget *tab = new QTabWidget(box);
-    box->setMargin( KDialog::marginHint() );
-    box->setSpacing( KDialog::spacingHint() );
+    QTabWidget *tab = new QTabWidget(this);
 
     m_confPenDia = new ConfPenDia(tab, 0, StyleDia::SdAll);
     m_confPenDia->setPen(m_pView->getPen());
@@ -831,13 +833,14 @@ ConfigureToolsPage::ConfigureToolsPage( KPresenterView *_view, QVBox *box, char 
     m_confRectDia->setRnds(m_pView->getRndX(), m_pView->getRndY());
     m_confRectDia->setPenBrush(m_pView->getPen(), m_pView->getBrush());
     tab->addTab(m_confRectDia, i18n("&Rectangle"));
+    box->addWidget(tab);
 }
 
-ConfigureToolsPage::~ConfigureToolsPage()
+configureToolsPage::~configureToolsPage()
 {
 }
 
-void ConfigureToolsPage::apply()
+void configureToolsPage::apply()
 {
     m_pView->setPieType(m_confPieDia->getType());
     m_pView->setPieAngle(m_confPieDia->getAngle());
@@ -868,7 +871,7 @@ void ConfigureToolsPage::apply()
                               m_confBrushDia->getBrush());
 }
 
-void ConfigureToolsPage::slotDefault()
+void configureToolsPage::slotDefault()
 {
     m_confPieDia->setType(PT_PIE);
     m_confPieDia->setLength(90 * 16);
@@ -887,38 +890,41 @@ void ConfigureToolsPage::slotDefault()
     m_pView->getActionPenColor()->setCurrentColor((m_confPenDia->getPen()).color());
 }
 
-ConfigurePathPage::ConfigurePathPage( KPresenterView *_view, QVBox *box, char *name )
-    : QObject( box->parent(), name )
+configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, char *name )
+    : QWidget( parent, name )
 {
+    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+
     m_pView=_view;
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     config = KPresenterFactory::global()->config();
-    QVGroupBox* gbPathGroup = new QVGroupBox( i18n("Path"), box, "GroupBox" );
-    gbPathGroup->setMargin( KDialog::marginHint() );
-    gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
-
-    m_pPathView = new KListView( gbPathGroup );
+    
+    m_pPathView = new KListView( this );
     m_pPathView->setResizeMode(QListView::NoColumn);
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ) );
     (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
     (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
 
-    m_modifyPath = new QPushButton( i18n("Modify Path..."), gbPathGroup);
+    box->addWidget(m_pPathView);
+
+    m_modifyPath = new QPushButton( i18n("Modify Path..."), this);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
     connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int )),
              this, SLOT( slotModifyPath()));
     connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )),
              this, SLOT( slotSelectionChanged(QListViewItem * )));
     slotSelectionChanged(m_pPathView->currentItem());
+    box->addWidget(m_modifyPath);
+
 }
 
-void ConfigurePathPage::slotSelectionChanged(QListViewItem * item)
+void configurePathPage::slotSelectionChanged(QListViewItem * item)
 {
     m_modifyPath->setEnabled( item );
 }
 
-void ConfigurePathPage::slotModifyPath()
+void configurePathPage::slotModifyPath()
 {
     QListViewItem *item = m_pPathView->currentItem ();
     if ( item )
@@ -943,7 +949,7 @@ void ConfigurePathPage::slotModifyPath()
     }
 }
 
-void ConfigurePathPage::slotDefault()
+void configurePathPage::slotDefault()
 {
     QListViewItem * item = m_pPathView->findItem(i18n("Picture Path"), 0);
     if ( item )
@@ -953,7 +959,7 @@ void ConfigurePathPage::slotDefault()
         item->setText(1, QString::null );
 }
 
-void ConfigurePathPage::apply()
+void configurePathPage::apply()
 {
     QListViewItem *item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )

@@ -66,11 +66,11 @@ protected:
     QColor oldGridColor;
 } ;
 
-class ConfigureSpellPage : public QObject
+class configureSpellPage : public QWidget
 {
     Q_OBJECT
 public:
-    ConfigureSpellPage( KPresenterView *_view, QVBox *box, char *name = 0 );
+    configureSpellPage( KPresenterView *_view, QWidget *parent, char *name = 0 );
     void apply();
     void slotDefault();
 private:
@@ -79,11 +79,11 @@ private:
     KConfig* config;
 };
 
-class ConfigureMiscPage : public QObject
+class configureMiscPage : public QWidget
 {
     Q_OBJECT
 public:
-    ConfigureMiscPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
+    configureMiscPage( KPresenterView  *_view, QWidget *parent, char *name = 0 );
     KCommand *apply();
     void slotDefault();
 private:
@@ -97,12 +97,12 @@ private:
     KDoubleNumInput *m_rotation;
 };
 
-class ConfigureDefaultDocPage : public QObject
+class configureDefaultDocPage : public QWidget
 {
     Q_OBJECT
 public:
-    ConfigureDefaultDocPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
-    ~ConfigureDefaultDocPage();
+    configureDefaultDocPage( KPresenterView  *_view, QWidget *parent, char *name = 0 );
+    ~configureDefaultDocPage();
     KCommand *apply();
     void slotDefault();
 public slots:
@@ -128,12 +128,12 @@ private:
     bool m_oldHyphenation;
 };
 
-class ConfigureToolsPage : public QObject
+class configureToolsPage : public QWidget
 {
     Q_OBJECT
 public:
-    ConfigureToolsPage( KPresenterView  *_view, QVBox *box, char *name = 0 );
-    ~ConfigureToolsPage();
+    configureToolsPage( KPresenterView  *_view, QWidget *parent, char *name = 0 );
+    ~configureToolsPage();
     void apply();
     void slotDefault();
 public slots:
@@ -149,11 +149,11 @@ private:
     ConfPolygonDia *m_confPolygonDia;
 };
 
-class ConfigurePathPage : public QObject
+class configurePathPage : public QWidget
 {
     Q_OBJECT
 public:
-    ConfigurePathPage( KPresenterView *_view, QVBox *box, char *name = 0 );
+    configurePathPage( KPresenterView *_view, QWidget *parent, char *name = 0 );
     void slotDefault();
     void apply();
 private slots:
@@ -180,11 +180,11 @@ public slots:
 private:
     configureInterfacePage *_interfacePage;
     configureColorBackground *_colorBackground;
-    ConfigureSpellPage *_spellPage;
-    ConfigureMiscPage *_miscPage;
-    ConfigureDefaultDocPage *_defaultDocPage;
-    ConfigureToolsPage *_toolsPage;
-    ConfigurePathPage *m_pathPage;
+    configureSpellPage *_spellPage;
+    configureMiscPage *_miscPage;
+    configureDefaultDocPage *_defaultDocPage;
+    configureToolsPage *_toolsPage;
+    configurePathPage *m_pathPage;
     KPresenterDoc* m_doc;
 
 };
