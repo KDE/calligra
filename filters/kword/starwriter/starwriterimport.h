@@ -40,7 +40,7 @@ private:
     QByteArray StarWriterDocument;
 
     // supplementary variables
-    Q_UINT8 frames;
+    Q_UINT8 framesNumber;
     QString bodyStuff, tablesStuff, picturesStuff;
 
     // needed for ATTRIBUTES

@@ -275,6 +275,44 @@ bool StarWriterImport::parseText(QByteArray n)
 
 bool StarWriterImport::parseTable(QByteArray n)
 {
+    /*
+    // QByteArray s;
+    Q_UINT32 len, p;
+    // QString text;
+    Q_UINT8 row, column, columns;   // no need to have 'rows'
+
+    // Preliminary check
+    if (n[0x00] != 'E') return false;
+
+    // Skip useless sections and retrieve the right point
+    p = 0x13;
+    while (n[p] != 'L') {
+        len = readU24(n, p+1);
+        p += len;
+    }
+
+    // Read rows
+    while (p < n.size()) {
+        // Read cells
+        // FIXME: find 't'
+        // FIXME: find 'T'
+        // FIXME: get cell text/value
+        // FIXME: add stuff for cell frame
+        row++;
+    }
+
+    // Add proper stuff for table frame
+    // FIXME
+
+    // Add everything to tablesStuff
+    // FIXME
+
+    // Add anchor to bodyStuff
+    // FIXME
+
+    framesNumber++;
+    */
+
     return (n[0x00] == 'E');
 };
 
