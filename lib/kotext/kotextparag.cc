@@ -292,7 +292,7 @@ int KoTextParag::leftMargin() const
     return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginLeft ]
         + m_layout.leftBorder.width() )
-        + counterWidth() /* in layout units already */;
+        + (str->isRightToLeft() ? 0 : counterWidth()) /* in layout units already */;
 }
 
 int KoTextParag::rightMargin() const
@@ -300,7 +300,8 @@ int KoTextParag::rightMargin() const
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginRight ]
-        + m_layout.rightBorder.width() );
+        + m_layout.rightBorder.width() )
+        + (str->isRightToLeft() ? counterWidth() : 0); // If RTL, the counter is on the right.
 }
 
 int KoTextParag::firstLineMargin() const
