@@ -36,6 +36,7 @@
 KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
  : QScrollView(parent, name)
 {
+	m_readOnly=false;
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 
 	m_tableCount = 0;
@@ -68,6 +69,7 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 	s.geometry = QRect(widest + 20, 5, 100, 150);
 
 	KexiRelationViewTable *tableView = new KexiRelationViewTable(this, table, columns, "someTable");
+	tableView->setReadOnly(m_readOnly);
 	s.columnView = tableView;
 
 	tableView->setFixedSize(s.geometry.width() - 5, s.geometry.height() - 19);
@@ -284,9 +286,20 @@ KexiRelationView::recalculateConnectionRect(SourceConnection *conn)
 	return (*conn).geometry;
 }
 
+void KexiRelationView::setReadOnly(bool b) 
+{
+	m_readOnly=b;
+	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)
+	{
+		(*it).columnView->setReadOnly(b);
+	}
+}
+
 KexiRelationView::~KexiRelationView()
 {
 }
+
+
 
 
 /// implementation of KexiRelationViewTable
@@ -322,6 +335,12 @@ KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString t
 //	setDragEnabled
 	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotContentsMoving(int,int)));
+}
+
+void KexiRelationViewTable::setReadOnly(bool b)
+{
+	setAcceptDrops(!b);
+	viewport()->setAcceptDrops(!b);
 }
 
 int

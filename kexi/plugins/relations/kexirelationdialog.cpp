@@ -77,6 +77,8 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 
 	if(!embedd)
 		registerAs(DocumentWindow);
+	else
+		m_view->setReadOnly(true);
 }
 
 void

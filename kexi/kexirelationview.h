@@ -57,6 +57,7 @@ class KexiRelationView : public QScrollView
 		void		addConnection(SourceConnection con);
 
 		RelationList	getConnections()const { return m_connections; };
+		void setReadOnly(bool);
 
 	public slots:
 		void		slotTableScrolling(QString);
@@ -80,6 +81,7 @@ class KexiRelationView : public QScrollView
 
 		TableList	m_tables;
 		RelationList	m_connections;
+		bool		m_readOnly;
 };
 
 class KexiRelationViewTable : public KListView
@@ -92,6 +94,7 @@ class KexiRelationViewTable : public KListView
 
 		QString			table() const { return m_table; };
 		int			globalY(const QString &item);
+		void setReadOnly(bool);
 
 	signals:
 		void			tableScrolling(QString);
