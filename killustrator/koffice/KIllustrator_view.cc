@@ -277,6 +277,7 @@ void KIllustratorView::createMyGUI()
 
     // Disable node actions
     slotPointTool( false );
+    tcontroller->toolSelected( ID_TOOL_SELECT );
 
     setupPopups ();
     setUndoStatus (false, false);
@@ -327,8 +328,6 @@ void KIllustratorView::setupCanvas()
                       vRuler, SLOT(setZoomFactor (float)));
     //  QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
     //       this, SLOT(updateZoomFactor (float)));
-    //  QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-    //       this, SLOT(showCursorPosition(int, int)));
     QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
                       hRuler, SLOT(updatePointer(int, int)));
     QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
@@ -407,7 +406,6 @@ void KIllustratorView::setupCanvas()
     QObject::connect (insertPartTool, SIGNAL(operationDone()),
                       this, SLOT (resetTools()));
 
-    tcontroller->toolSelected( ID_TOOL_SELECT );
     canvas->setToolController(tcontroller);
 }
 

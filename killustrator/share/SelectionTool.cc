@@ -851,61 +851,64 @@ void SelectionTool::processTabKeyEvent (GDocument* doc, Canvas*) {
   state = S_Pick;
 }
 
-void SelectionTool::activate (GDocument* doc, Canvas*) {
-  dragHorizHelpline = dragVertHelpline = -1;
+void SelectionTool::activate (GDocument* doc, Canvas*canvas) {
+    kdDebug() << "SelectionTool::activate" << endl;
+    dragHorizHelpline = dragVertHelpline = -1;
 
-  doc->handle ().show (true);
-  if (doc->lastObject ()) {
-    if (doc->selectionIsEmpty ())
-      doc->selectObject (doc->lastObject ());
+    doc->handle ().show (true);
+    if (doc->lastObject ()) {
+        kdDebug() << "there is an object..." << endl;
+        if (doc->selectionIsEmpty ())
+            doc->selectObject (doc->lastObject ());
+        else
+            doc->setAutoUpdate (true);
+        state = S_Pick;
+    }
     else
-      doc->setAutoUpdate (true);
-    state = S_Pick;
-  }
-  else
-    state = S_Init;
-  ctype = C_Arrow;
+        state = S_Init;
+    ctype = C_Arrow;
 
-  if (doc->selectionIsEmpty ()) {
-    emit modeSelected (i18n("Selection Mode"));
-  }
-  else {
-    Rect box = doc->boundingBoxForSelection ();
-    MeasurementUnit unit =
-      PStateManager::instance ()->defaultMeasurementUnit ();
-    QString u = unitToString (unit);
-    float x, y, w, h;
-    x = cvtPtToUnit (unit, box.x ());
-    y = cvtPtToUnit (unit, box.y ());
-    w = cvtPtToUnit (unit, box.width ());
-    h = cvtPtToUnit (unit, box.height ());
-    if (doc->selectionCount () > 1) {
-        msgbuf=i18n("Multiple Selection");
-        msgbuf+=" [";
-        msgbuf+=QString::number(x, 'f', 3);
-        msgbuf+=QString(" ") + u + QString(", ");
-        msgbuf+=QString::number(y, 'f', 3);
-        msgbuf+=QString(" ") + u + QString(", ");
-        msgbuf+=QString::number(w, 'f', 3);
-        msgbuf+=QString(" ") + u + QString(", ");
-        msgbuf+=QString::number(h, 'f', 3);
-        msgbuf+=QString(" ") + u + QString("]");
+    if (doc->selectionIsEmpty ()) {
+        emit modeSelected (i18n("Selection Mode"));
     }
     else {
-      GObject *sobj = doc->getSelection ().first();
-      msgbuf=sobj->typeName();
-      msgbuf+=" [";
-      msgbuf+=QString::number(x, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(y, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(w, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(h, 'f', 3);
-      msgbuf+=QString(" ") + u + QString("]");
+        Rect box = doc->boundingBoxForSelection ();
+        MeasurementUnit unit =
+            PStateManager::instance ()->defaultMeasurementUnit ();
+        QString u = unitToString (unit);
+        float x, y, w, h;
+        x = cvtPtToUnit (unit, box.x ());
+        y = cvtPtToUnit (unit, box.y ());
+        w = cvtPtToUnit (unit, box.width ());
+        h = cvtPtToUnit (unit, box.height ());
+        if (doc->selectionCount () > 1) {
+            msgbuf=i18n("Multiple Selection");
+            msgbuf+=" [";
+            msgbuf+=QString::number(x, 'f', 3);
+            msgbuf+=QString(" ") + u + QString(", ");
+            msgbuf+=QString::number(y, 'f', 3);
+            msgbuf+=QString(" ") + u + QString(", ");
+            msgbuf+=QString::number(w, 'f', 3);
+            msgbuf+=QString(" ") + u + QString(", ");
+            msgbuf+=QString::number(h, 'f', 3);
+            msgbuf+=QString(" ") + u + QString("]");
+        }
+        else {
+            GObject *sobj = doc->getSelection ().first();
+            msgbuf=sobj->typeName();
+            msgbuf+=" [";
+            msgbuf+=QString::number(x, 'f', 3);
+            msgbuf+=QString(" ") + u + QString(", ");
+            msgbuf+=QString::number(y, 'f', 3);
+            msgbuf+=QString(" ") + u + QString(", ");
+            msgbuf+=QString::number(w, 'f', 3);
+            msgbuf+=QString(" ") + u + QString(", ");
+            msgbuf+=QString::number(h, 'f', 3);
+            msgbuf+=QString(" ") + u + QString("]");
+        }
+        emit modeSelected (msgbuf);
     }
-    emit modeSelected (msgbuf);
-  }
+    canvas->updateView();
 }
 
 void SelectionTool::deactivate (GDocument* doc, Canvas* canvas) {

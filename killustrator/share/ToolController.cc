@@ -26,6 +26,7 @@
 #include <GDocument.h>
 #include <GLayer.h>
 #include <MainView.h>
+#include <kdebug.h>
 
 
 ToolController::ToolController (MainView* view) {
@@ -57,13 +58,13 @@ void ToolController::reset () {
 */
 
 void ToolController::toolSelected (int id) {
-  if (activeTool)
-    activeTool->deactivate (mainView->activeDocument (),
-                            mainView->getCanvas ());
-  activeTool = tools.find ((long) id);
-  if (activeTool)
-    activeTool->activate (mainView->activeDocument (),
-                          mainView->getCanvas ());
+    if (activeTool)
+        activeTool->deactivate (mainView->activeDocument (),
+                                mainView->getCanvas ());
+    activeTool = tools.find ((long) id);
+    if (activeTool)
+        activeTool->activate (mainView->activeDocument (),
+                              mainView->getCanvas ());
 }
 
 void ToolController::configureTool (int id) {

@@ -130,7 +130,6 @@ GBezier::GBezier () : GPolyline () {
 
 GBezier::GBezier (const QDomElement &element) : GPolyline (element.namedItem("polyline").toElement()) {
 
-    kdDebug() << "GBezier::GBezier" << endl;
     wSegment = -1;
     closed=(element.attribute("closed").toInt()==1);
     computePPoints();

@@ -97,7 +97,6 @@ GObject::GObject () {
 
 GObject::GObject (const QDomElement &element) {
 
-    kdDebug() << "GObject::GObject" << endl;
     layer = 0L;
     inWork = false;
 
