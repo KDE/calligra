@@ -30,6 +30,7 @@ class KComboBox;
 class KPushButton;
 class KPopupMenu;
 class KAction;
+class QListViewItem;
 
 class KexiMainWindow;
 
@@ -40,7 +41,7 @@ namespace KexiDB
 	class Reference;
 }
 
-class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidget, public KexiActionProxy
+class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 {
 	Q_OBJECT
 
@@ -53,7 +54,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 		const ConnectionList* connections() const;
 
 //		KexiRelationView	*relationView() const { return m_relationView; }
-		void			addTable(QString t);
+		void addTable(QString t);
 
 //		void openTable(KexiDB::TableSchema* table, bool designMode);
 
@@ -64,6 +65,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 		void tableHidden(KexiDB::TableSchema& t);
 		void tablePositionChanged(KexiRelationViewTableContainer*);
 		void aboutConnectionRemove(KexiRelationViewConnection*);
+		void tableFieldDoubleClicked( KexiDB::TableSchema* table, const QString& fieldName );
 	
 	public slots:
 		/*! Adds a table \a t to the area. This changes only visual representation.
@@ -88,24 +90,23 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 		void designSelectedTable();
 		void slotTableHidden(KexiDB::TableSchema &table);
 		void aboutToShowPopupMenu();
+		void slotTableFieldDoubleClicked(QListViewItem *i,const QPoint&,int);
 
 	protected:
-#if 0//js
-		virtual void		keyPressEvent(QKeyEvent *ev);
-#endif
 		/*! executes popup menu at \a pos, or, 
 		 if \a pos not specified: at center of selected table view (if any selected),
 		 or at center point of the relations view. */
 		void executePopup( QPoint pos = QPoint(-1,-1) );
 
-		void		invalidateActions();
+		//! Invalidates all actions availability
+		void invalidateActions();
 
 	private:
 		KexiMainWindow *m_win;
-		KComboBox		*m_tableCombo;
-		KPushButton		*m_btnAdd;
-		KexiRelationView	*m_relationView;
-		KexiDB::Connection	*m_conn;
+		KComboBox *m_tableCombo;
+		KPushButton *m_btnAdd;
+		KexiRelationView *m_relationView;
+		KexiDB::Connection *m_conn;
 
 		KPopupMenu *m_tableQueryPopup //over table/query
 			, *m_connectionPopup //over connection

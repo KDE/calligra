@@ -102,11 +102,11 @@ KexiRelationView::~KexiRelationView()
 {
 }
 
-void
+KexiRelationViewTableContainer*
 KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 {
 	if(!t)
-		return;
+		return 0;
 
 	kdDebug() << "KexiRelationView::addTable(): " << t->name() << ", " << viewport() << endl;
 
@@ -170,6 +170,8 @@ KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
             SLOT(containerMoved(KexiRelationViewTableContainer *)));
 	
 	c->setFocus();
+
+	return c;
 }
 
 void

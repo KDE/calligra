@@ -39,13 +39,9 @@
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 
-//#define TESTING_KexiRelationDialog
-
 KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent, 
 	const char *name)
 	: KexiViewBase(win, parent, name)
-//	: QWidget(parent, name)
-//	, KexiActionProxy(this)
 	, m_win(win)
 {
 	m_conn = m_win->project()->dbConnection();
@@ -117,7 +113,6 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	connect(m_relationView, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)),
 		this, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)));
 
-
 #if 0
 	if(!embedd)
 	{
@@ -165,7 +160,11 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 {
 	if (!t)
 		return;
-	m_relationView->addTable(t, rect);
+	KexiRelationViewTableContainer *c = m_relationView->addTable(t, rect);
+	if (!c)
+		return;
+	connect(c->tableView(), SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),
+		this, SLOT(slotTableFieldDoubleClicked(QListViewItem*,const QPoint&,int)));
 	kdDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
 
 	int oi=m_tableCombo->currentItem();
@@ -202,16 +201,6 @@ KexiRelationWidget::addTable(QString t)
 		}
 	}
 }
-
-#if 0//js
-void
-KexiRelationWidget::keyPressEvent(QKeyEvent *ev)
-{
-	kdDebug() << "KexiRelationWidget::keyPressEvent()" << endl;
-//	m_relationView->removeSelected();
-}
-#endif
-
 
 void KexiRelationWidget::tableViewGotFocus()
 {
@@ -258,7 +247,6 @@ void KexiRelationWidget::emptyAreaContextMenuRequest( const QPoint& pos )
 	//TODO
 }
 
-//! Invalidates all actions availability
 void KexiRelationWidget::invalidateActions()
 {
 	setAvailable("edit_delete", m_relationView->selectedConnection() || m_relationView->focusedTableView());
@@ -326,6 +314,14 @@ void KexiRelationWidget::aboutToShowPopupMenu()
 		m_connectionPopup->changeTitle( m_connectionPopupTitleID, 
 			 m_relationView->selectedConnection()->toString() + " : " + i18n("Relationship") );
 	}
+}
+
+void
+KexiRelationWidget::slotTableFieldDoubleClicked(QListViewItem *i,const QPoint&,int)
+{
+	if (!sender()->isA("KexiRelationViewTable"))
+		return;
+	emit tableFieldDoubleClicked( static_cast<const KexiRelationViewTable*>(sender())->table(), i->text(1) );
 }
 
 #include "kexirelationwidget.moc"

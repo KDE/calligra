@@ -78,7 +78,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		/*! Adds a table \a t to the area. This changes only visual representation.
 		 If \a rect is valid, table widget rgeometry will be initialized.
 		 */
-		void addTable(KexiDB::TableSchema *t, const QRect &rect = QRect());
+		KexiRelationViewTableContainer* addTable(KexiDB::TableSchema *t, const QRect &rect = QRect());
 
 		//! Adds a connection \a con to the area. This changes only visual representation.
 		void addConnection(const SourceConnection& _conn /*, bool interactive=true*/);

@@ -283,7 +283,6 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 ==== Query GUI Designer TODO: ======
 - add tables dropping from the browser
 - add a dialog for inserting multiple tables a time
-- reuse KexiDataTable
 - make actions work
 - fix connections drawing
 - make "1" and "inf" signs a bit larger (scalable)
@@ -314,6 +313,11 @@ Query Designer
 - SQL Editor: added KexiSectionHeader
 - KexiQueryDesignerSQLView -> KexiQueryDesignerSQL
 - KexiQueryDesignerSQLEditor: now inherits KexiViewBase
+
+- Double clicking on table's field in Relation View allows to auto-add this field
+KexiTableView
+- Editor's focus position is updated (moved down) 
+  when new row is inserted above current row
 
 2004-06-17
 KexiTableView

@@ -41,12 +41,12 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 
 	public:
 		KexiRelationViewTableContainer(KexiRelationView *parent, KexiDB::TableSchema *t);
-		~KexiRelationViewTableContainer();
+		virtual ~KexiRelationViewTableContainer();
 
-		int			globalY(const QString &field);
+		int globalY(const QString &field);
 		KexiDB::TableSchema *table();
 
-//		virtual QSize sizeHint();
+		KexiRelationViewTable* tableView() const { return m_tableView; }
 		
 		int right() { return x() + width() - 1; }
 		int bottom() { return y() + height() - 1; }
@@ -66,19 +66,10 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 		void slotContextMenu(KListView *lv, QListViewItem *i, const QPoint& p);
 
 	protected:
-//js		virtual void			mouseMoveEvent(QMouseEvent *ev);
-//js		virtual void			mousePressEvent(QMouseEvent *ev);
-//js		virtual void			mouseReleaseEvent(QMouseEvent *ev);
-
-//		bool			m_mousePressed;
-//		int			m_bX;
-//		int			m_bY;
-//		int			m_grabX;
-//		int			m_grabY;
 		KexiDB::TableSchema *m_table;
 		KexiRelationViewTableContainerHeader *m_tableHeader;
-		KexiRelationViewTable	*m_tableView;
-		KexiRelationView	*m_parent;
+		KexiRelationViewTable *m_tableView;
+		KexiRelationView *m_parent;
 
 		friend class KexiRelationViewTableContainerHeader;
 };
@@ -99,32 +90,32 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTable : public KListView
 
 	public:
 		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, KexiDB::TableSchema *t, const char *name=0);
-		~KexiRelationViewTable();
+		virtual ~KexiRelationViewTable();
 
-		QString			table() const { return m_table; };
-		int			globalY(const QString &item);
+		KexiDB::TableSchema *table() const { return m_table; };
+		int globalY(const QString &item);
 		void setReadOnly(bool);
 
 		virtual QSize sizeHint();
 
 	signals:
-		void			tableScrolling();
+		void tableScrolling();
 
 	protected slots:
-		void			slotDropped(QDropEvent *e);
-		void			slotContentsMoving(int, int);
+		void slotDropped(QDropEvent *e);
+		void slotContentsMoving(int, int);
+		void slotItemDoubleClicked( QListViewItem *i, const QPoint &, int );
 
 	protected:
 		virtual void contentsMousePressEvent( QMouseEvent * e );
-		virtual bool		acceptDrag(QDropEvent *e) const;
-		virtual QDragObject	*dragObject();
+		virtual bool acceptDrag(QDropEvent *e) const;
+		virtual QDragObject *dragObject();
 		virtual QRect drawItemHighlighter(QPainter *painter, QListViewItem *item); 
 
 	private:
-		QStringList		m_fieldList;
-		QString			m_table;
-
-		KexiRelationView	*m_view;
+		QStringList m_fieldList;
+		KexiDB::TableSchema *m_table;
+		KexiRelationView *m_view;
 		QPixmap m_keyIcon, m_noIcon;
 };
 
@@ -143,15 +134,15 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainerHeader : public QLa
 		void endDrag();
 
 	protected:
-		bool			eventFilter(QObject *obj, QEvent *ev);
-		void			mousePressEvent(QMouseEvent *ev);
-		void			mouseReleaseEvent(QMouseEvent *ev);
+		bool eventFilter(QObject *obj, QEvent *ev);
+		void mousePressEvent(QMouseEvent *ev);
+		void mouseReleaseEvent(QMouseEvent *ev);
 
-		bool			m_dragging;
-		int			m_grabX;
-		int			m_grabY;
-		int			m_offsetX;
-		int			m_offsetY;
+		bool m_dragging;
+		int m_grabX;
+		int m_grabY;
+		int m_offsetX;
+		int m_offsetY;
 
 		QColor m_activeBG, m_activeFG, m_inactiveBG, m_inactiveFG;
 };

@@ -68,6 +68,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 		this, SLOT(slotTableAdded(KexiDB::TableSchema&)));
 	connect(m_relations, SIGNAL(tableHidden(KexiDB::TableSchema&)),
 		this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
+	connect(m_relations, SIGNAL(tableFieldDoubleClicked(KexiDB::TableSchema*,const QString&)),
+		this, SLOT(slotTableFieldDoubleClicked(KexiDB::TableSchema*,const QString&)));
 
 //	addActionProxyChild( m_view->relationView() );
 /*	KexiRelationPart *p = win->relationPart();
@@ -134,7 +136,6 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 		loadLayout();
 	}
 }
-
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 {
@@ -518,6 +519,17 @@ QSize KexiQueryDesignerGuiEditor::sizeHint() const
 	return QSize(QMAX(s1.width(),s2.width()), s1.height()+s2.height());
 }
 
+KexiTableItem* 
+KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName) const
+{
+	KexiTableItem *newItem = new KexiTableItem(m_data->columnsCount());
+	(*newItem)[0]=tableName+"."+fieldName;
+	(*newItem)[1]=tableName;
+	(*newItem)[2]=QVariant(true,1);//visible
+	(*newItem)[3]=QVariant(0);//totals
+	return newItem;
+}
+
 void KexiQueryDesignerGuiEditor::slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e)
 {
 	if (e->provides("kexi/field")) {
@@ -536,12 +548,7 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row,
 
 	KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
 	//insert new row at specific place
-	newItem = new KexiTableItem(m_data->columnsCount());
-	(*newItem)[0]=srcTable+"."+srcField;
-	(*newItem)[1]=srcTable;
-	(*newItem)[2]=QVariant(true,1);//visible
-	(*newItem)[3]=QVariant(0);//totals
-
+	newItem = createNewRow(srcTable, srcField);
 	m_droppedNewItem = newItem;
 	m_droppedNewTable = srcTable;
 	m_droppedNewField = srcField;
@@ -649,6 +656,24 @@ void KexiQueryDesignerGuiEditor::slotTablePositionChanged(KexiRelationViewTableC
 void KexiQueryDesignerGuiEditor::slotAboutConnectionRemove(KexiRelationViewConnection*)
 {
 	setDirty(true);
+}
+
+void KexiQueryDesignerGuiEditor::slotTableFieldDoubleClicked( KexiDB::TableSchema* table, const QString& fieldName )
+{
+	if (!table || (!table->field(fieldName) && fieldName!="*"))
+		return;
+	int row_num;
+	//find last filled row in the GUI table
+	for (row_num=m_buffers->size()-1; !m_buffers->at(row_num) && row_num>=0; row_num--)
+		;
+	row_num++; //after
+	//add row
+	KexiTableItem *newItem = createNewRow(table->name(), fieldName);
+	m_dataTable->tableView()->insertItem(newItem, row_num);
+	m_dataTable->tableView()->setCursor(row_num, 0);
+	//create buffer
+	createPropertyBuffer( row_num, table->name(), fieldName, true/*new one*/ );
+	propertyBufferSwitched();
 }
 
 KexiPropertyBuffer *KexiQueryDesignerGuiEditor::propertyBuffer()

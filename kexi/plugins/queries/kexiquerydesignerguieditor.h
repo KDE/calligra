@@ -97,6 +97,9 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		/*! Loads layout of relation GUI diagram. */
 		bool loadLayout();
 
+		/*! Helper: allocates and initializes new GUI table's row. Doesn't insert it, just returns. */
+		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName) const;
+
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
 		void slotDroppedAtRow(KexiTableItem *item, int row, 
@@ -111,6 +114,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void slotRowInserted(KexiTableItem* item, uint row);
 		void slotTablePositionChanged(KexiRelationViewTableContainer*);
 		void slotAboutConnectionRemove(KexiRelationViewConnection*);
+		void slotTableFieldDoubleClicked( KexiDB::TableSchema* table, const QString& fieldName );
 
 	private:
 		KexiTableViewData *m_data;

@@ -126,84 +126,6 @@ QSize KexiRelationViewTableContainer::sizeHint()
 }
 #endif
 
-QSize KexiRelationViewTable::sizeHint()
-{
-QFontMetrics fm(font());
-
-kdDebug() << m_table << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.width(m_table+"  ") << endl; 
-
-	QSize s( 
-		QMAX( columnWidth(1) + fm.width("i"), fm.width(m_table+"  ")), 
-		childCount()*firstChild()->totalHeight() + 4 );
-//	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
-	return s;
-}
-
-#if 0//js: code is already in KexiRelationViewTableContainerHeader...
-void
-KexiRelationViewTableContainer::mousePressEvent(QMouseEvent *ev)
-{
-	if (ev->button()==Qt::LeftButton) {
-		m_mousePressed = true;
-		m_bX = ev->x();
-		m_bY = ev->y();
-	}
-	setFocus();
-	QFrame::mousePressEvent(ev);
-	if (ev->button()==Qt::LeftButton || ev->button()==Qt::RightButton)
-		ev->accept();
-	if (ev->button()==Qt::RightButton)
-		m_parent->executePopup(ev->globalPos());
-}
-
-void
-KexiRelationViewTableContainer::mouseMoveEvent(QMouseEvent *ev)
-{
-	return;
-	if(m_mousePressed)
-	{
-//		move(ev->x() - m_bX, ev->y() - m_bY);
-		if(m_bY < m_tableHeader->height())
-		{
-			QPoint movePoint(ev->x() - m_bX, ev->y() - m_bY);
-			move(mapToParent(movePoint));
-		}
-		else if(ev->x() >= width() - 3)
-		{
-			if(ev->y() >= height() - 6)
-				resize(ev->x(), ev->y());
-			else
-				resize(ev->x(), height());
-		}
-
-		emit moved(this);
-	}
-	else
-	{
-		if(ev->x() >= width() - 3)
-		{
-			if(ev->y() >= height() - 3)
-				setCursor(QCursor(SizeFDiagCursor));
-			else
-				setCursor(QCursor(SizeHorCursor));
-		}
-		else
-		{
-			setCursor(QCursor(ArrowCursor));
-		}
-	}
-
-	QFrame::mouseMoveEvent(ev);
-}
-
-void
-KexiRelationViewTableContainer::mouseReleaseEvent(QMouseEvent *ev)
-{
-	m_mousePressed = false;
-	QFrame::mouseMoveEvent(ev);
-}
-#endif
-
 void KexiRelationViewTableContainer::setFocus()
 {
 	kdDebug() << "SET FOCUS" << endl;
@@ -403,11 +325,12 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 
 KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, KexiDB::TableSchema *t, const char *name)
  : KListView(parent, name)
+ , m_table(t)
 {
 //	m_fieldList = t.;
 //	m_table = table;
 	m_view = view;
-	m_table = t->name();
+//	m_table = t->name();
 //	m_parent = parent;
 
 	m_keyIcon = SmallIcon("key");
@@ -461,6 +384,25 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *
 //	setDragEnabled
 	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotContentsMoving(int,int)));
+	connect(this, SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),
+		this, SLOT(slotItemDoubleClicked(QListViewItem*,const QPoint&,int)));
+}
+
+KexiRelationViewTable::~KexiRelationViewTable()
+{
+}
+
+QSize KexiRelationViewTable::sizeHint()
+{
+	QFontMetrics fm(font());
+
+	kdDebug() << m_table->name() << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.width(m_table->name()+"  ") << endl; 
+
+	QSize s( 
+		QMAX( columnWidth(1) + fm.width("i"), fm.width(m_table->name()+"  ")), 
+		childCount()*firstChild()->totalHeight() + 4 );
+//	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
+	return s;
 }
 
 void KexiRelationViewTable::setReadOnly(bool b)
@@ -488,7 +430,7 @@ KexiRelationViewTable::dragObject()
 	{
 //		QString f = selectedItem()->text(1).stripWhiteSpace();
 //		if (f!="*") {
-			KexiFieldDrag *drag = new KexiFieldDrag("kexi/table",m_table,selectedItem()->text(1), this, "metaDrag");
+			KexiFieldDrag *drag = new KexiFieldDrag("kexi/table",m_table->name(),selectedItem()->text(1), this, "metaDrag");
 			return drag;
 //		}
 	}
@@ -533,7 +475,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 
 		SourceConnection s;
 		s.masterTable = srcTable;
-		s.detailsTable = m_table;
+		s.detailsTable = m_table->name();
 		s.masterField = srcField;
 		s.detailsField = rcvField;
 
@@ -541,7 +483,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		m_view->addConnection(s); //, false);
 
 		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " 
-			<< m_table << ":" << rcvField << endl;
+			<< m_table->name() << ":" << rcvField << endl;
 		ev->accept();
 		return;
 	}
@@ -572,14 +514,10 @@ QRect KexiRelationViewTable::drawItemHighlighter(QPainter *painter, QListViewIte
 	return itemRect(item);
 }
 
-/*void KexiRelationViewTable::contentsMouseMoveEvent(QMouseEvent *ev)
-{
-
-}*/
-
-KexiRelationViewTable::~KexiRelationViewTable()
+void KexiRelationViewTable::slotItemDoubleClicked( QListViewItem *i, const QPoint &, int )
 {
 }
+
 
 //=====================================================================================
 
