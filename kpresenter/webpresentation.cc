@@ -232,11 +232,21 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     QString html;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         pgNum = i + 1;
-        html = QString( "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" );
+        html = QString( "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n" );
         html += QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
 
         html += QString( "<META HTTP-Equiv=\"Content-Type\" CONTENT=\"text/html; charset=%1\">\n" )
             .arg( chsetName );
+
+	if ( i > 0 ) {
+		html += QString( "<LINK rel=\"first\" href=\"slide_1.html\">\n" );
+		html += QString( "<LINK rel=\"prev\" href=\"slide_%1.html\">\n" ).arg( pgNum - 1 );
+	}
+	if ( i < slideInfos.count() - 1 ) {
+		html += QString( "<LINK rel=\"next\" href=\"slide_%1.html\">\n" ).arg( pgNum + 1 );
+		html += QString( "<LINK rel=\"last\" href=\"slide_%1.html\">\n" ).arg( slideInfos.count() );
+	}
+	html += QString( "<LINK rel=\"contents\" href=\"../index.html\">\n" );
 
         html += QString( "</HEAD>\n" );
         html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
@@ -244,7 +254,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         html += QString( "  <CENTER>\n" );
         if ( i > 0 )
             html += QString( "    <A HREF=\"slide_1.html\">" );
-        html += QString( "<IMG src=\"../pics/first.%1\" border=\"0\">" ).arg( format );
+        html += QString( "<IMG src=\"../pics/first.%1\" border=\"0\" alt=\"First\" title=\"First\">" ).arg( format );
         if ( i > 0 )
             html += "</A>\n";
         else
@@ -252,7 +262,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         if ( i > 0 )
             html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( pgNum - 1 );
-        html += QString( "<IMG src=\"../pics/prev.%1\" border=\"0\">" ).arg( format );
+        html += QString( "<IMG src=\"../pics/prev.%1\" border=\"0\" alt=\"Previous\" title=\"Previous\">" ).arg( format );
         if ( i > 0 )
             html += "</A>\n";
         else
@@ -260,7 +270,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         if ( i < slideInfos.count() - 1 )
             html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( pgNum + 1 );
-        html += QString( "<IMG src=\"../pics/next.%1\" border=\"0\">" ).arg( format );
+        html += QString( "<IMG src=\"../pics/next.%1\" border=\"0\" alt=\"Next\" title=\"Next\">" ).arg( format );
         if ( i < slideInfos.count() - 1 )
             html += "</A>\n";
         else
@@ -268,7 +278,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         if ( i < slideInfos.count() - 1 )
             html += QString( "    <A HREF=\"slide_%1.html\">" ).arg( slideInfos.count() );
-        html += QString( "<IMG src=\"../pics/last.%1\" border=\"0\">" ).arg( format );
+        html += QString( "<IMG src=\"../pics/last.%1\" border=\"0\" alt=\"Last\" title=\"Last\">" ).arg( format );
         if ( i < slideInfos.count() - 1 )
             html += "</A>\n";
         else
@@ -277,22 +287,22 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         html += "    &nbsp; &nbsp; &nbsp; &nbsp; \n";
 
         html += "    <A HREF=\"../index.html\">";
-        html += QString( "<IMG src=\"../pics/home.%1\" border=\"0\">" ).arg( format );
+        html += QString( "<IMG src=\"../pics/home.%1\" border=\"0\" alt=\"Home\" title=\"Home\">" ).arg( format );
         html += "</A>\n";
 
         html += "  </CENTER><BR><HR noshade>\n";
 
-        html += QString( "  <FONT color=\"%1\">\n" ).arg( titleColor.name() );
-        html += QString( "  <CENTER><B>%1</B> - <I>%2</I></CENTER>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
+        html += QString( "  <CENTER><FONT color=\"%1\">\n" ).arg( titleColor.name() );
+        html += QString( "  <B>%1</B> - <I>%2</I>\n" ).arg( title ).arg( slideInfos[ i ].slideTitle );
 
-        html += "  </FONT><HR noshade><BR>\n";
+        html += "  </FONT></CENTER><HR noshade><BR>\n";
 
         html += "  <CENTER>\n";
 
         html += "    ";
         if ( i < slideInfos.count() - 1 )
             html += QString( "<A HREF=\"slide_%1.html\">" ).arg( pgNum + 1 );
-        html += QString( "<IMG src=\"../pics/slide_%1.%2\" BORDER=0>" ).arg( pgNum ).arg( format );
+        html += QString( "<IMG src=\"../pics/slide_%1.%2\" border=\"0\" alt=\"Slide %3\">" ).arg( pgNum ).arg( format ).arg( i );
         if ( i < slideInfos.count() - 1 )
             html += "</A>\n";
         else
