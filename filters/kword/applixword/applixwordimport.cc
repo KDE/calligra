@@ -23,6 +23,7 @@
 #include <unistd.h>
 #endif
 
+#include <qregexp.h>
 #include <qmessagebox.h>
 #include <qlist.h>
 #include <applixwordimport.h>

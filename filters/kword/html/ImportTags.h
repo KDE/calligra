@@ -22,6 +22,8 @@
 #ifndef IMPORTTAGS_H
 #define IMPORTTAGS_H
 
+#include <qmap.h>
+
 typedef enum
 {
     modeDisplayUnknown=0,

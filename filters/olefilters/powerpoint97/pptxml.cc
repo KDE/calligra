@@ -22,6 +22,7 @@ DESCRIPTION
 
 #include <pptdoc.h>
 #include <pptxml.h>
+#include <qregexp.h>
 #include <qobject.h>
 #include <koGlobal.h>
 

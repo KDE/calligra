@@ -25,6 +25,7 @@
 
 #include <qvaluelist.h>
 #include <qstring.h>
+#include <qcolor.h>
 #include <qdom.h>
 
 // FormatData is a container for data retreived from the FORMAT tag

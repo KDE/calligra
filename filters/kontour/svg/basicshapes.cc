@@ -21,6 +21,7 @@ DESCRIPTION
     Filter to convert a svg file to a killustrator document using koDocument
 */
 
+#include <qregexp.h>
 #include "GPolyline.h"
 #include "GOval.h"
 #include "GPolygon.h"

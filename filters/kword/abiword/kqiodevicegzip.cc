@@ -81,19 +81,19 @@ void KQIODeviceGZip::flush(void)
     }
 }
 
-uint KQIODeviceGZip::size(void) const
+QIODevice::Offset KQIODeviceGZip::size(void) const
 {
     return 0; // You cannot determine size!
 }
 
-int  KQIODeviceGZip::at() const
+QIODevice::Offset  KQIODeviceGZip::at() const
 {
     if (!m_gzfile)
         return 0;
     return gztell(m_gzfile);
 }
 
-bool KQIODeviceGZip::at(int pos)
+bool KQIODeviceGZip::at(QIODevice::Offset pos)
 {
     if (!m_gzfile)
         return false;
@@ -114,9 +114,9 @@ bool KQIODeviceGZip::reset(void)
     return (gzrewind(m_gzfile)>=0);
 }
 
-int KQIODeviceGZip::readBlock( char *data, uint maxlen )
+Q_LONG KQIODeviceGZip::readBlock( char *data, Q_ULONG maxlen )
 {
-    int result=0;
+    Q_LONG result=0;
     if (m_gzfile)
     {
         result=gzread(m_gzfile,data,maxlen);
@@ -125,9 +125,9 @@ int KQIODeviceGZip::readBlock( char *data, uint maxlen )
     return result;
 }
 
-int KQIODeviceGZip::writeBlock( const char *data, uint len )
+Q_LONG KQIODeviceGZip::writeBlock( const char *data, Q_ULONG len )
 {
-    int result=0;
+    Q_ULONG result=0;
     if (m_gzfile)
     {
         result=gzwrite(m_gzfile,(char*)data,len);

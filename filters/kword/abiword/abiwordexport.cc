@@ -35,6 +35,7 @@
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
 
+#include <qregexp.h>
 #include <qtextstream.h>
 #include <qdom.h>
 

@@ -26,6 +26,7 @@ DESCRIPTION
 #include "GOval.h"
 #include "style.h"
 #include <kdebug.h>
+#include <qregexp.h>
 
 /********************* Path Shape ********************************/
 

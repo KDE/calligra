@@ -22,6 +22,7 @@ DESCRIPTION
 */
 
 #include "transform.h"
+#include <qregexp.h>
 #include <kdebug.h>
 
 /********************* Transform stuff *******************************/

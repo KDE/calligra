@@ -37,14 +37,14 @@ public:
     void close(void);
     void flush(void);
 
-    uint size(void) const;
-    int  at(void) const;
-    bool at(int pos);
+    Offset size(void) const;
+    Offset  at(void) const;
+    bool at(Offset pos);
     bool atEnd(void) const;
     bool reset (void);
 
-    int readBlock( char *data, uint maxlen );
-    int writeBlock( const char *data, uint len );
+    Q_LONG readBlock( char *data, Q_ULONG maxlen );
+    Q_LONG writeBlock( const char *data, Q_ULONG len );
 
     int getch(void);
     int putch(int ch);

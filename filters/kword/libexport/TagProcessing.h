@@ -38,6 +38,7 @@
 
 #include <kdebug.h>
 #include <qdom.h>
+#include <qvaluelist.h>
 
 class ClassExportFilterBase;
 

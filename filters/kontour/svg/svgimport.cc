@@ -22,6 +22,7 @@ DESCRIPTION
 */
 
 #include "svgimport.h"
+#include <qregexp.h>
 #include <kdebug.h>
 #include "GPage.h"
 #include "GGroup.h"

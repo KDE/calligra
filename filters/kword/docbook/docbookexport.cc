@@ -23,6 +23,7 @@
 #include <docbookexport.h>
 #include <docbookexport.moc>
 #include <kdebug.h>
+#include <qregexp.h>
 #include <qdom.h>
 
 

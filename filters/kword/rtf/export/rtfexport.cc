@@ -21,6 +21,7 @@
 
 #include <rtfexport.h>
 #include <qtextcodec.h>
+#include <qregexp.h>
 #include <rtfexport.moc>
 #include <qdatetime.h>
 #include <kiExport.h>

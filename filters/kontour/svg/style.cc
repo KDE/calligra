@@ -23,6 +23,8 @@ DESCRIPTION
 
 #include "style.h"
 #include <qstring.h>
+#include <qstringlist.h>
+#include <qregexp.h>
 #include <kdebug.h>
 
 unsigned int rgb(short r, short g, short b) {

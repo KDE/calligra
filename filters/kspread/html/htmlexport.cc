@@ -22,6 +22,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <qregexp.h>
 #include <qdom.h>
 #include <qstring.h>
 #include <qfile.h>

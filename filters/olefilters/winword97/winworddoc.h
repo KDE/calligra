@@ -28,6 +28,7 @@
 #include <qdom.h>
 #include <qvaluelist.h>
 #include <qvector.h>
+#include <qstringlist.h>
 
 class myFile;
 

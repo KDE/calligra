@@ -23,6 +23,7 @@
 #define HTMLIMPORTSAX_H
 
 #include<qdom.h>
+#include <qvaluelist.h>
 class CSS2Styles
 {
 public:

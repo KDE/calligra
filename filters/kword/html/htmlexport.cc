@@ -43,6 +43,7 @@
 */
 
 #include <qtextstream.h>
+#include <qregexp.h>
 #include <qdom.h>
 
 #include <kdebug.h>
