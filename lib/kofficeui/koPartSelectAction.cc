@@ -1,0 +1,86 @@
+/* This file is part of the KDE libraries
+    Copyright (C) 2001 David Faure <faure@kde.org>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
+*/
+
+#include "koPartSelectAction.h"
+#include "koPartSelectDia.h"
+
+KoPartSelectAction::KoPartSelectAction( const QString& text, QObject* parent, const char* name )
+    : KActionMenu( text, parent, name )
+{
+    init();
+}
+
+KoPartSelectAction::KoPartSelectAction( const QString& text, const QString& icon,
+                                        QObject* parent, const char* name )
+    : KActionMenu( text, icon, parent, name )
+{
+    init();
+}
+
+KoPartSelectAction::KoPartSelectAction( const QString& text, const QString& icon,
+                                        QObject* receiver, const char* slot,
+                                        QObject* parent, const char* name )
+    : KActionMenu( text, icon, parent, name )
+{
+    if (receiver)
+        connect( this, SIGNAL( activated() ), receiver, slot );
+    init();
+}
+
+void KoPartSelectAction::init()
+{
+    // Query for documents
+    m_lstEntries = KoDocumentEntry::query();
+    QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+    for( ; it != m_lstEntries.end(); ++it ) {
+        KService::Ptr serv = (*it).service();
+	KAction *action = new KAction( serv->comment(), serv->icon(), 0,
+                                       this, SLOT( slotActionActivated() ),
+                                       parentCollection(), serv->name().latin1() );
+        insert( action );
+    }
+
+}
+
+// Called when selecting a part
+void KoPartSelectAction::slotActionActivated()
+{
+    QString servName = QString::fromLatin1( sender()->name() );
+    KService::Ptr serv = KService::serviceByName( servName );
+    m_documentEntry = KoDocumentEntry( serv );
+    emit activated();
+}
+
+// Called when activating the toolbar button
+void KoPartSelectAction::slotActivated()
+{
+    m_documentEntry = KoPartSelectDia::selectPart( 0L );
+    emit activated();
+}
+
+/*int KoPartSelectAction::plug( QWidget *widget, int index )
+{
+    if ( widget->inherits("KToolBar") )
+    {
+        // Let's be clever... if we want a simple toolbar button, kaction can do it for us
+        return KAction::plug( widget, index );
+    }
+    return KActionMenu::plug( widget, index );
+}*/
+
+#include "koPartSelectAction.moc"

@@ -13,7 +13,7 @@ lib_LTLIBRARIES = libkofficeui.la
 
 libkofficeui_la_SOURCES = koGlobal.cc koFind.cc koReplace.cc \
         koPageLayoutDia.cc \
-	koPartSelectDia.cc \
+	koPartSelectDia.cc koPartSelectAction.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koTemplateCreateDia.cc \
 	kcoloractions.cpp koToolBox.cpp koTemplates.cc \
@@ -22,7 +22,7 @@ libkofficeui_la_SOURCES = koGlobal.cc koFind.cc koReplace.cc \
 
 include_HEADERS = koFind.h koReplace.h \
         koPageLayoutDia.h \
-	koPartSelectDia.h \
+	koPartSelectDia.h koPartSelectAction.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koTemplateCreateDia.h \
 	kcoloractions.h koToolBox.h koTemplates.h \
