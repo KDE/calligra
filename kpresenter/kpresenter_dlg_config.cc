@@ -188,21 +188,18 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     KoUnit::Unit unit = m_pView->kPresenterDoc()->getUnit();
 
     QVBoxLayout *box = new QVBoxLayout( this );
-    box->setMargin( 5 );
-    box->setSpacing( 10 );
+    box->setMargin( KDialog::spacingHint() );
+    box->setSpacing( KDialog::marginHint() );
 
     oldNbRecentFiles=10;
     double ptIndent = MM_TO_POINT(10.0);
     bool bShowRuler=true;
     bool oldShowStatusBar = true;
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
-    tmpQGroupBox->setTitle( i18n("Interface") );
-
-    QVBoxLayout *lay1 = new QVBoxLayout( tmpQGroupBox );
-    lay1->setMargin( 20 );
-    lay1->setSpacing( 10 );
-
+    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Interface"), this );
+    tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
+    tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
+    QVBoxLayout *lay1 = new QVBoxLayout( tmpQGroupBox->layout() );
 
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
@@ -239,7 +236,8 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 
     lay1->addWidget(indent);
 
-
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    lay1->addItem( spacer);
 
     box->addWidget( tmpQGroupBox );
 }
@@ -307,9 +305,10 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     box->setMargin( 5 );
     box->setSpacing( 10 );
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
-    tmpQGroupBox->setTitle( i18n("Colors") );
-    QGridLayout *grid1 = new QGridLayout( tmpQGroupBox, 5, 1, 15, 7);
+    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Colors"), this );
+    tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
+    tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *grid1 = new QGridLayout( tmpQGroupBox->layout(), 5, 1);
     QLabel *lab = new QLabel( tmpQGroupBox, "label20" );
     lab->setText( i18n( "Background color of objects in editing mode:" ) );
     grid1->addWidget( lab, 0, 0 );
@@ -329,6 +328,8 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
                                   oldGridColor,
                                   tmpQGroupBox );
     grid1->addWidget( gridColor, 3, 0 );
+
+    grid1->setRowStretch( 4, 1);
 
     box->addWidget( tmpQGroupBox );
 }

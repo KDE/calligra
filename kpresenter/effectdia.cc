@@ -59,9 +59,11 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     setMainWidget(page);
     topLayout = new QVBoxLayout( page, 0, spacingHint() );
 
-    QGroupBox *grp1 = new QGroupBox(i18n( "Appear" ), page );
+    QGroupBox *grp1 = new QGroupBox(0, Qt::Vertical, i18n( "Appear" ), page );
+    grp1->layout()->setSpacing(KDialog::spacingHint());
+    grp1->layout()->setMargin(KDialog::marginHint());
     topLayout->addWidget(grp1);
-    QGridLayout *upperRow = new QGridLayout(grp1, 5, 4, 15);
+    QGridLayout *upperRow = new QGridLayout(grp1->layout(), 5, 4);
 
     lNum = new QLabel( i18n( "Order of appearance:" ), grp1 );
     lNum->setAlignment( AlignVCenter );
@@ -184,9 +186,11 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     disappear->setChecked( obj->getDisappear() );
     topLayout->addWidget(disappear);
 
-    QGroupBox *grp2 = new QGroupBox(i18n( "Disappear" ), page);
+    QGroupBox *grp2 = new QGroupBox(0, Qt::Vertical, i18n( "Disappear" ), page);
+    grp2->layout()->setSpacing(KDialog::spacingHint());
+    grp2->layout()->setMargin(KDialog::marginHint());
     topLayout->addWidget(grp2);
-    QGridLayout *lowerRow = new QGridLayout(grp2, 4, 4, 15);
+    QGridLayout *lowerRow = new QGridLayout(grp2->layout(), 4, 4);
 
     lDisappear = new QLabel( i18n( "Order of disappearance:" ), grp2 );
     lDisappear->setAlignment( AlignVCenter );
