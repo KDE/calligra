@@ -18,16 +18,19 @@
    Boston, MA 02111-1307, USA.
  */
 
-#include "kexidialogbase.h"
-#include "kexiview.h"
-#include "kexiproject.h"
-#include "kexiworkspace.h"
+#include <qtimer.h>
 
 #include <kdockwidget.h>
 #include <kiconloader.h>
 #include <netwm_def.h>
-#include <qtimer.h>
 #include <kdebug.h>
+
+#include <kocontexthelp.h>
+
+#include "kexidialogbase.h"
+#include "kexiview.h"
+#include "kexiproject.h"
+#include "kexiworkspace.h"
 
 KexiDialogBase *KexiDialogBase::s_activeDocumentWindow=0;
 KexiDialogBase *KexiDialogBase::s_activeToolWindow=0;
@@ -61,7 +64,11 @@ KexiView *KexiDialogBase::kexiView()const
     return m_view;
 }
 
-
+void
+KexiDialogBase::setContextHelp(const QString &title, const QString &message)
+{
+	m_view->help()->setContextHelp(title, message);
+}
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {

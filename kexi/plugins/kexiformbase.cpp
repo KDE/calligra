@@ -61,13 +61,13 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 		        m_button = new KAction(i18n("Push Button"), "button",
 		                Key_F6,  actionCollection(), "widget_push_button");
 
-		        m_urlreq = new KAction(i18n("URL Request"), "button",
+		        m_urlreq = new KAction(i18n("URL Request"), "urlrequest",
 		                Key_F7, actionCollection(), "widget_url_requester");
 
-		        m_frame = new KAction(i18n("Frame"), "lineedit",
+		        m_frame = new KAction(i18n("Frame"), "frame",
 		                Key_F8, actionCollection(), "widget_frame");
 
-		        m_tabWidget = new KAction(i18n("Tab Widget"), "lineedit",
+		        m_tabWidget = new KAction(i18n("Tab Widget"), "tabwidget",
 		                Key_F9, actionCollection(), "widget_tabwidget");
 			setXMLFile("kexiformeditorui.rc");
 		}

@@ -58,6 +58,8 @@ class KexiQueryDesigner : public KexiDialogBase
 
 		void			print(KPrinter &printer);
 
+		QString			getSQL();
+
 	protected:
 		void			addTab(QPixmap pixmap, const QString &caption, QWidget *assosiated,int ID);
 		virtual void		finishUpForClosing();

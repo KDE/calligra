@@ -71,6 +71,8 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		~KexiQueryDesignerGuiEditor();
 
 		QString			getQuery();
+		QString			getParam(const QString &name, bool escape);
+
 		KexiTableView		*table()const { return m_designTable; };
 
 		QStringList		sourceList() { return m_sourceList; };
@@ -92,16 +94,16 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		KexiView		*m_view;
 		QWidget			*m_tables;
 		KexiTableView		*m_designTable;
-	        KexiParameterListEditor *m_paramList;
+		KexiParameterListEditor *m_paramList;
 
 
 		KexiQueryDesigner	*m_parent;
 
 		KexiTableItem		*m_insertItem;
 		QStringList		m_sourceList;
-		ConditionList		m_conditions;
+//		ConditionList		m_conditions;
 
-		InvolvedTables		m_involvedTables;
+//		InvolvedTables		m_involvedTables;
 };
 
 #endif

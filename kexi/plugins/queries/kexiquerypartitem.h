@@ -26,6 +26,7 @@
 
 class QString;
 class KexiProjectHandler;
+class KexiQueryDesigner;
 
 class KexiQueryPartItem: public KexiProjectHandlerItem 
 {
@@ -59,6 +60,8 @@ public:
 	void store(KoStore*);
 	void load(KoStore*);
 
+	void asignView(KexiQueryDesigner *v);
+
 protected:
 	friend class KexiQueryDesigner;
 	friend class KexiQueryDesigerGuiEditor;
@@ -66,6 +69,7 @@ protected:
 private:
 	QueryEntryList m_queryEntryList;
 	KexiDataProvider::ParameterList m_params;
+	KexiQueryDesigner	*m_designer;
 };
 
 #endif

@@ -399,6 +399,12 @@ KexiQueryDesigner::print(KPrinter &printer)
 	m_view->print(printer);
 }
 
+QString
+KexiQueryDesigner::getSQL()
+{
+	return m_editor->getQuery();
+}
+
 KexiQueryDesigner::~KexiQueryDesigner()
 {
 }

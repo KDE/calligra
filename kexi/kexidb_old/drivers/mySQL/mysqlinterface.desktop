@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name = mySQL
-Comment = mySQL is a fast database engine, which provides fast access to personal databases but also big databases
+Comment = mySQL is a fast database engine. It is used for personal purposes as well as for huge databases in big companies and organisations. We recommand using mySQL for projects shared in networks.
 X-KDE-Library = keximysqlinterface
 ServiceTypes = KexiDB/Interface
 Type= Service

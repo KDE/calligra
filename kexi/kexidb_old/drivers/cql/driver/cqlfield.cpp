@@ -66,6 +66,7 @@ CqlField::sqlType()
 		case CqlConstants::CQL_LONGVARCHAR:
 		case CqlConstants::CQL_CHAR:
 		case CqlConstants::CQL_CHARUC:
+		case CqlConstants::CQL_VARCHAR:
 			return SQLVarchar;
 
 		case CqlConstants::CQL_INTEGER:
@@ -76,7 +77,6 @@ CqlField::sqlType()
 
 		case CqlConstants::CQL_LONGVARBINARY:
 		case CqlConstants::CQL_VARBINARY:
-		case CqlConstants::CQL_VARCHAR:
 			return SQLBoolean;
 
 		case CqlConstants::CQL_DATE:

@@ -18,6 +18,7 @@
  */
 
 #include <kexiquerypartitem.h>
+#include <kexiquerydesigner.h>
 #include <qstring.h>
 #include <kexiproject.h>
 #include <qdom.h>
@@ -27,7 +28,9 @@
 KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
 		const QString& name, const QString& mime, 
 		const QString& identifier)
-	:KexiProjectHandlerItem(parent,name,mime,identifier){
+	:KexiProjectHandlerItem(parent,name,mime,identifier)
+{
+	m_designer = 0;
 }
 
 KexiQueryPartItem::~KexiQueryPartItem() {
@@ -63,6 +66,20 @@ void KexiQueryPartItem::store(KoStore* store) {
 	QDomText attrName = domDoc.createTextNode(identifier());
         nameElement.appendChild(attrName);
         docElement.appendChild(nameElement);
+
+	QDomElement sqlElement = domDoc.createElement("sql");
+	QDomText attrSql;
+
+	if(!m_designer)
+	{
+		attrSql = domDoc.createTextNode("");
+	}
+	else
+	{
+		attrSql = domDoc.createTextNode(m_designer->getSQL());
+	}
+
+	docElement.appendChild(sqlElement);
 
         QDomElement itemsElement = domDoc.createElement("items");
         docElement.appendChild(itemsElement);
@@ -148,6 +165,12 @@ void KexiQueryPartItem::load(KoStore* store) {
 			}
 		}
 	}
+}
+
+void
+KexiQueryPartItem::asignView(KexiQueryDesigner *v)
+{
+	m_designer = v;
 }
 
 #include "kexiquerypartitem.moc"

@@ -22,11 +22,14 @@
 #include <qdialog.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
+#include <qsplitter.h>
+#include <qregexp.h>
 
+#include <klistview.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kpushbutton.h>
-#include <qsplitter.h>
+#include <klineeditdlg.h>
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
@@ -116,6 +119,7 @@ void KexiQueryDesignerGuiEditor::appendLine(const QString &source, const QString
 	m_insertItem->setValue(2,show);
 	m_insertItem->setValue(3,andC);
 	m_insertItem->setValue(4,orC);
+	m_insertItem->setInsertItem(false);
 
         KexiTableItem *newInsert = new KexiTableItem(m_designTable);
         newInsert->setValue(0, 0);
@@ -182,10 +186,11 @@ KexiQueryDesignerGuiEditor::getQuery()
 #warning fixme
 	//yo, let's get ugly :)
 
+	ConditionList conditions;
+	InvolvedTables involvedTables;
+
 	if(m_designTable->rows() == 1)
 		return "";
-
-	QString	 mainTable;
 
 	QString query = "SELECT ";
 
@@ -206,9 +211,9 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 
 			int iCount;
-			if(m_involvedTables.contains(table))
+			if(involvedTables.contains(table))
 			{
-				iCount = m_involvedTables[table].involveCount;
+				iCount = involvedTables[table].involveCount;
 			}
 			else
 			{
@@ -217,17 +222,17 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 			InvolvedTable ivTable;
 			ivTable.involveCount = iCount + 1;
-			m_involvedTables.insert(table, ivTable, true);
+			involvedTables.insert(table, ivTable, true);
 
 
 			involvedFields.insert(table, field);
 
 			Condition condition;
-			condition.field = field;
+			condition.field = table + "." + field;
 			condition.andCondition = cItem->getValue(3).toString();
 			condition.orCondition = cItem->getValue(4).toString();
 
-			m_conditions.append(condition);
+			conditions.append(condition);
 
 			if(mI != m_designTable->rows() - 2)
 				query += ", ";
@@ -243,7 +248,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 	QString maxTable = QString::null;
 	int maxCount = 0;
 	bool isSrcTable = false;
-	for(InvolvedTables::Iterator it = m_involvedTables.begin(); it != m_involvedTables.end(); it++)
+	for(InvolvedTables::Iterator it = involvedTables.begin(); it != involvedTables.end(); it++)
 	{
 		for(RelationList::Iterator itRel = relations.begin(); itRel != relations.end(); itRel++)
 		{
@@ -291,9 +296,9 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	if(maxTable == QString::null)
 	{
-		if(m_involvedTables.count() == 1)
+		if(involvedTables.count() == 1)
 		{
-			maxTable = m_involvedTables.begin().key();
+			maxTable = involvedTables.begin().key();
 		}
 	}
 
@@ -322,27 +327,31 @@ KexiQueryDesignerGuiEditor::getQuery()
 	}
 
 	int conditionCount = 0;
-	for(ConditionList::Iterator itC = m_conditions.begin(); itC != m_conditions.end(); itC++)
+	for(ConditionList::Iterator itC = conditions.begin(); itC != conditions.end(); itC++)
 	{
-		if((*itC).orCondition == "" && (*itC).andCondition == "")
-		{
-			conditionCount--;
-		}
-		else if((*itC).andCondition != "")
+		if(!(*itC).andCondition.isEmpty())
 		{
 			if(conditionCount != 0)
 				query += " AND ";
 			else
 				query += " WHERE ";
 
-			query += (*itC).field + " " + (*itC).andCondition;
+			QString ccondition = (*itC).andCondition;
+			if(ccondition.contains("kexi_"))
+			{
+				QRegExp exp("kexi_[a-zA-Z0-9]*");
+				exp.search(ccondition);
+				ccondition.replace(exp, getParam(exp.cap(), true));
+			}
+
+			query += (*itC).field + " " + ccondition;
+			conditionCount++;
 		}
-		if((*itC).orCondition != "")
+		if(!(*itC).orCondition.isEmpty())
 		{
 			query += " OR " + (*itC).field + " " + (*itC).orCondition;
+			conditionCount++;
 		}
-
-		conditionCount++;
 	}
 
 	//ok, we are trying to get the conditions
@@ -353,14 +362,35 @@ KexiQueryDesignerGuiEditor::getQuery()
 	return query;
 }
 
+QString
+KexiQueryDesignerGuiEditor::getParam(const QString &name, bool escape)
+{
+	kdDebug() << "KexiQueryDesignerGuiEditor::getParam()" << endl;
+	if(m_paramList->list->findItem(name, 0))
+	{
+		bool ok;
+		QString result = KLineEditDlg::getText(i18n("Query"), name, "", &ok, this);
+		if(escape)
+			return QString("\"" + result + "\"");
+	}
+	else
+	{
+		return name;
+	}
+}
+
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor() {
 	m_parent->saveBack();
 }
 
-void KexiQueryDesignerGuiEditor::slotAddParameter() {
+void
+KexiQueryDesignerGuiEditor::slotAddParameter()
+{
 	KexiAddParamDialog d(this);
 	if (d.exec()==QDialog::Accepted)
 	{
+		kdDebug() << "KexiQueryDesignerGuiEditor::slotAddParameter(): name=" << d.parameterName() << endl;
+		new KListViewItem(m_paramList->list, QString("kexi_" + d.parameterName()), "type");
 	}
 }
 

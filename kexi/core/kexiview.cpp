@@ -133,12 +133,12 @@ void KexiView::initDocBrowser()
 
 void KexiView::initHelper()
 {
-	KoContextHelpDocker *help = new KoContextHelpDocker(mainWindow());
-        help->setResizeEnabled(true);
-        help->setCloseMode(QDockWindow::Always);
+	m_help = new KoContextHelpDocker(mainWindow());
+        m_help->setResizeEnabled(true);
+        m_help->setCloseMode(QDockWindow::Always);
 //	mainWindow()->moveDockWindow(help,DockLeft);
-	mainWindow()->moveDockWindow(help, DockLeft);
-	help->setContextHelp(i18n("welcome"), i18n("Welcome to kexi!"));
+	mainWindow()->moveDockWindow(m_help, DockLeft);
+	m_help->setContextHelp(i18n("welcome"), i18n("kexi is based on relational databases. Before you start creating tables you should think about the general <a>database-design</a>."));
 
 }
 

@@ -83,7 +83,7 @@ CqlDB::tables()
 	TableIdList *tlist = m_db->getTableIds("PUBLIC");
 	for(TableId *table = tlist->first(); table; table = tlist->next())
 	{
-		tables.append(cqlString(table->tableName()));
+		tables.append(cqlString(table->tableName()).lower().stripWhiteSpace());
 	}
 
 	return tables;

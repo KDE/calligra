@@ -33,6 +33,8 @@ class KAction;
 class KToggleAction;
 class KRecentFilesAction;
 
+class KoContextHelpDocker;
+
 class KexiWorkspace;
 class KexiTabBrowser;
 class KexiDoc;
@@ -56,6 +58,9 @@ public:
 	QWidget* workspaceWidget()const { return m_workspace; };
 	KexiTabBrowser* browser()const { return m_browser; };
 	KexiWindowMode windowMode()const { return m_windowMode;};
+
+	KoContextHelpDocker	*help() { return m_help; };
+
 	KexiProject *project()const ;
 
     virtual void updateReadWrite( bool readwrite );
@@ -81,6 +86,7 @@ protected:
 	KDockWidget		*m_mainDock;
 	QWidget			*m_workspace;
 	KexiTabBrowser	  	*m_browser;
+	KoContextHelpDocker	*m_help;
 	KexiWindowMode		m_windowMode;
 
 	KexiDoc			*m_doc;

@@ -49,6 +49,8 @@ class KexiDialogBase : public QWidget
 		KexiView *kexiView()const;
 		bool isRegistering(){return m_registering;}
 
+		void	setContextHelp(const QString &title, const QString &message);
+
 		virtual void print(KPrinter &printer) {; }
 
 	signals:
