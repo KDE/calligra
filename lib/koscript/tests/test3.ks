@@ -23,5 +23,8 @@ main {
     name[0] = 't';
     print("name: ", name, " g: ", g, "\n");
     println( hallo );
+    h = [ 42, 43, 44 ];
+    i = h + d + h;
+    print("i: '", i, "'\n");
     print("Done.");
 }
