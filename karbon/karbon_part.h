@@ -40,6 +40,9 @@ public:
 	// sacrifying privatness:
 	VLayer* activeLayer() const { return m_activeLayer; }
 
+public slots:
+    void repaintAllViews( bool erase = false );
+
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 

@@ -14,7 +14,7 @@
 VCCmdPolygon::VCCmdPolygon( KarbonPart* part,
 		const double centerX, const double centerY,
 		const double radius, const uint edges )
-	: VCommand( part, i18n("Create Polygon") ), m_object( 0L ),
+	: VCommand( part, i18n("Insert Polygon") ), m_object( 0L ),
 	  m_centerX( centerX ), m_centerY( centerY )
 {
 	// a polygon should have at least 3 edges:

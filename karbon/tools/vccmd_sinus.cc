@@ -12,7 +12,7 @@
 VCCmdSinus::VCCmdSinus( KarbonPart* part,
 		const double tlX, const double tlY,
 		const double brX, const double brY, const uint periods )
-	: VCommand( part, i18n("Create Sinus") ), m_object( 0L ),
+	: VCommand( part, i18n("Insert Sinus") ), m_object( 0L ),
 	  m_tlX( tlX ), m_tlY( tlY ), m_brX( brX ), m_brY( brY )
 {
 	// we want at least 1 period:

@@ -18,6 +18,8 @@ class VCanvas : public QScrollView
 public:
 	VCanvas( KarbonView* view, KarbonPart* part );
 
+	void repaintAll( bool erase = false );
+
 	const double& zoomFactor() const { return m_zoomFactor; }
 
 protected:

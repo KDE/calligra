@@ -29,7 +29,11 @@ public:
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
-	virtual VCanvas* canvas() { return m_canvas; }
+	virtual QWidget* canvas() { return m_canvas; }
+	// this is the kword-solution at least:
+	VCanvas* canvasWidget() { return m_canvas; }
+
+	const double& zoomFactor() { return m_canvas->zoomFactor(); }
 
 protected slots:
 	void editCut();

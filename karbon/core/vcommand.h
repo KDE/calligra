@@ -30,8 +30,8 @@ public:
 	VCommandHistory( KarbonPart* part )
 		: KCommandHistory( part->actionCollection(), false ), m_part( part ) {}
 
-//	virtual void undo() {}
-//	virtual void redo() {}
+	virtual void undo();
+	virtual void redo();
 
 protected:
 	KarbonPart* m_part;

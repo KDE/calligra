@@ -28,9 +28,7 @@ KarbonPart::~KarbonPart()
 	// delete all layers:
 	QListIterator<VLayer> i( m_layers );
 	for ( ; i.current() ; ++i )
-	{
 		delete( i.current() );
-	}
 
 	// delete the command-history:
 	delete m_commandHistory;
@@ -66,6 +64,8 @@ KarbonPart::saveXML()
 void
 KarbonPart::insertObject( const VObject* object )
 {
+	// don't repaint here explicitely. some commands might want to insert many
+	// objects.
 	activeLayer()->insertObject( object );
 	setModified( true );
 }
@@ -75,7 +75,20 @@ KarbonPart::addCommand( VCommand* cmd )
 {
 	kdDebug() << "KarbonPart::addCommand " << cmd->name() << endl;
 	m_commandHistory->addCommand( cmd );
+	setModified( true );
+	repaintAllViews();
 }
+
+void
+KarbonPart::repaintAllViews( bool erase )
+{
+	QListIterator<KoView> i( views() );
+	for ( ; i.current() ; ++i )
+// TODO: any better solution for this?
+//		static_cast<KarbonView*> ( i.current() )->canvasWidget()->repaintAll( erase );
+ 		static_cast<KarbonView*> ( i.current() )->canvasWidget()->repaintAll( true );
+}
+
 
 void
 KarbonPart::paintContent( QPainter& /*p*/, const QRect& /*rect*/,

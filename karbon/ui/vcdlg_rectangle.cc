@@ -9,6 +9,7 @@
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
+#include <qstring.h>
 #include <qwidget.h>
 
 #include <klocale.h>
@@ -29,11 +30,11 @@ VCDlgRectangle::VCDlgRectangle()
 
 	// add width/height-input:
 	new QLabel( i18n( "Width:" ), group );
-	m_width = new QLineEdit( "100.0", group );
+	m_width = new QLineEdit( 0, group );
 	new QLabel( i18n( "Height:" ), group );
-	m_height = new QLineEdit( "100.0", group );
+	m_height = new QLineEdit( 0, group );
 	new QLabel( i18n( "Edge Radius:" ), group );
-	m_edges = new QLineEdit( "0.0", group );
+	m_round = new QLineEdit( 0, group );
 
 	outerbox->addSpacing( 2 );
 
@@ -57,6 +58,48 @@ VCDlgRectangle::VCDlgRectangle()
 	// signals and slots:
 	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+}
+
+double
+VCDlgRectangle::valueWidth()
+{
+	return m_width->text().toDouble();
+}
+
+double
+VCDlgRectangle::valueHeight()
+{
+	return m_height->text().toDouble();
+}
+
+double
+VCDlgRectangle::valueRound()
+{
+	return m_round->text().toDouble();
+}
+
+void
+VCDlgRectangle::setValueWidth( const double value )
+{
+	QString s;
+	s.setNum( value, 'f', 3 );
+	m_width->setText( s );
+}
+
+void
+VCDlgRectangle::setValueHeight( const double value )
+{
+	QString s;
+	s.setNum( value, 'f', 3 );
+	m_height->setText( s );
+}
+
+void
+VCDlgRectangle::setValueRound( const double value )
+{
+	QString s;
+	s.setNum( value, 'f', 3 );
+	m_round->setText( s );
 }
 
 #include "vcdlg_rectangle.moc"

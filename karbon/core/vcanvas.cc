@@ -46,6 +46,12 @@ VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 }
 
 void
+VCanvas::repaintAll( bool erase )
+{
+	viewport()->repaint( erase );
+}
+
+void
 VCanvas::resizeEvent( QResizeEvent* event )
 {
 	QScrollView::resizeEvent( event );

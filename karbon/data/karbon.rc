@@ -29,12 +29,15 @@
 		<Action name="view_zoom"/>
 	</Menu>
 	</MenuBar>
-	<ToolBar name="edit_bar" fullWidth="false"><Text>Edit</Text>
-		<Action name="edit_undo"/>
-		<Action name="edit_do"/>
-		<Action name="edit_cut"/>
-	</ToolBar>
-	<ToolBar name="zoom_bar" fullWidth="false"><Text>Zoom</Text>
+	<ToolBar name="zoom_toolbar" fullWidth="false"><Text>Zoom</Text>
 		<Action name="view_zoom"/>
+	</ToolBar>
+	<ToolBar name="insert_toolbar" position="left"><Text>Insert</Text>
+		<Action name="insert_ellipse"/>
+		<Action name="insert_polygon"/>
+		<Action name="insert_rectangle"/>
+		<Action name="insert_sinus"/>
+		<Action name="insert_spiral"/>
+		<Action name="insert_star"/>
 	</ToolBar>
 </kpartgui>

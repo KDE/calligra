@@ -21,8 +21,11 @@ VTool* KarbonView::s_currentTool = 0L;
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
 {
-	if ( s_currentTool == 0L )
-		s_currentTool = VCToolRectangle::instance( m_part );
+// TODO: this is temporary =>
+if ( s_currentTool == 0L )
+	s_currentTool = VCToolRectangle::instance( m_part );
+setCursor( crossCursor );
+// TODO: <= this is temporary
 
 	setInstance( KarbonFactory::instance() );
 	setXMLFile( QString::fromLatin1( "karbon.rc" ) );

@@ -14,10 +14,13 @@ VCToolRectangle* VCToolRectangle::s_instance = 0L;
 
 VCToolRectangle::VCToolRectangle( KarbonPart* part )
 	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
-	  m_isCentered( false )
+	  m_isCentered( false ), m_round( 0.0 )
 {
 	// create config dialog:
 	m_dialog = new VCDlgRectangle();
+	m_dialog->setValueWidth( 100.0 );
+	m_dialog->setValueHeight( 100.0 );
+	m_dialog->setValueRound( m_round );
 }
 
 VCToolRectangle::~VCToolRectangle()
@@ -70,27 +73,38 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		// check if we moved the mouse at all:
-		if ( m_fp != m_lp )
+		// did we drag the mouse?
+		if ( m_fp == m_lp )
+		{
+			// we didnt drag => show a config-dialog:
+			if ( m_dialog->exec() )
+			{
+				// temp vpoint (zoomFactor):
+				VPoint tl;
+				tl.setFromQPoint( m_fp, view->zoomFactor() );
+
+				m_round = m_dialog->valueRound();
+
+				m_part->addCommand(
+					new VCCmdRectangle( m_part,
+						tl.x(), tl.y(),
+						tl.x() + m_dialog->valueWidth(),
+						tl.y() + m_dialog->valueHeight(), m_round ) );
+			}
+		}
+		else
 		{
 			// temp vpoints (zoomFactor):
 			VPoint tl;
 			VPoint br;
-			tl.setFromQPoint( m_rect.topLeft(), view->canvas()->zoomFactor() );
-			br.setFromQPoint( m_rect.bottomRight(), view->canvas()->zoomFactor() );
+			tl.setFromQPoint( m_rect.topLeft(), view->zoomFactor() );
+			br.setFromQPoint( m_rect.bottomRight(), view->zoomFactor() );
 
 			m_part->addCommand(
-				new VCCmdRectangle( m_part, tl.x(), tl.y(), br.x(), br.y() ) );
+				new VCCmdRectangle( m_part, tl.x(), tl.y(), br.x(), br.y(), m_round ) );
+		}
 
-			return true;
-		}
-		else
-		// we didnt move => show a config-dialog:
-		if ( m_dialog->exec() )
-		{
-// TODO: do stuff with dialog-values
-			return true;
-		}
+		return true;
 	}
 
 	// handle pressing of keys:
@@ -104,6 +118,10 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 			m_isDragging = false;
 			m_isSquare = false;
 			m_isCentered = false;
+
+			// erase old rect:
+			drawTemporaryRect( view );
+
 			return true;
 		}
 
@@ -124,8 +142,8 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 			return true;
 		}
 
-		// if ALT is pressed, we want a centered path:
-		if ( key_event->key() == Qt::Key_Alt )
+		// if Ctrl is pressed, we want a centered path:
+		if ( key_event->key() == Qt::Key_Control )
 		{
 			m_isCentered = true;
 
@@ -163,7 +181,7 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 			return true;
 		}
 
-		if ( key_event->key() == Qt::Key_Alt )
+		if ( key_event->key() == Qt::Key_Control )
 		{
 			m_isCentered = false;
 
@@ -190,8 +208,8 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 		// set initial rect:
 		m_rect.setLeft( m_fp.x() );
 		m_rect.setTop( m_fp.y() );
-		m_rect.setRight( m_fp.x() );
-		m_rect.setBottom( m_fp.y() );
+		m_rect.setRight( m_fp.x() + 1 );
+		m_rect.setBottom( m_fp.y() + 1 );
 
 		// draw initial rect:
 		drawTemporaryRect( view );

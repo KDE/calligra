@@ -9,11 +9,11 @@
 #include <qrect.h>
 
 #include "karbon_view.h"
+#include "vpoint.h"
 #include "vtool.h"
 
-class VCDlgRectangle;
-
 class KarbonPart;
+class VCDlgRectangle;
 
 // A singleton state to create a rectangle.
 
@@ -37,6 +37,8 @@ private:
 
 	KarbonPart* m_part;
 	VCDlgRectangle* m_dialog;
+
+	double m_round;
 
 	bool m_isDragging;
 	bool m_isSquare;
@@ -79,6 +81,8 @@ VCToolRectangle::recalcRect()
 	}
 	else
 	{
+		m_rect.setLeft( m_fp.x() );
+		m_rect.setTop( m_fp.y() );
 		m_rect.setRight( m_fp.x() + width );
 		m_rect.setBottom( m_fp.y() - height );
 	}
@@ -87,11 +91,24 @@ VCToolRectangle::recalcRect()
 inline void
 VCToolRectangle::drawTemporaryRect( KarbonView* view )
 {
-	QPainter painter( view->canvas()->viewport() );
+	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setPen( Qt::black );
 	painter.setRasterOp( Qt::NotROP );
-	// erase old rect:
-	painter.drawRect( m_rect );
+
+	if ( m_round == 0.0 )
+		painter.drawRect( m_rect );
+	else
+	{
+		// hacky: this is not really a point, we just use VPoint's
+		// zoomfactor-handling:
+ 		VPoint vp;
+		vp.setFromQPoint( QPoint( m_round, 0 ), view->zoomFactor() );
+// TODO: drawRoundRect behaves sometimes different from what the resulting
+// path looks => purge it
+ 		painter.drawRoundRect( m_rect,
+			vp.x() / QABS( m_rect.width() ) * 200.0,
+			vp.x() / QABS( m_rect.height() ) * 200.0 );
+	}
 }
 
 #endif

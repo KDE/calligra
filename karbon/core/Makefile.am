@@ -17,6 +17,7 @@ noinst_HEADERS = \
 libkarboncore_la_SOURCES = \
 	vaffinemap.cc \
 	vcanvas.cc \
+	vcommand.cc \
 	vlayer.cc \
 	vpath.cc \
 	vpoint.cc \

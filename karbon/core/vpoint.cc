@@ -29,8 +29,8 @@ VPoint::getQPoint( const double zoomFactor ) const
 void
 VPoint::setFromQPoint( const QPoint& point, const double zoomFactor )
 {
-	m_x = point.x() / zoomFactor;
-	m_y = point.y() / zoomFactor;
+	m_x = zoomFactor == 0 ? 0.0 : point.x() / zoomFactor;
+	m_y = zoomFactor == 0 ? 0.0 : point.y() / zoomFactor;
 }
 
 
