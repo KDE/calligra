@@ -349,7 +349,7 @@ void KWView::setupActions()
                                          this, SLOT( toolsEdit() ),
                                          actionCollection(), "tools_edit" );
     actionToolsEdit->setExclusiveGroup( "tools" );
-    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), "frame_text", Key_F5,
+    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), "frame_edit", Key_F5,
                                                this, SLOT( toolsEditFrame() ),
                                                actionCollection(), "tools_editframes" );
     actionToolsEditFrames->setExclusiveGroup( "tools" );
