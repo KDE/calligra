@@ -27,7 +27,9 @@ VDocker::VDocker( QWidget* parent, const char* /*name*/ )
 	: QDockWindow( QDockWindow::OutsideDock, parent )
 {
 	setCloseMode( QDockWindow::Always );
-	setFont( QFont( "helvetica" , 8 ) );
+	QFont f;
+	f.setPointSize(8);
+	setFont(f);
 }
 
 #include "vdocker.moc"
