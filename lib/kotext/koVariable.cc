@@ -692,6 +692,12 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
     return var;
 }
 
+void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )
+{
+    m_varFormat=_varFormat;
+}
+
+
 /******************************************************************/
 /* Class: KoDateVariable                                          */
 /******************************************************************/
@@ -1017,6 +1023,11 @@ QStringList KoPgNumVariable::actionTexts()
 QStringList KoPgNumVariable::subTypeText()
 {
     return KoPgNumVariable::actionTexts();
+}
+
+void KoPgNumVariable::setVariableSubType( short int type)
+{
+    m_subtype=type;
 }
 
 /******************************************************************/

@@ -264,11 +264,13 @@ public:
     virtual int minimumWidth() const { return width; }
     virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset);
 
-    void setVariableFormat( KoVariableFormat *_varFormat )
-    { m_varFormat = _varFormat; }
+    void setVariableFormat( KoVariableFormat *_varFormat );
 
     KoVariableFormat *variableFormat() const
     { return m_varFormat; }
+
+    KoVariableCollection *variableColl() const
+        { return m_varColl; }
 
     /** Returns the text to be displayed for this variable
      * It doesn't need to be cached, convert() is fast, and it's the actual
@@ -475,7 +477,7 @@ public:
 
     virtual QStringList subTypeText();
 
-    virtual void setVariableSubType( short int type){m_subtype=type;}
+    virtual void setVariableSubType( short int type);
 
     // For the 'current page' variable. This is called by the app e.g. when painting
     // a given page (see KWTextFrameSet::drawFrame and KPTextObject::recalcPageNum)
