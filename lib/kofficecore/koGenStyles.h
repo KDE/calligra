@@ -174,15 +174,15 @@ public:
     void addProperty( const QString& propName, const QString& propValue, PropertyType type = DefaultType ) {
         m_properties[type].insert( propName, propValue );
     }
-    /// Overloaded of addProperty version that take a char*, usually for "..."
+    /// Overloaded version of addProperty that takes a char*, usually for "..."
     void addProperty( const QString& propName, const char* propValue, PropertyType type = DefaultType ) {
         m_properties[type].insert( propName, QString::fromUtf8( propValue ), type );
     }
-    /// Overloaded of addProperty version that converts an int to a string
+    /// Overloaded version of addProperty that converts an int to a string
     void addProperty( const QString& propName, int propValue, PropertyType type = DefaultType ) {
         m_properties[type].insert( propName, QString::number( propValue ), type );
     }
-    /// Overloaded of addProperty version that converts a bool to a string (false/true)
+    /// Overloaded version of addProperty that converts a bool to a string (false/true)
     void addProperty( const QString& propName, bool propValue, PropertyType type = DefaultType ) {
         m_properties[type].insert( propName, propValue ? "true" : "false", type );
     }
@@ -203,16 +203,16 @@ public:
     void addAttribute( const QString& attrName, const QString& attrValue ) {
         m_attributes.insert( attrName, attrValue );
     }
-    /// Overloaded of version of addAttribute that takes a char*, usually for "..."
+    /// Overloaded version of addAttribute that takes a char*, usually for "..."
     void addAttribute( const QString& attrName, const char* attrValue ) {
         m_attributes.insert( attrName, QString::fromUtf8( attrValue ) );
     }
-    /// Overloaded of version of addAttribute that converts an int to a string
+    /// Overloaded version of addAttribute that converts an int to a string
     void addAttribute( const QString& attrName, int attrValue ) {
         m_attributes.insert( attrName, QString::number( attrValue ) );
     }
 
-    /// Overloaded of version of addAttribute that converts a bool to a string
+    /// Overloaded version of addAttribute that converts a bool to a string
     void addAttribute( const QString& attrName, bool attrValue ) {
         m_attributes.insert( attrName, attrValue ? "true" : "false" );
     }
@@ -228,7 +228,7 @@ public:
     /**
      * Add a child element to the style properties.
      * What is meant here is that the contents of the QString
-     * will be written out litterally. This means you should use
+     * will be written out literally. This means you should use
      * KoXmlWriter to generate it:
      * <code>
      * QBuffer buffer;
@@ -254,7 +254,7 @@ public:
      *  @param propertiesElementName the name of the XML element with the style properties,
      *  e.g. "style:text-properties"
      *  @param closeElement set it to false to be able to add more child elements to the style element
-     *  @param drawElement set it to true to add "draw:name" (use for gradient/hatch style) otherwise add "style:name
+     *  @param drawElement set it to true to add "draw:name" (used for gradient/hatch style) otherwise add "style:name"
      */
     void writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name,
                      const char* propertiesElementName, bool closeElement = true, bool drawElement = false ) const;
