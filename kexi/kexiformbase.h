@@ -26,6 +26,8 @@
 
 class KexiFormBase : public QWidget  {
 
+Q_OBJECT
+
 enum CursorType {
 	normal,
 	xResize,
@@ -33,7 +35,6 @@ enum CursorType {
 	bothResize
 };
    
-Q_OBJECT
 public: 
 	KexiFormBase(QWidget *parent=0, const char *name=0, QString datasource=0);
 	~KexiFormBase();
