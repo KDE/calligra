@@ -32,7 +32,11 @@ ExampleView::ExampleView( ExamplePart* part, QWidget* parent, const char* name )
     : KoView( part, parent, name )
 {
     setInstance( ExampleFactory::global() );
-    setXMLFile( "example.rc" );
+    if ( !part->isReadWrite() ) // readonly case, e.g. when embedded into konqueror
+        setXMLFile( "example_readonly.rc" ); // simplified GUI
+    else
+        setXMLFile( "example.rc" );
+    KStdAction::copy(this, SLOT( copy() ), actionCollection(), "copy" );
     KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
     // Note: Prefer KStdAction::* to any custom action if possible.
     //m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
@@ -57,6 +61,11 @@ void ExampleView::updateReadWrite( bool /*readwrite*/ )
 #ifdef __GNUC__
 #warning TODO
 #endif
+}
+
+void ExampleView::copy()
+{
+    kdDebug(31000) << "ExampleView::copy(): COPY called" << endl;
 }
 
 void ExampleView::cut()

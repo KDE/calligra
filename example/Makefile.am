@@ -33,7 +33,7 @@ kdelnkdir = $(kde_appsdir)/Office
 kdemime_DATA = x-example.desktop
 kdemimedir = $(kde_mimedir)/application
 
-rc_DATA = example.rc
+rc_DATA = example.rc example_readonly.rc
 rcdir = $(kde_datadir)/example
 
 messages: rc.cpp

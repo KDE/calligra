@@ -35,6 +35,7 @@ public:
 
 protected slots:
     void cut();
+    void copy();
 
 protected:
     void paintEvent( QPaintEvent* );
