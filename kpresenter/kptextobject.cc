@@ -336,13 +336,14 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
 {
     //kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
-
+    _painter->save();
+    _painter->translate( m_doc->zoomHandler()->zoomItX( bLeft()), m_doc->zoomHandler()->zoomItY( bTop()));
     if ( !editingTextObj )
         cg.setBrush( QColorGroup::Base, NoBrush );
     else
         cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );
 
-    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, ext.width(), ext.height() ) );
+    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, innerWidth(), innerHeight() ) );
     bool editMode = false;
     if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
         editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
@@ -363,12 +364,14 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     }
     else
     {
+
         //kdDebug() << "KPTextObject::drawText r=" << DEBUGRECT(r) << endl;
         /*KoTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
             cg, zoomHandler,
             onlyChanged, cursor != 0, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled() && editMode );
     }
+    _painter->restore();
 }
 
 int KPTextObject::getSubPresSteps() const
@@ -1013,7 +1016,7 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
     if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
         editMode = m_doc->getKPresenterView()->getCanvas()->getEditMode();
 
-    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, ext.width(), ext.height() ) );
+    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, /*ext.width()*/innerWidth(), /*ext.height()*/innerHeight() ) );
     KoTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         if ( !parag->isValid() )
@@ -1039,7 +1042,7 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
 {
     //kdDebug() << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << endl;
     KoZoomHandler *zh = m_doc->zoomHandler();
-    QPoint origPix = zh->zoomPoint( orig );
+    QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()) );
     // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( origPix.x(), origPix.y() );
     if ( angle != 0 )
