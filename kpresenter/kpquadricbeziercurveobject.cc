@@ -74,66 +74,6 @@ double KPQuadricBezierCurveObject::load(const QDomElement &element)
     return offset;
 }
 
-void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
-                                        bool /*drawingShadow*/, bool drawContour )
-{
-    int _w = pen.width();
-
-    QPen pen2;
-    if ( drawContour ) {
-        pen2 = QPen( Qt::black, 1, Qt::DotLine );
-        _painter->setRasterOp( Qt::NotXorROP );
-    }
-    else {
-        pen2 = pen;
-        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
-    }
-    _painter->setPen( pen2 );
-
-    QPointArray pointArray = allPoints.zoomPointArray( _zoomHandler, _w );
-    _painter->drawPolyline( pointArray );
-
-    if ( lineBegin != L_NORMAL && !drawContour && !isClosed()) {
-        QPoint startPoint;
-        bool first = true;
-        QPointArray::ConstIterator it1;
-        for ( it1 = pointArray.begin(); it1 != pointArray.end(); ++it1 ) {
-            if ( first ) {
-                startPoint = (*it1);
-                first = false;
-            }
-
-            QPoint point = (*it1);
-            if ( startPoint != point ) {
-                float angle = KoPoint::getAngle( startPoint, point );
-                drawFigureWithOffset( lineBegin, _painter, startPoint, pen2.color(), _w, angle,_zoomHandler );
-
-                break;
-            }
-        }
-    }
-
-    if ( lineEnd != L_NORMAL && !drawContour && !isClosed()) {
-        QPoint endPoint;
-        bool last = true;
-        QPointArray::ConstIterator it2 = pointArray.end();
-        for ( it2 = it2 - 1; it2 != pointArray.begin(); --it2 ) {
-            if ( last ) {
-                endPoint = (*it2);
-                last = false;
-            }
-
-            QPoint point = (*it2);
-            if ( endPoint != point ) {
-                float angle = KoPoint::getAngle( endPoint, point );
-                drawFigureWithOffset( lineEnd, _painter, endPoint, pen2.color(), _w, angle,_zoomHandler );
-
-                break;
-            }
-        }
-    }
-}
-
 void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
 {
     KPPointObject::updatePoints( _fx, _fy );
@@ -259,4 +199,10 @@ void KPQuadricBezierCurveObject::closeObject(bool _close)
 bool KPQuadricBezierCurveObject::isClosed()const
 {
     return ( allPoints.at(0) == allPoints.at(allPoints.count()-1) );
+}
+
+
+KoPointArray KPQuadricBezierCurveObject::getDrawingPoints()
+{
+  return allPoints;
 }

@@ -367,41 +367,6 @@ protected:
     QBrush brush;
 };
 
-class KPPointObject : public KPShadowObject
-{
-public:
-    KPPointObject();
-    KPPointObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
-    KPPointObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd, const QBrush &_brush );
-
-    virtual KoSize getRealSize() const;
-    virtual KoPoint getRealOrig() const;
-
-    virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual double load( const QDomElement &element );
-
-    virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
-    virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
-    
-    virtual LineEnd getLineBegin() const { return lineBegin; }
-    virtual LineEnd getLineEnd() const { return lineEnd; }
-    
-    virtual void setSize( double _width, double _height );
-    virtual void setSize( const KoSize & _size )
-        { setSize( _size.width(), _size.height() ); }
-    
-    virtual void flip( bool horizontal );
-
-    virtual void closeObject( bool close );
-    virtual bool isClosed() const;
-
-protected:
-    virtual void updatePoints( double _fx, double _fy );
-
-    KoPointArray points;
-    LineEnd lineBegin, lineEnd;
-};
-
 class KP2DObject : public KPShadowObject
 {
 public:

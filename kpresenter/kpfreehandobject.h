@@ -21,9 +21,7 @@
 #ifndef kpfreehandobject_h
 #define kpfreehandobject_h
 
-#include "koPointArray.h"
-
-#include "kpobject.h"
+#include "kppointobject.h"
 
 class QPainter;
 class DCOPObject;
@@ -44,10 +42,6 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
     virtual double load( const QDomElement &element );
-    
-protected:
-    virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-                        bool drawingShadow, bool drawContour = FALSE );
 };
 
 #endif

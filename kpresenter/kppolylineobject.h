@@ -21,9 +21,7 @@
 #ifndef kppolylineobject_h
 #define kppolylineobject_h
 
-#include <qpointarray.h>
-#include "koPointArray.h"
-#include "kpobject.h"
+#include "kppointobject.h"
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -47,10 +45,6 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
-
-protected:
-    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-                        bool drawingShadow, bool drawContour = FALSE );
 };
 
 #endif

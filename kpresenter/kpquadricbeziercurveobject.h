@@ -21,10 +21,7 @@
 #ifndef kpquadricbeziercurveobject_h
 #define kpquadricbeziercurveobject_h
 
-#include <qpointarray.h>
-#include "koPointArray.h"
-#include "kpobject.h"
-#include <koSize.h>
+#include "kppointobject.h"
 
 class QPainter;
 class KoZoomHandler;
@@ -53,10 +50,8 @@ public:
     bool isClosed()const;
 
 protected:
-    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-                        bool drawingShadow, bool drawContour = FALSE );
-
     virtual void updatePoints( double _fx, double _fy );
+    virtual KoPointArray getDrawingPoints();
 
     KoPointArray getQuadricBezierPointsFrom( const KoPointArray &_pointArray );
 
