@@ -108,16 +108,16 @@ bool MapTag::InitMapTag(void)
     AddTag("caption",false);
     AddTag("center",false);
     AddInlineTag("cite","font-style:italic;");
-    AddTag("code",false);
+    AddProvisoryInlineTag("code");
     // <col>
     AddTag("colgroup",false);
-    AddTag("dd",false);
+    AddBlockTag("dd",QString::null); // PROVISORY
     AddInlineTag("del","text-decoration:line-through;"); // May need to be changed when a new KWord does know what "deleted" text is!
-    AddTag("dfn",false);
+    AddProvisoryInlineTag("dfn");
     AddTag("dir",false);
     AddTag("div",false);
     AddTag("dl",false);
-    AddTag("dt",false);
+    AddBlockTag("dt",QString::null); // PROVISORY
     AddInlineTag("em","font-style:italic;");
 
     AddTag("fieldset",false);
@@ -151,15 +151,15 @@ bool MapTag::InitMapTag(void)
     AddTag("noframes",false);
     AddTag("noscript",false);
     AddTag("object",false);
-    AddBlockTag("ol",QString::null); // PROVISORY
+    AddTag("ol",false);
     AddTag("option",false);
     AddTag("optiongroup",false);
     AddBlockTag("p",QString::null);
     // <param>
-    AddTag("pre",false);
-    AddTag("q",false);
+    AddBlockTag("pre",QString::null); // PROVISORY
+    AddProvisoryInlineTag("q");
     AddInlineTag("s","text-decoration:line-through;");
-    AddTag("samp",false);
+    AddProvisoryInlineTag("samp");
     AddNoneTag("script"); // We do not support scripts
     AddTag("select",false);
     AddProvisoryInlineTag("small");
@@ -180,7 +180,7 @@ bool MapTag::InitMapTag(void)
     AddBlockTag("tr",QString::null); // PROVISORY
     AddBlockTag("tt",QString::null); // PROVISORY
     AddInlineTag("u","text-decoration:underline;");
-    AddBlockTag("ul",QString::null); // PROVISORY
+    AddTag("ul",false);
     AddInlineTag("var","font-style:italic;");
 
     // Non-HTML 4.01 Elements
