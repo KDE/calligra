@@ -1039,3 +1039,8 @@ when text is too large and you align to right or left.
 2000-10-29-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 Bug fix
+
+2000-11-01-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Add some financial functions, patch given by  Jonathan Singer <jsinger@genome.wi.mit.edu>
+thanks

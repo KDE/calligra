@@ -1392,7 +1392,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Interest rate</Comment>
+	<Comment>Rate</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -1400,8 +1400,8 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The FV() function returns a value that consist of the present value plus multiples periods of interest. If you have $1000 on your bank account, and you get 8% interest then after two years the amount of money you will own is FV( 1000; 0.08; 2 ). That means FV calculates the future value of your money, that it why it is called FV.</Text>
-	<Syntax>FV( present_value; interest; periods )</Syntax>
+	<Text>The FV() function returns the future value of an investment, given the yield and the time elapsed. If you have $1000 in a bank account earning 8% interest, after two years you will have FV( 1000; 0.08; 2 ) or $1166.40.</Text>
+	<Syntax>FV( present value; yield; periods )</Syntax>
 	<Example>FV( 1000; 0.08; 2 ) equals 1166.40</Example>
       </Help>
     </Function>
@@ -1422,8 +1422,8 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The PV() function returns the value that you need if you want to reach the future value after a certain amount of periods and a certain interest. For example if you need $1166.40 for your new computer and you want to buy it in two years while getting an interest of 8% then PV( 1166.4; 0.08; 2 ) tells you how much money you need now, in the presence. PV calculates the present value that you need to reach a future value, that is why it is called PV.</Text>
-	<Syntax>PV( future_value; interest; periods )</Syntax>
+	<Text>The PV() function returns the present value of an investment -- the value today of a sum of money in the future, given the rate of interest or inflation. For example if you need $1166.40 for your new computer and you want to buy it in two years while earning 8% interest, you need to start with PV( 1166.4; 0.08; 2 ) or $1000.</Text>
+	<Syntax>PV( future value; rate; periods )</Syntax>
 	<Example>PV( 1166.4; 0.08; 2 ) equals 1000</Example>
       </Help>
     </Function>
@@ -1443,18 +1443,11 @@
 	<Comment>Periods</Comment>
 	<Type>Float</Type>
       </Parameter>
-      <Parameter>
-	<Comment>Future cash</Comment>
-	<Type>Float</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Pay at start of period (True or False)</Comment>
-	<Type>Boolean</Type>
-      </Parameter>
-      <Help>
-	<Text>The PV_annuity() function tells you how much cash you need today (in the presence) if you want to reach a certain cash volume in the future. We assume that you put every month a certain amount of money on your bank account which gives you a certain interest. Now you wonder how much money your bank account must have initially so that you have a certain amount of money after some periods. Lets give a concrete example: You need $1374.40 in two years. At the end of each year you add $100 your account and you have 8% interest. Then PV_annuity( 100; 0.08; 2; 1374.4; FALSE ) tells you that your bank account must have $1000 initially. In case you pay the $100 not at the end of the year, but in the beginning, you would choose TRUE as the last parameter.</Text>
-	<Syntax>PV_annuity( amount; interest; periods; future_value; start )</Syntax>
-	<Example>PV_annuity( 100; 0.08; 2; 1374.4; FALSE ) equals 1000</Example>
+     <Help>
+	<Text>The PV_annuity() function returns the present value of an annuity or stream of payments. For example: a "million dollar" lottery ticket that pays $50,000 a year for 20 years, with an interest rate of 5%, is actually worth PV_annuity( 50000; 0.05; 20 ) or $623,111.
+           This function assumes that payments are made at the end of each period.</Text>
+	<Syntax>PV_annuity( amount; interest; periods )</Syntax>
+	<Example>PV_annuity( 1000; 0.05; 5 ) equals 4329.48</Example>
       </Help>
     </Function>
 
@@ -1473,18 +1466,10 @@
 	<Comment>Periods</Comment>
 	<Type>Float</Type>
       </Parameter>
-      <Parameter>
-	<Comment>Initial cash</Comment>
-	<Type>Float</Type>
-      </Parameter>
-      <Parameter>
-	<Comment>Pay at start of period (TRUE or FALSE)</Comment>
-	<Type>Boolean</Type>
-      </Parameter>
       <Help>
-	<Text>The FV_annuity() function tells you how much money you will have on your account after a certain amount of periods. We assume that you have initially some money and get a certain interest. In addition you put each period some amount of money in addition on your account. Lets have an example: Imagine you have $1000 on your bank account. At the end of every year you add $100 and your interest is 8%. PV_annuity( 100; 0.08; 2; 1000; FALSE ) tells you that after two years you will own $1374.40. If you pay the $100 at the beginning of each year then choose TRUE as the last parameter.</Text>
-	<Syntax>FV_annuity( amount; interest; periods; initial_value; start )</Syntax>
-	<Example>FV_annuity( 100; 0.08; 2; 1000; FALSE ) equals 1374.4</Example>
+	<Text>The FV_annuity() function returns the future value of a stream of payments given the amount of the payment, the interest rate and the number of periods. For example: If you receive $500 per year for 20 years, and invest it at 8%, the total after 20 years will be FV_annuity( 500; 0.08; 20 ) or $22,880.98. This function assumes that payments are made at the end of each period.</Text>
+	<Syntax>FV_annuity( amount; interest; periods )</Syntax>
+	<Example>FV_annuity( 1000; 0.05; 5 ) equals 5525.63</Example>
       </Help>
     </Function>
 
@@ -1492,7 +1477,7 @@
       <Name>compound</Name>
       <Type>Float</Type>
       <Parameter>
-	<Comment>Initial cash</Comment>
+	<Comment>Principal</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
@@ -1500,17 +1485,17 @@
 	<Type>Float</Type>
       </Parameter>
       <Parameter>
-	<Comment>Periods</Comment>
-	<Type>Float</Type>
-      </Parameter>
-      <Parameter>
 	<Comment>Periods per year</Comment>
 	<Type>Float</Type>
       </Parameter>
+      <Parameter>
+	<Comment>Years</Comment>
+	<Type>Float</Type>
+      </Parameter>
       <Help>
-	<Text>The compound() function calculates how much money you will have on your account after a certain amount of years. We assume that you have some initial cash and a certain interest. This interest is due every year. There are multiple periods per year. Lets give an example: You have $1000 and 8% interest every month. Then compound( 1000; 0.08; 12; 2 ) tells you that after 2 years you will own $1172.89</Text>
+	<Text>The compound() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time.  For example: $5000 at 12% interest compounded quarterly for 5 years will become compound( 5000; 0.12; 4; 5 ) or $9030.56</Text>
 	<Syntax>compound( initial; interest; periods; periods_per_year )</Syntax>
-	<Example>compound( 1000; 0.08; 12; 2 ) equals 1172.89</Example>
+	<Example>compound( 5000; 0.12; 4; 5 ) equals 9030.56</Example>
       </Help>
     </Function>
 
@@ -1530,8 +1515,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>Fix me, I am a hack</Text>
+	<Text>The continuous() function calculates the return on continuously compounded interest, given the principal, nominal rate and time in years. For example: $1000 earning 10% for 1 year becomes continuous(1000;.1;1) or $1105.17.</Text>
 	<Syntax>continuous( principal; interest; years )</Syntax>
+	<Example>continuous( 1000; 0.1; 1 ) equals 1105.17</Example>
       </Help>
     </Function>
 
@@ -1547,9 +1533,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The effective() function calculates the effective interest rate. Assume you get 8% interest per period. If you want to know how much money you have after a certain amount of periods you can call FV( initial; nominal_interest; periods ), or you can calculate initial*effective( nominal_interest; periods ). The result of both is the same. In other words: The effective interest rate is the percentage you get if you earn nominal interest for some periods. That means: If you wonder how much you earn in two years from $1000 with 8% interest; then effective( 0.08; 2 ) equals 0.1664 and that means you earn 16.64%.</Text>
+	<Text>The effective() function calculates the effective yield for a nominal interest rate (annual rate or APR). For example: 8% interest compounded monthly provides an effective yield of effective(.08;12) or 8.3%.</Text>
 	<Syntax>effective( nominal; periods )</Syntax>
-	<Example>effective( 0.08; 2 ) equals 0.1664</Example>
+	<Example>effective( 0.08; 12 ) equals 0.083</Example>
       </Help>
     </Function>
 
@@ -1565,9 +1551,61 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The nominal() function calculates the nominal interest rate from an effective interest rate. For example you have $1000 and after 2 years you earned 16.64%, that means you have $1166.64. Then you can calculate how much interest you got every year by calling nominal( 0.1164; 2 ) and the result is 0.08. This means you get 8% interest per year and after two years that is equal to an effective interest of 16.64%. You should know the following equation: </Text>
-	<Syntax>nominal( nominal; periods )</Syntax>
-	<Example>nominal( 0.1664; 2 ) equals 0.1664</Example>
+	<Text>The nominal() function calculates the nominal (stated) interest rate for an effective (annualized) interest rate compounded at given intervals. For example: to earn 8% on an account compounded monthly, you need a return of nominal(.08;12) or 7.72%.</Text>
+	<Syntax>nominal( effective; periods )</Syntax>
+	<Example>nominal( 0.08; 12 ) equals 0.0772</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>zero_coupon</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Face value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Interest rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Years</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The zero_coupon() function calculates the value of a zero-coupon (pure discount) bond. For example: if the interest rate is 10%, a $1000 bond that matures in 20 years is worth zero_coupon( 1000; .1; 20) or $148.64.</Text>
+	<Syntax>zero_coupon( face value; rate; years )</Syntax>
+	<Example>zero_coupon( 1000; .1; 20) equals 148.64</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>level_coupon</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Face value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Coupon rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Coupons per Year</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Years</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Market Interest Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>THIS DOESN"T QUITE WORK YET!! The level_coupon() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth level_coupon( 1000; .13; 2; 4; .1) or $1097.10.</Text>
+	<Syntax>zero_coupon( face value; rate; years )</Syntax>
+	<Example>level_coupon( 1000; .13; 2; 4; .1) equals 1097.10</Example>
       </Help>
     </Function>
 
