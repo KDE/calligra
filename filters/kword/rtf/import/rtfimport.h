@@ -264,7 +264,19 @@ public:
     void setFlagProperty( RTFProperty *property );
     void setNumericProperty( RTFProperty *property );
     void setEnumProperty( RTFProperty *property );
-    void setUnderlineProperty( RTFProperty *property );
+    /**
+     * Sets the enumaration value for \\ul-type keywords
+     * \\ul switches on simple underline
+     * \\ul0 switches off all underlines
+     * @since 1.4 (renamed)
+     */
+    void setSimpleUnderlineProperty( RTFProperty* );
+    /**
+     * Set underline properties
+     * @param property the property to set
+     * @since 1.4 (changed behaviour)
+     */
+    void setUnderlineProperty( RTFProperty* property );
     /**
      * Sets the value of a border property specified by token.
      * @param property the property to set

@@ -244,19 +244,19 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"tx",		insertTabDef,		0L, 0 ),
 	MEMBER(	0L,		"u",		insertUnicodeSymbol,	state.format.uc, 0 ),
 	MEMBER(	0L,		"uc",		setNumericProperty,	state.format.uc, 0 ),
-	MEMBER(	0L,		"ul",		setUnderlineProperty,	state.format.underline, 0 ),
+	PROP(	0L,		"ul",		setSimpleUnderlineProperty,	0L, 0 ),
 	MEMBER(	0L,		"ulc",		setNumericProperty,	state.format.underlinecolor, 0 ),
-	MEMBER(	0L,		"uld",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDot ),
-	MEMBER(	0L,		"uldash",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDash ),
-	MEMBER(	0L,		"uldashd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDot ),
-	MEMBER(	0L,		"uldashdd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDotDot ),
-	MEMBER(	0L,		"uldb",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDouble ),
-	MEMBER(	0L,		"ulnone",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineNone ),
-	MEMBER(	0L,		"ulth",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineThick ),
-	MEMBER(	0L,		"ulw",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineWordByWord ),
-	MEMBER(	0L,		"ulwave",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineWave ),
-	MEMBER(	0L,		"ulhwave",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineWave ),
-	MEMBER(	0L,		"ululdbwave",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineWave ),
+	PROP(	0L,		"uld",		setUnderlineProperty,	0L, RTFFormat::UnderlineDot ),
+	PROP(	0L,		"uldash",	setUnderlineProperty,	0L, RTFFormat::UnderlineDash ),
+	PROP(	0L,		"uldashd",	setUnderlineProperty,	0L, RTFFormat::UnderlineDashDot ),
+	PROP(	0L,		"uldashdd",	setUnderlineProperty,	0L, RTFFormat::UnderlineDashDotDot ),
+	PROP(	0L,		"uldb",		setUnderlineProperty,	0L, RTFFormat::UnderlineDouble ),
+	PROP(	0L,		"ulnone",	setUnderlineProperty,	0L, RTFFormat::UnderlineNone ),
+	PROP(	0L,		"ulth",		setUnderlineProperty,	0L, RTFFormat::UnderlineThick ),
+	PROP(	0L,		"ulw",		setUnderlineProperty,	0L, RTFFormat::UnderlineWordByWord ),
+	PROP(	0L,		"ulwave",	setUnderlineProperty,	0L, RTFFormat::UnderlineWave ),
+	PROP(	0L,		"ulhwave",	setUnderlineProperty,	0L, RTFFormat::UnderlineWave ),
+	PROP(	0L,		"ululdbwave",	setUnderlineProperty,	0L, RTFFormat::UnderlineWave ),
 	MEMBER(	0L,		"up",		setUpProperty,		state.format.baseline, 6 ),
 	MEMBER(	0L,		"v",		setToggleProperty,	state.format.hidden, 0 ),
 	MEMBER(	"@pict",	"wbitmap",	setEnumProperty,	picture.type, RTFPicture::BMP ),
@@ -912,6 +912,7 @@ void RTFImport::setNumericProperty( RTFProperty *property )
 /**
  * Sets an enumeration (flag) RTF property specified by token.
  * @param property the property to set
+ * @deprecated
  */
 void RTFImport::setEnumProperty( RTFProperty *property )
 {
@@ -919,19 +920,17 @@ void RTFImport::setEnumProperty( RTFProperty *property )
 }
 
 
-/**
- * Sets the enumaration value for \\ul-type keywords
- * \\ul switches on simple underline
- * \\ul0 switches off all underlines
- * @param property the property to set
- */
-void RTFImport::setUnderlineProperty( RTFProperty *property )
+void RTFImport::setSimpleUnderlineProperty( RTFProperty* )
 {
-    *((int *)(((char *)this) + property->offset))
+    state.format.underline
          = (!token.hasParam || token.value != 0)
          ? RTFFormat::UnderlineSimple : RTFFormat::UnderlineNone;
 }
 
+void RTFImport::setUnderlineProperty( RTFProperty* property )
+{
+    state.format.underline = RTFFormat::Underline( property->value );
+}
 
 void RTFImport::setBorderStyle( RTFProperty *property )
 {
