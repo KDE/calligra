@@ -49,7 +49,7 @@ KoColorChooser::KoColorChooser(QWidget *parent, const char *name) : QWidget(pare
   m_tab -> addTab(mLABWidget, "LAB");
 #endif
   mGreyWidget = new GreyWidget(m_tab);
-  m_tab -> addTab(mGreyWidget, i18n("Grey"));
+  m_tab -> addTab(mGreyWidget, i18n("Gray"));
   mColorSelector = new KHSSelector(this);
   mColorSelector->setFixedHeight(20);
   mGrid->addMultiCellWidget(m_tab, 0, 1, 0, 4);
@@ -202,7 +202,7 @@ void RGBWidget::slotRefreshColor()
   mBIn->setValue(b);
   mColorPatch -> setColor(mColor.color());
 }
-  
+
 void RGBWidget::slotRSliderChanged(int r)
 {
   int g = mColor.G();
@@ -268,7 +268,7 @@ void RGBWidget::slotPatchChanged(const QColor& clr)
   int r = clr.red();
   int g = clr.green();
   int b = clr.blue();
- 
+
   mColor.setRGB(r, g, b);
   slotRefreshColor();
   emit colorChanged(KoColor(r, g, b, KoColor::csRGB));
@@ -363,7 +363,7 @@ void HSVWidget::slotRefreshColor()
   mVIn->setValue(v);
   mColorPatch -> setColor(mColor.color());
 }
-  
+
 void HSVWidget::slotHSliderChanged(int h)
 {
   int v = mColor.V();
@@ -429,7 +429,7 @@ void HSVWidget::slotPatchChanged(const QColor& clr)
   int r = clr.red();
   int g = clr.green();
   int b = clr.blue();
- 
+
   mColor.setRGB(r, g, b);
   slotRefreshColor();
   emit colorChanged(mColor);
@@ -483,7 +483,7 @@ void GreyWidget::slotRefreshColor()
   mVSlider->slotSetValue(static_cast<int>(v));
   mColorPatch -> setColor(mColor.color());
 }
-  
+
 void GreyWidget::slotVSliderChanged(int v)
 {
   v = 255 - v;
@@ -496,7 +496,7 @@ void GreyWidget::slotVSliderChanged(int v)
 void GreyWidget::slotVInChanged(int v)
 {
   v = 255 - v;
- 
+
   mColor.setRGB(v, v, v);
   slotRefreshColor();
   emit colorChanged(mColor);
@@ -505,7 +505,7 @@ void GreyWidget::slotVInChanged(int v)
 void GreyWidget::slotPatchChanged(const QColor& clr)
 {
   int gray = qGray(clr.red(), clr.green(), clr.blue());
- 
+
   mColor.setRGB(gray, gray, gray);
   slotRefreshColor();
   emit colorChanged(mColor);
@@ -665,7 +665,7 @@ void LABWidget::slotPatchChanged(const QColor& clr)
   int r = clr.red();
   int g = clr.green();
   int b = clr.blue();
- 
+
   mColor.setRGB(r, g, b);
   slotRefreshColor();
   emit colorChanged(mColor);
