@@ -183,7 +183,7 @@ void KoRuler::drawTabs(QPainter &_painter)
   KoTabulator *_tab = 0L;
   int ptPos = 0;
 
-  _painter.setPen(QPen(kapp->textColor,2,SolidLine));
+  _painter.setPen(QPen(black,2,SolidLine));
 
   for (unsigned int i = 0;i < tabList.count();i++)
     {

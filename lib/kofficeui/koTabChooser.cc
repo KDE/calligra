@@ -104,7 +104,7 @@ void KoTabChooser::drawContents(QPainter *painter)
 {
   if (currType == 0) return;
 
-  painter->setPen(QPen(kapp->textColor,2,SolidLine));
+  painter->setPen(QPen(black,2,SolidLine));
 
   switch (currType)
     {
