@@ -222,6 +222,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 
     QStringList listUnit;
     listUnit << KoUnit::unitDescription( KoUnit::U_MM );
+    listUnit << KoUnit::unitDescription( KoUnit::U_CM );
     listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
     listUnit << KoUnit::unitDescription( KoUnit::U_PT );
     m_unit = new QComboBox( lay );
@@ -232,12 +233,15 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
     case KoUnit::U_MM:
         m_oldUnit = 0;
         break;
-    case KoUnit::U_INCH:
+    case KoUnit::U_CM:
         m_oldUnit = 1;
+        break;
+    case KoUnit::U_INCH:
+        m_oldUnit = 2;
         break;
     case KoUnit::U_PT:
     default:
-        m_oldUnit = 2;
+        m_oldUnit = 3;
     }
     m_unit->setCurrentItem( m_oldUnit );
 
@@ -259,10 +263,14 @@ void VConfigMiscPage::apply()
             part->setUnit( KoUnit::U_MM );
             break;
         case 1:
+            unitName = KoUnit::unitName( KoUnit::U_CM );
+            part->setUnit( KoUnit::U_CM );
+            break;
+        case 2:
             unitName = KoUnit::unitName( KoUnit::U_INCH );
             part->setUnit( KoUnit::U_INCH );
             break;
-        case 2:
+        case 3:
         default:
             unitName = KoUnit::unitName( KoUnit::U_PT );
             part->setUnit( KoUnit::U_PT );
