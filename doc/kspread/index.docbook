@@ -33,12 +33,12 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-04-08</date>
-<releaseinfo>1.01.00</releaseinfo>
+<date>2002-04-21</date>
+<releaseinfo>1.02.00</releaseinfo>
 
 
 <abstract>
-<para>THIS IS AN EARLY INCOMPLETE DRAFT DOCUMENT</para>
+<para>THIS IS A DRAFT DOCUMENT FOR COMMENT</para>
 <para>
 &kspread; is a full featured spreadsheet program.
 </para>
@@ -162,20 +162,26 @@ the world's leading politicians. </para>
 spreadsheet table. In both cases the selected cell(s) are displayed with a 
 thick black border.</para>
 <para>To select a single cell <mousebutton>left</mousebutton> click on it 
-or steer your way there with the <keycap>arrow</keycap> keys or enter the 
-cell reference (for example <userinput>B5</userinput>) into the cell reference 
-box at the left end of the Formula Bar and press <keycap>Enter</keycap>, or 
-use the <menuchoice><guimenu>View</guimenu><guimenuitem>Goto Cell...
-</guimenuitem></menuchoice> menu option.</para>
+or enter the cell reference (for example <userinput>B5</userinput>) into the 
+cell reference box at the left end of the Formula toolbar and press <keycap>
+Enter</keycap>, or use the <menuchoice><guimenu>View</guimenu>
+<guimenuitem>Goto Cell...</guimenuitem></menuchoice> menu option.</para>
+
+<para>You can also steer your way there with the <keycap>arrow</keycap> keys 
+or by pressing the <keysym>Enter</keysym> key which will move the current 
+selection one position up, down, left or right depending on the setting in 
+the <guilabel>Misc</guilabel> page of &kspread;'s <link linkend="configmisc">
+configuration dialog box</link>.</para>
+
 <para>To select an area of cells drag the mouse cursor across the wanted area 
 with the <mousebutton>left</mousebutton> button held down, or enter the 
 references of the top left and bottom right cells separated by a colon into 
-the formular bar cell reference box (for example <userinput>B7:C14</userinput>) 
-and press <keycap>Enter</keycap>, or enter these cell references in a similar 
-format into the dialog box brought up by <menuchoice><guimenu>View</guimenu>
-<guimenuitem>Goto Cell...</guimenuitem></menuchoice>.</para>
-<para>You can also select an area of cells by selecting the cell in one corner 
-of the wanted area then holding the &Shift; key down while using the 
+the Formula toolbar cell reference box (for example <userinput>B7:C14
+</userinput>) and press <keycap>Enter</keycap>, or enter these cell references 
+in a similar format into the dialog box brought up by <menuchoice><guimenu>
+View</guimenu><guimenuitem>Goto Cell...</guimenuitem></menuchoice>.</para>
+<para>You can also select an area of cells by selecting the cell in one 
+corner of the wanted area then holding the &Shift; key down while using the 
 <mousebutton>left</mousebutton> mouse button to select the cell in the 
 opposite corner.</para>
 
@@ -225,7 +231,7 @@ to whether you have entered a date or time in the correct format. But
 remember that how items are displayed can be changed by altering 
 the <link linkend="formatdata">cell format</link>.</para></note>
 
-<para>The main text entry box in the Formula Bar provides an easy way of 
+<para>The main text entry box in the Formula toolbar provides an easy way of 
 editing the contents of a selected cell. Press <keycap>Enter</keycap> or 
 <mousebutton>left</mousebutton> click on the green tick mark when you are 
 happy with what you have entered, or click on the red cross to cancel your 
@@ -274,43 +280,34 @@ cell references to suit.</para>
 </textobject>
 </mediaobject>
 
-<sect2>
+<sect2 id="copypasteareas">
 <title>Copying and Pasting Cell Areas</title>
 <para>In the above example D2 can be copied into all three cells D3 to D5 at 
 once by just copying D2 then selecting the complete cell area D3:D5 before 
 doing the paste.</para>
 <para>A rectangular area of cells can be cut or copied in one operation by 
-selecting the area before doing the cut or copy. Then move the selection to 
-the top left corner cell of the area you want to paste into before doing 
-the paste.</para>
+selecting the area before doing the cut or copy. Then select the top left 
+corner cell of the area you want to paste into before doing the paste.</para>
 <para>If you cut or copy a rectangular area of cells, say B2:C3, and paste it 
 into a larger area such as A10:D13 the original pattern of cells will be 
 repeated to fill the target area.</para>
 <para>&kspread; also provides a <quote>Drag and Copy</quote> method for 
-copying formula or text cells down into cells immediately below or to the 
-right of the selected cell(s). To use this method select the cell(s) to be 
+copying cells down into other cells immediately below or to the 
+right of the original cell(s). To use this method select the cell(s) to be 
 copied then position the mouse pointer over the small black square at the 
 bottom right corner of the selected cell(s) so the cursor changes to a double 
-headed arrow. Then hold the <mousebutton>left</mousebutton> button down while 
-you drag the selected cell(s) as far as you wish. This method can also be used 
-to create a <link linkend="series">series</link> if the copied cell(s) contain 
-a numeric, date or time value instead of text or a formula.</para>
+headed arrow. Then hold the <mousebutton>left</mousebutton> mouse button down 
+while you drag the selected cell(s) as far as you wish.</para>
 </sect2>
 
 <sect2 id="specialpaste">
-<title>Special Copy and Paste Modes</title>
+<title>Other Paste Modes</title>
 <para>A cell may contain text, a value, or a formula, and may also contain 
 special font, border or background <link linkend="formatspread">formatting 
-information</link>. &kspread; has special versions of Copy and Paste that let 
-you handle these items differently.</para>
-<para><guimenuitem>Copy as text</guimenuitem> copies the contents of the 
-selected cell(s) without any formatting information in a form suitable for 
-pasting into another application such as a text editor. Note that if you use 
-it to copy just one cell, and if that cell contains a formula, then the 
-formula itself is pasted rather than the result.</para>
-<para><guimenuitem>Special Paste...</guimenuitem> from the <guimenu>Edit
-</guimenu> menu or from the pop up menu you get when <mousebutton>right
-</mousebutton> clicking on a selected cell or cells brings up the <guilabel>
+information</link>. &kspread; has special versions of Paste that let 
+you handle these items in different ways.</para>
+
+<para><guimenuitem>Special Paste...</guimenuitem> brings up the <guilabel>
 Special Paste</guilabel> dialog box. By selecting the appropriate item from 
 the top part of this dialog you can choose to paste just <guilabel>Text
 </guilabel>, the cell <guilabel>Format</guilabel>, any <guilabel>Comment
@@ -318,10 +315,10 @@ the top part of this dialog you can choose to paste just <guilabel>Text
 The items in the bottom part of this dialog box allow you do do simple 
 <link linkend="sumspecialpaste">arithmetic on an area of cells</link>.
 </para>
-<para><guimenuitem>Paste with insertion...</guimenuitem> inserts the copied 
+<para><guimenuitem>Paste with Insertion...</guimenuitem> inserts the copied 
 cell(s) into the table by moving the cells that would otherwise be overwritten 
 a suitable number of rows of columns down or to the right. It can also be used 
-to insert copied complete row(s) or column(s) into the table.</para>
+to insert complete copied row(s) or column(s) into the table.</para>
 </sect2>
 
 </sect1>
@@ -373,14 +370,14 @@ enter more complex formulae such as <userinput>=((B10 + C3) *5 - F11) / 2
 </userinput>.</para>
 <para>&kspread; also includes a large number of built-in formulae for 
 applications such as statistical, trigonometrical and financial calculations. 
-These will be examined in more depth in a <link linkend="formulas">
+Their use will be examined in more depth in a <link linkend="formulas">
 later section</link> of this manual, but if you are interested at this stage 
 choose <guimenuitem>Math expression...</guimenuitem> from the <guimenu>Insert
-</guimenu> menu and take a look through the <guilabel>Formula Editor</guilabel> 
-dialog box that will be displayed..</para>
-<para>For the time being, however, the <emphasis>sum</emphasis> formula may 
+</guimenu> menu and take a look through the <guilabel>Math Expression
+</guilabel> dialog box that will be displayed..</para>
+<para>For the time being, however, the <emphasis>SUM</emphasis> formula may 
 be of interest as it calculates the sum of all values in a specified area of 
-cells. For example <userinput>=sum(B4:C10)</userinput> calculates the sum of 
+cells. For example <userinput>=SUM(B4:C10)</userinput> calculates the sum of 
 all values in the cell area B4 to C10.</para>
 <para>If &kspread; displays a row of <keycap>#</keycap> symbols when you have 
 entered your formula this usually means that it cannot understand what 
@@ -390,7 +387,7 @@ the complete result, in which case you should either make the cell(s) wider
 or change their <link linkend="formatdata">format</link> so that the result 
 does fit properly.</para>
 
-<sect2>
+<sect2 id="recalc">
 <title>Recalculation</title>
 <para>If the <guilabel>Automatic Recalculation</guilabel> box in the <guilabel>
 Preferences</guilabel> page of the <menuchoice><guimenu>Settings</guimenu>
@@ -398,20 +395,100 @@ Preferences</guilabel> page of the <menuchoice><guimenu>Settings</guimenu>
 checked, &kspread; will recalculate the values of cells whenever anything that 
 affects them is changed.</para>
 <para>You can instruct &kspread; to perform a recalculation at any time by 
-using the <guimenuitem>Recalculate Workbook</guimenuitem> or <guimenuitem>
-Recalculate Worksheet</guimenuitem> options in the <guimenu>Tools</guimenu> 
-menu or their shortcuts <keysym>F9</keysym> or <keycombo action="simul">
-&Shift;<keysym>F9</keysym></keycombo>.</para>
+using the <guimenuitem>Recalculate Sheet</guimenuitem> or <guimenuitem>
+Recalculate Workbook</guimenuitem> options in the <guimenu>Tools</guimenu> 
+menu or their shortcuts <keycombo action="simul">&Shift;<keysym>F9</keysym>
+</keycombo> or <keysym>F9</keysym>.</para>
 </sect2>
-
-<sect2>
-<title>Precision</title>
-<para>Question; what numeric precision does &kspread; achieve for integer and 
-floating point calculations?</para>
-</sect2>
-
 </sect1>
 
+<sect1 id="sort">
+<title>Sorting Data</title>
+<para>In the simple example shown below, the data consists of the names of a 
+number of mountains together with their height above sea level. &kspread; 
+lets us sort data such as this in different ways.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Screenshot of sorted data</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>We may, for example, want the data sorted so that the names are in 
+alphabetical order. To do this select the area containing the data (A2:B5 
+in this case) and choose <guimenuitem>Sort Increasing</guimenuitem> or 
+<guimenuitem>Sort Decreasing</guimenuitem> from the <guimenu>Data</guimenu> 
+menu.</para>
+<para>These two options sort the data according to the contents of the cells 
+in the left column of the selected area. You can also sort by the contents of 
+cells in another column, or in a row, by choosing <menuchoice><guimenu>Data
+</guimenu><guimenuitem>Sort...</guimenuitem></menuchoice> which brings up a 
+dialog box where you can choose the row or column to be used.</para>
+<para>Sorting is done alphanumerically, and is case sensitive, numbers coming 
+before upper case letters which come before lower case letters, so that cells 
+containing the entries <userinput>Cat</userinput>, <userinput>bar</userinput>, 
+<userinput>77</userinput> and <userinput>Bat</userinput> would be sorted into 
+the following order: <emphasis>77  Bat  Cat  bar</emphasis>.</para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title>The Statusbar Summary Calculator</title>
+<para>The left hand end of the Statusbar shows a summary of the values in 
+the selected cell(s). According to the setting of the <guilabel>Method of 
+calc:</guilabel> drop down box in the <guilabel>Misc</guilabel> page of 
+&kspread;'s configuration dialog the summary can be:</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Sum</guilabel></term>
+<listitem><para>The value displayed is the sum of the values in the selected 
+cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Min</guilabel></term>
+<listitem><para>The value displayed is the minimum of the values in the selected 
+cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Max</guilabel></term>
+<listitem><para>The value displayed is the maximum of the values in the selected 
+cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Average</guilabel></term>
+<listitem><para>The value displayed is the average of the values in the selected 
+cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Count</guilabel></term>
+<listitem><para>The value displayed is the number of cells containing numeric 
+values.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>None</guilabel></term>
+<listitem><para>No summary calculation is performed.
+</para></listitem>
+</varlistentry>
+</variablelist>
+<para>The method of calculation can also be changed by <mousebutton>right
+</mousebutton> clicking on the summary calculation result area of the 
+Statusbar and choosing an item from the pop up menu.</para>
+
+</sect1>
 
 <sect1 id="saving">
 <title>Saving a Spreadsheet</title>
@@ -439,7 +516,7 @@ a file name of the form <filename>.yourfilename.autosave</filename>, note the
 leading period (<keysym>.</keysym>), so that <filename>spread1.ksp</filename> 
 woud be autosaved as <filename>.spread1.ksp.autosave</filename>. The autosaved 
 version is removed when you next save your spreadsheet. This autosave feature 
-is <link linkend="configure">user configurable</link>.</para>
+is <link linkend="configinterface">user configurable</link>.</para>
 
 </sect1>
 <sect1 id="printing">
@@ -447,48 +524,48 @@ is <link linkend="configure">user configurable</link>.</para>
 <para>Printing a spreadsheet is basically done by selecting <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Print...</guimenuitem></menuchoice> which 
 brings up &kde;'s common <guilabel>Print</guilabel> dialog box where you can 
-select, among other options, the printer to be used, the number of copies and 
+choose, among other options, the printer to be used, the number of copies and 
 whether all or only selected pages are to be printed.</para> 
-<para>Note that if your spreadsheet includes more that one 
-<link linkend="tables">table</link> only the active table will be printed.
-</para>
-<para>&kspread; itself provides a number of tools to help you change the 
-content and appearance of the printed document:</para>
-<para>First of all, you can change the fonts, colors and borders of the cells 
-in the table, see the <link linkend="formatspread">Spreadsheet Formatting
-</link> section for more details about how to do this.</para>
-<para>Selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Paper 
-Layout...</guimenuitem></menuchoice> brings up a dialog box with two tabbed 
-pages. The <guilabel>Format and Borders</guilabel> page is where you can 
-change the paper size (this should be suitable for your printer) and 
-orientation and the size of the page borders. The <guilabel>Header and Footer
-</guilabel> page lets you add information to the header and footer of each 
-printed page.</para>
-<para>You can quickly see how a large table will be spilt into separate pages 
-for printing by checking the <menuchoice><guimenu>View</guimenu><guimenuitem>
-Show page borders</guimenuitem></menuchoice> box. The boundaries of each 
-printed page will then be marked by red lines in the table.</para>
+<para>&kspread; will print as many sheets as are necessary to include all 
+items in the table. You can quickly see how a table will be spilt into 
+separate pages for printing by checking the <menuchoice><guimenu>View</guimenu>
+<guimenuitem>Show page borders</guimenuitem></menuchoice> box. The boundaries 
+of each printed page will then be marked by red lines in the table.</para>
+
 <para>For a more detailed view of what is to be sent to the printer, including 
-anything you have asked to be included in the page header or footers, choose 
-<menuchoice><guimenu>File</guimenu><guimenuitem>Print Preview...</guimenuitem>
-</menuchoice>.
-</para>
+anything you have asked to be included in the page headers and footers (see 
+below), choose <menuchoice><guimenu>File</guimenu><guimenuitem>Print 
+Preview...</guimenuitem></menuchoice>.</para>
+
+<para>To improve the appearance of the printed output , you can change the 
+fonts, colors, borders and sizes of the cells in the table, see the 
+<link linkend="formatspread">Spreadsheet Formatting</link> section for more 
+details about how to do this.</para>
+
+<para>You can also use the <guilabel>Page Layout</guilabel> dialog box, 
+invoked by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Paper 
+Layout...</guimenuitem></menuchoice>, to change the orientation of the printed 
+pages, the paper size (this should be suitable for your printer) and the size 
+of the page borders. The <guilabel>Header and Footer</guilabel> page of this 
+dialog box also lets you add information such as the filename, date and page 
+number to the header and footer of each printed page.</para>
+
 </sect1>
 
 </chapter>
 
 <chapter id="formatspread">
 <title>Spreadsheet Formatting</title>
-<sect1>
+<sect1 id="formatfonts">
 <title>Fonts, Text, Borders and Colors</title>
 <para>To change the appearance of selected cell(s), row(s) or column(s) use 
 the <guimenuitem>Cell Format...</guimenuitem> option from the <guimenu>Format
 </guimenu> menu or from the <mousebutton>right</mousebutton> button pop up 
 menu. This will bring up the <guilabel>Cell Format</guilabel> dialog box 
-which has 6 tabbed pages:</para>
+which has several tabbed pages:</para>
 <para>The <guilabel>Border</guilabel> page lets you set the appearance of the 
 cell borders. If you have selected more than one cell you can apply different 
-styles to the individual cell borders and that surrounding the selected area.
+styles to the borders between the cells and that surrounding the selected area.
 </para>
 <para>First select the pattern and color from the <guilabel>Pattern</guilabel> 
 area of the dialog box <guilabel>Border</guilabel> page then apply that to 
@@ -502,7 +579,7 @@ and color, the cell background pattern and color can be selected from the
 <guilabel>Background</guilabel> page.</para>
 <para>From the <guilabel>Position</guilabel> page you can control the position 
 of text within a cell by making suitable selections in the <guilabel>Horizontal
-</guilabel> and <guilabel>Vertical></guilabel> areas or by setting the 
+</guilabel> and <guilabel>Vertical</guilabel> areas or by setting the 
 <guilabel>Indent</guilabel> value. You can also choose to have the text 
 appear vertically rather than horizontally, or even at an angle.</para>
 </sect1>
@@ -520,7 +597,7 @@ displayed with a leading + sign and whether negative values are shown in red.
 <para>The bottom part of the <guilabel>Data Format</guilabel> page lets you 
 select the format to be used when displaying numeric values, dates or times.
 </para>
-<sect2>
+<sect2 id="conditional">
 <title>Conditional Cell Attributes</title>
 <para>You can make the appearance of a cell change according to the value it 
 contains, useful perhaps if you are using &kspread; to keep track of your 
@@ -546,7 +623,7 @@ menu to clear any conditional attributes from selected cells.</para>
 changing the height of a single cell will change the height for all cells in 
 that row, similarly changing the width will affect the entire column.</para>
 <para>You can also select the row(s) or column(s) to be changed then select 
-<guimenuitem>Resize Row...</guimenuitem> or <guimenuitem>Resize column...
+<guimenuitem>Resize row...</guimenuitem> or <guimenuitem>Resize column...
 </guimenuitem> from the <mousebutton>right</mousebutton> mouse button pop up 
 menu or from the <menuchoice><guimenu>Format</guimenu><guisubmenu>Row
 </guisubmenu></menuchoice> or <menuchoice><guimenu>Format</guimenu><guisubmenu>
@@ -578,13 +655,13 @@ Dissociate cells</guimenuitem> from the <guimenu>Table</guimenu> menu.</para>
 <para>A finished spreadsheet can often be made to look more attractive by 
 hiding the cells containing intermediate calculations so that only the 
 important data input and result areas are shown.</para>
-<para>In &kspread; you can do this by hiding selected rows or columns by 
+<para>In &kspread; you can hide selected rows or columns by 
 using the <guimenuitem>Hide Row(s)</guimenuitem> and <guimenuitem>Hide 
 Column(s)</guimenuitem> options from the <guimenu>Format</guimenu> or 
 <mousebutton>right</mousebutton> mouse button menus. Hidden rows and columns 
 are not displayed on the screen or included in a print out.</para>
-<para>Hiding cells in this way also makes them immune to accidental change.
-</para>
+<para>Hiding cells in this way also makes them slightly less prone to 
+accidental change.</para>
 <para>To un-hide a row or column select <menuchoice><guisubmenu>Row
 </guisubmenu><guimenuitem>Show Row(s)</guimenuitem></menuchoice> or 
 <menuchoice><guisubmenu>Column</guisubmenu><guimenuitem>Show Column(s)
@@ -602,20 +679,20 @@ are not displayed on the screen or included in a print out.</para>
 <para>When constructing a spreadsheet you often need to include a series of 
 values, such as 10, 11, 12..., in a row or column. There are several ways you 
 can do this in &kspread;.</para>
-<para>For a simple short series such as 5, 6, 7.. 12 the <quote>Drag and Copy
+<para>For a simple short series such as 5, 6, 7, 8... the <quote>Drag and Copy
 </quote> method is the simplest. Enter the starting value into the starting 
-cell, make sure that cell is selected, move the mouse pointer over the small 
-square at the bottom right corner of the cell so the cursor changes to a 
-diagonal double headed arrow then hold the <mousebutton>left</mousebutton> 
-mouse button down while you drag the cell down or across as needed.</para>
-<para>This method also works with dates (incrementing by one day) and times 
-(incrementing by one minute).</para>
+cell and the next value of the series into an adjacent cell. 
+Then select both cells and move the mouse pointer so that it is over the small 
+square at the bottom right corner of the cell, the cursor will change to a 
+diagonal double headed arrow. Then hold the <mousebutton>left</mousebutton> 
+mouse button down while you drag the cells down or across as needed.</para>
+
 <para>&kspread; also recognises some special <quote>series</quote> such as 
 the days of the week. Try entering <userinput>Friday</userinput> into a cell 
-(note the capitalization) then using Drag and Copy on that. <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Sort lists...</guimenuitem></menuchoice> 
-will show you what special series are available and allow you to enter new 
-ones.</para>
+and <userinput>Saturday</userinput> into the cell below (note the 
+capitalization) then using Drag and Copy on them. To see what special series 
+are available, and perhaps create your own, select <menuchoice><guimenu>Tools
+</guimenu><guimenuitem>Custom Lists...</guimenuitem></menuchoice> .</para>
 <para>The Drag and Copy method can also be used to create series where the 
 step size is not just 1, although it must be an integer. For example if you 
 enter <userinput>4</userinput> into cell A1 and <userinput>2</userinput> into 
@@ -642,12 +719,12 @@ Drag and Copy cell A2 down.</para>
 <para>&kspread; has a huge range of built in mathematical and other functions 
 that can be used in a formula cell. They can be seen and accessed by selecting 
 a cell then choosing <guimenuitem>Math expression...</guimenuitem> from the 
-<guimenu>Insert</guimenu> menu. This brings up the <guilabel>Formula Editor
+<guimenu>Insert</guimenu> menu. This brings up the <guilabel>Math Expression
 </guilabel> dialog box.</para>
 <para>Select the expression you want to use from the listbox at the left of the 
 dialog box then press the button with the down arrow key symbol on it to paste 
-the expression into the text edit box at the bottom of the <guilabel>Formula 
-Editor</guilabel> dialog.</para>
+the expression into the text edit box at the bottom of the <guilabel>Math 
+Expression</guilabel> dialog.</para>
 <para>The <guilabel>Parameters</guilabel> tab page will then be displayed, 
 supposedly to let you enter the parameter(s) for the expression you have just 
 chosen. Unfortunately at the time of writing the only parameters you can 
@@ -655,19 +732,20 @@ enter here are actual values, not cell references which is what is usually
 required.</para>
 <para>Instead of using the <guilabel>Parameters</guilabel> page, cell 
 references such as <userinput>B6</userinput> can be entered by typing them in 
-the edit box at the bottom of the <guilabel>Formula Editor</guilabel> dialog. 
+the edit box at the bottom of the <guilabel>Math Expression</guilabel> dialog. 
 If an expression has more then one parameter separate then with a semi-colon 
 (<keysym>;</keysym>).</para>
 <para>Pressing the <guibutton>OK</guibutton> button will transfer the 
-expression to the main &kspread; window's Formula Bar edit box and close the 
-<guilabel>Formula Editor</guilabel> dialog. Press the Formula Bar button marked 
-with a large green tick to put the expression into the selected cell.</para>
-<para>You can of course do without the <guilabel>Formula Editor
-</guilabel> and simply type the complete expression into the Formula Bar's 
+expression to the main &kspread; window's Formula toolbar edit box and close 
+the <guilabel>Math Expression</guilabel> dialog. Press the Formula toolbar 
+button marked with a large green tick to put the expression into the selected 
+cell.</para>
+<para>You can of course do without the <guilabel>Math Expression</guilabel> 
+dialog and simply type the complete expression into the Formula toolbar's 
 edit box. Do not forget that all expressions must start with an <keysym>=
-</keysym> symbol and note that function names are case sensitive.</para>
+</keysym> symbol.</para>
 
-<sect2>
+<sect2 id="logical">
 <title>Logical Comparisons</title>
 <para>Logical functions such as IF(), AND(), OR() take parameters which have the 
 logical (boolean) values True or False. This type of value can be produced by 
@@ -761,19 +839,71 @@ letter nor the row number are changed).
 
 <sect1 id="sumspecialpaste">
 <title>Arithmetic using Special Paste</title>
-<para>At the time of writing this does not work properly.</para>
+<para>Sometimes you may want to add a single value to a number of 
+cells, or subtract a value from them, or multiply or divide them all by a 
+single value. The <guimenuitem>Special Paste...</guimenuitem> option lets you 
+do this quickly and easily.</para>
+<para>First, enter the modifier value into any spare cell on your spreadsheet 
+and <guimenuitem>Copy</guimenuitem> it. Then select the area of cells you want 
+to change, choose <guimenuitem>Special Paste...</guimenuitem> from the 
+<guimenu>Edit</guimenu> or <mousebutton>right</mousebutton> mouse button menu 
+and select <guilabel>Addition</guilabel>, <guilabel>Subtraction</guilabel>, 
+<guilabel>Multiplication</guilabel> or <guilabel>Division</guilabel> from the 
+<guilabel>Operation</guilabel> section of the dialog box.</para>
+<para>You can also apply different modifier values to different rows or 
+columns of the target area by copying an area containing the wanted modifiers 
+before selecting the target area and doing <guimenuitem>Special Paste...
+</guimenuitem> . For example, if you enter <userinput>5</userinput> into cell 
+A1, <userinput>10</userinput> into B1, select both cells and do a <guimenuitem>
+Copy</guimenuitem> then <guimenuitem>Special Paste...</guimenuitem> <guilabel>
+Addition</guilabel> into cells A10 to D15, 5 will be added to A10:A15 and 
+C5:C15, and 10 to B10:B15 and D10:D15.</para>
+<para>Note that a modifier value can be a formula as well as a simple numeric 
+value. If it is a formula then &kspread; will adjust the cell references as 
+for a normal <guimenuitem>Paste</guimenuitem> operation.</para>
 </sect1>
 
-<sect1 id="sort">
-<title>Sorting Data</title>
-<para>To be done</para>
+<sect1 id="tables">
+<title>Using more than one Table</title>
+<para>When you start a new, empty, document with &kspread; it will create a 
+number of blank tables (sheets). The number of tables it creates is determined 
+by the <guilabel>Number of pages open at the beginning</guilabel> setting in 
+the <guilabel>Interface</guilabel> page of &kspread;'s 
+<link linkend="configinterface">configuration</link> dialog box.</para>
+<para>To add another table to your workbook, select <guimenuitem>
+Insert Table</guimenuitem> from the <guimenu>Table</guimenu> menu.</para>
+<para>If the <guilabel>Show tabs</guilabel> box in the <guilabel>Interface
+</guilabel> page of &kspread;'s configuration dialog box is checked a small 
+tab will be shown near the bottom left of &kspread;'s window for each table. 
+<mousebutton>Left</mousebutton> click on one of these tabs to see that table.
+</para>
+<para>You can also switch between tables by using the <keycombo action="simul">
+&Ctrl;<keysym>PageDown</keysym></keycombo> to move to the next table, 
+<keycombo action="simul">&Ctrl;<keysym>PageUp</keysym></keycombo> to move to 
+the previous one.</para>
+<para>Tables are given the default names of <emphasis>Table1</emphasis>, 
+<emphasis>Table2</emphasis> ... you can give a table a different name by 
+<mousebutton>right</mousebutton> clicking on the tab and selecting 
+<guimenuitem>Rename table...</guimenuitem>.</para>
+<para>To remove a table from the workbook use the <guimenuitem>Remove Table
+</guimenuitem> option in the <guimenu>Table</guimenu> menu or in the little 
+menu that pops up when you <mousebutton>right</mousebutton> click on the tab 
+for the table you want to remove.</para>
+<para>Other entries in the <guimenu>Table</guimenu> menu allow you to remove a 
+table or hide it in much the same way as rows and columns can be hidden.</para>
+<para>If you want a formula in one table to refer to a cell in another table, 
+the cell reference must start with the table name followed by an exclamation 
+mark (<keysym>!</keysym>). For example if you enter <userinput>=Table2!A2
+</userinput> into a cell in Table 1, that cell will take the value from A2 of 
+Table2. Note that table names are case sensitive.
+</para>
 </sect1>
 
 <sect1 id="consolidate">
 <title>Consolidating Data</title>
 <para>You may have constructed a workbook containing several tables (sheets) 
 containing similar data but for, say, different months of the year, and wish 
-to have another table containing the consolidated (sum or average) values 
+to have summary sheet containing the consolidated (sum or average) values 
 of the corresponding data items in the other tables.</para>
 <para>This task can be made slightly easier by using the <guimenuitem>
 Consolidate...</guimenuitem> item from the <guimenu>Data</guimenu> menu.</para>
@@ -803,7 +933,7 @@ be placed into the target cells rather than the formulae to calculate them.
 data.</para>
 <para>First select the area of cells containing the data and choose 
 <menuchoice><guimenu>Insert</guimenu><guimenuitem>Chart</guimenuitem>
-</menuchoice>. The cursor should change to a small cross shape which you 
+</menuchoice>. The cursor will change to a small cross shape which you 
 should drag across the table while holding the <mousebutton>left
 </mousebutton> mouse button held down to define the area where you want the 
 chart to appear, there is no need to be too accurate at this stage as the 
@@ -845,11 +975,6 @@ hatch border without any small black squares and &kchart;'s <interface>
 Chart Toolbar</interface> should appear in &kspread;'s window. You can then 
 use these &kchart; tools or a selection from the menu that pops up when you 
 <mousebutton>right</mousebutton> click in the chart area to change the chart.</para>
-</sect1>
-
-<sect1 id="insertobj">
-<title>Inserting objects</title>
-<para>To be done.</para>
 </sect1>
 
 <sect1 id="hyper">
@@ -895,47 +1020,48 @@ wish.</para>
 
 <sect1 id="validcheck">
 <title>Validity Checking</title>
-<para>To be done</para>
+<para>&kspread; can automatically check the validity of entered data against 
+a number of criteria, and pop up a message box if the data is invalid.</para>
+<para>To enable this feature, select the cell(s) to be monitored and choose 
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Validity...</guimenuitem>
+</menuchoice>. This will bring up &kspread;'s <guilabel>Validity</guilabel> 
+dialog box which has two tabbed pages.</para>
+<para>In the <guilabel>Values</guilabel> page select what type of data is to 
+be considered valid from the <guilabel>Allow:</guilabel> drop down list then 
+define the valid range of values by choosing one of the options in the 
+<guilabel>Data:</guilabel> drop down list and entering suitable value(s) into 
+the Minimum and Maximum edit box(es).</para>
+<para>When you have done this change to the <guilabel>Error Alert</guilabel> 
+tab page. Here you can choose the type of message box (<guimenuitem>Stop
+</guimenuitem>, <guimenuitem>Warning</guimenuitem> or <guimenuitem>Information
+</guimenuitem>) that will appear when an invalid value is entered, and define 
+the message box title and message text.</para>
 </sect1>
 
 <sect1 id="other">
 <title>Other Features</title>
 
-<sect2>
+<sect2 id="splitview">
 <title>Splitting the View</title>
-<para>If your spreadsheet is so big that you can not see all of it at once, 
-splitting the screen into two or more views can help. This is done by 
-selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Split View
-</guimenuitem></menuchoice> which will split the screen into two vertical 
-portions. If you prefer a horizontal split you can then select <menuchoice>
-<guimenu>View</guimenu><guisubmenu>Splitter Orientation</guisubmenu>
-<guimenuitem>Horizontal</guimenuitem></menuchoice>.</para>
+<para>If your spreadsheet is so large that you can not see all of it at once, 
+splitting &kspread;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>
+Split View</guimenuitem></menuchoice> which will split the current view into 
+two parts. <menuchoice><guimenu>View</guimenu><guisubmenu>Splitter Orientation
+</guisubmenu></menuchoice> lets you choose between horizontal and vertical 
+splitting.</para>
 <para>This technique is particularly useful when you want select an area 
 larger than can be shown in one view, perhaps to paste a copied cell into it. 
 Use the scrollbars to position the two views to show the top left and 
 bottom right cells of the wanted area, select the top left cell in one 
 view then hold the &Shift; key pressed while you select the 
 bottom right cell with the <mousebutton>left</mousebutton> mouse button.</para>
+<para>The relative sizes of the views can be changed by dragging the thick bar 
+separating the them.</para>
+<para>To remove a view select <menuchoice><guimenu>View</guimenu><guimenuitem>
+Remove View</guimenuitem></menuchoice></para>
 </sect2>
 
-
-<sect2 id="tables">
-<title>Using more than one Table</title>
-<para>To add another table (sheet) to your workbook, select <guimenuitem>
-Insert Table</guimenuitem> from the <guimenu>Table</guimenu> menu. Another tab 
-labelled something like <quote>Table2</quote> will appear near the bottom left 
-of &kspread;'s window, you can give it a different name by <mousebutton>
-right</mousebutton> clicking on the tab and selecting <guimenuitem>Rename 
-table...</guimenuitem>.</para>
-<para>Other entries in the <guimenu>Table</guimenu> menu allow you to remove a 
-table or hide it in much the same way as rows and columns can be hidden.</para>
-<para>If you want a formula in one table to refer to a cell in another table, 
-the cell reference must start with the table name followed by an exclamation 
-mark (<keysym>!</keysym>). For example if you enter <userinput>=Table2!A2
-</userinput> into a cell in Table 1, that cell will take the value from A2 of 
-Table2. Note that table names are case sensitive.
-</para>
-</sect2>
 
 <sect2 id="namedareas">
 <title>Named Areas</title>
@@ -948,20 +1074,21 @@ selecting <guimenuitem>Area name...</guimenuitem> from the <mousebutton>right
 </menuchoice> option to change &kspread;'s focus to any of them.</para>
 </sect2>
 
-<sect2>
+<sect2 id="cellcomments">
 <title>Cell Comments</title>
-<para>You can add a comment to a cell that can be viewed when working on 
+<para>A cell can contain a text comment that can be viewed when working on 
 the spreadsheet but which is not printed and not normally seen.</para>
-<para>To do this select the cell and choose <guimenuitem>Add/modify comment...
-</guimenuitem> from the <mousebutton>right</mousebutton> mouse button or 
-<menuchoice><guimenu>Insert</guimenu><guisubmenu>Comment</guisubmenu>
-</menuchoice> menus and type your comment into the resulting 
-<guilabel>Cell comment</guilabel> dialog box.</para>
+<para>To add a comment select the cell and choose <guimenuitem>Add/modify 
+comment...</guimenuitem> from the <mousebutton>right</mousebutton> mouse 
+button menu or from the <menuchoice><guimenu>Insert</guimenu><guisubmenu>
+Comment</guisubmenu></menuchoice> menu and type your comment into the 
+resulting <guilabel>Cell comment</guilabel> dialog box.</para>
 <para>To see the comment hover the mouse pointer over the top right corner of 
 the cell. The comment will appear as if it were a Tooltip. Note that it will 
 only be visible if you have checked the <guilabel>Enable Tooltips</guilabel> 
-box in the <guilabel>Miscellaneous</guilabel> page of the Control Center 
-<guimenu>Look &amp; Feel</guimenu> <guisubmenu>Style</guisubmenu> dialog.</para>
+box in the <guilabel>Miscellaneous</guilabel> page of &kde;'s Control Center 
+<guimenu>Look &amp; Feel</guimenu> <guisubmenu>Style</guisubmenu> dialog.
+</para>
 <para>If you check the <guilabel>Show comment indicator</guilabel> box of the 
 <guilabel>Misc</guilabel> page in the <menuchoice><guimenu>Settings</guimenu>
 <guimenuitem>Configure &kspread;...</guimenuitem></menuchoice> dialog, those 
@@ -977,7 +1104,7 @@ choose <menuchoice><guimenu>Edit</guimenu><guisubmenu>Clear</guisubmenu>
 </chapter>
 
 <chapter id="importexport">
-<title>Importing and Exporting Foreign Files</title>
+<title>Importing and Exporting Foreign Formats</title>
 <para>&kspread; has a limited ability to import (read) and export (write) 
 spreadsheet files with foreign formats. &kspread;'s capabilities at the time 
 of writing are summarized in the table below, for more up to date 
@@ -1043,8 +1170,379 @@ you should add the correct extension for foreign formats.</para>
 
 
 <chapter id="configure">
-<title>Configuring &kspread;</title>
-<para>To be done</para>
+<title>Configuring &kspread; Shortcuts and Toolbars</title>
+
+<sect1 id="configshort">
+<title>Shortcuts</title>
+<para>To change the shortcut key arrangements used by &kspread; select 
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...
+</guimenuitem></menuchoice>. This will launch a dialog box as shown below.
+</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Shortcut config screenshot 1</phrase>
+</textobject>
+</mediaobject>
+<para>Search through the combo box to find the action you want to add or 
+change the shortcut keys for and select it by <mousebutton>left</mousebutton> 
+clicking on the name. You will then be able to change the shortcut by 
+selecting the <guilabel>None</guilabel>, <guilabel>Default</guilabel> or 
+<guilabel>Custom</guilabel> radio button or by clicking on the large button in 
+the <guilabel>Shortcut for Selected Action</guilabel> area.</para>
+<para>The <guilabel>Define Shortcut</guilabel> dialog box will then open.
+</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Shortcut config screenshot 2</phrase>
+</textobject>
+</mediaobject>
+<para>Choose whether you want to change the <guilabel>Primary</guilabel> or 
+<guilabel>Alternate</guilabel> shortcut then press the key combination you 
+want to act as the shortcut, for example <keycombo action="simul">
+<keysym>Ctrl</keysym><keysym>Shift</keysym><keycap>S</keycap></keycombo>. 
+If the <guilabel>Auto-Close</guilabel> box is checked the dialog will vanish 
+as soon as you enter the key combination, otherwise it will remain until you 
+press <guibutton>OK</guibutton> or <guibutton>Cancel</guibutton>. Clicking on 
+the little black icon with a white cross in it clears the shortcut.</para>
+
+<sect2 id="userdefmenus">
+<title>User Defined Menus</title>
+<para>You can add your own pop up menu to &kspread; so that pressing one key 
+combination will make the menu appear then pressing a second key, or using the 
+<keysym>Up arrow</keysym> and <keysym>Down arrow</keysym> keys and pressing 
+<keysym>Enter</keysym>, will select an item from it.</para>
+<para>To do this add a <guilabel>Custom</guilabel> shortcut for each of the 
+actions you want to appear in the menu and in the <guilabel>Define Shortcut
+</guilabel> dialog check the <guilabel>Multi-Key</guilabel> box, press the 
+key combination that you want to bring up your new menu then, separately, 
+press the key that will choose that item from the menu.</para>
+</sect2>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title>Toolbars</title>
+<para>&kspread; has five toolbars; File, Edit, Math, Format and Color/Border, 
+each of which may or may not be shown depending on the choices made in the 
+<guimenu>Settings</guimenu> menu.</para>
+<para>You can choose whether a toolbar appears at the top, left, right or 
+bottom of &kspread;'s window by <mousebutton>right</mousebutton> clicking on 
+the toolbar, which brings up the <guilabel>Toolbar Menu</guilabel> and making 
+a selection from the <guisubmenu>Orientation</guisubmenu> sub menu. This 
+<guilabel>Toolbar Menu</guilabel> also has sub menus for choosing whether the 
+toolbar displays icons, text or both, and the size of the icons.</para>
+
+<para>Another way of moving a toolbar is by positioning the mouse pointer over 
+the two vertical bars at the left end of each toolbar and holding the 
+<mousebutton>left</mousebutton> mouse button down while you drag the toolbar 
+to the wanted position. When you drag the toolbar in this way you can release 
+the mouse button when it is some distance from any of &kspread;'s window 
+sides, and then you will get a floating toolbar, which is not locked to any 
+particular part of &kspread;'s window and can in fact be moved outside of 
+the window. To put a floating toolbar back into one of the traditional 
+positions <mousebutton>right</mousebutton> click on the its title bar to bring 
+up the <guilabel>Toolbar Menu</guilabel>.</para>
+<para>You can also <quote>flatten</quote> a toolbar by <mousebutton>left
+</mousebutton> clicking on the two vertical bars at the left end of the 
+toolbar or by selecting <menuchoice><guisubmenu>Orientation</guisubmenu>
+<guimenuitem>Flat</guimenuitem></menuchoice> from the <guilabel>Toolbar 
+Menu</guilabel>. A <quote>flattened</quote> toolbar appears as a small 
+rectangle containing two horizontal bars just under &kspread;'s Menubar. It 
+can be restored to normal by <mousebutton>left</mousebutton> clicking on it.
+</para>
+<para>Selecting <guimenuitem>Configure Toolbars...</guimenuitem> from the 
+<guimenu>Settings</guimenu> menu will bring up a dialog box which lets you add 
+buttons to or remove them from &kspread;'s toolbars.</para>
+<para>To use this <guilabel>Configure Toolbars</guilabel> dialog box first 
+select a toolbar from the <guilabel>Toolbar:</guilabel> drop down list. The 
+right hand <guilabel>Current actions:</guilabel> window will then show the 
+buttons currently present on the toolbar. You can remove a button by selecting 
+it in this window then pressing the left arrow button, or move it around by 
+pressing the up and down arrow buttons. To add a new button to the toolbar 
+select it in the <guilabel>Available actions:</guilabel> list then press the 
+right arrow button.</para>
+</sect1>
+</chapter>
+
+<chapter id="configdialog">
+<title>The &kspread; Configuration Dialog Box</title>
+
+<para>Selecting <menuchoice><guimenu>Settings</guimenu><guimenuitem>
+Configure Kspread...</guimenuitem></menuchoice> opens a dialog box 
+with several pages, selected with the icons at the left of the dialog box, 
+which allow you to change many aspects of &kspread;'s operation.</para>
+
+<sect1 id="configpref">
+<title><guilabel>Preferences</guilabel></title>
+<para>This page has a number of checkboxes which control how items are 
+displayed, entered or calculated:
+<variablelist>
+<varlistentry>
+<term><guilabel>Show formula</guilabel></term>
+<listitem><para>If this box is not checked &kspread; will display 
+the actual formulae in cells rather than the results.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Show Grid</term>
+<listitem><para>Controls whether or not the cell grid lines are shown.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Show column number</term>
+<listitem><para>If this box is checked the column headings will show 
+as numbers rather than as letters.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>LC mode</term>
+<listitem><para>If this box is checked the cell reference shown at the 
+left end of the Formula Bar will be displayed in LC mode 
+(<abbrev>i.e.</abbrev> L2C3) rather than in its normal form B2. This does not 
+seem to be of much use at the moment.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Automatic Recalculation</term>
+<listitem><para>Controls whether formulae are recalculated 
+automatically when the value of any cell they refer to changes.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Hide Zero</term>
+<listitem><para>If this box is checked any cell containing the value 
+zero will appear blank.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Convert first letter to upper case</term>
+<listitem><para>Check this box and the first letter of any text you 
+type in will automatically be converted to upper case.
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+
+</sect1>
+
+<sect1 id="configlocale">
+<title><guilabel>Locale Parameters</guilabel></title>
+<para>This page of &kspread;'s configuration dialog box shows how items 
+such as numbers, date, time and money are displayed.</para>
+</sect1>
+
+<sect1 id="configinterface">
+<title><guilabel>Interface</guilabel></title>
+<para>This page of &kspread;'s configuration dialog box (obtained by selecting 
+<guimenuitem>Configure Kspread...</guimenuitem> from the <guimenu>Settings
+</guimenu> menu) controls some more &kspread; features:</para>
+<para></para>
+
+<para><variablelist>
+<varlistentry>
+<term><guilabel>Number of pages open at the beginning:</guilabel></term>
+<listitem><para>Controls how many pages (tables) will be created when the 
+option <guilabel>Start with an empty document</guilabel> is chosen when 
+&kspread; is started.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Number of recent file:</guilabel></term>
+<listitem><para>Controls the maximum number of filenames that are shown 
+when you select <menuchoice><guimenu>File</guimenu><guimenuitem>
+Open Recent</guimenuitem></menuchoice>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Auto save (min):</guilabel></term>
+<listitem><para>Here you can select the time between autosaves, or disable 
+this feature alltogether by choosing <guimenuitem>No auto save</guimenuitem>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show vertical scrollbar</guilabel></term>
+<listitem><para>Check or uncheck this box to show or hide the vertical 
+scrollbar.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show horizontal scrollbar</guilabel></term>
+<listitem><para>Check or uncheck this box to show or hide the horizontal 
+scrollbar.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show Column header</guilabel></term>
+<listitem><para>If you uncheck this box the column letters will not be shown 
+at the top of a table.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show Row header</guilabel></term>
+<listitem><para>If you uncheck this box the row numbers will not be shown at 
+the left side.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show tabs</guilabel></term>
+<listitem><para>This checkbox controls whether the table (page) tabs are shown 
+at the bottom of the table.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show formula toolbar</guilabel></term>
+<listitem><para>Here is where you can choose to show or hide the Formula bar.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show statusbar</guilabel></term>
+<listitem><para>Uncheck this box if you do not want the Statusbar to appear.
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+
+</sect1>
+
+<sect1 id="configmisc">
+<title><guilabel>Misc</guilabel></title>
+<para>The <guilabel>Misc</guilabel> page of &kspread;'s configuration 
+dialog box contains the following items;</para>
+
+<para><variablelist>
+<varlistentry>
+<term><guilabel>Completion mode:</guilabel></term>
+<listitem><para>Lets you choose the (auto) text completion mode from a 
+range of options in the drop down selection box.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Value of indent:</guilabel></term>
+<listitem><para>Lets you define the amount of indenting used by the 
+<guimenuitem>Increase indent</guimenuitem> option in the <guimenu>Format
+</guimenu> menu.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Press enter to move selection to:</guilabel></term>
+<listitem><para>When you have selected a cell then press the <keysym>Enter
+</keysym> key the selection will move one place to the left, right, up or 
+down as determined by the setting in this drop down selection box.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show error message</guilabel></term>
+<listitem><para>If this box is checked a message box will pop up when what 
+you have entered into a cell cannot be understood by &kspread;.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Method of calc:</guilabel></term>
+<listitem><para>This drop down selection box can be used to choose the 
+calculation performed by the <link linkend="statusbarsum">Statusbar Summary
+</link> function..
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show comment indicator</guilabel></term>
+<listitem><para>If this box is checked cells containing comments will be 
+marked by a small red triangle at the top right corner.
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+
+</sect1>
+
+<sect1 id="configcolor">
+<title><guilabel>Color</guilabel></title>
+<para>This page of &kspread;'s configuration dialog box lets you choose the 
+color of the table grid.</para>
+</sect1>
+
+<sect1 id="configpagelayout">
+<title><guilabel>Page layout</guilabel></title>
+<para>This page of &kspread;'s configuration dialog box lets you set up the 
+default page size, orientation and units used by the printer and by the 
+<guilabel>Page Layout</guilabel> dialog box (obtained by selecting 
+<guimenuitem>Paper Layout...</guimenuitem> from the <guimenu>Format
+</guimenu> menu.</para>
+</sect1>
+
+<sect1 id="configspelling">
+<title><guilabel>Spelling</guilabel></title>
+<para>This page lets you configure the behavior of &kspread;'s spelling 
+checker/</para>
+<para><variablelist>
+
+<varlistentry>
+<term><guilabel>Create root/affix combinations not in dictionary</guilabel>
+</term>
+<listitem><para>If this box is checked then when &kspread; finds a word in 
+the document which it does not recognise but which consists of a recognised 
+root word plus a recognised prefix or suffix it will accept it, whereas if 
+the box is not checked the spelling checker will reject it.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Consider run-together words as spelling errors</guilabel>
+</term>
+<listitem><para>If this box is checked then common words which are run 
+together will be considered to be spelling errors, for example <emphasis>
+cannot</emphasis>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Dictionary:</guilabel></term>
+<listitem><para>This drop down selection box can be used to select 
+alternative dictionaries.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Encoding:</guilabel></term>
+<listitem><para>To select the character encoding that should be used.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Client:</guilabel></term>
+<listitem><para>This dropdown box lets you select between different spell 
+checking programs that may be present on your computer.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Ignore uppercase words</guilabel></term>
+<listitem><para>Check this box if you want the spellchecker to ignore 
+uppercase words, which are usually acronyms such as &kde;.
+</para></listitem>
+</varlistentry>
+
+
+</variablelist></para>
+</sect1>
 </chapter>
 
 
@@ -1242,15 +1740,6 @@ cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Copy as text</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Copy the selected cell(s) as text.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Edit</guimenu>
 <guimenuitem>Special Paste...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Special forms of Paste.
@@ -1306,7 +1795,7 @@ attributes from selected cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Conditional cell attributes</guimenuitem>
+<guimenuitem>Conditional cell attributes...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Add or modify conditional cell attributes.</action>
 </para></listitem>
@@ -1315,10 +1804,11 @@ attributes from selected cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Validity</guimenuitem>
+<guimenuitem>Validity...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Set or modify the error checking criteria and error 
-alert message for selected cell(s).</action>
+alert message for selected cell(s).</action> See <link linkend="validcheck">
+Validity Checking</link> for more details.
 </para></listitem>
 </varlistentry>
 
@@ -1401,7 +1891,7 @@ contains two or more views)
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Show page borders</guimenuitem>
+<guimenuitem>Show Page Borders</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Toggle marking of printed page borders with red lines.
 </action>
@@ -1430,10 +1920,10 @@ contains two or more views)
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
-<guimenuitem>Math expression</guimenuitem>
+<guimenuitem>Math expression...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Insert a formula.</action> See the section 
-<link linkend="formulas">Formulae</link> for more details.
+<listitem><para><action>Insert a mathematical formula.</action> See the 
+section <link linkend="formulas">Formulae</link> for more details.
 </para></listitem>
 </varlistentry>
 
@@ -1462,8 +1952,7 @@ contains two or more views)
 <guimenu>Insert</guimenu>
 <guimenuitem>Object...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Insert a &koffice; object.</action> See the section 
-<link linkend="insertobj">Inserting Objects</link> for more details.
+<listitem><para><action>This feature is not yet fully implemented.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1511,17 +2000,7 @@ details.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Adjust row and column</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Set row and column sizes to show selected cell(s)
-properly.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Adjust row and column</guimenuitem>
+<guimenuitem>Adjust Row and Column</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Set row and column sizes to show selected cell(s)
 properly.</action>
@@ -1558,7 +2037,7 @@ properly.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Percent format</guimenuitem>
+<guimenuitem>Percent Format</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Set percent format for selected cell(s).</action>
 </para></listitem>
@@ -1567,7 +2046,7 @@ properly.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Percent format</guimenuitem>
+<guimenuitem>Percent Format</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Set percent format for selected cell(s).</action>
 </para></listitem>
@@ -1576,7 +2055,7 @@ properly.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Increase precision</guimenuitem>
+<guimenuitem>Increase Precision</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Increase displayed precision of numbers in selected 
 cell(s).</action>
@@ -1586,7 +2065,7 @@ cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Decrease precision</guimenuitem>
+<guimenuitem>Decrease Precision</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Decrease displayed precision of numbers in selected 
 cell(s).</action>
@@ -1596,7 +2075,7 @@ cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Money format</guimenuitem>
+<guimenuitem>Money Format</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Set money format for selected cell(s).</action>
 </para></listitem>
@@ -1605,7 +2084,7 @@ cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Increase indent</guimenuitem>
+<guimenuitem>Increase Indent</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Move text in selected cell(s) to the right.</action>
 </para></listitem>
@@ -1614,7 +2093,7 @@ cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Decrease indent</guimenuitem>
+<guimenuitem>Decrease Indent</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Move text in selected cell(s) to the left.</action>
 </para></listitem>
@@ -1650,7 +2129,7 @@ cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Sort increasing</guimenuitem>
+<guimenuitem>Sort Increasing</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Sort data in selected cells so that values are in 
 increasing order.</action>
@@ -1660,7 +2139,7 @@ increasing order.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Sort decreasing</guimenuitem>
+<guimenuitem>Sort Decreasing</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Sort data in selected cells so that values are in 
 decreasing order.</action>
@@ -1780,7 +2259,7 @@ decreasing order.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Table</guimenu>
-<guimenuitem>Merge cells</guimenuitem>
+<guimenuitem>Merge Cells</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Merge selected cells.</action>
 </para></listitem>
@@ -1789,7 +2268,7 @@ decreasing order.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Table</guimenu>
-<guimenuitem>Dissociate cells</guimenuitem>
+<guimenuitem>Dissociate Cells</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Dissociate previously merged cells.</action>
 </para></listitem>
@@ -1798,7 +2277,7 @@ decreasing order.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Table</guimenu>
-<guimenuitem>Show area...</guimenuitem>
+<guimenuitem>Show Area...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Change &kspread;'s focus to show named area.</action>
 </para></listitem>
@@ -1823,7 +2302,7 @@ decreasing order.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
-<guimenuitem>Sort lists...</guimenuitem>
+<guimenuitem>Custom Lists...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>View or amend the special series of words recognised 
 by &kspread;.</action>
@@ -1836,9 +2315,9 @@ by &kspread;.</action>
 <keycombo action="simul">&Shift;<keysym>F9</keysym></keycombo>
 </shortcut>
 <guimenu>Tools</guimenu>
-<guimenuitem>Recalculate Worksheet</guimenuitem>
+<guimenuitem>Recalculate Sheet</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Recalculate formulae in worksheet.</action>
+<listitem><para><action>Recalculate formulae in the current table.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1850,7 +2329,7 @@ by &kspread;.</action>
 <guimenu>Tools</guimenu>
 <guimenuitem>Recalculate Workbook</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Recalculate formulae in workbook.</action>
+<listitem><para><action>Recalculate all tables.</action>
 </para></listitem>
 </varlistentry>
 
@@ -1922,7 +2401,9 @@ by &kspread;.</action>
 <guimenuitem>Configure Shortcuts...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Configure the keyboard shortcuts used by &kspread;.
-</action>
+</action> See the section on <link linkend="configshort">configuring shortcuts
+</link> for more details.
+
 </para></listitem>
 </varlistentry>
 
@@ -1931,7 +2412,9 @@ by &kspread;.</action>
 <guimenu>Settings</guimenu>
 <guimenuitem>Configure Toolbars...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Configure the toolbars.</action>
+<listitem><para><action>Configure the toolbars.</action> The section on 
+<link linkend="configtoolbars">configuring toolbars</link> has more 
+information.
 </para></listitem>
 </varlistentry>
 
@@ -1941,8 +2424,8 @@ by &kspread;.</action>
 <guimenuitem>Configure &kspread;...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>General &kspread; configuration.</action> See the 
-section <link linkend="configure">Configuring &kspread;</link> for more 
-details.
+section on <link linkend="configdialog">&kspread; configuration</link> for 
+more details.
 </para></listitem>
 </varlistentry>
 
@@ -1960,7 +2443,8 @@ details.
 <sect1 id="rmbmenu">
 <title>The Right Mouse Button Menu</title>
 <para>This section describes the items in the pop up menu obtained by 
-<mousebutton>right</mousebutton> clicking an a selected cell or cells.
+<mousebutton>right</mousebutton> clicking on a selected cell or cells, 
+row(s) or column(s).
 </para>
 
 <para><variablelist>
@@ -2003,14 +2487,6 @@ original location to the new one.
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Copy as text</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Copy the selected cell(s) as text.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
 <guimenuitem>Special Paste...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Special forms of Paste.
@@ -2039,7 +2515,7 @@ previous cell(s) to make room.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Adjust row and column</guimenuitem>
+<guimenuitem>Adjust Row and Column</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Change size of row and column to display selected 
 cell(s) completely.</action>
@@ -2048,7 +2524,7 @@ cell(s) completely.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Resize row...</guimenuitem>
+<guimenuitem>Resize Row...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Change height of selected row.</action>
 </para></listitem>
@@ -2065,7 +2541,7 @@ completely.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Resize column...</guimenuitem>
+<guimenuitem>Resize Column...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Change width of selected column.</action>
 </para></listitem>
@@ -2090,7 +2566,7 @@ completely.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Area name...</guimenuitem>
+<guimenuitem>Area Name...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Name selected area.</action> See the section 
 <link linkend="namedareas">Named Areas</link> for more details.
@@ -2117,20 +2593,28 @@ occupy the space left by the removed cell(s).</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Add/modify comment...</guimenuitem>
+<guimenuitem>Add/Modify Comment...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Add or modify a comment to the selected cell.</action>
 </para></listitem>
 </varlistentry>
-
-
 </variablelist></para>
-
-
 </sect1>
-
 </chapter>
 
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<qandaset>
+
+<qandaentry>
+<question><para>How many rows and columns can I have in a sheet?</para>
+</question>
+<answer><para>Theoretically up to 32767 rows and 32767 columns.</para></answer>
+</qandaentry>
+
+</qandaset>
+</chapter>
 
 <chapter id="credits">
 
@@ -2178,8 +2662,11 @@ Documentation copyright 2002 Pamela Roberts
 <appendix id="installation">
 <title>Installation</title>
 
-<para>&kspread; is part of the &kde;'s &koffice; package.</para>
-<para>For instructions on acquiring and installing &kspread; please visit 
+<para>&kspread; is part of the &kde;'s &koffice; package and uses various 
+&koffice; libraries. &koffice; itself is part of and depends on the 
+general &kde; libraries.</para>
+<para>For instructions on acquiring and installing &kde;, &koffice; and 
+&kspread; please visit 
 <ulink url="http://www.kde.org">http://www.kde.org</ulink> and 
 <ulink url="http://www.koffice.org">http://www.koffice.org</ulink>.</para>
 
