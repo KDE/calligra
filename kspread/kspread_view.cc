@@ -1593,16 +1593,19 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
     // Code copied from KoView::hitTest
     KoViewChild *viewChild;
 
+    QWMatrix m = matrix();
+    m.translate( m_pCanvas->xOffset(), m_pCanvas->yOffset() );
+
     KoDocumentChild *docChild = selectedChild();
     if ( docChild )
     {
         if ( ( viewChild = child( docChild->document() ) ) )
         {
-            if ( viewChild->frameRegion( matrix() ).contains( pos ) )
+            if ( viewChild->frameRegion( m ).contains( pos ) )
                 return 0;
         }
         else
-            if ( docChild->frameRegion( matrix() ).contains( pos ) )
+            if ( docChild->frameRegion( m ).contains( pos ) )
                 return 0;
     }
 
@@ -1611,16 +1614,15 @@ KoDocument* KSpreadView::hitTest( const QPoint &pos )
     {
         if ( ( viewChild = child( docChild->document() ) ) )
         {
-            if ( viewChild->frameRegion( matrix() ).contains( pos ) )
+            if ( viewChild->frameRegion( m ).contains( pos ) )
                 return 0;
         }
         else
-            if ( docChild->frameRegion( matrix() ).contains( pos ) )
+            if ( docChild->frameRegion( m ).contains( pos ) )
                 return 0;
     }
 
     QPoint pos2( pos.x() / zoom(), pos.y() / zoom() );
-    QWMatrix m( matrix() );
 
     QListIterator<KoDocumentChild> it( m_pDoc->children() );
     for (; it.current(); ++it )
