@@ -177,7 +177,7 @@ void KWResizeHandle::updateGeometry()
 bool KWResizeHandle::isResizingEnabled() const
 {
     KWFrameSet *fs = frame->getFrameSet();
-    if ( fs->isMainFrameset() || fs->isFloating() )
+    if ( fs->isMainFrameset() )
         return false;
 
     // Headers and footer are resizable only in some directions
