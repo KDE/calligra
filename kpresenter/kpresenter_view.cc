@@ -6210,9 +6210,8 @@ void KPresenterView::pddClosed()
 // change from milliseconds to hh:mm:ss
 QString KPresenterView::presentationDurationDataFormatChange( int _time )
 {
-    QTime time;
-    time.addMSecs(_time);
-    return KGlobal::locale()->formatTime( time, true );
+    QTime time( 0, 0, 0 );
+    return KGlobal::locale()->formatTime( time.addMSecs( _time ), true );
 }
 
 
