@@ -69,7 +69,7 @@ public:
     { resizeBy( _size.width(), _size.height() ); }
     virtual void resizeBy( int _dx, int _dy )
     { ext = ext + QSize( _dx + ext.width() > 20 ? _dx : 0, _dy + ext.height() > 20 ? _dy : 0 ); }
-    
+
     virtual void setShadowParameter(int _distance,ShadowDirection _direction,QColor _color)
     {
 	    shadowDistance = _distance;
@@ -199,6 +199,12 @@ public:
 
     static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
 
+    virtual void setOrigPointInGroup( QPoint _point ) { origTopLeftPointInGroup = _point; }
+    virtual QPoint getOrigPointInGroup() { return origTopLeftPointInGroup; }
+
+    virtual void setOrigSizeInGroup( QSize _size ) { origSizeInGroup = _size; }
+    virtual QSize getOrigSizeInGroup() { return origSizeInGroup; }
+
 protected:
     /**
      * Modifies x and y to add the shadow offsets
@@ -266,6 +272,9 @@ protected:
         &attrEffect2, &tagPRESNUM, &tagANGLE,
         &tagDISAPPEAR, &attrDoit, &attrNum, &tagFILLTYPE,
         &tagGRADIENT, &tagPEN, &tagBRUSH, &attrValue;
+
+    QPoint origTopLeftPointInGroup;
+    QSize origSizeInGroup;
 
 private:
     // Don't copy or assign it

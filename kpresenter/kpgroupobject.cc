@@ -66,9 +66,13 @@ KPGroupObject &KPGroupObject::operator=( const KPGroupObject & )
 /*================================================================*/
 void KPGroupObject::setSize( int _width, int _height )
 {
-    float fx = (float)(_width / ext.width());
-    float fy = (float)(_height / ext.height());
     KPObject::setSize( _width, _height );
+
+    double fx = (double)ext.width() / (double)origSizeInGroup.width();
+    double fy = (double)ext.height() / (double)origSizeInGroup.height();
+
+    kdDebug() << "fx: " << fx << "  fy: " << fy << endl;
+
     updateSizes( fx, fy );
 }
 
@@ -81,10 +85,17 @@ void KPGroupObject::setOrig( QPoint _point )
 /*================================================================*/
 void KPGroupObject::setOrig( int _x, int _y )
 {
-    int dx = orig.x() - _x;
-    int dy = orig.y() - _y;
+    int dx = 0;
+    int dy = 0;
+    if ( !orig.isNull() ) {
+        dx = _x - orig.x();
+        dy = _y - orig.y();
+    }
+
     KPObject::setOrig( _x, _y );
-    updateCoords( dx, dy );
+
+    if ( dx != 0 && dy != 0 )
+        updateCoords( dx, dy );
 }
 
 /*================================================================*/
@@ -109,9 +120,11 @@ void KPGroupObject::resizeBy( QSize _size )
 /*================================================================*/
 void KPGroupObject::resizeBy( int _dx, int _dy )
 {
-    float fx = (float)(( ext.width() + _dx ) / ext.width());
-    float fy = (float)(( ext.height() + _dy ) / ext.height());
     KPObject::resizeBy( _dx, _dy );
+
+    double fx = (double)ext.width() / (double)origSizeInGroup.width();
+    double fy = (double)ext.height() / (double)origSizeInGroup.height();
+
     updateSizes( fx, fy );
 }
 
@@ -246,7 +259,7 @@ void KPGroupObject::draw( QPainter *_painter, int _diffx, int _diffy )
 }
 
 /*================================================================*/
-void KPGroupObject::updateSizes( float fx, float fy )
+void KPGroupObject::updateSizes( double fx, double fy )
 {
     if ( !updateObjs )
         return;
@@ -254,9 +267,25 @@ void KPGroupObject::updateSizes( float fx, float fy )
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
         kpobject = objects.at( i );
-        int w = (int)( (float)kpobject->getSize().width() * fx );
-        int h = (int)( (float)kpobject->getSize().height() * fy );
-        kpobject->setSize( w, h );
+
+        int _x = (int)( (double)( kpobject->getOrigPointInGroup().x() - origTopLeftPointInGroup.x() ) * fx );
+        int _y = (int)( (double)( kpobject->getOrigPointInGroup().y() - origTopLeftPointInGroup.y() ) * fy );
+
+        QRect origObjectRect = QRect( QPoint( kpobject->getOrigPointInGroup().x(), kpobject->getOrigPointInGroup().y() ),
+                                      kpobject->getOrigSizeInGroup() );
+        QPoint bottomRight = origObjectRect.bottomRight();
+        int _bottomRightX = (int)( (double)( bottomRight.x() - origTopLeftPointInGroup.x() ) * fx );
+        int _bottomRightY = (int)( (double)( bottomRight.y() - origTopLeftPointInGroup.y() ) * fy );
+
+        QRect objectRect = QRect( QPoint( _x, _y ), QPoint( _bottomRightX, _bottomRightY ) );
+        int _w = objectRect.width();
+        int _h = objectRect.height();
+
+        _x = orig.x() + _x;
+        _y = orig.y() + _y;
+        kpobject->setOrig( _x, _y );
+
+        kpobject->setSize( _w, _h );
     }
 }
 

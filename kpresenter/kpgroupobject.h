@@ -87,7 +87,7 @@ public:
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true );
 
 protected:
-    void updateSizes( float fx, float fy );
+    void updateSizes( double fx, double fy );
     void updateCoords( int dx, int dy );
 
     QPtrList<KPObject> objects;

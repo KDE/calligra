@@ -502,6 +502,8 @@ void GroupObjCmd::execute()
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	obj = objects.at( i );
+        obj->setOrigPointInGroup( obj->getOrig() );
+        obj->setOrigSizeInGroup( obj->getSize() );
 	obj->setSelected( false );
 	doc->objectList()->take( doc->objectList()->findRef( obj ) );
 	obj->removeFromObjList();
@@ -509,6 +511,8 @@ void GroupObjCmd::execute()
     }
 
     grpObj->setUpdateObjects( false );
+    grpObj->setOrigPointInGroup( QPoint( r.x(), r.y() ) );
+    grpObj->setOrigSizeInGroup( QSize( r.width(), r.height() ) );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
     doc->objectList()->append( grpObj );
