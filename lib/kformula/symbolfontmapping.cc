@@ -1,5 +1,5 @@
 //
-// Created: Sat Jan  4 18:46:30 2003
+// Created: Sun Jan 19 13:26:00 2003
 //      by: gensymbolfontmap.py
 //    from: symbol.xml
 //
@@ -16,6 +16,7 @@ static InternFontTable symbolMap[] = {
     { 0x2200, 0x22, ORDINARY },
     { 0x2207, 0xd1, ORDINARY },
     { 0x2205, 0xc6, BINOP },
+    { 0x220F, 0xd5, ORDINARY },
     { 0x220D, 0x27, RELATION },
     { 0x007C, 0x7c, ORDINARY },
     { 0x007B, 0x7b, ORDINARY },
@@ -64,7 +65,6 @@ static InternFontTable symbolMap[] = {
     { 0x2284, 0xcb, RELATION },
     { 0x221A, 0xd6, ORDINARY },
     { 0x221D, 0xb5, RELATION },
-    { 0x220F, 0xd5, ORDINARY },
     { 0x2211, 0xe5, ORDINARY },
     { 0x21D4, 0xdb, RELATION },
     { 0x2212, 0x2d, BINOP },
@@ -336,6 +336,8 @@ static InternFontTable esstixfiveMap[] = {
 
 
 static InternFontTable esstixfifteenMap[] = {
+    { 0x211C, 0x4e, ORDINARY },
+    { 0x2111, 0x49, ORDINARY },
     { 0, 0, ORDINARY }
 };
 
@@ -562,7 +564,7 @@ static InternFontTable esstixtwoMap[] = {
     { 0x2203, 0x64, ORDINARY },
     { 0x2200, 0x63, ORDINARY },
     { 0x2201, 0x66, ORDINARY },
-    { 0x228E, 0x6d, ORDINARY },
+    { 0x228E, 0x6d, BINOP },
     { 0x22BB, 0x76, ORDINARY },
     { 0x22BC, 0x77, ORDINARY },
     { 0x22B2, 0x39, ORDINARY },
@@ -573,8 +575,8 @@ static InternFontTable esstixtwoMap[] = {
     { 0x25B5, 0x36, ORDINARY },
     { 0x25B4, 0x3a, ORDINARY },
     { 0x22D2, 0x6a, ORDINARY },
-    { 0x2293, 0x6c, ORDINARY },
-    { 0x2294, 0x6b, ORDINARY },
+    { 0x2293, 0x6c, BINOP },
+    { 0x2294, 0x6b, BINOP },
     { 0x2227, 0x6f, BINOP },
     { 0x2228, 0x6e, BINOP },
     { 0x2229, 0x68, ORDINARY },
@@ -593,11 +595,24 @@ static InternFontTable esstixtwoMap[] = {
 
 
 static InternFontTable esstixsixMap[] = {
-    { 0x221A, 0x30, ORDINARY },
-    { 0x220F, 0x2e, ORDINARY },
-    { 0x2211, 0x2d, ORDINARY },
-    { 0x222E, 0x23, ORDINARY },
-    { 0x222B, 0x21, ORDINARY },
+    { 0x228E, 0x5d, BINOP },
+    { 0x220F, 0x54, ORDINARY },
+    { 0x221A, 0x4f, ORDINARY },
+    { 0x2211, 0x53, ORDINARY },
+    { 0x2293, 0x5c, BINOP },
+    { 0x2294, 0x5b, BINOP },
+    { 0x222E, 0x46, ORDINARY },
+    { 0x2227, 0x59, BINOP },
+    { 0x2228, 0x5a, BINOP },
+    { 0x2229, 0x58, ORDINARY },
+    { 0x222F, 0x48, ORDINARY },
+    { 0x222A, 0x57, ORDINARY },
+    { 0x222B, 0x45, ORDINARY },
+    { 0x2210, 0x55, ORDINARY },
+    { 0x2233, 0x4b, ORDINARY },
+    { 0x2232, 0x4c, ORDINARY },
+    { 0x2231, 0x4d, ORDINARY },
+    { 0x2230, 0x49, ORDINARY },
     { 0, 0, ORDINARY }
 };
 
@@ -705,6 +720,7 @@ static InternFontTable esstixfourMap[] = {
     { 0xE2B0, 0x56, RELATION },
     { 0xE2B7, 0x54, RELATION },
     { 0x00AC, 0x6c, ORDINARY },
+    { 0x2026, 0x2e, ORDINARY },
     { 0x223C, 0xa2, RELATION },
     { 0x228F, 0x37, RELATION },
     { 0x2245, 0x79, RELATION },
@@ -727,6 +743,7 @@ static UnicodeNameTable nameTable[] = {
     { 0x2204, "nexists" },
     { 0x2205, "oslash" },
     { 0x220B, "ni" },
+    { 0x220F, "prod" },
     { 0x220D, "ni" },
     { 0x2250, "doteq" },
     { 0x2253, "risingdotseq" },
@@ -798,7 +815,6 @@ static UnicodeNameTable nameTable[] = {
     { 0x2289, "nsupseteq" },
     { 0x221A, "surd" },
     { 0x221D, "propto" },
-    { 0x220F, "prod" },
     { 0xE2B2, "precnapprox" },
     { 0xE2B4, "succnapprox" },
     { 0xE2B6, "subsetneqq" },
@@ -945,8 +961,9 @@ static UnicodeNameTable nameTable[] = {
     { 0x2663, "clubsuit" },
     { 0x21A0, "twoheadrightarrow" },
     { 0x21D5, "Updownarrow" },
+    { 0x2210, "coprod" },
     { 0x2217, "ast" },
-    { 0x2026, "dots" },
+    { 0x2026, "ldots" },
     { 0x2022, "bullet" },
     { 0x223C, "sim" },
     { 0x21A9, "hookleftarrow" },

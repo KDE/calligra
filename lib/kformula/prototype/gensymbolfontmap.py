@@ -125,38 +125,94 @@ def make_unicode_table():
     f.close()
 
 def make_font_table(font):
-    header = []
-    try:
-        f = open('../config/' + font + '.font', 'r')
-        for line in f.xreadlines():
-            if line[0] == '#':
-                header.append(line.strip())
-            else:
-                break
-        f.close()
-    except IOError:
-        pass
+##    header = []
+##    try:
+##        f = open('../config/' + font + '.font', 'r')
+##        for line in f.xreadlines():
+##            if line[0] == '#':
+##                header.append(line.strip())
+##            else:
+##                break
+##        f.close()
+##    except IOError:
+##        pass
     
-    f = open('../config/' + font + '.font', 'w')
-    for line in header:
-        print >> f, line
+    #f = open('../config/' + font + '.font', 'w')
+    f = open(font + '.font', 'w')
+##    for line in header:
+##        print >> f, line
     #print >> f, "name = " + font
     for key in unicodetable:
         latexName, charClass = unicodetable[key]
         pos = fontkey(font, key)
         if pos:
-            print >> f, str(pos) + ', ' + key
+            print >> f, str(pos), key, charClass, latexName
     f.close()
 
 def make_all_font_tables():
     for font in fonttable:
         make_font_table(font)
+
+
+def symbol_entry(pos, unicode, charClass, name):
+    return '    <entry key="%d" number="%s" name="%s" class="%s"/>' % \
+           (pos, unicode, name, charClass)
+
+
+def compare_font(font):
+    for line in file(font+".font"):
+        list = line.split()
+        pos = int(list[0])
+        unicode = list[1]
+        charClass = list[2]
+        if len(list)>3:
+            name = list[3]
+        else:
+            name = ""
+
+        if (pos, unicode) not in fonttable[font]:
+            print "not in font", font, (pos, unicode)
+            print symbol_entry(pos, unicode, charClass, name)
+        if unicode not in unicodetable:
+            print font, unicode, (name, charClass)
+            print symbol_entry(pos, unicode, charClass, name)
+        elif unicodetable[unicode] != (name, charClass):
+            print font, unicode, pos, unicodetable[unicode], "!=", (name, charClass)
+
+def compare():
+    fontnames = [ "symbol",
+                  "esstixnine", 
+                  "esstixthirteen", 
+                  "esstixeleven", 
+                  "esstixfourteen", 
+                  "esstixfive", 
+                  "esstixfifteen", 
+                  "esstixeight", 
+                  "esstixthree", 
+                  "esstixten", 
+                  "esstixsixteen", 
+                  "esstixone", 
+                  "esstixtwo", 
+                  "esstixsix", 
+                  "esstixseven", 
+                  "esstixtwelve", 
+                  "esstixseventeen", 
+                  "esstixfour" ]
+
+    for font in fontnames:
+        compare_font(font)
+
         
 if __name__ == '__main__':
     parser = make_parser()
     parser.setContentHandler(ContentGenerator())
     parser.parse("symbol.xml")
 
+    #print fonttable
+    #print unicodetable
+
+    #compare()
+    
     main()
     #make_unicode_table()
     #make_all_font_tables()

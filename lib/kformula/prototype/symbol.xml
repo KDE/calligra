@@ -186,6 +186,8 @@
   <unicodetable font="esstixthirteen">
   </unicodetable>
   <unicodetable font="esstixfifteen">
+    <entry key="73" number="0x2111" name="Im" class="ORDINARY"/>
+    <entry key="78" number="0x211C" name="Re" class="ORDINARY"/>
   </unicodetable>
   <unicodetable font="symbol">
     <entry key="32" number="0x0020" name="" class="ORDINARY"/>
@@ -1433,12 +1435,24 @@
     <entry key="245" number="0x2292" name="sqsupseteq" class="ORDINARY"/>
   </unicodetable>
   <unicodetable font="esstixsix">
-    <entry key="33" number="0x222B" name="int" class="ORDINARY"/>
-    <entry key="35" number="0x222E" name="oint" class="ORDINARY"/>
-    <entry key="45" number="0x2211" name="sum" class="ORDINARY"/>
-    <entry key="46" number="0x220F" name="prod" class="ORDINARY"/>
-    <entry key="48" number="0x221A" name="surd" class="ORDINARY"/>
-    <entry key="52" number="" name="" class="ORDINARY"/>
+    <entry key="69" number="0x222B" name="int" class="ORDINARY"/>
+    <entry key="70" number="0x222E" name="oint" class="ORDINARY"/>
+    <entry key="72" number="0x222F" name="" class="ORDINARY"/>
+    <entry key="73" number="0x2230" name="" class="ORDINARY"/>
+    <entry key="75" number="0x2233" name="" class="ORDINARY"/>
+    <entry key="76" number="0x2232" name="" class="ORDINARY"/>
+    <entry key="77" number="0x2231" name="" class="ORDINARY"/>
+    <entry key="79" number="0x221A" name="surd" class="ORDINARY"/>
+    <entry key="83" number="0x2211" name="sum" class="ORDINARY"/>
+    <entry key="84" number="0x220F" name="prod" class="ORDINARY"/>
+    <entry key="85" number="0x2210" name="coprod" class="ORDINARY"/>
+    <entry key="87" number="0x222A" name="cup" class="BINOP"/>
+    <entry key="88" number="0x2229" name="cap" class="BINOP"/>
+    <entry key="89" number="0x2227" name="wedge" class="BINOP"/>
+    <entry key="90" number="0x2228" name="vee" class="BINOP"/>
+    <entry key="91" number="0x2294" name="sqcup" class="BINOP"/>
+    <entry key="92" number="0x2293" name="sqcap" class="BINOP"/>
+    <entry key="93" number="0x228E" name="uplus" class="BINOP"/>
   </unicodetable>
   <unicodetable font="cmsl10">
     <entry key="33" number="0x0021" name="" class="ORDINARY"/>
@@ -1829,7 +1843,7 @@
     <entry key="72" number="0xEC11" name="" class="ORDINARY"/>
     <entry key="73" number="0x2229" name="cap" class="ORDINARY"/>
     <entry key="74" number="0x2127" name="mho" class="ORDINARY"/>
-    <entry key="75" number="0x2026" name="dots" class="ORDINARY"/>
+    <entry key="75" number="0x2026" name="ldots" class="ORDINARY"/>
     <entry key="76" number="0x22EF" name="cdots" class="ORDINARY"/>
     <entry key="77" number="0x22EE" name="vdots" class="ORDINARY"/>
     <entry key="78" number="0x22F0" name="adots" class="ORDINARY"/>
@@ -2259,7 +2273,7 @@
     <entry key="196" number="0x2040" name="" class="ORDINARY"/>
   </unicodetable>
   <unicodetable font="esstixfour">
-    <entry key="46" number="" name="ldots" class="ORDINARY"/>
+    <entry key="46" number="0x2026" name="ldots" class="ORDINARY"/>
     <entry key="47" number="0x22EF" name="cdots" class="ORDINARY"/>
     <entry key="49" number="0x22F1" name="ddots" class="ORDINARY"/>
     <entry key="50" number="0x220A" name="in" class="RELATION"/>
