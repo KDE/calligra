@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2000 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,29 +17,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koApplication.h>
-#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 #include <klocale.h>
-#include <dcopclient.h>
 
-#include <gaboutdata.h>
+static const char *description=I18N_NOOP("graphite - Scientific Graphs");
+static const char *version="0.1";
 
-
-static const KCmdLineOptions options[]=
+KAboutData * newGraphiteAboutData()
 {
-        {"+[file]", I18N_NOOP("File To Open"),0},
-        {0,0,0}
-};
-
-int main(int argc, char **argv) {
-
-    KCmdLineArgs::init(argc, argv, newGraphiteAboutData());
-    KCmdLineArgs::addCmdLineOptions(options);
-
-    KoApplication app;
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs("graphite");
-    if (!app.start()) // parses command line args, create initial docs and shells
-	return 1;
-    return app.exec();
+    KAboutData * aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
+                                          version, description, KAboutData::License_GPL,
+                                          "(c) 2000, Werner Trobin");
+    aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
+    return aboutData;
 }

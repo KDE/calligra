@@ -3,8 +3,8 @@ AM_CPPFLAGS = -DQT_NO_CAST_ASCII
 
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-lib_LTLIBRARIES = libgraphitepart.la graphite.la
 ## The part
+kde_module_LTLIBRARIES = libgraphitepart.la
 libgraphitepart_la_SOURCES = graphitepart.cc \
     graphiteview.cc graphitefactory.cc gobject.cc \
     gcanvas.cc gobjectfactory.cc gline.cc \
@@ -16,9 +16,10 @@ libgraphitepart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 libgraphitepart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
+lib_LTLIBRARIES = graphite.la
 graphite_la_SOURCES = main.cc
 graphite_la_LDFLAGS = $(all_libraries) -module -avoid-version
-graphite_la_LIBADD = libgraphitepart.la
+graphite_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
 bin_PROGRAMS = graphite
@@ -34,7 +35,7 @@ noinst_HEADERS =  graphiteglobal.h \
     gobject.h gcanvas.h gobjectfactory.h \
     gline.h ggroup.h gprimitivecmds.h \
     gbackground.h ruler.h pagelayoutdia_impl.h \
-    myspinbox.h
+    myspinbox.h gaboutdata.h
 
 kdelnk_DATA = graphite.desktop
 kdelnkdir = $(kde_appsdir)/Office
@@ -48,4 +49,4 @@ rcdir = $(kde_datadir)/graphite
 SUBDIRS =  . tests
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc -o $(podir)/graphite.pot
+	$(XGETTEXT) rc.cpp *.cc gaboutdata.h -o $(podir)/graphite.pot

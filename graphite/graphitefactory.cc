@@ -19,20 +19,17 @@
 
 #include <kinstance.h>
 #include <klocale.h>
-#include <kaboutdata.h>
 #include <kiconloader.h>
 
 #include <graphitepart.h>
 #include <graphitefactory.h>
+#include <gaboutdata.h>
 
 extern "C" {
     void* init_libgraphitepart() {
         return new GraphiteFactory;
     }
 };
-
-static const char *description=I18N_NOOP("graphite - Scientific Graphs");
-static const char *version="0.1";
 
 KInstance *GraphiteFactory::s_global=0;
 KAboutData *GraphiteFactory::s_aboutData=0;
@@ -65,12 +62,8 @@ KParts::Part* GraphiteFactory::createPart( QWidget *parentWidget, const char *wi
 
 KAboutData* GraphiteFactory::aboutData() {
 
-    if(!s_aboutData) {
-        s_aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
-                                   version, description, KAboutData::License_GPL,
-                                   "(c) 2000, Werner Trobin");
-        s_aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
-    }
+    if(!s_aboutData)
+        s_aboutData=newGraphiteAboutData();
     return s_aboutData;
 }
 
