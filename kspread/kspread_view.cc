@@ -3456,6 +3456,7 @@ void KSpreadView::mergeCell()
 
     m_pTable->mergeCells( selection() );
     //  m_pCanvas->gotoLocation( selection().topLeft() );
+    m_selectionInfo->setSelection( selection().topLeft(), selection().topLeft(), m_pTable );
 
     m_pDoc->decreaseNumOperation();
     //    endOperation( QRect( selection().topLeft(), selection().topLeft() ) );
@@ -5515,11 +5516,8 @@ void KSpreadView::layoutDlg()
 {
   QRect selection( m_selectionInfo->selection() );
 
-  kdDebug() << "Left: " << selection.left() << "; right: " << selection.right() << endl;
-
   if ( m_selectionInfo->singleCellSelection() )
   {
-    kdDebug() << "Single cell" << endl;
     CellFormatDlg dlg( this, m_pTable, selection.left(), selection.top(),
                        selection.left(), selection.top() );
   }
