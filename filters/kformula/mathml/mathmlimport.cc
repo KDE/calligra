@@ -88,7 +88,10 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
         return KoFilter::WrongFormat;
     }
     f.close();
-    formula->loadMathML( mathML );
+    if ( !formula->loadMathML( mathML ) ) {
+        delete wrapper;
+        return KoFilter::StupidError;
+    }
 
     // taken from KoDocument::saveToStore
     KoStoreDevice dev( out );
