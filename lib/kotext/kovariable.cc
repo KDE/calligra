@@ -913,35 +913,30 @@ void KoDateVariable::load( QDomElement& elem )
     QDomElement e = elem.namedItem( "DATE" ).toElement();
     if (!e.isNull())
     {
-        int y = e.attribute("year").toInt();
-        int m = e.attribute("month").toInt();
-        int d = e.attribute("day").toInt();
-        bool fix = e.attribute("fix").toInt() == 1;
+        const int y = e.attribute("year").toInt();
+        const int month = e.attribute("month").toInt();
+        const int d = e.attribute("day").toInt();
+        const int h = e.attribute("hour").toInt();
+        const int min = e.attribute("minute").toInt();
+        const int s = e.attribute("second").toInt();
+        const int ms = e.attribute("msecond").toInt();
+        const bool fix = e.attribute("fix").toInt() == 1;
         if ( e.hasAttribute("correct"))
             m_correctDate = e.attribute("correct").toInt();
         if ( fix )
         {
-            QDate date;
-            date.setYMD( y, m, d );
+            QDate date( y, month, d );
             date = date.addDays( m_correctDate );
-            m_varValue = QVariant( date );
+            const QTime time( h, min, s, ms );
+            if (time.isValid())
+                m_varValue = QVariant ( QDateTime( date, time ) );
+            else
+                m_varValue = QVariant( date );
         }
         //old date variable format
         m_subtype = fix ? VST_DATE_FIX : VST_DATE_CURRENT;
         if ( elem.hasAttribute( "subtype" ))
             m_subtype = elem.attribute( "subtype").toInt();
-        // support for time info
-        if ( elem.hasAttribute( "hour" ) )
-        {
-            int h = e.attribute("hour").toInt();
-            int m = e.attribute("minute").toInt();
-            int s = e.attribute("second").toInt();
-            int ms = e.attribute("msecond").toInt();
-            QTime time;
-            time.setHMS( h, m, s, ms );
-            // no time correction here... time = time.addSecs( m_correctTime );
-            m_varValue = QDateTime( m_varValue.toDate(), time );
-        }
     }
 }
 
