@@ -54,7 +54,6 @@
 #include <kmessagebox.h>
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
-#include <kimageio.h>
 #include <kapplication.h>
 #include <kprogress.h>
 #include <kglobal.h>
@@ -187,7 +186,7 @@ KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_do
 KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
     : config( webPres.config ), author( webPres.author ), title( webPres.title ), email( webPres.email ),
       slideInfos( webPres.slideInfos ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
-      textColor( webPres.textColor ), path( webPres.path ), imgFormat( webPres.imgFormat ),
+      textColor( webPres.textColor ), path( webPres.path ), 
       xml( webPres.xml), zoom( webPres.zoom ), m_encoding( webPres.m_encoding )
 {
     doc = webPres.doc;
@@ -226,7 +225,6 @@ void KPWebPresentation::loadConfig()
     titleColor = cfg.readColorEntry( "TitleColor", &titleColor );
     textColor = cfg.readColorEntry( "TextColor", &textColor );
     path = cfg.readEntry( "Path", path );
-    imgFormat = static_cast<ImageFormat>( cfg.readNumEntry( "ImageFormat", static_cast<int>( imgFormat ) ) );
     xml = cfg.readBoolEntry( "XML", xml );
     zoom = cfg.readNumEntry( "Zoom", zoom );
     m_encoding = cfg.readEntry( "Encoding", m_encoding );
@@ -250,7 +248,6 @@ void KPWebPresentation::saveConfig()
     cfg.writeEntry( "TitleColor", titleColor );
     cfg.writeEntry( "TextColor", textColor );
     cfg.writeEntry( "Path", path );
-    cfg.writeEntry( "ImageFormat", static_cast<int>( imgFormat ) );
     cfg.writeEntry( "XML", xml );
     cfg.writeEntry( "Zoom", zoom );
     cfg.writeEntry( "Encoding", m_encoding );
@@ -274,15 +271,14 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
-    QString format = "." + imageFormat( imgFormat );
-
     const char *pics[] = { "home", "first", "next", "prev", "last", 0 };
 
     KURL srcurl, desturl;
     
     for ( uint index = 0; pics[ index ]; index ++ )    
     {
-        QString filename( pics[ index ] + format );
+        QString filename = pics[ index ];
+        filename += ".png";
         srcurl.setPath( locate( "slideshow", filename, KPresenterFactory::global() ) );
         desturl.setPath ( path + "/pics/" + filename );
         KIO::NetAccess::del( desturl ); // Copy does not remove existing destination file
@@ -300,14 +296,13 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
         return;
     QPixmap pix( 10, 10 );
     QString filename;
-    QString format = imageFormat( imgFormat );
     int p;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         int pgNum = slideInfos[i].pageNumber;
         view->getCanvas()->drawPageInPix( pix, pgNum, zoom, true /*force real variable value*/ );
-        filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
+        filename = QString( "%1/pics/slide_%2.png" ).arg( path ).arg( i + 1 );
 
-        pix.save( filename, format.upper().latin1() );   //lukas: provide the option to choose image quality
+        pix.save( filename, "PNG" );
 
         p = progressBar->progress();
         progressBar->setProgress( ++p );
@@ -375,7 +370,6 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
 void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
-    QString format ( imageFormat( imgFormat ) );
     
     const QString brtag ( "<br" + QString(isXML()?" /":"") + ">" );
 
@@ -409,7 +403,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         
         if ( i > 0 )
             streamOut << "    <a href=\"slide_1.html\">";
-        streamOut << "<img src=\"../pics/first." << format << "\" border=\"0\" alt=\"First\" title=\"First\"" << ( isXML() ?" /":"") << ">";
+        streamOut << "<img src=\"../pics/first.png\" border=\"0\" alt=\"First\" title=\"First\"" << ( isXML() ?" /":"") << ">";
         if ( i > 0 )
             streamOut << "</a>";
 
@@ -417,7 +411,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             
         if ( i > 0 )
             streamOut << "    <a href=\"slide_" << pgNum - 1 << ".html\">";
-        streamOut << "<img src=\"../pics/prev." << format << "\" border=\"0\" alt=\"Previous\" title=\"Previous\"" << ( isXML() ?" /":"") << ">";
+        streamOut << "<img src=\"../pics/prev.png\" border=\"0\" alt=\"Previous\" title=\"Previous\"" << ( isXML() ?" /":"") << ">";
         if ( i > 0 )
             streamOut << "</a>";
 
@@ -425,7 +419,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         
         if ( i < slideInfos.count() - 1 )
             streamOut << "    <a href=\"slide_" << pgNum + 1 << ".html\">";
-        streamOut << "<img src=\"../pics/next." << format << "\" border=\"0\" alt=\"Next\" title=\"Next\"" << ( isXML() ?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/next.png\" border=\"0\" alt=\"Next\" title=\"Next\"" << ( isXML() ?" /":"") << ">";;
         if ( i < slideInfos.count() - 1 )
             streamOut << "</a>";
 
@@ -433,14 +427,14 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         
         if ( i < slideInfos.count() - 1 )
             streamOut << "    <a href=\"slide_" << slideInfos.count() << ".html\">";
-        streamOut << "<img src=\"../pics/last." << format << "\" border=\"0\" alt=\"Last\" title=\"Last\"" << ( isXML() ?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/last.png\" border=\"0\" alt=\"Last\" title=\"Last\"" << ( isXML() ?" /":"") << ">";;
         if ( i < slideInfos.count() - 1 )
             streamOut << "</a>";
 
         streamOut << "\n" << "    &nbsp; &nbsp; &nbsp; &nbsp;\n";
 
         streamOut << "    <a href=\"../index.html\">";
-        streamOut << "<img src=\"../pics/home." << format << "\" border=\"0\" alt=\"Home\" title=\"Home\"" << ( isXML() ?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/home.png\" border=\"0\" alt=\"Home\" title=\"Home\"" << ( isXML() ?" /":"") << ">";;
         streamOut << "</a>\n";
 
         streamOut << " </center>" << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n"; // ### TODO: is noshade W3C?
@@ -454,7 +448,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         if ( i < slideInfos.count() - 1 )
             streamOut << "<a href=\"slide_" << pgNum + 1 << ".html\">";
-        streamOut << "<img src=\"../pics/slide_" << pgNum << "." << format << "\" border=\"0\" alt=\"Slide " << pgNum << "\">";
+        streamOut << "<img src=\"../pics/slide_" << pgNum << ".png\" border=\"0\" alt=\"Slide " << pgNum << "\">";
         if ( i < slideInfos.count() - 1 )
             streamOut << "</a>";
 
@@ -579,11 +573,6 @@ void KPWebPresentation::init()
     backColor = Qt::white;
     textColor = Qt::black;
     titleColor = Qt::red;
-    // ### TODO: make PNG the default. All modern user agents should know PNG nowadays.
-    if (KImageIO::canWrite("JPEG"))
-        imgFormat = JPEG;
-    else
-        imgFormat = PNG;
 
     path = KGlobalSettings::documentPath() + "www";
 
@@ -717,95 +706,51 @@ void KPWebPresentationWizard::setupPage2()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page2 );
-    QGridLayout *layout = new QGridLayout( canvas, 7, 2, 
+    QGridLayout *layout = new QGridLayout( canvas, 6, 2, 
         KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
-    QString help = i18n("Here you can configure the style of the web pages. "
-                        "You also need to specify the image format "
-                        "which should be used for the slides.");
-
-    help += "\n";
-
-#if 0
-    if ( KImageIO::canWrite( "BMP" ) )
-    {
-        help += "\n";
-        help += i18n("BMP is an image format with a bad "
-                     "compression, but is supported by "
-                     "old web browsers.");
-    }
-
-    if ( KImageIO::canWrite( "PNG" ) )
-    {
-        help += "\n";
-        help += i18n("PNG is a very optimized and well "
-                     "compressed format, but may not be "
-                     "supported by some old web browsers.");
-    }
-
-    if ( KImageIO::canWrite( "JPEG" ) )
-    {
-        help += "\n";
-        help += i18n("JPEG is an image format with quite a good "
-                     "compression and which is supported by "
-                     "all web browsers.");
-    }
-#endif
-
-    help += "\n";
-    help += i18n( "Finally you can also specify the zoom for the slides." );
+    QString help = i18n("Here you can configure the style of the web pages.");
+    help += i18n( "You can also specify the zoom for the slides." );
     helptext->setText(help);
 
     layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
 
     layout->addMultiCell( new QSpacerItem( 1, 50 ), 1, 1, 0, 1 );
 
-    QLabel *label1 = new QLabel( i18n("Image format:"), canvas );
+    QLabel *label1 = new QLabel( i18n("Zoom:"), canvas );
     label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout->addWidget( label1, 2, 0 );
 
-    QLabel *label2 = new QLabel( i18n("Zoom:"), canvas );
+    QLabel *label2 = new QLabel( i18n( "Default encoding:" ), canvas );
     label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout->addWidget( label2, 3, 0 );
 
-    QLabel *label3 = new QLabel( i18n( "Default encoding:" ), canvas );
+    QLabel *label3 = new QLabel( i18n( "Document type:" ), canvas );
     label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout->addWidget( label3, 4, 0 );
 
-    QLabel *label4 = new QLabel( i18n( "Document type:" ), canvas );
-    label4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label4, 5, 0 );
-
-    format = new KComboBox( false, canvas );
-    layout->addWidget( format, 2, 1 );
-    format->insertItem( "BMP", -1 );
-    format->insertItem( "PNG", -1 );
-    if ( KImageIO::canWrite( "JPEG" ) )
-        format->insertItem( "JPEG", -1 );
-    format->setCurrentItem( static_cast<int>( webPres.getImageFormat() ) );
-
     zoom = new KIntNumInput( webPres.getZoom(), canvas );
-    layout->addWidget( zoom, 3, 1 );
+    layout->addWidget( zoom, 2, 1 );
     zoom->setSuffix( " %" );
     zoom->setRange( 25, 1000, 5 );
 
     encoding = new KComboBox( false, canvas );
-    layout->addWidget( encoding, 4, 1 );
+    layout->addWidget( encoding, 3, 1 );
     QStringList _strList = KGlobal::charsets()->availableEncodingNames();
     encoding->insertStringList( _strList );
     QString _name = webPres.getEncoding();
     encoding->setCurrentItem( _strList.findIndex( _name.lower() ) );
 
     doctype = new KComboBox( false, canvas );
-    layout->addWidget( doctype, 5, 1 );
+    layout->addWidget( doctype, 4, 1 );
     doctype->insertItem( "HTML 4.01", -1 );
     doctype->insertItem( "XHTML 1.0", -1 );
 
     QSpacerItem* spacer = new QSpacerItem( 1, 10, 
         QSizePolicy::Minimum, QSizePolicy::Expanding );
-    layout->addMultiCell( spacer, 6, 6, 0, 1 );
+    layout->addMultiCell( spacer, 5, 5, 0, 1 );
 
     addPage( page2, i18n( "Step 2: Configure HTML" ) );
 
@@ -948,7 +893,6 @@ void KPWebPresentationWizard::finish()
     webPres.setBackColor( backColor->color() );
     webPres.setTitleColor( titleColor->color() );
     webPres.setTextColor( textColor->color() );
-    webPres.setImageFormat( static_cast<KPWebPresentation::ImageFormat>( format->currentItem() ) );
     webPres.setPath( path->lineEdit()->text() );
     webPres.setZoom( zoom->value() );
     webPres.setXML( doctype->currentItem() != 0 );

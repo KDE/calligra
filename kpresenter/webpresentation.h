@@ -51,14 +51,6 @@ class QLabel;
 class KPWebPresentation
 {
 public:
-    enum ImageFormat {BMP = 0, PNG, JPEG};
-
-    static QString imageFormat( ImageFormat i ) {
-        if ( i == BMP ) return QString( "bmp" );
-        if ( i == PNG ) return QString( "png" );
-        if ( i == JPEG ) return QString( "jpeg" );
-        return QString::null;
-    }
 
     KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view );
     KPWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view );
@@ -76,8 +68,6 @@ public:
     { titleColor = _titleColor; }
     void setTextColor( const QColor &_textColor )
     { textColor = _textColor; }
-    void setImageFormat( ImageFormat _imgFormat )
-    { imgFormat = _imgFormat; }
     void setXML( bool _xml )
     { xml = _xml; }
     void setPath( const QString &_path )
@@ -92,7 +82,6 @@ public:
     QColor getBackColor() const { return backColor; }
     QColor getTitleColor() const { return titleColor; }
     QColor getTextColor() const { return textColor; }
-    ImageFormat getImageFormat() const { return imgFormat; }
     bool isXML() const { return xml; }
     QString getPath() const { return path; }
     int getZoom() const { return zoom; }
@@ -139,7 +128,6 @@ protected:
     QValueList<SlideInfo> slideInfos;
     QColor backColor, titleColor, textColor;
     QString path;
-    ImageFormat imgFormat;
     bool xml;
     int zoom;
     QString m_encoding;
@@ -174,12 +162,11 @@ protected:
     KPWebPresentation webPres;
 
     QHBox *page1, *page2, *page3, *page4;
-    KLineEdit *author, *title, *email;//, *path;
+    KLineEdit *author, *title, *email;
     KColorButton *textColor, *titleColor, *backColor;
-    KComboBox *format, *encoding, *doctype;
+    KComboBox *encoding, *doctype;
     KIntNumInput *zoom;
     KURLRequester *path;
-    //QPushButton *choosePath;
     KListView *slideTitles;
     KLineEdit *slideTitle;
 
