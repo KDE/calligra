@@ -548,3 +548,8 @@ Reggie, 21-22.11.1999:
 - When pasting a page set the current page number as initial page number
   in the insert page dia
 
+Reggie, 24.11.1999:
+--------------------
+- Key_Escape works now always for exitting the edit mode of a txt obj
+- Key_Home and Key_End work now for txt objs
+

@@ -1,8 +1,6 @@
 BUGS :
 ======
 - Text editor :
-  - fix Home, End (they bring to the beginning/end of the document!)
-    also CTRL-A, CTRL-E, etc.
   - copy&paste with mouse (MMB) bugs (ah, QT 2 bug)
     '^' + 'e' = 'e' !
   - selecting several lines : first line gets unselected
@@ -10,7 +8,6 @@ BUGS :
     is changed too 
   - Extend contents to height and so on should also work in dit mode
 - Placing of objects is not precise 
-- When pasting a page set default page to currentPage + 1
 
 TO FINISH:
 ===========

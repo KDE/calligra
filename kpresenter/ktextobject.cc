@@ -4112,6 +4112,10 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 
 	// react on the pressed key
 	switch ( e->key() ) {
+	case Key_Escape: {
+	    emit exitEditMode();
+	    return;
+	} break;
 	case Key_Right: {
 	    if ( e->state() & ControlButton )
 		txtCursor->wordForward();
@@ -4151,27 +4155,20 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 	    cursorChanged = true;
 	} break;
 	case Key_Home: {
-	    if ( e->state() & ControlButton )
-	    {
-	        // TODO if ( e->state() & ShiftButton )
+	    if ( e->state() & ControlButton ) {
 		txtCursor->pos1();
-	    } else
-	    {
-		// TODO if ( e->state() & ShiftButton )
+	    } else {
 		txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
 	    }
 	    cursorChanged = true;
 	} break;
 	case Key_End: {
-	    if ( e->state() & ControlButton )
-	    {
-	        // TODO if ( e->state() & ShiftButton )
+	    if ( e->state() & ControlButton ) {
 		txtCursor->end();
-	    } else
-	    {
-		// TODO if ( e->state() & ShiftButton )
-		txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 
-                   paragraphAt( txtCursor->positionParagraph() )->lineAt( txtCursor->positionLine() )->lineLength()-1  );
+	    } else {
+		txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(),
+						 paragraphAt( txtCursor->positionParagraph() )->
+						 lineAt( txtCursor->positionLine() )->lineLength()-1  );
 	    }
 	    cursorChanged = true;
 	} break;
@@ -5669,4 +5666,20 @@ void KTextObject::selectAll()
 
     delete c1;
     delete c2;
+}
+
+/*================================================================*/
+void KTextObject::home()
+{
+    txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(), 0 );
+    repaint( FALSE );
+}
+    
+/*================================================================*/
+void KTextObject::end()
+{
+    txtCursor->setPositionParagraph( txtCursor->positionParagraph(), txtCursor->positionLine(),
+				     paragraphAt( txtCursor->positionParagraph() )->
+				     lineAt( txtCursor->positionLine() )->lineLength()-1  );
+    repaint( FALSE );
 }

@@ -1080,10 +1080,14 @@ void KPresenterView::screenPause()
 /*========================== screen first =======================*/
 void KPresenterView::screenFirst()
 {
-    if ( !presStarted )
-	vert->setValue( 0 );
-    else
-	gotoPresPage( 1 );
+    if ( page->kTxtObj() )
+	page->kTxtObj()->home();
+    else {
+	if ( !presStarted )
+	    vert->setValue( 0 );
+	else
+	    gotoPresPage( 1 );
+    }
 }
 
 /*========================== screen pevious =====================*/
@@ -1130,10 +1134,14 @@ void KPresenterView::screenNext()
 /*========================== screen last ========================*/
 void KPresenterView::screenLast()
 {
-    if ( !presStarted )
-	vert->setValue(vert->maxValue());
-    else
-	gotoPresPage( getNumPresPages() );
+    if ( page->kTxtObj() )
+	page->kTxtObj()->end();
+    else {
+	if ( !presStarted )
+	    vert->setValue(vert->maxValue());
+	else
+	    gotoPresPage( getNumPresPages() );
+    }
 }
 
 /*========================== screen skip =======================*/

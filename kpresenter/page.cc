@@ -162,12 +162,10 @@ void Page::drawBackground( QPainter *painter, QRect rect )
 {
     KPBackGround *kpbackground = 0;
 
-    for ( int i = 0; i < static_cast<int>( backgroundList()->count() ); i++ )
-    {
+    for ( int i = 0; i < static_cast<int>( backgroundList()->count() ); i++ ) {
 	kpbackground = backgroundList()->at( i );
 	if ( ( rect.intersects( QRect( getPageSize( i, _presFakt ) ) ) && editMode ) ||
-	     ( !editMode && static_cast<int>( currPresPage ) == i + 1 ) )
-	{
+	     ( !editMode && static_cast<int>( currPresPage ) == i + 1 ) ) {
 	    if ( editMode )
 		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt ).x(),
 						     getPageSize( i, _presFakt ).y() ), editMode );
@@ -186,21 +184,18 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 {
     KPObject *kpobject = 0;
 
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
-    {
+    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
 
 	if ( ( rect.intersects( kpobject->getBoundingRect( diffx( i ), diffy( i ) ) ) && editMode ) ||
 	     ( !editMode && getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage ) &&
 	       kpobject->getPresNum() <= static_cast<int>( currPresStep ) &&
 	       ( !kpobject->getDisappear() || kpobject->getDisappear() &&
-		 kpobject->getDisappearNum() > static_cast<int>( currPresStep ) ) ) )
-	{
+		 kpobject->getDisappearNum() > static_cast<int>( currPresStep ) ) ) ) {
 	    if ( inEffect && kpobject->getPresNum() >= static_cast<int>( currPresStep ) )
 		continue;
 
-	    if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getPresNum() && !goingBack )
-	    {
+	    if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getPresNum() && !goingBack ) {
 		kpobject->setSubPresStep( subPresStep );
 		kpobject->doSpecificEffects( true, false );
 	    }
@@ -238,6 +233,8 @@ void Page::mousePressEvent( QMouseEvent *e )
 			this, SLOT( toColorChanged( QColor* ) ) );
 	    disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			this, SLOT( exitEditMode() ) );
 	    kptextobject->getKTextObject()->setShowCursor( false );
 	} else if ( kpobject->getType() == OT_PART ) {
 	    kpobject->deactivate();
@@ -973,6 +970,8 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 		    connect( kptextobject->getKTextObject(),
 			     SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			     this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			     this, SLOT( exitEditMode() ) );
 		    editNum = i;
 		    break;
 		} else if ( kpobject->getType() == OT_PART ) {
@@ -1013,6 +1012,8 @@ void Page::keyPressEvent( QKeyEvent *e )
 			    this, SLOT( toColorChanged( QColor* ) ) );
 		disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			    this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
+		disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			    this, SLOT( exitEditMode() ) );
 		kptextobject->getKTextObject()->setShowCursor( false );
 	    } else if ( kpobject->getType() == OT_PART ) {
 		kpobject->deactivate();
@@ -1609,6 +1610,8 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
 			this, SLOT( toColorChanged( QColor* ) ) );
 	    disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			this, SLOT( exitEditMode() ) );
 	    kptextobject->getKTextObject()->setShowCursor( false );
 	} else if ( kpobject->getType() == OT_PART ) {
 	    kpobject->deactivate();
@@ -1621,10 +1624,12 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
     if ( zoom ) {
 	float _presFaktW = static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) >
 			   0.0 ?
-			   static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) : 1.0;
+			   static_cast<float>( width() ) / 
+	    static_cast<float>( getPageSize( 0, 1.0, false ).width() ) : 1.0;
 	float _presFaktH = static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) >
 			   0.0 ?
-			   static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) :
+			   static_cast<float>( height() ) / 
+	    static_cast<float>( getPageSize( 0, 1.0, false ).height() ) :
 			   1.0;
 	_presFakt = min(_presFaktW,_presFaktH);
     } else _presFakt = 1.0;
@@ -3105,23 +3110,23 @@ void Page::editSelectedTextArea()
 {
     KPObject *kpobject = 0;
 
-    if ( (int)objectList()->count() - 1 >= 0 )
-    {
-	for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
-	{
+    if ( (int)objectList()->count() - 1 >= 0 ) {
+	for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
 	    kpobject = objectList()->at( i );
-	    if ( kpobject->isSelected() )
-	    {
-		if ( kpobject->getType() == OT_TEXT )
-		{
+	    if ( kpobject->isSelected() ) {
+		if ( kpobject->getType() == OT_TEXT ) {
 		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 
 		    kpobject->activate( this, diffx(), diffy() );
 		    kptextobject->getKTextObject()->setBackgroundColor( txtBackCol() );
-		    connect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( toFontChanged( QFont* ) ) );
-		    connect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( toColorChanged( QColor* ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), 
+			     this, SLOT( toFontChanged( QFont* ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), 
+			     this, SLOT( toColorChanged( QColor* ) ) );
 		    connect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			     this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
+		    connect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			     this, SLOT( exitEditMode() ) );
 		    editNum = i;
 		    break;
 		}
@@ -3248,6 +3253,8 @@ void Page::setToolEditMode( ToolEditMode _m, bool updateView )
 			this, SLOT( toColorChanged( QColor* ) ) );
 	    disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			this, SLOT( exitEditMode() ) );
 	    kptextobject->getKTextObject()->setShowCursor( false );
 	} else if ( kpobject->getType() == OT_PART ) {
 	    kpobject->deactivate();
@@ -3787,4 +3794,27 @@ bool Page::calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio )
 	 kpobject->getSize().height() + dy < 20 )
 	return false;
     return true;
+}
+
+/*================================================================*/
+void Page::exitEditMode()
+{
+    if ( editNum != -1 ) {
+	KPObject *kpobject = objectList()->at( editNum );
+	editNum = -1;
+	if ( kpobject->getType() == OT_TEXT ) {
+	    KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+	    kptextobject->deactivate( view->kPresenterDoc() );
+	    kptextobject->getKTextObject()->clearFocus();
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
+			this, SLOT( toFontChanged( QFont* ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ),
+			this, SLOT( toColorChanged( QColor* ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
+			this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+			this, SLOT( exitEditMode() ) );
+	    kptextobject->getKTextObject()->setShowCursor( false );
+	}
+    }
 }

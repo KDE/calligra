@@ -1829,6 +1829,9 @@ public:
 
     void selectAll();
 
+    void home();
+    void end();
+    
 signals:
 
     /**
@@ -1848,6 +1851,8 @@ signals:
 
     void giveMeFocus();
 
+    void exitEditMode();
+    
 protected:
 
     enum CursorDirection {C_LEFT, C_RIGHT, C_UP, C_DOWN};

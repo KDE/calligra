@@ -104,7 +104,7 @@ public:
     float presFakt() { return _presFakt; }
     int numPresSteps() { return presStepList.count(); }
     int numPresPages() { return slideList.count(); }
-    
+
     bool canAssignEffect( QList<KPObject> &objs );
 
     void keyPressEvent( QKeyEvent *e );
@@ -125,7 +125,7 @@ public:
     void drawPageInPix2( QPixmap&, int, int, float _zoom = 1.0 );
 
     void gotoPage( int pg );
-    
+
 public slots:
 
     // public slots
@@ -277,7 +277,8 @@ private slots:
     void slotEditHF();
     void slotTextContents2Height();
     void slotTextObj2Contents();
-
+    void exitEditMode();
+    
 signals:
 
     // signals to notify of changes
