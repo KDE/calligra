@@ -114,7 +114,7 @@ public:
     virtual void cleanUp();
 
     // ------ IDL ------
-    virtual CORBA::Boolean printDlg();
+    virtual bool printDlg();
     // edit menu
     virtual void editUndo();
     virtual void editRedo();
@@ -203,8 +203,8 @@ public:
     virtual void helpContents();
 
     // text toolbar
-    virtual void sizeSelected( const CORBA::WChar * );
-    virtual void fontSelected( const CORBA::WChar * );
+    virtual void sizeSelected( const QString & );
+    virtual void fontSelected( const QString & );
     virtual void textBold();
     virtual void textItalic();
     virtual void textUnderline();
@@ -226,8 +226,8 @@ public:
     virtual void textObjectToContents();
 
     // color bar
-    virtual void setPenColor( CORBA::Long id );
-    virtual void setFillColor( CORBA::Long id );
+    virtual void setPenColor( long int id );
+    virtual void setFillColor( long int id );
 
     // ------ C++ ------
 
@@ -398,7 +398,7 @@ protected:
 // ********* functions ***********
 
 // C++
-    virtual bool event( const char* _event, const CORBA::Any& _value );
+    virtual bool event( const QCString &_event, const CORBA::Any& _value );
 // C++
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
@@ -431,113 +431,113 @@ protected:
 
 // edit menu
     OpenPartsUI::Menu_var m_vMenuEdit;
-    CORBA::Long m_idMenuEdit_Undo;
-    CORBA::Long m_idMenuEdit_Redo;
-    CORBA::Long m_idMenuEdit_Cut;
-    CORBA::Long m_idMenuEdit_Copy;
-    CORBA::Long m_idMenuEdit_Paste;
-    CORBA::Long m_idMenuEdit_Delete;
-    CORBA::Long m_idMenuEdit_SelectAll;
-    CORBA::Long m_idMenuEdit_CopyPage;
-    CORBA::Long m_idMenuEdit_DelPage;
-    CORBA::Long m_idMenuEdit_Find;
-    CORBA::Long m_idMenuEdit_FindReplace;
-    CORBA::Long m_idMenuEdit_HeaderFooter;
+    long int m_idMenuEdit_Undo;
+    long int m_idMenuEdit_Redo;
+    long int m_idMenuEdit_Cut;
+    long int m_idMenuEdit_Copy;
+    long int m_idMenuEdit_Paste;
+    long int m_idMenuEdit_Delete;
+    long int m_idMenuEdit_SelectAll;
+    long int m_idMenuEdit_CopyPage;
+    long int m_idMenuEdit_DelPage;
+    long int m_idMenuEdit_Find;
+    long int m_idMenuEdit_FindReplace;
+    long int m_idMenuEdit_HeaderFooter;
 
 // view menu
     OpenPartsUI::Menu_var m_vMenuView;
-    CORBA::Long m_idMenuView_NewView;
+    long int m_idMenuView_NewView;
 
 // insert menu
     OpenPartsUI::Menu_var m_vMenuInsert;
-    CORBA::Long m_idMenuInsert_Page;
-    CORBA::Long m_idMenuInsert_Picture;
-    CORBA::Long m_idMenuInsert_Clipart;
+    long int m_idMenuInsert_Page;
+    long int m_idMenuInsert_Picture;
+    long int m_idMenuInsert_Clipart;
 
 // tools menu
     OpenPartsUI::Menu_var m_vMenuTools;
-    CORBA::Long m_idMenuTools_Mouse;
-    CORBA::Long m_idMenuTools_Line;
-    CORBA::Long m_idMenuTools_Rectangle;
-    CORBA::Long m_idMenuTools_Circle;
-    CORBA::Long m_idMenuTools_Pie;
-    CORBA::Long m_idMenuTools_Text;
-    CORBA::Long m_idMenuTools_Autoform;
-    CORBA::Long m_idMenuTools_Diagramm;
-    CORBA::Long m_idMenuTools_Table;
-    CORBA::Long m_idMenuTools_Formula;
-    CORBA::Long m_idMenuTools_Part;
+    long int m_idMenuTools_Mouse;
+    long int m_idMenuTools_Line;
+    long int m_idMenuTools_Rectangle;
+    long int m_idMenuTools_Circle;
+    long int m_idMenuTools_Pie;
+    long int m_idMenuTools_Text;
+    long int m_idMenuTools_Autoform;
+    long int m_idMenuTools_Diagramm;
+    long int m_idMenuTools_Table;
+    long int m_idMenuTools_Formula;
+    long int m_idMenuTools_Part;
 
 // text menu
     OpenPartsUI::Menu_var m_vMenuText;
-    CORBA::Long m_idMenuText_TFont;
-    CORBA::Long m_idMenuText_TColor;
+    long int m_idMenuText_TFont;
+    long int m_idMenuText_TColor;
     OpenPartsUI::Menu_var m_vMenuText_TAlign;
-    CORBA::Long m_idMenuText_TAlign_Left;
-    CORBA::Long m_idMenuText_TAlign_Center;
-    CORBA::Long m_idMenuText_TAlign_Right;
+    long int m_idMenuText_TAlign_Left;
+    long int m_idMenuText_TAlign_Center;
+    long int m_idMenuText_TAlign_Right;
     OpenPartsUI::Menu_var m_vMenuText_TType;
-    CORBA::Long m_idMenuText_TType_EnumList;
-    CORBA::Long m_idMenuText_TType_UnsortList;
-    CORBA::Long m_idMenuText_TType_NormalText;
-    CORBA::Long m_idMenuText_TDepthPlus;
-    CORBA::Long m_idMenuText_TDepthMinus;
-    CORBA::Long m_idMenuText_TSpacing;
-    CORBA::Long m_idMenuText_TExtentCont2Height;
-    CORBA::Long m_idMenuText_TExtentObj2Cont;
+    long int m_idMenuText_TType_EnumList;
+    long int m_idMenuText_TType_UnsortList;
+    long int m_idMenuText_TType_NormalText;
+    long int m_idMenuText_TDepthPlus;
+    long int m_idMenuText_TDepthMinus;
+    long int m_idMenuText_TSpacing;
+    long int m_idMenuText_TExtentCont2Height;
+    long int m_idMenuText_TExtentObj2Cont;
 
 // extra menu
     OpenPartsUI::Menu_var m_vMenuExtra;
-    CORBA::Long m_idMenuExtra_PenBrush;
-    CORBA::Long m_idMenuExtra_Pie;
-    CORBA::Long m_idMenuExtra_Rect;
-    CORBA::Long m_idMenuExtra_Raise;
-    CORBA::Long m_idMenuExtra_Lower;
-    CORBA::Long m_idMenuExtra_Rotate;
-    CORBA::Long m_idMenuExtra_Shadow;
+    long int m_idMenuExtra_PenBrush;
+    long int m_idMenuExtra_Pie;
+    long int m_idMenuExtra_Rect;
+    long int m_idMenuExtra_Raise;
+    long int m_idMenuExtra_Lower;
+    long int m_idMenuExtra_Rotate;
+    long int m_idMenuExtra_Shadow;
     OpenPartsUI::Menu_var m_vMenuExtra_AlignObj;
-    CORBA::Long m_idMenuExtra_AlignObj_Left;
-    CORBA::Long m_idMenuExtra_AlignObj_CenterH;
-    CORBA::Long m_idMenuExtra_AlignObj_Right;
-    CORBA::Long m_idMenuExtra_AlignObj_Top;
-    CORBA::Long m_idMenuExtra_AlignObj_CenterV;
-    CORBA::Long m_idMenuExtra_AlignObj_Bottom;
-    CORBA::Long m_idMenuExtra_Background;
-    CORBA::Long m_idMenuExtra_Layout;
-    CORBA::Long m_idMenuExtra_Options;
-    CORBA::Long m_idMenuExtra_WepPres;
+    long int m_idMenuExtra_AlignObj_Left;
+    long int m_idMenuExtra_AlignObj_CenterH;
+    long int m_idMenuExtra_AlignObj_Right;
+    long int m_idMenuExtra_AlignObj_Top;
+    long int m_idMenuExtra_AlignObj_CenterV;
+    long int m_idMenuExtra_AlignObj_Bottom;
+    long int m_idMenuExtra_Background;
+    long int m_idMenuExtra_Layout;
+    long int m_idMenuExtra_Options;
+    long int m_idMenuExtra_WepPres;
 
     // screenpresentation menu
     OpenPartsUI::Menu_var m_vMenuScreen;
-    CORBA::Long m_idMenuScreen_ConfigPage;
-    CORBA::Long m_idMenuScreen_PresStructView;
-    CORBA::Long m_idMenuScreen_AssignEffect;
-    CORBA::Long m_idMenuScreen_Start;
-    CORBA::Long m_idMenuScreen_Stop;
-    CORBA::Long m_idMenuScreen_Pause;
-    CORBA::Long m_idMenuScreen_First;
-    CORBA::Long m_idMenuScreen_Prev;
-    CORBA::Long m_idMenuScreen_Next;
-    CORBA::Long m_idMenuScreen_Last;
-    CORBA::Long m_idMenuScreen_Skip;
-    CORBA::Long m_idMenuScreen_FullScreen;
+    long int m_idMenuScreen_ConfigPage;
+    long int m_idMenuScreen_PresStructView;
+    long int m_idMenuScreen_AssignEffect;
+    long int m_idMenuScreen_Start;
+    long int m_idMenuScreen_Stop;
+    long int m_idMenuScreen_Pause;
+    long int m_idMenuScreen_First;
+    long int m_idMenuScreen_Prev;
+    long int m_idMenuScreen_Next;
+    long int m_idMenuScreen_Last;
+    long int m_idMenuScreen_Skip;
+    long int m_idMenuScreen_FullScreen;
     OpenPartsUI::Menu_var m_vMenuScreen_Pen;
     OpenPartsUI::Menu_var m_vMenuScreen_PenWidth;
-    CORBA::Long m_idMenuScreen_PenColor;
-    CORBA::Long m_idMenuScreen_PenW1;
-    CORBA::Long m_idMenuScreen_PenW2;
-    CORBA::Long m_idMenuScreen_PenW3;
-    CORBA::Long m_idMenuScreen_PenW4;
-    CORBA::Long m_idMenuScreen_PenW5;
-    CORBA::Long m_idMenuScreen_PenW6;
-    CORBA::Long m_idMenuScreen_PenW7;
-    CORBA::Long m_idMenuScreen_PenW8;
-    CORBA::Long m_idMenuScreen_PenW9;
-    CORBA::Long m_idMenuScreen_PenW10;
+    long int m_idMenuScreen_PenColor;
+    long int m_idMenuScreen_PenW1;
+    long int m_idMenuScreen_PenW2;
+    long int m_idMenuScreen_PenW3;
+    long int m_idMenuScreen_PenW4;
+    long int m_idMenuScreen_PenW5;
+    long int m_idMenuScreen_PenW6;
+    long int m_idMenuScreen_PenW7;
+    long int m_idMenuScreen_PenW8;
+    long int m_idMenuScreen_PenW9;
+    long int m_idMenuScreen_PenW10;
 
     // help menu
     OpenPartsUI::Menu_var m_vMenuHelp;
-    CORBA::Long m_idMenuHelp_Contents;
+    long int m_idMenuHelp_Contents;
 
     // right button popup menus
     QPopupMenu *rb_pen, *rb_pen_width, *rb_oalign, *rb_lbegin, *rb_lend;
@@ -546,77 +546,77 @@ protected:
 
     // edit toolbar
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
-    CORBA::Long m_idButtonEdit_Undo;
-    CORBA::Long m_idButtonEdit_Redo;
-    CORBA::Long m_idButtonEdit_Cut;
-    CORBA::Long m_idButtonEdit_Copy;
-    CORBA::Long m_idButtonEdit_Paste;
-    CORBA::Long m_idButtonEdit_Delete;
+    long int m_idButtonEdit_Undo;
+    long int m_idButtonEdit_Redo;
+    long int m_idButtonEdit_Cut;
+    long int m_idButtonEdit_Copy;
+    long int m_idButtonEdit_Paste;
+    long int m_idButtonEdit_Delete;
 
     // insert toolbar
     OpenPartsUI::ToolBar_var m_vToolBarInsert;
-    CORBA::Long m_idButtonInsert_Page;
-    CORBA::Long m_idButtonInsert_Picture;
-    CORBA::Long m_idButtonInsert_Clipart;
+    long int m_idButtonInsert_Page;
+    long int m_idButtonInsert_Picture;
+    long int m_idButtonInsert_Clipart;
 
     // tools toolbar
     OpenPartsUI::ToolBar_var m_vToolBarTools;
-    CORBA::Long m_idButtonTools_Mouse;
-    CORBA::Long m_idButtonTools_Line;
-    CORBA::Long m_idButtonTools_Rectangle;
-    CORBA::Long m_idButtonTools_Circle;
-    CORBA::Long m_idButtonTools_Pie;
-    CORBA::Long m_idButtonTools_Text;
-    CORBA::Long m_idButtonTools_Autoform;
-    CORBA::Long m_idButtonTools_Diagramm;
-    CORBA::Long m_idButtonTools_Table;
-    CORBA::Long m_idButtonTools_Formula;
-    CORBA::Long m_idButtonTools_Part;
+    long int m_idButtonTools_Mouse;
+    long int m_idButtonTools_Line;
+    long int m_idButtonTools_Rectangle;
+    long int m_idButtonTools_Circle;
+    long int m_idButtonTools_Pie;
+    long int m_idButtonTools_Text;
+    long int m_idButtonTools_Autoform;
+    long int m_idButtonTools_Diagramm;
+    long int m_idButtonTools_Table;
+    long int m_idButtonTools_Formula;
+    long int m_idButtonTools_Part;
 
     // text toolbar
     OpenPartsUI::ToolBar_var m_vToolBarText;
-    CORBA::Long m_idComboText_FontSize;
-    CORBA::Long m_idComboText_FontList;
-    CORBA::Long m_idButtonText_Bold;
-    CORBA::Long m_idButtonText_Italic;
-    CORBA::Long m_idButtonText_Underline;
-    CORBA::Long m_idButtonText_Color;
-    CORBA::Long m_idButtonText_ARight;
-    CORBA::Long m_idButtonText_ACenter;
-    CORBA::Long m_idButtonText_ALeft;
-    CORBA::Long m_idButtonText_EnumList;
-    CORBA::Long m_idButtonText_UnsortList;
-    CORBA::Long m_idButtonText_NormalText;
-    CORBA::Long m_idButtonText_DepthPlus;
-    CORBA::Long m_idButtonText_DepthMinus;
-    CORBA::Long m_idButtonText_Spacing;
+    long int m_idComboText_FontSize;
+    long int m_idComboText_FontList;
+    long int m_idButtonText_Bold;
+    long int m_idButtonText_Italic;
+    long int m_idButtonText_Underline;
+    long int m_idButtonText_Color;
+    long int m_idButtonText_ARight;
+    long int m_idButtonText_ACenter;
+    long int m_idButtonText_ALeft;
+    long int m_idButtonText_EnumList;
+    long int m_idButtonText_UnsortList;
+    long int m_idButtonText_NormalText;
+    long int m_idButtonText_DepthPlus;
+    long int m_idButtonText_DepthMinus;
+    long int m_idButtonText_Spacing;
 
     // extra toolbar
     OpenPartsUI::ToolBar_var m_vToolBarExtra;
-    CORBA::Long m_idButtonExtra_Style;
-    CORBA::Long m_idButtonExtra_Pie;
-    CORBA::Long m_idButtonExtra_Rect;
-    CORBA::Long m_idButtonExtra_Raise;
-    CORBA::Long m_idButtonExtra_Lower;
-    CORBA::Long m_idButtonExtra_Rotate;
-    CORBA::Long m_idButtonExtra_Shadow;
-    CORBA::Long m_idButtonExtra_Align;
-    CORBA::Long m_idButtonExtra_LineBegin;
-    CORBA::Long m_idButtonExtra_LineEnd;
-    CORBA::Long m_idButtonExtra_WebPres;
+    long int m_idButtonExtra_Style;
+    long int m_idButtonExtra_Pie;
+    long int m_idButtonExtra_Rect;
+    long int m_idButtonExtra_Raise;
+    long int m_idButtonExtra_Lower;
+    long int m_idButtonExtra_Rotate;
+    long int m_idButtonExtra_Shadow;
+    long int m_idButtonExtra_Align;
+    long int m_idButtonExtra_LineBegin;
+    long int m_idButtonExtra_LineEnd;
+    long int m_idButtonExtra_WebPres;
 
     // screen toolbar
     OpenPartsUI::ToolBar_var m_vToolBarScreen;
-    CORBA::Long m_idButtonScreen_Stop;
-    CORBA::Long m_idButtonScreen_Pause;
-    CORBA::Long m_idButtonScreen_Start;
-    CORBA::Long m_idButtonScreen_First;
-    CORBA::Long m_idButtonScreen_Prev;
-    CORBA::Long m_idButtonScreen_Next;
-    CORBA::Long m_idButtonScreen_Last;
-    CORBA::Long m_idButtonScreen_Effect;
-    CORBA::Long m_idButtonScreen_Full;
-    CORBA::Long m_idButtonScreen_Pen;
+    long int m_idButtonScreen_Stop;
+    long int m_idButtonScreen_Pause;
+    long int m_idButtonScreen_Start;
+    long int m_idButtonScreen_First;
+    long int m_idButtonScreen_Prev;
+    long int m_idButtonScreen_Next;
+    long int m_idButtonScreen_Last;
+    long int m_idButtonScreen_Effect;
+    long int m_idButtonScreen_Full;
+    long int m_idButtonScreen_Pen;
 
     // color bar
     OpenPartsUI::ColorBar_var m_vColorBar;

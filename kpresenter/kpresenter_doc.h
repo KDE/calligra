@@ -112,7 +112,7 @@ public:
     virtual KPresenterView* createPresenterView( QWidget* _parent = 0 );
 
     // ------ IDL ------
-    virtual CORBA::Boolean initDoc() { return insertNewTemplate( 0, 0, TRUE ); }
+    virtual bool initDoc() { return insertNewTemplate( 0, 0, TRUE ); }
 
     KOffice::MainWindow_ptr createMainWindow();
 
@@ -120,13 +120,13 @@ public:
     virtual OpenParts::View_ptr createView();
 
     // get list of views
-    virtual void viewList( KOffice::Document::ViewList*& _list );
+    virtual void viewList( OpenParts::Document::ViewList _list );
 
     // get mime type
-    virtual char* mimeType() {return CORBA::string_dup( MIME_TYPE ); }
+    virtual QCString mimeType() {return QCString( MIME_TYPE ); }
 
     // ask, if document is modified
-    virtual CORBA::Boolean isModified() { return m_bModified; }
+    virtual bool isModified() { return m_bModified; }
     virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
     virtual bool isEmpty() { return m_bEmpty; }
 

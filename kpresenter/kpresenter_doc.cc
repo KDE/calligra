@@ -176,7 +176,7 @@ KPresenterDoc::KPresenterDoc()
 /*====================== destructor ==============================*/
 KPresenterDoc::~KPresenterDoc()
 {
-    sdeb( "KPresenterDoc::~KPresenterDoc()\n" );
+//    sdeb( "KPresenterDoc::~KPresenterDoc()\n" );
 
     headerFooterEdit->allowClose();
     delete headerFooterEdit;
@@ -188,7 +188,7 @@ KPresenterDoc::~KPresenterDoc()
     delete _objectList;
     _backgroundList.clear();
     cleanUp();
-    edeb( "...KPresenterDoc::~KPresenterDoc() %i\n", _refcnt() );
+//    edeb( "...KPresenterDoc::~KPresenterDoc() %i\n", _refcnt() );
 }
 
 /*======================== draw contents as QPicture =============*/
@@ -248,7 +248,7 @@ bool KPresenterDoc::saveChildren( KOStore::Store_ptr _store, const char *_path )
     for( ; it.current(); ++it ) {
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
 	KOffice::Document_var doc = it.current()->document();
-	if ( !doc->saveToStore( _store, 0L, internURL ) )
+	if ( !doc->saveToStore( _store, "", internURL ) )
           return false;
     }
     return true;
@@ -445,7 +445,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
             if ( !isStoredExtern() )
               u2.prepend( m_strURL + "/" );
 
-	    if ( _store->open( u2, mime.lower() ) ) {
+	    if ( _store->open( u2, mime.lower().ascii() ) ) {
 	        ostorestream out( _store );
 	        writeImageToStream( out, it.data(), format );
 	        out.flush();
@@ -464,7 +464,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
             if ( !isStoredExtern() )
               u2.prepend( m_strURL + "/" );
 
-	    if ( _store->open( u2, mime.lower() ) ) {
+	    if ( _store->open( u2, mime.lower().ascii() ) ) {
 	        ostorestream out( _store );
 	        out << it2.data();
 	        out.flush();
@@ -1105,13 +1105,13 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	    
 	    QImage img;
 
-	    if ( _store->open( u, 0L ) ) {
+	    if ( _store->open( u, "" ) ) {
 		istorestream in( _store );
 		in >> img;
 	        _store->close();
 	    } else {
 		u.prepend( "file:" );
-		if ( _store->open( u, 0L ) ) {
+		if ( _store->open( u, "" ) ) {
 		    istorestream in( _store );
 		    in >> img;
 		    _store->close();
@@ -1137,13 +1137,13 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	    
 	    QPicture pic;
 
-	    if ( _store->open( u, 0L ) ) {
+	    if ( _store->open( u, "" ) ) {
 		istorestream in( _store );
 		in >> pic;
 	        _store->close();
 	    } else {
 		u.prepend( "file:" );
-		if ( _store->open( u, 0L ) ) {
+		if ( _store->open( u, "" ) ) {
 		    istorestream in( _store );
 		    in >> pic;
 		    _store->close();
@@ -1201,14 +1201,14 @@ OpenParts::View_ptr KPresenterDoc::createView()
 }
 
 /*========================== view list ===========================*/
-void KPresenterDoc::viewList( KOffice::Document::ViewList*& _list )
+void KPresenterDoc::viewList( OpenParts::Document::ViewList _list )
 {
-    ( *_list ).length( m_lstViews.count() );
+    _list.clear();
 
     int i = 0;
     QListIterator<KPresenterView> it( m_lstViews );
     for( ; it.current(); ++it )
-	( *_list )[ i++ ] = OpenParts::View::_duplicate( it.current() );
+        _list.append( OpenParts::View::_duplicate( it.current() ) );
 }
 
 /*========================== output formats ======================*/
