@@ -55,9 +55,6 @@ class KTextEditFormatCollection;
 
 #include <qtextstream.h>
 
-#define MIME_TYPE "application/x-kpresenter"
-#define EDITOR "IDL:KPresenter/KPresenterDocument:1.0"
-
 class KPFooterHeaderEditor;
 class KPTextObject;
 class StyleDia;
@@ -318,7 +315,7 @@ public:
 
 public slots:
     void movePage( int from, int to );
-    
+
 signals:
 
     // document modified
