@@ -32,6 +32,7 @@ KivioGroupStencil::KivioGroupStencil()
 
     m_x = m_y = 1000000000000.0f;
     m_w = m_h = -10000000000.0f;
+    setType(kstGroup);
 }
 
 KivioGroupStencil::~KivioGroupStencil()
@@ -116,7 +117,7 @@ void KivioGroupStencil::setLineWidth( float f )
     }
 }
 
-KivioCollisionType KivioGroupStencil::checkForCollision( KivioPoint *p, float threshhold )
+KivioCollisionType KivioGroupStencil::checkForCollision( KivioPoint *p, double threshhold )
 {
     KivioCollisionType colType;
 
@@ -125,8 +126,9 @@ KivioCollisionType KivioGroupStencil::checkForCollision( KivioPoint *p, float th
     while( pStencil )
     {
         colType = pStencil->checkForCollision( p, threshhold );
-        if( colType != kctNone )
+        if( colType != kctNone ) {
             return colType;
+        }
 
         pStencil = m_pGroupList->prev();
     }

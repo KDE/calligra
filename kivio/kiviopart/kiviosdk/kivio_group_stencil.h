@@ -41,7 +41,7 @@ public:
     KivioGroupStencil();
     virtual ~KivioGroupStencil();
 
-    
+
     // File I/O routines
     virtual bool loadXML( const QDomElement &, KivioLayer * );
     virtual QDomElement saveXML( QDomDocument & );
@@ -52,16 +52,16 @@ public:
     virtual void paint( KivioIntraStencilData * );
     virtual void paintConnectorTargets( KivioIntraStencilData * );
 
-    
+
     // Duplication
     virtual KivioStencil *duplicate();
 
-    
+
     // FG/Color operations
     virtual void setFGColor( QColor );
     virtual void setBGColor( QColor );
-    
-    
+
+
 
     // Text operations
     virtual void setTextColor( QColor );
@@ -74,24 +74,24 @@ public:
 
     virtual void setHTextAlign(int);
     virtual void setVTextAlign(int);
-    
+
     virtual void setText( const QString & );
     virtual QString text();
-    
-    
+
+
     // Line width
     virtual void setLineWidth( float );
 
-    
-    // Collision detection
-    virtual KivioCollisionType checkForCollision( KivioPoint *, float );
 
-    
+    // Collision detection
+    virtual KivioCollisionType checkForCollision( KivioPoint *, double );
+
+
     // Group operations
     virtual void addToGroup( KivioStencil * );
     virtual QPtrList<KivioStencil> *groupList() { return m_pGroupList; }
 
-    
+
     // Position / Dimension operations
     virtual void setX( float );
     virtual void setY( float );
@@ -99,11 +99,11 @@ public:
     virtual void setH( float );
     virtual void setPosition( float f1, float f2 );
     virtual void setDimensions( float f1, float f2 );
-    
-    
+
+
     // ID generation
     virtual int generateIds( int );
-    
+
 
     // Connection operations
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, float );
