@@ -29,6 +29,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
+#include <koGenStyles.h>
 
 #include "kword13document.h"
 
@@ -46,6 +47,183 @@ bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
 {
     // ### TODO
     return true;
+}
+
+double KWord13OasisGenerator::numberOrNull( const QString& str ) const
+{
+    bool ok = false;
+    const double d = str.toDouble( &ok );
+    if ( ok )
+        return d;
+    else
+        return 0.0;
+}
+
+// Inspired from KoParagLayout::saveOasis but we have not the same data to start with.
+void KWord13OasisGenerator::fillGenStyleWithLayout( KoGenStyle& gs, const bool style ) const
+{
+    // ### TODO syntaxVersion < 3
+
+    QString str; // Help string to store each KWord 1.3 layout property
+   
+    str = m_kwordDocument->getProperty( "FLOW:align" );
+    if ( str.isEmpty() && ! style)
+    {
+        // Nothing to do!
+    }
+    else if ( ( str == "left" ) || ( str == "right") || ( str == "center" ) || ( str == "justify" ) )
+    {
+        gs.addProperty( "fo:text-align", str );
+    }
+    else // KWord 1.3's "auto" (or empty/unknown string for a style)
+    {
+        gs.addProperty( "fo:text-align", "start" ); // i.e. direction-dependent
+    }
+
+    str = m_kwordDocument->getProperty( "FLOW:dir" );
+    if ( str == "R" ) // ### TODO: check the right value
+    {
+            gs.addProperty( "style:writing-mode", "rl-tb" ); // right-to-left, top-to-bottom
+    }
+    else if ( style )
+    {
+            gs.addProperty( "style:writing-mode", "lr-tb" ); // left-to-right, top-to-bottom
+    }
+
+    // ### TODO: do not define if it does not exist and ! style
+    gs.addPropertyPt( "fo:margin-left", numberOrNull( m_kwordDocument->getProperty( "INDENTS:left" ) ) );
+    gs.addPropertyPt( "fo:margin-right", numberOrNull( m_kwordDocument->getProperty( "INDENTS:right" ) ) );
+    gs.addPropertyPt( "fo:text-indent", numberOrNull( m_kwordDocument->getProperty( "INDENTS:first" ) ) );
+    gs.addPropertyPt( "fo:margin-top", numberOrNull( m_kwordDocument->getProperty( "OFFSETS:before" ) ) );
+    gs.addPropertyPt( "fo:margin-bottom", numberOrNull( m_kwordDocument->getProperty( "OFFSETS:after" ) ) );
+
+#if 0
+    switch ( lineSpacingType ) {
+    case KoParagLayout::LS_SINGLE:
+        gs.addProperty( "fo:line-height", "100%" );
+        break;
+    case KoParagLayout::LS_ONEANDHALF:
+        gs.addProperty( "fo:line-height", "150%" );
+        break;
+    case KoParagLayout::LS_DOUBLE:
+        gs.addProperty( "fo:line-height", "200%" );
+        break;
+    case KoParagLayout::LS_MULTIPLE:
+        gs.addProperty( "fo:line-height", QString::number( lineSpacing * 100.0 ) + '%' );
+        break;
+    case KoParagLayout::LS_FIXED:
+        gs.addPropertyPt( "fo:line-height", lineSpacing );
+        break;
+    case KoParagLayout::LS_CUSTOM:
+        gs.addPropertyPt( "style:line-spacing", lineSpacing );
+        break;
+    case KoParagLayout::LS_AT_LEAST:
+        gs.addPropertyPt( "style:line-height-at-least", lineSpacing );
+        break;
+    }
+#endif
+
+#if 0
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter tabsWriter( &buffer, 4 ); // indent==4: root,autostyle,style,parag-props
+    tabsWriter.startElement( "style:tab-stops" );
+    KoTabulatorList::ConstIterator it = m_tabList.begin();
+    for ( ; it != m_tabList.end() ; it++ )
+    {
+        tabsWriter.startElement( "style:tab-stop" );
+        tabsWriter.addAttributePt( "style:position", (*it).ptPos );
+
+        switch ( (*it).type ) {
+        case T_LEFT:
+            tabsWriter.addAttribute( "style:type", "left" );
+            break;
+        case T_CENTER:
+            tabsWriter.addAttribute( "style:type", "center" );
+            break;
+        case T_RIGHT:
+            tabsWriter.addAttribute( "style:type", "right" );
+            break;
+        case T_DEC_PNT:  // "alignment on decimal point"
+            tabsWriter.addAttribute( "style:type", "char" );
+            tabsWriter.addAttribute( "style:char", QString( (*it).alignChar ) );
+            break;
+        case T_INVALID: // keep compiler happy, this can't happen
+            break;
+        }
+        switch( (*it).filling ) {
+        case TF_BLANK:
+            tabsWriter.addAttribute( "style:leader-type", "none" );
+            break;
+        case TF_LINE:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "solid" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "_" );
+            break;
+        case TF_DOTS:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "dotted" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "." );
+            break;
+        case TF_DASH:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "dash" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "_" );
+            break;
+        case TF_DASH_DOT:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "dot-dash" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "." );
+            break;
+        case TF_DASH_DOT_DOT:
+            tabsWriter.addAttribute( "style:leader-type", "single" );
+            tabsWriter.addAttribute( "style:leader-style", "dot-dot-dash" );
+            // Give OOo a chance to show something, since it doesn't support lines here.
+            tabsWriter.addAttribute( "style:leader-text", "." );
+            break;
+        }
+        if ( (*it).filling != TF_BLANK )
+            tabsWriter.addAttributePt( "style:leader-width", (*it).ptWidth );
+        // If we want to support it, oasis also defines style:leader-color
+        tabsWriter.endElement();
+    }
+    tabsWriter.endElement();
+    buffer.close();
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    gs.addChildElement( "style:tab-stops", elementContents );
+#endif
+
+#if 0
+    bool fourBordersEqual = leftBorder.penWidth() > 0 &&
+               leftBorder == rightBorder && rightBorder == topBorder && topBorder == bottomBorder;
+    if ( fourBordersEqual ) {
+        gs.addProperty( "fo:border", leftBorder.saveFoBorder() );
+    } else {
+        if ( leftBorder.penWidth() > 0 )
+            gs.addProperty( "fo:border-left", leftBorder.saveFoBorder() );
+        if ( rightBorder.penWidth() > 0 )
+            gs.addProperty( "fo:border-right", rightBorder.saveFoBorder() );
+        if ( topBorder.penWidth() > 0 )
+            gs.addProperty( "fo:border-top", topBorder.saveFoBorder() );
+        if ( bottomBorder.penWidth() > 0 )
+            gs.addProperty( "fo:border-bottom", bottomBorder.saveFoBorder() );
+    }
+#endif
+
+#if 0
+    if ( pageBreaking & KoParagLayout::HardFrameBreakBefore )
+        gs.addProperty( "fo:break-before", "column" );
+    else if ( pageBreaking & KoParagLayout::HardFrameBreakAfter )
+        gs.addProperty( "fo:break-after", "column" );
+    if ( pageBreaking & KoParagLayout::KeepLinesTogether )
+        gs.addProperty( "fo:keep-together", "always" );
+    if ( pageBreaking & KoParagLayout::KeepWithNext )
+        gs.addProperty( "fo:keep-with-next", "always" );
+#endif
 }
 
 
@@ -551,6 +729,13 @@ void KWord13OasisGenerator::writeMetaXml(void)
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
 {
 #if 1
+    if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
+    {
+        kdWarning(30520) << "KWord Document is different!" <<endl;
+    }
+    
+    m_kwordDocument = &kwordDocument;
+    
     KoStore* m_store = KoStore::createStore( fileName, KoStore::Write, "application/vnd.sun.xml.writer", KoStore::Zip );
     if ( ! m_store )
     {

@@ -28,6 +28,7 @@ class QString;
 class QTextStream;
 class KZip;
 class KoStore;
+class KoGenStyle;
 class KWord13Document;
 
 class KWord13OasisGenerator
@@ -53,6 +54,9 @@ protected: // ZIP methods
     void writeStylesXml( void );
     void writeContentXml( void );
     void writeMetaXml( void );
+protected: // Preparing phase
+    double numberOrNull( const QString& str ) const;
+    void fillGenStyleWithLayout( KoGenStyle& gs, const bool style ) const;
 protected:
     KWord13Document* m_kwordDocument;
     KZip* m_zip; ///< Output OOWriter file
