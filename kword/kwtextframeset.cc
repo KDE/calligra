@@ -1669,8 +1669,8 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
 
 void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin ) {
     QTextDocument * textdoc = textDocument();
-    //kdDebug(32001) << "KWTextFrameSet::setMargin " << m << " to value " << margin.pt() << endl;
-    //kdDebug(32001) << "Current margin is " << static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() << endl;
+    //kdDebug(32001) << "KWTextFrameSet::setMargin " << m << " to value " << margin << endl;
+    //kdDebug(32001) << "Current margin is " << static_cast<KWTextParag *>(cursor->parag())->margin(m) << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
          static_cast<KWTextParag *>(cursor->parag())->margin(m) == margin )
         return; // No change needed.
@@ -1687,7 +1687,6 @@ void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m,
         undoRedoInfo.name = i18n("Change Paragraph Spacing");
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
         static_cast<KWTextParag *>(cursor->parag())->setMargin(m, margin);
-        emit repaintChanged( this );
     }
     else
     {
@@ -1696,9 +1695,9 @@ void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m,
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setMargin(m, margin);
-	emit repaintChanged( this );
-	formatMore();
     }
+    emit repaintChanged( this );
+    formatMore();
     undoRedoInfo.newParagLayout.margins[m] = margin;
     undoRedoInfo.clear();
     emit showCursor();
@@ -1759,7 +1758,6 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
       static_cast<KWTextParag *>(cursor->parag())->setRightBorder(rightBorder);
       static_cast<KWTextParag *>(cursor->parag())->setBottomBorder(bottomBorder);
       static_cast<KWTextParag *>(cursor->parag())->setTopBorder(topBorder);
-      emit repaintChanged( this );
     }
     else
     {
@@ -1778,9 +1776,9 @@ void KWTextFrameSet::setBorders( QTextCursor * cursor, Border leftBorder, Border
 	  }
 	static_cast<KWTextParag *>(end)->setBottomBorder(bottomBorder);
 	static_cast<KWTextParag *>(textDocument()->selectionStart( QTextDocument::Standard ))->setTopBorder(topBorder);
-	emit repaintChanged( this );
-	formatMore();
     }
+    formatMore();
+    emit repaintChanged( this );
     undoRedoInfo.newParagLayout.leftBorder=leftBorder;
     undoRedoInfo.newParagLayout.rightBorder=rightBorder;
     undoRedoInfo.newParagLayout.topBorder=topBorder;

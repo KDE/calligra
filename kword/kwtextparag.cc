@@ -80,7 +80,7 @@ Counter *KWTextParag::counter()
 
 void KWTextParag::setMargin( QStyleSheetItem::Margin m, double _i )
 {
-    //kdDebug() << "KWTextParag::setMargin " << m << " margin " << _i.pt() << endl;
+    //kdDebug() << "KWTextParag::setMargin " << m << " margin " << _i << endl;
     m_layout.margins[m] = _i;
     if ( m == QStyleSheetItem::MarginTop && prev() )
         prev()->invalidate(0);     // for top margin
@@ -117,6 +117,8 @@ void KWTextParag::setLinesTogether( bool b )
 void KWTextParag::setTopBorder( const Border & _brd )
 {
     m_layout.topBorder = _brd;
+    if ( prev() )
+        prev()->invalidate(0);     // for top margin
     invalidate(0);
 }
 
@@ -308,34 +310,44 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
          || m_layout.rightBorder.ptWidth > 0 )
     {
         KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-        int leftX = 0;
-        int rightX = documentWidth()-1;
-        int topY = lineY( 0 ); // Maybe this is always 0. Not sure.
+        int leftX = leftMargin();
+        int rightX = rect().width() - rightMargin() /*documentWidth()-1*/;
+        int topY = lineY( 0 ); // Maybe lineY( 0 ) is always 0. Not sure.
         int bottomY = static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing );
         //kdDebug() << "KWTextParag::paint bottomY=" << bottomY << endl;
         if ( m_layout.topBorder.ptWidth > 0 )
         {
-            int width = QMAX( 1, (int)(doc->zoomItY( m_layout.topBorder.ptWidth ) + 0.5) );
+            int width = QMAX( 1, (int)(doc->zoomItY( m_layout.topBorder.ptWidth ) /* + 0.5*/) );
+            // the rounding would need to be done in topMargin() etc. as well
+            // And the / 2 issue is due to the drawLine thing... so rounding doesn't matter much ?
+            //kdDebug() << "KWTextParag::paint topBorder " << width << endl;
             painter.setPen( Border::borderPen( m_layout.topBorder, width ) );
-            painter.drawLine( leftX, topY, rightX, topY );
+            width /= 2;
+            painter.drawLine( leftX-width*2, topY-width, rightX+width*2, topY-width );
         }
         if ( m_layout.bottomBorder.ptWidth > 0 )
         {
-            int width = QMAX( 1, (int)(doc->zoomItY( m_layout.bottomBorder.ptWidth ) + 0.5) );
+            int width = QMAX( 1, (int)(doc->zoomItY( m_layout.bottomBorder.ptWidth ) /*+ 0.5*/) );
+            //kdDebug() << "KWTextParag::paint bottomBorder " << width << endl;
             painter.setPen( Border::borderPen( m_layout.bottomBorder, width ) );
-            painter.drawLine( leftX, bottomY, rightX, bottomY );
+            width /= 2;
+            painter.drawLine( leftX-width*2, bottomY+width, rightX+width*2, bottomY+width );
         }
         if ( m_layout.leftBorder.ptWidth > 0 )
         {
-            int width = QMAX( 1, (int)(doc->zoomItX( m_layout.leftBorder.ptWidth ) + 0.5) );
+            int width = QMAX( 1, (int)(doc->zoomItX( m_layout.leftBorder.ptWidth ) /*+ 0.5*/) );
+            //kdDebug() << "KWTextParag::paint leftBorder " << width << endl;
             painter.setPen( Border::borderPen( m_layout.leftBorder, width ) );
-            painter.drawLine( leftX, topY, leftX, bottomY );
+            width /= 2;
+            painter.drawLine( leftX-width, topY-width*2, leftX-width, bottomY+width*2 );
         }
         if ( m_layout.rightBorder.ptWidth > 0 )
         {
-            int width = QMAX( 1, (int)(doc->zoomItX( m_layout.rightBorder.ptWidth ) + 0.5) );
+            int width = QMAX( 1, (int)(doc->zoomItX( m_layout.rightBorder.ptWidth ) /*+ 0.5*/) );
+            //kdDebug() << "KWTextParag::paint rightBorder " << width << endl;
             painter.setPen( Border::borderPen( m_layout.rightBorder, width ) );
-            painter.drawLine( rightX, topY, rightX, bottomY );
+            width /= 2;
+            painter.drawLine( rightX+width, topY-width*2, rightX+width, bottomY+width*2 );
         }
     }
 }
@@ -837,6 +849,10 @@ void KWTextParag::printRTDebug( int info )
         if ( counter() )
             kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << " text=" << m_layout.counter->text( this ) << " width=" << m_layout.counter->width( this ) << endl;
         kdDebug() << "rect() : " << DEBUGRECT( rect() ) << endl;
+
+        kdDebug() << "topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
+                  << " leftMargin()=" << leftMargin() << " rightMargin()=" << rightMargin() << endl;
+
     } else if ( info == 1 ) // formatting info
     {
         kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()

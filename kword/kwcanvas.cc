@@ -230,6 +230,7 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
         case Key_End:
             setContentsPos( contentsX(), contentsHeight() - visibleHeight() );
             break;
+        // missing: Copy ... well selection isn't possible either currently
         default:
             break;
             m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
