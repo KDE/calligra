@@ -192,6 +192,7 @@ Note that transparent images do not print properly with the current Qt, Qt 3.1 w
 - Fixed paragraph height increasing when inserting a footnote.
 - Fixed the white lines during the painting of inline frames
 - Fixed footer layout in some first/even/odd footer settings
+- Zigzag lines for background checked words
 
 Bugfixes:
 - Several fixes for the readonly case
