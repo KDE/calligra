@@ -2441,31 +2441,35 @@ void KWView::insertContents()
 
 void KWView::formatFont()
 {
-    //kdDebug(32002) << "KWView::formatFont" << endl;
-    KWTextFrameSetEdit *edit = currentTextEdit();
-    if (edit)
+    //kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() )
+        return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    QColor col=lst.first()->textBackgroundColor();
+    col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+    KoFontDia *fontDia = new KoFontDia( this, "", lst.first()->textFont(),
+                                        actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
+                                        lst.first()->textColor(), col );
+    fontDia->exec();
+    int flags = fontDia->changedFlags();
+    if ( flags )
     {
-        QColor col=edit->textBackgroundColor();
-        col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-        KoFontDia *fontDia = new KoFontDia( this, "", edit->textFont(),
-                                            actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
-                                            edit->textColor(), col );
-        fontDia->exec();
-        int flags = fontDia->changedFlags();
-        kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
-        if ( flags )
+        KMacroCommand *globalCmd = new KMacroCommand(i18n("Change font of frame"));
+        for ( ; it.current() ; ++it )
         {
-            // The "change all the format" call
-            KCommand* cmd = edit->setFontCommand(fontDia->getNewFont(),
-                                                 fontDia->getSubScript(), fontDia->getSuperScript(),
-                                                 fontDia->color(),fontDia->backGroundColor(),
-                                                 flags);
-            if( cmd)
-                m_doc->addCommand( cmd );
+            KCommand *cmd = it.current()->setFontCommand(fontDia->getNewFont(),
+                                                         fontDia->getSubScript(), fontDia->getSuperScript(),
+                                                         fontDia->color(),fontDia->backGroundColor(),
+                                                         flags);
+            if (cmd)
+                globalCmd->addCommand(cmd);
         }
-
-        delete fontDia;
+        m_doc->addCommand(globalCmd);
+        m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
     }
+    delete fontDia;
+
     m_gui->canvasWidget()->setFocus();
 }
 
