@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2001 Lukas Tinkl <lukas@kde.org>
+   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -67,26 +68,40 @@ public:
 protected:
     void maybeTip( const QPoint &pos )
     {
+        return; // FIXME always crash ! (ariya)
         QString title;
-        QRect r(((Outline*)parentWidget())->tip(pos, title));
+        Outline* outline = dynamic_cast<Outline*>(parentWidget());
+        QRect r( outline->tip(pos, title) );
         if (!r.isValid())
             return;
-
         tip(r, title);
     }
 };
 
-class OutlineItem: public QCheckListItem
+class OutlineSlideItem: public KListViewItem
 {
 public:
-    OutlineItem( QListView * parent )
-     : QCheckListItem( parent, QString::null, QCheckListItem::CheckBox )
-     {}
+    OutlineSlideItem( KListView * parent, KPrPage* page );
 
-    virtual void stateChange(bool b)
-    {
-        static_cast<Outline*>(listView())->itemStateChange( this, b );
-    }
+    KPrPage* page(){ return m_page; }
+    
+    void setPage( KPrPage* p );
+    
+    void update();
+    
+private:
+    KPrPage* m_page;
+};
+
+class OutlineObjectItem: public KListViewItem
+{
+public:
+    OutlineObjectItem( OutlineSlideItem * parent, KPObject* object );
+     
+    KPObject* object(){ return m_object; }
+    
+private:
+    KPObject* m_object;
 };
 
 class ThumbItem : public QIconViewItem
@@ -510,6 +525,98 @@ void ThumbBar::slotRefreshItems()
     refreshItems();
 }
 
+OutlineSlideItem::OutlineSlideItem( KListView* parent, KPrPage* _page )
+    : KListViewItem( parent ), m_page( _page )
+{
+    setPage( _page );
+    setPixmap( 0, KPBarIcon( "newslide" ) );
+}
+
+void OutlineSlideItem::setPage( KPrPage* p )
+{
+    if( !p ) return;   
+    m_page = p;
+    update();
+}
+
+void OutlineSlideItem::update()
+{
+    if( !m_page ) return;
+    int index = m_page->kPresenterDoc()->pageList().find( m_page );
+    QString title = m_page->pageTitle( i18n( "Slide %1" ).arg( index + 1 ) );
+    if (title.length() > 12) // restrict to a maximum of 12 characters
+        title = title.left(5) + "..." + title.right(4);
+    setText( 0, title );
+}
+
+
+OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _object )
+    : KListViewItem( parent ), m_object( _object )
+{
+    QString name = m_object->getTypeString();
+    setText( 0, name );
+    
+    switch ( m_object->getType() ) {
+    case OT_PICTURE:
+      setPixmap( 0, KPBarIcon( "frame_image" ) );
+      break;
+    case OT_LINE:
+      setPixmap( 0, KPBarIcon( "mini_line" ) );
+      break;
+    case OT_RECT:
+      setPixmap( 0, KPBarIcon( "mini_rect" ) );
+      break;
+    case OT_ELLIPSE:
+      setPixmap( 0, KPBarIcon( "mini_circle" ) );
+      break;
+    case OT_TEXT:
+      setPixmap( 0, KPBarIcon( "frame_text" ) );
+      break;
+    case OT_AUTOFORM:
+      setPixmap( 0, KPBarIcon( "mini_autoform" ) );
+      break;
+    case OT_CLIPART:
+      setPixmap( 0, KPBarIcon( "mini_clipart" ) );
+      break;
+    case OT_PIE:
+      setPixmap( 0, KPBarIcon( "mini_pie" ) );
+      break;
+    case OT_PART:
+      setPixmap( 0, KPBarIcon( "frame_query" ) );
+      break;
+    case OT_FREEHAND:
+      setPixmap( 0, KPBarIcon( "freehand" ) );
+      break;
+    case OT_POLYLINE:
+      setPixmap( 0, KPBarIcon( "polyline" ) );
+      break;
+    case OT_QUADRICBEZIERCURVE:
+      setPixmap( 0, KPBarIcon( "quadricbeziercurve" ) );
+      break;
+    case OT_CUBICBEZIERCURVE:
+      setPixmap( 0, KPBarIcon( "cubicbeziercurve" ) );
+      break;
+    case OT_POLYGON:
+      setPixmap( 0, KPBarIcon( "mini_polygon" ) );
+      break;
+    case OT_CLOSED_LINE: {
+        if ( name == i18n( "Closed Freehand" ) )
+            setPixmap( 0, KPBarIcon( "closed_freehand" ) );
+        else if ( name == i18n( "Closed Polyline" ) )
+            setPixmap( 0, KPBarIcon( "closed_polyline" ) );
+        else if ( name == i18n( "Closed Quadric Bezier Curve" ) )
+            setPixmap( 0, KPBarIcon( "closed_quadricbeziercurve" ) );
+        else if ( name == i18n( "Closed Cubic Bezier Curve" ) )
+            setPixmap( 0, KPBarIcon( "closed_cubicbeziercurve" ) );
+    } break;
+    case OT_GROUP:
+      setPixmap( 0, KPBarIcon( "group" ) );
+      break;
+    default:
+      break;
+    }  
+}
+
 Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     : KListView( parent ), doc( d ), view( v )
 {
@@ -517,7 +624,6 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     setSorting( -1 );
     header()->hide();
     addColumn( i18n( "Slide" ) );
-    addColumn( i18n( "Number" ) );
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
     outlineTip = new OutlineToolTip(this);
@@ -531,9 +637,10 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     connect( this, SIGNAL( doubleClicked ( QListViewItem * )),
              this, SLOT(renamePageTitle()));
 
-    setAcceptDrops( TRUE );
-    setDropVisualizer( TRUE );
-    setDragEnabled( TRUE );
+    setAcceptDrops( true );
+    setDropVisualizer( true );
+    setDragEnabled( true );
+    this->setRootIsDecorated( true );
 
 }
 
@@ -545,42 +652,49 @@ Outline::~Outline()
 void Outline::rebuildItems()
 {
     clear();
+
     // Rebuild all the items
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-        QCheckListItem *item = new OutlineItem( this );
-        QString title = doc->pageList().at(i)->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) );
-        //kdDebug(33001) << "Outline::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
-        item->setOn( doc->isSlideSelected( i ) ); // calls itemStateChange !
-        item->setText( 1, QString::number( i + 1 ) ); // page number
-        if (title.length() > 12) // restrict to a maximum of 12 characters
-            item->setText(0, title.left(5) + "..." + title.right(4));
-        else
-            item->setText( 0, title );
+
+        KPrPage *page=doc->pageList().at( i );
+        OutlineSlideItem *item = new OutlineSlideItem( this, page );
+
+        // add all objects        
+        QPtrList<KPObject> list(page->objectList());
+        for ( int j = page->objNums() - 1; j >= 0; --j ) {
+            KPObject* object = list.at( j );
+            new OutlineObjectItem( item, object );
+        }
+
+        // add sticky objects
+        QPtrListIterator<KPObject> it( doc->stickyPage()->objectList() );
+        for ( ; it.current() ; ++it )
+        {
+            KPObject* object = it.current();
+            new OutlineObjectItem( item, object );
+        }
+
+
     }
 }
 
-// update the Outline item, the title my have changed
+// update the Outline item, the title may have changed
 void Outline::updateItem( int pagenr /* 0-based */)
 {
-    // Find item
+    KPrPage* page = doc->pageList().at(pagenr);
+    if( !page ) return;
+    
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
     {
-        if ( it.current()->text(1).toInt() == pagenr+1 )
-        {
-            QString title = doc->pageList().at(pagenr)->pageTitle( i18n( "Slide %1" ).arg( pagenr + 1 ) );
-            if (title.length() > 12) // restrict to a maximum of 12 characters
-                it.current()->setText( 0, title.left(5) + "..." + title.right(4));
-            else
-                it.current()->setText( 0, title );
-
-            it.current()->setText( 1, QString::null ); // hack, to make itemStateChange do nothing
-            static_cast<OutlineItem*>(it.current())->setOn( doc->isSlideSelected( pagenr ) );
-            it.current()->setText( 1, QString::number( pagenr + 1 ) ); // page number
-            return;
-        }
+        OutlineSlideItem *slideItem = dynamic_cast<OutlineSlideItem*>( it.current() );
+        if( slideItem )
+            if( slideItem->page() == page )
+            {
+                slideItem->update();
+                return;
+            }
     }
-    kdWarning() << "Item for page " << pagenr << " not found" << endl;
 }
 
 void Outline::addItem( int /*pos*/ )
@@ -607,8 +721,6 @@ void Outline::moveItem( int oldPos, int newPos )
             else
                 it.current()->setText( 0, title );
 
-            it.current()->setText( 1, QString::null ); // hack, to make itemStateChange do nothing
-            static_cast<OutlineItem*>(it.current())->setOn( doc->isSlideSelected( page ) );
             it.current()->setText( 1, QString::number( page + 1 ) ); // page number
             if ( page == highPage )
                 return;
@@ -644,13 +756,6 @@ void Outline::removeItem( int pos )
     }
 }
 
-void Outline::itemStateChange( OutlineItem * item, bool state )
-{
-    QString text = item->text( 1 );
-    if ( !text.isEmpty() ) // empty if we are called from rebuildItems
-        emit selectPage( text.toInt() - 1, state );
-}
-
 QRect Outline::tip(const QPoint &pos, QString &title)
 {
     QListViewItem *item = itemAt( pos );
@@ -663,13 +768,34 @@ QRect Outline::tip(const QPoint &pos, QString &title)
     return itemRect(item);
 }
 
-void Outline::itemClicked( QListViewItem *i )
+void Outline::itemClicked( QListViewItem *item )
 {
-    if ( !i )
-        return;
-    emit showPage( i->text( 1 ).toInt() - 1 );
+    if( !item ) return;
+    
+    OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
+    if( slideItem )
+    {
+        KPrPage* page = slideItem->page();
+        if( !page ) return;
+        int index = page->kPresenterDoc()->pageList().find( page );
+        emit showPage( index );
+    }    
+    
+    OutlineObjectItem* objectItem = dynamic_cast<OutlineObjectItem*>(item);
+    if( objectItem )
+    {
+        KPObject *object = objectItem->object();
+        if( !object ) return;
+        QRect rect( doc->zoomHandler()->zoomRect( object->getBoundingRect() ) );
+        object->setSelected( true );
+        doc->repaint( object );
+        rect.setLeft( rect.left() - 20 );
+        rect.setTop( rect.top() - 20 );
+        rect.setRight( rect.right() + 20 );
+        rect.setBottom( rect.bottom() + 20 );
+        view->makeRectVisible( rect );
+    }    
 }
-
 
 void Outline::setCurrentPage( int pg )
 {
@@ -683,15 +809,8 @@ void Outline::setCurrentPage( int pg )
     }
 }
 
-void Outline::setOn( int pg, bool on )
+void Outline::setOn( int , bool )
 {
-    QListViewItemIterator it( this );
-    for ( ; it.current(); ++it ) {
-        if ( it.current()->text( 1 ).toInt() - 1 == pg ) {
-            ( (QCheckListItem*)it.current() )->setOn( on );
-            return;
-        }
-    }
 }
 
 void Outline::contentsDropEvent( QDropEvent *e )
@@ -729,21 +848,32 @@ void Outline::doMoveItems()
 
 void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
 {
-    if ( !selectedItem() || !doc->isReadWrite())
-        return;
+    if ( !doc->isReadWrite()) return;
+
+    QListViewItem *item = QListView::selectedItem();
+    if( !item ) return;
+    
+    OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
+    if( !slideItem ) return;
+    
     view->openPopupMenuSideBar(pnt);
 }
 
 void Outline::renamePageTitle()
 {
     QListViewItem *item = QListView::selectedItem();
-    if ( !item )
-        return;
-
-    int pageNumber = item->text( 1 ).toInt() - 1;
-    bool ok;
-    QString activeTitle = doc->pageList().at( pageNumber )->pageTitle( i18n( "Slide %1" ).arg( pageNumber + 1 ) );
-    QString newTitle = KLineEditDlg::getText( i18n("Rename Page"),i18n("Page title:"), activeTitle, &ok, this );
+    if( !item ) return;
+    
+    OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
+    if( !slideItem ) return;
+    
+    KPrPage* page = slideItem->page();
+    if( !page ) return;
+    
+    bool ok = false;
+    QString activeTitle = item->text( 0 );
+    QString newTitle = KLineEditDlg::getText( i18n("Rename Page"),
+        i18n("Page title:"), activeTitle, &ok, this );
 
     // Have a different name ?
     if ( ok ) { // User pushed an OK button.
@@ -755,7 +885,7 @@ void Outline::renamePageTitle()
         }
         else if ( newTitle != activeTitle ) { // Title changed.
             KPresenterDoc *doc=view->kPresenterDoc();
-            KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Page"),doc, activeTitle, newTitle,doc->pageList().at(pageNumber)  );
+            KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Page"),doc, activeTitle, newTitle, page  );
             cmd->execute();
             doc->addCommand(cmd);
         }
