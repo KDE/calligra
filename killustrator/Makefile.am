@@ -6,11 +6,9 @@ SUBDIRS = share filter xmlutils standalone koffice pics doc
 AUTOMAKE_OPTIONS = foreign
 
 # only Tom may know, why make dist forgets configure
-EXTRA_DIST = README kil.dtd killustrator.lsm configure
+# myown_dist lists some more files when a standalone package
+EXTRA_DIST = README kil.dtd killustrator.lsm $(myown_dist)
 
 messages:
 	$(XGETTEXT) -C -ktranslate -ki18n -x$(includedir)/kde.pot */*.cc && mv messages.po ../po/killustrator.pot
-
-dist-hook:
-	cd $(top_distdir) && perl $(top_srcdir)/admin/am_edit -padmin 
 

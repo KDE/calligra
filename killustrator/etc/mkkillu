@@ -4,7 +4,7 @@ make acinclude.m4
 rm -rf killustrator.dist
 cp -rp killustrator killustrator.dist
 rm -rf killustrator.dist/etc killustrator.dist/koffice
-cp -p admin/install-sh admin/ltmain.sh admin/ltconfig admin/missing admin/mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL admin/config.guess admin/config.sub admin/am_edit killustrator.dist
+cp -p admin/install-sh admin/ltmain.sh admin/ltconfig admin/missing admin/mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL killustrator/kil.dtd admin/config.guess admin/config.sub admin/am_edit killustrator.dist
 mkdir killustrator.dist/po
 cp -p ../kde-i18n/templates/koffice/killustrator.pot killustrator.dist/po
 cp -p killustrator/etc/po_Makefile.am killustrator.dist/po/Makefile.am
@@ -22,15 +22,19 @@ for i in killustrator.dist/Makefile*; do
 done
 
 cd killustrator.dist
-find . -name \".deps\" -exec rm -rf {} \; 
-find . -name CVS -exec rm -rf {} \; 
-find . -name ".cvsignore" -exec rm -f {} \; 
+find . -name \".deps\" | xargs rm -rf  
+find . -name CVS | xargs rm -rf  
+find . -name ".cvsignore" | xargs rm -f  
 
 sed -e "s#@GMOFILES@#$list#" po/Makefile.am > po/Makefile.am.new && mv po/Makefile.am.new po/Makefile.am
-make -k maintainer-clean || rm config.cache
+echo 'dist-hook:' >> Makefile.am
+echo "\tcd \$(top_distdir) && perl \$(top_srcdir)/am_edit" >> Makefile.am
+echo "" >> Makefile.am
+echo "myown_dist = am_edit" >> Makefile.am
 aclocal
 autoheader
 automake
+perl am_edit 
 autoconf
 
 # if the following fails, try it by hand.
