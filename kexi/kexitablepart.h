@@ -45,13 +45,7 @@ class KexiTablePart : public KexiProjectPart
 		QPixmap				groupPixmap();
 		QPixmap				itemPixmap();
 
-		ItemList			*items();
-
 		void				getTables();
-
-	private:
-		KexiProject			*m_project;
-		ItemList			*m_items;
 
 	public slots:
 		void				slotCreate();

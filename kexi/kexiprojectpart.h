@@ -67,17 +67,19 @@ class KexiProjectPart : public QObject
 		virtual QPixmap			groupPixmap() = 0;
 		virtual QPixmap			itemPixmap() = 0;
 
-		virtual ItemList		*items() = 0;
+		virtual ItemList		*items();
 		
 		void setCurrentView(KexiView* view) { m_currentView = view; }
 		KexiView* currentView() { return m_currentView; }
+		KexiProject* project() { return m_project; }
 
 	signals:
 		void				itemListChanged(KexiProjectPart*);
 		
 	protected:
 		KexiView* m_currentView;
-		
+		ItemList* m_items;
+		KexiProject* m_project;
 };
 
 #endif

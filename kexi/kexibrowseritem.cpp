@@ -109,7 +109,7 @@ KexiBrowserItem::clearChildren()
 {
 	KexiBrowserItem* child;
 	
-	while(child = firstChild())
+	while(child = static_cast<KexiBrowserItem*>(firstChild()))
 	{
 		delete child;
 	}

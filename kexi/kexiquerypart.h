@@ -44,8 +44,14 @@ class KexiQueryPart : public KexiProjectPart
 
 		QPixmap				groupPixmap();
 		QPixmap				itemPixmap();
-
-		ItemList			*items();
+	
+	protected:
+		void				 getQueries();
+	
+	protected slots:
+		void				slotCreateQuery();
+		void				slotOpen(QString identifier);
+		void				slotDelete(QString identifier);
 
 	signals:
 		void				itemListChanged(KexiProjectPart*);

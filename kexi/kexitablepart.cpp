@@ -37,9 +37,6 @@ KexiTablePart::KexiTablePart(KexiProject *project)
 {
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 
-	m_project = project;
-	m_items = new ItemList();
-
 	getTables();
 }
 
@@ -99,13 +96,6 @@ KexiTablePart::itemTemplate()
 	return 0;
 }
 */
-
-ItemList*
-KexiTablePart::items()
-{
-	return m_items;
-}
-
 
 QPixmap
 KexiTablePart::groupPixmap()

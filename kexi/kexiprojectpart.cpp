@@ -23,9 +23,23 @@ KexiProjectPart::KexiProjectPart(KexiProject *project)
  : QObject(project)
 {
 	m_currentView = 0;
+	m_items = new ItemList();
 	
 	if(project)
+	{
 		project->registerProjectPart(this);
+		m_project = project;
+	}
+	else
+	{
+		m_project = 0;
+	}
+}
+
+ItemList*
+KexiProjectPart::items()
+{
+	return m_items;
 }
 
 #include "kexiprojectpart.moc"
