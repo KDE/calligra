@@ -3,6 +3,7 @@
 
 #include <handlers.h>
 #include <qstring.h>
+#include <qcolor.h>
 #include <qdom.h>
 
 #include <string>
@@ -36,6 +37,7 @@ public:
 private:
     QString getFont(unsigned fc) const;
     void writeOutParagraph( const QString& styleName, const QString& text );
+    QColor colorForNumber(int number, int defaultcolor, bool defaultWhite = false);
 
     QString m_paragraph;
     QDomDocument& m_mainDocument;

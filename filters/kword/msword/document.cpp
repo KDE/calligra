@@ -72,10 +72,16 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
     // (not if different from 'plain text')
     // This is also why the code below seems to test stuff twice ;)
 
-    // TODO: COLOR  .... see chp.ico where to put the conversion code? here or in wv2?
+    QColor color = colorForNumber( chp->ico, -1 );
+    QDomElement colorElem( m_mainDocument.createElement( "COLOR" ) );
+    colorElem.setAttribute( "red", color.red() );
+    colorElem.setAttribute( "blue", color.blue() );
+    colorElem.setAttribute( "green", color.green() );
+    format.appendChild( colorElem );
 
     // Font name
-    QString fontName = getFont( chp->ftc );
+    // TBD: We only use the Ascii font code. We should work out how/when to use the FE and Other font codes.
+    QString fontName = getFont( chp->ftcAscii );
 
     if ( !fontName.isEmpty() )
     {
@@ -228,6 +234,54 @@ QString Document::getFont(unsigned fc) const
 #endif
 
     return info.family();
+}
+
+QColor Document::colorForNumber(int number, int defaultcolor, bool defaultWhite)
+{
+    switch(number)
+    {
+	case 0:
+	    if(defaultWhite)
+		return QColor("white");
+	case 1:
+	    return QColor("black");
+	case 2:
+	    return QColor("blue");
+	case 3:
+	    return QColor("cyan");
+	case 4:
+	    return QColor("green");
+	case 5:
+	    return QColor("magenta");
+	case 6:
+	    return QColor("red");
+	case 7:
+	    return QColor("yellow");
+	case 8:
+	    return QColor("white");
+	case 9:
+	    return QColor("darkBlue");
+	case 10:
+	    return QColor("darkCyan");
+	case 11:
+	    return QColor("darkGreen");
+	case 12:
+	    return QColor("darkMagenta");
+	case 13:
+	    return QColor("darkRed");
+	case 14:
+	    return QColor("darkYellow");
+	case 15:
+	    return QColor("darkGray");
+	case 16:
+	    return QColor("lightGray");
+
+	default:
+	    if(defaultcolor == -1)
+		return QColor("black");
+	    else
+		return colorForNumber(defaultcolor, -1);
+    }
 }
 
 void Document::pageBreak()
