@@ -22,7 +22,6 @@
 #include "kwcanvas.h"
 #include "kwframe.h"
 #include "kwgroupmanager.h"
-#include "kwtextparag.h"
 #include "defs.h"
 #include "kwutils.h"
 #include "resizehandles.h"
@@ -30,24 +29,6 @@
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
 #include <kformulaview.h>
-#include <koPageLayoutDia.h>
-
-#include <fstream>
-#include <unistd.h>
-#include <limits.h>
-
-#include <qpicture.h>
-#include <qvaluelist.h>
-#include <qwidget.h>
-#include <qpixmap.h>
-#include <qfile.h>
-#include <qscrollview.h>
-#include <qarray.h>
-#include <qfile.h>
-#include <qpalette.h>
-
-#include <koFrame.h>
-#include <assert.h>
 
 #include <kdebug.h>
 
@@ -444,7 +425,8 @@ void KWFrameSet::updateFrames()
             }
         }
     }
-    //kdDebug() << "KWTextFrameSet::updateFrames frame on top:" << m_framesOnTop.count() << endl;
+    //kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
+    //               << m_framesOnTop.count() << endl;
 }
 
 /*================================================================*/
