@@ -1295,11 +1295,32 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &,
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
-    QSize s ( kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ) );
+    QSize screenSize ( kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ) );
 
-    if ( s != m_image.image().size() )
-        m_image = m_image.scale( s );
-    painter->drawPixmap( 0, 0, m_image.pixmap() );
+    bool scaleImage =  painter->device()->isExtDev()
+                      && ( m_image.size().width()<m_image.originalSize().width()
+                           || m_image.size().height()<m_image.originalSize().height() );
+    if( scaleImage ) {
+        if( m_image.size().width()>0 && m_image.size().height()>0 ) {
+
+            // use full resolution of image
+            double xScale = double(screenSize.width())/m_image.originalSize().width();
+            double yScale = double(screenSize.height())/m_image.originalSize().height();
+
+            if( xScale>0 && yScale>0 ) {
+                m_image = m_image.scale( m_image.originalSize() );
+                painter->scale( xScale, yScale );
+                painter->drawPixmap( 0, 0, m_image.pixmap() );
+                painter->scale( 1/xScale, 1/yScale );
+            }
+
+        }
+    } else {
+        if ( screenSize!=m_image.image().size() )
+            m_image = m_image.scale( screenSize );
+        painter->drawPixmap( 0, 0, m_image.pixmap() );
+    }
+
 }
 
 /******************************************************************/
