@@ -692,10 +692,6 @@ const QRect &GObject::boundingRect() const {
 
 GObject::GObject(const QString &name) : m_name(name), m_state(Visible), m_parent(0L),
     m_angle(0.0), m_boundingRectDirty(true), m_fillStyle(Brush), m_ok(true), m_dirty(false) {
-
-    m_gradient.type=KImageEffect::VerticalGradient;
-    m_gradient.xfactor=1;
-    m_gradient.yfactor=1;
 }
 
 GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
@@ -772,22 +768,13 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty
             if(!ok)
                 m_gradient.yfactor=1;
         }
-        else {
-            m_gradient.type=KImageEffect::VerticalGradient;
-            m_gradient.xfactor=1;
-            m_gradient.yfactor=1;
-        }
 
         QDomElement pen=format.namedItem(tagPen).toElement();
         if(!pen.isNull())
             m_pen=GraphiteGlobal::self()->toPen(pen);
     }
-    else {
+    else
         m_fillStyle=Brush;
-        m_gradient.type=KImageEffect::VerticalGradient;
-        m_gradient.xfactor=1;
-        m_gradient.yfactor=1;
-    }
     m_ok=true;   // CTOR has been completed successfully :)
 }
 

@@ -34,6 +34,7 @@ class FxRect;
 // This struct holds all the necessary information needed to represent
 // a KDE gradient
 struct Gradient {
+    Gradient() : type(KImageEffect::VerticalGradient), xfactor(1), yfactor(1) {}
     QColor ca;
     QColor cb;
     KImageEffect::GradientType type;
@@ -84,13 +85,13 @@ const double normalizeDeg(const double &deg);
 
 void rotatePoint(int &x, int &y, const double &angle, const QPoint &center);
 void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center);
-void rotatePoint(double &x, double &y, const double &angle, const QPoint &center);
+void rotatePoint(double &x, double &y, const double &angle, const double &cx, const double &cy);
 void rotatePoint(QPoint &p, const double &angle, const QPoint &center);
 void rotatePoint(FxPoint &p, const double &angle, const FxPoint &center);
 
 void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor, const QPoint &center);
 void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor, const double &yfactor, const QPoint &center);
-void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor, const QPoint &center);
+void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor, const double &cx, const double &cy);
 void scalePoint(QPoint &p, const double &xfactor, const double &yfactor, const QPoint &center);
 void scalePoint(FxPoint &p, const double &xfactor, const double &yfactor, const FxPoint &center);
 
@@ -115,7 +116,7 @@ const short pageHeight[]={ 297, 257, 279, 356, 254, 1189, 841, 594,
 // page borders in mm
 struct PageBorders {
     // ### Initialize w/ real values
-    PageBorders() : left(10.0), top(20.0), right(30.0), bottom(40.0) {}
+    PageBorders() : left(10.0), top(10.0), right(10.0), bottom(10.0) {}
     PageBorders &operator=(const PageBorders &rhs);
     double left;
     double top;
@@ -127,7 +128,6 @@ bool operator==(const PageBorders &lhs, const PageBorders &rhs);
 bool operator!=(const PageBorders &lhs, const PageBorders &rhs);
 
 struct PageLayout {
-    // ### read the defaults from a KConfig object
     PageLayout() : orientation(QPrinter::Portrait), layout(Norm),
         size(QPrinter::A4), customWidth(-1.0), customHeight(-1.0) {}
     PageLayout &operator=(const PageLayout &rhs);

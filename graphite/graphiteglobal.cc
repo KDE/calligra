@@ -405,13 +405,13 @@ QRect GraphiteGlobal::toQRect(const QDomElement &element) const {
     static const QString &attrHeight=KGlobal::staticQString("height");
 
     if(element.hasAttribute(attrX))
-        rect.setTop(element.attribute(attrX).toInt());
+        rect.setLeft(element.attribute(attrX).toInt());
     if(element.hasAttribute(attrY))
         rect.setTop(element.attribute(attrY).toInt());
     if(element.hasAttribute(attrWidth))
-        rect.setTop(element.attribute(attrWidth).toInt());
+        rect.setWidth(element.attribute(attrWidth).toInt());
     if(element.hasAttribute(attrHeight))
-        rect.setTop(element.attribute(attrHeight).toInt());
+        rect.setHeight(element.attribute(attrHeight).toInt());
     return rect;
 }
 
@@ -440,13 +440,13 @@ FxRect GraphiteGlobal::toFxRect(const QDomElement &element) const {
     static const QString &attrHeight=KGlobal::staticQString("height");
 
     if(element.hasAttribute(attrX))
-        rect.setTop(element.attribute(attrX).toDouble());
+        rect.setLeft(element.attribute(attrX).toDouble());
     if(element.hasAttribute(attrY))
         rect.setTop(element.attribute(attrY).toDouble());
     if(element.hasAttribute(attrWidth))
-        rect.setTop(element.attribute(attrWidth).toDouble());
+        rect.setWidth(element.attribute(attrWidth).toDouble());
     if(element.hasAttribute(attrHeight))
-        rect.setTop(element.attribute(attrHeight).toDouble());
+        rect.setHeight(element.attribute(attrHeight).toDouble());
     return rect;
 }
 

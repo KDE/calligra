@@ -3,7 +3,7 @@
 # with the correct output
 
 # This array holds the programs we should test.
-@programs = ("fxtest");
+@programs = ("fxtest", "macros");
 $failed=0;
 $passed=0;
 
