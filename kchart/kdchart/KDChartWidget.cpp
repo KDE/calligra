@@ -188,3 +188,4 @@ bool KDChartWidget::isActiveData() const
 {
     return _activeData;
 }
+#include "KDChartWidget.moc"

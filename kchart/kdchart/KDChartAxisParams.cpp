@@ -38,3 +38,4 @@ KDChartAxisParams::~KDChartAxisParams()
     // Intentionally left blank for now.
 }
 
+#include "KDChartAxisParams.moc"

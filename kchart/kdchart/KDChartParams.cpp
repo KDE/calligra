@@ -2569,3 +2569,4 @@ static Qt::PenStyle stringToPenStyle( const QString& style )
     else // should not happen
         return Qt::SolidLine;
 }
+#include "KDChartParams.moc"
