@@ -2,7 +2,12 @@
 [KDE Desktop Entry]
 MimeType=application/x-kpresenter
 Comment=KPresenter
+Comment[eo]=Prezentanto
+Comment[et]=KPresener
+Comment[hu]=KElõadó
+Comment[mi]=KElõadó
+Comment[sv]=Presentation
 DefaultApp=KPresenter
 Icon=kpresenter
 Type=MimeType
-Patterns=*.kpr;
+Patterns=*.kpr;*.kpt;
