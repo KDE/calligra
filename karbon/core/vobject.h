@@ -54,7 +54,7 @@ public:
 		edit          = 6	/// visible, active and is currently manipulated by a tool
 	};
 
-	VObject( VObject* parent, VState state = normal );
+	VObject( VObject* parent, VState state = edit );
 	VObject( const VObject& obj );
 
 	virtual ~VObject();

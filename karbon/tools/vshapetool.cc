@@ -51,28 +51,46 @@ void
 VShapeTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-	/*QWMatrix mat;
-	mat.scale( 1, -1 );
-	mat.translate( -view()->canvasWidget()->contentsX(),
-					view()->canvasWidget()->contentsY() - view()->canvasWidget()->contentsHeight() );
-	painter->setWorldMatrix( mat );*/
 	view()->canvasWidget()->setYMirroring( true );
-	
 
 	VPath* path = shape();
-	path->setState( VObject::edit );
 	path->draw( painter, path->boundingBox() );
 	delete( path );
 }
 
 void
-VShapeTool::mouseButtonPress( const KoPoint & )
+VShapeTool::mouseButtonPress( const KoPoint& /*current*/ )
 {
 	recalc();
+
+	// Draw new object:
+	draw();
 }
 
 void
-VShapeTool::mouseDrag( const KoPoint& current )
+VShapeTool::mouseButtonRelease( const KoPoint& /*current*/ )
+{
+	recalc();
+
+	VPath* path = shape( true );
+
+	if( path )
+	{
+		VShapeCmd* cmd = new VShapeCmd(
+			&view()->part()->document(),
+			name(),
+			path );
+
+		view()->part()->addCommand( cmd, true );
+		view()->selectionChanged();
+	}
+
+	m_isSquare = false;
+	m_isCentered = false;
+}
+
+void
+VShapeTool::mouseDrag( const KoPoint& /*current*/ )
 {
 	// Erase old object:
 	draw();
@@ -86,15 +104,12 @@ VShapeTool::mouseDrag( const KoPoint& current )
 void
 VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
 {
-	// Erase old object:
-	//draw();
-
 	recalc();
 
 	VShapeCmd* cmd = new VShapeCmd(
 		&view()->part()->document(),
 		name(),
-		shape( true ) );
+		shape() );
 
 	view()->part()->addCommand( cmd, true );
 	view()->selectionChanged();

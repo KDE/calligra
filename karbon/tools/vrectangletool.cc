@@ -49,7 +49,7 @@ void VRectangleTool::refreshUnit()
 VPath*
 VRectangleTool::shape( bool interactive ) const
 {
-	if( interactive && m_d1 <= 1.0 && m_d2 <= 1.0 )
+	if( interactive )
 	{
 		if( m_dialog->exec() )
 			return

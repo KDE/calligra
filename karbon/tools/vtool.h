@@ -56,16 +56,50 @@ protected:
 
 	virtual void setCursor( const KoPoint& /*current*/ ) const {}
 
+	/**
+	 * Mouse button press.
+	 */
 	virtual void mouseButtonPress( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * Mouse button releas. The mouse wasn't moved.
+	 */
 	virtual void mouseButtonRelease( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * Mouse move. No mouse button is pressed.
+	 */
 	virtual void mouseMove( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * Mouse drag.
+	 */
 	virtual void mouseDrag( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * Mouse button release. The mouse was moved before.
+	 */
 	virtual void mouseDragRelease( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * Mouse drag with "Shift" key pressed at the same time.
+	 */
 	virtual void mouseDragShiftPressed( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * Mouse drag with "Ctrl" key pressed at the same time.
+	 */
 	virtual void mouseDragCtrlPressed( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * "Shift" key released while mouse drag.
+	 */
 	virtual void mouseDragShiftReleased( const KoPoint& /*current*/ ) {}
+
+	/**
+	 * "Ctrl" key released while mouse drag.
+	 */
 	virtual void mouseDragCtrlReleased( const KoPoint& /*current*/ ) {}
-	virtual void mouseDragAltPressed( const KoPoint& /*current*/ ) {}
 
 	/**
 	 * Cancels all tool operations. This event is invoked when ESC is pressed.

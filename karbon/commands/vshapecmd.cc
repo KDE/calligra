@@ -38,7 +38,9 @@ VShapeCmd::execute()
 		m_path->setState( VObject::normal );
 	else
 	{
+		m_path->setState( VObject::normal );
 		m_doc->applyDefaultColors( *m_path );
+
 		// Add path:
 		m_doc->append( m_path );
 		m_doc->selection()->clear();

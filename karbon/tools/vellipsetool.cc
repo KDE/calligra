@@ -50,9 +50,9 @@ void VEllipseTool::refreshUnit()
 VPath*
 VEllipseTool::shape( bool interactive ) const
 {
-	if( interactive && m_d1 <= 1.0 && m_d2 <= 1.0 )
+	if( interactive )
 	{
-		if ( m_dialog->exec() )
+		if( m_dialog->exec() )
 			return
 				new VEllipse(
 					0L,

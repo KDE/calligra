@@ -45,13 +45,14 @@ protected:
 
 	virtual void draw();
 
+	virtual void mouseButtonPress( const KoPoint& current );
+	virtual void mouseButtonRelease( const KoPoint& current );
 	virtual void mouseDrag( const KoPoint& current );
 	virtual void mouseDragRelease( const KoPoint& current );
 	virtual void mouseDragShiftPressed( const KoPoint& current );
 	virtual void mouseDragCtrlPressed( const KoPoint& current );
 	virtual void mouseDragShiftReleased( const KoPoint& current );
 	virtual void mouseDragCtrlReleased( const KoPoint& current );
-	virtual void mouseButtonPress( const KoPoint& current );
 
 	virtual void cancel();
 
@@ -60,7 +61,9 @@ protected:
 
 	virtual VPath* shape( bool interactive = false ) const = 0;
 
-	/// Output coordinates.
+	/**
+	 * Output coordinates.
+	 */
 	KoPoint m_p;
 	double m_d1;
 	double m_d2;

@@ -44,9 +44,9 @@ VPolygonTool::~VPolygonTool()
 VPath*
 VPolygonTool::shape( bool interactive ) const
 {
-	if( interactive && m_d1 <= 1.0 )
+	if( interactive )
 	{
-		if ( m_dialog->exec() )
+		if( m_dialog->exec() )
 			return
 				new VPolygon(
 					0L,

@@ -51,9 +51,9 @@ VStarTool::~VStarTool()
 VPath*
 VStarTool::shape( bool interactive ) const
 {
-	if( interactive && m_d1 <= 1.0 )
+	if( interactive )
 	{
-		if ( m_dialog->exec() )
+		if( m_dialog->exec() )
 			return
 				new VStar(
 					0L,

@@ -15,11 +15,11 @@ TODO:
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
--	vroundcorners needs to be improved for beziers and big radii (lenny)
 -	allow for multiple strokes and fills in VPath. Also allow for strokes to be under
 	fills for nice special effects.
 -	use inside/intersection tests in vpath::combine() for changing winding.
 -	use vflatten in vselectool for more precise selection (lenny)
+-	being a kde/koffice app, we should use the global selection color for selections
 
 WISHLIST:
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
@@ -33,6 +33,8 @@ OPTIMIZATION:
 -	check places we use sqrt() if these are really necessary (lenny)
 
 MAKE IT NICE:
+-	use SVG's path notation natively
+-	vroundcorners needs to be improved for beziers and big radii (lenny)
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
