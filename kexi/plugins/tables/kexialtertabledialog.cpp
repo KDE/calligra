@@ -50,7 +50,7 @@
 
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
 	KexiDB::TableSchema *table, const char *name)
- : KexiDataTable(win, parent, name)
+ : KexiDataTable(win, parent, name, false/*not db-aware*/)
 {
 	m_table = table; //orig table
 	if (m_table) //deep copy of the original table
@@ -134,15 +134,12 @@ void KexiAlterTableDialog::init()
 //	QVBoxLayout *box = new QVBoxLayout(this);
 //	box->addWidget(m_view);
 
-	m_view->setNavigatorEnabled(false);
-	m_view->setSortingEnabled(false);//no, sorting is not good idea here
+	m_view->setSpreadSheetMode();
 	m_view->adjustColumnWidthToContents(0); //adjust column width
 //	m_view->adjustColumnWidthToContents(1); //adjust column width
 	m_view->setColumnWidth(1, maxTypeNameTextWidth + 2*m_view->rowHeight());
 	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
-	m_view->setAcceptsRowEditAfterCellAccepting( true );
-	m_view->setFilteringEnabled( false );
-	m_view->setEmptyRowInsertingEnabled( true );
+
 //	setFocusProxy(m_view);
 
 	connect(m_view, SIGNAL(cellSelected(int,int)), 
@@ -290,6 +287,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled)
 {
 	if (mode==Kexi::DesignViewMode) {
 		//todo
+		return true;
 	}
 	else if (mode==Kexi::DataViewMode) {
 		if (!dirty() && parentDialog()->neverSaved()) {
@@ -341,8 +339,12 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled)
 			}
 			mainWin()->project()->dbConnection()->deleteCursor(cursor);
 		}*/
+		return true;
 	}
-	return true;
+	else if (mode==Kexi::TextViewMode) {
+		//todo
+	}
+	return false;
 }
 
 KexiPropertyBuffer *KexiAlterTableDialog::propertyBuffer()
