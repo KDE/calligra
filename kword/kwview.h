@@ -358,6 +358,10 @@ public slots:
 
     void insertFile();
 
+    void addBookmark();
+    void selectBookmark();
+
+
 protected slots:
     void spellCheckerReady();
     void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
@@ -575,6 +579,9 @@ private:
     KAction *actionEditFrameSet;
     KAction *actionSelectedFrameSet;
     KAction *actionInsertFile;
+
+    KAction *actionAddBookmark;
+    KAction *actionSelectBookmark;
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;

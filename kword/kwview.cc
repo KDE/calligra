@@ -5665,6 +5665,17 @@ void KWView::insertFile()
     }
 }
 
+void KWView::addBookmark()
+{
+    //todo
+}
+
+void KWView::selectBookmark()
+{
+    //todo
+}
+
+
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

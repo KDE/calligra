@@ -644,6 +644,8 @@ public:
     void deleteBookMark(const QString &_name);
     void renameBookMark(const QString &_oldname, const QString &_newName);
 
+    KWBookMark * bookMarkByName( const QString & name );
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 

@@ -3936,4 +3936,15 @@ void KWDocument::renameBookMark(const QString &_oldName, const QString &_newName
     }
 }
 
+KWBookMark * KWDocument::bookMarkByName( const QString & name )
+{
+    QPtrListIterator<KWBookMark> book(m_bookmarkList);
+    for ( ; book.current() ; ++book )
+    {
+        if ( book.current()->bookMarkName()==name)
+            return book.current();
+    }
+    return 0L;
+}
+
 #include "kwdoc.moc"
