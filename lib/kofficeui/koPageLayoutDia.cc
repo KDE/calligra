@@ -115,8 +115,10 @@ void KoPagePreview::drawContents( QPainter *painter )
 /*==================== constructor ===============================*/
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout _layout,
 				  KoHeadFoot _hf, int tabs )
-    : QTabDialog( parent, name, true )
+    : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
+		   KDialogBase::Ok, parent, name, true)
 {
+
     flags = tabs;
     pgPreview = 0;
     pgPreview2 = 0;
@@ -131,23 +133,20 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayou
     if ( tabs & FORMAT_AND_BORDERS ) setupTab1();
     if ( tabs & HEADER_AND_FOOTER ) setupTab2();
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
     retPressed = false;
 
-    setCaption( i18n( "Page Layout" ) );
     setFocusPolicy( QWidget::StrongFocus );
     setFocus();
 
     // FIXME (Werner)
-    resize( 600, 500 );
+    //resize( 600, 500 );
 }
 
 /*==================== constructor ===============================*/
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayout _layout, KoHeadFoot _hf,
 				 KoColumns _cl, KoKWHeaderFooter _kwhf, int tabs )
-    : QTabDialog( parent, name, true )
+    : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
+		   KDialogBase::Ok, parent, name, true)
 {
     flags = tabs;
     pgPreview = 0;
@@ -166,17 +165,13 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayou
     if ( tabs & COLUMNS ) setupTab3();
     if ( tabs & KW_HEADER_AND_FOOTER ) setupTab4();
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
     retPressed = false;
 
-    setCaption( i18n( "Page Layout" ) );
     setFocusPolicy( QWidget::StrongFocus );
     setFocus();
 
     // FIXME (Werner)
-    resize( 600, 500 );
+    //resize( 600, 500 );
 }
 
 /*===================== destructor ===============================*/
@@ -340,7 +335,7 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
 /*================ setup format and borders tab ==================*/
 void KoPageLayoutDia::setupTab1()
 {
-    tab1 = new QWidget( this );
+    tab1 = addPage(i18n( "Format and Borders" ));
 
     grid1 = new QGridLayout( tab1, 5, 2, 15, 7 );
 
@@ -605,8 +600,6 @@ void KoPageLayoutDia::setupTab1()
 
     //grid1->activate();
 
-    addTab( tab1, i18n( "Format and Borders" ) );
-
     setValuesTab1();
     updatePreview( layout );
 }
@@ -666,7 +659,7 @@ void KoPageLayoutDia::setValuesTab1()
 /*================ setup header and footer tab ===================*/
 void KoPageLayoutDia::setupTab2()
 {
-    tab2 = new QWidget( this );
+    tab2 = addPage(i18n( "Header and Footer" ));
 
     grid2 = new QGridLayout( tab2, 7, 3, 6, 6 );
 
@@ -731,14 +724,12 @@ void KoPageLayoutDia::setupTab2()
 			   "<li>&lt;email&gt;: Your email address</li></ul></qt>", tab2 );
     lMacros2->resize( lMacros2->sizeHint() );
     grid2->addMultiCellWidget( lMacros2, 6, 6, 0, 2 );
-
-    addTab( tab2, i18n( "Header and Footer" ) );
 }
 
 /*================================================================*/
 void KoPageLayoutDia::setupTab3()
 {
-    tab3 = new QWidget( this );
+    tab3 = addPage(i18n( "Columns" ));
 
     grid3 = new QGridLayout( tab3, 5, 2, 15, 7 );
 
@@ -800,9 +791,6 @@ void KoPageLayoutDia::setupTab3()
     grid3->addRowSpacing( 3, nCSpacing->height() );
     grid3->setRowStretch( 4, 1 );
 
-    //grid3->activate();
-
-    addTab( tab3, i18n( "Columns" ) );
     if ( pgPreview ) pgPreview->setPageColumns( cl );
     pgPreview2->setPageColumns( cl );
 }
@@ -817,7 +805,7 @@ void KoPageLayoutDia::setupTab4()
     case PG_INCH: str = "inch"; break;
     }
 
-    tab4 = new QWidget( this );
+    tab4 = addPage(i18n( "Header and Footer" ));
     grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
 
     gHeader = new QButtonGroup( i18n( "Header" ), tab4 );
@@ -887,7 +875,6 @@ void KoPageLayoutDia::setupTab4()
     headerGrid->setRowStretch( 3, 0 );
     headerGrid->setRowStretch( 4, 0 );
 
-    //headerGrid->activate();
     grid4->addWidget( gHeader, 0, 0 );
 
     gFooter = new QButtonGroup( i18n( "Footer" ), tab4 );
@@ -957,7 +944,6 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->setRowStretch( 3, 0 );
     footerGrid->setRowStretch( 4, 0 );
 
-    //footerGrid->activate();
     grid4->addWidget( gFooter, 1, 0 );
 
     grid4->addColSpacing( 0, gHeader->width() );
@@ -968,10 +954,6 @@ void KoPageLayoutDia::setupTab4()
     grid4->addRowSpacing( 1, gFooter->height() );
     grid4->setRowStretch( 2, 0 );
     grid4->setRowStretch( 2, 1 );
-
-    //grid4->activate();
-
-    addTab( tab4, i18n( "Header and Footer" ) );
 }
 
 /*====================== update the preview ======================*/
@@ -986,64 +968,6 @@ void KoPageLayoutDia::updatePreview( KoPageLayout )
 /*===================== unit changed =============================*/
 void KoPageLayoutDia::unitChanged( int _unit )
 {
-//   if ( ( KoUnit )_unit != layout.unit )
-//     {
-//	 double fact = 1;
-//	 if ( layout.unit == PG_CM ) fact = 10;
-//	 if ( layout.unit == PG_INCH ) fact = 25.4;
-
-//	 layout.width *= fact;
-//	 layout.height *= fact;
-//	 layout.left *= fact;
-//	 layout.right *= fact;
-//	 layout.top *= fact;
-//	 layout.bottom *= fact;
-
-//	 layout.ptWidth = MM_TO_POINT( layout.width );
-//	 layout.ptHeight = MM_TO_POINT( layout.height );
-//	 layout.ptLeft = MM_TO_POINT( layout.left );
-//	 layout.ptRight = MM_TO_POINT( layout.right );
-//	 layout.ptTop = MM_TO_POINT( layout.top );
-//	 layout.ptBottom = MM_TO_POINT( layout.bottom );
-
-//	 fact = 1;
-//	 if ( _unit == PG_CM ) fact = 0.1;
-//	 if ( _unit == PG_INCH ) fact = 1/25.4;
-
-//	 layout.width *= fact;
-//	 layout.height *= fact;
-//	 layout.left *= fact;
-//	 layout.right *= fact;
-//	 layout.top *= fact;
-//	 layout.bottom *= fact;
-
-//	 layout.ptWidth = MM_TO_POINT( layout.width );
-//	 layout.ptHeight = MM_TO_POINT( layout.height );
-//	 layout.ptLeft = MM_TO_POINT( layout.left );
-//	 layout.ptRight = MM_TO_POINT( layout.right );
-//	 layout.ptTop = MM_TO_POINT( layout.top );
-//	 layout.ptBottom = MM_TO_POINT( layout.bottom );
-
-//	 layout.unit = ( KoUnit )_unit;
-//	 setValuesTab1();
-
-//	 layout.width = atof( epgWidth->text() );
-//	 layout.height = atof( epgHeight->text() );
-//	 layout.left = atof( ebrLeft->text() );
-//	 layout.right = atof( ebrRight->text() );
-//	 layout.top = atof( ebrTop->text() );
-//	 layout.bottom = atof( ebrBottom->text() );
-
-//	 layout.ptWidth = MM_TO_POINT( layout.width );
-//	 layout.ptHeight = MM_TO_POINT( layout.height );
-//	 layout.ptLeft = MM_TO_POINT( layout.left );
-//	 layout.ptRight = MM_TO_POINT( layout.right );
-//	 layout.ptTop = MM_TO_POINT( layout.top );
-//	 layout.ptBottom = MM_TO_POINT( layout.bottom );
-
-//	 updatePreview( layout );
-//     }
-
     layout.unit = static_cast<KoUnit>( _unit );
 
     // FIXME: put that into a separate private method! (dup.code)

@@ -28,16 +28,6 @@
 #include "kword_factory.h"
 
 #define MIME_TYPE "application/x-kword"
-
-//#define DEFAULT_PAPER_WIDTH  210.0
-//#define DEFAULT_PAPER_HEIGHT 297.0
-
-//#define DEFAULT_TOP_BORDER 15.0
-//#define DEFAULT_BOTTOM_BORDER 15.0
-//#define DEFAULT_LEFT_BORDER 10.0
-//#define DEFAULT_RIGHT_BORDER 10.0
-
-//#define STANDARD_COLUMNS 2
 #define STANDARD_COLUMN_SPACING 3
 
 enum MouseMode {

@@ -83,7 +83,7 @@ void GraphiteGlobal::setZoom(const double &zoom) {
 }
 
 void GraphiteGlobal::setResoltuion(const int &resolution) {
-    m_resolution=static_cast<double>(resolution)/25.4;
+    m_resolution=static_cast<double>(resolution)/25.399956;
 }
 
 QDomElement GraphiteGlobal::createElement(const QString &tagName, const QPen &pen, QDomDocument &doc) const {

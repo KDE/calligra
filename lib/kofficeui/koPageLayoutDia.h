@@ -22,10 +22,10 @@
 #ifndef __KOPGLAYOUTDIA_H__
 #define __KOPGLAYOUTDIA_H__
 
-#include <qtabdialog.h>
 #include <qgroupbox.h>
 
 #include <koGlobal.h>
+#include <kdialogbase.h>
 
 class QButtonGroup;
 class QWidget;
@@ -86,7 +86,7 @@ protected:
 /**
  *  With this dialog the user can specify the layout of this papaer during printing.
  */
-class KoPageLayoutDia : public QTabDialog
+class KoPageLayoutDia : public KDialogBase
 {
     Q_OBJECT
 
