@@ -96,6 +96,28 @@ protected:
 };
 
 /******************************************************************/
+/* Class: KWDocStructFormulaItem                                  */
+/******************************************************************/
+
+class KWDocStructFormulaItem : public QObject,
+                               virtual public QListViewItem
+{
+    Q_OBJECT
+
+public:
+    KWDocStructFormulaItem( QListViewItem *_parent, QString _text, KWFormulaFrameSet *_form, KWGUI*__parent );
+
+public slots:
+    void slotDoubleClicked( QListViewItem *_item );
+
+protected:
+    KWFormulaFrameSet *form;
+    KWGUI *gui;
+
+};
+
+
+/******************************************************************/
 /* Class: KWDocStructPictureItem                                  */
 /******************************************************************/
 
@@ -144,7 +166,7 @@ protected:
 class KWDocStructRootItem : public QListViewItem
 {
 public:
-    enum Type {Arrangement, Tables, Pictures, Cliparts, TextFrames, Embedded};
+    enum Type {Arrangement, Tables, Pictures, Cliparts, TextFrames, Embedded, FormulaFrames};
 
     KWDocStructRootItem( QListView *_parent, KWDocument *_doc, Type _type, KWGUI*__parent );
 
@@ -154,7 +176,7 @@ public:
     void setupPictures();
     void setupCliparts();
     void setupEmbedded();
-
+    void setupFormulaFrames();
     virtual void setOpen( bool o );
 
 protected:
@@ -184,7 +206,7 @@ protected:
     KWDocument *doc;
     KWGUI *gui;
 
-    KWDocStructRootItem *arrangement, *tables, *pictures, *cliparts, *textfrms, *embedded;
+    KWDocStructRootItem *arrangement, *tables, *pictures, *cliparts, *textfrms, *embedded, *formulafrms;
 
 };
 

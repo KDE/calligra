@@ -129,6 +129,28 @@ void KWDocStructPictureItem::slotDoubleClicked( QListViewItem *_item )
 }
 
 /******************************************************************/
+/* Class: KWDocStructFormulaItem                                  */
+/******************************************************************/
+
+/*================================================================*/
+KWDocStructFormulaItem::KWDocStructFormulaItem( QListViewItem *_parent, QString _text, KWFormulaFrameSet *_form, KWGUI*__parent )
+    : QListViewItem( _parent, _text )
+{
+    form = _form;
+    gui = __parent;
+}
+
+/*================================================================*/
+void KWDocStructFormulaItem::slotDoubleClicked( QListViewItem *_item )
+{
+    if ( _item == this )
+    {
+        KWFrame *frame = form->getFrame( 0 );
+        gui->canvasWidget()->scrollToOffset( frame->x(), frame->y() );
+    }
+}
+
+/******************************************************************/
 /* Class: KWDocStructPartItem                                     */
 /******************************************************************/
 
@@ -163,30 +185,34 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, 
     gui = __parent;
 
     switch ( type ) {
-    case Arrangement: {
-        setText( 0, i18n( "Arrangement" ) );
-        setPixmap( 0, KWBarIcon( "tree_arrange" ) );
-    } break;
-    case TextFrames: {
-        setText( 0, i18n( "Text Frames/Frame Sets" ) );
-        setPixmap( 0, KWBarIcon( "tree_textframes" ) );
-    } break;
-    case Tables: {
-        setText( 0, i18n( "Tables" ) );
-        setPixmap( 0, KWBarIcon( "tree_table" ) );
-    } break;
-    case Pictures: {
-        setText( 0, i18n( "Pictures" ) );
-        setPixmap( 0, KWBarIcon( "tree_picture" ) );
-    } break;
-    case Cliparts: {
-        setText( 0, i18n( "Cliparts" ) );
-        setPixmap( 0, KWBarIcon( "tree_clipart" ) );
-    } break;
-    case Embedded: {
-        setText( 0, i18n( "Embedded Objects" ) );
-        setPixmap( 0, KWBarIcon( "tree_embedded" ) );
-    } break;
+        case Arrangement: {
+            setText( 0, i18n( "Arrangement" ) );
+            setPixmap( 0, KWBarIcon( "tree_arrange" ) );
+        } break;
+        case TextFrames: {
+            setText( 0, i18n( "Text Frames/Frame Sets" ) );
+            setPixmap( 0, KWBarIcon( "tree_textframes" ) );
+        } break;
+        case FormulaFrames: {
+            setText( 0, i18n( "Formula Frames" ) );
+            setPixmap( 0, KWBarIcon( "tree_formulaframes" ) );
+        }break;
+        case Tables: {
+            setText( 0, i18n( "Tables" ) );
+            setPixmap( 0, KWBarIcon( "tree_table" ) );
+        } break;
+        case Pictures: {
+            setText( 0, i18n( "Pictures" ) );
+            setPixmap( 0, KWBarIcon( "tree_picture" ) );
+        } break;
+        case Cliparts: {
+            setText( 0, i18n( "Cliparts" ) );
+            setPixmap( 0, KWBarIcon( "tree_clipart" ) );
+        } break;
+        case Embedded: {
+            setText( 0, i18n( "Embedded Objects" ) );
+            setPixmap( 0, KWBarIcon( "tree_embedded" ) );
+        } break;
     }
 }
 
@@ -197,24 +223,27 @@ void KWDocStructRootItem::setOpen( bool o )
     {
         switch ( type )
         {
-        case Arrangement:
-            setupArrangement();
-            break;
-        case TextFrames:
-            setupTextFrames();
-            break;
-        case Tables:
-            setupTables();
-            break;
-        case Pictures:
-            setupPictures();
-            break;
-        case Cliparts:
-            setupCliparts();
-            break;
-        case Embedded:
-            setupEmbedded();
-            break;
+            case Arrangement:
+                setupArrangement();
+                break;
+            case TextFrames:
+                setupTextFrames();
+                break;
+            case FormulaFrames:
+                setupFormulaFrames();
+                break;
+            case Tables:
+                setupTables();
+                break;
+            case Pictures:
+                setupPictures();
+                break;
+            case Cliparts:
+                setupCliparts();
+                break;
+            case Embedded:
+                setupEmbedded();
+                break;
         }
     }
     QListViewItem::setOpen( o );
@@ -329,6 +358,41 @@ void KWDocStructRootItem::setupTextFrames()
                 child = new KWDocStructFrameItem( item, _name, frameset, frameset->getFrame( j ), gui );
                 QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
             }
+        }
+    }
+
+    if ( childCount() == 0 )
+        ( void )new QListViewItem( this, i18n( "Empty" ) );
+}
+
+/*================================================================*/
+void KWDocStructRootItem::setupFormulaFrames()
+{
+    if ( childCount() > 0 )
+    {
+        QListViewItem *child = firstChild(), *delChild;
+
+        while( child )
+        {
+            delChild = child;
+            child = child->nextSibling();
+            delete delChild;
+        }
+    }
+
+    KWFrameSet *frameset = 0L;
+    QString _name;
+    KWDocStructFormulaItem *child;
+
+    int j = 0;
+    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    {
+        frameset = doc->getFrameSet( i );
+        if ( frameset->getFrameType() == FT_FORMULA )
+        {
+            _name=i18n("Formula frame %1").arg(QString::number(++j));
+            child = new KWDocStructFormulaItem( this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ), gui );
+            QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
         }
     }
 
@@ -477,6 +541,9 @@ void KWDocStructTree::setup()
 
     tables = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Tables, gui );
     item = new QListViewItem( tables, i18n ("Empty" ) );
+
+    formulafrms = new KWDocStructRootItem( this, doc, KWDocStructRootItem::FormulaFrames, gui );
+    item = new QListViewItem( formulafrms, i18n ("Empty" ) );
 
     textfrms = new KWDocStructRootItem( this, doc, KWDocStructRootItem::TextFrames, gui );
     item = new QListViewItem( textfrms, i18n ("Empty" ) );
