@@ -1,0 +1,19 @@
+-----------------------------------------------------------
+Settings stotred in kexirc
+
+This is official list.
+All other settings are unofficial and are subject to change
+
+Started: 2004-08-20, js
+-----------------------------------------------------------
+
+Group: PropertyEditor
+-FontSize [integer]
+
+Group: Notification Messages
+-dontAskBeforeDeleteRow [boolean]
+
+Group: Startup
+-OpenExistingType [File|Server]
+-ShowStartupDialog [bool]
+
