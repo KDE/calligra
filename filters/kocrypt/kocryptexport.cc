@@ -119,8 +119,10 @@ int rc;
     p[(randlen % 5120)+5] = filelen & 0xff000000;
 
     // pad up to the nearest blocksize.
+    bool done = false;
     int cursize = (randlen % 5120) + 6;
     int shortness = cursize % blocksize;
+
     if (shortness != 0) {
        char *tp = &(p[cursize]);
        rc = inf.readBlock(tp, blocksize - shortness);
@@ -132,15 +134,36 @@ int rc;
        while (shortness) {
           p[cursize++] = (char) (rand()%0x100);
           shortness--;
+          done = true;
        }
     }
 
-    // assert: cursize % blocksize == 0;
+    for (;;) {
+       // assert: cursize % blocksize == 0;
 
-    for (int i = 0; i < cursize/blocksize; i++) {
+       for (int i = 0; i < cursize/blocksize; i++) {
+          rc = cbc->encrypt(&(p[i*blocksize]), blocksize);
+          if (rc != blocksize) return false;     // encryption error
+          rc = outf.writeBlock(&(p[i*blocksize]), blocksize);
+          if (rc != blocksize) return false;     // write error
+       }
+
+       if (done) break;
+
+       rc = inf.readBlock(p, 4096);
+       if (rc < 0) return false; // read error
+
+       cursize = rc;
+
+       if (rc != 4096) {
+          done = true;
+          shortness = cursize % blocksize;
+          while (shortness) {
+             p[cursize++] = (char) (rand()%0x100);
+             shortness--;
+          }
+       }
     }
-
-    // FIXME: write out the encrypted data
 
     return true;
 }
