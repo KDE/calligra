@@ -304,7 +304,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
 {
-    //kdDebug() << "KWTextFrameSet::drawFrame crect(r)=" << DEBUGRECT( r ) << endl;
+    kdDebug() << "KWTextFrameSet::drawFrame crect(r)=" << DEBUGRECT( r ) << endl;
     //m_currentDrawnFrame = frame;
     // Update variables for each frame (e.g. for page-number)
     // If more than KWPgNumVariable need this functionality, create an intermediary base class
@@ -1893,12 +1893,17 @@ void KWTextFrameSet::formatMore()
 
     // Now let's see when we'll need to get back here.
     if ( m_lastFormatted )
+    {
         formatTimer->start( interval, TRUE );
+#ifdef DEBUG_FORMAT_MORE
+        kdDebug(32002) << "formatMore: will have to format more. formatTimer->start with interval=" << interval << endl;
+#endif
+    }
     else
     {
         interval = QMAX( 0, interval );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "formatMore: all formatted" << endl;
+        kdDebug(32002) << "formatMore: all formatted interval=" << interval << endl;
 #endif
 #ifdef TIMING_FORMAT
         if ( frameSetInfo() == FI_BODY )
@@ -1983,6 +1988,9 @@ bool KWTextFrameSet::canRemovePage( int num )
 
 void KWTextFrameSet::doChangeInterval()
 {
+#ifdef DEBUG_FORMAT_MORE
+    kdDebug() << "KWTextFrameSet::doChangeInterval back to interval=0" << endl;
+#endif
     interval = 0;
 }
 
@@ -2749,7 +2757,17 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     textdoc->setFormat( QTextDocument::Temp, currentFormat, QTextFormat::Format );
     textdoc->removeSelection( QTextDocument::Temp );
 
-    formatMore();
+    // Speed optimization: if we only type a char, and it doesn't
+    // invalidate the next parag, only format the current one
+    QTextParag *parag = cursor->parag();
+    if ( !checkNewLine && m_lastFormatted == parag && parag->next() && parag->next()->isValid() )
+    {
+        parag->format();
+        m_lastFormatted = m_lastFormatted->next();
+    } else
+    {
+        formatMore();
+    }
     emit repaintChanged( this );
     emit ensureCursorVisible();
     emit showCursor();
@@ -2764,8 +2782,8 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     if ( !removeSelected ) {
         // ## not sure why we do this. I'd prefer leaving the selection unchanged...
         // but then it'd need adjustements in the offsets etc.
-        textdoc->removeSelection( QTextDocument::Standard );
-        emit repaintChanged( this );
+        if ( textdoc->removeSelection( QTextDocument::Standard ) )
+            emit repaintChanged( this );
     }
     if ( !customItemsMap.isEmpty() )
         clearUndoRedoInfo();
@@ -3132,6 +3150,20 @@ void KWTextFrameSet::removeHighlight()
     emit repaintChanged( this );
 }
 
+void KWTextFrameSet::typingStarted()
+{
+#ifdef DEBUG_FORMAT_MORE
+    kdDebug() << "KWTextFrameSet::typingStarted" << endl;
+#endif
+    changeIntervalTimer->stop();
+    interval = 10;
+}
+
+void KWTextFrameSet::typingDone()
+{
+    changeIntervalTimer->start( 100, TRUE );
+}
+
 #ifndef NDEBUG
 void KWTextFrameSet::printRTDebug( int info )
 {
@@ -3198,11 +3230,7 @@ void KWTextFrameSetEdit::terminate()
 
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 {
-#if 0
-    // TODO Move to KWTextFrameSet
-    changeIntervalTimer->stop();
-    interval = 10;
-#endif
+    textFrameSet()->typingStarted();
 
     /* bool selChanged = FALSE;
     for ( int i = 1; i < textDocument()->numSelections(); ++i )
@@ -3368,7 +3396,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
     if ( clearUndoRedoInfo ) {
         textFrameSet()->clearUndoRedoInfo();
     }
-    // TODO changeIntervalTimer->start( 100, TRUE );
+    textFrameSet()->typingDone();
 }
 
 void KWTextFrameSetEdit::moveCursor( CursorAction action, bool select )
