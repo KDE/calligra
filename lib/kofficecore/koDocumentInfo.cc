@@ -202,12 +202,6 @@ void KoDocumentInfoAuthor::initParameters()
 
 bool KoDocumentInfoAuthor::saveOasis( KoXmlWriter &xmlWriter )
 {
-    if ( !m_title.isEmpty() )
-    {
-     xmlWriter.startElement( "dc:title");
-     xmlWriter.addTextNode( m_title );
-     xmlWriter.endElement();
-    }
     if ( !m_fullName.isEmpty() )
     {
      xmlWriter.startElement( "dc:creator");
@@ -219,12 +213,7 @@ bool KoDocumentInfoAuthor::saveOasis( KoXmlWriter &xmlWriter )
 
 bool KoDocumentInfoAuthor::loadOasis( const QDomNode& metaDoc )
 {
-    QDomElement e  = metaDoc.namedItem( "dc:title" ).toElement();
-    if ( !e.isNull() && !e.text().isEmpty() )
-    {
-        m_title = e.text();
-    }
-    e = metaDoc.namedItem( "dc:creator" ).toElement();
+    QDomElement e = metaDoc.namedItem( "dc:creator" ).toElement();
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         m_fullName = e.text();
@@ -442,25 +431,34 @@ KoDocumentInfoAbout::KoDocumentInfoAbout( KoDocumentInfo* info )
 
 bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
 {
+    if ( !m_title.isEmpty() )
+    {
+     xmlWriter.startElement( "dc:title");
+     xmlWriter.addTextNode( m_title );
+     xmlWriter.endElement();
+    }
     if ( !m_abstract.isEmpty() )
     {
      xmlWriter.startElement( "dc:description");
      xmlWriter.addTextNode( m_abstract );
      xmlWriter.endElement();
     }
-    // TODO dc:subject
 
     return true;
 }
 
 bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
 {
-    QDomElement e  = metaDoc.namedItem( "dc:description" ).toElement();
+    QDomElement e  = metaDoc.namedItem( "dc:title" ).toElement();
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        m_title = e.text();
+    }
+    e  = metaDoc.namedItem( "dc:description" ).toElement();
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         m_abstract = e.text();
     }
-    // TODO dc:subject
     return true;
 }
 
