@@ -43,6 +43,7 @@
 #include <kparts/event.h>
 #include <kstatusbar.h>
 #include <ktoolbarbutton.h>
+#include <koMainWindow.h>
 
 #include "kontour_global.h"
 #include "kontour_doc.h"
@@ -83,7 +84,7 @@ KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc
 KoView(doc, parent, name)
 {
   mDoc = doc;
- 
+
   mDCOP = 0;
   dcopObject(); // build it
 
@@ -104,7 +105,6 @@ KoView(doc, parent, name)
 
 KontourView::~KontourView()
 {
-//  delete mPluginManager;
   writeConfig();
   delete tcontroller;
   if(objMenu)
@@ -118,17 +118,17 @@ KontourView::~KontourView()
   delete mSBCoords;
   delete mSBState;
 
-  // Delete dockers when not in dock area
-  if(mTransformPanel && !mTransformPanel->area())
-    delete mTransformPanel;
-  if(mAlignmentPanel && !mAlignmentPanel->area())
-    delete mAlignmentPanel;
-  if(mPaintPanel && !mPaintPanel->area())
-    delete mPaintPanel;
-  if(mOutlinePanel && !mOutlinePanel->area())
-    delete mOutlinePanel;
-  if(mLayerPanel && !mLayerPanel->area())
+  //
+  if(mLayerPanel)
     delete mLayerPanel;
+  if(mPaintPanel)
+    delete mPaintPanel;
+  if(mOutlinePanel)
+    delete mOutlinePanel;
+  if(mTransformPanel)
+    delete mTransformPanel;
+  if(mAlignmentPanel)
+    delete mAlignmentPanel;
   delete mDCOP;
 }
 
@@ -147,7 +147,7 @@ void KontourView::unit(MeasurementUnit u)
 
 void KontourView::setupActions()
 {
-  /* Edit menu */
+  // Edit menu
 
   m_copy = KStdAction::copy(this, SLOT(slotCopy()), actionCollection(), "copy");
   m_paste = KStdAction::paste(this, SLOT(slotPaste()), actionCollection(), "paste");
@@ -158,7 +158,7 @@ void KontourView::setupActions()
   m_selectAll = KStdAction::selectAll(this, SLOT(slotSelectAll()), actionCollection(), "selectAll");
   m_deselectAll = KStdAction::deselect(this, SLOT(slotDeselectAll()), actionCollection(), "deselectAll");
 
-  /* View menu */
+  // View menu
 
   m_zoomIn = new KAction(i18n("Zoom in"), "viewmag+", CTRL+Key_Plus, this, SLOT(slotZoomIn()), actionCollection(), "zoomin");
   m_zoomOut = new KAction(i18n("Zoom out"), "viewmag-", CTRL+Key_Minus, this, SLOT(slotZoomOut()), actionCollection(), "zoomout");
@@ -247,56 +247,47 @@ void KontourView::initActions()
 
 void KontourView::setupCanvas()
 {
-  mSplitView = new QSplitter(this);
-
-  QGridLayout *viewGrid = new QGridLayout(this);
-  viewGrid->addWidget(mSplitView, 0, 0);
-
-  QWidget *mLeftSide = new QWidget(mSplitView);
-
-  mRightDock = new QDockArea(Qt::Horizontal, QDockArea::Normal, mSplitView);
-
-  /* create horizontal ruler */
-  hRuler = new Ruler(mDoc, Ruler::Horizontal, mUnit, mLeftSide);
+  // create horizontal ruler
+  hRuler = new Ruler(mDoc, Ruler::Horizontal, mUnit, this);
   hRuler->setCursor(KCursor::handCursor());
 
-  /* create vertical ruler */
-  vRuler = new Ruler(mDoc, Ruler::Vertical, mUnit, mLeftSide);
+  // create vertical ruler
+  vRuler = new Ruler(mDoc, Ruler::Vertical, mUnit, this);
   vRuler->setCursor(KCursor::handCursor());
 
   connect(hRuler, SIGNAL(rmbPressed()), this, SLOT(popupForRulers()));
   connect(vRuler, SIGNAL(rmbPressed()), this, SLOT(popupForRulers()));
 
-  QSplitter *tabSplit = new QSplitter(mLeftSide);
+  QSplitter *tabSplit = new QSplitter(this);
 
   mTabBar = new TabBar(tabSplit, this);
 
-  vBar = new QScrollBar(QScrollBar::Vertical, mLeftSide);
+  vBar = new QScrollBar(QScrollBar::Vertical, this);
   hBar = new QScrollBar(QScrollBar::Horizontal, tabSplit);
 
-  mCanvas = new Canvas(mDoc->document(), this, hBar, vBar, mLeftSide);
+  mCanvas = new Canvas(mDoc->document(), this, hBar, vBar, this);
 
   QPixmap *pm;
 
-  mTabBarFirst = new QPushButton(mLeftSide);
+  mTabBarFirst = new QPushButton(this);
   mTabBarFirst->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_first"));
   if(pm)
     mTabBarFirst->setPixmap(*pm);
 
-  mTabBarLeft = new QPushButton(mLeftSide);
+  mTabBarLeft = new QPushButton(this);
   mTabBarLeft->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_left"));
   if(pm)
     mTabBarLeft->setPixmap(*pm);
 
-  mTabBarRight = new QPushButton(mLeftSide);
+  mTabBarRight = new QPushButton(this);
   mTabBarRight->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_right"));
   if(pm)
     mTabBarRight->setPixmap(*pm);
 
-  mTabBarLast = new QPushButton(mLeftSide);
+  mTabBarLast = new QPushButton(this);
   mTabBarLast->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_last"));
   if(pm)
@@ -313,7 +304,7 @@ void KontourView::setupCanvas()
   connect(mTabBarRight, SIGNAL(clicked()), mTabBar, SLOT(scrollRight()));
   connect(mTabBarLast, SIGNAL(clicked()), mTabBar, SLOT(scrollLast()));
 
-  QGridLayout *layout = new QGridLayout(mLeftSide);
+  QGridLayout *layout = new QGridLayout(this);
   layout->addWidget(mCanvas, 1, 1);
   layout->addWidget(hRuler, 0, 1);
   layout->addWidget(vRuler, 1, 0);
@@ -344,7 +335,7 @@ void KontourView::setupCanvas()
   connect(activeDocument(), SIGNAL(zoomFactorChanged(double)), this, SLOT(slotZoomFactorChanged()));
   connect(activeDocument(), SIGNAL(selectionChanged()), this, SLOT(changeSelection()));
 
-  /* helpline creation */
+  // helpline creation
   connect(hRuler, SIGNAL(drawHelpline(int, int, bool)), mCanvas, SLOT(drawTmpHelpline(int, int, bool)));
   connect(vRuler, SIGNAL(drawHelpline(int, int, bool)), mCanvas, SLOT(drawTmpHelpline(int, int, bool)));
   connect(hRuler, SIGNAL(addHelpline(int, int, bool)), mCanvas, SLOT(addHelpline(int, int, bool)));
@@ -370,26 +361,26 @@ void KontourView::setupPanels()
   mLayerPanel = new LayerPanel(activeDocument(), this);
   connect(activeDocument(), SIGNAL(updateLayerView()), mLayerPanel, SLOT(updatePanel()));
   connect(mLayerPanel, SIGNAL(visibilityChanged(bool)), m_showLayerPanel, SLOT(setChecked(bool)));
-  mRightDock->moveDockWindow(mLayerPanel);
+  shell()->addDockWindow(mLayerPanel, DockRight);
 
   // Outline properties panel
   mOutlinePanel = new OutlinePanel(this, this);
   connect(mOutlinePanel, SIGNAL(visibilityChanged(bool)), m_showOutlinePanel, SLOT(setChecked(bool)));
-  mRightDock->moveDockWindow(mOutlinePanel);
+  shell()->addDockWindow(mOutlinePanel, DockRight);
 
   // Paint properties panel
   mPaintPanel = new PaintPanel(this, this);
   connect(mPaintPanel, SIGNAL(visibilityChanged(bool)), m_showPaintPanel, SLOT(setChecked(bool)));
-  mRightDock->moveDockWindow(mPaintPanel);
+  shell()->addDockWindow(mPaintPanel, DockRight);
 
   // Transform panel
   mTransformPanel = new TransformPanel(this, this);
   connect(mTransformPanel, SIGNAL(visibilityChanged(bool)), m_showTransformationPanel, SLOT(setChecked(bool)));
-  mRightDock->moveDockWindow(mTransformPanel);
+  shell()->addDockWindow(mTransformPanel, DockRight);
 
   // Alignment panel
   mAlignmentPanel = new AlignmentPanel(this, this);
-  mRightDock->moveDockWindow(mAlignmentPanel);
+//  shell()->addDockWindow(mAlignmentPanel, DockRight);
 }
 
 void KontourView::setupTools()
@@ -458,10 +449,6 @@ void KontourView::readConfigAfter()
   KConfig *config = KontourFactory::global()->config();
 
   config->setGroup("General");
-  QValueList<int> s;
-  s << config->readNumEntry("LeftSide", -1);
-  s << config->readNumEntry("RightSide", 200);
-  mSplitView->setSizes(s);
 
   config->setGroup("Panels");
   slotShowLayerPanel(config->readBoolEntry("LayerPanel", false));
@@ -501,9 +488,6 @@ void KontourView::writeConfig()
     config->writeEntry("DefaultUnit", "cicero");
     break;
   }
-  QValueList<int> s = mSplitView->sizes();
-  config->writeEntry("LeftSide", s[0]);
-  config->writeEntry("RightSide", s[1]);
 
   config->setGroup("Panels");
   config->writeEntry("LayerPanel", m_showLayerPanel->isChecked());

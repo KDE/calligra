@@ -156,31 +156,28 @@ public slots:
   void slotOptions();
 
 private:
-  KontourDocument *mDoc;
+  KontourDocument     *mDoc;
 
-  /* Settings */
-  MeasurementUnit mUnit;
-  QColor mWorkSpaceColor;
+  // Settings
+  MeasurementUnit      mUnit;
+  QColor               mWorkSpaceColor;
 
   // GUI
-  QSplitter *mSplitView;
-  QDockArea *mRightDock;
-  
-  QButton *mTabBarFirst;
-  QButton *mTabBarLeft;
-  QButton *mTabBarRight;
-  QButton *mTabBarLast;
+  QButton             *mTabBarFirst;
+  QButton             *mTabBarLeft;
+  QButton             *mTabBarRight;
+  QButton             *mTabBarLast;
 
-  QScrollBar *hBar;
-  QScrollBar *vBar;
-  Canvas *mCanvas;
-  Ruler *hRuler;
-  Ruler *vRuler;
-  TabBar *mTabBar;
-  QHBoxLayout *tabLayout;
+  QScrollBar          *hBar;
+  QScrollBar          *vBar;
+  Canvas              *mCanvas;
+  Ruler               *hRuler;
+  Ruler               *vRuler;
+  TabBar              *mTabBar;
+  QHBoxLayout         *tabLayout;
 
-  KPopupMenu *objMenu;
-  KPopupMenu *rulerMenu;
+  KPopupMenu          *objMenu;
+  KPopupMenu          *rulerMenu;
 
   // Status bar
   QLabel              *mSBCoords;
@@ -247,7 +244,7 @@ private:
   TextTool            *mTextTool;
   InsertImageTool     *mInsertImageTool;
 
-  /* */
+  //
   bool mShowRulers;
   bool mShowGUI;
 
