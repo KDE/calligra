@@ -510,7 +510,11 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
     if ( e->button() == MidButton ) {
         if ( m_doc->isReadWrite() && m_currentFrameSetEdit && m_mouseMode == MM_EDIT )
+        {
+            QApplication::clipboard()->setSelectionMode( true );
             m_currentFrameSetEdit->paste();
+            QApplication::clipboard()->setSelectionMode( false );
+        }
     }
     else if ( e->button() == RightButton ) {
         if(!m_doc->isReadWrite()) // The popups are not available in readonly mode, since the GUI isn't built...
