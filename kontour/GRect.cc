@@ -33,6 +33,7 @@
 #include <kdebug.h>
 
 #include "kontour_global.h"
+#include "GPath.h"
 
 GRect::GRect(bool sFlag):
 GObject()
@@ -350,7 +351,12 @@ bool GRect::findNearestPoint(const KoPoint &p, double max_dist, double &dist, in
 
 GPath *GRect::convertToPath() const
 {
-  return 0L;
+  GPath *path = new GPath();
+  path->moveTo(sPoint.x(), sPoint.y());
+  path->lineTo(sPoint.x(), ePoint.y());
+  path->lineTo(ePoint.x(), ePoint.y());
+  path->lineTo(ePoint.x(), sPoint.y());
+  return path;
 }
 
 /*bool GRect::isValid()

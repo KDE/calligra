@@ -25,12 +25,23 @@
 #ifndef __kontour_global_h__
 #define __kontour_global_h__
 
+#include <koPoint.h>
+
+#include <math.h>
+
 namespace Kontour
 {
   const double nearDistance = 4.0;
   const double minZoomFactor = 0.06;
   const double maxZoomFactor = 100.0;
   const double pi = 3.14159265358979323846;
+  
+  inline double segLength(const KoPoint &c1, const KoPoint &c2)
+  {
+    double dx = c2.x() - c1.x();
+    double dy = c2.y() - c1.y();
+    return sqrt(dx * dx + dy * dy);
+  }
 }
 
 #endif

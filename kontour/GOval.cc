@@ -145,10 +145,6 @@ QDomElement GOval::writeToXml(QDomDocument &document)
 void GOval::draw(QPainter &p, bool withBasePoints, bool outline, bool)
 {
   p.save();
-  //QPen pen(black);
-  
-//  p.setWorldMatrix(tmpMatrix, true);
-  //p.setPen(pen);
   setPen(&p);
   setBrush(&p);
 

@@ -39,13 +39,14 @@
 class GSegment
 {
 public:
+  GSegment();
   GSegment(const QDomElement &element);
 
   virtual const KoPoint &point(int i) const = 0;
   virtual void point(int i, const KoPoint &c) = 0;
 
   virtual QDomElement writeToXml(QDomDocument &document) = 0;
-  virtual void draw(QPainter &p, bool withBasePoints, bool outline, bool drawFirst) = 0;
+  virtual void draw(QPainter &p, bool withBasePoints, bool outline) = 0;
   virtual void movePoint(int idx, double dx, double dy, bool ctrlPressed = false) = 0;
 
   virtual KoRect boundingBox() = 0;
@@ -65,11 +66,14 @@ public:
 class GLine : public GSegment
 {
 public:
+  GLine();
+  GLine(const QDomElement &element);
+
   const KoPoint &point(int i) const;
   void point(int i, const KoPoint &c);
 
   QDomElement writeToXml(QDomDocument &document);
-  void draw(QPainter &p, bool withBasePoints, bool outline, bool drawFirst);
+  void draw(QPainter &p, bool withBasePoints, bool outline);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
 
   KoRect boundingBox();
@@ -127,14 +131,15 @@ class GPath : public GObject
 {
   Q_OBJECT
 public:
-  GPath(bool aClosed);
+  GPath(bool aClosed = false);
   GPath(const QDomElement &element);
   GPath(const GPath &obj);
 
   bool closed() const {return mClosed; }
   void closed(bool aClosed);
 
-  void lineTo(KoPoint &p);
+  void moveTo(const double x, const double y);
+  void lineTo(const double x, const double y);
 //  void curveTo();
 //  void arcTo();
 
@@ -153,6 +158,8 @@ public:
 private:
   QPtrList<GSegment> segments;
   bool mClosed;
+  double endx;
+  double endy;
 };
 
 /*

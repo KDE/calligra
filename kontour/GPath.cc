@@ -31,14 +31,25 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "kontour_global.h"
 #include "GDocument.h"
+
+GSegment::GSegment()
+{
+}
 
 GSegment::GSegment(const QDomElement &element)
 {
-
 }
 
 
+GLine::GLine()
+{
+}
+
+GLine::GLine(const QDomElement &element)
+{
+}
 
 const KoPoint &GLine::point(int i) const
 {
@@ -60,9 +71,9 @@ QDomElement GLine::writeToXml(QDomDocument &document)
   return line;
 }
 
-void GLine::draw(QPainter &p, bool withBasePoints, bool outline, bool drawFirst)
+void GLine::draw(QPainter &p, bool withBasePoints, bool outline)
 {
-
+  p.drawLine(static_cast<int>(points[0].x()), static_cast<int>(points[0].y()), static_cast<int>(points[1].x()), static_cast<int>(points[1].y()));
 }
 
 void GLine::movePoint(int idx, double dx, double dy, bool ctrlPressed)
@@ -89,6 +100,7 @@ QPointArray GLine::getPoints() const
 
 double GLine::length() const
 {
+  return Kontour::segLength(points[0], points[1]);
 }
 
 
@@ -675,8 +687,20 @@ void GPath::closed(bool aClosed)
   mClosed = aClosed;
 }
 
-void GPath::lineTo(KoPoint &p)
+void GPath::moveTo(const double x, const double y)
 {
+  endx = x;
+  endy = y;
+}
+
+void GPath::lineTo(const double x, const double y)
+{
+  GLine *seg = new GLine();
+  seg->point(0, KoPoint(endx, endy));
+  seg->point(1, KoPoint(x, y));
+  segments.append(seg);
+  endx = x;
+  endy = y;
 }
 
 QString GPath::typeName() const
@@ -704,6 +728,19 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
   p.save();
   setPen(&p);
   setBrush(&p);
+  
+  if(mClosed)
+  {
+
+  }
+  else
+  {
+    for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
+    {
+      GSegment *s = (*seg);
+      s->draw(p, withBasePoints, outline);
+    }
+  }
   p.restore();
 }
 
