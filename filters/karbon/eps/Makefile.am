@@ -4,14 +4,14 @@ kde_module_LTLIBRARIES = \
 
 libkarbonepsexport_la_SOURCES = \
 	epsexport.cc \
-	epsexportdlg.cc
+	epsexportdlg.cc 
 
 libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonepsexport_la_LIBADD  = \
 	$(LIB_KOFFICEUI) \
 	../../../karbon/libkarbonpart.la
 
-libkarbonepsimport_la_SOURCES = epsimport.cc
+libkarbonepsimport_la_SOURCES = epsimport.cc pscommentlexer.cc
 libkarbonepsimport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonepsimport_la_LIBADD  = $(LIB_KOFFICEUI)
 
@@ -33,7 +33,8 @@ servicedir = $(kde_servicesdir)
 noinst_HEADERS = \
 	epsexport.h \
 	epsexportdlg.h \
-	epsimport.h
+	epsimport.h \
+	pscommentlexer.h
 
 METASOURCES = AUTO
 

@@ -19,6 +19,7 @@
 
 #include <qcstring.h>
 #include <qstring.h>
+#include <qfile.h>
 
 #include <kgenericfactory.h>
 #include <koFilter.h>
@@ -28,7 +29,7 @@
 #include <kdebug.h>
 
 #include "epsimport.h"
-
+#include "pscommentlexer.h"
 
 class EpsImportFactory : KGenericFactory<EpsImport, KoFilter>
 {
@@ -70,13 +71,38 @@ EpsImport::convert( const QCString& from, const QCString& to )
 	// Copy input filename:
 	QString input = m_chain->inputFile();
 
+
+	// EPS original bounding box
+	int llx = -1, lly = -1, urx = -1, ury = -1;
+ 	BoundingBoxExtractor extractor;
+
+	QFile file (input);
+
+	if ( file.open(IO_ReadOnly) )
+	{
+		extractor.parse (file);
+		llx = extractor.llx();
+		lly = extractor.lly();
+		urx = extractor.urx();
+		ury = extractor.ury();
+    		file.close();
+  	}
+	else
+		qDebug ("file could not be opened");
+
 	// Quote spaces in filename:
 	KRun::shellQuote( input );
 
+	// sed filter
+	QString sedFilter = QString ("sed -e \"s/%%BoundingBox: 0 0 612 792/%%BoundingBox: %1 %2 %3 %4/g\"").
+            arg(llx).arg(lly).arg(urx).arg(ury);
+
 	// Build ghostscript call to convert ps/eps -> ai:
 	QString command = QString(
-		"gs -q -dBATCH -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 > %2" ).
-			arg( input ).arg( m_chain->outputFile() );
+		"gs -q -dBATCH -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 |%2 > %3" ).
+			arg( input ).arg(sedFilter).arg( m_chain->outputFile() );
+
+	qDebug ("command to execute is (%s)",command.latin1());
 
 	// Execute it:
 	if( !system( command.latin1() ) )
