@@ -1090,16 +1090,16 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
     else
         setTextFontSize( 10 );
 
-    if ( font.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
+    if ( font.hasAttributeNS( KoXmlNS::fo, "font-style" ) && ( font.attributeNS( KoXmlNS::fo,"font-style" )== "italic" ))
     {
         kdDebug(30518) << "italic" << endl;
         setTextFontItalic( true ); // only thing we support
     }
-    if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
+    if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" ) && ( font.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold") )
         setTextFontBold( true ); // only thing we support
     if ( font.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || font.hasAttributeNS( KoXmlNS::style, "text-underline" ) )
         setTextFontUnderline( true ); // only thing we support
-    if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) )
+    if ( font.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) && ( font.attributeNS( KoXmlNS::style, "text-crossing-out" ) == "single-line" ))
         setTextFontStrike( true ); // only thing we support
     if ( font.hasAttributeNS( KoXmlNS::style, "font-pitch" ) )
     {

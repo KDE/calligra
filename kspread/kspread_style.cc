@@ -199,6 +199,8 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
         }
 #endif
         m_fontFlags |= FItalic;
+        m_featuresSet |= SFontFlag;
+
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
     {
@@ -207,6 +209,7 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-underline" ) || styleStack.hasAttributeNS( KoXmlNS::style, "text-underline" ))
     {
         m_fontFlags |= FUnderline;
+        m_featuresSet |= SFontFlag;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) )
     {
@@ -222,7 +225,9 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-crossing-out" ) )
     {
         m_fontFlags |= FStrike;
+        m_featuresSet |= SFontFlag;
     }
+
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
     {
@@ -1012,9 +1017,6 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     if ( featureSet( SFloatColor ) )
         format.setAttribute( "floatcolor", (int)m_floatColor );
 
-    if ( featureSet( SFormatType ) )
-        format.setAttribute( "format",(int) m_formatType );
-
     if ( featureSet( SCustomFormat ) && !strFormat().isEmpty() )
         format.setAttribute( "custom", m_strFormat );
 
@@ -1112,18 +1114,23 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     {
         style.addProperty("fo:font-size",m_fontSize  );
     }
+
+    if (m_fontFlags & (uint) FBold )
+        style.addProperty("fo:font-weight","bold" );
+    if ( m_fontFlags & (uint) FItalic )
+        style.addProperty("fo:font-style", "italic" );
+    if ( m_fontFlags & (uint) FUnderline )
+    {
+        style.addProperty( "style:text-underline", "single" );
+        style.addProperty( "style:text-underline-color", "font-color" );
+    }
+    if ( m_fontFlags & (uint) FStrike )
+        style.addProperty("style:text-crossing-out", "single-line" );
+
     if ( featureSet( STextPen ) && m_textPen.color().isValid() )
     {
         style.addProperty("fo:color", m_textPen.color().name() );
     }
-#if 0
-    if ( featureSet( SFontFlag ) )
-        format.setAttribute( "font-flags", m_fontFlags );
-
-    //  if ( featureSet( SFont ) )
-    //    format.appendChild( util_createElement( "font", m_textFont, doc ) );
-#endif
-
     if ( featureSet( SBackgroundBrush ) )
     {
         QString tmp = saveOasisBackgroundStyle( mainStyles, m_backGroundBrush );
