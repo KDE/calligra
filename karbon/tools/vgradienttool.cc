@@ -49,7 +49,7 @@ VGradientTool::draw()
 
 	painter->setPen( Qt::DotLine );
 	painter->newPath();
-	painter->moveTo( first() );
+	painter->moveTo( first( true ) );
 	painter->lineTo( m_current );
 	painter->strokePath();
 }
@@ -60,7 +60,7 @@ VGradientTool::mouseDrag( const KoPoint& current )
 	// undo old line
 	draw();
 
-	m_current = current;
+	m_current = last( true );
 
 	draw();
 }
@@ -68,7 +68,7 @@ VGradientTool::mouseDrag( const KoPoint& current )
 void
 VGradientTool::mouseButtonPress( const KoPoint& current )
 {
-	m_current = current;
+	m_current = first( true );
 }
 
 void
@@ -79,7 +79,7 @@ VGradientTool::mouseButtonRelease( const KoPoint& current )
 	gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
 	gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
 	gradient.setOrigin( first() );
-	gradient.setVector( current );
+	gradient.setVector( last() );
 	gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
 	gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
 
@@ -106,12 +106,17 @@ VGradientTool::mouseButtonRelease( const KoPoint& current )
 void
 VGradientTool::mouseDragRelease( const KoPoint& current )
 {
+	// Y mirroring
+	KoPoint fp = first();
+	fp.setY( -fp.y() + view()->canvasWidget()->viewport()->height() );
+	KoPoint lp = last();
+	lp.setY( -lp.y() + view()->canvasWidget()->viewport()->height() );
 	VGradient gradient;
 	gradient.clearStops();
 	gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
 	gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
-	gradient.setOrigin( first() );
-	gradient.setVector( current );
+	gradient.setOrigin( fp );
+	gradient.setVector( lp );
 	gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
 	gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
 
