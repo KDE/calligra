@@ -158,7 +158,7 @@ InsertPageCommand::execute()
 	if(classname == "KTabWidget")
 	{
 		KTabWidget *tab = (KTabWidget *)parent;
-		QString n = QString(i18n("Page %1").arg(tab->count() + 1));
+		QString n = i18n("Page %1").arg(tab->count() + 1);
 		tab->addTab(page, n);
 		tab->showPage(page);
 
