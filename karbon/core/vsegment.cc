@@ -27,9 +27,9 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		if( itr.current()->type() == segment_curve )
 		{
 			if( !curveTo(
-				itr.current()->point( 1 ),
-				itr.current()->point( 2 ),
-				itr.current()->point( 3 ) ) )
+				itr.current()->ctrlPoint1(),
+				itr.current()->ctrlPoint2(),
+				itr.current()->knot2() ) )
 			{
 				return false;
 			}
@@ -37,7 +37,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else if( itr.current()->type() == segment_line )
 		{
 			if( !lineTo(
-				itr.current()->point( 3 ) ) )
+				itr.current()->knot2() ) )
 			{
 				return false;
 			}
@@ -45,8 +45,8 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else if( itr.current()->type() == segment_curve1 )
 		{
 			if( !curve1To(
-				itr.current()->point( 2 ),
-				itr.current()->point( 3 ) ) )
+				itr.current()->ctrlPoint2(),
+				itr.current()->knot2() ) )
 			{
 				return false;
 			}
@@ -54,8 +54,8 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else if( itr.current()->type() == segment_curve2 )
 		{
 			if( !curve2To(
-				itr.current()->point( 1 ),
-				itr.current()->point( 3 ) ) )
+				itr.current()->ctrlPoint1(),
+				itr.current()->knot2() ) )
 			{
 				return false;
 			}
@@ -63,7 +63,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else if( itr.current()->type() == segment_begin )
 		{
 			if( !begin(
-				itr.current()->point( 3 ) ) )
+				itr.current()->knot2() ) )
 			{
 				return false;
 			}
@@ -71,7 +71,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else if( itr.current()->type() == segment_end )
 		{
 			if( !end(
-				itr.current()->point( 3 ) ) )
+				itr.current()->knot2() ) )
 			{
 				return false;
 			}
@@ -80,7 +80,7 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 		else
 		{
 			if( !lineTo(
-				itr.current()->point( 3 ) ) )
+				itr.current()->knot2() ) )
 			{
 				return false;
 			}

@@ -142,7 +142,7 @@ VSegmentList::~VSegmentList()
 const KoPoint&
 VSegmentList::currentPoint() const
 {
-	return getLast()->point( 3 );
+	return getLast()->knot2();
 }
 
 bool
@@ -153,7 +153,7 @@ VSegmentList::moveTo( const KoPoint& p )
 	// move "begin" when path is still empty:
 	if( getLast()->type() == segment_begin )
 	{
-		getLast()->setPoint( 3, p );
+		getLast()->setKnot2( p );
 		return true;
 	}
 
@@ -167,7 +167,7 @@ VSegmentList::lineTo( const KoPoint& p )
 
 	VSegment* s = new VSegment();
 	s->setType( segment_line );
-	s->setPoint( 3, p );
+	s->setKnot2( p );
 	append( s );
 
 	return true;
@@ -181,9 +181,9 @@ VSegmentList::curveTo(
 
 	VSegment* s = new VSegment();
 	s->setType( segment_curve );
-	s->setPoint( 1, p1 );
-	s->setPoint( 2, p2 );
-	s->setPoint( 3, p3 );
+	s->setCtrlPoint1( p1 );
+	s->setCtrlPoint2( p2 );
+	s->setKnot2( p3 );
 	append( s );
 
 	return true;
@@ -196,8 +196,8 @@ VSegmentList::curve1To( const KoPoint& p2, const KoPoint& p3 )
 
 	VSegment* s = new VSegment();
 	s->setType( segment_curve1 );
-	s->setPoint( 2, p2 );
-	s->setPoint( 3, p3 );
+	s->setCtrlPoint2( p2 );
+	s->setKnot2( p3 );
 	append( s );
 
 	return true;
@@ -210,8 +210,8 @@ VSegmentList::curve2To( const KoPoint& p1, const KoPoint& p3 )
 
 	VSegment* s = new VSegment();
 	s->setType( segment_curve2 );
-	s->setPoint( 1, p1 );
-	s->setPoint( 3, p3 );
+	s->setCtrlPoint1( p1 );
+	s->setKnot2( p3 );
 	append( s );
 
 	return true;
@@ -294,15 +294,14 @@ VSegmentList::close()
 	// move end-segment if one already exists:
 	if( getLast()->type() == segment_end )
 	{
-		getLast()->
-			setPoint( 3, getFirst()->point( 3 ) );
+		getLast()->setKnot2( getFirst()->knot2() );
 	}
 	// append one, if no end-segment exists:
-	else if( getLast()->point( 3 ) != getFirst()->point( 3 ) )
+	else if( getLast()->knot2() != getFirst()->knot2() )
 	{
 		VSegment* s = new VSegment();
 		s->setType( segment_end );
-		s->setPoint( 3, getFirst()->point( 3 ) );
+		s->setKnot2( getFirst()->knot2() );
 		append( s );
 	}
 
@@ -316,9 +315,9 @@ VSegmentList::transform( const QWMatrix& m )
 	VSegment* segment = m_first;
 	while( segment )
 	{
-		segment->m_point[0] = segment->m_point[0].transform( m );
-		segment->m_point[1] = segment->m_point[1].transform( m );
-		segment->m_point[2] = segment->m_point[2].transform( m );
+		segment->setCtrlPoint1( segment->ctrlPoint1().transform( m ) );
+		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m ) );
+		segment->setKnot2( segment->knot2().transform( m ) );
 		segment = segment->m_next;
 	}
 }

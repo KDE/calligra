@@ -68,16 +68,16 @@ public:
 	VSegmentType type() const { return m_type; }
 	void setType( VSegmentType t ) { m_type = t; }
 
-	const KoPoint& point( uint i ) const
-	{
-		if( i > 0 && i < 4 )	// index 1..3 feel more natural than 0..2
-			return m_point[--i];
-		else
-			return m_point[2];
-	}
+	const KoPoint& ctrlPoint1() const { return m_point[0]; }
+	const KoPoint& ctrlPoint2() const { return m_point[1]; }
 
-	void setPoint( uint i, const KoPoint& p )
-		{ if( i > 0 && i < 4 ) m_point[--i] = p; }
+	// you have to make sure yourself that you don't call knot1() on a "begin"-segment:
+	const KoPoint& knot1() const { return m_prev->m_point[2]; }
+	const KoPoint& knot2() const { return m_point[2]; }
+
+	void setCtrlPoint1( const KoPoint& p ) { m_point[0] = p; }
+	void setCtrlPoint2( const KoPoint& p ) { m_point[1] = p; }
+	void setKnot2( const KoPoint& p ) { m_point[2] = p; }
 
 	/// Returns true if segment is flat (see VGlobal for tolerance value).
 	bool isFlat() const;

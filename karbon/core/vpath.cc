@@ -67,27 +67,27 @@ VPath::draw( VPainter *painter, const QRect& rect,
 			{
 				if( jtr.current()->type() == segment_curve  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 2 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->ctrlPoint1(),
+						jtr.current()->ctrlPoint2(),
+						jtr.current()->knot2() );
 				else if( jtr.current()->type() == segment_curve1  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->knot1(),
+						jtr.current()->ctrlPoint2(),
+						jtr.current()->knot2() );
 				else if( jtr.current()->type() == segment_curve2  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 3 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->ctrlPoint1(),
+						jtr.current()->knot2(),
+						jtr.current()->knot2() );
 				else if(
 					jtr.current()->type() == segment_line ||
 					jtr.current()->type() == segment_end  )
 				{
-					painter->lineTo( jtr.current()->point( 3 ) );
+					painter->lineTo( jtr.current()->knot2() );
 				}
 				else
-					painter->moveTo( jtr.current()->point( 3 ) );
+					painter->moveTo( jtr.current()->knot2() );
 			}
 		}
 
@@ -104,27 +104,27 @@ VPath::draw( VPainter *painter, const QRect& rect,
 			{
 				if( jtr.current()->type() == segment_curve  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 2 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->ctrlPoint1(),
+						jtr.current()->ctrlPoint2(),
+						jtr.current()->knot2() );
 				else if( jtr.current()->type() == segment_curve1  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->knot1(),
+						jtr.current()->ctrlPoint2(),
+						jtr.current()->knot2() );
 				else if( jtr.current()->type() == segment_curve2  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 3 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->ctrlPoint1(),
+						jtr.current()->knot2(),
+						jtr.current()->knot2() );
 				else if(
 					jtr.current()->type() == segment_line ||
 					jtr.current()->type() == segment_end  )
 				{
-					painter->lineTo( jtr.current()->point( 3 ) );
+					painter->lineTo( jtr.current()->knot2() );
 				}
 				else
-					painter->moveTo( jtr.current()->point( 3 ) );
+					painter->moveTo( jtr.current()->knot2() );
 			}
 		}
 
@@ -144,27 +144,27 @@ VPath::draw( VPainter *painter, const QRect& rect,
 			{
 				if( jtr.current()->type() == segment_curve  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 2 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->ctrlPoint1(),
+						jtr.current()->ctrlPoint2(),
+						jtr.current()->knot2() );
 				else if( jtr.current()->type() == segment_curve1  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->knot1(),
+						jtr.current()->ctrlPoint2(),
+						jtr.current()->knot2() );
 				else if( jtr.current()->type() == segment_curve2  )
 					painter->curveTo(
-						jtr.current()->point( 1 ),
-						jtr.current()->point( 3 ),
-						jtr.current()->point( 3 ) );
+						jtr.current()->ctrlPoint1(),
+						jtr.current()->knot2(),
+						jtr.current()->knot2() );
 				else if(
 					jtr.current()->type() == segment_line ||
 					jtr.current()->type() == segment_end  )
 				{
-					painter->lineTo( jtr.current()->point( 3 ) );
+					painter->lineTo( jtr.current()->knot2() );
 				}
 				else
-					painter->moveTo( jtr.current()->point( 3 ) );
+					painter->moveTo( jtr.current()->knot2() );
 			}
 		}
 
@@ -188,8 +188,8 @@ VPath::draw( VPainter *painter, const QRect& rect,
 			for( ; jtr.current(); ++jtr )
 			{
 				qpainter.drawRect(
-					qRound( zoomFactor * jtr.current()->point( 3 ).x() ) - 2,
-					qRound( zoomFactor * jtr.current()->point( 3 ).y() ) - 2, 5, 5 );
+					qRound( zoomFactor * jtr.current()->knot2().x() ) - 2,
+					qRound( zoomFactor * jtr.current()->knot2().y() ) - 2, 5, 5 );
 			}
 		}
 	}
