@@ -3,7 +3,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 kchart_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kchart_LDADD = ../lib/kofficeui/libkofficeui.la
 
-libkchart_la_LDFLAGS = -version-info 1:0:0
+libkchart_la_LDFLAGS = -avoid-version -module
 
 libkchart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 

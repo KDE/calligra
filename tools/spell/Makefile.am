@@ -9,7 +9,7 @@ lib_LTLIBRARIES = libkspelltool.la
 
 libkspelltool_la_SOURCES = main.cc
 
-libkspelltool_la_LDFLAGS = -version-info 1:0:0
+libkspelltool_la_LDFLAGS = -avoid-version -module
 
 noinst_HEADERS = main.h
 
