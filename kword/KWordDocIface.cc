@@ -768,3 +768,13 @@ QStringList KWordDocIface::personalExpressionPath()const
     //return all list
     return doc->personalExpresssionPath();
 }
+
+QString KWordDocIface::picturePath()const
+{
+    return doc->picturePath();
+}
+
+void KWordDocIface::setPicturePath( const QString & _path )
+{
+    doc->setPicturePath( _path );
+}

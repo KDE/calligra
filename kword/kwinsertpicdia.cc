@@ -19,6 +19,7 @@
 */
 
 #include "kwinsertpicdia.h"
+#include "kwdoc.h"
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <qpainter.h>
@@ -86,9 +87,10 @@ private:
 
 //////////////
 
-KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, const char *name )
+KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, KWDocument *_doc, const char *name )
     : KDialogBase( Plain, i18n("Insert Picture"), Ok|Cancel, Ok, parent, name, true )
 {
+    m_doc = _doc;
     setInitialSize( QSize(400, 300) );
     m_bFirst =true;
     QWidget *page = plainPage();
@@ -133,7 +135,7 @@ bool KWInsertPicDia::keepRatio() const
 
 void KWInsertPicDia::slotChooseImage()
 {
-    int result = KWInsertPicDia::selectPictureDia( m_filename, SelectImage | SelectClipart );
+    int result = KWInsertPicDia::selectPictureDia( m_filename, SelectImage | SelectClipart, m_doc->picturePath() );
     if ( m_filename.isEmpty() && m_bFirst)
     {
         KDialogBase::close();

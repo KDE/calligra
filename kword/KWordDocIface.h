@@ -216,6 +216,8 @@ k_dcop:
     QString configAutoFormatLanguage( )const;
 
     QStringList personalExpressionPath()const;
+    QString picturePath()const;
+    void setPicturePath( const QString & _path );
 
 private:
     KWDocument *doc;

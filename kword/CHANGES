@@ -274,3 +274,4 @@ Changes after KWord-1.2
 - Paragraph numbering: setting a depth doesn't imply "chapter numbering" anymore
 - Add "copy link"
 - Add "Add to bookmark"
+- Now we can change "picture path" / "personal expression path"

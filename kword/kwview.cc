@@ -2905,7 +2905,7 @@ void KWView::insertPicture()
 {
     if ( actionToolsCreatePix->isChecked() )
     {
-        KWInsertPicDia dia( this,m_gui->canvasWidget()->pictureInline(),m_gui->canvasWidget()->pictureKeepRatio() );
+        KWInsertPicDia dia( this,m_gui->canvasWidget()->pictureInline(),m_gui->canvasWidget()->pictureKeepRatio(),m_doc );
         if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
         {
             insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline(), dia.pixmapSize(),dia.keepRatio() );

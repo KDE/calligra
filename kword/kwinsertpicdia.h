@@ -24,12 +24,13 @@
 class QCheckBox;
 class KWInsertPicPreview;
 class KFileDialog;
+class KWDocument;
 
 class KWInsertPicDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, const char *name = 0 );
+    KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, KWDocument *_doc, const char *name = 0 );
 
     // IPD = InsertPicDia :)
     enum { IPD_IMAGE = 0, IPD_CLIPART };
@@ -66,6 +67,7 @@ private:
     bool m_bFirst;
     QCheckBox *m_cbInline, *m_cbKeepRatio;
     KWInsertPicPreview *m_preview;
+    KWDocument *m_doc;
 };
 
 #endif
