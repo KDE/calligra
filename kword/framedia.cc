@@ -54,11 +54,11 @@
 /******************************************************************/
 /* Class: KWFrameDia						  *
  *
- *  TAB nr1 Frame Options
+ *  TAB Frame Options
  *	Set options dependend of frametype
- *  TAB nr2 Text Runaround
- *	Set the text from of this frame
- *  TAB nr3 Frameset
+ *  TAB Text Runaround
+ *	Set the text behaviour of this frame
+ *  TAB Frameset
  *	here the user can select from the current TEXT framesets, a new one is
  *	included in the list.
  *	Afterwards (on ok) the frame should be checked if it is allready owned by a
@@ -66,7 +66,7 @@
  *	framebehaviour will be copied from the frameset
  *	then the new connection should be made.
  *
- *  TAB nr4 Geometry
+ *  TAB Geometry
  *	position/size
  ******************************************************************/
 
@@ -114,12 +114,14 @@ void KWFrameDia::init() {
                showPage(2);
         } else if(frameType == FT_PICTURE) {
             setupTab1();
+            setupTab2();
             setupTab4();
         } else if(frameType == FT_PART) {
             setupTab2();
             setupTab4();
         } else if(frameType == FT_FORMULA) {
             setupTab1();
+            setupTab2();
             setupTab4();
         }
     } else 
@@ -157,18 +159,20 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     else
 	grid1->addWidget(floating,0,0);
     /* ideally the following properties could be given to any floating frame:
-       Position: Top of frame
-       Top of paragraph
-       Above current line
-       At insertion point
-       Below current line
-       Bottom of paragraph
-       Bottom of frame
-       Alignment:Left
-       Right
-       Center
-       Closest to binding
-       Further from binding
+       Position: 
+        Top of frame
+        Top of paragraph
+        Above current line
+        At insertion point
+        Below current line
+        Bottom of paragraph
+        Bottom of frame
+       Alignment:
+        Left
+        Right
+        Center
+        Closest to binding
+        Further from binding
     */
 
     // formula frame
@@ -321,7 +325,7 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
 
     grid2 = new QGridLayout( tab2, 3, 2, 15, 7 );
 
-    runGroup = new QGroupBox( i18n( "Text in this frame will:" ), tab2 );
+    runGroup = new QGroupBox( i18n( "Text in other frames will:" ), tab2 );
 
     runGrid = new QGridLayout( runGroup, 4, 3, 15, 7 );
 
@@ -344,17 +348,17 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     lRunContur->resize( pixmap.size() );
     runGrid->addWidget( lRunContur, 2, 0 );
 
-    rRunNo = new QRadioButton( i18n( "&Run through other frames" ), runGroup );
+    rRunNo = new QRadioButton( i18n( "&Run through this frame" ), runGroup );
     rRunNo->resize( rRunNo->sizeHint() );
     runGrid->addWidget( rRunNo, 0, 1 );
     connect( rRunNo, SIGNAL( clicked() ), this, SLOT( runNoClicked() ) );
 
-    rRunBounding = new QRadioButton( i18n( "Run around the &bounding rectangle of other frames" ), runGroup );
+    rRunBounding = new QRadioButton( i18n( "Run around the &bounding rectangle of this frame" ), runGroup );
     rRunBounding->resize( rRunBounding->sizeHint() );
     runGrid->addWidget( rRunBounding, 1, 1 );
     connect( rRunBounding, SIGNAL( clicked() ), this, SLOT( runBoundingClicked() ) );
 
-    rRunContur = new QRadioButton( i18n( "&Not run around other frames" ), runGroup );
+    rRunContur = new QRadioButton( i18n( "&Not run around this frame" ), runGroup );
     rRunContur->resize( rRunContur->sizeHint() );
     runGrid->addWidget( rRunContur, 2, 1 );
     connect( rRunContur, SIGNAL( clicked() ), this, SLOT( runConturClicked() ) );
@@ -879,21 +883,7 @@ bool KWFrameDia::applyChanges()
 		frame->setFrameBehaviour(Ignore);
 	    }
 	}
-	// TODO do some intelligent stuff with this setting so
-	// the frameset will be updated as well when, for instance,
-	// all the frames have been set to a particular setting.
 
-	// Run around
-	
-	if ( tab2 ) {
-	    if ( rRunNo->isChecked() )
-		frame->setRunAround( RA_NO );
-	    else if ( rRunBounding->isChecked() )
-		frame->setRunAround( RA_BOUNDINGRECT );
-	    else if ( rRunContur->isChecked() )
-		frame->setRunAround( RA_SKIP );
-	}
-	
 	// NewFrameBehaviour
 	if ( tab1 ) {
 	    if(reconnect->isChecked()) {
@@ -904,8 +894,16 @@ bool KWFrameDia::applyChanges()
 		frame->setNewFrameBehaviour(Copy);
 	    }
 	}
-	
+
+	// Run around
 	if ( tab2 ) {
+	    if ( rRunNo->isChecked() )
+		frame->setRunAround( RA_NO );
+	    else if ( rRunBounding->isChecked() )
+		frame->setRunAround( RA_BOUNDINGRECT );
+	    else if ( rRunContur->isChecked() )
+		frame->setRunAround( RA_SKIP );
+
 	    KWUnit u;
 	    switch ( KWUnit::unitType( doc->getUnit() ) ) {
 	    case U_MM: u.setMM( atof( eRGap->text() ) );
@@ -917,7 +915,6 @@ bool KWFrameDia::applyChanges()
 	    }
 	    frame->setRunAroundGap( u );
 	}
-
     }
     int currFS = -1;
 
