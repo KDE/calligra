@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=SQLite
+Comment=SQLite is default Kexi embedded SQL engine
+X-KDE-Library=kexidb_sqlitedriver
+ServiceTypes=Kexi/DBDriver
+Type=Service
+InitialPreference=8
+MimeType=text/plain
+X-Kexi-Location=LocalDB
+X-Kexi-DriverName=SQLite
