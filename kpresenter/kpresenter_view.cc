@@ -3066,7 +3066,7 @@ void KPresenterView::objectSelectedChanged()
         actionEditCopy->setEnabled(state);
         actionEditCut->setEnabled(state);
     }
-    actionFormatStyle->setEnabled(val);
+    actionFormatStyle->setEnabled(isText);
     state=m_canvas->oneObjectTextExist();
     actionEditSearch->setEnabled(state);
     actionEditReplace->setEnabled(state);
@@ -5520,6 +5520,27 @@ void KPresenterView::textStyleSelected( int index )
         edit->applyStyle( m_pKPresenterDoc->styleCollection()->styleAt( index ) );
         m_canvas->setFocus();
     }
+    else
+    {
+        QPtrList<KPTextObject> selectedFrames = m_canvas->selectedTextObjs();
+
+        if (selectedFrames.count() <= 0)
+            return; // nope, no frames are selected.
+        // yes, indeed frames are selected.
+        QPtrListIterator<KPTextObject> it( selectedFrames );
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply style to frame") : i18n("Apply style to frames"));
+        for ( ; it.current() ; ++it )
+        {
+            KoTextObject *textObject = it.current()->textObject();
+            textObject->textDocument()->selectAll( KoTextDocument::Temp );
+            KCommand *cmd = textObject->applyStyle( 0L, m_pKPresenterDoc->styleCollection()->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, QTextFormat::Format, true, true );
+            textObject->textDocument()->removeSelection( KoTextDocument::Temp );
+            if (cmd)
+                globalCmd->addCommand( cmd );
+        }
+        m_pKPresenterDoc->addCommand( globalCmd );
+    }
+
 }
 
 #include <kpresenter_view.moc>
