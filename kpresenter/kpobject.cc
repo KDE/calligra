@@ -752,7 +752,7 @@ double KPShadowObject::load(const QDomElement &element)
     if(!e.isNull())
         setPen(KPObject::toPen(e));
     else
-        pen=QPen();
+        pen.setWidth(1);/*=QPen();*/
     e=element.namedItem(tagBRUSH).toElement();
     if(!e.isNull())
         setBrush(KPObject::toBrush(e));
@@ -873,7 +873,7 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 double KP2DObject::load(const QDomElement &element)
 {
     double offset=KPShadowObject::load(element);
- 
+
     QDomElement e=element.namedItem(tagFILLTYPE).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrValue))
