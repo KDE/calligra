@@ -125,7 +125,7 @@ private:
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void writePictureData(const QString& koStoreName, const QString& keyName);
-
+    QString transformToTextDate(const QDateTime& dt);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
@@ -1076,6 +1076,68 @@ bool AbiWordWorker::doFullSpellCheckIgnoreWord (const QString& ignoreword)
     return true;
 }
 
+// Similar to QDateTime::toString, but guaranteed *not* to be translated
+QString AbiWordWorker::transformToTextDate(const QDateTime& dt)
+{
+    if (dt.isValid())
+    {
+        QString result;
+
+        const QDate date(dt.date());
+
+        const char* dayName[7] = { "Mon", "Thu", "Wed", "Tue", "Fri", "Sat", "Sun" };
+        const int dow = date.dayOfWeek() - 1;
+        if ((dow<0) || (dow>6))
+            result += "Mon"; // Unknown day, rename it Monday.
+        else
+            result += dayName[dow];
+        result += ' ';
+
+        const char* monthName[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+        const int month = date.month() - 1;
+        if ((month<0) || (month>11))
+            result += "Jan"; // Unknown month, rename it January
+        else
+            result += monthName[month];
+        result += ' ';
+
+        QString temp;
+
+        temp = "00";
+        temp += QString::number(date.day(), 10);
+        result += temp.right(2);
+        result += ' ';
+
+        const QTime time(dt.time());
+
+        temp = "00";
+        temp += QString::number(time.hour(), 10);
+        result += temp.right(2);
+        result += ':';
+
+        temp = "00";
+        temp += QString::number(time.minute(), 10);
+        result += temp.right(2);
+        result += ':';
+
+        temp = "00";
+        temp += QString::number(time.second(), 10);
+        result += temp.right(2);
+        result += ' ';
+
+        temp = "0000";
+        temp += QString::number(date.year(), 10);
+        result += temp.right(4);
+
+        return result;
+    }
+    else
+    {
+        // Invalid, so give back 1970-01-01
+        return "Tue Jan 01 00:00:00 1970";
+    }
+}
+
 bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
     m_docInfo=docInfo;
@@ -1105,7 +1167,7 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 
     QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
     *m_streamOut << "<m key=\"abiword.date_last_changed\">"
-         << escapeAbiWordText(now.toString(Qt::ISODate)) // ### PROBLEM: AbiWord uses an unlocalized Qt::TextDate
+         << escapeAbiWordText(transformToTextDate(now))
          << "</m>\n";
 
     *m_streamOut << "</metadata>\n";
