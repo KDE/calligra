@@ -1197,7 +1197,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int indent=0;
     int a = defineAlignX();
     //apply indent if text is align to left not when text is at right or middle
-    if(  a==KSpreadCell::Left)
+    if(  a==KSpreadCell::Left && !isEmpty())
         indent=getIndent(column(),row());
 
     // Do we have to occupy additional cells right hand ?
@@ -2723,7 +2723,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         int indent=0;
         int a = defineAlignX();
         //apply indent if text is align to left not when text is at right or middle
-        if(  a==KSpreadCell::Left)
+        if(  a==KSpreadCell::Left && !isEmpty())
                 indent=getIndent(column(),row());
         int tmpAngle=getAngle(_col,_row);
         if ( !multiRow(_col,_row) && !verticalText(_col,_row) && !tmpAngle)
@@ -2934,10 +2934,14 @@ if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue())
                 len+=cl2->width() - 1;
                 }
         QString tmp;
+        int tmpIndent=0;
+        if(!isEmpty())
+                tmpIndent=getIndent(column(),row());
         for (int i=m_strOutText.length();i!=0;i--)
                 {
                 tmp=m_strOutText.left(i);
-                if((fm.width(tmp)+getIndent(column(),row()))<(len-4-1)) //4 equal lenght of red triangle +1 pixel
+
+                if((fm.width(tmp)+tmpIndent)<(len-4-1)) //4 equal lenght of red triangle +1 pixel
                         {
                         return tmp;
                         }
