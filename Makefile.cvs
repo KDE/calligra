@@ -10,4 +10,4 @@ all:
 	   echo "   link kde-common/admin to ./admin" ;\
 	   exit 1 ;\
 	fi
-	make -f admin/Makefile.cvs
+	$(MAKE) -f admin/Makefile.common cvs
