@@ -938,11 +938,8 @@ VSegment::transform( const QWMatrix& m )
 		}
 		else if( pointIsSelected( 0 ) )
 		{
-			if( prev() && prev()->type() == curve && prev()->knotIsSelected() )
-			{
-				QWMatrix m2( m.m11(), m.m12(), m.m21(), m.m22(), -m.dx(), -m.dy() );
+			if( prev() && ( prev()->type() == begin || ( prev()->type() == curve && prev()->knotIsSelected() ) ) )
 				setPoint( 0, point( 0 ).transform( m ) );
-			}
 		}
 		else if( pointIsSelected( 1 ) )
 		{
