@@ -2789,11 +2789,7 @@ void KWDocument::updateStyleListOrder( const QStringList &list )
 
 void KWDocument::applyStyleChange( StyleChangeDefMap changed )
 {
-    QPtrList<KWTextFrameSet> textFramesets;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit ) {
-        fit.current()->addTextFrameSets(textFramesets);
-    }
+    QPtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
@@ -3235,6 +3231,11 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, int keyState )
         if ( frameSet->isProtectSize() )
             return Qt::forbiddenCursor;
         return Qt::sizeVerCursor;
+    case MEANING_RESIZE_COLUMN:
+        // Bug in (at least) Qt-3.1.1 : Qt::splitVCursor and Qt::splitHCursor are swapped!
+        return QCursor(SplitVCursor);
+    case MEANING_RESIZE_ROW:
+        return QCursor(SplitHCursor);
     }
     return QCursor(); // default cursor !?!?
 }
@@ -4258,11 +4259,7 @@ void KWDocument::setGridX(double _gridx) {
 QValueList<KoTextObject *> KWDocument::visibleTextObjects(KWViewMode *viewmode) const
 {
     QValueList<KoTextObject *> lst;
-    QPtrList<KWTextFrameSet> textFramesets;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit ) {
-        fit.current()->addTextFrameSets(textFramesets);
-    }
+    QPtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ) {
@@ -4295,11 +4292,7 @@ bool KWDocument::backgroundSpellCheckEnabled() const
 
 void KWDocument::reactivateBgSpellChecking()
 {
-    QPtrList<KWTextFrameSet> textFramesets;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit ) {
-        fit.current()->addTextFrameSets(textFramesets);
-    }
+    QPtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
@@ -4309,18 +4302,9 @@ void KWDocument::reactivateBgSpellChecking()
     startBackgroundSpellCheck();
 }
 
+// to be removed
 KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
 {
-#if 0 // TODO (rewrite)
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        // Look for the [toplevel] frameset currently being checked
-        if ( fit.current() == bgFrameSpellChecked )
-        {
-        }
-    }
-#endif
     int pos = -1;
     if ( bgFrameSpellChecked )
         pos=m_lstFrameSet.findNextRef(bgFrameSpellChecked);
@@ -4500,28 +4484,26 @@ int KWDocument::maxZOrder( int pageNum) const
     return maxZOrder;
 }
 
-
-int KWDocument::numberOfTextFrameSet( KWFrameSet* fs, bool forceAllTextFrameSet )
+QPtrList<KWTextFrameSet> KWDocument::allTextFramesets(bool onlyReadWrite) const
 {
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
         if(fit.current()->isDeleted()) continue;
-        fit.current()->addTextFrameSets(textFramesets, forceAllTextFrameSet);
+        fit.current()->addTextFrameSets(textFramesets, onlyReadWrite);
     }
+    return textFramesets;
+}
+
+int KWDocument::numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite )
+{
+    QPtrList<KWTextFrameSet> textFramesets = allTextFramesets( onlyReadWrite );
     return textFramesets.findRef( static_cast<KWTextFrameSet*>(fs) );
 }
 
-KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num, bool forceAllTextFrameSet )
+KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num, bool onlyReadWrite )
 {
-    QPtrList<KWTextFrameSet> textFramesets;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit ) {
-        if(fit.current()->isDeleted()) continue;
-        fit.current()->addTextFrameSets(textFramesets, forceAllTextFrameSet);
-    }
-    return textFramesets.at( _num );
-
+    return allTextFramesets( onlyReadWrite ).at( _num );
 }
 
 void KWDocument::updateTextFrameSetEdit()
@@ -4589,10 +4571,7 @@ void KWDocument::setDontCheckTitleCase(bool _b)
 void KWDocument::setTabStopValue ( double _tabStop )
 {
     m_tabStop = _tabStop;
-    QPtrList<KWTextFrameSet> textFramesets;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-        fit.current()->addTextFrameSets(textFramesets);
+    QPtrList<KWTextFrameSet> textFramesets = allTextFramesets( true );
 
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){

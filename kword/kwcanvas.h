@@ -304,9 +304,10 @@ private:
     bool m_deleteMovingRect, m_frameMoved, m_frameResized;
     bool m_ctrlClickOnSelectedFrame;
     KoPicture m_kopicture; // The picture
-    QSize m_pixmapSize; // size when inserting a picture (not necessaraly the size of the picture)
+    QSize m_pixmapSize; // size when inserting a picture (not necessarily the size of the picture)
     bool m_keepRatio;//when inserting a picture
     KoDocumentEntry m_partEntry; // when inserting a part
+    int m_rowColResized; // when resizing a row or column
 
     // Table creation support.
     // Having this as a member variable allows to remember and reuse the last settings

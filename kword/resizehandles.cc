@@ -52,73 +52,36 @@ KWResizeHandle::~KWResizeHandle()
 
 void KWResizeHandle::applyCursorType()
 {
-    bool protect = frame->frameSet()->isProtectSize();
+    if ( frame->frameSet()->isProtectSize() )  {
+        setCursor( Qt::forbiddenCursor );
+        return;
+    }
     switch ( direction )
     {
     case LeftUp:
-    {
-        if ( protect )
-            setCursor( Qt::forbiddenCursor );
-        else
-            setCursor( Qt::sizeFDiagCursor );
+        setCursor( Qt::sizeFDiagCursor );
         break;
-    }
     case Up:
-    {
-        if ( protect )
-            setCursor( Qt::forbiddenCursor );
-        else
-            setCursor( Qt::sizeVerCursor );
+        setCursor( Qt::sizeVerCursor );
         break;
-    }
     case RightUp:
-    {
-        if ( protect )
-            setCursor( Qt::forbiddenCursor );
-        else
-            setCursor( Qt::sizeBDiagCursor );
+        setCursor( Qt::sizeBDiagCursor );
         break;
-    }
     case Right:
-    {
-        if ( protect )
-            setCursor( Qt::forbiddenCursor );
-        else
-            setCursor( Qt::sizeHorCursor );
+        setCursor( Qt::sizeHorCursor );
         break;
-    }
     case RightDown:
-    {
-        if ( protect )
-            setCursor( Qt::forbiddenCursor );
-        else
-            setCursor( Qt::sizeFDiagCursor );
+        setCursor( Qt::sizeFDiagCursor );
         break;
-    }
     case Down:
-    {
-        if (protect )
-            setCursor( Qt::forbiddenCursor );
-        else
-            setCursor( Qt::sizeVerCursor );
+        setCursor( Qt::sizeVerCursor );
         break;
-    }
     case LeftDown:
-    {
-        if ( protect )
-            setCursor( Qt::forbiddenCursor );
-        else
-            setCursor( Qt::sizeBDiagCursor );
+        setCursor( Qt::sizeBDiagCursor );
         break;
-    }
     case Left:
-    {
-        if ( protect )
-            setCursor( Qt::forbiddenCursor );
-        else
-            setCursor( Qt::sizeHorCursor );
+        setCursor( Qt::sizeHorCursor );
         break;
-    }
     }
 }
 

@@ -116,7 +116,7 @@ public:
     void setSelected( bool _selected );
     bool isSelected()const { return m_selected; }
 
-    MouseMeaning getMouseMeaning( const KoPoint& docPoint, bool table, MouseMeaning defaultCursor );
+    MouseMeaning getMouseMeaning( const KoPoint& docPoint, MouseMeaning defaultMeaning );
 
     double runAroundGap()const { return m_runAroundGap; }
     void setRunAroundGap( double gap ) { m_runAroundGap = gap; }
@@ -435,7 +435,7 @@ public:
      */
     virtual FrameSetType typeAsKOffice1Dot1(void) { return type(); }
 
-    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool /*forceAllTextFrameSet*/ = false ) {};
+    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool /*onlyReadWrite*/ = false ) {};
     virtual bool ownLine() const { return FALSE;}
 
     /** The different types of textFramesets (that TEXT is important here!)

@@ -146,42 +146,47 @@ int KWFrame::pageNum( KWDocument* doc ) const
     //return QMIN( page, doc->numPages()-1 );
 }
 
-MouseMeaning KWFrame::getMouseMeaning( const KoPoint & docPoint, bool table, MouseMeaning defaultPosition )
+MouseMeaning KWFrame::getMouseMeaning( const KoPoint & docPoint, MouseMeaning defaultMeaning )
 {
-    if ( !m_selected && !table )
-        return defaultPosition;
+    if ( !m_selected )
+        return defaultMeaning;
+
+    double hs = 6; // horizontal snap zone (in pt)
+    double vs = 6; // vertical snap zone (in pt)
+    if ( width() < 18 )
+        hs = width() / 3; // frame is not wide enough -> leave some room to click inside it
+    if ( height() < 18 )
+        vs = height() / 3; // same thing if frame is not high enough
+    // Note that this makes a big zone when zooming in .... one that doesn't match
+    // the resize handles. Maybe we should calculate the area a bit differently
+    // (on both sides of the line), and allow resizing without selecting.
 
     double mx = docPoint.x();
     double my = docPoint.y();
 
-    if ( !table ) {
-        if ( mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6 )
-            return MEANING_TOPLEFT;
-        if ( mx >= x() && my >= y() + height() / 2 - 3 && mx <= x() + 6 && my <= y() + height() / 2 + 3 )
-            return MEANING_LEFT;
-        if ( mx >= x() && my >= y() + height() - 6 && mx <= x() + 6 && my <= y() + height() )
-            return MEANING_BOTTOMLEFT;
-        if ( mx >= x() + width() / 2 - 3 && my >= y() && mx <= x() + width() / 2 + 3 && my <= y() + 6 )
-            return MEANING_TOP;
-        if ( mx >= x() + width() / 2 - 3 && my >= y() + height() - 6 && mx <= x() + width() / 2 + 3 &&
-             my <= y() + height() )
-            return MEANING_BOTTOM;
-        if ( mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + 6 )
-            return MEANING_TOPRIGHT;
-        if ( mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() &&
-             my <= y() + height() / 2 + 3 )
-            return MEANING_RIGHT;
-        if ( mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
-            return MEANING_BOTTOMRIGHT;
-    } else { // Tables
-        // ### TODO move to KWTableFrameSet
-        if ( mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + height() )
-            return MEANING_RIGHT;
-        if ( mx >= x() && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
-            return MEANING_BOTTOM;
-    }
+    // Corners
+    if ( mx >= x() && my >= y() && mx <= x() + hs && my <= y() + vs )
+        return MEANING_TOPLEFT;
+    if ( mx >= x() && my >= y() + height() - vs && mx <= x() + hs && my <= y() + height() )
+        return MEANING_BOTTOMLEFT;
+    if ( mx >= x() + width() - hs && my >= y() && mx <= x() + width() && my <= y() + vs )
+        return MEANING_TOPRIGHT;
+    if ( mx >= x() + width() - hs && my >= y() + height() - vs && mx <= x() + width() && my <= y() + height() )
+        return MEANING_BOTTOMRIGHT;
 
-    return defaultPosition;
+    // Middle of edges
+    if ( mx >= x() && my >= y() + height() / 2 - vs/2 && mx <= x() + hs && my <= y() + height() / 2 + vs/2 )
+        return MEANING_LEFT;
+    if ( mx >= x() + width() / 2 - hs/2 && my >= y() && mx <= x() + width() / 2 + hs/2 && my <= y() + vs )
+        return MEANING_TOP;
+    if ( mx >= x() + width() / 2 - hs/2 && my >= y() + height() - vs && mx <= x() + width() / 2 + hs/2 &&
+         my <= y() + height() )
+        return MEANING_BOTTOM;
+    if ( mx >= x() + width() - hs && my >= y() + height() / 2 - vs/2 && mx <= x() + width() &&
+         my <= y() + height() / 2 + vs/2 )
+        return MEANING_RIGHT;
+
+    return defaultMeaning;
 }
 
 KWFrame *KWFrame::getCopy() {
@@ -1341,6 +1346,9 @@ bool KWFrameSet::contains( double mx, double my )
 
 MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
 {
+    if ( grpMgr ) // Cells forward the call to the table
+        return grpMgr->getMouseMeaning( nPoint, keyState );
+
     bool canMove = isMoveable();
     KoPoint docPoint = m_doc->unzoomPoint( nPoint );
     MouseMeaning defaultCursor = canMove ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
@@ -1348,7 +1356,7 @@ MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
     KWFrame * frame = frameByBorder( nPoint );
     if ( frame )
     {
-        return frame->getMouseMeaning( docPoint, grpMgr ? true : false, defaultCursor );
+        return frame->getMouseMeaning( docPoint, defaultCursor );
     }
 
     frame = frameAtPos( docPoint.x(), docPoint.y() );
@@ -1365,7 +1373,8 @@ MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
     if ( (keyState & ShiftButton) && (m_doc->getFirstSelectedFrame() != 0L) )
         return defaultCursor;
 
-    return frame->getMouseMeaning( docPoint, grpMgr ? true : false, MEANING_MOUSE_INSIDE_TEXT );
+    // huh? return frame->getMouseMeaning( docPoint, MEANING_MOUSE_INSIDE_TEXT );
+    return MEANING_MOUSE_INSIDE_TEXT;
 }
 
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )

@@ -446,8 +446,10 @@ public:
     KWFrame *getFirstSelectedFrame() const;
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
 
-    int numberOfTextFrameSet( KWFrameSet* fs,bool forceAllTextFrameSet );
-    KWFrameSet * textFrameSetFromIndex( unsigned int _num,bool forceAllTextFrameSet );
+    // Those three method consider _all_ text framesets, even table cells
+    QPtrList<KWTextFrameSet> allTextFramesets( bool onlyReadWrite ) const;
+    int numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite );
+    KWFrameSet * textFrameSetFromIndex( unsigned int _num, bool onlyReadWrite );
 
 
     /** Gather all the frames which are on a certain page and return them.
@@ -746,6 +748,7 @@ public:
     void initUnit();
     void startBackgroundSpellCheck();
     void reactivateBgSpellChecking();
+    //to be removed
     KWTextFrameSet* nextTextFrameSet(KWTextFrameSet *obj);
 
     void updateHeaderButton();

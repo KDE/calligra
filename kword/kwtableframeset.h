@@ -74,7 +74,7 @@ public:
 
         uint getRow() const {return m_row;}
         uint getColumn() const {return m_col;}
-        KWTableFrameSet *table() const { return m_table;}
+        KWTableFrameSet *table() const { return grpMgr; }
         bool isAboveOrLeftOf( unsigned row, unsigned col );
 
         double leftBorder();
@@ -90,10 +90,30 @@ public:
          * set zorder for all frames in this cell
          */
         void setZOrder();
-    private:
-        KWTableFrameSet *m_table;
     };
     friend class Cell;
+
+    // Represents a row, for direct access to cells with m_rowArray[row][column]
+    class Row {
+    public:
+        Cell* operator[] ( int i ) const { return i < (int)size() ? m_cellArray[i] : 0; }
+        uint size() const { return m_cellArray.size(); }
+
+        void addCell( Cell *cell ) {
+            if ( m_cellArray.size() <= cell->m_col )
+                m_cellArray.resize( cell->m_col + 1 );
+            m_cellArray.insert( cell->m_col, cell );
+        }
+        void removeCell( int col )  {
+            m_cellArray.remove( col );
+        }
+
+        // Array of cells in the row. If a cell has m_cols = N, the N-1 following entries are 0.
+        // (Same thing is a cell from a row above has m_rows > 1)
+        QPtrVector< Cell > m_cellArray;
+
+    };
+
 
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
@@ -102,7 +122,7 @@ public:
 
     virtual KWordFrameSetIface* dcopObject();
 
-    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool forceAllTextFrameSet =false  );
+    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool onlyReadWrite =false  );
 
     // constructor
     KWTableFrameSet( KWDocument *_doc, const QString & name );
@@ -170,6 +190,16 @@ public:
     /** resize and position all cells */
     void recalcCols(int _col=-1,int _row=-1);
     void recalcRows(int _col=-1,int _row=-1);
+
+    /** move a column edge (i.e. col can be 0 to getCols()+1) */
+    void resizeColumn( unsigned int col, double x );
+    /** move a row edge (i.e. row can be 0 to getRows()+1) */
+    void resizeRow( unsigned int row, double y );
+
+    /** return the number of the column edge closest to x (between 0 and getCols()+1) */
+    int columnEdgeAt( double x ) const;
+    /** return the number of the row edge closest to x (between 0 and getRows()+1) */
+    int rowEdgeAt( double y ) const;
 
     /** returns the number of rows */
     unsigned int getRows()const { return m_rows; }
@@ -262,6 +292,8 @@ public:
     /** returns true if we have a cell occupying that position */
     bool contains( double mx, double my );
 
+    MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState );
+
     /** override save so we save in table style.. */
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     /** load one cell */
@@ -295,10 +327,14 @@ public:
     virtual bool canRemovePage( int num );
 
     void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );
-    /** Add a cell to this table, the cell should allready have info like row, col and should
-     * allready have a frame.
+    /** Add a cell to this table, the cell should already have info like row, col and should
+     * already have a frame.
      */
     void addCell( Cell *cell );
+
+    /** Remove a cell from this table (either to delete it, or to move it)
+     */
+    void removeCell( Cell* cell );
 
     /** set left border. Uses all selected frames in this table to set the left border. Will
         only set the left border to frames that are selected and don't have a frame to their
@@ -343,6 +379,7 @@ protected:
     /* Overloaded methods, look for docu in kwframe.h */
     virtual void deleteAnchors();
     virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false );
+    void addCellToArray( Cell* cell );
 
 private:
     /** position an individual cell in the grid */
@@ -354,7 +391,9 @@ private:
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;
     bool m_active;
-    QPtrList<Cell> m_cells;
+    QPtrVector< Row > m_rowArray; // the new data structure
+    QPtrList<Cell> m_cells; // the old data structure (will disappear)
+
     /** The list of page boundaries.
     *   Each page the table spans has an entry in this list which points to the last _line_
     *   on a page.

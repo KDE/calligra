@@ -151,7 +151,7 @@ MouseMeaning KWPartFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState
         {
             // Clicking on a selected part frame, but not on its border -> either resize or "activate part"
             KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-            return frameUnder->getMouseMeaning( docPoint, false, MEANING_ACTIVATE_PART );
+            return frameUnder->getMouseMeaning( docPoint, MEANING_ACTIVATE_PART );
         }
     }
     return KWFrameSet::getMouseMeaning( nPoint, keyState );
@@ -272,13 +272,13 @@ void KWPartFrameSet::storeInternal()
         m_doc->addCommand(cmd);
         getChild()->document()->setStoreInternal(false);;
     }
-    else 
+    else
     {
         KWFramePartInternalCommand* cmd =new KWFramePartInternalCommand( i18n("Make Document Internal"), this );
         m_doc->addCommand(cmd);
         getChild()->document()->setStoreInternal(true);
     }
-    
+
     kdDebug()<<k_funcinfo<<"url: "<<getChild()->url().url()<<" store internal="<<getChild()->document()->storeInternal()<<endl;
 }
 

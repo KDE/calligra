@@ -1836,9 +1836,9 @@ void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progre
 }
 #endif
 
-void KWTextFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool forceAllTextFrameSet )
+void KWTextFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool onlyReadWrite )
 {
-    if (!textObject()->protectContent() || forceAllTextFrameSet)
+    if (!textObject()->protectContent() || !onlyReadWrite)
         lst.append(this);
 }
 
@@ -3028,7 +3028,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
     QString text = textFrameSet()->copyTextParag( elem, KoTextDocument::Standard );
     KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( text );
-    kd->setFrameSetNumber( textFrameSet()->kWordDocument()->numberOfTextFrameSet( textFrameSet(), true) );
+    kd->setFrameSetNumber( textFrameSet()->kWordDocument()->numberOfTextFrameSet( textFrameSet(), false ) );
     kd->setKWord( domDoc.toCString() );
     kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
     return kd;
@@ -3266,7 +3266,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             numberFrameSet=KWTextDrag::decodeFrameSetNumber( e );
             //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
             //KWFrameSet *frameset= frameSet()->kWordDocument()->frameSet( numberFrameSet );
-            KWFrameSet *frameset= frameSet()->kWordDocument()->textFrameSetFromIndex(  numberFrameSet,true );
+            KWFrameSet *frameset= frameSet()->kWordDocument()->textFrameSetFromIndex( numberFrameSet, false );
             KWTextFrameSet *tmp=dynamic_cast<KWTextFrameSet*>(frameset);
             tmp=tmp ? tmp:textFrameSet();
             if( tmp )

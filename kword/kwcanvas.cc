@@ -522,13 +522,42 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         // See if we clicked on a frame's border
         KWFrame* frame;
         m_mouseMeaning = m_doc->getMouseMeaning( normalPoint, e->state(), &frame );
-        //kdDebug() << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
-        Q_ASSERT( m_mouseMeaning < MEANING_TOPLEFT ); // during resizing, the resizehandles are supposed to get the events
+        kdDebug() << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
         if ( m_mouseMeaning == MEANING_MOUSE_MOVE || m_mouseMeaning == MEANING_MOUSE_SELECT )
         {
             if ( m_currentFrameSetEdit )
                 terminateCurrentEdit();
             mpEditFrame( e, normalPoint, m_mouseMeaning );
+
+            KWTableFrameSet *table = 0L;
+            KWDocument::TableToSelectPosition ePositionTable = m_doc->positionToSelectRowcolTable( normalPoint, &table);
+            // are we in the situation to select row/cols of a table?
+            if (ePositionTable != KWDocument::TABLE_POSITION_NONE)
+            {   // YES => select row/col
+                if (ePositionTable == KWDocument::TABLE_POSITION_RIGHT)
+                {  // in position to select a ROW
+                    // here the cursor is on the left of the table. the y is OK, but the x is not,
+                    // hence finding a proper x with the table object
+                    KWTableFrameSet::Cell *cell = table->getCellByPos( table->leftWithoutBorder(), m_doc->unzoomItY(normalPoint.y())  );
+                    if (cell)
+                    {
+                        table->selectRow( cell->getRow() );
+                        curTable = table;
+                        emit frameSelectedChanged();
+                    }
+                }
+                else
+                { // in position to select a COLUMN
+                    // here the cursor is on top of the table. the x is ok, but the y is not.
+                    KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(normalPoint.x()), table->topWithoutBorder()  );
+                    if (cell)
+                    {
+                        table->selectCol( cell->getColumn() );
+                        curTable = table;
+                        emit frameSelectedChanged();
+                    }
+                }
+            } // end select row/col
         }
         else if ( m_mouseMeaning == MEANING_MOUSE_INSIDE || m_mouseMeaning == MEANING_MOUSE_INSIDE_TEXT
                   || m_mouseMeaning == MEANING_ACTIVATE_PART )
@@ -564,36 +593,37 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 else
                     KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted"));
             }
-        }
+        } else if ( m_mouseMeaning == MEANING_RESIZE_COLUMN || m_mouseMeaning == MEANING_RESIZE_ROW ) {
 
-        KWTableFrameSet *table = 0L;
-        KWDocument::TableToSelectPosition ePositionTable = m_doc->positionToSelectRowcolTable( normalPoint, &table);
-        // are we in the situation to select row/cols of a table?
-        if (ePositionTable != KWDocument::TABLE_POSITION_NONE)
-        {   // YES => select row/col
-            if (ePositionTable == KWDocument::TABLE_POSITION_RIGHT)
-            {  // in position to select a ROW
-                // here the cursor is on the left of the table. the y is OK, but the x is not,
-                // hence finding a proper x with the table object
-                KWTableFrameSet::Cell *cell = table->getCellByPos( table->leftWithoutBorder(), m_doc->unzoomItY(normalPoint.y())  );
-                if (cell)
+            if ( m_currentFrameSetEdit )
+                terminateCurrentEdit();
+
+            // We know we're resizing a row or column, but we don't know which one yet...
+            // We're between two rows (or columns) so frameUnderMouse is a bit unprecise...
+            // We need it to find out which table we clicked on, though.
+            bool border = false;
+            KWFrame * frame = m_doc->frameUnderMouse( normalPoint, &border );
+            if (frame)
+            {
+                KWTableFrameSet::Cell* cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
+                if ( cell )
                 {
-                    table->selectRow( cell->getRow() );
+                    KWTableFrameSet* table = cell->getGroupManager();
+                    if ( m_mouseMeaning == MEANING_RESIZE_COLUMN )
+                        m_rowColResized = table->columnEdgeAt( docPoint.x() );
+                    else
+                        m_rowColResized = table->rowEdgeAt( docPoint.y() );
                     curTable = table;
-                    emit frameSelectedChanged();
+                    kdDebug() << "resizing row/col edge. m_rowColResized=" << m_rowColResized << endl;
                 }
             }
-            else
-            { // in position to select a COLUMN
-              // here the cursor is on top of the table. the x is ok, but the y is not.
-                KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(normalPoint.x()), table->topWithoutBorder()  );
-                if (cell)
-                {
-                    table->selectCol( cell->getColumn() );
-                    curTable = table;
-                    emit frameSelectedChanged();
-                }
-            }
+
+        } else { // resizing (in a case where the resizehandle didn't get the event)
+            if ( m_currentFrameSetEdit )
+                terminateCurrentEdit();
+            // select frame
+            mpEditFrame( e, normalPoint, m_mouseMeaning );
+            //mmEditFrameResize( bool top, bool bottom, bool left, bool right, e->state() & ShiftButton );
         }
         m_scrollTimer->start( 50 );
     }
@@ -724,7 +754,7 @@ bool KWCanvas::insertInlineTable()
 
 void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid )
 {
-    // This one is called by KWResizeHandle
+    // This one is also called by KWResizeHandle
     KWFrame *frame = m_doc->getFirstSelectedFrame();
     if (!frame) { // can't happen, but never say never
         kdWarning(32001) << "KWCanvas::mmEditFrameResize: no frame selected!" << endl;
@@ -1140,8 +1170,22 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 {
                     if ( m_mouseMeaning == MEANING_MOUSE_MOVE )
                         mmEditFrameMove( normalPoint, e->state() & ShiftButton );
-                    // mousemove during resizing is handled by the resizehandles directly
+                    else if ( m_mouseMeaning == MEANING_RESIZE_COLUMN || m_mouseMeaning == MEANING_RESIZE_ROW )
+                    {
+                        // TODO undo/redo support (esp. in mouse-release)
+                        QRect oldRect( m_viewMode->normalToView( m_doc->zoomRect( curTable->boundingRect() ) ) );
+                        if ( m_mouseMeaning == MEANING_RESIZE_ROW )
+                            curTable->resizeRow( m_rowColResized, docPoint.y() );
+                        else
+                            curTable->resizeColumn( m_rowColResized, docPoint.x() );
+                        // Repaint only the changed rects (oldRect U newRect)
+                        QRect newRect( m_viewMode->normalToView( m_doc->zoomRect( curTable->boundingRect() ) ) );
+                        repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
+                    }
+                    // mousemove during frame-resizing is handled by the resizehandles directly
                     // (since they are widgets. The canvas doesn't get the event).
+                    // ... but that's not really true since the active area is 6pt
+                    // (and the resize handle widget is 6 pixels...)
                 }
             } break;
             case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART:
@@ -1436,7 +1480,12 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mouseReleaseEvent( e, normalPoint, docPoint );
                 else {
-                    mrEditFrame( e, normalPoint );
+                    if ( m_mouseMeaning == MEANING_RESIZE_COLUMN || m_mouseMeaning == MEANING_RESIZE_ROW )
+                    {
+                        // TODO store undo/redocommand
+                    }
+                    else
+                        mrEditFrame( e, normalPoint );
                     m_mouseMeaning = MEANING_NONE;
                 }
                 break;
@@ -2268,17 +2317,13 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
     QPoint nPointBottom = m_viewMode->viewToNormal( QPoint( cx + visibleWidth(), cy + visibleHeight() ) );
     //kdDebug() << "KWCanvas::slotContentsMoving cx=" << cx << " cy=" << cy << endl;
     //kdDebug() << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
-    // Update our "formatted paragraphs needs" in the text framesets
-    ///////////////// TODO: use allTextFramesets for nested text framesets
-    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    // Update our "formatted paragraphs needs" in all the text framesets
+    QPtrList<KWTextFrameSet> textFrameSets = m_doc->allTextFramesets( false );
+    QPtrListIterator<KWTextFrameSet> fit( textFrameSets );
     for ( ; fit.current() ; ++fit )
     {
         if(! fit.current()->isVisible()) continue;
-        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(fit.current());
-        if ( fs )
-        {
-            fs->updateViewArea( this, m_viewMode, nPointBottom );
-        }
+        fit.current()->updateViewArea( this, m_viewMode, nPointBottom );
     }
     // cx and cy contain the future values for contentsx and contentsy, so we need to
     // pass them to updateRulerOffsets.
@@ -2373,7 +2418,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     m_scrollTimer->stop();
                 m_mousePressed = false;
                 return TRUE;
-            case QEvent::KeyPress:
+            case QEvent::AccelOverride: // was part of KeyPress - changed due to kdelibs BUG!
             {
 		//  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
 		//  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
@@ -2385,17 +2430,21 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     switch ( keyev->key() ) {
                         case Key_P: // 'P' -> paragraph debug
                             printRTDebug( 0 );
+                            keyev->accept();
                             break;
                         case Key_V: // 'V' -> verbose parag debug
                             printRTDebug( 1 );
+                            keyev->accept();
                             break;
                         case Key_F: // 'F' -> frames debug
                             m_doc->printDebug();
                             kdDebug(32002) << "Current framesetedit: " << m_currentFrameSetEdit << " " <<
                                 ( m_currentFrameSetEdit ? m_currentFrameSetEdit->frameSet()->className() : "" ) << endl;
+                            keyev->accept();
                             break;
                         case Key_S: // 'S' -> styles debug
                             m_doc->printStyleDebug();
+                            keyev->accept();
                             break;
                         default:
                             break;
@@ -2403,6 +2452,13 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     // For some reason 'T' doesn't work (maybe kxkb)
                 }
 #endif
+            }
+            break;
+            case QEvent::KeyPress:
+            {
+		//  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
+		//  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
+                QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
                 // By default PgUp and PgDown move the scrollbars and not the caret anymore - this is done here
                 if ( !m_doc->pgUpDownMovesCaret() && ( (keyev->state() & ShiftButton) == 0 )
                      && ( keyev->key() == Key_PageUp || keyev->key() == Key_PageDown ) )

@@ -49,6 +49,7 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     m_hasTmpHeaders = false;
     m_active = true;
     m_cells.setAutoDelete( true );
+    m_rowArray.setAutoDelete( true );
     frames.setAutoDelete(false);
     //m_anchor = 0L;
     if ( name.isEmpty() )
@@ -165,7 +166,23 @@ void KWTableFrameSet::addCell( Cell *cell )
     // Find the insertion point in the list.
     for ( i = 0; i < m_cells.count() && m_cells.at( i )->isAboveOrLeftOf( cell->m_row, cell->m_col ); i++ ) ;
     m_cells.insert( i, cell );
+    addCellToArray( cell ); // temporarily moved to another method
+}
 
+void KWTableFrameSet::addCellToArray( Cell* cell )
+{
+    if ( m_rowArray.size() <= cell->m_row )
+        m_rowArray.resize( cell->m_row + 1 );
+    if ( !m_rowArray[ cell->m_row ] )
+        m_rowArray.insert( cell->m_row, new Row );
+    m_rowArray[ cell->m_row ]->addCell( cell );
+}
+
+void KWTableFrameSet::removeCell( Cell* cell )
+{
+    // m_cells handling not done here
+    // the point is to get rid of it in the long run
+    m_rowArray[ cell->m_row ]->removeCell( cell->m_col );
 }
 
 KoRect KWTableFrameSet::boundingRect() {
@@ -203,13 +220,10 @@ double KWTableFrameSet::leftWithoutBorder()
 /* returns the cell that occupies row, col. */
 KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col )
 {
-    /// Sllloooowwww
-    // Suggested solution: implement comparison operators in Cell,
-    // and use a binary search.
-    // Other solution: use QPtrVector<QPtrVector<Cell> >
-    // This would also allow to define a Row object, as QPtrVector<Cell>.
-    // The Cell pointer would be 0 for cells that don't exist anymore
-    // after merging.
+    if ( row < m_rowArray.size() )
+        return (*m_rowArray[row])[col];
+    return 0L;
+#if 0
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
     {
         Cell *cell = m_cells.at( i );
@@ -222,6 +236,7 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
         }
     }
     return 0L;
+#endif
 }
 
 KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( double x, double y )
@@ -599,6 +614,7 @@ kdDebug() << "j--";
         if(adjustment >= 0 && counter == m_pageBoundaries[adjustment])
             adjustment--;
         if(rows[counter]==0) {
+            kdDebug() << k_funcinfo << "no rows at counter=" << counter << " -> erasing" << endl;
             m_rows--;
             m_rowPositions.erase(m_rowPositions.at(counter+(adjustment>0?adjustment:0)));
             for (cell = m_cells.first(); cell; cell = m_cells.next()) {
@@ -629,6 +645,63 @@ kdDebug() << "j--";
     updateFrames();
 }
 
+int KWTableFrameSet::columnEdgeAt( double x ) const
+{
+    // We compare x with the middle of columns (left+right/2),
+    // to find which column x is closest to.
+    // m_colPositions is sorted, so we can remember the last column we looked at.
+    double lastMiddlePos = 0;
+    for ( uint i = 0; i < m_colPositions.count() - 1; i++ ) {
+        double middlePos = ( m_colPositions[i] + m_colPositions[i+1] ) / 2;
+        Q_ASSERT( lastMiddlePos < middlePos );
+        if ( x > lastMiddlePos && x <= middlePos )
+            return i;
+        lastMiddlePos = middlePos;
+    }
+    return m_colPositions.count() - 1;
+}
+
+int KWTableFrameSet::rowEdgeAt( double y ) const
+{
+    double lastMiddlePos = 0;
+    for ( uint i = 0; i < m_rowPositions.count() - 1; i++ ) {
+        double middlePos = ( m_rowPositions[i] + m_rowPositions[i+1] ) / 2;
+        Q_ASSERT( lastMiddlePos < middlePos );
+        if ( y > lastMiddlePos && y <= middlePos )
+            return i;
+        lastMiddlePos = middlePos;
+    }
+    return m_rowPositions.count() - 1;
+}
+
+void KWTableFrameSet::resizeColumn( unsigned int col, double x )
+{
+    kdDebug() << k_funcinfo << col << "," << x << endl;
+    m_colPositions[ col ] = x;
+    // move all cells right of 'col'
+    for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
+        Cell *cell = m_cells.at(i);
+        if ( cell->m_col + cell->m_cols >= col ) {
+            position(cell);
+        }
+    }
+    recalcCols( col );
+}
+
+void KWTableFrameSet::resizeRow( unsigned int row, double y )
+{
+    kdDebug() << k_funcinfo << row << "," << y << endl;
+    m_rowPositions[ row ] = y;
+    // move all cells under 'row'
+    for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
+        Cell *cell = m_cells.at(i);
+        if ( cell->m_row + cell->m_rows >= row ) {
+            position(cell);
+        }
+    }
+    recalcRows( row );
+}
+
 void KWTableFrameSet::resizeWidth( double width ) {
     Q_ASSERT(width != 0);
     Q_ASSERT(boundingRect().width() != 0);
@@ -649,7 +722,7 @@ void KWTableFrameSet::resizeWidth( double width ) {
 }
 
 void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize heightMode ) {
-   // Column postions..
+   // Column positions..
     m_rowPositions.clear();
     unsigned int cols=0;
     for(QPtrListIterator<Cell> c(m_cells); c.current();  ++c)
@@ -743,8 +816,8 @@ bool KWTableFrameSet::hasSelectedFrame()
 
 void KWTableFrameSet::moveBy( double dx, double dy ) {
     bool redraw=false;
-kdDebug(32004) << "KWTableFrameSet::moveBy(" << dx<<","<<dy<<")\n";
-//for(unsigned int i=0; i < m_rowPositions.count() ; kdDebug(32004) << "row " << i << ": " << m_rowPositions[i++] << endl);
+    kdDebug(32004) << "KWTableFrameSet::moveBy(" << dx<<","<<dy<<")\n";
+    //for(unsigned int i=0; i < m_rowPositions.count() ; kdDebug(32004) << "row " << i << ": " << m_rowPositions[i++] << endl);
     if(!(dy > -0.001 && dy < 0.001)) {
         redraw=true;
         QValueList<double>::iterator row = m_rowPositions.begin();
@@ -1132,6 +1205,7 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
 {
     unsigned int rowspan=0;
     // I want to know the amount of the row(s) I am removing.
+    // ## This code makes no sense. _One_ vertically merged cell, and the whole row below get removed? (DF)
     for (unsigned int rs=1; rs < m_rows && rowspan == 0; rs++) {
         for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
             if(m_cells.at(i)->m_row == row && m_cells.at(i)->m_rows==rs) {
@@ -1156,15 +1230,18 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
             if(cell->m_rows == 1) { // lets remove it
                 frames.remove( cell->frame(0) );
                 cell->delFrame( cell->frame(0));
-                m_cells.take(i);
+                removeCell( cell );
+                m_cells.take(i); // doesn't delete cell (for undo/redo purposes)
                 i--;
             } else { // make cell span rowspan less rows
                 cell->m_rows -= rowspan;
                 position(cell);
             }
         } else if ( cell->m_row > row ) {
-            // move cells to the left
+            // move cell up
+            removeCell( cell );
             cell->m_row -= rowspan;
+            addCell( cell );
             position(cell);
         }
     }
@@ -1203,15 +1280,18 @@ void KWTableFrameSet::deleteCol( unsigned int col )
             if(cell->m_cols == 1) { // lets remove it
                 frames.remove( cell->frame(0) );
                 cell->delFrame( cell->frame(0));
-                m_cells.take(i);
+                removeCell( cell );
+                m_cells.take(i); // doesn't delete cell (for undo/redo purposes)
                 i--;
             } else { // make cell span colspan less cols
                 cell->m_cols -= colspan;
                 position(cell);
             }
         } else if ( cell->m_col > col ) {
-            // move cells to the left
+            // move cell to the left
+            removeCell( cell );
             cell->m_col -= colspan;
+            addCell( cell );
             position(cell);
         }
     }
@@ -1287,7 +1367,9 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
                 listCopyFrame.append(cell->frame(0)->getCopy());
                 frames.remove( cell->frame(0) );
                 cell->delFrame( cell->frame(0));
+                removeCell(cell);
                 m_cells.take(m_cells.find(cell));
+                // cell is not deleted (for undo/redo purposes...)
             }
         }
     }
@@ -1352,7 +1434,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             iCol=m_colPositions.insert(iCol, newPos);
         }
 
-//for(unsigned int i=0; i < m_colPositions.count() ; kdDebug(32004) << "col " << i << ": " << m_colPositions[i++] << endl);
+        //for(unsigned int i=0; i < m_colPositions.count() ; kdDebug(32004) << "col " << i << ": " << m_colPositions[i++] << endl);
     }
 
     KWFrame *firstFrame = cell->frame(0);
@@ -1505,11 +1587,12 @@ void KWTableFrameSet::validate()
     while (! misplacedCells.isEmpty()) {
         // append cell at bottom of table.
         Cell *cell = misplacedCells.take(0);
+        removeCell(cell);
         cell->m_row = m_rows++;
         cell->m_col = 0;
         cell->m_cols = getCols();
         cell->m_rows = 1;
-        m_cells.append(cell);
+        addCell(cell);
         position(cell);
     }
 }
@@ -1555,6 +1638,49 @@ bool KWTableFrameSet::contains( double mx, double my ) {
     }
 
     return false;
+}
+
+MouseMeaning KWTableFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
+{
+    MouseMeaning m = MEANING_MOUSE_SELECT;
+    KoPoint docPoint = m_doc->unzoomPoint( nPoint );
+    double mx = docPoint.x();
+    double my = docPoint.y();
+    // See if we're over a frame border
+    KWFrame * frame = frameByBorder( nPoint );
+    if ( frame )
+    {
+        double hs = 6; // horizontal snap zone (in pt)
+        double vs = 6; // vertical snap zone (in pt)
+        // (see KWFrame::getMouseMeaning)
+
+        if ( QABS( frame->x() - mx ) < hs/2
+             && my >= frame->y() && my <= frame->bottom() )
+            return MEANING_RESIZE_COLUMN;
+        if ( QABS( frame->right() - mx ) < hs/2
+             && my >= frame->y() && my <= frame->bottom() )
+            return MEANING_RESIZE_COLUMN;
+        if ( QABS( frame->y() - my ) < vs/2
+             && mx >= frame->x() && mx <= frame->right() )
+            return MEANING_RESIZE_ROW;
+        if ( QABS( frame->bottom() - my ) < vs/2
+             && mx >= frame->x() && mx <= frame->right() )
+            return MEANING_RESIZE_ROW;
+    }
+    frame = frameAtPos( docPoint.x(), docPoint.y() );
+    if ( frame == 0L )
+        return MEANING_NONE;
+
+    // Found a frame under the cursor
+    // Ctrl -> select
+    if ( keyState & ControlButton )
+        return m;
+    // Shift _and_ at least a frame is selected already
+    // (shift + no frame selected is used to select text)
+    if ( (keyState & ShiftButton) && (m_doc->getFirstSelectedFrame() != 0L) )
+        return m;
+
+    return MEANING_MOUSE_INSIDE_TEXT;
 }
 
 void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
@@ -1704,7 +1830,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
             // This code could be rewritten in a more QRT-like way
             // (iterate and compare with next, instead of the startRow/cell/border hack...)
             if(startRow != -1 &&
-               (!cell || row == (int)getRows() ||
+               (!cell || row == getRows() ||
                 ( right && cell->frame(0)->rightBorder() != *border) ||
                 ( !right && cell->frame(0)->leftBorder() != *border) )
                 ) {
@@ -1989,10 +2115,10 @@ bool KWTableFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSp
 void KWTableFrameSet::finalize( ) {
     //kdDebug(32004) << "KWTableFrameSet::finalize" << endl;
 
-    for ( unsigned int i = 0; i < m_cells.count(); i++ )
+    for(QPtrListIterator<Cell> c(m_cells); c.current(); ++c)
     {
-        position(m_cells.at( i ));
-        m_cells.at( i )->finalize();
+        position( c.current() );
+        c.current()->finalize();
     }
 
     recalcCols();
@@ -2022,12 +2148,11 @@ bool KWTableFrameSet::canRemovePage( int num ) {
     return true;
 }
 
-void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst,bool forceAllTextFrameSet )
+void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool onlyReadWrite )
 {
-    for (unsigned int i =0; i < m_cells.count(); i++) {
-        if (!m_cells.at(i)->textObject()->protectContent() ||forceAllTextFrameSet )
-            lst.append(m_cells.at(i));
-    }
+    for(QPtrListIterator<Cell> c(m_cells); c.current(); ++c)
+        if (!c.current()->textObject()->protectContent() || onlyReadWrite )
+            lst.append(c.current());
 }
 
 void KWTableFrameSet::setLeftBorder(KoBorder newBorder) {
@@ -2197,13 +2322,12 @@ void KWTableFrameSet::printDebug() {
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString &/*name*/ ) :
     KWTextFrameSet( table->m_doc, "." /*dummy and not empty, faster*/ )
 {
-    m_table = table;
     m_row = row;
     m_col = col;
     m_rows = 1;
     m_cols = 1;
-    setGroupManager( m_table );
-    m_table->addCell( this );
+    setGroupManager( table );
+    table->addCell( this );
     m_name = i18n("Hello dear translator :), 1 is the table name, 2 and 3 are row and column", "%1 Cell %2,%3")
              .arg( table->getName() ).arg(m_row).arg(m_col);
 }
@@ -2211,14 +2335,13 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, const Cell &original ) :
     KWTextFrameSet( table->m_doc, "." )
 {
-    m_table = table;
     m_row = original.m_row;
     m_col = original.m_col;
     m_rows = original.m_rows;
     m_cols = original.m_cols;
     setName(original.m_name+'_'); // unicity problem !
-    setGroupManager( m_table );
-    m_table->addCell( this );
+    setGroupManager( table );
+    table->addCell( this );
 }
 
 KWTableFrameSet::Cell::~Cell()
@@ -2249,7 +2372,7 @@ double KWTableFrameSet::Cell::rightBorder() {
     double b=frame(0)->rightBorder().width();
     if(b==0.0)
         return 0.0;
-    if(m_col+m_cols==m_table->getCols()) // right most cell
+    if(m_col+m_cols==grpMgr->getCols()) // right most cell
         return b;
     return (b / 2);
 }
@@ -2267,7 +2390,7 @@ double KWTableFrameSet::Cell::bottomBorder() {
     double b = frame(0)->bottomBorder().width();
     if(b==0.0)
         return 0.0;
-    if(m_row+m_rows==m_table->m_rows) // bottom most cell
+    if(m_row+m_rows==grpMgr->m_rows) // bottom most cell
         return b;
     return (b / 2);
 }
@@ -2279,7 +2402,7 @@ void KWTableFrameSet::Cell::setLeftBorder(KoBorder newBorder) {
 
     if((diff > 0.01 || diff < -0.01) && m_col!=0) {
         diff = diff / 2; // if not outer edge only use halve
-        m_table->getCell(m_row, m_col-1)->setRightBorder(newBorder);
+        grpMgr->getCell(m_row, m_col-1)->setRightBorder(newBorder);
     }
     f->setLeft(f->left() - diff);
 }
@@ -2289,9 +2412,9 @@ void KWTableFrameSet::Cell::setRightBorder(KoBorder newBorder) {
     double diff = f->rightBorder().width() - newBorder.width();
     f->setRightBorder(newBorder);
 
-    if((diff > 0.01 || diff < -0.01) && m_col+m_cols!=m_table->getCols()) {
+    if((diff > 0.01 || diff < -0.01) && m_col+m_cols!=grpMgr->getCols()) {
         diff = diff / 2; // if not outer edge only use halve
-        m_table->getCell(m_row, m_col+1)->setLeftBorder(newBorder);
+        grpMgr->getCell(m_row, m_col+1)->setLeftBorder(newBorder);
     }
     f->setRight(f->right() + diff);
 }
@@ -2303,7 +2426,7 @@ void KWTableFrameSet::Cell::setTopBorder(KoBorder newBorder) {
 
     if((diff > 0.01 || diff < -0.01) && m_row!=0) {
         diff = diff / 2; // if not outer edge only use halve
-        m_table->getCell(m_row-1, m_col)->setBottomBorder(newBorder);
+        grpMgr->getCell(m_row-1, m_col)->setBottomBorder(newBorder);
     }
     f->setTop(f->top() - diff);
 }
@@ -2313,9 +2436,9 @@ void KWTableFrameSet::Cell::setBottomBorder(KoBorder newBorder) {
     double diff = f->bottomBorder().width() - newBorder.width();
     f->setBottomBorder(newBorder);
 
-    if((diff > 0.01 || diff < -0.01) && m_row+m_rows!=m_table->m_rows) {
+    if((diff > 0.01 || diff < -0.01) && m_row+m_rows!=grpMgr->m_rows) {
         diff = diff / 2; // if not outer edge only use halve
-        m_table->getCell(m_row+1, m_col)->setTopBorder(newBorder);
+        grpMgr->getCell(m_row+1, m_col)->setTopBorder(newBorder);
     }
     f->setBottom(f->bottom() + diff);
 }
