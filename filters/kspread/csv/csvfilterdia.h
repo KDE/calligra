@@ -34,7 +34,7 @@ public:
     CSVFilterDia(QWidget *parent=0L, QString name=QString::null);
     virtual ~CSVFilterDia() {}
 
-    virtual const QString status() { return "Hallo"; }
+    virtual const QString state() { return "Hallo"; }
 };
 #endif
 #endif // CSVFILTERDIA_H

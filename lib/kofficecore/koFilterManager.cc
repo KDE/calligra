@@ -268,7 +268,7 @@ void KoFilterManager::cleanUp() {
         if(id!=0L) {
             KoFilterDialog *dia=originalDialogs.find(id).data();
             if(dia!=0L) {
-                kDebugInfo(30003, dia->status());
+                kDebugInfo(30003, dia->state());
                 // Save the status and pass is on to the filter...
                 kDebugWarning(30003, "found dia!");
             }

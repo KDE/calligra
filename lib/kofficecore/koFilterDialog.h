@@ -24,10 +24,10 @@ class KoFilterDialog : public QWidget {
 public:
     KoFilterDialog(QWidget *parent=0L, QString name=QString::null);
     virtual ~KoFilterDialog() = 0;
-    virtual const QString status() = 0;
+    virtual const QString state() = 0;
 
 protected:
-    QDomDocument *m_status;
+    QDomDocument *m_state;
 };
 #endif
 #endif
