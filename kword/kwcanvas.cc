@@ -1825,6 +1825,12 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
 {
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
+    //active header/footer when it's possible
+    if ( fs->isAHeader() && !m_doc->isHeaderVisible() && !(viewMode()->type()=="ModeText"))
+        m_doc->setHeaderVisible( true );
+    if ( fs->isAFooter() && !m_doc->isFooterVisible() && !(viewMode()->type()=="ModeText"))
+        m_doc->setFooterVisible( true );
+
     if ( !fs->isVisible( viewMode() ) )
         return;
     KWTableFrameSet *table = fs->getGroupManager();

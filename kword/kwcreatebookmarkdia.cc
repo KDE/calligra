@@ -112,7 +112,8 @@ void KWSelectBookmarkDia::slotRenameBookmark()
     QString tmp =m_bookmarkList->currentText();
     if ( tmp.isEmpty() )
         return;
-    QStringList lst =m_doc->listOfBookmarkName();
+    //all bookmark name
+    QStringList lst =m_doc->listOfBookmarkName(0L);
     lst.remove( tmp );
     KWCreateBookmarkDia dia( lst, tmp, this, 0 );
     if ( dia.exec() ) {

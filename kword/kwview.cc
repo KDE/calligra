@@ -5885,7 +5885,8 @@ void KWView::addBookmark()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
-        KWCreateBookmarkDia dia( m_doc->listOfBookmarkName(), this, 0 );
+        //don't create list against viewmode. We must all list.
+        KWCreateBookmarkDia dia( m_doc->listOfBookmarkName(0L), this, 0 );
         if ( dia.exec() ) {
             QString bookName = dia.bookmarkName();
             int startSel = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard ).index();
@@ -5897,7 +5898,7 @@ void KWView::addBookmark()
 
 void KWView::selectBookmark()
 {
-    KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(), m_doc, this, 0 );
+    KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(m_gui->canvasWidget()->viewMode()), m_doc, this, 0 );
     if ( dia.exec() ) {
         QString bookName = dia.bookmarkSelected();
         KWBookMark * book = m_doc->bookMarkByName( bookName );

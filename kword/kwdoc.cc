@@ -4110,13 +4110,25 @@ KWBookMark * KWDocument::bookMarkByName( const QString & name )
     return 0L;
 }
 
-QStringList KWDocument::listOfBookmarkName()const
+QStringList KWDocument::listOfBookmarkName(KWViewMode * viewMode)const
 {
     QStringList list;
-    QPtrListIterator<KWBookMark> book(m_bookmarkList);
-    for ( ; book.current() ; ++book )
+    if ( viewMode && viewMode->type()!="ModeText")
     {
-        list.append( book.current()->bookMarkName());
+        QPtrListIterator<KWBookMark> book(m_bookmarkList);
+        for ( ; book.current() ; ++book )
+        {
+            list.append( book.current()->bookMarkName());
+        }
+    }
+    else
+    {
+        QPtrListIterator<KWBookMark> book(m_bookmarkList);
+        for ( ; book.current() ; ++book )
+        {
+            if ( book.current()->frameSet()->isVisible( viewMode ))
+                list.append( book.current()->bookMarkName());
+        }
     }
     return list;
 }

@@ -679,7 +679,7 @@ public:
     void renameBookMark(const QString &_oldname, const QString &_newName);
 
     KWBookMark * bookMarkByName( const QString & name );
-    QStringList listOfBookmarkName()const;
+    QStringList listOfBookmarkName(KWViewMode * viewMode)const;
 
     void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
     void initBookmarkList();

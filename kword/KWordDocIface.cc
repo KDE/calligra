@@ -752,7 +752,8 @@ void KWordDocIface::renameBookMark(const QString &_oldname, const QString &_newN
 
 QStringList KWordDocIface::listOfBookmarkName()const
 {
-    return doc->listOfBookmarkName();
+    //return all list
+    return doc->listOfBookmarkName(0L);
 }
 
 QString KWordDocIface::configAutoFormatLanguage( )const
