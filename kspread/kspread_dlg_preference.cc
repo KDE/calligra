@@ -21,6 +21,7 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qvgroupbox.h>
 
 #include "kspread_dlg_preference.h"
 #include "kspread_table.h"
@@ -113,39 +114,27 @@ preference::preference( KSpreadView* _view, QVBox *box, char *name )
 
   m_pView = _view;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-  tmpQGroupBox->setTitle(i18n("Table"));
-  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->addSpacing( 10 );
-  lay1->setMargin( KDialog::marginHint() );
-  lay1->setSpacing( KDialog::spacingHint() );
+  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Table"), box, "GroupBox" );
 
-  m_pFormula= new QCheckBox(i18n("Show formula"),tmpQGroupBox);
-  lay1->addWidget(m_pFormula);
+  m_pFormula= new QCheckBox(i18n("Show &formula"),tmpQGroupBox);
   m_pFormula->setChecked(m_pView->activeTable()->getShowFormula());
 
-  m_pGrid=new QCheckBox(i18n("Show Grid"),tmpQGroupBox);
-  lay1->addWidget(m_pGrid);
+  m_pGrid=new QCheckBox(i18n("Show &Grid"),tmpQGroupBox);
   m_pGrid->setChecked(m_pView->activeTable()->getShowGrid());
 
-  m_pColumn=new QCheckBox(i18n("Show column number"),tmpQGroupBox);
-  lay1->addWidget(m_pColumn);
+  m_pColumn=new QCheckBox(i18n("Show c&olumn number"),tmpQGroupBox);
   m_pColumn->setChecked(m_pView->activeTable()->getShowColumnNumber());
 
-  m_pLcMode=new QCheckBox(i18n("LC mode"),tmpQGroupBox);
-  lay1->addWidget(m_pLcMode);
+  m_pLcMode=new QCheckBox(i18n("&LC mode"),tmpQGroupBox);
   m_pLcMode->setChecked(m_pView->activeTable()->getLcMode());
 
-  m_pAutoCalc= new QCheckBox(i18n("Automatic Recalculation"),tmpQGroupBox);
-  lay1->addWidget(m_pAutoCalc);
+  m_pAutoCalc= new QCheckBox(i18n("&Automatic Recalculation"),tmpQGroupBox);
   m_pAutoCalc->setChecked(m_pView->activeTable()->getAutoCalc());
 
-  m_pHideZero= new QCheckBox(i18n("Hide Zero"),tmpQGroupBox);
-  lay1->addWidget(m_pHideZero);
+  m_pHideZero= new QCheckBox(i18n("&Hide Zero"),tmpQGroupBox);
   m_pHideZero->setChecked(m_pView->activeTable()->getHideZero());
 
-  m_pFirstLetterUpper= new QCheckBox(i18n("Convert first letter to upper case"),tmpQGroupBox);
-  lay1->addWidget(m_pFirstLetterUpper);
+  m_pFirstLetterUpper= new QCheckBox(i18n("Convert first letter to &upper case"),tmpQGroupBox);
   m_pFirstLetterUpper->setChecked(m_pView->activeTable()->getFirstLetterUpper());
 
 }
@@ -191,36 +180,24 @@ parameterLocale::parameterLocale( KSpreadView* _view, QVBox *box , char *name )
 {
     m_pView = _view;
     m_bUpdateLocale=false;
-  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-  tmpQGroupBox->setTitle(i18n("Parameters"));
+  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Parameters"), box, "GroupBox" );
 
-  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->addSpacing( 10 );
-  lay1->setMargin( KDialog::marginHint() );
-  lay1->setSpacing( KDialog::spacingHint() );
   KLocale* locale=_view->doc()->locale();
 
   m_language=new QLabel( tmpQGroupBox,"label");
   m_language->setText( i18n("Language: %1").arg( locale->language() ));
-  lay1->addWidget(m_language);
   m_number=new QLabel( tmpQGroupBox,"label6");
   m_number->setText( i18n("Number: %1").arg( locale->formatNumber(12.55) ));
-  lay1->addWidget(m_number);
   m_date=new QLabel( tmpQGroupBox,"label1");
   m_date->setText( i18n("Date: %1").arg( locale->formatDate(QDate(2000,10,23)) ));
-  lay1->addWidget(m_date);
   m_shortDate=new QLabel( tmpQGroupBox,"label5");
   m_shortDate->setText( i18n("Short date: %1").arg( locale->formatDate(QDate(2000,10,23),true) ));
-  lay1->addWidget(m_shortDate);
   m_time=new QLabel( tmpQGroupBox,"label2");
   m_time->setText( i18n("Time: %1").arg( locale->formatTime(QTime(15,10,53)) ));
-  lay1->addWidget(m_time);
   m_money=new QLabel( tmpQGroupBox,"label3");
   m_money->setText( i18n("Money: %1").arg( locale->formatMoney(12.55) ));
-  lay1->addWidget(m_money);
 
-  m_updateButton=new QPushButton ( i18n("Update to locale system"), tmpQGroupBox);
-  lay1->addWidget(m_updateButton);
+  m_updateButton=new QPushButton ( i18n("&Update to locale system"), tmpQGroupBox);
   connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
 }
 
@@ -256,12 +233,7 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
   bool formulaBar=true;
   bool statusBar=true;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-  tmpQGroupBox->setTitle(i18n("Configuration"));
-  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->addSpacing( 10 );
-  lay1->setMargin( KDialog::marginHint() );
-  lay1->setSpacing( KDialog::spacingHint() );
+  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Configuration"), box, "GroupBox" );
 
   config = KSpreadFactory::global()->config();
   int _page=1;
@@ -285,48 +257,37 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
         }
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
-  nbPage->setLabel(i18n("Number of pages open at the beginning:"));
-  lay1->addWidget(nbPage);
+  nbPage->setLabel(i18n("Number of pages open at the &beginning:"));
 
   nbRecentFile=new KIntNumInput(oldRecent, tmpQGroupBox , 10);
   nbRecentFile->setRange(1, 20, 1);
-  nbRecentFile->setLabel(i18n("Number of recent file:"));
-  lay1->addWidget(nbRecentFile);
+  nbRecentFile->setLabel(i18n("&Number of recent file:"));
 
   autoSaveDelay=new KIntNumInput(oldAutoSaveValue, tmpQGroupBox , 10);
   autoSaveDelay->setRange(0, 60, 1);
-  autoSaveDelay->setLabel(i18n("Auto save (min):"));
+  autoSaveDelay->setLabel(i18n("Au&to save (min):"));
   autoSaveDelay->setSpecialValueText(i18n("No auto save"));
   autoSaveDelay->setSuffix(i18n("min"));
-  lay1->addWidget(autoSaveDelay);
 
-  showVScrollBar=new QCheckBox(i18n("Show vertical scrollbar"),tmpQGroupBox);
-  lay1->addWidget(showVScrollBar);
+  showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);
   showVScrollBar->setChecked(vertical);
-  showHScrollBar=new QCheckBox(i18n("Show horizontal scrollbar"),tmpQGroupBox);
-  lay1->addWidget(showHScrollBar);
+  showHScrollBar=new QCheckBox(i18n("Show &horizontal scrollbar"),tmpQGroupBox);
   showHScrollBar->setChecked(horizontal);
 
 
-  showColHeader=new QCheckBox(i18n("Show Column Header"),tmpQGroupBox);
-  lay1->addWidget(showColHeader);
+  showColHeader=new QCheckBox(i18n("Show C&olumn Header"),tmpQGroupBox);
   showColHeader->setChecked(colHeader);
-  showRowHeader=new QCheckBox(i18n("Show Row Header"),tmpQGroupBox);
-  lay1->addWidget(showRowHeader);
+  showRowHeader=new QCheckBox(i18n("Show &Row Header"),tmpQGroupBox);
   showRowHeader->setChecked(rowHeader);
 
-  showTabBar =new QCheckBox(i18n("Show tabs"),tmpQGroupBox);
-  lay1->addWidget(showTabBar);
+  showTabBar =new QCheckBox(i18n("Show ta&bs"),tmpQGroupBox);
   showTabBar->setChecked(tabbar);
 
-  showFormulaBar =new QCheckBox(i18n("Show formula toolbar"),tmpQGroupBox);
-  lay1->addWidget(showFormulaBar);
+  showFormulaBar =new QCheckBox(i18n("Sho&w formula toolbar"),tmpQGroupBox);
   showFormulaBar->setChecked(formulaBar);
 
-  showStatusBar =new QCheckBox(i18n("Show statusbar"),tmpQGroupBox);
-  lay1->addWidget(showStatusBar);
+  showStatusBar =new QCheckBox(i18n("Show stat&usbar"),tmpQGroupBox);
   showStatusBar->setChecked(statusBar);
-
 }
 
 
@@ -446,12 +407,7 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   m_pView = _view;
 
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-  tmpQGroupBox->setTitle(i18n("Misc"));
-  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->addSpacing( 10 );
-  lay1->setMargin( KDialog::marginHint() );
-  lay1->setSpacing( KDialog::spacingHint() );
+  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
 
   config = KSpreadFactory::global()->config();
   int _indent=10;
@@ -465,11 +421,10 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
 	m_bCommentIndicator=config->readBoolEntry( "Comment Indicator",true);
         }
 
-  QLabel *label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Completion mode:"));
-  lay1->addWidget(label);
+  QLabel *label=new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
 
-  typeCompletion=new QComboBox( tmpQGroupBox);
+  typeCompletion=new QComboBox(tmpQGroupBox);
+  label->setBuddy(typeCompletion);
   QStringList listType;
   listType+=i18n("None");
   listType+=i18n("Manual");
@@ -478,18 +433,14 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   listType+=i18n("Semi-Automatic");
   typeCompletion->insertStringList(listType);
   typeCompletion->setCurrentItem(0);
-  lay1->addWidget(typeCompletion);
   comboChanged=false;
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
 
   valIndent=new KIntNumInput(_indent, tmpQGroupBox , 10);
   valIndent->setRange(1, 100, 1);
-  valIndent->setLabel(i18n("Value of indent:"));
-  lay1->addWidget(valIndent);
+  valIndent->setLabel(i18n("&Value of indent:"));
 
-  label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Press enter to move selection to:"));
-  lay1->addWidget(label);
+  label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
   typeOfMove=new QComboBox( tmpQGroupBox);
   listType.clear();
   listType+=i18n("Bottom");
@@ -498,16 +449,13 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   listType+=i18n("Left");
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
-  lay1->addWidget(typeOfMove);
-  msgError= new QCheckBox(i18n("Show error message"),tmpQGroupBox);
+  msgError= new QCheckBox(i18n("&Show error message"),tmpQGroupBox);
   msgError->setChecked(m_bMsgError);
-  lay1->addWidget(msgError);
 
-  label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Method of calc:"));
-  lay1->addWidget(label);
+  label=new QLabel(i18n("&Method of calc:"), tmpQGroupBox);
 
   typeCalc=new QComboBox( tmpQGroupBox);
+  label->setBuddy(typeCalc);
   QStringList listTypeCalc;
   listTypeCalc+=i18n("Sum");
   listTypeCalc+=i18n("Min");
@@ -516,10 +464,8 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   listTypeCalc+=i18n("Count");
   typeCalc->insertStringList(listTypeCalc);
   typeCalc->setCurrentItem(0);
-  lay1->addWidget(typeCalc);
-  commentIndicator=new QCheckBox(i18n("Show comment indicator"),tmpQGroupBox);
+  commentIndicator=new QCheckBox(i18n("Show comment &indicator"),tmpQGroupBox);
   commentIndicator->setChecked(m_bCommentIndicator);
-  lay1->addWidget(commentIndicator);
 
   initComboBox();
 }
@@ -731,17 +677,13 @@ if(  config->hasGroup("KSpread Color" ) )
      _gridColor= config->readColorEntry("GridColor",&_gridColor);
    }
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-  tmpQGroupBox->setTitle(i18n("Color"));
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,5,1,15,7);
-  QLabel *lab=new QLabel( tmpQGroupBox,"label20");
-  lab->setText( i18n("Grid Color:"));
-  grid1->addWidget(lab,0,0);
+  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Color"), box, "GroupBox" );
+
+  QLabel *label=new QLabel(i18n("&Grid Color:"), tmpQGroupBox,"label20");
 
   gridColor=new KColorButton(tmpQGroupBox);
+  label->setBuddy(gridColor);
   gridColor->setColor(_gridColor);
-  grid1->addWidget(gridColor,1,0);
-
 }
 
 void colorParameters::apply()
@@ -767,9 +709,7 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *
 {
   m_pView = _view;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-  tmpQGroupBox->setTitle(i18n("Default parameters"));
-
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default parameters"), box, "GroupBox" );
 
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1, KDialog::marginHint()+10, KDialog::spacingHint());
   grid1->addRowSpacing( 0, KDialog::marginHint()  );
@@ -777,21 +717,21 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *
 
   config = KSpreadFactory::global()->config();
 
-  QLabel *label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Default page size:"));
+  QLabel *label=new QLabel(i18n("Default page &size:"), tmpQGroupBox);
 
   grid1->addWidget(label,0,0);
 
   defaultSizePage=new QComboBox( tmpQGroupBox);
+  label->setBuddy(defaultSizePage);
   defaultSizePage->insertStringList( KoPageFormat::allFormats() );
   defaultSizePage->setCurrentItem(1);
   grid1->addWidget(defaultSizePage,1,0);
 
-  label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Default page orientation:"));
+  label=new QLabel(i18n("Default page &orientation:"), tmpQGroupBox);
   grid1->addWidget(label,2,0);
 
   defaultOrientationPage=new QComboBox( tmpQGroupBox);
+  label->setBuddy(defaultOrientationPage);
   QStringList listType;
   listType+=i18n( "Portrait" );
   listType+=i18n( "Landscape" );
@@ -800,9 +740,10 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *
   grid1->addWidget(defaultOrientationPage,3,0);
 
   label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Default page units:"));
+  label->setText(i18n("Default page &units:"));
   grid1->addWidget(label,4,0);
   defaultUnit=new QComboBox( tmpQGroupBox);
+  label->setBuddy(defaultUnit);
   listType.clear();
   listType=i18n( "Millimeters (mm)" ) ;
   listType+=i18n( "Points (pt)" ) ;
@@ -869,8 +810,7 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
   m_pView = _view;
 
   config = KSpreadFactory::global()->config();
-  QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-  tmpQGroupBox->setTitle(i18n("Spelling"));
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Spelling"), box, "GroupBox" );
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1, KDialog::marginHint()+10, KDialog::spacingHint());
   grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
   grid1->setRowStretch( 7, 10 );
