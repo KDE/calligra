@@ -151,11 +151,11 @@ public:
     /**
      * A convenience function.
      */
-    void gotoLocation( const KSpreadRange & _range );
+    bool gotoLocation( const KSpreadRange & _range );
     /**
      * A convenience function.
      */
-    void gotoLocation( const KSpreadPoint& _cell );
+    bool gotoLocation( const KSpreadPoint& _cell );
 
     /**
      * Move the cursor to the specified cell. This may include switching

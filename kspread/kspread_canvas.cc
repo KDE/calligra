@@ -448,12 +448,12 @@ KSpreadTable* KSpreadCanvas::activeTable()
   return m_pView->activeTable();
 }
 
-void KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
+bool KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
 {
   if ( !_range.isValid() )
   {
     KMessageBox::error( this, i18n( "Invalid cell reference" ) );
-    return;
+    return false;
   }
   KSpreadTable * table = activeTable();
   if ( _range.isTableKnown() )
@@ -461,20 +461,21 @@ void KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
   if ( !table )
   {
     KMessageBox::error( this, i18n("Unknown table name %1" ).arg( _range.tableName ) );
-    return;
+    return false;
   }
 
   gotoLocation( _range.range.topLeft(), table, false );
   gotoLocation( _range.range.bottomRight(), table, true );
+  return true;
 }
 
 
-void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
+bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 {
   if ( !_cell.isValid() )
   {
     KMessageBox::error( this, i18n("Invalid cell reference") );
-    return;
+    return false;
   }
 
   KSpreadTable* table = activeTable();
@@ -483,10 +484,11 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   if ( !table )
   {
     KMessageBox::error( this, i18n("Unknown table name %1").arg( _cell.tableName ) );
-    return;
+    return false;
   }
 
   gotoLocation( _cell.pos, table );
+  return true;
 }
 
 void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
@@ -2579,9 +2581,9 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   m_pDoc->paintCellRegions(painter, view, m_pView, cellRegions, table, true);
   painter.restore();
 
-  //TODO: remove hack: The painter is saved, restored and "scaled" with the matrix again, 
+  //TODO: remove hack: The painter is saved, restored and "scaled" with the matrix again,
   //      because within paintCellRegions the region for the children is clipped out.
-  
+
   // Draw children
   m = m_pView->matrix();
   painter.setWorldMatrix( m );

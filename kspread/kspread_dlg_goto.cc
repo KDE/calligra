@@ -54,12 +54,13 @@ void KSpreadGotoDlg::slotOk()
 {
     QString tmp_upper;
     tmp_upper=m_nameCell->text().upper();
-
+    bool result = true;
     if ( tmp_upper.contains( ':' ) ) //Selection entered in location widget
-        m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp_upper, m_pView->doc()->map() ) );
+        result = m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp_upper, m_pView->doc()->map() ) );
     else //Location entered in location widget
-        m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
-    accept();
+        result = m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
+    if ( result )
+        accept();
 }
 
 #include "kspread_dlg_goto.moc"
