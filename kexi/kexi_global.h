@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2003-2004 Kexi Team
+   Copyright (c) 2003-2005 Kexi Team
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +28,20 @@
 #define kexiwarn  kdWarning(44010)
 #define kexicorewarn kdWarning(44020)
 #define kexipluginswarn kdWarning(44021)
+
+/* useful macros */
+
+/*! a shortcut for iterating over lists or maps, eg. QMap, QValueList */
+#define foreach(_class, variable, list) \
+	for (_class variable = list.constBegin(); variable!=list.constEnd(); ++variable)
+
+/*! nonconst version of foreach iterator */
+#define foreach_nonconst(_class, variable, list) \
+	for (_class variable = list.begin(); variable!=list.end(); ++variable)
+
+/*! a shortcut for iterating over QPtrList and QPtrDict */
+#define foreach_list(_class, variable, list) \
+	for (_class variable(list); variable.current(); ++variable)
 
 #endif /* _KEXI_GLOBAL_ */
 
