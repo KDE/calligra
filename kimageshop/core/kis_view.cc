@@ -25,6 +25,7 @@
 #include <qbutton.h>
 #include <qscrollbar.h>
 #include <qstringlist.h>
+#include <qclipboard.h>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -36,6 +37,7 @@
 #include <kstdaction.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
+#include <kapp.h>
 
 #include "kis_view.h"
 #include "kis_doc.h"
@@ -48,16 +50,17 @@
 #include "kis_factory.h"
 #include "kis_gradient.h"
 #include "kis_pluginserver.h"
+#include "kis_selection.h"
 
 #include "kis_brushchooser.h"
 #include "kis_layerview.h"
 #include "kis_channelview.h"
-
 #include "kis_dlg_gradient.h"
 #include "kis_dlg_gradienteditor.h"
 #include "kis_dlg_preferences.h"
 #include "kis_dlg_new.h"
 #include "kis_tool_select.h"
+#include "kis_tool_paste.h"
 #include "kis_tool_move.h"
 #include "kis_tool_zoom.h"
 #include "kis_tool_brush.h"
@@ -236,6 +239,9 @@ void KisView::setupTools()
 {
     // select tool 
     m_pSelectTool = new SelectTool( m_pDoc, this, m_pCanvas );
+
+    // select tool 
+    m_pPasteTool = new PasteTool( m_pDoc, this, NULL );
 
     // move tool
     m_pMoveTool = new MoveTool(m_pDoc);
@@ -519,9 +525,9 @@ void KisView::setupActions()
     m_layer_mirrorX->setEnabled( false );  
     m_layer_mirrorY->setEnabled( false );  
 
-    m_cut->setEnabled( false );
-    m_copy->setEnabled( false );
-    m_paste->setEnabled( false );
+    //m_cut->setEnabled( false );
+    //m_copy->setEnabled( false );
+    //m_paste->setEnabled( false );
 }
 
 
@@ -645,7 +651,6 @@ void KisView::scrollV(int)
 
 void KisView::slotDocUpdated()
 {
-    //kdDebug() << "KisView::slotDocUpdated" << endl;
     m_pCanvas->repaint();
 }
 
@@ -736,8 +741,6 @@ void KisView::updateCanvas( QRect & ur )
     // that makes it dog slow, scale just the area you need.
     p.scale( zoomFactor(), zoomFactor() );
 
-#ifndef JOHN
-
     // draw background
     p.eraseRect( 0, 0, xPaintOffset(), height() );
     p.eraseRect( xPaintOffset(), 0, width(), yPaintOffset() );
@@ -763,15 +766,12 @@ void KisView::updateCanvas( QRect & ur )
 
     p.translate(xt, yt);
 
-#endif
-
     // #### This is the place where image is drawn to view ###
     // john - the common code is NOT repainting the image bitmap,
     // so use document to do that
 
     //kdDebug(0) << "KisView::updateCanvas - paintContents called" << endl; 
     //kdDebug(0) << "ur.width(): " << ur.width() << " ur.height(): " << ur.height() << endl;                 
-    // koDocument()->paintEverything( p, ur, FALSE, this );
 
     m_pDoc->paintContent(p, ur); 
     p.end();
@@ -792,21 +792,13 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
     }
 
     QPainter p;
-
-#ifndef JOHN
     QRect ur = e->rect(); 
-#else    
-    QRect ur = QRect(0, 0, img->width(), img->height());
-#endif
-  
     p.begin( m_pCanvas );
 
-    // FIXME: Michael, you scale the whole image, that makes it dog slow, scale just the are you need.
+    /* FIXME: Michael, you scale the whole image, 
+    that makes it dog slow, scale just the are you need. */
     p.scale( zoomFactor(), zoomFactor() );
-
  
-#ifndef JOHN
-
     // draw background
     p.eraseRect( 0, 0, xPaintOffset(), height() );
     p.eraseRect( xPaintOffset(), 0, width(), yPaintOffset() );
@@ -831,7 +823,6 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
     int yt = yPaintOffset() + ur.y() - m_pVert->value();
 
     p.translate(xt, yt);
-#endif
 
     // #### This is the place where image is drawn to view ###
 
@@ -921,34 +912,77 @@ void KisView::tool_gradient()
 void KisView::undo()
 {
     kdDebug() << "UNDO called" << endl;
-
     //m_pDoc->commandHistory()->undo(); //jwc
 }
 
 void KisView::redo()
 {
     kdDebug() << "REDO called" << endl;
-
     //m_pDoc->commandHistory()->redo(); //jwc
 }
 
 void KisView::copy()
 {
     kdDebug() << "COPY called" << endl;
+
+    if(!m_pDoc->setClipImage())
+        kdDebug() << "m_pDoc->setClipImage() failed" << endl;
+        
+    if(m_pDoc->getClipImage())
+    {
+        kdDebug() << "got m_pDoc->getClipImage()" << endl;
+        QImage cImage = *m_pDoc->getClipImage();
+        kapp->clipboard()->setImage(cImage); 
+        {
+            if(kapp->clipboard()->image().isNull())
+                kdDebug() << "clipboard image is null - KisView::copy()" << endl; 
+            else
+               kdDebug() << "clipboard image is NOT null - KisView::copy()" << endl; 
+        }
+    }    
 }
 
 void KisView::cut()
 {
     kdDebug() << "CUT called" << endl;
+    
+    if(!m_pDoc->setClipImage())
+        kdDebug() << "m_pDoc->setClipImage() failed" << endl;
+        
+    if(m_pDoc->getClipImage())
+        kapp->clipboard()->setImage(*(m_pDoc->getClipImage()));    
+        
+    if(!m_pDoc->m_pSelection->erase())
+        kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
+
+    /* refresh canvas */
+    KisImage* img = m_pDoc->current();
+    QRect updateRect(0, 0, img->width(), img->height());
+    m_pDoc->current()->markDirty(updateRect);
+      
 }
 
 void KisView::paste()
 {
     kdDebug() << "PASTE called" << endl;
+    if(m_pDoc->getClipImage())
+    {
+        activateTool(m_pPasteTool);
+
+        /* refresh canvas */
+        KisImage* img = m_pDoc->current();
+        QRect updateRect(0, 0, img->width(), img->height());
+        m_pDoc->current()->markDirty(updateRect);
+    }    
+    else
+    {
+        kdDebug() << "Nothing to paste" << endl;
+    }
 }
 
+
 /*
- * dialog action slots
+ *      dialog action slots
  */
 
 void KisView::zoom( int _x, int _y, float zf )
@@ -980,18 +1014,15 @@ void KisView::zoom_out( int x, int y )
     zoom( x, y, zf);
 }
 
-
 void KisView::zoom_in()
 {
     zoom_in( 0, 0 );
 }
 
-
 void KisView::zoom_out()
 {
     zoom_out( 0, 0 );
 }
-
 
 void KisView::dialog_gradient()
 {
@@ -1048,7 +1079,6 @@ void KisView::insert_layer()
     QRect updateRect(0, 0, img->width(), img->height());
     m_pDoc->current()->markDirty(updateRect);
 #endif    
-
 }
 
 
@@ -1067,11 +1097,10 @@ void KisView::insert_layer_image()
 
     if( !url.isEmpty() )
     {
-        /* IMPORTANT - need to convert indexed images, all gifs and
-        some pngs of 8 bit or less,  to 16 bit by creating a QPixmap
-        from the file and blitting it into a 16 bit RGBA pixmap - you
-        can blit from a lesser depth to a greater but not the other
-        way around */
+        /* convert indexed images, all gifs and some pngs of 8 bits 
+        or less, to 16 bit by creating a QPixmap from the file and 
+        blitting it into a 16 bit RGBA pixmap - you can blit from a 
+        lesser depth to a greater but not the other way around */
         
         QPixmap *filePixmap = new QPixmap(url.path());
         unsigned int w = (unsigned int) filePixmap->width();
@@ -1082,8 +1111,6 @@ void KisView::insert_layer_image()
         
         bitBlt (buffer, 0, 0, filePixmap, 0, 0, w, h);
         
-        // QImage *fileImage = new QImage(url.path());
-
         QImage fileImage = buffer->convertToImage();
         
         delete filePixmap;
@@ -1099,48 +1126,6 @@ void KisView::insert_layer_image()
         QRect updateRect(0, 0, img->width(), img->height());
         m_pDoc->current()->markDirty(updateRect);
     }
-    
-/*------
-        QPixmap *filePM = new QPixmap(); 
-        filePM->convertFromImage(*fileImage, ColorOnly);
-         
-        QPixmap *imPM = m_pDoc->current()->imagePixmap;
-
-        bitBlt( imPM, 0, 0,         
-                filePM, 0, 0,
-                filePM->width(), filePM->height());
-
-        QRect updateRect(0, 0, filePM->width(), filePM->height());
-        delete filePM;
-        delete fileImage;
----------*/        
-        //m_pDoc->current()->markDirty(updateRect);
-        //updateCanvas(updateRect);
-        
-#if 0 
-        KisBrush *specialBrush = new KisBrush(url.path(), true, true);
-        BrushTool *specialBrushTool = new BrushTool(m_pDoc, this, specialBrush);
-
-        // save current brush
-        KisBrush *old_m_pBrush = m_pBrush;
-
-        // assign brush to special brush
-        m_pBrush = specialBrush;
-        
-        if(!specialBrushTool->paintMonochrome(QPoint(0,0)))
-            kdDebug(0) << "Error: Couldn't insert image into layer" << endl;
-
-        QRect updateRect(QPoint(0,0), m_pBrush->size());
-        m_pDoc->current()->markDirty(updateRect);
-            
-        // restore current brush, if any
-        m_pBrush = old_m_pBrush;
-
-        // clean up special, temporary brush
-        delete specialBrushTool;        
-        delete specialBrush;
-    }
-#endif    
 }
 
 

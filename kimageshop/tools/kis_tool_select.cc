@@ -18,7 +18,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "qpainter.h"
+#include <qpainter.h>
+#include <kdebug.h>
 
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -28,8 +29,9 @@
 SelectTool::SelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas )
   : KisTool( _doc, _view)
   , m_dragging( false ) 
+  , m_view( _view )  
   , m_canvas( _canvas )
-  , m_view( _view )
+
 {
       m_drawn = false;
       m_init  = true;
@@ -92,24 +94,63 @@ void SelectTool::mouseRelease( QMouseEvent* event )
         it is only drawn to canvas, not to retained imagePixmap,
         and therefore will disappear when another tool action is used */
         // drawRect( m_dragStart, m_dragEnd ); 
+        
+        /* get selection rectangle after mouse is released
+        there always is one, even if width and height are 0 
+        left and right, top and bottom are sometimes reversed! */
+        
+        if(m_dragStart.x() <= m_dragEnd.x())
+        {
+            m_selectRect.setLeft(m_dragStart.x());
+            m_selectRect.setRight(m_dragEnd.x());
+        }    
+        else 
+        {
+            m_selectRect.setLeft(m_dragEnd.x());                   
+            m_selectRect.setRight(m_dragStart.x());
+        }
+        
+        if(m_dragStart.y() <= m_dragEnd.y())
+        {
+            m_selectRect.setTop(m_dragStart.y());
+            m_selectRect.setBottom(m_dragEnd.y());            
+        }    
+        else
+        {
+            m_selectRect.setTop(m_dragEnd.y());
+            m_selectRect.setBottom(m_dragStart.y());            
+        }
+                    
+        m_pDoc->setSelectRect(m_selectRect);
+
+        kdDebug(0) << "selectRect" 
+            << " left: "   << m_selectRect.left() 
+            << " top: "    << m_selectRect.top()
+            << " right: "  << m_selectRect.right() 
+            << " bottom: " << m_selectRect.bottom()
+            << endl;
     }
 }
 
 
 void SelectTool::drawRect( const QPoint& start, const QPoint& end )
 {
-    // QPixmap *imPM = m_pDoc->current()->imagePixmap;
     QPainter p, pCanvas;
 
     p.begin( m_canvas );
-    //p.begin( imPM );
     p.setRasterOp( Qt::NotROP );
-    p.drawRect( QRect( start, end ) );
+
+    //p.drawRect( QRect( start, end ) );
+    /* adjust for scroll ofset as this draws on the canvas, not on
+    the image itself QRect(left, top, width, height) */
+    
+    p.drawRect( QRect(start.x() + m_view->xPaintOffset() - m_view->xScrollOffset(),
+                      start.y() + m_view->yPaintOffset() - m_view->yScrollOffset(), 
+                      end.x() - start.x(), 
+                      end.y() - start.y()) );
     p.end();
     
     // jwc - don't update retained graphics, only canvas
     //QRect updateRect(0, 0, m_pDoc->current()->width(), m_pDoc->current()->height());
     //m_view->updateCanvas(updateRect);
 }
-
-

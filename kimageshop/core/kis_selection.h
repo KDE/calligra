@@ -1,5 +1,5 @@
 /*
- *  selecttool.h - part of KImageShop
+ *  kis_gradient.h - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
  *
@@ -18,46 +18,36 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __selecttool_h__
-#define __selecttool_h__
+#ifndef __kis_selection_h__
+#define __kis_selection_h__
 
-#include <qpoint.h>
-#include "kis_view.h"
-#include "kis_tool.h"
+#include <qobject.h>
+#include <qimage.h>
+#include "kis_doc.h"
 
 class KisDoc;
-class KisCanvas;
-class KisView;
 
-class SelectTool : public KisTool
+class KisSelection : public QObject 
 {
+  Q_OBJECT
+
 public:
 
-  SelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-  ~SelectTool();
-
-  virtual QString toolName() { return QString( "SelectTool" ); }
-
-  virtual void mousePress( QMouseEvent *_event );
-  virtual void mouseMove( QMouseEvent *_event );
-  virtual void mouseRelease( QMouseEvent *_event );
-
+  KisSelection(KisDoc *doc);
+  ~KisSelection();
+  bool erase();
+  
+  QImage selectionImage;
+  QRect selectionRect;
+  
 protected:
 
-  void drawRect( const QPoint&, const QPoint& ); 
+          
+private:
 
-protected:
-
-  QPoint     m_dragStart;
-  QPoint     m_dragEnd;
-  bool       m_dragging;
-  bool       m_drawn;   
-  bool       m_init;
-
-  KisView   *m_view;  
-  KisCanvas *m_canvas;
-
-  QRect      m_selectRect;
+  KisDoc *pDoc;
+  int m_data;
 };
 
-#endif //__selecttool_h__
+#endif
+

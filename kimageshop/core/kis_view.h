@@ -24,7 +24,7 @@
 #define __kis_view_h__
 
 #include <koView.h>
-
+#include <qscrollbar.h>
 #include "kis_color.h"
 
 class KAction;
@@ -48,6 +48,7 @@ class QScrollBar;
 class KRuler;
 
 class SelectTool;
+class PasteTool;
 class KisBrush;
 class KisTool;
 class MoveTool;
@@ -183,13 +184,15 @@ class KisView : public KoView
 
     int 	xPaintOffset();
     int 	yPaintOffset();
-    void        scrollTo( QPoint p );
+    int     xScrollOffset() { return m_pHorz->value(); }
+    int     yScrollOffset() { return m_pVert->value(); }
+    void    scrollTo( QPoint p );
 
     void 	zoom( int x, int y, float zf );
-    void        zoom_in( int x, int y );
+    void    zoom_in( int x, int y );
     void	zoom_out( int x, int y );
-    float       zoomFactor();
-    void        setZoomFactor( float zf );
+    float   zoomFactor();
+    void    setZoomFactor( float zf );
     
  private:
 
@@ -214,6 +217,7 @@ class KisView : public KoView
     KisDoc                *m_pDoc;
     KisTool               *m_pTool; // currently active tool
     SelectTool            *m_pSelectTool;
+    PasteTool             *m_pPasteTool;
     MoveTool              *m_pMoveTool;
     BrushTool             *m_pBrushTool;
     EraserTool            *m_pEraserTool;

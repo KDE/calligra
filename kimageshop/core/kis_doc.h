@@ -32,8 +32,10 @@
 #include "kis_image.h"
 #include "kis_global.h"
 #include "kis_view.h"
+#include "kis_selection.h"
 
 class KisBrush;
+class KisSelection;
 class NewDialog;
 
 /*
@@ -131,28 +133,77 @@ public:
 	 */    
     bool QtImageToLayer(QImage *qimage, KisView *pView);
 
-public slots:
-  void slotImageUpdated();
-  void slotImageUpdated( const QRect& rect );
-  void slotLayersUpdated();
+	/*
+	 *  copy rectangular area of layer to Qt Image
+	 */    
+    bool LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect);
 
-  bool slotNewImage();
-  void setCurrentImage(const QString& _name);
-  void slotRemoveImage( const QString& name );
+	/*
+	 *  set selection rectangle for the document
+	 */    
+    void setSelectRect(QRect & rect);    
+
+	/*
+	 *  set selection rectangle for the document
+	 */    
+    QRect getSelectRect() { return selectRect; }    
+
+	/*
+	 *  set selection or clip rectangle for the document
+	 */    
+    bool setClipImage(); 
+    
+	/*
+	 *  get selection or clip image for the document
+	 */    
+    QImage *getClipImage() { return m_pClipImage; }
+
+	/*
+	 *  currrent selection for document
+	 */    
+
+    KisSelection *m_pSelection;
+
+public slots:
+    void slotImageUpdated();
+    void slotImageUpdated( const QRect& rect);
+    void slotLayersUpdated();
+
+    bool slotNewImage();
+    void setCurrentImage(const QString& _name);
+    void slotRemoveImage( const QString& name );
 
 signals:
-  void docUpdated();
-  void docUpdated( const QRect& rect );
-  void layersUpdated();
-  void imageListUpdated();
+    void docUpdated();
+    void docUpdated( const QRect& rect );
+    void layersUpdated();
+    void imageListUpdated();
 
 protected:
-  virtual KoView* createViewInstance( QWidget* parent, const char* name );
-  //KoCommandHistory  m_commands; //jwc
-  QList <KisImage> m_Images;
-  KisImage  * m_pCurrent;
-  NewDialog * m_pNewDialog;
+
+    /* reimplemented from koDocument - a document can have multiple
+    views of the same data */
+    virtual KoView* createViewInstance( QWidget* parent, const char* name );
+
+    /* undo/redo - currently nonfunctional */
+    //KoCommandHistory  m_commands; 
     
+    /* list of images for the document - each document can have multiple 
+    images and each image must have at least one layer. however, a document
+    can only have one current image, which is what is loaded and saved -
+    the permanent data associated with it. This coresponds to an
+    image, but that image is interchangeable */
+    QList <KisImage> m_Images;
+
+    KisImage  * m_pCurrent;
+    NewDialog * m_pNewDialog;
+    QImage    * m_pClipImage;
+    
+    /* selection rectangle for the document - there can only be one
+    no matter how many views or images - possible list of selections 
+    may be useful later, but list is questionable because current 
+    selection is tied to gui focus in current layer */
+    QRect     selectRect;    
 };
 
 #endif // __kis_doc_h__

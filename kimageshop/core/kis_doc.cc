@@ -63,6 +63,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_channel.h"
+#include "kis_selection.h"
 
 #define KIS_DEBUG(AREA, CMD)
 
@@ -81,6 +82,7 @@ kdDebug(0) << "KisDoc::KisDoc() entering" << endl;
     setInstance( KisFactory::global() );
     m_pCurrent = 0L;
     m_pNewDialog = 0L;
+    m_pClipImage = 0L;
     m_Images.setAutoDelete(false);
     
     kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl; 
@@ -95,7 +97,8 @@ kdDebug(0) << "KisDoc::KisDoc() leavring" << endl;
 bool KisDoc::initDoc()
 {
     kdDebug(0) << "KisDoc::initDoc() entering" << endl;
-
+    
+    bool ok = false;
     QString name;
     name.sprintf("image%d", m_Images.count() + 1);
     
@@ -127,29 +130,29 @@ bool KisDoc::initDoc()
         // list of images - mdi document 
         setCurrentImage(img);
         emit imageListUpdated();
+        
         setModified (true);
-        return true;
+        ok = true;
     } 
     // open an existing document
     else if (ret == KoTemplateChooseDia::File) 
     {
         KURL url;
         url.setPath (templ);
-        bool ok = openURL (url);
-        return ok;
+        ok = openURL (url);
     } 
     // create a new document from scratch
     else if ( ret == KoTemplateChooseDia::Empty )
     {
         // NewDialog for entering parameters
-        bool ok = slotNewImage();        
+        ok = slotNewImage();        
         if(ok) emit imageListUpdated();
-        return ok;
     } 
-    else
-        return false;
-}
 
+    m_pSelection = new KisSelection(this);    
+
+    return ok;    
+}
 
 
 /*
@@ -212,7 +215,6 @@ kdDebug(0) << "layer elements" << endl;
     {
         QDomElement layer = doc.createElement( "layer" );
 
-
 	layer.setAttribute( "name", lay->name() );
 	layer.setAttribute( "x", lay->imageExtents().x() );
 	layer.setAttribute( "y", lay->imageExtents().y() );
@@ -263,8 +265,8 @@ kdDebug(0) << "cId: " <<  static_cast<int>(ch->channelId())  << endl;
 kdDebug(0) << "bitDepth: " <<  static_cast<int>(ch->bitDepth())  << endl;            
 
 	    channels.appendChild( channel );
-	} // end of channels loop
 
+	} // end of channels loop
     } // end of layers loop
 
     setModified( false );
@@ -432,12 +434,10 @@ kdDebug(0) << "bitDepth: " << bd << endl;
 	l = l.nextSibling();
     }
 
-    /* 
-    add background layer
+    /* add background layer 
     jwc - should only do this for a new document, not 
     when loading an existing image - for existing document,
-    but will do for now
-    */
+    but will do for now */
     
     img->addLayer( QRect(0, 0, w, h), KisColor::white(), false, "background");
     img->markDirty( QRect(0, 0, w, h) );
@@ -600,6 +600,11 @@ KisDoc::~KisDoc()
         delete img;
         img = m_Images.next();
     }
+
+    if(m_pClipImage != 0L)
+    {
+        delete m_pClipImage;
+    }        
 }
 
 
@@ -731,13 +736,12 @@ void KisDoc::CopyToLayer(KisView *pView)
 }
 
 /*
-    This VERY important function probably shouldn't be in kis_doc.cc but
-    in a kis_utility.cc.  What it does is to copy a QImage exactly into
-    the current image's active layer, pixel by pixel using scanlines,
-    fully 32 bit even if the alpha channel isn't used. This provides a
-    basis for a clipboard buffer and a Krayon blit routine, with
-    custom modifiers to blend, apply various filters and raster operations,
-    and many other neat effects.  -jwc-
+    Copy a QImage exactly into the current image's active layer, 
+    pixel by pixel using scanlines,  fully 32 bit even if the alpha 
+    channel isn't used. This provides a  basis for a clipboard buffer 
+    and a Krayon blit routine, with custom modifiers to blend, apply 
+    various filters and raster operations,  and many other neat 
+    effects.  -jwc-
 */
 
 
@@ -839,6 +843,182 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
 }
 
 
+/*
+    Copy a rectangular area of a layer into a QImage, pixel by pixel 
+    using scanlines,  fully 32 bit even if the alpha channel isn't used. 
+    This provides a  basis for a clipboard buffer and a Krayon blit 
+    routine, with custom modifiers to blend, apply various filters and 
+    raster operations,  and many other neat effects.  -jwc-
+*/
+
+bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
+{
+    KisImage *img = current();
+    KisLayer *lay = img->getCurrentLayer();
+    QImage   *qimg = qimage;
+
+    if (!img)	        return false;
+    if (!lay)           return false;
+
+    // FIXME: Implement this for non-RGB modes.
+    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
+	return false;
+
+    /* if dealing with 1 or 8 bit images, convert to 16 bit */
+    if(qimage->depth() < 16)
+    {
+        QImage Converted = qimage->smoothScale(qimage->width(), 
+            qimage->height());
+        qimg = &Converted;
+    }
+    
+    int startx = 0;
+    int starty = 0;
+
+    //QRect clipRect(startx, starty, qimg->width(), qimg->height());
+
+    if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
+        return false;
+  
+    clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
+
+    int sx = clipRect.left() - startx;
+    int sy = clipRect.top() - starty;
+    int ex = clipRect.right() - startx;
+    int ey = clipRect.bottom() - starty;
+
+    uchar *sl;
+    uchar bv, invbv;
+    uchar r, g, b, a;
+    int   v;
+
+    int red     = pView->fgColor().R();
+    int green   = pView->fgColor().G();
+    int blue    = pView->fgColor().B();
+
+    bool alpha = (img->colorMode() == cm_RGBA);
+  
+    for (int y = sy; y <= ey; y++)
+    {
+        sl = qimg->scanLine(y);
+
+        for (int x = sx; x <= ex; x++)
+	{
+            // destination binary values by channel
+	    r = lay->pixel(0, startx + x, starty + y);
+	    g = lay->pixel(1, startx + x, starty + y);
+	    b = lay->pixel(2, startx + x, starty + y);
+
+            // source binary value for grayscale - not used here
+	    bv = *(sl + x);
+            
+            // skip black pixels in source - only for gray scale 
+	    // if (bv == 0) continue;
+
+            // inverse of gray scale binary value - the darker the higher
+            // the value
+	    invbv = 255 - bv;
+
+	    r = ((red * bv) + (r * invbv))/255;
+	    g = ((green * bv) + (g * invbv))/255;
+            b = ((blue * bv) + (b * invbv))/255;
+
+            uint *p = (uint *)qimg->scanLine(y) + x;
+            
+	    lay->setPixel(0, startx + x, starty + y, qRed(*p));
+	    lay->setPixel(1, startx + x, starty + y, qGreen(*p));
+	    lay->setPixel(2, startx + x, starty + y, qBlue(*p));
+                       	  
+            if (alpha)
+	    {
+#if 0
+	        a = lay->pixel(3, startx + x, starty + y);
+
+		v = a + bv;
+		if (v < 0 ) v = 0;
+		if (v > 255 ) v = 255;
+		a = (uchar) v;
+			  
+		lay->setPixel(3, startx + x, starty + y, a);
+#endif
+	    }
+	} 
+    }
+    
+    return true;
+}
+
+/*
+    set current selection rectangle for the document
+*/
+
+void KisDoc::setSelectRect(QRect & rect)
+{
+    selectRect.setLeft(rect.left());
+    selectRect.setTop(rect.top());
+    selectRect.setRight(rect.right());
+    selectRect.setBottom(rect.bottom());    
+}
+
+
+/*
+    set current selection or clip image for the document
+*/
+
+bool KisDoc::setClipImage( )
+{
+    KisImage *img = current();
+    KisLayer *lay = img->getCurrentLayer();
+
+    if(m_pClipImage != 0L)
+    { 
+        delete m_pClipImage;
+        m_pClipImage = 0L;
+    }   
+     
+    m_pClipImage = new QImage(selectRect.width(), selectRect.height(), 32);
+    if(!m_pClipImage) return false;
+    
+    // destination rect - the clip image
+    int dx = selectRect.width();
+    kdDebug(0) << "selection width: " << dx << endl;
+    int dy = selectRect.height();
+    kdDebug(0) << "selection height: " << dy << endl;    
+
+    // source rect - the layer data
+    int sx = selectRect.left();
+    int sy = selectRect.top();
+    
+    // channel values of pixel in layer
+    int r, g, b; 
+    
+    // alpha channel value in layer
+    int a; 
+    
+    // ptr to data at scanline in QImage
+    uint *p;
+    
+    // fill in the clip image with data from selection rectange
+    // in image layer, using channel data at x+dx, y+dy offset into layer 
+    for (int y = 0; y < dy; y++)
+    {
+        for (int x = 0; x < dx; x++)
+	{
+            // source binary values by channel
+	    r = lay->pixel(0, sx + x, sy + y);
+	    g = lay->pixel(1, sx + x, sy + y);
+	    b = lay->pixel(2, sx + x, sy + y);
+            
+            // dest binary data in scanline at x offset
+            // is set at this point
+            p = (uint *)m_pClipImage->scanLine(y) + x;
+            *p = qRgb(r, g, b);
+        }
+    }
+    
+    return true;    
+}
+
 
 KisImage* KisDoc::newImage(const QString& n, int width, int height, cMode cm , uchar bitDepth )
 {
@@ -848,7 +1028,6 @@ KisImage* KisDoc::newImage(const QString& n, int width, int height, cMode cm , u
     kdDebug() << "KisDoc::newImage: returned from KisImage constuctor" << endl;
 
     m_Images.append(img);
-
     return img;
 }
 
@@ -860,7 +1039,6 @@ void KisDoc::removeImage( KisImage *img )
     {
         m_Images.remove(img);
         delete img;
-
         setCurrentImage(m_Images.first());
     }
     else
@@ -875,7 +1053,6 @@ void KisDoc::removeImage( KisImage *img )
     else
         setCurrentImage(m_Images.last()); // #### FIXME
 #endif        
-
 }
 
 

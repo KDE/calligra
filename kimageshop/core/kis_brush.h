@@ -31,10 +31,10 @@ class QPixmap;
 class KisBrush : public IconItem
 {
  public:
-  KisBrush(QString file, bool monochrome = false, bool special = false);
-  virtual ~KisBrush();
+    KisBrush(QString file, bool monochrome = false, bool special = false);
+    virtual ~KisBrush();
 
-    void 	    setSpacing(int s)                 { m_spacing = s;     }
+    void      setSpacing(int s)             { m_spacing = s;     }
     int       spacing()   	      const { return m_spacing;  }
     bool      isValid()   	      const { return m_valid;    }
     void      setHotSpot(QPoint);
@@ -46,7 +46,7 @@ class KisBrush : public IconItem
     uchar     value(int x, int y) const;
     uchar*    scanline(int) const;
     uchar*    bits() const;
-    QPixmap  *m_pPixmap;
+
     // debug
     void      dump() const;
 
@@ -61,7 +61,7 @@ class KisBrush : public IconItem
     int       m_w, m_h;
     uchar*    m_pData;
 
-    //QPixmap  *m_pPixmap;
+    QPixmap  *m_pPixmap;
 };
 
 #endif
