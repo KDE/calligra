@@ -134,3 +134,6 @@ Setting tabs via the rulers is more intuitive.
 Add link (internet link/ address mail / file link)
 
 Add dcop interface : now we can insert text, change text format, etc...
+
+Frame z-order ("Raise frame", "Lower frame")
+
