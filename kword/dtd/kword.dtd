@@ -1095,7 +1095,8 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT BOOKMARKITEM name NMTOKEN #REQUIRED 
                        cursorIndex NMTOKEN #REQUIRED
                        frameset NMTOKEN #REQUIRED
-                       parag NMTOKEN #REQUIRED>
+                       parag NMTOKEN #REQUIRED
+                       length NMTOKEN #REQUIRED>
 <!--
         The key mapping to one pixmap.
         [Old attribute was named "key" (the filename).]
