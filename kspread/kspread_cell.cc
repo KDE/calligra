@@ -2929,7 +2929,7 @@ if (( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined) && !i
         for (int i=m_strOutText.length();i!=0;i--)
                 {
                 tmp=m_strOutText.left(i);
-                if((fm.width(tmp)+m_indent)<len)
+                if((fm.width(tmp)+m_indent)<(len-4-1)) //4 equal lenght of red triangle +1 pixel
                         {
                         return tmp;
                         }
@@ -2991,7 +2991,7 @@ else
         for (int i=m_strOutText.length();i!=0;i--)
                 {
                 tmp=m_strOutText.left(i);
-                if(fm.width(tmp)<w)
+                if(fm.width(tmp)<(w-4-1)) //4 equals lenght of red triangle +1 pixel
                         return tmp;
                 }
         }
