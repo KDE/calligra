@@ -28,7 +28,6 @@
 #include <qfileinfo.h>
 #include <qfont.h>
 #include <qpair.h>
-#include <qregexp.h>
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -601,12 +600,12 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
       fright = right.text();
   }
   //The macro "<sheet>" formerly was typed as "<table>"
-  hleft   = hleft.replace(   QRegExp("<table>"), "<sheet>" );
-  hcenter = hcenter.replace( QRegExp("<table>"), "<sheet>" );
-  hright  = hright.replace(  QRegExp("<table>"), "<sheet>" );
-  fleft   = fleft.replace(   QRegExp("<table>"), "<sheet>" );
-  fcenter = fcenter.replace( QRegExp("<table>"), "<sheet>" );
-  fright  = fright.replace(  QRegExp("<table>"), "<sheet>" );
+  hleft   = hleft.replace(   "<table>", "<sheet>" );
+  hcenter = hcenter.replace( "<table>", "<sheet>" );
+  hright  = hright.replace(  "<table>", "<sheet>" );
+  fleft   = fleft.replace(   "<table>", "<sheet>" );
+  fcenter = fcenter.replace( "<table>", "<sheet>" );
+  fright  = fright.replace(  "<table>", "<sheet>" );
 
   QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
   for( ; it.current(); ++it )
