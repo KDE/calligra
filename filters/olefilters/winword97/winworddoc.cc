@@ -500,10 +500,9 @@ QString WinWordDoc::generateFormats(
             m_embedded.append(mimeType);
             m_embedded.append("\">\n<RECT x=\"30\" y=\"190\" w=\"120\" h=\"80\"/>\n");
             m_embedded.append("</OBJECT>\n");
-            m_embedded.append("<SETTINGS>\n");
-            m_embedded.append("<NAME value=\"");
+            m_embedded.append("<SETTINGS name=\"");
             m_embedded.append(i18n("Object %1").arg(m_embeddedCount));
-            m_embedded.append("\"/>\n");
+            m_embedded.append("\">\n");
             m_embedded.append("<FRAME left=\"30\" top=\"190\" right=\"149\" bottom=\"269\" tRed=\"0\" tGreen=\"0\" tBlue=\"0\" bRed=\"0\" bGreen=\"0\" bBlue=\"0\"/>\n");
             m_embedded.append("</SETTINGS>\n");
             m_embedded.append(
