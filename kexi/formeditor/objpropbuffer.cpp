@@ -63,17 +63,34 @@ ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &va
 	}
 	else
 	{
-		m_object->setProperty(property.latin1(), value);
-		emit propertyChanged(m_object, property, value);
+		if(!m_multiple)
+		{
+			m_object->setProperty(property.latin1(), value);
+			emit propertyChanged(m_object, property, value);
+		}
+		else
+		{
+			QWidget *w;
+			for(w = m_widgets.first(); w; w = m_widgets.next())
+			{
+				kdDebug() << "saving property for widget " << w->name() << endl;
+				w->setProperty(property.latin1(), value);
+				emit propertyChanged((QObject*)w, property, value);
+			}
+		}
 	}
 }
 
 void
-ObjectPropertyBuffer::setObject(QWidget *widg)
+ObjectPropertyBuffer::setWidget(QWidget *widg)
 {
 	QObject *obj = (QObject*)widg; 
-	if(obj==m_object)
+	if(obj==m_object && !m_multiple)
 		return;
+
+	m_widgets.clear();
+	m_widgets.append(widg);
+	m_multiple = false;
 	checkModifiedProp();
 	kdDebug() << "loading object = " << widg->name() << endl;
 	
@@ -130,6 +147,29 @@ ObjectPropertyBuffer::setObject(QWidget *widg)
 	obj->installEventFilter(this);
 }
 
+void
+ObjectPropertyBuffer::addWidget(QWidget *widg)
+{
+	m_multiple = true;
+	if(m_widgets.find(widg) == -1)
+		m_widgets.append(widg);
+
+	QString classn;
+	if(m_object->className() == widg->className())
+		classn = m_object->className();
+
+	m_manager->editor()->clear();
+
+	QDictIterator<KexiProperty> it(*this);
+	for(; it.current(); ++it)
+	{
+		if(!showMultipleProperty(it.currentKey(), classn))
+			(*this)[it.currentKey()]->setVisible(false);
+	}
+
+	m_manager->editor()->setBuffer(this);
+}
+
 bool
 ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 {
@@ -145,6 +185,20 @@ ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 	if(obj->isA("KFormDesigner::Spacer"))
 		return Spacer::showProperty(property);
 	return true;
+}
+
+bool
+ObjectPropertyBuffer::showMultipleProperty(const QString &property, const QString &className)
+{
+	if(className.isNull())
+	{
+		QStringList list;
+		list << "font" << "paletteBackgroundColor" << "enabled" << "paletteForegroundColor" << "cursor" << "paletteBackgroundPixmap";
+		if(!(list.grep(property)).isEmpty())
+			return true;
+	}
+	return false;
+	// TODO : Filter properties following class name (ie : "alignment" for labels or line edits ...) (maybe using WidgetFactory ?)
 }
 
 bool

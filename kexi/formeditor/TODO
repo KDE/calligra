@@ -1,7 +1,8 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
-* Add support for layouts and special container (HBox, VBox ...) and spacers
-
+* Move multiple selected widgets at one time
+* When double-clicking on a QLabel or a QLabel (others ?), the widget should be inline-editable (also on creation)
+* Undo support
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):
 	1. signals/slots mechanism is hard to use for average folks
@@ -12,12 +13,13 @@
 	  (at least commercial) license mentions that there cannot be 
 	  a project that is a replacement of the Qt developed out of the Qt)
 	4. It wouldn't hurt to ask them, as well.
-
+* Add grid layout (if really needed)
 * Form previewing stuff (see KUIViewer)
 * Add many other widgets :-)
 * Create db-aware widget factory
 
 ****** Bugfixes/Changes : *****
+* Remove all these " Q*** " names
 * Add a grouping ability to Widget
 * Make actions toggable (with KRadioAction)
 
@@ -36,3 +38,5 @@
 * Fix pixmaps in Property Editor (2/24/04)
 * Properties names and values are now i18n'ed (2/24/04)
 * Add a classname and filename member into Form (2/24/04)
+* Add support for layouts and special container (HBox, VBox ...) and spacers (partially 2/27/04)
+* Allow Multiple selection : edit common properties (colors, font..),copy/cut them at one time, ... (2/28/04)

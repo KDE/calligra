@@ -23,6 +23,7 @@
 
 
 #include <qobject.h>
+#include <qdict.h>
 
 class QWidget;
 class QDomElement;
@@ -84,19 +85,21 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		//! \return the FormManager parent of this form.
 		FormManager*		manager() const { return m_manager; }
 		//! \return the widget currently selected in this form, or 0 if there is not.
-		QWidget*		selectedWidget() const {return m_selWidget;}
+		QPtrList<QWidget>* selectedWidgets() {return &m_selected;}
 		/*! \return A pointer to the currently active Container, ie the parent Container for a simple widget,
 		    and the widget's Container if it is itself a container.
 		 */
-		Container*		activeContainer() const;
+		Container*		activeContainer();
 		/*! \return A pointer to the parent Container of the currently selected widget. It is the same as activeContainer() for 
 		    a simple widget, but unlike this function it will also return the parent Container if the widget itself is a Container.
 		 */
-		Container*		parentContainer() const;
+		Container*		parentContainer(QWidget *w=0);
 		/*! This function is used by child Container to tell Form which widget is selected. The ResizeHandleSet is changed accordingly,
 		   and the PropertyBuffer and ObjectTreeView are updated.
 		 */
 		void			setCurrentWidget(QWidget *w);
+		void			addSelectedWidget(QWidget *w);
+		void			unSelectWidget(QWidget *w);
 		/*! Sets the Form interactivity mode. If is used when pasting widgets, or loading a Form.
 		 */
 		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
@@ -147,6 +150,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		   \a w is the newly selected widget.
 		  */
 		void			selectionChanged(QWidget *w);
+		void			addedSelectedWidget(QWidget *w);
 		/*! This signal is emitted when a new widget is created, to update ObjectTreeView.
 		 \a it is the ObjectTreeItem representing this new widget.
 		 */
@@ -179,8 +183,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		Container		*m_toplevel;
 		ObjectTree		*m_topTree;
 		
-		QWidget			*m_selWidget;
-		ResizeHandleSet		*m_resizeHandles;
+		QPtrList<QWidget>	m_selected;
+		QDict<ResizeHandleSet> m_resizeHandles;
 
 		bool			m_inter;
 		QString			m_filename;

@@ -673,7 +673,6 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		}
 		if(n.toElement().tagName() == "spacer")
 		{
-			kdDebug() << "loding a spacer32" << endl;
 			loadWidget(container, lib, n.toElement(), w);
 		}
 		if((n.toElement().tagName() == "vbox") || (n.toElement().tagName() == "hbox") || (n.toElement().tagName() == "grid"))
@@ -706,7 +705,6 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 				}
 				if(m.toElement().tagName() == "spacer")
 				{
-					kdDebug() << "loding a spacer" << endl;
 					loadWidget(tree->container(), lib, m.toElement(), w);
 				}
 			}

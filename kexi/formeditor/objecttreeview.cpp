@@ -236,7 +236,6 @@ ObjectTreeView::removeItem(ObjectTreeItem *item)
 void
 ObjectTreeView::setForm(Form *form)
 {
-	
 	if(m_form == form)
 		return;
 	m_form = form;
@@ -245,8 +244,8 @@ ObjectTreeView::setForm(Form *form)
 	ObjectTree *tree = m_form->objectTree();
 	loadTree(tree, m_topItem);
 	m_topItem->setOpen(true);
-	if(form->selectedWidget())
-		setSelWidget(form->selectedWidget());
+	if(!form->selectedWidgets()->isEmpty())
+		setSelWidget(form->selectedWidgets()->last());
 	else
 		setSelWidget(form->toplevelContainer()->widget());
 }

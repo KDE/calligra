@@ -152,6 +152,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  */
 		void windowChanged(QWidget *w);
 
+	protected:
+		void initForm(Form *form);
+
 	private:
 		ObjectPropertyBuffer	*m_buffer;
 		WidgetLibrary		*m_lib;

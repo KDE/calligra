@@ -68,7 +68,7 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 	m_treeview = treeview;
 	editor->setBuffer(m_buffer);
 
-	connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget *)));
+	connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget *)));
 	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
 }
 
@@ -206,19 +206,20 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 	w->resize(350, 300);
 	w->show();
 	w->setFocus();
-
+	initForm(form);
+/*
 	m_forms.append(form);
 	m_treeview->setForm(form);
 	m_active = form;
 	m_count++;
-	m_buffer->setObject(w);
+	m_buffer->setWidget(w);
 
-	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
+	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
 	connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 	connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
 	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
-	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
+	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));*/
 }
 
 void
@@ -232,19 +233,27 @@ FormManager::loadForm()
 		return;
 	}
 
+	initForm(form);
+}
+
+void
+FormManager::initForm(Form *form)
+{
 	m_forms.append(form);
 	m_treeview->setForm(form);
 	m_active = form;
 	m_count++;
-	m_buffer->setObject(form->toplevelContainer()->widget());
+	m_buffer->setWidget(form->toplevelContainer()->widget());
 
-	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
+	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
+	connect(form, SIGNAL(addedSelectedWidget(QWidget*)), m_buffer, SLOT(addWidget(QWidget*)));
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
 	connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 	connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
 	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
-	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
+	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
 }
+
 
 void
 FormManager::saveForm()
@@ -277,8 +286,21 @@ FormManager::isTopLevel(QWidget *w)
 void
 FormManager::deleteWidget()
 {
-	if (activeForm() && activeForm()->parentContainer())
-		activeForm()->parentContainer()->deleteItem();
+	//if (activeForm() && activeForm()->parentContainer())
+	//	activeForm()->parentContainer()->deleteItem();
+	if(!activeForm())
+		return;
+
+	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
+	if(list->isEmpty())
+		return;
+
+	QWidget *w;
+	for(w = list->first(); w; w= list->next())
+	{
+		if(w)
+			activeForm()->parentContainer(w)->deleteItem();
+	}
 }
 
 void
@@ -286,19 +308,27 @@ FormManager::copyWidget()
 {
 	if (!activeForm() || !activeForm()->objectTree())
 		return;
-	QWidget *w = activeForm()->selectedWidget();
-	if (!w)
-		return;
-	ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
 
-	if (!it)
+	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
+	if(list->isEmpty())
 		return;
 
 	QDomElement parent = m_domDoc.namedItem("UI").toElement();
-	if(!parent.firstChild().isNull())
-		parent.removeChild(parent.firstChild());
-
-	FormIO::saveWidget(it, parent, m_domDoc);
+	if(parent.hasChildNodes())
+	{
+		parent.clear();
+		parent = m_domDoc.createElement("UI");
+		m_domDoc.appendChild(parent);
+	}
+	
+	QWidget *w;
+	for(w = list->first(); w; w= list->next())
+	{
+		ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
+		if (!it)
+			return;
+		FormIO::saveWidget(it, parent, m_domDoc);
+	}
 }
 
 void
@@ -311,14 +341,24 @@ FormManager::cutWidget()
 void
 FormManager::pasteWidget()
 {
-	QDomElement widg = m_domDoc.firstChild().firstChild().toElement();
-	if(widg.isNull())
+	if(!m_domDoc.namedItem("UI").hasChildNodes())
 		return;
-
-	if(m_insertPoint.isNull())
+	if(!activeForm())
+		return;
+	
+	if(m_domDoc.namedItem("UI").firstChild().nextSibling().isNull())
+	{
+		QDomElement widg = m_domDoc.namedItem("UI").firstChild().toElement();
+		if(m_insertPoint.isNull())
+			activeForm()->pasteWidget(widg);
+		else
+			activeForm()->pasteWidget(widg, m_insertPoint);
+	}
+	else for(QDomNode n = m_domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		QDomElement widg = n.toElement();
 		activeForm()->pasteWidget(widg);
-	else
-		activeForm()->pasteWidget(widg, m_insertPoint);
+	}
 }
 
 void

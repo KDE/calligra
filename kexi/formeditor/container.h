@@ -22,6 +22,7 @@
 #define FORMEDITORCONTAINER_H
 
 #include <qobject.h>
+#include <qptrlist.h>
 
 class QEvent;
 class QWidget;
@@ -103,8 +104,12 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/*! Deletes the selected child item of this Container, and remove it from ObjectTree. */
 		void		deleteItem();
 
-		//! Sets \a selected to be the selected widget of this container (and so of the Form).
-		void		setSelectedWidget(QWidget *selected);
+		/*! Sets \a selected to be the selected widget of this container (and so of the Form). If \a add is true, the formerly selected widget
+		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
+		 */
+		void		setSelectedWidget(QWidget *selected, bool add);
+
+		void		unSelectWidget(QWidget *w);
 
 	protected slots:
 		/*! This slot is called when the watched widget is deleted. Deletes the Container too. */
@@ -129,7 +134,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		LayoutType	m_layType;
 
 		// selection
-		QWidget		*m_selected;
+		//QWidget		*m_selected;
+		QPtrList<QWidget> m_selected;
 
 		// moving etc.
 		QPoint		m_grab;

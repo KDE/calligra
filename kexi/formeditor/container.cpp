@@ -81,7 +81,6 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	m_moving = 0;
 	m_move = false;
-	m_selected = 0;
 	m_tree = 0;
 	m_form = 0;
 	m_layout = 0;
@@ -136,9 +135,18 @@ Container::eventFilter(QObject *s, QEvent *e)
 				kdDebug() << "composed widget  " << m_moving->name() << endl; 
 			}
 
-			setSelectedWidget(m_moving);
-
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
+
+			if((mev->state() == ControlButton) || (mev->state() == ShiftButton))
+			{
+				if(m_selected.findRef(m_moving) != -1)
+					unSelectWidget(m_moving);
+				else
+					setSelectedWidget(m_moving, true);
+			}
+			else
+				setSelectedWidget(m_moving, false);
+
 			m_grab = QPoint(mev->x(), mev->y());
 
 			if(s == m_container && m_form->manager()->inserting())
@@ -292,17 +300,37 @@ Container::eventFilter(QObject *s, QEvent *e)
 }
 
 void
-Container::setSelectedWidget(QWidget *w)
+Container::setSelectedWidget(QWidget *w, bool add)
 {
 	if(w)
 	kdDebug() << "slotSelectionChanged " << w->name()<< endl;
 
-	m_selected = w;
-
-	if(w)
+	if(add && w)
+	{
+		m_selected.append(w);
+		m_form->addSelectedWidget(w);
+	}
+	else if(w)
+	{
+		m_selected.clear();
+		m_selected.append(w);
 		m_form->setCurrentWidget(w);
+	}
 	else
+	{
+		m_selected.clear();
 		m_form->setCurrentWidget(m_container);
+	}
+}
+
+void
+Container::unSelectWidget(QWidget *w)
+{
+	if(!w)
+		return;
+
+	m_selected.remove(w);
+	m_form->unSelectWidget(w);
 }
 
 void
@@ -322,13 +350,17 @@ Container::toplevel()
 void
 Container::deleteItem()
 {
-	if(m_selected)
+	if(!m_selected.isEmpty())
 	{
-		kdDebug() << "deleting item : " << m_selected->name() << endl;
-		form()->objectTree()->removeChild(m_selected->name());
+		QWidget *w;
+		for(w = m_selected.first(); w; w = m_selected.next())
+		{
+			kdDebug() << "deleting item : " << w->name() << endl;
+			form()->objectTree()->removeChild(w->name());
+			delete w;
+		}
+		m_selected.clear();
 		m_form->setCurrentWidget(m_container);
-		delete m_selected;
-		m_selected = 0;
 	}
 }
 

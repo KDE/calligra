@@ -39,10 +39,9 @@ Form::Form(FormManager *manager, const char *name)
   : QObject(manager, name)
 {
 	m_toplevel = 0;
-	m_selWidget = 0;
 	m_topTree = 0;
 	m_manager = manager;
-	m_resizeHandles = 0;
+	m_resizeHandles.setAutoDelete(true);
 	m_inter = true;
 }
 
@@ -91,11 +90,13 @@ Form::createEmptyInstance(const QString &c, QWidget *parent)
 void
 Form::setCurrentWidget(QWidget *w)
 {
-	if(w != m_selWidget)
+	if(!m_selected.find(w))
 		w->raise();
-	m_selWidget = w;
+
 	if(w)
 	{
+		m_selected.clear();
+		m_selected.append(w);
 		emit selectionChanged(w);
 	}
 	/*if(w->parentWidget()->inherits("QWidgetStack"))
@@ -103,20 +104,31 @@ Form::setCurrentWidget(QWidget *w)
 		w = w->parentWidget()->parentWidget();
 	}*/
 
+	m_resizeHandles.clear();
 	if(w != m_toplevel->widget() && w)
-	{
-		if(!m_resizeHandles)
-			m_resizeHandles = new ResizeHandleSet(w);
-		else
-			m_resizeHandles->setWidget(w);
-	}
-	else
-	{
-		delete m_resizeHandles;
-		m_resizeHandles = 0;
-	}
+		m_resizeHandles.insert(w->name(), new ResizeHandleSet(w));
+
 }
 
+void
+Form::addSelectedWidget(QWidget *w)
+{
+	if(!w)
+		return;
+
+	m_selected.append(w);
+	m_resizeHandles.insert(w->name(), new ResizeHandleSet(w));
+	emit addedSelectedWidget(w);
+}
+
+void
+Form::unSelectWidget(QWidget *w)
+{
+	m_selected.remove(w);
+	m_resizeHandles.remove(w->name());
+	if(m_selected.count() == 1)
+		activeContainer()->setSelectedWidget(m_selected.first(), false);
+}
 
 void
 Form::setSelWidget(QWidget *w)
@@ -133,7 +145,7 @@ Form::setSelWidget(QWidget *w)
 	else
 		cont = item->parent()->container();
 
-	cont->setSelectedWidget(w);
+	cont->setSelectedWidget(w, false);
 }
 
 void
@@ -162,9 +174,9 @@ Form::emitChildRemoved(ObjectTreeItem *item)
 }
 
 Container*
-Form::activeContainer() const
+Form::activeContainer()
 {
-	ObjectTreeItem *it = m_topTree->lookup(m_selWidget->name());
+	ObjectTreeItem *it = m_topTree->lookup(m_selected.last()->name());
 	if (!it)
 		return 0;
 	if(it->container())
@@ -174,9 +186,14 @@ Form::activeContainer() const
 }
 
 Container*
-Form::parentContainer() const
+Form::parentContainer(QWidget *w)
 {
-	ObjectTreeItem *it = m_topTree->lookup(m_selWidget->name());
+	ObjectTreeItem *it;
+	if(!w)
+		it = m_topTree->lookup(m_selected.last()->name());
+	else
+		it = m_topTree->lookup(w->name());
+
 	if(it->parent()->container())
 		return it->parent()->container();
 	else
@@ -300,7 +317,7 @@ Form::fixPos(QDomElement el)
 Form::~Form()
 {
 	delete m_topTree;
-//	delete m_resizeHandles;
+	m_resizeHandles.setAutoDelete(false); // otherwise, it tries to delete widgets which doesn't exist anymore
 }
 
 }

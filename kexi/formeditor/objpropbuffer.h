@@ -64,7 +64,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		/*! Sets the buffer's object to \a widget. The properties are created automatically, and the list view is updated.
 		  checkModifiedProp() is called before doing this.
 		 */
-		void	setObject(QWidget *obj);
+		void	setWidget(QWidget *obj);
+		void    addWidget(QWidget *w);
 
 	signals:
 		/*! This signal is emitted when the name of the widget is modified. \a oldname is the name of the widget before the 
@@ -81,6 +82,10 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		   \return true if the property should be shown. False otherwise.
 		 */
 		bool    showProperty(QObject *obj, const QString &property);
+		/*! This function is used to filter the properties to be shown when multiple widgets are selected at the same time.
+		   \return true if the property should be shown. False otherwise.
+		 */
+		bool    showMultipleProperty(const QString &property, const QString &className);
 		/*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for the QWidget \a obj. \a meta
 		  is the QMetaProperty for "alignment" property". ( called by setObject() )
 		 */
@@ -102,6 +107,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 	
 	private:
 		QObject		*m_object;
+		QPtrList<QWidget> m_widgets;
+		bool		m_multiple;
 		FormManager     *m_manager;
 };
 
