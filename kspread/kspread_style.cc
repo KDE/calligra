@@ -595,7 +595,7 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
     //TODO add decimal etc.
     //TODO change with precision
     QString format="0.0E+00";
-    return KoOasisStyles::saveOasisScientificStyle( mainStyles, format );
+    return KoOasisStyles::saveOasisScientificStyle( mainStyles, format, prefix(), postfix() );
 }
 
 QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
@@ -803,7 +803,7 @@ QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
         break;
     }
 
-    return KoOasisStyles::saveOasisFractionStyle( mainStyles, format );
+    return KoOasisStyles::saveOasisFractionStyle( mainStyles, format, prefix(), postfix() );
 }
 
 
