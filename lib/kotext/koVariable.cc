@@ -992,7 +992,7 @@ void KoTimeVariable::resize()
     QString oldLanguage;
     if ( !fmt->language().isEmpty())
     {
-         oldLanguage=KGlobal::locale()->language();
+        oldLanguage=KGlobal::locale()->language();
          bool changeLanguage = KGlobal::locale()->setLanguage( fmt->language() );
          KoVariable::resize();
          if ( changeLanguage )
