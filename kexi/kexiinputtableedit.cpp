@@ -29,7 +29,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 {
 	m_type = type;
 	m_value = value;
-//	setText(value.toString());
+	setText(value.toString());
 	if(ov != QString::null)
 	{
 		switch(m_type)

@@ -34,6 +34,7 @@ KexiProject::KexiProject(QObject* parent) : QObject(parent)
 	m_db = new KexiDB(this);
 	m_formManager=new KexiFormManager();
 	m_url = "";
+	m_modified = false;
 }
 
 KexiProject::~KexiProject()
@@ -96,6 +97,7 @@ KexiProject::saveProject()
 		store->write(data);
 		store->close();
 		delete store;
+		m_modified = false;
 		return true;
 	}
 	
@@ -154,6 +156,7 @@ KexiProject::loadProject(const QString& url)
 	parsedCred.database = nameElement.text();
 	parsedCred.user     = userElement.text();
 	parsedCred.password = passElement.text();
+	m_modified = false;
 	
 	initDbConnection(parsedCred);
 	
@@ -183,6 +186,7 @@ KexiProject::initDbConnection(const Credentials &cred, const bool create)
 		m_cred = cred;
 		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
 		kexi->mainWindow()->slotProjectModified();
+		m_modified = true;
 		return true;
 	}
 	else
@@ -210,6 +214,7 @@ KexiProject::initHostConnection(const Credentials &cred)
 	if(!m_db->connect(cred.host, cred.user, cred.password, cred.socket, cred.port))
 	{
 		m_cred = cred;
+		m_modified = true;
 		return false;
 	}
 	else
@@ -217,6 +222,13 @@ KexiProject::initHostConnection(const Credentials &cred)
 		m_cred = cred;
 		return true;
 	}
+}
+
+void
+KexiProject::clear()
+{
+	m_url = "";
+	m_modified = false;
 }
 
 #include "kexiproject.moc"

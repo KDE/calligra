@@ -37,6 +37,7 @@
 //#ifdef USE_KDE
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 //#endif
 
 #include "kexitablerm.h"

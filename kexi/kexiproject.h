@@ -53,10 +53,12 @@ public:
 	bool loadProject(const QString& url);
 	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
+	void clear();
 	
 	KexiDB* db() { return m_db; };
 	KexiFormManager *formManager() {return m_formManager;}
 	QString url() { return m_url; }
+	bool modified() { return m_modified; }
 signals:
 	void docModified();
 
@@ -69,6 +71,7 @@ private:
 	KexiFormManager *m_formManager;
 	Credentials m_cred;
 	QString m_url;
+	bool m_modified;
 };
 
 #endif
