@@ -824,16 +824,38 @@ bool KWFrameDia::applyChanges()
         }
         int _num = str.toInt() - 1;
 
+        KWFrameSet*fs= frame->getFrameSet();
         // delete frame from frameset
-        if ( frame->getFrameSet() &&
+        if ( fs &&
              ! (static_cast<unsigned int>( _num ) < doc->getNumFrameSets() &&
-                frame->getFrameSet() == doc->getFrameSet(_num))) {
-            if ( frame->getFrameSet()->getNumFrames() > 1 )
-                frame->getFrameSet()->delFrame( frame, FALSE );
-            else {
-                frame->getFrameSet()->delFrame( frame, FALSE );
-                doc->delFrameSet( frame->getFrameSet() );
+                fs == doc->getFrameSet(_num)))
+        {
+
+
+            KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet*>( fs );
+            QTextParag * parag = textfs->textDocument()->firstParag();
+            if(!( parag!=parag->next() && parag->string()->toString().length()==0))
+            {
+                int result;
+                result = KMessageBox::warningContinueCancel(this,
+                                                            i18n( "You are about to reconnect the last Frame of the\n"
+                                                                  "Frameset '%1'.\n"
+                                                                  "Doing so will delete the Frameset and all the\n"
+                                                                  "text contained in it!\n\n"
+                                                                  "Are you sure you want to do that?").arg(fs->getName()),
+                                                            i18n("Reconnect Frame"), i18n("&Delete"));
+                if (result == KMessageBox::Continue)
+                {
+                     if ( frame->getFrameSet()->getNumFrames() > 1 )
+                         frame->getFrameSet()->delFrame( frame, FALSE );
+                     else
+                     {
+                         frame->getFrameSet()->delFrame( frame, FALSE );
+                         doc->delFrameSet( frame->getFrameSet() );
+                     }
+                }
             }
+
         }
 
         if(frame->getFrameSet() == 0L) { // if there is no frameset (anymore)
