@@ -20,11 +20,13 @@
 #ifndef __kspread_dlg_goalseek__
 #define __kspread_dlg_goalseek__
 
-#include <qdialog.h>
+#include <kdialog.h>
 #include <qpoint.h>
+#include <qrect.h>
 
 class KSpreadCell;
 class KSpreadPoint;
+class KSpreadTable;
 class KSpreadView;
 
 class QFrame;
@@ -35,7 +37,7 @@ class QLineEdit;
 class QPushButton;
 class QVBoxLayout;
 
-class KSpreadGoalSeekDlg : public QDialog
+class KSpreadGoalSeekDlg : public KDialog
 {
   Q_OBJECT
 
@@ -44,11 +46,19 @@ class KSpreadGoalSeekDlg : public QDialog
                       bool modal = FALSE, WFlags fl = 0 );
   ~KSpreadGoalSeekDlg();
 
+  /**
+   * Find out which widget got focus.
+   */
+  bool eventFilter( QObject* obj, QEvent* ev );
+
  public slots:
   void buttonOkClicked();
   void buttonCancelClicked();
+  void slotSelectionChanged( KSpreadTable * _table, const QRect & _selection );
 
  protected:
+  virtual void closeEvent ( QCloseEvent * );
+
   QGridLayout * KSpreadGoalSeekDlgLayout;
   QGridLayout * m_startFrameLayout;
   QGridLayout * m_resultFrameLayout;
@@ -62,6 +72,9 @@ class KSpreadGoalSeekDlg : public QDialog
   bool          m_restored;
   double        m_oldSource;
 
+  QString       m_oldText;
+  QString       m_tableName;
+
   QFrame      * m_startFrame;
   QLineEdit   * m_targetValueEdit;
   QLineEdit   * m_targetEdit;
@@ -70,11 +83,24 @@ class KSpreadGoalSeekDlg : public QDialog
   QPushButton * m_buttonCancel;
   QFrame      * m_resultFrame;
   QLabel      * m_newValueDesc;
+  QLabel      * m_currentValueLabel;
   QLabel      * m_newValue;
   QLabel      * m_currentValue;
   QLabel      * m_resultText;
 
+  /**
+   * Tells which of the lineedits has the logical focus currently.
+   * It may happen that a lineedit does not have qt focus but
+   * logical focus but not the other way round.
+   */
+  QLineEdit   * m_focus;
+
+  QPoint        m_anchor;
+  QPoint        m_marker;
+  QRect         m_selection;
+
   void startCalc(double _start, double _goal);
+  void chooseCleanup();
 };
 
 #endif

@@ -19,12 +19,16 @@
 
 #include "kspread_dlg_goalseek.h"
 
+#include "kspread_canvas.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
+#include "kspread_map.h"
 #include "kspread_table.h"
+#include "kspread_undo.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -40,11 +44,15 @@
 
 #include <math.h>
 KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & marker,
-                                        const char * name, bool modal, WFlags fl )
-  : QDialog( parent, name, modal, fl ),
+                                        const char * name, bool, WFlags fl )
+  : KDialog( parent, name, false, fl ),
     m_pView( parent ),
     m_maxIter( 1000 ),
-    m_restored( true )
+    m_restored( true ),
+    m_focus(0),
+    m_anchor( m_pView->canvasWidget()->selectionInfo()->selectionAnchor() ),
+    m_marker( m_pView->canvasWidget()->marker() ),
+    m_selection( m_pView->canvasWidget()->selection() )
 {
   if ( !name )
     setName( "KSpreadGoalSeekDlg" );
@@ -110,10 +118,10 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   m_resultFrame->setMinimumWidth( 350 );
   m_resultFrameLayout = new QGridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
 
-  QLabel * TextLabel7 = new QLabel( m_resultFrame, "TextLabel7" );
-  TextLabel7->setText( i18n( "Current value:" ) );
+  m_currentValueLabel = new QLabel( m_resultFrame, "m_currentValueLabel" );
+  m_currentValueLabel->setText( i18n( "Current value:" ) );
 
-  m_resultFrameLayout->addWidget( TextLabel7, 2, 0 );
+  m_resultFrameLayout->addWidget( m_currentValueLabel, 2, 0 );
 
   m_newValueDesc = new QLabel( m_resultFrame, "m_newValueDesc" );
   m_newValueDesc->setText( i18n( "New value:" ) );
@@ -121,17 +129,17 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   m_resultFrameLayout->addWidget( m_newValueDesc, 1, 0 );
 
   m_newValue = new QLabel( m_resultFrame, "m_newValue" );
-  m_newValue->setText( i18n( "m_targetValueEdit" ) );
+  m_newValue->setText( "m_targetValueEdit" );
 
   m_resultFrameLayout->addWidget( m_newValue, 1, 1 );
 
   m_currentValue = new QLabel( m_resultFrame, "m_currentValue" );
-  m_currentValue->setText( i18n( "m_currentValue" ) );
+  m_currentValue->setText( "m_currentValue" );
 
   m_resultFrameLayout->addWidget( m_currentValue, 2, 1 );
 
   m_resultText = new QLabel( m_resultFrame, "m_resultText" );
-  m_resultText->setText( i18n( "Goal seeking with cell <cell> found <a | no> solution:" ) );
+  m_resultText->setText( "Goal seeking with cell <cell> found <a | no> solution:" );
   m_resultText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 
   m_resultFrameLayout->addMultiCellWidget( m_resultText, 0, 0, 0, 1 );
@@ -140,9 +148,19 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
 
   m_resultFrame->hide();
 
+  m_tableName = m_pView->activeTable()->tableName();
+
+  // Allow the user to select cells on the spreadsheet.
+  m_pView->canvasWidget()->startChoose();
+  
+  qApp->installEventFilter( this );
+
   // signals and slots connections
   connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( buttonOkClicked() ) );
   connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( buttonCancelClicked() ) );
+
+  connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadTable*, const QRect& ) ),
+           this, SLOT( slotSelectionChanged( KSpreadTable *, const QRect & ) ) );
 
   // tab order
   setTabOrder( m_targetEdit,      m_targetValueEdit );
@@ -153,6 +171,8 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
 
 KSpreadGoalSeekDlg::~KSpreadGoalSeekDlg()
 {
+  kdDebug() << "~KSpreadGoalSeekDlg" << endl;
+
   if ( !m_restored )
   {
     m_sourceCell->setValue(m_oldSource);
@@ -161,8 +181,56 @@ KSpreadGoalSeekDlg::~KSpreadGoalSeekDlg()
   }
 }
 
+bool KSpreadGoalSeekDlg::eventFilter( QObject* obj, QEvent* ev )
+{
+  if ( obj == m_targetValueEdit && ev->type() == QEvent::FocusIn )
+    m_focus = m_targetValueEdit;
+  else if ( obj == m_targetEdit && ev->type() == QEvent::FocusIn )
+    m_focus = m_targetEdit;
+  else if ( obj == m_sourceEdit && ev->type() == QEvent::FocusIn )
+    m_focus = m_sourceEdit;
+  else
+    return FALSE;
+  
+  if ( m_focus )
+    m_pView->canvasWidget()->startChoose();
+  
+  return FALSE;
+}
+
+void KSpreadGoalSeekDlg::closeEvent ( QCloseEvent * )
+{
+  delete this;
+}
+
+void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadTable * _table, const QRect & _selection )
+{
+  if ( !m_focus )
+    return;
+
+  if ( _selection.left() <= 0 )
+    return;
+  
+  if ( _selection.left() >= _selection.right() && _selection.top() >= _selection.bottom() )
+  {
+    int dx = _selection.right();
+    int dy = _selection.bottom();
+    QString tmp;
+
+    tmp.setNum( dy );
+    tmp = _table->tableName() + "!" + util_encodeColumnLabelText( dx ) + tmp;
+    m_focus->setText( tmp );
+  }
+  else
+  {
+    QString area = util_rangeName( _table, _selection );
+    m_focus->setText( area );
+  }
+}
+
 void KSpreadGoalSeekDlg::buttonOkClicked()
 {
+  KSpreadDoc * pDoc = m_pView->doc();
   if (m_maxIter > 0)
   {
     KSpreadTable * table = m_pView->activeTable();
@@ -230,17 +298,32 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
 
     m_restored = false;
 
-    m_pView->doc()->emitBeginOperation();
+    pDoc->emitBeginOperation();
     startCalc( m_sourceCell->valueDouble(), goal );
-    m_pView->doc()->emitEndOperation();
+    pDoc->emitEndOperation();
 
     return;
   }
   else
   {
+    if ( !pDoc->undoBuffer()->isLocked() )
+    {
+      KSpreadUndoSetText * undo 
+        = new KSpreadUndoSetText( pDoc, m_pView->activeTable(), QString::number(m_oldSource), 
+                                  m_sourceCell->column(), m_sourceCell->row(),
+                                  m_sourceCell->formatType() );
+
+      pDoc->undoBuffer()->appendUndo( undo );
+    }
+
     m_restored = true;
   }
+  chooseCleanup();  
+
   accept();
+
+  delete this;
+
 }
 
 void KSpreadGoalSeekDlg::buttonCancelClicked()
@@ -253,8 +336,30 @@ void KSpreadGoalSeekDlg::buttonCancelClicked()
     m_restored = true;
   }
 
+  chooseCleanup();  
   reject();
 }
+
+void KSpreadGoalSeekDlg::chooseCleanup()
+{
+  m_pView->canvasWidget()->endChoose();
+
+  KSpreadTable * table = 0;
+
+  // Switch back to the old table
+  if ( m_pView->activeTable()->tableName() !=  m_tableName )
+  {
+    table = m_pView->doc()->map()->findTable( m_tableName );
+    if ( table )
+      m_pView->setActiveTable( table );
+  }
+  else
+    table = m_pView->activeTable();
+  
+  // Revert the marker to its original position
+  m_pView->selectionInfo()->setSelection( m_marker, m_anchor, table );
+}
+
 
 void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
 {
@@ -349,8 +454,8 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     m_targetCell->calc( false );
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:" ).arg( m_sourceEdit->text() ) );
-    m_newValue->setText( m_targetValueEdit->text() );
-    m_currentValue->setText( QString::number( resultA + _goal ) );
+    m_newValue->setText( QString::number( startA ) );
+    m_currentValue->setText( QString::number( m_oldSource ) );
     m_restored = false;
   }
   else
@@ -361,8 +466,8 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     m_targetCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution." ).arg( m_sourceEdit->text() ) );
-    m_newValue->setText( m_targetValueEdit->text() );
-    m_currentValue->setText( "" );
+    m_newValue->setText( "" );
+    m_currentValue->setText( QString::number( m_oldSource ) );
     m_restored = true;
   }
 

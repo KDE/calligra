@@ -2957,11 +2957,14 @@ void KSpreadView::decreaseIndent()
 
 void KSpreadView::goalSeek()
 {
-    m_pCanvas->closeEditor();
+  if ( m_pCanvas->editor() )
+  {
+    m_pCanvas->deleteEditor( true ); // save changes
+  }
 
-    KSpreadGoalSeekDlg dlg( this, QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
-                            "KSpreadGoalSeekDlg" );
-    dlg.exec();
+  KSpreadGoalSeekDlg * dlg = new KSpreadGoalSeekDlg( this, QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
+                                                     "KSpreadGoalSeekDlg" );
+  dlg->show();
 }
 
 void KSpreadView::textToColumns()
