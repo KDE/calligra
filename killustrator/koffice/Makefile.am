@@ -7,7 +7,8 @@ lib_LTLIBRARIES = libkillustratorpart.la killustrator.la
 
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	KIllustrator_view.cc \
-	InsertPartTool.cc GPart.cc KIllustrator_factory.cc
+	InsertPartTool.cc GPart.cc KIllustrator_factory.cc \
+	tooldockmanager.cc tooldockbase.cc stencilbarmovemanager.cc
 libkillustratorpart_la_LDFLAGS = -avoid-version -module -no-undefined
 libkillustratorpart_la_LIBADD = $(all_libraries) $(top_builddir)/killustrator/share/libkillu.la $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
 
@@ -24,7 +25,8 @@ dummy.cc:
 
 noinst_HEADERS = KIllustrator_doc.h \
 		 KIllustrator_view.h InsertPartTool.h GPart.h \
-		 KIllustrator_factory.h
+		 KIllustrator_factory.h \
+	tooldockmanager.h tooldockbase.h stencilbarmovemanager.h
 
 libkillustratorpart_la_METASOURCES = AUTO
 
