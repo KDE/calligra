@@ -129,7 +129,6 @@ KoFindReplace::KoFindReplace( QWidget * parent, KoSearchDia * dialog, KoTextView
       m_replace( 0L ),
       m_findDlg( dialog ), // guaranteed to remain alive while we live
       m_replaceDlg( 0L ),
-      m_options( dialog->options() ),
       m_currentTextObj( 0L ),
       m_macroCmd( 0L ),
       m_textView(textView),
@@ -145,7 +144,6 @@ KoFindReplace::KoFindReplace( QWidget * parent, KoReplaceDia * dialog, KoTextVie
       m_replace( new KoTextReplace( dialog->pattern(), dialog->replacement(), dialog->options(), dialog->searchContext(), dialog->replaceContext(), this, parent ) ),
       m_findDlg( 0L ),
       m_replaceDlg( dialog ), // guaranteed to remain alive while we live
-      m_options( dialog->options() ),
       m_currentTextObj( 0L ),
       m_macroCmd( 0L ),
       m_textView(textView),
@@ -179,6 +177,10 @@ void KoFindReplace::changeListObject(const QPtrList<KoTextObject> & lstObject)
 
 void KoFindReplace::proceed()
 {
+    if ( m_replace )
+        m_replace->resetCounts();
+    else
+        m_find->resetCounts();
     KoTextObject *firstTextObj=0;
     // Start point
     KoTextParag * firstParag = 0;
@@ -186,7 +188,7 @@ void KoFindReplace::proceed()
 
     // 'From Cursor' option
     KoTextView * edit = m_textView;
-    if ( edit && ( m_options & KoFindDialog::FromCursor ) )
+    if ( edit && ( options() & KoFindDialog::FromCursor ) )
     {
         firstParag = edit->cursor()->parag();
         firstIndex = edit->cursor()->index();
@@ -194,7 +196,7 @@ void KoFindReplace::proceed()
     } // no else here !
 
     // 'Selected Text' option
-    if ( edit && ( m_options & KoFindDialog::SelectedText ) )
+    if ( edit && ( options() & KoFindDialog::SelectedText ) )
     {
         firstTextObj =edit->textObject();
         if ( !firstParag ) // not set by 'from cursor'
@@ -206,7 +208,7 @@ void KoFindReplace::proceed()
         KoTextCursor c2 = firstTextObj->textDocument()->selectionEndCursor( KoTextDocument::Standard );
         //firstTextObj->emitHideCursor();
         // Find in the selection
-        findInFrameSet( firstTextObj, firstParag, firstIndex, c2.parag(), c2.index() );
+        findInTextObject( firstTextObj, firstParag, firstIndex, c2.parag(), c2.index() );
         if ( !m_destroying ) {
             //firstTextObj->emitShowCursor();
             firstTextObj->removeHighlight(true);
@@ -214,7 +216,7 @@ void KoFindReplace::proceed()
     }
     else // Not 'find in selection', need to iterate over the framesets
     {
-        bool firstFrameSetFound = !firstTextObj;
+        bool firstTextObjectFound = !firstTextObj;
         QPtrListIterator<KoTextObject> fit(m_lstObject);
         for ( ; fit.current() ; ++fit )
         {
@@ -224,14 +226,14 @@ void KoFindReplace::proceed()
                 KoTextParag * lastParag = fs->textDocument()->lastParag();
                 //fs->emitHideCursor();
                 bool ret = true;
-                if (!firstFrameSetFound && firstTextObj == fs && firstParag)  // first frameset
+                if (!firstTextObjectFound && firstTextObj == fs && firstParag)  // first frameset
                 {
-                    firstFrameSetFound = true;
-                    ret = findInFrameSet( fs, firstParag, firstIndex, lastParag, lastParag->length()-1 );
+                    firstTextObjectFound = true;
+                    ret = findInTextObject( fs, firstParag, firstIndex, lastParag, lastParag->length()-1 );
                 }
-                else if ( firstFrameSetFound ) // another frameset -> search entirely
+                else if ( firstTextObjectFound ) // another frameset -> search entirely
                 {
-                    ret = findInFrameSet( fs, fs->textDocument()->firstParag(), 0, lastParag, lastParag->length()-1 );
+                    ret = findInTextObject( fs, fs->textDocument()->firstParag(), 0, lastParag, lastParag->length()-1 );
                 }
                 if ( !m_destroying ) {
                     //fs->emitShowCursor();
@@ -246,7 +248,7 @@ void KoFindReplace::proceed()
     m_macroCmd= 0L;
 }
 
-bool KoFindReplace::findInFrameSet( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
+bool KoFindReplace::findInTextObject( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
                                     KoTextParag * lastParag, int lastIndex )
 {
     m_currentTextObj = textObj;
@@ -260,7 +262,7 @@ bool KoFindReplace::findInFrameSet( KoTextObject * textObj, KoTextParag * firstP
     }
     else
     {
-        bool forw = ! ( m_options & KoFindDialog::FindBackwards );
+        bool forw = ! ( options() & KoFindDialog::FindBackwards );
         bool ret = true;
         if ( forw )
         {
@@ -303,13 +305,25 @@ bool KoFindReplace::findInFrameSet( KoTextObject * textObj, KoTextParag * firstP
 
 bool KoFindReplace::process( const QString &_text )
 {
+    bool ret;
     if ( m_find )
-        return m_find->find( _text, QRect() );
+    {
+        ret = m_find->find( _text, QRect() );
+    }
     else
     {
         QString text( _text );
-        return m_replace->replace( text, QRect() );
+        ret = m_replace->replace( text, QRect() );
     }
+
+    return ret;
+}
+
+long KoFindReplace::options() const
+{
+    // We need to update m_options from m_replace after each replacement.
+    // It can have changed, e.g. if pressing "All" during a replace operation.
+    return m_find ? m_find->options() : m_replace->options();
 }
 
 // slot connected to the 'highlight' signal
@@ -323,12 +337,10 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 void KoFindReplace::replace( const QString &text, int matchingIndex,
                              int replacementLength, int matchedLength, const QRect &/*expose*/ )
 {
-    if(!m_macroCmd)
-        m_macroCmd=new KMacroCommand(i18n("Insert Replacement"));
-    //kdDebug() << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " m_options=" << m_options << endl;
+    //kdDebug() << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " options=" << options() << endl;
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)
-    if ( (m_options & KoReplaceDialog::PromptOnReplace) == 0 ) {
+    if ( (options() & KoReplaceDialog::PromptOnReplace) == 0 ) {
         highlightPortion(m_currentParag, index, matchedLength, m_currentTextObj->textDocument());
     }
 
@@ -344,13 +356,13 @@ void KoFindReplace::replace( const QString &text, int matchingIndex,
         replaceWithAttribut( &cursor, index );
     }
     // Don't repaint if we're doing batch changes
-    bool repaint = m_options & KoReplaceDialog::PromptOnReplace;
+    bool repaint = options() & KoReplaceDialog::PromptOnReplace;
 
     // Grab replacement string
     QString rep = text.mid( matchingIndex, replacementLength );
     KCommand *cmd = m_currentTextObj->replaceSelectionCommand(&cursor, rep, KoTextObject::HighlightSelection, QString::null, repaint );
     if( cmd )
-        m_macroCmd->addCommand(cmd);
+        macroCommand()->addCommand(cmd);
 }
 
 void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
@@ -403,7 +415,15 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
 
     if( cmd )
-        m_macroCmd->addCommand(cmd);
+        macroCommand()->addCommand(cmd);
+}
+
+KMacroCommand* KoFindReplace::macroCommand()
+{
+    // Create on demand, to avoid making an empty command
+    if(!m_macroCmd)
+        m_macroCmd = new KMacroCommand(i18n("Replace text"));
+    return m_macroCmd;
 }
 
 void KoFindReplace::setActiveWindow()
@@ -434,6 +454,18 @@ void KoFindReplace::abort()
        m_replaceDlg->reparent( 0, QPoint( 0, 0 ) );
 }
 
+/*int KoFindReplace::numMatches() const
+{
+    return m_find->numMatches();
+}
+
+int KoFindReplace::numReplacements() const
+{
+    return m_replace->numReplacements();
+}*/
+
+////
+
 KoTextFind::KoTextFind( const QString &pattern, long options, KoSearchContext * _searchContext, KoFindReplace *_findReplace, QWidget *parent )
     : KoFind( pattern, options, parent),
       m_searchContext(_searchContext),
@@ -445,66 +477,9 @@ KoTextFind::~KoTextFind()
 {
 }
 
-bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedlength )
+bool KoTextFind::validateMatch( const QString &text, int index, int matchedlength )
 {
-    if ( !m_searchContext || !m_searchContext->m_optionsMask)
-        return true;
-    KoTextString * s = m_findReplace->currentParag()->string();
-    for ( int i = index ; i < index+matchedlength ; ++i )
-    {
-        KoTextStringChar & ch = s->at(i);
-        KoTextFormat *format = ch.format();
-        if (m_searchContext->m_optionsMask & KoSearchContext::Bold)
-        {
-            if ( (!format->font().bold() && (m_searchContext->m_options & KoSearchContext::Bold)) || (format->font().bold() && ((m_searchContext->m_options & KoSearchContext::Bold)==0)))
-                return false;
-        }
-        if (m_searchContext->m_optionsMask & KoSearchContext::Size)
-        {
-            if ( format->font().pointSize () != m_searchContext->m_size)
-                return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::Family)
-        {
-            if (format->font().family() != m_searchContext->m_family)
-                return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::Color)
-        {
-            if (format->color() != m_searchContext->m_color)
-                return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::BgColor)
-        {
-            if (format->textBackgroundColor() != m_searchContext->m_backGroungColor)
-                return false;
-        }
-
-        if ( m_searchContext->m_optionsMask & KoSearchContext::Italic)
-        {
-            if ( (!format->font().italic() && (m_searchContext->m_options & KoSearchContext::Italic)) || (format->font().italic() && ((m_searchContext->m_options & KoSearchContext::Italic)==0)))
-                return false;
-
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
-        {
-            if ( format->underlineLineType()!= m_searchContext->m_underline)
-                return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
-        {
-            if ( format->strikeOutLineType()!= m_searchContext->m_strikeOut )
-                return false;
-        }
-
-
-        if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
-        {
-            if ( format->vAlign() != m_searchContext->m_vertAlign )
-                return false;
-        }
-    }
-    return true;
+    return m_findReplace->validateMatch( text, index, matchedlength );
 }
 
 KoTextReplace::KoTextReplace(const QString &pattern, const QString &replacement, long options, KoSearchContext * _searchContext, KoSearchContext *_replaceContext, KoFindReplace *_findReplace, QWidget *parent )
@@ -519,67 +494,9 @@ KoTextReplace::~KoTextReplace()
 {
 }
 
-bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int matchedlength )
+bool KoTextReplace::validateMatch( const QString &text, int index, int matchedlength )
 {
-    if ( !m_searchContext || !m_searchContext->m_optionsMask)
-        return true;
-    KoTextString * s = m_findReplace->currentParag()->string();
-    for ( int i = index ; i < index+matchedlength ; ++i )
-    {
-        KoTextStringChar & ch = s->at(i);
-        KoTextFormat *format = ch.format();
-        if (m_searchContext->m_optionsMask & KoSearchContext::Bold)
-        {
-            if ( (!format->font().bold() && (m_searchContext->m_options & KoSearchContext::Bold)) || (format->font().bold() && ((m_searchContext->m_options & KoSearchContext::Bold)==0)))
-                return false;
-        }
-        if (m_searchContext->m_optionsMask & KoSearchContext::Size)
-        {
-            if ( format->font().pointSize () != m_searchContext->m_size)
-                return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::Family)
-        {
-            if (format->font().family() != m_searchContext->m_family)
-                return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::Color)
-        {
-            if (format->color() != m_searchContext->m_color)
-                return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::BgColor)
-        {
-            if (format->textBackgroundColor() != m_searchContext->m_backGroungColor)
-                return false;
-        }
-
-        if ( m_searchContext->m_optionsMask & KoSearchContext::Italic)
-        {
-            if ( (!format->font().italic() && (m_searchContext->m_options & KoSearchContext::Italic)) || (format->font().italic() && ((m_searchContext->m_options & KoSearchContext::Italic)==0)))
-                return false;
-
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
-        {
-            if ( format->underlineLineType() != m_searchContext->m_underline )
-                return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
-        {
-            if ( format->strikeOutLineType() != m_searchContext->m_strikeOut )
-                return false;
-        }
-
-        if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
-        {
-            if ( format->vAlign() != m_searchContext->m_vertAlign )
-                return false;
-        }
-
-    }
-    return true;
-
+    return m_findReplace->validateMatch( text, index, matchedlength );
 }
 
 KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* name)
@@ -791,5 +708,77 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_options = options;
 }
 
+
+bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matchedlength )
+{
+    KoSearchContext* searchContext = m_findDlg ? m_findDlg->searchContext() : m_replaceDlg->searchContext();
+    if ( !searchContext || !searchContext->m_optionsMask)
+        return true;
+    KoTextString * s = currentParag()->string();
+    for ( int i = index ; i < index+matchedlength ; ++i )
+    {
+        KoTextStringChar & ch = s->at(i);
+        KoTextFormat *format = ch.format();
+        if (searchContext->m_optionsMask & KoSearchContext::Bold)
+        {
+            if ( (!format->font().bold() && (searchContext->m_options & KoSearchContext::Bold)) || (format->font().bold() && ((searchContext->m_options & KoSearchContext::Bold)==0)))
+                return false;
+        }
+        if (searchContext->m_optionsMask & KoSearchContext::Size)
+        {
+            if ( format->font().pointSize () != searchContext->m_size)
+                return false;
+        }
+        if ( searchContext->m_optionsMask & KoSearchContext::Family)
+        {
+            if (format->font().family() != searchContext->m_family)
+                return false;
+        }
+        if ( searchContext->m_optionsMask & KoSearchContext::Color)
+        {
+            if (format->color() != searchContext->m_color)
+                return false;
+        }
+        if ( searchContext->m_optionsMask & KoSearchContext::BgColor)
+        {
+            if (format->textBackgroundColor() != searchContext->m_backGroungColor)
+                return false;
+        }
+
+        if ( searchContext->m_optionsMask & KoSearchContext::Italic)
+        {
+            if ( (!format->font().italic() && (searchContext->m_options & KoSearchContext::Italic)) || (format->font().italic() && ((searchContext->m_options & KoSearchContext::Italic)==0)))
+                return false;
+
+        }
+        if ( searchContext->m_optionsMask & KoSearchContext::Underline)
+        {
+            if ( format->underlineLineType() != searchContext->m_underline )
+                return false;
+        }
+        if ( searchContext->m_optionsMask & KoSearchContext::StrikeOut)
+        {
+            if ( format->strikeOutLineType() != searchContext->m_strikeOut )
+                return false;
+        }
+
+        if ( searchContext->m_optionsMask & KoSearchContext::VertAlign)
+        {
+            if ( format->vAlign() != searchContext->m_vertAlign )
+                return false;
+        }
+
+    }
+    return true;
+}
+
+bool KoFindReplace::shouldRestart()
+{
+    // TODO use the fact that KoReplace inherits KoFind now ;)
+    if ( m_find )
+        return m_find->shouldRestart();
+    else
+        return m_replace->shouldRestart();
+}
 
 #include "koSearchDia.moc"
