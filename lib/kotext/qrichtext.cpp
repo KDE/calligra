@@ -3964,9 +3964,7 @@ void Qt3::QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCurs
 
 	//if something (format, etc.) changed, draw what we have so far
 	if ( ( ( ( alignment() & Qt::AlignJustify ) == Qt::AlignJustify && paintEnd != -1 && at(paintEnd)->c.isSpace() ) ||
-	// Those were just to try out things, I will check if necessary or not finally.
-//               ( paintEnd != -1 && paintEnd - paintStart >= 3 ) || // WYSIWYG problem: don't cumulate rounding problems too long
-//               ( paintEnd != -1 ) || // WYSIWYG problem: need to draw char by char :(
+               // ( paintEnd != -1 && paintEnd - paintStart >= 5 ) || // WYSIWYG problem: don't cumulate rounding problems too long - check if exactly same limits as KoTextFormatter
 	       lastDirection != (bool)chr->rightToLeft ||
 	       chr->startOfRun ||
 	       lastY != cy || chr->format() != lastFormat ||

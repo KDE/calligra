@@ -149,6 +149,8 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
 #endif
                 }
             }
+            // This was wrong - we paint the text word by word anyway
+#if 0
             bool breakable = ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ); // same test as below
 
             int ww_topix = zh->layoutUnitToPixelX(ww);
@@ -163,7 +165,7 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
 #endif
                 pixelww = ww_topix;
             }
-
+#endif
 	} else if ( c->c == '\t' ) {
 	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
@@ -393,16 +395,6 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
 	    if ( i < len - 2 || c->c != ' ' )
 		lastBreak = i;
 
-            // Re-sync x and pixelx (this is how we steal white pixels in spaces to compensate for rounding errors)
-            //pixelx = zh->layoutUnitToPixelX( x );
-            // More complex than that. It's the _space_ that has to grow/shrink
-#ifdef DEBUG_FORMATTER
-            int oldpixelww = pixelww;
-#endif
-            pixelww -= pixelx - zh->layoutUnitToPixelX( x );
-#ifdef DEBUG_FORMATTER
-            qDebug("pixelww was %d, now %d. Adjusted by pixelx - x. x=%d pixelx=%d", oldpixelww, pixelww, zh->layoutUnitToPixelX( x ), pixelx);
-#endif
 	} else {
 	    // Non-breakable character
 	    tminw += ww;
@@ -414,6 +406,20 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
 	    //qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
 	}
 
+        bool breakable = ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ); // same test as above
+        if ( breakable /* || ( lastBreak != -1 && i - lastBreak > 5 ) || ( lastBreak == -1 && i % 5 == 0 ) */ )
+        {
+            // Re-sync x and pixelx (this is how we steal white pixels in spaces to compensate for rounding errors)
+            //pixelx = zh->layoutUnitToPixelX( x );
+            // More complex than that. It's the _space_ that has to grow/shrink
+#ifdef DEBUG_FORMATTER
+            int oldpixelww = pixelww;
+#endif
+            pixelww -= pixelx - zh->layoutUnitToPixelX( x );
+#ifdef DEBUG_FORMATTER
+            qDebug("pixelww was %d, now %d. Adjusted by pixelx - x. x=%d pixelx=%d", oldpixelww, pixelww, zh->layoutUnitToPixelX( x ), pixelx);
+#endif
+        }
 	c->x = x;
         // pixelxadj is the adjustement to add to lu2pixel(x), to find pixelx
         // (pixelx would be too expensive to store directly since it would require an int)
