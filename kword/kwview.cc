@@ -127,6 +127,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     connect( doc, SIGNAL( pageNumChanged() ),
              this, SLOT( updatePageInfo() ) );
+    connect( doc, SIGNAL ( totalPageNumChanged()),
+             this, SLOT( totalPageNumChanged() ) );
 
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
@@ -145,6 +147,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     connect( gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
              this, SLOT(frameSelectedChanged()));
+
+    connect( gui->canvasWidget(), SIGNAL(docStructChanged()),
+             this, SLOT(docStructChanged()));
 
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
@@ -643,6 +648,12 @@ void KWView::updatePageInfo()
         statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(doc->getPages())+' ', statusPage );
         gui->getVertRuler()->setOffset( 0, -gui->canvasWidget()->getVertRulerPos() );
     }
+}
+
+void KWView::totalPageNumChanged()
+{
+     docStructChanged();
+     updatePageInfo();
 }
 
 /*================================================================*/
@@ -2636,6 +2647,13 @@ void KWView::frameSelectedChanged()
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
     actionTableJoinCells->setEnabled( table );
     actionTableSplitCells->setEnabled( table );
+}
+
+void KWView::docStructChanged()
+{
+    KWDocStruct *m_pDocStruct=gui->getDocStruct();
+    if(m_pDocStruct)
+        m_pDocStruct->getDocStructTree()->refreshTree();
 }
 
 /******************************************************************/

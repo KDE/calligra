@@ -810,14 +810,9 @@ bool KWFrameDia::applyChanges()
             name = eFrameSetName->text();
             if ( name.isEmpty() )
                 name = i18n( "Frameset %d" ).arg( doc->getNumFrameSets() + 1 );
-            bool same = FALSE;
-            for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
-                if ( doc->getFrameSet( i )->getName() == name ) {
-                    same = TRUE;
-                    break;
-                }
-            }
-            if ( same ) {
+
+            if (  doc->getFrameSetByName( name )!=0 )
+            {
                 KMessageBox::sorry( this,
                                     i18n( "A new frameset with the name '%1'\n"
                                           "can not be made because a frameset with that name\n"

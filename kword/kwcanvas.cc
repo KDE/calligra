@@ -872,6 +872,7 @@ void KWCanvas::mrCreateText()
     }
     setMouseMode( MM_EDIT );
     doc->repaintAllViews();
+    emit docStructChanged();
 }
 
 void KWCanvas::mrCreatePixmap()
@@ -890,6 +891,7 @@ void KWCanvas::mrCreatePixmap()
         doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );
+    emit docStructChanged();
 }
 
 void KWCanvas::mrCreatePart() // mouse release, when creating part
@@ -899,6 +901,7 @@ void KWCanvas::mrCreatePart() // mouse release, when creating part
         doc->insertObject( m_insRect, m_partEntry );
     }
     setMouseMode( MM_EDIT );
+    emit docStructChanged();
 }
 
 void KWCanvas::mrCreateFormula()
@@ -914,6 +917,7 @@ void KWCanvas::mrCreateFormula()
         doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );
+    emit docStructChanged();
 }
 
 void KWCanvas::mrCreateTable()
@@ -931,10 +935,12 @@ void KWCanvas::mrCreateTable()
             doc->addFrameSet( table );
             // ## TODO undo/redo support. KWCreateFrameCommand won't do it, we need a new command.
             // Only here, not in createTable() (anchored tables are handled differently)
+            emit docStructChanged();
         }
         doc->updateAllFrames();
         doc->layout();
         repaintAll();
+
     }
     setMouseMode( MM_EDIT );
 }

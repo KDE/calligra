@@ -65,7 +65,7 @@ void KWDocStructParagItem::slotDoubleClicked( QListViewItem *_item )
         KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
         QPoint iPoint =  parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
         QPoint cPoint;
-        KWFrame * frame = fs->internalToContents( iPoint, cPoint );
+        fs->internalToContents( iPoint, cPoint );
         gui->canvasWidget()->scrollToOffset(  cPoint.x() , cPoint.y() );
     }
 }
@@ -566,6 +566,17 @@ void KWDocStructTree::setup()
 
     arrangement = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Arrangement, gui );
     item = new QListViewItem( arrangement, i18n ( "Empty" ) );
+}
+
+void KWDocStructTree::refreshTree()
+{
+    arrangement->setupArrangement();
+    textfrms->setupTextFrames();
+    tables->setupTables();
+    pictures->setupPictures();
+    cliparts->setupCliparts();
+    embedded->setupEmbedded();
+    formulafrms->setupFormulaFrames();
 }
 
 /******************************************************************/

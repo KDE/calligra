@@ -457,6 +457,7 @@ signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void sig_newContentsSize( int width, int height );
     void pageNumChanged();
+    void totalPageNumChanged();
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );

@@ -1939,7 +1939,9 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
     int thisPageNum = m_pages-1;
     kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
-    emit pageNumChanged();
+
+    emit totalPageNumChanged();
+
     recalcVariables( VT_PGNUM );
 
     QListIterator<KWFrameSet> fit = framesetsIterator();

@@ -187,7 +187,8 @@ signals:
     void currentMouseModeChanged(MouseMode newMouseMode);
     //emit when you selected a other frame (disable/enable table button)
     void frameSelectedChanged();
-
+    //emit when you want to refresh docstruct
+    void docStructChanged();
 
 private slots:
     void slotContentsMoving( int, int );
