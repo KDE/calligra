@@ -870,7 +870,7 @@ void KPresenterView::extraCreateTemplate()
     pix = pix.xForm( m );
 
     // FIXME(Werner)
-    QString file = "/tmp/kpt";
+    QString file = "/tmp/kpt.kpt";
     m_pKPresenterDoc->savePage( file, i );
 
     KoTemplateCreateDia::createTemplate( "kpresenter_template", KPresenterFactory::global(),

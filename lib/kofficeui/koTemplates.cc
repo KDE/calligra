@@ -74,8 +74,8 @@ KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir) :
 const bool KoTemplateGroup::isHidden() const {
 
     QListIterator<KoTemplate> it(m_templates);
-    bool hidden=false;
-    while(it.current()!=0L && !hidden) {
+    bool hidden=true;
+    while(it.current()!=0L && hidden) {
 	hidden=it.current()->isHidden();
 	++it;
     }
@@ -107,7 +107,7 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
 KoTemplateTree::KoTemplateTree(const QString &templateType,
 			       KInstance *instance, const bool &readTree) :
-    m_templateType(templateType), m_instance(instance) {
+    m_templateType(templateType), m_instance(instance), groupAdded(false) {
 
     m_groups.setAutoDelete(true);
     if(readTree)
@@ -127,8 +127,10 @@ void KoTemplateTree::writeTemplateTree() {
 void KoTemplateTree::add(KoTemplateGroup *g) {
 
     KoTemplateGroup *group=find(g->name());
-    if(group==0L)
+    if(group==0L) {
 	m_groups.append(g);
+	groupAdded=true;
+    }
     else
 	group->addDir(g->dirs().first()); // "...there can be only one..." (queen)
 }

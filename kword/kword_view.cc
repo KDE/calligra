@@ -1544,7 +1544,7 @@ void KWordView::extraCreateTemplate()
     QPixmap pix( 45, 60 );
     pix.fill( Qt::white );
 
-    QString file = "/tmp/kpt";
+    QString file = "/tmp/kwt.kwt";
     m_pKWordDoc->saveNativeFormat( file );
 
     KoTemplateCreateDia::createTemplate( "kword_template", KWordFactory::global(),

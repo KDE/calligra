@@ -106,6 +106,8 @@ public:
 		   const bool &readTree=false);
     ~KoTemplateTree() {}
 
+    QString templateType() const { return m_templateType; }
+    KInstance *instance() const { return m_instance; }
     void readTemplateTree();
     void writeTemplateTree();
 
@@ -125,5 +127,6 @@ private:
     QString m_templateType;
     KInstance *m_instance;
     QList<KoTemplateGroup> m_groups;
+    bool groupAdded;
 };
 #endif
