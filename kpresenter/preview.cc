@@ -18,6 +18,7 @@
 */
 
 #include <qpicture.h>
+#include <qpixmap.h>
 #include "preview.h"
 #include "preview.moc"
 #include "qwmf.h"
@@ -130,10 +131,10 @@ Preview::Preview( QWidget *parent )
 }
 
 
-void Preview::showPreview( const QUrl &u )
+void Preview::showPreview( const KURL &u )
 {
     if ( u.isLocalFile() ) {
-	QString path = u.toString();
+	QString path = u.path();
         QFileInfo fi( path );
 	if ( fi.extension().lower() == "wmf" )
 	    pixmap->setClipart( path );
