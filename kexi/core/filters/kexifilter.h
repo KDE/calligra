@@ -22,6 +22,7 @@
 
 #include <qobject.h>
 #include <kurl.h>
+#include <qptrlist.h>
 
 class KexiFilterWizardBase;
 
@@ -38,10 +39,20 @@ public:
 	KexiFilterWizardBase *filterWizard();
 
 	virtual bool prepareImport(unsigned long type, const KURL& url=KURL())=0;
-        virtual void widgetActivated(QWidget *current, QWidget *former);
+
 	virtual unsigned long supportedTypes()=0;
+
+        virtual QPtrList<QWidget> sourceWidgets(QWidget *parent)=0;
+        virtual bool pageChanging(QWidget* from, QWidget *to)=0;
+	
+        void setPageBefore(QWidget *);
+        void setPageAfter(QWidget *);
+        QWidget *pageBefore();
+        QWidget *pageAfter();
+
 private:
 	KexiFilterWizardBase *m_filterWizard;
+	class KexiFilterPrivate *d;
 };
 
 

@@ -17,7 +17,6 @@ public:
         virtual bool nextTableRow();
         virtual QVariant tableValue(int field);
 	virtual KexiDBTable tableStructure();
-	virtual QPtrList<QWidget> tableSourceWidgets(QWidget*){}
 private:
 	QString m_file;
 	int m_dataPos;

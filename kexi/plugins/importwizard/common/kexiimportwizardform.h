@@ -47,6 +47,8 @@ private:
 	KexiImportWizard *m_wiz;
 	QWidget *m_openWidget;
 	bool m_initializing;
+	bool m_insertingPages;
+	QPtrList<QWidget> m_sourceWidgets;
 
 	void initDestChoice();
 	void buildNewTablePage();

@@ -31,8 +31,13 @@
 
 class KEXIFILTER_EXPORT KexiTableImportSourceIface {
 public:
-	KexiTableImportSourceIface() {}
-	virtual ~KexiTableImportSourceIface() {}
+	KexiTableImportSourceIface();
+	virtual ~KexiTableImportSourceIface();
+
+	/* Why the hell do I have to add dummy implementation here and can't just implement them
+	 * in derived classes*/
+	virtual bool pageChanging(QWidget* from, QWidget *to) {return false;}
+	virtual QPtrList<QWidget> sourceWidgets(QWidget *parent) {};
 
 	virtual KexiDBTable tableStructure()=0;
 
@@ -40,6 +45,9 @@ public:
 	virtual bool nextTableRow()=0;
 	virtual QVariant tableValue(int field)=0;
 
-	virtual QPtrList<QWidget> tableSourceWidgets(QWidget *parent)=0;
+
+
+private:
+	class KexiTableImportSourceIface *d;
 };
 #endif

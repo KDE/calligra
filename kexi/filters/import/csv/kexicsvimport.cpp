@@ -84,7 +84,7 @@ QVariant KexiCSVImport::tableValue(int field) {
 	return m_srcWidget->tableValue(field);
 }
 
-QPtrList<QWidget> KexiCSVImport::tableSourceWidgets(QWidget *parent) {
+QPtrList<QWidget> KexiCSVImport::sourceWidgets(QWidget *parent) {
 	filterWizard()->setMode(KexiFilterManager::Data);
 	m_srcWidget=new KexiCSVSource(parent);
 	m_srcWidget->setFile(m_file);

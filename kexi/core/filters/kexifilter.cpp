@@ -20,8 +20,21 @@
 #include "kexifilterwizardbase.h"
 #include <kdebug.h>
 
+class KexiFilterPrivate {
+public:
+        KexiFilterPrivate() {
+                pageBefore=0;
+                pageAfter=0;
+        }
+        ~KexiFilterPrivate(){}
+
+        QWidget *pageBefore;
+        QWidget *pageAfter;
+};
+
+
 KexiFilter::KexiFilter(KexiFilterWizardBase *parent, const char *name, const QStringList &):
-	QObject(parent),m_filterWizard(KEXIFILTERWIZARDBASE(parent)) {
+	QObject(parent),m_filterWizard(KEXIFILTERWIZARDBASE(parent)),d(new KexiFilterPrivate()) {
 
 	Q_ASSERT(m_filterWizard!=0);
 }
@@ -35,6 +48,23 @@ KexiFilterWizardBase *KexiFilter::filterWizard()
 	return m_filterWizard;
 }
 
-void KexiFilter::widgetActivated(QWidget *current, QWidget *former) {}
+
+void KexiFilter::setPageAfter(QWidget *pageAfter) {
+        d->pageAfter=pageAfter;
+}
+
+void KexiFilter::setPageBefore(QWidget *pageBefore) {
+        d->pageBefore=pageBefore;
+}
+
+QWidget *KexiFilter::pageBefore() {
+        return d->pageBefore;
+}
+
+QWidget *KexiFilter::pageAfter() {
+        return d->pageAfter;
+}
+
+
 
 #include "kexifilter.moc"

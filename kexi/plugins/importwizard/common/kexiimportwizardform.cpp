@@ -45,7 +45,7 @@
 KexiTableImportForm::KexiTableImportForm(KexiFilterManager *filterManager,KexiImportWizard *wiz,
 		const QString& dialogFilter, QMap<QString,QString> mimePluginMapping):
 	KexiImportWizardFormBase(),m_filterManager(filterManager),m_dialogFilter(dialogFilter),
-	m_mimePluginMapping(mimePluginMapping), m_filter(0),m_initializing(true) {
+	m_mimePluginMapping(mimePluginMapping), m_filter(0),m_initializing(true),m_insertingPages(false) {
 	
 	QVBoxLayout *layout=(new QVBoxLayout(openFilePage));
 	layout->setAutoAdd(false);
@@ -120,14 +120,18 @@ void KexiTableImportForm::filterHasBeenLoaded(KexiFilter *filter,const KURL &url
 	m_previousPage=0;	
 	KexiTableImportSourceIface *source=static_cast<KexiTableImportSourceIface*>(
 		m_filter->qt_cast("KexiTableImportSourceIface"));
-	QPtrList<QWidget> wl=source->tableSourceWidgets(this);
-	for (QWidget *w=wl.first();w;w=wl.next()) {
+	m_filter->setPageBefore(openFilePage);
+	m_filter->setPageAfter(0);
+	m_sourceWidgets=m_filter->sourceWidgets(this);
+	m_insertingPages=true;
+	for (QWidget *w=m_sourceWidgets.first();w;w=m_sourceWidgets.next()) {
 		insertPage(w,w->caption(),indexOf(dummySourcePage));
 	}
-
+	m_insertingPages=false;
 	kdDebug()<<"KexiTableImportForm::loadPlugin: Pages have been added"<<endl;
 
-	showPage(wl.first());
+	m_previousPage=openFilePage;
+	showPage(m_sourceWidgets.first());
 
 	kdDebug()<<"KexiTableImportForm::loadPlugin: show first Plugin Page"<<endl;
 	
@@ -164,11 +168,28 @@ void KexiTableImportForm::changeDestinationType(bool newTable) {
 }
 
 void KexiTableImportForm::pageSelected(const QString &) {
+	
+	kdDebug()<<"KexiTableImportForm::pageSelection"<<endl;
+	if (m_insertingPages) return;
+	if (m_previousPage==currentPage()) return;
+	if (m_sourceWidgets.containsRef(m_previousPage) ||
+		m_sourceWidgets.containsRef(currentPage())) {
+		if (m_filter) {
+			if (!m_filter->pageChanging(m_previousPage,
+				m_sourceWidgets.containsRef(currentPage())?
+				currentPage():((currentPage()==openFilePage)?
+				openFilePage:0))) {
+
+				showPage(m_previousPage);
+				return;
+			}
+		}
+	}
 
 	if (currentPage()==newTablePage) buildNewTablePage();
 	if (currentPage()==existingTablePage) buildExistingTablePage();
 
-	if (m_previousPage==openFilePage) {
+	if ((m_previousPage==openFilePage) && (currentPage()==loadingImportPluginPage)) {
 		if (!((currentPage()==openFilePage) || m_initializing)) {
 			loadPlugin();
 		}
@@ -176,6 +197,7 @@ void KexiTableImportForm::pageSelected(const QString &) {
 		return;
 	}
 	m_previousPage=currentPage();
+
 
 	if (currentPage()==openFilePage) setAppropriate(loadingImportPluginPage,true);
 	if ((currentPage()!=openFilePage) && (currentPage()!=loadingImportPluginPage))

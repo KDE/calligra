@@ -84,7 +84,7 @@ QVariant KexiKSpreadImport::tableValue(int field) {
 	return m_srcWidget->tableValue(field);
 }
 
-QPtrList<QWidget> KexiKSpreadImport::tableSourceWidgets(QWidget *parent) {
+QPtrList<QWidget> KexiKSpreadImport::sourceWidgets(QWidget *parent) {
 	filterWizard()->setMode(KexiFilterManager::Data);
 	m_srcWidget=new KexiKSpreadSource(parent);
 	m_srcWidget->setFile(m_file);
@@ -93,6 +93,12 @@ QPtrList<QWidget> KexiKSpreadImport::tableSourceWidgets(QWidget *parent) {
 	return tmp;
 }
 
+
+bool KexiKSpreadImport::pageChanging(QWidget *from, QWidget *to) {
+	if (to==pageBefore()) return true;
+	if (from==pageBefore()) return true;
+	return false;
+}
 
 
 KexiKSpreadImport::~KexiKSpreadImport()

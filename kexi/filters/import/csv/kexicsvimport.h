@@ -26,6 +26,8 @@
 #include "core/filters/kexitableimportsourceiface.h"
 #include <qmap.h>
 #include <kexiDB/kexidbtable.h>
+#include <qwidget.h>
+#include <qptrlist.h>
 
 class KexiDB;
 class KexiCSVSource;
@@ -56,10 +58,11 @@ class KexiCSVImport : public KexiFilter, public KexiTableImportSourceIface
         	virtual bool nextTableRow();
 	        virtual QVariant tableValue(int field);
 	
-        	virtual QPtrList<QWidget> tableSourceWidgets(QWidget *parent);
+        	virtual QPtrList<QWidget> sourceWidgets(QWidget *parent);
+
+		virtual bool pageChanging(QWidget*,QWidget*) {return true;}
 
 		virtual unsigned long supportedTypes() {return KexiFilterManager::Data;}
-
 
 	private:
 		QString		m_file;

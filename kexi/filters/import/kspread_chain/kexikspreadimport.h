@@ -55,10 +55,11 @@ class KexiKSpreadImport : public KexiFilter, public KexiTableImportSourceIface
         	virtual bool nextTableRow();
 	        virtual QVariant tableValue(int field);
 	
-        	virtual QPtrList<QWidget> tableSourceWidgets(QWidget *parent);
+        	virtual QPtrList<QWidget> sourceWidgets(QWidget *parent);
 
 		virtual unsigned long supportedTypes() {return KexiFilterManager::Data;}
 
+		virtual bool pageChanging(QWidget *from, QWidget *to);
 
 	private:
 		QString		m_file;
