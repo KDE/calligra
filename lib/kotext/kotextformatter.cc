@@ -43,6 +43,15 @@ KoTextFormatter::~KoTextFormatter()
 {
 }
 
+// Hyphenation can break anywhere in the word, so
+// remember the temp data for every char.
+struct TemporaryWordData
+{
+    int baseLine;
+    int height;
+    int lineWidth;
+};
+
 // Originally based on QTextFormatterBreakWords::format()
 int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                              int start, const QMap<int, KoTextParagLineStart*> & )
@@ -112,6 +121,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     int wused = 0;
     int tminw = marg;
     bool wrapEnabled = isWrapEnabled( parag );
+    QValueList<TemporaryWordData> tempWordData;
 
     int i = start;
 #ifdef DEBUG_FORMATTER
@@ -185,7 +195,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         c->width = ww;
 
         //code from qt-3.1beta2
-	if ( c->isCustom() && c->customItem()->ownLine() ) {
+        if ( c->isCustom() && c->customItem()->ownLine() ) {
 #ifdef DEBUG_FORMATTER
             kdDebug(32500) << "i=" << i << "/" << len << " custom item with ownline" << endl;
 #endif
@@ -193,24 +203,25 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
             x = left;
             if ( doc )
                 doc->flow()->adjustMargins( y + parag->rect().y(), parag->rect().height(), x, rightMargin, dw, parag );
-	    int w = dw - rightMargin;
+            int w = dw - rightMargin;
             c->customItem()->resize( w - x );
-	    y += lineHeight;
-	    lineHeight = c->height();
-	    lineStart = new KoTextParagLineStart( y, lineHeight, lineHeight );
+            y += lineHeight;
+            lineHeight = c->height();
+            lineStart = new KoTextParagLineStart( y, lineHeight, lineHeight );
             // Added for kotext (to be tested)
             lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
             lineStart->h += lineStart->lineSpacing;
             lineStart->w = dw;
-	    insertLineStart( parag, i, lineStart );
-	    c->lineStart = 1;
-	    firstChar = c;
-	    x = 0xffffff;
-	    continue;
-	}
+            insertLineStart( parag, i, lineStart );
+            tempWordData.clear();
+            c->lineStart = 1;
+            firstChar = c;
+            x = 0xffffff;
+            continue;
+        }
 
 #ifdef DEBUG_FORMATTER
-	kdDebug(32500) << "c='" << c->c << "' i=" << i << "/" << len << " x=" << x << " ww=" << ww << " availableWidth=" << availableWidth << " (test is x+ww>aW) lastBreak=" << lastBreak << " isBreakable=" << isBreakable(string, i) << endl;
+	kdDebug(32500) << "c='" << QString(c->c) << "' i=" << i << "/" << len << " x=" << x << " ww=" << ww << " availableWidth=" << availableWidth << " (test is x+ww>aW) lastBreak=" << lastBreak << " isBreakable=" << isBreakable(string, i) << endl;
 #endif
 	// Wrapping at end of line - one big if :)
 	if ( wrapEnabled
@@ -245,7 +256,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
             if ( m_hyphenator )
             {
                 int wordStart = QMAX(0, lastBreak+1);
-                int maxlen = i - wordStart + 1; // we can't accept to break after maxlen
+                // Breaking after i isn't possible, i is too far already
+                int maxlen = i - wordStart; // we can't accept to break after maxlen
                 QString word = string->mid( wordStart, maxlen );
                 int wordEnd = i + 1;
                 // but we need to compose the entire word, to hyphenate it
@@ -276,8 +288,15 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                             lastBreak = hypos + wordStart;
                             hyphenated = true;
 #ifdef DEBUG_FORMATTER
-                            kdDebug(32500) << "Hyphenation: will break at " << lastBreak << endl;
+                            kdDebug(32500) << "Hyphenation: will break at " << lastBreak << " using tempworddata at position " << hypos << "/" << tempWordData.size() << endl;
 #endif
+                            if ( hypos < (int)tempWordData.size() )
+                            {
+                                const TemporaryWordData& twd = tempWordData[ hypos ];
+                                lineStart->baseLine = twd.baseLine;
+                                lineStart->h = twd.height;
+                                lineStart->w = twd.lineWidth;
+                            }
                             break;
                         }
                     delete[] hyphens;
@@ -327,6 +346,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		curLeft = x;
 		lineStart->y = y;
 		insertLineStart( parag, i, lineStart );
+                tempWordData.clear();
 		lineStart->baseLine = c->ascent();
 		lineStart->h = c->height();
 		c->lineStart = 1;
@@ -351,7 +371,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 // maxY not known -> keep going ('i' remains where it is)
                 // (that's the initial QRT behaviour)
 	    } else {
-		// Breakable char was found
+		// Break the line at the last breakable character
 		i = lastBreak;
 		c = &string->at( i ); // The last char in the last line
                 int spaceAfterLine = availableWidth - c->x;
@@ -380,7 +400,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
 		c = &string->at( i + 1 ); // The first char in the new line
 #ifdef DEBUG_FORMATTER
-		kdDebug(32500) << "Next line will start at i+1=" << i+1 << ", char=" << c->c << endl;
+		kdDebug(32500) << "Next line will start at i+1=" << i+1 << ", char=" << QString(c->c) << endl;
 #endif
 		tmph = c->height();
 		lineHeight = tmph;
@@ -399,6 +419,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		curLeft = x;
 		lineStart->y = y;
 		insertLineStart( parag, i + 1, lineStart );
+                tempWordData.clear();
 		lineStart->baseLine = c->ascent();
 		lineStart->h = c->height();
 		c->lineStart = 1;
@@ -422,6 +443,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		tmph = tmpBaseLine + belowBaseLine;
 		//kdDebug(32500) << " -> tmpBaseLine/tmph : " << tmpBaseLine << "/" << tmph << endl;
 	    }
+            tempWordData.clear();
 	    minw = QMAX( minw, tminw );
 	    tminw = marg + ww;
 	    // (combine lineStart and tmpBaseLine/tmph)
@@ -494,6 +516,12 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 	    tmph = tmpBaseLine + belowBaseLine;
 	    //kdDebug(32500) << " -> tmpBaseLine/tmph : " << tmpBaseLine << "/" << tmph << endl;
+
+            TemporaryWordData twd;
+            twd.baseLine = tmpBaseLine;
+            twd.height = tmph;
+            twd.lineWidth = tminw; // ### check this is correct
+            tempWordData.append( twd );
 	}
 
 	c->x = x;
