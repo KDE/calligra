@@ -4,6 +4,7 @@
 #include "format.h"
 #include "image.h"
 #include "searchdia.h"
+#include "variable.h"
 
 #include <qimage.h>
 #include <qstring.h>
@@ -16,7 +17,7 @@
 class KWordDocument;
 class KWTextFrameSet;
 
-enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2,ID_KWCharTab = 3};
+enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2,ID_KWCharTab = 3,ID_KWCharVariable = 4};
  
 class KWCharAttribute
 {
@@ -87,6 +88,24 @@ class KWCharTab : public KWCharAttribute
 {
 public:
   KWCharTab() { classId = ID_KWCharTab; }
+
+};
+
+class KWCharVariable : public KWCharAttribute
+{
+public:
+  KWCharVariable() : var() { classId = ID_KWCharVariable; format = 0L; }
+  ~KWCharVariable() { format->decRef(); format = 0L; }
+
+  virtual KWFormat* getFormat()
+    { return format; }
+  virtual void setFormat(KWFormat *_format)
+    { format = _format; }
+  QString getText();
+
+protected:
+  KWFormat *format;
+  KWVariable var;
 
 };
 

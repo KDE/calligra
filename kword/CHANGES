@@ -771,3 +771,7 @@ Reggie, 31.1.1999:
 - Many fixes with drawing frame borders, headers/footers, etc.
 - Fixes with automatically adding new pages
 - Fixes with inserting new frames
+
+Reggie, 1.2.1999:
+-----------------
+- Started with internal stuff for variables (pagenum, date, etc.)
