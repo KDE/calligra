@@ -2,8 +2,8 @@
 Patches that need to be applied to the CVS sources are in file
 cvs.patch in the debian directory.
 
-When doing a new CVS pull, from ../.. run:
+When doing a new CVS pull, from directory ../ run:
 
-  patch -p0 < koffice-<version>/debian/cvs.patch
+  patch -p0 < debian/cvs.patch
 
- -- Ben Burton <benb@acm.org>  Tue,  8 May 2001 11:14:50 -0500
+ -- Ben Burton <benb@acm.org>  Sun,  3 Jun 2001 14:08:34 -0500

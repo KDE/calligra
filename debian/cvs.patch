@@ -1,5 +1,5 @@
---- koffice-1.1-beta2.orig/kchart/Makefile.am
-+++ koffice-1.1-beta2/kchart/Makefile.am
+--- kchart/Makefile.am
++++ kchart/Makefile.am
 @@ -49,7 +49,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kchart.la
@@ -9,9 +9,9 @@
  kchart_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- koffice-1.1-beta2.orig/kformula/Makefile.am
-+++ koffice-1.1-beta2/kformula/Makefile.am
-@@ -14,7 +14,7 @@
+--- kformula/Makefile.am
++++ kformula/Makefile.am
+@@ -13,7 +13,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kformulamain.la
  kformulamain_la_SOURCES = main.cc
@@ -20,8 +20,8 @@
  kformulamain_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- koffice-1.1-beta2.orig/killustrator/Makefile.am
-+++ koffice-1.1-beta2/killustrator/Makefile.am
+--- killustrator/Makefile.am
++++ killustrator/Makefile.am
 @@ -20,7 +20,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = killustrator.la
@@ -31,8 +31,8 @@
  killustrator_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- koffice-1.1-beta2.orig/kimageshop/Makefile.am
-+++ koffice-1.1-beta2/kimageshop/Makefile.am
+--- kimageshop/Makefile.am
++++ kimageshop/Makefile.am
 @@ -12,7 +12,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = krayon.la
@@ -42,8 +42,8 @@
  krayon_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- koffice-1.1-beta2.orig/kimageshop/plugins/example/Makefile.am
-+++ koffice-1.1-beta2/kimageshop/plugins/example/Makefile.am
+--- kimageshop/plugins/example/Makefile.am
++++ kimageshop/plugins/example/Makefile.am
 @@ -1,6 +1,6 @@
  INCLUDES  = -I$(srcdir)/../core -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
  
@@ -52,8 +52,8 @@
  #libkisp_example_la_LIBADD =  ../core/libkiscore.la ../ui/libkisui.la ../tools/libkistools.la \
  #	../../lib/kofficeui/libkofficeui.la
  
---- koffice-1.1-beta2.orig/kivio/kiviopart/Makefile.am
-+++ koffice-1.1-beta2/kivio/kiviopart/Makefile.am
+--- kivio/kiviopart/Makefile.am
++++ kivio/kiviopart/Makefile.am
 @@ -131,7 +131,7 @@
  #2########################################################!@#$
  lib_LTLIBRARIES = kivio.la
@@ -63,8 +63,8 @@
  kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
  
  libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
---- koffice-1.1-beta2.orig/kivio/plugins/kivioselecttool/Makefile.am
-+++ koffice-1.1-beta2/kivio/plugins/kivioselecttool/Makefile.am
+--- kivio/plugins/kivioselecttool/Makefile.am
++++ kivio/plugins/kivioselecttool/Makefile.am
 @@ -27,7 +27,7 @@
  ##############################################################
  ####                  END KDEStudio part                  ####
@@ -74,8 +74,8 @@
  libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
  rc_DATA = kivioselecttool.rc
---- koffice-1.1-beta2.orig/kivio/plugins/kivioconnectortool/Makefile.am
-+++ koffice-1.1-beta2/kivio/plugins/kivioconnectortool/Makefile.am
+--- kivio/plugins/kivioconnectortool/Makefile.am
++++ kivio/plugins/kivioconnectortool/Makefile.am
 @@ -31,7 +31,7 @@
  ##############################################################
  ####                  END KDEStudio part                  ####
@@ -85,8 +85,8 @@
  libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
  rc_DATA = kivioconnectortool.rc
---- koffice-1.1-beta2.orig/kivio/plugins/kiviotexttool/Makefile.am
-+++ koffice-1.1-beta2/kivio/plugins/kiviotexttool/Makefile.am
+--- kivio/plugins/kiviotexttool/Makefile.am
++++ kivio/plugins/kiviotexttool/Makefile.am
 @@ -31,7 +31,7 @@
  ##############################################################
  ####                  END KDEStudio part                  ####
@@ -96,8 +96,8 @@
  libkiviotexttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
  rc_DATA = kiviotexttool.rc
---- koffice-1.1-beta2.orig/kivio/plugins/kiviozoomtool/Makefile.am
-+++ koffice-1.1-beta2/kivio/plugins/kiviozoomtool/Makefile.am
+--- kivio/plugins/kiviozoomtool/Makefile.am
++++ kivio/plugins/kiviozoomtool/Makefile.am
 @@ -27,7 +27,7 @@
  ##############################################################
  ####                  END KDEStudio part                  ####
@@ -107,8 +107,8 @@
  libkiviozoomtool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
  
  rc_DATA = kiviozoomtool.rc
---- koffice-1.1-beta2.orig/koshell/Makefile.am
-+++ koffice-1.1-beta2/koshell/Makefile.am
+--- koshell/Makefile.am
++++ koshell/Makefile.am
 @@ -4,7 +4,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = koshell.la
@@ -118,8 +118,8 @@
  koshell_la_LIBADD = $(LIB_KOFFICEUI)
  
  ## The executable
---- koffice-1.1-beta2.orig/kpresenter/Makefile.am
-+++ koffice-1.1-beta2/kpresenter/Makefile.am
+--- kpresenter/Makefile.am
++++ kpresenter/Makefile.am
 @@ -38,7 +38,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kpresenter.la
@@ -129,8 +129,8 @@
  kpresenter_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- koffice-1.1-beta2.orig/kspread/Makefile.am
-+++ koffice-1.1-beta2/kspread/Makefile.am
+--- kspread/Makefile.am
++++ kspread/Makefile.am
 @@ -38,7 +38,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES =  kspread.la
@@ -140,8 +140,8 @@
  kspread_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- koffice-1.1-beta2.orig/kugar/part/Makefile.am
-+++ koffice-1.1-beta2/kugar/part/Makefile.am
+--- kugar/part/Makefile.am
++++ kugar/part/Makefile.am
 @@ -2,7 +2,7 @@
  
  lib_LTLIBRARIES = libkugarpart.la
@@ -151,19 +151,19 @@
  libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS) $(LIB_KDEPRINT)
  
  libkugarpart_la_METASOURCES = AUTO
---- koffice-1.1-beta2.orig/kugar/part/kugar.desktop
-+++ koffice-1.1-beta2/kugar/part/kugar.desktop
-@@ -1,7 +1,7 @@
- [Desktop Entry]
+--- kugar/part/kugar.desktop
++++ kugar/part/kugar.desktop
+@@ -2,7 +2,7 @@
  Name=Kugar
+ Name[eo]=Raportilo
  Exec=kugar
 -Icon=
 +Icon=kugar
  MimeType=application/x-kugar;
  Type=Application
  DocPath=
---- koffice-1.1-beta2.orig/kugar/part/kugar_part.cpp
-+++ koffice-1.1-beta2/kugar/part/kugar_part.cpp
+--- kugar/part/kugar_part.cpp
++++ kugar/part/kugar_part.cpp
 @@ -78,7 +78,7 @@
  
  	if (!s_instance)
@@ -173,8 +173,8 @@
  						   I18N_NOOP("Kugar"),
  						   VERSION);
  
---- koffice-1.1-beta2.orig/kugar/shell/main.cpp
-+++ koffice-1.1-beta2/kugar/shell/main.cpp
+--- kugar/shell/main.cpp
++++ kugar/shell/main.cpp
 @@ -18,7 +18,7 @@
  
  int main(int argc,char **argv)
@@ -184,9 +184,9 @@
  			 I18N_NOOP("A template driven report viewer for XML data."),
  			 KAboutData::License_GPL_V2,
  			 "Copyright (c) 1999-2000 Mutiny Bay Software\n"
---- koffice-1.1-beta2.orig/kword/Makefile.am
-+++ koffice-1.1-beta2/kword/Makefile.am
-@@ -24,7 +24,7 @@
+--- kword/Makefile.am
++++ kword/Makefile.am
+@@ -25,7 +25,7 @@
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kword.la
  kword_la_SOURCES = main.cc
@@ -195,8 +195,8 @@
  kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- koffice-1.1-beta2.orig/lib/kwmf/Makefile.am
-+++ koffice-1.1-beta2/lib/kwmf/Makefile.am
+--- lib/kwmf/Makefile.am
++++ lib/kwmf/Makefile.am
 @@ -2,7 +2,7 @@
  
  INCLUDES= -I$(srcdir) $(all_includes)
@@ -206,8 +206,8 @@
  libkwmf_la_LIBADD = $(KOFFICE_LIBS)
  
  ####### Files
---- koffice-1.1-beta2.orig/admin/Makefile.common
-+++ koffice-1.1-beta2/admin/Makefile.common
+--- admin/Makefile.common
++++ admin/Makefile.common
 @@ -86,22 +86,32 @@
  	pwd=`pwd` ;\
  	dirs=`find . -type d | grep -v CVS | sed -e "s#^./##"` ;\
