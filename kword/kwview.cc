@@ -5342,7 +5342,7 @@ void KWView::spellCheckerReady()
     {
         bool textIsEmpty = true;
         QString text;
-        while ( textIsEmpty )
+        while ( textIsEmpty && !m_spell.textIterator->atEnd() )
         {
             text = m_spell.textIterator->currentText();
             // Determine if text has any non-space character, otherwise there's nothing to spellcheck
@@ -5354,16 +5354,19 @@ void KWView::spellCheckerReady()
             if ( textIsEmpty )
                 ++(*m_spell.textIterator);
         }
-        //kdDebug(32001) << "Checking " << text << endl;
-        text += '\n'; // end of paragraph
+        if ( !textIsEmpty )
+        {
+            //kdDebug(32001) << "Checking " << text << endl;
+            text += '\n'; // end of paragraph
 #ifdef HAVE_LIBASPELL
-        m_spell.kospell->check( text);
+            m_spell.kospell->check( text);
 #else
-        text += '\n'; // empty line required by kspell
-        m_spell.kspell->check( text );
+            text += '\n'; // empty line required by kspell
+            m_spell.kspell->check( text );
 #endif
-        /// ??? textfs->textObject()->setNeedSpellCheck(true);
-        return;
+            /// ??? textfs->textObject()->setNeedSpellCheck(true);
+            return;
+        }
     }
     //kdDebug(32001) << "KWView::spellCheckerReady done" << endl;
 
