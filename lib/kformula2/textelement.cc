@@ -87,8 +87,14 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
     QRect bound = fm.boundingRect(character);
 
     setWidth(fm.width(character) + spaceBefore + spaceAfter);
+
     setHeight(bound.height());
     setBaseline(-bound.top());
+
+    // Or this way. But this doesn't seem to look better...
+    //setHeight(fm.height());
+    //setBaseline(fm.ascent()+1);
+
     setMidline(getBaseline() - fm.strikeOutPos());
 }
 
@@ -117,6 +123,14 @@ void TextElement::draw(QPainter& painter, const QRect& r,
     painter.setFont(font);
     painter.drawText(parentOrigin.x()+getX()+spaceBefore,
                      parentOrigin.y()+getY()+getBaseline(), character);
+
+    // Debug
+    //painter.setBrush(Qt::NoBrush);
+    //painter.setPen(Qt::red);
+    //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
+    //painter.setPen(Qt::green);
+    //painter.drawLine(myPos.x(), myPos.y()+getMidline(),
+    //                 myPos.x()+getWidth(), myPos.y()+getMidline());
 }
 
 

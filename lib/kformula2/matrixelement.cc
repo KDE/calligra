@@ -203,7 +203,12 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 
     setWidth(width);
     setHeight(height);
-    setMidline(height/2);
+    if ((rows == 2) && (columns == 1)) {
+        setMidline(getMainChild()->getHeight() + distY / 2);
+    }
+    else {
+        setMidline(height/2);
+    }
     setBaseline(-1);
 }
 

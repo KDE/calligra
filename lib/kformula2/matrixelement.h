@@ -117,6 +117,24 @@ public:
     virtual SequenceElement* getMainChild();
 
     /**
+     * Inserts all new children at the cursor position. Places the
+     * cursor according to the direction.
+     */
+    //virtual void insert(FormulaCursor*, QList<BasicElement>&, Direction);
+
+    /**
+     * Removes all selected children and returns them. Places the
+     * cursor to where the children have been.
+     */
+    //virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
+
+    /**
+     * Moves the cursor to a normal place where new elements
+     * might be inserted.
+     */
+    //virtual void normalize(FormulaCursor*, Direction);
+
+    /**
      * Sets the cursor to select the child. The mark is placed before,
      * the position behind it.
      */
@@ -128,10 +146,13 @@ public:
      */
     //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
 
-    // Save&load
-    //virtual QDomElement getElementDom(QDomDocument *doc);
-    //virtual bool buildFromDom(QDomElement *elem);
-
+    /**
+     * Returns wether the element has no more useful
+     * children (except its main child) and should therefore
+     * be replaced by its main child's content.
+     */
+    //virtual bool isSenseless();
+    
     /**
      * @returns the latex representation of the element and
      * of the element's children

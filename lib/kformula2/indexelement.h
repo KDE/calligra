@@ -128,7 +128,6 @@ public:
     // If an element has children one has to become the main one.
     
     virtual SequenceElement* getMainChild() { return content; }
-    //virtual void setMainChild(SequenceElement*);
 
     
     /**
