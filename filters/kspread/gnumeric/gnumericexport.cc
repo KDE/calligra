@@ -720,7 +720,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         return KoFilter::NotImplemented;
     }
 
-    const KSpreadDoc* const ksdoc = (const KSpreadDoc* const)document;
+    KSpreadDoc* ksdoc = (KSpreadDoc*)document;
 
     if (ksdoc->mimeType() != "application/x-kspread")
     {
@@ -788,6 +788,47 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         sheetName.appendChild(gnumeric_doc.createTextNode(table->tableName()));
         sheetNameIndex.appendChild(sheetName);
     }
+
+    /*
+     * Area Names
+     */
+    /*
+    <gmr:Names>
+    <gmr:Name>
+      <gmr:name>test</gmr:name>
+      <gmr:value>Sheet2!$A$2:$D$10</gmr:value>
+      <gmr:position>A1</gmr:position>
+    </gmr:Name>
+    <gmr:Name>
+      <gmr:name>voiture</gmr:name>
+      <gmr:value>Sheet2!$A$2:$D$8</gmr:value>
+      <gmr:position>A1</gmr:position>
+    </gmr:Name>
+  </gmr:Names>
+    */
+    if ( ksdoc->listArea().count()>0 )
+    {
+        QDomElement areaNames = gnumeric_doc.createElement("gmr:Names");
+        QValueList<Reference>::Iterator it;
+        QValueList<Reference>::Iterator itbegin;
+        QValueList<Reference> area =ksdoc->listArea();
+        itbegin=area.begin();
+        QValueList<Reference>::Iterator itend( area.end() );
+        for ( it = itbegin; it != itend; ++it )
+        {
+            QDomElement areaName = gnumeric_doc.createElement("gmr:Name");
+            QDomElement areaNameElement = gnumeric_doc.createElement("gmr:name");
+            areaNameElement.appendChild(gnumeric_doc.createTextNode(( *it ).ref_name) );
+            areaName.appendChild( areaNameElement );
+            QDomElement areaNameValue = gnumeric_doc.createElement("gmr:value");
+            areaNameValue.appendChild(gnumeric_doc.createTextNode( convertRefToRange( ( *it ).table_name, ( *it ).rect )  ) );
+            areaName.appendChild( areaNameValue );
+            areaNames.appendChild( areaName );
+            //TODO <gmr:position>A1</gmr:position> I don't know what is it.
+        }
+        workbook.appendChild(areaNames);
+    }
+
 
     /*
      * Sheets
@@ -1179,5 +1220,27 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     return KoFilter::OK;
 }
 
+
+QString convertRefToRange( const QString & table, const QRect & rect )
+{
+  QPoint topLeft( rect.topLeft() );
+  QPoint bottomRight( rect.bottomRight() );
+#if 0
+  if ( topLeft == bottomRight )
+    return convertRefToBase( table, rect );
+#endif
+  QString s;
+  s += table;
+  s += "!$";
+  s += KSpreadCell::columnName( topLeft.x() );
+  s += '$';
+  s += QString::number( topLeft.y() );
+  s += ":$";
+  s += KSpreadCell::columnName( bottomRight.x() );
+  s += '$';
+  s += QString::number( bottomRight.y() );
+
+  return s;
+}
 
 #include <gnumericexport.moc>
