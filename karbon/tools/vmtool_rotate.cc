@@ -18,6 +18,8 @@
 
 #include <qcursor.h>
 
+#include <kdebug.h>
+
 VMToolRotate* VMToolRotate::s_instance = 0L;
 
 VMToolRotate::VMToolRotate( KarbonPart* part )
@@ -68,20 +70,36 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
-
-	QRect rect =  part()->selection().boundingBox( 1 / view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
 		setCursor( view );
-		QWMatrix mat;
+		QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+		QRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
 		m_sp = QPoint( rect.left() + rect.width() / 2, rect.top() + rect.height() / 2 );
 		QPoint sp = QPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
-		// rotate operation
-		mat.translate( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor());
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
-		//m_angle += M_PI / 2;
+		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
+			m_angle -= atan2( rect.top() - m_sp.y(), rect.left() - m_sp.x() );
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MT )
+			m_angle += M_PI / 2;
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RT )
+			m_angle -= atan2( rect.top() - m_sp.y(), rect.right() - m_sp.x() );
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RM)
+		{
+		}
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RB )
+			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.right() - m_sp.x() );
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MB )
+			m_angle -= M_PI / 2;
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LB )
+			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.left() - m_sp.x() );
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LM )
+		{
+		}
+		// rotate operation
+		QWMatrix mat;
+		mat.translate( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor());
 		mat.rotate( m_angle / VGlobal::pi_180 );
 		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
 						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
@@ -140,11 +158,6 @@ VMToolRotate::eventFilter( KarbonView* view, QEvent* event )
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
-
-		// adjust to real viewport contents instead of raw mouse coords:
-		QPoint fp;
-		fp.setX( view->canvasWidget()->viewportToContents( m_fp ).x() );
-		fp.setY( view->canvasWidget()->viewportToContents( m_fp ).y() );
 
 		part()->addCommand(
 			new VMCmdRotate(
