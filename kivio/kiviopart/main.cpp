@@ -36,8 +36,6 @@ extern "C" int kdemain( int argc, char **argv )
   KCmdLineArgs::addCmdLineOptions( options );
 
   KoApplication app;
-  app.dcopClient()->attach();
-  app.dcopClient()->registerAs("kivio");
 
   if (!app.start()) {
     return 1;

@@ -35,9 +35,6 @@ extern "C" int kdemain( int argc, char **argv ) {
 
     KoApplication app;
 
-//     app.dcopClient()->attach();
-//     app.dcopClient()->registerAs("kplato");
-
     // This is disabled for now so the crude test below will run
     if (!app.start())
 	return 1;

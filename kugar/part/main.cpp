@@ -35,8 +35,6 @@ extern "C" int kdemain(int argc, char *argv[])
 	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
 	KoApplication app;
-	app.dcopClient()->attach();
-	app.dcopClient()->registerAs( "kugar" );
 
 	if (!app.start()) return 1;
 
