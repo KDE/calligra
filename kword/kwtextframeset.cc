@@ -2832,27 +2832,6 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
     return kd;
 }
 
-QString KWTextFrameSetEdit::realSelectedText( KoTextParag *_parag, int start, int len)
-{
-    QString str;
-    if ( start == 0 && _parag->paragLayout().counter )
-        str += _parag->paragLayout().counter->text( _parag ) + ' ';
-    // ### is this correct for RTL text?
-    for ( int i = start ; i < len+start ; ++i )
-    {
-        KoTextStringChar *ch = _parag->at( i );
-        if ( ch->isCustom() )
-        {
-            KoVariable * var = dynamic_cast<KoVariable *>(ch->customItem());
-            if ( var )
-                str += var->text(true);
-        }
-        else
-            str += ch->c;
-    }
-    return str;
-}
-
 void KWTextFrameSetEdit::ensureCursorVisible()
 {
     //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << endl;

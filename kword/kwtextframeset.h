@@ -410,7 +410,6 @@ private slots:
 
 private:
     bool enterCustomItem( KoTextCustomItem* customItem, bool fromRight );
-    QString realSelectedText( KoTextParag *_parag, int start, int len);
 
     KoParagLayout m_paragLayout;
     bool m_rtl; // maybe make part of KoParagLayout later
