@@ -28,8 +28,8 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 # kde_styledir        Where Qt/KDE widget styles should go to (new in KDE 3).
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
-# set the include path for X, qt and KDE
-INCLUDES= $(KOFFICE_INCLUDES) $(all_includes) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/datatable \
-			-I$(top_srcdir)/kexi/core
+# set the include path for X, qt and KDE - all_includes must remain last!
+INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/datatable \
+			-I$(top_srcdir)/kexi/core $(all_includes)
 
 METASOURCES = AUTO

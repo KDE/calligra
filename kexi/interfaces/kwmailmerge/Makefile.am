@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir) $(all_includes) $(KOFFICE_INCLUDES)
+INCLUDES = -I$(top_srcdir) $(KOFFICE_INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = kwmailmerge_kexi.la
 
