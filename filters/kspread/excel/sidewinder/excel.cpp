@@ -2264,6 +2264,14 @@ public:
   bool stackedLetters;
   unsigned indentLevel;
   bool shrinkContent;
+  unsigned leftBorderStyle;
+  unsigned leftBorderColor;
+  unsigned rightBorderStyle;
+  unsigned rightBorderColor;
+  unsigned topBorderStyle;
+  unsigned topBorderColor;
+  unsigned bottomBorderStyle;
+  unsigned bottomBorderColor;
 };
 
 XFRecord::XFRecord():  Record()
@@ -2281,6 +2289,14 @@ XFRecord::XFRecord():  Record()
   d->stackedLetters = 0;
   d->indentLevel = 0;
   d->shrinkContent = 0;
+  d->leftBorderStyle = 0;
+  d->leftBorderColor = 0;
+  d->rightBorderStyle = 0;
+  d->rightBorderColor = 0;
+  d->topBorderStyle = 0;
+  d->topBorderColor = 0;
+  d->bottomBorderStyle = 0;
+  d->bottomBorderColor = 0;
 }
 
 XFRecord::~XFRecord()
@@ -2308,6 +2324,14 @@ XFRecord& XFRecord::operator=( const XFRecord& xf )
   d->stackedLetters      = xf.stackedLetters();
   d->indentLevel         = xf.indentLevel();
   d->shrinkContent       = xf.shrinkContent();
+  d->leftBorderStyle     = xf.leftBorderStyle();
+  d->leftBorderColor     = xf.leftBorderColor();
+  d->rightBorderStyle    = xf.rightBorderStyle();
+  d->rightBorderColor    = xf.rightBorderColor();
+  d->topBorderStyle      = xf.topBorderStyle();
+  d->topBorderColor      = xf.topBorderColor();
+  d->bottomBorderStyle   = xf.bottomBorderStyle();
+  d->bottomBorderColor   = xf.bottomBorderColor();
   return *this;
 }
 
@@ -2462,6 +2486,86 @@ void XFRecord::setShrinkContent( bool s )
   d->shrinkContent = s;
 }
 
+unsigned XFRecord::leftBorderStyle() const
+{
+  return d->leftBorderStyle;
+}
+
+void XFRecord::setLeftBorderStyle( unsigned style )
+{
+  d->leftBorderStyle = style;
+}
+
+unsigned XFRecord::leftBorderColor() const
+{
+  return d->leftBorderColor;
+}
+
+void XFRecord::setLeftBorderColor( unsigned color )
+{
+  d->leftBorderColor = color;
+}
+
+unsigned XFRecord::rightBorderStyle() const
+{
+  return d->rightBorderStyle;
+}
+
+void XFRecord::setRightBorderStyle( unsigned style )
+{
+  d->rightBorderStyle = style;
+}
+
+unsigned XFRecord::rightBorderColor() const
+{
+  return d->rightBorderColor;
+}
+
+void XFRecord::setRightBorderColor( unsigned color )
+{
+  d->rightBorderColor = color;
+}
+
+unsigned XFRecord::topBorderStyle() const
+{
+  return d->topBorderStyle;
+}
+
+void XFRecord::setTopBorderStyle( unsigned style )
+{
+  d->topBorderStyle = style;
+}
+
+unsigned XFRecord::topBorderColor() const
+{
+  return d->topBorderColor;
+}
+
+void XFRecord::setTopBorderColor( unsigned color )
+{
+  d->topBorderColor = color;
+}
+
+unsigned XFRecord::bottomBorderStyle() const
+{
+  return d->bottomBorderStyle;
+}
+
+void XFRecord::setBottomBorderStyle( unsigned style )
+{
+  d->bottomBorderStyle = style;
+}
+
+unsigned XFRecord::bottomBorderColor() const
+{
+  return d->bottomBorderColor;
+}
+
+void XFRecord::setBottomBorderColor( unsigned color )
+{
+  d->bottomBorderColor = color;
+}
+
 void XFRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 20 ) return;
@@ -2487,6 +2591,19 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   unsigned options = data[8];
   setIndentLevel( options & 0x0f );
   setShrinkContent( options & 0x10 );
+  
+  unsigned linestyle = readU16( data + 10 );
+  setLeftBorderStyle( linestyle & 0xf );
+  setRightBorderStyle( ( linestyle >> 4 ) & 0xf );
+  setTopBorderStyle( ( linestyle >> 8 ) & 0xf );
+  setBottomBorderStyle( ( linestyle >> 12 ) & 0xf );
+  
+  unsigned color1 = readU16( data + 12 );
+  unsigned color2 = readU16( data + 14 );
+  setLeftBorderColor( color1 & 0x7f );
+  setRightBorderColor( ( color1 >> 7 ) & 0x7f );
+  setTopBorderColor( color1 & 0x7f );
+  setBottomBorderColor( ( color1 >> 7 ) & 0x7f );
 }
 
 void XFRecord::dump( std::ostream& out ) const

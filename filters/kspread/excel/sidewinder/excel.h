@@ -2364,6 +2364,126 @@ public:
   void setShrinkContent( bool s );
   
   /**
+   * Returns the line style for left border.
+   *
+   * \sa setLeftBorderStyle, leftBorderColor
+   */
+  unsigned leftBorderStyle() const;
+  
+  /**
+   * Sets the line style for left border.
+   *
+   * \sa leftBorderStyle, setLeftBorderColor
+   */
+  void setLeftBorderStyle( unsigned style );
+  
+  /**
+   * Returns the color for left border. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa setLeftBorderColor, leftBorderStyle
+   */
+  unsigned leftBorderColor() const;
+  
+  /**
+   * Sets the color for left border. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa leftBorderColor, setLeftBorderStyle
+   */
+  void setLeftBorderColor( unsigned color );
+
+  /**
+   * Returns the line style for right border.
+   *
+   * \sa setRightBorderStyle, rightBorderColor
+   */
+  unsigned rightBorderStyle() const;
+  
+  /**
+   * Sets the line style for right border.
+   *
+   * \sa rightBorderStyle, setRightBorderColor
+   */
+  void setRightBorderStyle( unsigned style );
+  
+  /**
+   * Returns the color for right border. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa setRightBorderColor, rightBorderStyle
+   */
+  unsigned rightBorderColor() const;
+  
+  /**
+   * Sets the color for right border. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa rightBorderColor, setRightBorderStyle
+   */
+  void setRightBorderColor( unsigned color );
+  
+  /**
+   * Returns the line style for top border.
+   *
+   * \sa setTopBorderStyle, topBorderColor
+   */
+  unsigned topBorderStyle() const;
+  
+  /**
+   * Sets the line style for top border.
+   *
+   * \sa topBorderStyle, setTopBorderColor
+   */
+  void setTopBorderStyle( unsigned style );
+  
+  /**
+   * Returns the color for top border. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa setTopBorderColor, topBorderStyle
+   */
+  unsigned topBorderColor() const;
+  
+  /**
+   * Sets the color for top border. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa topBorderColor, setTopBorderStyle
+   */
+  void setTopBorderColor( unsigned color );
+  
+  /**
+   * Returns the line style for bottom border.
+   *
+   * \sa setBottomBorderStyle, bottomBorderColor
+   */
+  unsigned bottomBorderStyle() const;
+  
+  /**
+   * Sets the line style for bottom border.
+   *
+   * \sa bottomBorderStyle, setBottomBorderColor
+   */
+  void setBottomBorderStyle( unsigned style );
+  
+  /**
+   * Returns the color for bottom border. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa setBottomBorderColor, bottomBorderStyle
+   */
+  unsigned bottomBorderColor() const;
+  
+  /**
+   * Sets the color for bottom border. This is an index to color palette
+   * specified in Palette record.
+   *
+   * \sa bottomBorderColor, setBottomBorderStyle
+   */
+  void setBottomBorderColor( unsigned color );
+    
+  /**
    \reimpl
    */
   virtual const char* name(){ return "XF"; }
