@@ -152,34 +152,84 @@ private:
   Private *d;
 };
 
+/**
+ * Defines alignment information for cell format.
+ *
+ * Class FormatAlignment defines the horizontal and vertical alignment
+ * for the text inside a cell.
+ * 
+ */
+
 class FormatAlignment
 {
 public:
 
+  /**
+   * Creates a default alignment information.
+   */
   FormatAlignment();
   
+  /**
+   * Destroys the alingment information
+   */
   ~FormatAlignment();
   
+  /**
+   * Creates a copy of alignment information.
+   */
   FormatAlignment( const FormatAlignment& );
   
+  /**
+   * Assigns from another alignment information.
+   */
   FormatAlignment& operator=( const FormatAlignment& );
   
+  /**
+   * Assigns from another alignment information.
+   */
   FormatAlignment& assign( const FormatAlignment& );
   
+  /**
+   * Returns true if it is a default alignment information.
+   */
   bool isNull() const;
   
+  /**
+   * Returns horizontal alignment. Possible values are
+   * Format::Left, Format::Right and Format::Center.
+   *
+   * \sa setAlignX
+   */
   unsigned alignX() const;
   
+  /**
+   * Sets the horizontal alignment.
+   *
+   * \sa alignX
+   */
   void setAlignX( unsigned xa );
   
+  /**
+   * Returns horizontal alignment. Possible values are
+   * Format::Top, Format::Middle and Format::Bottom.
+   *
+   * \sa setAlignY
+   */  
   unsigned alignY() const;
   
-  void setAlignY( unsigned xa );
+  /**
+   * Sets the horizontal alignment.
+   *
+   * \sa alignY
+   */
+   void setAlignY( unsigned xa );
     
 private:  
   class Private;
   Private *d;
 };
+
+class FormatData;
 
 /**
  * Defines format of cell.
@@ -202,7 +252,6 @@ private:
  * 
  */
  
-class FormatData;
 
 class Format
 {
@@ -242,6 +291,8 @@ public:
   FormatAlignment& alignment() const;
   
   enum { Left, Center, Right };
+  
+  enum { Top, Middle, Bottom };
   
   /**
    * Applies another format to this format. Basically this will merge
