@@ -21,7 +21,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kimgio.h>
+#include <kimageio.h>
 
 #include "kis_global.h"
 #include "kis_util.h"
