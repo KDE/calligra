@@ -17,7 +17,7 @@ bool KOMLParser::open( const char *_search, string& )
 
     if ( !_search )
     {
-	if ( m_node.firstChild().isNull() )
+	if ( m_node.isNull() )
 	    return FALSE;
 
 	m_stack.push( m_node );
