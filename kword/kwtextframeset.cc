@@ -809,7 +809,7 @@ void KWTextFrameSet::load( QDomElement &attributes )
     {
         // Create an empty one, then. See KWTextDocument ctor.
         textdoc->clear( true );
-        static_cast<KWTextParag *>( textdoc->firstParag() )->setStyleName( "Standard " );
+        static_cast<KWTextParag *>( textdoc->firstParag() )->setStyleName( "Standard" );
     }
     else
         textdoc->setLastParag( lastParagraph );
@@ -2190,7 +2190,20 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 	     cursor->atParagStart() )
 	    break;
 
-	textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionBackspace );
+        if ( e->state() & ControlButton )
+        {
+            // Delete a word
+            do {
+                textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionBackspace );
+                //kdDebug() << "KWTextFrameSetEdit::keyPressEvent one char removed, current char="
+                //          << cursor->parag()->at( cursor->index() )->c.latin1() << endl;
+            } while ( !cursor->atParagStart()
+                      && !cursor->parag()->at( cursor->index()-1 )->c.isSpace() );
+        }
+        else
+        {
+            textFrameSet()->doKeyboardAction( cursor, KWTextFrameSet::ActionBackspace );
+        }
 	clearUndoRedoInfo = FALSE;
 
 	break;
@@ -2439,6 +2452,8 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     QTextStringChar *chr = parag->at( cursor->index() );
     int h = parag->lineHeightOfChar( cursor->index() );
     int x = parag->rect().x() + chr->x + cursor->offsetX();
+    //kdDebug() << "parag->rect().x()=" << parag->rect().x() << " chr->x=" << chr->x
+    //          << " cursor->offsetX()=" << cursor->offsetX() << endl;
     int y = 0; int dummy;
     parag->lineHeightOfChar( cursor->index(), &dummy, &y );
     y += parag->rect().y() + cursor->offsetY();
