@@ -5276,7 +5276,9 @@ void KSpreadView::repaintPolygon( const QPointArray& polygon )
 QWMatrix KSpreadView::matrix() const
 {
     QWMatrix m;
-//    m.translate( -int( m_pCanvas->xOffset() ), -int( m_pCanvas->yOffset() ) );
+    m.scale( m_pDoc->zoomedResolutionX(),
+             m_pDoc->zoomedResolutionY() );
+    m.translate( - m_pCanvas->xOffset(), - m_pCanvas->yOffset() );
     return m;
 }
 

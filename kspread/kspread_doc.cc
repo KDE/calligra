@@ -750,13 +750,26 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   if ( rgn.isEmpty() )
     rgn = QRegion( QRect( 0, 0, viewRect.width(), viewRect.height() ) );
 
+  QWMatrix matrix;
+  if ( view )
+  {
+    matrix.scale( zoomedResolutionX(),
+                  zoomedResolutionY() );
+    matrix.translate( - view->canvasWidget()->xOffset(),
+                      - view->canvasWidget()->yOffset() );
+  }
+  else
+  {
+    matrix = painter.worldMatrix();
+  }
+
   QPtrListIterator<KoDocumentChild> it( children() );
   for( ; it.current(); ++it )
   {
 //    if ( ((KSpreadChild*)it.current())->table() == table &&
 //         !m_pView->hasDocumentInWindow( it.current()->document() ) )
     if ( ((KSpreadChild*)it.current())->table() == table)
-      rgn -= it.current()->region( painter.worldMatrix() );
+      rgn -= it.current()->region( matrix );
   }
   painter.setClipRegion( rgn );
 

@@ -1103,7 +1103,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( !table )
     return;
 
-  KoRect rect = doc()->unzoomRect ( _ev->rect() & QWidget::rect() );
+  KoRect rect = doc()->unzoomRect( _ev->rect() & QWidget::rect() );
   rect.moveBy( xOffset(), yOffset() );
 
   KoPoint tl = rect.topLeft();
@@ -2689,37 +2689,18 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
 
   /* Prepare the painter */
   QPainter painter( this );
-  painter.save();
-
-  // Do the view transformation.
-//   QWMatrix m = m_pView->matrix();
-//   painter.setWorldMatrix( m );
-
-  // Which part of the document is visible ? To determine this
-  // just transform the viewport rectangle with the inverse
-  // matrix, since this matrix usually transforms from document
-  // coordinates to view coordinates.
-//   m = m.invert();
-//   QPoint tl = m.map( QPoint( 0, 0 ) );
-//   QPoint br = m.map( QPoint( width(), height() ) );
-//  QRect view( tl, br );
-
   QRect viewRect = QRect( 0, 0, width(), height() );
 
+  painter.save(); //store it, we need to reload due to clipping range of children
   m_pDoc->paintCellRegions( painter, viewRect, m_pView, cellRegions, table, true );
   painter.restore();
 
-  //TODO: remove hack: The painter is saved, restored and "scaled" with the matrix again,
-  //      because within paintCellRegions the region for the children is clipped out.
-
-  // Draw children
-  painter.save();
+  // Do the view transformation.
   QWMatrix m = m_pView->matrix();
   painter.setWorldMatrix( m );
 
   QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
   it.toFirst();
-
   for( ; it.current(); ++it )
   {
     if ( ((KSpreadChild*)it.current())->table() == table &&
@@ -2727,13 +2708,13 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
     {
       // #### todo: paint only if child is visible inside rect
       painter.save();
-      m_pDoc->paintChild( it.current(), painter, m_pView );
+      m_pDoc->paintChild( it.current(),
+                          painter, m_pView );
       painter.restore();
     }
   }
-
-  painter.restore();
   painter.end();
+
   // XIM Position
   int xpos_xim, ypos_xim;
   xpos_xim = table->columnPos( markerColumn() ) - int( xOffset() );
