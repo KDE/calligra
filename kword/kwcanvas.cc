@@ -255,7 +255,7 @@ void KWCanvas::drawBorders( QPainter *painter, const QRect & crect )
                     rs.detach();
                     for ( uint i = 0 ; i < rs.size() ; ++i )
                     {
-                        kdDebug() << "KWCanvas::drawBorders emptySpaceRegion includes: " << DEBUGRECT( rs[i] ) << endl;
+                        //kdDebug() << "KWCanvas::drawBorders emptySpaceRegion includes: " << DEBUGRECT( rs[i] ) << endl;
                         rs[i] = painter->xForm( rs[i] );
                     }
                     devReg.setRects( rs.data(), rs.size() );

@@ -294,12 +294,10 @@ void KWFrame::setSelected( bool _selected )
 QRect KWFrame::outerRect() const
 {
     QRect outerRect( getFrameSet()->kWordDocument()->zoomRect( *this ) );
-    kdDebug() << "KWFrame::outerRect BEFORE " << DEBUGRECT( outerRect ) << endl;
     outerRect.rLeft() -= QMAX( 1, getLeftBorder().ptWidth );
     outerRect.rTop() -= QMAX( 1, getTopBorder().ptWidth );
     outerRect.rRight() += QMAX( 1, getRightBorder().ptWidth );
     outerRect.rBottom() += QMAX( 1, getBottomBorder().ptWidth );
-    kdDebug() << "KWFrame::outerRect AFTER " << DEBUGRECT( outerRect ) << endl;
     return outerRect;
 }
 
