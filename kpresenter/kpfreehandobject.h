@@ -58,7 +58,7 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
 
     virtual void setSize( double _width, double _height );
-    virtual void resizeBy( KoSize _size );
+    virtual void resizeBy( const KoSize &_size );
     virtual void resizeBy( double _dx, double _dy );
 
 protected:
