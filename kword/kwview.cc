@@ -1529,8 +1529,15 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewZoom->setEnabled( true );
         actionInsertComment->setEnabled( true );
         actionAllowAutoFormat->setEnabled( true );
-        KAction* newView = actionCollection()->action("view_newview");
-        if (newView) newView->setEnabled( true );
+        actionShowDocStruct->setEnabled( true );
+        actionConfigureCompletion->setEnabled( true );
+        KAction* newView = actionCollection()->action("edit_sldatabase");
+        if (newView)
+            newView->setEnabled( true );
+
+        newView = actionCollection()->action("view_newview");
+        if (newView)
+            newView->setEnabled( true );
         // Well, the view menu doesn't appear in konq, so this is currently useless...
     } else
     {
@@ -1551,6 +1558,15 @@ void KWView::updateReadWrite( bool readwrite )
         actionEditPersonnalExpr->setEnabled( true );
         // Settings
         actionConfigure->setEnabled( true );
+        actionBorderLeft->setEnabled( true );
+        actionBorderRight->setEnabled( true );
+        actionBorderTop->setEnabled( true );
+        actionBorderBottom->setEnabled( true );
+        actionBorderOutline->setEnabled( true );
+        actionBorderColor->setEnabled( true );
+        actionBorderWidth->setEnabled( true );
+        actionBorderStyle->setEnabled( true );
+        actionBackgroundColor->setEnabled( true );
     }
 }
 
