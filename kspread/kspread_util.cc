@@ -362,7 +362,10 @@ void
 
     uint len = _str.length();
     if ( !len )
+    {
+	kdDebug(36001) << "KSpreadPoint::init: len = 0" << endl;
 	return;
+    }
 
     uint p = 0;
 
@@ -436,7 +439,10 @@ void
     while ( p < len )
     {
 	if ( !isdigit(_str[p++]) )
+	{
+	    kdDebug(36001) << "KSpreadPoint::init: no number" << endl;
 	    return;
+	}
     }
 
     //int y = atoi( _str.mid( p2, p-p2 ).latin1() );
@@ -453,8 +459,10 @@ void
 	return;
     }
     if ( y <= 0 )
+    {
+	kdDebug(36001) << "KSpreadPoint::init: y <= 0" << endl;
 	return;
-
+    }
     pos = QPoint( x, y );
 }
 
