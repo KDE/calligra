@@ -208,19 +208,52 @@
  ####### Files
 --- koffice-1.1-beta1.orig/admin/Makefile.common
 +++ koffice-1.1-beta1/admin/Makefile.common
-@@ -91,6 +91,7 @@
- 	    rm -rf "$$pwd/$$i"; \
- 	    continue; \
- 	  fi ;\
-+	  if test ! "$$i" == debian; then \
- 	  cd $$pwd/$$i ;\
- 	  for f in * .*; do \
- 	    if test ! -d "$$f"; then \
-@@ -102,6 +103,7 @@
- 	      fi; \
- 	    fi ; \
- 	  done; \
-+	  fi; \
+@@ -86,22 +86,32 @@
+ 	pwd=`pwd` ;\
+ 	dirs=`find . -type d | grep -v CVS | sed -e "s#^./##"` ;\
+ 	for i in $$dirs; do \
+-	  if test ! -d "$$pwd/$$i/CVS"; then \
+-	    echo "D $$i" ;\
+-	    rm -rf "$$pwd/$$i"; \
+-	    continue; \
+-	  fi ;\
+-	  cd $$pwd/$$i ;\
+-	  for f in * .*; do \
+-	    if test ! -d "$$f"; then \
+-	      if grep "^/$$f/" CVS/Entries > /dev/null; then \
+-		a="b"; \
+-	      else \
+-	        echo "F $$i/$$f"; \
+-		rm -f "$$pwd/$$i/$$f"; \
+-	      fi; \
+-	    fi ; \
+-	  done; \
++	  case "$$i" in \
++	    debian) \
++		  echo "Ignoring files in $$i"; \
++		;; \
++		*/HTML) \
++		  echo "Ignoring files in $$i"; \
++		;; \
++		*) \
++	      if test ! -d "$$pwd/$$i/CVS"; then \
++	        echo "D $$i" ;\
++	        rm -rf "$$pwd/$$i"; \
++	        continue; \
++	      fi ;\
++	      cd $$pwd/$$i ;\
++	      for f in * .*; do \
++	        if test ! -d "$$f"; then \
++	          if grep "^/$$f/" CVS/Entries > /dev/null; then \
++		    a="b"; \
++	          else \
++	            echo "F $$i/$$f"; \
++		    rm -f "$$pwd/$$i/$$f"; \
++	          fi; \
++	        fi ; \
++	      done; \
++	    ;; \
++	  esac; \
  	done
  
  
