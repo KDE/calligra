@@ -1355,8 +1355,11 @@ KWStyle* KWDocument::addStyleTemplate( KWStyle * sty )
     {
         if ( p->name() == sty->name() ) {
             // Replace existing style
-            *p = *sty;
-            delete sty;
+            if ( sty != p )
+            {
+                *p = *sty;
+                delete sty;
+            }
             return p;
         }
     }
