@@ -849,8 +849,7 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
     stopBlinkCursor();
     maybeDrag = FALSE;
 
-    if ( editNum != -1 )
-    {
+    if ( editNum != -1 ) {
 	if ( doc->getFrameSet( editNum )->getFrameType() == FT_PART )
 	    dynamic_cast<KWPartFrameSet*>( doc->getFrameSet( editNum ) )->deactivate();
     }
@@ -860,25 +859,21 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
     int mx = e->x() + contentsX();
     int my = e->y() + contentsY();
 
-    switch ( e->button() )
-    {
-    case LeftButton:
-    {
+    switch ( e->button() ) {
+    case LeftButton: {
 	mousePressed = TRUE;
 
 	QPainter _painter;
 	_painter.begin( viewport() );
 
-	if ( doc->has_selection() && mouseMode != MM_EDIT )
-	{
+	if ( doc->has_selection() && *doc->getSelStart() == *doc->getSelEnd() && mouseMode != MM_EDIT ) {
 	    doc->drawSelection( _painter, contentsX(), contentsY() );
 	    doc->setSelection( FALSE );
 	}
 
 	_painter.end();
 
-	switch ( mouseMode )
-	{
+	switch ( mouseMode ) {
 	case MM_EDIT:
 	    if ( !vmpEdit( mx, my ) )
 		return;
