@@ -934,7 +934,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
     m_pictureCollection.assignUniqueIds();
     KoStoreDevice contentDev( store );
-    KoXmlWriter contentWriter( &contentDev, "office:document-content" );
+    KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
 
 
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
@@ -991,15 +991,16 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.endElement(); //office:presentation
     contentTmpWriter.endElement(); //office:body
 
-    writeAutomaticStyles( contentWriter, mainStyles );
+    writeAutomaticStyles( *contentWriter, mainStyles );
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
-    contentWriter.addCompleteElement( tmpFile );
+    contentWriter->addCompleteElement( tmpFile );
     contentTmpFile.close();
 
-    contentWriter.endElement(); // root element
-    contentWriter.endDocument();
+    contentWriter->endElement(); // root element
+    contentWriter->endDocument();
+    delete contentWriter;
 
     if ( !store->close() ) // done with content.xml
         return false;
@@ -1040,7 +1041,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if(!store->open("settings.xml"))
         return false;
 
-    KoXmlWriter settingsWriter(&contentDev, "office:document-settings");
+    KoXmlWriter& settingsWriter = *createOasisXmlWriter(&contentDev, "office:document-settings");
     settingsWriter.startElement("office:settings");
 
     settingsWriter.startElement("config:config-item-set");
@@ -1065,6 +1066,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element
     settingsWriter.endDocument();
+    delete &settingsWriter;
 
     if(!store->close())
         return false;
@@ -1346,59 +1348,57 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
 {
     QString pageLayoutName;
     KoStoreDevice stylesDev( store );
-    KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
+    KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
-    stylesWriter.startElement( "office:styles" );
+    stylesWriter->startElement( "office:styles" );
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
     styles = mainStyles.styles( STYLE_HATCH );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:hatch", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
+        (*it).style->writeStyle( stylesWriter, mainStyles, "draw:hatch", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
     }
     styles = mainStyles.styles( STYLE_GRADIENT );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:gradient", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
+        (*it).style->writeStyle( stylesWriter, mainStyles, "draw:gradient", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
     }
 
     styles = mainStyles.styles( STYLE_STROKE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:stroke-dash", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
+        (*it).style->writeStyle( stylesWriter, mainStyles, "draw:stroke-dash", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
     }
 
     styles = mainStyles.styles( STYLE_MARKER );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:marker", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
+        (*it).style->writeStyle( stylesWriter, mainStyles, "draw:marker", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
     }
     styles = mainStyles.styles( STYLE_PICTURE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "draw:fill-image", (*it).name, "style:image-properties" ,  true,  true /*add draw:name*/);
+        (*it).style->writeStyle( stylesWriter, mainStyles, "draw:fill-image", (*it).name, "style:image-properties" ,  true,  true /*add draw:name*/);
     }
 
-    stylesWriter.endElement(); // office:styles
+    stylesWriter->endElement(); // office:styles
 
-    stylesWriter.startElement( "office:automatic-styles" );
+    stylesWriter->startElement( "office:automatic-styles" );
     styles = mainStyles.styles( STYLE_BACKGROUNDPAGE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name , "style:drawing-page-properties"  );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:drawing-page-properties"  );
     }
 
     styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
-        //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
-        // which only works as long as we have only one page master
-        stylesWriter.endElement();
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        stylesWriter->endElement();
         Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
         pageLayoutName = (*it).name;
     }
@@ -1407,24 +1407,25 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         //TODO fix me graphic-properties ???
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
     }
 
-    stylesWriter.endElement(); // office:automatic-styles
+    stylesWriter->endElement(); // office:automatic-styles
 
     //code from kword
-    stylesWriter.startElement( "office:master-styles" );
-    stylesWriter.startElement( "style:master-page" );
-    stylesWriter.addAttribute( "style:name", "Standard" );
-    stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
+    stylesWriter->startElement( "office:master-styles" );
+    stylesWriter->startElement( "style:master-page" );
+    stylesWriter->addAttribute( "style:name", "Standard" );
+    stylesWriter->addAttribute( "style:page-layout-name", pageLayoutName );
     //save sticky object
-    stylesWriter.addCompleteElement( tmpStyckyFile );
-    stylesWriter.endElement();
-    stylesWriter.endElement(); // office:master-style
+    stylesWriter->addCompleteElement( tmpStyckyFile );
+    stylesWriter->endElement();
+    stylesWriter->endElement(); // office:master-style
 
 
-    stylesWriter.endElement(); // root element (office:document-styles)
-    stylesWriter.endDocument();
+    stylesWriter->endElement(); // root element (office:document-styles)
+    stylesWriter->endDocument();
+    delete stylesWriter;
 }
 
 bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, const QDomDocument&settingsDoc, KoStore*store )
@@ -3178,7 +3179,7 @@ void KPresenterDoc::insertPage( KPrPage *page, int currentPageNum, int insertPag
         view->addSideBarItem( insertPageNum );
 
         // change to the new page if the view was on the current page.
-        if ( view->getCurrPgNum() - 1 == currentPageNum )
+        if ( (int)view->getCurrPgNum() - 1 == currentPageNum )
         {
             view->skipToPage( insertPageNum );
         }
@@ -3204,7 +3205,7 @@ void KPresenterDoc::takePage( KPrPage *page, int pageNum )
         view->removeSideBarItem( pos );
 
         // change to the new page if the view was on the current page.
-        if ( view->getCurrPgNum() - 1 == pos )
+        if ( (int)view->getCurrPgNum() - 1 == pos )
         {
             view->skipToPage( pageNum );
         }
@@ -3243,7 +3244,7 @@ void KPresenterDoc::movePageTo( int oldPos, int newPos )
         view->moveSideBarItem( oldPos, newPos );
 
         // change to the new page if the view was on the old pos.
-        if ( view->getCurrPgNum() - 1 == oldPos )
+        if ( (int)view->getCurrPgNum() - 1 == oldPos )
         {
             view->skipToPage( newPos );
         }

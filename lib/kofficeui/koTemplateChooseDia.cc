@@ -216,6 +216,7 @@ static bool cancelQuits() {
     return onlyDoc && onlyMainWindow && kapp->instanceName() != "koshell"; // hack for koshell
 }
 
+#if 0 // DO NOT COMMIT
 /*================================================================*/
 // static
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
@@ -229,6 +230,7 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance,
     return choose( instance, file, format, nativeName, QStringList(),
                    dialogType, templateType, parent );
 }
+#endif
 
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
                                                             const KoTemplateChooseDia::DialogType &dialogType,

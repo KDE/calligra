@@ -617,7 +617,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
 
     KoStoreDevice dev( store );
-    KoXmlWriter contentWriter( &dev, "office:document-content" );
+    KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "office:document-content" );
     KoGenStyles mainStyles;//for compile
 
     KTempFile contentTmpFile;
@@ -639,48 +639,49 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 	contentTmpWriter.endElement(); ////office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    contentWriter.startElement( "office:automatic-styles" );
+    contentWriter->startElement( "office:automatic-styles" );
 
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
     styles = mainStyles.styles( STYLE_PAGE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
     }
 
     styles = mainStyles.styles( STYLE_COLUMN );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:column-properties" );
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:column-properties" );
     }
     styles = mainStyles.styles( STYLE_ROW );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:row-properties" );
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:row-properties" );
     }
 
     styles = mainStyles.styles( STYLE_CELL );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
     }
 
-    contentWriter.endElement(); // office:automatic-styles
+    contentWriter->endElement(); // office:automatic-styles
 
 
    // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
-    contentWriter.addCompleteElement( tmpFile );
+    contentWriter->addCompleteElement( tmpFile );
     contentTmpFile.close();
 
 
-    contentWriter.endElement(); // root element
-    contentWriter.endDocument();
+    contentWriter->endElement(); // root element
+    contentWriter->endDocument();
+    delete contentWriter;
     if ( !store->close() )
         return false;
     //add manifest line for content.xml
@@ -699,33 +700,34 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if(!store->open("settings.xml"))
         return false;
 
-    KoXmlWriter settingsWriter(&dev, "office:document-settings");
-    settingsWriter.startElement("office:settings");
-    settingsWriter.startElement("config:config-item-set");
-    settingsWriter.addAttribute("config:name", "view-settings");
+    KoXmlWriter* settingsWriter = createOasisXmlWriter(&dev, "office:document-settings");
+    settingsWriter->startElement("office:settings");
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "view-settings");
 
 
     //<config:config-item-map-indexed config:name="Views">
-    settingsWriter.startElement("config:config-item-map-indexed" );
-    settingsWriter.addAttribute("config:name", "Views" );
-    settingsWriter.startElement("config:config-item-map-entry" );
-    KoUnit::saveOasis(&settingsWriter, unit());
-    saveOasisSettings( settingsWriter );
-    settingsWriter.endElement();
+    settingsWriter->startElement("config:config-item-map-indexed" );
+    settingsWriter->addAttribute("config:name", "Views" );
+    settingsWriter->startElement("config:config-item-map-entry" );
+    KoUnit::saveOasis(settingsWriter, unit());
+    saveOasisSettings( *settingsWriter );
+    settingsWriter->endElement();
 
 
-    settingsWriter.endElement(); //config:config-item-map-indexed
-    settingsWriter.endElement(); // config:config-item-set
+    settingsWriter->endElement(); //config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
 
-    settingsWriter.startElement("config:config-item-set");
-    settingsWriter.addAttribute("config:name", "configuration-settings");
-    saveOasisIgnoreList( settingsWriter );
-    settingsWriter.endElement(); // config:config-item-set
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "configuration-settings");
+    saveOasisIgnoreList( *settingsWriter );
+    settingsWriter->endElement(); // config:config-item-set
 
 
-    settingsWriter.endElement(); // office:settings
-    settingsWriter.endElement(); // Root element
-    settingsWriter.endDocument();
+    settingsWriter->endElement(); // office:settings
+    settingsWriter->endElement(); // Root element
+    settingsWriter->endDocument();
+    delete settingsWriter;
 
     if(!store->close())
         return false;
@@ -784,53 +786,54 @@ void KSpreadDoc::loadOasisIgnoreList( const QDomDocument&settingsDoc )
 void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
 {
     KoStoreDevice stylesDev( store );
-    KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
+    KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
-    stylesWriter.startElement( "office:styles" );
+    stylesWriter->startElement( "office:styles" );
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
     styles = mainStyles.styles( KSpreadDoc::STYLE_USERSTYLE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
     }
 
     styles = mainStyles.styles( KSpreadDoc::STYLE_DEFAULTSTYLE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:default-style", (*it).name, "style:cell-properties" );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:cell-properties" );
     }
 
 
-    stylesWriter.endElement(); // office:styles
+    stylesWriter->endElement(); // office:styles
 
-    stylesWriter.startElement( "office:automatic-styles" );
+    stylesWriter->startElement( "office:automatic-styles" );
     styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
-        stylesWriter.endElement();
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        stylesWriter->endElement();
     }
 
-    stylesWriter.endElement(); // office:automatic-styles
+    stylesWriter->endElement(); // office:automatic-styles
     //code from kword
-    stylesWriter.startElement( "office:master-styles" );
+    stylesWriter->startElement( "office:master-styles" );
 
     styles = mainStyles.styles( KSpreadDoc::STYLE_PAGEMASTER );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:master-page", (*it).name, "" );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:master-page", (*it).name, "" );
     }
 
-    stylesWriter.endElement(); // office:master-style
+    stylesWriter->endElement(); // office:master-style
 
 
-    stylesWriter.endElement(); // root element (office:document-styles)
-    stylesWriter.endDocument();
+    stylesWriter->endElement(); // root element (office:document-styles)
+    stylesWriter->endDocument();
+    delete stylesWriter;;
 }
 
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )

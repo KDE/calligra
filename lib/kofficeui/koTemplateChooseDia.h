@@ -172,6 +172,7 @@ public:
                              const QCString& templateType,
                              QWidget* parent);
 
+#if 0 // DO NOT COMMIT
     /**
      * Alternate API, in case no KoDocument is available [and for backwards compatibility]
      * @param instance the KInstance of your app
@@ -194,7 +195,9 @@ public:
                              const DialogType &dialogType=Everything,
                              const QCString& templateType="",
                              QWidget* parent = 0);
+#endif
 
+private:
     /// Ditto, with extraNativeMimeTypes added
     static ReturnType choose(KInstance* instance, QString &file,
                              const QCString &format,
@@ -203,6 +206,7 @@ public:
                              const DialogType &dialogType=Everything,
                              const QCString& templateType="",
                              QWidget* parent = 0);
+public:
 
     /**
      * Method to get the current template

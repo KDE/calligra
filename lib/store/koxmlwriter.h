@@ -39,24 +39,6 @@ public:
      * the given QIODevice.
      */
     KoXmlWriter( QIODevice* dev, int indentLevel = 0 );
-    /**
-     *  Return an XML writer for saving Oasis XML into the device @p dev,
-     *  including the XML processing instruction,
-     *  the complete DOCTYPE tag (with systemId and publicId),
-     *  and the root element with all its namespaces.
-     *  You can add more namespaces afterwards with addAttribute.
-     *
-     *  @param rootElementName the tag name of the root element.
-     *     This is either office:document, office:document-content,
-     *     office:document-styles, office:document-meta or office:document-settings
-     *  @return the KoXmlWriter instance. It becomes owned by the caller, which
-     *  must delete it at some point.
-     *
-     * Once done with writing the contents of the root element, you
-     * will need to call endElement(); endDocument(); before destroying the KoXmlWriter.
-     * @note OASIS-specific
-     */
-    KoXmlWriter( QIODevice* dev, const char* rootElementName );
 
     /// Destructor
     ~KoXmlWriter();

@@ -5,10 +5,10 @@ INCLUDES= -I$(srcdir)/.. $(KSTORE_INCLUDES) $(all_includes)
 
 ####### Files
 
-check_PROGRAMS = priorityqueue_test filterchain_test filter_graph kogenstylestest
+check_PROGRAMS = priorityqueue_test filterchain_test filter_graph kogenstylestest \
+	kodomtest
 
-check: kogenstylestest
-	./kogenstylestest
+TESTS = kogenstylestest kodomtest
 
 priorityqueue_test_SOURCES = priorityqueue_test.cpp
 priorityqueue_test_LDADD = ../libkofficecore.la
@@ -21,6 +21,9 @@ filter_graph_LDADD = ../libkofficecore.la
 
 kogenstylestest_SOURCES = kogenstylestest.cpp
 kogenstylestest_LDADD = ../libkofficecore.la
+
+kodomtest_SOURCES = kodomtest.cpp
+kodomtest_LDADD = ../libkofficecore.la
 
 dot:
 	dot -Tpng -o graph.png graph.dot

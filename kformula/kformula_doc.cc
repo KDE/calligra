@@ -89,7 +89,7 @@ bool KFormulaDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
 
     KoStoreDevice dev( store );
-    KoXmlWriter contentWriter( &dev, "math:math" );
+    KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "math:math" );
 
 
     KTempFile contentTmpFile;
@@ -103,12 +103,13 @@ bool KFormulaDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     formula->saveMathML( stream, true );
 
     tmpFile->close();
-    contentWriter.addCompleteElement( tmpFile );
+    contentWriter->addCompleteElement( tmpFile );
     contentTmpFile.close();
 
 
 
-    contentWriter.endElement();
+    contentWriter->endElement();
+    delete contentWriter;
 
     if(!store->close())
         return false;

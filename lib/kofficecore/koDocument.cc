@@ -35,6 +35,7 @@
 #include <koDocumentInfo.h>
 #include <koOasisStyles.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
 
 #include <kprinter.h>
 #include <kio/netaccess.h>
@@ -954,7 +955,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
         KoXmlWriter* manifestWriter = new KoXmlWriter( &manifestBuffer );
         manifestWriter->startDocument( "manifest:manifest" );
         manifestWriter->startElement( "manifest:manifest" );
-        manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
+        manifestWriter->addAttribute( "xmlns:manifest", KoXmlNS::manifest );
         manifestWriter->addManifestEntry( "/", mimeType );
 
         if ( !saveOasis( store, manifestWriter ) )
@@ -2030,6 +2031,37 @@ QDomDocument KoDocument::createDomDocument( const QString& appName, const QStrin
     QDomDocument doc = impl.createDocument( namespaceURN, tagName, dtype );
     doc.insertBefore( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ), doc.documentElement() );
     return doc;
+}
+
+KoXmlWriter* KoDocument::createOasisXmlWriter( QIODevice* dev, const char* rootElementName )
+{
+    KoXmlWriter* writer = new KoXmlWriter( dev );
+    writer->startDocument( rootElementName );
+    writer->startElement( rootElementName );
+    writer->addAttribute( "xmlns:office", KoXmlNS::office );
+    writer->addAttribute( "xmlns:meta", KoXmlNS::meta );
+
+    if ( qstrcmp( rootElementName, "office:document-meta" ) != 0 ) {
+        writer->addAttribute( "xmlns:config", KoXmlNS::config );
+        writer->addAttribute( "xmlns:text", KoXmlNS::text );
+        writer->addAttribute( "xmlns:table", KoXmlNS::table );
+        writer->addAttribute( "xmlns:draw", KoXmlNS::draw );
+        writer->addAttribute( "xmlns:presentation", KoXmlNS::presentation );
+        writer->addAttribute( "xmlns:dr3d", KoXmlNS::dr3d );
+        writer->addAttribute( "xmlns:chart", KoXmlNS::chart );
+        writer->addAttribute( "xmlns:form", KoXmlNS::form );
+        writer->addAttribute( "xmlns:script", KoXmlNS::script );
+        writer->addAttribute( "xmlns:style", KoXmlNS::style );
+        writer->addAttribute( "xmlns:number", KoXmlNS::number );
+        writer->addAttribute( "xmlns:math", KoXmlNS::math );
+        writer->addAttribute( "xmlns:svg", KoXmlNS::svg );
+        writer->addAttribute( "xmlns:fo", KoXmlNS::fo );
+    }
+    // missing: office:version="1.0"
+
+    writer->addAttribute( "xmlns:dc", KoXmlNS::dc );
+    writer->addAttribute( "xmlns:xlink", KoXmlNS::xlink );
+    return writer;
 }
 
 QDomDocument KoDocument::saveXML()

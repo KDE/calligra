@@ -3267,7 +3267,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
 
     QBuffer buff;
     buff.open( IO_WriteOnly );
-    KoXmlWriter contentWriter( &buff, "office:document-content" );
+    KoXmlWriter* contentWriter = KoDocument::createOasisXmlWriter( &buff, "office:document-content" );
     // not sure how to avoid copy/pasting that code...
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
@@ -3282,14 +3282,15 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
     contentTmpWriter.endElement(); // office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    KWDocument::writeAutomaticStyles( contentWriter, mainStyles );
+    KWDocument::writeAutomaticStyles( *contentWriter, mainStyles );
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
-    contentWriter.addCompleteElement( tmpFile );
+    contentWriter->addCompleteElement( tmpFile );
     contentTmpFile.close();
-    contentWriter.endElement(); // document-content
-    contentWriter.endDocument();
+    contentWriter->endElement(); // document-content
+    contentWriter->endDocument();
+    delete contentWriter;
 
     const QByteArray data = buff.buffer();
     const QCString cstr( data.data(), data.size() + 1 ); // null-terminate

@@ -271,7 +271,7 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
         return false;
 
     KoStoreDevice storeDev( store );
-    KoXmlWriter docWriter( &storeDev, "office:document-content" );
+    KoXmlWriter* docWriter = createOasisXmlWriter( &storeDev, "office:document-content" );
     KoGenStyles mainStyles;
 
     KoGenStyle pageLayout = m_pageLayout.saveOasis();
@@ -293,31 +293,32 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     contentTmpWriter.endElement(); // office:drawing
     contentTmpWriter.endElement(); // office:body
 
-    docWriter.startElement( "office:automatic-styles" );
+    docWriter->startElement( "office:automatic-styles" );
 
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_GRAPHICAUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( &docWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+        (*it).style->writeStyle( docWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
 
-    docWriter.endElement(); // office:automatic-styles
+    docWriter->endElement(); // office:automatic-styles
 
     styles = mainStyles.styles( KoGenStyle::STYLE_MASTER );
     it = styles.begin();
-    docWriter.startElement("office:master-styles");
+    docWriter->startElement("office:master-styles");
 
     for( ; it != styles.end(); ++it)
-        (*it).style->writeStyle( &docWriter, mainStyles, "style:master-page", (*it).name, "");
+        (*it).style->writeStyle( docWriter, mainStyles, "style:master-page", (*it).name, "");
 
-    docWriter.endElement(); // office:master-styles
+    docWriter->endElement(); // office:master-styles
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
-    docWriter.addCompleteElement( tmpFile );
+    docWriter->addCompleteElement( tmpFile );
     contentTmpFile.close();
 
-    docWriter.endElement(); // Root element
-    docWriter.endDocument();
+    docWriter->endElement(); // Root element
+    docWriter->endDocument();
+    delete docWriter;
 
     if( !store->close() )
         return false;
@@ -327,34 +328,35 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     if( !store->open( "styles.xml" ) )
         return false;
 
-    KoXmlWriter styleWriter( &storeDev, "office:document-styles" );
+    KoXmlWriter* styleWriter = createOasisXmlWriter( &storeDev, "office:document-styles" );
 
-    styleWriter.startElement( "office:styles" );
+    styleWriter->startElement( "office:styles" );
 
     styles = mainStyles.styles( VDocument::STYLE_LINEAR_GRADIENT );
     it = styles.begin();
     for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( &styleWriter, mainStyles, "svg:linearGradient", (*it).name, 0, true,  true /*add draw:name*/);
+        (*it).style->writeStyle( styleWriter, mainStyles, "svg:linearGradient", (*it).name, 0, true,  true /*add draw:name*/);
 
     styles = mainStyles.styles( VDocument::STYLE_RADIAL_GRADIENT );
     it = styles.begin();
     for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( &styleWriter, mainStyles, "svg:radialGradient", (*it).name, 0, true,  true /*add draw:name*/);
+        (*it).style->writeStyle( styleWriter, mainStyles, "svg:radialGradient", (*it).name, 0, true,  true /*add draw:name*/);
 
-    styleWriter.endElement(); // office:styles
+    styleWriter->endElement(); // office:styles
 
-    styleWriter.startElement( "office:automatic-styles" );
+    styleWriter->startElement( "office:automatic-styles" );
 
     QValueList<KoGenStyles::NamedStyle> styleList = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     it = styleList.begin();
 
     for( ; it != styleList.end(); ++it )
-        (*it).style->writeStyle( &styleWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
+        (*it).style->writeStyle( styleWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
 
-    styleWriter.endElement(); // office:automatic-styles
+    styleWriter->endElement(); // office:automatic-styles
 
-    styleWriter.endElement(); // Root element
-    styleWriter.endDocument();
+    styleWriter->endElement(); // Root element
+    styleWriter->endDocument();
+    delete styleWriter;
 
     if( !store->close() )
         return false;
@@ -366,26 +368,26 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
         return false;
 
 
-    KoXmlWriter settingsWriter(&storeDev, "office:document-settings");
-    settingsWriter.startElement("office:settings");
-    settingsWriter.startElement("config:config-item-set");
-    settingsWriter.addAttribute("config:name", "view-settings");
+    KoXmlWriter* settingsWriter = createOasisXmlWriter(&storeDev, "office:document-settings");
+    settingsWriter->startElement("office:settings");
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "view-settings");
 
 
     //<config:config-item-map-indexed config:name="Views">
-    settingsWriter.startElement("config:config-item-map-indexed" );
-    settingsWriter.addAttribute("config:name", "Views" );
-    settingsWriter.startElement("config:config-item-map-entry" );
-    KoUnit::saveOasis(&settingsWriter, unit());
-    saveOasisSettings( settingsWriter );
-    settingsWriter.endElement();
+    settingsWriter->startElement("config:config-item-map-indexed" );
+    settingsWriter->addAttribute("config:name", "Views" );
+    settingsWriter->startElement("config:config-item-map-entry" );
+    KoUnit::saveOasis(settingsWriter, unit());
+    saveOasisSettings( *settingsWriter );
+    settingsWriter->endElement();
 
 
-    settingsWriter.endElement(); //config:config-item-map-indexed
-    settingsWriter.endElement(); // config:config-item-set
-    settingsWriter.endElement(); // office:settings
-    settingsWriter.endElement(); // Root element
-    settingsWriter.endDocument();
+    settingsWriter->endElement(); //config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
+    settingsWriter->endElement(); // office:settings
+    settingsWriter->endElement(); // Root element
+    settingsWriter->endDocument();
 
 
 

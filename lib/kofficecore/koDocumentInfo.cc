@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+   Copyright (C) 2004 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,16 +18,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koDocumentInfo.h>
-#include <koDocument.h>
-#include <qdom.h>
-#include <qobjectlist.h>
-#include <kconfig.h>
-#include <kdebug.h>
-#include <kofficeversion.h>
-#include <koApplication.h>
+#include "koDocumentInfo.h"
+#include "kodom.h"
+#include "koDocument.h"
+#include "kofficeversion.h"
+#include "koApplication.h"
+
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
+
+#include <kconfig.h>
+#include <kdebug.h>
+
+#include <qobjectlist.h>
+#include "koxmlns.h"
 
 /*****************************************
  *
@@ -70,8 +75,8 @@ bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
     {
         KoDocumentInfoPage* p = page( *it );
         Q_ASSERT( p );
-        QDomNode meta   = metaDoc.namedItem( "office:document-meta" );
-        QDomNode office = meta.namedItem( "office:meta" );
+        QDomNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
+        QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
         if ( office.isNull() )
             return false;
 
@@ -105,24 +110,25 @@ QDomDocument KoDocumentInfo::save()
 bool KoDocumentInfo::saveOasis( KoStore* store )
 {
     KoStoreDevice dev( store );
-    KoXmlWriter xmlWriter( &dev, "office:document-meta" );
-    xmlWriter.startElement( "office:meta" );
+    KoXmlWriter* xmlWriter = KoDocument::createOasisXmlWriter( &dev, "office:document-meta" );
+    xmlWriter->startElement( "office:meta" );
 
-    xmlWriter.startElement( "meta:generator");
-    xmlWriter.addTextNode( QString( "KOffice/%1" ).arg( KOFFICE_VERSION_STRING ) );
-    xmlWriter.endElement();
+    xmlWriter->startElement( "meta:generator");
+    xmlWriter->addTextNode( QString( "KOffice/%1" ).arg( KOFFICE_VERSION_STRING ) );
+    xmlWriter->endElement();
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
         KoDocumentInfoPage* p = page( *it );
         Q_ASSERT( p );
-        if ( !p->saveOasis( xmlWriter ) )
+        if ( !p->saveOasis( *xmlWriter ) )
             return false;
     }
-    xmlWriter.endElement();
-    xmlWriter.endElement(); // root element
-    xmlWriter.endDocument();
+    xmlWriter->endElement();
+    xmlWriter->endElement(); // root element
+    xmlWriter->endDocument();
+    delete xmlWriter;
     return true;
 }
 

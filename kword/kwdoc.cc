@@ -2587,7 +2587,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoStoreDevice contentDev( store );
-    KoXmlWriter contentWriter( &contentDev, "office:document-content" );
+    KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
 
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
     recalcVariables( VT_DATE );
@@ -2608,22 +2608,23 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:text" );
 
+    // save the content into contentTmpWriter!
     saveOasisBody( contentTmpWriter, savingContext );
-    // TODO save the content into contentTmpWriter!
     // TODO save embedded objects
 
     contentTmpWriter.endElement(); // office:text
     contentTmpWriter.endElement(); // office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    writeAutomaticStyles( contentWriter, mainStyles );
+    writeAutomaticStyles( *contentWriter, mainStyles );
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
-    contentWriter.addCompleteElement( tmpFile );
+    contentWriter->addCompleteElement( tmpFile );
     contentTmpFile.close();
-    contentWriter.endElement(); // document-content
-    contentWriter.endDocument();
+    contentWriter->endElement(); // document-content
+    contentWriter->endDocument();
+    delete contentWriter;
 
     if ( !store->close() ) // done with content.xml
         return false;
@@ -2645,7 +2646,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if(!store->open("settings.xml"))
         return false;
 
-    KoXmlWriter settingsWriter(&contentDev, "office:document-settings");
+    KoXmlWriter& settingsWriter = *createOasisXmlWriter(&contentDev, "office:document-settings");
     settingsWriter.startElement("office:settings");
     settingsWriter.startElement("config:config-item-set");
 
@@ -2669,6 +2670,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element
     settingsWriter.endDocument();
+    delete &settingsWriter;
 
     if(!store->close())
         return false;
@@ -2732,44 +2734,45 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
 {
     QString pageLayoutName;
     KoStoreDevice stylesDev( store );
-    KoXmlWriter stylesWriter( &stylesDev, "office:document-styles" );
+    KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
-    stylesWriter.startElement( "office:styles" );
+    stylesWriter->startElement( "office:styles" );
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
-    m_styleColl->saveOasisOutlineStyles( stylesWriter );
-    stylesWriter.endElement(); // office:styles
+    m_styleColl->saveOasisOutlineStyles( *stylesWriter );
+    stylesWriter->endElement(); // office:styles
 
-    stylesWriter.startElement( "office:automatic-styles" );
+    stylesWriter->startElement( "office:automatic-styles" );
 
     styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
         //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
         // which only works as long as we have only one page master
-        stylesWriter.endElement();
+        stylesWriter->endElement();
         Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
         pageLayoutName = (*it).name;
     }
 
 
 
-    stylesWriter.endElement(); // office:automatic-styles
+    stylesWriter->endElement(); // office:automatic-styles
 
-    stylesWriter.startElement( "office:master-styles" );
-    stylesWriter.startElement( "style:master-page" );
-    stylesWriter.addAttribute( "style:name", "Standard" );
-    stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
-    stylesWriter.endElement();
-    stylesWriter.endElement(); // office:master-styles
+    stylesWriter->startElement( "office:master-styles" );
+    stylesWriter->startElement( "style:master-page" );
+    stylesWriter->addAttribute( "style:name", "Standard" );
+    stylesWriter->addAttribute( "style:page-layout-name", pageLayoutName );
+    stylesWriter->endElement();
+    stylesWriter->endElement(); // office:master-styles
 
-    stylesWriter.endElement(); // root element (office:document-styles)
-    stylesWriter.endDocument();
+    stylesWriter->endElement(); // root element (office:document-styles)
+    stylesWriter->endDocument();
+    delete stylesWriter;
 }
 
 void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const
