@@ -508,6 +508,11 @@ void KoDocument::setAutoErrorHandlingEnabled( bool b )
     d->m_autoErrorHandlingEnabled = b;
 }
 
+bool KoDocument::isAutoErrorHandlingEnabled()
+{
+    return d->m_autoErrorHandlingEnabled;
+}
+
 void KoDocument::slotAutoSave()
 {
     //kdDebug(30003)<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
