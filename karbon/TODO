@@ -31,6 +31,8 @@ GUI:
 -	gradient widget: the midpoint arrows are currently hard to hit and modify
 
 REAL BUGS:
+-	create an ellipse, then a rectangle. mark both and apply "round corners" =>
+	the rectangle sitn transformed, the commands history is incosistent, why?
 -	patterns dont zoom
 -	VSelectionTool has an offset error relative to the handle nodes in the VSelection.
 -	fix i18n singular/plural

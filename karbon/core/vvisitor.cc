@@ -30,6 +30,8 @@
 bool
 VVisitor::visit( VObject& object )
 {
+	m_success = false;
+
 	object.accept( *this );
 
 	return m_success;

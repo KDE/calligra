@@ -39,6 +39,11 @@ VReplacingCmd::~VReplacingCmd()
 void
 VReplacingCmd::execute()
 {
+	// Did we have at least once a success? Otherwise we don't get inserted
+	// into the command history.
+	bool successfull = false;
+
+
 	// Create new shapes if they don't exist yet.
 	if( !m_newObjects )
 	{
@@ -51,16 +56,14 @@ VReplacingCmd::execute()
 
 		for( ; itr.current(); ++itr )
 		{
-			// Reset success.
-			setSuccess( false );
-
 			// Clone object and visit the clone.
 			newObject = itr.current()->clone();
-			visit( *newObject );
 
 			// Success.
-			if( success() )
+			if( visit( *newObject ) )
 			{
+				successfull = true;
+
 				// Insert new shape right before old shape.
 				itr.current()->parent()->insertInfrontOf(
 					newObject, itr.current() );
@@ -100,6 +103,10 @@ VReplacingCmd::execute()
 		itr.current()->setState( VObject::normal );
 		document()->selection()->append( itr.current() );
 	}
+
+
+	// Tell command history wether we had success at least once.
+	setSuccess( successfull );
 }
 
 void
@@ -125,5 +132,9 @@ VReplacingCmd::unexecute()
 		document()->selection()->take( *itr.current() );
 		itr.current()->setState( VObject::deleted );
 	}
+
+
+	// Reset success for command history.
+	setSuccess( false );
 }
 
