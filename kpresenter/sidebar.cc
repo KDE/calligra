@@ -116,7 +116,7 @@ SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
   addTab(_outline, i18n("Outline"));
 
   _thb = new ThumbBar(this, doc, view);
-  addTab(_thb,i18n("Thumbs"));
+  addTab(_thb,i18n("Preview"));
 
 
   //TODO find a better way
