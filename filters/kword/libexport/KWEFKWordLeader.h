@@ -23,12 +23,7 @@
 #ifndef KWEF_KWORDLEADER_H
 #define KWEF_KWORDLEADER_H
 
-#include "KWEFBaseClass.h"
-
-class QDomDocument;
-class KWEFBaseWorker;
-
-class KWEFKWordLeader : public KWEFBaseClass
+class KWEFKWordLeader
 {
     public:
         KWEFKWordLeader(void) : m_worker(0 /*NULL*/) {}
@@ -57,7 +52,7 @@ class KWEFKWordLeader : public KWEFBaseClass
         bool doAbortFile(void);
         bool doOpenDocument(void);
         bool doCloseDocument(void);
-        bool doFullDocumentInfo(QDomDocument& info);
+        bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     private:
         KWEFBaseWorker* m_worker;
 };

@@ -43,7 +43,6 @@
 
 #include "KWEFStructures.h"
 #include "TagProcessing.h"
-#include "KWEFBaseClass.h"
 #include "ProcessDocument.h"
 #include "KWEFBaseWorker.h"
 #include "KWEFKWordLeader.h"
@@ -51,7 +50,7 @@
 static void ProcessParagraphTag ( QDomNode      myNode,
                            void          *,
                            QString       &outputText,
-                           KWEFBaseClass *exportFilter )
+                           KWEFKWordLeader *exportFilter )
 {
     AllowNoAttributes (myNode);
 
@@ -75,7 +74,7 @@ static void ProcessParagraphTag ( QDomNode      myNode,
 static void ProcessFramesetTag ( QDomNode      myNode,
                           void          *,
                           QString       &outputText,
-                          KWEFBaseClass *exportFilter )
+                          KWEFKWordLeader *exportFilter )
 {
     int frameType=-1;
     int frameInfo=-1;
@@ -104,7 +103,7 @@ static void ProcessFramesetTag ( QDomNode      myNode,
 static void ProcessFramesetsTag ( QDomNode      myNode,
                            void          *,
                            QString       &outputText,
-                           KWEFBaseClass *exportFilter )
+                           KWEFKWordLeader *exportFilter )
 {
     AllowNoAttributes (myNode);
 
@@ -113,7 +112,7 @@ static void ProcessFramesetsTag ( QDomNode      myNode,
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
-static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )
+static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader* exportFilter )
 {
     kdDebug() << "Entering ProcessStyleTag" << endl;
 
@@ -128,7 +127,7 @@ static void ProcessStyleTag (QDomNode myNode, void *, QString &outputText, KWEFB
 
     kdDebug() << "Exiting ProcessStyleTag" << endl;
 }
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFKWordLeader* exportFilter )
 {
     AllowNoAttributes (myNode);
 
@@ -142,7 +141,7 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText
     leader->doCloseStyles();
 }
 
-static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter)
+static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, KWEFKWordLeader* exportFilter)
 {
 
     int format=-1;
@@ -172,7 +171,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText, KWE
 static void ProcessDocTag ( QDomNode       myNode,
                      void           *,
                      QString        &outputText,
-                     KWEFBaseClass  *exportFilter )
+                     KWEFKWordLeader  *exportFilter )
 {
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
@@ -255,10 +254,10 @@ bool KWEFKWordLeader::doFullParagraph(QString& paraText, LayoutData& layout, Val
 DO_VOID_DEFINITION(doOpenTextFrameSet)
 DO_VOID_DEFINITION(doCloseTextFrameSet)
 
-bool KWEFKWordLeader::doFullDocumentInfo(QDomDocument& info)
+bool KWEFKWordLeader::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
     if (m_worker)
-        return m_worker->doFullDocumentInfo(info);
+        return m_worker->doFullDocumentInfo(docInfo);
     return false;
 }
 
@@ -306,7 +305,11 @@ bool KWEFKWordLeader::filter(const QString& filenameIn, const QString& filenameO
         QDomDocument qDomDocumentInfo;
         qDomDocumentInfo.setContent (infoArrayIn);
 
-        doFullDocumentInfo(qDomDocumentInfo);
+        QDomNode docNode = qDomDocumentInfo.documentElement ();
+        KWEFDocumentInfo docInfo;
+        QString strDummy;
+        ProcessDocumentInfoTag (docNode, &docInfo, strDummy, this);
+        doFullDocumentInfo(docInfo);
     }
     else
     {

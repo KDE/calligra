@@ -41,7 +41,7 @@ class KWEFBaseWorker
         virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
         virtual bool doOpenTextFrameSet(void); // Like AbiWord's <section>
         virtual bool doCloseTextFrameSet(void); // Like AbiWord's </section>
-        virtual bool doFullDocumentInfo(QDomDocument& info);  // PROVISORY!
+        virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
         virtual bool doFullPaperFormat(const int format,
             const double width, const double height, const int orientation); // Like AbiWord's <papersize>
         virtual bool doOpenHead(void); // Like HTML's <HEAD>

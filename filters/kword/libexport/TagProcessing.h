@@ -36,11 +36,12 @@
 #ifndef EXPORTTAGPROCESSING_H
 #define EXPORTTAGPROCESSING_H
 
-#include <kdebug.h>
 #include <qdom.h>
 #include <qvaluelist.h>
 
-class KWEFBaseClass;
+#include <kdebug.h>
+
+class KWEFKWordLeader;
 
 // The class TagProcessing and the two functions ProcessSubtags () and
 // AllowNoSubtags () allow for easing parsing of subtags in the
@@ -57,19 +58,19 @@ class TagProcessing
         {}
 
         TagProcessing (QString  n,
-                       void     (*p)(QDomNode, void *, QString &, KWEFBaseClass*),
+                       void     (*p)(QDomNode, void *, QString &, KWEFKWordLeader*),
                        void    *d) : name (n), processor (p), data (d)
         {}
 
         QString  name;
-        void     (*processor)(QDomNode, void *, QString &, KWEFBaseClass*);
+        void     (*processor)(QDomNode, void *, QString &, KWEFKWordLeader*);
         void    *data;
 };
 
 void ProcessSubtags     ( QDomNode                   parentNode,
                           QValueList<TagProcessing>  &tagProcessingList,
                           QString                    &outputText,
-                          KWEFBaseClass      *exportFilter);
+                          KWEFKWordLeader      *exportFilter);
 
 void AllowNoSubtags ( QDomNode  myNode );
 

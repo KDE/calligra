@@ -49,7 +49,7 @@
 void ProcessSubtags ( QDomNode                   parentNode,
                       QValueList<TagProcessing>  &tagProcessingList,
                       QString                    &outputText,
-                      KWEFBaseClass              *exportFilter)
+                      KWEFKWordLeader              *exportFilter)
 {
     QDomNode childNode;
 

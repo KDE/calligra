@@ -20,10 +20,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qdom.h>
-
 #include <kdebug.h>
 
+#include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"
 
 //
@@ -65,7 +64,7 @@ DO_FALSE_DEFINITION(doFullParagraph(QString&, LayoutData&, ValueListFormatData&)
 
 DO_TRUE_DEFINITION(doOpenTextFrameSet(void))
 DO_TRUE_DEFINITION(doCloseTextFrameSet(void))
-DO_TRUE_DEFINITION(doFullDocumentInfo(QDomDocument& info))
+DO_TRUE_DEFINITION(doFullDocumentInfo(const KWEFDocumentInfo& docInfo))
 DO_TRUE_DEFINITION(doFullPaperFormat(const int format, const double width, const double height, const int orientation))
 DO_TRUE_DEFINITION(doOpenHead(void))
 DO_TRUE_DEFINITION(doCloseHead(void))

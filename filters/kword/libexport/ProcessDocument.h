@@ -24,11 +24,13 @@
 #define PROCESS_DOCUMENT_H
 
 #include <qdom.h>
-#include <KWEFBaseClass.h>
 
-void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFBaseClass* exportFilter );
-void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFBaseClass* exportFilter );
-void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*);
+class KWEFKWordLeader;
+
+void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader* exportFilter );
+void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFKWordLeader* exportFilter );
+void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFKWordLeader*);
+void ProcessDocumentInfoTag ( QDomNode myNode,  void *tagData, QString &, KWEFKWordLeader *exportFilter );
 
 #endif /* PROCESS_DOCUMENT_H */
 

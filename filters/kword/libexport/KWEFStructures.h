@@ -33,8 +33,9 @@
 
 class FormatData
 /*
-   This class is based on a class in the old file:
+   This class is based on a class in the old files:
     /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/koffice/filters/kword/docbook/docbookexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -139,6 +140,29 @@ public:
     bool pageBreakBefore, pageBreakAfter;
     QString tabulator;
 };
+
+class KWEFDocumentInfo
+{
+public:
+    KWEFDocumentInfo(void) { } // Initiate all QString
+public:
+    // <ABOUT>
+    QString title;
+    QString abstract;
+    // <AUTHOR>
+    QString fullName;
+    QString jobTitle;
+    QString company;
+    QString email;
+    QString telephone;
+    QString fax;
+    QString country;
+    QString postalCode;
+    QString city;
+    QString street;
+};
+
+
 
 // Helper functions
 
