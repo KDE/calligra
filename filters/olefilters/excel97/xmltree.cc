@@ -1514,9 +1514,25 @@ bool XMLTree::_guts(Q_UINT32, QDataStream &)
   return true;
 }
 
-bool XMLTree::_hcenter(Q_UINT32, QDataStream &)
+bool XMLTree::_hcenter(Q_UINT32, QDataStream &body)
 {
-  return true;
+    Q_UINT16 flag;
+    body >> flag;
+
+    bool hcenter = (flag & 0x1) ? true : false;
+    
+    if(hcenter)
+    {
+	// FIXME: Add functionality to kspread
+	kdDebug() << "Printing Information: Center horizontally when printing!" << endl;
+    }
+    else
+    {
+	// FIXME: Add functionality to kspread
+	kdDebug() << "Printing Information: Don't center horizontally when printing!" << endl;
+    }
+    
+    return true;
 }
 
 bool XMLTree::_header(Q_UINT32, QDataStream &body)
@@ -1554,6 +1570,9 @@ bool XMLTree::_horizontalpagebreaks(Q_UINT32, QDataStream &)
 
 bool XMLTree::_imdata(Q_UINT32, QDataStream &)
 {
+  /* Could be used to find out if this document was writting
+   * on Windows or on Macintosh, same for the bitmap format
+   */
   return true;
 }
 
@@ -1943,9 +1962,64 @@ bool XMLTree::_scl(Q_UINT32, QDataStream &)
   return true;
 }
 
-bool XMLTree::_setup(Q_UINT32, QDataStream &)
+bool XMLTree::_setup(Q_UINT32, QDataStream &body)
 {
-  return true;
+    Q_UINT16 papersize, scale, resolution, verresolution, copies, flags;
+    
+    body >> papersize >> scale >> resolution >> verresolution >> copies >> flags;
+    
+    if((flags & 0x4) != 0x4)
+    {
+	if((flags & 0x40) != 0x40)
+	{
+	    if((flags & 0x2) == 0x2)
+	    {
+		paper.setAttribute("orientation", "portrait");
+	    	kdDebug() << "Printing Information: Orientation: Vertical!" << endl;
+	    }
+	    else
+	    {
+		paper.setAttribute("orientation", "landscape");
+	    	kdDebug() << "Printing Information: Orientation: Horizontal!" << endl;
+	    }
+	}
+    }
+    
+    if((flags & 0x1) == 0x1)
+    {
+	// FIXME: Add functionality to kspread
+	kdDebug() << "Printing Information: Print Order: Right then Down" << endl;
+    }
+    else
+    {
+	// FIXME: Add functionality to kspread
+	kdDebug() << "Printing Information: Print Order: Down then Right" << endl;
+    }
+
+    if((flags & 0x8) == 0x8)
+    {
+	// FIXME: Add functionality to kspread
+	kdDebug() << "Printing Information: Black and White only!" << endl;
+    }
+    else
+    {
+	// FIXME: Add functionality to kspread
+	kdDebug() << "Printing Information: Color Printing!" << endl;
+    }
+
+    if((flags & 0x10) == 0x10)
+    {
+	// FIXME: Add functionality to kspread
+	kdDebug() << "Printing Information: Print as Draft!" << endl;
+    }
+
+    if((flags & 0x20) == 0x20)
+    {
+	// FIXME: Add functionality to kspread
+	kdDebug() << "Printing Information: Printing Comments allowed!" << endl;
+    }
+    
+    return true;
 }
 
 bool XMLTree::_shrfmla(Q_UINT32, QDataStream &)
@@ -2003,7 +2077,7 @@ bool XMLTree::_sst(Q_UINT32, QDataStream &body)
     return true;
 }
 
-bool XMLTree::_standardwidth(Q_UINT32, QDataStream&body)
+bool XMLTree::_standardwidth(Q_UINT32, QDataStream &body)
 {
   Q_UINT16 width;
   body >> width;
@@ -2041,9 +2115,25 @@ bool XMLTree::_topmargin(Q_UINT32, QDataStream &body)
   return true;
 }
 
-bool XMLTree::_vcenter(Q_UINT32, QDataStream &)
+bool XMLTree::_vcenter(Q_UINT32, QDataStream &body)
 {
-  return true;
+    Q_UINT16 flag;
+    body >> flag;
+
+    bool vcenter = (flag & 0x1) ? true : false;
+    
+    if(vcenter)
+    {
+	// FIXME: Add functionality to ksprad
+	kdDebug() << "Printing Information: Center vertically when printing!" << endl;
+    }
+    else
+    {
+	// FIXME: Add functionality to ksprad
+	kdDebug() << "Printing Information: Don't center vertically when printing!" << endl;
+    }
+    
+    return true;
 }
 
 bool XMLTree::_verticalpagebreaks(Q_UINT32, QDataStream &)
@@ -2056,7 +2146,7 @@ bool XMLTree::_window1(Q_UINT32, QDataStream &)
   return true;
 }
 
-bool XMLTree::_window2(Q_UINT32, QDataStream & body)
+bool XMLTree::_window2(Q_UINT32, QDataStream &body)
 {
   Q_UINT16 nOpt;
   body>> nOpt;
