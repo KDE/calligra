@@ -2254,7 +2254,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 
 void KSpreadCanvas::doAutoScroll()
 {
-    if ( !m_bMousePressed)
+    if ( !m_bMousePressed )
     {
         m_scrollTimer->stop();
         return;
@@ -2291,6 +2291,9 @@ void KSpreadCanvas::doAutoScroll()
         mouseMoveEvent(event);
         delete event;
     }
+
+    //Restart timer
+    m_scrollTimer->start( 50 );
 }
 
 void KSpreadCanvas::deleteEditor( bool saveChanges )
