@@ -364,6 +364,12 @@ void ChgPixCmd::execute()
 {
     m_page->insertObject(oldObject, newObject);
     doc->repaint( newObject );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -371,6 +377,12 @@ void ChgPixCmd::unexecute()
 {
     m_page->insertObject(newObject, oldObject);
     doc->repaint( oldObject );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /******************************************************************/
@@ -423,6 +435,7 @@ void DeleteCmd::execute()
     }
     if(textObj)
         doc->updateRuler();
+
     if ( doc->refreshSideBar())
     {
         int pos=doc->pageList().findRef(m_page);
@@ -439,9 +452,9 @@ void DeleteCmd::unexecute()
 	objects.at( i )->addToObjList();
 	doc->repaint( objects.at( i ) );
     }
+
     if ( doc->refreshSideBar())
     {
-
         int pos=doc->pageList().findRef(m_page);
         doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
     }
@@ -1663,6 +1676,8 @@ PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSett
     doc = _doc;
     newSettings = _newSettings;
 
+    m_page = doc->findSideBarPage( objects );
+
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
@@ -1693,6 +1708,12 @@ void PictureSettingCmd::execute()
         }
     }
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -1709,6 +1730,12 @@ void PictureSettingCmd::unexecute()
         }
     }
     doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
 }
 
 /******************************************************************/

@@ -673,6 +673,7 @@ protected:
     QPtrList<PictureSettings> oldSettings;
     QPtrList<KPObject> objects;
     PictureSettings newSettings;
+    KPrPage *m_page;
 
 };
 
