@@ -49,9 +49,7 @@ public:
     //repaint object when we spell check
     virtual void slotRepaintChanged(KoTextObject *obj)=0;
 
-    virtual void objectForSpellChecking(KoTextObject *obj)=0;
-
-    virtual void nextTextFrameSet( KoTextObject *obj )=0;
+    virtual KoTextObject* nextTextObject( KoTextObject *obj )=0;
 
 public slots:
     void startBackgroundSpellCheck();
@@ -66,7 +64,6 @@ protected slots:
 protected:
     void nextParagraphNeedingCheck();
 
-    KoTextObject * currObj;
     // Structure holding the background spellcheck data
     struct KoBGSpell {
         KoBGSpell() : kspell(0L), currentTextObj(0L), currentParag(0L) {}

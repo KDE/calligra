@@ -37,11 +37,10 @@ public:
     //repaint object when we spell check
     virtual void slotRepaintChanged(KoTextObject *obj);
 
-    virtual void objectForSpellChecking(KoTextObject *obj);
 
     KWTextFrameSet *currentCheckSpellingFrame(){ return m_currentFrame;}
 
-    virtual void nextTextFrameSet( KoTextObject *obj );
+    virtual KoTextObject *nextTextObject( KoTextObject *obj );
 
 private:
     KWDocument *m_doc;

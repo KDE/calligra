@@ -65,8 +65,6 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
         return;
     kdDebug() << "KoBgSpellCheck::startBackgroundSpellCheck" << endl;
 
-    m_bgSpell.currentTextObj = currObj;
-
     m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
     nextParagraphNeedingCheck();
     //kdDebug() << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
@@ -134,7 +132,7 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
     if( !m_bgSpell.currentParag)
     {
         KoTextObject *obj=m_bgSpell.currentTextObj;
-        nextTextFrameSet( m_bgSpell.currentTextObj );
+        m_bgSpell.currentTextObj=nextTextObject( m_bgSpell.currentTextObj );
         if ( m_bgSpell.currentTextObj && m_bgSpell.currentTextObj!=obj)
             m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
         else

@@ -43,9 +43,9 @@ void KWBgSpellCheck::objectForSpell(KWTextFrameSet *curr)
 {
     m_currentFrame=curr;
     if( m_currentFrame && m_currentFrame->textObject())
-        objectForSpellChecking(m_currentFrame->textObject());
+        m_bgSpell.currentTextObj=m_currentFrame->textObject();
     else
-        objectForSpellChecking(0L);
+        m_bgSpell.currentTextObj=0L;
 }
 
 void KWBgSpellCheck::slotRepaintChanged(KoTextObject *obj)
@@ -54,25 +54,19 @@ void KWBgSpellCheck::slotRepaintChanged(KoTextObject *obj)
         m_doc->slotRepaintChanged(m_currentFrame);
 }
 
-void KWBgSpellCheck::objectForSpellChecking(KoTextObject *obj)
-{
-    currObj=obj;
-    m_bgSpell.currentTextObj=obj;
-}
-
-void KWBgSpellCheck::nextTextFrameSet( KoTextObject *obj )
+KoTextObject *KWBgSpellCheck::nextTextObject( KoTextObject *obj )
 {
     if( m_currentFrame->textObject()==obj)
     {
         m_currentFrame=m_doc->nextTextFrameSet(m_currentFrame);
         if(!m_currentFrame)
-            objectForSpellChecking(0L);
+            return 0L;
         else
-            objectForSpellChecking(m_currentFrame->textObject());
+            return m_currentFrame->textObject();
     }
     else
     {
         m_currentFrame=0L;
-        objectForSpellChecking(0L);
+        return 0L;
     }
 }
