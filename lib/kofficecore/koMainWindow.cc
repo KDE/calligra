@@ -324,9 +324,8 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 bool KoMainWindow::queryClose()
 {
-  qDebug( "queryClose!" ); 
   return closeDocument();
-} 
+}
 
 bool KoMainWindow::closeDocument()
 {
