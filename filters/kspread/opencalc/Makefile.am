@@ -4,11 +4,11 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
 	$(KOTEXT_INCLUDES) $(KOSCRIPT_INCLUDES) $(all_includes)
 
 ####### Files
-kde_module_LTLIBRARIES = libopencalcimport.la 
+kde_module_LTLIBRARIES = libopencalcimport.la libopencalcexport.la
 
-# libopencalcexport_la_SOURCES = opencalcexport.cc
-# libopencalcexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-# libopencalcexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
+libopencalcexport_la_SOURCES = opencalcexport.cc opencalcstyleexport.cc
+libopencalcexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
+libopencalcexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
 
 libopencalcimport_la_SOURCES = opencalcimport.cc
 libopencalcimport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
@@ -16,6 +16,6 @@ libopencalcimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.l
 
 METASOURCES = AUTO
 
-service_DATA = kspread_opencalc_import.desktop
+service_DATA = kspread_opencalc_import.desktop kspread_opencalc_export.desktop
 
 servicedir = $(kde_servicesdir)
