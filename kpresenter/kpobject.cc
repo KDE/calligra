@@ -163,6 +163,9 @@ void KPObject::zoom(float _fakt)
   orig.setY(static_cast<int>(static_cast<float>(orig.y()) * presFakt));
   ext.setWidth(static_cast<int>(static_cast<float>(ext.width()) * presFakt));
   ext.setHeight(static_cast<int>(static_cast<float>(ext.height()) * presFakt));
+
+  setSize(ext);
+  setOrig(orig);
 }
 
 /*==================== zoom orig =================================*/
@@ -170,6 +173,9 @@ void KPObject::zoomOrig()
 {
   orig = oldOrig;
   ext = oldExt;
+
+  setSize(ext);
+  setOrig(orig);
 }
 
 /*======================== draw ==================================*/

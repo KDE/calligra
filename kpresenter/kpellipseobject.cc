@@ -22,12 +22,13 @@
 
 /*================ default constructor ===========================*/
 KPEllipseObject::KPEllipseObject()
-  : KPObject(), pen(), brush(), gColor1(red), gColor2(green)
+  : KPObject(), pen(), brush(), gColor1(red), gColor2(green), pix()
 {
   gradient = 0;
   fillType = FT_BRUSH;
   gType = BCT_GHORZ;
   drawShadow = false;
+  redrawPix = false;
 }
 
 /*================== overloaded constructor ======================*/
@@ -37,9 +38,14 @@ KPEllipseObject::KPEllipseObject(QPen _pen,QBrush _brush,FillType _fillType,
 {
   gType = _gType;
   fillType = _fillType;
+  redrawPix = false;
 
   if (fillType == FT_GRADIENT)
-    gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
+    {
+      gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
+      redrawPix = true;
+      pix.resize(getSize());
+    }
   else
     gradient = 0;
   drawShadow = false;
@@ -50,7 +56,11 @@ void KPEllipseObject::setSize(int _width,int _height)
 {
   KPObject::setSize(_width,_height);
   if (fillType == FT_GRADIENT && gradient)
-    gradient->setSize(getSize());
+    {
+      gradient->setSize(getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
 }
 
 /*================================================================*/
@@ -58,7 +68,11 @@ void KPEllipseObject::resizeBy(int _dx,int _dy)
 {
   KPObject::resizeBy(_dx,_dy);
   if (fillType == FT_GRADIENT && gradient)
-    gradient->setSize(getSize());
+    {
+      gradient->setSize(getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
 }
 
 /*================================================================*/
@@ -71,7 +85,12 @@ void KPEllipseObject::setFillType(FillType _fillType)
       delete gradient;
       gradient = 0;
     }
-  if (fillType == FT_GRADIENT && !gradient) gradient = new KPGradient(gColor1,gColor2,gType,getSize());
+  if (fillType == FT_GRADIENT && !gradient) 
+    {
+      gradient = new KPGradient(gColor1,gColor2,gType,getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
 }
 
 /*========================= save =================================*/
@@ -91,6 +110,11 @@ void KPEllipseObject::save(ostream& out)
       << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>(brush.style()) << "\"/>" << endl;
   out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
   out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
+  out << indent << "<FILLTYPE value=\"" << static_cast<int>(fillType) << "\"/>" << endl;
+  out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
+      << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\"" 
+      << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
+      << static_cast<int>(gType) << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -230,6 +254,47 @@ void KPEllipseObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		presNum = atoi((*it).m_strValue.c_str());
 	    }
 	}
+
+      // fillType
+      else if (name == "FILLTYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		fillType = static_cast<FillType>(atoi((*it).m_strValue.c_str()));
+	    }
+	  setFillType(fillType);
+	}
+
+      // gradient
+      else if (name == "GRADIENT")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "red1")
+		gColor1 = QColor(atoi((*it).m_strValue.c_str()),gColor1.green(),gColor1.blue());
+	      if ((*it).m_strName == "green1")
+		gColor1 = QColor(gColor1.red(),atoi((*it).m_strValue.c_str()),gColor1.blue());
+	      if ((*it).m_strName == "blue1")
+		gColor1 = QColor(gColor1.red(),gColor1.green(),atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "red2")
+		gColor2 = QColor(atoi((*it).m_strValue.c_str()),gColor2.green(),gColor2.blue());
+	      if ((*it).m_strName == "green2")
+		gColor2 = QColor(gColor2.red(),atoi((*it).m_strValue.c_str()),gColor2.blue());
+	      if ((*it).m_strName == "blue2")
+		gColor2 = QColor(gColor2.red(),gColor2.green(),atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "type")
+		gType = static_cast<BCType>(atoi((*it).m_strValue.c_str()));
+	    }
+	  setGColor1(gColor1);
+	  setGColor2(gColor2);
+	  setGType(gType);
+	}
+
       else
 	cerr << "Unknown tag '" << tag << "' in ELLIPSE_OBJECT" << endl;    
       
@@ -365,31 +430,38 @@ void KPEllipseObject::paint(QPainter* _painter)
 	  _painter->save();
 
 	  QRegion clipregion(ox,oy,ow - 2 * pw,oh - 2 * pw,QRegion::Ellipse);
+
+	  if (_painter->hasClipping())
+	    clipregion = _painter->clipRegion().intersect(clipregion);
+
 	  _painter->setClipRegion(clipregion);
-	  
+
 	  _painter->drawPixmap(pw,pw,*gradient->getGradient());
 
 	  _painter->restore();
 	}
       else
 	{
-	  QRegion clipregion(0,0,ow - 2 * pw,oh - 2 * pw,QRegion::Ellipse);
-	  QPicture pic;
-	  QPainter p;
+	  if (redrawPix)
+	    {
+	      redrawPix = false;
+	      QRegion clipregion(0,0,ow - 2 * pw,oh - 2 * pw,QRegion::Ellipse);
+	      QPicture pic;
+	      QPainter p;
+	      
+	      p.begin(&pic);
+	      p.setClipRegion(clipregion);
+	      p.drawPixmap(0,0,*gradient->getGradient());
+	      p.end();
+	      
+	      pix.fill(white);
+	      QPainter p2;
+	      p2.begin(&pix);
+	      p2.drawPicture(pic);
+	      p2.end();
+	    }
 
-	  p.begin(&pic);
-	  p.setClipRegion(clipregion);
-	  p.drawPixmap(0,0,*gradient->getGradient());
-	  p.end();
-
-	  QPixmap pix(ow - 2 * pw,oh - 2 * pw);
-	  pix.fill(white);
-	  QPainter p2;
-	  p2.begin(&pix);
-	  p2.drawPicture(pic);
-	  p2.end();
-
-	  _painter->drawPixmap(pw,pw,pix);
+	  _painter->drawPixmap(pw,pw,pix,0,0,ow - 2 * pw,oh - 2 * pw);
 	}
 
       _painter->setPen(pen);

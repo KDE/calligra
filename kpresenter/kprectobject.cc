@@ -30,6 +30,7 @@ KPRectObject::KPRectObject()
   gradient = 0;
   fillType = FT_BRUSH;
   gType = BCT_GHORZ;
+  drawShadow = false;
 }
 
 /*================== overloaded constructor ======================*/
@@ -42,6 +43,7 @@ KPRectObject::KPRectObject(QPen _pen,QBrush _brush,RectType _rectType,FillType _
   yRnd = _yRnd;
   gType = _gType;
   fillType = _fillType;
+  drawShadow = false;
 
   if (fillType == FT_GRADIENT)
     gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
@@ -96,6 +98,11 @@ void KPRectObject::save(ostream& out)
   out << indent << "<RECTTYPE value=\"" << static_cast<int>(rectType) << "\"/>" << endl;
   out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
   out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
+  out << indent << "<FILLTYPE value=\"" << static_cast<int>(fillType) << "\"/>" << endl;
+  out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
+      << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\"" 
+      << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
+      << static_cast<int>(gType) << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -172,6 +179,7 @@ void KPRectObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		  effect2 = (Effect2)atoi((*it).m_strValue.c_str());
 	    }
 	}
+
       // pen
       else if (name == "PEN")
 	{
@@ -247,6 +255,47 @@ void KPRectObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		presNum = atoi((*it).m_strValue.c_str());
 	    }
 	}
+
+      // fillType
+      else if (name == "FILLTYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		fillType = static_cast<FillType>(atoi((*it).m_strValue.c_str()));
+	    }
+	  setFillType(fillType);
+	}
+
+      // gradient
+      else if (name == "GRADIENT")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "red1")
+		gColor1 = QColor(atoi((*it).m_strValue.c_str()),gColor1.green(),gColor1.blue());
+	      if ((*it).m_strName == "green1")
+		gColor1 = QColor(gColor1.red(),atoi((*it).m_strValue.c_str()),gColor1.blue());
+	      if ((*it).m_strName == "blue1")
+		gColor1 = QColor(gColor1.red(),gColor1.green(),atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "red2")
+		gColor2 = QColor(atoi((*it).m_strValue.c_str()),gColor2.green(),gColor2.blue());
+	      if ((*it).m_strName == "green2")
+		gColor2 = QColor(gColor2.red(),atoi((*it).m_strValue.c_str()),gColor2.blue());
+	      if ((*it).m_strName == "blue2")
+		gColor2 = QColor(gColor2.red(),gColor2.green(),atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "type")
+		gType = static_cast<BCType>(atoi((*it).m_strValue.c_str()));
+	    }
+	  setGColor1(gColor1);
+	  setGColor2(gColor2);
+	  setGType(gType);
+	}
+
       else
 	cerr << "Unknown tag '" << tag << "' in RECT_OBJECT" << endl;    
       
@@ -271,6 +320,7 @@ void KPRectObject::draw(QPainter *_painter,int _diffx,int _diffy)
   
   if (shadowDistance > 0)
     {
+      drawShadow = true;
       QPen tmpPen(pen);
       pen.setColor(shadowColor);
       QBrush tmpBrush(brush);
@@ -317,6 +367,8 @@ void KPRectObject::draw(QPainter *_painter,int _diffx,int _diffy)
       brush = tmpBrush;
     }
   
+  drawShadow = false;
+
   _painter->restore();
   _painter->save();
 
@@ -365,6 +417,52 @@ void KPRectObject::paint(QPainter* _painter)
     _painter->drawRect(pw,pw,ow - 2 * pw,oh - 2 * pw);
   else
     _painter->drawRoundRect(pw,pw,ow - 2 * pw,oh - 2 * pw,xRnd,yRnd);
+
+  if (drawShadow || fillType == FT_BRUSH || !gradient)
+    {
+      int ow = ext.width();
+      int oh = ext.height();
+      
+      _painter->setPen(pen);
+      int pw = pen.width();
+      _painter->setBrush(brush);
+      if (rectType == RT_NORM)
+	_painter->drawRect(pw,pw,ow - 2 * pw,oh - 2 * pw);
+      else
+	_painter->drawRoundRect(pw,pw,ow - 2 * pw,oh - 2 * pw,xRnd,yRnd);
+    }
+  else
+    {
+      if (rectType == RT_NORM)
+	{
+	  int ow = ext.width();
+	  int oh = ext.height();
+	  int pw = pen.width();
+	  
+	  if (angle == 0)
+	    _painter->drawPixmap(pw,pw,*gradient->getGradient(),0,0,ow - 2 * pw,oh - 2 * pw);
+	  else
+	    {
+	      QPixmap pix(ow - 2 * pw,oh - 2 * pw);
+	      QPainter p;
+	      p.begin(&pix);
+	      p.drawPixmap(0,0,*gradient->getGradient());
+	      p.end();
+	      
+	      _painter->drawPixmap(pw,pw,pix);
+	    }
+	  
+	  _painter->setPen(pen);
+	  _painter->setBrush(NoBrush);
+	  _painter->drawRect(pw,pw,ow - 2 * pw,oh - 2 * pw);
+	}
+      else
+	{
+	  _painter->setPen(pen);
+	  _painter->setBrush(brush);
+	  _painter->drawRoundRect(pw,pw,ow - 2 * pw,oh - 2 * pw,xRnd,yRnd);
+	}
+    }
 }
 
 

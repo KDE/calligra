@@ -17,7 +17,6 @@
 #define kprectobject_h
 
 #include <qregion.h>
-#include <qpicture.h>
 
 #include "kpobject.h"
 #include "kpgradient.h"
@@ -92,6 +91,7 @@ protected:
   FillType fillType;
 
   KPGradient *gradient;
+  bool drawShadow;
 
 };
 

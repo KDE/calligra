@@ -22,28 +22,36 @@
 
 /*================ default constructor ===========================*/
 KPAutoformObject::KPAutoformObject()
-  : KPObject(), pen(), brush(), filename(), gColor1(red), gColor2(green), atfInterp(0,"")
+  : KPObject(), pen(), brush(), filename(), gColor1(red), gColor2(green), atfInterp(0,""), pix()
 {
   lineBegin = L_NORMAL;
   lineEnd = L_NORMAL;
   gradient = 0;
   fillType = FT_BRUSH;
   gType = BCT_GHORZ;
+  drawShadow = false;
+  redrawPix = false;
 }
 
 /*================== overloaded constructor ======================*/
 KPAutoformObject::KPAutoformObject(QPen _pen,QBrush _brush,QString _filename,LineEnd _lineBegin,LineEnd _lineEnd,
 				   FillType _fillType,QColor _gColor1,QColor _gColor2,BCType _gType)
-  : KPObject(), pen(_pen), brush(_brush), filename(_filename), gColor1(_gColor1), gColor2(_gColor2), atfInterp(0,"")
+  : KPObject(), pen(_pen), brush(_brush), filename(_filename), gColor1(_gColor1), gColor2(_gColor2), atfInterp(0,""), pix()
 {
   atfInterp.load(filename);
   lineBegin = _lineBegin;
   lineEnd = _lineEnd;
   gType = _gType;
   fillType = _fillType;
+  drawShadow = false;
+  redrawPix = true;
 
   if (fillType == FT_GRADIENT)
-    gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
+    {
+      gradient = new KPGradient(gColor1,gColor2,gType,QSize(1,1));
+      redrawPix = true;
+      pix.resize(getSize());
+    }
   else
     gradient = 0;
 }
@@ -53,7 +61,11 @@ void KPAutoformObject::setSize(int _width,int _height)
 {
   KPObject::setSize(_width,_height);
   if (fillType == FT_GRADIENT && gradient)
-    gradient->setSize(getSize());
+    {
+      gradient->setSize(getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
 }
 
 /*================================================================*/
@@ -61,7 +73,11 @@ void KPAutoformObject::resizeBy(int _dx,int _dy)
 {
   KPObject::resizeBy(_dx,_dy);
   if (fillType == FT_GRADIENT && gradient)
-    gradient->setSize(getSize());
+    {
+      gradient->setSize(getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
 }
 
 /*====================== set filename ============================*/
@@ -81,7 +97,12 @@ void KPAutoformObject::setFillType(FillType _fillType)
       delete gradient;
       gradient = 0;
     }
-  if (fillType == FT_GRADIENT && !gradient) gradient = new KPGradient(gColor1,gColor2,gType,getSize());
+  if (fillType == FT_GRADIENT && !gradient)
+    {
+      gradient = new KPGradient(gColor1,gColor2,gType,getSize());
+      redrawPix = true;
+      pix.resize(getSize());
+    }
 }
 
 /*========================= save =================================*/
@@ -110,6 +131,11 @@ void KPAutoformObject::save(ostream& out)
   QString str = qstrdup(filename);
   str = str.remove(0,len);
   out << indent << "<FILENAME value=\"" << str << "\"/>" << endl;
+  out << indent << "<FILLTYPE value=\"" << static_cast<int>(fillType) << "\"/>" << endl;
+  out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
+      << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\"" 
+      << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
+      << static_cast<int>(gType) << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -292,6 +318,46 @@ void KPAutoformObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	}
       
+      // fillType
+      else if (name == "FILLTYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		fillType = static_cast<FillType>(atoi((*it).m_strValue.c_str()));
+	    }
+	  setFillType(fillType);
+	}
+
+      // gradient
+      else if (name == "GRADIENT")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "red1")
+		gColor1 = QColor(atoi((*it).m_strValue.c_str()),gColor1.green(),gColor1.blue());
+	      if ((*it).m_strName == "green1")
+		gColor1 = QColor(gColor1.red(),atoi((*it).m_strValue.c_str()),gColor1.blue());
+	      if ((*it).m_strName == "blue1")
+		gColor1 = QColor(gColor1.red(),gColor1.green(),atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "red2")
+		gColor2 = QColor(atoi((*it).m_strValue.c_str()),gColor2.green(),gColor2.blue());
+	      if ((*it).m_strName == "green2")
+		gColor2 = QColor(gColor2.red(),atoi((*it).m_strValue.c_str()),gColor2.blue());
+	      if ((*it).m_strName == "blue2")
+		gColor2 = QColor(gColor2.red(),gColor2.green(),atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "type")
+		gType = static_cast<BCType>(atoi((*it).m_strValue.c_str()));
+	    }
+	  setGColor1(gColor1);
+	  setGColor2(gColor2);
+	  setGType(gType);
+	}
+
       else
 	cerr << "Unknown tag '" << tag << "' in AUTOFORM_OBJECT" << endl;    
       
@@ -316,6 +382,7 @@ void KPAutoformObject::draw(QPainter *_painter,int _diffx,int _diffy)
   
   if (shadowDistance > 0)
     {
+      drawShadow = true;
       QPen tmpPen(pen);
       pen.setColor(shadowColor);
       QBrush tmpBrush(brush);
@@ -361,6 +428,8 @@ void KPAutoformObject::draw(QPainter *_painter,int _diffx,int _diffy)
       pen = tmpPen;
       brush = tmpBrush;
     }
+
+  drawShadow = false;
   
   _painter->restore();
   _painter->save();
@@ -466,7 +535,60 @@ void KPAutoformObject::paint(QPainter* _painter)
   if (pntArray2.size() > 0)
     {
       if (pntArray2.at(0) == pntArray2.at(pntArray2.size() - 1))
-	_painter->drawPolygon(pntArray2);
+	{
+	  if (drawShadow || fillType == FT_BRUSH || !gradient)
+	    _painter->drawPolygon(pntArray2);
+	  else
+	    {
+	      if (angle == 0)
+		{
+		  int ox = _painter->viewport().x() + static_cast<int>(_painter->worldMatrix().dx());
+		  int oy = _painter->viewport().y() + static_cast<int>(_painter->worldMatrix().dy());
+
+		  QPointArray pntArray3 = pntArray2.copy();
+		  pntArray3.translate(ox,oy);
+		  _painter->save();
+		  
+		  QRegion clipregion(pntArray3);
+
+		  if (_painter->hasClipping())
+		    clipregion = _painter->clipRegion().intersect(clipregion);
+
+		  _painter->setClipRegion(clipregion);
+
+		  _painter->drawPixmap(0,0,*gradient->getGradient());
+
+		  _painter->restore();
+		}
+	      else
+		{
+		  if (redrawPix)
+		    {
+		      redrawPix = false;
+		      QRegion clipregion(pntArray2);
+		      QPicture pic;
+		      QPainter p;
+		      
+		      p.begin(&pic);
+		      p.setClipRegion(clipregion);
+		      p.drawPixmap(0,0,*gradient->getGradient());
+		      p.end();
+		      
+		      pix.fill(white);
+		      QPainter p2;
+		      p2.begin(&pix);
+		      p2.drawPicture(pic);
+		      p2.end();
+		    }
+
+		  _painter->drawPixmap(0,0,pix);
+		}
+	      
+	      _painter->setPen(pen);
+	      _painter->setBrush(NoBrush);
+	      _painter->drawPolygon(pntArray2);
+	    }
+	}
       else
 	{
 	  QSize diff1(0,0),diff2(0,0);

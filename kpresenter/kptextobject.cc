@@ -330,7 +330,7 @@ void KPTextObject::deactivate()
 void KPTextObject::zoom(float _fakt)
 {
   KPObject::zoom(_fakt);
-  ktextobject.resize(ext);
+  //ktextobject.resize(ext);
   ktextobject.zoom(_fakt);
 }
 
@@ -338,7 +338,7 @@ void KPTextObject::zoom(float _fakt)
 void KPTextObject::zoomOrig()
 {
   KPObject::zoomOrig();
-  ktextobject.resize(ext);
+  //ktextobject.resize(ext);
   ktextobject.zoomOrig();
 }
 

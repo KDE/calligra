@@ -22,8 +22,8 @@
   <PAGE>
    <BACKTYPE value="0"/>
    <BACKVIEW value="1"/>
-   <BACKCOLOR1 red="0" green="128" blue="0"/>
-   <BACKCOLOR2 red="0" green="0" blue="128"/>
+   <BACKCOLOR1 red="0" green="0" blue="128"/>
+   <BACKCOLOR2 red="0" green="128" blue="0"/>
    <BCTYPE value="1"/>
    <PGEFFECT value="3"/>
   </PAGE>
@@ -272,6 +272,13 @@
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
       </OBJ>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
+       <COLOR red="255" green="255" blue="255"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
      </LINE>
     </PARAGRAPH>
    </TEXTOBJ>
@@ -310,6 +317,8 @@
    <RECTTYPE value="0"/>
    <PRESNUM value="1"/>
    <ANGLE value="0"/>
+   <FILLTYPE value="1"/>
+   <GRADIENT red1="0" green1="0" blue1="128" red2="0" green2="0" blue2="0" type="1"/>
   </OBJECT>
   <OBJECT type="4">
    <ORIG x="50" y="580"/>
@@ -379,6 +388,8 @@
    <RECTTYPE value="0"/>
    <PRESNUM value="1"/>
    <ANGLE value="0"/>
+   <FILLTYPE value="1"/>
+   <GRADIENT red1="0" green1="0" blue1="0" red2="0" green2="0" blue2="128" type="1"/>
   </OBJECT>
   <OBJECT type="4">
    <ORIG x="480" y="970"/>
@@ -448,6 +459,8 @@
    <RECTTYPE value="0"/>
    <PRESNUM value="2"/>
    <ANGLE value="0"/>
+   <FILLTYPE value="0"/>
+   <GRADIENT red1="255" green1="0" blue1="0" red2="0" green2="255" blue2="0" type="1"/>
   </OBJECT>
   <OBJECT type="4">
    <ORIG x="229" y="768"/>
@@ -826,6 +839,13 @@
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
       </OBJ>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
+       <COLOR red="255" green="0" blue="0"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
      </LINE>
     </PARAGRAPH>
     <PARAGRAPH horzAlign="0">
@@ -850,6 +870,13 @@
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
        <TEXT value="Line"/>
+      </OBJ>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
+       <COLOR red="255" green="255" blue="0"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
@@ -904,6 +931,13 @@
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
       </OBJ>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
+       <COLOR red="0" green="0" blue="255"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
      </LINE>
     </PARAGRAPH>
     <PARAGRAPH horzAlign="0">
@@ -943,6 +977,13 @@
        <VERTALIGN value="1"/>
        <TEXT value=" "/>
       </OBJ>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
+       <COLOR red="0" green="0" blue="0"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
      </LINE>
     </PARAGRAPH>
     <PARAGRAPH horzAlign="0">
@@ -967,6 +1008,13 @@
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
        <TEXT value="Line"/>
+      </OBJ>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="10" bold="1" italic="0" underline="0"/>
+       <COLOR red="255" green="255" blue="255"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>

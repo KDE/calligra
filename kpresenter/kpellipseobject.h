@@ -46,11 +46,11 @@ public:
     { brush = _brush; }
   virtual void setFillType(FillType _fillType);
   virtual void setGColor1(QColor _gColor1)
-    { if (gradient) gradient->setColor1(_gColor1); gColor1 = _gColor1; }
+    { if (gradient) gradient->setColor1(_gColor1); gColor1 = _gColor1; redrawPix = true; }
   virtual void setGColor2(QColor _gColor2)
-    { if (gradient) gradient->setColor2(_gColor2); gColor2 = _gColor2; }
+    { if (gradient) gradient->setColor2(_gColor2); gColor2 = _gColor2; redrawPix = true; }
   virtual void setGType(BCType _gType)
-    { if (gradient) gradient->setBackColorType(_gType); gType = _gType; }
+    { if (gradient) gradient->setBackColorType(_gType); gType = _gType; redrawPix = true; }
 
   virtual ObjType getType()
     { return OT_ELLIPSE; }
@@ -83,6 +83,8 @@ protected:
 
   KPGradient *gradient;
   bool drawShadow;
+  QPixmap pix;
+  bool redrawPix;
 
 };
 
