@@ -157,10 +157,19 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     enableButtonOK(false);
     d->m_changed=false;
     updatePixmap();
+
+    connect(d->m_groups,SIGNAL( selectionChanged()),this,SLOT(slotSelectionChanged()));
+
+    d->m_remove->setEnabled(d->m_groups->currentItem());
 }
 
 KoTemplateCreateDia::~KoTemplateCreateDia() {
     delete d;
+}
+
+void KoTemplateCreateDia::slotSelectionChanged()
+{
+    d->m_remove->setEnabled(d->m_groups->currentItem());
 }
 
 void KoTemplateCreateDia::createTemplate( const QCString &templateType, KInstance *instance,

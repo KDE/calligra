@@ -61,7 +61,7 @@ private slots:
 
     void slotAddGroup();
     void slotRemove();
-
+    void slotSelectionChanged();
 private:
     void updatePixmap();
     void fillGroupTree();
