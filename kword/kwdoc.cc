@@ -1496,10 +1496,10 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement borders = doc.createElement( "PAPERBORDERS" );
     paper.appendChild( borders );
-    borders.setAttribute( "left", pageLayout.mmLeft );
-    borders.setAttribute( "top", pageLayout.mmTop );
-    borders.setAttribute( "right", pageLayout.mmRight );
-    borders.setAttribute( "bottom", pageLayout.mmBottom );
+    borders.setAttribute( "left", pageLayout.ptLeft );
+    borders.setAttribute( "top", pageLayout.ptTop );
+    borders.setAttribute( "right", pageLayout.ptRight );
+    borders.setAttribute( "bottom", pageLayout.ptBottom );
 
     QDomElement docattrs = doc.createElement( "ATTRIBUTES" );
     kwdoc.appendChild( docattrs );
