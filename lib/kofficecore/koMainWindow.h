@@ -186,11 +186,10 @@ public slots:
 protected:
 
     /**
-     * An alternative to @ref setRootDocument, which simply
-     * store the root document but does nothing to it - don't
-     * use this, it's special for KoShell.
+     * Special method for KOShell, to allow switching the root
+     * document (and its views) among a set of them.
      */
-    void setRootDocumentDirect( KoDocument *doc );
+    void setRootDocumentDirect( KoDocument *doc, const QList<KoView> & views );
 
     /**
      * Create a new empty document.

@@ -164,7 +164,7 @@ KoDocument::~KoDocument()
 
   QListIterator<KoMainWindow> shellIt( d->m_shells );
   for (; shellIt.current(); ++shellIt )
-    shellIt.current()->setRootDocumentDirect( 0L );
+    shellIt.current()->setRootDocumentDirect( 0L, QList<KoView>() );
 
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();

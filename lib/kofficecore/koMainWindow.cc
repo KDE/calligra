@@ -313,11 +313,10 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   }
 }
 
-void KoMainWindow::setRootDocumentDirect( KoDocument *doc )
+void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QList<KoView> & views )
 {
   d->m_rootDoc = doc;
-  // maybe we want to add the KoView as parameter and set it into
-  // d->m_rootView but it doesn't seem used at all ?!? (David)
+  d->m_rootViews = views;
   bool enable = d->m_rootDoc != 0 ? true : false;
   d->m_paDocInfo->setEnabled( enable );
   d->m_paSave->setEnabled( enable );
