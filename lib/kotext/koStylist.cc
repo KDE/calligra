@@ -595,7 +595,8 @@ void KoStyleFontTab::save()
     else
         m_style->format().setVAlign( QTextFormat::AlignNormal );
     m_style->format().setColor( m_chooser->color() );
-    m_style->format().setTextBackgroundColor(m_chooser->backGroundColor());
+    if(m_chooser->backGroundColor()!=QApplication::palette().color( QPalette::Active, QColorGroup::Base ))
+        m_style->format().setTextBackgroundColor(m_chooser->backGroundColor());
 }
 
 QString KoStyleFontTab::tabName()
