@@ -1246,7 +1246,14 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	    str << *it.current();
 	}
 	buffer.close();
-	_store.write( buffer.buffer().data(), buffer.buffer().size() );
+	
+	KOStore::Data data;
+	int len = buffer.buffer().size();
+	data.length( len );
+	const char* p = buffer.buffer().data();
+	for( int i = 0; i < len; ++i )
+	    data[i] = *p++;
+	_store.write( data );
 	_store.close();
  	keys.append( it.currentKey() );
  	images.append( it.current()->getFilename() );
@@ -2388,25 +2395,29 @@ void KWordDocument::copySelectedText()
 
     QClipboard *cb = QApplication::clipboard();
 
-//     string clip_string;
-//     tostrstream out( clip_string );
+    QString clip_string;
+    parag2 = firstParag;
+    
+    QDomDocument d( "PARAGRAPHS" );
+    QDomElement e = d.createElement( "PARAGRAPHS" );
+    while( parag2 ) {
+	QDomElement p = parag2->save( doc );
+	if ( p.isNull() )
+	    return p;
+	e.appendChild( p );
+	parag2 = parag2->getNext();
+    }
+    
+    {
+	QTextStream str( clip_string, IO_WriteOnly );
+	str << d;
+    }
 
-//     parag2 = firstParag;
-//     out << otag << "<PARAGRAPHS>" << endl;
-//     while ( parag2 )
-//     {
-// 	out << otag << "<PARAGRAPH>" << endl;
-// 	parag2->save( out );
-// 	out << etag << "</PARAGRAPH>" << endl;
-// 	parag2 = parag2->getNext();
-//     }
-//     out << etag << "</PARAGRAPHS>" << endl;
+     KWordDrag *dr = new KWordDrag;
+     dr->setPlain( clipString );
+     dr->setKWord( clip_string );
 
-//     KWordDrag *d = new KWordDrag;
-//     d->setPlain( clipString );
-//     d->setKWord( clip_string.c_str() );
-
-//     cb->setData( d );
+     cb->setData( dr );
 }
 
 /*================================================================*/
