@@ -2390,15 +2390,14 @@ void KWView::deleteFrame( bool _warning )
 
         if ( fs->getNumFrames() == 1 && fs->type() == FT_TEXT) {
             if ( m_doc->processingType() == KWDocument::WP && m_doc->frameSetNum( fs ) == 0 )
-                return;
+                return; // if primairy FS, we can't delete it :)
 
-            KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(m_doc->frameSet( 0 ) );
-            if ( !textfs )
+            KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(fs);
+            if ( !textfs ) // assertion...
                 return;
 
             KoTextDocument * textdoc = textfs->textDocument();
-            KoTextParag * parag = textdoc->firstParag();
-            if ( parag && parag->string()->length() > 1 )
+            if ( textdoc->length() > 1 )
             {
                 int result = KMessageBox::warningContinueCancel(
                     this,
