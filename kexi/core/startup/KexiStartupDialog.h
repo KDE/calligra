@@ -1,12 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
-   Based on: KoTemplateChooseDia.h
-   Original autors:
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   2000, 2001 Werner Trobin <trobin@kde.org>
-   2002, 2003 Thomas Nagy <tnagy@eleve.emn.fr>
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -37,83 +31,6 @@
 
 #include <kexidb/connectiondata.h>
 
-/**
- * Our reimplementation of KIconCanvas used within the template-chooser dialog.
- * @internal
- */
-/*class KoTCDIconCanvas : public KIconCanvas
-{
-    Q_OBJECT
-    public:
-	KoTCDIconCanvas( QWidget *parent = 0, const char *name = 0L )
-	    : KIconCanvas( parent, name ) {}
-
-	bool isCurrentValid() { return currentItem(); }
-	QIconViewItem * load(KoTemplateGroup *group, const QString& name);
-
-    protected:
-	virtual void keyPressEvent( QKeyEvent *e ) {
-	    if ( e->key() == Key_Return || e->key() == Key_Enter )
-		e->ignore();
-	    else
-		KIconCanvas::keyPressEvent( e );
-	}
-};
-
-/// @internal
-class KoTCDIconViewItem : public KIconViewItem
-{
-    public:
-	KoTCDIconViewItem(QIconView *parent=0)
-	    : KIconViewItem ( parent )
-	    {}
-
-	KoTCDIconViewItem(QIconView *parent=0, const QString &text=0, const QPixmap &icon=0,
-                      const QString &descr=0, const QString &fullname=0)
-	    : KIconViewItem(parent, text, icon)
-	    {
-            m_descr = descr;
-            m_full = fullname;
-	    }
-
-	QString getDescr() const { return m_descr; }
-	QString getFName() const { return m_full; }
-
-    private :
-	QString m_descr;
-	QString m_full;
-
-};
-*/
-
-/**
- * Our reimplementation of KFileIconView used as the "recent files" view
- * within the template-chooser dialog.
- * @internal
- */
-/*class KoTCDRecentFilesIconView : public KFileIconView {
-    Q_OBJECT
-    public:
-	KoTCDRecentFilesIconView( QWidget* parent, const char* name ) :
-		KFileIconView( parent, name ), toolTip(0)
-	{
-	    connect( this, SIGNAL( onItem( QIconViewItem * ) ),
-                     SLOT( showToolTip( QIconViewItem * ) ) );
-	    connect( this, SIGNAL( onViewport() ),
-                     SLOT( removeToolTip() ) );
-	}
-        virtual ~KoTCDRecentFilesIconView();
-    protected:
-        virtual void hideEvent( QHideEvent * );
-
-    private slots:
-        void showToolTip( QIconViewItem* );
-        void removeToolTip();
-    private:
-        QLabel* toolTip;
-};
-*/
-
 class KTextBrowser;
 
 /*! Helper class for displaying templates set with description. */
@@ -140,41 +57,35 @@ class KexiProjectData;
 class KexiProjectSet;
 class KexiDBConnectionSet;
 
-/**
- *  This class is used to show the template dialog
- *  on startup. Unless you need something special, you should use the static
- *  method choose().
- *
- *  @short The template choose dialog
- *  @author Reginald Stadlbauer <reggie@kde.org>
- *  @author Werner Trobin <trobin@kde.org>
+/*!
+   This class is used to show the template/open-existing/open-recent tabbed dialog
+   on Kexi startup. 
  */
 class KEXICORE_EXPORT KexiStartupDialog : public KDialogBase
 {
     Q_OBJECT
 
 public:
-	/**
-	 * The Dialog returns one of these values depending
-	 * on the input of the user.
-	 * Cancel = The user pressed 'Cancel'
-	 * Template = The user selected a template
-	 * File = The user has chosen a file
-	 * Empty = The user selected "Empty document"
+	/*! The Dialog returns one of these values depending 
+	 on the input of the user.
+	 CancelResult = The user pressed 'Cancel'
+	 TemplateResult = The user selected a template
+	 OpenExistingResult = The user has chosen an existing connection or db file
+	 OpenRecentResult = The user selected one of recently used databases
 	 */
 	enum Result { CancelResult=0, TemplateResult=1, OpenExistingResult=2, OpenRecentResult=3 };
-	/**
-	 * To configure the dialog you have to use this enum 
-	 * (any !=0 or'ed value is ok)
-	 * - Templates = Show "Templates" tab
-	 * - OpenExisting Show "Open existing" tab
-	 * - OpenRecent = Show "Recent" tab
-	 ( - Everything = Show everything above
+	/*!
+	 To configure the dialog you have to use this enum 
+	  (any !=0 or'ed value is ok)
+	  - Templates = Show "Templates" tab
+	  - OpenExisting Show "Open existing" tab
+	  - OpenRecent = Show "Recent" tab
+	  - Everything = Show everything above
 	 */
 	enum DialogType { Templates = 1, OpenExisting = 2, OpenRecent = 4, Everything = (1+2+4) };
 
 	/*! Creates a dialog.
-	 @param dialogType
+	 @param dialogType see DialogType description
 	 @param recentProjects a set of recent projects' info, used for "Open recent" tab
 	 @param connSet conenction set used to present available conenctions
 	  in "Open Existing" tab. Pass an empty object is this tab is not used.
@@ -184,50 +95,7 @@ public:
 		const KexiDBConnectionSet& connSet,
 		const KexiProjectSet& recentProjects,
 		QWidget *parent = 0, const char *name = 0 );
-//		KInstance* global,
-//		const QCString &format="",
-//		const QString &nativePattern=QString::null,
-//		const QString &nativeName=QString::null,
-//		const QCString& templateType="");
 	~KexiStartupDialog();
-
-	/**
-	 * This is the static method you'll normally use to show the
-	 * dialog.
-	 * @param global the KInstance of your app
-	 * @param file this is the filename which is returned to your app
-	 * More precisely, it's a url (to give to KURL) if ReturnType is File
-	 * and it's a path (to open directly) if ReturnType is Template
-	 *
-	 * @param format is the mimetype of the app (e.g. application/x-kspread)
-	 * @param nativeName is the name of your app (e.g KSpread)
-	 * @param nativePattern is the native pattern (e.g. *.ksp)
-	 * @param dialogType the type of the dialog
-	 * @param templateType the template type of your application (see kword or
-	 *        kpresenter for details)
-	 * @return The return type (see above)
-	 */
-/*js	static ReturnType choose(KInstance* global, QString &file,
-		const QCString &format="",
-		const QString &nativePattern=QString::null,
-		const QString &nativeName=QString::null,
-		const DialogType &dialogType=Everything,
-		const QCString& templateType="");
-*/
-	/**
-	 * Method to get the current template
-	 */
-//	QString getTemplate() const;
-	/**
-	 * Method to get the "full" template (path+template)
-	 */
-//	QString getFullTemplate() const;
-	
-
-	/**
-	 * The dialogType - normally you won't need this one
-	 */
-//	DialogType getDialogType() const;
 
 	/*! Executes dialog. 
 	 \return one of Result values. Use this after dialog is closed. */
@@ -263,10 +131,6 @@ public:
 public slots:
 
 protected slots:
-    /**
-     * Activated when the Ok button has been clicked.
-     */
-//    virtual void slotOk();
 	virtual void done(int r);
 	virtual void reject();
 	
@@ -304,20 +168,6 @@ private:
 	void updateSelectedTemplateKeyInfo();
 
 	KexiStartupDialogPrivate *d;
-
-/*	QString descriptionText(const QString &name, const QString &description);
-	void setupDialog();
-	void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);
-	void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);
-	void setupRecentDialog(QWidget * widgetbase, QGridLayout * layout);
-	bool collectInfo();
-	bool noStartupDlg() const;
-*/
-//    private slots:
-
-//	void chosen(QIconViewItem *);
-//	void currentChanged( QIconViewItem * );
-//	void recentSelected( QIconViewItem * );
 };
 
 //! internal
@@ -335,7 +185,6 @@ public :
 	bool checkURL();
 
 signals:
-//	void cancelClicked();
 
 protected:
 	// Typing a file that doesn't exist closes the file dialog, we have to

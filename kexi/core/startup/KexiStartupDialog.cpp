@@ -1,12 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
    
-   Some code comes from: KoTemplateChooseDia.cpp
-   Original autors:
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   2000, 2001 Werner Trobin <trobin@kde.org>
-   2002, 2003 Thomas Nagy <tnagy@eleve.emn.fr>
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
