@@ -78,12 +78,14 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
     m_textBody += m_prefix;
 
 #ifdef FULL_TABLE_SUPPORT
-    int rowCurrent=0;
-    m_textBody += "\\row";
-    m_textBody += m_eol;
+    int rowCurrent = 0;
+    int cellCurrent = 0;
+    QString textCellx; // All \cellx
+    QString realTextBody ( m_textBody ); // Save the current m_textBody
+    m_textBody = QString::null;
 
-    const bool oldInTable=m_inTable;
-    m_inTable=true;
+    const bool oldInTable = m_inTable;
+    m_inTable = true;
 #endif
 
     QValueList<TableCell>::ConstIterator itCell;
@@ -94,11 +96,20 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         // ### TODO: rowspan, colspan
         if (rowCurrent!=(*itCell).row)
         {
-            rowCurrent=(*itCell).row;
-            m_textBody += "\\row";
-            m_textBody += m_eol;
+            rowCurrent = (*itCell).row;
+            cellCurrent = 0;
+            realTextBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
+            realTextBody += textCellx;
+            realTextBody += " "; // End of keyword
+            realTextBody += m_textBody;
+            realTextBody += "\\row";
+            realTextBody += m_eol;
+            m_textBody = QString::null;
+            textCellx = QString::null;
         }
-        m_textBody += "\\trowd \\trgaph60 \\trleft-60";  // start new row
+        cellCurrent ++; // Should be at least 1
+        textCellx += "\\cellx";
+        textCellx += QString::number(cellCurrent*1440); // Dummy position
 #endif
 
         QValueList<ParaData> paraList = *(*itCell).paraList;
@@ -111,12 +122,21 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         }
 #ifdef FULL_TABLE_SUPPORT
         m_textBody += "\\cell";
+        cellCurrent ++;
 #endif
     }
 
 #ifdef FULL_TABLE_SUPPORT
-    m_inTable=oldInTable;
-    m_textBody += "\\row\\par";  // delimit last row
+    realTextBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
+    realTextBody += textCellx;
+    realTextBody += " "; // End of keyword
+    realTextBody += m_textBody;
+    realTextBody += "\\row";
+    realTextBody += m_eol;
+    m_textBody = realTextBody;
+    realTextBody = QString::null; // Release memory
+    m_inTable = oldInTable;
+    m_textBody += "\\par";  // delimit last row
     m_textBody += m_eol;
 #endif
     m_prefix = QString::null;
