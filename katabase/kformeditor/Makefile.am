@@ -56,6 +56,7 @@ METASOURCES = \
  backgrounddlg.moc \
  formpropertydlg.moc \
  formsizedlg.moc \
+ resizewidget.moc \
  widgetwrapper.moc
 
 idl_DATA = kformeditor.idl
