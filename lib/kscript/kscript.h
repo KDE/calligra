@@ -16,6 +16,7 @@ public:
   typedef KSSharedPtr<KSInterpreter> Ptr;
 
   KSInterpreter();
+  virtual ~KSInterpreter() { }
 
   /**
    * @return the stringified exception or an empty string if everything was ok.
@@ -63,7 +64,16 @@ public:
    */
   void addSearchPath( const QString& p ) { m_searchPaths.prepend( p ); }
 
-private:
+  /**
+   * KScript can be extended with special syntax. For example "Table1!A1"
+   * for use in some spread sheet. If such a node has to be evaluated,
+   * then this functions is told to do so.
+   *
+   * @return TRUE if the evaluation was successful
+   */
+  virtual bool processExtension( KSContext& context, KSParseNode* node );
+
+protected:
   /**
    * A pointer to the namespace of the KScript module.
    */

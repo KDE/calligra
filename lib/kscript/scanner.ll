@@ -146,6 +146,26 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 						  return T_MATCH;
 						}
 
+"$"?[A-Z]+"$"?{Digits} {
+                          yylval._str = new QString( yytext );
+			  return T_CELL;
+		       };
+
+[A-Za-z0-9]+"!""$"?[A-Z]+"$"?{Digits} {
+                          yylval._str = new QString( yytext );
+			  return T_CELL;
+		       };
+
+[A-Za-z0-9]+"!""$"?[A-Z]+"$"?{Digits}":""$"?[A-Z]+"$"?{Digits} {
+                          yylval._str = new QString( yytext );
+			  return T_RANGE;
+		       };
+
+"$"?[A-Z]+"$"?{Digits}":""$"?[A-Z]+"$"?{Digits} {
+                          yylval._str = new QString( yytext );
+			  return T_RANGE;
+		       };
+
 "{"			return T_LEFT_CURLY_BRACKET;
 "}"			return T_RIGHT_CURLY_BRACKET;
 "["		 	return T_LEFT_SQUARE_BRACKET;
@@ -257,3 +277,7 @@ raise			return T_RAISE;
 
 %%
 
+void kscriptInitFlex( const char *_code )
+{
+   yy_switch_to_buffer( yy_scan_string( _code ) );
+}

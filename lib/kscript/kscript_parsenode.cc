@@ -100,7 +100,9 @@ static ParseNodeDoc parseNodeDoc[] = {
   { "t_try", 0 },
   { "t_catch", 0 },
   { "t_catch_default", 0 },
-  { "t_raise", 0 }
+  { "t_raise", 0 },
+  { "t_cell", 0 },
+  { "t_range", 0 }
 };
 
 typedef bool (*KSEval)( KSParseNode*, KSContext& );
@@ -189,13 +191,16 @@ static KSEval KSEvalJump[] = {
   KSEval_t_try,
   KSEval_t_catch,
   KSEval_t_catch_default,
-  KSEval_t_raise
+  KSEval_t_raise,
+  KSEval_t_cell,
+  KSEval_t_range
 };
 
 KSParseNode::KSParseNode( KSParseNodeType aType, KSParseNode *one,
 		      KSParseNode *two, KSParseNode *three,
 		      KSParseNode *four, KSParseNode *five )
 {
+  m_extra = 0;
   str = 0;
   type = aType;
   ident = QString::null;
@@ -216,6 +221,8 @@ KSParseNode::~KSParseNode()
 
 void KSParseNode::clear()
 {
+  if ( m_extra ) delete m_extra;
+  m_extra = 0;
   if ( str ) delete str;
   str = 0;
   if( b1 ) delete b1;

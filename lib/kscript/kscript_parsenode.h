@@ -92,10 +92,22 @@ typedef enum
   t_try,
   t_catch,
   t_catch_default,
-  t_raise
+  t_raise,
+  t_cell,
+  t_range
 } KSParseNodeType;
 
 class KSContext;
+
+/**
+ * Derive from this class to store
+ * extra data in some parsenode.
+ */
+class KSParseNodeExtra
+{
+public:
+  virtual ~KSParseNodeExtra() { }
+};
 
 class KSParseNode
 {
@@ -114,7 +126,8 @@ private:
     ushort           _char;
   } _u;
   QString* str;
-
+  
+  KSParseNodeExtra* m_extra;
   KSParseNode *b1;
   KSParseNode *b2;
   KSParseNode *b3;
@@ -161,6 +174,9 @@ public:
   KSParseNode *branch5() { return b5; }
   KSParseNode *getBranch( int i );
   void setBranch( int i, KSParseNode *node );
+
+  KSParseNodeExtra* extra() { return m_extra; }
+  void setExtra( KSParseNodeExtra* e ) { m_extra = e; }
 
   void print( bool detailed = false );
 };

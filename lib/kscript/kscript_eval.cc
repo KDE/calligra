@@ -326,7 +326,68 @@ bool KSEval_t_circumflex( KSParseNode*, KSContext& ) { return false; }
 bool KSEval_t_ampersand( KSParseNode*, KSContext& ) { return false; }
 bool KSEval_t_shiftright( KSParseNode*, KSContext& ) { return false; }
 bool KSEval_t_shiftleft( KSParseNode*, KSContext& ) { return false; }
-bool KSEval_t_plus_sign( KSParseNode*, KSContext& ) { return false; }
+
+bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
+{
+  // Unary ?
+  if ( node->branch1() && !node->branch2() )
+  {
+    if ( !node->branch1()->eval( context ) )
+      return false;
+    if ( context.value()->cast( KSValue::IntType ) )
+      return true;
+    if ( context.value()->cast( KSValue::DoubleType ) )
+      return true;
+
+    QString tmp( "Unary Operator * not defined for type %1" );
+    context.setException( new KSException( "UnknownOperation", tmp.arg( context.value()->typeName() ), node->getLineNo() ) );
+    return false;
+  }
+
+  EVAL_OPS( context, l, r, false );
+
+  if ( !r.value()->cast( l.value()->type() ) )
+  {
+    QString tmp( "From %1 to %2" );
+    context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ).arg( l.value()->typeName() ), node->getLineNo() ) );
+    return false;
+  }
+
+  switch( l.value()->type() )
+    {
+    case KSValue::IntType:
+      {
+	KScript::Long result = r.value()->intValue() + l.value()->intValue();
+	FILL_VALUE( context, l, r );
+	context.value()->setValue( result );
+	return true;
+      }
+      break;
+    case KSValue::DoubleType:
+      {
+	KScript::Double result = r.value()->doubleValue() + l.value()->doubleValue();
+	FILL_VALUE( context, l, r );
+	context.value()->setValue( result );
+	return true;
+      }
+    case KSValue::StringType:
+      {
+	QString result = r.value()->stringValue() + l.value()->stringValue();
+	FILL_VALUE( context, l, r );
+	context.value()->setValue( result );
+	return true;
+      }
+      break;
+    default:
+      QString tmp( "Operator * not defined for type %1" );
+      context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
+      return false;
+    }
+
+  // Never reached
+  return false;
+}
+
 bool KSEval_t_minus_sign( KSParseNode*, KSContext& ) { return false; }
 
 bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
@@ -345,6 +406,14 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
     case KSValue::IntType:
       {
 	KScript::Long result = r.value()->intValue() * l.value()->intValue();
+	FILL_VALUE( context, l, r );
+	context.value()->setValue( result );
+	return true;
+      }
+      break;
+    case KSValue::DoubleType:
+      {
+	KScript::Double result = r.value()->doubleValue() * l.value()->doubleValue();
 	FILL_VALUE( context, l, r );
 	context.value()->setValue( result );
 	return true;
@@ -1723,4 +1792,14 @@ extern bool KSEval_t_raise( KSParseNode* node, KSContext& context )
   context.setException( new KSException( l.shareValue(), r.shareValue(), node->getLineNo() ) );
 
   return false;
+}
+
+extern bool KSEval_t_cell( KSParseNode* node, KSContext& context )
+{
+  return context.interpreter()->processExtension( context, node );
+}
+
+extern bool KSEval_t_range( KSParseNode* node, KSContext& context )
+{
+  return context.interpreter()->processExtension( context, node );
 }

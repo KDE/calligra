@@ -12,8 +12,6 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-// KSInterpreter* KSInterpreter::s_current = 0;
-
 KSInterpreter::KSInterpreter()
 {
   KSModule::Ptr m = ksCreateModule_KScript( this );
@@ -120,8 +118,8 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
   }
 
   // Create the parse tree.
-  KSParser parser( f, filename.ascii() );
-  if ( !parser.parse() )
+  KSParser parser;
+  if ( !parser.parse( f, filename.ascii() ) )
   {
     fclose( f );
     result.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
@@ -231,4 +229,12 @@ KSValue* KSInterpreter::repoidImplementation( const QString& repoid )
     return 0;
 
   return it.data();
+}
+
+bool KSInterpreter::processExtension( KSContext& context, KSParseNode* node )
+{
+  QString tmp( "The interpreter does not support an extended syntax you are using.");
+  context.setException( new KSException( "UnsupportedSyntaxExtension", tmp, node->getLineNo() ) );
+  
+  return false;
 }

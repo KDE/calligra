@@ -14,12 +14,13 @@ extern int yyparse();      // Defined through yacc.y
 class KSParser 
 {
 public:
-  KSParser( FILE* inp_file, const char *filename = NULL );
+  KSParser();
   ~KSParser();
 
   bool eval( KSContext& );
 
-  bool parse();
+  bool parse( FILE* inp_file, const char *filename = NULL );
+  bool parse( const char* code );
   void setRootNode( KSParseNode *node );
   KSParseNode *getRootNode();
   void parse_error( const char *file, const char *err, int line );

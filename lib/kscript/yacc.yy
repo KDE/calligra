@@ -11,6 +11,8 @@ extern int yylex();
 extern QString idl_lexFile;
 extern int idl_line_no;
 
+void kscriptInitFlex( const char *_code );
+
 void yyerror( const char *s )
 {
   theParser->parse_error( idl_lexFile, s, idl_line_no );
@@ -106,6 +108,8 @@ void yyerror( const char *s )
 %token T_CATCH
 %token T_TRY
 %token T_RAISE
+%token <_str> T_RANGE
+%token <_str> T_CELL
 
 %type <node>   definitions
 %type <node>   definition
@@ -176,6 +180,10 @@ specification
 	: /*empty*/
 	  {
 	    theParser->setRootNode( NULL );
+	  }
+	| T_ASSIGN equal_expr
+	  {
+	    theParser->setRootNode( $2 );
 	  }
 	| definitions
           {
@@ -670,6 +678,16 @@ literal
 	    $$ = new KSParseNode( t_integer_literal );
 	    $$->setIntegerLiteral( $1 );
 	  }
+	| T_CELL
+	  {
+	    $$ = new KSParseNode( t_cell );
+	    $$->setStringLiteral( $1 );
+	  }
+	| T_RANGE
+	  {
+	    $$ = new KSParseNode( t_range );
+	    $$->setStringLiteral( $1 );
+	  }
 	| T_STRING_LITERAL
           {
 	    $$ = new KSParseNode( t_string_literal );
@@ -1142,3 +1160,9 @@ for
 	  }
 	;
 %%
+
+void kscriptParse( const char *_code )
+{
+    kscriptInitFlex( _code );
+    yyparse();
+}

@@ -15,12 +15,12 @@ QString idl_lexFile;
 QString toplevelFile;
 int idl_line_no;
 
-KSParser::KSParser( FILE *inp_file, const char *filename )
+// Imported from yacc.yy
+extern void kscriptParse( const char *_code );
+
+KSParser::KSParser()
 {
   rootNode = 0;
-
-  idl_lexFile = toplevelFile = (char *) filename;
-  yyin = inp_file;
 }
 
 KSParser::~KSParser()
@@ -29,8 +29,11 @@ KSParser::~KSParser()
     delete rootNode;
 }
 
-bool KSParser::parse()
+bool KSParser::parse( FILE *inp_file, const char *filename )
 {
+  idl_lexFile = toplevelFile = (char *) filename;
+  yyin = inp_file;
+
   m_errorMessage = "";
   theParser = this;
   idl_line_no = 1;
@@ -39,6 +42,15 @@ bool KSParser::parse()
   return m_errorMessage.isEmpty();
 }
 
+bool KSParser::parse( const char* code )
+{
+  m_errorMessage = "";
+  theParser = this;
+  idl_line_no = 1;
+  kscriptParse( code );
+
+  return m_errorMessage.isEmpty();
+}
 
 void KSParser::setRootNode( KSParseNode *node )
 {
