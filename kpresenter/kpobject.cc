@@ -1212,6 +1212,7 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
         const QString fill = styleStack.attribute( "draw:fill" );
         kdDebug()<<" fill :"<<fill<<endl;
         QBrush tmpBrush;
+        
         if ( fill == "solid" )
         {
             tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
@@ -1236,7 +1237,7 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
             else if ( style == "Red Crossed 45 Degrees" || style == "Blue Crossed 45 Degrees" )
                 tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 14 ) );
             else
-                kdDebug()<<" hatch style not supported !!!!!!!!!!!!\n";
+                kdDebug()<<" hatch style not supported !!!!!!!!!!!!: "<<style<<endl;
 
             QDomElement* draw = oasisStyles.drawStyles()[style];
             //fixme !!!!
@@ -1337,6 +1338,17 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
             setBrush( tmpBrush );
             setFillType(FT_GRADIENT );
         }
+        else if ( fill == "none" )
+        {
+            //nothing
+        }
+        else if ( fill == "bitmap" )
+        {
+            //todo
+            //not implementer into kpresenter...
+            //the drawing object is filled with the bitmap specified by the draw:fill-image-name attribute.
+        }
+
     }
 
 }
