@@ -43,9 +43,10 @@
 #include <kmessagebox.h>
 #include <ksconfig.h>
 
-#include "koDocumentInfo.h"
+#include <koDocumentInfo.h>
 #include <kocommandhistory.h>
 #include <koTemplateChooseDia.h>
+#include <koxmlwriter.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
@@ -560,6 +561,12 @@ QDomDocument KSpreadDoc::saveXML()
 bool KSpreadDoc::loadChildren( KoStore* _store )
 {
     return d->workbook->loadChildren( _store );
+}
+
+bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    kdError() << "KSpreadDoc::saveOasis not implemented (for the moment :) )" << endl;
+    return true;
 }
 
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )
