@@ -487,7 +487,8 @@ void KWDocStructRootItem::setupEmbedded()
         frameset = doc->getFrameSet( i );
         if ( frameset->type() == FT_PART && frameset->getNumFrames()>0)
         {
-            _name=i18n( "Embedded Object %1" ).arg(QString::number( ++j ));
+            // Use the name of the frameset as the entry for the object.
+            _name=frameset->getName();
             child = new KWDocStructPartItem( this, _name, dynamic_cast<KWPartFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
         }
