@@ -104,7 +104,7 @@
       <Help>
         <Text>The BESSELY() function returns the Bessel function, which is also called the Weber function or the Neumann function.</Text>
         <Syntax>BESSELY(X;N)</Syntax>
-        <Example>BESSELY(4,2) equals 0.215903595</Example>
+        <Example>BESSELY(4;2) equals 0.215903595</Example>
         <Related>BESSELI</Related>
         <Related>BESSELJ</Related>
         <Related>BESSELK</Related>
@@ -128,15 +128,15 @@
       </Parameter>
       <Help>
         <Text>The CONVERT() function returns a conversion from one measurement system to another.</Text>
-        <Text>Supported mass units: g (gram), sg (pieces), lbm (pount), u (atomic mass), ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight (hundredweight), bron (gross registered ton).</Text>
+        <Text>Supported mass units: g (gram), sg (pieces), lbm (pound), u (atomic mass), ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight (hundredweight), bron (gross registered ton).</Text>
         <Text>Supported distance units: m (meter), in (inch), ft (feet), mi (mile), Nmi (nautical mile), ang (Angstrom), parse, lightyear.</Text>
         <Text>Supported pressure units: Pa (Pascal), atm (atmosphere), mmHg (mm of Mercury), psi, Torr.</Text>
-        <Text>Supported force units: N (Newton), dyn, pond.</Text>
+        <Text>Supported force units: N (Newton), dyn, pound.</Text>
         <Text>Supported energy units: J (Joule), e (erg), c (Thermodynamic calorie), cal (IT calorie), eV (electronvolt), HPh (Horsepower-hour), Wh (Watt-hour), flb (foot-pound), BTU.</Text>
         <Text>Supported power units: W (Watt), HP (horsepower), PS (Pferdestaerke).</Text>
         <Text>Supported magnetism units: T (Tesla), ga (Gauss).</Text>
-        <Text>Supported temperature units: C (Celcius), F (Fahrenheit), K (Kelvin).</Text>
-        <Text>Supported volume units: l (liter), tsp (teaspoon), tbs (ablespoon), oz (ounce liquid), cup, pt (pint), qt (quart), gal (gallone), barrel, m3 (cubic meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 (cubic foot), yd3 (cubic yard).</Text>
+        <Text>Supported temperature units: C (Celsius), F (Fahrenheit), K (Kelvin).</Text>
+        <Text>Supported volume units: l (liter), tsp (teaspoon), tbs (tablespoon), oz (ounce liquid), cup, pt (pint), qt (quart), gal (gallone), barrel, m3 (cubic meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 (cubic foot), yd3 (cubic yard).</Text>
         <Text>Supported area units: m2 (square meter), mi2 (square mile), Nmi2 (square Nautical mile), in2 (square inch), ft2 (square foot), yd2 (square yard), acre, ha (hectare).</Text>
         <Text>Supported speed units: m/s (meters per second), m/h (meters per hour), mph (miles per hour), kn (knot).</Text>
         <Text>For metric units any of the following prefixes can be used: E (exa, 1E+18), P (peta, 1E+15), T (tera, 1E+12), G (giga, 1E+09), M (mega, 1E+06), k (kilo, 1E+03), h (hecto, 1E+02), e (dekao, 1E+01), d (deci, 1E-01), c (centi, 1E-02), m (milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p (pico, 1E-12), f (femto, 1E-15), a (atto, 1E-18).</Text>
