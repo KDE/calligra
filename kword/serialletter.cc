@@ -153,7 +153,7 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
 /*================================================================*/
 QString KWSerialLetterVariableInsertDia::getName() const
 {
-    return names->currentText();
+    return names->text(names->currentItem());
 }
 
 /*================================================================*/
