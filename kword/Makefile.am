@@ -80,6 +80,6 @@ SUBDIRS = . mailmerge templates dtd pics toolbar expression data
 
 messages: rc.cpp
 	perl ../kspread/extracti18n expression/*.xml > xml_doc.cc
-	$(EXTRACTRC) mailmerge/sql/*.ui >> rc.cpp
-	$(XGETTEXT) rc.cpp *.cc mailmerge/*.cc mailmerge/sql/*.cc kwaboutdata.h -o $(podir)/kword.pot
+	$(EXTRACTRC) 'find mailmerge -name "*.ui"` >> rc.cpp
+	$(XGETTEXT) rc.cpp *.cc `find mailmerge -mame "*.cc"` kwaboutdata.h -o $(podir)/kword.pot
 	-rm xml_doc.cc
