@@ -24,49 +24,49 @@
 
 /*======================== constructor ===========================*/
 PieValueCmd::PieValueCmd( QString _name, QList<PieValues> &_oldValues, PieValues _newValues,
-						  QList<KPObject> &_objects, KPresenterDoc *_doc )
-	: Command( _name ), oldValues( _oldValues ), objects( _objects )
+                          QList<KPObject> &_objects, KPresenterDoc *_doc )
+    : Command( _name ), oldValues( _oldValues ), objects( _objects )
 {
-	objects.setAutoDelete( false );
-	oldValues.setAutoDelete( false );
-	doc = _doc;
-	newValues = _newValues;
+    objects.setAutoDelete( false );
+    oldValues.setAutoDelete( false );
+    doc = _doc;
+    newValues = _newValues;
 
-	for ( unsigned int i = 0; i < objects.count(); i++ )
-		objects.at( i )->incCmdRef();
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 PieValueCmd::~PieValueCmd()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
-		objects.at( i )->decCmdRef();
-	oldValues.setAutoDelete( true );
-	oldValues.clear();
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->decCmdRef();
+    oldValues.setAutoDelete( true );
+    oldValues.clear();
 }
 
 /*====================== execute =================================*/
 void PieValueCmd::execute()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
+    for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-		dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieType( newValues.pieType );
-		dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieAngle( newValues.pieAngle );
-		dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieLength( newValues.pieLength );
+        dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieType( newValues.pieType );
+        dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieAngle( newValues.pieAngle );
+        dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieLength( newValues.pieLength );
     }
-	doc->repaint( false );
+    doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
 void PieValueCmd::unexecute()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
+    for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-		dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieType( oldValues.at( i )->pieType );
-		dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieAngle( oldValues.at( i )->pieAngle );
-		dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieLength( oldValues.at( i )->pieLength );
+        dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieType( oldValues.at( i )->pieType );
+        dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieAngle( oldValues.at( i )->pieAngle );
+        dynamic_cast<KPPieObject*>( objects.at( i ) )->setPieLength( oldValues.at( i )->pieLength );
     }
-	doc->repaint( false );
+    doc->repaint( false );
 }
 
 

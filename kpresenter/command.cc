@@ -21,6 +21,6 @@
 
 /*======================= constructor ============================*/
 Command::Command( QString _name )
-	: name( _name )
+    : name( _name )
 {
 }

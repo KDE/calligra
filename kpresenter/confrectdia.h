@@ -37,19 +37,19 @@ class QPushButton;
 
 class RectPreview : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	RectPreview( QWidget* parent, const char* );
-	~RectPreview() {}
+    RectPreview( QWidget* parent, const char* );
+    ~RectPreview() {}
 
-	void setRnds( int _rx, int _ry )
+    void setRnds( int _rx, int _ry )
     { xRnd = _rx; yRnd = _ry; repaint( true ); }
 
 protected:
-	void drawContents( QPainter* );
+    void drawContents( QPainter* );
 
-	int xRnd, yRnd;
+    int xRnd, yRnd;
 
 };
 
@@ -59,35 +59,35 @@ protected:
 
 class ConfRectDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ConfRectDia( QWidget* parent, const char* );
-	~ConfRectDia();
+    ConfRectDia( QWidget* parent, const char* );
+    ~ConfRectDia();
 
-	void setRnds( int _rx, int _rx );
+    void setRnds( int _rx, int _rx );
 
-	int getRndX()
+    int getRndX()
     { return xRnd; }
-	int getRndY()
+    int getRndY()
     { return yRnd; }
 
 protected:
-	QLabel *lRndX, *lRndY;
-	KRestrictedLine *eRndX, *eRndY;
-	QGroupBox *gSettings, *gPreview;
-	RectPreview *rectPreview;
-	QPushButton *okBut, *applyBut, *cancelBut;
+    QLabel *lRndX, *lRndY;
+    KRestrictedLine *eRndX, *eRndY;
+    QGroupBox *gSettings, *gPreview;
+    RectPreview *rectPreview;
+    QPushButton *okBut, *applyBut, *cancelBut;
 
-	int xRnd, yRnd;
+    int xRnd, yRnd;
 
 protected slots:
-	void rndXChanged( const QString & );
-	void rndYChanged( const QString & );
-	void Apply() { emit confRectDiaOk(); }
+    void rndXChanged( const QString & );
+    void rndYChanged( const QString & );
+    void Apply() { emit confRectDiaOk(); }
 
 signals:
-	void confRectDiaOk();
+    void confRectDiaOk();
 
 };
 

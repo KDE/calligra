@@ -45,25 +45,25 @@ class KPBackGround;
 class KTreeListItem;
 
 const QString ObjName[] = {"Picture", "Line", "Rectangle", "Ellipse", "Text", "Autoform",
-						   "Clipart", "Undefined", "Pie/Arc/Chord", "Embedded Object"};
+                           "Clipart", "Undefined", "Pie/Arc/Chord", "Embedded Object"};
 const QString BackTypeName[] = {"Color", "Picture", "Clipart"};
 const QString BackViewName[] = {"Zoom", "Center", "Tiled"};
 const QString BackColorTypeName[] = {"Plain", "Horizontal Gradient", "Vertical Gradient", "Diagonal Gradient 1", "Diagonal Gradient 2",
-									 "Circle Gradient", "Rectangle Gradient"};
+                                     "Circle Gradient", "Rectangle Gradient"};
 const QString PageEffectName[] = {"No effect", "Close horizontal", "Close vertical", "Close from all directions",
-								  "Open horizontal", "Open vertical", "Open from all directions", "Interlocking horizontal 1",
-								  "Interlocking horizontal 2", "Interlocking vertical 1", "Interlocking vertical 2",
-								  "Sourrond 1"};
+                                  "Open horizontal", "Open vertical", "Open from all directions", "Interlocking horizontal 1",
+                                  "Interlocking horizontal 2", "Interlocking vertical 1", "Interlocking vertical 2",
+                                  "Sourrond 1"};
 const QString ShadowDirectionName[] = {"", "Left/Up", "Up", "Right/Up", "Right", "Right/Bottom", "Bottom", "Left/Bottom", "Left"};
 const QString EffectName[] = {"No Effect", "Come from right", "Come from left", "Come from top", "Come from bottom", "Come from right/top",
-							  "Come from right/bottom", "Come from left/top", "Come from left/bottom", "Wipe from left", "Wipe from right",
-							  "Wipe from top", "Wipe from bottom"};
+                              "Come from right/bottom", "Come from left/top", "Come from left/bottom", "Wipe from left", "Wipe from right",
+                              "Wipe from top", "Wipe from bottom"};
 const QString Effect2Name[] = {"No Effect", "Paragraph after paragraph"};
 const QString PenStyleName[] = {"no pen", "solid line", "dash line ( ---- )", "dot line ( **** )", "dash dot line ( -*-* )",
-								"dash dot dot line ( -**- )"};
+                                "dash dot dot line ( -**- )"};
 const QString BrushStyleName[] = {"no brush", "100% fill pattern", "94% fill pattern", "88% fill pattern", "63% fill pattern",
-								  "50% fill pattern", "37% fill pattern", "12% fill pattern", "6% fill pattern", "horizontal lines",
-								  "vertical lines", "crossing lines", "diagonal lines ( / )", "diagonal lines ( \\ )", "diagonal crossing lines"};
+                                  "50% fill pattern", "37% fill pattern", "12% fill pattern", "6% fill pattern", "horizontal lines",
+                                  "vertical lines", "crossing lines", "diagonal lines ( / )", "diagonal lines ( \\ )", "diagonal crossing lines"};
 const QString LineTypeName[] = {"Horizontal", "Vertical", "Left/Top - Right/Bottom", "Left/Bottom - Right/Top"};
 const QString LineEndName[] = {"Normal", "Arrow", "Square", "Circle"};
 const QString PresSpeedName[] = {"Slow", "Normal", "Fast"};
@@ -76,20 +76,20 @@ const QString PieTypeName[] = {"Pie", "Arc", "Chord"};
 
 class PVTimeTable : public QTableView
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PVTimeTable( QWidget *parent, KPresenterDoc *_doc );
+    PVTimeTable( QWidget *parent, KPresenterDoc *_doc );
 
-	void setPageNum( int _num );
+    void setPageNum( int _num );
 
 protected:
-	void paintCell( QPainter *painter, int row, int col );
+    void paintCell( QPainter *painter, int row, int col );
 
-	int page;
-	KPresenterDoc *doc;
+    int page;
+    KPresenterDoc *doc;
 
-	QList<KPObject> objList;
+    QList<KPObject> objList;
 
 };
 
@@ -99,72 +99,72 @@ protected:
 
 class PresStructViewer : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PresStructViewer( QWidget *parent, const char *name, KPresenterDoc *_doc, KPresenterView *_view );
+    PresStructViewer( QWidget *parent, const char *name, KPresenterDoc *_doc, KPresenterView *_view );
 
 signals:
-	void presStructViewClosed();
+    void presStructViewClosed();
 
 protected slots:
-	void itemSelected( int );
+    void itemSelected( int );
 
-	void slotStyle();
-	void slotRotate();
-	void slotShadow();
-	void slotAlign();
-	void slotEffect();
-	void slotLower();
-	void slotRaise();
-	void slotDelete();
-	void slotEdit();
-	void slotEditPie();
-	void slotEditRect();
-	void slotBackground();
-	void slotConfigPages();
-	void slotChangeFilename();
+    void slotStyle();
+    void slotRotate();
+    void slotShadow();
+    void slotAlign();
+    void slotEffect();
+    void slotLower();
+    void slotRaise();
+    void slotDelete();
+    void slotEdit();
+    void slotEditPie();
+    void slotEditRect();
+    void slotBackground();
+    void slotConfigPages();
+    void slotChangeFilename();
 
 protected:
-	struct ItemInfo
-	{
-		int num;
-		KTreeListItem *item;
-	};
+    struct ItemInfo
+    {
+        int num;
+        KTreeListItem *item;
+    };
 
-	static const int B_STYLE     = 1;
-	static const int B_ROTATE    = 2;
-	static const int B_SHADOW    = 3;
-	static const int B_ALIGN     = 4;
-	static const int B_EFFECT    = 5;
-	static const int B_LOWER     = 6;
-	static const int B_RAISE     = 7;
-	static const int B_DELETE    = 8;
-	static const int B_EDIT      = 9;
-	static const int B_EDIT_PIE  = 10;
-	static const int B_EDIT_RECT = 11;
-	static const int B_BACK      = 12;
-	static const int B_CPAGES    = 13;
-	static const int B_CFILEN    = 14;
+    static const int B_STYLE     = 1;
+    static const int B_ROTATE    = 2;
+    static const int B_SHADOW    = 3;
+    static const int B_ALIGN     = 4;
+    static const int B_EFFECT    = 5;
+    static const int B_LOWER     = 6;
+    static const int B_RAISE     = 7;
+    static const int B_DELETE    = 8;
+    static const int B_EDIT      = 9;
+    static const int B_EDIT_PIE  = 10;
+    static const int B_EDIT_RECT = 11;
+    static const int B_BACK      = 12;
+    static const int B_CPAGES    = 13;
+    static const int B_CFILEN    = 14;
 
-	void resizeEvent( QResizeEvent *e );
-	void closeEvent( QCloseEvent *e );
-	void setupTreeView();
-	void setupToolBar();
-	void fillWithPageInfo( KPBackGround *_page, int _num );
-	void fillWithObjInfo( KPObject *_obj, int _num );
-	QString getColor( QColor _color );
-	void disableAllFunctions();
+    void resizeEvent( QResizeEvent *e );
+    void closeEvent( QCloseEvent *e );
+    void setupTreeView();
+    void setupToolBar();
+    void fillWithPageInfo( KPBackGround *_page, int _num );
+    void fillWithObjInfo( KPObject *_obj, int _num );
+    QString getColor( QColor _color );
+    void disableAllFunctions();
 
-	KNewPanner *panner, *h_panner;
-	KTreeList *treelist;
-	KTabListBox *list;
-	KPresenterDoc *doc;
-	KPresenterView *view;
-	QList<ItemInfo> pageList, objList;
-	KPObject *lastSelected;
-	KToolBar *toolbar;
-	PVTimeTable *timeTable;
+    KNewPanner *panner, *h_panner;
+    KTreeList *treelist;
+    KTabListBox *list;
+    KPresenterDoc *doc;
+    KPresenterView *view;
+    QList<ItemInfo> pageList, objList;
+    KPObject *lastSelected;
+    KToolBar *toolbar;
+    PVTimeTable *timeTable;
 
 };
 

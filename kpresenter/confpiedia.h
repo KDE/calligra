@@ -43,28 +43,28 @@ class QPainter;
 
 class PiePreview : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PiePreview( QWidget* parent, const char* );
-	~PiePreview() {}
+    PiePreview( QWidget* parent, const char* );
+    ~PiePreview() {}
 
-	void setAngle( int _angle )
+    void setAngle( int _angle )
     { angle = _angle; repaint( true ); }
-	void setLength( int _len )
+    void setLength( int _len )
     { len = _len; repaint( true ); }
-	void setType( PieType _type )
+    void setType( PieType _type )
     { type = _type; repaint( true ); }
-	void setPenBrush( QPen _pen, QBrush _brush )
+    void setPenBrush( QPen _pen, QBrush _brush )
     { pen = _pen; brush = _brush; repaint( true ); }
 
 protected:
-	void drawContents( QPainter* );
+    void drawContents( QPainter* );
 
-	int angle, len;
-	PieType type;
-	QPen pen;
-	QBrush brush;
+    int angle, len;
+    PieType type;
+    QPen pen;
+    QBrush brush;
 
 };
 
@@ -74,49 +74,49 @@ protected:
 
 class ConfPieDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ConfPieDia( QWidget* parent, const char* );
-	~ConfPieDia();
+    ConfPieDia( QWidget* parent, const char* );
+    ~ConfPieDia();
 
-	void setAngle( int _angle )
+    void setAngle( int _angle )
     { angle = _angle; QString str; str.sprintf( "%d", _angle ); eAngle->setText( str ); piePreview->setAngle( angle ); }
-	void setLength( int _len )
+    void setLength( int _len )
     { len = _len; QString str; str.sprintf( "%d", _len ); eLen->setText( str ); piePreview->setLength( len ); }
-	void setType( PieType _type )
+    void setType( PieType _type )
     { type = _type; cType->setCurrentItem( _type ); piePreview->setType( type ); }
-	void setPenBrush( QPen _pen, QBrush _brush )
+    void setPenBrush( QPen _pen, QBrush _brush )
     { pen = _pen; brush = _brush; piePreview->setPenBrush( pen, brush );  }
 
-	int getAngle()
+    int getAngle()
     { return angle; }
-	int getLength()
+    int getLength()
     { return len; }
-	PieType getType()
+    PieType getType()
     { return type; }
 
 protected:
-	QLabel *lType, *lAngle, *lLen;
-	KRestrictedLine *eAngle, *eLen;
-	QGroupBox *gSettings, *gPreview;
-	PiePreview *piePreview;
-	QPushButton *okBut, *applyBut, *cancelBut;
-	QComboBox *cType;
+    QLabel *lType, *lAngle, *lLen;
+    KRestrictedLine *eAngle, *eLen;
+    QGroupBox *gSettings, *gPreview;
+    PiePreview *piePreview;
+    QPushButton *okBut, *applyBut, *cancelBut;
+    QComboBox *cType;
 
-	int angle, len;
-	PieType type;
-	QPen pen;
-	QBrush brush;
+    int angle, len;
+    PieType type;
+    QPen pen;
+    QBrush brush;
 
 protected slots:
-	void lengthChanged( const QString & );
-	void angleChanged( const QString & );
-	void typeChanged( int );
-	void Apply() { emit confPieDiaOk(); }
+    void lengthChanged( const QString & );
+    void angleChanged( const QString & );
+    void typeChanged( int );
+    void Apply() { emit confPieDiaOk(); }
 
 signals:
-	void confPieDiaOk();
+    void confPieDiaOk();
 
 };
 

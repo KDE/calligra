@@ -31,26 +31,26 @@ class KPresenterDoc;
 class RectValueCmd : public Command
 {
 public:
-	struct RectValues
-	{
-		int xRnd, yRnd;
-	};
+    struct RectValues
+    {
+        int xRnd, yRnd;
+    };
 
-	RectValueCmd( QString _name, QList<RectValues> &_oldValues, RectValues _newValues,
-				  QList<KPObject> &_objects, KPresenterDoc *_doc );
-	~RectValueCmd();
+    RectValueCmd( QString _name, QList<RectValues> &_oldValues, RectValues _newValues,
+                  QList<KPObject> &_objects, KPresenterDoc *_doc );
+    ~RectValueCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	RectValueCmd()
+    RectValueCmd()
     {; }
 
-	KPresenterDoc *doc;
-	QList<RectValues> oldValues;
-	QList<KPObject> objects;
-	RectValues newValues;
+    KPresenterDoc *doc;
+    QList<RectValues> oldValues;
+    QList<KPObject> objects;
+    RectValues newValues;
 
 };
 

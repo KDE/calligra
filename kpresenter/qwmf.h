@@ -12,7 +12,7 @@
  * MERCHANTABLILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details. You should have received a copy
  * of the GNU General Public License along with this program; if not, write
- * to the Free Software Foundation, Inc, 675 Mass Ave, Cambridge, MA 02139, 
+ * to the Free Software Foundation, Inc, 675 Mass Ave, Cambridge, MA 02139,
  * USA.
  */
 #ifndef qwmf_h
@@ -27,112 +27,112 @@
 #include <qpicture.h>
 #include <krect.h>
 
-class QPainter; 
-class WmfCmd; 
-class WinObjHandle; 
-class WinObjPenHandle; 
-class WinObjBrushHandle; 
-struct WmfPlaceableHeader; 
-class QPaintDevice; 
+class QPainter;
+class WmfCmd;
+class WinObjHandle;
+class WinObjPenHandle;
+class WinObjBrushHandle;
+struct WmfPlaceableHeader;
+class QPaintDevice;
 
 class QWinMetaFile
 {
 public:
-	QWinMetaFile(); 
-	virtual ~QWinMetaFile(); 
+    QWinMetaFile();
+    virtual ~QWinMetaFile();
 
-	/** Load WMF file. Returns TRUE on success. */
-	virtual bool load( const QString fileName ); 
+    /** Load WMF file. Returns TRUE on success. */
+    virtual bool load( const QString fileName );
 
-	/** Paint metafile to given paint-device. Returns TRUE on success. */
-	virtual bool paint( const QPaintDevice* target ); 
+    /** Paint metafile to given paint-device. Returns TRUE on success. */
+    virtual bool paint( const QPaintDevice* target );
 
-	/** Returns TRUE if the metafile is placeable. */
-	bool isPlaceable( void ) const { return mIsPlaceable; }
+    /** Returns TRUE if the metafile is placeable. */
+    bool isPlaceable( void ) const { return mIsPlaceable; }
 
-	/** Returns TRUE if the metafile is enhanced. */
-	bool isEnhanced( void ) const { return mIsEnhanced; }
+    /** Returns TRUE if the metafile is enhanced. */
+    bool isEnhanced( void ) const { return mIsEnhanced; }
 
-	/** Set single-step mode. */
-	virtual void singleStep( bool ss ); 
+    /** Set single-step mode. */
+    virtual void singleStep( bool ss );
 
-	/** Returns bounding rectangle if isPlaceable()==TRUE,
-		otherwise unspecified result. */
-	KRect bbox( void ) const { return mBBox; }
+    /** Returns bounding rectangle if isPlaceable()==TRUE,
+        otherwise unspecified result. */
+    KRect bbox( void ) const { return mBBox; }
 
 public: // should be protected but cannot
-	/** Metafile painter methods */
+    /** Metafile painter methods */
 
-	// set window origin
-	void setWindowOrg( short num, short* parms ); 
-	// set window extents
-	void setWindowExt( short num, short* parms ); 
-	// draw polygon
-	void polygon( short num, short* parms ); 
-	// draw series of lines
-	void polyline( short num, short* parms ); 
-	// set polygon fill mode
-	void setPolyFillMode( short num, short* parms ); 
-	// create a logical brush
-	void createBrushIndirect( short num, short* parms ); 
-	// create a logical pen
-	void createPenIndirect( short num, short* parms ); 
-	// set background pen color
-	void setBkColor( short num, short* parms ); 
-	// set background pen mode
-	void setBkMode( short num, short* parms ); 
-	// draw line to coord
-	void lineTo( short num, short* parms ); 
-	// move pen to coord
-	void moveTo( short num, short* parms ); 
-	// draw ellipse
-	void ellipse( short num, short* parms ); 
-	// Activate object handle
-	void selectObject( short num, short* parms ); 
-	// Free object handle
-	void deleteObject( short num, short* parms ); 
-	// Set raster operation mode
-	void setRop( short num, short* parms ); 
-	// Escape ( enhanced command set )
-	void escape( short num, short* parms ); 
+    // set window origin
+    void setWindowOrg( short num, short* parms );
+    // set window extents
+    void setWindowExt( short num, short* parms );
+    // draw polygon
+    void polygon( short num, short* parms );
+    // draw series of lines
+    void polyline( short num, short* parms );
+    // set polygon fill mode
+    void setPolyFillMode( short num, short* parms );
+    // create a logical brush
+    void createBrushIndirect( short num, short* parms );
+    // create a logical pen
+    void createPenIndirect( short num, short* parms );
+    // set background pen color
+    void setBkColor( short num, short* parms );
+    // set background pen mode
+    void setBkMode( short num, short* parms );
+    // draw line to coord
+    void lineTo( short num, short* parms );
+    // move pen to coord
+    void moveTo( short num, short* parms );
+    // draw ellipse
+    void ellipse( short num, short* parms );
+    // Activate object handle
+    void selectObject( short num, short* parms );
+    // Free object handle
+    void deleteObject( short num, short* parms );
+    // Set raster operation mode
+    void setRop( short num, short* parms );
+    // Escape ( enhanced command set )
+    void escape( short num, short* parms );
 
-	// do nothing
-	void noop( short num, short* parms ) { }
-
-protected:
-	/** Calculate header checksum */
-	unsigned short calcCheckSum( WmfPlaceableHeader* ); 
-
-	/** Find function in metafunc table by metafile-function.
-		Returns index or -1 if not found. */
-	virtual int findFunc( unsigned short aFunc ) const; 
-
-	/** Fills given parms into mPoints. */
-	QPointArray* pointArray( short num, short* parms ); 
-
-	/** Returns color given by the two parameters */
-	QColor color( short* parm ); 
-
-	/** Converts two parameters to long */
-	unsigned int toDWord( short* parm ); 
-
-	/** Handle win-object-handles */
-	int handleIndex( void ) const; 
-	WinObjPenHandle* createPen( void ); 
-	WinObjBrushHandle* createBrush( void ); 
-	void deleteHandle( int ); 
+    // do nothing
+    void noop( short num, short* parms ) { }
 
 protected:
-	QPainter mPainter; 
-	QPointArray mPoints; 
-	bool mIsPlaceable, mIsEnhanced; 
-	WmfCmd* mFirstCmd; 
-	bool mWinding; 
-	QBrush mBrush; 
-	QPen mPen; 
-	KRect mBBox; 
-	bool mSingleStep; 
-	WinObjHandle** mObjHandleTab; 
-}; 
+    /** Calculate header checksum */
+    unsigned short calcCheckSum( WmfPlaceableHeader* );
+
+    /** Find function in metafunc table by metafile-function.
+        Returns index or -1 if not found. */
+    virtual int findFunc( unsigned short aFunc ) const;
+
+    /** Fills given parms into mPoints. */
+    QPointArray* pointArray( short num, short* parms );
+
+    /** Returns color given by the two parameters */
+    QColor color( short* parm );
+
+    /** Converts two parameters to long */
+    unsigned int toDWord( short* parm );
+
+    /** Handle win-object-handles */
+    int handleIndex( void ) const;
+    WinObjPenHandle* createPen( void );
+    WinObjBrushHandle* createBrush( void );
+    void deleteHandle( int );
+
+protected:
+    QPainter mPainter;
+    QPointArray mPoints;
+    bool mIsPlaceable, mIsEnhanced;
+    WmfCmd* mFirstCmd;
+    bool mWinding;
+    QBrush mBrush;
+    QPen mPen;
+    KRect mBBox;
+    bool mSingleStep;
+    WinObjHandle** mObjHandleTab;
+};
 
 #endif /*qwmf_h*/

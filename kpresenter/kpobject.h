@@ -40,136 +40,136 @@ class QPainter;
 class KPObject
 {
 public:
-	KPObject();
+    KPObject();
 
-	virtual void setSelected( bool _selected )
+    virtual void setSelected( bool _selected )
     { selected = _selected; }
-	virtual void rotate( float _angle )
+    virtual void rotate( float _angle )
     { angle = _angle; }
-	virtual void setSize( KSize _size )
+    virtual void setSize( KSize _size )
     { setSize( _size.width(), _size.height() ); }
-	virtual void setSize( int _width, int _height )
+    virtual void setSize( int _width, int _height )
     { ext = KSize( _width > 20 ? _width : 20, _height > 20 ? _height : 20 ); }
-	virtual void setOrig( KPoint _point )
+    virtual void setOrig( KPoint _point )
     { orig = _point; }
-	virtual void setOrig( int _x, int _y )
+    virtual void setOrig( int _x, int _y )
     { orig = KPoint( _x, _y ); }
-	virtual void moveBy( KPoint _point )
+    virtual void moveBy( KPoint _point )
     { orig = orig + _point; }
-	virtual void moveBy( int _dx, int _dy )
+    virtual void moveBy( int _dx, int _dy )
     { orig = orig + KPoint( _dx, _dy ); }
-	virtual void resizeBy( KSize _size )
+    virtual void resizeBy( KSize _size )
     { resizeBy( _size.width(), _size.height() ); }
-	virtual void resizeBy( int _dx, int _dy )
+    virtual void resizeBy( int _dx, int _dy )
     { ext = ext + KSize( _dx + ext.width() > 20 ? _dx : 0, _dy + ext.height() > 20 ? _dy : 0 ); }
-	virtual void setShadowDistance( int _distance )
+    virtual void setShadowDistance( int _distance )
     { shadowDistance = _distance; }
-	virtual void setShadowDirection( ShadowDirection _direction )
+    virtual void setShadowDirection( ShadowDirection _direction )
     { shadowDirection = _direction; }
-	virtual void setShadowColor( QColor _color )
+    virtual void setShadowColor( QColor _color )
     { shadowColor = _color; }
-	virtual void setEffect( Effect _effect )
+    virtual void setEffect( Effect _effect )
     { effect = _effect; }
-	virtual void setEffect2( Effect2 _effect2 )
+    virtual void setEffect2( Effect2 _effect2 )
     { effect2 = _effect2; }
-	virtual void setPresNum( int _presNum )
+    virtual void setPresNum( int _presNum )
     { presNum = _presNum; }
-	
-	virtual void save( ostream& out )
+    
+    virtual void save( ostream& out )
     {; }
-	virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     {; }
 
-	virtual ObjType getType()
+    virtual ObjType getType()
     { return OT_UNDEFINED; }
-	virtual KRect getBoundingRect( int _diffx, int _diffy );
-	virtual bool isSelected()
+    virtual KRect getBoundingRect( int _diffx, int _diffy );
+    virtual bool isSelected()
     { return selected; }
-	virtual float getAngle()
+    virtual float getAngle()
     { return angle; }
-	virtual int getShadowDistance()
+    virtual int getShadowDistance()
     { return shadowDistance; }
-	virtual ShadowDirection getShadowDirection()
+    virtual ShadowDirection getShadowDirection()
     { return shadowDirection; }
-	virtual QColor getShadowColor()
+    virtual QColor getShadowColor()
     { return shadowColor; }
-	virtual KSize getSize()
+    virtual KSize getSize()
     { return ext; }
-	virtual KPoint getOrig()
+    virtual KPoint getOrig()
     { return orig; }
-	virtual Effect getEffect()
+    virtual Effect getEffect()
     { return effect; }
-	virtual Effect2 getEffect2()
+    virtual Effect2 getEffect2()
     { return effect2; }
-	virtual int getPresNum()
+    virtual int getPresNum()
     { return presNum; }
-	virtual int getSubPresSteps()
+    virtual int getSubPresSteps()
     { return 0; }
-	
-	virtual void drawSelection( bool _dSelection )
+    
+    virtual void drawSelection( bool _dSelection )
     { dSelection = _dSelection; }
 
-	virtual void zoom( float _fakt );
-	virtual void zoomOrig();
-	virtual void setOwnClipping( bool _ownClipping )
+    virtual void zoom( float _fakt );
+    virtual void zoomOrig();
+    virtual void setOwnClipping( bool _ownClipping )
     { ownClipping = _ownClipping; }
-	virtual void setSubPresStep( int _subPresStep )
+    virtual void setSubPresStep( int _subPresStep )
     { subPresStep = _subPresStep; }
-	virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true )
+    virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true )
     { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
 
-	virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
-	virtual bool contains( KPoint _point, int _diffx, int _diffy );
-	virtual bool intersects( KRect _rect, int _diffx, int _diffy );
-	virtual QCursor getCursor( KPoint _point, int _diffx, int _diffy, ModifyType &_modType );
+    virtual bool contains( KPoint _point, int _diffx, int _diffy );
+    virtual bool intersects( KRect _rect, int _diffx, int _diffy );
+    virtual QCursor getCursor( KPoint _point, int _diffx, int _diffy, ModifyType &_modType );
 
-	virtual void activate( QWidget *_widget, int diffx, int diffy )
+    virtual void activate( QWidget *_widget, int diffx, int diffy )
     {; }
-	virtual void deactivate()
+    virtual void deactivate()
     {; }
 
-	virtual void removeFromObjList()
+    virtual void removeFromObjList()
     { inObjList = false; doDelete(); }
-	virtual void addToObjList()
+    virtual void addToObjList()
     { inObjList = true; }
-	virtual void incCmdRef()
+    virtual void incCmdRef()
     { cmds++; }
-	virtual void decCmdRef()
+    virtual void decCmdRef()
     { cmds--; doDelete(); }
 
-	virtual void setMove( bool _move )
+    virtual void setMove( bool _move )
     { move = _move; }
 
 protected:
-	virtual void getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance );
-	virtual void paintSelection( QPainter *_painter );
-	virtual void doDelete();
+    virtual void getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance );
+    virtual void paintSelection( QPainter *_painter );
+    virtual void doDelete();
 
-	float angle;
-	KPoint orig;
-	KSize ext;
-	int shadowDistance;
-	ShadowDirection shadowDirection;
-	QColor shadowColor;
-	Effect effect;
-	Effect2 effect2;
-	int presNum;
+    float angle;
+    KPoint orig;
+    KSize ext;
+    int shadowDistance;
+    ShadowDirection shadowDirection;
+    QColor shadowColor;
+    Effect effect;
+    Effect2 effect2;
+    int presNum;
 
-	bool selected, dSelection;
-	bool zoomed;
-	float presFakt;
-	KPoint oldOrig;
-	KSize oldExt;
-	int subPresStep;
-	bool specEffects;
-	bool onlyCurrStep;
-	bool ownClipping;
+    bool selected, dSelection;
+    bool zoomed;
+    float presFakt;
+    KPoint oldOrig;
+    KSize oldExt;
+    int subPresStep;
+    bool specEffects;
+    bool onlyCurrStep;
+    bool ownClipping;
 
-	bool inObjList;
-	int cmds;
-	bool move;
-	
+    bool inObjList;
+    int cmds;
+    bool move;
+    
 };
 
 #endif

@@ -65,206 +65,206 @@ class QPainter;
 /******************************************************************/
 class Page : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	// constructor - destructor
-	Page( QWidget *parent=0, const char *name=0, KPresenterView *_view=0 );
-	~Page();
+    // constructor - destructor
+    Page( QWidget *parent=0, const char *name=0, KPresenterView *_view=0 );
+    ~Page();
 
-	// public functions
-	void draw( KRect, QPainter* );
-	void selectAllObj();
-	void deSelectAllObj();
-	void selectObj( int num );
-	void selectObj( KPObject* );
-	void deSelectObj( int num );
-	void deSelectObj( KPObject* );
-	void setTextFont( QFont* );
-	void setTextColor( QColor* );
-	void setTextAlign( TxtParagraph::HorzAlign );
-	KTextObject* kTxtObj();
+    // public functions
+    void draw( KRect, QPainter* );
+    void selectAllObj();
+    void deSelectAllObj();
+    void selectObj( int num );
+    void selectObj( KPObject* );
+    void deSelectObj( int num );
+    void deSelectObj( KPObject* );
+    void setTextFont( QFont* );
+    void setTextColor( QColor* );
+    void setTextAlign( TxtParagraph::HorzAlign );
+    KTextObject* kTxtObj();
 
-	void startScreenPresentation( bool );
-	void stopScreenPresentation();
-	bool pNext( bool );
-	bool pPrev( bool );
+    void startScreenPresentation( bool );
+    void stopScreenPresentation();
+    bool pNext( bool );
+    bool pPrev( bool );
 
-	unsigned int presPage() {return currPresPage; }
-	void setPresFakt( float f ) {_presFakt = f; }
-	float presFakt() {return _presFakt; }
+    unsigned int presPage() {return currPresPage; }
+    void setPresFakt( float f ) {_presFakt = f; }
+    float presFakt() {return _presFakt; }
 
-	bool canAssignEffect( int&, int& );
+    bool canAssignEffect( int&, int& );
 
-	void keyPressEvent( QKeyEvent *e );
+    void keyPressEvent( QKeyEvent *e );
 
-	void print( QPainter*, QPrinter*, float, float );
+    void print( QPainter*, QPrinter*, float, float );
 
-	void editSelectedTextArea();
-	void setPartEntry( KoDocumentEntry& _e )
+    void editSelectedTextArea();
+    void setPartEntry( KoDocumentEntry& _e )
     { partEntry = _e; }
-	void setToolEditMode( ToolEditMode _m );
-	void setAutoForm( QString _autoform )
+    void setToolEditMode( ToolEditMode _m );
+    void setAutoForm( QString _autoform )
     { autoform = _autoform; }
 
-	KTextObject *haveASelectedTextObj();
+    KTextObject *haveASelectedTextObj();
 
-	void drawPageInPix( QPixmap&, int );
-	void drawPageInPix2( QPixmap&, int, int, float _zoom = 1.0 );
+    void drawPageInPix( QPixmap&, int );
+    void drawPageInPix2( QPixmap&, int, int, float _zoom = 1.0 );
 
 public slots:
 
-	// public slots
-	void clipCut();
-	void clipCopy();
-	void clipPaste();
-	void deleteObjs();
-	void rotateObjs();
-	void shadowObjs();
+    // public slots
+    void clipCut();
+    void clipCopy();
+    void clipPaste();
+    void deleteObjs();
+    void rotateObjs();
+    void shadowObjs();
 
 protected:
 
-	struct PicCache
-	{
-		QPicture pic;
-		int num;
-		int subPresStep;
-	};
+    struct PicCache
+    {
+        QPicture pic;
+        int num;
+        int subPresStep;
+    };
 
-	// functions for displaying
-	void paintEvent( QPaintEvent* );
-	void paintBackground( QPainter*, KRect );
-	void drawBackground( QPainter*, KRect );
-	void drawObjects( QPainter*, KRect );
-	void mousePressEvent( QMouseEvent *e );
-	void mouseReleaseEvent( QMouseEvent *e );
-	void mouseMoveEvent( QMouseEvent *e );
-	void mouseDoubleClickEvent( QMouseEvent *e );
-	void resizeEvent( QResizeEvent *e );
-	int getObjectAt( int x, int y );
-	void focusInEvent( QFocusEvent* ) {}
-	void focusOutEvent( QFocusEvent* ) {}
-	void enterEvent( QEvent *e );
-	void leaveEvent( QEvent *e );
-	void dragEnterEvent( QDragEnterEvent *e );
-	void dragLeaveEvent( QDragLeaveEvent *e );
-	void dragMoveEvent( QDragMoveEvent *e );
-	void dropEvent( QDropEvent *e );
+    // functions for displaying
+    void paintEvent( QPaintEvent* );
+    void paintBackground( QPainter*, KRect );
+    void drawBackground( QPainter*, KRect );
+    void drawObjects( QPainter*, KRect );
+    void mousePressEvent( QMouseEvent *e );
+    void mouseReleaseEvent( QMouseEvent *e );
+    void mouseMoveEvent( QMouseEvent *e );
+    void mouseDoubleClickEvent( QMouseEvent *e );
+    void resizeEvent( QResizeEvent *e );
+    int getObjectAt( int x, int y );
+    void focusInEvent( QFocusEvent* ) {}
+    void focusOutEvent( QFocusEvent* ) {}
+    void enterEvent( QEvent *e );
+    void leaveEvent( QEvent *e );
+    void dragEnterEvent( QDragEnterEvent *e );
+    void dragLeaveEvent( QDragLeaveEvent *e );
+    void dragMoveEvent( QDragMoveEvent *e );
+    void dropEvent( QDropEvent *e );
 
-	// setup popupmenus
-	void setupMenus();
+    // setup popupmenus
+    void setupMenus();
 
-	// get - set data
-	QList<KPBackGround> *backgroundList();
-	QList<KPObject> *objectList();
-	unsigned int objNums();
-	int diffx( int i = -1 );
-	int diffy( int i = -1 );
-	unsigned int currPgNum();
-	unsigned int rastX();
-	unsigned int rastY();
-	QColor txtBackCol();
-	bool spInfinitLoop();
-	bool spManualSwitch();
-	KRect getPageSize( unsigned int p, float fakt=1.0, bool decBorders = true );
-	unsigned int pageNums();
-	int getPageOfObj( int i, float fakt = 1.0 );
-	float objSpeedFakt();
-	float pageSpeedFakt();
+    // get - set data
+    QList<KPBackGround> *backgroundList();
+    QList<KPObject> *objectList();
+    unsigned int objNums();
+    int diffx( int i = -1 );
+    int diffy( int i = -1 );
+    unsigned int currPgNum();
+    unsigned int rastX();
+    unsigned int rastY();
+    QColor txtBackCol();
+    bool spInfinitLoop();
+    bool spManualSwitch();
+    KRect getPageSize( unsigned int p, float fakt=1.0, bool decBorders = true );
+    unsigned int pageNums();
+    int getPageOfObj( int i, float fakt = 1.0 );
+    float objSpeedFakt();
+    float pageSpeedFakt();
 
-	void _repaint( bool erase=true );
-	void _repaint( KRect r );
-	void _repaint( KPObject *o );
+    void _repaint( bool erase=true );
+    void _repaint( KRect r );
+    void _repaint( KPObject *o );
 
-	void drawPageInPainter( QPainter*, int, KRect );
-	void changePages( QPixmap, QPixmap, PageEffect );
-	void doObjEffects();
-	void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
+    void drawPageInPainter( QPainter*, int, KRect );
+    void changePages( QPixmap, QPixmap, PageEffect );
+    void doObjEffects();
+    void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
-	void insertText( KRect );
-	void insertLineH( KRect, bool );
-	void insertLineV( KRect, bool );
-	void insertLineD1( KRect, bool );
-	void insertLineD2( KRect, bool );
-	void insertRect( KRect );
-	void insertEllipse( KRect );
-	void insertPie( KRect );
-	void insertObject( KRect );
-	void insertTable( KRect );
-	void insertDiagramm( KRect );
-	void insertFormula( KRect );
-	void insertAutoform( KRect, bool );
+    void insertText( KRect );
+    void insertLineH( KRect, bool );
+    void insertLineV( KRect, bool );
+    void insertLineD1( KRect, bool );
+    void insertLineD2( KRect, bool );
+    void insertRect( KRect );
+    void insertEllipse( KRect );
+    void insertPie( KRect );
+    void insertObject( KRect );
+    void insertTable( KRect );
+    void insertDiagramm( KRect );
+    void insertFormula( KRect );
+    void insertAutoform( KRect, bool );
 
-	void selectNext();
-	void selectPrev();
+    void selectNext();
+    void selectPrev();
 
-	// variables
-	QPopupMenu *graphMenu, *picMenu, *txtMenu, *clipMenu, *presMenu;
-	QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu4, *alignMenu5;
-	QPopupMenu *pageMenu, *pieMenu, *rectMenu, *alignMenu6, *partMenu, *alignMenu7;
-	bool mousePressed;
-	ModifyType modType;
-	unsigned int oldMx, oldMy;
-	int resizeObjNum, editNum;
-	bool fillBlack;
-	KPresenterView *view;
-	bool editMode, goingBack, drawMode;
-	unsigned int currPresPage, currPresStep, subPresStep;
-	unsigned int oldPresPage, oldPresStep, oldSubPresStep;
-	float _presFakt;
-	QList<int> presStepList;
-	int PM_DM, PM_SM;
-	int firstX, firstY;
-	bool drawRubber;
-	KRect rubber, oldBoundingRect;
-	ToolEditMode toolEditMode;
-	KRect insRect;
-	KoDocumentEntry partEntry;
-	QList <KPObject> tmpObjs;
-	QString autoform;
+    // variables
+    QPopupMenu *graphMenu, *picMenu, *txtMenu, *clipMenu, *presMenu;
+    QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu4, *alignMenu5;
+    QPopupMenu *pageMenu, *pieMenu, *rectMenu, *alignMenu6, *partMenu, *alignMenu7;
+    bool mousePressed;
+    ModifyType modType;
+    unsigned int oldMx, oldMy;
+    int resizeObjNum, editNum;
+    bool fillBlack;
+    KPresenterView *view;
+    bool editMode, goingBack, drawMode;
+    unsigned int currPresPage, currPresStep, subPresStep;
+    unsigned int oldPresPage, oldPresStep, oldSubPresStep;
+    float _presFakt;
+    QList<int> presStepList;
+    int PM_DM, PM_SM;
+    int firstX, firstY;
+    bool drawRubber;
+    KRect rubber, oldBoundingRect;
+    ToolEditMode toolEditMode;
+    KRect insRect;
+    KoDocumentEntry partEntry;
+    QList <KPObject> tmpObjs;
+    QString autoform;
 
 public slots:
-	void chPic();
-	void chClip();
+    void chPic();
+    void chClip();
 
 private slots:
 
-	// slots to react on changes
-	void toFontChanged( QFont* font ) { emit fontChanged( font ); }
-	void toColorChanged( QColor* color ) { emit colorChanged( color ); }
-	void toAlignChanged( TxtParagraph::HorzAlign a ) { emit alignChanged( a ); }
-	void objProperties();
-	void objConfigPie();
-	void objConfigRect();
-	void assignEffect();
-	void drawingMode();
-	void switchingMode();
-	void alignObjLeft();
-	void alignObjCenterH();
-	void alignObjRight();
-	void alignObjTop();
-	void alignObjCenterV();
-	void alignObjBottom();
-	void pageLayout();
-	void pageBackground();
-	void pageInsert();
-	void pageDelete();
-	void pagePaste();
-	void configPages();
-	void presStructView();
-	void slotGotoPage();
-	void slotExitPres();
-	void slotEditHF();
-	void slotTextContents2Height();
+    // slots to react on changes
+    void toFontChanged( QFont* font ) { emit fontChanged( font ); }
+    void toColorChanged( QColor* color ) { emit colorChanged( color ); }
+    void toAlignChanged( TxtParagraph::HorzAlign a ) { emit alignChanged( a ); }
+    void objProperties();
+    void objConfigPie();
+    void objConfigRect();
+    void assignEffect();
+    void drawingMode();
+    void switchingMode();
+    void alignObjLeft();
+    void alignObjCenterH();
+    void alignObjRight();
+    void alignObjTop();
+    void alignObjCenterV();
+    void alignObjBottom();
+    void pageLayout();
+    void pageBackground();
+    void pageInsert();
+    void pageDelete();
+    void pagePaste();
+    void configPages();
+    void presStructView();
+    void slotGotoPage();
+    void slotExitPres();
+    void slotEditHF();
+    void slotTextContents2Height();
 
 signals:
 
-	// signals to notify of changes
-	void fontChanged( QFont* );
-	void colorChanged( QColor* );
-	void alignChanged( TxtParagraph::HorzAlign );
-	void stopPres();
+    // signals to notify of changes
+    void fontChanged( QFont* );
+    void colorChanged( QColor* );
+    void alignChanged( TxtParagraph::HorzAlign );
+    void stopPres();
 
 };
 #endif //PAGE_H

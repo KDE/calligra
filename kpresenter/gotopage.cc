@@ -30,47 +30,47 @@
 
 /*================================================================*/
 KPGotoPage::KPGotoPage(int minValue,int maxValue,int start,
-					   QWidget *parent, const char *name, WFlags f )
-	: QFrame( parent, name, f ), _default( start ), page( start )
+                       QWidget *parent, const char *name, WFlags f )
+    : QFrame( parent, name, f ), _default( start ), page( start )
 {
-	label = new QLabel( i18n( "Goto Page:" ), this );
-	label->resize( label->sizeHint() );
+    label = new QLabel( i18n( "Goto Page:" ), this );
+    label->resize( label->sizeHint() );
 
-	spinbox = new QSpinBox(minValue,maxValue,1,this);
-	spinbox->setValue( page );
-	spinbox->resize( spinbox->sizeHint() );
+    spinbox = new QSpinBox(minValue,maxValue,1,this);
+    spinbox->setValue( page );
+    spinbox->resize( spinbox->sizeHint() );
 
-	spinbox->installEventFilter( this );
-	label->installEventFilter( this );
+    spinbox->installEventFilter( this );
+    label->installEventFilter( this );
 
-	setFrameStyle( QFrame::WinPanel | QFrame:: Raised );
+    setFrameStyle( QFrame::WinPanel | QFrame:: Raised );
 
-	spinbox->grabMouse();
-	spinbox->grabKeyboard();
-	setFocusProxy( spinbox );
-	setFocusPolicy( QWidget::StrongFocus );
-	spinbox->setFocus();
+    spinbox->grabMouse();
+    spinbox->grabKeyboard();
+    setFocusProxy( spinbox );
+    setFocusPolicy( QWidget::StrongFocus );
+    spinbox->setFocus();
 
-	resize( spinbox->width() + label->width() + 16,
-			QMAX( spinbox->height(), label->height() ) + 10 );
+    resize( spinbox->width() + label->width() + 16,
+            QMAX( spinbox->height(), label->height() ) + 10 );
 
-	move( ( kapp->desktop()->width() - width() ) / 2,
-		  ( kapp->desktop()->height() - height() ) / 2 );
+    move( ( kapp->desktop()->width() - width() ) / 2,
+          ( kapp->desktop()->height() - height() ) / 2 );
 
-	show();
+    show();
 }
 
 /*================================================================*/
 int KPGotoPage::gotoPage(int minValue,int maxValue,int start,QWidget *parent)
 {
-	KPGotoPage dia(minValue,maxValue,start,parent,0L,
-				   Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
+    KPGotoPage dia(minValue,maxValue,start,parent,0L,
+                   Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
 
-	kapp->enter_loop();
+    kapp->enter_loop();
 
-	int page = dia.getPage();
+    int page = dia.getPage();
 
-	return page;
+    return page;
 }
 
 /*================================================================*/
@@ -78,55 +78,55 @@ bool KPGotoPage::eventFilter( QObject *obj, QEvent *e )
 {
 #undef KeyPress
 
-	if ( e->type() == QEvent::KeyPress )
+    if ( e->type() == QEvent::KeyPress )
     {
-		QKeyEvent *ke = dynamic_cast<QKeyEvent*>( e );
-		if ( ke->key() == Key_Enter || ke->key() == Key_Return )
-		{
-			page = spinbox->value();
-	
-			spinbox->releaseMouse();
-			spinbox->releaseKeyboard();
-	
-			kapp->exit_loop();
-			hide();
-	
-			return true;
-		}
-		else if ( ke->key() == Key_Escape )
-		{
-			page = _default;
+        QKeyEvent *ke = dynamic_cast<QKeyEvent*>( e );
+        if ( ke->key() == Key_Enter || ke->key() == Key_Return )
+        {
+            page = spinbox->value();
+    
+            spinbox->releaseMouse();
+            spinbox->releaseKeyboard();
+    
+            kapp->exit_loop();
+            hide();
+    
+            return true;
+        }
+        else if ( ke->key() == Key_Escape )
+        {
+            page = _default;
 
-			spinbox->releaseMouse();
-			spinbox->releaseKeyboard();
+            spinbox->releaseMouse();
+            spinbox->releaseKeyboard();
 
-			kapp->exit_loop();
-			hide();
-	
-			return true;
-		}
-		else if ( ke->key() == Key_Up )
-		{
-			spinbox->stepUp();
-			return true;
-		}
-		else if ( ke->key() == Key_Down )
-		{
-			spinbox->stepDown();
-			return true;
-		}
+            kapp->exit_loop();
+            hide();
+    
+            return true;
+        }
+        else if ( ke->key() == Key_Up )
+        {
+            spinbox->stepUp();
+            return true;
+        }
+        else if ( ke->key() == Key_Down )
+        {
+            spinbox->stepDown();
+            return true;
+        }
     }
-	return false;
+    return false;
 }
 
 /*================================================================*/
 void KPGotoPage::resizeEvent( QResizeEvent *e )
 {
-	spinbox->resize( spinbox->sizeHint() );
-	label->resize( label->sizeHint() );
-	label->resize( label->width(), QMAX( label->height(), spinbox->height() ) );
+    spinbox->resize( spinbox->sizeHint() );
+    label->resize( label->sizeHint() );
+    label->resize( label->width(), QMAX( label->height(), spinbox->height() ) );
 
-	label->move( 5, 5 );
-	spinbox->move( label->x() + label->width() + 5, 5 );
+    label->move( 5, 5 );
+    spinbox->move( label->x() + label->width() + 5, 5 );
 }
 

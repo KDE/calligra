@@ -31,25 +31,25 @@ class KPresenterDoc;
 class SetOptionsCmd : public Command
 {
 public:
-	SetOptionsCmd( QString _name, QList<KPoint> &_diffs, QList<KPObject> &_objects,
-				   int _rastX, int _rastY, int _orastX, int _orastY,
-				   QColor _txtBackCol, QColor _otxtBackCol, KPresenterDoc *_doc );
-	~SetOptionsCmd();
+    SetOptionsCmd( QString _name, QList<KPoint> &_diffs, QList<KPObject> &_objects,
+                   int _rastX, int _rastY, int _orastX, int _orastY,
+                   QColor _txtBackCol, QColor _otxtBackCol, KPresenterDoc *_doc );
+    ~SetOptionsCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	SetOptionsCmd()
+    SetOptionsCmd()
     {; }
 
-	QList<KPoint> diffs;
-	QList<KPObject> objects;
-	int rastX, rastY;
-	int orastX, orastY;
-	KPresenterDoc *doc;
-	QColor txtBackCol;
-	QColor otxtBackCol;
+    QList<KPoint> diffs;
+    QList<KPObject> objects;
+    int rastX, rastY;
+    int orastX, orastY;
+    KPresenterDoc *doc;
+    QColor txtBackCol;
+    QColor otxtBackCol;
 
 };
 

@@ -39,23 +39,23 @@ class QLabel;
 
 class ShadowPreview : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	// constructor - destructor
-	ShadowPreview( QWidget* parent, const char* );
-	~ShadowPreview() {}
+    // constructor - destructor
+    ShadowPreview( QWidget* parent, const char* );
+    ~ShadowPreview() {}
 
-	void setShadowDirection( ShadowDirection sd ) { shadowDirection = sd; repaint( true ); }
-	void setShadowDistance( int sd ) { shadowDistance = sd; repaint( true ); }
-	void setShadowColor( QColor sc ) { shadowColor = sc; repaint( true ); }
+    void setShadowDirection( ShadowDirection sd ) { shadowDirection = sd; repaint( true ); }
+    void setShadowDistance( int sd ) { shadowDistance = sd; repaint( true ); }
+    void setShadowColor( QColor sc ) { shadowColor = sc; repaint( true ); }
 
 protected:
-	void drawContents( QPainter* );
+    void drawContents( QPainter* );
 
-	ShadowDirection shadowDirection;
-	int shadowDistance;
-	QColor shadowColor;
+    ShadowDirection shadowDirection;
+    int shadowDistance;
+    QColor shadowColor;
 
 };
 
@@ -65,49 +65,49 @@ protected:
 
 class ShadowDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	// constructor - destructor
-	ShadowDia( QWidget* parent, const char* );
-	~ShadowDia();
+    // constructor - destructor
+    ShadowDia( QWidget* parent, const char* );
+    ~ShadowDia();
 
-	void setShadowDirection( ShadowDirection sd );
-	void setShadowDistance( int sd );
-	void setShadowColor( QColor sc );
+    void setShadowDirection( ShadowDirection sd );
+    void setShadowDistance( int sd );
+    void setShadowColor( QColor sc );
 
-	ShadowDirection getShadowDirection() { return shadowDirection; }
-	int getShadowDistance() { return shadowDistance; }
-	QColor getShadowColor() { return shadowColor; }
+    ShadowDirection getShadowDirection() { return shadowDirection; }
+    int getShadowDistance() { return shadowDistance; }
+    QColor getShadowColor() { return shadowColor; }
 
 protected:
-	QSpinBox *distance;
-	QGroupBox *shadow, *preview;
-	ShadowPreview *sPreview;
-	QPushButton *lu, *u, *ru, *r, *rb, *b, *lb, *l;
-	QPushButton *okBut, *applyBut, *cancelBut;
-	KColorButton *color;
-	QLabel *lcolor, *ldirection, *ldistance;
+    QSpinBox *distance;
+    QGroupBox *shadow, *preview;
+    ShadowPreview *sPreview;
+    QPushButton *lu, *u, *ru, *r, *rb, *b, *lb, *l;
+    QPushButton *okBut, *applyBut, *cancelBut;
+    KColorButton *color;
+    QLabel *lcolor, *ldirection, *ldistance;
 
-	ShadowDirection shadowDirection;
-	int shadowDistance;
-	QColor shadowColor;
+    ShadowDirection shadowDirection;
+    int shadowDistance;
+    QColor shadowColor;
 
 protected slots:
-	void luChanged();
-	void uChanged();
-	void ruChanged();
-	void rChanged();
-	void rbChanged();
-	void bChanged();
-	void lbChanged();
-	void lChanged();
-	void colorChanged( const QColor& );
-	void distanceChanged( int );
-	void Apply() { emit shadowDiaOk(); }
+    void luChanged();
+    void uChanged();
+    void ruChanged();
+    void rChanged();
+    void rbChanged();
+    void bChanged();
+    void lbChanged();
+    void lChanged();
+    void colorChanged( const QColor& );
+    void distanceChanged( int );
+    void Apply() { emit shadowDiaOk(); }
 
 signals:
-	void shadowDiaOk();
+    void shadowDiaOk();
 
 };
 

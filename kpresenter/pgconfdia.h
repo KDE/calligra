@@ -32,31 +32,31 @@ class QPushButton;
 
 class PgConfDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	// constructor - destructor
-	PgConfDia( QWidget* parent=0, const char* name=0,
-			   bool infLoop = false, bool swMan = true, int pgNum = 1, PageEffect pageEffect = PEF_NONE, PresSpeed = PS_NORMAL );
-	~PgConfDia();
-	bool getInfinitLoop() {return infinitLoop->isChecked(); }
-	bool getManualSwitch() {return manualSwitch->isChecked(); }
-	PageEffect getPageEffect() {return static_cast<PageEffect>( effectCombo->currentItem() ); }
-	PresSpeed getPresSpeed() {return static_cast<PresSpeed>( speedCombo->currentItem() ); }
+    // constructor - destructor
+    PgConfDia( QWidget* parent=0, const char* name=0,
+               bool infLoop = false, bool swMan = true, int pgNum = 1, PageEffect pageEffect = PEF_NONE, PresSpeed = PS_NORMAL );
+    ~PgConfDia();
+    bool getInfinitLoop() {return infinitLoop->isChecked(); }
+    bool getManualSwitch() {return manualSwitch->isChecked(); }
+    PageEffect getPageEffect() {return static_cast<PageEffect>( effectCombo->currentItem() ); }
+    PresSpeed getPresSpeed() {return static_cast<PresSpeed>( speedCombo->currentItem() ); }
 
 protected:
-	QButtonGroup *general, *page;
-	QCheckBox *infinitLoop, *manualSwitch;
-	QLabel *label1, *label2, *label3, *label4;
-	QPushButton *cancelBut, *okBut;
-	QComboBox *effectCombo, *speedCombo;
+    QButtonGroup *general, *page;
+    QCheckBox *infinitLoop, *manualSwitch;
+    QLabel *label1, *label2, *label3, *label4;
+    QPushButton *cancelBut, *okBut;
+    QComboBox *effectCombo, *speedCombo;
 
 public slots:
-	void confDiaOk() {emit pgConfDiaOk(); }
+    void confDiaOk() {emit pgConfDiaOk(); }
 
 signals:
-	void pgConfDiaOk();
+    void pgConfDiaOk();
 
 };
 

@@ -36,211 +36,211 @@
 
 /*================================================================*/
 KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, QList<QFont> *_font, QList<QColor>* _color, QList<QChar>* _chr )
-	: QDialog( parent, name, true )
+    : QDialog( parent, name, true )
 {
-	unsigned int i = 0;
+    unsigned int i = 0;
 
-	vFont = _font;
-	vColor = _color;
-	vChr = _chr;
+    vFont = _font;
+    vColor = _color;
+    vChr = _chr;
 
-	_depth = 0;
+    _depth = 0;
 
-	setCaption( "Select a character" );
+    setCaption( "Select a character" );
 
-	grid = new QGridLayout( this, 3, 1, 15, 7 );
+    grid = new QGridLayout( this, 3, 1, 15, 7 );
 
-	charSelect = new KCharSelect( this, "", vFont->at( 0 )->family(), *vChr->at( 0 ) );
-	charSelect->resize( charSelect->sizeHint() );
-	grid->addWidget( charSelect, 0, 0 );
-	connect( charSelect, SIGNAL( activated( const QChar & ) ), this, SLOT( charChanged( const QChar & ) ) );
-	connect( charSelect, SIGNAL( fontChanged( const QString & ) ), this, SLOT( fontSelected( const QString & ) ) );
+    charSelect = new KCharSelect( this, "", vFont->at( 0 )->family(), *vChr->at( 0 ) );
+    charSelect->resize( charSelect->sizeHint() );
+    grid->addWidget( charSelect, 0, 0 );
+    connect( charSelect, SIGNAL( activated( const QChar & ) ), this, SLOT( charChanged( const QChar & ) ) );
+    connect( charSelect, SIGNAL( fontChanged( const QString & ) ), this, SLOT( fontSelected( const QString & ) ) );
 
-	wid = new QWidget( this );
+    wid = new QWidget( this );
 
-	grid2 = new QGridLayout( wid, 2, 7, 0, 7 );
+    grid2 = new QGridLayout( wid, 2, 7, 0, 7 );
 
-	lSize = new QLabel( "Size:", wid );
-	lSize->resize( lSize->sizeHint() );
-	grid2->addWidget( lSize, 0, 0 );
+    lSize = new QLabel( "Size:", wid );
+    lSize->resize( lSize->sizeHint() );
+    grid2->addWidget( lSize, 0, 0 );
 
-	lColor = new QLabel( "Color:", wid );
-	lColor->resize( lColor->sizeHint() );
-	grid2->addWidget( lColor, 0, 1 );
+    lColor = new QLabel( "Color:", wid );
+    lColor->resize( lColor->sizeHint() );
+    grid2->addWidget( lColor, 0, 1 );
 
-	sizeCombo = new QComboBox( false, wid );
-	char chr[ 5 ];
-	for ( i = 4; i <= 100; i++ )
+    sizeCombo = new QComboBox( false, wid );
+    char chr[ 5 ];
+    for ( i = 4; i <= 100; i++ )
     {
-		sprintf( chr, "%d", i );
-		sizeCombo->insertItem( chr, -1 );
+        sprintf( chr, "%d", i );
+        sizeCombo->insertItem( chr, -1 );
     }
-	sizeCombo->resize( sizeCombo->sizeHint() );
-	grid2->addWidget( sizeCombo, 1, 0 );
-	sizeCombo->setCurrentItem( vFont->at( 0 )->pointSize() - 4 );
-	connect( sizeCombo, SIGNAL( activated( int ) ), this, SLOT( sizeSelected( int ) ) );
+    sizeCombo->resize( sizeCombo->sizeHint() );
+    grid2->addWidget( sizeCombo, 1, 0 );
+    sizeCombo->setCurrentItem( vFont->at( 0 )->pointSize() - 4 );
+    connect( sizeCombo, SIGNAL( activated( int ) ), this, SLOT( sizeSelected( int ) ) );
 
-	colorButton = new KColorButton( *vColor->at( 0 ), wid );
-	colorButton->resize( colorButton->sizeHint() );
-	grid2->addWidget( colorButton, 1, 1 );
-	connect( colorButton, SIGNAL( changed( const QColor& ) ), this, SLOT( colorChanged( const QColor& ) ) );
+    colorButton = new KColorButton( *vColor->at( 0 ), wid );
+    colorButton->resize( colorButton->sizeHint() );
+    grid2->addWidget( colorButton, 1, 1 );
+    connect( colorButton, SIGNAL( changed( const QColor& ) ), this, SLOT( colorChanged( const QColor& ) ) );
 
-	lAttrib = new QLabel( "Attributes:", wid );
-	lAttrib->resize( lAttrib->sizeHint() );
-	grid2->addMultiCellWidget( lAttrib, 0, 0, 2, 4 );
+    lAttrib = new QLabel( "Attributes:", wid );
+    lAttrib->resize( lAttrib->sizeHint() );
+    grid2->addMultiCellWidget( lAttrib, 0, 0, 2, 4 );
 
-	bold = new QCheckBox( "Bold", wid );
-	bold->resize( bold->sizeHint() );
-	grid2->addWidget( bold, 1, 2 );
-	bold->setChecked( vFont->at( 0 )->bold() );
-	connect( bold, SIGNAL( clicked() ), this, SLOT( boldChanged() ) );
+    bold = new QCheckBox( "Bold", wid );
+    bold->resize( bold->sizeHint() );
+    grid2->addWidget( bold, 1, 2 );
+    bold->setChecked( vFont->at( 0 )->bold() );
+    connect( bold, SIGNAL( clicked() ), this, SLOT( boldChanged() ) );
 
-	italic= new QCheckBox( "Italic", wid );
-	italic->resize( italic->sizeHint() );
-	grid2->addWidget( italic, 1, 3 );
-	italic->setChecked( vFont->at( 0 )->italic() );
-	connect( italic, SIGNAL( clicked() ), this, SLOT( italicChanged() ) );
+    italic= new QCheckBox( "Italic", wid );
+    italic->resize( italic->sizeHint() );
+    grid2->addWidget( italic, 1, 3 );
+    italic->setChecked( vFont->at( 0 )->italic() );
+    connect( italic, SIGNAL( clicked() ), this, SLOT( italicChanged() ) );
 
-	underl = new QCheckBox( "Underlined", wid );
-	underl->resize( underl->sizeHint() );
-	grid2->addWidget( underl, 1, 4 );
-	underl->setChecked( vFont->at( 0 )->underline() );
-	connect( underl, SIGNAL( clicked() ), this, SLOT( underlChanged() ) );
+    underl = new QCheckBox( "Underlined", wid );
+    underl->resize( underl->sizeHint() );
+    grid2->addWidget( underl, 1, 4 );
+    underl->setChecked( vFont->at( 0 )->underline() );
+    connect( underl, SIGNAL( clicked() ), this, SLOT( underlChanged() ) );
 
-	lDepth = new QLabel( "Depth", wid );
-	lDepth->resize( lDepth->sizeHint() );
-	grid2->addWidget( lDepth, 0, 5 );
+    lDepth = new QLabel( "Depth", wid );
+    lDepth->resize( lDepth->sizeHint() );
+    grid2->addWidget( lDepth, 0, 5 );
 
-	depthCombo = new QComboBox( false, wid );
-	for ( i = 1; i <= 16; i++ )
+    depthCombo = new QComboBox( false, wid );
+    for ( i = 1; i <= 16; i++ )
     {
-		sprintf( chr, "%d", i );
-		depthCombo->insertItem( chr, -1 );
+        sprintf( chr, "%d", i );
+        depthCombo->insertItem( chr, -1 );
     }
-	depthCombo->resize( depthCombo->sizeHint() );
-	grid2->addWidget( depthCombo, 1, 5 );
-	connect( depthCombo, SIGNAL( activated( int ) ), this, SLOT( depthSelected( int ) ) );
+    depthCombo->resize( depthCombo->sizeHint() );
+    grid2->addWidget( depthCombo, 1, 5 );
+    connect( depthCombo, SIGNAL( activated( int ) ), this, SLOT( depthSelected( int ) ) );
 
-	lPreview = new QLabel( wid );
-	lPreview->setBackgroundColor( white );
-	lPreview->resize( 7+colorButton->height()+lColor->height(),
-					  7+colorButton->height()+lColor->height() );
-	lPreview->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-	lPreview->setText( *vChr->at( 0 ) );
-	lPreview->setAlignment( AlignHCenter | AlignVCenter );
-	lPreview->setFont( *vFont->at( 0 ) );
-	colorChanged( *vColor->at( 0 ) );
-	grid2->addMultiCellWidget( lPreview, 0, 1, 6, 6 );
+    lPreview = new QLabel( wid );
+    lPreview->setBackgroundColor( white );
+    lPreview->resize( 7+colorButton->height()+lColor->height(),
+                      7+colorButton->height()+lColor->height() );
+    lPreview->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    lPreview->setText( *vChr->at( 0 ) );
+    lPreview->setAlignment( AlignHCenter | AlignVCenter );
+    lPreview->setFont( *vFont->at( 0 ) );
+    colorChanged( *vColor->at( 0 ) );
+    grid2->addMultiCellWidget( lPreview, 0, 1, 6, 6 );
 
-	grid->addWidget( wid, 1, 0 );
+    grid->addWidget( wid, 1, 0 );
 
-	bbox = new KButtonBox( this, KButtonBox::HORIZONTAL, 7 );
-	bbox->addStretch( 20 );
-	bOk = bbox->addButton( "OK" );
-	bOk->setAutoRepeat( false );
-	bOk->setAutoResize( false );
-	bOk->setAutoDefault( true );
-	bOk->setDefault( true );
-	connect( bOk, SIGNAL( clicked() ), SLOT( accept() ) );
-	bCancel = bbox->addButton( "Cancel" );
-	connect( bCancel, SIGNAL( clicked() ), SLOT( reject() ) );
-	bbox->layout();
-	grid->addWidget( bbox, 2, 0 );
+    bbox = new KButtonBox( this, KButtonBox::HORIZONTAL, 7 );
+    bbox->addStretch( 20 );
+    bOk = bbox->addButton( "OK" );
+    bOk->setAutoRepeat( false );
+    bOk->setAutoResize( false );
+    bOk->setAutoDefault( true );
+    bOk->setDefault( true );
+    connect( bOk, SIGNAL( clicked() ), SLOT( accept() ) );
+    bCancel = bbox->addButton( "Cancel" );
+    connect( bCancel, SIGNAL( clicked() ), SLOT( reject() ) );
+    bbox->layout();
+    grid->addWidget( bbox, 2, 0 );
 
-	grid->setRowStretch( 1, 1 );
+    grid->setRowStretch( 1, 1 );
 
-	charSelect->setFocus();
+    charSelect->setFocus();
 }
 
 /*================================================================*/
 bool KCharSelectDia::selectChar( QList<QFont> *_font, QList<QColor> *_color, QList<QChar> *_chr )
 {
-	bool res = false;
+    bool res = false;
 
-	KCharSelectDia *dlg = new KCharSelectDia( 0L, "Select Character", _font, _color, _chr );
-	if ( dlg->exec() == QDialog::Accepted )
+    KCharSelectDia *dlg = new KCharSelectDia( 0L, "Select Character", _font, _color, _chr );
+    if ( dlg->exec() == QDialog::Accepted )
     {
-		_font = dlg->font();
-		_color = dlg->color();
-		_chr = dlg->chr();
-		res = true;
+        _font = dlg->font();
+        _color = dlg->color();
+        _chr = dlg->chr();
+        res = true;
     }
 
-	delete dlg;
+    delete dlg;
 
-	return res;
+    return res;
 }
 
 /*================================================================*/
 void KCharSelectDia::fontSelected( const QString &_family )
 {
-	vFont->at( _depth )->setFamily( _family );
-	lPreview->setFont( *vFont->at( _depth ) );
+    vFont->at( _depth )->setFamily( _family );
+    lPreview->setFont( *vFont->at( _depth ) );
 }
 
 /*================================================================*/
 void KCharSelectDia::sizeSelected( int i )
 {
-	vFont->at( _depth )->setPointSize( i + 4 );
-	lPreview->setFont( *vFont->at( _depth ) );
+    vFont->at( _depth )->setPointSize( i + 4 );
+    lPreview->setFont( *vFont->at( _depth ) );
 }
 
 /*================================================================*/
 void KCharSelectDia::depthSelected( int d )
 {
-	_depth = d;
+    _depth = d;
 
-	lPreview->setText( *vChr->at( d ) );
-	charSelect->setChar( *vChr->at( d ) );
+    lPreview->setText( *vChr->at( d ) );
+    charSelect->setChar( *vChr->at( d ) );
 
-	charSelect->setFont( vFont->at( d )->family() );
+    charSelect->setFont( vFont->at( d )->family() );
 
-	colorButton->setColor( *vColor->at( d ) );
-	colorChanged( *vColor->at( d ) );
+    colorButton->setColor( *vColor->at( d ) );
+    colorChanged( *vColor->at( d ) );
 
-	bold->setChecked( vFont->at( d )->bold() );
-	italic->setChecked( vFont->at( d )->italic() );
-	underl->setChecked( vFont->at( d )->underline() );
+    bold->setChecked( vFont->at( d )->bold() );
+    italic->setChecked( vFont->at( d )->italic() );
+    underl->setChecked( vFont->at( d )->underline() );
 
-	sizeCombo->setCurrentItem( vFont->at( d )->pointSize() - 4 );
+    sizeCombo->setCurrentItem( vFont->at( d )->pointSize() - 4 );
 }
 
 /*================================================================*/
 void KCharSelectDia::colorChanged( const QColor& _color )
 {
-	*vColor->at( _depth ) = _color;
-	QColorGroup cgrp( _color, lPreview->colorGroup().background(),
-					  lPreview->colorGroup().light(), lPreview->colorGroup().dark(),
-					  lPreview->colorGroup().mid(), _color, lPreview->colorGroup().base() );
-	QPalette p( cgrp, cgrp, cgrp );
+    *vColor->at( _depth ) = _color;
+    QColorGroup cgrp( _color, lPreview->colorGroup().background(),
+                      lPreview->colorGroup().light(), lPreview->colorGroup().dark(),
+                      lPreview->colorGroup().mid(), _color, lPreview->colorGroup().base() );
+    QPalette p( cgrp, cgrp, cgrp );
 
-	lPreview->setPalette( p );
+    lPreview->setPalette( p );
 }
 
 /*================================================================*/
 void KCharSelectDia::boldChanged()
 {
-	vFont->at( _depth )->setBold( bold->isChecked() );
-	lPreview->setFont( *vFont->at( _depth ) );
+    vFont->at( _depth )->setBold( bold->isChecked() );
+    lPreview->setFont( *vFont->at( _depth ) );
 }
 
 /*================================================================*/
 void KCharSelectDia::italicChanged()
 {
-	vFont->at( _depth )->setItalic( italic->isChecked() );
-	lPreview->setFont( *vFont->at( _depth ) );
+    vFont->at( _depth )->setItalic( italic->isChecked() );
+    lPreview->setFont( *vFont->at( _depth ) );
 }
 
 /*================================================================*/
 void KCharSelectDia::underlChanged()
 {
-	vFont->at( _depth )->setUnderline( underl->isChecked() );
-	lPreview->setFont( *vFont->at( _depth ) );
+    vFont->at( _depth )->setUnderline( underl->isChecked() );
+    lPreview->setFont( *vFont->at( _depth ) );
 }
 
 /*================================================================*/
 void KCharSelectDia::charChanged( const QChar &_chr )
 {
-	lPreview->setText( _chr );
-	*vChr->at( _depth ) = _chr;
+    lPreview->setText( _chr );
+    *vChr->at( _depth ) = _chr;
 }

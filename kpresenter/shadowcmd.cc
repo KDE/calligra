@@ -22,47 +22,47 @@
 
 /*======================== constructor ===========================*/
 ShadowCmd::ShadowCmd( QString _name, QList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
-					  QList<KPObject> &_objects, KPresenterDoc *_doc )
-	: Command( _name ), oldShadow( _oldShadow ), objects( _objects )
+                      QList<KPObject> &_objects, KPresenterDoc *_doc )
+    : Command( _name ), oldShadow( _oldShadow ), objects( _objects )
 {
-	objects.setAutoDelete( false );
-	oldShadow.setAutoDelete( false );
-	doc = _doc;
-	newShadow = _newShadow;
+    objects.setAutoDelete( false );
+    oldShadow.setAutoDelete( false );
+    doc = _doc;
+    newShadow = _newShadow;
 
-	for ( unsigned int i = 0; i < objects.count(); i++ )
-		objects.at( i )->incCmdRef();
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 ShadowCmd::~ShadowCmd()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
-		objects.at( i )->decCmdRef();
-	oldShadow.setAutoDelete( true );
-	oldShadow.clear();
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->decCmdRef();
+    oldShadow.setAutoDelete( true );
+    oldShadow.clear();
 }
 
 /*====================== execute =================================*/
 void ShadowCmd::execute()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
+    for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-		objects.at( i )->setShadowDistance( newShadow.shadowDistance );
-		objects.at( i )->setShadowDirection( newShadow.shadowDirection );
-		objects.at( i )->setShadowColor( newShadow.shadowColor );
+        objects.at( i )->setShadowDistance( newShadow.shadowDistance );
+        objects.at( i )->setShadowDirection( newShadow.shadowDirection );
+        objects.at( i )->setShadowColor( newShadow.shadowColor );
     }
-	doc->repaint( false );
+    doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
 void ShadowCmd::unexecute()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
+    for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-		objects.at( i )->setShadowDistance( oldShadow.at( i )->shadowDistance );
-		objects.at( i )->setShadowDirection( oldShadow.at( i )->shadowDirection );
-		objects.at( i )->setShadowColor( oldShadow.at( i )->shadowColor );
+        objects.at( i )->setShadowDistance( oldShadow.at( i )->shadowDistance );
+        objects.at( i )->setShadowDirection( oldShadow.at( i )->shadowDirection );
+        objects.at( i )->setShadowColor( oldShadow.at( i )->shadowColor );
     }
-	doc->repaint( false );
+    doc->repaint( false );
 }

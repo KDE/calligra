@@ -36,63 +36,63 @@ class QLineEdit;
 
 class KEnumListDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	static const int NUMBER = 1;
-	static const int ALPHABETH = 2;
+    static const int NUMBER = 1;
+    static const int ALPHABETH = 2;
 
-	// constructor - destructor
-	KEnumListDia( QWidget*, const char*, int, QFont, QColor, QString, QString, int, QStrList );
-	~KEnumListDia();
+    // constructor - destructor
+    KEnumListDia( QWidget*, const char*, int, QFont, QColor, QString, QString, int, QStrList );
+    ~KEnumListDia();
 
-	// show enum list dialog
-	static bool enumListDia( int&, QFont&, QColor&, QString&, QString&, int&, QStrList );
+    // show enum list dialog
+    static bool enumListDia( int&, QFont&, QColor&, QString&, QString&, int&, QStrList );
 
-	// return values
-	int type() {return _type; }
-	QFont font() {return _font; }
-	QColor color() {return _color; }
-	QString before() {return _before; }
-	QString after() {return _after; }
-	int start() {return _start; }
+    // return values
+    int type() {return _type; }
+    QFont font() {return _font; }
+    QColor color() {return _color; }
+    QString before() {return _before; }
+    QString after() {return _after; }
+    int start() {return _start; }
 
 protected:
 
-	// dialog objects
-	QGridLayout *grid;
-	QLabel *lFont, *lSize, *lColor, *lAttrib, *lBefore, *lAfter, *lStart;
-	QLineEdit *eBefore, *eAfter, *eStart;
-	QComboBox *fontCombo, *sizeCombo;
-	KColorButton *colorButton;
-	QCheckBox *bold, *italic, *underl;
-	QRadioButton *number, *alphabeth;
-	KButtonBox *bbox;
-	QPushButton *bOk, *bCancel;
+    // dialog objects
+    QGridLayout *grid;
+    QLabel *lFont, *lSize, *lColor, *lAttrib, *lBefore, *lAfter, *lStart;
+    QLineEdit *eBefore, *eAfter, *eStart;
+    QComboBox *fontCombo, *sizeCombo;
+    KColorButton *colorButton;
+    QCheckBox *bold, *italic, *underl;
+    QRadioButton *number, *alphabeth;
+    KButtonBox *bbox;
+    QPushButton *bOk, *bCancel;
 
-	// values
-	int _type;
-	QFont _font;
-	QColor _color;
-	QString _before;
-	QString _after;
-	int _start;
+    // values
+    int _type;
+    QFont _font;
+    QColor _color;
+    QString _before;
+    QString _after;
+    int _start;
 
-	QStrList fontList;
+    QStrList fontList;
 
 protected slots:
-	void fontSelected( const QString & );
-	void sizeSelected( int );
-	void colorChanged( const QColor& );
-	void boldChanged();
-	void italicChanged();
-	void underlChanged();
-	void beforeChanged( const QString & );
-	void afterChanged( const QString & );
-	void startChanged( const QString & );
-	void numChanged();
-	void alphaChanged();
+    void fontSelected( const QString & );
+    void sizeSelected( int );
+    void colorChanged( const QColor& );
+    void boldChanged();
+    void italicChanged();
+    void underlChanged();
+    void beforeChanged( const QString & );
+    void afterChanged( const QString & );
+    void startChanged( const QString & );
+    void numChanged();
+    void alphaChanged();
 
 };
 

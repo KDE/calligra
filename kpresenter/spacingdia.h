@@ -33,21 +33,21 @@ class QWidget;
 
 class SpacingDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int _distAfter );
+    SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int _distAfter );
 
 protected:
-	QLabel *lLineSpacing, *lDistBefore, *lDistAfter;
-	KRestrictedLine *eLineSpacing, *eDistBefore, *eDistAfter;
-	QPushButton *cancelBut, *okBut;
+    QLabel *lLineSpacing, *lDistBefore, *lDistAfter;
+    KRestrictedLine *eLineSpacing, *eDistBefore, *eDistAfter;
+    QPushButton *cancelBut, *okBut;
 
 public slots:
-	void slotSpacingDiaOk();
+    void slotSpacingDiaOk();
 
 signals:
-	void spacingDiaOk( int, int, int );
+    void spacingDiaOk( int, int, int );
 
 };
 

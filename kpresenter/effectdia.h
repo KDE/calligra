@@ -35,28 +35,28 @@ class QPushButton;
 
 class EffectDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	// constructor - destructor
-	EffectDia( QWidget* parent, const char*, int, int, KPresenterView* );
-	~EffectDia();
+    // constructor - destructor
+    EffectDia( QWidget* parent, const char*, int, int, KPresenterView* );
+    ~EffectDia();
 
 protected:
-	QComboBox *cEffect, *cEffect2;
-	QLabel *lEffect, *lEffect2, *lNum;
-	QSpinBox *eNum;
-	QPushButton *cancelBut, *okBut;
+    QComboBox *cEffect, *cEffect2;
+    QLabel *lEffect, *lEffect2, *lNum;
+    QSpinBox *eNum;
+    QPushButton *cancelBut, *okBut;
 
-	int objNum, pageNum;
-	KPresenterView *view;
+    int objNum, pageNum;
+    KPresenterView *view;
 
 public slots:
-	void slotEffectDiaOk();
+    void slotEffectDiaOk();
 
 signals:
-	void effectDiaOk();
+    void effectDiaOk();
 
 };
 

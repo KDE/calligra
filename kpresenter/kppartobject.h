@@ -35,83 +35,83 @@ class KPGradient;
 class KPPartObject : public KPObject
 {
 public:
-	KPPartObject( KPresenterChild *_child );
-	virtual ~KPPartObject()
-	{}
-	
-	virtual void save( ostream& out );
-	virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    KPPartObject( KPresenterChild *_child );
+    virtual ~KPPartObject()
+    {}
+    
+    virtual void save( ostream& out );
+    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
-	virtual void setPen( QPen _pen )
+    virtual void setPen( QPen _pen )
     { pen = _pen; }
-	virtual void setBrush( QBrush _brush )
+    virtual void setBrush( QBrush _brush )
     { brush = _brush; }
-	virtual void setFillType( FillType _fillType );
-	virtual void setGColor1( QColor _gColor1 )
+    virtual void setFillType( FillType _fillType );
+    virtual void setGColor1( QColor _gColor1 )
     { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; redrawPix = true; }
-	virtual void setGColor2( QColor _gColor2 )
+    virtual void setGColor2( QColor _gColor2 )
     { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; redrawPix = true; }
-	virtual void setGType( BCType _gType )
+    virtual void setGType( BCType _gType )
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; redrawPix = true; }
 
-	virtual ObjType getType()
+    virtual ObjType getType()
     { return OT_PART; }
-	virtual QPen getPen()
+    virtual QPen getPen()
     { return pen; }
-	virtual QBrush getBrush()
+    virtual QBrush getBrush()
     { return brush; }
-	virtual FillType getFillType()
+    virtual FillType getFillType()
     { return fillType; }
-	virtual QColor getGColor1()
+    virtual QColor getGColor1()
     { return gColor1; }
-	virtual QColor getGColor2()
+    virtual QColor getGColor2()
     { return gColor2; }
-	virtual BCType getGType()
+    virtual BCType getGType()
     { return gType; }
 
-	virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
-	virtual void activate( QWidget *_widget, int diffx, int diffy );
-	virtual void deactivate();
+    virtual void activate( QWidget *_widget, int diffx, int diffy );
+    virtual void deactivate();
 
-	virtual void setSize( int _width, int _height );
-	virtual void resizeBy( int _dx, int _dy );
-	virtual void setOrig( int _x, int _y );
-	virtual void moveBy( int _dx, int _dy );
+    virtual void setSize( int _width, int _height );
+    virtual void resizeBy( int _dx, int _dy );
+    virtual void setOrig( int _x, int _y );
+    virtual void moveBy( int _dx, int _dy );
 
-	KPresenterFrame *getView() { return view; }
-	void setView( KPresenterFrame *_view ) { view = _view; }
+    KPresenterFrame *getView() { return view; }
+    void setView( KPresenterFrame *_view ) { view = _view; }
 
-	void setMainWindow( OpenParts::MainWindow_ptr _mainWindow ) { mainWindow = KOffice::MainWindow::_narrow( _mainWindow ); }
-	void setParentID( OpenParts::Id _id ) { parentID = _id; }
+    void setMainWindow( OpenParts::MainWindow_ptr _mainWindow ) { mainWindow = KOffice::MainWindow::_narrow( _mainWindow ); }
+    void setParentID( OpenParts::Id _id ) { parentID = _id; }
 
-	KPresenterChild *getChild() { return child; }
+    KPresenterChild *getChild() { return child; }
 
-	void enableDrawing( bool f ) { _enableDrawing = f; }
+    void enableDrawing( bool f ) { _enableDrawing = f; }
 
-	void setGetNewPic( bool _new )
+    void setGetNewPic( bool _new )
     { getNewPic = _new; }
 
 protected:
-	void paint( QPainter *_painter );
+    void paint( QPainter *_painter );
 
-	QPen pen;
-	QBrush brush;
-	QColor gColor1, gColor2;
-	BCType gType;
-	FillType fillType;
+    QPen pen;
+    QBrush brush;
+    QColor gColor1, gColor2;
+    BCType gType;
+    FillType fillType;
 
-	KPGradient *gradient;
-	QPixmap pix;
-	bool redrawPix;
-	bool _enableDrawing;
+    KPGradient *gradient;
+    QPixmap pix;
+    bool redrawPix;
+    bool _enableDrawing;
 
-	KPresenterFrame *view;
-	KPresenterChild *child;
-	KOffice::MainWindow_var mainWindow;
-	OpenParts::Id parentID;
+    KPresenterFrame *view;
+    KPresenterChild *child;
+    KOffice::MainWindow_var mainWindow;
+    OpenParts::Id parentID;
 
-	bool getNewPic;
+    bool getNewPic;
 
 };
 

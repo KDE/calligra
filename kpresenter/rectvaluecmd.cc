@@ -24,41 +24,41 @@
 
 /*======================== constructor ===========================*/
 RectValueCmd::RectValueCmd( QString _name, QList<RectValues> &_oldValues, RectValues _newValues,
-							QList<KPObject> &_objects, KPresenterDoc *_doc )
-	: Command( _name ), oldValues( _oldValues ), objects( _objects )
+                            QList<KPObject> &_objects, KPresenterDoc *_doc )
+    : Command( _name ), oldValues( _oldValues ), objects( _objects )
 {
-	objects.setAutoDelete( false );
-	oldValues.setAutoDelete( false );
-	doc = _doc;
-	newValues = _newValues;
+    objects.setAutoDelete( false );
+    oldValues.setAutoDelete( false );
+    doc = _doc;
+    newValues = _newValues;
 
-	for ( unsigned int i = 0; i < objects.count(); i++ )
-		objects.at( i )->incCmdRef();
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 RectValueCmd::~RectValueCmd()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
-		objects.at( i )->decCmdRef();
-	oldValues.setAutoDelete( true );
-	oldValues.clear();
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->decCmdRef();
+    oldValues.setAutoDelete( true );
+    oldValues.clear();
 }
 
 /*====================== execute =================================*/
 void RectValueCmd::execute()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
-		dynamic_cast<KPRectObject*>( objects.at( i ) )->setRnds( newValues.xRnd, newValues.yRnd );
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        dynamic_cast<KPRectObject*>( objects.at( i ) )->setRnds( newValues.xRnd, newValues.yRnd );
 
-	doc->repaint( false );
+    doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
 void RectValueCmd::unexecute()
 {
-	for ( unsigned int i = 0; i < objects.count(); i++ )
-		dynamic_cast<KPRectObject*>( objects.at( i ) )->setRnds( oldValues.at( i )->xRnd, oldValues.at( i )->yRnd );
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        dynamic_cast<KPRectObject*>( objects.at( i ) )->setRnds( oldValues.at( i )->xRnd, oldValues.at( i )->yRnd );
 
-	doc->repaint( false );
+    doc->repaint( false );
 }

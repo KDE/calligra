@@ -25,56 +25,56 @@
 
 /*======================== constructor ===========================*/
 ResizeCmd::ResizeCmd( QString _name, KPoint _m_diff, KSize _r_diff, KPObject *_object, KPresenterDoc *_doc )
-	: Command( _name ), m_diff( _m_diff ), r_diff( _r_diff )
+    : Command( _name ), m_diff( _m_diff ), r_diff( _r_diff )
 {
-	object = _object;
-	doc = _doc;
-	object->incCmdRef();
+    object = _object;
+    doc = _doc;
+    object->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 ResizeCmd::~ResizeCmd()
 {
-	object->decCmdRef();
+    object->decCmdRef();
 }
 
 /*====================== execute =================================*/
 void ResizeCmd::execute()
 {
-	KRect oldRect;
+    KRect oldRect;
 
-	oldRect = object->getBoundingRect( 0, 0 );
-	object->moveBy( m_diff );
-	object->resizeBy( r_diff );
-	doc->repaint( oldRect );
-	doc->repaint( object );
+    oldRect = object->getBoundingRect( 0, 0 );
+    object->moveBy( m_diff );
+    object->resizeBy( r_diff );
+    doc->repaint( oldRect );
+    doc->repaint( object );
 }
 
 /*====================== unexecute ===============================*/
 void ResizeCmd::unexecute()
 {
-	KRect oldRect;
+    KRect oldRect;
 
-	oldRect = object->getBoundingRect( 0, 0 );
-	object->moveBy( -m_diff.x(), -m_diff.y() );
-	object->resizeBy( -r_diff.width(), -r_diff.height() );
-	doc->repaint( oldRect );
-	doc->repaint( object );
+    oldRect = object->getBoundingRect( 0, 0 );
+    object->moveBy( -m_diff.x(), -m_diff.y() );
+    object->resizeBy( -r_diff.width(), -r_diff.height() );
+    doc->repaint( oldRect );
+    doc->repaint( object );
 }
 
 /*====================== unexecute ===============================*/
 void ResizeCmd::unexecute( bool _repaint )
 {
-	KRect oldRect;
+    KRect oldRect;
 
-	oldRect = object->getBoundingRect( 0, 0 );
-	object->moveBy( -m_diff.x(), -m_diff.y() );
-	object->resizeBy( -r_diff.width(), -r_diff.height() );
+    oldRect = object->getBoundingRect( 0, 0 );
+    object->moveBy( -m_diff.x(), -m_diff.y() );
+    object->resizeBy( -r_diff.width(), -r_diff.height() );
 
-	if ( _repaint )
+    if ( _repaint )
     {
-		doc->repaint( oldRect );
-		doc->repaint( object );
+        doc->repaint( oldRect );
+        doc->repaint( object );
     }
 }
 

@@ -28,22 +28,22 @@ class KPObject;
 class EffectCmd : public Command
 {
 public:
-	EffectCmd( QString _name, int _presNum, Effect _effect, Effect2 _effect2,
-			   int _oldPresNum, Effect _oldEffect, Effect2 _oldEffect2,
-			   KPObject *_object );
-	~EffectCmd();
+    EffectCmd( QString _name, int _presNum, Effect _effect, Effect2 _effect2,
+               int _oldPresNum, Effect _oldEffect, Effect2 _oldEffect2,
+               KPObject *_object );
+    ~EffectCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	EffectCmd()
+    EffectCmd()
     {; }
 
-	int presNum, oldPresNum;
-	Effect effect, oldEffect;
-	Effect2 effect2, oldEffect2;
-	KPObject *object;
+    int presNum, oldPresNum;
+    Effect effect, oldEffect;
+    Effect2 effect2, oldEffect2;
+    KPObject *object;
 
 };
 

@@ -28,18 +28,18 @@ class KPObject;
 class InsertCmd : public Command
 {
 public:
-	InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc );
-	~InsertCmd();
+    InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc );
+    ~InsertCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	InsertCmd()
+    InsertCmd()
     {; }
 
-	KPObject *object;
-	KPresenterDoc *doc;
+    KPObject *object;
+    KPresenterDoc *doc;
 
 };
 

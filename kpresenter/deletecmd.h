@@ -30,18 +30,18 @@ class KPresenterDoc;
 class DeleteCmd : public Command
 {
 public:
-	DeleteCmd( QString _name, QList<KPObject> &_objects, KPresenterDoc *_doc );
-	~DeleteCmd();
+    DeleteCmd( QString _name, QList<KPObject> &_objects, KPresenterDoc *_doc );
+    ~DeleteCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	DeleteCmd()
+    DeleteCmd()
     {; }
 
-	QList<KPObject> objects;
-	KPresenterDoc *doc;
+    QList<KPObject> objects;
+    KPresenterDoc *doc;
 
 };
 

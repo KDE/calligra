@@ -29,27 +29,27 @@ class QLabel;
 
 class KSearchDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KSearchDialog ( QWidget *parent=0, const char *name=0 );
+    KSearchDialog ( QWidget *parent=0, const char *name=0 );
 
-	void setText( QString text ) {value->setText( text ); }
-	void setCaseSensitive( bool s ) {sensitive->setChecked( s ); }
-	void setDirection( bool d ) {direction->setChecked( d ); }
+    void setText( QString text ) {value->setText( text ); }
+    void setCaseSensitive( bool s ) {sensitive->setChecked( s ); }
+    void setDirection( bool d ) {direction->setChecked( d ); }
 
 protected:
-	QPushButton *ok, *cancel;
-	QCheckBox *sensitive;
-	QCheckBox *direction;
-	QGroupBox *frame;
-	QLineEdit *value;
+    QPushButton *ok, *cancel;
+    QCheckBox *sensitive;
+    QCheckBox *direction;
+    QGroupBox *frame;
+    QLineEdit *value;
 
 protected slots:
-	void search() {emit doSearch( value->text(), sensitive->isChecked(), direction->isChecked() ); }
+    void search() {emit doSearch( value->text(), sensitive->isChecked(), direction->isChecked() ); }
 
 signals:
-	void doSearch( QString, bool, bool );
+    void doSearch( QString, bool, bool );
 
 };
 
@@ -59,32 +59,32 @@ signals:
 /******************************************************************/
 class KSearchReplaceDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KSearchReplaceDialog( QWidget *parent=0, const char *name=0 );
+    KSearchReplaceDialog( QWidget *parent=0, const char *name=0 );
 
-	void setText( QString ssearch ) {search->setText( ssearch ); }
-	void setReplaceText( QString sreplace ) {replace->setText( sreplace ); }
-	void setCaseSensitive( bool s ) {sensitive->setChecked( s ); }
-	void setDirection( bool d ) {direction->setChecked( d ); }
+    void setText( QString ssearch ) {search->setText( ssearch ); }
+    void setReplaceText( QString sreplace ) {replace->setText( sreplace ); }
+    void setCaseSensitive( bool s ) {sensitive->setChecked( s ); }
+    void setDirection( bool d ) {direction->setChecked( d ); }
 
 protected:
-	QPushButton *ok, *cancel, *replace_all;
-	QCheckBox *sensitive;
-	QCheckBox *direction;
-	QGroupBox *frame;
-	QLineEdit *search, *replace;
-	QLabel *label;
+    QPushButton *ok, *cancel, *replace_all;
+    QCheckBox *sensitive;
+    QCheckBox *direction;
+    QGroupBox *frame;
+    QLineEdit *search, *replace;
+    QLabel *label;
 
 protected slots:
-	void searchReplace() {emit doSearchReplace( search->text(), replace->text(), sensitive->isChecked(), direction->isChecked() ); }
-	void searchReplaceAll() {emit doSearchReplaceAll( search->text(), replace->text(), sensitive->isChecked() ); }
-	void gotoReplace() {replace->setFocus(); }
+    void searchReplace() {emit doSearchReplace( search->text(), replace->text(), sensitive->isChecked(), direction->isChecked() ); }
+    void searchReplaceAll() {emit doSearchReplaceAll( search->text(), replace->text(), sensitive->isChecked() ); }
+    void gotoReplace() {replace->setFocus(); }
 
 signals:
-	void doSearchReplace( QString, QString, bool, bool );
-	void doSearchReplaceAll( QString, QString, bool );
+    void doSearchReplace( QString, QString, bool, bool );
+    void doSearchReplaceAll( QString, QString, bool );
 
 };
 

@@ -32,19 +32,19 @@ class KPresenterDoc;
 class MoveByCmd : public Command
 {
 public:
-	MoveByCmd( QString _name, KPoint _diff, QList<KPObject> &_objects, KPresenterDoc *_doc );
-	~MoveByCmd();
+    MoveByCmd( QString _name, KPoint _diff, QList<KPObject> &_objects, KPresenterDoc *_doc );
+    ~MoveByCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	MoveByCmd()
+    MoveByCmd()
     {; }
 
-	KPoint diff;
-	QList<KPObject> objects;
-	KPresenterDoc *doc;
+    KPoint diff;
+    QList<KPObject> objects;
+    KPresenterDoc *doc;
 
 };
 
@@ -55,19 +55,19 @@ protected:
 class MoveByCmd2 : public Command
 {
 public:
-	MoveByCmd2( QString _name, QList<KPoint> &_diffs, QList<KPObject> &_objects, KPresenterDoc *_doc );
-	~MoveByCmd2();
+    MoveByCmd2( QString _name, QList<KPoint> &_diffs, QList<KPObject> &_objects, KPresenterDoc *_doc );
+    ~MoveByCmd2();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	MoveByCmd2()
+    MoveByCmd2()
     {; }
 
-	QList<KPoint> diffs;
-	QList<KPObject> objects;
-	KPresenterDoc *doc;
+    QList<KPoint> diffs;
+    QList<KPObject> objects;
+    KPresenterDoc *doc;
 
 };
 

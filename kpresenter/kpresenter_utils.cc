@@ -22,48 +22,48 @@
 /*========================== draw a figure =======================*/
 void drawFigure( LineEnd figure, QPainter* painter, KPoint coord, QColor color, int _w, float angle )
 {
-	painter->setPen( Qt::NoPen );
-	painter->setBrush( Qt::NoBrush );
+    painter->setPen( Qt::NoPen );
+    painter->setBrush( Qt::NoBrush );
 
-	switch ( figure )
+    switch ( figure )
     {
     case L_SQUARE:
-	{
-		int _h = _w;
-		if ( _h % 2 == 0 ) _h--;
-		painter->save();
-		painter->translate( coord.x(), coord.y() );
-		painter->rotate( angle );
-		painter->scale( 1, 1 );
-		painter->fillRect( -3 - _w / 2, -3 - _h / 2, 6 + _w, 6 + _h, color );
-		painter->restore();
-	} break;
+    {
+        int _h = _w;
+        if ( _h % 2 == 0 ) _h--;
+        painter->save();
+        painter->translate( coord.x(), coord.y() );
+        painter->rotate( angle );
+        painter->scale( 1, 1 );
+        painter->fillRect( -3 - _w / 2, -3 - _h / 2, 6 + _w, 6 + _h, color );
+        painter->restore();
+    } break;
     case L_CIRCLE:
-	{
-		painter->save();
-		painter->translate( coord.x(), coord.y() );
-		painter->setBrush( color );
-		painter->drawEllipse( -3 - _w / 2, -3 - _w / 2, 6 + _w, 6 + _w );
-		painter->restore();
-	} break;
+    {
+        painter->save();
+        painter->translate( coord.x(), coord.y() );
+        painter->setBrush( color );
+        painter->drawEllipse( -3 - _w / 2, -3 - _w / 2, 6 + _w, 6 + _w );
+        painter->restore();
+    } break;
     case L_ARROW:
-	{
-		KPoint p1( -5 - _w / 2, -3 - _w / 2 );
-		KPoint p2( 5 + _w / 2, 0 );
-		KPoint p3( -5 - _w / 2, 3 + _w / 2 );
-		QPointArray pArray( 3 );
-		pArray.setPoint( 0, p1 );
-		pArray.setPoint( 1, p2 );
-		pArray.setPoint( 2, p3 );
-	
-		painter->save();
-		painter->translate( coord.x(), coord.y() );
-		painter->rotate( angle );
-		painter->scale( 1, 1 );
-		painter->setBrush( color );
-		painter->drawPolygon( pArray );
-		painter->restore();
-	} break;
+    {
+        KPoint p1( -5 - _w / 2, -3 - _w / 2 );
+        KPoint p2( 5 + _w / 2, 0 );
+        KPoint p3( -5 - _w / 2, 3 + _w / 2 );
+        QPointArray pArray( 3 );
+        pArray.setPoint( 0, p1 );
+        pArray.setPoint( 1, p2 );
+        pArray.setPoint( 2, p3 );
+    
+        painter->save();
+        painter->translate( coord.x(), coord.y() );
+        painter->rotate( angle );
+        painter->scale( 1, 1 );
+        painter->setBrush( color );
+        painter->drawPolygon( pArray );
+        painter->restore();
+    } break;
     default: break;
     }
 }
@@ -71,22 +71,22 @@ void drawFigure( LineEnd figure, QPainter* painter, KPoint coord, QColor color, 
 /*================== get bounding with of figure =================*/
 KSize getBoundingSize( LineEnd figure, int _w )
 {
-	switch ( figure )
+    switch ( figure )
     {
     case L_SQUARE:
-	{
-		int _h = _w;
-		if ( _h % 2 == 0 ) _h--;
-		return KSize( 6 + _w + 4, 6 + _h + 4 );
-	} break;
+    {
+        int _h = _w;
+        if ( _h % 2 == 0 ) _h--;
+        return KSize( 6 + _w + 4, 6 + _h + 4 );
+    } break;
     case L_CIRCLE:
-		return KSize( 6 + _w + 4, 6 + _w + 4 );
-		break;
+        return KSize( 6 + _w + 4, 6 + _w + 4 );
+        break;
     case L_ARROW:
-		return KSize( 10 + _w + 4, 6 + _w + 4 );
-		break;
+        return KSize( 10 + _w + 4, 6 + _w + 4 );
+        break;
     default: break;
     }
 
-	return KSize( 0, 0 );
+    return KSize( 0, 0 );
 }

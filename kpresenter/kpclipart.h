@@ -28,18 +28,18 @@
 class KPClipart
 {
 public:
-	KPClipart();
-	KPClipart( QString _filename );
-	~KPClipart();
+    KPClipart();
+    KPClipart( QString _filename );
+    ~KPClipart();
 
-	void setClipartName( QString );
-	QString getClipartName() {return filename; }
-	QPicture* getPic();
+    void setClipartName( QString );
+    QString getClipartName() {return filename; }
+    QPicture* getPic();
 
 protected:
-	QPicture *pic;
-	QString filename;
-	QWinMetaFile wmf;
+    QPicture *pic;
+    QString filename;
+    QWinMetaFile wmf;
 
 };
 

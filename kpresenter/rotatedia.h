@@ -36,19 +36,19 @@ class QPushButton;
 
 class RotatePreview : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	// constructor - destructor
-	RotatePreview( QWidget* parent, const char* );
-	~RotatePreview() {}
+    // constructor - destructor
+    RotatePreview( QWidget* parent, const char* );
+    ~RotatePreview() {}
 
-	void setAngle( float __angle ) {_angle = __angle; repaint( true ); }
+    void setAngle( float __angle ) {_angle = __angle; repaint( true ); }
 
 protected:
-	void drawContents( QPainter* );
+    void drawContents( QPainter* );
 
-	float _angle;
+    float _angle;
 
 };
 
@@ -58,36 +58,36 @@ protected:
 
 class RotateDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	// constructor - destructor
-	RotateDia( QWidget* parent, const char* );
-	~RotateDia();
+    // constructor - destructor
+    RotateDia( QWidget* parent, const char* );
+    ~RotateDia();
 
-	void setAngle( float __angle );
-	float getAngle() {return _angle; }
+    void setAngle( float __angle );
+    float getAngle() {return _angle; }
 
 protected:
-	QRadioButton *deg0, *deg90, *deg180, *deg270, *degCustom;
-	KRestrictedLine *custom;
-	QGroupBox *angle, *preview;
-	RotatePreview *rPreview;
-	QPushButton *okBut, *applyBut, *cancelBut;
+    QRadioButton *deg0, *deg90, *deg180, *deg270, *degCustom;
+    KRestrictedLine *custom;
+    QGroupBox *angle, *preview;
+    RotatePreview *rPreview;
+    QPushButton *okBut, *applyBut, *cancelBut;
 
-	float _angle;
+    float _angle;
 
 protected slots:
-	void deg0clicked();
-	void deg90clicked();
-	void deg180clicked();
-	void deg270clicked();
-	void degCustomclicked();
-	void degCustomChanged( const QString & );
-	void Apply() {emit rotateDiaOk(); }
+    void deg0clicked();
+    void deg90clicked();
+    void deg180clicked();
+    void deg270clicked();
+    void degCustomclicked();
+    void degCustomChanged( const QString & );
+    void Apply() {emit rotateDiaOk(); }
 
 signals:
-	void rotateDiaOk();
+    void rotateDiaOk();
 
 };
 

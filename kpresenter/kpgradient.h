@@ -41,47 +41,47 @@ class QPainter;
 class KPGradient
 {
 public:
-	KPGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size );
-	virtual ~KPGradient()
+    KPGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size );
+    virtual ~KPGradient()
     {}
 
-	virtual QColor getColor1()
+    virtual QColor getColor1()
     { return color1; }
-	virtual QColor getColor2()
+    virtual QColor getColor2()
     { return color2; }
-	virtual BCType getBackColorType()
+    virtual BCType getBackColorType()
     { return bcType; }
 
-	virtual void setColor1( QColor _color )
+    virtual void setColor1( QColor _color )
     { color1 = _color; paint(); }
-	virtual void setColor2( QColor _color )
+    virtual void setColor2( QColor _color )
     { color2 = _color; paint(); }
-	virtual void setBackColorType( BCType _type )
+    virtual void setBackColorType( BCType _type )
     { bcType = _type; paint(); }
 
-	virtual QPixmap* getGradient()
+    virtual QPixmap* getGradient()
     { return &pixmap; }
-	virtual KSize getSize()
+    virtual KSize getSize()
     { return pixmap.size(); }
 
-	virtual void setSize( KSize _size )
+    virtual void setSize( KSize _size )
     { pixmap.resize( _size ); paint(); }
 
-	virtual void addRef();
-	virtual bool removeRef();
+    virtual void addRef();
+    virtual bool removeRef();
 
 protected:
-	KPGradient()
+    KPGradient()
     {; }
-	virtual void paint();
-	virtual void makeLineGradient( QPixmap &pmCrop, QColor _color1, QColor _color2, int _ySize );
-	virtual void makeColorList( QList<QColor> &_colorList, QColor _color1, QColor _color2, int _ySize );
+    virtual void paint();
+    virtual void makeLineGradient( QPixmap &pmCrop, QColor _color1, QColor _color2, int _ySize );
+    virtual void makeColorList( QList<QColor> &_colorList, QColor _color1, QColor _color2, int _ySize );
 
-	QColor color1, color2;
-	BCType bcType;
+    QColor color1, color2;
+    BCType bcType;
 
-	QPixmap pixmap;
-	int refCount;
+    QPixmap pixmap;
+    int refCount;
 };
 
 #endif

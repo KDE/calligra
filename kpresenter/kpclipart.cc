@@ -21,36 +21,36 @@
 
 /*======================= constructor ============================*/
 KPClipart::KPClipart()
-	: filename(), wmf()
+    : filename(), wmf()
 {
-	pic = new QPicture;
+    pic = new QPicture;
 }
 
 /*======================= constructor ============================*/
 KPClipart::KPClipart( QString _filename )
-	: filename( _filename ), wmf()
+    : filename( _filename ), wmf()
 {
-	pic = new QPicture;
-	setClipartName( filename );
+    pic = new QPicture;
+    setClipartName( filename );
 }
 
 /*======================= destructor =============================*/
 KPClipart::~KPClipart()
 {
-	delete pic;
+    delete pic;
 }
 
 /*==================== set clipart ===============================*/
 void KPClipart::setClipartName( QString _filename )
 {
-	filename = _filename;
-	wmf.load( filename );
-	wmf.paint( pic );
+    filename = _filename;
+    wmf.load( filename );
+    wmf.paint( pic );
 }
 
 /*======================= get pic ================================*/
 QPicture* KPClipart::getPic()
 {
-	return pic;
+    return pic;
 }
 

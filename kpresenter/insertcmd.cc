@@ -27,36 +27,36 @@
 
 /*======================== constructor ===========================*/
 InsertCmd::InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc )
-	: Command( _name )
+    : Command( _name )
 {
-	object = _object;
-	doc = _doc;
-	object->incCmdRef();
+    object = _object;
+    doc = _doc;
+    object->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 InsertCmd::~InsertCmd()
 {
-	object->decCmdRef();
+    object->decCmdRef();
 }
 
 /*====================== execute =================================*/
 void InsertCmd::execute()
 {
-	doc->objectList()->append( object );
-	object->addToObjList();
-	doc->repaint( object );
+    doc->objectList()->append( object );
+    object->addToObjList();
+    doc->repaint( object );
 }
 
 /*====================== unexecute ===============================*/
 void InsertCmd::unexecute()
 {
-	KRect oldRect = object->getBoundingRect( 0, 0 );
-	if ( doc->objectList()->findRef( object ) != -1 )
+    KRect oldRect = object->getBoundingRect( 0, 0 );
+    if ( doc->objectList()->findRef( object ) != -1 )
     {
-		doc->objectList()->take( doc->objectList()->findRef( object ) );
-		object->removeFromObjList();
+        doc->objectList()->take( doc->objectList()->findRef( object ) );
+        object->removeFromObjList();
     }
-	doc->repaint( oldRect );
+    doc->repaint( oldRect );
 }
 

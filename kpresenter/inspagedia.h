@@ -36,30 +36,30 @@ class QPushButton;
 
 class InsPageDia : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	InsPageDia( QWidget* parent, const char* name, KPresenterDoc *_doc, int _currPage );
+    InsPageDia( QWidget* parent, const char* name, KPresenterDoc *_doc, int _currPage );
 
 protected:
-	void uncheckAllPos();
-	void uncheckAllMode();
+    void uncheckAllPos();
+    void uncheckAllMode();
 
-	KPresenterDoc *doc;
+    KPresenterDoc *doc;
 
-	QSpinBox *spinBox;
-	QRadioButton *before, *after, *leave, *_move;
-	QPushButton *ok, *cancel;
+    QSpinBox *spinBox;
+    QRadioButton *before, *after, *leave, *_move;
+    QPushButton *ok, *cancel;
 
 protected slots:
-	void leaveClicked();
-	void moveClicked();
-	void beforeClicked();
-	void afterClicked();
-	void okClicked();
+    void leaveClicked();
+    void moveClicked();
+    void beforeClicked();
+    void afterClicked();
+    void okClicked();
 
 signals:
-	void insertPage( int, InsPageMode, InsertPos );
+    void insertPage( int, InsPageMode, InsertPos );
 
 };
 

@@ -31,25 +31,25 @@ class QLabel;
 
 class KPGotoPage : public QFrame
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KPGotoPage( int minValue, int maxValue, int start,
-				QWidget *parent = 0L, const char *name = 0L, WFlags f = 0 );
+    KPGotoPage( int minValue, int maxValue, int start,
+                QWidget *parent = 0L, const char *name = 0L, WFlags f = 0 );
 
-	bool eventFilter( QObject *obj, QEvent *e );
+    bool eventFilter( QObject *obj, QEvent *e );
 
-	int getPage() { return page; }
+    int getPage() { return page; }
 
-	static int gotoPage( int minValue, int maxValue, int start, QWidget *parent = 0L );
+    static int gotoPage( int minValue, int maxValue, int start, QWidget *parent = 0L );
 
 protected:
-	void resizeEvent( QResizeEvent *e );
+    void resizeEvent( QResizeEvent *e );
 
-	QSpinBox *spinbox;
-	QLabel *label;
+    QSpinBox *spinbox;
+    QLabel *label;
 
-	int _default, page;
+    int _default, page;
 
 };
 

@@ -31,27 +31,27 @@ class KPresenterDoc;
 class PieValueCmd : public Command
 {
 public:
-	struct PieValues
-	{
-		PieType pieType;
-		int pieAngle, pieLength;
-	};
+    struct PieValues
+    {
+        PieType pieType;
+        int pieAngle, pieLength;
+    };
 
-	PieValueCmd( QString _name, QList<PieValues> &_oldValues, PieValues _newValues,
-				 QList<KPObject> &_objects, KPresenterDoc *_doc );
-	~PieValueCmd();
+    PieValueCmd( QString _name, QList<PieValues> &_oldValues, PieValues _newValues,
+                 QList<KPObject> &_objects, KPresenterDoc *_doc );
+    ~PieValueCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	PieValueCmd()
+    PieValueCmd()
     {; }
 
-	KPresenterDoc *doc;
-	QList<PieValues> oldValues;
-	QList<KPObject> objects;
-	PieValues newValues;
+    KPresenterDoc *doc;
+    QList<PieValues> oldValues;
+    QList<KPObject> objects;
+    PieValues newValues;
 
 };
 

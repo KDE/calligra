@@ -52,114 +52,114 @@
 
 class PBPreview : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	// constructor
-	PBPreview( QWidget* parent=0, const char* name=0, int _paintType=0 ); 
+    // constructor
+    PBPreview( QWidget* parent=0, const char* name=0, int _paintType=0 );
 
-	// set values
-	void setPen( QPen _pen ) {pen = _pen; repaint( true ); }
-	void setBrush( QBrush _brush ) {brush = _brush; repaint( true ); }
-	void setLineBegin( LineEnd lb ) {lineBegin = lb; repaint( true ); }
-	void setLineEnd( LineEnd le ) {lineEnd = le; repaint( true ); }
-	void setGradient( KPGradient *g ) {gradient = g; repaint( true ); }
+    // set values
+    void setPen( QPen _pen ) {pen = _pen; repaint( true ); }
+    void setBrush( QBrush _brush ) {brush = _brush; repaint( true ); }
+    void setLineBegin( LineEnd lb ) {lineBegin = lb; repaint( true ); }
+    void setLineEnd( LineEnd le ) {lineEnd = le; repaint( true ); }
+    void setGradient( KPGradient *g ) {gradient = g; repaint( true ); }
 
 protected:
 
-	// paint event
-	void paintEvent( QPaintEvent* ); 
+    // paint event
+    void paintEvent( QPaintEvent* );
 
 private:
 
-	int paintType; 
-	QPen pen; 
-	QBrush brush; 
-	LineEnd lineBegin, lineEnd; 
-	KPGradient *gradient; 
+    int paintType;
+    QPen pen;
+    QBrush brush;
+    LineEnd lineBegin, lineEnd;
+    KPGradient *gradient;
 
-}; 
+};
 
 /******************************************************************/
 /* class StyleDia                                                 */
 /******************************************************************/
 
-static const int SD_PEN = 1; 
-static const int SD_BRUSH = 2; 
+static const int SD_PEN = 1;
+static const int SD_BRUSH = 2;
 
 class StyleDia : public QTabDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	// constructor - destructor
-	StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SD_PEN | SD_BRUSH ); 
-	~StyleDia(); 
+    // constructor - destructor
+    StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SD_PEN | SD_BRUSH );
+    ~StyleDia();
 
-	// set values
-	void setPen( QPen _pen ); 
-	void setBrush( QBrush _brush ); 
-	void setLineBegin( LineEnd lb ); 
-	void setLineEnd( LineEnd le ); 
-	void setFillType( FillType ft ); 
-	void setGradient( QColor _c1, QColor _c2, BCType _t ); 
+    // set values
+    void setPen( QPen _pen );
+    void setBrush( QBrush _brush );
+    void setLineBegin( LineEnd lb );
+    void setLineEnd( LineEnd le );
+    void setFillType( FillType ft );
+    void setGradient( QColor _c1, QColor _c2, BCType _t );
 
-	// get values
-	QPen getPen() {return pen; }
-	QBrush getBrush() {return brush; }
-	LineEnd getLineBegin() {return lineBegin; }
-	LineEnd getLineEnd() {return lineEnd; }
-	FillType getFillType() {if ( fillStyle->isChecked() ) return FT_BRUSH; return FT_GRADIENT; }
-	QColor getGColor1() {return gradient1->color(); }
-	QColor getGColor2() {return gradient2->color(); }
-	BCType getGType() {return static_cast<BCType>( gradients->currentItem() + 1 ); }
+    // get values
+    QPen getPen() {return pen; }
+    QBrush getBrush() {return brush; }
+    LineEnd getLineBegin() {return lineBegin; }
+    LineEnd getLineEnd() {return lineEnd; }
+    FillType getFillType() {if ( fillStyle->isChecked() ) return FT_BRUSH; return FT_GRADIENT; }
+    QColor getGColor1() {return gradient1->color(); }
+    QColor getGColor2() {return gradient2->color(); }
+    BCType getGType() {return static_cast<BCType>( gradients->currentItem() + 1 ); }
 
 private:
 
-	// dialog objects
-	QWidget *penFrame, *brushFrame; 
-	QPushButton *choosePCol, *chooseBCol; 
-	QLabel *penStyle, *brushStyle, *penWidth, *llineBegin, *llineEnd; 
-	QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd; 
-	QSpinBox *choosePWidth; 
-	QPushButton *okBut, *applyBut, *cancelBut; 
-	PBPreview *penPrev, *brushPrev, *gPrev; 
-	QRadioButton *fillStyle, *fillGradient; 
-	QComboBox *gradients; 
-	KColorButton *gradient1, *gradient2; 
-	QLabel *gColors, *gStyle; 
-	QFrame *line; 
+    // dialog objects
+    QWidget *penFrame, *brushFrame;
+    QPushButton *choosePCol, *chooseBCol;
+    QLabel *penStyle, *brushStyle, *penWidth, *llineBegin, *llineEnd;
+    QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd;
+    QSpinBox *choosePWidth;
+    QPushButton *okBut, *applyBut, *cancelBut;
+    PBPreview *penPrev, *brushPrev, *gPrev;
+    QRadioButton *fillStyle, *fillGradient;
+    QComboBox *gradients;
+    KColorButton *gradient1, *gradient2;
+    QLabel *gColors, *gStyle;
+    QFrame *line;
 
-	// pen and brush
-	QBrush brush; 
-	QPen pen; 
-	LineEnd lineBegin, lineEnd; 
-	KPGradient *gradient; 
+    // pen and brush
+    QBrush brush;
+    QPen pen;
+    LineEnd lineBegin, lineEnd;
+    KPGradient *gradient;
 
 private slots:
 
-	// slots
-	void changePCol(); 
-	void changeBCol(); 
-	void changePStyle( int item ); 
-	void changeBStyle( int item ); 
-	void changePWidth( int item ); 
-	void changeLineBegin( int item ); 
-	void changeLineEnd( int item ); 
-	void gColor1( const QColor &newColor ); 
-	void gColor2( const QColor &newColor ); 
-	void gcStyle( int item ); 
-	void rBrush(); 
-	void rGradient(); 
-	void styleDone() {emit styleOk(); }
+    // slots
+    void changePCol();
+    void changeBCol();
+    void changePStyle( int item );
+    void changeBStyle( int item );
+    void changePWidth( int item );
+    void changeLineBegin( int item );
+    void changeLineEnd( int item );
+    void gColor1( const QColor &newColor );
+    void gColor2( const QColor &newColor );
+    void gcStyle( int item );
+    void rBrush();
+    void rGradient();
+    void styleDone() {emit styleOk(); }
 
 signals:
 
-	void styleOk(); 
+    void styleOk();
 
-}; 
+};
 #endif //STYLEDIA_H
 
 

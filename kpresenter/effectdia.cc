@@ -38,107 +38,107 @@
 
 /*==================== constructor ===============================*/
 EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objNum, KPresenterView *_view )
-	:QDialog( parent, name, true )
+    :QDialog( parent, name, true )
 {
-	pageNum = _pageNum;
-	objNum = _objNum;
-	view = _view;
+    pageNum = _pageNum;
+    objNum = _objNum;
+    view = _view;
 
-	lNum = new QLabel( i18n( "Number: " ), this );
-	lNum->move( 10, 10 );
-	lNum->resize( lNum->sizeHint() );
-	lNum->setAlignment( AlignVCenter );
+    lNum = new QLabel( i18n( "Number: " ), this );
+    lNum->move( 10, 10 );
+    lNum->resize( lNum->sizeHint() );
+    lNum->setAlignment( AlignVCenter );
 
-	eNum = new QSpinBox( 0, 100, 1, this );
-	eNum->move( lNum->width() + 15, 10 );
-	eNum->setValue( view->kPresenterDoc()->objectList()->at(_objNum)->getPresNum() );
-	eNum->resize( eNum->sizeHint().width(), eNum->sizeHint().height() );
-	lNum->resize( lNum->width(), eNum->height() );
+    eNum = new QSpinBox( 0, 100, 1, this );
+    eNum->move( lNum->width() + 15, 10 );
+    eNum->setValue( view->kPresenterDoc()->objectList()->at(_objNum)->getPresNum() );
+    eNum->resize( eNum->sizeHint().width(), eNum->sizeHint().height() );
+    lNum->resize( lNum->width(), eNum->height() );
 
-	lEffect = new QLabel( i18n( "Effect ( appearing ): " ), this );
-	lEffect->move( 10, eNum->y()+eNum->height()+20 );
-	lEffect->resize( lEffect->sizeHint() );
-	lEffect->setAlignment( AlignVCenter );
+    lEffect = new QLabel( i18n( "Effect ( appearing ): " ), this );
+    lEffect->move( 10, eNum->y()+eNum->height()+20 );
+    lEffect->resize( lEffect->sizeHint() );
+    lEffect->setAlignment( AlignVCenter );
 
-	cEffect = new QComboBox( false, this, "cEffect" );
-	cEffect->insertItem( i18n( "No Effect" ) );
-	cEffect->insertItem( i18n( "Come from right" ) );
-	cEffect->insertItem( i18n( "Come from left" ) );
-	cEffect->insertItem( i18n( "Come from top" ) );
-	cEffect->insertItem( i18n( "Come from bottom" ) );
-	cEffect->insertItem( i18n( "Come from right/top" ) );
-	cEffect->insertItem( i18n( "Come from right/bottom" ) );
-	cEffect->insertItem( i18n( "Come from left/top" ) );
-	cEffect->insertItem( i18n( "Come from left/bottom" ) );
-	cEffect->insertItem( i18n( "Wipe from left" ) );
-	cEffect->insertItem( i18n( "Wipe from right" ) );
-	cEffect->insertItem( i18n( "Wipe from top" ) );
-	cEffect->insertItem( i18n( "Wipe from bottom" ) );
-	cEffect->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect() ) );
-	cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y());
-	cEffect->resize( cEffect->sizeHint() );
-	lEffect->resize( lEffect->width(), cEffect->height() );
+    cEffect = new QComboBox( false, this, "cEffect" );
+    cEffect->insertItem( i18n( "No Effect" ) );
+    cEffect->insertItem( i18n( "Come from right" ) );
+    cEffect->insertItem( i18n( "Come from left" ) );
+    cEffect->insertItem( i18n( "Come from top" ) );
+    cEffect->insertItem( i18n( "Come from bottom" ) );
+    cEffect->insertItem( i18n( "Come from right/top" ) );
+    cEffect->insertItem( i18n( "Come from right/bottom" ) );
+    cEffect->insertItem( i18n( "Come from left/top" ) );
+    cEffect->insertItem( i18n( "Come from left/bottom" ) );
+    cEffect->insertItem( i18n( "Wipe from left" ) );
+    cEffect->insertItem( i18n( "Wipe from right" ) );
+    cEffect->insertItem( i18n( "Wipe from top" ) );
+    cEffect->insertItem( i18n( "Wipe from bottom" ) );
+    cEffect->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect() ) );
+    cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y());
+    cEffect->resize( cEffect->sizeHint() );
+    lEffect->resize( lEffect->width(), cEffect->height() );
 
-	lEffect2 = new QLabel( i18n( "Effect ( object specific ): " ), this );
-	lEffect2->move( cEffect->x()+cEffect->width()+20, eNum->y()+eNum->height()+20 );
-	lEffect2->resize( lEffect2->sizeHint() );
-	lEffect2->setAlignment( AlignVCenter );
+    lEffect2 = new QLabel( i18n( "Effect ( object specific ): " ), this );
+    lEffect2->move( cEffect->x()+cEffect->width()+20, eNum->y()+eNum->height()+20 );
+    lEffect2->resize( lEffect2->sizeHint() );
+    lEffect2->setAlignment( AlignVCenter );
 
-	cEffect2 = new QComboBox( false, this, "cEffect2" );
-	cEffect2->insertItem( i18n( "No Effect" ) );
+    cEffect2 = new QComboBox( false, this, "cEffect2" );
+    cEffect2->insertItem( i18n( "No Effect" ) );
 
-	switch ( view->kPresenterDoc()->objectList()->at( _objNum )->getType() )
-	{
-	case OT_TEXT:
-	{
-		cEffect2->insertItem( i18n( "Paragraph after paragraph" ) );
-	} break;
-	default: break;
-	}
+    switch ( view->kPresenterDoc()->objectList()->at( _objNum )->getType() )
+    {
+    case OT_TEXT:
+    {
+        cEffect2->insertItem( i18n( "Paragraph after paragraph" ) );
+    } break;
+    default: break;
+    }
 
-	if ( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() == EF2_NONE )
-		cEffect2->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() ) );
-	else
-	{
-		switch ( view->kPresenterDoc()->objectList()->at( _objNum )->getType() )
-		{
-		case OT_TEXT:
-			cEffect2->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() + TxtObjOffset ) );
-			break;
-		default: break;
-		}
-	}
+    if ( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() == EF2_NONE )
+        cEffect2->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() ) );
+    else
+    {
+        switch ( view->kPresenterDoc()->objectList()->at( _objNum )->getType() )
+        {
+        case OT_TEXT:
+            cEffect2->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect2() + TxtObjOffset ) );
+            break;
+        default: break;
+        }
+    }
 
-	cEffect2->move( lEffect2->x()+lEffect2->width()+5, lEffect2->y() );
-	cEffect2->resize( cEffect2->sizeHint() );
-	lEffect2->resize( lEffect2->width(), cEffect2->height() );
+    cEffect2->move( lEffect2->x()+lEffect2->width()+5, lEffect2->y() );
+    cEffect2->resize( cEffect2->sizeHint() );
+    lEffect2->resize( lEffect2->width(), cEffect2->height() );
 
-	resize( cEffect2->x()+cEffect2->width()+10, cEffect->y()+cEffect->height()+10 );
+    resize( cEffect2->x()+cEffect2->width()+10, cEffect->y()+cEffect->height()+10 );
 
-	cancelBut = new QPushButton( this, "BCancel" );
-	cancelBut->setText( i18n( "Cancel" ) );
+    cancelBut = new QPushButton( this, "BCancel" );
+    cancelBut->setText( i18n( "Cancel" ) );
 
-	okBut = new QPushButton( this, "BOK" );
-	okBut->setText( i18n( "OK" ) );
-	okBut->setAutoRepeat( false );
-	okBut->setAutoResize( false );
-	okBut->setAutoDefault( true );
-	okBut->setDefault( true );
+    okBut = new QPushButton( this, "BOK" );
+    okBut->setText( i18n( "OK" ) );
+    okBut->setAutoRepeat( false );
+    okBut->setAutoResize( false );
+    okBut->setAutoDefault( true );
+    okBut->setDefault( true );
 
-	int butW = max(cancelBut->sizeHint().width(),okBut->sizeHint().width());
-	int butH = cancelBut->sizeHint().height();
+    int butW = max(cancelBut->sizeHint().width(),okBut->sizeHint().width());
+    int butH = cancelBut->sizeHint().height();
 
-	cancelBut->resize( butW, butH );
-	okBut->resize( butW, butH );
+    cancelBut->resize( butW, butH );
+    okBut->resize( butW, butH );
 
-	cancelBut->move( width()-10-cancelBut->width(), cEffect->y()+cEffect->height()+20 );
-	okBut->move( cancelBut->x()-okBut->width()-5, cancelBut->y() );
+    cancelBut->move( width()-10-cancelBut->width(), cEffect->y()+cEffect->height()+20 );
+    okBut->move( cancelBut->x()-okBut->width()-5, cancelBut->y() );
 
-	connect( okBut, SIGNAL( clicked() ), this, SLOT( slotEffectDiaOk() ) );
-	connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-	connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    connect( okBut, SIGNAL( clicked() ), this, SLOT( slotEffectDiaOk() ) );
+    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-	resize( cEffect2->x()+cEffect2->width()+10, okBut->y()+okBut->height()+10 );
+    resize( cEffect2->x()+cEffect2->width()+10, okBut->y()+okBut->height()+10 );
 }
 
 /*===================== destructor ===============================*/
@@ -149,15 +149,15 @@ EffectDia::~EffectDia()
 /*====================== effect dia ok ===========================*/
 void EffectDia::slotEffectDiaOk()
 {
-	EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), atoi( eNum->text() ),
-										  ( Effect )cEffect->currentItem(), ( Effect2 )cEffect2->currentItem(),
-										  view->kPresenterDoc()->objectList()->at( objNum )->getPresNum(),
-										  view->kPresenterDoc()->objectList()->at( objNum )->getEffect(),
-										  view->kPresenterDoc()->objectList()->at( objNum )->getEffect2(),
-										  view->kPresenterDoc()->objectList()->at( objNum ) );
-	effectCmd->execute();
-	view->kPresenterDoc()->commands()->addCommand( effectCmd );
-	emit effectDiaOk();
+    EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), atoi( eNum->text() ),
+                                          ( Effect )cEffect->currentItem(), ( Effect2 )cEffect2->currentItem(),
+                                          view->kPresenterDoc()->objectList()->at( objNum )->getPresNum(),
+                                          view->kPresenterDoc()->objectList()->at( objNum )->getEffect(),
+                                          view->kPresenterDoc()->objectList()->at( objNum )->getEffect2(),
+                                          view->kPresenterDoc()->objectList()->at( objNum ) );
+    effectCmd->execute();
+    view->kPresenterDoc()->commands()->addCommand( effectCmd );
+    emit effectDiaOk();
 }
 
 

@@ -29,18 +29,18 @@ class KPresenterView;
 class PgLayoutCmd : public Command
 {
 public:
-	PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
-				 KPresenterView *_view );
+    PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
+                 KPresenterView *_view );
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	PgLayoutCmd()
+    PgLayoutCmd()
     {; }
 
-	KoPageLayout layout, oldLayout;
-	KPresenterView *view;
+    KoPageLayout layout, oldLayout;
+    KPresenterView *view;
 
 };
 

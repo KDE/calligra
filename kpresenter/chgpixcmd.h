@@ -30,19 +30,19 @@ class KPPixmapObject;
 class ChgPixCmd : public Command
 {
 public:
-	ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
-			   KPresenterDoc *_doc );
-	~ChgPixCmd();
+    ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
+               KPresenterDoc *_doc );
+    ~ChgPixCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	ChgPixCmd()
+    ChgPixCmd()
     {; }
 
-	KPPixmapObject *oldObject, *newObject;
-	KPresenterDoc *doc;
+    KPPixmapObject *oldObject, *newObject;
+    KPresenterDoc *doc;
 
 };
 

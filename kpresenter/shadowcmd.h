@@ -31,28 +31,28 @@ class KPresenterDoc;
 class ShadowCmd : public Command
 {
 public:
-	struct ShadowValues
-	{
-		int shadowDistance;
-		ShadowDirection shadowDirection;
-		QColor shadowColor;
-	};
+    struct ShadowValues
+    {
+        int shadowDistance;
+        ShadowDirection shadowDirection;
+        QColor shadowColor;
+    };
 
-	ShadowCmd( QString _name, QList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
-			   QList<KPObject> &_objects, KPresenterDoc *_doc );
-	~ShadowCmd();
+    ShadowCmd( QString _name, QList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
+               QList<KPObject> &_objects, KPresenterDoc *_doc );
+    ~ShadowCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-	ShadowCmd()
+    ShadowCmd()
     {; }
 
-	KPresenterDoc *doc;
-	QList<ShadowValues> oldShadow;
-	QList<KPObject> objects;
-	ShadowValues newShadow;
+    KPresenterDoc *doc;
+    QList<ShadowValues> oldShadow;
+    QList<KPObject> objects;
+    ShadowValues newShadow;
 
 };
 
