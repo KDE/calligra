@@ -584,3 +584,8 @@ Reggie, 9.12.1999:
 - Got rid of a warning
 - CTRL + A == Home and ALT + A select all now
 
+Reggie, 10.12.1999:
+----------------
+- If you insert a pixmap and it's larger than one page it's scaled
+  down to fit the page keeing constraints
+

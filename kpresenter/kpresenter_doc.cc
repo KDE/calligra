@@ -2817,6 +2817,20 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
+    QRect s = getPageSize( 0, 0, 0 );
+    float fakt = 1;
+    if ( kppixmapobject->getSize().width() > s.width() )
+	fakt = (float)s.width() / (float)kppixmapobject->getSize().width();
+    if ( kppixmapobject->getSize().height() > s.height() ) 
+	fakt = QMIN( fakt, (float)s.height() / (float)kppixmapobject->getSize().height() );
+
+    if ( fakt < 1 ) {
+	int w = (int)( fakt * (float)kppixmapobject->getSize().width() );
+	int h = (int)( fakt * (float)kppixmapobject->getSize().height() );
+	kppixmapobject->setSize( w, h );
+	repaint( FALSE );
+    }
+    
     setModified(true);
 }
 
