@@ -483,7 +483,7 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
       if ( !KSUtil::checkType( context, r.value(), KSValue::IntType, true ) )
           return false;
       QDate d = l.value()->dateValue();
-      d = d.addDays( -r.value()->intValue() );
+   d = d.addDays( -r.value()->intValue() );
       FILL_VALUE( context, l, r );
       context.value()->setValue( d );
       return TRUE;
@@ -548,16 +548,14 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
     {
     case KSValue::IntType:
       {
-        KScript::Long result = r.value()->intValue() * l.value()->intValue();
-        FILL_VALUE( context, l, r );
-        context.value()->setValue( result );
-
-        // chance to overflow ? promote to double
-        // this fixes bug #42499
+        // promote to double multiplication( fix bug #42499 )
+        // hold it in long integer only if it is small enough
         KScript::Double v = r.value()->doubleValue() * l.value()->doubleValue();
-        if( fabs( v ) > 1e9 )
+        FILL_VALUE( context, l, r );
+        if( fabs( v ) < 1e9 )
+          context.value()->setValue( (long) v );
+        else
           context.value()->setValue( v );
-
         return true;
       }
     case KSValue::DoubleType:
@@ -854,6 +852,7 @@ bool KSEval_t_equal( KSParseNode* node, KSContext& context )
   }
   else
   {
+
     result = ( r.value()->cmp( *l.value() ) );
   }
 
