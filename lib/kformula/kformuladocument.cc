@@ -415,7 +415,7 @@ void Document::createActions(KActionCollection* collection)
                                       collection, "formula_addlowerright");
 
     impl->addGenericUpperAction = new KAction(i18n("Add Upper Index"),
-                                      CTRL + Key_U,
+                                              /*CTRL + Key_U*/0,
                                       this, SLOT(addGenericUpperIndex()),
                                       collection, "formula_addupperindex");
     impl->addGenericLowerAction = new KAction(i18n("Add Lower Index"),
@@ -509,7 +509,7 @@ void Document::createActions(KActionCollection* collection)
 
     impl->insertSymbolAction = new KAction(i18n("Insert Symbol"),
                                            "key_enter",
-                                           CTRL + Key_I,
+                                           /*CTRL + Key_I*/0,
                                            this, SLOT(insertSymbol()),
                                            collection, "formula_insertsymbol");
     impl->symbolNamesAction = new SymbolAction(i18n("Symbol names"),
