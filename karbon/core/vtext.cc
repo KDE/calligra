@@ -15,7 +15,7 @@
 #include <X11/Xft/Xft.h>
 #include <X11/Xft/XftFreetype.h>
 
-#include <ft2build.h>
+#include FT_BUILD_H
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 #include FT_GLYPH_H
