@@ -380,6 +380,9 @@ signals:
 	void itemDblClicked(KexiTableItem *, int row, int col);
 	void itemMouseReleased(KexiTableItem *, int row, int col);
 
+#if 0 
+//MOC_SKIP_BEGIN 
+	//js: moved to kexitableviewdata
 	/*! Emitted before change of the single, currently edited cell.
 	 Connect this signal to your slot and set \a allow value to false 
 	 to disallow the change. */
@@ -397,6 +400,10 @@ signals:
 	void aboutToUpdateRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer, bool& allow, 
 		int *faultyColumn);
 
+	void rowUpdated(KexiTableItem*);
+	void rowInserted(KexiTableItem*);
+//MOC_SKIP_END
+#endif
 	void itemChanged(KexiTableItem *, int row, int col);
 	void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
 	void itemDeleteRequest(KexiTableItem *, int row, int col);
@@ -405,9 +412,6 @@ signals:
 	void dropped(QDropEvent *);
 //	void contextMenuRequested(KexiTableItem *,  int row, int col, const QPoint &);
 	void sortedColumnChanged(int col);
-
-	void rowUpdated(KexiTableItem*);
-	void rowInserted(KexiTableItem*);
 
 	//! emmited when row editing is started (for updating or inserting)
 	void rowEditStarted(int row);

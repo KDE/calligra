@@ -29,8 +29,11 @@
 #include <qvariant.h>
 #include <qvaluevector.h>
 #include <qstring.h>
+#include <qobject.h>
 
 #include "kexitableitem.h"
+
+#include <kexidb/error.h>
 
 namespace KexiDB {
 class Field;
@@ -40,6 +43,7 @@ class Cursor;
 }
 
 class KexiValidator;
+
 
 /*! Single column definition. */
 class KEXIDATATABLE_EXPORT KexiTableViewColumn {
@@ -135,8 +139,10 @@ typedef QPtrList<KexiTableItem> KexiTableViewDataBase;
 
 	\sa QPtrList.
 */
-class KEXIDATATABLE_EXPORT KexiTableViewData : public KexiTableViewDataBase
+class KEXIDATATABLE_EXPORT KexiTableViewData : public QObject, public KexiTableViewDataBase
 {
+	Q_OBJECT
+
 public: 
 	KexiTableViewData();
 
@@ -192,17 +198,39 @@ public:
 	 if the buffer is of simple type, or db-aware buffer if (isDBAware()==true).
 	 (then fields are addressed with KexiDB::Field, instead of caption strings).
 	 \sa KexiDB::RowEditBuffer */
-	void updateRowEditBuffer(int colnum, QVariant newval);
+	bool updateRowEditBuffer(KexiTableItem *item, int colnum, QVariant newval);
 
 	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }
 
-	bool saveRowChanges(KexiTableItem& item, QString *msg = 0, QString *desc = 0, 
-		int *faultyColumn = 0);
+	/*! \return last operation's result information (always not null). */
+	inline KexiDB::ResultInfo* result() { return &m_result; }
 
-	bool saveNewRow(KexiTableItem& item, QString *msg = 0, QString *desc = 0, 
-		int *faultyColumn = 0);
+	bool saveRowChanges(KexiTableItem& item);
 
-	bool deleteRow(KexiTableItem& item, QString *msg = 0, QString *desc = 0);
+	bool saveNewRow(KexiTableItem& item);
+
+	bool deleteRow(KexiTableItem& item);
+
+signals:
+	/*! Emitted before change of the single, currently edited cell.
+	 Connect this signal to your slot and set \a allow value to false 
+	 to disallow the change. */
+	void aboutToChangeCell(KexiTableItem *, int colnum, QVariant newValue,
+		KexiDB::ResultInfo* result);
+
+	/*! Emited before inserting of a new, current row.
+	 Connect this signal to your slot and set \a result->success to false 
+	 to disallow the inserting. */
+	void aboutToInsertRow(KexiTableItem *, KexiDB::ResultInfo* result);
+
+	/*! Emited before changing of an edited, current row.
+	 Connect this signal to your slot and set \a result->success to false 
+	 to disallow the change. */
+	void aboutToUpdateRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer,
+		KexiDB::ResultInfo* result);
+
+	void rowUpdated(KexiTableItem*);
+	void rowInserted(KexiTableItem*);
 
 protected:
 	virtual int compareItems(Item item1, Item item2);
@@ -210,8 +238,7 @@ protected:
 	int cmpInt(Item item1, Item item2);
 
 	//! internal: for saveRowChanges() and saveNewRow()
-	bool saveRow(KexiTableItem& item, bool insert, QString *msg = 0, QString *desc = 0,
-		int *faultyColumn = 0);
+	bool saveRow(KexiTableItem& item, bool insert);
 
 	int			m_key;
 	short		m_order;
@@ -222,6 +249,8 @@ protected:
 
 	//! used to faster lookup columns of simple type (not dbaware)
 //	QDict<KexiTableViewColumn> *m_simpleColumnsByName;
+
+	KexiDB::ResultInfo m_result;
 
 	bool m_readOnly : 1;
 	bool m_insertingEnabled : 1;

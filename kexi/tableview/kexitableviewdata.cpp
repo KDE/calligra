@@ -180,7 +180,8 @@ bool KexiDBTableViewColumn::acceptsFirstChar(const QChar& ch) const
 //------------------------------------------------------
 
 KexiTableViewData::KexiTableViewData()
-	: KexiTableViewDataBase()
+	: QObject()
+	, KexiTableViewDataBase()
 	, m_key(0)
 	, m_order(1)
 	, m_type(1)
@@ -194,7 +195,8 @@ KexiTableViewData::KexiTableViewData()
 }
 
 KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
-	: KexiTableViewDataBase()
+	: QObject()
+	, KexiTableViewDataBase()
 	, m_key(0)
 	, m_order(1)
 	, m_type(1)
@@ -323,34 +325,41 @@ bool KexiTableViewData::isDBAware()
 		return columns.first()->isDBAware;*/
 }
 
-void KexiTableViewData::updateRowEditBuffer(int colnum, QVariant newval)
+bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item, 
+	int colnum, QVariant newval)
 {
+	m_result.clear();
+	emit aboutToChangeCell(item, colnum, newval, &m_result);
+	if (!m_result.success)
+		return false;
+
 	kdDebug() << "KexiTableViewData::updateRowEditBuffer() column #" << colnum << " = " << newval.toString() << endl;
 	KexiTableViewColumn* col = columns.at(colnum);
 	if (!col) {
 		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found! col==0" << endl;
-		return;
+		return false;
 	}
 	if (!(col->field)) {
 		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
-		return;
+		return false;
 	}
 	if (m_pRowEditBuffer->isDBAware()) {
 //		if (!(static_cast<KexiDBTableViewColumn*>(col)->field)) {
 		m_pRowEditBuffer->insert( *col->field, newval);
-		return;
+		return true;
 	}
 	//not db-aware:
 	const QString colname = col->field->name();
 	if (colname.isEmpty()) {
 		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
-		return;
+		return false;
 	}
 	m_pRowEditBuffer->insert(colname, newval);
+	return true;
 }
 
 //js TODO: if there can be multiple views for this data, we need multiple buffers!
-bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, QString *msg, QString *desc, int *faultyColumn)
+bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
 {
 	if (!m_pRowEditBuffer)
 		return true; //nothing to do
@@ -371,22 +380,16 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, QString *msg, 
 		//check it
 		if (val->isNull() && f->isNotNull()) {
 			//NOT NULL violated
-			if (msg)
-				*msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
-			if (desc)
-				*desc = i18n("The column's constraint is declared as NOT NULL.");
-			if (faultyColumn)
-				*faultyColumn = col;
+			m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
+			m_result.desc = i18n("The column's constraint is declared as NOT NULL.");
+			m_result.column = col;
 			return false;
 		}
 		else if (f->isNotEmpty() && (val->isNull() || KexiDB::isEmptyValue( f, *val )) ) {
 			//NOT EMPTY violated
-			if (msg)
-				*msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
-			if (desc)
-				*desc = i18n("The column's constraint is declared as NOT EMPTY.");
-			if (faultyColumn)
-				*faultyColumn = col;
+			m_result.msg = i18n("\"%1\" column requires a value to be entered.").arg(f->captionOrName());
+			m_result.desc = i18n("The column's constraint is declared as NOT EMPTY.");
+			m_result.column = col;
 			return false;
 		}
 	}
@@ -394,8 +397,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, QString *msg, 
 	if (dbaware) {
 		if (insert) {
 			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
-				if (msg)
-					*msg = i18n("Row inserting failed.");
+				m_result.msg = i18n("Row inserting failed.");
 
 /*			if (desc)
 			*desc = 
@@ -409,8 +411,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 		}
 		else {
 			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
-				if (msg)
-					*msg = i18n("Row changing failed.");
+				m_result.msg = i18n("Row changing failed.");
 /*! js: TODO: the same as for inserting ^^^^^ */
 				return false;
 			}
@@ -431,25 +432,45 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 	return true;
 }
 
-bool KexiTableViewData::saveRowChanges(KexiTableItem& item, QString *msg, QString *desc, int *faultyColumn)
+bool KexiTableViewData::saveRowChanges(KexiTableItem& item)
 {
 	kdDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
-	return saveRow(item, false /*update*/, msg, desc, faultyColumn);
+	m_result.clear();
+	emit aboutToUpdateRow(&item, rowEditBuffer(), &m_result);
+	if (!m_result.success)
+		return false;
+
+	if (saveRow(item, false /*update*/)) {
+		emit rowUpdated(&item);
+		return true;
+	}
+	return false;
 }
 
-bool KexiTableViewData::saveNewRow(KexiTableItem& item, QString *msg, QString *desc, int *faultyColumn)
+bool KexiTableViewData::saveNewRow(KexiTableItem& item)
 {
 	kdDebug() << "KexiTableViewData::saveNewRow()..." << endl;
-	return saveRow(item, true /*insert*/, msg, desc, faultyColumn);
+	m_result.clear();
+	emit aboutToInsertRow(&item, &m_result);
+	if (!m_result.success)
+		return false;
+	
+	if (saveRow(item, true /*insert*/)) {
+		emit rowInserted(&item);
+		return true;
+	}
+	return false;
 }
 
-bool KexiTableViewData::deleteRow(KexiTableItem& item, QString *msg, QString *desc)
+bool KexiTableViewData::deleteRow(KexiTableItem& item)
 {
+	m_result.clear();
 	if (isDBAware()) {
+		m_result.success = false;
 		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item) )) {
-			if (msg)
-				*msg = i18n("Row deleting failed.");
+			m_result.msg = i18n("Row deleting failed.");
 /*js: TODO: use KexiDB::errorMessage() for description (desc) as in KexiTableViewData::saveRow() */
+			m_result.success = false;
 			return false;
 		}
 	}
@@ -457,7 +478,11 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item, QString *msg, QString *de
 	if (!removeRef(&item)) {
 		//aah - this shouldn't be!
 		kdWarning() << "KexiTableViewData::deleteRow(): !removeRef() - IMPL. ERROR?" << endl;
+		m_result.success = false;
 		return false;
 	}
 	return true;
 }
+
+#include "kexitableviewdata.moc"
+

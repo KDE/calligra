@@ -33,9 +33,11 @@ class KexiPropertyBuffer;
 
 namespace KexiDB
 {
+	class Field;
 	class Cursor;
 	class TableSchema;
 	class RowEditBuffer;
+	class ResultInfo;
 }
 
 class KexiAlterTableDialog : public KexiViewBase
@@ -60,6 +62,10 @@ class KexiAlterTableDialog : public KexiViewBase
 		void init();
 		void initActions();
 
+		/*! Creates a new property buffer for \a field. 
+		 The buffer will be asigned to \a row, and owned by this dialog. */
+		void createPropertyBuffer( int row, KexiDB::Field *field );
+
 		virtual bool beforeSwitchTo(int mode);
 
 		/*! \return property buffer associated with currently selected row (i.e. field)
@@ -76,20 +82,23 @@ class KexiAlterTableDialog : public KexiViewBase
 		void slotPropertyChanged(KexiPropertyBuffer& buf,KexiProperty& prop);
 
 		//! Called before cell change in tableview.
-		void slotBeforeCellChanged(KexiTableItem *item, QVariant newValue, bool& allow);
+		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
+			QVariant newValue, KexiDB::ResultInfo* result);
 
 		//! Called on row change in tableview.
 		void slotRowUpdated(KexiTableItem *item);
 
 		//! Called before row inserting in tableview.
-		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::RowEditBuffer* buffer, bool& allow);
+		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result);
 
 		//! Called before row updating in tableview.
-		void slotAboutToUpdateRow(KexiTableItem* item, KexiDB::RowEditBuffer* buffer, bool& allow);
+		void slotAboutToUpdateRow(KexiTableItem* item, 
+			KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result);
 
 	private:
 		KexiTableView *m_view;
-		KexiDB::TableSchema *m_table;
+		const KexiDB::TableSchema *m_table; //!< original table schema
+		KexiDB::TableSchema *m_newTable; //!< new table schema
 //		KexiPropertyEditor *m_properties;
 		FieldsBuffer m_fields;
 		int m_row;

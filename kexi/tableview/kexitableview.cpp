@@ -476,12 +476,12 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 //	if (m_data->removeRef(item))
 
 	QString msg, desc;
-	if (!m_data->deleteRow(*d->pCurrentItem, &msg, &desc)) {
+	if (!m_data->deleteRow(*d->pCurrentItem)) {
 		//error
-		if (desc.isEmpty())
-			KMessageBox::sorry(this, msg);
+		if (m_data->result()->desc.isEmpty())
+			KMessageBox::sorry(this, m_data->result()->msg);
 		else
-			KMessageBox::detailedSorry(this, msg, desc);
+			KMessageBox::detailedSorry(this, m_data->result()->msg, m_data->result()->desc);
 		return false;
 	}
 	else {
@@ -2469,16 +2469,15 @@ bool KexiTableView::acceptEditor()
 
 	if (res == KexiValidator::Ok) {
 		//2. check using signal
-		bool allow = true;
-		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
-		if (allow) {
-			//send changes to the backend
-			m_data->updateRowEditBuffer(d->curCol,newval);
-
+		//bool allow = true;
+//		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
+//		if (allow) {
+		//send changes to the backend
+		if (m_data->updateRowEditBuffer(d->pCurrentItem,d->curCol,newval)) {
 			kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
 			m_data->rowEditBuffer()->debug();
 		} else {
-			kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE NOT ALLOWED BY aboutToChangeCell() signal" << endl;
+			kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE FAILED in KexiTableViewData::updateRowEditBuffer()" << endl;
 			res = KexiValidator::Error;
 		}
 	}
@@ -2509,9 +2508,9 @@ bool KexiTableView::acceptRowEdit()
 
 	bool success = true;
 //	bool allow = true;
-	int faultyColumn = -1; // will be !=-1 if cursor has to be moved to that column
+//	int faultyColumn = -1; // will be !=-1 if cursor has to be moved to that column
 	const bool inserting = d->newRowEditing;
-	QString msg, desc;
+//	QString msg, desc;
 //	bool inserting = d->pInsertItem && d->pInsertItem==d->pCurrentItem;
 
 	if (m_data->rowEditBuffer()->isEmpty()) {
@@ -2527,22 +2526,22 @@ bool KexiTableView::acceptRowEdit()
 	}
 	else {//not empty edit buffer:
 		if (d->newRowEditing) {
-			emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
-			if (success) {
-				kdDebug() << "-- INSERTING: " << endl;
-				m_data->rowEditBuffer()->debug();
-				success = m_data->saveNewRow(*d->pCurrentItem, &msg, &desc, &faultyColumn);
+//			emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
+//			if (success) {
+			kdDebug() << "-- INSERTING: " << endl;
+			m_data->rowEditBuffer()->debug();
+			success = m_data->saveNewRow(*d->pCurrentItem);
 //				if (!success) {
 //				}
-			}
+//			}
 		}
 		else {
-			emit aboutToUpdateRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
+//			emit aboutToUpdateRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
 			if (success) {
 				//accept changes for this row:
 				kdDebug() << "-- UPDATING: " << endl;
 				m_data->rowEditBuffer()->debug();
-				success = m_data->saveRowChanges(*d->pCurrentItem, &msg, &desc, &faultyColumn);
+				success = m_data->saveRowChanges(*d->pCurrentItem);//, &msg, &desc, &faultyColumn);
 //				if (!success) {
 //				}
 			}
@@ -2562,12 +2561,12 @@ bool KexiTableView::acceptRowEdit()
 		/*debug*/itemAt(d->curRow);
 
 		if (inserting) {
-			emit rowInserted(d->pCurrentItem);
+//			emit rowInserted(d->pCurrentItem);
 			//update navigator's data
 			setNavRowCount(rows());
 		}
 		else {
-			emit rowUpdated(d->pCurrentItem);
+//			emit rowUpdated(d->pCurrentItem);
 		}
 
 		emit rowEditTerminated(d->curRow);
@@ -2579,14 +2578,14 @@ bool KexiTableView::acceptRowEdit()
 //		else {
 //			kdDebug() << "EDIT ROW - ERROR!" << endl;
 //		}
-		if (faultyColumn>=0 && faultyColumn<columns()) {
+		if (m_data->result()->column>=0 && m_data->result()->column<columns()) {
 			//move to faulty column
-			setCursor(d->curRow, faultyColumn);
+			setCursor(d->curRow, m_data->result()->column);
 		}
-		if (desc.isEmpty())
-			KMessageBox::sorry(this, msg);
+		if (m_data->result()->desc.isEmpty())
+			KMessageBox::sorry(this, m_data->result()->msg);
 		else
-			KMessageBox::detailedSorry(this, msg, desc);
+			KMessageBox::detailedSorry(this, m_data->result()->msg, m_data->result()->desc);
 	}
 
 	return success;

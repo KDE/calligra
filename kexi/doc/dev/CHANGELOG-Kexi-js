@@ -302,6 +302,21 @@ Detailed TODO for Beta3:
 - double editor should be klineedit with doublevalidator, not spinbox
 - update parent property (e.g. Rect) on child's change
 
+2004-02-24
+Table View:
+-KexiTableViewData is now QObject-derived
+-signals like aboutToChangeCell() or rowChanged() moved from KexiTableView
+ to KexiTableViewData, so it'll be easier to reuse KexiTableViewData 
+ with a forms, and easier to share common data object between views.
+
+2004-02-22
+KexiDB:
+-copy constructors added for classes: table schema, field list, index schema, field 
+Alter Table Dialog:
+-all changes are made to the deep copy of the table, not to the original
+
+TODO: KEXIDB: copy constructors: also copy references of the index schema
+
 2004-02-21
 Main Window:
 	-buffer in the property editor is properly cleared when current dialog is changed 
