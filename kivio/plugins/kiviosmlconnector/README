@@ -1,0 +1,16 @@
+DESIGN:
+	This plugin will create a connector from a path created from a series of points.  At each point a handle will be placed, this includes connection points and control handles.
+
+	Arrows are only available at the end points and only end points can connect to other shapes.
+
+Example SML:
+<KivioConnector>
+	<Type data="Xor"/>
+	<Points>
+		<KivioPoint x="40" y="50" type="bezier"/>
+		<KivioPoint x="30" y="40" type="bezier"/>
+		<KivioPoint x="10" y="40" type="bezier"/>
+		<KivioPoint x="0" y="50" type="bezier"/>
+	</Points>
+</KivioConnector
+This will create an arc shaped connector with handles at the control points and handles at the end points	
