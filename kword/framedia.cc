@@ -1070,19 +1070,17 @@ void KWFrameDia::updateFrames()
 {
     doc->layout();
     QList<KWFrame> frames=doc->getSelectedFrames();
+    bool updateFrameDone=false;
     if(frames.count()==1)
     {
         KWFrame *theFrame = frames.at(0);
+        doc->frameChanged(theFrame);
         if(theFrame->isSelected())
             theFrame->setSelected(true);
-        //if you change pos, you must move text also.
-        if(theFrame->getFrameSet()->getFrameType() == FT_FORMULA)
-            theFrame->getFrameSet()->updateFrames();
+        updateFrameDone=true;
     }
-    doc->repaintAllViews();
-#if 0
-    doc->updateAllFrames(); // already done in framedia
-#endif
+    if(!updateFrameDone)
+        doc->repaintAllViews();
 }
 
 void KWFrameDia::slotOk()
