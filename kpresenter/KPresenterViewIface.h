@@ -178,6 +178,10 @@ k_dcop:
     virtual void createStyleFromSelection();
 
     virtual void closeObject();
+
+    void saveClipart();
+    void savePicture();
+
 private:
     KPresenterView *view;
 

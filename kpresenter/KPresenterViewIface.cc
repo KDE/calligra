@@ -597,3 +597,13 @@ void KPresenterViewIface::closeObject()
 {
     view->closeObject();
 }
+
+void KPresenterViewIface::saveClipart()
+{
+    view->saveClipart();
+}
+
+void KPresenterViewIface::savePicture()
+{
+    view->savePicture();
+}
