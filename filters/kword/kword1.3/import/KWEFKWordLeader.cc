@@ -137,17 +137,6 @@ static void ProcessParagraphTag ( QDomNode         myNode,
 }
 
 
-static void ProcessImageKeyTag ( QDomNode         myNode,
-                                 void            *tagData,
-                                 KWEFKWordLeader *)
-{
-    KoPictureKey *key = (KoPictureKey*) tagData;
-
-    // Let KoPicture do the loading
-    key->loadAttributes(myNode.toElement());
-}
-
-
 static void ProcessFrameTag ( QDomNode myNode, void *tagData,
     KWEFKWordLeader *leader )
 {
@@ -229,20 +218,6 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
     frameAnchor->frame.bkColor = QColor( bkRed, bkGreen, bkBlue );
 
     AllowNoSubtags (myNode, leader);
-}
-
-
-static void ProcessImageTag ( QDomNode         myNode,
-                              void            *tagData,
-                              KWEFKWordLeader *leader )
-{ // <PICTURE>
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
-    ProcessAttributes (myNode, attrProcessingList);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "KEY", ProcessImageKeyTag, tagData );
-    ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 

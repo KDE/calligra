@@ -496,16 +496,24 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
     FormatData formatData(2, formatPos, formatLen);
     QValueList<TagProcessing> tagProcessingList;
 
-    QString fileName;
-    tagProcessingList.append(TagProcessing("FILENAME", ProcessStringValueTag, &fileName));
+    QString fileName; // KWord 0.8
+    KoPictureKey key; // Re-saved by KWord 1.2 or KWord 1.3
+    tagProcessingList.append(TagProcessing( "FILENAME", ProcessStringValueTag, &fileName));
+    tagProcessingList.append(TagProcessing( "PICTURE",  ProcessImageTag, &key ));
     ProcessSubtags (myNode, tagProcessingList, leader);
 
     if ( !fileName.isEmpty() )
     {
-        kdDebug(30508) << "Text image: " << fileName << endl;
-        formatData.frameAnchor.key = KoPictureKey( fileName );
-        formatData.frameAnchor.picture.key = formatData.frameAnchor.key;
+        kdDebug(30508) << "KWord 0.8 text image: " << fileName << endl;
+        key = KoPictureKey( fileName );
     }
+    else
+    {
+        kdDebug(30508) << "KWord 1.2/1.3 text image: " << key.toString() << endl;
+    }
+
+    formatData.frameAnchor.key = key;
+    formatData.frameAnchor.picture.key = key;
 
     (*formatDataList) << formatData;
 }
@@ -910,3 +918,27 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     }
 
 }
+
+static void ProcessImageKeyTag ( QDomNode myNode,
+    void *tagData, KWEFKWordLeader *)
+{
+    KoPictureKey *key = (KoPictureKey*) tagData;
+
+    // Let KoPicture do the loading
+    key->loadAttributes(myNode.toElement());
+}
+
+
+void ProcessImageTag ( QDomNode myNode,
+    void *tagData, KWEFKWordLeader *leader )
+{ // <PICTURE>
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "KEY", ProcessImageKeyTag, tagData );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+}
+
+
