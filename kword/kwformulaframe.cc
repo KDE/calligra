@@ -458,39 +458,6 @@ void KWFormulaFrameSetEdit::moveEnd()
     formulaView->moveEnd( KFormula::WordMovement );
 }
 
-void KWFormulaFrameSetEdit::exitLeft()
-{
-    if ( formulaFrameSet()->isFloating() ) {
-        KWAnchor* anchor = formulaFrameSet()->findAnchor( 0 );
-        int index = anchor->index();
-        KoTextParag *parag = static_cast<KoTextParag*>( anchor->paragraph() );
-        m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index );
-    }
-}
-
-void KWFormulaFrameSetEdit::exitRight()
-{
-    if ( formulaFrameSet()->isFloating() ) {
-        KWAnchor* anchor = formulaFrameSet()->findAnchor( 0 );
-        int index = anchor->index();
-        KoTextParag *parag = static_cast<KoTextParag*>( anchor->paragraph() );
-        m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index+1 );
-    }
-}
-
-
-void KWFormulaFrameSetEdit::exitAbove()
-{
-    exitLeft();
-}
-
-
-void KWFormulaFrameSetEdit::exitBelow()
-{
-    exitRight();
-}
-
-
 void KWFormulaFrameSetEdit::removeFormula()
 {
     if ( formulaFrameSet()->isFloating() ) {
@@ -536,10 +503,10 @@ void KWFormulaFrameSetEdit::slotLeaveFormula( KFormula::Container*,
             exitRight();
             break;
         case KFormula::Container::EXIT_ABOVE:
-            exitAbove();
+            exitLeft();
             break;
         case KFormula::Container::EXIT_BELOW:
-            exitBelow();
+            exitRight();
             break;
         case KFormula::Container::REMOVE_FORMULA:
             removeFormula();

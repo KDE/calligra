@@ -2093,6 +2093,32 @@ void KWFrameSetEdit::showPopup( KWFrame* frame, KWView* view, const QPoint & _po
     frame->frameSet()->showPopup( frame, view, _point );
 }
 
+bool KWFrameSetEdit::exitLeft()
+{
+    if ( m_fs->isFloating() ) {
+        KWAnchor* anchor = m_fs->findAnchor( 0 );
+        int index = anchor->index();
+        KoTextParag *parag = anchor->paragraph();
+        // This call deletes "this"!
+        m_canvas->editTextFrameSet( m_fs->anchorFrameset(), parag, index );
+        return true;
+    }
+    return false;
+}
+
+bool KWFrameSetEdit::exitRight()
+{
+    if ( m_fs->isFloating() ) {
+        KWAnchor* anchor = m_fs->findAnchor( 0 );
+        int index = anchor->index();
+        KoTextParag *parag = anchor->paragraph();
+        // This call deletes "this"!
+        m_canvas->editTextFrameSet( m_fs->anchorFrameset(), parag, index+1 );
+        return true;
+    }
+    return false;
+}
+
 /******************************************************************/
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/

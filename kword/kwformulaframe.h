@@ -153,15 +153,6 @@ public:
     /** Moves the cursor to the last position */
     void moveEnd();
 
-    /** Gets called if the cursor ties to leave the formula at its begin. */
-    void exitLeft();
-
-    /** Gets called if the cursor ties to leave the formula at its end. */
-    void exitRight();
-
-    void exitAbove();
-    void exitBelow();
-
     void removeFormula();
 
 protected slots:

@@ -3246,7 +3246,7 @@ bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fro
     KWAnchor* anchor = dynamic_cast<KWAnchor*>( customItem );
     if ( anchor ) {
         KWFrameSet* frameSet = anchor->frameSet();
-        if ( frameSet->type() == FT_FORMULA ) {
+        if ( frameSet->type() == FT_FORMULA || frameSet->type() == FT_TEXT ) {
 
             // store the instance variable we need after "delete this"
             KWCanvas* canvas = m_canvas;
@@ -3257,13 +3257,19 @@ bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fro
             // We assume that `editFrameSet' succeeded.
             if ( fromRight ) {
                 KWFrameSetEdit* edit = canvas->currentFrameSetEdit();
-                static_cast<KWFormulaFrameSetEdit*>( edit )->moveEnd();
+                if ( frameSet->type() == FT_FORMULA )
+                    static_cast<KWFormulaFrameSetEdit*>( edit )->moveEnd();
+                else
+                    static_cast<KWTextFrameSetEdit*>( edit )->moveCursor( MoveEnd );
             }
 
-            // A FormulaFrameSetEdit looks a little different from
-            // a FormulaFrameSet. (Colors)
-            static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
-            canvas->repaintChanged( frameSet, true );
+            if ( frameSet->type() == FT_FORMULA )
+            {
+                // A FormulaFrameSetEdit looks a little different from
+                // a FormulaFrameSet. (Colors)
+                static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
+                canvas->repaintChanged( frameSet, true );
+            }
             return true;
         }
     }
@@ -3272,7 +3278,7 @@ bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fro
 
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
 {
-    // Handle moving into foreign frames (formula frames).
+    // Handle moving into inline frames (e.g. formula frames).
     if ( !( e->state() & ControlButton ) && !( e->state() & ShiftButton ) )
     {
         if (e->state() != Qt::NoButton)
@@ -3287,27 +3293,32 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                 if ( ch->isCustom() ) {
                     KoTextCustomItem* customItem = ch->customItem();
                     if ( enterCustomItem( customItem, true ) ) {
-                        removeToolTipCompletion();
+                        // Don't do anything here, "this" is deleted!
                         return;
                     }
                 }
             }
+            if ( index == 0 && !parag->prev() )
+                if ( exitLeft() )
+                    return;
             break;
         }
         case Key_Right: {
             KoTextCursor* cursor = textView()->cursor();
             KoTextParag* parag = cursor->parag();
             int index = cursor->index();
-            if ( index < parag->length() ) {
+            if ( index < parag->length() - 1 ) {
                 KoTextStringChar* ch = parag->at( index );
                 if ( ch->isCustom() ) {
                     KoTextCustomItem* customItem = ch->customItem();
                     if ( enterCustomItem( customItem, false ) ) {
-                        removeToolTipCompletion();
+                        // Don't do anything here, "this" is deleted!
                         return;
                     }
                 }
-            }
+            } else if ( /*at end, covered by previous if, && */ !parag->next() )
+                if ( exitRight() )
+                    return;
             break;
         }
         }

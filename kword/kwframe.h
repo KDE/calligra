@@ -400,6 +400,13 @@ public:
      */
     virtual void showPopup( KWFrame* frame, KWView* view, const QPoint & _point );
 
+    /// Called if the cursor tries to leave the frameset at its beginning.
+    /// Returns true if the frameset was inline, and we did exit into another frameset.
+    bool exitLeft();
+    /// Called if the cursor tries to leave the frameset at its end.
+    /// Returns true if the frameset was inline, and we did exit into another frameset.
+    bool exitRight();
+
 protected:
     KWFrameSet * m_fs;
     KWCanvas * m_canvas;
