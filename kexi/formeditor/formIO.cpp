@@ -146,7 +146,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 }
 
 int
-FormIO::loadForm(Form *form, QWidget *container, QByteArray &src)
+FormIO::loadFormData(Form *form, QWidget *container, QByteArray &src)
 {
 	QString errMsg;
 	int errLine;
@@ -768,7 +768,8 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 //	w = new QWidget(parent, wname.latin1());
 //	form->createToplevel(w);
 	container->setName(wname.latin1());
-	form->objectTree()->rename(form->objectTree()->name(), wname);
+	if(form->objectTree())
+		form->objectTree()->rename(form->objectTree()->name(), wname);
 	form->setInteractiveMode(false);
 
 	readChildNodes(form->objectTree(), form->toplevelContainer(), form->manager()->lib(), el, container);

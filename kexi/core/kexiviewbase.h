@@ -145,6 +145,21 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 \sa storeNewData() */
 		virtual bool storeData();
 
+		//luci:temporary copy from KexiDialogBase
+		/*! Stores large string data \a dataString, block (e.g. xml form's representation) 
+		 at the backend. Block will be stored in "kexi__objectdata" table pointed by
+		 this object's id and an optional \a subID identifier. 
+		 If there is already such record in the table, it's simply overwritten.
+		 \return true on success
+		*/
+		bool storeDataBlock( const QString &dataString, const QString &id, const QString& subID = QString::null );
+
+		/*! Loads large string data \a dataString, block (e.g. xml form's representation).
+		 \return true on success
+		 \sa storeDataBlock(). */
+		bool loadDataBlock( QString &dataString, const QString &id, const QString& dataID = QString::null);
+
+
 		void setViewWidget(QWidget* w);
 
 		QString m_defaultIconName;

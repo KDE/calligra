@@ -167,7 +167,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	signals:
 		/*! this signal is emmited as the property buffer switched */
 		void bufferSwitched(KexiPropertyBuffer *buff);
-		void dirty(Form *form);
+		void dirty(KFormDesigner::Form *form);
 
 	private:
 		ObjectPropertyBuffer	*m_buffer;

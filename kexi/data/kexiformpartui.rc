@@ -1,12 +1,13 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiform" version="1">
+<kpartgui name="kexiform" version="2">
 
 <ToolBar name="widgets" fullWidth="false">
  <text>Widgets</text>
-   <Action name="library_widget_Button Group"/>
-   <Action name="library_widget_Tab Widget"/>
-   <Action name="library_widget_Line Edit"/>
-   <Action name="library_widget_Text Label"/>
+   <Action name="library_widget_QButtonGroup"/>
+   <Action name="library_widget_QTabWidget"/>
+   <Action name="library_widget_QLabel"/>
+   <Action name="library_widget_KLineEdit"/>
+   <Action name="library_widget_QPushButton"/>
    <Action name="library_widget_Spacer"/>
  <ActionList name="library_widgets" />
 </ToolBar>

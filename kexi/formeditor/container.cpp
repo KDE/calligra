@@ -134,7 +134,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 			m_moving = static_cast<QWidget*>(s);
 			if(!m_form->manager()->isTopLevel(m_moving) && m_moving->parent()->inherits("QWidgetStack"))
 			{
-				m_moving = m_moving->parentWidget()->parentWidget();
+				if(m_moving->parentWidget())
+				{
+					m_moving = m_moving->parentWidget();
+					if(m_moving->parentWidget())
+						m_moving = m_moving->parentWidget();
+				}
 				kdDebug() << "composed widget  " << m_moving->name() << endl;
 			}
 

@@ -34,6 +34,10 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/indexschema.h>
 
+#include <iostream>
+
+using namespace std;
+
 QCString prgname;
 QCString db_name;
 QCString drv_name;
@@ -47,22 +51,22 @@ KApplication *app;
 
 void usage()
 {
-	kdDebug() << "usage: " << endl;
-	kdDebug() << prgname << " <driver_name> cursors <db_name>" << endl;
-	kdDebug() << "  - test for cursors behaviour" << endl;
-	kdDebug() << prgname << " <driver_name> schema <db_name>" << endl;
-	kdDebug() << "  - test for db schema retrieving" << endl;
-	kdDebug() << prgname << " <driver_name> dbcreation <new_db_name>" << endl;
-	kdDebug() << "  - test for new db creation" << endl;
-	kdDebug() << prgname << " <driver_name> tables <new_db_name>" << endl;
-	kdDebug() << "  - test for tables creation and data inserting" << endl;
-	kdDebug() << prgname << " <driver_name> tableview <db_name>" << endl;
-	kdDebug() << "  - test for KexiDataTableView data-aware widget" << endl;
-	kdDebug() << " Notes:\n 'tables' test, automatically runs 'dbcreation' test.\n" 
+	kdWarning() << "usage: " << endl;
+	kdWarning() << prgname << " <driver_name> cursors <db_name>" << endl;
+	kdWarning() << "  - test for cursors behaviour" << endl;
+	kdWarning() << prgname << " <driver_name> schema <db_name>" << endl;
+	kdWarning() << "  - test for db schema retrieving" << endl;
+	kdWarning() << prgname << " <driver_name> dbcreation <new_db_name>" << endl;
+	kdWarning() << "  - test for new db creation" << endl;
+	kdWarning() << prgname << " <driver_name> tables <new_db_name>" << endl;
+	kdWarning() << "  - test for tables creation and data inserting" << endl;
+	kdWarning() << prgname << " <driver_name> tableview <db_name>" << endl;
+	kdWarning() << "  - test for KexiDataTableView data-aware widget" << endl;
+	kdWarning() << " Notes:\n 'tables' test, automatically runs 'dbcreation' test.\n" 
 		" <new_db_name> is removed if already exists.\n"
 		" <db_name> must be a valid kexi database e.g. created with 'tables' test." 
 		<< endl;
-	kdDebug() << " Optional switches, you can append at the end:\n"
+	kdWarning() << " Optional switches, you can append at the end:\n"
 		" -buffered-cursors -- turns cursors used in any tests to be buffered"
 		<< endl;
 }
@@ -74,7 +78,7 @@ void usage()
 #include "tableview_test.h"
 
 #define RETURN(code) \
-	kdDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR") << endl; \
+	kdWarning()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR") << endl; \
 	return code
 
 int main(int argc, char** argv)
@@ -101,9 +105,9 @@ int main(int argc, char** argv)
 
 	KexiDB::DriverManager manager;// = new KexiDB::DriverManager;
 	QStringList names = manager.driverNames();
-	kdDebug() << "DRIVERS: " << endl;
+	kdWarning() << "DRIVERS: " << endl;
 	for (QStringList::iterator it = names.begin(); it != names.end() ; ++it)
-		kdDebug() << *it << endl;
+		kdWarning() << *it << endl;
 	if (manager.error() || names.isEmpty()) {
 		manager.debugError();
 		RETURN(1);
@@ -115,7 +119,7 @@ int main(int argc, char** argv)
 		manager.debugError();
 		RETURN(1);
 	}
-	kdDebug() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMime() << endl;
+	kdWarning() << "MIME type for '" << driver->name() << "': " << driver->fileDBDriverMime() << endl;
 
 //connection data
 //	conn_data.host = "myhost";
@@ -124,7 +128,7 @@ int main(int argc, char** argv)
 //open connection
 	
 	if (argc<=3) {
-		kdDebug() << prgname << ": database name?" << endl;
+		kdWarning() << prgname << ": database name?" << endl;
 		usage();
 		RETURN(1);
 	}
@@ -135,7 +139,7 @@ int main(int argc, char** argv)
 			cursor_options |= KexiDB::Cursor::Buffered;
 		}
 		else {
-			kdDebug() << "Unknown switch: '" << QCString(argv[i]) << "'" << endl;
+			kdWarning() << "Unknown switch: '" << QCString(argv[i]) << "'" << endl;
 			usage();
 			RETURN(1);
 		}
@@ -167,7 +171,7 @@ int main(int argc, char** argv)
 	else if (test_name == "tableview")
 		r=tableViewTest();
 	else {
-		kdDebug() << "No such test: " << test_name << endl;
+		kdWarning() << "No such test: " << test_name << endl;
 		usage();
 		RETURN(1);
 	}
@@ -182,8 +186,8 @@ int main(int argc, char** argv)
 	else
 	    r = 1;
 	
-	kdDebug() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount() << endl;
-	kdDebug() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount() << endl;
+	kdWarning() << "!!! KexiDB::Transaction::globalcount == " << KexiDB::Transaction::globalCount() << endl;
+	kdWarning() << "!!! KexiDB::TransactionData::globalcount == " << KexiDB::TransactionData::globalCount() << endl;
 
 //	delete manager;
 	delete instance;
