@@ -2,6 +2,7 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qregexp.h>
 #include <qstring.h>
 #include <qtextstream.h>
 
@@ -10,15 +11,12 @@
 #include <kdebug.h>
 
 
-AiDocument* aiDocument;
-
 AiDocument::AiDocument()
 {
-	aiDocument = this;
 }
 
 void
-AiDocument::begin( QTextStream& s )
+AiDocument::parse( QTextStream& s, const QString& in )
 {
 	s <<
 		"<?xml version=\"0.1\" encoding=\"UTF-8\"?>\n"
@@ -27,11 +25,20 @@ AiDocument::begin( QTextStream& s )
 			"editor=\"Karbon AI Import Filter\" >\n"
 		"  <LAYER visible=\"1\" >\n"
 	<< endl;
-}
 
-void
-AiDocument::end( QTextStream& s )
-{
+	QString head;
+	QString body;
+
+	QRegExp reg( "^.*(%!PS-Adobe-.*%%EndProlog)(.*%%EOF)" );
+	if( reg.search( in ) != -1 )
+	{
+		head = reg.cap( 1 );
+		body = reg.cap( 2 );
+	}
+
+	parseHead( s, head );
+	parseBody( s, body );
+
 	s <<
 		" </LAYER>\n"
 		"</DOC>\n"
@@ -39,22 +46,40 @@ AiDocument::end( QTextStream& s )
 }
 
 void
-AiDocument::headerCreator( QString* in )
+AiDocument::parseHead( QTextStream& s, const QString& in )
 {
-	if( in == 0L )
-		return;
+	QRegExp reg( "%%Creator:([^\n]+)" );
+	if( reg.search( in ) != -1 )
+		headCreator( reg.cap( 1 ).stripWhiteSpace() );
 
-	kdDebug() << "\"" << *in << "\"" << endl;
-	delete in;
+	reg.setPattern( "%%For:([^\n]+)" );
+	if( reg.search( in ) != -1 )
+		headAuthor( reg.cap( 1 ).stripWhiteSpace() );
 }
 
 void
-AiDocument::headerAuthor( QString* in )
+AiDocument::parseBody( QTextStream& s, const QString& in )
 {
-	if( in == 0L )
-		return;
+	QRegExp reg( "%%Creator:([^\n]+)" );
+	if( reg.search( in ) != -1 )
+		headCreator( reg.cap( 1 ).stripWhiteSpace() );
+}
 
-	kdDebug() << "\"" << *in << "\"" << endl;
-	delete in;
+void
+AiDocument::lineTo( QTextStream& s, double x, double y )
+{
+	kdDebug() << "***lineto " << x << " " << y << endl;
+}
+
+void
+AiDocument::headCreator( const QString& in )
+{
+	kdDebug() << "***\"" << in << "\"" << endl;
+}
+
+void
+AiDocument::headAuthor( const QString& in )
+{
+	kdDebug() << "***\"" << in << "\"" << endl;
 }
 

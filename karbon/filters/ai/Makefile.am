@@ -19,23 +19,12 @@ servicedir = $(kde_servicesdir)
 
 noinst_HEADERS = \
 	aidocument.h \
-	aiimport.h \
-	yacc.cc.h
+	aiimport.h 
 
 libkarbonaiimport_la_SOURCES = \
 	aidocument.cc \
-	aiimport.cc \
-	scanner.cc \
-	yacc.cc
+	aiimport.cc 
 
 libkarbonaiimport_la_METASOURCES = \
 	AUTO
-
-parser:
-	cd $(srcdir) && flex -B -8 -oscanner.cc scanner.ll ; \
-	bison -t -d -v -o yacc.cc yacc.yy
-
-EXTRA_DIST = scanner.ll yacc.yy
-
-MAINTAINERCLEANFILES = yacc.cc.output
 

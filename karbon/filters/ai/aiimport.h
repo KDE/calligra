@@ -6,13 +6,12 @@
 #define __AIIMPORT_H__
 
 #include <qobject.h>
-
 #include <koFilter.h>
+
+#include "aidocument.h"
 
 class QDomElement;
 class QTextStream;
-
-class AiDocument;
 
 class AiImport : public KoFilter
 {
@@ -25,7 +24,7 @@ public:
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
-	AiDocument* m_aiDocument;
+	AiDocument m_aiDocument;
 };
 
 #endif

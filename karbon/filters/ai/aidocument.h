@@ -18,14 +18,18 @@ public:
 	AiDocument();
 	virtual ~AiDocument() {}
 
-	void begin( QTextStream& s );
-	void end( QTextStream& s );
-
-	// header:
-	void headerCreator( QString* in = 0L );
-	void headerAuthor( QString* in = 0L );
+	void parse( QTextStream& s, const QString& in );
 
 private:
+	void parseHead( QTextStream& s, const QString& in );
+	void parseBody( QTextStream& s, const QString& in );
+
+	// head:
+	void headCreator( const QString& in );
+	void headAuthor( const QString& in );
+
+	// path operators:
+	void lineTo( QTextStream& s, double x, double y );
 };
 
 #endif
