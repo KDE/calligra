@@ -44,6 +44,8 @@ private:
 	void getColor( const VColor& color );
 
 	QTextStream* m_stream;
+
+	uint m_psLevel;
 };
 
 #endif

@@ -9,11 +9,13 @@
 #include <qvaluelist.h>
 
 #include <kgenericfactory.h>
+#include <koDocumentInfo.h>
 #include <koFilter.h>
 #include <koFilterChain.h>
 #include <koStore.h>
 
 #include "epsexport.h"
+#include "epsexportdlg.h"
 #include "vcolor.h"
 #include "vdashpattern.h"
 #include "vdocument.h"
@@ -64,31 +66,39 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	if( !storeIn )
 		return KoFilter::StupidError;
 
-	QFile fileOut( m_chain->outputFile() );
-	if( !fileOut.open( IO_WriteOnly ) )
+	// Ask questions about ps level etc:
+	EpsExportDlg* dialog = new EpsExportDlg();
+
+	if( dialog->exec() )
 	{
-		delete storeIn;
-		return KoFilter::StupidError;
+		// Which postscript level to support?
+		m_psLevel = dialog->psLevel();
+
+		QFile fileOut( m_chain->outputFile() );
+		if( !fileOut.open( IO_WriteOnly ) )
+		{
+			delete storeIn;
+			return KoFilter::StupidError;
+		}
+
+		QDomDocument domIn;
+		domIn.setContent( storeIn );
+		QDomElement docNode = domIn.documentElement();
+
+		m_stream = new QTextStream( &fileOut );
+
+		// Load the document and export it:
+		VDocument doc;
+		doc.load( docNode );
+		doc.accept( *this );
+
+		delete m_stream;
+		fileOut.close();
 	}
 
+	delete( dialog );
+
 	storeIn->close();
-
-	QDomDocument domIn;
-	domIn.setContent( storeIn );
-	QDomElement docNode = domIn.documentElement();
-
-	m_stream = new QTextStream( &fileOut );
-
-
-	// load the document and export it:
-	VDocument doc;
-	doc.load( docNode );
-	doc.accept( *this );
-
-
-	fileOut.close();
-
-	delete m_stream;
 	delete storeIn;
 
 	return KoFilter::OK;
@@ -97,28 +107,60 @@ EpsExport::convert( const QCString& from, const QCString& to )
 void
 EpsExport::visitVDocument( VDocument& document )
 {
-	// select all objects:
+	// Select all objects:
 	document.select();
 
-	// get the bounding box of all selected objects:
+	// Get the bounding box of all selected objects:
 	const KoRect& rect = document.selection()->boundingBox();
 
-	// print a header:
+	// Print a header:
 	*m_stream <<
 		"%!PS-Adobe-2.0 EPSF-1.2\n"
-		"%%Creator: Karbon14 EPS 0.5\n"
 		"%%BoundingBox: "
-		<< rect.left() << " "
-		<< rect.top()  << " "
-		<< rect.right() << " "
-		<< rect.bottom() << "\n"
+			<< qRound( rect.left()   ) << " "	// The standard says: integer values.
+			<< qRound( rect.top()    ) << " "
+			<< qRound( rect.right()  ) << " "
+			<< qRound( rect.bottom() ) << "\n"
+		"%%HiResBoundingBox: "
+			<< rect.left()   << " "
+			<< rect.top()    << " "
+			<< rect.right()  << " "
+			<< rect.bottom() << "\n"
+		"%%Creator: Karbon14 EPS 0.5"
 	<< endl;
 
-	// we dont need the selection anymore:
+	// We dont need the selection anymore:
 	document.deselect();
 
-	// print some defines:
+
+	// Process document info:
+	KoStoreDevice* storeIn;
+	storeIn = m_chain->storageFile( "documentinfo.xml", KoStore::Read );
+
+	if( storeIn )
+	{
+		QDomDocument domIn;
+		domIn.setContent( storeIn );
+		storeIn->close();
+
+		KoDocumentInfo docInfo;
+		docInfo.load( domIn );
+
+		KoDocumentInfoAuthor* authorPage =
+			static_cast<KoDocumentInfoAuthor*>( docInfo.page( "author" ) );
+
+		*m_stream <<
+		// TODO:
+			"%%CreationDate: (12/24/01) (12:34 PM)\n"
+			"%%For: (" << authorPage->fullName() << ") (" << authorPage->company() << ")\n"
+			"%%Title: (" << docInfo.title() << ")"
+		<< endl;
+	}
+
+
+	// Print some definitions:
 	*m_stream <<
+		"\n"
 		"/N {newpath} def\n"
 		"/C {closepath} def\n"
 		"/m {moveto} def\n"
@@ -133,16 +175,23 @@ EpsExport::visitVDocument( VDocument& document )
 		"/R {grestore} def\n"
 	<< endl;
 
-	// export layers:
+
+	// Export layers:
 	VLayerListIterator itr( document.layers() );
 	for( ; itr.current(); ++itr )
 		itr.current()->accept( *this );
+
+
+	// Finished:
+	*m_stream <<
+		"%%EOF"
+	<< endl;
 }
 
 void
 EpsExport::visitVGroup( VGroup& group )
 {
-	// export objects:
+	// Export objects:
 	VObjectListIterator itr( group.objects() );
 	for( ; itr.current(); ++itr )
 		itr.current()->accept( *this );
@@ -151,7 +200,7 @@ EpsExport::visitVGroup( VGroup& group )
 void
 EpsExport::visitVLayer( VLayer& layer )
 {
-	// export objects:
+	// Export objects:
 	VObjectListIterator itr( layer.objects() );
 	for( ; itr.current(); ++itr )
 		itr.current()->accept( *this );
@@ -160,7 +209,7 @@ EpsExport::visitVLayer( VLayer& layer )
 void
 EpsExport::visitVPath( VPath& path )
 {
-	// export segmentlists:
+	// Export segmentlists:
 	VSegmentListListIterator itr( path.segmentLists() );
 	for( ; itr.current(); ++itr )
 		itr.current()->accept( *this );
@@ -176,7 +225,7 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 {
 	*m_stream << "N\n";
 
-	// export segments:
+	// Export segments:
 	VSegmentListIterator itr( segmentList );
 	for( ; itr.current(); ++itr )
 	{

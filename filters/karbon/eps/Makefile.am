@@ -2,7 +2,10 @@ kde_module_LTLIBRARIES = \
 	libkarbonepsexport.la \
 	libkarbonepsimport.la
 
-libkarbonepsexport_la_SOURCES = epsexport.cc
+libkarbonepsexport_la_SOURCES = \
+	epsexport.cc \
+	epsexportdlg.cc
+
 libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonepsexport_la_LIBADD  = \
 	$(LIB_KOFFICEUI) \
@@ -28,6 +31,7 @@ servicedir = $(kde_servicesdir)
 
 noinst_HEADERS = \
 	epsexport.h \
+	epsexportdlg.h \
 	epsimport.h
 
 METASOURCES = AUTO
