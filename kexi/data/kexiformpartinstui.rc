@@ -20,7 +20,7 @@
    <Action name="library_widget_Spacer"/>
  <ActionList name="library_widgets" />
 </ToolBar>
-<Toolbar name="tools" fullWidth="false">
+<ToolBar name="tools" fullWidth="false">
    <Action name="pointer"/>
    <Action name="change_style"/>
 </ToolBar>
