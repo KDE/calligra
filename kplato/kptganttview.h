@@ -39,31 +39,7 @@ class KDGanttViewItem;
 
 class KPrinter;
 
-class KPTTaskAppointmentsView : QWidget
-{
-    Q_OBJECT
-
-public:
-    KPTTaskAppointmentsView(QWidget *parent, const char* name = 0 );
-
-    void clear();
-    void draw(KPTTask *task);
-
-private:
-    QListView *appList;
-    QLineEdit *m_taskName;
-    QLineEdit *m_responsible;
-    QLineEdit *m_costToDate;
-    QLineEdit *m_totalCost;
-    QLineEdit *m_workToDate;
-    QLineEdit *m_totalWork;
-    QSpinBox *m_completion;
-    QLineEdit *m_deviationCost;
-    QLineEdit *m_deviationWork;
-
-};
-
- class KPTGanttView : public QSplitter
+class KPTGanttView : public QSplitter
 {
     Q_OBJECT
 
@@ -73,14 +49,14 @@ private:
 
     //~KPTGanttView();
 
-	void zoom(double zoom);
+    void zoom(double zoom);
 
     void draw(KPTProject &project);
     KPTView *mainView();
 
-	KPTNode *currentNode();
+    KPTNode *currentNode();
 
-	void clear();
+    void clear();
     void print(KPrinter &printer);
 
 public slots:
@@ -88,7 +64,7 @@ public slots:
 
 private slots:
     void currentItemChanged(KDGanttViewItem *);
-	void slotItemDoubleClicked(KDGanttViewItem*);
+    void slotItemDoubleClicked(KDGanttViewItem*);
 
 private:
     void drawChildren(KDGanttViewSummaryItem *item, KPTNode &node);
@@ -96,17 +72,17 @@ private:
     void drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node);
     void drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *task);
     void drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task);
-	void drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task);
+    void drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task);
 
     void drawRelations();
     void drawRelations(KDGanttViewItem *item);
     void drawChildRelations(KDGanttViewItem *item);
 
 private:
-	KPTView *m_mainview;
+    KPTView *m_mainview;
     int m_defaultFontSize;
-	KDGanttViewItem *m_currentItem;
+    KDGanttViewItem *m_currentItem;
     KDGanttView *m_gantt;
-    KPTTaskAppointmentsView *m_taskView;
+    class KPTTaskAppointmentsView *m_taskView;
 };
  #endif

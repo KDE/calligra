@@ -27,7 +27,7 @@
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
-
+#include "kpttaskappointmentsview.h"
 #include "KDGanttView.h"
 #include "KDGanttViewItem.h"
 #include "KDGanttViewTaskItem.h"
@@ -53,131 +53,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kprinter.h>
-
-KPTTaskAppointmentsView::KPTTaskAppointmentsView(QWidget *parent, const char* name)
-    : QWidget(parent, name),
-    appList(0),
-    m_taskName(0),
-    m_responsible(0),
-    m_costToDate(0),
-    m_totalCost(0),
-    m_workToDate(0),
-    m_totalWork(0),
-    m_completion(0),
-    m_deviationCost(0),
-    m_deviationWork(0)
-{
-    QGridLayout *layout = new QGridLayout(this, 4, 11, 8, 2);
-    layout->setRowStretch(0, 0);
-    layout->setRowStretch(1, 0);
-    layout->setRowStretch(2, 0);
-    layout->setRowStretch(3, 0);
-    layout->setColSpacing(2,10);
-    layout->setColSpacing(5,10);
-
-    layout->addWidget(new QLabel(i18n("Task name: "), this), 0, 0);
-    m_taskName = new QLineEdit(this);
-    layout->addMultiCellWidget(m_taskName, 0, 0, 1, 4);
-    layout->addWidget(new QLabel(i18n("Responsible: "), this), 0, 6);
-    m_responsible = new QLineEdit(this);
-    layout->addMultiCellWidget(m_responsible, 0, 0, 7, 10);
-
-    layout->addWidget(new QLabel(i18n("Cost to date: "), this), 1, 0);
-    m_costToDate = new QLineEdit(this);
-    layout->addWidget(m_costToDate, 1, 1);
-    layout->addWidget(new QLabel(i18n("Deviation: "), this), 1, 3);
-    m_deviationCost = new QLineEdit(this);
-    layout->addWidget(m_deviationCost, 1, 4);
-    layout->addWidget(new QLabel(i18n("Total planned cost: "), this), 1, 6);
-    m_totalCost = new QLineEdit(this);
-    layout->addWidget(m_totalCost, 1, 7);
-
-    layout->addWidget(new QLabel(i18n("Work to date: "), this), 2, 0);
-    m_workToDate = new QLineEdit(this);
-    layout->addWidget(m_workToDate, 2, 1);
-    layout->addWidget(new QLabel(i18n("Deviation: "), this), 2, 3);
-    m_deviationWork = new QLineEdit(this);
-    layout->addWidget(m_deviationWork, 2, 4);
-    layout->addWidget(new QLabel(i18n("Total planned work: "), this), 2, 6);
-    m_totalWork = new QLineEdit(this);
-    layout->addWidget(m_totalWork, 2, 7);
-
-    layout->addWidget(new QLabel(i18n("Completion: "), this), 2, 9);
-    QSpinBox *m_completion = new QSpinBox(this);
-    m_completion->setSuffix(i18n("%"));
-    m_completion->setDisabled(true);
-    layout->addWidget(m_completion, 2, 10);
-
-    QTabWidget *resTab = new QTabWidget(this);
-    layout->addMultiCellWidget(resTab, 3, 4, 0, 10);
-    appList = new QListView(resTab, "Appointments view");
-    appList->addColumn(i18n("Resource"));
-    appList->addColumn(i18n("Type"));
-    appList->setColumnAlignment(1, AlignHCenter);
-    appList->addColumn(i18n("Start date"));
-    appList->addColumn(i18n("Duration"));
-    appList->setColumnAlignment(3, AlignRight);
-    appList->addColumn(i18n("Normal rate"));
-    appList->setColumnAlignment(4, AlignRight);
-    appList->addColumn(i18n("Overtime rate"));
-    appList->setColumnAlignment(5, AlignRight);
-    appList->addColumn(i18n("Fixed cost"));
-    appList->setColumnAlignment(6, AlignRight);
-
-    resTab->addTab(appList, i18n("Appointments"));
-
-}
-
-void KPTTaskAppointmentsView::clear()
-{
-    if (appList) appList->clear();
-    if (m_taskName) m_taskName->clear();
-    if (m_responsible) m_responsible->clear();
-    if (m_costToDate) m_costToDate->clear();
-    if (m_totalCost) m_totalCost->clear();
-    if (m_workToDate) m_workToDate->clear();
-    if (m_totalWork) m_totalWork->clear();
-}
-
-void KPTTaskAppointmentsView::draw(KPTTask *task)
-{
-    //kdDebug()<<k_funcinfo<<endl;
-    clear();
-    if (!task)
-        return;
-    m_taskName->setText(task->name());
-    m_responsible->setText(task->leader());
-    QDateTime dt = QDateTime::currentDateTime();
-    m_costToDate->setText(KGlobal::locale()->formatMoney(task->plannedCost(dt)));
-    m_totalCost->setText(KGlobal::locale()->formatMoney(task->plannedCost()));
-    m_workToDate->setText(QString("%1").arg(task->plannedWork(dt)));
-    m_totalWork->setText(QString("%1").arg(task->plannedWork()));
-
-    KPTProject *p = dynamic_cast<KPTProject *>(task->projectNode());
-    if (!p) {
-        kdError()<<k_funcinfo<<"Task: '"<<task->name()<<"' has no project"<<endl;
-        return;
-    }
-    QPtrListIterator<KPTResourceGroup> it(p->resourceGroups());
-    for (; it.current(); ++it) {
-        QPtrListIterator<KPTResource> rit(it.current()->resources());
-        for (; rit.current(); ++rit) {
-            KPTResource *r = rit.current();
-            QPtrListIterator<KPTAppointment> ait(rit.current()->appointments());
-            for (; ait.current(); ++ait) {
-                if (ait.current()->task() == task) {
-                    QListViewItem *item = new QListViewItem(appList, r->name());
-                    item->setText(1, r->typeToString());
-                    item->setText(2, ait.current()->startTime().date().toString());
-                    item->setText(3, ait.current()->duration().toString(KPTDuration::Format_Hour));
-                    item->setText(4, KGlobal::locale()->formatMoney(r->normalRate()));
-                    item->setText(5, KGlobal::locale()->formatMoney(r->overtimeRate()));
-                    item->setText(6, KGlobal::locale()->formatMoney(r->fixedCost()));
-                }
-            }
-        }
-    }
-}
 
 KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     : QSplitter(parent, name),
