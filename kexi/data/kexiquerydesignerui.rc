@@ -1,8 +1,16 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiquerydesigner" version="0.1">
+<kpartgui name="kexiquerydesigner" version="0.2">
+<MenuBar>
+	<Menu name="query">
+		<text>&amp;Query</text>
+		<Action name="stateEdit"/>
+		<Action name="stateSQL"/>
+		<Action name="stateView"/>
+	</Menu>
+</MenuBar>
 
-<ToolBar name="state"><text>State Toolbar</text>
-        <Action name="stateEdit"/>
+<ToolBar name="stateToolBar"><text>State</text>
+	<Action name="stateEdit"/>
 	<Action name="stateSQL"/>
 	<Action name="stateView"/>
 </ToolBar>

@@ -87,6 +87,7 @@ void KexiAlterTable::initTable()
 	// Insert item
 	KexiTableItem *insert = new KexiTableItem(m_view);
 	insert->setValue(1, KexiDBField::SQLVarchar - 1);
+	insert->setValue(2, 1);
 	insert->setHint(QVariant(fc));
 	insert->setInsertItem(true);
 	
@@ -111,6 +112,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 				m_fieldnames.append(i->getValue(0).toString());
 				KexiTableItem *newinsert = new KexiTableItem(m_view);
 				newinsert->setValue(1, KexiDBField::SQLVarchar - 1);
+				newinsert->setValue(2, 1);
 				newinsert->setHint(QVariant(i->getHint().toInt() + 1));
 				newinsert->setInsertItem(true);
 			}

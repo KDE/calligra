@@ -1,11 +1,21 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformeditor" version="0.3">
+<kpartgui name="kexiformeditor" version="0.4">
 
-<ToolBar name="mainToolBar"><text>Main Toolbar</text>
-        <Action name="form_edit"/>
+<MenuBar>
+	<Menu name="widgets">
+		<text>&amp;Widgets</text>
+		<Action name="widget_line_edit"/>
+		<Action name="widget_push_button"/>
+		<Action name="widget_url_requester"/>
+		<Action name="widget_frame"/>
+	</Menu>
+</MenuBar>
+
+<ToolBar name="mainToolBar"><text>File</text>
+	<Action name="form_edit"/>
 </ToolBar>
 
-<ToolBar name="widgets">
+<ToolBar name="widgetsToolBar">
 	<Text>Widgets</Text>
 	<Action name="widget_line_edit"/>
 	<Action name="widget_push_button"/>
