@@ -952,7 +952,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals. */
 #define YYNNTS  13
 /* YYNRULES -- Number of rules. */
-#define YYNRULES  26
+#define YYNRULES  27
 /* YYNRULES -- Number of states. */
 #define YYNSTATES  46
 
@@ -1036,7 +1036,7 @@ static const unsigned char yyprhs[] =
 {
        0,     0,     3,     6,     9,    10,    11,    19,    23,    25,
       28,    32,    35,    37,    40,    43,    45,    47,    52,    57,
-      62,    64,    68,    70,    72,    74,    78
+      58,    63,    65,    69,    71,    73,    75,    79
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS. */
@@ -1047,18 +1047,18 @@ static const short yyrhs[] =
       63,   354,    -1,   354,    -1,   329,   357,    -1,   329,   357,
      355,    -1,   355,   356,    -1,   356,    -1,   243,   176,    -1,
      214,   217,    -1,    34,    -1,     3,    -1,     3,   181,   324,
-     261,    -1,   334,   181,   324,   261,    -1,   359,   360,   142,
-     329,    -1,   271,    -1,   360,    63,   361,    -1,   361,    -1,
-      29,    -1,   329,    -1,   329,   113,   329,    -1,   329,   113,
-      29,    -1
+     261,    -1,   334,   181,   324,   261,    -1,    -1,   359,   360,
+     142,   329,    -1,   271,    -1,   360,    63,   361,    -1,   361,
+      -1,    29,    -1,   329,    -1,   329,   113,   329,    -1,   329,
+     113,    29,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short yyrline[] =
 {
        0,   423,   423,   424,   425,   430,   429,   438,   438,   444,
-     453,   468,   468,   474,   479,   484,   492,   497,   504,   513,
-     538,   547,   547,   553,   558,   565,   573
+     453,   468,   468,   474,   479,   484,   492,   497,   504,   511,
+     519,   544,   553,   553,   559,   564,   571,   579
 };
 #endif
 
@@ -1177,16 +1177,16 @@ static const unsigned short yytoknum[] =
 static const unsigned short yyr1[] =
 {
        0,   349,   350,   350,   350,   352,   351,   353,   353,   354,
-     354,   355,   355,   356,   356,   356,   357,   357,   357,   358,
-     359,   360,   360,   361,   361,   361,   361
+     354,   355,   355,   356,   356,   356,   357,   357,   357,   357,
+     358,   359,   360,   360,   361,   361,   361,   361
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const unsigned char yyr2[] =
 {
        0,     2,     2,     2,     0,     0,     7,     3,     1,     2,
-       3,     2,     1,     2,     2,     1,     1,     4,     4,     4,
-       1,     3,     1,     1,     1,     3,     3
+       3,     2,     1,     2,     2,     1,     1,     4,     4,     0,
+       4,     1,     3,     1,     1,     1,     3,     3
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -1194,9 +1194,9 @@ static const unsigned char yyr2[] =
    means the default is an error.  */
 static const unsigned char yydefact[] =
 {
-       4,     0,     1,     0,    20,     2,     3,     0,     0,    23,
-      24,     0,    22,     5,     0,     0,     0,     0,    26,    25,
-      21,    19,     0,     0,     0,     8,    16,     0,     9,     0,
+       4,     0,     1,     0,    21,     2,     3,     0,     0,    24,
+      25,     0,    23,     5,     0,     0,     0,     0,    27,    26,
+      22,    20,     0,    19,     0,     8,    16,     0,     9,     0,
        6,     0,     0,    15,     0,     0,    10,    12,     7,     0,
        0,    14,    13,    11,    17,    18
 };
@@ -2035,7 +2035,16 @@ yyreduce:
     break;
 
   case 19:
-#line 514 "sqlparser.y"
+#line 511 "sqlparser.y"
+    {
+	// SQLITE compatibillity
+	field = new KexiDB::Field();
+	field->setType(KexiDB::Field::InvalidType);
+}
+    break;
+
+  case 20:
+#line 520 "sqlparser.y"
     {
 	std::cout << "FROM: '" << yyvsp[0].stringValue << "'" << std::endl;
 
@@ -2059,8 +2068,8 @@ yyreduce:
 }
     break;
 
-  case 20:
-#line 539 "sqlparser.y"
+  case 21:
+#line 545 "sqlparser.y"
     {
 	std::cout << "SELECT" << std::endl;
 	parser->createSelect();
@@ -2068,22 +2077,22 @@ yyreduce:
 }
     break;
 
-  case 22:
-#line 548 "sqlparser.y"
+  case 23:
+#line 554 "sqlparser.y"
     {
 }
     break;
 
-  case 23:
-#line 554 "sqlparser.y"
+  case 24:
+#line 560 "sqlparser.y"
     {
 	std::cout << "all columns" << std::endl;
 //	parser->select()->setUnresolvedWildcard(true);
 }
     break;
 
-  case 24:
-#line 559 "sqlparser.y"
+  case 25:
+#line 565 "sqlparser.y"
     {
 	std::cout << "  + col " << yyvsp[0].stringValue << std::endl;
 	KexiDB::Field *s = new KexiDB::Field();
@@ -2092,8 +2101,8 @@ yyreduce:
 }
     break;
 
-  case 25:
-#line 566 "sqlparser.y"
+  case 26:
+#line 572 "sqlparser.y"
     {
 	std::cout << "  + col " << yyvsp[0].stringValue << " based on " << yyvsp[-2].stringValue << std::endl;
 	KexiDB::Field *s = new KexiDB::Field();
@@ -2103,8 +2112,8 @@ yyreduce:
 }
     break;
 
-  case 26:
-#line 574 "sqlparser.y"
+  case 27:
+#line 580 "sqlparser.y"
     {
 	std::cout << "  + all columns from " << yyvsp[-2].stringValue << std::endl;
 //	parser->select()->setUnresolvedWildcard(true);
@@ -2115,7 +2124,7 @@ yyreduce:
     }
 
 /* Line 999 of yacc.c.  */
-#line 2119 "y.tab.c"
+#line 2128 "y.tab.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -2309,7 +2318,7 @@ yyreturn:
 }
 
 
-#line 580 "sqlparser.y"
+#line 586 "sqlparser.y"
 
 
 

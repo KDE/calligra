@@ -507,6 +507,12 @@ SQL_TYPE
 	field->setPrecision($3);
 	field->setType(KexiDB::Field::Text);
 }
+|
+{
+	// SQLITE compatibillity
+	field = new KexiDB::Field();
+	field->setType(KexiDB::Field::InvalidType);
+}
 ;
 
 SelectStatement:
