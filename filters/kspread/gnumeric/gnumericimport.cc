@@ -894,9 +894,33 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
       headRight = convertVars( head.attribute("Right"), table );
   }
 
+  QDomElement repeateColumn( printInfo.namedItem("gmr:repeat_top").toElement() );
+  if ( !repeateColumn.isNull() )
+  {
+      QString repeate = repeateColumn.attribute( "value" );
+      if ( !repeate.isEmpty() )
+      {
+          KSpreadRange range(repeate);
+          kdDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
+          table->print()->setPrintRepeatRows( qMakePair( range.startRow (),range.endRow ()) );
+      }
+  }
+  //TODO fix pb KSpreadPoint::init: row value too high (row: 65536)
+  QDomElement repeateRow( printInfo.namedItem("gmr:repeat_left").toElement() );
+  if ( !repeateRow.isNull() )
+  {
+      QString repeate = repeateRow.attribute( "value" );
+      if ( !repeate.isEmpty() )
+      {
+          KSpreadRange range(repeate);
+          kdDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
+          table->print()->setPrintRepeatColumns( qMakePair( range.startCol (),range.endCol ()) );
+      }
+  }
+
   //Repeate column/row
-        //<gmr:repeat_top value="A1:IV5"/>
-        //<gmr:repeat_left value="B1:D65536"/>
+  //<gmr:repeat_top value="A1:IV5"/>
+  //<gmr:repeat_left value="B1:D65536"/>
   //<printrepeatcolumns right="2" left="1" />
   //<printrepeatrows bottom="4" top="1" />
 
