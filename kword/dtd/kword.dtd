@@ -847,6 +847,8 @@ don't put a </?xml...> at the end of the file!).
         text    The text shown by the counter in the document when it was saved.
                 This is redundant information, unused by KWord upon loading, but useful
                 for export filters.
+
+        display-levels Number of levels to display (e.g. 3 means "1.2.1")
 -->
 <!ELEMENT COUNTER
     EMPTY>
@@ -861,7 +863,8 @@ don't put a </?xml...> at the end of the file!).
     bulletfont CDATA #IMPLIED
     customdef CDATA #IMPLIED
     restart CDATA #IMPLIED
-    text CDATA #IMPLIED>
+    text CDATA #IMPLIED
+    display-levels CDATA #IMPLIED>
 
 <!--
         The space to be added between two consecutive lines in a given paragraph.
