@@ -64,7 +64,7 @@ VCanvas::focusInEvent( QFocusEvent * )
 void
 VCanvas::toContents( int vx, int vy, int x, int y ) const
 {
-	x = vx + contentsX() * m_view->zoom();;
+	x = vx + int( contentsX() * m_view->zoom() );
 	y = vy + contentsY();// - ( contentsHeight() / m_view->zoom() ) + y;
 	//QScrollView::viewportToContents( vx, vy, x, y );
 }
@@ -206,7 +206,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 		setYMirroring( false );
 		drawPage( p );
 
-		m_part->document().draw( p, &KoRect::fromQRect( rect ) );
+		KoRect krect = KoRect::fromQRect( rect );
+		m_part->document().draw( p, &krect );
 
 		p->end();
 	}

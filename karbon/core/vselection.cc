@@ -36,7 +36,7 @@ VSelection::VSelection( VObject* parent )
 }
 
 VSelection::VSelection( const VSelection& selection )
-	: VObject( selection )
+	: VObject( selection ), VVisitor()
 {
 	m_qrect = new QRect[10];
 
