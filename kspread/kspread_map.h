@@ -136,6 +136,7 @@ public:
   QStringList visibleSheets() const;
   QStringList hiddenSheets() const;
 
+    static bool respectCase;
 
 private:
   /**

@@ -186,6 +186,13 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   page2Layout->addMultiCellWidget( m_firstRowHeader, 3, 3, 0, 1 );
 
+  m_respectCase = new QCheckBox( m_page2, "m_copyLayout" );
+  m_respectCase->setText( i18n( "Respect case" ) );
+  m_respectCase->setChecked( true );
+
+  page2Layout->addMultiCellWidget( m_respectCase, 4, 4, 0, 1 );
+
+
   QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
   resultToBox->setTitle( i18n( "Put Results To" ) );
   resultToBox->setColumnLayout(0, Qt::Vertical );
@@ -516,7 +523,7 @@ void KSpreadSortDlg::slotOk()
                                        order1, order2, order3,
                                        firstKey, m_copyLayout->isChecked(),
                                        m_firstRowHeader->isChecked(),
-                                       outputPoint );
+                                       outputPoint, m_respectCase->isChecked() );
   }
   else if (m_sortColumn->isChecked())
   {
@@ -524,7 +531,7 @@ void KSpreadSortDlg::slotOk()
                                           order1, order2, order3,
                                           firstKey, m_copyLayout->isChecked(),
                                           m_firstRowHeader->isChecked(),
-                                          outputPoint );
+                                          outputPoint, m_respectCase->isChecked() );
   }
   else
   {

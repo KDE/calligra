@@ -6375,7 +6375,12 @@ bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
         return false; //time are always < than texts
   }
   else
-    return d->value.asString().compare(cell.value().asString()) > 0;
+  {
+      if ( KSpreadMap::respectCase )
+          return d->value.asString().compare(cell.value().asString()) > 0;
+      else
+          return ( d->value.asString() ).lower().compare(cell.value().asString().lower()) > 0;
+  }
 }
 
 bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
@@ -6408,7 +6413,12 @@ bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
         return true; //time are always < than texts
   }
   else
-    return d->value.asString().compare(cell.value().asString()) < 0;
+  {
+      if ( KSpreadMap::respectCase )
+          return d->value.asString().compare(cell.value().asString()) < 0;
+      else
+          return ( d->value.asString() ).lower().compare(cell.value().asString().lower()) < 0;
+  }
 }
 
 QRect KSpreadCell::cellRect()

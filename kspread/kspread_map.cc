@@ -29,6 +29,8 @@
 #include <time.h>
 #include <stdlib.h>
 
+bool KSpreadMap::respectCase = true;
+
 KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
   : QObject( _doc, name ),
     m_pDoc( _doc ),

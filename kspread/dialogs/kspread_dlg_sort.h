@@ -86,9 +86,11 @@ class KSpreadSortDlg : public KDialogBase
 
   QCheckBox    * m_copyLayout;
   QCheckBox    * m_firstRowHeader;
+  QCheckBox    * m_respectCase;
 
   QComboBox    * m_outputTable;
   QLineEdit    * m_outputCell;
+
 
 };
 

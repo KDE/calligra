@@ -3244,7 +3244,7 @@ void KSpreadSheet::sortByRow( const QRect &area, int ref_row, SortingOrder mode 
   point.columnFixed = false;
   point.rowFixed = false;
 
-  sortByRow( area, ref_row, 0, 0, mode, mode, mode, 0, false, false, point );
+  sortByRow( area, ref_row, 0, 0, mode, mode, mode, 0, false, false, point,true );
 }
 
 void KSpreadSheet::sortByColumn( const QRect &area, int ref_column, SortingOrder mode )
@@ -3257,7 +3257,7 @@ void KSpreadSheet::sortByColumn( const QRect &area, int ref_column, SortingOrder
   point.rowFixed = false;
 
   sortByColumn( area, ref_column, 0, 0, mode, mode, mode, 0, false, false,
-                point );
+                point,true );
 }
 
 void KSpreadSheet::checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret)
@@ -3284,10 +3284,10 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
                               SortingOrder order1, SortingOrder order2,
                               SortingOrder order3,
                               QStringList const * firstKey, bool copyFormat,
-                              bool headerRow, KSpreadPoint const & outputPoint )
+                              bool headerRow, KSpreadPoint const & outputPoint, bool respectCase )
 {
   QRect r( area );
-
+  KSpreadMap::respectCase = respectCase;
   Q_ASSERT( order1 == Increase || order1 == Decrease );
 
   // It may not happen that entire columns are selected.
@@ -3322,7 +3322,10 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
 
     // Any cells to sort here ?
     if ( r.right() < r.left() )
-      return;
+    {
+        KSpreadMap::respectCase = true;
+        return;
+    }
   }
 
   QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
@@ -3613,7 +3616,7 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
       swapCells( d, key1, bestX, key1, copyFormat );
     }
   } // for (d = ...; ...; ++d)
-
+  KSpreadMap::respectCase = true;
   //  doc()->emitEndOperation();
   emit sig_updateView( this );
 }
@@ -3623,9 +3626,10 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
                                  SortingOrder order3,
                                  QStringList const * firstKey, bool copyFormat,
                                  bool headerRow,
-                                 KSpreadPoint const & outputPoint )
+                                 KSpreadPoint const & outputPoint, bool respectCase )
 {
   QRect r( area );
+  KSpreadMap::respectCase = respectCase;
 
   Q_ASSERT( order1 == Increase || order1 == Decrease );
 
@@ -3661,7 +3665,10 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
 
     // Any cells to sort here ?
     if ( r.bottom() < r.top() )
+    {
+        KSpreadMap::respectCase = true;
       return;
+    }
   }
   QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
 
@@ -3967,6 +3974,7 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
     }
   } // for (d = ...; ...; ++d)
   // doc()->emitEndOperation();
+  KSpreadMap::respectCase = true;
   emit sig_updateView( this );
 }
 
