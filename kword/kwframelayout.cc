@@ -69,6 +69,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     for ( ; itdbg3.current() ; ++itdbg3 )
         itdbg3.current()->debug();
 #endif
+#if 0 // old code
     // Necessary for end notes: calculate where the text goes down to
     Q_ASSERT( mainTextFrameSet->type() == FT_TEXT );
     double textBottom = 0.0;
@@ -91,6 +92,12 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 #ifdef DEBUG_FRAMELAYOUT
     kdDebug(32002) << "textBottom = " << textBottom << "pt" << endl;
 #endif
+#endif
+    // Necessary for end notes: find out the last frame of the main textframeset
+    KWFrame* lastMainFrame = mainTextFrameSet->frameIterator().getLast();
+    int lastMainFramePage = lastMainFrame->pageNum();
+    double lastMainFrameBottom = lastMainFrame->bottom(); // before we change it below!
+
     double ptColumnWidth = m_doc->ptColumnWidth();
     int mainTextFrameResized = -1; // contains the page number of the first resized main textframe
 
@@ -232,11 +239,14 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
         // Check for endnotes, on the last page of main text
         // and on any end-notes-only page, i.e. after the last page of main text
-        if ( textBottom && ( ( textBottom >= top && textBottom < bottom ) ||
-             ( textBottom < top ) ) ) {
-            bool pageHasMainText = ( textBottom >= top );
+        if ( pageNum >= lastMainFramePage ) {
+            bool pageHasMainText = ( pageNum == lastMainFramePage );
+            double textBottom = pageHasMainText ? lastMainFrameBottom : top;
             // Leave some space on top of the endnotes, for the horizontal line
             double endNoteTop = textBottom + m_doc->ptFootnoteBodySpacing();
+#ifdef DEBUG_FRAMELAYOUT
+            kdDebug(32002) << "textBottom=" << textBottom << "pt, endNoteTop=" << endNoteTop << "pt, bottom=" << bottom << "pt" << endl;
+#endif
             bool firstEndNote = true;
             for ( QPtrListIterator<HeaderFooterFrameset> it( m_endnotes ); it.current() ; ++it )
             {
@@ -255,11 +265,19 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                     {
                         // In the current page we stop at bottom
                         frameHeight = bottom - endNoteTop;
+
+                        if ( frameHeight > 0 )
+                        {
 #ifdef DEBUG_FRAMELAYOUT
-                        kdDebug(32002) << "   endnote: new height=" << frameHeight << " remaining height=" << it.current()->m_height - frameHeight << endl;
+                            kdDebug(32002) << "   endnote: new height=" << frameHeight << " remaining height=" << it.current()->m_height - frameHeight << endl;
 #endif
-                        Q_ASSERT( frameHeight < it.current()->m_height );
-                        it.current()->m_height -= frameHeight; // calculate what remains to be done in the next frame
+                            Q_ASSERT( frameHeight < it.current()->m_height );
+                            it.current()->m_height -= frameHeight; // calculate what remains to be done in the next frame
+                        } else {
+                            // No room at all on this page. Schedule for next page.
+                            it.current()->m_startAtPage++;
+                            break;
+                        }
                     }
                     else // It'll all fit in this page
                     {
@@ -281,7 +299,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 #ifdef DEBUG_FRAMELAYOUT
                         kdDebug(32002) << "   Laid out an endnote and the page has a maintextframe too -> call resizeMainTextFrame/checkFootNotes again top=" << top << " textBottom=" << textBottom << endl;
 #endif
-                        resizeMainTextFrame( mainTextFrameSet, pageNum, numColumns, ptColumnWidth, m_doc->ptColumnSpacing(), left, top, textBottom, FirstEndNote );
+                        resizeMainTextFrame( mainTextFrameSet, pageNum, numColumns, ptColumnWidth, m_doc->ptColumnSpacing(), left, top, textBottom, NoChange );
                     }
                 } // if not positionned yet
                 firstEndNote = false; // yes, out of the if
@@ -314,6 +332,11 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
             kdDebug(32002) << "  Final cleanup: deleting frame " << mainTextFrameSet->getNumFrames() - 1 << " of main textframeset (lastFrame=" << lastFrame << ")" << endl;
 #endif
             mainTextFrameSet->delFrame( mainTextFrameSet->getNumFrames() - 1, true, false /*do not updateFrames!*/ );
+        }
+        // The last frame before the first endnote, is in auto-extend mode
+        if ( m_doc->hasEndNotes() ) {
+            KWFrame* lastMainFrame = mainTextFrameSet->frameIterator().getLast();
+            lastMainFrame->setFrameBehavior( KWFrame::AutoExtendFrame );
         }
     }
 
@@ -394,7 +417,6 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
     if ( !mainTextFrameSet )
         return false;
     bool mainTextFrameResized = false;
-    KWFrame* lastFrame = 0L;
     for ( int col = 0; col < numColumns; col++ ) {
         Q_ASSERT( bottom > top );
         // Calculate wanted rect for this frame
@@ -433,11 +455,7 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
         // unchanged in the other cases
         // By default, all main-text frames are in "auto-create new frames" mode
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
-        lastFrame = frame;
     }
-    // The last frame before the first endnote, is in auto-extend mode
-    if ( hasFootNotes == FirstEndNote )
-        lastFrame->setFrameBehavior( KWFrame::AutoExtendFrame );
     return mainTextFrameResized;
 }
 

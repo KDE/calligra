@@ -122,7 +122,7 @@ public:
 protected:
     void resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect );
     KoRect firstColumnRect( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns ) const;
-    enum HasFootNotes { NoFootNote, WithFootNotes, NoChange, FirstEndNote };
+    enum HasFootNotes { NoFootNote, WithFootNotes, NoChange };
     bool resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, HasFootNotes hasFootNotes );
     void checkFootNotes();
 

@@ -2196,11 +2196,9 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
     // Do a full KWFrameLayout if this will have influence on other frames, i.e.:
     // * if we resized a header or footer
     // * if we resized the last main text frame (the one before the first endnote)
-    if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
+    if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY
+         || theFrame->frameSet()->isMainFrameset() )
         m_doc->recalcFrames( theFrame->pageNum(), -1 ); // warning this can delete theFrame!
-    else if ( theFrame->frameSet()->isMainFrameset() )
-        // In that case, delay it. We need the textdoc height...
-        m_doc->delayedRecalcFrames( theFrame->pageNum() );
 
     // m_doc->frameChanged( theFrame );
     // Warning, can't call layout() (frameChanged calls it)

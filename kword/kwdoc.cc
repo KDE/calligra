@@ -185,20 +185,6 @@ KWBookMark::~KWBookMark()
 /* Class: KWDocument                                              */
 /******************************************************************/
 const int KWDocument::CURRENT_SYNTAX_VERSION = 2;
-/*
-const int KWDocument::U_FONT_FAMILY_SAME_SIZE = 1;
-const int KWDocument::U_FONT_ALL_SAME_SIZE = 2;
-const int KWDocument::U_COLOR = 4;
-const int KWDocument::U_INDENT = 8;
-const int KWDocument::U_BORDER = 16;
-const int KWDocument::U_ALIGN = 32;
-const int KWDocument::U_NUMBERING = 64;
-const int KWDocument::U_FONT_FAMILY_ALL_SIZE = 128;
-const int KWDocument::U_FONT_ALL_ALL_SIZE = 256;
-const int KWDocument::U_TABS = 512;
-const int KWDocument::U_SMART = 1024;
-*/
-
 
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
@@ -261,7 +247,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bAllowAutoFormat = true;
     m_pgUpDownMovesCaret = false;
     m_bShowScrollBar = true;
-    m_cursorInProtectectedArea=true;
+    m_cursorInProtectectedArea = true;
+    m_bHasEndNotes = false;
 
     m_bInsertDirectCursor=false;
 
@@ -754,8 +741,10 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
             {
                 if ( fnfs->isFootNote() )
                     footnotesList.append( fnfs );
-                else if ( fnfs->isEndNote() )
+                else if ( fnfs->isEndNote() ) {
                     endnotesList.append( fnfs );
+                    m_bHasEndNotes = true;
+                }
             }
         }
             break;
@@ -1073,6 +1062,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_varFormatCollection->clear();
 
     m_pages = 1;
+    m_bHasEndNotes = false;
 
     KoPageLayout __pgLayout;
     KoColumns __columns;
@@ -1344,6 +1334,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         case KWFrameSet::FI_FIRST_FOOTER: _first_footer = TRUE; break;
         case KWFrameSet::FI_EVEN_FOOTER: _even_footer = TRUE; break;
         case KWFrameSet::FI_ODD_FOOTER: _odd_footer = TRUE; break;
+        case KWFrameSet::FI_FOOTNOTE: if ( fit.current()->isEndNote() ) m_bHasEndNotes = true; break;
         default: break;
         }
     }
@@ -2855,7 +2846,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
     }
     emit newContentsSize();
 
-    if ( isHeaderVisible() || isFooterVisible() )
+    if ( isHeaderVisible() || isFooterVisible() || hasEndNotes() )
         recalcFrames( thisPageNum );  // Get headers and footers on the new page
 
     recalcVariables( VT_PGNUM );
@@ -3461,6 +3452,11 @@ void KWDocument::setFooterVisible( bool f )
     repaintAllViews( true );
 }
 
+bool KWDocument::hasEndNotes() const
+{
+    return m_bHasEndNotes;
+}
+
 void KWDocument::updateHeaderButton()
 {
     QPtrListIterator<KWView> it( m_lstViews );
@@ -3717,7 +3713,6 @@ void KWDocument::printDebug()
 }
 #endif
 
-// Currently unused, I think
 void KWDocument::layout()
 {
     QPtrListIterator<KWFrameSet> it = framesetsIterator();

@@ -416,6 +416,7 @@ public:
     bool isFooterVisible() const { return m_footerVisible; }
     void setHeaderVisible( bool h );
     void setFooterVisible( bool f );
+    bool hasEndNotes() const;
 
     void recalcFrames( int fromPage = 0, int toPage = -1 );
 
@@ -881,6 +882,8 @@ private:
     bool m_bAllowAutoFormat;
     bool m_bShowScrollBar;
     bool m_cursorInProtectectedArea;
+    bool m_bInsertDirectCursor;
+    bool m_bHasEndNotes;
 
     bool m_viewFormattingChars;
     bool m_viewFormattingEndParag;
@@ -934,7 +937,6 @@ private:
 
     QStringList m_personalExpressionPath;
     QString m_picturePath;
-    bool  m_bInsertDirectCursor;
 };
 
 
