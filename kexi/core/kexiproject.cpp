@@ -87,7 +87,7 @@ bool KexiProject::completeLoading( KoStore* store )
 bool KexiProject::initDoc()
 {
 	QString filename;
-	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(KexiFactory::global(),filename,"application/x-kexi","*.kex",
+	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(KexiFactory::global(),filename,"application/x-vnd.kde-kexi","*.kex",
 		i18n("Kexi"),KoTemplateChooseDia::Everything,"kexi_template");
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {
