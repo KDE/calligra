@@ -59,7 +59,7 @@ class VDocumentTab : public QWidget
 	Q_OBJECT
 	
 	public:
-		VDocumentTab( VDocument* document, QWidget* parent );
+		VDocumentTab( KarbonPart* part, QWidget* parent );
 		~VDocumentTab();
 		
 	public slots:
@@ -70,7 +70,7 @@ class VDocumentTab : public QWidget
 		QLabel*           m_height;
 		QLabel*           m_width;
 		
-		VDocument*        m_document;
+		KarbonPart*        m_part;
 }; // VDocumentTab
 
 /*************************************************************************

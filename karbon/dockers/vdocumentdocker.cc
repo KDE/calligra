@@ -97,13 +97,13 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 	pw.end();
 } // VDocumentPreview::paintEvent
 
-VDocumentTab::VDocumentTab( VDocument* document, QWidget* parent )
-		: QWidget( parent, "DocumentTab" ), m_document( document )
+VDocumentTab::VDocumentTab( KarbonPart* part, QWidget* parent )
+		: QWidget( parent, "DocumentTab" ), m_part( part )
 {
 	QGridLayout* layout = new QGridLayout( this );
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
-	layout->addMultiCellWidget( m_documentPreview = new VDocumentPreview( document, this ), 0, 5, 1, 1 );
+	layout->addMultiCellWidget( m_documentPreview = new VDocumentPreview( &m_part->document(), this ), 0, 5, 1, 1 );
 	layout->addWidget( new QLabel( i18n( "Width:" ), this ), 0, 0 );
 	layout->addWidget( new QLabel( i18n( "Height:" ), this ), 2, 0 );
 	layout->addWidget( new QLabel( i18n( "Zoom factor:" ), this ), 4, 0 );
@@ -121,8 +121,8 @@ VDocumentTab::~VDocumentTab()
 
 void VDocumentTab::updateDocumentInfo()
 {
-	m_width->setText( QString::number( m_document->width(), 'f', 2 ) + " " + m_document->unitName() );
-	m_height->setText( QString::number( m_document->height(), 'f', 2 ) + " " + m_document->unitName() );
+	m_width->setText( QString::number( m_part->document().width(), 'f', 2 ) + " " + m_part->unitName() );
+	m_height->setText( QString::number( m_part->document().height(), 'f', 2 ) + " " + m_part->unitName() );
 } // VDocumentTab::updateDocumentInfo
 
 /*************************************************************************
@@ -710,7 +710,7 @@ VDocumentDocker::VDocumentDocker( KarbonView* view )
 
 	QTabWidget* tabWidget;
 	setWidget( tabWidget = new QTabWidget( this ) );
-	tabWidget->addTab( m_documentTab = new VDocumentTab( &view->part()->document(), this ), i18n( "Document" ) );
+	tabWidget->addTab( m_documentTab = new VDocumentTab( view->part(), this ), i18n( "Document" ) );
 	tabWidget->addTab( m_layersTab = new VLayersTab( view, this ), i18n( "Layers" ) );
 	tabWidget->addTab( m_historyTab = new VHistoryTab( view->part(), this ), i18n( "History" ) );
 	
