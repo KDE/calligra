@@ -117,7 +117,6 @@ public:
   void setNumCols( int col );
   void clear();
 
-
 public slots:
   void insertColor( const QColor& );
   void insertColor( const QColor&, const QString& );
@@ -133,6 +132,7 @@ protected:
   void resetGrid();
 
   virtual void mouseReleaseEvent( QMouseEvent* );
+  virtual void showEvent( QShowEvent *e );
 
   QGridLayout* m_pLayout;
   int m_iWidth;
@@ -143,6 +143,8 @@ protected:
   QDict<TKColorPanelButton> m_pColorDict;
 
 private:
+  void fillPanel();
+
   class TKColorPanelPrivate;
   TKColorPanelPrivate *d;
 };

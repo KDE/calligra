@@ -165,17 +165,142 @@ void TKSelectColorAction::panelReject()
 {
   m_pMenu->hide();
 }
+
+class TKColorPanel::TKColorPanelPrivate
+{
+public:
+  TKColorPanelPrivate()
+  {
+    panelCreated = false;
+  }
+
+  bool panelCreated;
+};
+
 /****************************************************************************************/
-TKColorPanel::TKColorPanel( QWidget* parent, const char* name  )
+TKColorPanel::TKColorPanel( QWidget* parent, const char* name )
 : QWidget(parent,name)
 {
+  d = new TKColorPanel::TKColorPanelPrivate();
   m_activeColor = black;
 
-  m_iX = 0;
-  m_iY = 0;
+  //m_iX = 0;  // happens in setNumCols() -> resetGrid()
+  //m_iY = 0;  // anyway, so...
 
   m_pLayout = 0L;
   setNumCols(15);
+}
+
+void TKColorPanel::setNumCols( int col )
+{
+  m_iWidth = col;
+  resetGrid();
+
+  QDictIterator<TKColorPanelButton> it(m_pColorDict);
+  while ( it.current() ) {
+    addToGrid(it.current());
+    ++it;
+  }
+}
+
+TKColorPanel::~TKColorPanel()
+{
+  delete d;
+}
+
+void TKColorPanel::resetGrid()
+{
+  m_iX = 0;
+  m_iY = 0;
+
+  if (m_pLayout)
+    delete m_pLayout;
+  m_pLayout = new QGridLayout(this,0,m_iWidth+1,0,0);
+
+  emit sizeChanged();
+}
+
+void TKColorPanel::clear()
+{
+  m_pColorDict.setAutoDelete(true);
+  m_pColorDict.clear();
+  m_pColorDict.setAutoDelete(false);
+  d->panelCreated = true;  // we don't want to create the default
+                           // panel anymore now (b/c of recent colors)
+  resetGrid();
+}
+
+void TKColorPanel::insertColor( const QColor& color, const QString& text )
+{
+  if (m_pColorDict[color.name()])
+    return;
+
+  insertColor(color);
+  QToolTip::add(m_pColorDict[color.name()],text);
+}
+
+void TKColorPanel::insertColor( const QColor& color )
+{
+  if (m_pColorDict[color.name()])
+    return;
+
+  m_pLayout->setMargin(3);
+  TKColorPanelButton* f = new TKColorPanelButton(color,this);
+  m_pColorDict.insert(color.name(),f);
+  if ( m_activeColor == color )
+    f->setActive(true);
+
+  connect(f,SIGNAL(selected(const QColor&)),SLOT(selected(const QColor&)));
+
+  addToGrid(f);
+}
+
+void TKColorPanel::addToGrid( TKColorPanelButton* f )
+{
+  m_pLayout->addWidget(f,m_iY,m_iX);
+  f->show();  // yeehaaaw! ugly hack (Werner)
+  m_iX++;
+  if ( m_iX == m_iWidth ) {
+    m_iX = 0;
+    m_iY++;
+  }
+  emit sizeChanged();
+}
+
+void TKColorPanel::setActiveColor( const QColor& color )
+{
+  TKColorPanelButton* b = m_pColorDict[m_activeColor.name()];
+  if (b)
+    b->setActive(false);
+
+  m_activeColor = color;
+
+  b = m_pColorDict[m_activeColor.name()];
+  if (b)
+    b->setActive(true);
+}
+
+void TKColorPanel::mouseReleaseEvent( QMouseEvent* )
+{
+  reject();
+}
+
+void TKColorPanel::showEvent( QShowEvent *e )
+{
+  if ( !d->panelCreated )
+    fillPanel();
+  QWidget::showEvent(e);
+}
+
+void TKColorPanel::selected( const QColor& color )
+{
+  emit colorSelected(color);
+}
+
+void TKColorPanel::fillPanel()
+{
+  d->panelCreated = true;
+  blockSignals(true); // don't emit sizeChanged() all the time
 
   // For all i18n gurus: I don't think we can translate these color names, can we? (Werner)
   insertColor(qRgb(     255     ,       0       ,       0       ),      "Red");
@@ -325,102 +450,9 @@ TKColorPanel::TKColorPanel( QWidget* parent, const char* name  )
   insertColor(qRgb(	25	,	25	,	112	),	"Midnight Blue");
   insertColor(qRgb(	0	,	0	,	205	),	"Medium Blue");
   insertColor(qRgb(	0	,	0	,	128	),	"Navy");
-}
 
-void TKColorPanel::setNumCols( int col )
-{
-  m_iWidth = col;
-  resetGrid();
-
-  QDictIterator<TKColorPanelButton> it(m_pColorDict);
-  while ( it.current() ) {
-    addToGrid(it.current());
-    ++it;
-  }
-}
-
-TKColorPanel::~TKColorPanel()
-{
-}
-
-void TKColorPanel::resetGrid()
-{
-  m_iX = 0;
-  m_iY = 0;
-
-  if (m_pLayout)
-    delete m_pLayout;
-  m_pLayout = new QGridLayout(this,0,m_iWidth+1,0,0);
-
-  emit sizeChanged();
-}
-
-void TKColorPanel::clear()
-{
-  m_pColorDict.setAutoDelete(true);
-  m_pColorDict.clear();
-  m_pColorDict.setAutoDelete(false);
-
-  resetGrid();
-}
-
-void TKColorPanel::insertColor( const QColor& color, const QString& text )
-{
-  if (m_pColorDict[color.name()])
-    return;
-
-  insertColor(color);
-  QToolTip::add(m_pColorDict[color.name()],text);
-}
-
-void TKColorPanel::insertColor( const QColor& color )
-{
-  if (m_pColorDict[color.name()])
-    return;
-
-  m_pLayout->setMargin(3);
-  TKColorPanelButton* f = new TKColorPanelButton(color,this);
-  m_pColorDict.insert(color.name(),f);
-  if ( m_activeColor == color )
-    f->setActive(true);
-
-  connect(f,SIGNAL(selected(const QColor&)),SLOT(selected(const QColor&)));
-
-  addToGrid(f);
-}
-
-void TKColorPanel::addToGrid( TKColorPanelButton* f )
-{
-  m_pLayout->addWidget(f,m_iY,m_iX);
-  m_iX++;
-  if ( m_iX == m_iWidth ) {
-    m_iX = 0;
-    m_iY++;
-  }
-  emit sizeChanged();
-}
-
-void TKColorPanel::setActiveColor( const QColor& color )
-{
-  TKColorPanelButton* b = m_pColorDict[m_activeColor.name()];
-  if (b)
-    b->setActive(false);
-
-  m_activeColor = color;
-
-  b = m_pColorDict[m_activeColor.name()];
-  if (b)
-    b->setActive(true);
-}
-
-void TKColorPanel::mouseReleaseEvent( QMouseEvent* )
-{
-  reject();
-}
-
-void TKColorPanel::selected( const QColor& color )
-{
-  emit colorSelected(color);
+  blockSignals(false);  // Signals allowed again
+  emit sizeChanged();   // one call should be enough ;)
 }
 
 /****************************************************************************************/
