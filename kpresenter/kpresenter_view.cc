@@ -2347,6 +2347,9 @@ void KPresenterView::initGui()
         sb->show();
     showZoom( zoomHandler()->zoom() );
     updateHeaderFooterButton();
+
+    actionAllowAutoFormat->setChecked( m_pKPresenterDoc->allowAutoFormat() );
+
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
 }
@@ -2941,6 +2944,11 @@ void KPresenterView::setupActions()
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
     updateStyleList();
+
+    actionAllowAutoFormat = new KToggleAction( i18n( "Allow AutoFormat" ), 0,
+                                             this, SLOT( slotAllowAutoFormat() ),
+                                          actionCollection(), "view_allowAutoFormat" );
+
 
 }
 
@@ -5551,5 +5559,12 @@ void KPresenterView::textStyleSelected( int index )
     }
 
 }
+
+void KPresenterView::slotAllowAutoFormat()
+{
+    bool state = actionAllowAutoFormat->isChecked();
+    m_pKPresenterDoc->setAllowAutoFormat( state );
+}
+
 
 #include <kpresenter_view.moc>

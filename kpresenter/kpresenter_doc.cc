@@ -185,6 +185,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bDontCheckUpperWord=false;
     m_bDontCheckTitleCase=false;
     m_bShowRuler=true;
+    m_bAllowAutoFormat = true;
 
     m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     newZoomAndResolution(false,false);
@@ -275,6 +276,7 @@ void KPresenterDoc::saveConfig()
     KConfig *config = KPresenterFactory::global()->config();
     config->setGroup( "Interface" );
     config->writeEntry( "Zoom", m_zoomHandler->zoom() );
+    config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
 }
 
 void KPresenterDoc::initConfig()
@@ -293,6 +295,7 @@ void KPresenterDoc::initConfig()
         setShowRuler(config->readBoolEntry("Rulers",true));
         zoom = config->readNumEntry( "Zoom", 100 );
         setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
+        setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
 
     }
     else

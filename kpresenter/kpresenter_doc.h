@@ -340,6 +340,10 @@ public:
     void changeBackGroundSpellCheckTextObject(KPTextObject *obj);
 
 
+    bool allowAutoFormat() const { return m_bAllowAutoFormat; }
+    void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
+
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -456,6 +460,7 @@ protected:
     bool m_bDontCheckTitleCase;
     bool m_bShowRuler;
     bool m_bShowStatusBar;
+    bool m_bAllowAutoFormat;
 
     double m_indent; // in pt
 

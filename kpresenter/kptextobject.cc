@@ -1106,6 +1106,7 @@ void KPTextView::cut()
 
 void KPTextView::copy()
 {
+    kdDebug()<<"void KPTextView::copy() "<<endl;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         KPrTextDrag *kd = newDrag( 0L );
         QApplication::clipboard()->setData( kd );
@@ -1122,7 +1123,7 @@ void KPTextView::paste()
         QByteArray arr = data->encodedData( KPrTextDrag::selectionMimeType() );
         if ( arr.size() )
         {
-            //kdDebug()<<"QCString( arr ) :"<<QCString( arr )<<endl;
+            kdDebug()<<"QCString( arr ) :"<<QCString( arr )<<endl;
             kpTextObject()->kPresenterDocument()->addCommand(kpTextObject()->pasteKPresenter( cursor(), QCString( arr ), true ));
         }
     }
@@ -1205,21 +1206,27 @@ void KPTextView::ensureCursorVisible()
 
 void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
-    KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
-    if ( autoFormat )
-        autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
+    if( m_kptextobj->kPresenterDocument()->allowAutoFormat())
+    {
+        KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
+        if ( autoFormat )
+            autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
+    }
 }
 
 bool KPTextView::doIgnoreDoubleSpace(KoTextParag * parag,
         int index,QChar ch )
 {
-    KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
-    if( autoFormat )
+    if( m_kptextobj->kPresenterDocument()->allowAutoFormat())
     {
-        return autoFormat->doIgnoreDoubleSpace( parag, index,ch );
+
+        KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
+        if( autoFormat )
+        {
+            return autoFormat->doIgnoreDoubleSpace( parag, index,ch );
+        }
     }
     return false;
-
 }
 
 void KPTextView::startDrag()

@@ -335,6 +335,9 @@ public slots:
     void textStyleSelected( int );
     void extraStylist();
 
+    void slotAllowAutoFormat();
+
+
 public:
     // create GUI
     virtual void createGUI();
@@ -805,6 +808,8 @@ private:
     KSelectAction *actionViewZoom;
 
     KSelectAction *actionFormatStyle;
+
+    KToggleAction *actionAllowAutoFormat;
 
     KAction *actionFormatStylist;
 
