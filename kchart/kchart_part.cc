@@ -139,7 +139,7 @@ void KChartPart::setData( const KoChart::Data& data )
     //Just in case, we only have 1 row, we never use it for label text => prevents crash
     if( data.rows() == 1 )
         isStringFirstRow = FALSE;
-    
+
     //Does the first column (without first cell) contain only strings
     bool isStringFirstCol = TRUE;
     for( uint row = 1; isStringFirstCol && row < data.rows(); row++ )
@@ -428,8 +428,12 @@ QDomDocument KChartPart::saveXML()
     QDomElement data = doc.createElement( "data" );
     docRoot.appendChild( data );
 
-    int cols = currentData.cols();
-    int rows = currentData.rows();
+    int cols = currentData.usedCols()
+             ? QMIN(currentData.usedCols(), currentData.cols())
+             : currentData.cols();
+    int rows = currentData.usedRows()
+             ? QMIN(currentData.usedRows(), currentData.rows())
+             : currentData.rows();
     data.setAttribute( "cols", cols );
     data.setAttribute( "rows", rows );
     kdDebug(35001) << "      writing  " << cols << "," << rows << "  (cols,rows)." << endl;
