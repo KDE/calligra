@@ -349,7 +349,6 @@ void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *ta
 		item = new KPTGanttViewEventItem(m_gantt, task);
 	}
 	item->setStartTime(*time);
-	item->setLeadTime(time->addDays(1)); // FIXME: follow resolution of timescale
 	item->setOpen(true);
 
     delete time;

@@ -50,6 +50,8 @@ KPTProject::KPTProject(KPTNode *parent)
 #endif
 
     m_constraint = KPTNode::MustStartOn;
+    m_startTime = KPTDateTime::currentDateTime();
+    m_endTime = KPTDateTime::currentDateTime();
 
     m_id = 0;
 

@@ -284,7 +284,7 @@ void KPTView::slotAddMilestone() {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
-			currNode->addChildNode(node);
+			getProject().addTask( node, currNode );
     		slotUpdate(true);
 			return;
 	    }
