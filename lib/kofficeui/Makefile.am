@@ -1,7 +1,7 @@
 ###### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICECORE_INCLUDES) $(all_includes)
+INCLUDES = $(KOFFICECORE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkofficeui_la_LDFLAGS	= -version-info 1:0:0 -no-undefined
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE)
 
@@ -18,7 +18,8 @@ libkofficeui_la_SOURCES = koGlobal.cc koFind.cc koReplace.cc \
 	koKoolBar.cc koTemplateCreateDia.cc \
 	kcoloractions.cpp koToolBox.cpp koTemplates.cc \
 	koRect.cpp koPictureFilePreview.cc \
-	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp
+	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
+	koFontDia.cc
 
 include_HEADERS = koGlobal.h koFind.h koReplace.h \
 	koPageLayoutDia.h \
@@ -27,7 +28,8 @@ include_HEADERS = koGlobal.h koFind.h koReplace.h \
 	koKoolBar.h koTemplateCreateDia.h \
 	kcoloractions.h koToolBox.h \
 	koRect.h koPoint.h koSize.h koPictureFilePreview.h \
-	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h
+	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h \
+	koFontDia.h
 
 METASOURCES = AUTO
 
