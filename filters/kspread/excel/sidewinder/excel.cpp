@@ -83,6 +83,10 @@ static inline double readFloat64( const void*p )
   const double* ptr = (const double*) p;
   double num = 0.0;
   num = *ptr;
+  
+  if( !isLittleEndian() )
+    convert_64( num );
+  
   return num;
 }
 
@@ -100,14 +104,22 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
   }
   else
   {
-    // FIXME litte vs big endian ?
     // TODO ensure double takes 8 bytes
     isInteger = false;
     unsigned char* s = (unsigned char*) &rkvalue;
     unsigned char* r = (unsigned char*) &f;
-    r[0] = r[1] = r[2] = r[3] = 0;
-    r[4] = s[0] & 0xfc;
-    r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
+    if( isLittleEndian() )
+    {
+      r[0] = r[1] = r[2] = r[3] = 0;
+      r[4] = s[0] & 0xfc;
+      r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
+    }  
+    else 
+    {
+      r[0] = r[1] = r[2] = r[3] = 0;
+      r[4] = s[0] & 0xfc;
+      r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
+    }
     memcpy( &f, r, 8 );
     f *= factor;
   }
