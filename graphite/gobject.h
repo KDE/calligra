@@ -21,6 +21,7 @@
 #define gobject_h
 
 #include <qobject.h>
+#include <qlist.h>
 #include <qbrush.h>
 #include <qpen.h>
 #include <qrect.h>
@@ -186,7 +187,9 @@ public:
     // region to maintain a correct Z order!
     virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false) = 0;
     // Used to draw the handles/rot-handles when selected
-    virtual void drawHandles(QPainter &p) = 0;
+    // All handles which are drawn are added to the list if the list
+    // is != 0L. Use this list to check "mouseOver" stuff
+    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L) = 0;
 
     const int &zoom() const { return m_zoom; }
     virtual void setZoom(const short &zoom=100) { m_zoom=zoom; }

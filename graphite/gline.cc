@@ -121,32 +121,55 @@ void GLine::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
     reg+=boundingRect();
 }
 
-void GLine::drawHandles(QPainter &p) {
+void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
 
     p.save();
     p.setPen(Qt::black);
     p.setBrush(Qt::black);
+
+    int size;
+    if(m_state==Handles)
+	size=GraphiteGlobal::self()->handleSize();
+    else if(m_state==Rot_Handles)
+	size=GraphiteGlobal::self()->rotHandleSize();
+    else
+	return; // no need to draw handles - shouldn't happen
+
+    int offset=double2Int(static_cast<double>(size)*0.5);
+
+    QRect *r1=new QRect(m_a.x()-offset, m_a.y()-offset, size, size);
+    QRect *r2=new QRect(m_b.x()-offset, m_b.y()-offset, size, size);
+    QRect *r3=0L;
+
+    if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
+       boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
+	r3=new QRect(m_a.x()+double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
+		     m_a.y()+double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
+		     size, size);
+
     if(m_state==Handles) {
-	int size=GraphiteGlobal::self()->handleSize();
-	int offset=double2Int(static_cast<double>(size)*0.5);
-	p.drawRect(m_a.x()-offset, m_a.y()-offset, size, size);
-	p.drawRect(m_b.x()-offset, m_b.y()-offset, size, size);
-	if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
-	   boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
-	    p.drawRect(m_a.x()+double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
-		       m_a.y()+double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
-		       size, size);	
+	p.drawRect(*r1);
+	p.drawRect(*r2);
+	if(r3)
+	    p.drawRect(*r3);
     }
-    else if(m_state==Rot_Handles) {
-	int size=GraphiteGlobal::self()->rotHandleSize();
-	int offset=double2Int(static_cast<double>(size)*0.5);
-	p.drawEllipse(m_a.x()-offset, m_a.y()-offset, size, size);
-	p.drawEllipse(m_b.x()-offset, m_b.y()-offset, size, size);
-	if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
-	   boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
-	    p.drawEllipse(m_a.x()+double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
-		       m_a.y()+double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
-		       size, size);
+    else {
+	p.drawEllipse(*r1);
+	p.drawEllipse(*r2);
+	if(r3)
+	    p.drawEllipse(*r3);
+    }
+
+    if(handles) {
+	handles->append(r1);
+	handles->append(r2);
+	if(r3)
+	    handles->append(r3);
+    }
+    else {
+	delete r1;
+	delete r2;
+	delete r3;
     }
     p.restore();
 }

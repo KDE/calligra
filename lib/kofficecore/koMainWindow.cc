@@ -34,6 +34,7 @@
 #include <qmime.h>
 #include <qmessagebox.h>
 #include <qfileinfo.h>
+#include <qsplitter.h>
 
 #include <kaboutdialog.h>
 #include <kstdaction.h>
@@ -73,6 +74,7 @@ public:
     m_activePart = 0L;
     m_activeView = 0L;
     m_splitViewActionList=0L;
+    m_splitter=0L;
   }
   ~KoMainWindowPrivate()
   {
@@ -86,6 +88,7 @@ public:
   KoView *m_activeView;
 
   QList<KAction> *m_splitViewActionList;
+  QSplitter *m_splitter;
 
   bool bMainWindowGUIBuilt;
 };
@@ -157,10 +160,8 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     m_recent->loadEntries( config );
     config->sync();
 
-    // we need this for a proper layout of the toolbars upon startup,
-    // when no real view has been loaded, yet
-    m_dummyWidget = new QWidget( this );
-    setView( m_dummyWidget );
+    d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
+    setView( d->m_splitter );
 
     buildMainWindowGUI();
     //createGUI( 0L ); // NOT this ! (duplicates shell entries !)
@@ -196,6 +197,8 @@ KoMainWindow::~KoMainWindow()
 
     delete d->m_manager;
     delete d->m_splitViewActionList;
+    delete d->m_splitter;
+    d->m_splitter=0L;
 
     delete d;
 }
@@ -214,16 +217,9 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( doc )
   {
     doc->setSelectable( false );
-    d->m_rootView = doc->createView( this );
+    d->m_rootView = doc->createView( d->m_splitter );
     d->m_rootView->setPartManager( d->m_manager );
 
-    setView( d->m_rootView );
-
-    if ( m_dummyWidget )
-    {
-      delete m_dummyWidget;
-      m_dummyWidget = 0L;
-    }
     d->m_rootView->show();
     d->m_rootDoc->addShell( this );
   }
@@ -281,7 +277,7 @@ KoDocument *KoMainWindow::rootDocument() const
 
 KoView *KoMainWindow::rootView() const
 {
-  return (KoView *)view();
+  return d->m_rootView;
 }
 
 KParts::PartManager *KoMainWindow::partManager()

@@ -52,7 +52,7 @@ public:
     virtual QDomElement save(QDomDocument &doc) const;
 
     virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false);
-    virtual void drawHandles(QPainter &p);
+    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
     virtual void setZoom(const short &zoom=100);
 

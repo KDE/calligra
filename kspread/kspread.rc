@@ -1,6 +1,6 @@
-<!DOCTYPE QConfig ><QConfig name="KSpread">
+<!DOCTYPE kpartgui ><kpartgui name="KSpread">
 <MenuBar>
- <Menu name="Edit"><text>Edit</text>
+ <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
@@ -17,7 +17,7 @@
   <Separator/>
   <Action name="transform"/>
  </Menu>
- <Menu name="Format"><text>Format</text>
+ <Menu name="Format"><text>Fo&amp;rmat</text>
   <Action name="bold"/>
   <Action name="italic"/>
   <Action name="underline"/>
@@ -41,8 +41,8 @@
   <Action name="adjust"/>
   <Action name="tableFormat"/>
  </Menu>
- <Menu name="Insert"><text>Insert</text>
-  <Menu name="Comment"><text>Comment</text>
+ <Menu name="Insert"><text>&amp;Insert</text>
+  <Menu name="Comment"><text>Co&amp;mment</text>
     <Action name="addmodifycomment"/>
     <Action name="showcomment"/>
     <Action name="removecomment"/>
@@ -53,20 +53,20 @@
   <Action name="insertPart"/>
   <Action name="insertChart"/>
  </Menu>
- <Menu name="View"><text>View</text>
+ <Menu name="View"><text>&amp;View</text>
   <Action name="newView"/>
   <ActionList name="view_split" />
   <Separator />
   <Action name="gotoCell"/>
   <Action name="showPageBorders"/>
  </Menu>
- <Menu name="Folder"><text>Folder</text>
-  <Menu name="Row"><text>Row</text>
+ <Menu name="Folder"><text>F&amp;older</text>
+  <Menu name="Row"><text>&amp;Row</text>
     <Action name="resizeRow"/>
     <Action name="equalizeRow"/>
   </Menu>
   <Separator/>
-  <Menu name="Column"><text>Column</text>
+  <Menu name="Column"><text>&amp;Column</text>
     <Action name="resizeCol"/>
     <Action name="equalizeCol"/>
   </Menu>
@@ -80,7 +80,7 @@
   <Separator/>
   <Action name="preference"/>
  </Menu>
- <Menu name="Data"><text>Data</text>
+ <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
   <Action name="sortInc"/>
   <Action name="sortDec"/>
@@ -96,14 +96,12 @@
   <Action name="consolidate"/>
   <Action name="oszi"/>
  </Menu>
- <Menu name="Scripts"><text>Scripts</text>
+ <Menu name="Scripts"><text>S&amp;cripts</text>
   <Action name="scripts"/>
   <Separator/>
   <Action name="editGlobalScripts"/>
   <Action name="editLocalScripts"/>
   <Action name="reloadScripts"/>
- </Menu>
- <Menu name="help"><text>Help</text>
  </Menu>
 </MenuBar>
 <ToolBar name="editAndColumnAndSortAndPartToolBar">
@@ -201,4 +199,4 @@
   </ToolBar>
  </ToolBars>
 </InPlaceEditing> -->
-</QConfig>
+</kpartgui>

@@ -39,7 +39,7 @@ public:
     virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
 
     virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false);
-    virtual void drawHandles(QPainter &p);
+    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
     virtual const GLine *hit(const QPoint &p) const;
     virtual const bool intersects(const QRect &r) const;

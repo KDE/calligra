@@ -387,7 +387,7 @@ void KWordView::setupActions()
 
 
     // ------------------------- Format actions
-    actionFormatFont = new KAction( i18n( "&Font..." ), ALT + Key_F,
+    actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
 				    this, SLOT( formatFont() ),
 				    actionCollection(), "format_font" );
     actionFormatColor = new KColorAction( i18n( "&Color..." ), KColorAction::TextColor, ALT + CTRL + Key_C,

@@ -180,7 +180,7 @@ void GGroup::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
 	it.current()->draw(p, reg, toPrinter);
 }
 
-void GGroup::drawHandles(QPainter &/*p*/) {
+void GGroup::drawHandles(QPainter &/*p*/, QList<QRect> */*handles*/) {
     // TODO
 }
 

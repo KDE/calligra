@@ -1760,7 +1760,7 @@ void KPresenterView::setupActions()
 					      actionCollection(), "tools_rectangle" );
     ( (KToggleAction*)actionToolsRectangle )->setExclusiveGroup( "tools" );
 
-    actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ), 
+    actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ),
 						    KPBarIcon("circle"), Key_F8,
 						    this, SLOT( toolsCircleOrEllipse() ),
 						    actionCollection(), "tools_circle" );
@@ -1896,7 +1896,7 @@ void KPresenterView::setupActions()
 					 this, SLOT( extraConfigRect() ),
 					 actionCollection(), "extra_configrect" );
 
-    actionExtraRaise = new KAction( i18n( "R&aise object(s)" ), KPBarIcon("raise"),
+    actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), KPBarIcon("raise"),
 				    CTRL + Key_R, this, SLOT( extraRaise() ),
 				    actionCollection(), "extra_raise" );
 

@@ -1,14 +1,15 @@
 <!DOCTYPE QConfig ><QConfig name="KChart">
 <MenuBar>
- <Menu name="Edit"><text>Edit</text>
+ <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="wizard"/>
   <Action name="edit"/>
   <Action name="config"/>
  </Menu>
- <Menu name="Options"><text>Options</text>
+ <Menu name="settings"><text>&amp;Settings</text>
   <Action name="loadconfig"/>
   <Action name="saveconfig"/>	
-  <Action name="defaultconfig"/>	
+  <Action name="defaultconfig" />
+  <Separator />
  </Menu>
 </MenuBar>
 <ToolBar name="KChartToolBar">

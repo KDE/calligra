@@ -18,6 +18,7 @@
  </Menu>
  <Merge />
  <Menu name="settings"><text>&amp;Settings</text>
+  <Merge />
   <Action name="configurekeys"/>
   <Action name="configuretoolbars"/>
  </Menu>

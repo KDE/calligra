@@ -1,6 +1,6 @@
-<!DOCTYPE QConfig ><QConfig name="KWord">
+<!DOCTYPE kpartgui ><kpartgui name="KWord">
 <MenuBar>
- <Menu name="Edit"><text>Edit</text>
+ <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -18,7 +18,7 @@
   <Action name="edit_customvars"/>
   <Action name="edit_sldatabase"/>
  </Menu>
- <Menu name="View"><text>View</text>
+ <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
   <ActionList name="view_split" />
   <Separator/>
@@ -34,7 +34,7 @@
   <Separator/>
   <Action name="view_zoom"/>
  </Menu>
- <Menu name="Insert"><text>Insert</text>
+ <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
   <Separator/>
@@ -42,7 +42,7 @@
   <Action name="insert_framebreak"/>
   <Action name="insert_footendnote"/>
   <Action name="insert_contents"/>
-  <Menu name="Variable"><text>Variable</text>
+  <Menu name="Variable"><text>&amp;Variable</text>
    <Action name="insert_var_datefix"/>
    <Action name="insert_var_datevar"/>
    <Action name="insert_var_timefix"/>
@@ -52,9 +52,9 @@
    <Action name="insert_var_custom"/>
    <Separator/>
    <Action name="insert_var_serialletter"/>
+  </Menu>
  </Menu>
- </Menu>
- <Menu name="Tools"><text>Tools</text>
+ <Menu name="Tools"><text>&amp;Tools</text>
   <Action name="tools_edit"/>
   <Action name="tools_editframes"/>
   <Separator/>
@@ -66,7 +66,7 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
  </Menu>
- <Menu name="Format"><text>Format</text>
+ <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="format_font"/>
   <Action name="format_color"/>
   <Action name="format_paragraph"/>
@@ -75,7 +75,7 @@
   <Separator/>
   <Action name="format_style"/>
  </Menu>
- <Menu name="Table"><text>Table</text>
+ <Menu name="Table"><text>Ta&amp;ble</text>
   <Action name="table_insrow"/>
   <Action name="table_inscol"/>
   <Action name="table_delrow"/>
@@ -87,7 +87,7 @@
   <Separator/>
   <Action name="table_delete"/>
  </Menu>
- <Menu name="Extra"><text>Extra</text>
+ <Menu name="Extra"><text>E&amp;xtra</text>
   <Action name="extra_spellcheck"/>
   <Action name="extra_autocorrection"/>
   <Action name="extra_stylist"/>
@@ -191,4 +191,4 @@
   <Action name="formula_product"/>
   <Action name="formula_sum"/>
 </ToolBar>
-</QConfig>
+</kpartgui>
