@@ -345,7 +345,7 @@ QString KWFrame::bottomBrd2String()
 
 /*================================================================*/
 KWFrameSet::KWFrameSet(KWordDocument *_doc)
-  : frames()
+  : frames(), removeableHeader(false)
 { 
   doc = _doc; 
   frames.setAutoDelete(true); 
@@ -529,6 +529,44 @@ void KWTextFrameSet::init()
   format->setDefaults(doc);
 
   updateCounters();
+}
+
+/*================================================================*/
+void KWTextFrameSet::assign(KWTextFrameSet *fs)
+{
+  parags = fs->getFirstParag();
+
+  parags = new KWParag(*fs->getFirstParag());
+  parags->setFrameSet(this);
+  parags->setPrev(0L);
+  parags->setDocument(doc);
+
+  KWParag *p1 = fs->getFirstParag()->getNext(),*p2 = parags,*tmp;
+  while (p1)
+    {
+      tmp = p2;
+      p2 = new KWParag(*p1);
+      //*p2 = *p1;
+      tmp->setNext(p2);
+      p2->setPrev(tmp);
+      p2->setFrameSet(this);
+      p2->setDocument(doc);
+      tmp = p2;
+
+      p1 = p1->getNext();
+    }
+
+  p2->setNext(0L);
+
+  getFrame(0)->setBackgroundColor(fs->getFrame(0)->getBackgroundColor());  
+  getFrame(0)->setLeftBorder(fs->getFrame(0)->getLeftBorder2());  
+  getFrame(0)->setRightBorder(fs->getFrame(0)->getRightBorder2());  
+  getFrame(0)->setTopBorder(fs->getFrame(0)->getTopBorder2());  
+  getFrame(0)->setBottomBorder(fs->getFrame(0)->getBottomBorder2());  
+  getFrame(0)->setBLeft(fs->getFrame(0)->getBLeft());
+  getFrame(0)->setBRight(fs->getFrame(0)->getBRight());
+  getFrame(0)->setBTop(fs->getFrame(0)->getBTop());
+  getFrame(0)->setBBottom(fs->getFrame(0)->getBBottom());
 }
 
 /*================================================================*/
@@ -766,7 +804,9 @@ void KWTextFrameSet::save(ostream &out)
     }
 
   out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) 
-      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\"" << static_cast<int>(frameInfo) << grp << "\">" << endl;
+      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\"" 
+      << static_cast<int>(frameInfo) << grp << "\" removeable=\"" << static_cast<int>(removeableHeader)
+      << "\">" << endl;
 
   KWFrameSet::save(out);
 
@@ -1499,6 +1539,16 @@ void KWGroupManager::recalcCols()
 /*================================================================*/
 void KWGroupManager::recalcRows(QPainter &_painter)
 {
+  // remove atomatically added headers
+  for (unsigned int j = 0;j < rows;j++)
+    {
+      if (getFrameSet(j,0)->isRemoveableHeader())
+	{
+	  deleteRow(j,_painter,false);
+	  j--;
+	}
+    }
+
   for (unsigned int j = 0;j < rows;j++)
     {
       unsigned int i = 0;
@@ -1521,27 +1571,49 @@ void KWGroupManager::recalcRows(QPainter &_painter)
   for (unsigned int j = 0;j < rows;j++)
     {
       unsigned int i = 0;
+      bool _addRow = false;
+
+      if (doc->getProcessingType() == KWordDocument::DTP)
+	{
+	  if (j > 0 && y + getFrameSet(j,i)->getFrame(0)->height() > 
+	      (getFrameSet(j - 1,i)->getPageOfFrame(0) + 1) * doc->getPTPaperHeight() - doc->getPTBottomBorder())
+	    {
+	      y = (getFrameSet(j - 1,i)->getPageOfFrame(0) + 1) * doc->getPTPaperHeight() + doc->getPTTopBorder();
+	      _addRow = true;
+	    }
+	}
+      else
+	{
+	  if (j > 0 && static_cast<int>(y + getFrameSet(j,i)->getFrame(0)->height()) > 
+	      static_cast<int>((doc->getFrameSet(0)->getFrame(getFrameSet(j - 1,i)->getPageOfFrame(0))->bottom())))
+	    {
+	      if (doc->getPages() < getFrameSet(j - 1,i)->getPageOfFrame(0) + 2)
+		doc->appendPage(doc->getPages() - 1,_painter);
+	      {
+		_addRow = true;
+		y = doc->getFrameSet(0)->getFrame(getFrameSet(j - 1,i)->getPageOfFrame(0) + 1)->y();
+	      }
+	    }
+	}
+      
+      if (_addRow && showHeaderOnAllPages)
+	insertRow(j,_painter,false,true);
+      
       for (i = 0;i < cols;i++)
 	{
-	  if (doc->getProcessingType() == KWordDocument::DTP)
+	  if (_addRow)
 	    {
-	      if (j > 0 && y + getFrameSet(j,i)->getFrame(0)->height() > 
-		  (getFrameSet(j - 1,i)->getPageOfFrame(0) + 1) * doc->getPTPaperHeight() - doc->getPTBottomBorder())
-		y = (getFrameSet(j - 1,i)->getPageOfFrame(0) + 1) * doc->getPTPaperHeight() + doc->getPTTopBorder();
+  	      KWTextFrameSet *f1,*f2;
+  	      f1 = dynamic_cast<KWTextFrameSet*>(getFrameSet(j,i));
+  	      f2 = dynamic_cast<KWTextFrameSet*>(getFrameSet(0,i));
+  	      f1->assign(f2);
+	      f1->getFrame(0)->setHeight(f2->getFrame(0)->height());
 	    }
-	  else
-	    {
-	      if (j > 0 && static_cast<int>(y + getFrameSet(j,i)->getFrame(0)->height()) > 
-		  static_cast<int>((doc->getFrameSet(0)->getFrame(getFrameSet(j - 1,i)->getPageOfFrame(0))->bottom())))
-		{
-		  if (doc->getPages() < getFrameSet(j - 1,i)->getPageOfFrame(0) + 2)
-		    doc->appendPage(doc->getPages() - 1,_painter);
-		  y = doc->getFrameSet(0)->getFrame(getFrameSet(j - 1,i)->getPageOfFrame(0) + 1)->y();
-		}
-	    }
+
 	  getFrameSet(j,i)->getFrame(0)->moveTopLeft(KPoint(getFrameSet(j,i)->getFrame(0)->x(),y));
 	  getFrameSet(j,i)->update();
 	}
+
       y = getFrameSet(j,0)->getFrame(0)->bottom() + 3;
     }
 
@@ -1664,7 +1736,7 @@ bool KWGroupManager::isOneSelected(KWFrameSet *fs,unsigned int &row,unsigned int
 }
 
 /*================================================================*/
-void KWGroupManager::insertRow(unsigned int _idx,QPainter &_painter)
+void KWGroupManager::insertRow(unsigned int _idx,QPainter &_painter,bool _recalc,bool _removeable)
 {
   unsigned int i = 0;
   unsigned int _rows = rows;
@@ -1690,6 +1762,7 @@ void KWGroupManager::insertRow(unsigned int _idx,QPainter &_painter)
       _frameSet->addFrame(frame);
       _frameSet->setAutoCreateNewFrame(false);
       _frameSet->setGroupManager(this);
+      _frameSet->setIsRemoveableHeader(_removeable);
       addFrameSet(_frameSet,_idx,i);
       nCells.append(_frameSet);
       ww += *w.at(i) + 2;
@@ -1709,7 +1782,8 @@ void KWGroupManager::insertRow(unsigned int _idx,QPainter &_painter)
       frame->setBBottom(u);
     }
 
-  recalcRows(_painter);
+  if (_recalc)
+    recalcRows(_painter);
 }
 
 /*================================================================*/
@@ -1762,7 +1836,7 @@ void KWGroupManager::insertCol(unsigned int _idx)
 }
 
 /*================================================================*/
-void KWGroupManager::deleteRow(unsigned int _idx,QPainter &_painter)
+void KWGroupManager::deleteRow(unsigned int _idx,QPainter &_painter,bool _recalc)
 {
   for (unsigned int i = 0;i < cells.count();i++)
     {
@@ -1779,7 +1853,8 @@ void KWGroupManager::deleteRow(unsigned int _idx,QPainter &_painter)
 
   rows--;
 
-  recalcRows(_painter);
+  if (_recalc)
+    recalcRows(_painter);
 }
 
 /*================================================================*/

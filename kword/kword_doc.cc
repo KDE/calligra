@@ -1172,6 +1172,7 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  FrameType frameType = FT_BASE;
 	  _name = "";
 	  _row = _col = 0;
+	  bool removeable = false;
 
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1189,6 +1190,8 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		_row = atoi((*it).m_strValue.c_str());
 	      if ((*it).m_strName == "col")
 		_col = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "removeable")
+		removeable = static_cast<bool>(atoi((*it).m_strValue.c_str()));
 	    }
 	  
 	  switch (frameType)
@@ -1199,6 +1202,7 @@ void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		frame->load(parser,lst);
 		frame->setAutoCreateNewFrame(autoCreateNewFrame);
 		frame->setFrameInfo(frameInfo);
+		frame->setIsRemoveableHeader(removeable);
 
 		if (!_name.isEmpty())
 		  {
@@ -2582,6 +2586,8 @@ int KWordDocument::getFrameSet(unsigned int mx,unsigned int my)
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
 	      isAWrongFooter(frameSet->getFrameInfo(),getFooterType()))
 	    continue;
+	  if (frameSet->isRemoveableHeader())
+	    continue;
 	  return getNumFrameSets() - 1 - i;
 	}
     }
@@ -2603,6 +2609,8 @@ int KWordDocument::selectFrame(unsigned int mx,unsigned int my)
 	      isAFooter(frameSet->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
 	      isAWrongFooter(frameSet->getFrameInfo(),getFooterType()))
+	    continue;
+	  if (frameSet->isRemoveableHeader())
 	    continue;
 	  return frameSet->selectFrame(mx,my);
 	}
@@ -2653,6 +2661,8 @@ QCursor KWordDocument::getMouseCursor(unsigned int mx,unsigned int my)
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
 	      isAWrongFooter(frameSet->getFrameInfo(),getFooterType()))
 	    continue;
+	  if (frameSet->isRemoveableHeader())
+	    continue;
 	  return frameSet->getMouseCursor(mx,my);
 	}
     }
@@ -2674,6 +2684,8 @@ KWFrame *KWordDocument::getFirstSelectedFrame()
 	      isAFooter(frameSet->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
 	      isAWrongFooter(frameSet->getFrameInfo(),getFooterType()))
+	    continue;
+	  if (frameSet->isRemoveableHeader())
 	    continue;
 	  if (frameSet->getFrame(j)->isSelected())
 	    return frameSet->getFrame(j);
@@ -2699,6 +2711,8 @@ KWFrame *KWordDocument::getFirstSelectedFrame(int &_frameset)
 	      isAFooter(frameSet->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
 	      isAWrongFooter(frameSet->getFrameInfo(),getFooterType()))
+	    continue;
+	  if (frameSet->isRemoveableHeader())
 	    continue;
 	  if (frameSet->getFrame(j)->isSelected())
 	    return frameSet->getFrame(j);

@@ -156,6 +156,11 @@ public:
   bool hasHardBreak() { return hardBreak; }
 
   QString getParagName() { return paragName; }
+
+  void setFrameSet(KWTextFrameSet *_fs)
+    { frameSet = _fs; }
+  void setDocument(KWordDocument *_doc)
+    { document = _doc; }
   
 protected:
   /**

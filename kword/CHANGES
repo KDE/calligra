@@ -838,3 +838,11 @@ Reggie, 16.2.1999:
 Reggie, 17.2.1999:
 ------------------
 - More undo/redo
+
+Reggie, 18.2.1999:
+------------------
+- When a table flows over multiple pages the header (= first row)
+  is shown on the beginning of the table part on each page. I'll
+  add the possibility to switch this on/off - now it's on by
+  default. Only the automatically added headers are not up-to-date
+  all the time currently - I'll fix that.

@@ -207,6 +207,11 @@ public:
   void setGroupManager(KWGroupManager *gm) { grpMgr = gm; }
   KWGroupManager *getGroupManager() { return grpMgr; }
 
+  void setIsRemoveableHeader(bool _h)
+    { removeableHeader = _h; }
+  bool isRemoveableHeader()
+    { return removeableHeader; }
+
   bool hasSelectedFrame();
 
 protected:
@@ -222,6 +227,7 @@ protected:
   FrameInfo frameInfo;
   int current;
   KWGroupManager *grpMgr;
+  bool removeableHeader;
 
 };
 
@@ -269,6 +275,9 @@ public:
 
   void updateCounters();
   void updateAllStyles();
+
+  // this function is optimized for framesets in tables and doesn't work for other purposes
+  void assign(KWTextFrameSet *fs);
 
 protected:
   virtual void init();
@@ -369,7 +378,8 @@ public:
     unsigned int row,col;
   };
 
-  KWGroupManager(KWordDocument *_doc) { doc = _doc; cells.setAutoDelete(true); rows = 0; cols = 0; };
+  KWGroupManager(KWordDocument *_doc) : showHeaderOnAllPages(true)
+    { doc = _doc; cells.setAutoDelete(true); rows = 0; cols = 0; };
 
   void addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int col);
   KWFrameSet *getFrameSet(unsigned int row,unsigned int col);
@@ -401,18 +411,24 @@ public:
   void selectUntil(KWFrameSet *fs);
   bool isOneSelected(KWFrameSet *fs,unsigned int &row,unsigned int &col);
 
-  void insertRow(unsigned int _idx,QPainter &_painter);
+  void insertRow(unsigned int _idx,QPainter &_painter,bool _recalc = true,bool _removeable = false);
   void insertCol(unsigned int _idx);
 
-  void deleteRow(unsigned int _idx,QPainter &_painter);
+  void deleteRow(unsigned int _idx,QPainter &_painter,bool _recalc = true);
   void deleteCol(unsigned int _idx);
+
+  void setShowHeaderOnAllPages(bool s)
+    { showHeaderOnAllPages = s; }
+  bool getShowHeaderOnAllPages()
+    { return showHeaderOnAllPages; }
 
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;
   KWordDocument *doc;
   QString name;
-  
+  bool showHeaderOnAllPages;
+
 };
 
 bool isAHeader(FrameInfo fi);
