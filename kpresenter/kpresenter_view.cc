@@ -6986,7 +6986,23 @@ void KPresenterView::autoSpellCheck()
 
 void KPresenterView::insertFile()
 {
-    m_pKPresenterDoc->insertFile(QString::null);
+    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+    fd.setMimeFilter( "application/x-kpresenter" );
+    fd.setCaption(i18n("Insert File"));
+
+    KURL url;
+    if ( fd.exec() == QDialog::Accepted )
+    {
+        url = fd.selectedURL();
+        if( url.isEmpty() )
+        {
+            KMessageBox::sorry( this,
+                                i18n("File name is empty"),
+                                i18n("Insert File"));
+            return;
+        }
+    }
+    m_pKPresenterDoc->insertFile(url.path());
 }
 
 #include <kpresenter_view.moc>

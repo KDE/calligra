@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="82">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="83">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -54,6 +54,7 @@
   <Action name="insert_comment"/>
   <Separator/>
   <Action name="insert_page"/>
+  <Action name="insert_file"/>
   <Separator/>
   <Action name="tools_text"/>
   <Action name="tools_autoform"/>

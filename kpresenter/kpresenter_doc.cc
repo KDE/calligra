@@ -3163,7 +3163,7 @@ void KPresenterDoc::insertFile(const QString & file )
     objStartY = 0;
     bool clean = _clean;
     _clean = false;
-    bool ok = loadNativeFormat(QString("/home/test/toto.kpr") );
+    bool ok = loadNativeFormat(file );
     if ( !ok )
     {
         KMessageBox::error(0L,
@@ -3171,6 +3171,7 @@ void KPresenterDoc::insertFile(const QString & file )
                            i18n("Insert File"));
         return;
     }
+#if 0
     KMacroCommand *macro = new KMacroCommand( i18n("Insert File"));
     bool createMacro = false;
     //for ( int i = m_insertFilePage; i<m_pageList.count();i++)
@@ -3184,11 +3185,13 @@ void KPresenterDoc::insertFile(const QString & file )
         addCommand( macro );
     else
         delete macro;
+#endif
     m_insertFilePage = 0;
     // Update the views
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBar();
+    selectPage(m_pageList.count()-1, true );
 
     _clean = clean;
 }
