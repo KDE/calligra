@@ -130,7 +130,8 @@ void KWordTextFrameSetEditIface::insertComment(const QString &_comment)
     m_framesetedit->insertComment(_comment);
 }
 
-void KWordTextFrameSetEditIface::insertFootNote( const QString & type )
+
+void KWordTextFrameSetEditIface::insertAutoFootNote( const QString & type )
 {
     if ( type.lower() =="footnote")
     {
@@ -139,5 +140,17 @@ void KWordTextFrameSetEditIface::insertFootNote( const QString & type )
     else if ( type.lower()=="endnote")
     {
         m_framesetedit->insertFootNote( EndNote, KWFootNoteVariable::Auto, QString::null);
+    }
+}
+
+void KWordTextFrameSetEditIface::insertManualFootNote( const QString & type, const QString & noteText )
+{
+    if ( type.lower() =="footnote")
+    {
+        m_framesetedit->insertFootNote( FootNote, KWFootNoteVariable::Manual, noteText);
+    }
+    else if ( type.lower()=="endnote")
+    {
+        m_framesetedit->insertFootNote( EndNote, KWFootNoteVariable::Manual, noteText);
     }
 }
