@@ -176,8 +176,9 @@ public:
     //int numMatches() const;
     //int numReplacements() const;
 
-    /** Do the complete loop for find or replace. When it exits, we're done */
-    void proceed();
+    /** Do the complete loop for find or replace. When it exits, we're done.
+     * Returns false if the user aborted the search/replace operation. */
+    bool proceed();
 
     /** Bring to front (e.g. when menuitem called twice) */
     void setActiveWindow();

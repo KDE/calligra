@@ -175,12 +175,13 @@ void KoFindReplace::changeListObject(const QPtrList<KoTextObject> & lstObject)
     m_textView=0L;
 }
 
-void KoFindReplace::proceed()
+bool KoFindReplace::proceed()
 {
     if ( m_replace )
         m_replace->resetCounts();
     else
         m_find->resetCounts();
+    bool ret = true;
     KoTextObject *firstTextObj=0;
     // Start point
     KoTextParag * firstParag = 0;
@@ -208,7 +209,7 @@ void KoFindReplace::proceed()
         KoTextCursor c2 = firstTextObj->textDocument()->selectionEndCursor( KoTextDocument::Standard );
         //firstTextObj->emitHideCursor();
         // Find in the selection
-        findInTextObject( firstTextObj, firstParag, firstIndex, c2.parag(), c2.index() );
+        ret = findInTextObject( firstTextObj, firstParag, firstIndex, c2.parag(), c2.index() );
         if ( !m_destroying ) {
             //firstTextObj->emitShowCursor();
             firstTextObj->removeHighlight(true);
@@ -225,7 +226,6 @@ void KoFindReplace::proceed()
             {
                 KoTextParag * lastParag = fs->textDocument()->lastParag();
                 //fs->emitHideCursor();
-                bool ret = true;
                 if (!firstTextObjectFound && firstTextObj == fs && firstParag)  // first frameset
                 {
                     firstTextObjectFound = true;
@@ -239,13 +239,14 @@ void KoFindReplace::proceed()
                     //fs->emitShowCursor();
                     fs->removeHighlight(true);  // we're done with this frameset
                 }
-                if (!ret) break;      // stop here if the user cancelled
+                if (!ret || m_destroying) break;      // stop here if the user cancelled
             }
         }
     }
     if(!m_destroying && m_macroCmd)
         emitNewCommand(m_macroCmd);
-    m_macroCmd= 0L;
+    m_macroCmd = 0L;
+    return ret && !m_destroying;
 }
 
 bool KoFindReplace::findInTextObject( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
