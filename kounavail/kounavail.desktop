@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Unavailable KOffice Document
+X-KDE-Library=libkounavailpart
+Type=Service
+ServiceTypes=KOfficePart
