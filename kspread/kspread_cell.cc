@@ -1786,7 +1786,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   paintPageBorders( painter,corner, cellRef);
 
 
-  if (isObscured() && paintingObscured == 0)
+  if (isObscured() && paintingObscured == 0 && !isObscuringForced())
   {
     /* print the cell obscuring this one */
 
