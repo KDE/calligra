@@ -288,7 +288,7 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor * /*editor*/)
 		QVariant value = m_currentEditor->value();
 //js: not needed		m_editItem->setValue(value);
 		bool sync = (~m_editItem->property()->autoSync()) ?
-		         m_sync : m_editItem->property()->autoSync();
+		         m_sync : bool(m_editItem->property()->autoSync());
 		if(m_buffer && sync)
 		{
 			if (m_editItem->property()->parent()) {
@@ -366,7 +366,7 @@ KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor * /*editor*/)
 	if(m_currentEditor)
 	{
 		bool sync = (~m_editItem->property()->autoSync()) 
-				? m_sync : m_editItem->property()->autoSync();
+				? m_sync : bool(m_editItem->property()->autoSync());
 		if(!sync)
 		{
 			//js: not needed m_editItem->setValue(m_editItem->property()->value());
@@ -579,178 +579,149 @@ KexiPropertyEditor::setFocus()
 		justClickedItem = false;
 	}
 	else {
-		//select anxiProp;
+		//select an item before focusing
+		item = static_cast<KexiPropertyEditorItem *>(itemAt(QPoint(10,1)));
+		if (item) {
+			ensureItemVisible(item);
+			setSelected(item, true);
+		}
+	}
+	if (m_currentEditor) {
+		m_currentEditor->setFocus();
+	}
+	else
+		KListView::setFocus();
 }
 
 void
-KexiPropertyE oid Kexict M=2)
-			{
-				KexiPropertyEditorItem *Arop;
-}iPropertyyE oid Kexict Mast<KexiPropertyEditorIr();
-	
-}iPropertym = false;
-	}
-	else {
-		//sec ol b = insideSlotValueChanged;
-	iexict M=2)
-			{
-				K*/)
+KexiPropertyEditor::resetItem()
 {
-	ifeset(false);
-
-	iftItem->par;
-	iexict M=2)
-			{
-				Kged;
-	iexict M=2)
-			{
-		updateTabStopsor;
-	m_currentEditor->deleteLa
-		juse(newS, m_editItem->em*>(meset(false);
-
-	iftItem-setItem();
-		}
-		m_editItem->updateValue();
-	}
-//	editor->hide();
-//setIor=0;
-changeProperty(m_editItem->name(), dateValue();
-	}
-//	editor->hide();,= 0;
-	fillm->property()->value());
-		slotValueChanteValue();
-	}
-//	editoeteLat valueChang}
-	//update children
-	m_editItem/*sButton( m {
-				geometry.setW; //todo: only when changed
-	}Prope false );
-}
-
-voidd KexiPropertyEditor::slotBufferDestrooying()
-{
-	m_buffer = 0;
-	fillresuler->debug();
-
-		iexiculer->debug();
-
-			->setValue(m_editItem->property()->value());
-r->hide();
-//	= static_cast<KexiPropertyEditrItem *i)//,Editor>setPrevSelection( eset(false);
-
-	iftItem->p(geometry.x() + geometry.width() - m_def)
-		PostPrevSelecti;
-//setIresize(columnWidth(1)esize(geometry.width()-m_defaults->width(), geometry.he_defaults->width(), m_currentEdit());
-	if (m_curit());
-	if ((), geometry.htEditor;
-	m_currentEditor->deleteDirectory->refreshContenv(selec=2)
-			{
-	rmContentsResv)
-		clear();
-		m_editItem = 0;
-		m->p(m_defrtrue);
-h(1), m_editItemy.he_der.ame1];
- r.amese
-		c.)
-		m_ oid * data vtem = Sourconticrevoidddit());
-	if (m_curror) {
-	rntEditor->move(m_currentEditor->rometry.setIresize(columnWidth(1setItem();
-		}
-		m_edi		else
-			m_currentEditor->resize(
-				columnWidth(1)-(m_currentEditor->le}js: not needed		m_editem->par;
-	iexict M=2)
-n()?m_defauts->width():0),
-
-				m_currentEditor->height());
-	}
-}
-
-void
-KexiP||ar();
-		m_editItem = 0;
-( Kex>resize(
-				colu		//		conntorOnly)
-{
-//	delete m_currentEditor;
-	m_currentEditor->delfer,SIGNAL(propertyReset(KexiPropertyB &Iteabled = false;
-->va,Editor>setm_currentEditor)
+	if(m_editItem)
 	{
-		QVar ulerton(nt value = fl noct Mast<KexiPropertyEdta* sto>tem = 0;
-	!=&Itealse;
-	setBufrty(parent->name(), par lection = !Kexi->va.rtyEdi];Editor(KexiP  for thffer&,Kex* data vtem = So deiant value = etAvail== dateValue(
-	}
-}
+//		if (m_currentEditor) {
+//			m_currentEditor->setValue(m_editItem->property()->oldValue());
+//		}
 
-voolumnWidth(1)esize(geometry.wid_editItem->va.ateValue();io: only when changed
-iopertyEditor::slotBufferDestditfer(	m_currentEditor->delhefaulKeyPblen( QKeyentsR* ev;
-	QRer: CreometDataev->keyetFullWiCrea;
-
-	d
-KexS statiataev->n stailable("() );
+//		m_editItem->property()->setValue( m_editItem->property()->oldValue(), false );
+		slotValueChanged_enabled = false;
+		m_editItem->property()->resetValue();
+		slotValueChanged_enabled = true;
+/*
+		if (!m_currentEditor) {
+			m_editItem->updateValue();
 		}
-moxSiz
-	PropertyEditor::creOT(slotCitor(s==No	d
-Kex
-	}
-ksizey_Up!=oldksizey_BackarennnectionelectedP vtem = yyE oid Kex(item);
-		jus( Kx(item);
-		jus			retAb_curu		// = item->itemBelow();
-		if (item && item!=oldItem) {
-			setSelected(item,true);
-			retAb_curuent buffer
-		m->propertyditItem->updateC fl n==No	d
-Kex
-	}
-(ksizey_Down=oldksizey_arennnnectionelecnext vtem = yyE oid Kex(item);
-		jus( Kx(item);
-		jus			return;
-				// = item->itemBelow();
-		if (item && item!=oldItem) {
-			setSelected(item,true);
-			return;
-		}
-	}
-}
+		//update children
+		m_editItem->updateChildrenValue();
 
-er
-		m->propertyditItem->updateC f(s==No	d
-Kex
+		showDefaultsButton( false );
+*/
+//js: not needed		else
+//js: not needed			m_editItem->setValue(m_editItem->property()->oldValue());
 	}
-ksizey_HomeertButton()) {
-				geomet
-	}
-}
-
-voolumnWidth	m_queateTabm->propertydotValueChionelec1st vtem = yyE oid Ke
-void
-KexiPr = item->itemBelow();
-		if (item && item!=oldItem) {
-			setSelected(item,true);
-			return;
-		}
-	>updateC f(s==No	d
-Kex
-	}
-ksizey_EndertButton()) {
-				geomet
-	}
-}
-
-voolumnWidth	m_queateTabm->propertydotValueChionelecStrinvtem = yyE oid Kex(item);
-		jus; || !item->isVisibStri		setSe			item = item->itemBeKexi;
- ow();
-		if (item && item!=oldItem) {
-			setSelected(item,true);
-			return;
-		}
-	}}
 }
 
 void
-KexiProf (item && item!=KexiProf (ientEditor->heigStri		setSe			item = i}yyE oid KeStri		setSeem) {
-		{
-		//sec oev->ertySub->leavb = insideSlotValueChanged
-	iexict M=2)
-			{
-			
+KexiPropertyEditor::moveEditor()
+{
+//	if (m_editItem) {
+	if (m_currentEditor) {
+		QPoint p = contentsToViewport(QPoint(0, itemPos(m_editItem)));
+//		if(m_currentEditor)
+		m_currentEditor->move(m_currentEditor->x(), p.y());
+		if(m_defaults->isVisible())
+			m_defaults->move(m_defaults->x(), p.y());
+	}
+}
+
+void
+KexiPropertyEditor::resizeEvent(QResizeEvent *ev)
+{
+	KListView::resizeEvent(ev);
+	if(m_defaults->isVisible())
+	{
+		QRect r = itemRect(m_editItem);
+		if(r.y()) // r.y() == 0 if the item is not visible on the screen
+			m_defaults->move(r.x() + r.width() - m_defaults->width(), r.y());
+//		if(m_currentEditor)
+//			m_currentEditor->resize(columnWidth(1) - m_defaults->width(), m_currentEditor->height());
+	}
+
+	if(m_currentEditor) {
+		m_currentEditor->resize(
+			columnWidth(1)-((m_currentEditor->leavesTheSpaceForRevertButton()||m_defaults->isVisible()) ? m_defaults->width() : 0),
+			m_currentEditor->height());
+	}
+}
+
+void
+KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &prop)
+{
+//	if (!slotValueChanged_enabled) //js
+	//	return;
+	if (static_cast<KexiPropertyBuffer*>(m_buffer)!=&buf)
+		return;
+	KexiPropertyEditorItem* item = m_items[prop.name()];
+	if (!item) //this property is not visible here
+		return;
+	if(item == m_editItem && m_currentEditor)
+		m_currentEditor->setValue(prop.value());
+	item->updateValue();
+	item->updateChildrenValue();
+}
+
+bool
+KexiPropertyEditor::handleKeyPress( QKeyEvent* ev )
+{
+	const int k = ev->key();
+	const Qt::ButtonState s = ev->state();
+
+	//selection moving
+	QListViewItem *item = 0;
+
+	if ((s==NoButton && k==Key_Up) || k==Key_BackTab) {
+		//find prev visible
+		item = selectedItem() ? selectedItem()->itemAbove() : 0;
+		while (item && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemAbove();
+		if (!item)
+			return true;
+	}
+	else if (s==NoButton && (k==Key_Down || k==Key_Tab)) {
+		//find next visible
+		item = selectedItem() ? selectedItem()->itemBelow() : 0;
+		while (item && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemBelow();
+		if (!item)
+			return true;
+	}
+	else if(s==NoButton && k==Key_Home) {
+		if (m_currentEditor && m_currentEditor->hasFocus())
+			return false;
+		//find 1st visible
+		item = firstChild();
+		while (item && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemBelow();
+	}
+	else if(s==NoButton && k==Key_End) {
+		if (m_currentEditor && m_currentEditor->hasFocus())
+			return false;
+		//find last visible
+		item = selectedItem();
+		QListViewItem *lastVisible = item;
+		while (item) { // && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemBelow();
+			if (item && item->isSelectable() && item->isVisible())
+				lastVisible = item;
+		}
+		item = lastVisible;
+	}
+	if(item) {
+		ev->accept();
+		ensureItemVisible(item);
+		setSelected(item, true);
+		return true;
+	}
+	return false;
+}
+
+#include "kexipropertyeditor.moc"
