@@ -27,15 +27,8 @@
 class KoMainWindow;
 
 inline QString colorToName( const QColor &c ) {
-    QString r( "#" );
-    QString t;
-
-    t = QString( "0" ) + QString::number( c.red(), 16 );
-    r = r + t.right( 2 );
-    t = QString( "0" ) + QString::number( c.green(), 16 );
-    r = r + t.right( 2 );
-    t = QString( "0" ) + QString::number( c.blue(), 16 );
-    r = r + t.right( 2 );
+    QString r;
+    r.sprintf( "#%02X%02X%02X", c.red(), c.green(), c.blue() );
     return r;
 }
 
