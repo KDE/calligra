@@ -104,16 +104,14 @@ public:
 class LayoutData
 {
 public:
-    LayoutData() { init(); }
+    LayoutData() :indentFirst(0.0), indentLeft(0.0), indentRight(0.0)
+     { }
 
     QString styleName;
     QString alignment;
     CounterData counter;
     QString abiprops; // AbiWord properties
-
-    void init()
-    {
-    }
+    double indentFirst, indentLeft, indentRight;
 };
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &)
@@ -398,6 +396,17 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy
     formatDataList->append (formatData);
 }
 
+static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("first" , "double", (void *)&layout->indentFirst ) );
+    attrProcessingList.append ( AttrProcessing ("left"  , "double", (void *)&layout->indentLeft  ) );
+    attrProcessingList.append ( AttrProcessing ("right" , "double", (void *)&layout->indentRight ) );
+    ProcessAttributes (myNode, attrProcessingList);
+}
+
 static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText )
 {
     LayoutData *layout = (LayoutData *) tagData;
@@ -412,6 +421,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "FORMAT",    ProcessSingleFormatTag, (void *) &formatData ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                   NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag,   (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "INDENTS",   ProcessIndentsTag,      (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",   NULL,                   NULL            ) );
     ProcessSubtags (myNode, tagProcessingList, outputText);
 
@@ -611,6 +621,21 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     else
     {
         kdWarning(30506) << "Unknown alignment: " << paraLayout.alignment << endl;
+    }
+
+    if ( paraLayout.indentLeft!=0.0 )
+    {
+        props += QString("margin-left:%1pt;").arg(paraLayout.indentLeft);
+    }
+
+    if ( paraLayout.indentRight!=0.0 )
+    {
+        props += QString("margin-right:%1pt;").arg(paraLayout.indentRight);
+    }
+
+    if ( paraLayout.indentFirst!=0.0 )
+    {
+        props += QString("text-indent:%1pt;").arg(paraLayout.indentFirst);
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element
