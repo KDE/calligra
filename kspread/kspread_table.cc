@@ -207,7 +207,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_iMaxRow = 256;
   m_bScrollbarUpdates = true;
 
-  setHidden(false);
+  setHidden( false );
   m_bShowGrid=true;
   m_bShowFormular=false;
   m_bLcMode=false;
@@ -4261,13 +4261,11 @@ void KSpreadTable::update()
 
 bool KSpreadTable::loadChildren( KoStore* _store )
 {
-    qDebug("============ LOAD CHILREN ============");
     QListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
     {
 	if ( ((KSpreadChild*)it.current())->table() == this )
         {
-	    qDebug("------------- CHILD --------------");
 	    if ( !it.current()->loadDocument( _store ) )
 		return false;
 	}

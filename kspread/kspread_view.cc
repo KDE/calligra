@@ -191,10 +191,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 	addTable( tbl );
     tbl = m_pDoc->map()->initialActiveTable();
     if (tbl)
-      setActiveTable(tbl);
+	setActiveTable(tbl);
     else
-      //activate first table which is not hiding
-      setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
+	//activate first table which is not hiding
+	setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
 
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
 
@@ -1142,7 +1142,7 @@ void KSpreadView::borderRemove()
 }
 void KSpreadView::addTable( KSpreadTable *_t )
 {
-  if( !_t->isHidden() )
+    if( !_t->isHidden() )
     {
   	m_pTabBar->addTab( _t->tableName() );
 	setActiveTable( _t );
@@ -1217,6 +1217,8 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
   if ( m_pTable == 0L )
     return;
 
+  qDebug("============== setActiveTable =============");
+  
   m_pTabBar->setActiveTab( _t->tableName() );
 
   m_pVBorderWidget->repaint();
@@ -1247,6 +1249,7 @@ void KSpreadView::changeTable( const QString& _name )
     setActiveTable( t );
 
     updateEditWidget();
+    
     //refresh toggle button
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
 }
@@ -1465,6 +1468,9 @@ bool KSpreadView::printDlg()
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 {
+    if ( !m_pTable )
+	return;
+    
     // Transform the view coordinates to document coordinates
     QWMatrix m = matrix().invert();
     QPoint tl = m.map( _geometry.topLeft() );
@@ -1476,6 +1482,9 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 
 void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 {
+    if ( !m_pTable )
+	return;
+    
     // Transform the view coordinates to document coordinates
     QWMatrix m = matrix().invert();
     QPoint tl = m.map( _geometry.topLeft() );
@@ -1567,6 +1576,55 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
     QWidget::keyPressEvent( _ev );
   else
     QApplication::sendEvent( m_pCanvas, _ev );
+}
+
+KoDocument* KSpreadView::hitTest( const QPoint &pos )
+{
+    // Code copied from KoView::hitTest
+    KoViewChild *viewChild;
+  
+    KoDocumentChild *docChild = selectedChild();
+    if ( docChild )
+    {
+	if ( ( viewChild = child( docChild->document() ) ) )
+        {
+	    if ( viewChild->frameRegion( matrix() ).contains( pos ) )
+		return 0;
+	}
+	else
+	    if ( docChild->frameRegion( matrix() ).contains( pos ) )
+		return 0;
+    }
+
+    docChild = activeChild();
+    if ( docChild )
+    {
+	if ( ( viewChild = child( docChild->document() ) ) )
+        {
+	    if ( viewChild->frameRegion( matrix() ).contains( pos ) )
+		return 0;
+	}
+	else
+	    if ( docChild->frameRegion( matrix() ).contains( pos ) )
+		return 0;
+    }
+
+    QPoint pos2( pos.x() / zoom(), pos.y() / zoom() );
+    QWMatrix m( matrix() );
+
+    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    for (; it.current(); ++it )
+    {
+	// Is the child document on the visible table ?
+	if ( ((KSpreadChild*)it.current())->table() == m_pTable )
+        {
+	    KoDocument *doc = it.current()->hitTest( pos2, m );
+	    if ( doc )
+		return doc;
+	}
+    }
+
+    return m_pDoc;
 }
 
 int KSpreadView::leftBorder() const

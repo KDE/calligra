@@ -152,6 +152,11 @@ public:
     virtual int canvasXOffset() const;
     virtual int canvasYOffset() const;
 
+    /**
+     * @reimp
+     */
+    KoDocument *hitTest( const QPoint &pos );
+    
 public slots:
     void initialPosition();
     /**
