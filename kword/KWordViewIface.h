@@ -63,7 +63,7 @@ k_dcop:
     virtual void lowerFrame();
     virtual void bringForward();
     virtual void sendBackward();
-
+    virtual void applyAutoFormat();
 private:
     KWView *view;
 

@@ -168,3 +168,9 @@ void KWordViewIface::sendBackward()
     view->sendBackward();
 }
 
+
+void KWordViewIface::applyAutoFormat()
+{
+    view->applyAutoFormat();
+}
+
