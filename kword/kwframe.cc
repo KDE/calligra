@@ -65,8 +65,6 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     m_pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
     handles.setAutoDelete(true);
-    //intersections.setAutoDelete( true );
-    //emptyRegionDirty = TRUE;
 }
 
 KWFrame::~KWFrame()
@@ -197,6 +195,16 @@ QRect KWFrame::outerRect() const
     outerRect.rTop() -= Border::zoomWidthY( brd_top.ptWidth, doc, 1 );
     outerRect.rRight() += Border::zoomWidthX( brd_right.ptWidth, doc, 1 );
     outerRect.rBottom() += Border::zoomWidthY( brd_bottom.ptWidth, doc, 1 );
+    return outerRect;
+}
+
+KoRect KWFrame::outerKoRect() const
+{
+    KoRect outerRect = *this;
+    outerRect.rLeft() -= brd_left.ptWidth;
+    outerRect.rTop() -= brd_top.ptWidth;
+    outerRect.rRight() += brd_right.ptWidth;
+    outerRect.rBottom() += brd_bottom.ptWidth;
     return outerRect;
 }
 
@@ -516,15 +524,19 @@ void KWFrameSet::updateFrames()
         QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
-            KWFrame *frame = frameIt.current();
+            KWFrame *frameOnTop = frameIt.current();
             // Is this frame over any of our frames ?
             QListIterator<KWFrame> fIt( frameIterator() );
             for ( ; fIt.current(); ++fIt )
             {
-                if ( frame->intersects( *fIt.current() ) )
+                KoRect intersect = fIt.current()->intersect( frameOnTop->outerKoRect() );
+                if( !intersect.isEmpty() )
                 {
-                    m_framesOnTop.append( frame );
-                    break;
+                    //kdDebug() << "KWFrameSet::updateFrames adding frame on top " << DEBUGRECT(intersect)
+                    //          << " (zoomed: " << DEBUGRECT( kWordDocument()->zoomRect( intersect ) ) << endl;
+                    m_framesOnTop.append( FrameOnTop( intersect, frameOnTop->getRunAround() ) );
+                    // ## We could also store which frame (frameOnTop) this is upon, to make lookups faster !
+                    // (TODO)
                 }
             }
         }
@@ -959,7 +971,8 @@ void KWFrameSet::finalize()
 // It clips to the frame, and clips out any "on top" frame.
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect, KWViewMode * viewMode )
 {
-    QRect rc = painter->xForm( viewMode->normalToView( kWordDocument()->zoomRect( *frame ) ) );
+    KWDocument * doc = kWordDocument();
+    QRect rc = painter->xForm( viewMode->normalToView( doc->zoomRect( *frame ) ) );
     rc &= painter->xForm( crect ); // intersect
     //kdDebug(32002) << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
     //               << " clip region rect=" << DEBUGRECT(rc)
@@ -967,11 +980,11 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     if ( !rc.isEmpty() )
     {
         QRegion reg( rc );
-        QListIterator<KWFrame> fIt( m_framesOnTop );
-        for ( ; fIt.current() ; ++fIt )
+        QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
+        for ( ; fIt != m_framesOnTop.end() ; ++fIt )
         {
-            QRect r = painter->xForm( viewMode->normalToView( fIt.current()->outerRect() ) );
-            //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
+            QRect r = painter->xForm( viewMode->normalToView( doc->zoomRect( (*fIt).outerRect ) ) );
+            kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
             reg -= r; // subtract
         }
         return reg;

@@ -124,8 +124,12 @@ public:
     void setTopBorder( Border _brd ) { brd_top = _brd; }
     void setBottomBorder( Border _brd ) { brd_bottom = _brd; }
 
-    /** Return the _zoomed_ rectangle for this frame, including the border */
+    /** Return the _zoomed_ rectangle for this frame, including the border - for drawing */
     QRect outerRect() const;
+    /** Return the unzoomed rectangle, including the border, for the frames-on-top list.
+        The default border of size 1-pixel that is drawn on screen is _not_ included here
+        [since it depends on the zoom] */
+    KoRect outerKoRect() const;
 
     /* Resize handles (in kwcanvas.h) are the dots that are drawn on selected
        frames, this creates and deletes them */
@@ -455,7 +459,14 @@ protected:
 
     KWDocument *m_doc;            // Document
     QList<KWFrame> frames;        // Our frames
-    QList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
+    struct FrameOnTop {
+        FrameOnTop() {} // for QValueList
+        FrameOnTop( const KoRect & rect, RunAround ra )
+            : outerRect( rect ), runAround( ra ) {}
+        KoRect outerRect;
+        RunAround runAround;
+    };
+    QValueList<FrameOnTop> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
 
     FrameInfo frameInfo;
     int m_current; // used for headers and footers, not too sure what it means

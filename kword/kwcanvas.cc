@@ -659,7 +659,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     // Another annoying case is if the top and bottom points are not in the same page....
     int topPage = static_cast<int>( m_boundingRect.top() / doc->ptPaperHeight() );
     int bottomPage = static_cast<int>( m_boundingRect.bottom() / doc->ptPaperHeight() );
-    kdDebug() << "KWCanvas::mmEditFrameMove topPage=" << topPage << " bottomPage=" << bottomPage << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove topPage=" << topPage << " bottomPage=" << bottomPage << endl;
     if ( topPage != bottomPage )
     {
         KoPoint p( m_boundingRect.topLeft() );
@@ -685,6 +685,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     QList<KWTableFrameSet> tablesMoved;
     tablesMoved.setAutoDelete( FALSE );
     bool bFirst = true;
+    QRegion repaintRegion;
     KoPoint _move=m_boundingRect.topLeft() - oldBoundingRect.topLeft();
     QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
     for ( ; framesetIt.current(); ++framesetIt, bFirst=false )
@@ -719,8 +720,8 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                                    (frameRect.right()-frameRect.left()) / 2,  // margin = half-width of the rect
                                    (frameRect.bottom()-frameRect.top()) / 2);
 
-                    // Repaing only the changed rects (oldRect U newRect)
-                    repaintContents( QRegion(oldRect).unite(frameRect).boundingRect() );
+                    // Repaint only the changed rects (oldRect U newRect)
+                    repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
                     // Move resize handles to new position
                     frame->updateResizeHandles();
                 }
@@ -740,12 +741,16 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                 QRect newRect( frame->outerRect() );
                 QRect frameRect( m_viewMode->normalToView( newRect ) );
                 // Repaing only the changed rects (oldRect U newRect)
-                repaintContents( QRegion(oldRect).unite(frameRect).boundingRect() );
+                repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
                 // Move resize handles to new position
                 frame->updateResizeHandles();
             }
         }
     }
+
+    // Frames have moved -> update the "frames on top" lists
+    doc->updateAllFrames();
+    repaintContents( repaintRegion.boundingRect() );
 
     // Doesn't work ! It makes the cursor jump.
     // I have tried every combination of contentsToViewport and viewport()->mapToGlobal etc., no luck

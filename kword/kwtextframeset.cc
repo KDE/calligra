@@ -379,6 +379,11 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     KWFrame * frame = internalToNormal( QPoint(0, yp), p );
     if (!frame)
         kdDebug() << "getMargins: internalToNormal returned frame=0L for yp=" << yp << endl;
+#ifdef DEBUG_FLOW
+    else
+        kdDebugBody(32002) << "getMargins: internalToNormal returned frame=" << DEBUGRECT( *frame )
+                           << " and p=" << p.x() << "," << p.y() << endl;
+#endif
     // Everything from there is in 'normal' coordinates.
     int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
     int from = left;
@@ -392,14 +397,12 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
     // For every frame on top at this height, we'll move from and to towards each other
     // The text flows between 'from' and 'to'
-    QListIterator<KWFrame> fIt( m_framesOnTop );
-    for ( ; fIt.current() && from < to ; ++fIt )
+    QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
+    for ( ; fIt != m_framesOnTop.end() && from < to ; ++fIt )
     {
-        // Look for "bounding rect runaround" frames, but skip floating frames.
-        // Otherwise those keep trying to avoid themselves, and oscillate between two positions...
-        if ( fIt.current()->getRunAround() == RA_BOUNDINGRECT && !fIt.current()->getFrameSet()->isFloating() )
+        if ( (*fIt).runAround == RA_BOUNDINGRECT )
         {
-            QRect frameRect = kWordDocument()->zoomRect( * fIt.current() );
+            QRect frameRect = kWordDocument()->zoomRect( (*fIt).outerRect );
 #ifdef DEBUG_FLOW
             kdDebug() << "getMargins found frame at " << DEBUGRECT(frameRect) << endl;
 #endif
@@ -422,7 +425,16 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                 kdDebugBody(32002) << "getMargins from=" << from << " to=" << to << endl;
 #endif
                 if ( breakEnd )
-                    bottomSkip = QMAX( bottomSkip, frameRect.bottom() - top );
+                {
+                    QPoint nPoint( left, frameRect.bottom() );
+                    QPoint iPoint;
+                    if ( normalToInternal( nPoint, iPoint ) )
+                        bottomSkip = QMAX( bottomSkip, iPoint.y() );
+#ifdef DEBUG_FLOW
+                    kdDebugBody(32002) << "getMargins iPoint.y=" << iPoint.y() << " frame's bottom=" << frameRect.bottom()
+                                       << " bottomSkip=" << bottomSkip << endl;
+#endif
+                }
             }
         }
     }
@@ -573,13 +585,13 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     }
 
     // Another case for a vertical break is frames with the RA_SKIP flag
-    QList<KWFrame> frames( m_framesOnTop );
-    for ( KWFrame *f = frames.first(); f ; f = frames.next() )
+    QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
+    for ( ; fIt != m_framesOnTop.end() ; ++fIt )
     {
-        if ( f->getRunAround() == RA_SKIP && !f->getFrameSet()->isFloating() /* see getMargins */)
+        if ( (*fIt).runAround == RA_SKIP )
         {
-            int top = kWordDocument()->zoomItY( f->top() );
-            int bottom = kWordDocument()->zoomItY( f->bottom() );
+            int top = kWordDocument()->zoomItY( (*fIt).outerRect.top() );
+            int bottom = kWordDocument()->zoomItY( (*fIt).outerRect.bottom() );
             QPoint iTop, iBottom; // top and bottom in internal coordinates
             if ( normalToInternal( QPoint( 0, top ), iTop, true ) &&  // we know the frame is on top, so using onlyY is ok
                  normalToInternal( QPoint( 0, bottom ), iBottom, true ) &&
@@ -590,8 +602,8 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
                 // We don't "break;" here because there could be another such frame below the first one
                 // In fact if they are in the wrong order we could fail to skip both...
                 // Back to the beginning then
-                frames.remove();
-                f = frames.first();
+                m_framesOnTop.remove( fIt );
+                fIt = m_framesOnTop.begin();
                 breaked = true;
             }
         }
@@ -604,7 +616,8 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     if ( breakEnd )
     {
         kdDebug(32002) << "KWTextFrameSet::adjustFlow no-space case. breakEnd=" << breakEnd
-                       << " yp=" << yp << " h=" << h << endl;
+                       << " breakBegin=yp=" << yp << " h=" << h << endl;
+        ASSERT( yp <= breakEnd ); // given that yp is breakBegin, this should always be true !
         if ( checkVerticalBreak( yp, h, parag, linesTogether, yp, breakEnd ) )
         {
             breaked = true;
@@ -645,7 +658,6 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
 
 }
 
-/*================================================================*/
 KWTextFrameSet::~KWTextFrameSet()
 {
     //kdDebug(32001) << "KWTextFrameSet::~KWTextFrameSet" << endl;
@@ -656,9 +668,12 @@ KWTextFrameSet::~KWTextFrameSet()
     m_doc = 0L;
 }
 
-/*================================================================*/
 void KWTextFrameSet::updateFrames()
 {
+    // Not visible ? Don't bother then.
+    if ( !isVisible() )
+        return;
+
     if ( !frames.isEmpty() )
     {
         //kdDebug(32002) << "KWTextFrameSet::updateFrames " << this
@@ -673,6 +688,7 @@ void KWTextFrameSet::updateFrames()
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
     }
 
+    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;
     frameList.setAutoDelete( true );
@@ -681,7 +697,7 @@ void KWTextFrameSet::updateFrames()
     // sort frames of this frameset into l2 on (page, y coord, x coord)
     KoRect pageRect;
     for ( unsigned int i = 0; i < static_cast<unsigned int>( m_doc->getPages() + 1 ); i++ ) {
-        //kdDebug(32002) << "Page " << i << endl;
+        //kdDebug(32002) << "Considering page " << i << endl;
         pageRect = KoRect( 0, i * m_doc->ptPaperHeight(), m_doc->ptPaperWidth(), m_doc->ptPaperHeight() );
         FrameList *l = new FrameList();
         l->setAutoDelete( false );
@@ -773,7 +789,6 @@ void KWTextFrameSet::updateFrames()
     KWFrameSet::updateFrames();
 }
 
-/*================================================================*/
 void KWTextFrameSet::save( QDomElement &parentElem )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
@@ -811,7 +826,6 @@ void KWTextFrameSet::save( QDomElement &parentElem )
     zoom();
 }
 
-/*================================================================*/
 void KWTextFrameSet::load( QDomElement &attributes )
 {
     KWFrameSet::load( attributes );
@@ -2130,11 +2144,11 @@ void KWTextFrameSet::undo()
     // a cursor inside a deleted paragraph -> crash.
     emit setCursor( c );
     setLastFormattedParag( textdoc->firstParag() );
-    emit ensureCursorVisible();
     emit repaintChanged( this );
     emit updateUI();
     emit showCursor();
     formatMore();
+    emit ensureCursorVisible();
 }
 
 void KWTextFrameSet::redo()
@@ -2150,10 +2164,10 @@ void KWTextFrameSet::redo()
     emit setCursor( c ); // see undo
     setLastFormattedParag( textdoc->firstParag() );
     emit repaintChanged( this );
-    emit ensureCursorVisible();
     emit updateUI();
     emit showCursor();
     formatMore();
+    emit ensureCursorVisible();
 }
 
 void KWTextFrameSet::clearUndoRedoInfo()
@@ -2288,6 +2302,7 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
         undoRedoInfo.clear();
         //kdDebug(32001) << "KWTextFrameSet::setFormat undoredo info done" << endl;
         textdoc->setFormat( QTextDocument::Standard, format, flags );
+        setLastFormattedParag( c1.parag() );
         emit repaintChanged( this );
         formatMore();
         emit showCursor();
