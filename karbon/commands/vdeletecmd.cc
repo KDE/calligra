@@ -66,3 +66,4 @@ VDeleteCmd::isExecuted()
 {
 	return m_executed;
 }
+

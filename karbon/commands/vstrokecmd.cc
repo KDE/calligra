@@ -107,7 +107,7 @@ VStrokeLineWidthCmd::unexecute()
 	m_executed = false;
 }
 
-VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke, const QString& icon = "14_action" )
+VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke, const QString& icon )
     : VCommand( doc, i18n( "Stroke Objects" ), icon ), m_stroke( stroke ), m_executed( false )
 {
 	m_selection = document()->selection()->clone();

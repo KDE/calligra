@@ -72,20 +72,14 @@ void VCommandHistory::addCommand( VCommand* command, bool execute )
 	emit commandAdded( command );
 } // VCommandHistory::addCommand()
 
-void VCommandHistory::setUndoLimit( int limit )
+void VCommandHistory::setUndoLimit( unsigned int limit )
 {
-	if ( limit < 0 )
-		return;
-	
 	m_undoLimit = limit;
 	clipCommands();
 } // VCommandHistory::setUndoLimit
 
-void VCommandHistory::setRedoLimit( int limit )
+void VCommandHistory::setRedoLimit( unsigned int limit )
 {
-	if ( limit < 0 )
-		return;
-	
 	m_redoLimit = limit;
 	clipCommands();
 } // VCommandHistory::setRedoLimit
@@ -120,18 +114,18 @@ void VCommandHistory::redo()
 		i--;
 	i++;
 	
-	if ( i >= m_commands.count() )
+	if ( i >= int( m_commands.count() ) )
 		return;
 	
 	VCommand* cmd;
 	if ( ( cmd = m_commands.at( i ) ) == 0L )
 		return;
-	
+
 	cmd->execute();
 	emit commandExecuted( cmd );
 	emit commandExecuted();
 	updateActions();
-	
+
 	m_part->repaintAllViews();
 } // VCommandHistory::redo
 
@@ -257,7 +251,7 @@ void VCommandHistory::updateActions()
 		}
 		
 	if ( m_redo != 0 )
-		if ( ++i == m_commands.count() )
+		if ( ++i == int( m_commands.count() ) )
 		{
 			m_redo->setEnabled( false );
 			m_redo->setText( i18n( "&Redo" ) );

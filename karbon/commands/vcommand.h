@@ -72,10 +72,10 @@ class VCommandHistory : public QObject
 		void addCommand( VCommand* command, bool execute = true );
     
 		 // limits
-		int undoLimit() const { return m_undoLimit; }
-		void setUndoLimit( int limit );
-		int redoLimit() const { return m_redoLimit; }
-		void setRedoLimit( int limit );
+		unsigned int undoLimit() const { return m_undoLimit; }
+		void setUndoLimit( unsigned int limit );
+		unsigned int redoLimit() const { return m_redoLimit; }
+		void setRedoLimit( unsigned int limit );
  
 		const QPtrList<VCommand>* commands() const { return &m_commands; }
 
@@ -100,12 +100,12 @@ class VCommandHistory : public QObject
 		void clipCommands();
 		void updateActions();
 	
-		KarbonPart*          m_part;
-		int                  m_undoLimit;
-		int                  m_redoLimit;
-		KAction*             m_undo;
-		KAction*             m_redo;
-		QPtrList<VCommand>   m_commands;
+		KarbonPart			*m_part;
+		unsigned int		m_undoLimit;
+		unsigned int		m_redoLimit;
+		KAction				*m_undo;
+		KAction				*m_redo;
+		QPtrList<VCommand>	m_commands;
 }; // VCommandHistory
 
 #endif
