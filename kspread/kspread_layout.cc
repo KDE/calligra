@@ -861,7 +861,17 @@ void KSpreadLayout::setBackGroundBrushColor( const QColor& c )
 
 void KSpreadLayout::setTextFont( const QFont& _f )
 {
-    setProperty( PFont );
+    if(_f==KGlobalSettings::generalFont())
+        {
+        clearProperty( PFont );
+        setNoFallBackProperties( PFont );
+        }
+    else
+        {
+        setProperty( PFont );
+        clearNoFallBackProperties( PFont );
+        }
+
 
     m_textFont = _f;
     layoutChanged();

@@ -823,7 +823,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         // TODO: We have to initialize sizes here ....
         _painter.save();
         _painter.setPen( m_textPen.color() );
-        _painter.setFont( m_textFont );
+        _painter.setFont( textFont(_col,_row ));
         m_pVisualFormula->setPos( -1000, -1000 );
         m_pVisualFormula->redraw( _painter );
         _painter.restore();
@@ -1067,7 +1067,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         _painter.setFont( tmpCondition->fontcond );
     }
     else
-        _painter.setFont( m_textFont );
+        _painter.setFont( textFont(_col,_row ) );
 
     // Calculate text dimensions
     textSize(_painter);
@@ -1854,7 +1854,7 @@ void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
     }
     else
     {
-        _paint.setFont( m_textFont );
+        _paint.setFont( textFont(_col,_row ) );
     }
 
     textSize(_paint);
@@ -2643,7 +2643,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
         _painter.save();
         _painter.setPen( m_textPen/*.color()??*/ );
-        _painter.setFont( m_textFont );
+        _painter.setFont( textFont(_col,_row ) );
         // TODO: No better method to set new font ?
         if ( old_layoutflag )
             m_pVisualFormula->parse( m_strText.mid(1) );
@@ -2688,7 +2688,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         }
         else
         {
-            _painter.setFont( m_textFont );
+            _painter.setFont( textFont(_col,_row ) );
             if( m_bValue && !m_pTable->getShowFormular() )
             {
                 double v = m_dValue * faktor(column(),row());
@@ -2701,7 +2701,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 tmpPen.setColor( textColor( _col, _row) );
         }
         _painter.setPen(tmpPen);
-        //_painter.setFont( m_textFont );
+        //_painter.setFont( textFont(_col,_row ) );
 
         QString tmpText=m_strOutText;
         if(m_bCellTooShort)
@@ -3096,7 +3096,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
         _painter.setFont( tmpCondition->fontcond );
         }
       else
-        _painter.setFont( m_textFont );
+        _painter.setFont( textFont(_col,_row ) );
       conditionAlign(_painter,_col,_row);
       _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
     }

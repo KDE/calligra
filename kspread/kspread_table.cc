@@ -692,70 +692,74 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-        KSpreadCell* c = m_cells.firstCell();
-        for( ; c; c = c->nextCell() )
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
-            int row = c->row();
-            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-            &&!c->isObscuringForced())
-            {
-                c->setDisplayDirtyFlag();
-                if ( _font )
-                    c->setTextFontFamily( _font );
-                if ( _size > 0 )
-                    c->setTextFontSize( _size );
-                if ( _italic >= 0 )
-                    c->setTextFontItalic( (bool)_italic );
-                if ( _bold >= 0 )
-                    c->setTextFontBold( (bool)_bold );
-                if ( _underline >= 0 )
-                    c->setTextFontUnderline( (bool)_underline );
-                if ( _strike >= 0 )
-                    c->setTextFontStrike( (bool)_strike );
-                c->clearDisplayDirtyFlag();
-            }
+                c->clearProperty( KSpreadCell::PFont );
+                c->clearNoFallBackProperties( KSpreadCell::PFont );
         }
+      }
 
-        emit sig_updateView( this, m_rctSelection );
-        return;
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        if ( _font )
+                rw->setTextFontFamily( _font );
+        if ( _size > 0 )
+                rw->setTextFontSize( _size );
+        if ( _italic >= 0 )
+                rw->setTextFontItalic( (bool)_italic );
+        if ( _bold >= 0 )
+                rw->setTextFontBold( (bool)_bold );
+        if ( _underline >= 0 )
+                rw->setTextFontUnderline( (bool)_underline );
+        if ( _strike >= 0 )
+                rw->setTextFontStrike( (bool)_strike );
+        }
+      emit sig_updateView( this );
+      return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-        KSpreadCell* c = m_cells.firstCell();
-        for( ; c; c = c->nextCell() )
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
-            int col = c->column();
-            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
-            &&!c->isObscuringForced())
-            {
-                c->setDisplayDirtyFlag();
-                if ( _font )
-                    c->setTextFontFamily( _font );
-                if ( _size > 0 )
-                    c->setTextFontSize( _size );
-                if ( _italic >= 0 )
-                    c->setTextFontItalic( (bool)_italic );
-                if ( _bold >= 0 )
-                    c->setTextFontBold( (bool)_bold );
-                if ( _underline >= 0 )
-                    c->setTextFontUnderline( (bool)_underline );
-                if ( _strike >= 0 )
-                    c->setTextFontStrike( (bool)_strike );
-                c->clearDisplayDirtyFlag();
-            }
+                c->clearProperty( KSpreadCell::PFont );
+                c->clearNoFallBackProperties( KSpreadCell::PFont );
         }
-
-        emit sig_updateView( this, m_rctSelection );
-        return;
+      }
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        if ( _font )
+                cl->setTextFontFamily( _font );
+        if ( _size > 0 )
+                cl->setTextFontSize( _size );
+        if ( _italic >= 0 )
+                cl->setTextFontItalic( (bool)_italic );
+        if ( _bold >= 0 )
+                cl->setTextFontBold( (bool)_bold );
+        if ( _underline >= 0 )
+                cl->setTextFontUnderline( (bool)_underline );
+        if ( _strike >= 0 )
+                cl->setTextFontStrike( (bool)_strike );
+        }
+      emit sig_updateView( this );
+      return;
     }
     else
     {
-
-
         for ( int x = r.left(); x <= r.right(); x++ )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
@@ -807,38 +811,54 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-        KSpreadCell* c = m_cells.firstCell();
+        int size;
+        KSpreadCell* c;
+        c=cellAt(_marker.x(), _marker.y());
+        size=c->textFontSize(_marker.x(), _marker.y());
+
+        c = m_cells.firstCell();
         for( ; c; c = c->nextCell() )
         {
             int row = c->row();
             if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
             &&!c->isObscuringForced())
             {
-                c->setDisplayDirtyFlag();
-                c->setTextFontSize( ( c->textFontSize( _marker.x(), _marker.y() ) + _size ) );
-                c->clearDisplayDirtyFlag();
+                c->clearProperty( KSpreadCell::PFont );
+                c->clearNoFallBackProperties( KSpreadCell::PFont );
             }
         }
-
-        emit sig_updateView( this, m_rctSelection );
-        return;
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        rw->setTextFontSize( size + _size) ;
+        }
+      emit sig_updateView( this );
+      return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-        KSpreadCell* c = m_cells.firstCell();
+        int size;
+        KSpreadCell* c;
+        c=cellAt(_marker.x(), _marker.y());
+        size=c->textFontSize(_marker.x(), _marker.y());
+
+        c = m_cells.firstCell();
         for( ; c; c = c->nextCell() )
         {
             int col = c->column();
             if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
             &&!c->isObscuringForced())
             {
-                c->setDisplayDirtyFlag();
-                c->setTextFontSize( ( c->textFontSize( _marker.x(), _marker.y() ) + _size ) );
-                c->clearDisplayDirtyFlag();
+                c->clearProperty( KSpreadCell::PFont );
+                c->clearNoFallBackProperties( KSpreadCell::PFont );
             }
         }
-
+        for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                {
+                ColumnLayout *cl=nonDefaultColumnLayout(i);
+                cl->setTextFontSize( size + _size );
+                }
         emit sig_updateView( this, m_rctSelection );
         return;
     }
