@@ -4095,7 +4095,7 @@ void KSpreadCell::setLink( const QString& link )
 
 QString KSpreadCell::link() const
 {
-  return d->extra()->link;
+  return d->hasExtra() ? d->extra()->link : QString::null;
 }
 
 void KSpreadCell::update()
