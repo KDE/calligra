@@ -130,6 +130,8 @@ public:
 
     void layout();
 
+    int availableHeight() const;
+
     /** set left margin size */
     void setBLeft( double b ) { bleft = b; }
     /** set right margin size */

@@ -614,7 +614,6 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
         if ( !elem.hasAttribute("pos"))
             continue;
         int index = elem.attribute("pos").toInt();
-        kdDebug()<<" index :"<<index <<endl;
         index+=offset;
         QDomElement varElem = elem.namedItem( "VARIABLE" ).toElement();
         if ( !varElem.isNull() )
@@ -667,7 +666,6 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
 
 
     int size = n.attribute( attrPointSize ).toInt();
-    kdDebug() << "Size: " << size << endl;
     bool bold=false;
     if(n.hasAttribute(attrBold))
         bold = (bool)n.attribute( attrBold ).toInt();
@@ -1122,6 +1120,11 @@ void KPTextObject::slotNewCommand( KCommand * cmd)
     m_doc->addCommand(cmd);
 }
 
+int KPTextObject::availableHeight() const
+{
+    return m_textobj->availableHeight();
+}
+
 void KPTextObject::slotAvailableHeightNeeded()
 {
     int ah = m_doc->zoomHandler()->ptToLayoutUnitPixY( innerHeight() );
@@ -1219,14 +1222,35 @@ void KPTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
 }
 
 
-void KPTextObject::slotAfterFormatting( int, KoTextParag* lastFormatted, bool* abort)
+void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, bool* abort)
 {
-    if( lastFormatted )
+    int availHeight = availableHeight();
+    if ( ( bottom > availHeight ) /*||   // this parag is already off page
+                                    ( lastFormatted && (bottom + lastFormatted->rect().height() > availHeight) ) */) // or next parag will be off page
     {
-        setSize( getRect().width(), m_doc->zoomHandler()->layoutUnitPtToPt(lastFormatted->rect().height())+getRect().height());
-        m_textobj->setLastFormattedParag( lastFormatted->prev() );
-        m_doc->updateRuler();
-        *abort = true;
+        int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
+        if( lastFormatted && bottom + lastFormatted->rect().height() > availHeight )
+        {
+            difference += lastFormatted->rect().height();
+        }
+        if(difference > 0)
+        {
+            double wantedPosition = 0;
+
+            wantedPosition = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( difference ) ) + getRect().bottom();
+            double pageBottom = (double) m_doc->stickyPage()->getPageRect().bottom();
+            double newPosition = QMIN( wantedPosition, pageBottom );
+            newPosition = QMAX( newPosition, getRect().top() ); // avoid negative heights
+            bool resized = getRect().bottom() != newPosition;
+            if ( resized )
+            {
+                double tmpBottom = getRect().bottom() - newPosition ;
+                setSize( getRect().width(), getRect().height()-tmpBottom );
+                //m_textobj->setLastFormattedParag( lastFormatted->prev() );
+                m_doc->updateRuler();
+                *abort = true;
+            }
+        }
     }
 }
 
