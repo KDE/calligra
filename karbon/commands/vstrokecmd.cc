@@ -10,8 +10,8 @@
 #include "vgradient.h"
 #include "vstrokecmd.h"
 
-VStrokeCmd::VStrokeCmd( VDocument *doc, const VStroke *stroke )
-	: VCommand( doc, i18n( "Stroke Objects" ) ), m_stroke( stroke )
+VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke )
+    : VCommand( doc, i18n( "Stroke Objects" ) ), m_stroke(stroke)
 {
 	m_selection = m_doc->selection()->clone();
 	m_gradient = 0L;

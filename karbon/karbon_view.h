@@ -147,7 +147,7 @@ protected slots:
 	//toolbox dialogs - slots
 	void solidFillClicked();
 	void strokeClicked();
-	void slotStrokeChanged( const VStroke & );
+	void slotStrokeChanged(  const VStroke & );
 	void slotFillChanged( const VFill & );
 	void slotJoinStyleClicked();
 

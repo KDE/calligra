@@ -26,6 +26,7 @@
 #include <qlineedit.h>
 #include <qvbox.h>
 #include <qvgroupbox.h>
+#include <qcombobox.h>
 
 #include <kapplication.h>
 #include <kcolorbutton.h>
@@ -185,42 +186,97 @@ void VConfigInterfacePage::slotDefault()
 VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 	: QObject( box->parent(), name )
 {
-	m_view = view;
-	m_config = KarbonFactory::instance()->config();
+    m_view = view;
+    m_config = KarbonFactory::instance()->config();
 
-	QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-	tmpQGroupBox->setTitle( i18n( "Misc" ) );
+    KoUnit::Unit unit = view->part()->getUnit();
 
-	QGridLayout* grid = new QGridLayout(
-		tmpQGroupBox, 8, 1, KDialog::marginHint() + 7, KDialog::spacingHint() );
+    QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
+    tmpQGroupBox->setTitle( i18n( "Misc" ) );
 
-	m_oldUndoRedo = 30;
+    QGridLayout* grid = new QGridLayout(
+        tmpQGroupBox, 8, 1, KDialog::marginHint() + 7, KDialog::spacingHint() );
 
-	if( m_config->hasGroup( "Misc" ) )
-	{
-		m_config->setGroup( "Misc" );
-		m_oldUndoRedo = m_config->readNumEntry( "UndoRedo", m_oldUndoRedo );
-	}
+    m_oldUndoRedo = 30;
 
-	m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
-	m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
-	m_undoRedo->setRange( 10, 60, 1 );
+    QString unitType=KoUnit::unitName(unit);
 
-	grid->addWidget( m_undoRedo, 0, 0 );
+    if( m_config->hasGroup( "Misc" ) )
+    {
+        m_config->setGroup( "Misc" );
+        m_oldUndoRedo = m_config->readNumEntry( "UndoRedo", m_oldUndoRedo );
+        unitType=m_config->readEntry("Units",unitType);
+    }
+
+    m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
+    m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
+    m_undoRedo->setRange( 10, 60, 1 );
+
+    grid->addWidget( m_undoRedo, 0, 0 );
+
+
+    QHBox *lay = new QHBox(box);
+    lay->setSpacing(KDialog::spacingHint());
+    QLabel *unitLabel= new QLabel(i18n("Units:"),lay);
+
+    QStringList listUnit;
+    listUnit << KoUnit::unitDescription( KoUnit::U_MM );
+    listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
+    listUnit << KoUnit::unitDescription( KoUnit::U_PT );
+    m_unit = new QComboBox( lay );
+    m_unit->insertStringList(listUnit);
+    m_oldUnit=0;
+    switch (KoUnit::unit( unitType ) )
+    {
+    case KoUnit::U_MM:
+        m_oldUnit=0;
+        break;
+    case KoUnit::U_INCH:
+        m_oldUnit=1;
+        break;
+    case KoUnit::U_PT:
+    default:
+        m_oldUnit=2;
+    }
+    m_unit->setCurrentItem(m_oldUnit);
+
 }
 
 void VConfigMiscPage::apply()
 {
-	m_config->setGroup( "Misc" );
-	int newUndo = m_undoRedo->value();
-	KarbonPart* part = m_view->part();
+    KarbonPart* part = m_view->part();
 
-	if( newUndo != m_oldUndoRedo )
-	{
-		m_config->writeEntry( "UndoRedo", newUndo );
-		part->setUndoRedoLimit( newUndo );
-		m_oldUndoRedo = newUndo;
-	}
+    m_config->setGroup( "Misc" );
+    if(m_oldUnit!=m_unit->currentItem())
+    {
+        QString unitName;
+        switch (m_unit->currentItem())
+        {
+        case 0:
+            unitName=KoUnit::unitName(KoUnit::U_MM  );
+            part->setUnit(KoUnit::U_MM);
+            break;
+        case 1:
+            unitName=KoUnit::unitName(KoUnit::U_INCH  );
+            part->setUnit(KoUnit::U_INCH);
+            break;
+        case 2:
+        default:
+            part->setUnit(KoUnit::U_PT);
+            unitName=KoUnit::unitName(KoUnit::U_PT );
+        }
+
+        m_config->writeEntry("Units",unitName);
+    }
+
+    int newUndo = m_undoRedo->value();
+
+    if( newUndo != m_oldUndoRedo )
+    {
+        m_config->writeEntry( "UndoRedo", newUndo );
+        part->setUndoRedoLimit( newUndo );
+        m_oldUndoRedo = newUndo;
+    }
 }
 
 void VConfigMiscPage::slotDefault()

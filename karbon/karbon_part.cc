@@ -21,7 +21,8 @@
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
-	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+      m_unit( KoUnit::U_MM )
 {
 	m_commandHistory = new VCommandHistory( this );
 	m_bShowStatusBar = true;
@@ -32,6 +33,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
 	initConfig();
+        initUnit();
 	if( name )
 		dcopObject();
 }
@@ -196,6 +198,19 @@ void KarbonPart::initConfig()
 			setUndoRedoLimit( undos );
 	}
 }
+
+void KarbonPart::initUnit()
+{
+    //load unit config after we load file.
+    //load it for new file or empty file
+    KConfig *config = KarbonPart::instance()->config();
+    if(config->hasGroup("Misc") )
+    {
+        config->setGroup( "Misc" );
+        m_unit=KoUnit::unit( config->readEntry("Units",KoUnit::unitName(KoUnit::U_MM  )));
+    }
+}
+
 
 #include "karbon_part.moc"
 

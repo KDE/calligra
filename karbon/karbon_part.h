@@ -8,7 +8,7 @@
 
 #include <qptrlist.h>
 #include <koDocument.h>
-
+#include <koUnit.h>
 #include "vdocument.h"
 #include "vlayer.h"
 #include "vcolor.h"
@@ -68,7 +68,10 @@ public:
 
 	void initConfig();
 	int maxRecentFiles() const { return m_maxRecentFiles; }
-
+    QString getUnitName()const { return KoUnit::unitName( m_unit ); }
+    KoUnit::Unit getUnit()const { return m_unit; }
+    void setUnit(KoUnit::Unit _unit){ m_unit=_unit; }
+    void initUnit();
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool erase = false );
@@ -86,6 +89,7 @@ private:
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
 	int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
 	DCOPObject *dcop;
+        KoUnit::Unit m_unit;
 };
 
 #endif

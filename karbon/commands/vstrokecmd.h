@@ -22,7 +22,7 @@ class VGradient;
 class VStrokeCmd : public VCommand
 {
 public:
-	VStrokeCmd( VDocument *doc, const VStroke * );
+	VStrokeCmd( VDocument *doc,  const VStroke * );
 	VStrokeCmd( VDocument *doc, VGradient * );
 	virtual ~VStrokeCmd();
 
@@ -32,7 +32,7 @@ public:
 private:
 	VSelection* m_selection;
 
-	VStroke *m_stroke;
+	const VStroke *m_stroke;
 	VGradient *m_gradient;
 
 	QValueVector<VStroke> m_oldcolors;

@@ -29,7 +29,7 @@ class KConfig;
 class KIntNumInput;
 class KLineEdit;
 class KSpellConfig;
-
+class QComboBox;
 class KarbonView;
 
 
@@ -76,6 +76,8 @@ private:
 
 	KIntNumInput* m_undoRedo;
 	int m_oldUndoRedo;
+    int m_oldUnit;
+    QComboBox *m_unit;
 };
 
 
