@@ -2843,63 +2843,122 @@ void Page::doObjEffects()
                     }
                     else
                     {
-                        switch ( kpobject->getEffect3() )
+                        if ( subPresStep == 0 ) 
                         {
-                        case EF3_NONE:
-                            //drawObject( kpobject, screen, ox, oy, 0, 0, 0, 0 );
-                            break;
-                        case EF3_GO_LEFT:
-                        {
-                            x_pos1 = _step_width * _step < ox - diffx() + ow ?
-                                     ox - diffx() + ow - _step_width * _step : 0;
-                            y_pos1 = 0;
-                            drawObject( kpobject, screen, -( ox + ow - x_pos1 ), y_pos1, 0, 0, 0, 0 );
-                            if ( x_pos1 != 0 ) nothingHappens = false;
-                            xy.at( i )->setX( -( ox + ow - x_pos1 ) );
-                            xy.at( i )->setY( y_pos1 );
-                            xy.at( i )->setWidth( 0 );
-                            xy.at( i )->setHeight( 0 );
-                        } break;
-                        case EF3_GO_TOP:
-                        {
-                            y_pos1 = _step_height * _step < oy - diffy() + oh ?
-                                     oy - diffy() + oh - _step_height * _step : 0;
-                            x_pos1 = 0;
-                            drawObject( kpobject, screen, x_pos1, -( ( oy - diffy() ) + oh - y_pos1 ), 0, 0, 0, 0 );
-                            if ( y_pos1 != 0 ) nothingHappens = false;
-                            xy.at( i )->setX( x_pos1 );
-                            xy.at( i )->setY( -( ( oy - diffy() ) + oh - y_pos1 ) );
-                            xy.at( i )->setWidth( 0 );
-                            xy.at( i )->setHeight( 0 );
-                        } break;
-                        case EF3_GO_RIGHT:
-                        {
-                            x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
-                                     _w - ( _step_width * _step ) : 0;
-                            y_pos2 = 0;
-                            int __w = kapp->desktop()->width() - ox;
-                            drawObject( kpobject, screen, __w - x_pos2, y_pos2, 0, 0, 0, 0 );
-                            if ( x_pos2 != 0 ) nothingHappens = false;
-                            xy.at( i )->setX( __w - x_pos2 );
-                            xy.at( i )->setY( y_pos2 );
-                            xy.at( i )->setWidth( 0 );
-                            xy.at( i )->setHeight( 0 );
-                        } break;
-                        case EF3_GO_BOTTOM:
-                        {
-                            y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
-                                     _h - ( _step_height * _step ) : 0;
-                            x_pos2 = 0;
-                            int __h = kapp->desktop()->height() - ( oy - diffy() );
-                            drawObject( kpobject, screen, x_pos2, __h - y_pos2, 0, 0, 0, 0 );
-                            if ( y_pos2 != 0 ) nothingHappens = false;
-                            xy.at( i )->setX( x_pos2 );
-                            xy.at( i )->setY( __h - y_pos2 );
-                            xy.at( i )->setWidth( 0 );
-                            xy.at( i )->setHeight( 0 );
-                        } break;
-                        default:
-                            break;
+                            switch ( kpobject->getEffect3() )
+                            {
+                            case EF3_NONE:
+                                //drawObject( kpobject, screen, ox, oy, 0, 0, 0, 0 );
+                                break;
+                            case EF3_GO_LEFT:
+                            {
+                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
+                                         ox - diffx() + ow - _step_width * _step : 0;
+                                y_pos1 = 0;
+                                drawObject( kpobject, screen, -( ox + ow - x_pos1 ), y_pos1, 0, 0, 0, 0 );
+                                if ( x_pos1 != 0 ) nothingHappens = false;
+                                xy.at( i )->setX( -( ox + ow - x_pos1 ) );
+                                xy.at( i )->setY( y_pos1 );
+                                xy.at( i )->setWidth( 0 );
+                                xy.at( i )->setHeight( 0 );
+                            } break;
+                            case EF3_GO_TOP:
+                            {
+                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
+                                         oy - diffy() + oh - _step_height * _step : 0;
+                                x_pos1 = 0;
+                                drawObject( kpobject, screen, x_pos1, -( ( oy - diffy() ) + oh - y_pos1 ), 0, 0, 0, 0 );
+                                if ( y_pos1 != 0 ) nothingHappens = false;
+                                xy.at( i )->setX( x_pos1 );
+                                xy.at( i )->setY( -( ( oy - diffy() ) + oh - y_pos1 ) );
+                                xy.at( i )->setWidth( 0 );
+                                xy.at( i )->setHeight( 0 );
+                            } break;
+                            case EF3_GO_RIGHT:
+                            {
+                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
+                                         _w - ( _step_width * _step ) : 0;
+                                y_pos2 = 0;
+                                int __w = kapp->desktop()->width() - ox;
+                                drawObject( kpobject, screen, __w - x_pos2, y_pos2, 0, 0, 0, 0 );
+                                if ( x_pos2 != 0 ) nothingHappens = false;
+                                xy.at( i )->setX( __w - x_pos2 );
+                                xy.at( i )->setY( y_pos2 );
+                                xy.at( i )->setWidth( 0 );
+                                xy.at( i )->setHeight( 0 );
+                            } break;
+                            case EF3_GO_BOTTOM:
+                            {
+                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
+                                         _h - ( _step_height * _step ) : 0;
+                                x_pos2 = 0;
+                                int __h = kapp->desktop()->height() - ( oy - diffy() );
+                                drawObject( kpobject, screen, x_pos2, __h - y_pos2, 0, 0, 0, 0 );
+                                if ( y_pos2 != 0 ) nothingHappens = false;
+                                xy.at( i )->setX( x_pos2 );
+                                xy.at( i )->setY( __h - y_pos2 );
+                                xy.at( i )->setWidth( 0 );
+                                xy.at( i )->setHeight( 0 );
+                            } break;
+                            case EF3_GO_LEFT_TOP:
+                            {
+                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
+                                         ox - diffx() + ow - _step_width * _step : 0;
+                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
+                                         oy - diffy() + oh - _step_height * _step : 0;
+                                drawObject( kpobject, screen, -( ox + ow - x_pos1 ), -( ( oy - diffy() ) + oh - y_pos1 ), 0, 0, 0, 0 );
+                                if ( x_pos1 != 0 || y_pos1 != 0 ) nothingHappens = false;
+                                xy.at( i )->setX( -( ox + ow - x_pos1 ) );
+                                xy.at( i )->setY( -( ( oy - diffy() ) + oh - y_pos1 ) );
+                                xy.at( i )->setWidth( 0 );
+                                xy.at( i )->setHeight( 0 );
+                            } break;
+                            case EF3_GO_LEFT_BOTTOM:
+                            {
+                                x_pos1 = _step_width * _step < ox - diffx() + ow ?
+                                         ox - diffx() + ow - _step_width * _step : 0;
+                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
+                                         _h - ( _step_height * _step ) : 0;
+                                int __h = kapp->desktop()->height() - ( oy - diffy() );
+                                drawObject( kpobject, screen, -( ox + ow - x_pos1 ), __h -  y_pos2, 0, 0, 0, 0 );
+                                if ( x_pos1 != 0 || y_pos2 != 0 ) nothingHappens = false;
+                                xy.at( i )->setX( -( ox + ow - x_pos1 ) );
+                                xy.at( i )->setY( __h - y_pos2 );
+                                xy.at( i )->setWidth( 0 );
+                                xy.at( i )->setHeight( 0 );
+                            } break;
+                            case EF3_GO_RIGHT_TOP:
+                            {
+                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
+                                         _w - ( _step_width * _step ) : 0;
+                                y_pos1 = _step_height * _step < oy - diffy() + oh ?
+                                         oy - diffy() + oh - _step_height * _step : 0;
+                                int __w = kapp->desktop()->width() - ox;
+                                drawObject( kpobject, screen, __w - x_pos2, -( ( oy - diffy() ) + oh - y_pos1 ), 0, 0, 0, 0 );
+                                if ( x_pos2 != 0 || y_pos1 != 0 ) nothingHappens = false;
+                                xy.at( i )->setX( __w - x_pos2 );
+                                xy.at( i )->setY( -( ( oy - diffy() ) + oh - y_pos1 ) );
+                                xy.at( i )->setWidth( 0 );
+                                xy.at( i )->setHeight( 0 );
+                            } break;
+                            case EF3_GO_RIGHT_BOTTOM:
+                            {
+                                x_pos2 = _w - ( _step_width * _step ) + ( ox - diffx() ) > ox - diffx() ?
+                                         _w - ( _step_width * _step ) : 0;
+                                y_pos2 = _h - ( _step_height * _step ) + ( oy - diffy() ) > oy - diffy() ?
+                                         _h - ( _step_height * _step ) : 0;
+                                int __w = kapp->desktop()->width() - ox;
+                                int __h = kapp->desktop()->height() - ( oy - diffy() );
+                                drawObject( kpobject, screen, __w - x_pos2, __h - y_pos2, 0, 0, 0, 0 );
+                                if ( x_pos2 != 0 || y_pos2 != 0 ) nothingHappens = false;
+                                xy.at( i )->setX( __w - x_pos2 );
+                                xy.at( i )->setY( __h - y_pos2 );
+                                xy.at( i )->setWidth( 0 );
+                                xy.at( i )->setHeight( 0 );
+                            } break;
+                            default:
+                                break;
+                            }
                         }
                     }
                     newRect.setRect( bx - ( diffx() - xy.at( i )->x() ), by - ( diffy() - xy.at( i )->y() ), bw - xy.at( i )->width(), bh - xy.at( i )->height() );

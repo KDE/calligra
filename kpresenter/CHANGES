@@ -265,3 +265,8 @@ Reggie, 30.5.1999:
 - Setting linespacing, parag-dist (before and after) and depth is applied
   to all selected parags if there are selected some.
 - First effects for disappearing objects are working (go to left, right, top and bottom)
+
+Reggie, 31.5.1999:
+------------------
+- Fixes in effects for disappearing objs
+- Implemented more effects for disappearing objs
