@@ -158,12 +158,12 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
 
   if ( m_strURL.isEmpty() )
   {	
-    kdebug( KDEBUG_INFO, 30003, "Empty 'id' attribute in OBJECT" );
+    kdebug( KDEBUG_INFO, 30003, "Empty 'url' attribute in OBJECT" );
     return false;
   }
   else if ( m_strMimeType.isEmpty() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Empty mime attribute in OBJECT" );
+    kdebug( KDEBUG_INFO, 30003, "Empty 'mime' attribute in OBJECT" );
     return false;
   }
 
@@ -388,9 +388,17 @@ void KoDocument::makeChildList( KOffice::Document_ptr _root, const char *_url )
       is_embedded = false;
   }
 
+  /*
+    Reggie says : always save the document in the store, no external document.
+    (David)
   // If not stored extern, we want to embed it and take the suggested name.
   if ( is_embedded )
+  */
+  
+  {
+  
     setURL( _url );
+  }
 
   // Tell our parent about us and our decision regarding the URL
   _root->addToChildList( this, _url );
