@@ -386,7 +386,7 @@ void KoPageLayoutDia::setupTab1()
     QWidget *dummyWidget = new QWidget( marginsFrame );
     
     QGridLayout *marginsLayout = new QGridLayout( dummyWidget, 3, 3,
-       KDialog::marginHint(), KDialog::spacingHint() );
+       0, KDialog::spacingHint() );
 
     // left margin
     ebrLeft = new KDoubleNumInput( dummyWidget, "Left" );
