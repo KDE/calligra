@@ -6,6 +6,8 @@
 #include <kparts/event.h>
 #include <kdebug.h>
 
+#define QMAX32767(a,b) QMAX(QMAX(32767,a),b)
+
 class KoFramePrivate
 {
 public:
@@ -57,8 +59,12 @@ void KoFrame::setView( KoView *view )
   {
     d->m_view->installEventFilter( this );
 
-    setMaximumSize( QMAX( d->m_view->maximumWidth() + 2 * border(), d->m_view->maximumWidth() ),
-		    QMAX( d->m_view->maximumHeight() + 2 * border(), d->m_view->maximumHeight() ) );
+    // #### Do we need this ?
+    // 1 - it seems border is 0
+    // 2 - setState will be called anyway
+    // (David)
+    setMaximumSize( QMAX32767( d->m_view->maximumWidth() + 2 * border(), d->m_view->maximumWidth() ),
+		    QMAX32767( d->m_view->maximumHeight() + 2 * border(), d->m_view->maximumHeight() ) );
     setMinimumSize( d->m_view->minimumWidth() + leftBorder() + rightBorder(),
 		    d->m_view->minimumHeight() + topBorder() + bottomBorder() );
 
@@ -82,8 +88,14 @@ void KoFrame::setState( State s )
 
   if ( d->m_view )
   {
-      setMaximumSize( QMAX( d->m_view->maximumWidth() + 2 * border(), d->m_view->maximumWidth() ),
-		      QMAX( d->m_view->maximumHeight() + 2 * border(), d->m_view->maximumHeight() ) );
+      /*
+      kdDebug(30003) << "KoFrame::setView setMaximumSize "
+              << "QMAX32767(" << d->m_view->maximumWidth() + 2 * border() << "," << d->m_view->maximumWidth() << "), "
+              << "QMAX32767(" << d->m_view->maximumHeight() + 2 * border() << "," <<  d->m_view->maximumHeight() << ")"
+              << endl;
+      */
+      setMaximumSize( QMAX32767( d->m_view->maximumWidth() + 2 * border(), d->m_view->maximumWidth() ),
+		      QMAX32767( d->m_view->maximumHeight() + 2 * border(), d->m_view->maximumHeight() ) );
       setMinimumSize( d->m_view->minimumWidth() + leftBorder() + rightBorder(),
 		      d->m_view->minimumHeight() + topBorder() + bottomBorder() );
   }
