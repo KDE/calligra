@@ -1623,20 +1623,30 @@ void KWFormulaFrameSetEdit::keyPressEvent(QKeyEvent* event)
 
 void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
 {
-    // TODO pass the zoomed or unzoomed coordinates - kformula doesn't know about the real coordinates
     // [Note that this method is called upon RMB and MMB as well, now]
-    formulaView->mousePressEvent(event);
+    QPoint nPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
+    nPoint.setX( event->pos().x()-nPoint.x() );
+    nPoint.setY( event->pos().y()-nPoint.y() );
+    QMouseEvent e( event->type(), nPoint, event->button(), event->state() );
+    formulaView->mousePressEvent( &e );
 }
 
 void KWFormulaFrameSetEdit::mouseMoveEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
 {
-    // TODO pass the zoomed or unzoomed coordinates - kformula doesn't know about the real coordinates
-    formulaView->mouseMoveEvent(event);
+    QPoint nPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
+    nPoint.setX( event->pos().x()-nPoint.x() );
+    nPoint.setY( event->pos().y()-nPoint.y() );
+    QMouseEvent e( event->type(), nPoint, event->button(), event->state() );
+    formulaView->mouseMoveEvent( &e );
 }
 
 void KWFormulaFrameSetEdit::mouseReleaseEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
 {
-    formulaView->mouseReleaseEvent(event);
+    QPoint nPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
+    nPoint.setX( event->pos().x()-nPoint.x() );
+    nPoint.setY( event->pos().y()-nPoint.y() );
+    QMouseEvent e( event->type(), nPoint, event->button(), event->state() );
+    formulaView->mouseReleaseEvent( &e );
 }
 
 void KWFormulaFrameSetEdit::focusInEvent()
