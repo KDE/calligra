@@ -1569,7 +1569,7 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
     return fileName;
 }
 
-int KPresenterDoc::insertNewPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
+int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
 {
     kdDebug(33001) << "KPresenterDoc::insertNewPage " << _page << endl;
 
@@ -1593,7 +1593,7 @@ int KPresenterDoc::insertNewPage( int _page, InsertPos _insPos, bool chooseTempl
 
     objStartY = 0;
 
-    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Insert new page") ,_page, newpage, this );
+    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(cmdName ,_page, newpage, this );
     cmd->execute();
     addCommand(cmd);
 
@@ -1806,7 +1806,23 @@ void KPresenterDoc::copyPage( int from, int to )
     KTempFile tempFile( QString::null, ".kpr" );
     tempFile.setAutoDelete( true );
     savePage( tempFile.name(), from );
-    insertPage( to, IP_BEFORE, FALSE, tempFile.name() );
+
+    _clean = false;
+
+    //insert page.
+    KPrPage *newpage=new KPrPage(this);
+
+    m_pageWhereLoadObject=newpage;
+
+    loadNativeFormat( tempFile.name() );
+
+    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Duplicate page") ,to, newpage, this );
+    cmd->execute();
+    addCommand(cmd);
+
+    _clean = true;
+    m_pageWhereLoadObject=0L;
+
     selectPage( to, wasSelected );
 }
 
@@ -1831,8 +1847,8 @@ void KPresenterDoc::pastePage( const QMimeSource * data, int pgnum )
     KURL::List lst;
     if ( KURLDrag::decode( data, lst ) && !lst.isEmpty() )
     {
-        insertPage( pgnum, IP_BEFORE, FALSE, lst.first().path() );
-        selectPage( pgnum, true /* should be part of the file ? */ );
+        insertNewPage(i18n("Paste page"),  pgnum, IP_BEFORE, FALSE, lst.first().path() );
+        //selectPage( pgnum, true /* should be part of the file ? */ );
     }
 }
 

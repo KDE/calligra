@@ -162,7 +162,7 @@ public:
     int insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
 
     QString templateFileName(bool chooseTemplate, const QString &theFile );
-    int insertNewPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
+    int insertNewPage( const QString &cmdName,int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile );
 
     void insertPage( KPrPage *_page, int position);
     void takePage(KPrPage *_page);

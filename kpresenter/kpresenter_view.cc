@@ -535,7 +535,7 @@ void KPresenterView::insertPage()
     if ( dia.exec() != QDialog::Accepted )
 	return;
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
-    int pg = m_pKPresenterDoc->insertNewPage( currPg, pos, dia.radioDifferent->isChecked(), QString::null );
+    int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new page"),currPg, pos, dia.radioDifferent->isChecked(), QString::null );
     setRanges();
     if ( pg != -1 )
 	skipToPage( pg );
