@@ -275,6 +275,8 @@ don't put a </?xml...> at the end of the file!).
                             can be 1 or greater.
 
             cols:           Ditto for columns.
+           
+            protectcontent: Protect content of text object
 
 -->
 <!ELEMENT FRAMESET
@@ -289,7 +291,8 @@ don't put a </?xml...> at the end of the file!).
     row CDATA #IMPLIED
     col CDATA #IMPLIED
     rows CDATA #IMPLIED
-    cols CDATA #IMPLIED>
+    cols CDATA #IMPLIED
+    protectcontent CDATA #IMPLIED>
 
 <!ELEMENT FRAME
     EMPTY>

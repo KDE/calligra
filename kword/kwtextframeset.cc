@@ -1426,6 +1426,8 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
         framesetElem.setAttribute( "cols", cell->m_cols );
         framesetElem.setAttribute( "removable", static_cast<int>( m_removeableHeader ) );
     }
+    if ( protectContent() )
+        framesetElem.setAttribute( "protectcontent", static_cast<int>(protectContent()));
 
     KWFrameSet::saveCommon( framesetElem, saveFrames );
 
@@ -1443,6 +1445,8 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
 {
     KWFrameSet::load( attributes, loadFrames );
+    if ( attributes.hasAttribute( "protectcontent"))
+        setProtectContent((bool)attributes.attribute( "protectcontent" ).toInt());
 
     textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
     m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
