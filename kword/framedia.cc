@@ -181,6 +181,7 @@ void KWFrameDia::init() {
     if( fs && fs->isMainFrameset() )
     {
         setupTab5();
+        setupTab4();
     }
     else if ( fs && (fs->isHeaderOrFooter() || fs->isFootEndNote()) )
     {
@@ -857,6 +858,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     bool disable = false;
     bool disableMargins = false;
+    bool isMainFrame = false;
     // Only one frame selected, or when creating a frame -> enable coordinates
     if ( doc->isOnlyOneFrameSelected() || !frame->frameSet() )
     {
@@ -889,7 +891,10 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         if ( fs && ( fs->isHeaderOrFooter() || fs->isMainFrameset() || fs->isFootEndNote()) )
             disable = true;
         if ( fs && fs->isMainFrameset() )
-            disableMargins = true;
+        {
+            disableMargins = false;
+            isMainFrame = true;
+        }
     }
     else
     {
@@ -906,7 +911,12 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sh->setEnabled( false );
         floating->setEnabled( false );
     }
-
+    if ( isMainFrame )
+    {
+        grp1->hide();
+        floating->hide( );
+        protectSize->hide();
+    }
     if (tab1 && cbProtectContent )
     {
         bool state = cbProtectContent->isChecked();
@@ -1623,10 +1633,14 @@ bool KWFrameDia::applyChanges()
             cmd->execute();
 
         }
-        if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
+        if ( doc->isOnlyOneFrameSelected() /*&& ( doc->processingType() == KWDocument::DTP ||
                                                 ( doc->processingType() == KWDocument::WP &&
-                                                  doc->frameSetNum( frame->frameSet() ) > 0 ) ) ) {
-            if ( oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() ) {
+                                                doc->frameSetNum( frame->frameSet() ) > 0 ) ) */)
+        {
+            bool state = ( doc->processingType() == KWDocument::DTP ||
+                           ( doc->processingType() == KWDocument::WP &&
+                             doc->frameSetNum( frame->frameSet() ) > 0 ) );
+            if ( state && (oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() )) {
                 //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
                 //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
                 //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
