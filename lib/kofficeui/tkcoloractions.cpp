@@ -55,12 +55,12 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObjec
     case LineColor:
       m_pMenu->insertItem(i18n("More Line Colors..."),this,SLOT(selectColorDialog()));
       setCurrentColor(black);
-      setIcon("pencolor");
+      setIcon("color_line");
       break;
     case FillColor:
       m_pMenu->insertItem(i18n("More Fill Colors..."),this,SLOT(selectColorDialog()));
       setCurrentColor(white);
-      setIcon("fillcolor");
+      setIcon("color_fill");
       break;
     case Color:
       break;
