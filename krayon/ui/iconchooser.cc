@@ -33,16 +33,13 @@
 
 
 IconChooser::IconChooser( QWidget *parent, QSize iconSize, const char *name )
-  : QtTableView( parent, name )
+  : super(parent, name)
 {
-    setTableFlags(  Tbl_vScrollBar |  Tbl_clipCellPainting | Tbl_cutCellsH |
-		    Tbl_snapToGrid );
-    QtTableView::setBackgroundColor(white);
+    super::setBackgroundColor(white);
 
     margin = 2; // a cell is 2 * two pixels larger than an item
     setCellWidth( iconSize.width() + 2*margin );
     setCellHeight( iconSize.height() + 2*margin );
-    updateTableSize();
 
     iconList.clear();
     pw           = 0L;
@@ -136,8 +133,8 @@ void IconChooser::setCurrentItem( IconItem *item )
         curCol = index - (curRow * nCols);
 
         // repaint the old and the new item
-        updateCell( oldRow, oldCol, true );
-        updateCell( curRow, curCol, true );
+        updateCell( oldRow, oldCol);
+        updateCell( curRow, curCol);
     }
 }
 
@@ -147,19 +144,20 @@ void IconChooser::setCurrentItem( IconItem *item )
 
 void IconChooser::calculateCells()
 {
-    if( nCols == 0 )
-        return;
+	if (nCols == 0)
+		return;
 
-    bool update = autoUpdate();
-    setAutoUpdate( false );
+	bool update = isUpdatesEnabled();
+	int rows = itemCount / nCols;
 
-    int rows = itemCount / nCols;
-    if ( (rows * nCols) < itemCount )
-        rows++;
+	setUpdatesEnabled(false);
 
-    setNumRows( rows );
-    setAutoUpdate( update );
-    repaint();
+	if ((rows * nCols) < itemCount)
+		rows++;
+
+	setNumRows(rows);
+	setUpdatesEnabled(update);
+	repaint();
 }
 
 // recalculate the number of items that fit into one row
@@ -167,12 +165,12 @@ void IconChooser::calculateCells()
 
 void IconChooser::resizeEvent ( QResizeEvent *e )
 {
-    QtTableView::resizeEvent( e );
+    super::resizeEvent( e );
     Q_ASSERT( cellWidth() > 0 );
 
     IconItem *item = currentItem();
     int oldNCols = nCols;
-    nCols = viewWidth() / cellWidth();
+    nCols = numCols();
 
     if ( nCols != oldNCols )
     {
@@ -267,14 +265,13 @@ int IconChooser::cellIndex( int row, int col )
 // eventually select the item, clicked on
 void IconChooser::mousePressEvent( QMouseEvent *e )
 {
-    QtTableView::mousePressEvent( e );
+    super::mousePressEvent( e );
 
     if ( e->button() == LeftButton )
     {
         QPoint p = e->pos();
-
-        int row = findRow( p.y() );
-        int col = findCol( p.x() );
+	int row = rowAt(p.y());
+	int col = columnAt(p.x());
 
         IconItem *item = itemAt( row, col );
         if ( item )
@@ -289,8 +286,8 @@ void IconChooser::mousePressEvent( QMouseEvent *e )
             curRow = row;
             curCol = col;
 
-            updateCell( oldRow, oldCol, true );
-            updateCell( curRow, curCol, true );
+            updateCell( oldRow, oldCol);
+            updateCell( curRow, curCol);
 
             emit selected( item );
         }
@@ -318,7 +315,7 @@ void IconChooser::showFullPixmap( const QPixmap& pix, const QPoint& )
 // FIXME: implement keyboard navigation
 void IconChooser::keyPressEvent( QKeyEvent *e )
 {
-    QtTableView::keyPressEvent( e ); // for now...
+    super::keyPressEvent( e ); // for now...
 }
 
 

@@ -124,7 +124,7 @@ void KisLayerView::showScrollBars( )
 }
 
 LayerTable::LayerTable( QWidget* parent, const char* name )
-  : QtTableView( parent, name )
+  : super( parent, name )
 {
     pLayerView = 0L;
     init( 0 );
@@ -132,7 +132,7 @@ LayerTable::LayerTable( QWidget* parent, const char* name )
 
 
 LayerTable::LayerTable( KisDoc* doc, QWidget* parent, const char* name )
-  : QtTableView( parent, name )
+  : super( parent, name )
 {
     pLayerView = 0L;
     init( doc );
@@ -140,7 +140,7 @@ LayerTable::LayerTable( KisDoc* doc, QWidget* parent, const char* name )
 
 LayerTable::LayerTable( KisDoc* doc, QWidget* parent,
 KisLayerView *layerview, const char* name )
-  : QtTableView(parent, name )
+  : super(parent, name )
 {
     pLayerView = layerview;
     init( doc );
@@ -148,8 +148,6 @@ KisLayerView *layerview, const char* name )
 
 void LayerTable::init( KisDoc* doc)
 {
-    setTableFlags(Tbl_autoVScrollBar | Tbl_autoHScrollBar);
-
     m_doc = doc;
     setBackgroundColor( white );
 
@@ -214,8 +212,6 @@ void LayerTable::init( KisDoc* doc)
         SLOT( slotMenuAction( int ) ) );
     connect( doc, SIGNAL( layersUpdated()),
         this, SLOT( slotDocUpdated () ) );
-
-    setAutoUpdate(true);
 }
 
 
@@ -232,12 +228,12 @@ void LayerTable::paintCell( QPainter* painter, int row, int )
     if( row == m_selected )
     {
         painter->fillRect( 0, 0,
-            cellWidth(0) - 1, cellHeight() - 1, gray);
+            cellWidth() - 1, cellHeight() - 1, gray);
     }
     else
     {
         painter->fillRect( 0, 0,
-            cellWidth(0) - 1, cellHeight() - 1, lightGray);
+            cellWidth() - 1, cellHeight() - 1, lightGray);
     }
 
     style().drawPrimitive( QStyle::PE_Panel, painter,
@@ -275,7 +271,7 @@ void LayerTable::paintCell( QPainter* painter, int row, int )
                                   mPreviewRect.width(), mPreviewRect.height() ),
                            colorGroup() ); //, true );
 
-    painter->drawRect(0, 0, cellWidth(0) - 1, cellHeight() - 1);
+    painter->drawRect(0, 0, cellWidth() - 1, cellHeight() - 1);
     painter->drawText(iheight * 3 + 3*3, 20,
         m_doc->current()->layerList().at(row)->name());
 }
@@ -396,7 +392,7 @@ QSize LayerTable::sizeHint() const
 
 void LayerTable::mousePressEvent( QMouseEvent *ev)
 {
-    int row = findRow( ev->pos().y() );
+    int row = rowAt( ev->pos().y() );
     QPoint localPoint( ev->pos().x() % cellWidth(),
         ev->pos().y() % cellHeight() );
 

@@ -119,14 +119,14 @@ void KisChannelView::showScrollBars( )
 
 
 ChannelTable::ChannelTable( QWidget* _parent, const char* _name )
-  : QtTableView( _parent, _name )
+  : super( _parent, _name )
 {
     pChannelView = 0L;
     init( 0 );
 }
 
 ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent, const char* _name )
-  : QtTableView( _parent, _name )
+  : super( _parent, _name )
 {
     pChannelView = 0L;
     init( doc );
@@ -134,7 +134,7 @@ ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent, const char* _name )
 
 ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent,
     KisChannelView *_channelview, const char* _name )
-    : QtTableView( _parent, _name )
+    : super( _parent, _name )
 {
     pChannelView = _channelview;
     init( doc );
@@ -143,7 +143,6 @@ ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent,
 
 void ChannelTable::init( KisDoc* doc )
 {
-    setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
     m_doc = doc;
 
     setBackgroundColor( white );
@@ -203,8 +202,6 @@ void ChannelTable::init( KisDoc* doc )
         SLOT( slotMenuAction( int ) ) );
     connect( submenu, SIGNAL( activated( int ) ),
         SLOT( slotMenuAction( int ) ) );
-
-    setAutoUpdate(true);
 }
 
 
@@ -235,10 +232,7 @@ void ChannelTable::paintCell( QPainter* _painter, int _row, int /* _col */)
     }
 
     if( _row == m_selected )
-    {
-        _painter->fillRect( 0, 0, cellWidth( 0 ) - 1,
-            cellHeight() - 1, color);
-    }
+        _painter->fillRect( 0, 0, cellWidth() - 1, cellHeight() - 1, color);
 
     style().drawPrimitive( QStyle::PE_Panel, _painter,
                            QRect( mVisibleRect.x(), mVisibleRect.y(),
@@ -259,7 +253,7 @@ void ChannelTable::paintCell( QPainter* _painter, int _row, int /* _col */)
                            mPreviewRect.width(), mPreviewRect.height() ),
                            colorGroup() ); //, true );
 
-    _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
+    _painter->drawRect( 0, 0, cellWidth() - 1, cellHeight() - 1);
     _painter->drawText( 80, 20, tmp );
 }
 
@@ -330,7 +324,7 @@ QSize ChannelTable::sizeHint() const
 
 void ChannelTable::mousePressEvent( QMouseEvent *_event )
 {
-    int row = findRow( _event->pos().y() );
+    int row = rowAt(_event -> pos().y());
     if (row < 0) return;
 
     QPoint localPoint( _event->pos().x() % cellWidth(),

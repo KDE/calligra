@@ -24,10 +24,9 @@
 #define ICONCHOOSER_H
 
 #include <qevent.h>
-#include <qptrlist.h>
+#include <qgridview.h>
 #include <qpixmap.h>
-#include <qttableview.h>
-
+#include <qptrlist.h>
 
 class QColor;
 class QFrame;
@@ -35,9 +34,10 @@ class QPainter;
 class IconItem;
 class PixmapWidget;
 
-class IconChooser: public QtTableView
-{
+class IconChooser: public QGridView {
   Q_OBJECT
+
+  typedef QGridView super;
 
 public:
   IconChooser( QWidget *parent, QSize iconSize, const char *name );

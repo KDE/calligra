@@ -24,7 +24,7 @@
 #define __kis_layerview_h__
 
 #include <qdialog.h>
-#include <qttableview.h>
+#include <qgridview.h>
 #include <qrect.h>
 
 #define CELLWIDTH   200
@@ -66,9 +66,11 @@ private:
     KisFrameButton *pbDown;
 };
 
-class LayerTable : public QtTableView
+class LayerTable : public QGridView
 {
     Q_OBJECT
+
+    typedef QGridView super;
 
 public:
 

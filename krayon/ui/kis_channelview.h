@@ -29,7 +29,7 @@
 #define MAXROWS	    8
 
 #include <qdialog.h>
-#include <qttableview.h>
+#include <qgridview.h>
 #include <qrect.h>
 
 class KisDoc;
@@ -67,9 +67,10 @@ private:
     KisFrameButton *pbDown;
 };
 
-class ChannelTable : public QtTableView
-{
+class ChannelTable : public QGridView {
     Q_OBJECT
+
+    typedef QGridView super;
 
 public:
 
