@@ -22,81 +22,68 @@
  *   OTHER DEALINGS IN THE SOFTWARE.                                       *
  ***************************************************************************/
 
-#ifndef KSPREAD_PLUGININSERTCALENDAR_H
-#define KSPREAD_PLUGININSERTCALENDAR_H
- 
-#include <kparts/plugin.h>
-#include <kparts/genericfactory.h>
+#include "kspread_plugininsertcalendar.h"
 
-#include <koffice_export.h>
-
-class KAboutData;
-
+#include <kaboutdata.h>
+#include <klocale.h>
+#include <kofficeversion.h>
 
 namespace KSpread
 {
 
-class InsertCalendarSettings;
+// make the plugin available
+typedef KGenericFactory<PluginInsertCalendar> InsertCalendarFactory;
+K_EXPORT_COMPONENT_FACTORY( libkspreadinsertcalendar,  InsertCalendarFactory("kspread"))
 
 /**
- * \class PluginInsertCalender kspread_plugininsertcalendar.h
- * \brief Plugin for inserting a calendar into a spreadsheet.
+ * \class InsertCalendarSettings kspread_plugininsertcalendar.cc
+ * \brief Holds all settings for the insertion (start/end dates, ...).
  * @author Raphael Langerhorst
- * 
- * The plugin class for the Insert Calendar plugin.
- * This plugin is designed to work in KSpread and
- * makes it possible to insert calendars into
- * the spreadsheet.
  */
-class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
+class InsertCalendarSettings
 {
-  Q_OBJECT
-  
-  protected:
-  
-    /**
-     * All settings that are made in the dialog are stored
-     * here, when inserting a calendar these settings are used.
-     * @see slotInsert
-     */
-    InsertCalendarSettings* m_pSettings;
-    
-  public:
-    
-    /**
-     * Constructor. This constructor is usable with KParts::GenericFactory.
-     */
-    PluginInsertCalendar( QObject *parent, const char *name, const QStringList& args );
-    
-    /**
-     * Virtual destructor.
-     */
-    virtual ~PluginInsertCalendar();
-     
-  public:
-  
-    /**
-     * Creates about data for the Insert Calendar plugin.
-     */
-    static KAboutData* createAboutData();
- 
-  public slots:
- 
-     /**
-      * This is called from the plugin action, it shows a dialog that
-      * allows start and end date selection and various other
-      * options. The calendar can then be inserted into a spreadsheet.
-      */
-     void slotShowDialog();
-     
-     /**
-      * This actually inserts the calendar. It reads the configuration
-      * from the settings and builds an calendar in the spreadsheet
-      * accordingly.
-      */
-     void slotInsert();
+  int start, end;
 };
 
+static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
+
+// Always the same as the KOffice version
+static const char* version=KOFFICE_VERSION_STRING;
+
+PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char *name, const QStringList& args )
+: Plugin(parent,name)
+{
+    this->m_pSettings = new InsertCalendarSettings();
+    
+    (void)new KAction( i18n("Insert Calendar"), KShortcut::null(),
+                   this, SLOT( slotShowDialog() ), actionCollection(), "kspreadinsertcalendar");
 }
 
-#endif
+PluginInsertCalendar::~PluginInsertCalendar()
+{
+}
+     
+KAboutData* PluginInsertCalendar::createAboutData()
+{
+  KAboutData * aboutData = new KAboutData( "kspreadinsertcalendar", I18N_NOOP("Insert Calendar"),
+                   KOFFICE_VERSION_STRING, I18N_NOOP("KSpread Insert Calendar Plugin"),
+                   KAboutData::License_BSD, I18N_NOOP("(c) 2005, The KSpread Team"), 0,
+                   "http://www.koffice.org/kspread/");
+  aboutData->addAuthor("Raphael Langerhorst", 0, "raphael-langerhorst@gmx.at");
+  
+  return aboutData;
+}
+ 
+void PluginInsertCalendar::slotShowDialog()
+{
+  //@todo implement
+  kdDebug() << "slotShowDialog..." << endl;
+}
+
+void PluginInsertCalendar::slotInsert()
+{
+  //@todo implement
+  kdDebug() << "slotInsert..." << endl;
+}
+
+}
