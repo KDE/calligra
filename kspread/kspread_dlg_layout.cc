@@ -606,7 +606,8 @@ void CellLayoutDlg::init()
     patternPage=new CellLayoutPagePattern(tab,this);
     tab->addTab( patternPage,i18n("Back&ground"));
 
-    tab->setCancelButton();
+    tab->setCancelButton(i18n("&Cancel"));
+    tab->setOkButton(i18n("&OK"));
 
     tab->setCaption(i18n("Cell Format"));
 
