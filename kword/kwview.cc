@@ -64,6 +64,7 @@
 #include <koTemplateCreateDia.h>
 #include <koFrame.h>
 
+#include <ktempfile.h>
 #include <kapp.h>
 #include <kfiledialog.h>
 #include <kstdaction.h>
@@ -1520,12 +1521,14 @@ void KWView::extraCreateTemplate()
     QPixmap pix( 45, 60 );
     pix.fill( Qt::white );
 
-    QString file = "/tmp/kwt.kwt";
-    doc->saveNativeFormat( file );
+    KTempFile tempFile;
+    tempFile.setAutoDelete(true);
+
+    doc->saveNativeFormat( tempFile.name() );
 
     KoTemplateCreateDia::createTemplate( "kword_template", KWFactory::global(),
-                                         file, pix, this );
-    system( QString( "rm %1" ).arg( file ).latin1() );
+                                         tempFile.name(), pix, this );
+
     KWFactory::global()->dirs()->addResourceType("kword_template",
                                                     KStandardDirs::kde_default( "data" ) +
                                                     "kword/templates/");
