@@ -934,8 +934,6 @@ void KoVariable::loadOasis( const QDomElement &/*elem*/, KoOasisContext& /*conte
 
 void KoVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    // TODO implement saving variables
-    kdWarning(32500) << "Not implemented: OASIS saving of variables" << endl;
 }
 
 void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )
@@ -1454,7 +1452,8 @@ void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*con
 
 void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    //todo
+    kdWarning(32500) << "Not implemented: OASIS saving of custom variables" << endl;
+
 }
 
 QString KoCustomVariable::value() const
@@ -2224,7 +2223,7 @@ void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*
 
 void KoMailMergeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    //todo
+        kdWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
 }
 
 
@@ -2235,7 +2234,8 @@ void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
 
 void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    // TODO
+    kdWarning(32500) << "Not implemented: OASIS saving of links variables" << endl;
+
 }
 
 void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
@@ -2245,5 +2245,5 @@ void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
 
 void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    //todo
+    kdWarning(32500) << "Not implemented: OASIS saving of note variables" << endl;
 }
