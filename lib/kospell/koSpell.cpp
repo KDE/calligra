@@ -295,7 +295,7 @@ QStringList KOSpell::resultCheckWord( const QString &_word )
 bool KOSpell::spellWord( const QString &_word )
 {
     QStringList lst =resultCheckWord( _word );
-    if ( lst.isEmpty() && (lastpos >= (int)origbuffer.length()-1) )
+    if ( lst.isEmpty() && ((lastpos >= (int)origbuffer.length()-1)|| lastpos<0) )
     {
         emit death();
         m_status = Finished;
@@ -357,7 +357,6 @@ void KOSpell::testIgnoreWord( QString & word )
 void KOSpell::previousWord()
 {
     QString word;
-    offset=0;
     do
     {
         int i =0;
@@ -366,7 +365,7 @@ void KOSpell::previousWord()
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
             {
-                lastpos --;
+                lastpos--;
                 break;
             }
             word.prepend(ch);
