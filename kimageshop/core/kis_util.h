@@ -38,6 +38,8 @@ const int TILE_SIZE = 128;
 // Used to make numbers round towards + or - infinity regardless of sign
 const long BIGNUM = (TILE_SIZE*10000);
 
+
+
 class KisUtil
 {
  public:

@@ -1,5 +1,5 @@
 /*
- *  kis_factory.h - part of KImageShop
+ *  example.cc - part of Example KImageShop plugin
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
@@ -18,29 +18,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __kis_factory_h__
-#define __kis_factory_h__
+#include "example.h"
 
-#include <klibloader.h>
-
-class KInstance;
-class KisPluginServer;
-
-class KisFactory : public KLibFactory
-{
-    Q_OBJECT
-public:
-    KisFactory( QObject* parent = 0, const char* name = 0 );
-    ~KisFactory();
-
-    virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
-
-    static KInstance* global();
-    static KisPluginServer* pServer();
-
-private:
-    static KInstance*       s_global;
-    static KisPluginServer* s_pserver;
-};
-
-#endif
+KispExample::KispExample() {}

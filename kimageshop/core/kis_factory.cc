@@ -23,6 +23,7 @@
 #include <kstddirs.h>
 
 #include "kis_factory.h"
+#include "kis_pluginserver.h"
 #include "kis_doc.h"
 
 extern "C"
@@ -34,6 +35,7 @@ extern "C"
 };
 
 KInstance* KisFactory::s_global = 0;
+KisPluginServer* KisFactory::s_pserver = 0;
 
 KisFactory::KisFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
@@ -50,10 +52,16 @@ KisFactory::KisFactory( QObject* parent, const char* name )
 				    KStandardDirs::kde_default("data") + "koffice/toolbar/");
   s_global->dirs()->addResourceType("kis_pics",
 				    KStandardDirs::kde_default("data") + "kimageshop/pics/");
+  
+  s_global->dirs()->addResourceType("kis_plugins",
+				    KStandardDirs::kde_default("data") + "kimageshop/plugins/");
+
+  s_pserver = new KisPluginServer();
 }
 
 KisFactory::~KisFactory()
 {
+  delete s_pserver;
   delete s_global;
 }
 
@@ -73,6 +81,11 @@ QObject* KisFactory::create( QObject* parent, const char* name, const char* /*cl
 KInstance* KisFactory::global()
 {
     return s_global;
+}
+
+KisPluginServer* KisFactory::pServer()
+{
+    return s_pserver;
 }
 
 #include "kis_factory.moc"

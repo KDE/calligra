@@ -24,6 +24,7 @@
 struct timeval KisUtil::tv1, KisUtil::tv2;
 struct timezone KisUtil::tz;
 
+
 KisUtil::KisUtil() {}
 
 void KisUtil::printRect( const QRect& r, const QString& name )

@@ -7,7 +7,7 @@ libkimageshop_la_LDFLAGS = $(all_libraries) -avoid-version -module
 libkimageshop_la_LIBADD =  core/libkiscore.la ui/libkisui.la tools/libkistools.la \
 	../lib/kofficeui/libkofficeui.la
 
-SUBDIRS = core tools ui . data pics
+SUBDIRS = core tools ui . plugins data pics
 
 bin_PROGRAMS = kimageshop
 lib_LTLIBRARIES = libkimageshop.la
