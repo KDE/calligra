@@ -167,6 +167,45 @@ void KexiAlterTableDialog::init()
 	initActions();
 }
 
+bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiPropertyBuffer& buf)
+{
+	bool changed = false;
+	KexiProperty *prop;
+	bool visible;
+	//if there is no more than 1 subType name: hide the property
+	prop = buf["subType"];
+	visible = prop->keys() && prop->keys()->count()>1;
+	if (prop->isVisible()!=visible) {
+		prop->setVisible( visible );
+		changed = true;
+	}
+	prop = buf["unsigned"];
+	visible = KexiDB::Field::isNumericType(fieldType);
+	if (prop->isVisible()!=visible) {
+		prop->setVisible( visible );
+		changed = true;
+	}
+	prop = buf["length"];
+	visible = KexiDB::Field::isTextType(fieldType);
+	if (prop->isVisible()!=visible) {
+		prop->setVisible( visible );
+		changed = true;
+	}
+	prop = buf["precision"];
+	visible = KexiDB::Field::isFPNumericType(fieldType);
+	if (prop->isVisible()!=visible) {
+		prop->setVisible( visible );
+		changed = true;
+	}
+	prop = buf["notEmpty"];
+	visible = KexiDB::Field::hasEmptyProperty(fieldType);
+	if (prop->isVisible()!=visible) {
+		prop->setVisible( visible );
+		changed = true;
+	}
+	return changed;
+}
+
 KexiPropertyBuffer *
 KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 {
@@ -177,37 +216,29 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 	//name
 	KexiProperty *prop;
 	buff->add(prop = new KexiProperty("name", QVariant(field->name()), i18n("Name")) );
-	prop->setVisible(false);
+	prop->setVisible(false);//always hidden
 
 	//type
 	buff->add( prop = new KexiProperty("type", QVariant(field->type()), i18n("Type")) );
-	prop->setVisible(false);
+	prop->setVisible(false);//always hidden
 
 	//subtype
 	const QStringList slist = KexiDB::typeStringsForGroup(field->typeGroup());
 	const QStringList nlist = KexiDB::typeNamesForGroup(field->typeGroup());
 	kdDebug() << "KexiAlterTableDialog::init(): subType strings: " << 
 		slist.join("|") << "\nnames: " << nlist.join("|") << endl;
-	if (slist.count()>1) {//there is more than 1 type name
-		buff->add(new KexiProperty("subType", field->typeString(), slist, nlist, i18n("Subtype")));
-	}
+	buff->add(prop = new KexiProperty("subType", field->typeString(), slist, nlist, i18n("Subtype")));
 
 	buff->add( new KexiProperty("caption", QVariant(field->caption()), i18n("Caption") ) );
 
 	buff->add( prop = new KexiProperty("description", QVariant(field->description())) );
-	prop->setVisible(false);
+	prop->setVisible(false);//always hidden
 
 	buff->add(prop = new KexiProperty("unsigned", QVariant(field->isUnsigned(), 4), i18n("Unsigned number")));
-	if (!field->isNumericType())
-		prop->setVisible(false);
 
 	buff->add( prop = new KexiProperty("length", (int)field->length()/*200?*/, i18n("Length")));
-	if (!field->isTextType())
-		prop->setVisible(false);
 
 	buff->add( prop = new KexiProperty("precision", (int)field->precision()/*200?*/, i18n("Precision")));
-	if (!field->isFPNumericType())
-		prop->setVisible(false);
 
 //TODO: set reasonable default for column width...
 	buff->add( new KexiProperty("width", (int)field->width()/*200?*/, i18n("Column width")));
@@ -221,10 +252,10 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 	buff->add(new KexiProperty("notNull", QVariant(field->isNotNull(), 4), i18n("Required")));
 	
 	buff->add(prop = new KexiProperty("notEmpty", QVariant(field->isNotEmpty(), 4), i18n("Not Empty")));
-	if (!field->hasEmptyProperty())
-		prop->setVisible(false);
 
 	buff->add(new KexiProperty("indexed", QVariant(field->isIndexed(), 4), i18n("Indexed")));
+
+	updatePropertiesVisibility(field->type(), *buff);
 
 	m_fields.insert(row, buff);
 	return buff;
@@ -364,17 +395,16 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& buf,KexiPrope
 	//TODO
 }
 
-int typeForSelectedGroup( int typegroup )
+KexiDB::Field::Type firstTypeForSelectedGroup( int typegroup )
 {
-	typegroup++; /*counting from 1*/
 	//take the 1st type for the group
 	KexiDB::TypeGroupList tlst = KexiDB::typesForGroup( (KexiDB::Field::TypeGroup)typegroup );
 	if (tlst.isEmpty()) {//this should not be!
 		kdWarning() << "KexiAlterTableDialog::slotRowUpdated(): no types for group " 
 		<< typegroup << endl;
-		return 0;
+		return KexiDB::Field::InvalidType;
 	}
-	return tlst.first();
+	return static_cast<KexiDB::Field::Type>(tlst.first());
 }
 
 void KexiAlterTableDialog::slotBeforeCellChanged(
@@ -397,19 +427,38 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 //			m_view->acceptRowEdit();
 //}
 		if (newValue.isNull()) {
-			//col 1 will be cleared: clear row 0 as well
+			//'type' col will be cleared: clear row 0 as well
 			m_view->data()->updateRowEditBuffer(item, 0, QVariant(QString::null));
 		}
 		else {
 			if (propertyBuffer()) {
-				int fieldTypeGroup = newValue.toInt();
-				if (fieldTypeGroup < 0 || fieldTypeGroup > (int)KexiDB::Field::LastTypeGroup)
+				KexiPropertyBuffer &buf = *propertyBuffer();
+				//'type' col is changed (existed before)
+				//-get type group number
+				KexiDB::Field::TypeGroup fieldTypeGroup;
+				int i_fieldTypeGroup = newValue.toInt()+1/*counting from 1*/;
+				if (i_fieldTypeGroup < 1 || i_fieldTypeGroup > (int)KexiDB::Field::LastTypeGroup)
 					return;
-				(*propertyBuffer())["type"]->setValue(fieldTypeGroup);
-				int fieldType = typeForSelectedGroup( fieldTypeGroup );
-				if (fieldType==0)
+				fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>(i_fieldTypeGroup);
+
+				//-get 1st type from this group, and update 'type' property
+
+				KexiDB::Field::Type fieldType = firstTypeForSelectedGroup( i_fieldTypeGroup );
+				if (fieldType==KexiDB::Field::InvalidType)
 					fieldType = KexiDB::Field::Text;
-				(*propertyBuffer())["subType"]->setValue(fieldType);
+				buf["type"]->setValue((int)fieldType);
+
+				//-get subtypes for this type: keys (slist) and names (nlist)
+				const QStringList slist = KexiDB::typeStringsForGroup(fieldTypeGroup);
+				const QStringList nlist = KexiDB::typeNamesForGroup(fieldTypeGroup);
+				KexiProperty *subTypeProperty = buf["subType"];
+				//update subtype list and value
+				subTypeProperty->setList(slist, nlist);
+				subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
+				if (updatePropertiesVisibility(fieldType, buf)) {
+					//properties' visiblility changed: refresh buffer
+					propertyBufferReloaded();
+				}
 			}
 		}
 	}
@@ -435,7 +484,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 	
 	} else if (buffer_allowed && !propertyBuffer()) {
 		//-- create a new field:
-		int fieldType = typeForSelectedGroup( item->at(1).toInt() );
+		int fieldType = firstTypeForSelectedGroup( item->at(1).toInt()+1/*counting from 1*/ );
 		if (fieldType==0)
 			return;
 
