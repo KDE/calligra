@@ -21,6 +21,8 @@
 
 KoFill::KoFill()
 {
+  mType = Flood;
+  mColor = KoColor::white();
   mOpacity = 0xFF;
 }
 
@@ -28,7 +30,19 @@ KoFill::~KoFill()
 {
 }
 
+void KoFill::color(const KoColor &c)
+{
+  mColor = c;
+}
+
 void KoFill::opacity(int o)
 {
   mOpacity = o;
+}
+
+KoFill &KoFill::operator=(const KoFill &f)
+{
+  mColor = f.mColor;
+  mOpacity = f.mOpacity;
+  return *this;
 }

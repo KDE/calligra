@@ -19,20 +19,26 @@
 
 #include "koPainter.h"
 
-#include <support/art_vpath_bpath.h>
 #include <support/art_rgb.h>
 #include <support/art_render.h>
+#include <support/art_render_svp.h>
+#include <support/art_render_gradient.h>
 #include <support/art_rgb_svp.h>
 #include <support/art_vpath_dash.h>
 #include <support/art_svp_vpath_stroke.h>
+#include <support/art_svp_vpath.h>
+#include <support/art_svp_intersect.h>
+#include <support/art_rgb_affine.h>
 
 #include <qwidget.h>
+#include <qwmatrix.h>
 #include <qimage.h>
 
 #include <kdebug.h>
 
-#include "koVectorPath.h"
-#include "koOutline.h"
+#include <koVectorPath.h>
+#include <koOutline.h>
+#include <koFill.h>
 
 //#include <support/xlibrgb.h>
 //#include <X11/Xlib.h>
@@ -73,8 +79,6 @@ void KoPainter::resize(const int w, const int h)
 
 void KoPainter::resize(const QSize &size)
 {
-  kdDebug() << "ooooooooWIDTH = " << size.width() << endl;
-  kdDebug() << "ooooooooHEIGHT = " << size.height() << endl;
   mBuffer->create(size, 32);
   mWidth = size.width();
   mHeight = size.height();
@@ -103,10 +107,6 @@ void KoPainter::fillAreaRGB(const QRect &r, const KoColor &c)
     return;
   if(ri >= mWidth)
     ri = mWidth - 1;
-  kdDebug() << "LEFT = " << l << endl;
-  kdDebug() << "RIGHT = " << ri << endl;
-  kdDebug() << "TOP = " << t << endl;
-  kdDebug() << "BOTTOM = " << b << endl;
   for(int y = t; y <= b; y++)
   {
     QRgb *ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
@@ -188,98 +188,56 @@ void KoPainter::memset(QRgb *p, int n, QRgb c)
 void KoPainter::drawVPath(ArtVpath *vec)
 {
   ArtSVP *svp;
-/*  bool sameURI = false;
+  if(mFill)
+  {
+    QRgb color = mFill->color().color().rgb();
 
-		if(m_drawShape->getFillColor()->paintType() == SVG_PAINTTYPE_URI && m_drawShape->getOutlineColor()->paintType() == SVG_PAINTTYPE_URI)
-		{
-			if(m_drawShape->getFillColor()->uri() == m_drawShape->getOutlineColor()->uri())
-				sameURI = true;
-		}
-		
-		if(m_drawShape->getFillColor()->paintType() == SVG_PAINTTYPE_URI)
-		{
-			SVGElementImpl *elem = m_drawShape->ownerSVGElement()->getElementById(m_drawShape->getFillColor()->uri());
-			if(elem)
-			{
-				if(elem->nodeName() == SVGPatternElementImpl::TAG)
-				{
-					static_cast<SVGPatternElementImpl *>(elem)->setBBoxTarget(m_drawShape);
+    ArtSVP *temp;
+    ArtSvpWriter *swr;
+    temp = art_svp_from_vpath(vec);
+    swr = art_svp_writer_rewind_new(ART_WIND_RULE_ODDEVEN);
+//    if(m_drawShape->getFillRule() == "evenodd")
+//			swr = art_svp_writer_rewind_new(ART_WIND_RULE_ODDEVEN);
+//		else
+//			swr = art_svp_writer_rewind_new(ART_WIND_RULE_NONZERO);
+    art_svp_intersector(temp, swr);
+    svp = art_svp_writer_rewind_reap(swr);
+    art_rgb_svp_alpha(svp, 0, 0, mWidth, mHeight, (art_u32)color, mFill->opacity(), mBuffer->bits(), mWidth * 4, 0);
+    art_svp_free(temp);
+    art_svp_free(svp);
+  }
 
-					elem->setAttributes();
-					elem->render(this);
-				}
-				else
-				{
-					static_cast<SVGGradientElementImpl *>(elem)->setFillSVP(art_svp_from_vpath(vec));
-					static_cast<SVGGradientElementImpl *>(elem)->setBBoxTarget(m_drawShape);
+/*  double a = 1/32.0;
+  double b = -1/33.00000;
+  double c = -1/3.0;
+  ArtGradientSpread spread = ART_GRADIENT_REPEAT;
+  ArtRender *render;
+  ArtPixMaxDepth color[3] = {0x0000, 0x0000, 0x8000 };
+  ArtGradientLinear gradient;
+  ArtGradientStop stops[3] = {
+    { 0.02, { 0x7fff, 0x0000, 0x0000, 0x7fff }},
+    { 0.5, { 0x0000, 0x0000, 0x0000, 0x1000 }},
+    { 0.98, { 0x0000, 0x7fff, 0x0000, 0x7fff }}
+  };
 
-					if(!sameURI)
-					{
-						elem->setAttributes();
-						elem->render(this);
-					}
-				}
-			}
-		}
-
-		if(m_drawShape->getOutlineColor()->paintType() == SVG_PAINTTYPE_URI)
-		{
-			SVGElementImpl *elem = m_drawShape->ownerSVGElement()->getElementById(m_drawShape->getOutlineColor()->uri());
-			if(elem)
-			{
-				if(static_cast<SVGGradientElementImpl *>(elem))
-				{
-					QRgb white = qRgb(255, 255, 255);
-					art_u32 strokeColor = (qRed(white << 24) | (qGreen(white << 16) | (qBlue(white) << 8) | (qAlpha(white))));
-
-					ArtSVP *svp = art_svp_vpath_stroke(vec, m_drawShape->getJoinStyle(), m_drawShape->getCapStyle(), m_penWidth, 4, 0.25);
-					static_cast<SVGGradientElementImpl *>(elem)->setStrokeSVP(svp);
-					static_cast<SVGGradientElementImpl *>(elem)->setBBoxTarget(m_drawShape);
-
-					if(!sameURI)
-					{
-						elem->setAttributes();
-						elem->render(this);
-					}
-				}
-			}
-		}
-
-		if(sameURI)
-		{
-			SVGElementImpl *elem = m_drawShape->ownerSVGElement()->getElementById(m_drawShape->getFillColor()->uri());
-			if(elem)
-			{
-				if(static_cast<SVGGradientElementImpl *>(elem))
-				{
-					elem->setAttributes();
-					elem->render(this);
-				}
-			}
-		}
-	}
-*/
-
-/*	if(m_brush)
-	{
-		art_u32 fillColor = (qRed(m_fillColor.rgb()) << 24) | (qGreen(m_fillColor.rgb()) << 16) | (qBlue(m_fillColor.rgb()) << 8) | (qAlpha(m_fillColor.rgb()));
-
-		ArtSVP *temp;
-		ArtSvpWriter *swr;
-		temp = art_svp_from_vpath(vec);
-	
-		if(m_drawShape->getFillRule() == "evenodd")
-			swr = art_svp_writer_rewind_new(ART_WIND_RULE_ODDEVEN);
-		else
-			swr = art_svp_writer_rewind_new(ART_WIND_RULE_NONZERO);
-		art_svp_intersector(temp, swr);
-		svp = art_svp_writer_rewind_reap(swr);
-		art_rgb_svp_alpha(svp, 0, 0, m_width, m_height, fillColor, m_buffer, m_width * 3, 0);
-
-		art_svp_free(temp);
-		art_svp_free(svp);
-	}
-*/
+  gradient.a = a;
+  gradient.b = b;
+  gradient.c = c;
+  gradient.spread = spread;
+  
+  gradient.n_stops = sizeof(stops) / sizeof(stops[0]);
+  gradient.stops = stops;
+  
+  render = art_render_new(0, 0,
+			   mWidth, mHeight,
+			   mBuffer->bits(), mWidth * 4,
+			   3, 8, ART_ALPHA_NONE,
+			   0L);
+  art_render_clear_rgb (render, 0xfff0c0);
+  art_render_svp (render, svp);
+//  art_render_gradient_linear (render, &gradient, ART_FILTER_NEAREST);
+  //  art_render_image_solid (render, color);
+  art_render_invoke (render);*/
 
   if(mOutline)
   {
@@ -287,12 +245,12 @@ void KoPainter::drawVPath(ArtVpath *vec)
 
     if(mOutline->dashes().count() > 0)
     {
-      /* dashes */
+      // dashes
       ArtVpathDash dash;
       dash.offset = mOutline->dashOffset();
       dash.n_dash = mOutline->dashes().count();
       dash.dash = mOutline->dashes().data();
-      /* get the dashed VPath and use that for the stroke render operation */
+      // get the dashed VPath and use that for the stroke render operation
       ArtVpath *vec2 = art_vpath_dash(vec, &dash);
       art_free(vec);
       vec = vec2;
@@ -302,4 +260,18 @@ void KoPainter::drawVPath(ArtVpath *vec)
     art_rgb_svp_alpha(svp, 0, 0, mWidth, mHeight, (art_u32)color, mOutline->opacity(), mBuffer->bits(), mWidth * 4, 0);
     art_free(svp);
   }
+}
+
+void KoPainter::drawImage(QImage *img, int alpha, QWMatrix &m)
+{
+  double affine[6];
+  affine[0] = m.m11();
+  affine[1] = m.m12();
+  affine[2] = m.m21();
+  affine[3] = m.m22();
+  affine[4] = m.dx();
+  affine[5] = m.dy();
+  art_rgb_affine(mBuffer->bits(), 0, 0, mWidth, mHeight, mWidth * 4,
+		img->bits(), img->width(), img->height(), img->width() * 4,
+		affine, ART_FILTER_NEAREST, 0L);
 }

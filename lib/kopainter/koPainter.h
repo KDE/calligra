@@ -51,6 +51,7 @@ public:
 
   void drawLine(double x1, double y1, double x2, double y2);
   void drawVectorPath(KoVectorPath *vp);
+  void drawImage(QImage *img, int alpha, QWMatrix &m);
 
   void blit();
 
@@ -63,7 +64,6 @@ private:
   QImage *mBuffer;
   int mWidth;
   int mHeight;
-//  GC gc;
 
   KoOutline *mOutline;
   KoFill *mFill;

@@ -30,8 +30,8 @@ public:
 
   KoOutline();
 
-  const KoColor color() const {return mColor; }
-  void color(KoColor c);
+  const KoColor &color() const {return mColor; }
+  void color(const KoColor &c);
 
   int opacity() const {return mOpacity; }
   void opacity(int o);

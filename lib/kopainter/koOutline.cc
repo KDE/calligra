@@ -29,7 +29,7 @@ KoOutline::KoOutline()
   mCap = CapButt;
 }
 
-void KoOutline::color(KoColor c)
+void KoOutline::color(const KoColor &c)
 {
   mColor = c;
 }

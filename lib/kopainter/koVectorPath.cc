@@ -19,7 +19,11 @@
 
 #include "koVectorPath.h"
 
+#include <cmath>
+
 #include <qwmatrix.h>
+
+#include <kdebug.h>
 
 KoVectorPath::KoVectorPath()
 {
@@ -63,7 +67,7 @@ void KoVectorPath::lineTo(double x, double y)
   ye = y;
 }
 
-void KoVectorPath::bezierTo(double x, double y, double x1, double y1, double x2, double y2)
+void KoVectorPath::bez(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3)
 {
   const double flatness = 0.25;
   int n;
@@ -102,8 +106,8 @@ void KoVectorPath::bezierTo(double x, double y, double x1, double y1, double x2,
 
   */
 
-  x3_0 = x - xe;
-  y3_0 = y - ye;
+  x3_0 = x3 - x0;
+  y3_0 = y3 - y0;
 
   /* z3_0_dot is dist z0-z3 squared */
   z3_0_dot = x3_0 * x3_0 + y3_0 * y3_0;
@@ -125,19 +129,19 @@ void KoVectorPath::bezierTo(double x, double y, double x1, double y1, double x2,
   /* perp is distance from line, multiplied by dist z0-z3 */
   max_perp_sq = flatness * flatness * z3_0_dot;
 
-  z1_perp = (y1 - ye) * x3_0 - (x1 - xe) * y3_0;
+  z1_perp = (y1 - y0) * x3_0 - (x1 - x0) * y3_0;
   if (z1_perp * z1_perp > max_perp_sq)
     goto subdivide;
 
-  z2_perp = (y - y2) * x3_0 - (x - x2) * y3_0;
+  z2_perp = (y3 - y2) * x3_0 - (x3 - x2) * y3_0;
   if (z2_perp * z2_perp > max_perp_sq)
     goto subdivide;
 
-  z1_dot = (x1 - xe) * x3_0 + (y1 - ye) * y3_0;
+  z1_dot = (x1 - x0) * x3_0 + (y1 - y0) * y3_0;
   if (z1_dot < 0 && z1_dot * z1_dot > max_perp_sq)
     goto subdivide;
 
-  z2_dot = (x - x2) * x3_0 + (y - y2) * y3_0;
+  z2_dot = (x3 - x2) * x3_0 + (y3 - y2) * y3_0;
   if (z2_dot < 0 && z2_dot * z2_dot > max_perp_sq)
     goto subdivide;
 
@@ -152,27 +156,31 @@ void KoVectorPath::bezierTo(double x, double y, double x1, double y1, double x2,
   n = segments.size();
   segments.resize(n + 1);
   segments[n].code = ART_LINETO;
-  segments[n].x = x;
-  segments[n].y = y;
+  segments[n].x = x3;
+  segments[n].y = y3;
   return;
 
  subdivide:
 
-  xa1 = (xe + x1) * 0.5;
-  ya1 = (ye + y1) * 0.5;
-  xa2 = (xe + 2 * x1 + x2) * 0.25;
-  ya2 = (ye + 2 * y1 + y2) * 0.25;
-  xb1 = (x1 + 2 * x2 + x) * 0.25;
-  yb1 = (y1 + 2 * y2 + y) * 0.25;
-  xb2 = (x2 + x) * 0.5;
-  yb2 = (y2 + y) * 0.5;
+  xa1 = (x0 + x1) * 0.5;
+  ya1 = (y0 + y1) * 0.5;
+  xa2 = (x0 + 2 * x1 + x2) * 0.25;
+  ya2 = (y0 + 2 * y1 + y2) * 0.25;
+  xb1 = (x1 + 2 * x2 + x3) * 0.25;
+  yb1 = (y1 + 2 * y2 + y3) * 0.25;
+  xb2 = (x2 + x3) * 0.5;
+  yb2 = (y2 + y3) * 0.5;
   x_m = (xa2 + xb1) * 0.5;
   y_m = (ya2 + yb1) * 0.5;
+  bez(x0, y0, xa1, ya1, xa2, ya2, x_m, y_m);
+  bez(x_m, y_m, xb1, yb1, xb2, yb2, x3, y3);
+}
 
-  bezierTo(x_m, y_m, xa1, ya1, xa2, ya2);
-  xe = x_m;
-  ye = y_m;
-  bezierTo(x, y, xb1, yb1, xb2, yb2);
+void KoVectorPath::bezierTo(double x, double y, double x1, double y1, double x2, double y2)
+{
+  bez(xe, ye, x1, y1, x2, y2, x, y);
+  xe = x;
+  ye = y;
 }
 
 void KoVectorPath::end()
@@ -204,7 +212,13 @@ KoVectorPath *KoVectorPath::rectangle(double x, double y, double w, double h, do
     if(ry > h / 2)
       ry = h / 2;
     vec->moveTo(x + rx, y);
+    //problem:
+    kdDebug() << "point 1 :  x=" << x + rx << " y=" << y << endl;
+    kdDebug() << "control 1 :  x=" << x + rx * (1 - 0.552) << " y=" << y << endl;
+    kdDebug() << "control 2 :  x=" << x << " y=" << y + ry * (1 - 0.552) << endl;
+    kdDebug() << "point 2 :  x=" << x << " y=" << y + ry << endl;
     vec->bezierTo(x, y + ry, x + rx * (1 - 0.552), y, x, y + ry * (1 - 0.552));
+//    vec->lineTo(x, y + ry);
     if(ry < h / 2)
       vec->lineTo(x, y + h - ry);
     vec->bezierTo(x + rx, y + h, x, y + h - ry * (1 - 0.552), x + rx * (1 - 0.552), y + h);
@@ -243,5 +257,36 @@ KoVectorPath *KoVectorPath::rectangle(double x, double y, double w, double h, do
 
     vec->segments[5].code = ART_END;
   }
+  return vec;
+}
+
+KoVectorPath *KoVectorPath::ellipse(double cx, double cy, double rx, double ry)
+{
+  KoVectorPath *vec = new KoVectorPath;
+  double x0, y0, x1, y1, x2, y2, x3, y3, len, s, e;
+  vec->moveTo(cos(0), sin(0));
+  for(s = 0; s < 2 * M_PI; s += M_PI_2)
+  {
+    e = s + M_PI_2;
+    if(e > 2 * M_PI)
+      e = 2 * M_PI;
+    len = 0.552 * (e - s) / M_PI_2;
+    x0 = cos(s);
+    y0 = sin(s);
+    x1 = x0 + len * cos(s + M_PI_2);
+    y1 = y0 + len * sin(s + M_PI_2);
+    x3 = cos(e);
+    y3 = sin(e);
+    x2 = x3 + len * cos(e - M_PI_2);
+    y2 = y3 + len * sin(e - M_PI_2);
+
+    vec->bezierTo(x3, y3, x1, y1, x2, y2);
+  }
+  vec->end();
+  
+QWMatrix m1, m2;
+  m1 = m1.scale(rx, ry);
+  m2 = m2.translate(cx, cy);
+  vec->transform(m1*m2);
   return vec;
 }

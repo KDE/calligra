@@ -23,7 +23,6 @@
 #include <qimage.h>
 #include <qdatetime.h>
 #include <qwmatrix.h>
-#include <qmemarray.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -36,31 +35,6 @@
 KoPainterTest::KoPainterTest(QWidget *widget, const char *name):
 QWidget( widget, name )
 {
-  QMemArray<int> a1;
-  a1.resize(1000000);
-  int a2[1000000];
-  QTime ttt;
-  ttt.start();
-  for(int i=0;i<1000000;i++)
-  {
-    a1[i] = 10034;
-  }
-  kdDebug() << "time1 = " << ttt.elapsed() << endl;
-  ttt.start();
-  int k;
-  for(int i=0;i<1000000;i++)
-  {
-    a2[i] = 10034;
-    k++;
-  }
-  kdDebug() << "time2 = " << ttt.elapsed() << endl;
-  ttt.start();
-  int *ppp = a2;
-  for(;ppp < a2 + 1000000;ppp++)
-  {
-    *ppp = 10034;
-  }
-  kdDebug() << "time3 = " << ttt.elapsed() << endl;
   setFixedSize(800,600);
   p = new KoPainter(this, 800, 600);
   QTime t;
@@ -89,12 +63,13 @@ QWidget( widget, name )
   o->opacity(150);
   o->width(3.0);
   o->color(KoColor::red());
-  KoVectorPath *vv = KoVectorPath::rectangle(530,320,200,200,20,30);
-  QWMatrix m1,m2,m3;
-  m1 = m1.translate(-630, -420);
-  m2 = m2.rotate(40);
-  m3 = m3.translate(630, 420);
-  vv->transform(m1*m2*m3);
+//  KoVectorPath *vv = KoVectorPath::rectangle(530,320,200,200,20,30);
+  KoVectorPath *vv = KoVectorPath::ellipse(530,320,200,100);
+//  QWMatrix m1,m2,m3;
+//  m1 = m1.translate(-630, -420);
+//  m2 = m2.rotate(40);
+//  m3 = m3.translate(630, 420);
+//  vv->transform(m1*m2*m3);
   p->drawVectorPath(vv);
   KoVectorPath *v = new KoVectorPath;
   v->moveTo(200, 40);
@@ -112,6 +87,16 @@ QWidget( widget, name )
   o->color(KoColor::green());
   o->opacity(255);
   p->drawVectorPath(v);
+  QImage img;
+  QWMatrix mmm;
+  QWMatrix m1,m2,m3;
+//  m1 = m1.translate(-630, -420);
+  m1 = m1.scale(0.5, 0.5);
+  m2 = m2.rotate(70.0);
+  m3 = m3.translate(10, 10);
+  mmm = m1 * m2 * m3;
+  bool f = img.load("1.png");
+  p->drawImage(&img,100,mmm);
 //  o->dashResize(0);
 //  o->width(1);
 //  o->color(KoColor::cyan());

@@ -20,6 +20,8 @@
 #ifndef __ko_fill_h__
 #define __ko_fill_h__
 
+#include <koColor.h>
+
 class KoFill
 {
 public:
@@ -28,12 +30,19 @@ public:
   KoFill();
   virtual ~KoFill();
 
-  virtual Type type() const = 0;
+  virtual Type type() const {return mType; }
 
   int opacity() const {return mOpacity; }
   void opacity(int o);
 
+  const KoColor &color() const {return mColor; }
+  void color(const KoColor &c);
+
+  KoFill &operator=(const KoFill &f);
+
 private:
+  Type mType;
+  KoColor mColor;
   int mOpacity;
 };
 
