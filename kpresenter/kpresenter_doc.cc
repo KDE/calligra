@@ -1147,15 +1147,9 @@ bool KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
             parseOasisHelpLine(  settings.parseConfigItemString( "SnapLinesDrawing" ) );
             setShowHelplines( settings.parseConfigItemBool( "SnapLineIsVisible" ) );
             int valx = settings.parseConfigItemInt( "GridFineWidth" );
-            QString pt_x;
-            pt_x.setNum(( valx/100.0 ));
-            pt_x+="mm";
-            m_gridX = KoUnit::parseValue(pt_x);
+            m_gridX = MM_TO_POINT( valx / 100.0 );
             int valy = settings.parseConfigItemInt( "GridFineHeight" );
-            QString pt_y;
-            pt_y.setNum(( valy/100.0 ));
-            pt_y+="mm";
-            m_gridY = KoUnit::parseValue(pt_y);
+            m_gridY = MM_TO_POINT( valy / 100.0 );
 
         }
     }

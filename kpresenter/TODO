@@ -76,6 +76,7 @@ Done:
 	-> contrast
 	-> intensity channel (green/blue/red)
 	-> grayscal
+-> save/load general config (GridIsVisible etc.)
 
 Todo:
 -> save/load cubic/quadric/freehand object (define as svg object)
@@ -95,7 +96,6 @@ In Progress:
 -> save/load picture effect
 -> save/load protect object
 -> save/load embedded object
--> save/load general config (GridIsVisible etc.)
 	
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>
