@@ -3468,9 +3468,9 @@ bool KSpreadCell::updateChart(bool refresh)
                     return true;
 
                 bind->cellChanged( this );
-                return true;
             }
         }
+        return true;
     }
     return false;
 

@@ -2143,20 +2143,21 @@ void KSpreadTable::refreshChart(const QPoint & pos, bool fullRowOrColumn, Change
         return;
     }
   }
+
   //refresh chart when there is a chart and you remove
   //all cells
-  if(c == 0L)
+  if (c == 0L)
   {
-    CellBinding * bind = firstCellBinding();
-    if ( bind != 0L )
-      bind->cellChanged( 0 );
+     CellBinding * bind;
+     for ( bind = firstCellBinding(); bind != 0L; bind = nextCellBinding() )
+     {
+       bind->cellChanged( 0 );
+     }
+     //    CellBinding * bind = firstCellBinding();
+     //    if ( bind != 0L )
+     //      bind->cellChanged( 0 );
   }
 
-  //   CellBinding * bind;
-  //   for ( bind = firstCellBinding(); bind != 0L; bind = nextCellBinding() )
-  //   {
-  //     bind->cellChanged( 0 );
-  //   }
 }
 
 void KSpreadTable::refreshMergedCell()
@@ -3288,8 +3289,6 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
         KSpreadCell * cell22 = cellAt( d, key2 );
         KSpreadCell * bestCell2 = cellAt( x, key2 );
 
-        //        kdDebug() << "Equality! Testing now " << d << ", " << x << " in " << key2 << endl;
-
         checkCellContent(cell2, bestCell, status);
         if (status == 1)
           continue;
@@ -3301,7 +3300,6 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
           continue;
         }
 
-        //        kdDebug() << "Not empty: " << cell22->text() << " <=> " << bestCell2->text() << " O: " << order2 << endl;
         if ( (order2 == Increase && *cell22 > *bestCell2)
              || (order2 == Decrease && *cell22 < *bestCell2) )
         {
@@ -3314,13 +3312,11 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
              || (order2 == Decrease && *cell22 < *bestCell2) )
         {
           // already in right order
-          //          kdDebug() << "Right order" << endl;
           continue;
         }
         else
         {
           // they are equal, check 3rd key
-          //          kdDebug() << "equals "<< endl;
           if (key3 == 0)
             continue;
           KSpreadCell * cell23 = cellAt( d, key3 );
@@ -3357,7 +3353,6 @@ void KSpreadTable::sortByRow( int key1, int key2, int key3,
     if ( d != bestX )
     {
       int top = target.top();
-      kdDebug() << "Header Row: " << headerRow << endl;
       if (headerRow)
         ++top;
 
@@ -3420,9 +3415,6 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
   }
   QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
 
-  //  kdDebug() << "Sel rect: " << r.left() << "; " << r.top() << " - " << r.right() << ", " << r.bottom() << endl;
-  //  kdDebug() << "Target rect: " << target.left() << "; " << target.top() << " - " << target.right() << ", " << target.bottom() << endl;
-
   if ( !m_pDoc->undoBuffer()->isLocked() )
   {
     KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, target );
@@ -3447,7 +3439,6 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
       for ( int y = 0; y < r.height(); ++y )
       {
         // from - to
-        kdDebug() << "x,y: " << x << ", " << y << ", TargetLeft " << targetLeft << ", TargetTop: " << targetTop << endl;
         copyCells( sourceLeft + x, sourceTop + y, 
                    targetLeft + x, targetTop + y, copyLayout );
       }      
@@ -3465,9 +3456,6 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
   KSpreadCell * bestCell;
   int status = 0;
 
-  //  kdDebug() << "Key1: " << key1 << ", Key2 " << key2 << ", Key3 " << key3 
-  //            << ", Rect TL: " << target.top() << ", " << target.left() << endl;
-  
   int d = target.top();
 
   if (headerRow)
@@ -3522,7 +3510,6 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
           {
             bestCell = cell2;
             bestY = y;
-            kdDebug() << "Switch: i1 < i2" << endl;
             continue;
           }
 
@@ -3634,7 +3621,6 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
       }
       else
       {
-        //        kdDebug() << "Cell2 equals bestCell!" << endl;
         // *cell2 equals *bestCell
         // check 2nd key
         if (key2 == 0)
@@ -3701,8 +3687,6 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
           if ( (order3 == Increase && *cell23 > *bestCell3)
                || (order3 == Decrease && *cell23 < *bestCell3) )
           {
-            //            kdDebug() << "First cell greater if increase, lesser if decrease " << cell23->text() << ", " << bestCell3->text()
-            //                      << ", bestY: " << bestY << endl;
             bestCell = cell2;
             bestY = y;
             continue;
@@ -3711,14 +3695,12 @@ void KSpreadTable::sortByColumn( int key1, int key2, int key3,
           {
             // they are really equal or already in the correct order
             // no swap necessary
-            //            kdDebug() << "Key2 in correct order" << endl;
             continue;
           }
         }
       }
     }
 
-    //    kdDebug() << "R: " << target.left() << ", " << target.right() << ", T: " << target.left() << ", " << target.right() << endl;
     // Swap rows cell1 and bestCell (i.e. d and bestY)
     if ( d != bestY )
     {
@@ -3742,8 +3724,6 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
 {
   KSpreadCell * sourceCell = cellAt( x1, y1 );
   KSpreadCell * targetCell = cellAt( x2, y2 );
-
-  //  kdDebug() << "Source: (" << x1 << ", " << y1 << ") " << sourceCell->text() << endl;
 
   if ( sourceCell->isDefault() )
   {
@@ -3769,7 +3749,6 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
 
   // TODO: check if this enough
   targetCell->copyContent( sourceCell );
-  //  kdDebug() << "Target: (" << x2 << ", " << y2 << ") " << sourceCell->text() << endl;
 
   /*
     if ( !sourceCell->isFormula() )
