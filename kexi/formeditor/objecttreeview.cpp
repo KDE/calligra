@@ -276,7 +276,7 @@ ObjectTreeView::slotSelectionChanged()
 		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
 		QWidget *w = it->objectTree()->widget();
 		if(w && (m_form->selectedWidgets()->findRef(w) == -1))
-			m_form->setSelectedWidget(w, true);
+			m_form->setSelectedWidget(w, true, true);
 	}
 }
 

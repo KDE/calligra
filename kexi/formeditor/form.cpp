@@ -191,7 +191,7 @@ Form::setDesignMode(bool design)
 ///////////////////////////// Selection stuff ///////////////////////
 
 void
-Form::setSelectedWidget(QWidget *w, bool add)
+Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 {
 	if((m_selected.isEmpty()) || (w == m_topTree->widget()) || (m_selected.first() == m_topTree->widget()))
 		add = false;
@@ -207,7 +207,7 @@ Form::setSelectedWidget(QWidget *w, bool add)
 	//wtmp->raise();
 	//while (wtmp && wtmp->parentWidget() && static_cast<QObject*>(wtmp)!=m_form && !wtmp->inherits("KFormDesigner::FormWidget")
 	//	&& static_cast<QObject*>(wtmp->parentWidget())!=this && static_cast<QObject*>(wtmp->parentWidget())!=m_form)
-	while(wtmp && wtmp->parentWidget() && (wtmp != m_topTree->widget()))
+	while(!dontRaise && wtmp && wtmp->parentWidget() && (wtmp != m_topTree->widget()))
 	{
 		wtmp->raise();
 		if(m_resizeHandles[ wtmp->name() ])

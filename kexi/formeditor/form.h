@@ -203,7 +203,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! Sets \a selected to be the selected widget of this Form. If \a add is true, the formerly selected widget
 		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
 		 */
-		void		setSelectedWidget(QWidget *selected, bool add=false);
+		void		setSelectedWidget(QWidget *selected, bool add=false, bool dontRaise=false);
 
 	protected slots:
 		/*! This slot is called when the toplevel widget of this Form is deleted (ie the window closed) so that the Form gets deleted
