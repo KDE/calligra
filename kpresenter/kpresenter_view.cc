@@ -1099,7 +1099,7 @@ void KPresenterView::extraPenBrush()
         styleDia->setObjectName( objectName );
     }
 
-    int nbStickyObjSelected= m_pKPresenterDoc->stickyPage()->numSelected();
+    int nbStickyObjSelected = m_canvas->activePage()->masterPage()->numSelected();
     int nbActivePageObjSelected = m_canvas->activePage()->numSelected();
     if ( nbActivePageObjSelected >0 && nbStickyObjSelected>0)
         styleDia->setSticky( STATE_UNDEF );
@@ -1844,9 +1844,9 @@ void KPresenterView::brushChosen()
             macro->addCommand( cmd );
         }
 
-        cmd = stickyPage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false,
-                                      0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle |
-                                      BrushCmd::BrushGradientSelect );
+        cmd = m_canvas->activePage()->masterPage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false,
+                                                              0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle |
+                                                              BrushCmd::BrushGradientSelect );
         if( cmd )
         {
             if ( !macro )
@@ -3290,11 +3290,11 @@ void KPresenterView::styleOk()
             macro->addCommand(cmd);
         }
 
-        cmd=stickyPage()->setBrush(confBrushDia->getBrush(), confBrushDia->getFillType(),
-                                   confBrushDia->getGColor1(), confBrushDia->getGColor2(),
-                                   confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
-                                   confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
-                                   confBrushDia->getBrushConfigChange());
+        cmd = m_canvas->activePage()->masterPage()->setBrush( confBrushDia->getBrush(), confBrushDia->getFillType(),
+                                                              confBrushDia->getGColor1(), confBrushDia->getGColor2(),
+                                                              confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
+                                                              confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
+                                                              confBrushDia->getBrushConfigChange() );
 
         if(cmd)
         {
@@ -3338,7 +3338,7 @@ void KPresenterView::styleOk()
         if(bSticky)
             cmd=m_canvas->activePage()->stickyObj(bSticky,m_canvas->activePage() );
         else
-            cmd=stickyPage()->stickyObj(bSticky,m_canvas->activePage());
+            cmd = m_canvas->activePage()->masterPage()->stickyObj(bSticky,m_canvas->activePage());
         if(cmd)
         {
             if ( !macro)
@@ -3406,8 +3406,8 @@ void KPresenterView::styleOk()
             macro->addCommand(cmd);
         }
 
-        cmd=stickyPage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(),
-                                          confPieDia->getLength(), confPieDia->getPieConfigChange() );
+        cmd = m_canvas->activePage()->masterPage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(),
+                                                                    confPieDia->getLength(), confPieDia->getPieConfigChange() );
 
         if(cmd)
         {
@@ -3434,10 +3434,10 @@ void KPresenterView::styleOk()
             macro->addCommand(cmd);
         }
 
-        cmd=stickyPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
-                                              confPolygonDia->getCornersValue(),
-                                              confPolygonDia->getSharpnessValue(),
-                                              confPolygonDia->getPolygonConfigChange() );
+        cmd = m_canvas->activePage()->masterPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
+                                                                        confPolygonDia->getCornersValue(),
+                                                                        confPolygonDia->getSharpnessValue(),
+                                                                        confPolygonDia->getPolygonConfigChange() );
         if(cmd)
         {
             if ( !macro)
@@ -3462,11 +3462,11 @@ void KPresenterView::styleOk()
             macro->addCommand( cmd );
         }
 
-        cmd = stickyPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
-                                                confPictureDia->getPictureDepth(),
-                                                confPictureDia->getPictureSwapRGB(),
-                                                confPictureDia->getPictureGrayscal(),
-                                                confPictureDia->getPictureBright() );
+        cmd = m_canvas->activePage()->masterPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
+                                                                        confPictureDia->getPictureDepth(),
+                                                                        confPictureDia->getPictureSwapRGB(),
+                                                                        confPictureDia->getPictureGrayscal(),
+                                                                        confPictureDia->getPictureBright() );
         if (cmd)
         {
             if ( !macro)
@@ -3489,8 +3489,8 @@ void KPresenterView::styleOk()
             macro->addCommand(cmd);
         }
 
-        cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY(),
-                                           confRectDia->getRectangleConfigChange() );
+        cmd = m_canvas->activePage()->masterPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY(),
+                                                                     confRectDia->getRectangleConfigChange() );
 
         if(cmd)
         {
@@ -3591,7 +3591,7 @@ void KPresenterView::rotateOk()
             macro=new KMacroCommand(i18n( "Change Rotation" ));
         macro->addCommand(cmd);
     }
-    cmd=stickyPage()->rotateSelectedObjects(_newAngle);
+    cmd = m_canvas->activePage()->masterPage()->rotateSelectedObjects( _newAngle );
     if( cmd)
     {
         if ( !macro )
@@ -3616,9 +3616,9 @@ void KPresenterView::shadowOk()
             macro=new KMacroCommand(i18n( "Change Shadow" ));
         macro->addCommand(cmd);
     }
-    cmd=stickyPage()->shadowObj(shadowDia->shadowDirection(),
-                                shadowDia->shadowDistance(),
-                                shadowDia->shadowColor());
+    cmd = m_canvas->activePage()->masterPage()->shadowObj( shadowDia->shadowDirection(),
+                                                           shadowDia->shadowDistance(),
+                                                           shadowDia->shadowColor() );
     if( cmd)
     {
         if ( !macro )
@@ -6217,7 +6217,7 @@ void KPresenterView::openPopupMenuZoom( const QPoint & _point )
     if(!koDocument()->isReadWrite() || !factory())
         return;
     actionZoomSelectedObject->setEnabled( m_canvas->isOneObjectSelected());
-    int nbObj=(m_pKPresenterDoc->stickyPage()->objectList().count()-2)+m_canvas->activePage()->objectList().count();
+    int nbObj = ( m_canvas->activePage()->masterPage()->objectList().count() - 2 ) + m_canvas->activePage()->objectList().count();
     actionZoomAllObject->setEnabled( nbObj > 0);
     static_cast<QPopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
 }
@@ -6461,7 +6461,7 @@ void KPresenterView::applyAutoFormat()
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_initSwitchPage=m_switchPage;
     QPtrList<KoTextObject> list=m_canvas->activePage()->allTextObjects();
-    QPtrList<KoTextObject> list2=stickyPage()->allTextObjects();
+    QPtrList<KoTextObject> list2 = m_canvas->activePage()->masterPage()->allTextObjects();
     QPtrListIterator<KoTextObject> it( list2 );
 
     for ( ; it.current() ; ++it )
@@ -6819,8 +6819,8 @@ void KPresenterView::imageEffect()
                     macro=new KMacroCommand(i18n("Change Image Effect"));
                 macro->addCommand(cmd);
             }
-            cmd=stickyPage()->setImageEffect(imageEffectDia->getEffect(), imageEffectDia->getParam1(),
-                                             imageEffectDia->getParam2(), imageEffectDia->getParam3());
+            cmd = m_canvas->activePage()->masterPage()->setImageEffect( imageEffectDia->getEffect(), imageEffectDia->getParam1(),
+                                                                        imageEffectDia->getParam2(), imageEffectDia->getParam3());
             if (cmd) {
                 if (!macro)
                     macro=new KMacroCommand(i18n("Change Image Effect"));
@@ -6887,7 +6887,7 @@ KCommand * KPresenterView::getPenCmd( const QString &name, QPen pen, LineEnd lb,
         macro->addCommand( cmd );
     }
 
-    cmd = stickyPage()->setPen( pen, lb, le, flags );
+    cmd = m_canvas->activePage()->masterPage()->setPen( pen, lb, le, flags );
     if( cmd )
     {
         if ( !macro )
