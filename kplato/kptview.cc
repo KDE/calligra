@@ -205,6 +205,7 @@ void KPTView::slotViewGantt() {
 void KPTView::slotViewPert() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_pertview);
+    m_pertview->draw();
 }
 
 void KPTView::slotViewResources() {
