@@ -2443,7 +2443,7 @@ void KWTableFrameSet::setZOrder()
 
 void KWTableFrameSet::convertTableToText()
 {
-    // TODO port to OASIS
+    // TODO port to OASIS (see KWTextFrameSetEdit::newDrag)
     QDomDocument domDoc( "PARAGRAPHS" );
     QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
     domDoc.appendChild( elem );
@@ -2458,7 +2458,7 @@ void KWTableFrameSet::convertTableToText()
     kd->setPlain( text );
     kd->setFrameSetNumber( -1 );
     kd->setKWord( domDoc.toCString() );
-    kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
+    kdDebug(32001) << "convertTableToText " << domDoc.toCString() << endl;
     QApplication::clipboard()->setData( kd );
 
 }
