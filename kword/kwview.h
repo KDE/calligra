@@ -575,7 +575,7 @@ public slots:
     void reorganize();
 
 protected slots:
-    void unitChanged( QString );
+    void unitChanged( QString  );
 
 protected:
     void resizeEvent( QResizeEvent *e );

@@ -479,7 +479,7 @@ void KWView::setupActions()
     actionInsertComment = new KAction( i18n( "Comment" ), 0,
                                     this, SLOT( insertComment() ),
                                     actionCollection(), "insert_comment" );
-    actionEditComment = new KAction( i18n("Edit Comment"), 0,
+    actionEditComment = new KAction( i18n("Edit Comment..."), 0,
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
 
@@ -4577,6 +4577,40 @@ void KWView::updateHeaderFooterButton()
     actionViewFooter->setChecked(m_doc->isFooterVisible());
 }
 
+void KWView::editComment()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KoVariable * tmpVar=edit->variable();
+        KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(tmpVar);
+        if(var)
+        {
+            QString authorName;
+            KoDocumentInfo * info = m_doc->documentInfo();
+            KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+            if ( !authorPage )
+                kdWarning() << "Author information not found in documentInfo !" << endl;
+            else
+                authorName = authorPage->fullName();
+            KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName);
+            if( commentDia->exec() )
+            {
+                var->setNote( commentDia->commentText());
+            }
+            delete commentDia;
+        }
+    }
+}
+
+void KWView::fileStatistics()
+{
+    KWStatisticsDialog *statisticsDialog = new KWStatisticsDialog( this, m_doc );
+    if ( !statisticsDialog->wasCanceled() )
+        statisticsDialog->exec();
+    delete statisticsDialog;
+}
+
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
 /******************************************************************/
@@ -4716,18 +4750,11 @@ void KWGUI::reorganize()
     r_vert->setGeometry( 0, space, space, left->height() - space );
 }
 
-void KWGUI::unitChanged( QString u )
+void KWGUI::unitChanged( QString  u )
 {
     view->kWordDocument()->setUnit( KoUnit::unit( u ) );
 }
 
-void KWView::fileStatistics()
-{
-    KWStatisticsDialog *statisticsDialog = new KWStatisticsDialog( this, m_doc );
-    if ( !statisticsDialog->wasCanceled() )
-        statisticsDialog->exec();
-    delete statisticsDialog;
-}
 
 // Implementation of KWStatisticsDialog
 KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
@@ -4915,30 +4942,5 @@ bool KWStatisticsDialog::docHasSelection()
     return false;
 }
 
-void KWView::editComment()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-    {
-        KoVariable * tmpVar=edit->variable();
-        KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(tmpVar);
-        if(var)
-        {
-            QString authorName;
-            KoDocumentInfo * info = m_doc->documentInfo();
-            KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-            if ( !authorPage )
-                kdWarning() << "Author information not found in documentInfo !" << endl;
-            else
-                authorName = authorPage->fullName();
-            KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName);
-            if( commentDia->exec() )
-            {
-                var->setNote( commentDia->commentText());
-            }
-            delete commentDia;
-        }
-    }
-}
 
 #include "kwview.moc"
