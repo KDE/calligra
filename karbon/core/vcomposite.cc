@@ -171,7 +171,6 @@ VComposite::moveTo( const KoPoint& p )
 	if( !m_paths.getLast()->isEmpty() )
 	{
 		VPath* path = new VPath( this );
-		path->moveTo( currentPoint() );
 		m_paths.append( path );
 	}
 
