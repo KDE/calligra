@@ -43,7 +43,6 @@
 #define FT_FROMFLOAT(x) ((int) floor ((x) * 64.0 + 0.5))
 
 
-
 // Trace routines for ttf / ps font -> VPath
 
 int traceMoveto( FT_Vector *to, VComposite *composite )
@@ -54,7 +53,7 @@ int traceMoveto( FT_Vector *to, VComposite *composite )
 	//QString add = "M" + QString::number(tox) + "," + QString::number(toy) + " ";
 	//kdDebug() << add.latin1() << endl;
 	composite->moveTo( KoPoint( tox, toy ) );
-	
+
 	return 0;
 }
 
@@ -67,7 +66,7 @@ int traceLineto( FT_Vector *to, VComposite *composite )
 	//kdDebug() << add.latin1() << endl;
 
 	composite->lineTo( KoPoint( tox, toy ) );
-	
+
 	return 0;
 };
 
@@ -78,11 +77,11 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VComposite *composi
 	double x2 = ( to->x / 64.0 );
 	double y2 = ( -to->y / 64.0 );
 
-	QString add = "Q" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + " ";
-	kdDebug() << add.latin1() << endl;
+	//QString add = "Q" + QString::number(x1) + "," + QString::number(y1) + "," + QString::number(x2) + "," + QString::number(y2) + " ";
+	//kdDebug() << add.latin1() << endl;
 	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x2, y2 ) );
 	//composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
-	
+
 	return 0;
 };
 
@@ -99,7 +98,7 @@ int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VComposite *com
 	//kdDebug() << add.latin1() << endl;
 
 	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
-	
+
 	return 0;
 };
 
@@ -145,7 +144,7 @@ VText::VText( const VText& text )
 	VCompositeListIterator itr( text.m_glyphs );
 	for( ; itr.current() ; ++itr )
 		m_glyphs.append( itr.current()->clone() );
-	
+
 	m_boundingBoxIsInvalid = true;
 }
 
@@ -260,7 +259,7 @@ VText::save( QDomElement& element ) const
 		me.setAttribute( "position", m_position );
 
 		element.appendChild( me );
-		
+
 		m_basePath.save( me );
 
 		// save all glyphs / paths
@@ -310,7 +309,7 @@ void
 VText::setState( const VState state )
 {
 	VObject::setState( state );
-	
+
 	VCompositeListIterator itr( m_glyphs );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
