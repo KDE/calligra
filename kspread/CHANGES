@@ -102,3 +102,8 @@ and it's saving.
 -Improved Special paste now you can paste only value.
 -You can ajust column when it's text (for the moment Virtual formual
 and QML don't work)
+
+1999-09-27 -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------
+-Fix bug : Now when you delete a formula it works
+-Add ajust for row

@@ -385,7 +385,7 @@ public:
     void setHide(bool _table_hide){table_hide=_table_hide;}
 
     int ajustColumn();
-
+    int ajustRow();
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */

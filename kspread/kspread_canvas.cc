@@ -613,7 +613,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   //desactivate EditWidget when you click on a table
   m_pEditWidget->setActivate(false);
-
+  m_pView->hide_show_formulatools(false);
   if(EditorisActivate()==true)
   	{
   	choose_cell( _ev);
@@ -836,7 +836,6 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
   showMarker();
-
   // Context menu ?
   if ( _ev->button() == RightButton )
   {
@@ -1696,6 +1695,23 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
+void KSpreadVBorder::ajustRow()
+{
+int ajust=m_pCanvas->activeTable()->ajustRow();
+if(ajust!=-1)
+	{
+	KSpreadTable *table = m_pCanvas->activeTable();
+	assert( table );
+	RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
+	//number of column
+	int x = table->rowPos( m_iSelectionAnchor, m_pCanvas );
+	if ( ( m_pCanvas->zoom() * (float)(ajust) ) < 20.0 )
+		rl->setHeight( 20, m_pCanvas );	
+	else
+		rl->setHeight( ajust, m_pCanvas );	
+	}
+}
+
 void KSpreadVBorder::resizeRow(int resize,int nb )
 {
 KSpreadTable *table = m_pCanvas->activeTable();
@@ -1716,7 +1732,7 @@ else
 	if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
 	|| selection.right()==0)
 		{
-		cout <<"Cell selectionne : "<<m_pCanvas->markerRow()<<endl;
+		//cout <<"Cell selectionne : "<<m_pCanvas->markerRow()<<endl;
 		RowLayout *rl = table->nonDefaultRowLayout( m_pCanvas->markerRow() );
 		int x = table->rowPos( m_pCanvas->markerRow(), m_pCanvas );
 		if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
@@ -1990,6 +2006,8 @@ if(ajust!=-1)
 		cl->setWidth( ajust, m_pCanvas );
 	}
 }
+
+
 
 void KSpreadHBorder::resizeColumn(int resize,int nb )
 {

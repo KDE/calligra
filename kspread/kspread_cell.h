@@ -455,12 +455,8 @@ public:
     /* return size of the text*/
     int textWidth() {return m_iOutTextWidth; }
     int textHeight() {return m_iOutTextHeight; }
-    int richTextWidth() {return m_iExtraWidth; }
-    int richTextHeight() {return m_iExtraHeight;}
-
-
-
-
+    int richTextWidth() {return m_richWidth; }
+    int richTextHeight() {return m_richHeight;}
 
     bool isFormular() { return m_content == Formula; }
 
@@ -655,6 +651,8 @@ protected:
      * A pointer to the decimal separator
      */
     static char decimal_point;
+    int m_richWidth;
+    int m_richHeight;
 };
 
 #endif

@@ -961,22 +961,63 @@ if ( m_rctSelection.left() != 0 && m_rctSelection.bottom() == 0x7FFF )
 	int col = l >> 16;
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 		{
-	        /*if(it.current()->isForceExtraCells())
-	  		{*/
-	  		if(it.current()->content()==KSpreadCell::RichText)
+			//pb with Richtext
+	  		/*if(it.current()->content()==KSpreadCell::RichText)
 	  			{
 	  			//cout <<"Richtext :"<< it.current()->richTextWidth()<<endl;
 	  			if(it.current()->richTextWidth()>long_max)
 	  				long_max=it.current()->richTextWidth();
 	  			}
 	  		else
-	  			{
+	  			{*/
 	  			//cout <<"text :"<< it.current()->textWidth()<<endl;
+	  			if(!it.current()->isEmpty()&&it.current()->textWidth()<400 )
+	  			{
 	  			if(it.current()->textWidth()>long_max)
 	  				long_max=it.current()->textWidth();
-	  			
+	  			 }
+	  			//}
+		}
+      	}
+    }
+//add 4 because long_max is the long of the text
+//but column has borders
+if(long_max==0)
+	return -1;
+else
+	return (long_max+5);
+}
+
+int KSpreadTable::ajustRow()
+{
+int long_max=0;
+
+if ( m_rctSelection.left() != 0 && m_rctSelection.right() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+		{
+
+			//pb with Richtext
+	  		/*if(it.current()->content()==KSpreadCell::RichText)
+	  			{
+	  			//cout <<"Richtext :"<< it.current()->richTextWidth()<<endl;
+	  			if(it.current()->richTextWidth()>long_max)
+	  				long_max=it.current()->richTextWidth();
 	  			}
-	  		//}
+	  		else
+	  			{*/
+	  			//cout <<"text :"<< it.current()->textWidth()<<endl;
+	  			if(!it.current()->isEmpty()&&it.current()->textHeight()<400 )
+	  			{
+	  			if(it.current()->textHeight()>long_max)
+	  				long_max=it.current()->textHeight();
+	  			}
+	  			//}
 		}
       	}
     }
@@ -2206,13 +2247,11 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
 
     m_dctCells.setAutoDelete( FALSE );
     m_dctColumns.setAutoDelete( FALSE );
-
     // Delete column
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it )
     {
 	int key = it.current()->row() + ( it.current()->column() * 0x10000 );
-
 	if ( it.current()->column() == (int)_column && !it.current()->isDefault() )
 	{
 	    KSpreadCell *cell = it.current();
@@ -2340,7 +2379,7 @@ void KSpreadTable::copySelection( const QPoint &_marker )
 
   QClipboard *clip = QApplication::clipboard();
   clip->setText( data.c_str() );
-  cout <<" copy : " <<data.c_str()<<endl;
+  //cout <<" copy : " <<data.c_str()<<endl;
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )

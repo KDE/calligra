@@ -92,7 +92,8 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const cha
   m_iExtraXCells = 0;
   m_iExtraYCells = 0;
   m_pObscuringCell = 0;
-
+  m_richWidth=0;
+  m_richHeight=0;
   m_iPrecision = -1;
 }
 
@@ -540,7 +541,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int h = m_pQML->height();
     int w = m_pQML->width();
     debug("QML w=%i max=%i",w,max_width);
-
+    m_richWidth=w;
+    m_richHeight=h;
     // Occupy the needed extra cells in horizontal direction
     max_width = width( _col );
     ende = ( max_width >= w );
@@ -560,7 +562,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int max_height = height( 0 );
     int r = _row;
     ende = ( max_height >= h );
-    for( int r = _row + 1; !ende && r < _row + 500; ++r )
+    for( r = _row + 1; !ende && r < _row + 500; ++r )
     {
       bool empty = true;
       for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
@@ -628,7 +630,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int h = size.height();
     int w = size.width();
     printf("Formula w=%i h=%i\n",w,h);
-
+    m_richWidth=w;
+    m_richHeight=h;
     // Occupy the needed extra cells in horizontal direction
     max_width = width( _col );
     ende = ( max_width >= w );
@@ -648,7 +651,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int max_height = height( 0 );
     int r = _row;
     ende = ( max_height >= h );
-    for( int r = _row + 1; !ende && r < _row + 500; ++r )
+    for( r = _row + 1; !ende && r < _row + 500; ++r )
     {
       bool empty = true;
       for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
@@ -804,7 +807,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }	
     m_iExtraHeight = h;
   }
-
   int a = m_eAlign;
   if ( a == KSpreadCell::Undefined )
   {
@@ -976,7 +978,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       }
 
       // Dont occupy additional space for right aligned or centered text or values.
-      if ( end == 1 && !isFormular() && ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined ) )
+      if ( end == 1 && !isFormular() && !isValue() && ( m_eAlign == KSpreadCell::Left || m_eAlign == KSpreadCell::Undefined ) )
       {
 	m_iExtraWidth = w;
 	for( int i = m_iColumn + 1; i <= c; i++ )
@@ -1952,7 +1954,7 @@ void KSpreadCell::setText( const QString& _text )
     delete m_pQML;
   m_pQML = 0;
   if ( m_pVisualFormula )
-    delete m_pVisualFormula;
+    	delete m_pVisualFormula;
   m_pVisualFormula = 0;
   if ( isFormular() )
     clearFormular();

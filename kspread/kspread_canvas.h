@@ -394,6 +394,7 @@ public:
     KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
     int markerRow(){return  m_iSelectionAnchor;}
     void resizeRow(int resize,int nb=-1);
+    void ajustRow();
 protected:
     virtual void paintEvent ( QPaintEvent* _ev ); 
     virtual void mousePressEvent( QMouseEvent* _ev );
