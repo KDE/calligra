@@ -4455,7 +4455,7 @@ void KSpreadView::togglePageBorders( bool mode )
 
 void KSpreadView::viewZoom( const QString & s )
 {
-  int oldZoom = (int) (zoom() * 100);
+  int oldZoom = m_pDoc->zoom();
 
   QString z( s );
   bool ok = false;
@@ -4464,8 +4464,8 @@ void KSpreadView::viewZoom( const QString & s )
   z = z.replace( "%", "" );
   z = z.simplifyWhiteSpace();
   newZoom = z.toInt(&ok);
-  kdDebug() << "---------viewZoom: " << z << " - " << s << ", newZoom: " << newZoom
-            << ", oldZoom " << oldZoom << ", " << zoom() << endl;
+//   kdDebug(36001) << "---------viewZoom: " << z << " - " << s << ", newZoom: " << newZoom
+//                  << ", oldZoom " << oldZoom << ", " << zoom() << endl;
 
   if ( !ok || newZoom < 10 ) //zoom should be valid and >10
     newZoom = oldZoom;
