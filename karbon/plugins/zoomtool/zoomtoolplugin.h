@@ -53,7 +53,7 @@ protected:
 	virtual void mouseDrag();
 	virtual void mouseDragRelease();
 
-	virtual void arrowKeyReleased( Qt::Key );
+	virtual bool keyReleased( Qt::Key key );
 
 	void recalc();
 

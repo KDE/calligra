@@ -187,17 +187,21 @@ VZoomTool::mouseDragRelease()
 	view()->setViewportRect( rect );
 }
 
-void
-VZoomTool::arrowKeyReleased( Qt::Key key )
+bool
+VZoomTool::keyReleased( Qt::Key key )
 {
 	double zoomChange = 0;
-	if( key == Qt::Key_Up )
+	if( key == Qt::Key_Minus )
 		zoomChange = 0.75;
-	else if( key == Qt::Key_Down )
+	else if( key == Qt::Key_Plus )
 		zoomChange = 1.50;
 
 	if( zoomChange != 0 )
+	{
 		view()->setZoomAt( view()->zoom() * zoomChange );
+		return true;
+	}
+	return false;
 }
 
 void
