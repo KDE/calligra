@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="69">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="70">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -315,6 +315,7 @@
  <Action name="open_link"/>
  <Action name="change_link"/>
  <Action name="copy_link"/>
+ <Action name="add_to_bookmark"/>
  <!--<ActionList name="datatools_link"/> Spell check doesn't work on links (yet?)-->
 </Menu>
 <Menu name="footnote_popup">

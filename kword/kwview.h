@@ -341,6 +341,7 @@ public slots:
     void openLink();
     void changeLink();
     void copyLink();
+    void addToBookmark();
     void editComment();
     void showDocStructure();
     void showRuler();
@@ -599,6 +600,7 @@ private:
     KAction *actionOpenLink;
     KAction * actionChangeLink;
     KAction *actionCopyLink;
+    KAction *actionAddLinkToBookmak;
 
     KAction *actionRefreshAllVariable;
     KAction *actionCreateStyleFromSelection;

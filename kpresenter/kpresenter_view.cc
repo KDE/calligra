@@ -3169,6 +3169,10 @@ void KPresenterView::setupActions()
                                      this, SLOT( copyLink() ),
                                      actionCollection(), "copy_link" );
 
+    actionAddLinkToBookmak = new KAction( i18n( "Add to bookmark" ), 0,
+                                     this, SLOT( addToBookmark() ),
+                                     actionCollection(), "add_to_bookmark" );
+
     actionEditCustomVarsEdit = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
                                         actionCollection(), "edit_vars" );
@@ -7345,6 +7349,19 @@ void KPresenterView::copyLink()
             QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
             QApplication::clipboard()->setSelectionMode(false);
             QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
+        }
+    }
+}
+
+void KPresenterView::addToBookmark()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        KoLinkVariable * var=edit->linkVariable();
+        if(var)
+        {
+            edit->addBookmarks(var->url());
         }
     }
 }

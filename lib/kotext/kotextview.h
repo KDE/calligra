@@ -134,6 +134,8 @@ public:
     void insertSpecialChar(QChar _c, const QString& font);
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
 
+    void addBookmarks(const QString &);
+
     //return a pointer to the variable under the cursor, if any
     KoVariable *variable();
     //return a pointer to the link variable under the cursor, if any

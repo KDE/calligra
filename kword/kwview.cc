@@ -1012,6 +1012,9 @@ void KWView::setupActions()
                                      this, SLOT( copyLink() ),
                                      actionCollection(), "copy_link" );
 
+    actionAddLinkToBookmak = new KAction( i18n( "Add to bookmark" ), 0,
+                                     this, SLOT( addToBookmark() ),
+                                     actionCollection(), "add_to_bookmark" );
 
 
     actionShowDocStruct = new KToggleAction( i18n( "Show Doc Structure" ), 0,
@@ -5766,6 +5769,19 @@ void KWView::copyLink()
             QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
             QApplication::clipboard()->setSelectionMode(false);
             QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
+        }
+    }
+}
+
+void KWView::addToBookmark()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KoLinkVariable * var=edit->linkVariable();
+        if(var)
+        {
+            edit->addBookmarks(var->url());
         }
     }
 }

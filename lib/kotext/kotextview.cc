@@ -23,6 +23,7 @@
 #include "koparagcounter.h"
 #include "kotextobject.h"
 #include <klocale.h>
+#include <kstandarddirs.h>
 #include <kstdaccel.h>
 #include <kdebug.h>
 #include <kinstance.h>
@@ -33,6 +34,9 @@
 #include <kcommand.h>
 #include "KoTextViewIface.h"
 #include <kostyle.h>
+#include <kbookmarkmanager.h>
+#include <kbookmark.h>
+
 class KoTextView::KoTextViewPrivate
 {
 public:
@@ -1236,6 +1240,16 @@ KoStyle * KoTextView::createStyleFromSelection(const QString & name)
     style->paragLayout() = layout;
     layout.style = style;
     return style;
+}
+
+void KoTextView::addBookmarks(const QString &url)
+{
+    QString filename = locateLocal( "data", QString::fromLatin1("konqueror/bookmarks.xml") );
+    KBookmarkManager *bookManager = KBookmarkManager::managerForFile( filename,false );
+    KBookmarkGroup group = bookManager->root();
+    group.addBookmark( bookManager, url, KURL( url));
+    bookManager->save();
+    // delete bookManager;
 }
 
 #include "kotextview.moc"
