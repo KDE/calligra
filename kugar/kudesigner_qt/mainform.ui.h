@@ -332,7 +332,7 @@ void fmMain::setDetailFooterAttributes(QDomNode *node)
 
 void fmMain::fileOpen()
 {
-    QString fName = QFileDialog::getOpenFileName("", "*.kut", this, "Open Report Dialog",
+	QString fName = QFileDialog::getOpenFileName("", "*.kut", this, "Open Report Dialog",
 						 "Choose a file");
     if (fName == "")
 	return;
@@ -735,4 +735,87 @@ void fmMain::saveReport()
 	t << canvas->templ->getXml();
     }
     report.close();
+}
+
+
+void fmMain::fileOpen( QString name )
+{
+    QString fName = name;
+    if (fName == "")
+	return;
+
+    QFile f(fName);
+    if (!f.open(IO_ReadOnly))
+	return;
+
+    QDomDocument rt;
+    if (!rt.setContent(&f))
+	return;
+
+    QDomNode report, rep;
+    for (QDomNode report = rt.firstChild(); !report.isNull(); report = report.nextSibling())
+    {
+	if (report.nodeName() == "KugarTemplate")
+	{
+	    rep = report;
+	    break;
+	}
+    }
+    report = rep;
+
+    //setting report Attributes
+    setReportAttributes(&report, fName);
+
+    // Get all the child report elements
+    QDomNodeList children = report.childNodes();
+    int childCount = children.length();
+    for (int j = 0; j < childCount; j++)
+    {
+	QDomNode child = children.item(j);
+
+	if (child.nodeType() == QDomNode::ElementNode)
+	{
+	    if (child.nodeName() == "ReportHeader")
+		setReportHeaderAttributes(&child);
+	    else if (child.nodeName() == "PageHeader")
+		setPageHeaderAttributes(&child);
+	    else if (child.nodeName() == "DetailHeader")
+		setDetailHeaderAttributes(&child);
+	    else if(child.nodeName() == "Detail")
+		setDetailAttributes(&child);
+	    else if(child.nodeName() == "DetailFooter")
+		setDetailFooterAttributes(&child);
+	    else if(child.nodeName() == "PageFooter")
+		setPageFooterAttributes(&child);
+	    else if(child.nodeName() == "ReportFooter")
+		setReportFooterAttributes(&child);
+	}
+    }
+    canvas->templ->arrangeSections(FALSE);
+    QCanvasItemList l = canvas->allItems();
+    for (QCanvasItemList::Iterator it = l.begin(); it != l.end(); it++)
+    {
+	(*it)->show();
+    }
+    canvas->update();
+       
+    //setting canvas view as central widget in form
+    setCentralWidget(rc);
+    AddReportSections->setEnabled(TRUE);
+    reportAddReportFooter->setEnabled(TRUE);
+    reportAddReportHeader->setEnabled(TRUE);
+    reportAddPageFooter->setEnabled(TRUE);
+    reportAddPageHeader->setEnabled(TRUE);
+    reportAddDetailHeader->setEnabled(TRUE);
+    reportAddDetailFooter->setEnabled(TRUE);
+    reportAddDetail->setEnabled(TRUE);
+    filePrintAction->setEnabled(TRUE);
+    fileSaveAction->setEnabled(TRUE);
+    fileSaveAsAction->setEnabled(TRUE);
+	
+    canvas->templ->setFileName(fName);    
+    setCaption("Report Designer - " + (fName == "" ? "<unnamed>" : fName));
+	
+    f.close();
+
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>fmMain</class>
 <widget class="QMainWindow">
     <property name="name">
@@ -112,7 +112,7 @@
             <cstring>fileNewAction</cstring>
         </property>
         <property name="iconSet">
-            <iconset>filenew</iconset>
+            <iconset>i-regular-36-aa.png</iconset>
         </property>
         <property name="text">
             <string>New</string>
@@ -121,7 +121,7 @@
             <string>&amp;New</string>
         </property>
         <property name="accel">
-            <number>4194382</number>
+            <string>Ctrl+N</string>
         </property>
     </action>
     <action>
@@ -138,7 +138,7 @@
             <string>&amp;Open...</string>
         </property>
         <property name="accel">
-            <number>4194383</number>
+            <string>Ctrl+O</string>
         </property>
     </action>
     <action>
@@ -158,7 +158,7 @@
             <string>&amp;Save</string>
         </property>
         <property name="accel">
-            <number>4194387</number>
+            <string>Ctrl+S</string>
         </property>
     </action>
     <action>
@@ -175,7 +175,7 @@
             <string>Save &amp;As...</string>
         </property>
         <property name="accel">
-            <number>0</number>
+            <string></string>
         </property>
     </action>
     <action>
@@ -195,7 +195,7 @@
             <string>&amp;Print...</string>
         </property>
         <property name="accel">
-            <number>4194384</number>
+            <string>Ctrl+P</string>
         </property>
     </action>
     <action>
@@ -209,7 +209,7 @@
             <string>E&amp;xit</string>
         </property>
         <property name="accel">
-            <number>0</number>
+            <string></string>
         </property>
     </action>
     <action>
@@ -226,7 +226,7 @@
             <string>&amp;Undo</string>
         </property>
         <property name="accel">
-            <number>4194394</number>
+            <string>Ctrl+Z</string>
         </property>
     </action>
     <action>
@@ -243,7 +243,7 @@
             <string>&amp;Redo</string>
         </property>
         <property name="accel">
-            <number>4194393</number>
+            <string>Ctrl+Y</string>
         </property>
     </action>
     <action>
@@ -260,7 +260,7 @@
             <string>&amp;Cut</string>
         </property>
         <property name="accel">
-            <number>4194392</number>
+            <string>Ctrl+X</string>
         </property>
     </action>
     <action>
@@ -277,7 +277,7 @@
             <string>C&amp;opy</string>
         </property>
         <property name="accel">
-            <number>4194371</number>
+            <string>Ctrl+C</string>
         </property>
     </action>
     <action>
@@ -294,7 +294,7 @@
             <string>&amp;Paste</string>
         </property>
         <property name="accel">
-            <number>4194390</number>
+            <string>Ctrl+V</string>
         </property>
     </action>
     <action>
@@ -311,7 +311,7 @@
             <string>&amp;Find...</string>
         </property>
         <property name="accel">
-            <number>4194374</number>
+            <string>Ctrl+F</string>
         </property>
     </action>
     <action>
@@ -325,7 +325,7 @@
             <string>&amp;Contents...</string>
         </property>
         <property name="accel">
-            <number>0</number>
+            <string></string>
         </property>
     </action>
     <action>
@@ -339,7 +339,7 @@
             <string>&amp;Index...</string>
         </property>
         <property name="accel">
-            <number>0</number>
+            <string></string>
         </property>
     </action>
     <action>
@@ -353,7 +353,7 @@
             <string>&amp;About...</string>
         </property>
         <property name="accel">
-            <number>0</number>
+            <string></string>
         </property>
     </action>
     <action>
@@ -638,12 +638,6 @@
         <slot>fileNew()</slot>
     </connection>
     <connection>
-        <sender>fileOpenAction</sender>
-        <signal>activated()</signal>
-        <receiver>fmMain</receiver>
-        <slot>fileOpen()</slot>
-    </connection>
-    <connection>
         <sender>fileSaveAction</sender>
         <signal>activated()</signal>
         <receiver>fmMain</receiver>
@@ -805,6 +799,12 @@
         <receiver>fmMain</receiver>
         <slot>toggleNothing(bool)</slot>
     </connection>
+    <connection>
+        <sender>fileOpenAction</sender>
+        <signal>activated()</signal>
+        <receiver>fmMain</receiver>
+        <slot>fileOpen()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in declaration">canvbox.h</include>
@@ -904,6 +904,7 @@
     <slot>toggleField( bool t )</slot>
     <slot>toggleNothing( bool t )</slot>
     <slot>saveReport()</slot>
+    <slot>fileOpen( QString name )</slot>
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
