@@ -131,7 +131,7 @@ bool KWInsertPicDia::keepRatio() const
 
 void KWInsertPicDia::slotChooseImage()
 {
-    m_picture = KWInsertPicDia::selectPictureDia( m_doc->picturePath() ) ;
+    m_picture = KWInsertPicDia::selectPictureDia( m_doc->picturePath(), this );
     if ( m_picture.isNull() && m_bFirst)
     {
         kdDebug() << "KWInsertPicDia::slotChooseImage cancelled by user." << endl;
@@ -143,12 +143,12 @@ void KWInsertPicDia::slotChooseImage()
     m_bFirst = false;
 }
 
-KoPicture KWInsertPicDia::selectPictureDia( const QString & _path )
+KoPicture KWInsertPicDia::selectPictureDia( const QString & _path, QWidget* parent )
 {
     QStringList mimetypes ( KImageIO::mimeTypes( KImageIO::Reading ) );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( _path, QString::null, 0, 0, TRUE );
+    KFileDialog fd( _path, QString::null, parent, 0, TRUE );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Choose Picture"));
     return selectPicture( fd );

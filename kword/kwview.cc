@@ -3223,7 +3223,7 @@ void KWView::insertLink()
         return;
     QString link;
     QString ref;
-    if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0)))
+    if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0), this))
     {
         if(!link.isEmpty() && !ref.isEmpty())
             edit->insertLink(link, ref);
@@ -5879,7 +5879,7 @@ void KWView::changePicture()
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
 
-    KoPicture picture ( KWInsertPicDia::selectPictureDia ( oldFile ) );
+    KoPicture picture ( KWInsertPicDia::selectPictureDia( oldFile, this ) );
     if ( !picture.isNull() )
     {
         KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change Picture"), FrameIndex(frame), oldKey, picture.getKey() ) ;
@@ -6028,7 +6028,7 @@ void KWView::changeLink()
             QString oldLinkName=var->value();
             QString link=oldLinkName;
             QString ref=oldhref;
-            if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0)))
+            if(KoInsertLinkDia::createLinkDia(link, ref, m_doc->listOfBookmarkName(0), this))
             {
                 if(!link.isEmpty() && !ref.isEmpty())
                 {

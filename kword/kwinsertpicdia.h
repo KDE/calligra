@@ -40,8 +40,8 @@ public:
      * @param _path the name of the old file
      * @return the loaded picture (Picture is null if cancelled.)
      */
-    static KoPicture selectPictureDia( const QString & _path = QString::null );
-    
+    static KoPicture selectPictureDia( const QString & _path, QWidget* parent );
+
     KoPicture picture ( void ) const;
 
 protected slots:
