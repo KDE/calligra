@@ -523,8 +523,7 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpre
     {
         if ( s == _srcList.count() )
             s = 0;
-
-        if ( _srcList.at( s )->text() != 0L )
+        if ( !_srcList.at( s )->text().isEmpty() )
         {
             if ( _srcList.at( s )->isFormula() )
             {
@@ -556,7 +555,7 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpre
                     incre+=60;
                     cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
                 }
-	    else if(AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end() && _srcList.count()==1)
+	    else if(AutoFillSequenceItem::month->find( _srcList.at( s )->text())!=0L && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end() && _srcList.count()==1)
 	      {
 		QString strMonth=_srcList.at( s )->text();
 		int i = AutoFillSequenceItem::month->findIndex( strMonth );
@@ -564,7 +563,7 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpre
 		cell->setCellText((*AutoFillSequenceItem::month->at( k )));
 		incre++;
 	      }
-	    else if(AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != AutoFillSequenceItem::day->end() && _srcList.count()==1)
+	    else if(AutoFillSequenceItem::day->find( _srcList.at( s )->text())!=0L && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != AutoFillSequenceItem::day->end() && _srcList.count()==1)
 	      {
 		QString strDay=_srcList.at( s )->text();
 		int i = AutoFillSequenceItem::day->findIndex( strDay );
