@@ -28,7 +28,7 @@
 const int BIFF_5_7 = 0x0500;
 const int BIFF_8 = 0x0600;
 
-class XMLTree:public QObject 
+class XMLTree:public QObject
 {
 public:
   XMLTree();
@@ -56,8 +56,8 @@ public:
   bool _calcmode(Q_UINT16, QDataStream&);
   bool _cf(Q_UINT16, QDataStream&);
   bool _condfmt(Q_UINT16, QDataStream&);
-  bool _codename(Q_UINT16, QDataStream&); 
-  bool _codepage(Q_UINT16, QDataStream&); 
+  bool _codename(Q_UINT16, QDataStream&);
+  bool _codepage(Q_UINT16, QDataStream&);
   bool _colinfo(Q_UINT16 size, QDataStream& body);
   bool _cont(Q_UINT16, QDataStream&);
   bool _coordlist(Q_UINT16, QDataStream&);
@@ -202,7 +202,7 @@ public:
   bool _verticalpagebreaks(Q_UINT16, QDataStream&);
   bool _window1(Q_UINT16, QDataStream&);
   bool _window2(Q_UINT16, QDataStream&);
-  bool _windowprotect(Q_UINT16, QDataStream&); 
+  bool _windowprotect(Q_UINT16, QDataStream&);
   bool _writeaccess(Q_UINT16 size, QDataStream& body);
   bool _writeprot(Q_UINT16, QDataStream&);
   bool _wsbool(Q_UINT16, QDataStream&);
@@ -217,13 +217,13 @@ private:
   };
 
   struct font_rec {
-    Q_UINT16 dyHeight, 
-      grbit, 
-      icv, 
-      bls, 
+    Q_UINT16 dyHeight,
+      grbit,
+      icv,
+      bls,
       sss;
-    Q_UINT8 uls, 
-      bFamily, 
+    Q_UINT8 uls,
+      bFamily,
       bCharSet,
       reserved,
       cch;
@@ -241,7 +241,7 @@ private:
     Q_UINT32 topBColor;
     Q_UINT16 cellColor;
   };
-  
+
   Q_UINT16 biff;
 
   QDomDocument *root;
@@ -254,6 +254,9 @@ private:
   QQueue<QDomElement> tables;
 
   QDomElement doc, paper, map, *table;
+
+  // To avoid static variables:
+  int fontCount, footerCount, headerCount, xfCount;
 };
 
-#endif 
+#endif

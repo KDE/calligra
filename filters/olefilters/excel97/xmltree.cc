@@ -32,7 +32,8 @@ const char *palette[65] = {
   "#993300", "#993366", "#333399", "#333333", "#ffffff"
 };
 
-XMLTree::XMLTree():QObject(),table(0L)
+XMLTree::XMLTree():QObject(),table(0L), fontCount(0), footerCount(0),
+                          headerCount(0), xfCount(0)
 {
   QDomElement e;
 
@@ -594,8 +595,6 @@ bool XMLTree::_fngroupname(Q_UINT16, QDataStream&)
 
 bool XMLTree::_font(Q_UINT16 size, QDataStream& body)
 {
-  static int count;
-
   QChar *c;
   Q_UINT8 lsb, msb;
 
@@ -617,16 +616,14 @@ bool XMLTree::_font(Q_UINT16 size, QDataStream& body)
       f->rgch += *c;
     }
   }
-  fonts.insert(count++, f);
+  fonts.insert(fontCount++, f);
 
   return true;
 }
 
 bool XMLTree::_footer(Q_UINT16 size, QDataStream& body)
 {
-  static int count;
-
-  if (count++ == 0) {
+  if (footerCount++ == 0) {
     QDomElement e;
     Q_UINT8 length;
     body >> length;
@@ -683,9 +680,7 @@ bool XMLTree::_hcenter(Q_UINT16, QDataStream&)
 
 bool XMLTree::_header(Q_UINT16 size, QDataStream& body)
 {
-  static int count;
-
-  if (count++ == 0) {
+  if (headerCount++ == 0) {
     QDomElement e;
     Q_UINT8 length;
     body >> length;
@@ -1425,12 +1420,10 @@ bool XMLTree::_xct(Q_UINT16, QDataStream&)
 
 bool XMLTree::_xf(Q_UINT16 size, QDataStream& body)
 {
-  static int count;
-
   xf_rec *x = new xf_rec;
   body >> x->ifnt >> x->ifmt >> x->attr >> x->align >> x->indent;
   body >> x->borderStyle >> x->sideBColor >> x->topBColor >> x->cellColor;
-  xfs.insert(count++, x);
+  xfs.insert(xfCount++, x);
 
   return true;
 }
