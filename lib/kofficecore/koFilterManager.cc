@@ -412,7 +412,7 @@ QString KoFilterManager::prepareExport( const QString & file,
     d->document=document;
     KURL url( d->exportFile );
 
-    ASSERT( outputFormat != _native_format );
+    Q_ASSERT( outputFormat != _native_format );
 
     d->mime_type=outputFormat;   // needed for export_ :)
 

@@ -149,7 +149,7 @@ public:
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     : KParts::MainWindow( name )
 {
-    ASSERT(instance);
+    Q_ASSERT(instance);
     d = new KoMainWindowPrivate;
 
     d->m_manager = new KoPartManager( this );
@@ -857,7 +857,7 @@ void KoMainWindow::slotConfigureKeys()
         coll += *doc->actionCollection();
     KoView *view = rootView();
     // We _need_ a view. We use the view's xmlFile() (e.g. kword.rc)
-    ASSERT( view );
+    Q_ASSERT( view );
     if ( !view )
         return;
     coll += *view->actionCollection();

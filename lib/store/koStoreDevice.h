@@ -46,16 +46,16 @@ public:
   void close() { }
   void flush() { }
 
-  uint size() const {
+  Offset size() const {
     if ( m_store->mode() == KoStore::Read )
       return m_store->size();
     else
       return 0xffffffff;
   }
 
-  int readBlock( char *data, uint maxlen ) { return (int) m_store->read(data, maxlen); }
-  int writeBlock( const char *data, uint len ) { m_store->write( data, len ); return len; }
-  int readLine( char *, uint  ) { return -1; } // unsupported
+  Q_LONG readBlock( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
+  Q_LONG writeBlock( const char *data, Q_ULONG len ) { m_store->write( data, len ); return len; }
+  Q_LONG readLine( char *, Q_ULONG  ) { return -1; } // unsupported
 
   int getch() {
     char c[2];
@@ -76,8 +76,8 @@ public:
   int ungetch( int ) { return -1; } // unsupported
 
   // See QIODevice
-  virtual bool at( int pos ) { return m_store->at(pos); }
-  virtual int at() const { return m_store->at(); }
+  virtual bool at( Offset pos ) { return m_store->at(pos); }
+  virtual Offset at() const { return m_store->at(); }
   virtual bool atEnd() const { return m_store->atEnd(); }
 
 protected:

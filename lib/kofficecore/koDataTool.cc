@@ -252,7 +252,7 @@ QList<KAction> KoDataToolAction::dataToolActionList( const QValueList<KoDataTool
     {
         QStringList userCommands = (*entry).userCommands();
         QStringList commands = (*entry).commands();
-        ASSERT(!commands.isEmpty());
+        Q_ASSERT(!commands.isEmpty());
         if ( commands.count() != userCommands.count() )
             kdWarning() << "KoDataTool desktop file error (" << (*entry).service()->entryPath()
                         << "). " << commands.count() << " commands and "

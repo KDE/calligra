@@ -102,7 +102,7 @@ public:
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
  : QWidget( parent, name )
 {
-  ASSERT( document );
+  Q_ASSERT( document );
 
   //kdDebug(30003) << "KoView::KoView " << this << endl;
   d = new KoViewPrivate;
@@ -379,7 +379,7 @@ void KoView::addStatusBarItem( QWidget * widget, int stretch, bool permanent )
     d->m_statusBarItems.append(item);
     QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.fromLast();
     KStatusBar * sb = statusBar();
-    ASSERT(sb);
+    Q_ASSERT(sb);
     if (sb)
         (*it).ensureItemShown( sb );
 }

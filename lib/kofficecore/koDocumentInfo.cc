@@ -44,7 +44,7 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
     for( ; it != lst.end(); ++it )
     {
         KoDocumentInfoPage* p = page( *it );
-        ASSERT( p );
+        Q_ASSERT( p );
         if ( !p->load( doc.documentElement() ) )
             return false;
     }
@@ -64,7 +64,7 @@ QDomDocument KoDocumentInfo::save()
     for( ; it != lst.end(); ++it )
     {
         KoDocumentInfoPage* p = page( *it );
-        ASSERT( p );
+        Q_ASSERT( p );
         QDomElement s = p->save( doc );
         if ( s.isNull() )
             return QDomDocument();

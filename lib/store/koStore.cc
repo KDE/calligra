@@ -251,7 +251,7 @@ QByteArray KoStore::read( unsigned long int max )
   return data;
 }
 
-long KoStore::read( char *_buffer, unsigned long _len )
+Q_LONG KoStore::read( char *_buffer, Q_ULONG _len )
 {
   if ( !m_bIsOpen )
   {
@@ -367,19 +367,19 @@ kdDebug(s_area) << "KoStore: is file " << endl;
   return i == entries.count();
 }
 
-long KoStore::size() const
+QIODevice::Offset KoStore::size() const
 {
   if ( !m_bIsOpen )
   {
     kdWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
-    return -1;
+    return static_cast<Q_ULONG>(-1);
   }
   if ( m_mode != Read )
   {
     kdWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
-    return -1;
+    return static_cast<Q_ULONG>(-1);
   }
-  return (long) m_iSize;
+  return m_iSize;
 }
 
 bool KoStore::write( const QByteArray& data )
@@ -389,7 +389,7 @@ bool KoStore::write( const QByteArray& data )
   return write( data.data(), len ); // see below
 }
 
-bool KoStore::write( const char* _data, unsigned long _len )
+bool KoStore::write( const char* _data, Q_ULONG _len )
 {
   if ( _len == 0L ) return true;
 
@@ -410,12 +410,12 @@ bool KoStore::write( const char* _data, unsigned long _len )
   return true;
 }
 
-bool KoStore::at( int pos )
+bool KoStore::at( QIODevice::Offset pos )
 {
   return m_stream->at( pos );
 }
 
-int KoStore::at() const
+QIODevice::Offset KoStore::at() const
 {
   return m_stream->at();
 }

@@ -246,7 +246,7 @@ bool KoDocument::saveFile()
   QCString _native_format = nativeFormatMimeType();
   // The output format is set by koMainWindow, and by openFile
   QCString outputMimeType = d->outputMimeType;
-  ASSERT( !outputMimeType.isEmpty() );
+  Q_ASSERT( !outputMimeType.isEmpty() );
   if ( outputMimeType.isEmpty() )
       outputMimeType = _native_format;
 
@@ -714,7 +714,7 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 QString KoDocument::autoSaveFile( const QString & path ) const
 {
     KURL url( path );
-    ASSERT( url.isLocalFile() );
+    Q_ASSERT( url.isLocalFile() );
     QString dir = url.directory(false);
     QString filename = url.filename();
     return dir + '.' + filename + ".autosave";
@@ -799,7 +799,7 @@ bool KoDocument::openFile()
      // We already had a view (this happens when doing reload in konqueror)
      removeView( d->m_views.first() );
      delete d->m_views.first();
-     ASSERT( d->m_views.isEmpty() );
+     Q_ASSERT( d->m_views.isEmpty() );
   }
 
   d->m_changed=false;

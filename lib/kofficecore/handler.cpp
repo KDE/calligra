@@ -55,7 +55,7 @@ public:
 
         bool ok = true;
         m_invert = m_matrix.invert( &ok );
-        ASSERT( ok );
+        Q_ASSERT( ok );
         m_mouseStart = m_invert.map( m_invertParentMatrix.map( point ) );
     }
     ~PartResizeHandlerPrivate() {}
@@ -200,7 +200,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
             }
             break;
         default:
-            ASSERT( 0 );
+            Q_ASSERT( 0 );
         }
         return true;
     }

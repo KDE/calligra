@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qiodevice.h>
 
 class QBuffer;
 class KTarGz;
@@ -83,14 +84,14 @@ public:
    * Write data into the currently opened file. You can also use the streams
    * for this.
    */
-  bool write( const char* _data, unsigned long _len );
+  bool write( const char* _data, Q_ULONG _len );
 
   /**
    * Read data from the currently opened file. You can also use the streams
    * for this.
    * @return size of data read, -1 on error
    */
-  long read( char *_buffer, unsigned long _len );
+  Q_LONG read( char *_buffer, Q_ULONG _len );
 
   /**
    * Embed a part contained in one store inside the current one, as the part
@@ -108,7 +109,7 @@ public:
    * @return the size of the currently opened file, -1 on error.
    * Can be used as an argument for the read methods, for instance
    */
-  long size() const;
+  QIODevice::Offset size() const;
 
   /**
    * @return true if an error occured
@@ -121,8 +122,8 @@ public:
   Mode mode() { return m_mode; }
 
   // See QIODevice
-  bool at( int pos );
-  int at() const;
+  bool at( QIODevice::Offset pos );
+  QIODevice::Offset at() const;
   bool atEnd() const;
 
 protected:
@@ -156,7 +157,7 @@ protected:
   // Current filename (between an open() and a close())
   QString m_sName;
   // Current size of the file named m_sName
-  unsigned long m_iSize;
+  QIODevice::Offset m_iSize;
 
   KTarGz * m_pTar;
   QByteArray m_byteArray;
