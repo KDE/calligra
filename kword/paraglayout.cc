@@ -188,18 +188,9 @@ bool KWParagLayout::load( QDOM::Element& layout )
   paragHeadOffset = layout.attribute( "head-offset" );
   paragFootOffset = layout.attribute( "foot-offset" );
   firstLineLeftIndent = layout.attribute( "first-line-left-indent" );
+  leftIndent = layout.attribute( "left-indent" );
+  lineSpacing = layout.attribute( "line-spacing" );
 
-	// following parag layout
-	else if ( _name == "FOLLOWING" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "name" )
-		    followingParagLayout = correctQString( ( *it ).m_strValue.c_str() );
-	    }
-	}
 
 	// following parag layout
 	else if ( _name == "TABULATOR" )
