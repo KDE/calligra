@@ -54,6 +54,7 @@ VStrokeFillPreview::VStrokeFillPreview(
 	KarbonPart *part, QWidget* parent, const char* name )
 		: QFrame( parent, name ), m_part( part )
 {
+	m_strokeWidget = false;
 	setFocusPolicy( QWidget::NoFocus );
 
 #if QT_VERSION < 0x030100
