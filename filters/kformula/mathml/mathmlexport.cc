@@ -48,7 +48,7 @@ MathMLExport::MathMLExport( KoFilter */*parent*/, const char */*name*/, const QS
 
 KoFilter::ConversionStatus MathMLExport::convert( const QCString& from, const QCString& to )
 {
-    if ( to != "text/mml" || from != "application/x-kformula" )
+    if ( to != "application/mathml+xml" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;
 
     KoStoreDevice* in = m_chain->storageFile( "root", KoStore::Read );

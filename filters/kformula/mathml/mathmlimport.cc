@@ -49,7 +49,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     kdWarning( KFormula::DEBUGID ) << from << endl;
     kdWarning( KFormula::DEBUGID ) << to << endl;
 
-    if(from != "text/mml" || to != "application/x-kformula")
+    if(from != "application/mathml+xml" || to != "application/x-kformula")
         return KoFilter::NotImplemented;
 
     KoStore* out = KoStore::createStore(QString(m_chain->outputFile()), KoStore::Write);
