@@ -7,6 +7,8 @@ TODO:
 	(make vselection a visitor and paint selected shapes instead of each shape)
 -	scratch your head about how to do undo/redo of path operations best like
 	removing nodes, inserting nodes...
+-	allow for multiple strokes and fills in VPath. Also allow for strokes to be under
+	fills for nice special effects.
 
 REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
