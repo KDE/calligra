@@ -302,8 +302,10 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
             frame = doc->frameAtPos( x, y );
 
         KWFrameSet *fs = frame ? frame->getFrameSet() : 0;
-        if ( fs && ( e->state() & ShiftButton ) && fs->getFrameType() == FT_TABLE ) { // is table and we hold shift
-            curTable = static_cast<KWTableFrameSet *> (fs);
+        KWTableFrameSet *table= fs ? fs->getGroupManager() : 0;
+
+        if ( fs && ( e->state() & ShiftButton ) && table ) { // is table and we hold shift
+            curTable = table;//static_cast<KWTableFrameSet *> (fs);
             curTable->selectUntil( x,y );
         }
         else if ( !frame->isSelected() ) // clicked on a frame that wasn't selected
@@ -322,8 +324,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
             }
         }
         // Set curTable if fs is a table, 0L otherwise
-        curTable = dynamic_cast<KWTableFrameSet *>(fs);
-
+        curTable = table;//dynamic_cast<KWTableFrameSet *>(fs);
         emit frameSelectedChanged();
     }
 
