@@ -31,11 +31,8 @@
 /*******************************************/
 /* Get the set of info. about a text format*/
 /*******************************************/
-void PictureFormat::analysePictureFormat(const Markup * balise_initiale)
+void PictureFormat::analysePictureFormat(const QDomNode balise)
 {
-	Token*  savedToken = 0;
-	Markup* balise     = 0;
-
 	/* MARKUPS FORMAT id="1" pos="0" len="17">
 	 * <IMAGE>
 	 * 	<FILENAME value="/my/pictures/directory/filename.png">
@@ -43,20 +40,11 @@ void PictureFormat::analysePictureFormat(const Markup * balise_initiale)
 	 * </FORMAT> */
 	
 	/* Parameters Analyse */
-	analyseParam(balise_initiale);
+	analyseParam(balise);
 	kdDebug() << "ANALYSE A PICTURE ZONE" << endl;
-	
+
 	/* Children Markups Analyse */
-	savedToken = enterTokenChild(balise_initiale);
-	
-	while((balise = getNextMarkup()) != NULL)
-	{
-		if(strcmp(balise->token.zText, "IMAGE")== 0)
-		{
-			kdDebug() << "IMAGE : " << endl;
-			analyseImage(balise);
-		}
-	}
+	analyseImage(getChild(balise, "IMAGE"));
 	kdDebug() << "END OF A PICTURE ZONE" << endl;
 }
 
@@ -65,27 +53,12 @@ void PictureFormat::analysePictureFormat(const Markup * balise_initiale)
 /*******************************************/
 /* Get the zone where the format is applied*/
 /*******************************************/
-void PictureFormat::analyseParam(const Markup *balise)
+void PictureFormat::analyseParam(const QDomNode balise)
 {
 	/* <FORMAT id="1" pos="0" len="17"> */
-	Arg *arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "ID")== 0)
-		{
-			//setId(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "POS")== 0)
-		{
-			setPos(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "LEN")== 0)
-		{
-			setLength(atoi(arg->zValue));
-		}
-	}
+	//setId(getAttr(balise, "ID").toInt());
+	setPos(getAttr(balise, "POS").toInt());
+	setLength(getAttr(balise, "LEN").toInt());
 }
 
 
@@ -94,32 +67,13 @@ void PictureFormat::analyseParam(const Markup *balise)
 /*******************************************/
 /* Get the image filename                  */
 /*******************************************/
-void PictureFormat::analyseImage(const Markup *balise_initiale)
+void PictureFormat::analyseImage(const QDomNode balise)
 {
-	Token*  savedToken = 0;
-	Markup* balise     = 0;
-	Arg *arg = 0;
-
-	/* Children Markups Analyse */
-	savedToken = enterTokenChild(balise_initiale);
+	QDomNode fils;
 	
-	while((balise = getNextMarkup()) != NULL)
-	{
-		if(strcmp(balise->token.zText, "FILENAME")== 0)
-		{
-			kdDebug() << "FILENAME : " << endl;
-			for(arg= balise->pArg; arg; arg= arg->pNext)
-			{
-				//kdDebug() << "PARAM " << arg->zName << endl;
-				if(strcmp(arg->zName, "VALUE")== 0)
-				{
-					kdDebug() << arg->zValue << endl;
-					setFilename(arg->zValue);
-					//setPathname(arg->zValue);
-					_fileHeader->useGraphics();
-				}
-			}
-		}
-	}
-
+	/* Children Markups Analyse */
+	fils = getChild(balise, "FILENAME");
+	setFilename(getAttr(fils, "VALUE"));
+	//setPathname(arg->zValue);
+	_fileHeader->useGraphics();
 }

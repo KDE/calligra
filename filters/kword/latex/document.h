@@ -77,21 +77,26 @@ class Document: public XmlParser
 		/**
 		 * @return the next frame type (header, footer, body, footnote).
 		 */
-		SType getTypeFrameset(const Markup *);
+		SType getTypeFrameset(const QDomNode);
 		//FileHeader* getFileHeader() const { return _fileHeader; }
 		//void setFileHeader(FileHeader *h) { _fileHeader = h; }
 
-		void  analyse(const Markup *);
+		void  analyse(const QDomNode);
 
-		void  generate(QTextStream&);
+		void  generate(QTextStream&, bool);
 
 	private:
 		/**
-		 * @return generate the header
+		 * Generate the second part of the preambule
+		 */
+		void generatePreambule(QTextStream&);
+
+		/**
+		 * Generate the header
 		 */
 		void  generateTypeHeader(QTextStream&, Element*);
 		/**
-		 * @return generate the footer
+		 * Generate the footer
 		 */
 		void  generateTypeFooter(QTextStream&, Element*);
 };

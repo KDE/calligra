@@ -25,62 +25,57 @@
 
 #include "xml2latexparser.h"
 
-Xml2LatexParser::Xml2LatexParser(QString filename, const char *data): XmlParser(data), _file(filename.latin1())
+Xml2LatexParser::Xml2LatexParser(QString fileIn, QString fileOut):
+		XmlParser(fileIn), _file(fileOut)
 {
-	kdDebug() << filename.latin1() << endl;
-	_filename = filename;
+	kdDebug() << fileIn.latin1() << endl;
+	kdDebug() << fileOut.latin1() << endl;
+	_filename = fileOut;
 	_document.setFileHeader(_fileHeader);
+	_isEmbeded = false;
+}
+
+Xml2LatexParser::Xml2LatexParser(QString fileIn, QString fileOut, QString config):
+		XmlParser(fileIn), _file(fileOut)
+{
+	kdDebug() << fileIn.latin1() << endl;
+	kdDebug() << fileOut.latin1() << endl;
+	_filename = fileOut;
+	_document.setFileHeader(_fileHeader);
+	_isEmbeded = false;
+	analyse_config(config);
+}
+
+void Xml2LatexParser::analyse_config(QString config)
+{
+	kdDebug() << config << endl;
+	if(config.contains("EMBEDED") > 0)
+		_isEmbeded = true;
+	if(config.contains("LATEX") > 0)
+		useLatexStyle();
+	else if(config.contains("KWORD") > 0)
+		useKwordStyle();
+	if(config.contains("UNICODE") > 0)
+		useUnicodeEnc();
+	else if(config.contains("LATIN1") > 0)
+		useLatin1Enc();
 }
 
 void Xml2LatexParser::analyse()
 {
-	Markup* balise     = 0;
-	Token*  savedToken = 0;
-
-	while((balise = getNextMarkup()) != 0)
-	{
-		if(strcmp(balise->token.zText, "DOC") == 0)
-		{
-			kdDebug() << "ENTETE -> DOC" << endl;
-			savedToken = enterTokenChild(balise);
-			//_header.analyse();
-
-		}
-		else if(strcmp(balise->token.zText, "PAPER") == 0)
-		{
-			kdDebug() <<"ENTETE -> PAPER" << endl;
-			_header.analysePaper(balise);
-		}
-		else if(strcmp(balise->token.zText, "ATTRIBUTES") == 0)
-		{
-			kdDebug() <<"ENTETE -> ATTRIBUTES" << endl;
-			_header.analyseAttributs(balise);
-		}
-		else if(strcmp(balise->token.zText, "FRAMESETS") == 0)
-		{
-			kdDebug() <<"ENTETE -> FRAMESETS" << endl;
-			_document.analyse(balise);
-			kdDebug() <<"ENTETE -> FIN FRAMESETS" << endl;
-		}
-		else if(strcmp(balise->token.zText, "STYLES") == 0)
-		{
-			kdDebug() <<"ENTETE -> STYLES" << endl;
-			// not implemented
-			// _style.analyse(balise);
-		}
-		else if(strcmp(balise->token.zText, "PIXMAPS") == 0)
-		{
-			kdDebug() <<"ENTETE -> PIXMAPS" << endl;
-			// not implemented
-			// _pixmaps.analyse(balise);
-		}
-		else if(strcmp(balise->token.zText, "SERIALL") == 0)
-		{
-			kdDebug() <<"ENTETE -> SERIALL" << endl;
-			// not implemented
-			// _seriall.analyse();
-		}
-	}
+	QDomNode balise;
+	balise = init();
+	balise = getChild(balise, "DOC");
+	kdDebug() <<"ENTETE -> PAPER" << endl;
+	_header.analysePaper(getChild(balise, "PAPER"));
+	kdDebug() <<"ENTETE -> ATTRIBUTES" << endl;
+	_header.analyseAttributs(getChild(balise, "ATTRIBUTS"));
+	kdDebug() <<"ENTETE -> FRAMESETS" << endl;
+	_document.analyse(getChild(balise, "FRAMESETS"));
+	kdDebug() <<"ENTETE -> FIN FRAMESETS" << endl;
+	//kdDebug() <<"ENTETE -> STYLES" << endl;
+	//kdDebug() <<"ENTETE -> PIXMAPS" << endl;
+	//kdDebug() <<"ENTETE -> SERIALL" << endl;
 	kdDebug() << "FIN ANALYSE" << endl;
 }
 
@@ -90,8 +85,9 @@ void Xml2LatexParser::generate()
 	{
 		kdDebug() << "GENERATION" << endl;
 		_out.setDevice(&_file);
-		_header.generate(_out);
-		_document.generate(_out);
+		if(!isEmbeded())
+			_header.generate(_out);
+		_document.generate(_out, !isEmbeded());
 		_out << getDocument();
 	}
 	else

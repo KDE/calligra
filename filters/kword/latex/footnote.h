@@ -40,7 +40,7 @@ class Footnote: public Format
 {
 	int     _from,   _to;
 	int     _start,  _end;
-	char    _before, _after, _space;
+	QString _before, _after, _space;	// TODO: Change in QChar
 	QString _ref;
 
 	public:
@@ -70,21 +70,21 @@ class Footnote: public Format
 		 */
 		void setFrom  (int   f) { _from   = f; }
 		void setTo    (int   t) { _to     = t; }
-		void setSpace (char*);
+		void setSpace (QString);
 		void setStart (int   s) { _start  = s; }
 		void setEnd   (int   e) { _end    = e; }
-		void setBefore(char*);
-		void setAfter (char*);
-		void setRef   (char*);
+		void setBefore(QString);
+		void setAfter (QString);
+		void setRef   (QString);
 
 		/**
 		 * Helpfull functions
 		 */
-		void analyse (const Markup*);
-		void analyseInternal(const Markup*);
-		void analyseRange(const Markup*);
-		void analyseText(const Markup*);
-		void analyseDescript(const Markup*);
+		void analyse (const QDomNode);
+		void analyseInternal(const QDomNode);
+		void analyseRange(const QDomNode);
+		void analyseText(const QDomNode);
+		void analyseDescript(const QDomNode);
 
 		void generate(QTextStream&);
 

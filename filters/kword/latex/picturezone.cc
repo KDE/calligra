@@ -51,15 +51,15 @@ PictureZone::~PictureZone()
 /* Analyse a text format, get the text used*/
 /* by this format.                         */
 /*******************************************/
-void PictureZone::analyse(const Markup * balise_initiale)
+void PictureZone::analyse(const QDomNode balise)
 {
 	kdDebug() << "FORMAT" << endl;
 	/* Get header information (size, position)
 	 * Get infos. to delete the text
 	 */
 
-	if(balise_initiale != 0)
-		analysePictureFormat(balise_initiale);
+	//if(balise != 0)
+		analysePictureFormat(balise);
 
 	/* Convert the picture */
 

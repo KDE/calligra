@@ -113,7 +113,7 @@ class Texte: public Element, Border
 		/**
 		 * Get informations from a markup tree.
 		 */
-		void analyse(const Markup*);
+		void analyse(const QDomNode);
 
 		/**
 		 * Write the text in a file.
@@ -125,7 +125,7 @@ class Texte: public Element, Border
 		 * Get informations from a markup tree (only parameters
 		 * in a frame.
 		 */
-		void analyseParamFrame(const Markup*);
+		void analyseParamFrame(const QDomNode);
 
 };
 

@@ -31,7 +31,7 @@ Element::Element()
 	_type      = ST_NONE;
 	_hinfo     = SI_NONE;
 	_section   = SS_NONE;
-	_name      = 0;
+	_name      = "";
 	_removable = false;
 	_visible   = true;
 	_row       = 0;
@@ -47,14 +47,12 @@ Element::Element()
 Element::~Element()
 {
 	kdDebug() << "Element Destructor" << endl;
-	if(_name != 0)
-		delete _name;
 }
 
 /*******************************************/
 /* Analyse                                 */
 /*******************************************/
-void Element::analyse(const Markup * balise_initiale)
+void Element::analyse(const QDomNode balise_initiale)
 {
 	/* ANALYSE A FRAMESET MARKUP */
 	
@@ -66,101 +64,52 @@ void Element::analyse(const Markup * balise_initiale)
 /*******************************************/
 /* AnalyseParam                            */
 /*******************************************/
-void Element::analyseParam(const Markup *balise)
+void Element::analyseParam(const QDomNode balise)
 {
-	/* <FRAMESET frameType="1" frameInfo="0" removable="0" visible="1"
-	 * name="Supercadre 1"> */
-	Arg *arg = 0;
-
-	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
+	/* <FRAMESET frameType="1" frameInfo="0" removable="0"
+	 * visible="1" name="Supercadre 1">
+	 */
+	_name = getAttr(balise, "name");
+	_type = (SType) getAttr(balise, "frameType").toInt();
+	switch(getAttr(balise, "frameInfo").toInt())
 	{
-		kdDebug() << "param : " << arg->zName << " " << arg->zValue << endl;
-		if(strcmp(arg->zName, "NAME")== 0)
-		{
-			_name = strdup(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "FRAMETYPE")== 0)
-		{
-			// TO FINISH
-			switch(atoi(arg->zValue))
-			{
-				case 0: _type = ST_NONE;
-					break;
-				case 1: _type = ST_TEXT;
-					break;
-				case 2: _type = ST_PICTURE;
-					break;
-				case 3: _type = ST_PART;
-					break;
-				case 4: _type = ST_FORMULA;
-					break;
-				default:
-					_type = ST_NONE;
-					kdDebug() << "error : frameinfo unknown!" << endl;
-			}
-		}
-		else if(strcmp(arg->zName, "FRAMEINFO")== 0 && _section == SS_NONE)
-		{
-			/* If _section != NONE, it's a table. */
-			switch(atoi(arg->zValue))
-			{
-				case 0: _section = SS_BODY;
-					break;
-				case 1: _section = SS_HEADERS;
-					_hinfo   = SI_FIRST;
-					break;
-				case 2: _section = SS_HEADERS;
-					_hinfo   = SI_ODD;
-					break;
-				case 3: _section = SS_HEADERS;
-					_hinfo   = SI_EVEN;
-					break;
-				case 4: _section = SS_FOOTERS;
-					_hinfo   = SI_FIRST;
-					break;
-				case 5: _section = SS_FOOTERS;
-					_hinfo   = SI_ODD;
-					break;
-				case 6: _section = SS_FOOTERS;
-					_hinfo   = SI_EVEN;
-					break;
-				case 7: _section = SS_FOOTNOTES;
-					break;
-				default:
-					_section = SS_NONE;
-					kdDebug() << "error : frameinfo unknown!" << endl;
-			}
-		}
-		else if(strcmp(arg->zName, "REMOVABLE") == 0)
-		{
-			setRemovable(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "VISIBLE") == 0)
-		{
-			setVisible(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "GRPMGR") == 0)
-		{
-			/* It's a table !! */
-			_section = SS_TABLE;
-			setGrpMgr(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "ROW") == 0)
-		{
-			setRow(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "COL") == 0)
-		{
-			setCol(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "ROWS") == 0)
-		{
-			setRows(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "COLS") == 0)
-		{
-			setCols(atoi(arg->zValue));
-		}
+		case 0: _section = SS_BODY;
+			break;
+		case 1: _section = SS_HEADERS;
+			_hinfo   = SI_FIRST;
+			break;
+		case 2: _section = SS_HEADERS;
+			_hinfo   = SI_ODD;
+			break;
+		case 3: _section = SS_HEADERS;
+			_hinfo   = SI_EVEN;
+			break;
+		case 4: _section = SS_FOOTERS;
+			_hinfo   = SI_FIRST;
+			break;
+		case 5: _section = SS_FOOTERS;
+			_hinfo   = SI_ODD;
+			break;
+		case 6: _section = SS_FOOTERS;
+			_hinfo   = SI_EVEN;
+			break;
+		case 7: _section = SS_FOOTNOTES;
+			break;
+		default:
+			_section = SS_NONE;
+			kdDebug() << "error : frameinfo unknown!" << endl;
 	}
+	setRemovable(getAttr(balise, "removable").toInt());
+	setVisible(getAttr(balise, "visible").toInt());
+	if(getAttr(balise, "grpMgr")!= 0)
+	{
+		_section = SS_TABLE;
+		setGrpMgr(getAttr(balise, "grpMgr"));
+	}
+	setRow(getAttr(balise, "row").toInt());
+	setCol(getAttr(balise, "col").toInt());
+	setRows(getAttr(balise, "rows").toInt());
+	setCols(getAttr(balise, "cols").toInt());
+
 	kdDebug() << "FIN PARAM" << endl;
 }

@@ -48,65 +48,50 @@ Layout::Layout()
 /*******************************************/
 /* analyseLAyout                           */
 /*******************************************/
-void Layout::analyseLayout(const Markup * balise_initiale)
+void Layout::analyseLayout(const QDomNode balise)
 {
-	Token*  savedToken = 0;
-	Markup* balise     = 0;
-
 	/* Markup type : FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* No parameters for this markup */
 	kdDebug() << "ANALYSE OF THE BEGINING OF A LAYOUT" << endl;
 	
 	/* Analyse children markups */
-	savedToken = enterTokenChild(balise_initiale);
-	
-	while((balise = getNextMarkup()) != NULL)
+	for(int index= 0; index < getNbChild(balise); index++)
 	{
-		if(strcmp(balise->token.zText, "NAME")== 0)
+		if(getChildName(balise, index).compare("NAME")== 0)
 		{
 			kdDebug() << "NAME : " << endl;
-			analyseName(balise);
+			analyseName(getChild(balise, index));
 		}
-		else if(strcmp(balise->token.zText, "FOLLOWING")== 0)
+		else if(getChildName(balise, index).compare("FOLLOWING")== 0)
 		{
 			kdDebug() << "FOLLOWING : " << endl;
-			analyseFollowing(balise);
+			analyseFollowing(getChild(balise, index));
 		}
-		else if(strcmp(balise->token.zText, "FLOW")== 0)
+		else if(getChildName(balise, index).compare("FLOW")== 0)
 		{
 			kdDebug() << "FLOW : " << endl;
-			analyseEnv(balise);
+			analyseEnv(getChild(balise, index));
 		}
-		else if(strcmp(balise->token.zText, "COUNTER")== 0)
+		else if(getChildName(balise, index).compare("COUNTER")== 0)
 		{
 			kdDebug() << "COUNTER : " << endl;
-			analyseCounter(balise);
+			analyseCounter(getChild(balise, index));
 		}
-		else if(strcmp(balise->token.zText, "FORMAT")== 0)
+		else if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
 			kdDebug() << "FORMAT : " << endl;
-			Format::analyse(balise);
+			Format::analyse(getChild(balise, index));
 		}
 	}
 	kdDebug() << "END OF THE BEGINING OF A LAYOUT" << endl;
-	setTokenCurrent(savedToken);
 }
 
-void Layout::analyseName(const Markup *balise)
+void Layout::analyseName(const QDomNode balise)
 {
 	/* <NAME value="times"> */
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			setName(arg->zValue);
-			kdDebug() << arg->zValue << endl;
-		}
-	}
+	kdDebug() << "PARAM" << endl;
+	setName(getAttr(balise, "value"));
 }
 
 /*******************************************/
@@ -114,20 +99,11 @@ void Layout::analyseName(const Markup *balise)
 /*******************************************/
 /* Get info about folowing. Ununsefull.    */
 /*******************************************/
-void Layout::analyseFollowing(const Markup *balise)
+void Layout::analyseFollowing(const QDomNode balise)
 {
 	/* <FOLLOWING name="times"> */
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "NAME")== 0)
-		{
-			setFollowing(arg->zValue);
-			kdDebug() << arg->zValue << endl;
-		}
-	}
+	kdDebug() << "PARAM" << endl;
+	setFollowing(getAttr(balise, "name"));
 }
 
 /*******************************************/
@@ -135,27 +111,19 @@ void Layout::analyseFollowing(const Markup *balise)
 /*******************************************/
 /* Get informations about environment.     */
 /*******************************************/
-void Layout::analyseEnv(const Markup *balise)
+void Layout::analyseEnv(const QDomNode balise)
 {
-	/* <FLOW value="0"> */
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "ALIGN")== 0)
-		{
-			if(strcmp(arg->zValue, "justify")== 0)
-				setEnv(ENV_JUSTIFY);
-			else if(strcmp(arg->zValue, "left")== 0)
-				setEnv(ENV_LEFT);
-			else if(strcmp(arg->zValue, "right")== 0)
-				setEnv(ENV_RIGHT);
-			else if(strcmp(arg->zValue, "center")== 0)
-				setEnv(ENV_CENTER);
-			kdDebug() << arg->zValue << endl;
-		}
-	}
+	/* <FLOW align="0"> */
+	// ERROR: Enter first in flow ????
+	kdDebug() << "PARAM" << endl;
+	if(getAttr(balise,"align").compare("justify")== 0)
+		setEnv(ENV_JUSTIFY);
+	else if(getAttr(balise, "align").compare("left")== 0)
+		setEnv(ENV_LEFT);
+	else if(getAttr(balise, "align").compare("right")== 0)
+		setEnv(ENV_RIGHT);
+	else if(getAttr(balise, "align").compare("center")== 0)
+		setEnv(ENV_CENTER);
 }
 
 /*******************************************/
@@ -165,38 +133,18 @@ void Layout::analyseEnv(const Markup *balise)
 /* If I use a counter, I must include a tex*/
 /* package.                                */
 /*******************************************/
-void Layout::analyseCounter(const Markup *balise)
+void Layout::analyseCounter(const QDomNode balise)
 {
 	/* <COUNTER type="1"> */
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
+	kdDebug() << "PARAM" << endl;
+	setCounterType(getAttr(balise, "type").toInt());
+	if(getCounterType() > TL_ARABIC && getCounterType() < TL_DISC_BULLET)
 	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "TYPE")== 0)
-		{
-			setCounterType(atoi(arg->zValue));
-			if(getCounterType() > TL_ARABIC && getCounterType() < TL_DISC_BULLET)
-			{
-				kdDebug() <<  getCounterType() << endl;
-				_fileHeader->useEnumerate();
-			}
-		}
-		else if(strcmp(arg->zName, "DEPTH")== 0)
-		{
-			setCounterDepth(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "BULLET")== 0)
-		{
-			setCounterBullet(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "START")== 0)
-		{
-			setCounterStart(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "NUMBERINGTYPE")== 0)
-		{
-			setNumberingType(atoi(arg->zValue));
-		}
+		kdDebug() <<  getCounterType() << endl;
+		_fileHeader->useEnumerate();
 	}
+	setCounterDepth(getAttr(balise, "depth").toInt());
+	setCounterBullet(getAttr(balise, "bullet").toInt());
+	setCounterStart(getAttr(balise, "start").toInt());
+	setNumberingType(getAttr(balise, "numberingType").toInt());
 }

@@ -53,136 +53,49 @@ FileHeader::~FileHeader()
 /*******************************************/
 /* AnalysePaperParam                       */
 /*******************************************/
-void FileHeader::analysePaperParam(const Markup* balise_initiale)
+void FileHeader::analysePaperParam(const QDomNode balise)
 {
-	Arg* arg = 0;
-
-	// Get parameters
-	for(arg= balise_initiale->pArg; arg; arg= arg->pNext)
-	{
-		if(strcmp(arg->zName, "FORMAT")== 0)
-		{
-			setFormat(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "WIDTH")== 0)
-		{
-			_width = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "HEIGHT")== 0)
-		{
-			_height = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "ORIENTATION")== 0)
-		{
-			setOrientation(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "COLUMNS")== 0)
-		{
-			if(atoi(arg->zValue) > 2)
-				setColumns(TC_MORE);
-			else
-				setColumns(atoi(arg->zValue) - 1);
-		}
-		else if(strcmp(arg->zName, "COLUMNSPACING")== 0)
-		{
-			_columnSpacing = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "HTYPE")== 0)
-		{
-			setHeadType(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "FTYPE")== 0)
-		{
-			setFootType(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "SPHEADBODY")== 0)
-		{
-			_headBody = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "SPFOOTBODY")== 0)
-		{
-			_footBody = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "ZOOM") == 0)
-		{
-			/* UNUSEFULL */
-		}
-	}
+	setFormat(getAttr(balise, "FORMAT").toInt());
+	_width = getAttr(balise, "WIDTH").toInt();
+	_height = getAttr(balise, "HEIGHT").toInt();
+	setOrientation(getAttr(balise, "ORIENTATION").toInt());
+	setColumns(getAttr(balise, "COLUMNS").toInt());
+	_columnSpacing = getAttr(balise, "COLUMNSPACING").toInt();
+	setHeadType(getAttr(balise, "HTYPE").toInt());
+	setFootType(getAttr(balise, "FTYPE").toInt());
+	_headBody = getAttr(balise, "SPHEADBODY").toInt();
+	_footBody = getAttr(balise, "SPFOOTBODY").toInt();
+	//getAttr(balise, "ZOOM").toInt();
 }
 
 /*******************************************/
 /* AnalysePaper                            */
 /*******************************************/
-void FileHeader::analysePaper(const Markup * balise_initiale)
+void FileHeader::analysePaper(const QDomNode balise)
 {
-	Markup* balise = 0;
-	Arg*    arg    = 0;
-
-	analysePaperParam(balise_initiale);
-
-	setTokenCurrent(balise_initiale->pContent);
-	// Analyse children markups --> PAPERBORDERS
-	while((balise = getNextMarkup()) != 0)
-	{
-		kdDebug() << balise << endl;
-		kdDebug() << balise->token.zText << endl;
-		if(strcmp(balise->token.zText, "PAPERBORDERS")== 0)
-		{
-			for(arg= balise->pArg; arg; arg= arg->pNext)
-			{
-				if(strcmp(arg->zName, "LEFT")== 0)
-				{
-					_leftBorder = atoi(arg->zValue);
-				}
-				else if(strcmp(arg->zName, "RIGHT")== 0)
-				{
-					_rightBorder = atoi(arg->zValue);
-				}
-				else if(strcmp(arg->zName, "BOTTOM")== 0)
-				{
-					_bottomBorder = atoi(arg->zValue);
-				}
-				else if(strcmp(arg->zName, "TOP")== 0)
-				{
-					_topBorder = atoi(arg->zValue);
-				}
-			}
-
-		}
-	}
+	QDomNode fils;
 	
+	analysePaperParam(balise);
+
+	//setTokenCurrent(balise_initiale->pContent);
+	// Analyse children markups --> PAPERBORDERS
+	fils = getChild(balise, "PAPERSBORDERS");
+	_leftBorder = getAttr(fils, "LEFT").toInt();
+	_rightBorder = getAttr(fils, "RIGHT").toInt();
+	_bottomBorder = getAttr(fils, "BOTTOM").toInt();
+	_topBorder = getAttr(fils, "TOP").toInt();
 }
 
 /*******************************************/
 /* AnalyseAttributs                        */
 /*******************************************/
-void FileHeader::analyseAttributs(const Markup *balise)
+void FileHeader::analyseAttributs(const QDomNode balise)
 {
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		if(strcmp(arg->zName, "PROCESSING") == 0)
-		{
-			setProcessing(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "STANDARDPAGE")== 0)
-		{
-			setStandardPge(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "HASHEADER")== 0)
-		{
-			_hasHeader = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "HASFOOTER")== 0)
-		{
-			_hasFooter = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "UNIT")== 0)
-		{
-			setUnit(atoi(arg->zValue));
-		}
-	}
+	setProcessing(getAttr(balise, "PROCESSING").toInt());
+	setStandardPge(getAttr(balise, "STANDARDPAGE").toInt());
+	_hasHeader = getAttr(balise, "HASHEADER").toInt();
+	_hasFooter = getAttr(balise, "HASFOOTER").toInt();
+	setUnit(getAttr(balise, "UNIT").toInt());
 }
 
 /*******************************************/

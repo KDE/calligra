@@ -56,10 +56,10 @@ LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
 	styleLayout->addWidget(typeLabel);
 	typeCBox = new ...
 	styleLayout->addWidget(typeCBox);
-
-	styleBox->setExclusive(true);*/
-	//styleBox->setButton(0);			/* LATEX STYLE IS DEFAULT */
-	/*styleLayout->activate();*/
+	*/
+	styleBox->setExclusive(true);
+	styleBox->setButton(0);			/* LATEX STYLE IS DEFAULT */
+	styleLayout->activate();
 
 	/* Second part */
 	langBox = new QVButtonGroup(i18n("Language"), this);
@@ -78,10 +78,10 @@ LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
 
 	babelCBox = new ...
 	langLayout->addWidget(babelCBox);
-
-	langBox->setExclusive(true);*/
-	//langBox->setButton(1);			/* LATIN1 IS THE DEFAULT. */
-	//langLayout->activate();
+	*/
+	langBox->setExclusive(true);
+	langBox->setButton(1);			/* LATIN1 IS THE DEFAULT. */
+	langLayout->activate();
 
 	/* Third part */
 	docBox = new QVButtonGroup(i18n("Document type"), this);
@@ -106,26 +106,25 @@ LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
 
 QString LATEXExportDia::state()
 {
-    /*QString result;
+	QString result;
 
-    if(r1==box1->selected())
-        result += "LATEX";
-    else if(r2==box1->selected())
-        result += "XLATEX";
-    else
-        result += "LATEX";
+	if(newDocRBtn == docBox->selected())
+		result += "DOC";
+	else if(embededRBtn == docBox->selected())
+		result += "EMBEDED";
 
-    result += '-';
+	result += '-';
 
-    if(ra1==box2->selected())
-        result += "SPARTAN";
-    else if(ra2==box2->selected())
-        result += "TRANSITIONAL";
-    else if(ra3==box2->selected())
-        result += "STYLE";
-    else
-        result += "STYLE"; 
-
-    return result;*/
+	if(unicodeRBtn == langBox->selected())
+		result += "UNICODE";
+	else if(latin1RBtn == langBox->selected())
+		result += "LATIN1";
+	result += '-';
+	
+	if(latexStyleRBtn == styleBox->selected())
+		result += "LATEX";
+	else if(kwordStyleRBtn == styleBox->selected())
+		result += "KWORD";
+	return result;
 }
 #endif /* __USE_QFD__ */

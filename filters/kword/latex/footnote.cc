@@ -39,68 +39,58 @@ Footnote::~Footnote()
 }
 
 /* Modifiers */
-void Footnote::setSpace (char* new_space)
+void Footnote::setSpace (QString new_space)
 {
-	if(new_space != 0)
-		_space = *new_space;
+	_space = new_space;
 }
 
-void Footnote::setBefore(char* new_before)
+void Footnote::setBefore(QString new_before)
 {
-	if(new_before != 0)
-		_before = *new_before;
+	_before = new_before;
 
 }
 
-void Footnote::setAfter(char* new_after)
+void Footnote::setAfter(QString new_after)
 {
-	if(new_after != 0)
-		_after = *new_after;
+	_after = new_after;
 }
 
-void Footnote::setRef(char* new_ref)
+void Footnote::setRef(QString new_ref)
 {
-	if(new_ref != 0)
-		_ref = new_ref;
+	_ref = new_ref;
 }
 
-void Footnote::analyse(const Markup * balise_initiale)
+void Footnote::analyse(const QDomNode balise)
 {
-	Token*  savedToken = 0;
-	Markup* balise     = 0;
-
-	// MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT>
+	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
-	// Parameters Analyse
-	//analyseParam(balise_initiale);
+	/* Parameters Analyse */
 	kdDebug() << "ANALYSE A FOOTNOTE" << endl;
 	
-	// Children Markups Analyse
-	savedToken = enterTokenChild(balise_initiale);
-	
-	while((balise = getNextMarkup()) != NULL)
+	/* Children Markups Analyse */
+	for(int index= 0; index < getNbChild(balise); index++)
 	{
-		if(strcmp(balise->token.zText, "INTERNAL")== 0)
+		if(getChildName(balise, index).compare("INTERNAL")== 0)
 		{
 			kdDebug() << "INTERNAL : " << endl;
 			analyseInternal(balise);
 		}
-		else if(strcmp(balise->token.zText, "RANGE")== 0)
+		else if(getChildName(balise, index).compare("RANGE")== 0)
 		{
 			kdDebug() << "RANGE : " << endl;
 			analyseRange(balise);
 		}
-		else if(strcmp(balise->token.zText, "TEXT")== 0)
+		else if(getChildName(balise, index).compare("TEXT")== 0)
 		{
 			kdDebug() << "TEXT : " << endl;
 			analyseText(balise);
 		}
-		else if(strcmp(balise->token.zText, "DESCRIPT")== 0)
+		else if(getChildName(balise, index).compare("DESCRIPT")== 0)
 		{
 			kdDebug() << "DESCRIPT : " << endl;
 			analyseDescript(balise);
 		}
-		else if(strcmp(balise->token.zText, "FORMAT")== 0)
+		else if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
 			kdDebug() << "SUBFORMAT : " << endl;
 			Format::analyse(balise);
@@ -109,92 +99,44 @@ void Footnote::analyse(const Markup * balise_initiale)
 	kdDebug() << "END OF FOOTNOTE" << endl;
 }
 
-void Footnote::analyseInternal(const Markup * balise_initiale)
+void Footnote::analyseInternal(const QDomNode balise)
 {
-	Token*  savedToken = 0;
-	Markup* balise     = 0;
-	Arg*    arg        = 0;
+	QDomNode fils;
+	/* MARKUPS <INTERNAL> <PART from="1" to="-1" space="-"/> */
 
-	// MARKUPS <INTERNAL> <PART from="1" to="-1" space="-"/>
-
-	// Children Markups Analyse
-	savedToken = enterTokenChild(balise_initiale);
-	
-	while((balise = getNextMarkup()) != NULL)
+	/* Children Markups Analyse */
+	fils = getChild(balise, "PART");
+	for(int index= 0; index < getNbChild(balise); index++)
 	{
-		if(strcmp(balise->token.zText, "PART")== 0)
+		if(getChildName(balise, index).compare("PART")== 0)
 		{
 			kdDebug() << "PART : " << endl;
+			setFrom(getAttr(balise, "FROM").toInt());
+			setTo(getAttr(balise, "TO").toInt());
+			setSpace(getAttr(balise, "SPACE"));
 
-			for(arg= balise->pArg; arg; arg= arg->pNext)
-			{
-				kdDebug() << "PARAM " << arg->zName << endl;
-				if(strcmp(arg->zName, "FROM")== 0)
-				{
-					setFrom(atoi(arg->zValue));
-				}
-				else if(strcmp(arg->zName, "TO")== 0)
-				{
-					setTo(atoi(arg->zValue));
-				}
-				else if(strcmp(arg->zName, "SPACE")== 0)
-				{
-					setSpace(arg->zValue);
-				}
-			}
-		}
-	}
-	setTokenCurrent(savedToken);
-}
-
-void Footnote::analyseRange(const Markup * balise)
-{
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "START")== 0)
-		{
-			setStart(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "END")== 0)
-		{
-			setEnd(atoi(arg->zValue));
 		}
 	}
 }
 
-void Footnote::analyseText(const Markup * balise)
+void Footnote::analyseRange(const QDomNode balise)
 {
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "BEFORE")== 0)
-		{
-			setBefore(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "AFTER")== 0)
-		{
-			setAfter(arg->zValue);
-		}
-	}
+	kdDebug() << "PARAM" << endl;
+	setStart(getAttr(balise, "START").toInt());
+	setEnd(getAttr(balise, "END").toInt());
 }
 
-void Footnote::analyseDescript(const Markup * balise)
+void Footnote::analyseText(const QDomNode balise)
 {
-	Arg* arg = 0;
+	kdDebug() << "PARAM" << endl;
+	setBefore(getAttr(balise, "BEFORE"));
+	setAfter(getAttr(balise, "AFTER"));
+}
 
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "REF")== 0)
-		{
-			setRef(arg->zValue);
-		}
-	}
+void Footnote::analyseDescript(const QDomNode balise)
+{
+	kdDebug() << "PARAM" << endl;
+	setRef(getAttr(balise, "REF"));
 }
 
 void Footnote::generate(QTextStream &out)

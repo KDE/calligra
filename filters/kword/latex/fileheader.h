@@ -55,6 +55,7 @@ enum TOrient
 
 enum TColonne
 {
+	TC_NONE,
 	TC_1,
 	TC_2,
 	TC_MORE
@@ -169,14 +170,14 @@ class FileHeader: public XmlParser
 		void useGraphics   ()           { _hasGraphics  = true;           }
 		void useTable      ()           { _hasTable     = true;           }
 
-		void analysePaper     (const Markup *);
-		void analyseAttributs (const Markup *);
+		void analysePaper     (const QDomNode);
+		void analyseAttributs (const QDomNode);
 
 		void generate         (QTextStream &);
 
 	private:
 
-		void analysePaperParam(const Markup*);
+		void analysePaperParam(const QDomNode);
 
 		void generatePaper    (QTextStream&);
 		void generatePreambule(QTextStream&);

@@ -105,23 +105,23 @@ class TextFormat: public Format
 		void setItalic     (bool i)                { _italic    = i; }
 		void setUnderlined (bool u)                { _underline = u; }
 		void setStrikeout  (bool s)                { _strikeout = s; }
-		void setPolice     (const char *p)         { _police    = p; }
+		void setPolice     (QString p)             { _police    = p; }
 		void setAlign      (const int a)           { _vertalign = (EAlign) a; }
 		void setColor      (const int, const int, const int);
 
 		/**
 		 * Helpfull functions
 		 */
-		void analyseTextFormat(const Markup*);
-		void analyseParam     (const Markup*);
-		void analyseFont      (const Markup*);
-		void analyseItalic    (const Markup*);
-		void analyseUnderlined(const Markup*);
-		void analyseStrikeout (const Markup*);
-		void analyseWeight    (const Markup*);
-		void analyseAlign     (const Markup*);
-		void analyseColor     (const Markup*);
-		void analyseSize      (const Markup*);
+		void analyseTextFormat(const QDomNode);
+		void analyseParam     (const QDomNode);
+		void analyseFont      (const QDomNode);
+		void analyseItalic    (const QDomNode);
+		void analyseUnderlined(const QDomNode);
+		void analyseStrikeout (const QDomNode);
+		void analyseWeight    (const QDomNode);
+		void analyseAlign     (const QDomNode);
+		void analyseColor     (const QDomNode);
+		void analyseSize      (const QDomNode);
 };
 
 #endif /* __KWORD_TEXTFORMAT_H__ */

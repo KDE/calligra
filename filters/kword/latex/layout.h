@@ -115,30 +115,30 @@ class Layout: public TextFormat
 		/**
 		 * Modifiers
 		 */
-		void setName         (const char * name) { _name = strdup(name); }
-		//void setType         (EType type)        { _type = type;         }
-		//void setTypeFollow   (EType type)        { _follow_type = type;  }
-		void setLastName     ()                  { _last_name   = _name; }
-		void setLastCounter  ()                  { _last_counter= _counterType; }
-		void setFollowing    (const char * name) { _following = strdup(name); }
-		void setCounterType  (int ct) { _counterType   = (EType) ct; }
-		void setCounterDepth (int cd) { _counterDepth  = cd; }
-		void setCounterBullet(int cb) { _counterBullet = cb; }
-		void setCounterStart (int cs) { _counterStart  = cs; }
-		void setNumberingType(int nt) { _numberingType = nt; }
-		void setEnv          (int env){ _env = (EEnv) env;   }
+		void setName         (QString name) { _name = name; }
+		//void setType         (EType type)   { _type = type;         }
+		//void setTypeFollow   (EType type)   { _follow_type = type;  }
+		void setLastName     ()             { _last_name   = _name; }
+		void setLastCounter  ()             { _last_counter= _counterType; }
+		void setFollowing    (QString name) { _following = name; }
+		void setCounterType  (int ct)       { _counterType   = (EType) ct; }
+		void setCounterDepth (int cd)       { _counterDepth  = cd; }
+		void setCounterBullet(int cb)       { _counterBullet = cb; }
+		void setCounterStart (int cs)       { _counterStart  = cs; }
+		void setNumberingType(int nt)       { _numberingType = nt; }
+		void setEnv          (int env)      { _env = (EEnv) env;   }
 
 		/**
 		 * Helpfull functions
 		 */
 
-		void analyseLayout  (const Markup *);
+		void analyseLayout  (const QDomNode);
 
 	private:
-		void analyseCounter  (const Markup*);
-		void analyseFollowing(const Markup*);
-		void analyseName     (const Markup*);
-		void analyseEnv      (const Markup*);
+		void analyseCounter  (const QDomNode);
+		void analyseFollowing(const QDomNode);
+		void analyseName     (const QDomNode);
+		void analyseEnv      (const QDomNode);
 };
 
 #endif /* __KWORD_LAYOUT_H__ */

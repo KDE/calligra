@@ -38,8 +38,6 @@ Para::Para(Texte* texte)
 {
 	_element   = texte;
 	_lines     = 0;
-	//_next      = 0;
-	//_previous  = 0;
 	_name      = 0;
 	_info      = EP_NONE;	/* the parag is not a footnote */
 	_hardbrk   = EP_FLOW;	/* and it's not a new page */
@@ -73,20 +71,11 @@ SSect Para::getFrameType() const
 /* To know if the zone is a textzone, a    */
 /* footnote, a picture, a variable.        */
 /*******************************************/
-EFormat Para::getTypeFormat(const Markup* balise) const
+EFormat Para::getTypeFormat(const QDomNode balise) const
 {
-	Arg *arg = 0;
-
 	//<FORMAT id="1" ...>
-	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "ID")== 0)
-		{
-			return (EFormat) atoi(arg->zValue);
-		}
-	}
-	return EF_ERROR;
+
+	return (EFormat) getAttr(balise, "id").toInt();
 }
 
 /*******************************************/
@@ -129,54 +118,46 @@ int Para::getNbCharPara() const
 /*******************************************/
 /* Analyse                                 */
 /*******************************************/
-void Para::analyse(const Markup * balise_initiale)
+void Para::analyse(const QDomNode balise)
 {
-	Token* savedToken = 0;
-	Markup* balise    = 0;
-
 	/* MARKUP TYPE :  PARAGRAPH */
 
 	/* Analyse of the parameters */
 	kdDebug() << "ANALYSE A PARAGRAPH" << endl;
 	
 	/* Analyse of the children markups */
-	savedToken = enterTokenChild(balise_initiale);
-	while((balise = getNextMarkup()) != 0)
+	for(int index= 0; index < getNbChild(balise); index++)
 	{
-		if(strcmp(balise->token.zText, "TEXT")== 0)
+		if(getChildName(balise, index).compare("TEXT")== 0)
 		{
-			for(Token *p = balise->pContent; p!= 0; p = p->pNext)
-			{
-				if(p->zText!= 0)
-				{
-					_texte += p->zText;
-				}
-			}
+			_texte =  getChild(getChild(getChild(balise, index), "#text"), 0).nodeValue();
+			kdDebug() << "TEXT : " << _texte << endl;
+			
 		}
-		else if(strcmp(balise->token.zText, "NAME")== 0)
+		else if(getChildName(balise, index).compare("NAME")== 0)
 		{
-			analyseName(balise);
+			analyseName(getChild(balise, index));
 		}
-		else if(strcmp(balise->token.zText, "INFO")== 0)
+		else if(getChildName(balise, index).compare("INFO")== 0)
 		{
-			analyseInfo(balise);
+			analyseInfo(getChild(balise, index));
 		}
-		else if(strcmp(balise->token.zText, "HARDBRK")== 0)
+		else if(getChildName(balise, index).compare("HARDBRK")== 0)
 		{
-			analyseBrk(balise);
+			analyseBrk(getChild(balise, index));
 		}
-		else if(strcmp(balise->token.zText, "FORMATS")== 0)
+		else if(getChildName(balise, index).compare("FORMATS")== 0)
 		{
 			// Garder pour la nouvelle dtd
 			// IMPORTANT ==> police + style
 			kdDebug() << "FORMATS" << endl;
-			analyseFormats(balise);
+			analyseFormats(getChild(balise, index));
 			
 		}
-		else if(strcmp(balise->token.zText, "LAYOUT")== 0)
+		else if(getChildName(balise, index).compare("LAYOUT")== 0)
 		{
 			kdDebug() << "LAYOUT" << endl;
-			analyseLayoutPara(balise);
+			analyseLayoutPara(getChild(balise, index));
 		}
 	}
 	kdDebug() << "END OF PARAGRAPH" << endl;
@@ -188,19 +169,11 @@ void Para::analyse(const Markup * balise_initiale)
 /* If a footnote have a name : it's a      */
 /* footnote/endnote.                       */
 /*******************************************/
-void Para::analyseName(const Markup* balise)
+void Para::analyseName(const QDomNode balise)
 {
-	Arg *arg = 0;
-
 	//<NAME name="Footnote/Endnote_1">
-	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "NAME")== 0)
-		{
-			_name = new QString(arg->zValue);
-		}
-	}
+	
+	_name = new QString(getAttr(balise, "NAME"));
 }
 
 /*******************************************/
@@ -209,19 +182,11 @@ void Para::analyseName(const Markup* balise)
 /* Type of the parag. : if info is 1, it's */
 /* a footnote/endnote (so it have a name). */
 /*******************************************/
-void Para::analyseInfo(const Markup* balise)
+void Para::analyseInfo(const QDomNode balise)
 {
-	Arg *arg = 0;
-
 	//<INFO info="1">
-	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "INFO")== 0)
-		{
-			_info = (EP_INFO) atoi(arg->zValue);
-		}
-	}
+	
+	_info = (EP_INFO) getAttr(balise, "INFO").toInt();
 }
 
 /*******************************************/
@@ -230,19 +195,11 @@ void Para::analyseInfo(const Markup* balise)
 /* There is a new page before this         */
 /* paragraph.                              */
 /*******************************************/
-void Para::analyseBrk(const Markup* balise)
+void Para::analyseBrk(const QDomNode balise)
 {
-	Arg *arg = 0;
-
 	//<NAME name="Footnote/Endnote_1">
-	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "FRAME")== 0)
-		{
-			_hardbrk = (EP_HARDBRK) atoi(arg->zValue);
-		}
-	}
+	
+	_hardbrk = (EP_HARDBRK) getAttr(balise, "FRAME").toInt();
 }
 
 /*******************************************/
@@ -253,19 +210,14 @@ void Para::analyseBrk(const Markup* balise)
 /* text, variable, footnote) and put the   */
 /* zone in a list.                         */
 /*******************************************/
-void Para::analyseLayoutPara(const Markup *balise_initiale)
+void Para::analyseLayoutPara(const QDomNode balise)
 {
-	Token* savedToken = 0;
-	Markup* balise    = 0;
-	Format* zone      = 0;
+	Format* zone = 0;
 
-	savedToken = enterTokenChild(balise_initiale);
-	analyseLayout(balise_initiale);
-	while((balise = getNextMarkup()) != NULL)
+	analyseLayout(balise);
+	for(int index= 0; index < getNbChild(balise); index++)
 	{
-		kdDebug() << balise << endl;
-		kdDebug() << balise->token.zText << endl;
-		if(strcmp(balise->token.zText, "FORMAT")== 0)
+		if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
 			//analyseFormat(balise);
 			/* No more format : verify if all the text zone has been formated */
@@ -274,7 +226,7 @@ void Para::analyseLayoutPara(const Markup *balise_initiale)
 				zone = new TextZone(_texte, this);
 				((TextZone*) zone)->setPos(_currentPos);
 				((TextZone*) zone)->setLength(_currentPos - _texte.length());
-				zone->analyse(0);
+				((TextZone*) zone)->analyse();
 				if(_lines == 0)
 					_lines = new QList<Format>;
 				/* add the text */
@@ -283,11 +235,9 @@ void Para::analyseLayoutPara(const Markup *balise_initiale)
 			
 			}
 		}
-		else
-			kdDebug() << " FORMAT FIELD UNKNOWN" << endl;
+		/*else
+			kdDebug() << " FORMAT FIELD UNKNOWN" << endl;*/
 	}
-	setTokenCurrent(savedToken);
-
 }
 
 /*******************************************/
@@ -297,27 +247,18 @@ void Para::analyseLayoutPara(const Markup *balise_initiale)
 /*  keep the type (picture, text, variable,*/
 /* footnote) and put the zone in a list.   */
 /*******************************************/
-void Para::analyseFormats(const Markup *balise_initiale)
+void Para::analyseFormats(const QDomNode balise)
 {
-	Token* savedToken = 0;
-	Markup* balise    = 0;
-
-	savedToken = enterTokenChild(balise_initiale);
-	//analyseLayout(balise_initiale);
-	while((balise = getNextMarkup()) != NULL)
+	for(int index= 0; index < getNbChild(balise, "FORMAT"); index++)
 	{
-		kdDebug() << balise << endl;
-		kdDebug() << balise->token.zText << endl;
-		if(strcmp(balise->token.zText, "FORMAT")== 0)
+		if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
 			kdDebug() << "A FORMAT !!!" << endl;
-			analyseFormat(balise);
+			analyseFormat(getChild(balise, index));
 		}
 		else
 			kdDebug() << " FORMAT UNUSEFULL HERE" << endl;
 	}
-	setTokenCurrent(savedToken);
-
 }
 
 /*******************************************/
@@ -327,7 +268,7 @@ void Para::analyseFormats(const Markup *balise_initiale)
 /*  keep the type (picture, text, variable,*/
 /* footnote) and put the zone in a list.   */
 /*******************************************/
-void Para::analyseFormat(const Markup *balise)
+void Para::analyseFormat(const QDomNode balise)
 {
 	Format *zone      = 0;
 	Format *zoneFirst = 0;
@@ -350,7 +291,7 @@ void Para::analyseFormat(const Markup *balise)
 						zoneFirst = new TextZone(_texte, this);
 						((TextZone*) zoneFirst)->setPos(_currentPos);
 						((TextZone*) zoneFirst)->setLength(((TextZone*) zone)->getPos() - _currentPos);
-						zoneFirst->analyse(0);
+						((TextZone*) zoneFirst)->analyse();
 
 						/* Add the text without format */
 						_lines->append(zoneFirst);
@@ -554,7 +495,7 @@ void Para::generateFin(QTextStream &out)
 {
 	/* Close a title of chapter */
 	if(isChapter())
-		out << "}" << endl;
+		out << "}";
 }
 
 /*******************************************/
@@ -567,13 +508,13 @@ void Para::generateEndEnv(QTextStream &out)
 	kdDebug() << "end of an environment : " << getEnv() << endl;
 	switch(getEnv())
 	{
-		case ENV_LEFT: out << "\\end{flushleft}" << endl;
+		case ENV_LEFT: out << endl << "\\end{flushleft}";
 			break;
-		case ENV_RIGHT: out << "\\end{flushright}" << endl;
+		case ENV_RIGHT: out << endl << "\\end{flushright}";
 			break;
-		case ENV_CENTER: out << "\\end{center}" << endl;
+		case ENV_CENTER: out << endl << "\\end{center}";
 			break;
-		case ENV_JUSTIFY: out << endl;
+		case ENV_JUSTIFY:
 			break;
 	}
 }

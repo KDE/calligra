@@ -30,7 +30,7 @@ LATEXExport::LATEXExport(KoFilter *parent, const char *name) :
 
 bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
                          const QString& from, const QString& to,
-                         const QString &) {
+                         const QString &config) {
 
     if(to != "text/x-tex" || from != "application/x-kword")
         return false;
@@ -46,10 +46,21 @@ bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
     QString buf = QString::fromUtf8((const char*)array, array.size());
     in.close();
 
-    int begin = buf.find( "<DOC" ); // skip <?...?>
-    buf.remove(0, begin);
+    QString fileIn2 = QString("/tmp/tmp-latexexport.xml");
+
+    QFile tempIn(fileIn2);
+    if(tempIn.open(IO_WriteOnly))
+    {
+        QTextStream tempStream(&tempIn);
+	tempStream.setEncoding(QTextStream::Unicode);
+	tempStream << buf;
+    }
+    tempIn.close();
+    
+    //int begin = buf.find( "<DOC" ); // skip <?...?>
+    //buf.remove(0, begin);
     kdDebug() << "LATEX FILTER --> BEGIN" << endl;
-    Xml2LatexParser LATEXParser(fileOut, buf.latin1());
+    Xml2LatexParser LATEXParser(fileIn2, fileOut, config);
     LATEXParser.analyse();
     kdDebug() << "---------- generate file -------------" << endl;
     LATEXParser.generate();

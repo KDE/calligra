@@ -28,8 +28,6 @@
 #include "texte.h"
 #include "formula.h"
 
-//#include "part.h"
-
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
@@ -48,102 +46,96 @@ Document::~Document()
 /*******************************************/
 /* Analyse                                 */
 /*******************************************/
-void Document::analyse(const Markup * balise_initiale)
+void Document::analyse(const QDomNode balise)
 {
-	Markup *balise = 0;
-		
-	setTokenCurrent(balise_initiale->pContent);
-	while((balise = getNextMarkup()) != 0)
+	for(int index= 0; index < getNbChild(balise); index++)
 	{
-		kdDebug() << balise << endl;
-		kdDebug() << balise->token.zText << endl;
-		if(strcmp(balise->token.zText, "FRAMESET")== 0)
+		Element *elt = 0;
+		kdDebug() << "NEW ELEMENT" << endl;
+		
+		kdDebug() << getChildName(balise, index) << endl;
+		switch(getTypeFrameset(getChild(balise, index)))
 		{
-			Element *elt = 0;
-			kdDebug() <<"ANALYSE OF A FRAMESET" << endl;
-			switch(getTypeFrameset(balise))
-			{
-				case ST_NONE: 
-					kdDebug() << "NONE" << endl;
-					break;
-				case ST_TEXT: 
-					kdDebug() << "TEXT" << endl;
-					elt = new Texte;
-					elt->analyse(balise);
-					break;
-				case ST_PICTURE:
-					kdDebug() << "PICTURE" << endl;
-					// elt = new Image;
-					// elt->analyse(balise);
-					break;
-				case ST_PART:
-					kdDebug() << "PART" << endl;
-					//elt = new Part;
-					//elt->analyse(balise);
-					break;
-				case ST_FORMULA:
-					/* Just save the frameset in a QString input
-					 * call the formula latex export filter
-					 * save in output
-					 * generate : write the output
-					 */
-					kdDebug() << "FORMULA" << endl;
-					elt = new Formula;
-					elt->analyse(balise);
-					break;
-				default:
-					kdDebug() << "error " << elt->getType() << " " << ST_TEXT << endl;
-			}
+			case ST_NONE: 
+				kdDebug() << "NONE" << endl;
+				break;
+			case ST_TEXT: 
+				kdDebug() << "TEXT" << endl;
+				elt = new Texte;
+				elt->analyse(getChild(balise, index));
+				break;
+			case ST_PICTURE:
+				kdDebug() << "PICTURE" << endl;
+				// elt = new Image;
+				// elt->analyse(getChild(balise, index));
+				break;
+			case ST_PART:
+				kdDebug() << "PART" << endl;
+				//elt = new Part;
+				//elt->analyse(getChild(balise, index));
+				break;
+			case ST_FORMULA:
+				/* Just save the frameset in a QString input
+				 * call the formula latex export filter
+				 * save in output
+				 * generate : write the output
+				 */
+				kdDebug() << "FORMULA" << endl;
+				elt = new Formula;
+				elt->analyse(getChild(balise, index));
+				break;
+			default:
+				kdDebug() << "error " << elt->getType() << " " << ST_TEXT << endl;
+		}
 			
-			/* 3. Add the Element in one of the lists */
-			if(elt != 0)
+		/* 3. Add the Element in one of the lists */
+		if(elt != 0)
+		{
+			kdDebug() << "INFO : " << elt->getSection() << endl;
+			switch(elt->getSection())
 			{
-				kdDebug() << "INFO : " << elt->getSection() << endl;
-				switch(elt->getSection())
-				{
-					case SS_FOOTERS: kdDebug() << " FOOTER" <<endl;
-						       _footers.append(elt);
-						       break;
-					case SS_HEADERS: kdDebug() << " HEADER" << endl;
-							_headers.append(elt);
-						break;
-					case SS_BODY:
-						if(!elt->isTable())
-						{
-							switch(elt->getType())
-							{
-								case ST_TEXT:
-								case ST_PICTURE:
-										_corps.append(elt);
-										kdDebug() << " BODY" << endl;
-									break;
-								case ST_PART:
-										kdDebug() << " PART" <<endl;
-										//_parts.append(elt);
-									break;
-								case ST_FORMULA:
-										kdDebug() << " FORMULA" <<endl;
-										_formulas.append(elt);
-									break;
-							}
-						}
-						break;
-					case SS_TABLE:
-						kdDebug() << " TABLE" <<endl;
-						/* Don't add simplely the cell */
-						/* heriter ListTable de ListElement et surcharger
-						 * la methode add. Une cellule est un element.
-						 */
-						_tables.add(elt);
-						if(_fileHeader!= 0)
-							_fileHeader->useTable();
-						break;
-					case SS_FOOTNOTES: /* Just for the new kwd file version */
-							_footnotes.append(elt);
+				case SS_FOOTERS: kdDebug() << " FOOTER" <<endl;
+					       _footers.append(elt);
+					       break;
+				case SS_HEADERS: kdDebug() << " HEADER" << endl;
+						_headers.append(elt);
 					break;
-					default: kdDebug() << "UNKNOWN" << endl;
-						break;
-				}
+				case SS_BODY:
+					if(!elt->isTable())
+					{
+						switch(elt->getType())
+						{
+							case ST_TEXT:
+							case ST_PICTURE:
+									_corps.append(elt);
+									kdDebug() << " BODY" << endl;
+								break;
+							case ST_PART:
+									kdDebug() << " PART" <<endl;
+									//_parts.append(elt);
+								break;
+							case ST_FORMULA:
+									kdDebug() << " FORMULA" <<endl;
+									_formulas.append(elt);
+								break;
+						}
+					}
+					break;
+				case SS_TABLE:
+					kdDebug() << " TABLE" <<endl;
+					/* Don't add simplely the cell */
+					/* heriter ListTable de ListElement et surcharger
+					 * la methode add. Une cellule est un element.
+					 */
+					_tables.add(elt);
+					if(_fileHeader!= 0)
+						_fileHeader->useTable();
+					break;
+				case SS_FOOTNOTES: /* Just for the new kwd file version */
+						_footnotes.append(elt);
+				break;
+				default: kdDebug() << "UNKNOWN" << endl;
+					break;
 			}
 		}
 		kdDebug() << "END OF ANALYSE OF A FRAMESET" << endl;
@@ -153,34 +145,11 @@ void Document::analyse(const Markup * balise_initiale)
 /*******************************************/
 /* getTypeFrameset                         */
 /*******************************************/
-SType Document::getTypeFrameset(const Markup *balise)
+SType Document::getTypeFrameset(const QDomNode balise)
 {
-	Arg*  arg  = 0;
 	SType type = ST_NONE;
 
-	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
-	{
-		if(strcmp(arg->zName, "FRAMETYPE")== 0)
-		{
-			// A FINIR
-			switch(atoi(arg->zValue))
-			{
-				case 0: type = ST_NONE;
-					break;
-				case 1: type = ST_TEXT;
-					break;
-				case 2: type = ST_PICTURE;
-					break;
-				case 3: type = ST_PART;
-					break;
-				case 4: type = ST_FORMULA;
-					break;
-				default:
-					type = ST_NONE;
-					kdError() << "error : frameinfo unknown!" << endl;
-			}
-		}
-	}
+	type = (SType) getAttr(balise, "frameType").toInt();
 	kdDebug() << "(end type analyse)" << endl;
 	return type;
 }
@@ -188,13 +157,38 @@ SType Document::getTypeFrameset(const Markup *balise)
 /*******************************************/
 /* Generate                                */
 /*******************************************/
-void Document::generate(QTextStream &out)
+void Document::generate(QTextStream &out, bool hasPreambule)
+{
+	kdDebug() << "DOC. GENERATION." << endl;
+	
+	if(hasPreambule)
+		generatePreambule(out);
+	kdDebug() << "preambule : " << hasPreambule << endl;
+
+	/* Body */
+	kdDebug() << endl << "body : " << _corps.count() << endl;
+
+	if(hasPreambule)
+		out << "\\begin{document}" << endl;
+	if(_corps.getFirst() != 0)
+		_corps.getFirst()->generate(out);
+
+	/* Just for test */
+	if(_tables.getFirst() != 0)
+		_tables.getFirst()->generate(out);
+	if(hasPreambule)
+		out << "\\end{document}" << endl;
+
+}
+
+/*******************************************/
+/* GeneratePreambule                       */
+/*******************************************/
+void Document::generatePreambule(QTextStream &out)
 {
 	Element* header;
 	Element* footer;
 
-	kdDebug() << "DOC. GENERATION." << endl;
-	
 	/* For each header */
 	if(getFileHeader()->hasHeader())
 	{
@@ -227,18 +221,6 @@ void Document::generate(QTextStream &out)
 	{
 		out << "\\pagestyle{empty}" << endl;
 	}
-
-	/* Body */
-	kdDebug() << endl << "body : " << _corps.count() << endl;
-
-	out << "\\begin{document}" << endl;
-	if(_corps.getFirst() != 0)
-		_corps.getFirst()->generate(out);
-
-	/* Just for test */
-	if(_tables.getFirst() != 0)
-		_tables.getFirst()->generate(out);
-	out << "\\end{document}" << endl;
 }
 
 /*******************************************/

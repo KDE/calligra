@@ -99,7 +99,7 @@ class Format: public XmlParser
 		/**
 		 * Get informations from a markup tree (only param of a format).
 		 */
-		virtual void analyse(const Markup*);
+		virtual void analyse(const QDomNode);
 
 		virtual void generate(QTextStream&) = 0;
 };

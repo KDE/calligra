@@ -38,7 +38,7 @@ class PictureZone: public PictureFormat
 		PictureZone(QString, Para *para = 0);
 		virtual ~PictureZone();
 
-		void analyse(const Markup*);
+		void analyse(const QDomNode);
 		void generate(QTextStream&);
 		void generate_format_begin(QTextStream &);
 		void generate_format_end(QTextStream &);

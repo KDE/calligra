@@ -50,13 +50,13 @@ class PictureFormat: public Format
 
 		void setPos        (const int p)   { _pos         = p; }
 		void setLength     (const int t)   { _length      = t; }
-		void setFilename   (const char* f) { _filename    = f; }
-		void setFilenameEPS(const char* f) { _filenameEPS = f; }
-		void setPathEPS    (const char* p) { _pathEPS     = p; }
+		void setFilename   (QString f)     { _filename    = f; }
+		void setFilenameEPS(QString f)     { _filenameEPS = f; }
+		void setPathEPS    (QString p)     { _pathEPS     = p; }
 
-		void analysePictureFormat(const Markup*);
-		void analyseParam        (const Markup*);
-		void analyseImage        (const Markup*);
+		void analysePictureFormat(const QDomNode);
+		void analyseParam        (const QDomNode);
+		void analyseImage        (const QDomNode);
 
 };
 

@@ -38,9 +38,18 @@ class Xml2LatexParser : public XmlParser
 	FileHeader  _header;
 	Document    _document;
 
+	/* Options */
+	bool _isEmbeded;
+
 	public:
-		Xml2LatexParser(QString, const char *);
+		Xml2LatexParser(QString, QString);
+		Xml2LatexParser(QString, QString, QString);
+
 		virtual ~Xml2LatexParser() {}
+
+		/* Accesors */
+		bool isEmbeded() const { return _isEmbeded; }
+		void analyse_config(QString);
 
 		void analyse();
 		void generate();

@@ -27,26 +27,11 @@
 #include "format.h"
 
 /* Get the set of info. about a text format */
-void Format::analyse(const Markup * balise)
+void Format::analyse(const QDomNode balise)
 {
-	Arg *arg = 0;
-
-	//<FORMAT id="1" pos="0" len="17">
-	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "ID")== 0)
-		{
-			setId(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "POS")== 0)
-		{
-			//setPos(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "LEN")== 0)
-		{
-			//setTaille (atoi(arg->zValue));
-		}
-	}
+	/* <FORMAT id="1" pos="0" len="17"> */
+	setId(getAttr(balise, "ID").toInt());
+	//setPos(getAttr(balise, "pos").toInt());
+	//setTaille (getAttr(balise, "len").toInt());
 }
 

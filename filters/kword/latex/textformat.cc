@@ -75,64 +75,33 @@ void TextFormat::setColor (const int r, const int g, const int b)
 /*******************************************/
 /* Get the set of info. about a text format*/
 /*******************************************/
-void TextFormat::analyseTextFormat(const Markup * balise_initiale)
+void TextFormat::analyseTextFormat(const QDomNode balise)
 {
-	Token*  savedToken = 0;
-	Markup* balise     = 0;
-
-	// MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT>
+	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* Parameters Analyse */
-	analyseParam(balise_initiale);
-	kdDebug() << "ANALYSE A ZONE" << endl;
+	analyseParam(balise);
+	kdDebug() << "ANALYSE A FORMAT" << endl;
 	
 	/* Children Markups Analyse */
-	savedToken = enterTokenChild(balise_initiale);
-	
-	while((balise = getNextMarkup()) != NULL)
-	{
-		if(strcmp(balise->token.zText, "FONT")== 0)
-		{
-			kdDebug() << "FONT : " << endl;
-			analyseFont(balise);
-		}
-		else if(strcmp(balise->token.zText, "ITALIC")== 0)
-		{
-			kdDebug() << "ITALIC : " << endl;
-			analyseItalic(balise);
-		}
-		else if(strcmp(balise->token.zText, "UNDERLINE")== 0)
-		{
-			kdDebug() << "UNDERLINED : " << endl;
-			analyseUnderlined(balise);
-		}
-		else if(strcmp(balise->token.zText, "WEIGHT")== 0)
-		{
-			kdDebug() << "WEIGHT : " << endl;
-			analyseWeight(balise);
-		}
-		else if(strcmp(balise->token.zText, "VERTALIGN")== 0)
-		{
-			kdDebug() << "VERTALIGN : " << endl;
-			analyseAlign(balise);
-		}
-		else if(strcmp(balise->token.zText, "STRIKEOUT")== 0)
-		{
-			kdDebug() << "STRIKEOUT : " << endl;
-			analyseStrikeout(balise);
-		}
-		else if(strcmp(balise->token.zText, "COLOR")== 0)
-		{
-			kdDebug() << "COLOR : " << endl;
-			analyseColor(balise);
-		}
-		else if(strcmp(balise->token.zText, "SIZE")== 0)
-		{
-			kdDebug() << "SIZE : " << endl;
-			analyseSize(balise);
-		}
-	}
-	kdDebug() << "END OF A ZONE" << endl;
+	if(isChild(balise, "FONT"))
+		analyseFont(getChild(balise, "FONT"));
+	if(isChild(balise, "ITALIC"))
+		analyseItalic(getChild(balise, "ITALIC"));
+	if(isChild(balise, "UNDERLINE"))
+		analyseUnderlined(getChild(balise, "UNDERLINE"));
+	if(isChild(balise, "WEIGHT"))
+		analyseWeight(getChild(balise, "WEIGHT"));
+	if(isChild(balise, "VERTALIGN"))
+		analyseAlign(getChild(balise, "VERTALIGN"));
+	if(isChild(balise, "STRIKEOUT"))
+		analyseStrikeout(getChild(balise, "STRIKEOUT"));
+	if(isChild(balise, "COLOR"))
+		analyseColor(getChild(balise, "COLOR"));
+	if(isChild(balise, "SIZE"))
+		analyseSize(getChild(balise, "SIZE"));
+
+	kdDebug() << "END OF A FORMAT" << endl;
 }
 
 /*******************************************/
@@ -140,27 +109,13 @@ void TextFormat::analyseTextFormat(const Markup * balise_initiale)
 /*******************************************/
 /* Get the zone where the format is applied*/
 /*******************************************/
-void TextFormat::analyseParam(const Markup *balise)
+void TextFormat::analyseParam(const QDomNode balise)
 {
 	/* <FORMAT id="1" pos="0" len="17"> */
-	Arg *arg = 0;
 
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "ID")== 0)
-		{
-			//setId(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "POS")== 0)
-		{
-			setPos(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "LEN")== 0)
-		{
-			setLength (atoi(arg->zValue));
-		}
-	}
+	//setId(getAttr(balise, "id").toInt());
+	setPos(getAttr(balise, "pos").toInt());
+	setLength(getAttr(balise, "len").toInt());
 }
 
 /*******************************************/
@@ -168,20 +123,10 @@ void TextFormat::analyseParam(const Markup *balise)
 /*******************************************/
 /* Get the text font!                      */
 /*******************************************/
-void TextFormat::analyseFont(const Markup *balise)
+void TextFormat::analyseFont(const QDomNode balise)
 {
 	/* <FONT name="times"> */
-	Arg *arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		//kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "NAME")== 0)
-		{
-			kdDebug() << arg->zName << endl;
-			setPolice(arg->zValue);
-		}
-	}
+	setPolice(getAttr(balise, "name"));
 }
 
 /*******************************************/
@@ -189,20 +134,10 @@ void TextFormat::analyseFont(const Markup *balise)
 /*******************************************/
 /* Verify if it's a italic text.           */
 /*******************************************/
-void TextFormat::analyseItalic(const Markup *balise)
+void TextFormat::analyseItalic(const QDomNode balise)
 {
 	/* <ITALIC value="1"> */
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		//kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			kdDebug() << arg->zName << endl;
-			setItalic(atoi(arg->zValue));
-		}
-	}
+	setItalic(getAttr(balise, "value").toInt());
 }
 
 /*******************************************/
@@ -210,22 +145,14 @@ void TextFormat::analyseItalic(const Markup *balise)
 /*******************************************/
 /* Verify if it's a underlined text.       */
 /*******************************************/
-void TextFormat::analyseUnderlined(const Markup *balise)
+void TextFormat::analyseUnderlined(const QDomNode balise)
 {
 	/* <UNDERLINE value="1"> */
-	Arg* arg = 0;
 
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			setUnderlined(atoi(arg->zValue));
-			if(isUnderlined())
-				_fileHeader->useUnderline();
-			kdDebug() << "Underlined ? " << isUnderlined() << endl;
-		}
-	}
+	setUnderlined(getAttr(balise, "value").toInt());
+	if(isUnderlined())
+		_fileHeader->useUnderline();
+	kdDebug() << "Underlined ? " << isUnderlined() << endl;
 }
 
 /*******************************************/
@@ -233,22 +160,13 @@ void TextFormat::analyseUnderlined(const Markup *balise)
 /*******************************************/
 /* Verify if it's a strikeout text.        */
 /*******************************************/
-void TextFormat::analyseStrikeout(const Markup *balise)
+void TextFormat::analyseStrikeout(const QDomNode balise)
 {
 	/* <STRIKEOUT value="1" /> */
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			setStrikeout(atoi(arg->zValue));
-			if(isStrikeout())
-				_fileHeader->useUnderline();
-			kdDebug() << "Strikeout ? " << isUnderlined() << endl;
-		}
-	}
+	setStrikeout(getAttr(balise, "value").toInt());
+	if(isStrikeout())
+		_fileHeader->useUnderline();
+	kdDebug() << "Strikeout ? " << isUnderlined() << endl;
 }
 
 /*******************************************/
@@ -256,20 +174,10 @@ void TextFormat::analyseStrikeout(const Markup *balise)
 /*******************************************/
 /* Get the text weigth.                    */
 /*******************************************/
-void TextFormat::analyseWeight(const Markup *balise)
+void TextFormat::analyseWeight(const QDomNode balise)
 {
 	/* <WEIGHT value="75" /> */
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		//kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			kdDebug() << arg->zName << endl;
-			setWeight(atoi(arg->zValue));
-		}
-	}
+	setWeight(getAttr(balise, "value").toInt());
 }
 
 /*******************************************/
@@ -277,20 +185,11 @@ void TextFormat::analyseWeight(const Markup *balise)
 /*******************************************/
 /* Get the text align.                     */
 /*******************************************/
-void TextFormat::analyseAlign(const Markup *balise)
+void TextFormat::analyseAlign(const QDomNode balise)
 {
 	/* <VERTALIGN value="0"> */
-	Arg* arg = 0;
 
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		//kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			kdDebug() << arg->zName << endl;
-			setAlign(atoi(arg->zValue));
-		}
-	}
+	setAlign(getAttr(balise, "value").toInt());
 }
 
 /*******************************************/
@@ -298,33 +197,16 @@ void TextFormat::analyseAlign(const Markup *balise)
 /*******************************************/
 /* Get the text color.                     */
 /*******************************************/
-void TextFormat::analyseColor(const Markup *balise)
+void TextFormat::analyseColor(const QDomNode balise)
 {
 	/* <COLOR red="0" green="0" blue="0"> */
-	Arg* arg   = 0;
 	int  red   = 0, 
 	     blue  = 0,
 	     green = 0;
 
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		//kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "RED")== 0)
-		{
-			kdDebug() << arg->zName << endl;
-			red = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "GREEN")== 0)
-		{
-			kdDebug() << arg->zName << endl;
-			green = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "BLUE")== 0)
-		{
-			kdDebug() << arg->zName << endl;
-			blue = atoi(arg->zValue);
-		}
-	}
+	red = getAttr(balise, "red").toInt();
+	green = getAttr(balise, "green").toInt();
+	blue = getAttr(balise, "blue").toInt();
 
 	if(!(red == green == blue == 0))
 	{
@@ -339,18 +221,8 @@ void TextFormat::analyseColor(const Markup *balise)
 /*******************************************/
 /* Get the text size.                      */
 /*******************************************/
-void TextFormat::analyseSize(const Markup *balise)
+void TextFormat::analyseSize(const QDomNode balise)
 {
 	/* <SIZE value="11"> */
-	Arg* arg = 0;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		//kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			kdDebug() << arg->zName << endl;
-			setSize(atoi(arg->zValue));
-		}
-	}
+	setSize(getAttr(balise, "value").toInt());
 }

@@ -94,7 +94,8 @@ class TextZone: public TextFormat
 		 */
 		QString escapeLatin1(QString);
 		
-		void analyse(const Markup*);
+		void analyse(const QDomNode);
+		void analyse();
 		void generate(QTextStream&);
 		void generate_format_begin(QTextStream &);
 		void generate_format_end(QTextStream &);

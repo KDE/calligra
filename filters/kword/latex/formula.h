@@ -78,7 +78,7 @@ class Formula: public Element
 		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
 		TSide   getSheetSide  () const { return _sheetSide;         }
 
-		void getFormula(Token*, int);
+		void getFormula(QDomNode, int);
 
 		/**
 		 * Modifiers
@@ -97,7 +97,7 @@ class Formula: public Element
 		 * Get informations from a markup tree and put the formula
 		 * in a QString.
 		 */
-		void analyse(const Markup*);
+		void analyse(const QDomNode);
 
 		/**
 		 * Write the formula in a file.
@@ -105,7 +105,7 @@ class Formula: public Element
 		void generate(QTextStream&);
 
 	private:
-		void analyseParamFrame(const Markup*);
+		void analyseParamFrame(const QDomNode);
 };
 
 #endif /* __KWORD_LATEXFORMULA_H__ */

@@ -20,21 +20,23 @@
 **
 */
 
-#ifndef __KWORD_XMLPARSER_H__
-#define __KWORD_XMLPARSER_H__
+#ifndef __KILLU_XMLPARSER_H__
+#define __KILLU_XMLPARSER_H__
 
-#include "xmlparse.h"
+#include "qstring.h"
+#include "qdom.h"
 
 class FileHeader;
 
 class XmlParser
 {
-	const char* _document;
-	//const char* _charset;
-	int         _index;
-	Token*      _arbreXml;
-	Token*      _tokenCurrent;
-	Token*      _childCurrent;
+	QString      _filename;
+	QDomDocument _document;
+
+	/* OPTIONS */
+	bool _useLatexStyle;
+	bool _useLatin1;
+	bool _useUnicode;
 
 	protected:
 		/* All the inherit class must be have a link with 
@@ -43,28 +45,35 @@ class XmlParser
 		static FileHeader *_fileHeader;
 
 	public:
-		XmlParser(const char *);
+		XmlParser(QString);
 		XmlParser();
 		virtual ~XmlParser();
 
-		const char* getDocument     () const;
-		Token*      getTokenCurrent () const        { return _tokenCurrent;  }
-
-		void        setTokenCurrent (Token * t)     { _tokenCurrent = t;  }
-		void        setFileHeader   (FileHeader* h) { _fileHeader   = h;  }
-		FileHeader* getFileHeader   () const        { return _fileHeader; }
-
-		void        nextToken       ()              { _tokenCurrent = _tokenCurrent->pNext; };
-		Token*      enterTokenChild (const Markup*);
+		void        useUnicodeEnc   ()              { _useUnicode    = true;  }
+		void        useLatin1Enc    ()              { _useLatin1     = true;  }
+		void        useLatexStyle   ()              { _useLatexStyle = true;  }
+		void        useKwordStyle   ()              { _useLatexStyle = false; }
 		
-		void analyse(){};
-		void generate(){};
+		QString     getFilename     () const  { return _filename;      }
+		QString     getDocument     () const  { return _document.toString(); };
+		FileHeader* getFileHeader   () const { return _fileHeader; }
+		QString  getChildName(QDomNode, int);
+		QDomNode getChild(QDomNode, QString);
+		QDomNode getChild(QDomNode, QString, int);
+		QDomNode getChild(QDomNode, int);
+		int      getNbChild(QDomNode, QString);
+		int      getNbChild(QDomNode);
+		QString  getAttr(const QDomNode, QString) const;
+		bool     isChild(QDomNode, QString);
+		void setFileHeader(FileHeader* h) { _fileHeader = h; }
+		QDomNode init() { return _document.documentElement(); }
+
+		/*void analyse(){};
+		void generate(){};*/
 
 	protected:
-		Markup* getNextMarkup();
-		Token*  getNextChild ();
 
 };
 
-#endif /* __KWORD_XMLPARSER_H__ */
+#endif /* __KILLU_XMLPARSER_H__ */
 

@@ -43,32 +43,28 @@ Formula::Formula()
 /*******************************************/
 /* analyse                                 */
 /*******************************************/
-void Formula::analyse(const Markup * balise_initiale)
+void Formula::analyse(const QDomNode balise)
 {
-	Token* savedToken = 0;
-	Markup* balise    = 0;
 
 	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
 	
 	/* Parameters Analyse */
-	Element::analyse(balise_initiale);
+	Element::analyse(balise);
 
 	kdDebug() << "FRAME ANALYSE (Formula)" << endl;
 
 	/* Chlidren markups Analyse */
-	savedToken = enterTokenChild(balise_initiale);
-	while((balise = getNextMarkup()) != 0)
+	for(int index= 0; index < getNbChild(balise); index++)
 	{
-
-		if(strcmp(balise->token.zText, "FRAME")== 0)
+		if(getChildName(balise, index).compare("FRAME")== 0)
 		{
 			analyseParamFrame(balise);
 		}
-		else if(strcmp(balise->token.zText, "FORMULA")== 0)
+		else if(getChildName(balise, index).compare("FORMULA")== 0)
 		{
-			Token* p = balise->pContent;
-			getFormula(p, 0);
-			kdDebug() << _formula << endl;
+			//Token* p = balise->pContent;
+			//getFormula(p, 0);
+			//kdDebug() << _formula << endl;
 		}
 		
 	}
@@ -80,9 +76,9 @@ void Formula::analyse(const Markup * balise_initiale)
 /*******************************************/
 /* Get back the xml markup tree.           */
 /*******************************************/
-void Formula::getFormula(Token* p, int indent)
+void Formula::getFormula(QDomNode p, int indent)
 {
-	Markup* pM = 0;
+/*	Markup* pM = 0;
 	Arg*  pArg = 0;
 
 	while( p )
@@ -125,57 +121,25 @@ void Formula::getFormula(Token* p, int indent)
 				break;
 		}
 		p = p->pNext;
-	}
+	}*/
 }
 
 /*******************************************/
 /* analyseParamFrame                       */
 /*******************************************/
-void Formula::analyseParamFrame(const Markup *balise)
+void Formula::analyseParamFrame(const QDomNode balise)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
-	Arg *arg = 0;
 
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "LEFT")== 0)
-		{
-			_left = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "TOP")== 0)
-		{
-			_top = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "RIGHT")== 0)
-		{
-			_right = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "BOTTOM")== 0)
-		{
-			_bottom = atoi(arg->zValue);
-		}
-		else if(strcmp(arg->zName, "RUNAROUND")== 0)
-		{
-			setRunAround(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "RUNAROUNDGAP")== 0)
-		{
-			setAroundGap(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "AUTOCREATENEWFRAME")== 0)
-		{
-			setAutoCreate(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "NEWFRAMEBEHAVIOUR")== 0)
-		{
-			setNewFrame(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "SHEETSIDE")== 0)
-		{
-			setSheetSide(atoi(arg->zValue));
-		}
-	}
+	_left = getAttr(balise, "LEFT").toInt();
+	_top = getAttr(balise, "TOP").toInt();
+	_right = getAttr(balise, "RIGHT").toInt();
+	_bottom = getAttr(balise, "BOTTOM").toInt();
+	setRunAround(getAttr(balise, "RUNAROUND").toInt());
+	setAroundGap(getAttr(balise, "RUNAROUNDGAP").toInt());
+	setAutoCreate(getAttr(balise, "AUTOCREATENEWFRAME").toInt());
+	setNewFrame(getAttr(balise, "NEWFRAMEBEHAVIOUR").toInt());
+	setSheetSide(getAttr(balise, "SHEETSIDE").toInt());
 }
 
 /*******************************************/

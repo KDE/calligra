@@ -124,7 +124,7 @@ class Para: public Layout
 		/**
 		 * @return the next format type (picture, text, variable, footnote).
 		 */
-		EFormat  getTypeFormat(const Markup*) const;
+		EFormat  getTypeFormat(const QDomNode) const;
 		/**
 		 * @return count the number of characters in the paragraph.
 		 */
@@ -143,7 +143,7 @@ class Para: public Layout
 		/**
 		 * Get informations from a markup tree.
 		 */
-		void analyse         (const Markup*);
+		void analyse         (const QDomNode);
 
 		/**
 		 * Write the paragraph in a file.
@@ -176,13 +176,13 @@ class Para: public Layout
 		void closeList        (QTextStream&, Para*);
 
 	private:
-		void analyseParam     (const Markup*);
-		void analyseName      (const Markup*);
-		void analyseInfo      (const Markup*);
-		void analyseBrk       (const Markup*);
-		void analyseLayoutPara(const Markup*);
-		void analyseFormat    (const Markup*);
-		void analyseFormats   (const Markup*);
+		void analyseParam     (const QDomNode);
+		void analyseName      (const QDomNode);
+		void analyseInfo      (const QDomNode);
+		void analyseBrk       (const QDomNode);
+		void analyseLayoutPara(const QDomNode);
+		void analyseFormat    (const QDomNode);
+		void analyseFormats   (const QDomNode);
 
 		/**
 		 * Write the paragraph style, format.

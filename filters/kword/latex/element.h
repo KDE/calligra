@@ -97,7 +97,7 @@ class Element: public XmlParser
 	SType   _type;
 	SSect   _section;
 	SInfo   _hinfo;
-	char*   _name;
+	QString _name;
 	bool    _removable;
 	bool    _visible;
 	QString _grpMgr;
@@ -147,7 +147,7 @@ class Element: public XmlParser
 		void setSection  (SSect       s)   { _section   = s;   }
 		void setVisible  (bool        v)   { _visible   = v;   }
 		void setRemovable(bool        r)   { _removable = r;   }
-		void setGrpMgr   (const char* g)   { _grpMgr    = g;   }
+		void setGrpMgr   (QString     g)   { _grpMgr    = g;   }
 		void setRow      (int         r)   { _row       = r;   }
 		void setCol      (int         c)   { _col       = c;   }
 		void setRows     (int         r)   { _rows      = r;   }
@@ -161,11 +161,11 @@ class Element: public XmlParser
 		 * Get informations about frameset markupt only from a
 		 * markup tree.
 		 */
-		virtual void analyse(const Markup*);
+		virtual void analyse(const QDomNode);
 		virtual void generate(QTextStream&) = 0;
 
 	private:
-		void analyseParam(const Markup *);
+		void analyseParam(const QDomNode);
 };
 
 #endif /* __KWORD_ELEMENT_H__ */

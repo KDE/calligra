@@ -22,82 +22,80 @@
 #include <kdebug.h>
 
 #include "xmlparser.h"
+#include "qfile.h"
 
 /* Init static data */
 FileHeader* XmlParser::_fileHeader = 0;
 
-XmlParser::XmlParser(const char *data)
+XmlParser::XmlParser(QString filename):
+		_filename(filename)
 {
-	_document     = data;
-	_index        = 0;
-	_childCurrent = 0;
-
-	// Get the tree
-	_arbreXml     = ParseXml(_document, &_index);
-	_tokenCurrent = _arbreXml;
-	//PrintXml(_arbreXml, 3);
+	QFile f(filename);
+	if(!f.open(IO_ReadOnly))
+		return;
+	if(!_document.setContent(&f))
+	{
+		f.close();
+		return;
+	}
+	f.close();
+	//_eltCurrent = _document.documentElement();
 }
 
 XmlParser::XmlParser()
 {
-	_document = 0;
-	_index    = 0;
-	_arbreXml = 0;
-	_tokenCurrent = 0;
-	_childCurrent = 0;
 }
 
 XmlParser::~XmlParser()
 {
-	kdDebug() << "destruction of XmlParser (tree)" << endl;
-	delete _arbreXml;
 }
 
-const char *XmlParser::getDocument() const
+QDomNode XmlParser::getChild(QDomNode balise, QString name)
 {
-	return _document;
+	QDomNode node = getChild(balise, name, 0);
+	kdDebug() << node.nodeName() << endl;
+	return node;
 }
 
-Markup* XmlParser::getNextMarkup()
+bool XmlParser::isChild(QDomNode balise, QString name)
 {
-	Markup *m= 0;
-	// Lit la zone de donnee _document et retourne un bloc.
-	kdDebug() << "markup suivant" << endl;
-	if(_tokenCurrent == 0)
-		return 0;
-
-	while((_tokenCurrent->eType == TT_Space || _tokenCurrent->eType == TT_EOL) 
-		&& _tokenCurrent->pNext != 0)
-	{
-		_tokenCurrent= _tokenCurrent->pNext;
-	}
-		
-	if(_tokenCurrent->eType == TT_Markup)
-	{
-		m = (Markup*) _tokenCurrent;
-		_tokenCurrent = _tokenCurrent->pNext;
-		kdDebug() << "getMarkup : " << m->token.zText << endl;
-
-	}
-	kdDebug() << "ok" << endl;
-	return m;
+	if(balise.isElement())
+		return balise.toElement().elementsByTagName(name).count();
+	return false;
 }
 
-Token * XmlParser::getNextChild()
+QDomNode XmlParser::getChild(QDomNode balise, QString name, int index)
 {
-	if(_childCurrent == NULL)
-		_childCurrent = ((Markup*) _tokenCurrent)->pContent;
-	else
-		_childCurrent = _childCurrent->pNext;
-	return _childCurrent;
+	if(balise.isElement())
+		return balise.toElement().elementsByTagName(name).item(index);
+	return QDomNode();
 }
 
-Token* XmlParser::enterTokenChild(const Markup *m)
-{	
-	Token *s;
-	
-	s = _tokenCurrent;
-	_tokenCurrent= m->pContent;
-	return s;
+QDomNode XmlParser::getChild(QDomNode balise, int index)
+{
+	return balise.childNodes().item(index);
 }
 
+int XmlParser::getNbChild(QDomNode balise)
+{
+	return balise.childNodes().count();
+}
+
+int XmlParser::getNbChild(QDomNode balise, QString name)
+{
+	if(balise.isElement())
+		return balise.toElement().elementsByTagName(name).count();
+	return -1;
+}
+
+QString  XmlParser::getChildName(QDomNode balise, int index)
+{
+	return balise.childNodes().item(index).nodeName();
+}
+
+QString  XmlParser::getAttr(QDomNode balise, QString name) const
+{
+	if(balise.isElement())
+		return balise.toElement().attributeNode(name).value();
+	return QString();
+}
