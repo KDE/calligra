@@ -59,22 +59,25 @@ height(
 }
 
 
-VSegment::VSegment( unsigned degree ) : m_degree( degree )
+VSegment::VSegment( unsigned degree )
 {
-	m_nodes = new VNodeData[ degree ];
+	m_degree = degree;
+
+	m_nodes = new VNodeData[ m_degree ];
+
 	m_type = begin;
 	m_state = normal;
 
 	m_prev = 0L;
 	m_next = 0L;
 
-	m_nodeSelected[0] = false;
-	m_nodeSelected[1] = false;
-	m_nodeSelected[2] = false;
+	m_nodeSelected[ 0 ] = false;
+	m_nodeSelected[ 1 ] = false;
+	m_nodeSelected[ 2 ] = false;
 
-	m_nodeEdited[0] = false;
-	m_nodeEdited[1] = false;
-	m_nodeEdited[2] = false;
+	m_nodeEdited[ 0 ] = false;
+	m_nodeEdited[ 1 ] = false;
+	m_nodeEdited[ 2 ] = false;
 
 
 	m_ctrlPointFixing = none;
@@ -82,10 +85,12 @@ VSegment::VSegment( unsigned degree ) : m_degree( degree )
 
 VSegment::VSegment( const VSegment& segment )
 {
-	m_degree	= segment.m_degree;
-	m_nodes		= new VNodeData[ segment.m_degree ];
-	m_type		= segment.m_type;
-	m_state		= segment.m_state;
+	m_degree = segment.m_degree;
+
+	m_nodes = new VNodeData[ m_degree ];
+
+	m_type = segment.m_type;
+	m_state = segment.m_state;
 
 	// Copying the pointers m_prev/m_next has some advantages (see VSegment::length()).
 	// Inserting a segment into a path overwrites these anyway.
@@ -98,13 +103,13 @@ VSegment::VSegment( const VSegment& segment )
 		setPoint( i, segment.point( i ) );
 	}
 
-	m_nodeSelected[0] = segment.m_nodeSelected[0];
-	m_nodeSelected[1] = segment.m_nodeSelected[1];
-	m_nodeSelected[2] = segment.m_nodeSelected[2];
+	m_nodeSelected[ 0 ] = segment.m_nodeSelected[ 0 ];
+	m_nodeSelected[ 1 ] = segment.m_nodeSelected[ 1 ];
+	m_nodeSelected[ 2 ] = segment.m_nodeSelected[ 2 ];
 
-	m_nodeEdited[0] = segment.m_nodeEdited[0];
-	m_nodeEdited[1] = segment.m_nodeEdited[1];
-	m_nodeEdited[2] = segment.m_nodeEdited[2];
+	m_nodeEdited[ 0 ] = segment.m_nodeEdited[ 0 ];
+	m_nodeEdited[ 1 ] = segment.m_nodeEdited[ 1 ];
+	m_nodeEdited[ 2 ] = segment.m_nodeEdited[ 2 ];
 
 	m_ctrlPointFixing = segment.m_ctrlPointFixing;
 }
@@ -127,6 +132,7 @@ VSegment::setDegree( unsigned degree )
 
 	// Allocate new node data.
 	m_nodes = new VNodeData[ degree ];
+
 	m_degree = degree;
 }
 
@@ -170,7 +176,7 @@ VSegment::isFlat( double flatness ) const
 		{
 			flat =
 				height( m_prev->knot(), point( i ), knot() ) / chordLength()
-					< flatness;
+				< flatness;
 
 			if( !flat )
 				break;
@@ -194,7 +200,7 @@ VSegment::pointAt( double t ) const
 
 void
 VSegment::pointDerivativesAt( double t, KoPoint* p,
-	KoPoint* d1, KoPoint* d2 ) const
+							  KoPoint* d1, KoPoint* d2 ) const
 {
 	if(
 		!m_prev ||
@@ -211,8 +217,10 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 
 		if( p )
 			*p = m_prev->knot() + diff * t;
+
 		if( d1 )
 			*d1 = diff;
+
 		if( d2 )
 			*d2 = KoPoint( 0.0, 0.0 );
 
@@ -246,8 +254,9 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 		{
 			if( d2 )
 				*d2 = degree() * ( degree() - 1 )
-						* ( q[ 2 ] - 2 * q[ 1 ] + q[ 0 ] );
+					  * ( q[ 2 ] - 2 * q[ 1 ] + q[ 0 ] );
 		}
+
 		// Save first derivative now that we have it.
 		else if( j == degree() - 1 )
 		{
@@ -258,7 +267,7 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 
 	// Save point.
 	if( p )
-		*p = q[0];
+		*p = q[ 0 ];
 
 	delete[]( q );
 
@@ -278,7 +287,7 @@ VSegment::tangentAt( double t ) const
 
 void
 VSegment::pointTangentNormalAt( double t, KoPoint* p,
-	KoPoint* tn, KoPoint* n ) const
+								KoPoint* tn, KoPoint* n ) const
 {
 	// Calculate derivative if necessary.
 	KoPoint d;
@@ -304,7 +313,7 @@ VSegment::pointTangentNormalAt( double t, KoPoint* p,
 	{
 		// Calculate vector product of "binormal" x tangent
 		// (0,0,1) x (dx,dy,0), which is simply (dy,-dx,0).
-		n->setX(  d.y() );
+		n->setX( d.y() );
 		n->setY( -d.x() );
 	}
 }
@@ -320,12 +329,14 @@ VSegment::length( double t ) const
 		return 0.0;
 	}
 
+
 	// Length of a line.
 	if( m_type == line )
 	{
 		return
 			t * chordLength();
 	}
+
 	// Length of a bezier.
 	else if( m_type == curve )
 	{
@@ -361,7 +372,7 @@ VSegment::length( double t ) const
 		while( path.current() )
 		{
 			chord = path.current()->chordLength();
-			poly  = path.current()->polyLength();
+			poly = path.current()->polyLength();
 
 			if(
 				poly &&
@@ -413,6 +424,7 @@ VSegment::polyLength() const
 
 	// Start with distance |first point - previous knot|.
 	KoPoint d = point( 0 ) - m_prev->knot();
+
 	double length = sqrt( d * d );
 
 	// Iterate over remaining points.
@@ -448,9 +460,10 @@ VSegment::param( double len ) const
 	else if( m_type == curve )
 	{
 		// Perform a successive interval bisection.
-		double param1   = 0.0;
+		double param1 = 0.0;
 		double paramMid = 0.5;
-		double param2   = 1.0;
+		double param2 = 1.0;
+
 		double lengthMid = length( paramMid );
 
 		while( QABS( lengthMid - len ) / len > VGlobal::paramLengthTolerance )
@@ -464,6 +477,7 @@ VSegment::param( double len ) const
 
 			lengthMid = length( paramMid );
 		}
+
 		return paramMid;
 	}
 
@@ -670,6 +684,7 @@ VSegment::linesIntersect(
 		return false;
 
 	const KoPoint delta_b = b1 - b0;
+
 	const double det_b = b1.x() * b0.y() - b1.y() * b0.x();
 
 	const double r_a0 = delta_b.y() * a0.x() - delta_b.x() * a0.y() + det_b;
@@ -727,15 +742,17 @@ VSegment::revert() const
 
 
 	// Swap node selection.
-	segment->m_nodeSelected[0] = m_nodeSelected[1];
-	segment->m_nodeSelected[1] = m_nodeSelected[0];
-	segment->m_nodeSelected[2] = m_prev->m_nodeSelected[2];
+	segment->m_nodeSelected[ 0 ] = m_nodeSelected[ 1 ];
+	segment->m_nodeSelected[ 1 ] = m_nodeSelected[ 0 ];
+	segment->m_nodeSelected[ 2 ] = m_prev->m_nodeSelected[ 2 ];
 
 	// Swap control point fixing.
+
 	if( m_ctrlPointFixing == first )
 		segment->m_ctrlPointFixing = second;
 	else if( m_ctrlPointFixing == second )
 		segment->m_ctrlPointFixing = first;
+
 
 	return segment;
 }
@@ -822,9 +839,11 @@ VSegment::load( const QDomElement& element )
 		case 1:
 			m_ctrlPointFixing = first;
 			break;
+
 		case 2:
 			m_ctrlPointFixing = second;
 			break;
+
 		default:
 			m_ctrlPointFixing = none;
 	}
