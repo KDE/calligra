@@ -620,6 +620,8 @@ void KSpreadTabBar::showTable(const QString& text)
 
 void KSpreadTabBar::showTable(QStringList list)
 {
+    if ( list.count()==0 )
+        return;
     KSpreadTable *table;
     KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( m_pView->doc(),i18n("Show Table"));
     for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
