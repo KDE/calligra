@@ -741,15 +741,18 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			points.remove( '\r' );
 			points.remove( '\n' );
 			QStringList pointList = QStringList::split( ' ', points );
-			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); it++ )
+			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); )
 			{
+				KoPoint point;
+				point.setX( (*(it++)).toDouble() );
+				point.setY( (*(it++)).toDouble() );
 				if( bFirst )
 				{
-					path->moveTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
+					path->moveTo( point );
 					bFirst = false;
 				}
 				else
-					path->lineTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
+					path->lineTo( point );
 			}
 			if( b.tagName() == "polygon" ) path->close();
 			obj = path;
