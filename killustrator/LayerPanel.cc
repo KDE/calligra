@@ -34,6 +34,8 @@
 #include <GLayer.h>
 #include "GPage.h"
 #include "KIllustrator_factory.h"
+#include "KIllustrator_doc.h"
+
 
 LayerPanel::LayerPanel (QWidget* parent, const char* name) :
     QWidget(parent, name) {
@@ -72,18 +74,24 @@ void LayerPanel::manageDocument (GDocument* doc) {
 }
 
 void LayerPanel::upPressed () {
+    if(!document->document()->isReadWrite())
+        return;
   document->activePage()->raiseLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
   slotLayerChanged();
 }
 
 void LayerPanel::downPressed () {
+    if(!document->document()->isReadWrite())
+        return;
   document->activePage()->lowerLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
   slotLayerChanged();
 }
 
 void LayerPanel::newPressed () {
+    if(!document->document()->isReadWrite())
+        return;
   GLayer* layer = document->activePage()->addLayer ();
   document->activePage()->setActiveLayer (layer);
   // force update
@@ -92,6 +100,8 @@ void LayerPanel::newPressed () {
 }
 
 void LayerPanel::deletePressed () {
+    if(!document->document()->isReadWrite())
+        return;
   document->activePage()->deleteLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
   stateOfButton();

@@ -1097,7 +1097,10 @@ void KIllustratorView::slotSelectTool( bool b )
 
 bool KIllustratorView::eventFilter(QObject *o, QEvent *e)
 {
-   if ((e==0) || (tcontroller->getActiveTool()->id()==Tool::ToolSelect))
+    if(!tcontroller ||!tcontroller->getActiveTool() )
+        return false;
+
+    if ((e==0) || (tcontroller->getActiveTool()->id()==Tool::ToolSelect))
       return false;
 
    if ((o==canvas) && (e->type()==QEvent::MouseButtonPress))

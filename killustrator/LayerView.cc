@@ -31,6 +31,7 @@
 #include <GDocument.h>
 #include "GPage.h"
 #include "KIllustrator_factory.h"
+#include "KIllustrator_doc.h"
 
 #define CELL_HEIGHT 25
 #define CELL1_WIDTH 25
@@ -142,6 +143,8 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
 }
 
 void LayerView::mouseDoubleClickEvent (QMouseEvent *event) {
+    if(!document->document()->isReadWrite() )
+        return;
   int row, col;
 
   row = findRow (event->y ());
@@ -152,8 +155,10 @@ void LayerView::mouseDoubleClickEvent (QMouseEvent *event) {
     repaint ();
   }
 }
-#include <kdebug.h>
+
 void LayerView::mousePressEvent (QMouseEvent *event) {
+    if(!document->document()->isReadWrite() )
+        return;
   int row, col;
 
   row = findRow (event->y ());
