@@ -233,6 +233,7 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool update
     if ( updateViews )
     {
         updateAllViewportSizes();
+        updateAllFrames();
         repaintAllViews( true );
     }
 }
