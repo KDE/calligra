@@ -704,12 +704,15 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
 
 #ifdef DEBUG_PAINT
     kdDebug(32500) << "KoTextParag::drawParagString drawing from " << start << " to " << start+len << endl;
-    kdDebug(32500) << " startX in LU: " << startX << endl;
+    kdDebug(32500) << " startX in LU: " << startX << " lastY in LU:" << lastY
+                   << " baseLine in LU:" << baseLine << endl;
 #endif
 
     // Calculate offset (e.g. due to shadow on left or top)
-    int shadowOffsetX_pix = zh->layoutUnitToPixelX( startX, format->offsetX() );
-    int shadowOffsetY_pix = zh->layoutUnitToPixelY( lastY, format->offsetY() );
+    // Important: don't use the 2-args methods here, offsets are not heights
+    // (0 should be 0, not 1) (#63256)
+    int shadowOffsetX_pix = zh->layoutUnitToPixelX( format->offsetX() );
+    int shadowOffsetY_pix = zh->layoutUnitToPixelY( format->offsetY() );
 
     // Calculate startX in pixels
     int startX_pix = zh->layoutUnitToPixelX( startX ) /* + at( rightToLeft ? start+len-1 : start )->pixelxadj */;
@@ -719,11 +722,12 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
 
     int bw_pix = zh->layoutUnitToPixelX( startX, bw );
     int lastY_pix = zh->layoutUnitToPixelY( lastY );
-    int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine );
+    int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine ); // 2 args=>+1. Is that correct?
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
 #ifdef DEBUG_PAINT
     kdDebug(32500) << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
-                   << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix << endl;
+                   << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix
+                   << " baseLine(PIX)=" << baseLine_pix << endl;
 #endif
 
     if ( format->textBackgroundColor().isValid() )
