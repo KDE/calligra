@@ -19,16 +19,21 @@
 
 #include <config.h>
 
+#include <kgenericfactory.h>
 #include <koStoreDevice.h>
+#include <koFilterChain.h>
 #include <koGlobal.h>
-#include "kprkword.h"
-#include "kprkword.moc"
+#include <kprkword.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <qsortedlist.h>
+#include <qcolor.h>
 
-KprKword::KprKword(KoFilter *parent, const char *name) :
-    KoFilter(parent, name),
+typedef KGenericFactory<KprKword, KoFilter> KprKwordFactory;
+K_EXPORT_COMPONENT_FACTORY( libkprkword, KprKwordFactory( "kprkword" ) );
+
+KprKword::KprKword(KoFilter *, const char *, const QStringList&) :
+    KoFilter(),
     outdoc( "DOC" )
 {
 }
@@ -36,30 +41,19 @@ KprKword::KprKword(KoFilter *parent, const char *name) :
 // This filter can act as an import filter for KWord and as an export
 // filter for KPresenter (isn't our architecture really nice ? :)
 // This is why we use the file-to-file method, not a QDomDoc one.
-bool KprKword::filter(const QString &fileIn, const QString &fileOut,
-                      const QString& from, const QString& to,
-                      const QString &)
+KoFilter::ConversionStatus KprKword::convert( const QCString& from, const QCString& to )
 {
     if(to!="application/x-kword" || from!="application/x-kpresenter")
-        return false;
+        return KoFilter::NotImplemented;
 
-    KoStore in( fileIn, KoStore::Read );
-    if ( in.bad() )
+    KoStoreDevice* inpdev = m_chain->storageFile( "root", KoStore::Read );
+    if ( !inpdev )
     {
-        kdError(30502) << "Unable to open input file " << fileIn << endl;
-        in.close();
-        return false;
+        kdError(30502) << "Unable to open input stream" << endl;
+        return KoFilter::StorageCreationError;
     }
 
-    if ( !in.open( "root" ) )
-    {
-        kdError(30502) << "No root document in " << fileIn << endl;
-        in.close();
-        return false;
-    }
-
-    KoStoreDevice inpdev( &in );
-    inpdoc.setContent( &inpdev );
+    inpdoc.setContent( inpdev );
 
 
     outdoc.appendChild( outdoc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -140,18 +134,14 @@ bool KprKword::filter(const QString &fileIn, const QString &fileOut,
 
     // Write output file
 
-    KoStore out = KoStore( fileOut, KoStore::Write);
-    if(!out.open("root")) {
+    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
+    if(!out) {
         kdError(30502) << "Unable to open output file!" << endl;
-        in.close();
-        out.close();
-        return false;
+        return KoFilter::StorageCreationError;
     }
     QCString cstring = outdoc.toCString(); // utf-8 already
-    out.write( cstring.data(), cstring.length() );
-    out.close();
-    in.close();
-    return true;
+    out->writeBlock( cstring.data(), cstring.length() );
+    return KoFilter::OK;
 }
 
 // This class is used to sort the objects by y position
@@ -373,3 +363,5 @@ void KprKword::convert()
         }
     }
 }
+
+#include <kprkword.moc>

@@ -21,7 +21,6 @@
 #define KPRKWORD_H
 
 #include <koFilter.h>
-#include <koStore.h>
 #include <qdom.h>
 
 class KprKword : public KoFilter {
@@ -29,13 +28,12 @@ class KprKword : public KoFilter {
     Q_OBJECT
 
 public:
-    KprKword(KoFilter *parent, const char *name);
+    KprKword(KoFilter *parent, const char *name, const QStringList&);
 
     virtual ~KprKword() {}
 
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config = QString::null);
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+
 protected:
     void convert();
     QDomDocument inpdoc;

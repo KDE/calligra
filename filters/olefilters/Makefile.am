@@ -14,9 +14,9 @@ SUBDIRS = lib excel97 powerpoint97 winword97
 
 kde_module_LTLIBRARIES = libolefilter.la
 
-libolefilter_la_SOURCES = olefilter_factory.cc olefilter.cc
+libolefilter_la_SOURCES = olefilter.cc
 
-noinst_HEADERS = olefilter_factory.h olefilter.h
+noinst_HEADERS = olefilter.h
 
 libolefilter_la_METASOURCES = AUTO
 

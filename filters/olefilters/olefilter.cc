@@ -25,19 +25,23 @@ DESCRIPTION
 
 #include <excelfilter.h>
 #include <koFilterManager.h>
+#include <koFilterChain.h>
 #include <koQueryTrader.h>
 #include <koDocumentInfo.h>
 #include <ktempfile.h>
+#include <kgenericfactory.h>
 #include <myfile.h>
 #include <olefilter.h>
-#include <olefilter.moc>
 #include <powerpointfilter.h>
 #include <unistd.h>
 #include <wordfilter.h>
 #include <qfile.h>
 
-OLEFilter::OLEFilter(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) {
+typedef KGenericFactory<OLEFilter, KoFilter> OLEFilterFactory;
+K_EXPORT_COMPONENT_FACTORY( libolefilter, OLEFilterFactory( "olefilter" ) );
+
+OLEFilter::OLEFilter(KoFilter *, const char *, const QStringList&) :
+                     KoFilter() {
     olefile.data=0L;
     docfile=0L;
     store=0L;
@@ -56,29 +60,26 @@ OLEFilter::~OLEFilter() {
     store=0L;
 }
 
-bool OLEFilter::filter(
-    const QString &fileIn,
-    const QString &fileOut, const QString &prefixOut,
-    const QString &from, const QString &to,
-    const QString &) {
-
+KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCString& to )
+{
     if(to!="application/x-kword" &&
        to!="application/x-kspread" &&
        to!="application/x-kpresenter")
-        return false;
+        return KoFilter::NotImplemented;
     if(from!="application/vnd.ms-word" &&
        from!="application/vnd.ms-excel" &&
        from!="application/msword" &&
        from!="application/msexcel" &&
        from!="application/mspowerpoint")
-        return false;
+        return KoFilter::NotImplemented;
 
+    QString prefixOut = ""; // ###### FIXME: Disabled till we find a nice solution (Werner)
     m_prefixOut = prefixOut;
-    QFile in(fileIn);
+    QFile in(m_chain->inputFile());
     if(!in.open(IO_ReadOnly)) {
-        kdError(s_area) << "OLEFilter::filter(): Unable to open input: " << fileIn << endl;
+        kdError(s_area) << "OLEFilter::filter(): Unable to open input" << endl;
         in.close();
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     // Open the OLE 2 file. [TODO] Is it really the best way to
@@ -93,17 +94,18 @@ bool OLEFilter::filter(
         kdError(s_area) << "OLEFilter::filter(): Unable to read input file correctly!" << endl;
         delete [] olefile.data;
         olefile.data=0L;
-        return false;
+        return KoFilter::StupidError;
     }
 
-    store=new KoStore(fileOut, KoStore::Write, to.latin1());
+    QString fileOut( m_chain->outputFile() );
+    store=new KoStore(fileOut, KoStore::Write, to);
     if(store->bad()) {
         kdError(s_area) << "OLEFilter::filter(): Unable to open output file! " << fileOut << endl;
         delete [] olefile.data;
         olefile.data=0L;
         delete store;
         store=0L;
-        return false;
+        return KoFilter::StorageCreationError;
     }
 
     // Special treatment for the "root" element: add a precanned name
@@ -115,7 +117,10 @@ bool OLEFilter::filter(
     kdDebug(s_area) << "OLEFilter::filter(): created " << fileOut << endl;
     delete store;
     store=0L;
-    return success;
+    if ( success )
+        return KoFilter::OK;
+    else
+        return KoFilter::StupidError;
 }
 
 void OLEFilter::slotSavePart(
@@ -123,7 +128,7 @@ void OLEFilter::slotSavePart(
     QString &storageId,
     QString &mimeType,
     const QString &extension,
-    const QString &config,
+    const QString &/*config*/,
     unsigned int length,
     const char *data)
 {
@@ -142,8 +147,8 @@ void OLEFilter::slotSavePart(
     }
     else
     {
-        KoFilterManager *mgr = new KoFilterManager();
-        KTempFile tempFile(QString::null, "." + extension);
+        KTempFile tempFileIN(QString::null, "." + extension);
+        tempFileIN.setAutoDelete(true);
 
         // It's not here, so let's generate one.
         id = m_path + '/' + QString::number(m_nextPart);
@@ -152,19 +157,28 @@ void OLEFilter::slotSavePart(
         // Save the data supplied into a temporary file, then run the filter
         // on it.
 
-        tempFile.file()->writeBlock(data, length);
-        tempFile.close();
-        QString result = mgr->import(tempFile.name(), mimeType, config, m_prefixOut + id.mid(sizeof("tar:") - 1));
-        tempFile.unlink();
+        tempFileIN.file()->writeBlock(data, length);
+        tempFileIN.close();
+
+        KoFilterManager *mgr = new KoFilterManager(tempFileIN.name());
+
+        KTempFile tempFileOUT(QString::null, "." + extension);
+        tempFileOUT.setAutoDelete(true);
+
+        // ##### FIXME: Ensure that the prefix is handled (Werner)
+        QCString mime( mimeType.latin1() );
+        KoFilter::ConversionStatus status = mgr->exp0rt( tempFileOUT.name(), mime );
+        if ( status != KoFilter::OK )
+            kdDebug(s_area) << "Huh??? Couldn't convert that file" << endl;
+
         partMap.insert(key, id);
         mimeMap.insert(key, mimeType);
 
         // Now fetch out the elements from the resulting KoStore and embed them in our KoStore.
 
-        KoStore storedPart(result, KoStore::Read);
+        KoStore storedPart(tempFileOUT.name(), KoStore::Read);
         if (!store->embed(id, storedPart))
             kdError(s_area) << "Could not embed in KoStore!" << endl;
-        unlink(result.local8Bit());
         delete mgr;
     }
     storageId = id;
@@ -527,3 +541,5 @@ void OLEFilter::connectCommon(FilterBase **myFilter) {
                      SLOT(slotGetStream(const QString &, myFile &)));
     QObject::connect(*myFilter, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));
 }
+
+#include <olefilter.moc>

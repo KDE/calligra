@@ -39,19 +39,10 @@ class OLEFilter : public KoFilter {
     Q_OBJECT
 
 public:
-    OLEFilter(KoFilter *parent, const char *name);
+    OLEFilter(KoFilter *parent, const char *name, const QStringList&);
     virtual ~OLEFilter();
 
-/*
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
-*/
-    virtual bool filter(const QString &fileIn,
-                        const QString &fileOut, const QString &prefixOut,
-                        const QString &from, const QString &to,
-                        const QString &config);
-    virtual bool supportsEmbedding() { return true; }
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 protected slots:
     // This slot saves the document informations to the KOffice tar storage.
@@ -68,7 +59,7 @@ protected slots:
 	const QString &street,
 	const QString &docTitle,
 	const QString &docAbstract);
-    
+
     // This slot saves an embedded Picture to the KOffice tar storage.
     void slotSavePic(
         const QString &nameIN,
