@@ -676,7 +676,7 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
     {
         // Write rawly the paragrapgh (see KoTextParag::saveOasis)
         writer.startElement( "text:p" );
-        writer.addAttribute( "text:style-name", (*it).m_layout.m_name );
+        writer.addAttribute( "text:style-name", (*it).m_layout.m_autoStyleName );
         writer.addTextSpan( (*it).text() );
         writer.endElement(); // text:p
     }
