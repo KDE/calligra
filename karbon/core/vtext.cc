@@ -384,6 +384,19 @@ VText::load( const QDomElement& element )
 }
 
 void
+VText::setText( const QString& text )
+{
+	if( m_text != text )
+	{
+		m_text = text;
+		m_glyphs.clear();
+#ifdef HAVE_KARBONTEXT
+		traceText();
+#endif
+	}
+}
+
+void
 VText::setState( const VState state )
 {
 	VObject::setState( state );

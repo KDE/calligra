@@ -61,7 +61,7 @@ public:
 	virtual ~VText();
 	virtual DCOPObject* dcopObject();
 
-	virtual void setText( const QString& text ) { m_text = text; }
+	virtual void setText( const QString& text );
 	virtual const QString& text() { return m_text; }
 	virtual void setFont( const QFont& font ) { m_font = font; }
 	virtual const QFont& font() { return m_font; }
