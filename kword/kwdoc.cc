@@ -138,7 +138,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     dcop = 0;
     m_pages = 1;
     m_tabStop = MM_TO_POINT( 15.0 );
-    bgFrameSpellChecked = 0L;
     m_processingType = WP;
 
     m_lstViews.setAutoDelete( false );
@@ -221,15 +220,14 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_varColl = new KWVariableCollection( new KWVariableSettings(), m_varFormatCollection );
 
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
+#ifdef HAVE_LIBKSPELL2
 
     m_bgSpellCheck = new KWBgSpellCheck(this);
-
+#endif
     m_slDataBase = new KWMailMergeDataBase( this );
     slRecordNum = -1;
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
-
-    m_pKOSpellConfig = 0;
 
     m_hasTOC=false;
 
@@ -314,12 +312,13 @@ KWDocument::~KWDocument()
     delete m_varFormatCollection;
     delete m_slDataBase;
     delete dcop;
+#ifdef HAVE_LIBKSPELL2
     delete m_bgSpellCheck;
+#endif
     delete m_styleColl;
     delete m_frameStyleColl;
     delete m_tableStyleColl;
     delete m_tableTemplateColl;
-    delete m_pKOSpellConfig;
     delete m_viewMode;
     delete m_bufPixmap;
     delete m_pictureCollection;
@@ -328,32 +327,18 @@ KWDocument::~KWDocument()
 void KWDocument::initConfig()
 {
   KConfig *config = KWFactory::global()->config();
-  KOSpellConfig kosconfig;
   if( config->hasGroup("KSpell kword" ) )
   {
       config->setGroup( "KSpell kword" );
-      kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-      kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-      kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-      kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-      kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KOS_E_ASCII));
-      kosconfig.setClient(config->readNumEntry ("KSpell_Client", KOS_CLIENT_ISPELL));
-
-      kosconfig.setIgnoreCase( config->readNumEntry( "KSpell_IgnoreCase", 0));
-      kosconfig.setIgnoreAccent( config->readNumEntry( "KSpell_IgnoreAccent", 0));
-      kosconfig.setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
-      kosconfig.setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
-      kosconfig.setSpellWordWithNumber( config->readNumEntry("KSpell_SpellWordWithNumber", false));
-
-      setKOSpellConfig( kosconfig );
 
       // Default is false for spellcheck, but the spell-check config dialog
       // should write out "true" when the user configures spell checking.
+#ifdef HAVE_LIBKSPELL2
       if ( isReadWrite() )
-          m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
+          m_bgSpellCheck->setEnabled(config->readBoolEntry( "SpellCheck", false ));
       else
-          m_bgSpellCheck->enableBackgroundSpellCheck( false );
-
+          m_bgSpellCheck->setEnabled( false );
+#endif
   }
 
   if(config->hasGroup("Interface" ) )
@@ -1564,7 +1549,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             spellWord=spellWord.nextSibling().toElement();
         }
     }
-    m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
+    //m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
 
     emit sigProgress(25);
 
@@ -1740,8 +1725,9 @@ void KWDocument::startBackgroundSpellCheck()
     //don't start bg spell checking if
     if(backgroundSpellCheckEnabled() && isReadWrite())
     {
-        m_bgSpellCheck->objectForSpell(textFrameSet(0));
-        m_bgSpellCheck->startBackgroundSpellCheck();
+#ifdef HAVE_LIBKSPELL2
+        m_bgSpellCheck->start();
+#endif
     }
 
 }
@@ -4124,9 +4110,6 @@ void KWDocument::removeFrameSet( KWFrameSet *f )
 {
     emit sig_terminateEditing( f );
     m_lstFrameSet.take( m_lstFrameSet.find(f) );
-    if ( m_bgSpellCheck->currentCheckSpellingFrame() == f )
-        // TODO nextTextFrameSet instead of:
-        m_bgSpellCheck->objectForSpell( 0L);
     setModified( true );
 }
 
@@ -4161,27 +4144,6 @@ void KWDocument::slotDocumentRestored()
 void KWDocument::slotCommandExecuted()
 {
     setModified( true );
-}
-
-
-void KWDocument::setKOSpellConfig(const KOSpellConfig& _kspell)
-{
-  if(m_pKOSpellConfig==0)
-    m_pKOSpellConfig=new KOSpellConfig();
-
-  m_pKOSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-  m_pKOSpellConfig->setRunTogether(_kspell.runTogether ());
-  m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
-  m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
-  m_pKOSpellConfig->setEncoding(_kspell.encoding());
-  m_pKOSpellConfig->setEncoding(_kspell.encoding());
-  m_pKOSpellConfig->setIgnoreCase ( _kspell.ignoreCase ());
-  m_pKOSpellConfig->setIgnoreAccent( _kspell.ignoreAccent());
-  m_pKOSpellConfig->setDontCheckTitleCase( _kspell.dontCheckTitleCase());
-  m_pKOSpellConfig->setDontCheckUpperWord( _kspell.dontCheckUpperWord() );
-  m_pKOSpellConfig->setSpellWordWithNumber( _kspell.spellWordWithNumber());
-  m_pKOSpellConfig->setClient (_kspell.client());
-  m_bgSpellCheck->setKSpellConfig(_kspell);
 }
 
 #ifndef NDEBUG
@@ -4626,14 +4588,20 @@ void KWDocument::refreshGUIButton()
 
 void KWDocument::enableBackgroundSpellCheck( bool b )
 {
-    m_bgSpellCheck->enableBackgroundSpellCheck(b);
+#ifdef HAVE_LIBKSPELL2
+    m_bgSpellCheck->setEnabled(b);
+#endif
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->updateBgSpellCheckingState();
 }
 
 bool KWDocument::backgroundSpellCheckEnabled() const
 {
-    return m_bgSpellCheck->backgroundSpellCheckEnabled();
+#ifdef HAVE_LIBKSPELL2
+    return m_bgSpellCheck->enabled();
+#else
+    return false;
+#endif
 }
 
 void KWDocument::reactivateBgSpellChecking()
@@ -4646,43 +4614,6 @@ void KWDocument::reactivateBgSpellChecking()
     }
     repaintAllViews();
     startBackgroundSpellCheck();
-}
-
-// to be removed
-KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
-{
-    int pos = -1;
-    if ( bgFrameSpellChecked )
-        pos=m_lstFrameSet.findNextRef(bgFrameSpellChecked);
-    if(pos !=-1)
-    {
-        KWFrameSet *frm=0L;
-        for ( frm=m_lstFrameSet.at(pos); frm != 0; frm=m_lstFrameSet.next() ){
-            KWTextFrameSet *newFrm = frm->nextTextObject( obj );
-            if(newFrm && !newFrm->isDeleted()  && newFrm->textObject()->needSpellCheck())
-            {
-                //kdDebug() << "KWDocument::nextTextFrameSet checking " << bgFrameSpellChecked << endl;
-                bgFrameSpellChecked = frm;
-                return newFrm;
-            }
-        }
-    }
-    else
-    {
-        KWFrameSet *frm=0L;
-        for ( frm=m_lstFrameSet.first(); frm != 0; frm=m_lstFrameSet.next() ){
-            KWTextFrameSet *newFrm = frm->nextTextObject( obj );
-            if(newFrm && !newFrm->isDeleted() && newFrm->textObject()->needSpellCheck())
-            {
-                //kdDebug() << "KWDocument::nextTextFrameSet checking " << bgFrameSpellChecked << endl;
-                bgFrameSpellChecked = frm;
-                return newFrm;
-            }
-        }
-    }
-    //kdDebug() << "KWDocument::nextTextFrameSet returning 0L" << endl;
-    bgFrameSpellChecked = 0L;
-    return 0L;
 }
 
 void KWDocument::slotChapterParagraphFormatted( KoTextParag* /*parag*/ )
@@ -4804,15 +4735,14 @@ void KWDocument::addIgnoreWordAll( const QString & word)
 {
     if( m_spellListIgnoreAll.findIndex( word )==-1)
         m_spellListIgnoreAll.append( word );
-    m_bgSpellCheck->addIgnoreWordAll( word );
+    //m_bgSpellCheck->addIgnoreWordAll( word );
 
 }
 
 void KWDocument::clearIgnoreWordAll( )
 {
     m_spellListIgnoreAll.clear();
-    m_bgSpellCheck->clearIgnoreWordAll();
-
+    //m_bgSpellCheck->clearIgnoreWordAll();
 }
 
 int KWDocument::maxZOrder( int pageNum) const
@@ -5091,7 +5021,8 @@ void KWDocument::paragraphModified(KoTextParag* /*_parag*/, int /*KoTextParag::P
 
 void KWDocument::spellCheckParagraphDeleted( KoTextParag *_parag,  KWTextFrameSet *frm)
 {
-    m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());
+    //FIXME: do we need that?
+    //m_bgSpellCheck->paragraphDeleted( _parag, frm->textObject());
 }
 
 void KWDocument::paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm )
@@ -5211,12 +5142,14 @@ void KWDocument::setHorizontalLinePath( const QStringList & lst)
 }
 #endif
 
-void KWDocument::addWordToDictionary( const QString & word)
+void KWDocument::addWordToDictionary( const QString & /*word*/ )
 {
+#ifdef HAVE_LIBKSPELL2
     if ( m_bgSpellCheck )
     {
-        m_bgSpellCheck->addPersonalDictonary( word );
+        //m_bgSpellCheck->addPersonalDictonary( word );
     }
+#endif
 }
 
 void KWDocument::setEmpty()

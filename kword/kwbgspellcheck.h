@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 David Faure <david@mandrakesoft.com>
                  2002 Laurent Montel <lmontel@mandrakesoft.com>
+                 2004 Zack Rusin <zack@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,28 +25,26 @@
 class KWDocument;
 class KWTextFrameSet;
 
-#include <qobject.h>
-#include <koBgSpellCheck.h>
+#include "kobgspellcheck.h"
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include <qobject.h>
+#ifdef HAVE_LIBKSPELL2
 class KWBgSpellCheck : public KoBgSpellCheck
 {
 public:
     KWBgSpellCheck(KWDocument *_doc);
     virtual ~KWBgSpellCheck();
 
-    void objectForSpell(KWTextFrameSet *curr);
-    //repaint object when we spell check
-    virtual void slotRepaintChanged(KoTextObject *obj);
-
-    //spell checker is not configurate.
-    virtual void configurateSpellChecker();
-
-    KWTextFrameSet *currentCheckSpellingFrame()const{ return m_currentFrame;}
-
-    virtual KoTextObject *nextTextObject( KoTextObject *obj );
+    virtual KoTextIterator *createWholeDocIterator() const;
 
 private:
     KWDocument *m_doc;
     KWTextFrameSet *m_currentFrame;
 };
+#endif
+
 #endif

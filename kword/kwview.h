@@ -51,7 +51,7 @@ class KWStyleManager;
 class KWTableDia;
 class KWView;
 class QResizeEvent;
-class KSpell;
+//class KSpell;
 class QScrollView;
 class QSplitter;
 class KAction;
@@ -80,7 +80,7 @@ class KWTableStyle;
 class KoTextIterator;
 class KWTableFrameSet;
 
-class KOSpell;
+class KoSpell;
 
 /******************************************************************/
 /* Class: KWView						  */
@@ -437,13 +437,10 @@ protected slots:
     virtual void slotChildActivated( bool a ); // from KoView
     void slotSetInitialPosition();
 
-    void spellCheckerReady();
-    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
-    void spellCheckerCorrected( const QString &, const QString &, unsigned int);
+    void spellCheckerMisspelling( const QString &, int );
+    void spellCheckerCorrected( const QString &, int, const QString & );
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
-    void spellCheckerIgnoreAll( const QString &);
-    void spellCheckerReplaceAll( const QString &,  const QString &);
     void spellAddAutoCorrect (const QString & originalword, const QString & newword);
     void slotApplyFont();
     void slotApplyParag();
@@ -742,7 +739,7 @@ private:
 
     // Spell-checking
     struct {
-        KOSpell *kospell;
+        KoSpell *kospell;
 	KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
         KoTextIterator * textIterator;

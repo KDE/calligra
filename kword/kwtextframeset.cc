@@ -30,6 +30,7 @@
 #include "kwcommand.h"
 #include "kwdrag.h"
 #include "kwformulaframe.h"
+#include "kwbgspellcheck.h"
 #include <koparagcounter.h>
 #include "contents.h"
 #include <koVariableDlgs.h>
@@ -135,7 +136,9 @@ void KWTextFrameSet::init()
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ),
                                   this, (m_name+"-textobj").utf8() );
-
+#ifdef HAVE_LIBKSPELL2
+    m_doc->backSpeller()->registerNewTextObject( m_textobj );
+#endif
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),
              SLOT( slotAvailableHeightNeeded() ) );
     connect( m_textobj, SIGNAL( afterFormatting( int, KoTextParag*, bool* ) ),

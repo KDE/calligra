@@ -76,7 +76,6 @@ class KFontSizeAction;
 class KColorAction;
 class KSelectAction;
 class KFontAction;
-class KSpell;
 class KoParagCounter;
 class KActionMenu;
 class KoSearchContext;
@@ -90,7 +89,7 @@ class KPrPage;
 class KPTextObject;
 class KoTextIterator;
 
-class KOSpell;
+class KoSpell;
 
 class PageBase : public QWidget
 {
@@ -353,16 +352,14 @@ public slots:
     void slotSpellCheck();
 
 
-    void spellCheckerReady();
-    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int);
-    void spellCheckerCorrected( const QString &, const QString &, unsigned int);
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
     void spellCheckerIgnoreAll( const QString & );
     void startKSpell();
     void spellCheckerReplaceAll( const QString &, const QString & );
     void spellAddAutoCorrect (const QString & originalword, const QString & newword);
-
+    void spellCheckerMisspelling( const QString &, int );
+    void spellCheckerCorrected( const QString &, int, const QString & );
     void alignChanged( int );
 
     void formatParagraph();
@@ -1165,7 +1162,7 @@ private:
 
     // Spell-checking
     struct {
-        KOSpell *kospell;
+        KoSpell *kospell;
         KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
         KoTextIterator * textIterator;

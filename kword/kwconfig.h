@@ -30,7 +30,6 @@ class KWView;
 class QCheckBox;
 class KIntNumInput;
 class KoUnitDoubleSpinBox;
-class KSpellConfig;
 class KConfig;
 class QComboBox;
 class KIntNumInput;

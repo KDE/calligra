@@ -2,7 +2,7 @@ if compile_lib_KOPAINTER
 KOPAINTERDIR = kopainter
 endif
 
-SUBDIRS = store kwmf kospell kofficecore kofficeui koscript kotext $(KOPAINTERDIR) kformula 
+SUBDIRS = store kwmf kofficecore kofficeui koscript kotext $(KOPAINTERDIR) kformula 
 
 messages:
 #	$(MAKE) -C kformula -f Makefile.am symbolnames.cc

@@ -17,7 +17,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include "kptextobject.h"
 #include "kpgradient.h"
 #include "kprcommand.h"
@@ -36,7 +38,7 @@
 
 #include "kpresenter_view.h"
 #include "kpresenter_doc.h"
-
+#include "kprbgspellcheck.h"
 #include <korichtext.h>
 #include <kotextobject.h>
 #include <kostyle.h>
@@ -110,6 +112,9 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ), this );
 
+#ifdef HAVE_LIBKSPELL2
+    m_doc->backSpeller()->registerNewTextObject( m_textobj );
+#endif
     brush = Qt::NoBrush;
     brush.setColor(QColor());
     pen = defaultPen();
@@ -1967,11 +1972,6 @@ void KPTextView::keyPressEvent( QKeyEvent *e )
 void KPTextView::keyReleaseEvent( QKeyEvent *e )
 {
     handleKeyReleaseEvent(e);
-}
-
-bool KPTextView::hasSelection() const
-{
-    return textObject()->hasSelection();
 }
 
 void KPTextView::clearSelection()

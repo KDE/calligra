@@ -45,8 +45,6 @@ class KWViewMode;
 class KMacroCommand;
 class KoDocumentEntry;
 class QPainter;
-class KSpellConfig;
-class KSpell;
 class KoAutoFormat;
 class KCommand;
 class KoCommandHistory;
@@ -54,7 +52,9 @@ class KoVariable;
 class KoVariableFormatCollection;
 class KWVariableCollection;
 class KoTextObject;
+#ifdef HAVE_LIBKSPELL2
 class KWBgSpellCheck;
+#endif
 class KoStyleCollection;
 class KWFrameStyleCollection;
 class KWTableStyleCollection;
@@ -68,8 +68,6 @@ class KWChild;
 class QFont;
 class QStringList;
 class QRect;
-
-class KOSpellConfig;
 
 namespace KFormula {
     class Document;
@@ -535,13 +533,6 @@ public:
 	  return defaultValue;
       }
 
-    /**
-     * get custom kspell config
-     */
-
-    void setKOSpellConfig(const KOSpellConfig& _kspell);
-    KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
-
 #ifndef NDEBUG
     void printStyleDebug();
     void printDebug();
@@ -680,8 +671,6 @@ public:
     void initUnit();
     void startBackgroundSpellCheck();
     void reactivateBgSpellChecking();
-    //to be removed
-    KWTextFrameSet* nextTextFrameSet(KWTextFrameSet *obj);
 
     void updateHeaderButton();
     void updateFooterButton();
@@ -774,7 +763,9 @@ public:
     void setGlobalHyphenation ( bool _hyphen );
 
     KWLoadingInfo* loadingInfo() const { return m_loadingInfo; }
-
+#ifdef HAVE_LIBKSPELL2
+    KWBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
+#endif
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -939,8 +930,9 @@ private:
 
     QString m_lastViewMode;
     KWVariableCollection *m_varColl;
+#ifdef HAVE_LIBKSPELL2
     KWBgSpellCheck *m_bgSpellCheck;
-    KOSpellConfig *m_pKOSpellConfig;
+#endif
     KoStyleCollection *m_styleColl;
     KWFrameStyleCollection *m_frameStyleColl;
     KWTableStyleCollection *m_tableStyleColl;
@@ -961,7 +953,6 @@ private:
 
     double m_tabStop;
     QStringList m_spellListIgnoreAll;
-    KWFrameSet * bgFrameSpellChecked;
     QPixmap* m_bufPixmap;
 
     KWLoadingInfo* m_loadingInfo;

@@ -12,16 +12,16 @@ libkotext_la_SOURCES = qcomplextext.cpp korichtext.cpp \
 	koParagDia.cc kovariable.cc koVariableDlgs.cc \
 	koChangeCaseDia.cc koStylist.cc koSearchDia.cc \
 	timedateformatwidget.ui timeformatwidget_impl.cc dateformatwidget_impl.cc \
-	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc koBgSpellCheck.cc \
+	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc kobgspellcheck.cc \
 	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc \
 	koimportstyledia.cc kotextiterator.cc kooasiscontext.cc koliststylestack.cc
 
 libkotext_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 # We use kofficeui for koRect :)
-libkotext_la_LIBADD = $(LIB_KOFFICEUI) kohyphen/libkohyphen.la -lkspell -lkutils
+libkotext_la_LIBADD = $(LIB_KOFFICEUI) kohyphen/libkohyphen.la $(LIBKSPELL2) -lkutils
 
 METASOURCES = AUTO
 
 # include_HEADERS = 
 #	kozoomhandler.h kotextformat.h koparagcounter.h kostyle.h 
-#	kotextdocument.h koBgSpellCheck.h koCommentDia.h koCreateStyleDia.h
+#	kotextdocument.h kobgspellcheck.h koCommentDia.h koCreateStyleDia.h

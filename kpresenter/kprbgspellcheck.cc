@@ -21,48 +21,42 @@
 
 
 #include "kprbgspellcheck.h"
-#include <kdebug.h>
-#include <kotextobject.h>
 #include "kpresenter_doc.h"
 #include "kptextobject.h"
+#ifdef HAVE_LIBKSPELL2
+
+#include "kotextiterator.h"
+#include "kotextobject.h"
+
+#include <kspell2/broker.h>
+using namespace KSpell2;
+
+#include <kdebug.h>
+#include <kconfig.h>
+#include <klocale.h>
 
 KPrBgSpellCheck::KPrBgSpellCheck(KPresenterDoc *_doc)
-    : KoBgSpellCheck()
+    : KoBgSpellCheck(Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) ), _doc )
 {
     m_doc=_doc;
     m_currentObj=0L;
-    objectForSpell(m_currentObj);
 }
 
 KPrBgSpellCheck::~KPrBgSpellCheck()
 {
 }
 
-void KPrBgSpellCheck::objectForSpell(KPTextObject *curr)
+
+KoTextIterator *KPrBgSpellCheck::createWholeDocIterator() const
 {
-    m_currentObj=curr;
-    if( m_currentObj && m_currentObj->textObject())
-        m_bgSpell.currentTextObj=m_currentObj->textObject();
-    else
-        m_bgSpell.currentTextObj=0L;
+    QValueList<KoTextObject *> objects = m_doc->visibleTextObjects( );
+
+    kdDebug()<<"Number of visible text objects = "<< objects.count() << endl;
+
+    if ( objects.isEmpty() )
+        return 0;
+
+    return new KoTextIterator( objects, 0, 0 );
 }
 
-void KPrBgSpellCheck::slotRepaintChanged(KoTextObject *obj)
-{
-    if( m_currentObj->textObject()==obj)
-        m_doc->repaint(m_currentObj);
-}
-
-KoTextObject *KPrBgSpellCheck::nextTextObject( KoTextObject *obj )
-{
-    m_currentObj=m_doc->nextTextFrameSet(m_currentObj);
-    if(!m_currentObj)
-        return 0L;
-    else
-        return m_currentObj->textObject();
-}
-
-void KPrBgSpellCheck::configurateSpellChecker()
-{
-    m_doc->configureSpellChecker();
-}
+#endif

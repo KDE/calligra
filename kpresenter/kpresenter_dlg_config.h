@@ -28,7 +28,6 @@ class KPresenterDoc;
 class KIntNumInput;
 class KColorButton;
 class KConfig;
-class KSpellConfig;
 class QCheckBox;
 class KLineEdit;
 class KDoubleNumInput;

@@ -39,13 +39,14 @@ class KoVariableFormatCollection;
 class KPrVariableCollection;
 class KTempFile;
 class KoStyle;
+#ifdef HAVE_LIBKSPELL2
 class KPrBgSpellCheck;
+#endif
 class KoTextParag;
 class KoTextObject;
 class KPRLoadingInfo;
 class KPGroupObject;
 
-class KOSpellConfig;
 class KoOasisContext;
 class KoXmlWriter;
 
@@ -78,7 +79,6 @@ class KPObject;
 class KPresenterDoc;
 
 class KoStyle;
-class KSpellConfig;
 class KoStyleCollection;
 
 class KPresenterChild : public KoDocumentChild
@@ -292,8 +292,6 @@ class KPresenterDoc : public KoDocument
     /**
      * get custom kspell config
      */
-    void setKOSpellConfig(KOSpellConfig _kspell);
-    KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
 
     bool showStatusBar() const { return m_bShowStatusBar;}
     void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
@@ -368,8 +366,8 @@ class KPresenterDoc : public KoDocument
 
     //refresh obj when we active or disactive
     void reactivateBgSpellChecking(bool refreshTextObj=false);
-    KPTextObject* nextTextFrameSet(KPTextObject *obj); // deprecated
     QPtrList<KoTextObject> allTextObjects() const;
+    QValueList<KoTextObject *> visibleTextObjects( ) const;
 
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
@@ -478,8 +476,9 @@ class KPresenterDoc : public KoDocument
     void loadImagesFromStore( KoStore *_store );
     void saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter );
     void insertEmbedded( KoStore *store, QDomElement elem, KMacroCommand * macroCmd, KPrPage *page );
-
-
+#ifdef HAVE_LIBKSPELL2
+    KPrBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
+#endif
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -587,7 +586,6 @@ protected:
     KoZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
     KoAutoFormat * m_autoFormat;
-    KOSpellConfig *m_pKOSpellConfig;
 
     bool m_bShowRuler;
     bool m_bShowStatusBar;
@@ -630,7 +628,9 @@ private:
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
     KPrPage *m_stickyPage;
+ #ifdef HAVE_LIBKSPELL2
     KPrBgSpellCheck *m_bgSpellCheck;
+#endif
     KoStyleCollection *m_styleColl;
     KPObject *bgObjSpellChecked;
     QString m_picturePath;

@@ -24,28 +24,21 @@
 
 class KPresenterDoc;
 class KPTextObject;
+#include "kobgspellcheck.h"
+#ifdef HAVE_LIBKSPELL2
 
-#include <koBgSpellCheck.h>
 
 class KPrBgSpellCheck : public KoBgSpellCheck
 {
 public:
     KPrBgSpellCheck(KPresenterDoc *_doc);
     virtual ~KPrBgSpellCheck();
+    virtual KoTextIterator *createWholeDocIterator() const;
 
-    void objectForSpell(KPTextObject *curr);
-    //repaint object when we spell check
-    virtual void slotRepaintChanged(KoTextObject *obj);
-
-    KPTextObject *currentCheckSpellingFrame() const { return m_currentObj; }
-
-    KoTextObject *nextTextObject( KoTextObject *obj );
-
-    //spell checker is not configurate.
-    virtual void configurateSpellChecker();
 
 private:
     KPresenterDoc *m_doc;
     KPTextObject *m_currentObj;
 };
+#endif
 #endif

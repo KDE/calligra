@@ -139,7 +139,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
     m_loadingInfo=0L;
-    bgObjSpellChecked = 0L;
     m_tabStop = MM_TO_POINT( 15.0 );
     m_styleColl=new KoStyleCollection();
     m_insertFilePage = 0;
@@ -187,8 +186,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl = new KPrVariableCollection( new KoVariableSettings(), m_varFormatCollection );
+#ifdef HAVE_LIBKSPELL2
     m_bgSpellCheck = new KPrBgSpellCheck(this);
-
+#endif
     dcop = 0;
     m_initialActivePage=0;
     m_bShowStatusBar = true;
@@ -202,7 +202,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _yRnd = 20;
     _txtBackCol = lightGray;
     _otxtBackCol = lightGray;
-    m_pKOSpellConfig = 0;
 
     m_bShowRuler=true;
     m_bAllowAutoFormat = true;
@@ -369,26 +368,19 @@ void KPresenterDoc::initConfig()
         setGridColor(config->readColorEntry( "GridColor", &oldGridColor ));
     }
 
-    KOSpellConfig kosconfig;
 
     if( config->hasGroup("KSpell kpresenter" ) )
     {
         config->setGroup( "KSpell kpresenter" );
-        kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-        kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-        kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-        kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-        kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-        kosconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-        kosconfig.setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
-        kosconfig.setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
-        kosconfig.setIgnoreCase( config->readNumEntry( "KSpell_IgnoreCase", 0));
-        kosconfig.setIgnoreAccent( config->readNumEntry( "KSpell_IgnoreAccent", 0));
-        kosconfig.setSpellWordWithNumber( config->readNumEntry("KSpell_SpellWordWithNumber", false));
-        setKOSpellConfig(kosconfig);
 
-        m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
-
+       // Default is false for spellcheck, but the spell-check config dialog
+       // should write out "true" when the user configures spell checking.
+#ifdef HAVE_LIBKSPELL2
+        if ( isReadWrite() )
+          m_bgSpellCheck->setEnabled(config->readBoolEntry( "SpellCheck", false ));
+       else
+          m_bgSpellCheck->setEnabled( false );
+#endif
     }
     int undo=30;
     if(config->hasGroup("Misc" ) )
@@ -437,9 +429,10 @@ KPresenterDoc::~KPresenterDoc()
     delete m_varFormatCollection;
     delete dcop;
     delete m_stickyPage;
+#ifdef HAVE_LIBKSPELL2
     delete m_bgSpellCheck;
+#endif
     delete m_styleColl;
-    delete m_pKOSpellConfig;
 
     m_pageList.setAutoDelete( true );
     m_pageList.clear();
@@ -1639,7 +1632,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
                 spellWord=spellWord.nextSibling().toElement();
             }
-            m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
+            //m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
         }else if(elem.tagName()=="ATTRIBUTES" && _clean) {
             if(elem.hasAttribute("activePage"))
                 activePage=elem.attribute("activePage").toInt();
@@ -3301,15 +3294,19 @@ void KPresenterDoc::startBackgroundSpellCheck()
     {
         if(m_initialActivePage->allTextObjects().count()>0)
         {
-            m_bgSpellCheck->objectForSpell(m_initialActivePage->textFrameSet(0));
-            m_bgSpellCheck->startBackgroundSpellCheck();
+#ifdef HAVE_LIBKSPELL2
+            m_bgSpellCheck->start();
+#endif
         }
     }
 }
 
 void KPresenterDoc::enableBackgroundSpellCheck( bool b )
 {
-    m_bgSpellCheck->enableBackgroundSpellCheck(b);
+    //m_bgSpellCheck->enableBackgroundSpellCheck(b);
+#ifdef HAVE_LIBKSPELL2
+    m_bgSpellCheck->setEnabled(b);
+#endif
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it )
         ((KPresenterView*)it.current())->updateBgSpellCheckingState();
@@ -3317,7 +3314,11 @@ void KPresenterDoc::enableBackgroundSpellCheck( bool b )
 
 bool KPresenterDoc::backgroundSpellCheckEnabled() const
 {
-    return m_bgSpellCheck->backgroundSpellCheckEnabled();
+  #ifdef HAVE_LIBKSPELL2
+    return m_bgSpellCheck->enabled();
+    #else
+    return false;
+    #endif
 }
 
 void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)
@@ -3349,37 +3350,19 @@ QPtrList<KoTextObject> KPresenterDoc::allTextObjects() const
     return lst;
 }
 
-KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
+QValueList<KoTextObject *> KPresenterDoc::visibleTextObjects( ) const
 {
-    if(m_initialActivePage)
-    {
-        bool findObject = m_initialActivePage->findTextObject( bgObjSpellChecked );
-        if ( !findObject )
+    QValueList<KoTextObject *> lst;
+    QPtrList<KoTextObject> textFramesets = allTextObjects(  );
+
+    KoTextObject *frm;
+    for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ) {
+        if ( frm && !frm->protectContent() )
         {
-            findObject = m_stickyPage->findTextObject( bgObjSpellChecked );
-            if ( findObject )
-            {
-                bgObjSpellChecked = m_stickyPage->nextTextObject( obj );
-                if ( bgObjSpellChecked )
-                    return bgObjSpellChecked->nextTextObject();
-                else
-                    return 0L;
-            }
+            lst.append( frm );
         }
-        bgObjSpellChecked = m_initialActivePage->nextTextObject( obj );
-        if ( bgObjSpellChecked )
-            return bgObjSpellChecked->nextTextObject();
-        else
-        {
-            bgObjSpellChecked = m_stickyPage->nextTextObject( obj );
-            if ( bgObjSpellChecked )
-                return bgObjSpellChecked->nextTextObject();
-            else
-                return 0L;
-        }
-        return 0L;
     }
-    return 0L;
+    return lst;
 }
 
 void KPresenterDoc::setShowHelplines(bool b)
@@ -3548,13 +3531,13 @@ void KPresenterDoc::addIgnoreWordAll( const QString & word)
 {
     if( m_spellListIgnoreAll.findIndex( word )==-1)
         m_spellListIgnoreAll.append( word );
-    m_bgSpellCheck->addIgnoreWordAll( word );
+    //m_bgSpellCheck->addIgnoreWordAll( word );
 }
 
 void KPresenterDoc::clearIgnoreWordAll( )
 {
     m_spellListIgnoreAll.clear();
-    m_bgSpellCheck->clearIgnoreWordAll( );
+    //m_bgSpellCheck->clearIgnoreWordAll( );
 }
 
 void KPresenterDoc::updateObjectStatusBarItem()
@@ -3653,7 +3636,7 @@ void KPresenterDoc::insertFile(const QString & file )
 
 void KPresenterDoc::spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm)
 {
-    m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());
+    //m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());
 }
 
 void KPresenterDoc::configureSpellChecker()
@@ -3731,27 +3714,9 @@ KPresenterView *KPresenterDoc::firstView() const
 
 void KPresenterDoc::addWordToDictionary( const QString & word)
 {
-    if ( m_bgSpellCheck )
-        m_bgSpellCheck->addPersonalDictonary( word );
+    //if ( m_bgSpellCheck )
+    //m_bgSpellCheck->addPersonalDictonary( word );
 }
 
-void KPresenterDoc::setKOSpellConfig(KOSpellConfig _kspell)
-{
-    if(m_pKOSpellConfig==0)
-        m_pKOSpellConfig=new KOSpellConfig();
-
-    m_pKOSpellConfig->setNoRootAffix(_kspell.noRootAffix ());
-    m_pKOSpellConfig->setRunTogether(_kspell.runTogether ());
-    m_pKOSpellConfig->setDictionary(_kspell.dictionary ());
-    m_pKOSpellConfig->setDictFromList(_kspell.dictFromList());
-    m_pKOSpellConfig->setEncoding(_kspell.encoding());
-    m_pKOSpellConfig->setDontCheckTitleCase( _kspell.dontCheckTitleCase());
-    m_pKOSpellConfig->setDontCheckUpperWord( _kspell.dontCheckUpperWord() );
-    m_pKOSpellConfig->setIgnoreCase ( _kspell.ignoreCase ());
-    m_pKOSpellConfig->setIgnoreAccent( _kspell.ignoreAccent());
-    m_pKOSpellConfig->setSpellWordWithNumber( _kspell.spellWordWithNumber());
-    m_pKOSpellConfig->setClient (_kspell.client());
-    m_bgSpellCheck->setKSpellConfig(_kspell);
-}
 
 #include "kpresenter_doc.moc"
