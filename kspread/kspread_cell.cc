@@ -2009,20 +2009,6 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	bottom_offset = bottom_pen.width() / 2;
     }
 
-    //
-    // Draw diagonal borders.
-    //
-    if ( m_fallDiagonalPen.style() != Qt::NoPen )
-    {
-	_painter.setPen( m_fallDiagonalPen );
-	_painter.drawLine( _tx, _ty, _tx + w, _ty + h );
-    }
-    if ( m_goUpDiagonalPen.style() != Qt::NoPen )
-    {
-	_painter.setPen( m_goUpDiagonalPen );
-	_painter.drawLine( _tx, _ty + h , _tx + w, _ty );
-    }
-
     // Erase the background of the cell.
     _painter.eraseRect( _tx + left_offset, _ty + top_offset,
 			w - left_offset - right_offset,
@@ -2035,6 +2021,20 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 			   w - left_offset - right_offset,
 			   h - top_offset - bottom_offset,
 			   backGroundBrush( _col, _row ) );
+    }
+
+    //
+    // Draw diagonal borders.
+    //
+    if ( m_fallDiagonalPen.style() != Qt::NoPen )
+    {
+	_painter.setPen( m_fallDiagonalPen );
+	_painter.drawLine( _tx, _ty, _tx + w, _ty + h );
+    }
+    if ( m_goUpDiagonalPen.style() != Qt::NoPen )
+    {
+	_painter.setPen( m_goUpDiagonalPen );
+	_painter.drawLine( _tx, _ty + h , _tx + w, _ty );
     }
 
     // Point the little corner if there is a comment attached
