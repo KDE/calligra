@@ -24,6 +24,10 @@
 #include "koStream.h"
 #include "koQueryTypes.h"
 
+#include <koBinaryStore.h>
+#include <koTarStore.h>
+#include <koStoreStream.h>
+
 #include <komlWriter.h>
 #include <komlMime.h>
 #include <komlStreamFeed.h>
@@ -233,11 +237,11 @@ bool KoDocumentChild::save( ostream& out )
 bool KoDocumentChild::isStoredExtern()
 {
   CORBA::String_var url = m_rDoc->url();
-  string s = url.in();
-  if ( s.empty() )
+  QString s ( url.in() );
+  if ( s.isEmpty() )
     return false;
-  KURL u( s.c_str() );
-  if ( strcmp( u.protocol(), "store" ) == 0 )
+  KURL u( s );
+  if ( u.protocol() == "store" )
     return false;
 
   return true;
@@ -454,34 +458,48 @@ CORBA::Boolean KoDocument::saveToURL( const char *_url, const char* _format )
     kdebug( KDEBUG_INFO, 30003, "Saving to store" );
 
     CORBA::String_var mime = mimeType();
-    KoStore store( u.path(), KOStore::Write );
+
+    KoStore * store;
+    // TEMPORARY question for file format to use when saving
+    // Enables to avoid using the broken tar format (for now)
+    int i = QMessageBox::information(0L, "KOffice",
+                                     "Select format to use for saving (temporary question, will be removed later)",
+                                     "Binary format (old one, still working)", 
+                                     "Tar format (new one, broken, for testing purposes ONLY)");
+    if (i == 0)
+      store = new KoBinaryStore ( u.path(), KOStore::Write );
+    else // if (i == 1)
+      store = new KoTarStore( u.path(), KOStore::Write );
+
     // TODO: Check for error
 
     makeChildListIntern();
 
-    store.open( "root", mime.in() );
+    store->open( "root", mime.in() );
     {
-      ostorestream out( &store );
+      ostorestream out( store );
       if ( !save( out, _format ) )
       {
-	store.close();
+	store->close();
 	return false;
       }
       out.flush();
     }
-    store.close();
+    store->close();
 
-    if ( store.bad() )
+    if ( store->bad() )
 	return FALSE;
 
     kdebug( KDEBUG_INFO, 30003, "Saving children" );
 
     // Lets write all direct and indirect children
-    if ( !saveChildren( &store ) )
+    if ( !saveChildren( store ) )
       return false;
 
-    if ( !completeSaving( &store ) )
+    if ( !completeSaving( store ) )
       return false;
+
+    delete store;
 
     kdebug( KDEBUG_INFO, 30003, "Saving done" );
   }
@@ -581,31 +599,8 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
 
   setURL( _url );
 
-  // Is it a koffice store ?
-  if ( strncasecmp( buf, "KS01", 4 ) == 0 )
-  {
-    in.close();
-
-    KoStore store( u.path(), KOStore::Read );
-    // TODO: Check for errors
-    store.open( "root", 0L );
-    {
-      istorestream in( &store );
-      if ( !load( in, &store ) )
-	return false;
-    }
-    store.close();
-
-    if ( !loadChildren( &store ) )
-    {	
-      kdebug( KDEBUG_INFO, 30003, "ERROR: Could not load children" );
-      return false;
-    }
-
-    return completeLoading( &store );
-  }
-  // Standalone XML or some binary data
-  else
+  // Is it plain XML ? (very old format)
+  if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
   {
     bool res = load( in, 0L );
     in.close();
@@ -613,6 +608,34 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
       return false;
 
     return completeLoading( 0L );
+  } else
+  { // It's a koffice store (binary or tar.gz)
+    in.close();
+    KoStore * store;
+    if ( strncasecmp( buf, "KS01", 4 ) == 0 )
+    {
+      store = new KoBinaryStore( u.path(), KOStore::Read );
+    }
+    else // new (tar.gz)
+    {
+      store = new KoTarStore( u.path(), KOStore::Read );
+    }
+    // TODO: Check for errors
+    store->open( "root", 0L );
+    {
+      istorestream in( store );
+      if ( !load( in, store ) )
+        return false;
+    }
+    store->close();
+      
+    if ( !loadChildren( store ) )
+    {	
+      kdebug( KDEBUG_INFO, 30003, "ERROR: Could not load children" );
+      return false;
+    }
+
+    return completeLoading( store );
   }
 }
 
@@ -639,7 +662,7 @@ CORBA::Boolean KoDocument::loadFromStore( KOStore::Store_ptr _store, const char 
 bool KoDocument::load( istream& in, KOStore::Store_ptr _store )
 {
   kdebug( KDEBUG_INFO, 30003, "KoDocument::load( istream& in, KOStore::Store_ptr _store )");
-  // Try to find out wether it is a mime multi part file
+  // Try to find out whether it is a mime multi part file
   char buf[5];
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();

@@ -27,7 +27,7 @@ class KoDocumentChildPicture;
 
 #include <opDocument.h>
 #include <komlParser.h>
-#include <koStore.h>
+#include <koStoreIf.h>
 
 #include <vector>
 #include <string>
@@ -98,7 +98,7 @@ protected:
   virtual bool load( istream& in, KOStore::Store_ptr _store );
   /**
    *  @param _stream       The stream, from which the binary should be read.
-   *  @param _randomaccess Tells wether input stream is a serial stream
+   *  @param _randomaccess Tells whether input stream is a serial stream
    *                       or a random access stream, usually a @ref ifstream
    *                       or a @ref istringstream.
    *  @param _store        Pointer to a Store object. May be 0L.
