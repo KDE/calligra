@@ -1,3 +1,23 @@
+/* This file is part of the KDE project
+   Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
+   Copyright (c) 2003 David Faure <faure@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "stylestack.h"
 #include <koUnit.h>
 #include <kdebug.h>
@@ -5,7 +25,6 @@
 //#define DEBUG_STYLESTACK
 
 StyleStack::StyleStack()
-    : m_marks(3)
 {
     clear();
 }
@@ -16,30 +35,31 @@ StyleStack::~StyleStack()
 
 void StyleStack::clear()
 {
-    m_marks.fill( -1 );
     m_stack.clear();
+#ifdef DEBUG_STYLESTACK
+    kdDebug() << "clear!" << endl;
+#endif
 }
 
-void StyleStack::popToMark( int mark )
+void StyleStack::save()
 {
-    int toIndex = m_marks[ mark ];
+    m_marks.push( m_stack.count() );
 #ifdef DEBUG_STYLESTACK
-    kdDebug() << "popToMark " << mark << " -> to index " << toIndex << endl;
+    kdDebug() << "save (level " << m_marks.count() << ") -> index " << m_stack.count() << endl;
 #endif
-    Q_ASSERT( toIndex != -1 ); // If this happens, you didn't call setMark()...
+}
+
+void StyleStack::restore()
+{
+    Q_ASSERT( !m_marks.isEmpty() );
+    int toIndex = m_marks.pop();
+#ifdef DEBUG_STYLESTACK
+    kdDebug() << "restore (level " << m_marks.count()+1 << ") -> to index " << toIndex << endl;
+#endif
+    Q_ASSERT( toIndex > -1 );
     Q_ASSERT( toIndex <= (int)m_stack.count() ); // If equal, nothing to remove. If greater, bug.
     for ( int index = (int)m_stack.count() - 1; index >= toIndex; --index )
         m_stack.pop_back();
-}
-
-void StyleStack::setMark( int mark )
-{
-    if ( (int)m_marks.size() <= mark )
-        m_marks.resize( mark + 1 );
-    m_marks[ mark ] = m_stack.count();
-#ifdef DEBUG_STYLESTACK
-    kdDebug() << "setMark " << mark << " -> index " << m_stack.count() << endl;
-#endif
 }
 
 void StyleStack::pop()

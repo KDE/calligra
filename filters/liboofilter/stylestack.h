@@ -1,8 +1,29 @@
+/* This file is part of the KDE project
+   Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
+   Copyright (c) 2003 David Faure <faure@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #ifndef STYLESTACK_H
 #define STYLESTACK_H
 
 #include <qvaluelist.h>
 #include <qdom.h>
+#include <qvaluestack.h>
 
 /**
  *  This class implements a stack for the different styles of an object.
@@ -32,24 +53,21 @@ public:
     StyleStack();
     virtual ~StyleStack();
 
-    enum Marks { PageMark = 0, ObjectMark, ParagraphMark, SpanMark };
-
     /**
      * Clears the complete stack.
      */
     void clear();
 
     /**
-     * Keep only the styles up to the given mark.
-     * For instance popToMark( PageMark ) keeps only the page styles on the stack,
-     * popToMark( ObjectMark ) keeps page and object styles on the stack, etc.
+     * Save the current state of the stack. Any items added between
+     * this call and its corresponding restore() will be removed when calling restore().
      */
-    void popToMark( int mark );
+    void save();
 
     /**
-     * Set the mark (stores the index of the object on top of the stack).
+     * Restore the stack to the state it was at the corresponding save() call.
      */
-    void setMark( int mark );
+    void restore();
 
     /**
      * Removes the style on top of the stack.
@@ -95,9 +113,8 @@ public:
     QString userStyleName() const;
 
 private:
-    // We use QMemArray<uint> instead of uint[3] so that we can support
-    // application-defined marks.
-    QMemArray<int> m_marks;
+    // For save/restore: stack of "marks". Each mark is an index in m_stack.
+    QValueStack<int> m_marks;
 
     // We use QValueList instead of QValueStack because we need access to all styles
     // not only the top one.
@@ -106,4 +123,3 @@ private:
 
 
 #endif /* STYLESTACK_H */
-
