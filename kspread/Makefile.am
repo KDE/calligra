@@ -18,6 +18,7 @@ libkspreadcommon_la_SOURCES =  \
         kspread_condition.cc \
         kspread_doc.cc \
         kspread_depend.cc \
+				kspread_dependencies.cc \
         kspread_editors.cc  \
         kspread_events.cc  \
         kspread_factory.cc \
