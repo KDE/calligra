@@ -141,8 +141,10 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     connect(m_colsSB, SIGNAL(valueChangedSpecial(int)), 
 	    this,     SLOT(setCols(int)));
 
-    connect(m_table->horizontalHeader(), SIGNAL(clicked(int)), this, SLOT(column_clicked(int)) );
-    connect(m_table->verticalHeader(), SIGNAL(clicked(int)), this, SLOT(row_clicked(int)) );
+    connect(m_table->horizontalHeader(), SIGNAL(clicked(int)), 
+	    this,                        SLOT(column_clicked(int)) );
+    connect(m_table->verticalHeader(),   SIGNAL(clicked(int)),
+	    this,                        SLOT(row_clicked(int)) );
 
     // At first, assume that any shrinking of the table is a mistake.
     // A confirmation dialog will make sure that the user knows what
@@ -288,7 +290,7 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 
     rowHeader->setLabel(0, "");
     for (row = 0; row < numRows; row++) {
-      rowHeader->setLabel(row, rowLabels[row]);
+	rowHeader->setLabel(row, rowLabels[row]);
     }
 }
 
@@ -319,8 +321,8 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 
     colHeader->setLabel(0, "");
     for (col = 0; col < numCols; col++) {
-      colHeader->setLabel(col, colLabels[col]);
-     }
+	colHeader->setLabel(col, colLabels[col]);
+    }
 }
 
 
@@ -347,11 +349,11 @@ void kchartDataEditor::getColLabels(QStringList &colLabels)
 // column.
 //
 
-static int askUserForConfirmation()
+static int askUserForConfirmation(QWidget *parent)
 {
-    return KMessageBox::warningContinueCancel(0,
-        i18n("You are about to shrink the data table. "
-	     "This may lead to loss of existing data in the table "
+    return KMessageBox::warningContinueCancel(parent,
+        i18n("You are about to shrink the data table and remove some values. "
+	     "This will lead to loss of existing data in the table "
 	     "and/or the headers.\n\n"
 	     "This message will not be shown again if you click Continue"));
 }
@@ -369,29 +371,33 @@ void kchartDataEditor::setRows(int rows)
     // Sanity check.  This should never happen since the spinbox has a
     // minvalue of 1, but just to be sure...
     if (rows < 1) {
-    m_rowsSB->setValue(1);
-    return;
+	m_rowsSB->setValue(1);
+	return;
     }
 
-    if (rows > m_table->numRows()) {
     int old_rows = m_table->numRows();
+    if (rows > old_rows) {
 	m_table->setNumRows(rows);
-    //default value for the new rows: empty string
-    for (int i=old_rows; i<rows; i++)
-        m_table->verticalHeader()->setLabel(i, "");
-	}
+
+	// Default value for the new rows: empty string
+	for (int i = old_rows; i < rows; i++)
+	    m_table->verticalHeader()->setLabel(i, "");
+    }
     else if (rows < m_table->numRows()) {
 	bool ask_user = false;
-	//check if the last row is empty...
-		for (int col=0; col<m_table->numCols(); col++) {
-			if (!m_table->text(rows, col).isEmpty()) {
-				ask_user = true;
-				break;
-			}
-		}
-	// if it is not, ask if the user really wants to shrink the table.
+
+	// Check if the last row is empty.
+	for (int col=0; col<m_table->numCols(); col++) {
+	    if (!m_table->text(rows, col).isEmpty()) {
+		ask_user = true;
+		break;
+	    }
+	}
+
+	// If it is not, ask if the user really wants to shrink the table.
 	if ( ask_user && !m_userWantsToShrink
-	    && askUserForConfirmation() == KMessageBox::Cancel) {
+	    && askUserForConfirmation(this) == KMessageBox::Cancel) {
+
 	    // The user aborts.  Reset the number of rows and return.
 	    m_rowsSB->setValue(m_table->numRows());
 	    return;
@@ -416,39 +422,43 @@ void kchartDataEditor::setCols(int cols)
     // Sanity check.  This should never happen since the spinbox has a
     // minvalue of 1, but just to be sure...
     if (cols < 1) {
-    m_colsSB->setValue(1);
-    return;
+	m_colsSB->setValue(1);
+	return;
     }
     
-    if (cols > m_table->numCols()) {
-    int old_cols = m_table->numCols();
+    int  old_cols = m_table->numCols();
+    if (cols > old_cols) {
 	m_table->setNumCols(cols);
-	m_table->setColumnWidth(cols-1, COLUMNWIDTH);
 
-    //default value for the new columns: empty string
-    for (int i=old_cols; i<cols; i++)
-        m_table->horizontalHeader()->setLabel(i, "");
+	// Default value for the new columns: empty string.
+	for (int i = old_cols; i < cols; i++) {
+	    m_table->horizontalHeader()->setLabel(i, "");
+	    m_table->setColumnWidth(i, COLUMNWIDTH);
+	}
     }
     else if (cols < m_table->numCols()) {
 	bool ask_user = false;
-	//check if the last column is empty...
+
+	// Check if the last column is empty.
 	for (int row=0; row<m_table->numRows(); row++) {
-		if (!m_table->text(row, cols).isEmpty()) {
-			ask_user = true;
-			break;
-		}
+	    if (!m_table->text(row, cols).isEmpty()) {
+		ask_user = true;
+		break;
+	    }
 	}
-	// if it is not, ask if the user really wants to shrink the table.
+
+	// If it is not, ask if the user really wants to shrink the table.
 	if (ask_user && !m_userWantsToShrink
-	    && askUserForConfirmation() == KMessageBox::Cancel) {
+	    && askUserForConfirmation(this) == KMessageBox::Cancel) {
 
 	    // The user aborts.  Reset the number of rows and return.
 	    m_colsSB->setValue(m_table->numCols());
 	    return;
 	}
+
 	// Record the fact that the user knows what (s)he is doing.
 	if (ask_user)
-		m_userWantsToShrink = true;
+	    m_userWantsToShrink = true;
 
 	// Do the actual shrinking.
 	m_table->setNumCols(cols);

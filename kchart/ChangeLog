@@ -1,5 +1,9 @@
 2005-03-23  Inge Wallin  <inge@lysator.liu.se>
 
+	Bug fix.
+	* kchartDataEditor.cc (setCols): Set width for all new columns.
+	(misc): Code cleaning
+	
 	Code cleaning
 	* kchartDataEditor.{h,cc}: Move some methods, change What's This
 	strings, and add some comments.
