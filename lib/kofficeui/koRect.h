@@ -99,6 +99,8 @@ public:
     KoRect unite(const KoRect &r) const;
     KoRect intersect(const KoRect &r) const;
     bool intersects(const KoRect &r) const;
+    
+    KoRect transform(const QWMatrix &m) const;
 
     QRect toQRect() const;
     static KoRect fromQRect( const QRect &rect );

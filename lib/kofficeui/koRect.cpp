@@ -186,6 +186,37 @@ bool operator!=(const KoRect &lhs, const KoRect &rhs) {
              lhs.bottomRight()!=rhs.bottomRight() );
 }
 
+KoRect KoRect::transform(const QWMatrix &m) const
+{
+  KoRect result;
+  if(m.m12() == 0.0F && m.m21() == 0.0F)
+  {
+    result = KoRect(topLeft().transform(m), bottomRight().transform(m));
+  }
+  else
+  {
+    int i;
+    KoPoint p[4] = { KoPoint(m_tl.x(), m_tl.y()), KoPoint(m_tl.x(), m_br.x()),
+                   KoPoint(m_br.x(), m_br.x()), KoPoint(m_br.x(), m_tl.y()) };
+    for(i = 0; i < 4; i++)
+      p[i] = p[i].transform(m);
+
+    result.setLeft(p[0].x());
+    result.setTop(p[0].y());
+    result.setRight(p[0].x());
+    result.setBottom(p[0].y());
+
+    for(int i = 1; i < 4; i++)
+    {
+      result.setLeft(QMIN(p[i].x(), result.left()));
+      result.setTop(QMIN(p[i].y(), result.top()));
+      result.setRight(QMAX(p[i].x(), result.right()));
+      result.setBottom(QMAX(p[i].y(), result.bottom()));
+    }
+  }
+  return result;    
+}
+
 QRect KoRect::toQRect() const
 {
     return QRect( qRound( left() ), qRound( top() ), qRound( width() ), qRound( height() ) );
