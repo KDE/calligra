@@ -85,3 +85,5 @@ kcharselectdia.cc: kcharselectdia.moc
 kword_utils.cc: kword_utils.h
 stylist.cc: kword.h
 searchdia.cc: searchdia.moc
+
+

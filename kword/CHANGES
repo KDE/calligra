@@ -633,3 +633,7 @@ Reggie, 10.1.1999:
 ------------------
 - Fixed some memory leak producing code
 - Find&Replacing works (with formats)
+
+Reggie, 11.1.1999:
+------------------
+- Implemented 'replace all'

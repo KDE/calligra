@@ -181,6 +181,7 @@ public:
   void replace(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _addlen);
   
   void removeSelection();
+  void addLen() { currFindPos += currFindLen; }
 
 public slots:
   void newLeftIndent(int _left); 

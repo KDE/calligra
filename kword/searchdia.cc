@@ -20,6 +20,8 @@
 #include "searchdia.h"
 #include "searchdia.moc"
 
+#include <kmsgbox.h>
+
 /******************************************************************/
 /* Class: KWSearchDia                                             */
 /******************************************************************/
@@ -823,6 +825,48 @@ void KWSearchDia::replaceNext()
 /*================================================================*/
 void KWSearchDia::replaceAll()
 {
+  QString expr = eSearch->text();
+  if (expr.isEmpty()) return;
+
+  bool first = true;
+  bool addlen = false;
+  bool replace = false;
+  bool select = cAsk->isChecked();
+
+  while (true)
+    {
+      if (!cRev->isChecked())
+	replace = page->find(expr,searchEntry,first,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),
+			     cWildcard->isChecked(),addlen,select);
+      else
+	replace = page->findRev(expr,searchEntry,first,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked(),
+				cWildcard->isChecked(),addlen,select);
+      first = false;
+
+      if (replace && cAsk->isChecked())
+	{
+	  bool _exit = false;
+	  switch (KMsgBox::yesNoCancel(0L,i18n("Replace"),i18n("Replace selected text?"),0,i18n("&Yes"),i18n("&No"),i18n("&Skip")))
+	    {
+	    case 1: break;
+	    case 2: _exit = true; break;
+	    case 3: 
+	      {
+		if (addlen) page->addLen();
+		page->repaint(false);
+		continue;
+	      } break;
+	    }
+	  if (_exit) break;
+	}
+
+      if (replace)
+	page->replace(eReplace->text(),replaceEntry,addlen);
+      else
+	break;
+    }
+
+  page->repaint(false);
 }
 
 /*================================================================*/
