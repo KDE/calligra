@@ -616,6 +616,15 @@ void KSpreadView::initializeEditActions()
   /*m_findPrevious =*/ KStdAction::findPrev( this, SLOT( findPrevious() ), actionCollection() );
 
   m_replaceAction = KStdAction::replace(this, SLOT(replace()), actionCollection());
+
+  m_fillRight = new KAction( i18n( "&Right" ), 0, 0, this, 
+                             SLOT( fillRight() ), actionCollection(), "fillRight" );
+  m_fillLeft = new KAction( i18n( "&Left" ), 0, 0, this, 
+                             SLOT( fillLeft() ), actionCollection(), "fillLeft" );
+  m_fillDown = new KAction( i18n( "&Down" ), 0, 0, this, 
+                             SLOT( fillDown() ), actionCollection(), "fillDown" );
+  m_fillUp = new KAction( i18n( "&Up" ), 0, 0, this, 
+                             SLOT( fillUp() ), actionCollection(), "fillUp" );
 }
 
 void KSpreadView::initializeAreaOperationActions()
@@ -1877,19 +1886,18 @@ void KSpreadView::initialPosition()
     m_tableFormat->setEnabled(false);
     m_sort->setEnabled(false);
     m_mergeCell->setEnabled(false);
-    m_insertChartFrame->setEnabled(false);
 
-// I don't think we should recalculate everything after loading, this takes much to much time
-// and shouldn't be necessary at all - Philipp
-//
-//     /*recalc all dependent after loading*/
-//     KSpreadSheet *tbl;
-//     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-//     {
-//         if( tbl->getAutoCalc() )
-//             tbl->recalc();
-//         tbl->refreshMergedCell();
-//     }
+    m_fillUp->setEnabled( false );
+    m_fillRight->setEnabled( false );
+    m_fillDown->setEnabled( false );
+    m_fillLeft->setEnabled( false );
+
+    m_acceptRejectChanges->setEnabled( false );
+    m_filterChanges->setEnabled( false );
+    m_protectChanges->setEnabled( false );
+    m_commentChanges->setEnabled( false );
+
+    m_insertChartFrame->setEnabled(false);
 
     slotUpdateView( activeTable() );
     m_bLoading =true;
@@ -4141,6 +4149,11 @@ void KSpreadView::adjustActions( bool mode )
   m_sortInc->setEnabled( false );
   m_transform->setEnabled( false );
 
+  m_fillRight->setEnabled( false );
+  m_fillLeft->setEnabled( false );
+  m_fillUp->setEnabled( false );
+  m_fillDown->setEnabled( false );
+
   if ( mode && m_pDoc && m_pDoc->map() && !m_pDoc->map()->isProtected() )
     m_renameTable->setEnabled( true );
   else
@@ -5154,6 +5167,37 @@ void KSpreadView::clearConditionalSelection()
     m_pDoc->emitEndOperation();
 }
 
+void KSpreadView::fillRight()
+{
+  Q_ASSERT( m_pTable );
+  m_pDoc->emitBeginOperation(false);
+  m_pTable->fillSelection( selectionInfo(), KSpreadSheet::Right );
+  m_pDoc->emitEndOperation();
+}
+
+void KSpreadView::fillLeft()
+{
+  Q_ASSERT( m_pTable );
+  m_pDoc->emitBeginOperation(false);
+  m_pTable->fillSelection( selectionInfo(), KSpreadSheet::Left );
+  m_pDoc->emitEndOperation();
+}
+
+void KSpreadView::fillUp()
+{
+  Q_ASSERT( m_pTable );
+  m_pDoc->emitBeginOperation(false);
+  m_pTable->fillSelection( selectionInfo(), KSpreadSheet::Up );
+  m_pDoc->emitEndOperation();
+}
+
+void KSpreadView::fillDown()
+{
+  Q_ASSERT( m_pTable );
+  m_pDoc->emitBeginOperation(false);
+  m_pTable->fillSelection( selectionInfo(), KSpreadSheet::Down );
+  m_pDoc->emitEndOperation();
+}
 
 void KSpreadView::defaultSelection()
 {
@@ -5711,6 +5755,10 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
       m_tableFormat->setEnabled( !simpleSelection );
       m_sort->setEnabled( !simpleSelection );
       m_mergeCell->setEnabled( !simpleSelection );
+      m_fillRight->setEnabled( !simpleSelection );
+      m_fillUp->setEnabled( !simpleSelection );
+      m_fillDown->setEnabled( !simpleSelection );
+      m_fillLeft->setEnabled( !simpleSelection );
       m_insertChartFrame->setEnabled( !simpleSelection );
       m_sortDec->setEnabled( !simpleSelection );
       m_sortInc->setEnabled( !simpleSelection);

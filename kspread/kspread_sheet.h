@@ -228,6 +228,7 @@ class KSpreadSheet : public QObject
 
     Q_OBJECT
 public:
+    enum Direction { Right, Left, Up, Down };
     enum SortingOrder{ Increase, Decrease };
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
@@ -531,6 +532,7 @@ public:
 
     void clearConditionalSelection(KSpreadSelection* selectionInfo );
 
+    void fillSelection( KSpreadSelection * selectionInfo, int direction );
 
     void setWordSpelling(KSpreadSelection* selectionInfo,const QString _listWord );
 

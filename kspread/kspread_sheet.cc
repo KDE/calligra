@@ -4638,6 +4638,83 @@ void KSpreadSheet::clearConditionalSelection( KSpreadSelection* selectionInfo )
   workOnCells( selectionInfo, w );
 }
 
+void KSpreadSheet::fillSelection( KSpreadSelection * selectionInfo, int direction )
+{
+  QRect rct( selectionInfo->selection() );
+  int right  = rct.right();
+  int bottom = rct.bottom();
+  int left   = rct.left();
+  int top    = rct.top();
+  int width  = rct.width();
+  int height = rct.height();
+
+  QDomDocument undoDoc = saveCellRect( rct );
+  loadSelectionUndo( undoDoc, rct, left - 1, top - 1, false, 0 );
+
+  QDomDocument doc;
+
+  switch( direction )
+  {
+   case Right:
+    doc = saveCellRect( QRect( left, top, 1, height ) );
+    break;
+
+   case Up:
+    doc = saveCellRect( QRect( left, bottom, width, 1 ) );
+    break;
+
+   case Left:
+    doc = saveCellRect( QRect( right, top, 1, height ) );
+    break;
+
+   case Down:
+    doc = saveCellRect( QRect( left, top, width, 1 ) );
+    break;
+  };
+
+  // Save to buffer
+  QBuffer buffer;
+  buffer.open( IO_WriteOnly );
+  QTextStream str( &buffer );
+  str.setEncoding( QTextStream::UnicodeUTF8 );
+  str << doc;
+  buffer.close();
+
+  int i;
+  switch( direction )
+  {
+   case Right:
+    for ( i = left + 1; i <= right; ++i )
+    {
+      paste( buffer.buffer(), QRect( i, top, 1, 1 ), false );
+    }
+    break;
+
+   case Up:
+    for ( i = bottom + 1; i >= top; --i )
+    {
+      paste( buffer.buffer(), QRect( left, i, 1, 1 ), false );
+    }
+    break;
+
+   case Left:
+    for ( i = right - 1; i >= left; --i )
+    {
+      paste( buffer.buffer(), QRect( i, top, 1, 1 ), false );
+    }
+    break;
+
+   case Down:
+    for ( i = top + 1; i <= bottom; ++i )
+    {
+      paste( buffer.buffer(), QRect( left, i, 1, 1 ), false );
+    }
+    break;
+  }
+
+  m_pDoc->setModified( true );
+}
+
 
 struct DefaultSelectionWorker : public KSpreadSheet::CellWorker {
     DefaultSelectionWorker( ) : KSpreadSheet::CellWorker( true, false, true ) { }

@@ -18,6 +18,12 @@
   <Action name="edit_find_next"/>
   <Action name="edit_find_last"/>
   <Action name="edit_replace"/>
+  <Menu name="Fill"><text>Fi&amp;ll</text>
+        <Action name="fillDown"/>
+        <Action name="fillRight"/>
+        <Action name="fillUp"/>
+        <Action name="fillLeft"/>
+  </Menu>      
   <Menu name="Clear"><text>Clear</text>
         <Action name="cleartext"/>
         <Action name="clearcomment"/>

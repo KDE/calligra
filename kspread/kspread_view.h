@@ -219,6 +219,10 @@ public slots:
     void clearCommentSelection();
     void clearValiditySelection();
     void clearConditionalSelection();
+    void fillRight();
+    void fillLeft();
+    void fillUp();
+    void fillDown();
     void recalcWorkBook();
     void recalcWorkSheet();
     void paste();
@@ -535,6 +539,10 @@ private:
     KAction* m_clearComment;
     KAction* m_clearValidity;
     KAction* m_clearConditional;
+    KAction* m_fillRight;
+    KAction* m_fillLeft;
+    KAction* m_fillUp;
+    KAction* m_fillDown;
     KAction* m_recalc_workbook;
     KAction* m_recalc_worksheet;
     KAction* m_adjust;

@@ -29,6 +29,7 @@ since 1.2 relase ( 'til 1.3 beta 1 :-)
 - Protection tab in layout dialog: you unprotect certain cells, hide their
   contents, hide the formulas, or select them for not being printed
 - FindNext, FindPrevious cell enhancement for find
+- Fill: Fill area from right to left, left to right, bottom to top, top to bottom
 
 
 New functions:
