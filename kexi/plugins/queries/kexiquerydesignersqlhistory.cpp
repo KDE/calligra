@@ -18,7 +18,9 @@
 */
 
 #include <qpainter.h>
+#include <qpopupmenu.h>
 
+#include <klocale.h>
 #include <kiconloader.h>
 
 #include "kexiquerydesignersqlhistory.h"
@@ -27,13 +29,13 @@ KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent, const 
  : QScrollView(parent, name)
 {
 	viewport()->setPaletteBackgroundColor(white);
+
+	m_selected = 0;
 }
 
 void
 KexiQueryDesignerSQLHistory::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
-//	p->drawRect(0, 20, 20, 20);
-
 	QRect clipping(cx, cy, cw, ch);
 
 	int y = 0;
@@ -44,8 +46,32 @@ KexiQueryDesignerSQLHistory::drawContents(QPainter *p, int cx, int cy, int cw, i
 		{
 			p->saveWorldMatrix();
 			p->translate(0, y);
-			it->drawItem(p, visibleWidth());
+			it->drawItem(p, visibleWidth(), colorGroup());
 			p->restoreWorldMatrix();
+		}
+		y += it->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
+	}
+}
+
+void
+KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
+{
+	int y = 0;
+	for(HistoryEntry *it = m_history.first(); it; it = m_history.next())
+	{
+		if(it->isSelected())
+		{
+			it->setSelected(false);
+			updateContents(it->geometry(y, visibleWidth(), fontMetrics()));
+		}
+
+		if(it->geometry(y, visibleWidth(), fontMetrics()).contains(e->pos()))
+		{
+			it->setSelected(true);
+			m_selected = it;
+			updateContents(it->geometry(y, visibleWidth(), fontMetrics()));
+			if(e->button() == RightButton)
+				contextMenu(e->globalPos(), it);
 		}
 		y += it->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
 	}
@@ -54,7 +80,7 @@ KexiQueryDesignerSQLHistory::drawContents(QPainter *p, int cx, int cy, int cw, i
 void
 KexiQueryDesignerSQLHistory::addEvent(QString q, bool s)
 {
-	addEntry(new HistoryEntry(s, QTime::currentTime(), q));
+	addEntry(new HistoryEntry(s, QTime::currentTime(), q, 0));
 }
 
 void
@@ -72,6 +98,18 @@ KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 	ensureVisible(0, y);
 }
 
+void
+KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *e)
+{
+	QPopupMenu p(this);
+	p.insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"));
+	p.insertSeparator();
+	p.insertItem(SmallIcon("edit"), i18n("Edit"));
+	p.insertItem(SmallIcon("reload"), i18n("Requery"));
+
+	p.exec(pos);
+}
+
 KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
 {
 }
@@ -80,15 +118,17 @@ KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
    HISTORY ENTRY
  */
 
-HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &statement)
+HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &statement, int y)
 {
 	m_succeed = succeed;
 	m_execTime = execTime;
 	m_statement = statement;
+
+	m_selected = false;
 }
 
 void
-HistoryEntry::drawItem(QPainter *p, int width)
+HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 {
 	p->setPen(QColor(200, 200, 200));
 	p->setBrush(QColor(200, 200, 200));
@@ -103,11 +143,20 @@ HistoryEntry::drawItem(QPainter *p, int width)
 	p->drawText(22, 2, 180, 20, Qt::AlignLeft | Qt::AlignVCenter, m_execTime.toString());
 	p->setPen(QColor(200, 200, 200));
 	p->setBrush(QColor(255, 255, 255));
-	QRect content = p->fontMetrics().boundingRect(2, 21, width - 2, 0, Qt::AlignLeft | Qt::AlignVCenter, m_statement);
+	QRect content = p->fontMetrics().boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
 //	QRect content(2, 21, width - 2, p->fontMetrics().height() + 4);
 	content = QRect(2, 21, width - 2, content.height());
+
+	if(m_selected)
+		p->setBrush(cg.highlight());
+
 	p->drawRect(content);
-	p->setPen(QColor(0, 0, 0));
+
+	if(!m_selected)
+		p->setPen(cg.text());
+	else
+		p->setPen(cg.highlightedText());
+
 	content.setX(content.x() + 2);
 	content.setWidth(content.width() - 2);
 	p->drawText(content, Qt::AlignLeft | Qt::AlignVCenter, m_statement);
@@ -116,7 +165,7 @@ HistoryEntry::drawItem(QPainter *p, int width)
 QRect
 HistoryEntry::geometry(int y, int width, QFontMetrics f)
 {
-	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
+	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
 	return QRect(0, y, width, h);
 }
 

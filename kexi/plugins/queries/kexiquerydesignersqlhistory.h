@@ -23,20 +23,27 @@
 #include <qscrollview.h>
 #include <qdatetime.h>
 #include <qptrlist.h>
+#include <qmap.h>
 
 class HistoryEntry
 {
 	public:
-		HistoryEntry(bool, const QTime &, const QString &);
+		HistoryEntry(bool success, const QTime &time, const QString &statement, int y);
 		~HistoryEntry();
 
 		QRect	geometry(int y, int width, QFontMetrics f);
-		void	drawItem(QPainter *p, int width);
+		void	drawItem(QPainter *p, int width, const QColorGroup &cg);
+
+		void	setSelected(bool selected) { m_selected = selected; }
+		bool	isSelected() { return m_selected; }
 
 	private:
 		bool	m_succeed;
 		QTime	m_execTime;
 		QString	m_statement;
+
+		int	m_y;
+		bool	m_selected;
 };
 
 typedef QPtrList<HistoryEntry> History;
@@ -50,6 +57,7 @@ class KexiQueryDesignerSQLHistory : public QScrollView
 		~KexiQueryDesignerSQLHistory();
 
 		void		addEntry(HistoryEntry *e);
+		void		contextMenu(const QPoint &pos, HistoryEntry *e);
 
 	public slots:
 		void		addEvent(QString q, bool s);
@@ -58,9 +66,11 @@ class KexiQueryDesignerSQLHistory : public QScrollView
 
 	protected:
 		void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+		void	contentsMousePressEvent(QMouseEvent * e);
 
 	private:
-		History	m_history;
+		History		m_history;
+		HistoryEntry	*m_selected;
 };
 
 #endif
