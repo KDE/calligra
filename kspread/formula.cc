@@ -574,7 +574,7 @@ bool Formula::isValid() const
   if( d->dirty )
   {
     Tokens tokens = scan( d->expression );
-    if( !tokens.valid() )
+    if( tokens.valid() )
       compile( tokens );
     else
       d->valid = false;
