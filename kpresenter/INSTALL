@@ -1,0 +1,33 @@
+libkom*, libop*, libkofficeui* havbe to be installed. 
+
+To install KPresenter, do following:
+
+cd autoformEdit
+make depend
+make all
+cd ..
+cd autoforms
+make install
+cd ..
+cd pics
+make install
+cd ..
+cd toolbar
+mak install
+cd ..
+make depend
+make all
+
+To run KPresenter do:
+
+./kpresenter
+
+To run KAutoformEdit do:
+
+cd autoformEdit
+./kautoformedit
+
+Enjoy it!
+
+Reginald Stadlbauer
+<reggie@kde.org>

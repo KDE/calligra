@@ -1,0 +1,224 @@
+####################################
+#  Autoform
+# Generated with atoformEdit
+# (c) by Reginald Stadlbauer 1998
+# E-Mail: reggie@kde.org
+####################################
+
+################ 1. Point
+
+POINT {
+
+  X {
+a = w
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+x = a
+  }
+
+  Y {
+a = h / 2
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+y = a
+  }
+
+  ATTRIB {
+v = 0
+p = 1
+  }
+
+}
+
+################ 2. Point
+
+POINT {
+
+  X {
+a = 30
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+x = a
+  }
+
+  Y {
+a = h / 2
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+y = a
+  }
+
+  ATTRIB {
+v = 0
+p = 0
+  }
+
+}
+
+################ 3. Point
+
+POINT {
+
+  X {
+a = 30
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+x = a - b
+  }
+
+  Y {
+a = h / 2
+b = 5
+c = 0
+d = 0
+e = 0
+f = 0
+y = a - b
+  }
+
+  ATTRIB {
+v = 0
+p = 0
+  }
+
+}
+
+################ 4. Point
+
+POINT {
+
+  X {
+a = 17
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+x = a
+  }
+
+  Y {
+a = h / 2
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+y = a
+  }
+
+  ATTRIB {
+v = 0
+p = 0
+  }
+
+}
+
+################ 5. Point
+
+POINT {
+
+  X {
+a = 30
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+x = a
+  }
+
+  Y {
+a = h / 2
+b = 5
+c = 0
+d = 0
+e = 0
+f = 0
+y = a + b
+  }
+
+  ATTRIB {
+v = 0
+p = 0
+  }
+
+}
+
+################ 6. Point
+
+POINT {
+
+  X {
+a = 30
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+x = a
+  }
+
+  Y {
+a = h / 2
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+y = a
+  }
+
+  ATTRIB {
+v = 0
+p = 0
+  }
+
+}
+
+################ 7. Point
+
+POINT {
+
+  X {
+a = w
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+x = a
+  }
+
+  Y {
+a = h / 2
+b = 0
+c = 0
+d = 0
+e = 0
+f = 0
+y = a
+  }
+
+  ATTRIB {
+v = 0
+p = 1
+  }
+
+}
+

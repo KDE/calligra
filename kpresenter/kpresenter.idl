@@ -1,0 +1,80 @@
+#ifndef __kpresenter_idl__
+#define __kpresenter_idl__
+
+#include <parts.idl>
+
+module KPresenter
+{
+  interface KPresenterView : OPParts::View
+    {
+      oneway void editCut();
+      oneway void editCopy();
+      oneway void editPaste();
+      oneway void editDelete();
+      oneway void editSelectAll();
+      
+      oneway void newView();
+      
+      oneway void insertPage();
+      oneway void insertPicture();
+      oneway void insertClipart();
+      oneway void insertLine();
+      oneway void insertRectangle();
+      oneway void insertCircleOrEllipse();
+      oneway void insertText();
+      oneway void insertAutoform();
+
+      oneway void insertLineH();
+      oneway void insertLineV();
+      oneway void insertLineD1();
+      oneway void insertLineD2();
+      oneway void insertNormRect();
+      oneway void insertRoundRect();
+
+      oneway void extraPenBrush();
+      oneway void extraRaise();
+      oneway void extraLower();
+      oneway void extraRotate();
+      oneway void extraBackground();
+      oneway void extraLayout();
+      oneway void extraOptions();
+
+      oneway void screenConfigPages();
+      oneway void screenAssignEffect();
+      oneway void screenStart();
+      oneway void screenStop();
+      oneway void screenPause();
+      oneway void screenFirst();
+      oneway void screenPrev();
+      oneway void screenNext();
+      oneway void screenLast();
+      oneway void screenSkip();
+      oneway void screenFullScreen();
+      oneway void screenPen();
+
+      oneway void helpContents();
+      oneway void helpAbout();
+      oneway void helpAboutKOffice();
+      oneway void helpAboutKDE();
+
+      oneway void sizeSelected(in string size);
+      oneway void fontSelected(in string font);
+      oneway void textBold();
+      oneway void textItalic();
+      oneway void textUnderline();
+      oneway void textColor();
+      oneway void textAlignLeft();
+      oneway void textAlignCenter();
+      oneway void textAlignRight();
+      oneway void mtextAlignLeft();
+      oneway void mtextAlignCenter();
+      oneway void mtextAlignRight();
+      oneway void mtextFont();
+    };
+  
+  interface KPresenterDocument : OPParts::Document
+    {
+    };
+};
+
+#endif

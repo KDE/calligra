@@ -1,0 +1,707 @@
+/******************************************************************/
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
+/* Version: 0.1.0alpha                                            */
+/* Author: Reginald Stadlbauer                                    */
+/* E-Mail: reggie@kde.org                                         */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
+/* needs c++ library Qt (http://www.troll.no)                     */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
+/* needs OpenParts and Kom (weis@kde.org)                         */
+/* written for KDE (http://www.kde.org)                           */
+/* License: GNU GPL                                               */
+/******************************************************************/
+/* Module: Autoform Interpreter                                   */
+/******************************************************************/
+
+#include "atfinterpreter.h"
+#include "atfinterpreter.moc"
+
+/******************************************************************/
+/* class ATFInterpreter                                           */
+/******************************************************************/
+
+/*====================== constructor =============================*/
+ATFInterpreter::ATFInterpreter(QObject* parent=0,const char* name=0)
+  : QObject(parent,name)
+{
+  coordList.setAutoDelete(true);
+  lines.setAutoDelete(true);
+  pointList.setAutoDelete(true);
+}
+
+/*======================= destrcutor =============================*/
+ATFInterpreter::~ATFInterpreter()
+{
+}
+
+/*====================== load autoform ===========================*/
+void ATFInterpreter::load(const char* fileName)
+{
+  QString line;
+  char* cLine = new char[256];
+  QFile ptA(fileName);
+  
+  coordList.clear();
+  lines.clear();
+  pointList.clear();
+  if (ptA.open(IO_ReadOnly))
+    {
+      while (!ptA.atEnd())
+	{
+	  ptA.readLine(cLine,256);
+	  line.operator=(simplify(QString(qstrdup(cLine))));
+	  lines.append(qstrdup(line));
+	}
+      ptA.close();
+      delete cLine;
+      interpret();
+    }
+}
+
+/*======================= new autoform ===========================*/
+void ATFInterpreter::newAutoform()
+{
+  coordList.clear();
+  lines.clear();
+  pointList.clear();
+  interpret();
+}  
+
+/*===================== save autoform ============================*/
+void ATFInterpreter::save(const char* fileName)
+{
+  if (!lines.isEmpty())
+    {
+      QFile f(fileName); 
+      QString line;
+      unsigned int i = 0;
+
+      if (f.open(IO_WriteOnly))
+	{
+	  for (line = lines.first();i < lines.count();line = lines.next(),i++)
+	    {
+	      line += "\n";
+	      f.writeBlock(line,line.length());
+	    }
+	}
+    }
+}
+
+
+/*==================== get point array ===========================*/
+QPointArray ATFInterpreter::getPointArray(int wid,int heig)
+{
+  unsigned int px = 0,py = 0,a = 0,b = 0,c = 0,d = 0,e = 0,f = 0;
+  unsigned int tmp = 0,num = 0;
+  bool calc = false,res = false;
+  char op = OP_EQUAL,var = VAR_1;
+  QList<Sign> slp;
+  QPointArray pntArray(QPointArray(coordList.count()));
+ 
+  if (!coordList.isEmpty())
+    {
+      for (coordPtr=coordList.first();coordPtr != 0;coordPtr=coordList.next())
+	{
+	  for (unsigned int i = 1; i<= 14; i++)
+	    {
+	      switch (i)
+		{
+		case 1: slp = coordPtr->pntX.var1; break; 
+		case 2: slp = coordPtr->pntX.var2; break; 
+		case 3: slp = coordPtr->pntX.var3; break; 
+		case 4: slp = coordPtr->pntX.var4; break; 
+		case 5: slp = coordPtr->pntX.var5; break; 
+		case 6: slp = coordPtr->pntX.var6; break; 
+		case 7: slp = coordPtr->pntX.result; break;
+		case 8: slp = coordPtr->pntY.var1; break; 
+		case 9: slp = coordPtr->pntY.var2; break; 
+		case 10: slp = coordPtr->pntY.var3; break; 
+		case 11: slp = coordPtr->pntY.var4; break; 
+		case 12: slp = coordPtr->pntY.var5; break; 
+		case 13: slp = coordPtr->pntY.var6; break; 
+		case 14: slp = coordPtr->pntY.result; break;
+		} 
+	      if (!slp.isEmpty())
+		{
+		  tmp = 0;
+		  for (signPtr=slp.first();signPtr != 0;signPtr=slp.next())
+		    {
+		      switch (signPtr->type)
+			{
+			case ST_WIDTH: { num = wid; calc = true; res = false;} break;
+			case ST_HEIGHT: { num = heig; calc = true; res = false;} break;
+			case ST_OPERATOR: { op = signPtr->op; calc = false; res = false;} break;
+			case ST_VARIABLE: { var = signPtr->var; calc = false; res = true;} break;
+			case ST_NUMBER: { num = signPtr->num; calc = true; res = false;} break;
+			}
+		      if (calc)
+			{
+			  switch (op)
+			    {
+			    case OP_EQUAL: tmp = num; break;
+			    case OP_PLUS: tmp += num; break;
+			    case OP_MINUS: tmp -= num; break;
+			    case OP_MULT: tmp *= num; break;
+			    case OP_DIV: tmp /= num; break;
+			    }
+			}
+		      else if (res)
+			{
+			  switch (var)
+			    {
+			    case VAR_1: num = a; break;
+			    case VAR_2: num = b; break;
+			    case VAR_3: num = c; break;
+			    case VAR_4: num = d; break;
+			    case VAR_5: num = e; break;
+			    case VAR_6: num = f; break;
+			    }
+			  switch (op)
+			    {
+			    case OP_EQUAL: tmp = num; break;
+			    case OP_PLUS: tmp += num; break;
+			    case OP_MINUS: tmp -= num; break;
+			    case OP_MULT: tmp *= num; break;
+			    case OP_DIV: tmp /= num; break;
+			    }
+			}
+		    }
+		  if (i == 1 || i == 8) a = tmp;
+		  if (i == 2 || i == 9) b = tmp;
+		  if (i == 3 || i == 10) c = tmp;
+		  if (i == 4 || i == 11) d = tmp;
+		  if (i == 5 || i == 12) e = tmp;
+		  if (i == 6 || i == 13) f = tmp;
+		  if (i == 7) px = tmp;
+		  if (i == 14) py = tmp; 
+		}
+	    }
+	  pntArray.setPoint(coordList.at(),px,py);
+	}
+    }
+  return pntArray;
+}
+
+/*===================== get attrib list =========================*/
+QList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
+{
+  QList<AttribList> attrLs; 
+  AttribList *attribPtr;
+  
+  if (!coordList.isEmpty())
+    {
+      for (coordPtr=coordList.first();coordPtr != 0;coordPtr=coordList.next())
+	{
+	  attribPtr = new AttribList;
+	  attribPtr->isVariable = coordPtr->isVariable;
+	  attribPtr->pwDiv = coordPtr->pwDiv;
+	  attrLs.append(attribPtr);
+	}
+    }
+  return attrLs;
+}
+
+/*========================== change variable =====================*/
+void ATFInterpreter::changeVar(int pnt,int structur,int var,QString str)
+{
+  CoordStruct coord;
+
+  str = simplify(str);
+  if (!pointList.isEmpty())
+    {
+      pntPtr = pointList.at(pnt);
+      if (structur < 2)
+	{
+	  if (structur == 0) coord = pntPtr->x;
+	  else coord = pntPtr->y;
+	  if (var == 0) coord.a = qstrdup(str);
+	  else if (var == 1) coord.b = qstrdup(str);
+	  else if (var == 2) coord.c = qstrdup(str);
+	  else if (var == 3) coord.d = qstrdup(str);
+	  else if (var == 4) coord.e = qstrdup(str);
+	  else if (var == 5) coord.f = qstrdup(str);
+	  else if (var == 6) coord.result = qstrdup(str);
+	  if (structur == 0) pntPtr->x = coord;
+	  else pntPtr->y = coord;
+	}
+      else
+	{
+	  if (var == 0) pntPtr->attrib.isVariable = qstrdup(str);
+	  else pntPtr->attrib.pwDiv = qstrdup(str);
+	}
+      makeLines();
+      coordList.clear();
+      pointList.clear();
+      interpret();
+    }
+}
+
+/*======================== get number of points ==================*/
+int ATFInterpreter::getNumOfPoints()
+{
+  return pointList.count();
+}
+
+/*========================= insert Point =========================*/
+void ATFInterpreter::insertPoint(int index,bool pos)
+{
+  // pos == true  => insert after index
+  // pos == false => insert before index
+  
+  CoordStruct coord1;
+  CoordStruct coord2;
+  AttribStruct attrib;
+
+  pntPtr = new PointStruct;
+  coord1.a = "a=0";
+  coord1.b = "b=0";
+  coord1.c = "c=0";
+  coord1.d = "d=0";
+  coord1.e = "e=0";
+  coord1.f = "f=0";
+  coord1.result = "result=a";
+  pntPtr->x = coord1;
+  coord2.a = "a=0";
+  coord2.b = "b=0";
+  coord2.c = "c=0";
+  coord2.d = "d=0";
+  coord2.e = "e=0";
+  coord2.f = "f=0";
+  coord2.result = "result=a";
+  pntPtr->y = coord2;
+  attrib.isVariable = "v=0";
+  attrib.pwDiv = "p=1";
+  pntPtr->attrib = attrib;
+
+  if (index > 0 && (unsigned int)index <= pointList.count())
+    {
+      if (pos) pointList.insert(index,pntPtr);
+      else pointList.insert(index-1,pntPtr);
+    }
+  else if (pointList.isEmpty())
+    {
+      pointList.append(pntPtr);
+    }
+  makeLines();
+  coordList.clear();
+  pointList.clear();
+  interpret();
+}
+
+/*=========================== delete point =======================*/
+void ATFInterpreter::deletePoint(int pnt)
+{
+  if (!pointList.isEmpty())
+    {
+      pointList.remove(pnt);
+      if (!pointList.isEmpty())
+	{
+	  makeLines();
+	  coordList.clear();
+	  pointList.clear();
+	  interpret();
+	}
+      else
+	{
+	  lines.clear();
+	  coordList.clear();
+	  pointList.clear();
+	  interpret();
+	}
+    }
+}
+
+/*========================= interpret ============================*/
+void ATFInterpreter::interpret()
+{
+  QStack<ls> level;
+  QString line;
+  Value value;
+  bool v = false;
+  int pw = 1;
+  ls *lPtr;
+  CoordStruct coord;
+  AttribStruct attrib;
+
+  level.setAutoDelete(true);
+  lPtr = new ls;
+  lPtr->l = LEVEL_NULL;
+  level.push(lPtr);
+  
+  unsigned int i = 0;
+  for (line = simplify(lines.first());i < lines.count();line = simplify(lines.next()),i++)
+    {
+      if (!line.isEmpty() && line.at(0) != COMMENT)
+	{
+	  if (level.top()->l == LEVEL_NULL)
+	    {
+	      if (operator==(line,PNT_BG))
+		{
+		  coordPtr = new Coord;
+		  lPtr = new ls;
+		  lPtr->l = LEVEL_POINT;
+		  level.push(lPtr);
+		  pntPtr = new PointStruct;
+		}
+	    }
+	  else if (level.top()->l == LEVEL_POINT)
+	    {
+	      lPtr = new ls;
+	      if (operator==(line,X_BG))
+		{
+		  lPtr->l = LEVEL_X;
+		  level.push(lPtr);
+		}
+	      else if (operator==(line,Y_BG))
+		{
+		  lPtr->l = LEVEL_Y;
+		  level.push(lPtr);
+		}
+	      else if (operator==(line,ATTR_BG))
+		{
+		  lPtr->l = LEVEL_ATTR;
+		  level.push(lPtr);
+		}
+	      else if (operator==(line,END))
+		{
+		  level.pop();
+		  coordList.append(coordPtr);
+		  pointList.append(pntPtr);
+		}
+	    }
+	  else if (level.top()->l == LEVEL_X || level.top()->l == LEVEL_Y || level.top()->l == LEVEL_ATTR)
+	    {
+	      switch (line.at(0))
+		{
+		case VAR_1: 
+		  {
+		    coord.a = qstrdup(line);
+		    value.var1 = getVar(line.remove(0,1)); 
+		  } break;
+		case VAR_2:
+		  {
+		    coord.b = qstrdup(line);		    
+		    value.var2 = getVar(line.remove(0,1)); 
+		  } break;
+		case VAR_3: 
+		  {
+		    coord.c = qstrdup(line);		    
+		    value.var3 = getVar(line.remove(0,1));
+		  } break;
+		case VAR_4: 
+		  {
+		    coord.d = qstrdup(line);		    
+		    value.var4 = getVar(line.remove(0,1));
+		  } break;
+		case VAR_5: 
+		  {
+		    coord.e = qstrdup(line);		    
+		    value.var5 = getVar(line.remove(0,1));
+		  } break;
+		case VAR_6: 
+		  {
+		    coord.f = qstrdup(line);		    
+		    value.var6 = getVar(line.remove(0,1));
+		  } break;
+		case VAR_X: case VAR_Y: 
+		  {
+		    coord.result = qstrdup(line);		    
+		    value.result = getVar(line.remove(0,1));
+		  } break;
+		case VAR_VARIA: 
+		  {
+		    if (line.at(2) == '0') v = false; 
+		    else v = true; 
+		    attrib.isVariable = qstrdup(line);
+		  } break;
+		case VAR_PW: 
+		  { 
+		    pw = 1; pw = line.at(2) - 48; 
+		    attrib.pwDiv = qstrdup(line);
+		  } break;
+		case '}': 
+		  {
+		    switch (level.top()->l)
+		      {
+		      case LEVEL_X:
+			{
+			  coordPtr->pntX = value;
+			  pntPtr->x = coord;
+			  coord.a = 0;
+			  coord.b = 0;
+			  coord.c = 0;
+			  coord.d = 0;
+			  coord.e = 0;
+			  coord.f = 0;
+			  coord.result = 0;
+			} break;
+		      case LEVEL_Y: 
+			{
+			  coordPtr->pntY = value;
+			  pntPtr->y = coord;
+			  coord.a = 0;
+			  coord.a = 0;
+			  coord.b = 0;
+			  coord.c = 0;
+			  coord.d = 0;
+			  coord.e = 0;
+			  coord.f = 0;
+			  coord.result = 0;
+			} break;
+		      case LEVEL_ATTR: 
+			{
+			  coordPtr->isVariable = v; 
+			  coordPtr->pwDiv = pw;
+			  pw = 1;
+			  v = false;
+			  pntPtr->attrib = attrib;
+			  attrib.isVariable = 0;
+			  attrib.pwDiv = 1;
+			} break;
+		      }
+		    level.pop();
+		  } break;
+		}
+	    }
+	}
+    }
+  makeLines();
+}
+
+/*====================== simplyfy a string =======================*/
+QString ATFInterpreter::simplify(QString s)
+{
+  QString res;
+  QString str = s.stripWhiteSpace();
+
+  for (unsigned int i=0;i < str.length();i++)
+    if (str.at(i) != ' ') res.insert(res.length(),str.at(i));
+  return res;
+}
+
+/*====================== get variable ===========================*/
+QList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString s)
+{
+  QList<Sign> list;
+  for (unsigned int i=0;i < s.length();i++)
+    {
+      signPtr = new Sign;
+      switch (s.at(i))
+	{
+	case VAR_W: signPtr->type = ST_WIDTH; break;
+	case VAR_H: signPtr->type = ST_HEIGHT; break;
+	case VAR_1: 
+	  {
+	    signPtr->type = ST_VARIABLE;
+	    signPtr->var = VAR_1;
+	  } break;
+	case VAR_2: 
+	  {
+	    signPtr->type = ST_VARIABLE;
+	    signPtr->var = VAR_2;
+	  } break;
+	case VAR_3: 
+	  {
+	    signPtr->type = ST_VARIABLE;
+	    signPtr->var = VAR_3;
+	  } break;
+	case VAR_4: 
+	  {
+	    signPtr->type = ST_VARIABLE;
+	    signPtr->var = VAR_4;
+	  } break;
+	case VAR_5: 
+	  {
+	    signPtr->type = ST_VARIABLE;
+	    signPtr->var = VAR_5;
+	  } break;
+	case VAR_6: 
+	  {
+	    signPtr->type = ST_VARIABLE;
+	    signPtr->var = VAR_6;
+	  } break;
+	case OP_EQUAL: 
+	  {
+	    signPtr->type = ST_OPERATOR;
+	    signPtr->op = OP_EQUAL;
+	  } break;
+	case OP_PLUS: 
+	  {
+	    signPtr->type = ST_OPERATOR;
+	    signPtr->op = OP_PLUS;
+	  } break;
+	case OP_MINUS: 
+	  {
+	    signPtr->type = ST_OPERATOR;
+	    signPtr->op = OP_MINUS;
+	  } break;
+	case OP_DIV: 
+	  {
+	    signPtr->type = ST_OPERATOR;
+	    signPtr->op = OP_DIV;
+	  } break;
+	case OP_MULT: 
+	  {
+	    signPtr->type = ST_OPERATOR;
+	    signPtr->op = OP_MULT;
+	  } break;
+	case NUM_0: case NUM_1: case NUM_2: case NUM_3: case NUM_4:
+	case NUM_5: case NUM_6: case NUM_7: case NUM_8: case NUM_9:
+	  {
+	    signPtr->type = ST_NUMBER;
+	    if (s.length() - 1 > i)
+	      {
+		switch (s.at(i+1))
+		  {
+		  case NUM_0: case NUM_1: case NUM_2: case NUM_3: case NUM_4:
+		  case NUM_5: case NUM_6: case NUM_7: case NUM_8: case NUM_9:
+		    {
+		      signPtr->num = (s.at(i) - 48) * 10 + s.at(i+1) - 48;
+		      i++;
+		    } break; 
+		  default:
+		    signPtr->num = s.at(i) - 48; break; 
+		  }
+	      }
+	    else
+	      signPtr->num = s.at(i) - 48;
+	  } break;
+	}
+      list.append(signPtr);
+    }
+  return list;
+}
+
+/*===================== make lines ==============================*/
+void ATFInterpreter::makeLines()
+{
+  QString tmp,tmp2;
+  unsigned int i = 1;
+
+  if (!pointList.isEmpty())
+    {
+      lines.clear();
+      lines.append("####################################");
+      tmp = "# ";
+      tmp += name();
+      tmp += " Autoform";
+      lines.append(qstrdup(tmp));
+      lines.append("# Generated with KAutoformEdit");
+      lines.append("# (c) by Reginald Stadlbauer 1998");
+      lines.append("# E-Mail: reggie@kde.org");
+      lines.append("####################################");
+      lines.append("");
+      for (pntPtr = pointList.first();pntPtr != 0;pntPtr = pointList.next(),i++)
+	{
+	  tmp = "################ ";
+	  tmp2 = "";
+	  tmp2.setNum(i);
+	  tmp += tmp2;
+	  tmp +=". Point";
+	  lines.append(qstrdup(tmp));
+	  lines.append("");
+	  lines.append("POINT {");
+	  lines.append("");
+	  lines.append("  X {"); 
+	  if (!pntPtr->x.a.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->x.a)));
+	  else
+	    lines.append("    a = 0");
+	  if (!pntPtr->x.b.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->x.b)));
+	  else
+	    lines.append("    b = 0");
+	  if (!pntPtr->x.c.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->x.c)));
+	  else
+	    lines.append("    c = 0");
+	  if (!pntPtr->x.d.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->x.d)));
+	  else
+	    lines.append("    d = 0");
+	  if (!pntPtr->x.e.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->x.e)));
+	  else
+	    lines.append("    e = 0");
+	  if (!pntPtr->x.f.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->x.f)));
+	  else
+	    lines.append("    f = 0");
+	  if (!pntPtr->x.result.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->x.result)));
+	  else
+	    lines.append("    x = a");
+	  lines.append("  }");
+	  lines.append("");
+	  lines.append("  Y {"); 
+	  if (!pntPtr->y.a.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->y.a)));
+	  else
+	    lines.append("    a = 0");
+	  if (!pntPtr->y.b.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->y.b)));
+	  else
+	    lines.append("    b = 0");
+	  if (!pntPtr->y.c.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->y.c)));
+	  else
+	    lines.append("    c = 0");
+	  if (!pntPtr->y.d.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->y.d)));
+	  else
+	    lines.append("    d = 0");
+	  if (!pntPtr->y.e.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->y.e)));
+	  else
+	    lines.append("    e = 0");
+	  if (!pntPtr->y.f.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->y.f)));
+	  else
+	    lines.append("    f = 0");
+	  if (!pntPtr->y.result.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->y.result)));
+	  else
+	    lines.append("    y = a");
+	  lines.append("  }");
+	  lines.append("");
+	  lines.append("  ATTRIB {"); 
+	  if (!pntPtr->attrib.isVariable.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->attrib.isVariable)));
+	  else
+	    lines.append("    v = 0");
+	  if (!pntPtr->attrib.pwDiv.isEmpty())
+	    lines.append(qstrdup(stretch(pntPtr->attrib.pwDiv)));
+	  else
+	    lines.append("    p = 1");
+	  lines.append("  }");
+	  lines.append("");
+	  lines.append("}");
+	  lines.append("");
+	}
+    }
+}
+
+/*================== stretch a line =============================*/
+QString ATFInterpreter::stretch(QString s)
+{
+  QString res = "";
+  unsigned int i;
+
+  for (i=0;i < s.length()-1;i++)
+    {
+      res += s.at(i);
+      if ((isNum(s.at(i)) && !isNum(s.at(i+1))) || (!isNum(s.at(i))))
+	res += " ";
+    }
+  res += s.at(s.length()-1);
+  return res;
+}
+
+/*====================== is a number ============================*/
+bool ATFInterpreter::isNum(char c)
+{
+  if (c >= 48 && c <= 57) return true;
+  else return false;
+}
+
+

@@ -1,0 +1,36 @@
+/* XPM */
+static char *configure[] = {
+/* width height num_colors chars_per_pixel */
+"    22    22        7            1",
+/* colors */
+". c None",
+"# c #808080",
+"a c #c0c0c0",
+"b c #404040",
+"c c #fbfffb",
+"d c #202020",
+"e c #000000",
+/* pixels */
+"......................",
+"......................",
+"...........##.........",
+".......aa#acc#ac#.....",
+"......bccaaccacc#b....",
+"...ba##cccccccc###cb..",
+"...bccccccccccccaca#..",
+"..#d#cccccab#ccccc##..",
+".###accccaeeebcccc#b#.",
+"#bbacccccab#baccccaaa#",
+"#eeeaccccccacccccceb##",
+".eecccccccccccccccdbb#",
+".##cccccccccccccccad..",
+".#accaccccccccccccca#.",
+".debbedcccccccccee###.",
+".deedb#ccaccccccdedd#.",
+".#bb#baa#e#a#ebc####..",
+".....ee#be#abeedeb....",
+".....eeb#beeb.eeed....",
+".....ee#.bebb.beeb....",
+".........#dd#.........",
+"......................"
+};
