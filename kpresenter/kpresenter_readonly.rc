@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="2">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_copy"/>
@@ -10,28 +10,11 @@
   <Separator/>
   <Action name="edit_copypage"/>
  </Menu>
- <Menu name="view"><text>&amp;View</text>
-  <Action name="view_header"/>
-  <Action name="view_footer"/>
-  <Separator/>
-  <Action name="view_helplines"/>
-  <Action name="view_helplinetofront"/>
-  <Action name="view_grid"/>
-  <Action name="view_gridtofront"/>
-  <Action name="view_snaptogrid"/>
- </Menu>
  <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
-  <Action name="screen_start"/>
-  <Action name="screen_viewpage"/>
-  <Separator/>
   <Action name="screen_first"/>
   <Action name="screen_prev"/>
   <Action name="screen_next"/>
   <Action name="screen_last"/>
-  <Separator/>
-  <Action name="screen_pencolor"/>
-  <Action name="screen_penwidth"/>
- </Menu>
 </MenuBar>
 <StatusBar/>
 <ToolBar name="editToolBar" position="top" fullWidth="false"><Text>Edit</Text>
@@ -40,11 +23,6 @@
   <Action name="view_zoom"/>
 </ToolBar>
 <ToolBar name="screenToolBar" position="top" fullWidth="false"><Text>Presentation</Text>
-  <Action name="screen_assigneffect"/>
-  <Separator/>
-  <Action name="screen_start"/>
-  <Action name="screen_viewpage"/>
-  <Separator/>
   <Action name="screen_first"/>
   <Action name="screen_prev"/>
   <Action name="screen_next"/>
