@@ -623,9 +623,8 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     if ( !drawContour )
     {
-        QRect rect( (int)( penw ), (int)( penw ),
-                    (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                    (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+        QRect rect( 0, 0, (int)( _zoomHandler->zoomItX( ow ) ),
+                    (int)( _zoomHandler->zoomItY(  oh ) ) );
         // ### HACK QT seems not to be able to correctly compare QVariant
         bool variants1;
         if (m_ie_par1.isNull())
