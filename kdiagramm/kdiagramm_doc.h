@@ -105,6 +105,9 @@ public:
   
   // C++
   virtual void editData();
+
+  // C++
+  void configChart();
   
   // IDL
   virtual void showWizard();

@@ -38,6 +38,7 @@ module KDiagramm
 
 		slot void editData();
 		slot void pageLayout();
+		slot void configChart();
 
 		struct EventConfigured
 		{

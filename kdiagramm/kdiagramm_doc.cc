@@ -318,6 +318,17 @@ void KDiagrammDoc::editData()
   delete dlg; dlg = 0;
 }
 
+
+void KDiagrammDoc::configChart()
+{
+#ifndef OLDCODE
+    // PENDING(Torben) How to transfer configuration from diag._params
+    // to document?
+    KoDiagramm diag;
+    diag.config( 0 );
+#endif
+}
+
 void KDiagrammDoc::print( QPaintDevice* _dev )
 {
   QPainter painter;

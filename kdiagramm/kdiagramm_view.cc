@@ -232,8 +232,17 @@ bool KDiagrammView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   
   m_idMenuEdit_Page = m_vMenuEdit->insertItem( i18n("&Page Layout"), this, "pageLayout", CTRL + Key_L );
 
+  m_idMenuConfig_Chart = m_vMenuEdit->insertItem( i18n( "C&onfigure Chart..." ), this, "configChart", CTRL + Key_O );
+
   return true;
 }      
+
+void KDiagrammView::configChart()
+{
+       m_pDoc->configChart();
+}
+  
+
 
 void KDiagrammView::editData()
 {

@@ -80,6 +80,11 @@ public:
      */
     void pageLayout();
 
+    /**
+     * MenuBar
+     */
+    void configChart();
+
     virtual void cleanUp();
 
     CORBA::Boolean printDlg();
@@ -114,6 +119,8 @@ protected:
     CORBA::Long m_idMenuEdit_Cakes;
     CORBA::Long m_idMenuEdit_Data;
     CORBA::Long m_idMenuEdit_Page;
+    CORBA::Long m_idMenuConfig_Chart;
+
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_About;
     CORBA::Long m_idMenuHelp_Using;
