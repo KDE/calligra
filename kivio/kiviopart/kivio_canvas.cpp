@@ -278,13 +278,16 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
   QRect rect( ev->rect() );
   painter.fillRect(rect,white);
+  KoPageLayout pl = page->paperLayout();
+  int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
+  int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
 
   // Draw Grid
   if (m_pDoc->grid().isShow) {
     int x = rect.x();
     int y = rect.y();
-    int w = x + rect.width();
-    int h = y + rect.height();
+    int w = x + QMIN(rect.width(), pw);
+    int h = y + QMIN(rect.height(), ph);
 
     KoSize dxy = m_pDoc->grid().freq;
     
@@ -315,21 +318,6 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     p.setCoords(0, 0);
     p0 = mapToScreen(p);
 
-    while (p0.x() > w) {
-      p.rx() -= dxy.width();
-      p0 = mapToScreen(p);
-    }
-
-    while (p0.x() >= x) {
-      painter.drawLine(p0.x(),y,p0.x(),h);
-
-      p.rx() -= dxy.width();
-      p0 = mapToScreen(p);
-    }
-
-    p.setCoords(0, 0);
-    p0 = mapToScreen(p);
-
     while (p0.y() < y) {
       p.ry() += dxy.height();
       p0 = mapToScreen(p);
@@ -341,28 +329,9 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
       p.ry() += dxy.height();
       p0 = mapToScreen(p);
     }
-
-    p.setCoords(0, 0);
-    p0 = mapToScreen(p);
-
-    while (p0.y() > h) {
-      p.ry() -= dxy.height();
-      p0 = mapToScreen(p);
-    }
-
-    while (p0.y() >= y) {
-      painter.drawLine(x,p0.y(),w,p0.y());
-
-      p.ry() -= dxy.height();
-      p0 = mapToScreen(p);
-    }
   }
 
   painter.translate(-m_iXOffset,-m_iYOffset);
-
-  KoPageLayout pl = page->paperLayout();
-  int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
-  int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
 
   if (m_pView->isShowPageMargins()) {
     int ml = m_pView->zoomHandler()->zoomItX(pl.ptLeft);
