@@ -60,7 +60,7 @@ static QString boolAsString( bool b )
   else return QString( "False" );
 }
 
-static QString hexintAsString( long l )
+static QString longAsHexstring( long l )
 {
     return QString("0%1").arg(l, 8, 16);
 }
@@ -90,7 +90,7 @@ void Inspector::Private::handleCell()
 
   new QListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );    
   new QListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
-  new QListViewItem( cellView, "Properties", hexintAsString( static_cast<long>(cell->kspreadStyle()->features()) ) );
+  new QListViewItem( cellView, "Properties", longAsHexstring( static_cast<long>(cell->kspreadStyle()->features()) ) );
   new QListViewItem( cellView, "Text", cell->text() );
   new QListViewItem( cellView, "Text (Displayed)", cell->strOutText() );
 
