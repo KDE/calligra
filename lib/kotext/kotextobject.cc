@@ -331,8 +331,6 @@ void KoTextObject::copyCharFormatting( KoTextParag *parag, int position, int ind
 void KoTextObject::readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyParagLayouts, bool moveCustomItems )
 {
     //kdDebug(32500) << "KoTextObject::readFormats moveCustomItems=" << moveCustomItems << endl;
-    c2.restoreState();
-    c1.restoreState();
     int oldLen = undoRedoInfo.text.length();
     if ( c1.parag() == c2.parag() ) {
         undoRedoInfo.text += c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
@@ -1994,9 +1992,12 @@ void KoTextObject::setNeedSpellCheck(bool b)
 #ifndef NDEBUG
 void KoTextObject::printRTDebug(int info)
 {
+    KoTextParag* lastParag = 0;
     for (KoTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
     {
+        assert( parag->prev() == lastParag );
         parag->printRTDebug( info );
+        lastParag = parag;
     }
     if ( info == 1 )
         textdoc->formatCollection()->debug();

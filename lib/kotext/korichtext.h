@@ -317,43 +317,22 @@ public:
 
     void setIndex( int i, bool restore = TRUE );
 
-    void checkIndex();
+    //void checkIndex();
 
-    int offsetX() const { return ox; }
-    int offsetY() const { return oy; }
-
-    KoTextParag *topParag() const { return parags.isEmpty() ? string : parags.first(); }
-    int totalOffsetX() const;
-    int totalOffsetY() const;
+    //int offsetX() const { return ox; }
+    //int offsetY() const { return oy; }
 
     bool place( const QPoint &pos, KoTextParag *s, bool link = false, int *customItemIndex = 0 );
-    void restoreState();
 
     int x() const;
     int y() const;
     void fixCursorPosition();
-    int nestedDepth() const { return (int)indices.count(); } //### size_t/int cast
 
 private:
-    enum Operation { EnterBegin, EnterEnd, Next, Prev, Up, Down };
-
-    void push();
-    void pop();
-    void processNesting( Operation op );
-    void invalidateNested();
-    void gotoIntoNested( const QPoint &globalPos );
-
     KoTextParag *string;
     KoTextDocument *doc;
     int idx, tmpIndex;
-    int ox, oy;
-    QValueStack<int> indices;
-    QValueStack<KoTextParag*> parags;
-    QValueStack<int> xOffsets;
-    QValueStack<int> yOffsets;
-    QValueStack<bool> nestedStack;
-    bool nested;
-
+    //int ox, oy;
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1169,27 +1148,6 @@ public:
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#if 0
-class KoTextPreProcessor
-{
-public:
-    enum Ids {
-	Standard = 0
-    };
-
-    KoTextPreProcessor() {}
-    virtual ~KoTextPreProcessor() {}
-
-    virtual void process( KoTextDocument *doc, KoTextParag *, int, bool = TRUE ) = 0;
-    virtual KoTextFormat *format( int id ) = 0;
-
-};
-#endif
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 inline int KoTextString::length() const
 {
     return data.size();
@@ -1220,20 +1178,18 @@ inline int KoTextCursor::index() const
     return idx;
 }
 
-inline void KoTextCursor::setParag( KoTextParag *s, bool restore )
+inline void KoTextCursor::setParag( KoTextParag *s, bool /*restore*/ )
 {
-    if ( restore )
-	restoreState();
     idx = 0;
     string = s;
     tmpIndex = -1;
 }
 
-inline void KoTextCursor::checkIndex()
-{
-    if ( idx >= string->length() )
-	idx = string->length() - 1;
-}
+//inline void KoTextCursor::checkIndex()
+//{
+//    if ( idx >= string->length() )
+//	idx = string->length() - 1;
+//}
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -813,7 +813,6 @@ bool KoTextView::insertParagraph(const QPoint &pos)
 bool KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
 {
     bool addParag = false;
-    m_cursor->restoreState();
     if ( insertDirectCursor && (pos.y()>textDocument()->height()) )
         addParag = insertParagraph(pos);
     KoTextParag *s = 0L;

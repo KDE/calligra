@@ -38,8 +38,14 @@ void KoOasisContext::fillStyleStack( const QDomElement& object, const QString& a
 void KoOasisContext::addStyles( const QDomElement* style )
 {
     // this recursive function is necessary as parent styles can have parents themselves
-    if ( style->hasAttribute( "style:parent-style-name" ) )
-        addStyles( m_styles.styles()[style->attribute( "style:parent-style-name" )] );
+    if ( style->hasAttribute( "style:parent-style-name" ) ) {
+        const QString parentStyleName = style->attribute( "style:parent-style-name" );
+        QDomElement* parentStyle = m_styles.styles()[ parentStyleName ];
+        if ( parentStyle )
+            addStyles( parentStyle );
+        else
+            kdWarning(32500) << "Parent style not found: " << parentStyleName << endl;
+    }
     else if ( !m_styles.defaultStyle().isNull() ) // on top of all, the default style
         m_styleStack.push( m_styles.defaultStyle() );
 

@@ -462,9 +462,7 @@ bool KoTextDocument::setSelectionEnd( int id, KoTextCursor *cursor )
     KoTextCursor tmp = sel.startCursor;
     if ( sel.swapped )
 	tmp = sel.endCursor;
-    tmp.restoreState();
     KoTextCursor tmp2 = *cursor;
-    tmp2.restoreState();
     c.setParag( tmp.parag()->paragId() < tmp2.parag()->paragId() ? tmp.parag() : tmp2.parag() );
     KoTextCursor old;
     bool hadStart = FALSE;
@@ -497,7 +495,6 @@ bool KoTextDocument::setSelectionEnd( int id, KoTextCursor *cursor )
 	if ( c == end && hadStartParag ||
 	     c == start && hadEndParag ) {
 	    KoTextCursor tmp = c;
-	    tmp.restoreState();
 	    if ( tmp.parag() != c.parag() ) {
 		int sstart = tmp.parag()->selectionStart( id );
 		tmp.parag()->removeSelection( id );
@@ -598,7 +595,6 @@ bool KoTextDocument::removeSelection( int id )
     KoTextCursor tmp = sel.startCursor;
     if ( sel.swapped )
 	tmp = sel.endCursor;
-    tmp.restoreState();
     c.setParag( tmp.parag() );
     KoTextCursor old;
     bool hadStart = FALSE;
@@ -654,9 +650,6 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
 	c2 = sel.startCursor;
 	c1 = sel.endCursor;
     }
-
-    c2.restoreState();
-    c1.restoreState();
 
     if ( c1.parag() == c2.parag() ) {
 	QString s;
@@ -726,6 +719,34 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
     return s;
 }
 
+QString KoTextDocument::copySelection( KoXmlWriter& writer, KoSavingContext& context, int selectionId )
+{
+    KoTextCursor c1 = selectionStartCursor( selectionId );
+    KoTextCursor c2 = selectionEndCursor( selectionId );
+    QString text;
+    if ( c1.parag() == c2.parag() )
+    {
+        text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
+
+        c1.parag()->saveOasis( writer, context, c1.index(), c2.index()-1, true );
+    }
+    else
+    {
+        text += c1.parag()->toString( c1.index() ) + "\n";
+
+        c1.parag()->saveOasis( writer, context, c1.index(), c1.parag()->length()-2, true );
+        KoTextParag *p = c1.parag()->next();
+        while ( p && p != c2.parag() ) {
+            text += p->toString() + "\n";
+            p->saveOasis( writer, context, 0, p->length()-2, true );
+            p = p->next();
+        }
+        text += c2.parag()->toString( 0, c2.index() );
+        c2.parag()->saveOasis( writer, context, 0, QMAX( 0, c2.index() - 1 ), true );
+    }
+    return text;
+}
+
 void KoTextDocument::setFormat( int id, const KoTextFormat *f, int flags )
 {
     QMap<int, KoTextDocumentSelection>::ConstIterator it = selections.find( id );
@@ -740,9 +761,6 @@ void KoTextDocument::setFormat( int id, const KoTextFormat *f, int flags )
 	c2 = sel.startCursor;
 	c1 = sel.endCursor;
     }
-
-    c2.restoreState();
-    c1.restoreState();
 
     if ( c1.parag() == c2.parag() ) {
 	c1.parag()->setFormat( c1.index(), c2.index() - c1.index(), f, TRUE, flags );
@@ -782,13 +800,6 @@ void KoTextDocument::removeSelectedText( int id, KoTextCursor *cursor )
 	c2 = sel.startCursor;
 	c1 = sel.endCursor;
     }
-
-    // ### no support for editing tables yet
-    if ( c1.nestedDepth() || c2.nestedDepth() )
-	return;
-
-    c2.restoreState();
-    c1.restoreState();
 
     *cursor = c1;
     removeSelection( id );
@@ -1447,7 +1458,7 @@ KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
     return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
-KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection* styleColl )
+KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection* styleColl, KoTextParag* nextParagraph )
 {
     // was OoWriterImport::parseBodyOrSimilar
     for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
@@ -1460,7 +1471,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
         if ( textFoo && tagName == "text:p" ) {  // text paragraph
             context.fillStyleStack( tag, "text:style-name" );
 
-            KoTextParag *parag = createParag( this, lastParagraph );
+            KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
             parag->loadOasis( tag, context, styleColl );
             if ( !lastParagraph )        // First parag
                 setFirstParag( parag );
@@ -1490,7 +1501,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
                 // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
                 restartNumbering = tag.attribute( "text:start-value" ).toInt();
 
-            KoTextParag *parag = createParag( this, lastParagraph );
+            KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
             parag->loadOasis( tag, context, styleColl );
             if ( !lastParagraph )        // First parag
                 setFirstParag( parag );
@@ -1505,7 +1516,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
                      || tagName == "text:list" || tagName == "text:numbered-paragraph" ) )  // OASIS
         {
             kdDebug(32500)<<" list \n";
-            lastParagraph = loadList( tag, context, lastParagraph, styleColl );
+            lastParagraph = loadList( tag, context, lastParagraph, styleColl, nextParagraph );
             context.styleStack().restore();
             continue;
         }
@@ -1513,7 +1524,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
         {
             kdDebug(32500) << "Section found!" << endl;
             context.fillStyleStack( tag, "text:style-name" );
-            lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl );
+            lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl, nextParagraph );
         }
         else if ( textFoo && tagName == "text:variable-decls" )
         {
@@ -1530,7 +1541,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
     return lastParagraph;
 }
 
-KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl )
+KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph )
 {
     //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
@@ -1557,7 +1568,7 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
         if ( list.hasAttribute( "text:start-value" ) )
             restartNumbering = list.attribute( "text:start-value" ).toInt();
         KoTextParag* oldLast = lastParagraph;
-        lastParagraph = loadOasisText( list, context, lastParagraph, styleColl );
+        lastParagraph = loadOasisText( list, context, lastParagraph, styleColl, nextParagraph );
         KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
         // Apply list style to first paragraph inside numbered-parag - there's only one anyway
         firstListItem->applyListStyle( context, restartNumbering, orderedList, false, level );
@@ -1572,7 +1583,7 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
             if ( listItem.hasAttribute( "text:start-value" ) )
                 restartNumbering = listItem.attribute( "text:start-value" ).toInt();
             KoTextParag* oldLast = lastParagraph;
-            lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl );
+            lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl, nextParagraph );
             KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
             // It's either list-header (normal text on top of list) or list-item
             if ( listItem.tagName() != "text:list-header" && firstListItem ) {
@@ -1585,6 +1596,46 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
         context.listStyleStack().pop();
     context.setCurrentListStyleName( oldListStyleName );
     return lastParagraph;
+}
+
+KoTextCursor KoTextDocument::pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextCursor& cursor, KoStyleCollection * styleColl )
+{
+    KoTextCursor resultCursor( cursor );
+    if ( cursor.index() == 0 ) {
+        // Pasting on an empty paragraph -> respect <text:h> in selected text etc.
+        KoTextParag* lastParagraph = cursor.parag() ? cursor.parag()->prev() : 0;
+        lastParagraph = loadOasisText( bodyElem, context, lastParagraph, styleColl, cursor.parag() );
+        resultCursor.setParag( lastParagraph );
+        resultCursor.setIndex( 0 );
+    } else {
+        KoTextParag* lastParagraph = cursor.parag();
+        uint pos = cursor.index();
+        // Pasting inside a non-empty paragraph -> append text to it.
+        // This loop looks for the *FIRST* paragraph only.
+        for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
+        {
+            QDomElement tag = text.toElement();
+            if ( tag.isNull() ) continue;
+            context.styleStack().save();
+            // Note how we ignore tag.tagName() here.
+            context.fillStyleStack( tag, "text:style-name" );
+            lastParagraph->loadOasis( tag, context, styleColl, &pos );
+            context.styleStack().restore();
+            // Done with first parag, remove it and exit loop
+            const_cast<QDomElement &>( bodyElem ).removeChild( tag ); // somewhat hackish
+            break;
+        }
+        resultCursor.setParag( lastParagraph );
+        resultCursor.setIndex( pos );
+        // Load the rest the usual way.
+        lastParagraph = loadOasisText( bodyElem, context, lastParagraph, styleColl, lastParagraph->next() );
+        if ( lastParagraph != resultCursor.parag() ) // we loaded more paragraphs
+        {
+            resultCursor.setParag( lastParagraph );
+            resultCursor.setIndex( lastParagraph->length() - 1 /* TODO - one parag too many gets created? */ );
+        }
+    }
+    return resultCursor;
 }
 
 void KoTextDocument::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const

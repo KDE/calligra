@@ -202,8 +202,11 @@ public:
     int length() const;
     void clear( bool createEmptyParag = FALSE );
 
-    KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl );
-    KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl );
+    KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
+    KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph = 0 );
+    // Similar to loadOasisText but the first paragraph is inserted after the given cursor
+    KoTextCursor pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextCursor& cursor, KoStyleCollection * styleColl );
+    QString copySelection( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
 
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
 

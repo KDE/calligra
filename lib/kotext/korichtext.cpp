@@ -365,9 +365,8 @@ KoTextCursor *KoTextAlignmentCommand::unexecute( KoTextCursor *c )
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextCursor::KoTextCursor( KoTextDocument *d )
-    : doc( d ), ox( 0 ), oy( 0 )
+    : doc( d )
 {
-    nested = FALSE;
     idx = 0;
     string = doc ? doc->firstParag() : 0;
     tmpIndex = -1;
@@ -380,31 +379,17 @@ KoTextCursor::KoTextCursor()
 KoTextCursor::KoTextCursor( const KoTextCursor &c )
 {
     doc = c.doc;
-    ox = c.ox;
-    oy = c.oy;
-    nested = c.nested;
     idx = c.idx;
     string = c.string;
     tmpIndex = c.tmpIndex;
-    indices = c.indices;
-    parags = c.parags;
-    xOffsets = c.xOffsets;
-    yOffsets = c.yOffsets;
 }
 
 KoTextCursor &KoTextCursor::operator=( const KoTextCursor &c )
 {
     doc = c.doc;
-    ox = c.ox;
-    oy = c.oy;
-    nested = c.nested;
     idx = c.idx;
     string = c.string;
     tmpIndex = c.tmpIndex;
-    indices = c.indices;
-    parags = c.parags;
-    xOffsets = c.xOffsets;
-    yOffsets = c.yOffsets;
 
     return *this;
 }
@@ -412,59 +397,6 @@ KoTextCursor &KoTextCursor::operator=( const KoTextCursor &c )
 bool KoTextCursor::operator==( const KoTextCursor &c ) const
 {
     return doc == c.doc && string == c.string && idx == c.idx;
-}
-
-int KoTextCursor::totalOffsetX() const
-{
-    if ( !nested )
-	return 0;
-    QValueStack<int>::ConstIterator xit = xOffsets.begin();
-    int xoff = ox;
-    for ( ; xit != xOffsets.end(); ++xit )
-	xoff += *xit;
-    return xoff;
-}
-
-int KoTextCursor::totalOffsetY() const
-{
-    if ( !nested )
-	return 0;
-    QValueStack<int>::ConstIterator yit = yOffsets.begin();
-    int yoff = oy;
-    for ( ; yit != yOffsets.end(); ++yit )
-	yoff += *yit;
-    return yoff;
-}
-
-void KoTextCursor::gotoIntoNested( const QPoint &globalPos )
-{
-    if ( !doc )
-	return;
-    push();
-    ox = 0;
-    int bl, y;
-    string->lineHeightOfChar( idx, &bl, &y );
-    oy = y + string->rect().y();
-    nested = TRUE;
-    QPoint p( globalPos.x() - offsetX(), globalPos.y() - offsetY() );
-    Q_ASSERT( string->at( idx )->isCustom() );
-    ox = string->at( idx )->x;
-    string->at( idx )->customItem()->enterAt( this, doc, string, idx, ox, oy, p );
-}
-
-void KoTextCursor::invalidateNested()
-{
-    if ( nested ) {
-	QValueStack<KoTextParag*>::Iterator it = parags.begin();
-	QValueStack<int>::Iterator it2 = indices.begin();
-	for ( ; it != parags.end(); ++it, ++it2 ) {
-	    if ( *it == string )
-		continue;
-	    (*it)->invalidate( 0 );
-	    if ( (*it)->at( *it2 )->isCustom() )
-		(*it)->at( *it2 )->customItem()->invalidate();
-	}
-    }
 }
 
 void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTextStringChar> *formatting )
@@ -550,12 +482,8 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTe
 #if 0  //// useless and slow
     int h = string->rect().height();
     string->format( -1, TRUE );
-    if ( h != string->rect().height() )
-	invalidateNested();
-    else if ( doc && doc->parent() )
-	doc->nextDoubleBuffered = TRUE;
 #endif
-	fixCursorPosition();
+    fixCursorPosition();
 }
 
 void KoTextCursor::gotoLeft()
@@ -577,56 +505,7 @@ void KoTextCursor::gotoPreviousLetter()
 	while ( !string->isVisible() )
 	    string = string->prev();
 	idx = string->length() - 1;
-#if 0
-    } else {
-	if ( nested ) {
-	    pop();
-	    processNesting( Prev );
-	    if ( idx == -1 ) {
-		pop();
-		if ( idx > 0 ) {
-		    idx--;
-		} else if ( string->prev() ) {
-		    string = string->prev();
-		    idx = string->length() - 1;
-		}
-	    }
-	}
-#endif
     }
-
-    const KoTextStringChar *tsc = string->at( idx );
-    if ( tsc && tsc->isCustom() && tsc->customItem()->isNested() ) {
-	processNesting( EnterEnd );
-    }
-}
-
-void KoTextCursor::push()
-{
-    indices.push( idx );
-    parags.push( string );
-    xOffsets.push( ox );
-    yOffsets.push( oy );
-    nestedStack.push( nested );
-}
-
-void KoTextCursor::pop()
-{
-    if ( !doc )
-	return;
-    idx = indices.pop();
-    string = parags.pop();
-    ox = xOffsets.pop();
-    oy = yOffsets.pop();
-    //if ( doc->parent() )
-    //doc = doc->parent();
-    nested = nestedStack.pop();
-}
-
-void KoTextCursor::restoreState()
-{
-    while ( !indices.isEmpty() )
-	pop();
 }
 
 bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *customItemIndex )
@@ -709,55 +588,7 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
     }
     setIndex( curpos, FALSE );
 
-#if 0
-    if ( inCustom && doc && parag()->at( curpos )->isCustom() && parag()->at( curpos )->customItem()->isNested() ) {
-	KoTextDocument *oldDoc = doc;
-	pos.setX( pos.x() - parag()->at( curpos )->x );
-	gotoIntoNested( pos );
-	if ( oldDoc == doc )
-	    return TRUE;
-	QPoint p( pos.x() - offsetX(), pos.y() - offsetY() );
-	if ( !place( p, document()->firstParag() ) )
-	    pop();
-    }
-#endif
     return TRUE;
-}
-
-void KoTextCursor::processNesting( Operation op )
-{
-    if ( !doc )
-	return;
-    push();
-    ox = string->at( idx )->x;
-    int bl, y;
-    string->lineHeightOfChar( idx, &bl, &y );
-    oy = y + string->rect().y();
-    nested = TRUE;
-    bool ok = FALSE;
-
-    switch ( op ) {
-    case EnterBegin:
-	ok = string->at( idx )->customItem()->enter( this, doc, string, idx, ox, oy );
-	break;
-    case EnterEnd:
-	ok = string->at( idx )->customItem()->enter( this, doc, string, idx, ox, oy, TRUE );
-	break;
-    case Next:
-	ok = string->at( idx )->customItem()->next( this, doc, string, idx, ox, oy );
-	break;
-    case Prev:
-	ok = string->at( idx )->customItem()->prev( this, doc, string, idx, ox, oy );
-	break;
-    case Down:
-	ok = string->at( idx )->customItem()->down( this, doc, string, idx, ox, oy );
-	break;
-    case Up:
-	ok = string->at( idx )->customItem()->up( this, doc, string, idx, ox, oy );
-	break;
-    }
-    if ( !ok )
-	pop();
 }
 
 void KoTextCursor::gotoRight()
@@ -773,12 +604,6 @@ void KoTextCursor::gotoNextLetter()
     tmpIndex = -1;
 
     int len = string->length() - 1;
-    const KoTextStringChar *tsc = string->at( idx );
-    if ( tsc && tsc->isCustom() && tsc->customItem()->isNested() ) {
-	processNesting( EnterBegin );
-	return;
-    }
-
     if ( idx < len ) {
         idx = string->string()->nextCursorPosition( idx );
     } else if ( string->next() ) {
@@ -786,22 +611,6 @@ void KoTextCursor::gotoNextLetter()
 	while ( !string->isVisible() )
 	    string = string->next();
 	idx = 0;
-#if 0
-    } else {
-	if ( nested ) {
-	    pop();
-	    processNesting( Next );
-	    if ( idx == -1 ) {
-		pop();
-		if ( idx < string->length() - 1 ) {
-		    idx++;
-		} else if ( string->next() ) {
-		    string = string->next();
-		    idx = 0;
-		}
-	    }
-	}
-#endif
     }
 }
 
@@ -816,19 +625,7 @@ void KoTextCursor::gotoUp()
     tmpIndex = QMAX( tmpIndex, idx - indexOfLineStart );
     if ( indexOfLineStart == 0 ) {
 	if ( !string->prev() ) {
-	    if ( !nested )
-		return;
-	    pop();
-	    processNesting( Up );
-	    if ( idx == -1 ) {
-		pop();
-		if ( !string->prev() )
-		    return;
-		idx = tmpIndex = 0;
-	    } else {
-		tmpIndex = -1;
-		return;
-	    }
+            return;
 	}
 	string = string->prev();
 	while ( !string->isVisible() )
@@ -864,19 +661,7 @@ void KoTextCursor::gotoDown()
     tmpIndex = QMAX( tmpIndex, idx - indexOfLineStart );
     if ( line == string->lines() - 1 ) {
 	if ( !string->next() ) {
-	    if ( !nested )
-		return;
-	    pop();
-	    processNesting( Down );
-	    if ( idx == -1 ) {
-		pop();
-		if ( !string->next() )
-		    return;
-		idx = tmpIndex = 0;
-	    } else {
-		tmpIndex = -1;
-		return;
-	    }
+            return;
 	}
 	string = string->next();
 	while ( !string->isVisible() )
@@ -1164,8 +949,6 @@ void KoTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 	    idx = 0;
 	}
     }
-
-    invalidateNested();
 }
 
 bool KoTextCursor::removePreviousChar()
@@ -1173,13 +956,10 @@ bool KoTextCursor::removePreviousChar()
     tmpIndex = -1;
     if ( !atParagStart() ) {
 	string->remove( idx-1, 1 );
-	int h = string->rect().height();
 	idx--;
 	// shouldn't be needed, just to make sure.
 	fixCursorPosition();
 	string->format( -1, TRUE );
-	if ( h != string->rect().height() )
-	    invalidateNested();
 	//else if ( string->document() && string->document()->parent() )
 	//    string->document()->nextDoubleBuffered = TRUE;
 	return FALSE;
@@ -1187,7 +967,6 @@ bool KoTextCursor::removePreviousChar()
 	string = string->prev();
 	string->join( string->next() );
 	string->invalidateCounters();
-	invalidateNested();
 	return TRUE;
     }
     return FALSE;
@@ -1199,10 +978,7 @@ bool KoTextCursor::remove()
     if ( !atParagEnd() ) {
 	int next = string->string()->nextCursorPosition( idx );
 	string->remove( idx, next-idx );
-	int h = string->rect().height();
 	string->format( -1, TRUE );
-	if ( h != string->rect().height() )
-	    invalidateNested();
 	//else if ( doc && doc->parent() )
 	//    doc->nextDoubleBuffered = TRUE;
 	return FALSE;
@@ -1230,7 +1006,6 @@ bool KoTextCursor::remove()
 	} else {
 	    string->join( string->next() );
 	}
-	invalidateNested();
 	return TRUE;
     }
     return FALSE;
@@ -1241,10 +1016,7 @@ void KoTextCursor::killLine()
     if ( atParagEnd() )
 	return;
     string->remove( idx, string->length() - idx - 1 );
-    int h = string->rect().height();
     string->format( -1, TRUE );
-    if ( h != string->rect().height() )
-	invalidateNested();
     //else if ( doc && doc->parent() )
     //doc->nextDoubleBuffered = TRUE;
 }
@@ -1267,8 +1039,6 @@ void KoTextCursor::setDocument( KoTextDocument *d )
     doc = d;
     string = d->firstParag();
     idx = 0;
-    nested = FALSE;
-    restoreState();
     tmpIndex = -1;
 }
 
@@ -1865,13 +1635,7 @@ void KoTextParag::setLineChanged( short int line )
 
 void KoTextParag::insert( int index, const QString &s )
 {
-#if 0
-    if ( doc && !doc->useFormatCollection() && doc->preProcessor() )
-	str->insert( index, s,
-		     doc->preProcessor()->format( KoTextPreProcessor::Standard ) );
-    else
-#endif
-	str->insert( index, s, formatCollection()->defaultFormat() );
+    str->insert( index, s, formatCollection()->defaultFormat() );
     invalidate( index );
     //needPreProcess = TRUE;
 }
@@ -1990,14 +1754,6 @@ void KoTextParag::format( int start, bool doMove )
 {
     if ( !str || str->length() == 0 || !formatter() )
 	return;
-
-#if 0
-    if ( doc &&
-	 doc->preProcessor() &&
-	 ( needPreProcess || state == -1 ) )
-	doc->preProcessor()->process( doc, this, invalid <= 0 ? 0 : invalid );
-    needPreProcess = FALSE;
-#endif
 
     if ( invalid == -1 )
 	return;
@@ -2721,10 +2477,8 @@ QPtrList<KoTextCustomItem> &KoTextParag::floatingItems() const
     return *mFloatingItems;
 }
 
-void KoTextCursor::setIndex( int i, bool restore )
+void KoTextCursor::setIndex( int i, bool /*restore*/ )
 {
-    if ( restore )
-	restoreState();
 // Note: QRT doesn't allow to position the cursor at string->length
 // However we need it, when applying a style to a paragraph, so that
 // the trailing space gets the style change applied as well.
@@ -2750,52 +2504,6 @@ KoTextFormatterBase::KoTextFormatterBase()
       biw( true /*default in kotext*/ )
 {
 }
-
-// See KoTextFormatter
-#if 0
-KoTextParagLineStart *KoTextFormatterBase::formatLine( KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line,
-						   KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
-{
-#ifndef QT_NO_COMPLEXTEXT
-    if( string->isBidi() )
-	return bidiReorderLine( parag, string, line, startChar, lastChar, align, space );
-#endif
-    space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
-    int start = (startChar - &string->at(0));
-    int last = (lastChar - &string->at(0) );
-    // do alignment Auto == Left in this case
-    if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
-	if ( align & Qt::AlignHCenter )
-	    space /= 2;
-	for ( int j = start; j <= last; ++j )
-	    string->at( j ).x += space;
-    } else if ( align & AlignJustify ) {
-	int numSpaces = 0;
-	for ( int j = start; j < last; ++j ) {
-	    if( isBreakable( string, j ) ) {
-		numSpaces++;
-	    }
-	}
-	int toAdd = 0;
-	for ( int k = start + 1; k <= last; ++k ) {
-	    if( isBreakable( string, k ) && numSpaces ) {
-		int s = space / numSpaces;
-		toAdd += s;
-		space -= s;
-		numSpaces--;
-	    }
-	    string->at( k ).x += toAdd;
-	}
-    }
-
-    if ( last >= 0 && last < string->length() )
-	line->w = string->at( last ).x + string->width( last );
-    else
-	line->w = 0;
-
-    return new KoTextParagLineStart();
-}
-#endif
 
 #ifdef BIDI_DEBUG
 #include <iostream>
@@ -2934,55 +2642,6 @@ bool KoTextFormatterBase::isBreakable( KoTextString *string, int pos ) const
     //if (string->at(pos).nobreak)
     //    return FALSE;
     return (pos < string->length()-1 && string->at(pos+1).softBreak);
-
-#if 0
-    const QChar &c = string->at(pos).c;
-    if ( c.isSpace() && c.unicode() != '\n' && c.unicode() != 0x00a0U )
-	return TRUE;
-    if ( c == '-' || c.unicode() == 0xad ) // hyphen or soft hyphen
-	return TRUE;
-    if ( !ch ) {
-	// not latin1, need to do more sophisticated checks for other scripts
-	uchar row = c.row();
-	if ( row == 0x0e ) {
-	    // 0e00 - 0e7f == Thai
-	    if ( c.cell() < 0x80 ) {
-#ifdef HAVE_THAI_BREAKS
-		// check for thai
-		if( string != cachedString ) {
-		    // build up string of thai chars
-		    QTextCodec *thaiCodec = QTextCodec::codecForMib(2259);
-		    if ( !thaiCache )
-			thaiCache = new QCString;
-		    if ( !thaiIt )
-			thaiIt = ThBreakIterator::createWordInstance();
-		    *thaiCache = thaiCodec->fromUnicode( s->string() );
-		}
-		thaiIt->setText(thaiCache->data());
-		for(int i = thaiIt->first(); i != thaiIt->DONE; i = thaiIt->next() ) {
-		    if( i == pos )
-			return TRUE;
-		    if( i > pos )
-			return FALSE;
-		}
-		return FALSE;
-#else
-		// if we don't have a thai line breaking lib, allow
-		// breaks everywhere except directly before punctuation.
-		return TRUE;
-#endif
-	    } else
-		return FALSE;
-	}
-	if ( row < 0x11 ) // no asian font
-	    return FALSE;
-	if ( row > 0x2d && row < 0xfb || row == 0x11 )
-	    // asian line breaking. Everywhere allowed except directly
-	    // in front of a punctuation character.
-	    return TRUE;
-    }
-    return FALSE;
-#endif
 }
 
 void KoTextParag::insertLineStart( int index, KoTextParagLineStart *ls )
@@ -3091,42 +2750,9 @@ void KoTextFlow::adjustMargins( int, int, int, int&, int&, int& pageWidth, KoTex
     pageWidth = w;
 }
 
-#if 0
-int KoTextFlow::adjustLMargin( int yp, int, int margin, int space, KoTextParag* )
-{
-    for ( KoTextCustomItem* item = leftItems.first(); item; item = leftItems.next() ) {
-	if ( item->y() == -1 )
-	    continue;
-	if ( yp >= item->y() && yp < item->y() + item->height )
-	    margin = QMAX( margin, item->x() + item->width + space );
-    }
-    return margin;
-}
-
-int KoTextFlow::adjustRMargin( int yp, int, int margin, int space, KoTextParag* )
-{
-    for ( KoTextCustomItem* item = rightItems.first(); item; item = rightItems.next() ) {
-	if ( item->y() == -1 )
-	    continue;
-	if ( yp >= item->y() && yp < item->y() + item->height )
-	    margin = QMAX( margin, w - item->x() - space );
-    }
-    return margin;
-}
-#endif
 
 int KoTextFlow::adjustFlow( int /*y*/, int, int /*h*/ )
 {
-#if 0
-    if ( pagesize > 0 ) { // check pages
-	int yinpage = y % pagesize;
-	if ( yinpage <= 2 )
-	    return 2 - yinpage;
-	else
-	    if ( yinpage + h > pagesize - 2 )
-		return ( pagesize - yinpage ) + 2;
-    }
-#endif
     return 0;
 }
 
@@ -3146,24 +2772,6 @@ void KoTextFlow::registerFloatingItem( KoTextCustomItem* item )
 	leftItems.append( item );
     }
 }
-
-#if 0
-QRect KoTextFlow::boundingRect() const
-{
-    QRect br;
-    QPtrListIterator<KoTextCustomItem> l( leftItems );
-    while( l.current() ) {
-	br = br.unite( l.current()->geometry() );
-	++l;
-    }
-    QPtrListIterator<KoTextCustomItem> r( rightItems );
-    while( r.current() ) {
-	br = br.unite( r.current()->geometry() );
-	++r;
-    }
-    return br;
-}
-#endif
 
 int KoTextFlow::availableHeight() const
 {
