@@ -20,7 +20,7 @@
 
 /*================================================================*/
 KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
-		 KoPageLayout _layout,int _flags,KoTabChooser *_tabChooser = 0L)
+		 KoPageLayout _layout,int _flags,KoTabChooser *_tabChooser )
   : QFrame(_parent), buffer(width(),height()), unit("mm")
 {
   setFrameStyle(Box | Raised);

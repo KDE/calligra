@@ -33,9 +33,6 @@ idl_HEADERS =  koffice.h
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 
-#BUILT_SOURCES = koffice.h trader.h typerepo.h
-BUILT_SOURCES = trader.h typerepo.h
-
 #koffice.cc: koffice.h
 #koffice.h: koffice.idl $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl $(micodir)/include/CORBA.h
 #	$(IDL) $(IDL_FLAGS) $(srcdir)/koffice.idl

@@ -236,7 +236,7 @@ void KoTemplateChooseDia::nameChanged(const QString &name)
 }
 
 /*================================================================*/
-void KoTemplateChooseDia::currentChanged(const QString &name)
+void KoTemplateChooseDia::currentChanged(const QString &)
 {
 	openTemplate();
 }

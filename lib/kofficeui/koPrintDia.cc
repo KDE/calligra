@@ -261,7 +261,7 @@ void KoPrintDia::slotBrowse()
     fileName->setText( file );
 }
 
-bool KoPrintDia::print( QPrinter &_printer, QObject *dest = 0L, const char *slot = 0L )
+bool KoPrintDia::print( QPrinter &_printer, QObject *dest, const char *slot )
 {
   KoPrintDia dlg;
 

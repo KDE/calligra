@@ -6,7 +6,7 @@ libkofficeui_la_LIBADD  = ../kofficecore/libkofficecore.la $(LIB_KDEUI)
 
 ####### Files
 
-SUBDIRS = pics test
+SUBDIRS = . pics test
 
 lib_LTLIBRARIES = libkofficeui.la
 

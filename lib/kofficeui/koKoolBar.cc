@@ -24,7 +24,7 @@
 
 static int g_koKoolBarId = 0;
 
-KoKoolBar::KoKoolBar( QWidget *_parent = 0L, const char *_name = 0L ) :
+KoKoolBar::KoKoolBar( QWidget *_parent, const char *_name ) :
   QWidget( _parent, _name ), m_iActiveGroup( -1 ), m_pButtonUp( 0L ),
   m_pButtonDown( 0L )
 {
@@ -113,7 +113,7 @@ void KoKoolBar::setActiveGroup( int _grp )
   resizeEvent( 0L );
 }
 
-void KoKoolBar::resizeEvent( QResizeEvent *_ev )
+void KoKoolBar::resizeEvent( QResizeEvent * )
 {
   if ( m_iActiveGroup == -1 )
     return;
@@ -371,7 +371,7 @@ void KoKoolBarBox::scrollDown()
   QWidget::scroll( 0, old - m_iYOffset );
 }
 
-void KoKoolBarBox::paintEvent( QPaintEvent *_ev )
+void KoKoolBarBox::paintEvent( QPaintEvent * )
 {
   QPainter painter;
   painter.begin( this );
