@@ -582,7 +582,7 @@ QRect KSpreadTable::markerRect() const
         const KSpreadCell* cell = cellAt( r.left(), r.top() );
         if ( cell->extraXCells() || cell->extraYCells() )
             r.setCoords( r.left(), r.top(),
-                         r.left() + cell->extraXCells(), r.top() + cell->extraXCells() );
+                         r.left() + cell->extraXCells(), r.top() + cell->extraYCells() );
     }
 
     return r;
@@ -3940,6 +3940,12 @@ void KSpreadTable::refreshView(const QRect& rect)
     deleteCells( rect );
     emit sig_updateView( this, tmp );
 }
+
+void KSpreadTable::updateView(const QRect& rect)
+{
+    emit sig_updateView( this, rect );
+}
+
 void KSpreadTable::mergeCell( const QPoint &_marker)
 {
     if(m_rctSelection.left() == 0)

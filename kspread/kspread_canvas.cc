@@ -144,30 +144,39 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
   if ( !m_pCanvas->doc()->isReadWrite() )
     return;
 
+  if ( !m_pCanvas->editor() )
+      {
+        // Start editing the current cell
+        m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
+      }
+  KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
   switch ( _ev->key() )
   {
     case Key_Down:
     case Key_Up:
     case Key_Return:
     case Key_Enter:
-
       // Send to the canvas, which will handle it.
       QApplication::sendEvent( m_pCanvas, _ev );
 
       _ev->accept();
       break;
-
+    case Key_F2:
+      cellEditor->setFocus();
+      cellEditor->setText( text());
+      cellEditor->setCursorPosition(cellEditor->text().length());
+      break;
     default:
 
       QLineEdit::keyPressEvent( _ev );
 
-      if ( !m_pCanvas->editor() )
+      /*if ( !m_pCanvas->editor() )
       {
         // Start editing the current cell
         m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
-      }
+      } */
       setFocus();
-      KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
+      //KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
       cellEditor->blockCheckChoose( TRUE );
       cellEditor->setText( text() );
       cellEditor->blockCheckChoose( FALSE );
@@ -1410,7 +1419,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
        activeTable()->clearSelection( QPoint( markerColumn(), markerRow() ) );
        m_pView->editWidget()->setText( "" );
        return;
-
+    case Key_F2:
+       m_pView->editWidget()->setFocus();
+       m_pView->editWidget()->cursorRight(false);
+       return;
     default:
 
       // No null character ...

@@ -32,19 +32,18 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-#include <iostream.h>
+//#include <iostream.h>
 #include <knumvalidator.h>
 
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
     : QDialog( parent, name )
 {
-
     m_pView = parent;
     setCaption( name );
-
+    QString tmp_oldText;
     KSpreadCell* cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
         m_pView->canvasWidget()->markerRow() );
-
+    m_oldText=cell->text();
     if ( !m_pView->canvasWidget()->editor() )
     {
         m_pView->canvasWidget()->createEditor( KSpreadCanvas::CellEditor );
@@ -124,6 +123,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     help=new QLabel(this);
     grid2->addWidget(help,10,1);
 
+    grid2->setColStretch(1,1);
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
     m_pOk = bb->addButton( i18n("OK") );
@@ -168,18 +168,19 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     m_oldLength=0;
     // Save the name of the active table.
     m_tableName = m_pView->activeTable()->tableName();
-    m_oldText = m_pView->canvasWidget()->editor()->text();
+    /*m_oldText*/
+    tmp_oldText = m_pView->canvasWidget()->editor()->text();
+
     m_column = m_pView->canvasWidget()->markerColumn();
     m_row = m_pView->canvasWidget()->markerRow();
 
-
-    if(m_oldText.isEmpty())
+    if(tmp_oldText.isEmpty())
         result->setText("=");
     else
-        if( m_oldText.at(0)!='=')
-                result->setText("="+m_oldText);
+        if( tmp_oldText.at(0)!='=')
+                result->setText("="+tmp_oldText);
         else
-                result->setText(m_oldText);
+                result->setText(tmp_oldText);
 
     m_pView->canvasWidget()->startChoose();
 
@@ -272,6 +273,12 @@ void KSpreadDlgFormula::slotClose()
 
     // Revert the marker to its original position
     m_pView->canvasWidget()->activeTable()->setMarker( QPoint( m_column, m_row ) );
+    if( m_pView->canvasWidget()->editor()!=0)
+        {
+        ASSERT( m_pView->canvasWidget()->editor() );
+        m_pView->canvasWidget()->editor()->setText( m_oldText );
+        m_pView->canvasWidget()->editor()->setFocus();
+        }
 
     reject();
 }

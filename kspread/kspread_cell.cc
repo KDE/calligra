@@ -1448,112 +1448,112 @@ QString KSpreadCell::createFractionFormat(double value)
 
 QString KSpreadCell::createDateFormat( )
 {
-QString tmp,tmp2;
-if(m_eFormatNumber==ShortDate)
+    QString tmp,tmp2;
+    if(m_eFormatNumber==ShortDate)
         tmp = KGlobal::locale()->formatDate(m_Date,true);
-else if(m_eFormatNumber==TextDate)
+    else if(m_eFormatNumber==TextDate)
         tmp=KGlobal::locale()->formatDate(m_Date,false);
-else if(m_eFormatNumber==date_format1)/*18-Feb-99*/
-        {
+    else if(m_eFormatNumber==date_format1)/*18-Feb-99*/
+    {
         tmp=tmp2.setNum(m_Date.day());
         tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
-        }
-else if(m_eFormatNumber==date_format2) /*18-Feb-1999*/
-        {
+    }
+    else if(m_eFormatNumber==date_format2) /*18-Feb-1999*/
+    {
         tmp=tmp2.setNum(m_Date.day());
         tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(m_Date.year());
-        }
-else if(m_eFormatNumber==date_format3) /*18-Feb*/
-        {
+    }
+    else if(m_eFormatNumber==date_format3) /*18-Feb*/
+    {
         tmp=tmp2.setNum(m_Date.day());
         tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true);
-        }
-else if(m_eFormatNumber==date_format4) /*18-5*/
-        {
+    }
+    else if(m_eFormatNumber==date_format4) /*18-5*/
+    {
         tmp=tmp2.setNum(m_Date.day());
         tmp=tmp+"-"+tmp2.setNum(m_Date.month());
-        }
-else if(m_eFormatNumber==date_format5) /*18/5/00*/
-        {
+    }
+    else if(m_eFormatNumber==date_format5) /*18/5/00*/
+    {
         tmp=tmp2.setNum(m_Date.day());
         tmp=tmp+"/"+tmp2.setNum(m_Date.month())+"/";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
-        }
-else if(m_eFormatNumber==date_format6) /*18/5/1999*/
-        {
+    }
+    else if(m_eFormatNumber==date_format6) /*18/5/1999*/
+    {
         tmp=tmp2.setNum(m_Date.day());
         tmp=tmp+"/"+tmp2.setNum(m_Date.month())+"/";
         tmp=tmp+tmp2.setNum(m_Date.year());
-        }
-else if(m_eFormatNumber==date_format7) /*Feb-99*/
-        {
+    }
+    else if(m_eFormatNumber==date_format7) /*Feb-99*/
+    {
         tmp=KGlobal::locale()->monthName(m_Date.month(), true)+"-";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
-        }
-else if(m_eFormatNumber==date_format8) /*February-99*/
-        {
+    }
+    else if(m_eFormatNumber==date_format8) /*February-99*/
+    {
         tmp=KGlobal::locale()->monthName(m_Date.month())+"-";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
-        }
-else if(m_eFormatNumber==date_format9) /*February-1999*/
-        {
+    }
+    else if(m_eFormatNumber==date_format9) /*February-1999*/
+    {
         tmp=KGlobal::locale()->monthName(m_Date.month())+"-";
         tmp=tmp+tmp2.setNum(m_Date.year());
-        }
-else if(m_eFormatNumber==date_format10) /*F-99*/
-        {
+    }
+    else if(m_eFormatNumber==date_format10) /*F-99*/
+    {
         tmp=KGlobal::locale()->monthName(m_Date.month()).at(0)+"-";
         tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
-        }
-else if(m_eFormatNumber==date_format11) /*18/Feb*/
-        {
+    }
+    else if(m_eFormatNumber==date_format11) /*18/Feb*/
+    {
         tmp=tmp2.setNum(m_Date.day())+"/";
         tmp+=KGlobal::locale()->monthName(m_Date.month(),true);
-        }
-else if(m_eFormatNumber==date_format12) /*18/2*/
-        {
+    }
+    else if(m_eFormatNumber==date_format12) /*18/2*/
+    {
         tmp=tmp2.setNum(m_Date.day())+"/";
         tmp+=tmp2.setNum(m_Date.month());
-        }
-else if(m_eFormatNumber==date_format13) /*18/Feb/1999*/
-        {
+    }
+    else if(m_eFormatNumber==date_format13) /*18/Feb/1999*/
+    {
         tmp=tmp2.setNum(m_Date.day());
         tmp=tmp+"/"+KGlobal::locale()->monthName(m_Date.month(),true)+"/";
         tmp=tmp+tmp2.setNum(m_Date.year());
-        }
-else if(m_eFormatNumber==date_format14) /*2000/Feb/18*/
-        {
+    }
+    else if(m_eFormatNumber==date_format14) /*2000/Feb/18*/
+    {
         tmp=tmp2.setNum(m_Date.year());
         tmp=tmp+"/"+KGlobal::locale()->monthName(m_Date.month(),true)+"/";
         tmp=tmp+tmp2.setNum(m_Date.day());
-        }
-else if(m_eFormatNumber==date_format15) /*2000-Feb-18*/
-        {
+    }
+    else if(m_eFormatNumber==date_format15) /*2000-Feb-18*/
+    {
         tmp=tmp2.setNum(m_Date.year());
         tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(),true)+"-";
         tmp=tmp+tmp2.setNum(m_Date.day());
-        }
-else if(m_eFormatNumber==date_format16) /*2000-2-18*/
-        {
+    }
+    else if(m_eFormatNumber==date_format16) /*2000-2-18*/
+    {
         tmp=tmp2.setNum(m_Date.year());
         tmp=tmp+"-"+tmp2.setNum(m_Date.month())+"-";
         tmp=tmp+tmp2.setNum(m_Date.day());
-        }
-else
+    }
+    else
         tmp = KGlobal::locale()->formatDate(m_Date,true);
-return tmp;
+    return tmp;
 }
 
 QString KSpreadCell::createTimeFormat( )
 {
-QString tmp;
-if( m_eFormatNumber == Time )
+    QString tmp;
+    if( m_eFormatNumber == Time )
         tmp = KGlobal::locale()->formatTime(m_Time,false);
-else if(m_eFormatNumber == SecondeTime )
+    else if(m_eFormatNumber == SecondeTime )
         tmp = KGlobal::locale()->formatTime(m_Time,true);
-return tmp;
+    return tmp;
 }
 
 void KSpreadCell::verifyCondition()
@@ -2344,7 +2344,11 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     int bottom_offset = 0;
     int left_offset = 0;
     int right_offset = 0;
-
+    // Erase the background of the cell.
+    if ( !_painter.device()->isExtDev() )
+        _painter.eraseRect( _tx + left_offset, _ty + top_offset,
+                            w - left_offset - right_offset,
+                            h - top_offset - bottom_offset );
     //
     // First draw the default borders so that they dont
     // overwrite any other border.
@@ -2409,10 +2413,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
         int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 +  ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
         int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
-
         _painter.setPen( right_pen );
-        _painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );
 
+        _painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );
         right_offset = right_pen.width() / 2;
     }
     if ( top_pen.style() != Qt::NoPen )
@@ -2431,11 +2434,11 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     }
 
     // Erase the background of the cell.
-    if ( !_painter.device()->isExtDev() )
+    /*if ( !_painter.device()->isExtDev() )
         _painter.eraseRect( _tx + left_offset, _ty + top_offset,
                             w - left_offset - right_offset,
                             h - top_offset - bottom_offset );
-
+    */
     // Draw a background brush
     QBrush bb = backGroundBrush( _col, _row );
     if( bb.style() != Qt::NoBrush )
@@ -2763,7 +2766,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // The marker is exactly this cell ?
     if ( marker.left() == _col && marker.right() == _col &&
          marker.top() == _row && marker.bottom() == _row )
-    {
+    {   
         paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
         paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
         paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
@@ -2773,7 +2776,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
         // int w = cl->width();
         // int h = rl->height();
-
+        
         // Upper border ?
         if ( _row == marker.top() )
             paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
@@ -2792,7 +2795,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
         // int w = cl->width();
         // int h = rl->height();
-
+        
         // Upper border ?
         if ( _col >= marker.left() && _col <= marker.right() && _row - 1 == marker.bottom() )
             paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );

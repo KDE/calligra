@@ -698,9 +698,14 @@ public:
     void updateCell( KSpreadCell* _cell, int _col, int _row );
 
     /**
-    * used for refresh cell when you make redodelete
-    */
+     * used to refresh cells when you make redodelete
+     */
     void refreshView(const QRect& rect);
+    /**
+     * Repaint cells in @p rect.
+     * Called by KSpreadUndoCellLayout::undo() and KSpreadUndoCellLayout::redo()
+     */
+    void updateView(const QRect& rect);
 
     void emit_updateRow( RowLayout *_layout, int _row );
     void emit_updateColumn( ColumnLayout *_layout, int _column );

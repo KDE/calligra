@@ -2,6 +2,8 @@
 #include "kspread_view.h"
 #include "kspread_table.h"
 #include "kspread_factory.h"
+#include "kspread_undo.h"
+#include "kspread_doc.h"
 
 #include <kinstance.h>
 #include <kstddirs.h>
@@ -50,7 +52,7 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     {
 	KSimpleConfig cfg( *it, TRUE );
 	cfg.setGroup( "Table-Style" );
-	
+
 	Entry e;
 	e.config = *it;
 	e.xml = cfg.readEntry( "XML" );
@@ -94,7 +96,7 @@ void KSpreadFormatDlg::slotActivated( int index )
 	KMessageBox::error( this,str );
 	return;
     }
-	
+
     m_label->setPixmap( pix );
 }
 
@@ -122,9 +124,16 @@ void KSpreadFormatDlg::slotOk()
 	KMessageBox::error( this, str );
 	return;
     }
-	
+
     QRect r = m_view->activeTable()->selectionRect();
 
+
+    KSpreadUndoCellLayout *undo;
+    if ( !m_view->doc()->undoBuffer()->isLocked() )
+    {
+        undo = new KSpreadUndoCellLayout( m_view->doc(), m_view->activeTable(), r );
+        m_view->doc()->undoBuffer()->appendUndo( undo );
+    }
     //
     // Set colors, borders etc.
     //
@@ -132,7 +141,7 @@ void KSpreadFormatDlg::slotOk()
     // Top left corner
     KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.left(), r.top() );
     cell->copy( *m_cells[0] );
-	
+
     // Top column
     int x, y;
     for( x = r.left() + 1; x <= r.right(); ++x )
@@ -140,7 +149,7 @@ void KSpreadFormatDlg::slotOk()
 	int pos = 1 + ( ( x - r.left() - 1 ) % 2 );
 	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, r.top() );
 	cell->copy( *m_cells[ pos ] );
-	
+
 	KSpreadLayout* c;
 	if ( x == r.right() )
 	    c = m_cells[2];

@@ -479,10 +479,10 @@ void KSpreadUndoCellLayout::undo()
 	    cell->copy( *l );
 	    cell->setLayoutDirtyFlag();
 	    cell->setDisplayDirtyFlag();
-	    table->updateCell( cell, x, y );	
+	    table->updateCell( cell, x, y );
 	    l = m_lstLayouts.next();
 	}
-
+    table->updateView(m_rctRect);
     doc()->undoBuffer()->unlock();
 }
 
@@ -507,7 +507,7 @@ void KSpreadUndoCellLayout::redo()
 	    table->updateCell( cell, x, y );
 	    l = m_lstRedoLayouts.next();
 	}
-
+    table->updateView(m_rctRect);
     doc()->undoBuffer()->unlock();
 }
 
@@ -522,9 +522,9 @@ KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable* table, QRe
 {
     m_tableName = table->name();
     m_selection = _selection;
-    
+
     QDomDocument doc = table->saveCellRect( _selection );
-    
+
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -536,7 +536,7 @@ KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable* table, QRe
     // This allows us to treat the QCString like a QByteArray later on.
     m_data = buffer.utf8();
     int len = m_data.length();
-    char tmp = m_data[ len - 1 ]; 
+    char tmp = m_data[ len - 1 ];
     m_data.resize( len );
     *( m_data.data() + len - 1 ) = tmp;
 }
