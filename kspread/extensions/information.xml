@@ -12,7 +12,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The INFO() returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns path of the current directory, "release" returns version of KSpread as text.</Text>
+	<Text>The INFO() returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns path of the current directory, "numfile" returns number of active documents, "release" returns version of KSpread as text.</Text>
 	<Syntax>INFO(type)</Syntax>
       </Help>
     </Function>

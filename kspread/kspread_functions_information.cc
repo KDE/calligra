@@ -36,6 +36,9 @@ bool kspreadfunc_info( KSContext& context )
   if( type == "release" )
     result = VERSION;
 
+  if( type == "numfile" )
+    result = QString::number( KSpreadDoc::documents().count() );
+
   context.setValue( new KSValue( result) );
   return true;
 }
