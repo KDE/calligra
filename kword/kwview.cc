@@ -6902,7 +6902,7 @@ void KWView::convertTableToText()
                     KWTextFrameSetEdit* edit = currentTextEdit();
                     if ( edit && edit->textFrameSet())
                     {
-                        KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr ), true );
+                        KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr , arr.count()), true );
                         if ( cmd )
                             macro->addCommand( cmd);
                         m_doc->addCommand(cmd);
@@ -6948,7 +6948,7 @@ void KWView::convertToTextBox()
                 QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
                 if ( arr.size() )
                 {
-                    cmd =edit->textFrameSet()->pasteKWord( edit->textView()->cursor(), QCString( arr ), true );
+                    cmd =edit->textFrameSet()->pasteKWord( edit->textView()->cursor(), QCString( arr, arr.size()+1 ), true );
                     if ( cmd )
                     {
                         if ( ! macro )
@@ -6986,7 +6986,7 @@ void KWView::sortText()
                     QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
                     if ( arr.size() )
                     {
-                        KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr ), true );
+                        KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr , arr.size()+1), true );
                         if ( cmd )
                             m_doc->addCommand(cmd);
                     }

@@ -2974,7 +2974,7 @@ void KWTextFrameSetEdit::paste()
         QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
         if ( arr.size() )
         {
-            KCommand *cmd =textFrameSet()->pasteKWord( cursor(), QCString( arr ), true );
+            KCommand *cmd =textFrameSet()->pasteKWord( cursor(), QCString( arr, arr.size()+1 ), true );
             if ( cmd )
                 frameSet()->kWordDocument()->addCommand(cmd);
         }
@@ -3340,7 +3340,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             QByteArray arr = e->encodedData( KWTextDrag::selectionMimeType() );
             if ( arr.size() )
             {
-                KCommand *cmd=textFrameSet()->pasteKWord( cursor(), QCString(arr), false );
+                KCommand *cmd=textFrameSet()->pasteKWord( cursor(), QCString(arr, arr.size()+1 ), false );
                 if ( cmd )
                 {
                     macroCmd->addCommand(cmd);

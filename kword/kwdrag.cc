@@ -79,7 +79,7 @@ int KWTextDrag::decodeFrameSetNumber( QMimeSource *e )
 {
     QByteArray a =  e->encodedData("application/x-kword-framesetnumber");
     if(!a.isEmpty())
-        return QCString(a).toInt();
+        return QCString(a, a.size()+1 ).toInt();
     else
         return -1;
 }
