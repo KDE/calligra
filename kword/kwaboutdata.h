@@ -27,13 +27,13 @@ static const char* KWORD_DESCRIPTION=I18N_NOOP("KOffice Word Processor");
 // First official public release Oct 2000 version 0.8
 // KOffice-1.1-beta1: version 0.9
 // KOffice-1.1-beta2: version 1.1 (to remove confusion)
-static const char* KWORD_VERSION="1.2 Beta1";
+static const char* KWORD_VERSION="1.2 Beta2";
 
 KAboutData * newKWordAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kword", I18N_NOOP("KWord"),
                                            KWORD_VERSION, KWORD_DESCRIPTION, KAboutData::License_GPL,
-                                           I18N_NOOP("(c) 1998-2002, The KWord Team"), 0, 
+                                           I18N_NOOP("(c) 1998-2002, The KWord Team"), 0,
 					   "http://www.koffice.org/kword/" );
     aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
