@@ -1,18 +1,4 @@
 Find these opcodes
 -----------------------
 
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xae operands: 4
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xaf operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xb7 operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xc1 operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xdd operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xe1 operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0xe2 operands: 0
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0x4d operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0x5f operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0x60 operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0x61 operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0x82 operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0x8d operands: 2
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0x93 operands: 4
-ole-excel: WARNING: invokeHandler: unsupported opcode: 0x9c operands: 2
+None!
