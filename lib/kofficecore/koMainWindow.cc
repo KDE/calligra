@@ -93,7 +93,7 @@ public:
   QList<KAction> *m_splitViewActionList;
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
-    KAction *m_removeView;
+  KAction *m_removeView;
 
   bool bMainWindowGUIBuilt;
 };
@@ -153,7 +153,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     items << i18n("Vertical")
 	  << i18n("Horizontal");
     d->m_orientation->setItems(items);
-    d->m_orientation->setCurrentItem(0); // doesn't work - why? (Werner)
     d->m_splitViewActionList->append(d->m_orientation);
 
     if ( instance )
@@ -247,6 +246,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   updateCaption();
 
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews->current() );
+  d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
 
   if ( !oldRootViews->isEmpty() ) {
     for(KoView *view=oldRootViews->first(); view!=0L; view=oldRootViews->next()) {
