@@ -43,8 +43,9 @@ install: build
 	dh_testdir
 	dh_clean
 	-rm -f debian/undocumented
+	mkdir -p debian/tmp/etc/kde2
 	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp/
-	perl -w admin/debianrules
+	perl -w admin/debianrules cleanup
 	
 binary-indep: build install
 	dh_testroot
