@@ -1039,6 +1039,7 @@ KarbonView::selectionChanged()
 	{
 		m_toolbox->strokeFillPreview()->update( *part()->document().selection()->objects().getFirst()->stroke(),
 												*part()->document().selection()->objects().getFirst()->fill() );
+		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 	}
 }
 
