@@ -1791,7 +1791,7 @@ void OoImpressImport::createStyleMap( QDomDocument &docstyles )
     {
         insertDraws( fixedStyles.toElement() );
         insertStyles( fixedStyles.toElement() );
-	insertStylesPresentation( automaticStyles.toElement() );
+        insertStylesPresentation( fixedStyles.toElement() );
     }
 
     QDomNode automaticStyles = styles.namedItem( "office:automatic-styles" );
