@@ -138,7 +138,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   grid->setMargin(KDialog::marginHint());
   grid->setSpacing(KDialog::spacingHint());
 
-  (void) new QLabel( i18n( "Full Name :" ), grid );
+  (void) new QLabel( i18n( "Full Name:" ), grid );
   d->m_leFullName = new QLineEdit( authorInfo->fullName(), grid );
 
   if ( authorInfo->fullName().isEmpty() )
@@ -148,10 +148,10 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leFullName->setText( name );
   }
 
-  (void) new QLabel( i18n( "Title :" ), grid );
+  (void) new QLabel( i18n( "Title:" ), grid );
   d->m_leAuthorTitle = new QLineEdit( authorInfo->title(), grid );
 
-  (void) new QLabel( i18n( "Company :" ), grid );
+  (void) new QLabel( i18n( "Company:" ), grid );
   d->m_leCompany = new QLineEdit( authorInfo->company(), grid );
 
   if ( authorInfo->company().isEmpty() )
@@ -161,7 +161,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leCompany->setText( name );
   }
 
-  (void) new QLabel( i18n( "Email :" ), grid );
+  (void) new QLabel( i18n( "Email:" ), grid );
   d->m_leEmail = new QLineEdit( authorInfo->email(), grid );
 
   if ( authorInfo->email().isEmpty() )
@@ -171,22 +171,22 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leEmail->setText( email );
   }
 
-  (void) new QLabel( i18n( "Telephone :" ), grid );
+  (void) new QLabel( i18n( "Telephone:" ), grid );
   d->m_leTelephone = new QLineEdit( authorInfo->telephone(), grid );
 
-  (void) new QLabel( i18n( "Fax :" ), grid );
+  (void) new QLabel( i18n( "Fax:" ), grid );
   d->m_leFax = new QLineEdit( authorInfo->fax(), grid );
 
-  (void) new QLabel( i18n( "Street :" ), grid );
+  (void) new QLabel( i18n( "Street:" ), grid );
   d->m_leStreet = new QLineEdit( authorInfo->street(), grid );
 
-  (void) new QLabel( i18n( "Postal Code :" ), grid );
+  (void) new QLabel( i18n( "Postal Code:" ), grid );
   d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), grid );
 
-  (void) new QLabel( i18n( "City :" ), grid );
+  (void) new QLabel( i18n( "City:" ), grid );
   d->m_leCity = new QLineEdit( authorInfo->city(), grid );
 
-  (void) new QLabel( i18n( "Country :" ), grid );
+  (void) new QLabel( i18n( "Country:" ), grid );
   d->m_leCountry = new QLineEdit( authorInfo->country(), grid );
 
   connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),
@@ -217,10 +217,10 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
   grid->setMargin(KDialog::marginHint());
   grid->setSpacing(KDialog::spacingHint());
 
-  (void) new QLabel( i18n( "Title :" ), grid );
+  (void) new QLabel( i18n( "Title:" ), grid );
   d->m_leDocTitle = new QLineEdit( aboutInfo->title(), grid );
 
-  (void) new QLabel( i18n( "Abstract :" ), grid );
+  (void) new QLabel( i18n( "Abstract:" ), grid );
   d->m_meAbstract = new QMultiLineEdit( grid );
   d->m_meAbstract->setText( aboutInfo->abstract() );
 
