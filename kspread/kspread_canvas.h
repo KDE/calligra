@@ -362,13 +362,21 @@ private:
     QPoint m_ptGeometryEnd;
 
     /**
-     * The column in which a mouse drag started.
+     * The column in which a mouse drag started.  Used for the 'choose'
+     * operations.
      */
     int m_iMouseStartColumn;
     /**
-     * The row in which a mouse drag started.
+     * The row in which a mouse drag started.  Used for the 'choose'
+     * operations.
      */
     int m_iMouseStartRow;
+
+    /**
+     * The fixed anchor of a selection.  For example, during a selection with
+     * a mouse drag, it is the fixed corner opposite to the mouse pointer.
+     */
+    QPoint m_selectionAnchor;
 
     /**
      * True when the mouse button is pressed

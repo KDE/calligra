@@ -958,14 +958,20 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
 
   QRect selection( table->selection() );
 
+  if (table->singleCellSelection())
+  {
+    KSpreadCell* cell = table->cellAt(table->marker());
+    cell->clicked(this);
+  }
+
   // The user started the drag in the lower right corner of the marker ?
   if ( m_eMouseAction == ResizeCell )
   {
-    int x=m_iMouseStartColumn;
-    int y=m_iMouseStartRow;
-    if( m_iMouseStartColumn>selection.left())
-        x=selection.left();
-    if( m_iMouseStartRow > selection.top() )
+    int x = m_selectionAnchor.x();
+    int y = m_selectionAnchor.y();
+    if( x > selection.left())
+        x = selection.left();
+    if( y > selection.top() )
         y =selection.top();
     KSpreadCell *cell = table->nonDefaultCell( x, y );
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
@@ -990,17 +996,6 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   // The user started the drag in the middle of a cell ?
   else if ( m_eMouseAction == Mark )
   {
-    // Get the object in the lower right corner
-//    KSpreadCell *cell = table->cellAt( m_iMouseStartColumn, m_iMouseStartRow );
-    // Did we mark only a single cell ?
-    // Take care: One cell may obscure other cells ( extra size! ).
-//    if ( selection.left() + cell->extraXCells() == selection.right() &&
-//         selection.top() + cell->extraYCells() == selection.bottom() )
-//    {
-//      gotoLocation(KSpreadPoint(util_cellName(m_iMouseStartColumn, m_iMouseStartRow)));
-//    }
-//    else
-//
     m_pView->updateEditWidget();
   }
 
@@ -1018,16 +1013,16 @@ void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
   {
     m_eMouseAction = AutoFill;
     m_rctAutoFillSrc = selection;
-    m_iMouseStartColumn = QMIN(markerColumn(),selection.left());
-    m_iMouseStartRow = QMIN(markerRow(),selection.top());
+    m_selectionAnchor.setX(QMIN(markerColumn(),selection.left()));
+    m_selectionAnchor.setY(QMIN(markerRow(),selection.top()));
   }
-  // Resize a cell (dont with the right mouse button) ?
+  // Resize a cell (done with the right mouse button) ?
   // But for that to work there must not be a selection.
   else if ( event->button() == MidButton && table->singleCellSelection())
   {
     m_eMouseAction = ResizeCell;
-    m_iMouseStartColumn = markerColumn();
-    m_iMouseStartRow = markerRow();
+    m_selectionAnchor.setX(markerColumn());
+    m_selectionAnchor.setY(markerRow());
   }
 
   return;
@@ -1037,13 +1032,12 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
 {
   KSpreadTable* table = activeTable();
 
-  QPoint anchor(m_iMouseStartColumn, m_iMouseStartRow);
   /* the selection simply becomes a box with the anchor and given cell as opposite corners*/
   int left, top, right, bottom;
-  left = QMIN(anchor.x(), cell.x());
-  top = QMIN(anchor.y(), cell.y());
-  right = QMAX(anchor.x(), cell.x());
-  bottom = QMAX(anchor.y(), cell.y());
+  left = QMIN(m_selectionAnchor.x(), cell.x());
+  top = QMIN(m_selectionAnchor.y(), cell.y());
+  right = QMAX(m_selectionAnchor.x(), cell.x());
+  bottom = QMAX(m_selectionAnchor.y(), cell.y());
   QRect newSelection(QPoint(left, top), QPoint(right, bottom));
   newSelection.normalize();
 
@@ -1051,7 +1045,7 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
   newSelection = table->selectionCellMerged(newSelection);
 
   /* keep the marker at the anchor */
-  table->setSelection(newSelection, anchor, this);
+  table->setSelection(newSelection, cell, this);
 
 }
 
@@ -1164,8 +1158,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
                          col + cell->extraXCells(),
                          row + cell->extraYCells() );
     table->setSelection( selection, this );
-    m_iMouseStartColumn = col;
-    m_iMouseStartRow = row;
+    m_selectionAnchor.setX(col);
+    m_selectionAnchor.setY(row);
   }
   else if ( _ev->button() == RightButton )
   {
@@ -1596,7 +1590,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 		      if ( m_bChoose )
 			  chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
-		      else
+	      else
 			  {
 		              QRect selection = activeTable()->selection();
 			      if( selection.left() == 0 )
