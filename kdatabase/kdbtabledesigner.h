@@ -33,20 +33,11 @@ class QStringList;
 class KDBTableDesigner : public KDialog  {
          Q_OBJECT
 public: 
-
-	enum DataType
-	{
-		t_int,
-		t_char,
-		t_vchar,
-		t_float,
-		t_boolen
-	};
-		 
+		
 	KDBTableDesigner(KDBStruct *KDBStruct);
 	~KDBTableDesigner();
 	bool populateTblDesigner(QString tblName);
-	void addRow(bool primary_key=false, QString name="", DataType type=t_int, int size=10, QString default_v="", bool allow_null=false);
+	void addRow(bool primary_key, QString name, DataType type, int size, QString default_v, bool allow_null);
 
 private:
 	QTable		*m_table;

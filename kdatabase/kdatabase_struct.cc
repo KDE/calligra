@@ -14,6 +14,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "kdatabase_struct.h"
+#include <stdlib.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include <qptrlist.h>
@@ -30,7 +31,7 @@ bool KDBStruct::createTable(QString* tableName, QString fieldInfo){
 
 
 KDBTable* KDBStruct::getTable(QString tblName) {
-   KDBTable* myTable = new KDBTable(myKDBNode);
+   KDBTable *myTable = new KDBTable(myKDBNode);
    return myTable;
 }
 
@@ -47,7 +48,7 @@ bool KDBStruct::createReport(QString* reportName, QString reportSQL){
 
 QPtrList<QString> KDBStruct::getTables(){
 
-    QPtrList<QString> tableList;
+    QPtrList<QString> *tableList = new QPtrList <QString>;
     kdDebug() << "myKDBNode.toString=" << myKDBNode->toString() << endl;
     if(myKDBNode->isNull()) {
        kdDebug() << "KDBNode is already null" << endl;
@@ -64,14 +65,14 @@ QPtrList<QString> KDBStruct::getTables(){
         myElement = myTableWalker.toElement();
         const QString* tableName = new QString(myElement.attribute("name"));
         const QString* tableDescript = new QString(myElement.attribute("description"));
-        tableList.append(tableName);
-        tableList.append(tableDescript);
+        tableList->append(tableName);
+        tableList->append(tableDescript);
         kdDebug() << "In while loop...last table was " << &tableName << endl;
         myTableWalker = myTableWalker.nextSibling();
         }
 
-    kdDebug() << "tableList contains " << tableList.count() << " items." << endl;
-    return(tableList);
+    kdDebug() << "tableList contains " << tableList->count() << " items." << endl;
+    return(*tableList);
 }
 
 QPtrList<QString> KDBStruct::getViews(){
@@ -98,87 +99,119 @@ QPtrList<TableStructureRow> KDBTable::getColumns(QString *tableName, QString *re
     QString myName;
     QString myDefault;
 
+    //columnList = new QPtrList<TableStructureRow>;
     QDomNode myTableNode = myKDBNode->documentElement().namedItem("STRUCTURE");
 
     myTableNode=myTableNode.namedItem("TABLES");
 
     QDomNode myTableWalker = myTableNode.firstChild();
     QDomElement myElement;
-    bool tableFound = FALSE;
+    bool tableFound = false;
     //find the table in question
     while(!tableFound) {
         myElement = myTableWalker.toElement();
-        const QString* myTableName = new QString(myElement.attribute("name"));
-        if (QString::localeAwareCompare(tableName->latin1(),myTableName->latin1())==0) { tableFound=TRUE; }
+        QString myTableName = myElement.attribute("name");
+        if (QString::localeAwareCompare(tableName->latin1(),myTableName.latin1())==0) { tableFound=TRUE; }
+        else {myTableWalker = myTableWalker.nextSibling(); }
         kdDebug() << "In while loop...last table was " << &tableName << endl;
-        myTableWalker = myTableWalker.nextSibling();
         }
 
      //now that the table is found, build the list of its fields
      myTableWalker = myTableWalker.namedItem("FIELD");
      myElement = myTableWalker.toElement();
-     const QString* columnIsInKey = new QString(myElement.attribute("isPKey"));
-     const QString* columnName = new QString(myElement.attribute("name"));
-     const QString* columnType = new QString(myElement.attribute("datatype"));
-     const QString* columnSize = new QString(myElement.attribute("defaultSize"));
-     const QString* columnDefault = new QString(myElement.attribute("defaultvalue"));
-     const QString* columnAllowsNull = new QString(myElement.attribute("allownull"));
+     QString columnIsInKey = myElement.attribute("isPKey");
+     QString columnName = myElement.attribute("name");
+     QString columnType = myElement.attribute("datatype");
+     QString columnSize = myElement.attribute("defaultsize");
+     QString columnDefault = myElement.attribute("defaultvalue");
+     QString columnAllowsNull = myElement.attribute("allownull");
 
-     myKey = columnIsInKey;
-     myName = columnName->latin1();
-     if(columnType->latin1() == "int") {
+     if (QString::compare(columnIsInKey.latin1(), "false")==0) {
+        myKey = false;
+        }
+     else {
+        myKey = true;
+        }
+     myName = columnName.latin1();
+     if(QString::compare(columnType.latin1(), "int") == 0) {
 		myType = t_int;
        }
-     else if(columnType->latin1() == "char") {
+     else if(QString::compare(columnType.latin1(), "char") ==0) {
 		myType = t_char;
        }
-     else if(columnType->latin1() == "varchar") {
+     else if(QString::compare(columnType.latin1(), "varchar")==0) {
 		myType = t_vchar;
        }
-     else if(columnType->latin1() == "float") {
+     else if(QString::compare(columnType.latin1(), "float")==0) {
 		myType = t_float;
        }
      else {
 		myType = t_boolen;
        }
-     mySize = columnSize->toInt();
-     myDefault = columnDefault->latin1();
-     myAllowNull = columnAllowsNull;
-     TableStructureRow myRow1 = { myKey, myName, myType, mySize, myDefault, myAllowNull };
-     const TableStructureRow* myRow = &myRow1;
+     mySize = columnSize.toInt();
+     myDefault = columnDefault.latin1();
+     if (QString::compare(columnAllowsNull.latin1(), "false")==0) {
+        myAllowNull = false;
+        }
+     else {
+        myAllowNull = true;
+        }
+
+//     TableStructureRow* myRow1 = (TableStructureRow*)malloc(sizeof(TableStructureRow));
+     TableStructureRow myRow1 = {myKey, myName, myType, mySize, myDefault, myAllowNull};
+
+//     myRow1->primary_key =  myKey;
+//     myRow1->name =  myName;
+//     myRow1->type =  myType;
+//     myRow1->size =  mySize;
+//     myRow1->Default =  myDefault;
+//     myRow1->allow_null =  myAllowNull;
+//     const TableStructureRow* myRow = myRow1;
+     const TableStructureRow *myRow = &myRow1;
      columnList.append(myRow);
+     myTableWalker.nextSibling();
 
     while(!myTableWalker.isNull()) {
       myElement = myTableWalker.toElement();
-      columnIsInKey = new QString(myElement.attribute("isPKey"));
-      columnName = new QString(myElement.attribute("name"));
-      columnType = new QString(myElement.attribute("datatype"));
-      columnSize = new QString(myElement.attribute("defaultSize"));
-      columnDefault = new QString(myElement.attribute("defaultvalue"));
-      columnAllowsNull = new QString(myElement.attribute("allownull"));
+      columnIsInKey = myElement.attribute("isPKey");
+      columnName = myElement.attribute("name");
+      columnType = myElement.attribute("datatype");
+      columnSize = myElement.attribute("defaultsize");
+      columnDefault = myElement.attribute("defaultvalue");
+      columnAllowsNull = myElement.attribute("allownull");
 
-     myKey = columnIsInKey;
-     myName = columnName->latin1();
-     if(columnType->latin1() == "int") {
+     if (QString::compare(columnIsInKey.latin1(), "false")==0) {
+        myKey = false;
+        }
+     else {
+        myKey = true;
+        }
+     myName = columnName.latin1();
+     if(columnType.latin1() == "int") {
 		myType = t_int;
        }
-     else if(columnType->latin1() == "char") {
+     else if(columnType.latin1() == "char") {
 		myType = t_char;
        }
-     else if(columnType->latin1() == "varchar") {
+     else if(columnType.latin1() == "varchar") {
 		myType = t_vchar;
        }
-     else if(columnType->latin1() == "float") {
+     else if(columnType.latin1() == "float") {
 		myType = t_float;
        }
      else {
 		myType = t_boolen;
        }
-     mySize = columnSize->toInt();
-     myDefault = columnDefault->latin1();
-     myAllowNull = columnAllowsNull;
+     mySize = columnSize.toInt();
+     myDefault = columnDefault.latin1();
+     if (QString::compare(columnAllowsNull.latin1(), "false")==0) {
+        myAllowNull = false;
+        }
+     else {
+        myAllowNull = true;
+        }
      TableStructureRow myRow1 = { myKey, myName, myType, mySize, myDefault, myAllowNull };
-     const TableStructureRow* myRow = &myRow1;
+     const TableStructureRow *myRow = &myRow1;
      columnList.append(myRow);
 
       myTableWalker = myTableWalker.nextSibling();

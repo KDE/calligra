@@ -25,7 +25,7 @@ KDBTableDesigner::KDBTableDesigner(KDBStruct *KDBStruct){
     myKDBStruct = KDBStruct;
 	QGridLayout *g = new QGridLayout(this);
 
-	this->resize(575,420);
+	this->resize(647,430);
 	
 	m_table = new QTable(1,6, this, "myQTable");
 	m_table->resize(575,420);
@@ -52,8 +52,8 @@ KDBTableDesigner::KDBTableDesigner(KDBStruct *KDBStruct){
 	m_rows = 0;
 
 	
-	this->addRow(true, "id", t_int, 12, "");
-	this->addRow(false, "name", t_char, 10, "nobody");
+//	this->addRow(true, "id", t_int, 12, "");
+//	this->addRow(false, "name", t_char, 10, "nobody");
 }
 
 KDBTableDesigner::~KDBTableDesigner(){
@@ -63,11 +63,24 @@ KDBTableDesigner::~KDBTableDesigner(){
 bool KDBTableDesigner::populateTblDesigner(QString tblName){
 
     KDBTable *myTableInfo = myKDBStruct->getTable(tblName);
-    QString* msg=NULL;
+    QString *msg=NULL;
     QPtrList<TableStructureRow> columnList = myTableInfo->getColumns(&tblName, msg);
+//    QPtrList<TableStructureRow> *columnList = new QPtrList<TableStructureRow>;
+    unsigned int rowCounter=0;
 
     tblName.append(" - Table Designer");
     this->setCaption(tblName);
+
+   TableStructureRow *aColumn = columnList.first();
+
+	this->addRow(aColumn->primary_key, aColumn->name, aColumn->type, aColumn->size, aColumn->Default,aColumn->allow_null);
+//	this->addRow(true, "argh", t_int, 10, "",true);
+   columnList.next();
+    while(rowCounter < columnList.count()) {
+  	    this->addRow(columnList.current()->primary_key, columnList.current()->name, columnList.current()->type, columnList.current()->size, columnList.current()->Default,columnList.current()->allow_null);
+       columnList.next();
+       rowCounter++;
+       }
     return(true);
 }
 
@@ -85,12 +98,12 @@ void KDBTableDesigner::addRow(bool primary_key, QString name, DataType type, int
 	m_table->setItem(m_rows, 0, primary_keyView);
 	primary_keyView->setChecked(primary_key);
 	m_table->setText(m_rows, 1, name);
+	m_table->setText(m_rows, 3, sizestr.latin1());
+	m_table->setText(m_rows, 4, default_v.latin1());
 	m_table->setItem(m_rows, 2, dataTypeView);
-	m_table->setText(m_rows, 3, sizestr);
-	m_table->setText(m_rows, 4, default_v);
 	m_table->setItem(m_rows, 5, allow_nullView);
 	allow_nullView->setChecked(allow_null);
-	
+
 	
 	switch(type)
 	{
