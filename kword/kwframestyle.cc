@@ -39,7 +39,6 @@ KWFrameStyleCollection::KWFrameStyleCollection()
 
 KWFrameStyleCollection::~KWFrameStyleCollection()
 {
-    kdDebug() << "KWFrameStyleCollection::destructor" << endl;
     m_styleList.setAutoDelete( true );
     m_styleList.clear();
     m_deletedStyles.clear();
