@@ -501,7 +501,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                 break;
             }
 
-#if KDE_VERSION < 220 // No need to force the extension anymore, with the new kfiledialog stuff
+// ###### To be made configurable !
             if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
                 // assume that the pattern ends with .extension
                 QString s( dialog->currentFilter() );
@@ -510,7 +510,6 @@ bool KoMainWindow::saveDocument( bool saveas )
 
                 newURL.setPath( newURL.path() + extension );
             }
-#endif
 
             if ( KIO::NetAccess::exists( newURL ) ) { // this file exists => ask for confirmation
                 bOk = KMessageBox::questionYesNo( this,
