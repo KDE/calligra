@@ -163,6 +163,10 @@
                 <title xml:lang="en_us">MS Write</title>
                 <stat import="twostars" export="planned"/>
             </filter>
+            <filter id="kword_oowriter">
+                <title xml:lang="en_us">OpenOffice Writer</title>
+                <stat import="onestar" export="none"/>
+            </filter>
             <filter id="kword_palmdoc" webcvspath="koffice/filters/kword/palmdoc">
                 <title xml:lang="en_us">Palmdoc</title>
                 <note xml:lang="en_us">Palm documents</note>
@@ -242,6 +246,10 @@
 
         <application id="kpresenter">
             <title xml:lang="en_us">KPresenter</title>
+            <filter id="kword_ooimpress">
+                <title xml:lang="en_us">OpenOffice Impress</title>
+                <stat import="onestar" export="none"/>
+            </filter>
             <filter id="kpresenter_powerpoint" webcvspath="koffice/filters/olefilters/powerpoint97">
                 <title xml:lang="en_us">PowerPoint 97</title>
                 <note xml:lang="en_us">Microsoft PowerPoint 97</note>
