@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KTextObject - (c) by Reginald Stadlbauer 1998                  */
-/* Version: 0.0.2                                                 */
+/* Version: 0.0.3                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* needs c++ library Qt (http://www.troll.no)                     */
@@ -64,7 +64,7 @@ class KTextObject;
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for managing a textcursor.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.2
+ * @version 0.0.3
  */
 
 class TxtCursor
@@ -280,7 +280,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a single object in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.2
+ * @version 0.0.3
  */
 
 class TxtObj
@@ -443,7 +443,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a text line in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.2
+ * @version 0.0.3
  */
 
 class TxtLine
@@ -641,7 +641,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a text paragraph in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.2
+ * @version 0.0.3
  */
 
 class TxtParagraph 
@@ -819,7 +819,7 @@ protected:
  * Default is dynamically linebreaking.
  * @short A widget for editing rich text.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.2
+ * @version 0.0.3
  */
 
 class KTextObject : public QTableView
@@ -899,13 +899,13 @@ public:
    * 
    * struct EnumListType
    * {
-   *   int type; // NUMBER or ALPHABETH
-   *   QString before; // string before the counter
-   *   QString after; // string after the counter
-   *   int start; // start of the counter
-   *   QFont font; 
-   *   QColor color;
-   *   QFont ofont;
+   *  &nbsp;&nbsp;int type; // NUMBER or ALPHABETH
+   *  &nbsp;&nbsp;QString before; // string before the counter
+   *  &nbsp;&nbsp;QString after; // string after the counter
+   *  &nbsp;&nbsp;int start; // start of the counter
+   *  &nbsp;&nbsp;QFont font; 
+   *  &nbsp;&nbsp;QColor color;
+   *  &nbsp;&nbsp;QFont ofont;
    * };
    * </pre>
    */
@@ -919,13 +919,13 @@ public:
    * 
    * struct EnumListType
    * {
-   *   int type; // NUMBER or ALPHABETH
-   *   QString before; // string before the counter
-   *   QString after; // string after the counter
-   *   int start; // start of the counter
-   *   QFont font; 
-   *   QColor color;
-   *   QFont ofont;
+   *  &nbsp;&nbsp;int type; // NUMBER or ALPHABETH
+   *  &nbsp;&nbsp;QString before; // string before the counter
+   *  &nbsp;&nbsp;QString after; // string after the counter
+   *  &nbsp;&nbsp;int start; // start of the counter
+   *  &nbsp;&nbsp;QFont font; 
+   *  &nbsp;&nbsp;QColor color;
+   *  &nbsp;&nbsp;QFont ofont;
    * };
    * </pre>
    */
@@ -936,10 +936,10 @@ public:
    * The structure for the enumerated list types looks like that:
    * <pre>struct UnsortListType
    * {
-   *   QFont font;
-   *   QColor color;
-   *   int chr;
-   *   QFont ofont;
+   *  &nbsp;&nbsp;QFont font;
+   *  &nbsp;&nbsp;QColor color;
+   *  &nbsp;&nbsp;int chr;
+   *  &nbsp;&nbsp;QFont ofont;
    * };
    * </pre>
    */
@@ -949,10 +949,10 @@ public:
    * Returns the type of unsorted lists.<br>
    * <pre>struct UnsortListType
    * {
-   *   QFont font;
-   *   QColor color;
-   *   int chr;
-   *   QFont ofont;
+   *  &nbsp;&nbsp;QFont font;
+   *  &nbsp;&nbsp;QColor color;
+   *  &nbsp;&nbsp;int chr;
+   *  &nbsp;&nbsp;QFont ofont;
    * };
    * </pre>
    */
@@ -1039,7 +1039,8 @@ public:
   /**
    * Returns a QPicture of the text to draw it transparent.<br>
    * The four integers give the size of the QPicture<br>
-   * If presMode is <i>true</i>, you can say that only the paragraphs between from and to are drawn. 
+   * If presMode is <i>true</i>, you can say that only the paragraphs between from and to are drawn.
+   * If <i>_clip</i> is true, the clipping rect is set to <i>_x, _y, _w, _h</i>, else no clipping rect is set. 
    */
   QPicture* getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true);
 

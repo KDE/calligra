@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KTextObject - (c) by Reginald Stadlbauer 1998                  */
-/* Version: 0.0.2                                                 */
+/* Version: 0.0.3                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* needs c++ library Qt (http://www.troll.no)                     */
@@ -3225,13 +3225,14 @@ void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCu
   if (stop_cpos == C_IN)
     {
       paragraphAt(_stopCursor->positionParagraph())->lineAt(_stopCursor->positionLine())->splitObj(_stopCursor->positionInLine());
-      stop_cpos = C_BEFORE;
+      //stop_cpos = C_BEFORE;
     }
 
   if (start_cpos == C_AFTER) start = start_pos + 1;
   else start = start_pos;
 
   if (stop_cpos == C_AFTER) stop = stop_pos + 1;
+  else if (stop_cpos == C_BEFORE) stop = stop_pos - 1;
   else stop = stop_pos;
 
   for (i = start;i <= stop;i++)

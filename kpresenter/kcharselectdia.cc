@@ -1,6 +1,6 @@
 /******************************************************************/
 /* KCharSelectDia - (c) by Reginald Stadlbauer 1998               */
-/* Version: 0.0.2                                                 */
+/* Version: 0.0.3                                                 */
 /* Author: Reginald Stadlbauer                                    */
 /* E-Mail: reggie@kde.org                                         */
 /* needs c++ library Qt (http://www.troll.no)                     */
