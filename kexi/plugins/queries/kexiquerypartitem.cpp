@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+ */
+
 #include <kexiquerypartitem.h>
 #include <qstring.h>
 #include <kexiproject.h>
@@ -22,6 +41,15 @@ const KexiQueryPartItem::QueryEntryList &KexiQueryPartItem::getQueryData() {
 void KexiQueryPartItem::setQueryData(const KexiQueryPartItem::QueryEntryList& newlist) {
 	m_queryEntryList=newlist;
 }
+
+void KexiQueryPartItem::setParameterList(const KexiDataProvider::ParameterList& params) {
+	m_params=params;
+}
+
+const KexiDataProvider::ParameterList KexiQueryPartItem::parameters() {
+	return m_params;
+}
+
 
 void KexiQueryPartItem::store(KoStore* store) {
         kdDebug() << "KexiQueryPartItem::store(KoStore*)" << endl;
@@ -48,6 +76,19 @@ void KexiQueryPartItem::store(KoStore* store) {
 		item.setAttribute("andC",(*it).andC);
                 itemsElement.appendChild(item);
 	}
+
+
+        QDomElement paramsElement = domDoc.createElement("parameters");
+        docElement.appendChild(paramsElement);
+
+	for (KexiDataProvider::ParameterList::const_iterator it=m_params.begin();it!=m_params.end();++it) {
+		QDomElement param = domDoc.createElement("parameter");
+		param.setAttribute("name",(*it).name);
+		param.setAttribute("type",(*it).type);
+                paramsElement.appendChild(param);
+	}
+
+
 /*
                 QDomElement preparsed = domDoc.createElement("preparsed");
                 domDoc.appendChild(preparsed);
@@ -75,12 +116,13 @@ void KexiQueryPartItem::load(KoStore* store) {
 		store->close();
 		QDomElement el=doc.documentElement();
 		kdDebug()<<"document tag name: "<<el.tagName()<<endl;
-		for (QDomElement itemsTag=el.firstChild().toElement();
-			!itemsTag.isNull();itemsTag=itemsTag.nextSibling().toElement()) {
+		for (QDomElement readTag=el.firstChild().toElement();
+			!readTag.isNull();readTag=readTag.nextSibling().toElement()) {
 			kdDebug()<<"Looking for items tag"<<endl;
-			if (itemsTag.tagName()=="items") {
+			// read the items
+			if (readTag.tagName()=="items") {
 				kdDebug()<<"Items tag found"<<endl;
-				for (QDomElement itemTag=itemsTag.firstChild().toElement();
+				for (QDomElement itemTag=readTag.firstChild().toElement();
 				!itemTag.isNull(); itemTag=itemTag.nextSibling().toElement()) {
 					m_queryEntryList.append(QueryEntry(
 						itemTag.attribute("source"),
@@ -90,7 +132,19 @@ void KexiQueryPartItem::load(KoStore* store) {
 						itemTag.attribute("andC")
 					));	
 				}
-				break;
+			}
+			else
+			// read query parameters
+			if (readTag.tagName()=="parameters") {
+				kdDebug()<<"Parameters tag found"<<endl;
+				for (QDomElement paramTag=readTag.firstChild().toElement();
+				!paramTag.isNull(); paramTag=paramTag.nextSibling().toElement()) {
+					m_params.append(KexiDataProvider::Parameter(
+						paramTag.attribute("name"),
+						paramTag.attribute("type").toInt()
+					));	
+				}
+
 			}
 		}
 	}

@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
 
@@ -18,11 +19,13 @@
 */
 
 #include <qlayout.h>
+#include <qdialog.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kpushbutton.h>
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
@@ -30,9 +33,11 @@
 #include "kexitableview.h"
 #include "kexitableitem.h"
 #include "kexiquerydesignerguieditor.h"
+#include "kexiparameterlisteditor.h"
 #include "kexidragobjects.h"
 #include "kexiproject.h"
 #include "kexiview.h"
+#include "kexiaddparamdialog.h"
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent, KexiQueryDesigner *myparent, const char *name)
  : QWidget(parent, name)
@@ -41,7 +46,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_parent = myparent;
 
 //	m_tables = new KexiRelationDialog(view,this, "querytables", true);
-
+	m_paramList=new KexiParameterListEditor(this);
+	connect(m_paramList->addParameter,SIGNAL(clicked()),this,SLOT(slotAddParameter()));
 	m_designTable = new KexiTableView(this);
 	m_designTable->m_editOnDubleClick = true;
 	connect(m_designTable, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
@@ -66,9 +72,10 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_insertItem->setValue(2, true);
 	m_insertItem->setInsertItem(true);
 */
-	QGridLayout *g = new QGridLayout(this);
+	QGridLayout *g = new QGridLayout(this,2,1);
 //	g->addWidget(m_tables,		0,	0);
 	g->addWidget(m_designTable,	1,	0);
+	g->addWidget(m_paramList, 1,1);
 }
 
 void KexiQueryDesignerGuiEditor::clear()
@@ -329,9 +336,18 @@ KexiQueryDesignerGuiEditor::getQuery()
 	return QString("");
 }
 
-KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
-{
+KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor() {
 	m_parent->saveBack();
+}
+
+void KexiQueryDesignerGuiEditor::slotAddParameter() {
+	KexiAddParamDialog d(this);
+	if (d.exec()==QDialog::Accepted)
+	{
+	}
+}
+
+void KexiQueryDesignerGuiEditor::slotRemoveParameter() {
 }
 
 

@@ -60,6 +60,8 @@ typedef QMap<QString, InvolvedTable> InvolvedTables;
 typedef QValueList<JoinField> JoinFields;
 typedef QValueList<Condition> ConditionList;
 
+class KexiParameterListEditor;
+
 class KexiQueryDesignerGuiEditor : public QWidget
 {
 	Q_OBJECT
@@ -81,12 +83,16 @@ class KexiQueryDesignerGuiEditor : public QWidget
 	protected slots:
 		void			slotDropped(QDropEvent *ev);
 		void			slotItemChanged(KexiTableItem *item, int col);
+		void			slotAddParameter();
+		void			slotRemoveParameter();
 
 	private:
 		KexiDB			*m_db;
 
 		KexiRelationDialog	*m_tables;
 		KexiTableView		*m_designTable;
+	        KexiParameterListEditor *m_paramList;
+
 
 		KexiQueryDesigner	*m_parent;
 
