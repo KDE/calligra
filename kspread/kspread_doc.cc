@@ -28,7 +28,6 @@
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kprinter.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <ksconfig.h>

@@ -2962,12 +2962,23 @@ void KSpreadView::setupPrinter( KPrinter &prt )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
+
+    prt.setFullPage( TRUE );
+    prt.setResolution ( 72 );
+    
 }
 
 void KSpreadView::print( KPrinter &prt )
 {
+//    prt.preparePrinting();
+
     //store the current setting in a temporary variable
     KoOrientation _orient =  m_pTable->orientation();
+
+    
+    QPainter painter;
+
+    painter.begin( &prt );
 
     //use the current orientation from print dialog
     if ( prt.orientation() == KPrinter::Landscape )
@@ -2979,12 +2990,6 @@ void KSpreadView::print( KPrinter &prt )
         m_pTable->setPaperOrientation( PG_PORTRAIT );
     }
 
-    prt.setFullPage( TRUE );
-    prt.setResolution ( 72 );
-
-    QPainter painter;
-
-    painter.begin( &prt );
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );
     painter.end();
