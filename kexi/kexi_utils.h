@@ -43,7 +43,7 @@ inline void KEXI_UNFINISHED(QString feature_name) {
 		.arg(KEXI_VERSION_STRING).arg(KEXI_APP_NAME) );
 }
 
-//! like above - for use inside KExiActionProxy subclass - reuses feature name from shared action's text
+//! like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
 	KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString::null)
 
