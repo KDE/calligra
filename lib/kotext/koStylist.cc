@@ -47,7 +47,8 @@
    When an orig entry is empty and the other is not, a new one has to be made,
    when the orig is present and the other is not, the orig has to be deleted.
    Otherwise all changes are copied from the changed ones to the origs on OK.
-   OK also frees all the changed ones and updates the doc if styles are deleted.
+   OK updates the doc if styles are deleted.
+   The dtor frees all the changed ones.
 */
 /* Months later the above seems SOO stupid.. Just should have created a small class
    containing the orig and the copy and an enum plus some simple methods..
@@ -109,6 +110,13 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
 
 KoStyleManager::~KoStyleManager()
 {
+    for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
+        KoStyle *orig = m_origStyles.at(i);
+        KoStyle *changed = m_changedStyles.at(i);
+        if( orig && changed && orig != changed ) // modified style, we can delete the changed one now that changes have been applied
+            delete changed;
+    }
+
     delete d;
 }
 
@@ -348,7 +356,7 @@ void KoStyleManager::save() {
         }
 
         int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
-        m_currentStyle->setFollowingStyle( m_changedStyles.at( indexNextStyle ) );
+        m_currentStyle->setFollowingStyle( m_origStyles.at( indexNextStyle ) ); // point to orig, not changed! (#47377)
         m_currentStyle->setParentStyle( style( m_inheritCombo->currentText() ) );
         m_currentStyle->setOutline( d->cbIncludeInTOC->isChecked() );
     }
@@ -527,25 +535,28 @@ void KoStyleManager::apply() {
             removeStyle.append( orig );
             // Note that the style is never deleted (we'll need it for undo/redo purposes)
 
-        } else if(m_changedStyles.at(i) != 0L && m_origStyles.at(i)!=0L) {
+        } else if(m_changedStyles.at(i) != 0L && m_origStyles.at(i)!=0L) { // simply updated style
             kdDebug(32500) << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
-                                                // simply updated style
             KoStyle *orig = m_origStyles.at(i);
             KoStyle *changed = m_changedStyles.at(i);
+            if ( orig != changed )
+            {
+                int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
+                int formatChanged = orig->format().compare( changed->format() );
+                //kdDebug(32500) << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
+                //kdDebug(32500) << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
 
-            int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
-            int formatChanged = orig->format().compare( changed->format() );
-            //kdDebug(32500) << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
-            //kdDebug(32500) << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
+                // Copy everything from changed to orig
+                *orig = *changed;
 
-            // Copy everything from changed to orig
-            *orig = *changed;
+                // Apply the change selectively - i.e. only what changed
+                //applyStyleChange( orig, paragLayoutChanged, formatChanged );
+                if ( formatChanged != 0 || paragLayoutChanged != 0 ) {
+                    KoStyleChangeDef tmp(paragLayoutChanged, formatChanged);
+                    styleChanged.insert( orig, tmp );
+                }
 
-            // Apply the change selectively - i.e. only what changed
-            //applyStyleChange( orig, paragLayoutChanged, formatChanged );
-            KoStyleChangeDef tmp(paragLayoutChanged, formatChanged);
-            styleChanged.insert( orig, tmp);
-
+            }
 
         }// else
          //     kdDebug(32500) << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
