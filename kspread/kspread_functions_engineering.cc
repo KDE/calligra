@@ -701,6 +701,50 @@ bool kspreadfunc_hex2oct( KSContext& context )
   return true;
 }
 
+
+// check if unit may contain prefix, for example "kPa" is "Pa" with
+// return prefix factor found in unit, or 1.0 for no prefix
+// also modify the unit, i.e stripping the prefix from it
+// example: "kPa" will return 1e3 and change unit into "Pa"
+static double kspread_convert_prefix( QMap<QString,double> map, QString& unit )
+{
+  if( map.contains( unit ) )
+    return 1.0;
+
+  // initialize prefix mapping if necessary
+  static QMap<char,double> prefixMap;
+  if( prefixMap.isEmpty() )
+  {
+     prefixMap[ 'E' ] = 1e18;  //  exa
+     prefixMap[ 'P' ] = 1e15;  //  peta
+     prefixMap[ 'T' ] = 1e12;  // tera
+     prefixMap[ 'G' ] = 1e9;   // giga
+     prefixMap[ 'M' ] = 1e6;   // mega
+     prefixMap[ 'k' ] = 1e3;   // kilo
+     prefixMap[ 'h' ] = 1e2;   // hecto
+     prefixMap[ 'e' ] = 1e1;   // dekao
+     prefixMap[ 'd' ] = 1e1;   // deci
+     prefixMap[ 'c' ] = 1e2;   // centi
+     prefixMap[ 'm' ] = 1e3;   // milli
+     prefixMap[ 'u' ] = 1e6;   // micro
+     prefixMap[ 'n' ] = 1e9;   // nano
+     prefixMap[ 'p' ] = 1e12;  // pico
+     prefixMap[ 'f' ] = 1e15;  // femto
+     prefixMap[ 'a' ] = 1e18;  // atto
+  }
+
+  // check for possible prefix
+  char prefix = unit[0].latin1();
+  if( prefixMap.contains( prefix ) )
+  {
+    unit.remove( 0, 1 );
+    return prefixMap[ prefix ];
+  }
+
+  // fail miserably
+  return 0.0;
+}
+
 static bool kspread_convert_mass( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -709,7 +753,7 @@ static bool kspread_convert_mass( const QString& fromUnit,
   // first-time initialization
   if( massMap.isEmpty() )
   {
-    massMap[ "g" ]       = 1.0; // Gram (the reference )
+    massMap[ "g" ]        = 1.0; // Gram (the reference )
     massMap[ "sg" ]       = 6.8522050005347800E-05; // Pieces
     massMap[ "lbm" ]      = 2.2046229146913400E-03; // Pound
     massMap[ "u" ]        = 6.0221370000000000E23; // U (atomic mass)
@@ -723,10 +767,16 @@ static bool kspread_convert_mass( const QString& fromUnit,
     massMap[ "brton" ]    = 9.842065E-07; // Gross Registered Ton
   }
 
-  if( !massMap.contains( fromUnit ) ) return false;
-  if( !massMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( massMap, fromU );
+  double toPrefix = kspread_convert_prefix( massMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !massMap.contains( fromU ) ) return false;
+  if( !massMap.contains( toU ) ) return false;
 
-  result = value * massMap[ toUnit ] / massMap[ fromUnit ];
+  result = value * fromPrefix * massMap[toU] / (massMap[fromU] * toPrefix);
 
   return true;
 }
@@ -751,10 +801,16 @@ static bool kspread_convert_distance( const QString& fromUnit,
     distanceMap[ "lightyear" ] = 1.057023455773293e-16; // lightyear
   }
 
-  if( !distanceMap.contains( fromUnit ) ) return false;
-  if( !distanceMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( distanceMap, fromU );
+  double toPrefix = kspread_convert_prefix( distanceMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !distanceMap.contains( fromU ) ) return false;
+  if( !distanceMap.contains( toU ) ) return false;
 
-  result = value * distanceMap[ toUnit ] / distanceMap[ fromUnit ];
+  result = value * fromPrefix * distanceMap[toU] / (distanceMap[fromU] * toPrefix);
 
   return true;
 }
@@ -774,10 +830,16 @@ static bool kspread_convert_pressure( const QString& fromUnit,
     pressureMap[ "Torr" ] = 1 / 133.32237;
   }
 
-  if( !pressureMap.contains( fromUnit ) ) return false;
-  if( !pressureMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( pressureMap, fromU );
+  double toPrefix = kspread_convert_prefix( pressureMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !pressureMap.contains( fromU ) ) return false;
+  if( !pressureMap.contains( toU ) ) return false;
 
-  result = value * pressureMap[ toUnit ] / pressureMap[ fromUnit ];
+  result = value * fromPrefix * pressureMap[toU] / (pressureMap[fromU] * toPrefix);
 
   return true;
 }
@@ -795,10 +857,16 @@ static bool kspread_convert_force( const QString& fromUnit,
     forceMap[ "pond" ]   = 1.019716e2; // pond
   }
 
-  if( !forceMap.contains( fromUnit ) ) return false;
-  if( !forceMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( forceMap, fromU );
+  double toPrefix = kspread_convert_prefix( forceMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !forceMap.contains( fromU ) ) return false;
+  if( !forceMap.contains( toU ) ) return false;
 
-  result = value * forceMap[ toUnit ] / forceMap[ fromUnit ];
+  result = value * fromPrefix * forceMap[toU] / (forceMap[fromU] * toPrefix);
 
   return true;
 }
@@ -815,17 +883,23 @@ static bool kspread_convert_energy( const QString& fromUnit,
     energyMap[ "e" ]   = 1.0e7; //erg
     energyMap[ "c" ]   = 0.239006249473467; // thermodynamical calorie
     energyMap[ "cal" ] = 0.238846190642017; // calorie
-    energyMap[ "eV" ]  = 6.241457e+18; // electronvold
+    energyMap[ "eV" ]  = 6.241457e+18; // electronvolt
     energyMap[ "HPh" ] = 3.72506111e-7; // horsepower-hour
     energyMap[ "Wh" ]  = 0.000277778; // watt-hour
     energyMap[ "flb" ] = 23.73042222;
     energyMap[ "BTU" ] = 9.47815067349015e-4; // British Thermal Unit
   }
 
-  if( !energyMap.contains( fromUnit ) ) return false;
-  if( !energyMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( energyMap, fromU );
+  double toPrefix = kspread_convert_prefix( energyMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !energyMap.contains( fromU ) ) return false;
+  if( !energyMap.contains( toU ) ) return false;
 
-  result = value * energyMap[ toUnit ] / energyMap[ fromUnit ];
+  result = value * fromPrefix * energyMap[toU] / (energyMap[fromU] * toPrefix);
 
   return true;
 }
@@ -843,10 +917,16 @@ static bool kspread_convert_power( const QString& fromUnit,
     powerMap[ "PS" ]  = 1.359622e-3; // Pferdestärke (German)
   }
 
-  if( !powerMap.contains( fromUnit ) ) return false;
-  if( !powerMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( powerMap, fromU );
+  double toPrefix = kspread_convert_prefix( powerMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !powerMap.contains( fromU ) ) return false;
+  if( !powerMap.contains( toU ) ) return false;
 
-  result = value * powerMap[ toUnit ] / powerMap[ fromUnit ];
+  result = value * fromPrefix * powerMap[toU] / (powerMap[fromU] * toPrefix);
 
   return true;
 }
@@ -859,14 +939,20 @@ static bool kspread_convert_magnetism( const QString& fromUnit,
   // first-time initialization
   if( magnetismMap.isEmpty() )
   {
-    magnetismMap[ "T" ]   = 1.0; // Tesla (the reference)
+    magnetismMap[ "T" ]   = 1.0;    // Tesla (the reference)
     magnetismMap[ "ga" ]   = 1.0e4; // Gauss
   }
 
-  if( !magnetismMap.contains( fromUnit ) ) return false;
-  if( !magnetismMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( magnetismMap, fromU );
+  double toPrefix = kspread_convert_prefix( magnetismMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !magnetismMap.contains( fromU ) ) return false;
+  if( !magnetismMap.contains( toU ) ) return false;
 
-  result = value * magnetismMap[ toUnit ] / magnetismMap[ fromUnit ];
+  result = value * fromPrefix * magnetismMap[toU] / (magnetismMap[fromU] * toPrefix);
 
   return true;
 }
@@ -921,10 +1007,16 @@ static bool kspread_convert_volume( const QString& fromUnit,
     volumeMap[ "barrel" ] = 6.289811E-03; // barrel
   }
 
-  if( !volumeMap.contains( fromUnit ) ) return false;
-  if( !volumeMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( volumeMap, fromU );
+  double toPrefix = kspread_convert_prefix( volumeMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !volumeMap.contains( fromU ) ) return false;
+  if( !volumeMap.contains( toU ) ) return false;
 
-  result = value * volumeMap[ toUnit ] / volumeMap[ fromUnit ];
+  result = value * fromPrefix * volumeMap[toU] / (volumeMap[fromU] * toPrefix);
 
   return true;
 }
@@ -947,10 +1039,16 @@ static bool kspread_convert_area( const QString& fromUnit,
     areaMap[ "ha" ]   = 1.0e4; // hectare
   }
 
-  if( !areaMap.contains( fromUnit ) ) return false;
-  if( !areaMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( areaMap, fromU );
+  double toPrefix = kspread_convert_prefix( areaMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !areaMap.contains( fromU ) ) return false;
+  if( !areaMap.contains( toU ) ) return false;
 
-  result = value * areaMap[ toUnit ] / areaMap[ fromUnit ];
+  result = value * fromPrefix * areaMap[toU] / (areaMap[fromU] * toPrefix);
 
   return true;
 }
@@ -969,10 +1067,16 @@ static bool kspread_convert_speed( const QString& fromUnit,
     speedMap[ "kn" ]  = 1.9438444924406048; // knot
   }
 
-  if( !speedMap.contains( fromUnit ) ) return false;
-  if( !speedMap.contains( toUnit ) ) return false;
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( speedMap, fromU );
+  double toPrefix = kspread_convert_prefix( speedMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !speedMap.contains( fromU ) ) return false;
+  if( !speedMap.contains( toU ) ) return false;
 
-  result = value * speedMap[ toUnit ] / speedMap[ fromUnit ];
+  result = value * fromPrefix * speedMap[toU] / (speedMap[fromU] * toPrefix);
 
   return true;
 }
