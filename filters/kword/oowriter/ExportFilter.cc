@@ -803,20 +803,33 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     if (force || (layoutOrigin.alignment!=layout.alignment))
     {
-        // Check if the current alignment is a valid one for OOWriter.
-        if ((layout.alignment == "left") || (layout.alignment == "right")
-            || (layout.alignment == "center")  || (layout.alignment == "justify"))
+        // NOTE: OO 1.0.x uses start and left like left and right (section 3.11.4)
+        // Unfortunately in XSL-FO's text-align, they are really supposed to be the start and the end.
+        if (layout.alignment == "left")
         {
-            props += "fo:text-align=\"";
-            props += layout.alignment;
-            props += "\" ";
-            styleKey += layout.alignment[0].upper();
+            props += "fo:text-align=\"start\" ";
+            styleKey += 'L';
+        }
+        else if (layout.alignment == "right")
+        {
+            props += "fo:text-align=\"end\" ";
+            styleKey += 'R';
+        }
+        else if (layout.alignment == "center")
+        {
+            props += "fo:text-align=\"center\" ";
+            styleKey += 'C';
+        }
+        else if (layout.alignment == "justify")
+        {
+            props += "fo:text-align=\"justify\" ";
+            styleKey += 'J';
         }
         else if (layout.alignment == "auto")
         {
             props += "fo:text-align=\"left\" ";
             props += "style:text-auto-align=\"true\" "; // OASIS extension
-            styleKey += "A";
+            styleKey += 'A';
         }
         else
         {
