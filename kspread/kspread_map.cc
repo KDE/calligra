@@ -140,7 +140,24 @@ bool KSpreadMap::loadOasis( const QDomElement& body )
         
         tableNode = tableNode.nextSibling();
     }
-       
+    
+    // load the table    
+    tableNode = body.firstChild();
+    while ( !tableNode.isNull() )
+    {
+        QDomElement tableElement = tableNode.toElement();
+        if( !tableElement.isNull() )
+        if( tableElement.nodeName() == "table:table" )
+        if( !tableElement.attribute( "table:name" ).isEmpty() )
+        {
+            QString name = tableElement.attribute( "table:name" );
+            KSpreadSheet* sheet = m_pDoc->map()->findTable( name );
+            if( sheet )
+                sheet->loadOasis( tableElement );
+        }        
+        tableNode = tableNode.nextSibling();
+    }
+    
     return true;
 }
 
