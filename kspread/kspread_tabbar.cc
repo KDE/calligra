@@ -75,6 +75,16 @@ public:
 
     // indicates the direction the tabs are scrolled to.
     int autoScroll;
+
+    enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
+    enum { moveTabNo = 0, moveTabBefore, moveTabAfter };
+
+    // paint one tab
+    void paintTab( QPainter & painter, int x, int height, const QString& text, int text_width, int text_y,
+                              bool isactive, bool ismovemarked, QColor bgColor );
+
+    // open pop-up menu at global pos
+    void openPopupMenu( const QPoint &pos );
 };
 
 
@@ -96,6 +106,66 @@ static int tabbar_text_width( QPainter& painter, const QString& text )
     painter.restore();
 
     return width;
+}
+
+// paint a single tab
+void TabBarPrivate::paintTab( QPainter & painter, int x, int height, const QString& text, int text_width, int text_y,
+                              bool isactive, bool ismovemarked, QColor bgColor )
+{
+    QPointArray parr;
+    parr.setPoints( 4, x,0, x+10,height-1, x+10+text_width,height-1, x+20+text_width,0 );
+    QRegion reg( parr );
+    painter.setClipping( TRUE );
+    painter.setClipRegion( reg );
+    painter.setBackgroundColor( bgColor );
+    painter.eraseRect( x, 0, text_width + 20, height );
+    painter.setClipping( FALSE );
+
+    painter.drawLine( x, 0, x + 10, height - 1 );
+    painter.drawLine( x + 10, height - 1, x + text_width + 10, height - 1 );
+    painter.drawLine( x + 10 + text_width, height - 1, x + 20 + text_width, 0 );
+    if ( !isactive )
+        painter.drawLine( x, 0, x + 20 + text_width, 0 );
+    if ( ismovemarked )
+    {
+            if ( moveTabFlag == TabBarPrivate::moveTabBefore )
+            {
+                QPointArray movmark;
+                movmark.setPoints(3, x, 0, x + 7, 0, x + 4, 6);
+                QBrush oldBrush = painter.brush();
+                painter.setBrush( QColor( 0, 0, 0 ) );
+                painter.drawPolygon(movmark);
+                painter.setBrush( oldBrush );
+            }
+            else
+            {
+                QPointArray movmark;
+                movmark.setPoints(3, x + 20 + text_width, 0, x + 13 + text_width, 0, x + 16 + text_width, 6);
+                QBrush oldBrush = painter.brush();
+                painter.setBrush( QColor( 0, 0, 0 ) );
+                painter.drawPolygon(movmark);
+                painter.setBrush( oldBrush );
+            }
+    }
+
+    if( isactive )
+    {
+      painter.save();
+      QFont f = painter.font();
+      f.setBold( true );
+      painter.setFont( f );
+      painter.drawText( x + 10, text_y , text );
+      painter.restore();
+    }
+    else
+      painter.drawText( x + 10, text_y , text );
+}
+
+void TabBarPrivate::openPopupMenu( const QPoint &pos )
+{
+    if ( !view->koDocument()->isReadWrite() )
+      return;
+    view->openPopupMenuMenuPage( pos );
 }
 
 // creates a new tabbar
@@ -323,7 +393,7 @@ void TabBar::paintEvent( QPaintEvent* )
                      height(), colorGroup(), FALSE, 1, &fill );
 
     if ( d->leftTab > 1 )
-        paintTab( painter, -10, QString(""), 0, 0, FALSE );
+        d->paintTab( painter, -10, height(), QString(""), 0, 0, FALSE, false, colorGroup().background() );
 
     int i = 1;
     int x = 0;
@@ -348,9 +418,9 @@ void TabBar::paintEvent( QPaintEvent* )
             if( i != d->activeTab )
             {
                 if ( d->moveTab == i )
-                    paintTab( painter, x, text, text_width, text_y, false, true );
+                    d->paintTab( painter, x, height(), text, text_width, text_y, false, true, colorGroup().background() );
                 else
-                    paintTab( painter, x, text, text_width, text_y, false );
+                    d->paintTab( painter, x, height(), text, text_width, text_y, false, false, colorGroup().background() );
             }
             else
             {
@@ -372,75 +442,14 @@ void TabBar::paintEvent( QPaintEvent* )
     }
 
     if( paint_active )
-      paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
+      d->paintTab( painter, active_x, height(), active_text, active_width, active_y, TRUE, false, colorGroup().base() );
 
     painter.end();
     bitBlt( this, 0, 0, &pm );
 }
 
 
-void TabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y,
-                              bool isactive, bool ismovemarked )
-{
-    QPointArray parr;
-    parr.setPoints( 4, x,0, x+10,height()-1, x+10+text_width,height()-1, x+20+text_width,0 );
-    QRegion reg( parr );
-    painter.setClipping( TRUE );
-    painter.setClipRegion( reg );
-    if ( isactive )
-        painter.setBackgroundColor( colorGroup().base() );
-    else
-        painter.setBackgroundColor( colorGroup().background() );
-    painter.eraseRect( x, 0, text_width + 20, height() );
-    painter.setClipping( FALSE );
 
-    painter.drawLine( x, 0, x + 10, height() - 1 );
-    painter.drawLine( x + 10, height() - 1, x + text_width + 10, height() - 1 );
-    painter.drawLine( x + 10 + text_width, height() - 1, x + 20 + text_width, 0 );
-    if ( !isactive )
-        painter.drawLine( x, 0, x + 20 + text_width, 0 );
-    if ( ismovemarked )
-    {
-            if ( d->moveTabFlag == moveTabBefore )
-            {
-                QPointArray movmark;
-                movmark.setPoints(3, x, 0, x + 7, 0, x + 4, 6);
-                QBrush oldBrush = painter.brush();
-                painter.setBrush( QColor( 0, 0, 0 ) );
-                painter.drawPolygon(movmark);
-                painter.setBrush( oldBrush );
-            }
-            else
-            {
-                QPointArray movmark;
-                movmark.setPoints(3, x + 20 + text_width, 0, x + 13 + text_width, 0, x + 16 + text_width, 6);
-                QBrush oldBrush = painter.brush();
-                painter.setBrush( QColor( 0, 0, 0 ) );
-                painter.drawPolygon(movmark);
-                painter.setBrush( oldBrush );
-            }
-    }
-
-    if( isactive )
-    {
-      painter.save();
-      QFont f = painter.font();
-      f.setBold( true );
-      painter.setFont( f );
-      painter.drawText( x + 10, text_y , text );
-      painter.restore();
-    }
-    else
-      painter.drawText( x + 10, text_y , text );
-}
-
-
-void TabBar::openPopupMenu( const QPoint &_global )
-{
-    if ( !d->view->koDocument()->isReadWrite() )
-      return;
-    d->view->openPopupMenuMenuPage( _global );
-}
 
 void TabBar::renameTab( const QString& old_name, const QString& new_name )
 {
@@ -566,11 +575,11 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
 
     if ( _ev->button() == LeftButton )
     {
-        d->moveTabFlag = moveTabBefore;
+        d->moveTabFlag = TabBarPrivate::moveTabBefore;
     }
     else if ( _ev->button() == RightButton )
     {
-        openPopupMenu( _ev->globalPos() );
+        d->openPopupMenu( _ev->globalPos() );
     }
 }
 
@@ -590,11 +599,11 @@ void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
         }
         d->view->doc()->map()->moveTable( (*d->visibleTabs.at( d->activeTab - 1 )),
                                           (*d->visibleTabs.at( d->moveTab - 1 )),
-                                          d->moveTabFlag == moveTabBefore );
-        moveTab( d->activeTab - 1, d->moveTab - 1, d->moveTabFlag == moveTabBefore );
+                                          d->moveTabFlag == TabBarPrivate::moveTabBefore );
+        moveTab( d->activeTab - 1, d->moveTab - 1, d->moveTabFlag == TabBarPrivate::moveTabBefore );
 
-        d->moveTabFlag = moveTabNo;
-        if ( d->activeTab < d->moveTab && d->moveTabFlag == moveTabBefore )
+        d->moveTabFlag = TabBarPrivate::moveTabNo;
+        if ( d->activeTab < d->moveTab && d->moveTabFlag == TabBarPrivate::moveTabBefore )
             d->moveTab--;
         d->activeTab = d->moveTab;
 
@@ -605,12 +614,12 @@ void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
 
 void TabBar::slotAutoScroll( )
 {
-    if ( d->autoScroll == autoScrollLeft && d->leftTab > 1 )
+    if ( d->autoScroll == TabBarPrivate::autoScrollLeft && d->leftTab > 1 )
     {
         d->moveTab = d->leftTab - 1;
         scrollLeft();
     }
-    else if ( d->autoScroll == autoScrollRight )
+    else if ( d->autoScroll == TabBarPrivate::autoScrollRight )
     {
         scrollRight();
     }
@@ -635,7 +644,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 
     if ( _ev->pos().x() < 0 && d->leftTab > 1 && d->autoScroll == 0 )
     {
-        d->autoScroll = autoScrollLeft;
+        d->autoScroll = TabBarPrivate::autoScrollLeft;
         d->moveTab = d->leftTab - 1;
         scrollLeft();
         d->autoScrollTimer->start( 400 );
@@ -645,13 +654,13 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
         int i = d->visibleTabs.count();
         if ( d->activeTab != i && d->moveTab != i && d->activeTab != i - 1 )
         {
-            d->moveTabFlag = moveTabAfter;
+            d->moveTabFlag = TabBarPrivate::moveTabAfter;
             d->moveTab = d->visibleTabs.count();
             repaint( false );
         }
         if ( d->rightTab != (int)d->visibleTabs.count() && d->autoScroll == 0 )
         {
-            d->autoScroll = autoScrollRight;
+            d->autoScroll = TabBarPrivate::autoScrollRight;
             d->moveTab = d->leftTab;
             scrollRight();
             d->autoScrollTimer->start( 400 );
@@ -677,9 +686,9 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
                         d->autoScroll = 0;
                     }
 
-                    if ( ( d->activeTab != i && d->activeTab != i - 1 && d->moveTab != i ) || d->moveTabFlag == moveTabAfter )
+                    if ( ( d->activeTab != i && d->activeTab != i - 1 && d->moveTab != i ) || d->moveTabFlag == TabBarPrivate::moveTabAfter )
                     {
-                        d->moveTabFlag = moveTabBefore;
+                        d->moveTabFlag = TabBarPrivate::moveTabBefore;
                         d->moveTab = i;
                         repaint( false );
                     }
@@ -697,9 +706,9 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 
         if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
         {
-            if ( d->activeTab != i && d->moveTabFlag != moveTabAfter )
+            if ( d->activeTab != i && d->moveTabFlag != TabBarPrivate::moveTabAfter )
             {
-                d->moveTabFlag = moveTabAfter;
+                d->moveTabFlag = TabBarPrivate::moveTabAfter;
                 d->moveTab = i;
                 repaint( false );
             }

@@ -176,18 +176,11 @@ protected slots:
     void slotAutoScroll();
 
 protected:
-    virtual void paintEvent ( QPaintEvent* _ev );
-    virtual void mousePressEvent ( QMouseEvent* _ev );
-    virtual void mouseReleaseEvent ( QMouseEvent* _ev );
-    virtual void mouseDoubleClickEvent ( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
-
-    void paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y, bool isactive, bool ismovemarked = false );
-
-    void openPopupMenu( QPoint &_global );
-
-    enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
-    enum { moveTabNo = 0, moveTabBefore, moveTabAfter };
+    virtual void paintEvent ( QPaintEvent* ev );
+    virtual void mousePressEvent ( QMouseEvent* ev );
+    virtual void mouseReleaseEvent ( QMouseEvent* ev );
+    virtual void mouseDoubleClickEvent ( QMouseEvent* ev );
+    virtual void mouseMoveEvent( QMouseEvent* ev );
 
 private:
     TabBarPrivate *d;
