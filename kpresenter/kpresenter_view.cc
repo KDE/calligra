@@ -202,12 +202,14 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 {
 
     setInstance( KPresenterFactory::global() );
-    setXMLFile( "kpresenter.rc" );
+    if ( !_doc->isReadWrite() )
+        setXMLFile( "kpresenter_readonly.rc" );
+    else
+        setXMLFile( "kpresenter.rc" );
 
     dcop = 0;
     dcopObject(); // build it
 
-    m_pKPresenterDoc = 0L;
     m_bDisplayFiedCode=false;
     // init
     backDia = 0;

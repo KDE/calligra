@@ -96,7 +96,7 @@ kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
 rcdir = $(kde_datadir)/kpresenter
-rc_DATA = kpresenter.rc
+rc_DATA = kpresenter.rc kpresenter_readonly.rc
 
 SUBDIRS = autoformEdit autoforms . pics templates dtd slideshow toolbar
 

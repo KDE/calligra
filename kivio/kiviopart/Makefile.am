@@ -76,6 +76,7 @@ EXTRA_DIST = \
 		kivio.desktop\
 		x-kivio.desktop\
 		kivio.rc\
+		kivio_readonly.rc\
 		kivio_dlg_pageshow.cpp\
 		kivio_dlg_pageshow.h\
 		kivio_ruler.cpp\
@@ -156,7 +157,7 @@ dummy.cpp:
 kdelnk_DATA = kivio.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-rc_DATA = kivio.rc
+rc_DATA = kivio.rc kivio_readonly.rc
 rcdir = $(kde_datadir)/kivio
 
 KDE_ICON = kivio

@@ -234,7 +234,10 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   m_pToolDock = new ToolDockManager(canvasBase);
 
   setInstance(KivioFactory::global());
-  setXMLFile("kivio.rc");
+  if ( !m_pDoc->isReadWrite() )
+    setXMLFile("kivio_readonly.rc");
+  else
+    setXMLFile("kivio.rc");
 
   // Must be executed before setActivePage() and before setupActions()
   createGeometryDock();
