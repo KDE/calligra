@@ -646,7 +646,7 @@ void KPresenterView::updateSideBarMenu()
 void KPresenterView::editDelPage()
 {
     if ( KMessageBox::questionYesNo( this,
-                                     i18n( "Do you want to remove the current page?") )
+                                     i18n( "Do you want to remove the current slide?") )
          != KMessageBox::Yes )
         return;
     m_canvas->exitEditMode();
