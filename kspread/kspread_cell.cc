@@ -23,6 +23,7 @@
 #include <math.h>
 
 #include <qpainter.h>
+#include <qapplication.h>
 #include <qdrawutil.h>
 #include <qpoint.h>
 #include <qpointarray.h>
