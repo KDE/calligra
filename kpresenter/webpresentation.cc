@@ -597,7 +597,7 @@ void KPWebPresentation::init()
 /*================================================================*/
 KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPresenterDoc *_doc,
                                                   KPresenterView *_view )
-    : QWizard( 0, "", false ), config( _config ), webPres( config, _doc, _view )
+    : KWizard( 0, "", false ), config( _config ), webPres( config, _doc, _view )
 {
     doc = _doc;
     view = _view;
@@ -635,17 +635,22 @@ void KPWebPresentationWizard::setupPage1()
     page1->setSpacing( 5 );
     page1->setMargin( 5 );
 
-    QLabel *helptext = new QLabel( page1 );
-    helptext->setMargin( 5 );
-    helptext->setBackgroundMode( PaletteLight );
-    helptext->setText( i18n( "Enter your name, email address and\n"
-                             "the title of the web presentation.\n"
-                             "Also enter the path into which the\n"
-                             "web presentation should be created\n"
-                             "(This must be a directory).\n" ) );
-    helptext->setMaximumWidth( helptext->sizeHint().width() );
+    QLabel* sidebar = new QLabel( page1 );
+    sidebar->setMinimumSize( 106, 318 );
+    sidebar->setMaximumSize( 106, 318 );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QVBox *canvas = new QVBox( page1 );
+
+    QLabel *helptext = new QLabel( canvas );
+    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setText( i18n( "Enter your name, email address and "
+                             "the title of the web presentation. "
+                             "Also enter the path into which the "
+                             "web presentation should be created. "
+                             "(This must be a directory)." ) );
 
     QHBox *row1 = new QHBox( canvas );
     QHBox *row2 = new QHBox( canvas );
@@ -673,7 +678,7 @@ void KPWebPresentationWizard::setupPage1()
     connect(path, SIGNAL(urlSelected( const QString& )),
            this,SLOT(slotChoosePath(const QString&)));
 
-    addPage( page1, i18n( "General Information" ) );
+    addPage( page1, i18n( "Step 1: General Information" ) );
 
     setHelpEnabled(page1, false);  //doesn't do anything currently
 
@@ -686,32 +691,44 @@ void KPWebPresentationWizard::setupPage2()
     page2->setSpacing( 6 );
     page2->setMargin( 6 );
 
-    QLabel *helptext = new QLabel( page2 );
-    helptext->setMargin( 6 );
-    helptext->setBackgroundMode( PaletteLight );
-    QString help = i18n("Here you can configure the style\n"
-                        "of the web pages (colors). You also\n"
-                        "need to specify the picture format\n"
-                        "which should be used for the slides.\n"
-                        "PNG is a very optimized and well\n"
-                        "compressed format, but may not be\n"
-                        "supported by some old web browsers.\n"
-                        "BMP is a picture format with a bad\n"
-                        "compression, but is supported by\n"
-                        "old web browsers.\n");
-
-    if ( KImageIO::canWrite( "JPEG" ) )
-        help += i18n("JPEG is a picture format with quite a good\n"
-                     "compression and which is supported by\n"
-                     "all web browsers.\n");
-
-    help += i18n( "\n"
-                  "Finally you can also specify the zoom\n"
-                  "for the slides." );
-    helptext->setText(help);
-    helptext->setMaximumWidth( helptext->sizeHint().width() );
+    QLabel* sidebar = new QLabel( page2 );
+    sidebar->setMinimumSize( 106, 318 );
+    sidebar->setMaximumSize( 106, 318 );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QVBox *canvas = new QVBox( page2 );
+
+    QLabel *helptext = new QLabel( canvas );
+    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    QString help = i18n("Here you can configure the style "
+                        "of the web pages (colors). You also "
+                        "need to specify the picture format "
+                        "which should be used for the slides.\n\n"
+                        "BMP is a picture format with a bad "
+                        "compression, but is supported by "
+                        "old web browsers.");
+
+    if ( KImageIO::canWrite( "PNG" ) )
+    {
+        help += "\n";
+        help += i18n("PNG is a very optimized and well "
+                     "compressed format, but may not be "
+                     "supported by some old web browsers.");
+    }
+
+    if ( KImageIO::canWrite( "JPEG" ) )
+    {
+        help += "\n";
+        help += i18n("JPEG is a picture format with quite a good "
+                     "compression and which is supported by "
+                     "all web browsers.");
+    }
+
+    help += "\n\n";
+    help += i18n( "Finally you can also specify the zoom for the slides." );
+    helptext->setText(help);
 
     QHBox *row1 = new QHBox( canvas );
     QHBox *row2 = new QHBox( canvas );
@@ -754,7 +771,7 @@ void KPWebPresentationWizard::setupPage2()
     encoding->setCurrentItem( _strList.findIndex( _name.lower() ) );
 
 
-    addPage( page2, i18n( "Style" ) );
+    addPage( page2, i18n( "Step 2: Choose Style" ) );
 
     setHelpEnabled(page2, false);  //doesn't do anything currently
 }
@@ -766,19 +783,24 @@ void KPWebPresentationWizard::setupPage3()
     page3->setSpacing( 5 );
     page3->setMargin( 5 );
 
-    QLabel *helptext = new QLabel( page3 );
-    helptext->setMargin( 5 );
-    helptext->setBackgroundMode( PaletteLight );
-    helptext->setText( i18n( "Here you can specify titles for\n"
-                             "each slide. Click on a slide in\n"
-                             "the list and then enter the title\n"
-                             "in the textbox below. If you\n"
-                             "click on a title, the KPresenter\n"
-                             "mainview will scroll to this\n"
-                             "slide, so it can be seen." ) );
-    helptext->setMaximumWidth( helptext->sizeHint().width() );
+    QLabel* sidebar = new QLabel( page3 );
+    sidebar->setMinimumSize( 106, 318 );
+    sidebar->setMaximumSize( 106, 318 );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QVBox *canvas = new QVBox( page3 );
+
+    QLabel *helptext = new QLabel( canvas );
+    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setText( i18n( "Here you can specify titles for"
+                             "each slide. Click on a slide in "
+                             "the list and then enter the title "
+                             "in the textbox below. If you "
+                             "click on a title, the KPresenter "
+                             "mainview will scroll to this "
+                             "slide, so it can be seen." ) );
 
     QHBox *row = new QHBox( canvas );
     QLabel *label = new QLabel( i18n( "Slide title:" ), row );
@@ -810,7 +832,7 @@ void KPWebPresentationWizard::setupPage3()
 
     slideTitles->setSelected( slideTitles->firstChild(), true );
 
-    addPage( page3, i18n( "Slide Titles" ) );
+    addPage( page3, i18n( "Step 3: Customize Slide Titles" ) );
 
     setHelpEnabled(page3, false);  //doesn't do anything currently
 

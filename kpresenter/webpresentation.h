@@ -20,7 +20,8 @@
 #ifndef webpresentation_h
 #define webpresentation_h
 
-#include <qwizard.h>
+#include <kwizard.h>
+
 #include <qdialog.h>
 #include <qvaluelist.h>
 
@@ -144,7 +145,7 @@ protected:
 /* Class: KPWebPresentationWizard                                 */
 /******************************************************************/
 
-class KPWebPresentationWizard : public QWizard
+class KPWebPresentationWizard : public KWizard
 {
     Q_OBJECT
 
