@@ -14,59 +14,6 @@
 
 #include <kdebug.h>
 
-/*
-      <Name>LCM</Name>
-      <Name>LCD</Name>
-      <Name>eps</Name>
-      <Name>pow</Name>
-      <Name>DELTA</Name>
-      <Name>EVEN</Name>
-      <Name>ODD</Name>
-      <Name>MOD</Name>
-      <Name>sign</Name>
-      <Name>INV</Name>
-      <Name>count</Name>
-      <Name>fact</Name>
-      <Name>sum</Name>
-      <Name>PRODUCT</Name>
-      <Name>DIV</Name>
-      <Name>sumsq</Name>
-      <Name>max</Name>
-      <Name>min</Name>
-      <Name>multiply</Name>
-      <Name>sqrt</Name>
-      <Name>ln</Name>
-      <Name>LOGn</Name>
-      <Name>SQRTn</Name>
-      <Name>CUR</Name>
-      <Name>log</Name>
-      <Name>exp</Name>
-      <Name>ceil</Name>
-      <Name>floor</Name>
-      <Name>abs</Name>
-      <Name>INT</Name>
-      <Name>rand</Name>
-      <Name>RANDBETWEEN</Name>
-      <Name>ROUNDUP</Name>
-      <Name>ROUNDDOWN</Name>
-      <Name>COMPLEX</Name>
-      <Name>IMAGINARY</Name>
-      <Name>IMREAL</Name>
-      <Name>IMCOS</Name>
-      <Name>IMSIN</Name>
-      <Name>IMEXP</Name>
-      <Name>IMLN</Name>
-      <Name>IMSQRT</Name>
-      <Name>IMPOWER</Name>
-      <Name>IMSUM</Name>
-      <Name>IMDIV</Name>
-      <Name>IMSUB</Name>
-      <Name>IMPRODUCT</Name>
-      <Name>IMCONJUGATE</Name>
-      <Name>IMARGUMENT</Name>
-      <Name>IMABS</Name>
- */
-
 /*********************************************************************
  *
  * Helper function to avoid problems with rounding floating point
