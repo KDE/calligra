@@ -46,8 +46,8 @@ MathMLImport::MathMLImport(KoFilter *, const char *, const QStringList&)
 
 KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QCString& to )
 {
-    kdWarning( KFormula::DEBUGID ) << from << endl;
-    kdWarning( KFormula::DEBUGID ) << to << endl;
+    kdDebug( KFormula::DEBUGID ) << "From: " << from << endl;
+    kdDebug( KFormula::DEBUGID ) << "To:   " << to << endl;
 
     if(from != "application/mathml+xml" || to != "application/x-kformula")
         return KoFilter::NotImplemented;
@@ -59,48 +59,43 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
         return KoFilter::FileNotFound;
     }
 
-    QFile f( m_chain->outputFile() );
-    if( !f.open( IO_Truncate | IO_ReadWrite ) ) {
-        QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "MathML Import Error" ) );
-        return KoFilter::FileNotFound;
-    }
-    f.close();
-
     KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
     KFormula::Document* doc = new KFormula::Document;
     wrapper->document( doc );
     KFormula::Container* formula = doc->createFormula();
 
     //formula->loadMathML( m_chain->inputFile() );
-    f.setName( m_chain->inputFile() );
+    const QString filename( m_chain->inputFile() );
+    QFile f( filename );
     if ( !f.open( IO_ReadOnly ) ) {
-        KMessageBox::error( 0, i18n( "Failed to open file." ), i18n( "MathML Import Error" ) );
+        KMessageBox::error( 0, i18n( "Failed to open input file: %1" ).arg( filename ), i18n( "MathML Import Error" ) );
         delete wrapper;
         return KoFilter::FileNotFound;
     }
 
     QDomDocument mathML;
-    if ( !mathML.setContent( &f, false ) ) {
-        QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "MathML Import Error" ) );
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if ( !mathML.setContent( &f, false, &errorMsg, &errorLine, &errorColumn ) ) {
         delete wrapper;
+        QApplication::restoreOverrideCursor();
+        kdError(KFormula::DEBUGID) << "Parsing error in " << filename << "! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+        KMessageBox::error( 0, i18n( "Parsing error in MathML file %4 at line %1, column %2\nError message: %3" )
+                              .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg.utf8() ).arg( filename ) ), i18n( "MathML Import Error" ) );
         return KoFilter::WrongFormat;
     }
     f.close();
     formula->loadMathML( mathML );
 
-    QDomDocument xml = doc->saveXML();
-
-    // stolen from KoDocument::saveToStore
+    // taken from KoDocument::saveToStore
     KoStoreDevice dev( out );
-    QCString s = xml.toCString(); // utf8 already
-    // Important: don't use s.length() here. It's slow, and dangerous (in case of a '\0' somewhere)
-    // The -1 is because we don't want to write the final \0.
-    int nwritten = dev.writeBlock( s.data(), s.size()-1 );
-    if ( nwritten != (int)s.size()-1 )
-        kdWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;
+    const QCString s = doc->saveXML().toCString(); // utf8 already
+    const int nwritten = dev.writeBlock( s.data(), s.size()-1 );
     if ( nwritten != (int)s.size()-1 ) {
+        kdWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;
         KMessageBox::error( 0, i18n( "Failed to write formula." ), i18n( "MathML Import Error" ) );
     }
 
