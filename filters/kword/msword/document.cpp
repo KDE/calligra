@@ -79,8 +79,14 @@ void Document::finishDocument()
     element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
     elementDoc.appendChild(element);
 
-    // FOOTNOTESETTING: use nfcFtnRef for the type of counter
-    // Hmm there's nfcFtnRef2 too.
+    element = m_mainDocument.createElement("FOOTNOTESETTING");
+    elementDoc.appendChild(element);
+    element.setAttribute( "start", dop.nFtn ); // initial footnote number for document. Starts at 1.
+    kdDebug() << "nfcFtnRef=" << dop.nfcFtnRef << " nfcFtnRef2=" << dop.nfcFtnRef2 << endl;
+    // There's nfcFtnRef and nfcFtnRef2 !! And a quick test seems to indicate that the 2nd one is used (at least in Word97)
+    element.setAttribute( "type", Conversion::numberFormatCode( dop.nfcFtnRef2 ) );
+
+    // TODO same for ENDNOTESETTING
 
     // Done at the end: write the type of headers/footers,
     // depending on which kind of headers and footers we received.
