@@ -37,6 +37,7 @@
 #include "vselecttool.h"
 #include "vtransformcmd.h"
 
+
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonView* view )
 	: QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ) ), m_view( view )
 {
@@ -278,12 +279,16 @@ VSelectTool::recalc()
 	{
 		m_current = last();
 	}
-	else 
+	else
 	{
-		// Build affine matrix:
-		QWMatrix mat;
+		VTransformCmd* cmd;
+
 		if( m_state == moving )
-			mat.translate( last().x() - first().x(), last().y() - first().y() );
+		{
+			cmd = new VTranslateCmd( 0L,
+				last().x() - first().x(),
+				last().y() - first().y() );
+		}
 		else
 		{
 			KoRect rect = view()->part()->document().selection()->boundingBox();
@@ -336,34 +341,29 @@ VSelectTool::recalc()
 				m_s1 = ( rect.right() - last().x() ) / double( rect.width() );
 				m_s2 = 1;
 			}
-			KoPoint sp = KoPoint( m_sp.x(), m_sp.y() );
-			mat.translate( sp.x(), sp.y() );
-			mat.scale( m_s1, m_s2 );
-			mat.translate(-sp.x(), -sp.y() );
+
+			cmd = new VScaleCmd( 0L, m_sp, m_s1, m_s2 );
 		}
 
 		// Copy selected objects and transform:
 		m_objects.clear();
 		VObject* copy;
 
-		VTranslateCmd cmd( 0L,
-			qRound( last().x() - first().x() ),
-			qRound( last().y() - first().y() ) );
-
 		VObjectListIterator itr = view()->part()->document().selection()->objects();
-		for ( ; itr.current() ; ++itr )
+		for( ; itr.current() ; ++itr )
 		{
 			if( itr.current()->state() != VObject::deleted )
 			{
 				copy = itr.current()->clone();
-
-				cmd.visit( *copy );
-
 				copy->setState( VObject::edit );
+
+				cmd->visit( *copy );
 
 				m_objects.append( copy );
 			}
 		}
+
+		delete( cmd );
 	}
 }
 
