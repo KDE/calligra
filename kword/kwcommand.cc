@@ -1389,3 +1389,36 @@ void KWFrameChangeFrameMarginCommand::unexecute()
     KWDocument * doc = frameSet->kWordDocument();
     doc->frameChanged( frame );
 }
+
+KWChangeFootEndNoteSettingsCommand::KWChangeFootEndNoteSettingsCommand( const QString &name, KoParagCounter _oldCounter, KoParagCounter _newCounter ,bool _footNote ,KWDocument *_doc):
+    KNamedCommand(name),
+    m_oldCounter(_oldCounter),
+    m_newCounter(_newCounter),
+    m_footNote( _footNote ),
+    m_doc(_doc)
+{
+}
+
+void KWChangeFootEndNoteSettingsCommand::execute()
+{
+    changeCounter( m_newCounter);
+}
+
+void KWChangeFootEndNoteSettingsCommand::unexecute()
+{
+    changeCounter( m_oldCounter);
+}
+
+void KWChangeFootEndNoteSettingsCommand::changeCounter( KoParagCounter counter)
+{
+    if (m_footNote )
+    {
+        static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->changeFootNoteCounter(counter );
+    }
+    else
+    {
+        static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->changeEndNoteCounter(counter );
+    }
+    m_doc->changeFootNoteConfig();
+}
+

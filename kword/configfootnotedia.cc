@@ -26,6 +26,7 @@
 #include <qvbox.h>
 #include <koParagDia.h>
 #include <kwvariable.h>
+#include "kwcommand.h"
 
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel , Ok, parent, name, true)
@@ -56,8 +57,29 @@ void KWConfigFootNoteDia::setupTab2()
 
 void KWConfigFootNoteDia::slotOk()
 {
-    static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->changeFootNoteCounter( m_footNoteConfig->counter() );
-    static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->changeEndNoteCounter( m_endNoteConfig->counter() );
-    m_doc->changeFootNoteConfig();
+    KMacroCommand * macro = new KMacroCommand(i18n("Change EndFootNote Variable Settings"));
+    bool createMacro = false;
+    KWChangeFootEndNoteSettingsCommand *cmd = 0L;
+    KoParagCounter counter =static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->footNoteCounter();
+    if (counter != m_footNoteConfig->counter() )
+    {
+        cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change EndFootNote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
+        macro->addCommand(cmd );
+        createMacro = true;
+    }
+    counter = static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter();
+    if (counter != m_endNoteConfig->counter() )
+    {
+        cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change EndFootNote Variable Settings") , counter, m_endNoteConfig->counter() ,false ,m_doc);
+        macro->addCommand(cmd );
+        createMacro = true ;
+    }
+    if ( createMacro )
+    {
+        macro->execute();
+        m_doc->addCommand( macro );
+    }
+    else
+        delete macro;
     KDialogBase::slotOk();
 }

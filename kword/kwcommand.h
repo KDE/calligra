@@ -25,6 +25,7 @@
 #include <koRect.h>
 #include <koborder.h>
 #include <koparaglayout.h>
+#include <koparagcounter.h>
 class KWFrameSet;
 class KWTableFrameSet;
 class KWDocument;
@@ -572,5 +573,22 @@ protected:
     FrameMarginsStruct m_frameMarginsEnd;
 };
 
+
+class KWChangeFootEndNoteSettingsCommand : public KNamedCommand
+{
+public:
+    KWChangeFootEndNoteSettingsCommand( const QString &name, KoParagCounter _oldCounter, KoParagCounter _newCounter ,bool _footNote ,KWDocument *_doc );
+    ~KWChangeFootEndNoteSettingsCommand() {}
+
+    void execute();
+    void unexecute();
+
+protected:
+    void changeCounter( KoParagCounter counter);
+    KoParagCounter m_oldCounter;
+    KoParagCounter m_newCounter;
+    bool m_footNote;
+    KWDocument *m_doc;
+};
 
 #endif
