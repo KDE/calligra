@@ -763,14 +763,14 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "OR",               37,   0 },
 	{ "NOT",              38,   1 },
 	{ "MOD",              39,   2 },
-	{ "DBCOUNT",          40,   3 },
-	{ "DBSUM",            41,   3 },
-	{ "DBAVERAGE",        42,   3 },
-	{ "DBMIN",            43,   3 },
-	{ "DBMAX",            44,   3 },
-	{ "DBSTDDEV",         45,   3 },
+	{ "DCOUNT",           40,   3 },
+	{ "DSUM",             41,   3 },
+	{ "DAVERAGE",         42,   3 },
+	{ "DMIN",             43,   3 },
+	{ "DMAX",             44,   3 },
+	{ "DSTDEV",           45,   3 },
 	{ "VAR",              46,   0 },
-	{ "DBVAR",            47,   3 },
+	{ "DVAR",             47,   3 },
 	{ "TEXT",             48,   2 },
 	{ "RGP",              49,   0 },
 	{ "TREND",            50,   0 },
@@ -844,15 +844,15 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "COUNT2",           169,  0 },
 	{ "MULTIPLY",         183,  0 },  /* EXCEL: PRODUCT */
 	{ "FACT",             184,  1 },
-	{ "DBPRODUCT",        189,  3 },
+	{ "DPRODUCT",         189,  3 },
 	{ "ISNONSTRING",      190,  1 },
 	{ "STDEVP",           193,  0 },
 	{ "VARP",             194,  0 },
-	{ "DBSTDDEVP",        195,  3 },
-	{ "DBVARP",           196,  3 },
+	{ "DSTDEVP",          195,  3 },
+	{ "DVARP",            196,  3 },
 	{ "ENT",              197,  0 },  /* EXCEL: TRUNC */
 	{ "ISLOGICAL",        198,  1 },
-	{ "DBCOUNT2",         199,  3 },
+	{ "DCOUNTA",          199,  3 },
 	{ "CEIL",             212,  2 },  /* EXCEL: ROUNDUP */
 	{ "ROUNDDOWN",        213,  2 },
 	{ "RANK",             216,  0 },
@@ -868,7 +868,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "ASINH",            232,  1 },  /* EXCEL: ARCSINHYP */
 	{ "ACOSH",            233,  1 },  /* EXCEL: ARCCOSHYP */
 	{ "ATANH",            234,  1 },  /* EXCEL: ARCTANHYP */
-	{ "DBGET",            235,  3 },
+	{ "DGET",             235,  3 },
 	{ "DB",               247,  0 },  /* EXCEL: GDA2 */
 	{ "FREQUENCY",        252,  2 },
 	{ "ERRORTYPE",        261,  1 },
@@ -947,6 +947,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "ROMAN",            354,  0 },
 	{ "EXTERNAL",         255,  0 },
 	{ "ISPMT",            350,  4 },
+	{ "GETPIVOTDATA",     358,  2 },
 	{ "AVERAGEA",         361,  0 },
 	{ "MAXA",             362,  0 },
 	{ "MINA",             363,  0 },
@@ -964,7 +965,6 @@ static const sExcelFunction *ExcelFunction(Q_UINT16 nIndex)
 		if(ExcelFunctions[i].index == nIndex)
 			return &ExcelFunctions[i];
 	}
-	
 	return 0;
 }
 
@@ -1185,6 +1185,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				index &= 0x7FFF;
 
 				excelFunc = ExcelFunction(index);
+qDebug("index %d, function %s", index, excelFunc ? excelFunc->name : "??");
 
 				if(excelFunc)
 				{

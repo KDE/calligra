@@ -1349,22 +1349,21 @@ bool Worker::op_number(Q_UINT32, QDataStream &body)
 {
 	Q_UINT16 row, column, xf;
 	double value;
+	int format = 0;
 	
 	body >> row >> column >> xf >> value;
 	
+	xfrec *xwork = static_cast<xfrec *>(m_helper->queryDict(D_XF, xf));
+	if(!xwork)
+		kdError(30511) << "Missing format definition: " << xf << endl;
+	else
+		format = xwork->ifmt;
+	QString s = m_helper->formatValue(value, format);
 	QDomElement e = m_root->createElement("cell");
-	e.appendChild(m_helper->getFormat(xf));
+	if(xwork) e.appendChild(m_helper->getFormat(xf));
 	e.setAttribute("row", row+1);
 	e.setAttribute("column", column+1);
 
-	xfrec *xwork = static_cast<xfrec *>(m_helper->queryDict(D_XF, xf));
-	if(!xwork)
-	{
-		kdError(30511) << "Missing format definition: " << xf << endl;
-		xf = 0;
-	}
-	
-	QString s = m_helper->formatValue(value, xf);
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(s));
 	e.appendChild(text);
