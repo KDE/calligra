@@ -753,10 +753,10 @@ void KIllustrator::initStatusBar () {
   statusbar = new KStatusBar (this);
   setStatusBar (statusbar);
 
-  statusbar->setInsertOrder (KStatusBar::RightToLeft);
+  //statusbar->setInsertOrder (KStatusBar::RightToLeft);
   statusbar->insertItem ("XXXX.XX:XXXX.XX pt     ", 1);
   statusbar->insertItem ("                                        ", 2);
-  statusbar->enable (KStatusBar::Show);
+  statusbar->show();
 }
 
 void KIllustrator::showCursorPosition (int x, int y) {
