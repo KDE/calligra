@@ -341,7 +341,12 @@ void KoRuler::drawVertical( QPainter *_painter )
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
     int totalh = qRound( zoomIt(layout.ptHeight) );
-    if ( ( diffy >= 0 && totalh > diffy ) || ( diffy < 0 && diffy + totalh >= 0 ) ) {
+    // Clip rect - this gives basically always a rect like (2,2,width-2,height-2)
+    QRect paintRect = _painter->clipRegion( QPainter::CoordPainter ).boundingRect();
+    // Ruler rect
+    QRect rulerRect( 0, -diffy, width(), totalh );
+
+    if ( paintRect.intersects( rulerRect ) )  {
         QString str;
         QFont font; // Use the global KDE font. Let's hope it's appropriate.
         font.setPixelSize( 8 ); // Hardcode the size? (Werner)
