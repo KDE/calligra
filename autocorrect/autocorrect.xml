@@ -12,4 +12,7 @@
   <superscript find="3rd" super="rd" />
   <superscript find="othernb" super="th" />
  </SuperScript>
+ <DoubleQuote>
+  <doublequote begin="«" end="»" />
+ </DoubleQuote>
 </Word>

@@ -1270,4 +1270,7 @@
   <superscript find="1ier" super="ier" />
   <superscript find="2ième" super="ième" />
  </SuperScript>
+ <DoubleQuote>
+  <doublequote begin="«" end="»" />
+ </DoubleQuote>
 </Word>
