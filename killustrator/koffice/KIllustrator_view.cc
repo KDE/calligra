@@ -128,6 +128,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     createMyGUI();
     setXMLFile( "KIllustrator.rc" );
     kdDebug()<<"KIlluView after createMyGUI: "<<time.elapsed()<<endl;
+    canvas->docSizeChanged();
 }
 
 KIllustratorView::~KIllustratorView()
@@ -1232,8 +1233,8 @@ void KIllustratorView::slotViewZoom (const QString& s)
    z = z.replace (QRegExp ("%"), "");
    z = z.simplifyWhiteSpace ();
    float zoom = z.toFloat () / 100.0;
-   if (zoom != canvas->getZoomFactor ())
-      canvas->setZoomFactor (zoom);
+   //if (zoom != canvas->getZoomFactor ())
+   canvas->setZoomFactor (zoom);
 }
 
 void KIllustratorView::slotZoomIn()
