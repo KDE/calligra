@@ -67,4 +67,4 @@ noinst_HEADERS = \
 
 messages: rc.cpp
 	$(EXTRACTRC) data/*.rc >> rc.cpp
-	$(XGETTEXT) rc.cpp *.cc */*.cc  -o $(podir)/karbon.pot
+	$(XGETTEXT) rc.cpp *.cc */*.cc tools/*.h plugins/*.h -o $(podir)/karbon.pot
