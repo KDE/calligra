@@ -129,26 +129,26 @@ BackDia::BackDia( QWidget* parent, const char* name,
     colorTab->setSpacing( 5 );
     colorTab->setMargin( 5 );
 
+    cType = new QComboBox( false, colorTab );
+    cType->insertItem( i18n( "Plain" ) );
+    cType->insertItem( i18n( "Horizontal Gradient" ) );
+    cType->insertItem( i18n( "Vertical Gradient" ) );
+    cType->insertItem( i18n( "Diagonal Gradient 1" ) );
+    cType->insertItem( i18n( "Diagonal Gradient 2" ) );
+    cType->insertItem( i18n( "Circle Gradient" ) );
+    cType->insertItem( i18n( "Rectangle Gradient" ) );
+    cType->insertItem( i18n( "PipeCross Gradient" ) );
+    cType->insertItem( i18n( "Pyramid Gradient" ) );
+    cType->setCurrentItem( _bcType );
+    connect( cType, SIGNAL( activated( int ) ),
+             this, SLOT( updateConfiguration() ) );
+
     color1Choose = new KColorButton( backColor1, colorTab );
     connect( color1Choose, SIGNAL( changed( const QColor& ) ),
              this, SLOT( updateConfiguration() ) );
 
     color2Choose = new KColorButton( backColor2, colorTab );
     connect( color2Choose, SIGNAL( changed( const QColor& ) ),
-             this, SLOT( updateConfiguration() ) );
-
-    cType = new QComboBox( false, colorTab );
-    cType->insertItem( i18n( "Plain" ), -1 );
-    cType->insertItem( i18n( "Horizontal Gradient" ), -1 );
-    cType->insertItem( i18n( "Vertical Gradient" ), -1 );
-    cType->insertItem( i18n( "Diagonal Gradient 1" ), -1 );
-    cType->insertItem( i18n( "Diagonal Gradient 2" ), -1 );
-    cType->insertItem( i18n( "Circle Gradient" ), -1 );
-    cType->insertItem( i18n( "Rectangle Gradient" ), -1 );
-    cType->insertItem( i18n( "PipeCross Gradient" ), -1 );
-    cType->insertItem( i18n( "Pyramid Gradient" ), -1 );
-    cType->setCurrentItem( _bcType );
-    connect( cType, SIGNAL( activated( int ) ),
              this, SLOT( updateConfiguration() ) );
 
     unbalanced = new QCheckBox( i18n( "Unbalanced" ), colorTab );
@@ -170,7 +170,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
              this, SLOT( updateConfiguration() ) );
     yfactor->setValue( _yfactor );
 
-    tabWidget->addTab( colorTab, i18n( "&Color/Gradient" ) );
+    tabWidget->addTab( colorTab, i18n( "Color/Gradient" ) );
 
     // picture tab ---------------------
 
@@ -208,7 +208,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     (void)new QWidget( picTab );
 
-    tabWidget->addTab( picTab, i18n( "&Picture" ) );
+    tabWidget->addTab( picTab, i18n( "Picture" ) );
 
     // clipart tab--------------------------
 
@@ -233,7 +233,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     (void)new QWidget( clipTab );
 
-    tabWidget->addTab( clipTab, i18n( "Clip&art" ) );
+    tabWidget->addTab( clipTab, i18n( "Clipart" ) );
 
     // ------------------------ preview
 
