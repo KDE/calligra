@@ -167,7 +167,6 @@ public:
     void setInlineFramesVisible(bool);
 
 #ifndef NDEBUG
-    void printRTDebug( int );
     virtual void printDebug();
 #endif
 

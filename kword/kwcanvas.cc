@@ -2223,7 +2223,7 @@ void KWCanvas::printRTDebug( int info )
     if ( !textfs )
         textfs = dynamic_cast<KWTextFrameSet *>(m_doc->frameSet( 0 ));
     if ( textfs )
-        textfs->printRTDebug( info );
+        textfs->textObject()->printRTDebug( info );
 }
 #endif
 

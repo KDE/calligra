@@ -2047,20 +2047,6 @@ void KWTextFrameSet::showPopup( KWFrame *theFrame, KWFrameSetEdit *edit, KWView 
     }
 }
 
-#ifndef NDEBUG
-void KWTextFrameSet::printRTDebug( int info )
-{
-    for (Qt3::QTextParag * parag = textDocument()->firstParag(); parag ; parag = parag->next())
-    {
-        KWTextParag * p = static_cast<KWTextParag *>(parag);
-        p->printRTDebug( info );
-    }
-    if ( info == 1 )
-        textDocument()->formatCollection()->debug();
-}
-#endif
-
-
 ///////////////////////////////////////////////////////////////////////////////
 
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
