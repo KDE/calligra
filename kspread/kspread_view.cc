@@ -1894,9 +1894,9 @@ void KSpreadView::slotPopupAdjustColumn()
 {
     if ( !m_pTable )
        return;
-    QRect selection( m_pTable->selectionRect() );
+    /*QRect selection( m_pTable->selectionRect() );
     for(int i=selection.left();i<=selection.right();i++)
-        canvasWidget()->hBorderWidget()->adjustColumn(i);
+        canvasWidget()->hBorderWidget()->adjustColumn(i);*/
 }
 
 void KSpreadView::slotPopupInsertColumn()
@@ -1949,9 +1949,9 @@ void KSpreadView::slotPopupAdjustRow()
 {
     if ( !m_pTable )
        return;
-    QRect selection( m_pTable->selectionRect() );
+    /*QRect selection( m_pTable->selectionRect() );
     for(int i=selection.top();i<=selection.bottom();i++)
-        canvasWidget()->vBorderWidget()->adjustRow(i);
+        canvasWidget()->vBorderWidget()->adjustRow(i);*/
 }
 
 void KSpreadView::slotPopupInsertRow()

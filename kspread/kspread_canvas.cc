@@ -2492,10 +2492,13 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     int hit_row = table->topRow( _ev->pos().y(), tmp, m_pCanvas );
     m_iSelectionAnchor = hit_row;
 
+    QRect rect = m_pCanvas->activeTable()->selectionRect();
     QRect selection;
-    selection.setCoords( 1, hit_row, 0x7FFF, hit_row );
-
-    table->setSelection( selection, m_pCanvas );
+    if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton))
+        {
+        selection.setCoords( 1, hit_row, 0x7FFF, hit_row );
+        table->setSelection( selection, m_pCanvas );
+        }
 
     if ( _ev->button() == RightButton )
     {
@@ -2933,13 +2936,19 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   {
     m_bSelection = TRUE;
 
-    table->unselect();
+    //table->unselect();
     int tmp;
     int hit_col = table->leftColumn( _ev->pos().x(), tmp, m_pCanvas );
     m_iSelectionAnchor = hit_col;
+
+    QRect rect = m_pCanvas->activeTable()->selectionRect();
     QRect r;
-    r.setCoords( hit_col, 1, hit_col, 0x7FFF );
-    table->setSelection( r, m_pCanvas );
+    if(!rect.contains( QPoint(hit_col,10)) || !(_ev->button() == RightButton))
+        {
+        r.setCoords( hit_col, 1, hit_col, 0x7FFF );
+        table->setSelection( r, m_pCanvas );
+        }
+
     if ( _ev->button() == RightButton )
     {
       QPoint p = mapToGlobal( _ev->pos() );
