@@ -319,14 +319,10 @@ Container::eventFilter(QObject *s, QEvent *e)
 			else if( ( (mev->state() == Qt::LeftButton) || (mev->state() == (LeftButton|ControlButton|AltButton)) )
 			  && !m_form->manager()->isInserting() && (m_state != CopyingWidget)) // we are dragging the widget(s) to move it
 			{
-				if(!m_toplevel && m_moving == m_container) { // no effect for form
-					kdDebug() << "Cancelling move operation" << endl;
+				if(!m_toplevel && m_moving == m_container) // no effect for form
 					return false;
-				}
-				if((!m_moving) || (!m_moving->parentWidget())) {// || (m_moving->parentWidget()->inherits("QWidgetStack")))
-						kdDebug() << "m_moving == false kfffffffffffffffffff" << endl;
+				if((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
 						return true;
-				}
 
 				dragWidgets(mev);
 			}
