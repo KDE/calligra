@@ -25,6 +25,7 @@ Boston, MA 02111-1307, USA.
 #include "kexidbresult.h"
 
 class KexiDBInterfaceManager;
+class KexiDBDriver;
 
 class KexiDB : public QObject
 {
@@ -35,8 +36,9 @@ class KexiDB : public QObject
 		~KexiDB();
 
 		KexiDB *add(QString driver);
+		KexiDBDriver *driverInfo(QString driver);
 
-		QStringList getDrivers() const;
+		QStringList getDrivers();
 
 		//now driver related functions
 
@@ -56,10 +58,15 @@ class KexiDB : public QObject
 		virtual KexiDBResult	*getResult();
 
 		virtual unsigned long	affectedRows();
+		
+		void appendManager(KexiDBInterfaceManager *m);
 
 
 	protected:
+		KexiDBInterfaceManager	*manager();
+
 		KexiDBInterfaceManager	*m_manager;
+		KexiDBDriver		*m_currentDriver;
 };
 
 #endif

@@ -90,33 +90,9 @@ MySqlDB::connect(QString host, QString user, QString password, QString db)
 QStringList
 MySqlDB::databases()
 {
-/*	if(!m_connected)
-		return QStringList();
-		
-	kdDebug() << "MySqlDB::databases()" << endl;
-	MYSQL_RES *res = mysql_list_dbs(m_mysql, "%");
-	if(!res)
-		return s;
-
-	MySqlResult *result = new MySqlResult(res, this);
-	if(!result)
-		return s;
-
-	kdDebug() << "MySqlDB::databases(): fetched result" << endl;
-	while(result->next())
-	{
-		kdDebug() << "MySqlDB::databases(): reached get-loop" << endl;
-		s.append(QString::fromLatin1(result->value(0).toString()));
-		kdDebug() << "MySqlDB::databases() found databases: " << result->value(0).toString() << endl;
-	}
-//	delete result;
-	return s;
-*/
 	QStringList s;
 	
 	query("show databases");
-//	query("select current_time() as time");
-//	kdDebug() << "MySqlDB::databases(): query produced error: " << mysql_errno(m_mysql) << endl;
 	KexiDBResult *result = storeResult();
 
 	if(!result)
@@ -127,9 +103,9 @@ MySqlDB::databases()
 	{
 		kdDebug() << "MySqlDB::databases(): found: " << result->value(0).toString() << endl;
 		s.append(result->value(0).toString());
-//		kdDebug() << "MySqlDB::databases(): result loop" << endl;
 	}
 
+	delete result;
 	return s;
 }
 

@@ -26,7 +26,7 @@
 KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
 {
 	kdDebug() << "KexiDB::KexiDB()" << endl;
-	m_manager = new KexiDBInterfaceManager(this, "manager");
+	m_manager = 0;
 }
 
 KexiDB*
@@ -38,18 +38,47 @@ KexiDB::add(QString driver)
 	    oh, how we love c++
 	*/
 
-	KexiDB *d = m_manager->require(driver);
+	kdDebug() << "KexDB::add" << endl;
+	
+	KexiDB *d = manager()->require(driver);
 	if(d)
 	{
+		kdDebug() << "got driver..." << endl;
+		appendManager(manager());
 		return d;
 	}
 	return 0;
-//	else
-//	{
-//		throw 1;
-//	}
 }
 
+KexiDBDriver*
+KexiDB::driverInfo(QString driver)
+{
+	return manager()->getDriverInfo(driver);
+}
+
+void
+KexiDB::appendManager(KexiDBInterfaceManager *m)
+{
+	if(m)
+		m_manager = m;
+}
+
+QStringList
+KexiDB::getDrivers()
+{
+	return manager()->getDrivers();
+}
+
+KexiDBInterfaceManager*
+KexiDB::manager()
+{
+	if(!m_manager)
+		m_manager = new KexiDBInterfaceManager(this, "manager");
+
+	return m_manager;
+}
+
+// it's not worth reading behind that line :)
 
 bool
 KexiDB::connect(QString, QString, QString)
@@ -71,12 +100,6 @@ bool
 KexiDB::load(QString file)
 {
 	return false;
-}
-
-QStringList
-KexiDB::getDrivers() const
-{
-	return m_manager->getDrivers();
 }
 
 QStringList

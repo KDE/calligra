@@ -28,6 +28,7 @@
 class KComboBox;
 class KLineEdit;
 class KListView;
+class KTextBrowser;
   
 class KexiCreateProject : public KWizard  {
    Q_OBJECT
@@ -48,6 +49,7 @@ class KexiCreateProject : public KWizard  {
 		QWidget			*m_page1;
 		QWidget			*m_page2;
 		KComboBox		*m_cEngine;
+		KTextBrowser		*m_iEngine;
 		
 		KLineEdit		*m_dbName;
 		KLineEdit		*m_dbHost;

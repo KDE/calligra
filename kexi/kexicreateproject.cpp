@@ -33,6 +33,7 @@
 #include <klistview.h>
 
 #include "kexiDB/kexidb.h"
+#include "kexiDB/kexidbdriver.h"
 
 #include "kexiapplication.h"
 #include "keximainwindow.h"
@@ -82,8 +83,8 @@ QWidget *KexiCreateProject::generatePage0()
 //	QLabel *lName = new QLabel(i18n("Database Name:"), p0);
 //	m_dbName = new KLineEdit(p0);
 	
-	KTextBrowser *iEngine = new KTextBrowser(p0);
-	iEngine->setText("<i>no information avaible</i>");
+	m_iEngine = new KTextBrowser(p0);
+	m_iEngine->setText("<i>no information avaible</i>");
 	
 	
 	//checking drivers and making them avaible	
@@ -97,14 +98,15 @@ QWidget *KexiCreateProject::generatePage0()
 	QString description = "<b>";
 	description += m_cEngine->currentText();
 	description += "</b><br><hr><br>";
-	iEngine->setText(description);
+	description += kexi->project()->db()->driverInfo(m_cEngine->currentText())->service()->comment();
+	m_iEngine->setText(description);
 	
 	g0->addMultiCellWidget(pic0,	0,	2,	0,	0);
 	g0->addWidget(lEngine,		0,	1);
 	g0->addWidget(m_cEngine,	0,	2);
 //	g0->addWidget(lName,		1,	1);
 //	g0->addWidget(m_dbName,		1,	2);
-	g0->addMultiCellWidget(iEngine,	1,	1,	1,	2);
+	g0->addMultiCellWidget(m_iEngine,	1,	1,	1,	2);
 	
 //	#warning "TODO: don't load here!"
 	return p0;
@@ -162,6 +164,13 @@ QWidget *KexiCreateProject::generatePage2()
 void KexiCreateProject::engineSelectionChanged(const QString &engineName)
 {
 	kdDebug() << "engine is changing to " << engineName << endl;
+	
+	QString description = "<b>";
+	description += m_cEngine->currentText();
+	description += "</b><br><hr><br>";
+	description += kexi->project()->db()->driverInfo(m_cEngine->currentText())->service()->comment();
+	m_iEngine->setText(description);
+
 }
 
 

@@ -122,12 +122,29 @@ KexiDBInterfaceManager::getDrivers() const
 KexiDBDriver*
 KexiDBInterfaceManager::getDriverInfo(QString driver)
 {
-	
+	KexiDBDriver *d = m_driverList.find(driver);
+	if(d)
+	{
+		return d;
+	}
+	else
+	{
+		return 0;
+	}
+
 }
 
 
 KexiDBInterfaceManager::~KexiDBInterfaceManager()
 {
+	for(QDictIterator<KexiDBDriver> it(m_driverList); it.current(); ++it)
+	{
+		KexiDBDriver *driver = it;
+		if(driver->loaded())
+		{
+			delete driver;
+		}
+	}
 }
 
 #include "kexidbinterfacemanager.moc"
