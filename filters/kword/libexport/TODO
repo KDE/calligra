@@ -1,0 +1,5 @@
+- tidy files TagProcessing.* (use QT3) {2002-01-05}
+- remove all unnessary (void*) (not urgent) {2002-01-05}
+
+- any TODO in status.html
+- any TODO in source code
