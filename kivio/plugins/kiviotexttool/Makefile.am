@@ -13,8 +13,6 @@ INCLUDES = $(all_includes)\
 		-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 		-I$(top_srcdir)/kivio/kiviopart/tklib\
 		-I$(top_srcdir)/kivio/kiviopart/tools
-CXXFLAGS = -O2 -Wall 
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libkiviotexttool_la_METASOURCES = AUTO
 libkiviotexttool_la_SOURCES = \
 		plugin.cpp\
@@ -33,8 +31,8 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
-libkiviotexttool_la_LDFLAGS = -avoid-version -module
-libkiviotexttool_la_LIBADD = $(all_libraries)
+libkiviotexttool_la_LDFLAGS = -avoid-version -module -no-undefined
+libkiviotexttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kiviotexttool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

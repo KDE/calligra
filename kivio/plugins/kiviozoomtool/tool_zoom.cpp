@@ -186,7 +186,7 @@ void ZoomTool::activate()
 
 void ZoomTool::deactivate()
 {
-  debug("ZoomTool DeActivate");
+  qDebug("ZoomTool DeActivate");
   if (m_pToolBar)
    m_pToolBar->hide();
 
@@ -344,3 +344,4 @@ void ZoomTool::zoomRect( QRect r )
   TKPoint p0 = m_pCanvas->mapFromScreen(r.topLeft());
   m_pCanvas->setVisibleArea(KivioRect(p0.x, p0.y, r.width()*100/m_pCanvas->zoom(), r.height()*100/m_pCanvas->zoom()));
 }
+#include "tool_zoom.moc"

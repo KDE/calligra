@@ -62,3 +62,4 @@ KInstance* TextToolFactory::global()
 {
   return s_global;
 }
+#include "plugin.moc"

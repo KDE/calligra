@@ -108,7 +108,7 @@ void SelectTool::processEvent( QEvent* e )
 
 void SelectTool::activate()
 {
-    debug("SelectTool activate");
+    qDebug("SelectTool activate");
     m_pCanvas->setCursor(arrowCursor);
     m_mode = stmNone;
 }
@@ -523,7 +523,7 @@ void SelectTool::continueResizing(QPoint pos)
 
     if( !pData )
     {
-        debug("SelectTool::continueResizing() - Original geometry not found");
+        qDebug("SelectTool::continueResizing() - Original geometry not found");
         return;
     }
 
@@ -633,7 +633,7 @@ void SelectTool::continueResizing(QPoint pos)
              break;
 
         default:
-            debug("SelectTool::continueResizing() - unknown resize handle: %d", m_resizeHandle );
+            qDebug("SelectTool::continueResizing() - unknown resize handle: %d", m_resizeHandle );
             break;
     }
 
@@ -915,7 +915,7 @@ void SelectTool::leftDoubleClick( QPoint p )
     Tool *t = controller()->findTool("Text");
     if( !t )
     {
-        debug("SelectTool::leftDoubleClick() - unable to locate Text Tool");
+        qDebug("SelectTool::leftDoubleClick() - unable to locate Text Tool");
         return;
     }
 
@@ -925,3 +925,5 @@ void SelectTool::leftDoubleClick( QPoint p )
     // Reselect this tool so we are back in selection mode
     controller()->selectTool(this);
 }
+#include "tool_select.moc"
+

@@ -63,7 +63,7 @@ protected:
   enum
   {
       stmNone,
-      stmDrawRubber,
+      stmDrawRubber
   };
     
 private:

@@ -13,8 +13,6 @@ INCLUDES = $(all_includes)\
 		-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 		-I$(top_srcdir)/kivio/kiviopart/tklib\
 		-I$(top_srcdir)/kivio/kiviopart/tools
-CXXFLAGS = -O2 -Wall 
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libkivioselecttool_la_METASOURCES = AUTO
 libkivioselecttool_la_SOURCES = \
 		plugin.cpp\
@@ -29,11 +27,12 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
-libkivioselecttool_la_LDFLAGS = -avoid-version -module
-libkivioselecttool_la_LIBADD = $(all_libraries)
+libkivioselecttool_la_LDFLAGS = -avoid-version -module -no-undefined
+libkivioselecttool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kivioselecttool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins
 
 desktop_DATA = kivioselecttool.desktop
 desktopdir = $(kde_servicesdir)
+

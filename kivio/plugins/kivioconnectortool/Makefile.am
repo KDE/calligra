@@ -6,7 +6,7 @@ SUBDIRS = straight_connector
 lib_LTLIBRARIES =libkivioconnectortool.la
 
 
-libkivioconnectortool_la_LDFLAGS = -version-info 
+libkivioconnectortool_la_LDFLAGS = -version-info
 
 INCLUDES = $(all_includes)\
 		-I$(top_srcdir)/kivio/kiviopart\
@@ -14,7 +14,6 @@ INCLUDES = $(all_includes)\
 		-I$(top_srcdir)/kivio/kiviopart/tklib\
 		-I$(top_srcdir)/kivio/kiviopart/tools\
 		-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector
-CXXFLAGS = -O2 -Wall 
 DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libkivioconnectortool_la_METASOURCES = AUTO
 libkivioconnectortool_la_SOURCES = \
@@ -33,8 +32,8 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
-libkivioconnectortool_la_LDFLAGS = -avoid-version -module
-libkivioconnectortool_la_LIBADD = $(all_libraries)
+libkivioconnectortool_la_LDFLAGS = -avoid-version -module -no-undefined
+libkivioconnectortool_la_LIBADD = $(all_libraries) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kivioconnectortool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins

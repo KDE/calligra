@@ -84,7 +84,7 @@ void TextTool::processEvent( QEvent* e )
 
 void TextTool::activate()
 {
-    debug("TextTool activate");
+    qDebug("TextTool activate");
     m_pCanvas->setCursor(*m_pTextCursor);
     m_mode = stmNone;
     
@@ -245,3 +245,4 @@ void TextTool::endRubberBanding(QMouseEvent *e)
         text(m_pCanvas->rect());
     }
 }
+#include "tool_text.moc"

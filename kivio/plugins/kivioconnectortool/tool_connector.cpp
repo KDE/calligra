@@ -85,7 +85,7 @@ void ConnectorTool::processEvent( QEvent* e )
 
 void ConnectorTool::activate()
 {
-    debug("ConnectorTool activate");
+    qDebug("ConnectorTool activate");
     m_pCanvas->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
     m_pStencil = 0;
@@ -221,3 +221,4 @@ void ConnectorTool::endRubberBanding(QMouseEvent *e)
     connector(m_pCanvas->rect());
     m_pStencil = 0;
 }
+#include "tool_connector.moc"
