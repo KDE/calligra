@@ -71,7 +71,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 		if( !svgz )
 			return false;
 
-		QCString data;
+		QByteArray data;
 		bool done = false;
 
 		char *buffer = new char[ 1024 ];
@@ -86,7 +86,8 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 			else if( ret == -1 )
 				return false;
 
-			data += buffer;
+			QDataStream dataStream( data, IO_WriteOnly | IO_Append );
+	        dataStream.writeRawBytes( buffer, 1024 );
 		}
 
 		gzclose( svgz );
