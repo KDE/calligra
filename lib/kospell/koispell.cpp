@@ -196,7 +196,7 @@ void KOISpell::startIspell()
             case KOS_E_LATIN15:
 
                 // will work, if this is the default charset in the dictionary
-                kdError(750) << "charsets iso-8859-4 .. iso-8859-15 not supported yet" << endl;
+                kdError(30006) << "charsets iso-8859-4 .. iso-8859-15 not supported yet" << endl;
                 break;
 
             case KOS_E_UTF8:
