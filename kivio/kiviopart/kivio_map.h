@@ -32,6 +32,8 @@ class DCOPObject;
 #include <qintdict.h>
 #include <qobject.h>
 #include <qptrlist.h>
+#include <qstringlist.h>
+
 /*
  * A map is a simple container for all pages. Usually a complete map is saved in one file.
  */
@@ -85,6 +87,16 @@ public:
   KivioPage* nextPage();
 
   QPtrList<KivioPage>& pageList() { return m_lstPages; }
+  
+  /**
+   * Returns list of visible pages as stringlist.
+   */
+  QStringList visiblePages() const;
+  
+  /**
+   * Returns list of hidden pages as stringlist.
+   */
+  QStringList hiddenPages() const;
 
   /**
    * @return amount of pages in this map.

@@ -181,3 +181,33 @@ DCOPObject* KivioMap::dcopObject()
 
     return m_dcop;
 }
+
+QStringList KivioMap::visiblePages() const
+{
+  QStringList pages;
+  
+  QPtrListIterator<KivioPage> it( m_lstPages );
+  for( ; it.current(); ++it )
+  {
+    KivioPage* page = it.current();
+    if( !page->isHidden() )
+      pages.append( page->pageName() );
+  }
+  
+  return pages;
+}
+
+QStringList KivioMap::hiddenPages() const
+{
+  QStringList pages;
+  
+  QPtrListIterator<KivioPage> it( m_lstPages );
+  for( ; it.current(); ++it )
+  {
+    KivioPage* page = it.current();
+    if( page->isHidden() )
+      pages.append( page->pageName() );
+  }
+  
+  return pages;
+}
