@@ -324,6 +324,13 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 
 CC_MAIL: dkite@shaw.ca
 
+2004-04-05
+Kexi Alter Table
+	- fixed possible crash when the view is initialized with no table schema specified 
+	  (ie. for designing new table)
+	- a pointer to table schema is updated after creating a new table
+	- compilter warnings removed
+
 2004-04-02
 KexiDialogBase
 	- beforeSwitchTo(int mode, bool &cancelled) is called also on newly created view

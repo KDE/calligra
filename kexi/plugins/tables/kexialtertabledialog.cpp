@@ -153,20 +153,23 @@ void KexiAlterTableDialog::initData()
 
 	//add column data
 	m_data->clear();
-	for(unsigned int i=0; i < m_table->fieldCount(); i++)
-	{
-		KexiDB::Field *field = m_table->field(i);
-		KexiTableItem *item = new KexiTableItem(0);
-		item->push_back(QVariant(field->name()));
-		item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
-		item->push_back(QVariant(field->description()));
-		m_data->append(item);
-
-		createPropertyBuffer( i, field );
+	int tableFieldCount = 0;
+	if (m_table) {
+		tableFieldCount = m_table->fieldCount();
+		for(int i=0; i < tableFieldCount; i++)
+		{
+			KexiDB::Field *field = m_table->field(i);
+			KexiTableItem *item = new KexiTableItem(0);
+			item->push_back(QVariant(field->name()));
+			item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
+			item->push_back(QVariant(field->description()));
+			m_data->append(item);
+	
+			createPropertyBuffer( i, field );
+		}
 	}
-
 	//add empty space
-	for (int i=m_table->fieldCount(); i<MAX_FIELDS; i++) {
+	for (int i=tableFieldCount; i<MAX_FIELDS; i++) {
 //		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
 //		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
 //		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
@@ -385,7 +388,7 @@ void KexiAlterTableDialog::slotUpdateRowActions(int row)
 	setAvailable("data_save_row", m_view->rowEditing());
 }*/
 
-void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& buf,KexiProperty& prop)
+void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& /*buf*/ ,KexiProperty& /*prop*/)
 {
 	setDirty();
 	//TODO
@@ -404,7 +407,7 @@ KexiDB::Field::Type firstTypeForSelectedGroup( int typegroup )
 }
 
 void KexiAlterTableDialog::slotBeforeCellChanged(
-	KexiTableItem *item, int colnum, QVariant newValue, KexiDB::ResultInfo* result)
+	KexiTableItem *item, int colnum, QVariant newValue, KexiDB::ResultInfo* /*result*/)
 {
 	if (colnum==0) {//'name'
 //		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
@@ -524,7 +527,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 }
 
 void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item, 
-	KexiDB::ResultInfo* result)
+	KexiDB::ResultInfo* /*result*/)
 {
 	setDirty();
 	//TODO
@@ -549,7 +552,7 @@ void KexiAlterTableDialog::slotRowDeleted()
 	propertyBufferSwitched();
 }
 
-void KexiAlterTableDialog::slotEmptyRowInserted(KexiTableItem*, uint index)
+void KexiAlterTableDialog::slotEmptyRowInserted(KexiTableItem*, uint /*index*/)
 {
 	setDirty();
 
@@ -570,16 +573,16 @@ void KexiAlterTableDialog::slotEmptyRowInserted(KexiTableItem*, uint index)
 
 KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata)
 {
-	if (m_dialog->schemaData()) //must not be
+	if (m_table || m_dialog->schemaData()) //must not be
 		return 0;
 	
 	m_view->acceptRowEdit();
 
 	//create table schema definition
-	KexiDB::TableSchema *ts = new KexiDB::TableSchema(sdata.name());
-	ts->setName( sdata.name() );
-	ts->setCaption( sdata.caption() );
-	ts->setDescription( sdata.description() );
+	m_table = new KexiDB::TableSchema(sdata.name());
+	m_table->setName( sdata.name() );
+	m_table->setCaption( sdata.caption() );
+	m_table->setDescription( sdata.description() );
 
 	//check for duplicates
 	KexiPropertyBuffer *b = 0;
@@ -658,7 +661,7 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 			buf["description"]->value().toString(),
 			buf["width"]->value().toInt()
 		);
-		ts->addField(f);
+		m_table->addField(f);
 	}
 
 	//todo
@@ -666,19 +669,21 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 
 	//FINALLY: create table:
-	if (!conn->createTable(ts)) {
+	if (!conn->createTable(m_table)) {
 		//todo: show err...
-		delete ts;
-		ts = 0;
+		delete m_table;
+		m_table = 0;
 	}
-	setDirty(false);
-	return ts;
+	else {
+		//finally, we've got a table schema
+		setDirty(false);
+	}
+	return m_table;
 }
 
 bool KexiAlterTableDialog::storeData()
 {
-	KexiDB::TableSchema *ts = static_cast<KexiDB::TableSchema*>(m_dialog->schemaData());
-	
+//	KexiDB::TableSchema *ts = static_cast<KexiDB::TableSchema*>(m_dialog->schemaData());
 	m_view->acceptRowEdit();
 
 //<TODO: remove this in the future>
