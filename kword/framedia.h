@@ -153,6 +153,7 @@ protected slots:
     void textNameFrameChanged ( const QString & );
     void updateBrushConfiguration();
     void slotMarginsChanged( double );
+    void slotProtectContentChanged( bool );
 };
 
 #endif

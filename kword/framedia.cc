@@ -468,7 +468,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     cbAllFrames->setChecked(frame!=0L);
     grid1->addMultiCellWidget(cbAllFrames,++row,row+1, 0, 1);
     cbProtectContent = new QCheckBox( i18n("Protect Content"), tab1);
-
+    connect( cbProtectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
     grid1->addMultiCellWidget(cbProtectContent,++row,row+1, 0, 1);
     if( frameType != FT_TEXT || frame!=0 && frame->frameSet()==0) {
         cbAllFrames->setChecked(false);
@@ -704,7 +704,7 @@ void KWFrameDia::textNameFrameChanged ( const QString &text )
 }
 
 void KWFrameDia::setupTab4(){ // TAB Geometry
-    kdDebug() << "setup tab 4 geometry"<<endl;
+    //kdDebug() << "setup tab 4 geometry"<<endl;
     noSignal = true;
 
     tab4 = addPage( i18n( "Geometry" ) );
@@ -899,8 +899,19 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sh->setEnabled( false );
         floating->setEnabled( false );
     }
+
+    if (tab1 && cbProtectContent )
+    {
+        bool state = cbProtectContent->isChecked();
+        smb->setEnabled( !state );
+        smr->setEnabled( !state );
+        smt->setEnabled( !state );
+        sml->setEnabled( !state );
+        synchronize->setEnabled( !state );
+    }
+
     noSignal=false;
-    kdDebug() << "setup tab 4 exit"<<endl;
+    //kdDebug() << "setup tab 4 exit"<<endl;
 }
 
 void KWFrameDia::setupTab5()
@@ -957,6 +968,18 @@ void KWFrameDia::setupTab5()
 
     initComboStyleBrush();
     updateBrushConfiguration();
+}
+
+void KWFrameDia::slotProtectContentChanged( bool b)
+{
+    if (tab4&& !noSignal)
+    {
+        sml->setEnabled( !b );
+        smr->setEnabled( !b );
+        smt->setEnabled( !b );
+        smb->setEnabled( !b );
+        synchronize->setEnabled( !b);
+    }
 }
 
 void KWFrameDia::initComboStyleBrush()
@@ -1309,7 +1332,7 @@ bool KWFrameDia::applyChanges()
             // check if new name is unique
             for (QPtrListIterator<KWFrameSet> fit = doc->framesetsIterator(); fit.current() ; ++fit ) {
                 if ( !fit.current()->isDeleted() &&  // Allow to reuse a deleted frameset's name
-                       fs != fit.current() && fit.current()->getName() == name) {
+                     fs != fit.current() && fit.current()->getName() == name) {
                     if ( rNewFrameset->isChecked() )
                         KMessageBox::sorry( this,
                                             i18n( "A new frameset with the name '%1' "
@@ -1434,7 +1457,7 @@ bool KWFrameDia::applyChanges()
         KWFrame::RunAround ra=KWFrame::RA_BOUNDINGRECT;
         bool update=true;
         if ( rRunNo->isChecked() )
-             ra = KWFrame::RA_NO;
+            ra = KWFrame::RA_NO;
         else if ( rRunBounding->isChecked() )
             ra = KWFrame::RA_BOUNDINGRECT;
         else if ( rRunContur->isChecked() )
@@ -1499,11 +1522,11 @@ bool KWFrameDia::applyChanges()
     // Undo/redo for frame properties
     if(frame) { // only do undo/redo when we edit 1 frame for now..
         if(!isNewFrame && (frameCopy->isCopy()!=frame->isCopy()
-                   || frameCopy->frameBehavior()!=frame->frameBehavior()
-                   || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
-                   || frameCopy->runAround()!=frame->runAround()
-                   || frameCopy->runAroundGap()!=frame->runAroundGap()
-                       || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle())))
+                           || frameCopy->frameBehavior()!=frame->frameBehavior()
+                           || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
+                           || frameCopy->runAround()!=frame->runAround()
+                           || frameCopy->runAroundGap()!=frame->runAroundGap()
+                           || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle())))
         {
             if(!macroCmd)
                 macroCmd = new KMacroCommand( i18n("Frame Properties") );
@@ -1521,7 +1544,9 @@ bool KWFrameDia::applyChanges()
 
             if( !doc->isOutOfPage( rect , frame->pageNum() ) ) {
                 frame->setRect( px, py, pw, ph );
-                frame->setFrameMargins( uLeft, uTop, uRight, uBottom);
+                //don't change margins when frame is protected.
+                if ( !tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked()))
+                    frame->setFrameMargins( uLeft, uTop, uRight, uBottom);
                 doc->frameChanged( frame );
             } else {
                 KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
@@ -1605,17 +1630,20 @@ bool KWFrameDia::applyChanges()
                     KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
                 }
             }
-            if ( oldMarginLeft!=sml->value() || oldMarginRight!=smr->value() ||
-                 oldMarginTop!=smt->value() || oldMarginBottom!=smb->value())
+            if (!tab1 || (tab1 && cbProtectContent && !cbProtectContent->isChecked()))
             {
-                FrameIndex index( frame );
-                FrameMarginsStruct tmpMargBegin(frame);
-                FrameMarginsStruct tmpMargEnd(uLeft, uTop, uRight, uBottom);
-                if(!macroCmd)
-                    macroCmd = new KMacroCommand( i18n("Change Margin Frame") );
-                KWFrameChangeFrameMarginCommand *cmd = new KWFrameChangeFrameMarginCommand( i18n("Change Margin Frame"), index, tmpMargBegin, tmpMargEnd) ;
-                cmd->execute();
-                macroCmd->addCommand(cmd);
+                if ( oldMarginLeft!=sml->value() || oldMarginRight!=smr->value() ||
+                     oldMarginTop!=smt->value() || oldMarginBottom!=smb->value())
+                {
+                    FrameIndex index( frame );
+                    FrameMarginsStruct tmpMargBegin(frame);
+                    FrameMarginsStruct tmpMargEnd(uLeft, uTop, uRight, uBottom);
+                    if(!macroCmd)
+                        macroCmd = new KMacroCommand( i18n("Change Margin Frame") );
+                    KWFrameChangeFrameMarginCommand *cmd = new KWFrameChangeFrameMarginCommand( i18n("Change Margin Frame"), index, tmpMargBegin, tmpMargEnd) ;
+                    cmd->execute();
+                    macroCmd->addCommand(cmd);
+                }
             }
         }
     }
