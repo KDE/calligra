@@ -212,8 +212,8 @@ VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2, bool duplica
 }
 
 
-VScaleCmd::VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
-		: VTransformCmd( doc, i18n( "Scale Objects" ), "14_select" )
+VScaleCmd::VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate )
+		: VTransformCmd( doc, i18n( "Scale Objects" ), "14_select", duplicate )
 {
 	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Scale Object" ) );
@@ -224,8 +224,8 @@ VScaleCmd::VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
 }
 
 
-VShearCmd::VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
-		: VTransformCmd( doc, i18n( "Shear Objects" ), "14_shear" )
+VShearCmd::VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate )
+		: VTransformCmd( doc, i18n( "Shear Objects" ), "14_shear", duplicate )
 {
 	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Shear Object" ) );

@@ -252,7 +252,7 @@ VSelectTool::mouseDragRelease()
 	{
 		m_state = normal;
 		view()->part()->addCommand(
-			new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ),
+			new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2, altPressed() ),
 			true );
 		m_s1 = m_s2 = 1;
 	}

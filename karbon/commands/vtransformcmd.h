@@ -75,14 +75,14 @@ public:
 class VScaleCmd : public VTransformCmd
 {
 public:
-	VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2 );
+	VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate = false );
 };
 
 
 class VShearCmd : public VTransformCmd
 {
 public:
-	VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2 );
+	VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2, bool duplicate = false );
 };
 
 

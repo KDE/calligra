@@ -130,7 +130,7 @@ void
 VShearTool::mouseDragRelease()
 {
 	view()->part()->addCommand(
-		new VShearCmd( &view()->part()->document(), m_center, m_s1, m_s2 ),
+		new VShearCmd( &view()->part()->document(), m_center, m_s1, m_s2, altPressed() ),
 		true );
 }
 
