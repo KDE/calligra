@@ -2,41 +2,56 @@ This package was debianized by Ivan E. Moore II <rkrusty@debian.org> on
 Sat, 12 Jun 1999 03:00:29 -0400.
 It was brought up to date by Ben Burton <bab@debian.org> on
 Fri,  6 Apr 2001 10:30:32 -0500.
- 
+
 It was downloaded via CVS from cvs.kde.org.
 
 Upstream authors:
 
   Note that KOffice has many contributers beyond those listed below.
 
-  Karbon: Rob Buis <buis@kde.org>, Lennart Kudling <kudling@kde.org> and
-          Tomislav Lukman <tomislav.lukman@ck.tel.hr>
+  Karbon: Rob Buis <buis@kde.org>, Lennart Kudling <kudling@kde.org>,
+          Tomislav Lukman <tomislav.lukman@ck.hinet.hr> and
+          Benoit Vautrin  <benoit.vautrin@free.fr>
   KChart: Kalle Dalheimer <kalle@kde.org>,
           Laurent Montel <lmontel@mandrakesoft.com>,
           Karl-Heinz Zimmer <khz@kde.org> and
           Reginald Stadlbauer <reggie@kde.org>
-  KFormula: Andrea Rizzi <rizzi@kde.org>, Stephan Kulow <coolo@kde.org> and
-            Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+  Kexi: Lucijan Busch <lucijan@kde.org>, Peter Simonsson <psn@linux.se>,
+        Joseph Wenninger <jowenn@kde.org>, Seth Kurzenberg <seth@cql.com>,
+        Laurent Montel <montell@club-internet.fr>, Till Busch <till@bux.at>
+        and Jaroslaw Staniek / OpenOffice Polska <js@iidea.pl>
+  KFormula: Andrea Rizzi <rizzi@kde.org>, Stephan Kulow <coolo@kde.org>,
+            Ulrich Kuettler <ulrich.kuettler@gmx.de>,
+            Heinrich Kuettler <heinrich.kuettler@gmx.de> and
+            Claus O. Wilke <wilke@caltech.edu>
   Kivio: Dave Marotti <lndshark@speakeasy.net>,
-         Max Judin <max@thekompany.com> and Dmitry Poplavsky <dima@kde.org>
-  Kontour: Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de>,
-           Igor Janssen <rm@linux.ru.net>,
-           Alexander Neundorf <neundorf@kde.org>,
-           Rob Buis <rwlbuis@wanadoo.nl> and
-           Laurent Montel <lmontel@mandrakesoft.com>
+         Max Judin <max@thekompany.com>, Dmitry Poplavsky <dima@kde.org>,
+         Peter Simonsson <psn@linux.se>, Ian Reinhart Geiser <geiseri@kde.org>,
+         Laurent Montel <montel@kde.org> and
+         theKompany.com <info@thekompany.com>
   KOShell: Torben Weis <weis@kde.org>, Simon Hausmann <hausmann@kde.org>,
            David Faure <faure@kde.org> and Sven Lüppken <sven@kde.org>
   KPresenter: Reginald Stadlbauer <reggie@kde.org>,
               Werner Trobin <trobin@kde.org>, David Faure <dfaure@kde.org>,
               Toshitaka Fujioka <fujioka@kde.org>,
-              Lukáš Tinkl <lukas@kde.org> and
-              Laurent Montel <lmontel@mandrakesoft.com>
+              Lukáš Tinkl <lukas@kde.org>, Laurent Montel <montel@kde.org>,
+              Thorsten Zachmann <t.zachmann@zagge.de> and
+              Ariya Hidayat <ariya@kde.org>
+  Krita: Andrew Richards <physajr@phys.canterbury.ac.nz>,
+         Matthias Elter <me@kde.org>, Michael Koch <koch@kde.org>,
+         Carsten Pfeiffer <carpdjih@cetus.zrz.tu-berlin.de>,
+         John Califf <jcaliff@compuzone.net>,
+         Patrick Julien <freak@codepimps.org>,
+         Toshitaka Fujioka <fujioka@kde.org> and
+         Laurent Montel <lmontel@mandrakesoft.com>
   KSpread: Torben Weis <weis@kde.org>,
            Laurent Montel <montell@club-internet.fr>,
            David Faure <faure@kde.org> and many others
-  Kugar: Mutiny Bay Software <info@mutinybaysoftware.com>,
-         Phil Thompson <phil@river-bank.demon.co.uk> and
-         Alexander Dymo <cloudtemple@mksat.net>
+  Kugar: Keith Davis (Mutiny Bay Software) <info@mutinybaysoftware.com>,
+         Phil Thompson <phil@river-bank.demon.co.uk>,
+         Alexander Dymo <cloudtemple@mksat.net>,
+         Joseph Wenninger <jowenn@jowenn.at> and
+         Joris Marcillac <joris@marcillac.com>
   KWord: Reginald Stadlbauer <reggie@kde.org>, Torben Weis <weis@kde.org>,
          David Faure <dfaure@kde.org>, Thomas Zander <zander@kde.org>,
          Shaheed Haque <srhaque@iee.org>,
@@ -45,12 +60,97 @@ Upstream authors:
 
 Copyright:
 
-All programs in this package are released under the GPL (GNU General
-Public License).
+  The different components of KOffice are released under a mixture of
+  licenses, most of which are either the GPL (GNU General Public
+  License) or the LGPL (GNU Lesser General Public License).
 
-The basic flowcharting stencils provided with Kivio are released under the
-BSD license.
+  Specifically, all components are released under the GPL with the
+  following exceptions.
 
-On Debian GNU/Linux systems, the complete texts of these licenses can be
-found in `/usr/share/common-licenses/GPL' (GNU General Public License)
-and `/usr/share/common-licenses/BSD' (BSD License).
+  Karbon, Kexi (excluding CQL++ components), KPresenter,
+  KSpread (excluding calculator plugin), Kugar Designer, KWord,
+  Spell checker tool, Thumbnail creators:
+
+    LGPL (GNU Lesser General Public License).
+
+    Note that the KSpread calculator plugin is released under the GPL,
+    and that the CQL++ components of Kexi are released under a separate
+    license as described below.
+
+  CQL++ components of Kexi:
+
+    Copyright and Licensing Information for CQL++(TM)
+    =================================================
+
+    CQL++(TM) is copyrighted by Seth Kurtzberg, (C) 1994-2002, all rights
+    reserved. Since CQL++ is [1]open source, [2]free software, you are
+    free to use, modify, and distribute the CQL++ source code and object
+    code produced from the source, as long as you include this copyright
+    statement along with code built using CQL++.
+
+    In particular, you can use CQL++ in proprietary software and are under
+    no obligation to redistribute any of your source code that is built
+    using CQL++. Note, however, that you may not do anything to the CQL++
+    code, such as copyrighting it yourself or claiming authorship of the
+    CQL++ code, that will prevent CQL++ from being distributed freely
+    using an open source development model.
+
+    CQL++ is provided as is with no warranties of any kind, including the
+    warranties of design, merchantibility and fitness for a particular
+    purpose, noninfringement, or arising from a course of dealing, usage
+    or trade practice. Moreover, CQL++ is provided with no support and
+    without any obligation on the part of Machine Independent Software
+    Corporation or its employees to assist in its use, correction,
+    modification, or enhancement. However, commercial support for CQL++ is
+    available from Machine Independent Software Corporation.
+
+    Machine Independent Software Corporation and its employees shall have
+    no liability with respect to the infringement of copyrights, trade
+    secrets or any patents in CQL++ or any part thereof. Moreover, in no
+    event will Machine Independent Software or its employees be liable for
+    any lost revenue or profits or other special, indirect and
+    consequential damages.
+
+    The [3]CQL++ web site is maintained by Machine Independent Software
+    Corporation for the development of open source software as part of the
+    [1]open source software community. By submitting comments,
+    suggestions, code, code snippets, techniques (including that of
+    usage), and algorithms, submitters acknowledge that they have the
+    right to do so, that any such submissions are given freely and
+    unreservedly, and that they waive any claims to copyright or
+    ownership. In addition, submitters acknowledge that any such
+    submission might become part of the copyright maintained on the
+    overall body of code which comprises the CQL++ software. By making a
+    submission, submitters agree to these terms. Furthermore, submitters
+    acknowledge that the incorporation or modification of such submissions
+    is entirely at the discretion of the moderators of the open source
+    CQL++ projects or their designees.
+
+    References
+
+    1. http://www.opensource.org/
+    2. http://www.gnu.org/
+    3. http://www.cql.com
+
+  Kivio basic flowcharting stencils:
+
+    BSD License.
+
+  KOffice libraries:
+
+    LGPL in the most part.
+
+    Note however that components of libkofficeui, libkotext and libkwmf
+    include code from Trolltech and theKompany.com that is released
+    under the GPL.  If in doubt, the individual source files can be
+    inspected; these each contain their own license statements.
+
+  Import and export filters:
+
+    A mixture of GPL and LGPL.  Again the individual source files can
+    be inspected if in doubt.
+
+On Debian GNU/Linux systems, the complete texts of the licenses mentioned
+above can be found in `/usr/share/common-licenses/GPL' (GNU General Public
+License), `/usr/share/common-licenses/LGPL' (GNU Lesser General Public
+License) and `/usr/share/common-licenses/BSD' (BSD License).
