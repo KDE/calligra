@@ -629,7 +629,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
     return true;
 }
 
-bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
+bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameSize)
 {
     kdDebug(30518) << "New picture: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
@@ -681,8 +681,18 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
 
     kdDebug(30518) << "Picture loaded: " << koStoreName << endl;
 
-    const double height=anchor.frame.bottom - anchor.frame.top;
-    const double width =anchor.frame.right  - anchor.frame.left;
+    double height, width;
+    if ( useFrameSize )
+    {
+        height=anchor.frame.bottom - anchor.frame.top;
+        width =anchor.frame.right  - anchor.frame.left;
+    }
+    else
+    {
+        // dummy values (### TODO)
+        height=72;
+        width=72;
+    }
 
      // We need a 32 digit hex value of the picture number
      // Please note: it is an exact 32 digit value, truncated if the value is more than 512 bits wide. :-)
@@ -847,7 +857,7 @@ void OOWriterWorker::processAnchor ( const QString&,
     if ( (2==formatData.frameAnchor.type) // <IMAGE> or <PICTURE>
         || (5==formatData.frameAnchor.type) ) // <CLIPART>
     {
-        makePicture(formatData.frameAnchor);
+        makePicture(formatData.frameAnchor, true);
     }
     else if (6==formatData.frameAnchor.type)
     {
@@ -865,6 +875,7 @@ void OOWriterWorker::processTextImage ( const QString&,
     const FormatData& formatData)
 {
     kdDebug(30518) << "Text Image: " << formatData.frameAnchor.key.toString() << endl;
+    makePicture(formatData.frameAnchor, false);
 }
 
 void OOWriterWorker::processParagraphData ( const QString &paraText,

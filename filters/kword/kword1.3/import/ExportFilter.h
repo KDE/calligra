@@ -92,7 +92,7 @@ private:
     QString escapeOOText(const QString& strText) const;
     QString escapeOOSpan(const QString& strText) const;
     bool makeTable(const FrameAnchor& anchor);
-    bool makePicture(const FrameAnchor& anchor);
+    bool makePicture(const FrameAnchor& anchor, const bool useFrameSize);
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void declareFont(const QString& fontName);
     void writeFontDeclaration(void);
