@@ -813,9 +813,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 // find object on sticky page (ignore header/footer)
                 if ( !kpobject ) {
                     kpobject = stickyPage()->getObjectAt( docPoint );
-                    if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
-                        if(objectIsAHeaderFooterHidden(kpobject))
-                            kpobject=0L;
+                    if( kpobject && objectIsAHeaderFooterHidden( kpobject ) )
+                        kpobject=0L;
                 }
 
                 // clear old selections even if shift or control are pressed
@@ -1252,11 +1251,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 {
                     if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
                     {
-                        if( m_view->kPresenterDoc()->isHeaderFooter(sIt.current()))
-                        {
-                            if( objectIsAHeaderFooterHidden(sIt.current()))
-                                continue;
-                        }
+                        if( objectIsAHeaderFooterHidden(sIt.current()))
+                            continue;
                         selectObj( sIt.current() );
                     }
                 }
@@ -1992,11 +1988,8 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     if( !kpobject)
     {
         kpobject=stickyPage()->getObjectAt(docPoint );
-        if( kpobject && m_view->kPresenterDoc()->isHeaderFooter(kpobject))
-        {
-            if( objectIsAHeaderFooterHidden(kpobject))
-                kpobject=0L;
-        }
+        if( kpobject && objectIsAHeaderFooterHidden( kpobject ) )
+            kpobject=0L;
     }
     if(kpobject)
     {
@@ -5928,11 +5921,10 @@ void KPrCanvas::setActivePage( KPrPage* active )
     m_view->kPresenterDoc()->recalcPageNum();
 }
 
-//return true if object is a header/footer hidden
 bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
 {
-    if ((obj==m_view->kPresenterDoc()->header() && !m_view->kPresenterDoc()->hasHeader())
-        || (obj==m_view->kPresenterDoc()->footer() && !m_view->kPresenterDoc()->hasFooter()))
+    if (( m_view->kPresenterDoc()->isHeader(obj) && !m_view->kPresenterDoc()->hasHeader() )
+        || ( m_view->kPresenterDoc()->isFooter(obj) && !m_view->kPresenterDoc()->hasFooter() ) )
         return true;
     return false;
 }

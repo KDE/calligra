@@ -650,6 +650,10 @@ private:
     QPoint limitOfPoint(const QPoint& _point) const;
 
     void calcBoundingRect();
+    
+    /**
+     * Return true if object is a header/footer which is hidden.
+     */
     bool objectIsAHeaderFooterHidden(KPObject *obj) const;
 
     KPTextObject* textUnderMouse( const QPoint & point );
