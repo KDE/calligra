@@ -65,7 +65,6 @@ KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *w
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
     kdDebug(38000)<<"KIlluDoc::KIlluDoc() starts"<<endl;
-    m_killuView=0;
     setInstance( KIllustratorFactory::global() );
     m_gdocument = new GDocument(this);
     connect(m_gdocument, SIGNAL(wasModified(bool)), this, SLOT(modified(bool)));
@@ -186,27 +185,23 @@ KoView* KIllustratorDocument::createViewInstance( QWidget* parent, const char* n
 
 void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY )
 {
-    Rect r( (float)rect.x(), (float)rect.y(), (float)rect.width(), (float)rect.height() );
-    if (m_killuView==0)
-    {
-       painter.save();
-       painter.scale(zoomX,zoomY);
-       r=Rect( (float)rect.x(), (float)rect.y(), (float)rect.width()/zoomX, (float)rect.height()/zoomY );
-    }
-    else
+    painter.save();
+    painter.scale(zoomX,zoomY);
+    Rect r( (float)rect.x(), (float)rect.y(), (float)rect.width()/zoomX, (float)rect.height()/zoomY );
+
+    /*else
     {
        Canvas *can=m_killuView->getCanvas();
        float newZoom=zoomX;
        if (newZoom!=can->getZoomFactor())
           can->setZoomFactor(newZoom);
-    };
-    // TODO support zoom
+    };*/
 
     if ( !transparent )
         painter.fillRect( rect, white );
     m_gdocument->activePage()->drawContentsInRegion( painter, r, r );
-    if (m_killuView==0)
-       painter.restore();
+
+    painter.restore();
 }
 
 GDocument* KIllustratorDocument::gdoc()

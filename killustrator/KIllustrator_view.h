@@ -93,6 +93,8 @@ public:
 
     bool printDlg();
 
+    virtual void setZoom( double zoom );
+    virtual double zoom() const;
 
     void editInsertObject ();
 

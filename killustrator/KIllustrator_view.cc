@@ -106,6 +106,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     ,mLayerPanel(0)
     ,mLayerDockBase(0)
 {
+    kdDebug() << "KIllustratorView::KIllustratorView" << endl;
    QTime time;
    time.start();
     setInstance( KIllustratorFactory::global() );
@@ -114,8 +115,6 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     m_bShowRulers = true;
     mParent = parent;
 
-    if (m_pDoc!=0)
-       m_pDoc->setKilluView(this);
     //kdDebug(38000)<<"KIlluView after readConfig: "<<time.elapsed()<<endl;
 
     // restore default settings
@@ -144,8 +143,6 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 
 KIllustratorView::~KIllustratorView()
 {
-    if (m_pDoc!=0)
-       m_pDoc->setKilluView(0);
    writeConfig();
    delete mZoomTool;
    if (objMenu!=0)
@@ -1322,6 +1319,18 @@ void KIllustratorView::slotZoomFactorChanged(float factor)
    m_viewZoom->changeItem(8,f);
    m_viewZoom->setCurrentItem(8);
 
+}
+
+// Reimplemented from KoView. Automatically called for embedded views
+void KIllustratorView::setZoom( double zoom ) {
+    kdDebug() << "KIllustratorView::setZoom " << zoom << endl;
+    if (zoom != canvas->getZoomFactor() )
+        canvas->setZoomFactor(zoom);
+}
+
+// Reimplemented from KoView.
+double KIllustratorView::zoom() const {
+    return canvas->getZoomFactor();
 }
 
 void KIllustratorView::slotAddHelpline(int x, int y, bool d) {
