@@ -145,19 +145,18 @@ VSegment::isFlat( double flatness ) const
 	}
 
 
-	bool flat = false;
-
+	// Iterate over control points.
 	for( unsigned short i = 0; i < degree() - 1; ++i )
 	{
-		flat =
+		if(
 			height( prev()->knot(), point( i ), knot() ) / chordLength()
-			< flatness;
-
-		if( !flat )
-			break;
+			>= flatness )
+		{
+			return false;
+		}
 	}
 
-	return flat;
+	return true;
 }
 
 KoPoint
@@ -443,19 +442,19 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 	/* This function solves the "nearest point on curve" problem. That means, it
 	 * calculates the point q (to be precise: it's paramter t) on this segment, which
-	 * is located nearest to the input point p.
+	 * is located nearest to the input point P.
 	 * The basic idea is best described (because it is freely available) in "Phoenix:
 	 * An Interactive Curve Design System Based on the Automatic Fitting of
 	 * Hand-Sketched Curves", Philip J. Schneider (Master thesis, University of
 	 * Washington).
 	 *
 	 * For the nearest point q = C(t) on this segment, the first derivative is
-	 * orthogonal to the distance vector "C(t) - p". In other words we are looking for
-	 * solutions of f(t) = ( C(t) - p ) * C'(t) = 0.
-	 * ( C(t) - p ) is a nth degree curve, C'(t) a n-1th degree curve => f(t) is a
+	 * orthogonal to the distance vector "C(t) - P". In other words we are looking for
+	 * solutions of f(t) = ( C(t) - P ) * C'(t) = 0.
+	 * ( C(t) - P ) is a nth degree curve, C'(t) a n-1th degree curve => f(t) is a
 	 * (2n - 1)th degree curve and thus has up to 2n - 1 distinct solutions.
 	 * We solve the problem f(t) = 0 by using something called "Approximate Inversion Method".
-	 * Let's write f(t) explicitly:
+	 * Let's write f(t) explicitly (with c_i = p_i - P and d_j = p_{j+1} - p_j):
 	 *
 	 *         n                     n-1
 	 * f(t) = SUM c_i * B^n_i(t)  *  SUM d_j * B^{n-1}_j(t)
@@ -475,7 +474,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	 */
 
 
-	// Calculate the c_i = point( i ) - p.
+	// Calculate the c_i = point( i ) - P.
 	KoPoint* c = new KoPoint[ degree() + 1 ];
 
 	c[ 0 ] = prev()->knot() - p;
@@ -511,9 +510,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 				/
 				static_cast<double>(
 					VGlobal::binomialCoeff( 2 * degree() - 1, i + j ) );
-kdDebug() << z[ j * ( degree() + 1 ) + i ] << endl;
 		}
-kdDebug() << "\n" << endl;
 	}
 
 
@@ -536,34 +533,39 @@ kdDebug() << "\n" << endl;
 
 	// Calculate the control points of the new 2n-1th degree curve.
 	VPath newCurve( 0L );
-	newCurve.append( new VSegment( 2 * degree() ) );
+	newCurve.append( new VSegment( 2 * degree() - 1 ) );
 
 	// Set up control points in the ( u, f(u) )-plane.
-	for( unsigned short u = 1; u <= 2 * degree(); ++u )
+	for( unsigned short u = 0; u <= 2 * degree() - 1; ++u )
 	{
-		newCurve.current()->setPoint(
-			u - 1,
+		newCurve.current()->setP(
+			u,
 			KoPoint(
-				static_cast<double>( u ) / static_cast<double>( 2 * degree() ),
+				static_cast<double>( u ) / static_cast<double>( 2 * degree() - 1 ),
 				0.0 ) );
 	}
 
+
 	// Set f(u)-values.
-	for( unsigned short k = 1; k < 2 * degree() - 1; ++k )
+	for( unsigned short k = 0; k <= 2 * degree() - 1; ++k )
 	{
-		int min = QMIN( k, degree() );
+		unsigned short min = QMIN( k, degree() );
 
 		for(
-			int i = QMAX( 0, k - degree() + 1 );
+			unsigned short i = QMAX( 0, k - ( degree() - 1 ) );
 			i <= min;
 			++i )
 		{
-			int j = k - i;
+			unsigned short j = k - i;
 
-			newCurve.getLast()->m_nodes[ i + j  - 1 ].m_vector.setY(
-				newCurve.getLast()->m_nodes[ i + j  - 1 ].m_vector.y() +
-				products[ j * ( degree() + 1 ) + i ] *
-					z[ j * ( degree() + 1 ) + i ] );
+			// p_k += products[j][i] * z[j][i].
+			newCurve.getLast()->setP(
+				k,
+				KoPoint(
+					newCurve.getLast()->p( k ).x(),
+					newCurve.getLast()->p( k ).y() +
+						products[ j * ( degree() + 1 ) + i ] *
+							z[ j * ( degree() + 1 ) + i ] ) );
 		}
 	}
 
@@ -571,11 +573,18 @@ kdDebug() << "\n" << endl;
 	delete[]( products );
 	delete[]( z );
 
+kdDebug() << "results" << endl;
+for( int i = 0; i <= 2 * degree() - 1; ++i )
+{
+kdDebug() << newCurve.getLast()->p( i ).x() << " "
+<< newCurve.getLast()->p( i ).y() << endl;
+}
+kdDebug() << endl;
 
 	// Find roots.
 	QValueList<double> params;
 
-	newCurve.current()->rootParams( params );
+	newCurve.getLast()->rootParams( params );
 
 
 	// Now compare the distances of the candidate points.
@@ -592,7 +601,6 @@ kdDebug() << "\n" << endl;
 	// Iterate over the found candidate params.
 	for( QValueListConstIterator<double> itr = params.begin(); itr != params.end(); ++itr )
 	{
-kdDebug() << *itr << endl;
 		pointDerivativesAt( *itr, &dist );
 		dist -= p;
 		oldDistanceSquared = distanceSquared;
@@ -629,18 +637,17 @@ VSegment::rootParams( QValueList<double>& params ) const
 	{
 		// No solutions.
 		case 0:
-kdDebug() << "nosolution" << endl;
 			return;
 		// Exactly one solution.
 		case 1:
-kdDebug() << "one solution" << endl;
-			if( isFlat() )
+			if( isFlat( VGlobal::flatnessTolerance / chordLength() ) )
 			{
 				// Calculate intersection of chord with x-axis.
 				KoPoint chord = knot() - prev()->knot();
 
-kdDebug() << "result" << endl;
-kdDebug() << ( chord.x() * prev()->knot().y() - chord.y() * prev()->knot().x() ) / - chord.y() << endl;
+kdDebug() << prev()->knot().x()  << " " << prev()->knot().y()
+<< knot().x() << " " << knot().y() << " ---> "
+<< ( chord.x() * prev()->knot().y() - chord.y() * prev()->knot().x() ) / - chord.y() << endl;
 				params.append(
 					( chord.x() * prev()->knot().y() - chord.y() * prev()->knot().x() )
 					/ - chord.y() );

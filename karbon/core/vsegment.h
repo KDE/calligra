@@ -126,11 +126,23 @@ public:
 
 
 	/**
-	 * Returns the point with index 0 <= i < degree(),
+	 * Returns the segment's point with index 0 <= i < degree().
 	 */
 	const KoPoint& point( int i ) const
 	{
 		return m_nodes[ i ].m_vector;
+	}
+
+	/**
+	 * This is a convenience function. It returns the point with index
+	 * 0 <= i <= degree() while p( 0 ) is the knot of the previous
+	 * segment.
+	 */
+	const KoPoint& p( int i ) const
+	{
+		return i == 0
+			   ? prev()->knot()
+			   : m_nodes[ --i ].m_vector;
 	}
 
 	/**
@@ -142,11 +154,24 @@ public:
 	}
 
 	/**
-	 * Sets the point with index 0 <= i < degree() to "p".
+	 * Sets the segment's point with index 0 <= i < degree() to "p".
 	 */
 	void setPoint( int i, const KoPoint& p )
 	{
 		m_nodes[ i ].m_vector = p;
+	}
+
+	/**
+	 * This is a convenience function. It sets the point with index
+	 * 0 <= i <= degree() to "p" while setP( 0 ) sets the knot of the
+	 * previous segment.
+	 */
+	void setP( int i, const KoPoint& p )
+	{
+		if( i == 0 )
+			prev()->setKnot( p );
+		else
+			m_nodes[ --i ].m_vector = p;
 	}
 
 	/**
