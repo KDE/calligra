@@ -99,10 +99,10 @@ namespace KexiDB {
 #define KexiDBDrvWarning kdWarning(44001)
 
 //! returns KexiDB version info (most significant part)
-int KEXI_DB_EXPORT versionMajor();
+KEXI_DB_EXPORT int versionMajor();
 
 //! returns KexiDB version info (least significant part)
-int KEXI_DB_EXPORT versionMinor();
+KEXI_DB_EXPORT int versionMinor();
 
 /*! Object types set like table or query. */
 enum ObjectTypes {
