@@ -80,21 +80,6 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
 
     obj = 0L;
 
-#ifdef NO_LAYERS
-    QListIterator<GObject> it (doc->getSelection ());
-    for (; it.current (); ++it) {
-      GObject* o = it.current ();
-      int idx = o->getNeighbourPoint (Coord (xpos, ypos));
-      if (idx != -1) {
-	obj = o;
-	pointIdx = idx;
-	startPos = Coord (xpos, ypos);
-	lastPos = startPos;
-	canvas->setCursor (*cursor);
-	break;
-      }
-    }
-#else
     for (list<GObject*>::iterator it = doc->getSelection ().begin ();
 	 it != doc->getSelection ().end (); it++) {
       GObject* o = *it;
@@ -108,7 +93,6 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
 	break;
       }
     }
-#endif
   }
   else if (e->type () == Event_MouseMove) {
     QMouseEvent *me = (QMouseEvent *) e;
@@ -117,21 +101,12 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
 
     if (obj == 0L) {
       bool isOver = false;
-#ifdef NO_LAYERS
-      QListIterator<GObject> it (doc->getSelection ());
-      for (; it.current (); ++it) {
-	GObject* o = it.current ();
-	if (o->getNeighbourPoint (Coord (xpos, ypos)) != -1)
-	  isOver = true;
-      }
-#else
       for (list<GObject*>::iterator it = doc->getSelection ().begin ();
 	   it != doc->getSelection ().end (); it++) {
 	GObject* o = *it;
 	if (o->getNeighbourPoint (Coord (xpos, ypos)) != -1)
 	  isOver = true;
       }
-#endif
       if (isOver)
 	canvas->setCursor (*cursor);
       else

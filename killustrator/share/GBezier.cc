@@ -132,6 +132,15 @@ GBezier::GBezier () : GPolyline () {
   
 GBezier::GBezier (const list<XmlAttribute>& attribs) : GPolyline (attribs) {
   wSegment = -1;
+
+  list<XmlAttribute>::const_iterator first = attribs.begin ();
+	
+  while (first != attribs.end ()) {
+    const string& attr = (*first).name ();
+    if (attr == "closed")
+      closed = ((*first).intValue () == 1);
+    first++;
+  }
 }
 
 GBezier::GBezier (const GBezier& obj) : GPolyline (obj) {
@@ -205,13 +214,16 @@ const char* GBezier::typeName () {
 
 void GBezier::draw (Painter& p, bool withBasePoints) {
   QPen pen;
+  QBrush brush;
 
   initPen (pen);
   p.save ();
   p.setPen (pen);
   p.setWorldMatrix (tmpMatrix, true);
-  unsigned int i, num = points.count ();
-  for (i = 1; i + 3 < num; i += 3) {
+  unsigned num = points.count ();
+  
+#if 0
+  for (unsigned int i = 1; i + 3 < num; i += 3) {
     if (points.at (i + 1)->x () == MAXFLOAT ||
 	points.at (i + 2)->x () == MAXFLOAT) {
       p.drawLine (points.at (i)->x (), points.at (i)->y (),
@@ -221,6 +233,25 @@ void GBezier::draw (Painter& p, bool withBasePoints) {
       p.drawBezier (points,i);
     }
   }
+#else
+  if (num > 3) {
+    if (closed) {
+      if (! workInProgress ()) {
+	initBrush (brush);
+	p.setBrush (brush);
+
+	if (gradientFill ()) {
+	  if (! gShape.valid ())
+	    updateGradientShape (p);
+	  gShape.draw (p);
+	}
+      }
+      p.drawPolygon (ppoints);
+    }
+    else
+      p.drawPolyline (ppoints);
+  }
+#endif
   p.restore ();
   if (sArrow != 0L) {
     Coord pp = points.at (1)->transform (tmpMatrix);
@@ -362,6 +393,8 @@ void GBezier::calcBoundingBox () {
   unsigned int num = points.count ();
   Coord p = points.at (0)->transform (tmpMatrix);
 
+  computePPoints ();
+
   r.left (p.x ());
   r.top (p.y ());
   r.right (p.x ());
@@ -404,6 +437,7 @@ void GBezier::writeToXml (XmlWriter& xml) {
   writePropertiesToXml (xml);
   xml.addAttribute ("arrow1", outlineInfo.startArrowId);
   xml.addAttribute ("arrow2", outlineInfo.endArrowId);
+  xml.addAttribute ("closed", (int) closed);
   xml.closeTag (false);
 
   for (QListIterator<Coord> it (points); it.current (); ++it) {
@@ -444,24 +478,85 @@ bool GBezier::findNearestPoint (const Coord& p, float max_dist,
 }
 
 void GBezier::computePPoints () {
-    if (closed) {
+  unsigned int i, num = points.count ();
+  unsigned int idx = 0;
+
+  ppoints.resize (num);
+  for (i = 1; i + 3 < num; i += 3) {
+    if (points.at (i + 1)->x () == MAXFLOAT ||
+	points.at (i + 2)->x () == MAXFLOAT) {
+      if (ppoints.size () < idx + 2)
+	ppoints.resize (ppoints.size () + 2);
+      ppoints.setPoint (idx++, points.at (i)->x (), points.at (i)->y ());
+      ppoints.setPoint (idx++, points.at (i+3)->x (), points.at (i+3)->y ());
     }
+    else 
+      idx = createPolyline (i, idx);
+  }
+  ppoints.resize (idx);
 }
 
 void GBezier::setClosed (bool flag) {
-    if (flag && points.count () < 6)
-	return;
+  if (flag && points.count () < 6)
+    return;
+  
+  closed = flag;
+  if (closed) {
+    // Point #n-2 := Point #0
+    // Point #n-1 := Point #1
+    // Point #n := Point #2
+    unsigned int n = points.count () - 1;
+    *points.at (n) = *points.at (2);
+    *points.at (n-1) = *points.at (1);
+    *points.at (n-2) = *points.at (0);
+  }
+  computePPoints ();
+}
 
-    closed = flag;
-    if (closed) {
-	cout << "create closed bezier curve...: " << points.count () << endl;
-	// Point #n-2 := Point #0
-	// Point #n-1 := Point #1
-	// Point #n := Point #2
-	unsigned int n = points.count () - 1;
-	*points.at (n) = *points.at (2);
-	*points.at (n-1) = *points.at (1);
-	*points.at (n-2) = *points.at (0);
-    }
-    computePPoints ();
+int GBezier::createPolyline (int index, int pidx) {
+  double th, th2, th3;
+  double t, t2, t3;
+  int x4, y4;
+
+  double x0 = points.at (index)->x();
+  double y0 = points.at (index)->y();
+  double x1 = points.at (index+1)->x();
+  double y1 = points.at (index+1)->y();
+  double x2 = points.at (index+2)->x();
+  double y2 = points.at (index+2)->y();
+  double x3 = points.at (index+3)->x();
+  double y3 = points.at (index+3)->y();
+
+  if (ppoints.size () - pidx < ((points.count ())/ DELTA / 3))
+    ppoints.resize ((points.count ()) /DELTA / 3 + pidx);
+
+  for (t = 0; t < 1.01; t += DELTA) {
+    t2 = t * t;              
+    t3 = t2 * t;
+    th = 1 - t;
+    th2 = th * th;
+    th3 = th2 * th;
+    x4 = (int) (th3 * x0 + 3. * t * th2 * x1 + 3. *t2 *th *x2 + t3 * x3);
+    y4 = (int) (th3 * y0 + 3. * t * th2 * y1 + 3. * t2 * th * y2 + t3 * y3);
+    ppoints.setPoint (pidx, x4, y4);
+    pidx++;
+  } 
+  ppoints.resize (pidx);
+  return pidx;
+}
+
+void GBezier::updateGradientShape (QPainter& p) {
+  // define the rectangular box for the gradient pixmap 
+  // (in object coordinate system)
+  gShape.setBox (calcEnvelope ());
+
+  // define the clipping region
+  QWMatrix matrix = p.worldMatrix ();
+  gShape.setRegion (QRegion (matrix.map (ppoints)));
+
+  // update the gradient information
+  gShape.setGradient (fillInfo.gradient);
+
+  // and create a new gradient pixmap
+  gShape.updatePixmap ();
 }

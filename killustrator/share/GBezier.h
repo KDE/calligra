@@ -75,6 +75,8 @@ protected:
   void updateBasePoint (int idx);
 
   void computePPoints ();
+  int createPolyline (int index, int pidx);
+  void updateGradientShape (QPainter& p);
 
 private:
   int wSegment;

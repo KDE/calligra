@@ -1,4 +1,4 @@
 * german translation
 * undo/redo for layers
-* object ordering is modified during grouping
 * bounding box for arrows
+* seg points in rotated ellipses

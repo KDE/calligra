@@ -460,7 +460,7 @@ void GPolygon::updateGradientShape (QPainter& p) {
   if (kind == PK_Polygon || 
       (kind != PK_Polygon && (Roundness == 0 || Roundness == 100))) {
     if (kind == PK_Polygon || Roundness == 0) {
-      QRegion region (pnts);
+      QRegion region (matrix.map (pnts));
       gShape.setRegion (region);
     }
     else if (Roundness == 100) {

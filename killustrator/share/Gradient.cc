@@ -63,6 +63,7 @@ QPixmap Gradient::createPixmap (unsigned int width, unsigned int height) {
     createHVGradient (p, width, height);
     break;
   case Radial:
+    pix.fill (color2);
     createRadGradient (p, width, height);
     break;
   case Rectangular:

@@ -79,9 +79,9 @@ bool EPSExport::exportToFile (GDocument* doc) {
   Painter paint;
   paint.begin (&printer);
   // define the bounding box as clipping region
-  paint.setClipRect (0, 0, box.width (), box.height ());
+  paint.setClipRect (0, 0, box.width () + 2, box.height () + 2);
   // and move the objects to the origin
-  paint.translate (-box.left (), -box.top ());
+  paint.translate (-box.left () + 1, -box.top () + 1);
   doc->drawContents (paint);
   paint.end ();
   return true;

@@ -5,7 +5,7 @@
 * Undo fuer UngroupCmd [10/28/98]
 * Gradientfuellen fuer abgerundete Rechtecke [10/31/98]
 * EPS-Export ueber Qt-PostScript-Ausgabe [10/31/98]
-* Gradientfuellen fuer Kreissegmente
+* Gradientfuellen fuer Kreissegmente [11/02/98]
 * geschlossene Bezierkurven
 
 * Drucken fuer KOffice
