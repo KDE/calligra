@@ -522,6 +522,7 @@ void KWParagDia::setupTab1()
     endFramePageGrid->addWidget(cEndOfFramePage,0,0);
     endFramePageGrid->addRowSpacing( 0, 5 );
     grid->addWidget( endFramePage, 1, 0 );
+    connect(cEndOfFramePage,SIGNAL(clicked()),this,SLOT(slotEndOfFramePageChanged()));
 
     // --------------- paragraph spacing ---------------
     pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), tab );
@@ -569,6 +570,8 @@ void KWParagDia::setupTab1()
 
     grid->setColStretch( 1, 1 );
     grid->setRowStretch( 3, 1 );
+
+    m_bPageBreakingChanged=false;
 }
 
 /*================================================================*/
@@ -1510,6 +1513,16 @@ bool KWParagDia::isBulletChanged() const
     return true; // unused anyway
 }
 
+bool KWParagDia::linesTogether() const
+{
+    return  cEndOfFramePage->isChecked();
+}
+
+void KWParagDia::slotEndOfFramePageChanged()
+{
+    m_bPageBreakingChanged=true;
+}
+
 void KWParagDia::setParagLayout( const KWParagLayout & lay )
 {
     setAlign( lay.alignment );
@@ -1526,7 +1539,7 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
     setTopBorder( lay.topBorder );
     setBottomBorder( lay.bottomBorder );
     setTabList( lay.tabList() );
-    setPageBreaking( lay.samePage);
+    setPageBreaking( lay.linesTogether);
     oldLayout=lay;
     //setTabList( lay.ParagLayout->getTabList );
     //border init it's necessary to allow left border works

@@ -448,6 +448,14 @@ void KWView::setupActions()
     actionFormatBrdOutline = new KToggleAction( i18n( "Paragraph Border Outline" ), "borderoutline", 0,this, SLOT( textBorderOutline() ),
 			actionCollection(), "format_brdoutline" );
 
+    actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ), 0,
+                                      this, SLOT( textIncreaseIndent() ),
+                                      actionCollection(), "format_increaseindent" );
+
+    actionFormatDecreaseIndent= new KAction( i18n( "Decrease Indent" ), 0,
+                                      this, SLOT( textDecreaseIndent() ),
+                                      actionCollection(), "format_decreaseindent" );
+
     actionFormatBrdLeft = new KToggleAction( i18n( "Paragraph Border Left" ), "borderleft", 0,
                                              this, SLOT( textBorderLeft() ),
                                              actionCollection(), "format_brdleft" );
@@ -2203,6 +2211,39 @@ void KWView::textSubScript()
         edit->setTextSubScript(actionFormatSub->isChecked());
 }
 
+/*===============================================================*/
+void KWView::textIncreaseIndent()
+{
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    if ( edit )
+        {
+            KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+            double val=(u.pt()+10);
+            if(val <=doc->paperWidth())
+                {
+                    u.setPT( val );
+                    edit->setMargin( QStyleSheetItem::MarginLeft, u );
+                }
+        }
+}
+
+/*===============================================================*/
+void KWView::textDecreaseIndent()
+{
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    if ( edit )
+        {
+             KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+             double val=(u.pt()-10);
+             if(val>=0)
+                 {
+                     u.setMM( (u.pt()-10) );
+                     edit->setMargin( QStyleSheetItem::MarginLeft, u );
+                 }
+        }
+}
+
+/*===============================================================*/
 void KWView::textBorderOutline()
 {
     if ( actionFormatBrdOutline->isChecked() )

@@ -24,7 +24,7 @@
 #include <qstringlist.h>
 #include <qlist.h>
 #include <koRuler.h>
-#include <qcheckbox.h>
+
 
 #include "kwtextparag.h"
 #include "kwunit.h"
@@ -50,7 +50,7 @@ class KWPagePreview;
 class KWPagePreview2;
 class KWBorderPreview;
 class KWNumPreview;
-//class QCheckBox;
+class QCheckBox;
 
 /******************************************************************/
 /* Class: KWParagDia                                              */
@@ -107,12 +107,16 @@ public:
     void setParagLayout( const KWParagLayout & lay );
     void setPageBreaking( bool b);
 
+
     KoTabulatorList tabListTabulator() const { return _tabList; }
 
 
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
     bool listTabulatorChanged() const {return m_bListTabulatorChanged;}
-    bool isPageBreakingChanged() const { return  cEndOfFramePage->isChecked();}
+
+    bool linesTogether() const ;
+
+    bool isPageBreakingChanged() const { return  m_bPageBreakingChanged;}
 
     bool isLineSpacingChanged() const {return oldLayout.lineSpacing.pt()!=lineSpacing().pt();}
     bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft].pt()!=leftIndent().pt(); }
@@ -184,6 +188,7 @@ protected:
 
     bool m_bAfterInitBorder;
     bool m_bListTabulatorChanged;
+    bool m_bPageBreakingChanged;
 
 protected slots:
     void slotPressEvent(QMouseEvent *_ev);
@@ -220,6 +225,7 @@ protected slots:
     void modifyClicked();
     void delClicked();
     void slotDoubleClicked( QListBoxItem * );
+    void slotEndOfFramePageChanged();
 };
 
 #endif

@@ -223,6 +223,8 @@ public slots:
     void textUnsortList();
     void textSuperScript();
     void textSubScript();
+    void textIncreaseIndent();
+    void textDecreaseIndent();
     void textBorderLeft();
     void textBorderRight();
     void textBorderTop();
@@ -364,6 +366,8 @@ protected:
     KAction *actionFormatFrameSet;
     KAction *actionFormatPage;
     KAction *actionFormatStylist;
+    KAction *actionFormatIncreaseIndent;
+    KAction *actionFormatDecreaseIndent;
     KToggleAction *actionFormatEnumList;
     KToggleAction *actionFormatUnsortList;
     KToggleAction *actionFormatSuper;
