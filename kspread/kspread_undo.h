@@ -214,9 +214,9 @@ public:
 
     virtual void undo();
     virtual void redo();
+protected:
     void createList( QValueList<int>&list,KSpreadTable *_tab );
 
-protected:
     QString m_tableName;
     int m_iRow;
     int m_iNbRow;
@@ -231,9 +231,9 @@ public:
 
     virtual void undo();
     virtual void redo();
+protected:
     void createList( QValueList<int>&list,KSpreadTable *_tab );
 
-protected:
     QString m_tableName;
     int m_iColumn;
     int m_iNbCol;
@@ -248,9 +248,9 @@ public:
 
     virtual void undo();
     virtual void redo();
-    void createList( QValueList<int>&list,KSpreadTable *_tab );
 
 protected:
+    void createList( QValueList<int>&list,KSpreadTable *_tab );
     QString m_tableName;
     int m_iRow;
     int m_iNbRow;
@@ -334,9 +334,9 @@ public:
     virtual void undo();
     virtual void redo();
 
+protected:
     void copyLayout( QValueList<layoutCell> &list,QValueList<layoutColumn> &listCol,QValueList<layoutRow> &listRow, KSpreadTable* table );
 
-protected:
     QRect m_rctRect;
     QValueList<layoutCell> m_lstLayouts;
     QValueList<layoutCell> m_lstRedoLayouts;
@@ -357,9 +357,9 @@ public:
     virtual void undo();
     virtual void redo();
 
+protected:
     void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
 
-protected:
     QRect m_selection;
     QCString m_data;
     QCString m_dataRedo;
@@ -394,9 +394,9 @@ public:
     virtual void undo();
     virtual void redo();
 
+protected:
     void createList( QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
 
-protected:
     QRect m_rctRect;
     QValueList<columnSize> m_lstColumn;
     QValueList<columnSize> m_lstRedoColumn;
@@ -414,9 +414,9 @@ public:
     virtual void undo();
     virtual void redo();
 
+protected:
     void createList( QValueList<textOfCell> &list, KSpreadTable* table );
 
-protected:
     QRect m_rctRect;
     QValueList<textOfCell> m_lstTextCell;
     QValueList<textOfCell> m_lstRedoTextCell;
@@ -432,10 +432,10 @@ public:
     virtual void undo();
     virtual void redo();
 
+protected:
     void copyAll( QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol,
                   QValueList<layoutRow> & listRow, KSpreadTable * table );
 
-protected:
     QRect m_rctRect;
     QValueList<layoutTextCell> m_lstLayouts;
     QValueList<layoutTextCell> m_lstRedoLayouts;
@@ -475,8 +475,8 @@ public:
 
     virtual void undo();
     virtual void redo();
-    void createListCell( QCString &list, KSpreadTable* table );
 protected:
+    void createListCell( QCString &list, KSpreadTable* table );
     QRect m_selection;
     QCString m_data;
     QCString m_dataRedo;
@@ -549,8 +549,8 @@ public:
 
     virtual void undo();
     virtual void redo();
-    void createListCell( QCString &list, KSpreadTable* table );
 protected:
+    void createListCell( QCString &list, KSpreadTable* table );
     QRect m_selection;
     QCString m_data;
     QCString m_dataRedo;
@@ -594,9 +594,10 @@ public:
 
     virtual void undo();
     virtual void redo();
-    void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
 
 protected:
+    void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
+
     QRect m_selection;
     QCString m_data;
     QCString m_dataRedo;
@@ -623,9 +624,8 @@ public:
     virtual void undo();
     virtual void redo();
 
-    void createListCell( QValueList<styleCell> &listCell, KSpreadTable* table );
-
 protected:
+    void createListCell( QValueList<styleCell> &listCell, KSpreadTable* table );
     QRect m_selection;
     QValueList<styleCell> m_lstStyleCell;
     QValueList<styleCell> m_lstRedoStyleCell;

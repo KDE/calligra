@@ -3005,36 +3005,44 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
 void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
 {
-  double adjust = -1.0;
-  int select;
-  if ( _row == -1 )
-  {
-    adjust = m_pCanvas->activeTable()->adjustRow( m_pView->selectionInfo() );
-    select = m_iSelectionAnchor;
-  }
-  else
-  {
-    adjust = m_pCanvas->activeTable()->adjustRow( m_pView->selectionInfo(), _row );
-    select = _row;
-  }
-
-  if ( adjust != -1.0 )
-  {
-    if ( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+    double adjust = -1.0;
+    int select;
+    if ( _row == -1 )
     {
-        QRect rect;
-        rect.setCoords( 1, select, KS_colMax, select);
-        KSpreadUndoResizeColRow * undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),
-                                                                      m_pCanvas->activeTable(), rect );
-        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+        adjust = m_pCanvas->activeTable()->adjustRow( m_pView->selectionInfo() );
+        select = m_iSelectionAnchor;
     }
-    KSpreadTable * table = m_pCanvas->activeTable();
-    assert( table );
-    RowLayout * rl = table->nonDefaultRowLayout( select );
-    //    adjust = QMAX( (int)(2.0 * m_pCanvas->zoom()), adjust * m_pCanvas->zoom() );
-    adjust = QMAX( 2.0, adjust );
-    rl->setDblHeight(adjust * m_pCanvas->zoom(), m_pCanvas);
-  }
+    else
+    {
+        adjust = m_pCanvas->activeTable()->adjustRow( m_pView->selectionInfo(), _row );
+        select = _row;
+    }
+
+    if ( adjust != -1.0 )
+    {
+        KSpreadTable * table = m_pCanvas->activeTable();
+        assert( table );
+        if ( _row == -1 )
+        {
+            RowLayout * rl = table->nonDefaultRowLayout( select );
+
+            if ( rl->dblHeight()==adjust)
+                return;
+        }
+
+        if ( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+        {
+            QRect rect;
+            rect.setCoords( 1, select, KS_colMax, select);
+            KSpreadUndoResizeColRow * undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),
+                                                                          m_pCanvas->activeTable(), rect );
+            m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+        }
+        RowLayout * rl = table->nonDefaultRowLayout( select );
+        //    adjust = QMAX( (int)(2.0 * m_pCanvas->zoom()), adjust * m_pCanvas->zoom() );
+        adjust = QMAX( 2.0, adjust );
+        rl->setDblHeight(adjust * m_pCanvas->zoom(), m_pCanvas);
+    }
 }
 
 void KSpreadVBorder::equalizeRow( int resize )
@@ -3560,6 +3568,13 @@ void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
     KSpreadTable * table = m_pCanvas->activeTable();
     assert( table );
 
+    if ( _col == -1 )
+    {
+        ColumnLayout * cl = table->nonDefaultColumnLayout( select );
+        if ( cl->dblWidth() == adjust )
+            return;
+
+    }
     if ( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
     {
         QRect rect;
