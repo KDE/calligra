@@ -3257,8 +3257,12 @@ formatAgain:
     if ( n && doMove && n->invalid == -1 && r.y() + r.height() != n->r.y() ) {
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	QTextParag *s = n;
+        bool makeInvalid = p->lastInFrame;
 	while ( s ) {
-	    s->invalidate( 0 );
+	   if ( !s->isFullWidth() )
+	        makeInvalid = TRUE;
+	    if ( makeInvalid )
+	        s->invalidate( 0 );
 	    s->move( dy );
 	    s = s->n;
 	}
