@@ -44,7 +44,6 @@ TextTool::TextTool (CommandHistory *history) : Tool (history)
   origState = 0L;
   m_id=ToolText;
 }
-
 void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
   if(!doc->document()->isReadWrite())
@@ -53,7 +52,6 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
    {
       QMouseEvent *me = (QMouseEvent *) e;
       Coord pos (me->x (), me->y ());
-
       if (text != 0L)
       {
          if (text->isEmpty ())
@@ -62,7 +60,11 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
             doc->activePage()->deleteObject (text);
          }
          else
-                text->showCursor (false);
+         {
+             //store undo info
+             deactivate (doc, canvas);
+             //text->showCursor (false);
+         }
         }
 
         text = 0L;
