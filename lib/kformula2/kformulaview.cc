@@ -192,6 +192,7 @@ void KFormulaView::focusInEvent(QFocusEvent*)
 void KFormulaView::focusOutEvent(QFocusEvent*)
 {
     //cerr << "void KFormulaView::focusOutEvent(QFocusEvent*): " << cursorVisible << " " << hasFocus() << endl;
+    document->setActiveCursor(0);
     hideCursor();
     cursorHasChanged = true;
     emitCursorChanged();

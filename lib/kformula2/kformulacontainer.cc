@@ -55,6 +55,7 @@ KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
     connect(this, SIGNAL(commandExecuted()),
             document->getHistory(), SIGNAL(commandExecuted()));
     rootElement = new FormulaElement(this);
+    activeCursor = internCursor = createCursor();
     dirty = true;
     testDirty();
 }
@@ -62,6 +63,7 @@ KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
 KFormulaContainer::~KFormulaContainer()
 {
     getDocument()->formulaDies(this);
+    delete internCursor;
     delete rootElement;
 }
 
@@ -110,7 +112,15 @@ FormulaCursor* KFormulaContainer::getActiveCursor()
 void KFormulaContainer::setActiveCursor(FormulaCursor* cursor)
 {
     getDocument()->activate(this);
-    activeCursor = cursor;
+    if (cursor != 0) {
+        activeCursor = cursor;
+    }
+    else {
+        FormulaCursor::CursorData* data = activeCursor->getCursorData();
+        internCursor->setCursorData(data);
+        delete data;
+        activeCursor = internCursor;
+    }
 }
 
 

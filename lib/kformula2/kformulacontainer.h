@@ -336,6 +336,12 @@ private:
     FormulaCursor* activeCursor;
 
     /**
+     * The cursor that is used if there is no view.
+     * Please consider this a dirty hack.
+     */
+    FormulaCursor* internCursor;
+
+    /**
      * The document we belong to.
      */
     KFormulaDocument* document;
