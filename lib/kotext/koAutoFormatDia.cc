@@ -1113,9 +1113,12 @@ void KoCompletionDia::slotAddCompletionEntry()
     QString newWord = KLineEditDlg::getText( i18n("Add Completion Entry"),i18n("Enter entry:"),QString::null, &ok, this );
     if ( ok )
     {
-        m_listCompletion.append( newWord );
-        m_lbListCompletion->insertItem( newWord );
-        pbRemoveCompletionEntry->setEnabled( true );
+        if ( !m_listCompletion.contains( newWord ))
+        {
+            m_listCompletion.append( newWord );
+            m_lbListCompletion->insertItem( newWord );
+            pbRemoveCompletionEntry->setEnabled( true );
+        }
 
     }
 }
