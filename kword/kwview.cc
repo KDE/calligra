@@ -199,7 +199,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     if ( m_doc->isReadWrite() )
     {
         connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
-                 actionEditCut, SLOT(setEnabled(bool)) );
+                 actionEditCut, SLOT(/*setEnabled(bool)*/slotChangeCutState(bool )) );
     }
     else
     {
@@ -278,6 +278,15 @@ DCOPObject* KWView::dcopObject()
 	dcop = new KWordViewIface( this );
 
     return dcop;
+}
+
+void KWView::slotChangeCutState(bool b)
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit && edit->textFrameSet()->protectContent())
+        actionEditCut->setEnabled( false );
+    else
+        actionEditCut->setEnabled( b );
 }
 
 void KWView::slotSetInitialPosition()

@@ -385,6 +385,7 @@ protected slots:
     void slotApplyFont();
     void slotApplyParag();
     void slotPageLayoutChanged( const KoPageLayout& layout );
+    void slotChangeCutState(bool b);
 
 protected:
     void addVariableActions( int type, const QStringList & texts,
