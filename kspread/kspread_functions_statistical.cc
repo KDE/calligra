@@ -24,6 +24,8 @@
 #include <math.h>
 #include <float.h>
 
+#include <kdebug.h>
+
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
@@ -34,83 +36,496 @@
 #include <kspread_table.h>
 #include <kspread_util.h>
 
-// prototypes
+// prototypes (sorted!)
 bool kspreadfunc_arrang( KSContext& context );
 bool kspreadfunc_average( KSContext& context );
 bool kspreadfunc_averagea( KSContext& context );
 bool kspreadfunc_avedev( KSContext& context );
-bool kspreadfunc_median( KSContext& context );
-bool kspreadfunc_variance( KSContext& context );
-bool kspreadfunc_variancep( KSContext& context );
-bool kspreadfunc_stddev( KSContext& context );
-bool kspreadfunc_stddevp( KSContext& context );
-bool kspreadfunc_combin( KSContext& context );
+bool kspreadfunc_betadist( KSContext& context );
 bool kspreadfunc_bino( KSContext& context );
 bool kspreadfunc_bino_inv( KSContext& context );
-bool kspreadfunc_phi(KSContext& context);
-bool kspreadfunc_gauss(KSContext& context);
-bool kspreadfunc_gammadist( KSContext& context );
-bool kspreadfunc_betadist( KSContext& context );
+bool kspreadfunc_chidist( KSContext& context );
+bool kspreadfunc_combin( KSContext& context );
+bool kspreadfunc_confidence( KSContext& context );
+bool kspreadfunc_devsq( KSContext & context );
+bool kspreadfunc_expondist(KSContext& context );
+bool kspreadfunc_fdist( KSContext& context );
 bool kspreadfunc_fisher( KSContext& context );
 bool kspreadfunc_fisherinv( KSContext& context );
-bool kspreadfunc_normdist(KSContext& context );
-bool kspreadfunc_lognormdist(KSContext& context );
-bool kspreadfunc_stdnormdist(KSContext& context );
-bool kspreadfunc_expondist(KSContext& context );
-bool kspreadfunc_weibull( KSContext& context );
-bool kspreadfunc_normsinv( KSContext& context );
-bool kspreadfunc_norminv( KSContext& context );
+bool kspreadfunc_gammadist( KSContext& context );
 bool kspreadfunc_gammaln( KSContext& context );
+bool kspreadfunc_gauss(KSContext& context);
+bool kspreadfunc_geomean( KSContext & context );
+bool kspreadfunc_harmean( KSContext & context );
+bool kspreadfunc_hypgeomdist( KSContext & context );
+bool kspreadfunc_kurtosis_est( KSContext & context );
+bool kspreadfunc_loginv(KSContext& context );
+bool kspreadfunc_lognormdist(KSContext& context );
+bool kspreadfunc_median( KSContext& context );
+bool kspreadfunc_negbinomdist( KSContext & context );
+bool kspreadfunc_normdist(KSContext& context );
+bool kspreadfunc_norminv( KSContext& context );
+bool kspreadfunc_normsinv( KSContext& context );
+bool kspreadfunc_phi(KSContext& context);
 bool kspreadfunc_poisson( KSContext& context );
-bool kspreadfunc_confidence( KSContext& context );
-bool kspreadfunc_tdist( KSContext& context );
-bool kspreadfunc_fdist( KSContext& context );
-bool kspreadfunc_chidist( KSContext& context );
+bool kspreadfunc_standardize( KSContext & context );
+bool kspreadfunc_stddev( KSContext& context );
+bool kspreadfunc_stddevp( KSContext& context );
+bool kspreadfunc_stdnormdist(KSContext& context );
 bool kspreadfunc_sumproduct( KSContext& context );
 bool kspreadfunc_sumx2py2( KSContext& context );
 bool kspreadfunc_sumx2my2( KSContext& context );
 bool kspreadfunc_sumxmy2( KSContext& context );
+bool kspreadfunc_tdist( KSContext& context );
+bool kspreadfunc_variance( KSContext& context );
+bool kspreadfunc_variancep( KSContext& context );
+bool kspreadfunc_weibull( KSContext& context );
+
+static bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+                                        double & result,int & number );
+static bool kspreadfunc_stddev_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+                                       double & result, double & avera );
 
 // registers all statistical functions
 void KSpreadRegisterStatisticalFunctions()
 {
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
 
+  // insert them sorted please
+  repo->registerFunction( "AVEDEV", kspreadfunc_avedev );
   repo->registerFunction( "AVERAGE", kspreadfunc_average );
   repo->registerFunction( "AVERAGEA", kspreadfunc_averagea );
-  repo->registerFunction( "AVEDEV", kspreadfunc_avedev );
+  repo->registerFunction( "BETADIST", kspreadfunc_betadist );
+  repo->registerFunction( "BINO", kspreadfunc_bino );
+  repo->registerFunction( "CHIDIST", kspreadfunc_chidist );
+  repo->registerFunction( "COMBIN", kspreadfunc_combin );
+  repo->registerFunction( "CONFIDENCE", kspreadfunc_confidence );
+  repo->registerFunction( "DEVSQ", kspreadfunc_devsq );
+  repo->registerFunction( "EXPONDIST", kspreadfunc_expondist );
+  repo->registerFunction( "FISHER", kspreadfunc_fisher );
+  repo->registerFunction( "FISHERINV", kspreadfunc_fisherinv );
+  repo->registerFunction( "GAMMADIST", kspreadfunc_gammadist );
+  repo->registerFunction( "GAMMALN", kspreadfunc_gammaln );
+  repo->registerFunction( "GAUSS", kspreadfunc_gauss );
+  repo->registerFunction( "GEOMEAN", kspreadfunc_geomean );
+  repo->registerFunction( "HARMEAN", kspreadfunc_harmean );
+  repo->registerFunction( "HYPGEOMDIST", kspreadfunc_hypgeomdist );
+  repo->registerFunction( "FDIST", kspreadfunc_fdist );
+  repo->registerFunction( "INVBINO", kspreadfunc_bino_inv );
+  repo->registerFunction( "LOGINV", kspreadfunc_loginv );
+  repo->registerFunction( "LOGNORMDIST", kspreadfunc_lognormdist );
+  repo->registerFunction( "KURT", kspreadfunc_kurtosis_est );
   repo->registerFunction( "MEDIAN", kspreadfunc_median );
-  repo->registerFunction( "VARIANCE", kspreadfunc_variance );
-  repo->registerFunction( "VAR", kspreadfunc_variance );
-  repo->registerFunction( "VARP", kspreadfunc_variancep );
+  repo->registerFunction( "NEGBINOMDIST", kspreadfunc_negbinomdist );
+  repo->registerFunction( "NORMDIST", kspreadfunc_normdist );
+  repo->registerFunction( "NORMINV", kspreadfunc_norminv );
+  repo->registerFunction( "NORMSDIST", kspreadfunc_stdnormdist );
+  repo->registerFunction( "NORMSINV", kspreadfunc_normsinv );
+  repo->registerFunction( "PERMUT", kspreadfunc_arrang );
+  repo->registerFunction( "PHI", kspreadfunc_phi );
+  repo->registerFunction( "POISSON", kspreadfunc_poisson );
+  repo->registerFunction( "STANDARDIZE", kspreadfunc_standardize );
   repo->registerFunction( "STDEV", kspreadfunc_stddev );
   repo->registerFunction( "STDEVP", kspreadfunc_stddevp );
-  repo->registerFunction( "COMBIN", kspreadfunc_combin );
-  repo->registerFunction( "PERMUT", kspreadfunc_arrang );
-  repo->registerFunction( "BINO", kspreadfunc_bino );
-  repo->registerFunction( "INVBINO", kspreadfunc_bino_inv );
+  repo->registerFunction( "SUM2XMY", kspreadfunc_sumxmy2 );
   repo->registerFunction( "SUMPRODUCT", kspreadfunc_sumproduct );
   repo->registerFunction( "SUMX2PY2", kspreadfunc_sumx2py2 );
   repo->registerFunction( "SUMX2MY2", kspreadfunc_sumx2my2 );
-  repo->registerFunction( "SUM2XMY", kspreadfunc_sumxmy2 );
-  repo->registerFunction( "GAUSS", kspreadfunc_gauss );
-  repo->registerFunction( "PHI", kspreadfunc_phi );
-  repo->registerFunction( "GAMMADIST", kspreadfunc_gammadist );
-  repo->registerFunction( "BETADIST", kspreadfunc_betadist );
-  repo->registerFunction( "FISHER", kspreadfunc_fisher );
-  repo->registerFunction( "FISHERINV", kspreadfunc_fisherinv );
-  repo->registerFunction( "NORMDIST", kspreadfunc_normdist );
-  repo->registerFunction( "LOGNORMDIST", kspreadfunc_lognormdist );
-  repo->registerFunction( "EXPONDIST", kspreadfunc_expondist );
-  repo->registerFunction( "WEIBULL", kspreadfunc_weibull );
-  repo->registerFunction( "NORMSINV", kspreadfunc_normsinv );
-  repo->registerFunction( "NORMINV", kspreadfunc_norminv );
-  repo->registerFunction( "GAMMALN", kspreadfunc_gammaln );
-  repo->registerFunction( "POISSON", kspreadfunc_poisson );
-  repo->registerFunction( "CONFIDENCE", kspreadfunc_confidence );
   repo->registerFunction( "TDIST", kspreadfunc_tdist );
-  repo->registerFunction( "FDIST", kspreadfunc_fdist );
-  repo->registerFunction( "CHIDIST", kspreadfunc_chidist );
+  repo->registerFunction( "VARIANCE", kspreadfunc_variance );
+  repo->registerFunction( "VAR", kspreadfunc_variance );
+  repo->registerFunction( "VARP", kspreadfunc_variancep );
+  repo->registerFunction( "VARA", kspreadfunc_variance );
+  repo->registerFunction( "VARPA", kspreadfunc_variancep );
+  repo->registerFunction( "WEIBULL", kspreadfunc_weibull );
+}
+
+double fact(int n)
+{
+  return ( n != 0 ? n * fact(n - 1) : 1 );
+}
+
+double combin(int n, int k)
+{
+  if (n >= 15) 
+  {
+    double result = exp(lgamma (n + 1) - lgamma (k + 1) - lgamma (n - k + 1));
+    return floor(result + 0.5);
+  } 
+  else 
+  {
+    double result = fact( n ) / fact( k ) / fact( n - k );
+    return result;
+  }
+}
+
+static double gaussinv_helper (double x) 
+{
+  double c0, c1, c2, d1, d2, d3, q, t, z;
+  c0 = 2.515517;
+  c1 = 0.802853;
+  c2 = 0.010328;
+  d1 = 1.432788;
+  d2 = 0.189269;
+  d3 = 0.001308;
+  if (x < 0.5)
+    q = x;
+  else
+    q = 1.0-x;
+  t = sqrt(-log(q*q));
+  z = t - (c0 + t*(c1 + t*c2)) / (1.0 + t*(d1 + t*(d2 + t*d3)));
+  if (x < 0.5)
+    z *= -1.0;
+  return z;
+}
+
+bool kspreadfunc_geomean_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, int & number)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_geomean_helper( context, (*it)->listValue(), result, number) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      double d = (*it)->doubleValue();
+      kdDebug() << "args[i]: " << d << endl;
+      
+      if ( d <= 0 )
+        return false;
+      
+      result *= d;
+      ++number;
+    }
+  }
+
+  return true;
+}
+
+bool kspreadfunc_geomean( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  int number = 0;
+  double result = 1.0;
+
+  if ( !kspreadfunc_geomean_helper( context, args, result, number ) )
+    return false;
+
+  if ( number == 0 )
+    return false;
+
+  result = pow( result, 1.0 / number);
+  
+  context.setValue( new KSValue( result ) );
+  return true;
+}
+
+bool kspreadfunc_harmean_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, int & number)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_harmean_helper( context, (*it)->listValue(), result, number) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      double d = (*it)->doubleValue();
+      kdDebug() << "args[i]: " << d << endl;
+      
+      if ( d <= 0 )
+        return false;
+      
+      result += 1 / d;
+      ++number;
+    }
+  }
+
+  return true;
+}
+
+
+bool kspreadfunc_harmean( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  int number = 0;
+  double result = 0.0;
+
+  if ( !kspreadfunc_harmean_helper( context, args, result, number ) )
+    return false;
+
+  if ( number == 0 )
+    return false;
+
+  result = number / result;
+
+  context.setValue( new KSValue( result ) );
+  return true;
+}
+
+bool kspreadfunc_loginv( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "LOGINV",true ) )
+    return false;
+  
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+
+  double p = args[0]->doubleValue();
+  double m = args[1]->doubleValue();
+  double s = args[2]->doubleValue();
+
+  if ( p < 0 || p > 1 )
+    return false;
+  if ( s <= 0 )
+    return false;
+  
+  double result;
+
+  if ( p == 1 ) 
+    result = HUGE_VAL;
+  else
+  if ( p > 0 ) 
+    result = exp( gaussinv_helper( p ) * s + m );
+  else
+    result = 0.0;
+
+  context.setValue( new KSValue( result ) );
+  return true;
+}
+
+bool kspreadfunc_devsq_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, double avg )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_devsq_helper( context, (*it)->listValue(), result, avg ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      double d = (*it)->doubleValue() - avg;
+      result += d * d;
+    }
+  }
+
+  return true;
+}
+
+bool kspreadfunc_devsq( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  double res = 0.0;
+  int number = 0;
+
+  kdDebug() << "DevSQ" << endl;
+  if ( !kspreadfunc_average_helper( context, args, res, number) )
+    return false;
+
+  kdDebug() << "DevSQ: " << number << " - " << res << endl;
+
+  if ( number == 0 )
+  {
+    context.setValue( new KSValue( 0.0 ) );
+    return true;
+  }
+
+  double avg = res / (double) number;
+
+  kdDebug() << "Average: " << avg << endl;
+  
+  res = 0.0;
+
+  if ( !kspreadfunc_devsq_helper( context, args, res, avg ) )
+    return false;
+
+  context.setValue( new KSValue( res ) );
+  return true;
+}
+
+bool kspreadfunc_kurt_est_helper( KSContext & context, QValueList<KSValue::Ptr> & args, double & result, 
+                                  double avg, double stdev )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_kurt_est_helper( context, (*it)->listValue(), result, avg, stdev ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      double d = ( (*it)->doubleValue() - avg ) / stdev;
+      result += d * d * d * d;
+    }
+  }
+
+  return true;
+}
+
+bool kspreadfunc_kurtosis_est( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  double m, s, dxn;
+  double x4 = 0.0;
+
+  int number = 0;
+  double res = 0.0;
+
+  if ( !kspreadfunc_average_helper( context, args, res, number) )
+    return false;
+
+  if ( number < 4 )
+    return false;
+
+  double avg = res / (double) number;
+
+  kdDebug() << "Average: " << avg << endl;
+
+  if ( !kspreadfunc_stddev_helper( context, args, res, avg ) )
+    return false;
+
+  kdDebug() << "Stdev: " << res << endl;
+
+  if ( res == 0.0 )
+    return false;
+
+  if ( !kspreadfunc_kurt_est_helper( context, args, x4, avg, res ) )
+    return false;
+  
+  double den = ( double )( number - 2 ) * ( number - 3 );
+  double nth = ( double ) number * ( number + 1 ) / ( ( number - 1 ) * den );
+  double t = 3.0 * ( number - 1 ) * ( number - 1 ) / den;
+
+  context.setValue( new KSValue( x4 * nth - t ) );
+  return true;
+}
+
+bool kspreadfunc_standardize( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,3, "STANDARDIZE",true ) )
+    return false;
+  
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+
+
+  double x = args[0]->doubleValue();
+  double m = args[1]->doubleValue();
+  double s = args[2]->doubleValue();
+
+  if ( s <= 0 )
+    return false;
+
+  context.setValue( new KSValue( ( x - m ) / s ) );
+  return true;
+}
+
+
+bool kspreadfunc_hypgeomdist( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,4, "HYPGEOMDIST",true ) )
+    return false;
+  
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
+    return false;
+
+  int x = args[0]->intValue();
+  int n = args[1]->intValue();
+  int M = args[2]->intValue();
+  int N = args[3]->intValue();
+
+  if ( x < 0 || n < 0 || M < 0 || N < 0 )
+    return false;
+
+  if ( x > M || n > N )
+    return false;
+
+  double d1 = combin( M, x );
+  double d2 = combin( N - M, n - x );
+  double d3 = combin( N, n );
+
+  context.setValue( new KSValue( d1 * d2 / d3 ) );
+  return true;
+}
+
+bool kspreadfunc_negbinomdist( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,3, "NEGBINOMDIST",true ) )
+    return false;
+  
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+
+  int    x = args[0]->intValue();
+  int    r = args[1]->intValue();
+  double p = args[2]->doubleValue();
+  
+  if ( ( x + r - 1 ) <= 0 ) 
+    return false;
+  if ( p < 0 || p > 1 )
+    return false;
+
+  double d1 = combin( x + r - 1, r - 1 );
+  double d2 = pow( p, r ) * pow( 1 - p, x );
+
+  context.setValue( new KSValue( d1 * d2 ) );
+  return true;
 }
 
 // Function: permut
@@ -163,31 +578,31 @@ static bool kspreadfunc_average_helper( KSContext& context, QValueList<KSValue::
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      {
+    {
       result += (*it)->doubleValue();
-      number++;
-      }
+      ++number;
+    }
   }
 
   return true;
 }
 
 // Function: average
-bool kspreadfunc_average( KSContext& context )
+bool kspreadfunc_average( KSContext & context )
 {
   double result = 0.0;
 
-  int number=0;
-  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
+  int number = 0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result, number );
 
   if ( number == 0 )
-    {
+  {
     context.setValue( new KSValue( i18n("#DIV/0") ) );
     return true;
-    }
+  }
 
   if ( b )
-    context.setValue( new KSValue( result / (double)number ) );
+    context.setValue( new KSValue( result / (double) number ) );
 
   return b;
 }
@@ -572,7 +987,8 @@ static double taylor_helper (double* pPolynom, uint nMax, double x)
   return nVal;
 }
 
-static double gauss_helper(double x) {
+static double gauss_helper( double x ) 
+{
   double t0[] =
     { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
      -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
@@ -984,7 +1400,8 @@ bool kspreadfunc_lognormdist(KSContext& context ) {
 }
 
 // Function: normsdist
-bool kspreadfunc_stdnormdist(KSContext& context ) {
+bool kspreadfunc_stdnormdist(KSContext& context ) 
+{
   //returns the cumulative lognormal distribution
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
@@ -1073,25 +1490,6 @@ bool kspreadfunc_weibull( KSContext& context ) {
 
   context.setValue( new KSValue(result));
   return true;
-}
-
-static double gaussinv_helper (double x) {
-  double c0, c1, c2, d1, d2, d3, q, t, z;
-  c0 = 2.515517;
-  c1 = 0.802853;
-  c2 = 0.010328;
-  d1 = 1.432788;
-  d2 = 0.189269;
-  d3 = 0.001308;
-  if (x < 0.5)
-    q = x;
-  else
-    q = 1.0-x;
-  t = sqrt(-log(q*q));
-  z = t - (c0 + t*(c1 + t*c2)) / (1.0 + t*(d1 + t*(d2 + t*d3)));
-  if (x < 0.5)
-    z *= -1.0;
-  return z;
 }
 
 // Function: normsinv
@@ -1187,20 +1585,24 @@ bool kspreadfunc_poisson( KSContext& context ) {
 
   if (lambda < 0.0 || x < 0.0)
     return false;
-  else if (kum == 0)  { // density
+  else if (kum == 0)  
+  { // density
     if (lambda == 0.0)
       result = 0;
     else
       result = exp(-lambda) * pow(lambda,x) / util_fact(x,0);
-    }
-  else { // distribution
+  }
+  else 
+  { // distribution
     if (lambda == 0.0)
       result = 1;
-    else {
+    else 
+    {
       double sum = 1.0;
       double fFak = 1.0;
-      unsigned long nEnd = static_cast<unsigned long>(x);
-      for (unsigned long i = 1; i <= nEnd; i++) {
+      unsigned long nEnd = static_cast<unsigned long > (x);
+      for (unsigned long i = 1; i <= nEnd; i++) 
+      {
         fFak *= static_cast<double>(i);
         sum += pow( lambda, static_cast<double>(i) ) / fFak;
       }
