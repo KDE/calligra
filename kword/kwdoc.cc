@@ -4205,7 +4205,8 @@ QStringList KWDocument::listOfBookmarkName(KWViewMode * viewMode)const
         QPtrListIterator<KWBookMark> book(m_bookmarkList);
         for ( ; book.current() ; ++book )
         {
-            list.append( book.current()->bookMarkName());
+            if ( !book.current()->frameSet()->isDeleted())
+                list.append( book.current()->bookMarkName());
         }
     }
     else
@@ -4213,7 +4214,7 @@ QStringList KWDocument::listOfBookmarkName(KWViewMode * viewMode)const
         QPtrListIterator<KWBookMark> book(m_bookmarkList);
         for ( ; book.current() ; ++book )
         {
-            if ( book.current()->frameSet()->isVisible( viewMode ))
+            if ( book.current()->frameSet()->isVisible( viewMode )&& !book.current()->frameSet()->isDeleted())
                 list.append( book.current()->bookMarkName());
         }
     }
