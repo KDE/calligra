@@ -195,6 +195,9 @@ public slots:
     void alignLeft( bool b );
     void alignRight( bool b );
     void alignCenter( bool b );
+    void alignTop( bool b );
+    void alignMiddle( bool b );
+    void alignBottom( bool b );
     void multiRow( bool b );
     void precisionMinus();
     void precisionPlus();
@@ -364,6 +367,9 @@ private:
     KToggleAction* m_alignLeft;
     KToggleAction* m_alignCenter;
     KToggleAction* m_alignRight;
+    KToggleAction* m_alignTop;
+    KToggleAction* m_alignMiddle;
+    KToggleAction* m_alignBottom;
     KAction* m_transform;
     KAction* m_copy;
     KAction* m_paste;

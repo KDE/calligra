@@ -450,3 +450,10 @@ changed (idea of jp.martin" <jpmartin@iroise.com>)
 I used now good cursor for each type (column or row)
 Bug report by jp.martin <jpmartin@iroise.com> thanks
 -bug fix
+
+2000-05-05 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can select "Top" "Middle" "Bottom" position of text in menubar
+(idea given by jp.martin <jpmartin@iroise.com> thanks )
+-Bug fix in kspread_dlg_layout bug reported by jp.martin <jpmartin@iroise.com>
+thanks

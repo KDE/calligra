@@ -120,6 +120,10 @@
  <Action name="left"/>
  <Action name="center"/>
  <Action name="right"/>
+ <Separator/>
+ <Action name="top"/>
+ <Action name="middle"/>
+ <Action name="bottom"/>
  <Action name="multiRow"/>
 </ToolBar>
 <ToolBar name="mathToolBar">

@@ -219,6 +219,17 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_alignRight = new KToggleAction( i18n("Align right"), "right", 0, actionCollection(), "right");
     connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
     m_alignRight->setExclusiveGroup( "Align" );
+    
+    m_alignTop = new KToggleAction( i18n("Align top"), "top", 0, actionCollection(), "top");
+    connect( m_alignTop, SIGNAL( toggled( bool ) ), this, SLOT( alignTop( bool ) ) );
+    m_alignTop->setExclusiveGroup( "Pos" );
+    m_alignMiddle = new KToggleAction( i18n("Align middle"), "middle", 0, actionCollection(), "middle");
+    connect( m_alignMiddle, SIGNAL( toggled( bool ) ), this, SLOT( alignMiddle( bool ) ) );
+    m_alignMiddle->setExclusiveGroup( "Pos" );
+    m_alignBottom = new KToggleAction( i18n("Align bottom"), "bottom", 0, actionCollection(), "bottom");
+    connect( m_alignBottom, SIGNAL( toggled( bool ) ), this, SLOT( alignBottom( bool ) ) );
+    m_alignBottom->setExclusiveGroup( "Pos" );
+    
     m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this, SLOT( transformPart() ),
 			       actionCollection(), "transform" );
     m_transform->setEnabled( FALSE );
@@ -686,6 +697,13 @@ void KSpreadView::updateEditWidget()
 	m_alignRight->setChecked( FALSE );
 	m_alignCenter->setChecked( FALSE );
     }
+    
+    if ( cell->alignY() == KSpreadLayout::Top )
+	m_alignTop->setChecked( TRUE );
+    else if ( cell->alignY() == KSpreadLayout::Middle )
+	m_alignMiddle->setChecked( TRUE );
+    else if ( cell->alignY() == KSpreadLayout::Bottom )
+	m_alignBottom->setChecked( TRUE );
 
     m_multiRow->setChecked( cell->multiRow() );
     if( cell->faktor()==100.0 && cell->postfix()=="%")
@@ -2223,6 +2241,40 @@ void KSpreadView::alignCenter( bool b )
     if ( m_pTable != 0L )
 	m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Center );
 }
+
+void KSpreadView::alignTop( bool b )
+{
+    if ( m_toolbarLock )
+	return;
+    if ( !b )
+	return;
+
+    if ( m_pTable != 0L )
+	m_pTable->setSelectionAlignY( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Top );
+}
+
+void KSpreadView::alignBottom( bool b )
+{
+    if ( m_toolbarLock )
+	return;
+    if ( !b )
+	return;
+
+    if ( m_pTable != 0L )
+      m_pTable->setSelectionAlignY( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Bottom );
+}
+
+void KSpreadView::alignMiddle( bool b )
+{
+    if ( m_toolbarLock )
+	return;
+    if ( !b )
+	return;
+
+    if ( m_pTable != 0L )
+	m_pTable->setSelectionAlignY( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Middle );
+}
+
 
 void KSpreadView::moneyFormat(bool b)
 {

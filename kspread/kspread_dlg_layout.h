@@ -353,6 +353,7 @@ public:
     CellLayoutPagePattern( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
+    void init();
 public slots:
     void slotUnselect2( KSpreadBrushSelect *_select );
     void slotSetColorButton( const QColor &_color );

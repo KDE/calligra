@@ -1322,7 +1322,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   remove=new KSpreadBorderButton(this,"remove");
   remove->setGeometry(25,240,25,25);
-  loadIcon("remove",remove);
+  loadIcon("borderremove",remove);
 
   all=new KSpreadBorderButton(this,"all");
   all->setGeometry(60,240,25,25);
@@ -1471,7 +1471,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     tmpQLabel->setGeometry( 225, 205, 35, 30 );
     tmpQLabel->setText( i18n("Color") );
 
- if(dlg->leftBorderStyle != Qt::NoPen)
+ if(dlg->leftBorderStyle != Qt::NoPen || !dlg->bLeftBorderStyle )
     {
     if ( dlg->bLeftBorderColor && dlg->bLeftBorderStyle  )
       {
@@ -1486,7 +1486,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 	left->setUndefined();
       }
  }
- if(dlg->rightBorderStyle!=NoPen)
+ if(dlg->rightBorderStyle!=Qt::NoPen|| !dlg->bRightBorderStyle)
     {
     if ( dlg->bRightBorderColor && dlg->bRightBorderStyle && dlg->rightBorderStyle!=NoPen)
       {
@@ -1502,7 +1502,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
       }
      }
 
-   if(  dlg->topBorderStyle!=NoPen)
+   if(  dlg->topBorderStyle!=Qt::NoPen || !dlg->bTopBorderStyle)
     {
     if ( dlg->bTopBorderColor && dlg->bTopBorderStyle)
       {
@@ -1518,7 +1518,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
       }
      }
 
- if(dlg->bottomBorderStyle != NoPen)
+ if(dlg->bottomBorderStyle != Qt::NoPen || !dlg->bBottomBorderStyle)
  {
     if ( dlg->bBottomBorderColor && dlg->bBottomBorderStyle )
 
@@ -1537,7 +1537,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   if(dlg->oneRow==FALSE)
   {
-   if(dlg->horizontalBorderStyle!=NoPen)
+   if(dlg->horizontalBorderStyle!=Qt::NoPen ||!dlg->bHorizontalBorderStyle)
    {
     if ( dlg->bHorizontalBorderColor && dlg->bHorizontalBorderStyle )
       {
@@ -1557,7 +1557,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   if(dlg->oneCol==FALSE)
   {
-        if(dlg->verticalBorderStyle!=NoPen)
+        if(dlg->verticalBorderStyle!=Qt::NoPen || !dlg->bVerticalBorderStyle)
         {
                 if ( dlg->bVerticalBorderColor && dlg->bVerticalBorderStyle )
                 {
@@ -1577,7 +1577,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
         vertical->setEnabled(false);
         }
 
-  if(dlg->fallDiagonalStyle!=NoPen)
+  if(dlg->fallDiagonalStyle!=Qt::NoPen || !dlg->bFallDiagonalStyle)
   {
     if ( dlg->bfallDiagonalColor && dlg->bFallDiagonalStyle  )
       {
@@ -1593,7 +1593,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
       }
    }
 
- if(dlg->goUpDiagonalStyle!=NoPen)
+ if(dlg->goUpDiagonalStyle!=Qt::NoPen || !dlg->bGoUpDiagonalStyle)
     {
     if ( dlg->bGoUpDiagonalColor && dlg->bGoUpDiagonalStyle )
       {
@@ -1683,15 +1683,16 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
 void CellLayoutPageBorder::loadIcon( QString _pix,KSpreadBorderButton *_button)
 {
-    QPixmap pix = UserIcon(_pix, KSpreadFactory::global() );
-    if ( pix.isNull() )
+    QPixmap *pix = new QPixmap( BarIcon(_pix) ); 
+    //QPixmap pix = UserIcon(_pix, KSpreadFactory::global() );
+    /*if ( pix->isNull() )
     {
 	QString str( i18n( "Could not load image %1" ) );
 	str = str.arg( _pix );
 	QMessageBox::critical( this, i18n("KSpread Error"), str );
 	return;
-    }
-    _button->setPixmap( pix );
+    }*/
+    _button->setPixmap( *pix );
 }
 
 
@@ -2417,8 +2418,74 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 	     this, SLOT( slotSetColorButton( const QColor & ) ) );
 
     slotSetColorButton( dlg->brushColor );
-
+    init();
     this->resize( 400, 400 );
+}
+
+void CellLayoutPagePattern::init()
+{
+    if(dlg->brushStyle==Qt::VerPattern)
+	{
+    	brush1->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::HorPattern)
+    	{
+    	brush2->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::Dense1Pattern)
+    	{
+    	brush3->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::Dense2Pattern)
+    	{
+    	brush4->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::Dense3Pattern)
+    	{
+    	brush5->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::Dense4Pattern)
+    	{
+    	brush6->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::Dense5Pattern)
+    	{
+    	brush7->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::Dense6Pattern)
+    	{
+    	brush8->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::Dense7Pattern)
+    	{
+    	brush9->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::CrossPattern)
+    	{
+    	brush10->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::BDiagPattern)
+        {
+    	brush11->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::FDiagPattern)
+    	{
+    	brush12->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::VerPattern)
+    	{
+    	brush13->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::DiagCrossPattern)
+    	{
+    	brush14->slotSelect();
+    	}
+    else if(dlg->brushStyle==Qt::NoBrush)
+    	{
+    	brush15->slotSelect();
+    	}
+    else
+    	kdDebug(36001) << "Error in brushStyle" << endl; 
 }
 
 void CellLayoutPagePattern::slotSetColorButton( const QColor &_color )
