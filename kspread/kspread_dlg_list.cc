@@ -27,10 +27,10 @@
 #include "kspread_autofill.h"
 
 #include <kbuttonbox.h>
-
-
+#include <kmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
+
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <qgrid.h>
@@ -164,15 +164,27 @@ void KSpreadList::slotNew()
   list->setEnabled(false);
   entryList->setText(""); 
   entryList->setEnabled(true);
+  entryList->setFocus();
 }
 
 void KSpreadList::slotRemove()
 {
+  int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this list?")); 
+  if(ret==4) // reponse = No
+    return;
   list->removeItem(list->currentItem ());
+  entryList->setEnabled(false);
+  entryList->setText("");
 }
 
 void KSpreadList::slotOk()
 {
+  if(!entryList->text().isEmpty())
+    {
+      int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want continue?")); 
+      if(ret==4) // reponse = No
+	return;
+    }
   QStringList result;
   result.append("\\");
   for(unsigned int i=0;i<list->count();i++)

@@ -457,7 +457,7 @@ KSpreadView::~KSpreadView()
 {
     if ( !m_transformToolBox.isNull() )
 	delete (&*m_transformToolBox);
-
+    m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
     // of embedded child documents possible repaints in KSpreadTable are not
     // performed. The repains can happen if you delete an embedded document,
