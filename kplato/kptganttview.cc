@@ -291,7 +291,7 @@ void KPTGanttView::updateChildren(KPTNode *parentNode)
 
 void KPTGanttView::updateNode(KPTNode *node)
 {
-    kdDebug()<<k_funcinfo<<node->name()<<endl;
+    //kdDebug()<<k_funcinfo<<node->name()<<endl;
     KDGanttViewItem *item = findItem(node);
     if (!item) {
         item = addNode(findItem(node->getParent()), node, findItem(node->siblingBefore()));
