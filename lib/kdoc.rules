@@ -13,7 +13,7 @@ store_FILES = *.h
 store_LIBS = -lkdecore -lqt
 
 koparts_FILES = *.h
-koparts_LIBS = -lkdeui -lqt
+koparts_LIBS = -lkparts -lkdeui -lqt
 
 kofficecore_FILES = *.h
 kofficecore_LIBS = -lkoparts -lkdecore -lqt
