@@ -192,6 +192,8 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 				add(new KexiProperty(meta->name(), obj->property(meta->name()), desc));
 		}
 
+		if(QString(meta->name()) == "name")
+			(*this)["name"]->setAutoSync(0);
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(widg->name());
 		if(tree->modifProp()->contains(meta->name()))
 		{

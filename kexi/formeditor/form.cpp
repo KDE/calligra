@@ -154,6 +154,8 @@ Form::formDeleted()
 void
 Form::changeName(const QString &oldname, const QString &newname)
 {
+	if(oldname == newname)
+		return;
 	if(!m_topTree->rename(oldname, newname))
 	{
 		KMessageBox::sorry(m_toplevel->widget()->topLevelWidget(), i18n("A widget with this name already exists."

@@ -236,7 +236,8 @@ ObjectTreeView::removeItem(ObjectTreeItem *item)
 void
 ObjectTreeView::renameItem(const QString &oldname, const QString &newname)
 {
-	kdDebug() << "ObjectTreeView::renameItem()" << endl;
+	if(findItem(newname))
+		return;
 	ObjectTreeViewItem *item = findItem(oldname);
 	if(!item)
 		return;

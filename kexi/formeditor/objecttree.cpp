@@ -45,13 +45,10 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidg
 	m_parent = 0;
 }
 
-bool
+void
 ObjectTreeItem::rename(const QString &name)
 {
-	//m_widget->setName(name.latin1());
 	m_name = name;
-
-	return true;
 }
 
 ObjectTreeItem::~ObjectTreeItem()
@@ -91,7 +88,7 @@ ObjectTreeItem::addModProperty(const QString &property, const QVariant &oldValue
 {
 	if(property == "name")
 		return;
-	kdDebug() << "ObjectTree::adModProperty()   wanting to add the property" << property << endl;
+
 	if(!m_props.contains(property))
 	{
 		m_props.insert(property, oldValue);
@@ -133,7 +130,7 @@ ObjectTree::rename(const QString &oldname, const QString &newname)
 	}
 
 	ObjectTreeItem *it = lookup(oldname);
-	if(!it->rename(newname))  { return false;}
+	it->rename(newname);
 	m_treeDict.remove(oldname);
 	m_treeDict.insert(newname, it);
 

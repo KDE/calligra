@@ -61,7 +61,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		void 		setParent(ObjectTreeItem *parent)  { m_parent = parent;}
 
 		void		debug(int ident);
-		virtual bool	rename(const QString &name);
+		virtual void	rename(const QString &name);
 
 		virtual void	addChild(ObjectTreeItem *it);
 		void 		remChild(ObjectTreeItem *it);
