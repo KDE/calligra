@@ -1679,7 +1679,7 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
         m_canvas->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
     }
 
-    if( m_paragLayout.tabList() != parag->tabList() )
+    if( m_paragLayout.tabList() != parag->tabList() || force )
     {
         m_paragLayout.setTabList( parag->tabList() );
         KoRuler * hr = m_canvas->getView()->getHRuler();
