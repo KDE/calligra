@@ -53,7 +53,7 @@ public:
     /// Call this to terminate an XML document.
     void endDocument();
 
-    void startElement( const char* xmlName );
+    void startElement( const char* tagName );
     inline void addAttribute( const char* attrName, const QString& value ) {
         addAttribute( attrName, value.utf8() );
     }
@@ -77,13 +77,27 @@ public:
     void addTextNode( const char* cstr );
 
 
+    /**
+     *  Return an XML writer for saving Oasis XML into the device @p dev,
+     *  including the XML processing instruction,
+     *  the complete DOCTYPE tag (with systemId and publicId),
+     *  and the root element with all its namespaces.
+     *  You can add more namespaces afterwards with addAttribute.
+     *
+     *  @param subtype either 0, "content", "styles", "meta" or "settings",
+     *   which is the second part of the name of the tag for the root element.
+     *  @return the KoXmlWriter instance. It becomes owned by the caller, which
+     *  must delete it at some point.
+     */
+    static KoXmlWriter* createOasisXmlWriter( QIODevice* dev, const char* subtype );
+
 private:
     struct Tag {
         Tag( const char* t = 0 ) : tagName( t ), hasChildren( false ),
                                    openingTagClosed( false ), lastChildIsText( false ) {}
         const char* tagName;
         bool hasChildren; // element or text children
-        bool openingTagClosed; // true once the '>' in <xml a="b"> is written out
+        bool openingTagClosed; // true once the '>' in <tag a="b"> is written out
         bool lastChildIsText;
     };
 
@@ -119,6 +133,9 @@ private:
     char* m_indentBuffer;
     char* m_escapeBuffer;
     static const int s_escapeBufferLen = 10000;
+
+    KoXmlWriter( const KoXmlWriter & ); // forbidden
+    KoXmlWriter& operator=( const KoXmlWriter & ); // forbidden
 };
 
 #endif /* XMLWRITER_H */
