@@ -28,6 +28,7 @@
 
 #include <qbrush.h>
 #include <qpalette.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 KivioStencilSpawner* KivioIconView::m_pCurDrag = 0L;

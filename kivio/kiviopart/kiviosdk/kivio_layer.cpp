@@ -32,6 +32,7 @@
 #include "kivio_doc.h"
 #include "kivio_page.h"
 
+#include <klocale.h>
 #include <kdebug.h>
 
 KivioLayer::KivioLayer( KivioPage *pPage )
