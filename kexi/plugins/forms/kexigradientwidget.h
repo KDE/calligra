@@ -191,6 +191,15 @@ class KexiGradientWidget : public QWidget {
 		*/
 		void rebuildCache();
 
+		/*!
+		Sets the background of \a childWidget.
+		This is necessary when the child has been moved.
+		For performance-reasons this is used only for Move-events.
+		The same code is used for PaletteChange-events, but in a
+		different location.
+		*/
+		void updateChildBackground( QWidget* childWidget );
+
 	private:
 		WidgetList p_knownWidgets;
 		WidgetList p_customBackgroundWidgets;

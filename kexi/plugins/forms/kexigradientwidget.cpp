@@ -31,7 +31,7 @@
 
 KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, WFlags f )
 	: QWidget( parent, name, f ), p_displayMode( NoGradient ),
-	p_gradientType( VerticalGradient ), 
+	p_gradientType( VerticalGradient ),
 	p_color1( Qt::white ), p_color2( Qt::blue ), p_currentChild( 0 ),
 	p_opacity( 0.5 ), p_cacheDirty( true )
 {
@@ -96,7 +96,7 @@ void KexiGradientWidget::rebuildCache( void ) {
 	/**
 	Draw the gradient
 	*/
-	gradientImage = KImageEffect::gradient( size(), p_color1, p_color2, 
+	gradientImage = KImageEffect::gradient( size(), p_color1, p_color2,
 		(KImageEffect::GradientType)p_gradientType );
 
 	/**
@@ -251,7 +251,49 @@ bool KexiGradientWidget::eventFilter( QObject* object, QEvent* event ) {
 		}
 		p_currentChild = 0;
 	}
+
+	if ( event->type() == QEvent::Move ) {
+		if ( p_customBackgroundWidgets.contains( child ) == false ) {
+			updateChildBackground( child );
+		}
+	}
 	return false;
+}
+
+void KexiGradientWidget::updateChildBackground( QWidget* childWidget )
+{
+	KPixmap partPixmap;
+	KPixmap bgPixmap;
+	QRect area;
+	const QPoint topLeft( 0, 0 );
+
+	bgPixmap = paletteBackgroundPixmap() ? (*paletteBackgroundPixmap()) : QPixmap();
+	if ( bgPixmap.isNull() )
+		return;
+
+	/**
+	Exclude widgets with a custom palette.
+	*/
+	if ( p_customBackgroundWidgets.contains( childWidget ) ) {
+		return;
+	}
+
+	partPixmap.resize( childWidget->size() );
+	/**
+	Get the part of the tempPixmap that is
+	under the current child-widget.
+	*/
+	if ( childWidget->parent() == this ) {
+		area = childWidget->geometry();
+	} else {
+		area.setTopLeft( childWidget->mapTo( this,
+			childWidget->clipRegion().boundingRect().topLeft() ) );
+		area.setSize( childWidget->size() );
+	}
+	bitBlt( &partPixmap, topLeft, &bgPixmap, area );
+
+	p_currentChild = childWidget;
+	childWidget->setPaletteBackgroundPixmap( partPixmap );
 }
 
 #include "kexigradientwidget.moc"
