@@ -203,6 +203,12 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &styleStack )
+{
+    KP2DObject::loadOasis(element);
+    //todo other attribute
+}
+
 double KPTextObject::load(const QDomElement &element)
 {
     double offset=KP2DObject::load(element);

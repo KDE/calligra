@@ -1003,6 +1003,10 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             m_styleStack.save();
             if ( name == "draw:text-box" ) // textbox
             {
+                fillStyleStack( o, oasisStyles );
+                KPTextObject *kptextobject = new KPTextObject( this );
+                kptextobject->loadOasis(o, m_styleStack);
+                newpage->appendObject(kptextobject);
             }
             else if ( name == "draw:rect" ) // rectangle
             {
@@ -1082,17 +1086,26 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisStyles&oasisStyles )
 {
     // find all styles associated with an object and push them on the stack
-    if ( object.hasAttribute( "presentation:style-name" ) )
+    if ( object.hasAttribute( "presentation:style-name" ))
+    {
+        kdDebug()<<"presentation:style-name \n";
         addStyles( oasisStyles.styles()[object.attribute( "presentation:style-name" )], oasisStyles );
-
+    }
     if ( object.hasAttribute( "draw:style-name" ) )
+    {
+        kdDebug()<<"draw:style-name \n";
         addStyles( oasisStyles.styles()[object.attribute( "draw:style-name" )], oasisStyles );
-
+    }
     if ( object.hasAttribute( "draw:text-style-name" ) )
+    {
+        kdDebug()<<"draw:text-style-name \n";
         addStyles( oasisStyles.styles()[object.attribute( "draw:text-style-name" )],oasisStyles );
-
+    }
     if ( object.hasAttribute( "text:style-name" ) )
+    {
+        kdDebug()<<"text:style-name\n";
         addStyles( oasisStyles.styles()[object.attribute( "text:style-name" )], oasisStyles );
+    }
 }
 
 void KPresenterDoc::addStyles( const QDomElement* style, KoOasisStyles&oasisStyles )

@@ -25,6 +25,7 @@
 #include "korichtext.h"
 #include <kotextview.h>
 #include <kostyle.h> // for KoStyleChangeDefMap
+#include <koStyleStack.h>
 
 class KPresenterView;
 class KPresenterDoc;
@@ -78,6 +79,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
+    virtual void loadOasis(const QDomElement &element, const KoStyleStack &styleStack);
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour );
