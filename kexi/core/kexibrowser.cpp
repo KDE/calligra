@@ -137,7 +137,7 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 	if(it->proxy() || it->item())
 	{
 		KexiPartPopupMenu *pg = 0;
-		if(it->identifier() == QString::null)
+		if(it->identifier().isNull())
 		{
 			// FIXME: Make this less hacky please :)
 			pg = it->proxy()->groupContext();
@@ -166,7 +166,7 @@ KexiBrowser::slotExecuteItem(QListViewItem *item)
 
 	if(it->proxy() || it->item())
 	{
-		if(it->identifier() != QString::null)
+		if(!it->identifier().isNull())
 		{
 			if (it->proxy())
 			{

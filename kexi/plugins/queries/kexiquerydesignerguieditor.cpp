@@ -304,7 +304,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 
 	//get "forign" tables
 
-	if(maxTable == QString::null)
+	if(maxTable.isNull())
 	{
 		if(involvedTables.count() == 1)
 		{
