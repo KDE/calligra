@@ -488,8 +488,10 @@ void VTextTool::activate()
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 
 	m_creating = true;
-	delete m_text;
+	//delete m_text;
+	m_text = 0L;
 	delete m_editedText;
+	m_editedText = 0L;
 
 	VSelection* selection = view()->part()->document().selection();
 	kdDebug() << "Nb objects selected: " << selection->objects().count() << endl;
@@ -564,7 +566,7 @@ void VTextTool::mouseDragRelease()
 		delete m_editedText;
 		m_editedText = 0L;
 	}
-	
+
 	VPath path( 0L );
 	path.moveTo( first() );
 	path.lineTo( last() );
@@ -575,7 +577,7 @@ void VTextTool::mouseDragRelease()
 	m_editedText->traceText();
 #endif
 	m_creating = true;
-	
+
 	drawEditedText();
 } // VTextTool::mouseDragRelease
 
@@ -592,7 +594,7 @@ void VTextTool::textChanged()
 	}
 	else
 		drawEditedText();
-	
+
 	m_editedText->setText( m_optionsWidget->text() );
 	m_editedText->setFont( m_optionsWidget->font() );
 	m_editedText->setPosition( m_optionsWidget->position() );
@@ -636,7 +638,7 @@ void VTextTool::accept()
 			i18n( "Insert text" ),
 			m_text );
 	} 
-	
+
 	view()->part()->addCommand( cmd, true );
 	view()->selectionChanged();
 
