@@ -179,12 +179,25 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     }
     else if( strExt == ".wmf" )
     {
-        // throw away WMF metaheader (22 bytes)
+        // special treatment for WMF with metaheader
+        // d7cdc69a is metaheader magic id
         Q_UINT8* data = (Q_UINT8*) image.data();
         if( ( data[0] == 0xd7 ) && ( data[1] == 0xcd ) &&
             ( data[2] == 0xc6 ) && ( data[3] == 0x9a ) && 
             ( image.size() > 22 ) )
         {
+            // FIXME what is exactly this value ?
+            double magicfactor = 1.76;
+
+            // grab bounding box, find original size
+            unsigned left = data[6]+(data[7]<<8);
+            unsigned top = data[8]+(data[9]<<8);
+            unsigned right = data[10]+(data[11]<<8);
+            unsigned bottom = data[12]+(data[13]<<8);
+            origWidth = (right-left) / magicfactor;
+            origHeight = (bottom-top) / magicfactor;
+
+            // throw away WMF metaheader (22 bytes)
             QByteArray tmp;
             for( unsigned i=0; i<image.size()-22; i++)
                 image[i] = image[i+22];
