@@ -125,6 +125,7 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
   newW = zoomHandler->zoomItX(m_w);
   newH = zoomHandler->zoomItY(m_h);
 
+  painter->saveState();
   painter->setTranslation(newX, newY);
   rotatePainter(pData);  // Rotate the painter if needed
 
@@ -170,6 +171,7 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
     painter->drawHandle( 0, newH / 2, 0 );
     painter->drawHandle( newW, newH / 2, 0 );
   }
+  painter->restoreState();
 }
 
 KivioCollisionType KivioStencil::checkForCollision( KoPoint *, double )
