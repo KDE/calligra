@@ -140,6 +140,7 @@ void SetOptionsCmd::execute()
         objects.at( i )->moveBy( *diffs.at( i ) );
 
     doc->setGridValue( gridX, gridY, false );
+    doc->updateRuler();
     doc->setTxtBackCol( txtBackCol );
     doc->repaint( false );
 }
@@ -150,7 +151,7 @@ void SetOptionsCmd::unexecute()
     for ( unsigned int i = 0; i < objects.count(); i++ )
         objects.at( i )->moveBy( -(*diffs.at( i )).x(), -(*diffs.at( i )).y() );
     doc->setGridValue( oldGridX, oldGridY, false );
-
+    doc->updateRuler();
     doc->setTxtBackCol( otxtBackCol );
     doc->repaint( false );
 }
