@@ -1038,9 +1038,9 @@ void KWView::setupActions()
     actionCreateStyleFromSelection->setToolTip( i18n( "Create a new style based on the currently selected text." ) );
     actionCreateStyleFromSelection->setWhatsThis( i18n( "Create a new style based on the currently selected text." ) );
 
-    actionConfigureFootEndNote = new KAction( i18n( "Configure Footnote/Endnote" ), 0,
+    actionConfigureFootEndNote = new KAction( i18n( "Footnotes and Endnotes..." ), 0,
                                         this, SLOT( configureFootEndNote()),
-                                        actionCollection(), "configure_footendnote" );
+                                        actionCollection(), "format_footendnote" );
     actionConfigureFootEndNote->setToolTip( i18n( "Change the look of footnotes." ) );
     actionConfigureFootEndNote->setWhatsThis( i18n( "Change the look of footnotes." ) );
 
