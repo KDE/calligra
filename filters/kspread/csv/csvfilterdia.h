@@ -43,7 +43,7 @@ public:
 
 private:
     QVButtonGroup *box;
-    QRadioButton *r1, *r2;
+    QRadioButton *r1, *r2, *r3;
 };
 #endif
 #endif // CSVFILTERDIA_H

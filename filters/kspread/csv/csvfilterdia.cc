@@ -29,12 +29,15 @@ CSVFilterDia::CSVFilterDia(QWidget *parent, QString name) :
     box=new QVButtonGroup(i18n("CSV Delimiter"),this);
     ml->addWidget(box, 3);
     QBoxLayout *bl=new QVBoxLayout(box, 5);
-    r1=new QRadioButton(i18n("; (Germany)"), box);
+    r1=new QRadioButton(i18n("semi-colon (;)"), box);
     bl->addStretch(5);
     bl->addWidget(r1, 3);
     bl->addStretch(5);
-    r2=new QRadioButton(i18n(", (USA)"), box);
+    r2=new QRadioButton(i18n("comma (,)"), box);
     bl->addWidget(r2, 3);
+    bl->addStretch(5);
+    r3=new QRadioButton(i18n("tabulator"), box);
+    bl->addWidget(r3, 3);
     bl->addStretch(5);
     box->setExclusive(true);
     box->setButton(0);
@@ -47,7 +50,9 @@ const QString CSVFilterDia::state() {
 
     if(r1==box->selected())
         return QString(QChar(';'));
-    else
+    else if(r2==box->selected())
         return QString(QChar(','));
+    else
+        return QString(QChar(0x08));  // Is that the only possibility? (Werner)
 }
 #endif
