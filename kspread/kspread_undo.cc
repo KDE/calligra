@@ -791,7 +791,7 @@ void KSpreadUndoSetText::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-
+    doc()->emitBeginOperation();
     KSpreadCell *cell = table->nonDefaultCell( m_iColumn, m_iRow );
     m_strRedoText = cell->text();
     m_eFormatTypeRedo=cell->getFormatType( m_iColumn, m_iRow );
@@ -801,7 +801,7 @@ void KSpreadUndoSetText::undo()
 	cell->setCellText( "" );
     else
 	cell->setCellText( m_strText );
-
+    doc()->emitEndOperation();
     doc()->undoBuffer()->unlock();
 }
 
@@ -812,7 +812,7 @@ void KSpreadUndoSetText::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-
+    doc()->emitBeginOperation();
     KSpreadCell *cell = table->nonDefaultCell( m_iColumn, m_iRow );
     m_strText = cell->text();
     m_eFormatType=cell->getFormatType( m_iColumn, m_iRow );
@@ -821,6 +821,7 @@ void KSpreadUndoSetText::redo()
     else
 	cell->setCellText( m_strRedoText );
     cell->setFormatType(m_eFormatTypeRedo);
+    doc()->emitEndOperation();
     doc()->undoBuffer()->unlock();
 }
 
@@ -1453,6 +1454,8 @@ void KSpreadUndoDelete::undo()
     createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,table );
 
     doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
+
     if( util_isColumnSelected( m_selection ) )
     {
         QValueList<columnSize>::Iterator it2;
@@ -1474,6 +1477,8 @@ void KSpreadUndoDelete::undo()
 
     table->deleteCells( m_selection );
     table->paste( m_data, m_selection );
+    doc()->emitEndOperation();
+
     if(table->getAutoCalc()) table->recalc();
 
     doc()->undoBuffer()->unlock();
@@ -1487,6 +1492,8 @@ void KSpreadUndoDelete::redo()
 	return;
 
     doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
+
     if( util_isColumnSelected( m_selection ) )
     {
         QValueList<columnSize>::Iterator it2;
@@ -1512,6 +1519,7 @@ void KSpreadUndoDelete::redo()
 
     table->paste( m_dataRedo, m_selection );
     //table->deleteCells( m_selection );
+    doc()->emitEndOperation();
     table->refreshView( m_selection );
     doc()->undoBuffer()->unlock();
 }
@@ -1783,7 +1791,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-
+    doc()->emitBeginOperation();
     createList( m_lstRedoTextCell, table );
 
 
@@ -1799,7 +1807,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
         else
 	       cell->setCellText( (*it2).text );
     }
-
+    doc()->emitEndOperation();
     doc()->undoBuffer()->unlock();
 }
 
@@ -1810,7 +1818,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-
+    doc()->emitBeginOperation();
     QValueList<textOfCell>::Iterator it2;
     for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
     {
@@ -1823,7 +1831,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
         else
 	       cell->setCellText( (*it2).text );
     }
-
+    doc()->emitEndOperation();
     doc()->undoBuffer()->unlock();
 }
 
