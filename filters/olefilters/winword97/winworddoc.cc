@@ -708,14 +708,14 @@ void WinWordDoc::gotTableEnd(
             QColor backGround = colorForNumber(QString::number(row.rgshd[x].icoBack), 8, true);
 
             cell.append(
-                QString::fromLatin1("\" runaround=\"1\" runaGap=\"2\"") +
-                QString::fromLatin1("lWidth=\"1\" lStyle=\"0\" ") +
+                QString::fromLatin1("\" runaround=\"1\" runaGap=\"2\" ") +
+                QString::fromLatin1("lWidth=\"%1\" lStyle=\"0\" ").arg(row.rgtc[x].brcLeft.dptLineWidth * 0.125) +
                 QString::fromLatin1("lRed=\"%1\" lGreen=\"%2\" lBlue=\"%3\" ").arg(brcLeft.red()).arg(brcLeft.green()).arg(brcLeft.blue()) +
-                QString::fromLatin1("rWidth=\"1\" rStyle=\"0\" ") +
+                QString::fromLatin1("rWidth=\"%1\" rStyle=\"0\" ").arg(row.rgtc[x].brcRight.dptLineWidth * 0.125) +
                 QString::fromLatin1("rRed=\"%1\" rGreen=\"%2\" rBlue=\"%3\" ").arg(brcRight.red()).arg(brcRight.green()).arg(brcRight.blue()) +
-                QString::fromLatin1("tWidth=\"1\" tStyle=\"0\" ") +
+                QString::fromLatin1("tWidth=\"%1\" tStyle=\"0\" ").arg(row.rgtc[x].brcTop.dptLineWidth * 0.125) +
                 QString::fromLatin1("tRed=\"%1\" tGreen=\"%2\" tBlue=\"%3\" ").arg(brcTop.red()).arg(brcTop.green()).arg(brcTop.blue()) +
-                QString::fromLatin1("bWidth=\"1\" bStyle=\"0\" ") +
+                QString::fromLatin1("bWidth=\"%1\" bStyle=\"0\" ").arg(row.rgtc[x].brcBottom.dptLineWidth * 0.125) +
                 QString::fromLatin1("bRed=\"%1\" bGreen=\"%2\" bBlue=\"%3\" ").arg(brcBottom.red()).arg(brcBottom.green()).arg(brcBottom.blue()) +
                 QString::fromLatin1("bkRed=\"%1\" bkGreen=\"%2\" bkBlue=\"%3\" ").arg(backGround.red()).arg(backGround.green()).arg(backGround.blue()) +
                 QString::fromLatin1("bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\""));
