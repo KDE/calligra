@@ -1,6 +1,6 @@
 SUBDIRS = templates pics reports
 
-INCLUDES = $(KOFFICE_INCLUDES) -I/work/kde/head/kdepim/kdgantt -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib \
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib \
                    $(all_includes)
 
 libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
@@ -31,7 +31,7 @@ noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
 lib_LTLIBRARIES = 
 kde_module_LTLIBRARIES = libkplatopart.la
 libkplatopart_la_LDFLAGS = $(KDE_LDFLAGS) $(KDE_PLUGIN)
-libkplatopart_la_LIBADD = $(LIB_KABC) $(LIB_KOFFICEUI) /work/kde/head/build-kdepim/kdgantt/libkdgantt.la $(top_builddir)/kugar/lib/libkugar.la
+libkplatopart_la_LIBADD = $(LIB_KABC) $(LIB_KOFFICEUI) $(top_builddir)/kdgantt/libkdgantt.la $(top_builddir)/kugar/lib/libkugar.la
 libkplatopart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module and executable
