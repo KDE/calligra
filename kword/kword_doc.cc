@@ -1428,9 +1428,14 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
             }
             _store->close();
 
-            KWImage image( this, img, *it );
-            imageCollection.insertImage( *it, image );
+            QString filename = *it;
+            int dashdash = filename.findRev( "--" );
+            if ( dashdash != -1 )
+                filename == filename.left( dashdash );
 
+            KWImage image( this, img, filename );
+            if ( !img.isNull() ) 
+                imageCollection.insertImage( *it, image );
         }
     }
 
@@ -1503,9 +1508,15 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     out << otag << "<PIXMAPS>" << endl;
 
     QDictIterator<KWImage> it = imageCollection.iterator();
+    QStringList keys, images;
     for ( ; it.current(); ++it )
-        out << indent << "<KEY key=\"" << it.currentKey().latin1() << "\"/>" << endl;
-
+    {
+        if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
+            continue;
+        out << indent << "<KEY key=\"" << it.current()->getFilename().latin1() << "\"/>" << endl;
+        keys.append( it.currentKey() );
+        images.append( it.current()->getFilename() );
+    }
     out << etag << "</PIXMAPS>" << endl;
 
     // Write "OBJECT" tag for every child
@@ -1527,11 +1538,16 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
     CORBA::String_var u = url();
     QDictIterator<KWImage> it = imageCollection.iterator();
 
+    QStringList keys, images;
+    
     for( ; it.current(); ++it )
     {
+        if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
+            continue;
+        
         QString u2 = u.in();
         u2 += "/";
-        u2 += it.currentKey();
+        u2 += it.current()->getFilename();
 
         QString format = QFileInfo( it.current()->getFilename() ).extension().upper();
         if ( format == "JPG" )
@@ -1545,6 +1561,8 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
         writeImageToStream( out, *it.current(), format );
         out.flush();
         _store->close();
+        keys.append( it.currentKey() );
+        images.append( it.current()->getFilename() );
     }
 
     return true;
