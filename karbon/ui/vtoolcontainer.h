@@ -5,15 +5,22 @@
 #ifndef __VTOOLCONTAINER_H__
 #define __VTOOLCONTAINER_H__
 
-#include <kaction.h>
+#include <qwidget.h>
 
-class VToolContainer : public KAction
+class QButtonGroup;
+class QPushButton;
+
+class VToolContainer : public QWidget
 {
 	Q_OBJECT
 public:
-	VToolContainer( const QString& text, QObject* parent = 0L, const char* name = 0L );
-
-	virtual int plug( QWidget* widget, int index = -1 );
+	VToolContainer( QObject* parent = 0L, const char* name = 0L );
+	~VToolContainer();
+private:
+	QButtonGroup *btngroup;
+	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral };
+private slots:
+	void slotButton( int ID );
 };
 
 #endif

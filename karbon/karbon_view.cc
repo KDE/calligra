@@ -370,7 +370,9 @@ KarbonView::initActions()
 	m_zoomAction->setEditable( true );
 	// zoom <-----
 
-	new VToolContainer( i18n( "Tools" ), actionCollection(), "tool_container" );
+	/*VToolContainer *toolbox;
+	toolbox = new VToolContainer( this );
+	toolbox->show();*/
 }
 
 void
