@@ -316,7 +316,8 @@ void KWStyleManager::deleteStyle()
 bool KWStyleManager::apply()
 {
     int f = 0;
-
+#if 0
+    // Not implemented for the moment
     if ( cFont->currentItem() == 1 )
         f = f | KWDocument::U_FONT_FAMILY_SAME_SIZE;
     else if ( cFont->currentItem() == 2 )
@@ -343,6 +344,7 @@ bool KWStyleManager::apply()
         f = f | KWDocument::U_SMART;
 
     doc->setApplyStyleChangeMask( f );
+#endif
     return true;
 }
 
