@@ -2371,10 +2371,10 @@ void CellLayoutPageFont::weight_chosen_slot(const QString & weight)
 {
   QString weight_string = weight;
 
-  if ( weight_string == QString(i18n("normal")))
+  if ( weight_string == QString(i18n("Normal")))
     selFont.setBold(false);
-  if ( weight_string == QString(i18n("bold")))
-       selFont.setBold(true);
+  if ( weight_string == QString(i18n("Bold")))
+    selFont.setBold(true);
   emit fontSelected(selFont);
 }
 
@@ -2382,9 +2382,9 @@ void CellLayoutPageFont::style_chosen_slot(const QString & style)
 {
   QString style_string = style;
 
-  if ( style_string == QString(i18n("roman")))
+  if ( style_string == QString(i18n("Roman")))
     selFont.setItalic(false);
-  if ( style_string == QString(i18n("italic")))
+  if ( style_string == QString(i18n("Italic")))
     selFont.setItalic(true);
   emit fontSelected(selFont);
 }
@@ -2413,9 +2413,9 @@ void CellLayoutPageFont::display_example(const QFont& font)
     actual_weight_label_data->setText(i18n("Normal"));
 
   if (info.italic())
-    actual_style_label_data->setText(i18n("italic"));
+    actual_style_label_data->setText(i18n("Italic"));
   else
-    actual_style_label_data->setText(i18n("roman"));
+    actual_style_label_data->setText(i18n("Roman"));
 }
 
 void CellLayoutPageFont::setCombos()
