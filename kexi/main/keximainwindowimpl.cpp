@@ -439,6 +439,8 @@ QPopupMenu* KexiMainWindowImpl::findPopupMenu(const char *popupName)
 void
 KexiMainWindowImpl::initActions()
 {
+//	setupGUI(KMainWindow::Keys|KMainWindow::StatusBar|KMainWindow::Save|KMainWindow::Create);
+
 //	d->actionMapper = new QSignalMapper(this, "act_map");
 //	connect(d->actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
 
@@ -603,8 +605,10 @@ KexiMainWindowImpl::initActions()
 	action = KStdAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
 	action->setWhatsThis(i18n("Lets you configure shortcut keys."));
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	action = KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
 	action->setWhatsThis(i18n("Lets you configure toolbars."));
+#endif
 
 	d->action_show_other = new KActionMenu(i18n("Other"),
 		actionCollection(), "options_show_other");
@@ -636,8 +640,10 @@ KexiMainWindowImpl::initActions()
 
 #endif
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_configure = KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
 	action->setWhatsThis(i18n("Lets you configure Kexi."));
+#endif
 
 	//HELP MENU
 #if 0//js: todo reenable later

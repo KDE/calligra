@@ -376,19 +376,20 @@ CCMAIL: dkite@shaw.ca
 2004-10-25..26
 - defines moved from Makefile.global
 - minor compile fixes and some warnings removed
-TableView
-- datatimeedit hack disabled for !win32
 I18N
 - pl translation updated
 Forms
 - fixed crash in connection editor
 TableView
+- datatimeedit hack disabled for !win32
 - "edit_clear_table" action added
 - KexiTableViewDataBase made protected in KexiTableViewData for safety
 - on row inserting, enable "next" button
 - record navigator
 -- now takes full width, painting fixed
 -- update width when number of digits in rows counter changes
+Main
+- preferences and configureToolbars actions ifdefed using KEXI_SHOW_UNIMPLEMENTED
 
 2004-10-22
 TableView
