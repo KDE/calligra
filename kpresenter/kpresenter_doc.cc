@@ -1009,6 +1009,8 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     uint childTotalCount=document.childNodes().count();
     uint childCount = 0;
 
+    loadTextStyle( document );
+
     while(!elem.isNull()) {
         kdDebug() << "Element name: " << elem.tagName() << endl;
         if(elem.tagName()=="EMBEDDED") {
@@ -1179,9 +1181,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             loadTitle(elem);
         } else if(elem.tagName()=="PAGENOTES") {
             loadNote(elem);
-        } else if( _clean && elem.tagName()=="STYLES"){
-            // Load all styles before the corresponding paragraphs try to use them!
-            loadStyleTemplates( elem );
         } else if(elem.tagName()=="OBJECTS") {
             //FIXME**********************
 #if 0
@@ -1256,6 +1255,13 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     setModified(false);
 
     return true;
+}
+
+void KPresenterDoc::loadTextStyle( const QDomElement& domElement )
+{
+    QDomElement style = domElement.namedItem( "STYLES" ).toElement();
+    if ( _clean && ! style.isNull() )
+        loadStyleTemplates( style );
 }
 
 void KPresenterDoc::loadPictureMap ( QDomElement& domElement )

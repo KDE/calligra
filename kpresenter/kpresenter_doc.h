@@ -456,7 +456,7 @@ protected:
     QDomElement saveNote( QDomDocument &doc );
     QDomElement saveAttribute( QDomDocument &doc );
     QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list );
-
+    void loadTextStyle( const QDomElement& domElement );
     void saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomDocument &doc,QDomElement &presenter, double offset );
     QDomElement saveHelpLines( QDomDocument &doc );
 
