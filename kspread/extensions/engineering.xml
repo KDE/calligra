@@ -139,8 +139,11 @@
         <Text>Supported volume units: l (liter), tsp (teaspoon), tbs (ablespoon), oz (ounce liquid), cup, pt (pint), qt (quart), gal (gallone), barrel, m3 (cubic meter), mi3 (cubic mile), Nmi3 (cubic Nautical mile), in3 (cubic inch), ft3 (cubic foot), yd3 (cubic yard).</Text>
         <Text>Supported area units: m2 (square meter), mi2 (square mile), Nmi2 (square Nautical mile), in2 (square inch), ft2 (square foot), yd2 (square yard), acre, ha (hectare).</Text>
         <Text>Supported speed units: m/s (meters per second), m/h (meters per hour), mph (miles per hour), kn (knot).</Text>
+        <Text>For metric units any of the following prefixes can be used: E (exa, 1E+18), P (peta, 1E+15), T (tera, 1E+12), G (giga, 1E+09), M (mega, 1E+06), k (kilo, 1E+03), h (hecto, 1E+02), e (dekao, 1E+01), d (deci, 1E-01), c (centi, 1E-02), m (milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p (pico, 1E-12), f (femto, 1E-15), a (atto, 1E-18).</Text>
         <Syntax>CONVERT(Number; From Unit; To Unit)</Syntax>
         <Example>CONVERT(32;"C";"F") equals 89.6</Example>
+        <Example>CONVERT(3;"lbm";"kg") equals 1.3608</Example>
+        <Example>CONVERT(7.9;"cal";"J") equals 33.0757</Example>
       </Help>
     </Function>
 
