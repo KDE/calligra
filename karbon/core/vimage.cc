@@ -14,6 +14,8 @@
 #include <qimage.h>
 #include <koRect.h>
 
+#include <render/vqpainter.h>
+
 #include <kdebug.h>
 
 VImage::VImage( VObject *parent, const QString &fname ) : VObject( parent ), m_image( 0L ), m_fname( fname )
@@ -57,13 +59,17 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 	kdDebug() << "VImage::draw" << endl;
 	if( state() == edit )
 	{
-		KoRect bbox = m_boundingBox;//.transform( m_matrix );
+		KoRect bbox = KoRect( 0, 0, m_image->width(), m_image->height() );
+		KoPoint tl = bbox.topLeft().transform( m_matrix );
+		KoPoint tr = bbox.topRight().transform( m_matrix );
+		KoPoint bl = bbox.bottomLeft().transform( m_matrix );
+		KoPoint br = bbox.bottomRight().transform( m_matrix );
 		kdDebug() << "m_boundingBox : " << m_boundingBox << endl;
-	    painter->moveTo( bbox.topLeft() );
-	    painter->lineTo( bbox.topRight() );
-	    painter->lineTo( bbox.bottomRight() );
-	    painter->lineTo( bbox.bottomLeft() );
-	    painter->lineTo( bbox.topLeft() );
+	    painter->moveTo( tl );
+	    painter->lineTo( tr );
+	    painter->lineTo( br );
+	    painter->lineTo( bl );
+	    painter->lineTo( tl );
 
 		painter->setRasterOp( Qt::XorROP );
 		//painter->setPen( stroke() );
