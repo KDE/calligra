@@ -95,18 +95,11 @@ KoPoint
 VCanvas::toContents( const KoPoint &p ) const
 {
 	KoPoint p2 = p;
-	//kdDebug() << p.y() << endl;
 	p2.setX( ( p.x() + contentsX() ) / m_view->zoom() );
-	//p2.setY( ( contentsHeight() / m_view->zoom() - ( p.y() + contentsY() / m_view->zoom() ) ) );
 	if( contentsHeight() > height() )
 		p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) ) / m_view->zoom() );
 	else
 		p2.setY( ( height() - p.y() ) / m_view->zoom() );
-	//kdDebug() << "contentsHeight() : " << contentsHeight() << endl;
-	//kdDebug() << "p.y() : " << p.y() << endl;
-	//kdDebug() << "contentsY() : " << contentsY() << endl;
-	//p2.setY( ( contentsHeight() - ( p.y() + contentsY() ) * m_view->zoom() ) ) / m_view->zoom() );
-	//kdDebug() << p2.y() << endl;
 	return p2;
 }
 
@@ -115,7 +108,6 @@ VCanvas::setYMirroring( bool edit )
 {
 	VPainter *p;
 	QWMatrix mat;
-	//kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
 
 	if( edit )
 		p = m_view->painterFactory()->editpainter();
@@ -192,7 +184,6 @@ void
 VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 	int clipw, int cliph  )
 {
-	//kdDebug() << "VCanvas::drawContents" << endl;
 	drawDocument( painter, KoRect( clipx, clipy, clipw, cliph ) );
 }
 
