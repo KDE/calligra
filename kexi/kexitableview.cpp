@@ -593,7 +593,7 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 	if(m_pCurrentItem)
 	{	if(m_editOnDubleClick)
 		{
-			createEditor(m_curRow, m_curCol);
+			createEditor(m_curRow, m_curCol, QString::null);
 		}
 
 		emit itemDblClicked(m_pCurrentItem, m_curCol);
@@ -739,7 +739,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 
     case Key_Shift:
-    		break;
+    		e->ignore();
+        	break;
 
 	#warning this needs work!
 	case Key_Return:

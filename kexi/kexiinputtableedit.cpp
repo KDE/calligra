@@ -58,6 +58,11 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 					break;
 		}
 	}
+	else
+	{
+		setText(value.toString());
+		setSelection(0, value.toString().length());
+	}
 
 	m_calculatedCell = false;
 }
