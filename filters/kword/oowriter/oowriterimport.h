@@ -70,6 +70,8 @@ private:
     void appendField(QDomDocument& doc, QDomElement& outputFormats, const QDomElement& object, uint pos);
     void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
         const QString& key, int type, QDomElement& child);
+    void appendBookmark( QDomDocument& doc, int paragId, int pos, const QString& name );
+    void appendBookmark( QDomDocument& doc, int paragId, int pos, int endParagId, int endPos, const QString& name );
     void parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
     void parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
         const QString& tableName, const QMemArray<double> & columnLefts, uint& row, uint& column );
@@ -91,6 +93,18 @@ private:
     bool m_nextItemIsListItem; // only the first elem inside list-item is numbered
     int m_restartNumbering;
     QString m_currentMasterPage;
+    QDomElement m_currentFrameset; // set by parseBodyOrSimilar
+
+    struct BookmarkStart {
+        BookmarkStart() {} // for stupid QValueList
+        BookmarkStart( const QString&s, int par, int ind )
+            : frameSetName( s ), paragId( par ), pos( ind ) {}
+        QString frameSetName;
+        int paragId;
+        int pos;
+    };
+    typedef QMap<QString, BookmarkStart> BookmarkStartsMap;
+    BookmarkStartsMap m_bookmarkStarts;
 
     uint m_pictureNumber; // Number of the picture (increment *before* use)
     KZip* m_zip; // Input KZip file

@@ -112,6 +112,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     mainFramesetElement.setAttribute("frameType",1);
     mainFramesetElement.setAttribute("frameInfo",0);
     mainFramesetElement.setAttribute("visible",1);
+    mainFramesetElement.setAttribute("name", i18n( "Main Text Frameset" ) );
     framesetsElem.appendChild(mainFramesetElement);
 
     createInitialFrame( mainFramesetElement, 42, 566, false );
@@ -198,6 +199,8 @@ void OoWriterImport::createStyles( QDomDocument& doc )
 
 void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement )
 {
+    m_currentFrameset = currentFramesetElement;
+    Q_ASSERT( !m_currentFrameset.isNull() );
     for ( QDomNode text (parent.firstChild()); !text.isNull(); text = text.nextSibling() )
     {
         m_styleStack.save();
@@ -784,6 +787,18 @@ void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDom
         m_listStyleStack.pop();
 }
 
+static int numberOfParagraphs( const QDomElement& frameset )
+{
+    const QDomNodeList children = frameset.childNodes();
+    const QString paragStr = "PARAGRAPH";
+    int paragCount = 0;
+    for ( unsigned int i = 0 ; i < children.length() ; ++i ) {
+        if ( children.item( i ).toElement().tagName() == paragStr )
+            ++paragCount;
+    }
+    return paragCount;
+}
+
 void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
     QDomElement& outputParagraph, QDomElement& outputFormats, QString& paragraphText, uint& pos)
 {
@@ -871,6 +886,35 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
             textData = "#";     // field placeholder
             appendField(doc, outputFormats, ts, pos);
         }
+        else if ( tagName == "text:bookmark" )
+        {
+            // the number of <PARAGRAPH> tags in the frameset element is the parag id
+            // (-1 for starting at 0, +1 since not written yet)
+            Q_ASSERT( !m_currentFrameset.isNull() );
+            appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
+                            pos, ts.attribute( "text:name" ) );
+        }
+        else if ( tagName == "text:bookmark-start" ) {
+            m_bookmarkStarts.insert( ts.attribute( "text:name" ),
+                                     BookmarkStart( m_currentFrameset.attribute( "name" ),
+                                                    numberOfParagraphs( m_currentFrameset ),
+                                                    pos ) );
+        }
+        else if ( tagName == "text:bookmark-end" ) {
+            BookmarkStartsMap::iterator it = m_bookmarkStarts.find( ts.attribute( "text:name" ) );
+            if ( it == m_bookmarkStarts.end() ) {
+                kdWarning(30518) << "Found bookmark end without bookmark start!!! Impossible." << endl;
+            } else {
+                if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
+                    // Oh tell me this never happens...
+                    kdWarning(30518) << "Cross-frameset bookmark! Not supported." << endl;
+                } else {
+                    appendBookmark( doc, (*it).paragId, (*it).pos,
+                                    numberOfParagraphs( m_currentFrameset ), pos, it.key() );
+                }
+                m_bookmarkStarts.remove( it );
+            }
+        }
         else if ( t.isNull() ) // no textnode, we must ignore
         {
             kdWarning(30518) << "Ignoring tag " << ts.tagName() << endl;
@@ -893,6 +937,8 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         pos += length;
     }
 }
+
+
 
 QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
 {
@@ -1912,6 +1958,31 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
 
         m_styleStack.restore();
     }
+}
+
+void OoWriterImport::appendBookmark( QDomDocument& doc, int paragId, int pos, const QString& name )
+{
+    appendBookmark( doc, paragId, pos, paragId, pos, name );
+}
+
+void OoWriterImport::appendBookmark( QDomDocument& doc, int paragId, int pos, int endParagId, int endPos, const QString& name )
+{
+    Q_ASSERT( !m_currentFrameset.isNull() );
+    const QString frameSetName = m_currentFrameset.attribute( "name" );
+    Q_ASSERT( !frameSetName.isEmpty() );
+    QDomElement bookmarks = doc.documentElement().namedItem( "BOOKMARKS" ).toElement();
+    if ( bookmarks.isNull() ) {
+        bookmarks = doc.createElement( "BOOKMARKS" );
+        doc.documentElement().appendChild( bookmarks );
+    }
+    QDomElement bkItem = doc.createElement( "BOOKMARKITEM" );
+    bkItem.setAttribute( "name", name );
+    bkItem.setAttribute( "frameset", frameSetName );
+    bkItem.setAttribute( "startparag", paragId );
+    bkItem.setAttribute( "cursorIndexStart", pos );
+    bkItem.setAttribute( "endparag", endParagId );
+    bkItem.setAttribute( "cursorIndexEnd", endPos );
+    bookmarks.appendChild( bkItem );
 }
 
 #include "oowriterimport.moc"
