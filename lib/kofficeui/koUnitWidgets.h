@@ -93,16 +93,25 @@ private:
 
 class KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
 {
+Q_OBJECT
 public:
 	KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
 
 	virtual void changeValue( double );
+	void updateValue( double );
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
 	double value() const { return m_value; }
+	void insertItem( double, int index = -1 );
 
 protected:
 	 bool eventFilter( QObject* obj, QEvent* ev );
+
+signals:
+	 void valueChanged(double);
+
+private slots:
+	void slotActivated( int );
 
 private:
 	double m_value;

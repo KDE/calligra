@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koUnitWidgets.h"
+#include "koUnitWidgets.moc"
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -143,13 +143,40 @@ KoUnitDoubleComboBox::KoUnitDoubleComboBox( QWidget *parent, double lower, doubl
 	m_validator = new KoUnitDoubleValidator( this, this );
 	lineEdit()->setValidator( m_validator );
 	changeValue( value );
+	connect( this, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 
 void
 KoUnitDoubleComboBox::changeValue( double value )
 {
+	QString oldLabel = lineEdit()->text();
+	updateValue( value );
+	if( lineEdit()->text() != oldLabel )
+		emit valueChanged( m_value );
+}
+
+void
+KoUnitDoubleComboBox::updateValue( double value )
+{
 	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
 	lineEdit()->setText( QString( "%1%2").arg( KGlobal::locale()->formatNumber( m_value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+}
+
+void
+KoUnitDoubleComboBox::insertItem( double value, int index )
+{
+	KComboBox::insertItem( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ), index );
+}
+
+void
+KoUnitDoubleComboBox::slotActivated( int index )
+{
+	double oldvalue = m_value;
+	bool ok;
+	double value = text( index ).replace( ',', "." ).toDouble( &ok );
+	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
+	if( m_value != oldvalue )
+		emit valueChanged( m_value );
 }
 
 void
