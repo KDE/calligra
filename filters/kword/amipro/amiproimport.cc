@@ -128,16 +128,16 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
   QString underline = layout.underline|layout.word_underline|layout.double_underline ? "1" : "0";
 
   QString align;
-  align = layout.align==AmiProLayout::Left ? "left" :
-          layout.align==AmiProLayout::Right ? "right" :
-          layout.align==AmiProLayout::Center ? "center" :
-          layout.align==AmiProLayout::Justify ? "justify" :
+  align = layout.align==Qt::AlignLeft ? "left" :
+          layout.align==Qt::AlignRight ? "right" :
+          layout.align==Qt::AlignCenter ? "center" :
+          layout.align==Qt::AlignJustify ? "justify" :
           "left";
 
   QString linespacing;
-  linespacing = layout.linespace==AmiProLayout::Single ? "0" :
-                layout.linespace==AmiProLayout::OneAndHalf ? "oneandhalf" :
-                layout.linespace==AmiProLayout::Double ? "double" :
+  linespacing = layout.linespace==AmiPro::LS_Single ? "0" :
+                layout.linespace==AmiPro::LS_OneAndHalf ? "oneandhalf" :
+                layout.linespace==AmiPro::LS_Double ? "double" :
                   QString::number( layout.linespace );
 
   result.append( "<LAYOUT>\n" );
@@ -181,9 +181,17 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
   QString vertalign = style.superscript ? "2" : style.subscript ? "1" : "0";
   QString underline = style.underline|style.word_underline|style.double_underline ? "1" : "0";
 
+  QString align;
+  align = style.align==Qt::AlignLeft ? "left" :
+          style.align==Qt::AlignRight ? "right" :
+          style.align==Qt::AlignCenter ? "center" :
+          style.align==Qt::AlignJustify ? "justify" :
+          "left";
+
   result.append( "<STYLE>\n" );
   result.append( "  <NAME value=\"" + style.name + "\" />\n" );
-  result.append( "  <FOLLOWING name=\"Standard\" />\n" );
+  //result.append( "  <FOLLOWING name=\"Standard\" />\n" );
+  result.append( "  <FLOW align=\"" + align + "\" />\n" );
   result.append( "  <LINESPACING value=\"0\" />\n" );
   result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
   result.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );

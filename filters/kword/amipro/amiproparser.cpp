@@ -262,6 +262,7 @@ bool AmiProParser::parseStyle( const QStringList& lines )
   style.name = lines[0].stripWhiteSpace();
   if( style.name.isEmpty() ) return true;
 
+  // font
   if( lines[2].stripWhiteSpace() != "[fnt]" ) return true;
   style.fontFamily = lines[3].stripWhiteSpace();
   style.fontSize = lines[4].stripWhiteSpace().toFloat() / 20.0;
@@ -275,6 +276,23 @@ bool AmiProParser::parseStyle( const QStringList& lines )
   style.underline = flag & 4;
   style.word_underline = flag & 8;
   style.double_underline = flag & 64;
+
+  // alignment
+  if( lines[7].stripWhiteSpace() != "[algn]" ) return true;
+  unsigned align_flag = lines[8].stripWhiteSpace().toUInt();
+  if( align_flag & 1 ) style.align = Qt::AlignLeft;
+  if( align_flag & 2 ) style.align = Qt::AlignRight;
+  if( align_flag & 4 ) style.align = Qt::AlignCenter;
+  if( align_flag & 8 ) style.align = Qt::AlignJustify;
+
+  // linespace
+  if( lines[13].stripWhiteSpace() != "[spc]" ) return true;
+  unsigned ls_flag = lines[14].stripWhiteSpace().toUInt();
+  if( ls_flag & 1 ) style.linespace = AmiPro::LS_Single;
+  if( ls_flag & 2 ) style.linespace = AmiPro::LS_OneAndHalf;
+  if( ls_flag & 4 ) style.linespace = AmiPro::LS_Double;
+  if( ls_flag & 8 ) 
+    style.linespace = lines[15].stripWhiteSpace().toFloat() / 20.0;
 
   m_styleList.append( style );
   if( m_listener )
@@ -434,27 +452,27 @@ bool AmiProParser::handleTag( const QString& tag )
 
   // paragraph left-align
   if( tag == "+@" )
-    m_layout.align = AmiProLayout::Left;
+    m_layout.align = Qt::AlignLeft;
 
   // paragraph right-align
   if( tag == "+A" )
-    m_layout.align = AmiProLayout::Right;
+    m_layout.align = Qt::AlignRight;
 
   // paragraph center
   if( tag == "+B" )
-    m_layout.align = AmiProLayout::Center;
+    m_layout.align = Qt::AlignCenter;
 
   // paragraph justify
   if( tag == "+C" )
-    m_layout.align = AmiProLayout::Justify;
+    m_layout.align = Qt::AlignJustify;
 
   // linespace
   if( tag.left( 3 ) == ":S+" )
   {
     float ls = tag.right( tag.length() - 3 ).toFloat();
-    m_layout.linespace = (ls == -1) ? AmiProLayout::Single :
-     (ls == -2) ? AmiProLayout::OneAndHalf :
-     (ls == -3) ? AmiProLayout::Double : ls / 20.0;
+    m_layout.linespace = (ls == -1) ? AmiPro::LS_Single :
+     (ls == -2) ? AmiPro::LS_OneAndHalf :
+     (ls == -3) ? AmiPro::LS_Double : ls / 20.0;
   }
 
   // font
@@ -547,8 +565,8 @@ AmiProLayout::AmiProLayout()
   bold = italic = underline = 
   word_underline = double_underline = 
   subscript = superscript = strikethrough = FALSE;
-  align = Left;
-  linespace = Single;
+  align = Qt::AlignLeft;
+  linespace = AmiPro::LS_Single;
 }
 
 void AmiProLayout::assign( const AmiProLayout &l )
@@ -593,6 +611,7 @@ void AmiProLayout::applyStyle( const AmiProStyle& style )
   subscript = style.subscript;
   superscript = style.superscript;
   strikethrough = style.strikethrough;
+  align = style.align;
   linespace = style.linespace;
 }
 
@@ -606,7 +625,7 @@ AmiProStyle::AmiProStyle()
   bold = italic = underline = 
   word_underline = double_underline = 
   subscript = superscript = strikethrough = FALSE;
-  linespace = Single;
+  linespace = AmiPro::LS_Single;
 }
 
 void AmiProStyle::assign( const AmiProStyle& s )
@@ -623,6 +642,7 @@ void AmiProStyle::assign( const AmiProStyle& s )
   subscript = s.subscript;
   superscript = s.superscript;
   strikethrough = s.strikethrough;
+  align = s.align;
   linespace = s.linespace;
 }
 

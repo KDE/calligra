@@ -25,6 +25,12 @@ class QStringList;
 #include <qvaluelist.h>
 #include <qcolor.h>
 
+class AmiPro
+{
+  public:
+    const static float LS_Single = -1, LS_OneAndHalf = -1.5, LS_Double = -2;
+};
+
 class AmiProStyle;
 
 class AmiProFormat
@@ -58,7 +64,7 @@ class AmiProLayout
     bool bold, italic, underline;
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
-    enum { Left, Center, Right, Justify } align;
+    Qt::AlignmentFlags align;
     const static float Single = -1, OneAndHalf = -1.5, Double = -2;
     float linespace;
     AmiProLayout();
@@ -78,7 +84,7 @@ class AmiProStyle
     bool bold, italic, underline;
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
-    const static float Single = -1, OneAndHalf = -1.5, Double = -2;
+    Qt::AlignmentFlags align;
     float linespace;
     AmiProStyle();
     AmiProStyle( const AmiProStyle& );
