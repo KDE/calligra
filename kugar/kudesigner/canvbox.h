@@ -57,12 +57,12 @@ public:
                          -- to organize appropriate input
 		      << probably_key_value << ... -- values
     */
-//    std::map<QString, std::pair<QString, QStringList> > props;
+    std::map<QString, std::pair<QString, QStringList> > props;
     /**
       NEW property format
       map<QString, Property* >
     */
-    std::map<QString, Property* > props;
+//    std::map<QString, Property* > props;
 };
 
 class CanvasSection: public CanvasBox{
