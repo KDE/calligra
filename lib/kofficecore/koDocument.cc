@@ -1145,9 +1145,8 @@ bool KoDocument::loadNativeFormat( const QString & file )
         }
         if ( store->open( "documentinfo.xml" ) )
         {
-            KoStoreDevice dev( store );
             QDomDocument doc;
-            doc.setContent( &dev );
+            doc.setContent( store->device() );
             d->m_docInfo->load( doc );
             store->close();
         }
@@ -1380,10 +1379,10 @@ DCOPObject * KoDocument::dcopObject()
 }
 
 QCString KoDocument::dcopObjectId() const
-{ 
-	return const_cast<KoDocument *>(this)->dcopObject()->objId(); 
-	
-} 
+{
+	return const_cast<KoDocument *>(this)->dcopObject()->objId();
+
+}
 
 
 void KoDocument::setErrorMessage( const QString& errMsg )

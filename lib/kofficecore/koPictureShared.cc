@@ -186,6 +186,8 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     else
     {   // TODO: test if QImageIO really knows the file format
         m_base=new KoPictureImage();
+        if (mode=="eps")
+            static_cast<KoPictureImage *>(m_base)->setResampleOnResize( true );
     }
 }
 

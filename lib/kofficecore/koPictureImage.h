@@ -50,6 +50,12 @@ public:
 
 
     /**
+     * Called for EPS images, so that resizing (in slow mode) will reload
+     * the data from the raw data, to get a better resolution.
+     */
+    void setResampleOnResize( bool b ) { m_resampleOnResize = b; }
+
+    /**
      * Returns true if the picture is null.
      */
     virtual bool isNull(void) const;
@@ -84,17 +90,20 @@ public:
 protected:
     QPixmap getPixmap(QImage& image);
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
-protected:
+
+private:
     QImage  m_originalImage;
     QByteArray m_rawData;
-    // No idea why it is a mutable, but as it was in KoImage I suppose that there is a reason.
-    mutable QPixmap m_cachedPixmap;
+    QPixmap m_cachedPixmap;
     QSize m_cachedSize;
     /**
      * true, if the last cached image was done using fast mode.
      * false, if the last cached image was done using slow mode.
      */
     bool m_cacheIsInFastMode;
+    bool m_resampleOnResize;
+    class Private;
+    Private* d;
 };
 
 #endif /* __koPictureImage_h__ */

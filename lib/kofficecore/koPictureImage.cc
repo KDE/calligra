@@ -30,8 +30,9 @@
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 #include "koPictureImage.h"
+#include <kdebug.h>
 
-KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
+KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true), m_resampleOnResize(false)
 {
 }
 
@@ -82,32 +83,38 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     // Use QImage::scale if we have fastMode==true
     if ( fastMode )
     {
-        image = m_originalImage.smoothScale( size );
+        image = m_originalImage.scale( size );
         m_cacheIsInFastMode=true;
     }
     else
     {
-        //kdDebug() << "KoPictureImage::scale loading from raw data" << endl;
-        QApplication::setOverrideCursor( Qt::waitCursor );
-        QBuffer buffer( m_rawData );
-        buffer.open( IO_ReadOnly );
-        QImageIO io( &buffer, 0 );
-        QCString params;
-        params.setNum( size.width() );
-        params += ':';
-        QCString height;
-        height.setNum( size.height() );
-        params += height;
-        io.setParameters( params );
-        io.read();
-        image = io.image();
-        if ( image.size() != size ) // this can happen due to rounding problems
+        if ( m_resampleOnResize )
         {
-            image = image.scale( size );
-            //kdDebug() << "fixing size to " << size.width() << "x" << size.height() << endl;
+            QApplication::setOverrideCursor( Qt::waitCursor );
+            QBuffer buffer( m_rawData );
+            buffer.open( IO_ReadOnly );
+            QImageIO io( &buffer, 0 );
+            QCString params;
+            params.setNum( size.width() );
+            params += ':';
+            QCString height;
+            height.setNum( size.height() );
+            params += height;
+            io.setParameters( params );
+            io.read();
+            image = io.image();
+            if ( image.size() != size ) // this can happen due to rounding problems
+            {
+                //kdDebug() << "fixing size to " << size.width() << "x" << size.height()
+                //          << " (was " << image.width() << "x" << image.height() << ")" << endl;
+                image = image.scale( size ); // hmm, smoothScale instead?
+            }
+            QApplication::restoreOverrideCursor();
+            m_cacheIsInFastMode=false;
         }
-        QApplication::restoreOverrideCursor();
-        m_cacheIsInFastMode=false;
+        else
+            image = m_originalImage.smoothScale( size );
+
     }
 
     // Now create and cache the new pixmap
@@ -143,7 +150,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     {
         QSize screenSize( width, height );
         //kdDebug() << "KoPictureImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
-        
+
         scaleAndCreatePixmap(screenSize, fastMode);
 
         // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap
@@ -187,6 +194,6 @@ QSize KoPictureImage::getOriginalSize(void) const
 
 QPixmap KoPictureImage::generatePixmap(const QSize& size)
 {
-    scaleAndCreatePixmap(size,true); // Alwas fast mode!
+    scaleAndCreatePixmap(size,true); // Always fast mode!
     return m_cachedPixmap;
 }

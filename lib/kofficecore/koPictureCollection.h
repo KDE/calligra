@@ -126,6 +126,9 @@ private:
       * @internal
       */
     QString getFileName(const Type pictureType, KoPicture& picture, int& counter);
+
+    class Private;
+    Private* d;
 };
 
 #endif /* __koPictureCollection_h_- */

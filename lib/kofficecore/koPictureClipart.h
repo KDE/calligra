@@ -112,6 +112,8 @@ protected:
     QPicture m_clipart;
     QByteArray m_rawData;
     QSize m_size;
+    class Private;
+    Private* d;
 };
 
 #endif /* __koPictureClipart_h__ */
