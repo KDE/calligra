@@ -14,7 +14,10 @@
  </Menu>
  <Part/>
  <Menu name="Help"><text>Help</text>
+  <Action name="helpUsingHelp"/>
+  <Separator/>
   <Action name="about"/>
+  <Action name="helpAboutKImage"/>
   <Part/>
  </Menu>
 </MenuBar>

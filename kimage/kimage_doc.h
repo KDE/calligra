@@ -44,6 +44,9 @@ public:
   KImageDocument( KoDocument* parent = 0, const char* name = 0 );
   ~KImageDocument();
 
+  bool openDocument( const char* );
+
+public:
   // IDL
 
   // document
@@ -53,7 +56,7 @@ public:
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
   virtual bool initDoc();
   virtual QCString mimeType() const;
-  
+
   float printableHeight();
   float paperHeight();
   float paperWidth();
@@ -61,8 +64,8 @@ public:
   float rightBorder();
   float topBorder();
   float bottomBorder();
-  //KoOrientation orientation();
-  //KoFormat paperFormat();
+  KoOrientation orientation();
+  KoFormat paperFormat();
   //void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder, KoFormat _paper, KoOrientation orientation );
   //void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder, const char * _paper, const char* _orientation );
   //void setHeadFootLine( const char* _headl, const char* _headm, const char* _headr,	const char* _footl, const char* _footm, const char* _footr );
@@ -94,7 +97,6 @@ signals:
 protected:
   //virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
   bool m_bEmpty;
-  QList<KImageView> m_lstViews;
   KoOrientation m_orientation;
   KoFormat m_paperFormat;
   float m_paperWidth;
@@ -109,7 +111,8 @@ protected:
   QString m_footLeft;
   QString m_footRight;
   QString m_footMid;
-  QImage m_image;
+
+  QImage m_image; // the image
 
 // FIXME : make this private
 public:

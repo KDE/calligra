@@ -24,6 +24,7 @@
 #include <kstddirs.h>
 
 #include <koAboutDia.h>
+#include <koFilterManager.h>
 
 #include "kimage_shell.h"
 #include "kimage_factory.h"
@@ -51,4 +52,59 @@ KoDocument* KImageShell::createDoc()
   return new KImageDocument;
 }
 
+// FIXME: is this really neccassary here to support mor then one MimeType ?
+
+void KImageShell::slotFileOpen()
+{
+  /*
+  QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+								nativeFormatMimeType(), nativeFormatPattern(),
+							        nativeFormatName(), TRUE );
+  */
+
+  QString filter = "*.jpg|JPEG (*.jpeg)\n*.bmp|Bitmap (*.bmp)\n*.png|PNG (*.png)\n*.*|All files (*.*)";
+
+  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+  if ( file.isNull() )
+    return;
+
+  file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
+  if ( file.isNull() )
+    return;
+
+  if ( !openDocument( file ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
+    QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+  }
+}
+
+bool KImageShell::openDocument( const char* _url )
+//bool KImageDocument::openDocument( const QString & _filename, const char *_format )
+{
+  return ((KImageDocument*) document())->openDocument( _url );
+
+/*
+  if ( !m_image.load( _url ) )
+    return false;
+
+  if ( _format )
+    m_strImageFormat = _format;
+  else
+    m_strImageFormat = QImage::imageFormat( _filename );
+
+  emit sigUpdateView();
+
+  setModified( true );
+  m_bEmpty = false;
+
+  return true;
+*/
+}
+
 #include "kimage_shell.moc"
+
+
+
+

@@ -38,18 +38,19 @@ class KImageView : public ContainerView
 public:
   KImageView( KImageDocument* doc, QWidget* _parent = 0, const char* _name = 0 );
 
+protected:
   virtual void paintEvent( QPaintEvent* );
 
- public slots:
-//  void slotDocUpdated();
-//  void slotDocUpdated(const QRect&);
+public slots:
+//void slotDocUpdated();
+//void slotDocUpdated(const QRect&);
 
- signals:
+signals:
   void mousePressed(QMouseEvent *);
   void mouseMoved(QMouseEvent *);
   void mouseReleased(QMouseEvent *);
 
- protected slots:
+protected slots:
 
   // edit action slots
 
@@ -62,9 +63,11 @@ public:
 /*
   void editImportImage();
   void editExportImage();
+*/
   void editPageLayout();
   void editPreferences();
-*/
+
+  // view action slots
 
   void viewZoomFactor();
   void viewFitToView();
@@ -74,6 +77,8 @@ public:
   void viewScrollbars();
   void viewInformations();
   void viewBackgroundColor();
+
+  // transform action slots
 
   void transformRotateRight();
   void transformRotateLeft();
@@ -88,6 +93,11 @@ public:
   void transformZoomMax();
   void transformZoomMaxAspect();
 
+  // help action slots
+
+  void helpUsingHelp();
+  void helpAboutKImage();
+
 public slots:
   // Document signals
   void slotUpdateView();
@@ -97,7 +107,6 @@ protected:
 
 /*
   virtual void resizeEvent( QResizeEvent* _ev );
-  virtual void paintEvent( QPaintEvent* _ev );
   virtual void mousePressEvent ( QMouseEvent * );
   virtual void mouseReleaseEvent ( QMouseEvent * );
   virtual void mouseMoveEvent ( QMouseEvent * );
@@ -116,8 +125,7 @@ protected:
   KAction *m_zoomFactor, *m_zoomIn10, *m_zoomOut10, *m_zoomDouble, *m_zoomHalf, *m_zoomMax, *m_zoomMaxAspect;
 
   // help menu
-  KAction        *m_helpAbout;
-  KAction        *m_helpUsing;
+  KAction *m_helpAbout, *m_helpUsing;
 
   QPoint          m_zoomFactorValue;
   KImageDocument *m_pDoc;

@@ -36,6 +36,7 @@
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 #include <koQueryTypes.h>
+#include <koFilterManager.h>
 
 #include "kimage_doc.h"
 #include "kimage_shell.h"
@@ -53,22 +54,21 @@ KImageDocument::KImageDocument( KoDocument* parent, const char* name )
 
 KImageDocument::~KImageDocument()
 {
+}
+
+bool KImageDocument::initDoc()
+{
   m_bEmpty = true;
-  //m_bModified = false;
 
   m_leftBorder = 20.0;
   m_rightBorder = 20.0;
   m_topBorder = 20.0;
   m_bottomBorder = 20.0;
-  //m_paperFormat = PG_DIN_A4;
+  m_paperFormat = PG_DIN_A4;
   m_paperWidth = PG_A4_WIDTH;
   m_paperHeight = PG_A4_HEIGHT;
   calcPaperSize();
-  //m_orientation = PG_PORTRAIT;
-}
-
-bool KImageDocument::initDoc()
-{
+  m_orientation = PG_PORTRAIT;
 
   return true;
 }
@@ -100,6 +100,8 @@ void KImageDocument::paintContent( QPainter& /* _painter */, const QRect& /* _re
 
 QCString KImageDocument::mimeType() const
 {
+  // FIXME: save the same file type as loaded, not allways KImmage file format ;-)
+
   return "application/x-kimage";
 }
 
@@ -337,7 +339,7 @@ bool KImageDocument::completeLoading( KOStore::Store_ptr _store )
     _store->close();
   }
 
-  m_bModified = false;
+  setModified( false );
   m_bEmpty = false;
 
   emit sigUpdateView();
@@ -498,7 +500,7 @@ void KImageDocument::setHeadFootLine( const char *_headl, const char *_headm, co
   m_footRight = _footr;
   m_footMid = _footm;
 
-  m_bModified = TRUE;
+  setModified( TRUE );
 }
 
 void KImageDocument::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
@@ -559,7 +561,7 @@ void KImageDocument::setPaperLayout( float _leftBorder, float _topBorder, float 
 
   calcPaperSize();
 
-  m_bModified = TRUE;
+  setModified( TRUE );
 }
 
 QString KImageDocument::completeHeading( const char *_data, 
@@ -699,25 +701,30 @@ QString KImageDocument::orientationString()
   }
   return orientationStr;
 }
+*/
 
-bool KImageDocument::openDocument( const QString & _filename, const char *_format )
+bool KImageDocument::openDocument( const char* _url )
+//bool KImageDocument::openDocument( const QString & _filename, const char *_format )
 {
-  if ( !m_image.load( _filename, _format ) )
+  if ( !m_image.load( _url ) )
     return false;
 
+/*
   if ( _format )
     m_strImageFormat = _format;
   else
     m_strImageFormat = QImage::imageFormat( _filename );
+*/
 
   emit sigUpdateView();
 
-  m_bModified = true;
+  setModified( true );
   m_bEmpty = false;
 
   return true;
 }
 
+/*
 bool KImageDocument::saveDocument( const QString & _filename, const char* / * _format * / )
 {
   assert( !isEmpty() );
@@ -733,7 +740,7 @@ void KImageDocument::transformImage( const QWMatrix& matrix )
   newpix = pix.xForm( matrix );
   m_image = newpix.convertToImage();
   emit sigUpdateView();
-  m_bModified = true;
+  setModified( true );
   m_bEmpty = false;
 
   kdebug( KDEBUG_INFO, 0, "Image manipulated with matrix" );
@@ -741,7 +748,7 @@ void KImageDocument::transformImage( const QWMatrix& matrix )
 
 void KImageDocument::setModified( bool _c )
 {
-  m_bModified = _c;
+  setModified( _c );
   if ( _c )
   {
     m_bEmpty = false;
@@ -792,6 +799,7 @@ float KImageDocument::bottomBorder()
 {
   return m_bottomBorder;
 }
+*/
 
 KoOrientation KImageDocument::orientation()
 {
@@ -803,6 +811,7 @@ KoFormat KImageDocument::paperFormat()
   return m_paperFormat;
 }
 
+/*
 QString KImageDocument::headLeft( int _p, const char* _t )
 {
   if( m_headLeft.isNull() )
@@ -910,15 +919,11 @@ QString KImageDocument::footRight()
   }
   return m_footRight.data();
 }
+*/
 
 const QImage& KImageDocument::image()
 {
   return m_image;
 }
-
-KImageDocument::~KImageDocument()
-{
-}
-*/
 
 #include "kimage_doc.moc"

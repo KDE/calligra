@@ -37,7 +37,11 @@ public:
   QString nativeFormatPattern() const { return "*.kim"; }
   QString nativeFormatName() const { return "KImage"; }
 
+public slots:
+  virtual void slotFileOpen();
+
 protected:
+  virtual bool openDocument ( const char* _url );
 
   virtual QString configFile() const;
   virtual KoDocument* createDoc();
