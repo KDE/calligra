@@ -185,6 +185,11 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 		else
 			newList.append( segmentList.current()->clone() );
 
+
+		if( !success() )
+			setSuccess();
+
+
 		segmentList.next();
 	}
 

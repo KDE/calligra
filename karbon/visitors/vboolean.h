@@ -31,9 +31,10 @@ public:
 	VBooleanType type() const { return m_type; }
 	void setType( VBooleanType type ) { m_type = type; }
 
-	// we can only visit object pairs:
-	virtual void visit( VObject& /*object*/ ) {}
-	void visit( VObject& object1, VObject& object2 );
+	// We can only visit object pairs:
+	virtual bool visit( VObject& /*object*/ )
+		{ return false; }
+	bool visit( VObject& object1, VObject& object2 );
 
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 

@@ -18,7 +18,10 @@ class VText;
 class VVisitor
 {
 public:
-	virtual void visit( VObject& object );
+	VVisitor()
+		{ m_success = false; }
+
+	virtual bool visit( VObject& object );
 
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVGroup( VGroup& group );
@@ -32,6 +35,14 @@ protected:
 	 * Make this class "abstract".
 	 */
 	virtual ~VVisitor() {}
+
+	bool success() const
+		{ return m_success; }
+	void setSuccess( bool success = true )
+		{ m_success = success; }
+
+private:
+	bool m_success;
 };
 
 #endif

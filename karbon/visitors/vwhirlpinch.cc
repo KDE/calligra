@@ -104,6 +104,11 @@ VWhirlPinch::visitVSegmentList( VSegmentList& segmentList )
 			segmentList.current()->setCtrlPoint2( delta.transform( m ) );
 		}
 
+
+		if( !success() )
+			setSuccess();
+
+
 		segmentList.next();
 	}
 

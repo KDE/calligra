@@ -1,4 +1,5 @@
 TODO:
+-	rempve segmentlist from VSelectNodes + VSelection
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
 	similar to vshapecommand
 -	check/set winding in vpath::combine().
@@ -11,6 +12,7 @@ TODO:
 	fills for nice special effects.
 
 REAL BUGS:
+-	select first/last segment's knot if one of each other's knot is selected
 -	mirror coordinate-system so origin is bottom-left
 -	add undo/redo to shape commands like VFlattenCmd etc
 -	scale tool should only scale in one direction while dragging a slection node

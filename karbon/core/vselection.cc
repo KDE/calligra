@@ -240,10 +240,12 @@ VSelection::handleNode( const QPoint& point ) const
 void
 VSelection::clearNodes()
 {
-	QPtrListIterator<VSegment> itr = m_segments;
+	VSelectNodes op( false );
+
+	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
 	{
-		itr.current()->deselect();
+		op.visit( *itr.current() );
 	}
 
 	m_segments.clear();
@@ -254,6 +256,7 @@ void
 VSelection::appendNodes()
 {
 	VSelectNodes op;
+
 	m_segments.clear();
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
@@ -291,19 +294,12 @@ VSelection::checkNode( const KoPoint &p )
 bool
 VSelection::appendNode( const KoPoint &p )
 {
-	VSelectNodes op( p );
+	VSelectNodes op( p, true, 2.0 );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
 	{
 		op.visit( *itr.current() );
-
-		QPtrListIterator<VSegment> it2( op.result() );
-		for( it2.toFirst(); it2.current(); ++it2 )
-		{
-			it2.current()->select( p, 2.0 );
-			m_segments.append( it2.current() );
-		}
 	}
 
 	return m_segments.count() > 0;

@@ -32,6 +32,9 @@ VFlatten::visitVSegmentList( VSegmentList& segmentList )
 
 		// convert to line:
 		segmentList.current()->setType( VSegment::line );
+
+		if( !success() )
+			setSuccess();
 	}
 }
 

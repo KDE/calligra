@@ -57,6 +57,9 @@ VTransformNodes::visitVSegmentList( VSegmentList& segmentList )
 			segmentList.current()->setCtrlPoint2(
 				segmentList.current()->ctrlPoint2().transform( m_matrix ) );
 		}
+
+		if( !success() )
+			setSuccess();
 	}
 }
 

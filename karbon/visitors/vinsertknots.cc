@@ -31,6 +31,9 @@ VInsertKnots::visitVSegmentList( VSegmentList& segmentList )
 
 			segmentList.next();
 		}
+
+		if( !success() )
+			setSuccess();
 	}
 }
 

@@ -9,10 +9,12 @@
 #include "vsegmentlist.h"
 #include "vvisitor.h"
 
-void
+bool
 VVisitor::visit( VObject& object )
 {
 	object.accept( *this );
+
+	return m_success;
 }
 
 void

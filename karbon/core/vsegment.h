@@ -198,43 +198,33 @@ public:
 		const KoPoint& b0,
 		const KoPoint& b1 );
 
-	/**
-	 * Select the node at point p.
-	 */
-	bool select(
-		const KoPoint& p,
-		double isNearRange = VGlobal::isNearRange,
-		bool select = true );
 
 	/**
-	 * Deselect the node at point p.
+	 * Selects or deselects node with 1 <= index <= 3.
 	 */
-	bool deselect( const KoPoint& p,
-		double isNearRange = VGlobal::isNearRange )
-	{
-		return select( p, isNearRange, false );
-	}
-
-	/**
-	 * Select all nodes inside rect.
-	 */
-	bool select( const KoRect& rect );
-
-	/**
-	 * Deselect all nodes inside rect.
-	 */
-	void deselect( const KoRect& rect );
-
-	/**
-	 * Deselect all nodes.
-	 */
-	void deselect();
+	void select( uint index, bool select = true )
+		{ m_nodeSelected[--index] = select; }
 
 	/**
 	 * Returns true if node with 1 <= index <= 3 is selected.
 	 */
 	bool selected( uint index ) const
 		{ return m_nodeSelected[--index]; }
+
+	void selectCtrlPoint1( bool select = true )
+		{ m_nodeSelected[0] = select; }
+	void selectCtrlPoint2( bool select = true )
+		{ m_nodeSelected[1] = select; }
+	void selectKnot( bool select = true )
+		{ m_nodeSelected[2] = select; }
+
+	bool ctrlPoint1Selected() const
+		{ return m_nodeSelected[0]; }
+	bool ctrlPoint2Selected() const
+		{ return m_nodeSelected[1]; }
+	bool knotSelected() const
+		{ return m_nodeSelected[2]; }
+
 
 	bool edited( uint index ) const
 		{ return m_nodeEdited[index]; }

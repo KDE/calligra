@@ -10,13 +10,15 @@
 #include "vsegmentlist.h"
 
 
-void
+bool
 VBoolean::visit( VObject& object1, VObject& object2 )
 {
 	m_list1 = 0L;
 	m_list2 = 0L;
 	object1.accept( *this );
 	object2.accept( *this );
+
+	return success();
 }
 
 void
