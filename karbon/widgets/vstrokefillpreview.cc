@@ -111,9 +111,9 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->setPen( Qt::NoPen );
 	if( s.type() != VStroke::none )
 	{
+		VFill fill;
 		if( s.type() != VStroke::solid )
 		{
-			VFill fill;
 			if( s.type() == VStroke::grad )
 			{
 				fill.gradient() = s.gradient();
@@ -136,10 +136,10 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 				fill.pattern().setVector( KoPoint( 20, 40 ) );
 				fill.setType( VFill::patt );
 			}
-			m_painter->setBrush( fill );
 		}
 		else
-			m_painter->setBrush( s.color() );
+			fill.setColor( s.color() );
+		m_painter->setBrush( fill );
 
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
@@ -219,7 +219,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 			m_painter->setBrush( fill );
 		}
 		else
-			m_painter->setBrush( f.color() );
+			m_painter->setBrush( f );
 
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( FILL_TOPX, FILL_TOPY ) );

@@ -429,13 +429,14 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	int r = 0;
 	int g = 0;
 	int b = 0;
-	int a = 0;
+	int af = 0;
+	int as = 0;
 	art_u32 fillColor = 0;
     // filling
 	if( m_fill && m_fill->type() != VFill::none )
 	{
 		m_fill->color().pseudoValues( r, g, b );
-		a = qRound( 255 * m_fill->color().opacity() );
+		af = qRound( 255 * m_fill->color().opacity() );
 		fillColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
 		ArtSvpWriter *swr;
@@ -462,7 +463,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		// TODO : non rgb support ?
 
 		m_stroke->color().pseudoValues( r, g, b );
-		a = qRound( 255 * m_stroke->color().opacity() );
+		as = qRound( 255 * m_stroke->color().opacity() );
 		strokeColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
 		double ratio = m_zoomFactor;//sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
@@ -513,7 +514,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		{
 			clampToViewport( *strokeSvp, x0, y0, x1, y1 );
 			if( x0 != x1 && y0 != y1 )
-				art_rgb_svp_alpha_( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+				art_rgb_svp_alpha_( strokeSvp, x0, y0, x1, y1, strokeColor, as, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
 		}
 		art_svp_free( strokeSvp );
 	}
@@ -528,7 +529,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		{
 			clampToViewport( *fillSvp, x0, y0, x1, y1 );
 			if( x0 != x1 && y0 != y1 )
-				art_rgb_svp_alpha_( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+				art_rgb_svp_alpha_( fillSvp, x0, y0, x1, y1, fillColor, af, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
 		}
 		art_svp_free( fillSvp );
 	}
