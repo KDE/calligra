@@ -30,6 +30,10 @@
 #include <qdatetime.h>
 #include <qdropsite.h>
 
+#include <qrect.h>
+#include <qsize.h>
+#include <qpoint.h>
+
 #include <page.h>
 #include <kpresenter_view.h>
 #include <footer_header.h>

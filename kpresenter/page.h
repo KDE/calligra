@@ -25,10 +25,7 @@
 #include <qpicture.h>
 #include <qvaluelist.h>
 
-#include <qrect.h>
-#include <qsize.h>
 #include <qpixmap.h>
-#include <qpoint.h>
 
 #include <koQueryTrader.h>
 #include <koprinter.h>
@@ -54,6 +51,9 @@ class QWheelEvent;
 class QKeyEvent;
 class KPPixmapObject;
 class KPBackGround;
+class QRect;
+class QSize;
+class QPoint;
 
 /**********************************************************************/
 /* class Page - There is ONE instance of this class for a given view  */
