@@ -714,10 +714,10 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( !table )
     return;
 
-  int xpos;
-  int ypos;
-  int row = table->topRow( _ev->pos().y(), ypos, this );
-  int col = table->leftColumn( _ev->pos().x(), xpos, this );
+  int xpos = 0;
+  int ypos = 0;
+  int row  = table->topRow( _ev->pos().y(), ypos, this );
+  int col  = table->leftColumn( _ev->pos().x(), xpos, this );
 
   if( col > KS_colMax || row > KS_rowMax )
   {
@@ -2548,6 +2548,12 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   QPoint br = m.map( QPoint( width(), height() ) );
   QRect view( tl, br );
 
+  if (view.width() < width())
+    view.setWidth( width() );
+
+  if (view.height() < height())
+    view.setHeight( height() );
+
   QValueList<QRect> cellRegions;
   cellRegions.append(area1);
   cellRegions.append(area2);
@@ -3232,6 +3238,10 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
 
   QFont normalFont = painter.font();
+  if (m_pCanvas->zoom() < 1)
+  {
+    normalFont.setPointSize( (int) ((double) normalFont.pointSize() * m_pCanvas->zoom()) );
+  }
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
 

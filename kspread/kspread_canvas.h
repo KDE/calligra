@@ -359,8 +359,6 @@ private:
      */
     QString m_strAnchor;
 
-    float m_fZoom;
-
     /**
      * Non visible range left from current screen
      * Example:

@@ -545,6 +545,15 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
   emit sig_addTable( _table );
 }
 
+void KSpreadDoc::setZoom( int zoom )
+{ 
+  m_iZoom = zoom; 
+}
+
+void KSpreadDoc::newZoom()
+{
+  emit sig_refreshView();
+}
 
 void KSpreadDoc::initInterpreter()
 {
@@ -807,7 +816,7 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, QRect viewRect,
   int positions[4];
   bool paintSides[4];
 
-  QPen pen(Qt::black,3);
+  QPen pen(Qt::black, 3);
   painter.setPen( pen );
 
   RetrieveMarkerInfo(marker, table, viewRect, positions, paintSides);
@@ -829,9 +838,19 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, QRect viewRect,
                             *         *                   *         *
      .                      *         *                   *         *
   */
+  double dzoom = 1;
+  int l = 1;
+  if (zoom() > 100)
+  {
+    dzoom = (double) zoom() / 100;
+    if (dzoom >= 2)
+      l = 2;
+  }
+
+
   if (paintTop)
   {
-    painter.drawLine( left - 1, top, right + 2, top );
+    painter.drawLine( left - 2 + l, top, (int) (right + (double) 2 / dzoom), top);
   }
   if (paintLeft)
   {
@@ -841,7 +860,7 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, QRect viewRect,
   {
     /* then the 'handle' in the bottom right corner is visible. */
     painter.drawLine( right, top, right, bottom - 2 );
-    painter.drawLine( left - 1, bottom, right - 3, bottom );
+    painter.drawLine( left - 2 + l, bottom, right - 3, bottom );
     painter.fillRect( right - 2, bottom - 1, 5, 5, painter.pen().color() );
   }
   else
@@ -852,7 +871,7 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, QRect viewRect,
     }
     if (paintBottom)
     {
-      painter.drawLine( left - 1, bottom, right, bottom );
+      painter.drawLine( left - 2 + l, bottom, right, bottom );
     }
   }
 }

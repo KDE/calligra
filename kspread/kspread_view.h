@@ -93,6 +93,7 @@ public:
     KSpreadLocationEditWidget* posWidget()const { return m_pPosWidget; }
 
     KSpreadDoc* doc()const { return m_pDoc; }
+    void setZoom( int zoom, bool updateViews ); // change the zoom value
 
     void addTable( KSpreadTable *_t );
     //void removeTable( KSpreadTable *_t );
@@ -226,6 +227,7 @@ public slots:
     void reloadScripts();
     void runLocalScript();
     void togglePageBorders( bool );
+    void viewZoom(const QString &);
     void find();
     void replace();
     void conditional();
@@ -536,6 +538,7 @@ private:
     KAction* m_showRow;
     KAction* m_showSelRows;
     KSelectAction* m_formulaSelection;
+    KSelectAction* m_viewZoom;
     KAction* m_sortDec;
     KAction* m_sortInc;
     TKSelectColorAction* m_textColor;

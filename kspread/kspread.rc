@@ -36,6 +36,8 @@
   <ActionList name="view_split" />
   <Action name="gotoCell"/>
   <Action name="showPageBorders"/>
+  <Separator/>
+  <Action name="view_zoom"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="insertTable"/>

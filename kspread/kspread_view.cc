@@ -27,6 +27,7 @@
 #include <qtimer.h>
 #include <qcursor.h>
 #include <qpaintdevicemetrics.h>
+#include <qregexp.h>
 
 #include <kprocio.h>
 #include <kspell.h>
@@ -634,6 +635,29 @@ void KSpreadView::initializeGlobalOperationActions()
   connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this,
            SLOT( togglePageBorders( bool ) ) );
   m_showPageBorders->setToolTip("Show on the spreadsheet where the page borders will be.");
+
+  m_viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
+                                  actionCollection(), "view_zoom" );
+
+  connect( m_viewZoom, SIGNAL( activated( const QString & ) ),
+           this, SLOT( viewZoom( const QString & ) ) );
+  m_viewZoom->setEditable(true);
+
+  QStringList lst1;
+  lst1 << "33%";
+  lst1 << "50%";
+  lst1 << "75%";
+  lst1 << "100%";
+  lst1 << "125%";
+  lst1 << "150%";
+  lst1 << "200%";
+  lst1 << "250%";
+  lst1 << "350%";
+  lst1 << "400%";
+  lst1 << "450%";
+  lst1 << "500%";
+  m_viewZoom->setItems( lst1 );
+  m_viewZoom->setCurrentItem( 3 );
 
   m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
                                          actionCollection(), "formulaSelection");
@@ -3183,6 +3207,43 @@ void KSpreadView::togglePageBorders( bool mode )
    m_pTable->setShowPageBorders( mode );
 }
 
+void KSpreadView::viewZoom( const QString & s )
+{
+  int oldZoom = (int) (zoom() * 100);
+
+  QString z( s );
+  bool ok = false;
+  int newZoom;
+
+  z = z.replace( QRegExp( "%" ), "" );
+  z = z.simplifyWhiteSpace();
+  newZoom = z.toInt(&ok);
+
+  if ( !ok || newZoom < 10 ) //zoom should be valid and >10
+    newZoom = oldZoom;
+
+  if( newZoom != oldZoom )
+  {
+    double d = (double) newZoom / 100 ;
+    setZoom( newZoom, true );
+  }
+}
+
+void KSpreadView::setZoom( int zoom, bool updateViews )
+{
+  // Set the zoom in KoView (for embedded views)
+  KoView::setZoom( (double) zoom / 100 );
+  m_pDoc->setZoom( zoom );
+  m_pDoc->newZoom();
+  
+  m_pVBorderWidget->repaint();
+  m_pHBorderWidget->repaint();
+  m_pCanvas->repaint();
+  m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
+  m_pCanvas->slotMaxRow( m_pTable->maxRow() );
+
+  refreshView();
+}
 
 void KSpreadView::preference()
 {

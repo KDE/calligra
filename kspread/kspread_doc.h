@@ -106,6 +106,21 @@ public:
   KLocale* locale() { return &m_locale; }
 
   /**
+   * updates all view after zoom changed
+   */
+  void newZoom();
+
+  /**
+   * set the zoom factor (in percent)
+   */
+  void setZoom( int zoom );
+
+  /**
+   * returns the zoom factor in percent.
+   */
+  int zoom() const { return m_iZoom; } 
+
+  /**
    * @return the KScript Interpreter used by this document.
    */
   KSpreadInterpreter* interpreter()const { return m_pInterpreter; }
@@ -395,6 +410,11 @@ protected:
   int m_iTableId;
 
   /**
+   * Stores the current zooom factor in percent
+   */
+  int m_iZoom;
+
+  /**
    * The URL of the this part. This variable is only set if the @ref #load function
    * had been called with an URL as argument.
    *
@@ -481,7 +501,6 @@ protected:
   int m_iIndentValue;
 
   KSpread::MoveTo m_EMoveTo;
-
 
   bool m_bShowError;
 
