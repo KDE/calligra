@@ -207,8 +207,8 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
             _tempObj->moveBy( 20.0*(double)mod,20.0*(double)mod );
         }
       _tempObj->setSelected( true );
-      if ( angle == 0.0 || increaseY != 0.0 || increaseX != 0.0)
-          m_doc->repaint(_tempObj);
+      if ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0))
+        m_doc->repaint(_tempObj);
     }
 
     if ( angle != 0.0)
@@ -243,7 +243,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
     if (macro)
         m_doc->addCommand(macro);
     //update sidebar
-    if ( m_doc->refreshSideBar())
+    if ( m_doc->refreshSideBar()&& ( angle == 0.0 || (increaseY == 0.0 && increaseX == 0.0)))
     {
         int pos=m_doc->pageList().findRef(this);
         m_doc->updateSideBarItem(pos);
