@@ -225,23 +225,17 @@ public slots:
     void textSubScript();
     void textIncreaseIndent();
     void textDecreaseIndent();
-    void textBorderLeft();
-    void textBorderRight();
-    void textBorderTop();
-    void textBorderBottom();
-    void textBorderOutline();
-    void textBorderColor();
-    void textBorderWidth( const QString & );
-    void textBorderStyle( const QString & );
-    void frameBorderLeft();
-    void frameBorderRight();
-    void frameBorderTop();
-    void frameBorderBottom();
-    void frameBorderOutline();
-    void frameBorderColor();
-    void frameBorderWidth( const QString &width );
-    void frameBorderStyle( const QString &style );
-    void frameBackColor();
+
+    // Text and Frame borders.
+    void borderOutline();
+    void borderLeft();
+    void borderRight();
+    void borderTop();
+    void borderBottom();
+    void borderColor();
+    void borderWidth( const QString &width );
+    void borderStyle( const QString &style );
+    void backgroundColor();
 
     void formulaPower();
     void formulaSubscript();
@@ -303,8 +297,6 @@ protected:
   */
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
-    void showParagBorderValues();
-    void verifyFrameOutline();
     virtual void updateReadWrite( bool readwrite );
 
     KWDocument *doc;
@@ -372,24 +364,27 @@ protected:
     KToggleAction *actionFormatUnsortList;
     KToggleAction *actionFormatSuper;
     KToggleAction *actionFormatSub;
-    KToggleAction *actionFormatBrdLeft;
-    KToggleAction *actionFormatBrdRight;
-    KToggleAction *actionFormatBrdTop;
-    KToggleAction *actionFormatBrdBottom;
-    KToggleAction *actionFormatBrdOutline;
-    KSelectColorAction *actionFormatBrdColor;
-    KSelectAction *actionFormatBrdWidth;
-    KSelectAction *actionFormatBrdStyle;
 
-    KToggleAction *actionFrameBrdLeft;
-    KToggleAction *actionFrameBrdRight;
-    KToggleAction *actionFrameBrdTop;
-    KToggleAction *actionFrameBrdBottom;
-    KToggleAction *actionFrameBrdOutline;
-    KSelectColorAction *actionFrameBrdColor;
-    KSelectAction *actionFrameBrdWidth;
-    KSelectAction *actionFrameBrdStyle;
-    KSelectColorAction *actionFrameBackColor;
+    // Text and Frame borders.
+    KToggleAction *actionBorderLeft;
+    KToggleAction *actionBorderRight;
+    KToggleAction *actionBorderTop;
+    KToggleAction *actionBorderBottom;
+    KToggleAction *actionBorderOutline;
+    KSelectColorAction *actionBorderColor;
+    KSelectAction *actionBorderWidth;
+    KSelectAction *actionBorderStyle;
+    KSelectColorAction *actionBackgroundColor;
+    void borderShowValues();
+    void borderSet();
+    struct
+    {
+        Border left;    // Values specific to left border.
+        Border right;   // right.
+        Border top;     // top.
+        Border bottom;  // bottom.
+        Border common;  // Value common to left, right top and bottom borders.
+    } m_border;
 
     KAction *actionFormulaPower;
     KAction *actionFormulaSubscript;
@@ -426,7 +421,6 @@ protected:
 
     KWGUI *gui;
 
-    Border left, right, top, bottom, tmpBrd, frmBrd;
     KWSearchContext *searchEntry, *replaceEntry;
     QBrush backColor;
 

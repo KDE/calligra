@@ -165,26 +165,16 @@
   <Action name="format_super"/>
   <Action name="format_sub"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="border_toolbar" position="top"><Text>Borders</Text>
-  <Action name="format_brdoutline"/>
-  <Action name="format_brdleft"/>
-  <Action name="format_brdright"/>
-  <Action name="format_brdtop"/>
-  <Action name="format_brdbottom"/>
-  <Action name="format_brdcolor"/>
-  <Action name="format_brdwidth"/>
-  <Action name="format_brdstyle"/>
-</ToolBar>
-<ToolBar hidden="true" fullWidth="false" name="frame_toolbar" position="top"><Text>Frame</Text>
-  <Action name="frame_brdoutline"/>
-  <Action name="frame_brdleft"/>
-  <Action name="frame_brdright"/>
-  <Action name="frame_brdtop"/>
-  <Action name="frame_brdbottom"/>
-  <Action name="frame_brdcolor"/>
-  <Action name="frame_brdwidth"/>
-  <Action name="frame_brdstyle"/>
-  <Action name="frame_backcolor"/>
+<ToolBar hidden="true" fullWidth="false" name="border_toolbar" position="top"><Text>Borders</Text>
+  <Action name="border_outline"/>
+  <Action name="border_left"/>
+  <Action name="border_right"/>
+  <Action name="border_top"/>
+  <Action name="border_bottom"/>
+  <Action name="border_width"/>
+  <Action name="border_style"/>
+  <Action name="border_color"/>
+  <Action name="border_backgroundcolor"/>
 </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="formula_toolbar" position="bottom"><Text>Formula</Text>
   <Action name="formula_addtext"/>

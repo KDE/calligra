@@ -101,24 +101,15 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     gui = 0;
     kspell = 0;
     //vertAlign = KWFormat::VA_NORMAL;
-    left.color = white;
-    left.style = Border::SOLID;
-    left.ptWidth = 0;
-    right.color = white;
-    right.style = Border::SOLID;
-    right.ptWidth = 0;
-    top.color = white;
-    top.style = Border::SOLID;
-    top.ptWidth = 0;
-    bottom.color = white;
-    bottom.style = Border::SOLID;
-    bottom.ptWidth = 0;
-    tmpBrd.color = black;
-    tmpBrd.style = Border::SOLID;
-    tmpBrd.ptWidth = 1;
-    frmBrd.color = black;
-    frmBrd.style = Border::SOLID;
-    frmBrd.ptWidth = 1;
+    m_border.left.color = white;
+    m_border.left.style = Border::SOLID;
+    m_border.left.ptWidth = 0;
+    m_border.right = m_border.left;
+    m_border.top = m_border.left;
+    m_border.bottom = m_border.left;
+    m_border.common.color = black;
+    m_border.common.style = Border::SOLID;
+    m_border.common.ptWidth = 1;
     m_currentPage = 0;
 
     searchEntry = new KWSearchContext();
@@ -194,9 +185,8 @@ void KWView::initGui()
     //setNoteType(doc->getNoteType(), false);
 
     actionFormatColor->setColor( Qt::black );
-    actionFormatBrdColor->setColor( Qt::black );
-    actionFrameBrdColor->setColor( Qt::black );
-    actionFrameBackColor->setColor( Qt::white );
+    actionBorderColor->setColor( Qt::black );
+    actionBackgroundColor->setColor( Qt::white );
 
     //refresh zoom combobox
     QStringList list=actionViewZoom->items();
@@ -204,15 +194,6 @@ void KWView::initGui()
     actionViewZoom->setCurrentItem(list.findIndex(zoomStr)  );
 
     showFormulaToolbar( FALSE );
-
-    /*
-      The XML file does this for us now
-      QWidget *tb = 0;
-      if ( factory() )
-      tb = factory()->container( "frame_toolbar", this );
-      if ( tb )
-      tb->hide();
-    */
 
     statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
     // Workaround for bug in KDE-2.1[.1]'s KStatusBar (show() not called in insertItem)
@@ -445,8 +426,6 @@ void KWView::setupActions()
                                               this, SLOT( textSubScript() ),
                                               actionCollection(), "format_sub" );
     actionFormatSub->setExclusiveGroup( "valign" );
-    actionFormatBrdOutline = new KToggleAction( i18n( "Paragraph Border Outline" ), "borderoutline", 0,this, SLOT( textBorderOutline() ),
-			actionCollection(), "format_brdoutline" );
 
     actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ), 0,
                                       this, SLOT( textIncreaseIndent() ),
@@ -456,77 +435,41 @@ void KWView::setupActions()
                                       this, SLOT( textDecreaseIndent() ),
                                       actionCollection(), "format_decreaseindent" );
 
-    actionFormatBrdLeft = new KToggleAction( i18n( "Paragraph Border Left" ), "borderleft", 0,
-                                             this, SLOT( textBorderLeft() ),
-                                             actionCollection(), "format_brdleft" );
-    actionFormatBrdRight = new KToggleAction( i18n( "Paragraph Border Right" ), "borderright", 0,
-                                             this, SLOT( textBorderRight() ),
-                                             actionCollection(), "format_brdright" );
-    actionFormatBrdTop = new KToggleAction( i18n( "Paragraph Border Top" ), "bordertop", 0,
-                                             this, SLOT( textBorderTop() ),
-                                             actionCollection(), "format_brdtop" );
-    actionFormatBrdBottom = new KToggleAction( i18n( "Paragraph Border Bottom" ), "borderbottom", 0,
-                                               this, SLOT( textBorderBottom() ),
-                                             actionCollection(), "format_brdbottom" );
-    actionFormatBrdColor = new KSelectColorAction( i18n( "Paragraph Border Color" ), KColorAction::FrameColor, 0,
-                                             this, SLOT( textBorderColor() ),
-                                             actionCollection(), "format_brdcolor" );
-    actionFormatBrdWidth = new KSelectAction( i18n( "Paragraph Border Width" ), 0,
-                                                 actionCollection(), "format_brdwidth" );
-    connect( actionFormatBrdWidth, SIGNAL( activated( const QString & ) ),
-             this, SLOT( textBorderWidth( const QString & ) ) );
-    lst.clear();
-    for ( unsigned int i = 0; i < 10; i++ )
-        lst << QString( "%1" ).arg( i + 1 );
-    actionFormatBrdWidth->setItems( lst );
-    actionFormatBrdStyle = new KSelectAction( i18n( "Paragraph Border Style" ), 0,
-                                                 actionCollection(), "format_brdstyle" );
-    connect( actionFormatBrdStyle, SIGNAL( activated( const QString & ) ),
-             this, SLOT( textBorderStyle( const QString & ) ) );
-    lst.clear();
-    lst.append( i18n( "solid line" ) );
-    lst.append( i18n( "dash line ( ---- )" ) );
-    lst.append( i18n( "dot line ( **** )" ) );
-    lst.append( i18n( "dash dot line ( -*-* )" ) );
-    lst.append( i18n( "dash dot dot line ( -**- )" ) );
-    actionFormatBrdStyle->setItems( lst );
-
     // ---------------------------- frame toolbar actions
 
-    actionFrameBrdOutline = new KToggleAction( i18n( "Frame Border Outline" ), "borderoutline", 0,this, SLOT( frameBorderOutline() ),
-			actionCollection(), "frame_brdoutline" );
-
-    actionFrameBrdLeft = new KToggleAction( i18n( "Frame Border Left" ), "borderleft", 0,
-                                             this, SLOT( frameBorderLeft() ),
-                                             actionCollection(), "frame_brdleft" );
-    actionFrameBrdRight = new KToggleAction( i18n( "Frame Border Right" ), "borderright", 0,
-                                             this, SLOT( frameBorderRight() ),
-                                             actionCollection(), "frame_brdright" );
-    actionFrameBrdTop = new KToggleAction( i18n( "Frame Border Top" ), "bordertop", 0,
-                                             this, SLOT( frameBorderTop() ),
-                                             actionCollection(), "frame_brdtop" );
-    actionFrameBrdBottom = new KToggleAction( i18n( "Frame Border Bottom" ), "borderbottom", 0,
-                                               this, SLOT( frameBorderBottom() ),
-                                             actionCollection(), "frame_brdbottom" );
-    actionFrameBrdColor = new KSelectColorAction( i18n( "Frame Border Color" ), KColorAction::FrameColor, 0,
-                                             this, SLOT( frameBorderColor() ),
-                                             actionCollection(), "frame_brdcolor" );
-    actionFrameBrdStyle = new KSelectAction( i18n( "Frame Border Style" ), 0,
-                                             actionCollection(), "frame_brdstyle" );
-    connect( actionFrameBrdStyle, SIGNAL( activated( const QString & ) ),
-             this, SLOT( frameBorderStyle( const QString & ) ) );
-    actionFrameBrdStyle->setItems( lst );
-    actionFrameBrdWidth = new KSelectAction( i18n( "Frame Border Width" ), 0,
-                                                 actionCollection(), "frame_brdwidth" );
-    connect( actionFrameBrdWidth, SIGNAL( activated( const QString & ) ),
-             this, SLOT( frameBorderWidth( const QString & ) ) );
+    actionBorderOutline = new KToggleAction( i18n( "Border Outline" ), "borderoutline",
+                            0, this, SLOT( borderOutline() ), actionCollection(), "border_outline" );
+    actionBorderLeft = new KToggleAction( i18n( "Border Left" ), "borderleft",
+                            0, this, SLOT( borderLeft() ), actionCollection(), "border_left" );
+    actionBorderRight = new KToggleAction( i18n( "Border Right" ), "borderright",
+                            0, this, SLOT( borderRight() ), actionCollection(), "border_right" );
+    actionBorderTop = new KToggleAction( i18n( "Border Top" ), "bordertop",
+                            0, this, SLOT( borderTop() ), actionCollection(), "border_top" );
+    actionBorderBottom = new KToggleAction( i18n( "Border Bottom" ), "borderbottom",
+                            0, this, SLOT( borderBottom() ),  actionCollection(), "border_bottom" );
+    actionBorderStyle = new KSelectAction( i18n( "Border Style" ),
+                            0,  actionCollection(), "border_style" );
+    connect( actionBorderStyle, SIGNAL( activated( const QString & ) ),
+             this, SLOT( borderStyle( const QString & ) ) );
     lst.clear();
-    for ( unsigned int i = 0; i < 10; i++ )
-        lst << QString( "%1" ).arg( i + 1 );
-    actionFrameBrdWidth->setItems( lst );
-    actionFrameBackColor = new KSelectColorAction( i18n( "Frame Background Color" ), KColorAction::BackgroundColor, 0,
-                                             this, SLOT( frameBackColor() ),
-                                             actionCollection(), "frame_backcolor" );
+    lst << "_________";
+    lst << "___ ___ __";
+    lst << "_ _ _ _ _ _";
+    lst << "___ _ ___ _";
+    lst << "___ _ _ ___";
+    actionBorderStyle->setItems( lst );
+    actionBorderWidth = new KSelectAction( i18n( "Border Width" ), 0,
+                                                 actionCollection(), "border_width" );
+    connect( actionBorderWidth, SIGNAL( activated( const QString & ) ),
+             this, SLOT( borderWidth( const QString & ) ) );
+    lst.clear();
+    for ( unsigned int i = 1; i < 10; i++ )
+        lst << QString::number( i );
+    actionBorderWidth->setItems( lst );
+    actionBorderColor = new KSelectColorAction( i18n( "Border Color" ), KColorAction::FrameColor,
+        0, this, SLOT( borderColor() ), actionCollection(), "border_color" );
+    actionBackgroundColor = new KSelectColorAction( i18n( "Background Color" ), KColorAction::BackgroundColor,
+        0, this, SLOT( backgroundColor() ), actionCollection(), "border_backgroundcolor" );
 
     // ---------------------- formula toolbar actions
 
@@ -885,47 +828,45 @@ void KWView::showCounter( Counter &c )
 void KWView::showFrameBorders( Border _left, Border _right,
                                Border _top, Border _bottom )
 {
-   actionFrameBrdLeft->setChecked( _left.ptWidth > 0 );
-   actionFrameBrdRight->setChecked( _right.ptWidth > 0 );
-   actionFrameBrdTop->setChecked( _top.ptWidth > 0 );
-   actionFrameBrdBottom->setChecked( _bottom.ptWidth > 0 );
-   verifyFrameOutline();
+    showParagBorders( _left, _right, _top, _bottom );
 }
 
 /*================================================================*/
-void KWView::showParagBorders( Border _left, Border _right,
-                               Border _top, Border _bottom )
+void KWView::showParagBorders( Border left, Border right,
+                               Border top, Border bottom )
 {
-    if ( left != _left || right != _right || top != _top || bottom != _bottom ) {
-        left = _left;
-        right = _right;
-        top = _top;
-        bottom = _bottom;
+    if ( m_border.left != left || m_border.right != right || m_border.top != top || m_border.bottom != bottom )
+    {
+        m_border.left = left;
+        m_border.right = right;
+        m_border.top = top;
+        m_border.bottom = bottom;
 
-        actionFormatBrdLeft->setChecked( left.ptWidth > 0 );
-        actionFormatBrdRight->setChecked( right.ptWidth > 0 );
-        actionFormatBrdTop->setChecked( top.ptWidth > 0 );
-        actionFormatBrdBottom->setChecked( bottom.ptWidth > 0 );
-	actionFormatBrdOutline->setChecked( actionFormatBrdBottom->isChecked() &&
-                                            actionFormatBrdTop->isChecked() &&
-					    actionFormatBrdRight->isChecked() &&
-					    actionFormatBrdLeft->isChecked() );
+        actionBorderLeft->setChecked( left.ptWidth > 0 );
+        actionBorderRight->setChecked( right.ptWidth > 0 );
+        actionBorderTop->setChecked( top.ptWidth > 0 );
+        actionBorderBottom->setChecked( bottom.ptWidth > 0 );
+        actionBorderOutline->setChecked(
+            actionBorderLeft->isChecked() &&
+            actionBorderRight->isChecked() &&
+            actionBorderTop->isChecked() &&
+            actionBorderBottom->isChecked());
 
         if ( left.ptWidth > 0 ) {
-            tmpBrd = left;
-            showParagBorderValues();
+            m_border.common = left;
+            borderShowValues();
         }
         if ( right.ptWidth > 0 ) {
-            tmpBrd = right;
-            showParagBorderValues();
+            m_border.common = right;
+            borderShowValues();
         }
         if ( top.ptWidth > 0 ) {
-            tmpBrd = top;
-            showParagBorderValues();
+            m_border.common = top;
+            borderShowValues();
         }
         if ( bottom.ptWidth > 0 ) {
-            tmpBrd = bottom;
-            showParagBorderValues();
+            m_border.common = bottom;
+            borderShowValues();
         }
     }
 }
@@ -980,36 +921,20 @@ void KWView::setTool( MouseMode _mouseMode )
         actionToolsCreatePart->setChecked( TRUE );
         break;
     }
-    QWidget *tbFormat = 0;
-    QWidget *tbFrame = 0;
 
-    if ( factory() )
+    if ( _mouseMode == MM_EDIT_FRAME )
     {
-      tbFormat = factory()->container( "border_toolbar", this );
-      tbFrame = factory()->container( "frame_toolbar", this );
-    }
-    if ( tbFrame && tbFormat )
-    {
-      if ( _mouseMode == MM_EDIT_FRAME )
-      {
-        tbFormat->hide();
-        tbFrame->show();
         //checked false all frame border button
         //because when you change mode to edit frame
         // there isn't any frame selected => border button
         //should be unselect.
-        actionFrameBrdOutline->setChecked(false);
-        actionFrameBrdLeft->setChecked(false);
-        actionFrameBrdRight->setChecked(false);
-        actionFrameBrdTop->setChecked(false);
-        actionFrameBrdBottom->setChecked(false);
-      }
-      else
-      {
-        tbFormat->show();
-        tbFrame->hide();
-      }
+        actionBorderOutline->setChecked(false);
+        actionBorderLeft->setChecked(false);
+        actionBorderRight->setChecked(false);
+        actionBorderTop->setChecked(false);
+        actionBorderBottom->setChecked(false);
     }
+
     actionTableInsertRow->setEnabled( FALSE );
     actionTableInsertCol->setEnabled( FALSE );
     actionTableDelRow->setEnabled( FALSE );
@@ -2243,218 +2168,162 @@ void KWView::textDecreaseIndent()
         }
 }
 
-/*===============================================================*/
-void KWView::textBorderOutline()
+/*================================================================*/
+void KWView::borderOutline()
 {
-    if ( actionFormatBrdOutline->isChecked() )
+    bool b = actionBorderOutline->isChecked();
+
+    actionBorderLeft->setChecked(b);
+    actionBorderRight->setChecked(b);
+    actionBorderTop->setChecked(b);
+    actionBorderBottom->setChecked(b);
+
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::borderLeft()
+{
+    actionBorderOutline->setChecked(
+        actionBorderLeft->isChecked() &&
+        actionBorderRight->isChecked() &&
+        actionBorderTop->isChecked() &&
+        actionBorderBottom->isChecked());
+
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::borderRight()
+{
+    actionBorderOutline->setChecked(
+        actionBorderLeft->isChecked() &&
+        actionBorderRight->isChecked() &&
+        actionBorderTop->isChecked() &&
+        actionBorderBottom->isChecked());
+
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::borderTop()
+{
+    actionBorderOutline->setChecked(
+        actionBorderLeft->isChecked() &&
+        actionBorderRight->isChecked() &&
+        actionBorderTop->isChecked() &&
+        actionBorderBottom->isChecked());
+
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::borderBottom()
+{
+    actionBorderOutline->setChecked(
+        actionBorderLeft->isChecked() &&
+        actionBorderRight->isChecked() &&
+        actionBorderTop->isChecked() &&
+        actionBorderBottom->isChecked());
+
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::borderColor()
+{
+    m_border.common.color = actionBorderColor->color();
+    m_border.left.color = m_border.common.color;
+    m_border.right.color = m_border.common.color;
+    m_border.top.color = m_border.common.color;
+    m_border.bottom.color = m_border.common.color;
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::borderWidth( const QString &width )
+{
+    m_border.common.ptWidth = width.toInt();
+    m_border.left.ptWidth = m_border.common.ptWidth;
+    m_border.right.ptWidth = m_border.common.ptWidth;
+    m_border.top.ptWidth = m_border.common.ptWidth;
+    m_border.bottom.ptWidth = m_border.common.ptWidth;
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::borderStyle( const QString &style )
+{
+    if ( style == "_________" )
+        m_border.common.style = Border::SOLID;
+    else if ( style == "___ ___ __" )
+        m_border.common.style = Border::DASH;
+    else if ( style == "_ _ _ _ _ _" )
+        m_border.common.style = Border::DOT;
+    else if ( style == "___ _ ___ _" )
+        m_border.common.style = Border::DASH_DOT;
+    else if ( style == "___ _ _ ___" )
+        m_border.common.style = Border::DASH_DOT_DOT;
+    m_border.left.style = m_border.common.style;
+    m_border.right.style = m_border.common.style;
+    m_border.top.style = m_border.common.style;
+    m_border.bottom.style = m_border.common.style;
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::backgroundColor()
+{
+    // The effect of this action depends on if we are in Edit Text or Edit Frame mode.
+    if ( actionToolsEditFrames->isChecked() )
     {
-        left = tmpBrd;
-        right = tmpBrd;
-        top =tmpBrd;
-        bottom = tmpBrd;
+        backColor = actionBackgroundColor->color();
+        if ( gui )
+            gui->canvasWidget()->setFrameBackgroundColor( backColor );
+    }
+    borderSet();
+}
+
+/*================================================================*/
+void KWView::borderSet()
+{
+    // The effect of this action depends on if we are in Edit Text or Edit Frame mode.
+
+    m_border.left = m_border.common;
+    m_border.right = m_border.common;
+    m_border.top = m_border.common;
+    m_border.bottom = m_border.common;
+    if ( !actionBorderLeft->isChecked() )
+    {
+        m_border.left.ptWidth = 0;
+    }
+    if ( !actionBorderRight->isChecked() )
+    {
+        m_border.right.ptWidth = 0;
+    }
+    if ( !actionBorderTop->isChecked() )
+    {
+        m_border.top.ptWidth = 0;
+    }
+    if ( !actionBorderBottom->isChecked() )
+    {
+        m_border.bottom.ptWidth = 0;
+    }
+    if ( actionToolsEditFrames->isChecked() )
+    {
+        gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
+        gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
+        gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
+        gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
     }
     else
     {
-        left.ptWidth = 0;
-        right.ptWidth = 0;
-        top.ptWidth = 0;
-        bottom.ptWidth = 0;
+        KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+        if ( edit )
+        {
+            edit->setBorders( m_border.left, m_border.right, m_border.bottom, m_border.top );
+        }
     }
-    actionFormatBrdRight->setChecked(actionFormatBrdOutline->isChecked());
-    actionFormatBrdLeft->setChecked(actionFormatBrdOutline->isChecked());
-    actionFormatBrdTop->setChecked(actionFormatBrdOutline->isChecked());
-    actionFormatBrdBottom->setChecked(actionFormatBrdOutline->isChecked());
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
-    if ( edit )
-        edit->setBorders( left, right, bottom, top );
-}
-
-/*===============================================================*/
-void KWView::textBorderLeft()
-{
-    if ( actionFormatBrdLeft->isChecked() )
-        left = tmpBrd;
-    else
-        left.ptWidth = 0;
-    actionFormatBrdOutline->setChecked(actionFormatBrdRight->isChecked()&&
-				       actionFormatBrdLeft->isChecked()&&
-				       actionFormatBrdTop->isChecked()&&
-				       actionFormatBrdBottom->isChecked());
-
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
-    if ( edit )
-        edit->setBorders( left, right, bottom, top );
-}
-
-/*===============================================================*/
-void KWView::textBorderRight()
-{
-
-    if ( actionFormatBrdRight->isChecked() )
-        right = tmpBrd;
-    else
-        right.ptWidth = 0;
-    actionFormatBrdOutline->setChecked(actionFormatBrdRight->isChecked()&&
-				       actionFormatBrdLeft->isChecked()&&
-				       actionFormatBrdTop->isChecked()&&
-				       actionFormatBrdBottom->isChecked());
-
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
-    if ( edit )
-        edit->setBorders( left, right, bottom, top );
-}
-
-/*===============================================================*/
-void KWView::textBorderTop()
-{
-
-    if ( actionFormatBrdTop->isChecked() )
-        top = tmpBrd;
-    else
-        top.ptWidth = 0;
-    actionFormatBrdOutline->setChecked(actionFormatBrdRight->isChecked()&&
-				       actionFormatBrdLeft->isChecked()&&
-				       actionFormatBrdTop->isChecked()&&
-				       actionFormatBrdBottom->isChecked());
-
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
-    if ( edit )
-        edit->setBorders( left, right, bottom, top );
-}
-
-/*===============================================================*/
-void KWView::textBorderBottom()
-{
-
-    if ( actionFormatBrdBottom->isChecked() )
-        bottom = tmpBrd;
-    else
-        bottom.ptWidth = 0;
-    actionFormatBrdOutline->setChecked(actionFormatBrdRight->isChecked()&&
-				       actionFormatBrdLeft->isChecked()&&
-				       actionFormatBrdTop->isChecked()&&
-				       actionFormatBrdBottom->isChecked());
-
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
-    if ( edit )
-        edit->setBorders( left, right, bottom, top );
-}
-
-/*================================================================*/
-void KWView::textBorderColor()
-{
-    tmpBrd.color = actionFormatBrdColor->color();
-}
-
-/*================================================================*/
-void KWView::textBorderWidth( const QString &width )
-{
-    tmpBrd.ptWidth = width.toInt();
-}
-
-/*================================================================*/
-void KWView::textBorderStyle( const QString &style )
-{
-    QString stl = style;
-
-    if ( stl == i18n( "solid line" ) )
-        tmpBrd.style = Border::SOLID;
-    else if ( stl == i18n( "dash line ( ---- )" ) )
-        tmpBrd.style = Border::DASH;
-    else if ( stl == i18n( "dot line ( **** )" ) )
-        tmpBrd.style = Border::DOT;
-    else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-        tmpBrd.style = Border::DASH_DOT;
-    else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-        tmpBrd.style = Border::DASH_DOT_DOT;
-}
-
-/*================================================================*/
-void KWView::frameBorderOutline()
-{
-    bool b = actionFrameBrdOutline->isChecked();
-    gui->canvasWidget()->setOutlineFrameBorder( frmBrd, b );
-    actionFrameBrdLeft->setChecked(b);
-    actionFrameBrdRight->setChecked(b);
-    actionFrameBrdTop->setChecked(b);
-    actionFrameBrdBottom->setChecked(b);
-}
-
-/*================================================================*/
-void KWView::frameBorderLeft()
-{
-    bool b = actionFrameBrdLeft->isChecked();
-    gui->canvasWidget()->setLeftFrameBorder( frmBrd, b );
-}
-
-/*================================================================*/
-void KWView::frameBorderRight()
-{
-    bool b = actionFrameBrdRight->isChecked();
-    gui->canvasWidget()->setRightFrameBorder( frmBrd, b );
-    verifyFrameOutline();
-}
-
-/*================================================================*/
-void KWView::frameBorderTop()
-{
-    bool b = actionFrameBrdTop->isChecked();
-    gui->canvasWidget()->setTopFrameBorder( frmBrd, b );
-    verifyFrameOutline();
-}
-
-/*================================================================*/
-void KWView::frameBorderBottom()
-{
-    bool b = actionFrameBrdBottom->isChecked();
-    gui->canvasWidget()->setBottomFrameBorder( frmBrd, b );
-    verifyFrameOutline();
-}
-
-/*================================================================*/
-void KWView::frameBorderColor()
-{
-    frmBrd.color=actionFrameBrdColor->color();
-    //gui->canvasWidget()->setFrameBorderColor( frmBrd.color );
-}
-
-/*================================================================*/
-void KWView::frameBorderWidth( const QString &width )
-{
-    frmBrd.ptWidth = width.toInt();
-}
-
-/*================================================================*/
-void KWView::frameBorderStyle( const QString &style )
-{
-    QString stl = style;
-    if ( stl == i18n( "solid line" ) )
-        frmBrd.style = Border::SOLID;
-    else if ( stl == i18n( "dash line ( ---- )" ) )
-        frmBrd.style = Border::DASH;
-    else if ( stl == i18n( "dot line ( **** )" ) )
-        frmBrd.style = Border::DOT;
-    else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-        frmBrd.style = Border::DASH_DOT;
-    else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-        frmBrd.style = Border::DASH_DOT_DOT;
-}
-
-/*================================================================*/
-void KWView::frameBackColor()
-{
-    backColor=actionFrameBackColor->color();
-    if ( gui )
-        gui->canvasWidget()->setFrameBackgroundColor( backColor );
-}
-
-/*================================================================*/
-void KWView::verifyFrameOutline()
-{
-    actionFrameBrdOutline->setChecked(actionFrameBrdBottom->isChecked()&&
-                                      actionFrameBrdTop->isChecked()&&
-                                      actionFrameBrdLeft->isChecked()&&
-                                      actionFrameBrdRight->isChecked());
 }
 
 /*================================================================*/
@@ -2651,10 +2520,10 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 }
 
 /*================================================================*/
-void KWView::showParagBorderValues()
+void KWView::borderShowValues()
 {
-    actionFormatBrdWidth->setCurrentItem( tmpBrd.ptWidth - 1 );
-    actionFormatBrdStyle->setCurrentItem( (int)tmpBrd.style );
+    actionBorderWidth->setCurrentItem( m_border.common.ptWidth - 1 );
+    actionBorderStyle->setCurrentItem( (int)m_border.common.style );
 }
 
 /*================================================================*/
