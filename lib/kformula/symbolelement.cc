@@ -322,6 +322,7 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 
     // Debug
+#if 0
     painter.setBrush(Qt::NoBrush);
     painter.setPen(Qt::red);
 //     painter.drawRect( style.layoutUnitToPixelX( myPos.x() ),
@@ -337,6 +338,7 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
                       style.layoutUnitToPixelY( myPos.y()+axis(style, tstyle) ),
                       style.layoutUnitToPixelX( myPos.x()+getWidth() ),
                       style.layoutUnitToPixelY( myPos.y()+axis(style, tstyle) ) );
+#endif
 }
 
 
