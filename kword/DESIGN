@@ -37,10 +37,13 @@ cell, we contain the cells in their own KWTextFrameset.
         + ---> KWTextFrameSet    |
                    +-> KWFrame <-+
 
-Edit objects are objects that are created to edit a given frameset.
+Editing
+=======
+To edit the contents of a text frameset (including table cells), the user clicks on it.
+This creates an edit object for the frameset, which will be destroyed as soon as we go
+edit another frameset. This means, in a given view (canvas), there is only one edit
+object at a given moment (for text objects, it's the one with the cursor).
 There is one type of edit object per type of frameset. For instance: KWTextFrameSetEdit.
-In a given view (canvas), there is only one edit object at a given moment
-(for text objects, it's the one with the cursor).
 
 Custom items
 ============
