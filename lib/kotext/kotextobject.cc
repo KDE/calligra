@@ -953,8 +953,8 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
         // Find format in collection
         newFormat = textdoc->formatCollection()->format( format );
         if ( newFormat->isMisspelled() ) {
-            newFormat->removeRef();
             KoTextFormat fNoMisspelled( *newFormat );
+            newFormat->removeRef();
             fNoMisspelled.setMisspelled( false );
             newFormat = textdoc->formatCollection()->format( &fNoMisspelled );
         }
