@@ -125,8 +125,7 @@ namespace MSWrite
 
 	inline Short ReadShort (Short &dest, const Byte *src)
 	{
-                Word wdest( dest );
-		return (Short) ReadWord (wdest, src);
+		return (Short) ReadWord ((Word &) dest, src);
 	}
 
 	inline DWord ReadDWord (DWord &dest, const Byte *src)
@@ -139,8 +138,7 @@ namespace MSWrite
 
 	inline Long ReadLong (Long &dest, const Byte *src)
 	{
-                DWord dwdest( dest );
-		return (Long) ReadDWord (dwdest, src);
+		return (Long) ReadDWord ((DWord &) dest, src);
 	}
 
 	inline Byte WriteByte (const Byte &src, Byte *dest)
