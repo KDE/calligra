@@ -29,9 +29,18 @@
 
 class KTar;
 
+/**
+ * Saves and loads koffice documents using a tar file called "the tar store".
+ * For method documentation, see koStore.h
+ */
 class KoTarStore : public KoStore
 {
 public:
+  /**
+   * Creates a Tar Store (i.e. a file on the hard disk, to save a document)
+   * if _mode is KoStore::Write
+   * Opens a Tar Store for reading if _mode is KoStore::Read.
+   */
   KoTarStore( const QString & _filename, Mode _mode );
   virtual ~KoTarStore();
 
