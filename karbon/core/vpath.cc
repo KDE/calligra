@@ -58,24 +58,49 @@ VPath::draw( QPainter& painter, const QRect& rect,
 
 	painter.save();
 
+	QPtrListIterator<VSegmentList> holeItr( m_holes );
+
 	// paint fill:
 	if( state() == normal || state() == selected )
 	{
+		// draw outline:
 		m_fill.draw( painter, zoomFactor, m_segments );
+
+		// draw holes:
+		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+		{
+kdDebug() << "fill yes" << endl;
+			m_fill.draw( painter, zoomFactor, *( holeItr.current() ), true );
+		}
 	}
 
 	// paint contour:
-	if( state() == edit )
+	if( state() == edit )	// draw just simplistic contours.
 	{
 		painter.setPen( Qt::yellow );
 		painter.setRasterOp( Qt::XorROP );
 
-		// draw just a simplistic outline:
+		// draw outline:
 		m_contour.draw( painter, zoomFactor, m_segments, true );
+
+		// draw holes:
+		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+		{
+kdDebug() << "edit yes" << endl;
+			m_contour.draw( painter, zoomFactor, *( holeItr.current() ), true );
+		}
 	}
 	else
 	{
+		// draw outline:
 		m_contour.draw( painter, zoomFactor, m_segments );
+
+		// draw holes:
+		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+		{
+kdDebug() << "contour yes" << endl;
+			m_contour.draw( painter, zoomFactor, *( holeItr.current() ) );
+		}
 	}
 
 
@@ -317,15 +342,43 @@ VPath::booleanOp( const VPath* path, int /*type*/ ) const
 	return 0L;
 }
 
+void
+VPath::combine( const VPath& path )
+{
+	VSegmentList* holes = new VSegmentList();
+	VSegmentListIterator itr( path.m_segments );
+
+	for( ; itr.current(); ++itr )
+	{
+		holes->append( new VSegment( *( itr.current() ) ) );
+	}
+
+	m_holes.append( holes );
+}
+
 VObject&
 VPath::transform( const QWMatrix& m )
 {
+	// outline:
 	VSegmentListIterator itr( m_segments );
 	for( ; itr.current() ; ++itr )
 	{
 		itr.current()->setPoint( 1, itr.current()->point( 1 ).transform( m ) );
 		itr.current()->setPoint( 2, itr.current()->point( 2 ).transform( m ) );
 		itr.current()->setPoint( 3, itr.current()->point( 3 ).transform( m ) );
+	}
+
+	// holes:
+	QPtrListIterator<VSegmentList> holeItr( m_holes );
+	for( holeItr.toFirst(); holeItr.current(); ++holeItr )
+	{
+		VSegmentListIterator itr2( *( holeItr.current() ) );
+		for( ; itr2.current() ; ++itr2 )
+		{
+			itr2.current()->setPoint( 1, itr2.current()->point( 1 ).transform( m ) );
+			itr2.current()->setPoint( 2, itr2.current()->point( 2 ).transform( m ) );
+			itr2.current()->setPoint( 3, itr2.current()->point( 3 ).transform( m ) );
+		}
 	}
 
 	return *this;

@@ -44,16 +44,20 @@ bool
 KarbonPart::initDoc()
 {
 // TODO: remove the whole test code:
-/*
-	VCCmdEllipse e( this, 50, 100, 150, 250 );
+
+	VCCmdEllipse e( this, 100, 100, 250, 250 );
 	VPath* elly = e.createPath();
 
-	VCCmdStar r( this, 110, 150, 80, 30, 8 );
+	VCCmdEllipse r( this, 150, 150, 200, 200 );
 	VPath* rect = r.createPath();
 
-	insertObject( elly );
-	insertObject( rect );
+	elly->combine( *rect );
+	delete( rect );
 
+	insertObject( elly );
+//	insertObject( rect );
+
+/*
 	VCCmdSpiral t(this, 100, 100, 50.0, 25, 0.2, true);
 	VPath *spi = t.createPath();
 

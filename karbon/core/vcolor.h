@@ -18,11 +18,11 @@ public:
 
 	VColor();
 
-	void values( VColorSpace colorSpace,
+	void values( const VColorSpace colorSpace,
 		int* v1 = 0L, int* v2 = 0L, int* v3 = 0L, int* v4 = 0L ) const;
 
 	VColorSpace colorSpace() const { return m_colorSpace; }
-	void setColorSpace( VColorSpace colorSpace );
+	void setColorSpace( const VColorSpace colorSpace );
 
 private:
 	VColorSpace m_colorSpace;

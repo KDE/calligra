@@ -14,7 +14,7 @@ VColor::VColor()
 }
 
 void
-VColor::values( VColorSpace colorSpace,
+VColor::values( const VColorSpace colorSpace,
 	int* v1, int* v2, int* v3, int* v4 ) const
 {
 	if( colorSpace == rgb )
@@ -29,7 +29,7 @@ VColor::values( VColorSpace colorSpace,
 }
 
 void
-VColor::setColorSpace( VColorSpace colorSpace )
+VColor::setColorSpace( const VColorSpace colorSpace )
 {
 // TODO: convert values
 	m_colorSpace = colorSpace;

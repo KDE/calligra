@@ -15,7 +15,7 @@ VSegment::VSegment()
 {
 }
 
-VSegment::VSegment( const VSegment &other )
+VSegment::VSegment( const VSegment& other )
 {
 	m_point[0] = other.m_point[0];
 	m_point[1] = other.m_point[1];

@@ -112,6 +112,8 @@ public:
 	// perform a boolean operation (unite(0), intersect(1), substract(2), xor(3)):
 	VPath* booleanOp( const VPath* path, int type = 0 ) const;
 
+	void combine( const VPath& path );
+
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor = 1.0 );
 
@@ -129,13 +131,11 @@ private:
 	void drawBox( QPainter &painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
 
 private:
-	VSegmentList m_segments;
+	VSegmentList m_segments;			// "outline" segments.
+	QPtrList<VSegmentList> m_holes;		// "holes" inside the outline
 
-	// contour:
-	VContour m_contour;
-
-	// fill:
-	VFill m_fill;
+	VContour m_contour;		// contour.
+	VFill m_fill;			// fill.
 
 	bool m_isClosed;
 };
