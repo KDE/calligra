@@ -50,9 +50,11 @@ OLEFilter::~OLEFilter() {
     store=0L;
 }
 
-const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
-                             const QString &from, const QString &to,
-                             const QString &) {
+const bool OLEFilter::filter1(
+    const QString &fileIn,
+    const QString &fileOut, const QString &prefixOut,
+    const QString &from, const QString &to,
+    const QString &) {
 
     if(to!="application/x-kword" &&
        to!="application/x-kspread" &&
@@ -65,6 +67,7 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
        from!="application/mspowerpoint")
         return false;
 
+    m_prefixOut = prefixOut;
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
         kdError(s_area) << "OLEFilter::filter(): Unable to open input file!" << endl;
@@ -102,7 +105,7 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
     partMap.insert("tar:root", "root");
 
     // Recursively convert the file
-    convert("tar:", "root");
+    convert(prefixOut, "root");
     delete store;
     store=0L;
     return success;
@@ -111,8 +114,9 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
 void OLEFilter::slotSavePart(
     const QString &nameIN,
     QString &storageId,
+    QString &mimeType,
     const QString &extension,
-    const char *mimeType,
+    const QString &config,
     unsigned int length,
     const char *data)
 {
@@ -133,29 +137,24 @@ void OLEFilter::slotSavePart(
         KoFilterManager *mgr = KoFilterManager::self();
         KTempFile tempFile(QString::null, "." + extension);
 
+        // It's not here, so let's generate one.
+        id = m_path + '/' + QString::number(m_nextPart);
+        m_nextPart++;
+
         // Save the data supplied into a temporary file, then run the filter
         // on it.
 
         tempFile.file()->writeBlock(data, length);
-        QString result = mgr->import(tempFile.name(), mimeType, 0L );
+        QString result = mgr->import(tempFile.name(), mimeType, config, m_prefixOut + id.mid(sizeof("tar:") - 1) );
         unlink(tempFile.name().local8Bit());
+        partMap.insert(key, id);
+        mimeMap.insert(key, mimeType);
 
         // Now fetch out the root element from the resulting KoStore.
 
         KoStore storedPart(result, KoStore::Read);
-    
-        // It's not here, so let's generate one.
-        id = m_path + '/' + QString::number(m_nextPart);
-        m_nextPart++;
-        partMap.insert(key, id);
-        mimeMap.insert(key, mimeType);
-#ifdef __GNUC__
-#warning "KoStore::embed doesn't exist anymore ! Shaheed ? :}"
-#endif
-#if 0
         if (!store->embed(id, storedPart))
             kdError(s_area) << "OLEFilter::slotSavePart(): Could not embed in KoStore!" << endl;
-#endif
         unlink(result.local8Bit());
     }
     //storageId = QFile::encodeName(id);
@@ -398,9 +397,9 @@ void OLEFilter::connectCommon(FilterBase **myFilter) {
         SLOT(slotSavePic(const QString &, QString &, const QString &, unsigned int, const char *)));
     QObject::connect(
         *myFilter,
-        SIGNAL(signalSavePart(const QString &, QString &, const QString &, const char *, unsigned int, const char *)),
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)),
         this,
-        SLOT(slotSavePart(const QString &, QString &, const QString &, const char *, unsigned int, const char *)));
+        SLOT(slotSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)));
     QObject::connect(*myFilter, SIGNAL(signalPart(const char *, QString &, QString &)),
                      this, SLOT(slotPart(const char *, QString &, QString &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const int &, myFile &)), this,

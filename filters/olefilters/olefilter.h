@@ -52,9 +52,16 @@ public:
     OLEFilter(KoFilter *parent, const char *name);
     virtual ~OLEFilter();
 
+/*
     virtual const bool filter(const QString &fileIn, const QString &fileOut,
                               const QString &from, const QString &to,
                               const QString &config=QString::null);
+*/
+    virtual const bool filter1(const QString &fileIn,
+                              const QString &fileOut, const QString &prefixOut,
+                              const QString &from, const QString &to,
+                              const QString &config=QString::null);
+    virtual bool supportsEmbedding() { return true; }
 
 protected slots:
     // This slot saves an embedded Picture to the KOffice tar storage.
@@ -72,8 +79,9 @@ protected slots:
     void slotSavePart(
         const QString &nameIN,
         QString &storageId,
+        QString &mimeType,
         const QString &extension,
-        const char *mimeType,
+        const QString &config,
         unsigned int length,
         const char *data);
 
@@ -108,6 +116,7 @@ private:
     QString m_path;
 
     myFile olefile;
+    QString m_prefixOut;
     int numPic;                      // for the "unique name generation"
     int m_nextPart;
     KLaola *docfile;                 // used to split up the OLE 2 file

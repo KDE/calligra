@@ -64,8 +64,9 @@ signals:
     void signalSavePart(
         const QString &nameIN,
         QString &storageId,
+        QString &mimeType,
         const QString &extension,
-        const char *mimeType,
+        const QString &config,
         unsigned int length,
         const char *data);
     void signalPart(const char *nameIN, QString &storageId, QString &mimeType);
