@@ -1659,22 +1659,25 @@ bool KWDocument::completeLoading( KoStore *_store )
     processImageRequests();
     processAnchorRequests();
 
+    // Save memory
+    m_urlIntern = QString::null;
+
     // The fields from documentinfo.xml just got loaded -> update vars
     recalcVariables( VT_FIELD );
+
+    // This computes the number of pages (from the frames)
+    // for the first time (and adds footers/headers etc.)
+    // It is necessary to do so BEFORE calling finalize, since updateFrames
+    // (in KWTextFrameSet) needs the number of pages.
+    recalcFrames();
 
     // Finalize all the existing framesets
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->finalize();
 
-    // Save memory
-    m_urlIntern = QString::null;
-
     // Fix z orders on older documents
     fixZOrders();
-
-    recalcFrames(); // This computes the number of pages (from the frames)
-                    // for the first time (and adds footers/headers etc.)
 
     emit newContentsSize();
     repaintAllViews( true );     // in case any view exists already
