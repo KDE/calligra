@@ -90,10 +90,6 @@ KPTDuration *KPTTask::getRandomDuration() {
     return 0L;
 }
 
-KPTDuration *KPTTask::getFloat() {
-    return new KPTDuration;
-}
-
 KPTResourceGroupRequest *KPTTask::resourceGroupRequest(KPTResourceGroup *group) const {
     if (m_requests)
         return m_requests->find(group);

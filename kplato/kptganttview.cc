@@ -432,13 +432,7 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
     if (m_showProgress) {
         w += "\n"; w += "Progress (%): " + QString().setNum(task->progress().percentFinished);
     }
-    w += "\n"; w += "Float: ";
-    if (task->getEarliestStart() != task->startTime())
-        w += QString("%1h").arg((double)(task->getEarliestStart().secsTo(task->startTime()))/(double(2600)), 0, 'f', 1);
-    else if (task->getLatestFinish() != task->endTime())
-        w += QString("%1h").arg((double)(task->endTime().secsTo(task->getLatestFinish()))/(double(2600)), 0, 'f', 1);
-    else
-        w+= "0h";
+    w += "\n"; w += "Float: " + task->positiveFloat().toString(KPTDuration::Format_Hour);
 
     QString sts;
     bool ok = true;

@@ -131,10 +131,6 @@ KPTDuration *KPTProject::getRandomDuration() {
     return 0L;
 }
 
-KPTDuration *KPTProject::getFloat() {
-    return 0L;
-}
-
 KPTDateTime KPTProject::calculateForward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == KPTNode::Type_Project) {

@@ -69,11 +69,6 @@ public:
      */
     KPTDuration *getRandomDuration();
 
-    /**
-     * Retrieve the calculated float of this node
-     */
-    KPTDuration *getFloat();
-
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) ;
 

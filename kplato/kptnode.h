@@ -206,11 +206,6 @@ public:
     virtual KPTDuration *getRandomDuration() = 0;
 
     /**
-     * Retrieve the calculated float of this node
-     */
-    virtual KPTDuration *getFloat() =0;
-
-    /**
      * Calculate the delay of this node. Use the calculated startTime and the
      * setted startTime.
      */

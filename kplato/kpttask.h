@@ -60,11 +60,6 @@ public:
     KPTDuration *getRandomDuration();
 
     /**
-     * Retrieve the calculated float of this node
-     */
-    KPTDuration *getFloat();
-
-    /**
      * Return the resource request made to group
      * (There should be only one)
      */
