@@ -14,6 +14,7 @@ public:
     SideBar( QWidget *parent, KPresenterDoc *d );
     void setCurrentPage( int pg );
     void setOn( int pg, bool on );
+    QSize sizeHint() const { return QSize( 120, KListView::sizeHint().height() ); }
     
 signals:
     void showPage( int i );

@@ -1622,6 +1622,7 @@ void KPresenterView::createGUI()
 
     // setup page
     pageBase = new PageBase( splitter, this );
+    pageBase->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     page = new Page( pageBase, "Page", ( KPresenterView* )this );
     QObject::connect( page, SIGNAL( fontChanged( const QFont & ) ),
 		      this, SLOT( fontChanged( const QFont & ) ) );
@@ -1630,7 +1631,8 @@ void KPresenterView::createGUI()
     QObject::connect( page, SIGNAL( alignChanged( int ) ),
 		      this, SLOT( alignChanged( int ) ) );
 
-    splitter->setResizeMode( sidebar, QSplitter::KeepSize );
+    splitter->setResizeMode( sidebar, QSplitter::FollowSizeHint );
+    splitter->setResizeMode( pageBase, QSplitter::Stretch );
     connect( sidebar, SIGNAL( showPage( int ) ), this, SLOT( skipToPage( int ) ) );
 
     // setup GUI
@@ -1646,9 +1648,6 @@ void KPresenterView::createGUI()
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
     sidebar->rebuildItems();
-    QValueList<int> sizes;
-    sizes << 100 << 10000;
-    splitter->setSizes( sizes );
 }
 
 /*=============================================================*/
@@ -2484,6 +2483,8 @@ void PageBase::resizeEvent( QResizeEvent *e )
     if ( !view->presStarted )
 	QWidget::resizeEvent( e );
 
+    QSize s = e ? e->size() : size();
+    
     if ( view->m_bShowGUI ) {
 	view->horz->show();
 	view->vert->show();
@@ -2493,12 +2494,12 @@ void PageBase::resizeEvent( QResizeEvent *e )
 	    view->h_ruler->show();
 	if ( view->v_ruler )
 	    view->v_ruler->show();
-	view->page->resize( width() - 36, height() - 36 );
+	view->page->resize( s.width() - 36, s.height() - 36 );
 	view->page->move( 20, 20 );
-	view->vert->setGeometry( width() - 16, 0, 16, height() - 32 );
-	view->pgPrev->setGeometry( width() - 16, height() - 32, 16, 16 );
-	view->pgNext->setGeometry( width() - 16, height() - 16, 16, 16 );
-	view->horz->setGeometry( 0, height() - 16, width() - 16, 16 );
+	view->vert->setGeometry( s.width() - 16, 0, 16, s.height() - 32 );
+	view->pgPrev->setGeometry( s.width() - 16, s.height() - 32, 16, 16 );
+	view->pgNext->setGeometry( s.width() - 16, s.height() - 16, 16, 16 );
+	view->horz->setGeometry( 0, s.height() - 16, s.width() - 16, 16 );
 	if ( view->h_ruler )
 	    view->h_ruler->setGeometry( 20, 0, view->page->width(), 20 );
 	if ( view->v_ruler )
@@ -2512,7 +2513,7 @@ void PageBase::resizeEvent( QResizeEvent *e )
 	view->h_ruler->hide();
 	view->v_ruler->hide();
 	view->page->move( 0, 0 );
-	view->page->resize( width(), height() );
+	view->page->resize( s.width(), s.height() );
     }
 }
 
@@ -2740,7 +2741,7 @@ void KPresenterView::setRanges()
 {
     if ( vert && horz && page && m_pKPresenterDoc ) {
 	vert->setSteps( 10, page->height() );
-	vert->setRange( 0, m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).height()  - page->height() );
+	vert->setRange( 0, QMAX( 0, m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).height()  - page->height() ) );
 	horz->setSteps( 10, m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).width() +
 			16 - page->width() );
 	int range = m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).width() +
