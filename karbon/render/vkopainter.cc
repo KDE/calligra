@@ -74,7 +74,6 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h ) :
 	m_index = 0;
 	resize( m_width, m_height );
 	clear();
-	m_aa = true;
 
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -97,7 +96,6 @@ VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h ) 
 	m_path = 0L;
 	m_index = 0;
 	clear();
-	m_aa = true;
 
 	m_stroke = 0L;
 	m_fill = 0L;
@@ -663,8 +661,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
-			if(m_aa)
-				art_render_svp( render, svp );
+			art_render_svp( render, svp );
 			art_karbon_render_gradient_linear( render, linear, ART_FILTER_HYPER );
 		}
 	}

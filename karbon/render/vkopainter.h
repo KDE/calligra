@@ -110,7 +110,6 @@ private:
 	VFill *m_fill;
 	double m_zoomFactor;
 	KoRect m_bbox;
-	bool m_aa;
 
 	GC gc;
 };
