@@ -1700,7 +1700,7 @@ void
 KexiTableView::print(KPrinter &printer)
 {
 //	printer.setFullPage(true);
-
+#if 0
 	int leftMargin = printer.margins().width() + 2 + d->rowHeight;
 	int topMargin = printer.margins().height() + 2;
 //	int bottomMargin = topMargin + ( printer.realPageSize()->height() * printer.resolution() + 36 ) / 72;
@@ -1757,6 +1757,7 @@ KexiTableView::print(KPrinter &printer)
 
 //	p.drawLine(60,60,120,150);
 	p.end();
+#endif
 }
 #endif
 

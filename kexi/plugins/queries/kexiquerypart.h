@@ -51,7 +51,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryPart : public KexiProjectHandler, KexiData
 
 		virtual QStringList datasets(QWidget*);
 		virtual QStringList datasetNames(QWidget*);
-		virtual KexiDBRecordSet *records(QWidget*,const QString& identifier,Parameters params);
+		virtual KexiDB::Cursor *records(QWidget*,const QString& identifier,Parameters params);
 		virtual QStringList fields(QWidget*,const QString& identifier);
 
 		virtual KexiDataProvider	*provider() { return this; }

@@ -378,7 +378,7 @@ KexiDataTable::slotSearchChanged(const QString &findQuery)
 	kdDebug() << "KexiDataTable::slotSearchChanged()" << endl;
 	if(m_tableView->sorting() != m_searchCol->currentItem())
 		m_tableView->setSorting(m_searchCol->currentItem());
-	m_tableView->findString(findQuery);
+//	im_tableView->findString(findQuery);
 #endif
 }
 
