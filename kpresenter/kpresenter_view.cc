@@ -2811,13 +2811,13 @@ QWidget* KPresenterView::canvas()
 /*================================================================*/
 int KPresenterView::canvasXOffset() const
 {
-    return -getDiffX();
+    return getDiffX();
 }
 
 /*================================================================*/
 int KPresenterView::canvasYOffset() const
 {
-    return -getDiffY();
+    return getDiffY();
 }
 
 /*================================================================*/
