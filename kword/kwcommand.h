@@ -276,13 +276,13 @@ protected:
 
 
 /**
- * Command created when you delete a textframeset
+ * Command created when you delete a frame
  */
-class KWTextFrameCommand : public KCommand
+class KWDeleteFrameCommand : public KCommand
 {
 public:
-    KWTextFrameCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex) ;
-    ~KWTextFrameCommand() {}
+    KWDeleteFrameCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex) ;
+    ~KWDeleteFrameCommand() {}
 
     void execute();
     void unexecute();
@@ -292,55 +292,5 @@ protected:
     KWFrame *copyFrame;
 };
 
-/**
- * Command created when you delete a textframeset
- */
-class KWTextFrameSetCommand : public KCommand
-{
-public:
-    KWTextFrameSetCommand( const QString &name,KWDocument *_doc,const QDomDocument& _saveFrameParag,FrameIndex _frameIndex) ;
-    ~KWTextFrameSetCommand() {}
-
-    void execute();
-    void unexecute();
-protected:
-    KWDocument *m_pDoc;
-    FrameIndex frameIndex;
-    QDomDocument saveFrameParag;
-};
-
-/**
- * Command created when you delete a textframeset
- */
-class KWFormulaFrameCommand : public KCommand
-{
-public:
-    KWFormulaFrameCommand( const QString &name,KWDocument *_doc,const QDomDocument& _saveFormula,FrameIndex _frameIndex) ;
-    ~KWFormulaFrameCommand() {}
-
-    void execute();
-    void unexecute();
-protected:
-    KWDocument *m_pDoc;
-    FrameIndex frameIndex;
-    QDomDocument saveFormula;
-};
-
-/**
- * Command created when you delete a textframeset
- */
-class KWPictureFrameCommand : public KCommand
-{
-public:
-    KWPictureFrameCommand( const QString &name,KWDocument *_doc,const QDomDocument& _saveImage,FrameIndex _frameIndex) ;
-    ~KWPictureFrameCommand() {}
-
-    void execute();
-    void unexecute();
-protected:
-    KWDocument *m_pDoc;
-    FrameIndex frameIndex;
-    QDomDocument saveImage;
-};
 
 #endif

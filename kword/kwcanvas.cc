@@ -1617,64 +1617,38 @@ void KWCanvas::deleteFrame()
         stopBlinkCursor();
 #endif
     // do the actual delete.
-    if ( fs->getNumFrames() > 1 )
+    FrameIndex index;
+    index.m_iFrameIndex=fs->getFrameFromPtr(theFrame);
+    index.m_iFrameSetIndex=doc->getFrameSetNum(fs);
+
+
+    QString cmdName;
+    // Note: I would have preferred a virtual method in KWFrameSet (DF)
+    if(fs->getFrameType() == FT_TEXT)
     {
-        if( fs->getFrameType() == FT_TEXT)
-        {
-            FrameIndex index;
-            index.m_iFrameIndex=fs->getFrameFromPtr(theFrame);
-            index.m_iFrameSetIndex=doc->getFrameSetNum(fs);
-            KWTextFrameCommand *cmd = new KWTextFrameCommand(i18n("Delete text frame"),doc,index);
-            doc->addCommand(cmd);
-        }
-        fs->delFrame( theFrame );
+        cmdName=i18n("Delete text frame");
+    }
+    else if(fs->getFrameType() == FT_FORMULA)
+    {
+        cmdName=i18n("Delete formula frame");
+    }
+    else if(fs->getFrameType() == FT_PICTURE )
+    {
+        cmdName=i18n("Delete picture frame");
+    }
+    else if(fs->getFrameType() == FT_PART )
+    {
+         cmdName=i18n("Delete picture frame");
     }
     else
     {
-        FrameIndex index;
-        index.m_iFrameIndex=fs->getFrameFromPtr(theFrame);
-        index.m_iFrameSetIndex=doc->getFrameSetNum(fs);
-
-        // Note: I would have preferred a virtual method in KWFrameSet (DF)
-        if(fs->getFrameType() == FT_TEXT)
-        {
-            QDomDocument domDoc( "PARAGRAPHS" );
-            QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
-            domDoc.appendChild( elem );
-            fs->save(elem);
-
-            KWTextFrameSetCommand *cmd = new KWTextFrameSetCommand(i18n("Delete text frame"),doc,domDoc,index);
-            doc->addCommand(cmd);
-             //don't remove frameset Otherwise undo/redo text doesn't work
-            //as discuted with david faure
-            //doc->delFrameSet( fs );
-            fs->delFrame( theFrame );
-        }
-        else if(fs->getFrameType() == FT_FORMULA)
-        {
-            QDomDocument domDoc( "FORMULA" );
-            QDomElement elem = domDoc.createElement( "FORMULA" );
-            domDoc.appendChild( elem );
-            fs->save(elem);
-            KWFormulaFrameCommand *cmd = new KWFormulaFrameCommand(i18n("Delete formula frame"),doc,domDoc,index);
-            doc->addCommand(cmd);
-            fs->delFrame( theFrame );
-        }
-        else if(fs->getFrameType() == FT_PICTURE )
-        {
-            QDomDocument domDoc( "IMAGE" );
-            QDomElement elem = domDoc.createElement( "IMAGE" );
-            domDoc.appendChild( elem );
-            fs->save(elem);
-            KWPictureFrameCommand *cmd = new KWPictureFrameCommand(i18n("Delete picture frame"),doc,domDoc,index);
-            doc->addCommand(cmd);
-            fs->delFrame( theFrame );
-        }
-        else
-        {
-            doc->delFrameSet( fs ); // ## dangerous
-        }
+        cmdName=i18n("Delete text frame");
     }
+    KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand(cmdName,doc,index);
+    doc->addCommand(cmd);
+    fs->delFrame( theFrame );
+
+
     doc->recalcFrames();
     doc->updateAllFrames();
     repaintAll();

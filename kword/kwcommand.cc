@@ -585,7 +585,7 @@ void KWPageLayoutCommand::unexecute()
 }
 
 
-KWTextFrameCommand::KWTextFrameCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex):
+KWDeleteFrameCommand::KWDeleteFrameCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex):
     KCommand(name),
     m_pDoc(_doc),
     frameIndex(_frameIndex)
@@ -595,7 +595,7 @@ KWTextFrameCommand::KWTextFrameCommand( const QString &name,KWDocument *_doc,Fra
     copyFrame=frame->getCopy();
 }
 
-void KWTextFrameCommand::execute()
+void KWDeleteFrameCommand::execute()
 {
     KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
     KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
@@ -603,90 +603,18 @@ void KWTextFrameCommand::execute()
     m_pDoc->repaintAllViews();
 }
 
-void KWTextFrameCommand::unexecute()
+void KWDeleteFrameCommand::unexecute()
 {
     KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
-    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
     copyFrame->setFrameSet(frameSet);
-    frame->getFrameSet()->addFrame( copyFrame );
+    frameSet->addFrame( copyFrame );
+    if(frameSet->getFrameType() == FT_TEXT)
+    {
+        KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameSet) ;
+        tmpParag->formatMore();
+    }
     m_pDoc->repaintAllViews();
 }
 
 
 
-KWTextFrameSetCommand::KWTextFrameSetCommand( const QString &name,KWDocument *_doc,const QDomDocument &_saveParam,FrameIndex _frameIndex):
-    KCommand(name),
-    m_pDoc(_doc),
-    frameIndex(_frameIndex),
-    saveFrameParag(_saveParam)
-{
-}
-
-void KWTextFrameSetCommand::execute()
-{
-    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
-    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
-    frame->getFrameSet()->delFrame( frameIndex.m_iFrameIndex );
-    m_pDoc->repaintAllViews();
-}
-
-void KWTextFrameSetCommand::unexecute()
-{
-    QDomElement saveParam=saveFrameParag.documentElement();
-    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
-    KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameSet) ;
-    tmpParag->load(saveParam );
-    tmpParag->formatMore();
-    m_pDoc->repaintAllViews();
-}
-
-
-KWFormulaFrameCommand::KWFormulaFrameCommand( const QString &name,KWDocument *_doc,const QDomDocument &_saveFormula,FrameIndex _frameIndex):
-    KCommand(name),
-    m_pDoc(_doc),
-    frameIndex(_frameIndex),
-    saveFormula(_saveFormula)
-{
-}
-
-void KWFormulaFrameCommand::execute()
-{
-    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
-    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
-    frame->getFrameSet()->delFrame( frame );
-    m_pDoc->repaintAllViews();
-}
-
-void KWFormulaFrameCommand::unexecute()
-{
-    QDomElement saveParam=saveFormula.documentElement();
-    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
-    KWFormulaFrameSet *tmpParag = dynamic_cast<KWFormulaFrameSet*> (frameSet) ;
-    tmpParag->load(saveParam);
-    m_pDoc->repaintAllViews();
-}
-
-KWPictureFrameCommand::KWPictureFrameCommand( const QString &name,KWDocument *_doc,const QDomDocument &_saveImage,FrameIndex _frameIndex):
-    KCommand(name),
-    m_pDoc(_doc),
-    frameIndex(_frameIndex),
-    saveImage(_saveImage)
-{
-}
-
-void KWPictureFrameCommand::execute()
-{
-    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
-    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
-    frame->getFrameSet()->delFrame( frame );
-    m_pDoc->repaintAllViews();
-}
-
-void KWPictureFrameCommand::unexecute()
-{
-    QDomElement saveParam=saveImage.documentElement();
-    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
-    KWPictureFrameSet *tmpParag = dynamic_cast<KWPictureFrameSet*> (frameSet) ;
-    tmpParag->load(saveParam);
-    m_pDoc->repaintAllViews();
-}
