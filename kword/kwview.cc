@@ -2225,7 +2225,7 @@ void KWView::updateTableStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        KWTableStyle *tmp = m_doc->tableStyleCollection()->findTableStyle( lst[ i]);
+        KWTableStyle *tmp = m_doc->tableStyleCollection()->findTranslatedTableStyle( lst[ i]);
         if ( tmp)
         {
             QCString name = tmp->shortCutName().latin1();
