@@ -350,7 +350,7 @@ KAction *KoDocument::action( const QDomElement &element ) const
     Q_ASSERT( d->m_bSingleViewMode );
     // Then look in the first view (this is for the single view mode)
     if ( !d->m_views.isEmpty() )
-        d->m_views.getFirst()->action( element );
+        return d->m_views.getFirst()->action( element );
     else
         return 0L;
 }
