@@ -99,6 +99,7 @@ KOASpell::KOASpell (QWidget *_parent, const QString &_caption,
 
 void KOASpell::slotEmitCheckerReady()
 {
+    emit ready( this );
     emit spellCheckerReady();
 }
 

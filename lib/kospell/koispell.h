@@ -52,6 +52,7 @@ public:
 
 
     virtual bool checkWord (const QString &_buffer, bool usedialog = FALSE);
+    bool checkWord( const QString &_buffer, bool usedialog, bool synchronous );
 
 
     virtual bool ignore (const QString & word);
@@ -69,6 +70,7 @@ protected slots:
     /* All of those signals from KProcIO get sent here. */
     void KSpell2 (KProcIO *);
     void checkWord2 (KProcIO *);
+    void checkWord2Synchronous (KProcIO *);
     void checkWord3 ();
     void check2 (KProcIO *);
     void checkList2 ();
@@ -91,7 +93,8 @@ private slots:
 
     void slotModalDone( const QString & );
     void slotSpellCheckerCorrected( const QString & oldText, const QString & newText, unsigned int );
-    void  slotModalSpellCheckerFinished( );
+    void slotModalSpellCheckerFinished( );
+    void slotSynchronousReady();
 
 signals:
     void dialog3 ();
@@ -140,6 +143,8 @@ protected:
     void initialize( QWidget *_parent, const QString &_caption,
                      QObject *obj, const char *slot, KOSpellConfig *_ksc,
                      bool _progressbar, bool _modal );
+    void enter_loop();
+    bool m_ready;
 };
 
 

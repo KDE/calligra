@@ -689,6 +689,9 @@ void KOSpellConfig::setDictionary (const QString &s)
             }
         }
     }
+    QString ab, desc;
+    interpret( qsdict, ab, desc );
+    qsdict = ab;
 }
 
 void KOSpellConfig::setDictFromList (bool dfl)

@@ -245,7 +245,9 @@ void KOISpell::startIspell()
 
 QStringList KOISpell::resultCheckWord( const QString &_word )
 {
-    checkWord (_word, false);
+    disconnect();
+    checkWord (_word, false, true);
+    QStringList sug = suggestions();
     return suggestions();
 }
 
@@ -253,7 +255,7 @@ QStringList KOISpell::resultCheckWord( const QString &_word )
 void KOISpell::ispellErrors (KProcess *, char *buffer, int buflen)
 {
   buffer [buflen-1] = '\0';
-  //  kdDebug(30006) << "ispellErrors [" << buffer << "]\n" << endl;
+  //kdDebug(30006) << "ispellErrors [" << buffer << "]\n" << endl;
 }
 
 void KOISpell::KSpell2 (KProcIO *)
@@ -296,6 +298,7 @@ void KOISpell::KSpell2 (KProcIO *)
   NOOUTPUT (KSpell2);
 
   m_status = Running;
+  m_ready = true;
   emit ready(this);
 }
 
@@ -311,8 +314,8 @@ KOISpell::setUpDialog (bool reallyuseprogressbar)
   ksdlg->setCaption (caption);
   connect (ksdlg, SIGNAL (command (int)), this,
 		SLOT (slotStopCancel (int)) );
-  connect (this, SIGNAL ( progress (unsigned int) ),
-	   ksdlg, SLOT ( slotProgress (unsigned int) ));
+  /**connect (this, SIGNAL ( progress (unsigned int) ),
+     ksdlg, SLOT ( slotProgress (unsigned int) ));*/
 #ifdef Q_WS_X11 // FIXME(E): Implement for Qt/Embedded
   KWin::setIcons (ksdlg->winId(), kapp->icon(), kapp->miniIcon());
 #endif
@@ -406,12 +409,11 @@ KOISpell::cleanFputs (const QString & s, bool appendCR)
 bool KOISpell::checkWord (const QString & buffer, bool _usedialog)
 {
   QString qs = buffer.simplifyWhiteSpace();
-
   if (qs.find (' ')!=-1 || qs.isEmpty())    // make sure it's a _word_
     return false;
 
   ///set the dialog signal handler
-  dialog3slot = SLOT (checkWord3());
+  dialog3slot = SLOT(checkWord3());
 
   usedialog=_usedialog;
   setUpDialog(false);
@@ -427,7 +429,42 @@ bool KOISpell::checkWord (const QString & buffer, bool _usedialog)
   //  connect (this, SIGNAL (dialog3()), this, SLOT (checkWord3()));
 
   proc->fputs ("%"); // turn off terse mode
-  proc->fputs (buffer); // send the word to ispell
+  cleanFputsWord( qs ); // send the word to ispell
+
+  return true;
+}
+
+//it can't use dialog anyway
+bool KOISpell::checkWord (const QString & buffer, bool _usedialog, bool synchronous )
+{
+  QString qs = buffer.simplifyWhiteSpace();
+
+  if (qs.find (' ')!=-1 || qs.isEmpty())    // make sure it's a _word_
+    return false;
+
+  ///set the dialog signal handler
+  dialog3slot = SLOT(checkWord3());
+
+  usedialog=_usedialog;
+  setUpDialog(false);
+
+  ksdlg->hide();
+
+  if ( synchronous ) {
+    if ( !m_ready ) {
+      connect( this, SIGNAL(ready(KOSpell*)),
+               SLOT(slotSynchronousReady()) );
+      enter_loop();
+    }
+    OUTPUT (checkWord2Synchronous);
+  }
+  else
+    OUTPUT (checkWord2);
+  //  connect (this, SIGNAL (dialog3()), this, SLOT (checkWord3()));
+
+  proc->fputs ("%"); // turn off terse mode
+  cleanFputsWord( qs ); // send the word to ispell
+  enter_loop();
 
   return true;
 }
@@ -462,6 +499,35 @@ void KOISpell::checkWord2 (KProcIO *)
   //emits a "corrected" signal _even_ if no change was made
   //so that the calling program knows when the check is complete
   emit corrected (word, word, 0L);
+}
+
+// This is not even cute... Just watch me abuse
+// Qt, KDE, candy, cookies and make this stuff work
+// through pure magic
+void KOISpell::checkWord2Synchronous (KProcIO *)
+{
+  QString word;
+
+  QString line;
+  proc->fgets (line, true); //get ispell's response
+
+/* ispell man page: "Each sentence of text input is terminated with an
+   additional blank line,  indicating that ispell has completed processing
+   the input line." */
+  QString blank_line;
+  proc->fgets(blank_line, true); // eat the blank line
+
+  NOOUTPUT(checkWord2);
+
+  bool mistake = (parseOneResponse(line, word, sugg) == MISTAKE);
+  if( mistake )
+  {
+    misspellingWord (word, sugg, lastpos);
+  }
+  //emits a "corrected" signal _even_ if no change was made
+  //so that the calling program knows when the check is complete
+  emit corrected (word, word, 0L);
+  qApp->exit_loop();
 }
 
 void KOISpell::checkWord3 ()
@@ -1215,7 +1281,7 @@ void KOISpell::initialize( QWidget *_parent, const QString &_caption,
                          QObject *obj, const char *slot, KOSpellConfig *_ksc,
                          bool _progressbar, bool _modal )
 {
-
+  m_ready = false;
   m_bIgnoreUpperWords=false;
   m_bIgnoreTitleCase=false;
 
@@ -1254,4 +1320,22 @@ void KOISpell::initialize( QWidget *_parent, const QString &_caption,
   proc=new KProcIO(codec);
 
   startIspell();
+}
+
+// This is retarded, if you don't get it, don't worry
+// it's me working around 999999999 problems
+void qt_enter_modal( QWidget *widget );
+void qt_leave_modal( QWidget *widget );
+void KOISpell::enter_loop()
+{
+  QWidget dummy(0,0,WType_Dialog | WShowModal);
+  dummy.setFocusPolicy( QWidget::NoFocus );
+  qt_enter_modal(&dummy);
+  qApp->enter_loop();
+  qt_leave_modal(&dummy);
+}
+
+void KOISpell::slotSynchronousReady()
+{
+  qApp->exit_loop();
 }

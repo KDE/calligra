@@ -53,7 +53,9 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
     else if (clt == KOS_CLIENT_ASPELL)
     {
         kdDebug(30006)<<" KOS_CLIENT_ASPELL :**************\n";
-        return new KOASpell(parent,caption,ksc,modal,_autocorrect, type);
+        KOASpell* aspell = new KOASpell(parent,caption,ksc,modal,_autocorrect, type);
+        connect( aspell, SIGNAL(ready(KOSpell*)), receiver, slot );
+        return aspell;
     }
 #endif
 #if 0
