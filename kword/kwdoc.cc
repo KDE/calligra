@@ -1695,7 +1695,6 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
                 newName = generateFramesetName( newName+"-%1" );
             m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
             kdDebug() << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
-
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
             switch ( frameSetType ) {
             case FT_TABLE: {
@@ -1716,6 +1715,9 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
                 fs->setName( newName );
                 frameElem = elem.namedItem( "FRAME" ).toElement();
             }
+            //when we paste a header/footer we transforme it in a body frame
+            if(fs->isHeaderOrFooter())
+                fs->setFrameSetInfo(KWFrameSet::FI_BODY);
         }
         // Test commented out since the toplevel element can contain "PARAGRAPH" now
         //else
