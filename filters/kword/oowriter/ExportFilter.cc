@@ -881,7 +881,18 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
                 case 3:  props += " style:type=\"char\" style:char=\".\""; styleKey += "D"; break; // decimal
                 default: props += " style:type=\"left\""; styleKey += "L"; break;
             }
-            // ### TODO: style:leader-char
+            switch ((*it).m_filling) // ### TODO: check if the characters are right
+            {
+                case TabulatorData::TF_NONE: break;
+                case TabulatorData::TF_DOT:  props += " style:leader-char=\".\""; break;
+                case TabulatorData::TF_LINE: props += " style:leader-char=\"_\""; break;
+
+                case TabulatorData::TF_DASH:
+                case TabulatorData::TF_DASHDOT:
+                case TabulatorData::TF_DASHDOTDOT: props += " style:leader-char=\"-\""; break;
+
+                default: break;
+            }
             props += "/>\n";
             styleKey +='/';
         }
@@ -1078,8 +1089,43 @@ void OOWriterWorker::declareFont(const QString& fontName)
 {
     if (m_fontNames.find(fontName)==m_fontNames.end())
     {
+        QString props;
+
+        // Disabled, as QFontInfo::styleHint() cannot guess
+#if 0
+        QFont font(fontName);
+        QFontInfo info(font);
+        props+="style:font-family-generic=\""
+        switch (info.styleHint())
+        {
+        case QFont::SansSerif:
+        default:
+            {
+                props += "swiss";
+                break;
+            }
+        case QFont::Serif:
+            {
+                props +=  "roman";
+                break;
+            }
+        case QFont::Courier:
+            {
+                props +=  "modern";
+                break;
+            }
+        case QFont::OldEnglish:
+            {
+                props +=  "decorative";
+                break;
+            }
+        }
+        props +="\" ";
+#endif
+
+        props +="style:font-pitch=\"variable\""; // ### TODO: check if font is variable or fixed
         // New font, so register it
-        m_fontNames[fontName]="style:font-pitch=\"variable\""; // ### TODO: check if font is variable or fixed
+        m_fontNames[fontName]=props;
     }
 }
 
