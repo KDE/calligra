@@ -240,6 +240,7 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
 #endif
 
     const QCString appId( "application/vnd.sun.xml.writer" );
+    // ### TODO: QCString::length is slow in Qt3!
     m_zip->writeFile( "mimetype", QString::null, QString::null, appId.length(), appId.data() );
 
     m_zip->setCompression( KZip::DeflateCompression );
@@ -545,7 +546,7 @@ void OOWriterWorker::writeMetaXml(void)
     zipWriteData( "\"" );
 
     // ### TODO: any reasons not to generate it?
-    zipWriteData( " meta:image-count=\"" ); // Why is this not specified in the OO specification section 2.1.19 (### TODO)
+    zipWriteData( " meta:image-count=\"" ); // This not specified in the OO specification section 2.1.19 (### TODO)
     zipWriteData( escapeOOText( QString::number ( m_pictureNumber ) ) );
     zipWriteData( "\"" );
 
@@ -903,7 +904,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             strElement += "style:text-position=\"super\" ";
             key += 'P';
         }
-        // ### TODO: how to reset it?
+        // ### TODO: how to reset it? "0pt" ?
     }
 
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
@@ -915,17 +916,23 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
-    const QString tableName( QString( "Table" ) + QString:.number( ++m_tableNumber ) );
+    const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) );
+    const QString tableName( QString( "Table" ) + QString:.number( m_tableNumber ) ); // m_tableNumber was already increased
+
     kdDebug(30520) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
+
+    kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
 
     *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
     *m_streamOut << "<table:table table:name=\""
         << escapeOOText( tableName )
         << "\ table:style-name=\""
-        << "Table1" // ### TODO: we need an automatic table style
+        << escapeOOText( automaticTableStyle )
         << "\" >\n";
 
-    ulong columnNumber = 0;
+    ulong columnNumber = 0L;
+    double tableWidth = 0.0; // total width of table
+    QString delayedAutomaticStyles; // Automatic styles for the columns
 
     QValueList<TableCell>::ConstIterator itCell;
     for ( itCell=anchor.table.cellList.begin();
@@ -933,27 +940,43 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     {
         if ( (*itCell).row != 1 )
             break; // We have finished the first row
+
         const double width = (*itCell).frame.right - (*itCell).frame.left;
+        tableWidth += width; // ###TODO any modifier needed?
 
-        const QString automaticStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
-        kdDebug(30520) << "Creating automatic cell style: " << automaticStyle /* << " key: " */ << styleKey << endl;
+        const QString automaticCellStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
+        kdDebug(30520) << "Creating automatic cell style: " << automaticCellStyle /* << " key: " << styleKey */ << endl;
 
-        m_contentAutomaticStyles += "  <style:style";
-        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticStyle ) + "\"";
-        m_contentAutomaticStyles += " style:family=\"table-column\"";
-        m_contentAutomaticStyles += ">\n";
-        m_contentAutomaticStyles += "   <style:properties ";
+        delayedAutomaticStyles += "  <style:style";
+        delayedAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
+        delayedAutomaticStyles += " style:family=\"table-column\"";
+        delayedAutomaticStyles += ">\n";
+        delayedAutomaticStyles += "   <style:properties ";
         // ### TODO: style:column-width (OOWriter 1.1) or fo:width (OO specification)
         // ### TODO:  and what about style:column-width-rel (same problem, it would be nice if we could skip it)
-        m_contentAutomaticStyles += " style:column-width=\"" + QString::number( width ) + "pt\" ";
-        m_contentAutomaticStyles += "/>\n";
-        m_contentAutomaticStyles += "  </style:style>\n";
+        delayedAutomaticStyles += " style:column-width=\"" + QString::number( width ) + "pt\" ";
+        delayedAutomaticStyles += "/>\n";
+        delayedAutomaticStyles += "  </style:style>\n";
 
         // ### TODO: find a way how to use table:number-columns-repeated > 1
         *m_streamOut << "<table:column table:style-name=\""
             << escapeOOText( automaticStyle )
             << "\" table:number-columns-repeated=\"1\"/>\n";
     }
+
+    // Now that we have processed the columns, we can write out the automatic style for the table
+    m_contentAutomaticStyles += "  <style:style";
+    m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
+    m_contentAutomaticStyles += " style:family=\"table\"";
+    m_contentAutomaticStyles += ">\n";
+    m_contentAutomaticStyles += "   <style:properties ";
+    m_contentAutomaticStyles += " style:width=\"" + QString::number( tableWidth ) + "pt\" ";
+    m_contentAutomaticStyles += "/>\n";
+    m_contentAutomaticStyles += "  </style:style>\n";
+
+    // Now that the automatic style for the table is written, we can write the column's ones
+    m_contentAutomaticStyles += delayedAutomaticStyles;
+    delayedAutomaticStyles = QString::null; // Release memory
 
     // ### TODO: automatic styles
 
