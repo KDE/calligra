@@ -2972,7 +2972,7 @@ void KPresenterView::setupActions()
                                          this, SLOT( extraBackground() ),
                                          actionCollection(), "extra_background" );
 
-    actionExtraLayout = new KAction( i18n( "Page La&yout..." ), 0,
+    actionExtraLayout = new KAction( i18n( "Page &Layout..." ), 0,
                                      this, SLOT( extraLayout() ),
                                      actionCollection(), "extra_layout" );
 
