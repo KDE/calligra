@@ -836,7 +836,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 for ( ; sIt.current() ; ++sIt )
                 {
                     if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber),m_view->zoomHandler() ) )
+                    {
+                        if( m_view->kPresenterDoc()->isHeaderFooter(sIt.current()))
+                        {
+                            if((sIt.current()==m_view->kPresenterDoc()->header() && !m_view->kPresenterDoc()->hasHeader())||(sIt.current()==m_view->kPresenterDoc()->footer() && !m_view->kPresenterDoc()->hasFooter()))
+                                continue;
+                        }
                         selectObj( sIt.current() );
+                    }
                 }
 
 
