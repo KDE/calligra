@@ -737,8 +737,13 @@ void KoPageLayoutDia::formatChanged( int _format )
 
 void KoPageLayoutDia::orientationChanged()
 {
+    KoOrientation oldOrientation = layout.orientation;
     layout.orientation = ( rbPortrait->isChecked() ) ?  PG_PORTRAIT : PG_LANDSCAPE;
-
+    
+    // without this check, width & height would be swapped around (below)
+    // even though the orientation has not changed
+    if (layout.orientation == oldOrientation) return;
+    
     layout.ptWidth = KoUnit::ptFromUnit( epgWidth->value(), m_unit );
     layout.ptHeight = KoUnit::ptFromUnit( epgHeight->value(), m_unit );
     layout.ptLeft = KoUnit::ptFromUnit( ebrLeft->value(), m_unit );
