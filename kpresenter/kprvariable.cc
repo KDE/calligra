@@ -19,7 +19,6 @@
 */
 
 #include "kprvariable.h"
-#include "kprvariable.moc"
 #include <koVariable.h>
 #include "kpresenter_doc.h"
 #include "kprcommand.h"
