@@ -291,6 +291,8 @@ void KChartView::pieChart()
       KDChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Pie );
       params->setThreeDPies( true );
+      params->setExplodeFactor( 0 );
+      params->setExplode( true );
       repaint();
     }
   else

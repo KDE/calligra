@@ -26,10 +26,10 @@ KChartPieConfigPage::KChartPieConfigPage( KDChartParams* params,
 {
     //    col=_params->colPie;
     pos=-1;
-    QGridLayout *grid = new QGridLayout(this,8,4,15,7);
+    QGridLayout *grid = new QGridLayout(this,10,4,15,7);
     list = new QListView( this );
     list->resize( list->sizeHint() );
-    grid->addMultiCellWidget(list,0,7,0,0);
+    grid->addMultiCellWidget(list,0,9,0,0);
     list->addColumn( i18n("Hide piece") );
     list->setRootIsDecorated( TRUE );
 
@@ -71,6 +71,15 @@ KChartPieConfigPage::KChartPieConfigPage( KDChartParams* params,
     depth = new QSpinBox(0, 40, 1, this);
     depth->resize(100, depth->sizeHint().height() );
     grid->addWidget( depth,7,1);
+
+    label = new QLabel( i18n( "Explose factor (%)" ), this );
+    label->resize( label->sizeHint() );
+    label->setAlignment(Qt::AlignCenter);
+    grid->addWidget( label,8,1);
+
+    explose = new QSpinBox(0, 100, 1, this);
+    explose->resize(100, explose->sizeHint().height() );
+    grid->addWidget( explose,9,1);
 
 
     grid->addColSpacing(0,list->width());
@@ -170,6 +179,7 @@ void KChartPieConfigPage::init()
 //             pos=_params->legend.count()*col;
 //             dist->setValue(	value[pos]);
 // 	}
+    explose->setValue((int)(_params->explodeFactor()*100));
 }
 
 
@@ -194,4 +204,5 @@ void KChartPieConfigPage::apply()
     // PENDING(kalle) Put back in
     //     value[pos]=dist->value();
 //     _params->explode.duplicate(value);
+    _params->setExplodeFactor(((double)(explose->value()))/100);
 }
