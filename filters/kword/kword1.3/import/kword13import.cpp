@@ -19,13 +19,17 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qxml.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kimageio.h>
 
 #include <koFilterChain.h>
+#include <koStoreDevice.h>
 
+#include "kword13parser.h"
+#include "kword13document.h"
 #include "kword13import.h"
 
 typedef KGenericFactory<KWord13Import, KoFilter> KWord13ImportFactory;
@@ -35,6 +39,24 @@ K_EXPORT_COMPONENT_FACTORY( libkwordkword1dot3import, KWord13ImportFactory( "kof
 KWord13Import::KWord13Import(KoFilter */*parent*/, const char */*name*/, const QStringList &)
      : KoFilter()
 {
+}
+
+bool KWord13Import::parseRoot( QIODevice* io, KWordDocument& kwordDocument )
+{
+    KWordParser handler( &kwordDocument );
+
+    QXmlSimpleReader reader;
+    reader.setContentHandler( &handler );
+    //### TODO: reader.setErrorHandler( &handler );
+
+    QXmlInputSource source( io ); // Read the file
+    
+    if (!reader.parse( source ))
+    {
+        kdWarning(30520) << "Parse Error" << endl;
+        return false;
+    }
+    return true;
 }
 
 KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const QCString& to )
@@ -50,7 +72,39 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
 
     KoFilter::ConversionStatus result = KoFilter::StupidError;
     
-    // ###TODO
+    KWordDocument kwordDocument;
+    
+    KoStoreDevice* subFile;
+
+    // ### TODO: process documentinfo.xml
+
+    subFile = m_chain->storageFile( "root", KoStore::Read );
+    kdDebug (30520) << "Processing root... " << ((void*) subFile) << endl;
+    if ( ! parseRoot ( subFile, kwordDocument ) )
+    {
+        kdWarning(30520) << "Opening root has failed. Trying raw XML file!" << endl;
+
+        const QString filename( m_chain->inputFile() );
+        if ( filename.isEmpty() )
+        {
+            kdError(30520) << "Could not open document as raw XML! Aborting!" << endl;
+            return KoFilter::StupidError;
+        }
+        else
+        {
+            QFile file( filename );
+            file.open( IO_ReadOnly );
+            if ( ! parseRoot( &file, kwordDocument ) )
+            {
+                kdError(30520) << "Could not process document! Aborting!" << endl;
+                file.close();
+                return KoFilter::StupidError;
+            }
+            file.close();
+        }
+    }
+    
+    // ### TODO
     
     return result;
 }

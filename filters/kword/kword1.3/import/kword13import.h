@@ -27,6 +27,8 @@
 
 #include <koFilter.h>
 
+class QIODevice;
+class KWordDocument;
 
 class KWord13Import : public KoFilter {
 
@@ -37,5 +39,7 @@ public:
     virtual ~KWord13Import() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+protected:
+    bool KWord13Import::parseRoot( QIODevice* io, KWordDocument& kwordDocument );
 };
 #endif // KWORD_1_3_IMPORT_H
