@@ -132,6 +132,9 @@ MySqlResult::value(unsigned int field)
 QVariant
 MySqlResult::value(QString field)
 {
+	if(!m_fieldNames.contains(field))
+		return QVariant();
+
 	FieldNames::Iterator it;
 	it = m_fieldNames.find(field);
 	return value(it.data());
