@@ -34,6 +34,7 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qregexp.h>
+#include <kozoomhandler.h>
 
 KoSearchContext::KoSearchContext()
 {
@@ -734,7 +735,7 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
         }
         if (searchContext->m_optionsMask & KoSearchContext::Size)
         {
-            if ( format->font().pointSize () != searchContext->m_size)
+            if ( format->font().pointSize () !=  KoTextZoomHandler::ptToLayoutUnitPt(searchContext->m_size))
                 return false;
         }
         if ( searchContext->m_optionsMask & KoSearchContext::Family)
