@@ -32,7 +32,6 @@ libdialogs_la_SOURCES = \
 	kspread_dlg_preference.cc \
 	kspread_dlg_reference.cc \
 	kspread_dlg_resize2.cc \
-	kspread_dlg_scripts.cc \
 	kspread_dlg_series.cc \
 	kspread_dlg_show.cc \
 	kspread_dlg_showColRow.cc \
@@ -68,4 +67,3 @@ noinst_HEADERS = \
 	kspread_dlg_preference.h \
 	kspread_dlg_reference.h \
 	kspread_dlg_resize2.h
-
