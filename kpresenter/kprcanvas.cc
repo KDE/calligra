@@ -816,6 +816,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                         selectObj( it.current() );
                 }
 
+                QPtrListIterator<KPObject> sIt(m_view->kPresenterDoc()->stickyPage()->objectList() );
+                for ( ; sIt.current() ; ++sIt )
+                {
+                    if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
+                        selectObj( sIt.current() );
+                }
+
+
             }
         } break;
         case MT_MOVE: {
@@ -846,7 +854,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                         _repaint(it.current() );
                 }
             }
-        } break;
+        }
+            break;
         case MT_RESIZE_UP: {
             if ( resizeObjNum < 0 ) break;
             if ( firstX != mx || firstY != my ) {
@@ -1712,29 +1721,19 @@ void KPrCanvas::clipPaste()
 /*======================= change picture  ========================*/
 void KPrCanvas::chPic()
 {
-    QPtrListIterator<KPObject> it( getObjectList() );
-    for ( ; it.current() ; ++it )
-    {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
-        {
-            m_view->changePicture( dynamic_cast<KPPixmapObject*>( it.current() )->getFileName() );
-            break;
-        }
-    }
+    bool state=m_activePage->chPic( m_view);
+    if( state)
+        return;
+    m_view->kPresenterDoc()->stickyPage()->chPic(m_view);
 }
 
 /*======================= change clipart  ========================*/
 void KPrCanvas::chClip()
 {
-    QPtrListIterator<KPObject> it( getObjectList() );
-    for ( ; it.current() ; ++it )
-    {
-        if ( it.current()->isSelected() && it.current()->getType() == OT_CLIPART )
-        {
-            m_view->changeClipart( dynamic_cast<KPClipartObject*>( it.current() )->getFileName() );
-            break;
-        }
-    }
+    bool state=m_activePage->chClip( m_view);
+    if( state)
+        return;
+    m_view->kPresenterDoc()->stickyPage()->chClip(m_view);
 }
 
 void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags)

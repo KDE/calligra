@@ -177,7 +177,7 @@ int KPObject::load(const QDomElement &element) {
             orig.setX(e.attribute(attrX).toDouble());
         if(e.hasAttribute(attrY))
         {
-            offset=e.attribute(attrY).toInt();
+            offset=e.attribute(attrY).toDouble();
             orig.setY(0);
         }
         origTopLeftPointInGroup = orig;

@@ -217,6 +217,9 @@ public:
     bool haveASelectedPictureObj();
     KoRect getBoundingRect(const KoRect &rect, KoZoomHandler *zoomhandler);
 
+    bool chPic( KPresenterView *_view);
+    bool chClip(KPresenterView *_view);
+
 protected:
 
 private:

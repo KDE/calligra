@@ -3075,3 +3075,32 @@ KoRect KPrPage::getBoundingRect(const KoRect &rect, KoZoomHandler *zoomhandler)
     }
     return boundingRect;
 }
+
+//return true if we change picture
+bool KPrPage::chPic( KPresenterView *_view)
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
+        {
+            _view->changePicture( dynamic_cast<KPPixmapObject*>( it.current() )->getFileName() );
+            return true;
+        }
+    }
+    return false;
+}
+
+bool KPrPage::chClip(KPresenterView *_view)
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_CLIPART )
+        {
+            _view->changeClipart( dynamic_cast<KPClipartObject*>( it.current() )->getFileName() );
+            return true;
+        }
+    }
+    return false;
+}
