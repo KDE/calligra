@@ -27,11 +27,12 @@
 #include <qstringlist.h>
 
 #include <kdebug.h>
-#include <kaction.h>
-#include <kstdaction.h>
 #include <kruler.h>
+#include <kaction.h>
 #include <klocale.h>
 #include <khelpmenu.h>
+#include <kaboutdata.h>
+#include <kstdaction.h>
 #include <kfiledialog.h>
 
 #include "kis_core.h"
@@ -270,6 +271,11 @@ void KisView::setupDialogs()
   //m_pBrushDialog->hide();
   //connect( m_pBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
+  // brush
+  //m_pBrushChooser = m_pBrushDialog->brushChooser();
+  //m_pBrush = m_pBrushChooser->currentBrush();
+  //QObject::connect(m_pBrushChooser, SIGNAL(selected(const KisBrush *)), this, SLOT(slotSetBrush(const KisBrush*)));
+
   // gradient dialog
   m_pGradientDialog = new GradientDialog( m_pDoc, this );
   m_pGradientDialog->resize( 206, 185 );
@@ -297,8 +303,14 @@ void KisView::setupActions()
   m_copy = KStdAction::copy( this, SLOT( copy() ), actionCollection(), "copy");
   m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste");
 
-  // dialog actions
+  // view actions
 
+  new KAction( i18n("Zoom &in"), KISBarIcon("viewmag+"), 0, this,
+               SLOT( zoom_in() ), actionCollection(), "zoom_in" );
+
+  new KAction( i18n("Zoom &out"), KISBarIcon("viewmag-"), 0, this,
+               SLOT( zoom_out() ), actionCollection(), "zoom_out" );
+  
   m_dialog_layer = new KToggleAction( i18n("&Layer Dialog"), KISBarIcon("layer_dialog"), 0, this,
 				SLOT( dialog_layer() ),actionCollection(), "dialog_layer");
   m_dialog_color = new KToggleAction( i18n("&Color Dialog"), KISBarIcon("color_dialog"), 0, this,
@@ -319,29 +331,48 @@ void KisView::setupActions()
 										  KISBarIcon( "areaselect" ), 0, this,
 										  SLOT( tool_select_rect() ), actionCollection(), "tool_select_rect" );
   m_tool_select_rect->setExclusiveGroup( "tools" );
+  
+  m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ), KISBarIcon( "areaselect" ), 0, this,
+                             SLOT( tool_select_rect() ), actionCollection(), "tool_select_polygon" );
+  m_tool_select_polygon->setExclusiveGroup( "tools" );
+  
   m_tool_move = new KToggleAction( i18n("&Move tool"), KISBarIcon("move"), 0, this,
 			     SLOT( tool_move() ),actionCollection(), "tool_move");
   m_tool_move->setExclusiveGroup( "tools" );
+  
   m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KISBarIcon("zoom"), 0, this,
 			     SLOT( tool_zoom() ),actionCollection(), "tool_zoom");
   m_tool_zoom->setExclusiveGroup( "tools" );
+  
+  m_tool_draw = new KToggleAction( i18n("&Draw simple figure"), KISBarIcon("pencil"), 0, this,
+			      SLOT( tool_pen() ),actionCollection(), "tool_draw_figure");
+  m_tool_draw->setExclusiveGroup( "tools" );
+  
   m_tool_pen = new KToggleAction( i18n("&Pen tool"), KISBarIcon("pencil"), 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_pen");
   m_tool_pen->setExclusiveGroup( "tools" );
+  
   m_tool_brush = new KToggleAction( i18n("&Brush tool"), KISBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
+  
   m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"), KISBarIcon("airbrush"), 0, this,
 				       SLOT( tool_airbrush() ),actionCollection(), "tool_airbrush");
   m_tool_airbrush->setExclusiveGroup( "tools" );
   m_tool_airbrush->setEnabled( false );
-
+  
+  m_tool_fill = new KToggleAction( i18n("&Filler tool"), KISBarIcon("airbrush"), 0, this,
+				       SLOT( tool_airbrush() ),actionCollection(), "tool_fill");
+  m_tool_fill->setExclusiveGroup( "tools" );
+  
   m_tool_eraser = new KToggleAction( i18n("&Eraser tool"), KISBarIcon("eraser"), 0, this,
 			      SLOT( tool_eraser() ),actionCollection(), "tool_eraser");
   m_tool_eraser->setExclusiveGroup( "tools" );
+  
   m_tool_colorpicker = new KToggleAction( i18n("&Color picker"), KISBarIcon("colorpicker"), 0, this,
 			      SLOT( tool_colorpicker() ),actionCollection(), "tool_colorpicker");
   m_tool_colorpicker->setExclusiveGroup( "tools" );
+  
   m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), KISBarIcon("gradient"), 0, this,
   				 SLOT( tool_gradient() ),actionCollection(), "tool_gradient");
   m_tool_gradient->setExclusiveGroup( "tools" );
@@ -350,6 +381,9 @@ void KisView::setupActions()
 
   (void) new KAction( i18n("&Insert layer..."), 0, this,
                       SLOT( insert_layer() ), actionCollection(), "insert_layer" );
+
+  (void) new KAction( i18n("I&nsert image as layer..."), 0, this,
+                      SLOT( insert_layer_image() ), actionCollection(), "insert_layer_image" );
 
   (void) new KAction( i18n("Rotate &180"), 0, this,
 				   SLOT( layer_rotate180() ),actionCollection(), "layer_rotate180");
@@ -789,7 +823,7 @@ void KisView::dialog_gradienteditor()
 
 void KisView::updateToolbarButtons()
 {
-  kDebugInfo( 0, "KisView::updateToolbarButtons" );
+  kDebugInfo( "KisView::updateToolbarButtons" );
 
   // m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
   //m_dialog_color->setChecked( m_pColorDialog->isVisible() );
@@ -805,6 +839,11 @@ void KisView::updateToolbarButtons()
 void KisView::insert_layer()
 {
   debug("KisView::insert_layer");
+}
+
+void KisView::insert_layer_image()
+{
+  debug("KisView::insert_layer_image");
   
   QString fileName;
 

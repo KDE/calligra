@@ -17,9 +17,9 @@ GradientDialog::GradientDialog( KisDoc *_doc, QWidget *_parent, const char *_nam
   setCaption( i18n( "Gradients" ) );
 
   QWidget *area = new QWidget( this, "GradientDialogArea" );
+  setBaseWidget( area );
 
-  //QGridLayout *layout = new QGridLayout( area, 7, 2, 5 );
-  QGridLayout *layout = new QGridLayout( area, 5, 2, 5 );
+  QGridLayout *layout = new QGridLayout( area, 7, 2, 5 );
 
   IntegerWidget *opacity = new IntegerWidget( 0, 100, area );
   opacity->setValue( 100 );
@@ -44,7 +44,6 @@ GradientDialog::GradientDialog( KisDoc *_doc, QWidget *_parent, const char *_nam
   QLabel *lblMode = new QLabel( mode, i18n( "Mode" ), area );
   layout->addWidget( lblMode, 2, 0 );
 
-/*
   QComboBox *blend = new QComboBox( false, area );
   blend->insertItem( i18n( "FG to BG (RGB)" ) );
   blend->insertItem( i18n( "FG to BG (HSV)" ) );
@@ -69,26 +68,20 @@ GradientDialog::GradientDialog( KisDoc *_doc, QWidget *_parent, const char *_nam
 
   QLabel *lblGradient = new QLabel( gradient, i18n( "Gradient" ), area );
   layout->addWidget( lblGradient, 4, 0 );
-*/
 
   QComboBox *repeat = new QComboBox( false, area );
   repeat->insertItem( i18n( "None" ) );
   repeat->insertItem( i18n( "Sawtooth wave" ) );
   repeat->insertItem( i18n( "Triangular wave" ) );
-  layout->addWidget( repeat, 3, 1 );
+  layout->addWidget( repeat, 5, 1 );
 
   QLabel *lblRepeat= new QLabel( repeat, i18n( "Repeat" ), area );
-  layout->addWidget( lblRepeat, 3, 0 );
+  layout->addWidget( lblRepeat, 5, 0 );
 
   layout->setColStretch( 1, 1 );
-  //layout->setRowStretch( 6, 1 );
-  layout->setRowStretch( 4, 1 );
-
-  //layout->activate();
-  //setBaseSize( area->sizeHint() );
-  area->setMinimumWidth( layout->sizeHint().width() );
+  layout->setRowStretch( 6, 1 );
   
-  setBaseWidget( area );
+  opacity->setMinimumWidth( gradient->sizeHint().width() );
 }
 
 GradientDialog::~GradientDialog()

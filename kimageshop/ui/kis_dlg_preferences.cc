@@ -34,7 +34,7 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )
 {
   // Layout
-  QGridLayout* grid = new QGridLayout( this, 2, 1, 7, 15);
+  QGridLayout* grid = new QGridLayout( this, 3, 1, 7, 15);
 
   // checkbutton
   m_saveOnExit = new QCheckBox( i18n( "Save and restore dialog geometries" ), this );
@@ -43,6 +43,8 @@ GeneralTab::GeneralTab( QWidget *_parent, const char *_name )
   // only for testing it
   KIntNumInput* i = new KIntNumInput( "a", 1, 100, 1, 1, QString::null, 10, true, this );
   grid->addWidget( i, 1, 0 );
+
+  grid->setRowStretch( 2, 1 );
 }
 
 bool GeneralTab::saveOnExit()
@@ -55,24 +57,26 @@ DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
 {
   QLabel* label;
 
-	// Layout
-  QGridLayout* grid = new QGridLayout( this, 4, 1, 7, 15);
+  // Layout
+  QGridLayout* grid = new QGridLayout( this, 5, 1, 7, 15);
 
-	// Inputline
-	m_pLineEdit = new QLineEdit( this, "tempDir" );
+  // Inputline
+  m_pLineEdit = new QLineEdit( this, "tempDir" );
   grid->addWidget( m_pLineEdit, 1, 0 );	
 
-	// Label
-	label = new QLabel( m_pLineEdit, i18n( "Directory for temporary files" ) , this );
-	grid->addWidget( label, 0, 0 );
+  // Label
+  label = new QLabel( m_pLineEdit, i18n( "Directory for temporary files" ) , this );
+  grid->addWidget( label, 0, 0 );
 
-	// Inputline
-	m_pLineEdit = new QLineEdit( this, "gimpGradientDir" );
+  // Inputline
+  m_pLineEdit = new QLineEdit( this, "gimpGradientDir" );
   grid->addWidget( m_pLineEdit, 3, 0 );	
 
-	// Label
-	label = new QLabel( m_pLineEdit, i18n( "Directory of GIMP gradients" ) , this );
-	grid->addWidget( label, 2, 0 );
+  // Label
+  label = new QLabel( m_pLineEdit, i18n( "Directory of GIMP gradients" ) , this );
+  grid->addWidget( label, 2, 0 );
+
+  grid->setRowStretch( 4, 1 );
 }
 
 UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
