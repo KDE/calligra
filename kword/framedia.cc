@@ -1502,6 +1502,7 @@ bool KWFrameDia::applyChanges()
 
             if( !doc->isOutOfPage( rect , frame->pageNum() ) ) {
                 frame->setRect( px, py, pw, ph );
+                frame->setFrameMargins( uLeft, uTop, uRight, uBottom);
                 doc->frameChanged( frame );
             } else {
                 KMessageBox::sorry( this,i18n("The frame will not be resized because the new size would be greater than the size of the page."));
