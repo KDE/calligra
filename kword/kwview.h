@@ -338,6 +338,8 @@ public slots:
 
     void editFootEndNote();
     void changeFootNoteType();
+    void savePicture();
+    void saveClipart();
 protected slots:
     void spellCheckerReady();
     void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
@@ -521,6 +523,10 @@ private:
 
     KAction *actionChangePicture;
     KAction *actionChangeClipart;
+
+    KAction *actionSavePicture;
+    KAction *actionSaveClipart;
+
     KAction *actionConfigureHeaderFooter;
     KToggleAction *actionInlineFrame;
 
