@@ -1569,6 +1569,7 @@ void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )
 	formulaEdit->getFormula()->setFont( font );
 	formulaEdit->getFormula()->setBackColor( frames.at( 0 )->getBackgroundColor().color() );
 	formulaEdit->getFormula()->setForeColor( color );
+	formulaEdit->getFormula()->makeDirty();
 	formulaEdit->redraw( TRUE );
     }
     update();
