@@ -3450,7 +3450,7 @@ void KWDocument::setTabStopValue ( double _tabStop )
 
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
-        frm->textDocument()->setTabStops( ptToLayoutUnitPt( _tabStop ));
+        frm->textDocument()->setTabStops( ptToLayoutUnitPixX( _tabStop ));
         frm->layout();
     }
     repaintAllViews();
