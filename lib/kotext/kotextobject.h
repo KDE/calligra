@@ -161,7 +161,7 @@ public:
     virtual ~KoTextObject();
 
 
-    void setNeedSpellCheck(bool b){ m_needsSpellCheck = b;}
+    void setNeedSpellCheck(bool b);
     bool needSpellCheck() const { return m_needsSpellCheck;}
     void setProtectContent(bool b) { m_protectContent = b; }
     bool protectContent() const{ return m_protectContent;}

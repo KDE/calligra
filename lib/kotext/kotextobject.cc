@@ -1843,6 +1843,13 @@ KCommand *KoTextObject::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _
     return cmd;
 }
 
+void KoTextObject::setNeedSpellCheck(bool b)
+{
+    m_needsSpellCheck = b;
+    KoTextDocument *textdoc = textDocument();
+    for (KoTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
+        parag->string()->setNeedsSpellCheck( b );
+}
 
 #ifndef NDEBUG
 void KoTextObject::printRTDebug(int info)

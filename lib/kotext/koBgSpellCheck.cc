@@ -125,7 +125,6 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
     }
     m_bgSpell.kspell->setIgnoreUpperWords( m_bDontCheckUpperWord );
     m_bgSpell.kspell->setIgnoreTitleCase( m_bDontCheckTitleCase );
-    // TODO 'ignore list' stuff
 
     if ( !needsWait )
         spellCheckerReady();
