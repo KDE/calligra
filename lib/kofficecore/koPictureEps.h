@@ -113,7 +113,7 @@ private:
      *   to skip an eventual Line Feed at the start of this line
      * @return the read line
      */
-    QString KoPictureEps::readLine( const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr );
+    QString readLine( const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr );
 
 private:
     /**
