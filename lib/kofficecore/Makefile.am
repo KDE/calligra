@@ -9,10 +9,10 @@ libkofficecore_la_LIBADD  = -lkparts ../koml/libkoml.la ../store/libkstore.la -l
 lib_LTLIBRARIES = libkofficecore.la
 
 libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.cc \
-	koFrame.cc koIMR.cc koStream.cc koQueryTrader.cc \
+	koFrame.cc koIMR.cc koStream.cc koFilterManager.cc \
 	koPrintExt.cc koMainWindow.cc koScanTools.cc \
 	koScanPlugins.cc koApplication.cc trader.cc \
-	koFilterManager.cc typerepo.cc
+	typerepo.cc koQueryTrader.cc
 
 include_HEADERS = koffice.h koView.h koFrame.h koIMR.h \
 	koStream.h koDocument.h koPrintExt.h koFactory.h \
