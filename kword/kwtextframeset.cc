@@ -3289,7 +3289,6 @@ void KWTextFrameSetEdit::keyReleaseEvent( QKeyEvent* e )
 
 void KWTextFrameSetEdit::imStartEvent( QIMEvent* e )
 {
-    kdDebug() << "FEFOIEJFOIEWFEWIJU" << endl;
     textView()->handleImStartEvent( e );
 }
 
