@@ -129,7 +129,7 @@ public:
     void setNewFrameBehavior( NewFrameBehavior nfb ) { m_newFrameBehavior = nfb; }
 
     /** Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset */
-    bool isCopy() { return m_bCopy; }
+    bool isCopy()const { return m_bCopy; }
     void setCopy( bool copy ) { m_bCopy = copy; }
 
     /** Data stucture methods */
@@ -199,13 +199,13 @@ public:
     void setBBottom( double b ) { bbottom = b; }
 
     /** get left margin size */
-    double bLeft() { return bleft; }
+    double bLeft()const { return bleft; }
     /** get right margin size */
-    double bRight() { return bright; }
+    double bRight()const { return bright; }
     /** get top margin size */
-    double bTop() { return btop; }
+    double bTop()const { return btop; }
     /** get bottom margin size */
-    double bBottom() { return bbottom; }
+    double bBottom()const { return bbottom; }
 
     /** returns a copy of self */
     KWFrame *getCopy();
@@ -218,7 +218,7 @@ public:
     void load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion );
 
     void setMinFrameHeight(double h) {m_minFrameHeight=h;}
-    double minFrameHeight(void) {return m_minFrameHeight;}
+    double minFrameHeight(void)const {return m_minFrameHeight;}
 
     /** Return if the point is on the frame.
         @param point the point in normal coordinates.

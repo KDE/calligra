@@ -85,3 +85,18 @@ double KWordFrameSetIface::ptPosY() const
 {
     return m_frame->frame(0)->normalize().y();
 }
+
+int KWordFrameSetIface::zOrder() const
+{
+    return m_frame->frame(0)->zOrder();
+}
+
+int KWordFrameSetIface::pageNum() const
+{
+    return m_frame->frame(0)->pageNum();
+}
+
+QBrush KWordFrameSetIface::backgroundColor() const
+{
+    return m_frame->frame(0)->backgroundColor();
+}

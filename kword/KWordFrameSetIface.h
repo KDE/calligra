@@ -25,6 +25,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
+#include <qbrush.h>
 class KWFrameSet;
 
 class KWordFrameSetIface :  virtual public DCOPObject
@@ -45,6 +46,9 @@ k_dcop:
     virtual double ptHeight() const;
     virtual double ptPosX() const;
     virtual double ptPosY() const;
+    virtual int zOrder() const;
+    virtual int pageNum() const;
+    virtual QBrush backgroundColor() const;
 
 private:
     KWFrameSet *m_frame;
