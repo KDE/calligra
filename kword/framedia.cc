@@ -1711,7 +1711,6 @@ bool KWFrameDia::applyChanges()
             KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Text Frame"), frame) ;
             macroCmd->addCommand(cmd);
         }
-
         if(!isNewFrame && (frameCopy->isCopy()!=frame->isCopy()
                            || frameCopy->frameBehavior()!=frame->frameBehavior()
                            || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
@@ -1775,7 +1774,7 @@ bool KWFrameDia::applyChanges()
                 macroCmd->addCommand(cmd);
                 cmd->execute();
             }
-            if ( frameSetProtectedSize != protectSize->isChecked() )
+            if ( parentFs->isProtectSize() != protectSize->isChecked() )
             {
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Protect Size") );
