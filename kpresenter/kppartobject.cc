@@ -156,23 +156,22 @@ void KPPartObject::paint( QPainter *_painter )
 /*================================================================*/
 void KPPartObject::activate( QWidget *_widget, int diffx, int diffy )
 {
-    if ( !frame )
-    {
+    if ( !frame ) {
 	frame = new KPresenterFrame( dynamic_cast<KPresenterView*>( _widget ), child );
 	frame->attachView( view );
 	frame->show();
     }
     frame->setGeometry( orig.x() - diffx + 20, orig.y() - diffy + 20, ext.width(), ext.height() );
     frame->view()->mainWindow()->setActivePart( frame->view()->id() );
-
+    frame->setFocus();
+    
     parentID = dynamic_cast<KPresenterView*>( _widget )->getID();
 }
 
 /*================================================================*/
 void KPPartObject::deactivate()
 {
-    if ( frame )
-    {
+    if ( frame ) {
 	frame->view()->mainWindow()->setActivePart( parentID );
 	// HACK!
 	frame->setGeometry( -10, -10, 1, 1 );
