@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <dirent.h>    
+#include <dirent.h>
 #include <sys/stat.h>
 
 #include <ksimpleconfig.h>
@@ -43,18 +43,18 @@
 QList<KoToolEntry> KoToolEntry::findTools( const QString &_mime_type )
 {
   QList<KoToolEntry> lst;
-  
+
   KTrader *trader = KdedInstance::self()->ktrader();
   KActivator *activator = KdedInstance::self()->kactivator();
 
   QString mime = _mime_type;
- 
+
 //  cerr << "mimetype = "<< mime.ascii() << endl;
 //  cerr << "constr = " << QString("'%1' in ServiceTypes").arg( mime ).ascii() << endl;
-  
+
 //  KTrader::OfferList offers = trader->query( "KOfficeTool", QString("'%1' in ServiceTypes").arg( mime ) );
   KTrader::OfferList offers = trader->query( "KOfficeTool" );
-  
+
   KTrader::OfferList::ConstIterator it = offers.begin();
   for (; it != offers.end(); ++it )
   {
@@ -68,9 +68,9 @@ QList<KoToolEntry> KoToolEntry::findTools( const QString &_mime_type )
 
     if ( mimeTypes.find( _mime_type ) == mimeTypes.end() )
       continue;
-    
+
     //strip off tag
-    QString repoId = (*it)->repoIds().getFirst();
+    QString repoId = *( (*it)->repoIds().begin() );
     QString tag = (*it)->name();
     int tagPos = repoId.findRev( "#" );
     if ( tagPos != -1 )
@@ -78,12 +78,12 @@ QList<KoToolEntry> KoToolEntry::findTools( const QString &_mime_type )
       tag = repoId.mid( tagPos+1 );
       repoId.truncate( tagPos );
     }
-    
+
     CORBA::Object_var obj = activator->activateService( name, repoId, tag );
-    
+
     lst.append( new KoToolEntry( name, comment, mimeTypes, commands, commandsI18N, obj ) );
   }
-  
+
   return lst;
 }
 
@@ -99,7 +99,7 @@ KoToolEntry::KoToolEntry( const QString &_name, const QString &_comment, const Q
   m_vRef = CORBA::Object::_duplicate( _ref );
 }
 
-bool KoToolEntry::supports( const QString &_mime_type ) 
+bool KoToolEntry::supports( const QString &_mime_type )
 {
   return ( m_strlstMimeTypes.find( _mime_type ) != m_strlstMimeTypes.end() );
 }

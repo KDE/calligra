@@ -122,7 +122,7 @@ void KoPluginProxy::cleanUp()
   for( ; it.current() != 0L; ++it )
     CORBA::release( it );
   m_lstMenuBarCallbacks.clear();
-  
+
   delete m_pEntry;
 }
 
@@ -132,7 +132,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
     return KOM::Plugin::_duplicate( m_vPlugin );
 
   CORBA::Object_var obj = m_pEntry->ref();
-  
+
   KOM::PluginFactory_var factory = KOM::PluginFactory::_narrow( obj );
   if ( CORBA::is_nil( factory ) )
   {
@@ -174,48 +174,48 @@ KoPluginManager::KoPluginManager()
     //HACK
     QString miniIcon = (*it)->icon();
     QString comment = (*it)->comment();
-    
+
     QStringList menuEntriesList = (*it)->property( "MenuEntries" )->stringListValue();
     QStringList toolBarEntriesList = (*it)->property( "ToolBarEntries" )->stringListValue();
-    
-    QString repoId = (*it)->repoIds().getFirst();
+
+    QString repoId = *( (*it)->repoIds().begin() );
     QString tag = (*it)->name();
     int tagPos = repoId.findRev( "#" );
     if ( tagPos != -1 )
     {
       tag = repoId.mid( tagPos+1 );
       repoId.truncate( tagPos );
-    }      
-    
+    }
+
     CORBA::Object_var obj = activator->activateService( (*it)->name(), repoId, tag );
-    
+
     KoPluginEntry *plugin = new KoPluginEntry( (*it)->name(), comment, icon,
                                                miniIcon, true, obj );
-					      
+					
     QStringList::ConstIterator it2 = menuEntriesList.begin();
     for (; it2 != menuEntriesList.end(); ++it2 )
     {
       KoPluginEntry::Entry e;
-      
+
       e.m_strName = *(it2++);
       e.m_strIcon = *(it2++);
       e.m_strMiniIcon = *(it2++);
       e.m_strSlot = *it2;
-      
+
       plugin->addMenuEntry( e );
     }
-    
+
     it2 = toolBarEntriesList.begin();
     for (; it2 != toolBarEntriesList.end(); ++it2 )
     {
       KoPluginEntry::Entry e;
-      
+
       e.m_strName = *(it2++);
       e.m_strIcon = *(it2++);
       e.m_strMiniIcon = *(it2++);
       e.m_strSlot = *(it2++);
       e.m_strMenu = *it2;
-      
+
       plugin->addToolBarEntry( e );
     }
 
