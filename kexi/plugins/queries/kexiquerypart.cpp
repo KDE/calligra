@@ -113,7 +113,7 @@ void KexiQueryPart::initInstanceActions()
 
 	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check Query"), "test_it", 
 		CTRL|Key_Return, "querypart_check_query");
-	a->setToolTip(i18n("Check query"));
+	a->setToolTip(i18n("Check Query"));
 	a->setWhatsThis(i18n("Checks query for validity."));
 
 	a = createSharedToggleAction(

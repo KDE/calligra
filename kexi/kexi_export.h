@@ -188,7 +188,7 @@
 
 
 /* -- compile-time settings -- */
-#ifdef Q_WS_WIN
+#if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
 /* defined in a .pro file */
 #else
 
@@ -214,11 +214,12 @@
 # define KEXI_SHOW_UNIMPLEMENTED 
 # define KEXI_STARTUP_SHOW_TEMPLATES 
 # define KEXI_STARTUP_SHOW_RECENT
-# define KEXI_SERVER_SUPPORT KEXI_FORMS_SUPPORT
+# define KEXI_SERVER_SUPPORT
+# define KEXI_FORMS_SUPPORT
+#endif
 
 /* additional default options */
 # define KDE_CXXFLAGS
 # define DKEXI_NO_CTXT_HELP
-#endif
 
 #endif //KEXI_EXPORT_H
