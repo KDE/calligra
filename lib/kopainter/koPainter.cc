@@ -40,7 +40,7 @@ void KoPainter::fillAreaRGB(const QRect &r, const KoColor &c)
   QRgb a;
   for(int y = r.top(); y <= r.bottom(); y++)
   {
-    QRgb *ptr = static_cast<QRgb *>(mBuffer->scanLine(y));
+    QRgb *ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
   }
 }
 
