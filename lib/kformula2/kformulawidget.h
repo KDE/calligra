@@ -21,6 +21,7 @@
 #ifndef __KFORMULAWIDGET_H
 #define __KFORMULAWIDGET_H
 
+#include <qdom.h>
 #include <qwidget.h>
 
 class FormulaCursor;
@@ -55,6 +56,11 @@ private:
 
     KFormulaContainer* document;
     FormulaCursor* cursor;
+
+    /**
+     * This isn't meant to last.
+     */
+    QDomDocument clipboard;
 };
 
 #endif // __KFORMULAWIDGET_H

@@ -185,6 +185,12 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
                 case Qt::Key_R:
                     document->replaceElementWithMainChild(cursor, BasicElement::beforeCursor);
                     break;
+                case Qt::Key_C:
+                    clipboard = cursor->copy();
+                    break;
+                case Qt::Key_V:
+                    cursor->paste(clipboard);
+                    break;
                 default:
                     //cerr << "Key: " << event->key() << endl;
                     break;

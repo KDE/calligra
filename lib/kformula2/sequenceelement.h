@@ -189,6 +189,18 @@ public:
     virtual QDomElement getElementDom(QDomDocument *doc);
     virtual bool buildFromDom(QDomElement *elem);
 
+    /**
+     * Stores the given childrens dom in the element.
+     */
+    void getChildrenDom(QDomDocument& doc, QDomElement& elem, uint from, uint to);
+    
+    /**
+     * Builds elements from the given node and its siblings and
+     * puts them into the list.
+     * Returns false if an error occures.
+     */
+    bool buildChildrenFromDom(QList<BasicElement>& list, QDomNode n);
+    
     
     // debug
     virtual ostream& output(ostream&);

@@ -579,10 +579,7 @@ QDomElement SequenceElement::getElementDom(QDomDocument *doc)
     de.appendChild(BasicElement::getElementDom(doc));
     
     uint count = children.count();
-    for (uint i = 0; i < count; i++) {
-        QDomElement tmpEleDom=children.at(i)->getElementDom(doc);
-	de.appendChild(tmpEleDom);
-    }
+    getChildrenDom(*doc, de, 0, count);
     return de;
 }
 
@@ -611,6 +608,30 @@ bool SequenceElement::buildFromDom(QDomElement *elem)
     n = n.nextSibling();
 
     // read content
+    return buildChildrenFromDom(children, n);
+}
+
+
+/**
+ * Stores the given childrens dom in the element.
+ */
+void SequenceElement::getChildrenDom(QDomDocument& doc, QDomElement& elem,
+                                     uint from, uint to)
+{
+    for (uint i = from; i < to; i++) {
+        QDomElement tmpEleDom=children.at(i)->getElementDom(&doc);
+	elem.appendChild(tmpEleDom);
+    }
+}
+
+
+/**
+ * Builds elements from the given node and its siblings and
+ * puts them into the list.
+ * Returns false if an error occures.
+ */
+bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n)
+{
     while (!n.isNull()) {
         if (n.isElement()) {
             QDomElement e = n.toElement();
@@ -634,13 +655,13 @@ bool SequenceElement::buildFromDom(QDomElement *elem)
             if (child != 0) {
                 child->setParent(this);
                 if (child->buildFromDom(&e)) {
-                    children.append(child);
+                    list.append(child);
                 }
                 else {
                     delete child;
                     return false;
                 }
-            }  
+            }
         }
         n = n.nextSibling();
     }

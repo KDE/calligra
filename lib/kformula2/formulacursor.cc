@@ -501,6 +501,47 @@ void FormulaCursor::formulaLoaded(FormulaElement* rootElement)
     setSelection(false);
 }
 
+/**
+ * Stores the currently selected elements inside a dom.
+ */
+QDomDocument FormulaCursor::copy()
+{
+    QDomDocument doc("KFORMULA");
+    QDomElement de = doc.createElement("KFORMULACOPY");
+    doc.appendChild(de);
+    if (isSelection()) {
+        SequenceElement* sequence = getNormal();
+        if (sequence != 0) {
+            sequence->getChildrenDom(doc, de, getSelectionStart(), getSelectionEnd());
+        }
+        else {
+            // This must never happen.
+            qFatal("A not normalized cursor is selection in.");
+        }
+    }
+    return doc;
+}
+
+/**
+ * Inserts the content from the tree at the current position.
+ */
+bool FormulaCursor::paste(QDomDocument doc)
+{
+    SequenceElement* sequence = getNormal();
+    if (sequence != 0) {
+        QList<BasicElement> list;
+        list.setAutoDelete(true);
+        QDomNode n = doc.firstChild();
+        if (n.isElement()) {
+            QDomElement e = n.toElement();
+            if (sequence->buildChildrenFromDom(list, e.firstChild())) {
+                insert(list);
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 /**
  * Creates a new CursorData object that describes the cursor.

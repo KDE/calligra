@@ -232,7 +232,16 @@ public:
      * if there is non.
      */
     SymbolElement* getActiveSymbolElement();
-    
+
+    /**
+     * Stores the currently selected elements inside a dom.
+     */
+    QDomDocument copy();
+
+    /**
+     * Inserts the content from the tree at the current position.
+     */
+    bool paste(QDomDocument doc);
     
     // undo/redo support
     
