@@ -83,7 +83,7 @@ public:
     Private() :
         m_dcopObject( 0L ),
         filterManager( 0L ),
-        haventTriedSaving( true ),
+        m_confirmNonNativeSave( true ),
         m_specialOutputFlag( 0 ),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
@@ -110,7 +110,7 @@ public:
 
     QCString mimeType; // The actual mimetype of the document
     QCString outputMimeType; // The mimetype to use when saving
-    bool haventTriedSaving; // used to pop up a dialog when saving for the first time where the file is in a foreign format
+    bool m_confirmNonNativeSave; // used to pop up a dialog when saving for the first time if the file is in a foreign format
     int m_specialOutputFlag; // See KoFileDialog in koMainWindow.cc
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
@@ -353,7 +353,7 @@ bool KoDocument::saveFile()
     if ( ret )
     {
         d->mimeType = outputMimeType;
-        d->haventTriedSaving = false;
+        d->m_confirmNonNativeSave = false;
     }
 
     return ret;
@@ -380,9 +380,9 @@ int KoDocument::specialOutputFlag() const
     return d->m_specialOutputFlag;
 }
 
-bool KoDocument::haventTriedSaving() const
+bool KoDocument::confirmNonNativeSave() const
 {
-    return d->haventTriedSaving;
+    return d->m_confirmNonNativeSave;
 }
 
 void KoDocument::setCheckAutoSaveFile( bool b )
@@ -1206,13 +1206,13 @@ bool KoDocument::openFile()
             guiFactory->addClient( this );
     }
 
-    if ( ok ) d->mimeType = typeName.latin1 ();
+    if ( ok )
+    {
+        d->mimeType = typeName.latin1 ();
 
-    // We decided not to save in the file's original format by default
-    // ( KWord isn't a text editor or a MSWord editor :)
-    // The risk of losing formatting information is too high currently.
-    d->outputMimeType = _native_format;
-    if ( ok ) d->haventTriedSaving = typeName.latin1() != _native_format;
+        d->outputMimeType = d->mimeType;
+        d->m_confirmNonNativeSave = d->mimeType != _native_format;
+    }
 
     return ok;
 }

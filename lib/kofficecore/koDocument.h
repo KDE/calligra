@@ -183,7 +183,17 @@ public:
     QCString outputMimeType() const;
     int specialOutputFlag() const;
 
-    bool haventTriedSaving() const;
+    /**
+     * Returns true if this document was the result of opening a foreign
+     * file format and if the user hasn't yet saved the document (in any
+     * format).
+     *
+     * Used by KoMainWindow to warn the user when s/he lazily presses
+     * CTRL+S to save in the same foreign format, putting all his/her
+     * formatting at risk (normally an export confirmation only comes up
+     * with Save As).
+     */
+    bool confirmNonNativeSave() const;
 
     /**
      * Sets the error message to be shown to the user (use i18n()!)
