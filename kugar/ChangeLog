@@ -1,122 +1,66 @@
 2003-03-22 Alexander Dymo <cloudtemple@mksat.net>
-	* kugar: qt only version of the designer and preliminary version of shell added
-	* lib: fixes for qt-only compilation, thanks to Joris Marcillac <joris@marcillac.com>
+	* kugar:
+	Qt only version of the designer and preliminary version of shell added to the repository.
+	Qt only versions aren't compiled with kde. They should be compiled by hand using
+	qmake kugar.pro
+	QMake and automake coexist normally;)
+	Qt only Kugar Designer and shell do not support KOffice zipped xml files
+	Preliminary qt-shell is written by Joris Marcillac <joris@marcillac.com>
+	* lib:
+	Fixes for qt-only compilation, thanks to Joris Marcillac <joris@marcillac.com>
 
 2003-03-16 Alexander Dymo <cloudtemple@mksat.net>
-	* kudesigner: code reorganization
+	* kudesigner:
+	Code reorganization to make it more modular
 
-2003-02-00 Joseph Wenninger <jowenn@jowenn.at> (entry added by Alexander Dymo)
-	* kudesigner: ui enhancements and bugfixes, plugin architecture for property editors
-	* part: part is now a KOffice part, old shell disabled, new part-based shell is ready to use
+2003-02-25 Joseph Wenninger <jowenn@jowenn.at>
+	* part:
+	 1) Don't crash anymore if a template file can't be loaded
+	 2) Support kudesigner koStore template files (That's a littlebit hacky.
+	    Once ku{gar|designer} supports images the loading has to be redone a littlebit, but for now it works
+	 3) Relative template pathes are now relative to the data file, not to the current working directory
+
+2003-01-25 Joseph Wenninger <jowenn@jowenn.at> 
+	* kudesigner:
+	Canvas Bands can now be resized with the mouse
+	Changed resizehandle paint code. They are painted above all items now.
+	Changed mouse <-> resize handle interaction. 
+	If the resizehandle is displayed partly above an item which has a higher z-order 
+	than the item they belong too, a resize operation is still triggerd. 
+	That makes section resizeable, if they have a report item in the middle which fills the whole height
+
+2003-01-21 Joseph Wenninger <jowenn@jowenn.at> 
+	* kudesigner: 
+	1) Let a plugin access the property, it should create a editor for.
+	   There is a new type enum UserDefined, which should mark the beginning of user defineable property types.
+	   If there is no custom editor created, user defined types will show a lineedit.
+	2) Now all resize grips works for report items.
+	3) Support for properties, which should not be saved into the kugar template file
+
+2003-01-19 Joseph Wenninger <jowenn@jowenn.at> 
+	* kudesigner:
+	Pluggable property editors, bands are now resizable with the property editor
+	
+2003-01-16 Joseph Wenninger <jowenn@jowenn.at> 
+	* kudesigner: 
+	Now it is ensured, that items can't be moved out of ther section or resized to be larger than a section.
 
 2003-01-03 Alexander Dymo <cloudtemple@mksat.net>
-	* kudesigner: many visual editors for properties created - font and color combos, etc.
+	* kudesigner:
+	Many visual editors for properties created - font and color combos, etc.
 	
 2002-12-29 Alexander Dymo <cloudtemple@mksat.net>
-	* kudesigner: property editing in designer is coming back
+	* kudesigner:
+	Property editing in designer is coming back with the new Property Editor widget
+	
+2002-11-23 Joseph Wenninger <jowenn@jowenn.at> 
+	* part:
+	Part is now a KOffice part, old shell disabled, new part-based shell is ready to use
 
 2002-09-22 Alexander Dymo <cloudtemple@mskat.net>
-	* kudesigner: porting to KoDocument/KoFactory/KoView/KoAcclication started
+	* kudesigner:
+	Porting to KoDocument/KoFactory/KoView/KoAcclication started
 
 2002-09-20 Alexander Dymo <cloudtemple@mksat.net>
-	* lib: transparency for labels/fields/specials/calcfields added (gui property does not exists yet)
+	* lib: Transparency for labels/fields/specials/calcfields added (gui property does not exists yet)
 
-
-*************************
-VERSION 1.2
-*************************
-
-Changes:
-
- 1. GUI Report Designer is added (kudesigner)
-    Qt version of designer can be found in maintainer's web site
-    http://www.cloudtemple.mksat.net
-
- 2. Users can add as many detail bands to the report as needed,
-    this can be useful if we print report with data, arranged according
-    the master-detail relationship.
-    For example, now Kugar's
-    Detail Level="0" -> Detail Level="1" -> Detail Level="2"
-    corresponds to many commertial report engines'
-    Master -> Detail -> Subdetail
-
- 3. Any detail of any level can now have detail header and detail footer
-
- 4. Added DDMMYY_PERIOD (e.g. 25.02.02)
-    and DDMMYYYY_PERIOD (e.g. 25.02.2002) date type output formats
-    for Fields, Specials and CalculatedFields.
-    They have numbers 11 and 12 to use in a report template.
-
- 5. Report engine is now completely Qt-based. Any use of KDE classes were
-    removed and replaced with their Qt analogs (KPrinter -> QPrinter,
-    KMessageBox -> QMessageBox)
-
- 6. KReportViewer class is added to Kugar lib - it uses KMessageBox and
-    KPrinter classes.
-    kugar.h now references to kreportviewer.h
-    Qt users should include kugarqt.h that references to mreportviewr.h
-
-
-*************************
-VERSION 1.0
-*************************
-
-Changes:
-
- 1. Change the documentation to reflect the new maintainer and web site.
- 2. Renamed the whole package.
- 3. Switched from the Apache Xerces XML Parser to the parser included with Qt
-    v2.2.0.
- 4. Converted the reportviewer to being a KPart.
- 5. Extended the data DTD to include a prefered template.
- 6. The template can be specified as a URL.
-
-
-*************************
-VERSION 0.2
-*************************
-
-Changes:
-
- 1. Added new class MLineObject for drawing simple lines on a report.
- 2. Moved metaphrast code to a seperate dir and added code to create a shared
-    library.
- 3. Switched from IBM XML4C to Apache Xerces XML Parser. Not using ICU, just
-    native transcoding.
- 4. Added command line switches to the viewer utility.
- 5. Added support for formatting negative numbers with a user defined color.
- 6. Added currency data type to field and calc objects.
- 7. Added support for formatting numbers.
- 8. Added support for formatting dates. To format dates, the field type must be
-    defined as a date and the date string in the data file must be in
-    mm/dd/yyyy or mm-dd-yyyy format.
- 9. Fixed bug that added an empty page to the end of a report.
-10. Added a progress dialog to MReportViewer for printing. User can now cancel
-    a print job.
-11. Added code to MReportViewer to allow printing of selected pages.
-12. Added code to MReportViewer to print multiple copies. QPrinter does not
-    appear to handle this correctly.
-13. Added code to MReportViewer to print reverse page order.
-14. Added method getRenderSteps() to MReportEngine, returns count of rendering
-    steps required to process the report.  Convenience funtion for UI progress
-    indicators.
-15. Added signal signalRenderStatus(int) to MReportEngine to track rendering
-    progress.  Convenience funtion for UI progress indicators.
-16. Added public slot cancelRendering() to MReportEngine to cancel report
-    rendering.
-17. Added a progress dialog for report rendering to MReportViewer.  User can
-    now cancel report processing.
-18. Changed rendering code to draw at absolute y position. Previous version
-    used to subtract 1 from the y pos so that bordered fields would not have
-    double borders on one side.  Existing reports that used bordered fields in
-    this way will need to be modified, shrink the height of the report section
-    by one - the bordered fields will still form a grid (see samplereport1.xml).
-19. Added clear functions to report sections so the report engine can clear
-    existing formatting data before setting a new report template.
-
-
-*************************
-VERSION 0.1 
-*************************
-
-First release
