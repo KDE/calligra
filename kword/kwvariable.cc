@@ -240,9 +240,30 @@ void KWFootNoteVariable::move( int x, int y )
             kdDebug(32001) << "Footnote var at page " << varPage << ", footnote frame at page " << framePage << " -> recalcFrames()" << endl;
             fs->kWordDocument()->recalcFrames( QMIN( varPage, framePage ), -1 );
         }
+
+        // TODO handle the case where dPoint is too far down to be on top of the associated footnote.... somehow
     } else
     {
         // This can happen if the page hasn't been created yet
         //kdDebug(32001) << "KWFootNoteVariable::move internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
     }
+}
+
+void KWFootNoteVariable::setDeleted( bool del )
+{
+    if ( del )
+    {
+        Q_ASSERT( m_frameset );
+        if ( m_frameset ) {
+            m_frameset->deleteAllFrames();
+            m_frameset->setVisible( false );
+        }
+    }
+    else
+    {
+        Q_ASSERT( m_frameset );
+        if ( m_frameset )
+            m_frameset->setVisible( true );
+    }
+    m_doc->recalcFrames(); // hmm, maybe compress such requests and do only once?
 }

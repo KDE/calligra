@@ -2206,7 +2206,8 @@ void KWTextFrameSet::renumberFootNotes()
         }
         if ( changed )
         {
-            var->frameSet()->setName( i18n("Footnote %1").arg( var->text() ) );
+            if ( var->frameSet() ) //safety
+                var->frameSet()->setName( i18n("Footnote %1").arg( var->text() ) );
             var->paragraph()->invalidate(0);
             var->paragraph()->setChanged( true );
             needRepaint = true;

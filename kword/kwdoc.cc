@@ -680,12 +680,15 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
     for ( ; fnfsIt.current() ; ++fnfsIt )
     {
         KWFootNoteFrameSet* fnfs = fnfsIt.current();
-        KWFrame* frame = fnfs->getNumFrames() > 0 ? fnfs->frame(0) : 0L;
-        int pageNum = frame ? frame->pageNum() : 0;
-        headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                     fnfs, pageNum, pageNum /*TODO overflows*/,
-                                     m_pageHeaderFooter.ptFooterBodySpacing, // do we need another var?
-                                     KWFrameLayout::HeaderFooterFrameset::All ) );
+        if ( fnfs->isVisible() ) // false when the footnote has been deleted
+        {
+            KWFrame* frame = fnfs->getNumFrames() > 0 ? fnfs->frame(0) : 0L;
+            int pageNum = frame ? frame->pageNum() : 0;
+            headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                         fnfs, pageNum, pageNum /*TODO overflows*/,
+                                         m_pageHeaderFooter.ptFooterBodySpacing, // do we need another var?
+                                         KWFrameLayout::HeaderFooterFrameset::All ) );
+        }
     }
 
     if ( m_processingType == WP ) { // In WP mode the pages are created automatically. In DTP not...

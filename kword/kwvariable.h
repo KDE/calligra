@@ -134,6 +134,8 @@ public:
     // Called whenever this item is being moved by the text formatter
     virtual void move( int x, int y );
 
+    virtual void setDeleted( bool del );
+
 private:
     KWDocument *m_doc;
     NoteType m_noteType;
