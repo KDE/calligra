@@ -102,7 +102,7 @@
 #include <koInsertLink.h>
 #include <koAutoFormatDia.h>
 #include <koparagcounter.h>
-
+#include <koParagDia.h>
 
 #include <kspell.h>
 
@@ -2466,6 +2466,10 @@ void KPresenterView::setupActions()
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
+
+    actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Key_P,
+                                     this, SLOT( formatParagraph() ),
+                                     actionCollection(), "format_paragraph" );
 }
 
 void KPresenterView::textSubScript()
@@ -2529,6 +2533,7 @@ void KPresenterView::objectSelectedChanged()
     actionInsertSpecialChar->setEnabled(edit && isText);
     actionInsertLink->setEnabled(edit && isText);
     actionEditFind->setEnabled(isText && edit);
+    actionFormatParag->setEnabled(isText && edit);
 
     state=state || isText;
     actionEditCopy->setEnabled(state);
@@ -3885,6 +3890,155 @@ void KPresenterView::spellCheckerFinished()
 void KPresenterView::showCounter( KoParagCounter &c )
 {
     actionTextTypeUnsortList->setChecked( c.numbering() == KoParagCounter::NUM_LIST );
+}
+
+void KPresenterView::formatParagraph()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if (edit)
+    {
+        //FIXME : KWUnit::U_MM unit
+        KoParagDia *paragDia = new KoParagDia( this, "",
+                                               KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
+                                               KoParagDia::PD_BORDERS |
+                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, KWUnit::U_MM/*m_doc->getUnit()*//*,edit->textFrameSet()->getFrame(0)->width()*/ );
+        paragDia->setCaption( i18n( "Paragraph settings" ) );
+
+        // Initialize the dialog from the current paragraph's settings
+        KoParagLayout lay = static_cast<KoTextParag *>(edit->cursor()->parag())->paragLayout();
+        paragDia->setParagLayout( lay );
+#if 0
+        // Set initial page and initial tabpos if necessary
+        if ( initialPage != -1 )
+        {
+            paragDia->setCurrentPage( initialPage );
+            if ( initialPage == KoParagDia::PD_TABS )
+                paragDia->tabulatorsWidget()->setCurrentTab( initialTabPos );
+        }
+#endif
+        if(!paragDia->exec())
+            return;
+        KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph settings" ) );
+        KCommand *cmd=0L;
+        bool changed=false;
+        if(paragDia->isLeftMarginChanged())
+        {
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+#if 0
+            m_gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
+#endif
+        }
+
+        if(paragDia->isRightMarginChanged())
+        {
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+            //m_gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
+        }
+        if(paragDia->isSpaceBeforeChanged())
+        {
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+        if(paragDia->isSpaceAfterChanged())
+        {
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginBottom, paragDia->spaceAfterParag() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+        if(paragDia->isFirstLineChanged())
+        {
+            cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+            /*m_gui->getHorzRuler()->setFirstIndent(
+              KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );*/
+        }
+
+        if(paragDia->isAlignChanged())
+        {
+            cmd=edit->setAlignCommand( paragDia->align() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+        if(paragDia->isCounterChanged())
+        {
+            cmd=edit->setCounterCommand( paragDia->counter() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+        if(paragDia->listTabulatorChanged())
+        {
+            cmd=edit->setTabListCommand( paragDia->tabListTabulator() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+
+        if(paragDia->isLineSpacingChanged())
+        {
+            cmd=edit->setLineSpacingCommand( paragDia->lineSpacing() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+        if(paragDia->isBorderChanged())
+        {
+            cmd=edit->setBordersCommand( paragDia->leftBorder(), paragDia->rightBorder(),
+                              paragDia->topBorder(), paragDia->bottomBorder() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+        if ( paragDia->isPageBreakingChanged() )
+        {
+#if 0
+            cmd=edit->setPageBreakingCommand( paragDia->pageBreaking() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+#endif
+        }
+        if(changed)
+            m_pKPresenterDoc->addCommand(macroCommand);
+        else
+            delete macroCommand;
+        delete paragDia;
+    }
+
 }
 
 #include <kpresenter_view.moc>

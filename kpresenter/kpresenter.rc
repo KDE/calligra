@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="16">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="17">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -74,6 +74,7 @@
  </Menu>
  <Menu name="Text"><text>Te&amp;xt</text>
   <Action name="text_font"/>
+  <Action name="format_paragraph"/>
   <Action name="text_color"/>
   <Action name="text_settings"/>
   <Separator/>

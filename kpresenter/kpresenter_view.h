@@ -265,6 +265,8 @@ public slots:
 
     void alignChanged( int );
 
+    void formatParagraph();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -648,6 +650,7 @@ private:
 
     KAction* actionInsertSpecialChar;
     KAction *actionInsertLink;
+    KAction *actionFormatParag;
 
 
     QTimer automaticScreenPresSpeed;
