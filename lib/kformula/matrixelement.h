@@ -164,6 +164,8 @@ public:
      */
     virtual QString toLatex();
 
+    virtual QString formulaString();
+
     uint getRows() { return content.count(); }
     uint getColumns() { return content.at(0)->count(); }
 

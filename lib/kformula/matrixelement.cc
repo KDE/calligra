@@ -792,4 +792,22 @@ QString MatrixElement::toLatex()
     return matrix;
 }
 
+QString MatrixElement::formulaString()
+{
+    QString matrix = "[";
+    uint cols=getColumns();
+    uint rows=getRows();
+    for (uint r = 0; r < rows; r++) {
+        matrix += "[";
+        for (uint c = 0; c < cols; c++) {
+            matrix+=getElement(r, c)->formulaString();
+	    if ( c < cols-1 ) matrix+=", ";
+        }
+        matrix += "]";
+    	if ( r < rows-1 ) matrix += ", ";
+    }
+    matrix += "]";
+    return matrix;
+}
+
 KFORMULA_NAMESPACE_END

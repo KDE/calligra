@@ -393,4 +393,9 @@ QString BracketElement::latexString(char type)
     return ".";
 }
 
+QString BracketElement::formulaString()
+{
+    return "(" + content->formulaString() + ")";
+}
+
 KFORMULA_NAMESPACE_END

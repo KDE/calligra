@@ -174,6 +174,8 @@ public:
      */
     QString texString();
 
+    QString formulaString();
+
     /**
      * Tries to read a formula string from the other lib.
      */
@@ -297,6 +299,11 @@ public:
     void paste();
 
     /**
+     * Insert data from the document.
+     */
+    void paste( QDomDocument document, QString desc );
+
+    /**
      * Copy the current selection to the clipboard.
      */
     void copy();
@@ -321,11 +328,6 @@ private:
      * Emits a signal if the cursor had moved.
      */
     void checkCursor();
-
-    /**
-     * Insert data from the document.
-     */
-    void paste( QDomDocument document, QString desc );
 
     /**
      * @returns true if there is a cursor that is allowed to edit the formula.

@@ -22,23 +22,26 @@ class KPrinter;
 
 #include <qpainter.h>
 #include <qpopupmenu.h>
+#include <qtextedit.h>
 
 #include <kaction.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <klocale.h>
 #include <kstdaction.h>
 //#include <kglobal.h>
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
 
+#include "formulastring.h"
+#include "fsparser.h"
+#include "kfconfig.h"
 #include "kformula_doc.h"
 #include "kformula_factory.h"
 #include "kformula_view.h"
-#include "kformulawidget.h"
-#include "kfconfig.h"
-
 #include "kformula_view_iface.h"
+#include "kformulawidget.h"
 
 
 KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const char* _name)
@@ -118,6 +121,10 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 //     connect(actionElement_Text_Under, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
 
 
+    formulaStringAction = new KAction( i18n( "Edit Formula String..." ),
+                                       0,
+                                       this, SLOT( formulaString() ),
+                                       actionCollection(), "formula_formulastring" );
     // notify on cursor change
     connect(formulaWidget, SIGNAL(cursorChanged(bool, bool)),
             this, SLOT(cursorChanged(bool, bool)));
@@ -140,9 +147,6 @@ DCOPObject* KFormulaPartView::dcopObject()
 
 void KFormulaPartView::focusInEvent(QFocusEvent*)
 {
-    // After saving the focus doesn't come back to the formulaWidget
-    // so the cursor is not shown. (very bad)
-    //cerr << "KFormulaPartView::focusInEvent(QFocusEvent*)\n";
     formulaWidget->setFocus();
 }
 
@@ -199,6 +203,18 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
         int x = formulaWidget->getCursorPoint().x();
         int y = formulaWidget->getCursorPoint().y();
         scrollview->ensureVisible(x, y);
+    }
+}
+
+void KFormulaPartView::formulaString()
+{
+    FormulaString dia( this );
+    dia.textWidget->setText( document()->getFormula()->formulaString() );
+    if ( dia.exec() ) {
+        FormulaStringParser parser( document()->getDocument()->getSymbolTable(), dia.textWidget->text() );
+        QDomDocument formula = parser.parse();
+        formulaView()->slotSelectAll();
+        document()->getFormula()->paste( formula, i18n( "Read Formula String" ) );
     }
 }
 

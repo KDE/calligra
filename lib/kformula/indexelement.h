@@ -227,6 +227,9 @@ public:
      */
     virtual QString toLatex();
 
+    // the upper right index is the only one we show
+    virtual QString formulaString();
+
 protected:
 
     //Save/load support

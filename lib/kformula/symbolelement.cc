@@ -749,4 +749,23 @@ QString SymbolElement::toLatex()
     return sym;
 }
 
+QString SymbolElement::formulaString()
+{
+    QString sym;
+    switch ( symbol.getType() ) {
+    case 1001:
+        sym="int(";
+	break;
+    case 1002:
+        sym="sum(";
+	break;
+    case 1003:
+        sym="prod(";
+	break;
+    default:
+        sym="(";
+    }
+    return sym + content->formulaString() + ")";
+}
+
 KFORMULA_NAMESPACE_END

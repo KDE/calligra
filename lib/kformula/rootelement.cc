@@ -544,4 +544,12 @@ QString RootElement::toLatex()
     return root;
 }
 
+QString RootElement::formulaString()
+{
+    if ( hasIndex() ) {
+        return "(" + content->formulaString() + ")**(1.0/(" + index->formulaString() + "))";
+    }
+    return "sqrt(" + content->formulaString() + ")";
+}
+
 KFORMULA_NAMESPACE_END

@@ -166,6 +166,7 @@ protected:
      */
     virtual QString toLatex();
 
+    virtual QString formulaString();
 
 private:
     /**

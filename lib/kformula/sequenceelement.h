@@ -267,6 +267,8 @@ public:
      */
     virtual QString toLatex();
 
+    virtual QString formulaString();
+
 protected:
 
     //Save/load support

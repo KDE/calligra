@@ -70,6 +70,8 @@ protected slots:
     void configure();
     void cursorChanged(bool visible, bool selecting);
 
+    void formulaString();
+
 private:
 
     /**
@@ -99,6 +101,8 @@ private:
     KAction* addGenericUpperAction;
     KAction* addGenericLowerAction;
     KAction* removeEnclosingAction;
+
+    KAction* formulaStringAction;
 
     DCOPObject *m_dcop;
 };

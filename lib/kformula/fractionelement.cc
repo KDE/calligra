@@ -419,4 +419,9 @@ QString FractionElement::toLatex()
     }
 }
 
+QString FractionElement::formulaString()
+{
+    return "(" + numerator->formulaString() + ")/(" + denominator->formulaString() + ")";
+}
+
 KFORMULA_NAMESPACE_END

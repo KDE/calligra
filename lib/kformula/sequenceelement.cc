@@ -803,6 +803,7 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
             command->setElement( new NameSequence() );
             return command;
         }
+        break;
     case req_addBracket: {
         KFCAddReplacing* command = new KFCAddReplacing(i18n("Add bracket"), container);
         BracketRequest* br = static_cast<BracketRequest*>( request );
@@ -1195,6 +1196,20 @@ QString SequenceElement::toLatex()
         content += child->toLatex();
     }
     content += "}";
+    return content;
+}
+
+QString SequenceElement::formulaString()
+{
+    QString content;
+    uint count = children.count();
+    for ( uint i = 0; i < count; i++ ) {
+        BasicElement* child = children.at( i );
+        //if ( isFirstOfToken( child ) ) {
+        //    content += " ";
+        //}
+        content += child->formulaString();
+    }
     return content;
 }
 

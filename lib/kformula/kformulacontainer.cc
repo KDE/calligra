@@ -541,6 +541,10 @@ QString Container::texString()
     return rootElement()->toLatex();
 }
 
+QString Container::formulaString()
+{
+    return rootElement()->formulaString();
+}
 
 bool Container::importOldText(QString text)
 {

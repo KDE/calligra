@@ -1227,4 +1227,12 @@ QString IndexElement::toLatex()
     return index;
 }
 
+QString IndexElement::formulaString()
+{
+    if ( hasUpperRight() ) {
+        return "(" + content->formulaString() + ")**(" + upperRight->formulaString() + ")";
+    }
+    return content->formulaString();
+}
+
 KFORMULA_NAMESPACE_END
