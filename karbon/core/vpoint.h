@@ -1,3 +1,7 @@
+/* This file is part of the KDE project
+   Copyright (C) 2001, The Karbon Developers
+*/
+
 #ifndef __VPOINT_H__
 #define __VPOINT_H__
 

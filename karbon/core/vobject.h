@@ -1,3 +1,7 @@
+/* This file is part of the KDE project
+   Copyright (C) 2001, The Karbon Developers
+*/
+
 #ifndef __VOBJECT_H__
 #define __VOBJECT_H__
 
