@@ -25,7 +25,8 @@
 // Layout text at 1440 DPI
 // Well, not really always 1440 DPI, but always 20 times the point size
 // This is constant, no need to litterally apply 1440 DPI at all resolutions.
-int KoTextZoomHandler::m_layoutUnitFactor = 20;
+// *********** Changed to 1, for better output at 100%
+int KoTextZoomHandler::m_layoutUnitFactor = 1;
 
 KoZoomHandler::KoZoomHandler()
 {
