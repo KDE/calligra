@@ -19,7 +19,11 @@
 #ifndef KIVIOMOUSETOOL_H
 #define KIVIOMOUSETOOL_H
 
-#include <kivio_plugin.h>
+#include "kivio_plugin.h"
+
+#include <qptrlist.h>
+
+class KivioStencil;
 
 namespace Kivio {
   /**
@@ -35,6 +39,10 @@ namespace Kivio {
       
     public slots:
       virtual void setActivated(bool) = 0;
+      /** This function should apply a change to @param stencil
+       * done by the tool.
+       */
+      virtual void applyToolAction(QPtrList<KivioStencil>*) {};
     
     signals:
       /** this should be emited when the tool wants to be active */

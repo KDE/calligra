@@ -94,53 +94,9 @@ void TextTool::setActivated(bool a)
     m_textAction->setChecked(true);
     view()->canvasWidget()->setCursor(*m_pTextCursor);
     m_mode = stmNone;
-    KivioPage *pPage = view()->activePage();
-    KivioStencil *pStencil = pPage->selectedStencils()->first();
-  
-    if(pStencil) {
-      setStencilText();
-      view()->pluginManager()->activateDefaultTool();
-    }
   } else {
     m_textAction->setChecked(false);
   }
-}
-
-void TextTool::setStencilText()
-{
-  KivioDoc* doc = view()->doc();
-  KivioPage *page = view()->activePage();
-  KivioStencil *stencil = page->selectedStencils()->first();
-
-  if( !stencil )
-    return;
-
-  KivioStencilTextDlg d(0, stencil->text());
-
-  if( !d.exec() )
-    return;
-
-  QString text = d.text();
-  KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
-  bool createMacro=false;
-  while( stencil )
-  {
-    if ( stencil->text()!= text )
-    {
-      KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand( i18n("Change Stencil Text"), stencil, stencil->text(), text, page);
-      macro->addCommand( cmd);
-      stencil->setText( text );
-      createMacro=true;
-    }
-    stencil = page->selectedStencils()->next();
-  }
-  
-  if ( createMacro )
-    doc->addCommand( macro);
-  else
-    delete macro;
-  
-  doc->updateView(page);
 }
 
 void TextTool::text(QRect r)
@@ -187,7 +143,7 @@ void TextTool::text(QRect r)
 
   doc->updateView(page);
 
-  setStencilText();
+  applyToolAction(page->selectedStencils());
 
   if (stencil->text().isEmpty()) {
     page->deleteSelectedStencils();
@@ -264,6 +220,44 @@ void TextTool::endRubberBanding(QMouseEvent */*e*/)
   {
     text(view()->canvasWidget()->rect());
   }
+}
+
+void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
+{
+  KivioDoc* doc = view()->doc();
+  KivioPage *page = view()->activePage();
+
+  if( stencils->isEmpty() )
+    return;
+
+  KivioStencil* stencil = stencils->first();
+  KivioStencilTextDlg d(0, stencil->text());
+
+  if( !d.exec() )
+    return;
+
+  QString text = d.text();
+  KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
+  bool createMacro=false;
+  
+  while( stencil )
+  {
+    if ( stencil->text()!= text )
+    {
+      KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand( i18n("Change Stencil Text"), stencil, stencil->text(), text, page);
+      macro->addCommand( cmd);
+      stencil->setText( text );
+      createMacro=true;
+    }
+    stencil = stencils->next();
+  }
+  
+  if ( createMacro )
+    doc->addCommand( macro);
+  else
+    delete macro;
+  
+  doc->updateView(page);
 }
 
 #include "tool_text.moc"

@@ -19,6 +19,9 @@
 #include "kivio_pluginmanager.h"
 
 #include <kdebug.h>
+#include <kparts/plugin.h>
+
+#include "kivio_plugin.h"
 
 namespace Kivio {
   PluginManager::PluginManager(KivioView* parent, const char* name) : QObject(parent, name)
@@ -71,6 +74,23 @@ namespace Kivio {
   {
     m_defaultTool = tool;
     kdDebug(43000) << "New default tool: " << tool->name() << endl;
+  }
+
+  Kivio::Plugin* PluginManager::findPlugin(const QString& name)
+  {
+    QPtrList<KParts::Plugin> plugins = KParts::Plugin::pluginObjects(parent());
+    KParts::Plugin* p = plugins.first();
+    bool found = false;
+    
+    while(p && !found) {
+      if(p->name() == name) {
+        found = true;
+      } else {
+        p = plugins.next();
+      }
+    }
+    
+    return static_cast<Kivio::Plugin*>(p);
   }
 };
 

@@ -66,8 +66,9 @@ class SelectTool : public Kivio::MouseTool
     void operationDone();
 
   protected slots:
-    void editText();
-    void showPropreties();
+    void editText(QPtrList<KivioStencil>* stencils);
+    void showProperties();
+    void editStencilText();
 
   protected:
     void mousePress(const QPoint&);
@@ -120,6 +121,7 @@ class SelectTool : public Kivio::MouseTool
     
     KRadioAction* m_selectAction;
     KPopupMenu *m_pMenu;
+    QPtrList<KAction> textActionList;
 };
 
 #endif

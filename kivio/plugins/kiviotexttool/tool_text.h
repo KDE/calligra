@@ -40,10 +40,9 @@ class TextTool : public Kivio::MouseTool
   
     void text(QRect);
   
-    void setStencilText();
-  
   public slots:
     void setActivated(bool a);
+    void applyToolAction(QPtrList<KivioStencil>* stencils);
   
   signals:
     void operationDone();

@@ -23,6 +23,8 @@
 #include "kivio_mousetool.h"
 
 namespace Kivio {
+  class Plugin;
+  
   /**
   This class manages the plugins*/
   class PluginManager : public QObject {
@@ -37,6 +39,8 @@ namespace Kivio {
       Kivio::MouseTool* activeTool();
       /** Returns the default tool. */
       Kivio::MouseTool* defaultTool();
+      
+      Kivio::Plugin* findPlugin(const QString& name);
     
     public slots:
       /** Makes the default tool active. */

@@ -53,7 +53,10 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
 
   m_selectAction = new KRadioAction(i18n("&Select"), "select", Key_Space, actionCollection(), "select");
   connect(m_selectAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
-  (void) new KAction(i18n("&Properties..."), 0, 0, this, SLOT(showPropreties()), actionCollection(), "properties");
+  (void) new KAction(i18n("&Properties..."), 0, 0, this, SLOT(showProperties()), actionCollection(), "properties");
+  
+  KAction* textAction = new KAction(i18n("&Edit text..."), "text", Key_F2, this, SLOT(editStencilText()), actionCollection(), "editText");
+  textActionList.append(textAction);
 
   m_mode = stmNone;
   m_pResizingStencil = NULL;
@@ -1050,12 +1053,13 @@ void SelectTool::showPopupMenu( const QPoint &pos )
   }
 
   if(view()->activePage()->selectedStencils()->count() > 0) {
-    plugActionList("textActionList", view()->textActionList());
+    plugActionList("textActionList", textActionList);
     plugActionList("layerActionList", view()->layerActionList());
   }
   
   if(m_pMenu) {
     m_pMenu->popup( pos );
+    m_lastPoint = view()->canvasWidget()->mapFromScreen(pos);
   } else {
     kdDebug(43000) << "What no popup! *ARGH*!" << endl;
   }
@@ -1069,35 +1073,36 @@ void SelectTool::showPopupMenu( const QPoint &pos )
  * it launches the text tool on the selected stencils and switches back
  * to this tool when it's done.
  */
-void SelectTool::leftDoubleClick( const QPoint &/*p*/ )
+void SelectTool::leftDoubleClick(const QPoint& pos)
 {
   if( view()->activePage()->selectedStencils()->count() <= 0 )
     return;
-
-  editText();
+  
+  editText(view()->activePage()->selectedStencils());
 }
 
-void SelectTool::editText()
+void SelectTool::editText(QPtrList<KivioStencil>* stencils)
 {
-//FIXME: Need to implement this in a cleaner way!!!!
-/*  // Locate the text tool.  If not found, bail with an error
-  Tool *t = controller()->findTool("Text");
-  if( !t )
+  // Locate the text tool.  If not found, bail with an error
+  Kivio::Plugin *p = view()->pluginManager()->findPlugin("Text Mouse Tool");
+  if( !p )
   {
     kdDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
-      return;
+    return;
   }
-
+  
   // Select the text tool (which makes the text dialog pop up)
-  controller()->selectTool(t);
-
-  // Reselect this tool so we are back in selection mode
-  controller()->selectTool(this);*/
+  static_cast<Kivio::MouseTool*>(p)->applyToolAction(stencils);
 }
 
-void SelectTool::showPropreties()
+void SelectTool::showProperties()
 {
   //FIXME: This needs to be implemented ;)
+}
+
+void SelectTool::editStencilText()
+{
+  editText(view()->activePage()->selectedStencils());
 }
 
 #include "tool_select.moc"
