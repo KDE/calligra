@@ -960,6 +960,7 @@ void KWPageLayoutCommand::execute()
     m_pDoc->setPageLayout( m_NewLayout._pgLayout,m_NewLayout._cl, m_NewLayout._hf );
     m_pDoc->updateRuler();
     m_pDoc->updateResizeHandles();
+    m_pDoc->updateContentsSize();
     m_pDoc->repaintAllViews();
 }
 
@@ -968,6 +969,7 @@ void KWPageLayoutCommand::unexecute()
     m_pDoc->setPageLayout( m_OldLayout._pgLayout,m_OldLayout._cl, m_OldLayout._hf);
     m_pDoc->updateRuler();
     m_pDoc->updateResizeHandles();
+    m_pDoc->updateContentsSize();
     m_pDoc->repaintAllViews();
 }
 
