@@ -40,11 +40,11 @@ public:
 	virtual ~XcfExport() {}
 
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
-	
-private:
+
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVLayer( VLayer& layer );
 
+private:
 	/**
 	 * Tile size constants.
 	 */
@@ -65,6 +65,16 @@ private:
 	 * Image height.
 	 */
 	unsigned m_height;
+
+	/**
+	 * X-zoom factor.
+	 */
+	 double m_zoomX;
+
+	/**
+	 * Y-zoom factor.
+	 */
+	 double m_zoomY;
 };
 
 #endif

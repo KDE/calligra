@@ -37,7 +37,7 @@
 
 
 // Tile size constants.
-const unsigned XcfExport::m_tileWidth = 64;
+const unsigned XcfExport::m_tileWidth  = 64;
 const unsigned XcfExport::m_tileHeight = 64;
 
 
@@ -48,6 +48,8 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonxcfexport, XcfExportFactory( "karbonxcfexpo
 XcfExport::XcfExport( KoFilter*, const char*, const QStringList& )
 	: KoFilter()
 {
+	m_zoomX = 1.0;
+	m_zoomY = 1.0;
 }
 
 KoFilter::ConversionStatus
@@ -96,11 +98,11 @@ void
 XcfExport::visitVDocument( VDocument& document )
 {
 	// Remember width and height for layer saving.
-	m_width  = static_cast<unsigned>( document.width() );
-	m_height = static_cast<unsigned>( document.height() );
+	m_width  = static_cast<unsigned>( document.width()  * m_zoomX );
+	m_height = static_cast<unsigned>( document.height() * m_zoomY );
 
 
-	// Header tag (length 14 bytes).
+	// Header tag (size 14 bytes).
 	m_stream->writeRawBytes( "gimp xcf file", 14 );
 
 	// Image width.
@@ -109,35 +111,76 @@ XcfExport::visitVDocument( VDocument& document )
 	// Image height.
 	*m_stream << static_cast<Q_UINT32>( m_height );
 
-	// Image type 0 = RGB.
+	// Image type = RGB.
 	*m_stream << static_cast<Q_UINT32>( 0 );
 
-	// Do not save any properties.
+	// Do not save any properties currently.
 	*m_stream
 		// "END".
 		<< static_cast<Q_UINT32>( 0 )
-		// size 0.
+		// Property size in bytes.
 		<< static_cast<Q_UINT32>( 0 );
 
 
-	// Write layer offsets.
-	QIODevice::Offset offset = m_stream->device()->at();
+	// Offsets.
+	QIODevice::Offset current = 0;
+	QIODevice::Offset start = 0;
+	QIODevice::Offset end = 0;
 
-	for( unsigned i = 0; i < document.layers().count(); ++i )
+	// Remember current offset.
+	current = m_stream->device()->at();
+
+	// Leave space for layer and channel offsets.
+	m_stream->device()->at(
+		// current position + (number layers + number channels + 2) * 4.
+		current + ( document.layers().count() + 3 + 2 ) * 4 );
+
+
+	// Iterate over layers.
+	VLayerListIterator itr( document.layers() );
+
+	for( ; itr.current(); ++itr )
 	{
-		*m_stream << static_cast<Q_UINT32>( offset + ( i + 3 + 2 ) * 4 );
+		// Remember start offset.
+		start = m_stream->device()->at();
+
+
+		// Write layer.
+		itr.current()->accept( *this );
+
+
+		// Remember end offset.
+		end = m_stream->device()->at();
+
+		// Return to current offset.
+		m_stream->device()->at( current );
+
+		// Save layer offset.
+		*m_stream << start;
+
+		// Increment offset.
+		current = m_stream->device()->at();
+
+		// Return to end offset.
+		m_stream->device()->at( end );
 	}
-	
+
+
+	// Return to current offset.
+	m_stream->device()->at( current );
+
 	// Append a zero offset to indicate end of layer offset list.
 	*m_stream << static_cast<Q_UINT32>( 0 );
+
+	// Remember current offset.
+	current = m_stream->device()->at();
+
+	// Return to end offset.
+	m_stream->device()->at( end );
 
 
 	// Append a zero offset to indicate end of channel offset list.
 	*m_stream << static_cast<Q_UINT32>( 0 );
-
-
-	// Export layers.
-	VVisitor::visitVDocument( document );
 }
 
 void
@@ -153,9 +196,6 @@ XcfExport::visitVLayer( VLayer& layer )
 	*m_stream << static_cast<Q_UINT32>( 1 );
 
 	// Layer name.
-	// Size in bytes.
-	*m_stream << static_cast<Q_UINT32>( layer.name().length() + 1 );
-	// String.
 	*m_stream << layer.name().latin1();
 	
 	// Layer opacity.
@@ -236,23 +276,57 @@ XcfExport::visitVLayer( VLayer& layer )
 	*m_stream << static_cast<Q_UINT32>( 0 );
 
 
-	// Gimp splits the image into tiles ("hierarchy").
+	// Offsets.
+	QIODevice::Offset current = 0;
+	QIODevice::Offset start = 0;
+	QIODevice::Offset end = 0;
 
-	// TODO: Hierarchy offset.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	// Remember position.
+	current = m_stream->device()->at();
 
-	// TODO: Layer mask offset.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	// Leave space for hierarchy offset.
+	m_stream->device()->at( current + 8 );
 
+	// Remember start offset.
+	start = m_stream->device()->at();
+
+
+	// Save hierarchy.
+
+	// Width (again?)
+	*m_stream << m_width;
+
+	// Height (again?)
+	*m_stream << m_height;
+
+	// Layer color depth.
+	*m_stream << static_cast<Q_UINT32>( 3 );
+
+
+// TODO
 	// Calculate tile-rows and -columns.
-	Q_UINT32 rows    = ( m_height + m_tileHeight - 1 ) / m_tileHeight;
-	Q_UINT32 columns = ( m_width  + m_tileWidth - 1 )  / m_tileWidth;
+//	Q_UINT32 rows    = ( m_height + m_tileHeight - 1 ) / m_tileHeight;
+//	Q_UINT32 columns = ( m_width  + m_tileWidth  - 1 ) / m_tileWidth;
 
-	// Layer depth = RGBA.
-	*m_stream << static_cast<Q_UINT32>( 1 );
+	// Append a zero offset to indicate end of layer hierarchy offset list.
+	*m_stream << static_cast<Q_UINT32>( 0 );
 
 
-// TODO: to be continued.
+	// Remember end offset.
+	end = m_stream->device()->at();
+
+	// Return to current offset.
+	m_stream->device()->at( current );
+
+	// Save hierarchy offset.
+	*m_stream << start;
+
+	// Return to end offset.
+	m_stream->device()->at( end );
+
+
+	// Append a zero offset to indicate end of layer mask offset list.
+	*m_stream << static_cast<Q_UINT32>( 0 );
 }
 
 #include "xcfexport.moc"
