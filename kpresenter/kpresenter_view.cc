@@ -661,7 +661,7 @@ void KPresenterView::insertClipart()
 /*==============================================================*/
 void KPresenterView::toolsMouse()
 {
-    if ( actionToolsMouse ->isChecked() )
+    if ( actionToolsMouse->isChecked() )
         m_canvas->setToolEditMode( TEM_MOUSE, false );
     else
         actionToolsMouse->setChecked(true);
@@ -672,10 +672,19 @@ void KPresenterView::toolsMouse()
 /*==============================================================*/
 void KPresenterView::toolsRotate()
 {
-    if ( actionToolsRotate ->isChecked() )
+    if ( actionToolsRotate->isChecked() )
         m_canvas->setToolEditMode( TEM_ROTATE, false );
     else
         actionToolsRotate->setChecked(true);
+}
+
+/*==============================================================*/
+void KPresenterView::toolsZoom()
+{
+    if ( actionToolsZoom->isChecked() )
+        m_canvas->setToolEditMode( TEM_ZOOM, false );
+    else
+        actionToolsZoom->setChecked(true);
 }
 
 
@@ -2483,6 +2492,12 @@ void KPresenterView::setupActions()
 					   actionCollection(), "tools_rotate" );
     actionToolsRotate->setExclusiveGroup( "tools" );
 
+    actionToolsZoom = new KToggleAction( i18n( "&Zoom" ), "zoom", 0,
+					   this, SLOT( toolsZoom() ),
+					   actionCollection(), "tools_zoom" );
+    actionToolsZoom->setExclusiveGroup( "tools" );
+
+
     actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", Key_F6,
 					 this, SLOT( toolsLine() ),
 					 actionCollection(), "tools_line" );
@@ -4090,6 +4105,9 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
     case TEM_ROTATE:
 	actionToolsRotate->setChecked( true );
 	break;
+    case TEM_ZOOM:
+	actionToolsZoom->setChecked( true );
+	break;
     case INS_LINE:
 	actionToolsLine->setChecked( true );
 	break;
@@ -5553,6 +5571,15 @@ void KPresenterView::viewZoom( const QString &s )
     m_canvas->repaint();
 }
 
+void KPresenterView::setZoomRect( const QRect & rect )
+{
+    kdDebug()<<" DEBUGRECT ( rect ) :"<<DEBUGRECT ( rect )<<endl;
+    double height = zoomHandler()->resolutionY() * zoomHandler()->unzoomItY( rect.height() );
+    double width = zoomHandler()->resolutionX() * zoomHandler()->unzoomItY( rect.width() );
+    int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+                 qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+    viewZoom( QString::number(zoom ) );
+}
 
 void KPresenterView::setZoom( int zoom, bool updateViews )
 {
@@ -6036,6 +6063,15 @@ void KPresenterView::addHelpPoint()
     delete dlg;
     m_pKPresenterDoc->setModified( true );
     m_canvas->repaint( false );
+}
+
+
+void KPresenterView::openPopupMenuZoom( const QPoint & _point )
+{
+    //for the future or today :)
+    if(!koDocument()->isReadWrite() )
+        return;
+    static_cast<QPopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
 }
 
 

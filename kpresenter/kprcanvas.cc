@@ -263,7 +263,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
         SelectionMode selectionMode;
 
-	if ( toolEditMode == TEM_MOUSE )
+	if ( toolEditMode == TEM_MOUSE || toolEditMode == TEM_ZOOM )
 	    selectionMode = SM_MOVERESIZE;
 	else if ( toolEditMode == TEM_ROTATE )
 	    selectionMode = SM_ROTATE;
@@ -743,6 +743,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 		    calcBoundingRect();
                     m_hotSpot = docPoint - m_boundingRect.topLeft();
                 } break;
+                case TEM_ZOOM: {
+                    modType = MT_NONE;
+                    drawRubber = true;
+                    rubber = QRect( e->x(), e->y(), 0, 0 );
+                }break;
 		case TEM_ROTATE: {
                     //bool deSelAll = true;
                     //bool _resizeObj = false;
@@ -1266,6 +1271,22 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             //setCursor( arrowCursor );
         }
     } break;
+    case TEM_ZOOM:{
+        drawContour = FALSE;
+        if( modType == MT_NONE && drawRubber )
+        {
+            QPainter p;
+            p.begin( this );
+            p.setRasterOp( NotROP );
+            p.setPen( QPen( black, 0, DotLine ) );
+            p.drawRect( rubber );
+            p.end();
+            drawRubber = false;
+            rubber = rubber.normalize();
+            rubber.moveBy(diffx(),diffy());
+            m_view->setZoomRect(rubber );
+        }
+    }break;
     case TEM_ROTATE: {
 	drawContour = FALSE;
 	if ( !rotateNum )
@@ -1477,6 +1498,19 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		oldMx = e->x()+diffx();
 		oldMy = e->y()+diffy();
 	    } break;
+            case TEM_ZOOM : {
+                if ( drawRubber ) {
+                    QPainter p;
+                    p.begin( this );
+                    p.setRasterOp( NotROP );
+                    p.setPen( QPen( black, 0, DotLine ) );
+                    p.drawRect( rubber );
+                    rubber.setRight( e->x() );
+                    rubber.setBottom( e->y() );
+                    p.drawRect( rubber );
+                    p.end();
+                }
+            }break;
 	    case TEM_ROTATE: {
 		drawContour = TRUE;
 		double angle = KoPoint::getAngle( KoPoint( e->x() + diffx(), e->y() + diffy() ),

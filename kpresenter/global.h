@@ -221,7 +221,8 @@ enum ToolEditMode {
     INS_POLYGON = 15,
     INS_PICTURE = 16,
     INS_CLIPART = 17,
-    TEM_ROTATE = 18
+    TEM_ROTATE = 18,
+    TEM_ZOOM = 19
 };
 
 // offsets of the effects in the Effect2 enum accoording to a objType

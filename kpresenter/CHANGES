@@ -20,4 +20,4 @@ Changes after KPresenter 1.1
 - New transition effect: Blinds, Box In/Out, Checkboard, Cover, Uncover, Dissolve, Random,...
 - Add grid support
 - Add Help Point
-
+- Add support to change zoom with mouse (zoom selected area)

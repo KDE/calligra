@@ -175,6 +175,7 @@ public slots:
     // tools menu
     void toolsMouse();
     void toolsRotate();
+    void toolsZoom();
     void toolsLine();
     void toolsRectangle();
     void toolsCircleOrEllipse();
@@ -456,7 +457,7 @@ public:
 
     void openPopupMenuHelpLine( const QPoint & _point );
     void openPopupMenuHelpPoint( const QPoint & _point );
-
+    void openPopupMenuZoom( const QPoint & _point );
 
     void penColorChanged( const QPen & _pen );
     void brushColorChanged( const QBrush & _brush );
@@ -494,6 +495,9 @@ public:
     KPrPage * stickyPage() const;
 
     void updatePageParameter();
+
+
+    void setZoomRect( const QRect & rect );
 
 protected slots:
     // dialog slots
@@ -720,6 +724,7 @@ private:
 
     KToggleAction *actionToolsMouse;
     KToggleAction *actionToolsRotate;
+    KToggleAction *actionToolsZoom;
     KToggleAction *actionToolsLine;
     KToggleAction *actionToolsRectangle;
     KToggleAction *actionToolsCircleOrEllipse;
