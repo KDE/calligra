@@ -253,7 +253,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
 
             for ( int i = 0 ; i < nbCopy ; i++ )
             {
-                KCommand *cmd = m_doc->loadPastedObjs( domDoc.toCString(),this );
+                KCommand *cmd = m_doc->loadPastedObjs( domDoc.toString(),this );
                 if (cmd )
                 {
                     if ( !macro )
