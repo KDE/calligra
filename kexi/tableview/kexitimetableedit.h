@@ -20,7 +20,7 @@
 #ifndef KEXITIMETABLEEDIT_H
 #define KEXITIMETABLEEDIT_H
 
-#include <kexitableedit.h>
+#include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
 class QTimeEdit;

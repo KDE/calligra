@@ -15,8 +15,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <kexikugarhandleritem.h>
-#include <kexikugarhandler.h>
+#include "kexikugarhandleritem.h"
+#include "kexikugarhandler.h"
 #include <kexikugarhandleritem.moc>
 #include <kexidataprovider.h>
 #include <ksimpleconfig.h>
@@ -29,8 +29,7 @@
 #include <qdom.h>
 #include <kexiDB/kexidbrecordset.h>
 #include <qtextstream.h>
-#include <qfile.h>
-#include <kexikugarwrapper.h>
+#include "kexikugarwrapper.h"
 
 KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *handler, const QString& ident,
 	const QString& mime, const QString& title)

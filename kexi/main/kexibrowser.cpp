@@ -42,7 +42,6 @@
 #include "kexidialogbase.h"
 #include "keximainwindow.h"
 #include "kexi_utils.h"
-#include "kexi.h"
 
 
 KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)

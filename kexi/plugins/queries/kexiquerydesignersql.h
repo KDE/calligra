@@ -22,7 +22,7 @@
 #define KEXIQUERYDESIGNERSQL_H
 
 #include <kexiviewbase.h>
-#include <kexiquerypart.h>
+#include "kexiquerypart.h"
 
 class KexiQueryDesignerSQLEditor;
 class KexiQueryDesignerSQLViewPrivate;

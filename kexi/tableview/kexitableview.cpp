@@ -45,7 +45,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 

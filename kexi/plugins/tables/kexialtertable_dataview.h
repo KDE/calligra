@@ -22,7 +22,7 @@
 
 #include <kexidatatable.h>
 #include <kexipropertybuffer.h>
-#include <kexitablepart.h>
+#include "kexitablepart.h"
 
 class KexiAlterTable_DataView : public KexiDataTable
 {

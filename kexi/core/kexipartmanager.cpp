@@ -22,7 +22,6 @@
 #include <ktrader.h>
 #include <kdebug.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <kparts/componentfactory.h>
 
 #include "kexipartmanager.h"

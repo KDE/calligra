@@ -19,7 +19,6 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/drivermanager.h>
-#include <kexidb/connection.h>
 #include <kexidb/driver_p.h>
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"

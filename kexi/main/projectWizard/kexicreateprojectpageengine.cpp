@@ -32,7 +32,7 @@ Boston, MA 02111-1307, USA.
 #include <ktextbrowser.h>
 #include <kdialog.h>
 #include <kiconloader.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 #include <kexidb/drivermanager.h>
 #include "kexicreateprojectpageengine.h"

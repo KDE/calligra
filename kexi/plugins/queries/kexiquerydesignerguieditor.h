@@ -26,7 +26,7 @@
 
 #include <kexiviewbase.h>
 #include <kexipropertybuffer.h>
-#include <kexiquerypart.h>
+#include "kexiquerypart.h"
 
 class KexiMainWindow;
 class KexiTableViewData;

@@ -23,7 +23,6 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <klocale.h>
 #include <kglobalsettings.h>
 #include <kstdguiitem.h>
 #include <kdeversion.h>

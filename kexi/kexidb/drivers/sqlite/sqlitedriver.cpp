@@ -20,7 +20,6 @@
 #include <kexidb/connection.h>
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver_p.h>
-#include <kexidb/connection.h>
 
 #include "sqlite.h"
 #include "sqlitedriver.h"

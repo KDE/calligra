@@ -22,7 +22,7 @@
 #ifndef KEXIDATETABLEEDIT_H
 #define KEXIDATETABLEEDIT_H
 
-#include <kexitableedit.h>
+#include "kexitableedit.h"
 #include <kdatepicker.h>
 
 #include "kexicelleditorfactory.h"

@@ -19,9 +19,9 @@
 
 #include "kexiinternalpart.h"
 
-#include <kexidialogbase.h>
-#include <kexiviewbase.h>
-#include <keximainwindow.h>
+#include "kexidialogbase.h"
+#include "kexiviewbase.h"
+#include "keximainwindow.h"
 
 #include <qasciidict.h>
 

@@ -4,8 +4,8 @@
 
 #include <kexidb/cursor.h>
 
-#include <kexipart.h>
-#include <kexipartmanager.h>
+#include "kexipart.h"
+#include "kexipartmanager.h"
 
 #include "kexiproject.h"
 #include "keximainwindow.h"

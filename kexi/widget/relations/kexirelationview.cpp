@@ -30,7 +30,6 @@
 #include <qlineedit.h>
 #include <qpopupmenu.h>
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
