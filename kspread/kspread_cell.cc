@@ -1248,7 +1248,12 @@ switch( m_eAlignY )
                 if(!m_rotateAngle)
                         m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
                 else
-                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                        {
+                        if(m_rotateAngle<0)
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                        }
                 break;
         case KSpreadCell::Bottom:
                 if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
@@ -1258,7 +1263,10 @@ switch( m_eAlignY )
                         if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
                                 m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
                         else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                                if(m_rotateAngle<0)
+                                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+                                else
+                                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
                         }
                 else if(m_bMultiRow)
                         {
@@ -1280,7 +1288,10 @@ switch( m_eAlignY )
                         if(( h - m_iOutTextHeight )>0)
                                 m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
                         else
-                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                                if( m_rotateAngle<0)
+                                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
+                                else
+                                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
                 else if(m_bMultiRow)
                         if(( h - m_iOutTextHeight*m_nbLines )>0)
                                 m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
@@ -1328,8 +1339,9 @@ if(!m_bVerticalText && !m_rotateAngle)
         }
  else if(m_rotateAngle!=0)
         {
-        m_iOutTextHeight = abs((int)(cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180)));
+        m_iOutTextHeight = cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180)));
         m_iOutTextWidth = abs((int)(sin(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(m_rotateAngle*M_PI/180);
+        //kdDebug(36001)<<"m_iOutTextWidth"<<m_iOutTextWidth<<"m_iOutTextHeight"<<m_iOutTextHeight<<endl;
         }
   else
         {
@@ -1959,7 +1971,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if(angle>0)
         x=_tx + m_iTextX + dx;
     else
-        x=_tx + m_iTextX + dx/*+m_iOutTextWidth*/;
+        x=_tx + m_iTextX + dx-(fm.descent() + fm.ascent())*sin(angle*M_PI/180);
     int y;
     if(angle>0)
         y=_ty + m_iTextY + dy;
