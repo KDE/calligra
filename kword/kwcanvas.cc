@@ -66,7 +66,6 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     setKeyCompression( TRUE );
     viewport()->setMouseTracking( TRUE );
-    viewport()->setCursor( ibeamCursor );
 
     scrollTimer = new QTimer( this );
     connect( scrollTimer, SIGNAL( timeout() ),
@@ -1587,7 +1586,10 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
 
     switch ( m_mouseMode ) {
         case MM_EDIT: {
-            viewport()->setCursor( ibeamCursor );
+            //if ( doc->isReadWrite() )
+                viewport()->setCursor( ibeamCursor );
+            //else
+            //viewport()->setCursor( arrowCursor );
             //mm_menu->setItemChecked( mm_edit, TRUE );
         } break;
         case MM_EDIT_FRAME: {

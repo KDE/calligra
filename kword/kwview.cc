@@ -176,6 +176,7 @@ KWView::~KWView()
 
 void KWView::initConfig()
 {
+  /// ### Why isn't this in KWDocument ??? ( DF )
   KConfig *config = KWFactory::global()->config();
   KSpellConfig ksconfig;
   if( config->hasGroup("KSpell kword" ) )
@@ -207,7 +208,8 @@ void KWView::initConfig()
 
 void KWView::changeNbOfRecentFiles(int _nb)
 {
-    shell()->setMaxRecentItems( _nb );
+    if ( shell() ) // 0 when embedded into konq !
+        shell()->setMaxRecentItems( _nb );
 }
 
 void KWView::initGui()

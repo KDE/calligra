@@ -1067,6 +1067,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
     KWTextParag * parag = static_cast<KWTextParag *>(cursor->parag());
     setLastFormattedParag( parag );
     emit hideCursor();
+    bool doUpdateCurrentFormat = true;
 
     switch ( action ) {
     case ActionDelete: {
@@ -1076,12 +1077,20 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	    undoRedoInfo.index = cursor->index();
 	    undoRedoInfo.text = QString::null;
             undoRedoInfo.name = i18n("Delete text");
+            undoRedoInfo.oldParagLayouts << parag->paragLayout();
 	}
         QTextStringChar * ch = parag->at( cursor->index() );
 	undoRedoInfo.text += ch->c;
+        KWParagLayout paragLayout;
+        if ( parag->next() )
+            paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
         copyCharFormatting( ch, undoRedoInfo.text.length()-1, true );
 	if ( cursor->remove() )
+        {
 	    undoRedoInfo.text += "\n";
+            kdDebug() << "KWTextFrameSet::doKeyboardAction ActionDelete adding paraglayout" << endl;
+            undoRedoInfo.oldParagLayouts << paragLayout;
+        }
     } break;
     case ActionBackspace: {
         // Remove counter
@@ -1095,21 +1104,24 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
         {
             checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
             if ( !undoRedoInfo.valid() ) {
-                undoRedoInfo.id = cursor->parag()->paragId();
+                undoRedoInfo.id = parag->paragId();
                 undoRedoInfo.index = cursor->index();
                 undoRedoInfo.text = QString::null;
                 undoRedoInfo.name = i18n("Delete text");
+                undoRedoInfo.oldParagLayouts << parag->paragLayout();
             }
             cursor->gotoLeft();
             QTextStringChar * ch = cursor->parag()->at( cursor->index() );
             undoRedoInfo.text.prepend( QString( ch->c ) );
             copyCharFormatting( ch, 0, true );
             undoRedoInfo.index = cursor->index();
+            KWParagLayout paragLayout = static_cast<KWTextParag *>( cursor->parag() )->paragLayout();
             if ( cursor->remove() ) {
                 undoRedoInfo.text.remove( 0, 1 );
                 undoRedoInfo.text.prepend( "\n" );
                 undoRedoInfo.index = cursor->index();
                 undoRedoInfo.id = cursor->parag()->paragId();
+                undoRedoInfo.oldParagLayouts.prepend( paragLayout );
             }
             setLastFormattedParag( cursor->parag() );
         }
@@ -1126,7 +1138,8 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	cursor->splitAndInsertEmptyParag();
 	if ( cursor->parag()->prev() )
             setLastFormattedParag( cursor->parag()->prev() );
-	break;
+        doUpdateCurrentFormat = false;
+        break;
     case ActionKill:
 	checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
 	if ( !undoRedoInfo.valid() ) {
@@ -1134,13 +1147,20 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	    undoRedoInfo.index = cursor->index();
 	    undoRedoInfo.text = QString::null;
             undoRedoInfo.name = i18n("Delete text");
+            undoRedoInfo.oldParagLayouts << parag->paragLayout();
 	}
 	if ( cursor->atParagEnd() ) {
             QTextStringChar * ch = cursor->parag()->at( cursor->index() );
 	    undoRedoInfo.text += ch->c;
+            KWParagLayout paragLayout;
+            if ( parag->next() )
+                paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
             copyCharFormatting( ch, undoRedoInfo.text.length()-1, true );
             if ( cursor->remove() )
+            {
 		undoRedoInfo.text += "\n";
+                undoRedoInfo.oldParagLayouts << paragLayout;
+            }
 	} else {
             int oldLen = undoRedoInfo.text.length();
 	    undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
@@ -1155,7 +1175,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
     emit repaintChanged( this );
     emit ensureCursorVisible();
     emit showCursor();
-    emit updateUI();
+    emit updateUI( doUpdateCurrentFormat );
 }
 
 void KWTextFrameSet::ensureFormatted( QTextParag * parag )
@@ -2294,7 +2314,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     connect( fs, SIGNAL( hideCursor() ), this, SLOT( hideCursor() ) );
     connect( fs, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
     connect( fs, SIGNAL( setCursor( QTextCursor * ) ), this, SLOT( setCursor( QTextCursor * ) ) );
-    connect( fs, SIGNAL( updateUI() ), this, SLOT( updateUI() ) );
+    connect( fs, SIGNAL( updateUI(bool) ), this, SLOT( updateUI(bool) ) );
     connect( fs, SIGNAL( showCurrentFormat() ), this, SLOT( showCurrentFormat() ) );
     connect( fs, SIGNAL( ensureCursorVisible() ), this, SLOT( ensureCursorVisible() ) );
     connect( fs, SIGNAL( selectionChanged(bool) ), canvas, SIGNAL( selectionChanged(bool) ) );
@@ -2821,11 +2841,21 @@ void KWTextFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, c
 
 void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 {
+    if ( !frameSet()->kWordDocument()->isReadWrite() || !KWDrag::canDecode( e ) )
+    {
+        e->ignore();
+        return;
+    }
     e->acceptAction();
 }
 
 void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &nPoint, const KoPoint & )
 {
+    if ( !frameSet()->kWordDocument()->isReadWrite() || !KWDrag::canDecode( e ) )
+    {
+        e->ignore();
+        return;
+    }
     QPoint iPoint;
     if ( textFrameSet()->normalToInternal( nPoint, iPoint ) )
     {
@@ -3196,36 +3226,39 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
 }
 
 // Update the GUI toolbar button etc. to reflect the current cursor position.
-void KWTextFrameSetEdit::updateUI()
+void KWTextFrameSetEdit::updateUI( bool updateFormat )
 {
     // Update UI - only for those items which have changed
 
-    int i = cursor->index();
-    if ( i > 0 )
-        --i;
-#ifdef DEBUG_FORMATS
-    if ( m_currentFormat )
-        kdDebug(32003) << "KWTextFrameSet::updateUI m_currentFormat=" << m_currentFormat
-                       << " " << m_currentFormat->key()
-                       << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
-    else
-        kdDebug(32003) << "KWTextFrameSetEdit::updateUI m_currentFormat=0" << endl;
-#endif
-    if ( !m_currentFormat || m_currentFormat->key() != cursor->parag()->at( i )->format()->key() )
+    if ( updateFormat )
     {
-        if ( m_currentFormat )
-            m_currentFormat->removeRef();
+        int i = cursor->index();
+        if ( i > 0 )
+            --i;
 #ifdef DEBUG_FORMATS
-        kdDebug() << "Setting m_currentFormat from format " << cursor->parag()->at( i )->format()
-                  << " ( character " << i << " in paragraph " << cursor->parag() << " )" << endl;
+        if ( m_currentFormat )
+            kdDebug(32003) << "KWTextFrameSet::updateUI m_currentFormat=" << m_currentFormat
+                           << " " << m_currentFormat->key()
+                           << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
+        else
+            kdDebug(32003) << "KWTextFrameSetEdit::updateUI m_currentFormat=0" << endl;
 #endif
-        m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( cursor->parag()->at( i )->format() ) );
-        if ( m_currentFormat->isMisspelled() ) {
-            m_currentFormat->removeRef();
-            m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( m_currentFormat->font(), m_currentFormat->color() ) );
+        if ( !m_currentFormat || m_currentFormat->key() != cursor->parag()->at( i )->format()->key() )
+        {
+            if ( m_currentFormat )
+                m_currentFormat->removeRef();
+#ifdef DEBUG_FORMATS
+            kdDebug() << "Setting m_currentFormat from format " << cursor->parag()->at( i )->format()
+                      << " ( character " << i << " in paragraph " << cursor->parag() << " )" << endl;
+#endif
+            m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( cursor->parag()->at( i )->format() ) );
+            if ( m_currentFormat->isMisspelled() ) {
+                m_currentFormat->removeRef();
+                m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( m_currentFormat->font(), m_currentFormat->color() ) );
+            }
+            showCurrentFormat();
+            //textDocument()->formatCollection()->debug();
         }
-        showCurrentFormat();
-        //textDocument()->formatCollection()->debug();
     }
 
     // Paragraph settings
