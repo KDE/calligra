@@ -3457,7 +3457,10 @@ KPPixmapObject * KPrPage::picViewOrigHelper() const
 
 void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
 {
-  QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst );
+    QPtrListIterator<KPObject> it( lst );
+
   for ( ; it.current() ; ++it )
   {
       KPTextObject *obj=dynamic_cast<KPTextObject*>(it.current());
@@ -3468,7 +3471,10 @@ void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, 
 
 void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
 {
-    QPtrListIterator<KPObject> oIt(m_objectList )  ;
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst );
+    QPtrListIterator<KPObject> oIt( lst );
+
     for ( ; oIt.current() ; ++oIt )
     {
         if(oIt.current()->getType()==OT_TEXT)
