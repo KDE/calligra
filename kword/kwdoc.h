@@ -690,6 +690,8 @@ public:
     QStringList listOfBookmarkName(KWViewMode * viewMode)const;
 
     void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
+    void spellCheckParagraphDeleted( KoTextParag *_parag,  KWTextFrameSet *frm);
+
     void initBookmarkList();
     void loadImagesFromStore( KoStore *_store );
     void loadPictureMap ( QDomElement& domElement );
@@ -775,7 +777,7 @@ private:
     KoKWHeaderFooter m_pageHeaderFooter;
 
     KoPictureCollection m_pictureCollection;
-    
+
     QPtrList<KWFrameSet> m_lstFrameSet;
 
     int m_pages;
