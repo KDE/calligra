@@ -20,7 +20,7 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qstring.h>
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qkeycode.h>
 #include <qpixmap.h>
 #include <qevent.h>
