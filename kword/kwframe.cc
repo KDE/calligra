@@ -2118,6 +2118,18 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
     }
 }
 
+void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    writer.startElement( "draw:image" );
+
+    KWFrameSet::saveOasisCommon( writer );
+    writer.addAttribute( "xlink:type", "simple" );
+    writer.addAttribute( "xlink:show", "embed" );
+    writer.addAttribute( "xlink:actuate", "onLoad" );
+    writer.addAttribute( "xlink:href", "#"+ m_doc->pictureCollection()->getOasisFileName(m_picture) );
+    writer.endElement();
+}
+
 void KWPictureFrameSet::loadOasis( const QDomElement& tag, KoOasisContext& context )
 {
     const QString href( tag.attribute("xlink:href") );

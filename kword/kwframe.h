@@ -56,7 +56,8 @@ class KWTextFrameSet;
 class KWFramePartMoveCommand;
 class KWordFrameSetIface;
 class DCOPObject;
-
+class KoXmlWriter;
+class KoSavingContext;
 
 /**
  * small utility class representing a sortable (by z-order) list of frames
@@ -911,6 +912,7 @@ public:
 
 protected:
     void loadOasis( const QDomElement& tag, KoOasisContext& context );
+    void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     /// The picture
     KoPicture m_picture;

@@ -149,7 +149,7 @@ QString KoPictureCollection::getFileNameAsKOffice1Dot1(const Type pictureType, K
     return storeURL;
 }
 
-QString KoPictureCollection::getOasisFileName(KoPicture& picture)
+QString KoPictureCollection::getOasisFileName(const KoPicture& picture) const
 {
     QString storeURL( "Pictures/");
     if ( !picture.uniquePictureId().isEmpty() )

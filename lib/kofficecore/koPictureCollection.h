@@ -156,7 +156,7 @@ public:
      * Return filename as url for picture
      *
      */
-    QString getOasisFileName(KoPicture& picture);
+    QString getOasisFileName(const KoPicture& picture) const;
 
     /**
      * Call it before to save Oasis file
