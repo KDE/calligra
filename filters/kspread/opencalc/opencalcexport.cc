@@ -33,6 +33,8 @@
 #include <kmessagebox.h>
 #include <kmdcodec.h>
 #include <kgenericfactory.h>
+#include <klocale.h>
+
 #include <koDocumentInfo.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
@@ -74,7 +76,7 @@ K_EXPORT_COMPONENT_FACTORY( libopencalcexport, OpenCalcExportFactory() )
   } while(0)
 
 OpenCalcExport::OpenCalcExport( KoFilter *, const char *, const QStringList & )
-  : KoFilter()
+  : KoFilter(), m_locale( 0 )
 {
 }
 
@@ -119,7 +121,8 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
     kdWarning(30518) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
     return KoFilter::NotImplemented;
   }
-
+  
+  m_locale = static_cast<KSpreadDoc*>(document)->locale();
   if ( !writeFile( ksdoc ) )
     return KoFilter::CreationError;
 
@@ -128,7 +131,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
   return KoFilter::OK;
 }
 
-bool OpenCalcExport::writeFile( const KSpreadDoc * const ksdoc )
+bool OpenCalcExport::writeFile( const KSpreadDoc * ksdoc )
 {
   KoStore * store = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "", KoStore::Zip );
 
@@ -1196,6 +1199,16 @@ void insertBracket( QString & s )
 
 QString OpenCalcExport::convertFormula( QString const & formula ) const
 {
+  QChar decimalSymbol( '.' );
+  if ( m_locale )
+  {
+    const QString decimal ( m_locale->decimalSymbol() );
+    if ( !decimal.isEmpty() )
+    {
+        decimalSymbol = decimal.at( 0 );
+    }
+  }
+  
   QString s;
   QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
   int n = exp.search( formula, 0 );
@@ -1245,6 +1258,12 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
     {
       insertBracket( s );
       s += '.';
+      ++i;
+      continue;
+    }
+    else if ( formula[i] == decimalSymbol )
+    {
+      s += '.'; // decimal point
       ++i;
       continue;
     }

@@ -26,6 +26,8 @@
 #include <koFilter.h>
 #include <qptrlist.h>
 
+class KLocale;
+
 class KoStore;
 class KSpreadDoc;
 class KSpreadSheet;
@@ -48,7 +50,7 @@ class OpenCalcExport : public KoFilter
   enum files { metaXML = 0x01, contentXML = 0x02, stylesXML = 0x04, settingsXML = 0x08 };
   OpenCalcStyles m_styles;
 
-  bool writeFile( const KSpreadDoc * const ksdoc );
+  bool writeFile( const KSpreadDoc * ksdoc );
 
   bool exportDocInfo( KoStore * store, const KSpreadDoc * ksdoc );
   bool exportStyles ( KoStore * store, const KSpreadDoc * ksdoc );
@@ -77,6 +79,9 @@ class OpenCalcExport : public KoFilter
 
   void createDefaultStyles();
   QString convertFormula( QString const & formula ) const;
+private:
+    /// Pointer to the KSpread locale
+    KLocale* m_locale;
 };
 
 #endif
