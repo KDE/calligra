@@ -563,7 +563,7 @@ protected slots:
     virtual void slotOk();
     virtual void slotApply();
 signals:
-     void apply();
+     void applyParagStyle();
 
 private:
     KoIndentSpacingWidget * m_indentSpacingWidget;

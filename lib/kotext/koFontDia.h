@@ -182,7 +182,7 @@ protected slots:
     virtual void slotApply();
     virtual void slotOk();
 signals:
-     void apply();
+     void applyFont();
 
 private:
     KoFontChooser * m_chooser;

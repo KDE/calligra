@@ -2265,7 +2265,7 @@ KoParagDia::~KoParagDia()
 
 void KoParagDia::slotApply()
 {
-    emit apply();
+    emit applyParagStyle();
 }
 
 void KoParagDia::slotOk()

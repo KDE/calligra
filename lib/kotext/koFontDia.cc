@@ -706,7 +706,7 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
 
 void KoFontDia::slotApply()
 {
-    emit apply();
+    emit applyFont();
 }
 
 void KoFontDia::slotOk()
