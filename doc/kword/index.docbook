@@ -483,7 +483,7 @@ url="http://apps.kde.org/kword">http://apps.kde.org/kword</ulink>.
 </sect1>
 
 <sect1 id="compilation">
-<title>Compilation and installation</title>
+<title>Compilation and Installation</title>
 
 <para>
 In order to compile and install &kword; on your system, type the following in the base
