@@ -1,0 +1,12 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KChart
+Name[sk]=KChart
+Exec=kchart.bin --server
+Comment=Kalles Charter
+MimeTypes=application/x-kchart,
+RepoID=IDL:KCharter/Factory:1.0,
+ActivationMode=shared
+Type=OpenPart
+Icon=image.xpm
+MiniIcon=image.xpm
