@@ -363,6 +363,11 @@ signals:
 
     void showFormatObject(const KoTextFormat &);
 
+    // Keeping track of text modifications - not emitted during loading/closing.
+    void paragraphCreated( KoTextParag* parag );
+    void paragraphModified( KoTextParag* parag ); // add more args if necessary
+    void paragraphDeleted( KoTextParag* parag );
+
 public slots:
     void formatMore( bool emitAfterFormatting = true );
 

@@ -899,6 +899,8 @@ public:
 
 signals:
     void minimumWidthChanged( int );
+    /** Emitted when a paragraph is deleted (kotext addition) */
+    void paragraphDeleted( KoTextParag* parag );
 
 private:
     void init();

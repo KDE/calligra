@@ -3714,9 +3714,8 @@ KoTextParag::~KoTextParag()
     //// kotext
     if ( !document()->isDestroying() )
     {
-        // TODO let the text document emit a signal paragraphDeleted ?
-        // needed for background spellcheck
         invalidateCounters();
+        emit document()->paragraphDeleted( this );
     }
     //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
     delete m_item;
