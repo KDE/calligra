@@ -4903,7 +4903,7 @@ QTextFormatCollection::~QTextFormatCollection()
 
 QTextFormat *QTextFormatCollection::format( QTextFormat *f )
 {
-    if ( f->parent() == this ) {
+    if ( f->parent() == this || f == defFormat ) {
 #ifdef DEBUG_COLLECTION
 	qDebug( " format(f) need '%s', best case!", f->key().latin1() );
 #endif
@@ -5041,7 +5041,6 @@ void QTextFormatCollection::setPainter( QPainter *p )
 
 void QTextFormatCollection::debug()
 {
-#ifdef DEBUG_COLLECTION
     qDebug( "------------ QTextFormatCollection: debug --------------- BEGIN" );
     QDictIterator<QTextFormat> it( cKey );
     for ( ; it.current(); ++it ) {
@@ -5049,7 +5048,6 @@ void QTextFormatCollection::debug()
 		it.current(), it.current()->ref );
     }
     qDebug( "------------ QTextFormatCollection: debug --------------- END" );
-#endif
 }
 
 void QTextFormatCollection::updateStyles()
