@@ -19,6 +19,16 @@
 
 #include "kpgroupobject.h"
 
+#include "kpresenter_doc.h"
+#include "kplineobject.h"
+#include "kprectobject.h"
+#include "kpellipseobject.h"
+#include "kpautoformobject.h"
+#include "kpclipartobject.h"
+#include "kptextobject.h"
+#include "kppixmapobject.h"
+#include "kppieobject.h"
+
 #include <qpainter.h>
 
 /******************************************************************/
@@ -107,11 +117,156 @@ void KPGroupObject::resizeBy( int _dx, int _dy )
 /*================================================================*/
 void KPGroupObject::save( ostream& out )
 {
+    out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
+    out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
+    out << indent << "<OBJECTS>" << endl;
+    
+    KPObject *kpobject = 0;
+    for ( unsigned int i = 0; i < objects.count() ; ++i ) {
+	kpobject = objects.at( i );
+	if ( kpobject->getType() == OT_PART ) 
+	    continue;
+	out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
+	kpobject->save( out );
+	out << etag << "</OBJECT>" << endl;
+    }
+
+    out << indent << "</OBJECTS>" << endl;
 }
 
 /*================================================================*/
-void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
+			  KPresenterDoc *doc )
 {
+    string tag;
+    string name;
+
+    updateObjs = FALSE;
+    
+    while ( parser.open( 0L, tag ) ) {
+	KOMLParser::parseTag( tag.c_str(), name, lst );
+
+	// orig
+	if ( name == "ORIG" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+		if ( ( *it ).m_strName == "x" )
+		    orig.setX( atoi( ( *it ).m_strValue.c_str() ) );
+		if ( ( *it ).m_strName == "y" )
+		    orig.setY( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	}
+
+	// size
+	else if ( name == "SIZE" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+		if ( ( *it ).m_strName == "width" )
+		    ext.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
+		if ( ( *it ).m_strName == "height" )
+		    ext.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
+	    }
+	} else if ( name == "OBJECTS" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+	    }
+
+	    ObjType t = OT_LINE;
+
+	    while ( parser.open( 0L, tag ) ) {
+		KOMLParser::parseTag( tag.c_str(), name, lst );
+
+		// object
+		if ( name == "OBJECT" ) {
+		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    vector<KOMLAttrib>::const_iterator it = lst.begin();
+		    for( ; it != lst.end(); it++ ) {
+			if ( ( *it ).m_strName == "type" )
+			    t = ( ObjType )atoi( ( *it ).m_strValue.c_str() );
+		    }
+
+		    switch ( t ) {
+		    case OT_LINE: {
+			KPLineObject *kplineobject = new KPLineObject();
+			kplineobject->load( parser, lst );
+
+			objects.append( kplineobject );
+		    } break;
+		    case OT_RECT: {
+			KPRectObject *kprectobject = new KPRectObject();
+			kprectobject->setRnds( doc->getRndX(), doc->getRndY() );
+			kprectobject->load( parser, lst );
+
+			objects.append( kprectobject );
+		    } break;
+		    case OT_ELLIPSE: {
+			KPEllipseObject *kpellipseobject = new KPEllipseObject();
+			kpellipseobject->load( parser, lst );
+
+			objects.append( kpellipseobject );
+		    } break;
+		    case OT_PIE: {
+			KPPieObject *kppieobject = new KPPieObject();
+			kppieobject->load( parser, lst );
+
+			objects.append( kppieobject );
+		    } break;
+		    case OT_AUTOFORM: {
+			KPAutoformObject *kpautoformobject = new KPAutoformObject();
+			kpautoformobject->load( parser, lst );
+
+			objects.append( kpautoformobject );
+		    } break;
+		    case OT_CLIPART: {
+			KPClipartObject *kpclipartobject = new KPClipartObject( doc->getClipartCollection() );
+			kpclipartobject->load( parser, lst );
+
+			objects.append( kpclipartobject );
+		    } break;
+		    case OT_TEXT: {
+			KPTextObject *kptextobject = new KPTextObject();
+			kptextobject->load( parser, lst );
+
+			objects.append( kptextobject );
+		    } break;
+		    case OT_PICTURE: {
+			KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->getPixmapCollection() );
+			kppixmapobject->load( parser, lst );
+
+			objects.append( kppixmapobject );
+		    } break;
+		    case OT_GROUP: {
+			KPGroupObject *kpgroupobject = new KPGroupObject();
+			kpgroupobject->load( parser, lst, doc );
+
+			objects.append( kpgroupobject );
+		    } break;
+		    default: break;
+		    }
+
+		} else
+		    cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;
+
+		if ( !parser.close( tag ) ) {
+		    cerr << "ERR: Closing Child" << endl;
+		    return;
+		}
+	    }
+	    
+	    
+	} else
+	    cerr << "Unknown tag '" << tag << "' in GROUP_OBJECT" << endl;
+
+	if ( !parser.close( tag ) ) {
+	    cerr << "ERR: Closing Child" << endl;
+	    return;
+	}
+    }
+    
+    updateObjs = TRUE;
 }
 
 /*================================================================*/

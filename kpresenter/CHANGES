@@ -500,3 +500,8 @@ Reggie, 3.11.1999:
   - Resizing groupobjects doesn´t work correctly
   - Saving/Loading them is not implemented
   (but this will work soon :-)
+
+Reggie, 4.11.1999:
+------------------
+- Implemented Saving/Loading group objects 
+

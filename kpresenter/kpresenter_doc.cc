@@ -33,6 +33,7 @@
 #include "kppixmapobject.h"
 #include "kppieobject.h"
 #include "kppartobject.h"
+#include "kpgroupobject.h"
 #include "movecmd.h"
 #include "insertcmd.h"
 #include "deletecmd.h"
@@ -1057,6 +1058,17 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
 		    kppixmapobject->reload();
 		} else
 		    _objectList->append( kppixmapobject );
+	    } break;
+	    case OT_GROUP: {
+		KPGroupObject *kpgroupobject = new KPGroupObject();
+		kpgroupobject->load( parser, lst, this );
+
+		if ( _paste ) {
+		    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this );
+		    insertCmd->execute();
+		    _commands.addCommand( insertCmd );
+		} else
+		    _objectList->append( kpgroupobject );
 	    } break;
 	    default: break;
 	    }

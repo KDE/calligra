@@ -20,6 +20,8 @@
 #ifndef kpgroupobject_h
 #define kpgroupobject_h
 
+class KPresenterDoc;
+
 #include "kpobject.h"
 
 /******************************************************************/
@@ -58,7 +60,7 @@ public:
     { return OT_GROUP; }
 
     virtual void save( ostream& out );
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst, KPresenterDoc *doc );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
