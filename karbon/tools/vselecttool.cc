@@ -283,11 +283,18 @@ VSelectTool::arrowKeyReleased( Qt::Key key )
 void
 VSelectTool::updateStatusBar() const
 {
-	if( view()->part()->document().selection()->objects().count() > 0 )
+	int objcount = view()->part()->document().selection()->objects().count();
+	if( objcount > 0 )
 	{
 		KoRect rect = view()->part()->document().selection()->boundingBox();
 
-		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)] (%5)" ).arg( KoUnit::ptToUnit( rect.x(), view()->part()->unit() ) ).arg( KoUnit::ptToUnit( rect.y(), view()->part()->unit() ) ).arg( KoUnit::ptToUnit( rect.right(), view()->part()->unit() ) ).arg( KoUnit::ptToUnit( rect.bottom(), view()->part()->unit() ) ).arg( view()->part()->unitName() );
+		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)] (%5)" ).arg( KoUnit::ptToUnit( rect.x(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.y(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.right(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.bottom(), view()->part()->unit() ), 0, 'f', 1 ).arg( view()->part()->unitName() );
+
+		if( objcount == 1 )
+			selectMessage += QString( "(%1 object)" ).arg( objcount );
+		else
+			selectMessage += QString( "(%1 objects)" ).arg( objcount );
+
 		view()->statusMessage()->setText( selectMessage );
 	}
 	else
