@@ -253,10 +253,10 @@ OoDrawImport::convert()
 		else if( name == "draw:circle" || name == "draw:ellipse" )
 		{
 				storeObjectStyles( o );
-				double x = KoUnit::parseValue( o.attribute( "svg:x" ) );
-				double y = ymirror( KoUnit::parseValue( o.attribute( "svg:y" ) ) );
 				double w = KoUnit::parseValue( o.attribute( "svg:width" ) );
 				double h = KoUnit::parseValue( o.attribute( "svg:height" ) );
+				double x = KoUnit::parseValue( o.attribute( "svg:x" ) );
+				double y = ymirror( KoUnit::parseValue( o.attribute( "svg:y" ) ) ) - h;
 				double start = o.attribute( "draw:start-angle" ).toDouble();
 				double end = o.attribute( "draw:end-angle" ).toDouble();
 				QString kind = o.attribute( "draw:kind" );
