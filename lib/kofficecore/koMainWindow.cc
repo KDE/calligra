@@ -7,6 +7,7 @@
 #include <opApplication.h>
 #include <opMenuBarManager.h>
 #include <opToolBarManager.h>
+#include <opStatusBarManager.h>
 #include <opMenu.h>
 
 #include <qkeycode.h>
@@ -29,6 +30,9 @@ KoMainWindow::KoMainWindow( const char *_name )
   
   // create the toolbar manager to handle the toolbars of the embedded parts
   (void)toolBarManager();
+
+  // create the statusbar manager to handle the statusbar of the embedded parts
+  (void)statusBarManager();
 
   // build a toolbar and insert some buttons
   opToolBar()->insertButton(Icon("filenew.xpm"),TOOLBAR_NEW, SIGNAL( clicked() ), this, SLOT( slotFileNew() ), true,i18n("New"));
@@ -96,8 +100,10 @@ void KoMainWindow::slotActivePartChanged( unsigned long _new_part_id, unsigned l
 {
   menuBarManager()->clear();
   toolBarManager()->clear();
+  statusBarManager()->clear();
   menuBarManager()->create( _new_part_id );
   toolBarManager()->create( _new_part_id );
+  statusBarManager()->create( _new_part_id );
 }
 
 void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
