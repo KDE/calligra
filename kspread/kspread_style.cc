@@ -1188,6 +1188,7 @@ bool KSpreadStyle::loadXML( QDomElement & format )
     {
       m_currency.symbol = format.attribute( "symbol" );
     }
+    m_featuresSet |= SFormatType;
   }
   if ( format.hasAttribute( "angle" ) )
   {
@@ -1575,7 +1576,7 @@ KSpreadFormat::FormatType KSpreadStyle::formatType() const
 
 KSpreadFormat::Currency const & KSpreadStyle::currency() const
 {
-  return ( !m_parent ? m_currency : m_parent->currency() );
+  return ( !m_parent || featureSet( SFormatType ) ? m_currency : m_parent->currency() );
 }
 
 QString const & KSpreadStyle::strFormat() const
@@ -2066,10 +2067,12 @@ KSpreadStyle * KSpreadStyle::setCurrency( KSpreadFormat::Currency const & curren
   {
     KSpreadStyle * style = new KSpreadStyle( this );
     style->m_currency = currency;
+    style->m_featuresSet |= SFormatType;
     return style;
   }
 
   m_currency = currency;
+  m_featuresSet |= SFormatType;
   return this;
 }
 
