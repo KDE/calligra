@@ -271,6 +271,8 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 
 void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select )
 {
+  kdDebug() << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
+    " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
   if ( table )
     m_pView->setActiveTable( table );
   else
@@ -286,11 +288,20 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   int xpos = table->columnPos( x, this );
   int ypos = table->rowPos( y, this );
 
-  if ( xpos < 0 || xpos > width()-100 * zoom() )
-    horzScrollBar()->setValue( xOffset() + xpos );
+  int minX = 100 * zoom(); // less than that, we scroll
+  int minY = 50 * zoom();
+  int maxX = width() - 100 * zoom(); // more than that, we scroll
+  int maxY = height() - 50 * zoom();
 
-  if ( ypos < 0 || ypos > height() - 50 * zoom() )
-    vertScrollBar()->setValue( yOffset() + ypos );
+  if ( xpos < minX )
+    horzScrollBar()->setValue( xOffset() + xpos - minX );
+  else if ( xpos > maxX )
+    horzScrollBar()->setValue( xOffset() + xpos - maxX );
+
+  if ( ypos < minY )
+    vertScrollBar()->setValue( yOffset() + ypos - minY );
+  else if ( ypos > maxY )
+    vertScrollBar()->setValue( yOffset() + ypos - maxY );
 
   QRect selection = activeTable()->selectionRect();
 
@@ -343,11 +354,20 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   int xpos = table->columnPos( x, this );
   int ypos = table->rowPos( y, this );
 
-  if ( xpos < 0 || xpos > width()-100 * zoom() )
-    horzScrollBar()->setValue( xOffset() + xpos );
+  int minX = 100 * zoom(); // less than that, we scroll
+  int minY = 50 * zoom();
+  int maxX = width() - 100 * zoom(); // more than that, we scroll
+  int maxY = height() - 50 * zoom();
 
-  if ( ypos < 0 || ypos > height() - 50 * zoom() )
-    vertScrollBar()->setValue( yOffset() + ypos );
+  if ( xpos < minX )
+    horzScrollBar()->setValue( xOffset() + xpos - minX);
+  else if ( xpos > maxX )
+    horzScrollBar()->setValue( xOffset() + xpos - maxX );
+
+  if ( ypos < minY )
+    vertScrollBar()->setValue( yOffset() + ypos - minY );
+  else if ( ypos > maxY )
+    vertScrollBar()->setValue( yOffset() + ypos - maxY );
 
   if ( !make_select )
     setChooseMarker( QPoint( x, y ) );
