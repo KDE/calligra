@@ -81,7 +81,7 @@ class CqlRecord : public KexiDBRecord
 
 		unsigned long	last_id();
 
-
+                virtual KexiDBError *latestError();
 	protected:
 		void		setupCursor();
 
@@ -92,6 +92,9 @@ class CqlRecord : public KexiDBRecord
 		DataVector	m_datavector;
 		NullVector	m_nullvector;
 		bool		m_force;
+
+	private:
+                KexiDBError     m_error;
 };
 
 #endif

@@ -52,6 +52,7 @@ CqlDB::dbType()
 bool
 CqlDB::load(QString file, bool)
 {
+	m_error.clear();
 	char *dir = file.latin1();
 	kdDebug() << "CqlDB::load()" << endl;
 	try
@@ -75,8 +76,11 @@ CqlDB::load(QString file, bool)
 	catch(CqlException& ex)
 	{
 		cerr << ex << endl;
-		throw new KexiDBError(0, i18n("Connection failed"));
+		m_error.setup(1,i18n("Connection failed"));
+		return false;
+		//throw new KexiDBError(0, i18n("Connection failed"));
 	}
+	return true;
 }
 
 QStringList
@@ -95,6 +99,7 @@ CqlDB::tables()
 bool
 CqlDB::query(QString statement)
 {
+	m_error.clear();
 	kdDebug() << "CqlDB::query()" << endl;
 
 	if(!m_db)
@@ -109,7 +114,9 @@ CqlDB::query(QString statement)
 	}
 	catch(CqlException& ex)
 	{
-		throw new KexiDBError(0, i18n("Query failed"));
+		m_error.setup(1,i18n("Query failed"));
+//		throw new KexiDBError(0, i18n("Query failed"));
+		return false;
 		cerr << ex << endl;
 	}
 
@@ -136,6 +143,10 @@ CqlDB::queryRecord(QString statement, bool buffer)
 //	try
 //	{
 		CqlRecord *record = new CqlRecord(this, "rec", m_db, rs);
+		if (record->latestError()->kexiErrnoFunction()!=0) {
+			delete record;
+			return 0;
+		}
 		return record;
 //	}
 //	catch(KexiDBError *e)
@@ -157,25 +168,25 @@ CqlDB::alterField(const QString& table, const QString& field, const QString& new
 
 // cql->kexi
 
-static QString
+QString
 CqlDB::cqlString(const CqlString &str)
 {
 	return QString(str.text());
 }
 
-static QString
+QString
 CqlDB::cqlFixedString(const CqlFixedLengthString &str)
 {
 	return QString(str.text());
 }
 
-static QString
+QString
 CqlDB::errorText(CqlException &ex)
 {
 	return cqlString(ex.errorText());
 }
 
-static KexiDBField::ColumnType
+KexiDBField::ColumnType
 CqlDB::getInternalDataType(int t)
 {
 	switch(t)
@@ -224,6 +235,11 @@ CqlDB::getInternalDataType(int t)
 		default:
 			return KexiDBField::SQLVarchar;
 	}
+}
+
+KexiDBError *CqlDB::latestError()
+{
+	return &m_error;
 }
 
 CqlDB::~CqlDB()

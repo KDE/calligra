@@ -34,6 +34,7 @@ class KexiDBError
 		KexiDBError(const KexiDBError &old);
 		KexiDBError(int kexiErrno, QString text=QString::null);
 		void setup(int KexiErrno, QString text=QString::null);
+		void clear();
 		~KexiDBError();
 
 		void	toUser(QWidget *parent);

@@ -57,8 +57,11 @@ class CqlDB : public KexiDB
 		static QString	errorText(CqlException &ex);
 		static KexiDBField::ColumnType getInternalDataType(int t);
 
+                virtual KexiDBError *latestError();
+
 	private:
 		SqlHandle	*m_db;
+                KexiDBError     m_error;
 };
 
 #endif

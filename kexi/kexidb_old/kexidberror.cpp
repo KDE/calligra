@@ -63,6 +63,11 @@ KexiDBError::message()
 	return m_text;
 }
 
+void KexiDBError::clear() 
+{
+	setup(0);
+}
+
 KexiDBError::~KexiDBError()
 {
 }

@@ -43,13 +43,16 @@ CqlRecord::CqlRecord(QObject *p, const char *name, SqlHandle *handle, const QStr
 		catch(CqlException &err)
 		{
 			cerr << err << endl;
-			throw KexiDBError(0, CqlDB::errorText(err));
+			m_error.setup(1,CqlDB::errorText(err));
+			//throw KexiDBError(0, CqlDB::errorText(err));
 		}
 	}
 	catch(CqlException &err)
 	{
+		
 		cerr << err << endl;
-		throw KexiDBError(0, CqlDB::errorText(err));
+		m_error.setup(1,CqlDB::errorText(err));
+//		throw KexiDBError(0, CqlDB::errorText(err));
 	}
 	
 //	m_cursor->GetResultInfo();
@@ -227,6 +230,11 @@ CqlRecord::setupCursor()
 	}
 
 	m_fieldCount = fields;
+}
+
+KexiDBError *CqlRecord::latestError()
+{
+	return &m_error;
 }
 
 CqlRecord::~CqlRecord()
