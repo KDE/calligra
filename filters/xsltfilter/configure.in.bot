@@ -1,0 +1,19 @@
+if test -z "$LIBXML_LIBS"; then
+  echo ""
+  echo "You're missing libxml2 (at least version 2.4.8)."
+  echo "The XSLT filters will not be compiled."
+  echo "Please download libxml2 from http://xmlsoft.org ."
+  echo ""
+  all_tests=bad
+fi
+
+if test -z "$LIBXSLT_LIBS"; then
+  echo ""
+  echo "You're missing libxslt (at least version 1.0.7)."
+  echo "The XSLT filters will not be compiled."
+# TODO: URL is not exacly right anymore
+  echo "Please download libxml2 from http://xmlsoft.org ."
+  echo ""
+  all_tests=bad
+fi
+
