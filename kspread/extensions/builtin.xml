@@ -2736,6 +2736,31 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>NORMINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>probability value for which the standard logarithmic distribution is to be calculated</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>middle value in the normal distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>standard deviation of the normal distribution</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the inverse of the normal cumulative distribution. The number
+          must be between 0 and 1 (non-inclusive) and STD must be positive.
+        </Text>
+        <Syntax>NORMINV(number;MV;STD)</Syntax>
+        <Example>NORMINV(0.9;63;5) equals 69.41</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>

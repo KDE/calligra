@@ -2548,6 +2548,32 @@ static bool kspreadfunc_normsinv( KSContext& context ) {
   return true;
 }
 
+static bool kspreadfunc_norminv( KSContext& context ) {
+  //returns the inverse of the normal cumulative distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  
+  if ( !KSUtil::checkArgumentsCount( context, 3, "NORMINV", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double mue = args[1]->doubleValue();
+  double sigma = args[2]->doubleValue();
+
+  if (sigma <= 0.0 || x <= 0.0 || x >= 1.0)
+    return false;
+  else
+    context.setValue( new KSValue((gaussinv_helper(x)*sigma + mue)));
+  
+  return true;
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
@@ -5051,6 +5077,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "EXPONDIST", new KSValue( new KSBuiltinFunction( module, "EXPONDIST", kspreadfunc_expondist) ) );
   module->addObject( "WEIBULL", new KSValue( new KSBuiltinFunction( module, "WEIBULL", kspreadfunc_weibull) ) );
   module->addObject( "NORMSINV", new KSValue( new KSBuiltinFunction( module, "NORMSINV", kspreadfunc_normsinv) ) );
+  module->addObject( "NORMINV", new KSValue( new KSBuiltinFunction( module, "NORMINV", kspreadfunc_norminv) ) );
 
   return module;
 }
