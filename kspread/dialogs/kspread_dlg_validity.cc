@@ -35,7 +35,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qmultilineedit.h>
+#include <qtextedit.h>
 
 
 KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
@@ -159,7 +159,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   tmpQLabel->setText(i18n("Message:" ));
   grid2->addWidget(tmpQLabel,2,0);
 
-  message =new QMultiLineEdit( tmpQButtonGroup);
+  message =new QTextEdit( tmpQButtonGroup);
   grid2->addMultiCellWidget(message,2, 3,1, 1);
   lay1->addWidget(tmpQButtonGroup);
 

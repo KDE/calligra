@@ -30,7 +30,7 @@ class KSpreadView;
 class KSpreadSheet;
 class QLabel;
 class QLineEdit;
-class QMultiLineEdit;
+class QTextEdit;
 class QComboBox;
 class QPushButton;
 
@@ -58,7 +58,7 @@ protected:
   QComboBox *chooseAction;
   QComboBox *chooseType;
   QLineEdit * title;
-  QMultiLineEdit *message;
+  QTextEdit *message;
   KSpreadValidity result;
 };
 
