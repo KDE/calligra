@@ -691,7 +691,7 @@ QString KSValue::toString() const
 	  tmp += it.data()->toString();
 	  tmp += " ), ";
 	}
-	tmp += "]";
+	tmp += "}";
 	return tmp;
       }
       break;
