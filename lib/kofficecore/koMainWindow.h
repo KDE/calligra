@@ -81,7 +81,7 @@ public:
 
     /**
      * The name of the native file format. Usually the name of
-     * your component, for example "KSpread" or "KWord".
+     * your component, for example i18n("KSpread") or i18n("KWord").
      */
     virtual QString nativeFormatName() const = 0;
 
