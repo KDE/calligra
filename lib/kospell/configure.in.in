@@ -4,11 +4,13 @@
    AC_CHECK_LIB(aspell, new_aspell_config, [LIBASPELL="-laspell"])
    AC_CHECK_HEADER(aspell.h)
    if test -z "$ac_cv_header_aspell_h"; then
-      LIBASPELL=""
-   else if test -n "$LIBASPELL"; then
-      dnl the header and the lib exist -> ok
-      dnl this is for config.h
-      AC_DEFINE(HAVE_LIBASPELL, 1, [If we are going to use libaspell for spell-checking])
+       LIBASPELL=""
+   else
+       if test -n "$LIBASPELL"; then
+           dnl the header and the lib exist -> ok
+           dnl this is for config.h
+           AC_DEFINE(HAVE_LIBASPELL, 1, [If we are going to use libaspell for spell-checking])
+       fi
    fi
    dnl this is for lib/Makefile.am, to know whether to compile kospell
    AM_CONDITIONAL(include_KOSPELL, test -n "$LIBASPELL")
