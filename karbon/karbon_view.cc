@@ -169,6 +169,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 KarbonView::~KarbonView()
 {
 	delete m_toolFactory;
+	m_toolFactory = 0L;
 	// dialogs:
 
 	if( shell() )
@@ -240,6 +241,8 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 		delete m_toolOptionsDocker;
 		delete m_documentDocker;
 		m_toolbox = 0L;
+		delete m_toolFactory;
+		m_toolFactory = 0L;
 		return ;
 	}
 
