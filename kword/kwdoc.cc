@@ -1177,7 +1177,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     bool _first_footer = FALSE, _even_footer = FALSE, _odd_footer = FALSE;
     bool _first_header = FALSE, _even_header = FALSE, _odd_header = FALSE;
-    bool _footnotes = FALSE;
+    //bool _footnotes = FALSE;
+    KWFrameSet * footNotesFS = 0L;
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1189,9 +1190,14 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         case KWFrameSet::FI_FIRST_FOOTER: _first_footer = TRUE; break;
         case KWFrameSet::FI_EVEN_FOOTER: _odd_footer = TRUE; break;
         case KWFrameSet::FI_ODD_FOOTER: _even_footer = TRUE; break;
-        case KWFrameSet::FI_FOOTNOTE: _footnotes = TRUE; break;
+        case KWFrameSet::FI_FOOTNOTE: footNotesFS = fit.current(); /* _footnotes = TRUE; */ break;
         default: break;
         }
+    }
+    // Not implemented currently -> remove all frames, to avoid problems
+    if ( footNotesFS )
+    {
+	footNotesFS->deleteAllFrames();
     }
 
     // create defaults if they were not in the input file.
@@ -1267,6 +1273,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frames.append( fs );
     }
 
+#if 0
     if ( !_footnotes ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Footnotes" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
@@ -1281,6 +1288,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frames.append( fs );
         fs->setVisible( FALSE );
     }
+#endif
 
 #if 0 // already done !
     KWChild *ch = 0L;
