@@ -186,21 +186,16 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
 KoMainWindow::~KoMainWindow()
 {
-    kdDebug(30003) << "KoMainWindow::~KoMainWindow -----------------------------" << endl;
     // The doc and view might still exist (this is the case when closing the window)
-    if (d->m_rootDoc) {
-	kdDebug() << "root doc" << endl;
+    if (d->m_rootDoc)
         d->m_rootDoc->removeShell(this);
-    }
 
     if(d->m_rootViews.findRef(d->m_activeView)==-1) {
-	kdDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	delete d->m_activeView;
 	d->m_activeView=0L;
     }
     d->m_rootViews.setAutoDelete( true );
     d->m_rootViews.clear();
-    kdDebug() << " views deleted" << endl;
 
     // We have to check if this was a root document.
     // -> We aren't allowed to delete the (embedded) document!
@@ -222,7 +217,6 @@ KoMainWindow::~KoMainWindow()
     delete d->m_splitter;
     d->m_splitter=0L;
     delete d;
-    kdDebug(30003) << "KoMainWindow::~KoMainWindow -----------------------------" << endl;
 }
 
 void KoMainWindow::setRootDocument( KoDocument *doc )

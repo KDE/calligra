@@ -121,8 +121,6 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
   if(m_documentList==0L)
     m_documentList=new QList<KoDocument>;
   m_documentList->append(this);
-  kdDebug() << "XXXXXXXXXXXXX docList (append): " << m_documentList->count()
-	    << endl;
 
   d = new KoDocumentPrivate;
   m_bEmpty = TRUE;
@@ -150,8 +148,6 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
 
 KoDocument::~KoDocument()
 {
-  kdDebug(30003) << "KoDocument::~KoDocument() " << this << endl;
-
   QListIterator<KoDocumentChild> childIt( d->m_children );
   for (; childIt.current(); ++childIt )
     disconnect( childIt.current(), SIGNAL( destroyed() ),
@@ -160,16 +156,6 @@ KoDocument::~KoDocument()
   d->m_children.setAutoDelete( true );
   d->m_children.clear();
 
-  /*
-  KoDocumentChild *child=d->m_children.first();
-  for( ; child!=0L; child=d->m_children.next()) {
-      d->m_children.removeRef(child);
-      delete child;
-      child=0L;
-  }
-  */
-  kdDebug(30003) << "KoDocument::~KoDocument() shells:" << d->m_shells.count() << endl;
-
   QListIterator<KoMainWindow> shellIt( d->m_shells );
   for (; shellIt.current(); ++shellIt )
     shellIt.current()->setRootDocumentDirect( 0L );
@@ -177,14 +163,8 @@ KoDocument::~KoDocument()
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
-  // just to avoid mem leaks
-  //  while(! d->m_views.isEmpty())
-  //    d->m_views.remove();
-
   delete d;
   m_documentList->removeRef(this);
-  kdDebug() << "XXXXXXXXXXXXX docList (remove): " << m_documentList->count()
-	    << endl;
 }
 
 void KoDocument::delayedDestruction()
@@ -550,7 +530,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
   }
   else
     return false;
-
+  // FIXME (Werner)
   if ( store->open( "/documentinfo.xml" ) )
   {
     QBuffer buffer;
@@ -724,7 +704,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
       QApplication::restoreOverrideCursor();
       return false;
     }
-
+    // FIXME (Werner)
     if ( store->open( "/documentinfo.xml" ) )
     {
       istorestream in( store );
