@@ -56,7 +56,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The acos() function returns the arc cosine in radians and the value is mathematically defined to be between 0 and PI(inclusive)</Text>
+	<Text>The acos() function returns the arc cosine in radians and the value is mathematically defined to be between 0 and PI(inclusive).</Text>
 	<Syntax>acos(Float)</Syntax>
 	<Example>acos(0.8) equals 0.6435011</Example>
 	<Example>acos(0) equals 1.57079633</Example>
@@ -101,7 +101,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The cosh() function returns the hyperbolic cosine of x, which is defined mathematically as (exp(x) + exp(-x)) / 2</Text>
+	<Text>The cosh() function returns the hyperbolic cosine of x, which is defined mathematically as (exp(x) + exp(-x)) / 2.</Text>
 	<Syntax>cosh(Float)</Syntax>
 	<Example>cosh(0.8) equals 1.33743495</Example>
 	<Example>cosh(0) equals 1</Example>
@@ -176,7 +176,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The atanh() function calculates the inverse hyperbolic tangent of x; that is the value whose hyperbolic tangent is x. If the absolute value of x is greater than 1.0, atanh() returns not-a-number (NaN)</Text>
+	<Text>The atanh() function calculates the inverse hyperbolic tangent of x; that is the value whose hyperbolic tangent is x. If the absolute value of x is greater than 1.0, atanh() returns not-a-number (NaN).</Text>
 	<Syntax>atanh(Float)</Syntax>
 	<Example>atanh(0.8) equals 1.09861229</Example>
 	<Example>atanh(0) equals 0</Example>
@@ -232,7 +232,7 @@
       <Name>PI</Name>
       <Type>Float</Type>
       <Help>
-	<Text>The PI() function returns the PI value</Text>
+	<Text>The PI() function returns the PI value.</Text>
 	<Syntax>PI()</Syntax>
 	<Example>PI() equals 3.141592654...</Example>
       </Help>
@@ -511,7 +511,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-        <Text>The SEXDEC() function returns decimal value. You can also give a time value</Text>
+        <Text>The SEXDEC() function returns decimal value. You can also give a time value.</Text>
         <Syntax>SEXDEC( time value ) or SEXDEC(hour,minute,second)</Syntax>
         <Example>SEXDEC(1;5;7) returns 1.0852778 </Example>
         <Example>DECSEX("8:05") returns 8.08333333</Example>
@@ -734,7 +734,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The day() function returns name of day of the week (1..7). In some countries the first day of the week is the monday, while in others the first day of the week is sunday.</Text>
+	<Text>The day() function returns name of day of the week (1..7). In some countries the first day of the week is Monday, while in others the first day of the week is Sunday.</Text>
 	<Syntax>day( weekday )</Syntax>
 	<Example>day(1) returns Monday (if the week starts on Monday)</Example>
       </Help>
@@ -810,7 +810,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The EXACT() function returns True if these two strings are equal otherwise returns False.</Text>
+	<Text>The EXACT() function returns True if these two strings are equal. Otherwise, it returns False.</Text>
 	<Syntax>EXACT( string1; string2 )</Syntax>
 	<Example>EXACT( "Koffice"; "Koffice" ) returns True</Example>
         <Example>EXACT( "kspread"; "Koffice" ) returns False</Example>
@@ -829,7 +829,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The find() function searches a substring. This function returns True if this substring exists otherwise it returns False.</Text>
+	<Text>The find() function searches a substring. This function returns True if this substring exists. Otherwise, it returns False.</Text>
 	<Syntax>find( haystack; needle )</Syntax>
 	<Example>find( "Kof"; "Koffice" ) returns True</Example>
 	<Example>find( "kspread"; "Koffice") returns False</Example>
@@ -1077,7 +1077,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The MOD() function returns the remainder after division if the second parameter is null the function returns #DIV/0</Text>
+	<Text>The MOD() function returns the remainder after division. If the second parameter is null the function returns #DIV/0.</Text>
 	<Syntax>MOD( value; value )</Syntax>
 	<Example>MOD(12;5) returns 2</Example>
 	<Example>MOD(5;5) returns 0</Example>
@@ -1108,7 +1108,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>This function multiplies each value by -1</Text>
+	<Text>This function multiplies each value by -1.</Text>
 	<Syntax>INV( Value )</Syntax>
 	<Example>INV(-5) equals 5</Example>
 	<Example>INV(5) equals -5</Example>
@@ -1186,7 +1186,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The sum() function calculates the sum of all the values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5)</Text>
+	<Text>The sum() function calculates the sum of all the values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5).</Text>
 	<Syntax>sum( values; values; ... )</Syntax>
 	<Example>sum(12;5;7) equals 24</Example>
 	<Example>sum(12.5;2) equals 14.5</Example>
@@ -1217,7 +1217,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The sumsq() function calculates the sum of all the squares of values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5)</Text>
+	<Text>The sumsq() function calculates the sum of all the squares of values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5).</Text>
 	<Syntax>sumsq( values; values; ... )</Syntax>
 	<Example>sumsq(12;5;7) equals 218</Example>
 	<Example>sumsq(12.5;2) equals 173</Example>
@@ -1311,7 +1311,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The multiply() function multiplies all the values given in the parameters. You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12;5;12.5)</Text>
+	<Text>The multiply() function multiplies all the values given in the parameters. You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12;5;12.5).</Text>
 	<Syntax>multiply( values; values; ... )</Syntax>
 	<Example>multiply(12;5;7) equals 420</Example>
 	<Example>multiply(12.5;2) equals 25</Example>
@@ -1326,7 +1326,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The sqrt() function returns the non-negative square root of x. If x is negative, then "nan" is returned</Text>
+	<Text>The sqrt() function returns the non-negative square root of x. If x is negative, "nan" is returned.</Text>
 	<Syntax>sqrt( x )</Syntax>
 	<Example>sqrt(9) equals 3</Example>
 	<Example>sqrt(-9) equals "nan"</Example>
@@ -1660,7 +1660,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The IMLN(string) returns the natural logarithm of a complex number</Text>
+	<Text>The IMLN(string) returns the natural logarithm of a complex number.</Text>
 	<Syntax>IMLN(string )</Syntax>
 	<Example>IMLN("3-i") returns "1.15129-0.321751i"</Example>
 	<Example>IMLN("12") returns 2.48491 </Example>
@@ -1904,7 +1904,7 @@
 	<Type range="true">Boolean</Type>
       </Parameter>
       <Help>
-	<Text>The AND() function returns True if all the values are true, otherwise returns False</Text>
+	<Text>The AND() function returns True if all the values are true, otherwise returns False.</Text>
 	<Syntax>AND( values; values; ... )</Syntax>
 	<Example>AND(True;True;True) returns True</Example>
 	<Example>AND(True;False) returns False</Example>
@@ -1935,7 +1935,7 @@
 	<Type range="true">Boolean</Type>
       </Parameter>
       <Help>
-	<Text>The OR() function returns True if at least one of the values is true, otherwise returns False</Text>
+	<Text>The OR() function returns True if at least one of the values is true, otherwise returns False.</Text>
 	<Syntax>OR( values; values; ... )</Syntax>
 	<Example>OR(False;False;False) returns False</Example>
 	<Example>OR(True;False) returns True</Example>
@@ -2064,7 +2064,7 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISNUM() function returns True if the parameter is a numerical value otherwise it returns False</Text>
+	<Text>The ISNUM() function returns True if the parameter is a numerical value otherwise it returns False.</Text>
 	<Syntax>ISNUM( x )</Syntax>
 	<Example>ISNUM(12) returns True</Example>
 	<Example>ISNUM(hello) returns False</Example>
@@ -2079,7 +2079,7 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISTIME() function returns True if the parameter is a time value otherwise it returns False</Text>
+	<Text>The ISTIME() function returns True if the parameter is a time value otherwise it returns False.</Text>
 	<Syntax>ISTIME( x )</Syntax>
 	<Example>ISTIME("12:05") returns True</Example>
 	<Example>ISTIME(hello) returns False</Example>
@@ -2141,7 +2141,7 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISODD() function returns True if the number is odd and otherwise returns False</Text>
+	<Text>The ISODD() function returns True if the number is odd and otherwise returns False.</Text>
 	<Syntax>ISODD( x )</Syntax>
 	<Example>ISODD(12) returns False</Example>
 	<Example>ISODD(-7) returns True</Example>
@@ -2156,7 +2156,7 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The ISEVEN() function returns True if the number is even and otherwise returns False</Text>
+	<Text>The ISEVEN() function returns True if the number is even and otherwise returns False.</Text>
 	<Syntax>ISEVEN( x )</Syntax>
 	<Example>ISEVEN(12) returns True</Example>
 	<Example>ISEVEN(-7) returns False</Example>
@@ -2347,7 +2347,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The average() function calculates the average of all the values given as parameters. You can calculate the average of a range average(A1:B5) or a list of values like average(12;5;12.5)</Text>
+	<Text>The average() function calculates the average of all the values given as parameters. You can calculate the average of a range average(A1:B5) or a list of values like average(12;5;12.5).</Text>
 	<Syntax>average( values; values; ... )</Syntax>
 	<Example>average(12;5;7) equals 8</Example>
 	<Example>average(12.5;2) equals 7.25</Example>
@@ -2526,7 +2526,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The compound() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time.  For example: $5000 at 12% interest compounded quarterly for 5 years will become compound( 5000; 0.12; 4; 5 ) or $9030.56</Text>
+	<Text>The compound() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time.  For example: $5000 at 12% interest compounded quarterly for 5 years will become compound( 5000; 0.12; 4; 5 ) or $9030.56.</Text>
 	<Syntax>compound( initial; interest; periods; periods_per_year )</Syntax>
 	<Example>compound( 5000; 0.12; 4; 5 ) equals 9030.56</Example>
       </Help>
