@@ -13,6 +13,7 @@
 #include <KDFrame.h>
 #include <KDFrameProfileSection.h>
 #include <KDXMLTools.h>
+#include "KDFrame.moc"
 
 // internal note:
 //

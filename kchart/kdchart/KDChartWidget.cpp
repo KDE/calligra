@@ -11,6 +11,7 @@
 #include <KDChart.h>
 #include <KDChartParams.h>
 #include <KDChartTable.h>
+#include "KDChartWidget.moc"
 
 #include <qpainter.h>
 
