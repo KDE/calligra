@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
-             (C) 2004 Laurent Montel <montel@kde.org>
+   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2004 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

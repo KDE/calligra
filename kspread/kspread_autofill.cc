@@ -1,8 +1,16 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 - 2003 The KSpread Team
-                             www.koffice.org/kspread
-
+   
+   Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
+   Copyright 2000-2002 Laurent Montel <montel@kde.org>
+   Copyright 2000-2001 Werner Trobin <trobin@kde.org>
+   Copyright 1999-2001 David Faure <faure@kde.org>
+   Copyright 1998-2000 Torben Weis <weis@kde.org>
+   Copyright 1998-1999 Stephan Kulow <coolo@kde.org>
+   Copyright 1998 Reginald Stadlbauer <reggie@kde.org>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
