@@ -992,7 +992,7 @@ void KWView::showFormulaToolbar( bool show )
     m_doc->getFormulaDocument()->getAddProductAction()->setEnabled( show );
     m_doc->getFormulaDocument()->getAddIntegralAction()->setEnabled( show );
     m_doc->getFormulaDocument()->getAddMatrixAction()->setEnabled( show );
-    m_doc->getFormulaDocument()->getChangeMatrixAction()->setEnabled( show );
+    //m_doc->getFormulaDocument()->getChangeMatrixAction()->setEnabled( show );
     m_doc->getFormulaDocument()->getAddOneByTwoMatrixAction()->setEnabled( show );
     m_doc->getFormulaDocument()->getAddUpperLeftAction()->setEnabled( show );
     m_doc->getFormulaDocument()->getAddLowerLeftAction()->setEnabled( show );
