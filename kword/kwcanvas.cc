@@ -369,6 +369,12 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in e
             }
         }
     }
+    if(doc->getFirstSelectedFrame()!=0)
+    {
+        kdDebug()<<"!doc->getFirstSelectedFrame()) -----------------\n";
+        rectOfSizeSelected= doc->getFirstSelectedFrame()->normalize();
+        kdDebug()<<"rectOfSizeSelected :"<<rectOfSizeSelected.right()<<endl;
+    }
 
     viewport()->setCursor( doc->getMouseCursor( mx, my ) );
 
@@ -810,6 +816,32 @@ void KWCanvas::mrEditFrame()
             grpMgr->recalcRows();
             grpMgr->updateTempHeaders();
             //repaintTableHeaders( grpMgr );
+        }
+        KWFrame *frame=doc->getFirstSelectedFrame();
+        if(rectOfSizeSelected!=frame->normalize())
+        {
+            //move or resize.
+            QRect tmpRect(frame->normalize());
+            if((rectOfSizeSelected.width()!=tmpRect.width())||
+               (rectOfSizeSelected.height()!=tmpRect.height()))
+            {
+                //resize
+                FrameIndex *index=new FrameIndex;
+                FrameResizeStruct *tmpResize=new FrameResizeStruct;
+                tmpResize->sizeOfBegin=rectOfSizeSelected;
+                tmpResize->sizeOfEnd=frame->normalize();
+
+                index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+                index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+
+                KWFrameResizeCommand *cmd =new KWFrameResizeCommand( i18n("Resize Frame"),doc,*index,*tmpResize ) ;
+                doc->addCommand(cmd);
+            }
+            else
+            {
+                //move
+                //todo
+            }
         }
         //recalcAll = TRUE;
         //recalcText();

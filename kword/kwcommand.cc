@@ -381,3 +381,27 @@ void KWFrameBackGroundColorCommand::unexecute()
 }
 
 
+KWFrameResizeCommand::KWFrameResizeCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex,FrameResizeStruct _frameResize ) :
+    KCommand(name),
+    m_IndexFrame(_frameIndex),
+    m_FrameResize(_frameResize),
+    m_pDoc(_doc)
+{
+}
+
+void KWFrameResizeCommand::execute()
+{
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(m_IndexFrame.m_iFrameSetIndex);
+    KWFrame *frame=frameSet->getFrame(m_IndexFrame.m_iFrameIndex);
+    frame->setCoords(m_FrameResize.sizeOfEnd.left(),m_FrameResize.sizeOfEnd.top(),m_FrameResize.sizeOfEnd.right(),m_FrameResize.sizeOfEnd.bottom());
+    m_pDoc->refreshAllFrames();
+}
+
+void KWFrameResizeCommand::unexecute()
+{
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(m_IndexFrame.m_iFrameSetIndex);
+    KWFrame *frame=frameSet->getFrame(m_IndexFrame.m_iFrameIndex);
+    frame->setCoords(m_FrameResize.sizeOfBegin.left(),m_FrameResize.sizeOfBegin.top(),m_FrameResize.sizeOfBegin.right(),m_FrameResize.sizeOfBegin.bottom());
+    //update frames
+    m_pDoc->refreshAllFrames();
+}

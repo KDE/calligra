@@ -32,6 +32,11 @@ struct FrameIndex {
     unsigned int m_iFrameSetIndex;
 };
 
+struct FrameResizeStruct {
+    QRect sizeOfBegin;
+    QRect sizeOfEnd;
+};
+
 enum FrameBorderType { FBLeft=0, FBRight=1, FBTop=2, FBBottom=3};
 
 struct FrameBorderTypeStruct {
@@ -177,6 +182,24 @@ protected:
     QList<FrameIndex> m_IndexFrame;
     QList<QBrush> m_oldBackGroundColor;
     QBrush m_newColor;
+    KWDocument *m_pDoc;
+};
+
+/**
+ * Command created when you resize a frame
+ */
+class KWFrameResizeCommand : public KCommand
+{
+public:
+    KWFrameResizeCommand( const QString &name,KWDocument *_doc,FrameIndex _frameIndex,FrameResizeStruct _frameResize ) ;
+    ~KWFrameResizeCommand() {}
+    
+    void execute();
+    void unexecute();
+
+protected:
+    FrameIndex m_IndexFrame;
+    FrameResizeStruct m_FrameResize;
     KWDocument *m_pDoc;
 };
 #endif

@@ -196,6 +196,8 @@ private:
     unsigned int tcols, trows;
     KWTblCellSize twid, thei;
     KWGroupManager *curTable;
+
+    QRect rectOfSizeSelected;
 };
 
 #endif
