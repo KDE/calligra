@@ -35,7 +35,7 @@ struct KWChar;
 namespace Qt3 {
 class QTextFormat;
 };
-
+using namespace Qt3;
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
 /******************************************************************/
@@ -132,12 +132,12 @@ public:
 
     KWAutoFormat( KWDocument *_doc );
                                            
-    void startAutoFormat( KWTextParag *parag/*, QTextFormat *fc*/ );
-    bool doAutoFormat( KWTextParag *parag/*,QTextFormat *fc*/ );
-    void endAutoFormat( KWTextParag *parag /*, QTextFormat *fc*/ );
-    bool doTypographicQuotes( KWTextParag *parag/*,QTextFormat *fc*/ );
-    bool doUpperCase( KWTextParag *parag/*, QTextFormat *fc*/ );
-    void doSpellCheck( KWTextParag *parag/*, QTextFormat *fc*/ );
+    void startAutoFormat( KWTextParag *parag, QTextFormat *fc );
+    bool doAutoFormat( KWTextParag *parag,QTextFormat *fc );
+    void endAutoFormat( KWTextParag *parag , QTextFormat *fc );
+    bool doTypographicQuotes( KWTextParag *parag,QTextFormat *fc );
+    bool doUpperCase( KWTextParag *parag, QTextFormat *fc );
+    void doSpellCheck( KWTextParag *parag, QTextFormat *fc );
 
     void setEnabled( bool e ) { enabled = e; }
     bool isEnabled() { return enabled; }

@@ -21,6 +21,7 @@
 #include "kwdoc.h"
 #include <qrichtext_p.h>
 
+
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
 /******************************************************************/
@@ -248,8 +249,8 @@ KWAutoFormat::KWAutoFormat( KWDocument *_doc )
 }
 
 /*================================================================*/
-void KWAutoFormat::startAutoFormat( KWTextParag */*parag*//*,
-                                                   QTextFormat *fc*/ )
+void KWAutoFormat::startAutoFormat( KWTextParag */*parag*/,
+                                                   QTextFormat *fc )
 {
     if ( !enabled )
 	return;
@@ -262,7 +263,7 @@ void KWAutoFormat::startAutoFormat( KWTextParag */*parag*//*,
 }
 
 /*================================================================*/
-bool KWAutoFormat::doAutoFormat( KWTextParag *parag/*, QTextFormat *fc*/ )
+bool KWAutoFormat::doAutoFormat( KWTextParag *parag, QTextFormat *fc )
 {
 #if 0
     if ( !enabled )
@@ -307,7 +308,7 @@ bool KWAutoFormat::doAutoFormat( KWTextParag *parag/*, QTextFormat *fc*/ )
 }
 
 /*================================================================*/
-void KWAutoFormat::doSpellCheck( KWTextParag *parag/*, QTextFormat *fc*/ )
+void KWAutoFormat::doSpellCheck( KWTextParag *parag, QTextFormat *fc )
 {
     if ( !enabled || !doc->onLineSpellCheck() )
 	return;
@@ -328,7 +329,7 @@ void KWAutoFormat::doSpellCheck( KWTextParag *parag/*, QTextFormat *fc*/ )
 }
 
 /*================================================================*/
-void KWAutoFormat::endAutoFormat( KWTextParag * /*parag*//*, QTextFormat *fc*/ )
+void KWAutoFormat::endAutoFormat( KWTextParag * /*parag*/, QTextFormat *fc )
 {
     if ( !enabled )
 	return;
@@ -340,7 +341,7 @@ void KWAutoFormat::endAutoFormat( KWTextParag * /*parag*//*, QTextFormat *fc*/ )
 }
 
 /*================================================================*/
-bool KWAutoFormat::doTypographicQuotes( KWTextParag *parag/*, QTextFormat *fc*/ )
+bool KWAutoFormat::doTypographicQuotes( KWTextParag *parag, QTextFormat *fc )
 {
     if ( !enabled )
 	return false;
@@ -391,7 +392,7 @@ bool KWAutoFormat::doTypographicQuotes( KWTextParag *parag/*, QTextFormat *fc*/ 
 }
 
 /*================================================================*/
-bool KWAutoFormat::doUpperCase( KWTextParag *parag/*, QTextFormat *fc*/ )
+bool KWAutoFormat::doUpperCase( KWTextParag *parag, QTextFormat *fc )
 {
     if ( !enabled )
 	return false;
