@@ -29,7 +29,7 @@ class KWord13Paragraph;
 class KWord13Document;
 class KWord13Frameset;
 class KWord13Layout;
-class KWord13FormatOneData;
+class KWord13Format;
 
 // ### TODO: stackItem and friends should be renamed to become unique (see AbiWord import filter), as Doxygen cannot handle multiple classes with the same name.
 
@@ -51,8 +51,8 @@ enum StackItemElementType
     ElementTypeParagraph,   ///< \<PARAGRAPH\>
     ElementTypeText,        ///< \<TEXT\>
     ElementTypeLayout,      ///< \<STYLE\> and \<LAYOUT\>
-    ElementTypeFormatOne,    ///< \<FORMATS id="1"\>, not child of \<LAYOUT\>
-    ElementTypeLayoutFormatOne    ///< \<FORMATS id="1"\> as child of \<LAYOUT\>
+    ElementTypeFormat,    ///< \<FORMAT\>, not child of \<LAYOUT\>
+    ElementTypeLayoutFormatOne    ///< \<FORMAT id="1"\> as child of \<LAYOUT\>
 };
 
 class StackItem
@@ -114,7 +114,7 @@ protected:
     KWord13Document* m_kwordDocument;
     KWord13Paragraph* m_currentParagraph; ///< Current paragraph
     KWord13Layout* m_currentLayout; ///< Current layout (or style)
-    KWord13FormatOneData* m_currentFormat; ///< Current character format 
+    KWord13Format* m_currentFormat; ///< Current format 
 };
 
 #endif // KWORD_1_3_PARSER_H

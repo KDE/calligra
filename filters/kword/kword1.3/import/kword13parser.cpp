@@ -74,19 +74,27 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
         stackItem->elementType = ElementTypeEmpty;
         return true;
     }
-    else if ( stackItem->elementType == ElementTypeFormatOne )
+    else if ( stackItem->elementType == ElementTypeFormat )
     {
         if ( ! m_currentFormat )
         {
              kdError(30520) << "No current FORMAT for storing FORMAT property: " << name << endl;
              return false;
         }
+        KWord13FormatOneData* data = m_currentFormat->getFormatOneData();
+        
+        if ( ! data )
+        {
+             kdError(30520) << "Current FORMAT cannot store FORMAT text property: " << name << endl;
+             return false;
+        }
+        
         for (int i = 0; i < attributes.count(); ++i )
         {
             QString attrName ( name );
             attrName += ':';
             attrName += attributes.qName( i );
-            m_currentFormat->m_properties[ attrName ] = attributes.value( i );
+            data->m_properties[ attrName ] = attributes.value( i );
             kdDebug(30520) << "Format Property (for FORMATS): " << attrName << " = " << attributes.value( i ) << endl;
         }
         stackItem->elementType = ElementTypeEmpty;
@@ -161,7 +169,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
         return true; // Everything is done directly on the layout
     }
         
-    stackItem->elementType = ElementTypeFormatOne;
+    stackItem->elementType = ElementTypeFormat;
     
     if ( m_currentFormat )
     {
@@ -170,8 +178,33 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
         delete m_currentFormat;
     }
     
-    // ### TODO: something else must be done, as the can be many <FORMAT> kinds (and not only of id="1")
-    m_currentFormat = new KWord13FormatOneData;
+    bool ok = false;
+    const int id = attributes.value( "id" ).toInt( &ok );
+    
+    if ( id == 1 && ok )
+    {
+        KWord13FormatOne* one = new KWord13FormatOne;
+        const int length = attributes.value( "length" ).toInt( &ok );
+        if ( ok )
+            one->m_length = length;
+        m_currentFormat = one;
+    }
+    else
+    {
+        m_currentFormat = new KWord13Format;
+        if ( ok )
+            m_currentFormat->m_id = id;
+    }
+    const int pos = attributes.value( "pos" ).toInt( &ok );
+    if ( ok )
+    {
+        m_currentFormat->m_pos = pos;
+    }
+    else
+    {
+        kdWarning(30520) << "Cannot set position of <FORMAT>: " << attributes.value( "pos" ) << endl;
+        return false; // Assume parse error!
+    }
         
     return true;    
 }
