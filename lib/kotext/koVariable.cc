@@ -502,10 +502,6 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
 {
     QCString string;
     QStringList stringList;
-    // ###### Use KConfig("kofficerc"), it's much simpler
-    KAboutData* kad=new KAboutData("koffice", "KOffice Library", "");
-    KConfig * config;
-    KInstance* instance;
     int count=1, noe=5;
     if ( varFormat == 0L )
     {
@@ -517,19 +513,18 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Date Format"), KDialogBase::Ok|KDialogBase::Cancel);
             DateFormatWidget* widget=new DateFormatWidget(dialog);
             dialog->setMainWidget(widget);
-            instance=new KInstance(kad);
-            config=instance->config();
+            KConfig config( "kofficerc" );
             bool selectLast=false;
-            if( config->hasGroup("Date format history") )
+            if( config.hasGroup("Date format history") )
             {
                 count=0;
-                config->setGroup("Date format history");
-                noe=config->readNumEntry("Number Of Entries", 5);
+                config.setGroup("Date format history");
+                noe=config.readNumEntry("Number Of Entries", 5);
                 for(int i=0;i<noe;i++)
                 {
                     QString num, tmpString;
                     num.setNum(i);
-                    tmpString=config->readEntry("Last Used"+num);
+                    tmpString=config.readEntry("Last Used"+num);
                     if(tmpString.compare(i18n("Locale"))==0)
                     {
                         if(i==0) selectLast = true;
@@ -569,19 +564,17 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             {
                 return 0;
             }
-            config->setGroup("Date format history");
+            config.setGroup("Date format history");
             stringList.remove(string);
             stringList.prepend(string);
             for(int i=0;i<=count;i++)
             {
                 QString num;
                 num.setNum(i);
-                config->writeEntry("Last Used"+num, stringList[i]);
+                config.writeEntry("Last Used"+num, stringList[i]);
             }
-            config->sync();
+            config.sync();
             delete dialog;
-            delete kad;
-            delete instance;
             varFormat = coll->format( QCString("DATE")
                 + "0" // no support for short locale dates yet - TODO
                 + string );
@@ -591,19 +584,18 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
             TimeFormatWidget* widget=new TimeFormatWidget(dialog);
             dialog->setMainWidget(widget);
-            instance=new KInstance(kad);
-            config=instance->config();
+            KConfig config( "kofficerc" );
             bool selectLast=false;
-            if( config->hasGroup("Time format history") )
+            if( config.hasGroup("Time format history") )
             {
                 count=0;
-                config->setGroup("Time format history");
-                noe=config->readNumEntry("Number Of Entries", 5);
+                config.setGroup("Time format history");
+                noe=config.readNumEntry("Number Of Entries", 5);
                 for(int i=0;i<noe;i++)
                 {
                     QString num, tmpString;
                     num.setNum(i);
-                    tmpString=config->readEntry("Last Used"+num);
+                    tmpString=config.readEntry("Last Used"+num);
                     if(tmpString.compare(i18n("Locale"))==0)
                     {
                         if(i==0) selectLast = true;
@@ -639,19 +631,17 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             {
                 return 0;
             }
-            config->setGroup("Time format history");
+            config.setGroup("Time format history");
             stringList.remove(string);
             stringList.prepend(string);
             for(int i=0;i<=count;i++)
             {
                 QString num;
                 num.setNum(i);
-                config->writeEntry("Last Used"+num, stringList[i]);
+                config.writeEntry("Last Used"+num, stringList[i]);
             }
-            config->sync();
+            config.sync();
             delete dialog;
-            delete kad;
-            delete instance;
             varFormat = coll->format( "TIME"+string );
             break;
         }
@@ -659,20 +649,15 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             varFormat = coll->format( "NUMBER" );
             break;
         case VT_FIELD:
-            varFormat = coll->format( "STRING" );
-            break;
         case VT_CUSTOM:
-            varFormat = coll->format( "STRING" );
-            break;
         case VT_MAILMERGE:
-            varFormat = coll->format( "STRING" );
-            break;
         case VT_LINK:
-            varFormat = coll->format( "STRING" );
-            break;
         case VT_NOTE:
             varFormat = coll->format( "STRING" );
             break;
+        case VT_FOOTNOTE: // this is a KWord-specific variable
+            kdError() << "Footnote type not handled in KoVariableCollection: VT_FOOTNOTE" << endl;
+            return 0L;
         }
     }
     Q_ASSERT( varFormat );

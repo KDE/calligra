@@ -34,8 +34,8 @@ class QDomElement;
 // (and update KWView::setupActions)
 enum VariableType { VT_NONE = -1,
                     VT_DATE = 0, VT_TIME = 2, VT_PGNUM = 4,
-                    VT_CUSTOM = 6, VT_MAILMERGE = 7, VT_FIELD = 8, VT_LINK=9,
-                    VT_NOTE,
+                    VT_CUSTOM = 6, VT_MAILMERGE = 7, VT_FIELD = 8, VT_LINK = 9,
+                    VT_NOTE = 10, VT_FOOTNOTE = 11,
                     VT_ALL=256 };
 
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
@@ -271,7 +271,7 @@ public:
     void setVariableFormat( KoVariableFormat *_varFormat );
 
     KoVariableFormat *variableFormat() const
-    { return m_varFormat; }
+        { return m_varFormat; }
 
     KoVariableCollection *variableColl() const
         { return m_varColl; }
@@ -292,6 +292,7 @@ public:
     /** Save the variable. Public API, does the common job and then calls saveVariable. */
     void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+
     /** Part of the KoTextCustomItem interface. Returns the code for a variable, see DTD.
       * Do NOT reimplement in koVariable-derived classes.
       */
