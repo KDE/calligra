@@ -367,10 +367,10 @@ public:
     const KSpreadFormat* defaultFormat() const { return m_defaultFormat; }
 
     QRect visibleRect( KSpreadCanvas const * const _canvas ) const;
-    int topRow( int _ypos, double &_top, const KSpreadCanvas *_canvas = 0L ) const;
-    int bottomRow( int _ypos, const KSpreadCanvas *_canvas = 0L ) const;
-    int leftColumn( int _xpos, double &_left, const KSpreadCanvas *_canvas = 0L ) const;
-    int rightColumn( int _xpos, const KSpreadCanvas *_canvas = 0L ) const;
+    int topRow( double _ypos, double &_top, const KSpreadCanvas *_canvas = 0L ) const;
+    int bottomRow( double _ypos, const KSpreadCanvas *_canvas = 0L ) const;
+    int leftColumn( double _xpos, double &_left, const KSpreadCanvas *_canvas = 0L ) const;
+    int rightColumn( double _xpos, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
      * @return the left corner of the column as int.
@@ -459,7 +459,7 @@ public:
      * Sets the contents of the cell at row,column to text
      * @param updateDepends set to false to disable updating the dependencies
      */
-    void setText( int row, int column, const QString& text, 
+    void setText( int row, int column, const QString& text,
                   bool updateDepends = true, bool asString = false );
 
 
