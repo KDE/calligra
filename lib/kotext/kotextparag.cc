@@ -398,12 +398,12 @@ int KoTextParag::lineSpacing( int line ) const
         {
         case KoParagLayout::LS_MULTIPLE:
         {
-            int n = QMAX( (int)m_layout.lineSpacingValue() - 1, 1 );
-            return shadow + n*height;
+            double n = QMAX( m_layout.lineSpacingValue() - 1.0, 0.0 );
+            return shadow + qRound( n * height );
         }
         case KoParagLayout::LS_ONEANDHALF:
         {
-            // Special case of LS_MULTIPLE, with n=0.5
+            // Special case of LS_MULTIPLE, with n=1.5
             return shadow + height / 2;
         }
         case KoParagLayout::LS_DOUBLE:
