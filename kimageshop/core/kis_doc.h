@@ -110,6 +110,8 @@ public:
     
 
     QStringList images();
+
+    void renameImage(const QString& oldname, const QString &newname);
     
 public slots:
   void slotUndoRedoChanged( QString _undo, QString _redo );

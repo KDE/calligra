@@ -29,9 +29,11 @@
 
 #include <klocale.h>
 
+#include <kis_view.h>
+#include <kis_doc.h>
+
 #include "kis_tabbar.h"
-#include "kis_view.h"
-#include "kis_doc.h"
+#include "kis_dlg_rename.h"
 
 KisTabBar::KisTabBar( KisView *_view, KisDoc *_doc )
   : QWidget ( (QWidget*)_view )
@@ -46,7 +48,6 @@ KisTabBar::KisTabBar( KisView *_view, KisDoc *_doc )
   leftTab = 1;
   m_rightTab = 0;
   activeTab = 0;
-  m_moveTab = 0;
   m_autoScroll = 0;
 }
 
@@ -82,35 +83,6 @@ void KisTabBar::removeAllTabs()
   leftTab = 1;
   
   repaint();
-}
-
-void KisTabBar::moveTab( int _from, int _to, bool _before )
-{
-  QStringList::Iterator it;
-  
-  it = tabsList.at( _from );
-  const QString tabname = *it;
-  
-  if ( !_before )
-    ++_to;
-  
-  if ( _to > (int)tabsList.count() )
-    {
-      tabsList.append( tabname );
-      tabsList.remove( it );
-    }
-  else if ( _from < _to )
-    {
-      tabsList.insert( tabsList.at( _to ), tabname );
-      tabsList.remove( it );
-    }
-  else
-    {
-      tabsList.remove( it );
-      tabsList.insert( tabsList.at( _to ), tabname );
-    }
-  
-  repaint();	
 }
 
 
@@ -201,7 +173,7 @@ void KisTabBar::setActiveTab( const QString& _text )
 
 void KisTabBar::slotRemove( )
 {
-  int ret = QMessageBox::warning( this, i18n("Remove table"),
+  int ret = QMessageBox::warning( this, i18n("Remove image"),
 				  i18n("You are going to remove the active image.\nDo you want to continue?"),
 				  i18n("Yes"), i18n("No"), QString::null, 1, 1);
   if ( ret == 0 ) 
@@ -211,7 +183,11 @@ void KisTabBar::slotRemove( )
       for ( it = tabsList.begin(); it != tabsList.end(); ++it )
 	{
 	  if (i == activeTab)
-	    m_pDoc->slotRemoveImage(*it);
+	    {
+	      QString img = *it;
+	      qDebug("Removing: %s", img.latin1());
+	      m_pDoc->slotRemoveImage(img);
+	    }
 	  i++;
 	}
     }
@@ -259,7 +235,7 @@ void KisTabBar::paintEvent( QPaintEvent* )
   painter.begin( &pm, this );
   
   if ( leftTab > 1 )
-    paintTab( painter, -10, QString(""), 0, 0, FALSE );
+    paintTab( painter, -10, QString(""), 0, 0, false );
   
   int i = 1;
   int x = 0;
@@ -289,10 +265,7 @@ void KisTabBar::paintEvent( QPaintEvent* )
 	}
       else if ( i >= leftTab )
 	{
-	  if ( m_moveTab == i )
-	    paintTab( painter, x, text, text_width, text_y, false, true );
-	  else
-	    paintTab( painter, x, text, text_width, text_y, false );
+	  paintTab( painter, x, text, text_width, text_y, false);
 	  x += 10 + text_width;
 	}
       if ( x - 10 < width() )
@@ -301,7 +274,7 @@ void KisTabBar::paintEvent( QPaintEvent* )
     }
   
   // if ( active_text != 0L )
-  paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
+  paintTab( painter, active_x, active_text, active_width, active_y, true);
   
   painter.end();
   bitBlt( this, 0, 0, &pm );
@@ -309,7 +282,7 @@ void KisTabBar::paintEvent( QPaintEvent* )
 
 
 void KisTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y,
-			      bool isactive, bool ismovemarked )
+			      bool isactive )
 {
   QPointArray parr;
   parr.setPoints( 4, x,0, x+10,height()-1, x+10+text_width,height()-1, x+20+text_width,0 );
@@ -328,28 +301,7 @@ void KisTabBar::paintTab( QPainter & painter, int x, const QString& text, int te
   painter.drawLine( x + 10 + text_width, height() - 1, x + 20 + text_width, 0 );
   if ( !isactive )
     painter.drawLine( x, 0, x + 20 + text_width, 0 );
-  if ( ismovemarked )
-    {
-      if ( m_moveTabFlag == moveTabBefore )
-	{
-	  QPointArray movmark;
-	  movmark.setPoints(3, x, 0, x + 7, 0, x + 4, 6);
-	  QBrush oldBrush = painter.brush();
-	  painter.setBrush( QColor( 0, 0, 0 ) );
-	  painter.drawPolygon(movmark);
-	  painter.setBrush( oldBrush );
-	}
-      else
-	{
-	  QPointArray movmark;
-	  movmark.setPoints(3, x + 20 + text_width, 0, x + 13 + text_width, 0, x + 16 + text_width, 6);
-	  QBrush oldBrush = painter.brush();
-	  painter.setBrush( QColor( 0, 0, 0 ) );
-	  painter.drawPolygon(movmark);
-	  painter.setBrush( oldBrush );
-	}
-    }
-  painter.drawText( x + 10, text_y , text );
+   painter.drawText( x + 10, text_y , text );
 }
 
 
@@ -367,29 +319,22 @@ void KisTabBar::openPopupMenu( const QPoint &_global )
 
 void KisTabBar::renameTab()
 {
-  /*
-  QString activeName;
-  QString newName;
-  
-  KImageShopTable* table = m_pView->activeTable();
-  activeName = table->tableName();
-  
-  KImageShopTableName tndlg( (KisView *)this->parentWidget(), "TableName" , activeName );
-  if ( tndlg.exec() )
-    {
-      if ( ( newName = tndlg.tableName() ) != activeName )
-        {
-	  table->setTableName( newName );
-	  QStringList::Iterator it = tabsList.find( activeName );
-	  (*it) = newName;
-	  repaint();
-	  QListIterator<KImageShopTable> it2( table->map()->tableList() );
-	  for( ; it2.current(); ++it2 )
-	    it2.current()->changeCellTabName(activeName,newName);
-	  
-        }	
-    
-	}*/
+  int i = 1;
+  QString img;
+
+  QStringList::Iterator it;
+  for ( it = tabsList.begin(); it != tabsList.end(); ++it ) {
+      if (i == activeTab)
+	img = *it;
+      i++;
+    }
+
+  KisDlgRename dlg(img, this, "rename_dlg", true);
+  dlg.resize(300, 60);
+  dlg.setCaption("Rename image");
+
+  if (dlg.exec())
+    m_pDoc->renameImage(img, dlg.name());
 }
 
 void KisTabBar::mousePressEvent( QMouseEvent* _ev )
@@ -438,47 +383,16 @@ void KisTabBar::mousePressEvent( QMouseEvent* _ev )
       emit tabSelected( active_text );
     }
     
-    if ( _ev->button() == LeftButton )
-      {
-	m_moveTabFlag = moveTabBefore;
-      }
-    else if ( _ev->button() == RightButton )
+   if ( _ev->button() == RightButton )
       {
 	openPopupMenu( _ev->globalPos() );
       }
-}
-
-void KisTabBar::mouseReleaseEvent( QMouseEvent* )
-{
-  /*
-  if ( _ev->button() == LeftButton && m_moveTab != 0 )
-    {
-      if ( m_autoScroll != 0 )
-        {
-	  m_pAutoScrollTimer->stop();
-	  m_autoScroll = 0;
-	}
-      m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )).ascii(),
-					(*tabsList.at( m_moveTab - 1 )).ascii(),
-					m_moveTabFlag == moveTabBefore );
-      moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
-      
-      m_moveTabFlag = moveTabNo;
-      if ( activeTab < m_moveTab && m_moveTabFlag == moveTabBefore )
-	m_moveTab--;
-	activeTab = m_moveTab;
-	
-	m_moveTab = 0;
-	repaint( false );
-    }
-  */
 }
 
 void KisTabBar::slotAutoScroll( )
 {
   if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
     {
-      m_moveTab = leftTab - 1;
 	slotScrollLeft();
     }
   else if ( m_autoScroll == autoScrollRight )
@@ -490,90 +404,6 @@ void KisTabBar::slotAutoScroll( )
       m_pAutoScrollTimer->stop();
       m_autoScroll = 0;
     }
-}
-
-void KisTabBar::mouseMoveEvent( QMouseEvent* _ev )
-{
-  if ( m_moveTabFlag == 0)
-    return;
-  
-  QPainter painter;
-  painter.begin( this );
-  
-  if ( _ev->pos().x() < 0 && leftTab > 1 && m_autoScroll == 0 )
-    {
-      m_autoScroll = autoScrollLeft;
-      m_moveTab = leftTab - 1;
-      slotScrollLeft();
-      m_pAutoScrollTimer->start( 400 );
-    }
-  else if ( _ev->pos().x() > size().width() )
-    {
-      int i = tabsList.count();
-      if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
-        {
-	  m_moveTabFlag = moveTabAfter;
-	  m_moveTab = tabsList.count();
-	  repaint( false );
-	}
-      if ( m_rightTab != (int)tabsList.count() && m_autoScroll == 0 )
-        {
-	  m_autoScroll = autoScrollRight;
-	  m_moveTab = leftTab;
-	  slotScrollRight();
-	  m_pAutoScrollTimer->start( 400 );
-	}
-    }
-  else // ftf
-    {
-      int i = 1;
-      int x = 0;
-      
-      QStringList::Iterator it;
-      for ( it = tabsList.begin(); it != tabsList.end(); ++it )
-        {
-	  QFontMetrics fm = painter.fontMetrics();
-	  int text_width = fm.width( *it );
-	  
-	  if ( i >= leftTab )
-	    {
-	      if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
-	        {
-		  if ( m_autoScroll != 0 )
-		    {
-		      m_pAutoScrollTimer->stop();
-		      m_autoScroll = 0;
-		    }
-		  
-		  if ( ( activeTab != i && activeTab != i - 1 && m_moveTab != i ) || m_moveTabFlag == moveTabAfter )
-		    {
-		      m_moveTabFlag = moveTabBefore;
-		      m_moveTab = i;
-		      repaint( false );
-		    }
-		  else if ( (m_moveTab != i && m_moveTab != 0) || (activeTab == i - 1 && m_moveTab != 0) )
-		    {
-		      m_moveTab = 0;
-		      repaint( false );
-		    }
-		}
-	      x += 10 + text_width;
-	    }
-	  i++;
-	}
-      --i;
-      
-      if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
-        {
-	  if ( activeTab != i && m_moveTabFlag != moveTabAfter )
-	    {
-	      m_moveTabFlag = moveTabAfter;
-	      m_moveTab = i;
-	      repaint( false );
-	    }
-	}
-    }
-  painter.end();
 }
 
 void KisTabBar::mouseDoubleClickEvent( QMouseEvent*  )

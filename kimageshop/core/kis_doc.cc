@@ -70,6 +70,7 @@ bool KisDoc::initDoc()
   img->addRGBLayer(QRect(0, 0, 512, 512), QColor(255, 255, 255), "background");
   img->setLayerOpacity(255);
   img->compositeImage(QRect(0, 0, 512, 512));
+  setCurrentImage(img);
   
   emit imageListUpdated();
   return true;
@@ -106,7 +107,6 @@ void KisDoc::setCurrentImage(KisImage *img)
 
 void KisDoc::setCurrentImage(const QString& _name)
 {
-  qDebug("KisDoc::setCurrentImage: %s", _name.latin1());
   KisImage *img = m_Images.first();
   
   while (img)
@@ -114,6 +114,22 @@ void KisDoc::setCurrentImage(const QString& _name)
       if (img->name() == _name)
 	{
 	  setCurrentImage(img);
+	  return;
+	}
+      img = m_Images.next();
+    }
+}
+
+void KisDoc::renameImage(const QString& oldname, const QString &newname)
+{
+  KisImage *img = m_Images.first();
+  
+  while (img)
+    {
+      if (img->name() == oldname)
+	{
+	  img->setName(newname);
+	  emit imageListUpdated();
 	  return;
 	}
       img = m_Images.next();
@@ -184,7 +200,7 @@ KisImage* KisDoc::newImage(const QString& _name, int w, int h, int /*colorModel*
 {
   KisImage *img = new KisImage( _name, w, h );
   m_Images.append(img);
-  setCurrentImage(img);
+  
   return img;
 }
 
@@ -193,7 +209,10 @@ void KisDoc::removeImage( KisImage *img )
   m_Images.remove(img);
   delete img;
 
-  setCurrentImage(m_Images.last()); // #### FIXME
+  if (m_Images.isEmpty())
+    setCurrentImage(0L);
+  else
+    setCurrentImage(m_Images.last()); // #### FIXME
 }
 
 void KisDoc::slotRemoveImage( const QString& _name )
@@ -245,6 +264,7 @@ bool KisDoc::loadImage( const QString& file )
   kis_img->addRGBLayer(img, alpha, name);
   kis_img->setLayerOpacity(255);
   kis_img->compositeImage(QRect(0, 0, w, h));
+  setCurrentImage(kis_img);
   return true;
 }
 
@@ -272,9 +292,9 @@ void KisDoc::slotNewImage()
   // add background layer
   img->addRGBLayer(QRect(0, 0, w, h), QColor(255, 255, 255), "background");
   img->setLayerOpacity(255);
-  img->compositeImage(QRect(0, 0, w, h));  
+  img->compositeImage(QRect(0, 0, w, h));
+  setCurrentImage(img);
 }
-
 
 bool KisDoc::loadFromURL( const QString& _url )
 {

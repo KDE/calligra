@@ -66,12 +66,6 @@ protected:
     void removeTab( const QString& _text );
     
     /**
-     * Moves the tab with number _from befor tab number _to if @param _before is
-     * true _from is inserted before _to. If false it is inserted after.
-     */
-    void moveTab( int _from, int _to, bool _before = true );
-
-    /**
      * Removes all tabs from the bar and repaints the widget.
      */
     void removeAllTabs();
@@ -93,12 +87,10 @@ protected:
 
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent ( QMouseEvent* _ev );
-    virtual void mouseReleaseEvent ( QMouseEvent* _ev );
     virtual void mouseDoubleClickEvent ( QMouseEvent* _ev );
-    virtual void mouseMoveEvent( QMouseEvent* _ev );
 
     void paintTab( QPainter & painter, int x, const QString& text,
-		   int text_width, int text_y, bool isactive, bool ismovemarked = false );
+		   int text_width, int text_y, bool isactive);
     
     void openPopupMenu( QPoint &_global );
     
@@ -106,7 +98,6 @@ protected:
     KisDoc  *m_pDoc;
     
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
-    enum { moveTabNo = 0, moveTabBefore, moveTabAfter };
     
     /**
      * Pointer to the last popup menu.
@@ -146,18 +137,6 @@ protected:
      * Used to provide a timeout.
      */
     bool m_mayScroll;
-    
-    /**
-     * The number of the tab being moved using the mouse.
-     * If no tab is being moved this value is 0.
-     */
-    int m_moveTab;
-    
-    /**
-     * Indicates whether a tab is being moved using the mouse and in which
-     * direction.
-     */ 	
-    int m_moveTabFlag;
     
     /**
      * Indicates the direction the tabs are scrolled to.
