@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="2">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="3">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="file_statistics"/>
@@ -10,6 +10,7 @@
   <Action name="edit_find"/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
+  <Separator/>
   <Action name="view_pagemode"/>
   <Action name="view_previewmode"/>
   <Action name="view_textmode"/>
