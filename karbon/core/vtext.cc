@@ -55,7 +55,7 @@ int traceMoveto( FT_Vector *to, VComposite *composite )
 	//QString add = "M" + QString::number(tox) + "," + QString::number(toy) + " ";
 	//kdDebug() << add.latin1() << endl;
 	composite->moveTo( KoPoint( tox, toy ) );
-	
+
 	return 0;
 }
 
@@ -68,7 +68,7 @@ int traceLineto( FT_Vector *to, VComposite *composite )
 	//kdDebug() << add.latin1() << endl;
 
 	composite->lineTo( KoPoint( tox, toy ) );
-	
+
 	return 0;
 };
 
@@ -83,7 +83,7 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VComposite *composi
 	//kdDebug() << add.latin1() << endl;
 //path->curveTo( x1, y1, x1, y1, x2, y2 );
 	composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
-	
+
 	return 0;
 };
 
@@ -100,7 +100,7 @@ int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VComposite *com
 	//kdDebug() << add.latin1() << endl;
 
 	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
-	
+
 	return 0;
 };
 
@@ -146,7 +146,7 @@ VText::VText( const VText& text )
 	VCompositeListIterator itr( text.m_glyphs );
 	for( ; itr.current() ; ++itr )
 		m_glyphs.append( itr.current()->clone() );
-	
+
 	m_boundingBoxIsInvalid = true;
 }
 
@@ -217,7 +217,7 @@ VText::boundingBox() const
 	if( m_boundingBoxIsInvalid )
 	{
 		// clear:
-		m_boundingBox = KoRect(); 
+		m_boundingBox = KoRect();
 
 		VCompositeListIterator itr( m_glyphs );
 		for( itr.toFirst(); itr.current(); ++itr )
@@ -236,7 +236,7 @@ VText::boundingBox() const
 	}
 
 	return m_boundingBox;
-} 
+}
 
 VText*
 VText::clone() const
@@ -262,7 +262,7 @@ VText::save( QDomElement& element ) const
 		me.setAttribute( "position", m_position );
 
 		element.appendChild( me );
-		
+
 		m_basePath.save( me );
 
 		// save all glyphs / paths
@@ -308,11 +308,11 @@ VText::load( const QDomElement& element )
 	m_boundingBoxIsInvalid = true;
 }
 
-void 
+void
 VText::setState( const VState state )
 {
 	VObject::setState( state );
-	
+
 	VCompositeListIterator itr( m_glyphs );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
@@ -359,7 +359,7 @@ void VText::traceText( const KarbonView* view )
 	if( font )
 	{
 		m_glyphs.clear();
-		
+
 		XftPatternGetString( font->pattern, XFT_FILE, 0, &filename );
 		kdDebug() << "Loading " << filename << " for requested font \"" << m_font.family().latin1() << "\", " << m_font.pointSize() << " pt." << endl;
 
@@ -407,7 +407,7 @@ void VText::traceText( const KarbonView* view )
 			dx = FT_TOFLOAT( fontFace->glyph->advance.x ) / 2;
 			x += dx;
 			composite->transform( QWMatrix( 1, 0, 0, 1, -dx, y + yoffset ) );
-			
+
 			// Step 2: find the position where to draw.
 			while ( seg && x > fsx + seg->length() )
 			{
@@ -427,16 +427,16 @@ void VText::traceText( const KarbonView* view )
 					oldSeg->pointTangentNormal( 1, &extPoint, &tangent, &normal );
 				point = extPoint + ( x - fsx ) * tangent;
 			}
-			
+
 			// Step 3: transform glyph and append it. That's it, we've got
 			// text following a path. Really easy, isn't it ;) ?
 			composite->transform( QWMatrix( tangent.x(), tangent.y(), tangent.y(), -tangent.x(), point.x(), point.y() ) );
 			composite->setState( state() );
 			m_glyphs.append( composite );
-			
-			
+
+
 			//kdDebug() << "Glyph: " << (QString)character << " [String pos: " << x << ", " << y << " / Canvas pos: " << point.x() << ", " << point.y() << "]" << endl;;
-			
+
 			x += dx;
 			y += FT_TOFLOAT( fontFace->glyph->advance.y );
 		}
