@@ -12,14 +12,13 @@
 class QDomElement;
 class QWMatrix;
 class VPainter;
-class VVisitor;
 
 /**
  * The base class for all karbon objects. Every object should
- * have the ability to draw itself using a painter, manage
- * stroke/fill properties, be state aware, perform hit detection,
- * transform on demand, clone and load/save itself.
- * Also an extension mechanism is provided.
+ * have the ability to draw itself using a painter, perform
+ * hit detection, transform on demand, clone and load/save itself.
+ * Also each object manages its own bounding box and keeps track of its
+ * parent object.
  */
 class VObject
 {

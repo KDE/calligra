@@ -18,11 +18,12 @@ enum VState
 	state_deleted  = 3  /// not visible
 };
 
+class VVisitor;
+
 /**
- * The base class for all karbon objects. Every object should
- * have the ability to draw itself using a painter, manage
- * stroke/fill properties, be state aware, perform hit detection,
- * transform on demand, clone and load/save itself.
+ * The base class for all karbon shapes. All shapes 
+ * take into acount stroke/fill properties, have a
+ * gui state and can clone themselves.
  * Also an extension mechanism is provided.
  */
 class VShape : public VObject
@@ -47,9 +48,9 @@ public:
 	virtual ~VShape() {}
 
 	/**
-	 * Get the state the object is in.
+	 * Get the state the shape is in.
 	 *
-	 * @return the object state at time of calling.
+	 * @return the shape state at time of calling.
 	 */
 	VState state() const { return m_state; }
 	/**
@@ -62,7 +63,7 @@ public:
 	virtual void setState( const VState state ) { m_state = state; }
 
 	/**
-	 * Create an exact copy of this object.
+	 * Create an exact copy of this shape.
 	 *
 	 */
 	virtual VShape* clone() = 0;

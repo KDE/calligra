@@ -44,7 +44,7 @@ public:
 	bool isClosed() const { return m_isClosed; }
 	void close();
 
-	virtual void draw( VPainter* painter, const KoRect& rect ) {}
+	virtual void draw( VPainter*, const KoRect& ) {}
 
 	virtual void transform( const QWMatrix& m );
 
