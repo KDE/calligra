@@ -1,3 +1,8 @@
+2005-03-23  Inge Wallin  <inge@lysator.liu.se>
+
+	* kchartDataEditor.{h,cc}: Document the reasons for the nice fix
+	of Fredrik below.
+
 2005-03-23  Fredrik Edemar <f_edemar@linux.se>
 
 	Fix a problem with the spinboxes in the data editor:

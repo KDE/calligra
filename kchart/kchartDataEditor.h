@@ -1,18 +1,41 @@
 #ifndef KCHART_DATA_EDITOR_H
 #define KCHART_DATA_EDITOR_H
 
-#include <kdialogbase.h>
-#include <qspinbox.h>
-#include "kchart_part.h"
+
 #include <qstrlist.h>
+#include <qspinbox.h>
+
+#include <kdialogbase.h>
+
+#include "kchart_part.h"
 
 class QLabel;
 class QSpinBox;
 
+
 namespace KChart
 {
 
+
 class KChartParams;
+
+
+// This class inherits QSpinBox, but fixes a problem with it.
+// Consider the following case:
+//
+// 1. The SpinBox for rows has the value 4.
+// 2. The user enters the number 2 into it.
+// 3. The user presses the little up arrow in the spinbox.
+// 4. valueChanged(2) is emitted and 2 rows are removed.
+// 5. valueChanged(3) is emitted and 1 row is added.
+// 
+// Now (at least) one row is removed that was never meant to be
+// removed and data is lost.  This class fixes that by changing the
+// semantics.  So instead of the behaviour of above, the
+// valueChanged(2) is never emitted and instead of valueChanged(3),
+// valueChanged(5) is emitted.
+//
+
 
 class kchartDataSpinBox : public QSpinBox
 {
@@ -26,6 +49,7 @@ public slots:
     void stepUp();
     // The user pressed the Down-button
     void stepDown();
+
 protected:
     void interpretText(){;};
     bool eventFilter( QObject *obj, QEvent *ev );
@@ -35,8 +59,12 @@ signals:
     void valueChangedSpecial(int);
 
 private:
-    bool m_ignore;
+    // True if we should ignore the next value change (see above).
+    bool  m_ignore;
 };
+
+
+// ----------------------------------------------------------------
 
 
 class kchartDataEditor : public KDialogBase
@@ -69,11 +97,11 @@ private slots:
 
 private:
     // Widgets in the editor
-    QTable      *m_table;
-    QLabel      *m_rowsLA;
-    kchartDataSpinBox    *m_rowsSB;
-    QLabel      *m_colsLA;
-    kchartDataSpinBox    *m_colsSB;
+    QTable             *m_table;
+    QLabel             *m_rowsLA;
+    kchartDataSpinBox  *m_rowsSB;
+    QLabel             *m_colsLA;
+    kchartDataSpinBox  *m_colsSB;
 
     // This member is set to true if the user shrinks the data table,
     // and confirms this by clicking OK in a warning dialog.

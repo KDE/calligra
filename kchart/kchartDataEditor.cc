@@ -19,36 +19,51 @@
 namespace KChart
 {
 
-kchartDataSpinBox::kchartDataSpinBox(QWidget *parent) : QSpinBox(parent)
+
+// ================================================================
+//                    Class kchartDataSpinBox
+
+
+// We don't provide very much generality, since this spinbox is used
+// here and here only.
+//
+kchartDataSpinBox::kchartDataSpinBox(QWidget *parent)
+    : QSpinBox(parent)
 {
     m_ignore = false;
 }
+
 
 kchartDataSpinBox::~kchartDataSpinBox()
 {
 }
 
+
 void kchartDataSpinBox::stepUp()
 {
     m_ignore = true;
     uint const new_value = value() + 1;
+
     QSpinBox::stepUp();
     setValue(new_value);
-    //kdDebug() << "Up: " << value() << endl;
+
     emit valueChangedSpecial( value() );
     m_ignore = false;
 }
 
+
 void kchartDataSpinBox::stepDown()
 {
     m_ignore = true;
+
     uint const new_value = value() - 1;
     QSpinBox::stepDown();
     setValue(new_value);
-    //kdDebug() << "Down: " << value() << endl;
+
     emit valueChangedSpecial( value() );
     m_ignore = false;
 }
+
 
 bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
 {
@@ -56,14 +71,23 @@ bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
         if ( ev->type() == QEvent::FocusOut ) {
             //kdDebug() << "Focus out" << endl;
             setValue(editor()->text().toInt());
-            // don't call valueChangedSpecial twice when stepUp/stepDown has been called
+
+            // Don't emit valueChangedSpecial(int) twice when
+            // stepUp/stepDown has been called
             if (!m_ignore)
                 emit valueChangedSpecial( value() );
         }
     }
-        // pass the event on to the parent class
-        return QSpinBox::eventFilter( obj, ev );
+ 
+    // Pass the event on to the parent class.
+    return QSpinBox::eventFilter( obj, ev );
 }
+
+
+
+// ================================================================
+//                    Class kchartDataEditor
+
 
 #define COLUMNWIDTH  80
 
