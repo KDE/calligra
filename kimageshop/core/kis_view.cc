@@ -66,8 +66,9 @@
 #include "kis_tool_eraser.h"
 
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
-  : KoView( doc, parent, name )
-  , m_pDoc(doc)
+    : KoView( doc, parent, name )
+    , m_pDoc( doc )
+    , m_zoomFactor( 1.0 )
 {
   setInstance( KisFactory::global() );
   setXMLFile( "kimageshop.rc" );
@@ -117,7 +118,7 @@ void KisView::setupSideBar()
   m_pBrush = m_pBrushChooser->currentBrush();
   QObject::connect(m_pBrushChooser, SIGNAL(selected(const KisBrush *)),
 				   this, SLOT(slotSetBrush(const KisBrush*)));
- 
+
   m_pBrushChooser->setCaption("Brushes");
   m_pSideBar->plug(m_pBrushChooser);
 
@@ -133,7 +134,7 @@ void KisView::setupSideBar()
 
   // activate brushes tab
   m_pSideBar->slotActivateTab("Brushes");
-  
+
   // init sidebar
   m_pSideBar->slotSetBrush(*m_pBrush);
   m_pSideBar->slotSetFGColor(m_fg);
@@ -235,10 +236,10 @@ void KisView::setupTools()
 
   // zoom tool
   m_pZoomTool = new ZoomTool(this);
- 
+
   // gradient tool
   m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient );
- 
+
   m_tool_brush->setChecked( true );
   activateTool(m_pBrushTool);
 }
@@ -310,11 +311,7 @@ void KisView::setupActions()
 
   new KAction( i18n("Zoom &out"), KISBarIcon("viewmag-"), 0, this,
                SLOT( zoom_out() ), actionCollection(), "zoom_out" );
-  
-  m_dialog_layer = new KToggleAction( i18n("&Layer Dialog"), KISBarIcon("layer_dialog"), 0, this,
-				SLOT( dialog_layer() ),actionCollection(), "dialog_layer");
-  m_dialog_color = new KToggleAction( i18n("&Color Dialog"), KISBarIcon("color_dialog"), 0, this,
-				SLOT( dialog_color() ),actionCollection(), "dialog_color");
+
   m_dialog_brush = new KToggleAction( i18n("&Brush Dialog"), KISBarIcon("brush_dialog"), 0, this,
 				SLOT( dialog_brush() ),actionCollection(), "dialog_brush");
   m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"),
@@ -331,48 +328,48 @@ void KisView::setupActions()
 										  KISBarIcon( "areaselect" ), 0, this,
 										  SLOT( tool_select_rect() ), actionCollection(), "tool_select_rect" );
   m_tool_select_rect->setExclusiveGroup( "tools" );
-  
+
   m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ), KISBarIcon( "areaselect" ), 0, this,
                              SLOT( tool_select_rect() ), actionCollection(), "tool_select_polygon" );
   m_tool_select_polygon->setExclusiveGroup( "tools" );
-  
+
   m_tool_move = new KToggleAction( i18n("&Move tool"), KISBarIcon("move"), 0, this,
 			     SLOT( tool_move() ),actionCollection(), "tool_move");
   m_tool_move->setExclusiveGroup( "tools" );
-  
+
   m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KISBarIcon("zoom"), 0, this,
 			     SLOT( tool_zoom() ),actionCollection(), "tool_zoom");
   m_tool_zoom->setExclusiveGroup( "tools" );
-  
+
   m_tool_draw = new KToggleAction( i18n("&Draw simple figure"), KISBarIcon("pencil"), 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_draw_figure");
   m_tool_draw->setExclusiveGroup( "tools" );
-  
+
   m_tool_pen = new KToggleAction( i18n("&Pen tool"), KISBarIcon("pencil"), 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_pen");
   m_tool_pen->setExclusiveGroup( "tools" );
-  
+
   m_tool_brush = new KToggleAction( i18n("&Brush tool"), KISBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
-  
+
   m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"), KISBarIcon("airbrush"), 0, this,
 				       SLOT( tool_airbrush() ),actionCollection(), "tool_airbrush");
   m_tool_airbrush->setExclusiveGroup( "tools" );
   m_tool_airbrush->setEnabled( false );
-  
+
   m_tool_fill = new KToggleAction( i18n("&Filler tool"), KISBarIcon("airbrush"), 0, this,
 				       SLOT( tool_airbrush() ),actionCollection(), "tool_fill");
   m_tool_fill->setExclusiveGroup( "tools" );
-  
+
   m_tool_eraser = new KToggleAction( i18n("&Eraser tool"), KISBarIcon("eraser"), 0, this,
 			      SLOT( tool_eraser() ),actionCollection(), "tool_eraser");
   m_tool_eraser->setExclusiveGroup( "tools" );
-  
+
   m_tool_colorpicker = new KToggleAction( i18n("&Color picker"), KISBarIcon("colorpicker"), 0, this,
 			      SLOT( tool_colorpicker() ),actionCollection(), "tool_colorpicker");
   m_tool_colorpicker->setExclusiveGroup( "tools" );
-  
+
   m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), KISBarIcon("gradient"), 0, this,
   				 SLOT( tool_gradient() ),actionCollection(), "tool_gradient");
   m_tool_gradient->setExclusiveGroup( "tools" );
@@ -401,6 +398,7 @@ void KisView::setupActions()
 				 SLOT( layer_mirrorY() ),actionCollection(), "layer_mirrorY");
 
   // image actions
+
   (void) new KAction( i18n("Merge &all layers"), 0, this,
 				    SLOT( merge_all_layers() ),actionCollection(), "merge_all_layers");
 
@@ -413,16 +411,16 @@ void KisView::setupActions()
   // setting actions
 
   (void) KStdAction::showMenubar( this, SLOT( showMenubar() ), actionCollection(), "show_menubar" );
-  
+
   (void) KStdAction::showToolbar( this, SLOT( showToolbar() ), actionCollection(), "show_toolbar" );
-  
+
   (void) KStdAction::showStatusbar( this, SLOT( showStatusbar() ), actionCollection(), "show_statusbar" );
-  
+
   (void) new KRadioAction( i18n("Show &Sidebar"), 0, this,
                            SLOT( showSidebar() ), actionCollection(), "show_sidebar" );
-  
+
   (void) KStdAction::saveOptions( this, SLOT( saveOptions() ), actionCollection(), "save_options" );
-  
+
   (void) KStdAction::preferences( this, SLOT( preferences() ), actionCollection(), "configure");
 
   // help actions
@@ -433,8 +431,9 @@ void KisView::setupActions()
   (void) KStdAction::whatsThis( m_helpMenu, SLOT( contextHelpActivated() ), actionCollection(), "help_whatsthis" );
   (void) KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "help_bugreport" );
   (void) KStdAction::aboutApp( m_helpMenu, SLOT( aboutApplication() ), actionCollection(), "help_about" );
-  
+
   // disable at startup unused actions
+
   m_undo->setEnabled( false );
   m_redo->setEnabled( false );
   m_cut->setEnabled( false );
@@ -532,9 +531,9 @@ void KisView::resizeEvent(QResizeEvent*)
 void KisView::updateReadWrite( bool /*readwrite*/ )
 {
 #ifdef __GNUC__
-#warning TODO 
+#warning TODO
 #endif
-} 
+}
 
 void KisView::scrollH(int)
 {
@@ -619,15 +618,17 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
   //	 , e->rect().left(), e->rect().top(), e->rect().right(), e->rect().bottom());
 
   p.begin( m_pCanvas );
+  
+  p.scale( zoomFactor(), zoomFactor() );
 
   // draw background
-  p.eraseRect(0, 0, xPaintOffset(), height());
-  p.eraseRect(xPaintOffset(), 0, width(), yPaintOffset());
-  p.eraseRect(xPaintOffset(), yPaintOffset() + docHeight(), width(), height());
-  p.eraseRect(xPaintOffset() + docWidth(), yPaintOffset(), width(), height());
+  p.eraseRect( 0, 0, xPaintOffset(), height() );
+  p.eraseRect( xPaintOffset(), 0, width(), yPaintOffset() );
+  p.eraseRect( xPaintOffset(), yPaintOffset() + docHeight(), width(), height() );
+  p.eraseRect( xPaintOffset() + docWidth(), yPaintOffset(), width(), height() );
 
   // draw the image
-  ur.moveBy( -xPaintOffset() + m_pHorz->value() , -yPaintOffset() + m_pVert->value());
+  ur.moveBy( - xPaintOffset() + m_pHorz->value() , - yPaintOffset() + m_pVert->value());
   ur = ur.intersect(m_pDoc->imageExtents());
 
   ur.setBottom(ur.bottom()+1);
@@ -761,12 +762,57 @@ void KisView::paste()
  * dialog action slots
  */
 
+void KisView::zoom( int _x, int _y, float zf )
+{
+  debug( "KisView::zoom" );
+  
+  debug( "zoom factor : %f", zf );
+  
+  if (zf == 0) zf = 1;
+
+  setZoomFactor( zf );
+  
+  int x = static_cast<int> (_x * zf - docWidth() / 2);
+  int y = static_cast<int> (_y * zf - docHeight() / 2);
+
+  if (x < 0) x = 0;
+  if (y < 0) y = 0;
+
+  scrollTo( QPoint( x, y ) );
+  
+  m_pCanvas->update();
+}
+
+void KisView::zoom_in( int x, int y )
+{
+  debug( "KisView::zoom_in" );
+
+  float zf = zoomFactor();
+
+  zf *= 2;
+  
+  zoom( x, y, zf);
+}
+
+void KisView::zoom_out( int x, int y )
+{
+  debug( "KisView::zoom_out" );
+
+  float zf = zoomFactor();
+
+  zf /= 2;
+  
+  zoom( x, y, zf);
+}
+
 void KisView::zoom_in()
 {
+    zoom_in( 0, 0 );
 }
 
 void KisView::zoom_out()
 {
+    zoom_out( 0, 0 );
 }
 
 void KisView::dialog_layer()
@@ -852,7 +898,7 @@ void KisView::insert_layer()
 void KisView::insert_layer_image()
 {
   debug("KisView::insert_layer_image");
-  
+
   QString fileName;
 
   fileName = KFileDialog::getOpenFileName( getenv("HOME"),KisCore::readFilters(),0,i18n("Image file for layer") );
@@ -970,9 +1016,18 @@ int KisView::yPaintOffset()
   return v;
 }
 
+void KisView::scrollTo( QPoint p )
+{
+}
+
 float KisView::zoomFactor()
 {
-  return 2.0; // FIXME
+  return m_zoomFactor;
+}
+
+void KisView::setZoomFactor( float zf )
+{
+    m_zoomFactor = zf;
 }
 
 void KisView::slotSetBrush(const KisBrush* b)

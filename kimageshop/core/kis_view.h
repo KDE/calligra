@@ -72,6 +72,8 @@ class KisView : public KoView
   KisColor& fgColor() { return m_fg; }
   KisColor& bgColor() { return m_bg; }
 
+  KisCanvas* kisCanvas() { return m_pCanvas; }
+
  public slots:
   void slotDocUpdated();
   void slotDocUpdated(const QRect&);
@@ -87,6 +89,11 @@ class KisView : public KoView
   void canvasMouseMoveEvent( QMouseEvent * );
   void canvasMouseReleaseEvent( QMouseEvent * );
 
+ public slots:
+
+  void zoom_in();
+  void zoom_out();
+
  protected slots:
   // edit action slots
   void undo();
@@ -96,8 +103,6 @@ class KisView : public KoView
   void paste();
 
   // dialog action slots
-  void zoom_in();
-  void zoom_out();
   void dialog_layer();
   void dialog_color();
   void dialog_brush();
@@ -166,18 +171,27 @@ class KisView : public KoView
 
   void activateTool(KisTool*);
 
- private:
+ public:
+
   int 	docWidth();
   int 	docHeight();
 
   int 	xPaintOffset();
   int 	yPaintOffset();
+  void  scrollTo( QPoint p );
+
+  void 	zoom( int x, int y, float zf );
+  void  zoom_in( int x, int y );
+  void	zoom_out( int x, int y );
   float zoomFactor();
+  void  setZoomFactor( float zf );
+
+ private:
 
   // edit actions
   KAction *m_undo, *m_redo, *m_copy, *m_cut, *m_paste;
   // dialog actions
-  KToggleAction *m_dialog_layer, *m_dialog_color, *m_dialog_brush, *m_dialog_gradient, *m_dialog_gradienteditor;
+  KToggleAction *m_dialog_brush, *m_dialog_gradient, *m_dialog_gradienteditor;
   // tool actions
   KToggleAction *m_tool_select_rect, *m_tool_select_polygon, *m_tool_move, *m_tool_zoom, *m_tool_brush,
     *m_tool_draw, *m_tool_pen, *m_tool_gradient, *m_tool_colorpicker, *m_tool_fill,
@@ -215,6 +229,8 @@ class KisView : public KoView
   QButton              *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
 
   KHelpMenu            *m_helpMenu;
+
+  float		        m_zoomFactor;
 };
 
 #endif

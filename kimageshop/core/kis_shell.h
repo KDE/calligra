@@ -25,6 +25,8 @@
 
 class KStatusBar;
 
+#define ID_STATUSBAR_INFOTEXT 1
+
 class KisShell : public KoMainWindow
 {
   Q_OBJECT
@@ -48,6 +50,8 @@ public slots:
   virtual void slotFileSaveAs();
   virtual void slotFilePrint();
   virtual void slotFileClose();
+
+  virtual void statusMsg( const QString& );
 
 protected:
 

@@ -21,37 +21,34 @@
 #include "qpoint.h"
 
 #include "kis_doc.h"
+#include "kis_view.h"
 #include "kis_tool_zoom.h"
 
-ZoomTool::ZoomTool(KisView *view) : KisTool(0L, view){}
-ZoomTool::~ZoomTool() {}
+ZoomTool::ZoomTool( KisView *view )
+  : KisTool( 0L, view )
+{
+}
+
+ZoomTool::~ZoomTool()
+{
+}
 
 void ZoomTool::mousePress(QMouseEvent *e)
 {
-  if (e->button() != LeftButton)
+  if( (e->button() != LeftButton) &&
+      (e->button() != RightButton) )
     return;
-  
-  /*
-    float zf = m_pView->zoomFactor();
-  
-  if (zf == 0) zf = 1;
 
-  //if (e.shiftButton)
-  //  zf/=2;
-  // else
-    zf*=2;
-  
-  m_pView->slotSetZoomFactor(zf);
-
-  int x = static_cast<int>(e->x()*zf - m_pView->viewWidth()/2);
-  int y = static_cast<int>(e->y()*zf - m_pView->viewHeight()/2);
-
-  if (x < 0) x = 0;
-  if (y < 0) y = 0;
-
-  m_pView->scrollTo(QPoint(x,y));
-  */
+  if( e->button() == LeftButton )
+      m_pView->zoom_in();
+  else
+      m_pView->zoom_out();
 }
 
-void ZoomTool::mouseMove(QMouseEvent *){}
-void ZoomTool::mouseRelease(QMouseEvent *){}
+void ZoomTool::mouseMove(QMouseEvent *)
+{
+}
+
+void ZoomTool::mouseRelease(QMouseEvent *)
+{
+}

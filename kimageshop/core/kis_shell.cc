@@ -40,7 +40,7 @@ KisShell::KisShell( const char* name )
 
   m_pStatusBar = new KStatusBar( this, "shell_statusbar" );
 
-  m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), 1 );
+  m_pStatusBar->insertItem( i18n( "a little test for the statusbar" ), ID_STATUSBAR_INFOTEXT );
   
   setStatusBar( m_pStatusBar );
 }
@@ -123,6 +123,11 @@ void KisShell::slotFileClose()
 {
   KisDoc* doc = (KisDoc*)rootDocument();
   doc->slotRemoveImage( doc->currentImage() );
+}
+
+void KisShell::statusMsg( const QString& text )
+{
+  m_pStatusBar->changeItem( text, ID_STATUSBAR_INFOTEXT );
 }
 
 #include "kis_shell.moc"

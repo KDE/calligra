@@ -28,6 +28,7 @@
 class ZoomTool : public KisTool
 {
  public:
+
   ZoomTool(KisView *view);
   ~ZoomTool();
 
