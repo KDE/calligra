@@ -69,6 +69,11 @@ QSize KexiViewBase::preferredSizeHint(const QSize& otherSize)
 	return otherSize;
 }
 
+void KexiViewBase::closeEvent( QCloseEvent * e )
+{
+	emit closing();
+	QWidget::closeEvent(e);
+}
 
 #include "kexiviewbase.moc"
 

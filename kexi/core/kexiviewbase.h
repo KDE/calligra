@@ -77,6 +77,8 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 flag from internal structures that may be changed. */
 		virtual bool dirty();
 
+		virtual void closeEvent( QCloseEvent * e );
+
 		QString m_defaultIconName;
 
 	private:
