@@ -564,8 +564,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
 
     // Do we draw a cursor ?
     bool drawCursor = edit!=0L;
-    KoTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->cursor() : 0;
-
+    KoTextCursor * cursor = edit ? (dynamic_cast<KWTextFrameSetEdit *>(edit) ? static_cast<KWTextFrameSetEdit *>(edit)->cursor() : 0) : 0;
     uint drawingFlags = 0;
     if ( viewMode->drawSelections() )
         drawingFlags |= KoTextDocument::DrawSelections;
