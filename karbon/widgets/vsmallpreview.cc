@@ -115,12 +115,14 @@ VSmallPreview::drawFill( const VFill &f )
 					m_fillLabel->setText( i18n( "Fill: Color") );
 			}
 			fill.setColor( f.color() );
+			break;
 		}
 		case VFill::grad:
 		{
 			fill.gradient() = f.gradient();
 			fill.setType( VFill::grad );
 			m_fillLabel->setText( i18n( "Fill: Gradient") );
+			break;
 
 		}
 		case VFill::patt:
@@ -128,6 +130,7 @@ VSmallPreview::drawFill( const VFill &f )
 			fill.pattern() = f.pattern();
 			fill.setType( VFill::patt );
 			m_fillLabel->setText( i18n( "Fill: Pattern") );
+			break;
 		}
 		default: //None or unknown
 		{
@@ -188,18 +191,21 @@ VSmallPreview::drawStroke( const VStroke &s )
 					m_strokeLabel->setText( i18n( "Stroke: Color") );
 			}
 			fill.setColor( s.color() );
+			break;
 		}
 		case VStroke::grad:
 		{
 			fill.gradient() = s.gradient();
 			fill.setType( VFill::grad );
 			m_strokeLabel->setText( i18n( "Stroke: Gradient") );
+			break;
 		}
 		case VStroke::patt:
 		{
 			fill.pattern() = s.pattern();
 			fill.setType( VFill::patt );
 			m_strokeLabel->setText( i18n( "Stroke: Pattern") );
+			break;
 		}
 		default: //None or unknown
 		{
