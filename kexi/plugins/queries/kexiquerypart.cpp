@@ -26,13 +26,13 @@
 #include <klocale.h>
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
-
+#include <kgenericfactory.h>
 #include "kexiquerydesigner.h"
 #include "kexiquerypart.h"
 #include "kexiquerypartproxy.h"
 
-KexiQueryPart::KexiQueryPart(KexiProject *project)
- : KexiProjectPart(project)
+KexiQueryPart::KexiQueryPart(QObject *project,const char *,const QStringList &)
+ : KexiProjectPart(KEXIPROJECT(project))
 {
 	kdDebug() << "KexiQueryPart::KexiQueryPart()" << endl;
 }
@@ -89,6 +89,9 @@ void KexiQueryPart::hookIntoView(KexiView *view)
         KexiQueryPartProxy *prx=new KexiQueryPartProxy(this,view);
         insertIntoViewProxyMap(view,prx);
 }
+
+
+K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart> )
 
 
 #include "kexiquerypart.moc"

@@ -30,7 +30,7 @@
 #include "kexitableview.h"
 #include "kexitableitem.h"
 #include "kexiquerydesignerguieditor.h"
-#include "kexirelationdialog.h"
+//#include "kexirelationdialog.h"
 #include "kexiproject.h"
 #include "kexiview.h"
 
@@ -40,7 +40,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_db = view->project()->db();
 	m_parent = myparent;
 
-	m_tables = new KexiRelationDialog(view,this, "querytables", true);
+//	m_tables = new KexiRelationDialog(view,this, "querytables", true);
 
 	m_designTable = new KexiTableView(this);
 	m_designTable->m_editOnDubleClick = true;
@@ -66,13 +66,14 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_insertItem->setInsertItem(true);
 
 	QGridLayout *g = new QGridLayout(this);
-	g->addWidget(m_tables,		0,	0);
+//	g->addWidget(m_tables,		0,	0);
 	g->addWidget(m_designTable,	1,	0);
 }
 
 void
 KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 {
+#if 0
 	kdDebug() << "KexiQueryDesignerGuiEditor::slotDropped()" << endl;
 
 	KexiRelationViewTable *sourceTable = static_cast<KexiRelationViewTable *>(ev->source());
@@ -101,6 +102,7 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 	newInsert->setValue(2, true);
 	newInsert->setInsertItem(true);
 	m_insertItem = newInsert;
+#endif
 }
 
 void
@@ -121,6 +123,8 @@ KexiQueryDesignerGuiEditor::slotItemChanged(KexiTableItem *item, int col)
 QString
 KexiQueryDesignerGuiEditor::getQuery()
 {
+#if 0
+#warning fixme
 	//yo, let's get ugly :)
 
 	if(m_designTable->rows() == 1)
@@ -281,6 +285,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 	kdDebug() << "KexiQueryDesignerGuiEditor::getQuery() query: " << query << endl;
 
 	return query;
+#endif
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()

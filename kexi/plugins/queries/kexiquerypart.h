@@ -29,7 +29,7 @@ class KexiQueryPart : public KexiProjectPart
 	Q_OBJECT
 
 	public:
-		KexiQueryPart(KexiProject *project);
+		KexiQueryPart(QObject *project,const char *,const QStringList &);
 
 		virtual QString				name();
 		virtual QString				mime();
