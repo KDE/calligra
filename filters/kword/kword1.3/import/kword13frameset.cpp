@@ -71,3 +71,21 @@ void KWordTextFrameset::xmldump( QTextStream& iostream )
     m_paragraphGroup.xmldump( iostream );
     iostream << "  </frameset>\n";
 }
+
+KWord13PictureFrameset::KWord13PictureFrameset( int frameType, int frameInfo, const QString& name )
+    : KWord13Frameset( frameType, frameInfo, name )
+{    
+}
+
+KWord13PictureFrameset::~KWord13PictureFrameset( void )
+{
+}
+
+void KWord13PictureFrameset::xmldump( QTextStream& iostream )
+{
+    iostream << "  <frameset variant=\"Text\" type=\"" << m_frameType
+         << "\" info=\"" << m_frameInfo
+         << "\" name=\"" << EscapeXmlDump( m_name ) <<"\">\n";
+    iostream << "   <key>" << m_pictureKey << "</key>\n";
+    iostream << "  </frameset>\n";
+}

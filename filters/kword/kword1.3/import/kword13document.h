@@ -70,8 +70,9 @@ public:
     QPtrList<KWordTextFrameset> m_tableFramesetList; ///< List of \<FRAMESET\> being part of tables
     QPtrList<KWordTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
     QPtrList<KWordTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
+    QPtrList<KWord13PictureFrameset> m_pictureFramesetList; ///< List of \<FRAMESET\> having pictures
     QPtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
-    QDict<KWord13Picture> m_pictureDict; ///< "Dictionnary" of all pictures
+    QDict<KWord13Picture> m_pictureDict; ///< "Dictionnary" of all pictures' data
     KTempFile* m_previewFile;
 };
 

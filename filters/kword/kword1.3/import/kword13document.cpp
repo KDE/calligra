@@ -36,6 +36,7 @@ KWord13Document::KWord13Document( void ) : m_previewFile( 0 )
     m_otherFramesetList.setAutoDelete( true );
     m_headerFooterFramesetList.setAutoDelete( true );
     m_footEndNoteFramesetList.setAutoDelete( true );
+    m_pictureFramesetList.setAutoDelete( true );
     m_pictureDict.setAutoDelete( true );
 }
 
@@ -112,6 +113,15 @@ void KWord13Document::xmldump( QIODevice* io )
         item4->xmldump( iostream );
     }
     iostream << " </otherframesets>\n";
+    
+    iostream << " <pictureframesets>\n";
+    for ( KWord13Frameset* item5 = m_pictureFramesetList.first();
+        item5;
+        item5 = m_pictureFramesetList.next() )
+    {
+        item5->xmldump( iostream );
+    }
+    iostream << " </pictureframesets>\n";
     
     iostream << " <styles>\n";
     

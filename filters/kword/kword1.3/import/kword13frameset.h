@@ -58,4 +58,15 @@ public:
     KWord13ParagraphGroup m_paragraphGroup;
 };
 
+class KWord13PictureFrameset : public KWord13Frameset
+{
+public:
+    KWord13PictureFrameset( int frameType, int frameInfo, const QString& name );
+    virtual ~KWord13PictureFrameset( void );
+public:
+    virtual void xmldump( QTextStream& iostream );
+public:
+    QString m_pictureKey;
+};
+
 #endif // _FILTER_KWORD_1_3__KWORDFRAMESET_H

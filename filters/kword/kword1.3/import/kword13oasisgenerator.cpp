@@ -635,7 +635,7 @@ void KWord13OasisGenerator::writeContentXml(void)
     writer.startElement( "office:body" );
     writer.startElement( "office:text" );
 
-    // ### TODO: write text document!
+    // ### TODO: check that there is at least a normal text frameset
     generateTextFrameset( writer, m_kwordDocument->m_normalTextFramesetList.first(), true );
     
     writer.endElement(); // office:text
