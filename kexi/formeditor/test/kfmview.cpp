@@ -25,6 +25,10 @@
 #include "kexipropertyeditor.h"
 #include "kfmview.h"
 
+#define ENABLE_ACTION(name, enable) \
+	if(actionCollection()->action( name )) \
+		actionCollection()->action( name )->setEnabled( enable )
+
 KFMView::KFMView()
  : KMainWindow()
 {
@@ -137,33 +141,21 @@ KFMView::slotWidgetSelected(Form *form, bool multiple)
 {
 	enableFormActions();
 	// Enable edit actions
-	if(actionCollection()->action( KStdAction::name(KStdAction::Copy) ))
-		actionCollection()->action(KStdAction::name(KStdAction::Copy) )->setEnabled(true);
-	if(actionCollection()->action( KStdAction::name(KStdAction::Cut) ))
-		actionCollection()->action( KStdAction::name(KStdAction::Cut) )->setEnabled(true);
-#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
-	if(actionCollection()->action( KStdAction::name(KStdAction::Clear) ))
-		actionCollection()->action( KStdAction::name(KStdAction::Clear) )->setEnabled(true);
+	ENABLE_ACTION("edit_copy", true);
+	ENABLE_ACTION("edit_cut", true);
+#if KDE_IS_VERSION(3,1,9) //&& !defined(Q_WS_WIN)
+	ENABLE_ACTION("edit_clear", true);
 #endif
 
 	// 'Align Widgets' menu
-	if(actionCollection()->action("align_menu"))
-		actionCollection()->action("align_menu")->setEnabled(true);
-	if(actionCollection()->action("align_to_left"))
-		actionCollection()->action("align_to_left")->setEnabled(multiple);
-	if(actionCollection()->action("align_to_right"))
-		actionCollection()->action("align_to_right")->setEnabled(multiple);
-	if(actionCollection()->action("align_to_top"))
-		actionCollection()->action("align_to_top")->setEnabled(multiple);
-	if(actionCollection()->action("align_to_bottom"))
-		actionCollection()->action("align_to_bottom")->setEnabled(multiple);
-
-	if(actionCollection()->action("adjust_size_menu"))
-		actionCollection()->action("adjust_size_menu")->setEnabled(true);
-	if(actionCollection()->action("format_raise"))
-		actionCollection()->action("format_raise")->setEnabled(true);
-	if(actionCollection()->action("format_lower"))
-		actionCollection()->action("format_lower")->setEnabled(true);
+	ENABLE_ACTION("align_menu", multiple);
+	ENABLE_ACTION("align_to_left", multiple);
+	ENABLE_ACTION("align_to_right", multiple);
+	ENABLE_ACTION("align_to_top", multiple);
+	ENABLE_ACTION("align_to_bottom", multiple);
+	ENABLE_ACTION("adjust_size_menu", true);
+	ENABLE_ACTION("format_raise", true);
+	ENABLE_ACTION("format_lower", true);
 
 	// If the widgets selected is a container, we enable layout actions
 	if(!multiple)
@@ -173,12 +165,9 @@ KFMView::slotWidgetSelected(Form *form, bool multiple)
 			multiple = true;
 	}
 	// Layout actions
-	if(actionCollection()->action("layout_hbox"))
-		actionCollection()->action("layout_hbox")->setEnabled(multiple);
-	if(actionCollection()->action("layout_vbox"))
-		actionCollection()->action("layout_vbox")->setEnabled(multiple);
-	if(actionCollection()->action("layout_grid"))
-		actionCollection()->action("layout_grid")->setEnabled(multiple);
+	ENABLE_ACTION("layout_hbox", multiple);
+	ENABLE_ACTION("layout_vbox", multiple);
+	ENABLE_ACTION("layout_grid", multiple);
 }
 
 void
@@ -194,85 +183,58 @@ KFMView::slotNoFormSelected()
 	disableWidgetActions();
 
 	// Disable paste action
-	if(actionCollection()->action( KStdAction::name(KStdAction::Paste) ))
-		actionCollection()->action( KStdAction::name(KStdAction::Paste) )->setEnabled(false);
+	ENABLE_ACTION("edit_paste", false);
 
 	// Disable 'Tools' actions
-	if(actionCollection()->action("pixmap_collection"))
-		actionCollection()->action("pixmap_collection")->setEnabled(false);
-	if(actionCollection()->action("form_connections"))
-		actionCollection()->action("form_connections")->setEnabled(false);
-	if(actionCollection()->action("taborder"))
-		actionCollection()->action("taborder")->setEnabled(false);
-	if(actionCollection()->action("change_style"))
-		actionCollection()->action("change_style")->setEnabled(false);
+	ENABLE_ACTION("pixmap_collection", false);
+	ENABLE_ACTION("form_connections", false);
+	ENABLE_ACTION("taborder", false);
+	ENABLE_ACTION("change_style", false);
 
 	// Disable items in 'File'
-	if(actionCollection()->action( KStdAction::name(KStdAction::Save) ))
-		actionCollection()->action( KStdAction::name(KStdAction::Save) )->setEnabled(false);
-	if(actionCollection()->action( KStdAction::name(KStdAction::SaveAs) ))
-		actionCollection()->action( KStdAction::name(KStdAction::SaveAs) )->setEnabled(false);
-	if(actionCollection()->action( KStdAction::name(KStdAction::PrintPreview) ))
-		actionCollection()->action( KStdAction::name(KStdAction::PrintPreview) )->setEnabled(false);
-	if(actionCollection()->action( KStdAction::name(KStdAction::SaveAs) ))
-		actionCollection()->action( KStdAction::name(KStdAction::SaveAs) )->setEnabled(false);
+	ENABLE_ACTION("file_save", false);
+	ENABLE_ACTION("file_save_as", false);
+	ENABLE_ACTION("file_print_preview", false);
 }
 
 void
 KFMView::enableFormActions()
 {
 	// Enable 'Tools' actions
-	if(actionCollection()->action("pixmap_collection"))
-		actionCollection()->action("pixmap_collection")->setEnabled(true);
-	if(actionCollection()->action("form_connections"))
-		actionCollection()->action("form_connections")->setEnabled(true);
-	if(actionCollection()->action("taborder"))
-		actionCollection()->action("taborder")->setEnabled(true);
-	if(actionCollection()->action("change_style"))
-		actionCollection()->action("change_style")->setEnabled(true);
+	ENABLE_ACTION("pixmap_collection", true);
+	ENABLE_ACTION("form_connections", true);
+	ENABLE_ACTION("taborder", true);
+	ENABLE_ACTION("change_style", true);
 
 	// Enable items in 'File'
-	if(actionCollection()->action( KStdAction::name(KStdAction::Save) ))
-		actionCollection()->action( KStdAction::name(KStdAction::Save) )->setEnabled(true);
-	if(actionCollection()->action( KStdAction::name(KStdAction::SaveAs) ))
-		actionCollection()->action( KStdAction::name(KStdAction::SaveAs) )->setEnabled(true);
-	if(actionCollection()->action( KStdAction::name(KStdAction::PrintPreview) ))
-		actionCollection()->action( KStdAction::name(KStdAction::PrintPreview) )->setEnabled(true);
-	if(actionCollection()->action( KStdAction::name(KStdAction::SaveAs) ))
-		actionCollection()->action( KStdAction::name(KStdAction::SaveAs) )->setEnabled(true);
+	ENABLE_ACTION("file_save", true);
+	ENABLE_ACTION("file_save_as", true);
+	ENABLE_ACTION("file_print_preview", true);
 
-	if(actionCollection()->action( KStdAction::name(KStdAction::Paste) ))
-		actionCollection()->action( KStdAction::name(KStdAction::Paste) )->setEnabled(manager->isPasteEnabled());
+	ENABLE_ACTION("edit_paste", manager->isPasteEnabled());
 }
 
 void
 KFMView::disableWidgetActions()
 {
 	// Disable edit actions
-	if(actionCollection()->action( KStdAction::name(KStdAction::Copy) ))
-		actionCollection()->action(KStdAction::name(KStdAction::Copy) )->setEnabled(false);
-	if(actionCollection()->action( KStdAction::name(KStdAction::Cut) ))
-		actionCollection()->action( KStdAction::name(KStdAction::Cut) )->setEnabled(false);
-#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
-	if(actionCollection()->action( KStdAction::name(KStdAction::Clear) ))
-		actionCollection()->action( KStdAction::name(KStdAction::Clear) )->setEnabled(false);
-#endif
+	ENABLE_ACTION("edit_paste", false);
+	ENABLE_ACTION("edit_cut", false);
+	ENABLE_ACTION("edit_clear", false);
 
 	// Disable format functions
-	if(actionCollection()->action("align_menu"))
-		actionCollection()->action("align_menu")->setEnabled(false);
-	if(actionCollection()->action("adjust_size_menu"))
-		actionCollection()->action("adjust_size_menu")->setEnabled(false);
-	if(actionCollection()->action("format_raise"))
-		actionCollection()->action("format_raise")->setEnabled(false);
-	if(actionCollection()->action("format_lower"))
-		actionCollection()->action("format_lower")->setEnabled(false);
-	if(actionCollection()->action("layout_hbox"))
-		actionCollection()->action("layout_hbox")->setEnabled(false);
-	if(actionCollection()->action("layout_vbox"))
-		actionCollection()->action("layout_vbox")->setEnabled(false);
-	if(actionCollection()->action("layout_grid"))
-		actionCollection()->action("layout_grid")->setEnabled(false);
+	ENABLE_ACTION("align_menu", false);
+	ENABLE_ACTION("align_to_left", false);
+	ENABLE_ACTION("align_to_right", false);
+	ENABLE_ACTION("align_to_top", false);
+	ENABLE_ACTION("align_to_bottom", false);
+	ENABLE_ACTION("adjust_size_menu", false);
+	ENABLE_ACTION("format_raise", false);
+	ENABLE_ACTION("format_lower", false);
+
+	ENABLE_ACTION("layout_hbox", false);
+	ENABLE_ACTION("layout_vbox", false);
+	ENABLE_ACTION("layout_grid", false);
 }
 
 KFMView::~KFMView()
