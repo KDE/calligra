@@ -50,65 +50,71 @@ protected:
 public:
     virtual ~KWViewMode() {}
 
-    // Normal coord -> view coord
+    /** Normal coord -> view coord */
     virtual QPoint normalToView( const QPoint & nPoint ) = 0;
 
+    /** Normal coord -> view coord */
     QRect normalToView( const QRect & nRect )
     { return QRect( normalToView( nRect.topLeft() ), normalToView( nRect.bottomRight() ) ); }
 
-    // View coord -> normal coord
+    /** View coord -> normal coord */
     virtual QPoint viewToNormal( const QPoint & vPoint ) = 0;
 
+    /** View coord -> normal coord */
     QRect viewToNormal( const QRect & nRect )
     { return QRect( viewToNormal( nRect.topLeft() ), viewToNormal( nRect.bottomRight() ) ); }
 
-    // Size of the contents area
+    /** Size of the contents area */
     virtual QSize contentsSize() = 0;
 
-    // Size (in pixels) of the total area available for text in a given textframeset
-    // This is used by KWTextFrameSet::drawFrame to erase between the bottom of the
-    // last paragraph and the bottom of the available area.
+    /** Size (in pixels) of the total area available for text in a given textframeset
+     * This is used by KWTextFrameSet::drawFrame to erase between the bottom of the
+     * last paragraph and the bottom of the available area. */
     virtual QSize availableSizeForText( KWTextFrameSet* textfs );
 
-    // "Topleft of current page" - concept used by the rulers.
-    // The default implementation is good enough for any page-based viewmode,
-    // since it calls normalToView. But the textmode has no page concept.
+    /** "Topleft of current page" - concept used by the rulers.
+     * The default implementation is good enough for any page-based viewmode,
+     * since it calls normalToView. But the textmode has no page concept. */
     virtual QPoint pageCorner( KWCanvas* canvas );
-    // The result of this is passed to setFrameStartEnd for both rulers
-    // (after adjustement with pageCorner())
+    /** The result of this is passed to setFrameStartEnd for both rulers
+     * (after adjustement with pageCorner()) */
     virtual QRect rulerFrameRect( KWCanvas* canvas );
-    // Called when the page layout is set, or changes.
-    // Usually this is directly passed to KoRuler (for page-based viewmodes)
+    /** Called when the page layout is set, or changes.
+     * Usually this is directly passed to KoRuler (for page-based viewmodes) */
     virtual void setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& layout );
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ) = 0;
 
-    // Config option for KWViewModePreview (a bit of a hack)
+    /** Config option for KWViewModePreview (a bit of a hack) */
     virtual void setPagesPerRow(int) {}
     virtual int pagesPerRow() {return 0;}
 
-    // Should selected text be drawn as such?
+    /** Should selected text be drawn as such? */
     virtual bool drawSelections() {return true;}
 
-    // Should we see frame borders? This setting doesn't always come from KWView...
+    /** Should we see frame borders? This setting doesn't always come from KWView... */
     bool drawFrameBorders() const { return m_drawFrameBorders; }
     void setDrawFrameBorders(bool b)  { m_drawFrameBorders = b; }
 
-    // Should this frameset be visible in this viewmode? True by default, all are shown.
+    /** Should this frameset be visible in this viewmode? True by default, all are shown. */
     virtual bool isFrameSetVisible( const KWFrameSet* /*frameset*/ ) { return true; }
 
-    // Should formatVertically() happen (to skip frame bottom, frames on top, etc.)
+    /** Should formatVertically() happen (to skip frame bottom, frames on top, etc.) */
     // TODO: maybe this should be more fine-grained.
     virtual bool shouldFormatVertically() { return true; }
 
-    // Should adjust[LR]Margin() happen (to run the text around frames on top etc.)
+    /** Should adjust[LR]Margin() happen (to run the text around frames on top etc.) */
     virtual bool shouldAdjustMargins() { return true; }
 
-    // Does this viewmode know anything about frames?
+    /** Does this viewmode know anything about frames? */
     virtual bool hasFrames() { return true; }
 
-    // Return the name of the viewmode, used for loading/saving.
+    /** Return the name of the viewmode, used for loading/saving. */
     virtual const QString type() = 0;
+
+    /** Answers the question if argument frameset has to be drawn as a text-mode 
+     *  text area if true, or if false as a frame with its own contents. */
+    virtual bool isTextModeFrameset(KWFrameSet *) const { return false; }
 
     static KWViewMode *create( const QString & viewModeType, KWDocument * );
 
@@ -124,7 +130,7 @@ protected:
     bool m_drawFrameBorders;
 };
 
-// The 'normal' view mode (pages below one another)
+/** The 'normal' view mode (pages below one another) */
 class KWViewModeNormal : public KWViewMode
 {
 public:
@@ -141,7 +147,7 @@ public:
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
 
-// The view mode used when printing (pages under one another, no selections)
+/** The view mode used when printing (pages under one another, no selections) */
 class KWViewModePrint : public KWViewModeNormal // we inherit the "normal" viewmode
 {
 public:
@@ -150,7 +156,7 @@ public:
     virtual bool drawSelections() { return false; }
 };
 
-// The 'embedded' view mode (usually a single page, no selections)
+/** The 'embedded' view mode (usually a single page, no selections) */
 class KWViewModeEmbedded : public KWViewMode
 {
 public:
@@ -169,8 +175,8 @@ public:
 };
 
 
-// A mode for previewing the overall document
-// Pages are organized in a grid (mostly useful when zooming out a lot)
+/** A mode for previewing the overall document
+ Pages are organized in a grid (mostly useful when zooming out a lot) */
 class KWViewModePreview : public KWViewMode
 {
 public:
@@ -193,14 +199,15 @@ private:
     int m_spacing;
 };
 
-// The 'edit only one text frameset' view mode
+/** The 'edit only one text frameset' view mode */
 class KWViewModeText : public KWViewMode
 {
 public:
-    KWViewModeText( KWDocument * doc ) : KWViewMode( doc, false ) {}
+
+    KWViewModeText( KWDocument * doc );
     virtual ~KWViewModeText() {}
 
-    KWTextFrameSet *textFrameSet() const;
+    KWTextFrameSet *textFrameSet();
 
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );
@@ -218,6 +225,11 @@ public:
     virtual bool hasFrames() { return false; }
 
     virtual bool isFrameSetVisible( const KWFrameSet* fs );
+
+    virtual bool isTextModeFrameset(KWFrameSet *fs) const;
+
+private:
+    KWTextFrameSet *m_textFrameSet;
 };
 
 #endif

@@ -19,6 +19,7 @@
 
 #include "kwviewmode.h"
 #include "kwcanvas.h"
+#include "kwview.h"
 #include "kwdoc.h"
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
@@ -309,17 +310,31 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 }
 
 //////////////////
+KWViewModeText::KWViewModeText( KWDocument * doc ) : KWViewMode( doc, false ) { 
+    m_textFrameSet=NULL; 
+}
 
-KWTextFrameSet * KWViewModeText::textFrameSet() const
+KWTextFrameSet * KWViewModeText::textFrameSet()
 {
-    KWFrame * f = m_doc->getFirstSelectedFrame();
-    KWFrameSet * fs = 0L;
-    if(f) fs = f->frameSet(); // selected frame
+    if(m_textFrameSet==NULL) {
+        KWFrameSet * fs = 0L;
 
-    if ( !fs || fs->type() != FT_TEXT ) fs = m_doc->frameSet( 0 );  // fallback to frameset 0;
-    if ( !fs || fs->type() != FT_TEXT )                             // framset 0 also does not work..
-        return 0L;
-    return static_cast<KWTextFrameSet *>(fs);
+        KWFrame *f = m_doc->getFirstSelectedFrame();
+        if(f) fs=f->frameSet();
+
+        if (!fs || fs->type() != FT_TEXT) { // no suitable frameset found
+            KWView *view = m_doc->getAllViews().first(); // try the one I am editing..
+            if(view) {
+                KWFrameSetEdit *fse = view->getGUI()->canvasWidget()->currentFrameSetEdit();
+                if(fse) fs = fse->frameSet(); // selected frame
+            }
+        }
+
+        if (!fs || fs->type() != FT_TEXT) fs = m_doc->frameSet( 0 );  // if not a textFS; fallback to fs 0;
+
+        m_textFrameSet=dynamic_cast<KWTextFrameSet *>(fs);
+    }
+    return m_textFrameSet;
 }
 
 QPoint KWViewModeText::normalToView( const QPoint & nPoint )
@@ -376,20 +391,17 @@ QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
 
 QSize KWViewModeText::contentsSize()
 {
-    KWTextFrameSet * textfs = textFrameSet();
-    if (!textfs)
+    textFrameSet(); // init.
+
+    if (!m_textFrameSet)
         return QSize();
-    // Hmm, availableHeight relies on the formatting being done - problem?
-    //QSize luSize( textfs->textDocument()->width(), textfs->availableHeight() + 1 /*bottom line*/ );
 
     // The actual contents only depend on the amount of text.
-    QSize luSize( textfs->textDocument()->width(), textfs->textDocument()->height() /* + 1 bottom line*/ );
 
-    // But we want to show at least a page if the doc is empty, IMHO.
-    int pageHeight = m_doc->zoomItY( textfs->frame(0)->height() );
-
-    QSize cSize( m_doc->layoutUnitToPixelX( luSize.width() ),
-                 QMAX( m_doc->layoutUnitToPixelY( luSize.height() ), pageHeight ) );
+    QSize cSize( m_doc->paperWidth(),
+                 QMAX(m_doc->paperHeight() , 
+                      m_doc->layoutUnitToPixelY( m_textFrameSet->textDocument()->height() ) 
+                  ) );
     //kdDebug() << "KWViewModeText::contentsSize " << cSize << endl;
     return cSize;
 }
@@ -401,16 +413,13 @@ QSize KWViewModeText::availableSizeForText( KWTextFrameSet* /*textfs*/ )
 
 bool KWViewModeText::isFrameSetVisible( const KWFrameSet *fs )
 {
-    KWTextFrameSet * textfs = textFrameSet();
-    if ( !textfs || !fs )
-        return false;
-    if ( fs == textfs )
-        return true;
-    const KWFrameSet* parentFrameset = fs;
-    parentFrameset = fs->getGroupManager() ? fs->getGroupManager() : fs;
+    if(fs==NULL) return false; // assertion
+    if(fs==textFrameSet()) return true;
+
+    const KWFrameSet* parentFrameset = fs->getGroupManager() ? fs->getGroupManager() : fs;
     while ( parentFrameset->isFloating() ) {
         parentFrameset = parentFrameset->anchorFrameset();
-        if ( parentFrameset == textfs )
+        if ( parentFrameset == m_textFrameSet )
             return true;
     }
     return false;
@@ -424,7 +433,7 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
         return;
     painter->save();
     QRegion grayRegion( crect );
-    //kdDebug() << "\nKWViewModeText::drawPageBorders crect=" << grayRegion << endl;
+    //kdDebug() << "KWViewModeText::drawPageBorders crect=" << grayRegion << endl;
     QPtrListIterator<KWFrame> it( textfs->frameIterator() );
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     QSize cSize = contentsSize();
@@ -471,4 +480,8 @@ void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPa
     layout.ptBottom = 0;
     hRuler->setPageLayout( layout );
     vRuler->setPageLayout( layout );
+}
+
+bool KWViewModeText::isTextModeFrameset(KWFrameSet *fs) const {
+    return fs==m_textFrameSet;
 }
