@@ -192,6 +192,12 @@ void KSpreadCanvas::setEditor(QString text)
 m_pEditor->setText(text);
 }
 
+void KSpreadCanvas::insertFormulaChar(int c)
+{
+m_pEditor->insertFormulaChar(c);
+}
+
+
 KSpreadTable* KSpreadCanvas::activeTable()
 {
   return m_pView->activeTable();
@@ -862,7 +868,21 @@ m_pEditor->setFocus();
 
 void KSpreadCanvas::mouseDoubleClickEvent( QMouseEvent*  )
 {
-m_pView->layoutDlg();
+if(editWidget()->text().find("*")==0)
+	{
+	
+	create_editor(type_formula);
+	QString tmp=editWidget()->text();
+	m_pEditor->setText(tmp.right(tmp.length()-1));
+	m_pView->hide_show_formulatools(true);
+	}
+else
+	{
+	create_editor(type_cell);
+	QString tmp=editWidget()->text();
+	m_pEditor->setText(tmp);	
+	}
+m_pEditor->setFocus();
 }
 
 void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
@@ -984,6 +1004,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	setEditorActivate(false);
 	//l
 	hide_choose_cell();
+	m_pView->hide_show_formulatools(false);
 	break;
 	
     case Key_Up:
@@ -1000,6 +1021,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	}
 	setEditorActivate(false);
 	hide_choose_cell();
+	m_pView->hide_show_formulatools(false);
 	break;
 	
     case Key_Left:
@@ -1019,6 +1041,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	}
 	setEditorActivate(false);
 	hide_choose_cell();
+	m_pView->hide_show_formulatools(false);
 	break;
 
     case Key_Right:
@@ -1038,6 +1061,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	}
 	setEditorActivate(false);
 	hide_choose_cell();
+	m_pView->hide_show_formulatools(false);
 	break;
 
 	/**
@@ -1060,6 +1084,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       }
       setEditorActivate(false);
       hide_choose_cell();
+      m_pView->hide_show_formulatools(false);
       return;
     case Key_Home :
     	tmp=m_pView->activeTable()->name() + "!A1" ;
@@ -1069,6 +1094,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
     	showMarker();
     	setFocus();
+    	m_pView->hide_show_formulatools(false);
     	break;
     	
     case Key_Prior :
@@ -1080,7 +1106,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  	m_pEditor = 0;
 		}
     	if(markerRow() == 1)
+    		{
+    		m_pView->hide_show_formulatools(false);
     		return;
+    		}
     		
     	setgotovert(true);
     	setgotohorz(true);
@@ -1102,6 +1131,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     		showMarker();
     		setFocus();
     		}
+    	m_pView->hide_show_formulatools(false);
     	break;
     	
     	case Key_Next :
@@ -1114,7 +1144,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		}
 		
     	if(markerRow() == 0x7FFF)
+    		{
     		return;
+    		m_pView->hide_show_formulatools(false);
+    		}
     	setgotovert(true);
     	setgotohorz(true);
     	if((markerRow() >0x7FF5) &&( markerRow()<0x7FFF))
@@ -1135,6 +1168,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     		showMarker();
     		setFocus();
     		}
+    	m_pView->hide_show_formulatools(false);
     	break;
     default:
       // No null character ...
@@ -1148,7 +1182,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       {
 	KSpreadCell* cell = activeTable()->cellAt( marker() );
 	if ( _ev->ascii() == '*' )
+	  {
 	  m_pEditor = new KSpreadFormulaEditor( cell, this );
+	  m_pView->hide_show_formulatools(true);
+	  }
 	else
 	// TODO: Choose the correct editor here!
 	  {
@@ -1196,21 +1233,20 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   EMIT_EVENT( m_pView, KSpread::eventKeyPressed, event );
 }
 
-void KSpreadCanvas::create_editor()
+void KSpreadCanvas::create_editor(type_editor ed)
 {
 KSpreadTable *table = activeTable();
 if ( !m_pEditor )
-      {
-        KSpreadCell* cell = activeTable()->cellAt( marker() );
-
- m_pEditor = new KSpreadTextEditor( cell, this );
-	  /*if ( _ev->ascii() == '=' )
-	  	{
-	  	setEditorActivate(true);
-	  	name_tab=m_pView->activeTable()->name();
-	  	}
-	  } */
-	
+      	{
+      	KSpreadCell* cell = activeTable()->cellAt( marker() );
+      	if (ed==type_cell)
+      		{
+        	m_pEditor = new KSpreadTextEditor( cell, this );
+         	}
+         else if(ed==type_formula)
+         	{
+         	m_pEditor = new KSpreadFormulaEditor( cell, this );
+         	}	
 	int w = cell->width( m_iMarkerColumn, this );
 	int h = cell->height( m_iMarkerRow, this );
 	int xpos = table->columnPos( markerColumn(), this );
@@ -1225,7 +1261,7 @@ if ( !m_pEditor )
 	m_pEditor->setMinimumSize( QSize( w, h ) );
 	m_pEditor->show();
 	m_pEditor->setFocus();
-}
+	}
 }
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )

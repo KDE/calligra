@@ -2286,6 +2286,10 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset,QString name 
   	out << " width=\"" << bottomBorderWidth( column(),row()) << '"';
   	out << " color=\"" << bottomBorderColor( column(),row()) << "\"/>"<<endl;
         }
+  if ( !m_strText.isEmpty()&& isFormular())
+  	{
+  	out << indent << "<FORMULA formula=\"" << m_strText.utf8() <<"\"/>"<<endl;
+  	}
   if ( !m_strText.isEmpty() )
   {
     if ( isFormular() )
@@ -2293,6 +2297,7 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset,QString name 
       // TODO: Not unicode here!
       out << indent << encodeFormular().utf8() << endl;
       // out << indent << encodeFormular().ascii() << endl;
+
     }
     else
       out << indent << m_strText.utf8() << endl;
@@ -2359,9 +2364,9 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   bool res;
   QString name_table;
   QString text_old_cell;
+  QString formula;
   KSpreadCell * cell1 =  m_pTable->cellAt(m_iColumn,m_iRow );
   text_old_cell=cell1->text();
-  cout <<"Old_text : "<<text_old_cell.ascii()<<endl;
   // FORMAT, LEFTBORDER, TOPBORDER, FONT, PEN
   do
   {
@@ -2631,7 +2636,22 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
 	    }
 	  }
 	}
-	
+	else if ( name == "FORMULA"&&op!=Any)
+	{
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "formula" )
+	    {
+	    formula=(*it).m_strValue.c_str();
+	    }
+	    else
+	    {
+	    cout <<"Err in TABLE\n";
+	    }
+	  }
+	cout <<"Formule reelle : "<<formula.ascii()<<endl;
+	}
 	else
 	  cerr << "Unknown tag '" << tag << "' in CELL" << endl;
 	
@@ -2651,13 +2671,15 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   t = t.stripWhiteSpace();
   if(sp==ALL || sp==Wborder ||sp==FORMULA || sp==ALL_trans || sp==Wborder_trans ||sp==FORMULA_trans)
   {
-  cout <<"Operation : "<<op<<endl;
   if ( t[0] == '=' )
   	t = decodeFormular( t, m_iColumn, m_iRow );
   if(op!=Any)
   	{
+  	if(!formula.isEmpty())
+  		{
+  		t=formula;
+  		}
   	QString tmp=paste_Operation(t,text_old_cell,op);
-  	cout <<"Text : "<<tmp.ascii()<<endl;
   	t=tmp;
   	}
   	
@@ -2681,7 +2703,6 @@ else
 	{
 	tmp=new_text;
 	}
-cout <<"Tmp paste_operation : "<<tmp.ascii()<<endl;
 if(old_text.find("=")==0)
 	{
 	old_op=old_text.right(old_text.length()-1);
@@ -2690,7 +2711,32 @@ else
 	{
 	old_op=old_text;
 	}
-if( (old_text.find("=")==0&&new_text.find("=")==0)||(Operation_ok(tmp)&&Operation_ok(old_op)))
+//two double
+QString inter;
+if(tmp.toDouble()!=0&&old_op.toDouble()!=0)
+	{
+	switch(op)
+		{
+		case  Add:
+			tmp_op="="+inter.setNum(old_op.toDouble()+tmp.toDouble());
+			break;
+		case Mul :
+		        tmp_op="="+inter.setNum(old_op.toDouble()*tmp.toDouble());
+			break;
+		case Sub:
+		        tmp_op="="+inter.setNum(old_op.toDouble()-tmp.toDouble());
+			break;
+		case Div :
+		        tmp_op="="+inter.setNum(old_op.toDouble()/tmp.toDouble());
+			break;
+		default :
+			cout <<"Err in paste Operation\n";
+			break;
+		}
+	return tmp_op;
+	}
+else if (new_text.find("=")==0&&old_text.find("=")==0||(new_text.find("=")==0&&old_op.toDouble()!=0)
+	||(old_text.find("=")==0&&tmp.toDouble()!=0))
 	{
 	switch(op)
 		{
@@ -2724,21 +2770,16 @@ bool KSpreadCell::Operation_ok(QString new_text)
 QString tmp;
 tmp=m_pTable->name();
 tmp+= "!" +new_text;
-cout <<"Tmp : "<<tmp.ascii()<<endl;
+//cout <<"Tmp : "<<tmp.ascii()<<endl;
 KSpreadPoint _cell=KSpreadPoint( tmp, m_pTable->map() );
 if(_cell.isValid())
 	{
-	cout <<"Cell Valid\n";
-	return true;
-	}
-else if(new_text.toDouble()!=0)
-	{
-	cout <<"Double\n";
+	//cout <<"Cell Valid\n";
 	return true;
 	}
 else
 	{
-	cout <<"No valid !\n";
+	//cout <<"No valid !\n";
 	return false;
 	}
 }

@@ -69,6 +69,10 @@ void KSpreadTextEditor::setFocus()
 m_pEdit->setFocus();
 }
 
+void KSpreadTextEditor::insertFormulaChar(int c)
+{
+}
+
 bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 {
   if ( o != m_pEdit )
@@ -155,6 +159,10 @@ void KSpreadFormulaEditor::setCursorPosition(int pos)
 //no implanted
  //m_pEdit->setCursorPosition(pos);
 }
+void KSpreadFormulaEditor::insertFormulaChar(int c)
+{
+m_pEdit->insertChar( c );
+}
 
 bool KSpreadFormulaEditor::eventFilter( QObject* o, QEvent* e )
 {
@@ -180,5 +188,4 @@ void KSpreadFormulaEditor::slotSizeHint( QSize _s )
   int h = QMAX( _s.height(), minimumHeight() );
   resize( w, h );
 }
-
 #include "kspread_editors.moc"

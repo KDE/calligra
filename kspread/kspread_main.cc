@@ -19,7 +19,7 @@
 
 #include <koFactory.h>
 #include <opAutoLoader.h>
-
+#include <kstddirs.h>
 #include "kspread_main.h"
 #include "kspread_doc.h"
 
@@ -41,6 +41,9 @@ KSpreadApp::KSpreadApp( int &argc, char** argv ) :
   // Tell klocale that we can handle localized numeric and monetary
   // Well not yet, but that will come :))
   KGlobal::locale()->enableNumericLocale( true );
+  KGlobal::dirs()->addResourceType( "toolbar",
+				      KStandardDirs::kde_default( "data" ) +
+				      "kformula/pics/" );
 }
 
 KSpreadApp::~KSpreadApp()

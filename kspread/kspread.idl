@@ -104,6 +104,17 @@ module KSpread
 		slot void sortincr();
 		slot void sortdecrease();
 		slot void funct();
+		slot void formulaPower();
+    		slot void formulaSubscript();
+    		slot void formulaParentheses();
+    		slot void formulaAbsValue();
+    		slot void formulaBrackets();
+    		slot void formulaFraction();
+    		slot void formulaRoot();
+    		slot void formulaIntegral();
+    		slot void formulaMatrix();
+    		slot void formulaLeftSuper();
+    		slot void formulaLeftSub();
 		slot void RemoveTable();
 
 		Book book();

@@ -132,6 +132,8 @@ public:
     void PopupMenuRow(const QPoint & _point ) ;
     void PopupMenuColumn( const QPoint & _point);
     QString setRichTextFond(QString type_font);
+    void hide_show_formulatools(bool look);
+
     /**
      * Used by @ref KSpreadEditWidget. Sets the text of the active cell.
      */
@@ -376,6 +378,19 @@ public:
 
     void layoutDlg();
     void funct();
+    void formulaPower();
+    void formulaSubscript();
+    void formulaParentheses();
+    void formulaAbsValue();
+    void formulaBrackets();
+    void formulaFraction();
+    void formulaRoot();
+    void formulaIntegral();
+    void formulaMatrix();
+    void formulaLeftSuper();
+    void formulaLeftSub();
+
+
     virtual void cleanUp();
 
 protected slots:
@@ -535,6 +550,20 @@ protected:
     CORBA::Long m_idButtonLayout_sort_decrease;
     CORBA::Long m_idButtonLayout_funct;
 
+    OpenPartsUI::ToolBar_var m_vToolBarFormula;
+    CORBA::Long m_idButtonFormula_Power;
+    CORBA::Long m_idButtonFormula_Subscript;
+    CORBA::Long m_idButtonFormula_Parentheses;
+    CORBA::Long m_idButtonFormula_AbsValue;
+    CORBA::Long m_idButtonFormula_Brackets;
+    CORBA::Long m_idButtonFormula_Fraction;
+    CORBA::Long m_idButtonFormula_Root;
+    CORBA::Long m_idButtonFormula_Integral;
+    CORBA::Long m_idButtonFormula_Matrix;
+    CORBA::Long m_idButtonFormula_LeftSuper;
+    CORBA::Long m_idButtonFormula_LeftSub;
+
+
     OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;
     CORBA::Long m_idMenuEdit_Redo;
@@ -577,6 +606,7 @@ protected:
     CORBA::Long m_idMenuHelp_Using;
     OpenPartsUI::ToolBar_var m_vToolBarMath ;
     CORBA::Long m_idComboMath;
+
 
     /**
      * Pointer to the last popup menu.

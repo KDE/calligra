@@ -27,6 +27,7 @@ public:
   virtual int cursorPosition()=0;
   virtual void setCursorPosition(int pos)=0;
   virtual void setFocus()=0;
+  virtual void insertFormulaChar(int c)=0;
 private:
   KSpreadCell* m_pCell;
 };
@@ -44,6 +45,7 @@ public:
   virtual int cursorPosition();
   virtual void setCursorPosition(int pos);
   virtual void setFocus();
+  virtual void insertFormulaChar(int c);
 protected:
   void resizeEvent( QResizeEvent* );
   /**
@@ -69,6 +71,7 @@ public:
   virtual int cursorPosition();
   virtual void setCursorPosition(int pos);
   virtual void setFocus();
+  virtual void insertFormulaChar(int c);
 protected slots:
   void slotSizeHint( QSize );
 

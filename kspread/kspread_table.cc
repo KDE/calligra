@@ -2294,7 +2294,7 @@ void KSpreadTable::copySelection( const QPoint &_marker )
 
   QClipboard *clip = QApplication::clipboard();
   clip->setText( data.c_str() );
-  cout <<" copy : " <<data.c_str()<<endl;
+  //cout <<" copy : " <<data.c_str()<<endl;
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )

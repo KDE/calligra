@@ -62,11 +62,6 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
   rb8 = new QRadioButton( i18n("Multiplication"), grp );
   rb9 = new QRadioButton( i18n("Division"), grp );
   rb5->setChecked(true);
-  rb5->setEnabled(false);
-  rb6->setEnabled(false);
-  rb7->setEnabled(false);
-  rb8->setEnabled(false);
-  rb9->setEnabled(false);
   cb=new QCheckBox(i18n("Transpose"),this);
   cb->layout();
   lay1->addWidget(cb);
@@ -84,6 +79,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_link,SIGNAL(clicked()),this,SLOT(slotlink()));
+  connect( grp,SIGNAL(pressed ( int  )),this,SLOT(slotclick(int)));
 }
 
 
@@ -157,6 +153,18 @@ if(rb9->isChecked())
 	}
 m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),  m_pView->canvasWidget()->markerRow() ) ,sp,op);
 accept();
+}
+
+void KSpreadspecial::slotclick(int id )
+{
+if(id!=0)	
+	{
+	m_link->setEnabled(false);
+	}
+else if( m_link->isEnabled()==false)
+	{
+	m_link->setEnabled(true);
+	}
 }
 
 void KSpreadspecial::slotlink()

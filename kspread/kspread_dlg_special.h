@@ -42,6 +42,7 @@ public slots:
   void slotOk();
   void slotClose();
   void slotlink();
+  void slotclick(int id );
 protected:
   KSpreadView* m_pView;
 

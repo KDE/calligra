@@ -45,6 +45,7 @@
 #include <koScanTools.h>
 #include <koQueryTypes.h>
 #include <koUIUtils.h>
+#include <kformulaedit.h>
 
 #include "kspread_map.h"
 #include "kspread_table.h"
@@ -710,7 +711,58 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 					       80,-1, OpenPartsUI::AtBottom );
   
   m_vToolBarMath->enable( OpenPartsUI::Show );
-  
+
+    //formula Toolbar
+    m_vToolBarFormula = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+    m_vToolBarFormula->setFullWidth( FALSE );
+
+    pix = OPUIUtils::convertPixmap( BarIcon( "index2" ) );
+    m_idButtonFormula_Power = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								this, "formulaPower",
+								TRUE, Q2C( i18n( "Power" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "index3" ) );
+    m_idButtonFormula_Subscript = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								    this, "formulaSubscript",
+								    TRUE, Q2C( i18n( "Subscript" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "bra" ) );
+    m_idButtonFormula_Parentheses = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								      this, "formulaParentheses",
+								      TRUE, Q2C( i18n( "Parentheses" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "abs" ) );
+    m_idButtonFormula_AbsValue = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								   this, "formulaAbsValue",
+								   TRUE, Q2C( i18n( "Absolute Value" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "brackets" ) );
+    m_idButtonFormula_Brackets = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								   this, "formulaBrackets",
+								   TRUE, Q2C( i18n( "Brackets" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "frac" ) );
+    m_idButtonFormula_Fraction = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								   this, "formulaFraction",
+								   TRUE, Q2C( i18n( "Fraction" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "root" ) );
+    m_idButtonFormula_Root = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+							       this, "formulaRoot",
+							       TRUE, Q2C( i18n( "Root" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "integral" ) );
+    m_idButtonFormula_Integral = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								   this, "formulaIntegral",
+								   TRUE, Q2C( i18n( "Integral" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "matrix" ) );
+    m_idButtonFormula_Matrix = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								 this, "formulaMatrix",
+								 TRUE, Q2C( i18n( "Matrix" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "index0" ) );
+    m_idButtonFormula_LeftSuper = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								    this, "formulaLeftSuper",
+								    TRUE, Q2C( i18n( "Left Superscript" ) ), -1 );
+    pix = OPUIUtils::convertPixmap( BarIcon( "index1" ) );
+    m_idButtonFormula_LeftSub = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
+								  this, "formulaLeftSub",
+								  TRUE, Q2C( i18n( "Left Subscript" ) ), -1 );
+
+    m_vToolBarFormula->enable( OpenPartsUI::Hide );
+
 
   m_pluginManager->fillToolBar( _factory );
 
@@ -720,6 +772,73 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_vToolBarLayout->enable( OpenPartsUI::Show ); */
 
   return true;
+}
+
+void KSpreadView::formulaPower()
+{
+canvasWidget()->insertFormulaChar(POWER );
+}
+
+void KSpreadView::formulaSubscript()
+{
+canvasWidget()->insertFormulaChar(SUB );
+}
+
+void KSpreadView::formulaParentheses()
+{
+canvasWidget()->insertFormulaChar(PAREN );
+}
+
+void KSpreadView::formulaAbsValue()
+{
+canvasWidget()->insertFormulaChar(ABS );
+}
+
+void KSpreadView::formulaBrackets()
+{
+canvasWidget()->insertFormulaChar(BRACKET );
+}
+
+void KSpreadView::formulaFraction()
+{
+canvasWidget()->insertFormulaChar(DIVIDE );
+}
+
+void KSpreadView::formulaRoot()
+{
+canvasWidget()->insertFormulaChar(SQRT );
+}
+
+void KSpreadView::formulaIntegral()
+{
+canvasWidget()->insertFormulaChar(INTEGRAL );
+}
+
+void KSpreadView::formulaMatrix()
+{
+canvasWidget()->insertFormulaChar(MATRIX );
+}
+
+void KSpreadView::formulaLeftSuper()
+{
+canvasWidget()->insertFormulaChar(LSUP );
+}
+
+void KSpreadView::formulaLeftSub()
+{
+canvasWidget()->insertFormulaChar(LSUB );
+}
+
+void KSpreadView::hide_show_formulatools(bool look)
+{
+if(look==true)
+	{
+	 m_vToolBarFormula->enable( OpenPartsUI::Show );
+	 }
+else if(look==false)
+	{
+	 m_vToolBarFormula->enable( OpenPartsUI::Hide );  	
+	}
 }
 
 bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )

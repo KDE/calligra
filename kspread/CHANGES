@@ -62,3 +62,11 @@ So text is in italic or bold.
 -When you selection a text in editWidget and first character egal to !
 and you click on bold or italic you add <b> </b> or <i> </i>
 -Start improved of special paste => operation add ,mult etc...
+
+1999-09-21 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now Special paste =>operation ,works
+-Reggie had a good idea to add a Toolbar for formula, So I had it
+and now when you create formula with kformula widget a toolbar appear.
+-Now when you doubleclick on cell you create a new cell with old text
+inside so you can add text in this cell.

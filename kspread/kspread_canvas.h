@@ -99,6 +99,7 @@ public:
     int posEditor();
     void focusEditor();
     void setPosEditor(int pos);
+    void insertFormulaChar(int c);
     KSpreadCellEditor * pointeur() {return m_pEditor ;}
     void choose_cell( QMouseEvent * _ev );
     bool EditorisActivate() {return E_activate;}
@@ -186,7 +187,8 @@ public:
     KSpreadTable* findTable( const QString& _name );
 
     void gotoLocation( const KSpreadPoint& _cell );
-    void create_editor();
+    enum type_editor{type_cell,type_formula};
+    void create_editor(type_editor=type_cell);
 public slots:  
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
