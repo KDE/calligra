@@ -32,7 +32,7 @@ public:
     Border( const QColor & c, BorderStyle s, unsigned int width );
     QColor color;
     BorderStyle style;
-    unsigned int ptWidth;
+    double ptWidth;
 
     bool operator==( const Border _brd ) const;
     bool operator!=( const Border _brd ) const;
