@@ -297,7 +297,6 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
 
   // Create a new painter object
   canvas->beginUnclippedSpawnerPainter();
-  canvas->drawSelectedStencilsXOR();
 
   // Tell the view to update the toolbars to reflect the
   // first selected stencil's settings
@@ -1183,7 +1182,6 @@ void SelectTool::keyPress(QKeyEvent* e)
 
   // Create a new painter object
   canvas->beginUnclippedSpawnerPainter();
-  canvas->drawSelectedStencilsXOR();
 
   // Build the list of old geometry
   KivioSelectDragData *pData;

@@ -591,8 +591,11 @@ void KivioView::setActivePage( KivioPage* page )
   if ( page == m_pActivePage )
     return;
 
-  disconnect(m_pActivePage, SIGNAL(sig_pageLayoutChanged(const KoPageLayout&)), this,
-    SLOT(setRulerPageLayout(const KoPageLayout&)));
+  if(m_pActivePage) {
+    disconnect(m_pActivePage, SIGNAL(sig_pageLayoutChanged(const KoPageLayout&)), this,
+      SLOT(setRulerPageLayout(const KoPageLayout&)));
+  }
+  
   m_pActivePage = page;
 
   m_pTabBar->setActiveTab(page->pageName());

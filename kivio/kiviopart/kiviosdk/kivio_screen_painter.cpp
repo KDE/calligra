@@ -914,6 +914,7 @@ void KivioScreenPainter::drawSelectionBox( const QRect& r )
    QPen p;
    p.setColor(QColor(0,200,0));
    p.setStyle(Qt::DashLine);
+   m_pPainter->setBrush(Qt::NoBrush);
    m_pPainter->setPen(p);
    m_pPainter->drawRect(r);
 }
