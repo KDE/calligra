@@ -31,8 +31,6 @@
 #include <klocale.h>
 #include <kprinter.h>
 
-#include <iostream>
-
 #include "bracketelement.h"
 #include "contextstyle.h"
 #include "formulacursor.h"
@@ -309,7 +307,7 @@ void Container::paste( QDomDocument document, QString desc )
     FormulaCursor* cursor = activeCursor();
     QPtrList<BasicElement> list;
     list.setAutoDelete( true );
-    if ( cursor->buildElementsFromDom( document, list ) ) {
+    if ( cursor->buildElementsFromDom( document.documentElement(), list ) ) {
         uint count = list.count();
         // You must not execute an add command that adds nothing.
         if (count > 0) {
@@ -327,7 +325,8 @@ void Container::copy()
     // read-only cursors are fine for copying.
     FormulaCursor* cursor = activeCursor();
     if (cursor != 0) {
-        QDomDocument formula = cursor->copy();
+        QDomDocument formula = document()->createDomDocument();
+        cursor->copy( formula );
         QClipboard* clipboard = QApplication::clipboard();
         clipboard->setData(new MimeSource(document(), formula));
     }
@@ -413,135 +412,19 @@ void Container::setFontSizeDirect( int pointSize )
     recalc();
 }
 
-QDomDocument Container::domData()
+
+void Container::save( QDomElement root )
 {
-    QDomDocument doc("KFORMULA");
-    save(doc);
-    return doc;
+    QDomDocument ownerDoc = root.ownerDocument();
+    root.appendChild(rootElement()->getElementDom(ownerDoc));
 }
 
-void Container::save(QString file)
-{
-    QFile f(file);
-    if(!f.open(IO_Truncate | IO_ReadWrite)) {
-        kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
-        return;
-    }
-    //QCString data=domData().toCString();
-    //cerr << (const char *)data << endl;
-
-    QTextStream stream(&f);
-    stream.setEncoding(QTextStream::UnicodeUTF8);
-    domData().save(stream,4);
-    f.close();
-}
-
-/**
- * Saves the data into the document.
- */
-void Container::save(QDomNode doc)
-{
-    QDomDocument ownerDoc = doc.ownerDocument();
-    doc.appendChild(rootElement()->getElementDom(ownerDoc));
-}
-
-void Container::saveMathML(QString file)
-{
-    QFile f( file );
-    if ( !f.open( IO_Truncate | IO_ReadWrite ) ) {
-        kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
-        return;
-    }
-
-    QTextStream stream( &f );
-    stream.setEncoding( QTextStream::UnicodeUTF8 );
-    saveMathML( stream );
-    f.close();
-}
-
-void Container::saveMathML( QTextStream& stream )
-{
-    QDomDocumentType dt = QDomImplementation().createDocumentType( "math",
-                                             "-//W3C//DTD MathML 2.0//EN",
-                          "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
-    QDomDocument doc( dt );
-    rootElement()->writeMathML( doc, doc );
-
-    doc.save( stream, 4 );
-}
-
-void Container::load(QString file)
-{
-    QFile f(file);
-    if (!f.open(IO_ReadOnly)) {
-        kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
-        return;
-    }
-    QTextStream stream(&f);
-    stream.setEncoding(QTextStream::UnicodeUTF8);
-    QString content = stream.read();
-    //kdDebug( DEBUGID ) << content << endl;
-    QDomDocument doc;
-    if (!doc.setContent(content)) {
-        f.close();
-        return;
-    }
-    if (load(doc)) {
-        getHistory()->clear();
-    }
-    f.close();
-}
-
-void Container::loadMathML( QString file )
-{
-    QFile f( file );
-    if ( !f.open( IO_ReadOnly ) ) {
-        kdWarning( DEBUGID ) << "Error opening file " << file.latin1() << endl;
-        return;
-    }
-    QTextStream stream( &f );
-    stream.setEncoding( QTextStream::UnicodeUTF8 );
-    QString content = stream.read();
-
-    QDomDocument doc;
-    QString errorMsg; int errorLine; int errorColumn;
-    if ( !doc.setContent( content, true,
-                          &errorMsg, &errorLine, &errorColumn ) ) {
-        kdWarning( DEBUGID ) << "MathML built error: " << errorMsg
-                             << " at line " << errorLine
-                             << " and column " << errorColumn << endl;
-        f.close();
-        return;
-    }
-
-    /*kdDebug( DEBUGID ) << "Container::loadMathML\n"
-      << doc.toCString() << endl;*/
-
-    const ContextStyle& context = document()->getContextStyle();
-    MathML2KFormula *filter = new MathML2KFormula( doc, context );
-    filter->startConversion();
-
-    if ( load( filter->getKFormulaDom() ) ) {
-        getHistory()->clear();
-    }
-    delete filter;
-    f.close();
-}
-
-/*
-bool Container::loadMathML( QDomNode doc )
-{
-    return false;
-}
-*/
 
 /**
  * Loads a formula from the document.
  */
-bool Container::load(QDomNode doc)
+bool Container::load( QDomElement fe )
 {
-    //cerr << "Loading" << endl;
-    QDomElement fe = doc.firstChild().toElement();
     if (!fe.isNull()) {
         FormulaElement* root = new FormulaElement(this);
         if (root->buildFromDom(fe)) {
@@ -556,6 +439,33 @@ bool Container::load(QDomNode doc)
             delete root;
             kdWarning( DEBUGID ) << "Error constructing element tree." << endl;
         }
+    }
+    else {
+        kdWarning( DEBUGID ) << "Empty element." << endl;
+    }
+    return false;
+}
+
+
+void Container::saveMathML( QTextStream& stream )
+{
+    QDomDocumentType dt = QDomImplementation().createDocumentType( "math",
+                                             "-//W3C//DTD MathML 2.0//EN",
+                          "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
+    QDomDocument doc( dt );
+    rootElement()->writeMathML( doc, doc );
+    doc.save( stream, 4 );
+}
+
+bool Container::loadMathML( QDomDocument doc )
+{
+    const ContextStyle& context = document()->getContextStyle();
+    MathML2KFormula filter( doc, context );
+    filter.startConversion();
+
+    if ( load( filter.getKFormulaDom().documentElement() ) ) {
+        getHistory()->clear();
+        return true;
     }
     return false;
 }
@@ -614,15 +524,6 @@ QString Container::texString()
 QString Container::formulaString()
 {
     return rootElement()->formulaString();
-}
-
-bool Container::importOldText(QString text)
-{
-    Compatibility converter;
-    QDomDocument doc = converter.buildDOM(text);
-    QCString data = doc.toCString();
-    cerr << (const char *)data << endl;
-    return load(doc);
 }
 
 KFORMULA_NAMESPACE_END

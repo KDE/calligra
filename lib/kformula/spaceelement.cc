@@ -101,7 +101,7 @@ QString SpaceElement::toLatex()
     return "";
 }
 
-void SpaceElement::writeDom(QDomElement& element)
+void SpaceElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
     switch ( spaceWidth ) {
@@ -123,7 +123,7 @@ void SpaceElement::writeDom(QDomElement& element)
     }
 }
 
-bool SpaceElement::readAttributesFromDom( QDomElement& element )
+bool SpaceElement::readAttributesFromDom( QDomElement element )
 {
     if ( !BasicElement::readAttributesFromDom( element ) ) {
         return false;

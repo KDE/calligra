@@ -623,16 +623,15 @@ void FormulaCursor::formulaLoaded(FormulaElement* rootElement)
 /**
  * Stores the currently selected elements inside a dom.
  */
-QDomDocument FormulaCursor::copy()
+void FormulaCursor::copy( QDomDocument doc )
 {
-    QDomDocument doc("KFORMULA");
-    QDomElement de = doc.createElement("FORMULA");
-    // here comes the current version of FormulaElement
-    de.setAttribute( "VERSION", "4" );
-    doc.appendChild(de);
     if (isSelection()) {
         SequenceElement* sequence = normal();
         if (sequence != 0) {
+            QDomElement root = doc.documentElement();
+            QDomElement de = sequence->formula()->emptyFormulaElement( doc );
+            root.appendChild( de );
+
             sequence->getChildrenDom(doc, de, getSelectionStart(), getSelectionEnd());
         }
         else {
@@ -640,25 +639,21 @@ QDomDocument FormulaCursor::copy()
             qFatal("A not normalized cursor is selecting.");
         }
     }
-    return doc;
 }
 
 /**
  * Inserts the elements that could be read from the dom into
  * the list. Returns true on success.
  */
-bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QPtrList<BasicElement>& list)
+bool FormulaCursor::buildElementsFromDom( QDomElement root, QPtrList<BasicElement>& list )
 {
     if (readOnly)
         return false;
     SequenceElement* sequence = normal();
     if (sequence != 0) {
-        QDomNode n = doc.firstChild();
-        if (n.isElement()) {
-            QDomElement e = n.toElement();
-            if (sequence->buildChildrenFromDom(list, e.firstChild())) {
-                return true;
-            }
+        QDomElement e = root.firstChild().toElement();
+        if (sequence->buildChildrenFromDom(list, e.firstChild())) {
+            return true;
         }
     }
     return false;

@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <qaccel.h>
+#include <qdom.h>
 #include <qfile.h>
 #include <qlayout.h>
 #include <qptrlist.h>
@@ -18,7 +19,7 @@
 #include <kcmdlineargs.h>
 #include <kcommand.h>
 #include <kdebug.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 
 #include "elementtype.h"
 #include "kformulacommand.h"
@@ -39,8 +40,93 @@ protected:
     virtual void keyPressEvent(QKeyEvent* event);
 
 private:
-    void importOld(QString file);
 };
+
+
+void save( QString filename, QDomDocument doc )
+{
+    QFile f( filename );
+    if(!f.open(IO_Truncate | IO_ReadWrite)) {
+        kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
+        return;
+    }
+
+    QTextStream stream(&f);
+    stream.setEncoding(QTextStream::UnicodeUTF8);
+    doc.save(stream,4);
+    f.close();
+}
+
+
+void load( KFormula::Container* formula, QString filename )
+{
+    QFile f(filename);
+    if (!f.open(IO_ReadOnly)) {
+        kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
+        return;
+    }
+    QTextStream stream(&f);
+    stream.setEncoding(QTextStream::UnicodeUTF8);
+    QString content = stream.read();
+    f.close();
+    //kdDebug( DEBUGID ) << content << endl;
+    QDomDocument doc;
+    if (!doc.setContent(content)) {
+        return;
+    }
+    if ( !formula->load( doc.documentElement() ) ) {
+        kdWarning( DEBUGID ) << "Failed." << endl;
+    }
+}
+
+
+void saveMathML( KFormula::Container* formula, QString filename )
+{
+    QFile f( filename );
+    if ( !f.open( IO_Truncate | IO_ReadWrite ) ) {
+        kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
+        return;
+    }
+
+    QTextStream stream( &f );
+    stream.setEncoding( QTextStream::UnicodeUTF8 );
+    formula->saveMathML( stream );
+    f.close();
+}
+
+
+void loadMathML( KFormula::Container* formula, QString filename )
+{
+    QFile f( filename );
+    if ( !f.open( IO_ReadOnly ) ) {
+        kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
+        return;
+    }
+    QTextStream stream( &f );
+    stream.setEncoding( QTextStream::UnicodeUTF8 );
+    QString content = stream.read();
+
+    QDomDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if ( !doc.setContent( content, true,
+                          &errorMsg, &errorLine, &errorColumn ) ) {
+        kdWarning( DEBUGID ) << "MathML built error: " << errorMsg
+                             << " at line " << errorLine
+                             << " and column " << errorColumn << endl;
+        f.close();
+        return;
+    }
+
+    /*kdDebug( DEBUGID ) << "Container::loadMathML\n"
+      << doc.toCString() << endl;*/
+
+    if ( !formula->loadMathML( doc ) ) {
+        kdWarning( DEBUGID ) << "Failed." << endl;
+    }
+    f.close();
+}
 
 
 void TestWidget::keyPressEvent(QKeyEvent* event)
@@ -58,18 +144,18 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_R: document->document()->removeColumn(); return;
             case Qt::Key_Z: document->document()->redo(); return;
 
-            case Qt::Key_M: document->saveMathML( "test.mml" ); return;
+            case Qt::Key_M: saveMathML( document, "test.mml" ); return;
             case Qt::Key_O: {
-                QString file = QFileDialog::getOpenFileName();
+                QString file = KFileDialog::getOpenFileName();
                 kdDebug( DEBUGID ) << file << endl;
-                if( !file.isEmpty() )
-                {
+                if( !file.isEmpty() ) {
                     QFileInfo fi( file );
                     if ( fi.extension() == "mml" ) {
-                        document->loadMathML( file );
+                        loadMathML( document, file );
                     }
-                    else if ( fi.extension() == "xml" )
-                        document->load( file );
+                    else if ( fi.extension() == "xml" ) {
+                        load( document, file );
+                    }
                 }
                 return;
         }
@@ -86,7 +172,6 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
 	    case Qt::Key_7: document->document()->addOneByTwoMatrix(); return;
 	    case Qt::Key_8: document->document()->addOverline(); return;
 	    case Qt::Key_9: document->document()->addUnderline(); return;
-            case Qt::Key_0: importOld("oldformula"); return;
             case Qt::Key_A: slotSelectAll(); return;
             case Qt::Key_B: document->document()->appendRow(); return;
             case Qt::Key_C: document->document()->copy(); return;
@@ -96,10 +181,10 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_R: document->document()->removeRow(); return;
             case Qt::Key_K: document->document()->addMultiline(); return;
             case Qt::Key_L: document->document()->addGenericLowerIndex(); return;
-            case Qt::Key_M: document->loadMathML("test.mml"); return;
-            case Qt::Key_O: document->load("test.xml"); return;
+            case Qt::Key_M: loadMathML( document, "test.mml" ); return;
+            case Qt::Key_O: load( document, "test.xml" ); return;
             case Qt::Key_Q: kapp->quit(); return;
-            case Qt::Key_S: document->save("test.xml"); return;
+            case Qt::Key_S: save( "test.xml", document->document()->saveXML() ); return;
             case Qt::Key_T: std::cout << document->texString().latin1() << std::endl; return;
             case Qt::Key_U: document->document()->addGenericUpperIndex(); return;
             case Qt::Key_V: document->document()->paste(); return;
@@ -112,20 +197,6 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
     }
 
     KFormulaWidget::keyPressEvent(event);
-}
-
-
-void TestWidget::importOld(QString file)
-{
-    QFile f(file);
-    if (!f.open(IO_ReadOnly)) {
-        std::cerr << "Error opening file" << std::endl;
-        return;
-    }
-    QTextStream stream(&f);
-    stream.setEncoding(QTextStream::Unicode);
-    QString text = stream.readLine();
-    getDocument()->importOldText(text);
 }
 
 
@@ -214,9 +285,9 @@ int main(int argc, char** argv)
     for ( int i = 0; i < args->count(); ++i ) {
         QFileInfo fi( args->url( i ).path() );
         if ( fi.extension() == "mml" )
-            container2->loadMathML( args->url( i ).path() );
+            loadMathML( container2, args->url( i ).path() );
         else if ( fi.extension() == "xml" )
-            container2->load( args->url( i ).path() );
+            load( container2, args->url( i ).path() );
     }
 
     int result = app.exec();

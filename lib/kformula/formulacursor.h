@@ -290,13 +290,13 @@ public:
     /**
      * Stores the currently selected elements inside a dom.
      */
-    QDomDocument copy();
+    void copy( QDomDocument doc );
 
     /**
      * Inserts the elements that could be read from the dom into
      * the list. Returns true on success.
      */
-    bool buildElementsFromDom(QDomDocument doc, QPtrList<BasicElement>& list);
+    bool buildElementsFromDom( QDomElement root, QPtrList<BasicElement>& list );
 
     // undo/redo support
 

@@ -58,7 +58,7 @@ KoFilter::ConversionStatus MathMLExport::convert( const QCString& from, const QC
         return KoFilter::StorageCreationError;
     }
 
-    QDomDocument dom( "KFORMULA" );
+    QDomDocument dom;
     if ( !dom.setContent( in, false ) ) {
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "Mathml Export Error" ) );
@@ -74,7 +74,7 @@ KoFilter::ConversionStatus MathMLExport::convert( const QCString& from, const QC
 
     KFormula::Document* doc = new KFormula::Document( kapp->sessionConfig() );
     KFormula::Container* formula = new KFormula::Container( doc );
-    if ( !formula->load( dom ) ) {
+    if ( !doc->loadXML( dom ) ) {
         kdError() << "Failed." << endl;
     }
 

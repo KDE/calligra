@@ -130,6 +130,16 @@ public:
 
     virtual void writeMathML( QDomDocument doc, QDomNode parent );
 
+    /**
+     * Appends our attributes to the dom element.
+     */
+    virtual void writeDom(QDomElement element);
+
+    /**
+     * For copy&paste we need to create an empty XML element.
+     */
+    QDomElement emptyFormulaElement( QDomDocument doc );
+
 protected:
 
     //Save/load support
@@ -140,15 +150,10 @@ protected:
     virtual QString getTagName() const { return "FORMULA"; }
 
     /**
-     * Appends our attributes to the dom element.
-     */
-    virtual void writeDom(QDomElement& element);
-
-    /**
      * Reads our attributes from the element.
      * Returns false if it failed.
      */
-    virtual bool readAttributesFromDom(QDomElement& element);
+    virtual bool readAttributesFromDom(QDomElement element);
 
     /**
      * Reads our content from the node. Sets the node to the next node

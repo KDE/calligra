@@ -367,7 +367,7 @@ void FractionElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 /**
  * Appends our attributes to the dom element.
  */
-void FractionElement::writeDom(QDomElement& element)
+void FractionElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
@@ -387,7 +387,7 @@ void FractionElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool FractionElement::readAttributesFromDom(QDomElement& element)
+bool FractionElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;

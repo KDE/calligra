@@ -146,10 +146,22 @@ const SymbolTable& FormulaElement::getSymbolTable() const
 }
 
 
+QDomElement FormulaElement::emptyFormulaElement( QDomDocument doc )
+{
+    QDomElement element = doc.createElement( getTagName() );
+    /*
+    element.setAttribute( "VERSION", "6" );
+    if ( ownBaseSize ) {
+        element.setAttribute( "BASESIZE", baseSize );
+    }
+    */
+    return element;
+}
+
 /**
  * Appends our attributes to the dom element.
  */
-void FormulaElement::writeDom(QDomElement& element)
+void FormulaElement::writeDom(QDomElement element)
 {
     inherited::writeDom(element);
     element.setAttribute( "VERSION", "6" );
@@ -162,20 +174,22 @@ void FormulaElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool FormulaElement::readAttributesFromDom(QDomElement& element)
+bool FormulaElement::readAttributesFromDom(QDomElement element)
 {
     if (!inherited::readAttributesFromDom(element)) {
         return false;
     }
-    int version = 0;
+    int version = -1;
     QString versionStr = element.attribute( "VERSION" );
     if ( !versionStr.isNull() ) {
         version = versionStr.toInt();
     }
-    // Version 6 added the MultilineElement (TabMarker)
-    // Version 5 added under- and overlines
-    if ( version < 4 ) {
-        convertNames( element );
+    if ( version > -1 ) {
+        // Version 6 added the MultilineElement (TabMarker)
+        // Version 5 added under- and overlines
+        if ( version < 4 ) {
+            convertNames( element );
+        }
     }
     QString baseSizeStr = element.attribute( "BASESIZE" );
     if ( !baseSizeStr.isNull() ) {

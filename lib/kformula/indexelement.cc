@@ -1128,7 +1128,7 @@ void IndexElement::moveToLowerRight(FormulaCursor* cursor, Direction direction)
 /**
  * Appends our attributes to the dom element.
  */
-void IndexElement::writeDom(QDomElement& element)
+void IndexElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
@@ -1174,7 +1174,7 @@ void IndexElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool IndexElement::readAttributesFromDom(QDomElement& element)
+bool IndexElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;

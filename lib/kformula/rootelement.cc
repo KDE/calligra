@@ -497,7 +497,7 @@ void RootElement::setToIndex(FormulaCursor* cursor)
 /**
  * Appends our attributes to the dom element.
  */
-void RootElement::writeDom(QDomElement& element)
+void RootElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
@@ -508,7 +508,7 @@ void RootElement::writeDom(QDomElement& element)
     element.appendChild(con);
 
     if(hasIndex()) {
-        QDomElement ind = doc.createElement("INDEX");
+        QDomElement ind = doc.createElement("ROOTINDEX");
         ind.appendChild(index->getElementDom(doc));
         element.appendChild(ind);
     }
@@ -518,7 +518,7 @@ void RootElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool RootElement::readAttributesFromDom(QDomElement& element)
+bool RootElement::readAttributesFromDom(QDomElement element)
 {
     return BasicElement::readAttributesFromDom(element);
 }
@@ -540,7 +540,13 @@ bool RootElement::readContentFromDom(QDomNode& node)
     }
     node = node.nextSibling();
 
-    if ( node.nodeName().upper() == "INDEX" ) {
+    if ( node.nodeName().upper() == "ROOTINDEX" ) {
+        if ( !buildChild( index=new SequenceElement( this ), node, "ROOTINDEX" ) ) {
+            return false;
+        }
+    }
+    // backward compatiblity
+    else if ( node.nodeName().upper() == "INDEX" ) {
         if ( !buildChild( index=new SequenceElement( this ), node, "INDEX" ) ) {
             return false;
         }

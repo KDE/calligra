@@ -662,7 +662,7 @@ ElementIndexPtr SymbolElement::getIndex( int position )
 /**
  * Appends our attributes to the dom element.
  */
-void SymbolElement::writeDom(QDomElement& element)
+void SymbolElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
@@ -690,7 +690,7 @@ void SymbolElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool SymbolElement::readAttributesFromDom(QDomElement& element)
+bool SymbolElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;

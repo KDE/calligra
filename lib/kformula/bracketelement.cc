@@ -157,7 +157,7 @@ void SingleContentElement::selectChild(FormulaCursor* cursor, BasicElement* chil
     }
 }
 
-void SingleContentElement::writeDom(QDomElement& element)
+void SingleContentElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
@@ -367,7 +367,7 @@ Artwork* BracketElement::createBracket(SymbolType bracket)
 /**
  * Appends our attributes to the dom element.
  */
-void BracketElement::writeDom(QDomElement& element)
+void BracketElement::writeDom(QDomElement element)
 {
     SingleContentElement::writeDom(element);
     element.setAttribute("LEFT", left->getType());
@@ -378,7 +378,7 @@ void BracketElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool BracketElement::readAttributesFromDom(QDomElement& element)
+bool BracketElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;

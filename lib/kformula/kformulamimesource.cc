@@ -50,7 +50,7 @@ MimeSource::MimeSource(Document* doc, QDomDocument formula)
 
     QPtrList<BasicElement> list;
     list.setAutoDelete(true);
-    if (cursor.buildElementsFromDom(document, list)) {
+    if ( cursor.buildElementsFromDom( document.documentElement(), list ) ) {
         cursor.insert(list);
         latexString = rootElement->toLatex().utf8();
         if (latexString.size() > 0) {

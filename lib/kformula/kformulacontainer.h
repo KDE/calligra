@@ -149,47 +149,25 @@ public:
     void draw( QPainter& painter, const QRect& r, bool edit=false );
 
     /**
-     * This function return all the data contained in
-     * the formula.
-     * @return the content of the formula as a
-     * QDomDocument.
-     */
-    QDomDocument domData();
-
-
-    /**
-     * Save function.
-     * Save the formula into the specified file.
-     * It overwrites the file if exists.
-     */
-    void save(QString file);
-
-    /**
      * Saves the data into the document.
      */
-    void save(QDomNode doc);
+    void save( QDomElement root );
 
-    /* Tries to save MathML */
-    void saveMathML( QString file );
+    /**
+     * Save formula as MathML.
+     */
     void saveMathML( QTextStream& stream );
 
     /**
      * Load function.
      * Load the formula from the specified file containing MathML .
      */
-    void loadMathML( QString file );
-    //bool loadMathML( QDomNode doc );
-
-    /**
-     * Load function.
-     * Load the formula from the specified file.
-     */
-    void load(QString file);
+    bool loadMathML( QDomDocument doc );
 
     /**
      * Loads a formula from the document.
      */
-    bool load(QDomNode doc);
+    bool load( QDomElement fe );
 
     /**
      * @retruns a tex string for the formula
@@ -197,11 +175,6 @@ public:
     QString texString();
 
     QString formulaString();
-
-    /**
-     * Tries to read a formula string from the other lib.
-     */
-    bool importOldText(QString text);
 
     /**
      * Prints the formula.

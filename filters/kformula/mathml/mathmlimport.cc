@@ -69,10 +69,24 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
 
     KFormula::Document* doc = new KFormula::Document( kapp->sessionConfig() );
     KFormula::Container* formula = new KFormula::Container( doc );
-    formula->loadMathML( m_chain->inputFile() );
 
-    QDomDocument xml( "FORMULA" );
-    formula->save(xml);
+    //formula->loadMathML( m_chain->inputFile() );
+    f.setName( m_chain->inputFile() );
+    if ( !f.open( IO_ReadOnly ) ) {
+        KMessageBox::error( 0, i18n( "Failed to open file" ), i18n( "Mathml Import Error" ) );
+        return KoFilter::FileNotFound;
+    }
+
+    QDomDocument mathML;
+    if ( !mathML.setContent( &f, false ) ) {
+        QApplication::restoreOverrideCursor();
+        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "Mathml Import Error" ) );
+        return KoFilter::WrongFormat;
+    }
+    f.close();
+    formula->loadMathML( mathML );
+
+    QDomDocument xml = doc->saveXML();
 
     // stolen from KoDocument::saveToStore
     KoStoreDevice dev( out );

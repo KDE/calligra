@@ -158,7 +158,7 @@ void BasicElement::writeMathML( QDomDocument doc, QDomNode parent )
                                            .arg( getTagName() ) ) );
 }
 
-bool BasicElement::buildFromDom(QDomElement& element)
+bool BasicElement::buildFromDom(QDomElement element)
 {
     if (element.tagName() != getTagName()) {
         kdWarning( DEBUGID ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
@@ -174,7 +174,7 @@ bool BasicElement::buildFromDom(QDomElement& element)
 /**
  * Appends our attributes to the dom element.
  */
-void BasicElement::writeDom(QDomElement&)
+void BasicElement::writeDom(QDomElement)
 {
 }
 
@@ -182,7 +182,7 @@ void BasicElement::writeDom(QDomElement&)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool BasicElement::readAttributesFromDom(QDomElement&)
+bool BasicElement::readAttributesFromDom(QDomElement)
 {
     return true;
 }

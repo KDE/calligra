@@ -47,7 +47,7 @@ PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWi
 
     doc = new KFormula::Document( kapp->config() );
     formula = new KFormula::Container( doc );
-    if ( !formula->load( dom ) ) {
+    if ( !doc->loadXML( dom ) ) {
         kdError() << "Failed." << endl;
     }
 
@@ -55,7 +55,7 @@ PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWi
 
     QRect rect = formula->boundingRect();
     realWidth = rect.width();
-   realHeight = rect.height();
+    realHeight = rect.height();
     widthEdit->setValue(  realWidth );
     heightEdit->setValue(  realHeight  );
     percWidthEdit->setValue( 100 );

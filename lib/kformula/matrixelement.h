@@ -195,13 +195,13 @@ protected:
     /**
      * Appends our attributes to the dom element.
      */
-    virtual void writeDom(QDomElement& element);
+    virtual void writeDom(QDomElement element);
 
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
      */
-    virtual bool readAttributesFromDom(QDomElement& element);
+    virtual bool readAttributesFromDom(QDomElement element);
 
     /**
      * Reads our content from the node. Sets the node to the next node
@@ -349,13 +349,13 @@ protected:
     /**
      * Appends our attributes to the dom element.
      */
-    virtual void writeDom(QDomElement& element);
+    virtual void writeDom(QDomElement element);
 
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
      */
-    virtual bool readAttributesFromDom(QDomElement& element);
+    virtual bool readAttributesFromDom(QDomElement element);
 
     /**
      * Reads our content from the node. Sets the node to the next node

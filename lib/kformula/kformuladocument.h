@@ -21,14 +21,15 @@
 #ifndef KFORMULADOCUMENT_H
 #define KFORMULADOCUMENT_H
 
+#include <qdom.h>
 #include <qobject.h>
 #include <qstring.h>
 
 #include <kaction.h>
 #include <kcommand.h>
 #include <kconfig.h>
-//#include <kocommandhistory.h>
-#include "kocommandhistory.h"
+#include <kocommandhistory.h>
+//#include "kocommandhistory.h"
 #include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -39,10 +40,19 @@ class SymbolTable;
 
 
 /**
- * A document that can contain a lot of formulas.
+ * A document that can contain a lot of formulas (container).
+ *
+ * The relationship between the document and its formulas is an
+ * open one. The document sure owns the formulas and when it
+ * vanishes the formulas will be destroyed, too. But the user
+ * will most often work with those formulas directly and not
+ * bother to ask the document. It's legal to directly create
+ * or destroy a Container object.
  */
 class Document : public QObject {
     Q_OBJECT
+
+    friend class Container;
 
 public:
 
@@ -63,6 +73,28 @@ public:
     Document( KConfig* config, KoCommandHistory* history = 0 );
 
     ~Document();
+
+    /**
+     * Load a kformula DomDocument with all its formulas.
+     * This must only be called on a virgin document.
+     */
+    bool loadXML( QDomDocument doc );
+
+    /**
+     * Load the document settings.
+     */
+    bool loadDocumentPart( QDomElement node );
+
+    /**
+     * Save the document with all its formulae.
+     */
+    QDomDocument saveXML();
+
+    /**
+     * Save the document settings.
+     */
+    QDomElement saveDocumentPart( QDomDocument doc );
+
 
     /**
      * @returns the documents context style.
@@ -87,15 +119,6 @@ public:
     double getYResolution() const;
 
     /**
-     * Registers a new formula to be part of this document. Each formula
-     * must be part of exactly one document.
-     *
-     * The formula is not owned by the document so you are responsible
-     * to delete in properly.
-     */
-    void registerFormula( Container* );
-
-    /**
      * Sets a new formula.
      */
     void activate(Container* formula);
@@ -104,12 +127,6 @@ public:
      * Enables our action according to enabled.
      */
     void setEnabled( bool enabled );
-
-    /**
-     * Tells that a formula is about to vanish. This must not be
-     * the active formula from now on.
-     */
-    void formulaDies(Container* formula);
 
     /**
      * @returns our undo stack so the formulas can use it.
@@ -230,6 +247,32 @@ public slots:
     void symbolNames();
 
 private:
+
+    /**
+     * Registers a new formula to be part of this document. Each formula
+     * must be part of exactly one document.
+     *
+     * The formula is not owned by the document so you are responsible
+     * to delete in properly.
+     */
+    void registerFormula( Container* );
+
+    /**
+     * Tells that a formula is about to vanish. This must not be
+     * the active formula from now on.
+     */
+    void formulaDies( Container* formula );
+
+    /**
+     * Return the formula with the given number or create a new one
+     * if there is no such formula.
+     */
+    Container* newFormula( uint number );
+
+    /**
+     * Return a kformula DomDocument.
+     */
+    QDomDocument createDomDocument();
 
     /**
      * Needs to be called when the first formula is created.

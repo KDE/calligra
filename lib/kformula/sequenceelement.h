@@ -261,7 +261,7 @@ public:
     /**
      * Stores the given childrens dom in the element.
      */
-    void getChildrenDom(QDomDocument& doc, QDomElement& elem, uint from, uint to);
+    void getChildrenDom(QDomDocument doc, QDomElement elem, uint from, uint to);
 
     /**
      * Builds elements from the given node and its siblings and
@@ -299,13 +299,13 @@ protected:
     /**
      * Appends our attributes to the dom element.
      */
-    virtual void writeDom(QDomElement& element);
+    virtual void writeDom(QDomElement element);
 
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
      */
-    virtual bool readAttributesFromDom(QDomElement& element);
+    virtual bool readAttributesFromDom(QDomElement element);
 
     /**
      * Reads our content from the node. Sets the node to the next node

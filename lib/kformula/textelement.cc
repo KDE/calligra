@@ -252,18 +252,20 @@ const SymbolTable& TextElement::getSymbolTable() const
 /**
  * Appends our attributes to the dom element.
  */
-void TextElement::writeDom(QDomElement& element)
+void TextElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
     element.setAttribute("CHAR", QString(character));
+    //QString s;
+    //element.setAttribute("CHAR", s.sprintf( "#x%05X", character ) );
     if (symbol) element.setAttribute("SYMBOL", "3");
 
     switch ( charStyle ) {
     case anyChar: break;
-    case normalChar: element.setAttribute("style", "normal"); break;
-    case boldChar: element.setAttribute("style", "bold"); break;
-    case italicChar: element.setAttribute("style", "italic"); break;
-    case boldItalicChar: element.setAttribute("style", "bolditalic"); break;
+    case normalChar: element.setAttribute("STYLE", "NORMAL"); break;
+    case boldChar: element.setAttribute("STYLE", "BOLD"); break;
+    case italicChar: element.setAttribute("STYLE", "ITALIC"); break;
+    case boldItalicChar: element.setAttribute("STYLE", "BOLDITALIC"); break;
     }
 }
 
@@ -271,7 +273,7 @@ void TextElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool TextElement::readAttributesFromDom(QDomElement& element)
+bool TextElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;
@@ -306,17 +308,17 @@ bool TextElement::readAttributesFromDom(QDomElement& element)
         symbol = symbolInt != 0;
     }
 
-    QString styleStr = element.attribute("style");
-    if ( styleStr == QString( "normal" ) ) {
+    QString styleStr = element.attribute("STYLE");
+    if ( styleStr == QString( "NORMAL" ) ) {
         charStyle = normalChar;
     }
-    else if ( styleStr == QString( "bold" ) ) {
+    else if ( styleStr == QString( "BOLD" ) ) {
         charStyle = boldChar;
     }
-    else if ( styleStr == QString( "italic" ) ) {
+    else if ( styleStr == QString( "ITALIC" ) ) {
         charStyle = italicChar;
     }
-    else if ( styleStr == QString( "bolditalic" ) ) {
+    else if ( styleStr == QString( "BOLDITALIC" ) ) {
         charStyle = boldItalicChar;
     }
     else {

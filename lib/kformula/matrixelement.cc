@@ -711,7 +711,7 @@ bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column
 /**
  * Appends our attributes to the dom element.
  */
-void MatrixElement::writeDom(QDomElement& element)
+void MatrixElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
@@ -736,7 +736,7 @@ void MatrixElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool MatrixElement::readAttributesFromDom(QDomElement& element)
+bool MatrixElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;
@@ -1260,23 +1260,6 @@ void MultilineSequenceElement::writeMathML( QDomDocument doc,
 
     QDomElement tmp = doc.createElement( "TMP" );
 
-    /*
-    BasicElement* last = getChild( countChildren() - 1 ); // children.last();
-    if ( last != 0 ) {
-        // Create a list (right order!)
-        QPtrList<ElementType> tokenList;
-        ElementType* token = last->getElementType();
-        while ( token != 0 ) {
-            // Add to the list.
-            tokenList.prepend( token );
-            token = token->getPrev();
-        }
-
-        for ( uint i = 0; i < tokenList.count(); ++i ) {
-            tokenList.at( i )->saveMathML( this, doc, tmp );
-        }
-    }
-    */
     inherited::writeMathML( doc, tmp );
 
     /* Now we re-parse the Dom tree, because of the TabMarkers
@@ -1286,9 +1269,10 @@ void MultilineSequenceElement::writeMathML( QDomDocument doc,
 
     QDomElement mtd = doc.createElement( "mtd" );
 
+    // The mrow, if it exists.
     QDomNode n = tmp.firstChild().firstChild();
     while ( !n.isNull() ) {
-        // the illegal TabMarkers are direct children of tmp.
+        // the illegal TabMarkers are children of the mrow, child of tmp.
         if ( n.isElement() && n.toElement().tagName() == "TAB" ) {
             parent.appendChild( mtd );
             mtd = doc.createElement( "mtd" );
@@ -1672,7 +1656,7 @@ void MultilineElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 /**
  * Appends our attributes to the dom element.
  */
-void MultilineElement::writeDom(QDomElement& element)
+void MultilineElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
@@ -1708,7 +1692,7 @@ void MultilineElement::writeMathML( QDomDocument doc, QDomNode parent )
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool MultilineElement::readAttributesFromDom(QDomElement& element)
+bool MultilineElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;

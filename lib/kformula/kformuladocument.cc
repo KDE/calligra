@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+#include <koDocument.h>
+
 #include "contextstyle.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
@@ -34,6 +36,12 @@
 #include "symbolaction.h"
 
 KFORMULA_NAMESPACE_BEGIN
+
+
+static const int CURRENT_SYNTAX_VERSION = 1;
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+static const char * CURRENT_DTD_VERSION = "1.3";
+
 
 struct Document::Document_Impl {
 
@@ -49,8 +57,19 @@ struct Document::Document_Impl {
 
     ~Document_Impl()
     {
+        clear();
         if (ownHistory) {
             delete history;
+        }
+    }
+
+    void clear() {
+        // Destroy remaining formulae. We do it backward because
+        // the formulae remove themselves from this document upon
+        // destruction.
+        int count = formulae.count();
+        for ( int i=count-1; i>=0; --i ) {
+            delete formulae.at( i );
         }
     }
 
@@ -247,6 +266,103 @@ Document::~Document()
 }
 
 
+bool Document::loadXML( QDomDocument doc )
+{
+    //impl->clear();
+    QDomElement root = doc.documentElement();
+
+    // backward compatiblity
+    if ( root.tagName() == "FORMULA" ) {
+        Container* formula = newFormula( 0 );
+        return formula->load( root );
+    }
+
+    QDomNode node = root.firstChild();
+    if ( node.isElement() ) {
+        QDomElement element = node.toElement();
+        if ( element.tagName() == "FORMULASETTINGS" ) {
+            if ( !loadDocumentPart( element ) ) {
+                return false;
+            }
+        }
+        node = node.nextSibling();
+    }
+    uint number = 0;
+    while ( !node.isNull() ) {
+        if ( node.isElement() ) {
+            QDomElement element = node.toElement();
+            if ( element.tagName() == "FORMULA" ) {
+                Container* formula = newFormula( number );
+                if ( !formula->load( node.toElement() ) ) {
+                    return false;
+                }
+                number += 1;
+            }
+        }
+        node = node.nextSibling();
+    }
+    return impl->formulae.count() > 0;
+}
+
+bool Document::loadDocumentPart( QDomElement /*node*/ )
+{
+    return true;
+}
+
+QDomDocument Document::saveXML()
+{
+    QDomDocument doc = createDomDocument();
+    QDomElement root = doc.documentElement();
+    root.appendChild( saveDocumentPart( doc ) );
+    uint count = impl->formulae.count();
+    for ( uint i=0; i<count; ++i ) {
+        impl->formulae.at( i )->save( root );
+    }
+    return doc;
+}
+
+
+QDomElement Document::saveDocumentPart( QDomDocument doc )
+{
+    QDomElement settings = doc.createElement( "FORMULASETTINGS" );
+    return settings;
+}
+
+
+QDomDocument Document::createDomDocument()
+{
+    return KoDocument::createDomDocument( "kformula", "KFORMULA", CURRENT_DTD_VERSION );
+}
+
+void Document::registerFormula( Container* f )
+{
+    lazyInit();
+    impl->formulae.append(f);
+}
+
+void Document::activate(Container* f)
+{
+    impl->formula = f;
+}
+
+void Document::formulaDies(Container* f)
+{
+    if (f == impl->formula) {
+        impl->formula = 0;
+    }
+    impl->formulae.remove(f);
+}
+
+
+Container* Document::newFormula( uint number )
+{
+    if ( number < impl->formulae.count() ) {
+        return impl->formulae.at( number );
+    }
+    return new Container( this );
+}
+
+
 void Document::lazyInit()
 {
     if ( impl->firstTime ) {
@@ -307,17 +423,6 @@ void Document::setZoomAndResolution( int zoom, double zoomX, double zoomY, bool 
     }
 }
 
-void Document::registerFormula( Container* f )
-{
-    lazyInit();
-    impl->formulae.append(f);
-}
-
-
-void Document::activate(Container* f)
-{
-    impl->formula = f;
-}
 
 void Document::setEnabled( bool enabled )
 {
@@ -370,14 +475,6 @@ void Document::setEnabled( bool enabled )
         getMakeGreekAction()->setShortcut( KShortcut() );
         getInsertSymbolAction()->setShortcut( KShortcut() );
     }
-}
-
-void Document::formulaDies(Container* f)
-{
-    if (f == impl->formula) {
-        impl->formula = 0;
-    }
-    impl->formulae.remove(f);
 }
 
 

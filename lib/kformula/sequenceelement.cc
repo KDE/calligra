@@ -1162,7 +1162,7 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
 /**
  * Stores the given childrens dom in the element.
  */
-void SequenceElement::getChildrenDom(QDomDocument& doc, QDomElement& elem,
+void SequenceElement::getChildrenDom(QDomDocument doc, QDomElement elem,
                                      uint from, uint to)
 {
     for (uint i = from; i < to; i++) {
@@ -1232,7 +1232,7 @@ BasicElement* SequenceElement::createElement( QString type )
 /**
  * Appends our attributes to the dom element.
  */
-void SequenceElement::writeDom(QDomElement& element)
+void SequenceElement::writeDom(QDomElement element)
 {
     BasicElement::writeDom(element);
 
@@ -1245,7 +1245,7 @@ void SequenceElement::writeDom(QDomElement& element)
  * Reads our attributes from the element.
  * Returns false if it failed.
  */
-bool SequenceElement::readAttributesFromDom(QDomElement& element)
+bool SequenceElement::readAttributesFromDom(QDomElement element)
 {
     if (!BasicElement::readAttributesFromDom(element)) {
         return false;
