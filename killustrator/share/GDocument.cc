@@ -246,6 +246,11 @@ void GDocument::deleteObject (GObject* obj) {
   }
 }
 
+GObject* GDocument::findNextObject (int x, int y, const char* type) {
+  // TODO
+  return 0L;
+}
+
 GObject* GDocument::findContainingObject (int x, int y) {
   QListIterator<GObject> it (objects);
   // We are looking for the most relevant object, that means the object 
