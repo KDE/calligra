@@ -252,7 +252,7 @@ VPath::curve1To( const KoPoint& p2, const KoPoint& p3 )
 	VSegment* s = new VSegment();
 
 	s->setDegree( 3 );
-	s->setPoint( 0, s->prev()->knot() );
+	s->setPoint( 0, currentPoint() );
 	s->setPoint( 1, p2 );
 	s->setPoint( 2, p3 );
 
