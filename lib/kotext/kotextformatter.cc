@@ -59,7 +59,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     KoTextStringChar *c = 0;
     start = 0;
     if ( start == 0 )
-	c = &parag->string()->at( 0 );
+        c = &parag->string()->at( 0 );
 
     KoTextStringChar *firstChar = 0;
     KoTextString *string = parag->string();
@@ -137,7 +137,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
     int align = parag->alignment();
     if ( align == Qt::AlignAuto && doc && doc->alignment() != Qt::AlignAuto )
-	align = doc->alignment();
+        align = doc->alignment();
 
     int col = 0;
     int ww = 0; // width in layout units
@@ -153,22 +153,22 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
     KoTextStringChar* lastChr = 0;
     for ( ; i < len; ++i, ++col ) {
-	if ( c )
-	    lastChr = c;
-	c = &string->at( i );
-	if ( i > 0 && (x > curLeft || ww == 0) || lastWasNonInlineCustom ) {
-	    c->lineStart = 0;
-	} else {
-	    c->lineStart = 1;
-	    firstChar = c;
-	}
+        if ( c )
+            lastChr = c;
+        c = &string->at( i );
+        if ( i > 0 && (x > curLeft || ww == 0) || lastWasNonInlineCustom ) {
+            c->lineStart = 0;
+        } else {
+            c->lineStart = 1;
+            firstChar = c;
+        }
 
-	if ( c->isCustom() && c->customItem()->placement() != KoTextCustomItem::PlaceInline )
-	    lastWasNonInlineCustom = TRUE;
-	else
-	    lastWasNonInlineCustom = FALSE;
+        if ( c->isCustom() && c->customItem()->placement() != KoTextCustomItem::PlaceInline )
+            lastWasNonInlineCustom = TRUE;
+        else
+            lastWasNonInlineCustom = FALSE;
 
-	if ( c->c != '\t' || c->isCustom() ) {
+        if ( c->c != '\t' || c->isCustom() ) {
             KoTextFormat *charFormat = c->format();
             if ( c->isCustom() ) {
                 ww = c->customItem()->width;
@@ -182,16 +182,16 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 pixelww = charFormat->charWidth( zh, true, c, parag, i );
 #endif
             }
-	} else { // tab
-	    int nx = parag->nextTab( i, x );
-	    if ( nx < x )
-		ww = availableWidth - x;
-	    else
-		ww = nx - x + 1;
+        } else { // tab
+            int nx = parag->nextTab( i, x );
+            if ( nx < x )
+                ww = availableWidth - x;
+            else
+                ww = nx - x + 1;
 #ifndef REF_IS_LU
             pixelww = zh->layoutUnitToPixelX( ww );
 #endif
-	}
+        }
         c->width = ww;
 
         //code from qt-3.1beta2
@@ -221,17 +221,17 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         }
 
 #ifdef DEBUG_FORMATTER
-	kdDebug(32500) << "c='" << QString(c->c) << "' i=" << i << "/" << len << " x=" << x << " ww=" << ww << " availableWidth=" << availableWidth << " (test is x+ww>aW) lastBreak=" << lastBreak << " isBreakable=" << isBreakable(string, i) << endl;
+        kdDebug(32500) << "c='" << QString(c->c) << "' i=" << i << "/" << len << " x=" << x << " ww=" << ww << " availableWidth=" << availableWidth << " (test is x+ww>aW) lastBreak=" << lastBreak << " isBreakable=" << isBreakable(string, i) << endl;
 #endif
-	// Wrapping at end of line - one big if :)
-	if ( wrapEnabled
+        // Wrapping at end of line - one big if :)
+        if ( wrapEnabled
              // Check if should break (i.e. we are after the max X for the end of the line)
-	     && ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
+             && ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
                   ( lastBreak != -1 || allowBreakInWords() )
                   /*|| wrapAtColumn() != -1 && col >= wrapAtColumn()*/ )
 
-	     // Allow two breakable chars next to each other (e.g. '  ') but not more
-	     && ( !isBreakable( string, i ) ||
+             // Allow two breakable chars next to each other (e.g. '  ') but not more
+             && ( !isBreakable( string, i ) ||
                   ( i > 1 && lastBreak == i-1 && isBreakable( string, i-2 ) ) ||
                   lastBreak == -2 ) // ... used to be a special case...
 
@@ -246,10 +246,10 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
              || lastChr->c == '\n' && parag->isNewLinesAllowed() && lastBreak > -1 )
         {
 #ifdef DEBUG_FORMATTER
-	    kdDebug(32500) << "BREAKING" << endl;
+            kdDebug(32500) << "BREAKING" << endl;
 #endif
-	    //if ( wrapAtColumn() != -1 )
-	    //    minw = QMAX( minw, x + ww );
+            //if ( wrapAtColumn() != -1 )
+            //    minw = QMAX( minw, x + ww );
 
             bool hyphenated = false;
             // Hyphenation: check if we can break somewhere between lastBreak and i
@@ -303,8 +303,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 }
             }
 
-	    // No breakable char found -> break at current char (i.e. before 'i')
-	    if ( lastBreak < 0 ) {
+            // No breakable char found -> break at current char (i.e. before 'i')
+            if ( lastBreak < 0 ) {
                 // (combine lineStart->baseLine/h and tmpBaseLine/tmph)
                 int belowBaseLine = QMAX( lineHeight - lineStart->baseLine, tmph - tmpBaseLine );
                 lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
@@ -312,18 +312,18 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 lineStart->h = lineHeight;
                 lineStart->w = dw;
 
-		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
+                KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
                 lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
-		lineStart->h += lineStart->lineSpacing;
-		y += lineStart->h;
+                lineStart->h += lineStart->lineSpacing;
+                y += lineStart->h;
 #ifdef DEBUG_FORMATTER
                 int linenr = parag->lineStartList().count()-1;
                 kdDebug(32500) << "line " << linenr << " done (breaking at current char). y now " << y << endl;
 #endif
 
-		lineStart = lineStart2;
-		tmph = c->height();
-		lineHeight = 0;
+                lineStart = lineStart2;
+                tmph = c->height();
+                lineHeight = 0;
 
                 initialRMargin = currentRightMargin;
                 x = left;
@@ -331,30 +331,30 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     doc->flow()->adjustMargins( y + parag->rect().y(), tmph, x, initialRMargin, dw, parag );
 
                 pixelx = zh->layoutUnitToPixelX( x );
-		initialHeight = tmph;
-		initialLMargin = x;
-		availableWidth = dw - initialRMargin;
-		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
-		    int nx = parag->nextTab( i, x );
-		    if ( nx < x )
-			ww = availableWidth - x;
-		    else
-			ww = nx - x + 1;
-		}
-		if ( x != left || availableWidth != dw )
-		    fullWidth = FALSE;
-		curLeft = x;
-		lineStart->y = y;
-		insertLineStart( parag, i, lineStart );
+                initialHeight = tmph;
+                initialLMargin = x;
+                availableWidth = dw - initialRMargin;
+                if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
+                    int nx = parag->nextTab( i, x );
+                    if ( nx < x )
+                        ww = availableWidth - x;
+                    else
+                        ww = nx - x + 1;
+                }
+                if ( x != left || availableWidth != dw )
+                    fullWidth = FALSE;
+                curLeft = x;
+                lineStart->y = y;
+                insertLineStart( parag, i, lineStart );
                 tempWordData.clear();
-		lineStart->baseLine = c->ascent();
-		lineStart->h = c->height();
-		c->lineStart = 1;
-		firstChar = c;
-		tmpBaseLine = lineStart->baseLine;
-		lastBreak = -1;
-		col = 0;
-		tminw = marg; // not in QRT?
+                lineStart->baseLine = c->ascent();
+                lineStart->h = c->height();
+                c->lineStart = 1;
+                firstChar = c;
+                tmpBaseLine = lineStart->baseLine;
+                lastBreak = -1;
+                col = 0;
+                tminw = marg; // not in QRT?
                 // recalc everything for 'i', it might still not be ok where it is...
                 // (e.g. if there's no room at all on this line)
                 // But we don't want to do this forever, so we check against maxY (if known)
@@ -370,10 +370,10 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 }
                 // maxY not known -> keep going ('i' remains where it is)
                 // (that's the initial QRT behaviour)
-	    } else {
-		// Break the line at the last breakable character
-		i = lastBreak;
-		c = &string->at( i ); // The last char in the last line
+            } else {
+                // Break the line at the last breakable character
+                i = lastBreak;
+                c = &string->at( i ); // The last char in the last line
                 int spaceAfterLine = availableWidth - c->x;
                 // ?? AFAICS we should always deduce the char's width from the available space....
                 //if ( string->isRightToLeft() && lastChr->c == '\n' )
@@ -388,22 +388,22 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                         c->width = width;
                     spaceAfterLine -= width;
                 }
-		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, spaceAfterLine );
+                KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, spaceAfterLine );
                 lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
                 lineStart->w = dw;
-		lineStart->h += lineStart->lineSpacing;
-		y += lineStart->h;
-		lineStart = lineStart2;
+                lineStart->h += lineStart->lineSpacing;
+                y += lineStart->h;
+                lineStart = lineStart2;
 #ifdef DEBUG_FORMATTER
-		kdDebug(32500) << "Breaking at a breakable char (" << i << "). linenr=" << parag->lineStartList().count()-1 << " y=" << y << endl;
+                kdDebug(32500) << "Breaking at a breakable char (" << i << "). linenr=" << parag->lineStartList().count()-1 << " y=" << y << endl;
 #endif
 
-		c = &string->at( i + 1 ); // The first char in the new line
+                c = &string->at( i + 1 ); // The first char in the new line
 #ifdef DEBUG_FORMATTER
-		kdDebug(32500) << "Next line will start at i+1=" << i+1 << ", char=" << QString(c->c) << endl;
+                kdDebug(32500) << "Next line will start at i+1=" << i+1 << ", char=" << QString(c->c) << endl;
 #endif
-		tmph = c->height();
-		lineHeight = tmph;
+                tmph = c->height();
+                lineHeight = tmph;
 
                 initialRMargin = currentRightMargin;
                 x = left;
@@ -411,88 +411,88 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     doc->flow()->adjustMargins( y + parag->rect().y(), tmph, x, initialRMargin, dw, parag );
 
                 pixelx = zh->layoutUnitToPixelX( x );
-		initialHeight = lineHeight;
-		initialLMargin = x;
-		availableWidth = dw - initialRMargin;
-		if ( x != left || availableWidth != dw )
-		    fullWidth = FALSE;
-		curLeft = x;
-		lineStart->y = y;
-		insertLineStart( parag, i + 1, lineStart );
+                initialHeight = lineHeight;
+                initialLMargin = x;
+                availableWidth = dw - initialRMargin;
+                if ( x != left || availableWidth != dw )
+                    fullWidth = FALSE;
+                curLeft = x;
+                lineStart->y = y;
+                insertLineStart( parag, i + 1, lineStart );
                 tempWordData.clear();
-		lineStart->baseLine = c->ascent();
-		lineStart->h = c->height();
-		c->lineStart = 1;
-		firstChar = c;
-		tmpBaseLine = lineStart->baseLine;
-		lastBreak = -1;
-		col = 0;
-		tminw = marg;
+                lineStart->baseLine = c->ascent();
+                lineStart->h = c->height();
+                c->lineStart = 1;
+                firstChar = c;
+                tmpBaseLine = lineStart->baseLine;
+                lastBreak = -1;
+                col = 0;
+                tminw = marg;
                 // If we're after maxY, time to stop. Hopefully KWord will create more pages.
                 if ( maxY > -1 && y >= maxY )
                     break;
-		continue;
-	    }
-	} else if ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ) {
-	    // Breakable character
-	    if ( len <= 2 || i < len - 1 ) {
-		//kdDebug(32500) << " Breakable character (i=" << i << " len=" << len << "): combining " << //	tmpBaseLine << "/" << tmph << " with " << c->ascent() << "/" << c->height() << endl;
-		// (combine tmpBaseLine/tmph and this character)
-		int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
-		tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
-		tmph = tmpBaseLine + belowBaseLine;
-		//kdDebug(32500) << " -> tmpBaseLine/tmph : " << tmpBaseLine << "/" << tmph << endl;
-	    }
+                continue;
+            }
+        } else if ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ) {
+            // Breakable character
+            if ( len <= 2 || i < len - 1 ) {
+                //kdDebug(32500) << " Breakable character (i=" << i << " len=" << len << "): combining " << //  tmpBaseLine << "/" << tmph << " with " << c->ascent() << "/" << c->height() << endl;
+                // (combine tmpBaseLine/tmph and this character)
+                int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
+                tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
+                tmph = tmpBaseLine + belowBaseLine;
+                //kdDebug(32500) << " -> tmpBaseLine/tmph : " << tmpBaseLine << "/" << tmph << endl;
+            }
             tempWordData.clear();
-	    minw = QMAX( minw, tminw );
-	    tminw = marg + ww;
-	    // (combine lineStart and tmpBaseLine/tmph)
-	    //kdDebug(32500) << "Breakable character: combining " << lineStart->baseLine << "/" << h << " with " << tmpBaseLine << "/" << tmph << endl;
-	    int belowBaseLine = QMAX( lineHeight - lineStart->baseLine, tmph - tmpBaseLine );
-	    lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
-	    lineHeight = lineStart->baseLine + belowBaseLine;
-	    lineStart->h = lineHeight;
+            minw = QMAX( minw, tminw );
+            tminw = marg + ww;
+            // (combine lineStart and tmpBaseLine/tmph)
+            //kdDebug(32500) << "Breakable character: combining " << lineStart->baseLine << "/" << h << " with " << tmpBaseLine << "/" << tmph << endl;
+            int belowBaseLine = QMAX( lineHeight - lineStart->baseLine, tmph - tmpBaseLine );
+            lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
+            lineHeight = lineStart->baseLine + belowBaseLine;
+            lineStart->h = lineHeight;
             lineStart->w = dw;
-	    // if h > initialHeight,  call adjustMargins, and if the result is != initial[LR]Margin,
-	    // format this line again
-	    if ( doc && lineHeight > initialHeight )
-	    {
-		int lm = left + ( ( firstChar == &string->at(0) && doc && !rtl ) ? parag->firstLineMargin() : 0 );
+            // if h > initialHeight,  call adjustMargins, and if the result is != initial[LR]Margin,
+            // format this line again
+            if ( doc && lineHeight > initialHeight )
+            {
+                int lm = left + ( ( firstChar == &string->at(0) && doc && !rtl ) ? parag->firstLineMargin() : 0 );
 #ifdef DEBUG_FORMATTER
                 kdDebug(32500) << "left=" << left << ", firstlinepargin=" << (( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0) << " => lm=" << lm << endl;
 #endif
-		int newLMargin = lm;
-		int newRMargin = currentRightMargin - ( ( firstChar == &string->at(0) && doc && rtl ) ? parag->firstLineMargin() : 0 );
+                int newLMargin = lm;
+                int newRMargin = currentRightMargin - ( ( firstChar == &string->at(0) && doc && rtl ) ? parag->firstLineMargin() : 0 );
                 int newPageWidth = dw;
                 doc->flow()->adjustMargins( y + parag->rect().y(), lineHeight, newLMargin, newRMargin, newPageWidth, parag );
 
-		initialHeight = lineHeight;
+                initialHeight = lineHeight;
 #ifdef DEBUG_FORMATTER
-		kdDebug(32500) << "new height: " << lineHeight << " => left=" << left << " lm=" << lm << " first-char=" << (firstChar==&string->at(0)) << " newLMargin=" << newLMargin << " newRMargin=" << newRMargin << endl;
+                kdDebug(32500) << "new height: " << lineHeight << " => left=" << left << " lm=" << lm << " first-char=" << (firstChar==&string->at(0)) << " newLMargin=" << newLMargin << " newRMargin=" << newRMargin << endl;
 #endif
-		if ( newLMargin != initialLMargin || newRMargin != initialRMargin || newPageWidth != dw )
-		{
+                if ( newLMargin != initialLMargin || newRMargin != initialRMargin || newPageWidth != dw )
+                {
 #ifdef DEBUG_FORMATTER
-		    kdDebug(32500) << "formatting again" << endl;
+                    kdDebug(32500) << "formatting again" << endl;
 #endif
-		    i = (firstChar - &string->at(0));
-		    x = newLMargin;
+                    i = (firstChar - &string->at(0));
+                    x = newLMargin;
                     pixelx = zh->layoutUnitToPixelX( x );
-		    availableWidth = dw - newRMargin;
-		    initialLMargin = newLMargin;
-		    initialRMargin = newRMargin;
+                    availableWidth = dw - newRMargin;
+                    initialLMargin = newLMargin;
+                    initialRMargin = newRMargin;
                     dw = newPageWidth;
-		    c = &string->at( i );
-		    tmph = c->height();
-		    lineHeight = tmph;
-		    tmpBaseLine = c->ascent();
-		    lineStart->h = lineHeight;
-		    lineStart->baseLine = tmpBaseLine;
-		    curLeft = x;
-		    lastBreak = -1;
-		    col = 0;
+                    c = &string->at( i );
+                    tmph = c->height();
+                    lineHeight = tmph;
+                    tmpBaseLine = c->ascent();
+                    lineStart->h = lineHeight;
+                    lineStart->baseLine = tmpBaseLine;
+                    curLeft = x;
+                    lastBreak = -1;
+                    col = 0;
 #ifdef DEBUG_FORMATTER
-		    kdDebug(32500) << "Restarting with i=" << i << " x=" << x << " y=" << y << " lineHeight=" << lineHeight << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " y=" << y << endl;
+                    kdDebug(32500) << "Restarting with i=" << i << " x=" << x << " y=" << y << " lineHeight=" << lineHeight << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " y=" << y << endl;
 #endif
                     // ww and pixelww already calculated and stored, no need to duplicate
                     // code like QRT does.
@@ -500,31 +500,31 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #ifndef REF_IS_LU
                     pixelww = c->pixelwidth;
 #endif
-		}
-	    }
+                }
+            }
 
-	    //kdDebug(32500) << " -> lineStart->baseLine/lineStart->h : " << lineStart->baseLine << "/" << lineStart->h << endl;
-	    if ( i < len - 2 || c->c != ' ' )
-		lastBreak = i;
+            //kdDebug(32500) << " -> lineStart->baseLine/lineStart->h : " << lineStart->baseLine << "/" << lineStart->h << endl;
+            if ( i < len - 2 || c->c != ' ' )
+                lastBreak = i;
 
-	} else {
-	    // Non-breakable character
-	    tminw += ww;
-	    //kdDebug(32500) << " Non-breakable character: combining " << tmpBaseLine << "/" << tmph << " with " << c->ascent() << "/" << c->height() << endl;
-	    // (combine tmpBaseLine/tmph and this character)
-	    int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
-	    tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
-	    tmph = tmpBaseLine + belowBaseLine;
-	    //kdDebug(32500) << " -> tmpBaseLine/tmph : " << tmpBaseLine << "/" << tmph << endl;
+        } else {
+            // Non-breakable character
+            tminw += ww;
+            //kdDebug(32500) << " Non-breakable character: combining " << tmpBaseLine << "/" << tmph << " with " << c->ascent() << "/" << c->height() << endl;
+            // (combine tmpBaseLine/tmph and this character)
+            int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
+            tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
+            tmph = tmpBaseLine + belowBaseLine;
+            //kdDebug(32500) << " -> tmpBaseLine/tmph : " << tmpBaseLine << "/" << tmph << endl;
 
             TemporaryWordData twd;
             twd.baseLine = tmpBaseLine;
             twd.height = tmph;
             twd.lineWidth = tminw; // ### check this is correct
             tempWordData.append( twd );
-	}
+        }
 
-	c->x = x;
+        c->x = x;
         // pixelxadj is the adjustement to add to lu2pixel(x), to find pixelx
         // (pixelx would be too expensive to store directly since it would require an int)
         c->pixelxadj = pixelx - zh->layoutUnitToPixelX( x );
@@ -540,7 +540,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         else // trailing space
             c->pixelwidth = zh->layoutUnitToPixelX( ww ); // was: pixelww;
 
-	x += ww;
+        x += ww;
         lastPixelx = pixelx;
 #ifdef REF_IS_LU
         pixelx = zh->layoutUnitToPixelX( x ); // no accumulating rounding errors anymore
@@ -548,39 +548,39 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         pixelx += pixelww;
 #endif
 #ifdef DEBUG_FORMATTER
-	kdDebug(32500) << "LU: added " << ww << " -> now x=" << x << " ; PIX: added " << pixelww << " -> now pixelx=" << pixelx << endl;
+        kdDebug(32500) << "LU: added " << ww << " -> now x=" << x << " ; PIX: added " << pixelww << " -> now pixelx=" << pixelx << endl;
 #endif
     }
 
     // ### hack. The last char in the paragraph is always invisible, and somehow sometimes has a wrong format. It changes between
     // layouting and printing. This corrects some layouting errors in BiDi mode due to this.
     if ( len > 1 /*&& !c->isAnchor()*/ ) {
-	c->format()->removeRef();
-	c->setFormat( string->at( len - 2 ).format() );
-	c->format()->addRef();
+        c->format()->removeRef();
+        c->setFormat( string->at( len - 2 ).format() );
+        c->format()->addRef();
     }
 
     // Finish formatting the last line
     if ( lineStart ) {
 #ifdef DEBUG_FORMATTER
-	kdDebug(32500) << "Last Line.... linenr=" << (int)parag->lineStartList().count()-1 << endl;
+        kdDebug(32500) << "Last Line.... linenr=" << (int)parag->lineStartList().count()-1 << endl;
 #endif
         //kdDebug(32500) << "Combining " << lineStart->baseLine << "/" << lineHeight << " with " << tmpBaseLine << "/" << tmph << endl;
-	// (combine lineStart and tmpBaseLine/tmph)
-	int belowBaseLine = QMAX( lineHeight - lineStart->baseLine, tmph - tmpBaseLine );
-	lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
-	lineHeight = lineStart->baseLine + belowBaseLine;
+        // (combine lineStart and tmpBaseLine/tmph)
+        int belowBaseLine = QMAX( lineHeight - lineStart->baseLine, tmph - tmpBaseLine );
+        lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
+        lineHeight = lineStart->baseLine + belowBaseLine;
         lineStart->w = dw;
-	//kdDebug(32500) << " -> lineStart->baseLine/lineStart->h : " << lineStart->baseLine << "/" << lineStart->h << endl;
-	// last line in a paragraph is not justified
-	if ( align == Qt::AlignJustify )
-	    align = Qt::AlignAuto;
+        //kdDebug(32500) << " -> lineStart->baseLine/lineStart->h : " << lineStart->baseLine << "/" << lineStart->h << endl;
+        // last line in a paragraph is not justified
+        if ( align == Qt::AlignJustify )
+            align = Qt::AlignAuto;
         int space = availableWidth - x + c->width; // don't count the trailing space (it breaks e.g. centering)
         KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, space );
         lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
-	lineHeight += lineStart->lineSpacing;
-	lineStart->h = lineHeight;
-	delete lineStart2;
+        lineHeight += lineStart->lineSpacing;
+        lineStart->h = lineHeight;
+        delete lineStart2;
     }
 
     minw = QMAX( minw, tminw );
@@ -588,7 +588,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     int m = parag->bottomMargin();
     // ##### Does OOo add margins or does it max them?
     //if ( parag->next() && doc && !doc->addMargins() )
-    //	m = QMAX( m, parag->next()->topMargin() );
+    //  m = QMAX( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
     //if ( parag->next() && parag->next()->isLineBreak() )
     //    m = 0;
@@ -599,7 +599,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
     wused += currentRightMargin;
     if ( !wrapEnabled || wrapAtColumn() != -1  )
-	minw = QMAX(minw, wused);
+        minw = QMAX(minw, wused);
     thisminw = minw;
     thiswused = wused;
     return y;
@@ -624,16 +624,16 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
     if( string->isBidi() )
-	return koBidiReorderLine( zh, parag, string, line, startChar, lastChar, align, space );
+        return koBidiReorderLine( zh, parag, string, line, startChar, lastChar, align, space );
     space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
     int start = (startChar - &string->at(0));
     int last = (lastChar - &string->at(0) );
     // do alignment Auto == Left in this case
     if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
-	if ( align & Qt::AlignHCenter )
-	    space /= 2;
+        if ( align & Qt::AlignHCenter )
+            space /= 2;
         int toAddPix = zh->layoutUnitToPixelX( space );
-	for ( int j = last; j >= start; --j ) {
+        for ( int j = last; j >= start; --j ) {
             KoTextStringChar &chr = string->at( j );
             //// Start at last tab, if any - BR #40472.
             if ( chr.c == '\t' ) {
@@ -642,78 +642,78 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
             moveChar( chr, zh, space, toAddPix );
         }
     } else if ( align & Qt::AlignJustify ) {
-	int numSpaces = 0;
+        int numSpaces = 0;
         // End at "last-1", the last space ends up with a width of 0
-	for ( int j = last-1; j >= start; --j ) {
+        for ( int j = last-1; j >= start; --j ) {
             //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
             if ( string->at( j ).c == '\t' ) {
                 start = j+1;
                 break;
             }
-	    if( isStretchable( string, j ) ) {
-		numSpaces++;
-	    }
-	}
-	int toAdd = 0;
+            if( isStretchable( string, j ) ) {
+                numSpaces++;
+            }
+        }
+        int toAdd = 0;
         int toAddPix = 0;
-	for ( int k = start + 1; k <= last; ++k ) {
+        for ( int k = start + 1; k <= last; ++k ) {
             KoTextStringChar &chr = string->at( k );
             if ( toAdd != 0 )
                 moveChar( chr, zh, toAdd, toAddPix );
-	    if( isStretchable( string, k ) && numSpaces ) {
-		int s = space / numSpaces;
-		toAdd += s;
+            if( isStretchable( string, k ) && numSpaces ) {
+                int s = space / numSpaces;
+                toAdd += s;
                 toAddPix = zh->layoutUnitToPixelX( toAdd );
-		space -= s;
-		numSpaces--;
+                space -= s;
+                numSpaces--;
                 chr.width += s;
 #ifndef REF_IS_LU
                 chr.pixelwidth += zh->layoutUnitToPixelX( s ); // ### rounding problem, recalculate
 #endif
-	    }
-	}
+            }
+        }
     }
     int current=0;
     int nc=0; // Not double, as we check it against 0 and to avoid gcc warnings
     KoTextFormat refFormat( *string->at(0).format() ); // we need a ref format, doesn't matter where it comes from
     for(int i=start;i<=last;++i)
     {
-	KoTextFormat* format=string->at(i).format();
+        KoTextFormat* format=string->at(i).format();
         // End of underline
-	if ( (((!format->underline())&&
+        if ( (((!format->underline())&&
                (!format->doubleUnderline())&&
                (!format->waveUnderline())&&
                (format->underlineType()!=KoTextFormat::U_SIMPLE_BOLD))
               || i == last)
              && nc )
-	{
-	    double avg=static_cast<double>(current)/nc;
-	    avg/=18.0;
+        {
+            double avg=static_cast<double>(current)/nc;
+            avg/=18.0;
             // Apply underline width "avg" from i-nc to i
             refFormat.setUnderLineWidth( avg );
             parag->setFormat( i-nc, i, &refFormat, true, KoTextFormat::UnderLineWidth );
-	    nc=0;
-	    current=0;
-	}
+            nc=0;
+            current=0;
+        }
         // Inside underline
-	else if(format->underline()||
+        else if(format->underline()||
                 format->waveUnderline()||
                 format->doubleUnderline()||
                 (format->underlineType() == KoTextFormat::U_SIMPLE_BOLD))
-	{
-	    ++nc;
-	    current += format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()
-	}
+        {
+            ++nc;
+            current += format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()
+        }
     }
 #if 0
     if ( last >= 0 && last < string->length() ) {
         KoTextStringChar &chr = string->at( last );
-	line->w = chr.x + chr.width; //string->width( last );
+        line->w = chr.x + chr.width; //string->width( last );
         // Add width of hyphen (so that it appears)
         if ( line->hyphenated )
             line->w += KoTextZoomHandler::ptToLayoutUnitPt( chr.format()->refFontMetrics().width( QChar(0xad) ) );
     } else
-	line->w = 0;
+        line->w = 0;
 #endif
 
     return new KoTextParagLineStart();
@@ -737,24 +737,24 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
     KoTextStringChar *ch = startChar;
     QChar *qch = (QChar *)str.unicode();
     while ( ch <= lastChar ) {
-	*qch = ch->c;
-	qch++;
-	ch++;
+        *qch = ch->c;
+        qch++;
+        ch++;
     }
     int x = startChar->x;
 
     QPtrList<KoTextRun> *runs;
     runs = KoComplexText::bidiReorderLine(control, str, 0, last - start + 1,
-					 (text->isRightToLeft() ? QChar::DirR : QChar::DirL) );
+                                         (text->isRightToLeft() ? QChar::DirR : QChar::DirL) );
 
     // now construct the reordered string out of the runs...
 
     int numSpaces = 0;
     // set the correct alignment. This is a bit messy....
     if( align == Qt::AlignAuto ) {
-	// align according to directionality of the paragraph...
-	if ( text->isRightToLeft() )
-	    align = Qt::AlignRight;
+        // align according to directionality of the paragraph...
+        if ( text->isRightToLeft() )
+            align = Qt::AlignRight;
     }
 
     if ( align & Qt::AlignHCenter ) {
@@ -762,16 +762,16 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
     } else if ( align & Qt::AlignRight ) {
         x += space;
     } else if ( align & Qt::AlignJustify ) {
-	for ( int j = last - 1; j >= start; --j ) {
+        for ( int j = last - 1; j >= start; --j ) {
             //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
             if ( text->at( j ).c == '\t' ) {
                 start = j+1;
                 break;
             }
-	    if( isStretchable( text, j ) ) {
-		numSpaces++;
-	    }
-	}
+            if( isStretchable( text, j ) ) {
+                numSpaces++;
+            }
+        }
     }
 // TODO #ifndef REF_IS_LU or remove
     int pixelx = zh->layoutUnitToPixelX( x );
@@ -784,77 +784,77 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
 #ifdef DEBUG_FORMATTER
         kdDebug(32500) << "koBidiReorderLine level: " << r->level << endl;
 #endif
-	if(r->level %2) {
-	    // odd level, need to reverse the string
-	    int pos = r->stop + start;
-	    while(pos >= r->start + start) {
-		KoTextStringChar &chr = text->at(pos);
-		if( numSpaces && !first && isBreakable( text, pos ) ) {
-		    int s = space / numSpaces;
+        if(r->level %2) {
+            // odd level, need to reverse the string
+            int pos = r->stop + start;
+            while(pos >= r->start + start) {
+                KoTextStringChar &chr = text->at(pos);
+                if( numSpaces && !first && isBreakable( text, pos ) ) {
+                    int s = space / numSpaces;
                     toAdd += s;
                     toAddPix = zh->layoutUnitToPixelX( toAdd );
-		    space -= s;
-		    numSpaces--;
+                    space -= s;
+                    numSpaces--;
                     chr.width += s;
                     chr.pixelwidth += zh->layoutUnitToPixelX( s ); // ### rounding problem, recalculate
-		} else if ( first ) {
-		    first = FALSE;
-		    if ( chr.c == ' ' ) // trailing space
+                } else if ( first ) {
+                    first = FALSE;
+                    if ( chr.c == ' ' ) // trailing space
                     {
                         //x -= chr.format()->width( ' ' );
                         x -= chr.width;
                         pixelx -= chr.pixelwidth;
                     }
-		}
-		chr.x = x + toAdd;
+                }
+                chr.x = x + toAdd;
                 chr.pixelxadj = pixelx + toAddPix - zh->layoutUnitToPixelX( chr.x );
 #ifdef DEBUG_FORMATTER
                 kdDebug(32500) << "koBidiReorderLine: pos=" << pos << " x(LU)=" << x << " toAdd(LU)=" << toAdd << " -> chr.x=" << chr.x << " pixelx=" << pixelx << "+" << zh->layoutUnitToPixelX( toAdd ) << ", pixelxadj=" << pixelx+zh->layoutUnitToPixelX( toAdd )-zh->layoutUnitToPixelX( chr.x ) << endl;
 #endif
-		chr.rightToLeft = TRUE;
-		chr.startOfRun = FALSE;
-		int ww = chr.width;
-		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
-		x += ww;
+                chr.rightToLeft = TRUE;
+                chr.startOfRun = FALSE;
+                int ww = chr.width;
+                if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
+                x += ww;
                 pixelx += chr.pixelwidth;
 #ifdef DEBUG_FORMATTER
                 kdDebug(32500) << "              ww=" << ww << " adding to x, now " << x << ". pixelwidth=" << chr.pixelwidth << " adding to pixelx, now " << pixelx << " xmax=" << xmax << endl;
 #endif
-		pos--;
-	    }
-	} else {
-	    int pos = r->start + start;
-	    while(pos <= r->stop + start) {
-		KoTextStringChar& chr = text->at(pos);
-		if( numSpaces && !first && isBreakable( text, pos ) ) {
-		    int s = space / numSpaces;
-		    toAdd += s;
+                pos--;
+            }
+        } else {
+            int pos = r->start + start;
+            while(pos <= r->stop + start) {
+                KoTextStringChar& chr = text->at(pos);
+                if( numSpaces && !first && isBreakable( text, pos ) ) {
+                    int s = space / numSpaces;
+                    toAdd += s;
                     toAddPix = zh->layoutUnitToPixelX( toAdd );
-		    space -= s;
-		    numSpaces--;
-		} else if ( first ) {
-		    first = FALSE;
-		    if ( chr.c == ' ' ) // trailing space
+                    space -= s;
+                    numSpaces--;
+                } else if ( first ) {
+                    first = FALSE;
+                    if ( chr.c == ' ' ) // trailing space
                     {
                         //x -= chr.format()->width( ' ' );
                         x -= chr.width;
                         pixelx -= chr.pixelwidth;
                     }
-		}
-		chr.x = x + toAdd;
+                }
+                chr.x = x + toAdd;
                 chr.pixelxadj = pixelx + toAddPix - zh->layoutUnitToPixelX( chr.x );
-		chr.rightToLeft = FALSE;
-		chr.startOfRun = FALSE;
-		int ww = chr.width;
-		//kdDebug(32500) << "setting char " << pos << " at pos " << chr.x << endl;
-		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
-		x += ww;
+                chr.rightToLeft = FALSE;
+                chr.startOfRun = FALSE;
+                int ww = chr.width;
+                //kdDebug(32500) << "setting char " << pos << " at pos " << chr.x << endl;
+                if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
+                x += ww;
                 pixelx += chr.pixelwidth;
-		pos++;
-	    }
-	}
-	text->at( r->start + start ).startOfRun = TRUE;
-	r = runs->next();
+                pos++;
+            }
+        }
+        text->at( r->start + start ).startOfRun = TRUE;
+        r = runs->next();
     }
 
     //line->w = xmax /*+ 10*/; // Why +10 ?
