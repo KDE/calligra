@@ -27,7 +27,8 @@ KPTResourceGroup::KPTResourceGroup() {
 KPTResourceGroup::~KPTResourceGroup() {
 }
 
-void KPTResourceGroup::addResource(KPTResource*, KPTRisk*) {
+void KPTResourceGroup::addResource(KPTResource* resource, KPTRisk*) {
+    m_resources.append(resource);
 }
 
 KPTResource* KPTResourceGroup::getResource(int) {
@@ -55,9 +56,6 @@ KPTResource::KPTResource() : m_appointments(), m_workingHours() {
 }
 
 KPTResource::~KPTResource() {
-}
-
-void KPTResource::setName(QString) {
 }
 
 void KPTResource::addWorkingHour(KPTDuration from, KPTDuration until) {
@@ -100,3 +98,20 @@ KPTRisk::KPTRisk(KPTNode *n, KPTResource *r, RiskType rt) {
 
 KPTRisk::~KPTRisk() {
 }
+
+#ifndef NDEBUG
+
+void KPTResourceGroup::printDebug(QString indent)
+{
+    kdDebug()<<indent<<"   + Resource group: "<<m_name<<endl;
+    indent += "   !";
+    QPtrListIterator<KPTResource> it(m_resources);
+    for ( ; it.current(); ++it)
+        it.current()->printDebug(indent);
+}
+void KPTResource::printDebug(QString indent)
+{
+    kdDebug()<<indent<<"   + Resource: "<<m_name<<endl;
+    indent += "  !";
+}
+#endif

@@ -34,13 +34,19 @@ class KPTDuration {
         KPTDuration(const KPTDuration &d);
         KPTDuration(int h, int m, int s=0, int ms=0);
         KPTDuration(const QTime time);
+        KPTDuration(const QDateTime time);
+        KPTDuration(int seconds);
         ~KPTDuration();
 
         void add(KPTDuration time);
+        void add(KPTDuration *time);
         void subtract(KPTDuration time);
+        void subtract(KPTDuration *time);
         void const set(KPTDuration newTime);
         void const set(QDateTime newTime);
 
+        int duration() const { return zero.secsTo(m_theTime); }
+        
         bool   operator==( const KPTDuration &d ) const { return m_theTime == d.m_theTime; }
         bool   operator!=( const KPTDuration &d ) const { return m_theTime != d.m_theTime; }
         bool   operator<( const KPTDuration &d ) const { return m_theTime < d.m_theTime; }
@@ -50,6 +56,10 @@ class KPTDuration {
         KPTDuration &operator = ( const KPTDuration &d ) { set(d); return *this;}
 
         QString toString() const { return m_theTime.time().toString(); }
+        
+        QDateTime dateTime() const { return m_theTime; }
+        QDate date() const { return m_theTime.date(); }
+        QTime time() const { return m_theTime.time(); }
 
     /**
      * This is useful for occasions where we need a zero duration.

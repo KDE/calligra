@@ -26,6 +26,9 @@
 #include "defs.h"
 
 class KPTResource;
+class KPTTimeScale;
+class KPTPertCanvas;
+class QCanvas;
 
 /** 
   * A task in the scheduling software is represented by this class. A task
@@ -34,7 +37,7 @@ class KPTResource;
   */
 class KPTTask : public KPTNode {
 public:
-    KPTTask();
+    KPTTask(KPTNode *parent = 0);
     ~KPTTask();
 
     /**
@@ -86,8 +89,18 @@ public:
     virtual void save(QDomElement &element) const;
 
     virtual bool openDialog();
-    
+ 
+    virtual void drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h);
+    virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas, int col);
+    virtual void drawPertRelations(QCanvas* canvas);
+   
 private:
     QPtrList<KPTResourceGroup> m_resource;
+    
+#ifndef NDEBUG
+public:
+    void printDebug(bool children, QCString indent);
+#endif
+
 };
 #endif

@@ -20,11 +20,38 @@
 #ifndef KPTPROJECTDIALOG_H
 #define KPTPROJECTDIALOG_H
 
+#include "kptresource.h"
+
 #include <kdialogbase.h>
+#include <klineedit.h>
+
+#include <qlistbox.h>
+#include <qstring.h>
 
 class KPTProject;
-class KLineEdit;
 class QTextEdit;
+class QDateTimeEdit;
+class QTimeEdit;
+class QButtonGroup;
+class QListBox;
+
+class KPTGroupItem : public QListBoxText
+{
+public:
+    KPTGroupItem(KPTResourceGroup *item)
+        : QListBoxText(item->name()) { m_group = item; }
+    
+    KPTResourceGroup *m_group;
+};
+
+class KPTResourceItem : public QListBoxText
+{
+public:
+    KPTResourceItem(KPTResource *item)
+        : QListBoxText(item->name()) { m_resource = item; }
+
+    KPTResource *m_resource;
+};
 
 
 class KPTProjectDialog : public KDialogBase {
@@ -35,13 +62,43 @@ public:
 
 protected slots:
     void slotOk();
+    void slotAddGroup();
+    void slotEditGroup();
+    void slotDeleteGroup();
+    void slotAddResource();
+    void slotEditResource();
+    void slotDeleteResource();
+
+    void slotGroupChanged(QListBoxItem * item);
+    void slotResourceChanged(QListBoxItem * item);
 
 private:
     KPTProject &project;
     KLineEdit *namefield;
     KLineEdit *leaderfield;
     QTextEdit *descriptionfield;
+    
+    QDateTimeEdit *sneTime, *fnlTime, *msoTime;
+    
+    QButtonGroup *constraints;
+    QListBox *group, *resource;
+    
+    KPTGroupItem *m_groupItem;
+    KPTResourceItem *m_resourceItem;
+
 };
 
+class KPTGroupDialog : public KDialogBase {
+    Q_OBJECT
+public:
+    KPTGroupDialog(QWidget *parent=0, const char *name=0);
+    QString name();
+    
+protected slots:
+    void slotOk();
+    
+private:
+    KLineEdit *m_name;
+};
 
 #endif // KPTPROJECTDIALOG_H

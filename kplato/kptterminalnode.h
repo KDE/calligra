@@ -22,6 +22,10 @@
 
 #include "kptnode.h"
 
+#include <qdom.h>
+
+#include <kdebug.h>
+
 
 class KPTTerminalNode : public KPTNode {
 public:
@@ -45,6 +49,9 @@ public:
     virtual KPTDuration *getExpectedDuration()
 	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
   
+    virtual uint getExpectedDuration(int)
+	{ return 0; }
+  
     /**
      * Instead of using the expected duration, generate a random value
      * using the Distribution of each Task. This can be used for Monte-Carlo
@@ -66,10 +73,18 @@ public:
 	{ return const_cast<KPTDuration*>( &KPTDuration::zeroDuration ); }
 
     /**
-     * TODO: Load and save
+     * Load and save
      */
-    virtual bool load(QDomElement &/*element*/) { return true; }
-    virtual void save(QDomElement &/*element*/) const { }
+    virtual bool load(QDomElement &e) { 
+        earliestStart = KPTDuration(QDateTime::fromString(e.attribute("earlieststart")));
+        latestFinish = KPTDuration(QDateTime::fromString(e.attribute("latestfinish")));
+        return true; 
+    }
+    
+    virtual void save(QDomElement &e) const {
+        e.setAttribute("earlieststart", earliestStart.dateTime().toString());
+        e.setAttribute("latestfinish", latestFinish.dateTime().toString());
+    }
 
 protected:
     /**
@@ -85,6 +100,17 @@ protected:
      * @return Null pointer.
      */
     virtual KPTNode* end_node(){ return 0; }
+
+#ifndef NDEBUG
+public:
+    void printDebug(bool children, QCString indent) 
+        {   
+            indent += "  ";
+            kdDebug()<<indent<<" Earliest start: "<<earliestStart.dateTime().toString()<<endl;
+            kdDebug()<<indent<<" Latest finish: "<<earliestStart.dateTime().toString()<<endl;
+        }
+#endif
+
 };
 
 #endif

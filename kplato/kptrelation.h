@@ -23,7 +23,14 @@
 #include "kptduration.h"
 #include "defs.h"
 
+#include <qstring.h>
+
 class KPTNode;
+class KPTProject;
+class KPTTimeScale;
+class QCanvas;
+class QDomElement;
+
 /**
   * The relation class couples a 2 nodes together which are dependent on each other.
   * If for example you have a project to build a house, the node that represents the 
@@ -32,22 +39,22 @@ class KPTNode;
   * We actually have a number of TimingRelations so this relation can be used in different manners.
   */
 class KPTRelation {
-    public:
+public:
 
-        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag);
-        KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
-        ~KPTRelation();
+    KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag);
+    KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
+    ~KPTRelation();
 
-        void setTimingType(TimingType );
-        TimingType timingType() { return m_timingType; }
-        void setTimingRelation(TimingRelation );
-        TimingRelation timingRelation() { return m_timingRelation; }
+    void setTimingType(TimingType );
+    TimingType timingType() { return m_timingType; }
+    void setTimingRelation(TimingRelation );
+    TimingRelation timingRelation() { return m_timingRelation; }
 
-        /** returns the lag.
-         *  The lag of a relation is the time it takes between the parent starting/stopping
-         *  and the start of the child.
-         */
-        const KPTDuration &lag() const { return m_lag; }
+    /** returns the lag.
+    *  The lag of a relation is the time it takes between the parent starting/stopping
+    *  and the start of the child.
+    */
+    const KPTDuration &lag() const { return m_lag; }
 
     /**
      * @return The parent dependent node.
@@ -58,18 +65,33 @@ class KPTRelation {
      */
     KPTNode *child() const { return m_child; }
 
-        enum Result {
-          SUCCESS = 0l,
-          HASCHILDREN = 1l,
-          NOTIMPL = 2l
-        };
+    enum Result {
+        SUCCESS = 0l,
+        HASCHILDREN = 1l,
+        NOTIMPL = 2l
+    };
 
-        
-    protected: // variables
-        KPTNode *m_parent;
-        KPTNode *m_child;
-        TimingType m_timingType;
-        TimingRelation m_timingRelation;
-        KPTDuration m_lag;
+    bool load(QDomElement &element);
+    void save(QDomElement &element) const;
+    
+    bool completeLoad(KPTNode *top);
+    
+    void draw(QCanvas* canvas);
+    
+protected: // variables
+    KPTNode *m_parent;
+    KPTNode *m_child;
+    TimingType m_timingType;
+    TimingRelation m_timingRelation;
+    KPTDuration m_lag;
+
+private:
+    QString m_parentId;
+    
+#ifndef NDEBUG
+public:
+    void printDebug(QCString indent);
+#endif
+
 };
 #endif

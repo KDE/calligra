@@ -31,34 +31,45 @@
 #include <qdatetimeedit.h>
 
 
-KPTResourceDialog::KPTResourceDialog(QPtrList<KPTResourceGroup> &rgList, QWidget *p, const char *n)
-    : KDialogBase(Tabbed, i18n("Edit Resource"), Ok|Cancel, Ok, p,
-		  n, true, true), m_rgList(rgList)
+KPTResourceDialog::KPTResourceDialog(QWidget *p, const char *n)
+    : KDialogBase(Plain, i18n("New Resource"), Ok|Cancel, Ok, p, n, true, true),
+      m_resource(0)
 {
-    // For now the setup is pretty trivial. It's planned to be able to control
-    // the children here too.
-    QWidget *panel = addPage(i18n("Settings"));
-    QGridLayout *layout = new QGridLayout(panel, 4, 2, marginHint(),
-					 spacingHint());
+    init();
+}
+
+KPTResourceDialog::KPTResourceDialog(KPTResource *resource, QWidget *p, const char *n)
+    : KDialogBase(Plain, i18n("Edit Resource"), Ok|Cancel, Ok, p, n, true, true),
+      m_resource(resource)
+{
+    init();
+}
+
+void KPTResourceDialog::init()
+{
+    QWidget *page = plainPage();
+    QGridLayout *layout = new QGridLayout(page, 4, 2, marginHint(), spacingHint());
 
     // Name of the milestone
-    layout->addWidget(new QLabel(i18n("Resource name:"), panel), 0, 0);
-    layout->addMultiCellWidget(m_namefield=new KLineEdit("", panel), 0, 0, 1, 3);
+    layout->addWidget(new QLabel(i18n("Resource name:"), page), 0, 0);
+    layout->addMultiCellWidget(m_namefield=new KLineEdit("", page), 0, 0, 1, 3);
+    if (m_resource)
+        m_namefield->setText(m_resource->name());
 
-    layout->addWidget(new QLabel(i18n("Available:"), panel), 1,0);
+    layout->addWidget(new QLabel(i18n("Available:"), page), 1,0);
     
-    m_availableFrom = new QTimeEdit(QTime(8,0),panel);
+    m_availableFrom = new QTimeEdit(QTime(8,0),page);
     m_availableFrom->setDisplay(QTimeEdit::Hours|QTimeEdit::Minutes);
     layout->addWidget(m_availableFrom, 1, 2);
 
-    m_availableFrom = new QTimeEdit(QTime(16,0),panel);
+    m_availableFrom = new QTimeEdit(QTime(16,0),page);
     m_availableFrom->setDisplay(QTimeEdit::Hours|QTimeEdit::Minutes);
     layout->addWidget(m_availableFrom, 1, 3);
 }
 
 
 void KPTResourceDialog::slotOk() {
-    if (m_namefield->text() == "" ) {
+    if (m_namefield->text().isEmpty() ) {
 	    KMessageBox::sorry(this, i18n("You have to set a name for this resource"));
 	    return;
     }

@@ -23,7 +23,6 @@
 #include "kptproject.h"
 #include "kptprojectdialog.h"
 #include "kptresource.h"
-#include "kptresourcedialog.h"
 
 #include <qpainter.h>
 #include <qfileinfo.h>
@@ -136,6 +135,7 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
 	    if(e.tagName() == "project") {
 		KPTProject *newProject = new KPTProject();
 		if (newProject->load(e)) {
+            newProject->completeLoad(newProject); // Now fix relations etc.
 		    // The load went fine. Throw out the old project
 		    delete m_project;
 		    delete m_projectDialog;
@@ -193,10 +193,5 @@ void KPTPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
 //         painter.drawLine( left * 20, y * 20, right * 20, y * 20 );
 }
 
-void KPTPart::openResourceDialog() {
-    kdDebug()<<k_funcinfo<<endl;
-    KPTResourceDialog *dial = new KPTResourceDialog(m_resourceGroups);
-    dial->exec();
-}
 
 #include "kptpart.moc"

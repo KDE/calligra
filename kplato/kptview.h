@@ -23,8 +23,13 @@
 #include <koView.h>
 
 class QListViewItem;
+class QPopupMenu;
+class QHBoxLayout;
+class QTabWidget;
 class KListView;
 
+class KPTGanttView;
+class KPTPertView;
 class KPTPart;
 class KPTNode;
 class KPTNodeItem;
@@ -41,6 +46,13 @@ public:
      */
     virtual void setZoom(double zoom);
 
+    KPTPart *getPart();
+    
+    QPopupMenu *popupMenu( const QString& name );
+	void updateViews();
+
+public slots:
+    
 protected slots:
     void slotEditCut();
     void slotEditCopy();
@@ -51,14 +63,17 @@ protected slots:
     void slotAddSubProject();
     void slotAddTask();
     void slotAddMilestone();
-    void slotEditProject();
-    void slotEditResource();
+    void slotProjectEdit();
+    void slotProjectCalculate();
     void slotConfigure();
     
-    void slotKoolBar(int,int);
-    
-    void slotSelectionChanged();
+    void slotOpenNode();     
     void slotOpen(QListViewItem *item);
+    
+    void slotConnectNode();
+	void slotChanged(QWidget *);
+	void slotChanged();
+	void slotUpdate(bool calculate);
     
 #ifndef NDEBUG
     void slotPrintDebug();
@@ -68,14 +83,14 @@ protected:
     virtual void updateReadWrite(bool readwrite);
 
 private:
-    void displayProject();
-    void displayChildren(const KPTNode &node, KPTNodeItem *item);
-
-    KListView *m_listview;
-
-    int m_defaultFontSize;
+    KPTGanttView *m_ganttview;
+    QHBoxLayout *m_ganttlayout;
+    KPTPertView *m_pertview;
+    QHBoxLayout *m_pertlayout;
+	QTabWidget *m_tab;
     
     int m_viewGrp;
+    int m_defaultFontSize;
     
     KAction *actionEditCut;
     KAction *actionEditCopy;

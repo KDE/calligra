@@ -17,34 +17,41 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTRESOURCE_H
-#define KPTRESOURCE_H
+#ifndef KPTRESOURCEDIALOG_H
+#define KPTRESOURCEDIALOG_H
 
 #include <kdialogbase.h>
+#include <klineedit.h>
 
 class KPTResourceGroup;
 class KPTResource;
-class KLineEdit;
 class QTextEdit;
 class QTimeEdit;
 
 
-class KPTResourceDialog : public KDialogBase {
+class KPTResourceDialog : public KDialogBase 
+{
     Q_OBJECT
 public:
-    KPTResourceDialog(QPtrList<KPTResourceGroup> &rgList, QWidget *parent=0, const char *name=0);
+    KPTResourceDialog(QWidget *parent=0, const char *name=0);
+    
+    KPTResourceDialog(KPTResource *resource, QWidget *parent=0, const char *name=0);
 
+    QString name() { return m_namefield->text(); }
+    
 protected slots:
     void slotOk();
 
+protected:
+    void init();
+
 private:
-    QPtrList<KPTResourceGroup> &m_rgList;
-    KPTResource &m_resource;
-    KPTResource &m_resourceGroup;    
+    KPTResource *m_resource;
+    KPTResource *m_resourceGroup;    
     KLineEdit *m_namefield;
     QTimeEdit *m_availableFrom;
     QTimeEdit *m_availableUntil;
 };
 
 
-#endif // KPTRESOURCE_H
+#endif // KPTRESOURCEDIALOG_H

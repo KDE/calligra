@@ -23,12 +23,16 @@
 #include "kptduration.h"
 #include "kptnode.h"
 #include "kptterminalnode.h"
+#include "kptresource.h"
 #include "defs.h"
 
 #include <list>
 #include <algorithm>
 
 class KPTResource;
+class KPTTimeScale;
+class KPTPertCanvas;
+class QCanvas;
 
 
 #define DEBUGPERT
@@ -39,9 +43,13 @@ class KPTResource;
  */
 class KPTProject : public KPTNode {
 public:
-    KPTProject();
+    KPTProject(KPTNode *parent = 0);
     ~KPTProject();
 
+    /**
+     * Calculate the whole project
+     */
+    void calculate();
     /**
      * The expected Duration is the expected time to complete a Task, Project,
      * etc. For an individual Task, this will calculate the expected duration
@@ -52,13 +60,15 @@ public:
      * PERT/CPM. 
      */
     KPTDuration *getExpectedDuration();
-
+    
     /**
      * Instead of using the expected duration, generate a random value using
      * the Distribution of each Task. This can be used for Monte-Carlo
      * estimation of Project duration.
      */
     KPTDuration *getRandomDuration();
+
+    void setStartTime(KPTDuration startTime);
 
     /**
      * Retrive the time this node starts. This is either implied from the set
@@ -73,8 +83,8 @@ public:
 
     /**
      * Carry out PERT/CPM calculations on current project.
-     * Eventually, this will need to can specify which type of duration
-     * calculation will be used.
+     * Eventually, this will need to specify which type of duration
+     * the calculation will use.
      */
     void pert_cpm();
 
@@ -85,7 +95,21 @@ public:
     virtual void save(QDomElement &element) const;
 
     virtual bool openDialog();
+    
+    virtual void drawGanttBar(QCanvas* canvas, KPTTimeScale* ts, int y, int h);
+    virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas, int col);
+    virtual void drawPertRelations(QCanvas* canvas);
 
+    KPTDuration getEarliestStart() const { return startNode.earliestStart; }
+    KPTDuration getLatestFinish() const { return endNode.latestFinish; }
+    
+    QPtrList<KPTResourceGroup> &resourceGroups();
+    virtual void addResourceGroup(KPTResourceGroup *resource);
+    virtual void insertResourceGroup(unsigned int index, KPTResourceGroup *resource);
+    void removeResourceGroup(KPTResourceGroup *resource);
+    void removeResourceGroup(int number);
+
+  
 protected:
     /**
      * @return The start node.
@@ -129,10 +153,15 @@ protected:
     KPTTerminalNode startNode;
     KPTTerminalNode endNode;
 
-#ifdef DEBUGPERT
+    QPtrList<KPTResourceGroup> m_resourceGroups;
+   
+#ifndef NDEBUG
 public:
+    void printDebug(bool children, QCString indent);
+#ifdef DEBUGPERT
     static void pert_test();
     static void printTree(KPTNode *n, QString s);
+#endif
 #endif
 };
 #endif

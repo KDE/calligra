@@ -35,28 +35,53 @@ KPTDuration::KPTDuration(const KPTDuration &d) {
 }
 
 KPTDuration::KPTDuration(int h, int m, int s, int ms) {
-    kdDebug()<<k_funcinfo<<endl;
     zero = QDateTime(QDate(0,1,1));
-    m_theTime = QDateTime(QDate(0,1,1),QTime(h,m,s,ms));
+    m_theTime = QDateTime(QDate(0,1,1));
+    int dur = h*3600+m*60+s;
+    m_theTime = m_theTime.addSecs(dur);
+    kdDebug()<<k_funcinfo<<m_theTime.toString()<<endl;
 }
 
 KPTDuration::KPTDuration(const QTime time) {
-    kdDebug()<<k_funcinfo<<endl;
     zero = QDateTime(QDate(0,1,1));
     m_theTime = QDateTime(QDate(0,1,1),time);
 }
+
+KPTDuration::KPTDuration(const QDateTime time) {
+    zero = QDateTime(QDate(0,1,1));
+    m_theTime = time;
+}
+
+KPTDuration::KPTDuration(int seconds) {
+    zero = QDateTime(QDate(0,1,1));
+    m_theTime = QDateTime(QDate(0,1,1));
+    m_theTime = m_theTime.addSecs(seconds);
+}
+
 
 KPTDuration::~KPTDuration() {
 }
 
 void KPTDuration::add(KPTDuration time) {
-    set(m_theTime.addDays(zero.daysTo(time.m_theTime)));
+    int days = zero.daysTo(time.m_theTime);
+    set(m_theTime.addDays(days));
+    time.m_theTime = time.m_theTime.addDays(-days);
     set(m_theTime.addSecs(zero.secsTo(time.m_theTime)));
 }
 
+void KPTDuration::add(KPTDuration *time) {
+    add(*time);
+}
+
 void KPTDuration::subtract(KPTDuration time) {
-    set(m_theTime.addDays(time.m_theTime.daysTo(zero)));
+    int days = time.m_theTime.daysTo(zero);
+    set(m_theTime.addDays(days));
+    time.set(time.m_theTime.addDays(days));
     set(m_theTime.addSecs(time.m_theTime.secsTo(zero)));
+}
+
+void KPTDuration::subtract(KPTDuration *time) {
+    subtract(*time);
 }
 
 void const KPTDuration::set(KPTDuration newTime) {

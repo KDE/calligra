@@ -24,6 +24,9 @@
 #include "defs.h"
 
 class KPTResourceGroup;
+class KPTPertCanvas;
+class KPTTimeScale;
+class QCanvas;
 
 /**
  * This class is a 0-time node which is dependent on any number of other nodes. 
@@ -31,7 +34,7 @@ class KPTResourceGroup;
 class KPTMilestone : public KPTNode {
     public:
 
-        KPTMilestone();
+        KPTMilestone(KPTNode *parent = 0);
         ~KPTMilestone();
 
         // no children permitted.
@@ -77,5 +80,15 @@ class KPTMilestone : public KPTNode {
         virtual void save(QDomElement &element) const;
 
         virtual bool openDialog();
+        
+        virtual void drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h);
+        virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas, int col);
+        virtual void drawPertRelations(QCanvas* canvas);
+   
+#ifndef NDEBUG
+public:
+    void printDebug(bool children, QCString indent);
+#endif
+
 };
 #endif

@@ -17,14 +17,25 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptnode.h"
+#include "kptcanvasitem.h"
 
 #include <qptrlist.h>
+#include <qdatetime.h>
+#include <qdom.h>
+
 #include <kdebug.h>
 
-KPTNode::KPTNode() : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
+KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
+    m_parent = parent;
     m_name="";
-    m_startTime = KPTDuration();
-    m_endTime = KPTDuration();
+    m_startTime.set(KPTDuration());
+    m_endTime.set(KPTDuration());
+    earliestStart.set(KPTDuration());
+    latestFinish.set(KPTDuration());
+    m_constraint = KPTNode::ASAP;
+    m_pertItem = 0;
+	m_drawn = false;
+    m_effort = 0;
 }
 
 KPTNode::~KPTNode() {
@@ -61,20 +72,6 @@ const KPTNode &KPTNode::getChildNode(int number) const {
     return *(const_cast<QPtrList<KPTNode> &>(nodes)).at(number);
 }
 
-#ifndef NDEBUG
-void KPTNode::printDebug(bool children, QCString indent) {
-    indent += "---";
-    kdDebug() << indent << " Name: " << name() << endl;
-    if (children) {
-        QPtrListIterator<KPTNode> it(m_nodes); 
-        for ( ; it.current(); ++it ) {
-            it.current()->printDebug(true,indent);
-        }
-    }
-        
-}
-#endif
-
 KPTDuration *KPTNode::getDelay() {
     /* TODO
        Calculate the delay of this node. Use the calculated startTime and the setted startTime.
@@ -107,6 +104,15 @@ void KPTNode::addDependChildNode( KPTRelation *relation) {
 
 void KPTNode::delDependChildNode( KPTNode *node, bool remove) {
     if ( m_nodes.findRef(node) != -1 ) {
+        if(remove)
+            m_dependChildNodes.remove();
+        else
+            m_dependChildNodes.take();
+    }
+}
+
+void KPTNode::delDependChildNode( KPTRelation *rel, bool remove) {
+    if ( m_dependChildNodes.findRef(rel) != -1 ) {
         if(remove)
             m_dependChildNodes.remove();
         else
@@ -153,11 +159,45 @@ void KPTNode::delDependParentNode( KPTNode *node, bool remove) {
     }
 }
 
+void KPTNode::delDependParentNode( KPTRelation *rel, bool remove) {
+    if ( m_dependParentNodes.findRef(rel) != -1 ) {
+        if(remove)
+            m_dependParentNodes.remove();
+        else
+            m_dependParentNodes.take();
+    }
+}
+
 void KPTNode::delDependParentNode( int number, bool remove) {
     if(remove)
         m_dependParentNodes.remove(number);
     else
         m_dependParentNodes.take(number);
+}
+
+void KPTNode::addPredesessorNode( KPTRelation *relation) {
+    kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
+    m_predesessorNodes.append(relation);
+}
+
+void KPTNode::delPredesessorNode() {
+    KPTRelation *relation = m_predesessorNodes.take();
+    kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
+    delete relation;
+}
+
+KPTRelation *KPTNode::findRelation(KPTNode *node) {
+    for (int i=0; i<numDependParentNodes(); i++) {
+        KPTRelation *rel = getDependParentNode(i);
+        if (rel->parent() == node)
+            return rel;
+    }
+    for (int i=0; i<numDependChildNodes(); i++) {
+        KPTRelation *rel = getDependChildNode(i);
+        if (rel->child() == node)
+            return rel;
+    }
+    return (KPTRelation *)0;
 }
 
 void KPTNode::initialize_arcs() {
@@ -237,10 +277,71 @@ void KPTNode::set_pert_values( const KPTDuration& time,
     i.current()->set_pert_values( time, start );
 }
 
+ const KPTDuration& KPTNode::optimisticDuration(const KPTDuration &start)
+ {
+    m_duration.set(KPTDuration::zeroDuration);
+    if (m_effort)
+        calcDuration(start, m_effort->optimistic());
+    return m_duration;
+ }
+
+const KPTDuration& KPTNode::pessimisticDuration(const KPTDuration &start)
+ {
+    m_duration.set(KPTDuration::zeroDuration);
+    if (m_effort)
+        calcDuration(start, m_effort->pessimistic());
+    return m_duration;
+ }
+ const KPTDuration& KPTNode::expectedDuration(const KPTDuration &start)
+ {
+    m_duration.set(KPTDuration::zeroDuration);
+    if (m_effort)
+        calcDuration(start, m_effort->expected());
+    return m_duration;
+ }
+
+void KPTNode::calcDuration( const KPTDuration &start, const KPTDuration &effort )
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    m_duration.add(effort);
+}
+
+void KPTNode::completeLoad(KPTNode *node) {
+    kdDebug()<<k_funcinfo<<endl;
+    // Complete relations for this node
+    QPtrListIterator<KPTRelation> it(m_predesessorNodes);
+    for ( ; it.current(); ++it ) {
+        if (it.current()->completeLoad(node)) {
+            addDependParentNode(it.current()->parent(), it.current()->timingType(), it.current()->timingRelation(), it.current()->lag());
+            delPredesessorNode();
+        }
+    }
+    // Now my children
+    QPtrListIterator<KPTNode> nit(m_nodes);
+    for ( ; nit.current(); ++nit ) {
+        nit.current()->completeLoad(node);
+    }
+    
+}
+
+void KPTNode::showPopup() {
+    kdDebug()<<k_funcinfo<<endl;
+}
+
+ int KPTNode::x() { 
+    return m_pertItem->rect().left(); 
+}
+
+int KPTNode::width() {
+    return m_pertItem->rect().width(); 
+}
+
+////////////////////////////////////   KPTEffort   ////////////////////////////////////////////
+
 KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
-  m_expectedDuration = e;
-  m_pessimisticDuration = p;
-  m_optimisticDuration = o;
+  m_expectedEffort = e;
+  m_pessimisticEffort = p;
+  m_optimisticEffort = o;
 }
 
 KPTEffort::~KPTEffort() {
@@ -249,3 +350,106 @@ KPTEffort::~KPTEffort() {
 const KPTEffort KPTEffort::zeroEffort( KPTDuration::zeroDuration,
                        KPTDuration::zeroDuration,
                        KPTDuration::zeroDuration );
+
+void KPTEffort::set( KPTDuration e, KPTDuration p, KPTDuration o )
+{
+    m_expectedEffort.set(e);
+    p == KPTDuration::zeroDuration ? m_pessimisticEffort.set(e) :  m_pessimisticEffort.set(p);
+    o == KPTDuration::zeroDuration ? m_optimisticEffort.set(e) : m_optimisticEffort.set(o);
+}
+
+void KPTEffort::set( int e, int p, int o )
+{
+    m_expectedEffort.set(KPTDuration(e));
+    p < 0 ? m_pessimisticEffort.set(KPTDuration(e)) :  m_pessimisticEffort.set(KPTDuration(p));
+    o < 0 ? m_optimisticEffort.set(KPTDuration(e)) : m_optimisticEffort.set(KPTDuration(o));
+    //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.dateTime().toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEffort.dateTime().toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEffort.dateTime().toString()<<endl;
+    
+    kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.duration()<<" manseconds"<<endl;
+}
+
+bool KPTEffort::load(QDomElement &element) {
+    m_expectedEffort = KPTDuration(QDateTime::fromString(element.attribute("expected")));
+    m_optimisticEffort = KPTDuration(QDateTime::fromString(element.attribute("optimistic")));
+    m_pessimisticEffort = KPTDuration(QDateTime::fromString(element.attribute("pessimistic")));
+    return true;
+}
+
+void KPTEffort::save(QDomElement &element) const {
+    QDomElement me = element.ownerDocument().createElement("effort");
+    element.appendChild(me);
+    me.setAttribute("expected", m_expectedEffort.dateTime().toString());
+    me.setAttribute("optimistic", m_optimisticEffort.dateTime().toString());
+    me.setAttribute("pessimistic", m_pessimisticEffort.dateTime().toString());
+}
+
+// Debugging
+#ifndef NDEBUG
+void KPTNode::printDebug(bool children, QCString indent) {
+    QCString c[] = {"ASAP","ALAP","StartNotEarlier","FinishNotLater","MustStartOn"};
+    if (m_effort) m_effort->printDebug(indent);
+    QString s = "  Constraint: " + c[m_constraint];
+    switch (m_constraint)
+    {
+        case KPTNode::StartNotEarlier:
+            s += "   " + sneTime.dateTime().toString();
+            break;
+        case KPTNode::FinishNotLater:
+            s += "   " + fnlTime.dateTime().toString();
+            break;
+        case KPTNode::MustStartOn:
+            s += "   " + msoTime.dateTime().toString();
+            break;
+    }
+    kdDebug()<<indent<<s<<endl;
+    //kdDebug()<<indent<<"  Duration: "<<m_duration.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Duration: "<<m_duration.duration()<<QCString(" mansecs")<<endl;
+    kdDebug()<<indent<<"  Start time: "<<m_startTime.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  End time: " <<m_endTime.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Earliest start: "<<earliestStart.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Latest finish: " <<latestFinish.dateTime().toString()<<endl;
+    //kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
+    kdDebug()<<indent<<"  Predecessors="<<start_node()->predecessors.number<<" unvisited="<<start_node()->predecessors.unvisited<<endl;
+    kdDebug()<<indent<<"  Successors="<<start_node()->successors.number<<" unvisited="<<start_node()->successors.unvisited<<endl;
+
+                
+    QPtrListIterator<KPTRelation> pit(m_dependParentNodes);
+    kdDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
+    if (pit.count() > 0) {
+        for ( ; pit.current(); ++pit ) {
+            pit.current()->printDebug(indent);
+        }
+    }
+    
+    QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
+    kdDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
+    if (cit.count() > 0) {
+        for ( ; cit.current(); ++cit ) {
+            cit.current()->printDebug(indent);
+        }
+    }
+    
+    kdDebug()<<indent<<endl;
+    indent += "  ";
+    if (children) {
+        QPtrListIterator<KPTNode> it(m_nodes); 
+        for ( ; it.current(); ++it ) {
+            it.current()->printDebug(true,indent);
+        }
+    }
+        
+}
+#endif
+
+
+#ifndef NDEBUG
+void KPTEffort::printDebug(QCString indent) {
+    kdDebug()<<indent<<"  Effort: "<<m_expectedEffort.dateTime().toString()<<endl;
+    indent += "  ";
+    kdDebug()<<indent<<"  Expected: "<<m_expectedEffort.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Optimistic: "<<m_optimisticEffort.dateTime().toString()<<endl;
+    kdDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.dateTime().toString()<<endl;
+}
+#endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Bo Thorsen  bo@suse.de
+   Copyright (C) 2003 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,41 +16,46 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+ 
+#ifndef KPTPERTVIEW_H
+#define KPTPERTVIEW_H
 
-#ifndef KPTTASKDIALOG_H
-#define KPTTASKDIALOG_H
+#include <qsplitter.h>
 
-#include <kdialogbase.h>
+class KPTView;
+class KPTProjectList;
+class KPTTimeScale;
+class KPTGanttCanvas;
+class KPTPertCanvas;
+class KPTNodeItem;
+class KPTNode;
+class QLayout;
+class QListViewItem;
 
-class KPTTask;
-class KLineEdit;
-class QTextEdit;
-class QDateTimeEdit;
-class QSpinBox;
-class QButtonGroup;
-
-
-class KPTTaskDialog : public KDialogBase {
+ class KPTPertView : public QWidget
+{
     Q_OBJECT
-public:
-    KPTTaskDialog(KPTTask &task, QWidget *parent=0, const char *name=0);
+    
+ public:
+ 
+    KPTPertView( KPTView *view, QWidget *parent, QLayout *layout );
 
-protected slots:
-    void slotOk();
+    ~KPTPertView();
+    
+	void zoom(double zoom) {}
+	
+    void draw();
+    KPTView *mainView();
+    KPTNode *currentNode() { return m_node; }
+	
+ public slots:
+    void slotRMBPressed(KPTNode *node, const QPoint & point);
 
 private:
-    KPTTask &task;
-    KLineEdit *namefield;
-    KLineEdit *leaderfield;
-    QTextEdit *descriptionfield;
-    
-    QDateTimeEdit *sneTime, *fnlTime, *msoTime;
-    QSpinBox *effort;
-
-    QButtonGroup *constraints;
-    
-    // TODO: Duration and risk fields
+    void init(QLayout *layout);
+    KPTView *m_mainview;
+    KPTPertCanvas *m_canvasview;
+	KPTNode *m_node;
+    int m_defaultFontSize;
 };
-
-
-#endif // KPTTASKDIALOG_H
+ #endif

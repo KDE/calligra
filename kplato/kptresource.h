@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef kptresource_h
-#define kptresource_h
+#ifndef KPTRESOURCE_H
+#define KPTRESOURCE_H
 
 #include <qstring.h>
 #include "kptduration.h"
@@ -78,7 +78,13 @@ class KPTResourceGroup {
             * <p>see also @ref getRequiredResource, @ref addRequiredResource
 	        */
 	      void removeRequiredResource(int);
-	
+          
+          QPtrList<KPTResource> &resources() { return m_resources; }
+
+#ifndef NDEBUG
+        void printDebug(QString ident);
+#endif
+
     private:
         QString m_name;
         QPtrList<KPTResource> m_resources;
@@ -102,9 +108,9 @@ class KPTResource {
         ~KPTResource();
 
 
-        void setName(QString);
-        QString &name();
-
+	   void setName(QString n) {m_name=n;}
+	   const QString &name() const {return m_name;}
+	
         void setAvailableFrom(KPTDuration af) {m_availableFrom=af;}
         const KPTDuration &availableFrom() const {return m_availableFrom;}
         void setAvailableUntil(KPTDuration au) {m_availableUntil=au;}
@@ -115,6 +121,9 @@ class KPTResource {
         KPTDuration *getFirstAvailableTime(KPTDuration after = KPTDuration());
         KPTDuration *getBestAvailableTime(KPTDuration duration);
 
+#ifndef NDEBUG
+        void printDebug(QString ident);
+#endif
     private:
         QPtrList<KPTAppointment> m_appointments;
         QString m_name;

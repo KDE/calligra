@@ -19,6 +19,13 @@
 #include "kptrelation.h"
 #include "defs.h"
 
+#include "kptnode.h"
+#include "kpttimescale.h"
+#include "kptcanvasitem.h"
+
+#include <qcanvas.h>
+#include <qdom.h>
+
 #include <kdebug.h>
 
 KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag) {
@@ -46,4 +53,81 @@ void KPTRelation::setTimingType(TimingType tt) {
 void KPTRelation::setTimingRelation(TimingRelation tr) {
     m_timingRelation=tr;
 }
+
+
+bool KPTRelation::load(QDomElement &element) {
+    m_parentId = element.attribute("parent");
+    //m_timingType = element.attribute("timingtype");
+    QString tr = element.attribute("timingrelation");
+    if ( tr == "FS" )
+        m_timingRelation = FINISH_START;
+    else if ( tr == "FF" )
+        m_timingRelation = FINISH_FINISH;
+    else if ( tr == "SS" )
+        m_timingRelation = START_START;
+    else
+        m_timingRelation = FINISH_START;
+        
+    m_lag = KPTDuration(); //m_lag.set( KPTDuration(QDateTime::fromString(element.attribute("lag"))) );
+    
+    kdDebug()<<k_funcinfo<<"Child="<<m_child->name()<<" parent id="<<m_parentId<<endl;
+    return true;
+}
+
+
+void KPTRelation::save(QDomElement &element) const {
+    QDomElement me = element.ownerDocument().createElement("predesessor");
+    element.appendChild(me);
+
+    me.setAttribute("parent", m_parent->name());
+    //me.setAttribute("timingtype", m_timingType);
+    QString tr = "FS";
+    switch (m_timingRelation) {
+        case FINISH_START:
+            tr = "FS";
+            break;
+        case FINISH_FINISH:
+            tr = "FF";
+            break;
+        case START_START:
+            tr = "SS";
+            break;
+    }
+    me.setAttribute("timingrelation", tr);
+    //me.setAttribute("lag", m_lag.dateTime().toString());
+}
+
+bool KPTRelation::completeLoad(KPTNode *top) {
+    kdDebug()<<k_funcinfo<<endl;
+    if ( !m_parent ) {
+        QPtrListIterator<KPTNode> nit(top->childNodeIterator()); 
+        for ( ; nit.current(); ++nit ) {
+            if (nit.current()->name() == m_parentId) {
+                m_parent = nit.current();
+                kdDebug()<<k_funcinfo<<" found parent="<<m_parentId<<endl;
+                break;
+            }
+        }
+        if (!m_parent)
+            return false;
+    }
+    return true;
+}
+
+void KPTRelation::draw(QCanvas* canvas) {
+    kdDebug()<<k_funcinfo<<endl;
+    
+	KPTRelationCanvasItem *item = new KPTRelationCanvasItem(canvas, this);
+	item->show();
+}
+
+#ifndef NDEBUG
+void KPTRelation::printDebug(QCString indent) {
+    indent += "  ";
+    kdDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
+    kdDebug()<<indent<<"  Child: "<<m_child->name()<<endl;
+    kdDebug()<<indent<<"  Timing type: "<<m_timingType<<endl;
+    kdDebug()<<indent<<"  Relation type: "<<m_timingRelation<<endl;
+}
+#endif
 

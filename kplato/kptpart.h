@@ -56,8 +56,6 @@ public:
     virtual bool loadXML(QIODevice *, const QDomDocument &document);
     virtual QDomDocument saveXML();
 
-    void openResourceDialog();
-    
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
@@ -69,7 +67,6 @@ private:
     KPTProjectDialog *m_projectDialog;
     KoView *m_view;
     KCommandHistory *m_commandHistory;
-    QPtrList<KPTResourceGroup> m_resourceGroups;
 };
 
 #endif
