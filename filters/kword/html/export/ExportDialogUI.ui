@@ -10,8 +10,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>594</width>
-            <height>287</height>
+            <width>354</width>
+            <height>260</height>
         </rect>
     </property>
     <property name="caption">
@@ -44,28 +44,6 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>radioEncodingUTF8</cstring>
-                    </property>
-                    <property name="text">
-                        <string>UTF-&amp;8</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>radioEncodingLocal</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Local encoding</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
                 <widget class="KComboBox" row="2" column="1">
                     <property name="name">
                         <cstring>comboBoxEncoding</cstring>
@@ -91,23 +69,6 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="QRadioButton" row="2" column="0">
-                    <property name="name">
-                        <cstring>radioEncodingOther</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Other encoding:</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+O</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>2</number>
-                    </property>
-                </widget>
             </grid>
         </widget>
         <spacer row="3" column="0">
@@ -252,8 +213,6 @@
 <tabstops>
     <tabstop>radioDocType1</tabstop>
     <tabstop>radioDocType2</tabstop>
-    <tabstop>radioEncodingUTF8</tabstop>
-    <tabstop>radioEncodingLocal</tabstop>
     <tabstop>radioModeLight</tabstop>
     <tabstop>radioModeBasic</tabstop>
     <tabstop>radioModeEnhanced</tabstop>

@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kcombobox.h>
+#include <kmessagebox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
@@ -74,39 +75,27 @@ bool HtmlExportDialog::isXHtml(void) const
 
 QTextCodec* HtmlExportDialog::getCodec(void) const
 {
-    QTextCodec* codec=0;
+    const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
+    kdDebug(30503) << "Encoding: " << strCodec << endl;
 
-    if (m_dialog->radioEncodingUTF8==m_dialog->buttonGroupEncoding->selected())
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+
+    // Qt has not found a valid encoding, so try with kdelibs.
+    if ( !codec )
     {
-        kdDebug(30503) << "Encoding: UTF-8" << endl;
-        codec=QTextCodec::codecForName("UTF-8");
-    }
-    else if (m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
-    {
-        kdDebug(30503) << "Encoding: Locale" << endl;
-        codec=QTextCodec::codecForLocale();
-    }
-    else if (m_dialog->radioEncodingOther==m_dialog->buttonGroupEncoding->selected())
-    {
-        const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-        kdDebug(30503) << "Encoding: " << strCodec << endl;
-        if (strCodec.isEmpty())
-        {
-            codec=QTextCodec::codecForLocale();
-        }
-        else
-        {
-            // We do not use QTextCodec::codecForName here
-            //   because we fear subtle problems
-            codec=KGlobal::charsets()->codecForName(strCodec);
-        }
+        // We do not use QTextCodec::codecForName here
+        //   because we fear subtle problems
+        codec = KGlobal::charsets()->codecForName( strCodec );
     }
 
-    if (!codec)
+    // Still nothing?
+    if ( !codec )
     {
         // Default: UTF-8
-        kdWarning(30503) << "No codec set, assuming UTF-8" << endl;
-        codec=QTextCodec::codecForName("UTF-8");
+        kdWarning(30503) << "Cannot find encoding:" << strCodec << endl;
+        // ### TODO: what parent to use?
+        KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
+        return 0;
     }
 
     return codec;
