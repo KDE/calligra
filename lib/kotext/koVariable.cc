@@ -20,13 +20,11 @@
 #include "koVariable.h"
 #include "koVariable.moc"
 #include <koDocumentInfo.h>
-//#include <kotextparag.h>
 #include <kozoomhandler.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <qdom.h>
-#include <koUtils.h>
 #include <koDocument.h>
 #include <kdialogbase.h>
 #include <kconfig.h>
