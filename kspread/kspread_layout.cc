@@ -1079,7 +1079,7 @@ void KSpreadLayout::setComment( const QString& _comment )
 
 QString KSpreadLayout::prefix( int col, int row ) const
 {
-    if ( !hasProperty( PPrefix ) )
+    if ( !hasProperty( PPrefix ) && !hasNoFallBackProperties(PPrefix ))
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
@@ -1090,7 +1090,7 @@ QString KSpreadLayout::prefix( int col, int row ) const
 
 QString KSpreadLayout::postfix( int col, int row ) const
 {
-    if ( !hasProperty( PPostfix ) )
+    if ( !hasProperty( PPostfix ) && !hasNoFallBackProperties(PPostfix ))
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
@@ -1297,7 +1297,7 @@ int KSpreadLayout::precision( int col, int row ) const
 
 KSpreadLayout::FloatFormat KSpreadLayout::floatFormat( int col, int row ) const
 {
-    if ( !hasProperty( PFloatFormat ) )
+    if ( !hasProperty( PFloatFormat ) && !hasNoFallBackProperties(PFloatFormat ))
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
@@ -1308,7 +1308,7 @@ KSpreadLayout::FloatFormat KSpreadLayout::floatFormat( int col, int row ) const
 
 KSpreadLayout::FloatColor KSpreadLayout::floatColor( int col, int row ) const
 {
-    if ( !hasProperty( PFloatColor ) )
+    if ( !hasProperty( PFloatColor ) && !hasNoFallBackProperties(PFloatColor ))
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
@@ -1331,7 +1331,7 @@ const QColor& KSpreadLayout::bgColor( int col, int row ) const
 
 const QPen& KSpreadLayout::textPen( int col, int row ) const
 {
-    if ( !hasProperty( PTextPen ) )
+    if ( !hasProperty( PTextPen ) && !hasNoFallBackProperties(PTextPen ) )
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
@@ -1347,7 +1347,7 @@ const QColor& KSpreadLayout::textColor( int col, int row ) const
 
 const QFont& KSpreadLayout::textFont( int col, int row ) const
 {
-    if ( !hasProperty( PFont ) )
+    if ( !hasProperty( PFont ) && !hasNoFallBackProperties(PFont ))
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
@@ -1413,7 +1413,7 @@ KSpreadLayout::AlignY KSpreadLayout::alignY( int col, int row ) const
 
 double KSpreadLayout::faktor( int col, int row ) const
 {
-    if ( !hasProperty( PFaktor ) && !hasNoFallBackProperties(PBackgroundBrush ))
+    if ( !hasProperty( PFaktor ) && !hasNoFallBackProperties(PFaktor ))
     {
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
