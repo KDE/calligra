@@ -178,9 +178,23 @@ QStringList Connection::databaseNames()
 	if (!checkConnected())
 		return QStringList();
 
+	QString tmpdbName;
+	//some engines need to have opened any database before executing "create database"
+	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
+		return QStringList();
+		
 	QStringList list;
 
-	drv_getDatabasesList( list );
+	bool ret = drv_getDatabasesList( list );
+	
+	if (!tmpdbName.isEmpty()) {
+		//whatever result is - now we have to close temporary opened database:
+		if (!closeDatabase())
+			return QStringList();
+	}
+	
+	if (!ret)
+		return QStringList();
 	return list;
 }
 
@@ -212,6 +226,11 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 		return false;
 	clearError();
 
+	QString tmpdbName;
+	//some engines need to have opened any database before executing "create database"
+	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
+		return false;
+
 	if (m_driver->isFileDriver()) {
 		//for file-based db: file must exists and be accessible
 //js: moved from useDatabase():
@@ -233,7 +252,15 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 		}
 	}
 
-	return drv_databaseExists(dbName, ignoreErrors);
+	bool ret = drv_databaseExists(dbName, ignoreErrors);
+	
+	if (!tmpdbName.isEmpty()) {
+		//whatever result is - now we have to close temporary opened database:
+		if (!closeDatabase())
+			return false;
+	}
+	
+	return ret;
 }
 
 #define createDatabase_CLOSE \
@@ -292,7 +319,7 @@ bool Connection::createDatabase( const QString &dbName )
 			return false;
 	}
 
-	if (!m_driver->m_isDBOpenedAfterCreate) {
+	if (!tmpdbName.isEmpty() || !m_driver->m_isDBOpenedAfterCreate) {
 		//db need to be opened
 		if (!useDatabase( dbName )) {
 			setError(i18n("Database '%1' created but could not be opened.").arg(dbName) );

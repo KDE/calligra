@@ -413,13 +413,16 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 executing administrative sql statements like "create database" or "drop database",
 		 this method is used to use appropriate, existing database for this connection.
 		 For file-based db drivers this always return true and not sets tmpdbName
-		 to any value. For other db drivers, sets tmpdbName to db name computed 
-		 using anyAvailableDatabaseName(). If the name computed is empty, false is returned;
-		 if it is not, useDatabase() is called for it. False is returned also after 
-		 useDatabase() failure.
-		 You can call this method fro your app if you really want to perform 
+		 to any value. For other db drivers: this sets tmpdbName to db name computed 
+		 using anyAvailableDatabaseName(), and if the name computed is empty, false 
+		 is returned; if it is not empty, useDatabase() is called. 
+		 False is returned also when useDatabase() fails.
+		 You can call this method from your application's level if you really want to perform 
 		 tasks that require any used database. In such a case don't forget 
 		 to closeDatabase() if returned tmpdbName is not empty.
+		 
+		 Note: This method has nothing to do with creating or using temporary databases
+		 in such meaning that these database are not persistent
 		*/
 		bool useTemporaryDatabaseIfNeeded(QString &tmpdbName);
 		
