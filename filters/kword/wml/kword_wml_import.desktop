@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KWord WML Import Filter
+X-KDE-Export=application/x-kword
+X-KDE-Import=text/vnd.wap.wml
+X-KDE-Weight=1
+X-KDE-Library=libwmlimport
+ServiceTypes=KOfficeFilter
