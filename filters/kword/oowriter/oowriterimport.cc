@@ -1228,11 +1228,13 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
             bgColor.setNamedColor( color );
     }
 
-    // Available in the style: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color,
+
+    // TODO more refined border spec for double borders (3.11.28)
+
     // draw:textarea-vertical-align, draw:textarea-horizontal-align
-    // More generally: Anchor (not in kword), Border (3.11.27), Shadow (3.11.30), Columns
 
     // Not supported in KWord: fo:max-height  fo:max-width
+    //                         Anchor, Shadow (3.11.30), Columns
 
     //  #### horizontal-pos horizontal-rel vertical-pos vertical-rel anchor-type
     //  All the above changes the placement!
@@ -1275,6 +1277,7 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     if ( paddingBottom != 0 )
         frameElementOut.setAttribute( "bbottompt", paddingBottom );
 
+    // background color
     if ( transparent )
         frameElementOut.setAttribute( "bkStyle", 0 );
     else if ( bgColor.isValid() ) {
@@ -1284,9 +1287,55 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
         // 1) convert the Qt fill patterns to draw:hatch elements (in office:styles)
         // 2) refer to those using draw:fill="hatch" draw:fill-hatch-name="..."
         // (OASIS extension requested, 17/01/2004)
+        // Hmm, some docu talks about: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color
         frameElementOut.setAttribute( "bkRed", bgColor.red() );
         frameElementOut.setAttribute( "bkBlue", bgColor.blue() );
         frameElementOut.setAttribute( "bkGreen", bgColor.green() );
+    }
+
+
+    // borders (3.11.27)
+    // can be none/hidden, solid and double. General form is the XSL/FO "width|style|color"
+    {
+        double width;
+        int style;
+        QColor color;
+        if (OoUtils::parseBorder(m_styleStack.attribute("fo:border", "left"), &width, &style, &color)) {
+            frameElementOut.setAttribute( "lWidth", width );
+            if ( color.isValid() ) { // should be always true, but who knows
+                frameElementOut.setAttribute( "lRed", color.red() );
+                frameElementOut.setAttribute( "lBlue", color.blue() );
+                frameElementOut.setAttribute( "lGreen", color.green() );
+            }
+            frameElementOut.setAttribute( "lStyle", style );
+        }
+        if (OoUtils::parseBorder(m_styleStack.attribute("fo:border", "right"), &width, &style, &color)) {
+            frameElementOut.setAttribute( "rWidth", width );
+            if ( color.isValid() ) { // should be always true, but who knows
+                frameElementOut.setAttribute( "rRed", color.red() );
+                frameElementOut.setAttribute( "rBlue", color.blue() );
+                frameElementOut.setAttribute( "rGreen", color.green() );
+            }
+            frameElementOut.setAttribute( "rStyle", style );
+        }
+        if (OoUtils::parseBorder(m_styleStack.attribute("fo:border", "top"), &width, &style, &color)) {
+            frameElementOut.setAttribute( "tWidth", width );
+            if ( color.isValid() ) { // should be always true, but who knows
+                frameElementOut.setAttribute( "tRed", color.red() );
+                frameElementOut.setAttribute( "tBlue", color.blue() );
+                frameElementOut.setAttribute( "tGreen", color.green() );
+            }
+            frameElementOut.setAttribute( "tStyle", style );
+        }
+        if (OoUtils::parseBorder(m_styleStack.attribute("fo:border", "bottom"), &width, &style, &color)) {
+            frameElementOut.setAttribute( "bWidth", width );
+            if ( color.isValid() ) { // should be always true, but who knows
+                frameElementOut.setAttribute( "bRed", color.red() );
+                frameElementOut.setAttribute( "bBlue", color.blue() );
+                frameElementOut.setAttribute( "bGreen", color.green() );
+            }
+            frameElementOut.setAttribute( "bStyle", style );
+        }
     }
 }
 

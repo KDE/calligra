@@ -52,7 +52,15 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
 
     *width = KoUnit::parseValue(_width, 1.0);
 
-    if (_style=="double")
+    if ( _style == "dashed" )
+        *style = 1;
+    else if ( _style == "dotted" )
+        *style = 2;
+    else if ( _style == "dot-dash" ) // not in xsl/fo, but in OASIS (in other places)
+        *style = 3;
+    else if ( _style == "dot-dot-dash" ) // not in xsl/fo, but in OASIS (in other places)
+        *style = 4;
+    else if ( _style == "double" )
         *style = 5;
     else
         *style = 0;
@@ -228,13 +236,12 @@ void OoUtils::importTabulators( QDomElement& parentElement, const StyleStack& st
 
 void OoUtils::importBorders( QDomElement& parentElement, const StyleStack& styleStack )
 {
-    // First case, we set all the borders at once
-    if ( styleStack.hasAttribute( "fo:border" ) )
+    if (styleStack.hasAttribute("fo:border","left"))
     {
         double width;
         int style;
         QColor color;
-        if (OoUtils::parseBorder(styleStack.attribute("fo:border"), &width, &style, &color))
+        if (OoUtils::parseBorder(styleStack.attribute("fo:border", "left"), &width, &style, &color))
         {
             QDomElement lbElem = parentElement.ownerDocument().createElement("LEFTBORDER");
             lbElem.setAttribute("width", width);
@@ -245,100 +252,63 @@ void OoUtils::importBorders( QDomElement& parentElement, const StyleStack& style
                 lbElem.setAttribute("blue", color.blue());
             }
             parentElement.appendChild(lbElem);
-
-            QDomElement rbElem = parentElement.ownerDocument().createElement("RIGHTBORDER");
-            rbElem = lbElem.cloneNode(false).toElement();
-            parentElement.appendChild(rbElem);
-
-            QDomElement tbElem = parentElement.ownerDocument().createElement("TOPBORDER");
-            tbElem = lbElem.cloneNode(false).toElement();
-            parentElement.appendChild(tbElem);
-
-            QDomElement bbElem = parentElement.ownerDocument().createElement("BOTTOMBORDER");
-            bbElem = lbElem.cloneNode(false).toElement();
-            parentElement.appendChild(bbElem);
         }
     }
-         // Second case: we set each border independently
-         else if ( styleStack.hasAttribute( "fo:border-left" )
-                   || styleStack.hasAttribute( "fo:border-right" )
-                   || styleStack.hasAttribute( "fo:border-top" )
-                   || styleStack.hasAttribute( "fo:border-bottom" ) )
+
+    if (styleStack.hasAttribute("fo:border", "right"))
     {
-        if (styleStack.hasAttribute("fo:border-left"))
+        double width;
+        int style;
+        QColor color;
+        if (OoUtils::parseBorder(styleStack.attribute("fo:border", "right"), &width, &style, &color))
         {
-            double width;
-            int style;
-            QColor color;
-            if (OoUtils::parseBorder(styleStack.attribute("fo:border-left"), &width, &style, &color))
-            {
-                QDomElement lbElem = parentElement.ownerDocument().createElement("LEFTBORDER");
-                lbElem.setAttribute("width", width);
-                lbElem.setAttribute("style", style);
-                if (color.isValid()) {
-                    lbElem.setAttribute("red", color.red());
-                    lbElem.setAttribute("green", color.green());
-                    lbElem.setAttribute("blue", color.blue());
-                }
-                parentElement.appendChild(lbElem);
+            QDomElement lbElem = parentElement.ownerDocument().createElement("RIGHTBORDER");
+            lbElem.setAttribute("width", width);
+            lbElem.setAttribute("style", style);
+            if (color.isValid()) {
+                lbElem.setAttribute("red", color.red());
+                lbElem.setAttribute("green", color.green());
+                lbElem.setAttribute("blue", color.blue());
             }
+            parentElement.appendChild(lbElem);
         }
+    }
 
-        if (styleStack.hasAttribute("fo:border-right"))
+    if (styleStack.hasAttribute("fo:border", "top"))
+    {
+        double width;
+        int style;
+        QColor color;
+        if (OoUtils::parseBorder(styleStack.attribute("fo:border", "top"), &width, &style, &color))
         {
-            double width;
-            int style;
-            QColor color;
-            if (OoUtils::parseBorder(styleStack.attribute("fo:border-right"), &width, &style, &color))
-            {
-                QDomElement lbElem = parentElement.ownerDocument().createElement("RIGHTBORDER");
-                lbElem.setAttribute("width", width);
-                lbElem.setAttribute("style", style);
-                if (color.isValid()) {
-                    lbElem.setAttribute("red", color.red());
-                    lbElem.setAttribute("green", color.green());
-                    lbElem.setAttribute("blue", color.blue());
-                }
-                parentElement.appendChild(lbElem);
+            QDomElement lbElem = parentElement.ownerDocument().createElement("TOPBORDER");
+            lbElem.setAttribute("width", width);
+            lbElem.setAttribute("style", style);
+            if (color.isValid()) {
+                lbElem.setAttribute("red", color.red());
+                lbElem.setAttribute("green", color.green());
+                lbElem.setAttribute("blue", color.blue());
             }
+            parentElement.appendChild(lbElem);
         }
+    }
 
-        if (styleStack.hasAttribute("fo:border-top"))
+    if (styleStack.hasAttribute("fo:border", "bottom"))
+    {
+        double width;
+        int style;
+        QColor color;
+        if (OoUtils::parseBorder(styleStack.attribute("fo:border", "bottom"), &width, &style, &color))
         {
-            double width;
-            int style;
-            QColor color;
-            if (OoUtils::parseBorder(styleStack.attribute("fo:border-top"), &width, &style, &color))
-            {
-                QDomElement lbElem = parentElement.ownerDocument().createElement("TOPBORDER");
-                lbElem.setAttribute("width", width);
-                lbElem.setAttribute("style", style);
-                if (color.isValid()) {
-                    lbElem.setAttribute("red", color.red());
-                    lbElem.setAttribute("green", color.green());
-                    lbElem.setAttribute("blue", color.blue());
-                }
-                parentElement.appendChild(lbElem);
+            QDomElement lbElem = parentElement.ownerDocument().createElement("BOTTOMBORDER");
+            lbElem.setAttribute("width", width);
+            lbElem.setAttribute("style", style);
+            if (color.isValid()) {
+                lbElem.setAttribute("red", color.red());
+                lbElem.setAttribute("green", color.green());
+                lbElem.setAttribute("blue", color.blue());
             }
-        }
-
-        if (styleStack.hasAttribute("fo:border-bottom"))
-        {
-            double width;
-            int style;
-            QColor color;
-            if (OoUtils::parseBorder(styleStack.attribute("fo:border-bottom"), &width, &style, &color))
-            {
-                QDomElement lbElem = parentElement.ownerDocument().createElement("BOTTOMBORDER");
-                lbElem.setAttribute("width", width);
-                lbElem.setAttribute("style", style);
-                if (color.isValid()) {
-                    lbElem.setAttribute("red", color.red());
-                    lbElem.setAttribute("green", color.green());
-                    lbElem.setAttribute("blue", color.blue());
-                }
-                parentElement.appendChild(lbElem);
-            }
+            parentElement.appendChild(lbElem);
         }
     }
 }
