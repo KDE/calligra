@@ -599,7 +599,7 @@ KoTextFormat* KoParagCounter::counterFormat( const KoTextParag *paragraph )
     KoTextFormat* refFormat = paragraph->at( 0 )->format();
     KoTextFormat format( *refFormat );
     format.setVAlign( KoTextFormat::AlignNormal );
-    return refFormat->parent()->format( &format );
+    return paragraph->textDocument()->formatCollection()->format( &format );
     /*paragraph->paragFormat()*/
 }
 
