@@ -29,6 +29,8 @@ Boston, MA 02111-1307, USA.
 #include <klineedit.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
+#include <kiconloader.h>
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbinterfacemanager.h"
@@ -122,9 +124,13 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 	}
 
 	QStringList databases = db->databases();
+	QPixmap &db_pix = kapp->iconLoader()->loadIcon("db", KIcon::Small);
 	for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
 	{
-		new KListViewItem(m_databases, (*it));
+		if (!db->isSystemDatabase(*it)) {
+			KListViewItem *item = new KListViewItem(m_databases, (*it));
+			item->setPixmap(0, db_pix);
+		}
 	}
 
 }
