@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <assert.h>
 #include <kdebug.h>
-#include "koVariable.h"
+#include "kovariable.h"
 
 //#define DEBUG_PAINT
 

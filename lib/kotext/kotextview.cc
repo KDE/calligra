@@ -30,7 +30,7 @@
 #include <kdatatool.h>
 #include <krun.h>
 #include <kmessagebox.h>
-#include <koVariable.h>
+#include <kovariable.h>
 #include <kcommand.h>
 #include "KoTextViewIface.h"
 #include <kostyle.h>

@@ -33,7 +33,7 @@
 #include <qdom.h>
 #include <kglobal.h>
 #include <koDocument.h>
-#include "koVariable.h"
+#include "kovariable.h"
 #include "koparagcounter.h"
 #include <kcommand.h>
 //#include <kotextformat.h>

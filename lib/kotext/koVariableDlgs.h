@@ -20,7 +20,7 @@
 #ifndef KOVARIABLEDLGS_H
 #define KOVARIABLEDLGS_H
 
-#include "koVariable.h"
+#include "kovariable.h"
 
 #include <kdialogbase.h>
 #include <qptrlist.h>

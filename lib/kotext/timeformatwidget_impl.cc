@@ -11,7 +11,7 @@
 #include <klocale.h>
 #include <qlineedit.h>
 #include <knuminput.h>
-#include <koVariable.h>
+#include <kovariable.h>
 
 /*
  *  Constructs a TimeFormatWidget which is a child of 'parent', with the

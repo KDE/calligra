@@ -4,7 +4,7 @@
 /**
  * KoTextCustomItem is the base class for custom items (i.e. special chars)
  * Custom items include:
- * - variables ( KoVariable, koVariable.h )
+ * - variables ( KoVariable, kovariable.h )
  * - in kword: inline images ( KWTextImage, kwtextimage.h ) (to be removed)
  * - in kword: anchors, i.e. floating frames ( KWAnchor, kwanchor.h )
  */

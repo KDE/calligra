@@ -23,7 +23,7 @@
 #include <dcopclient.h>
 #include <kdebug.h>
 #include "koborder.h"
-#include <koVariable.h>
+#include <kovariable.h>
 #include <kcommand.h>
 
 

@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koVariable.h"
+#include "kovariable.h"
 #include "koVariable.moc"
 #include <koDocumentInfo.h>
 #include <kozoomhandler.h>
