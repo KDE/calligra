@@ -288,10 +288,10 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   // <spreadsheet>
   QDomElement spread = doc.documentElement();
 
-  if ( spread.attribute( "mime" ) != "application/x-kspread" )
+  if ( spread.attribute( "mime" ) != "application/x-kspread" && spread.attribute( "mime" ) != "application/vnd.kde.kspread" )
   {
     m_bLoading = false;
-    setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kspread, got %1" ).arg( spread.attribute("mime") ) );
+    setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" ).arg( spread.attribute("mime") ) );
     return false;
   }
 
