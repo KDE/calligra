@@ -2847,21 +2847,22 @@ void KWordView::printDebug() {
     kdDebug() << "Legend: types 0=base, 1=txt, 2=pic, 3=part, 4=formula." <<endl;
     kdDebug() << "        info  0=body, headers: 1=first, 2=odd, 3=even footers: 4=first, 5=odd, 6=even, 7=footnote" <<endl;
     kdDebug() << "  newFrameBh  0=Reconnect, 1=NoFollowup, 2=Copy" <<endl;
-    kdDebug() << "Framesets: " << doc->getNumFrameSets() <<endl;
+    kdDebug() << "# Framesets: " << doc->getNumFrameSets() <<endl;
     for (unsigned int iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {
-        kdDebug() << "Frameset " << iFrameset << ": " <<
-            doc->getFrameSet(iFrameset)->getName() << " (" << doc->getFrameSet(iFrameset) << ")" <<endl;
-        kdDebug() << "Frameset has type:" << doc->getFrameSet(iFrameset)->getFrameType() << endl;
-        kdDebug() << "Frameset has Info:" << doc->getFrameSet(iFrameset)->getFrameInfo() << endl;
+        kdDebug() << "Frameset " << iFrameset << ": '" << 
+            doc->getFrameSet(iFrameset)->getName() << "' (" << doc->getFrameSet(iFrameset) << ")" <<endl;
+        kdDebug() << " |  Type:" << doc->getFrameSet(iFrameset)->getFrameType() << endl;
+        kdDebug() << " |  Info:" << doc->getFrameSet(iFrameset)->getFrameInfo() << endl;
         if(doc->getFrameSet(iFrameset)->getGroupManager())
-            kdDebug() << "Frameset has groupmanager:" << doc->getFrameSet(iFrameset)->getGroupManager() << endl;
-        kdDebug() << "Frameset has " << doc->getFrameSet(iFrameset)->getNumFrames() << " frames" << endl;
+            kdDebug() << " |  Groupmanager:" << doc->getFrameSet(iFrameset)->getGroupManager() << endl;
         for ( unsigned int j = 0; j < doc->getFrameSet(iFrameset)->getNumFrames(); j++ ) {
-                kdDebug() << " Frame " << j << " has NewFrameBehaviour: "<< doc->getFrameSet(iFrameset)->getFrame(j)->getNewFrameBehaviour() << endl;
+            kdDebug() << " +-- Frame " << j << " of "<< doc->getFrameSet(iFrameset)->getNumFrames() <<  endl;
+                kdDebug() << "     NewFrameBehaviour: "<< doc->getFrameSet(iFrameset)->getFrame(j)->getNewFrameBehaviour() << endl;
+            kdDebug() << "     SheetSide "<< doc->getFrameSet(iFrameset)->getFrame(j)->getSheetSide() << endl;
             if(doc->getFrameSet(iFrameset)->getFrame( j )->isSelected())
-                kdDebug() << " Frame " << j << " on page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << " *" << endl;
-            else
-                kdDebug() << " Frame " << j << " on page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << endl;
+                kdDebug() << " *   Page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << endl;
+            else 
+                kdDebug() << "     Page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << endl;
         }
     }
 }
