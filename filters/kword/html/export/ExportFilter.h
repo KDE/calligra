@@ -57,9 +57,11 @@ private:
     QString escapeCssIdentifier(const QString& strText) const;
     QString textFormatToCss(const TextFormatting& formatData) const;
     QString layoutToCss(const LayoutData& layout) const;
-    void ProcessParagraphData ( const QString &paraText,
-     const ValueListFormatData &paraFormatDataList, QString &outputText);
+    void ProcessParagraphData ( const QString& strTag, const QString &paraText,
+     const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
     QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
+    QString getFormatTextParagraph(const QString& strText, const FormatData& format);
+    bool makeTable(const FrameAnchor& anchor);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;

@@ -131,8 +131,7 @@ QString HtmlWorker::textFormatToCss(const TextFormatting& formatData) const
     strElement+="; ";
 
     const int size=formatData.fontSize;
-    if ((size>0)
-        && (size < 32767)) // PROVISORY/FIXME: we have a font size problem somewhere in processing styles
+    if (size>0)
     {
         // We use absolute font sizes.
         strElement+="font-size: ";
@@ -168,14 +167,125 @@ QString HtmlWorker::textFormatToCss(const TextFormatting& formatData) const
     {
         strElement+="none";
     }
-    strElement+="; ";
+    // As this is the last property, do not put a semi-colon
+    //strElement+="; ";
+
     return strElement;
 }
 
+bool HtmlWorker::makeTable(const FrameAnchor& anchor)
+{
+    *m_streamOut << "<table>\n";
+    *m_streamOut << "<tbody>\n";
+
+    QValueList<TableCell>::ConstIterator itCell;
+
+    int rowCurrent=0;
+    *m_streamOut << "<tr>\n";
 
 
-void HtmlWorker::ProcessParagraphData (const QString &paraText,
-    const ValueListFormatData &paraFormatDataList, QString &outputText)
+    for (itCell=anchor.table.cellList.begin();
+        itCell!=anchor.table.cellList.end(); itCell++)
+    {
+        // TODO: rowspan, colspan
+        if (rowCurrent!=(*itCell).row)
+        {
+            rowCurrent=(*itCell).row;
+            *m_streamOut << "</tr>\n<tr>\n";
+        }
+
+        *m_streamOut << "<td>";
+
+        QValueList<ParaData>::ConstIterator itPara;
+        for (itPara=(*itCell).paraList->begin(); itPara!=(*itCell).paraList->end(); itPara++)
+        {
+            // For now, just show the text. (Not sure if we can do anything else at all in HTML!)
+            *m_streamOut << escapeHtmlText((*itPara).text);
+        }
+
+        *m_streamOut << "</td>";
+    }
+
+    *m_streamOut << "</tr>\n";
+    *m_streamOut << "</tbody>\n";
+    *m_streamOut << "</table>\n";
+}
+
+QString HtmlWorker::getFormatTextParagraph(const QString& strText, const FormatData& format)
+{
+    QString outputText;
+    if (format.text.missing)
+    {
+        //Format is not issued from KWord. Therefore is only the layout
+        // So it is only the text
+        if (strText==" ")
+        {//Just a space as text. Therefore we must use a non-breaking space.
+            outputText += "&nbsp;";
+            // FIXME: only needed for <p>&nbsp;</p>, but not for </span> <span>
+        }
+        else
+        {
+            //Code all possible predefined HTML entities
+            outputText += escapeHtmlText(strText);
+        }
+    }
+    else
+    {
+        // TODO: first and last characters of partialText should not be a space (white space problems!)
+        // TODO: replace multiples spaces in non-breaking spaces!
+        // Opening elements
+        outputText+="<span style=\"";
+
+        outputText+=textFormatToCss(format.text);
+
+        outputText+="\">"; // close span opening tag
+
+        if ( 1==format.text.verticalAlignment )
+        {
+            outputText+="<sub>"; //Subscript
+        }
+        if ( 2==format.text.verticalAlignment )
+        {
+            outputText+="<sup>"; //Superscript
+        }
+        if (!format.text.linkName.isEmpty())
+        {
+            outputText+="<a href=\"";
+            outputText+=escapeHtmlText(format.text.linkReference);
+            outputText+="\">";
+        }
+
+        // The text
+        if (strText==" ")
+        {//Just a space as text. Therefore we must use a non-breaking space.
+            outputText += "&nbsp;";
+        }
+        else
+        {
+            //Code all possible predefined HTML entities
+            outputText += escapeHtmlText(strText);
+        }
+
+        // Closing elements
+        if (!format.text.linkName.isEmpty())
+        {
+            outputText+="</a>";
+        }
+        if ( 2==format.text.verticalAlignment )
+        {
+            outputText+="</sup>"; //Superscript
+        }
+        if ( 1==format.text.verticalAlignment )
+        {
+            outputText+="</sub>"; //Subscript
+        }
+        outputText+="</span>";
+    }
+    return outputText;
+}
+
+void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &paraText,
+    const LayoutData& layout, const ValueListFormatData &paraFormatDataList)
 {
     if (! paraText.isEmpty() )
     {
@@ -188,74 +298,46 @@ void HtmlWorker::ProcessParagraphData (const QString &paraText,
               paraFormatDataIt != paraFormatDataList.end ();
               paraFormatDataIt++ )
         {
-            //Retrieve text
-            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-
-            if ((*paraFormatDataIt).text.missing)
-            {   //Format is not issued from KWord. Therefore is only the layout
-                // So it is only the text
-                if (partialText==" ")
-                {//Just a space as text. Therefore we must use a non-breaking space.
-                    outputText += "&nbsp;";
-                    // FIXME: only needed for <p>&nbsp;</p>, but not for </span> <span>
-                }
-                else
+            if (1==(*paraFormatDataIt).id)
+            {
+                //Retrieve text
+                partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+                *m_streamOut << getFormatTextParagraph(partialText,*paraFormatDataIt);
+            }
+            else if (6==(*paraFormatDataIt).id)
+            {
+                // We have an image or a table
+                // But first, we have a problem, as we must close the paragraph
+                //     like in layout (very annoying (TODO: common code))
+                if ( 2==layout.formatData.text.verticalAlignment )
                 {
-                    //Code all possible predefined HTML entities
-                    outputText += escapeHtmlText(partialText);
+                    *m_streamOut << "</sup>"; //Superscript
                 }
-                continue; // And back to the loop
-            }
+                if ( 1==layout.formatData.text.verticalAlignment )
+                {
+                    *m_streamOut << "</sub>"; //Subscript
+                }
+                *m_streamOut << "</" << strTag << ">";
 
-            // TODO: first and last characters of partialText should not be a space (white space problems!)
-            // TODO: replace multiples spaces in non-breaking spaces!
-            // Opening elements
-            outputText+="<span style=\"";
+                // TODO: everything!
+                if (6==(*paraFormatDataIt).frameAnchor.type)
+                {
+                    makeTable((*paraFormatDataIt).frameAnchor);
+                }
 
-            outputText+=textFormatToCss((*paraFormatDataIt).text);
-
-            outputText+="\">"; // close span opening tag
-
-            if ( 1==(*paraFormatDataIt).text.verticalAlignment )
-            {
-                outputText+="<sub>"; //Subscript
+                // And re-open everything like in layout (very annoying (TODO: common code))
+                *m_streamOut << "<" << strTag;
+                *m_streamOut << " class=\"" << escapeCssIdentifier(layout.styleName);
+                *m_streamOut << "\" style=\"" << layoutToCss(layout) << "\">";
+                if ( 1==layout.formatData.text.verticalAlignment )
+                {
+                    *m_streamOut << "<sub>"; //Subscript
+                }
+                if ( 2==layout.formatData.text.verticalAlignment )
+                {
+                    *m_streamOut << "<sup>"; //Superscript
+                }
             }
-            if ( 2==(*paraFormatDataIt).text.verticalAlignment )
-            {
-                outputText+="<sup>"; //Superscript
-            }
-            if (!(*paraFormatDataIt).text.linkName.isEmpty())
-            {
-                outputText+="<a href=\"";
-                outputText+=escapeHtmlText((*paraFormatDataIt).text.linkReference);
-                outputText+="\">";
-            }
-
-            // The text
-            if (outputText==" ")
-            {//Just a space as text. Therefore we must use a non-breaking space.
-                outputText += "&nbsp;";
-            }
-            else
-            {
-                //Code all possible predefined HTML entities
-                outputText += escapeHtmlText(partialText);
-            }
-
-            // Closing elements
-            if (!(*paraFormatDataIt).text.linkName.isEmpty())
-            {
-                outputText+="</a>";
-            }
-            if ( 2==(*paraFormatDataIt).text.verticalAlignment )
-            {
-                outputText+="</sup>"; //Superscript
-            }
-            if ( 1==(*paraFormatDataIt).text.verticalAlignment )
-            {
-                outputText+="</sub>"; //Subscript
-            }
-            outputText+="</span>";
         }
     }
 }
@@ -339,32 +421,63 @@ QString HtmlWorker::getStartOfListOpeningTag(const CounterData::Style typeList, 
 
 QString HtmlWorker::layoutToCss(const LayoutData& layout) const
 {
-    QString strElement; // TODO: rename this variable
-    
+    QString strLayout;
+
     // We do not set "left" explicitly, since KWord cannot do bi-di
+    //  (FIXME/TODO: H'm, that is no more true!)
     if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
     {
-        strElement+=QString("text-align:%1;").arg(layout.alignment);
+        strLayout+=QString("text-align:%1; ").arg(layout.alignment);
     }
+
+    // FIXME/TODO: H'm, why is 0.0 not a valid value?
 
     if ( layout.indentLeft!=0.0 )
     {
-        strElement+=QString("margin-left:%1pt;").arg(layout.indentLeft);
+        strLayout+=QString("margin-left:%1pt; ").arg(layout.indentLeft);
     }
 
     if ( layout.indentRight!=0.0 )
     {
-        strElement+=QString("margin-right:%1pt;").arg(layout.indentRight);
+        strLayout+=QString("margin-right:%1pt; ").arg(layout.indentRight);
     }
 
     if ( layout.indentFirst!=0.0 )
     {
-        strElement+=QString("text-indent:%1pt;").arg(layout.indentFirst);
+        strLayout+=QString("text-indent:%1pt; ").arg(layout.indentFirst);
     }
 
-    strElement+=textFormatToCss(layout.formatData.text);
+    if( layout.marginBottom!=0.0)
+    {
+        strLayout += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
+    }
+    if( layout.marginTop!=0.0  )
+    {
+        strLayout += QString("margin-top:%1pt; ").arg(layout.marginTop);
+    }
 
-    return strElement;
+    if ( !layout.lineSpacingType )
+    {
+        // We have a custom line spacing (in points)
+        strLayout += QString("line-height:%1pt; ").arg(layout.lineSpacing);
+    }
+    else if ( 15==layout.lineSpacingType  )
+    {
+        strLayout += "line-height:1.5; "; // One-and-half
+    }
+    else if ( 20==layout.lineSpacingType  )
+    {
+        strLayout += "line-height:2.0; "; // Two
+    }
+    else if ( layout.lineSpacingType!=10  )
+    {
+        kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+    }
+
+    // This must remain last, as the last property does not have a semi-colon
+    strLayout+=textFormatToCss(layout.formatData.text);
+
+    return strLayout;
 }
 
 bool HtmlWorker::doFullParagraph(const QString& paraText,
@@ -408,14 +521,14 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
             *m_streamOut << getStartOfListOpeningTag(layout.counter.style,m_orderedList);
             m_typeList=layout.counter.style;
         }
-        // TODO: with Cascaded Style Sheet, we could add the exact counter type we want
+        // TODO: with Cascaded Style Sheet, we could add the exact counter type that we want
         strTag="li";
     }
     else
     {
         if (m_inList)
         {
-            // The previous paragraphs were in a list, so we have to close it
+            // The previous paragraphs were in a list, so we have to close the list
             if (m_orderedList)
             {
                 *m_streamOut << "</ol>\n";
@@ -451,9 +564,7 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
         *m_streamOut << "<sup>"; //Superscript
     }
 
-    QString strText;
-    ProcessParagraphData(strParaText, paraFormatDataList, strText);
-    *m_streamOut << strText;
+    ProcessParagraphData(strTag, strParaText, layout, paraFormatDataList);
 
     if ( 2==layout.formatData.text.verticalAlignment )
     {
@@ -662,10 +773,11 @@ bool HtmlWorker::doOpenStyles(void)
     *m_streamOut << "<style type=\"text/css\">\n";
     if (!isXML())
     {
-        // Put the style under comments to increase the compatibility with old browsers
+        // Put the style under comment to increase the compatibility with old browsers
         // However in XHTML 1.0, you cannot put the style definition into HTML comments
         *m_streamOut << "<!--\n";
     }
+    // TODO: does KWord gives a paper colour?
     *m_streamOut << "BODY\n{\n background-color: #FFFFFF\n}\n";
 
     return true;
@@ -690,6 +802,8 @@ bool HtmlWorker::doCloseStyles(void)
 {
     if (!isXML())
     {
+        // Put the style under comment to increase the compatibility with old browsers
+        // However in XHTML 1.0, you cannot put the style definition into HTML comments
         *m_streamOut << "-->\n";
     }
     *m_streamOut << "</style>\n";
