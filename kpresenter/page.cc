@@ -195,20 +195,30 @@ void Page::paintEvent( QPaintEvent* paintEvent )
 /*======================= draw background ========================*/
 void Page::drawBackground( QPainter *painter, QRect rect )
 {
+    QRegion grayRegion( rect );
     QListIterator<KPBackGround> it(*backgroundList());
     for ( int i = 0 ; it.current(); ++it, ++i ) {
-	if ( ( rect.intersects( getPageRect( i, _presFakt ) ) && editMode ) ||
-	     ( !editMode && static_cast<int>( currPresPage ) == i + 1 ) ) {
+	if ( editMode )
+        {
+            if ( !ignoreSkip && painter->device()->devType() != QInternal::Printer && i != (int)view->getCurrPgNum() - 1 )
+            {
+                //kdDebug() << "Page::drawBackground skipping drawing" << endl;
+                continue;
+            }
             //kdDebug() << "Page::drawBackground drawing bg for page " << i+1 << " editMode=" << editMode << endl;
-	    if ( editMode ) {
-		if ( !ignoreSkip && painter->device()->devType() != QInternal::Printer && i != (int)view->getCurrPgNum() - 1 )
-                {
-                    //kdDebug() << "Page::drawBackground skipping drawing" << endl;
-		    continue;
-                }
-		it.current()->draw( painter, getPageRect( i, _presFakt ).topLeft(), editMode );
-	    } else {
-                QRect pgRect = getPageRect( i, _presFakt, false );
+            QRect pageRect = getPageRect( i, _presFakt );
+            if ( rect.intersects( pageRect ) )
+                it.current()->draw( painter, pageRect.topLeft(), true );
+            // Include the border now
+            pageRect.rLeft() -= 1;
+            pageRect.rTop() -= 1;
+            pageRect.rRight() += 1;
+            pageRect.rBottom() += 1;
+            grayRegion -= pageRect;
+        }
+        else if ( !editMode && static_cast<int>( currPresPage ) == i + 1 )
+        {
+            QRect pgRect = getPageRect( i, _presFakt, false );
                 /*kdDebug() << "Page::drawBackground pgRect: " << pgRect.x() << "," << pgRect.y()
                           << " " << pgRect.width() << "x" << pgRect.height() << endl;
 
@@ -218,14 +228,39 @@ void Page::drawBackground( QPainter *painter, QRect rect )
                     view->kPresenterDoc()->getTopBorder() * _presFakt
                           << endl;
                 */
-		it.current()->draw( painter, QPoint( pgRect.x() +
-						     qRound(view->kPresenterDoc()->getLeftBorder() * _presFakt),
-						     pgRect.y() +
-						     qRound(view->kPresenterDoc()->getTopBorder() * _presFakt) ),
-				    editMode );
-	    }
+            it.current()->draw( painter, QPoint( pgRect.x() +
+                                                 qRound(view->kPresenterDoc()->getLeftBorder() * _presFakt),
+                                                 pgRect.y() +
+                                                 qRound(view->kPresenterDoc()->getTopBorder() * _presFakt) ),
+                                false );
 	}
     }
+
+    // In edit mode we also want to draw the gray area out of the pages
+    if ( editMode && !grayRegion.isEmpty() )
+    {
+        eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
+    }
+}
+
+// 100% stolen from KWord
+void Page::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush )
+{
+    painter->save();
+    // Translate emptySpaceRegion in device coordinates
+    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
+    QRegion devReg;
+    QArray<QRect>rs = emptySpaceRegion.rects();
+    rs.detach();
+    for ( uint i = 0 ; i < rs.size() ; ++i )
+        rs[i] = painter->xForm( rs[i] );
+    devReg.setRects( rs.data(), rs.size() );
+    painter->setClipRegion( devReg );
+    painter->setPen( Qt::NoPen );
+
+    //kdDebug() << "KWDocument::eraseEmptySpace emptySpaceRegion: " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
+    painter->fillRect( emptySpaceRegion.boundingRect(), brush );
+    painter->restore();
 }
 
 /*========================= draw objects =========================*/

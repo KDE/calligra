@@ -170,6 +170,7 @@ protected:
     void dragLeaveEvent( QDragLeaveEvent *e );
     void dragMoveEvent( QDragMoveEvent *e );
     void dropEvent( QDropEvent *e );
+    void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush );
 
     // setup popupmenus
     void setupMenus();

@@ -22,6 +22,7 @@
 #include <kpbackground.h>
 #include <kpresenter_doc.h>
 #include <qwmf.h>
+#include <qapplication.h>
 #include <kpgradientcollection.h>
 #include <kptextobject.h>
 
@@ -481,11 +482,8 @@ void KPBackGround::drawBackClip( QPainter *_painter )
 /*================================================================*/
 void KPBackGround::drawBorders( QPainter *_painter )
 {
-    QPen pen( Qt::red, 1 );
-    QBrush brush( Qt::NoBrush );
-
-    _painter->setPen( pen );
-    _painter->setBrush( brush );
+    _painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
+    _painter->setBrush( Qt::NoBrush );
     _painter->drawRect( 0, 0, ext.width() + 1, ext.height() + 1 );
 }
 
