@@ -1,3 +1,11 @@
+Sun May 31 03:11:57 1998  Torben Weis  <weis@localhost>
+
+	* kspread_table.cc (insertChart): Support for KChart added
+
+	* kspread_view.h (View_skel): Improved Marker painting
+
+	* kspread_table.cc (saveCellRect): Added cut/copy/paste
+
 Sun May 24 13:22:11 1998  Torben Weis  <weis@localhost>
 
 	* kspread_view.cc (slotScrollHorz): Fixed ugly marker

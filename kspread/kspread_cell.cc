@@ -1653,18 +1653,18 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
   return true;
 }
 
-bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs )
+bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _xshift, int _yshift )
 {
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end(); it++ )
   {
     if ( (*it).m_strName == "row" )
     {
-      m_iRow = atoi( (*it).m_strValue.c_str() );
+      m_iRow = atoi( (*it).m_strValue.c_str() ) + _yshift;
     }
     else if ( (*it).m_strName == "column" )
     {
-      m_iColumn = atoi( (*it).m_strValue.c_str() );
+      m_iColumn = atoi( (*it).m_strValue.c_str() ) + _xshift;
     }
     else
       cerr << "Unknown attrib 'CELL:" << (*it).m_strName << "'" << endl;

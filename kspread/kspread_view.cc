@@ -68,36 +68,6 @@ void KSpreadView::createGUI()
   m_vToolBarFactory = m_vPartShell->toolBarFactory();
   if ( !CORBA::is_nil( m_vToolBarFactory ) )
   {
-    /* m_rToolBarFile = m_vToolBarFactory->createToolBar( this, CORBA::string_dup( "File" ) );
-    m_rToolBarFile->setFileToolBar( true );
-
-    QString tmp = kapp->kde_toolbardir().copy();
-    tmp += "/fileopen.xpm";
-    QString pix = loadPixmap( tmp );
-    m_idButtonFile_Open = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( "Open" ) );
-  
-    tmp = kapp->kde_toolbardir().copy();
-    tmp += "/filefloppy.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFile_Save = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( "Save" ) );
-
-    tmp = kapp->kde_toolbardir().copy();
-    tmp += "/fileprint.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFile_Print = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( "Print" ) );
-  
-    m_rToolBarFile->insertSeparator();
-
-    tmp = kapp->kde_toolbardir().copy();
-    tmp += "/viewmag-.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFile_ZoomOut = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( "Zoom Out" ) );
-
-    tmp = kapp->kde_toolbardir().copy();
-    tmp += "/viewmag+.xpm";
-    pix = loadPixmap( tmp );
-    m_idButtonFile_ZoomIn = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( "Zoom In" ) );
-    */
     m_rToolBarEdit = m_vToolBarFactory->createToolBar( this, CORBA::string_dup( "Edit" ) );
 
     QString tmp = kapp->kde_toolbardir().copy();
@@ -237,7 +207,7 @@ void KSpreadView::createGUI()
     tmp += "/kspread/pics/chart.xpm";
     pix = loadPixmap( tmp );
     m_idButtonLayout_Chart = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), CORBA::string_dup( i18n( "Insert Chart" ) ),
-							     this, "insertChart" );  
+							     this, "insertChart" );
   }
   
   // Vert. Scroll Bar
@@ -351,20 +321,6 @@ void KSpreadView::createGUI()
 
     m_idMenuEdit_Layout = m_rMenuBar->insertItem( "Paper &Layout", m_idMenuEdit, this, CORBA::string_dup( "paperLayoutDlg" ) );
 
-  /* insertMenu = new QPopupMenu;
-     CHECK_PTR( insertMenu );
-     QList<KPartEntry>& list = xclPart->shell()->availableParts();
-     KPartEntry *e;
-	for ( e = list.first(); e != 0L; e = list.next() )
-	    if ( !e->isSeamless() )
-	    {
-		lstToolbarParts.append( e );
-		insertMenu->insertItem( e->partName() );
-	    }
-	
-	connect( insertMenu, SIGNAL( activated( int ) ), this, SLOT( slotInsertPart( int ) ) );
-	*/
-    
     // View
     m_idMenuView = m_rMenuBar->insertMenu( CORBA::string_dup( i18n( "&View" ) ) );
 

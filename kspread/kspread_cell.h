@@ -42,7 +42,8 @@ public:
     ~KSpreadCell();
 
     virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0 );
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual bool load( KOMLParser& _parser, vector<KOMLAttrib>& _attrib ) { return load( _parser, _attrib, 0, 0 ); }
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift );
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).

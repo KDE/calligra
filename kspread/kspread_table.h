@@ -37,7 +37,7 @@ class QPainter;
 #include "kspread_cell.h"
 #include "kspread_dlg_layout.h"
 
-#include "../kchart/chart.h"
+#include <chart.h>
 
 /********************************************************************
  *
@@ -368,10 +368,9 @@ public:
     void insertRowLayout( RowLayout *_l );
     
     /**
-     * This function is a convenience function. It takes a @ref QByteArray as
-     * source instead of a @ref KorbSession.
+     * @see #paste
      */
-    void loadCells( QByteArray &_array, int _insert_x, int _insert_y );
+    bool loadSelection( istream& _in, int _xshift, int _yshift );
     
     /**
      * Deletes all cells in the given rectangle.
@@ -434,7 +433,9 @@ protected:
      * @see #autofill
      */
     void fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList, QList<AutoFillSequence>& _seqList );
-    
+
+    bool saveCellRect( ostream&, const QRect& );
+  
     QIntDict<KSpreadCell> m_dctCells;
     QIntDict<RowLayout> m_dctRows;
     QIntDict<ColumnLayout> m_dctColumns;

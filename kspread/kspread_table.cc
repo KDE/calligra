@@ -14,6 +14,7 @@
 #include <qstack.h>
 #include <qbuffer.h>
 #include <qmsgbox.h>
+#include <qclipbrd.h>
 
 #include "kspread_table.h"
 #include "kspread_view.h"
@@ -25,6 +26,11 @@
 #include <koStream.h>
 
 #include <komlWriter.h>
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <torben.h>
+
+#include <strstream.h>
 
 #include <kurl.h>
 
@@ -1099,34 +1105,37 @@ void KSpreadTable::deleteColumn( int _column )
 
 void KSpreadTable::copySelection( const QPoint &_marker )
 {   
-  /*    QBuffer device( m_pDoc->shell()->clipboard() );
-    device.open( IO_WriteOnly );
+  QRect rct;
+  
+  // No selection ? => copy active cell
+  if ( m_rctSelection.left() == 0 )
+    rct.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+  else if ( m_rctSelection.right() == 0x7fff )
+  {
+    QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supproted" );
+    return;
+  }
+  else if ( m_rctSelection.bottom() == 0x7fff )
+  {
+    QMessageBox::critical( (QWidget*)0L, "KSpread Error", "Not supproted" );
+    return;
+  }
+  else
+    rct = selection();
 
-    KorbSession *korb = new KorbSession( &device );
-    OBJECT o_root = 0;
-    
-    // No selection ? => copy active cell
-    if ( m_rctSelection.left() == 0 )
-    {
-	o_root = saveCells( korb, markerColumn, markerRow, markerColumn, markerRow );
-    }
-    else if ( m_rctSelection.right() == 0x7fff )
-    {
-    }
-    else if ( m_rctSelection.bottom() == 0x7fff )
-    {
-    }
-    else
-    {
-	o_root = saveCells( korb, m_rctSelection.left(), m_rctSelection.top(), m_rctSelection.right(), m_rctSelection.bottom() );
-    }
+  string data;
 
-    if ( o_root != 0 )
-	korb->setRootCell( o_root );
-
-    korb->release();
-    delete korb;
-    device.close(); */
+  {
+    tostrstream out( data );
+    if ( !saveCellRect( out, rct ) )
+    {
+      cerr << "INTERNAL ERROR while copying" << endl;
+      return;
+    }
+  }
+  
+  QClipboard *clip = QApplication::clipboard();
+  clip->setText( data.c_str() );
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )
@@ -1139,43 +1148,80 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
 
 void KSpreadTable::paste( const QPoint &_marker )
 {
-  /* if ( m_pDoc->shell()->clipboard().isEmpty() )
-	return;
+  string data = QApplication::clipboard()->text();
+  if ( data.empty() )
+  {
+    QMessageBox::critical( (QWidget*)0L, i18n( "KSpread Error" ), i18n( "Clipboard is empty" ), i18n( "Ok" ) );
+    return;
+  }
+  
+  istrstream in( data.c_str() );
+  loadSelection( in, _marker.x() - 1, _marker.y() - 1 );
 
-    loadCells( m_pDoc->shell()->clipboard(), markerColumn, markerRow );
-    
-    m_pDoc->setModified( true );
-
-    if ( pGui )
-	pGui->canvasWidget()->repaint(); */
+  m_pDoc->setModified( true );
+  emit sig_updateView( this );
 }
 
-void KSpreadTable::loadCells( QByteArray &_array, int _column, int _row )
+bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift )
 {
-  /* QBuffer device( _array );
-    device.open( IO_ReadOnly );
+  KOMLStreamFeed feed( _in );
+  KOMLParser parser( &feed );
 
-    KorbSession *korb = new KorbSession( &device );
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+ 
+  // DOC
+  if ( !parser.open( "DOC", tag ) )
+  {
+    cerr << "Missing DOC" << endl;
+    return false;
+  }
+  
+  KOMLParser::parseTag( tag.c_str(), name, lst );
+  vector<KOMLAttrib>::const_iterator it = lst.begin();
+  for( ; it != lst.end(); it++ )
+  {
+    if ( (*it).m_strName == "mime" )
+    {
+      if ( (*it).m_strValue != "application/x-kspread-selection" )
+      {
+	cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	return false;
+      }
+    }
+  }
     
-    OBJECT o_root = korb->rootCell();
-    if ( o_root == 0 )
+  // OBJECT
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+ 
+    if ( name == "CELL" )
     {
-	printf("ERROR: No root object\n");
-	return;
+      KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
+      cell->load( parser, lst, _xshift, _yshift );
+      insertCell( cell );
     }
+    else
+      cerr << "Unknown tag '" << tag << "' in TABLE" << endl;    
 
-    TYPE t_cellRectangle = korb->registerType( "KDE:kxcl:CellRectangle" );
-    if ( t_cellRectangle && korb->cellType( o_root ) == t_cellRectangle )
+    if ( !parser.close( tag ) )
     {
-	loadCells( korb, o_root, _column, _row );
+      cerr << "ERR: Closing CELL" << endl;
+      return false;
     }
+  }
+  
+  if ( !parser.close( tag ) )
+  {
+    cerr << "ERR: Closing DOC" << endl;
+    return false;
+  }
+  
+  m_pDoc->setModified( true );
 
-    korb->release();
-    delete korb;
-    device.close();    
-
-    setKSpreadLayoutDirtyFlag();
-    setDisplayDirtyFlag(); */
+  return true;
 }
 
 void KSpreadTable::deleteCells( int _left, int _top, int _right, int _bottom )
@@ -1456,6 +1502,29 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range )
 
 	ypos += row_lay->height();
     }
+}
+
+bool KSpreadTable::saveCellRect( ostream &out, const QRect &_rect )
+{
+  out << "<?xml version=\"1.0\"?>" << endl;
+  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=\"" << "weis@kde.org" << "\" editor=\"" << "KSpread"
+      << "\" mime=\"" << "application/x-kspread-selection" << "\" >" << endl;
+
+  // Save all cells.
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for ( ; it.current(); ++it ) 
+  {
+    if ( !it.current()->isDefault() )
+    {
+      QPoint p( it.current()->column(), it.current()->row() );
+      if ( _rect.contains( p ) )
+	it.current()->save( out, _rect.left() - 1, _rect.top() - 1 );
+    }
+  }
+
+  out << "</DOC>" << endl;
+
+  return true;
 }
 
 bool KSpreadTable::save( ostream &out )
@@ -2271,6 +2340,8 @@ void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRec
   ch->setDataArea( _data );
   ch->setChart( chart );
   ch->update();
+  
+  chart->showWizard();
   
   insertChild( ch );
 }

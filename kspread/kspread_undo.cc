@@ -445,7 +445,7 @@ KSpreadUndoDelete::~KSpreadUndoDelete()
 void KSpreadUndoDelete::undo()
 {
     m_pDoc->undoBuffer()->lock();
-    m_pTable->loadCells( m_array, m_rctRect.left(), m_rctRect.top() );
+    // m_pTable->loadCells( m_array, m_rctRect.left(), m_rctRect.top() );
     m_pDoc->undoBuffer()->unlock();
 
     // TODO
