@@ -625,6 +625,7 @@ void KoMainWindow::slotFileOpen()
     KURL url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
+        m_recent->addURL( url );
         if ( url.isLocalFile() )
             KRecentDocument::add(url.path(-1));
         else
