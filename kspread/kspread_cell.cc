@@ -652,7 +652,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   else
     ptext = m_strText;
 
-  if ( ptext == 0L || *ptext = 0 )
+  if ( ptext == 0L || *ptext == 0 )
   {
     m_strOutText = QString::null;
     if ( isDefault() )
@@ -1180,7 +1180,7 @@ bool KSpreadCell::calc( bool _makedepend )
     {
       if ( context.exception() )
 	QMessageBox::critical( 0, i18n("KSpread error"), context.exception()->toString() );
-     
+
       m_strFormularOut = "####";
       m_bValue = false;
       m_bBool = false;
