@@ -181,8 +181,9 @@ protected:
 
     // dialog objects
     QComboBox *cpgFormat;
-    QComboBox *cpgOrientation;
     QComboBox *cpgUnit;
+    QRadioButton *rbPortrait;
+    QRadioButton *rbLandscape;
     KDoubleNumInput *epgWidth;
     KDoubleNumInput *epgHeight;
     KDoubleNumInput *ebrLeft;
@@ -236,10 +237,10 @@ private slots:
     // take changes
     void Ok() {}
 
-    // combos
+    // combos and radios
     void unitChanged( int );
     void formatChanged( int );
-    void orientationChanged( int );
+    void orientationChanged();
 
     void rPressed() {retPressed = true;}
 
