@@ -27,6 +27,7 @@
 #include "kexipartinfo.h"
 
 #include <qwidgetstack.h>
+#include <qobjectlist.h>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -128,6 +129,15 @@ void KexiDialogBase::setContextHelp(const QString& caption, const QString& text,
 
 void KexiDialogBase::closeEvent( QCloseEvent * e )
 {
+	//let any view send "closing" signal
+	QObjectList *list = m_stack->queryList( "KexiViewBase", 0, false, false);
+	KexiViewBase *view;
+	QObjectListIt it( *list );
+	for ( ;(view = static_cast<KexiViewBase*>(it.current()) ) != 0; ++it ) {
+		emit view->closing();
+	}
+	delete list;
+
 	emit closing();
 	KMdiChildView::closeEvent(e);
 }

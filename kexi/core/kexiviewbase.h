@@ -51,6 +51,8 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 	public slots:
 
 	signals:
+		//! emitted when the view is about to close
+		void closing();
 
 	protected:
 		/*! called by KexiDialogBase::switchToViewMode() right before dialog is switched to new mode

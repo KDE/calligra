@@ -69,5 +69,6 @@ QSize KexiViewBase::preferredSizeHint(const QSize& otherSize)
 	return otherSize;
 }
 
+
 #include "kexiviewbase.moc"
 
