@@ -89,7 +89,7 @@ private:
     QSpinBox* m_shearY;
     KoDocumentChild* m_child;
     class KoTransformToolBoxPrivate;
-    KoTransformToolBox *d;
+    KoTransformToolBoxPrivate *d;
 };
 
 #endif
