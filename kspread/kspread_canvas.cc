@@ -63,6 +63,7 @@
 #include <qtimer.h>
 #include <qpoint.h>
 #include <qscrollbar.h>
+#include <qtooltip.h>
 #include <float.h>
 
 
@@ -4201,6 +4202,7 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
           m_lSize->setAlignment( Qt::AlignVCenter );
           m_lSize->setText( tmpSize );
+          m_lSize->setPalette( QToolTip::palette() );
           m_lSize->show();
     }
     else
@@ -4989,6 +4991,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
 
         m_lSize->setAlignment( Qt::AlignVCenter );
         m_lSize->setText( tmpSize );
+        m_lSize->setPalette( QToolTip::palette() );
         m_lSize->show();
     }
     else
