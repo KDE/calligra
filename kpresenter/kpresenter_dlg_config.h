@@ -118,7 +118,6 @@ private:
     int m_oldStartingPage;
     double m_oldTabStopWidth;
     bool m_oldBackupFile;
-    QString m_oldBackupFileExtension;
 
     KPresenterView* m_pView;
     KConfig* config;
@@ -130,7 +129,6 @@ private:
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
     QCheckBox *m_directInsertCursor;
-    QLineEdit *m_backupFileExtension;
 };
 
 class ConfigureToolsPage : public QObject

@@ -493,11 +493,6 @@ public:
 
     bool backupFile()const;
 
-    void setBackupFileExtension( const QString & _ext );
-
-    QString backupFileExtension()const;
-
-
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes

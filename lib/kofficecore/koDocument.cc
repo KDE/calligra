@@ -83,7 +83,6 @@ public:
         m_dcopObject( 0L ),
         filterManager( 0L ),
         m_specialOutputFlag( 0 ),
-        m_backupFileExtension( QString::fromLatin1("~")),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
         m_autosaving( false ),
@@ -106,7 +105,6 @@ public:
     int m_specialOutputFlag; // See KoFileDialog in koMainWindow.cc
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
-    QString m_backupFileExtension;
     int m_autoSaveDelay; // in seconds, 0 to disable.
     int m_numOperations;
     bool modifiedAfterAutosave;
@@ -283,7 +281,7 @@ bool KoDocument::saveFile()
 
     if ( KIO::NetAccess::exists( url() ) ) { // this file exists => backup
         KURL backup( url() );
-        backup.setPath( backup.path() + d->m_backupFileExtension );
+        backup.setPath( backup.path() + QString::fromLatin1("~") );
         (void) KIO::NetAccess::del( backup );
         if ( backupFile() )
             (void) KIO::NetAccess::copy( url(), backup );
@@ -1464,20 +1462,6 @@ void KoDocument::setBackupFile( bool _b )
 bool KoDocument::backupFile()const
 {
     return d->m_backupFile;
-}
-
-void KoDocument::setBackupFileExtension( const QString & _ext )
-{
-    if ( _ext.isEmpty() )
-        d->m_backupFileExtension = QString::fromLatin1("~");
-    else
-        d->m_backupFileExtension = _ext;
-}
-
-
-QString KoDocument::backupFileExtension()const
-{
-    return d->m_backupFileExtension;
 }
 
 

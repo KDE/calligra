@@ -33,7 +33,6 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qvbox.h>
-#include <qhbox.h>
 #include <qcheckbox.h>
 #include <qtabwidget.h>
 
@@ -687,23 +686,14 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     }
 
     m_oldBackupFile = true;
-    m_oldBackupFileExtension = QString::fromLatin1("~");
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
         m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
-        m_oldBackupFileExtension=config->readEntry("BackupFileExtension",m_oldBackupFileExtension);
     }
 
     m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
     m_createBackupFile->setChecked( m_oldBackupFile );
-
-    QHBox* gbHorziGroupBox = new QHBox( gbDocumentSettings );
-
-    new QLabel(i18n("Backup File Extension:"), gbHorziGroupBox);
-    m_backupFileExtension = new QLineEdit(gbHorziGroupBox );
-    m_backupFileExtension->setText( m_oldBackupFileExtension );
-
 
 
     autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
@@ -765,16 +755,6 @@ KCommand *ConfigureDefaultDocPage::apply()
         m_oldBackupFile=state;
     }
 
-    QString tmp = m_backupFileExtension->text();
-    if ( tmp != m_oldBackupFileExtension)
-    {
-        if ( tmp.isEmpty())
-            tmp = QString::fromLatin1("~");
-        config->writeEntry( "BackupFileExtension", tmp );
-        doc->setBackupFileExtension( tmp );
-        m_oldBackupFileExtension = tmp;
-    }
-
     state = m_cursorInProtectedArea->isChecked();
     if ( state != doc->cursorInProtectedArea() )
     {
@@ -820,7 +800,6 @@ void ConfigureDefaultDocPage::slotDefault()
     m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kPresenterDoc()->getUnit()));
     m_createBackupFile->setChecked( true );
     m_directInsertCursor->setChecked( false );
-    m_backupFileExtension->setText( QString::fromLatin1("~") );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
