@@ -4904,7 +4904,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4 ) : 0;
     int w = dw - initialRMargin;
 #ifdef DEBUG_FORMATTER
-    qDebug( "QTextFormatterBreakWords::format initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d", initialHeight, initialLMargin, initialRMargin, w );
+    qDebug( "QTextFormatterBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d", left, initialHeight, initialLMargin, initialRMargin, w );
 #endif
     bool fullWidth = TRUE;
     int marg = left + initialRMargin;
@@ -5116,12 +5116,15 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	    // format this line again
 	    if ( doc && h > initialHeight )
 	    {
-		int lm = left + ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0;
+		int lm = left + ( ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0 );
+#ifdef DEBUG_FORMATTER
+                qDebug( "left=%d, firstlinepargin=%d => lm=%d", left, ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0, lm );
+#endif
 		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, lm, 4 );
 		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4 );
 		initialHeight = h;
 #ifdef DEBUG_FORMATTER
-		qDebug("new height: %d => newLMargin=%d newRMargin=%d", h, newLMargin, newRMargin);
+		qDebug("new height: %d => left=%d lm=%d first-char=%d newLMargin=%d newRMargin=%d", h, left, lm, (firstChar==&string->at(0)), newLMargin, newRMargin);
 #endif
 		if ( newLMargin != initialLMargin || newRMargin != initialRMargin )
 		{
