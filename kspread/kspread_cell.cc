@@ -2127,12 +2127,31 @@ bool KSpreadCell::calc( bool _makedepend )
   }
   else
   {
+    if ( m_pQML )
+        delete m_pQML;
+    m_pQML = 0;
+    if ( m_pVisualFormula )
+        delete m_pVisualFormula;
+    m_pVisualFormula = 0;
     m_bError =false;
     m_bValue = false;
     m_bBool = false;
     m_bDate=false;
     m_bTime=false;
     m_strFormularOut = context.value()->toString( context );
+    if( !m_strFormularOut.isEmpty() && m_strFormularOut[0] == '*' )
+        {
+        m_pVisualFormula = new KFormula();
+        m_pVisualFormula->parse( m_strFormularOut.mid( 1 ) );
+        }
+  else if ( !m_strFormularOut.isEmpty() && m_strFormularOut[0] == '!' )
+        {
+        m_pQML = new QSimpleRichText( m_strFormularOut.mid(1),  QApplication::font() );//, m_pTable->widget() );
+        }
+  else if( !m_strFormularOut.isEmpty() && m_strFormularOut[0]=='\'')
+        {
+        m_strFormularOut=m_strFormularOut.right(m_strFormularOut.length()-1);
+        }
     setFormatNumber(Number);
   }
   if ( m_style == ST_Select )

@@ -229,6 +229,7 @@ public:
     void apply( KSpreadCell *_cell );
     int getSizeHeight();
     int getSizeWidth();
+    QCheckBox *mergeCell;
 public slots:
     void slotChangeHeightState();
     void slotChangeWidthState();
@@ -248,6 +249,7 @@ protected:
     CellLayoutDlg *dlg;
     QCheckBox *defaultWidth;
     QCheckBox *defaultHeight;
+    //QCheckBox *mergeCell;
     KIntNumInput *angleRotation;
 };
 
@@ -549,6 +551,9 @@ public:
     QDate m_date;
     QString cellText;
     double m_value;
+
+    bool isMerged;
+    bool oneCell;
 public slots:
     void slotApply();
 

@@ -1757,7 +1757,7 @@ void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
     m_popupChild = new QPopupMenu( this );
 
     m_popupChild->insertItem( i18n("Delete embedded document"), this, SLOT( slotPopupDeleteChild() ) );
-	
+
     m_popupChild->popup( global_pos );
 }
 
@@ -1765,9 +1765,12 @@ void KSpreadView::slotPopupDeleteChild()
 {
     if ( !m_popupChildObject || !m_popupChildObject->table() )
 	return;
-    
-    m_popupChildObject->table()->deleteChild( m_popupChildObject );
-    m_popupChildObject = 0;
+    int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove this embedded document.\nDo you want to continue?"),i18n("Delete embedded document"));
+    if ( ret == 3 )
+        {
+        m_popupChildObject->table()->deleteChild( m_popupChildObject );
+        m_popupChildObject = 0;
+        }
 }
 
 void KSpreadView::popupColumnMenu(const QPoint & _point)

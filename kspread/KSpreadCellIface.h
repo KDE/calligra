@@ -61,6 +61,54 @@ k_dcop:
     virtual int textFontSize() const;
     virtual void setTextFontFamily( const QString& _font );
     virtual QString textFontFamily() const;
+    //border left
+    virtual void setLeftBorderStyle( const QString& _style );
+    virtual void setLeftBorderColor(const QString& _c);
+    virtual void setLeftBorderColor(int r,int g,int b);
+    virtual void setLeftBorderWidth( int _size );
+    virtual int leftBorderWidth() const;
+    virtual QString leftBorderColor() const;
+    virtual QString leftBorderStyle() const;
+    //border right
+    virtual void setRightBorderStyle( const QString& _style );
+    virtual void setRightBorderColor(const QString& _c);
+    virtual void setRightBorderColor(int r,int g,int b);
+    virtual void setRightBorderWidth( int _size );
+    virtual int rightBorderWidth() const;
+    virtual QString rightBorderColor() const;
+    virtual QString rightBorderStyle() const;
+    //border top
+    virtual void setTopBorderStyle( const QString& _style );
+    virtual void setTopBorderColor(const QString& _c);
+    virtual void setTopBorderColor(int r,int g,int b);
+    virtual void setTopBorderWidth( int _size );
+    virtual int topBorderWidth() const;
+    virtual QString topBorderColor() const;
+    virtual QString topBorderStyle() const;
+    //border bottom
+    virtual void setBottomBorderStyle( const QString& _style );
+    virtual void setBottomBorderColor(const QString& _c);
+    virtual void setBottomBorderColor(int r,int g,int b);
+    virtual void setBottomBorderWidth( int _size );
+    virtual int bottomBorderWidth() const;
+    virtual QString bottomBorderColor() const;
+    virtual QString bottomBorderStyle() const;
+    // fall back diagonal
+    virtual void setFallDiagonalStyle( const QString& _style );
+    virtual void setFallDiagonalColor(const QString& _c);
+    virtual void setFallDiagonalColor(int r,int g,int b);
+    virtual void setFallDiagonalWidth( int _size );
+    virtual int fallDiagonalWidth() const;
+    virtual QString fallDiagonalColor() const;
+    virtual QString fallDiagonalStyle() const;
+    //GoUpDiagonal
+    virtual void setGoUpDiagonalStyle( const QString& _style );
+    virtual void setGoUpDiagonalColor(const QString& _c);
+    virtual void setGoUpDiagonalColor(int r,int g,int b);
+    virtual void setGoUpDiagonalWidth( int _size );
+    virtual int goUpDiagonalWidth() const;
+    virtual QString goUpDiagonalColor() const;
+    virtual QString goUpDiagonalStyle() const;
 private:
     QPoint m_point;
     KSpreadTable* m_table;

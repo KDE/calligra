@@ -2,6 +2,7 @@
 
 #include "kspread_table.h"
 #include "kspread_cell.h"
+#include <qpen.h>
 
 KSpreadCellIface::KSpreadCellIface()
 {
@@ -470,4 +471,458 @@ double KSpreadCellIface::faktor() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->faktor( m_point.x(), m_point.y() );
+}
+
+//border left
+void KSpreadCellIface::setLeftBorderStyle( const QString& _style )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if(_style=="DotLine")
+        cell->setLeftBorderStyle(Qt::DotLine);
+    else if(_style=="DashLine")
+        cell->setLeftBorderStyle(Qt::DashLine);
+    else if(_style=="DashDotLine")
+        cell->setLeftBorderStyle(Qt::DashDotLine);
+    else if(_style=="DashDotDotLine")
+        cell->setLeftBorderStyle(Qt::DashDotDotLine);
+    else if(_style=="SolidLine")
+        cell->setLeftBorderStyle(Qt::SolidLine);
+    else
+        cell->setLeftBorderStyle(Qt::SolidLine);
+    cell->update();
+
+}
+
+void KSpreadCellIface::setLeftBorderColor(const QString& _c)
+{
+    QColor c(_c);
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setLeftBorderColor(c );
+    cell->update();
+
+}
+void KSpreadCellIface::setLeftBorderColor(int r,int g,int b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(r,g,b);
+    cell->setLeftBorderColor(c );
+    cell->update();
+}
+
+void KSpreadCellIface::setLeftBorderWidth( int _size )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setLeftBorderWidth( _size );
+    cell->update();
+
+}
+
+
+int  KSpreadCellIface::leftBorderWidth() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->leftBorderWidth(m_point.x(), m_point.y());
+}
+
+QString KSpreadCellIface::leftBorderColor() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->leftBorderColor( m_point.x(), m_point.y() ).name();
+}
+
+QString KSpreadCellIface::leftBorderStyle() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    Qt::PenStyle penStyle=cell->leftBorderStyle( m_point.x(), m_point.y() );
+    QString tmp;
+    if( penStyle==Qt::DotLine)
+        tmp="DotLine";
+    else if( penStyle==Qt::DashLine)
+        tmp="DashLine";
+    else if( penStyle==Qt::DashDotLine)
+        tmp="DashDotLine";
+    else if( penStyle==Qt::DashDotDotLine)
+        tmp="DashDotDotLine";
+    else if( penStyle==Qt::SolidLine)
+        tmp="SolidLine";
+    else
+        tmp="SolidLine";
+    return tmp;
+}
+
+//border right
+void KSpreadCellIface::setRightBorderStyle( const QString& _style )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if(_style=="DotLine")
+        cell->setRightBorderStyle(Qt::DotLine);
+    else if(_style=="DashLine")
+        cell->setRightBorderStyle(Qt::DashLine);
+    else if(_style=="DashDotLine")
+        cell->setRightBorderStyle(Qt::DashDotLine);
+    else if(_style=="DashDotDotLine")
+        cell->setRightBorderStyle(Qt::DashDotDotLine);
+    else if(_style=="SolidLine")
+        cell->setRightBorderStyle(Qt::SolidLine);
+    else
+        cell->setRightBorderStyle(Qt::SolidLine);
+    cell->update();
+
+}
+
+void KSpreadCellIface::setRightBorderColor(const QString& _c)
+{
+    QColor c(_c);
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setRightBorderColor(c );
+    cell->update();
+
+}
+void KSpreadCellIface::setRightBorderColor(int r,int g,int b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(r,g,b);
+    cell->setRightBorderColor(c );
+    cell->update();
+}
+
+void KSpreadCellIface::setRightBorderWidth( int _size )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setRightBorderWidth( _size );
+    cell->update();
+
+}
+
+int  KSpreadCellIface::rightBorderWidth() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->rightBorderWidth(m_point.x(), m_point.y());
+}
+
+QString KSpreadCellIface::rightBorderColor() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->rightBorderColor( m_point.x(), m_point.y() ).name();
+}
+
+QString KSpreadCellIface::rightBorderStyle() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    Qt::PenStyle penStyle=cell->rightBorderStyle( m_point.x(), m_point.y() );
+    QString tmp;
+    if( penStyle==Qt::DotLine)
+        tmp="DotLine";
+    else if( penStyle==Qt::DashLine)
+        tmp="DashLine";
+    else if( penStyle==Qt::DashDotLine)
+        tmp="DashDotLine";
+    else if( penStyle==Qt::DashDotDotLine)
+        tmp="DashDotDotLine";
+    else if( penStyle==Qt::SolidLine)
+        tmp="SolidLine";
+    else
+        tmp="SolidLine";
+    return tmp;
+}
+
+//border top
+void KSpreadCellIface::setTopBorderStyle( const QString& _style )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if(_style=="DotLine")
+        cell->setTopBorderStyle(Qt::DotLine);
+    else if(_style=="DashLine")
+        cell->setTopBorderStyle(Qt::DashLine);
+    else if(_style=="DashDotLine")
+        cell->setTopBorderStyle(Qt::DashDotLine);
+    else if(_style=="DashDotDotLine")
+        cell->setTopBorderStyle(Qt::DashDotDotLine);
+    else if(_style=="SolidLine")
+        cell->setTopBorderStyle(Qt::SolidLine);
+    else
+        cell->setTopBorderStyle(Qt::SolidLine);
+    cell->update();
+
+}
+
+void KSpreadCellIface::setTopBorderColor(const QString& _c)
+{
+    QColor c(_c);
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setTopBorderColor(c );
+    cell->update();
+
+}
+void KSpreadCellIface::setTopBorderColor(int r,int g,int b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(r,g,b);
+    cell->setTopBorderColor(c );
+    cell->update();
+}
+
+void KSpreadCellIface::setTopBorderWidth( int _size )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setTopBorderWidth( _size );
+    cell->update();
+}
+
+int  KSpreadCellIface::topBorderWidth() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->topBorderWidth(m_point.x(), m_point.y());
+}
+
+QString KSpreadCellIface::topBorderColor() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->topBorderColor( m_point.x(), m_point.y() ).name();
+}
+
+QString KSpreadCellIface::topBorderStyle() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    Qt::PenStyle penStyle=cell->topBorderStyle( m_point.x(), m_point.y() );
+    QString tmp;
+    if( penStyle==Qt::DotLine)
+        tmp="DotLine";
+    else if( penStyle==Qt::DashLine)
+        tmp="DashLine";
+    else if( penStyle==Qt::DashDotLine)
+        tmp="DashDotLine";
+    else if( penStyle==Qt::DashDotDotLine)
+        tmp="DashDotDotLine";
+    else if( penStyle==Qt::SolidLine)
+        tmp="SolidLine";
+    else
+        tmp="SolidLine";
+    return tmp;
+}
+
+//border bottom
+void KSpreadCellIface::setBottomBorderStyle( const QString& _style )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if(_style=="DotLine")
+        cell->setBottomBorderStyle(Qt::DotLine);
+    else if(_style=="DashLine")
+        cell->setBottomBorderStyle(Qt::DashLine);
+    else if(_style=="DashDotLine")
+        cell->setBottomBorderStyle(Qt::DashDotLine);
+    else if(_style=="DashDotDotLine")
+        cell->setBottomBorderStyle(Qt::DashDotDotLine);
+    else if(_style=="SolidLine")
+        cell->setBottomBorderStyle(Qt::SolidLine);
+    else
+        cell->setBottomBorderStyle(Qt::SolidLine);
+    cell->update();
+
+}
+
+void KSpreadCellIface::setBottomBorderColor(const QString& _c)
+{
+    QColor c(_c);
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setBottomBorderColor(c );
+    cell->update();
+
+}
+void KSpreadCellIface::setBottomBorderColor(int r,int g,int b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(r,g,b);
+    cell->setBottomBorderColor(c );
+    cell->update();
+}
+
+void KSpreadCellIface::setBottomBorderWidth( int _size )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setBottomBorderWidth( _size );
+    cell->update();
+}
+
+int  KSpreadCellIface::bottomBorderWidth() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->bottomBorderWidth(m_point.x(), m_point.y());
+}
+
+QString KSpreadCellIface::bottomBorderColor() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->bottomBorderColor( m_point.x(), m_point.y() ).name();
+}
+
+QString KSpreadCellIface::bottomBorderStyle() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    Qt::PenStyle penStyle=cell->bottomBorderStyle( m_point.x(), m_point.y() );
+    QString tmp;
+    if( penStyle==Qt::DotLine)
+        tmp="DotLine";
+    else if( penStyle==Qt::DashLine)
+        tmp="DashLine";
+    else if( penStyle==Qt::DashDotLine)
+        tmp="DashDotLine";
+    else if( penStyle==Qt::DashDotDotLine)
+        tmp="DashDotDotLine";
+    else if( penStyle==Qt::SolidLine)
+        tmp="SolidLine";
+    else
+        tmp="SolidLine";
+    return tmp;
+}
+
+//fall back diagonal
+void KSpreadCellIface::setFallDiagonalStyle( const QString& _style )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if(_style=="DotLine")
+        cell->setFallDiagonalStyle(Qt::DotLine);
+    else if(_style=="DashLine")
+        cell->setFallDiagonalStyle(Qt::DashLine);
+    else if(_style=="DashDotLine")
+        cell->setFallDiagonalStyle(Qt::DashDotLine);
+    else if(_style=="DashDotDotLine")
+        cell->setFallDiagonalStyle(Qt::DashDotDotLine);
+    else if(_style=="SolidLine")
+        cell->setFallDiagonalStyle(Qt::SolidLine);
+    else
+        cell->setFallDiagonalStyle(Qt::SolidLine);
+    cell->update();
+
+}
+
+void KSpreadCellIface::setFallDiagonalColor(const QString& _c)
+{
+    QColor c(_c);
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setFallDiagonalColor(c );
+    cell->update();
+
+}
+void KSpreadCellIface::setFallDiagonalColor(int r,int g,int b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(r,g,b);
+    cell->setFallDiagonalColor(c );
+    cell->update();
+}
+
+void KSpreadCellIface::setFallDiagonalWidth( int _size )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setFallDiagonalWidth( _size );
+    cell->update();
+}
+
+int  KSpreadCellIface::fallDiagonalWidth() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->fallDiagonalWidth(m_point.x(), m_point.y());
+}
+
+QString KSpreadCellIface::fallDiagonalColor() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->fallDiagonalColor( m_point.x(), m_point.y() ).name();
+}
+
+QString KSpreadCellIface::fallDiagonalStyle() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    Qt::PenStyle penStyle=cell->fallDiagonalStyle( m_point.x(), m_point.y() );
+    QString tmp;
+    if( penStyle==Qt::DotLine)
+        tmp="DotLine";
+    else if( penStyle==Qt::DashLine)
+        tmp="DashLine";
+    else if( penStyle==Qt::DashDotLine)
+        tmp="DashDotLine";
+    else if( penStyle==Qt::DashDotDotLine)
+        tmp="DashDotDotLine";
+    else if( penStyle==Qt::SolidLine)
+        tmp="SolidLine";
+    else
+        tmp="SolidLine";
+    return tmp;
+}
+
+
+//GoUpDiagonal
+void KSpreadCellIface::setGoUpDiagonalStyle( const QString& _style )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if(_style=="DotLine")
+        cell->setGoUpDiagonalStyle(Qt::DotLine);
+    else if(_style=="DashLine")
+        cell->setGoUpDiagonalStyle(Qt::DashLine);
+    else if(_style=="DashDotLine")
+        cell->setGoUpDiagonalStyle(Qt::DashDotLine);
+    else if(_style=="DashDotDotLine")
+        cell->setGoUpDiagonalStyle(Qt::DashDotDotLine);
+    else if(_style=="SolidLine")
+        cell->setGoUpDiagonalStyle(Qt::SolidLine);
+    else
+        cell->setGoUpDiagonalStyle(Qt::SolidLine);
+    cell->update();
+
+}
+
+void KSpreadCellIface::setGoUpDiagonalColor(const QString& _c)
+{
+    QColor c(_c);
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setGoUpDiagonalColor(c );
+    cell->update();
+
+}
+void KSpreadCellIface::setGoUpDiagonalColor(int r,int g,int b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QColor c(r,g,b);
+    cell->setGoUpDiagonalColor(c );
+    cell->update();
+}
+
+void KSpreadCellIface::setGoUpDiagonalWidth( int _size )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setGoUpDiagonalWidth( _size );
+    cell->update();
+}
+
+int  KSpreadCellIface::goUpDiagonalWidth() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->goUpDiagonalWidth(m_point.x(), m_point.y());
+}
+
+QString KSpreadCellIface::goUpDiagonalColor() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->goUpDiagonalColor( m_point.x(), m_point.y() ).name();
+}
+
+QString KSpreadCellIface::goUpDiagonalStyle() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    Qt::PenStyle penStyle=cell->goUpDiagonalStyle( m_point.x(), m_point.y() );
+    QString tmp;
+    if( penStyle==Qt::DotLine)
+        tmp="DotLine";
+    else if( penStyle==Qt::DashLine)
+        tmp="DashLine";
+    else if( penStyle==Qt::DashDotLine)
+        tmp="DashDotLine";
+    else if( penStyle==Qt::DashDotDotLine)
+        tmp="DashDotDotLine";
+    else if( penStyle==Qt::SolidLine)
+        tmp="SolidLine";
+    else
+        tmp="SolidLine";
+    return tmp;
 }
