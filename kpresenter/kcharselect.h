@@ -46,6 +46,8 @@ public:
   void setFont(QFont __font)
     { _font = __font; repaint(true); }
 
+  void setChar(int __c);
+
 protected:
 
   // paint cell

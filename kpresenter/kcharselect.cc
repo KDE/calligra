@@ -27,13 +27,21 @@ KCharSelect::KCharSelect(QWidget *parent,const char *name,QFont __font,QColor __
 
   currentC = KPoint(_c - 33 - ((_c - 33) / 28) * 28,(_c - 33) / 28);
 
-  setBackgroundColor(white);
+  setBackgroundColor(kapp->windowColor);
 
   setCellWidth(20);
   setCellHeight(25);
 
   setNumCols(28);
   setNumRows(8);
+}
+
+/*================================================================*/
+void KCharSelect::setChar(int __c)
+{
+  _c = __c;
+  currentC = KPoint(_c - 33 - ((_c - 33) / 28) * 28,(_c - 33) / 28);
+  repaint(true);
 }
 
 /*======================= get size hint ==========================*/

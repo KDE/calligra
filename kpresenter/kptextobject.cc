@@ -375,19 +375,24 @@ void KPTextObject::saveKTextObject(ostream& out)
       << "\" underline=\"" << ktextobject.enumListType().font.underline() << "\" red=\"" 
       << ktextobject.enumListType().color.red() << "\" green=\"" << ktextobject.enumListType().color.green() 
       << "\" blue=\"" << ktextobject.enumListType().color.blue() << "\"/>" << endl; 
-  out << indent << "<UNSORTEDLISTTYPE type=\"" << ktextobject.enumListType().type << "\" family=\"" 
-      << ktextobject.unsortListType().font.family() << "\" pointSize=\"" << ktextobject.unsortListType().font.pointSize()
-      << "\" bold=\"" << ktextobject.unsortListType().font.bold() << "\" italic=\"" << ktextobject.unsortListType().font.italic()
-      << "\" underline=" << ktextobject.unsortListType().font.underline() << " red=\"" 
-      << ktextobject.unsortListType().color.red() << "\" green=\"" << ktextobject.unsortListType().color.green() 
-      << "\" blue=\"" << ktextobject.unsortListType().color.blue() << "\" chr=\"" << ktextobject.unsortListType().chr
-      << "\"/>" << endl; 
+  for (i = 0;i < 16;i++)
+    {
+      out << indent << "<UNSORTEDLISTTYPE family=\"" << ktextobject.unsortListType().font->at(i)->family() << "\" pointSize=\"" 
+	  << ktextobject.unsortListType().font->at(i)->pointSize()
+	  << "\" bold=\"" << ktextobject.unsortListType().font->at(i)->bold() << "\" italic=\"" 
+	  << ktextobject.unsortListType().font->at(i)->italic()
+	  << "\" underline=\"" << ktextobject.unsortListType().font->at(i)->underline() << "\" red=\"" 
+	  << ktextobject.unsortListType().color->at(i)->red() << "\" green=\"" << ktextobject.unsortListType().color->at(i)->green() 
+	  << "\" blue=\"" << ktextobject.unsortListType().color->at(i)->blue() << "\" chr=\"" << *ktextobject.unsortListType().chr->at(i)
+	  << "\"/>" << endl; 
+    }
 
   for (i = 0;i < ktextobject.paragraphs();i++)
     {
       txtParagraph = ktextobject.paragraphAt(i);
 
-      out << otag << "<PARAGRAPH horzAlign=\"" << static_cast<int>(txtParagraph->horzAlign()) << "\">" << endl; 
+      out << otag << "<PARAGRAPH horzAlign=\"" << static_cast<int>(txtParagraph->horzAlign()) << "\" depth=\""
+	  << txtParagraph->getDepth() << "\">" << endl; 
 
       lastWasSpace = false;
 
@@ -435,10 +440,16 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
   string name;
 
   KTextObject::EnumListType elt;
-  KTextObject::UnsortListType ult;
+  KTextObject::UnsortListType ult = ktextobject.unsortListType();
+
+  ult.font->clear();
+  ult.color->clear();
+  ult.ofont->clear();
+  ult.chr->clear();
+
   QFont font;
   QColor color;
-  int r = 0,g = 0,b = 0;
+  int r = 0,g = 0,b = 0,c = 0;
   TxtParagraph *txtParagraph;
   TxtObj *objPtr;
   
@@ -492,7 +503,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "chr")
-		ult.chr = atoi((*it).m_strValue.c_str());
+		c = atoi((*it).m_strValue.c_str());
 	      if ((*it).m_strName == "family")
 		font.setFamily((*it).m_strValue.c_str());
 	      if ((*it).m_strName == "pointSize")
@@ -511,9 +522,10 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		b = atoi((*it).m_strValue.c_str());
 	    }
 	  color.setRgb(r,g,b);
-	  ult.font = font;
-	  ult.color = color;
-	  ktextobject.setUnsortListType(ult);
+	  ult.chr->append(new int(c));
+	  ult.font->append(new QFont(font));
+	  ult.color->append(new QColor(color));
+	  ult.ofont->append(new QFont());
 	}
 
       // paragraph
@@ -526,6 +538,8 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    {
 	      if ((*it).m_strName == "horzAlign")
 		txtParagraph->setHorzAlign((TxtParagraph::HorzAlign)atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "depth")
+		txtParagraph->setDepth(atoi((*it).m_strValue.c_str()));
 	    }
 
 	  while (parser.open(0L,tag))
@@ -656,6 +670,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		  return;
 		}
 	    }
+	  txtParagraph->setDepth(txtParagraph->getDepth());
 	}
 	  
       else
@@ -667,5 +682,17 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  return;
 	}
     }
+
+  if (ult.font->count() < 16)
+    {
+      while (ult.font->count() < 16)
+	{
+	  ult.font->append(new QFont("times",20));
+	  ult.color->append(new QColor(red));
+	  ult.chr->append(new int('-'));
+	  ult.ofont->append(new QFont());
+	}
+    }
+  ktextobject.setUnsortListType(ult);
 }
 

@@ -27,6 +27,7 @@
 #include <qframe.h>
 #include <qchkbox.h>
 #include <qpalette.h>
+#include <qlist.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>
@@ -47,40 +48,42 @@ class KCharSelectDia : public QDialog
 public:
 
   // constructor - destructor
-  KCharSelectDia(QWidget*,const char*,QFont,QColor,int,QStrList); 
+  KCharSelectDia(QWidget*,const char*,QList<QFont>* __font,QList<QColor>* __color,QList<int>* __c,QStrList); 
   ~KCharSelectDia();                                    
 
   // select char dialog
-  static bool selectChar(QFont&,QColor&,int&,QStrList);
+  static bool selectChar(QList<QFont> *__font,QList<QColor> *__color,QList<int> *__chr,QStrList);
 
   // internal
-  QFont font() {return _font;}
-  QColor color() {return _color;}
-  int c() {return _c;}
+  QList<QFont> *font() {return _font;}
+  QList<QColor> *color() {return _color;}
+  QList<int> *c() {return _c;}
 
 protected:
   
   // dialog objects
   QGridLayout *grid,*grid2;
-  QComboBox *fontCombo,*sizeCombo;
+  QComboBox *fontCombo,*sizeCombo,*depthCombo;
   KButtonBox *bbox;
   QPushButton *bOk,*bCancel; 
   KCharSelect *charSelect;
   QWidget *wid;
-  QLabel *lFont,*lSize,*lColor,*lPreview,*lAttrib;
+  QLabel *lFont,*lSize,*lColor,*lPreview,*lAttrib,*lDepth;
   KColorButton *colorButton;
   QCheckBox *bold,*italic,*underl;
 
   // values
-  QFont _font;
-  QColor _color;
-  int _c;
+  QList<QFont> *_font;
+  QList<QColor> *_color;
+  QList<int> *_c;
+  int _depth;
 
   QStrList fontList;
 
 protected slots:
   void fontSelected(const char*);
   void sizeSelected(int);
+  void depthSelected(int);
   void colorChanged(const QColor&);
   void boldChanged();
   void italicChanged();

@@ -99,6 +99,8 @@ module KPresenter
       slot void textEnumList();
       slot void textUnsortList();
       slot void textNormalText();
+      slot void textDepthPlus();
+      slot void textDepthMinus();
     };
   
   interface KPresenterDocument : KOffice::Document, KOffice::Print

@@ -809,6 +809,32 @@ public:
    */
   void deleteRegion(int _start,int _stop);
 
+  /**
+   * Returns <i>true</i>, if the paragraph is empty, else <i>false</i>.
+   */
+  bool isEmpty();
+
+  /**
+   * Returns the depth of this paragraph.
+   */
+  int getDepth() { return _depth; }
+
+  /**
+   * Set the depth of this paragraph
+   */
+  void setDepth(int d);
+
+  /**
+   * Returns the left indent.
+   */
+  int getLeftIndent() { return _leftIndent; }
+
+  /**
+   * Set the left indent of this paragraph
+   */
+  void setLeftIndent(int l)
+    { _leftIndent = l; }
+
 protected:
 
   unsigned int widthToNextSep(unsigned int);
@@ -825,6 +851,8 @@ protected:
   TxtLine *line;
   TxtObj *obj;
   QList<RegExpMode> *regExpList;
+  int _depth,_leftIndent;
+  
 };
 
 /******************************************************************/
@@ -864,10 +892,10 @@ public:
    */
   struct UnsortListType
   {
-    QFont font;
-    QColor color;
-    int chr;
-    QFont ofont;
+    QList<QFont> *font;
+    QList<QColor> *color;
+    QList<int> *chr;
+    QList<QFont> *ofont;
   };
 
   /**
@@ -1767,6 +1795,30 @@ public:
    */
   void setHorzAlignToAll(TxtParagraph::HorzAlign _align);
 
+  /**
+   * Set the depth for the current paragraph.
+   */
+  void setDepth(int d)
+    { paragraphList.at(txtCursor->positionParagraph())->setDepth(d); recalc(); repaint(true); }
+
+  /**
+   * Increase the depth for the current paragraph.
+   */
+  void incDepth() { 
+    paragraphList.at(txtCursor->positionParagraph())->setDepth(paragraphList.at(txtCursor->positionParagraph())->getDepth() + 1 < 16 ? 
+							       paragraphList.at(txtCursor->positionParagraph())->getDepth() + 1 : 15); 
+    recalc(); repaint(true);
+  }
+
+  /**
+   * Decrease the depth for the current paragraph.
+   */
+  void decDepth() {
+    paragraphList.at(txtCursor->positionParagraph())->setDepth(paragraphList.at(txtCursor->positionParagraph())->getDepth() - 1 >= 0 ? 
+							       paragraphList.at(txtCursor->positionParagraph())->getDepth() - 1 : 0);
+    recalc(); repaint(true);
+  }
+
 signals:
 
   /**
@@ -1874,6 +1926,10 @@ protected:
   void createRBMenu();
 
   void selectText(TxtCursor*,CursorDirection);
+
+  int getParagNum(TxtParagraph *_parag);
+  int getLeftIndent();
+  int getLeftIndent(int _parag);
 
 protected slots:
   void clipCut() {cutRegion();}

@@ -1188,9 +1188,9 @@ void KPresenterView::textUnsortList()
 {
   if (page->kTxtObj())
     {
-      QFont _font = page->kTxtObj()->unsortListType().font;
-      QColor _color = page->kTxtObj()->unsortListType().color;
-      int _c = page->kTxtObj()->unsortListType().chr;
+      QList<QFont> *_font = page->kTxtObj()->unsortListType().font;
+      QList<QColor> *_color = page->kTxtObj()->unsortListType().color;
+      QList<int> *_c = page->kTxtObj()->unsortListType().chr;
       
       if (KCharSelectDia::selectChar(_font,_color,_c,fontList))
 	{
@@ -1209,6 +1209,18 @@ void KPresenterView::textUnsortList()
 void KPresenterView::textNormalText()
 {
   if (page->kTxtObj()) page->kTxtObj()->setObjType(KTextObject::PLAIN);
+}
+
+/*===============================================================*/
+void KPresenterView::textDepthPlus()
+{
+  if (page->kTxtObj()) page->kTxtObj()->incDepth();
+}
+
+/*===============================================================*/
+void KPresenterView::textDepthMinus()
+{
+  if (page->kTxtObj()) page->kTxtObj()->decDepth();
 }
 
 /*======================= align object left =====================*/
@@ -2603,6 +2615,16 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_TType_NormalText = m_vMenuExtra_TType->insertItem6(pix, i18n("&Normal Text"), this,"textNormalText", 0, -1, -1 );
 
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/depth+.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuExtra_TDepthPlus = m_vMenuExtra->insertItem6(pix, i18n("&Increase Depth"), this,"textDepthPlus", 0, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/depth-.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuExtra_TDepthMinus = m_vMenuExtra->insertItem6(pix, i18n("&Decrease Depth"), this,"textDepthMinus", 0, -1, -1 );
+
   m_vMenuExtra->insertSeparator( -1 );
 
   tmp = kapp->kde_datadir().copy();
@@ -3144,13 +3166,27 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/unsortedList.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnsortList", true, i18n("Unsorted List"), -1 );
+  m_idButtonText_UnsortList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnsortList", true, i18n("Unsorted List"), -1 );
   
   // normal text
   tmp = kapp->kde_datadir().copy();
   tmp += "/kpresenter/toolbar/normalText.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textNormalText", true, i18n("Normal Text"), -1 );
+  m_idButtonText_NormalText = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textNormalText", true, i18n("Normal Text"), -1 );
+
+  m_vToolBarText->enable( OpenPartsUI::Show );
+
+  // depth plus
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/depth+.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthPlus", true, i18n("Increase Depth"), -1 );
+
+  // depth minus
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/depth-.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthMinus", true, i18n("Decrease Depth"), -1 );
 
   m_vToolBarText->enable( OpenPartsUI::Show );
 

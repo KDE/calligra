@@ -235,6 +235,8 @@ public:
   virtual void textEnumList();
   virtual void textUnsortList();
   virtual void textNormalText();
+  virtual void textDepthPlus();
+  virtual void textDepthMinus();
   
   // ------ C++ ------
 
@@ -471,6 +473,8 @@ protected:
   CORBA::Long m_idMenuExtra_TType_EnumList;
   CORBA::Long m_idMenuExtra_TType_UnsortList;
   CORBA::Long m_idMenuExtra_TType_NormalText;
+  CORBA::Long m_idMenuExtra_TDepthPlus;
+  CORBA::Long m_idMenuExtra_TDepthMinus;
   CORBA::Long m_idMenuExtra_PenBrush;
   CORBA::Long m_idMenuExtra_Pie;
   CORBA::Long m_idMenuExtra_Raise;
@@ -565,6 +569,8 @@ protected:
   CORBA::Long m_idButtonText_EnumList;
   CORBA::Long m_idButtonText_UnsortList;
   CORBA::Long m_idButtonText_NormalText;
+  CORBA::Long m_idButtonText_DepthPlus;
+  CORBA::Long m_idButtonText_DepthMinus;
 
   // extra toolbar
   OpenPartsUI::ToolBar_var m_vToolBarExtra;
