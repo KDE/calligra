@@ -166,7 +166,7 @@ preference::preference( KSpreadView* _view, QVBox *box, char *name )
 void preference::slotDefault()
 {
   m_pFormula->setChecked(false);
-  m_pFormula->setChecked(true);
+  m_pFormulaIndicator->setChecked(true);
   m_pAutoCalc->setChecked(true);
   m_pGrid->setChecked(true);
   m_pColumn->setChecked(false);
