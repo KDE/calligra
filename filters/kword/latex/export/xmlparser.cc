@@ -93,14 +93,20 @@ bool XmlParser::isChild(QDomNode balise, QString name)
 
 QDomNode XmlParser::getChild(QDomNode balise, QString name, int index)
 {
-	if(balise.isElement())
-		return balise.toElement().elementsByTagName(name).item(index);
+	if(balise.isElement()) {
+		QDomNodeList children = balise.toElement().elementsByTagName(name);
+		if ( children.count() )
+			return children.item(index);
+	}
 	return QDomNode();
 }
 
 QDomNode XmlParser::getChild(QDomNode balise, int index)
 {
-	return balise.childNodes().item(index);
+	QDomNodeList children = balise.childNodes();
+	if ( children.count() )
+		return children.item(index);
+	return QDomNode();
 }
 
 int XmlParser::getNbChild(QDomNode balise)

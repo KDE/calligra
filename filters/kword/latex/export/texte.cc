@@ -240,6 +240,8 @@ void Texte::generate(QTextStream &out)
 
 EEnv Texte::getNextEnv(QPtrList<Para> liste, const int pos)
 {
+	if ( pos < 0 )
+		return ENV_NONE;
 	Para* index = 0;
 
 	for(index = liste.at(pos); index != 0 && index->isChapter(); index = liste.next())

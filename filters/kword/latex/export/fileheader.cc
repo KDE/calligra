@@ -74,13 +74,11 @@ void FileHeader::analysePaperParam(const QDomNode balise)
 /*******************************************/
 void FileHeader::analysePaper(const QDomNode balise)
 {
-	QDomNode fils;
-	
 	analysePaperParam(balise);
 
 	//setTokenCurrent(balise_initiale->pContent);
 	// Analyse children markups --> PAPERBORDERS
-	fils = getChild(balise, "PAPERSBORDERS");
+	QDomNode fils = getChild(balise, "PAPERSBORDERS");
 	_leftBorder = getAttr(fils, "left").toInt();
 	_rightBorder = getAttr(fils, "right").toInt();
 	_bottomBorder = getAttr(fils, "bottom").toInt();
@@ -291,5 +289,5 @@ void FileHeader::generatePackage(QTextStream &out)
 	}
 	out << "\\usepackage{textcomp}" << endl;
 	out << endl;
-			
+
 }
