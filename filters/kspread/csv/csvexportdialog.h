@@ -37,6 +37,7 @@ class CSVExportDialog : public KDialogBase
   bool    exportTable( QString const & tableName ) const;
   bool    printAlwaysTableDelimiter() const;
   QString getTableDelimiter() const;  
+  bool    exportSelectionOnly() const;
 
   void  fillTable( KSpreadMap * map );
 
@@ -54,6 +55,7 @@ class CSVExportDialog : public KDialogBase
   void delimiterClicked( int id );
   void textChanged ( const QString & );
   void textquoteSelected( const QString & mark );
+  void selectionOnlyChanged( bool );
 };
 
 #endif

@@ -33,6 +33,7 @@
 #include <qptrlist.h>
 #include <qradiobutton.h>
 #include <qtextstream.h>
+#include <qtabwidget.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -57,6 +58,8 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
            this, SLOT(textChanged ( const QString & ) ) );
   connect( m_dialog->m_comboQuote, SIGNAL( activated( const QString & ) ),
            this, SLOT( textquoteSelected( const QString & ) ) );
+  connect( m_dialog->m_selectionOnly, SIGNAL( toggled( bool ) ),
+           this, SLOT( selectionOnlyChanged( bool ) ) );
 }
 
 CSVExportDialog::~CSVExportDialog()
@@ -75,7 +78,7 @@ void CSVExportDialog::fillTable( KSpreadMap * map )
     item = new QCheckListItem( m_dialog->m_tableList,
                                it.current()->tableName(),
                                QCheckListItem::CheckBox );
-    item->setOn(false);
+    item->setOn(true);
     m_dialog->m_tableList->insertItem( item );
   }
 
@@ -166,6 +169,20 @@ void CSVExportDialog::delimiterClicked( int id )
 void CSVExportDialog::textquoteSelected( const QString & mark )
 {
   m_textquote = mark[0];
+}
+
+void CSVExportDialog::selectionOnlyChanged( bool on )
+{
+  m_dialog->m_tableList->setEnabled( !on );
+  m_dialog->m_delimiterLineBox->setEnabled( !on );
+
+  if ( on )
+    m_dialog->m_tabWidget->setCurrentPage( 1 );
+}
+
+bool CSVExportDialog::exportSelectionOnly() const
+{
+  return m_dialog->m_selectionOnly->isChecked();
 }
 
 #include "csvexportdialog.moc"

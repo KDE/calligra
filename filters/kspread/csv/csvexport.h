@@ -22,15 +22,21 @@
 
 #include <koFilter.h>
 
-class CSVExport : public KoFilter {
+class KSpreadSheet;
 
-    Q_OBJECT
-
-public:
-    CSVExport(KoFilter* parent, const char* name, const QStringList&);
-    virtual ~CSVExport() {}
-
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+class CSVExport : public KoFilter 
+{
+  Q_OBJECT
+  
+ public:
+  CSVExport(KoFilter * parent, const char * name, const QStringList &);
+  virtual ~CSVExport() {}
+  
+  virtual KoFilter::ConversionStatus convert( const QCString & from, const QCString & to );
+  
+ private:
+  void exportCell( KSpreadSheet const * const sheet, int col, int row, 
+                   QString & separators, QString & line, QChar const & csvDelimiter, QChar const & textQuote );
 };
 
 #endif // CSVEXPORT_H

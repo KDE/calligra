@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ExportDialogUI</class>
 <widget class="QWidget">
     <property name="name">
@@ -25,9 +25,9 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QTabWidget" row="0" column="0">
+        <widget class="QTabWidget" row="1" column="0">
             <property name="name">
-                <cstring>TabWidget3</cstring>
+                <cstring>m_tabWidget</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -62,7 +62,7 @@
                             <property name="clickable">
                                 <bool>false</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -80,7 +80,7 @@
                     </widget>
                     <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
-                            <cstring>GroupBox4</cstring>
+                            <cstring>m_delimiterLineBox</cstring>
                         </property>
                         <property name="sizePolicy">
                             <sizepolicy>
@@ -152,7 +152,7 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tab2</cstring>
                 </property>
                 <attribute name="title">
                     <string>Cells</string>
@@ -272,7 +272,7 @@
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Cells:</string>
+                            <string>Cells</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -350,6 +350,27 @@
                     </spacer>
                 </grid>
             </widget>
+        </widget>
+        <widget class="QButtonGroup" row="0" column="0">
+            <property name="name">
+                <cstring>buttonGroup2</cstring>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>m_selectionOnly</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Export selection only</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
     </grid>
 </widget>
