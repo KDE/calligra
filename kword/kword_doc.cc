@@ -31,7 +31,6 @@
 #include <komlMime.h>
 #include <koStream.h>
 #include <komlParser.h>
-#include <komlStreamFeed.h>
 #include <komlWriter.h>
 #include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
