@@ -55,7 +55,7 @@ VSelection::VSelection( const VSelection& selection )
 
 VSelection::~VSelection()
 {
-	clear();
+	//clear();
 	delete[]( m_handleRect );
 }
 
