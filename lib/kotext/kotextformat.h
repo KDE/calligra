@@ -70,7 +70,7 @@ public:
     enum UnderlineLineStyle { U_SOLID = 0 , U_DASH = 1, U_DOT = 2, U_DASH_DOT = 3, U_DASH_DOT_DOT = 4};
     enum StrikeOutLineStyle { S_SOLID = 0 , S_DASH = 1, S_DOT = 2, S_DASH_DOT = 3, S_DASH_DOT_DOT = 4};
 
-    enum AttributeStyle { ATT_NONE = 0, ATT_MAJ = 1, ATT_MIN = 2 };
+    enum AttributeStyle { ATT_NONE = 0, ATT_UPPER = 1, ATT_LOWER = 2 };
 
     /** Set a decimal point size. NOTE: this value isn't stored in the formay key.
         You should NOT call this - it's a special treat for KoTextFormatter */

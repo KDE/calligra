@@ -352,9 +352,9 @@ QChar KoTextFormat::displayedChar( QChar c )const
 {
     if ( m_attributeFont== ATT_NONE)
         return c;
-    else if ( m_attributeFont== ATT_MAJ)
+    else if ( m_attributeFont== ATT_UPPER)
         return c.upper();
-    else if ( m_attributeFont== ATT_MIN)
+    else if ( m_attributeFont== ATT_LOWER)
         return c.lower();
     else
     {
@@ -488,9 +488,9 @@ QString KoTextFormat::attributeFontToString( KoTextFormat::AttributeStyle _attr 
 {
     if (_attr == KoTextFormat::ATT_NONE )
         return QString("none");
-    else if ( _attr == KoTextFormat::ATT_MAJ )
+    else if ( _attr == KoTextFormat::ATT_UPPER )
         return QString("upper");
-    else if ( _attr == KoTextFormat::ATT_MIN )
+    else if ( _attr == KoTextFormat::ATT_LOWER )
         return QString("lower");
     else
         return QString("none");
@@ -501,9 +501,9 @@ KoTextFormat::AttributeStyle KoTextFormat::stringToAttributeFont( const QString 
     if ( _str == "none" )
         return KoTextFormat::ATT_NONE;
     else if ( _str == "upper")
-        return KoTextFormat::ATT_MAJ;
+        return KoTextFormat::ATT_UPPER;
     else if ( _str == "lower")
-        return KoTextFormat::ATT_MIN;
+        return KoTextFormat::ATT_LOWER;
     else
         return KoTextFormat::ATT_NONE;
 }

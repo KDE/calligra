@@ -245,10 +245,10 @@ KoTextFormat::AttributeStyle KoFontChooser::getFontAttribute()const
         return KoTextFormat::ATT_NONE;
         break;
     case 1:
-        return KoTextFormat::ATT_MAJ;
+        return KoTextFormat::ATT_UPPER;
         break;
     case 2:
-        return KoTextFormat::ATT_MIN;
+        return KoTextFormat::ATT_LOWER;
         break;
     default:
         return KoTextFormat::ATT_NONE;
@@ -259,9 +259,9 @@ void KoFontChooser::setFontAttribute( KoTextFormat::AttributeStyle _att)
 {
     if ( _att ==KoTextFormat::ATT_NONE)
         d->m_fontAttribute->setCurrentItem( 0);
-    else if ( _att ==KoTextFormat::ATT_MAJ)
+    else if ( _att ==KoTextFormat::ATT_UPPER)
         d->m_fontAttribute->setCurrentItem( 1 );
-    else if ( _att ==KoTextFormat::ATT_MIN )
+    else if ( _att ==KoTextFormat::ATT_LOWER )
         d->m_fontAttribute->setCurrentItem( 2 );
 }
 

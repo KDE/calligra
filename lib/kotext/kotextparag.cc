@@ -575,9 +575,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
             //shadow to 'top'.
             if ( shadowY( zh ) < 0)
                 posY -=shadowY( zh );
-            if ( lastFormat->attributeFont() == KoTextFormat::ATT_MAJ)
+            if ( lastFormat->attributeFont() == KoTextFormat::ATT_UPPER)
                 str = str.upper();
-            else if ( lastFormat->attributeFont() == KoTextFormat::ATT_MIN)
+            else if ( lastFormat->attributeFont() == KoTextFormat::ATT_LOWER)
                 str = str.lower();
 
 	    painter.drawText( startX, posY, str, start, len, dir );
