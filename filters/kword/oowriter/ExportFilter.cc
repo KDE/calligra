@@ -40,8 +40,6 @@
 #include <kdebug.h>
 #include <kzip.h>
 
-#include <config.h> // For VERSION
-
 #include <koGlobal.h>
 #include <koPictureKey.h>
 
@@ -918,10 +916,9 @@ bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 
     zipWriteData(" <office:meta>\n");
 
-    // Say who we are in case we have a bug in our filter output!
-    zipWriteData("  <meta:generator>OOWriter Export Filter of KWord ");
-
-    zipWriteData(escapeOOText(VERSION)); // escape the version string in case it would contain such character one day.
+    // Tell who we are in case we have a bug in our filter output!
+    zipWriteData("  <meta:generator>KWord's OOWriter Export Filter");
+    zipWriteData(QString("$Revision$").mid(10).remove('$')); // has a leading and a trailing space.
 
     zipWriteData("</meta:generator>\n");
 
