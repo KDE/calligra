@@ -24,6 +24,7 @@ class AutoFillDeltaSequence;
 class AutoFillSequenceItem;
 class AutoFillSequence;
 
+#include <qdatetime.h>
 #include <qmemarray.h>
 #include <qstring.h>
 #include <qptrlist.h>
@@ -34,7 +35,7 @@ class KSpreadCell;
 class AutoFillSequenceItem
 {
 public:
-    enum Type { INTEGER, FLOAT, STRING, DAY, MONTH, FORMULA, OTHER };
+    enum Type { INTEGER, FLOAT, STRING, DAY, MONTH, FORMULA, OTHER, DATE, TIME };
 
     AutoFillSequenceItem( int _i );
     AutoFillSequenceItem( double _d );
@@ -43,6 +44,7 @@ public:
     bool getDelta( AutoFillSequenceItem *_seq, double &delta );
 
     QString getSuccessor( int _no, double _delta );
+    QString getPredecessor( int _no, double _delta );
 
     Type getType() { return m_Type; }
     int getIValue() { return m_IValue; }
@@ -76,7 +78,7 @@ public:
 
     bool matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_delta );
 
-    void fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDeltaSequence *delta, int _block );
+    void fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDeltaSequence *delta, int _block, bool down = true );
 
 protected:
     QPtrList<AutoFillSequenceItem> sequence;
@@ -88,17 +90,17 @@ public:
     AutoFillDeltaSequence( AutoFillSequence *_first, AutoFillSequence *_next );
     ~AutoFillDeltaSequence();
 
-    bool isOk() { return ok; }
+    bool isOk() { return m_ok; }
 
     bool equals( AutoFillDeltaSequence *_delta );
 
-    QMemArray<double>* getSequence() { return sequence; }
+    QMemArray<double>* getSequence() { return m_sequence; }
 
     double getItemDelta( int _pos );
 
 protected:
-    bool ok;
-    QMemArray<double>* sequence;
+    bool m_ok;
+    QMemArray<double>* m_sequence;
 };
 
 #endif

@@ -36,17 +36,16 @@ QStringList *AutoFillSequenceItem::other = 0L;
  **********************************************************************************/
 
 AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFillSequence *_next )
+  : m_ok(TRUE),
+    m_sequence(0L)
 {
-  ok = TRUE;
-  sequence = 0L;
-
   if ( _first->count() != _next->count() )
   {
-    ok = FALSE;
+    m_ok = FALSE;
     return;
   }
 
-  sequence = new QMemArray<double> ( _first->count() );
+  m_sequence = new QMemArray<double> ( _first->count() );
 
   AutoFillSequenceItem *item = _first->getFirst();
   AutoFillSequenceItem *item2 = _next->getFirst();
@@ -57,10 +56,10 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
     double d;
     if ( !item->getDelta( item2, d ) )
       {
-        ok = FALSE;
+        m_ok = FALSE;
         return;
       }
-    sequence->at( i++ ) = d;
+    m_sequence->at( i++ ) = d;
     item2 = _next->getNext();
     item = _first->getNext();
   }
@@ -68,22 +67,22 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
 
 AutoFillDeltaSequence::~AutoFillDeltaSequence()
 {
-  if ( sequence )
-    delete sequence;
+  if ( m_sequence )
+    delete m_sequence;
 }
 
 bool AutoFillDeltaSequence::equals( AutoFillDeltaSequence *_delta )
 {
-  if ( sequence == 0L )
+  if ( m_sequence == 0L )
     return FALSE;
   if ( _delta->getSequence() == 0L )
     return FALSE;
-  if ( sequence->size() != _delta->getSequence()->size() )
+  if ( m_sequence->size() != _delta->getSequence()->size() )
     return FALSE;
 
-  for ( unsigned int i = 0; i < sequence->size(); i++ )
+  for ( unsigned int i = 0; i < m_sequence->size(); i++ )
   {
-    if ( sequence->at( i ) != _delta->getSequence()->at( i ) )
+    if ( m_sequence->at( i ) != _delta->getSequence()->at( i ) )
       return FALSE;
   }
 
@@ -92,9 +91,10 @@ bool AutoFillDeltaSequence::equals( AutoFillDeltaSequence *_delta )
 
 double AutoFillDeltaSequence::getItemDelta( int _pos )
 {
-  if ( sequence == 0L )
+  if ( m_sequence == 0L )
     return 0.0;
-  return sequence->at( _pos );
+
+  return m_sequence->at( _pos );
 }
 
 /**********************************************************************************
@@ -226,8 +226,7 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
             int i = month->findIndex( m_String );
             int j = month->findIndex( seq->getString() );
             int k = j;
-            if ( j < i )
-                k += month->count();
+
             if ( j + 1 == i )
                 _delta = -1.0;
             else
@@ -240,12 +239,12 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
             int i = day->findIndex( m_String );
             int j = day->findIndex( seq->getString() );
             int k = j;
-            if ( j < i )
-                k += day->count();
+
             if ( j + 1 == i )
                 _delta = -1.0;
             else
                 _delta = ( double )( k - i );
+            kdDebug() << m_String << " i: " << i << " j: " << j << " k: " << k << " delta: " << _delta << endl;
             return TRUE;
         }
     case OTHER:
@@ -256,15 +255,15 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
 	int j = other->findIndex( seq->getString() );
 	int k = j;
 	if ( j < i )
-	  k += (m_OtherEnd - m_OtherBegin-1);
+	  k += (m_OtherEnd - m_OtherBegin - 1);
 	/*if ( j + 1 == i )
 	  _delta = -1.0;
 	  else*/
 	  _delta = ( double )( k - i );
 	return TRUE;
       }
-    default:
-        return FALSE;
+     default:
+      return FALSE;
     }
 }
 
@@ -287,6 +286,8 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
         {
             int i = month->findIndex( m_String );
             int j = i + _no * (int) _delta;
+            while (j < 0)
+              j += month->count();
             int k = j % month->count();
             erg = (*month->at( k ));
         }
@@ -295,6 +296,8 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
         {
             int i = day->findIndex( m_String );
             int j = i + _no * (int) _delta;
+            while (j < 0)
+              j += day->count();
             int k = j % day->count();
             erg = (*day->at( k ));
         }
@@ -306,9 +309,66 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
 	 int k = j % (m_OtherEnd - m_OtherBegin-1);
 	 erg = (*other->at( (k+m_OtherBegin+1) ));
       }
+     case TIME:
+     case DATE:
+      // gets never called but fixes a warning while compiling
+      break;
     }
 
     return QString( erg );
+}
+
+QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
+{
+  QString erg;
+  switch( m_Type )
+  {
+   case INTEGER:
+    erg.sprintf("%i", m_IValue - _no * (int)_delta );
+    break;
+   case FLOAT:
+    erg.sprintf("%f", m_DValue - (double)_no * _delta );
+    break;
+   case FORMULA:
+   case STRING:
+    erg = m_String;
+    break;
+   case MONTH:
+    {
+      int i = month->findIndex( m_String );
+      int j = i - _no * (int) _delta;
+      while ( j < 0 )
+        j += month->count();
+      int k = j % month->count();
+      erg = (*month->at( k ));
+    }
+    break;
+   case DAY:
+    {
+      int i = day->findIndex( m_String );
+      int j = i - _no * (int) _delta;
+      while ( j < 0 )
+        j += day->count();
+      int k = j % day->count();
+      erg = (*day->at( k ));
+    }
+    break;
+   case OTHER:
+    {
+      int i = other->findIndex( m_String ) - (m_OtherBegin + 1);
+      int j = i - _no * (int) _delta;
+      while ( j < 0 )
+        j += (m_OtherEnd - m_OtherBegin - 1);
+      int k = j % (m_OtherEnd - m_OtherBegin - 1);
+      erg = (*other->at( (k + m_OtherBegin + 1) ));
+    }
+   case TIME:
+   case DATE:
+    // gets never called but fixes a warning while compiling
+    break;
+  }
+
+  return QString( erg );
 }
 
 /**********************************************************************************
@@ -351,7 +411,7 @@ bool AutoFillSequence::matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_
     return FALSE;
 }
 
-void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDeltaSequence *delta, int _block )
+void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDeltaSequence *delta, int _block, bool down )
 {
     QString erg = "";
 
@@ -366,8 +426,16 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
 
     AutoFillSequenceItem *item;
     int i = 0;
-    for ( item = sequence.first(); item != 0L; item = sequence.next() )
+    if (down)
+    {
+      for ( item = sequence.first(); item != 0L; item = sequence.next() )
         erg += item->getSuccessor( _block, delta->getItemDelta( i++ ) );
+    }
+    else
+    {
+      for ( item = sequence.first(); item != 0L; item = sequence.next() )
+        erg += item->getPredecessor( _block, delta->getItemDelta( i++ ) );
+    }
 
     dest->setCellText( erg, true );
     dest->copyLayout( src );
@@ -381,8 +449,7 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
 
 void KSpreadTable::autofill( QRect &src, QRect &dest )
 {
-    if(src==dest || ( src.right() >= dest.right() &&
-                      src.bottom() >= dest.bottom()))
+    if(src == dest)
     {
         return;
     }
@@ -404,11 +471,11 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
                 destList.append( nonDefaultCell( x, y ) );
             QPtrList<KSpreadCell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
-                srcList.append( cellAt( x, y ) );
+                srcList.append( cellAt( x, y, true ) );
             QPtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( TRUE );
             for ( x = src.left(); x <= src.right(); x++ )
-                seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
+                seqList.append( new AutoFillSequence( cellAt( x, y, true ) ) );
             fillSequence( srcList, destList, seqList );
         }
     }
@@ -424,42 +491,299 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
                 destList.append( nonDefaultCell( x, y ) );
             QPtrList<KSpreadCell> srcList;
             for ( y = src.top(); y <= src.bottom(); y++ )
-                srcList.append( cellAt( x, y ) );
+                srcList.append( cellAt( x, y, true ) );
             QPtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( TRUE );
             for ( y = src.top(); y <= src.bottom(); y++ )
-                seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
+                seqList.append( new AutoFillSequence( cellAt( x, y, true ) ) );
             fillSequence( srcList, destList, seqList );
         }
     }
 
+    // Fill from right to left
+    if ( src.left() == dest.right() && src.right() >= dest.right() )
+    {
+        for ( int y = src.top(); y <= src.bottom(); y++ )
+        {
+            int x;
+            QPtrList<KSpreadCell> destList;
+
+            for ( x = dest.left(); x < src.left(); x++ )
+                destList.append( nonDefaultCell( x, y, true ) );
+            QPtrList<KSpreadCell> srcList;
+            for ( x = src.left(); x <= src.right(); x++ )
+                srcList.append( cellAt( x, y, true ) );
+            QPtrList<AutoFillSequence> seqList;
+            seqList.setAutoDelete( TRUE );
+            for ( x = src.left(); x <= src.right(); x++ )
+                seqList.append( new AutoFillSequence( cellAt( x, y, true ) ) );
+            fillSequence( srcList, destList, seqList, false );
+        }
+    }
+
+    // Fill from bottom to top
+    if ( src.top() == dest.bottom() && src.bottom() >= dest.bottom() )
+    {
+        for ( int x = src.left(); x <= dest.right(); x++ )
+        {
+            int y;
+            QPtrList<KSpreadCell> destList;
+            for ( y = dest.top(); y < src.top(); y++ )
+                destList.append( nonDefaultCell( x, y ) );
+            QPtrList<KSpreadCell> srcList;
+            for ( y = src.top(); y <= src.bottom(); ++y )
+                srcList.append( cellAt( x, y, true ) );
+            QPtrList<AutoFillSequence> seqList;
+            seqList.setAutoDelete( TRUE );
+            for ( y = src.top(); y <= src.bottom(); y++ )
+                seqList.append( new AutoFillSequence( cellAt( x, y, true ) ) );
+            fillSequence( srcList, destList, seqList, false );
+        }
+    }
 }
 
 
 void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList,
 				 QPtrList<KSpreadCell>& _destList,
-                                 QPtrList<AutoFillSequence>& _seqList )
+                                 QPtrList<AutoFillSequence>& _seqList,
+                                 bool down)
 {
     doc()->emitBeginOperation();
 
     /* try finding an interval to use to fill the sequence */
-    if (!FillSequenceWithInterval(_srcList, _destList, _seqList))
+    if (!FillSequenceWithInterval(_srcList, _destList, _seqList, down))
     {
       /* if no interval was found, just copy down through */
-      FillSequenceWithCopy(_srcList, _destList);
+      FillSequenceWithCopy(_srcList, _destList, down);
     }
 
     doc()->emitEndOperation();
 }
 
+double getDiff(KSpreadCell * cell1, KSpreadCell * cell2, AutoFillSequenceItem::Type type)
+{
+  if (type == AutoFillSequenceItem::FLOAT)
+  {
+    return ( cell2->valueDouble() - cell1->valueDouble() );
+  }
+  else if (type == AutoFillSequenceItem::DATE)
+  {
+    QDate date1 = cell1->valueDate();
+    QDate date2 = cell2->valueDate();
 
-bool KSpreadTable::FillSequenceWithInterval
-(QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList,
- QPtrList<AutoFillSequence>& _seqList)
+    return (double) date1.daysTo(date2);
+  }
+  else if (type == AutoFillSequenceItem::TIME)
+  {
+    QTime time1 = cell1->valueTime();
+    QTime time2 = cell2->valueTime();
+
+    return (double) time1.secsTo(time2);
+  }
+  else
+    return 0.0;
+}
+
+bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList, 
+                                            QPtrList<KSpreadCell>& _destList,
+                                            QPtrList<AutoFillSequence>& _seqList,
+                                            bool down)
 {
   QPtrList<AutoFillDeltaSequence> deltaList;
   deltaList.setAutoDelete( TRUE );
   bool ok = false;
+
+  if ( _srcList.first()->isNumeric() || _srcList.first()->isDate() || _srcList.first()->isTime() )
+  {
+    AutoFillSequenceItem::Type type;
+
+    QMemArray<double> * tmp  = new QMemArray<double> ( _seqList.count() );
+    QMemArray<double> * diff = new QMemArray<double> ( _seqList.count() );
+    int p = -1;
+    int count = 0;
+    int tmpcount = 0;
+
+    KSpreadCell * cell = _srcList.first();
+    KSpreadCell * cell2 = _srcList.next();
+
+    if ( cell->isNumeric() )
+      type = AutoFillSequenceItem::FLOAT;
+    else if ( cell->isDate() )
+      type = AutoFillSequenceItem::DATE;
+    else if ( cell->isTime() )
+      type = AutoFillSequenceItem::TIME;    
+ 
+    while ( cell && cell2 )
+    {
+      // check if both cells contain the same type
+      if ( ( cell2->isNumeric() && type != AutoFillSequenceItem::FLOAT )
+           || ( cell2->isDate() && type != AutoFillSequenceItem::DATE )
+           || ( cell2->isTime() && type != AutoFillSequenceItem::TIME )
+           || (!cell2->isNumeric() && !cell2->isDate() && !cell2->isTime()) )
+      {
+        count = 0;
+        ok = false;
+        break;
+      }
+
+      // get a delta (days, seconds or just a diff)
+      double delta = getDiff(cell, cell2, type);
+
+      if (count < 1)
+      {
+        p = count;
+        diff->at( count++ ) = delta;
+      }
+      else
+      {
+        // same value again?
+        if (diff->at( p ) == delta)
+        {
+          // store it somewhere else for the case we need it later
+          ++p;
+          tmp->at( tmpcount++ ) = delta;
+        }
+        else
+        {
+          // if we have saved values in another buffer we have to insert them first
+          if ( tmpcount > 0 )
+          {
+            for ( int i = 0; i < tmpcount; ++i )
+            {
+              diff->at( count++ ) = tmp->at( i );
+            }
+
+            tmpcount = 0;
+          }
+
+          // insert the value
+          p = 0;
+          diff->at( count++ ) = delta;
+        }
+      }
+
+      // check next cell pair
+      cell  = cell2;
+      cell2 = _srcList.next();
+    }
+
+    // we have found something:
+    if (count > 0 && (tmpcount > 0 || count == 1)) 
+    {
+      double initDouble;
+      QDate  initDate;
+      QTime  initTime;
+
+      KSpreadCell * dest; 
+      KSpreadCell * src; 
+
+      int i = tmpcount;
+      if (down)
+      {
+        dest = _destList.first();
+        src  = _srcList.last();
+
+        if (type == AutoFillSequenceItem::FLOAT)
+          initDouble = src->valueDouble();
+        else if (type == AutoFillSequenceItem::DATE)
+          initDate = src->valueDate();
+        else if (type == AutoFillSequenceItem::TIME)
+          initTime = src->valueTime();
+      }
+      else
+      {
+        dest = _destList.last();
+        src  = _srcList.first();
+
+        if (type == AutoFillSequenceItem::FLOAT)
+          initDouble = src->valueDouble();
+        else if (type == AutoFillSequenceItem::DATE)
+          initDate = src->valueDate();
+        else if (type == AutoFillSequenceItem::TIME)
+          initTime = src->valueTime();
+
+        i   *= -1;
+      }
+
+      QString res;
+
+      // copy all the data
+      while (dest)
+      {
+        if (down)
+        {
+          while ( i >= count )
+            i -= count;
+        }
+        else
+        {
+          while ( i < 0)
+            i += count;
+        }
+
+        if (type == AutoFillSequenceItem::FLOAT)
+        {
+          if (down)
+            initDouble += diff->at( i );        
+          else
+            initDouble -= diff->at( i );        
+
+          res.sprintf("%f", initDouble );
+        }
+        else if (type == AutoFillSequenceItem::DATE)
+        {
+          int n = (int) diff->at( i );
+
+          if (!down)
+            n *= -1;
+
+          initDate = initDate.addDays( n );
+          res = initDate.toString("dd.MM.yyyy");
+        }
+        else if (type == AutoFillSequenceItem::TIME)
+        {
+          int n = (int) diff->at( i );
+
+          if (!down)
+            n *= -1;
+
+          initTime = initTime.addSecs( n );
+          res = initTime.toString();
+        }
+
+        dest->setCellText( res, true );
+        dest->copyLayout( src );
+        dest->setFormatType( src->formatType() );
+        
+        if (down)
+        {
+          ++i;
+          dest = _destList.next();
+          src = _srcList.next();
+        }
+        else
+        {
+          --i;
+          dest = _destList.prev();
+          src = _srcList.prev();
+        }
+
+        if (!src)
+          src = _srcList.last();
+      }
+
+      ok = true;
+    }
+    else
+    {
+      ok = false;
+    }
+
+    delete tmp;
+    delete diff;
+
+    return ok;
+  }
 
   // What is the interval (block)? If your table looks like this:
   // 1 3 5 7 9
@@ -474,6 +798,7 @@ bool KSpreadTable::FillSequenceWithInterval
   // We try to find the shortest interval.
   for ( unsigned int step = 1; step <= _seqList.count() / 2; step++ )
   {
+    kdDebug() << "Looking for interval: " << step << " seqList count: " << _seqList.count() << endl;
     // If the interval is of length 'step' then the _seqList size must
     // be a multiple of 'step'
     if ( _seqList.count() % step == 0 )
@@ -510,62 +835,117 @@ bool KSpreadTable::FillSequenceWithInterval
 	    ok = FALSE;
 	}
       }
-
       // Did we find a valid interval ?
       if ( ok )
       {
-	// Start iterating with the first cell
-	KSpreadCell *cell = _destList.first();
 	unsigned int s = 0;
 	// Amount of intervals (blocks)
 	int block = _seqList.count() / step;
+
+	// Start iterating with the first cell
+	KSpreadCell * cell;
+        if (down)
+          cell = _destList.first();
+        else
+        {
+          cell = _destList.last();
+          block -= (_seqList.count() - 1);
+        }
+
+
 	// Loop over all destination cells
 	while ( cell )
 	{
+          kdDebug() << "Valid intervall, cell: " << cell->row() << " block: " << block << endl;
+
 	  // End of block? -> start again from beginning
-	  if ( s == step )
-	  {
-	    block++;
-	    s = 0;
-	  }
+          if (down)
+          {
+            if ( s == step )
+            {
+              ++block;
+              s = 0;
+            }
+          }
+          else
+          {
+            if ( s >= step )
+            {
+              s = step - 1;
+              ++block;
+            }
+          }
+
+          kdDebug() << "Step: " << step << " S: " << s << " Block " << block 
+                    << " SeqList: " << _seqList.count()
+                    << " SrcList: " << _srcList.count() << " DeltaList: " << deltaList.count()
+                    << endl;
+
 	  // Set the value of 'cell' by adding 'block' times the delta tp the
 	  // value of cell 's'.
 	  _seqList.at( s )->fillCell( _srcList.at( s ), cell,
-				      deltaList.at( s ), block );
-	  // Next cell
-	  cell = _destList.next();
-	  s++;
+				      deltaList.at( s ), block, down );
+
+          if (down)
+          {
+            // Next cell
+            cell = _destList.next();
+            ++s;
+          }
+          else
+          {
+            // Previous cell
+            cell = _destList.prev();
+            --s;            
+          }
 	}
       }
     }
   }
   return ok;
-
 }
 
-void KSpreadTable::FillSequenceWithCopy
-(QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList)
+void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList, 
+                                        QPtrList<KSpreadCell>& _destList,
+                                        bool down)
 {
   // We did not find any valid interval. So just copy over the marked
   // area.
-  KSpreadCell *cell = _destList.first();
+  KSpreadCell * cell;
+
+  if (down)
+    cell = _destList.first();
+  else
+    cell = _destList.last();
+
   unsigned int s = 0;
-  unsigned int incre=1;
+
+  if (!down)
+    s = _srcList.count() - 1;
+
   while ( cell )
   {
-    if ( s == _srcList.count() )
-      s = 0;
+    if (down)
+    {
+      if ( s == _srcList.count() )
+        s = 0;
+    }
+    else
+    {
+      if ( s >= _srcList.count() )
+        s = _srcList.count() - 1;
+    } 
+
     if ( !_srcList.at( s )->text().isEmpty() )
     {
       if ( _srcList.at( s )->isFormula() )
       {
-	QString d = _srcList.at( s )->encodeFormula();
+ 	QString d = _srcList.at( s )->encodeFormula();
 	cell->setCellText( cell->decodeFormula( d ), true );
       }
       else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
       {
-	double val=(_srcList.at( s )->valueDouble())+incre;
-	incre++;
+	double val=(_srcList.at( s )->valueDouble());
 	QString tmp;
 	tmp=tmp.setNum(val);
 	cell->setCellText( tmp, true );
@@ -573,18 +953,11 @@ void KSpreadTable::FillSequenceWithCopy
       else if(_srcList.at( s )->isDate() && _srcList.count()==1)
       {
 	QDate tmpDate=(_srcList.at( s )->valueDate());
-	tmpDate=tmpDate.addDays( incre );
-	incre++;
 	cell->setCellText(doc()->locale()->formatDate(tmpDate,true),true);
       }
       else if(_srcList.at( s )->isTime() && _srcList.count()==1)
       {
-	if(incre==1)
-	  incre=60;
 	QTime tmpTime=(_srcList.at( s )->valueTime());
-	//add a minute
-	tmpTime=tmpTime.addSecs( incre );
-	incre+=60;
 	cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
       }
       else if((AutoFillSequenceItem::month != 0L)
@@ -594,9 +967,8 @@ void KSpreadTable::FillSequenceWithCopy
       {
 	QString strMonth=_srcList.at( s )->text();
 	int i = AutoFillSequenceItem::month->findIndex( strMonth );
-	int k = (i+incre) % AutoFillSequenceItem::month->count();
+	int k = (i) % AutoFillSequenceItem::month->count();
 	cell->setCellText((*AutoFillSequenceItem::month->at( k )));
-	incre++;
       }
       else if(AutoFillSequenceItem::day != 0L
 	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != 0L
@@ -606,9 +978,8 @@ void KSpreadTable::FillSequenceWithCopy
       {
 	QString strDay=_srcList.at( s )->text();
 	int i = AutoFillSequenceItem::day->findIndex( strDay );
-	int k = (i+incre) % AutoFillSequenceItem::day->count();
+	int k = (i) % AutoFillSequenceItem::day->count();
 	cell->setCellText((*AutoFillSequenceItem::day->at( k )));
-	incre++;
       }
       else
       {
@@ -618,8 +989,7 @@ void KSpreadTable::FillSequenceWithCopy
 	{
 	  QString tmp=number.cap(1);
 	  int num=tmp.toInt();
-	  cell->setCellText(_srcList.at( s )->text().replace(number,QString::number(num+incre)));
-	  incre++;
+	  cell->setCellText(_srcList.at( s )->text().replace(number,QString::number(num)));
 	}
 	else
 	  cell->setCellText( _srcList.at( s )->text(), true );
@@ -627,9 +997,19 @@ void KSpreadTable::FillSequenceWithCopy
     }
     else
       cell->setCellText( "", true );
+
     cell->copyLayout( _srcList.at( s ) );
-    cell = _destList.next();
-    s++;
+
+    if (down)
+    {
+      cell = _destList.next();
+      ++s;
+    }
+    else
+    {
+      cell = _destList.prev();
+      --s;
+    }
   }
   return;
 }

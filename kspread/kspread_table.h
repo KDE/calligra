@@ -1058,7 +1058,7 @@ protected:
     /**
      * @see #autofill
      */
-    void fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, QPtrList<AutoFillSequence>& _seqList );
+    void fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
 
     KSpreadCluster m_cells;
     KSpreadRowCluster m_rows;
@@ -1224,12 +1224,14 @@ protected:
 private:
     bool FillSequenceWithInterval (QPtrList<KSpreadCell>& _srcList,
 				   QPtrList<KSpreadCell>& _destList,
-				   QPtrList<AutoFillSequence>& _seqList);
+				   QPtrList<AutoFillSequence>& _seqList,
+                                   bool down);
 
     void FillSequenceWithCopy (QPtrList<KSpreadCell>& _srcList,
-			       QPtrList<KSpreadCell>& _destList);
-  void convertObscuringBorders();
+			       QPtrList<KSpreadCell>& _destList,
+                               bool down);
 
+    void convertObscuringBorders();
 };
 
 #endif
