@@ -6686,10 +6686,24 @@ void KPrCanvas::textContentsToHeight()
     if ( lst.isEmpty() )
         return;
     QPtrListIterator<KPTextObject> it( lst );
+    KMacroCommand * macro = new KMacroCommand(i18n("Extend text contents to height"));
+    bool createMacro=false;
     for ( ; it.current() ; ++it ) {
-        it.current()->textContentsToHeight();
-        _repaint( it.current() );
+        KCommand *cmd= it.current()->textContentsToHeight();
+        if( cmd )
+        {
+            macro->addCommand( cmd);
+            createMacro=true;
+            _repaint( it.current() );
+        }
     }
+    if( createMacro)
+    {
+        macro->execute();
+        m_view->kPresenterDoc()->addCommand( macro );
+    }
+    else
+        delete macro;
 }
 
 void KPrCanvas::textObjectToContents()
@@ -6698,9 +6712,24 @@ void KPrCanvas::textObjectToContents()
     if ( lst.isEmpty() )
         return;
     QPtrListIterator<KPTextObject> it( lst );
+    KMacroCommand * macro = new KMacroCommand(i18n("Extend text to contents"));
+    bool createMacro=false;
     for ( ; it.current() ; ++it ) {
-        it.current()->textObjectToContents();
-        _repaint( it.current() );
+        KCommand *cmd= it.current()->textObjectToContents();
+        if( cmd )
+        {
+            macro->addCommand( cmd);
+            createMacro=true;
+        }
     }
+
+    if( createMacro)
+    {
+        macro->execute();
+        m_view->kPresenterDoc()->addCommand( macro );
+    }
+    else
+        delete macro;
+
 }
 

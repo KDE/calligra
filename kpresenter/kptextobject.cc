@@ -56,7 +56,7 @@
 #include <koRuler.h>
 #include "kprdrag.h"
 #include <qclipboard.h>
-
+#include <koSize.h>
 using namespace std;
 
 /******************************************************************/
@@ -1078,19 +1078,21 @@ void KPTextObject::slotAfterFormatting( int, KoTextParag* lastFormatted, bool* )
     }
 }
 
-void KPTextObject::textContentsToHeight()
+KCommand * KPTextObject::textContentsToHeight()
 {
     KoTextParag * parag = m_textobj->textDocument()->lastParag();
     double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ));
     if( getRect().height()> txtHeight )
     {
         m_doc->repaint(this);
-        setSize( getRect().width(), txtHeight);
-        m_doc->updateRuler();
+        KoSize size= KoSize(getRect().width(), txtHeight) - getRect().size();
+        ResizeCmd *cmd = new ResizeCmd( i18n("TextContentsToHeight"), KoPoint( 0,0), size, this, m_doc);
+        return cmd;
     }
+    return 0L;
 }
 
-void KPTextObject::textObjectToContents()
+KCommand * KPTextObject::textObjectToContents()
 {
     KoTextParag * parag = m_textobj->textDocument()->firstParag();
     KoTextParag * lastParag = m_textobj->textDocument()->lastParag();
@@ -1104,15 +1106,18 @@ void KPTextObject::textObjectToContents()
     if( getRect().height()> txtHeight )
     {
         m_doc->repaint(this);
-        setSize( m_doc->zoomHandler()->unzoomItX(widthTxt), txtHeight);
-        m_doc->updateRuler();
+        KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), txtHeight ) - getRect().size();
+        ResizeCmd *cmd = new ResizeCmd( i18n("TextContentsToHeight"), KoPoint( 0,0), size, this, m_doc);
+        return cmd;
     }
     else
     {
         m_doc->repaint(this);
-        setSize( m_doc->zoomHandler()->unzoomItX(widthTxt), getRect().height());
-        m_doc->updateRuler();
+        KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), getRect().height()) - getRect().size();
+        ResizeCmd *cmd = new ResizeCmd( i18n("TextContentsToHeight"), KoPoint( 0,0), size, this, m_doc);
+        return cmd;
     }
+    return 0L;
 }
 
 KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )

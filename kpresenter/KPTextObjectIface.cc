@@ -219,10 +219,12 @@ void KPTextObjectIface::changeCaseOfText( const QString & caseType)
 
 void KPTextObjectIface::extendTextContentsToHeight()
 {
-    m_textobject->textContentsToHeight();
+    KCommand *cmd=m_textobject->textContentsToHeight();
+    delete cmd;
 }
 
 void KPTextObjectIface::extendTextObjectToContents()
 {
-    m_textobject->textObjectToContents();
+    KCommand *cmd= m_textobject->textObjectToContents();
+    delete cmd;
 }
