@@ -298,10 +298,10 @@ void BrushTool::optionsDialog()
 
 void BrushTool::setupAction(QObject *collection)
 {
-	KToggleAction * toggle = new KToggleAction(i18n("&Brush tool"), "paintbrush", 0, this, SLOT(toolSelect()),
+	m_toggle = new KToggleAction(i18n("&Brush tool"), "paintbrush", 0, this, SLOT(toolSelect()),
 			collection, "tool_brush");
 
-	toggle -> setExclusiveGroup("tools");
+	m_toggle -> setExclusiveGroup("tools");
 }
 
 QDomElement BrushTool::saveSettings(QDomDocument& doc) const
@@ -327,3 +327,10 @@ bool BrushTool::loadSettings(QDomElement& elem)
 	return rc;
 }
 
+void BrushTool::toolSelect()
+{
+	if (m_pView)
+		m_pView -> activateTool(this);
+
+	m_toggle -> setChecked(true);
+}

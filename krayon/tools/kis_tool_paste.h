@@ -35,12 +35,12 @@ public:
   
 	virtual void setupAction(QObject *collection);
 	virtual bool shouldRepaint();
+	virtual bool setClip();
 
 	void setOpacity(int opacity);
 	bool pasteMonochrome(QPoint pos);
 	bool pasteColor(QPoint pos);
 	bool pasteToCanvas(QPoint pos);
-	bool setClip();
 
 public slots:
 	virtual void mousePress(QMouseEvent*); 

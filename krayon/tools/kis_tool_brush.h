@@ -25,6 +25,8 @@
 
 #include "kis_tool.h"
 
+class KToggleAction;
+
 class KisBrush;
 class KisDoc;
 
@@ -45,24 +47,24 @@ public:
 	bool paintCanvas(const QPoint& pos);
 
 public slots:
+	virtual void toolSelect();
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
 
 protected:
+	KToggleAction * m_toggle;
+	QPoint 	m_dragStart;
+	bool   	m_dragging;
+	float       m_dragdist;
 
-    QPoint 	m_dragStart;
-    bool   	m_dragging;
-    float       m_dragdist;
-    
-    int red, blue, green;
-    int brushWidth, brushHeight;
-    QSize brushSize;
-    QPoint hotSpot;
-    int hotSpotX, hotSpotY;
-    int spacing;
-    bool alpha;
-    
+	int red, blue, green;
+	int brushWidth, brushHeight;
+	QSize brushSize;
+	QPoint hotSpot;
+	int hotSpotX, hotSpotY;
+	int spacing;
+	bool alpha;
 };
 
 #endif //__brushtool_h__
