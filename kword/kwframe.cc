@@ -863,21 +863,21 @@ void KWFrameSet::load( QDomElement &attributes )
             t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0.0 );
             b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0.0 );
             l.color.setRgb(
-                KWDocument::getAttribute( frameElem, "lRed", 0xff ),
-                KWDocument::getAttribute( frameElem, "lGreen", 0xff ),
-                KWDocument::getAttribute( frameElem, "lBlue", 0xff ) );
+                KWDocument::getAttribute( frameElem, "lRed", 0 ),
+                KWDocument::getAttribute( frameElem, "lGreen", 0 ),
+                KWDocument::getAttribute( frameElem, "lBlue", 0 ) );
             r.color.setRgb(
-                KWDocument::getAttribute( frameElem, "rRed", 0xff ),
-                KWDocument::getAttribute( frameElem, "rGreen", 0xff ),
-                KWDocument::getAttribute( frameElem, "rBlue", 0xff ) );
+                KWDocument::getAttribute( frameElem, "rRed", 0 ),
+                KWDocument::getAttribute( frameElem, "rGreen", 0 ),
+                KWDocument::getAttribute( frameElem, "rBlue", 0 ) );
             t.color.setRgb(
-                KWDocument::getAttribute( frameElem, "tRed", 0xff ),
-                KWDocument::getAttribute( frameElem, "tGreen", 0xff ),
-                KWDocument::getAttribute( frameElem, "tBlue", 0xff ) );
+                KWDocument::getAttribute( frameElem, "tRed", 0 ),
+                KWDocument::getAttribute( frameElem, "tGreen", 0 ),
+                KWDocument::getAttribute( frameElem, "tBlue", 0 ) );
             b.color.setRgb(
-                KWDocument::getAttribute( frameElem, "bRed", 0xff ),
-                KWDocument::getAttribute( frameElem, "bGreen", 0xff ),
-                KWDocument::getAttribute( frameElem, "bBlue", 0xff ) );
+                KWDocument::getAttribute( frameElem, "bRed", 0 ),
+                KWDocument::getAttribute( frameElem, "bGreen", 0 ),
+                KWDocument::getAttribute( frameElem, "bBlue", 0 ) );
             l.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", Border::SOLID ) );
             r.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", Border::SOLID ) );
             t.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", Border::SOLID ) );
