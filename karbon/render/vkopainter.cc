@@ -181,9 +181,8 @@ VKoPainter::clear()
 void
 VKoPainter::clear( const QColor &c )
 {
-	unsigned int color = c.rgb();
 	if( m_buffer )
-		memset( m_buffer, qRgba( qRed( color ), qGreen( color ), qBlue( color ), 100 ), m_width * m_height * 4 );
+		memset( m_buffer, c.rgb(), m_width * m_height * 4 );
 }
 
 void
