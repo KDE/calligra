@@ -51,6 +51,7 @@ protected:
     KDoubleNumInput *position;
 protected slots:
     virtual void slotOk();
+    void slotValueChanged( int pos);
 };
 
 #endif

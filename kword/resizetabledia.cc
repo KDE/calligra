@@ -55,6 +55,7 @@ void KWResizeTableDia::setupTab1()
     rc->setAlignment( AlignLeft | AlignBottom );
 
     value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(), 1, page );
+    connect( value, SIGNAL( valueChanged ( int )), this, SLOT( slotValueChanged( int )));
     value->resize( value->sizeHint() );
     unsigned int rowSelected;
     unsigned int colSelected;
@@ -63,9 +64,9 @@ void KWResizeTableDia::setupTab1()
         value->setValue( type == ROW ? table->getRows() : table->getCols() );
     else
         value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
-
     rc = new QLabel( type == ROW ? i18n( "Height:(%1)" ).arg(doc->getUnitName()) : i18n( "Width:(%1)" ).arg(doc->getUnitName()), page );
     position= new KDoubleNumInput( page );
+    slotValueChanged( value->value());
 }
 
 bool KWResizeTableDia::doResize()
@@ -105,6 +106,27 @@ bool KWResizeTableDia::doResize()
         }
     }
     return true;
+}
+
+void KWResizeTableDia::slotValueChanged( int pos)
+{
+    if ( type == ROW )
+    {
+        KWFrame *frm = table->getCell( pos-1, 0 )->frame(0);
+        if (frm)
+        {
+            position->setValue( KoUnit::ptToUnit( QMAX(0.00, frm->normalize().height()), doc->getUnit() ) );
+        }
+
+    }
+    else
+    {
+        KWFrame *frm = table->getCell( 0, pos-1 )->frame(0);
+        if (frm)
+        {
+            position->setValue( KoUnit::ptToUnit( QMAX(0.00, frm->normalize().width()), doc->getUnit() ) );
+        }
+    }
 }
 
 void KWResizeTableDia::slotOk()
