@@ -26,13 +26,15 @@ namespace Kivio {
   class DragBarButton;
 }
 
+class KivioView;
+
 using namespace Kivio;
 
 class KivioStackBar : public QDockWindow
 {
   Q_OBJECT
   public:
-    KivioStackBar(QWidget* parent=0, const char* name=0);
+    KivioStackBar(KivioView* view, QWidget* parent=0, const char* name=0);
     ~KivioStackBar();
   
     QWidget* findPage(const QString& name);
@@ -42,7 +44,9 @@ class KivioStackBar : public QDockWindow
     void deletePageAndButton(DragBarButton*);
     void showPage(QWidget*);
   
-    QWidget* visiblePage()const { return m_visiblePage; }
+    QWidget* visiblePage() const { return m_visiblePage; }
+    
+    KivioView* view() const { return m_view; } 
   
   signals:
     void aboutToShow(QWidget*);
@@ -63,6 +67,7 @@ class KivioStackBar : public QDockWindow
   private:
     QPtrDict<QWidget> m_data;
     QWidget* m_visiblePage;
+    KivioView* m_view;
 };
 
 #endif

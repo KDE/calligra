@@ -38,7 +38,11 @@ StencilBarDockManager::StencilBarDockManager( KivioView* parent, const char* nam
   m_destinationBar = 0L;
   dragPos = OnDesktop;
 
-  m_pDoc = NULL;
+  m_pBars.setAutoDelete(true);
+
+  m_pDoc = m_pView->doc();
+  connect(m_pDoc, SIGNAL(sig_deleteStencilSet(DragBarButton*, QWidget*, KivioStackBar*)), this,
+          SLOT(slotDeleteStencilSet(DragBarButton*, QWidget*, KivioStackBar*)));
 
   moveManager = new KoToolDockMoveManager();
   connect(moveManager,SIGNAL(positionChanged()),SLOT(slotMoving()));
@@ -72,7 +76,7 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
         QPtrList<QDockWindow> dockList = m_pView->mainWindow()->dockWindows(Qt::DockLeft);
         
         for(QDockWindow* dock = dockList.first(); dock; dock = dockList.next()) {
-          if(::qt_cast<KivioStackBar*>(dock)) {
+          if(::qt_cast<KivioStackBar*>(dock) && (static_cast<KivioStackBar*>(dock)->view() == m_pView)) {
             bar = static_cast<KivioStackBar*>(dock);
             break;
           }
@@ -86,7 +90,7 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
         QPtrList<QDockWindow> dockList = m_pView->mainWindow()->dockWindows(Qt::DockTop);
         
         for(QDockWindow* dock = dockList.first(); dock; dock = dockList.next()) {
-          if(::qt_cast<KivioStackBar*>(dock)) {
+          if(::qt_cast<KivioStackBar*>(dock) && (static_cast<KivioStackBar*>(dock)->view() == m_pView)) {
             bar = static_cast<KivioStackBar*>(dock);
             break;
           }
@@ -100,7 +104,7 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
         QPtrList<QDockWindow> dockList = m_pView->mainWindow()->dockWindows(Qt::DockRight);
         
         for(QDockWindow* dock = dockList.first(); dock; dock = dockList.next()) {
-          if(::qt_cast<KivioStackBar*>(dock)) {
+          if(::qt_cast<KivioStackBar*>(dock) && (static_cast<KivioStackBar*>(dock)->view() == m_pView)) {
             bar = static_cast<KivioStackBar*>(dock);
             break;
           }
@@ -114,7 +118,7 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
         QPtrList<QDockWindow> dockList = m_pView->mainWindow()->dockWindows(Qt::DockBottom);
         
         for(QDockWindow* dock = dockList.first(); dock; dock = dockList.next()) {
-          if(::qt_cast<KivioStackBar*>(dock)) {
+          if(::qt_cast<KivioStackBar*>(dock) && (static_cast<KivioStackBar*>(dock)->view() == m_pView)) {
             bar = static_cast<KivioStackBar*>(dock);
             break;
           }
@@ -131,7 +135,7 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
     }
 
     if (!bar) {
-      bar = new KivioStackBar(m_pView->mainWindow());
+      bar = new KivioStackBar(m_pView, m_pView->mainWindow());
       m_pView->mainWindow()->moveDockWindow(bar, position);
       m_pBars.append(bar);
       connect(bar,SIGNAL(beginDragPage(DragBarButton*)),SLOT(slotBeginDragPage(DragBarButton*)));
@@ -281,15 +285,15 @@ void StencilBarDockManager::slotDeleteStencilSet( DragBarButton* pBtn, QWidget *
   }
 }
 
-void StencilBarDockManager::setDoc( KivioDoc *p )
+void StencilBarDockManager::setAllStackBarsShown(bool shown)
 {
-    if( m_pDoc )
-    {
-       kdDebug(43000) << "StencilBarDockManager::setDoc() - This should never be called twice - error!!" << endl;
-        return;
+  for(KivioStackBar* bar = m_pBars.first(); bar; bar = m_pBars.next()) {
+    if(shown) {
+      bar->show();
+    } else {
+      bar->hide();
     }
-    m_pDoc = p;
-
-    connect(m_pDoc, SIGNAL(sig_deleteStencilSet(DragBarButton*,QWidget*,KivioStackBar*)), this, SLOT(slotDeleteStencilSet( DragBarButton*,QWidget*,KivioStackBar* )));
+  }
 }
+
 #include "stencilbardockmanager.moc"

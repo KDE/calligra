@@ -26,8 +26,8 @@
 #include <kdebug.h>
 
 
-KivioStackBar::KivioStackBar( QWidget* parent, const char* name )
-    : QDockWindow(parent, name)
+KivioStackBar::KivioStackBar(KivioView* view, QWidget* parent, const char* name)
+  : QDockWindow(parent, name), m_view(view)
 {
   QDockWindow::boxLayout()->setSpacing(0);
   QDockWindow::boxLayout()->setMargin(0);

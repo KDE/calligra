@@ -165,7 +165,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   bool isModified = doc->isModified();
   m_pStencilBarDockManager = new StencilBarDockManager(this);
-  m_pStencilBarDockManager->setDoc( doc );
 
   // QGridLayout for the entire view
   QGridLayout *viewGrid = new QGridLayout(this);
@@ -2157,9 +2156,10 @@ void KivioView::partActivateEvent(KParts::PartActivateEvent* event)
     updateToolBars();
     clipboardDataChanged();
   }
-  
+
   if(event->widget() == this) {
     m_pluginManager->setEventDelegationEnabled(event->activated());
+    m_pStencilBarDockManager->setAllStackBarsShown(event->activated());
   }
 
   KoView::partActivateEvent(event);

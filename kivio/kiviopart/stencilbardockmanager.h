@@ -48,14 +48,12 @@ class StencilBarDockManager : public QWidget
     StencilBarDockManager( KivioView* parent, const char* name = 0 );
     ~StencilBarDockManager();
   
-    void setDoc( KivioDoc* );
-  
-  
     void insertStencilSet( QWidget*,  const QString&, BarPos = AutoSelect,
                            QRect r = QRect(), KivioStackBar* destinationBar = 0L );
   
   public slots:
-      void slotDeleteStencilSet( DragBarButton*,QWidget*,KivioStackBar* );
+    void slotDeleteStencilSet( DragBarButton*,QWidget*,KivioStackBar* );
+    void setAllStackBarsShown(bool shown);
   
   protected slots:
     void slotBeginDragPage( DragBarButton* );
