@@ -10,6 +10,7 @@ noinst_LTLIBRARIES = \
 
 noinst_HEADERS = \
 	vcolorslider.h \
+	vreference.h \
 	vstrokefillpreview.h \
 	vtoolcontainer.h \
 	vtranslate.h \
@@ -20,6 +21,7 @@ noinst_HEADERS = \
 libkarbonwidgets_la_SOURCES = \
 	dummy.cc \
 	vcolorslider.cc \
+	vreference.cc \
 	vstrokefillpreview.cc \
 	vtoolcontainer.cc \
 	vtranslate.cc \
