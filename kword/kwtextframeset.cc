@@ -2201,7 +2201,8 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     /// 2 - Changing the character formatting for each char in the paragraph (setFormat(indices))
     /// 3 - Changing the character formatting for the whole paragraph (setFormat()) [just in case]
     /// -> We need a macro command to hold the 3 commands
-    KMacroCommand * macroCmd = createUndoRedo ? new KMacroCommand( i18n("Apply style %1").arg(newStyle->name()) ) : 0;
+    KMacroCommand * macroCmd = createUndoRedo ? new KMacroCommand( i18n("Apply style %1").
+                                                                   arg(i18n("KWord style", newStyle->name().utf8())) ) : 0;
 
     // 1
     //kdDebug(32001) << "KWTextFrameSet::applyStyle setParagLayout" << endl;
