@@ -113,27 +113,27 @@ public:
   /**
    * @return the printable height of the paper in millimeters.
    */
-  float printableHeight() { return m_paperHeight - m_topBorder - m_bottomBorder; }
+  float printableHeight()const { return m_paperHeight - m_topBorder - m_bottomBorder; }
 
-  float paperHeight() { return m_paperHeight; }
-  float paperWidth() { return m_paperWidth; }
+  float paperHeight()const { return m_paperHeight; }
+  float paperWidth()const { return m_paperWidth; }
 
   /**
    * @return the left border in millimeters
    */
-  float leftBorder() { return m_leftBorder; }
+  float leftBorder()const { return m_leftBorder; }
   /**
    * @return the right border in millimeters
    */
-  float rightBorder() { return m_rightBorder; }
+  float rightBorder()const { return m_rightBorder; }
   /**
    * @return the top border in millimeters
    */
-  float topBorder() { return m_topBorder; }
+  float topBorder()const { return m_topBorder; }
   /**
    * @return the bottom border in millimeters
    */
-  float bottomBorder() { return m_bottomBorder; }
+  float bottomBorder()const { return m_bottomBorder; }
 
   /**
    * @return the orientation of the paper.
@@ -147,16 +147,16 @@ public:
   /**
    * @return the paper format.
    */
-  KoFormat paperFormat() { return m_paperFormat; }
+  KoFormat paperFormat()const { return m_paperFormat; }
   /**
    * @return the ascii name of the paper format ( like A4, Letter etc. )
    */
-  QString paperFormatString();
+  QString paperFormatString()const;
 
   /**
    * @return the unit paper
    */
-  KoUnit::Unit paperUnit() { return m_paperUnit; }
+  KoUnit::Unit paperUnit()const { return m_paperUnit; }
 
   void setPaperFormat(KoFormat _format) {m_paperFormat=_format;}
 
@@ -310,21 +310,21 @@ public:
    * show/hide tabbar
    */
   void setShowTabBar(bool _tabbar) {  m_bShowTabBar=_tabbar;}
-  bool getShowTabBar() { return  m_bShowTabBar;}
+  bool getShowTabBar()const { return  m_bShowTabBar;}
 
-  void changeDefaultGridPenColor( QColor &_col){m_defaultGridPen.setColor(_col);}
+  void changeDefaultGridPenColor( const QColor &_col){m_defaultGridPen.setColor(_col);}
 
   /**
    * show/hide comment indicator
    */
   void setShowCommentIndicator(bool _indic) {  m_bShowCommentIndicator=_indic;}
-  bool getShowCommentIndicator() { return  m_bShowCommentIndicator;}
+  bool getShowCommentIndicator()const { return  m_bShowCommentIndicator;}
 
   /**
    * show/hide formula bar
    */
   void setShowFormulaBar(bool _formulaBar) {  m_bShowFormulaBar=_formulaBar;}
-  bool getShowFormulaBar() { return  m_bShowFormulaBar;}
+  bool getShowFormulaBar()const { return  m_bShowFormulaBar;}
 
   /**
    * get custom kspell config
@@ -336,7 +336,7 @@ public:
    * show/hide status bar
    */
   void setShowStatusBar(bool _statusBar) { m_bShowStatusBar=_statusBar;}
-  bool getShowStatusBar() { return  m_bShowStatusBar;}
+  bool getShowStatusBar()const { return  m_bShowStatusBar;}
 
   void insertChild( KoDocumentChild *child ) { KoDocument::insertChild( child ); }
 
@@ -345,9 +345,9 @@ public:
 
   void emitBeginOperation();
   void emitEndOperation();
-   
+
   bool delayCalculation();
-   
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -374,7 +374,7 @@ signals:
   *  Emitted if all interfaces have to be updated.
   */
   void sig_refreshView();
-  /** 
+  /**
    * Emitted if we update to locale system
    */
   void sig_refreshLocale();

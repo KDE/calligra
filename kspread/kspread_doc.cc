@@ -513,7 +513,7 @@ void KSpreadDoc::calcPaperSize()
     }
 }
 
-QString KSpreadDoc::paperFormatString()
+QString KSpreadDoc::paperFormatString()const
 {
     if ( m_paperFormat == PG_CUSTOM )
     {

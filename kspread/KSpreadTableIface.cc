@@ -108,7 +108,8 @@ DCOPRef KSpreadTableIface::cell( const QString& name )
 
 DCOPRef KSpreadTableIface::column( int _col )
 {
-    if(_col <0)
+    //First col number = 1
+    if(_col <1)
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    m_table->nonDefaultColumnLayout( _col )->dcopObject()->objId() );
@@ -117,7 +118,8 @@ DCOPRef KSpreadTableIface::column( int _col )
 
 DCOPRef KSpreadTableIface::row( int _row )
 {
-    if(_row <0)
+    //First row number = 1
+    if(_row <1)
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    m_table->nonDefaultRowLayout( _row )->dcopObject()->objId() );
