@@ -676,11 +676,11 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s )
     while ( s ) {
 	r = s->rect();
 	r.setWidth( doc ? doc->width() : QWIDGETSIZE_MAX );
-	if ( pos.y() >= r.y() && pos.y() <= r.y() + r.height() )
+	if ( pos.y() >= r.y() && pos.y() <= r.y() + r.height() || !s->next() )
 	    break;
 	s = s->next();
-        if ( !s )
-            break;
+        //if ( !s )
+        //    break;
     }
 
     if ( !s )
@@ -2394,8 +2394,7 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 
     painter->translate( -( ir.x() - parag->rect().x() ),
 		       -( ir.y() - parag->rect().y() ) );
-    parag->paint( *painter, cg, drawCursor ? cursor : 0, painter->device()->devType() != QInternal::Printer,
-		  cx, cy, cw, ch );
+    parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE, cx, cy, cw, ch );
     if ( !flow()->isEmpty() ) {
 	painter->translate( 0, -parag->rect().y() );
 	QRect cr( cx, cy, cw, ch );
@@ -3730,7 +3729,8 @@ void QTextParag::drawParagString( QPainter &painter, const QString &s, int start
 
     if ( drawSelections ) {
 	const int nSels = doc ? doc->numSelections() : 1;
-	for ( int j = 0; j < nSels; ++j ) {
+	const int startSel = painter.device()->devType() != QInternal::Printer ? 0 : 1;
+	for ( int j = startSel; j < nSels; ++j ) {
 	    if ( i > selectionStarts[ j ] && i <= selectionEnds[ j ] ) {
 		if ( !doc || doc->invertSelectionText( j ) )
 		    painter.setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
