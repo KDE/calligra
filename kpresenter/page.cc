@@ -1054,7 +1054,7 @@ void Page::wheelEvent( QWheelEvent *e )
             view->screenNext();
         else if ( e->delta() == 120 ) // wheel up
             view->screenPrev();
-	e->accept();
+        e->accept();
     }
 }
 
