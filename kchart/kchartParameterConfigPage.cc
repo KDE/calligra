@@ -14,6 +14,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qbuttongroup.h>
 
 
 KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QWidget* parent ) :
@@ -21,79 +22,89 @@ KChartParameterConfigPage::KChartParameterConfigPage(KChartParameters* params,QW
 {
     QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
 
-    QGridLayout* layout = new QGridLayout( 7, 3 );
+    QGridLayout* layout = new QGridLayout( 1, 2 );
     toplevel->addLayout( layout );
 
-    grid = new QCheckBox( i18n( "Grid" ), this );
-    layout->addWidget(grid,0,0);
+    QButtonGroup* gb1 = new QButtonGroup( i18n("Parameters"), this );
+    QGridLayout *grid1 = new QGridLayout(gb1,7,1,15,7);
 
-    border = new QCheckBox( i18n( "Border" ), this );
-    layout->addWidget(border,1,0);
+    grid = new QCheckBox( i18n( "Grid" ), gb1 );
+    grid1->addWidget(grid,0,0);
 
-    xaxis = new QCheckBox( i18n( "X-Axis" ), this );
-    layout->addWidget(xaxis,2,0);
+    border = new QCheckBox( i18n( "Border" ), gb1 );
+    grid1->addWidget(border,1,0);
 
-    yaxis = new QCheckBox( i18n( "Y-Axis" ), this );
-    layout->addWidget(yaxis,3,0);
+    xaxis = new QCheckBox( i18n( "X-Axis" ), gb1 );
+    grid1->addWidget(xaxis,2,0);
 
-    shelf = new QCheckBox( i18n( "Shelf grid" ), this );
-    layout->addWidget(shelf,4,0);
+    yaxis = new QCheckBox( i18n( "Y-Axis" ), gb1);
+    grid1->addWidget(yaxis,3,0);
 
-    yaxis2 = new QCheckBox( i18n( "Y-Axis2" ), this );
-    layout->addWidget(yaxis2,5,0);
+    shelf = new QCheckBox( i18n( "Shelf grid" ), gb1 );
+    grid1->addWidget(shelf,4,0);
 
-    xlabel = new QCheckBox( i18n( "Has X-Label" ), this );
-    layout->addWidget(xlabel,6,0);
+    xlabel = new QCheckBox( i18n( "Has X-Label" ), gb1 );
+    grid1->addWidget(xlabel,5,0);
 
-    QLabel *tmpLabel = new QLabel( i18n( "Title" ), this );
+    yaxis2 = new QCheckBox( i18n( "Y-Axis2" ), gb1 );
+    grid1->addWidget(yaxis2,6,0);
+
+    QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
+    QGridLayout *grid2 = new QGridLayout(gb2,7,2,15,7);
+    QLabel *tmpLabel = new QLabel( i18n( "Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(tmpLabel,0,1);
+    grid2->addWidget(tmpLabel,0,0);
 
-    title= new QLineEdit( this );
+    title= new QLineEdit( gb2 );
     title->setMaximumWidth(130);
-    layout->addWidget(title,1,1);
+    grid2->addWidget(title,1,0);
 
 
-    tmpLabel = new QLabel( i18n( "Y-Title" ), this );
+    tmpLabel = new QLabel( i18n( "Y-Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(tmpLabel,2,1);
+    grid2->addWidget(tmpLabel,2,0);
 
-    ytitle= new QLineEdit( this );
+    ytitle= new QLineEdit( gb2 );
     ytitle->setMaximumWidth(130);
-    layout->addWidget(ytitle,3,1);
+    grid2->addWidget(ytitle,3,0);
 
-    tmpLabel = new QLabel( i18n( "X-Title" ), this );
+    tmpLabel = new QLabel( i18n( "X-Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(tmpLabel,4,1);
+    grid2->addWidget(tmpLabel,4,0);
 
-    xtitle= new QLineEdit( this );
+    xtitle= new QLineEdit( gb2 );
     xtitle->setMaximumWidth(130);
-    layout->addWidget(xtitle,5,1);
+    grid2->addWidget(xtitle,5,0);
 
-    tmpLabel = new QLabel( i18n( "Y-Label format" ), this );
+    tmpLabel = new QLabel( i18n( "Y-Label format" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(tmpLabel,0,2);
+    grid2->addWidget(tmpLabel,0,1);
 
-    ylabel_fmt= new QLineEdit( this );
+    ylabel_fmt= new QLineEdit( gb2 );
     ylabel_fmt->setMaximumWidth(130);
-    layout->addWidget(ylabel_fmt,1,2);
+    grid2->addWidget(ylabel_fmt,1,1);
 
-    tmpLabel = new QLabel( i18n( "Y-Title 2" ), this );
+    tmpLabel = new QLabel( i18n( "Y-Title 2" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(tmpLabel,2,2);
+    grid2->addWidget(tmpLabel,2,1);
 
-    ytitle2= new QLineEdit( this );
+    ytitle2= new QLineEdit( gb2 );
     ytitle2->setMaximumWidth(130);
-    layout->addWidget(ytitle2,3,2);
+    grid2->addWidget(ytitle2,3,1);
 
-    tmpLabel = new QLabel( i18n( "Y-Label format 2" ), this );
+    tmpLabel = new QLabel( i18n( "Y-Label format 2" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
-    layout->addWidget(tmpLabel,4,2);
+    grid2->addWidget(tmpLabel,4,1);
 
-    ylabel2_fmt= new QLineEdit( this );
+    ylabel2_fmt= new QLineEdit( gb2 );
     ylabel2_fmt->setMaximumWidth(130);
-    layout->addWidget(ylabel2_fmt,5,2);
+    grid2->addWidget(ylabel2_fmt,5,1);
 
+    layout->addWidget(gb1,0,0);
+    layout->addWidget(gb2,0,1);
+
+    grid1->activate();
+    grid2->activate();
 
     connect( grid, SIGNAL( toggled( bool ) ),
   		   this, SLOT( changeState( bool ) ) );
@@ -126,6 +137,7 @@ void KChartParameterConfigPage::init()
     xaxis->setChecked(_params->xaxis);
     yaxis->setChecked(_params->yaxis);
     xlabel->setChecked(_params->hasxlabel);
+    shelf->setChecked(_params->shelf);
     if(_params->has_yaxis2())
     	{
     	yaxis2->setChecked(_params->yaxis2);

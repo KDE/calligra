@@ -316,20 +316,7 @@ void KChartParameters::loadConfig(KConfig *conf) {
 
 void KChartParameters::defaultConfig()
 {
-/*BGColor( 0, 0, 0 ),
-GridColor( 160, 160, 160 ),
-LineColor( 0, 0, 0 ),
-PlotColor( 0, 0, 0 ),
-VolColor( 160, 160, 255 ),
-TitleColor( 0, 0, 0 ),
-XTitleColor( 0, 0, 0 ),
-YTitleColor( 0, 0, 0 ),
-YTitle2Color( 0, 0, 0 ),
-XLabelColor( 0, 0, 0 ),
-YLabelColor( 0, 0, 0 ),
-YLabel2Color( 0, 0, 0 ),
-EdgeColor() // default: no color
-{*/
+
 	ExtColor.setColor( 0, Qt::red );
 	ExtColor.setColor( 1, Qt::green );
 	ExtColor.setColor( 2, Qt::blue );
@@ -378,13 +365,9 @@ EdgeColor() // default: no color
 	thumbval = -MAXFLOAT;
 	border = true;
 	transparent_bg = false;
-	//percent_labels = KCHARTPCTTYPE_NONE;
-	//type = KCHARTTYPE_3DBAR;
 	hard_size = false;
 	hard_graphheight = 0;
 	hard_graphwidth = 0;
 	hard_xorig = 0;
 	hard_yorig = 0;
-	//colPie=0; //first column select
-	//offsetCol=0;
 }
