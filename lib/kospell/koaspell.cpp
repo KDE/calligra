@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
    Copyright (C) 1997 David Sweet <dsweet@kde.org>
    Copyright (C) 2000-2001 Wolfram Diestel <wolfram@steloj.de>
-   Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2002-2003 Laurent Montel <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,8 +49,6 @@
 #include <qtimer.h>
 
 #include <aspell.h>
-
-#define MAXLINELENGTH 10000
 
 
 KOASpell::KOASpell( KOSpellConfig *_ksc )
