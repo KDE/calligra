@@ -1279,12 +1279,12 @@ KoParagBorderWidget::KoParagBorderWidget( QWidget * parent, const char * name )
     connect( bTop, SIGNAL( toggled( bool ) ), this, SLOT( brdTopToggled( bool ) ) );
     connect( bBottom, SIGNAL( toggled( bool ) ), this, SLOT( brdBottomToggled( bool ) ) );
 
-    QGroupBox *grp=new QGroupBox( i18n( "Preview" ), this, "previewgrp" );
+    QGroupBox *grp=new QGroupBox( 0, Qt::Vertical, i18n( "Preview" ), this, "previewgrp" );
     grid->addMultiCellWidget( grp , 0, 7, 1, 1 );
+    grp->layout()->setSpacing(KDialog::spacingHint());
+    grp->layout()->setMargin(KDialog::marginHint());
     prev3 = new KoBorderPreview( grp );
-    QVBoxLayout *lay1 = new QVBoxLayout( grp );
-    lay1->setMargin( 15 );
-    lay1->setSpacing( 1 );
+    QVBoxLayout *lay1 = new QVBoxLayout( grp->layout() );
     lay1->addWidget(prev3);
 
     connect( prev3, SIGNAL( choosearea(QMouseEvent * ) ),

@@ -621,8 +621,10 @@ void KoPageLayoutDia::setupTab4()
     QWidget *tab4 = addPage(i18n( "H&eader && Footer" ));
     QGridLayout *grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QButtonGroup *gHeader = new QButtonGroup( i18n( "&Header" ), tab4 );
-    QGridLayout *headerGrid = new QGridLayout( gHeader, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QButtonGroup *gHeader = new QButtonGroup( 0, Qt::Vertical, i18n( "&Header" ), tab4 );
+    gHeader->layout()->setSpacing(KDialog::spacingHint());
+    gHeader->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *headerGrid = new QGridLayout( gHeader->layout(), 4, 2 );
 
     rhFirst = new QCheckBox( i18n( "Different header for the first page" ), gHeader );
     gHeader->insert( rhFirst );
@@ -649,8 +651,10 @@ void KoPageLayoutDia::setupTab4()
 
     grid4->addWidget( gHeader, 0, 0 );
 
-    QButtonGroup *gFooter = new QButtonGroup( i18n( "&Footer" ), tab4 );
-    QGridLayout *footerGrid = new QGridLayout( gFooter, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QButtonGroup *gFooter = new QButtonGroup( 0, Qt::Vertical, i18n( "&Footer" ), tab4 );
+    gFooter->layout()->setSpacing(KDialog::spacingHint());
+    gFooter->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *footerGrid = new QGridLayout( gFooter->layout(), 4, 2 );
 
     rfFirst = new QCheckBox( i18n( "Different footer for the first page" ), gFooter );
     gFooter->insert( rfFirst );
@@ -677,8 +681,10 @@ void KoPageLayoutDia::setupTab4()
 
     grid4->addWidget( gFooter, 2, 0 );
 
-    QButtonGroup *gFootNote = new QButtonGroup( i18n( "Foot&note/Endnote" ), tab4 ); // why doesn't the accel work??? - Clarence
-    QGridLayout *footNoteGrid = new QGridLayout( gFootNote, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QButtonGroup *gFootNote = new QButtonGroup( 0, Qt::Vertical, i18n( "Foot&note/Endnote" ), tab4 ); // why doesn't the accel work??? - Clarence
+    gFootNote->layout()->setSpacing(KDialog::spacingHint());
+    gFootNote->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *footNoteGrid = new QGridLayout( gFootNote->layout(), 2, 2 );
 
     QLabel *lFNSpacing = new QLabel( i18n("Spacing between footnote and body (%1):").arg(str), gFootNote );
     lFNSpacing->setAlignment( AlignRight | AlignVCenter );
@@ -689,7 +695,7 @@ void KoPageLayoutDia::setupTab4()
 
     nFNSpacing->setValue(KoUnit::ptToUnit( kwhf.ptFootNoteBodySpacing, m_unit ) );
 
-    footerGrid->addRowSpacing( 0, KDialog::spacingHint() );
+    footNoteGrid->addRowSpacing( 0, KDialog::spacingHint() );
 
     grid4->addWidget( gFootNote, 3, 0 );
 

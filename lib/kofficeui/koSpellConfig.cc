@@ -68,7 +68,7 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KOSpellConfig *_conf
                                     tmpQGroupBox2, "list_ignoreall" , false,
                                     KEditListBox::Add|KEditListBox::Remove );
 
-    m_clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History..."),tmpQGroupBox2);
+    m_clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History"),tmpQGroupBox2);
     connect( m_clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
 
     tab->addTab(tmpQGroupBox2, i18n("IgnoreAll"));

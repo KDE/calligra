@@ -70,7 +70,7 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
 {
     m_bAbbreviation=_abreviation;
     m_listException=_list;
-    QGridLayout *grid = new QGridLayout(this, 4, 2, 0, KDialog::spacingHint());
+    QGridLayout *grid = new QGridLayout(this, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *lab=new QLabel(name,this);
     grid->addMultiCellWidget(lab,0,0,0,1);
@@ -603,7 +603,7 @@ void KoAutoFormatDia::setupTab3()
 
     connect(pbRemove,SIGNAL(clicked()), SLOT(slotRemoveEntry()));
 
-    pbChangeFormat= new QPushButton( i18n( "Change Format" ), tab3 );
+    pbChangeFormat= new QPushButton( i18n( "Change Format..." ), tab3 );
     grid->addWidget( pbChangeFormat, 5, 6, Qt::AlignTop );
 
     connect( pbChangeFormat, SIGNAL(clicked()), SLOT(slotChangeTextFormatEntry()));

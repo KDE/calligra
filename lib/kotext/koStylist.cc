@@ -196,6 +196,7 @@ void KoStyleManager::addGeneralTab() {
 
     QLabel *nextStyleLabel = new QLabel( tab );
     nextStyleLabel->setText( i18n( "Next style:" ) );
+    nextStyleLabel->setAlignment( AlignRight | AlignVCenter );
 
     tabLayout->addWidget( nextStyleLabel, 1, 0 );
 
@@ -204,6 +205,7 @@ void KoStyleManager::addGeneralTab() {
 
     QLabel *inheritStyleLabel = new QLabel( tab );
     inheritStyleLabel->setText( i18n( "Inherit style:" ) );
+    inheritStyleLabel->setAlignment( AlignRight | AlignVCenter );
 
     tabLayout->addWidget( inheritStyleLabel, 2, 0 );
 

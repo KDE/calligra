@@ -30,6 +30,7 @@
 #include <klineedit.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
+#include <qlabel.h>
 
 KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
@@ -44,7 +45,7 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
 
     KEditListBox::CustomEditor tmp(urlReq, urlReq->lineEdit());
 
-    m_listpath =  new KEditListBox( i18n("Expression path:"),
+    m_listpath =  new KEditListBox( i18n("Expression Path"),
                     tmp,page, "list_editor" , false, KEditListBox::Add|KEditListBox::Remove );
 
     grid->addMultiCellWidget(m_listpath, 0, 4, 0, 0);
@@ -70,7 +71,9 @@ KoChangePathDia::KoChangePathDia( const QString & _path, QWidget *parent, const 
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
     setCaption( i18n("Edit Path") );
+
     QVBox *page =makeVBoxMainWidget();
+    new QLabel( i18n("Location:"), page);
     m_urlReq = new KURLRequester(page);
     m_urlReq->setMinimumWidth( m_urlReq->sizeHint().width() * 3 );
 
