@@ -1345,3 +1345,4 @@ Reggie, 22.6.1999:
 ------------------
 - Activating/Deactivating embedded parts works now
   (no crashes anymore :-)
+- Fixed a crash in the document structure viewer

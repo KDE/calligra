@@ -2603,7 +2603,9 @@ void KWPage::scrollToParag( KWParag *_parag )
 
     QPainter p;
 
+    p.begin( viewport() );
     doc->drawMarker( *fc, &p, contentsX(), contentsY() );
+    p.end();
     fc->init( _parag, true );
     fc->gotoStartOfParag();
     fc->cursorGotoLineStart();
