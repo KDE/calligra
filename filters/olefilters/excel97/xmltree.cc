@@ -20,7 +20,7 @@
 
 const char *palette[65] = {
   "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff",
-  "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ff0000", "#00ff00",
+  "#ffffff", "#ffffff", "#000000", "#ffffff", "#ff0000", "#00ff00",
   "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#800000", "#008000",
   "#000080", "#808000", "#800080", "#008080", "#c0c0c0", "#808080",
   "#9999ff", "#993366", "#ffffcc", "#ccffff", "#660066", "#ff8080",
@@ -80,19 +80,19 @@ void XMLTree::getFont(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
   QDomElement font = root->createElement("font");
 
   font.setAttribute("family", fonts[fontid]->rgch);
-  font.setAttribute("size", fonts[fontid]->dyHeight / 20);
+  font.setAttribute("size", (fonts[fontid]->dyHeight / 20) + 2);
   font.setAttribute("weight", fonts[fontid]->bls / 8);
+
   if ((fonts[fontid]->bls / 8) != 50)
     font.setAttribute("bold", "yes");
+
   if ((fonts[fontid]->grbit & 0x02) == 2) 
     font.setAttribute("italic", "yes");
-  f.appendChild(font);
 
-  if (fonts[fontid]->uls != 0) {
-    font = root->createElement("underline");
-    font.setAttribute("val", (int) fonts[fontid]->uls);
-    f.appendChild(font);
-  }
+  if (fonts[fontid]->uls != 0) 
+    font.setAttribute("underline", "yes");
+
+  f.appendChild(font);
 }
 
 void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
@@ -104,29 +104,49 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
   pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x7f]);
   f.appendChild(pen);
 
-  QDomElement leftBorder = root->createElement("left-border");
+  if (xfs[xf]->borderStyle & 0x0f != 0) { 
+    QDomElement leftBorder = root->createElement("left-border");
+    pen = root->createElement("pen");
+    pen.setAttribute("width", 2);
+    pen.setAttribute("style", xfs[xf]->borderStyle & 0x0f);
+    pen.setAttribute("color", palette[xfs[xf]->sideBColor & 0x7f]);
+    leftBorder.appendChild(pen);
+    f.appendChild(leftBorder);
+  }
 
-  pen = root->createElement("pen");
-  pen.setAttribute("width", 2);
-  pen.setAttribute("style", xfs[xf]->borderStyle & 0x0f);
-  pen.setAttribute("color", "#ff0000");//palette[xfs[xf]->sideBColor & 0x7f]);
-  leftBorder.appendChild(pen);
-  f.appendChild(leftBorder);
-  
-  QDomElement topBorder = root->createElement("top-border");
+  if ((xfs[xf]->borderStyle >> 4) & 0x0f != 0) {
+    QDomElement topBorder = root->createElement("right-border");
+    pen = root->createElement("pen");
+    pen.setAttribute("width", 2);
+    pen.setAttribute("style", (xfs[xf]->borderStyle >> 4) & 0x0f);
+    pen.setAttribute("color", palette[(xfs[xf]->sideBColor >> 7) & 0x7f]);
+    topBorder.appendChild(pen);
+    f.appendChild(topBorder);
+  }
 
-  pen = root->createElement("pen");
-  pen.setAttribute("width", 2);
-  pen.setAttribute("style", (xfs[xf]->borderStyle >> 4) & 0x0f);
-  pen.setAttribute("color", "#ff0000");//palette[xfs[xf]->topBColor & 0x7f]);
-  topBorder.appendChild(pen);
-  f.appendChild(topBorder);
+  if ((xfs[xf]->borderStyle >> 8) & 0x0f != 0) {
+    QDomElement topBorder = root->createElement("top-border");
+    pen = root->createElement("pen");
+    pen.setAttribute("width", 2);
+    pen.setAttribute("style", (xfs[xf]->borderStyle >> 8) & 0x0f);
+    pen.setAttribute("color", palette[xfs[xf]->topBColor & 0x7f]);
+    topBorder.appendChild(pen);
+    f.appendChild(topBorder);
+  }
+
+  if ((xfs[xf]->borderStyle >> 12) & 0x0f != 0) {
+    QDomElement topBorder = root->createElement("bottom-border");
+    pen = root->createElement("pen");
+    pen.setAttribute("width", 2);
+    pen.setAttribute("style", (xfs[xf]->borderStyle >> 12) & 0x0f);
+    pen.setAttribute("color", palette[(xfs[xf]->topBColor >> 7) & 0x7f]);
+    topBorder.appendChild(pen);
+    f.appendChild(topBorder);
+  }
 }
 
 const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 {
-  int align, pos, precision = -1;
-
   QString s;
   QDomElement format = root->createElement("format");
 
@@ -137,8 +157,14 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 
   format.setAttribute("bgcolor", palette[xfs[xf]->cellColor & 0x7f]); 
 
-  align = (xfs[xf]->align & 0x07) == 0 ? 4 : xfs[xf]->align & 0x07;
-  format.setAttribute("align", align); 
+  format.setAttribute("align", (xfs[xf]->align & 0x07) == 0 ? 4 : xfs[xf]->align & 0x07); 
+  format.setAttribute("alignY", ((xfs[xf]->align >> 4) & 0x07) == 3 ? 2 : ((xfs[xf]->align >> 4) & 0x07) + 1); 
+
+  int angle = xfs[xf]->align >> 8;
+  format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90); 
+
+  if ((xfs[xf]->align >> 3) & 0x01 == 1)
+    format.setAttribute("multirow", "yes"); 
 
   switch (xfs[xf]->ifmt)
     {
@@ -157,83 +183,95 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
     case 0x04:	// Number w/comma	0,000.00
       format.setAttribute("precision", "2");
       break;
+    case 0x05:	// Number currency
+    case 0x06:	
+    case 0x07:	
+    case 0x08:	
+      format.setAttribute("precision", "2");
+      format.setAttribute("format", "10");
+      format.setAttribute("faktor", "1");
+      break;
     case 0x09:	// Percent 0%
       format.setAttribute("precision", "-1");
-      format.setAttribute("postfix", "%");
-      format.setAttribute("faktor", 100);
+      format.setAttribute("format", "25");
+      format.setAttribute("faktor", "100");
       break;
     case 0x0A:	// Percent 0.00%
       format.setAttribute("precision", "2");
-      format.setAttribute("postfix", "%");
-      format.setAttribute("faktor", 100);
+      format.setAttribute("format", "25");
+      format.setAttribute("faktor", "100");
       break;
     case 0x0B:	// Scientific 0.00+E00
       format.setAttribute("precision", "2");
+      format.setAttribute("format", "0");
       break;
     case 0x0C:	// Fraction 1 number  e.g. 1/2, 1/3
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x0D:	// Fraction 2 numbers  e.g. 1/50, 25/33
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x0E:	// Date: m-d-y
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x0F:	// Date: d-mmm-yy
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x10:	// Date: d-mmm
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x11:	// Date: mmm-yy
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x12:	// Time: h:mm AM/PM
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x13:	// Time: h:mm:ss AM/PM
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x14:	// Time: h:mm
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x15:	// Time: h:mm:ss
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x2a:	// Number currency
+    case 0x2c:	
+      format.setAttribute("precision", "2");
+      format.setAttribute("format", "10");
+      format.setAttribute("faktor", "1");
       break;
     case 0x2D:	// Time: mm:ss
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x2E:	// Time: [h]:mm:ss
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     case 0x2F:	// Time: mm:ss.0
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
-    case 0x31:	// Text - if we are here...its a number
+    case 0x31:	// Text
       format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
       break;
     default:	// Unsupported...but, if we are here, its a number
       s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
 			      formats[xfs[xf]->ifmt]->cch);
-    
-      if ((pos = s.find("0.0")) != -1) {
-	pos += 3;
-	precision += 2;
-	while (s.mid(pos++, 1) == "0") 
-	  precision++;
-      }
-
       format.setAttribute("precision", "-1");
-
-      if (s.find("DM", 0, false) != -1) {
-	debug ("MONEY FOUND!");
-	format.setAttribute("postfix", " $");
-	format.setAttribute("faktor", 1);
-      }
-      if (s.find("%", 0, false) != -1) {
-	format.setAttribute("postfix", "%");
-	format.setAttribute("faktor", 100);
-      }
+      format.setAttribute("format", "0");
     }
   
   getFont(xf, format, fontid);
@@ -388,8 +426,19 @@ bool XMLTree::_codepage(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_colinfo(Q_UINT16, QDataStream&)
+bool XMLTree::_colinfo(Q_UINT16 size, QDataStream& body)
 {
+  Q_UINT16 first, last, width;
+
+  body >> first >> last >> width;
+
+  for (Q_UINT16 i = first; i <= last; ++i) {
+    QDomElement col = root->createElement("column");
+    col.setAttribute("column", (int) i+1);
+    col.setAttribute("width", (int) width / 120);
+    table->appendChild(col);
+  }
+
   return true;
 }
 
@@ -999,8 +1048,17 @@ bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_row(Q_UINT16, QDataStream&)
+bool XMLTree::_row(Q_UINT16 size, QDataStream& body)
 {
+  Q_UINT16 rowNr, skip, height;
+
+  body >> rowNr >> skip >> skip >> height;
+
+  QDomElement row = root->createElement("row");
+  row.setAttribute("row", (int) rowNr + 1);
+  row.setAttribute("height", (int) height / 40);
+  table->appendChild(row);
+
   return true;
 }
 

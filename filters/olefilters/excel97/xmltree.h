@@ -58,7 +58,7 @@ public:
   bool _condfmt(Q_UINT16, QDataStream&);
   bool _codename(Q_UINT16, QDataStream&); 
   bool _codepage(Q_UINT16, QDataStream&); 
-  bool _colinfo(Q_UINT16, QDataStream&);
+  bool _colinfo(Q_UINT16 size, QDataStream& body);
   bool _cont(Q_UINT16, QDataStream&);
   bool _coordlist(Q_UINT16, QDataStream&);
   bool _country(Q_UINT16, QDataStream&);
@@ -141,7 +141,7 @@ public:
   bool _refreshall(Q_UINT16, QDataStream&);
   bool _rightmargin(Q_UINT16 size, QDataStream& body);
   bool _rk(Q_UINT16 size, QDataStream& body);
-  bool _row(Q_UINT16, QDataStream&);
+  bool _row(Q_UINT16 size, QDataStream& body);
   bool _rstring(Q_UINT16, QDataStream&);
   bool _saverecalc(Q_UINT16, QDataStream&);
   bool _scenario(Q_UINT16, QDataStream&);
@@ -243,12 +243,16 @@ private:
   };
   
   Q_UINT16 biff;
+
   QDomDocument *root;
+
   QIntDict<xf_rec> xfs;
   QIntDict<QString> sst;
   QIntDict<font_rec> fonts;
   QIntDict<format_rec> formats;
+
   QQueue<QDomElement> tables;
+
   QDomElement doc, paper, map, *table;
 };
 
