@@ -49,7 +49,7 @@ void KWAnchor::finalize()
 
     int paragy = paragraph()->rect().y();
     kdDebug(32001) << this << " KWAnchor::finalize " << x() << "," << y() << " paragy=" << paragy << endl;
-    
+
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
     if ( fs->internalToDocument( QPoint( x(), y()+paragy ), dPoint ) )
@@ -75,6 +75,8 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         return;
 
     Q_ASSERT( x == xpos );
+    Q_ASSERT( y == ypos );
+    //kdDebug() << "KWAnchor::draw x=" << x << " y=" << y << " xpos=" << xpos << " ypos=" << ypos << endl;
 
     // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
@@ -139,11 +141,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         //kdDebug() << "KWAnchor::draw frame=" << containingFrame << endl;
     }
 
-#if 0 // Why this code? Why draw from x=0 if the crect is positionned correctly? (DF)
-    // left side from the containing frameset and we can get the top from the calculated point of our parag. (TZ)
-    // ## Looks wrong to me. The translation can't depend on the crect.... (DF)
-    QPoint topLeft( zh->zoomItX(containingFrame->x()), cnpoint.y() );
-#endif
+#if 0 // This code didn't work in case of a line-level broken parag with a custom
+    // item in the 2nd part. The topleft of the parag was in the other frame.
+
     // Find the topleft of the _paragraph_, that's how the painter is set up
     KoPoint topLeftParagPt;
     if ( ! fs->internalToDocument( QPoint( 0, paragy ), topLeftParagPt ) )
@@ -151,6 +151,11 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         kdDebug() << "KWAnchor::paint can't convert topleft of paragraph to doc coords\n";
         return;
     }
+#endif
+
+    // Same calculation as in internalToDocument, but we know the frame already
+    KoPoint topLeftParagPt( containingFrame->innerRect().topLeft() );
+    topLeftParagPt.ry() += zh->layoutUnitPtToPt( zh->pixelYToPt( paragy ) ) - containingFrame->internalY();
 
     QPoint topLeftParag = fs->currentViewMode()->normalToView( zh->zoomPoint( topLeftParagPt ) );
 
@@ -197,7 +202,9 @@ QSize KWAnchor::size() const
 int KWAnchor::ascent() const
 {
     int baseline = m_frameset->floatingFrameBaseline( m_frameNum );
-    return ( baseline == -1 ) ? height : baseline;
+    int ret = ( baseline == -1 ) ? height : baseline;
+    //kdDebug() << "KWAnchor::ascent " << ret << endl;
+    return ret;
 }
 
 void KWAnchor::resize()
