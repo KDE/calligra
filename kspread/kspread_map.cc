@@ -99,13 +99,11 @@ void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
     KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());
     if ( view ) // no view if embedded document
     {
+        // save current sheet selection before to save marker, otherwise current pos is not saved
+        view->saveCurrentSheetSelection();
         KSpreadCanvas * canvas = view->canvasWidget();
         //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
         settingsWriter.addConfigItem( "ActiveTable",  canvas->activeTable()->tableName() );
-
-        //todo
-        //mymap.setAttribute( "markerColumn", canvas->markerColumn() );
-        //mymap.setAttribute( "markerRow", canvas->markerRow() );
     }
 
     //<config:config-item-map-named config:name="Tables">
@@ -114,9 +112,14 @@ void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
     QPtrListIterator<KSpreadSheet> it( m_lstTables );
     for( ; it.current(); ++it )
     {
+        QPoint marker;
+        if ( view )
+        {
+            marker = view->markerFromSheet( *it );
+        }
         settingsWriter.startElement( "config:config-item-map-entry" );
         settingsWriter.addAttribute( "config:name", ( *it )->tableName() );
-        it.current()->saveOasisSettings( settingsWriter );
+        it.current()->saveOasisSettings( settingsWriter, marker);
         settingsWriter.endElement();
     }
     settingsWriter.endElement();
@@ -197,7 +200,6 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
 {
     if ( body.hasAttribute( "table:structure-protected" ) )
     {
-        kdDebug()<<" table:structure-protected !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
         QCString passwd( "" );
         if ( body.hasAttribute( "table:protection-key" ) )
         {

@@ -223,8 +223,8 @@ protected:
  ********************************************************************/
 
 class SheetPrivate;
- 
- 
+
+
 /**
  */
 class KSpreadSheet : public QObject
@@ -242,7 +242,7 @@ public:
     ~KSpreadSheet();
 
     virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
-    
+
     /**
      * Return the name of this sheet.
      */
@@ -289,7 +289,7 @@ public:
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
 
     void loadOasisSettings( const QDomElement& setting );
-    void saveOasisSettings( KoXmlWriter &settingsWriter );
+    void saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker );
 
     /**
      * Saves a children
@@ -816,8 +816,8 @@ public:
     void setShowPageBorders( bool _b );
 
     void addCellBinding( CellBinding *_bind );
-    void removeCellBinding( CellBinding *_bind );    
-    CellBinding* firstCellBinding();    
+    void removeCellBinding( CellBinding *_bind );
+    CellBinding* firstCellBinding();
     CellBinding* nextCellBinding();
 
     /**
@@ -1252,9 +1252,9 @@ private:
     void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
     int  adjustColumnHelper( KSpreadCell * c, int _col, int _row );
     void checkContentDirection( QString const & name );
-    
+
     SheetPrivate* d;
-    
+
     // don't allow copy or assignment
     KSpreadSheet( const KSpreadSheet& );
     KSpreadSheet& operator=( const KSpreadSheet& );

@@ -221,16 +221,16 @@ public:
   KSpreadMap *workbook;
   KSpreadDoc *doc;
   DCOPObject* dcop;
-  
+
   QString name;
   int id;
 
-  // true if sheet is hidden    
+  // true if sheet is hidden
   bool hide;
 
   // password of protected sheet
   QCString password;
-  
+
   bool rightToLeft;
 
   bool showGrid;
@@ -241,7 +241,7 @@ public:
   bool showColumnNumber;
   bool hideZero;
   bool firstLetterUpper;
-  
+
   // clusters to hold objects
   KSpreadCluster cells;
   KSpreadRowCluster rows;
@@ -252,25 +252,25 @@ public:
   KSpreadFormat* defaultFormat;
   RowFormat* defaultRowFormat;
   ColumnFormat* defaultColumnFormat;
-  
+
   // hold the print object
   KSpreadSheetPrint* print;
 
   // cells that need painting
   QValueList<QRect> paintDirtyList;
-  
+
   // to get font metrics
   QPainter *painter;
   QWidget *widget;
-  
+
   // List of all cell bindings. For example charts use bindings to get
   // informed about changing cell contents.
   QPtrList<CellBinding> cellBindings;
-    
+
   // Indicates whether the table should paint the page breaks.
   // Doing so costs some time, so by default it should be turned off.
   bool showPageBorders;
-    
+
   // List of all embedded objects. FIXME unused ??
   // QPtrList<KSpreadChild> m_lstChildren;
 
@@ -293,7 +293,7 @@ public:
   int scrollPosX;
   int scrollPosY;
 };
- 
+
 int KSpreadSheet::s_id = 0L;
 QIntDict<KSpreadSheet>* KSpreadSheet::s_mapTables;
 
@@ -310,7 +310,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &tableName, const cha
 {
   if ( s_mapTables == 0L )
     s_mapTables = new QIntDict<KSpreadSheet>;
-    
+
   d = new SheetPrivate;
   d->rightToLeft = false;
 
@@ -382,24 +382,24 @@ QString KSpreadSheet::sheetName() const
 }
 
 void KSpreadSheet::setMap( KSpreadMap* map )
-{ 
-  d->workbook = map; 
+{
+  d->workbook = map;
 }
 
-KSpreadDoc* KSpreadSheet::doc() const 
-{ 
-  return d->doc; 
+KSpreadDoc* KSpreadSheet::doc() const
+{
+  return d->doc;
 }
 
-KSpreadMap* KSpreadSheet::map() const 
-{ 
-  return d->workbook; 
+KSpreadMap* KSpreadSheet::map() const
+{
+  return d->workbook;
 }
 
 int KSpreadSheet::id() const
 {
   return d->id;
-}    
+}
 
 bool KSpreadSheet::isRightToLeft() const
 {
@@ -409,34 +409,34 @@ bool KSpreadSheet::isRightToLeft() const
 bool KSpreadSheet::isHidden() const
 {
   return d->hide;
-}    
+}
 
 void KSpreadSheet::setHidden( bool hidden )
 {
   d->hide = hidden;
-}    
+}
 
-bool KSpreadSheet::getShowGrid() const 
-{ 
+bool KSpreadSheet::getShowGrid() const
+{
     return d->showGrid;
 }
 
 void KSpreadSheet::setShowGrid( bool _showGrid )
-{ 
-    d->showGrid=_showGrid; 
+{
+    d->showGrid=_showGrid;
 }
 
-bool KSpreadSheet::getShowFormula() const 
+bool KSpreadSheet::getShowFormula() const
 {
     return d->showFormula;
 }
 
-void KSpreadSheet::setShowFormula( bool _showFormula ) 
+void KSpreadSheet::setShowFormula( bool _showFormula )
 {
     d->showFormula=_showFormula;
 }
 
-bool KSpreadSheet::getShowFormulaIndicator() const 
+bool KSpreadSheet::getShowFormulaIndicator() const
 {
     return d->showFormulaIndicator;
 }
@@ -446,7 +446,7 @@ void KSpreadSheet::setShowFormulaIndicator( bool _showFormulaIndicator )
     d->showFormulaIndicator=_showFormulaIndicator;
 }
 
-bool KSpreadSheet::getLcMode() const 
+bool KSpreadSheet::getLcMode() const
 {
     return d->lcMode;
 }
@@ -465,13 +465,13 @@ void KSpreadSheet::setAutoCalc( bool _AutoCalc )
 {
     d->autoCalc=_AutoCalc;
 }
- 
+
 bool KSpreadSheet::getShowColumnNumber() const
 {
     return d->showColumnNumber;
 }
 
-void KSpreadSheet::setShowColumnNumber( bool _showColumnNumber ) 
+void KSpreadSheet::setShowColumnNumber( bool _showColumnNumber )
 {
     d->showColumnNumber=_showColumnNumber;
 }
@@ -486,7 +486,7 @@ void KSpreadSheet::setHideZero( bool _hideZero )
     d->hideZero=_hideZero;
 }
 
-bool KSpreadSheet::getFirstLetterUpper() const 
+bool KSpreadSheet::getFirstLetterUpper() const
 {
     return d->firstLetterUpper;
 }
@@ -497,8 +497,8 @@ void KSpreadSheet::setFirstLetterUpper( bool _firstUpper )
 }
 
 bool KSpreadSheet::isShowPageBorders() const
-{ 
-    return d->showPageBorders; 
+{
+    return d->showPageBorders;
 }
 
 bool KSpreadSheet::isEmpty( unsigned long int x, unsigned long int y ) const
@@ -515,14 +515,14 @@ KSpreadCell* KSpreadSheet::defaultCell() const
     return d->defaultCell;
 }
 
-KSpreadFormat* KSpreadSheet::defaultFormat() 
-{ 
+KSpreadFormat* KSpreadSheet::defaultFormat()
+{
     return d->defaultFormat;
 };
 
-const KSpreadFormat* KSpreadSheet::defaultFormat() const 
-{ 
-    return d->defaultFormat; 
+const KSpreadFormat* KSpreadSheet::defaultFormat() const
+{
+    return d->defaultFormat;
 }
 
 const ColumnFormat* KSpreadSheet::columnFormat( int _column ) const
@@ -561,14 +561,14 @@ RowFormat* KSpreadSheet::rowFormat( int _row )
     return d->defaultRowFormat;
 }
 
-void KSpreadSheet::password( QCString & passwd ) const 
-{ 
+void KSpreadSheet::password( QCString & passwd ) const
+{
     passwd = d->password;
 }
 
-bool KSpreadSheet::isProtected() const 
-{ 
-    return !d->password.isNull(); 
+bool KSpreadSheet::isProtected() const
+{
+    return !d->password.isNull();
 }
 
 void KSpreadSheet::setProtected( QCString const & passwd )
@@ -576,36 +576,36 @@ void KSpreadSheet::setProtected( QCString const & passwd )
   d->password = passwd;
 }
 
-bool KSpreadSheet::checkPassword( QCString const & passwd ) const 
-{ 
-    return ( passwd == d->password ); 
+bool KSpreadSheet::checkPassword( QCString const & passwd ) const
+{
+    return ( passwd == d->password );
 }
 
-KSpreadSheetPrint* KSpreadSheet::print() const 
-{ 
-    return d->print; 
+KSpreadSheetPrint* KSpreadSheet::print() const
+{
+    return d->print;
 }
 
 QPainter& KSpreadSheet::painter()
-{ 
-    return *d->painter; 
+{
+    return *d->painter;
 }
 
 QWidget* KSpreadSheet::widget()const
-{ 
-    return d->widget; 
+{
+    return d->widget;
 }
 
-CellBinding* KSpreadSheet::firstCellBinding() 
-{ 
-    return d->cellBindings.first(); 
+CellBinding* KSpreadSheet::firstCellBinding()
+{
+    return d->cellBindings.first();
 }
-    
-CellBinding* KSpreadSheet::nextCellBinding() 
-{ 
-    return d->cellBindings.next(); 
+
+CellBinding* KSpreadSheet::nextCellBinding()
+{
+    return d->cellBindings.next();
 }
-    
+
 void KSpreadSheet::setDefaultHeight( double height )
 {
   if ( isProtected() )
@@ -622,39 +622,39 @@ void KSpreadSheet::setDefaultWidth( double width )
   d->defaultColumnFormat->setDblWidth( width );
 }
 
-double KSpreadSheet::sizeMaxX() const 
-{ 
-  return d->sizeMaxX; 
+double KSpreadSheet::sizeMaxX() const
+{
+  return d->sizeMaxX;
 }
 
-double KSpreadSheet::sizeMaxY() const 
-{ 
-  return d->sizeMaxY; 
+double KSpreadSheet::sizeMaxY() const
+{
+  return d->sizeMaxY;
 }
 
 int KSpreadSheet::maxColumn() const
-{ 
+{
   return d->maxColumn;
 }
 
 int KSpreadSheet::maxRow() const
-{ 
-  return d->maxRow; 
+{
+  return d->maxRow;
 }
 
-const QPen& KSpreadSheet::emptyPen() const 
-{ 
-  return d->emptyPen; 
+const QPen& KSpreadSheet::emptyPen() const
+{
+  return d->emptyPen;
 }
 
-const QBrush& KSpreadSheet::emptyBrush() const 
-{ 
-  return d->emptyBrush; 
+const QBrush& KSpreadSheet::emptyBrush() const
+{
+  return d->emptyBrush;
 }
 
-const QColor& KSpreadSheet::emptyColor() const 
-{ 
-  return d->emptyColor; 
+const QColor& KSpreadSheet::emptyColor() const
+{
+  return d->emptyColor;
 }
 
 int KSpreadSheet::leftColumn( double _xpos, double &_left,
@@ -7497,12 +7497,19 @@ void KSpreadSheet::loadOasisSettings( const QDomElement& setting )
 
 }
 
-void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter )
+void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker )
 {
+    //not into each page into oo spec
     settingsWriter.addConfigItem( "ShowZeroValues", d->hideZero );
     settingsWriter.addConfigItem( "ShowGrid", d->showGrid );
     //not define into oo spec
+
     settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper);
+
+    //<config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
+    //<config:config-item config:name="CursorPositionY" config:type="int">34</config:config-item>
+    settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
+    settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
 }
 
 
@@ -8185,7 +8192,7 @@ KSpreadSheet::~KSpreadSheet()
     delete d->defaultColumnFormat;
     delete d->print;
     delete d->dcop;
-    
+
     delete d;
 }
 

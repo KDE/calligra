@@ -3438,14 +3438,7 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
 
   d->doc->emitBeginOperation(false);
 
-  /* save the current selection on this table */
-  if (d->activeSheet != NULL)
-  {
-    d->savedAnchors.replace(d->activeSheet, selectionInfo()->selectionAnchor());
-    kdDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
-    kdDebug() << "Saving marker pos: " << selectionInfo()->marker() << endl;
-    d->savedMarkers.replace(d->activeSheet, selectionInfo()->marker());
-  }
+  saveCurrentSheetSelection();
 
   KSpreadSheet * oldSheet = d->activeSheet;
 
@@ -4585,13 +4578,13 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 
   d->doc->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
   KoView::setZoom( d->doc->zoomedResolutionY() /* KoView only supports one zoom */ );
-  
+
   Q_ASSERT(d->activeSheet);
-  
+
   if (d->activeSheet)  //this is 0 when viewing a document in konqueror!? (see Q_ASSERT above)
     d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
 
-  d->doc->refreshInterface();  
+  d->doc->refreshInterface();
   d->doc->emitEndOperation();
 }
 
@@ -6733,6 +6726,26 @@ void KSpreadView::commandExecuted()
   updateEditWidget();
   resultOfCalc();
 }
+
+QPoint KSpreadView::markerFromSheet( KSpreadSheet *_sheet ) const
+{
+    QMapIterator<KSpreadSheet*, QPoint> it2 = d->savedMarkers.find(_sheet);
+    QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
+    return newMarker;
+}
+
+void KSpreadView::saveCurrentSheetSelection()
+{
+    /* save the current selection on this table */
+    if (d->activeSheet != NULL)
+    {
+        d->savedAnchors.replace(d->activeSheet, selectionInfo()->selectionAnchor());
+        kdDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
+        kdDebug() << "Saving marker pos: " << selectionInfo()->marker() << endl;
+        d->savedMarkers.replace(d->activeSheet, selectionInfo()->marker());
+    }
+}
+
 
 #include "kspread_view.moc"
 

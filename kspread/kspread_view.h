@@ -62,7 +62,7 @@ class ViewPrivate;
  * KSpreadView is used to display a spreadsheet document and provide
  * the interface for the user to perform editing and data analysis.
  *
- * A view consists of several parts: 
+ * A view consists of several parts:
  *  \li canvas to display cells in a sheet
  *  \li line editor to display and edit cell contents
  *  \li location editor to show marker and/or selection
@@ -223,7 +223,7 @@ public:
     void changeNbOfRecentFiles(int _nb);
 
     void updateBorderButton();
-    
+
     void removeTable( KSpreadSheet *_t );
     void insertTable( KSpreadSheet* table );
     QColor borderColor() const;
@@ -245,6 +245,12 @@ public:
     void resetInsertHandle();
 
     bool showTable(const QString& tableName);
+
+    QPoint markerFromSheet( KSpreadSheet *_sheet ) const;
+    /*
+     * Save current sheet selection. Call when we change sheet, or save in oasis format
+     */
+    void saveCurrentSheetSelection();
 
 public slots:
     /**
@@ -413,7 +419,7 @@ public slots:
      * Shows the sheet properties dialog.
      */
     void sheetProperties();
-        
+
     /**
      * Switch the active sheet to the name. This slot is connected to the tab bar
      * and activated when the user selects a new sheet in the tab bar.
@@ -448,28 +454,28 @@ public slots:
 
     void statusBarClicked(int _id);
     void menuCalc(bool);
-    
+
     /**
      * Shows the status bar if b is true, otherwise the status bar will be hidden.
      */
     void showStatusBar( bool b );
-    
+
     /**
      * Shows the tab bar if b is true, otherwise the tab bar will be hidden.
      */
     void showTabBar( bool b );
-    
+
     /**
      * Shows the formula bar if b is true, otherwise the formula bar will be hidden.
      */
     void showFormulaBar( bool b );
-    
+
     /**
      * If b is true, a red triangle is displayed on the corner of cells
      * which have comments.
      */
     void showCommentIndicator( bool b );
-    
+
     /**
      * Shows context menu when tabbar is double-clicked.
      */
@@ -551,7 +557,7 @@ public slots:
     /**
      * Updates the view and the action. This is typically connected
      * to KoCommandHistory::commandExecuted() signal.
-     */    
+     */
     void commandExecuted();
 
     virtual int leftBorder() const;

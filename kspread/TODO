@@ -372,7 +372,7 @@ Todo:
 In Progress:
 ------------
 -> save/load font format
--> save/load settings
+-> save/load settings (cursor position, active table)
 
 Done:
 -----
