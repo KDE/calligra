@@ -83,6 +83,7 @@ public:
      * Use this format for displaying the properties (Align/counter/...) of the object
      */
     virtual const KoParagLayout * currentParagLayoutFormat() const;
+    virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type);
 
     //void setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex=-1);
     virtual KCommand* setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);

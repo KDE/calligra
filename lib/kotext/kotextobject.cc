@@ -1563,7 +1563,7 @@ KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosE
 
 }
 
-void KoTextObject::changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type)
+KCommand *KoTextObject::changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type)
 {
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
 
@@ -1585,9 +1585,7 @@ void KoTextObject::changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfC
         }
         macroCmd->addCommand(changeCaseOfTextParag(0,end.index() , _type,cursor, static_cast<KoTextParag*>(end.parag()) ));
     }
-
-    if (macroCmd)
-        emit newCommand( macroCmd );
+    return macroCmd;
 }
 
 QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::TypeOfCase _type)
@@ -1700,6 +1698,18 @@ void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont
     format.setPointSize( docFontSize( currentFormat() ) ); // "unzoom" the font size
     emit showFormatObject(format);
 }
+
+KCommand *KoTextObject::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type)
+{
+    KoTextDocument *textdoc = textDocument();
+    textdoc->selectAll( KoTextDocument::Standard );
+    QTextCursor *cursor = new QTextCursor( textDocument() );
+    KCommand* cmd = changeCaseOfText(cursor, _type);
+    textdoc->removeSelection( KoTextDocument::Standard );
+    delete cursor;
+    return cmd;
+}
+
 
 #ifndef NDEBUG
 void KoTextObject::printRTDebug(int info)

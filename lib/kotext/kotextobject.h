@@ -60,6 +60,9 @@ public:
      */
     virtual KCommand *setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1) = 0;
 
+    virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type)=0;
+
+
     void setParagLayoutFormat( KoParagLayout *newLayout,int flags, int marginIndex=-1);
     void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false );
 
@@ -299,7 +302,9 @@ public:
 
     void emitNewCommand(KCommand *cmd);
 
-    void changeCaseOfText(QTextCursor *cursor, KoChangeCaseDia::TypeOfCase _type);
+    virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type);
+
+    KCommand *changeCaseOfText(QTextCursor *cursor, KoChangeCaseDia::TypeOfCase _type);
     QString textChangedCase(const QString& _text, KoChangeCaseDia::TypeOfCase _type);
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
 

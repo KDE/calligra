@@ -1031,13 +1031,15 @@ KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout,int 
     return textObject()->setParagLayoutFormatCommand( m_cursor, KoTextDocument::Standard, newLayout, flags, marginIndex );
 }
 
-void KoTextView::changeCaseOfText(KoChangeCaseDia::TypeOfCase _type)
+KCommand *KoTextView::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type)
 {
     QString text;
     if ( textObject()->hasSelection() )
         text = textObject()->selectedText();
     if(!text.isEmpty())
-        textObject()->changeCaseOfText(cursor(), _type);
+        return textObject()->changeCaseOfText(cursor(), _type);
+    else
+        return 0L;
 }
 
 #include "kotextview.moc"
