@@ -192,8 +192,8 @@ KPresenterDoc::~KPresenterDoc()
 }
 
 /*======================== draw contents as QPicture =============*/
-void KPresenterDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-			  CORBA::Float _scale )
+void KPresenterDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
+			  float _scale )
 {
     warning( "***********************************************" );
     warning( i18n( "KPresenter doesn't support KoDocument::draw( ... ) now!" ) );
@@ -332,7 +332,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     makeUsedPixmapList();
 
     out << otag << "<PIXMAPS>" << endl;
-    
+
     int i = 0;
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
@@ -347,7 +347,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
             QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
             if ( !isStoredExtern() )
               pictureName.prepend( m_strURL + "/" );
-	    out << indent << "<KEY " << key << " name=\"" 
+	    out << indent << "<KEY " << key << " name=\""
 		<< pictureName.latin1()
 		<< "\" />" << endl;
 	}
@@ -365,8 +365,8 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
         QString clipartName = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
         if ( !isStoredExtern() )
           clipartName.prepend( m_strURL + "/" );
-	out << indent << "<KEY " << key << " name=\"" 
-	    << clipartName.latin1() 
+	out << indent << "<KEY " << key << " name=\""
+	    << clipartName.latin1()
 	    << "\" />" << endl;
     }
 
@@ -432,7 +432,7 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
     for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
 	if ( _pixmapCollection.getPixmapDataCollection().references( it.key() ) > 0 &&
 	     !it.key().filename.isEmpty() && usedPixmaps.contains( it.key() ) ) {
-	    
+	
 	    QString format = QFileInfo( it.key().filename ).extension().upper();
 	    if ( format == "JPG" )
 		format = "JPEG";
@@ -506,7 +506,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     pixmapCollectionNames.clear();
     clipartCollectionKeys.clear();
     clipartCollectionNames.clear();
-    
+
     // clean
     if ( _clean ) {
 	//KoPageLayout __pgLayout;
@@ -1094,7 +1094,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 
 	for ( ; it != pixmapCollectionKeys.end(); ++it, ++nit ) {
 	    QString u = QString::null;
-	    
+	
 	    if ( !( *nit ).isEmpty() )
 		u = *nit;
 	    else {
@@ -1102,7 +1102,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 		u += "/";
 		u += it.node->data.toString();
 	    }
-	    
+	
 	    QImage img;
 
 	    if ( _store->open( u, "" ) ) {
@@ -1126,7 +1126,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	
 	for ( ; it2 != clipartCollectionKeys.end(); ++it2, ++nit2 ) {
 	    QString u = QString::null;
-	    
+	
 	    if ( !( *nit2 ).isEmpty() )
 		u = *nit2;
 	    else {
@@ -1134,7 +1134,7 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 		u += "/";
 		u += it2.node->data.toString();
 	    }
-	    
+	
 	    QPicture pic;
 
 	    if ( _store->open( u, "" ) ) {

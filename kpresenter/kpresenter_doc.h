@@ -361,7 +361,7 @@ protected:
      */
     virtual bool hasToWriteMultipart();
 
-    virtual void draw( QPaintDevice*, CORBA::Long, CORBA::Long, CORBA::Float _scale );
+    virtual void draw( QPaintDevice*, long int, long int, float _scale );
 
     void saveBackground( ostream& );
     void saveObjects( ostream& );
