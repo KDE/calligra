@@ -72,7 +72,8 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     
     fillTable();
 
-    resize(sizeHint());
+    //resize(sizeHint());
+    resize( 600, 400 ); // Try to show as much as possible of the table view
     setMainWidget(m_dialog);
 
     m_dialog->m_table->setSelectionMode(QTable::NoSelection);
