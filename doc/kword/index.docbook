@@ -60,7 +60,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-1-22</date>
+<date>2005-2-11</date>
 <releaseinfo>1.3</releaseinfo>
 
 <abstract>
@@ -69,7 +69,7 @@
 &koffice; suite of utilities.
 </para>
 <para>
-This manual describes &kword; 1.4.
+This manual describes &kword; 1.3.
 </para>
 </abstract>
 
@@ -85,11 +85,7 @@ This manual describes &kword; 1.4.
 <!--
 TODO:
 - Write Migrating section
-- Write Watermark procedure
 - Write Chapter Numbering
-- Personal expressions path
-- Personal dictionary
-- "Load from Address Book" Button in Document Information (When working)
 - Recheck "Spelling dialog" section for changes to UI
 - Describe "Counter alignment" in footnotes/endnotes section.....when working
 
@@ -443,7 +439,13 @@ there are many possible authors (employees) and hundreds (or thousands) of docum
 information (email address, telephone numbers and physical address).</para>
 <tip><para>Every value entered in this dialog can be inserted as a
 <link linkend="variables">document variables</link>.</para></tip>
-<para>The second tab is labled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract.</para>
+<para>At the bottom of the dialog is a button labeled <guibutton>Load from Address Book</guibutton>. Clicking 
+on this button will automatically insert your information contained in the KDE address book into this &kword; document information dialog.</para>
+<note><para>You must inform the KDE addressbook which entry corresponds to your information.  </para>
+<para>To do this, open the KDE addressbook, select the entry that contains your name and address.  Now select <menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Set as Personal Contact Data</guimenuitem></menuchoice>from the menubar in the KDE addressbook. This only needs to be performed once.</para>
+<para>&kword; will now insert the entered information when the <guibutton>Load from Address Book</guibutton> button is clicked.</para></note>
+<para>The second tab is labled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract. </para>
 <tip><para>Both the document title and the abstract can be accessed through
 <link linkend="variables">document variables</link>.</para></tip>
 <para>When finished entering the information, click <guibutton>OK</guibutton> to apply the changes.
