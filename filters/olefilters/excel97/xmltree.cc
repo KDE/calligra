@@ -701,9 +701,9 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 					{
 						kdDebug(s_area) << "*********** Found a shared formula for this row/col!" << endl;
 
-						kdDebug() << "***************************** START!" << endl;
+						kdDebug() << "***************************** START!" << endl;					
 						QString formula = getFormula(row, column, *fmla->stream());
-						kdDebug() << "***************************** END!" << endl;									
+						kdDebug() << "***************************** END!" << endl;
 					}
 				}
 	
@@ -2993,12 +2993,20 @@ bool XMLTree::_shrfmla(Q_UINT32 size, QDataStream &body)
 	body >> firstrow >> lastrow >> firstcol >> lastcol;
 	body >> temp >> dataLen;
 
+	int nowSize = size - (sizeof(Q_UINT16) * 4) - (sizeof(Q_UINT8) * 2);
+
 	kdDebug() << "FR: " << firstrow << " LR: " << lastrow << endl;
 	kdDebug() << "FC: " << firstcol << " LC: " << lastcol << endl;
 
 	if(firstrow == 0 && lastrow == 2 && firstcol == 3 && lastcol == 0)
 		return true;
 	kdDebug() << "DATALEN: " << dataLen << endl;
+
+	if(nowSize != dataLen)
+	{
+		kdError() << "WARNING: Shared formula data seems to be wrong!" << endl;
+		return true;
+	}
 
 	char *store = new char[dataLen];
 
