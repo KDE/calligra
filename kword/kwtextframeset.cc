@@ -643,9 +643,11 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
         *marginLeft = from;
     if ( marginRight )
     {
-        /*kdDebug() << "KWTextFrameSet::getMargins " << getName()
+#ifdef DEBUG_FLOW
+        kdDebug() << "KWTextFrameSet::getMargins " << getName()
                   << " textdoc's width=" << textdoc->width()
-                  << " frame's width=" << width << " to=" << to << endl;*/
+                  << " frame's width=" << width << " to=" << to << endl;
+#endif
         *marginRight = textdoc->width() /*width*/ - to;
     }
     if ( breakEnd )
@@ -1152,6 +1154,7 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
 void KWTextFrameSet::printDebug()
 {
     KWFrameSet::printDebug();
+    kdDebug() << "QTextDocument width = " << textdoc->width() << endl;
     kdDebug() << " -- Frames in page array -- " << endl;
     for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
     {
@@ -3870,7 +3873,24 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             if ( textDocument()->hasSelection( QTextDocument::Standard ) )
             {
                 // Dropping into the selection itself ?
-                if ( textDocument()->inSelection( QTextDocument::Standard, dropPoint ) )
+                QTextCursor startSel = textDocument()->selectionStartCursor( QTextDocument::Standard );
+                QTextCursor endSel = textDocument()->selectionEndCursor( QTextDocument::Standard );
+                // Looking at first line first:
+                bool inSelection = dropCursor.parag() == startSel.parag() && dropCursor.index() >= startSel.index();
+                if ( !inSelection )
+                {
+                    // Look at all paragraphs except last one
+                    QTextParag *p = startSel.parag();
+                    while ( !inSelection && p && p != endSel.parag() )
+                    {
+                        inSelection = ( p == dropCursor.parag() );
+                        p = p->next();
+                    }
+                    // Look at last paragraph
+                    if ( !inSelection )
+                        inSelection = dropCursor.parag() == endSel.parag() && dropCursor.index() <= endSel.index();
+                }
+                if ( inSelection )
                 {
                     textDocument()->removeSelection( QTextDocument::Standard );
                     textFrameSet()->selectionChangedNotify();
@@ -3884,10 +3904,8 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                 // Tricky. We don't want to do the placeCursor after removing the selection
                 // (the user pointed at some text with the old selection in place).
                 // However, something got deleted in our parag, dropCursor's index needs adjustment.
-                QTextCursor endSel = textDocument()->selectionEndCursor( QTextDocument::Standard );
                 if ( endSel.parag() == dropCursor.parag() )
                 {
-                    QTextCursor startSel = textDocument()->selectionStartCursor( QTextDocument::Standard );
                     // Does the selection starts before (other parag or same parag) ?
                     if ( startSel.parag() != dropCursor.parag() || startSel.index() < dropCursor.index() )
                     {
