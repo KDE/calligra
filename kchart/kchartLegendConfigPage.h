@@ -23,15 +23,16 @@ public:
     void init();
     void apply();
 public slots:
-    void changeLegendFont();
+    void changeTitleLegendFont();
+    void changeTextLegendFont();
 
 private:
     KChartParams* _params;
     QRadioButton *noLegend,*lTop,*lBottom,*lLeft,*lRight,*lTopLeft,*lTopRight,*lBottomRight,*lBottomLeft;
     QLineEdit *title;
     KColorButton *legendTitleColor, *legendTextColor;
-    QFont legend;
-    QPushButton *legendFontButton;
+    QFont titleLegend, textLegend;
+    QPushButton *titleLegendFontButton, *textLegendFontButton;
 };
 
 #endif

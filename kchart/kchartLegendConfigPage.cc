@@ -68,35 +68,45 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   title=new QLineEdit(gb);
   grid2->addWidget(title,1,0);
 
-
-  lab=new QLabel(i18n("Legend title color:"),gb);
-  grid2->addWidget(lab,2,0);
-
-  legendTitleColor=new KColorButton(gb);
-  grid2->addWidget(legendTitleColor,3,0);
-
   gb = new QButtonGroup( i18n("Color:"), this );
   layout->addWidget(gb,0,1);
 
   QGridLayout *grid3 = new QGridLayout(gb,4,2,15,7);
 
-  lab=new QLabel(i18n("Legend text color:"),gb);
+  lab=new QLabel(i18n("Legend title color:"),gb);
   grid3->addWidget(lab,0,0);
 
+  legendTitleColor=new KColorButton(gb);
+  grid3->addWidget(legendTitleColor,1,0);
+
+
+  lab=new QLabel(i18n("Legend text color:"),gb);
+  grid3->addWidget(lab,2,0);
+
   legendTextColor=new KColorButton(gb);
-  grid3->addWidget(legendTextColor,1,0);
+
+  grid3->addWidget(legendTextColor,3,0);
 
   gb = new QButtonGroup( i18n("Font:"), this );
   layout->addWidget(gb,1,1);
 
   QGridLayout *grid4 = new QGridLayout(gb,4,2,15,7);
-  legendFontButton=new QPushButton(gb);
-  lab=new QLabel(i18n("Legend text font:"),gb);
+  titleLegendFontButton=new QPushButton(gb);
+
+  lab=new QLabel(i18n("Legend title font:"),gb);
   grid4->addWidget(lab,0,0);
 
-  legendFontButton->setText(i18n("Legend"));
-  grid4->addWidget(legendFontButton,1,0);
-  connect( legendFontButton, SIGNAL(clicked()), this, SLOT(changeLegendFont()));
+  titleLegendFontButton->setText(i18n("Legend"));
+  grid4->addWidget(titleLegendFontButton,1,0);
+
+  lab=new QLabel(i18n("Legend text font:"),gb);
+  grid4->addWidget(lab,2,0);
+  textLegendFontButton=new QPushButton(gb);
+  textLegendFontButton->setText(i18n("Text legend"));
+  grid4->addWidget(textLegendFontButton,3,0);
+
+  connect( titleLegendFontButton, SIGNAL(clicked()), this, SLOT(changeTitleLegendFont()));
+  connect( textLegendFontButton, SIGNAL(clicked()), this, SLOT(changeTextLegendFont()));
 
   //it's not good but I don't know how
   //to reduce space
@@ -141,12 +151,19 @@ void KChartLegendConfigPage::init()
     title->setText(_params->legendTitleText());
     legendTitleColor->setColor(_params->legendTitleTextColor());
     legendTextColor->setColor(_params->legendTextColor());
-    legend=_params->legendFont();
+    titleLegend=_params->legendTitleFont();
+    textLegend=_params->legendFont();
 }
 
-void KChartLegendConfigPage::changeLegendFont()
+void KChartLegendConfigPage::changeTitleLegendFont()
 {
-    if (KFontDialog::getFont( legend,false,this ) == QDialog::Rejected )
+    if (KFontDialog::getFont( titleLegend,false,this ) == QDialog::Rejected )
+        return;
+}
+
+void KChartLegendConfigPage::changeTextLegendFont()
+{
+    if (KFontDialog::getFont( textLegend,false,this ) == QDialog::Rejected )
         return;
 }
 
@@ -177,9 +194,14 @@ void KChartLegendConfigPage::apply()
     _params->setLegendTitleTextColor(legendTitleColor->color());
     _params->setLegendTextColor(legendTextColor->color());
 
-    if(_params->legendFont()!=legend)
+    if(_params->legendTitleFont()!=titleLegend)
     {
         //used real size font.
-        _params->setLegendTitleFont(legend,true);
+        _params->setLegendTitleFont(titleLegend,true);
+    }
+    if(_params->legendFont()!=textLegend)
+    {
+        //used real size font.
+        _params->setLegendFont(textLegend,true);
     }
 }
