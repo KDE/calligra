@@ -524,12 +524,11 @@ void KIllustratorView::setPenColor (long int id) {
   }
   else {
     int result =
-      QMessageBox::warning (this, i18n("Warning"),
+      KMessageBox::warningYesNo(this, 
                             i18n ("This action will set the default\n"
                                   "properties for new objects !\n"
-                                  "Would you like to do it ?"),
-                            i18n ("Yes"), i18n ("No"));
-    if (result == 0)
+                                  "Would you like to do it ?"));
+    if (result == KmessageBox::Yes)
       GObject::setDefaultOutlineInfo (oInfo);
   }
 }
@@ -557,12 +556,11 @@ void KIllustratorView::setFillColor (long int id) {
   }
   else {
     int result =
-      QMessageBox::warning(this, i18n("Warning"),
+      KMessageBox::warningYesNo(this, 
                            i18n ("This action will set the default\n"
                                  "properties for new objects !\n"
-                                 "Would you like to do it ?"),
-                           i18n ("Yes"), i18n ("No"));
-    if (result == 0)
+                                 "Would you like to do it ?"));
+    if (result == KMessageBox::Yes)
       GObject::setDefaultFillInfo (fInfo);
   }
 }
