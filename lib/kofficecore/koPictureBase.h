@@ -25,6 +25,7 @@
 class QPainter;
 class QSize;
 class QIODevice;
+class QDragObject;
 
 const char NULL_MIME_TYPE[]="application/x-zerosize";
 const char UNKNOWN_MIME_TYPE[]="application/octet-stream";
@@ -32,7 +33,8 @@ const char UNKNOWN_MIME_TYPE[]="application/octet-stream";
 // TODO: fix documentation
 
 /**
- * KoPictureBase is a container class
+ * @internal
+ * Base class for KoPictureImage, KoPictureClipart and KoPictureEps
  */
 class KoPictureBase
 {
@@ -72,6 +74,13 @@ public:
      * right of the pixmap.
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
+
+    /**
+     * Create a dragobject containing this picture.
+     * @param dragSource must be 0 when copying to the clipboard
+     * @return 0L if the picture is null!
+     */
+    virtual QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
     virtual bool load(QIODevice* io, const QString& extension);
 

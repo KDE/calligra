@@ -89,6 +89,13 @@ public:
      */
     void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
+    /**
+     * Create a dragobject containing this picture.
+     * @param dragSource must be 0 when copying to the clipboard
+     * @return 0L if the picture is null!
+     */
+    QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+
     bool load(QIODevice* io, const QString& extension);
 
     /**
@@ -126,7 +133,7 @@ public:
      * Download a possibily remote file
      */
     bool download(const KURL& url);
-    
+
     /*
      * Load a file
      *
@@ -161,7 +168,7 @@ protected:
      * Load a WMF file (a .wmf file could be a QPicture file)
      */
     bool loadWmf(QIODevice* io);
-    
+
     /**
      * @internal
      * Loads a temporary file, probably from a downloaded file

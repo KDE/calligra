@@ -39,8 +39,7 @@ KoPictureShared::KoPictureShared(void) : m_base(NULL)
 
 KoPictureShared::~KoPictureShared(void)
 {
-    if (m_base)
-        delete m_base;
+    delete m_base;
 }
 
 KoPictureShared::KoPictureShared(const KoPictureShared &other)
@@ -285,15 +284,13 @@ bool KoPictureShared::saveAsKOffice1Dot1(QIODevice* io)
 void KoPictureShared::clear(void)
 {
     // Clear does not reset the key m_key!
-    if (m_base)
-        delete m_base;
+    delete m_base;
     m_base=NULL;
 }
 
 void KoPictureShared::clearAndSetMode(const QString& newMode)
 {
-    if (m_base)
-        delete m_base;
+    delete m_base;
     m_base=NULL;
 
     const QString mode=newMode.lower();
@@ -414,3 +411,9 @@ bool KoPictureShared::isClipartAsKOffice1Dot1(void) const
     return false;
 }
 
+QDragObject* KoPictureShared::dragObject( QWidget *dragSource, const char *name )
+{
+    if (m_base)
+        return m_base->dragObject( dragSource, name );
+    return 0L;
+}

@@ -23,12 +23,12 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qapplication.h>
+#include <qdragobject.h>
 
 #include <kdebug.h>
 #include <kmimetype.h>
 
 #include "koPictureKey.h"
-#include "koPictureBase.h"
 #include "koPictureImage.h"
 
 KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
@@ -172,4 +172,9 @@ QString KoPictureImage::getMimeType(const QString& extension) const
     QString mimetype=KMimeType::findByURL(fileName,0,true,true)->name();
     kdDebug(30003) << "Image is mime type: " << mimetype << endl;
     return mimetype;
+}
+
+QDragObject* KoPictureImage::dragObject( QWidget *dragSource, const char *name )
+{
+    return new QImageDrag( m_originalImage, dragSource, name );
 }

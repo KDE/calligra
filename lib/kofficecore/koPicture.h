@@ -28,7 +28,7 @@
 
 class QPainter;
 class QSize;
-
+class QDragObject;
 class KURL;
 
 class KoPictureShared;
@@ -92,8 +92,15 @@ public:
      */
     void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
+    /**
+     * Create a dragobject containing this picture.
+     * @param dragSource must be 0 when copying to the clipboard
+     * @return 0L if the picture is null, or if a dragobject for it isn't implemented [yet]
+     */
+    QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+
     bool load(QIODevice* io, const QString& extension);
-    
+
     /**
      * save file
      * @param io QIODevice used for saving

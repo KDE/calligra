@@ -275,7 +275,7 @@ bool KoPictureEps::load(QIODevice* io, const QString& /*extension*/)
         if (!extractPostScriptStream()) // Changes m_rawData
             return false;
     }
-    
+
     QTextStream stream(m_rawData, IO_ReadOnly);
     QString lineBox;
     QString line( stream.readLine() );
@@ -306,10 +306,10 @@ bool KoPictureEps::load(QIODevice* io, const QString& /*extension*/)
     QRegExp exp("([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)");
     exp.search(lineBox);
     kdDebug(30003) << "Reg. Exp. Found: " << exp.capturedTexts() << endl;
-    rect.setLeft(exp.cap(1).toDouble());
-    rect.setTop(exp.cap(2).toDouble());
-    rect.setRight(exp.cap(3).toDouble());
-    rect.setBottom(exp.cap(4).toDouble());
+    rect.setLeft(exp.cap(1).toInt());
+    rect.setTop(exp.cap(2).toInt());
+    rect.setRight(exp.cap(3).toInt());
+    rect.setBottom(exp.cap(4).toInt());
     m_boundingBox=rect;
     m_originalSize=rect.size();
     kdDebug(30003) << "Rect: " << rect << " Size: "  << m_originalSize << endl;

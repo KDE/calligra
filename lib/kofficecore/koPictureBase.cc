@@ -114,3 +114,8 @@ bool KoPictureBase::isSlowResizeModeAllowed(void) const
 {
     return s_useSlowResizeMode != 0;
 }
+
+QDragObject* KoPictureBase::dragObject( QWidget *, const char * )
+{
+    return 0L;
+}
