@@ -321,13 +321,13 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
 		it.current()->setSubPresStep( subPresStep );
 		it.current()->doSpecificEffects( true, false );
 	    }
-
+#if 0 //not necessary all sticky obj are stored in stickyPage
 	    KoPoint op;
 	    if ( it.current()->isSticky() ) {
 		op = it.current()->getOrig();
 		it.current()->setOrig( op.x(), op.y() );
 	    }
-
+#endif
             //kdDebug(33001) << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
             if ( drawCursor && it.current()->getType() == OT_TEXT && m_currentTextObjectView )
             {
@@ -343,8 +343,10 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
             }
 	    it.current()->setSubPresStep( 0 );
 	    it.current()->doSpecificEffects( false );
+#if 0
 	    if ( it.current()->isSticky() )
 		it.current()->setOrig( op );
+#endif
 	}
     }
 
@@ -1995,6 +1997,12 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
     else
     {
         QPtrListIterator<KPObject> it(getObjectList());
+        for ( ; it.current(); ++it ) {
+            if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
+                lst.append( static_cast<KPTextObject*>( it.current() )->textObject() );
+        }
+        //get sticky obj
+        it=m_view->kPresenterDoc()->stickyPage()->objectList();
         for ( ; it.current(); ++it ) {
             if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
                 lst.append( static_cast<KPTextObject*>( it.current() )->textObject() );
