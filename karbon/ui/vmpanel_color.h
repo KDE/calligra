@@ -9,6 +9,7 @@
 #include <qdockwindow.h>
 
 class QSpinBox;
+class QTabWidget;
 class KColorPatch;
 class KoMainWindow;
 class KoView;

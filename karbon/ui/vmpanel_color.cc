@@ -16,14 +16,13 @@
 #include "vmpanel_color.h"
 
 VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
-	: QDockWindow( OutsideDock, parent->shell() )
+	: QDockWindow( QDockWindow::InDock, parent->shell() )
 {
 	setCaption(i18n( "Uniform Color" ));
-	QGridLayout *mainLayout;
 
 	mTabWidget = new QTabWidget( this );
 	mRGBWidget = new QWidget(mTabWidget);
-	mainLayout = new QGridLayout(mRGBWidget, 2, 1);
+	QGridLayout *mainLayout = new QGridLayout(mRGBWidget, 2, 1);
 
 	//Reference
 	QGroupBox* groupbox = new QGroupBox(2, Vertical, i18n("Reference"), mRGBWidget);
@@ -45,6 +44,10 @@ VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
 	mBlue = new QSpinBox( 0, 255, 1, cgroupbox);
 	mBlue->setValue( color.blue() );
 	mainLayout->addWidget( cgroupbox, 1, 0);
+	mainLayout->activate();
+	mTabWidget->addTab(mRGBWidget, i18n("RGB"));
+	mainLayout->activate();
+	//setMinimumSize(mRGBWidget->baseSize());
 }
 
 #include "vmpanel_color.moc"
