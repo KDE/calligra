@@ -43,29 +43,23 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>08 Apr 2001</td>
+     <td>20 Apr 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
      <td>
-        <p>
-            <b>Old filter:</b><br>
-            - Very crude!<br>
-            - Import document as text but without the contents of any tag!!!<br>
-        </p>
-        <p>
-            <b>New filter:</b><br>
-            - XHTML 1.0 only!!<br>
-            - Crude!<br>
-        </p>
+        New filter: <b>from 20 Apr 2001</b><br>
+        - Crude!<br>
+        - XHTML 1.0 (directly) or HTML 4.01 (at first transformed into XHTML)<br>
+        - Only well-formed document for now (even for HTML!)<br>
      </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
      <td>
-        - &lt;font&gt;, &lt;sub&gt;, &lt;sup&gt;<br>
+        - &lt;font&gt;<br>
         - tables<br>
         - images<br>
         - use really CSS2 (not just a very little part of it)<br>
@@ -76,7 +70,10 @@
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>08 Apr 2001 New XHTML 1.0 import filter</td>
+     <td>
+        08 Apr 2001 New XHTML 1.0 import filter<br>
+        20 Apr 2001 First new HTML import<br>
+     </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
@@ -101,6 +98,9 @@
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
      <td>
+        <b>Notes:</b><br>
+        - XHTML is done in one pass<br>
+        - HTML is done in two passes. The first pass is the tranformation into XHTML.<br>
      </td>
     </tr>
    </table>

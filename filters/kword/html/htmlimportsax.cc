@@ -32,6 +32,7 @@
 
 #include <koStore.h>
 
+#include "ImportTags.h"
 #include "htmlimportsax.h"
 
 // *Note for the reader of this code*
@@ -876,7 +877,7 @@ static QDomElement createMainFramesetElement(QDomDocument& qDomDocumentOut)
     return framesetElementOut; // return the main <FRAMESET> where the body text will be under.
 }
 
-bool saxfilter(const QString &fileIn, const QString &fileOut)
+bool saxfilter(QXmlInputSource& source, const QString &fileOut)
 {
     kdDebug(30503)<<"(X)HTML Import filter"<<endl;
 
@@ -899,8 +900,6 @@ bool saxfilter(const QString &fileIn, const QString &fileOut)
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
 
-    QFile in(fileIn);
-    QXmlInputSource source(in);
     if (!reader.parse( source ))
     {
         kdError(30503) << "Import: Parsing unsuccessful. Aborting!" << endl;
@@ -927,4 +926,11 @@ bool saxfilter(const QString &fileIn, const QString &fileOut)
     kdDebug(30503) << "Now importing to KWord!" << endl;
 
     return true;
+}
+
+bool saxfilter(const QString &fileIn, const QString &fileOut)
+{
+    QFile in(fileIn);
+    QXmlInputSource source(in);
+    return saxfilter(source,fileOut);
 }

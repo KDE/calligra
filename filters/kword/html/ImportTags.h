@@ -19,5 +19,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-bool saxfilter(QXmlInputSource& source, const QString &fileOut);
-bool saxfilter(const QString &fileIn, const QString &fileOut);
+class ParsingTag
+{
+public:
+    ParsingTag (void) { }
+    ParsingTag (const bool empty) : m_empty(empty) { }
+    ~ParsingTag(void) { }
+public:
+    inline bool isEmptyElement(void) {return m_empty;}
+private:
+    bool m_empty;
+};
+
+bool InitMapTag(QMap<QString,ParsingTag> & mapTag);

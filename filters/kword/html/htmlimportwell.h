@@ -19,5 +19,4 @@
    Boston, MA 02111-1307, USA.
 */
 
-bool saxfilter(QXmlInputSource& source, const QString &fileOut);
-bool saxfilter(const QString &fileIn, const QString &fileOut);
+bool WellFilter(QTextStream& streamIn, QTextStream& streamOut);

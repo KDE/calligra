@@ -19,17 +19,20 @@
 */
 
 #include <qtextstream.h>
+#include <qxml.h>
 
 #include <htmlimport.h>
 #include <htmlimport.moc>
 #include <kdebug.h>
 
+#include "htmlimportwell.h"
 #include "htmlimportsax.h"
 
 HTMLImport::HTMLImport(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
 }
 
+#if 0
 static bool oldfilter(const QString &fileIn, const QString &fileOut)
 {
 
@@ -110,6 +113,7 @@ static bool oldfilter(const QString &fileIn, const QString &fileOut)
     delete [] buffer;
     return true;
 }
+#endif
 
 static bool checkXMLDeclaration(const QString &fileIn)
 {
@@ -137,6 +141,31 @@ static bool checkXMLDeclaration(const QString &fileIn)
     return (strRead==strToCompare);
 }
 
+static bool TwoPassFilter(const QString &fileIn, const QString &fileOut)
+{
+    kdDebug(30503) << "Calling first pass (HTML to XHTML)" << endl;
+    QFile in(fileIn);
+    if(!in.open(IO_ReadOnly)) {
+        kdError(30503) << "Unable to open input file!" << endl;
+        return false;
+    }
+    QTextStream inStream(&in);
+    QString strXHTML;
+    QTextStream streamXHTML(&strXHTML,IO_WriteOnly);
+    if (!WellFilter(inStream,streamXHTML))
+    {
+        kdDebug(30503) << "First pass failed! Aborting!" << endl;
+        return false;
+    }
+#if 1
+    kdDebug(30503) << strXHTML;
+#endif
+    kdDebug(30503) << "Calling second pass (HTML to XHTML)" << endl;
+    QXmlInputSource source;
+    source.setData(strXHTML);
+    return saxfilter(source,fileOut);
+}
+
 
 bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
                         const QString& from, const QString& to,
@@ -146,18 +175,24 @@ bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
         return false;
 
     bool result=false;
-
     if (checkXMLDeclaration(fileIn)) // Do we have a XML file?
     { // We have a XML file, so we can use the new XHTML filter!
         kdDebug(30503) << "Calling XHTML filter" << endl;
         result=saxfilter(fileIn,fileOut);
     }
+#if 1
+    else
+    { // We have not a XML file, so we must make two passes
+        kdDebug(30503) << "Calling two pass filter" << endl;
+        result=TwoPassFilter(fileIn,fileOut);
+    }
+#else
     else
     {
         // We have no XML declaration, so we have to use the old filter.
         kdDebug(30503) << "Calling old filter" << endl;
         result=oldfilter(fileIn,fileOut);
     }
-
+#endif
     return result;
 }
