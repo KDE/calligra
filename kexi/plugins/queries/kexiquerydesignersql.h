@@ -51,12 +51,14 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		void setStatusEmpty();
 		void setStatusText(const QString& text);
 
-		virtual void updateActions();
+		virtual void updateActions(bool activated);
 
 	protected slots:
 		void slotCheckQuery();
 		void slotUpdateMode();
 		void slotTextChanged();
+//		void slotHistoryHeaderButtonClicked(const QString& buttonIdentifier);
+		void slotSelectQuery();
 
 	signals:
 		void queryShortcut();

@@ -58,7 +58,7 @@ class KexiQueryDesignerSQLViewPrivate
 		 , history(0)
 		 , historyHead(0)
 		 , statusPixmapErr( DesktopIcon("button_cancel") )
-		 , statusPixmapInfo( DesktopIcon("info") )
+		 , statusPixmapInfo( DesktopIcon("messagebox_info") )
 		 , heightForStatusMode(-1)
 		 , heightForHistoryMode(-1)
 		 , eventFilterForSplitterEnabled(true)
@@ -126,6 +126,14 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	d->historyHead = new KexiSectionHeader(i18n("SQL Query History"), Vertical, d->history_section);
 	d->historyHead->installEventFilter(this);
 	d->history = new KexiQueryDesignerSQLHistory(d->historyHead, "sql_history");
+
+	static const QString msg_back = i18n("Back to selected query");
+	static const QString msg_clear = i18n("Clear history");
+	d->historyHead->addButton("select_item", msg_back, this, SLOT(slotSelectQuery()));
+	d->historyHead->addButton("editclear", msg_clear, d->history, SLOT(clear()));
+	d->history->popupMenu()->insertItem(SmallIcon("select_item"), msg_back, this, SLOT(slotSelectQuery()));
+	d->history->popupMenu()->insertItem(SmallIcon("editclear"), msg_clear, d->history, SLOT(clear()));
+
 	d->heightForHistoryMode = -1; //height() / 2;
 	//d->historyHead->hide();
 	d->action_toggle_history_was_checked = !d->action_toggle_history->isChecked(); //to force update
@@ -323,10 +331,31 @@ bool KexiQueryDesignerSQLView::eventFilter( QObject *o, QEvent *e )
 	return KexiViewBase::eventFilter(o, e);
 }
 
-void KexiQueryDesignerSQLView::updateActions()
+void KexiQueryDesignerSQLView::updateActions(bool activated)
 {
-	slotUpdateMode();
+	if (activated) {
+		slotUpdateMode();
+	}
+	KexiViewBase::updateActions(activated);
 }
+
+void KexiQueryDesignerSQLView::slotSelectQuery()
+{
+	QString sql = d->history->selectedStatement();
+	if (!sql.isEmpty()) {
+		d->editor->setText( sql );
+	}
+}
+
+/*void KexiQueryDesignerSQLView::slotHistoryHeaderButtonClicked(const QString& buttonIdentifier)
+{
+	if (buttonIdentifier=="select_query") {
+		slotSelectQuery();
+	}
+	else if (buttonIdentifier=="clear_history") {
+		d->history->clear();
+	}
+}*/
 
 #include "kexiquerydesignersql.moc"
 

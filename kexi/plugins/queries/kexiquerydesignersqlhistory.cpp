@@ -18,15 +18,14 @@
 */
 
 #include <qpainter.h>
-#include <qpopupmenu.h>
 #include <qclipboard.h>
+#include <qregexp.h>
 
+#include <kpopupmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <qregexp.h>
 #include <kglobalsettings.h>
-
 #include <kapplication.h>
 
 #include "kexiquerydesignersqlhistory.h"
@@ -38,6 +37,14 @@ KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent, const 
 
 	m_selected = 0;
 	m_history = new History();
+	m_history->setAutoDelete(true);
+
+	m_popup = new KPopupMenu(this);
+	m_popup->insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
+}
+
+KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
+{
 }
 
 void
@@ -64,23 +71,37 @@ void
 KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 {
 	int y = 0;
-	for(HistoryEntry *it = m_history->first(); it; it = m_history->next())
+	HistoryEntry *popupHistory = 0;
+	int pos;
+	for(QPtrListIterator<HistoryEntry> it(*m_history); it.current(); ++it)
 	{
-		if(it->isSelected())
+		if(it.current()->isSelected())
 		{
-			it->setSelected(false, colorGroup());
-			updateContents(it->geometry(y, visibleWidth(), fontMetrics()));
+			//clear
+			it.current()->setSelected(false, colorGroup());
+			updateContents(it.current()->geometry(y, visibleWidth(), fontMetrics()));
 		}
 
-		if(it->geometry(y, visibleWidth(), fontMetrics()).contains(e->pos()))
+		if(it.current()->geometry(y, visibleWidth(), fontMetrics()).contains(e->pos()))
 		{
-			it->setSelected(true, colorGroup());
-			m_selected = it;
-			updateContents(it->geometry(y, visibleWidth(), fontMetrics()));
-			if(e->button() == RightButton)
-				contextMenu(e->globalPos(), it);
+			popupHistory = it.current();
+			pos = y;
 		}
-		y += it->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
+		y += it.current()->geometry(y, visibleWidth(), fontMetrics()).height() + 5;
+	}
+
+	//now do update
+	if (popupHistory) {
+			if (m_selected && m_selected != popupHistory) {
+				m_selected->setSelected(false, colorGroup());
+				updateContents(m_selected->geometry(pos, visibleWidth(), fontMetrics()));
+			}
+			m_selected = popupHistory;
+			m_selected->setSelected(true, colorGroup());
+			updateContents(m_selected->geometry(pos, visibleWidth(), fontMetrics()));
+			if(e->button() == RightButton) {
+				m_popup->exec(e->globalPos());
+			}
 	}
 }
 
@@ -101,8 +122,8 @@ KexiQueryDesignerSQLHistory::addEvent(QString q, bool s, const QString &error)
 void
 KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 {
-//	m_history->append(e);
-	m_history->prepend(e);
+	m_history->append(e);
+//	m_history->prepend(e);
 
 	int y = 0;
 	for(HistoryEntry *it = m_history->first(); it; it = m_history->next())
@@ -111,20 +132,30 @@ KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 	}
 
 	resizeContents(visibleWidth() - 1, y);
-	ensureVisible(0, 0);
 	if (m_selected) {
 		m_selected->setSelected(false, colorGroup());
 	}
 	m_selected = e;
 	m_selected->setSelected(true, colorGroup());
-	updateContents();//m_selected->geometry(0, visibleWidth(), fontMetrics()));
+	ensureVisible(0,y+5);
+	updateContents();
+/*	ensureVisible(0, 0);
+	if (m_selected) {
+		m_selected->setSelected(false, colorGroup());
+	}
+	m_selected = e;
+	m_selected->setSelected(true, colorGroup());
+//	updateContents();
+	updateContents(m_selected->geometry(0, visibleWidth(), fontMetrics()));*/
 }
 
-void
+/*void
 KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *)
 {
-	QPopupMenu p(this);
+	KPopupMenu p(this);
 	p.insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
+	
+
 #ifndef KEXI_NO_UNFINISHED
 	p.insertSeparator();
 	p.insertItem(SmallIcon("edit"), i18n("Edit"), this, SLOT(slotEdit()));
@@ -132,7 +163,7 @@ KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *)
 #endif
 
 	p.exec(pos);
-}
+}*/
 
 void
 KexiQueryDesignerSQLHistory::slotToClipboard()
@@ -149,6 +180,12 @@ KexiQueryDesignerSQLHistory::slotEdit()
 	emit editRequested(m_selected->statement());
 }
 
+QString
+KexiQueryDesignerSQLHistory::selectedStatement() const
+{
+	return m_selected ? m_selected->statement() : QString::null;
+}
+
 void
 KexiQueryDesignerSQLHistory::setHistory(History *h)
 {
@@ -156,13 +193,19 @@ KexiQueryDesignerSQLHistory::setHistory(History *h)
 	update();
 }
 
-KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
+void KexiQueryDesignerSQLHistory::clear()
 {
+	m_selected = 0;
+	m_history->clear();
+	updateContents();
 }
 
-/*
-   HISTORY ENTRY
- */
+KPopupMenu* KexiQueryDesignerSQLHistory::popupMenu() const
+{
+	return m_popup;
+}
+
+//==================================
 
 HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &statement, /*int ,*/ const QString &err)
 {

@@ -27,6 +27,7 @@
 #include <qsimplerichtext.h>
 
 class QSimpleRichText;
+class KPopupMenu;
 
 class KEXI_HAND_QUERY_EXPORT HistoryEntry
 {
@@ -63,17 +64,23 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 
 	public:
 		KexiQueryDesignerSQLHistory(QWidget *parent, const char *name=0);
-		~KexiQueryDesignerSQLHistory();
+		virtual ~KexiQueryDesignerSQLHistory();
 
-		void		contextMenu(const QPoint &pos, HistoryEntry *e);
+		KPopupMenu* popupMenu() const;
+
+//		void		contextMenu(const QPoint &pos, HistoryEntry *e);
 
 		void		setHistory(History *h);
+
+		QString selectedStatement() const;
 
 	public slots:
 		void		addEvent(QString q, bool s, const QString &error);
 
 		void		slotToClipboard();
 		void		slotEdit();
+
+		void clear();
 
 //		HistoryItem	itemAt(int y);
 
@@ -88,6 +95,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 	private:
 		History		*m_history;
 		HistoryEntry	*m_selected;
+		KPopupMenu *m_popup;
 };
 
 #endif
