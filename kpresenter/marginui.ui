@@ -1,0 +1,156 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>MarginUI</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>MarginUI</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>266</width>
+            <height>114</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Margin</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QGroupBox" row="0" column="0">
+            <property name="name">
+                <cstring>margins</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Margins</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>layout2</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget" row="1" column="0">
+                            <property name="name">
+                                <cstring>layout1</cstring>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>leftLabel</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Left</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>leftInput</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="1" column="0">
+                                    <property name="name">
+                                        <cstring>rightLabel</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Right</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>rightInput</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KDoubleNumInput" row="1" column="3">
+                                    <property name="name">
+                                        <cstring>bottomInput</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KDoubleNumInput" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>leftInput</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="1" column="2">
+                                    <property name="name">
+                                        <cstring>bottomLabel</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Bottom</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>bottomInput</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="2">
+                                    <property name="name">
+                                        <cstring>topLabel</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Top</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>topInput</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KDoubleNumInput" row="1" column="1">
+                                    <property name="name">
+                                        <cstring>rightInput</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KDoubleNumInput" row="0" column="3">
+                                    <property name="name">
+                                        <cstring>topInput</cstring>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                        <widget class="QCheckBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>synchronize</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Synchronize changes</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+S</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+</includehints>
+</UI>

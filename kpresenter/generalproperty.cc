@@ -26,6 +26,7 @@
 #include <qlineedit.h>
 
 #include <knuminput.h>
+#include <klocale.h>
 
 #include "generalpropertyui.h"
 
@@ -47,6 +48,9 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValu
     {
         m_ui->nameInput->setText( m_generalValue.m_name );
     }
+
+    m_ui->positionGroup->setTitle( i18n( "Position (%1)" ).arg( KoUnit::unitName( m_unit ) ) );
+    m_ui->sizeGroup->setTitle( i18n( "Size (%1)" ).arg( KoUnit::unitName( m_unit ) ) );
 
     connect( m_ui->protect, SIGNAL( toggled( bool ) ), this, SLOT( slotProtectToggled( bool ) ) );
     connect( m_ui->keepRatio, SIGNAL( toggled( bool ) ), this, SLOT( slotKeepRatioToggled( bool ) ) );

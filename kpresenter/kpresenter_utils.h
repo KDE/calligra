@@ -58,17 +58,4 @@ double readOasisSettingsDouble( const QDomElement & element );
 bool readOasisSettingsBool( const QDomElement & element );
 QString readOasisSettingsString( const QDomElement & element );
 
-enum PropertyType {
-    PtPen = 1,
-    PtLineEnds = 2,
-    PtBrush = 4,
-    PtPie = 8,
-    PtPicture = 16,
-    PtPolygon = 32,
-    PtRectangle = 64,
-    PtOther = 128
-};
-
-int getPropertyFlags( const QPtrList<KPObject> &list );
-
 #endif

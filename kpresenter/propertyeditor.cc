@@ -28,6 +28,8 @@
 #include "brushproperty.h"
 #include "rectproperty.h"
 #include "polygonproperty.h"
+#include "textproperty.h"
+#include "kpobjectproperties.h"
 
 #include <klocale.h>
 
@@ -40,7 +42,9 @@ PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page
     , m_brushProperty( 0 )
     , m_rectProperty( 0 )
     , m_polygonProperty( 0 )
+    , m_textProperty( 0 )
     , m_generalProperty( 0 )
+    , m_objectProperties( 0 )
 {
     setCancelButton( i18n( "&Cancel" ) );
     setOkButton( i18n( "&OK" ) );
@@ -48,12 +52,15 @@ PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( slotDone() ) );
 
+    m_objectProperties = new KPObjectProperties( m_objects );
+
     setupTabs();
 }
 
 
 PropertyEditor::~PropertyEditor()
 {
+    delete m_objectProperties;
 }
 
 
@@ -142,6 +149,41 @@ KCommand * PropertyEditor::getCommand()
             }
 
             macro->addCommand( cmd );
+        }
+    }
+
+    if ( m_textProperty )
+    {
+        int change = m_textProperty->getTextPropertyChange();
+
+        if ( change )
+        {
+            if ( change & TextProperty::ProtectContent )
+            {
+                KPrProtectContentCommand * cmd = new KPrProtectContentCommand( i18n( "Apply Styles" ), m_objects,
+                                                                               m_textProperty->getProtectContent(),
+                                                                               m_doc );
+                if ( !macro )
+                {
+                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
+                }
+
+                macro->addCommand( cmd );
+            }
+
+            if ( change & TextProperty::Margins )
+            {
+                KPrChangeMarginCommand *cmd = new KPrChangeMarginCommand( i18n( "Apply Styles" ), m_objects,
+                                                                          m_textProperty->getMarginsStruct(),
+                                                                          m_doc, m_page );
+
+                if ( !macro )
+                {
+                    macro = new KMacroCommand( i18n( "Apply Properties" ) );
+                }
+
+                macro->addCommand( cmd );
+            }
         }
     }
 
@@ -236,19 +278,22 @@ KCommand * PropertyEditor::getCommand()
 
 void PropertyEditor::setupTabs()
 {
-    int flags = getPropertyFlags( m_objects );
+    int flags = m_objectProperties->getPropertyFlags();
 
-    if ( flags & PtPen )
-        setupTabPen( flags & PtLineEnds );
+    if ( flags & KPObjectProperties::PtPen )
+        setupTabPen( flags & KPObjectProperties::PtLineEnds );
 
-    if ( flags & PtBrush )
+    if ( flags & KPObjectProperties::PtBrush )
         setupTabBrush();
 
-    if ( flags & PtRectangle )
+    if ( flags & KPObjectProperties::PtRectangle )
         setupTabRect();
 
-    if ( flags & PtPolygon )
+    if ( flags & KPObjectProperties::PtPolygon )
         setupTabPolygon();
+
+    if ( flags & KPObjectProperties::PtText )
+        setupTabText();
 
     setupTabGeneral();
 }
@@ -310,6 +355,17 @@ void PropertyEditor::setupTabPolygon()
         polygonSettings.sharpnessValue = m_page->getSharpnessValue( 0 );
         m_polygonProperty = new PolygonProperty( this, 0, polygonSettings );
         addTab( m_polygonProperty, i18n("&Polygon" ) );
+    }
+}
+
+
+void PropertyEditor::setupTabText()
+{
+    if ( m_textProperty == 0 )
+    {
+        m_textProperty = new TextProperty( this, 0, m_objectProperties->getMarginsStruct(),
+                                           m_doc->getUnit(), m_objectProperties->getProtectContent() );
+        addTab( m_textProperty, i18n("T&ext" ) );
     }
 }
 
@@ -387,6 +443,8 @@ void PropertyEditor::slotDone()
         m_rectProperty->apply();
     if ( m_polygonProperty )
         m_polygonProperty->apply();
+    if ( m_textProperty )
+        m_textProperty->apply();
     if ( m_generalProperty )
         m_generalProperty->apply();
 }

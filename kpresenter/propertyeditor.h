@@ -31,6 +31,8 @@ class PenStyleWidget;
 class BrushProperty;
 class RectProperty;
 class PolygonProperty;
+class TextProperty;
+class KPObjectProperties;
 
 class PropertyEditor : public QTabDialog
 {
@@ -51,6 +53,7 @@ private:
     void setupTabBrush();
     void setupTabRect();
     void setupTabPolygon();
+    void setupTabText();
     void setupTabGeneral();
 
     GeneralProperty::GeneralValue getGeneralValue();
@@ -63,7 +66,10 @@ private:
     BrushProperty *m_brushProperty;
     RectProperty *m_rectProperty;
     PolygonProperty *m_polygonProperty;
+    TextProperty *m_textProperty;
     GeneralProperty *m_generalProperty;
+
+    KPObjectProperties *m_objectProperties;
 
 signals:
     void propertiesOk();
