@@ -58,7 +58,7 @@ void KoTextParag::checkItem( QStyleSheetItem * & item, const char * name )
     if ( !item )
     {
         item = new QStyleSheetItem( 0, QString::fromLatin1(name) /* For debugging purposes only */ );
-        QVector<QStyleSheetItem> vec = styleSheetItems();
+        QPtrVector<QStyleSheetItem> vec = styleSheetItems();
         vec.resize( vec.size() + 1 );
         vec.insert( vec.size() - 1, item );
         //kdDebug() << "KoTextParag::checkItem inserting QStyleSheetItem " << name << " at position " << vec.size()-1 << endl;

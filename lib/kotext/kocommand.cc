@@ -39,7 +39,7 @@ KoTextDeleteCommand::KoTextDeleteCommand(
     const CustomItemsMap & customItemsMap,
     const QValueList<KoParagLayout> &oldParagLayouts )
     : QTextDeleteCommand( d, i, idx, str,
-                          QValueList< QVector<QStyleSheetItem> >(),
+                          QValueList< QPtrVector<QStyleSheetItem> >(),
                           QValueList<QStyleSheetItem::ListStyle>(),
                           QArray<int>() ),
       m_oldParagLayouts( oldParagLayouts ),

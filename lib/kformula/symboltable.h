@@ -26,7 +26,7 @@
 #include <qmap.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvector.h>
+#include <qptrvector.h>
 
 #include "formuladefs.h"
 
@@ -192,7 +192,7 @@ private:
      * Symbol fonts in use.
      * There must not be more than 256 fonts.
      */
-    QVector<QFont> fontTable;
+    QPtrVector<QFont> fontTable;
 
     /**
      * The one CharTable that is supported right now.
