@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=SVG Export Filter for Kontour
 Name[af]=svg voer uit filter vir kontoer
@@ -14,6 +15,8 @@ Name[fr]=Filtre d'exportation SVG de Kontour
 Name[he]=מסנן ייצוא SVG ל-Kontour
 Name[hu]=SVG exportszűrő a Kontourhoz
 Name[is]=SVG útflutningssía fyrir Kontour forritið
+Name[it]=Filtro di esportazione SVG per Kontour
+Name[lt]=SVG eksportavimo filtras skirtas Kountour
 Name[lv]=SVG Eksporta Filtrs Kontouram
 Name[nl]=SVG-exportfilter voor Kontour
 Name[nn]=SVG-eksportfilter for Kontour
@@ -21,7 +24,9 @@ Name[pt]=Filtro de Exportação de SVG para o Kontour
 Name[pt_BR]=Filtro de exportação SVG para o Kontour
 Name[ru]=Фильтр экспорта файлов SVG в Kontour
 Name[sk]=Filter pre export SVG pre Kontour
+Name[sl]=Izvozni filer SVG za Kontour
 Name[sv]=SVG-exportfilter för Kontour
+Name[ta]=Kontour ­ü¸¡É SVG ²üÚÁ¾¢ ÅÊ¸ðÊ
 Name[uk]=Фільтр експорту SVG для Kontour
 Name[xh]=SVG Icebo lokucoca lorhwebo langaphakathi le Kontour
 Name[xx]=xx

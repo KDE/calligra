@@ -1,7 +1,12 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Link
 URL=.source/A4.kwt
 Name=A4
+Name[af]=a4
 Name[bg]=А4
 Name[ru]=А4
+Name[xh]=u-A4
+Name[xx]=xx
+Name[zu]=u-A4
 Icon=.icon/A4.png

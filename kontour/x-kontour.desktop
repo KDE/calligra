@@ -1,10 +1,14 @@
 # KDE Config File
 [Desktop Entry]
+Encoding=UTF-8
 MimeType=application/x-kontour
 Comment=Kontour
-Comment[af]=KONTOER
-Comment[da]=Kontour illustreringsprogram 
+Comment[af]=kontoer
+Comment[ar]=رسم Kontour
+Comment[bg]=Контур
+Comment[da]=Kontour-illustrationsprogram
 Comment[eo]=Vektorgrafikprogramo Konturo
+Comment[xx]=xx
 Icon=kontour
 Type=MimeType
 Patterns=*.kon;

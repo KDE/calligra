@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=CSV Import Filter for KSpread
 Name[af]=cvs in voer filter vir kspread
@@ -31,7 +32,7 @@ Name[lv]=CSV Importa Filtrs priekš KSpread
 Name[mk]=CSV увозен филтер за KSpread
 Name[mt]=Filtru għall-importazzzjoni ta' CSV ġo KSpread
 Name[nb]=CSV-importfilter for KSpread
-Name[nl]= CSV-importfilter voor KSpread
+Name[nl]=CSV-importfilter voor KSpread
 Name[nn]=CSV-importfilter for KSpread
 Name[oc]=Filtre d'importacion CSV per a KSpread
 Name[pl]=Filtr importujący z plików CSV do KSpreada

@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=Kontour XFig Import Filter
 Name[af]=kontoer xfig in voer filter
@@ -14,6 +15,8 @@ Name[fr]=Filtre d'importation xFig de Kontour
 Name[he]=מסנן ייבוא XFig ל-Kontour
 Name[hu]=Kontour XFig importszűrő
 Name[is]=XFig innflutningssía fyrir Kontour forritið
+Name[it]=Filtro di importazione XFig per Kontour
+Name[lt]=Kountour filtras importuoti XFig
 Name[lv]=Kontour XFig Importa Filtrs
 Name[nl]=Kontour XFig Importfilter
 Name[nn]=XFig-importfilter for Kontour
@@ -21,7 +24,9 @@ Name[pt]=Filtro de Importação do XFig do Kontour
 Name[pt_BR]=Filtro de importação XFIG  para o Kontour
 Name[ru]=Фильтр импорта файлов XFig в Kontour
 Name[sk]=Filter pre import XFig pre Kontour
+Name[sl]=Uvozni filter XFig za Kontour
 Name[sv]=Kontour XFig-importfilter
+Name[ta]=Kontour XFig ­ÈìÌÁ¾¢ ÅÊ¸ðÊ
 Name[uk]=Фільтр імпорту XFig для Kontour
 Name[xh]=Kontour XFig Icebo lokucoca lorhwebo langaphakathi
 Name[xx]=xx

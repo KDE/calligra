@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=KWord WordPerfect Export Filter
 Name[af]=kword wordperfect voer uit filter
@@ -14,15 +15,20 @@ Name[fr]=Filtre d'exportation WordPerfect de kWord
 Name[he]=מסנן ייצוא WordPerfect ל-KWord
 Name[hu]=KWord WordPerfect exportszűrő
 Name[is]=WordPerfect útflutningssía fyrir KWord
+Name[it]=Filtro di esportazione WordPerfect per KWord
 Name[ko]=K글틀에서 워드 퍼펙트 파일로 내보낼 때 쓰는 거르개
+Name[lt]=KWord WordPerfect eksporto filtras
 Name[lv]=KWord WordPerfect Eksporta Filtrs
-Name[nl]= KWord WordPerfect Exportfilter
+Name[nl]=KWord WordPerfect Exportfilter
 Name[nn]=Word Perfect-eksportfilter for Kontour
 Name[pt]=Filtro de exportação para WordPerfect do KWord
 Name[pt_BR]=Filtro de exportação do KWord para o WordPerfect 
 Name[ru]=Фильтр KWord экспорта в WordPerfect
 Name[sk]=AbiWord filter pre export z KWord
+Name[sl]=Izvozni filter WordPerfect za KWord
 Name[sv]=Kword-exportfilter för WordPerfect
+Name[ta]=KWord WordPerfect ²üÚÁ¾¢ ÅÊ¸ðÊ
+Name[tr]=KWord WordPerfect Kaydetme Filtresi
 Name[uk]=Фільтр експорту WordPerfect для KWord
 Name[xh]=KWord WordPerfect Icebo lokucoca lorhwebo langaphandle
 Name[xx]=xx

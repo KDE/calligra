@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=KWord Ascii Export Filter
 Name[af]=kword ascii voer uit filter
@@ -30,7 +31,7 @@ Name[lv]=KWord Ascii Eksporta Filtrs
 Name[mk]=KWord Ascii извозен филтер
 Name[mt]=Filtru għall-esportazzjoni ta' Ascii minn ġo KWord
 Name[nb]=KWord Ascii-eksportfilter
-Name[nl]= KWord's Ascii-exportfilter
+Name[nl]=KWord's Ascii-exportfilter
 Name[nn]=Ascii-eksportfilter for KWord
 Name[oc]=Filtre d'exportacion ascii de KWord
 Name[pl]=Filtr eksportujący do plików ASCII z KWorda

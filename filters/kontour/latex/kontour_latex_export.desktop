@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=Kontour LATEX Export Filter
 Name[af]=kontoer latex voer uit filter
@@ -32,7 +33,7 @@ Name[ru]=фильтр Kontour экспорта в LaTeX
 Name[sk]=LATEX filter pre export z Kontour
 Name[sl]=Izvozni filter LaTeXa za Kontour
 Name[sr]=Kontour filter za izvoz u LATEX
-Name[sv]=Kontour LATEX-exportfilter
+Name[sv]=Kontour Latex-exportfilter
 Name[ta]=Kontour LATEX ²üÚÁ¾¢ ÅÊ¸ðÊ
 Name[tr]=Kontour LATEX Verme Süzgeci
 Name[uk]=Фільтр експорту LATEX для Kontour

@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KOfficeFilter
 Comment=KOffice Filter
@@ -25,7 +26,7 @@ Comment[hr]=KOffice filter
 Comment[hu]=KOffice szűrő
 Comment[id]=Filter KOffice
 Comment[is]=Sía f. KDE-vöndulinn
-Comment[it]=Filtro per KOffice
+Comment[it]=Filtro di KOffice
 Comment[ja]=KOfficeフィルター
 Comment[ko]=K사무용 거르개
 Comment[lt]=KOffice Filtras

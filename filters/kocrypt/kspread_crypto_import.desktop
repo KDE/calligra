@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=KSpread Document Decryption Layer
 Name[af]=kspread dokument dekripsie laag
@@ -17,7 +18,7 @@ Name[fr]=Module de décryptage de document de kSpread
 Name[he]=שכבת פיענוח מסמכי KSpread
 Name[hu]=KWord dokumentumdekódoló
 Name[is]=Afkóðunareining KSpread skjala
-Name[it]=Layer per la decifratura dei documenti di KSpread
+Name[it]=Layer per la decifrazione dei documenti di KSpread
 Name[ja]=KSpread ドキュメント暗号解除レイヤー
 Name[lt]=KSpread dokumentų iššifravimo sluoksnis
 Name[lv]=KSpread Dokumentu Atkodēšanas Slānis

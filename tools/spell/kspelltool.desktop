@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=Spell Checker Tool
 Name[af]=spel toetser program
 Name[ar]=أداة التحقق الإملائي
@@ -56,7 +57,7 @@ X-KDE-Library=libkspelltool
 Type=Service
 Commands=spellcheck
 Comment=Check this word's spelling
-Comment[af]=bevestig hierdie word's spelling
+Comment[af]=bevestig hierdie woord se spelling
 Comment[ar]=تحقق من املاء هذه الكلمة
 Comment[az]=Bu kəlməyə imla yoxlaması apar
 Comment[bg]=Проверете този правопис

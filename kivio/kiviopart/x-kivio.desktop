@@ -1,11 +1,14 @@
 # KDE Config File
 [Desktop Entry]
+Encoding=UTF-8
 MimeType=application/x-kivio
 Comment=Kivio
-Comment[af]=KIVIO
+Comment[af]=kivio
+Comment[ar]=رسم توضيحي Kivio
 Comment[es]=Archivo de Kivio
 Comment[is]=kivio: Forrit til að teikna ýmis rit (ekki ósvipað Visio)
 Comment[pt_BR]=Editor de fluxogramas
+Comment[xx]=xx
 Icon=kivio
 Type=MimeType
 Patterns=*.flw;

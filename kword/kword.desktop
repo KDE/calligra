@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=KWord
 Name[af]=kword
 Name[eo]=Verkilo
@@ -30,7 +31,7 @@ Comment[fr]=Traitement de texte
 Comment[he]=עיבוד תמלילים
 Comment[hu]=A KOffice szövegszerkesztője
 Comment[is]=Ritvinnsla
-Comment[it]=Gestione testi
+Comment[it]=Videoscrittura
 Comment[ja]=ワープロ
 Comment[ko]=글틀
 Comment[lt]=Tekstų apdorojimas

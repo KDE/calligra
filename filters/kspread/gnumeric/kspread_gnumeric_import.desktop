@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=GNUMERIC Import Filter for KSpread
 Name[af]=gnumeric in voer filter vir kspread
@@ -33,7 +34,7 @@ Name[ru]=Фильтр импорта GNUmeric в KSpread
 Name[sk]=Filter pre import Gnumeric pre KSpread
 Name[sl]=Uvozni filter Gnumeric za Kspread
 Name[sr]=KSpread filter za uvoz GNUmeric formata
-Name[sv]=GNUmeric-importfilter för Kspread
+Name[sv]=Gnumeric-importfilter för Kspread
 Name[tr]=KSpread için GNUMERIC Alma Süzgeci
 Name[uk]=Фільтр імпорту GNUMERIC для KSpread
 Name[xh]=GNUMERIC Icebo lokucoca ulwelo olurhwetyiweyo lwe KSpread

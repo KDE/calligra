@@ -1,9 +1,13 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=KOSoap
-Name[af]=KO-SEEP
+Name[af]=ko-seep
 Name[eo]=KO-Sapo
 Name[fr]=kOSoap
 Name[sv]=Exempel
+Name[xh]=Isepha ye KO
+Name[xx]=xx
+Name[zu]=KOInsipho
 Exec=kosoap
 X-KDE-Library=libkosoappart
 MimeType=application/x-kosoap

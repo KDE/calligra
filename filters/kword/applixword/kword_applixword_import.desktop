@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=KWord Applixword Import Filter
 Name[af]=kword applixword in voer filter
@@ -35,7 +36,7 @@ Name[ru]=фильтр импорта из Applixword в KWord
 Name[sk]=Applixword filter pre import do KWord-u
 Name[sl]=Uvozni filter Applixword za KWord
 Name[sr]=KWord filter za uvoz Applixword formata
-Name[sv]=Kword importfilter för Applixword
+Name[sv]=Kword-importfilter för Applixword
 Name[ta]=KWord Applixword ­ÈìÌÁ¾¢ ÅÊ¸ðÊ
 Name[tr]=KWord Applixword Alma Süzgeci
 Name[uk]=Фільтр імпорту Applixword для KWord

@@ -1,6 +1,10 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Link
 URL=.source/kde.kpt
 Name=KDE
+Name[af]=kde
 Name[ru]=Каталог KDE
+Name[xh]=iKDE
+Name[xx]=xx
 Icon=.icon/kde.png

@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=KWord RTF Import Filter
 Name[af]=kword rtf in voer filter
@@ -18,7 +19,7 @@ Name[fr]=Filtre d'importation RTF de kWord
 Name[he]=מסנן ייבוא RTF ל-KWord
 Name[hu]=KWord RTF importszűrő
 Name[is]=RTF innflutningssía fyrir KWord ritvinnsluna
-Name[it]=Filtro di importazione RTF di KWord
+Name[it]=Filtro di importazione RTF per KWord
 Name[ja]=KWord RTF エクスポートフィルター
 Name[ko]=K글틀에서 RTF 파일을 가져올 때 쓰는 거르개
 Name[lt]=KWord RTF importo filtras

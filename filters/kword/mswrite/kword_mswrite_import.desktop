@@ -1,9 +1,24 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=KWord Microsoft Write Import Filter
 Name[da]=KWord Microsoft Write import-filter
+Name[de]=KWord-Importfilter für MS Write
+Name[es]=Filtro de importación Microsoft Write de KWord
+Name[fi]=KWord Microsoft Write tuontisuodatin
+Name[fr]=Filtre d'importation MS-Write de kWord
+Name[he]=מסנן ייבוא Microsoft Write ל-KWord
+Name[hu]=KWord Microsoft Write importszűrő
+Name[it]=Filtro di importazione Microsoft Write per KWord
+Name[lt]=KWord Microsoft Write importo filtras
 Name[lv]=KWord Microsoft Write Importa Filtrs
+Name[pt]=Filtro de Importação de Microsoft Write do KWord
+Name[pt_BR]=Filtro de Importação de Microsoft Write do KWord
+Name[sk]=Microsoft Write filter pre import do KWordu
+Name[sl]=Uvozni filter Microsoft Write za KWord
 Name[sv]=Kword-importfilter för Microsoft Write
+Name[uk]=Фільтр імпорту Miscrosoft Write для KWord
+Name[xx]=xx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/x-mswrite
 X-KDE-Weight=1

@@ -1,5 +1,8 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Link
 URL=.source/kde2.kpt
 Name=KDE 2
+Name[af]=kde 2
+Name[xx]=xx
 Icon=.icon/kde2.png

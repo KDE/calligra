@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=KWord AbiWord Export Filter
 Name[af]=kword abiword voer uit filter
@@ -25,7 +26,7 @@ Name[lt]=KWord AbiWord eksporto filtras
 Name[lv]=KWord AbiWord Eksporta Filtrs
 Name[mt]=Filtru għall-esportazzjoni ta' AbiWord minn ġo KWord
 Name[nb]=KWord AbiWord-eksportfilter
-Name[nl]= KWord AbiWord-exportfilter
+Name[nl]=KWord AbiWord-exportfilter
 Name[nn]=AbiWord-eksportfilter for KWord
 Name[pl]=Filtr eksportujący do formatu Abiworda z KWorda
 Name[pt]=Filtro de exportação para AbiWord do KWord
@@ -34,7 +35,7 @@ Name[ru]=Фильтр KWord экспорта в AbiWord
 Name[sk]=AbiWord filter pre export z KWord-u
 Name[sl]=Izvozni filter AbiWord za KWord
 Name[sr]=KWord filter za izvoz u AbiWord
-Name[sv]=Kword exportfilter för Abiword
+Name[sv]=Kword-exportfilter för Abiword
 Name[ta]=KWord AbiWord ²üÚÁ¾¢ ÅÊ¸ðÊ
 Name[tr]=KWord AbiWord Alma Süzgeci
 Name[uk]=Фільтр експорту AbiWord для KWord

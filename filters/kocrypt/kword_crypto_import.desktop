@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=KWord Document Decryption Layer
 Name[af]=kword dokument dekripsie laag
@@ -16,7 +17,7 @@ Name[fr]=Module de décryptage de document de kWord
 Name[he]=שכבת פיענוח מסמכי KWord
 Name[hu]=KWord dokumentumdekódoló
 Name[is]=Afkóðunareining KWord skjala
-Name[it]=Layer per la decifratura dei documenti di KWord
+Name[it]=Layer per la decifrazione dei documenti di KWord
 Name[ja]=KWord ドキュメント暗号解除レイヤー
 Name[lt]=KWord dokumento dešifravimo sluoksnis
 Name[lv]=KWord Dokumenta Atšifrēšanas Slānis

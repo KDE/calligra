@@ -1,4 +1,5 @@
 [Desktop Entry]
+Encoding=UTF-8
 Type=Service
 Name=Kontour WMF Import Filter
 Name[af]=kontoer wmf in voer filter
@@ -14,6 +15,8 @@ Name[fr]=Filtre d'importation WMF de Kontour
 Name[he]=מסנן ייבוא WMF ל-Kontour
 Name[hu]=Kontour WMF importszűrő
 Name[is]=WMF innflutningssía fyrir Kontour forritið
+Name[it]=Filtro di importazione WMF per Kontour
+Name[lt]=Kontour filtras importuoti WMF
 Name[lv]=Kontour WMF Importa Filtrs
 Name[nl]=Kontour WMF Importfilter
 Name[nn]=WMF-importfilter for Kontour
@@ -21,7 +24,9 @@ Name[pt]=Filtro de Importação de WMF do Kontour
 Name[pt_BR]=Filtro de importação WMF para o Kontour
 Name[ru]=Фильтр импорта файлов WMF в Kontour
 Name[sk]=WMF filter pre import pre Kontour
+Name[sl]=Uvozni filter WMF za Kontour
 Name[sv]=Kontour WMF-importfilter
+Name[ta]=Kontour WMF ­ÈìÌÁ¾¢ ÅÊ¸ðÊ
 Name[uk]=Фільтр імпорту WMF для Kontour
 Name[xh]=Kontour WMF Icebo lokucoca lorhwebo langaphakathi
 Name[xx]=xx

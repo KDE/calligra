@@ -1,8 +1,10 @@
 # KDE Config File
 [Desktop Entry]
+Encoding=UTF-8
 MimeType=application/x-kformula
 Comment=KFormula
-Comment[af]=KFORMULA
+Comment[af]=kformula
+Comment[ar]=معادلة KFormula
 Comment[eo]=KFormulo
 Comment[es]=Documento de KFormula
 Comment[fr]=Éditeur de formules
@@ -11,6 +13,7 @@ Comment[ko]=K공식
 Comment[mk]=К-формула
 Comment[pt_BR]=Editor de fórmulas
 Comment[sv]=Kformula
+Comment[xx]=xx
 Type=MimeType
 Patterns=*.kfo;
 [Property::X-KDE-NativeExtension]
