@@ -47,6 +47,9 @@
             <property name="margin">
                 <number>0</number>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Use whole numbers or decimal fractions</string>
+            </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
@@ -257,6 +260,7 @@
     <forward>class QRegExpValidator</forward>
 </forwards>
 <variables>
+    <variable access="public">enum { Days = 0x1, Hours = 0x2, Minutes = 0x4, Seconds = 0x8, Milliseconds = 0x10 } Fields;</variable>
     <variable access="private">QString m_decimalPoint;</variable>
     <variable access="private">QRegExpValidator *m_validator;</variable>
     <variable access="private">struct FieldDescriptor *m_fields;</variable>
@@ -277,6 +281,8 @@
     <function access="private">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
     <function returnType="KPTDuration">value() const</function>
+    <function>setVisibleFields( int fieldMask )</function>
+    <function returnType="int">visibleFields()</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
