@@ -287,8 +287,8 @@ void KontourView::setupCanvas()
 //    connect(canvas,SIGNAL(rightButtonAtSelectionClicked(int,int)),this,SLOT(popupForSelection()));
 
   // helpline creation
-//    connect (hRuler, SIGNAL (drawHelpline(int, int, bool)), canvas, SLOT(drawTmpHelpline(int, int, bool)));
-//    connect (vRuler, SIGNAL (drawHelpline(int, int, bool)), canvas, SLOT(drawTmpHelpline(int, int, bool)));
+  connect(hRuler, SIGNAL(drawHelpline(int, int, bool)), mCanvas, SLOT(drawTmpHelpline(int, int, bool)));
+  connect(vRuler, SIGNAL(drawHelpline(int, int, bool)), mCanvas, SLOT(drawTmpHelpline(int, int, bool)));
 //    connect (hRuler, SIGNAL (addHelpline(int, int, bool)), this, SLOT(slotAddHelpline(int, int, bool)));
 //    connect (vRuler, SIGNAL (addHelpline(int, int, bool)), this, SLOT(slotAddHelpline(int, int, bool)));
 

@@ -50,6 +50,9 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
   setMouseTracking(true);
   setBackgroundMode(NoBackground);
 
+  mTmpHorizHelpline = -1;
+  mTmpVertHelpline = -1;
+
   vBar->setLineStep(30);
   hBar->setLineStep(30);
 
@@ -61,9 +64,6 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
 
   mOutlineMode = false;
 
-  tmpHorizHelpline = -1.0;
-  tmpVertHelpline = -1.0;
-  
   hBar->setRange(-mGDoc->xCanvas(), mGDoc->xCanvas());
   vBar->setRange(-mGDoc->yCanvas(), mGDoc->yCanvas());
 
@@ -256,23 +256,34 @@ KoRect Canvas::snapScaledBoxToGrid(const KoRect &r, int hmask)
 
 void Canvas::drawTmpHelpline(int x, int y, bool horizH)
 {
-/*  double pos = -1;
-  // convert into mGDoc coordinates
-  // and add helpline
   if(horizH)
   {
-    pos = double(y - m_relativePaperArea.top()) / zoomFactor();
-    tmpHorizHelpline = pos;
+    if(mTmpHorizHelpline >= 0)
+      repaint(0, mTmpHorizHelpline, width(), 1);
+    if(y >= 0)
+    {
+      QPainter p(this);
+      QPen pen(red);
+      p.setPen(pen);
+      p.drawLine(0, y, width() - 1, y);
+      p.end();
+    }
+    mTmpHorizHelpline = y;
   }
   else
   {
-    pos = double(x - m_relativePaperArea.left()) / zoomFactor();
-    tmpVertHelpline = pos;
+    if(mTmpVertHelpline >= 0)
+      repaint(mTmpVertHelpline, 0, 1, height());
+    if(x >= 0)
+    {
+      QPainter p(this);
+      QPen pen(red);
+      p.setPen(pen);
+      p.drawLine(x, 0, x, height() - 1);
+      p.end();
+    }
+    mTmpVertHelpline = x;
   }
-  // it makes no sense to hide helplines yet
-  mGDoc->showHelplines (true);
-  if(mGDoc->showHelplines() )
-    repaint();*/
 }
 
 void Canvas::addHelpline(int x, int y, bool horizH)
@@ -497,18 +508,6 @@ void Canvas::drawHelplines(QPainter &p, const QRect &rect)
     int vi = qRound(*i * zoomFactor()) + mXOffset;
     p.drawLine(vi, rect.top(), vi, rect.bottom());
   }
-
-/*  if(tmpHorizHelpline != -1)
-  {
-    int hi = qRound (tmpHorizHelpline * zoomFactor()) + m_relativePaperArea.top();
-    p.drawLine (0, hi, width(), hi);
-  }
-
-  if(tmpVertHelpline != -1)
-  {
-    int vi = qRound (tmpVertHelpline * zoomFactor()) + m_relativePaperArea.left();
-    p.drawLine (vi, 0, vi, height());
-  }*/
 
   p.restore ();
 }

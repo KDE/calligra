@@ -126,8 +126,8 @@ private:
 
   bool mOutlineMode:1;
 
-  double tmpHorizHelpline;
-  double tmpVertHelpline;
+  int mTmpHorizHelpline;
+  int mTmpVertHelpline;
 };
 
 #endif

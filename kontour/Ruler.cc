@@ -25,10 +25,10 @@
 
 #include "Ruler.h"
 
+#include <math.h>
+
 #include <qpainter.h>
 #include <qpixmap.h>
-
-#include <math.h>
 
 #include "units.h"
 #include "GDocument.h"
@@ -195,7 +195,7 @@ void Ruler::resizeEvent(QResizeEvent *e)
   recalculateSize (e);
 }
 
-void Ruler::mousePressEvent( QMouseEvent * e)
+void Ruler::mousePressEvent(QMouseEvent *e)
 {
   if(!e)
     return;
@@ -205,40 +205,24 @@ void Ruler::mousePressEvent( QMouseEvent * e)
     emit rmbPressed();
 }
 
-void Ruler::mouseMoveEvent ( QMouseEvent * me)
+void Ruler::mouseMoveEvent(QMouseEvent *me)
 {
   if(mOrientation == Horizontal)
     updatePointer(me->x(), 0);
   else
     updatePointer(0, me->y());
-   /* Implement the hooks so that a helpline can be drawn out of the ruler:
-      - if the mouse is on the widget, draw a helpline
-      - if it is outside remove the XOR'd helpline
-      - if the mouse it over the page view, set the helpline
-       (different place: update the helpline position in the status bar)*/
-/*  if (isMousePressed && doc->isReadWrite())
-    emit drawHelpline (me->x () +
-         (mOrientation == Horizontal ? zeroPoint : 0) -
-         20,
-         me->y () +
-         (mOrientation == Vertical ? zeroPoint : 0) -
-         20,
-         (mOrientation==Horizontal) ? true : false );*/
+  if(isMousePressed && mDoc->isReadWrite())
+    emit drawHelpline(me->x() - 20, me->y() - 20, mOrientation == Horizontal);
 }
 
-void Ruler::mouseReleaseEvent ( QMouseEvent * me)
+void Ruler::mouseReleaseEvent(QMouseEvent *me)
 {
-/*  if (isMousePressed&& doc->isReadWrite())
+  if(isMousePressed && mDoc->isReadWrite())
   {
-     isMousePressed = false;
-     emit addHelpline (me->x () +
-         (mOrientation == Horizontal ? zeroPoint : 0) -
-         20,
-         me->y () +
-         (mOrientation == Vertical ? zeroPoint : 0) -
-         20,
-         (mOrientation==Horizontal) ? true : false );
-  }*/
+    isMousePressed = false;
+    emit drawHelpline(-1, -1, mOrientation == Horizontal);
+    emit addHelpline(me->x() - 20, me->y() - 20, mOrientation==Horizontal);
+  }
 }
 
 void Ruler::recalculateSize(QResizeEvent *)
