@@ -1094,14 +1094,22 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
       {
 	QRegExp number("(\\d+)");
 	int pos =number.search(_srcList.at( s )->text());
-	if( pos )
+	if( pos!=-1 )
 	{
 	  QString tmp=number.cap(1);
-	  int num=tmp.toInt();
+	  int num=tmp.toInt()+incr;
 	  cell->setCellText(_srcList.at( s )->text().replace(number,QString::number(num)));
+          ++incr;
 	}
-	else
+	else if ( !_srcList.at( s )->link().isEmpty() )
+        {
 	  cell->setCellText( _srcList.at( s )->text() );
+	  cell->setLink( _srcList.at( s )->link() );
+        }
+        else
+        {
+	  cell->setCellText( _srcList.at( s )->text() );
+        }
       }
     }
     else
