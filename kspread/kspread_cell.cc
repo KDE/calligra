@@ -4131,14 +4131,16 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         if(m_Validity->dateMin.isValid())
                 {
                 QDomElement dateMin = doc.createElement( "datemin" );
-                tmp=tmp.setNum(m_Validity->dateMin.year())+"/"+tmp.setNum(m_Validity->dateMin.month())+"/"+tmp.setNum(m_Validity->dateMin.day());
+                QString tmp("%1/%2/%3");
+                tmp = tmp.arg(m_Validity->dateMin.year()).arg(m_Validity->dateMin.month()).arg(m_Validity->dateMin.day());
                 dateMin.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( dateMin );
                 }
         if( m_Validity->dateMax.isValid())
                 {
                 QDomElement dateMax = doc.createElement( "datemax" );
-                tmp=tmp.setNum(m_Validity->dateMax.year())+"/"+tmp.setNum(m_Validity->dateMax.month())+"/"+tmp.setNum(m_Validity->dateMax.day());
+                QString tmp("%1/%2/%3");
+                tmp = tmp.arg(m_Validity->dateMax.year()).arg(m_Validity->dateMax.month()).arg(m_Validity->dateMax.day());
                 dateMax.appendChild( doc.createTextNode( tmp ) );
                 validity.appendChild( dateMax );
                 }
@@ -4178,8 +4180,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=216))&& m_bDate )
         {
             QDomElement text = doc.createElement( "text" );
-            QString tmp;
-            tmp=tmp.setNum(m_Date.year())+"/"+tmp.setNum(m_Date.month())+"/"+tmp.setNum(m_Date.day());
+            QString tmp("%1/%2/%3");
+            tmp = tmp.arg(m_Date.year()).arg(m_Date.month()).arg(m_Date.day());
             text.appendChild( doc.createTextNode( tmp ) );
             cell.appendChild( text );
         }
@@ -4586,7 +4588,6 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
         old = old_text;
     }
 
-    QString inter;
     bool b1, b2;
     tmp.toDouble( &b1 );
     old.toDouble( &b2 );
@@ -4596,16 +4597,16 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
         switch( op )
         {
         case  Add:
-            tmp_op = "="+inter.setNum(old.toDouble()+tmp.toDouble());
+            tmp_op = "="+QString::number(old.toDouble()+tmp.toDouble());
             break;
         case Mul :
-            tmp_op = "="+inter.setNum(old.toDouble()*tmp.toDouble());
+            tmp_op = "="+QString::number(old.toDouble()*tmp.toDouble());
             break;
         case Sub:
-            tmp_op = "="+inter.setNum(old.toDouble()-tmp.toDouble());
+            tmp_op = "="+QString::number(old.toDouble()-tmp.toDouble());
             break;
         case Div:
-            tmp_op = "="+inter.setNum(old.toDouble()/tmp.toDouble());
+            tmp_op = "="+QString::number(old.toDouble()/tmp.toDouble());
             break;
         default:
             Q_ASSERT( 0 );
