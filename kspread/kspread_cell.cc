@@ -3529,7 +3529,11 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( i > 0 )
 		m_bForceExtraCells = true;
 	}
-	if ( f.hasAttribute( "precision" ) )
+        if(m_bForceExtraCells)
+        {
+            forceExtraCells(m_iColumn,m_iRow,m_iExtraXCells,m_iExtraYCells);
+        }
+        if ( f.hasAttribute( "precision" ) )
         {
 	    int i = f.attribute("precision").toInt( &ok );
 	    if ( i < -1 )
