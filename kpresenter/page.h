@@ -25,6 +25,7 @@
 #include <qpicture.h>
 #include <qvaluelist.h>
 
+#include <koRuler.h>
 #include <qpixmap.h>
 
 #include <koQueryTrader.h>
@@ -57,6 +58,7 @@ class QSize;
 class QPoint;
 class KPresenterSoundPlayer;
 
+
 class KPTextView;
 
 /**********************************************************************/
@@ -84,6 +86,7 @@ public:
     void setTextColor( const QColor & );
     void setTextBackgroundColor( const QColor & );
     void setTextAlign( int );
+    void setTabList( const KoTabulatorList & tabList );
     void setTextBold( bool b );
     void setTextItalic( bool b );
     void setTextUnderline( bool b );

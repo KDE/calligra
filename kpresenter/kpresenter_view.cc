@@ -4495,12 +4495,16 @@ void KPresenterView::tabListChanged( const KoTabulatorList & tabList )
     if(!m_pKPresenterDoc->isReadWrite())
         return;
 
+    page->setTabList( tabList );
+
+#if 0
     KPTextView *edit=page->currentTextObjectView();
     if (!edit)
         return;
     KCommand *cmd=edit->setTabListCommand( tabList );
     if(cmd)
         m_pKPresenterDoc->addCommand(cmd);
+#endif
 }
 
 void KPresenterView::newFirstIndent( double _firstIndent )
@@ -4539,18 +4543,31 @@ void KPresenterView::slotUpdateRuler()
 {
     // Set the "frame start" in the ruler (tabs are relative to that position)
     KPTextView *edit=page->currentTextObjectView();
-    if ( edit )
+    bool isText=!page->applicableTextObjects().isEmpty();
+    if ( isText )
     {
-        KPTextObject *txtobj= edit->kpTextObject();
+        KPTextObject *txtobj= page->applicableTextObjects().first();
         if ( txtobj )
         {
             QRect r= txtobj->getBoundingRect(page->diffx(),page->diffy() );
             getHRuler()->setFrameStartEnd( r.left() /*- pc.x()*/, r.right() /*- pc.x()*/ );
             getVRuler()->setFrameStartEnd( r.top() /*- pc.y()*/, r.bottom() /*- pc.y()*/ );
+            if( getHRuler())
+            {
+                getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+                getHRuler()->repaint();
+            }
         }
     }
     else
+    {
+        if( getHRuler())
+        {
+            getHRuler()->changeFlags(0);
+            getHRuler()->repaint();
+        }
         updateRuler();
+    }
 }
 
 

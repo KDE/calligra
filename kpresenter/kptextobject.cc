@@ -974,21 +974,25 @@ KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
     updateUI( true, true );
     m_actionList.setAutoDelete( true );
+#if 0
     if( m_page->getView() && m_page->getView()->getHRuler())
     {
         m_page->getView()->getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
         m_page->getView()->getHRuler()->repaint();
     }
+#endif
 
 }
 
 KPTextView::~KPTextView()
 {
+#if 0
     if( m_page->getView() && m_page->getView()->getHRuler())
     {
         m_page->getView()->getHRuler()->changeFlags(0);
         m_page->getView()->getHRuler()->repaint();
     }
+#endif
 }
 
 void KPTextView::terminate()

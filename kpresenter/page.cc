@@ -1642,28 +1642,14 @@ void Page::setTextAlign( int align )
     QPtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it )
         it.current()->setAlign(align);
-#if 0
-    // TODO parag-level settings in KoTextFormatInterface
-    if ( m_currentTextObjectView ) {
-        KCommand *cmd =m_currentTextObjectView->setAlignCommand( align );
-        if(cmd)
-            view->kPresenterDoc()->addCommand(cmd);
-        repaint( FALSE );
-    } else {
-        KPObject *kpobject = 0;
+}
 
-        for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
-            kpobject = objectList()->at( i );
-            if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
-            {
-//#if 0
-                dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setAlignmentToAll( align );
-//#endif
-            }
-        }
-        repaint( FALSE );
-    }
-#endif
+void Page::setTabList( const KoTabulatorList & tabList )
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setTabList(tabList );
 }
 
 /*================================================================*/
