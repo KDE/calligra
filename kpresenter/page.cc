@@ -1723,6 +1723,89 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 	    if ((_pix2.height() / _steps) * _step >= _pix2.height()) break;
 	  }
       } break;
+    case PEF_SURROUND1:
+      {
+	int wid = kapp->desktop()->width() / 10;
+	int hei = kapp->desktop()->height() / 10;
+
+	int curr = 1;
+	int curr2 = 1;
+
+	_steps = static_cast<int>(static_cast<float>(kapp->desktop()->width()) / pageSpeedFakt());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+
+		if (curr == 1 || curr == 5 || curr == 9 || curr == 13 || curr == 17)
+		  {
+		    int dx = (curr2 / 4) * wid;
+		    int dy = (curr2 / 4) * hei;
+		    _h = (_pix2.height() / _steps) * _step;
+		    if (_h >= _pix2.height() - 2 * dy)
+		      { 
+			_h = _pix2.height() - 2 * dy; 
+			curr++;
+			_step = 0;
+		      }
+		    bitBlt(this,dx,dy,&_pix2,dx,dy,wid,_h);
+		  }
+		else if (curr == 2 || curr == 6 || curr == 10 || curr == 14 || curr == 18)
+		  {
+		    int dx = (curr2 / 4) * wid;
+		    int dy = (curr2 / 4) * hei;
+		    _w = (_pix2.width() / _steps) * _step;
+		    if (_w >= _pix2.width() - wid - 2 * dx)
+		      {
+			_w = _pix2.width() - wid - 2 * dx;
+			curr++;
+			_step = 0;
+		      }
+		    bitBlt(this,dx + wid,height() - hei - dy,&_pix2,dx + wid,height() - hei - dy,_w,hei);
+		  }
+		else if (curr == 3 || curr == 7 || curr == 11 || curr == 15 || curr == 19)
+		  {
+		    int dx = (curr2 / 4) * wid;
+		    int dy = (curr2 / 4) * hei;
+		    _h = (_pix2.height() / _steps) * _step;
+		    if (_h >= _pix2.height() - hei - 2 * dy)
+		      { 
+			_h = _pix2.height() - hei - 2 * dy; 
+			curr++;
+			_step = 0;
+		      }
+		    bitBlt(this,_pix2.width() - wid - dx,_pix2.height() - hei - dy - _h,&_pix2,
+			   _pix2.width() - wid - dx,_pix2.height() - hei - dy - _h,wid,_h);
+		  }
+		else if (curr == 4 || curr == 8 || curr == 12 || curr == 16 || curr == 20)
+		  {
+		    int dx = (curr2 / 4) * wid;
+		    int dy = (curr2 / 4) * hei;
+		    _w = (_pix2.width() / _steps) * _step;
+		    if (_w >= _pix2.width() - 2 * wid - 2 * dx)
+		      {
+			_w = _pix2.width() - 2 * wid - 2 * dx;
+			_steps *= 2;
+			_steps = static_cast<int>(static_cast<float>(_steps) / 1.5);
+			curr++;
+			curr2 += 4;
+			_step = 0;
+		      }
+		    bitBlt(this,_pix2.width() - dx - wid - _w,dy,&_pix2,_pix2.width() - dx - wid - _w,dy,_w,hei);
+		  }
+		_time.restart();
+	      }
+	    if (curr == 21) 
+	      {
+		bitBlt(this,0,0,&_pix2,0,0,_pix2.width(),_pix2.height());
+		break;
+	      }
+	  }
+      } break;
     }
 }
 

@@ -65,10 +65,17 @@ unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 /*================================================================*/
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
-  int mx = e->x() + xOffset;
-  int my = e->y() + yOffset;
+  unsigned int mx = e->x();
+  unsigned int my = e->y();
 
-  debug("mx: %d, my: %d",mx,my);
+  for (unsigned int i = firstVisiblePage - 1;i < lastVisiblePage;i++)
+    {
+      if (my >= i * ZOOM(ptPaperHeight()) + ZOOM(ptTopBorder()) - 1 - yOffset &&
+	  my <= (i * ZOOM(ptPaperHeight()) + ZOOM(ptTopBorder()) - 1) + 
+	  (ZOOM(ptPaperHeight()) - ZOOM(ptTopBorder()) - ZOOM(ptBottomBorder()) + 2) - yOffset)
+	debug("Page: %d",i);
+    }
+  
 }
 
 /*================================================================*/

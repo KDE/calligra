@@ -141,3 +141,8 @@ Reggie, 28.9.1998:
 Reggie, 29.9.1998:
 ------------------
 - Bugfix with drawing the cursor
+
+Reggie, 30.9.1998:
+------------------
+- Started implementing placing the cursor with the mouse (but it doesn't do
+  anything at the moment...)

@@ -42,7 +42,8 @@ const QString BackColorTypeName[] = {"Plain","Horizontal Gradient","Vertical Gra
 				     "Circle Gradient","Rectangle Gradient"};
 const QString PageEffectName[] = {"No effect","Close horizontal","Close vertical","Close from all directions",
 				  "Open horizontal","Open vertical","Open from all directions","Interlocking horizontal 1",
-				  "Interlocking horizontal 2","Interlocking vertical 1","Interlocking vertical 2"};
+				  "Interlocking horizontal 2","Interlocking vertical 1","Interlocking vertical 2",
+				  "Sourrond 1"};
 const QString ShadowDirectionName[] = {"","Left/Up","Up","Right/Up","Right","Right/Bottom","Bottom","Left/Bottom","Left"};
 const QString EffectName[] = {"No Effect","Come from right","Come from left","Come from top","Come from bottom","Come from right/top",
 			      "Come from right/bottom","Come from left/top","Come from left/bottom","Wipe from left","Wipe from right",
