@@ -20,7 +20,7 @@
 #include "kivio_view.h"
 #include "kivio_page.h"
 #include "kivio_canvas.h"
-
+#include "kivio_factory.h"
 #include "toolbarseparator.h"
 
 #include <kaction.h>
@@ -71,13 +71,13 @@ ZoomTool::ZoomTool(KivioView* view)
 
   QPixmap pix;
 
-  pix = BarIcon("kivio_zoom_plus");
+  pix = BarIcon("kivio_zoom_plus",KivioFactory::global());
   m_pPlusCursor = new QCursor(pix,pix.width()/2,pix.height()/2);
 
-  pix = BarIcon("kivio_zoom_minus");
+  pix = BarIcon("kivio_zoom_minus",KivioFactory::global());
   m_pMinusCursor = new QCursor(pix,pix.width()/2,pix.height()/2);
 
-  pix = BarIcon("kivio_zoom_hand");
+  pix = BarIcon("kivio_zoom_hand",KivioFactory::global());
   m_handCursor = new QCursor(pix,pix.width()/2,pix.height()/2);
 
   ToolSelectAction* zoom = new ToolSelectAction( actionCollection(), "ToolAction" );
@@ -256,12 +256,12 @@ void ZoomTool::zoomMinus()
 void ZoomTool::zoomWidth()
 {
    setOverride();
-   
+
    int cw = QMAX(10,m_pCanvas->width()-20);
    TKPageLayout pl = m_pCanvas->activePage()->paperLayout();
    float w = pl.ptWidth();
    float z = cw/w;
-   
+
    m_pCanvas->setUpdatesEnabled(false);
    m_pCanvas->centerPage();
    m_pCanvas->setZoom(z);

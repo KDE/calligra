@@ -27,6 +27,7 @@
 #include "kivio_canvas.h"
 #include "kivio_page.h"
 #include "kivio_doc.h"
+#include "kivio_factory.h"
 
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_stencil_spawner.h"
@@ -48,8 +49,8 @@ ConnectorTool::ConnectorTool( KivioView* view )
 
   m_mode = stmNone;
 
-  m_pConnectorCursor1 = new QCursor(BarIcon("kivio_connector_cursor1"),2,2);
-  m_pConnectorCursor2 = new QCursor(BarIcon("kivio_connector_cursor2"),2,2);
+  m_pConnectorCursor1 = new QCursor(BarIcon("kivio_connector_cursor1",KivioFactory::global()),2,2);
+  m_pConnectorCursor2 = new QCursor(BarIcon("kivio_connector_cursor2",KivioFactory::global()),2,2);
 }
 
 ConnectorTool::~ConnectorTool()
@@ -116,7 +117,7 @@ void ConnectorTool::connector(QRect)
 
     KivioDoc* doc = m_pView->doc();
     KivioPage* page = m_pCanvas->activePage();
-    
+
     if (m_pStencil->w() < 3.0 && m_pStencil->h() < 3.0) {
         page->unselectAllStencils();
         page->selectStencil(m_pStencil);
@@ -184,7 +185,7 @@ void ConnectorTool::mouseMove( QMouseEvent * e )
         case stmDrawRubber:
             continueRubberBanding(e);
             break;
-        
+
         default:
             break;
     }
@@ -215,7 +216,7 @@ void ConnectorTool::mouseRelease( QMouseEvent *e )
             endRubberBanding(e);
             break;
     }
-	
+
     m_pCanvas->setCursor(*m_pConnectorCursor1);
   	m_mode = stmNone;
 }

@@ -335,7 +335,7 @@ void KivioView::setupActions()
   KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
   KStdAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
 
-  KStdAction::selectAll( this, SLOT( selectAllStencils() ), actionCollection(), "selectAllStencils" ); 
+  KStdAction::selectAll( this, SLOT( selectAllStencils() ), actionCollection(), "selectAllStencils" );
   (void) new KAction( i18n("Select None"), CTRL+SHIFT+Key_A, this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils" );
 
   (void) new KAction( i18n("Group Selected Stencils"), "group_stencils", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
@@ -389,7 +389,7 @@ void KivioView::setupActions()
   m_hidePage = new KAction( i18n("Hide Page"),0 ,this,SLOT(hidePage()), actionCollection(), "hidePage" );
   m_exportPage = new KAction( i18n("Export Page..."),0,this,SLOT(exportPage()), actionCollection(), "exportPage");
 
-  KToggleAction* showPageBorders = new KToggleAction( i18n("Show page borders"), "view_pageborder", CTRL+Key_B, actionCollection(), "showPageBorders" );
+  KToggleAction* showPageBorders = new KToggleAction( i18n("Show page borders"), BarIcon("view_pageborder",KivioFactory::global()), CTRL+Key_B, actionCollection(), "showPageBorders" );
   connect( showPageBorders, SIGNAL(toggled(bool)), SLOT(togglePageBorders(bool)));
 
   KToggleAction* showPageMargins = new KToggleAction( i18n("Show page margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
@@ -466,7 +466,7 @@ QButton* KivioView::newIconButton( const char* file, bool kbutton, QWidget* pare
   if (!parent)
     parent = this;
 
-  QPixmap *pixmap = new QPixmap(BarIcon(file));
+  QPixmap *pixmap = new QPixmap(BarIcon(file,KivioFactory::global()));
 
   QButton *pb;
   if (!kbutton)

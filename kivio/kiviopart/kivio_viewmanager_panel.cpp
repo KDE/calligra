@@ -4,6 +4,7 @@
 #include "kivio_page.h"
 #include "kivio_canvas.h"
 #include "kivio_common.h"
+#include "kivio_factory.h"
 
 #include "viewitemrenamedialog.h"
 
@@ -108,8 +109,8 @@ KivioViewItem::~KivioViewItem()
 
 void KivioViewItem::update()
 {
-  setPixmap(0, data->isZoom ? BarIcon("zoom_enabled"):BarIcon("zoom_disabled"));
-  setPixmap(1, data->isPage ? BarIcon("page_enabled"):BarIcon("page_disabled"));
+  setPixmap(0, data->isZoom ? BarIcon("zoom_enabled",KivioFactory::global()):BarIcon("zoom_disabled",KivioFactory::global()));
+  setPixmap(1, data->isPage ? BarIcon("page_enabled",KivioFactory::global()):BarIcon("page_disabled",KivioFactory::global()));
   setText(2,data->name);
 }
 /*********************************************************/
@@ -135,9 +136,9 @@ KivioViewManagerPanel::KivioViewManagerPanel(KivioView* view, QWidget* parent, c
   KToolBar* bar = new KToolBar(this);
   bar->setFullSize(true);
 
-  actNew = new KAction( i18n("Add current view"), "item_add", 0, this, SLOT(addItem()), this);
-  actDel = new KAction( i18n("Remove item"), "item_remove", 0, this, SLOT(removeItem()), this);
-  actRename = new KAction( i18n("Rename item"), "item_rename", 0, this, SLOT(renameItem()), this);
+  actNew = new KAction( i18n("Add current view"), BarIcon("item_add",KivioFactory::global()), 0, this, SLOT(addItem()), this);
+  actDel = new KAction( i18n("Remove item"), BarIcon("item_remove",KivioFactory::global()), 0, this, SLOT(removeItem()), this);
+  actRename = new KAction( i18n("Rename item"),BarIcon("item_rename",KivioFactory::global()), 0, this, SLOT(renameItem()), this);
   actUp = new KAction( i18n("Move item Up"), "up", 0, this, SLOT(upItem()), this);
   actDown = new KAction( i18n("Move item Down"), "down", 0, this, SLOT(downItem()), this);
 

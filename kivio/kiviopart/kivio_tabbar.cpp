@@ -37,6 +37,7 @@
 #include "kivio_page.h"
 #include "kivio_tabbar.h"
 #include "kivio_map.h"
+#include "kivio_factory.h"
 
 KivioTabBar::KivioTabBar( QWidget* parent, KivioView* view )
 : QWidget(parent)
@@ -352,9 +353,9 @@ void KivioTabBar::openPopupMenu( const QPoint &_global )
         delete m_pPopupMenu;
     m_pPopupMenu = new QPopupMenu();
 
-    m_pPopupMenu->insertItem( BarIcon("item_rename"), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
-    m_pPopupMenu->insertItem( BarIcon("item_add"), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
-    m_pPopupMenu->insertItem( BarIcon("item_remove"),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
+    m_pPopupMenu->insertItem( BarIcon("item_rename",KivioFactory::global()), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
+    m_pPopupMenu->insertItem( BarIcon("item_add",KivioFactory::global()), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
+    m_pPopupMenu->insertItem( BarIcon("item_remove",KivioFactory::global()),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
     m_pPopupMenu->popup( _global );
 }
 

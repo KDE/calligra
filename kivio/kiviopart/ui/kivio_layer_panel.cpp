@@ -4,6 +4,7 @@
 #include "kivio_doc.h"
 #include "kivio_page.h"
 #include "kivio_layer.h"
+#include "kivio_factory.h"
 
 #include "viewitemrenamedialog.h"
 
@@ -33,10 +34,10 @@ KivioLayerItem::~KivioLayerItem()
 
 void KivioLayerItem::update()
 {
-  setPixmap(0, data->visible() ? BarIcon("layer_visible"):BarIcon("layer_novisible"));
-  setPixmap(1, true/*data->print()*/ ? BarIcon("layer_print"):BarIcon("layer_noprint"));
-  setPixmap(2, true/*data->edit()*/ ? BarIcon("layer_editable"):BarIcon("layer_noeditable"));
-  setPixmap(3, data->connectable() ? BarIcon("layer_connect"):BarIcon("layer_noconnect"));
+  setPixmap(0, data->visible() ? BarIcon("layer_visible",KivioFactory::global()):BarIcon("layer_novisible"));
+  setPixmap(1, true/*data->print()*/ ? BarIcon("layer_print",KivioFactory::global()):BarIcon("layer_noprint"));
+  setPixmap(2, true/*data->edit()*/ ? BarIcon("layer_editable",KivioFactory::global()):BarIcon("layer_noeditable"));
+  setPixmap(3, data->connectable() ? BarIcon("layer_connect",KivioFactory::global()):BarIcon("layer_noconnect"));
   setText(4,data->name());
 }
 /*********************************************************/
@@ -52,9 +53,9 @@ KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* n
   list->setSorting(5,true);
   list->installEventFilter(this);
 
-  actNew = new KAction( i18n("New Layer"), "layer_add", 0, this, SLOT(addItem()), this);
-  actDel = new KAction( i18n("Remove Layer"), "layer_remove", 0, this, SLOT(removeItem()), this);
-  actRename = new KAction( i18n("Rename Layer"), "item_rename", 0, this, SLOT(renameItem()), this);
+  actNew = new KAction( i18n("New Layer"), BarIcon("layer_add",KivioFactory::global()), 0, this, SLOT(addItem()), this);
+  actDel = new KAction( i18n("Remove Layer"), BarIcon("layer_remove",KivioFactory::global()), 0, this, SLOT(removeItem()), this);
+  actRename = new KAction( i18n("Rename Layer"), BarIcon("item_rename",KivioFactory::global()), 0, this, SLOT(renameItem()), this);
   actUp = new KAction( i18n("Move Layer Up"), "up", 0, this, SLOT(upItem()), this);
   actDown = new KAction( i18n("Move Layer Down"), "down", 0, this, SLOT(downItem()), this);
 
