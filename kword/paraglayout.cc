@@ -162,7 +162,7 @@ QDomElement KWParagLayout::save( QDomDocument& doc )
     b.setAttribute( "style", (int)right.style );
     layout.appendChild( b );
 
-    doc.createElement( "TOPBORDER" );
+    b = doc.createElement( "TOPBORDER" );
     b.setAttribute( "color", colorToName( top.color ) );
     b.setAttribute( "width", (int)top.ptWidth );
     b.setAttribute( "style", (int)top.style );
@@ -193,7 +193,7 @@ QDomElement KWParagLayout::save( QDomDocument& doc )
 	tab.setAttribute( "pos-inch", tabList.at( i )->inchPos );
 	tab.setAttribute( "type", (int)tabList.at( i )->type );
     }
-    
+
     return layout;
 }
 
@@ -264,9 +264,8 @@ bool KWParagLayout::load( const QDomElement& layout )
     QDomElement f = layout.namedItem( "FORMAT" ).toElement();
     if ( f.isNull() )
 	return false;
-    // #### todo
-//     if ( !form.load( f ) )
-// 	return false;
+    if ( !form.load( f, document ) )
+ 	return false;
     setFormat( form );
 
     QDomElement tabs = layout.namedItem( "TABULATORS" ).toElement();
