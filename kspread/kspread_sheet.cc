@@ -5902,6 +5902,13 @@ void KSpreadSheet::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int 
 
 void KSpreadSheet::mergeCells( const QRect &area )
 {
+  // sanity check
+  if( isProtected() )
+    return;
+  if( m_pMap->isProtected() )
+    return;
+
+  // no span ?    
   if( area.width() == 1 && area.height() == 1)
     return;
 
