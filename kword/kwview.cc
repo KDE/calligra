@@ -21,6 +21,7 @@
 #undef Unsorted
 #include <kaccel.h>
 #include <kmessagebox.h>
+#include <kdeversion.h>
 #include <qclipboard.h>
 #include <qregexp.h>
 #include <qpaintdevicemetrics.h>
