@@ -36,7 +36,7 @@ public:
     ParserNode() { debugCount++; }
     virtual ~ParserNode() { debugCount--; }
     //virtual void output( ostream& ) = 0;
-    virtual void buildXML( QDomDocument doc, QDomElement element ) = 0;
+    virtual void buildXML( QDomDocument& doc, QDomElement element ) = 0;
     virtual bool isSimple() { return false; }
 
     static int debugCount;
@@ -48,7 +48,7 @@ class PrimaryNode : public ParserNode {
 public:
     PrimaryNode( QString primary ) : m_primary( primary ), m_functionName( false ) {}
     //virtual void output( ostream& stream ) { stream << "PrimaryNode {" << m_primary << "}" << endl; }
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
     virtual bool isSimple() { return true; }
     void setUnicode( QChar unicode ) { m_unicode = unicode; }
     void setFunctionName( bool functionName ) { m_functionName = functionName; }
@@ -59,7 +59,7 @@ private:
     bool m_functionName;
 };
 
-void PrimaryNode::buildXML( QDomDocument doc, QDomElement element )
+void PrimaryNode::buildXML( QDomDocument& doc, QDomElement element )
 {
     if ( m_unicode != QChar::null ) {
         QDomElement de = doc.createElement( "TEXT" );
@@ -85,12 +85,12 @@ class UnaryMinus : public ParserNode {
 public:
     UnaryMinus( ParserNode* primary ) : m_primary( primary ) {}
     ~UnaryMinus() { delete m_primary; }
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
 private:
     ParserNode* m_primary;
 };
 
-void UnaryMinus::buildXML( QDomDocument doc, QDomElement element )
+void UnaryMinus::buildXML( QDomDocument& doc, QDomElement element )
 {
     QDomElement de = doc.createElement( "TEXT" );
     de.setAttribute( "CHAR", "-" );
@@ -116,10 +116,10 @@ protected:
 class AssignNode : public OperatorNode {
 public:
     AssignNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
 };
 
-void AssignNode::buildXML( QDomDocument doc, QDomElement element )
+void AssignNode::buildXML( QDomDocument& doc, QDomElement element )
 {
     m_lhs->buildXML( doc, element );
     QDomElement de = doc.createElement( "TEXT" );
@@ -131,10 +131,10 @@ void AssignNode::buildXML( QDomDocument doc, QDomElement element )
 class ExprNode : public OperatorNode {
 public:
     ExprNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
 };
 
-void ExprNode::buildXML( QDomDocument doc, QDomElement element )
+void ExprNode::buildXML( QDomDocument& doc, QDomElement element )
 {
     m_lhs->buildXML( doc, element );
     QDomElement de = doc.createElement( "TEXT" );
@@ -146,10 +146,10 @@ void ExprNode::buildXML( QDomDocument doc, QDomElement element )
 class TermNode : public OperatorNode {
 public:
     TermNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
 };
 
-void TermNode::buildXML( QDomDocument doc, QDomElement element )
+void TermNode::buildXML( QDomDocument& doc, QDomElement element )
 {
     if ( m_type == "*" ) {
         m_lhs->buildXML( doc, element );
@@ -178,10 +178,10 @@ void TermNode::buildXML( QDomDocument doc, QDomElement element )
 class PowerNode : public OperatorNode {
 public:
     PowerNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
 };
 
-void PowerNode::buildXML( QDomDocument doc, QDomElement element )
+void PowerNode::buildXML( QDomDocument& doc, QDomElement element )
 {
     QDomElement index = doc.createElement( "INDEX" );
     QDomElement content = doc.createElement( "CONTENT" );
@@ -227,14 +227,14 @@ public:
     }
     ~FunctionNode() { delete m_name; }
     //virtual void output( ostream& stream );
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
 private:
-    void buildSymbolXML( QDomDocument doc, QDomElement element, KFormula::SymbolType type );
+    void buildSymbolXML( QDomDocument& doc, QDomElement element, KFormula::SymbolType type );
     PrimaryNode* m_name;
     QPtrList<ParserNode> m_args;
 };
 
-void FunctionNode::buildSymbolXML( QDomDocument doc, QDomElement element, KFormula::SymbolType type )
+void FunctionNode::buildSymbolXML( QDomDocument& doc, QDomElement element, KFormula::SymbolType type )
 {
     QDomElement symbol = doc.createElement( "SYMBOL" );
     symbol.setAttribute( "TYPE", type );
@@ -262,7 +262,7 @@ void FunctionNode::buildSymbolXML( QDomDocument doc, QDomElement element, KFormu
     element.appendChild( symbol );
 }
 
-void FunctionNode::buildXML( QDomDocument doc, QDomElement element )
+void FunctionNode::buildXML( QDomDocument& doc, QDomElement element )
 {
     if ( ( m_name->primary() == "sqrt" ) && ( m_args.count() == 1 ) ) {
         QDomElement root = doc.createElement( "ROOT" );
@@ -334,7 +334,7 @@ class RowNode : public ParserNode {
 public:
     RowNode( QPtrList<ParserNode> row ) : m_row( row ) { m_row.setAutoDelete( true ); }
     //virtual void output( ostream& stream );
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
     uint columns() const { return m_row.count(); }
     void setRequiredColumns( uint requiredColumns ) { m_requiredColumns = requiredColumns; }
 private:
@@ -342,7 +342,7 @@ private:
     uint m_requiredColumns;
 };
 
-void RowNode::buildXML( QDomDocument doc, QDomElement element )
+void RowNode::buildXML( QDomDocument& doc, QDomElement element )
 {
     for ( uint i = 0; i < m_requiredColumns; i++ ) {
         QDomElement sequence = doc.createElement( "SEQUENCE" );
@@ -374,7 +374,7 @@ class MatrixNode : public ParserNode {
 public:
     MatrixNode( QPtrList<RowNode> rows ) : m_rows( rows ) { m_rows.setAutoDelete( true ); }
     //virtual void output( ostream& stream );
-    virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual void buildXML( QDomDocument& doc, QDomElement element );
     virtual bool isSimple() { return true; }
     uint columns();
     uint rows() { return m_rows.count(); }
@@ -391,7 +391,7 @@ uint MatrixNode::columns()
     return columns;
 }
 
-void MatrixNode::buildXML( QDomDocument doc, QDomElement element )
+void MatrixNode::buildXML( QDomDocument& doc, QDomElement element )
 {
     QDomElement bracket = doc.createElement( "BRACKET" );
     bracket.setAttribute( "LEFT", '(' );
