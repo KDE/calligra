@@ -171,8 +171,8 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   (void) new QLabel( i18n( "Fax :" ), grid );
   d->m_leFax = new QLineEdit( authorInfo->fax(), grid );
 
-  (void) new QLabel( i18n( "Country :" ), grid );
-  d->m_leCountry = new QLineEdit( authorInfo->country(), grid );
+  (void) new QLabel( i18n( "Street :" ), grid );
+  d->m_leStreet = new QLineEdit( authorInfo->street(), grid );
 
   (void) new QLabel( i18n( "Postal Code :" ), grid );
   d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), grid );
@@ -180,8 +180,8 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   (void) new QLabel( i18n( "City :" ), grid );
   d->m_leCity = new QLineEdit( authorInfo->city(), grid );
 
-  (void) new QLabel( i18n( "Street :" ), grid );
-  d->m_leStreet = new QLineEdit( authorInfo->street(), grid );
+  (void) new QLabel( i18n( "Country :" ), grid );
+  d->m_leCountry = new QLineEdit( authorInfo->country(), grid );
 
   connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
