@@ -184,7 +184,6 @@ public slots:
     void textItalic();
     void textUnderline();
     void textColor();
-    void tbTextColor();
     void textAlignLeft();
     void textAlignCenter();
     void textAlignRight();
@@ -570,7 +569,6 @@ protected:
     TKSelectColorAction* actionBrushColor;
     TKSelectColorAction* actionPenColor;
     TKSelectColorAction* actionTextColor;
-    TKSelectColorAction* actionTbTextColor;
 
 
     KAction *actionResizeTextObject;

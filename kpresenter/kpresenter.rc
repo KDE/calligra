@@ -194,7 +194,7 @@
   <Action name="text_depthMinus"/>
   <Action name="text_depthPlus"/>
   <Separator/>
-  <Action name="tb_text_color"/>
+  <Action name="text_color"/>
 </ToolBar>
 <ToolBar name="screenToolBar" position="top" fullWidth="false"><Text>Presentation</Text>
   <Action name="screen_assigneffect"/>

@@ -1263,16 +1263,6 @@ void KPresenterView::textUnderline()
 void KPresenterView::textColor()
 {
     tbColor = actionTextColor->color();
-    actionTbTextColor->setCurrentColor( tbColor );
-    page->setTextColor( tbColor );
-    m_pKPresenterDoc->setModified(true);
-}
-
-/*===============================================================*/
-void KPresenterView::tbTextColor()
-{
-    tbColor = actionTbTextColor->color();
-    actionTextColor->setCurrentColor( tbColor );
     page->setTextColor( tbColor );
     m_pKPresenterDoc->setModified(true);
 }
@@ -1852,7 +1842,6 @@ void KPresenterView::initGui()
 {
     tbColor = Qt::black;
     actionTextColor->setCurrentColor( Qt::black );
-    actionTbTextColor->setCurrentColor( Qt::black );
     actionBrushColor->setCurrentColor( Qt::white );
     actionPenColor->setCurrentColor( Qt::black );
     ( (KColorAction*)actionScreenPenColor )->setColor( Qt::red );
@@ -2017,10 +2006,6 @@ void KPresenterView::setupActions()
     actionTextColor = new TKSelectColorAction( i18n( "&Color" ), TKSelectColorAction::TextColor,
                                                actionCollection(), "text_color", true );
     connect( actionTextColor, SIGNAL( activated() ), SLOT( textColor() ) );
-
-    actionTbTextColor = new TKSelectColorAction( i18n( "Text Color" ), TKSelectColorAction::TextColor,
-                                                 actionCollection(), "tb_text_color", false );
-    connect( actionTbTextColor, SIGNAL( activated() ), SLOT( tbTextColor() ) );
 
     actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
 				       this, SLOT( textAlignLeft() ),
@@ -2339,7 +2324,6 @@ void KPresenterView::objectSelectedChanged()
     actionTextFontSize->setEnabled(isText);
     actionTextFontFamily->setEnabled(isText);
     actionTextColor->setEnabled(isText);
-    actionTbTextColor->setEnabled(isText);
     actionTextAlignLeft->setEnabled(isText);
     actionTextAlignCenter->setEnabled(isText);
     actionTextAlignRight->setEnabled(isText);
