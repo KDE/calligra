@@ -27,7 +27,18 @@ protected:
     virtual void paintEvent( QPaintEvent* )
     {
         QPainter p( this );
-        QRect rect( 20, 20, 100, 100 );
+        // Lines
+        QPen bigPen( black, 8, SolidLine, FlatCap, MiterJoin );
+        p.setPen( bigPen );
+        p.drawLine( 20, 5, 120, 5 );
+        bigPen.setCapStyle( SquareCap );
+        p.setPen( bigPen );
+        p.drawLine( 20, 20, 120, 20 );
+        bigPen.setCapStyle( RoundCap );
+        p.setPen( bigPen );
+        p.drawLine( 20, 40, 120, 40 );
+        // First square
+        QRect rect( 20, 80, 100, 100 );
         KoBorder::drawBorders( p, m_zh, rect, m_leftBorder,
                                m_rightBorder, m_topBorder, m_bottomBorder,
                                0, QPen() );
