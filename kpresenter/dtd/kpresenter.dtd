@@ -280,7 +280,7 @@
 			pointSize  CDATA #REQUIRED
 			bold       CDATA #IMPLIED
 			italic     CDATA #IMPLIED
-			underline  CDATA #IMPLIED
+			underline CDATA #IMPLIED
 			red        CDATA #IMPLIED
 			green      CDATA #IMPLIED
 			blue       CDATA #IMPLIED>
@@ -321,7 +321,7 @@
 <!ATTLIST TEXT
 		family	CDATA	#REQUIRED
 		pointSize NMTOKEN #REQUIRED
-		underline ( 0 | 1 | single | double|single-bold ) #REQUIRED
+		underline ( 0 | 1 | single | double|single-bold|wave ) #REQUIRED
                 underlinestyleline CDATA #REQUIRED
                 underlinecolor CDATA #REQUIRED
                 bold ( 0 | 1 ) #REQUIRED
