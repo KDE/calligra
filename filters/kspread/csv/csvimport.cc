@@ -94,7 +94,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     QString csv_delimiter = QString::null;
     // ###### FIXME: disabled for now
-    //if (config != QString::null)
+    //if (!config.isNull())
     //    csv_delimiter = config[0];
 
     QByteArray inputFile( in.readAll() );
