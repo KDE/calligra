@@ -97,6 +97,12 @@ not partial text. For example, if the text is "Visit the website" where only
 the string "website" is a hyperlink to an URL, in KSpread the whole string 
 "Visit the website" becomes the link. Consequently, if the text contains 
 two or more links, only the first link will be used.
+(I will fixe when we convert it to kotext)
+
+===========================================================
+  IN PROGRESS
+===========================================================
+-> Save/load numeric-style
 
 ===========================================================
   TODO
@@ -105,7 +111,6 @@ two or more links, only the first link will be used.
 -> fix default value (for printing)
 -> Save/load spell checking ignore word into settings.xml
 -> Save/load col-width/row-height into settings.xml
--> Save/load numeric-style
 -> Fix load conditional attribute, for the moment it load just one style
 
 ===========================================================
