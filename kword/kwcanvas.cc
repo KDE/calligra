@@ -484,11 +484,12 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     m_currentFrameSetEdit = fs->createFrameSetEdit( this );
                     emitChanged = true;
                 }
-                if ( emitChanged )
-                    emit currentFrameSetEditChanged();
 
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mousePressEvent( e );
+
+                if ( emitChanged )
+                    emit currentFrameSetEditChanged();
 
             }
             break;
