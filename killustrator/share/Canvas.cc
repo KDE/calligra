@@ -709,28 +709,32 @@ void Canvas::drawGrid (QPainter& p)
 
 void Canvas::readGridProperties ()
 {
-   kdDebug()<<"Canvas::readGridProps()"<<endl;
-  KConfig* config = kapp->config ();
+   //kdDebug()<<"Canvas::readGridProps()"<<endl;
+   KConfig* config = kapp->config ();
 
-  config->setGroup ("Grid");
+   config->setGroup ("Grid");
 
-  vGridDistance = (float) config->readDoubleNumEntry ("vGridDistance", 50.0);
-  hGridDistance = (float) config->readDoubleNumEntry ("hGridDistance", 50.0);
-  gridIsOn = config->readBoolEntry ("showGrid", false);
-  gridSnapIsOn = config->readBoolEntry ("snapToGrid", false);
-  mGridColor = config->readColorEntry ("GridColor", &mGridColor);
-  //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
-  //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
+   vGridDistance = (float) config->readDoubleNumEntry ("vGridDistance", 50.0);
+   hGridDistance = (float) config->readDoubleNumEntry ("hGridDistance", 50.0);
+   gridIsOn = config->readBoolEntry ("showGrid", false);
+   gridSnapIsOn = config->readBoolEntry ("snapToGrid", false);
+   mGridColor = config->readColorEntry ("GridColor", &mGridColor);
+   document->setGrid(vGridDistance,hGridDistance,gridSnapIsOn);
+   //kdDebug()<<"gridSnapIsOn: "<<int(gridSnapIsOn)<<endl;
+   //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
+   //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
 
-  config->setGroup ("Helplines");
-  helplinesAreOn = config->readBoolEntry ("showHelplines");
-  helplinesSnapIsOn = config->readBoolEntry ("snapToHelplines");
-  document->layerForHelplines ()->setVisible (helplinesAreOn);
+   config->setGroup ("Helplines");
+   helplinesAreOn = config->readBoolEntry ("showHelplines");
+   helplinesSnapIsOn = config->readBoolEntry ("snapToHelplines");
+   document->layerForHelplines ()->setVisible (helplinesAreOn);
+
+
 }
 
 void Canvas::saveGridProperties ()
 {
-   kdDebug()<<"Canvas::saveGridProps()"<<endl;
+   //kdDebug()<<"Canvas::saveGridProps()"<<endl;
   KConfig* config = kapp->config ();
 
   config->setGroup ("Grid");
@@ -740,6 +744,7 @@ void Canvas::saveGridProperties ()
   config->writeEntry ("showGrid", gridIsOn);
   config->writeEntry ("snapToGrid", gridSnapIsOn);
   config->writeEntry ("GridColor", mGridColor);
+  //kdDebug()<<"gridSnapIsOn: "<<int(gridSnapIsOn)<<endl;
   //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
   //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
   
@@ -752,7 +757,9 @@ void Canvas::saveGridProperties ()
 
 void Canvas::updateGridInfos ()
 {
+   //kdDebug()<<"gridsnapison: "<<int(gridSnapIsOn)<<endl;
    document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
+   //kdDebug()<<"after getGrid() gridsnapison: "<<int(gridSnapIsOn)<<endl;
    document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
    if (helplinesAreOn != document->layerForHelplines ()->isVisible ())
       showHelplines (document->layerForHelplines ()->isVisible ());
