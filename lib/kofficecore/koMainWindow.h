@@ -114,6 +114,12 @@ public:
      */
     virtual bool openDocument( const KURL & url );
 
+    /**
+     * Load the URL into this document (and make it root doc after loading)
+     * Special method for KoApplication::start, don't use.
+     */
+    bool openDocument( KoDocument *newdoc, const KURL & url );
+
     virtual DCOPObject * dcopObject();
 
 signals:
@@ -240,7 +246,8 @@ protected:
     virtual void resizeEvent( QResizeEvent * e );
     virtual bool queryClose();
 
-    bool openDocumentInternal( KoFilterManager * filterManager, const KURL & url );
+    bool openDocumentInternal( KoFilterManager * filterManager, const KURL & url,
+                               KoDocument * newdoc = 0L );
 
     KRecentFilesAction *m_recent;
 

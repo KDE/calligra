@@ -112,11 +112,12 @@ bool KoApplication::start()
                 KoMainWindow *shell = new KoMainWindow( doc->instance() );
                 shell->show();
                 // now try to load
-                if ( shell->openDocument( args->url(i) ) ) {
+                if ( shell->openDocument( doc, args->url(i) ) ) {
                     n++;
                 } else {
                     // .... if failed
                     delete shell;
+                    delete doc;
                 }
             }
         }

@@ -396,11 +396,17 @@ bool KoMainWindow::openDocument( const KURL & url )
     return openDocumentInternal( 0L, url );
 }
 
-bool KoMainWindow::openDocumentInternal( KoFilterManager * filterManager, const KURL & url )
+bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
+{
+    return openDocumentInternal( 0L, url, newdoc );
+}
+
+bool KoMainWindow::openDocumentInternal( KoFilterManager * filterManager, const KURL & url, KoDocument *newdoc )
 {
     //kdDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
-    //KoDocument* doc = rootDocument();
-    KoDocument *newdoc=createDoc();
+
+    if ( !newdoc )
+        newdoc = createDoc();
 
     // Pass the filterManager to the document (who will own it from now on)
     if ( filterManager )
@@ -708,7 +714,7 @@ void KoMainWindow::slotFileOpen()
         return;
     }
 
-    (void) openDocumentInternal( filterManager, url );
+    (void) openDocumentInternal( filterManager, url, 0L );
 }
 
 void KoMainWindow::slotFileOpenRecent( const KURL & url )
