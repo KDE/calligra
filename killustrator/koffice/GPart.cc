@@ -23,7 +23,6 @@
 */
 
 #include "GPart.h"
-#include "GPart.moc"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -33,12 +32,10 @@
 
 GPart::GPart () {
   child = 0L;
-  view = 0L;
 }
 
 GPart::GPart (KIllustratorChild *c) {
   child = c;
-  view = 0L;
   initialGeom = child->geometry ();
   calcBoundingBox ();
 }
@@ -66,11 +63,12 @@ GPart::GPart (const list<XmlAttribute>& attribs) : GObject (attribs) {
     first++;
   }
   initialGeom = QRect (x, y, w, h);
-  view = 0L;
-  child = new KIllustratorChild ();
+
+  // ####### Torben
+  /* child = new KIllustratorChild ();
   child->setURL (url.c_str ());
   child->setMimeType (mime.c_str ());
-  child->setGeometry (initialGeom);
+  child->setGeometry (initialGeom); */
   calcBoundingBox ();
 }
 
@@ -86,6 +84,8 @@ QString GPart::typeName () const {
 }
 
 void GPart::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
+    // ####### Torben
+    /**
   p.save ();
   QRect r = child->geometry ();
   if (outline) {
@@ -103,7 +103,7 @@ void GPart::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
     p.setViewport (vPort);
     p.setWindow (win);
   }
-  p.restore ();
+  p.restore (); */
 }
 
 void GPart::calcBoundingBox () {
@@ -134,33 +134,11 @@ void GPart::writeToXml (XmlWriter& xml) {
   xml.addAttribute ("y", oldGeom.y ());
   xml.addAttribute ("width", oldGeom.width ());
   xml.addAttribute ("height", oldGeom.height ());
-  xml.addAttribute ("url", child->urlForSave ());
-  xml.addAttribute ("mime", child->mimeType ());
+  xml.addAttribute ("url", child->url().latin1() );
+  xml.addAttribute ("mime", child->document()->mimeType ());
   xml.closeTag (true);
 
   //  child->save (xml.stream ());
 }
 
-void GPart::setMainWindow (OpenParts::MainWindow_ptr _mainWindow) {
-  mainWindow = KOffice::MainWindow::_narrow (_mainWindow);
-}
-
-void GPart::activate (int xoff, int yoff) {
-  assert (view);
-  cout << "$$$$$$$$$$$ ACTIVATE PART $$$$$$$$$$$$" << endl;
-  QRect r = child->geometry ();
-  view->setGeometry (r.x () + xoff, r.y () + yoff, r.width (), r.height ());
-  view->show ();
-  view->view ()->mainWindow ()->setActivePart (view->view ()->id ());
-}
-
-void GPart::deactivate () {
-  view->hide ();
-  view->view ()->mainWindow ()->setActivePart (parentID);
-}
-
-void GPart::select (bool flag) {
-  GObject::select (flag);
-  if (!flag)
-    deactivate ();
-}
+#include "GPart.moc"

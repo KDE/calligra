@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -25,111 +25,92 @@
 #ifndef KIllustrator_doc_h_
 #define KIllustrator_doc_h_
 
-#include <koFrame.h>
 #include <koDocument.h>
-#include <koView.h>
-#include <koPrintExt.h>
-#include <koStoreIf.h>
 
-#include "KIllustrator.h"
-#include "GDocument.h"
-#include "GPart.h"
-
-#define MIME_TYPE "application/x-killustrator"
-#define EDITOR "IDL:KIllustrator/Document:1.0"
+#include <qcstring.h>
 
 class KIllustratorDocument;
 class KIllustratorView;
 class KoDocumentEntry;
+class KoStore;
+class GDocument;
+class GPart;
 
-class KIllustratorChild : public KoDocumentChild {
+class KIllustratorChild : public KoDocumentChild
+{
 public:
-  KIllustratorChild () {}
-  KIllustratorChild (KIllustratorDocument* killu, const QRect& rect, 
-		     KOffice::Document_ptr doc);
-  ~KIllustratorChild ();
+    KIllustratorChild( KIllustratorDocument* );
+    KIllustratorChild( KIllustratorDocument* killu, KoDocument* doc, const QRect& geometry );
+    ~KIllustratorChild();
 
-  KIllustratorDocument* parent () { return m_pKilluDoc; }
-
-  void setURL (const char* url);
-  void setMimeType (const char *mime);
-
-  const char* urlForSave ();
-
-protected:
-  KIllustratorDocument *m_pKilluDoc; 
+    KIllustratorDocument* killuParent () { return (KIllustratorDocument*)parent(); }
 };
 
-class KIllustratorDocument : public GDocument,
-			virtual public KoDocument, 
-			virtual public KoPrintExt, 
-			virtual public KIllustrator::Document_skel {
-  Q_OBJECT
+class KIllustratorDocument : public KoDocument
+{
+    Q_OBJECT
 public:
-  KIllustratorDocument ();
-  ~KIllustratorDocument ();
+    KIllustratorDocument( QObject* parent = 0, const char* name = 0 );
+    ~KIllustratorDocument ();
 
-  // --- C++ ---
-  // Overloaded methods from KoDocument
+    // Overloaded methods from KoDocument
 
-  virtual bool saveChildren (KOStore::Store_ptr _store, const char *_path);
-  bool save (ostream& os, const char *fmt);
-  bool completeSaving (KOStore::Store_ptr store);
+    virtual bool saveChildren (KoStore* _store, const char *_path);
+    bool save (ostream& os, const char *fmt);
+    bool completeSaving (KoStore* store);
 
-  bool load (istream& is, KOStore::Store_ptr store);
-  bool loadChildren (KOStore::Store_ptr store);
-  bool hasToWriteMultipart ();
+    bool load (istream& is, KoStore* store);
+    bool loadChildren (KoStore* store);
+    bool hasToWriteMultipart ();
 
-  void cleanUp ();
+    /**
+     * Overloaded @ref Part::createView
+     */
+    View* createView( QWidget* parent, const char* name );
 
-  void insertPart (const QRect& rect, KoDocumentEntry& e);
-  void changeChildGeometry (KIllustratorChild* child, const QRect& r);
+    /**
+     * Overloaded @ref Part::createShell
+     */
+    Shell* createShell();
 
-  // --- IDL ---
-  virtual bool initDoc ();
+    /**
+     * Overloaded @ref KoDocument::initDoc.
+     */
+    bool initDoc ();
 
-  virtual KOffice::MainWindow_ptr createMainWindow();
+    /**
+     * Overloaded @ref KoDocument::mimeType.
+     */
+    QCString mimeType() const { return "application/x-killustrator"; }
 
-  // create a view
-  virtual OpenParts::View_ptr createView ();
+    /**
+     * Overloaded @ref ContainerPart::insertChild.
+     */
+    void insertChild( PartChild* child );
+	
+    /**
+     * Overloaded @ref Part::paintContent
+     */
+    void paintContent( QPainter& painter, const QRect& rect, bool transparent );
+	
+    // Killustrator stuff
+    GDocument* gdoc();
 
-  // get list of views
-  virtual void viewList (OpenParts::Document::ViewList & list_ptr);
-
-  void removeView (KIllustratorView* view);
-
-  // get mime type
-  virtual QCString mimeType () { return MIME_TYPE; }
-
-  // ask, if document is modified
-  virtual bool isModified ();
-  virtual void setModified (bool f);
-
-  virtual void draw (QPaintDevice* dev, long int w, long int h,
-		     float _scale );
-
-  virtual int viewCount ();
-  virtual KIllustratorView* createKIllustratorView ( QWidget* _parent = 0 );
-
-  virtual bool isEmpty () { return m_bEmpty; }
-
-  virtual bool checkForSelection ();
-  virtual KIllustrator::GfxObjectSeq getSelection ();
-  virtual void addToSelection (KIllustrator::GfxObject_ptr obj);
-  virtual void removeFromSelection (KIllustrator::GfxObject_ptr obj);
-  virtual void groupSelection ();
+    void insertPart (const QRect& rect, KoDocumentEntry& e);
+    void changeChildGeometry (KIllustratorChild* child, const QRect& r);
 
 signals:
-  void partInserted (KIllustratorChild* child, GPart* part);
-  void childGeometryChanged (KIllustratorChild* child);
- 
-protected:
-  void insertChild (KIllustratorChild* child);
+    void partInserted (KIllustratorChild* child, GPart* part);
+    void childGeometryChanged (KIllustratorChild* child);
 
-  bool m_bEmpty;
-  QList<KIllustratorView> m_lstViews;
-  QList<KIllustratorChild> m_lstChildren;
-  KIllustratorView *viewPtr;
+protected:
+    /**
+     * Overloaded @ref Part::configFile
+     */
+    QString configFile() const;
+	
+private:
+    GDocument* m_gdocument;
 };
 
 #endif

@@ -33,8 +33,6 @@
 #include <qpicture.h>
 
 #include <koMainWindow.h>
-#include <koView.h>
-#include <openparts.h>
 
 #include "Coord.h"
 #include "GObject.h"
@@ -62,27 +60,13 @@ public:
 
   virtual void writeToXml (XmlWriter&);
 
-  void setView (KIllustratorFrame *v) { view = v; }
-  KIllustratorFrame *getView () { return view; }
-
   KIllustratorChild *getChild () { return child; }
-  void setMainWindow(OpenParts::MainWindow_ptr _mainWindow);
-
-  void setParentID (OpenParts::Id _id) { parentID = _id; }
-
-  virtual void select (bool flag = false);
-
-  virtual void activate (int xoff, int yoff);
-  virtual void deactivate ();
 
 protected:
   void calcBoundingBox ();
 
 private:
   KIllustratorChild *child;
-  KIllustratorFrame *view;
-  KOffice::MainWindow_var mainWindow;
-  OpenParts::Id parentID;
   QRect initialGeom, oldGeom;
 };
 

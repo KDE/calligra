@@ -23,78 +23,58 @@
 */
 
 #include "KIllustrator_doc.h"
-#include "KIllustrator_doc.moc"
 #include "KIllustrator_view.h"
 #include "KIllustrator_shell.h"
 
+#include "GDocument.h"
 #include "GPart.h"
-#include "GfxWrapper.h"
-#include <opApplication.h>
+#include "Coord.h"
+
 #include <qmessagebox.h>
+
 #include <klocale.h>
 
 #include <koQueryTypes.h>
-#include <koDocument.h>
+#include <koStore.h>
 
 KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu,
-				      const QRect& rect,
-				      KOffice::Document_ptr doc)
-  : KoDocumentChild (rect, doc) {
-  m_pKilluDoc = killu;
+				      KoDocument* doc,
+				      const QRect& rect )
+  : KoDocumentChild ( killu, doc, rect )
+{
 }
 
-KIllustratorChild::~KIllustratorChild () {
-  m_rDoc = 0L;
+KIllustratorChild::~KIllustratorChild ()
+{
 }
 
-void KIllustratorChild::setURL (const char* url) {
-  m_strURL = url;
+// ----------------------------------------------------------
+
+KIllustratorDocument::KIllustratorDocument( QObject* parent, const char* name )
+    : KoDocument( parent, name )
+{
+    m_gdocument = new GDocument();
+    GObject::registerPrototype ("object", new GPart ());
 }
 
-void KIllustratorChild::setMimeType (const char *mime) {
-  m_strMimeType = mime;
+KIllustratorDocument::~KIllustratorDocument()
+{
+    delete m_gdocument;
 }
 
-const char* KIllustratorChild::urlForSave () {
-  return m_rDoc->url ();
+bool KIllustratorDocument::save (ostream& os, const char* )
+{
+    cout << "save KIllu to stream !!!!!!!!!!!!!!!" << endl;
+    return m_gdocument->saveToXml (os);
 }
 
-KIllustratorDocument::KIllustratorDocument () {
-  ADD_INTERFACE("IDL:KOffice/Print:1.0")
-  cout << "create new KIllustratorDocument: ior = "
-       << opapp_orb->object_to_string (this) << endl;
-
-  GObject::registerPrototype ("object", new GPart ());
-
-  m_lstViews.setAutoDelete (true);
-  m_lstChildren.setAutoDelete (true);
-  m_bEmpty = true;
-}
-
-KIllustratorDocument::~KIllustratorDocument () {
-  cleanUp ();
-}
-
-bool KIllustratorDocument::save (ostream& os, const char* ) {
-  cout << "save KIllu to stream !!!!!!!!!!!!!!!" << endl;
-  return GDocument::saveToXml (os);
-}
-
-void KIllustratorDocument::cleanUp () {
-  if (m_bIsClean)
-    return;
-
-  m_lstChildren.clear ();
-
-  KoDocument::cleanUp ();
-}
-
-
-bool KIllustratorDocument::load (istream& in, KOStore::Store_ptr ) {
+bool KIllustratorDocument::load (istream& in, KoStore* )
+{
   cout << "load KIllu from stream !!!!!!!!!" << endl;
-  if (GDocument::readFromXml (in)) {
+  if ( m_gdocument->readFromXml (in)) {
 
     // now look for part objects in order to create the child list
+    vector<GLayer*>& layers = m_gdocument->getLayers();
     vector<GLayer*>::iterator i = layers.begin ();
     for (; i != layers.end (); i++) {
       GLayer* layer = *i;
@@ -112,164 +92,117 @@ bool KIllustratorDocument::load (istream& in, KOStore::Store_ptr ) {
   return false;
 }
 
-bool KIllustratorDocument::loadChildren (KOStore::Store_ptr store) {
-  QListIterator<KIllustratorChild> it (m_lstChildren);
+bool KIllustratorDocument::loadChildren (KoStore* store)
+{
+  QListIterator<PartChild> it ( children() );
   for (; it.current (); ++it) {
-    if (! it.current ()->loadDocument (store))
+    if (! ((KoDocumentChild*)it.current())->loadDocument (store))
       return false;
   }
 
   return true;
 }
 
-bool KIllustratorDocument::saveChildren (KOStore::Store_ptr _store, const char *_path) {
+bool KIllustratorDocument::saveChildren (KoStore* _store, const char *_path)
+{
   cerr << "void KIllustratorDocument::saveChildren( KOStore::Store _store, const char *_path )" << endl;
   int i = 0;
-  QListIterator<KIllustratorChild> it (m_lstChildren);
+  QListIterator<PartChild> it ( children() );
   for( ; it.current(); ++it )
-    {
-        // set the child document's url to an internal url (ex: "tar:/0/1")
-        QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-        KOffice::Document_var doc = it.current()->document();
-        if ( !doc->saveToStore( _store, "", internURL ) )
-          return false;
-    }
+  {
+    QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
+    if ( !((KoDocumentChild*)it.current())->document()->saveToStore( _store, "", path ) )
+      return false;
+  }
   return true;
-}  
+}
 
-bool KIllustratorDocument::completeSaving (KOStore::Store_ptr store) {
+bool KIllustratorDocument::completeSaving (KoStore* store)
+{
   if (!store)
     return true;
 
   return true;
 }
 
-bool KIllustratorDocument::hasToWriteMultipart () {
-  return (m_lstChildren.count () > 0);
+bool KIllustratorDocument::hasToWriteMultipart ()
+{
+    return (children().count() > 0 );
 }
 
-void KIllustratorDocument::insertPart (const QRect& rect,
-				       KoDocumentEntry& e) {
-  KOffice::Document_var doc = e.createDoc();
-  if (CORBA::is_nil (doc))
-    return;
+void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
+{
+    KoDocument* doc = e.createDoc();
+    if ( !doc )
+	return;
 
-  if (! doc->initDoc ()) {
-    QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"),
-			   i18n ("Could not insert document"), i18n ("OK"));
-    return;
-  }
+    if (! doc->initDoc() )
+    {
+	QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"),
+			       i18n ("Could not insert document"), i18n ("OK"));
+	return;
+    }
 
-  KIllustratorChild *child =
-    new KIllustratorChild (this, rect, doc);
-  insertChild (child);
+    KIllustratorChild *child = new KIllustratorChild (this, doc, rect );
+    insertChild (child);
 
-  GPart* part = new GPart (child);
-  GDocument::insertObject (part);
-  emit partInserted (child, part);
+    GPart* part = new GPart (child);
+    m_gdocument->insertObject (part);
+    emit partInserted (child, part);
 }
 
 
-void KIllustratorDocument::insertChild (KIllustratorChild* child) {
-  m_lstChildren.append (child);
-  setModified (true);
+void KIllustratorDocument::insertChild( PartChild* child )
+{
+    ContainerPart::insertChild( child );
+
+    setModified (true);
 }
 
-void KIllustratorDocument::changeChildGeometry (KIllustratorChild* child,
-						const QRect& r) {
+void KIllustratorDocument::changeChildGeometry (KIllustratorChild* child, const QRect& r)
+{
   child->setGeometry (r);
   setModified (true);
   emit childGeometryChanged (child);
 }
 
-bool KIllustratorDocument::initDoc () {
+bool KIllustratorDocument::initDoc()
+{
   return true;
 }
 
-KOffice::MainWindow_ptr KIllustratorDocument::createMainWindow()
+View* KIllustratorDocument::createView( QWidget* parent, const char* name )
 {
-  KIllustratorShell* shell = new KIllustratorShell;
-  shell->show();
-  shell->setDocument( this );
+    KIllustratorView* view = new KIllustratorView( parent, name, this );
+    addView( view );
 
-  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+    return view;
 }
 
-KIllustratorView* KIllustratorDocument::createKIllustratorView ( QWidget* _parent ) {
-  KIllustratorView *view = new KIllustratorView (_parent, 0L, this);
-  //view->QWidget::show ();
-  m_lstViews.append (view);
-  return view;
+Shell* KIllustratorDocument::createShell()
+{
+    Shell* shell = new KIllustratorShell;
+    shell->setRootPart( this );
+    shell->show();
+
+    return shell;
 }
 
-OpenParts::View_ptr KIllustratorDocument::createView () {
-  return OpenParts::View::_duplicate (createKIllustratorView ());
+void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, bool transparent )
+{
+    Rect r( (float)rect.x(), (float)rect.y(), (float)rect.width(), (float)rect.height() );
+    
+    m_gdocument->drawContentsInRegion( painter, r );
 }
 
-void KIllustratorDocument::removeView (KIllustratorView* view) {
-  m_lstViews.setAutoDelete (false);
-  m_lstViews.removeRef (view);
-  m_lstViews.setAutoDelete (true);
+QString KIllustratorDocument::configFile() const
+{
+    return readConfigFile( "killustrator.rc" );
 }
 
-int KIllustratorDocument::viewCount () {
-  return m_lstViews.count ();
+GDocument* KIllustratorDocument::gdoc()
+{
+    return m_gdocument;
 }
 
-void KIllustratorDocument::viewList (OpenParts::Document::ViewList & list_ptr) {
-  QListIterator<KIllustratorView> it (m_lstViews);
-  for (; it.current (); ++it)
-    list_ptr.append( OpenParts::View::_duplicate (it.current ()) );
-}
-
-bool KIllustratorDocument::isModified () {
-  return GDocument::isModified ();
-}
-
-void KIllustratorDocument::setModified (bool f) {
-  GDocument::setModified (f);
-  if (f)
-    m_bEmpty = false;
-}
-
-void KIllustratorDocument::draw (QPaintDevice* dev,
-				 long int , long int ,
-				 float _scale ) {
-  Painter painter;
-  painter.begin (dev);
-
-  if ( _scale != 1.0 )
-    painter.scale( _scale, _scale );
-
-  GDocument::drawContents (painter);
-  painter.end ();
-}
-
-bool KIllustratorDocument::checkForSelection () {
-  cout << "check for selection..." << endl;
-  return !selectionIsEmpty ();
-}
-
-KIllustrator::GfxObjectSeq  KIllustratorDocument::getSelection () {
-  KIllustrator::GfxObjectSeq seq;
-  int n = 0;
-  for (list<GObject*>::iterator i = selection.begin ();
-       i != selection.end (); i++) {
-    GfxWrapper* wobj = (GfxWrapper *) (*i)->getWrapper ();
-    if (wobj == 0L)
-      wobj = new GfxWrapper (this, *i);
-    seq.append ( KIllustrator::GfxObject::_duplicate (wobj) );
-  }
-
-  return seq;
-}
-
-void KIllustratorDocument::addToSelection (KIllustrator::GfxObject_ptr) {
-}
-
-void
-KIllustratorDocument::removeFromSelection (KIllustrator::GfxObject_ptr) {
-}
-
-void KIllustratorDocument::groupSelection () {
-}
+#include "KIllustrator_doc.moc"

@@ -25,20 +25,12 @@
 #ifndef KIllustrator_view_h_
 #define KIllustrator_view_h_
 
-#include <koFrame.h>
-#include <koView.h>
-#include <opMenu.h>
-#include <opToolBar.h>
-#include <openparts_ui.h>
+#include <qarray.h>
 
-#include <qlist.h>
-#include <qlayout.h>
-
-#include "KIllustrator.h"
-#include "KIllustrator_doc.h"
-
-#include "MainView.h"
 #include "CommandHistory.h"
+#include "MainView.h"
+
+#include <container.h>
 
 #define ID_TOOL_SELECT        1001
 #define ID_TOOL_EDITPOINT     1002
@@ -51,25 +43,26 @@
 #define ID_TOOL_TEXT          1009
 #define ID_TOOL_ZOOM          1010
 #define ID_TOOL_PATHTEXT      1011
-
+ 
 #define ID_TOOL_INSERTPART    1012
-
+ 
 #define ID_EDIT_UNDO          2001
 #define ID_EDIT_REDO          2002
 #define ID_EDIT_CUT           2003
 #define ID_EDIT_COPY          2004
 #define ID_EDIT_PASTE         2005
 #define ID_EDIT_DELETE        2006
-#define ID_EDIT_ZOOM          2007
+#define ID_EDIT_ZOOM          2007  
 
 #define ID_TOOL_EP_MOVE       1101
 #define ID_TOOL_EP_INSERT     1102
 #define ID_TOOL_EP_DELETE     1103
 #define ID_TOOL_EP_SPLIT      1104
-#define ID_TOOL_EP_JOIN       1105
+#define ID_TOOL_EP_JOIN       1105   
 
 class KIllustratorView;
 class KIllustratorChild;
+class KIllustratorDocument;
 class Canvas;
 class GDocument;
 class QwViewport;
@@ -81,42 +74,28 @@ class Ruler;
 class EditPointTool;
 class InsertPartTool;
 class GPart;
+class QGridLayout;
 
-class KIllustratorFrame : public KoFrame {
-  Q_OBJECT
+class KIllustratorView : public ContainerView, public MainView
+{
+    Q_OBJECT
 public:
-  KIllustratorFrame (KIllustratorView* view, KIllustratorChild* child);
-  KIllustratorChild* child () { return m_pChild; }
-  KIllustratorView* killustratorView () { return m_pView; }
+    KIllustratorView (QWidget* parent, const char* name = 0, KIllustratorDocument* doc = 0 );
+    ~KIllustratorView ();
 
-  void setPartObject (GPart *obj) { m_pObj = obj; }
-  GPart* getPartObject () { return m_pObj; }
+    void createGUI ();
 
-protected:
-  KIllustratorChild *m_pChild;
-  KIllustratorView *m_pView;
-  GPart *m_pObj;
-};
+    /**
+     * Overloaded @ref MainView::activeDocument
+     */
+    GDocument* activeDocument ();
+    /**
+     * Overloaded @ref MainView::getCanvas
+     */
+    Canvas* getCanvas () { return canvas; }
 
-class KIllustratorView : public QWidget, public MainView,
-			 virtual public KoViewIf,
-			 virtual public KIllustrator::View_skel {
-  Q_OBJECT
-public:
-  KIllustratorView (QWidget* parent, const char* name = 0L,
-		    KIllustratorDocument* doc = 0L);
-  ~KIllustratorView ();
-
-  void createGUI ();
-  void cleanUp ();
-
-  GDocument* activeDocument () { return m_pDoc; }
-  Canvas* getCanvas () { return canvas; }
-
-  // --- IDL ---
+ public slots:
   void newView ();
-  //  void setMode (OPParts::Part::Mode mode);
-  //  void setFocus (bool mode);
   bool printDlg ();
 
   void editUndo ();
@@ -188,18 +167,11 @@ public:
   void showScripts ();
 
 protected:
-  void init ();
-  bool event (const QCString & _event, const CORBA::Any& _value);
-  bool mappingCreateMenubar (OpenPartsUI::MenuBar_ptr menubar);
-  bool mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr factory);
-
   void showTransformationDialog (int id);
 
   void setupCanvas ();
   void setupPopups ();
   void resizeEvent (QResizeEvent*);
-
-  void setFramesToParts ();
 
 protected slots:
   void editCutSlot ();
@@ -218,92 +190,12 @@ protected slots:
 
   void insertPartSlot (KIllustratorChild *child, GPart *part);
   void changeChildGeometrySlot (KIllustratorChild *child);
-  void childGeometryEndSlot (KoFrame *f);
-  void childMoveEndSlot (KoFrame *f);
-  void activatePart (GObject *obj);
 
 protected:
-  /* Menu: Edit */
-  OpenPartsUI::Menu_var m_vMenuEdit;
-  OpenPartsUI::Menu_var m_vMenuInsert;
-  long int m_idMenuEdit_Undo, m_idMenuEdit_Redo,
-    m_idMenuEdit_Cut, m_idMenuEdit_Copy, m_idMenuEdit_Paste,
-    m_idMenuEdit_Duplicate, m_idMenuEdit_Delete, m_idMenuEdit_SelectAll,
-    m_idMenuEdit_InsertObject, m_idMenuEdit_Properties;
-
-  /* Menu: Edit->Insert */
-  long int m_idMenuInsert_Object, m_idMenuInsert_Clipart,
-    m_idMenuInsert_Bitmap;
-
-  /* Menu: View */
-  OpenPartsUI::Menu_var m_vMenuView;
-  long int m_idMenuView_Outline,
-    m_idMenuView_Normal, m_idMenuView_Ruler, m_idMenuView_Grid,
-    m_idMenuView_Helplines, m_idMenuView_Layers;
-
-  /* Menu: Layout */
-  OpenPartsUI::Menu_var m_vMenuLayout;
-  long int m_idMenuLayout_InsertPage,
-    m_idMenuLayout_RemovePage, m_idMenuLayout_GotoPage,
-    m_idMenuLayout_PageLayout,
-    m_idMenuLayout_SetupGrid, m_idMenuLayout_AlignToGrid,
-    m_idMenuLayout_SetupHelplines, m_idMenuLayout_AlignToHelplines;
-
-  /* Menu: Arrange */
-  OpenPartsUI::Menu_var m_vMenuArrange;
-  OpenPartsUI::Menu_var m_vMenuTransform;
-  long int m_idMenuTransform_Position,
-    m_idMenuTransform_Dimension, m_idMenuTransform_Rotation,
-    m_idMenuTransform_Mirror, m_idMenuArrange_Align,
-    m_idMenuArrange_ToFront, m_idMenuArrange_ToBack,
-    m_idMenuArrange_1Forward, m_idMenuArrange_1Back,
-    m_idMenuArrange_Group, m_idMenuArrange_Ungroup,
-    m_idMenuArrange_TextAlongPath;
-  /* Menu: Extras */
-  OpenPartsUI::Menu_var m_vMenuExtras;
-  long int m_idMenuExtras_Scripts;
-
-  /* Menu: Help */
-  OpenPartsUI::Menu_var m_vMenuHelp;
-
-  /* Toolbar: Tools */
-  OpenPartsUI::ToolBar_var m_vToolBarTools;
-  long int m_idSelectionTool;
-  long int m_idEditPointTool;
-  long int m_idFreeHandTool;
-  long int m_idPolylineTool;
-  long int m_idBezierTool;
-  long int m_idRectangleTool;
-  long int m_idPolygonTool;
-  long int m_idEllipseTool;
-  long int m_idTextTool;
-  long int m_idZoomTool;
-  long int m_idActiveTool;
-
-  /* Toolbar: Edit */
-  OpenPartsUI::ToolBar_var m_vToolBarEdit;
-  long int m_idEditCut;
-  long int m_idEditCopy;
-  long int m_idEditPaste;
-  long int m_idEditDelete;
-  long int m_idEditUndo;
-  long int m_idEditRedo;
-  long int m_idEditZoom;
-
-  /* Toolbar: Colors */
-  OpenPartsUI::ColorBar_var m_vColorBar;
-
-  /* Toolbar: Edit Point */
-  OpenPartsUI::ToolBar_var m_vToolBarEditPoint;
-  long int m_idMovePoint;
-  long int m_idInsertPoint;
-  long int m_idRemovePoint;
-
   KIllustratorDocument *m_pDoc;
   EditPointTool *editPointTool;
   InsertPartTool *insertPartTool;
   QPopupMenu *objMenu;
-  QList<KIllustratorFrame> m_lstFrames;
   QArray<float> zFactors;
 
   bool m_bShowGUI;
@@ -318,6 +210,8 @@ protected:
   QWidget *mainWidget;
   QGridLayout *grid;
   CommandHistory cmdHistory;
+    
+    int m_idActiveTool;
 };
 
 #endif

@@ -1,0 +1,36 @@
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="undo"/>
+  <Action name="redo"/>
+  <Separator/>
+  <Action name="cut"/>
+  <Action name="copy"/>
+  <Action name="paste"/>
+ </Menu>
+</MenuBar>
+<ToolBars>
+ <ToolBar>
+  <Action name="undo"/>
+  <Action name="redo"/>
+  <Separator/>
+  <Action name="cut"/>
+  <Action name="copy"/>
+ </ToolBar>
+</ToolBars>
+<InPlaceEditing>
+ <MenuBar>
+  <Menu name="View"><text>View</text>
+   <Action name="newView"/>
+  </Menu>
+  <Menu name="Help"><text>Help</text>
+   <Action name="about"/>
+  </Menu>
+ </MenuBar>
+ <ToolBars>
+  <ToolBar>
+   <Action name="about"/>
+  </ToolBar>
+ </ToolBars>
+</InPlaceEditing>
+</QConfig>
