@@ -3481,6 +3481,8 @@ void ExcelReader::handleRecord( Record* record )
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
     case FormatRecord::id: 
       handleFormat( static_cast<FormatRecord*>( record ) ); break;
+    case FormulaRecord::id: 
+      handleFormula( static_cast<FormulaRecord*>( record ) ); break;
     case FontRecord::id: 
       handleFont( static_cast<FontRecord*>( record ) ); break;
     case FooterRecord::id: 
@@ -3698,12 +3700,30 @@ void ExcelReader::handleLeftMargin( LeftMarginRecord* record )
   d->activeSheet->setLeftMargin( margin );
 }
 
-
 void ExcelReader::handleFormat( FormatRecord* record )
 {
   if( !record ) return;
 
   d->formatTable[ record->index() ] = *record;
+}
+
+void ExcelReader::handleFormula( FormulaRecord* record )
+{
+  if( !record ) return;
+
+  if( !d->activeSheet ) return;
+  
+  unsigned column = record->column();
+  unsigned row = record->row();  
+  unsigned xfIndex = record->xfIndex();
+  Value value = record->result();
+  
+  Cell* cell = d->activeSheet->cell( column, row, true );
+  if( cell )
+  {
+    cell->setValue( value );
+    cell->setFormat( convertFormat( xfIndex ) );
+  }
 }
 
 void ExcelReader::handleFont( FontRecord* record )

@@ -2859,6 +2859,7 @@ private:
   void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
   void handleFormat( FormatRecord* record );
+  void handleFormula( FormulaRecord* record );
   void handleFont( FontRecord* record );
   void handleFooter( FooterRecord* record );
   void handleHeader( HeaderRecord* record );
