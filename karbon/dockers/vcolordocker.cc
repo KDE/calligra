@@ -28,7 +28,6 @@
 
 #include <kcolordialog.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <koMainWindow.h>
 
 #include "karbon_part.h"
@@ -41,10 +40,10 @@
 
 #include "vcolordocker.h"
 
-VColorDocker::VColorDocker( KarbonPart *part, KarbonView *parent, const char */*name*/ )
+VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
 {
-	setCaption( i18n( "Color Manager" ) );
+	setCaption( i18n( "Color" ) );
 
 	mainWidget = new QWidget( this );
 	mTabWidget = new QTabWidget( mainWidget );
@@ -103,35 +102,6 @@ VColorDocker::VColorDocker( KarbonPart *part, KarbonView *parent, const char */*
 	mainCMYKLayout->activate();
 	mTabWidget->addTab( mCMYKWidget, i18n("CMYK") );
 	
-	/* ##### HSB WIDGET ##### */
-	mHSBWidget = new QWidget( mTabWidget );
-	QGridLayout *mainHSBLayout = new QGridLayout( mHSBWidget, 4, 1);
-	
-	//Reference
-	QGroupBox* h1groupbox = new QGroupBox( 2, Horizontal, i18n( "Reference" ), mHSBWidget );
-	new QLabel(i18n("Color:"), h1groupbox );
-	mHSBColorPreview = new KColorPatch( h1groupbox );
-	mHSBColorPreview->setColor( QColor( "black" ) );
-	mainHSBLayout->addWidget( h1groupbox, 0, 0 );
-	
-	//Components
-	QGroupBox* h2groupbox = new QGroupBox( 1, Horizontal, i18n( "Components" ), mHSBWidget );
-	mHSSelector = new KHSSelector( h2groupbox );
-	mHSSelector->setMinimumHeight( 65 );
-	QGroupBox* h3groupbox = new QGroupBox( 3, Horizontal, i18n( "H:S:B" ), h2groupbox );
-	mH = new KIntSpinBox( 0, 359, 1, 0, 10, h3groupbox );
-	mS = new KIntSpinBox( 0, 255, 1, 0, 10, h3groupbox );
-	mB = new KIntSpinBox( 0, 255, 1, 0, 10, h3groupbox );
-	mainHSBLayout->addWidget( h2groupbox, 1, 0 );
-	
-	connect( mHSSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
-	connect( mH, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSB() ) );
-	connect( mS, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSB() ) );
-	connect( mB, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSB() ) );
-		
-	mainHSBLayout->activate();
-	mTabWidget->addTab( mHSBWidget, i18n( "HSB" ) );
-	
 	//Buttons
 	mButtonGroup = new QHButtonGroup( mainWidget );
 	QPushButton *button = new QPushButton( i18n( "Stroke" ), mButtonGroup );
@@ -142,17 +112,16 @@ VColorDocker::VColorDocker( KarbonPart *part, KarbonView *parent, const char */*
 	connect( mButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonClicked ( int ) ) );
 	
 	//Opacity
-	QGroupBox* opGroupBox = new QGroupBox( 1, Horizontal, i18n( "Opacity" ), mainWidget );
-	mOpacity = new KIntNumInput( 100, opGroupBox );
-	mOpacity->setRange( 0, 100, 1, true );
+	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "black" ), QColor( "white" ), 0, 100, 100, mainWidget );
+	//TODO: Make "white" a transparent color
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 	
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 2 );
 	mainWidgetLayout->addWidget( mTabWidget );
-	mainWidgetLayout->addWidget( opGroupBox );
+	mainWidgetLayout->addWidget( mOpacity );
 	mainWidgetLayout->addWidget( mButtonGroup );
 	mainWidgetLayout->activate();
-	
+	mainWidget->setMinimumWidth( 194 );
 	setWidget( mainWidget );
 	
 	m_Color = new VColor();
@@ -174,12 +143,6 @@ void VColorDocker::buttonClicked( int button_ID )
 	}
 }
 
-void VColorDocker::slotHSChanged( int h, int s )
-{
-	mH->setValue( h );
-	mS->setValue( s );
-}
-
 void VColorDocker::updateRGB()
 {
 	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
@@ -197,14 +160,6 @@ void VColorDocker::updateCMYK()
 	updateColorPreviews();
 }
 
-void VColorDocker::updateHSB()
-{
-	float h = mH->value() / 359.0, s = mS->value() / 255.0, b = mB->value() / 255.0;
-	m_Color->setColorSpace( VColor::hsb );
-	m_Color->setValues( &h, &s, &b, 0L );
-	updateColorPreviews();
-}
-
 void VColorDocker::updateOpacity()
 {
 	float op = mOpacity->value() / 100.0;
@@ -215,7 +170,6 @@ void VColorDocker::updateColorPreviews()
 {
 	mRGBColorPreview->setColor( m_Color->toQColor() );
 	mCMYKColorPreview->setColor( m_Color->toQColor() );
-	mHSBColorPreview->setColor( m_Color->toQColor() );
 }
 #include "vcolordocker.moc"
 

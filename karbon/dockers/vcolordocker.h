@@ -30,9 +30,6 @@ class KColorPatch;
 class KoMainWindow;
 class KarbonView;
 class KarbonPart;
-class KHSSelector;
-class KIntNumInput;
-class KIntSpinBox;
 class VColor;
 class VColorSlider;
 
@@ -41,17 +38,15 @@ class VColorDocker : public VDocker
 	Q_OBJECT
 
 public:
-	 VColorDocker( KarbonPart *part, KarbonView *parent = 0L, const char *name = 0L );
+	 VColorDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
   
 private:
 	QWidget *mainWidget;
 	QTabWidget *mTabWidget;
 	QWidget *mRGBWidget;
 	QWidget *mCMYKWidget;
-	QWidget *mHSBWidget;
 	KColorPatch *mRGBColorPreview;
 	KColorPatch *mCMYKColorPreview;
-	KColorPatch *mHSBColorPreview;
 	QHButtonGroup *mButtonGroup;
 	VColorSlider *mRedSlider;
 	VColorSlider *mGreenSlider;
@@ -60,20 +55,14 @@ private:
 	VColorSlider *mMagentaSlider;
 	VColorSlider *mYellowSlider;
 	VColorSlider *mBlackSlider;
-	KHSSelector *mHSSelector;
-	KIntSpinBox *mH;
-	KIntSpinBox *mS;
-	KIntSpinBox *mB;
-	KIntNumInput *mOpacity;
+	VColorSlider *mOpacity;
 	enum ButtonChoice { Outline, Fill };
 	KarbonPart *m_part;
 	KarbonView *m_view;
 	
 private slots:
 	void buttonClicked( int button_ID );
-	void slotHSChanged( int, int );
 	void updateCMYK();
-	void updateHSB();
 	void updateRGB();
 	void updateOpacity();
 	void updateColorPreviews();
