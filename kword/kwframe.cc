@@ -1301,7 +1301,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     if ( clipFrame )
     {
         //kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << DEBUGRECT(rc) << endl;
-        rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( *frame ) ) ); // intersect
+        rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( frame->innerRect() ) ) ); // intersect
         //kdDebug(32002) << "KWFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
         //               << " clip region rect=" << DEBUGRECT(rc)
         //               << " rc.isEmpty()=" << rc.isEmpty() << endl;
