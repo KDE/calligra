@@ -32,13 +32,13 @@ class KexiDBRecord;
 class KexiDB : public QObject
 {
 	Q_OBJECT
-	
+
 	public:
 		KexiDB(QObject *parent=0, const char *name=0);
 		~KexiDB();
 
-		KexiDB *add(QString driver);
-		KexiDBDriver *driverInfo(QString driver);
+		KexiDB *add(const QString &driver);
+		KexiDBDriver *driverInfo(const QString &driver);
 
 		QStringList getDrivers();
 
@@ -65,11 +65,11 @@ class KexiDB : public QObject
 			int, bool, const QString&, bool);
 		virtual bool createField(const QString&, const QString&, KexiDBField::ColumnType,
 			int, bool, const QString&, bool);
-		
+
 		virtual KexiDBResult	*getResult();
 
 		virtual unsigned long	affectedRows();
-		
+
 		void appendManager(KexiDBInterfaceManager *m);
 
 

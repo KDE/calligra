@@ -51,7 +51,7 @@ KexiDBDriver::driver()
 }
 
 bool
-KexiDBDriver::loaded()
+KexiDBDriver::loaded() const
 {
 	return m_loaded;
 }

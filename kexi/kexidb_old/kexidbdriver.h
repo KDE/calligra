@@ -37,20 +37,20 @@ class KexiDBDriver
 
 		QString driver();
 		KService::Ptr service() const;
-		
-		bool loaded();
+
+		bool loaded()const;
 		KexiDB *db();
-		
+
 	private:
-		void setPath(QString path);
+		void setPath(const QString &path);
 		void setService(KService::Ptr service);
-		
+
 		KService::Ptr	m_service;
 		QString		m_driver;
 		QString		m_path;
 
 		bool		m_loaded;
-		
+
 		KexiDB		*m_db;
 };
 

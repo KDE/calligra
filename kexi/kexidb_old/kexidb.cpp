@@ -17,9 +17,9 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
  */
- 
+
 #include <kdebug.h>
- 
+
 #include "kexidbinterfacemanager.h"
 #include "kexidbrecord.h"
 #include "kexidb.h"
@@ -31,7 +31,7 @@ KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
 }
 
 KexiDB*
-KexiDB::add(QString driver)
+KexiDB::add(const QString &driver)
 {
 	/*! this loads (if needed) the plugin
 	    and creates an instance, wich is returned.
@@ -40,7 +40,7 @@ KexiDB::add(QString driver)
 	*/
 
 	kdDebug() << "KexDB::add" << endl;
-	
+
 	KexiDB *d = manager()->require(driver);
 	if(d)
 	{
@@ -52,7 +52,7 @@ KexiDB::add(QString driver)
 }
 
 KexiDBDriver*
-KexiDB::driverInfo(QString driver)
+KexiDB::driverInfo(const QString &driver)
 {
 	return manager()->getDriverInfo(driver);
 }
