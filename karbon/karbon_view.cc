@@ -17,6 +17,7 @@
 #include <koMainWindow.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
+#include <kiconloader.h>
 
 // tools:
 #include "vellipsetool.h"
@@ -1034,9 +1035,9 @@ KarbonView::initActions()
 
 	// set up join style widget
 	m_joinStyle = new VStateButton( this );
-	m_joinStyle->addState( new QPixmap( "pics/hi16-action-join_bevel.png" ) );
-    m_joinStyle->addState( new QPixmap( "pics/hi16-action-join_miter.png" ) );
-    m_joinStyle->addState( new QPixmap( "pics/hi16-action-join_round.png" ) );
+	m_joinStyle->addState( new QPixmap( DesktopIcon( "join_bevel" ) ) );
+    m_joinStyle->addState( new QPixmap( DesktopIcon( "join_miter" ) ) );
+    m_joinStyle->addState( new QPixmap( DesktopIcon( "join_round" ) ) );
     m_joinStyle->setState( 0 );
 #if KDE_VERSION >= 305
 	new KWidgetAction( m_joinStyle, i18n("Set Join Style"), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
@@ -1045,9 +1046,9 @@ KarbonView::initActions()
 
 	// set up cap style widget
 	m_capStyle = new VStateButton( this );
-	m_capStyle->addState( new QPixmap( "pics/hi16-action-cap_butt.png" ) );
-    m_capStyle->addState( new QPixmap( "pics/hi16-action-cap_square.png" ) );
-    m_capStyle->addState( new QPixmap( "pics/hi16-action-cap_round.png" ) );
+	m_capStyle->addState( new QPixmap( DesktopIcon( "cap_butt" ) ) );
+    m_capStyle->addState( new QPixmap( DesktopIcon( "cap_square" ) ) );
+    m_capStyle->addState( new QPixmap( DesktopIcon( "cap_round" ) ) );
     m_capStyle->setState( 0 );
 #if KDE_VERSION >= 305
 	new KWidgetAction( m_capStyle, i18n("Set Cap Style"), 0, this, SLOT( slotCapStyleClicked() ), actionCollection(), "setCapStyle" );
