@@ -1764,8 +1764,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
                       << " (pointsize " << newFormat->pointSizeFloat() << ")" << endl;
 #endif
         } else {
-            KWTextFormat * styleFormat = const_cast<KWTextFormat *>( &newStyle->format() ); // grmbl
-            newFormat = static_cast<KWTextFormat *>( textdoc->formatCollection()->format(styleFormat) );
+            newFormat = static_cast<KWTextFormat *>( textdoc->formatCollection()->format( &newStyle->format() ) );
         }
 
         if ( createUndoRedo )
