@@ -275,11 +275,75 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement pictureElement = doc.createElement( "PICTURES" );
     QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
     QDomElement pageNoteElement = doc.createElement( "PAGENOTES" );
+    QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
 
     // parse all pages
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
     {
         dp = drawPage.toElement();
+        m_styleStack.clear(); // remove all styles
+        fillStyleStack( dp );
+        m_styleStack.setPageMark();
+
+        // take care of a possible page background
+        if ( m_styleStack.hasAttribute( "draw:fill" ) )
+        {
+            QDomElement bgPage = doc.createElement( "PAGE" );
+            QString fill = m_styleStack.attribute( "draw:fill" );
+            if ( fill == "solid" )
+            {
+                QDomElement backColor1 = doc.createElement( "BACKCOLOR1" );
+                backColor1.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
+                bgPage.appendChild( backColor1 );
+
+                QDomElement bcType = doc.createElement( "BCTYPE" );
+                bcType.setAttribute( "value", 0 ); // plain
+                bgPage.appendChild( bcType );
+
+                QDomElement backType = doc.createElement( "BACKTYPE" );
+                backType.setAttribute( "value", 0 ); // color/gradient
+                bgPage.appendChild( backType );
+
+                backgroundElement.appendChild( bgPage );
+            }
+            else if ( fill == "gradient" )
+            {
+                QDomElement bgPage = doc.createElement( "PAGE" );
+                QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
+                QDomElement* draw = m_draws[style];
+                appendBackgroundGradient( doc, bgPage, *draw );
+
+                backgroundElement.appendChild( bgPage );
+            }
+            else if ( fill == "bitmap" )
+            {
+                QDomElement bgPage = doc.createElement( "PAGE" );
+                QString style = m_styleStack.attribute( "draw:fill-image-name" );
+                QDomElement* draw = m_draws[style];
+                appendBackgroundImage( doc, bgPage, pictureElement, *draw );
+
+                QDomElement backView = doc.createElement( "BACKVIEW" );
+                if ( m_styleStack.hasAttribute( "style:repeat" ) )
+                {
+                    QString repeat = m_styleStack.attribute( "style:repeat" );
+                    if ( repeat == "stretch" )
+                        backView.setAttribute( "value", 0 ); // zoomed
+                    else if ( repeat == "no-repeat" )
+                        backView.setAttribute( "value", 1 ); // centered
+                    else
+                        backView.setAttribute( "value", 2 ); // use tiled as default
+                }
+                else
+                    backView.setAttribute( "value", 2 ); // use tiled as default
+                bgPage.appendChild( backView );
+
+                QDomElement backType = doc.createElement( "BACKTYPE" );
+                backType.setAttribute( "value", 1 ); // image
+                bgPage.appendChild( backType );
+
+                backgroundElement.appendChild( bgPage );
+            }
+        }
 
         // set the pagetitle
         QDomElement titleElement = doc.createElement( "Title" );
@@ -406,6 +470,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     }
 
     docElement.appendChild( paperElement );
+    docElement.appendChild( backgroundElement );
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
@@ -575,13 +640,13 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                 // Hard to map between x- and y-center settings of ooimpress
                 // and (un-)balanced settings of kpresenter. Let's try it.
                 int x, y;
-                if ( gradient.hasAttribute( "draw:cx" ) )
-                    x = gradient.attribute( "draw:cx" ).remove( '%' ).toInt();
+                if ( draw->hasAttribute( "draw:cx" ) )
+                    x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
                 else
                     x = 50;
 
-                if ( gradient.hasAttribute( "draw:cy" ) )
-                    y = gradient.attribute( "draw:cy" ).remove( '%' ).toInt();
+                if ( draw->hasAttribute( "draw:cy" ) )
+                    y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
                 else
                     y = 50;
 
@@ -626,22 +691,7 @@ void OoImpressImport::appendPie( QDomDocument& doc, QDomElement& e, const QDomEl
 
 void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object )
 {
-    // store the picture
-    KZip inputFile = KZip( m_chain->inputFile() );
-    inputFile.open( IO_ReadOnly );
-
-    QString url = object.attribute( "xlink:href" ).remove( '#' );
-    KArchiveFile* file = (KArchiveFile*) inputFile.directory()->entry( url );
-
-    QString extension = url.mid( url.find( '.' ) );
-    QString fileName = QString( "picture%1" ).arg( m_numPicture++ ) + extension;
-    KoStoreDevice* out = m_chain->storageFile( "pictures/" + fileName, KoStore::Write );
-    if ( out )
-    {
-        QByteArray buffer = file->data();
-        out->writeBlock( buffer.data(), buffer.size() );
-    }
-    inputFile.close();
+    QString fileName = storeImage( object );
 
     // create a key for the picture
     QTime time = QTime::currentTime();
@@ -669,6 +719,120 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
     QDomElement key = image.cloneNode().toElement();
     key.setAttribute( "name", "pictures/" + fileName );
     p.appendChild( key );
+}
+
+void OoImpressImport::appendBackgroundImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object )
+{
+    QString fileName = storeImage( object );
+
+    // create a key for the picture
+    QTime time = QTime::currentTime();
+    QDate date = QDate::currentDate();
+
+    QDomElement image = doc.createElement( "BACKPICTUREKEY" );
+    image.setAttribute( "msec", time.msec() );
+    image.setAttribute( "second", time.second() );
+    image.setAttribute( "minute", time.minute() );
+    image.setAttribute( "hour", time.hour() );
+    image.setAttribute( "day", date.day() );
+    image.setAttribute( "month", date.month() );
+    image.setAttribute( "year", date.year() );
+    image.setAttribute( "filename", fileName );
+    e.appendChild( image );
+
+    QDomElement key = image.cloneNode().toElement();
+    key.setTagName( "KEY" );
+    key.setAttribute( "name", "pictures/" + fileName );
+    p.appendChild( key );
+}
+
+void OoImpressImport::appendBackgroundGradient( QDomDocument& doc, QDomElement& e, const QDomElement& object )
+{
+    QDomElement backColor1 = doc.createElement( "BACKCOLOR1" );
+    backColor1.setAttribute( "color", object.attribute( "draw:start-color" ) );
+    e.appendChild( backColor1 );
+
+    QDomElement backColor2 = doc.createElement( "BACKCOLOR2" );
+    backColor2.setAttribute( "color", object.attribute( "draw:end-color" ) );
+    e.appendChild( backColor2 );
+
+    QDomElement backType = doc.createElement( "BACKTYPE" );
+    backType.setAttribute( "value", 0 ); // color/gradient
+    e.appendChild( backType );
+
+    QDomElement bcType = doc.createElement( "BCTYPE" );
+    QString type = object.attribute( "draw:style" );
+    if ( type == "linear" )
+    {
+        int angle = object.attribute( "draw:angle" ).toInt() / 10;
+
+        // make sure the angle is between 0 and 359
+        angle = abs( angle );
+        angle -= ( (int) ( angle / 360 ) ) * 360;
+
+        // What we are trying to do here is to find out if the given
+        // angle belongs to a horizontal, vertical or diagonal gradient.
+        int lower, upper, nearAngle = 0;
+        for ( lower = 0, upper = 45; upper < 360; lower += 45, upper += 45 )
+        {
+            if ( upper >= angle )
+            {
+                int distanceToUpper = abs( angle - upper );
+                int distanceToLower = abs( angle - lower );
+                nearAngle = distanceToUpper > distanceToLower ? lower : upper;
+                break;
+            }
+        }
+
+        // nearAngle should now be one of: 0, 45, 90, 135, 180...
+        if ( nearAngle == 0 || nearAngle == 180 )
+            bcType.setAttribute( "value", 1 ); // horizontal
+        else if ( nearAngle == 90 || nearAngle == 270 )
+            bcType.setAttribute( "value", 2 ); // vertical
+        else if ( nearAngle == 45 || nearAngle == 225 )
+            bcType.setAttribute( "value", 3 ); // diagonal 1
+        else if ( nearAngle == 135 || nearAngle == 315 )
+            bcType.setAttribute( "value", 4 ); // diagonal 2
+    }
+    else if ( type == "radial" || type == "ellipsoid" )
+        bcType.setAttribute( "value", 5 ); // circle
+    else if ( type == "square" || type == "rectangular" )
+        bcType.setAttribute( "value", 6 ); // rectangle
+    else if ( type == "axial" )
+        bcType.setAttribute( "value", 7 ); // pipecross
+
+    e.appendChild( bcType );
+
+    QDomElement bGradient = doc.createElement( "BGRADIENT" );
+
+    // Hard to map between x- and y-center settings of ooimpress
+    // and (un-)balanced settings of kpresenter. Let's try it.
+    int x, y;
+    if ( object.hasAttribute( "draw:cx" ) )
+        x = object.attribute( "draw:cx" ).remove( '%' ).toInt();
+    else
+        x = 50;
+
+    if ( object.hasAttribute( "draw:cy" ) )
+        y = object.attribute( "draw:cy" ).remove( '%' ).toInt();
+    else
+        y = 50;
+
+    if ( x == 50 && y == 50 )
+    {
+        bGradient.setAttribute( "unbalanced", 0 );
+        bGradient.setAttribute( "xfactor", 100 );
+        bGradient.setAttribute( "yfactor", 100 );
+    }
+    else
+    {
+        bGradient.setAttribute( "unbalanced", 1 );
+        // map 0 - 100% to -200 - 200
+        bGradient.setAttribute( "xfactor", 4 * x - 200 );
+        bGradient.setAttribute( "yfactor", 4 * y - 200 );
+    }
+
+    e.appendChild( bGradient );
 }
 
 void OoImpressImport::appendRounding( QDomDocument& doc, QDomElement& e, const QDomElement& object )
@@ -870,7 +1034,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
         }
 
         textObjectElement.appendChild( e );
-        m_styleStack.clearMark( 0 ); // remove the styles added by the child-object
+        m_styleStack.clearObjectMark(); // remove the styles added by the child-objects
     }
 
     return textObjectElement;
@@ -878,7 +1042,6 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
 
 QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& list )
 {
-    // take care of nested lists
     //kdDebug() << k_funcinfo << "parsing list"<< endl;
 
     bool isOrdered;
@@ -887,6 +1050,7 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
     else
         isOrdered = false;
 
+    // take care of nested lists
     QDomElement e;
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
     {
@@ -909,14 +1073,6 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
     }
 
     QDomElement p = parseParagraph( doc, e );
-
-    if ( m_styleStack.hasAttribute( "fo:margin-left" ) )
-        if ( toPoint( m_styleStack.attribute( "fo:margin-left" ) ) != 0 )
-        {
-            QDomElement indent = doc.createElement( "INDENTS" );
-            indent.setAttribute( "left", toPoint( m_styleStack.attribute( "fo:margin-left" ) ) );
-            p.insertBefore( indent, QDomNode() ); // don't 'appendChild()'!
-        }
 
     QDomElement counter = doc.createElement( "COUNTER" );
     counter.setAttribute( "numberingtype", 0 );
@@ -967,7 +1123,6 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             if ( ts.tagName() != "text:span" ) // TODO: are there any other possible
                 continue;                      // elements or even nested test:spans?
 
-            m_styleStack.setMark( 1 ); // we have to remove the spans styles
             fillStyleStack( ts.toElement() );
 
             // We do a look ahead to eventually find a text:span that contains
@@ -990,6 +1145,15 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         }
         else
             textData = t.data();
+
+        // take care of indentation
+        if ( m_styleStack.hasAttribute( "fo:margin-left" ) )
+            if ( toPoint( m_styleStack.attribute( "fo:margin-left" ) ) != 0 )
+            {
+                QDomElement indent = doc.createElement( "INDENTS" );
+                indent.setAttribute( "left", toPoint( m_styleStack.attribute( "fo:margin-left" ) ) );
+                p.appendChild( indent );
+            }
 
         QDomElement text = doc.createElement( "TEXT" );
         text.appendChild( doc.createTextNode( textData ) );
@@ -1026,10 +1190,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         }
 
         appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
-
-        if ( n.toElement().tagName() == "text:span" )
-            m_styleStack.clearMark( 1 ); // current node is a text:span, remove its style from the stack
-
+        m_styleStack.clearObjectMark(); // remove possible test:span styles from the stack
         p.appendChild( text );
     }
 
@@ -1038,24 +1199,24 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
 void OoImpressImport::createStyleMap( QDomDocument &docstyles )
 {
-  QDomElement styles = docstyles.documentElement();
-  if ( styles.isNull() )
-      return;
+    QDomElement styles = docstyles.documentElement();
+    if ( styles.isNull() )
+        return;
 
-  QDomNode fixedStyles = styles.namedItem( "office:styles" );
-  if ( !fixedStyles.isNull() )
-  {
-      insertDraws( fixedStyles.toElement() );
-      insertStyles( fixedStyles.toElement() );
-  }
+    QDomNode fixedStyles = styles.namedItem( "office:styles" );
+    if ( !fixedStyles.isNull() )
+    {
+        insertDraws( fixedStyles.toElement() );
+        insertStyles( fixedStyles.toElement() );
+    }
 
-  QDomNode automaticStyles = styles.namedItem( "office:automatic-styles" );
-  if ( !automaticStyles.isNull() )
-      insertStyles( automaticStyles.toElement() );
+    QDomNode automaticStyles = styles.namedItem( "office:automatic-styles" );
+    if ( !automaticStyles.isNull() )
+        insertStyles( automaticStyles.toElement() );
 
-  QDomNode masterStyles = styles.namedItem( "office:master-styles" );
-  if ( !masterStyles.isNull() )
-      insertStyles( masterStyles.toElement() );
+    QDomNode masterStyles = styles.namedItem( "office:master-styles" );
+    if ( !masterStyles.isNull() )
+        insertStyles( masterStyles.toElement() );
 }
 
 void OoImpressImport::insertDraws( const QDomElement& styles )
@@ -1112,17 +1273,40 @@ void OoImpressImport::addStyles( const QDomElement* style )
     m_styleStack.push( style );
 }
 
+QString OoImpressImport::storeImage( const QDomElement& object )
+{
+    // store the picture
+    KZip inputFile = KZip( m_chain->inputFile() );
+    inputFile.open( IO_ReadOnly );
+
+    QString url = object.attribute( "xlink:href" ).remove( '#' );
+    KArchiveFile* file = (KArchiveFile*) inputFile.directory()->entry( url );
+
+    QString extension = url.mid( url.find( '.' ) );
+    QString fileName = QString( "picture%1" ).arg( m_numPicture++ ) + extension;
+    KoStoreDevice* out = m_chain->storageFile( "pictures/" + fileName, KoStore::Write );
+
+    if ( out )
+    {
+        QByteArray buffer = file->data();
+        out->writeBlock( buffer.data(), buffer.size() );
+    }
+
+    inputFile.close();
+    return fileName;
+}
+
 void OoImpressImport::storeObjectStyles( const QDomElement& object )
 {
-    m_styleStack.clear();
+    m_styleStack.clearPageMark(); // remove styles of previous object
     fillStyleStack( object );
-    m_styleStack.setMark( 0 );
+    m_styleStack.setObjectMark();
 }
 
 StyleStack::StyleStack()
-    : m_marks( 5 )
+    : m_pageMark( 0 ),
+      m_objectMark( 0 )
 {
-    m_marks.fill( 0 );
     m_stack.setAutoDelete( false );
 }
 
@@ -1132,23 +1316,31 @@ StyleStack::~StyleStack()
 
 void StyleStack::clear()
 {
-    m_marks.fill( 0 );
+    m_pageMark = 0;
+    m_objectMark = 0;
     m_stack.clear();
 }
 
-void StyleStack::clearMark( uint mark )
+void StyleStack::clearPageMark()
 {
-    if ( mark > m_marks.size() - 1 )
-        m_marks.resize( mark );
-    for ( uint index = m_stack.count() - 1; index >= m_marks[mark]; --index )
+    for ( uint index = m_stack.count() - 1; index >= m_pageMark; --index )
         m_stack.remove( index );
 }
 
-void StyleStack::setMark( uint mark )
+void StyleStack::setPageMark()
 {
-    if ( mark > m_marks.size() - 1 )
-        m_marks.resize( mark );
-    m_marks[mark] = m_stack.count();
+    m_pageMark= m_stack.count();
+}
+
+void StyleStack::clearObjectMark()
+{
+    for ( uint index = m_stack.count() - 1; index >= m_objectMark; --index )
+        m_stack.remove( index );
+}
+
+void StyleStack::setObjectMark()
+{
+    m_objectMark= m_stack.count();
 }
 
 void StyleStack::pop()

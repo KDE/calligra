@@ -60,16 +60,24 @@ public:
     void clear();
 
     /**
-     * Remove only the styles 'above' the mark. If no mark is set, clear the whole stack.
-     * This is used to keep the styles of an object on the stack and remove only the
-     * style of that objects child-objects.
+     * Keep only the page styles on the stack.
      */
-    void clearMark( uint mark );
+    void clearPageMark();
 
     /**
      * Set the mark (stores the index of the object on top of the stack).
      */
-    void setMark( uint mark );
+    void setPageMark();
+
+    /**
+     * Keep page and object styles on the stack.
+     */
+    void clearObjectMark();
+
+    /**
+     * Set the mark (stores the index of the object on top of the stack).
+     */
+    void setObjectMark();
 
     /**
      * Removes the style on top of the stack.
@@ -93,7 +101,7 @@ public:
     QString attribute( const QString& name );
 
 private:
-    QMemArray<uint> m_marks;
+    uint m_pageMark, m_objectMark;
 
     // We use QPtrList instead of QPtrStack because we need access to all styles
     // not only the top one.
@@ -122,6 +130,8 @@ private:
     void appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
     void appendPie( QDomDocument& doc, QDomElement& e, const QDomElement& object );
     void appendImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object );
+    void appendBackgroundImage( QDomDocument& doc, QDomElement& e, QDomElement& p, const QDomElement& object );
+    void appendBackgroundGradient( QDomDocument& doc, QDomElement& e, const QDomElement& object );
     void appendRounding( QDomDocument& doc, QDomElement& e, const QDomElement& object );
     void appendPen( QDomDocument& doc, QDomElement& e );
     void appendBrush( QDomDocument& doc, QDomElement& e );
@@ -129,6 +139,7 @@ private:
     void appendLineEnds( QDomDocument& doc, QDomElement& e );
     double toPoint( QString value );
 
+    QString storeImage( const QDomElement& object );
     QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );
     QDomElement parseList( QDomDocument& doc, const QDomElement& paragraph );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& list );
