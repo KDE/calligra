@@ -75,7 +75,7 @@ public:
 };
 
 KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, const char *name,
-				      KDialogBase *dialog )
+                                      KDialogBase *dialog )
 : QObject( parent, "docinfodlg" )
 {
   d = new KoDocumentInfoDlgPrivate;
@@ -89,9 +89,9 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
   if ( !dialog )
   {
     d->m_dialog = new KDialogBase( KDialogBase::Tabbed,
-				   i18n( "Document Information" ),
-				   KDialogBase::Ok | KDialogBase::Cancel,
-				   KDialogBase::Ok, parent, name, true, true );
+                                   i18n( "Document Information" ),
+                                   KDialogBase::Ok | KDialogBase::Cancel,
+                                   KDialogBase::Ok, parent, name, true, true );
     d->m_bDeleteDialog = true;
   }
 
@@ -179,25 +179,25 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   d->m_leStreet = new QLineEdit( authorInfo->street(), grid );
 
   connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_leAuthorTitle, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_leCompany, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_leEmail, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_leTelephone, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_leFax, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_leCountry, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_lePostalCode, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_leCity, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_leStreet, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
 }
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
@@ -214,9 +214,9 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
   d->m_meAbstract->setText( aboutInfo->abstract() );
 
   connect( d->m_leDocTitle, SIGNAL( textChanged( const QString & ) ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
   connect( d->m_meAbstract, SIGNAL( textChanged() ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
 }
 
 void KoDocumentInfoDlg::save()
@@ -241,7 +241,7 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   authorInfo->setCompany( d->m_leCompany->text() );
   authorInfo->setEmail( d->m_leEmail->text() );
   authorInfo->setTelephone( d->m_leTelephone->text() );
-  authorInfo->setFax( d->m_leTelephone->text() );
+  authorInfo->setFax( d->m_leFax->text() );
   authorInfo->setCountry( d->m_leCountry->text() );
   authorInfo->setPostalCode( d->m_lePostalCode->text() );
   authorInfo->setCity( d->m_leCity->text() );
@@ -312,7 +312,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props )
 
   d->m_dlg = new KoDocumentInfoDlg( d->m_info, 0, 0, props );
   connect( d->m_dlg, SIGNAL( changed() ),
-	   this, SIGNAL( changed() ) );
+           this, SIGNAL( changed() ) );
 }
 
 KoDocumentInfoPropsPage::~KoDocumentInfoPropsPage()
@@ -367,7 +367,7 @@ void KoDocumentInfoPropsPage::applyChanges()
     const KTarEntry *entry = root->entry( *it );
 
     if ( entry->name() == "documentinfo.xml" ||
-	 ( !docInfoSaved && !entries.contains( "documentinfo.xml" ) ) )
+         ( !docInfoSaved && !entries.contains( "documentinfo.xml" ) ) )
     {
       d->m_dlg->save();
 
@@ -379,7 +379,7 @@ void KoDocumentInfoPropsPage::applyChanges()
 
       kdDebug( 30003 ) << "writing documentinfo.xml" << endl;
       d->m_dst->writeFile( "documentinfo.xml", entry->user(), entry->group(), buffer.buffer().size(),
-			   buffer.buffer().data() );
+                           buffer.buffer().data() );
 
       docInfoSaved = true;
     }
@@ -405,8 +405,8 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KTarEntry *entry 
     kdDebug( 30003 ) << "file :" << entry->name() << endl;
     kdDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
     d->m_dst->writeFile( path + entry->name(), entry->user(), entry->group(),
-			 file->size(),
-			 file->data().data() );
+                         file->size(),
+                         file->data().data() );
   }
   else
   {
