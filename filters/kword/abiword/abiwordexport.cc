@@ -403,13 +403,16 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatData) co
 
 bool AbiWordWorker::makeImage(const FrameAnchor& anchor)
 {
-    // PROVISORY
     kdDebug(30506) << "New image: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key << endl;
+        
+    double height=anchor.bottom - anchor.top;
+    double width =anchor.right  - anchor.left;
 
-    *m_streamOut << "<image dataid=\"" << anchor.picture.key
-        << "\"/>"; // NO end of line!
-        // TODO: props for image!
+    *m_streamOut << "<image dataid=\"" << anchor.picture.key << "\"";
+    *m_streamOut << " props= \"height:" << height << "pt;width:" << width << "pt\"";
+    *m_streamOut << "/>"; // NO end of line!
+    // TODO: other props for image
 
     m_mapData[anchor.picture.koStoreName]=anchor.picture.key;
 
