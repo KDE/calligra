@@ -190,7 +190,7 @@ Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, koffice-data (= ${Source-Version})
 Recommends: kghostview (>= 4:3.0.1-0)
-Suggests: wordnet, khelpcenter, tetex-extra, koffice-doc-html
+Suggests: wordnet, tetex-extra
 Conflicts: koffice (<< 2.1-beta2-1), kword (<< 1:1.2.90-0)
 Replaces: koffice (<< 2.1-beta2-1), kword (<< 1:1.2.90-0)
 Description: common libraries and binaries for the KDE Office Suite
@@ -203,6 +203,7 @@ Package: koffice-data
 Architecture: all
 Section: libs
 Depends: koffice-libs (= ${Source-Version})
+Suggests: khelpcenter, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.2.90-0), kugar (<< 1:1.2.90-0)
 Replaces: koffice-libs (<< 1:1.2.90-0), kugar (<< 1:1.2.90-0)
 Description: common shared data for the KDE Office Suite
