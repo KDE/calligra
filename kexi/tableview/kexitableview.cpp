@@ -298,7 +298,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	// Connect header, table and scrollbars
 	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), d->pTopHeader, SLOT(setOffset(int)));
 	connect(verticalScrollBar(), SIGNAL(valueChanged(int)),	d->pVerticalHeader, SLOT(setOffset(int)));
-	connect(d->pTopHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(columnWidthChanged(int, int, int)));
+	connect(d->pTopHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnWidthChanged(int, int, int)));
+	connect(d->pTopHeader, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotSectionHandleDoubleClicked(int)));
 	connect(d->pTopHeader, SIGNAL(clicked(int)), this, SLOT(sortColumnInternal(int)));
 
 	connect(d->pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
@@ -2566,7 +2567,7 @@ void KexiTableView::updateRow(int row)
 	updateContents( QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
 }
 
-void KexiTableView::columnWidthChanged( int, int, int )
+void KexiTableView::slotColumnWidthChanged( int, int, int )
 {
 	QSize s(tableSize());
 	int w = contentsWidth();
@@ -2589,6 +2590,13 @@ void KexiTableView::columnWidthChanged( int, int, int )
 	}
 	updateGeometries();
 }
+
+void KexiTableView::slotSectionHandleDoubleClicked( int section )
+{
+	adjustColumnWidthToContents(section);
+	slotColumnWidthChanged(0,0,0); //to update contents and redraw
+}
+
 
 void KexiTableView::updateGeometries()
 {
@@ -3351,7 +3359,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 //	int end = QMAX( start, rowAt( contentsY() + viewport()->height() - 1 ) );
 //	for (int i=start; i<=end; i++) {
 
-//js TODO: this is NOT EFFECTIVE for big data sets!!!!
+//! \todo js: this is NOT EFFECTIVE for big data sets!!!!
 
 	KexiTableEdit *ed = editor( colNum );
 //	KexiDB::Field *f = m_data->column( colNum )->field;

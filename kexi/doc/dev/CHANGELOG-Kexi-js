@@ -326,6 +326,9 @@ Table View
 - on failed sorting, sort indicator is reverted
 - Key_Tab, Key_BackTab work again; 
   skipping to next/previous row added
+- when the user doubleclicks on the edge (handle) 
+   of horizontal header's section, column's width 
+   is adjusted to widest cell size
 Table Designer
 - before switching to design view, row editing is accepted 
 Main

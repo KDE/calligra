@@ -549,7 +549,8 @@ signals:
 protected slots:
 	void slotDataDestroying();
 	void slotRowsDeleted( const QValueList<int> & ); //!< updates display after many rows deletion
-	void columnWidthChanged( int col, int os, int ns );
+	void slotColumnWidthChanged( int col, int os, int ns );
+	void slotSectionHandleDoubleClicked( int section );
 	void cancelEditor();
 	virtual bool acceptEditor();
 	/*! Typically handles pressing Enter or F2 key: 
