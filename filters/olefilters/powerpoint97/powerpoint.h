@@ -50,8 +50,6 @@ public:
         QDataStream &mainStream,
         QDataStream &currentUser);
 
-protected:
-
     typedef struct
     {
         unsigned type;
@@ -63,6 +61,8 @@ protected:
         unsigned persistentReference;
         QList<SlideText> text;
     } Slide;
+
+protected:
 
     virtual void gotDrawing(
         unsigned id,
@@ -78,6 +78,7 @@ private:
 
     // Debug support.
 
+public:
     static const int s_area = 30512;
 
     // Use unambiguous names for Microsoft types.
@@ -88,6 +89,7 @@ private:
     typedef signed int S32;
     typedef unsigned int U32;
 
+private:
     myFile m_mainStream;
     QMap<unsigned, unsigned> m_persistentReferences;
     unsigned m_editDepth;

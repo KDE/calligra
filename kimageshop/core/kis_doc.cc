@@ -583,7 +583,7 @@ QStringList KisDoc::images()
     still need to be check occasionally for operations which
     require an image
 */
-bool KisDoc::isEmpty()
+bool KisDoc::isEmpty() const
 {
     if (m_pCurrent) return false;
     return true;

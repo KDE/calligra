@@ -294,7 +294,7 @@ public:
         U8 m_i;
     };
 
-protected:
+public:
     // Character property handling.
 
     typedef struct
@@ -306,6 +306,7 @@ protected:
 
     typedef QArray<CHPX> CHPXarray;
 
+protected:
     virtual void gotParagraph(
         const QString &text,
         const PAP &pap,
@@ -383,6 +384,7 @@ private:
 
     // Error handling and reporting support.
 
+public:
     static const int s_area = 30513;
     QString m_constructionError;
     void constructionError(unsigned line, const char *reason);
@@ -390,6 +392,7 @@ private:
     static const unsigned s_maxWord6Version = 105;
     static const unsigned s_maxWord7Version = 193;
 
+private:
     // Some fundamental data structures. We keep pointers to our streams,
     // and a copy of the FIB.
 

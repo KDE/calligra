@@ -131,7 +131,7 @@ public:
 	/*
 	 * Does the doc contain any images?
 	 */
-    bool isEmpty();
+    bool isEmpty() const;
 
 	/*
 	 * Return a list of image names.

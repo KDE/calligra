@@ -67,6 +67,7 @@ protected:
     // We derive from KSharedPtr since some overrides of our callback
     // functions may choose to store the data for later processing.
 
+public:
     class Run: public KShared
     {
     public:
@@ -122,6 +123,7 @@ protected:
         }
     };
 
+protected:
     virtual void gotError(
         const QString &text) = 0;
     virtual void gotParagraph(
@@ -171,6 +173,7 @@ private:
         Attributes &attributes);
 
     // Field code handling.
+public:
 
     typedef enum
     {
@@ -275,6 +278,7 @@ private:
         unsigned end;
     } m_field;
 
+private:
     void rewriteField(
         QString &text,
         CHPXarray &chpxs);

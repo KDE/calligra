@@ -205,7 +205,7 @@ QDomElement KivioConnectorPoint::saveXML( QDomDocument &doc )
     return e;
 }
 
-void KivioConnectorPoint::moveBy( float _x, float _y, bool updateStencil=true )
+void KivioConnectorPoint::moveBy( float _x, float _y, bool updateStencil )
 {
    m_x += _x;
    m_y += _y;

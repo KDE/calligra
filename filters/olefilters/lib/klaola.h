@@ -110,6 +110,7 @@ private:
     // of the LAOLA-project).
     void testIt(QString prefix = "");
 
+public:
     typedef enum
     {
         DIRECTORY = 1,
@@ -159,6 +160,7 @@ private:
         bool deadDir;     // true, if the dir is a "dead end"
     };
 
+private:
     // Lists of nodes.
 
     NodeList m_nodeList;

@@ -104,10 +104,12 @@ private:
 
     // Use unambiguous names for Microsoft types.
 
+public:
     typedef unsigned char U8;
     typedef unsigned short U16;
     typedef unsigned int U32;
 
+private:
     int m_dpi;
     DrawContext m_dc;
     unsigned m_dggError;
@@ -131,6 +133,7 @@ private:
         QDataStream &operands);
 
     // Common Header (MSOBFH)
+public:
 
     typedef struct
     {
@@ -147,6 +150,7 @@ private:
         U32 cbLength;
     } Header;
 
+private:
     typedef enum
     {
         msoblipERROR,               // An error occured during loading.

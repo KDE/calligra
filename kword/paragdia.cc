@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qwhatsthis.h> 
 #include "paragdia.h"
 #include "paragdia_p.h"
 #include "kwdoc.h"
@@ -42,7 +43,6 @@
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <qvalidator.h>
-#include <qwhatsthis.h>
 #include <qcheckbox.h>
 
 #include <kiconloader.h>
