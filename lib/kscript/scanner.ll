@@ -213,7 +213,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 			  return T_CELL;
 		       };
 
-[A-Za-z0-9]+"!""$"?[A-Z]+"$"?{Digits} {
+[A-Z a-z0-9]+"!""$"?[A-Z]+"$"?{Digits} {
 			  if ( !s_kspread )
 			  {
 			  	yylval.ident = new QString( yytext );
@@ -223,7 +223,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 			  return T_CELL;
 		       };
 
-[A-Za-z0-9]+"!""$"?[A-Z]+"$"?{Digits}":""$"?[A-Z]+"$"?{Digits} {
+[A-Z a-z0-9]+"!""$"?[A-Z]+"$"?{Digits}":""$"?[A-Z]+"$"?{Digits} {
 			  if ( !s_kspread )
 			  {
 			  	yylval.ident = new QString( yytext );
