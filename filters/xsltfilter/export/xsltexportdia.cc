@@ -38,6 +38,10 @@
 
 #include <xsltproc.h>
 
+#ifdef __FreeBSD__
+#include <unistd.h>
+#endif
+
 /*
  *  Constructs a XSLTExportDia which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.

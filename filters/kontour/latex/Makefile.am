@@ -2,9 +2,9 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
-#libtexgraphimport_la_LDFLAGS	= -module -avoid-version -no-undefined
+#libtexgraphimport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
 #libtexgraphimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
-libtexgraphexport_la_LDFLAGS	= -module -avoid-version -no-undefined
+libtexgraphexport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
 libtexgraphexport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
