@@ -1131,6 +1131,7 @@ void KoTextParag::printRTDebug( int info )
 
 void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h, int startText, int len, KoTextParag *_parag)
 {
+    //kdDebug()<<" bw :"<<bw<<endl;
     if ( !format->wordByWord() )
     {
         KoTextParag::drawFontEffects( p, format, zh, font, color, startX, baseLine, bw , lastY, h);
@@ -1145,7 +1146,7 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
         {
             if ( !_parag->at(index)->c.isSpace() )
             {
-                large += _parag->at( index )->pixelwidth;
+                large += _parag->at( index )->width;
                 noSpace = true;
                 noDraw  = true;
             }
@@ -1153,14 +1154,14 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
             {
                 if ( !noSpace )
                 {
-                    tmpStartX += _parag->at( index )->pixelwidth;
+                    tmpStartX += _parag->at( index )->width;
                     noDraw  = true;
                 }
                 else
                 {
-                    KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, zh->pixelToLayoutUnitX(large) , lastY, h);
-                    tmpStartX += _parag->at( index )->pixelwidth;
-                    tmpStartX += zh->pixelToLayoutUnitX(large);
+                    KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, zh->layoutUnitToPixelX(tmpStartX, large ), lastY, h);
+                    tmpStartX += _parag->at( index )->width;
+                    tmpStartX += large;
                     large = 0;
                     noSpace = false;
                     noDraw  = false;
@@ -1169,7 +1170,7 @@ void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZ
         }
         if ( noDraw && noSpace )
         {
-            KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, /*bw*/zh->pixelToLayoutUnitX(large) , lastY, h);
+            KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, /*bw*/zh->layoutUnitToPixelX(tmpStartX, large) , lastY, h);
         }
     }
 }
