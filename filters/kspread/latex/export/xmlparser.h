@@ -62,6 +62,7 @@ class XmlParser
 		QDomNode    getChild(QDomNode, QString, int);
 		QDomNode    getChild(QDomNode, int);
 		QString     getData(QDomNode, int);
+		QString     getData(QDomNode, QString);
 		int         getNbChild(QDomNode, QString);
 		int         getNbChild(QDomNode);
 		QString     getAttr(QDomNode, QString) const;

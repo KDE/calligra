@@ -37,6 +37,7 @@ Config::Config()
 	_useLatin1 = true;
 	_useLatexStyle = true;
 	_isEmbeded = false;
+	_convertPictures = true;
 }
 
 Config::Config(const Config &config)

@@ -28,6 +28,19 @@
 
 Format::Format()
 {
+	_multirow = -1;
+}
+
+Format::~Format()
+{
+	if(_bottomBorder != NULL)
+		delete _bottomBorder;
+	if(_topBorder != NULL)
+		delete _topBorder;
+	if(_leftBorder != NULL)
+		delete _leftBorder;
+	if(_rightBorder != NULL)
+		delete _rightBorder;
 }
 
 /* Get the set of info. about a text format */
@@ -43,14 +56,38 @@ void Format::analyse(const QDomNode balise)
 	setAlignY(getAttr(balise, "alignY").toLong());
 	setAlign(getAttr(balise, "align").toLong());
 	analysePen(getChild(balise, "pen"));
+	if(isChild(balise, "bottom-border"))
+	{
+		kdDebug() << "bottom-border" << endl;
+		_bottomBorder = new Pen();
+		_bottomBorder->analyse(getChild(getChild(balise, "bottom-border"), "pen"));
+	}
+	if(isChild(balise, "top-border"))
+	{
+		kdDebug() << "top-border" << endl;
+		_topBorder = new Pen();
+		_topBorder->analyse(getChild(getChild(balise, "top-border"), "pen"));
+	}
+	if(isChild(balise, "left-border"))
+	{
+		kdDebug() << "left-border" << endl;
+		_leftBorder = new Pen();
+		_leftBorder->analyse(getChild(getChild(balise, "left-border"), "pen"));
+	}
+	if(isChild(balise, "right-border"))
+	{
+		kdDebug() << "right-border" << endl;
+		_rightBorder = new Pen();
+		_rightBorder->analyse(getChild(getChild(balise, "right-border"), "pen"));
+	}
 }
 
 void Format::analysePen(const QDomNode balise)
 {
 	/* <pen width="0" style="1" color="#000000" /> */
-	setPenWidth(getAttr(balise, "width").toDouble());
-	setPenStyle(getAttr(balise, "style").toInt());
-	setPenColor(getAttr(balise, "color"));
+	/*setWidth(getAttr(balise, "width").toDouble());
+	setStyle(getAttr(balise, "style").toInt());
+	setColor(getAttr(balise, "color"));*/
 }
 
 void Format::analyseFont(const QDomNode balise)

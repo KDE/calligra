@@ -1,7 +1,7 @@
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
-** Copyright (C) 2000, 2001, 2002 Robert JACOLIN
+** Copyright (C) 2000, 2001, 2002, 2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-//#include "fileheader.h"
+#include "fileheader.h"
 //#include "paper.h"
 #include "spreadsheet.h"
 
@@ -72,7 +72,7 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
 {
 	kdDebug() << "DOC. GENERATION." << endl;
 	
-	if(hasPreambule)
+	if(!Config::instance()->isEmbeded())
 		generatePreambule(out);
 	kdDebug() << "preambule : " << hasPreambule << endl;
 
@@ -97,7 +97,7 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
 /*******************************************/
 void Spreadsheet::generatePreambule(QTextStream &out)
 {
-
+	FileHeader::instance()->generate(out);
 	/* For each header */
 	//if(getFileHeader()->hasHeader())
 	//{

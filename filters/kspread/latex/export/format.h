@@ -27,6 +27,7 @@
 #include <qstring.h>
 #include <qcolor.h>
 #include "xmlparser.h"
+#include "pen.h"
 
 /***********************************************************************/
 /* Class: Format                                                       */
@@ -58,6 +59,12 @@ class Format: public XmlParser
 	QString _family;
 	int _weight;
 
+	/* borders */
+	Pen *_bottomBorder;
+	Pen *_topBorder;
+	Pen *_leftBorder;
+	Pen *_rightBorder;
+	
 	public:
 		/**
 		 * Constructors
@@ -73,7 +80,7 @@ class Format: public XmlParser
 		 *
 		 * Nothing to do
 		 */
-		virtual ~Format() {}
+		virtual ~Format();
 
 		/**
 		 * getters
@@ -89,9 +96,11 @@ class Format: public XmlParser
 		int getIndent() const { return _indent; }
 		bool getDontPrintText() const { return _dontprinttext; }
 	
-		double getPenWidth() const { return _width; }
-		int getPenStyle() const { return _style; }
-		QColor getPenCOlor() const { return _color; }
+		bool hasBorder() { return (hasTopBorder() || hasBottomBorder() || hasLeftBorder() || hasRightBorder()); }
+		bool hasTopBorder() { return (_topBorder != NULL); }
+		bool hasBottomBorder() { return (_bottomBorder != NULL); }
+		bool hasLeftBorder() { return (_leftBorder != NULL); }
+		bool hasRightBorder() { return (_rightBorder != NULL); }
 		
 		int getFontSize() const { return _size; }
 		QString getFontFamily() const { return _family; }
@@ -110,10 +119,6 @@ class Format: public XmlParser
 		void setBrushStyle(int bs) { _brushStyle = bs; }
 		void setIndent(int indent) { _indent = indent; }
 		void setDontPrintText(bool dpt) { _dontprinttext = dpt; }
-
-		void setPenWidth(double w) { _width = w; }
-		void setPenStyle(int s) { _style = s; }
-		void setPenColor(QString color) { _color.setNamedColor(color); }
 
 		void setFontSize(int s) { _size = s; }
 		void setFontFamily(QString f) { _family = f; }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Robert JACOLIN <rjacolin@ifrance.com>
+   Copyright (C) 2002, 2003 Robert JACOLIN <rjacolin@ifrance.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +22,9 @@
 
 #include <qdir.h>
 #include <qcombobox.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
 
 #include <kapplication.h>
 #include <kglobal.h>
@@ -30,9 +33,11 @@
 #include <kstandarddirs.h>
 #include <krecentdocument.h>
 #include <ktempfile.h>
+#include <kurlrequester.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <koFilterManager.h>
+#include <kcombobox.h>
 
 #include <dcopclient.h>
 
@@ -97,19 +102,38 @@ KSpreadLatexExportDiaImpl::~KSpreadLatexExportDiaImpl()
  */
 void KSpreadLatexExportDiaImpl::reject()
 {
-	kdDebug() << "export cancelled" << endl;
+	kdDebug() << "Export cancelled" << endl;
 }
 
 /**
  * Called when the user clic on the ok button. The xslt sheet is put on the recent list which is
- * saved, then the xslt processor is called to export the document.
+ * saved, then export the document.
  */
 void KSpreadLatexExportDiaImpl::accept()
 {
 	hide();
 	kdDebug() << "KSPREAD LATEX EXPORT FILTER --> BEGIN" << endl;
-	Document doc(_in, _fileOut);
+	Config* config = Config::instance();
+	/* Document tab */
+	if(embededButton == typeGroup->selected())
+		config->setEmbeded(true);
+	else
+		config->setEmbeded(false);
+	if(kwordStyleButton == styleGroup->selected())
+		config->useKwordStyle();
+	else
+		config-> useLatexStyle();
+	config->setClass(classComboBox->currentText());
+	config->setQuality(qualityComboBox->currentText());
 	
+	/* Pictures tab */
+	if(pictureCheckBox->isChecked())
+		config->convertPictures();
+	//config->setPicturesDir(pathPictures.text());
+	
+	/* Language tab */
+	Document doc(_in, _fileOut);	
+	kdDebug() << "---------- analyse file -------------" << endl;
 	doc.analyse();
 	kdDebug() << "---------- generate file -------------" << endl;
 	doc.generate();
@@ -118,12 +142,18 @@ void KSpreadLatexExportDiaImpl::accept()
 
 void KSpreadLatexExportDiaImpl::addLanguage()
 {
-	kdDebug() << "add a new language supported" << endl;
+	kdDebug() << "add a new language supported" << languagesList->currentText() << endl;
+	QString text = languagesList->currentText();
+	languagesList->removeItem(languagesList->currentItem());
+	langUsedList->insertItem(text);
 }
 
 void KSpreadLatexExportDiaImpl::removeLanguage()
 {
-	kdDebug() << "remove a lanugage" << endl;
+	kdDebug() << "remove a lanugage" << langUsedList->currentText() << endl;
+	QString text = langUsedList->currentText();
+	langUsedList->removeItem(langUsedList->currentItem());
+	languagesList->insertItem(text);
 }
 
 #include <kspreadlatexexportdiaImpl.moc>

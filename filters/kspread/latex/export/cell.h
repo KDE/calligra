@@ -31,6 +31,8 @@
 /* Class: Cell                                                        */
 /***********************************************************************/
 
+class Table;
+
 /**
  * This class hold a cell.
  */
@@ -92,7 +94,7 @@ class Cell: public Format
 		void     analyse (const QDomNode);
 		void     analyseText (const QDomNode);
 		void     analyseResult (const QDomNode);
-		void     generate  (QTextStream&);
+		void     generate  (QTextStream&, Table*);
 
 	private:
 

@@ -109,6 +109,11 @@ QString XmlParser::getData(QDomNode balise, int index)
 	return getChild(getChild(balise, index), 0).nodeValue();
 }
 
+QString XmlParser::getData(QDomNode balise, QString name)
+{
+	return getChild(getChild(balise, name), 0).nodeValue();
+}
+
 int XmlParser::getNbChild(QDomNode balise)
 {
 	return balise.childNodes().count();

@@ -1,3 +1,3 @@
 
-- 3 November 2002
-Implements table, cell, ... classes, the parser, and the kspread filter itself.
+- 18 January 2003
+	 Implements cell borders, multirow.

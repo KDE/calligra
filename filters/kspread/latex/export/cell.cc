@@ -1,7 +1,7 @@
 /*
 ** A program to convert the XML rendered by KSpread into LATEX.
 **
-** Copyright (C) 2002 Robert JACOLIN
+** Copyright (C) 2002, 2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -22,6 +22,8 @@
 #include <kdebug.h>		/* for kdDebug stream */
 
 #include "cell.h"
+#include "table.h"
+#include "column.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -53,28 +55,45 @@ void Cell::analyse(const QDomNode balise)
 void Cell::analyseText(const QDomNode balise)
 {
 	setTextDataType( getAttr(getChild(balise, "text"), "dataType"));	
-	setText(getData(balise, 0));
-	kdDebug() << "text: " << getText() << endl;
+	setText(getData(balise, "text"));
+	kdDebug() << "text(" << getTextDataType() << "): " << getText() << endl;
 }
 
 /*******************************************/
 /* generate                                */
 /*******************************************/
-void Cell::generate(QTextStream& out)
+void Cell::generate(QTextStream& out, Table* table)
 {
-	/*if(getColSpan() > 0)
-		out << "\\multicol{" << getColSpan() << "}{";
-	else if (getRowSpan() > 0)
-		out << "\\multirow{" << getRowSpan() << "}{";*/
+	/*if(getMulticol() > 0)
+		out << "\\multicol{" << getMulticol() << "}{";
+	else*/ if (getMultirow() > 0)
+		out << "\\multirow{" << getMultirow() << "}{";
 	kdDebug() << "Generate cell..." << endl;
+	if(hasBorder())
+	{
+		
+		if(hasLeftBorder() || hasRightBorder())
+		{
+			out << "\\multicolumn{1}{";
+			if(hasLeftBorder())
+				out << "|";
+			out << "m{" << table->searchColumn(_col)->getWidth() << "pt}";
+			if(hasRightBorder())
+				out << "|";
+			out << "}{" << endl;
+		}
+	}
 	if(getTextDataType() == "Str")
 		out << getText();
+	if(hasLeftBorder() || hasRightBorder())
+		out << "}" << endl;
 	
 	/*if(getColSpan() > 0)
 		out << "}" << endl;
-	else if (getRowSpan() > 0)
-		out << "}" << endl;*/
-	/*Element* elt = 0;
+	else*/ if (getMultirow() > 0)
+		out << "}" << endl;
+	
+		/*Element* elt = 0;
 	kdDebug() << "GENERATION OF A TABLE " << count() << endl;
 	out << endl << "\\begin{tabular}";
 	generateCellHeader(out);
