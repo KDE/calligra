@@ -109,6 +109,7 @@ public:
     virtual void editDeleteFrame();
     virtual void editReconnectFrame();
     virtual void editCustomVars();
+    virtual void editSerialLetterDataBase();
 
     virtual void newView();
     virtual void viewFormattingChars();
@@ -207,7 +208,7 @@ public:
     // C++
     virtual CORBA::Boolean printDlg();
 
-    virtual void setFormat( const KWFormat &_format, bool _check = true, 
+    virtual void setFormat( const KWFormat &_format, bool _check = true,
 			    bool _update_page = true, bool _redraw = true );
     virtual void setFlow( KWParagLayout::Flow _flow );
     virtual void setLineSpacing( int _spc );
@@ -251,11 +252,11 @@ public slots:
     void clipboardDataChanged();
 
 protected:
-// C++
+    // C++
     virtual void init();
-// IDL
+    // IDL
     virtual bool event( const char* _event, const CORBA::Any& _value );
-// C++
+    // C++
     bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
 
@@ -292,7 +293,8 @@ protected:
     CORBA::Long m_idMenuEdit_DeleteFrame;
     CORBA::Long m_idMenuEdit_ReconnectFrame;
     CORBA::Long m_idMenuEdit_CustomVars;
-
+    CORBA::Long m_idMenuEdit_SerialLetterDataBase;
+    
     // view menu
     OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;

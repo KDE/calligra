@@ -17,6 +17,9 @@
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qvalidator.h>
+#include <qheader.h>
 
 #include <klocale.h>
 #include <kbuttonbox.h>
@@ -153,11 +156,109 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
 /*================================================================*/
 QString KWSerialLetterVariableInsertDia::getName() const
 {
-    return names->text(names->currentItem());
+    return names->text( names->currentItem() );
 }
 
 /*================================================================*/
 void KWSerialLetterVariableInsertDia::resizeEvent( QResizeEvent *e )
+{
+    QDialog::resizeEvent( e );
+    back->resize( size() );
+}
+
+/******************************************************************
+ *
+ * Class: KWSerialLetterEditorListItem
+ *
+ ******************************************************************/
+
+/*================================================================*/
+KWSerialLetterEditorListItem::KWSerialLetterEditorListItem( QListView *parent )
+    : QListViewItem( parent )
+{
+    editWidget = new QLineEdit( listView()->viewport() );
+    listView()->addChild( editWidget );
+}
+
+/*================================================================*/
+void KWSerialLetterEditorListItem::setup()
+{
+    setHeight( QMAX( listView()->fontMetrics().height(),
+		     editWidget->sizeHint().height() ) );
+    if ( listView()->columnWidth( 1 ) < editWidget->sizeHint().width() )
+	listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
+}
+
+/*================================================================*/
+void KWSerialLetterEditorListItem::update()
+{
+    editWidget->resize( listView()->header()->cellSize( 1 ), height() );
+    listView()->moveChild( editWidget, listView()->header()->cellPos( 1 ),
+			   listView()->itemPos( this ) + listView()->contentsY() );
+    editWidget->show();
+}
+
+/******************************************************************
+ *
+ * Class: KWSerialLetterEditorList
+ *
+ ******************************************************************/
+
+/*================================================================*/
+KWSerialLetterEditorList::KWSerialLetterEditorList( QWidget *parent )
+    : QListView( parent )
+{
+    header()->setMovingEnabled( FALSE );
+    connect( header(), SIGNAL( sizeChange( int, int, int ) ),
+	     this, SLOT( columnSizeChange( int, int, int ) ) );
+    connect( header(), SIGNAL( sectionClicked( int ) ),
+	     this, SLOT( sectionClicked( int ) ) );
+    setColumnWidthMode( 0, Manual );
+    setColumnWidthMode( 1, Manual );
+
+    setSorting( -1 );
+}
+
+/*================================================================*/
+void KWSerialLetterEditorList::columnSizeChange( int c, int, int )
+{
+    if ( c == 0 || c == 1 )
+	updateItems();
+}
+
+/*================================================================*/
+void KWSerialLetterEditorList::sectionClicked( int )
+{
+    updateItems();
+}
+
+/*================================================================*/
+void KWSerialLetterEditorList::updateItems()
+{
+    QListViewItemIterator it( this );
+    for ( ; it.current(); ++it )
+	( (KWSerialLetterEditorListItem*)it.current() )->update();
+}
+
+/******************************************************************
+ *
+ * Class: KWSerialLetterEditor
+ *
+ ******************************************************************/
+
+/*================================================================*/
+KWSerialLetterEditor::KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db )
+    : QDialog( parent, "", TRUE )
+{
+    setCaption( i18n( "Serial Letter - Editor" ) );
+
+    back = new QVBox( this );
+    back->setSpacing( 5 );
+    back->setMargin( 5 );
+}
+
+/*================================================================*/
+void KWSerialLetterEditor::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );

@@ -21,8 +21,11 @@
 #include <qstringlist.h>
 #include <qdialog.h>
 #include <qvbox.h>
+#include <qlistview.h>
 
 class QListBox;
+class QPushButton;
+class QLineEdit;
 class KWordDocument;
 
 /******************************************************************
@@ -35,21 +38,21 @@ class KWSerialLetterDataBase
 {
 public:
     KWSerialLetterDataBase( KWordDocument *doc_ );
-    
+
     QString getValue( const QString &name, int record = -1 ) const;
     void setValue( const QString &name, const QString &value, int record = -1 );
     void appendRecord();
     void addEntry( const QString &name );
     void removeEntry( const QString &name );
-    
+
     const QMap< QString, QStringList > database() const {
 	return db;
     }
-    
+
 protected:
     KWordDocument *doc;
     QMap< QString, QStringList > db;
-    
+
 };
 
 /******************************************************************
@@ -63,7 +66,7 @@ class KWSerialLetterVariableInsertDia : public QDialog
     Q_OBJECT
 
 public:
-    KWSerialLetterVariableInsertDia( QWidget *parent, KWSerialLetterDataBase* db );
+    KWSerialLetterVariableInsertDia( QWidget *parent, KWSerialLetterDataBase *db );
     QString getName() const;
 
 protected:
@@ -72,6 +75,70 @@ protected:
     QListBox *names;
     QVBox *back;
 
+};
+
+/******************************************************************
+ *
+ * Class: KWSerialLetterEditorListItem
+ *
+ ******************************************************************/
+
+class KWSerialLetterEditorListItem : public QListViewItem
+{
+public:
+    KWSerialLetterEditorListItem( QListView *parent );
+
+    void setup();
+    void update();
+
+protected:
+    QLineEdit *editWidget;
+
+};
+
+/******************************************************************
+ *
+ * Class: KWSerialLetterEditorList
+ *
+ ******************************************************************/
+
+class KWSerialLetterEditorList : public QListView
+{
+    Q_OBJECT
+
+public:
+    KWSerialLetterEditorList( QWidget *parent );
+
+    void updateItems();
+
+protected slots:
+    void columnSizeChange( int c, int os, int ns );
+    void sectionClicked( int c );
+
+};
+
+/******************************************************************
+ *
+ * Class: KWSerialLetterEditor
+ *
+ ******************************************************************/
+
+class KWSerialLetterEditor : public QDialog
+{
+    Q_OBJECT
+    
+public:
+    KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db );
+    
+protected:
+    void resizeEvent( QResizeEvent *e );
+
+    QPushButton *first, *last, *prev, *next, *newRecord,
+	*removeRecord, *removeEntry, *addEntry, *addRecord;
+    QLineEdit *record;
+    KWSerialLetterEditorList *list;
+    QVBox *back;
+    
 };
 
 #endif

@@ -48,6 +48,7 @@
 #include "autoformatdia.h"
 #include "font.h"
 #include "variabledlgs.h"
+#include "serialletter.h"
 
 #include <opUIUtils.h>
 #include <opMenuIf.h>
@@ -98,8 +99,8 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     KoViewIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
     m_pKWordDoc = 0L;
-    m_bUnderConstruction = true;
-    m_bShowGUI = true;
+    m_bUnderConstruction = TRUE;
+    m_bShowGUI = TRUE;
     m_vMenuTools = 0L;
     m_vToolBarTools = 0L;
     m_vToolBarText = 0L;
@@ -126,9 +127,9 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     frmBrd.color = black;
     frmBrd.style = KWParagLayout::SOLID;
     frmBrd.ptWidth = 1;
-    _viewFormattingChars = false;
-    _viewFrameBorders = true;
-    _viewTableGrid = true;
+    _viewFormattingChars = FALSE;
+    _viewFrameBorders = TRUE;
+    _viewTableGrid = TRUE;
     searchEntry = 0L;
     replaceEntry = 0L;
     searchDia = 0L;
@@ -146,8 +147,8 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 		      this, SLOT( slotUpdateChildGeometry( KWordChild* ) ) );
 
 
-    setKeyCompression( true );
-    setAcceptDrops( true );
+    setKeyCompression( TRUE );
+    setAcceptDrops( TRUE );
 }
 
 /*================================================================*/
@@ -182,7 +183,7 @@ void KWordView::init()
 
     gui->getPaperWidget()->formatChanged( format );
 
-    setFormat( format, false );
+    setFormat( format, FALSE );
 
     if ( gui )
 	gui->setDocument( m_pKWordDoc );
@@ -196,7 +197,8 @@ void KWordView::init()
     {
 	frameset = m_pKWordDoc->getFrameSet( i );
 	if ( frameset->getFrameType() == FT_PART )
-	    slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(), dynamic_cast<KWPartFrameSet*>( frameset ) );
+	    slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(),
+			      dynamic_cast<KWPartFrameSet*>( frameset ) );
     }
 }
 
@@ -213,13 +215,13 @@ void KWordView::clipboardDataChanged()
 {
     if ( kapp->clipboard()->text().isEmpty() )
     {
-	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, false );
-	m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, false );
+	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, FALSE );
+	m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, FALSE );
     }
     else
     {
-	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, true );
-	m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, true );
+	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, TRUE );
+	m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, TRUE );
     }
 }
 
@@ -251,7 +253,7 @@ CORBA::Boolean KWordView::printDlg()
 {
     QPrinter prt;
     prt.setMinMax( 1, m_pKWordDoc->getPages() );
-    bool makeLandscape = false;
+    bool makeLandscape = FALSE;
 
     KoPageLayout pgLayout;
     KoColumns cl;
@@ -278,7 +280,7 @@ CORBA::Boolean KWordView::printDlg()
     {
 	warning( i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) );
 	prt.setPageSize( QPrinter::A4 );
-	makeLandscape = true;
+	makeLandscape = TRUE;
     }	break;
     default:
     {
@@ -318,7 +320,7 @@ CORBA::Boolean KWordView::printDlg()
 	setCursor( arrowCursor );
 	gui->getPaperWidget()->viewport()->setCursor( ibeamCursor );
     }
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -326,11 +328,14 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
 {
     if ( _check && _format == format || !m_vToolBarText ) return;
 
-    if ( gui && gui->getPaperWidget() && gui->getPaperWidget()->getCursor() && gui->getPaperWidget()->getCursor()->getParag()
+    if ( gui && gui->getPaperWidget() && gui->getPaperWidget()->getCursor() &&
+	 gui->getPaperWidget()->getCursor()->getParag()
 	 && gui->getPaperWidget()->getCursor()->getTextPos() > 0
-	 && gui->getPaperWidget()->getCursor()->getParag()->getKWString()->data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib
+	 && gui->getPaperWidget()->getCursor()->getParag()->getKWString()->
+	 data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib
 	 && gui->getPaperWidget()->getCursor()->getParag()->
-	 getKWString()->data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib->getClassId() == ID_KWCharFootNote )
+	 getKWString()->data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib->getClassId() ==
+	 ID_KWCharFootNote )
 	return;
 
     format = _format;
@@ -374,7 +379,7 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
     {
 	if ( !CORBA::is_nil( m_vToolBarText ) )
 	{
-	    OpenPartsUI::Pixmap_var pix = 
+	    OpenPartsUI::Pixmap_var pix =
               KOUIUtils::colorPixmap( _format.getColor(), KOUIUtils::TXT_COLOR );
 	    m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
 	}
@@ -383,8 +388,8 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
 
     if ( !CORBA::is_nil( m_vToolBarText ) )
     {
-	m_vToolBarText->setButton( ID_SUPERSCRIPT, false );
-	m_vToolBarText->setButton( ID_SUBSCRIPT, false );
+	m_vToolBarText->setButton( ID_SUPERSCRIPT, FALSE );
+	m_vToolBarText->setButton( ID_SUBSCRIPT, FALSE );
     }
 
     if ( _format.getVertAlign() == KWFormat::VA_NORMAL )
@@ -393,13 +398,13 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
     {
 	vertAlign = KWFormat::VA_SUB;
 	if ( !CORBA::is_nil( m_vToolBarText ) )
-	    m_vToolBarText->setButton( ID_SUBSCRIPT, true );
+	    m_vToolBarText->setButton( ID_SUBSCRIPT, TRUE );
     }
     else if ( _format.getVertAlign() == KWFormat::VA_SUPER )
     {
 	vertAlign = KWFormat::VA_SUPER;
 	if ( !CORBA::is_nil( m_vToolBarText ) )
-	    m_vToolBarText->setButton( ID_SUPERSCRIPT, true );
+	    m_vToolBarText->setButton( ID_SUPERSCRIPT, TRUE );
     }
 
     format = _format;
@@ -414,24 +419,24 @@ void KWordView::setFlow( KWParagLayout::Flow _flow )
     if ( _flow != flow && m_vToolBarText )
     {
 	flow = _flow;
-	m_vToolBarText->setButton( ID_ALEFT, false );
-	m_vToolBarText->setButton( ID_ACENTER, false );
-	m_vToolBarText->setButton( ID_ARIGHT, false );
-	m_vToolBarText->setButton( ID_ABLOCK, false );
+	m_vToolBarText->setButton( ID_ALEFT, FALSE );
+	m_vToolBarText->setButton( ID_ACENTER, FALSE );
+	m_vToolBarText->setButton( ID_ARIGHT, FALSE );
+	m_vToolBarText->setButton( ID_ABLOCK, FALSE );
 
 	switch ( flow )
 	{
 	case KWParagLayout::LEFT:
-	    m_vToolBarText->setButton( ID_ALEFT, true );
+	    m_vToolBarText->setButton( ID_ALEFT, TRUE );
 	    break;
 	case KWParagLayout::CENTER:
-	    m_vToolBarText->setButton( ID_ACENTER, true );
+	    m_vToolBarText->setButton( ID_ACENTER, TRUE );
 	    break;
 	case KWParagLayout::RIGHT:
-	    m_vToolBarText->setButton( ID_ARIGHT, true );
+	    m_vToolBarText->setButton( ID_ARIGHT, TRUE );
 	    break;
 	case KWParagLayout::BLOCK:
-	    m_vToolBarText->setButton( ID_ABLOCK, true );
+	    m_vToolBarText->setButton( ID_ABLOCK, TRUE );
 	    break;
 	}
     }
@@ -453,10 +458,10 @@ void KWordView::setParagBorders( KWParagLayout::Border _left, KWParagLayout::Bor
 {
     if ( ( left != _left || right != _right || top != _top || bottom != _bottom ) && m_vToolBarText )
     {
-	m_vToolBarText->setButton( ID_BRD_LEFT, false );
-	m_vToolBarText->setButton( ID_BRD_RIGHT, false );
-	m_vToolBarText->setButton( ID_BRD_TOP, false );
-	m_vToolBarText->setButton( ID_BRD_BOTTOM, false );
+	m_vToolBarText->setButton( ID_BRD_LEFT, FALSE );
+	m_vToolBarText->setButton( ID_BRD_RIGHT, FALSE );
+	m_vToolBarText->setButton( ID_BRD_TOP, FALSE );
+	m_vToolBarText->setButton( ID_BRD_BOTTOM, FALSE );
 
 	left = _left;
 	right = _right;
@@ -465,25 +470,25 @@ void KWordView::setParagBorders( KWParagLayout::Border _left, KWParagLayout::Bor
 
 	if ( left.ptWidth > 0 )
 	{
-	    m_vToolBarText->setButton( ID_BRD_LEFT, true );
+	    m_vToolBarText->setButton( ID_BRD_LEFT, TRUE );
 	    tmpBrd = left;
 	    setParagBorderValues();
 	}
 	if ( right.ptWidth > 0 )
 	{
-	    m_vToolBarText->setButton( ID_BRD_RIGHT, true );
+	    m_vToolBarText->setButton( ID_BRD_RIGHT, TRUE );
 	    tmpBrd = right;
 	    setParagBorderValues();
 	}
 	if ( top.ptWidth > 0 )
 	{
-	    m_vToolBarText->setButton( ID_BRD_TOP, true );
+	    m_vToolBarText->setButton( ID_BRD_TOP, TRUE );
 	    tmpBrd = top;
 	    setParagBorderValues();
 	}
 	if ( bottom.ptWidth > 0 )
 	{
-	    m_vToolBarText->setButton( ID_BRD_BOTTOM, true );
+	    m_vToolBarText->setButton( ID_BRD_BOTTOM, TRUE );
 	    tmpBrd = bottom;
 	    setParagBorderValues();
 	}
@@ -500,7 +505,7 @@ bool KWordView::event( const char* _event, const CORBA::Any& _value )
 
     END_EVENT_MAPPER;
 
-    return false;
+    return FALSE;
 }
 
 /*===============================================================*/
@@ -508,28 +513,28 @@ void KWordView::uncheckAllTools()
 {
     if ( m_vMenuTools )
     {
-	m_vMenuTools->setItemChecked( m_idMenuTools_Edit, false );
-	m_vMenuTools->setItemChecked( m_idMenuTools_EditFrame, false );
-	m_vMenuTools->setItemChecked( m_idMenuTools_CreateText, false );
-	m_vMenuTools->setItemChecked( m_idMenuTools_CreatePix, false );
-	m_vMenuTools->setItemChecked( m_idMenuTools_Clipart, false );
-	m_vMenuTools->setItemChecked( m_idMenuTools_Table, false );
-	m_vMenuTools->setItemChecked( m_idMenuTools_KSpreadTable, false );
-	m_vMenuTools->setItemChecked( m_idMenuTools_Formula, false );
-	m_vMenuTools->setItemChecked( m_idMenuTools_Part, false );
+	m_vMenuTools->setItemChecked( m_idMenuTools_Edit, FALSE );
+	m_vMenuTools->setItemChecked( m_idMenuTools_EditFrame, FALSE );
+	m_vMenuTools->setItemChecked( m_idMenuTools_CreateText, FALSE );
+	m_vMenuTools->setItemChecked( m_idMenuTools_CreatePix, FALSE );
+	m_vMenuTools->setItemChecked( m_idMenuTools_Clipart, FALSE );
+	m_vMenuTools->setItemChecked( m_idMenuTools_Table, FALSE );
+	m_vMenuTools->setItemChecked( m_idMenuTools_KSpreadTable, FALSE );
+	m_vMenuTools->setItemChecked( m_idMenuTools_Formula, FALSE );
+	m_vMenuTools->setItemChecked( m_idMenuTools_Part, FALSE );
     }
 
     if ( m_vToolBarTools )
     {
-	m_vToolBarTools->setButton( ID_TOOL_EDIT, false );
-	m_vToolBarTools->setButton( ID_TOOL_EDIT_FRAME, false );
-	m_vToolBarTools->setButton( ID_TOOL_CREATE_TEXT, false );
-	m_vToolBarTools->setButton( ID_TOOL_CREATE_PIX, false );
-	m_vToolBarTools->setButton( ID_TOOL_CREATE_CLIPART, false );
-	m_vToolBarTools->setButton( ID_TOOL_CREATE_TABLE, false );
-	m_vToolBarTools->setButton( ID_TOOL_CREATE_KSPREAD_TABLE, false );
-	m_vToolBarTools->setButton( ID_TOOL_CREATE_FORMULA, false );
-	m_vToolBarTools->setButton( ID_TOOL_CREATE_PART, false );
+	m_vToolBarTools->setButton( ID_TOOL_EDIT, FALSE );
+	m_vToolBarTools->setButton( ID_TOOL_EDIT_FRAME, FALSE );
+	m_vToolBarTools->setButton( ID_TOOL_CREATE_TEXT, FALSE );
+	m_vToolBarTools->setButton( ID_TOOL_CREATE_PIX, FALSE );
+	m_vToolBarTools->setButton( ID_TOOL_CREATE_CLIPART, FALSE );
+	m_vToolBarTools->setButton( ID_TOOL_CREATE_TABLE, FALSE );
+	m_vToolBarTools->setButton( ID_TOOL_CREATE_KSPREAD_TABLE, FALSE );
+	m_vToolBarTools->setButton( ID_TOOL_CREATE_FORMULA, FALSE );
+	m_vToolBarTools->setButton( ID_TOOL_CREATE_PART, FALSE );
     }
 }
 
@@ -541,31 +546,31 @@ void KWordView::setTool( MouseMode _mouseMode )
 	switch ( _mouseMode )
 	{
 	case MM_EDIT:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_Edit, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_Edit, TRUE );
 	    break;
 	case MM_EDIT_FRAME:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_EditFrame, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_EditFrame, TRUE );
 	    break;
 	case MM_CREATE_TEXT:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_CreateText, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_CreateText, TRUE );
 	    break;
 	case MM_CREATE_PIX:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_CreatePix, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_CreatePix, TRUE );
 	    break;
 	case MM_CREATE_CLIPART:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_Clipart, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_Clipart, TRUE );
 	    break;
 	case MM_CREATE_TABLE:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_Table, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_Table, TRUE );
 	    break;
 	case MM_CREATE_KSPREAD_TABLE:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_KSpreadTable, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_KSpreadTable, TRUE );
 	    break;
 	case MM_CREATE_FORMULA:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_Formula, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_Formula, TRUE );
 	    break;
 	case MM_CREATE_PART:
-	    m_vMenuTools->setItemChecked( m_idMenuTools_Part, true );
+	    m_vMenuTools->setItemChecked( m_idMenuTools_Part, TRUE );
 	    break;
 	}
     }
@@ -575,31 +580,31 @@ void KWordView::setTool( MouseMode _mouseMode )
 	switch ( _mouseMode )
 	{
 	case MM_EDIT:
-	    m_vToolBarTools->setButton( ID_TOOL_EDIT, true );
+	    m_vToolBarTools->setButton( ID_TOOL_EDIT, TRUE );
 	    break;
 	case MM_EDIT_FRAME:
-	    m_vToolBarTools->setButton( ID_TOOL_EDIT_FRAME, true );
+	    m_vToolBarTools->setButton( ID_TOOL_EDIT_FRAME, TRUE );
 	    break;
 	case MM_CREATE_TEXT:
-	    m_vToolBarTools->setButton( ID_TOOL_CREATE_TEXT, true );
+	    m_vToolBarTools->setButton( ID_TOOL_CREATE_TEXT, TRUE );
 	    break;
 	case MM_CREATE_PIX:
-	    m_vToolBarTools->setButton( ID_TOOL_CREATE_PIX, true );
+	    m_vToolBarTools->setButton( ID_TOOL_CREATE_PIX, TRUE );
 	    break;
 	case MM_CREATE_CLIPART:
-	    m_vToolBarTools->setButton( ID_TOOL_CREATE_CLIPART, true );
+	    m_vToolBarTools->setButton( ID_TOOL_CREATE_CLIPART, TRUE );
 	    break;
 	case MM_CREATE_TABLE:
-	    m_vToolBarTools->setButton( ID_TOOL_CREATE_TABLE, true );
+	    m_vToolBarTools->setButton( ID_TOOL_CREATE_TABLE, TRUE );
 	    break;
 	case MM_CREATE_KSPREAD_TABLE:
-	    m_vToolBarTools->setButton( ID_TOOL_CREATE_KSPREAD_TABLE, true );
+	    m_vToolBarTools->setButton( ID_TOOL_CREATE_KSPREAD_TABLE, TRUE );
 	    break;
 	case MM_CREATE_FORMULA:
-	    m_vToolBarTools->setButton( ID_TOOL_CREATE_FORMULA, true );
+	    m_vToolBarTools->setButton( ID_TOOL_CREATE_FORMULA, TRUE );
 	    break;
 	case MM_CREATE_PART:
-	    m_vToolBarTools->setButton( ID_TOOL_CREATE_PART, true );
+	    m_vToolBarTools->setButton( ID_TOOL_CREATE_PART, TRUE );
 	    break;
 	}
     }
@@ -608,10 +613,10 @@ void KWordView::setTool( MouseMode _mouseMode )
     {
 	if ( _mouseMode == MM_EDIT_FRAME )
 	{
-	    m_vToolBarFrame->setButton( ID_FBRD_LEFT, false );
-	    m_vToolBarFrame->setButton( ID_FBRD_RIGHT, false );
-	    m_vToolBarFrame->setButton( ID_FBRD_TOP, false );
-	    m_vToolBarFrame->setButton( ID_FBRD_BOTTOM, false );
+	    m_vToolBarFrame->setButton( ID_FBRD_LEFT, FALSE );
+	    m_vToolBarFrame->setButton( ID_FBRD_RIGHT, FALSE );
+	    m_vToolBarFrame->setButton( ID_FBRD_TOP, FALSE );
+	    m_vToolBarFrame->setButton( ID_FBRD_BOTTOM, FALSE );
 
 	    m_vToolBarFrame->setBarPos( oldFramePos );
 	    m_vToolBarText->enable( OpenPartsUI::Hide );
@@ -629,36 +634,36 @@ void KWordView::setTool( MouseMode _mouseMode )
 	    m_vToolBarFrame->setBarPos( OpenPartsUI::Floating );
 	}
 
-	m_vMenuTable->setItemEnabled( m_idMenuTable_InsertRow, false );
-	m_vToolBarTable->setItemEnabled( ID_TABLE_INSROW, false );
-	m_vMenuTable->setItemEnabled( m_idMenuTable_DeleteRow, false );
-	m_vToolBarTable->setItemEnabled( ID_TABLE_DELROW, false );
-	m_vMenuTable->setItemEnabled( m_idMenuTable_InsertCol, false );
-	m_vToolBarTable->setItemEnabled( ID_TABLE_INSCOL, false );
-	m_vMenuTable->setItemEnabled( m_idMenuTable_DeleteCol, false );
-	m_vToolBarTable->setItemEnabled( ID_TABLE_DELCOL, false );
-	m_vMenuTable->setItemEnabled( m_idMenuTable_JoinCells, false );
-	m_vMenuTable->setItemEnabled( m_idMenuTable_SplitCells, false );
-	m_vMenuTable->setItemEnabled( m_idMenuTable_UngroupTable, false );
+	m_vMenuTable->setItemEnabled( m_idMenuTable_InsertRow, FALSE );
+	m_vToolBarTable->setItemEnabled( ID_TABLE_INSROW, FALSE );
+	m_vMenuTable->setItemEnabled( m_idMenuTable_DeleteRow, FALSE );
+	m_vToolBarTable->setItemEnabled( ID_TABLE_DELROW, FALSE );
+	m_vMenuTable->setItemEnabled( m_idMenuTable_InsertCol, FALSE );
+	m_vToolBarTable->setItemEnabled( ID_TABLE_INSCOL, FALSE );
+	m_vMenuTable->setItemEnabled( m_idMenuTable_DeleteCol, FALSE );
+	m_vToolBarTable->setItemEnabled( ID_TABLE_DELCOL, FALSE );
+	m_vMenuTable->setItemEnabled( m_idMenuTable_JoinCells, FALSE );
+	m_vMenuTable->setItemEnabled( m_idMenuTable_SplitCells, FALSE );
+	m_vMenuTable->setItemEnabled( m_idMenuTable_UngroupTable, FALSE );
 
 	switch ( _mouseMode )
 	{
 	case MM_EDIT:
 	{
-	    m_vMenuTable->setItemEnabled( m_idMenuTable_InsertRow, true );
-	    m_vToolBarTable->setItemEnabled( ID_TABLE_INSROW, true );
-	    m_vMenuTable->setItemEnabled( m_idMenuTable_DeleteRow, true );
-	    m_vToolBarTable->setItemEnabled( ID_TABLE_DELROW, true );
-	    m_vMenuTable->setItemEnabled( m_idMenuTable_InsertCol, true );
-	    m_vToolBarTable->setItemEnabled( ID_TABLE_INSCOL, true );
-	    m_vMenuTable->setItemEnabled( m_idMenuTable_DeleteCol, true );
-	    m_vToolBarTable->setItemEnabled( ID_TABLE_DELCOL, true );
-	    m_vMenuTable->setItemEnabled( m_idMenuTable_UngroupTable, true );
+	    m_vMenuTable->setItemEnabled( m_idMenuTable_InsertRow, TRUE );
+	    m_vToolBarTable->setItemEnabled( ID_TABLE_INSROW, TRUE );
+	    m_vMenuTable->setItemEnabled( m_idMenuTable_DeleteRow, TRUE );
+	    m_vToolBarTable->setItemEnabled( ID_TABLE_DELROW, TRUE );
+	    m_vMenuTable->setItemEnabled( m_idMenuTable_InsertCol, TRUE );
+	    m_vToolBarTable->setItemEnabled( ID_TABLE_INSCOL, TRUE );
+	    m_vMenuTable->setItemEnabled( m_idMenuTable_DeleteCol, TRUE );
+	    m_vToolBarTable->setItemEnabled( ID_TABLE_DELCOL, TRUE );
+	    m_vMenuTable->setItemEnabled( m_idMenuTable_UngroupTable, TRUE );
 	} break;
 	case MM_EDIT_FRAME:
 	{
-	    m_vMenuTable->setItemEnabled( m_idMenuTable_JoinCells, true );
-	    m_vMenuTable->setItemEnabled( m_idMenuTable_SplitCells, true );
+	    m_vMenuTable->setItemEnabled( m_idMenuTable_JoinCells, TRUE );
+	    m_vMenuTable->setItemEnabled( m_idMenuTable_SplitCells, TRUE );
 	} break;
 	default: break;
 	}
@@ -675,16 +680,16 @@ void KWordView::updateStyle( QString _styleName, bool _updateFormat )
     if ( !CORBA::is_nil( m_vToolBarText ) )
 	m_vToolBarText->setCurrentComboItem( ID_STYLE_LIST, styleList.at() );
 
-    m_vToolBarText->setButton( ID_USORT_LIST, false );
-    m_vToolBarText->setButton( ID_ENUM_LIST, false );
+    m_vToolBarText->setButton( ID_USORT_LIST, FALSE );
+    m_vToolBarText->setButton( ID_ENUM_LIST, FALSE );
 
     if ( _styleName == "Enumerated List" )
-	m_vToolBarText->setButton( ID_ENUM_LIST, true );
+	m_vToolBarText->setButton( ID_ENUM_LIST, TRUE );
 
     if ( _styleName == "Bullet List" )
-	m_vToolBarText->setButton( ID_USORT_LIST, true );
+	m_vToolBarText->setButton( ID_USORT_LIST, TRUE );
 
-    setFormat( m_pKWordDoc->findParagLayout( _styleName )->getFormat(), false, _updateFormat, false );
+    setFormat( m_pKWordDoc->findParagLayout( _styleName )->getFormat(), FALSE, _updateFormat, FALSE );
 
     gui->getHorzRuler()->setTabList( m_pKWordDoc->findParagLayout( _styleName )->getTabList() );
 }
@@ -710,14 +715,14 @@ void KWordView::updateStyleList()
 void KWordView::editUndo()
 {
     m_pKWordDoc->undo();
-    gui->getPaperWidget()->recalcWholeText( true );
+    gui->getPaperWidget()->recalcWholeText( TRUE );
 }
 
 /*===============================================================*/
 void KWordView::editRedo()
 {
     m_pKWordDoc->redo();
-    gui->getPaperWidget()->recalcWholeText( true );
+    gui->getPaperWidget()->recalcWholeText( TRUE );
 }
 
 /*===============================================================*/
@@ -785,6 +790,15 @@ void KWordView::editCustomVars()
     gui->getPaperWidget()->repaintScreen( FALSE );
 }
 
+/*===============================================================*/
+void KWordView::editSerialLetterDataBase()
+{
+    KWSerialLetterEditor *dia = new KWSerialLetterEditor( this, m_pKWordDoc->getSerialLetterDataBase() );
+    dia->exec();
+    gui->getPaperWidget()->recalcWholeText();
+    gui->getPaperWidget()->repaintScreen( FALSE );
+}
+
 /*================================================================*/
 void KWordView::newView()
 {
@@ -798,7 +812,8 @@ void KWordView::newView()
 /*===============================================================*/
 void KWordView::viewFormattingChars()
 {
-    m_vMenuView->setItemChecked( m_idMenuView_FormattingChars, !m_vMenuView->isItemChecked( m_idMenuView_FormattingChars ) );
+    m_vMenuView->setItemChecked( m_idMenuView_FormattingChars,
+				 !m_vMenuView->isItemChecked( m_idMenuView_FormattingChars ) );
     _viewFormattingChars = m_vMenuView->isItemChecked( m_idMenuView_FormattingChars );
     gui->getPaperWidget()->repaintScreen( !_viewFormattingChars );
 }
@@ -808,7 +823,7 @@ void KWordView::viewFrameBorders()
 {
     m_vMenuView->setItemChecked( m_idMenuView_FrameBorders, !m_vMenuView->isItemChecked( m_idMenuView_FrameBorders ) );
     _viewFrameBorders = m_vMenuView->isItemChecked( m_idMenuView_FrameBorders );
-    gui->getPaperWidget()->repaintScreen( false );
+    gui->getPaperWidget()->repaintScreen( FALSE );
 }
 
 /*===============================================================*/
@@ -836,8 +851,8 @@ void KWordView::viewFooter()
 /*===============================================================*/
 void KWordView::viewFootNotes()
 {
-    m_vMenuEdit->setItemChecked( m_idMenuView_FootNotes, true );
-    m_vMenuEdit->setItemChecked( m_idMenuView_EndNotes, false );
+    m_vMenuEdit->setItemChecked( m_idMenuView_FootNotes, TRUE );
+    m_vMenuEdit->setItemChecked( m_idMenuView_EndNotes, FALSE );
 
     m_pKWordDoc->setNoteType( KWFootNoteManager::FootNotes );
 }
@@ -845,8 +860,8 @@ void KWordView::viewFootNotes()
 /*===============================================================*/
 void KWordView::viewEndNotes()
 {
-    m_vMenuEdit->setItemChecked( m_idMenuView_FootNotes, false );
-    m_vMenuEdit->setItemChecked( m_idMenuView_EndNotes, true );
+    m_vMenuEdit->setItemChecked( m_idMenuView_FootNotes, FALSE );
+    m_vMenuEdit->setItemChecked( m_idMenuView_EndNotes, TRUE );
 
     m_pKWordDoc->setNoteType( KWFootNoteManager::EndNotes );
 }
@@ -1133,7 +1148,8 @@ void KWordView::toolsFormula()
 {
     gui->getPaperWidget()->mmFormula();
 
-    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
+    QValueList<KoDocumentEntry>
+	vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
     if ( vec.isEmpty() == 0 )
     {
 	cout << "Got no results" << endl;
@@ -1163,7 +1179,8 @@ void KWordView::tableInsertRow()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ), i18n( "OK" ) );
+	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
+			       i18n( "OK" ) );
     else
     {
 	KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::ROW, gui->getPaperWidget() );
@@ -1179,11 +1196,13 @@ void KWordView::tableInsertCol()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ), i18n( "OK" ) );
+	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
+			       i18n( "OK" ) );
     else
     {
 	if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( m_pKWordDoc->getPTPaperWidth() ) )
-	    QMessageBox::critical( this, i18n( "Error" ), i18n( "There is not enough space at the right of the table\nto insert a new column." ),
+	    QMessageBox::critical( this, i18n( "Error" ),
+				   i18n( "There is not enough space at the right of the table\nto insert a new column." ),
 				   i18n( "OK" ) );
 	else
 	{
@@ -1201,11 +1220,13 @@ void KWordView::tableDeleteRow()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ), i18n( "OK" ) );
+	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
+			       i18n( "OK" ) );
     else
     {
 	if ( grpMgr->getRows() == 1 )
-	    QMessageBox::critical( this, i18n( "Error" ), i18n( "The table has only one row. You can't delete the last one!" ), i18n( "OK" ) );
+	    QMessageBox::critical( this, i18n( "Error" ),
+				   i18n( "The table has only one row. You can't delete the last one!" ), i18n( "OK" ) );
 	else
 	{
 	    KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::ROW, gui->getPaperWidget() );
@@ -1222,11 +1243,13 @@ void KWordView::tableDeleteCol()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ), i18n( "OK" ) );
+	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
+			       i18n( "OK" ) );
     else
     {
 	if ( grpMgr->getCols() == 1 )
-	    QMessageBox::critical( this, i18n( "Error" ), i18n( "The table has only one column. You can't delete the last one!" ), i18n( "OK" ) );
+	    QMessageBox::critical( this, i18n( "Error" ),
+				   i18n( "The table has only one column. You can't delete the last one!" ), i18n( "OK" ) );
 	else
 	{
 	    KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::COL, gui->getPaperWidget() );
@@ -1243,20 +1266,22 @@ void KWordView::tableJoinCells()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select some cells in a table to join them!" ), i18n( "OK" ) );
+	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select some cells in a table to join them!" ),
+			       i18n( "OK" ) );
     else
     {
 	QPainter painter;
 	painter.begin( gui->getPaperWidget() );
 	if ( !grpMgr->joinCells() )
-	    QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select some cells which are next to each other\n"
-								"and are not already joined." ), i18n( "OK" ) );
+	    QMessageBox::critical( this, i18n( "Error" ),
+				   i18n( "You have to select some cells which are next to each other\n"
+					 "and are not already joined." ), i18n( "OK" ) );
 	painter.end();
 	QRect r = grpMgr->getBoundingRect();
 	r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
 		   r.y() - gui->getPaperWidget()->contentsY(),
 		   r.width(), r.height() );
-	gui->getPaperWidget()->repaintScreen( r, true );
+	gui->getPaperWidget()->repaintScreen( r, TRUE );
     }
 }
 
@@ -1267,7 +1292,8 @@ void KWordView::tableSplitCells()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select a cell in a table to split it!" ), i18n( "OK" ) );
+	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select a cell in a table to split it!" ),
+			       i18n( "OK" ) );
     else
     {
 	QPainter painter;
@@ -1280,7 +1306,7 @@ void KWordView::tableSplitCells()
 	r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
 		   r.y() - gui->getPaperWidget()->contentsY(),
 		   r.width(), r.height() );
-	gui->getPaperWidget()->repaintScreen( r, true );
+	gui->getPaperWidget()->repaintScreen( r, TRUE );
     }
 }
 
@@ -1291,18 +1317,20 @@ void KWordView::tableUngroupTable()
 
     KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
     if ( !grpMgr )
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ), i18n( "OK" ) );
+	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
+			       i18n( "OK" ) );
     else
     {
 	if ( QMessageBox::warning( this, i18n( "Warning" ), i18n( "Ungrouping a table is an irrevesible action!\n"
-								  "Do you really want to do that?" ), i18n( "Yes" ), i18n( "No" ) ) == 0 )
+								  "Do you really want to do that?" ), i18n( "Yes" ),
+				   i18n( "No" ) ) == 0 )
 	{
 	    grpMgr->ungroup();
 	    QRect r = grpMgr->getBoundingRect();
 	    r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
 		       r.y() - gui->getPaperWidget()->contentsY(),
 		       r.width(), r.height() );
-	    gui->getPaperWidget()->repaintScreen( r, true );
+	    gui->getPaperWidget()->repaintScreen( r, TRUE );
 	}
     }
 }
@@ -1352,7 +1380,7 @@ void KWordView::textStyleSelected( const CORBA::WChar *_style )
     gui->getPaperWidget()->applyStyle( style );
     format = m_pKWordDoc->findParagLayout( style )->getFormat();
     gui->getPaperWidget()->formatChanged( format );
-    updateStyle( style, false );
+    updateStyle( style, FALSE );
 }
 
 /*======================= text size selected  ===================*/
@@ -1413,10 +1441,10 @@ void KWordView::textColor()
 void KWordView::textAlignLeft()
 {
     flow = KWParagLayout::LEFT;
-    m_vToolBarText->setButton( ID_ALEFT, true );
-    m_vToolBarText->setButton( ID_ACENTER, false );
-    m_vToolBarText->setButton( ID_ARIGHT, false );
-    m_vToolBarText->setButton( ID_ABLOCK, false );
+    m_vToolBarText->setButton( ID_ALEFT, TRUE );
+    m_vToolBarText->setButton( ID_ACENTER, FALSE );
+    m_vToolBarText->setButton( ID_ARIGHT, FALSE );
+    m_vToolBarText->setButton( ID_ABLOCK, FALSE );
     gui->getPaperWidget()->setFlow( KWParagLayout::LEFT );
 }
 
@@ -1424,10 +1452,10 @@ void KWordView::textAlignLeft()
 void KWordView::textAlignCenter()
 {
     flow = KWParagLayout::CENTER;
-    m_vToolBarText->setButton( ID_ALEFT, false );
-    m_vToolBarText->setButton( ID_ACENTER, true );
-    m_vToolBarText->setButton( ID_ARIGHT, false );
-    m_vToolBarText->setButton( ID_ABLOCK, false );
+    m_vToolBarText->setButton( ID_ALEFT, FALSE );
+    m_vToolBarText->setButton( ID_ACENTER, TRUE );
+    m_vToolBarText->setButton( ID_ARIGHT, FALSE );
+    m_vToolBarText->setButton( ID_ABLOCK, FALSE );
     gui->getPaperWidget()->setFlow( KWParagLayout::CENTER );
 }
 
@@ -1435,10 +1463,10 @@ void KWordView::textAlignCenter()
 void KWordView::textAlignRight()
 {
     flow = KWParagLayout::RIGHT;
-    m_vToolBarText->setButton( ID_ALEFT, false );
-    m_vToolBarText->setButton( ID_ACENTER, false );
-    m_vToolBarText->setButton( ID_ARIGHT, true );
-    m_vToolBarText->setButton( ID_ABLOCK, false );
+    m_vToolBarText->setButton( ID_ALEFT, FALSE );
+    m_vToolBarText->setButton( ID_ACENTER, FALSE );
+    m_vToolBarText->setButton( ID_ARIGHT, TRUE );
+    m_vToolBarText->setButton( ID_ABLOCK, FALSE );
     gui->getPaperWidget()->setFlow( KWParagLayout::RIGHT );
 }
 
@@ -1446,10 +1474,10 @@ void KWordView::textAlignRight()
 void KWordView::textAlignBlock()
 {
     flow = KWParagLayout::BLOCK;
-    m_vToolBarText->setButton( ID_ARIGHT, false );
-    m_vToolBarText->setButton( ID_ACENTER, false );
-    m_vToolBarText->setButton( ID_ALEFT, false );
-    m_vToolBarText->setButton( ID_ABLOCK, true );
+    m_vToolBarText->setButton( ID_ARIGHT, FALSE );
+    m_vToolBarText->setButton( ID_ACENTER, FALSE );
+    m_vToolBarText->setButton( ID_ALEFT, FALSE );
+    m_vToolBarText->setButton( ID_ABLOCK, TRUE );
     gui->getPaperWidget()->setFlow( KWParagLayout::BLOCK );
 }
 
@@ -1464,7 +1492,7 @@ void KWordView::textLineSpacing( const CORBA::WChar *spc )
 /*====================== enumerated list ========================*/
 void KWordView::textEnumList()
 {
-    m_vToolBarText->setButton( ID_USORT_LIST, false );
+    m_vToolBarText->setButton( ID_USORT_LIST, FALSE );
     if ( m_vToolBarText->isButtonOn( ID_ENUM_LIST ) )
 	gui->getPaperWidget()->setEnumList();
     else
@@ -1474,7 +1502,7 @@ void KWordView::textEnumList()
 /*====================== unsorted list ==========================*/
 void KWordView::textUnsortList()
 {
-    m_vToolBarText->setButton( ID_ENUM_LIST, false );
+    m_vToolBarText->setButton( ID_ENUM_LIST, FALSE );
     if ( m_vToolBarText->isButtonOn( ID_USORT_LIST ) )
 	gui->getPaperWidget()->setBulletList();
     else
@@ -1484,7 +1512,7 @@ void KWordView::textUnsortList()
 /*===============================================================*/
 void KWordView::textSuperScript()
 {
-    m_vToolBarText->setButton( ID_SUBSCRIPT, false );
+    m_vToolBarText->setButton( ID_SUBSCRIPT, FALSE );
     if ( m_vToolBarText->isButtonOn( ID_SUPERSCRIPT ) )
 	vertAlign = KWFormat::VA_SUPER;
     else
@@ -1496,7 +1524,7 @@ void KWordView::textSuperScript()
 /*===============================================================*/
 void KWordView::textSubScript()
 {
-    m_vToolBarText->setButton( ID_SUPERSCRIPT, false );
+    m_vToolBarText->setButton( ID_SUPERSCRIPT, FALSE );
     if ( m_vToolBarText->isButtonOn( ID_SUBSCRIPT ) )
 	vertAlign = KWFormat::VA_SUB;
     else
@@ -1726,15 +1754,14 @@ void KWordView::dropEvent( QDropEvent *e )
 /*================================================================*/
 bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 {
-    if ( CORBA::is_nil( _menubar ) )
-    {
+    if ( CORBA::is_nil( _menubar ) ) {
 	m_vMenuEdit = 0L;
 	m_vMenuView = 0L;
 	m_vMenuInsert = 0L;
 	m_vMenuFormat = 0L;
 	m_vMenuExtra = 0L;
 	m_vMenuHelp = 0L;
-	return true;
+	return TRUE;
     }
 
     CORBA::WString_var text;
@@ -1746,12 +1773,12 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "undo" ) );
     text = Q2C( i18n( "No Undo possible" ) );
     m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, text, this, "editUndo", CTRL + Key_Z, -1, -1 );
-    m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
+    m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, FALSE );
 
     pix = OPUIUtils::convertPixmap( BarIcon( "redo" ) );
     text = Q2C( i18n( "No Redo possible" ) );
     m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, text, this, "editRedo", 0, -1, -1 );
-    m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
+    m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, FALSE );
     m_vMenuEdit->insertSeparator( -1 );
 
     pix = OPUIUtils::convertPixmap( BarIcon( "editcut" ) );
@@ -1787,6 +1814,12 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Custom Variables..." ) );
     m_idMenuEdit_CustomVars = m_vMenuEdit->insertItem4( text, this, "editCustomVars", 0, -1, -1 );
 
+    m_vMenuEdit->insertSeparator( -1 );
+
+    text = Q2C( i18n( "Serial &Letter Database..." ) );
+    m_idMenuEdit_SerialLetterDataBase = m_vMenuEdit->insertItem4( text, this,
+								  "editSerialLetterDataBase", 0, -1, -1 );
+
     // View
     text = Q2C( i18n( "&View" ) );
     _menubar->insertMenu( text, m_vMenuView, -1, -1 );
@@ -1811,13 +1844,13 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Endnotes" ) );
     m_idMenuView_EndNotes = m_vMenuView->insertItem4( text, this, "viewEndNotes", 0, -1, -1 );
 
-    m_vMenuView->setCheckable( true );
-    m_vMenuView->setItemChecked( m_idMenuView_FrameBorders, true );
-    m_vMenuView->setItemChecked( m_idMenuView_TableGrid, true );
+    m_vMenuView->setCheckable( TRUE );
+    m_vMenuView->setItemChecked( m_idMenuView_FrameBorders, TRUE );
+    m_vMenuView->setItemChecked( m_idMenuView_TableGrid, TRUE );
     m_vMenuView->setItemChecked( m_idMenuView_Header, m_pKWordDoc->hasHeader() );
     m_vMenuView->setItemChecked( m_idMenuView_Footer, m_pKWordDoc->hasFooter() );
-    m_vMenuView->setItemChecked( m_idMenuView_FootNotes, false );
-    m_vMenuView->setItemChecked( m_idMenuView_EndNotes, true );
+    m_vMenuView->setItemChecked( m_idMenuView_FootNotes, FALSE );
+    m_vMenuView->setItemChecked( m_idMenuView_EndNotes, TRUE );
 
     // insert menu
     text = Q2C( i18n( "&Insert" ) );
@@ -1866,7 +1899,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_idMenuInsert_VariableCustom = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariableCustom", 0, -1, -1 );
     m_vMenuInsert_Variable->insertSeparator( -1 );
     text = Q2C( i18n( "Serial Letter..." ) );
-    m_idMenuInsert_VariableSerialLetter = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariableSerialLetter", 
+    m_idMenuInsert_VariableSerialLetter = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariableSerialLetter",
 									       0, -1, -1 );
 
     // tools menu
@@ -1911,8 +1944,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Create Part Frame" ) );
     m_idMenuTools_Part = m_vMenuTools->insertItem6( pix, text, this, "toolsPart", Key_F12, -1, -1 );
 
-    m_vMenuTools->setCheckable( true );
-    m_vMenuTools->setItemChecked( m_idMenuTools_Edit, true );
+    m_vMenuTools->setCheckable( TRUE );
+    m_vMenuTools->setItemChecked( m_idMenuTools_Edit, TRUE );
 
     // format menu
     text = Q2C( i18n( "&Format" ) );
@@ -2005,7 +2038,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
     QObject::connect( kapp->clipboard(), SIGNAL( dataChanged() ), this, SLOT( clipboardDataChanged() ) );
 
-    return true;
+    return TRUE;
 }
 
 /*======================= setup edit toolbar ===================*/
@@ -2016,24 +2049,26 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 	m_vToolBarEdit = 0L;
 	m_vToolBarText = 0L;
 	m_vToolBarInsert = 0L;
-	return true;
+	return TRUE;
     }
 
     m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
-    m_vToolBarEdit->setFullWidth( false );
+    m_vToolBarEdit->setFullWidth( FALSE );
 
     // undo
     OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "undo" ) );
     CORBA::WString_var toolTip = Q2C( i18n( "Undo" ) );
-    m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, toolTip, -1 );
-    m_vToolBarEdit->setItemEnabled( ID_UNDO, false );
+    m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo",
+							 TRUE, toolTip, -1 );
+    m_vToolBarEdit->setItemEnabled( ID_UNDO, FALSE );
 
     // redo
     pix = OPUIUtils::convertPixmap( BarIcon( "redo" ) );
     toolTip = Q2C( i18n( "Redo" ) );
-    m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, toolTip, -1 );
-    m_vToolBarEdit->setItemEnabled( ID_REDO, false );
+    m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo",
+							 TRUE, toolTip, -1 );
+    m_vToolBarEdit->setItemEnabled( ID_REDO, FALSE );
 
     m_vToolBarEdit->insertSeparator( -1 );
 
@@ -2041,19 +2076,19 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     pix = OPUIUtils::convertPixmap( BarIcon( "editcut" ) );
     toolTip = Q2C( i18n( "Cut" ) );
     m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, ID_EDIT_CUT, SIGNAL( clicked() ), this,
-							"editCut", true, toolTip, -1 );
+							"editCut", TRUE, toolTip, -1 );
 
     // copy
     pix = OPUIUtils::convertPixmap( BarIcon( "editcopy" ) );
     toolTip = Q2C( i18n( "Copy" ) );
     m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, ID_EDIT_COPY, SIGNAL( clicked() ), this,
-							 "editCopy", true, toolTip, -1 );
+							 "editCopy", TRUE, toolTip, -1 );
 
     // paste
     pix = OPUIUtils::convertPixmap( BarIcon( "editpaste" ) );
     toolTip = Q2C( i18n( "Paste" ) );
     m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, ID_EDIT_PASTE, SIGNAL( clicked() ), this,
-							  "editPaste", true, toolTip, -1 );
+							  "editPaste", TRUE, toolTip, -1 );
 
     m_vToolBarEdit->insertSeparator( -1 );
 
@@ -2061,7 +2096,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     pix = OPUIUtils::convertPixmap( BarIcon( "spellcheck" ) );
     toolTip = Q2C( i18n( "Spell Checking" ) );
     m_idButtonEdit_Spelling = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraSpelling",
-							     true, toolTip, -1 );
+							     TRUE, toolTip, -1 );
 
     m_vToolBarEdit->insertSeparator( -1 );
 
@@ -2069,23 +2104,25 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     pix = OPUIUtils::convertPixmap( BarIcon( "kwsearch" ) );
     toolTip = Q2C( i18n( "Find & Replace" ) );
     m_idButtonEdit_Find = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editFind",
-							 true, toolTip, -1 );
+							 TRUE, toolTip, -1 );
 
     m_vToolBarEdit->enable( OpenPartsUI::Show );
 
     // TOOLBAR Insert
     m_vToolBarInsert = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-    m_vToolBarInsert->setFullWidth( false );
+    m_vToolBarInsert->setFullWidth( FALSE );
 
     // picture
     pix = OPUIUtils::convertPixmap( BarIcon( "picture" ) );
     toolTip = Q2C( i18n( "Insert Picture" ) );
-    m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture", true, toolTip, -1 );
+    m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture",
+								TRUE, toolTip, -1 );
 
     // clipart
     pix = OPUIUtils::convertPixmap( BarIcon( "clipart" ) );
     toolTip = Q2C( i18n( "Insert Clipart" ) );
-    m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, toolTip, -1 );
+    m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart",
+								TRUE, toolTip, -1 );
 
     m_vToolBarInsert->insertSeparator( -1 );
 
@@ -2093,109 +2130,122 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     pix = OPUIUtils::convertPixmap( BarIcon( "char" ) );
     toolTip = Q2C( i18n( "Insert Special Character" ) );
     m_idButtonInsert_SpecialChar = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertSpecialChar",
-								    true, toolTip, -1 );
+								    TRUE, toolTip, -1 );
 
     m_vToolBarInsert->enable( OpenPartsUI::Show );
 
     // TOOLBAR table
     m_vToolBarTable = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-    m_vToolBarTable->setFullWidth( false );
+    m_vToolBarTable->setFullWidth( FALSE );
 
     pix = OPUIUtils::convertPixmap( BarIcon( "rowin" ) );
     toolTip = Q2C( i18n( "Insert Row" ) );
-    m_idButtonTable_InsertRow = m_vToolBarTable->insertButton2( pix, ID_TABLE_INSROW, SIGNAL( clicked() ), this, "tableInsertRow",
-								true, toolTip, -1 );
+    m_idButtonTable_InsertRow = m_vToolBarTable->insertButton2( pix, ID_TABLE_INSROW, SIGNAL( clicked() ), this,
+								"tableInsertRow",
+								TRUE, toolTip, -1 );
 
     pix = OPUIUtils::convertPixmap( BarIcon( "colin" ) );
     toolTip = Q2C( i18n( "Insert Column" ) );
-    m_idButtonTable_InsertCol = m_vToolBarTable->insertButton2( pix, ID_TABLE_INSCOL, SIGNAL( clicked() ), this, "tableInsertCol",
-								true, toolTip, -1 );
+    m_idButtonTable_InsertCol = m_vToolBarTable->insertButton2( pix, ID_TABLE_INSCOL, SIGNAL( clicked() ), this,
+								"tableInsertCol",
+								TRUE, toolTip, -1 );
 
     pix = OPUIUtils::convertPixmap( BarIcon( "rowout" ) );
     toolTip = Q2C( i18n( "Delete Row" ) );
-    m_idButtonTable_DeleteRow = m_vToolBarTable->insertButton2( pix, ID_TABLE_DELROW, SIGNAL( clicked() ), this, "tableDeleteRow",
-								true, toolTip, -1 );
+    m_idButtonTable_DeleteRow = m_vToolBarTable->insertButton2( pix, ID_TABLE_DELROW, SIGNAL( clicked() ), this,
+								"tableDeleteRow",
+								TRUE, toolTip, -1 );
 
     pix = OPUIUtils::convertPixmap( BarIcon( "colout" ) );
     toolTip = Q2C( i18n( "Delete Column" ) );
-    m_idButtonTable_DeleteCol = m_vToolBarTable->insertButton2( pix, ID_TABLE_DELCOL, SIGNAL( clicked() ), this, "tableDeleteCol",
-								true, toolTip, -1 );
+    m_idButtonTable_DeleteCol = m_vToolBarTable->insertButton2( pix, ID_TABLE_DELCOL, SIGNAL( clicked() ), this,
+								"tableDeleteCol",
+								TRUE, toolTip, -1 );
 
     m_vToolBarTable->enable( OpenPartsUI::Show );
 
     // TOOLBAR Tools
     m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-    m_vToolBarTools->setFullWidth( false );
+    m_vToolBarTools->setFullWidth( FALSE );
 
     // edit
     pix = OPUIUtils::convertPixmap( BarIcon( "edittool" ) );
     toolTip = Q2C( i18n( "Edit Text Tool" ) );
-    m_idButtonTools_Edit = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT, SIGNAL( clicked() ), this, "toolsEdit",
-							   true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_EDIT, true );
-    m_vToolBarTools->setButton( ID_TOOL_EDIT, true );
+    m_idButtonTools_Edit = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT, SIGNAL( clicked() ), this,
+							   "toolsEdit",
+							   TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_EDIT, TRUE );
+    m_vToolBarTools->setButton( ID_TOOL_EDIT, TRUE );
 
     // edit frame
     pix = OPUIUtils::convertPixmap( BarIcon( "editframetool" ) );
     toolTip = Q2C( i18n( "Edit Frames Tool" ) );
-    m_idButtonTools_EditFrame = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT_FRAME, SIGNAL( clicked() ), this, "toolsEditFrame",
-								true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_EDIT_FRAME, true );
+    m_idButtonTools_EditFrame = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT_FRAME, SIGNAL( clicked() ),
+								this, "toolsEditFrame",
+								TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_EDIT_FRAME, TRUE );
 
     // create text frame
     pix = OPUIUtils::convertPixmap( BarIcon( "textframetool" ) );
     toolTip = Q2C( i18n( "Create Text Frame" ) );
-    m_idButtonTools_CreateText = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TEXT, SIGNAL( clicked() ), this, "toolsCreateText",
-								 true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_CREATE_TEXT, true );
+    m_idButtonTools_CreateText = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TEXT, SIGNAL( clicked() ),
+								 this, "toolsCreateText",
+								 TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_CREATE_TEXT, TRUE );
 
     // create pix frame
     pix = OPUIUtils::convertPixmap( BarIcon( "picframetool" ) );
     toolTip = Q2C( i18n( "Create Picture Frame" ) );
-    m_idButtonTools_CreatePix = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PIX, SIGNAL( clicked() ), this, "toolsCreatePix",
-								true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_CREATE_PIX, true );
+    m_idButtonTools_CreatePix = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PIX, SIGNAL( clicked() ),
+								this, "toolsCreatePix",
+								TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_CREATE_PIX, TRUE );
 
     // create clip frame
     pix = OPUIUtils::convertPixmap( BarIcon( "clipart" ) );
     toolTip = Q2C( i18n( "Create Clipart Frame" ) );
-    m_idButtonTools_Clipart = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_CLIPART, SIGNAL( clicked() ), this, "toolsClipart",
-							      true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_CREATE_CLIPART, true );
+    m_idButtonTools_Clipart = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_CLIPART, SIGNAL( clicked() ),
+							      this, "toolsClipart",
+							      TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_CREATE_CLIPART, TRUE );
 
     // create table frame
     pix = OPUIUtils::convertPixmap( BarIcon( "table" ) );
     toolTip = Q2C( i18n( "Create Table Frame" ) );
-    m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TABLE, SIGNAL( clicked() ), this, "toolsTable",
-							    true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_CREATE_TABLE, true );
+    m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TABLE, SIGNAL( clicked() ),
+							    this, "toolsTable",
+							    TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_CREATE_TABLE, TRUE );
 
     // create table frame
     pix = OPUIUtils::convertPixmap( BarIcon( "table" ) );
     toolTip = Q2C( i18n( "Create KSPread Table Frame" ) );
-    m_idButtonTools_KSpreadTable = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_KSPREAD_TABLE, SIGNAL( clicked() ), this,
-								   "toolsKSpreadTable", true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_CREATE_KSPREAD_TABLE, true );
+    m_idButtonTools_KSpreadTable = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_KSPREAD_TABLE, SIGNAL( clicked() ),
+								   this,
+								   "toolsKSpreadTable", TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_CREATE_KSPREAD_TABLE, TRUE );
 
     // create formula frame
     pix = OPUIUtils::convertPixmap( BarIcon( "formula" ) );
     toolTip = Q2C( i18n( "Create Formula Frame" ) );
-    m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_FORMULA, SIGNAL( clicked() ), this, "toolsFormula",
-							      true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_CREATE_FORMULA, true );
+    m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_FORMULA, SIGNAL( clicked() ),
+							      this, "toolsFormula",
+							      TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_CREATE_FORMULA, TRUE );
 
     // create part frame
     pix = OPUIUtils::convertPixmap( BarIcon( "parts" ) );
     toolTip = Q2C( i18n( "Create Part Frame" ) );
-    m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PART, SIGNAL( clicked() ), this, "toolsPart",
-							   true, toolTip, -1 );
-    m_vToolBarTools->setToggle( ID_TOOL_CREATE_PART, true );
+    m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PART, SIGNAL( clicked() ),
+							   this, "toolsPart",
+							   TRUE, toolTip, -1 );
+    m_vToolBarTools->setToggle( ID_TOOL_CREATE_PART, TRUE );
 
     m_vToolBarTools->enable( OpenPartsUI::Show );
 
     // TOOLBAR Text
     m_vToolBarText = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-    m_vToolBarText->setFullWidth( false );
+    m_vToolBarText->setFullWidth( FALSE );
 
     // style combobox
     OpenPartsUI::StrList stylelist;
@@ -2206,8 +2256,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 	stylelist[ i ] = CORBA::string_dup( m_pKWordDoc->paragLayoutList.at( i )->getName() );
     }
     toolTip = Q2C( i18n( "Style" ) );
-    m_idComboText_Style = m_vToolBarText->insertCombo( stylelist, ID_STYLE_LIST, false, SIGNAL( activated( const QString & ) ),
-						       this, "textStyleSelected", true, toolTip,
+    m_idComboText_Style = m_vToolBarText->insertCombo( stylelist, ID_STYLE_LIST,
+						       FALSE, SIGNAL( activated( const QString & ) ),
+						       this, "textStyleSelected", TRUE, toolTip,
 						       200, -1, OpenPartsUI::AtBottom );
 
     // size combobox
@@ -2220,8 +2271,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 	sizelist[ i - 4 ] = CORBA::string_dup( buffer );
     }
     toolTip = Q2C( i18n( "Font Size" ) );
-    m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const QString & ) ),
-							  this, "textSizeSelected", true,
+    m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, TRUE,
+							  SIGNAL( activated( const QString & ) ),
+							  this, "textSizeSelected", TRUE,
 							  toolTip, 50, -1, OpenPartsUI::AtBottom );
     m_vToolBarText->setCurrentComboItem( ID_FONT_SIZE, 8 );
     tbFont.setPointSize( 12 );
@@ -2233,8 +2285,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     for( unsigned int i = 0; i < fontList.count(); i++ )
 	fonts[ i ] = CORBA::string_dup( fontList[ i ] );
     toolTip = Q2C( i18n( "Font List" ) );
-    m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
-							  "textFontSelected", true, toolTip,
+    m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, TRUE,
+							  SIGNAL( activated( const QString & ) ), this,
+							  "textFontSelected", TRUE, toolTip,
 							  200, -1, OpenPartsUI::AtBottom );
     tbFont.setFamily( fontList[ 0 ] );
     m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, 0 );
@@ -2244,68 +2297,74 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     // bold
     pix = OPUIUtils::convertPixmap( BarIcon( "bold" ) );
     toolTip = Q2C( i18n( "Bold" ) );
-    m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ), this, "textBold", true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_BOLD, true );
-    m_vToolBarText->setButton( ID_BOLD, false );
-    tbFont.setBold( false );
+    m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ),
+							 this, "textBold", TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_BOLD, TRUE );
+    m_vToolBarText->setButton( ID_BOLD, FALSE );
+    tbFont.setBold( FALSE );
 
     // italic
     pix = OPUIUtils::convertPixmap( BarIcon( "italic" ) );
     toolTip = Q2C( i18n( "Italic" ) );
-    m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ), this, "textItalic", true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_ITALIC, true );
-    m_vToolBarText->setButton( ID_ITALIC, false );
-    tbFont.setItalic( false );
+    m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ),
+							   this, "textItalic", TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_ITALIC, TRUE );
+    m_vToolBarText->setButton( ID_ITALIC, FALSE );
+    tbFont.setItalic( FALSE );
 
     // underline
     pix = OPUIUtils::convertPixmap( BarIcon( "underl" ) );
     toolTip = Q2C( i18n( "Underline" ) );
-    m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline", true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_UNDERLINE, true );
-    m_vToolBarText->setButton( ID_UNDERLINE, false );
-    tbFont.setUnderline( false );
+    m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ),
+							      this, "textUnderline", TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_UNDERLINE, TRUE );
+    m_vToolBarText->setButton( ID_UNDERLINE, FALSE );
+    tbFont.setUnderline( FALSE );
 
     // color
     tbColor = black;
     pix = KOUIUtils::colorPixmap( tbColor, KOUIUtils::TXT_COLOR );
     toolTip = Q2C( i18n( "Text Color" ) );
-    m_idButtonText_Color = m_vToolBarText->insertButton2( pix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor",
-							  true, toolTip, -1 );
+    m_idButtonText_Color = m_vToolBarText->insertButton2( pix, ID_TEXT_COLOR, SIGNAL( clicked() ),
+							  this, "textColor",
+							  TRUE, toolTip, -1 );
 
     m_vToolBarText->insertSeparator( -1 );
 
     // align left
     pix = OPUIUtils::convertPixmap( BarIcon( "alignLeft" ) );
     toolTip = Q2C( i18n( "Align Left" ) );
-    m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft",
-							  true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_ALEFT, true );
-    m_vToolBarText->setButton( ID_ALEFT, true );
+    m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ),
+							  this, "textAlignLeft",
+							  TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_ALEFT, TRUE );
+    m_vToolBarText->setButton( ID_ALEFT, TRUE );
 
     // align center
     pix = OPUIUtils::convertPixmap( BarIcon( "alignCenter" ) );
     toolTip = Q2C( i18n( "Align Center" ) );
-    m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter",
-							    true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_ACENTER, true );
-    m_vToolBarText->setButton( ID_ACENTER, false );
+    m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ),
+							    this, "textAlignCenter",
+							    TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_ACENTER, TRUE );
+    m_vToolBarText->setButton( ID_ACENTER, FALSE );
 
     // align right
     pix = OPUIUtils::convertPixmap( BarIcon( "alignRight" ) );
     toolTip = Q2C( i18n( "Align Right" ) );
     m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight",
-							   true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_ARIGHT, true );
-    m_vToolBarText->setButton( ID_ARIGHT, false );
+							   TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_ARIGHT, TRUE );
+    m_vToolBarText->setButton( ID_ARIGHT, FALSE );
 
     QString tmp;
     // align block
     pix = OPUIUtils::convertPixmap( BarIcon( "alignBlock" ) );
     toolTip = Q2C( i18n( "Align Block" ) );
     m_idButtonText_ABlock = m_vToolBarText->insertButton2( pix, ID_ABLOCK, SIGNAL( clicked() ), this, "textAlignBlock",
-							   true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_ABLOCK, true );
-    m_vToolBarText->setButton( ID_ABLOCK, false );
+							   TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_ABLOCK, TRUE );
+    m_vToolBarText->setButton( ID_ABLOCK, FALSE );
 
     // line spacing
     OpenPartsUI::StrList spclist;
@@ -2317,8 +2376,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 	spclist[ i ] = CORBA::string_dup( buffer );
     }
     toolTip = Q2C( i18n( "Line Spacing ( in pt )" ) );
-    m_idComboText_LineSpacing = m_vToolBarText->insertCombo( spclist, ID_LINE_SPC, false, SIGNAL( activated( const QString & ) ),
-							     this, "textLineSpacing", true, toolTip,
+    m_idComboText_LineSpacing = m_vToolBarText->insertCombo( spclist, ID_LINE_SPC, FALSE,
+							     SIGNAL( activated( const QString & ) ),
+							     this, "textLineSpacing", TRUE, toolTip,
 							     60, -1, OpenPartsUI::AtBottom );
     spc = 0;
     m_vToolBarText->insertSeparator( -1 );
@@ -2326,77 +2386,86 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     // enum list
     pix = OPUIUtils::convertPixmap( BarIcon( "enumList" ) );
     toolTip = Q2C( i18n( "Enumerated List" ) );
-    m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, ID_ENUM_LIST, SIGNAL( clicked() ), this, "textEnumList",
-							     true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_ENUM_LIST, true );
-    m_vToolBarText->setButton( ID_ENUM_LIST, false );
+    m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, ID_ENUM_LIST, SIGNAL( clicked() ),
+							     this, "textEnumList",
+							     TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_ENUM_LIST, TRUE );
+    m_vToolBarText->setButton( ID_ENUM_LIST, FALSE );
 
     // unsorted list
     pix = OPUIUtils::convertPixmap( BarIcon( "unsortedList" ) );
     toolTip = Q2C( i18n( "Unsorted List" ) );
-    m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, ID_USORT_LIST, SIGNAL( clicked() ), this, "textUnsortList",
-							     true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_USORT_LIST, true );
-    m_vToolBarText->setButton( ID_USORT_LIST, false );
+    m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, ID_USORT_LIST, SIGNAL( clicked() ),
+							     this, "textUnsortList",
+							     TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_USORT_LIST, TRUE );
+    m_vToolBarText->setButton( ID_USORT_LIST, FALSE );
 
     m_vToolBarText->insertSeparator( -1 );
 
     // superscript
     pix = OPUIUtils::convertPixmap( BarIcon( "super" ) );
     toolTip = Q2C( i18n( "Superscript" ) );
-    m_idButtonText_SuperScript = m_vToolBarText->insertButton2( pix, ID_SUPERSCRIPT, SIGNAL( clicked() ), this, "textSuperScript",
-								true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_SUPERSCRIPT, true );
-    m_vToolBarText->setButton( ID_SUPERSCRIPT, false );
+    m_idButtonText_SuperScript = m_vToolBarText->insertButton2( pix, ID_SUPERSCRIPT, SIGNAL( clicked() ),
+								this, "textSuperScript",
+								TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_SUPERSCRIPT, TRUE );
+    m_vToolBarText->setButton( ID_SUPERSCRIPT, FALSE );
 
     // subscript
     pix = OPUIUtils::convertPixmap( BarIcon( "sub" ) );
     toolTip = Q2C( i18n( "Subscript" ) );
-    m_idButtonText_SubScript = m_vToolBarText->insertButton2( pix, ID_SUBSCRIPT, SIGNAL( clicked() ), this, "textSubScript",
-							      true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_SUBSCRIPT, true );
-    m_vToolBarText->setButton( ID_SUBSCRIPT, false );
+    m_idButtonText_SubScript = m_vToolBarText->insertButton2( pix, ID_SUBSCRIPT, SIGNAL( clicked() ),
+							      this, "textSubScript",
+							      TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_SUBSCRIPT, TRUE );
+    m_vToolBarText->setButton( ID_SUBSCRIPT, FALSE );
 
     m_vToolBarText->insertSeparator( -1 );
 
     // border left
     pix = OPUIUtils::convertPixmap( BarIcon( "borderleft" ) );
     toolTip = Q2C( i18n( "Paragraph Border Left" ) );
-    m_idButtonText_BorderLeft = m_vToolBarText->insertButton2( pix, ID_BRD_LEFT, SIGNAL( clicked() ), this, "textBorderLeft",
-							       true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_BRD_LEFT, true );
-    m_vToolBarText->setButton( ID_BRD_LEFT, false );
+    m_idButtonText_BorderLeft = m_vToolBarText->insertButton2( pix, ID_BRD_LEFT, SIGNAL( clicked() ),
+							       this, "textBorderLeft",
+							       TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_BRD_LEFT, TRUE );
+    m_vToolBarText->setButton( ID_BRD_LEFT, FALSE );
 
     // border right
     pix = OPUIUtils::convertPixmap( BarIcon( "borderright" ) );
     toolTip = Q2C( i18n( "Paragraph Border Right" ) );
-    m_idButtonText_BorderRight = m_vToolBarText->insertButton2( pix, ID_BRD_RIGHT, SIGNAL( clicked() ), this, "textBorderRight",
-								true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_BRD_RIGHT, true );
-    m_vToolBarText->setButton( ID_BRD_RIGHT, false );
+    m_idButtonText_BorderRight = m_vToolBarText->insertButton2( pix, ID_BRD_RIGHT, SIGNAL( clicked() ),
+								this, "textBorderRight",
+								TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_BRD_RIGHT, TRUE );
+    m_vToolBarText->setButton( ID_BRD_RIGHT, FALSE );
 
     // border top
     pix = OPUIUtils::convertPixmap( BarIcon( "bordertop" ) );
     toolTip = Q2C( i18n( "Paragraph Border Top" ) );
-    m_idButtonText_BorderTop = m_vToolBarText->insertButton2( pix, ID_BRD_TOP, SIGNAL( clicked() ), this, "textBorderTop",
-							      true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_BRD_TOP, true );
-    m_vToolBarText->setButton( ID_BRD_TOP, false );
+    m_idButtonText_BorderTop = m_vToolBarText->insertButton2( pix, ID_BRD_TOP, SIGNAL( clicked() ),
+							      this, "textBorderTop",
+							      TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_BRD_TOP, TRUE );
+    m_vToolBarText->setButton( ID_BRD_TOP, FALSE );
 
     // border bottom
     pix = OPUIUtils::convertPixmap( BarIcon( "borderbottom" ) );
     toolTip = Q2C( i18n( "Paragraph Border Bottom" ) );
-    m_idButtonText_BorderBottom = m_vToolBarText->insertButton2( pix, ID_BRD_BOTTOM, SIGNAL( clicked() ), this, "textBorderBottom",
-								 true, toolTip, -1 );
-    m_vToolBarText->setToggle( ID_BRD_BOTTOM, true );
-    m_vToolBarText->setButton( ID_BRD_BOTTOM, false );
+    m_idButtonText_BorderBottom = m_vToolBarText->insertButton2( pix, ID_BRD_BOTTOM, SIGNAL( clicked() ),
+								 this, "textBorderBottom",
+								 TRUE, toolTip, -1 );
+    m_vToolBarText->setToggle( ID_BRD_BOTTOM, TRUE );
+    m_vToolBarText->setButton( ID_BRD_BOTTOM, FALSE );
 
     // border color
     tmpBrd.color = black;
     pix = KOUIUtils::colorPixmap( tmpBrd.color, KOUIUtils::FRAME_COLOR );
     toolTip = Q2C( i18n( "Paragraph Border Color" ) );
-    m_idButtonText_BorderColor = m_vToolBarText->insertButton2( pix, ID_BORDER_COLOR, SIGNAL( clicked() ), this, "textBorderColor",
-								true, toolTip, -1 );
+    m_idButtonText_BorderColor = m_vToolBarText->insertButton2( pix, ID_BORDER_COLOR, SIGNAL( clicked() ),
+								this, "textBorderColor",
+								TRUE, toolTip, -1 );
 
     // border width combobox
     OpenPartsUI::StrList widthlist;
@@ -2409,8 +2478,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     }
     tmpBrd.ptWidth = 1;
     toolTip = Q2C( i18n( "Paragraph Border Width" ) );
-    m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, false, SIGNAL( activated( const QString & ) ),
-							     this, "textBorderWidth", true, toolTip,
+    m_idComboText_BorderWidth = m_vToolBarText->insertCombo( widthlist, ID_BRD_WIDTH, FALSE,
+							     SIGNAL( activated( const QString & ) ),
+							     this, "textBorderWidth", TRUE, toolTip,
 							     60, -1, OpenPartsUI::AtBottom );
 
     // border style combobox
@@ -2421,8 +2491,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     stylelist[ 3 ] = CORBA::string_dup( i18n( "dash dot line ( -*-* )" ) );
     stylelist[ 4 ] = CORBA::string_dup( i18n( "dash dot dot line ( -**- )" ) );
     toolTip = Q2C( i18n( "Paragraph Border Style" ) );
-    m_idComboText_BorderStyle = m_vToolBarText->insertCombo( stylelist, ID_BRD_STYLE, false, SIGNAL( activated( const QString & ) ),
-							     this, "textBorderStyle", true, toolTip,
+    m_idComboText_BorderStyle = m_vToolBarText->insertCombo( stylelist, ID_BRD_STYLE, FALSE,
+							     SIGNAL( activated( const QString & ) ),
+							     this, "textBorderStyle", TRUE, toolTip,
 							     150, -1, OpenPartsUI::AtBottom );
     tmpBrd.style = KWParagLayout::SOLID;
 
@@ -2430,75 +2501,83 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
     // TOOLBAR Frame
     m_vToolBarFrame = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-    m_vToolBarFrame->setFullWidth( false );
+    m_vToolBarFrame->setFullWidth( FALSE );
 
     // border left
     pix = OPUIUtils::convertPixmap( BarIcon( "borderleft" ) );
     toolTip = Q2C( i18n( "Frame Border Left" ) );
-    m_idButtonFrame_BorderLeft = m_vToolBarFrame->insertButton2( pix, ID_FBRD_LEFT, SIGNAL( clicked() ), this, "frameBorderLeft",
-								 true, toolTip, -1 );
-    m_vToolBarFrame->setToggle( ID_FBRD_LEFT, true );
-    m_vToolBarFrame->setButton( ID_FBRD_LEFT, false );
+    m_idButtonFrame_BorderLeft = m_vToolBarFrame->insertButton2( pix, ID_FBRD_LEFT, SIGNAL( clicked() ),
+								 this, "frameBorderLeft",
+								 TRUE, toolTip, -1 );
+    m_vToolBarFrame->setToggle( ID_FBRD_LEFT, TRUE );
+    m_vToolBarFrame->setButton( ID_FBRD_LEFT, FALSE );
 
     // border right
     pix = OPUIUtils::convertPixmap( BarIcon( "borderright" ) );
     toolTip = Q2C( i18n( "Frame Border Right" ) );
-    m_idButtonFrame_BorderRight = m_vToolBarFrame->insertButton2( pix, ID_FBRD_RIGHT, SIGNAL( clicked() ), this, "frameBorderRight",
-								  true, toolTip, -1 );
-    m_vToolBarFrame->setToggle( ID_FBRD_RIGHT, true );
-    m_vToolBarFrame->setButton( ID_FBRD_RIGHT, false );
+    m_idButtonFrame_BorderRight = m_vToolBarFrame->insertButton2( pix, ID_FBRD_RIGHT, SIGNAL( clicked() ),
+								  this, "frameBorderRight",
+								  TRUE, toolTip, -1 );
+    m_vToolBarFrame->setToggle( ID_FBRD_RIGHT, TRUE );
+    m_vToolBarFrame->setButton( ID_FBRD_RIGHT, FALSE );
 
     // border top
     pix = OPUIUtils::convertPixmap( BarIcon( "bordertop" ) );
     toolTip = Q2C( i18n( "Frame Border Top" ) );
-    m_idButtonFrame_BorderTop = m_vToolBarFrame->insertButton2( pix, ID_FBRD_TOP, SIGNAL( clicked() ), this, "frameBorderTop",
-								true, toolTip, -1 );
-    m_vToolBarFrame->setToggle( ID_FBRD_TOP, true );
-    m_vToolBarFrame->setButton( ID_FBRD_TOP, false );
+    m_idButtonFrame_BorderTop = m_vToolBarFrame->insertButton2( pix, ID_FBRD_TOP, SIGNAL( clicked() ),
+								this, "frameBorderTop",
+								TRUE, toolTip, -1 );
+    m_vToolBarFrame->setToggle( ID_FBRD_TOP, TRUE );
+    m_vToolBarFrame->setButton( ID_FBRD_TOP, FALSE );
 
     // border bottom
     pix = OPUIUtils::convertPixmap( BarIcon( "borderbottom" ) );
     toolTip = Q2C( i18n( "Frame Border Bottom" ) );
-    m_idButtonFrame_BorderBottom = m_vToolBarFrame->insertButton2( pix, ID_FBRD_BOTTOM, SIGNAL( clicked() ), this, "frameBorderBottom",
-								   true, toolTip, -1 );
-    m_vToolBarFrame->setToggle( ID_FBRD_BOTTOM, true );
-    m_vToolBarFrame->setButton( ID_FBRD_BOTTOM, false );
+    m_idButtonFrame_BorderBottom = m_vToolBarFrame->insertButton2( pix, ID_FBRD_BOTTOM, SIGNAL( clicked() ),
+								   this, "frameBorderBottom",
+								   TRUE, toolTip, -1 );
+    m_vToolBarFrame->setToggle( ID_FBRD_BOTTOM, TRUE );
+    m_vToolBarFrame->setButton( ID_FBRD_BOTTOM, FALSE );
 
     // border color
-    pix = KOUIUtils::colorPixmap( frmBrd.color, KOUIUtils::FRAME_COLOR ); 
+    pix = KOUIUtils::colorPixmap( frmBrd.color, KOUIUtils::FRAME_COLOR );
     toolTip = Q2C( i18n( "Frame Border Color" ) );
-    m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2( pix, ID_FBORDER_COLOR, SIGNAL( clicked() ), this, "frameBorderColor",
-								  true, toolTip, -1 );
+    m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2( pix, ID_FBORDER_COLOR, SIGNAL( clicked() ),
+								  this, "frameBorderColor",
+								  TRUE, toolTip, -1 );
 
     toolTip = Q2C( i18n( "Frame Border Width" ) );
-    m_idComboFrame_BorderWidth = m_vToolBarFrame->insertCombo( widthlist, ID_FBRD_WIDTH, false, SIGNAL( activated( const QString & ) ),
-							       this, "frameBorderWidth", true, toolTip,
+    m_idComboFrame_BorderWidth = m_vToolBarFrame->insertCombo( widthlist, ID_FBRD_WIDTH, FALSE,
+							       SIGNAL( activated( const QString & ) ),
+							       this, "frameBorderWidth", TRUE, toolTip,
 							       60, -1, OpenPartsUI::AtBottom );
 
     toolTip = Q2C( i18n( "Frame Border Style" ) );
-    m_idComboFrame_BorderStyle = m_vToolBarFrame->insertCombo( stylelist, ID_FBRD_STYLE, false, SIGNAL( activated( const QString & ) ),
-							       this, "frameBorderStyle", true, toolTip,
+    m_idComboFrame_BorderStyle = m_vToolBarFrame->insertCombo( stylelist, ID_FBRD_STYLE, FALSE,
+							       SIGNAL( activated( const QString & ) ),
+							       this, "frameBorderStyle", TRUE, toolTip,
 							       150, -1, OpenPartsUI::AtBottom );
 
     // frame back color
     backColor.setColor( white );
-    pix = KOUIUtils::colorPixmap( backColor.color(), KOUIUtils::BACK_COLOR ); 
+    pix = KOUIUtils::colorPixmap( backColor.color(), KOUIUtils::BACK_COLOR );
     toolTip = Q2C( i18n( "Frame Background Color" ) );
-    m_idButtonFrame_BackColor = m_vToolBarFrame->insertButton2( pix, ID_FBACK_COLOR, SIGNAL( clicked() ), this, "frameBackColor",
-								true, toolTip, -1 );
+    m_idButtonFrame_BackColor = m_vToolBarFrame->insertButton2( pix, ID_FBACK_COLOR, SIGNAL( clicked() ),
+								this, "frameBackColor",
+								TRUE, toolTip, -1 );
 
     m_vToolBarFrame->enable( OpenPartsUI::Hide );
 
     updateStyle( "Standard" );
-    setFormat( format, false );
+    setFormat( format, FALSE );
     gui->getPaperWidget()->forceFullUpdate();
     gui->getPaperWidget()->init();
 
     clipboardDataChanged();
 
-    gui->getPaperWidget()->repaintScreen( true );
+    gui->getPaperWidget()->repaintScreen( TRUE );
 
-    return true;
+    return TRUE;
 }
 
 /*===================== load not KDE installed fonts =============*/
@@ -2679,7 +2758,7 @@ void KWordView::newPageLayout( KoPageLayout _layout )
     gui->getVertRuler()->setPageLayout( _layout );
 
     gui->getPaperWidget()->frameSizeChanged( _layout );
-    gui->getPaperWidget()->repaintScreen( true );
+    gui->getPaperWidget()->repaintScreen( TRUE );
 }
 
 /*================================================================*/
@@ -2687,8 +2766,10 @@ void KWordView::spellCheckerReady()
 {
     if ( !currParag && currFrameSetNum == -1 )
     {
-	QObject::connect( kspell, SIGNAL( misspelling( char*, QStrList*, unsigned ) ), this, SLOT( spellCheckerMisspelling( char*, QStrList*, unsigned ) ) );
-	QObject::connect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ), this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
+	QObject::connect( kspell, SIGNAL( misspelling( char*, QStrList*, unsigned ) ),
+			  this, SLOT( spellCheckerMisspelling( char*, QStrList*, unsigned ) ) );
+	QObject::connect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ),
+			  this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
 	QObject::connect( kspell, SIGNAL( done( char* ) ), this, SLOT( spellCheckerDone( char* ) ) );
 	currParag = 0L;
 	for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ )
@@ -2704,7 +2785,8 @@ void KWordView::spellCheckerReady()
 	    kspell->cleanUp();
 	    QObject::disconnect( kspell, SIGNAL( misspelling( char*, QStrList*, unsigned ) ), this,
 				 SLOT( spellCheckerMisspelling( char*, QStrList*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ), this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ),
+				 this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
 	    QObject::disconnect( kspell, SIGNAL( done( char* ) ), this, SLOT( spellCheckerDone( char* ) ) );
 	    delete kspell;
 	    return;
@@ -2720,7 +2802,8 @@ void KWordView::spellCheckerReady()
 	    kspell->cleanUp();
 	    QObject::disconnect( kspell, SIGNAL( misspelling( char*, QStrList*, unsigned ) ), this,
 				 SLOT( spellCheckerMisspelling( char*, QStrList*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ), this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ),
+				 this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
 	    QObject::disconnect( kspell, SIGNAL( done( char* ) ), this, SLOT( spellCheckerDone( char* ) ) );
 	    delete kspell;
 	    return;
@@ -2739,7 +2822,8 @@ void KWordView::spellCheckerReady()
 	    kspell->cleanUp();
 	    QObject::disconnect( kspell, SIGNAL( misspelling( char*, QStrList*, unsigned ) ), this,
 				 SLOT( spellCheckerMisspelling( char*, QStrList*, unsigned ) ) );
-	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ), this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
+	    QObject::disconnect( kspell, SIGNAL( corrected( char*, char*, unsigned ) ),
+				 this, SLOT( spellCheckerCorrected( char*, char*, unsigned ) ) );
 	    QObject::disconnect( kspell, SIGNAL( done( char* ) ), this, SLOT( spellCheckerDone( char* ) ) );
 	    delete kspell;
 	    return;
@@ -2781,9 +2865,9 @@ void KWordView::setMode( KOffice::View::Mode _mode )
     KoViewIf::setMode( _mode );
 
     if ( mode() == KOffice::View::ChildMode && !m_bFocus )
-	m_bShowGUI = false;
+	m_bShowGUI = FALSE;
     else
-	m_bShowGUI = true;
+	m_bShowGUI = TRUE;
 
     if ( gui )
     {
@@ -2800,9 +2884,9 @@ void KWordView::setFocus( CORBA::Boolean _mode )
     bool old = m_bShowGUI;
 
     if ( mode() == KOffice::View::ChildMode && !m_bFocus )
-	m_bShowGUI = false;
+	m_bShowGUI = FALSE;
     else
-	m_bShowGUI = true;
+	m_bShowGUI = TRUE;
 
     if ( gui ) gui->showGUI( m_bShowGUI );
 
@@ -2819,19 +2903,19 @@ void KWordView::changeUndo( QString _text, bool _enable )
 
     if ( _enable )
     {
-	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, true );
+	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, TRUE );
 	QString str;
 	str.sprintf( i18n( "Undo: %s" ), _text.data() );
 	text = Q2C( str );
 	m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
-	m_vToolBarEdit->setItemEnabled( ID_UNDO, true );
+	m_vToolBarEdit->setItemEnabled( ID_UNDO, TRUE );
     }
     else
     {
 	text = Q2C( i18n( "No Undo possible" ) );
 	m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
-	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
-	m_vToolBarEdit->setItemEnabled( ID_UNDO, false );
+	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, FALSE );
+	m_vToolBarEdit->setItemEnabled( ID_UNDO, FALSE );
     }
 }
 
@@ -2844,19 +2928,19 @@ void KWordView::changeRedo( QString _text, bool _enable )
 
     if ( _enable )
     {
-	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, true );
+	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, TRUE );
 	QString str;
 	str.sprintf( i18n( "Redo: %s" ), _text.data() );
 	text = Q2C( str );
 	m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
-	m_vToolBarEdit->setItemEnabled( ID_REDO, true );
+	m_vToolBarEdit->setItemEnabled( ID_REDO, TRUE );
     }
     else
     {
 	text = Q2C( i18n( "No Redo possible" ) );
 	m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
-	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
-	m_vToolBarEdit->setItemEnabled( ID_REDO, false );
+	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, FALSE );
+	m_vToolBarEdit->setItemEnabled( ID_REDO, FALSE );
     }
 }
 
@@ -2870,7 +2954,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
 {
     doc = _doc;
     view = _view;
-    _showStruct = false;
+    _showStruct = FALSE;
 
     r_horz = r_vert = 0;
 
@@ -2892,7 +2976,8 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
 
     tabChooser = new KoTabChooser( left, KoTabChooser::TAB_ALL );
 
-    r_horz = new KoRuler( left, paperWidget->viewport(), KoRuler::HORIZONTAL, layout, KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
+    r_horz = new KoRuler( left, paperWidget->viewport(), KoRuler::HORIZONTAL, layout,
+			  KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
     r_vert = new KoRuler( left, paperWidget->viewport(), KoRuler::VERTICAL, layout, 0 );
     connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
     connect( r_horz, SIGNAL( newLeftIndent( int ) ), paperWidget, SLOT( newLeftIndent( int ) ) );
@@ -2938,12 +3023,13 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
 	paperWidget->keyPressEvent( &e );
     }
 
-    connect( r_horz, SIGNAL( tabListChanged( QList<KoTabulator>* ) ), paperWidget, SLOT( tabListChanged( QList<KoTabulator>* ) ) );
+    connect( r_horz, SIGNAL( tabListChanged( QList<KoTabulator>* ) ), paperWidget,
+	     SLOT( tabListChanged( QList<KoTabulator>* ) ) );
 
     paperWidget->forceFullUpdate();
 
-    setKeyCompression( true );
-    setAcceptDrops( true );
+    setKeyCompression( TRUE );
+    setAcceptDrops( TRUE );
     setFocusPolicy( QWidget::StrongFocus );
 
     scrollTo( 0, 0 );

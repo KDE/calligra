@@ -1478,6 +1478,11 @@ Reggie, 3.9.1999:
 
 Reggie, 7.9.1999:
 -----------------
-- Implemented all internals for serial letters and 
+- Implemented all internals for serial letters and
   the dialog for inserting serial letter variables.
+
+Reggie, 12.9.1999:
+------------------
+- More work on serial letters
+- Some fixes for pixmaps in new and old fileformat
 

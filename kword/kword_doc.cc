@@ -130,7 +130,7 @@ KWordDocument::KWordDocument()
     slDataBase->appendRecord();
     slDataBase->setValue( i18n( "First Name" ), "Reginald", 0 );
     slDataBase->setValue( i18n( "Last Name" ), "Stadlbauer", 0 );
-    
+
     QObject::connect( &history, SIGNAL( undoRedoChanged( QString, QString ) ), this,
 		      SLOT( slotUndoRedoChanged( QString, QString ) ) );
 }
@@ -777,7 +777,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 		return FALSE;
 	    }
 	} else if ( ( *it ).m_strName == "url" )
-	    urlIntern = ( *it ).m_strValue.c_str();
+	    urlIntern = KURL( ( *it ).m_strValue.c_str() ).path();
     }
 
     // PAPER
@@ -1290,25 +1290,29 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 /*===================================================================*/
 bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 {
-    if ( _store )
-    {
-	CORBA::String_var str = urlIntern.isEmpty() ? url() : urlIntern.latin1();
+    if ( _store ) {
+	CORBA::String_var str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
 
 	QStringList::Iterator it = pixmapKeys.begin();
 
-	for ( ; it != pixmapKeys.end(); ++it )
-	{
+	for ( ; it != pixmapKeys.end(); ++it ) {
 	    QString u = str.in();
 	    u += "/";
 	    u += *it;
 
 	    QImage img;
 
-	    if ( _store->open( u, 0L ) )
-	    {
+	    if ( _store->open( u, 0L ) ) {
 		istorestream in( _store );
 		in >> img;
 		_store->close();
+	    } else {
+		u.prepend( "file:" );
+		if ( _store->open( u, 0L ) ) {
+		    istorestream in( _store );
+		    in >> img;
+		    _store->close();
+		}
 	    }
 
 	    QString filename = *it;
@@ -1339,7 +1343,8 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
     out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org"
-	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\" url=\"" << url() << "\">" << endl;
+	<< "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\" url=\""
+	<< KURL( url() ).path().latin1() << "\">" << endl;
     out << otag << "<PAPER format=\"" << static_cast<int>( pageLayout.format ) << "\" ptWidth=\"" << pageLayout.ptWidth
 	<< "\" ptHeight=\"" << pageLayout.ptHeight
 	<< "\" mmWidth =\"" << pageLayout.mmWidth << "\" mmHeight=\"" << pageLayout.mmHeight
@@ -1418,7 +1423,7 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
     if ( !_store )
 	return TRUE;
 
-    CORBA::String_var u = url();
+    CORBA::String_var u = KURL( url() ).path().latin1();
     QDictIterator<KWImage> it = imageCollection.iterator();
 
     QStringList keys, images;
