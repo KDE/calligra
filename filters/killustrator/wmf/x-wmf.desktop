@@ -1,0 +1,6 @@
+[Desktop Entry]
+Icon=image
+Type=MimeType
+MimeType=image/x-wmf
+Patterns=*.wmf;*.WMF;
+Comment=Windows MetaFile
