@@ -1,25 +1,12 @@
-TODO before 1.1
-* SVG Import/Export filters fixes (Rob Buis)
-* Printing fixes(pages, color)
-* Bug fixing and cleaning code
-  * test undo/redo and fix bugs
-    * changing color and undo...
-  * test for for setting modified flag at document
-    * creating helpline from ruler
-    * changing grid settings
-  * nodes deleting (crash)
-
-
-
-TODO before 1.2
+TODO
 * CMX Import/Export filter
 * AI Import/Export filters
 * KCommand for undo/redo
 * New color support
-* Transparency support
+* Transparency support (for objects and layers)
 * More redrawing speed
 * New layers dialog (tree...)
 ...
 
 Last update:
-30.06.2001
+1.08.2001

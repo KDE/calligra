@@ -1,49 +1,7 @@
-		KIllustrator - Release 0.7
+		Kontour - Release 1.1
 		==========================
 
-1. Introduction
----------------
-
-Welcome to release 0.7 of KIllustrator - the vector drawing program
-for the K Desktop Environment. The aim of the KIllustrator project is
-the development of a freely available vector-based drawing application
-similiar to Corel Draw or Adobe Illustrator. I have started this
-project because I am tired of switching to Windows in order to design
-illustrations for papers or slides with a modern drawing tool. Now,
-for the Linux operating system and of course for other Unixes the Qt
-toolkit and the KDE project provide a perfect foundation for this kind
-of application.
-
-2. Installation
----------------
-
-KIllustrator comes in source code only - you have to compile the
-package for yourself. But the configuration and compilation conforms
-to the usual GNU autoconf procedure.
-
-After downloading the archive, unpack the distribution with
-	gunzip -c killustrator-0.7.tar.gz | tar xvof -
-Next, change into the distribution directory 
-	cd killustrator-0.7
-and invoke
-	./configure
-
-The installation requires a working K Desktop Environment (1.1 or
-better) as well as QT-1.44. The current release is tested on Linux and
-Solaris 2.6 with gcc-2.8 and egcs-1.1. For image export (JPEG and PNG)
-the Qt Image I/O Extension (qimgio) is required. Otherwise only XPM,
-PPM and GIF is supported.
-
-After the successfull configuration compile the project
-	make
-and install it (optionally)
-	make install
-
-If you dislike KIllustrator or in case of an upgrade you should be able to
-remove the package with
-	make uninstall
-
-3. Features
+ Features
 -----------
 
 Here is a short description of currently implemented features: 
@@ -94,9 +52,6 @@ The handling follows the Corel Draw(tm) user interface. That means:
   produces squares resp. circles instead of rectangles or
   ellipses.
 - Clicking in an existing text object enables the editing of the text.
-- You can configure a tool by double clicking the
-  activated tool button. Currently, this works only for
-  the polygon tool and the ellipse tool.
 - Lines are constructed with left click (this adds a new point) and 
   finished with right click.
 - Bezier curves are constructed with 4 control
@@ -114,43 +69,3 @@ The handling follows the Corel Draw(tm) user interface. That means:
     segment to this point.
   * Polylines and bezier curves are closed by SHIFT+Right button.
   * You can cancel selection or line adding with ESC.
-
-Look at the KIllustrator web site 
-	http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator.html
-for more information.
-
-4. Contributions
-----------------
-
-The development of this kind of application is surely much
-effort. Because I won't spend my whole spare time in coding, I invite
-you to participate in the KIllustrator project. So, if you plan to
-contribute some code, please contact me in order to avoid duplicate
-work. 
-
-5. Bugs
--------
-
-Of course the current release contains some bugs. Look at
-	http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
-
-6. Download
------------
-
-The primary site for downloading the development snapshot and 
-additional information is
-	http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator.html
-In addition, the sourrce code should available from the KDE ftp site
-and it's mirrors:
-        ftp://ftp.kde.org
-
-7. Contact 
-----------
-
-I am interested to know if you find KIllustrator useful. If you would
-like to contribute to the development, send bug reports or
-suggestions, please feel free to contact me at
-kus@iti.cs.uni-magdeburg.de. In addition, there is a mailing list for
-discussion about KIllustrator. Please look at 
-	http://www.egroups.com/list/killustrator/
-
