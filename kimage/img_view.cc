@@ -210,21 +210,21 @@ void ImageView_impl::createGUI()
     m_rMenuBar = m_vMenuBarFactory->createMenuBar( this );
 
     // Edit
-    m_idMenuEdit = m_rMenuBar->insertMenu( CORBA::string_dup( "&Edit" ) );
-    m_idMenuEdit_NewImage = m_rMenuBar->insertItem( CORBA::string_dup( "&Insert ..." ), m_idMenuEdit,
-						       this, CORBA::string_dup( "insertObject" ) );
+    m_idMenuEdit = m_rMenuBar->insertMenu( CORBA::string_dup( i18n("&Edit") ) );
+    m_idMenuEdit_NewImage = m_rMenuBar->insertItem( CORBA::string_dup( i18n("&Insert ...") ), m_idMenuEdit,
+						    this, CORBA::string_dup( "insertObject" ) );
     m_rMenuBar->insertSeparator( m_idMenuEdit );
     
-    m_idMenuEdit_ImportImage = m_rMenuBar->insertItem( CORBA::string_dup( "Im&port ..." ), m_idMenuEdit,
+    m_idMenuEdit_ImportImage = m_rMenuBar->insertItem( CORBA::string_dup( i18n("Im&port ...") ), m_idMenuEdit,
 						       this, CORBA::string_dup( "importImage" ) );
-    m_idMenuEdit_ExportImage = m_rMenuBar->insertItem( CORBA::string_dup( "&Export ..." ), m_idMenuEdit,
+    m_idMenuEdit_ExportImage = m_rMenuBar->insertItem( CORBA::string_dup( i18n("&Export ...") ), m_idMenuEdit,
 						       this, CORBA::string_dup( "exportImage" ) );
 
     // View
-    m_idMenuView = m_rMenuBar->insertMenu( CORBA::string_dup( "&View" ) );
-    m_idMenuView_FitToWindow = m_rMenuBar->insertItem( CORBA::string_dup( "&Fit To Window" ), m_idMenuView,
+    m_idMenuView = m_rMenuBar->insertMenu( CORBA::string_dup( i18n("&View") ) );
+    m_idMenuView_FitToWindow = m_rMenuBar->insertItem( CORBA::string_dup( i18n("&Fit To Window") ), m_idMenuView,
 						       this, CORBA::string_dup( "toggleFitToWindow" ) );
-    m_idMenuView_NewView = m_rMenuBar->insertItem( CORBA::string_dup( "&New View" ), m_idMenuView,
+    m_idMenuView_NewView = m_rMenuBar->insertItem( CORBA::string_dup( i18n("&New View") ), m_idMenuView,
 						       this, CORBA::string_dup( "newView" ) );
   }
 
@@ -236,13 +236,13 @@ void ImageView_impl::createGUI()
     QString tmp = opapp->kde_icondir().copy();
     tmp += "/mini/mini-doc.xpm";
     QString pix = loadPixmap( tmp );
-    m_idButtonFile_Open = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), "Open", 0L, 0L );
+    m_idButtonFile_Open = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), i18n("Open"), 0L, 0L );
 
     m_rToolBarEdit = m_vToolBarFactory->createToolBar( this, "Edit" );
     tmp = opapp->kde_icondir().copy();
     tmp += "/mini/mini-eyes.xpm";
     pix = loadPixmap( tmp );
-    m_idButtonEdit_Darker = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), "Darker", 0L, 0L );
+    m_idButtonEdit_Darker = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), i18n("Darker"), 0L, 0L );
   }
 
   edeb("...void ImageView_impl::createGUI() %i | %i\n",refCount(),_refcnt());

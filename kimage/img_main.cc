@@ -46,7 +46,7 @@ typedef AutoLoader<KImageFactory> KImageAutoLoader;
 ImageApp::ImageApp( int argc, char** argv ) : 
      OPApplication( argc, argv, "kimage" )
 {
-  getLocale()->insertCatalogue("koffice");
+    getLocale()->insertCatalogue("koffice");
 }
 
 ImageApp::~ImageApp()

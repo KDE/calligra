@@ -156,13 +156,15 @@ void KPresenterView_impl::insertPicture()
 {
   page->deSelectAllObj();
   QString file = KFileDialog::getOpenFileName(getenv("HOME"),
-					      i18n("*.gif *GIF|GIF-Pictures\n"
-					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-					      "*.bmp *.BMP|Windows Bitmaps\n"
-					      "*.xbm *.XBM|XWindow Bitmaps\n"
-					      "*.xpm *.XPM|Pixmaps\n"
-					      "*.pnm *.PNM|PNM-Pictures\n"
-					      "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures"),0);
+					      i18n(
+						   "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP"
+						   "*.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures\n"
+						   "*.gif *GIF|GIF-Pictures\n"
+						   "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+						   "*.bmp *.BMP|Windows Bitmaps\n"
+						   "*.xbm *.XBM|XWindow Bitmaps\n"
+						   "*.xpm *.XPM|Pixmaps\n"
+						   "*.pnm *.PNM|PNM-Pictures"),0);
   if (!file.isEmpty()) m_pKPresenterDoc->insertPicture((const char*)file,xOffset,yOffset);
 
 
@@ -267,7 +269,7 @@ void KPresenterView_impl::extraPenBrush()
       delete styleDia;
       styleDia = 0;
     }
-  styleDia = new StyleDia(0,i18n("StyleDia"));
+  styleDia = new StyleDia(0,"StyleDia");
   styleDia->setMaximumSize(styleDia->width(),styleDia->height());
   styleDia->setMinimumSize(styleDia->width(),styleDia->height());
   styleDia->setPen(m_pKPresenterDoc->getPen(pen));
@@ -1210,15 +1212,14 @@ void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 {
   QFileInfo fileInfo(filename);
   QString file = KFileDialog::getOpenFileName(getenv("HOME"),
-					      i18n("*.gif *GIF|GIF-Pictures\n"
+					      i18n(  "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP"
+						   "*.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures\n"
+						   "*.gif *GIF|GIF-Pictures\n"
 						   "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 						   "*.bmp *.BMP|Windows Bitmaps\n"
 						   "*.xbm *.XBM|XWindow Bitmaps\n"
 						   "*.xpm *.XPM|Pixmaps\n"
-						   "*.pnm *.PNM|PNM-Pictures\n"
-						   "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp "
-						   "*.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures"),0);
-
+						   "*.pnm *.PNM|PNM-Pictures"), 0);
   if (!file.isEmpty()) m_pKPresenterDoc->changePicture((const char*)file,xOffset,yOffset);
 }
 
