@@ -198,12 +198,14 @@ protected:
   virtual bool init( Mode mode );
   /**
    * Open the file @p name in the store, for writing
+   * On success, this method must set m_stream to a stream in which we can write.
    * @return true on success
    */
   virtual bool openWrite( const QString& name ) = 0;
   /**
    * Open the file @p name in the store, for reading.
-   * This method must set m_iSize to the size of the file.
+   * On success, this method must set m_stream to a stream from which we can read,
+   * as well as setting m_iSize to the size of the file.
    * @return true on success
    */
   virtual bool openRead( const QString& name ) = 0;

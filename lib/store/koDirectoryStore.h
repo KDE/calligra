@@ -33,14 +33,13 @@ protected:
     virtual bool init( Mode _mode );
     virtual bool openWrite( const QString& name ) { return openReadOrWrite( name, IO_WriteOnly ); }
     virtual bool openRead( const QString& name ) { return openReadOrWrite( name, IO_ReadOnly ); }
-    virtual bool closeRead() { return closeReadOrWrite(); }
-    virtual bool closeWrite() { return closeReadOrWrite(); }
+    virtual bool closeRead() { return true; }
+    virtual bool closeWrite() { return true; }
     virtual bool enterRelativeDirectory( const QString& dirName );
     virtual bool enterAbsoluteDirectory( const QString& path );
     virtual bool fileExists( const QString& absPath );
 
     bool openReadOrWrite( const QString& name, int iomode );
-    bool closeReadOrWrite();
 private:
     // Path to base directory
     QString m_basePath;

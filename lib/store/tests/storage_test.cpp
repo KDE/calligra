@@ -18,11 +18,13 @@
 */
 
 #include <qfile.h>
+#include <qdir.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 
 #include <koStore.h>
 #include <kdebug.h>
+#include <stdlib.h>
 
 #include <string.h>
 
@@ -50,16 +52,17 @@ int cleanUp( KoStore* store, const char* error )
     return 1;
 }
 
-int main( int argc, char **argv )
+int test( const char* testName, KoStore::Backend backend )
 {
-    KCmdLineArgs::init( argc, argv, "storage_test", "A test for the KoStore classes", "1" );
-    KApplication app( argc, argv );
-
     if ( QFile::exists( testFile ) )
         QFile::remove( testFile );
+    QDir dirTest( testFile );
+    if ( dirTest.exists() ) {
+        system( QCString( "rm -rf " ) + testFile ); // QDir::rmdir isn't recursive!
+    }
 
-    kdDebug() << "===========================================================" << endl;
-    KoStore* store = KoStore::createStore( testFile, KoStore::Write );
+    kdDebug() << "======================="<<testName<<"====================================" << endl;
+    KoStore* store = KoStore::createStore( testFile, KoStore::Write, "", backend );
     if ( store->bad() )
         return cleanUp( store, badStorage );
 
@@ -107,7 +110,7 @@ int main( int argc, char **argv )
 
     kdDebug() << "===========================================================" << endl;
 
-    store = KoStore::createStore( testFile, KoStore::Read );
+    store = KoStore::createStore( testFile, KoStore::Read, "", backend );
     if ( store->bad() )
         return cleanUp( store, badStorage );
 
@@ -190,4 +193,17 @@ int main( int argc, char **argv )
 
     kdDebug() << "===========================================================" << endl;
     return 0;
+}
+
+int main( int argc, char **argv )
+{
+    KCmdLineArgs::init( argc, argv, "storage_test", "A test for the KoStore classes", "1" );
+    KApplication app( argc, argv );
+
+    if ( test( "Tar", KoStore::Tar ) != 0 )
+      return 1;
+    //if ( test( "Zip", KoStore::Zip ) != 0 )
+    //  return 1;
+    if ( test( "Directory", KoStore::Directory ) != 0 )
+      return 1;
 }
