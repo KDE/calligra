@@ -142,8 +142,6 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
         if ( parag->style() && ( parag->style()->name().startsWith( "Contents Head" ) ||
             parag->style()->name() == "Contents Title" ) )
         {
-            posOfToc=parag;
-
             kdDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
             // This paragraph is part of the TOC -> remove
 
@@ -172,6 +170,7 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
             delete p;
             kdDebug() << "KWInsertTOCCommand::removeTOC " << p << " deleted" << endl;
             p = next;
+            posOfToc = p;
             kdDebug() << "KWInsertTOCCommand::removeTOC prev=" << prev << " p=" << p << endl;
             // Fix parag chain
             if ( prev )
@@ -179,6 +178,8 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
                 prev->setNext( p );
                 if ( p )
                     p->setParagId( prev->paragId() + 1 );
+                else
+                    posOfToc = prev;
             }
             else
             {
@@ -190,6 +191,7 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
                 {
                     textdoc->clear( true ); // recreate empty parag.
                     cursor->setParag( textdoc->firstParag() );
+                    posOfToc = textdoc->firstParag();
                     break;
                 }
             }
@@ -198,12 +200,12 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
         p = p->prev();
     }
     textdoc->invalidate();
-     if(posOfToc)
-     {
+    if(posOfToc)
+    {
          posOfTable=new KoTextCursor( textdoc );
          posOfTable->setParag(posOfToc  );
          posOfTable->setIndex( 0 );//start of parag
-     }
+    }
     // ### TODO propagate parag ID changes.
     return posOfTable;
 }
