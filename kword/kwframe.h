@@ -180,9 +180,12 @@ public:
     QBrush backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor( QBrush _color ) { m_backgroundColor = _color; }
 
-    // For text frames only
-    void setInternalY( int y ) { m_internalY = y; }
-    int internalY() const { return m_internalY; }
+    // The "internal Y" is the offset (in pt) of the real frame showed in this one
+    // ("real" means "the last that isn't a copy")
+    // This offset in pt is the sum of the height of the frames before that one.
+    // For text frames, this is equivalent to the layout units (after multiplication).
+    void setInternalY( double y ) { m_internalY = y; }
+    double internalY() const { return m_internalY; }
 
     /** set left margin size */
     void setBLeft( double b ) { bleft = b; }
@@ -230,7 +233,7 @@ private:
     double bleft, bright, btop, bbottom; // margins
     double m_minFrameHeight;
 
-    int m_internalY; // for text frames only
+    double m_internalY;
     int m_zOrder;
     bool m_bCopy;
     bool selected;

@@ -109,9 +109,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     KWFrame* containingFrame = fs->currentDrawnFrame();
     // Intersect with containing frame - in case the inline item is
     // bigger, it shouldn't go out of it!
-    QRect frameRectLU( 0, containingFrame->internalY(),
-                     zh->ptToLayoutUnitPixX( containingFrame->width() ),
-                     zh->ptToLayoutUnitPixY( containingFrame->height() ) );
+    QRect frameRectLU( 0, zh->ptToLayoutUnitPixY( containingFrame->internalY() ),
+                       zh->ptToLayoutUnitPixX( containingFrame->width() ),
+                       zh->ptToLayoutUnitPixY( containingFrame->height() ) );
     crectLU &= frameRectLU;
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw crect LU, after intersect with framerect : " << DEBUGRECT( crectLU ) << endl;

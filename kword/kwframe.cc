@@ -962,20 +962,24 @@ const QPtrList<KWFrame> & KWFrameSet::framesInPage( int pageNum ) const
     return * m_framesInPage[pageNum - m_firstPage];
 }
 
+//#define DEBUG_DRAW
+
 void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
                                bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas )
 {
-    /* kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
+#ifdef DEBUG_DRAW
+    kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
                    << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
                    << " crect= " << DEBUGRECT(crect)
-                   << endl; */
+                   << endl;
+#endif
     m_currentDrawnCanvas = canvas;
 
     QPtrListIterator<KWFrame> frameIt( frameIterator() );
     KWFrame * lastRealFrame = 0L;
-    int lastRealFrameTop = 0;
-    int totalHeight = 0;
+    double lastRealFrameTop = 0;
+    double totalHeight = 0; // in pt, to avoid accumulating rounding errors
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
@@ -988,19 +992,25 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
         QRect r(crect);
         QRect normalFrameRect( m_doc->zoomRect( *frame ) );
         QRect frameRect( viewMode->normalToView( normalFrameRect ) );
-        //kdDebug(32002) << "                    frame=" << frame << " crect=" << DEBUGRECT(r) << endl;
         r = r.intersect( frameRect );
-        //kdDebug(32002) << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
+#ifdef DEBUG_DRAW
+        kdDebug(32002) << "                    frame=" << frame << " framerect=" << DEBUGRECT(*frame) << endl;
+        kdDebug(32002) << "                    crect=" << DEBUGRECT(crect) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
+#endif
         if ( !r.isEmpty() )
         {
             // This translates the coordinates in the document contents
             // ( frame and r are up to here in this system )
             // into the frame's own coordinate system.
             int offsetX = normalFrameRect.left();
-            int offsetY = normalFrameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
+            double frameTopPt = ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight;
+            int offsetY = normalFrameRect.top() - m_doc->zoomItY( frameTopPt );
 
             QRect fcrect = viewMode->viewToNormal( r );
-            //kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << DEBUGRECT( fcrect )  << endl;
+#ifdef DEBUG_DRAW
+            kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << DEBUGRECT( fcrect ) << "."
+                      << " Will move by (" << -offsetX << ", -(" << normalFrameRect.top() << "-" << m_doc->zoomItY(frameTopPt) << ") == " << -offsetY << ")." << endl;
+#endif
             // y=-1 means all (in QRT), so let's not go there !
             //QPoint tl( QMAX( 0, fcrect.left() - offsetX ), QMAX( 0, fcrect.top() - offsetY ) );
             //fcrect.moveTopLeft( tl );
@@ -1010,8 +1020,9 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
             // fcrect is now the portion of the frame to be drawn,
             // in the frame's coordinates and in pixels
-            //kdDebug() << "KWFrameSet::drawContents in internal coords:" << DEBUGRECT( fcrect ) << endl;
-
+#ifdef DEBUG_DRAW
+            kdDebug() << "KWFrameSet::drawContents in internal coords:" << DEBUGRECT( fcrect ) << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
+#endif
             // The settings come from this frame
             KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
 
@@ -1056,7 +1067,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             lastRealFrame = frame;
             lastRealFrameTop = totalHeight;
         }
-        totalHeight += normalFrameRect.height();
+        totalHeight += frame->height();
     }
     m_currentDrawnCanvas = 0L;
 }

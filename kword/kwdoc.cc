@@ -59,6 +59,7 @@
 
 //#define DEBUG_PAGES
 
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.1";
 
 /******************************************************************/
@@ -1851,7 +1852,6 @@ QDomDocument KWDocument::saveXML()
     kwdoc.setAttribute( "mime", "application/x-kword" );
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
     kwdoc.setAttribute( "syntaxVersion", m_syntaxVersion );
-    doc.appendChild( kwdoc );
 
     QDomElement paper = doc.createElement( "PAPER" );
     kwdoc.appendChild( paper );
@@ -3370,18 +3370,22 @@ QString KWDocument::sectionTitle( int pageNum ) const
     if ( !frameIt.current() )
         return QString::null;
 
-    // Look at all frames in the page, and keep min and max LU positions
-    int topLUpix = frameIt.current()->internalY();
-    int bottomLUpix = topLUpix + ptToLayoutUnitPixY( frameIt.current()->height() );
+    // Look at all frames in the page, and keep min and max "internalY" positions
+    double topPt = frameIt.current()->internalY();
+    double bottomPt = topPt + frameIt.current()->height();
     for ( ; frameIt.current(); ++frameIt )
     {
         if ( frameIt.current()->frameSet() == frameset )
         {
-            int y = frameIt.current()->internalY();
-            topLUpix = QMIN( topLUpix, y );
-            bottomLUpix = QMAX( bottomLUpix, y + ptToLayoutUnitPixY( frameIt.current()->height() ) );
+            double y = frameIt.current()->internalY();
+            topPt = QMIN( topPt, y );
+            bottomPt = QMAX( bottomPt, y + frameIt.current()->height() );
         }
     }
+
+    // Convert to layout units
+    int topLUpix = ptToLayoutUnitPixY( topPt );
+    int bottomLUpix = ptToLayoutUnitPixY( bottomPt );
 
     KoTextParag* parag = frameset->textDocument()->firstParag();
     //kdDebug() << "KWDocument::sectionTitle " << pageNum
