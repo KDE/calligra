@@ -79,7 +79,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      "ringchart");
     m_chartring->setExclusiveGroup( "charttypes" );
     //Laurent for koffice 1.2 change icon
-    m_chartpolar = new KToggleAction( i18n("&Polar"), "ring", 0, this,
+    m_chartpolar = new KToggleAction( i18n("&Polar"), "polar", 0, this,
                                      SLOT( polarChart() ), actionCollection(),
                                      "polarchart");
     m_chartpolar->setExclusiveGroup( "charttypes" );
