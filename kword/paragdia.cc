@@ -584,6 +584,7 @@ void KWIndentSpacingWidget::display( const KWParagLayout & lay )
 
 void KWIndentSpacingWidget::save( KWParagLayout & lay )
 {
+    lay.lineSpacing = lineSpacing();
     lay.margins[QStyleSheetItem::MarginLeft] = leftIndent();
     lay.margins[QStyleSheetItem::MarginRight] = rightIndent();
     lay.margins[QStyleSheetItem::MarginFirstLine] = firstLineIndent();
