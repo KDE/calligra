@@ -1,4 +1,4 @@
-// GENERATED FILE. Do not edit! Generated from kzip.h by update_kzip.sh
+// GENERATED FILE. Do not edit! Generated from kzip.cpp by ./update_kzip.sh
 /* This file is part of the KDE libraries
    Copyright (C) 2002 Holger Schroeder <holger-kde@holgis.net>
 
@@ -31,98 +31,12 @@
 #include <karchive.h>
 #undef private
 #include <karchive.h>
-#include <zlib.h>
 
 class KoZipFileEntry;
-
-// Directly "ported" from the tar stuff to support zip file format.
-
 /**
  * @short A class for reading/writing zip archives.
  * @author Holger Schroeder <holger-kde@holgis.net>
  */
-class KoZipFilter : public QIODevice
-{
-/*
-    this class gives transparent acces to a compressed zip file,
-    dependant on where you start reading in the file,
-    so when extracting the directory structure, it gives back the
-    raw data, but when you read an included file starting on its
-    well-defined startpoint, you will get it extracted.
-    (a bit of a hack, but it should work ;) )
-*/
-
-public:
-    KoZipFilter(const QString& filename);
-    KoZipFilter(QIODevice * dev);
-
-    bool open(int);
-    void close();
-    void flush();
-    Offset size() const;
-    Q_LONG readBlock(char *, long unsigned int);
-    Q_LONG writeBlock(const char *, long unsigned int);
-    int getch();
-    int putch(int);
-    int ungetch(int);
-    Offset at () const;
-//    Q_LONG getpos () const;
-
-    bool at ( Offset pos );
-    bool atEnd () const;
-
-    bool setEntry(Q_LONG start, int encoding,Q_LONG csize);
-    uLong getcrc() {return crc; }
-    void setcrc(uLong _crc) { crc= _crc; }
-
-private:
-    typedef QValueList<KoZipFileEntry> KoZipFileList;
-    QIODevice * dev;
-    KoZipFileList list;
-//    Q_LONG m_pos;
-    uLong crc;
-};
-
-class KoZipFileEntry
-{
-public:
-    KoZipFileEntry() : st(-1)
-    {}
-    KoZipFileEntry(Q_LONG start, int encoding, Q_LONG csize) :
-		st(start) , enc(encoding) , cs(csize)
-    {}
-    Q_LONG start() const {return st; }
-    int encoding() const {return enc; }
-    Q_LONG csize() const {return cs; }
-    uLong crc32() const {return crc; }
-
-    QString filename() const {return fn; }
-    Q_LONG usize() const {return us; }
-    Q_LONG headerstart() const {return hst; }
-
-    void setStart(Q_LONG start) { st=start; }
-    void setEncoding(int encoding) { enc=encoding; }
-    void setCSize(Q_LONG csize) { cs=csize; }
-    void setCRC32(uLong crc32) {crc=crc32; }
-
-    void setFilename(QString filename) { fn=filename; }
-    void setUSize(Q_LONG usize) { us=usize; }
-    void setHeaderStart(Q_LONG headerstart) { hst=headerstart; }
-
-private:
-    Q_LONG st;
-    int enc;
-    Q_LONG cs;
-    uLong crc;
-
-    QString fn;
-    Q_LONG us;
-    Q_LONG hst;
-
-};
-
-
-
 class KoZip : public KArchive
 {
 public:
@@ -130,15 +44,9 @@ public:
      * Creates an instance that operates on the given filename.
      * using the compression filter associated to given mimetype.
      *
-     * @param filename is a local path (e.g. "/home/weis/myfile.zip")
-     * @param mimetype Only "application/x-zip" is supported by KoZip.
-     * If the mimetype is ommitted, it will be determined from the filename.
-     * If something else than application/x-zip is found, the resulting KoZip will be invalid.
-     * In summary, if you know for sure that the file is a zip file, you will
-     * save time by passing application/x-zip as parameter. Otherwise, let KoZip
-     * check the file.
+     * @param filename is a local path (e.g. "/home/holger/myfile.zip")
      */
-    KoZip( const QString& filename, const QString & mimetype = QString::null );
+    KoZip( const QString& filename );
 
     /**
      * Creates an instance that operates on the given device.
@@ -160,21 +68,21 @@ public:
      */
     QString fileName() { return m_filename; }
 
-    /**
-     * Special function for setting the "original file name" in the gzip header,
-     * when writing a tar.gz file. It appears when using in the "file" command,
-     * for instance. Should only be called if the underlying device is a KFilterDev!
-     *
-     * FIXME: useful for zip ?
-     */
-    void setOrigFileName( const QCString & fileName );
+    //void setOrigFileName( const QCString & fileName );
 
     /**
-     * @internal Not needed for zip
+     * If an archive is opened for writing then you can add a new file
+     * using this function.
+     * This method takes the whole data at once.
+     * @param name can include subdirs e.g. path/to/the/file
      */
-    virtual bool writeDir( const QString&, const QString&, const QString& ) { return true; }
+    virtual bool writeFile( const QString& name, const QString& user, const QString& group, uint size, const char* data );
 
+    /**
+     * Alternative method: call prepareWriting, writeData in small chunks, doneWriting
+     */
     virtual bool prepareWriting( const QString& name, const QString& user, const QString& group, uint size );
+    bool writeData( const char* data, uint size );
     virtual bool doneWriting( uint size );
     virtual void close(); // HACK for misplaced closeArchive() call in KDE-3.0s KArchive
     virtual bool closeArchive() { return true; } // part of the same hack
@@ -189,30 +97,78 @@ protected:
     virtual bool openArchive( int mode );
     virtual bool closeArchiveHack();
 
-private:
     /**
-     * @internal
+     * @internal Not needed for zip
      */
-    void prepareDevice( const QString & filename, const QString & mimetype, bool forced = false );
+    virtual bool writeDir( const QString&, const QString&, const QString& ) { return true; }
 
-    /**
-     * @internal
-     * Fills @p buffer for writing a file as required by the tar format
-     * Has to be called LAST, since it does the checksum
-     * (normally, only the name has to be filled in before)
-     * @param mode is expected to be 6 chars long, [uname and gname 31].
-     */
-    void fillBuffer( char * buffer, const char * mode, int size, char typeflag, const char * uname, const char * gname );
-
-    QString m_filename;
 protected:
     virtual void virtual_hook( int id, void* data );
 private:
+    QString m_filename;
     class KoZipPrivate;
     KoZipPrivate * d;
-    typedef QValueList<KoZipFileEntry> KoZipFileList;
-    KoZipFileList list;
-    KoZipFileList::iterator actualFile;
+};
+
+
+/**
+ * @internal
+ */
+class KoZipFileEntry : public KArchiveFile
+{
+public:
+    /*KoZipFileEntry() : st(-1)
+      {}*/
+    KoZipFileEntry( KoZip* zip, const QString& name, int access, int date,
+                   const QString& user, const QString& group, const QString& symlink,
+                   const QString& path, Q_LONG start, Q_LONG uncompressedSize,
+                   int encoding, Q_LONG compressedSize) :
+        KArchiveFile( zip, name, access, date, user, group, symlink,
+                      start, uncompressedSize ),
+        m_crc(0),
+        m_compressedSize(compressedSize),
+        m_headerStart(0),
+        m_encoding(encoding),
+        m_path( path )
+    {}
+    int encoding() const { return m_encoding; }
+    Q_LONG compressedSize() const { return m_compressedSize; }
+
+    // Only used when writing
+    void setCompressedSize(Q_LONG compressedSize) { m_compressedSize = compressedSize; }
+
+    // Header start: only used when writing
+    void setHeaderStart(Q_LONG headerstart) { m_headerStart = headerstart; }
+    Q_LONG headerStart() const {return m_headerStart; }
+
+    // CRC: only used when writing
+    unsigned long crc32() const { return m_crc; }
+    void setCRC32(unsigned long crc32) { m_crc=crc32; }
+
+    // Name with complete path - KArchiveFile::name() is the filename only (no path)
+    QString path() const { return m_path; }
+
+    /**
+     * @return the content of this file.
+     * Call data() with care (only once per file), this data isn't cached.
+     */
+    virtual QByteArray data() const;
+
+    /**
+     * This method returns a QIODevice to read the file contents.
+     * This is obviously for reading only.
+     * Note that the ownership of the device is being transferred to the caller,
+     * who will have to delete it.
+     * The returned device auto-opens (in readonly mode), no need to open it.
+     */
+    QIODevice* device() const; // WARNING, not virtual!
+
+private:
+    unsigned long m_crc;
+    Q_LONG m_compressedSize;
+    Q_LONG m_headerStart;
+    int m_encoding;
+    QString m_path;
 };
 
 #endif

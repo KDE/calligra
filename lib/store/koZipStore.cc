@@ -27,12 +27,12 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & 
     kdDebug(s_area) << "KoZipStore Constructor filename = " << _filename
                     << " mode = " << int(_mode) << endl;
 
-    m_pZip = new KoZip( _filename, "application/x-zip" );
+    m_pZip = new KoZip( _filename );
 
     m_bGood = init( _mode ); // open the zip file and init some vars
 
-    if ( m_bGood && _mode == Write )
-        m_pZip->setOrigFileName( appIdentification );
+    //if ( m_bGood && _mode == Write )
+    //    m_pZip->setOrigFileName( appIdentification );
 }
 
 KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
@@ -41,8 +41,8 @@ KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentific
 
     m_bGood = init( mode );
 
-    if ( m_bGood && mode == Write )
-        m_pZip->setOrigFileName( appIdentification );
+    //if ( m_bGood && mode == Write )
+    //    m_pZip->setOrigFileName( appIdentification );
 }
 
 KoZipStore::~KoZipStore()

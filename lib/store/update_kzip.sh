@@ -1,11 +1,22 @@
 #!/bin/sh
-echo "// GENERATED FILE. Do not edit! Generated from kzip.cpp by $0" > kozip.cpp
+header="// GENERATED FILE. Do not edit! Generated from kzip.cpp by $0"
+echo "$header" > kozip.cpp
 cat ../../../kdelibs/kio/kio/kzip.cpp >> kozip.cpp || exit 1
-echo "// GENERATED FILE. Do not edit! Generated from kzip.h by $0" > kozip.h
+echo "$header" > kozip.h
 cat ../../../kdelibs/kio/kio/kzip.h >> kozip.h || exit 1
+echo "$header" > kofilterdev.cpp
+cat ../../../kdelibs/kio/kio/kfilterdev.cpp >> kofilterdev.cpp || exit 1
+echo "$header" > kofilterdev.h
+cat ../../../kdelibs/kio/kio/kfilterdev.h >> kofilterdev.h || exit 1
+echo "$header" > kolimitediodevice.h
+cat ../../../kdelibs/kio/kio/klimitediodevice.h >> kolimitediodevice.h || exit 1
 
 perl -pi -e 's/KZip/KoZip/g' kozip.cpp kozip.h
 perl -pi -e 's/kzip\.h/kozip\.h/' kozip.cpp
+perl -pi -e 's/KFilterDev/KoFilterDev/g' kofilterdev.cpp kofilterdev.h kozip.cpp
+perl -pi -e 's/kfilterdev\.h/kofilterdev\.h/' kofilterdev.cpp kozip.cpp
+perl -pi -e 's/KLimitedIODevice/KoLimitedIODevice/g' kolimitediodevice.h kozip.cpp
+perl -pi -e 's/klimitediodevice\.h/kolimitediodevice\.h/g' kozip.cpp
 
 perl -pi -e 's/closeArchive/closeArchiveHack/' kozip.cpp kozip.h
 perl -pi -e 'if (/.include .karchive\.h./) { print "\#define private protected // for m_open access for the HACK\n$_\#undef private\n"; }' kozip.h
