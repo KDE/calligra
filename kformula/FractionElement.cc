@@ -19,7 +19,7 @@ FractionElement::FractionElement(FormulaClass *Formula,BasicElement *Prev=0L,int
   /*
     Central alligned fraction
   */
-  content="FMCC5";
+  content="FMC5";
   childrenNumber=2;
   child.resize(childrenNumber);
 }
@@ -37,7 +37,7 @@ void FractionElement::draw(QPoint drawPoint,int resolution=72)
   int x,y; 
   x=drawPoint.x();
   y=drawPoint.y();
-  int space=atoi(content.right(content.length()-4));
+  int space=atoi(content.right(content.length()-3));
   warning("Sapce %i",space);
   space+=numericFont/32;
   
@@ -48,7 +48,7 @@ void FractionElement::draw(QPoint drawPoint,int resolution=72)
   int ofs=(numericFont/32); 
   warning("Array");
   
-if (content[0]='F') {
+if (content[0]=='F') {
   QPointArray points(5);  
   points.setPoint(1,x+familySize.x()+1,y+offsetY-ofs/2);
   points.setPoint(2,x+familySize.right()-2,y+offsetY-ofs/2);
@@ -68,8 +68,8 @@ if (content[0]='F') {
   if(offsetX>0) x0=offsetX;
   if(offsetX<0) x1=-offsetX; 
 
-  child[0]->draw(QPoint(x+x0+1,y+y0),resolution);
-  child[1]->draw(QPoint(x+x1+1,y+y1),resolution);
+  child[0]->draw(QPoint(x+x0+2,y+y0),resolution);
+  child[1]->draw(QPoint(x+x1+2,y+y1),resolution);
   myArea=globalSize;
   myArea.moveBy(x,y);
 
@@ -98,7 +98,7 @@ if (next!=0L)
 }
  child[0]->checkSize();
  child[1]->checkSize();
- int space=atoi(content.right(content.length()-4));
+ int space=atoi(content.right(content.length()-3));
  warning("Space %i",space);
  space+=numericFont/32;
  QRect child0Size=child[0]->getSize();
@@ -106,7 +106,7 @@ if (next!=0L)
  if(content[1]=='U')
    offsetY=child0Size.bottom()+space/2;
  if(content[1]=='D')
-   offsetY=child0Size.top()-space/2;
+   offsetY=child1Size.top()-space/2;
  if(content[1]=='M')
    offsetY=0;
  offsetX=child1Size.width()-child0Size.width();

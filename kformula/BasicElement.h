@@ -141,6 +141,7 @@ class BasicElement
    */ 
   QColor *getColor() { return defaultColor; }
   
+  QString getContent() {return content;}  
   /*
    * Various SetFunction
    */  
