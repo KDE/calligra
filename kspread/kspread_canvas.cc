@@ -1755,6 +1755,8 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 {
   m_bResize = FALSE;
   m_bSelection = FALSE;
+  if(!m_pView->koDocument()->isReadWrite()) 
+	return;
 
   KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
@@ -1813,6 +1815,8 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
+  if(!m_pView->koDocument()->isReadWrite()) 
+	return;
 
   if ( m_bResize )
   {
@@ -1898,6 +1902,8 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
+  if(!m_pView->koDocument()->isReadWrite()) 
+	return;
 
   // The button is pressed and we are resizing ?
   if ( m_bResize )
@@ -2054,6 +2060,8 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
+  if(!m_pView->koDocument()->isReadWrite()) 
+	return;
 
   m_bResize = FALSE;
   m_bSelection = FALSE;
@@ -2106,6 +2114,8 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
+  if(!m_pView->koDocument()->isReadWrite()) 
+	return;
 
   if ( m_bResize )
   {
@@ -2193,6 +2203,8 @@ void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * _ev )
 {
 	KSpreadTable *table = m_pCanvas->activeTable();
 	assert( table );
+	if(!m_pView->koDocument()->isReadWrite()) 
+		return;
 
 	int x = 0;
 	int col = table->leftColumn( 0, x, m_pCanvas );
@@ -2221,6 +2233,8 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
+  if(!m_pView->koDocument()->isReadWrite()) 
+	return;
 
   if ( m_bResize )
   {

@@ -1894,6 +1894,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 {
     assert( m_pTable );
 
+
     if ( m_pPopupMenu != 0L )
 	delete m_pPopupMenu;
 
@@ -1930,7 +1931,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-    if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty() )
+    if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()&& koDocument()->isReadWrite() )
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;

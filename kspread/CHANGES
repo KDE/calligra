@@ -341,3 +341,8 @@ Now I use knumvalidator for QLineEdit
 -Bug fix . Fix bug that Michael Koch reported me in kspread_dlg_formula
   centered border on cell grid ..
 -Bug fix in KSpread_dlg_conditional.
+
+2000-03-04 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Improved ReadWrite => when you load in konqueror a kspread file
+you can't resize column or row, you can't rename table etc...

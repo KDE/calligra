@@ -369,7 +369,9 @@ void KSpreadTabBar::renameTab()
 {
     QString activeName;
     QString newName;
-
+    if ( !m_pView->koDocument()->isReadWrite() )
+	  return;
+    	
     KSpreadTable* table = m_pView->activeTable();
     activeName = table->tableName();
 
