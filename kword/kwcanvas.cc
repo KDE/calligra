@@ -1359,7 +1359,7 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
     for ( unsigned int i = 0; i < m_table.rows; i++ ) {
         for ( unsigned int j = 0; j < m_table.cols; j++ ) {
             KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j, QString::null /*automatic name*/ );
-            KWFrame *frame = new KWFrame(cell, 0, 0, 0, 0, KWFrame::RA_NO ); // pos and size will be set in setBoundingRect
+            KWFrame *frame = new KWFrame(cell, 0, 0, 0, 0, KWFrame::RA_BOUNDINGRECT ); // pos and size will be set in setBoundingRect
             frame->setZOrder( m_doc->maxZOrder( pageNum ) + 1 ); // make sure it's on top
             cell->addFrame( frame, false );
             frame->setFrameBehavior(KWFrame::AutoExtendFrame);
