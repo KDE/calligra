@@ -2802,7 +2802,8 @@ void KPresenterDoc::updateHelpLineButton()
 void KPresenterDoc::loadHelpLines( const QDomElement &element )
 {
     QDomElement helplines=element.firstChild().toElement();
-    int i=0;
+    helplines=helplines.namedItem("HELPLINES").toElement();
+
     while ( !helplines.isNull() ) {
         if ( helplines.tagName()=="Vertical" )
         {
@@ -2820,10 +2821,11 @@ void KPresenterDoc::loadHelpLines( const QDomElement &element )
 QDomElement KPresenterDoc::saveHelpLines( QDomDocument &doc )
 {
     QDomElement helplines=doc.createElement("HELPLINES");
+
     for(QValueList<double>::Iterator it = m_vertHelplines.begin(); it != m_vertHelplines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Vertical");
-        lines.setAttribute("value", *it);
+        lines.setAttribute("value", (double)*it);
         helplines.appendChild( lines );
     }
 

@@ -623,10 +623,17 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     }
                     else {
                         modType = MT_NONE;
+                        m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()));
+                        m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()));
+
                         if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                             deSelectAllObj();
-                        drawRubber = true;
-                        rubber = QRect( e->x(), e->y(), 0, 0 );
+                        if (m_tmpHorizHelpline == -1 && m_tmpVertHelpline ==-1)
+                        {
+                            drawRubber = true;
+                            rubber = QRect( e->x(), e->y(), 0, 0 );
+                        }
+
                     }
 
 		    // update hotspot
@@ -1277,12 +1284,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
                 }
 	    }
-            if( m_view->kPresenterDoc()->indexOfHorizHelpline(e->pos().y())!=-1)
+            if( m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()))!=-1)
             {
                 setCursor ( Qt::sizeVerCursor );
                 cursorAlreadySet = true;
             }
-            else if ( m_view->kPresenterDoc()->indexOfVertHelpline(e->pos().x())!=-1)
+            else if ( m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()))!=-1)
             {
                 setCursor ( Qt::sizeHorCursor );
                 cursorAlreadySet = true;
@@ -1308,7 +1315,11 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		oldMy = ( oldMy / rastY() ) * rastY();
 
 		if ( modType == MT_NONE ) {
-		    if ( drawRubber ) {
+                    if ( m_tmpVertHelpline !=-1 || m_tmpHorizHelpline !=-1)
+                    {
+                        //drawline
+                    }
+		    else if ( drawRubber ) {
 			QPainter p;
 			p.begin( this );
 			p.setRasterOp( NotROP );
@@ -5754,7 +5765,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     KoRect page=m_activePage->getPageRect();
     KPObject *kpobject=resizeObjNum;
 
-    KoSize objSize = kpobject->getSize(); 
+    KoSize objSize = kpobject->getSize();
     KoRect objRect=kpobject->getBoundingRect(m_view->zoomHandler());
     KoRect pageRect=m_activePage->getPageRect();
     KoPoint point=objRect.topLeft();
