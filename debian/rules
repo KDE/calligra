@@ -52,6 +52,7 @@ binary-arch: build
 	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp/
 	perl -w admin/debianrules
 	dh_movefiles -pkoffice-dev-cvs $(kde_libdir)/lib*.so $(kde_libdir)/lib*.a $(kde_libdir)/lib*.la  $(kde_includedir)
+	-mv `find debian/koffice-dev-cvs/$(kde_libdir) -type f -name "*.so"` debian/tmp/$(kde_libdir)/
 	dh_undocumented
 	dh_installdocs
 	dh_installmenu
