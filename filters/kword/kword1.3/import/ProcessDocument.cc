@@ -117,7 +117,7 @@ void ProcessDocumentInfoTag ( QDomNode         myNode,
     KWEFDocumentInfo docInfo;
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "log",    NULL,             NULL              ) );
+    tagProcessingList.append ( TagProcessing ( "log" ) );
     tagProcessingList.append ( TagProcessing ( "author", ProcessAuthorTag, &docInfo ) );
     tagProcessingList.append ( TagProcessing ( "about",  ProcessAboutTag,  &docInfo ) );
     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -284,8 +284,8 @@ static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     text->strikeoutWord = false;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ("value" , "QString", (void *) &type );
-    attrProcessingList << AttrProcessing ("styleline" , "QString", (void *) &linestyle );
+    attrProcessingList << AttrProcessing ("value" , "QString",  &type );
+    attrProcessingList << AttrProcessing ("styleline" , "QString",  &linestyle );
     attrProcessingList << AttrProcessing ( "wordbyword", text->strikeoutWord );
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -313,8 +313,8 @@ void ProcessAnchorTag ( QDomNode       myNode,
     QString type;
     *instance = QString::null;
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "type",     "QString", (void *) &type    )
-                       << AttrProcessing ( "instance", "QString", (void *) instance );
+    attrProcessingList << AttrProcessing ( "type",     "QString",  &type    )
+                       << AttrProcessing ( "instance", "QString",  instance );
     ProcessAttributes (myNode, attrProcessingList);
 
     if ( type != "frameset" )
@@ -450,10 +450,10 @@ static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader*
     tagProcessingList
         << TagProcessing ( "TYPE",          ProcessTypeTag,         variable )
         << TagProcessing ( "PGNUM",         ProcessPgNumTag,        variable )
-        << TagProcessing ( "DATE",          NULL,                   NULL     )
-        << TagProcessing ( "TIME",          NULL,                   NULL     )
-        << TagProcessing ( "CUSTOM",        NULL,                   NULL     )
-        << TagProcessing ( "SERIALLETTER",  NULL,                   NULL     )
+        << TagProcessing ( "DATE" )
+        << TagProcessing ( "TIME" )
+        << TagProcessing ( "CUSTOM" )
+        << TagProcessing ( "SERIALLETTER" )
         << TagProcessing ( "FIELD",         ProcessFieldTag,        variable )
         << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
         << TagProcessing ( "NOTE",          ProcessNoteTag,         variable )
@@ -473,16 +473,16 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "UNDERLINE",           ProcessUnderlineTag,    &formatData.text                   )
         << TagProcessing ( "STRIKEOUT",           ProcessStrikeoutTag,    &formatData.text                   )
         << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
-        << TagProcessing ( "SHADOW",              NULL,                   NULL                               )
+        << TagProcessing ( "SHADOW" )
         << TagProcessing ( "FONTATTRIBUTE",       ProcessStringValueTag,  &formatData.text.fontAttribute     )
         << TagProcessing ( "LANGUAGE",            ProcessStringValueTag,  &formatData.text.language          )
-        << TagProcessing ( "ANCHOR",              NULL,                   NULL                               )
-        << TagProcessing ( "IMAGE",               NULL,                   NULL                               )
-        << TagProcessing ( "PICTURE",             NULL,                   NULL                               )
-        << TagProcessing ( "VARIABLE",            NULL,                   NULL                               )
+        << TagProcessing ( "ANCHOR" )
+        << TagProcessing ( "IMAGE" )
+        << TagProcessing ( "PICTURE" )
+        << TagProcessing ( "VARIABLE" )
         << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )
-        << TagProcessing ( "OFFSETFROMBASELINE",  NULL,                   NULL                               )
-        << TagProcessing ( "CHARSET",             0L,                     0L                                 )
+        << TagProcessing ( "OFFSETFROMBASELINE" )
+        << TagProcessing ( "CHARSET" )
         ;
 }
 
@@ -601,8 +601,8 @@ static void SubProcessFormatSixTag(QDomNode myNode,
         // TODO: We can have all layout information as in regular texts
         //       They simply apply to the table frames
         //       FONT is just the first that we've come across so far
-        tagProcessingList << TagProcessing ( "FONT",   NULL,             NULL               )
-                            << TagProcessing ( "ANCHOR", ProcessAnchorTag, (void *) &instance );
+        tagProcessingList << TagProcessing ( "FONT" )
+                            << TagProcessing ( "ANCHOR", ProcessAnchorTag,  &instance );
         ProcessSubtags (myNode, tagProcessingList, leader);
 #if 0
         kdDebug (30508) << "DEBUG: Adding frame anchor " << instance << endl;
@@ -624,9 +624,9 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
     int formatLen = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "id",  "int", (void *) &formatId  );
-    attrProcessingList << AttrProcessing ( "pos", "int", (void *) &formatPos );
-    attrProcessingList << AttrProcessing ( "len", "int", (void *) &formatLen );
+    attrProcessingList << AttrProcessing ( "id",  "int",  &formatId  );
+    attrProcessingList << AttrProcessing ( "pos", "int",  &formatPos );
+    attrProcessingList << AttrProcessing ( "len", "int",  &formatLen );
     ProcessAttributes (myNode, attrProcessingList);
 
     if ( ( formatId == -1 ) && ( leader->m_oldSyntax ) )
@@ -684,7 +684,7 @@ void ProcessFormatsTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader
 
     (*formatDataList).clear ();
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "FORMAT", ProcessFormatTag, (void *) formatDataList );
+    tagProcessingList << TagProcessing ( "FORMAT", ProcessFormatTag,  formatDataList );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
@@ -697,18 +697,18 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
     CounterData *counter = (CounterData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "type",            "int",     (void *) &counter->style           );
-    attrProcessingList << AttrProcessing ( "depth",           "int",     (void *) &counter->depth           );
-    attrProcessingList << AttrProcessing ( "bullet",          "int",     (void *) &counter->customCharacter );
-    attrProcessingList << AttrProcessing ( "start",           "int",     (void *) &counter->start           );
-    attrProcessingList << AttrProcessing ( "numberingtype",   "int",     (void *) &counter->numbering       );
-    attrProcessingList << AttrProcessing ( "lefttext",        "QString", (void *) &counter->lefttext        );
-    attrProcessingList << AttrProcessing ( "righttext",       "QString", (void *) &counter->righttext       );
-    attrProcessingList << AttrProcessing ( "bulletfont",      "QString", (void *) &counter->customFont      );
-    attrProcessingList << AttrProcessing ( "customdef",       "",        (void *) NULL                      );
-    attrProcessingList << AttrProcessing ( "text",            "QString", (void *) &counter->text            );
-    attrProcessingList << AttrProcessing ( "display-levels",  "",                 NULL                      );
-    attrProcessingList << AttrProcessing ( "align",           "",                 NULL                      );
+    attrProcessingList << AttrProcessing ( "type",            "int",      &counter->style           );
+    attrProcessingList << AttrProcessing ( "depth",           "int",      &counter->depth           );
+    attrProcessingList << AttrProcessing ( "bullet",          "int",      &counter->customCharacter );
+    attrProcessingList << AttrProcessing ( "start",           "int",      &counter->start           );
+    attrProcessingList << AttrProcessing ( "numberingtype",   "int",      &counter->numbering       );
+    attrProcessingList << AttrProcessing ( "lefttext",        "QString",  &counter->lefttext        );
+    attrProcessingList << AttrProcessing ( "righttext",       "QString",  &counter->righttext       );
+    attrProcessingList << AttrProcessing ( "bulletfont",      "QString",  &counter->customFont      );
+    attrProcessingList << AttrProcessing ( "customdef" );
+    attrProcessingList << AttrProcessing ( "text",            "QString",  &counter->text            );
+    attrProcessingList << AttrProcessing ( "display-levels" );
+    attrProcessingList << AttrProcessing ( "align" );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
@@ -728,7 +728,7 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
         << AttrProcessing ( "type",      "int",    &tabulator.m_type    )
         << AttrProcessing ( "filling",   "int",    &tabulator.m_filling )
         << AttrProcessing ( "width",     "double", &tabulator.m_width   )
-        << AttrProcessing ( "alignchar", "",       0 )
+        << AttrProcessing ( "alignchar" )
         ;
 
     if ( leader->m_oldSyntax )
@@ -752,9 +752,9 @@ static void ProcessIndentsTag (QDomNode myNode, void *tagData, KWEFKWordLeader *
     LayoutData *layout = (LayoutData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ("first" , "double", (void *) &layout->indentFirst );
-    attrProcessingList << AttrProcessing ("left"  , "double", (void *) &layout->indentLeft  );
-    attrProcessingList << AttrProcessing ("right" , "double", (void *) &layout->indentRight );
+    attrProcessingList << AttrProcessing ("first" , "double",  &layout->indentFirst );
+    attrProcessingList << AttrProcessing ("left"  , "double",  &layout->indentLeft  );
+    attrProcessingList << AttrProcessing ("right" , "double",  &layout->indentRight );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
@@ -766,8 +766,8 @@ static void ProcessLayoutOffsetTag ( QDomNode myNode, void *tagData, KWEFKWordLe
     LayoutData *layout = (LayoutData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ("after" ,  "double", (void *) &layout->marginBottom );
-    attrProcessingList << AttrProcessing ("before" , "double", (void *) &layout->marginTop    );
+    attrProcessingList << AttrProcessing ("after" ,  "double",  &layout->marginBottom );
+    attrProcessingList << AttrProcessing ("before" , "double",  &layout->marginTop    );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
@@ -923,16 +923,16 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "NAME",         ProcessStringValueTag,       &layout->styleName           );
     tagProcessingList << TagProcessing ( "FOLLOWING",    ProcessFollowingTag,         &layout->styleFollowing      );
-    tagProcessingList << TagProcessing ( "INDENTS",      ProcessIndentsTag,           (void *) layout              );
-    tagProcessingList << TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,      (void *) layout              );
-    tagProcessingList << TagProcessing ( "LINESPACING",  ProcessLinespacingTag,       (void *) layout              );
-    tagProcessingList << TagProcessing ( "PAGEBREAKING", ProcessLineBreakingTag,      (void *) layout              );
+    tagProcessingList << TagProcessing ( "INDENTS",      ProcessIndentsTag,           layout              );
+    tagProcessingList << TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,      layout              );
+    tagProcessingList << TagProcessing ( "LINESPACING",  ProcessLinespacingTag,       layout              );
+    tagProcessingList << TagProcessing ( "PAGEBREAKING", ProcessLineBreakingTag,      layout              );
     tagProcessingList << TagProcessing ( "LEFTBORDER",   ProcessAnyBorderTag,         &layout->leftBorder          );
     tagProcessingList << TagProcessing ( "RIGHTBORDER",  ProcessAnyBorderTag,         &layout->rightBorder         );
     tagProcessingList << TagProcessing ( "TOPBORDER",    ProcessAnyBorderTag,         &layout->topBorder           );
     tagProcessingList << TagProcessing ( "BOTTOMBORDER", ProcessAnyBorderTag,         &layout->bottomBorder        );
-    tagProcessingList << TagProcessing ( "COUNTER",      ProcessCounterTag,           (void *) &layout->counter    );
-    tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            (void *) &formatDataList     );
+    tagProcessingList << TagProcessing ( "COUNTER",      ProcessCounterTag,           &layout->counter    );
+    tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            &formatDataList     );
     tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   &layout->tabulatorList       );
     tagProcessingList << TagProcessing ( "SHADOW",       ProcessShadowTag,            layout                       );
 
@@ -1014,7 +1014,7 @@ void ProcessImageTag ( QDomNode myNode,
     void *tagData, KWEFKWordLeader *leader )
 { // <PICTURE>
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
+    attrProcessingList << AttrProcessing ( "keepAspectRatio" );
     ProcessAttributes (myNode, attrProcessingList);
 
     QValueList<TagProcessing> tagProcessingList;

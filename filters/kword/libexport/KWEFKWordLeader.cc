@@ -714,11 +714,11 @@ static void ProcessFootnoteFramesetTag ( QDomNode myNode, void *tagData, KWEFKWo
         << AttrProcessing ( "frameInfo",   "int",      &frameInfo )
         << AttrProcessing ( "removable" )
         << AttrProcessing ( "visible",     "bool",     &visible )
-        << AttrProcessing ( "grpMgr",      "QString", NULL    )
-        << AttrProcessing ( "row",         "int",     NULL    )
-        << AttrProcessing ( "col",         "int",     NULL    )
-        << AttrProcessing ( "rows",        "int",     NULL    )
-        << AttrProcessing ( "cols",        "int",     NULL    )
+        << AttrProcessing ( "grpMgr" )
+        << AttrProcessing ( "row" )
+        << AttrProcessing ( "col" )
+        << AttrProcessing ( "rows" )
+        << AttrProcessing ( "cols" )
         << AttrProcessing ( "protectSize" )
         ;
     ProcessAttributes (myNode, attrProcessingList);
