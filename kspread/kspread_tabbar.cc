@@ -108,7 +108,7 @@ void TabBarPrivate::layoutTabs()
       if( c >= leftTab-1 )
       {
           QString text = visibleTabs[ c ];
-          int tw = fm.width( text ) + 10;
+          int tw = fm.width( text ) + 4;
           rect = QRect( x, 0, tw + 20, tabbar->height() );
 
           x = x + tw + 10;
