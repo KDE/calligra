@@ -17,7 +17,7 @@
 
 
 /** Constructor */
-MReportViewer::MReportViewer(QWidget *parent, const char *name ) : QWidget(parent,name) {
+MReportViewer::MReportViewer(QWidget *parent, const char *name ) : QWidget(parent,name),progress(0) {
 	// Create the scrollview
   scroller = new QScrollView(this);
 
@@ -294,8 +294,6 @@ void MReportViewer::slotCancelPrinting(){
 
 /** Updates rendering progress */
 void MReportViewer::slotRenderProgress(int p){
-	static QProgressDialog* progress;
-	static int totalSteps;
 
 	// Check if the dialog was created
 	if (progress == 0){
@@ -317,7 +315,10 @@ void MReportViewer::slotRenderProgress(int p){
 
 	// Cleanup dialog if necessary
 	if (progress->progress() == -1)
+	{
 		delete progress;
+		progress=0;
+	}
 }
 
 

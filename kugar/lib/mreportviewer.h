@@ -74,6 +74,10 @@ protected:
 	MReportEngine *rptEngine;
 	MPageCollection *report;
 	QPrinter *printer;
+
+private:
+        QProgressDialog* progress;
+        int totalSteps;
 };
 
 #endif
