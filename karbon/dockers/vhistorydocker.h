@@ -21,7 +21,7 @@
 #ifndef __VHISTORYDOCKER_H__
 #define __VHISTORYDOCKER_H__
 
-#include <qlistview.h>
+#include <qlistbox.h>
 
 #include "vcommand.h"
 #include "vdocker.h"

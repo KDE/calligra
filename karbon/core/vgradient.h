@@ -20,8 +20,6 @@
 #ifndef __VGRADIENT_H__
 #define __VGRADIENT_H__
 
-#include <qpixmap.h>
-#include <qlistbox.h>
 #include <qptrlist.h>
 #include <qptrvector.h>
 #include <koPoint.h>
@@ -115,30 +113,5 @@ private:
 	KoPoint m_origin;
 	KoPoint m_vector;
 }; // VGradient
-
-class VGradientListItem : public QListBoxItem
-{
-	public:
-		VGradientListItem( const VGradient& gradient, QString filename );
-		VGradientListItem( const VGradientListItem& );
-		~VGradientListItem();
-
-		QPixmap& pixmap() { return m_pixmap; }
-		const VGradient* gradient() const { return m_gradient; }
-		QString filename() { return m_filename; }
-		bool canDelete() { return m_delete; }
-
-		virtual int height( const QListBox* ) const { return 16; }
-		virtual int width( const QListBox* lb ) const;
-
-	protected:
-		virtual void paint( QPainter* p );
-
-	private:
-		VGradient* m_gradient;
-		QPixmap    m_pixmap;
-		QString    m_filename;
-		bool       m_delete;
-}; // VGradientListItem
 
 #endif /* __VGRADIENT_H__ */

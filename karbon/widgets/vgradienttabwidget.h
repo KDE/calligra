@@ -23,16 +23,42 @@
 
 #include <qwidget.h>
 #include <qtabwidget.h>
+#include <qlistbox.h>
 
 #include "vgradient.h"
 
 class KComboBox;
 class VGradientWidget;
 class KListBox;
-class QListBoxItem;
 class QPushButton;
 class QGroupBox;
 class KarbonResourceServer;
+
+
+class VGradientListItem : public QListBoxItem
+{
+public:
+	VGradientListItem( const VGradient& gradient, QString filename );
+	VGradientListItem( const VGradientListItem& );
+	~VGradientListItem();
+
+	QPixmap& pixmap() { return m_pixmap; }
+	const VGradient* gradient() const { return m_gradient; }
+	QString filename() { return m_filename; }
+	bool canDelete() { return m_delete; }
+
+	virtual int height( const QListBox* ) const { return 16; }
+	virtual int width( const QListBox* lb ) const;
+
+protected:
+	virtual void paint( QPainter* p );
+
+private:
+	VGradient	*m_gradient;
+	QPixmap		m_pixmap;
+	QString		m_filename;
+	bool		m_delete;
+}; // VGradientListItem
 
 class VGradientPreview : public QWidget
 {

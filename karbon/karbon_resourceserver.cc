@@ -33,6 +33,7 @@
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
 #include "vgradient.h"
+#include "vgradienttabwidget.h"
 #include "vobject.h"
 #include "vcomposite.h"
 #include "vgroup.h"
@@ -41,7 +42,7 @@ KarbonResourceServer::KarbonResourceServer()
 {
 	kdDebug() << "-- Karbon ResourceServer --" << endl;
 		
-		// PATTERNS  
+	// PATTERNS  
 	kdDebug() << "Loading patterns:" << endl;
 	m_patterns.setAutoDelete(true);
 
@@ -94,7 +95,7 @@ KarbonResourceServer::KarbonResourceServer()
 	}
 	kdDebug() << m_gradients->count() << " gradients loaded." << endl;
 	
-		// CLIPARTS
+	// CLIPARTS
 	kdDebug() << "Loading cliparts:" << endl;
 	m_cliparts = new QPtrList<VClipartIconItem>();
 	m_cliparts->setAutoDelete( true );
@@ -164,7 +165,7 @@ VGradientListItem* KarbonResourceServer::addGradient( VGradient* gradient )
 	saveGradient( gradient, filename );
 
 	m_gradients->append( new VGradientListItem( *gradient, filename ) );
-	
+
 	return m_gradients->last();
 } // KarbonResourceServer::addGradient
 

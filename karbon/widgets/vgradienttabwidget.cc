@@ -34,6 +34,7 @@
 #include <qpushbutton.h>
 #include <qdom.h>    
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qpixmap.h>
 #include <kiconloader.h>
 
@@ -42,6 +43,69 @@
 #include "karbon_resourceserver.h"
 #include "vkopainter.h"
 #include "vfill.h"
+
+VGradientListItem::VGradientListItem( const VGradient& gradient, QString filename )
+		: QListBoxItem( 0L ), m_filename( filename )
+{
+	m_gradient = new VGradient( gradient );
+
+	m_pixmap.resize( 200, 16 );
+	VKoPainter gp( &m_pixmap, m_pixmap.width(), m_pixmap.height() );
+	gp.setRasterOp( Qt::XorROP );
+	gp.newPath();
+	VGradient grad( *m_gradient );
+	grad.setOrigin( KoPoint( 0, 0 ) );
+	grad.setVector( KoPoint( m_pixmap.width() - 1, 0 ) );
+	grad.setType( VGradient::linear );
+	VFill fill;
+	fill.gradient() = grad;
+	fill.setType( VFill::grad );
+	gp.setBrush( fill );
+	gp.moveTo( KoPoint( 0, 0 ) );
+	gp.lineTo( KoPoint( 0, m_pixmap.height() - 1 ) );
+	gp.lineTo( KoPoint( m_pixmap.width() - 1, m_pixmap.height() - 1 ) );
+	gp.lineTo( KoPoint( m_pixmap.width() - 1, 0 ) );
+	gp.lineTo( KoPoint( 0, 0 ) );
+	gp.fillPath();
+	gp.end();
+
+	m_delete = QFileInfo( filename ).isWritable();
+} // VGradientListItem::VGradientListItem
+
+VGradientListItem::VGradientListItem( const VGradientListItem& gradient )
+		: QListBoxItem( 0L )
+{
+	m_pixmap = gradient.m_pixmap;
+	m_delete = gradient.m_delete;
+	m_gradient = new VGradient( *gradient.gradient() );
+	m_filename = gradient.m_filename;
+} // VGradientListItem::VGradientListItem
+
+VGradientListItem::~VGradientListItem()
+{
+	delete m_gradient;
+} // VGradientListItem::~VGradientListItem
+
+int VGradientListItem::width( const QListBox* lb ) const
+{
+	return lb->width() - 25;
+} // VGradientListItem::width
+
+void VGradientListItem::paint( QPainter* painter )
+{
+	painter->save();
+	painter->setRasterOp( Qt::CopyROP );
+	QRect r ( 0, 0, width( listBox() ), height( listBox() ) );
+	painter->scale( ( (float)( width( listBox() ) ) ) / 200., 1. );
+	painter->drawPixmap( 0, 0, m_pixmap );
+	painter->restore();
+	if ( isSelected() )
+		painter->setPen( listBox()->colorGroup().highlightedText() );
+	else
+		painter->setPen( listBox()->colorGroup().base() );
+	painter->drawRect( r );
+	painter->flush();
+} // VGradientListItem::paint
 
 VGradientPreview::VGradientPreview( VGradient*& gradient, QWidget* parent, const char* name )
 		: QWidget( parent, name ), m_lpgradient( &gradient )
@@ -245,3 +309,4 @@ void VGradientTabWidget::deletePredef()
 } // VGradientTabWidget::deletePredef
 
 #include "vgradienttabwidget.moc"
+
