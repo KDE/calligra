@@ -1,4 +1,4 @@
-application/x-karbon; karbon;test=test "$DISPLAY" != ""; priority=7
-application/illustrator; karbon;test=test "$DISPLAY" != ""; priority=2
-application/postscript; karbon;test=test "$DISPLAY" != ""; priority=2
-image/x-eps; karbon;test=test "$DISPLAY" != ""; priority=2
+application/x-karbon; karbon %s;test=test "$DISPLAY" != ""; priority=7
+application/illustrator; karbon %s;test=test "$DISPLAY" != ""; priority=2
+application/postscript; karbon %s;test=test "$DISPLAY" != ""; priority=2
+image/x-eps; karbon %s;test=test "$DISPLAY" != ""; priority=2
