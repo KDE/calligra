@@ -39,7 +39,7 @@
 typedef KGenericFactory<CSVExport, KoFilter> CSVExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libcsvexport, CSVExportFactory( "kofficefilters" ) )
 
-class Cell 
+class Cell
 {
  public:
   int row, col;
@@ -56,13 +56,13 @@ class Cell
 };
 
 
-CSVExport::CSVExport( KoFilter *, const char *, const QStringList & ) 
+CSVExport::CSVExport( KoFilter *, const char *, const QStringList & )
   : KoFilter(), m_eol("\n")
 {
 }
 
 
-void CSVExport::exportCell( KSpreadSheet const * const sheet, int col, int row, QString & separators, 
+void CSVExport::exportCell( KSpreadSheet const * const sheet, int col, int row, QString & separators,
                             QString & line, QChar const & csvDelimiter, QChar const & textQuote )
 {
   KSpreadCell const * const cell = sheet->cellAt( col, row );
@@ -70,6 +70,13 @@ void CSVExport::exportCell( KSpreadSheet const * const sheet, int col, int row, 
   QString text;
   if ( !cell->isDefault() && !cell->isEmpty() )
   {
+    if ( cell->isFormula() )
+        text = cell->strOutText();
+    else if ( !cell->link().isEmpty() )
+        text = cell->text(); // untested
+    else
+        text = cell->strOutText();
+#if 0
     switch( cell->content() )
     {
      case KSpreadCell::Text:
@@ -81,11 +88,12 @@ void CSVExport::exportCell( KSpreadSheet const * const sheet, int col, int row, 
       break;
      case KSpreadCell::Formula:
       //      cell->setCalcDirtyFlag();
-      //      cell->calc(); 
+      //      cell->calc();
       //      text = cell->value().asString();
       text = cell->strOutText();
       break;
     }
+#endif
   }
   if ( !text.isEmpty() )
   {
@@ -134,7 +142,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   if (!m_chain->manager()->getBatchMode())
   {
     expDialog= new CSVExportDialog( 0 );
-    
+
     if (!expDialog)
     {
       kdError(30501) << "Dialog has not been created! Aborting!" << endl;
@@ -237,7 +245,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       {
         if ( !first)
           str += m_eol;
-	
+
 	QString name;
 	if (expDialog)
 	  name = expDialog->getTableDelimiter();
@@ -261,7 +269,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       int iMaxColumn = sheet->maxColumn();
       int iMaxRow    = sheet->maxRow();
       kdDebug(30501) << "Max row x column: " << iMaxRow << " x " << iMaxColumn << endl;
-      
+
       // this is just a bad approximation which fails for documents with less than 50 rows, but
       // we don't need any progress stuff there anyway :) (Werner)
       int value = 0;
@@ -277,7 +285,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
           emit sigProgress(value);
           i = 0;
         }
-          
+
         QString separators;
         QString line;
         for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
@@ -300,7 +308,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   emit sigProgress(100);
 
   QFile out(m_chain->outputFile());
-  if ( !out.open( IO_WriteOnly ) ) 
+  if ( !out.open( IO_WriteOnly ) )
   {
     kdError(30501) << "Unable to open output file!" << endl;
     out.close();
@@ -310,7 +318,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
 
   QTextStream outStream( &out );
   outStream.setCodec( codec );
-  
+
   outStream << str;
 
   out.close();
