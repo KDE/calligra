@@ -77,9 +77,9 @@
       </Parameter>
       <Help>
 	<Text>Returns the parameter specified by the index.</Text>
-	<Syntax>CHOOSE(index, parameter1, parameter2,...)</Syntax>
-	<Example>CHOOSE(1, "1st", "2nd") returns "1st"</Example>
-	<Example>CHOOSE(2, 3, 2, 4) returns 2</Example>
+	<Syntax>CHOOSE(index; parameter1; parameter2;...)</Syntax>
+	<Example>CHOOSE(1; "1st"; "2nd") returns "1st"</Example>
+	<Example>CHOOSE(2; 3; 2; 4) returns 2</Example>
       </Help>
     </Function>
 
