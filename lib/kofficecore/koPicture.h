@@ -155,6 +155,11 @@ public:
      */
     bool isClipartAsKOffice1Dot1(void) const;
 
+    /**
+     * Downloads and set the key for a possibily remote file
+     */
+    bool setKeyAndDownloadPicture(const KURL& url);
+
 protected:
     /**
      * @internal

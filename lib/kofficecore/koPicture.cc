@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 #include <kurl.h>
+#include <kio/netaccess.h>
 
 #include <qwmf.h>
 #include "koPictureKey.h"
@@ -223,4 +224,21 @@ bool KoPicture::isClipartAsKOffice1Dot1(void) const
     if (m_sharedData)
         return m_sharedData->isClipartAsKOffice1Dot1();
     return false;
+}
+
+bool KoPicture::setKeyAndDownloadPicture(const KURL& url)
+{
+    bool result=false;
+
+    QString tmpFileName;
+    if ( KIO::NetAccess::download(url, tmpFileName) )
+    {
+        KoPictureKey key;
+        key.setKeyFromFile( tmpFileName );
+        setKey( key );
+        result=loadFromFile( tmpFileName );
+        KIO::NetAccess::removeTempFile( tmpFileName );
+    }
+
+    return result;
 }
