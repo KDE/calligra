@@ -362,6 +362,7 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         return false;
     }
     QRect rect;
+    bool lineIsBoundingBox = false; // Does "line" has a %%BoundingBox line?
     for(;;)
     {
         ++pos; // Get over the previous line end (CR or LF)
@@ -370,20 +371,25 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         // ### TODO: it seems that the bounding box can be delayed in the trailer (GhostScript 7.07 does not support it either.)
         if (line.startsWith("%%BoundingBox:"))
         {
-            lineBox=line;
+            lineIsBoundingBox = true;
             break;
         }
         else if (!line.startsWith("%%"))
             break; // Not a EPS comment anymore, so abort as we are not in the EPS header anymore
     }
-    if (lineBox.isEmpty())
+    if ( !lineIsBoundingBox )
     {
-        kdError(30003) << "KoPictureEps::load: could not find bounding box!" << endl;
+        kdError(30003) << "KoPictureEps::load: could not find a bounding box!" << endl;
         return false;
     }
     QRegExp exp("(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)");
-    // ### FIXME: check return value of search, as the bounding box could be marked as "delayed" (What is the exact text then?)
-    exp.search(lineBox);
+    if ( exp.search(line) == -1 )
+    {
+        // ### TODO: it might be an "(atend)" and the bounding box is in the trailer 
+        // (but GhostScript 7.07 does not support a bounding box in the trailer.)
+        kdError(30003) << "Not standard bounding box: " << line << endl;
+        return false;
+    }
     kdDebug(30003) << "Reg. Exp. Found: " << exp.capturedTexts() << endl;
     rect.setLeft((int)exp.cap(1).toDouble());
     rect.setTop((int)exp.cap(2).toDouble());
