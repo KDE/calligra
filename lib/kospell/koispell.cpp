@@ -135,11 +135,11 @@ void KOISpell::startIspell()
 #if 0 //fixem !!!!!!!!!!!!!
   switch (ksconfig->client())
     {
-    case KS_CLIENT_ISPELL:
+    case KOS_CLIENT_ISPELL:
       *proc << "ispell";
       kdDebug(750) << "Using ispell" << endl;
       break;
-    case KS_CLIENT_ASPELL:
+    case KOS_CLIENT_ASPELL:
       *proc << "aspell";
       kdDebug(750) << "Using aspell" << endl;
       break;
@@ -763,19 +763,19 @@ void KOISpell::checkList4 ()
   //others should have been processed by dialog() already
   switch (dlgresult)
     {
-    case KS_REPLACE:
-    case KS_REPLACEALL:
+    case KOS_REPLACE:
+    case KOS_REPLACEALL:
       kdDebug(750) << "KS: cklist4: lastpos: " << lastpos << endl;
       old = *(--wlIt); ++wlIt;
       // replace word
       checkListReplaceCurrent();
       emit corrected (old, *(--wlIt), lastpos); ++wlIt;
       break;
-    case KS_CANCEL:
+    case KOS_CANCEL:
       ksdlg->hide();
       emit done ((bool)FALSE);
       return;
-    case KS_STOP:
+    case KOS_STOP:
       ksdlg->hide();
       emit done (TRUE);
       break;
@@ -902,7 +902,7 @@ void KOISpell::check2 (KProcIO *)
                   } else {
                       // No dialog, just emit misspelling and continue
                       emit misspelling (word, sugg, lastpos);
-                      dlgresult = KS_IGNORE;
+                      dlgresult = KOS_IGNORE;
                       check3();
                   }
 		  return;
@@ -957,19 +957,19 @@ void KOISpell::check3 ()
   //others should have been processed by dialog() already
   switch (dlgresult)
     {
-    case KS_REPLACE:
-    case KS_REPLACEALL:
+    case KOS_REPLACE:
+    case KOS_REPLACEALL:
       offset+=replacement().length()-cwword.length();
       newbuffer.replace (lastpos, cwword.length(),
 			 replacement());
       emit corrected (dlgorigword, replacement(), lastpos);
       break;
-    case KS_CANCEL:
+    case KOS_CANCEL:
     //      kdDebug(750) << "cancelled\n" << endl;
       ksdlg->hide();
       emit done (origbuffer);
       return;
-    case KS_STOP:
+    case KOS_STOP:
       ksdlg->hide();
       //buffer=newbuffer);
       emitProgress();
@@ -988,7 +988,7 @@ KOISpell::slotStopCancel (int result)
 
   kdDebug(750) << "KSpell::slotStopCancel [" << result << "]" << endl;
 
-  if (result==KS_STOP || result==KS_CANCEL)
+  if (result==KOS_STOP || result==KOS_CANCEL)
     if (!dialog3slot.isEmpty())
       {
 	dlgresult=result;
@@ -1027,22 +1027,22 @@ void KOISpell::dialog2 (int result)
   switch (dlgresult)
     {
 
-    case KS_IGNORE:
+    case KOS_IGNORE:
       emit ignoreword(dlgorigword);
       break;
-    case KS_IGNOREALL:
+    case KOS_IGNOREALL:
       // would be better to lower case only words with beginning cap
       ignorelist.prepend(dlgorigword.lower());
       emit ignoreall (dlgorigword);
       break;
-    case KS_ADD:
+    case KOS_ADD:
       addPersonal (dlgorigword);
       personaldict=TRUE;
       emit addword (dlgorigword);
       // adding to pesonal dict takes effect at the next line, not the current
       ignorelist.prepend(dlgorigword.lower());
       break;
-    case KS_REPLACEALL:
+    case KOS_REPLACEALL:
       replacelist.append (dlgorigword);
       QString _replacement = replacement();
       replacelist.append (_replacement);

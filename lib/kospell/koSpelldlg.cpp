@@ -148,13 +148,13 @@ KOSpellDlg::KOSpellDlg(
 void KOSpellDlg::addToAutoCorrect()
 {
     newword = editbox->text();
-    done (KS_ADDAUTOCORRECT);
+    done (KOS_ADDAUTOCORRECT);
 }
 
 void KOSpellDlg::spellCheckAgain()
 {
     newword = editbox->text();
-    done (KS_CHECKAGAIN);
+    done (KOS_CHECKAGAIN);
 }
 
 void KOSpellDlg::changeLanguage( int index)
@@ -162,7 +162,7 @@ void KOSpellDlg::changeLanguage( int index)
     //todo change language in config
     newword = word;
     m_indexLanguage = index;
-    done (KS_CHECKAGAINWITHNEWLANGUAGE);
+    done (KOS_CHECKAGAINWITHNEWLANGUAGE);
 }
 
 void KOSpellDlg::changeSuggList( QStringList *_lst )
@@ -246,44 +246,44 @@ void KOSpellDlg::done (int result)
 void KOSpellDlg::ignore()
 {
   newword = word;
-  done (KS_IGNORE);
+  done (KOS_IGNORE);
 }
 
 void KOSpellDlg::ignoreAll()
 {
   newword = word;
-  done (KS_IGNOREALL);
+  done (KOS_IGNOREALL);
 }
 
 void KOSpellDlg::add()
 {
   newword = word;
-  done (KS_ADD);
+  done (KOS_ADD);
 }
 
 
 void KOSpellDlg::cancel()
 {
   newword=word;
-  done (KS_CANCEL);
+  done (KOS_CANCEL);
 }
 
 void KOSpellDlg::replace()
 {
   newword = editbox->text();
-  done (KS_REPLACE);
+  done (KOS_REPLACE);
 }
 
 void KOSpellDlg::stop()
 {
   newword = word;
-  done (KS_STOP);
+  done (KOS_STOP);
 }
 
 void KOSpellDlg::replaceAll()
 {
   newword = editbox->text();
-  done (KS_REPLACEALL);
+  done (KOS_REPLACEALL);
 }
 
 bool KOSpellDlg::previousWord() const

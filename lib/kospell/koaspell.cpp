@@ -465,22 +465,22 @@ void KOASpell::dialog2 (int result)
     QString _replacement;
     switch (dlgresult)
     {
-    case KS_IGNORE:
+    case KOS_IGNORE:
         emit ignoreword(dlgorigword);
         break;
-    case KS_IGNOREALL:
+    case KOS_IGNOREALL:
         // would be better to lower case only words with beginning cap
         ignorelist.prepend(dlgorigword.lower());
         emit ignoreall (dlgorigword);
         break;
-    case KS_ADD:
+    case KOS_ADD:
         addPersonal (dlgorigword);
         personaldict=TRUE;
         emit addword (dlgorigword);
         // adding to personal dict takes effect at the next line, not the current
         ignorelist.prepend(dlgorigword.lower());
         break;
-    case KS_REPLACEALL:
+    case KOS_REPLACEALL:
         replacelist.append (dlgorigword);
         _replacement = replacement();
         replacelist.append (_replacement);
@@ -488,29 +488,29 @@ void KOASpell::dialog2 (int result)
         emit replaceall( dlgorigword ,  _replacement );
         correctWord( dlgorigword ,  _replacement );
         break;
-    case KS_ADDAUTOCORRECT:
+    case KOS_ADDAUTOCORRECT:
         //todo add new word ????
         emit addAutoCorrect (dlgorigword , replacement());
-    case KS_REPLACE:
+    case KOS_REPLACE:
         correctWord( dlgorigword ,  replacement() );
         break;
-    case KS_CHECKAGAINWITHNEWLANGUAGE:
+    case KOS_CHECKAGAINWITHNEWLANGUAGE:
         changeSpellLanguage( ksdlg->languageIndex());
         spellCheckReplaceWord( dlgreplacement);
         testNextWord = false;
         break;
-    case KS_CHECKAGAIN:
+    case KOS_CHECKAGAIN:
         spellCheckReplaceWord( dlgreplacement);
         testNextWord = false;
         break;
-    case KS_STOP:
+    case KOS_STOP:
         testNextWord = false;
         ksdlg->hide();
         //buffer=newbuffer);
         emit done (newbuffer);
         emit death();
         break;
-    case KS_CANCEL:
+    case KOS_CANCEL:
         testNextWord = false;
         //      kdDebug(750) << "cancelled\n" << endl;
         ksdlg->hide();
