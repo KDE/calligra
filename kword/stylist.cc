@@ -1,17 +1,21 @@
-/******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
-/* Version: 0.0.1						  */
-/* Author: Reginald Stadlbauer, Torben Weis			  */
-/* E-Mail: reggie@kde.org, weis@kde.org				  */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
-/* needs c++ library Qt (http://www.troll.no)			  */
-/* written for KDE (http://www.kde.org)				  */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
-/* needs OpenParts and Kom (weis@kde.org)			  */
-/* License: GNU GPL						  */
-/******************************************************************/
-/* Module: Stylist						  */
-/******************************************************************/
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 #include "kword_doc.h"
 #include "paraglayout.h"
@@ -118,7 +122,7 @@ void KWStyleManager::setupTab2()
 
     cSmart = new QCheckBox( i18n( "&Smart updating of fonts and colors" ), tab2 );
     grid2->addWidget( cSmart, 0, 0 );
-    
+
     cFont = new QComboBox( false, tab2 );
     cFont->insertItem( i18n( "Don't update Fonts" ) );
     cFont->insertItem( i18n( "Update Font Families of same sized Fonts" ) );
@@ -222,7 +226,7 @@ void KWStyleManager::setupTab2()
 	cFont->setEnabled( FALSE );
 	cColor->setEnabled( FALSE );
     }
-    
+
     connect( cSmart, SIGNAL( clicked() ),
 	     this, SLOT( smartClicked() ) );
 }
@@ -297,7 +301,7 @@ void KWStyleManager::apply()
 
     if ( cSmart->isChecked() )
 	f = f | KWordDocument::U_SMART;
-    
+
     doc->setApplyStyleTemplate( f );
 }
 
@@ -336,7 +340,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     QRect r = contentsRect();
     QFontMetrics fm( font() );
 
-    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(), 
+    painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
 		       r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height(), white );
     painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
 			  r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
@@ -355,7 +359,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     int y = height() / 2 - fm.height() / 2;
 
     painter->drawText( 20 + style->getFirstLineLeftIndent().pt() + style->getLeftIndent().pt(),
-		       y, fm.width( i18n( "KWord, KOffice's Wordprocessor" ) ), 
+		       y, fm.width( i18n( "KWord, KOffice's Wordprocessor" ) ),
 		       fm.height(), 0, i18n( "KWord, KOffice's Wordprocessor" ) );
 }
 

@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>, Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #ifndef paraglayout_h
 #define paraglayout_h
 
@@ -29,7 +48,7 @@ class KWParagLayout
 {
 public:
     enum Flow {LEFT, RIGHT, CENTER, BLOCK};
-    enum CounterType {CT_NONE = 0, CT_NUM = 1, CT_ALPHAB_L = 2, CT_ALPHAB_U = 3, 
+    enum CounterType {CT_NONE = 0, CT_NUM = 1, CT_ALPHAB_L = 2, CT_ALPHAB_U = 3,
 		      CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_BULLET = 6};
     enum NumType {NT_LIST = 0, NT_CHAPTER = 1};
 
@@ -128,10 +147,10 @@ public:
     const QList<KoTabulator> *getTabList() const { return &tabList; }
     void setTabList( const QList<KoTabulator> *tabList );
 
-    bool getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsigned int _rBorder, 
+    bool getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsigned int _rBorder,
 		     unsigned int &_tabPos, KoTabulators &_tabType );
     bool hasSpecialTabs() const { return specialTabs; }
-    
+
 protected:
     KWFormat format;
 

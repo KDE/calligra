@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>, Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "paraglayout.h"
 #include "kword_doc.h"
 #include "defs.h"
@@ -127,9 +146,9 @@ void KWParagLayout::save( ostream &out )
     out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
 	<< "\" bullet=\"" << static_cast<unsigned short>( counter.counterBullet.unicode() ) << "\" start=\""
 	<< correctQString( counter.startCounter ).latin1() << "\" numberingtype=\""
-	<< static_cast<int>( counter.numberingType ) << "\" lefttext=\"" 
+	<< static_cast<int>( counter.numberingType ) << "\" lefttext=\""
 	<< correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
-	<< correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\"" 
+	<< correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\""
 	<< correctQString( counter.bulletFont ).latin1() << "\"/>" << endl;
     out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
 	<< left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
@@ -138,7 +157,7 @@ void KWParagLayout::save( ostream &out )
     out << indent << "<TOPBORDER red=\"" << top.color.red() << "\" green=\"" << top.color.green() << "\" blue=\""
 	<< top.color.blue() << "\" style=\"" << static_cast<int>( top.style ) << "\" width=\"" << top.ptWidth << "\"/>" << endl;
     out << indent << "<BOTTOMBORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
-	<< bottom.color.blue() << "\" style=\"" << static_cast<int>( bottom.style ) 
+	<< bottom.color.blue() << "\" style=\"" << static_cast<int>( bottom.style )
 	<< "\" width=\"" << bottom.ptWidth << "\"/>" << endl;
     out << otag << "<FORMAT>" << endl;
     format.save( out );
@@ -146,7 +165,7 @@ void KWParagLayout::save( ostream &out )
 
     for ( unsigned int i = 0; i < tabList.count(); i++ )
 	out << indent << "<TABULATOR mmpos=\"" << tabList.at( i )->mmPos << "\" ptpos=\"" << tabList.at( i )->ptPos
-	    << "\" inchpos=\"" << tabList.at( i )->inchPos << "\" type=\"" 
+	    << "\" inchpos=\"" << tabList.at( i )->inchPos << "\" type=\""
 	    << static_cast<int>( tabList.at( i )->type ) << "\"/>" << endl;
 }
 
@@ -444,10 +463,10 @@ bool KWParagLayout::getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsi
 
     for ( unsigned int i = 0; i < tabList.count(); i++ ) {
 	ptPos = tabList.at( i )->ptPos + _lBorder;
-	if ( ptPos > _ptPos && ptPos < _rBorder && ( _best == -1 || 
+	if ( ptPos > _ptPos && ptPos < _rBorder && ( _best == -1 ||
 						     ptPos < static_cast<unsigned int>( tabList.at( _best )->ptPos ) ) )
 	    _best = i;
-	if ( ptPos <= _ptPos && ptPos > _lBorder && ( _mostLeft == -1 || 
+	if ( ptPos <= _ptPos && ptPos > _lBorder && ( _mostLeft == -1 ||
 						      ptPos < static_cast<unsigned int>( tabList.at( _mostLeft )->ptPos ) ) )
 	    _mostLeft = i;
     }
