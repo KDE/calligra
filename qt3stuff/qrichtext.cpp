@@ -3197,6 +3197,8 @@ void QTextParag::format( int start, bool doMove )
     //qDebug("QTextParag::format id=%d invalid, formatting (moving after previous parag)",paragId());
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
+    if ( p )
+	p->lastInFrame = FALSE;
 formatAgain:
     if ( doc ) {
 	for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() ) {
@@ -3235,8 +3237,6 @@ formatAgain:
 	r.setHeight( y );
 
     splittedInside = FALSE;
-    if ( p )
-	p->lastInFrame = FALSE;
     if ( doc && doc->verticalBreak() ) {
 	const int oy = r.y();
 	int y = oy;
