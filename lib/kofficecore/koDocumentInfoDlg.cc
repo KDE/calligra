@@ -449,8 +449,8 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KTarEntry *entry 
     QString p = path + entry->name();
     if ( p != "/" )
     {
+      d->m_dst->writeDir( p, entry->user(), entry->group() );
       p.append( "/" );
-      d->m_dst->writeDir( path + entry->name(), entry->user(), entry->group() );
     }
 
     QStringList entries = dir->entries();
