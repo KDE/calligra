@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="91">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="92">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -148,8 +148,6 @@
   </Menu>  
   <Separator/>
   <Action name="apply_autoformat"/>
-  <Separator/>
-  <Action name="direct_cursor"/>
  </Menu>
  <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
   <Action name="screen_configpages"/>
@@ -172,6 +170,8 @@
   <Action name="extra_configure" group="settings_configure"/>
   <Action name="extra_autocorrection"/>	
   <Action name="configure_completion"/>
+  <Separator/>
+  <Action name="direct_cursor"/>
   <Separator/>
  </Menu>
 </MenuBar>

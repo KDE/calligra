@@ -3382,7 +3382,7 @@ void KPresenterView::setupActions()
                                     this, SLOT(backgroundPicture() ),
                                     actionCollection(), "save_bgpicture" );
 
-    actionInsertDirectCursor = new KToggleAction( i18n( "Insert Direct Cursor" ), 0,
+    actionInsertDirectCursor = new KToggleAction( i18n( "Type Anywhere Cursor" ), 0,
                                                   this, SLOT( insertDirectCursor() ),
                                                   actionCollection(), "direct_cursor" );
 
