@@ -87,6 +87,9 @@ protected:
     virtual View* firstView();
     virtual View* nextView();
 
+protected slots:
+    void slotViewDestroyed();
+
 private:
     QList<View> m_views;
     QString m_config;

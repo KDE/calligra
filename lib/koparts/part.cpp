@@ -58,9 +58,15 @@ View* Part::nextView()
     return m_views.next();
 }
 
+void Part::slotViewDestroyed()
+{
+    m_views.removeRef( (View *)sender() );
+}
+
 void Part::addView( View* view )
 {
     m_views.append( view );
+    connect( view, SIGNAL( destroyed() ), this, SLOT( slotViewDestroyed() ) );
 }
 
 Part* Part::hitTest( const QPoint& p )
