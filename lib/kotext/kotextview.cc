@@ -1199,16 +1199,16 @@ void KoTextView::removeComment()
             else
                 m_cursor->setIndex( m_cursor->index() -1 );
 
-            textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
+            textDocument()->setSelectionStart( KoTextDocument::Temp, m_cursor );
 
             if( variablePosition == m_cursor->index() )
                 m_cursor->setIndex( m_cursor->index() +1);
             else
                 m_cursor->setIndex( m_cursor->index()  );
 
-            textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
+            textDocument()->setSelectionEnd( KoTextDocument::Temp, m_cursor );
 
-            textObject()->removeSelectedText( m_cursor,  KoTextDocument::Standard, i18n("Remove Comment") );
+            textObject()->removeSelectedText( m_cursor,  KoTextDocument::Temp, i18n("Remove Comment") );
         }
     }
 }
