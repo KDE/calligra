@@ -173,12 +173,19 @@ bool KWordDocument::initDoc()
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
 	bool ok = loadTemplate( fileName );
-	setURL( QString::null );
+	setURL( KURL() );
 	return ok;
-    } else if ( ret == KoTemplateChooseDia::File ) {
+    } else if ( ret == KoTemplateChooseDia::File ||
+                ret == KoTemplateChooseDia::TempFile ) {
 	QString fileName( _template );
 	bool ok = loadTemplate( fileName );
-	setURL( fileName );
+	if ( ret == KoTemplateChooseDia::TempFile )
+	{
+	    setURL(KURL());
+	    unlink( fileName.ascii() );
+	}
+	else
+	    setURL( fileName );
 	_loaded = TRUE;
 	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
