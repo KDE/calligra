@@ -26,6 +26,27 @@
 #include <qdict.h>
 #include <qpixmap.h>
 
+#include <komlMime.h>
+#include <koStream.h>
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
+#include <koFilterManager.h>
+#include <koTemplateChooseDia.h>
+#include <kstddirs.h>
+#include <koStore.h>
+#include <koStoreStream.h>
+#include <shell.h>
+
+#include <kurl.h>
+#include <klocale.h>
+#include <kglobal.h>
+
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
+#include <math.h>
+
 #include "kword_doc.h"
 #include "kword_page.h"
 #include "kword_shell.h"
@@ -39,28 +60,6 @@
 #include "serialletter.h"
 #include "contents.h"
 #include "kword_factory.h"
-
-#include <komlMime.h>
-#include <koStream.h>
-#include <komlParser.h>
-#include <komlStreamFeed.h>
-#include <komlWriter.h>
-
-#include <kurl.h>
-#include <klocale.h>
-#include <kglobal.h>
-
-#include <strstream>
-#include <fstream>
-#include <unistd.h>
-#include <math.h>
-
-#include <koFilterManager.h>
-#include <koTemplateChooseDia.h>
-#include <kstddirs.h>
-#include <koStore.h>
-#include <koStoreStream.h>
-#include <shell.h>
 
 /******************************************************************/
 /* Class: KWordChild						  */
