@@ -36,20 +36,86 @@ class KPrVariableCollection : public KoVariableCollection
  public:
     KPrVariableCollection(KoVariableSettings *_setting);
     virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
+    QPtrList<KAction> variableActionList();
 };
 
 /**
  * "current page number" and "number of pages" variables
  */
-class KPrPgNumVariable : public KoPgNumVariable
+class KPrPgNumVariable : public QObject,public KoPgNumVariable
 {
+    Q_OBJECT
 public:
     KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc );
 
     virtual void recalc();
     virtual void setVariableSubType( short int type);
+    QPtrList<KAction> actionList();
+
+protected slots:
+    void slotChangeSubType();
+
  private:
     KPresenterDoc *m_doc;
 };
+
+
+class KPrFieldVariable : public QObject, public KoFieldVariable
+{
+    Q_OBJECT
+public:
+    KPrFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *_doc );
+
+    QPtrList<KAction> actionList();
+
+protected slots:
+    void slotChangeSubType();
+
+private:
+    KPresenterDoc *m_doc;
+
+};
+
+/**
+ * Date-related variables
+ */
+class KPrDateVariable : public QObject, public KoDateVariable
+{
+    Q_OBJECT
+public:
+    KPrDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KPresenterDoc *_doc );
+
+    QPtrList<KAction> actionList();
+
+protected slots:
+    void slotChangeSubType();
+    void slotChangeFormat();
+
+private:
+    KPresenterDoc *m_doc;
+
+};
+
+/**
+ * Time-related variables
+ */
+class KPrTimeVariable : public QObject, public KoTimeVariable
+{
+
+    Q_OBJECT
+public:
+    KPrTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, KPresenterDoc *_doc );
+
+    QPtrList<KAction> actionList();
+
+protected slots:
+    void slotChangeSubType();
+    void slotChangeFormat();
+
+private:
+    KPresenterDoc *m_doc;
+
+};
+
 
 #endif

@@ -34,7 +34,7 @@
 #include <koparaglayout.h>
 #include <kocommand.h>
 #include <koPoint.h>
-
+#include "kprvariable.h"
 class KPresenterDoc;
 class KPTextObject;
 class KPObject;
@@ -867,6 +867,91 @@ class KPrChangeCustomVariableValue : public KNamedCommand
     QString oldValue;
     KoCustomVariable *m_var;
 };
+
+class KPrChangeFieldVariableSubType : public KNamedCommand
+{
+ public:
+    KPrChangeFieldVariableSubType( const QString &name, KPresenterDoc *_doc, short int _oldValue, short int _newValue, KPrFieldVariable *var);
+    ~KPrChangeFieldVariableSubType();
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    short int newValue;
+    short int oldValue;
+    KPrFieldVariable *m_var;
+};
+
+class KPrChangeTimeVariableSubType : public KNamedCommand
+{
+ public:
+    KPrChangeTimeVariableSubType( const QString &name, KPresenterDoc *_doc, short int _oldValue, short int _newValue, KPrTimeVariable *var);
+    ~KPrChangeTimeVariableSubType();
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    short int newValue;
+    short int oldValue;
+    KPrTimeVariable *m_var;
+};
+
+class KPrChangeTimeVariableFormat : public KNamedCommand
+{
+ public:
+    KPrChangeTimeVariableFormat( const QString &name, KPresenterDoc *_doc, const QString _oldValue, const QString _newValue, KPrTimeVariable *var);
+    ~KPrChangeTimeVariableFormat();
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    QString newValue;
+    QString oldValue;
+    KPrTimeVariable *m_var;
+};
+
+class KPrChangeDateVariableSubType : public KNamedCommand
+{
+ public:
+    KPrChangeDateVariableSubType( const QString &name, KPresenterDoc *_doc, short int _oldValue, short int _newValue, KPrDateVariable *var);
+    ~KPrChangeDateVariableSubType();
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    short int newValue;
+    short int oldValue;
+    KPrDateVariable *m_var;
+};
+
+class KPrChangeDateVariableFormat : public KNamedCommand
+{
+ public:
+    KPrChangeDateVariableFormat( const QString &name, KPresenterDoc *_doc, const QString _oldValue, const QString _newValue, KPrDateVariable *var);
+    ~KPrChangeDateVariableFormat();
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    QString newValue;
+    QString oldValue;
+    KPrDateVariable *m_var;
+};
+
+class KPrChangePgNumVariableValue : public KNamedCommand
+{
+ public:
+    KPrChangePgNumVariableValue( const QString &name, KPresenterDoc *_doc, short int _oldValue, short int _newValue, KPrPgNumVariable *var);
+    ~KPrChangePgNumVariableValue();
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    short int newValue;
+    short int oldValue;
+    KPrPgNumVariable *m_var;
+};
+
 
 class KPrChangeLinkVariable : public KNamedCommand
 {

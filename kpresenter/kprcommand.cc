@@ -2118,6 +2118,180 @@ void KPrChangeCustomVariableValue::unexecute()
     m_doc->recalcVariables( VT_CUSTOM );
 }
 
+KPrChangeFieldVariableSubType::KPrChangeFieldVariableSubType( const QString &name, KPresenterDoc *_doc,
+                                                              short int _oldValue, short int _newValue,
+                                                              KPrFieldVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KPrChangeFieldVariableSubType::~KPrChangeFieldVariableSubType()
+{
+}
+
+void KPrChangeFieldVariableSubType::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(newValue);
+    m_doc->recalcVariables( VT_FIELD );
+}
+
+void KPrChangeFieldVariableSubType::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(oldValue);
+    m_doc->recalcVariables( VT_FIELD );
+}
+
+KPrChangeDateVariableSubType::KPrChangeDateVariableSubType( const QString &name, KPresenterDoc *_doc,
+                        short int _oldValue, short int _newValue,
+                        KPrDateVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KPrChangeDateVariableSubType::~KPrChangeDateVariableSubType()
+{
+}
+
+void KPrChangeDateVariableSubType::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(newValue);
+    m_doc->recalcVariables( VT_DATE );
+}
+
+void KPrChangeDateVariableSubType::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(oldValue);
+    m_doc->recalcVariables( VT_DATE );
+}
+
+KPrChangeDateVariableFormat::KPrChangeDateVariableFormat( const QString &name, KPresenterDoc *_doc,
+                        const QString _oldValue, const QString _newValue,
+                        KPrDateVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KPrChangeDateVariableFormat::~KPrChangeDateVariableFormat()
+{
+}
+
+void KPrChangeDateVariableFormat::execute()
+{
+    Q_ASSERT(m_var);
+    dynamic_cast<KoVariableDateFormat *>(m_var->variableFormat())->m_strFormat = newValue;
+    m_doc->recalcVariables( VT_DATE );
+}
+
+void KPrChangeDateVariableFormat::unexecute()
+{
+    Q_ASSERT(m_var);
+    dynamic_cast<KoVariableDateFormat *>(m_var->variableFormat())->m_strFormat = oldValue;
+    m_doc->recalcVariables( VT_DATE );
+}
+
+KPrChangeTimeVariableSubType::KPrChangeTimeVariableSubType( const QString &name, KPresenterDoc *_doc,
+                        short int _oldValue, short int _newValue,
+                        KPrTimeVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KPrChangeTimeVariableSubType::~KPrChangeTimeVariableSubType()
+{
+}
+
+void KPrChangeTimeVariableSubType::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(newValue);
+    m_doc->recalcVariables( VT_TIME );
+}
+
+void KPrChangeTimeVariableSubType::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(oldValue);
+    m_doc->recalcVariables( VT_TIME );
+}
+
+KPrChangeTimeVariableFormat::KPrChangeTimeVariableFormat( const QString &name, KPresenterDoc *_doc,
+                        const QString _oldValue, const QString _newValue,
+                        KPrTimeVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KPrChangeTimeVariableFormat::~KPrChangeTimeVariableFormat()
+{
+}
+
+void KPrChangeTimeVariableFormat::execute()
+{
+    Q_ASSERT(m_var);
+    dynamic_cast<KoVariableTimeFormat *>(m_var->variableFormat())->m_strFormat = newValue;
+    m_doc->recalcVariables( VT_TIME );
+}
+
+void KPrChangeTimeVariableFormat::unexecute()
+{
+    Q_ASSERT(m_var);
+    dynamic_cast<KoVariableTimeFormat *>(m_var->variableFormat())->m_strFormat = oldValue;
+    m_doc->recalcVariables( VT_TIME );
+}
+
+KPrChangePgNumVariableValue::KPrChangePgNumVariableValue( const QString &name, KPresenterDoc *_doc,
+                        short int _oldValue, short int _newValue,
+                        KPrPgNumVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KPrChangePgNumVariableValue::~KPrChangePgNumVariableValue()
+{
+}
+
+void KPrChangePgNumVariableValue::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(newValue);
+    m_doc->recalcVariables( VT_PGNUM );
+}
+
+void KPrChangePgNumVariableValue::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(oldValue);
+    m_doc->recalcVariables( VT_PGNUM );
+}
+
 
 KPrChangeLinkVariable::KPrChangeLinkVariable( const QString &name, KPresenterDoc *_doc,const QString & _oldHref, const QString & _newHref, const QString & _oldLink,const QString &_newLink, KoLinkVariable *var):
     KNamedCommand(name),
