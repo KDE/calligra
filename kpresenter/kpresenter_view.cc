@@ -1506,12 +1506,12 @@ void KPresenterView::screenAssignEffect()
 /*========================== screen start =======================*/
 void KPresenterView::screenStart()
 {
-    startScreenPres( -1 ); // all selected pages
+    startScreenPres( getCurrPgNum() ); 
 }
 
 void KPresenterView::screenViewPage()
 {
-    startScreenPres( getCurrPgNum() ); // current page only
+    startScreenPres( getCurrPgNum() ); 
 }
 
 void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
@@ -1585,14 +1585,14 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         actionScreenStart->setEnabled( false );
         actionScreenViewPage->setEnabled( false );
 
-        if ( kPresenterDoc()->presentationDuration() && pgNum == -1 ) {
+        if ( kPresenterDoc()->presentationDuration() ) {
             m_presentationDuration.start();
 
             for ( unsigned int i = 0; i < kPresenterDoc()->pageList().count(); ++i )
                 m_presentationDurationList.append( 0 ); // initialization
         }
 
-        if ( !kPresenterDoc()->spManualSwitch() && pgNum == -1 ) {
+        if ( !kPresenterDoc()->spManualSwitch() ) {
             continuePres = true;
             exitPres = false;
             m_pKPresenterDoc->repaint( false );

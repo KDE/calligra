@@ -3082,8 +3082,7 @@ QPtrList<KPTextObject> KPrCanvas::selectedTextObjs() const
 void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
 {
     _presFakt = presFakt;
-    m_showOnlyPage = curPgNum;
-    kdDebug(33001) << "KPrCanvas::startScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
+    kdDebug(33001) << "KPrCanvas::startScreenPresentation curPgNum=" << curPgNum << endl;
     kdDebug(33001) << "                              _presFakt=" << _presFakt << endl;
 
     presMenu->setItemChecked( PM_SM, true );
@@ -3102,35 +3101,21 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*m_zoomBeforePresentation), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     doc->newZoomAndResolution(false,false);
 
-    if(m_showOnlyPage==-1)
-    {
-        QPtrListIterator<KPObject> oIt(doc->pageList().at(0)->objectList());
-        for (; oIt.current(); ++oIt )
-             tmpObjs.append( oIt.current() );
+    QPtrListIterator<KPObject> oIt(doc->pageList().at( curPgNum-1 )->objectList());
+    for (; oIt.current(); ++oIt )
+         tmpObjs.append( oIt.current() );
 
-    }
-    else
+    // add all selected slides, starting from curPgNum
+    slideList.clear();
+    QValueList<int> selected = doc->selectedSlides();
+    for ( QValueList<int>::Iterator it = selected.begin() ; it != selected.end(); ++ it )
     {
-        QPtrListIterator<KPObject> oIt(doc->pageList().at(m_showOnlyPage-1)->objectList());
-        for (; oIt.current(); ++oIt )
-             tmpObjs.append( oIt.current() );
-    }
-    if ( m_showOnlyPage != -1 ) // only one page
-    {
-        slideList.clear();
-        slideList << m_showOnlyPage;
-    }
-    else // all selected pages
-    {
-        slideList = doc->selectedSlides();
-        // ARGLLLRGLRLGRLG selectedSlides gets us 0-based numbers,
-        // and here we want 1-based numbers !
-        QString debugstr;
-        for ( QValueList<int>::Iterator it = slideList.begin() ; it != slideList.end(); ++ it )
-        {
-            *it = (*it)+1;
-            debugstr += QString::number(*it) + ',';
-        }
+       // ARGLLLRGLRLGRLG selectedSlides gets us 0-based numbers,
+       // and here we want 1-based numbers !
+       int slideno = *it + 1;
+
+       if( slideno < curPgNum ) continue;
+       slideList.append( slideno );
     }
     Q_ASSERT( slideList.count() );
 
