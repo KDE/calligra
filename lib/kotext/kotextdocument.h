@@ -65,8 +65,8 @@ public:
 
     void setText( const QString &text, const QString &context );
 
-    QString text() const;
-    QString text( int parag ) const;
+    //QString text() const;
+    //QString text( int parag ) const;
     //QString originalText() const;
 
     int x() const;
@@ -184,8 +184,8 @@ public:
 
     void setPlainText( const QString &text );
     //void setRichText( const QString &text, const QString &context );
-    QString richText( KoTextParag *p = 0 ) const;
-    QString plainText( KoTextParag *p = 0 ) const;
+    //QString richText( KoTextParag *p = 0 ) const;
+    QString plainText() const;
 
     //bool focusNextPrevChild( bool next );
 

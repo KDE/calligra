@@ -256,42 +256,44 @@ void KoTextDocument::setText( const QString &text, const QString & /*context*/ )
 	setPlainText( text );
 }
 
-QString KoTextDocument::plainText( KoTextParag *p ) const
+QString KoTextDocument::plainText() const
 {
-    if ( !p ) {
-	QString buffer;
-	QString s;
-	KoTextParag *p = fParag;
-	while ( p ) {
-	    s = p->string()->toString();
-	    s.remove( s.length() - 1, 1 );
-	    if ( p->next() )
-		s += "\n";
-	    buffer += s;
-	    p = p->next();
-	}
-	return buffer;
-    } else {
-	return p->string()->toString();
+    QString buffer;
+    QString s;
+    KoTextParag *p = fParag;
+    while ( p ) {
+        s = p->string()->toString();
+        s.remove( s.length() - 1, 1 );
+        if ( p->next() )
+            s += "\n";
+        buffer += s;
+        p = p->next();
     }
+    return buffer;
 }
 
+#if 0
 QString KoTextDocument::richText( KoTextParag * ) const
 {
     QString s;
     // TODO update from QRT if this code is needed
     return s;
 }
+#endif
 
+#if 0
 QString KoTextDocument::text() const
 {
+    // SLLOOOWWW - factorize!
     if ( plainText().simplifyWhiteSpace().isEmpty() )
 	return QString("");
     //if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
     //    return richText();
-    return plainText( 0 );
+    return plainText();
 }
+#endif
 
+#if 0
 QString KoTextDocument::text( int parag ) const
 {
     KoTextParag *p = paragAt( parag );
@@ -301,8 +303,9 @@ QString KoTextDocument::text( int parag ) const
     //if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
     //    return richText( p );
     //else
-	return plainText( p );
+	return p->string()->toString();
 }
+#endif
 
 void KoTextDocument::invalidate()
 {

@@ -169,7 +169,7 @@ int KoTextObject::zoomedFontSize( int docFontSize ) const
 }
 
 // A visitor that looks for custom items in e.g. a selection
-class KoHasCustomItemVisitor : public KoParagVisitor // see kotextdocument.h
+class KoHasCustomItemVisitor : public KoParagVisitor
 {
 public:
     KoHasCustomItemVisitor() : KoParagVisitor() { }
@@ -1973,8 +1973,10 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
         // Pasting on an empty paragraph -> respect <text:h> in selected text etc.
         lastParagraph = lastParagraph->prev();
         lastParagraph = textDocument()->loadOasisText( bodyElem, context, lastParagraph, styleColl, cursor.parag() );
-        resultCursor.setParag( lastParagraph );
-        resultCursor.setIndex( lastParagraph->length() - 1 );
+        if ( lastParagraph ) {
+            resultCursor.setParag( lastParagraph );
+            resultCursor.setIndex( lastParagraph->length() - 1 );
+        }
         removeNewline = true;
     } else {
         // Pasting inside a non-empty paragraph -> insert/append text to it.
