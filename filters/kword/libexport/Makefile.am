@@ -11,8 +11,9 @@ libkwordexportfilters_la_LIBADD = $(KOFFICE_LIBS)
 lib_LTLIBRARIES = libkwordexportfilters.la
 
 libkwordexportfilters_la_SOURCES = TagProcessing.cc KWEFStructures.cc\
-KWEFBaseClass.cc
+KWEFBaseClass.cc ProcessDocument.cc
 
-noinst_HEADERS = TagProcessing.h KWEFStructures.h KWEFBaseClass.h
+noinst_HEADERS = TagProcessing.h KWEFStructures.h KWEFBaseClass.h\
+ProcessDocument.h
 
 METASOURCES = AUTO

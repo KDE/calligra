@@ -52,6 +52,8 @@
 #include <htmlexport.moc>
 
 #include <TagProcessing.h>
+#include <KWEFBaseClass.h>
+#include <ProcessDocument.h>
 
 #include "ExportDialog.h"
 #include "ExportFilterBase.h"
@@ -59,6 +61,8 @@
 #include "ExportFilterDirect.h"
 #include "ExportFilterStyle.h"
 #include "ExportFilterFullPower.h"
+
+#if 0
 
 // Every tag has its own processing function. All of those functions
 // have the same parameters since the functions are passed to
@@ -82,7 +86,7 @@
 //            NAME value=
 
 
-static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
+static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -100,7 +104,7 @@ static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, Cl
     AllowNoSubtags (myNode);
 }
 
-static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
+static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -112,7 +116,7 @@ static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString &, Cl
     AllowNoSubtags (myNode);
 }
 
-static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
+static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass* )
 {
     CounterData *counter = (CounterData *) tagData;
     QValueList<AttrProcessing> attrProcessingList;
@@ -132,7 +136,7 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, Class
 
 // FORMAT's subtags
 
-static void ProcessItalicTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
+static void ProcessItalicTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -145,7 +149,7 @@ static void ProcessItalicTag (QDomNode myNode, void* formatDataPtr , QString&, C
     formatData->italic=(value!=0);
 }
 
-static void ProcessUnderlineTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
+static void ProcessUnderlineTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -158,7 +162,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void* formatDataPtr , QString&
     formatData->underline=(value!=0);
 }
 
-static void ProcessStrikeOutTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
+static void ProcessStrikeOutTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -171,7 +175,7 @@ static void ProcessStrikeOutTag (QDomNode myNode, void* formatDataPtr , QString&
     formatData->strikeout=(value!=0);
 }
 
-static void ProcessWeightTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
+static void ProcessWeightTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -184,7 +188,7 @@ static void ProcessWeightTag (QDomNode myNode, void* formatDataPtr , QString&, C
     formatData->weight=weight;
 }
 
-static void ProcessSizeTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
+static void ProcessSizeTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -197,7 +201,7 @@ static void ProcessSizeTag (QDomNode myNode, void* formatDataPtr , QString&, Cla
     formatData->fontSize=size;
 }
 
-static void ProcessFontTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase* )
+static void ProcessFontTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass* )
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -210,7 +214,7 @@ static void ProcessFontTag (QDomNode myNode, void* formatDataPtr , QString&, Cla
     formatData->fontName=fontName;
 }
 
-static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
+static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -225,7 +229,7 @@ static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&, Cl
     formatData->colour.setRgb(red, green, blue);
 }
 
-static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
+static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFBaseClass*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -238,7 +242,7 @@ static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&
     formatData->verticalAlignment=value;
 }
 
-static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* exportFilter)
+static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, KWEFBaseClass* exportFilter)
 {
     FormatData *formatData = (FormatData*) tagData;
 
@@ -289,7 +293,7 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, C
 
 }
 
-static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, ClassExportFilterBase*)
+static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, KWEFBaseClass*)
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -300,7 +304,7 @@ static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, ClassE
     ProcessAttributes (myNode, attrProcessingList);
 }
 
-static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
+static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFBaseClass* exportFilter )
 {
     LayoutData *layout = (LayoutData *) tagData;
 
@@ -320,7 +324,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
-static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & outputText, ClassExportFilterBase* exportFilter)
+static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & outputText, KWEFBaseClass* exportFilter)
 {
     // To use in <FORMATS> elements
 
@@ -334,7 +338,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & outputTe
 }
 
 
-static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
+static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, KWEFBaseClass* exportFilter )
 {
     ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
 
@@ -347,7 +351,7 @@ static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputT
 }
 
 
-static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase*)
+static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
 {
     QString *tagText = (QString *) tagData;
 
@@ -367,7 +371,9 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, ClassExp
     AllowNoSubtags (myNode);
 }
 
-static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
+#endif /* 0 */
+
+static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter)
 {
     AllowNoAttributes (myNode);
 
@@ -452,7 +458,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 }
 
 
-static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
+static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter)
 {
     int frameType=-1;
     int frameInfo=-1;
@@ -493,7 +499,7 @@ static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText,
 }
 
 
-static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
+static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText, KWEFBaseClass* exportFilter)
 {
     AllowNoAttributes (myNode);
 
@@ -502,7 +508,7 @@ static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText,
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
-static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, ClassExportFilterBase* exportFilter)
+static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, KWEFBaseClass* exportFilter)
 {
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );

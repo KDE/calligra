@@ -40,7 +40,7 @@
 #include <qdom.h>
 #include <qvaluelist.h>
 
-class ClassExportFilterBase;
+class KWEFBaseClass;
 
 // The class TagProcessing and the two functions ProcessSubtags () and
 // AllowNoSubtags () allow for easing parsing of subtags in the
@@ -57,19 +57,19 @@ class TagProcessing
         {}
 
         TagProcessing (QString  n,
-                       void     (*p)(QDomNode, void *, QString &, ClassExportFilterBase*),
+                       void     (*p)(QDomNode, void *, QString &, KWEFBaseClass*),
                        void    *d) : name (n), processor (p), data (d)
         {}
 
         QString  name;
-        void     (*processor)(QDomNode, void *, QString &, ClassExportFilterBase*);
+        void     (*processor)(QDomNode, void *, QString &, KWEFBaseClass*);
         void    *data;
 };
 
 void ProcessSubtags     ( QDomNode                   parentNode,
                           QValueList<TagProcessing>  &tagProcessingList,
                           QString                    &outputText,
-                          ClassExportFilterBase      *exportFilter);
+                          KWEFBaseClass      *exportFilter);
 
 void AllowNoSubtags ( QDomNode  myNode );
 

@@ -46,10 +46,10 @@
 // call the corresponding processing function, and do all the
 // necessary error handling.
 
-void ProcessSubtags ( QDomNode                    parentNode,
+void ProcessSubtags ( QDomNode                   parentNode,
                       QValueList<TagProcessing>  &tagProcessingList,
                       QString                    &outputText,
-                      ClassExportFilterBase      *exportFilter)
+                      KWEFBaseClass              *exportFilter)
 {
     QDomNode childNode;
 

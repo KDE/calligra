@@ -458,14 +458,14 @@ void ClassExportFilterHtmlFullPower::processStyleTag (QDomNode myNode, void *, Q
     kdDebug(30503) << "Exiting ClassExportFilterHtmlFullPower::processStyleTag" << endl;
 }
 
-static void ProcessStyleTag (QDomNode myNode, void *, QString &strStyles, ClassExportFilterBase* exportFilter )
+static void ProcessStyleTag (QDomNode myNode, void *, QString &strStyles, KWEFBaseClass* exportFilter )
 {
     kdDebug(30503) << "Entering ProcessStyleTag" << endl;
     exportFilter->processStyleTag(myNode,NULL,strStyles);
     kdDebug(30503) << "Exiting ProcessStyleTag" << endl;
 }
 
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, ClassExportFilterBase* exportFilter )
+static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )
 {
     kdDebug(30503) << "Entering ProcessStylesPluralTag" << endl;
     AllowNoAttributes (myNode);

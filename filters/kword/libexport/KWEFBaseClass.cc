@@ -114,3 +114,23 @@ bool KWEFBaseClass::filter(const QString& , const QString&)
 void KWEFBaseClass::helpStyleProcessing(QDomNode myNode,LayoutData* layout)
 {
 }
+
+QString KWEFBaseClass::getBodyOpeningTagExtraAttributes(void) const
+{
+    return QString::null;
+}
+
+void KWEFBaseClass::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
+{
+}
+
+QString KWEFBaseClass::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
+{
+    return QString::null;
+}
+
+QString KWEFBaseClass::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)
+{
+    return QString::null;
+}
+
