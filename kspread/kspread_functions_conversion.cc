@@ -463,7 +463,7 @@ bool kspreadfunc_roman( KSContext& context )
 // return < 0 if invalid
 int kspreadfunc_arabic_helper( QChar c )
 {
-  switch( c.unicode() )
+  switch( c.upper().unicode() )
   {
     case 'M': return 1000;
     case 'D': return 500;
