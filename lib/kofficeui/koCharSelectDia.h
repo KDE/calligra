@@ -47,11 +47,11 @@ public:
                      const QChar &_chr, bool _modal=true );
     ~KoCharSelectDia();
     // select char dialog
-    static bool selectChar( QString &_font, QChar &_chr, bool _enableFont = true );
+    static bool selectChar( QString &_font, QChar &_chr, bool _enableFont = true, QWidget* parent = 0, const char* name = 0);
 
     // internal
-    QChar chr();
-    QString font();
+    QChar chr() const;
+    QString font() const;
     void closeDialog();
 
 private:

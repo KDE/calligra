@@ -34,9 +34,10 @@ KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar
 {
     initDialog(_chr,_font,_enableFont);
 
-    setButtonOKText(i18n("&Insert"),
-                      i18n("Insert the selected character in the text"));
-
+    KGuiItem okItem = KStdGuiItem::ok(); // start from std item to keep the OK icon...
+    okItem.setText( i18n("&Insert") );
+    okItem.setWhatsThis( i18n("Insert the selected character in the text") );
+    setButtonOK( okItem );
 }
 
 KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal )
@@ -76,15 +77,14 @@ void KoCharSelectDia::closeDialog()
     KDialogBase::close();
 }
 
-bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont )
+bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont, QWidget* parent, const char* name )
 {
     bool res = false;
 
-    KoCharSelectDia *dlg = new KoCharSelectDia( 0L, "Select Character", _chr, _font, _enableFont );
+    KoCharSelectDia *dlg = new KoCharSelectDia( parent, name, _chr, _font, _enableFont );
     dlg->setFocus();
     if ( dlg->exec() == Accepted )
     {
-
         _font = dlg->font();
         _chr = dlg->chr();
         res = true;
@@ -95,12 +95,12 @@ bool KoCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont 
     return res;
 }
 
-QChar KoCharSelectDia::chr()
+QChar KoCharSelectDia::chr() const
 {
     return charSelect->chr();
 }
 
-QString KoCharSelectDia::font()
+QString KoCharSelectDia::font() const
 {
     return charSelect->font();
 }
