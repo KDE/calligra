@@ -64,7 +64,9 @@ QString
 VSelectNodesTool::statusText()
 {
 	if( m_state == normal )
-		return i18n( "EditNode" );
+		return i18n( "Editing Nodes" );
+	else
+		return QString( "" );
 }
 
 void
