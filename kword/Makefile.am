@@ -24,13 +24,12 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		kwinsertlink.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell ./libkwserialletter_interface.la
-libkwordpart_la_METASOURCES = AUTO
+libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell
+METASOURCES = AUTO
 
 ## The serial letter interface library
 libkwserialletter_interface_la_SOURCES = serialletter_interface.cc
 libkwserialletter_interface_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwserialletter_interface_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kword.la
