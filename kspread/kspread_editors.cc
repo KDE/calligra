@@ -125,7 +125,7 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
   if (t.length() > m_length)
   {
     // allocate more space than needed. Otherwise it might be too slow
-    m_length = t.length() + 10;
+    m_length = t.length() + 5;
    
     // Too slow for long texts
     // QFontMetrics fm( m_pEdit->font() );
