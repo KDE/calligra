@@ -186,8 +186,11 @@ void KChartFontConfigPage::apply()
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
     _params->setHeader1Font(title);
-    //used real size font.
-    _params->setLegendFont(legend,true);
+    if(_params->legendFont()!=legend)
+    {
+        //used real size font.
+        _params->setLegendFont(legend,true);
+    }
 
 //     _params->setXTitleFont(xtitle);
 //     _params->setYTitleFont(ytitle);
