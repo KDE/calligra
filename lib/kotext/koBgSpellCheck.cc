@@ -229,6 +229,9 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
     KoTextParag* parag = m_bgSpell.currentParag;
     if ( parag && parag->string() && parag->string()->needsSpellCheck() )
     {
+#ifdef DEBUG_BGSPELLCHECKING
+        kdDebug(32500) << "current parag " << parag << " needs checking again." <<endl;
+#endif
         return;
     }
 
@@ -260,8 +263,6 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
         }
         else
         {
-            if ( m_bgSpell.currentParag )
-                m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
             if ( m_bgSpell.currentTextObj )
                 m_bgSpell.currentTextObj->setNeedSpellCheck( false );
             m_bgSpell.currentParag = 0L;
@@ -300,9 +301,18 @@ void KoBgSpellCheck::spellCheckNextParagraph()
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug(32500) << "KoBgSpellCheck::spellCheckNextParagraph spell checking parag " << m_bgSpell.currentParag->paragId() << endl;
 #endif
-    // Now spell-check that paragraph
+
+    // Get the text to spell-check
     QString text = m_bgSpell.currentParag->string()->toString();
     text.remove( text.length() - 1, 1 ); // trailing space
+
+    // Mark it as "we've read the text to be spell-checked", *before* doing it.
+    // This prevents race conditions: if the user modifies the text during
+    // the spellchecking, the new text _will_ be checked, since the bool will
+    // be set to true.
+    m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
+
+    // Now spell-check that paragraph
     m_bgSpell.kspell->check(text);
 }
 
@@ -334,9 +344,8 @@ void KoBgSpellCheck::spellCheckerDone()
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug(32500) << "KoBgSpellCheck::spellCheckerDone" << endl;
 #endif
-    if(m_bgSpell.currentParag)
-        m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
     if( m_bgSpell.currentTextObj && m_bgSpell.currentParag==m_bgSpell.currentTextObj->textDocument()->lastParag())
+        // ### and there is no paragraph in the textobject that got the "needsSpellCheck" flag since!
         m_bgSpell.currentTextObj->setNeedSpellCheck(false);
     // Done checking the current paragraph, schedule the next one
     d->nextParagraphTimer->start( 10, true );
