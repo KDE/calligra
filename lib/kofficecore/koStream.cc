@@ -302,7 +302,7 @@ public:
   void close() { }
   void flush() { }
   bool atEnd() { if ( m_in.eof() ) return true; return false; }
-  bool at() { return m_in.tellg(); }
+  int at() const { return m_in.tellg(); }
   bool at( int _pos ) { m_in.seekg( _pos ); return true; }
 
   uint size() const { return 0xffffffff; }
