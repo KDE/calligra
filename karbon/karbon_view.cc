@@ -87,17 +87,17 @@ KarbonView::initActions()
 		"edit_selectall" );
 
 	// object
-	new KAction( i18n("&Ellipse"), 0, actionCollection(),
+	new KAction( i18n("&Ellipse"), "ellipse", 0, actionCollection(),
 		"insert_ellipse" );
-	new KAction( i18n("&Polygon"), 0, actionCollection(),
+	new KAction( i18n("&Polygon"), "polygon", 0, actionCollection(),
 		"insert_polygon" );
-	new KAction( i18n("&Rectangle"), 0, actionCollection(),
+	new KAction( i18n("&Rectangle"), "rectangle", 0, actionCollection(),
 		"insert_rectangle" );
-	new KAction( i18n("S&inus"), 0, actionCollection(),
+	new KAction( i18n("S&inus"), "sinus", 0, actionCollection(),
 		"insert_sinus" );
-	new KAction( i18n("&Spiral"), 0, actionCollection(),
+	new KAction( i18n("&Spiral"), "spiral", 0, actionCollection(),
 		"insert_spiral" );
-	new KAction( i18n("S&tar"), 0, actionCollection(),
+	new KAction( i18n("S&tar"), "star", 0, actionCollection(),
 		"insert_star" );
 
 	// view
