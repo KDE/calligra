@@ -56,7 +56,7 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 	if (wt==DocumentWindow) {
 		if ((s_activeDocumentWindow==0) || (s_activeDocumentWindow->myDock==0)) {
 			myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockTop, 100);
-x//			myDock->toDesktop();
+//			myDock->toDesktop();
 		}
 		else
 			myDock->manualDock(s_activeDocumentWindow->myDock,KDockWidget::DockCenter);
