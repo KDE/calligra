@@ -260,6 +260,7 @@ bool Cursor::movePrev()
 	//--let's move to last record
 	if (m_afterLast && (m_records_in_buf>0)) {
 		drv_bufferMovePointerTo(m_records_in_buf-1);
+		m_at=m_records_in_buf;
 		m_at_buffer = true; //now current record is stored in the buffer
 		m_validRecord=true;
 		m_afterLast=false;

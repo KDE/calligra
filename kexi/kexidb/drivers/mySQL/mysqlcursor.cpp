@@ -126,7 +126,7 @@ void MySqlCursor::drv_bufferMovePointerNext() {
 
 void MySqlCursor::drv_bufferMovePointerPrev() {
 	MYSQL_ROW_OFFSET ro=mysql_row_tell(m_res);
-	mysql_data_seek(m_res,m_at);
+	mysql_data_seek(m_res,m_at-1);
 	m_row=mysql_fetch_row(m_res);
 	m_lengths=mysql_fetch_lengths(m_res);
 }
