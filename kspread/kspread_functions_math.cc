@@ -1889,7 +1889,6 @@ static bool kspreadfunc_counta_helper( KSContext& context, QValueList<KSValue::P
 
   for ( ; eit != eend; ++eit )
   {
-    kdDebug() << "S:" << (*eit)->stringValue() << endl;
     int right = 0;
     int left = 0;
     int bottom = 0;
