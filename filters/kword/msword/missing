@@ -11,13 +11,6 @@ Always download the latest version, we try to fix bugs in the SPEC.
 (Attention: this is a big file)
 
 Missing (not in any particular order):
-- The PAP (paragraph properties) and the CHP (character properties) are fully
-  provided, but the filter only cares about some parts of the properties
-  (justification and bold/italic/underlined properties)
-- The current SEP (section properties) is available via the Parser::currentSep
-  method. KWord doesn't really care about sections right now, but it should at
-  least read the first SEP to determine the page properties (size, orientation,
-  borders).
 - The filter should read the STTBFASSOC (a bunch of strings containing the
   author, title, keywords,...) for documentinfo.xml
 
