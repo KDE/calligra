@@ -54,7 +54,7 @@ bool KoPictureClipart::isNull(void) const
 }
 
 void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
-    int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool /*fastMode*/)
+    int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
     kdDebug(30003) << "Drawing KoPictureClipart " << this << endl;
     kdDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height << endl;
@@ -73,7 +73,7 @@ void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
     painter.restore();
 }
 
-void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh)
+void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool /*fastMode*/)
 {
     drawQPicture(m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
 }
