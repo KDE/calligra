@@ -31,12 +31,11 @@ VLayer::~VLayer()
 }
 
 void
-VLayer::draw( VPainter *painter, const KoRect& rect,
-	const double zoomFactor )
+VLayer::draw( VPainter *painter, const KoRect& rect )
 {
 	VObjectListIterator itr = m_objects;
 	for ( ; itr.current(); ++itr )
-		itr.current()->draw( painter, rect, zoomFactor );
+		itr.current()->draw( painter, rect );
 }
 
 void

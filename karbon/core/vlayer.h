@@ -22,8 +22,7 @@ public:
 	VLayer();
 	~VLayer();
 
-	void draw( VPainter *painter, const KoRect& rect,
-		const double zoomFactor );
+	void draw( VPainter *painter, const KoRect& rect );
 
 	void insertObject( const VObject* object );
 	void prependObject( const VObject* object );

@@ -135,6 +135,7 @@ KarbonView::print( KPrinter &printer )
 {
 	VQPainter p( (QPaintDevice *)&printer, width(), height() );
 	p.begin();
+	p.setZoomFactor( 1.0 );
 
 	// print the doc using QPainter at zoom level 1
 	// TODO : better use eps export?
@@ -142,7 +143,7 @@ KarbonView::print( KPrinter &printer )
 	QPtrListIterator<VLayer> i = m_part->layers();
 	for ( ; i.current(); ++i )
 		if ( i.current()->visible() )
-			i.current()->draw( &p, KoRect::fromQRect( QRect( 0, 0, width(), height() ) ), 1.0 );
+			i.current()->draw( &p, KoRect::fromQRect( QRect( 0, 0, width(), height() ) ) );
 
 	p.end();
 }

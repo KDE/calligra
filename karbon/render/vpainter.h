@@ -38,6 +38,7 @@ public:
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & ) = 0;
 	virtual void setZoomFactor( double ) = 0;
+	virtual double zoomFactor() { return 1.0; }
 
 	// drawing
 	virtual void moveTo( const KoPoint & ) = 0;

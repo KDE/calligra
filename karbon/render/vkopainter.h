@@ -32,6 +32,7 @@ public:
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );
 	virtual void setZoomFactor( double );
+	virtual double zoomFactor() { return m_zoomFactor; }
 
 	// drawing
     virtual void moveTo( const KoPoint & );

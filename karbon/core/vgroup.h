@@ -20,8 +20,7 @@ public:
 	VGroup( const VGroup & );
 	~VGroup();
 
-	void draw( VPainter *painter, const KoRect& rect,
-		const double zoomFactor );
+	void draw( VPainter *painter, const KoRect& rect );
 
 	void setState( const VState state );
 	// clear the group without deleting the objects

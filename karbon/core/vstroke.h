@@ -37,15 +37,33 @@ enum VLineJoin
 
 class QDomElement;
 
+/**
+ * Manages stroke properties.
+ *
+ */
 class VStroke
 {
 public:
 	VStroke( float width = 1.0, const VLineCap cap = cap_butt,
 			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
 
+	/**
+	 * Gives the current stroke color.
+	 *
+	 * @return The current stroke color.
+	 */
 	const VColor& color() const { return m_color; }
+
+	/**
+	 * Sets the current stroke color to color.
+	 */
 	void setColor( const VColor& color ) { m_color = color; }
 
+	/**
+	 * Gets the linewidth in pixels.
+	 *
+	 * @return 
+	 */
 	double lineWidth() const { return m_lineWidth; }
 	void setLineWidth( const double width ) { m_lineWidth = width; }
 

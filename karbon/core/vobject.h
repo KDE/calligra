@@ -46,15 +46,13 @@ public:
 	virtual ~VObject() {}
 
 	/**
-	 * Draw the object 
+	 * Draw the object to a painting device.
 	 *
 	 * @param painter abstraction that is used to render to a painting device.
 	 * @param rect represents the visible rectangular area. If this object doesnt
 	 *             intersect with this area it is not drawn.
-	 * @param zoomFactor zooming factor to take into account when drawing.
 	 */
-	virtual void draw( VPainter* painter, const KoRect& rect,
-		const double zoomFactor = 1.0  ) = 0;
+	virtual void draw( VPainter* painter, const KoRect& rect ) = 0;
 
 	/**
 	 * Transform the object according to the given matrix.

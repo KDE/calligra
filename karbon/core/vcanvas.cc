@@ -55,6 +55,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		// TODO : only update ROIs
 		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
 		p->begin();
+		p->setZoomFactor( m_zoomFactor );
 		QWMatrix mat;
 		mat.translate( -contentsX(), -contentsY() );
 		p->setWorldMatrix( mat );
@@ -62,7 +63,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		QPtrListIterator<VLayer> i = m_part->layers();
 		for ( ; i.current(); ++i )
 			if ( i.current()->visible() )
-				i.current()->draw( p, r, m_zoomFactor );
+				i.current()->draw( p, r );
 
 		m_bScrolling = false;
 	}
@@ -90,6 +91,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 	//kdDebug() << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 	VPainter* p = m_view->painterFactory()->painter();
 	p->begin();
+	p->setZoomFactor( m_zoomFactor );
 	QWMatrix mat;
 	mat.translate( -contentsX(), -contentsY() );
 	p->setWorldMatrix( mat );
@@ -99,7 +101,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 	QPtrListIterator<VLayer> i = m_part->layers();
 	for ( ; i.current(); ++i )
 		if ( i.current()->visible() )
-			i.current()->draw( p, KoRect::fromQRect( rect ), m_zoomFactor );
+			i.current()->draw( p, KoRect::fromQRect( rect ) );
 
 	p->end();
 

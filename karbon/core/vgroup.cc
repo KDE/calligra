@@ -40,12 +40,11 @@ VGroup::~VGroup()
 }
 
 void
-VGroup::draw( VPainter *painter, const KoRect& rect,
-	const double zoomFactor )
+VGroup::draw( VPainter *painter, const KoRect& rect )
 {
 	VObjectListIterator itr = m_objects;
 	for ( ; itr.current(); ++itr )
-		itr.current()->draw( painter, rect, zoomFactor );
+		itr.current()->draw( painter, rect );
 }
 
 void

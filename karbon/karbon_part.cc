@@ -426,11 +426,12 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	VPainter *p = painterFactory->painter();
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
+	p->setZoomFactor( 1.0 );
 
 	QPtrListIterator<VLayer> itr( m_layers );
 	for( ; itr.current(); ++itr )
 		if( itr.current()->visible() )
-			itr.current()->draw( p, KoRect::fromQRect( rect ), 1 );
+			itr.current()->draw( p, KoRect::fromQRect( rect ) );
 
 	p->end();
 	delete painterFactory;

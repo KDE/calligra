@@ -43,9 +43,9 @@ VPath::~VPath()
 }
 
 void
-VPath::draw( VPainter *painter, const KoRect& rect,
-	const double zoomFactor )
+VPath::draw( VPainter *painter, const KoRect& rect )
 {
+	double zoomFactor = painter->zoomFactor();
 	if( state() == state_deleted )
 		return;
 
@@ -53,7 +53,7 @@ VPath::draw( VPainter *painter, const KoRect& rect,
 		return;
 
 	painter->save();
-	painter->setZoomFactor( zoomFactor );
+	//painter->setZoomFactor( zoomFactor );
 
 	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 

@@ -124,8 +124,7 @@ VText::setState( const VState state )
 }
 
 void
-VText::draw( VPainter* painter, const KoRect& rect,
-	const double zoomFactor )
+VText::draw( VPainter* painter, const KoRect& rect )
 {
 	if( state() == state_deleted )
 		return;
@@ -152,7 +151,7 @@ VText::draw( VPainter* painter, const KoRect& rect,
 		//itr.current()->setState( state() );
 		itr.current()->setFill( m_fill );
 		itr.current()->setStroke( m_stroke );
-		itr.current()->draw( painter, rect, zoomFactor );
+		itr.current()->draw( painter, rect );
 	}
 }
 

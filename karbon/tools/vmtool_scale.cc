@@ -139,16 +139,15 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 		{
 			list.append( itr.current()->clone() );
 		}
+		painter->setZoomFactor( view->zoomFactor() );
 		VObjectListIterator itr2 = list;
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
-			itr2.current()->draw(
-				painter,
-				itr2.current()->boundingBox( view->zoomFactor() ),
-				view->zoomFactor() );
+			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoomFactor() ) );
 		}
+		painter->setZoomFactor( 1.0 );
 	}
 	else
 		m_isDragging = false;
