@@ -30,8 +30,8 @@ static const char* version=VERSION;
 KAboutData * newKPresenterAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kpresenter", I18N_NOOP("KPresenter"),
-                                           version, description, KAboutData::License_GPL,
-                                           I18N_NOOP("(c) 1998-2002, The KPresenter Team"), 0,
+                                           version, description, KAboutData::License_LGPL,
+                                           I18N_NOOP("(c) 1998-2003, The KPresenter Team"), 0,
                                            "http://www.koffice.org/kpresenter/");
     aboutData->addAuthor("Reginald Stadlbauer",I18N_NOOP("original author"), "reggie@kde.org");
     aboutData->addAuthor("Laurent Montel", I18N_NOOP("current maintainer"), "lmontel@mandrakesoft.com");
