@@ -45,6 +45,7 @@
 #include <kfiledialog.h>
 #include <kimgio.h>
 #include <kbuttonbox.h>
+#include <kio/netaccess.h>
 
 /*******************************************************************
  *
@@ -387,52 +388,56 @@ int BackDia::getBackYFactor()
 /*=============================================================*/
 void BackDia::selectPic()
 {
-    QString file;
-//#ifdef USE_QFD
-    KFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    KURL url;
+    KFileDialog fd( QString::null, 
+  //i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" )
+    KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
-/*#else
-   file  = KFilePreviewDialog::getOpenFileName( QString::null,
-						KImageIO::pattern(KImageIO::Reading),
-						0 );
-#endif*/
-
-    if ( !file.isEmpty() ) {
-	chosenPic = file;
-	lPicName->setText( chosenPic );
+    {
+	url = fd.selectedURL();
+/*
+        if (!url.isLocalFile())
+        {
+          KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+          return;
+        }
+	chosenPic = url.path();
+*/
+        chosenPic = QString::null;
+        if (!KIO::NetAccess::download( url, chosenPic ))
+          return;
+	lPicName->setText( url.decodedURL() );
 	backCombo->setCurrentItem( 1 );
 	picChanged = TRUE;
 	picLastModified = QDateTime();
 	updateConfiguration();
+        // Problem : when to remove the temp file ?
     }
 }
 
 /*=============================================================*/
 void BackDia::selectClip()
 {
-    QString file;
-//#ifdef USE_QFD
+    KURL url;
     KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
     fd.setPreviewWidget( new Preview( &fd ) );
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	    file = fd.selectedFile();
-/*#else
-    file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
-#endif*/
-    
-    if ( !file.isEmpty() ) {
-	chosenClip = file;
-	lClipName->setText( chosenClip );
+    {
+        url = fd.selectedURL();
+        chosenClip = QString::null;
+        if (!KIO::NetAccess::download( url, chosenClip ))
+          return;
+        lClipName->setText( url.decodedURL() );
 	backCombo->setCurrentItem( 2 );
 	clipChanged = TRUE;
 	clipLastModified = QDateTime();
 	updateConfiguration();
+        // Problem : when to remove the temp file ?
     }
 }
 
