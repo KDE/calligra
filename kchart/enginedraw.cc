@@ -1,6 +1,6 @@
 #include <stdlib.h>
 //#include <stdarg.h>
-//#include <math.h>
+#include <math.h>
 //#include <stdio.h> //PENDING(kalle) Remove?
 #include <qcolor.h>
 #include <qpainter.h>
@@ -73,7 +73,7 @@ void draw_3d_line( QPainter*    p,
 // %d, %d, %d,\nshadow color 0 = %d, %d, %d,\ncolor 1 = %d, %d, %d,\nshadow color 1 = %d, %d, %d", clr[0].red(), clr[0].green(), clr[0].blue(), clrshd[0].red(), clrshd[0].green(), clrshd[0].blue(), clr[1].red(), clr[1].green(), clr[1].blue(), clrshd[1].red(), clrshd[1].green(), clrshd[1].blue() );
 
 #define F(x,i)  (int)( (float)((x)-x1)*slope[i]+(float)y1[i] )
-    float depth_slope  = xdepth==0? MAXFLOAT: (float)ydepth/(float)xdepth;
+    float depth_slope  = xdepth==0? FLT_MAX: (float)ydepth/(float)xdepth;
     float *slope = new float[num_sets];
     int *lnclr = new int[num_sets];
     int *shclr = new int[num_sets];
@@ -85,7 +85,7 @@ void draw_3d_line( QPainter*    p,
     for( i=0; i<num_sets; ++i ) {
         // lnclr[i] = clr[i];
         // shclr[i] = clrshd[i];
-        slope[i] = x2==x1? MAXFLOAT: (float)(y2[i]-y1[i])/(float)(x2-x1);
+        slope[i] = x2==x1? FLT_MAX: (float)(y2[i]-y1[i])/(float)(x2-x1);
     }
 
     for( x=x1+1; x<=x2; ++x ) {
@@ -146,8 +146,8 @@ void draw_3d_area( QPainter* p,
 
     if( xdepth || ydepth )
         {
-        float line_slope = x2==x1?    MAXFLOAT: (float)-(y2-y1) / (float)(x2-x1);
-        float depth_slope  = xdepth==0? MAXFLOAT: (float)ydepth/(float)xdepth;
+        float line_slope = x2==x1?    FLT_MAX: (float)-(y2-y1) / (float)(x2-x1);
+        float depth_slope  = xdepth==0? FLT_MAX: (float)ydepth/(float)xdepth;
         y_intercept = (y1 > y0 && y2 < y0) ||                                           // line crosses y0
                 (y1 < y0 && y2 > y0)?
                         (int)((1.0/ABS(line_slope))*(float)(ABS(y1-y0)))+x1:0;                                                                          // never

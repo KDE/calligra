@@ -208,22 +208,22 @@ pie_gif( short imagewidth,
                     /* diamiter limited by this piont's: explosion, label                 */
                     /* (radius to box @ slice_angle) - (explode) - (projected label size) */
                     /* radius constraint due to labels */
-                    /*this_y_explode_limit = (float)this_cos==0.0? MAXFLOAT:
+                    /*this_y_explode_limit = (float)this_cos==0.0? FLT_MAX:
                         (       (float)( (double)cheight/ABS(this_cos) ) -
                                                         (float)( this_explode + (lbl[i]? params->label_dist: 0) ) -
                                                         (float)( lbl_hgt/2 ) / (float)ABS(this_cos)     );*/
 
-                    this_y_explode_limit = (float)this_cos==0.0? MAXFLOAT:
+                    this_y_explode_limit = (float)this_cos==0.0? FLT_MAX:
                         (       (float)( (double)cheight/ABS(this_cos) ) -
                                                         (float)( this_explode + (!params->legend[i].isEmpty()? params->label_dist: 0) ) -
                                                         (float)( lbl_hgt/2 ) / (float)ABS(this_cos)     );
 
-                    /*this_x_explode_limit = (float)this_sin==0.0? MAXFLOAT:
+                    /*this_x_explode_limit = (float)this_sin==0.0? FLT_MAX:
                         (       (float)( (double)cwidth/ABS(this_sin) ) -
                                                         (float)( this_explode + (lbl[i]? params->label_dist: 0) ) -
                                                         (float)( lbl_wdth ) / (float)ABS(this_sin)      );*/
 
-                    this_x_explode_limit = (float)this_sin==0.0? MAXFLOAT:
+                    this_x_explode_limit = (float)this_sin==0.0? FLT_MAX:
                         (       (float)( (double)cwidth/ABS(this_sin) ) -
                                                         (float)( this_explode + (!params->legend[i].isEmpty()? params->label_dist: 0) ) -
                                                         (float)( lbl_wdth ) / (float)ABS(this_sin)      );
@@ -286,7 +286,7 @@ pie_gif( short imagewidth,
 	    else 
 	      {
                 others[i] = TRUE;
-                slice_angle[i][0] = -MAXFLOAT;
+                slice_angle[i][0] = -FLT_MAX;
 	      }
             last += that;
         }
@@ -701,7 +701,7 @@ pie_gif( short imagewidth,
                                
 		if( !params->legend[i].isNull() )
 		  {
-		    QRect br = QFontMetrics( params->labelFont() ).boundingRect( 0, 0, MAXINT, MAXINT, slice_angle[i][0] <= M_PI ?
+		    QRect br = QFontMetrics( params->labelFont() ).boundingRect( 0, 0, INT_MAX, INT_MAX, slice_angle[i][0] <= M_PI ?
 										 Qt::AlignLeft : Qt::AlignRight, params->legend[i] );
 		    p->setPen( LineColor);
 		    p->setFont( params->labelFont() );

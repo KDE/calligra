@@ -12,6 +12,7 @@
 #include <qlayout.h>
 #include <klocale.h>
 #include <kfontdialog.h>
+#include <math.h>
 
 KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 													  KChartPart* chart ) :
@@ -104,7 +105,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QString tmp;
   y_interval=new QLineEdit(tmpQGroupBox);
   grid2->addWidget(y_interval,0,1);
-  if( _chart->params()->requested_yinterval != -MAXDOUBLE)
+  if( _chart->params()->requested_yinterval != -DBL_MAX)
     y_interval->setText( tmp.setNum(_chart->params()->requested_yinterval));
 
   tmpLabel=new QLabel(tmpQGroupBox);
@@ -112,7 +113,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   grid2->addWidget(tmpLabel,1,0);
   y_min=new QLineEdit(tmpQGroupBox);
   grid2->addWidget(y_min,1,1);
-  if( _chart->params()->requested_ymin != MAXDOUBLE)
+  if( _chart->params()->requested_ymin != DBL_MAX)
     y_min->setText( tmp.setNum(_chart->params()->requested_ymin));
 
   tmpLabel=new QLabel(tmpQGroupBox);
@@ -120,7 +121,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   grid2->addWidget(tmpLabel,2,0);
   y_max=new QLineEdit(tmpQGroupBox);
   grid2->addWidget(y_max,2,1);
-  if( _chart->params()->requested_ymax != -MAXDOUBLE)
+  if( _chart->params()->requested_ymax != -DBL_MAX)
     y_max->setText( tmp.setNum(_chart->params()->requested_ymax));
 
   grid1->addWidget(tmpQGroupBox,1,0);

@@ -48,8 +48,8 @@ void KChartEngine::drawAnnotation() {
                 p->setPen( AnnoteColor );
                 p->drawLine( x2,PY(highest)-2,x2-annote_hgt/2, PY(highest)-2-annote_hgt/2 );
                 p->setFont( params->annotationFont() );
-                QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0, MAXINT,
-                                                                   MAXINT,
+                QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0, INT_MAX,
+                                                                   INT_MAX,
                                                                    Qt::AlignRight,
                                                                    params->annotation->note );
                 p->drawText(   x2-annote_hgt/2-1-annote_len - 1,
@@ -63,8 +63,8 @@ void KChartEngine::drawAnnotation() {
                 p->drawLine( x2, PY(highest)-2,x2+annote_hgt/2, PY(highest)-2-annote_hgt/2 );
                 p->setFont( params->annotationFont() );
                 QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0,
-                                                                        MAXINT,
-                                                                        MAXINT,
+                                                                        INT_MAX,
+                                                                        INT_MAX,
                                                                         Qt::AlignLeft,
                                                                         params->annotation->note );
                 p->drawText( x2+annote_hgt/2+1 + 1,
@@ -85,8 +85,8 @@ void KChartEngine::titleText() {
         p->setFont( params->titleFont() );
         p->setPen( titlecolor );
         QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0,
-                                MAXINT,
-                                MAXINT,
+                                INT_MAX,
+                                INT_MAX,
                                 Qt::AlignCenter,
                                 params->title );
         p->drawText( imagewidth/2 - tlen*params->titleFontWidth()/2, // x

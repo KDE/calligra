@@ -60,7 +60,7 @@ void KChartEngine::computeSize() {
 
   if( params->xaxis && params->hasxlabel )
         {
-          int biggest     = -MAXINT;
+          int biggest     = -INT_MAX;
           unsigned int len = 0;
           for( int i=0; i<num_points; ++i )
                 {
@@ -130,7 +130,7 @@ void KChartEngine::computeSize() {
     //    params->requested_yinterval = 1.0;
 
     /* gotta go through the above loop to catch the 'tweeners :-| */
-    ylbl_interval = params->requested_yinterval != -MAXDOUBLE &&
+    ylbl_interval = params->requested_yinterval != -DBL_MAX &&
       params->requested_yinterval > ypoints[jumpout_value-1] ?
       params->requested_yinterval:
       ypoints[jumpout_value-1];
@@ -180,7 +180,7 @@ void KChartEngine::computeSize() {
           } while( tmp_highest <= highest); // BL.
 
     ylabel_wth = longest_ylblen * params->yAxisFontWidth();
-    highest = params->requested_ymax==-MAXDOUBLE? tmp_highest:
+    highest = params->requested_ymax==-DBL_MAX? tmp_highest:
       QMAX( params->requested_ymax, highest );
 
     if( params->do_vol() ) {
@@ -358,19 +358,19 @@ void KChartEngine::computeMinMaxValues() {
                         vhighest = QMAX( CELLVALUE( 3, j ), vhighest );
                         vlowest  = QMIN( CELLVALUE( 3, j ), vlowest );
                   }
-          if( vhighest == -MAXFLOAT )// no values
+          if( vhighest == -FLT_MAX )// no values
                 vhighest = 1.0;// for scaling, need a range
           else if( vhighest < 0.0 )
                 vhighest = 0.0;
-          if( vlowest > 0.0 || vlowest == MAXFLOAT )
+          if( vlowest > 0.0 || vlowest == FLT_MAX )
                 vlowest = 0.0;// vol should always start at 0
         }
 
   kdDebug(35001) << "done vlowest computation" << endl;
 
-  if( lowest == MAXFLOAT )
+  if( lowest == FLT_MAX )
     lowest = 0.0;
-  if( highest == -MAXFLOAT )
+  if( highest == -FLT_MAX )
     highest = 1.0;// need a range
   if( params->type == KCHARTTYPE_AREA  ||// bars and area should always start at 0
       params->type == KCHARTTYPE_BAR   ||
@@ -381,9 +381,9 @@ void KChartEngine::computeMinMaxValues() {
     else if( lowest > 0.0 )// negs should be drawn from 0
       lowest = 0.0;
 
-  if( params->requested_ymin != -MAXDOUBLE && params->requested_ymin < lowest )
+  if( params->requested_ymin != -DBL_MAX && params->requested_ymin < lowest )
     lowest = params->requested_ymin;
-  if( params->requested_ymax != -MAXDOUBLE && params->requested_ymax > highest )
+  if( params->requested_ymax != -DBL_MAX && params->requested_ymax > highest )
     highest = params->requested_ymax;
 
   kdDebug(35001) << "done requested_* computation" << endl;

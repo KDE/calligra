@@ -13,7 +13,7 @@
 
 #include <qfont.h>
 #include <qcolor.h>
-#include <values.h>
+#include <limits.h>
 #include <kchart_part.h>
 
 class KChartParameters;

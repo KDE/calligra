@@ -5,6 +5,7 @@
 #include "kchartparams.h"
 #include "kglobal.h"
 #include <klocale.h>
+#include <math.h>
 #include <kstddirs.h>
 KChartParameters::KChartParameters() :
 	annotation( 0 ),
@@ -305,9 +306,9 @@ void KChartParameters::defaultConfig()
   label_line = false;
   xlabel_spacing = 5;
   ylabel_density = 80;
-  requested_ymin = MAXDOUBLE;
-  requested_ymax = -MAXDOUBLE;
-  requested_yinterval = -MAXDOUBLE;
+  requested_ymin = DBL_MAX;
+  requested_ymax = -DBL_MAX;
+  requested_yinterval = -DBL_MAX;
   shelf = true;
   grid = true;
   xaxis = true;
@@ -329,7 +330,7 @@ void KChartParameters::defaultConfig()
     delete scatter;
   scatter = 0;
   thumbnail = false;
-  thumbval = -MAXFLOAT;
+  thumbval = -FLT_MAX;
   border = true;
   transparent_bg = false;
   hasxlabel = true;

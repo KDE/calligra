@@ -374,7 +374,7 @@ void KChartEngine::drawXTicks()
         return;
 
   /* each xlbl + avg due to num_lf_xlbls */
-  int neededspace = ( (params->xlabel_spacing==MAXSHORT?0:params->xlabel_spacing)+params->xAxisFontHeight() +
+  int neededspace = ( (params->xlabel_spacing==SHRT_MAX?0:params->xlabel_spacing)+params->xAxisFontHeight() +
                                           (num_lf_xlbls*(params->xAxisFontHeight()-1))/num_points );
   ASSERT( neededspace );
   int num_xlbls = /* maximum x lables that'll fit */
@@ -388,7 +388,7 @@ void KChartEngine::drawXTicks()
   for(int i=0; i<num_points+(params->do_bar()?2:0); ++i ) {
         if( (i%(1+num_points/num_xlbls) == 0) ||   // labels are regulated
                 (num_xlbls >= num_points)         ||
-                params->xlabel_spacing == MAXSHORT ) {
+                params->xlabel_spacing == SHRT_MAX ) {
           int xi = params->do_bar()? i-1: i;
 
           if( params->grid ) {

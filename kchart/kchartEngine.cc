@@ -21,10 +21,10 @@ int KChartEngine::init() {
   yscl = 0.0;
   vyscl = 0.0;
   xscl = 0.0;
-  vhighest = -MAXFLOAT;
-  vlowest  = MAXFLOAT;
-  highest  = -MAXFLOAT;
-  lowest   = MAXFLOAT;
+  vhighest = -FLT_MAX;
+  vlowest  = FLT_MAX;
+  highest  = -FLT_MAX;
+  lowest   = FLT_MAX;
   ylbl_interval  = 0.0;
   num_lf_xlbls   = 0;
   xdepth_3Dtotal = 0;
