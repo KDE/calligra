@@ -17,6 +17,6 @@ bool WordFilter::filterIt() {
     return false;  // was not able to convert ;)
 }
 
-QString WordFilter::kwdFile() {
+QString &WordFilter::kwdFile() {
     return myKwd->kwdFile();
 }

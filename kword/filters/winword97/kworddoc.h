@@ -8,7 +8,7 @@ class KWordDoc {
 public:
     KWordDoc();
     ~KWordDoc();
-    QString kwdFile();
+    QString &kwdFile();
     
 private:
     QString kwd;    

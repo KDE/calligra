@@ -6,6 +6,6 @@ KWordDoc::KWordDoc() {
 KWordDoc::~KWordDoc() {
 }
 
-QString KWordDoc::kwdFile() {
+QString &KWordDoc::kwdFile() {
     return kwd;
 }

@@ -11,17 +11,18 @@
 
 #include <string.h>
 #include <qstring.h>
-#include <qfile.h>
 #include <qstrlist.h>
 #include <qlist.h>
 #include <kdebug.h>
 #include "myfile.h"
 
-
+// If you fetch this struct, you will get all the available
+// OLE-Info for the corresponding stream.
+// Normally you won't use it.
 struct OLEInfo {
-    short handle;       // An internal number :)
-    char name[32];      // Name of the Stream
-    short nameSize;     // Size of the Name
+    long handle;        // PPS entry number
+    QString name;       // Name of the stream
+    short nameSize;     // Size of the name
     char type;          // Type of pps 
     long prev;          // Last pps
     long next;          // Next pps
@@ -30,45 +31,65 @@ struct OLEInfo {
     long ts1d;          // Timestamp 1, days
     long ts2s;          // Timestamp 2, seconds
     long ts2d;          // Timestamp 2, days
-    long sb;            // Starting Block
-    long size;          // Size of Property    
+    long sb;            // Starting block
+    long size;          // Size of property
 };
 
-struct OLEStream {
-    long size;          // Size of the stream
-    char *stream;       // The Data. Note: This is a potential
-                        // memory-leak! Please ensure that you
-                        // delete [] stream; stream=0L; somewhere!
+// A little bit of OLE-Information. If you want to navigate through
+// the "filesystem" you have to use this struct.
+struct OLENode {
+    long handle;
+    QString name;
+    char type;       // 1=Dir, 2=File/Stream, 5=Root Entry
+};
+
+// For internal use only!
+struct OLETree {
+    long handle;
+    QList<OLETree> subtree;
 };
 
 
 class KLaola {
 
 public:
-    KLaola(myFile _file);
+    KLaola(myFile file);               // see myfile.h!
     ~KLaola();
 
-    QStrList streamNames();            // all the Stream-Names, TODO
-    OLEInfo streamInfo(QString name);  // fetch info for a specific Stream
-                                       // this info is from the property
-                                       // storage area, TODO
-    OLEStream stream(QString name);    // get the Stream, TODO
+
+    QList<OLENode> parseRootDir();     // TODO
+    QList<OLENode> parseCurrentDir();  // TODO
+
+    bool enterDir(long handle);        // TODO
+    bool leaveDir();                   // TODO
+    QList<long> currentPath();         // TODO
+
+    OLEInfo *streamInfo(long handle);  // TODO
+    QString &stream(long handle);      // TODO
+
+    void testIt();                     // dump some info (similar to "lls"
+                                       // of the LAOLA-project), TODO
  
 private:
     bool parseHeader();
     void readBigBlockDepot();
     void readSmallBlockDepot();
     void readSmallBlockFile();
-    void parseNames();             // TODO
-    void readRootList();           // TODO
-    
+    void readRootList();
+    void readPPSEntry(long pos, long handle);
+    void createTree(QList<OLETree> &subtree, long handle);
     unsigned char *readBBStream(long start);
-    
+    unsigned char *readSBStream(long start);
+
+    inline long nextBigBlock(long pos);
+    inline long nextSmallBlock(long pos);
     inline unsigned short read16(int i);
     inline unsigned long read32(int i);
 
-    QStrList names;
-    QList<OLEInfo> streamInfoList;
+    QList<OLETree> tree;
+    QList<OLEInfo> ppsList;
+    QList<long> path;
+
     unsigned char *data;
     unsigned char *bigBlockDepot;
     unsigned char *smallBlockDepot;

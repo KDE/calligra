@@ -15,7 +15,7 @@ public:
     WordFilter(myFile in);
     ~WordFilter();
     bool filterIt();
-    QString kwdFile();
+    QString &kwdFile();
     
 private:
     WinWordDoc *myDoc;
