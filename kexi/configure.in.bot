@@ -1,0 +1,8 @@
+if test "$use_kexi_compat_qextmdi" = "do_not_compile"; then
+  echo ""
+  echo "Kexi will not be compiled, as the compatibility library is missing."
+  echo "For kde3.1 qextmdi library is needed from"
+  echo "http://kexi-project.org/resources"
+  all_tests=bad
+fi
+
