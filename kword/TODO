@@ -1,3 +1,4 @@
+
 TODO-List:
 ----------
 
@@ -5,19 +6,13 @@ Bugs; in order or importance:
 
 - Frame Run around is the wrong way around.. Framedia does it correct now. 
   still needs to be done correctly in kword_doc
-- Tables can not expand to next page, the append page bugs..
 - Deleting the first frameset crashes kword (can only be done in DTP)
-- When the cursor is in a frame which a) is not visible (below others) or b) just deleted
-  the updateframes crashes (on getFirstParag).
 - Page Preview image forgets about orientation when changing page size. (always shows  portrait)
 - deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
   (we have a problem with reference counts in the creation of a new image)
 - Setting a paragraph to a new style should override ALL settings, including size of the characters.
 - reconnect dumps sometimes.
 - When deleting text, empty pages are not removed
-- Tables have to be in the textflow of the first frameset (some hack needed here)
-- When moving/resizing tables and the go over multiple pages there are some redraw problems - 
-  but nothing really bad :-))
 - When a frame grows there are sometimes redraw errors
 - When removing text in a table cell shrink table cells
 
@@ -33,6 +28,7 @@ Missing or incomplete stuff:
 - Tabulators don't work correctly in "Blocksatz"
 - Sideheads
 - split frame
+- Toolbars in the settings menu are not updated if they are not shown/reshown
 
 Optimations:
 ----------------------------------------
