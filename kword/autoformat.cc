@@ -145,8 +145,8 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
 
     //if ( !m_enabled )
     //    return;
-    // Auto-correction happens when pressing space, tab, CR etc.
-    if ( ch.isSpace() )
+    // Auto-correction happens when pressing space, tab, CR, punct etc.
+    if ( ch.isSpace() || ch.isPunct() )
     {
         if ( index > 0 )
         {
