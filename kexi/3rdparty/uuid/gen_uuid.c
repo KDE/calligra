@@ -189,7 +189,7 @@ static int get_clock(__u32 *clock_high, __u32 *clock_low, __u16 *ret_clock_seq)
 	static struct timeval		last = {0, 0};
 	static __u16			clock_seq;
 	struct timeval 			tv;
-	unsigned long long		clock_reg;
+	unsigned longlong		clock_reg;
 	
 try_again:
 	gettimeofday(&tv, 0);
@@ -216,8 +216,8 @@ try_again:
 	}
 		
 	clock_reg = tv.tv_usec*10 + adjustment;
-	clock_reg += ((unsigned long long) tv.tv_sec)*10000000;
-	clock_reg += (((unsigned long long) 0x01B21DD2) << 32) + 0x13814000;
+	clock_reg += ((unsigned longlong) tv.tv_sec)*10000000;
+	clock_reg += (((unsigned longlong) 0x01B21DD2) << 32) + 0x13814000;
 
 	*clock_high = clock_reg >> 32;
 	*clock_low = clock_reg;

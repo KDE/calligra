@@ -12,7 +12,13 @@
 #include <sys/types.h>
 /*jowenn: #include <uuid/uuid_types.h>*/
 
-#include <linux/types.h>
+#ifdef _WIN32 //(js)
+//..
+#define longlong __int64
+#else
+#define longlong long long
+# include <linux/types.h>
+#endif
 
 #include "uuid.h"
 
