@@ -46,9 +46,12 @@ public:
     virtual bool load( QBuffer &buffer );
 
     /**
-     * Paint metafile to given paint-device. Returns true on success.
+     * Paint metafile to given paint-device using absolute or relative coordinate.
+     * abosute coord. reset the world transfomation Matrix
+     * relative coord. use the existing world transfomation Matrix
+     * Returns true on success.
      */
-    virtual bool paint( const QPaintDevice* target );
+    virtual bool paint( const QPaintDevice* target, bool absolute=false );
 
     /**
      * Returns true if the metafile is placeable.
@@ -191,6 +194,7 @@ protected:
 
 protected:
     QPainter mPainter;
+    bool  mAbsoluteCoord;
     QPointArray mPoints;
     QColor mTextColor;
     int mTextAlign, mRotation;

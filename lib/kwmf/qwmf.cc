@@ -1,6 +1,7 @@
 /* Windows Meta File Loader/Painter Class Implementation
  *
  * Copyright ( C ) 1998 Stefan Taferner
+ * Modified 2002 thierry lorthiois
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,6 +27,7 @@
 #include <qapplication.h>
 #include <qbuffer.h>
 #include <kdebug.h>
+//#define  kdDebug()  cout
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -43,9 +45,9 @@ class WmfCmd
 public:
     ~WmfCmd() { if ( next ) delete next; }
     WmfCmd* next;
-    short funcIndex;
+    unsigned short funcIndex;
     long  numParm;
-    WORD* parm;
+    short* parm;
 };
 
 
@@ -201,22 +203,22 @@ bool QWinMetaFile::load( QBuffer &buffer )
         checksum = calcCheckSum( &pheader );
         if ( pheader.checksum!=checksum ) mIsPlaceable = false;
 
+        mDpi = pheader.inch;
+        mBBox.setLeft( pheader.bbox.left );
+        mBBox.setTop( pheader.bbox.top );
+        mBBox.setRight( pheader.bbox.right );
+        mBBox.setBottom( pheader.bbox.bottom );
         if ( mSingleStep )
         {
+            kdDebug() << endl << "-------------------------------------------------" << endl;
             kdDebug() << "WMF Placeable Header ( " << static_cast<int>(sizeof( pheader ) ) << "):" << endl;
-            kdDebug() << "  key=" << pheader.key << endl;
-            kdDebug() << "  hmf=" << pheader.hmf << endl;
             kdDebug() << "  bbox=( " << pheader.bbox.left << "; " << pheader.bbox.top << "; " << pheader.bbox.right
                       << "; " << pheader.bbox.bottom << ")" << endl;
+            kdDebug() << "  width=" << mBBox.width() << "  height=" << mBBox.height() << endl;
             kdDebug() << "  inch=" << pheader.inch << endl;
             kdDebug() << "  checksum=" << pheader.checksum << "( "
                       << (pheader.checksum==checksum?"ok":"wrong") << " )" << endl;
         }
-        mDpi = pheader.inch;
-        mBBox.setLeft( QMIN( pheader.bbox.left, pheader.bbox.right ) );
-        mBBox.setTop( QMIN( pheader.bbox.top, pheader.bbox.bottom ) );
-        mBBox.setWidth( QABS( pheader.bbox.right - pheader.bbox.left ) );
-        mBBox.setHeight( QABS( pheader.bbox.bottom - pheader.bbox.top ) );
     }
     else buffer.at( 0 );
 
@@ -251,6 +253,7 @@ bool QWinMetaFile::load( QBuffer &buffer )
 
         if ( mSingleStep )
         {
+            kdDebug() << endl << "-------------------------------------------------" << endl;
             kdDebug() << "WMF Extended Header:" << endl;
             kdDebug() << "  iType=" << eheader.iType << endl;
             kdDebug() << "  nSize=" << eheader.nSize << endl;
@@ -258,8 +261,6 @@ bool QWinMetaFile::load( QBuffer &buffer )
                       << eheader.rclBounds.right << "; " << eheader.rclBounds.bottom << ")" << endl;
             kdDebug() << "  rclFrame=( " << eheader.rclFrame.left << "; " << eheader.rclFrame.top << "; "
                       << eheader.rclFrame.right << "; " << eheader.rclFrame.bottom << ")" << endl;
-            kdDebug() << "  dSignature=" << eheader.dSignature << endl;
-            kdDebug() << "  nVersion=" << eheader.nVersion << endl;
             kdDebug() << "  nBytes=" << eheader.nBytes << endl;
             kdDebug() << "\nNOT YET IMPLEMENTED, SORRY." << endl;
         }
@@ -275,13 +276,8 @@ bool QWinMetaFile::load( QBuffer &buffer )
         st >> header.mtNoObjects;
         st >> header.mtMaxRecord;
         st >> header.mtNoParameters;
-        if ( mSingleStep )
-        {
-            kdDebug() << "WMF Header:" << endl;
-            kdDebug() << "  mtType=" << header.mtType << endl;
-            kdDebug() <<  "  mtHeaderSize=" << header.mtHeaderSize  << endl;
-            kdDebug() <<  "  mtVersion=" << header.mtVersion  << endl;
-            kdDebug() <<  "  mtSize=" << header.mtSize << endl;
+        if ( mSingleStep ) {
+            kdDebug() << "WMF Header: " <<  "mtSize=" << header.mtSize << endl;
         }
     }
 
@@ -290,61 +286,68 @@ bool QWinMetaFile::load( QBuffer &buffer )
     if ( mValid )
     {
         //----- Read Metafile Records
-    last = NULL;
-    while ( !st.eof() )
-    {
-        st >> rdSize;
-        st >> rdFunc;
-        if ( rdFunc==0 ) break;
-
-        idx = findFunc( rdFunc );
-        rdSize -= 3;
-
-        cmd = new WmfCmd;
-        cmd->next = NULL;
-        if ( last ) last->next = cmd;
-        else mFirstCmd = cmd;
-
-        cmd->funcIndex = idx;
-        cmd->numParm = rdSize;
-        cmd->parm = new WORD[ rdSize ];
-        last = cmd;
-
-        for ( i=0; i<rdSize && !st.eof(); i++ )
-            st >> cmd->parm[ i ];
-
-        if ( rdFunc == 0x020B ) {         // SETWINDOWORG: dimensions
-            mBBox.setLeft( cmd->parm[ 1 ] );
-            mBBox.setTop( cmd->parm[ 0 ] );
-        }
-        if ( rdFunc == 0x020C ) {         // SETWINDOWEXT: dimensions
-                mBBox.setWidth( QABS(cmd->parm[ 1 ]) );
-                mBBox.setHeight( QABS(cmd->parm[ 0 ]) );
-        }
-
-        if ( i<rdSize )
+        last = NULL;
+        while ( !st.eof() )
         {
+            st >> rdSize;
+            st >> rdFunc;
+            if ( rdFunc==0 ) break;
+
+            idx = findFunc( rdFunc );
+            rdSize -= 3;
+
+            cmd = new WmfCmd;
+            cmd->next = NULL;
+            if ( last ) last->next = cmd;
+            else mFirstCmd = cmd;
+
+            cmd->funcIndex = idx;
+            cmd->numParm = rdSize;
+            cmd->parm = new WORD[ rdSize ];
+            last = cmd;
+
+            for ( i=0; i<rdSize && !st.eof(); i++ )
+                st >> cmd->parm[ i ];
+
+
+            if ( rdFunc == 0x020B ) {         // SETWINDOWORG: dimensions
+//kdDebug() << "  ORG left=" << cmd->parm[ 1 ] << "  top=" << cmd->parm[ 0 ] << endl;
+                mBBox.setLeft( cmd->parm[ 1 ] );
+                mBBox.setTop( cmd->parm[ 0 ] );
+            }
+            if ( rdFunc == 0x020C ) {         // SETWINDOWEXT: dimensions
+//kdDebug() << "  EXT width=" << cmd->parm[ 1 ] << "  height=" << cmd->parm[ 0 ] << endl;
+                mBBox.setWidth( cmd->parm[ 1 ] );
+                mBBox.setHeight( cmd->parm[ 0 ] );
+            }
+
+            if ( i<rdSize )
+            {
                 kdDebug() << "WMF : file truncated !" << endl;
-            return false;
+                return false;
+            }
         }
-    }
         //----- Test records validities
         mValid = (rdFunc == 0) && (mBBox.width() != 0) && (mBBox.height() != 0);
         if ( !mValid ) {
             kdDebug() << "WMF : incorrect file format !" << endl;
-}
+        }
     }
     else {
         kdDebug() << "WMF Header : incorrect header !" << endl;
-}
+    }
 
+    if ( mSingleStep ) {
+        kdDebug() << "  bbox=( " << mBBox.left() << "; " << mBBox.top() << "; " << mBBox.width()
+                      << "; " << mBBox.height() << ")" << endl;
+    }
     buffer.close();
     return mValid;
 }
 
 
 //-----------------------------------------------------------------------------
-bool QWinMetaFile::paint( const QPaintDevice* aTarget )
+bool QWinMetaFile::paint( const QPaintDevice* aTarget, bool absolute )
 {
     int idx, i;
     WmfCmd* cmd;
@@ -362,8 +365,16 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
 
     mPainter.resetXForm();
     mWinding = false;
+    mAbsoluteCoord = absolute;
 
     mPainter.begin( aTarget );
+    if ( mAbsoluteCoord ) {
+        mPainter.setWindow( mBBox.top(), mBBox.left(), mBBox.width(), mBBox.height() );
+        if ( mSingleStep )  {
+            kdDebug() << "Absolute drawing. Bounding box : " << mBBox.top();
+            kdDebug() << " " << mBBox.left() << " " << mBBox.right() << " " << mBBox.bottom() << endl;
+        }
+    }
 
     for ( cmd=mFirstCmd; cmd; cmd=cmd->next )
     {
@@ -376,21 +387,26 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
 
         if ( mSingleStep || metaFuncTab[ idx ].method==0 )
         {
+
             if ( metaFuncTab[ idx ].method == 0 )
-            fprintf( stderr, "QWinMetaFile: unimplemented %s", metaFuncTab[ idx ].name );
+                kdDebug() << "QWinMetaFile unimplemented : " << metaFuncTab[ idx ].name << endl;
             else
-                fprintf( stderr, "%s  : ", metaFuncTab[ idx ].name );
-            
-            for ( int i=0 ; i < cmd->numParm ; i++ ) fprintf( stderr, " %d", cmd->parm[ i ] );
+                kdDebug() << metaFuncTab[ idx ].name << " : "<< endl;
+
+            for ( int i=0 ; i < cmd->numParm ; i++ )
+                kdDebug() << cmd->parm[ i ] << " ";
 
             if ( mSingleStep )
             {
                 fflush( stderr );
                 fgets( dummy, 1, stdin );
             }
-            else fprintf( stderr, "\n" );
+            else
+                kdDebug() << endl;
+
         }
-        if ( metaFuncTab[ idx ].method!=0 )
+
+        if ( metaFuncTab[ idx ].method != 0 )
         {
             ( this->*metaFuncTab[ idx ].method )( cmd->numParm, cmd->parm );
         }
@@ -405,24 +421,51 @@ bool QWinMetaFile::paint( const QPaintDevice* aTarget )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowOrg( long, short* parm )
 {
-    mBBox.setLeft( parm[ 1 ] );
-    mBBox.setTop( parm[ 0 ] );
+    if ( mAbsoluteCoord ) {
+        QRect r = mPainter.window();
+        mPainter.setWindow( parm[ 1 ], parm[ 0 ], r.width(), r.height() );
+    }
+    else {
+        mBBox.setLeft( parm[ 1 ] );
+        mBBox.setTop( parm[ 0 ] );
 
-    mPainter.translate( -parm[ 1 ], -parm[ 0 ] );
+        mPainter.translate( -mBBox.left(), -mBBox.top() );
+    }
+    if ( mSingleStep )  {
+        kdDebug() << "WindowsOrg: Bounding box : " << mBBox.left();
+        kdDebug() << " " << mBBox.top() << " " << mBBox.width() << " " << mBBox.height() << endl;
+    }
 }
 
 
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setWindowExt( long, short* parm )
 {
-    mBBox.setWidth( parm[ 1 ] );
-    mBBox.setHeight( parm[ 0 ] );
+    if ( mAbsoluteCoord ) {
+        QRect r = mPainter.window();
+        mPainter.setWindow( r.left(), r.top(), parm[ 1 ], parm[ 0 ] );
+    }
+    else {
+        // negative value allowed : QABS() forbidden
+        mBBox.setWidth( parm[ 1 ] );
+        mBBox.setHeight( parm[ 0 ] );
 
-    QRect r = mPainter.window();
+        QRect r = mPainter.window();
+        mPainter.translate( mBBox.left(), mBBox.top() );
+        mPainter.scale( (double)r.width() / (double)mBBox.width(),
+          (double)r.height() / (double)mBBox.height() );
+        mPainter.translate( -mBBox.left(), -mBBox.top() );
 
-    mPainter.translate( mBBox.left(), mBBox.top() );
-    mPainter.scale( (double)r.width() / (double)parm[ 1 ],  (double)r.height() / (double)parm[ 0 ] );
-    mPainter.translate( -mBBox.left(), -mBBox.top() );
+        // TODO: cleanup this code when QPicture::setBoundingBox() is possible in KOClipart (QT31)
+        // because actually QPicture::boundingBox() != mBBox()
+//        mPainter.setPen( Qt::white );
+//        mPainter.drawPoint( mBBox.left(), mBBox.top()  );
+//        mPainter.drawPoint( mBBox.right(), mBBox.bottom() );
+    }
+    if ( mSingleStep )  {
+        kdDebug() << "WindowsExt: Bounding box : " << mBBox.left();
+        kdDebug() << " " << mBBox.top() << " " << mBBox.width() << " " << mBBox.height() << endl;
+    }
 }
 
 
@@ -632,6 +675,11 @@ void QWinMetaFile::restoreDC( long, short* )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::intersectClipRect( long, short* parm )
 {
+/*  TODO: better implementation : need QT 3.0.2
+    QRegion region = mPainter.clipRegion();
+    if ( region.isEmpty() )
+        region = bbox();
+*/
     QRegion region( bbox() );
 
     QRegion newRegion( parm[ 3 ], parm[ 2 ], parm[ 1 ] - parm[ 3 ], parm[ 0 ] - parm[ 2 ] );
@@ -644,6 +692,11 @@ void QWinMetaFile::intersectClipRect( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::excludeClipRect( long, short* parm )
 {
+/*  TODO: better implementation : need QT 3.0.2
+    QRegion region = mPainter.clipRegion();
+    if ( region.isEmpty() )
+        region = bbox();
+*/
     QRegion region( bbox() );
 
     QRegion newRegion( parm[ 3 ], parm[ 2 ], parm[ 1 ] - parm[ 3 ], parm[ 0 ] - parm[ 2 ] );
@@ -754,7 +807,7 @@ void QWinMetaFile::extTextOut( long num, short* parm )
 // Bitmap
 //-----------------------------------------------------------------------------
 void QWinMetaFile::dibBitBlt( long num, short* parm )
-    {
+{
     if ( num > 9 ) {      // DIB image
         QImage bmpSrc;
 
@@ -821,7 +874,7 @@ void QWinMetaFile::stretchDib( long num, short* parm )
         long raster = toDWord( parm );
 
         mPainter.setRasterOp( winToQtRaster( raster )  );
-        
+
         // wmf file allow negative width or height
         mPainter.save();
         if ( parm[ 8 ] < 0 ) {  // width < 0 => horizontal flip
@@ -972,7 +1025,7 @@ void QWinMetaFile::createFontIndirect( long , short* parm)
     handle->font.setFamily( family );
     handle->font.setFixedPitch( ((parm[ 8 ] & 0x01) == 0) );
     // TODO: investigation why some test case need -2. (size of font in logical point)
-    handle->font.setPointSize( abs(parm[ 0 ]) - 2 );
+    handle->font.setPointSize( QABS(parm[ 0 ]) - 2 );
     handle->font.setWeight( (parm[ 4 ] >> 3) );
     handle->font.setItalic( (parm[ 5 ] & 0x01) );
     handle->font.setUnderline( (parm[ 5 ] & 0x100) );
@@ -984,11 +1037,10 @@ void QWinMetaFile::createFontIndirect( long , short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::escape( long, short* parm )
 {
-    if ( parm[ 0 ]==15 )
+    if ( mSingleStep )
     {
-        // simply ignore comments
+//        kdDebug() << "QWinMetaFile: unimplemented ESCAPE command " << parm[ 0 ] << endl;
     }
-    else kdDebug() << "QWinMetaFile: unimplemented ESCAPE command " << parm[ 0 ] << endl;
 }
 
 
@@ -1185,7 +1237,7 @@ bool QWinMetaFile::dibToBmp( QImage& bmp, const char* dib, long size )
     pattern.fill(0);
     memcpy( &pattern[ 14 ], dib, size );
 
-    // BMP header for the DIB bitmap
+    // add BMP header
     BMPFILEHEADER* bmpHeader;
     bmpHeader = (BMPFILEHEADER*)((const char*)pattern);
     bmpHeader->bmType = 0x4D42;
@@ -1196,8 +1248,10 @@ bool QWinMetaFile::dibToBmp( QImage& bmp, const char* dib, long size )
         return false;
     }
     else {
+//        if ( bmp.save("/home/software/kde-cvs/qt/examples/wmf/test.bmp", "BMP") )
+//        if ( bmp.load( "/home/software/kde-cvs/qt/examples/wmf/test.bmp", "BMP" ) )
+//            fprintf(stderr, "Bitmap ok \n");
         return true;
     }
 }
-
 
