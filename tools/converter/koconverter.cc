@@ -18,7 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "koconverter.h"
+#include <qfile.h>
+
 #include <kaboutdata.h>
 #include <kimageio.h>
 #include <kcmdlineargs.h>
@@ -27,12 +28,22 @@
 #include <kmimetype.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kio/netaccess.h>
+
 #include <koFilterManager.h>
+
+#include "koconverter.h"
+
+
+#if ! KDE_IS_VERSION(3,1,90)
+#include <kfileitem.h>
+#endif
 
 static const KCmdLineOptions options[]=
 {
 	{"+in", I18N_NOOP("Input file"),0},
 	{"+out", I18N_NOOP("Output file"),0},
+    {"backup", I18N_NOOP("Make a backup of the destination file"),0},
     {"batch", I18N_NOOP("Batch mode: do not show dialogs"),0},
     {"interactive", I18N_NOOP("Interactive mode: show dialogs (default)"),0},
 	{"mimetype <mime>", I18N_NOOP("Mimetype of the output file"),0},
@@ -92,6 +103,33 @@ int main( int argc, char **argv )
         bool batch = args->isSet("batch");
         if ( args->isSet("interactive") )
             batch = false;
+
+        if ( args->isSet("backup") )
+        {
+            // Code form koDocument.cc
+            KIO::UDSEntry entry;
+#if KDE_IS_VERSION(3,1,90)
+            if ( KIO::NetAccess::stat( uOut, entry, 0L ) ) // this file exists => backup
+#else
+            if ( KIO::NetAccess::stat( uOut, entry ) ) // this file exists => backup
+#endif
+            {
+                kdDebug() << "Making backup...";
+                KURL backup( uOut );
+                backup.setPath( uOut.path() + '~' );
+#if KDE_IS_VERSION(3,1,90)
+                KIO::NetAccess::file_copy( uOut, backup, -1, true /*overwrite*/, false /*resume*/, 0L );
+#else
+                KFileItem item( entry, uOut );
+                KIO::NetAccess::del( backup ); // Copy does not remove existing destination file
+                KIO::NetAccess::copy( uOut, backup );
+                // Not network transparent.
+                if ( backup.isLocalFile() )
+                    ::chmod( QFile::encodeName( backup.path() ), item.permissions() );
+#endif
+            }
+        }
+
 
         KMimeType::Ptr inputMimetype = KMimeType::findByURL( uIn );
         if ( inputMimetype->name() == KMimeType::defaultMimeType() )
