@@ -287,6 +287,7 @@ protected:
                          const QString &battr="blue") const;
 
     void saveOasisObjectStyle( KoGenStyle &styleobjectauto );
+    void saveOasisShadowElement( KoGenStyle &styleobjectauto );
 
     float angle;
     KoPoint orig;

@@ -160,7 +160,6 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
 
 void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
 {
-    //TODO
     //FIXME
     if ( lineBegin != L_NORMAL )
     {
@@ -491,7 +490,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
     orig.setY( KoUnit::parseValue( element.attribute( "svg:y" ) ) );
     ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
     ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
-    kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+    //kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
     const KoStyleStack &styleStack = context.styleStack();
     if( element.hasAttribute( "draw:transform" ))
         {
@@ -748,9 +747,53 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
             shadowDirection = SD_LEFT;
             shadowDistance = (int) fabs ( x );
         }
-        if ( element.hasAttribute ( "draw:shadow-color" ) )
-            shadowColor= QColor(element.attribute( "draw:shadow-color" ) );
+        if ( styleStack.hasAttribute ( "draw:shadow-color", QString::null,"graphic" ) )
+            shadowColor= QColor(styleStack.attribute( "draw:shadow-color", QString::null,"graphic" ) );
         kdDebug()<<" shadow color : "<<shadowColor.name()<<endl;
+    }
+}
+
+void KPObject::saveOasisShadowElement( KoGenStyle &styleobjectauto )
+{
+    //FIXME default value
+    if(shadowDistance!=0 || shadowDirection!=SD_RIGHT_BOTTOM || shadowColor!=Qt::gray) {
+        styleobjectauto.addProperty( "draw:shadow", "visible" );
+        switch( shadowDirection )
+        {
+        case SD_LEFT_UP:
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-x", ( -1.0 * shadowDistance )  );
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-y", ( -1.0 * shadowDistance ) );
+            break;
+        case SD_UP:
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-x", 0.0 );
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-y", ( -1.0 * shadowDistance ) );
+            break;
+        case SD_RIGHT_UP:
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-x", shadowDistance );
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-y", ( -1.0 * shadowDistance ) );
+            break;
+        case SD_RIGHT:
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-x", shadowDistance );
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-y", 0.0 );
+            break;
+        case SD_RIGHT_BOTTOM:
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-x",shadowDistance  );
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-y", shadowDistance );
+            break;
+        case SD_BOTTOM:
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-x", 0.0 );
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-y",shadowDistance  );
+            break;
+        case SD_LEFT_BOTTOM:
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-x", ( -1.0*shadowDistance ) );
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-y", shadowDistance );
+            break;
+        case SD_LEFT:
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-x", ( -1.0 * shadowDistance ) );
+            styleobjectauto.addPropertyPt( "draw:shadow-offset-y",  0.0 );
+            break;
+        }
+        styleobjectauto.addProperty( "draw:shadow-color", shadowColor.name() );
     }
 }
 
@@ -1720,6 +1763,7 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
 
     saveOasisStrokeElement( mainStyles, styleobjectauto );
     saveOasisMarginElement( styleobjectauto );
+    saveOasisShadowElement( styleobjectauto );
 
     return mainStyles.lookup( styleobjectauto, "gr" );
 }

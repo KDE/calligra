@@ -64,6 +64,8 @@ bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingCont
 {
     kdDebug()<<"bool KPQuadricBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
     //todo
+    // call saveOasisShadowElement( styleobjectauto );
+    // call saveOasisStrokeElement( KoGenStyle &styleobjectauto );
     //call xmlWriter.addAttribute( "draw:style-name", style );
     return true;
 }
