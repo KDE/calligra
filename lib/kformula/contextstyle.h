@@ -76,7 +76,8 @@ public:
      */
     ContextStyle();
 
-    void init( KConfig* config );
+    void init();
+    void readConfig( KConfig* config );
 
     bool edit() const { return m_edit; }
     void setEdit( bool e ) { m_edit = e; }

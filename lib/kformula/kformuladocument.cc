@@ -200,7 +200,7 @@ Document::Document( KConfig* config,
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
     //kdDebug( DEBUGID ) << "Document::Document" << endl;
-    // DF: the contextStyle hasn't been init()ed yet, isn't this call too early ?
+    impl->contextStyle.readConfig( impl->config );
     impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
 
     if (his == 0) {
@@ -217,6 +217,7 @@ Document::Document( KConfig* config,
 Document::Document( KConfig* config, KCommandHistory* his )
 {
     impl = new Document_Impl( config );
+    impl->contextStyle.readConfig( impl->config );
     if (his == 0) {
         impl->history = new KCommandHistory;
         impl->ownHistory = true;
@@ -238,7 +239,7 @@ void Document::lazyInit()
 {
     if ( impl->firstTime ) {
         impl->firstTime = false;
-        impl->contextStyle.init( impl->config );
+        impl->contextStyle.init();
 
         if ( impl->actionsCreated ) {
             QStringList names = impl->contextStyle.symbolTable().allNames();

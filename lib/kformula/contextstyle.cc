@@ -55,10 +55,16 @@ ContextStyle::ContextStyle()
     m_syntaxHighlighting = true;
 }
 
-void ContextStyle::init( KConfig* config )
+void ContextStyle::init()
 {
     table.init();
 
+    baseSize = defaultFont.pointSizeFloat();
+    setup();
+}
+
+void ContextStyle::readConfig( KConfig* config )
+{
     config->setGroup( "kformula Font" );
     QString fontName = config->readEntry( "defaultFont", "Times,18,-1,5,50,1,0,0,0,0" );
     defaultFont.fromString( fontName );
@@ -70,9 +76,6 @@ void ContextStyle::init( KConfig* config )
     operatorFont.fromString( fontName );
     //fontName = config->readEntry( "symbolFont", "times,12,-1,5,50,0,0,0,0,0" );
     //symbolFont.fromString( fontName );
-
-    baseSize = defaultFont.pointSizeFloat();
-    setup();
 
     config->setGroup( "kformula Color" );
     defaultColor  = config->readColorEntry( "defaultColor",  &defaultColor );
