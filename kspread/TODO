@@ -1,104 +1,6 @@
 Please put your name in "(...)" to the bug/feature you work on or you want to work on.
 For bugs: look into the KBugBuster if somebody else is working on it.d
 
-Grave bugs:
-
-
-Crashes:
-
-#32645: printing with CUPS gives segfault
-#35143: SIGSEGV crash when using horizontal scroll bar
-#38875: File save crashes Linux
-#39126: opened xls document modified, saved, and crashed on reopening
-#40179: kspread signal 11 every document
-
-Normal bugs
-
-#15125: kspread printing problem
-#18083: kspread rounding error
-#22359: kspread postscript generation failure
-#26241: Embedded chart changes titles when opening again
-#27847: resizing charts in embedded kspread part returns to parent document
-#29417: Font of kcalc included in kspread
-#29537: file not displayed properly
-#30048: Bugs in screen representation of cell in multiline mode                       (Norbert - done beta1)
-#30765: split view does not work on different tables
-#31448: Bad import data from file & clipboard
-#31753: slow load save time
-#32691: printing tables in landscape-mode will bring the same pieces on paper as in portrait-mode
-#32766: cell text spillover cut off
-#32822: table sort does not sort correctly
-#33340: Text color with column sort
-#35278: wrong interest rate in continuous function
-#36486: currency symbol not displayed in imported excel documents
-#36961: Font properities in cells and arrow keys
-#37237: Kspread 1.1.1 Format bug
-#37601: Errors in KSpread DTD
-#37831: paste problem between kspread/kword                                           (should be equal to 37006 - message sent to submitter -Philipp)
-#38095: Copy Table from KSpread/Paste to Kword or KMail - doesn't work                (Norbert)
-#38218: password protected excel can't be opened
-#38494: scientific input in a formula is misinterpreted
-#39525: kspread: change angle is not fully undoable
-#39620: if statments not working with dates
-#39653: inconsitent behaviour when dragging the little black box in the cell corner   (Norbert - done beta2)
-#39719: KSpread: selection over page limits stops when not moving the mouse
-#40150: Precision problem in calculations
-#40303: semiColon separated data are not imported
-#40354: KSpread Consolidate average wrong
-
-
-Wishlist items
-
-#9881: Control of linebreak within multi-row cell
-#13007: KSpread printing - scaling not supported (not urgent, wishlist)
-#18545: kspread regexp in formula
-#18869: no decimals possible when inserting a series                                  (Norbert - done beta2)
-#19678: Handling time/date
-#22685: feature request for kspread formula editor
-#23846: slow delete of large amounts of related KSpread
-#23898: BIG WISH: missing zoom option
-#23951: RFC show page borders: default to ON
-#24399: password and encrypt document
-#24417: Cannot move column
-#25322: printing spread to far apart.
-#26053: KSpread excessive cpu utilization
-#27217: kspread print grid option
-#27286: printing red numbers are wider than black numbers
-#27522: only the equal sign is accepted as beginning of a formula
-#27553: kspread formula editor entering condition - big usablilty issue
-#27567: kspread can't fit a sheet on nxm pages.
-#27872: Needed auto-increase of cell height, when long dara in cell
-#28194: no matrix manipulation operations
-#28716: improved conditional cell attributes in kspread
-#28906: drag formula only downwards?                           (Norbert - done beta2)
-#29419: KSpread chart dialog box too large
-#29524: Kspreads Formula editors tooltip should be changed
-#29598: Renaming tables in KSpread
-#29784: low performance on big spreadsheets
-#30134: Currency cannot be specified in a spread sheet
-#31130: No auto-completion of formula when using mouse
-#31604: unrecognized multiple IF functions
-#32496: Auto complete using alt down-arrow for an ordered selection list
-#33242: pivot tables or view SQL tables             (view SQL tables: Norbert)
-#33389: Freeze window option request                (started but problems with scrollbars: Norbert)
-#33819: kspread sort more than one column
-#33872: Calculation KSpread + Formula Editor together
-#33875: New Type of Worksheet: Movable Tables
-#34088: Precision of currency is too low or overflow is handled in a strange way
-#34271: [Wishlist] Something to Borrow From Lotus Improv
-#35477: Automatically resizing multiple collumns by doubleLClick behaves unpredictably
-#36742: time and date formats
-#37573: Slow series insertion quadratic
-#38463: needed: newline inside a cell
-#38495: selecting multiple non-adjecent columns is impossible
-#38739: request: option to scale pages to print to one page
-#38774: Improved word wrapping in KSpread cells
-#38828: no automatic date continuation (maybe not understandable)       (Norbert - done beta2)
-#39113: Wish: Named areas
-#39561: no mouse drag and drop of selections
-#39622: select area for print from kspread
-#40037: cell default format should be definend
-#40388: unable to insert an image in a Kspread document
 
 
 
@@ -107,9 +9,7 @@ Others bugs not in BT system (Report by - taken by):
 - Clicking into canvas causes to much flickering if many items
         (especially multirow cells) are in visible rect
 - MultiRow cells will only be drawn if obscuring is forced!
-- Far too much flickering: merge about 20 cells. Click in merged        (Norbert)
-  area, click somewhere else and see what happens
-- Merge cells are always obscured by others even if something is in there
+- Merged cells are always obscured by others even if something is in there
 
 
 
@@ -130,6 +30,11 @@ Other things: (please add the things you are working on!)
 - GoalSeek
         (You can have an algorithm from me,
         if you are interested in implementing this -  Norbert)
+- Printing:
+        - print grid
+        - expand selection to page
+        - fit selection to page
+        - print selection only
 - Scenerios
 - Locked areas (for formulas with a matrix as result)
 - Multible Operations (in Excel: "Data"->"Table")
@@ -160,10 +65,9 @@ Philipp
 Norbert
 =======
 
-- AutoCompletion/AutoContinuation for dates, times, for values like:
-        "1,3,4,6", more Excel-like behavior                     (Norbert - done beta2)
+- Improve sort for sorting by more than one column/row
 - insert data from databases                                    (Norbert)
-- Styles                                                        (Norbert - almost done)
+- Styles                                          
 - implement more Excel shortcuts like CTRL+Shift+!, *, ^, ...   (Norbert - almost done)
   (see Todo-list below)
 
