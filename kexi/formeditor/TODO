@@ -1,7 +1,18 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
 * Add support for layouts and special container (HBox, VBox ...) and spacers
+
 * Create an event editor and manage signals/slots (EventBuffer ?)
+	HOWEVER, SIGNAL/SLOT ISSUES:
+	1. signals/slots mechanism is hard to use for average folks
+	2. it may be easily simplified to avoid confusing them
+	3. TrollTech would try to get influence on the Kexi Project 
+	  because of violating their licenses, if we'd like to expose 
+		all their technologies so plainly
+	  (at least commercial) license mentions that there cannot be 
+	  a project that is a replacement of the Qt developed out of the Qt)
+	4. It wouldn't hurt to ask them, as well.
+
 * Form previewing stuff (see KUIViewer)
 * Add many other widgets :-)
 * Create db-aware widget factory
