@@ -8,13 +8,13 @@ kde_module_LTLIBRARIES = libkwordkword1dot3import.la
 
 libkwordkword1dot3import_la_SOURCES = oowriterexport.cc ExportFilter.cc \
 TagProcessing.cc KWEFStructures.cc\
-ProcessDocument.cc KWEFUtil.cc KWEFKWordLeader.cc KWEFBaseWorker.cc
+ProcessDocument.cc KWEFUtil.cc KWEFKWordLeader.cc
 
 libkwordkword1dot3import_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 libkwordkword1dot3import_la_LIBADD  = $(KOFFICE_LIBS)
 
 noinst_HEADERS = TagProcessing.h KWEFStructures.h\
-ProcessDocument.h KWEFUtil.h KWEFKWordLeader.h KWEFBaseWorker.h ExportFilter.h
+ProcessDocument.h KWEFUtil.h KWEFKWordLeader.h ExportFilter.h
 
 METASOURCES = AUTO
 

@@ -49,7 +49,7 @@ public:
     ~StyleMap(void) {}
 };
 
-class OOWriterWorker : public KWEFBaseWorker
+class OOWriterWorker : public KWEFKWordLeader
 {
 public:
     OOWriterWorker(void);
