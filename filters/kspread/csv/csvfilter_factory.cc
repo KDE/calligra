@@ -15,7 +15,7 @@ extern "C"
 KLibGlobal* CSVFilterFactory::s_global = 0;
 
 CSVFilterFactory::CSVFilterFactory( QObject* parent, const char* name )
-    : Factory( parent, name )
+    : KLibFactory( parent, name )
 {
     s_global = new KLibGlobal( "csvfilter" );
 }
@@ -24,7 +24,7 @@ CSVFilterFactory::~CSVFilterFactory()
 {
 }
 
-QObject* CSVFilterFactory::create( QObject* parent, const char* name )
+QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char* classname )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

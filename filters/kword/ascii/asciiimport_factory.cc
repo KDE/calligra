@@ -15,7 +15,7 @@ extern "C"
 KLibGlobal* ASCIIImportFactory::s_global = 0;
 
 ASCIIImportFactory::ASCIIImportFactory( QObject* parent, const char* name )
-    : Factory( parent, name )
+    : KLibFactory( parent, name )
 {
     s_global = new KLibGlobal( "asciiimport" );
 }
@@ -24,7 +24,7 @@ ASCIIImportFactory::~ASCIIImportFactory()
 {
 }
 
-QObject* ASCIIImportFactory::create( QObject* parent, const char* name )
+QObject* ASCIIImportFactory::create( QObject* parent, const char* name, const char* classname )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

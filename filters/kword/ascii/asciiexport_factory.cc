@@ -15,7 +15,7 @@ extern "C"
 KLibGlobal* ASCIIExportFactory::s_global = 0;
 
 ASCIIExportFactory::ASCIIExportFactory( QObject* parent, const char* name )
-    : Factory( parent, name )
+    : KLibFactory( parent, name )
 {
     s_global = new KLibGlobal( "asciiexport" );
 }
@@ -24,7 +24,7 @@ ASCIIExportFactory::~ASCIIExportFactory()
 {
 }
 
-QObject* ASCIIExportFactory::create( QObject* parent, const char* name )
+QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const char* classname )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
