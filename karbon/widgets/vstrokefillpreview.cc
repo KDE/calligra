@@ -54,7 +54,11 @@ VStrokeFillPreview::VStrokeFillPreview(
 		: QFrame( parent, name ), m_part( part )
 {
 	setFocusPolicy( QWidget::NoFocus );
+#if QT_VERSION < 0x030100
+	setFrameStyle( QFrame::Panel | QFrame::Sunken );
+#else
 	setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
+#endif
 	installEventFilter( this );
 
 	m_pixmap.resize( 50, 50 );
@@ -88,7 +92,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			emit strokeSelected();
 		}
 	}
-	
+
 	if( event && event->type() == QEvent::MouseButtonDblClick )
 	{
 		QMouseEvent *e = static_cast<QMouseEvent *>( event );
