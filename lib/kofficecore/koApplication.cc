@@ -26,13 +26,11 @@
 #include <koDocument.h>
 #include <koMainWindow.h>
 #include <klocale.h>
-#include <kimageio.h>
-#include <kiconloader.h>
 #include <kcmdlineargs.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
 #include <stdlib.h>
 
 void qt_generate_epsf( bool b );
@@ -51,10 +49,8 @@ class KoApplicationPrivate
 public:
     KoApplicationPrivate()  {
         m_appIface = 0L;
-        m_kofficeConfig = 0L;
     }
     KoApplicationIface *m_appIface;  // to avoid a leak
-    KConfig* m_kofficeConfig;
 };
 
 KoApplication::KoApplication()
@@ -62,16 +58,8 @@ KoApplication::KoApplication()
 {
     d = new KoApplicationPrivate;
 
-    // Install the libkoffice* translations
-    KGlobal::locale()->insertCatalogue("koffice");
-
-    KImageIO::registerFormats();
-
-    // Tell KStandardDirs about the koffice prefix
-    KGlobal::dirs()->addPrefix(PREFIX);
-
-    // Tell the iconloader about share/apps/koffice/icons
-    KGlobal::iconLoader()->addAppDir("koffice");
+    // Initialize all KOffice directories etc.
+    KoGlobal::initialize();
 
     // Prepare a DCOP interface
     d->m_appIface = new KoApplicationIface;
@@ -231,7 +219,6 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-    delete d->m_kofficeConfig;
     delete d->m_appIface;
     delete d;
 }
@@ -239,16 +226,6 @@ KoApplication::~KoApplication()
 bool KoApplication::isStarting()
 {
     return KoApplication::m_starting;
-}
-
-KConfig* KoApplication::kofficeConfig()
-{
-    if ( !d->m_kofficeConfig ) {
-        qDebug("kofficeConfig - start");
-        d->m_kofficeConfig = new KConfig( "kofficerc" );
-        qDebug("kofficeConfig - end");
-    }
-    return d->m_kofficeConfig;
 }
 
 #include <koApplication.moc>

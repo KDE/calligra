@@ -23,7 +23,9 @@
 
 #include <qstringlist.h>
 #include <koUnit.h>
-class QFont;
+#include <qfont.h>
+class KConfig;
+
 // paper formats ( mm ) - public for compat reasons, but DO NOT USE in new programs !
 // See KoPageFormat's methods instead.
 #define PG_A3_WIDTH		297.0
@@ -246,26 +248,63 @@ struct KoKWHeaderFooter
 class KoGlobal
 {
 public:
+    /// For KoApplication
+    static void initialize()  {
+        (void)self(); // I don't want to make KGlobal instances public, so self() is private
+    }
     /**
      * Return the default font for KOffice programs.
      * This is (currently) the same as the KDE-global default font,
      * except that it is guaranteed to have a point size set,
      * never a pixel size (see @ref QFont).
      */
-    static QFont defaultFont();
+    static QFont defaultFont()  {
+        return self()->_defaultFont();
+    }
 
-    static QStringList listOfLanguages();
-    static QStringList listTagOfLanguages();
-    static QString tagOfLanguage( const QString & _lang);
-    static int languageIndexFromTag( const QString &_lang);
+    /**
+     * @return the global KConfig object around kofficerc.
+     * kofficerc is used for KOffice-wide settings, from totally unrelated classes,
+     * so this is the centralization of the KConfig object so that the file is
+     * parsed only once
+     */
+    static KConfig* kofficeConfig() {
+        return self()->_kofficeConfig();
+    }
+
+    ///// ##### TODO: document (Laurent?)
+
+    static QStringList listOfLanguages() {
+        return self()->_listOfLanguages();
+    }
+    static QStringList listTagOfLanguages() {
+        return self()->_listTagOfLanguages();
+    }
+    static QString tagOfLanguage( const QString & _lang );
+    static int languageIndexFromTag( const QString &_lang );
     static QString languageFromTag( const QString &_lang );
-protected:
-    KoGlobal(){} // don't use
+
+    ~KoGlobal();
+
 private:
-    static void createListOfLanguages();
-    static int s_pointSize;
-    static QStringList s_languageList;
-    static QStringList s_languageTag;
+    static KoGlobal* self();
+    KoGlobal();
+    QFont _defaultFont();
+    QStringList _listOfLanguages();
+    QStringList _listTagOfLanguages();
+    KConfig* _kofficeConfig();
+    void createListOfLanguages();
+
+    int m_pointSize;
+    QStringList m_languageList;
+    QStringList m_languageTag;
+    KConfig* m_kofficeConfig;
+    // No BC problem here, constructor is private, feel free to add members
+
+    // Singleton pattern. Maybe this should even be refcounted, so
+    // that it gets cleaned up when closing all koffice parts in e.g. konqueror?
+    static KoGlobal* s_global;
+    friend class this_is_a_singleton; // workaround gcc warning
 };
 
 #endif // koGlobal

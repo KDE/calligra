@@ -961,17 +961,17 @@ QCString KoDateVariable::formatStr(int & correct)
     DateFormatWidget* widget=new DateFormatWidget(dialog);
     int count=0;
     dialog->setMainWidget(widget);
-    KConfig config( "kofficerc" );
+    KConfig* config = KoGlobal::kofficeConfig();
     bool selectLast=false;
-    if( config.hasGroup("Date format history") )
+    if( config->hasGroup("Date format history") )
     {
-        config.setGroup("Date format history");
-        int noe=config.readNumEntry("Number Of Entries", 5);
+        KConfigGroupSaver cgs( config, "Date format history");
+        int noe=config->readNumEntry("Number Of Entries", 5);
         for(int i=0;i<noe;i++)
         {
             QString num, tmpString;
             num.setNum(i);
-            tmpString=config.readEntry("Last Used"+num);
+            tmpString=config->readEntry("Last Used"+num);
             if(tmpString.compare(i18n("Locale"))==0)
             {
                 if(i==0) selectLast = true;
@@ -1007,16 +1007,16 @@ QCString KoDateVariable::formatStr(int & correct)
     {
         return 0;
     }
-    config.setGroup("Date format history");
+    config->setGroup("Date format history");
     stringList.remove(string);
     stringList.prepend(string);
     for(int i=0;i<=count;i++)
     {
         QString num;
         num.setNum(i);
-        config.writeEntry("Last Used"+num, stringList[i]);
+        config->writeEntry("Last Used"+num, stringList[i]);
     }
-    config.sync();
+    config->sync();
     delete dialog;
     return QCString(QCString("DATE") + string );
 }
@@ -1126,18 +1126,18 @@ QCString KoTimeVariable::formatStr(int & _correct)
     KDialogBase* dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
     TimeFormatWidget* widget=new TimeFormatWidget(dialog);
     dialog->setMainWidget(widget);
-    KConfig config( "kofficerc" );
+    KConfig* config = KoGlobal::kofficeConfig();
     int count=0;
     bool selectLast=false;
-    if( config.hasGroup("Time format history") )
+    if( config->hasGroup("Time format history") )
     {
-        config.setGroup("Time format history");
-        int noe=config.readNumEntry("Number Of Entries", 5);
+        KConfigGroupSaver cgs( config, "Time format history" );
+        int noe=config->readNumEntry("Number Of Entries", 5);
         for(int i=0;i<noe;i++)
         {
             QString num, tmpString;
             num.setNum(i);
-            tmpString=config.readEntry("Last Used"+num);
+            tmpString=config->readEntry("Last Used"+num);
             if(tmpString.compare(i18n("Locale"))==0)
             {
                 if(i==0) selectLast = true;
@@ -1171,16 +1171,16 @@ QCString KoTimeVariable::formatStr(int & _correct)
     {
         return 0;
     }
-    config.setGroup("Time format history");
+    config->setGroup("Time format history");
     stringList.remove(string);
     stringList.prepend(string);
     for(int i=0;i<=count;i++)
     {
         QString num;
         num.setNum(i);
-        config.writeEntry("Last Used"+num, stringList[i]);
+        config->writeEntry("Last Used"+num, stringList[i]);
     }
-    config.sync();
+    config->sync();
     delete dialog;
     return QCString("TIME"+string );
 }

@@ -24,6 +24,9 @@ namespace std { }
 using namespace std;
 #include <kapplication.h>
 
+// Be VERY careful with this. There is no KoApplication when embedded into e.g. konqueror
+// Ah well, don't even use it at all, that would be better.
+// Next version: remove completely
 #define KOAPP ((KoApplication *)KApplication::kApplication())
 
 class KoApplicationPrivate;
@@ -76,14 +79,6 @@ public:
      * @return true if the application is starting
      */
     static bool isStarting();
-
-    /**
-     * @return the global KConfig object around kofficerc.
-     * kofficerc is used for KOffice-wide settings, from totally unrelated classes,
-     * so this is the centralization of the KConfig object so that the file is
-     * parsed only once
-     */
-    KConfig* kofficeConfig();
 
 private:
     bool initHack();

@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "config.h"
 #include <koGlobal.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -27,6 +28,10 @@
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <ksimpleconfig.h>
+#include <kstandarddirs.h>
+#include <kstaticdeleter.h>
+#include <kimageio.h>
+#include <kiconloader.h>
 #include <kstandarddirs.h>
 
 struct PageFormatInfo
@@ -68,7 +73,7 @@ const PageFormatInfo pageFormatInfo[]=
     { PG_DIN_B3,        KPrinter::B3,           "B3",           I18N_NOOP("ISO B3"),       364.0,  515.0 },
     { PG_DIN_B4,        KPrinter::B4,           "B4",           I18N_NOOP("ISO B4"),       257.0,  364.0 },
     { PG_DIN_B6,        KPrinter::B6,           "B6",           I18N_NOOP("ISO B6"),       128.0,  182.0 },
-    { PG_ISO_C5,        KPrinter::C5E,          "C5",           I18N_NOOP("ISO C5"),       163.0,  229.0 }, // Some sources tells: 162 mm x 228 mm 
+    { PG_ISO_C5,        KPrinter::C5E,          "C5",           I18N_NOOP("ISO C5"),       163.0,  229.0 }, // Some sources tells: 162 mm x 228 mm
     { PG_US_COMM10,     KPrinter::Comm10E,      "Comm10",       I18N_NOOP("US Common 10"), 105.0,  241.0 }, // should be 104.775 mm x 241.3 mm
     { PG_ISO_DL,        KPrinter::DLE,          "DL",           I18N_NOOP("ISO DL"),       110.0,  220.0 },
     { PG_US_FOLIO,      KPrinter::Folio,        "Folio",        I18N_NOOP("US Folio"),     210.0,  330.0 }, // should be 209.54 mm x 330.2 mm
@@ -90,7 +95,7 @@ int KoPageFormat::printerPageSize( KoFormat format )
     }
     else if ( format <= PG_LAST_FORMAT )
         return pageFormatInfo[ format ].kprinter;
-    else 
+    else
         return KPrinter::A4;
 }
 
@@ -161,32 +166,65 @@ QStringList KoPageFormat::allFormats()
     return lst;
 }
 
-int KoGlobal::s_pointSize = -1;
-QStringList KoGlobal::s_languageList = QStringList();
-QStringList KoGlobal::s_languageTag = QStringList();
+KoGlobal* KoGlobal::s_global = 0L;
+static KStaticDeleter<KoGlobal> sdg;
 
-QFont KoGlobal::defaultFont()
+KoGlobal* KoGlobal::self()
+{
+    if ( !s_global )
+        sdg.setObject( s_global, new KoGlobal );
+    return s_global;
+}
+
+KoGlobal::KoGlobal()
+    : m_pointSize( -1 ), m_kofficeConfig( 0L )
+{
+    // Install the libkoffice* translations
+    KGlobal::locale()->insertCatalogue("koffice");
+
+    KImageIO::registerFormats();
+
+    // Tell KStandardDirs about the koffice prefix
+    KGlobal::dirs()->addPrefix(PREFIX);
+
+    // Tell the iconloader about share/apps/koffice/icons
+    KGlobal::iconLoader()->addAppDir("koffice");
+}
+
+KoGlobal::~KoGlobal()
+{
+    delete m_kofficeConfig;
+}
+
+QFont KoGlobal::_defaultFont()
 {
     QFont font = KGlobalSettings::generalFont();
     // we have to use QFontInfo, in case the font was specified with a pixel size
     if ( font.pointSize() == -1 )
     {
-        // cache size into s_pointSize, since QFontInfo loads the font -> slow
-        if ( s_pointSize == -1 )
-            s_pointSize = QFontInfo(font).pointSize();
-        Q_ASSERT( s_pointSize != -1 );
-        font.setPointSize( s_pointSize );
+        // cache size into m_pointSize, since QFontInfo loads the font -> slow
+        if ( m_pointSize == -1 )
+            m_pointSize = QFontInfo(font).pointSize();
+        Q_ASSERT( m_pointSize != -1 );
+        font.setPointSize( m_pointSize );
     }
     //kdDebug()<<k_funcinfo<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize()<<endl;
     //kdDebug()<<k_funcinfo<<"font.name() :"<<font.family ()<<endl;
     return font;
 }
 
-QStringList KoGlobal::listTagOfLanguages()
+QStringList KoGlobal::_listTagOfLanguages()
 {
-    if ( s_languageTag.count()==0 )
+    if ( m_languageTag.isEmpty() )
         createListOfLanguages();
-    return s_languageTag;
+    return m_languageTag;
+}
+
+QStringList KoGlobal::_listOfLanguages()
+{
+    if ( m_languageList.empty() )
+        createListOfLanguages();
+    return m_languageList;
 }
 
 void KoGlobal::createListOfLanguages()
@@ -207,39 +245,42 @@ void KoGlobal::createListOfLanguages()
         tag = tag.left(index);
         index = tag.findRev('/');
         tag = tag.mid(index+1);
-        s_languageList.append(name);
-        s_languageTag.append(tag);
+        m_languageList.append(name);
+        m_languageTag.append(tag);
     }
 
 }
 
-QStringList KoGlobal::listOfLanguages()
-{
-    if ( s_languageList.empty() )
-        createListOfLanguages();
-    return s_languageList;
-}
-
 QString KoGlobal::tagOfLanguage( const QString & _lang)
 {
-    int pos = s_languageList.findIndex( _lang );
+    // Should use iterator...
+    int pos = self()->m_languageList.findIndex( _lang );
     if ( pos != -1)
     {
-        return s_languageTag[ pos ];
+        return self()->m_languageTag[ pos ];
     }
     return QString::null;
 }
 
 int KoGlobal::languageIndexFromTag( const QString &_lang )
 {
-    return s_languageTag.findIndex( _lang );
+    return self()->m_languageTag.findIndex( _lang );
 }
 
 QString KoGlobal::languageFromTag( const QString &_lang )
 {
-    int pos = s_languageTag.findIndex( _lang );
+    // should use iterator
+    int pos = self()->m_languageTag.findIndex( _lang );
     if ( pos != -1)
-        return s_languageList[ pos ];
+        return self()->m_languageList[ pos ];
     else
         return QString::null;
+}
+
+KConfig* KoGlobal::_kofficeConfig()
+{
+    if ( !m_kofficeConfig ) {
+        m_kofficeConfig = new KConfig( "kofficerc" );
+    }
+    return m_kofficeConfig;
 }

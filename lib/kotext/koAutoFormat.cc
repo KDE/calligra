@@ -41,7 +41,6 @@
 #include <koSearchDia.h>
 #include <kozoomhandler.h>
 #include <koGlobal.h>
-#include <koApplication.h>
 
 KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
     : m_replace( replace )
@@ -186,7 +185,7 @@ KoAutoFormat::~KoAutoFormat()
 
 void KoAutoFormat::loadListOfWordCompletion()
 {
-    KConfig* config = KOAPP->kofficeConfig();
+    KConfig* config = KoGlobal::kofficeConfig();
     KConfigGroupSaver cgs( config, "Completion Word" );
     m_listCompletion->insertItems(config->readListEntry( "list" ));
 }
@@ -198,54 +197,54 @@ void KoAutoFormat::readConfig(bool force)
     // so that loading is faster and to avoid doing it for readonly documents.
     if ( m_configRead && !force )
         return;
-    KConfig config("kofficerc");
-    KConfigGroupSaver cgs( &config, "AutoFormat" );
+    KConfig* config = KoGlobal::kofficeConfig();
+    KConfigGroupSaver cgs( config, "AutoFormat" );
     //when we force don't load format language.
     if ( !force)
-        m_autoFormatLanguage = config.readEntry("formatLanguage", QString::null);
+        m_autoFormatLanguage = config->readEntry("formatLanguage", QString::null);
 
-    m_convertUpperCase = config.readBoolEntry( "ConvertUpperCase", false );
-    m_convertUpperUpper = config.readBoolEntry( "ConvertUpperUpper", false );
-    m_includeTwoUpperLetterException = config.readBoolEntry( "includeTwoLetterException", false );
-    m_includeAbbreviation = config.readBoolEntry( "includeAbbreviation", false );
+    m_convertUpperCase = config->readBoolEntry( "ConvertUpperCase", false );
+    m_convertUpperUpper = config->readBoolEntry( "ConvertUpperUpper", false );
+    m_includeTwoUpperLetterException = config->readBoolEntry( "includeTwoLetterException", false );
+    m_includeAbbreviation = config->readBoolEntry( "includeAbbreviation", false );
 
-    m_advancedAutoCorrect = config.readBoolEntry( "AdvancedAutocorrect", true );
-    m_bAutoCorrectionWithFormat = config.readBoolEntry( "AutoCorrectionWithFormat",false );
-    m_bCapitalizeNameOfDays = config.readBoolEntry( "CapitalizeNameOfDays",false );
+    m_advancedAutoCorrect = config->readBoolEntry( "AdvancedAutocorrect", true );
+    m_bAutoCorrectionWithFormat = config->readBoolEntry( "AutoCorrectionWithFormat",false );
+    m_bCapitalizeNameOfDays = config->readBoolEntry( "CapitalizeNameOfDays",false );
 
-    m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
-    m_ignoreDoubleSpace = config.readBoolEntry("IgnoreDoubleSpace",false);
-    m_removeSpaceBeginEndLine = config.readBoolEntry("RemoveSpaceBeginEndLine",false);
+    m_autoDetectUrl = config->readBoolEntry("AutoDetectUrl",false);
+    m_ignoreDoubleSpace = config->readBoolEntry("IgnoreDoubleSpace",false);
+    m_removeSpaceBeginEndLine = config->readBoolEntry("RemoveSpaceBeginEndLine",false);
 
-    m_useBulletStyle = config.readBoolEntry("UseBulletStyle",false);
-    QString tmp = config.readEntry( "BulletStyle", "" );
+    m_useBulletStyle = config->readBoolEntry("UseBulletStyle",false);
+    QString tmp = config->readEntry( "BulletStyle", "" );
     m_bulletStyle = tmp.isEmpty() ? QChar() : tmp[0];
 
-    m_autoChangeFormat = config.readBoolEntry( "AutoChangeFormat", false );
+    m_autoChangeFormat = config->readBoolEntry( "AutoChangeFormat", false );
 
-    m_autoReplaceNumber = config.readBoolEntry( "AutoReplaceNumber", false );
+    m_autoReplaceNumber = config->readBoolEntry( "AutoReplaceNumber", false );
 
-    m_useAutoNumberStyle = config.readBoolEntry( "AutoNumberStyle", false );
+    m_useAutoNumberStyle = config->readBoolEntry( "AutoNumberStyle", false );
 
 
-    QString beginDoubleQuote = config.readEntry( "TypographicQuotesBegin" );
-    QString endDoubleQuote = config.readEntry( "TypographicQuotesEnd" );
+    QString beginDoubleQuote = config->readEntry( "TypographicQuotesBegin" );
+    QString endDoubleQuote = config->readEntry( "TypographicQuotesEnd" );
 
-    m_typographicDoubleQuotes.replace = config.readBoolEntry( "TypographicQuotesEnabled", false );
+    m_typographicDoubleQuotes.replace = config->readBoolEntry( "TypographicQuotesEnabled", false );
 
-    QString begin = config.readEntry( "TypographicSimpleQuotesBegin" );
-    QString end = config.readEntry( "TypographicSimpleQuotesEnd" );
-    m_typographicSimpleQuotes.replace = config.readBoolEntry( "TypographicSimpleQuotesEnabled", false );
+    QString begin = config->readEntry( "TypographicSimpleQuotesBegin" );
+    QString end = config->readEntry( "TypographicSimpleQuotesEnd" );
+    m_typographicSimpleQuotes.replace = config->readBoolEntry( "TypographicSimpleQuotesEnabled", false );
 
-    m_bAutoSuperScript = config.readBoolEntry( "AutoSuperScript", false );
+    m_bAutoSuperScript = config->readBoolEntry( "AutoSuperScript", false );
 
-    config.setGroup( "completion" );
-    m_completion = config.readBoolEntry( "completion", false );
+    config->setGroup( "completion" );
+    m_completion = config->readBoolEntry( "completion", false );
 
-    m_completionAppendSpace = config.readBoolEntry( "CompletionAppendSpace", false );
-    m_minCompletionWordLength = config.readUnsignedNumEntry( "CompletionMinWordLength", 5 );
-    m_nbMaxCompletionWord = config.readUnsignedNumEntry( "NbMaxCompletionWord", 100 );
-    m_addCompletionWord = config.readBoolEntry( "AddCompletionWord", true );
+    m_completionAppendSpace = config->readBoolEntry( "CompletionAppendSpace", false );
+    m_minCompletionWordLength = config->readUnsignedNumEntry( "CompletionMinWordLength", 5 );
+    m_nbMaxCompletionWord = config->readUnsignedNumEntry( "NbMaxCompletionWord", 100 );
+    m_addCompletionWord = config->readBoolEntry( "AddCompletionWord", true );
 
     if ( force )
     {
@@ -259,7 +258,7 @@ void KoAutoFormat::readConfig(bool force)
     }
 
     Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
-    config.setGroup( "AutoFormatEntries" );
+    config->setGroup( "AutoFormatEntries" );
 
     bool fileNotFound = false;
     QFile xmlFile;
@@ -513,53 +512,53 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
 
 void KoAutoFormat::saveConfig()
 {
-    KConfig config("kofficerc");
+    KConfig* config = KoGlobal::kofficeConfig();
     KLocale klocale(m_doc->instance()->instanceName());
-    KConfigGroupSaver cgs( &config, "AutoFormat" );
-    config.writeEntry( "ConvertUpperCase", m_convertUpperCase );
-    config.writeEntry( "formatLanguage", m_autoFormatLanguage);
+    KConfigGroupSaver cgs( config, "AutoFormat" );
+    config->writeEntry( "ConvertUpperCase", m_convertUpperCase );
+    config->writeEntry( "formatLanguage", m_autoFormatLanguage);
 
-    config.writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
-    config.writeEntry( "includeTwoLetterException", m_includeTwoUpperLetterException );
-    config.writeEntry( "includeAbbreviation", m_includeAbbreviation );
+    config->writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
+    config->writeEntry( "includeTwoLetterException", m_includeTwoUpperLetterException );
+    config->writeEntry( "includeAbbreviation", m_includeAbbreviation );
 
-    config.writeEntry( "TypographicQuotesBegin", QString( m_typographicDoubleQuotes.begin ) );
-    config.writeEntry( "TypographicQuotesEnd", QString( m_typographicDoubleQuotes.end ) );
-    config.writeEntry( "TypographicQuotesEnabled", m_typographicDoubleQuotes.replace );
-    config.writeEntry( "TypographicSimpleQuotesBegin", QString( m_typographicSimpleQuotes.begin ) );
-    config.writeEntry( "TypographicSimpleQuotesEnd", QString( m_typographicSimpleQuotes.end ) );
-    config.writeEntry( "TypographicSimpleQuotesEnabled", m_typographicSimpleQuotes.replace );
+    config->writeEntry( "TypographicQuotesBegin", QString( m_typographicDoubleQuotes.begin ) );
+    config->writeEntry( "TypographicQuotesEnd", QString( m_typographicDoubleQuotes.end ) );
+    config->writeEntry( "TypographicQuotesEnabled", m_typographicDoubleQuotes.replace );
+    config->writeEntry( "TypographicSimpleQuotesBegin", QString( m_typographicSimpleQuotes.begin ) );
+    config->writeEntry( "TypographicSimpleQuotesEnd", QString( m_typographicSimpleQuotes.end ) );
+    config->writeEntry( "TypographicSimpleQuotesEnabled", m_typographicSimpleQuotes.replace );
 
-    config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect );
-    config.writeEntry( "AutoCorrectionWithFormat", m_bAutoCorrectionWithFormat );
-    config.writeEntry( "CapitalizeNameOfDays", m_bCapitalizeNameOfDays );
+    config->writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect );
+    config->writeEntry( "AutoCorrectionWithFormat", m_bAutoCorrectionWithFormat );
+    config->writeEntry( "CapitalizeNameOfDays", m_bCapitalizeNameOfDays );
 
-    config.writeEntry( "AutoDetectUrl",m_autoDetectUrl);
+    config->writeEntry( "AutoDetectUrl",m_autoDetectUrl);
 
-    config.writeEntry( "IgnoreDoubleSpace",m_ignoreDoubleSpace );
-    config.writeEntry( "RemoveSpaceBeginEndLine",m_removeSpaceBeginEndLine );
+    config->writeEntry( "IgnoreDoubleSpace",m_ignoreDoubleSpace );
+    config->writeEntry( "RemoveSpaceBeginEndLine",m_removeSpaceBeginEndLine );
 
-    config.writeEntry( "UseBulletStyle", m_useBulletStyle);
-    config.writeEntry( "BulletStyle", QString(m_bulletStyle));
+    config->writeEntry( "UseBulletStyle", m_useBulletStyle);
+    config->writeEntry( "BulletStyle", QString(m_bulletStyle));
 
-    config.writeEntry( "AutoChangeFormat", m_autoChangeFormat);
+    config->writeEntry( "AutoChangeFormat", m_autoChangeFormat);
 
-    config.writeEntry( "AutoReplaceNumber", m_autoReplaceNumber);
+    config->writeEntry( "AutoReplaceNumber", m_autoReplaceNumber);
 
-    config.writeEntry( "AutoNumberStyle", m_useAutoNumberStyle );
+    config->writeEntry( "AutoNumberStyle", m_useAutoNumberStyle );
 
-    config.writeEntry( "AutoSuperScript", m_bAutoSuperScript );
+    config->writeEntry( "AutoSuperScript", m_bAutoSuperScript );
 
-    config.setGroup( "completion" );
-    config.writeEntry( "completion", m_completion );
-    config.writeEntry( "CompletionAppendSpace", m_completionAppendSpace );
-    config.writeEntry( "CompletionMinWordLength", m_minCompletionWordLength);
-    config.writeEntry( "NbMaxCompletionWord", m_nbMaxCompletionWord);
-    config.writeEntry( "AddCompletionWord", m_addCompletionWord );
+    config->setGroup( "completion" );
+    config->writeEntry( "completion", m_completion );
+    config->writeEntry( "CompletionAppendSpace", m_completionAppendSpace );
+    config->writeEntry( "CompletionMinWordLength", m_minCompletionWordLength);
+    config->writeEntry( "NbMaxCompletionWord", m_nbMaxCompletionWord);
+    config->writeEntry( "AddCompletionWord", m_addCompletionWord );
 
 
 
-    config.setGroup( "AutoFormatEntries" );
+    config->setGroup( "AutoFormatEntries" );
     QDictIterator<KoAutoFormatEntry> it( m_entries );
 
     //refresh m_maxFindLength
@@ -640,7 +639,7 @@ void KoAutoFormat::saveConfig()
     doc.save(ts, 2);
     f.close();
     autoFormatIsActive();
-    config.sync();
+    config->sync();
 }
 
 QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QDomDocument doc)

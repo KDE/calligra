@@ -21,7 +21,8 @@
 
 #include <koDocumentInfoDlg.h>
 #include <koDocumentInfo.h>
-#include <koApplication.h>
+#include <koGlobal.h>
+#include <koStore.h>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -40,7 +41,6 @@
 #include <kdeversion.h>
 #include <klocale.h>
 #include <ktar.h>
-#include <koStore.h>
 #include <kdebug.h>
 #include <ktempfile.h>
 #include <kmimetype.h>
@@ -336,7 +336,7 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   authorInfo->setCity( d->m_leCity->text() );
   authorInfo->setStreet( d->m_leStreet->text() );
 
-  KConfig* config = KOAPP->kofficeConfig();
+  KConfig* config = KoGlobal::kofficeConfig();
   KConfigGroupSaver cgs( config, "Author" );
   config->writeEntry("telephone", d->m_leTelephone->text());
   config->writeEntry("fax", d->m_leFax->text());

@@ -202,7 +202,7 @@ KoDocumentInfoAuthor::KoDocumentInfoAuthor( KoDocumentInfo* info )
 
 void KoDocumentInfoAuthor::initParameters()
 {
-    KConfig* config = KOAPP->kofficeConfig();
+    KConfig* config = KoGlobal::kofficeConfig();
     if ( config->hasGroup( "Author" ) ) {
         KConfigGroupSaver cgs( config, "Author" );
         m_telephone=config->readEntry( "telephone" );
