@@ -97,7 +97,7 @@ void KWResizeHandle::applyCursorType()
     }
     case Down:
     {
-        if (!protect )
+        if (protect )
             setCursor( Qt::forbiddenCursor );
         else
             setCursor( Qt::sizeVerCursor );
