@@ -78,3 +78,5 @@ Bugfixes:
 Crashes:
 - Fixed crash when we close kword and "special char dialogbox" is not closed
 - Fixed several memory leaks
+- Fixed crash when we cancel insert time/date variable.
+- Fixed crash when we duplicate page and there was an embedded document.

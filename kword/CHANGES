@@ -217,6 +217,8 @@ KoText library fixes:
 - Fixed preview in paragraph dialog (was truncated)
 - Fixed font size applied by "Find/Replace with formatting" and "Autocorrection with formatting".
 - Fixed background color not applied by "Find/Replace with formatting".
+- Fixed crash when we remove "autocorrect word formatted"
+- Fixed mem leak in autocorrect dialogbox (autocorrect list was not deleted )
 - Fixed non/working undo/redo when changing paragraph settings for a whole text frameset
 - Fixed calculation of centering (visible on very short paragraphs)
 - The height of the cursor now depends on the character on the left of the cursor
@@ -230,3 +232,4 @@ Crashes:
 - Fixed crash when we delete style that is also used as a 'following style'.
 - Fixed crash with bookmarks
 - Fixed several memory leaks
+- Fixed crash when we canceled create time/date variable.
