@@ -92,7 +92,7 @@ public:
   void setPathObject (GObject* obj);
   GObject* pathObject () { return pathObj; }
 
-  virtual const char* typeName ();
+  virtual QString typeName () const;
 
   virtual GOState* saveState ();
   virtual void restoreState (GOState* state);

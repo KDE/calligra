@@ -69,7 +69,7 @@ public:
   
   virtual void getPath (vector<Coord>& path);
 
-  virtual const char* typeName ();
+  virtual QString typeName () const;
 
   virtual GObject* copy ();
   virtual GObject* clone (const list<XmlAttribute>& attribs);

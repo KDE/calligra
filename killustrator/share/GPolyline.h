@@ -69,7 +69,7 @@ public:
   virtual void removePoint (int idx, bool update = true);
   void removeAllPoints ();
 
-  virtual const char* typeName ();
+  virtual QString typeName () const;
 
   virtual GObject* copy ();
   virtual GObject* clone (const list<XmlAttribute>& attribs);

@@ -52,7 +52,7 @@ public:
   virtual void draw (Painter& p, bool withBasePoints = false,
 		     bool outline = false);
 
-  virtual const char* typeName ();
+  virtual QString typeName () const;
 
   virtual GObject* copy ();
   virtual GObject* clone (const list<XmlAttribute>& attribs);

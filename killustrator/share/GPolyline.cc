@@ -115,8 +115,8 @@ float GPolyline::calcArrowAngle (const Coord& p1, const Coord& p2,
   return angle;
 }
 
-const char* GPolyline::typeName () {
-  return I18N ("Polyline");
+QString GPolyline::typeName () const {
+  return SI18N ("Polyline");
 }
 
 void GPolyline::draw (Painter& p, bool withBasePoints, bool /*outline*/) {

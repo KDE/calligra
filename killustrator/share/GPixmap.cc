@@ -93,8 +93,8 @@ GPixmap::~GPixmap () {
     delete pix;
 }
 
-const char* GPixmap::typeName () {
-  return I18N ("Pixmap object");
+QString GPixmap::typeName () const {
+  return SI18N ("Pixmap object");
 }
 
 void GPixmap::draw (Painter& p, bool /*withBasePoints*/, bool outline) {

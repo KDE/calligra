@@ -759,7 +759,12 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
     else {
       GObject *sobj = doc->getSelection ().front ();
       sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-	       sobj->typeName (), x, u, y, u, w, u, h, u);
+#if QT_VERSION >= 199
+	       sobj->typeName ().ascii ()
+#else
+	       (const char *) sobj->typeName ()
+#endif
+, x, u, y, u, w, u, h, u);
     }
     emit modeSelected (msgbuf);
   }

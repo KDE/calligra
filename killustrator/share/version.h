@@ -31,11 +31,15 @@
 #define QT_PRFX Qt
 #define NEWKDE 1
 #define QSTR_NULL QString::null
-#define I18N(s) i18n(s).ascii()
+#define I18N(s) i18n(s).ascii ()
+#define SI18N(s) i18n(s)
+#define STR(s) s
 #else
 #define QT_PRFX
 #define QSTR_NULL (const char *) 0L
 #define I18N(s) i18n(s)
+#define SI18N(s) QString(i18n(s))
+#define STR(s) s.data ()
 #endif
 
 #if NEWKDE

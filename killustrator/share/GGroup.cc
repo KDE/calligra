@@ -60,8 +60,8 @@ GGroup::~GGroup () {
   members.clear ();
 }
 
-const char* GGroup::typeName () {
-  return i18n ("Group");
+QString GGroup::typeName () const {
+  return SI18N ("Group");
 }
 
 bool GGroup::contains (const Coord& p) {

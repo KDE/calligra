@@ -26,9 +26,9 @@
 #include "GCurve.moc"
 #include "GBezier.h"
 #include <qcolor.h>
-#include "version.h"
 #include <kapp.h>
 #include <klocale.h>
+#include "version.h"
 
 static Coord blendPoints (const Coord& p1, const Coord& p2, 
 			  int step, int num) {
@@ -239,6 +239,15 @@ void GCurve::draw (Painter& p, bool withBasePoints, bool outline) {
       }
     }
     p.drawPolygon (points);
+  if (withBasePoints) {
+    p.setPen (QT_PRFX::black);
+    p.setBrush (QT_PRFX::white);
+    for (unsigned int i = 0; i < points.size (); i++) {
+      QPoint pnt = points.point (i);
+      p.drawRect (pnt.x () - 2, pnt.y () - 2, 4, 4);
+    }
+  }
+   
   }
   else {
     list<GSegment>::iterator i;
@@ -258,11 +267,11 @@ bool GCurve::contains (const Coord& p) {
     return false;
 }
 
-const char* GCurve::typeName () {
+QString GCurve::typeName () const {
   if (closed)
-    return I18N ("Closed Curve");
+    return SI18N ("Closed Curve");
   else
-    return I18N ("Curve");
+    return SI18N ("Curve");
 }
 
 GObject* GCurve::copy () {

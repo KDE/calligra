@@ -68,7 +68,7 @@ public:
   virtual int getNeighbourPoint (const Coord& p);
   virtual void movePoint (int idx, float dx, float dy);
 
-  virtual const char* typeName ();
+  virtual QString typeName () const;
 
   virtual void getPath (vector<Coord>& path);
 

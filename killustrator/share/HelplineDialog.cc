@@ -33,6 +33,7 @@
 #include "HelplineDialog.moc"
 #include "units.h"
 #include "PStateManager.h"
+#include "version.h"
 
 HelplineDialog::HelplineDialog (Canvas* c, QWidget* parent, 
 				const char* name) : 
@@ -76,7 +77,12 @@ QWidget* HelplineDialog::createHorizLineWidget (QWidget* parent) {
   horizValue->move (10, 20);
 
   horizList = new QListBox (w);
+#if QT_VERSION >= 199
+  horizList->setColumnMode (1);
+  horizList->setRowMode (6);
+#else
   horizList->setFixedVisibleLines (6);
+#endif
   horizList->move (10, 60);
   horizList->setMultiSelection (false);
   connect (horizList, SIGNAL(highlighted (int)), 
@@ -113,7 +119,12 @@ QWidget* HelplineDialog::createVertLineWidget (QWidget* parent) {
   vertValue->move (10, 20);
 
   vertList = new QListBox (w);
+#if QT_VERSION >= 199
+  vertList->setColumnMode (1);
+  vertList->setRowMode (6);
+#else
   vertList->setFixedVisibleLines (6);
+#endif
   vertList->move (10, 60);
   vertList->setMultiSelection (false);
   connect (vertList, SIGNAL(highlighted (int)), 
@@ -148,42 +159,42 @@ void HelplineDialog::helpPressed () {
 
 void HelplineDialog::initLists () {
   vector<float>::iterator i;
-  char buf[20];
+  QString buf;
   MeasurementUnit unit = 
     PStateManager::instance ()->defaultMeasurementUnit ();
 
   for (i = horizLines.begin (); i != horizLines.end (); i++) {
     float value = *i;
-    sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-    horizList->insertItem (buf);
+    buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+    horizList->insertItem (STR(buf));
   }
 
   for (i = vertLines.begin (); i != vertLines.end (); i++) {
     float value = *i;
     sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-    vertList->insertItem (buf);
+    vertList->insertItem (STR(buf));
   }
 }
 
 void HelplineDialog::addHorizLine () {
   float value = horizValue->getValue ();
   horizLines.push_back (value);
-  char buf[20];
+  QString buf;
   MeasurementUnit unit = 
     PStateManager::instance ()->defaultMeasurementUnit ();
-  sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-  horizList->insertItem (buf);
+  buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+  horizList->insertItem (STR(buf));
 }
 
 void HelplineDialog::updateHorizLine () {
   int idx = horizList->currentItem ();
   if (idx != -1) {
     float value = horizValue->getValue ();
-    char buf[20];
+    QString buf;
     MeasurementUnit unit = 
       PStateManager::instance ()->defaultMeasurementUnit ();
-    sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-    horizList->changeItem (buf, idx);
+    buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+    horizList->changeItem (STR(buf), idx);
     horizLines[idx] = value;
   }
 }
@@ -201,22 +212,22 @@ void HelplineDialog::deleteHorizLine () {
 void HelplineDialog::addVertLine () {
   float value = vertValue->getValue ();
   vertLines.push_back (value);
-  char buf[20];
+  QString buf;
   MeasurementUnit unit = 
     PStateManager::instance ()->defaultMeasurementUnit ();
-  sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-  vertList->insertItem (buf);
+  buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+  vertList->insertItem (STR(buf));
 }
 
 void HelplineDialog::updateVertLine () {
   int idx = vertList->currentItem ();
   if (idx != -1) {
     float value = vertValue->getValue ();
-    char buf[20];
+    QString buf;
     MeasurementUnit unit = 
       PStateManager::instance ()->defaultMeasurementUnit ();
-    sprintf (buf, "%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
-    vertList->changeItem (buf, idx);
+    buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+    vertList->changeItem (STR(buf), idx);
     vertLines[idx] = value;
   }
 }

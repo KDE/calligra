@@ -82,11 +82,11 @@ GOval::GOval (const GOval& obj) : GObject (obj) {
   calcBoundingBox ();
 }
 
-const char* GOval::typeName () {
+QString GOval::typeName () const {
   if (circleFlag)
-    return i18n ("Circle");
+    return SI18N ("Circle");
   else
-    return i18n ("Ellipse");
+    return SI18N ("Ellipse");
 }
 
 void GOval::draw (Painter& p, bool withBasePoints, bool outline) {

@@ -303,7 +303,7 @@ public:
   void unref ();
   unsigned int ref_count () const { return rcount; }
 
-  virtual const char* typeName () = 0;
+  virtual QString typeName () const = 0;
 
   virtual GOState* saveState ();
   virtual void restoreState (GOState* state);

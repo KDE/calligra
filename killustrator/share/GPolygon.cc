@@ -155,13 +155,13 @@ void GPolygon::setKind (GPolygon::Kind k) {
     kind = k;
 }
 
-const char* GPolygon::typeName () {
+QString GPolygon::typeName () const {
   if (kind == PK_Polygon)
-    return I18N ("Polygon");
+    return SI18N ("Polygon");
   else if (kind == PK_Rectangle)
-    return I18N ("Rectangle");
+    return SI18N ("Rectangle");
   else
-    return I18N ("Square");
+    return SI18N ("Square");
 }
 
 bool GPolygon::isFilled () const {

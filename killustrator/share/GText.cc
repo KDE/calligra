@@ -135,8 +135,8 @@ GText::TextInfo GText::getTextInfo () const {
   return tinfo;
 }
 
-const char* GText::typeName () {
-  return i18n ("Text");
+QString GText::typeName () const {
+  return SI18N ("Text");
 }
 
 void GText::draw (Painter& p, bool, bool) {

@@ -80,8 +80,8 @@ GClipart::GClipart (const GClipart& obj) : GObject (obj) {
   calcBoundingBox ();
 }
 
-const char* GClipart::typeName () {
-  return I18N ("Clipart object");
+QString GClipart::typeName () const {
+  return SI18N ("Clipart object");
 }
 
 void GClipart::draw (Painter& p, bool /*withBasePoints*/, bool outline) {

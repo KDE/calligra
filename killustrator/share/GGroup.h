@@ -50,7 +50,7 @@ public:
 		     bool outline = false);
   virtual bool contains (const Coord& p);
 
-  virtual const char* typeName ();
+  virtual QString typeName () const;
 
   virtual GObject* copy ();
   virtual GObject* clone (const list<XmlAttribute>& attribs);
