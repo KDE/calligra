@@ -4,6 +4,9 @@ AC_SUBST(KOML_INCLUDES)
 KSTORE_INCLUDES='-I$(top_srcdir)/lib/store -I$(top_builddir)/lib/store'
 AC_SUBST(KSTORE_INCLUDES)
 
+KOPARTS_INCLUDES='-I$(top_srcdir)/lib/koparts'
+AC_SUBST(KOPARTS_INCLUDES)
+
 KOFFICECORE_INCLUDES='-I$(top_srcdir)/lib/kofficecore -I$(top_builddir)/lib/kofficecore'
 AC_SUBST(KOFFICECORE_INCLUDES)
 
