@@ -3,7 +3,7 @@
 
 #include <koView.h>
 
-class QAction;
+class KAction;
 class QPaintEvent;
 
 class ExamplePart;
@@ -23,7 +23,7 @@ protected:
     virtual void updateReadWrite( bool readwrite );
 
 private:
-    QAction* m_cut;
+    KAction* m_cut;
 };
 
 #endif
