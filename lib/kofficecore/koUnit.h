@@ -82,15 +82,15 @@ public:
 
     // Convert a unit name into a Unit enum
     static Unit unit( const QString &_unitName ) {
-        if ( _unitName == "mm" ) return U_MM;
-        if ( _unitName == "inch" ) return U_INCH;
+        if ( _unitName == QString::fromLatin1( "mm" ) ) return U_MM;
+        if ( _unitName == QString::fromLatin1( "inch" ) ) return U_INCH;
         return U_PT;
     }
     // Get the name of a unit
     static QString unitName( Unit _unit ) {
-        if ( _unit == U_MM ) return "mm";
-        if ( _unit == U_INCH ) return "inch";
-        return "pt";
+        if ( _unit == U_MM ) return QString::fromLatin1( "mm" );
+        if ( _unit == U_INCH ) return QString::fromLatin1( "inch" );
+        return QString::fromLatin1( "pt" );
     }
     // Get the full (translated) description of a unit
     static QString unitDescription( Unit _unit );
