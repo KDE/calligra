@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "kexiimportwizard.h"
 #include "kexiimportwizardform.h"
 #include "kexiimportwizardform.moc"
@@ -33,6 +52,7 @@ KexiTableImportForm::KexiTableImportForm(KexiFilterManager *filterManager,KexiIm
 	m_openWidget=wiz->openWidget(openFilePage,m_dialogFilter);
 	connect (m_openWidget,SIGNAL(nextPage()),this,SLOT(loadPlugin()));
 	connect (m_openWidget,SIGNAL(filterHasBeenLoaded(KexiFilter*,const KURL& )),this,SLOT(filterHasBeenLoaded(KexiFilter*,const KURL&)));
+	connect (m_openWidget,SIGNAL(canceled()), this, SLOT(reject()));
 	layout->addWidget(m_openWidget);
 	layout->activate();
 	
