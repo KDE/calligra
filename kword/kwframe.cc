@@ -1303,14 +1303,15 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
 #ifdef DEBUG_DRAW
                 kdDebug(32001) << "KWFrameSet::drawFrame viewCRect&frameRect=" << viewCRect << " calling drawFrameAndBorders." << endl;
 #endif
-                f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewCRect, cg, onlyChanged, resetChanged,
+                f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewCRect, cg, false, resetChanged,
                                                     edit, viewMode, 0L, false );
             }
 
             doubleBufPainter->restore();
         }
 
-        drawFrameContents( frame, doubleBufPainter, crect, cg, onlyChanged, resetChanged, edit, viewMode );
+        // We can't "repaint changed parags only" if we just drew the underlying frames, hence the "false"
+        drawFrameContents( frame, doubleBufPainter, crect, cg, false, resetChanged, edit, viewMode );
         if ( painter->device()->devType() != QInternal::Printer )
         {
             painter->drawPixmap( crect.topLeft(), *pix, crect );
