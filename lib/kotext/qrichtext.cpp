@@ -741,10 +741,11 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s, bool link, int *customI
 		 pos.y() >= y + cy && pos.y() <= y + cy + chr->height() ) {
                 if ( customItemIndex )
                     *customItemIndex = i;
+                curpos = i;
+
                 if ( chr->customItem()->isNested() )
                 {
 		    inCustom = TRUE;
-		    curpos = i;
 		    break;
                 }
 	    }
