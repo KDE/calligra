@@ -13,9 +13,8 @@ const bool FilterBase::filter() {
     return success;
 }
 
-void FilterBase::slotSavePic(const char *data, const char *type, const unsigned long size,
-                             char **nameOUT) {
-    emit signalSavePic(data, type, size, nameOUT);
+void FilterBase::slotSavePic(Picture *pic) {
+    emit signalSavePic(pic);
 }
 
 void FilterBase::slotPart(const char *nameIN, char **nameOUT) {

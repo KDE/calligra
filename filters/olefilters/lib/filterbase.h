@@ -5,6 +5,8 @@
 #include <qstring.h>
 #include <myfile.h>
 
+class Picture;
+
 // Attention: The nameOUT Strings are allocated with new[] in the
 // slots!!! Therefore you have to delete [] them!
 class FilterBase : public QObject {
@@ -19,8 +21,7 @@ public:
     virtual const QString part() { return QString(""); }
 
 signals:
-    void signalSavePic(const char *data, const char *type, const unsigned long size,
-                               char **nameOUT);
+    void signalSavePic(Picture *pic);
     void signalPart(const char *nameIN, char **nameOUT);
     void signalGetStream(const long &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
@@ -28,8 +29,7 @@ signals:
     void signalGetStream(const QString &name, myFile &stream);
 
 protected slots:
-    void slotSavePic(const char *data, const char *type, const unsigned long size,
-                             char **nameOUT);
+    void slotSavePic(Picture *pic);
     void slotPart(const char *nameIN, char **nameOUT);
     void slotFilterError();
 

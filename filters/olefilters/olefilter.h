@@ -13,6 +13,7 @@
 #include <filterbase.h>
 #include <wordfilter.h>
 #include <excelfilter.h>
+#include <picture.h>
 #include <myfile.h>
 
 
@@ -28,8 +29,7 @@ public:
                               const QCString& from, const QCString& to);
     
 protected slots:
-    void slotSavePic(const char *data, const char *type, const unsigned long size,
-                     char **nameOUT);
+    void slotSavePic(Picture *pic);
     void slotPart(const char *nameIN, char **nameOUT);
     void slotGetStream(const long &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
@@ -47,7 +47,7 @@ private:
     QArray<unsigned short> storePath;
 
     myFile olefile;
-    int numPic;                      // unique name generation ->
+    int numPic;                      // unique name generation 
     KLaola *docfile;                 // used to split up the OLE-file
     KoTarStore *store;               // KOffice Storage structure
     bool success;

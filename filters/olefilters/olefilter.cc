@@ -66,8 +66,7 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
     return success;
 }
 
-void OLEFilter::slotSavePic(const char *data, const char *type,
-                            const unsigned long size, char **nameOUT) {
+void OLEFilter::slotSavePic(Picture *pic) {
 
     QString name;
 
@@ -217,9 +216,8 @@ void OLEFilter::convert(const QString &dirname) {
 
 void OLEFilter::connectCommon(FilterBase **myFilter) {
 
-    QObject::connect(*myFilter, SIGNAL(signalSavePic(const char *, const char *,
-                     const unsigned long, char **)), this, SLOT(slotSavePic(const char *,
-                     const char *, const unsigned long, char **)));
+    QObject::connect(*myFilter, SIGNAL(signalSavePic(Picture *)), this,
+                     SLOT(slotSavePic(Picture *)));
     QObject::connect(*myFilter, SIGNAL(signalPart(const char *, char **)),
                      this, SLOT(slotPart(const char *, char **)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const long &, myFile &)), this,
