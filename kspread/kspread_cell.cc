@@ -2686,8 +2686,7 @@ void KSpreadCell::paintText( QPainter& painter,
 
   //Check for red font color for negative values
   if ( !d->hasExtra() || !d->extra()->conditions
-      || !d->extra()->conditions->matchedStyle() )
-  {
+       || !d->extra()->conditions->matchedStyle() ) {
     if ( value().isNumber()
          && !( m_pTable->getShowFormula()
                && !( m_pTable->isProtected()
@@ -2738,20 +2737,17 @@ void KSpreadCell::paintText( QPainter& painter,
   QString tmpText = d->strOutText;
   double tmpHeight = d->textHeight;
   double tmpWidth = d->textWidth;
-  if( testFlag( Flag_CellTooShortX ) )
-  {
+  if ( testFlag( Flag_CellTooShortX ) ) {
     d->strOutText = textDisplaying( painter );
   }
 
   //hide zero
-  if ( m_pTable->getHideZero() && value().isNumber() &&
-       value().asFloat() == 0 )
-  {
+  if ( m_pTable->getHideZero() && value().isNumber()
+       && value().asFloat() == 0 ) {
     d->strOutText = QString::null;
   }
 
-  if ( colFormat->isHide() || ( cellRect.height() <= 2 ) )
-  {
+  if ( colFormat->isHide() || ( cellRect.height() <= 2 ) ) {
     //clear extra cell if column or row is hidden
     freeAllObscuredCells();  /* TODO: This looks dangerous...must check when I
                                 have time */
@@ -2762,8 +2758,7 @@ void KSpreadCell::paintText( QPainter& painter,
   double offsetCellTooShort = 0.0;
   int a = effAlignX();
   //apply indent if text is align to left not when text is at right or middle
-  if (  a == KSpreadCell::Left && !isEmpty() )
-  {
+  if (  a == KSpreadCell::Left && !isEmpty() ) {
     if ( d->hasExtra() && d->extra()->conditions
          && d->extra()->conditions->matchedStyle()
          && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SIndent, true ) )
@@ -2781,9 +2776,8 @@ void KSpreadCell::paintText( QPainter& painter,
   QFontMetrics fm2 = painter.fontMetrics();
   double offsetFont = 0.0;
 
-  if ( ( alignY( column(), row() ) == KSpreadCell::Bottom )
-       && textFontUnderline( column(), row() ) )
-  {
+  if ( alignY( column(), row() ) == KSpreadCell::Bottom
+       && textFontUnderline( column(), row() ) ) {
     offsetFont = m_pTable->doc()->unzoomItX( fm2.underlinePos() + 1 );
   }
 
@@ -2809,20 +2803,17 @@ void KSpreadCell::paintText( QPainter& painter,
     else
       tmpMultiRow = multiRow( cellRef.x(), cellRef.y() );
   }
-  else
-  {
+  else {
     tmpAngle        = getAngle( cellRef.x(), cellRef.y() );
     tmpVerticalText = verticalText( cellRef.x(), cellRef.y() );
     tmpMultiRow     = multiRow( cellRef.x(), cellRef.y() );
   }
 
-  if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle )
-  {
-       painter.drawText( doc->zoomItX( indent + cellRect.x() + d->textX - offsetCellTooShort ),
+  if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle ) {
+    painter.drawText( doc->zoomItX( indent + cellRect.x() + d->textX - offsetCellTooShort ),
                       doc->zoomItY( cellRect.y() + d->textY - offsetFont ), d->strOutText );
   }
-  else if ( tmpAngle != 0 )
-  {
+  else if ( tmpAngle != 0 ) {
     int angle = tmpAngle;
     QFontMetrics fm = painter.fontMetrics();
 
@@ -2845,8 +2836,7 @@ void KSpreadCell::paintText( QPainter& painter,
                       d->strOutText );
     painter.rotate( -angle );
   }
-  else if ( tmpMultiRow && !tmpVerticalText )
-  {
+  else if ( tmpMultiRow && !tmpVerticalText ) {
     QString t;
     int i;
     int pos = 0;
@@ -3316,39 +3306,52 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
 
     // Fix the borders which meet at the bottom right corner
-    if ( m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effRightBorderValue( cellRef.x(), cellRef.y() + 1 )
-         >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effLeftBorderValue( cellRef.x() + 1, cellRef.y() + 1 ) )
-      vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+      KSpreadCell *cell_east      = m_pTable->cellAt( cellRef.x() + 1, 
+						      cellRef.y() );
+      KSpreadCell *cell_south     = m_pTable->cellAt( cellRef.x(), 
+						      cellRef.y() + 1 );
+      KSpreadCell *cell_southeast = m_pTable->cellAt( cellRef.x() + 1, 
+						      cellRef.y() + 1 );
+    if ( cell_south->effRightBorderValue( cellRef.x(), cellRef.y() + 1 )
+         >= cell_southeast->effLeftBorderValue( cellRef.x() + 1, 
+						cellRef.y() + 1 ) )
+      vert_pen = cell_south->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
     else
-      vert_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effLeftBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
+      vert_pen = cell_southeast->effLeftBorderPen( cellRef.x() + 1, 
+						   cellRef.y() + 1 );
 
     // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
     vert_penWidth = QMAX( 1, doc->zoomItY( vert_pen.width() ) );
     vert_pen.setWidth( vert_penWidth );
-    if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) )
-    {
-      if ( m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effBottomBorderValue( cellRef.x() + 1, cellRef.y() )
-           >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effTopBorderValue( cellRef.x() + 1, cellRef.y() + 1 ) )
-        horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+    if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
+      if ( cell_east ->effBottomBorderValue( cellRef.x() + 1, cellRef.y() )
+           >= cell_southeast->effTopBorderValue( cellRef.x() + 1, 
+						 cellRef.y() + 1 ) )
+
+        horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )
+	  ->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
       else
-        horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
+        horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )
+	  ->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
 
       // horz_pen = effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
       horz_penWidth = QMAX( 1, doc->zoomItX( horz_pen.width() ) );
       int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2;
 
       painter.setPen( vert_pen );
-      //If we are on paper printout, we limit the length of the lines
-      //On paper, we always have full cells, on screen not
-      if ( painter.device()->isExtDev() )
-      {
-        painter.drawLine( QMAX( doc->zoomItX( rect.left() ), doc->zoomItX( cellRect.right() ) ),
-                          QMAX( doc->zoomItY( rect.top() ), doc->zoomItY( cellRect.bottom() ) - bottom ),
-                          QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.right() ) ),
-                          QMIN( doc->zoomItY( rect.bottom() ),doc->zoomItY( cellRect.bottom() ) ) );
+      // If we are on paper printout, we limit the length of the lines.
+      // On paper, we always have full cells, on screen not.
+      if ( painter.device()->isExtDev() )      {
+        painter.drawLine( QMAX( doc->zoomItX( rect.left() ), 
+				doc->zoomItX( cellRect.right() ) ),
+                          QMAX( doc->zoomItY( rect.top() ), 
+				doc->zoomItY( cellRect.bottom() ) - bottom ),
+                          QMIN( doc->zoomItX( rect.right() ),
+				doc->zoomItX( cellRect.right() ) ),
+                          QMIN( doc->zoomItY( rect.bottom() ),
+				doc->zoomItY( cellRect.bottom() ) ) );
       }
-      else
-      {
+      else {
         if ( sheetDir == KSpreadSheet::RightToLeft )
           painter.drawLine( doc->zoomItX( cellRect.x() ),
                             doc->zoomItY( cellRect.bottom() ) - bottom,
