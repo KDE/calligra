@@ -736,6 +736,227 @@ static bool kspreadfunc_conc( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_no( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "NO", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
+    return false;
+
+  bool toto;
+  if( args[0]->boolValue()==true)
+  	toto=false;
+   else if  (args[0]->boolValue()==false)
+   	toto=true;
+   else		
+   	cout <<"Pb in function NO\n";
+  context.setValue( new KSValue(toto)); 	
+  return true;
+}
+
+static bool kspreadfunc_TRUE( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 0, "TRUE", true ) )
+    return false;
+
+  bool toto=true;
+  context.setValue( new KSValue(toto)); 	
+  return true;
+}
+
+static bool kspreadfunc_FALSE( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 0, "FALSE", true ) )
+    return false;
+
+  bool toto=false;
+  context.setValue( new KSValue(toto)); 	
+  return true;
+}
+
+
+static bool kspreadfunc_if( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "IF", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::BoolType, true ) )
+    return false;
+
+  if(  args[0]->boolValue()==true)
+    {
+      if ( KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+	{
+	  context.setValue( new KSValue(args[1]->stringValue()));
+	}
+      else if(KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+        {
+          context.setValue( new KSValue(args[1]->doubleValue()));
+        }
+      /*else if(KSUtil::checkType( context, args[1], KSValue::BoolType, true ) )
+	{
+	cout <<"booleen :\n";*/
+	 /*bool toto;
+  	if( args[1]->boolValue()==true)
+  		toto=false;
+   	else if  (args[1]->boolValue()==false)
+   		toto=true;
+   	else		
+   		cout <<"Pb in function IF\n";*/
+  	//context.setValue( new KSValue(toto));
+	 // context.setValue( new KSValue(args[1]->boolValue()));
+	//}
+      else
+	{
+	  cout <<"Pb in function IF\n";
+	}
+    }
+  else
+  {
+    if ( KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
+      {
+          context.setValue( new KSValue(args[2]->stringValue()));
+      }
+    else if(KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+	{
+ 	 context.setValue( new KSValue(args[2]->doubleValue()));
+	}
+   /* else if(KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
+	{
+          cout <<"booleen :\n";*/
+        /*   bool toto;
+  	if( args[2]->boolValue()==true)
+  		toto=false;
+   	else if  (args[2]->boolValue()==false)
+   		toto=true;
+   	else		
+   		cout <<"Pb in function IF\n"; */
+  	//context.setValue( new KSValue(toto));
+          //context.setValue( new KSValue(args[2]->boolValue()));
+	//}
+    else
+    	{
+    	cout <<"Pb in function IF\n";
+    	}
+   }	
+
+  return true;
+}
+
+static bool kspreadfunc_LEFT( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "LEFT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+  if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  int nb=(int) args[1]->doubleValue();
+  QString tmp=args[0]->stringValue().left(nb);
+  context.setValue( new KSValue(tmp)); 	
+  return true;
+}
+
+static bool kspreadfunc_RIGHT( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "RIGHT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+  if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  int nb=(int) args[1]->doubleValue();
+  QString tmp=args[0]->stringValue().right(nb);
+  context.setValue( new KSValue(tmp)); 	
+  return true;
+}
+
+static bool kspreadfunc_NBCAR( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "NBCAR", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  int nb=args[0]->stringValue().length();
+  context.setValue( new KSValue(nb)); 	
+  return true;
+}
+
+static bool kspreadfunc_EXACT( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "EXACT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+    return false;
+  bool toto=true;
+  if(args[1]->stringValue()==args[0]->stringValue())
+  	toto=true;
+  else
+  	toto=false;
+  context.setValue( new KSValue(toto)); 	
+  return true;
+}
+
+
+static bool kspreadfunc_STXT( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "STXT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  QString tmp;
+  tmp=args[0]->stringValue().right(args[0]->stringValue().length()-(int)args[1]->doubleValue());
+  tmp=tmp.left(  (int)args[2]->doubleValue());
+  context.setValue( new KSValue(tmp)); 	
+  return true;
+}
+
+static bool kspreadfunc_ENT( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ENT", true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue((int)args[0]->doubleValue())); 	
+  return true;
+}
+
 
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
@@ -770,6 +991,16 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "mult", new KSValue( new KSBuiltinFunction( module, "mult", kspreadfunc_mult) ) );
   module->addObject( "ecartype", new KSValue( new KSBuiltinFunction( module, "ecartype", kspreadfunc_ecarttype) ) );
   module->addObject( "conc", new KSValue( new KSBuiltinFunction( module, "conc", kspreadfunc_conc) ) );
+  module->addObject( "NO", new KSValue( new KSBuiltinFunction( module, "NO", kspreadfunc_no) ) );
+  module->addObject( "IF", new KSValue( new KSBuiltinFunction( module, "IF", kspreadfunc_if) ) );
+  module->addObject( "TRUE", new KSValue( new KSBuiltinFunction( module, "TRUE", kspreadfunc_TRUE) ) );
+  module->addObject( "FALSE", new KSValue( new KSBuiltinFunction( module, "FALSE", kspreadfunc_FALSE) ) );
+  module->addObject( "LEFT", new KSValue( new KSBuiltinFunction( module, "LEFT", kspreadfunc_LEFT) ) );
+  module->addObject( "RIGHT", new KSValue( new KSBuiltinFunction( module, "RIGHT", kspreadfunc_RIGHT) ) );
+  module->addObject( "NBCAR", new KSValue( new KSBuiltinFunction( module, "NBCAR", kspreadfunc_NBCAR) ) );
+  module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
+  module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
+  module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
   return module;
 }
 

@@ -22,6 +22,7 @@
 
 #include "kspread_dlg_formula.h"
 #include "kspread_dlg_assistant.h"
+#include "kspread_dlg_create.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
 #include <kapp.h>
@@ -51,6 +52,9 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   
   setCaption( i18n("Formula") );
 
+  exp=new QLabel(this);
+  exp->layout();
+  lay1->addWidget(exp);
   assistant=new QCheckBox("Assistant",this);
   assistant->layout();
   lay1->addWidget(assistant);
@@ -68,12 +72,12 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   type_formula->insertItem(i18n("Statistic"));
   type_formula->insertItem(i18n("Trigonometric"));
   type_formula->insertItem(i18n("Analytic"));
-
+  type_formula->insertItem(i18n("Logic"));
+  type_formula->insertItem(i18n("Text"));
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   QObject::connect( type_formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
   QObject::connect( formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected_formula(const QString &) ) );
-
   resize( 350, 300 );
   
 }
@@ -125,9 +129,16 @@ void KSpreaddlgformula::slotOk()
 	{
 	
 	
-	    name_function= math  + "(" + string + ")";
-	    //last position of cursor + length of function +1 "("
 	
+	    //last position of cursor + length of function +1 "("
+	    if(math=="TRUE" || math=="FALSE")
+	    	{
+	    	name_function=math;
+	    	}
+	    else
+	    	{
+	    	name_function= math  + "(" + string + ")";
+	    	}
 	    pos=m_pView->editWidget()->cursorPosition()+ math.length()+1;
 	    m_pView->editWidget()->setText( m_pView->editWidget()->text().insert(m_pView->editWidget()->cursorPosition(),name_function) );
 	    m_pView->editWidget()->setFocus();
@@ -137,7 +148,15 @@ void KSpreaddlgformula::slotOk()
 	{
 	    if(m_pView->canvasWidget()->EditorisActivate())
 	    {
-		name_function= math  + "(" + string + ")";
+		
+		if(math=="TRUE" || math=="FALSE")
+			{
+	    		name_function=math;
+	    		}
+	  	else
+	  		{
+	  		name_function= math  + "(" + string + ")";
+	  		}
 		pos=m_pView->canvasWidget()->posEditor()+ math.length()+1;
 		m_pView->canvasWidget()->setEditor(m_pView->canvasWidget()->editEditor().insert(m_pView->canvasWidget()->posEditor(),name_function) );
 	    	m_pView->canvasWidget()->focusEditor();
@@ -146,6 +165,9 @@ void KSpreaddlgformula::slotOk()
 	}
      	}
     }
+    //don't work for the moment
+    //KSpreadcreate* dlg = new KSpreadcreate( m_pView, math,2 );
+    //dlg->show();
   accept();
 }
 
@@ -177,7 +199,28 @@ else
 	
 	assistant->setEnabled(false);
 	}
-	
+if(string=="IF")
+	{
+	exp->clear();
+	exp->setText("IF(exp logic,if true so,if false so..)");
+	}
+else if(string=="TRUE")
+	{
+	exp->clear();
+	exp->setText("TRUE return value TRUE");
+	}
+else if(string=="FALSE")
+	{
+	exp->clear();
+	exp->setText("FALSE return value FALSE");
+	}
+else if(string=="NO")
+	{
+	exp->clear();
+	exp->setText("NO(exp logic) :\nif exp==TRUE return FALSE,\nif exp==FALSE return TRUE");
+	}
+else
+	exp->clear();		
 }
 void KSpreaddlgformula::slotselected(const QString & string)
 {
@@ -198,6 +241,7 @@ list_anal+="ceil";
 list_anal+="max";
 list_anal+="min";
 list_anal+="mult";
+list_anal+="INT";
 
 QStringList list_trig;
 list_trig+="cos";
@@ -215,6 +259,19 @@ list_trig+="atanh";
 list_trig+="degree";
 list_trig+="radian";
 
+QStringList list_logic;
+list_logic+="IF";
+list_logic+="TRUE";
+list_logic+="FALSE";
+list_logic+="NO";
+
+QStringList list_text;
+list_text+="conc";
+list_text+="RIGHT";
+list_text+="LEFT";
+list_text+="NBCAR";
+list_text+="EXACT";
+list_text+="STXT";
 
 if(string== "Statistic" )
 	{
@@ -231,12 +288,24 @@ if (string =="Analytic")
 	formula->clear();
 	formula->insertStringList(list_anal);
 	}
+if(string== "Logic" )
+	{
+	formula->clear();
+	formula->insertStringList(list_logic);
+	}
+if(string== "Text" )
+	{
+	formula->clear();
+	formula->insertStringList(list_text);
+	}	
 if(string == "All")
 	{
 	formula->clear();
 	formula->insertStringList(list_stat);
 	formula->insertStringList(list_trig);
 	formula->insertStringList(list_anal);
+	formula->insertStringList(list_text);
+	formula->insertStringList(list_logic);
 	}		
 }
 

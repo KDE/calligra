@@ -18,3 +18,11 @@ Add new function in Kspread_dlg_sort Now you can sort in mode Decrease or
 Increase.
 bugs fix
 Add CTRL+Key_G => call dlg : goto
+
+1999-09-13 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+Add new functions :
+	-logic : IF , NO , TRUE,FALSE
+	-Math : INT
+	-Text : EXACT, RIGHT, LEFT,conc ,NBCAR,STXT
+		

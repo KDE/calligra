@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -17,40 +18,36 @@
    Boston, MA 02111-1307, USA.
 */     
 
-#ifndef __kspread_dlg_formula__
-#define __kspread_dlg_formula__
+#ifndef __kspread_dlg_create__
+#define __kspread_dlg_create__
 
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+
 
 class KSpreadView;
+class KSpreadTable;
+class KSpreadCell;
 
-class KSpreaddlgformula: public QDialog
+class KSpreadcreate : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreaddlgformula( KSpreadView* parent, const char* name );
+  KSpreadcreate( KSpreadView* parent, const char* name=0L,int param=0 );
 
-  
 public slots:
   void slotOk();
   void slotClose();
-  void slotselected(const QString &);
-  void slotselected_formula(const QString &);
+
 protected:
+
   KSpreadView* m_pView;
   
-  QListBox * type_formula;
-  QListBox * formula;
+  QLineEdit* f_param;
+  QLineEdit* s_param;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
-  QCheckBox *assistant;
-  QLabel *exp;
-
 
 };
 
