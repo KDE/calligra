@@ -45,7 +45,7 @@ public:
 
     virtual bool initDoc();
 
-    virtual bool loadXML( QIODevice *, const QDomDocument & ) {}
+    virtual bool loadXML( QIODevice *, const QDomDocument & ) { return false; }
 
     virtual QCString mimeType() const;
     GCommandHistory *history() { return m_history; }
