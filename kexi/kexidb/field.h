@@ -223,7 +223,7 @@ class KEXI_DB_EXPORT Field
 		inline uint constraints() const { return m_constraints; }
 		//! \return order of this field in containing table (counting starts from 0)
 		//! (-1 if unspecified)
-		inline uint order() const { return m_order; }
+		inline int order() const { return m_order; }
 		//! \return caption of this field
 		inline QString caption() const { return m_caption; }
 		//! \return caption of this field or - if empty - return its name
@@ -304,7 +304,7 @@ class KEXI_DB_EXPORT Field
 		uint m_precision;
 		uint m_options;
 		QVariant m_defaultValue;
-		uint m_order;
+		int m_order;
 		QString m_caption;
 		QString m_help;
 		uint m_width;
