@@ -101,7 +101,7 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 
 	if( mouseEvent->type() == QEvent::MouseMove )
 	{
-		setCursor();
+		//setCursor();
 
 		if( m_mouseButtonIsDown )
 		{

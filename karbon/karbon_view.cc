@@ -666,25 +666,25 @@ KarbonView::zoomChanged( const KoPoint &p )
 	else if( m_zoomAction->currentText() == i18n("  Width") )
 	{
 		centerX = 0.5;
-		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
-		zoomFactor = double( m_canvas->visibleWidth() ) / double( part()->document().width() + 10 );
+		centerY = double( m_canvas->contentsY() + ( height() - 20 ) / 2 ) / double( m_canvas->contentsHeight() );
+		zoomFactor = double( width() - 20 ) / double( part()->document().width() + 10 );
 	}
 	else if( m_zoomAction->currentText() == i18n("Whole Page") )
 	{
 		centerX = 0.5;
 		centerY = 0.5;
-		double zoomFactorX = double( m_canvas->visibleWidth() ) / double( part()->document().width() + 10 );
-		double zoomFactorY = double( m_canvas->visibleHeight() ) / double( part()->document().height() + 10 );
+		double zoomFactorX = double( width() - 20 ) / double( part()->document().width() + 10 );
+		double zoomFactorY = double( height() - 20 ) / double( part()->document().height() + 10 );
 		zoomFactor = kMin( zoomFactorX, zoomFactorY );
 	}
 	else
 	{
-		if( m_canvas->contentsWidth() > m_canvas->visibleWidth() )
-			centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
+		if( m_canvas->contentsWidth() > width() - 20 )
+			centerX = double( m_canvas->contentsX() + ( width() - 20 ) / 2 ) / double( m_canvas->contentsWidth() );
 		else
 			centerX = 0.5;
-		if( m_canvas->contentsHeight() > m_canvas->visibleHeight() )
-			centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
+		if( m_canvas->contentsHeight() > height() - 20 )
+			centerY = double( m_canvas->contentsY() + ( height() - 20 ) / 2 ) / double( m_canvas->contentsHeight() );
 		else
 			centerY = 0.5;
 		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
@@ -692,7 +692,6 @@ KarbonView::zoomChanged( const KoPoint &p )
 	kdDebug() << "centerX : " << centerX << endl;
 	kdDebug() << "centerY : " << centerY << endl;
 	kdDebug() << "zoomFactor : " << zoomFactor << endl;
-
 
 	// above 2000% probably doesnt make sense... (Rob)
 	if( zoomFactor > 20 )

@@ -5,6 +5,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/xrgbrender \
 	-I$(srcdir)/../core \
 	$(LIBART_CFLAGS) \
+	-I/cvs/agg2/include/ \
 	$(all_includes)
 
 noinst_LTLIBRARIES = libvpainter.la

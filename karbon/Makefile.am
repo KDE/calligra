@@ -47,6 +47,7 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOPAINTER) \
 	visitors/libkarbonvisitors.la \
 	dialogs/libkarbondialogs.la \
 	libkarbonbase.la \
+	-L/cvs/agg2/src/ -lagg \
 	$(LIBART_LIBS) \
 	$(FONTCONFIG_LIBS) \
 	$(LIBFREETYPE_LIBS)
