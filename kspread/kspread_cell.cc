@@ -1274,7 +1274,7 @@ void KSpreadCell::offsetAlign( int _col,int _row )
     switch( alignY(_col,_row) )
         {
         case KSpreadCell::Top:
-            if(tmpAngle!=0)
+            if( tmpAngle == 0 )
                 m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
             else
                 {
