@@ -599,3 +599,8 @@ Reggie, 4.1.1999:
 -----------------
 - Implemented searching with formats
 - Lots of fixes (updating the rulers seems to work correctly now :-)
+
+Reggie, 5.1.1999:
+-----------------
+- Fixes
+- Searching for whole words only works now

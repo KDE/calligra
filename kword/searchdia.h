@@ -63,6 +63,8 @@ public:
       vertAlign = KWFormat::VA_NORMAL;
       caseSensitive = false;
       regexp = false;
+      reverse = false;
+      wholeWords = false;
     }
 
     QString expr;
@@ -72,7 +74,7 @@ public:
     int size;
     bool bold,italic,underline;
     KWFormat::VertAlign vertAlign;
-    bool caseSensitive,regexp;
+    bool caseSensitive,regexp,reverse,wholeWords;
   };
 
   KWSearchDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page,KWordView *_view,
@@ -85,7 +87,7 @@ protected:
   QWidget *tab1;
   QGridLayout *grid1,*sGrid;
   QGroupBox *gSearch;
-  QCheckBox *cRegExp,*cFamily,*cSize,*cColor,*cBold,*cItalic,*cUnderline,*cVertAlign,*cmBold,*cmItalic,*cmUnderline,*cCase;
+  QCheckBox *cRegExp,*cFamily,*cSize,*cColor,*cBold,*cItalic,*cUnderline,*cVertAlign,*cmBold,*cmItalic,*cmUnderline,*cCase,*cWholeWords,*cRev;
   QComboBox *cmFamily,*cmSize,*cmVertAlign;
   KColorButton *bColor;
   QLabel *lSearch;

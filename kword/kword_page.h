@@ -170,8 +170,8 @@ public:
 
   void clear() { buffer.fill(white); drawBuffer(); }
 
-  bool find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false);
-  bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false);
+  bool find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false);
+  bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false);
   
   void removeSelection();
 

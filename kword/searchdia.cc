@@ -81,6 +81,16 @@ void KWSearchDia::setupTab1()
   sGrid->addWidget(cRegExp,4,0);
   cRegExp->setChecked(searchEntry->regexp);
 
+  cWholeWords = new QCheckBox(i18n("Find Whole Words only"),gSearch);
+  cWholeWords->resize(cWholeWords->sizeHint());
+  sGrid->addWidget(cWholeWords,5,0);
+  cWholeWords->setChecked(searchEntry->wholeWords);
+
+  cRev = new QCheckBox(i18n("Find Reverse"),gSearch);
+  cRev->resize(cRev->sizeHint());
+  sGrid->addWidget(cRev,6,0);
+  cRev->setChecked(searchEntry->reverse);
+
   cFamily = new QCheckBox(i18n("Check Family"),gSearch);
   cFamily->resize(cFamily->sizeHint());
   sGrid->addWidget(cFamily,1,1);
@@ -207,10 +217,12 @@ void KWSearchDia::setupTab1()
   sGrid->addRowSpacing(4,cRegExp->height());
   sGrid->addRowSpacing(4,cBold->height());
   sGrid->addRowSpacing(4,cmBold->height());
+  sGrid->addRowSpacing(5,cWholeWords->height());
   sGrid->addRowSpacing(5,cItalic->height());
   sGrid->addRowSpacing(5,cmItalic->height());
   sGrid->addRowSpacing(6,cUnderline->height());
   sGrid->addRowSpacing(6,cmUnderline->height());
+  sGrid->addRowSpacing(4,cRev->height());
   sGrid->addRowSpacing(7,cVertAlign->height());
   sGrid->addRowSpacing(7,cmVertAlign->height());
   sGrid->setRowStretch(0,0);
@@ -231,6 +243,8 @@ void KWSearchDia::setupTab1()
   sGrid->addColSpacing(2,cmSize->width());
   sGrid->addColSpacing(0,cRegExp->width());
   sGrid->addColSpacing(0,cCase->width());
+  sGrid->addColSpacing(0,cWholeWords->width());
+  sGrid->addColSpacing(0,cRev->width());
   sGrid->addColSpacing(1,cColor->width());
   sGrid->addColSpacing(2,bColor->width());
   sGrid->addColSpacing(1,cBold->width());
@@ -299,7 +313,11 @@ void KWSearchDia::searchFirst()
   if (expr.isEmpty()) return;
 
   page->removeSelection();
-  page->find(expr,searchEntry,true,cCase->isChecked());
+
+  if (!cRev->isChecked())
+    page->find(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked());
+  else
+    page->findRev(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked());
 }
 
 /*================================================================*/
@@ -309,7 +327,11 @@ void KWSearchDia::searchNext()
   if (expr.isEmpty()) return;
 
   page->removeSelection();
-  page->find(expr,searchEntry,false,cCase->isChecked());
+
+  if (!cRev->isChecked())
+    page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked());
+  else
+    page->findRev(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked());
 }
 
 /*================================================================*/

@@ -253,6 +253,12 @@ int KWFrame::getRightIndent(int _y,int _h)
 }
 
 /*================================================================*/
+QPointArray KWFrame::getEmptyPolygon()
+{
+  return QPointArray();
+}
+
+/*================================================================*/
 QCursor KWFrame::getMouseCursor(int mx,int my)
 {
   if (mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6)

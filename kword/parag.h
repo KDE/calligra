@@ -142,9 +142,9 @@ public:
     void applyStyle(QString _style);
     void tabListChanged(QList<KoTabulator>*);
 
-    int find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs);
+    int find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole);
     int find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index);
-    int findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs);
+    int findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole);
     int findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index);
     void replace(int _pos,int _len,QString _text,KWFormat &_format);
 

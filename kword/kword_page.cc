@@ -2940,7 +2940,7 @@ void KWPage::tabListChanged(QList<KoTabulator> *_tablist)
 }
 
 /*================================================================*/
-bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false)
+bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false)
 {
   debug("find start %d",_format->checkBold);
   if (_first || !currFindParag)
@@ -2961,7 +2961,7 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
   while (true)
     {
       int tmpFindPos = currFindPos;
-      currFindPos = currFindParag->find(_expr,_format,currFindPos,_cs);
+      currFindPos = currFindParag->find(_expr,_format,currFindPos,_cs,_whole);
       if (currFindPos >= 0)
 	{
 	  debug("  => `%s' found at %d",_expr.data(),currFindPos);
@@ -2977,7 +2977,7 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
 	  if (currFindPos == -2 && tmpFindPos + _expr.length() < currFindParag->getTextLen())
 	    {
 	      currFindPos = tmpFindPos + _expr.length();
-	      debug(" => going forward (res was -2, this means ony format was wrong)"
+	      debug(" => going forward (res was -2, this means only format was wrong or not whole word found)"
 		    " => currFindPos = tmpFindPos + _expr.length() = %d",currFindPos);
 	    }
 	  else if (currFindParag->getNext())
@@ -3019,7 +3019,7 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
 }
 
 /*================================================================*/
-bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false)
+bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false)
 {
 }
 

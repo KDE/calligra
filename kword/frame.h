@@ -22,6 +22,7 @@
 #include <qcursor.h>
 #include <ksize.h>
 #include <qpicture.h>
+#include <qpointarray.h>
 
 #include "image.h"
 
@@ -121,6 +122,8 @@ public:
   void setRightBorder(KWParagLayout::Border _brd) { brd_right = _brd; }
   void setTopBorder(KWParagLayout::Border _brd) { brd_top = _brd; }
   void setBottomBorder(KWParagLayout::Border _brd) { brd_bottom = _brd; }
+
+  QPointArray getEmptyPolygon();
 
 protected:
   RunAround runAround;

@@ -403,14 +403,23 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
   return __data;
 }
 
-int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs)
+int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole)
 {
   QString str = toString(0,size());
   int res = str.find(_expr,_index,_cs);
 
   if (res != -1)
     {
-      if (!_format) return res;
+      if (!_format && !_whole) return res;
+      
+      if (!_format && _whole) 
+	{
+	  if ((res == 0 || res > 0 && str[res - 1] == ' ') &&
+	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) < 
+	       static_cast<int>(_len_) && str[res + _expr.length()] == ' '))
+	    return res;
+	  return -2;
+	}
 
       KWFormat *format;
       for (unsigned int i = 0;i < _expr.length();i++)
@@ -435,7 +444,17 @@ int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,
 	  if (_format->checkVertAlign && _format->vertAlign != format->getVertAlign())
 	    return -2;
 	}
-      return res;
+
+      if (!_whole)
+	return res;
+      else
+	{
+	  if ((res == 0 || res > 0 && str[res - 1] == ' ') &&
+	      (res + static_cast<int>(_expr.length()) == static_cast<int>(_len_) || res + static_cast<int>(_expr.length()) < 
+	       static_cast<int>(_len_) && str[res + _expr.length()] == ' '))
+	    return res;
+	  return -2;
+	}
     }
   else return -1;
 }
@@ -461,7 +480,7 @@ int KWString::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _inde
   else return -1;
 }
 
-int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs)
+int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole)
 {
   QString str = toString(0,size());
   int res = str.findRev(_expr,_index,_cs);
