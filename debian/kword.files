@@ -6,6 +6,7 @@ usr/lib/kword.so
 usr/lib/kword.la
 usr/share/applnk/Office/kword.desktop
 usr/share/mimelnk/application/x-kword.desktop
+usr/share/mimelnk/application/x-abiword.desktop
 usr/share/apps/kword/*
 usr/share/icons/hicolor/32x32/apps/kword.png
 usr/share/icons/hicolor/48x48/apps/kword.png

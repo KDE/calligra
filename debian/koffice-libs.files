@@ -67,9 +67,15 @@ usr/lib/libkofficeui.la
 usr/lib/libkoscript.so.1.0.0
 usr/lib/libkoscript.so.1
 usr/lib/libkoscript.la
+usr/lib/libqt3stuff.so.0.0.0
+usr/lib/libqt3stuff.so.0
+usr/lib/libqt3stuff.la
 usr/lib/libkformula.so.3.0.0
 usr/lib/libkformula.so.3
 usr/lib/libkformula.la
+usr/lib/kformulamain.la
+usr/lib/libhtmlexportdia.so
+usr/lib/libhtmlexportdia.la
 usr/lib/libkochart.so.1.0.0
 usr/lib/libkochart.so.1
 usr/lib/libkochart.la

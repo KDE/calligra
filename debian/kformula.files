@@ -1,8 +1,9 @@
 usr/share/apps/kformula/*
 usr/share/applnk/Office/kformula.desktop
 usr/share/mimelnk/application/x-kformula.desktop
-usr/lib/kformula.so
-usr/lib/kformula.la
+usr/lib/kformula*.so
+usr/lib/libkformula*.so
+usr/lib/libkformula*.la
 usr/lib/libkformulapart.so
 usr/lib/libkformulapart.la
 usr/bin/kformula
