@@ -26,6 +26,7 @@
 #include <kaction.h>
 #include <kcommand.h>
 
+#include "contextstyle.h"
 #include "symboltable.h"
 
 class KFormulaContainer;
@@ -57,6 +58,11 @@ public:
     
     ~KFormulaDocument();
 
+    /**
+     * @returns the documents context style.
+     */
+    const ContextStyle& getContextStyle() const { return contextStyle; }
+    
     /**
      * Creates a new formula. The whole idea of the formula document
      * is to contain formulas.
@@ -193,6 +199,12 @@ private:
      * The symbols/names that are "known" to the system.
      */
     SymbolTable table;
+
+    /**
+     * The documents context style. This is the place where all
+     * the user configurable informations are stored.
+     */
+    ContextStyle contextStyle;
 };
 
 #endif // __KFORMULADOCUMENT_H

@@ -169,24 +169,24 @@ ComplexElementType::ComplexElementType(SequenceParser* parser)
 }
 
 
-int ElementType::getSpace(ContextStyle&, int)
+int ElementType::getSpace(const ContextStyle&, int)
 {
     return 0;
 }
 
-QFont ElementType::getFont(ContextStyle& context)
+QFont ElementType::getFont(const ContextStyle& context)
 {
     return context.getDefaultFont();
 }
 
-void ElementType::setUpPainter(ContextStyle& context, QPainter& painter)
+void ElementType::setUpPainter(const ContextStyle& context, QPainter& painter)
 {
     painter.setPen(context.getDefaultColor());
 }
 
 
 
-int OperatorType::getSpace(ContextStyle& context, int size)
+int OperatorType::getSpace(const ContextStyle& context, int size)
 {
     QFont font = context.getOperatorFont();
     font.setPointSize(size);
@@ -194,34 +194,34 @@ int OperatorType::getSpace(ContextStyle& context, int size)
     return fm.width('0')/2;
 }
 
-QFont OperatorType::getFont(ContextStyle& context)
+QFont OperatorType::getFont(const ContextStyle& context)
 {
     return context.getOperatorFont();
 }
 
-void OperatorType::setUpPainter(ContextStyle& context, QPainter& painter)
+void OperatorType::setUpPainter(const ContextStyle& context, QPainter& painter)
 {
     painter.setPen(context.getOperatorColor());
 }
 
 
-void ErrorType::setUpPainter(ContextStyle& context, QPainter& painter)
+void ErrorType::setUpPainter(const ContextStyle& context, QPainter& painter)
 {
     painter.setPen(context.getErrorColor());
 }
 
-QFont NameType::getFont(ContextStyle& context)
+QFont NameType::getFont(const ContextStyle& context)
 {
     return context.getNameFont();
 }
 
 
-QFont NumberType::getFont(ContextStyle& context)
+QFont NumberType::getFont(const ContextStyle& context)
 {
     return context.getNumberFont();
 }
 
-void NumberType::setUpPainter(ContextStyle& context, QPainter& painter)
+void NumberType::setUpPainter(const ContextStyle& context, QPainter& painter)
 {
     painter.setPen(context.getNumberColor());
 }

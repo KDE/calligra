@@ -293,11 +293,6 @@ private:
     void execute(KFormulaCommand *command);
 
     /**
-     * Remove the selection if any.
-     */
-    void removeSelection();
-
-    /**
      * Sets the cursor that is to be used for any editing.
      *
      * The active cursor might 0. In this case you must not
@@ -319,11 +314,6 @@ private:
      * The element tree's root.
      */
     FormulaElement* rootElement;
-
-    /**
-     * The style that should be used to draw the formula.
-     */
-    ContextStyle context;
 
     /**
      * The active cursor is the one that triggered the last command.

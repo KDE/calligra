@@ -112,7 +112,7 @@ void KFormulaContainer::testDirty()
 {
     if (dirty) {
         dirty = false;
-        rootElement->calcSizes(context);
+        rootElement->calcSizes(getDocument()->getContextStyle());
         emit formulaChanged(rootElement->getWidth(), rootElement->getHeight());
     }
 }
@@ -128,7 +128,7 @@ bool KFormulaContainer::isEmpty()
  */
 void KFormulaContainer::draw(QPainter& painter)
 {
-    rootElement->draw(painter, context);
+    rootElement->draw(painter, getDocument()->getContextStyle());
 }
 
 
@@ -136,8 +136,7 @@ void KFormulaContainer::addText(QChar ch)
 {
     if (!hasValidCursor())
         return;
-    removeSelection();
-    KFCAdd* command = new KFCAdd(i18n("Add text"), this);
+    KFCReplace* command = new KFCReplace(i18n("Add text"), this);
     command->addElement(new TextElement(ch));
     execute(command);
 }
@@ -198,7 +197,6 @@ void KFormulaContainer::addMatrix(int rows, int columns)
 {
     if (!hasValidCursor())
         return;
-    removeSelection();
     KFCAddMatrix* command = new KFCAddMatrix(this, rows, columns);
     execute(command);
 }
@@ -391,16 +389,15 @@ void KFormulaContainer::compactExpression()
     if (!name.isNull()) {
         QChar ch = getDocument()->getSymbolTable().getSymbolChar(name);
         if (!ch.isNull()) {
-            removeSelection();
-            KFCAdd* command = new KFCAdd(i18n("Add symbol"), this);
+            KFCReplace* command = new KFCReplace(i18n("Add symbol"), this);
             command->addElement(new TextSymbolElement(ch));
             execute(command);
+            return;
         }
     }
-    else {
-        // It might have moved the cursor. So tell them.
-        emit cursorMoved(cursor);
-    }
+
+    // It might have moved the cursor. So tell them.
+    emit cursorMoved(cursor);
 }
 
 
@@ -421,8 +418,7 @@ void KFormulaContainer::paste()
 
         FormulaCursor* cursor = getActiveCursor();
         if (cursor->buildElementsFromDom(formula, list)) {
-            removeSelection();
-            KFCAdd* command = new KFCAdd(i18n("Paste"), this);
+            KFCReplace* command = new KFCReplace(i18n("Paste"), this);
             uint count = list.count();
             for (uint i = 0; i < count; i++) {
                 command->addElement(list.take(0));
@@ -463,16 +459,6 @@ void KFormulaContainer::execute(KFormulaCommand* command)
     }
     else {
         delete command;
-    }
-}
-
-
-void KFormulaContainer::removeSelection()
-{
-    FormulaCursor* cursor = getActiveCursor();
-    if (cursor->isSelection()) {
-        KFCRemoveSelection* command = new KFCRemoveSelection(this, BasicElement::beforeCursor);
-        getHistory()->addCommand(command);
     }
 }
 
@@ -562,6 +548,6 @@ void KFormulaContainer::print(QPrinter& printer)
     //printer.setFullPage(true);
     QPainter painter;
     if (painter.begin(&printer)) {
-        rootElement->draw(painter, context);
+        rootElement->draw(painter, getDocument()->getContextStyle());
     }
 }

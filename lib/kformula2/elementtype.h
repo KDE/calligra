@@ -61,17 +61,17 @@ public:
      * @returns the space to be left before and behind each char
      * for the given style and font size.
      */
-    virtual int getSpace(ContextStyle& context, int size);
+    virtual int getSpace(const ContextStyle& context, int size);
     
     /**
      * @returns the font to be used for this kind of element
      */
-    virtual QFont getFont(ContextStyle& context);
+    virtual QFont getFont(const ContextStyle& context);
 
     /**
      * sets the painters pen to a appropiate value
      */
-    virtual void setUpPainter(ContextStyle& context, QPainter& painter);
+    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
     
     // debug
     virtual void output() = 0;
@@ -105,6 +105,7 @@ class MultiElementType : public ElementType {
 public:
     MultiElementType(SequenceParser* parser);
 
+    // debug
     virtual void output();
 };
 
@@ -138,7 +139,7 @@ public:
     /**
      * @returns the font to be used for this kind of element
      */
-    virtual QFont getFont(ContextStyle& context);
+    virtual QFont getFont(const ContextStyle& context);
 
 private:
 
@@ -164,7 +165,7 @@ public:
     /**
      * sets the painters pen to a appropiate value
      */
-    virtual void setUpPainter(ContextStyle& context, QPainter& painter);
+    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 
     // debug
     virtual void output();
@@ -181,12 +182,12 @@ public:
     /**
      * @returns the font to be used for this kind of element
      */
-    virtual QFont getFont(ContextStyle& context);
+    virtual QFont getFont(const ContextStyle& context);
 
     /**
      * sets the painters pen to a appropiate value
      */
-    virtual void setUpPainter(ContextStyle& context, QPainter& painter);
+    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 
     // debug
     virtual void output();
@@ -206,17 +207,17 @@ public:
      * @returns the space to be left before and behind each char
      * for the given style and font size.
      */
-    virtual int getSpace(ContextStyle& context, int size);
+    virtual int getSpace(const ContextStyle& context, int size);
     
     /**
      * @returns the font to be used for this kind of element
      */
-    virtual QFont getFont(ContextStyle& context);
+    virtual QFont getFont(const ContextStyle& context);
 
     /**
      * sets the painters pen to a appropiate value
      */
-    virtual void setUpPainter(ContextStyle& context, QPainter& painter);
+    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 
     // debug
     virtual void output();

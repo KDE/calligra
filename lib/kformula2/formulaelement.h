@@ -66,12 +66,12 @@ public:
     /**
      * Calculates the formulas sizes and positions.
      */
-    void calcSizes(ContextStyle& context);
+    void calcSizes(const ContextStyle& context);
     
     /**
      * Draws the whole thing.
      */
-    void draw(QPainter& painter, ContextStyle& context);
+    void draw(QPainter& painter, const ContextStyle& context);
 
     /**
      * @returns our documents symbol table
@@ -111,11 +111,6 @@ private:
      * The document that owns this formula.
      */
     KFormulaContainer* document;
-
-    /**
-     * The root element has to know its size.
-     */
-    int size;
 };
 
 #endif // __FORMULAELEMENT_H

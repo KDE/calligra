@@ -49,7 +49,14 @@ And yes, we do have syntax highlighting! Just type:
 
 y = e ^ - o m e g a <space> t <space> ( a * s i n ( o m e g a <space> t <space> + b * c o s ( o m e g a <space> t
 
-or anything else you want to.
+or, if you prefer
+
+s i n <space> ^ 2 <space> ( a l p h a <space> <space> + c o s <space> ^ 2 <space> ( a l p h a <space> <space> = 1
+
+There is some truth in it!
+
+
+Hint: Press <space> on a name that is not a symbol to select it.
 
 
 See DESIGN to know the structure of the formulas

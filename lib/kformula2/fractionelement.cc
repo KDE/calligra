@@ -84,9 +84,9 @@ BasicElement* FractionElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void FractionElement::calcSizes(ContextStyle& style, int parentSize)
+void FractionElement::calcSizes(const ContextStyle& style, int parentSize)
 {
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
     numerator->calcSizes(style, mySize);
     denominator->calcSizes(style, mySize);
 
@@ -108,11 +108,11 @@ void FractionElement::calcSizes(ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void FractionElement::draw(QPainter& painter, ContextStyle& style,
+void FractionElement::draw(QPainter& painter, const ContextStyle& style,
                            int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
 
     numerator->draw(painter, style, mySize, myPos);
     denominator->draw(painter, style, mySize, myPos);

@@ -31,7 +31,6 @@
 FormulaElement::FormulaElement(KFormulaContainer* container)
     : document(container)
 {
-    size = 18;
 }
 
 /**
@@ -64,17 +63,17 @@ void FormulaElement::changed()
 /**
  * Calculates the formulas sizes and positions.
  */
-void FormulaElement::calcSizes(ContextStyle& context)
+void FormulaElement::calcSizes(const ContextStyle& context)
 {
-    inherited::calcSizes(context, size);
+    inherited::calcSizes(context, context.getBaseSize());
 }
 
 /**
  * Draws the whole thing.
  */
-void FormulaElement::draw(QPainter& painter, ContextStyle& context)
+void FormulaElement::draw(QPainter& painter, const ContextStyle& context)
 {
-    inherited::draw(painter, context, size, QPoint());
+    inherited::draw(painter, context, context.getBaseSize(), QPoint());
 }
 
 
@@ -90,7 +89,6 @@ const SymbolTable& FormulaElement::getSymbolTable() const
 void FormulaElement::writeDom(QDomElement& element)
 {
     inherited::writeDom(element);
-    element.setAttribute("SIZE", size);
 }
     
 /**
@@ -101,10 +99,6 @@ bool FormulaElement::readAttributesFromDom(QDomElement& element)
 {
     if (!inherited::readAttributesFromDom(element)) {
         return false;
-    }
-    QString sizeStr = element.attribute("SIZE");
-    if(!sizeStr.isNull()) {
-        size = sizeStr.toInt();
     }
     return true;
 }

@@ -39,7 +39,7 @@
 
 
 SequenceElement::SequenceElement(BasicElement* parent)
-        : BasicElement(parent), parseTree(0)
+        : BasicElement(parent), parseTree(0), relativeSize(0)
 {
     children.setAutoDelete(true);
 }
@@ -100,13 +100,20 @@ BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
 }
 
 
+void SequenceElement::setSizeReduction(const ContextStyle& context)
+{
+    relativeSize = context.getSizeReduction();
+}
+
+
 /**
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void SequenceElement::calcSizes(ContextStyle& context, int parentSize)
+void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
 {
     if (children.count() > 0) {
+        int mySize = parentSize - relativeSize;
         int width = 0;
         int toMidline = 0;
         int fromMidline = 0;
@@ -114,7 +121,7 @@ void SequenceElement::calcSizes(ContextStyle& context, int parentSize)
         uint count = children.count();
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
-            child->calcSizes(context, parentSize+getRelativeSize());
+            child->calcSizes(context, mySize);
             child->setX(width);
             width += child->getWidth();
             toMidline = QMAX(toMidline, child->getMidline());
@@ -149,14 +156,14 @@ void SequenceElement::setChildrenPositions()
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void SequenceElement::draw(QPainter& painter, ContextStyle& context,
+void SequenceElement::draw(QPainter& painter, const ContextStyle& context,
                            int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x() + getX(),
                  parentOrigin.y() + getY());
     
     if (children.count() > 0) {
-        int mySize = parentSize+getRelativeSize();
+        int mySize = parentSize - relativeSize;
         uint count = children.count();
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);

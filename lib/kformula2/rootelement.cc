@@ -85,15 +85,16 @@ BasicElement* RootElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void RootElement::calcSizes(ContextStyle& style, int parentSize)
+void RootElement::calcSizes(const ContextStyle& style, int parentSize)
 {
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
 
     content->calcSizes(style, mySize);
     
     int indexWidth = 0;
     int indexHeight = 0;
     if (hasIndex()) {
+        index->setSizeReduction(style);
         index->calcSizes(style, mySize);
         indexWidth = index->getWidth();
         indexHeight = index->getHeight();
@@ -138,11 +139,11 @@ void RootElement::calcSizes(ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void RootElement::draw(QPainter& painter, ContextStyle& style,
+void RootElement::draw(QPainter& painter, const ContextStyle& style,
                        int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
 
     content->draw(painter, style, mySize, myPos);
     if (hasIndex()) {
@@ -289,7 +290,6 @@ void RootElement::insert(FormulaCursor* cursor,
     if (cursor->getPos() == indexPos) {
         index = static_cast<SequenceElement*>(newChildren.take(0));
         index->setParent(this);
-        index->setRelativeSize(-2);
 
         if (direction == beforeCursor) {
             index->moveLeft(cursor, this);

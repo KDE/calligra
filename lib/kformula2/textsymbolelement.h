@@ -62,17 +62,17 @@ protected:
     /**
      * @returns the font to be used for the element.
      */
-    virtual QFont getFont(ContextStyle& context);
+    virtual QFont getFont(const ContextStyle& context);
 
     /**
      * @returns the space to be left before and behind the character.
      */
-    virtual int getSpaceWidth(ContextStyle& context, int size);
+    virtual int getSpaceWidth(const ContextStyle& context, int size);
 
     /**
      * Sets up the painter to be used for drawing.
      */
-    virtual void setUpPainter(ContextStyle& context, QPainter& painter);
+    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
 
 private:
 

@@ -22,10 +22,15 @@
 #include "contextstyle.h"
 
 ContextStyle::ContextStyle()
-    : defaultFont("helvetica"), nameFont("helvetica"), numberFont("symbol"),
+    : defaultFont("times"), nameFont("times"), numberFont("symbol"),
       operatorFont("symbol"), symbolFont("symbol"),
       defaultColor(Qt::black), numberColor(Qt::blue),
       operatorColor(Qt::darkGreen), errorColor(Qt::darkRed)
 {
     nameFont.setItalic(true);
+    distance = 5;
+    linearMovement = false;
+    baseSize = 18;
+    minimumSize = 8;
+    sizeReduction = 2;
 }

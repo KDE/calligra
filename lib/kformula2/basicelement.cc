@@ -32,7 +32,6 @@ int BasicElement::evilDestructionCount = 0;
 BasicElement::BasicElement(BasicElement* p)
         : parent(p), elementType(0)
 {
-    relativeSize = 0;
     evilDestructionCount++;
 }
 
@@ -150,9 +149,6 @@ bool BasicElement::buildFromDom(QDomElement& element)
  */
 void BasicElement::writeDom(QDomElement& element)
 {
-    if (relativeSize != 0) {
-        element.setAttribute("RELATIVESIZE", relativeSize);
-    }	    
 }
     
 /**
@@ -161,10 +157,6 @@ void BasicElement::writeDom(QDomElement& element)
  */
 bool BasicElement::readAttributesFromDom(QDomElement& element)
 {
-    QString sizeStr = element.attribute("RELATIVESIZE");
-    if(!sizeStr.isNull()) {
-        setRelativeSize(sizeStr.toInt());
-    }
     return true;
 }
 

@@ -117,6 +117,10 @@ protected:
      */
     void testDirty() { doc->testDirty(); }
 
+    /**
+     * @returns our document.
+     */
+    KFormulaContainer* getDocument() const { return doc; }
 
     // I would prefer to have private attributes.
     
@@ -129,9 +133,12 @@ protected:
 private:
     
     void destroyUndoCursor() { delete undocursor; undocursor = 0; }
-    
-    void setExecuteCursor(FormulaCursor* cursor);
 
+    /**
+     * Saves the cursor that is used to execute the command.
+     */
+    void setExecuteCursor(FormulaCursor* cursor);
+    
     /**
      * Cursor position before the command execution.
      */
@@ -147,6 +154,7 @@ private:
      */
     KFormulaContainer* doc;
 
+    // debug
     static int evilDestructionCount;
 };
 
@@ -159,7 +167,7 @@ class KFCAdd : public KFormulaCommand
 public:
 
     KFCAdd(const QString &name, KFormulaContainer* document);
- 
+    
     virtual void execute();
     virtual void unexecute();
 
@@ -181,13 +189,37 @@ public:
     /**
      * generic add command, default implementation do nothing
      */
-    KFCRemoveSelection(KFormulaContainer* document, BasicElement::Direction dir);
+    KFCRemoveSelection(KFormulaContainer* document,
+                       BasicElement::Direction dir = BasicElement::beforeCursor);
  
     virtual void execute();
     virtual void unexecute();
 
-protected:
+private:
     BasicElement::Direction dir;   
+};
+
+
+/**
+ * Removes the current selection and adds the any new elements
+ * afterwards.
+ */
+class KFCReplace : public KFCAdd
+{
+public:
+
+    KFCReplace(const QString &name, KFormulaContainer* document);
+    ~KFCReplace();
+    
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+
+    /**
+     * The command that needs to be executed first if there is a selection.
+     */ 
+    KFCRemoveSelection* removeSelection;
 };
 
 
@@ -248,9 +280,8 @@ private:
 
 
 /**
- * Base for all commands that want to replace the current
- * selection with a new element and set the replaced elements
- * as main child.
+ * The command that takes the main child out of the selected
+ * element and replaces the element with it.
  */
 class KFCAddReplacing : public KFormulaCommand
 {
@@ -274,7 +305,7 @@ private:
 
 class MatrixElement;
 
-class KFCAddMatrix : public KFCAdd
+class KFCAddMatrix : public KFCReplace
 {
 public:
     KFCAddMatrix(KFormulaContainer* document, int r, int c);
@@ -307,9 +338,6 @@ class IndexElement;
 
 /**
  * Add an IndexElement.
- *
- * This is an exception as the element itself is not constructed
- * inside the constructor but by the caller.
  */
 class KFCAddIndex : public KFCAddReplacing
 {

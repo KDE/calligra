@@ -86,6 +86,7 @@ KFCAdd::KFCAdd(const QString &name, KFormulaContainer *document)
 {
 }
 
+
 void KFCAdd::execute()
 {
     FormulaCursor* cursor = getExecuteCursor();
@@ -131,6 +132,38 @@ void KFCRemoveSelection::unexecute()
     cursor->setSelection(false);
     testDirty();
 }
+
+
+
+KFCReplace::KFCReplace(const QString &name, KFormulaContainer* document)
+        : KFCAdd(name, document), removeSelection(0)
+{
+}
+
+KFCReplace::~KFCReplace()
+{
+    delete removeSelection;
+}
+    
+void KFCReplace::execute()
+{
+    if (getActiveCursor()->isSelection() && (removeSelection == 0)) {
+        removeSelection = new KFCRemoveSelection(getDocument());
+    }
+    if (removeSelection != 0) {
+        removeSelection->execute();
+    }
+    KFCAdd::execute();
+}
+
+void KFCReplace::unexecute()
+{
+    KFCAdd::unexecute();
+    if (removeSelection != 0) {
+        removeSelection->unexecute();
+    }
+}
+
 
 
 KFCRemove::KFCRemove(KFormulaContainer *document,
@@ -245,7 +278,7 @@ void KFCAddReplacing::unexecute()
 // ******  Add matrix command 
 
 KFCAddMatrix::KFCAddMatrix(KFormulaContainer* document, int r, int c)
-        : KFCAdd(i18n("Add matrix"), document)
+        : KFCReplace(i18n("Add matrix"), document)
 {
     matrix = new MatrixElement(r, c);
     addElement(matrix);
@@ -253,7 +286,7 @@ KFCAddMatrix::KFCAddMatrix(KFormulaContainer* document, int r, int c)
 
 void KFCAddMatrix::execute()
 {
-    KFCAdd::execute();
+    KFCReplace::execute();
     FormulaCursor* cursor = getActiveCursor();
     cursor->goInsideElement(matrix);
 }

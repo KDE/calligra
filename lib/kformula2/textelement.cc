@@ -40,9 +40,9 @@ TextElement::TextElement(QChar ch, BasicElement* parent)
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void TextElement::calcSizes(ContextStyle& context, int parentSize)
+void TextElement::calcSizes(const ContextStyle& context, int parentSize)
 {
-    int mySize = QMAX(parentSize + getRelativeSize(), 8);
+    int mySize = QMAX(parentSize, context.getMinimumSize());
 
     QFont font = getFont(context);
     font.setPointSize(mySize);
@@ -64,10 +64,10 @@ void TextElement::calcSizes(ContextStyle& context, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void TextElement::draw(QPainter& painter, ContextStyle& context,
+void TextElement::draw(QPainter& painter, const ContextStyle& context,
                        int parentSize, const QPoint& parentOrigin)
 {
-    int mySize = QMAX(parentSize + getRelativeSize(), 10);
+    int mySize = QMAX(parentSize, context.getMinimumSize());
 
     QFont font = getFont(context);
     font.setPointSize(mySize);
@@ -79,7 +79,7 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
 }
 
 
-QFont TextElement::getFont(ContextStyle& context)
+QFont TextElement::getFont(const ContextStyle& context)
 {
     if (getElementType() != 0) {
         return getElementType()->getFont(context);
@@ -89,7 +89,7 @@ QFont TextElement::getFont(ContextStyle& context)
     }
 }
 
-int TextElement::getSpaceWidth(ContextStyle& context, int size)
+int TextElement::getSpaceWidth(const ContextStyle& context, int size)
 {
     if (getElementType() != 0) {
         return getElementType()->getSpace(context, size);
@@ -99,7 +99,7 @@ int TextElement::getSpaceWidth(ContextStyle& context, int size)
     }
 }
 
-void TextElement::setUpPainter(ContextStyle& context, QPainter& painter)
+void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
 {
     if (getElementType() != 0) {
         getElementType()->setUpPainter(context, painter);

@@ -99,9 +99,9 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void SymbolElement::calcSizes(ContextStyle& style, int parentSize)
+void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
 {
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
     symbol.calcSizes(style, mySize);
     content->calcSizes(style, mySize);
 
@@ -110,6 +110,7 @@ void SymbolElement::calcSizes(ContextStyle& style, int parentSize)
     int upperWidth = 0;
     int upperHeight = 0;
     if (hasUpper()) {
+        upper->setSizeReduction(style);
         upper->calcSizes(style, mySize);
         upperWidth = upper->getWidth();
         upperHeight = upper->getHeight();
@@ -118,6 +119,7 @@ void SymbolElement::calcSizes(ContextStyle& style, int parentSize)
     int lowerWidth = 0;
     int lowerHeight = 0;
     if (hasLower()) {
+        lower->setSizeReduction(style);
         lower->calcSizes(style, mySize);
         lowerWidth = lower->getWidth();
         lowerHeight = lower->getHeight();
@@ -166,11 +168,11 @@ void SymbolElement::calcSizes(ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void SymbolElement::draw(QPainter& painter, ContextStyle& style,
+void SymbolElement::draw(QPainter& painter, const ContextStyle& style,
                          int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
 
     symbol.draw(painter, style, mySize, myPos);
     content->draw(painter, style, mySize, myPos);
@@ -358,7 +360,6 @@ void SymbolElement::insert(FormulaCursor* cursor,
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
-    index->setRelativeSize(-2);
     
     switch (cursor->getPos()) {
     case upperPos:

@@ -140,9 +140,9 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void MatrixElement::calcSizes(ContextStyle& style, int parentSize)
+void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
 {
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
     
     QArray<int> toMidlines(getRows());
     QArray<int> fromMidlines(getRows());
@@ -209,11 +209,11 @@ void MatrixElement::calcSizes(ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void MatrixElement::draw(QPainter& painter, ContextStyle& style,
+void MatrixElement::draw(QPainter& painter, const ContextStyle& style,
                          int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
 
     uint rows = getRows();
     uint columns = getColumns();

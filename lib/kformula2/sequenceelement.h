@@ -36,7 +36,7 @@ public:
 
     SequenceElement(BasicElement* parent = 0);
     ~SequenceElement();
-    
+
     /**
      * Sets the cursor and returns the element the point is in.
      * The handled flag shows whether the cursor has been set.
@@ -54,17 +54,22 @@ public:
     // before you draw.
     
     /**
+     * Tells the sequence to have a smaller size than its parant.
+     */
+    void setSizeReduction(const ContextStyle& context);
+
+    /**
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(ContextStyle& context, int parentSize);
+    virtual void calcSizes(const ContextStyle& context, int parentSize);
 
     /**
      * Draws the whole element including its children.
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, ContextStyle& context,
+    virtual void draw(QPainter& painter, const ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin);
 
     /**
@@ -292,6 +297,14 @@ private:
      * the syntax tree of the sequence
      */
     ElementType* parseTree;
+
+    /**
+     * Our size relative to those of our parent.
+     * That's needed only in the sequence because it is to
+     * support smaller indexes and indexes are always a sequence
+     * with some content.
+     */
+    int relativeSize;
 };
 
 #endif // __SEQUENCEELEMENT_H

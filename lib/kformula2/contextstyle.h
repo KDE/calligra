@@ -52,20 +52,23 @@ public:
     //ContextStyle(KConfig *config);
 
     
-    QColor getDefaultColor()  { return defaultColor; }
-    QColor getNumberColor()   { return numberColor; }
-    QColor getOperatorColor() { return operatorColor; }
-    QColor getErrorColor()    { return errorColor; }
+    QColor getDefaultColor()  const { return defaultColor; }
+    QColor getNumberColor()   const { return numberColor; }
+    QColor getOperatorColor() const { return operatorColor; }
+    QColor getErrorColor()    const { return errorColor; }
 
-    QFont getDefaultFont()    { return defaultFont; }
-    QFont getNameFont()       { return nameFont; }
-    QFont getNumberFont()     { return numberFont; }
-    QFont getOperatorFont()   { return operatorFont; }
-    QFont getSymbolFont()     { return symbolFont; }
+    QFont getDefaultFont()    const { return defaultFont; }
+    QFont getNameFont()       const { return nameFont; }
+    QFont getNumberFont()     const { return numberFont; }
+    QFont getOperatorFont()   const { return operatorFont; }
+    QFont getSymbolFont()     const { return symbolFont; }
 
-    int getDistance() { return 5; }
+    int getDistance() const { return distance; }
+    int getBaseSize() const { return baseSize; }
+    int getMinimumSize() const { return minimumSize; }
+    int getSizeReduction() const { return sizeReduction; }
 
-    Alignment getMatrixAlignment() { return center; }
+    Alignment getMatrixAlignment() const { return center; }
     
 private:
     
@@ -79,6 +82,33 @@ private:
     QColor numberColor;
     QColor operatorColor;
     QColor errorColor;
+
+    /**
+     * The basic distance. Used everywhere a non specific
+     * distance is needed. (Maybe we should think about this.)
+     */
+    int distance;
+
+    /**
+     * The cursors movement style. You need to notify each cursor
+     * if you change this.
+     */
+    bool linearMovement;
+
+    /**
+     * The (font) size of the formula's main sequence.
+     */
+    int baseSize;
+
+    /**
+     * The smallest font size we use. Sometimes things have to be readable...
+     */
+    int minimumSize;
+
+    /**
+     * The amount the indexes are smaller that their parent.
+     */
+    int sizeReduction;
 };
 
 #endif // __CONTEXTSTYLE_H

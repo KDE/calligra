@@ -54,7 +54,7 @@ void Artwork::scale(double factor)
  * The user is expected to scale this down to the size he
  * needs.
  */
-void Artwork::calcSizes(ContextStyle& style, int parentSize)
+void Artwork::calcSizes(const ContextStyle& style, int parentSize)
 {
     setHeight(1000);
     switch (type) {
@@ -85,7 +85,7 @@ void Artwork::calcSizes(ContextStyle& style, int parentSize)
     }
 }
 
-void Artwork::draw(QPainter& painter, ContextStyle& style,
+void Artwork::draw(QPainter& painter, const ContextStyle& style,
                    int parentSize, const QPoint& origin)
 {
     int myX = origin.x() + getX();
@@ -214,7 +214,7 @@ void Artwork::drawArrow(QPainter& painter, int x, int y, int size)
 }
 
 
-void Artwork::drawLeftSquareBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawLeftSquareBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
     int width = getWidth()-2;
     int thickness = width/4+1;
@@ -236,7 +236,7 @@ void Artwork::drawLeftSquareBracket(QPainter& painter, ContextStyle& style, int 
     painter.drawPolygon(points, false, 1, 8);
 }
 
-void Artwork::drawRightSquareBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawRightSquareBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
     int width = getWidth()-2;
     int thickness = width/4+1;
@@ -258,15 +258,15 @@ void Artwork::drawRightSquareBracket(QPainter& painter, ContextStyle& style, int
     painter.drawPolygon(points, false, 1, 8);
 }
     
-void Artwork::drawLeftCurlyBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawLeftCurlyBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
 }
 
-void Artwork::drawRightCurlyBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawRightCurlyBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
 }
 
-void Artwork::drawLineBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawLineBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
     int width = getWidth()-2;
     int thickness = width/4+1;
@@ -284,7 +284,7 @@ void Artwork::drawLineBracket(QPainter& painter, ContextStyle& style, int x, int
     painter.drawPolygon(points, false, 1, 4);
 }
 
-void Artwork::drawLeftCornerBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawLeftCornerBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
     int width = getWidth()-2;
     int thickness = width/4+1;
@@ -302,7 +302,7 @@ void Artwork::drawLeftCornerBracket(QPainter& painter, ContextStyle& style, int 
     painter.drawPolyline(points, 1, /*4*/3);
 }
 
-void Artwork::drawRightCornerBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawRightCornerBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
     int width = getWidth()-2;
     int thickness = width/4+1;
@@ -320,7 +320,7 @@ void Artwork::drawRightCornerBracket(QPainter& painter, ContextStyle& style, int
     painter.drawPolyline(points, 1, /*4*/3);
 }
 
-void Artwork::drawLeftRoundBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawLeftRoundBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
     int thickness = getWidth()/4+1;
     
@@ -330,7 +330,7 @@ void Artwork::drawLeftRoundBracket(QPainter& painter, ContextStyle& style, int x
     painter.drawArc(x+thickness, y, getWidth(), getHeight(), 90*16, 180*16);
 }
 
-void Artwork::drawRightRoundBracket(QPainter& painter, ContextStyle& style, int x, int y, int size)
+void Artwork::drawRightRoundBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
     int thickness = getWidth()/4+1;
     

@@ -53,14 +53,14 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(ContextStyle& context, int parentSize);
+    virtual void calcSizes(const ContextStyle& context, int parentSize);
 
     /**
      * Draws the whole element including its children.
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, ContextStyle& context,
+    virtual void draw(QPainter& painter, const ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin);
 
 protected:
@@ -94,17 +94,17 @@ protected:
     /**
      * @returns the font to be used for the element.
      */
-    virtual QFont getFont(ContextStyle& context);
+    virtual QFont getFont(const ContextStyle& context);
 
     /**
      * @returns the space to be left before and behind the character.
      */
-    virtual int getSpaceWidth(ContextStyle& context, int size);
+    virtual int getSpaceWidth(const ContextStyle& context, int size);
 
     /**
      * Sets up the painter to be used for drawing.
      */
-    virtual void setUpPainter(ContextStyle& context, QPainter& painter);
+    virtual void setUpPainter(const ContextStyle& context, QPainter& painter);
     
 private:
 

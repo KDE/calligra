@@ -136,13 +136,14 @@ BasicElement* IndexElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void IndexElement::calcSizes(ContextStyle& contextStyle, int parentSize)
+void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
 {
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
     
     // get the indexes size
     int ulWidth = 0, ulHeight = 0, ulMidline = 0;
     if (hasUpperLeft()) {
+        upperLeft->setSizeReduction(contextStyle);
         upperLeft->calcSizes(contextStyle, mySize);
         ulWidth = upperLeft->getWidth();
         ulHeight = upperLeft->getHeight();
@@ -151,6 +152,7 @@ void IndexElement::calcSizes(ContextStyle& contextStyle, int parentSize)
 
     int urWidth = 0, urHeight = 0, urMidline = 0;
     if (hasUpperRight()) {
+        upperRight->setSizeReduction(contextStyle);
         upperRight->calcSizes(contextStyle, mySize);
         urWidth = upperRight->getWidth();
         urHeight = upperRight->getHeight();
@@ -159,6 +161,7 @@ void IndexElement::calcSizes(ContextStyle& contextStyle, int parentSize)
 
     int llWidth = 0, llHeight = 0, llMidline = 0;
     if (hasLowerLeft()) {
+        lowerLeft->setSizeReduction(contextStyle);
         lowerLeft->calcSizes(contextStyle, mySize);
         llWidth = lowerLeft->getWidth();
         llHeight = lowerLeft->getHeight();
@@ -167,6 +170,7 @@ void IndexElement::calcSizes(ContextStyle& contextStyle, int parentSize)
 
     int lrWidth = 0, lrHeight = 0, lrMidline = 0;
     if (hasLowerRight()) {
+        lowerRight->setSizeReduction(contextStyle);
         lowerRight->calcSizes(contextStyle, mySize);
         lrWidth = lowerRight->getWidth();
         lrHeight = lowerRight->getHeight();
@@ -246,11 +250,11 @@ void IndexElement::calcSizes(ContextStyle& contextStyle, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void IndexElement::draw(QPainter& painter, ContextStyle& contextStyle,
+void IndexElement::draw(QPainter& painter, const ContextStyle& contextStyle,
                         int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
     
     content->draw(painter, contextStyle, mySize, myPos);
     if (hasUpperLeft()) {
@@ -505,7 +509,6 @@ void IndexElement::insert(FormulaCursor* cursor,
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
-    index->setRelativeSize(-2);
     
     switch (cursor->getPos()) {
     case upperLeftPos:

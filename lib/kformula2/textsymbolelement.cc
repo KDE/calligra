@@ -18,6 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qpainter.h>
+
 #include "contextstyle.h"
 #include "textsymbolelement.h"
 
@@ -31,7 +33,7 @@ TextSymbolElement::TextSymbolElement(QChar ch, BasicElement* parent)
 /**
  * @returns the font to be used for the element.
  */
-QFont TextSymbolElement::getFont(ContextStyle& context)
+QFont TextSymbolElement::getFont(const ContextStyle& context)
 {
     return context.getSymbolFont();
 }
@@ -39,7 +41,7 @@ QFont TextSymbolElement::getFont(ContextStyle& context)
 /**
  * @returns the space to be left before and behind the character.
  */
-int TextSymbolElement::getSpaceWidth(ContextStyle&, int)
+int TextSymbolElement::getSpaceWidth(const ContextStyle&, int)
 {
     return 0;
 }
@@ -47,8 +49,9 @@ int TextSymbolElement::getSpaceWidth(ContextStyle&, int)
 /**
  * Sets up the painter to be used for drawing.
  */
-void TextSymbolElement::setUpPainter(ContextStyle&, QPainter&)
+void TextSymbolElement::setUpPainter(const ContextStyle& context, QPainter& painter)
 {
+    painter.setPen(context.getDefaultColor());
 }
 
 

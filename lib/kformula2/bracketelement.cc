@@ -80,10 +80,10 @@ BasicElement* BracketElement::goToPos(FormulaCursor* cursor, bool& handled,
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void BracketElement::calcSizes(ContextStyle& style, int parentSize)
+void BracketElement::calcSizes(const ContextStyle& style, int parentSize)
 {
-    int mySize = parentSize + getRelativeSize();
-    content->calcSizes(style, parentSize);
+    int mySize = parentSize;
+    content->calcSizes(style, mySize);
     int contentHeight = 2 * QMAX(content->getMidline(),
                                  content->getHeight() - content->getMidline());
     
@@ -117,11 +117,11 @@ void BracketElement::calcSizes(ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void BracketElement::draw(QPainter& painter, ContextStyle& style,
+void BracketElement::draw(QPainter& painter, const ContextStyle& style,
                           int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    int mySize = parentSize + getRelativeSize();
+    int mySize = parentSize;
 
     left->draw(painter, style, mySize, myPos);
     content->draw(painter, style, mySize, myPos);

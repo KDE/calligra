@@ -121,14 +121,14 @@ public:
      * Calculates our width and height and
      * our children's parentPosition.
      */
-    virtual void calcSizes(ContextStyle& context, int parentSize) = 0;
+    virtual void calcSizes(const ContextStyle& context, int parentSize) = 0;
 
     /**
      * Draws the whole element including its children.
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, ContextStyle& context,
+    virtual void draw(QPainter& painter, const ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin) = 0;
 
     
@@ -275,9 +275,6 @@ public:
     int getWidth() const { return size.width(); }
     int getHeight() const { return size.height(); }
 
-    int getRelativeSize() const { return relativeSize; }
-    void setRelativeSize(int size) { relativeSize = size; }
-    
     /**
      * Our position inside our parent.
      */
@@ -378,11 +375,6 @@ private:
      * the upper border.
      */
     int midline;
-
-    /**
-     * Our size relative to those of our parent.
-     */
-    int relativeSize;
 
     /**
      * The token that describes our type. Please note that we don't
