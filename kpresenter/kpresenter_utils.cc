@@ -114,6 +114,24 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         painter->drawPolygon( pArray );
 
     }break;
+    case L_DOUBLE_LINE_ARROW:
+    {
+        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+        painter->setPen( QPen(color , _zoomHandler->zoomItX( _w )) );
+        painter->rotate( angle );
+        painter->scale( 1, 1 );
+        QPoint p1( _zoomHandler->zoomItX(-5 - _w / 2), _zoomHandler->zoomItY(-3 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItX(5 + _w / 2), _zoomHandler->zoomItY(0) );
+        QPoint p3( _zoomHandler->zoomItX(-5 - _w / 2), _zoomHandler->zoomItY(3 + _w / 2) );
+        painter->drawLine( p2, p1);
+        painter->drawLine( p2, p3);
+
+        p1.setX( _zoomHandler->zoomItX(-15 - _w / 2));
+        p2.setX( _zoomHandler->zoomItX(-5 + _w / 2));
+        p3.setX( _zoomHandler->zoomItX(-15 - _w / 2));
+        painter->drawLine( p2, p1);
+        painter->drawLine( p2, p3);
+    }break;
     default: break;
     }
     painter->restore();
@@ -144,7 +162,9 @@ KoSize getBoundingSize( LineEnd figure, int _w, KoZoomHandler*_zoomHandler )
         break;
     case L_DOUBLE_ARROW:
         return KoSize( _zoomHandler->zoomItX( 28 + _w),_zoomHandler->zoomItY( 14 + _w) );
-
+        break;
+    case L_DOUBLE_LINE_ARROW:
+        return KoSize( _zoomHandler->zoomItX( 28 + _w),_zoomHandler->zoomItY( 14 + _w) );
         break;
     default: break;
     }
@@ -170,6 +190,8 @@ QString lineEndBeginName( LineEnd type )
         return QString("DIMENSION_LINE");
     case L_DOUBLE_ARROW:
         return QString("DOUBLE_ARROW");
+    case L_DOUBLE_LINE_ARROW:
+        return QString("DOUBLE_LINE_ARROW");
     }
     return QString::null;
 }
@@ -190,6 +212,8 @@ LineEnd lineEndBeginFromString( const QString & type )
         return L_DIMENSION_LINE;
     else if (type=="DOUBLE_ARROW")
         return L_DOUBLE_ARROW;
+    else if (type=="DOUBLE_LINE_ARROW")
+        return L_DOUBLE_LINE_ARROW;
     else
         kdDebug()<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
     return L_NORMAL;

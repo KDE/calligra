@@ -176,7 +176,8 @@ enum LineEnd {
     L_CIRCLE,
     L_LINE_ARROW,
     L_DIMENSION_LINE,
-    L_DOUBLE_ARROW
+    L_DOUBLE_ARROW,
+    L_DOUBLE_LINE_ARROW
 };
 enum ShadowDirection {
     SD_LEFT_UP = 1,
