@@ -674,10 +674,10 @@ void RTFWorker::openParagraph(const LayoutData& layout)
     m_textBody += "\\pard";
     if (m_inTable)
         m_textBody += "\\intbl";
-    m_textBody += "{\\plain";
+    m_textBody += "\\plain{";
     LayoutData styleLayout;
     m_textBody += lookupStyle(layout.styleName, styleLayout);
-    m_textBody += layoutToRtf(styleLayout,layout,false);
+    m_textBody += layoutToRtf(styleLayout,layout,true);
 
     if ( 1==layout.formatData.text.verticalAlignment )
     {
