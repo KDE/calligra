@@ -24,7 +24,7 @@
 
 #if defined(WV2_IS_VERSION)
 #  if WV2_IS_VERSION( 0, 2, 5 )
-//#    define IMAGE_IMPORT 1
+#    define IMAGE_IMPORT 1
 #  endif
 #endif
 
