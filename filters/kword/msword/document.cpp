@@ -153,8 +153,6 @@ void Document::sectionStart()
 
         QDomElement elementPaper = m_mainDocument.createElement("PAPER");
         elementPaper.setAttribute("format",paperFormat);
-        //elementPaper.setAttribute("width" ,KoPageFormat::width (paperFormat,paperOrientation) * 72.0 / 25.4);
-        //elementPaper.setAttribute("height",KoPageFormat::height(paperFormat,paperOrientation) * 72.0 / 25.4);
         elementPaper.setAttribute("width", (double)sep->xaPage / 20.0);
         elementPaper.setAttribute("height", (double)sep->yaPage / 20.0);
         elementPaper.setAttribute("orientation", sep->dmOrientPage == 2 ? PG_LANDSCAPE : PG_PORTRAIT );
@@ -333,8 +331,11 @@ void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CH
         bgcolElem.setAttribute( "green", color.green() );
         format.appendChild( bgcolElem );
     }
-
-    // ## Problem with fShadow. Char property in MSWord, parag property in KWord at the moment....
+    if ( chp->fShadow ) {
+        QDomElement weight( m_mainDocument.createElement( "SHADOWTEXT" ) );
+        weight.setAttribute( "value", "1" );
+        format.appendChild( weight );
+    }
 
     if ( !format.firstChild().isNull() ) // Don't save an empty format tag
         parentElement.appendChild( format );
@@ -548,5 +549,5 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
 
     // TODO: COUNTER
     // TODO? FORMAT - unless it all comes from the style, or is all specified for all chars
-    // TODO? SHADOW [it comes from the text runs...]
+    // TODO: SHADOW - does MSWord allow defining those properties?
 }
