@@ -251,6 +251,8 @@ Bugfixes:
 - Fix move up/down table/frame style
 - Fix restore shortcut when we remove/add/rename style
 - Fix restore shortcut when we remove/move/add/rename frame/table style
+- Fix update resize handle when we change cell border
+- Fix update resize handle when we change frame/table style.
 
 KoText library fixes:
 - Fix move up/down style
