@@ -2530,7 +2530,7 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
     for ( ; cit.current() ; ++cit )
     {
         KWFootNoteVariable *fnv = dynamic_cast<KWFootNoteVariable *>( cit.current() );
-        if (fnv && !fnv->isDeleted())
+        if (fnv && !fnv->isDeleted() && (fnv->frameSet() && !fnv->frameSet()->isDeleted()))
             lst.append( fnv );
     }
     lst.sort();
