@@ -33,18 +33,20 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
     {
         m_image = doc->imageCollection()->image( filename );
         ASSERT( !m_image.isNull() );
-        adjustToPainter( 0L ); // Zoom if necessary
+        resize(); // Zoom if necessary
     }
 }
 
 void KWTextImage::setImage( const KWImage &image )
 {
     m_image = image;
-    adjustToPainter( 0L );
+    resize();
 }
 
-void KWTextImage::adjustToPainter( QPainter* )
+void KWTextImage::resize()
 {
+    if ( m_deleted )
+        return;
     if ( !m_image.isNull() ) {
         KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
         width = m_image.originalSize().width();
@@ -52,7 +54,7 @@ void KWTextImage::adjustToPainter( QPainter* )
         height = m_image.originalSize().height();
         height = (int)( doc->zoomItY( (double)height ) / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
         // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-        kdDebug() << "KWTextImage::adjustToPainter scaling to " << width << ", " << height << endl;
+        //kdDebug() << "KWTextImage::resize scaling to " << width << ", " << height << endl;
         m_image = m_image.scale( QSize( width, height ) );
     }
 }

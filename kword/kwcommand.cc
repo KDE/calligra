@@ -94,21 +94,7 @@ QTextCursor * KWTextDeleteCommand::unexecute( QTextCursor *c )
     // Let QRichText undo what it can
     QTextCursor * cr = QTextDeleteCommand::unexecute(c);
     // Set any custom item that we had
-    // CustomItemsMap::Iterator it = m_customItemsMap.begin();
-    // for ( ; it != m_customItemsMap.end(); ++it )
-    if ( !m_customItemsMap.isEmpty() )
-        for ( int i = 0; i < (int)text.size(); ++i )
-        {
-            CustomItemsMap::Iterator it = m_customItemsMap.find( i );
-            if ( it != m_customItemsMap.end() )
-            {
-                kdDebug() << "KWTextDeleteCommand::unexecute setting custom item " << it.data() << endl;
-                cursor.parag()->at( cursor.index() )->setCustomItem( it.data() );
-                static_cast<KWTextCustomItem *>( it.data() )->setDeleted( false );
-                cursor.parag()->invalidate( 0 );
-            }
-            cursor.gotoRight();
-        }
+    m_customItemsMap.insertItems( cursor, text.size() );
 
     // Now restore the parag layouts (i.e. KWord specific stuff)
     QValueList<KWParagLayout>::Iterator lit = m_oldParagLayouts.begin();

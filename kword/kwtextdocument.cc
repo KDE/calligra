@@ -20,6 +20,7 @@
 #include "kwtextparag.h"
 #include "kwtextdocument.h"
 #include "kwformat.h"
+#include <kdebug.h>
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc )
     : QTextDocument( p, fc ), m_textfs( textfs ), m_bDestroying( false )
@@ -41,5 +42,24 @@ QTextParag * KWTextDocument::createParag( QTextDocument *d, QTextParag *pr, QTex
     return new KWTextParag( d, pr, nx, updateIds );
 }
 
+
+void CustomItemsMap::insertItems( const QTextCursor & startCursor, int size )
+{
+    if ( isEmpty() )
+        return;
+
+    QTextCursor cursor( startCursor );
+    for ( int i = 0; i < size; ++i )
+    {
+        CustomItemsMap::Iterator it = find( i );
+        if ( it != end() )
+        {
+            kdDebug() << "CustomItemsMap::insertItems setting custom item " << it.data() << endl;
+            static_cast<KWTextParag *>(cursor.parag())->setCustomItem( cursor.index(), it.data(), 0 );
+            it.data()->setDeleted( false );
+        }
+        cursor.gotoRight();
+    }
+}
 
 #include "kwtextdocument.moc"

@@ -864,12 +864,7 @@ void KWTextFrameSet::zoom()
     // Zoom all custom items
     QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
     for ( ; cit.current() ; ++cit )
-    {
-        // ## This is only valid as long as all our custom items update
-        // the size in adjustToPainter and doesn't use the painter.
-        // If other classes do it differently, make a KWTextCustomItem base class with zoom().
-        cit.current()->adjustToPainter( 0L );
-    }
+        static_cast<KWTextCustomItem *>( cit.current() )->resize();
 
     // Mark all paragraphs as changed !
     for ( KWTextParag * s = static_cast<KWTextParag *>( textdoc->firstParag() ) ; s ; s = static_cast<KWTextParag *>( s->next() ) )
@@ -1346,7 +1341,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
                     CustomItemsMap::Iterator it = customItemsMap.begin();
                     for ( ; it != customItemsMap.end(); ++it )
                     {
-                        KWTextCustomItem * item = static_cast<KWTextCustomItem *>( it.data() );
+                        KWTextCustomItem * item = it.data();
                         item->addDeleteCommand( macroCmd );
                         item->setDeleted( true );
                     }
@@ -1426,7 +1421,7 @@ void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in te
     if ( moveCustomItems && ch->isCustom() )
     {
         kdDebug(32001) << "KWTextFrameSet::copyCharFormatting moving custom item " << ch->customItem() << " to text's " << index << " char"  << endl;
-        undoRedoInfo.customItemsMap.insert( index, ch->customItem() );
+        undoRedoInfo.customItemsMap.insert( index, static_cast<KWTextCustomItem *>( ch->customItem() ) );
         ch->loseCustomItem();
     }
 }
@@ -1888,7 +1883,8 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId )
 
 void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
                              const QString &txt, bool checkNewLine,
-                             bool removeSelected, const QString & commandName )
+                             bool removeSelected, const QString & commandName,
+                             CustomItemsMap customItemsMap )
 {
     //kdDebug(32001) << "KWTextFrameSet::insert" << endl;
     QTextDocument *textdoc = textDocument();
@@ -1898,6 +1894,8 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     }
     QTextCursor c2 = *cursor;
     checkUndoRedoInfo( cursor, UndoRedoInfo::Insert );
+    if ( !customItemsMap.isEmpty() )
+        clearUndoRedoInfo();
     if ( !undoRedoInfo.valid() ) {
 	undoRedoInfo.id = cursor->parag()->paragId();
 	undoRedoInfo.index = cursor->index();
@@ -1909,6 +1907,11 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
                            cursor->parag()->prev() : cursor->parag() );
     QTextCursor oldCursor = *cursor;
     cursor->insert( txt, checkNewLine );  // insert the text
+
+    if ( !customItemsMap.isEmpty() ) {
+        customItemsMap.insertItems( oldCursor, txt.length() );
+        undoRedoInfo.customItemsMap = customItemsMap;
+    }
 
     if ( textdoc->useFormatCollection() ) { // (always true)   apply the formatting
         textdoc->setSelectionStart( QTextDocument::Temp, &oldCursor );
@@ -1925,7 +1928,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
 
     for ( int i = 0; i < (int)txt.length(); ++i ) {
         if ( txt[ oldLen + i ] != '\n' )
-            copyCharFormatting( c2.parag()->at( c2.index() ), oldLen + i, true );
+            copyCharFormatting( c2.parag()->at( c2.index() ), oldLen + i, false );
         c2.gotoRight();
     }
 
@@ -1936,6 +1939,8 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
         textdoc->removeSelection( QTextDocument::Standard );
         emit repaintChanged( this );
     }
+    if ( !customItemsMap.isEmpty() )
+        clearUndoRedoInfo();
 }
 
 void KWTextFrameSet::undo()
@@ -3064,13 +3069,12 @@ void KWTextFrameSetEdit::insertVariable( int type )
 
     if ( var )
     {
+        CustomItemsMap customItemsMap;
+        customItemsMap.insert( 0, var );
         kdDebug() << "KWTextFrameSetEdit::insertVariable inserting into paragraph" << endl;
-        // TODO undo/redo support
-        cursor->parag()->insert( cursor->index(), QChar('&') /*whatever*/ );
-        static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), var, currentFormat );
-        var->adjustToPainter( 0L ); // just a way to compute the width from the start
-        cursor->parag()->setChanged( true );
-        // repaintChanged?
+        textFrameSet()->insert( cursor, currentFormat, QChar('&') /*whatever*/,
+                                false, false, i18n("Insert Variable"),
+                                customItemsMap );
     }
 }
 

@@ -362,13 +362,16 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     // applying the parag layout will create them
 }
 
-void KWTextParag::setCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat )
+void KWTextParag::setCustomItem( int index, KWTextCustomItem * custom, QTextFormat * currentFormat )
 {
+    kdDebug() << "KWTextParag::setCustomItem " << index << "  " << (void*)custom
+              << "  currentFormat=" << (void*)currentFormat << endl;
     if ( currentFormat )
         setFormat( index, 1, currentFormat );
     at( index )->setCustomItem( custom );
     addCustomItem();
     document()->registerCustomItem( custom, this );
+    custom->resize();
     invalidate( 0 );
 }
 
@@ -391,7 +394,7 @@ int KWTextParag::findCustomItem( const QTextCustomItem * custom ) const
         if ( ch.isCustom() && ch.customItem() == custom )
             return i;
     }
-    kdDebug() << "KWTextParag::findCustomItem custom item " << custom
+    kdDebug() << "KWTextParag::findCustomItem custom item " << (void*)custom
               << " not found in paragraph " << paragId() << endl;
     return 0;
 }
@@ -608,7 +611,7 @@ QTextFormat KWTextParag::loadFormat( QDomElement &formatElem, QTextFormat * refF
                     elem.attribute("blue").toInt() );
         format.setColor( col );
     }
-    //kdDebug() << "KWTextParag::loadLayout format=" << format.key() << endl;
+    kdDebug() << "KWTextParag::loadLayout format=" << format.key() << endl;
     return format;
 }
 
@@ -716,10 +719,11 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                     else
                     {
                         int type = typeElem.attribute( "type" ).toInt();
+                        kdDebug() << "KWTextParag::loadFormatting variable type=" << type << endl;
                         KWVariable * var = KWVariable::createVariable( type, textDocument()->textFrameSet() );
                         var->load( varElem );
                         QTextFormat f = loadFormat( formatElem, paragFormat(), doc->defaultFont() );
-                        setCustomItem( index, var, &f );
+                        setCustomItem( index, var, document()->formatCollection()->format( &f ) );
                     }
                     break;
                 }
@@ -809,10 +813,15 @@ void KWTextParag::printRTDebug( int info )
 
         QTextString * s = string();
         for ( int i = 0 ; i < s->length() ; ++i )
-            kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format()
-                      << " " << s->at(i).format()->key()
-                //<< " fontsize:" << dynamic_cast<KWTextFormat *>(s->at(i).format())->pointSizeFloat()
+        {
+            QTextStringChar & ch = s->at(i);
+            kdDebug() << i << ": '" << QString(ch.c) << "'" << ch.format()
+                      << " " << ch.format()->key()
+                //<< " fontsize:" << dynamic_cast<KWTextFormat *>(ch.format())->pointSizeFloat()
                       << endl;
+            if ( ch.isCustom() )
+                kdDebug() << " - custom item " << ch.customItem() << endl;
+        }
     }
 
     /*KoTabulatorList tabList = m_layout.tabList();

@@ -31,7 +31,6 @@ KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrame * frame )
       m_frameset( frame->getFrameSet() ),
       m_frameNum( m_frameset->getFrameFromPtr( frame ) )
 {
-    resize();
 }
 
 KWAnchor::~KWAnchor()

@@ -109,7 +109,8 @@ public:
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible );
 
     void insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &text,
-                 bool checkNewLine, bool removeSelected, const QString & commandName );
+                 bool checkNewLine, bool removeSelected, const QString & commandName,
+                 CustomItemsMap customItemsMap = CustomItemsMap() );
     void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
     void undo();
     void redo();
@@ -228,7 +229,7 @@ private:
         QTextCursor *cursor; // basically a "mark" of the view that started this undo/redo info
         // If the view changes, the next call to checkUndoRedoInfo will terminate the previous view's edition
 
-        QMap<int, QTextCustomItem *> customItemsMap; // character position -> qtextcustomitem
+        CustomItemsMap customItemsMap; // character position -> qtextcustomitem
         QValueList<KWParagLayout> oldParagLayouts;
         KWParagLayout newParagLayout;
     };

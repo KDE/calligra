@@ -39,10 +39,10 @@ public:
         // Remove image from collection ?
     }
 
-    Placement placement() const { return place; }
-    void adjustToPainter( QPainter* );
-    int widthHint() const { return width; }
-    int minimumWidth() const { return width; }
+    virtual Placement placement() const { return place; }
+    virtual void resize();
+    virtual int widthHint() const { return width; }
+    virtual int minimumWidth() const { return width; }
 
     void setImage( const KWImage &image );
     KWImage image() const { return m_image; }

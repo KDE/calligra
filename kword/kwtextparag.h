@@ -32,6 +32,7 @@ using namespace Qt3;
 class QDomDocument;
 class KWTextFrameSet;
 class KWTextDocument;
+class KWTextCustomItem;
 class KWDocument;
 class KWTextParag;
 class Counter;
@@ -154,7 +155,7 @@ public:
     void loadLayout( QDomElement & attributes );
 
     // Set a @p custom item at position @p index, with format @p currentFormat (convenience method)
-    void setCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat );
+    void setCustomItem( int index, KWTextCustomItem * custom, QTextFormat * currentFormat );
     // Remove the custom item from position @p index, but doesn't delete it
     void removeCustomItem( int index );
     // Find a custom item that we know is somewhere in this paragraph

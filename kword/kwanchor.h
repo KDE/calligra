@@ -44,10 +44,9 @@ public:
     // Return the size of the item, i.e. the size of the frame (zoomed)
     QSize size() const;
 
-    void resize();
+    virtual void resize();
 
     virtual Placement placement() const { return PlaceInline; }
-    virtual void adjustToPainter( QPainter* ) { resize(); }
     virtual int widthHint() const { return size().width(); }
     virtual int minimumWidth() const { return size().width(); }
 

@@ -222,11 +222,11 @@ public:
     virtual VariableType getType() const { return VT_NONE; }
 
     // QTextCustomItem stuff
-    Placement placement() const { return PlaceInline; }
-    void adjustToPainter( QPainter* );
-    int widthHint() const { return width; }
-    int minimumWidth() const { return width; }
-    void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    virtual Placement placement() const { return PlaceInline; }
+    virtual void resize();
+    virtual int widthHint() const { return width; }
+    virtual int minimumWidth() const { return width; }
+    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
 
     QTextFormat * format() const;
 

@@ -56,9 +56,8 @@ protected:
 ////// Extensions to qrichtext_p.h
 #include <qrichtext_p.h>
 #include <kwtextparag.h>
-
+#include <kwtextdocument.h>
 using namespace Qt3;
-typedef QMap<int, QTextCustomItem *> CustomItemsMap;
 
 /**
  * Command created when deleting some text

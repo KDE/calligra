@@ -69,8 +69,23 @@ public:
     // Save to XML
     virtual void save( QDomElement & /*formatElem*/ ) = 0;
 
+    // Reimplement this to calculate the item width
+    // It is important to start with "if ( m_deleted ) return;"
+    virtual void resize() {}
+
 protected:
+    virtual void adjustToPainter( QPainter* ) { resize(); }
     bool m_deleted;
+};
+
+// A CustomItemsMap associates a custom item to an index
+// Used in the undo/redo info for insert/delete text.
+class CustomItemsMap : public QMap<int, KWTextCustomItem *>
+{
+public:
+
+    // Insert all the items from the map, into the existing text
+    void insertItems( const QTextCursor & startCursor, int size );
 };
 
 #endif

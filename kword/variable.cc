@@ -169,9 +169,9 @@ KWVariable::KWVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat )
     doc->registerVariable( this );
 }
 
-
 KWVariable::~KWVariable()
 {
+    kdDebug() << "KWVariable::~KWVariable " << this << endl;
     doc->unregisterVariable( this );
 }
 
@@ -180,16 +180,20 @@ QTextFormat * KWVariable::format() const
     ASSERT( paragraph() );
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
     int index = parag->findCustomItem( this );
+    kdDebug() << "KWVariable::format index=" << index << endl;
     return parag->at( index )->format();
 }
 
-void KWVariable::adjustToPainter( QPainter* )
+void KWVariable::resize()
 {
+    if ( m_deleted )
+        return;
     QTextString text;
     text.insert( 0, getText(), format() );
     width = 0;
     for ( uint i = 0 ; i < text.length() ; ++i )
         width += text.width( i );
+    kdDebug() << "KWVariable::resize width=" << width << endl;
 }
 
 void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
@@ -201,11 +205,11 @@ void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch
     int bl, _y;
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
     int index = parag->findCustomItem( this );
+    kdDebug() << "KWVariable::draw index=" << index << " x=" << x << " y=" << y << endl;
     parag->lineHeightOfChar( index, &bl, &_y );
     p->drawText( x, y /*+ _y*/ + bl, getText() );
     p->restore();
 }
-
 
 void KWVariable::save( QDomElement &formatElem )
 {
@@ -215,7 +219,6 @@ void KWVariable::save( QDomElement &formatElem )
     formatElem.appendChild( typeElem );
     typeElem.setAttribute( "type", static_cast<int>( getType() ) );
 }
-
 
 void KWVariable::load( QDomElement & )
 {
@@ -307,7 +310,6 @@ KWVariable * KWVariable::createVariable( int type, KWTextFrameSet * textFrameSet
 /* Class: KWPgNumVariable                                         */
 /******************************************************************/
 
-
 void KWPgNumVariable::save( QDomElement& parentElem )
 {
     KWVariable::save( parentElem );
@@ -315,7 +317,6 @@ void KWPgNumVariable::save( QDomElement& parentElem )
     parentElem.appendChild( pgNumElem );
     pgNumElem.setAttribute( "value", pgNum );
 }
-
 
 void KWPgNumVariable::load( QDomElement& elem )
 {
@@ -331,7 +332,6 @@ void KWPgNumVariable::load( QDomElement& elem )
 /* Class: KWDateVariable                                          */
 /******************************************************************/
 
-
 KWDateVariable::KWDateVariable( KWTextFrameSet *fs, bool _fix, QDate _date, KWVariableFormat *_varFormat )
     : KWVariable( fs, _varFormat ), fix( _fix )
 {
@@ -342,7 +342,6 @@ KWDateVariable::KWDateVariable( KWTextFrameSet *fs, bool _fix, QDate _date, KWVa
 
     recalc();
 }
-
 
 void KWDateVariable::save( QDomElement& parentElem )
 {
@@ -355,7 +354,6 @@ void KWDateVariable::save( QDomElement& parentElem )
     elem.setAttribute( "day", date.day() );
     elem.setAttribute( "fix", static_cast<int>( fix ) );
 }
-
 
 void KWDateVariable::load( QDomElement& elem )
 {
@@ -380,7 +378,6 @@ void KWDateVariable::load( QDomElement& elem )
 /* Class: KWTimeVariable                                          */
 /******************************************************************/
 
-
 KWTimeVariable::KWTimeVariable( KWTextFrameSet *fs, bool _fix, QTime _time, KWVariableFormat *_varFormat )
     : KWVariable( fs, _varFormat ), fix( _fix )
 {
@@ -391,7 +388,6 @@ KWTimeVariable::KWTimeVariable( KWTextFrameSet *fs, bool _fix, QTime _time, KWVa
 
     recalc();
 }
-
 
 void KWTimeVariable::save( QDomElement& parentElem )
 {
@@ -405,7 +401,6 @@ void KWTimeVariable::save( QDomElement& parentElem )
     elem.setAttribute( "msecond", time.msec() );
     elem.setAttribute( "fix", static_cast<int>( fix ) );
 }
-
 
 void KWTimeVariable::load( QDomElement& elem )
 {
@@ -438,7 +433,6 @@ KWFileNameVariable::KWFileNameVariable( KWTextFrameSet *fs,const QString &_fileN
     recalc();
 }
 
-
 void KWFileNameVariable::save( QDomElement& parentElem )
 {
     kdDebug() << "KWFileNameVariable::save" << endl;
@@ -447,7 +441,6 @@ void KWFileNameVariable::save( QDomElement& parentElem )
     parentElem.appendChild( elem );
     elem.setAttribute( "name", correctQString( filename ) );
 }
-
 
 void KWFileNameVariable::load( QDomElement& elem )
 {
@@ -462,7 +455,6 @@ void KWFileNameVariable::load( QDomElement& elem )
     }
 }
 
-
 /******************************************************************/
 /* Class: KWNameAuthorVariable                                    */
 /******************************************************************/
@@ -473,7 +465,6 @@ KWNameAuthorVariable::KWNameAuthorVariable( KWTextFrameSet *fs, const QString &_
     doc->registerVariable( this );
     recalc();
 }
-
 
 void KWNameAuthorVariable::save( QDomElement& parentElem )
 {
@@ -608,7 +599,6 @@ QString KWCustomVariable::getValue() const
 {
     return doc->getVariableValue( name );
 }
-
 
 void KWCustomVariable::setValue( const QString &v )
 {
