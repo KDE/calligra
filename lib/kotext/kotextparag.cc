@@ -616,9 +616,9 @@ void KoTextParag::copyParagData( QTextParag *_parag )
     if (!styleApplied)
     {
         setParagLayout( parag->paragLayout() );
-        // Don't copy the hard-frame-break setting though
-        m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakBefore;
-        m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakAfter;
+        // Remove pagebreak flags from initial parag - they got copied to the new parag
+        parag->m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakBefore;
+        parag->m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakAfter;
         // set parag format to the format of the trailing space of the previous parag
         setFormat( parag->at( parag->length()-1 )->format() );
         // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
