@@ -27,7 +27,6 @@
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-
 #include <kzip.h>
 #include <karchive.h>
 #include <kdebug.h>
@@ -2092,12 +2091,18 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
 QDomNode OoImpressImport::findAnimationByObjectID(const QString & id)
 {
-    if (m_animations.isNull() || !m_animations.hasChildNodes())
+    //kdDebug()<<"QDomNode OoImpressImport::findAnimationByObjectID(const QString & id) :"<<id<<endl;
+    if (m_animations.isEmpty() )
         return QDomNode();
 
-    for (QDomNode node = m_animations.firstChild(); !node.isNull(); node = node.nextSibling())
+    QDomElement *animation = m_animations[id];
+    //kdDebug()<<"QDomElement *animation = m_animations[id]; :"<<animation<<endl;
+    if ( !animation )
+        return QDomNode();
+    for (QDomNode node = *animation; !node.isNull(); node = node.nextSibling())
     {
         QDomElement e = node.toElement();
+        //kdDebug()<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attribute("draw:shape-id")<<endl;
         if (e.tagName()=="presentation:show-shape" && e.attribute("draw:shape-id")==id)
             return node;
     }
