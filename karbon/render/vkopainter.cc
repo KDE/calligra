@@ -889,19 +889,19 @@ VKoPainter::drawNode( const KoPoint& p, int width )
 }
 
 void
-VKoPainter::drawImage( const QImage &image )
+VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
 {
 	// set up world matrix
-	double affine[6];
-	affine[0] = m_zoomFactor;//m_matrix.m11();
-	affine[1] = m_matrix.m12();
-	affine[2] = m_matrix.m21();
-	affine[3] = m_zoomFactor;//m_matrix.m22();
-	affine[4] = m_matrix.dx();
-	affine[5] = m_matrix.dy();
+	double affineresult[6];
+	affineresult[0] = m_zoomFactor * affine.m11();
+	affineresult[1] = affine.m12();
+	affineresult[2] = affine.m21();
+	affineresult[3] = m_zoomFactor * affine.m22();
+	affineresult[4] = m_matrix.dx() + affine.dx();
+	affineresult[5] = m_matrix.dy() + affine.dy() - image.height();
 	art_rgb_affine(	m_buffer, 0, 0, m_width, m_height, m_width * 4,
 					image.bits(), image.width(), image.height(), image.width() * 4,
-					affine, ART_FILTER_NEAREST, 0L );
+					affineresult, ART_FILTER_NEAREST, 0L );
 }
 
 void

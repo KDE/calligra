@@ -82,7 +82,7 @@ public:
 	virtual void setBrush( const QColor & );
 	virtual void setBrush( Qt::BrushStyle style );
 
-	virtual void drawImage( const QImage & );
+	virtual void drawImage( const QImage &, const QWMatrix & );
 
 	// stack management
 	virtual void save();
