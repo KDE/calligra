@@ -79,6 +79,10 @@ KPTDuration *KPTNode::getDelay() {
     return 0L;
 }
 
+bool KPTNode::isParentOf(KPTNode *node) {
+    return m_nodes.findRef(node) != -1;
+}
+
 void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p) {
     addDependChildNode(node,t,p,KPTDuration());
 }
@@ -200,44 +204,54 @@ KPTRelation *KPTNode::findRelation(KPTNode *node) {
     return (KPTRelation *)0;
 }
 
-bool KPTNode::isChildOf(KPTNode *node) {
+bool KPTNode::isDependChildOf(KPTNode *node) {
     //kdDebug()<<k_funcinfo<<" '"<<m_name<<"' checking against '"<<node->name()<<"'"<<endl;
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
         if (rel->parent() == node)
             return true;
-		if (rel->parent()->isChildOf(node))
+		if (rel->parent()->isDependChildOf(node))
 		    return true;
     }
 	return false;
 }
 
-int KPTNode::getColumn() {
+int KPTNode::getColumn(KPTNode *parent) {
     //kdDebug()<<k_funcinfo<<endl;
 	int col = 0;
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
-        KPTPertCanvasItem *parent = rel->parent()->pertItem();
-        if (parent) {
+        KPTPertCanvasItem *dp = rel->parent()->pertItem();
+        if (dp) {
 		    if (rel->timingRelation() == FINISH_START)
-		        col = QMAX(col,parent->column()+1);
+		        col = QMAX(col,dp->column()+1);
 			else
-			    col = QMAX(col, parent->column());
+			    col = QMAX(col, dp->column());
 	    }
+	}
+	if (parent && parent->isDrawn())
+	{
+        kdDebug()<<k_funcinfo<<"Col="<<col<<" parent col="<<parent->pertItem()->column()<<endl;
+	    col = QMAX(col+1, parent->pertItem()->column());
 	}
 	return col;
 }
 
-int KPTNode::getRow() {
+int KPTNode::getRow(KPTNode *parent) {
     //kdDebug()<<k_funcinfo<<endl;
 	int row = 0;
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
-        KPTPertCanvasItem *parent = rel->parent()->pertItem();
-        if (parent) {
-		    row = QMAX(row,parent->row());
+        KPTPertCanvasItem *dp = rel->parent()->pertItem();
+        if (dp) {
+		    row = QMAX(row,dp->row());
 	    }
 	}
+	if (parent && parent->isDrawn())
+	{
+        kdDebug()<<k_funcinfo<<"Row="<<row<<" parent row="<<parent->pertItem()->row()<<endl;
+	    row = QMAX(row, parent->pertItem()->row());
+    }
 	return row;
 }
 
@@ -369,6 +383,16 @@ void KPTNode::showPopup() {
     kdDebug()<<k_funcinfo<<endl;
 }
 
+void KPTNode::setDrawn(bool drawn, bool children) { 
+    m_drawn = drawn; 
+	if (children) {
+		QPtrListIterator<KPTNode> nit(m_nodes);
+		for ( ; nit.current(); ++nit ) {
+			nit.current()->setDrawn(drawn, children);
+		}
+	}
+}
+ 
  int KPTNode::x() { 
     return m_pertItem->rect().left(); 
 }

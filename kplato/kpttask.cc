@@ -69,7 +69,6 @@ KPTDuration *KPTTask::getExpectedDuration() {
                 ed->set(*time);
                 kdDebug()<<k_funcinfo<<"   New finish: "<<ed->dateTime().toString()<<":"<<endl;
             }
-            delete node;
             delete time;
             delete dur;
         }
@@ -198,6 +197,7 @@ bool KPTTask::load(QDomElement &element) {
     		if (rel->load(e)) {
                 addPredesessorNode(rel);
             } else {
+                kdDebug()<<k_funcinfo<<"Failed to load relation"<<endl;
 		        // TODO: Complain about this
 		        delete rel;
             }
@@ -292,28 +292,27 @@ void KPTTask::drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h) {
     delete dur;
 }
 
-void KPTTask::drawPert(KPTPertCanvas *view, QCanvas* canvas) {
+void KPTTask::drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent) {
+	if (!m_drawn) {
+		if (!allParentsDrawn()) {
+			return;
+		}
+		int col = getColumn(parent);
+		int row = view->row(getRow(parent), col);
+		m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
+		m_pertItem->show();
+		m_drawn = true;
+		//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
+	}
 	if ( numChildren() > 0 ) {
 	    QPtrListIterator<KPTNode> nit(m_nodes); 
 		for ( ; nit.current(); ++nit ) {
-		    nit.current()->drawPert(view, canvas);
+		    nit.current()->drawPert(view, canvas, this);
 		}
-    } else {
-		if (!m_drawn) {
-		    if (!allParentsDrawn()) {
-			    return;
-			}
-            int col = getColumn();
-			int row = view->row(getRow(), col);
-			m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
-			m_pertItem->show();
-			m_drawn = true;
-        	//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
-	    }
-        QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
-		for ( ; cit.current(); ++cit ) {
-		    cit.current()->child()->drawPert(view, canvas);
-		}
+    }
+	QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
+	for ( ; cit.current(); ++cit ) {
+		cit.current()->child()->drawPert(view, canvas);
 	}
 }
 

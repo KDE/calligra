@@ -128,9 +128,13 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					}
 					//kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
 					// open relation dialog
-					if (par->node().isChildOf(&(item->node())))
+					if (par->node().isDependChildOf(&(item->node())))
 					{
-						KMessageBox::sorry(this, i18n("Cannot link to a node which is already my parent"));
+						KMessageBox::sorry(this, i18n("Cannot link to a node which I am already dependent on"));
+					}
+					else if (par->node().isParentOf(&(item->node())) || item->node().isParentOf(&(par->node())))
+					{
+						KMessageBox::sorry(this, i18n("Cannot link summary tasks to their children"));
 					}
 					else
 					{

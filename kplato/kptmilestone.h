@@ -82,7 +82,7 @@ class KPTMilestone : public KPTNode {
         virtual bool openDialog();
         
         virtual void drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h);
-        virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas);
+        virtual void drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent = 0);
         virtual void drawPertRelations(QCanvas* canvas);
    
 #ifndef NDEBUG

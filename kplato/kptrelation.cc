@@ -102,9 +102,9 @@ bool KPTRelation::completeLoad(KPTNode *top) {
     if ( !m_parent ) {
         QPtrListIterator<KPTNode> nit(top->childNodeIterator()); 
         for ( ; nit.current(); ++nit ) {
+            //kdDebug()<<k_funcinfo<<"Check node="<<nit.current()->name()<<" parentId="<<m_parentId<<endl;
             if (nit.current()->name() == m_parentId) {
                 m_parent = nit.current();
-                kdDebug()<<k_funcinfo<<" found parent="<<m_parentId<<endl;
                 break;
             }
         }

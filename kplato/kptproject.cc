@@ -417,17 +417,16 @@ void KPTProject::drawGanttBar(QCanvas* canvas, KPTTimeScale *ts, int y, int h) {
     delete dur;
 }
 
-void KPTProject::drawPert(KPTPertCanvas *view, QCanvas* canvas) {
+void KPTProject::drawPert(KPTPertCanvas *view, QCanvas* canvas, KPTNode *parent) {
     kdDebug()<<k_funcinfo<<endl;
 	
     QPtrListIterator<KPTNode> it(m_nodes); 
     for ( ; it.current(); ++it ) {
-        it.current()->setDrawn(false);
+        it.current()->setDrawn(false, true);
 	}
     QPtrListIterator<KPTNode> nit(m_nodes); 
     for ( ; nit.current(); ++nit ) {
 	    if (nit.current()->numDependParentNodes() == 0) {
-            //kdDebug()<<k_funcinfo<<"Check ("<<col<<"): "<<nit.current()->name()<<" isDrawn="<<nit.current()->isDrawn()<<endl;
 			if (!nit.current()->isDrawn()) {
     		    nit.current()->drawPert(view, canvas);
 			}

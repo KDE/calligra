@@ -86,6 +86,8 @@ public:
     KPTNode &getChildNode(int number) { return *m_nodes.at(number); }
     const KPTNode &getChildNode(int number) const;
 
+	bool isParentOf(KPTNode *node);
+	
     // Time-dependent child-node-management.
     // list all nodes that are dependent upon this one.
     // Building a house requires the table to be finished, therefore the
@@ -125,9 +127,9 @@ public:
     }
     
     KPTRelation *findRelation(KPTNode *node);
-    bool isChildOf(KPTNode *node);
-	int getRow();
-	int getColumn();
+    bool isDependChildOf(KPTNode *node);
+	int getRow(KPTNode *parent = 0);
+	int getColumn(KPTNode *parent = 0);
 	
     // These are calculated, or set manually if node is MustStartOn
     void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
@@ -205,7 +207,7 @@ public:
     const KPTDuration& expectedDuration(const KPTDuration &start);
 
     virtual void drawGanttBar(QCanvas*, KPTTimeScale*, int , int) {;}
-    virtual void drawPert(KPTPertCanvas * /*view */, QCanvas*) {;}
+    virtual void drawPert(KPTPertCanvas * /*view */, QCanvas*, KPTNode * /*parent*/ = 0) {;}
     virtual void drawPertRelations(QCanvas*) {;}
     
     virtual void setStartNotEarlier(KPTDuration time) { sneTime = time; }
@@ -217,7 +219,7 @@ public:
     
     virtual void showPopup();
     
-	void setDrawn(bool drawn) { m_drawn = drawn; }  
+	void setDrawn(bool drawn, bool children = false);
 	bool isDrawn() { return m_drawn; }  
 
 	// For Gantt

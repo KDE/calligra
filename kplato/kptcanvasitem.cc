@@ -148,7 +148,6 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 	m_rel(rel)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    //kdDebug()<<k_funcinfo<<endl;
 	// Some "rules":
 	//  a) FINISH_START: child column > parent column
 	//  b) FINISH_FINISH: child column >= parent column
@@ -167,6 +166,7 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 	childCol =  m_rel->child()->pertItem()->column();
 	parentRow = m_rel->parent()->pertItem()->row();
 	parentCol =  m_rel->parent()->pertItem()->column();
+    //kdDebug()<<k_funcinfo<<"Parent="<<rel->parent()->name()<<" ("<<parentRow<<","<<parentCol<<") Child="<<rel->child()->name()<<" ("<<childRow<<","<<childCol<<")"<<endl;
 
 	switch (rel->timingRelation())
 	{
