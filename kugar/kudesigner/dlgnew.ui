@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>404</width>
-            <height>274</height>
+            <width>197</width>
+            <height>268</height>
         </rect>
     </property>
     <property name="caption">
@@ -346,20 +346,6 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonHelp</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Help</string>
-                    </property>
-                    <property name="accel">
-                        <number>4144</number>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
@@ -452,13 +438,13 @@
 <tabstops>
     <tabstop>cbPageSize</tabstop>
     <tabstop>rbPortrait</tabstop>
+    <tabstop>rbLandscape</tabstop>
     <tabstop>sbTop</tabstop>
     <tabstop>sbBottom</tabstop>
     <tabstop>sbLeft</tabstop>
     <tabstop>sbRight</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
-    <tabstop>buttonHelp</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in declaration">qsize.h</include>
