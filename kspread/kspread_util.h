@@ -44,7 +44,7 @@ public:
   }
 
   bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
-  bool isTableKnown() const { return ( !tableName.isEmpty() || table != 0 ); }
+  bool isTableKnown() const { return ( !tableName.isEmpty() && table != 0 ); }
 
   KSpreadCell* cell();
 
@@ -95,7 +95,7 @@ struct KSpreadRange
   }
 
   bool isValid() const { return ( range.left() >= 0 && range.right() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
-  bool isTableKnown() const { return ( !tableName.isEmpty() || table != 0 ); }
+  bool isTableKnown() const { return ( !tableName.isEmpty() && table != 0 ); }
 
   KSpreadSheet* table;
   QString tableName;
@@ -159,6 +159,8 @@ QString util_encodeColumnLabelText( int column );
 QString util_dateFormat( KLocale* locale, const QDate &_date, KSpreadCell::FormatType fmtType);
 
 QString util_timeFormat( KLocale* locale, const QTime &_time, KSpreadCell::FormatType fmtType);
+
+QString util_dateTimeFormat( KLocale * locale, double date, KSpreadCell::FormatType fmtType, QString const & format );
 
 QString util_fractionFormat( double value , KSpreadCell::FormatType fmtType);
 
