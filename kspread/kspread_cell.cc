@@ -3452,7 +3452,7 @@ void KSpreadCell::updateDepending()
     updateChart();
 }
 
-bool KSpreadCell::updateChart()
+bool KSpreadCell::updateChart(bool refresh)
 {
     // Update a chart for example if it depends on this cell.
     if ( m_iRow != 0 && m_iColumn != 0 )
@@ -3462,6 +3462,9 @@ bool KSpreadCell::updateChart()
         {
 	    if ( bind->contains( m_iColumn, m_iRow ) )
                 {
+                if(!refresh)
+                        return true;
+
                 bind->cellChanged( this );
                 return true;
                 }

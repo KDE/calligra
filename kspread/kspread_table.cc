@@ -3659,7 +3659,9 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    }
 	}
     }
-
+    bool refreshChart=false;
+    int refresCol=0;
+    int refreshRow=0;
     QDomElement c = e.firstChild().toElement();
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
@@ -3683,10 +3685,20 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    else
               if ( needInsert )
 		insertCell( cell );
-            cell->updateChart();
+            if(!refreshChart)
+                {
+                refreshChart=cell->updateChart(false);
+                refresCol=col;
+                refreshRow=row;
+                }
 	}
     }
-
+    //refresh chart after that you paste all cells
+    if(refreshChart)
+        {
+        KSpreadCell* cell = cellAt( refresCol, refreshRow );
+        cell->updateChart();
+        }
     m_pDoc->setModified( true );
 
     emit sig_updateView( this );

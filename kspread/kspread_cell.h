@@ -391,7 +391,13 @@ public:
      */
     void updateDepending();
 
-    bool updateChart();
+    /**
+    * Refreshing chart
+    * bool refresh is default true
+    * when it's false it's just for test
+    * it's used when you paste cell
+    */
+    bool updateChart(bool refresh=true);
 
     QString testAnchor( int _x, int _y, QWidget* _canvas );
 
