@@ -738,13 +738,13 @@ void KSpreadView::initializeGlobalOperationActions()
            SLOT( togglePageBorders( bool ) ) );
   m_showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
 
-  m_protectSheet = new KToggleAction( i18n( "Protect &Sheet" ), 0,
+  m_protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ), 0,
                                       actionCollection(), "protectSheet" );
   m_protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
   connect( m_protectSheet, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectSheet( bool ) ) );
 
-  m_protectDoc = new KToggleAction( i18n( "Protect &Doc" ), 0,
+  m_protectDoc = new KToggleAction( i18n( "Protect &Doc..." ), 0,
                                       actionCollection(), "protectDoc" );
   m_protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
   connect( m_protectDoc, SIGNAL( toggled( bool ) ), this,

@@ -41,23 +41,19 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   m_pView=parent;
   marker=_marker;
   QFrame *page1 = addPage(i18n("&Values"));
-  QVBoxLayout *lay1 = new QVBoxLayout( page1 );
-  lay1->setMargin( KDialogBase::marginHint()  );
-  lay1->setSpacing( KDialogBase::spacingHint() );
+  QVBoxLayout *lay1 = new QVBoxLayout( page1, KDialogBase::marginHint(), KDialogBase::spacingHint() );
 
-  QButtonGroup* tmpQButtonGroup;
-  tmpQButtonGroup = new QButtonGroup( page1, "ButtonGroup_1" );
-  tmpQButtonGroup->setFrameStyle( 49 );
-  tmpQButtonGroup->setTitle( i18n("Validity Criteria") );
-  tmpQButtonGroup->resize( tmpQButtonGroup->sizeHint() );
-  QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup,2,4,KDialogBase::marginHint(),KDialogBase::spacingHint());
+  QGroupBox* tmpQButtonGroup;
+  tmpQButtonGroup = new QGroupBox( 0, Qt::Vertical, i18n("Validity Criteria"), page1, "ButtonGroup_1" );
+  tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
+  tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
+  QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup->layout(),4,2);
 
   QLabel *tmpQLabel = new QLabel( tmpQButtonGroup, "Label_1" );
   tmpQLabel->setText(i18n("Allow:" ));
   grid1->addWidget(tmpQLabel,0,0);
 
   chooseType=new QComboBox(tmpQButtonGroup);
-  chooseType->resize( chooseType->sizeHint() );
   grid1->addWidget(chooseType,0,1);
   QStringList listType;
   listType+=i18n("All");
@@ -76,7 +72,6 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   grid1->addWidget(tmpQLabel,1,0);
 
   choose=new QComboBox(tmpQButtonGroup);
-  choose->resize( choose->sizeHint() );
   grid1->addWidget(choose,1,1);
   QStringList list;
   list+=i18n("equal to");
@@ -94,7 +89,6 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   grid1->addWidget(edit1,2,0);
 
   val_min=new QLineEdit(tmpQButtonGroup);
-  val_min->resize( val_min->sizeHint() );
   grid1->addWidget(val_min,2,1);
   val_min->setValidator( new KFloatValidator( val_min ) );
 
@@ -103,7 +97,6 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   grid1->addWidget(edit2,3,0);
 
   val_max=new QLineEdit(tmpQButtonGroup);
-  val_max->resize( val_max->sizeHint() );
   grid1->addWidget(val_max,3,1);
   val_max->setValidator( new KFloatValidator( val_max ) );
   lay1->addWidget(tmpQButtonGroup);
@@ -132,21 +125,18 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
 
   QFrame *page2 = addPage(i18n("&Error Alert"));
 
-  lay1 = new QVBoxLayout( page2 );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  lay1 = new QVBoxLayout( page2, KDialogBase::marginHint(), KDialogBase::spacingHint() );
 
-  tmpQButtonGroup = new QButtonGroup( page2, "ButtonGroup_2" );
-  tmpQButtonGroup->setFrameStyle( 49 );
-  tmpQButtonGroup->setTitle( i18n("Contents") );
-  QGridLayout *grid2 = new QGridLayout(tmpQButtonGroup,2,4,15,7);
+  tmpQButtonGroup = new QButtonGroup( 0, Qt::Vertical, i18n("Contents"), page2, "ButtonGroup_2" );
+  tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
+  tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
+  QGridLayout *grid2 = new QGridLayout(tmpQButtonGroup->layout(),4,2);
 
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_5" );
   tmpQLabel->setText(i18n("Action:" ));
   grid2->addWidget(tmpQLabel,0,0);
 
   chooseAction=new QComboBox(tmpQButtonGroup);
-  chooseAction->resize( chooseAction->sizeHint() );
   grid2->addWidget(chooseAction,0,1);
   QStringList list2;
   list2+=i18n("Stop");
@@ -165,8 +155,8 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   tmpQLabel->setText(i18n("Message:" ));
   grid2->addWidget(tmpQLabel,2,0);
 
-  message =new QMultiLineEdit( tmpQButtonGroup);
-  grid2->addMultiCellWidget(message,2,3,1,1);
+  message =new QLineEdit( tmpQButtonGroup);
+  grid2->addWidget(message,2,1);
   lay1->addWidget(tmpQButtonGroup);
 
   connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
@@ -174,7 +164,6 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   connect( this, SIGNAL(user1Clicked()), SLOT(OkPressed()) );
   connect( this, SIGNAL(user2Clicked()), SLOT(clearAllPressed()) );
   init();
-  resize(400,300);
 }
 
 void KSpreadDlgValidity::changeIndexType(int _index)

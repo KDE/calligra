@@ -812,9 +812,11 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *
 {
   m_pView = _view;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default Parameters"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Default Parameters"), box, "GroupBox" );
+  tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
+  tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1, KDialog::marginHint()+10, KDialog::spacingHint());
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox->layout(),8,1);
   grid1->addRowSpacing( 0, KDialog::marginHint()  );
   grid1->setRowStretch( 7, 10 );
 

@@ -27,6 +27,7 @@
 #include "configdlg.h"
 
 #include <klocale.h>
+#include <kdialog.h>
 #include <qlayout.h>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
@@ -41,14 +42,15 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 {
   defst = defstruct;
 
-   QVBoxLayout *lay1 = new QVBoxLayout( this );
-    lay1->setMargin( 5 );
-    lay1->setSpacing( 10 );
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
 
-    box = new QGroupBox(this, "box");
-  box->setTitle(i18n("Defaults"));
+  box = new QGroupBox(0, Qt::Vertical, i18n("Defaults"), this, "box");
+  box->layout()->setSpacing(KDialog::spacingHint());
+  box->layout()->setMargin(KDialog::marginHint());
 
-  QGridLayout *grid1 = new QGridLayout(box,8,2,15,7);
+  QGridLayout *grid1 = new QGridLayout(box->layout(),8,2);
   label1 = new QLabel(box);
   label1->setText(i18n("Foreground color:"));
   grid1->addWidget(label1,0,0);

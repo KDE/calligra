@@ -30,6 +30,7 @@
 #include <qpushbutton.h>
 #include <kapplication.h>
 #include <qstyle.h>
+#include <kdialog.h>
 
 // What's that?!? (Werner)
 //#define i18n( x ) x
@@ -1469,11 +1470,13 @@ void QtCalculator::configclicked(){
 
   QWidget *about = new QWidget(tabdialog,"about");
   QVBoxLayout *lay1 = new QVBoxLayout( about );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
+  lay1->setMargin( KDialog::marginHint() );
+  lay1->setSpacing( KDialog::spacingHint() );
 
-  QGroupBox *box = new QGroupBox(about,"box");
-  QGridLayout *grid1 = new QGridLayout(box,2,2,15,7);
+  QGroupBox *box = new QGroupBox(0,Qt::Vertical,about,"box");
+  box->layout()->setSpacing(KDialog::spacingHint());
+  box->layout()->setMargin(KDialog::marginHint());
+  QGridLayout *grid1 = new QGridLayout(box->layout(),2,2);
   QLabel  *label = new QLabel(box,"label");
   QLabel  *label2 = new QLabel(box,"label2");
 
