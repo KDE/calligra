@@ -441,7 +441,10 @@ bool KoMainWindow::saveDocument( bool saveas )
             bOk=true;
             if(dialog->exec()==QDialog::Accepted) {
                 newURL=dialog->selectedURL();
-                KRecentDocument::add(dialog->selectedURL().url(), true);
+                if ( newURL.isLocalFile() )
+                    KRecentDocument::add(newURL.path(-1));
+                else
+                    KRecentDocument::add(newURL.url(-1), true);
             }
             else
             {
@@ -583,7 +586,10 @@ void KoMainWindow::slotFileOpen()
     KURL url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
-        KRecentDocument::add(dialog->selectedURL().url(), true);
+        if ( url.isLocalFile() )
+            KRecentDocument::add(url.path(-1));
+        else
+            KRecentDocument::add(url.url(-1), true);
     }
     else
         return;
