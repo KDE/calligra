@@ -41,7 +41,6 @@
 #include <wordfilter.h>
 #include <excelfilter.h>
 #include <powerpointfilter.h>
-#include <picture.h>
 #include <myfile.h>
 
 
