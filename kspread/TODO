@@ -87,13 +87,14 @@ Norbert
 + more than one currency 
 + enhance the Gnumeric import filter
 - sync the Gnumeric export filter
-- Style support
++ Style support
 + StarCalc/OpenCalc import filter
 - StarCalc/OpenCalc filter for embedding/embedded objects
 + StarCalc/OpenCalc export filter
 - qsa support + recording
 - Button + Drop-Down-List support (within cells)
 - better AutoFormat dialog + better templates
+- new dialog for conditional cell attributes
 
 - Multiple Operations
 + Lookup & Reference functions (LOOKUP needs to fixed)

@@ -38,7 +38,10 @@ KSpreadScripter * KSpreadScripting::engine()
 
 void KSpreadScripting::setEngine( KSpreadScripter * engine )
 {
-  g_scriptEngine = engine;
+  if ( engine == 0 )
+    g_scriptEngine = &scripter;
+  else
+    g_scriptEngine = engine;
 }
 
 void KSpreadScripting::setAction( KSpreadScripting::Action action, QString const & data )
