@@ -71,7 +71,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_bMultiRow = FALSE;
     m_bVerticalText = FALSE;
     m_textPen.setColor( QApplication::palette().active().text() );
-    
+
     QFont font( "Helvetica", 12 );
     m_textFont = font;
 }
@@ -209,7 +209,7 @@ QPen KSpreadLayout::toPen(QDomElement &element) const
 QDomElement KSpreadLayout::save( QDomDocument& doc ) const
 {
     QDomElement format = doc.createElement( "format" );
-    
+
     if ( hasProperty( PAlign ) )
 	format.setAttribute( "align", (int)m_eAlign );
     if ( hasProperty( PAlignY ) )
@@ -280,11 +280,11 @@ QDomElement KSpreadLayout::save( QDomDocument& doc ) const
 
     return format;
 }
-    
+
 bool KSpreadLayout::load( const QDomElement& f )
 {
     bool ok;
-	
+
     if ( f.hasAttribute( "align" ) )
     {
 	Align a = (Align)f.attribute("align").toInt( &ok );
@@ -313,7 +313,7 @@ bool KSpreadLayout::load( const QDomElement& f )
 	// Assignment
 	setAlignY( a );
     }
-    
+
     if ( f.hasAttribute( "bgcolor" ) )
 	setBgColor( QColor( f.attribute( "bgcolor" ) ) );
 
@@ -331,7 +331,8 @@ bool KSpreadLayout::load( const QDomElement& f )
 	    kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
 	    return false;
 	}
-	m_iPrecision = i;
+        // Assignment
+        setPrecision(i);
     }
 
     if ( f.hasAttribute( "float" ) )
@@ -448,7 +449,10 @@ bool KSpreadLayout::load( const QDomElement& f )
 
 void KSpreadLayout::setAlign( Align _align )
 {
-    setProperty( PAlign );
+    if(_align==KSpreadLayout::Undefined)
+        clearProperty( PAlign );
+    else
+        setProperty( PAlign );
 
     m_eAlign = _align;
     layoutChanged();
@@ -456,16 +460,22 @@ void KSpreadLayout::setAlign( Align _align )
 
 void KSpreadLayout::setAlignY( AlignY _alignY)
 {
-    setProperty( PAlignY );
-	
+    if(_alignY==KSpreadLayout::Middle)
+        clearProperty( PAlignY );
+    else
+        setProperty( PAlignY );
+
     m_eAlignY = _alignY;
     layoutChanged();
 }
 
 void KSpreadLayout::setFaktor( double _d )
 {
-    setProperty( PFaktor );
-	
+    if(_d==1.0)
+        clearProperty( PFaktor );
+    else
+        setProperty( PFaktor );
+
     m_dFaktor = _d;
     layoutChanged();
 }
@@ -473,7 +483,7 @@ void KSpreadLayout::setFaktor( double _d )
 void KSpreadLayout::setPrefix( const QString& _prefix )
 {
     setProperty( PPrefix );
-	
+
     m_strPrefix = _prefix;
     layoutChanged();
 }
@@ -481,15 +491,18 @@ void KSpreadLayout::setPrefix( const QString& _prefix )
 void KSpreadLayout::setPostfix( const QString& _postfix )
 {
     setProperty( PPostfix );
-	
+
     m_strPostfix = _postfix;
     layoutChanged();
 }
 
 void KSpreadLayout::setPrecision( int _p )
 {
-    setProperty( PPrecision );
-	
+    if(_p!=-1)
+        setProperty( PPrecision );
+    else
+        clearProperty( PPrecision );
+
     m_iPrecision = _p;
     layoutChanged();
 }
@@ -500,7 +513,7 @@ void KSpreadLayout::setLeftBorderPen( const QPen& _p )
 	clearProperty( PLeftBorder );
     else
 	setProperty( PLeftBorder );
-	
+
     m_leftBorderPen = _p;
     layoutChanged();
 }
@@ -532,7 +545,7 @@ void KSpreadLayout::setTopBorderPen( const QPen& _p )
 	clearProperty( PTopBorder );
     else
 	setProperty( PTopBorder );
-	
+
     m_topBorderPen = _p;
     layoutChanged();
 }
@@ -564,7 +577,7 @@ void KSpreadLayout::setRightBorderPen( const QPen& p )
 	clearProperty( PRightBorder );
     else
 	setProperty( PRightBorder );
-	
+
     m_rightBorderPen = p;
     layoutChanged();
 }
@@ -596,7 +609,7 @@ void KSpreadLayout::setBottomBorderPen( const QPen& p )
 	clearProperty( PBottomBorder );
     else
 	setProperty( PBottomBorder );
-	
+
     m_bottomBorderPen = p;
     layoutChanged();
 }
@@ -628,7 +641,7 @@ void KSpreadLayout::setFallDiagonalPen( const QPen& _p )
 	clearProperty( PFallDiagonal );
     else
 	setProperty( PFallDiagonal );
-	
+
     m_fallDiagonalPen = _p;
     layoutChanged();
 }
@@ -660,7 +673,7 @@ void KSpreadLayout::setGoUpDiagonalPen( const QPen& _p )
 	clearProperty( PGoUpDiagonal );
     else
 	setProperty( PGoUpDiagonal );
-	
+
     m_goUpDiagonalPen = _p;
     layoutChanged();
 }
@@ -689,7 +702,7 @@ void KSpreadLayout::setGoUpDiagonalWidth( int _w )
 void KSpreadLayout::setBackGroundBrush( const QBrush& _p)
 {
     setProperty( PBackgroundBrush );
-	
+
     m_backGroundBrush = _p;
     layoutChanged();
 }
@@ -711,7 +724,7 @@ void KSpreadLayout::setBackGroundBrushColor( const QColor& c )
 void KSpreadLayout::setTextFont( const QFont& _f )
 {
     setProperty( PFont );
-	
+
     m_textFont = _f;
     layoutChanged();
 }
@@ -761,7 +774,7 @@ void KSpreadLayout::setTextFontStrike( bool _i )
 void KSpreadLayout::setTextPen( const QPen& _p )
 {
     setProperty( PTextPen );
-	
+
     layoutChanged();
     m_textPen = _p;
 }
@@ -776,7 +789,7 @@ void KSpreadLayout::setTextColor( const QColor & _c )
 void KSpreadLayout::setBgColor( const QColor & _c )
 {
     setProperty( PBackgroundColor );
-	
+
     m_bgColor = _c;
     layoutChanged();
 }
@@ -784,7 +797,7 @@ void KSpreadLayout::setBgColor( const QColor & _c )
 void KSpreadLayout::setFloatFormat( FloatFormat _f )
 {
     setProperty( PFloatFormat );
-	
+
     m_eFloatFormat = _f;
     layoutChanged();
 }
@@ -792,7 +805,7 @@ void KSpreadLayout::setFloatFormat( FloatFormat _f )
 void KSpreadLayout::setFloatColor( FloatColor _c )
 {
     setProperty( PFloatColor );
-	
+
     m_eFloatColor = _c;
     layoutChanged();
 }
@@ -800,7 +813,7 @@ void KSpreadLayout::setFloatColor( FloatColor _c )
 void KSpreadLayout::setMultiRow( bool _b )
 {
     setProperty( PMultiRow );
-	
+
     m_bMultiRow = _b;
     layoutChanged();
 }
@@ -808,7 +821,7 @@ void KSpreadLayout::setMultiRow( bool _b )
 void KSpreadLayout::setVerticalText( bool _b )
 {
     setProperty( PVerticalText );
-	
+
     m_bVerticalText = _b;
     layoutChanged();
 }

@@ -813,3 +813,7 @@ Torben corrected bug in save/load embedded component
 2000-07-20-Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 -Now vertical text and multirow works when cell merged
+
+2000-07-22-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-bug fix when I copy/paste cells (setPrecision)
