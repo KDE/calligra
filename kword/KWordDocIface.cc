@@ -55,7 +55,7 @@ int KWordDocIface::numFrameSets()const
 
 unsigned int KWordDocIface::nbColumns()const
 {
-    return doc->getColumns();
+    return doc->numColumns();
 }
 
 double KWordDocIface::ptPageTop( int pgNum )const

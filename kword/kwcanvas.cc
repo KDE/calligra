@@ -522,7 +522,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         // See if we clicked on a frame's border
         KWFrame* frame;
         m_mouseMeaning = m_doc->getMouseMeaning( normalPoint, e->state(), &frame );
-        kdDebug() << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
+        //kdDebug() << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
         Q_ASSERT( m_mouseMeaning < MEANING_TOPLEFT ); // during resizing, the resizehandles are supposed to get the events
         if ( m_mouseMeaning == MEANING_MOUSE_MOVE )
         {
@@ -1253,7 +1253,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
     m_ctrlClickOnSelectedFrame = false;
 }
 
-KCommand *KWCanvas::createTextBox(const KoRect & rect )
+KCommand *KWCanvas::createTextBox( const KoRect & rect )
 {
     if ( rect.width() > m_doc->gridX() && rect.height() > m_doc->gridY() ) {
         KWFrame *frame = new KWFrame(0L, rect.x(), rect.y(), rect.width(), rect.height() );
@@ -1264,7 +1264,7 @@ KCommand *KWCanvas::createTextBox(const KoRect & rect )
         KWTextFrameSet *_frameSet = new KWTextFrameSet(m_doc, name );
         _frameSet->addFrame( frame );
         m_doc->addFrameSet( _frameSet );
-        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Text Frame"), frame) ;
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Text Frame"), frame );
 	checkCurrentEdit(frame->frameSet(), true);
         return cmd;
     }

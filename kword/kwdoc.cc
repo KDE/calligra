@@ -67,7 +67,7 @@
 #include <koSconfig.h>
 #endif
 
-//#define DEBUG_PAGES
+#define DEBUG_PAGES
 //#define DEBUG_SPEED
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
@@ -2739,7 +2739,7 @@ void KWDocument::slotRepaintAllViews() {
 }
 
 void KWDocument::delayedRecalcFrames( int fromPage ) {
-    kdDebug() << k_funcinfo << fromPage << endl;
+    //kdDebug() << k_funcinfo << fromPage << endl;
     if ( m_recalcFramesPending == -1 || fromPage < m_recalcFramesPending )
     {
         m_recalcFramesPending = fromPage;
@@ -2820,23 +2820,45 @@ void KWDocument::repaintAllViews( bool erase )
         viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
 }
 
-int KWDocument::appendPage( /*unsigned int _page*/ )
+void KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page 0'
 {
-    int thisPageNum = m_pages-1;
 #ifdef DEBUG_PAGES
-    kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
+    kdDebug(32002) << "insertPage: afterPageNum=" << afterPageNum << endl;
 #endif
+    if ( processingType() == WP )
+        Q_ASSERT( afterPageNum == m_pages-1 ); // WP mode: can only append.
+
+    // If not appending, move down everything after 'afterPageNum', to make room.
+    for ( int pg = m_pages-1 ; pg > afterPageNum ; --pg )
+    {
+        // pg is the 'src' page. Its contents must be moved to the page pg+1
+        QPtrList<KWFrame> frames = framesInPage( pg, false );
+#ifdef DEBUG_PAGES
+        kdDebug(32002) << "insertPage: moving " << frames.count() << " frames down, from page " << pg << endl;
+#endif
+        QPtrListIterator<KWFrame> frameIt( frames );
+        for ( ; frameIt.current(); ++frameIt )
+            frameIt.current()->moveBy( 0, ptPaperHeight() );
+    }
+
     m_pages++;
 
-    // Look at frames on pages thisPageNum and thisPageNum-1 (for sheetside stuff)
-    QPtrList<KWFrame> framesToLookAt = framesInPage( thisPageNum, false );
+    // Look at frames on pages afterPageNum and afterPageNum-1 (for sheetside stuff)
+    QPtrList<KWFrame> framesToLookAt;
+    if ( afterPageNum >= 0 )
+        framesToLookAt = framesInPage( afterPageNum, false );
 
-    QPtrList<KWFrame> framesToAlsoLookAt = framesInPage( thisPageNum-1, false ); // order doesn't matter
-    // Merge into single list. Other alternative, two loops, code inside moved to another method.
-    QPtrListIterator<KWFrame> frameAlsoIt( framesToAlsoLookAt );
-    for ( ; frameAlsoIt.current(); ++frameAlsoIt )
-        framesToLookAt.append( frameAlsoIt.current() );
+    if ( afterPageNum >= 1 )
+    {
+        QPtrList<KWFrame> framesToAlsoLookAt = framesInPage( afterPageNum-1, false ); // order doesn't matter
 
+        // Merge into single list. Other alternative, two loops, code inside moved to another method.
+        QPtrListIterator<KWFrame> frameAlsoIt( framesToAlsoLookAt );
+        for ( ; frameAlsoIt.current(); ++frameAlsoIt )
+            framesToLookAt.append( frameAlsoIt.current() );
+    }
+
+    // Fill in the new page
     QPtrListIterator<KWFrame> frameIt( framesToLookAt );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -2851,12 +2873,12 @@ int KWDocument::appendPage( /*unsigned int _page*/ )
            - AND the frame is set to be reconnected or copied
            -  */
 #ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::appendPage looking at frame " << frame << ", pageNum=" << frame->pageNum() << " from " << frameSet->getName() << endl;
+        kdDebug(32002) << "KWDocument::insertPage looking at frame " << frame << ", pageNum=" << frame->pageNum() << " from " << frameSet->getName() << endl;
         static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
         kdDebug(32002) << "   frame->newFrameBehavior()==" << newFrameBh[frame->newFrameBehavior()] << endl;
 #endif
-        if ( (frame->pageNum() == thisPageNum ||
-              (frame->pageNum() == thisPageNum -1 && frame->sheetSide() != KWFrame::AnySide) )
+        if ( (frame->pageNum() == afterPageNum ||
+              (frame->pageNum() == afterPageNum -1 && frame->sheetSide() != KWFrame::AnySide) )
              &&
              ( ( frame->newFrameBehavior()==KWFrame::Reconnect && frameSet->type() == FT_TEXT ) ||  // (*)
                ( frame->newFrameBehavior()==KWFrame::Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) ) // (**)
@@ -2876,7 +2898,15 @@ int KWDocument::appendPage( /*unsigned int _page*/ )
             //kdDebug(32002) << "   => created frame " << frm << endl;
         }
     }
-    return m_pages - 1;
+}
+
+int KWDocument::appendPage()
+{
+#ifdef DEBUG_PAGES
+    kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " -> insertPage(" << m_pages-1 << ")" << endl;
+#endif
+    insertPage( m_pages - 1 );
+    return m_pages - 1; // Note that insertPage changes m_pages!
 }
 
 void KWDocument::afterAppendPage( int pageNum )
@@ -2908,12 +2938,18 @@ bool KWDocument::canRemovePage( int num )
     return true;
 }
 
-void KWDocument::removePage( int num )
+void KWDocument::removePage( int pageNum )
 {
+    if ( processingType() == WP )
+        Q_ASSERT( pageNum == m_pages-1 ); // WP mode: can only remove last page.
+    Q_ASSERT( m_pages > 1 );
+    if ( m_pages == 1 )
+        return;
+
     // ## This assumes that framesInPage is up-to-date.
-    QPtrList<KWFrame> framesToDelete = framesInPage( num, false );
+    QPtrList<KWFrame> framesToDelete = framesInPage( pageNum, false );
 #ifdef DEBUG_PAGES
-    kdDebug(32002) << "KWDocument::removePage " << num << ", " << framesToDelete.count() << " frames to delete" << endl;
+    kdDebug(32002) << "KWDocument::removePage " << pageNum << ", " << framesToDelete.count() << " frames to delete" << endl;
 #endif
     QPtrListIterator<KWFrame> frameIt( framesToDelete );
     for ( ; frameIt.current(); ++frameIt )
@@ -2924,6 +2960,20 @@ void KWDocument::removePage( int num )
             continue;
         frameSet->delFrame( frame, true );
     }
+
+    // If not removing the last one, move up everything after the one we removed.
+    for ( int pg = pageNum+1 ; pg < m_pages ; ++pg )
+    {
+        // pg is the 'src' page. Its contents must be moved to the page pg-1
+        QPtrList<KWFrame> frames = framesInPage( pg, false );
+#ifdef DEBUG_PAGES
+        kdDebug(32002) << "removePage: moving " << frames.count() << " frames up, from page " << pg << endl;
+#endif
+        QPtrListIterator<KWFrame> frameIt( frames );
+        for ( ; frameIt.current(); ++frameIt )
+            frameIt.current()->moveBy( 0, -ptPaperHeight() );
+    }
+
     m_pages--;
 #ifdef DEBUG_PAGES
     kdDebug(32002) << "KWDocument::removePage -- -> " << m_pages << endl;
@@ -2934,6 +2984,7 @@ void KWDocument::removePage( int num )
 
 void KWDocument::afterRemovePages()
 {
+    //### IMHO recalcFrames should take care of updateAllFrames (it already does it partially).
     recalcFrames();
     // Do this before recalcVariables (which repaints). The removed frames must be removed from the frame caches.
     // We don't call updateAllFrames() directly, because it still calls
@@ -2942,7 +2993,6 @@ void KWDocument::afterRemovePages()
     for ( ; fit.current() ; ++fit )
         fit.current()->updateFrames();
 
-    //### IMHO recalcFrames should take care of updateAllFrames (it already does it partially).
     recalcVariables( VT_PGNUM );
     emit newContentsSize();
 }
@@ -3288,7 +3338,7 @@ void KWDocument::fixZOrders() {
 
 
 // TODO pass viewmode for isVisible? Depends on how framesInPage is being used...
-QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted) const {
+QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted ) const {
     KWFrameList frames;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )

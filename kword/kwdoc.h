@@ -323,7 +323,7 @@ public:
     double ptPageTop( int pgNum /*0-based*/ ) const { return pgNum * m_pageLayout.ptHeight; }
     double ptFootnoteBodySpacing() const { return m_pageHeaderFooter.ptFootNoteBodySpacing; }
 
-    unsigned int getColumns() const { return m_pageColumns.columns; }
+    unsigned int numColumns() const { return m_pageColumns.columns; }
 
     /** Returns 0-based page number where rect is.
      * @param _rect should be a rect in real pt coordinates.
@@ -396,6 +396,15 @@ public:
 
     QPtrList <KWView> getAllViews() { return m_lstViews; }
 
+    /**
+     * Insert a new page after another,
+     * creating followup frames (but not headers/footers),
+     * @param afterPageNum the page is inserted after the one specified here
+     * If afterPageNum is -1, a page is inserted before page 0.
+     * In all cases, the new page will have the number afterPageNum+1.
+     * Use appendPage in WP mode, insertPage in DTP mode.
+     */
+    void insertPage( int afterPageNum );
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.

@@ -461,7 +461,7 @@ void KWDocStructRootItem::setupTextFrames()
             {
                 if ( i == 0 && doc->processingType() == KWDocument::WP )
                 {
-                    if ( doc->getColumns() == 1 )
+                    if ( doc->numColumns() == 1 )
                         _name=i18n( "Page %1" ).arg(QString::number(j + 1));
                     else
                         _name=i18n( "Column %1" ).arg(QString::number(j + 1));

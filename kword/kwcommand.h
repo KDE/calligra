@@ -740,6 +740,21 @@ protected:
     bool m_bProtect;
 };
 
+class KWInsertRemovePageCommand : public KCommand
+{
+ public:
+    enum Command { Insert, Remove };
+    KWInsertRemovePageCommand( KWDocument *_doc, Command cmd, int pgNum);
+    ~KWInsertRemovePageCommand(){}
+    virtual QString name() const;
+    void execute();
+    void unexecute();
+ protected:
+    KWDocument *m_doc;
+    Command m_cmd;
+    int m_pgNum;
+};
+
 struct FrameMarginsStruct {
     FrameMarginsStruct() {}
     FrameMarginsStruct( KWFrame *frame );

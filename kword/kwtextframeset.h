@@ -42,6 +42,7 @@ class KMacroCommand;
 class KWTextDocument;
 class KoTextObject;
 class KWordFrameSetIface;
+class KNamedCommand;
 
 /**
  * Class: KWTextFrameSet
@@ -171,6 +172,7 @@ public:
 
     KCommand* pasteKWord( KoTextCursor * cursor, const QCString & data, bool removeSelected );
     void insertTOC( KoTextCursor * cursor );
+    KNamedCommand* insertFrameBreakCommand( KoTextCursor *cursor );
     void insertFrameBreak( KoTextCursor * cursor );
     KCommand * setPageBreakingCommand( KoTextCursor * cursor, int pageBreaking );
 
@@ -283,12 +285,15 @@ signals:
     /** Tell the text viewmode that the height of the text might have changed */
     void mainTextHeightChanged();
 
+public slots:
+    // Connected to KoTextObject
+    void slotRepaintChanged();
+
 protected slots:
     // All those slots are connected to KoTextObject
     void slotAvailableHeightNeeded();
     void slotAfterFormatting( int bottom, KoTextParag *lastFormatted, bool* abort );
     void slotNewCommand( KCommand *cmd );
-    void slotRepaintChanged();
     void slotParagraphDeleted(KoTextParag*_parag);
     void slotParagraphCreated(KoTextParag*_parag);
     void slotParagraphModified(KoTextParag*_parag, int /*KoTextParag::ParagModifyType*/, int, int);
@@ -370,6 +375,7 @@ public:
     void setCursor( KoTextParag* parag, int index );
 
     void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor() ); }
+    void insertWPPage();
     void insertVariable( int type, int subtype = 0 );
     void insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering _numType, const QString &_manualString );
     void insertCustomVariable( const QString &name);

@@ -19,33 +19,8 @@
 */
 
 #undef Unsorted
-#include <qclipboard.h>
-#include <qregexp.h>
-#include <qpaintdevicemetrics.h>
-#include <qprogressdialog.h>
-#include <qlabel.h>
-#include <qgroupbox.h>
 
-#include <koAutoFormat.h>
-#include <koAutoFormatDia.h>
-#include <koChangeCaseDia.h>
-#include <koCharSelectDia.h>
-#include <koCommentDia.h>
-#include <koCreateStyleDia.h>
-#include <koDocumentInfo.h>
-#include <koFontDia.h>
-#include <koFrame.h>
-#include <koInsertLink.h>
-#include <koMainWindow.h>
-#include <koParagDia.h>
-#include <koPartSelectAction.h>
-#include <koSearchDia.h>
-#include <koTemplateCreateDia.h>
-#include <koVariable.h>
-#include <koVariableDlgs.h>
-#include <kotextobject.h>
-#include <koStore.h>
-
+#include "kwview.h"
 #include "kwcanvas.h"
 #include "defs.h"
 #include "deldia.h"
@@ -61,7 +36,6 @@
 #include "kwinsertpicdia.h"
 #include "kwtableframeset.h"
 #include "kwpartframeset.h"
-#include "kwview.h"
 #include "kwviewmode.h"
 #include "searchdia.h"
 #include "mailmerge.h"
@@ -77,43 +51,72 @@
 #include "KWordViewIface.h"
 #include "sortdia.h"
 #include "configfootnotedia.h"
-#include <qrichtext_p.h>
-#include <kaccel.h>
-#include <kmessagebox.h>
-#include <kstatusbar.h>
-#include <kstdaccel.h>
-#include <kaccelgen.h>
-#include <kdeversion.h>
-#include <ktempfile.h>
-#include <kdebug.h>
-#include <kdebugclasses.h>
-#include <kfiledialog.h>
-#include <kstdaction.h>
-#include <klocale.h>
-#include <kimageio.h>
-#include <koPictureFilePreview.h>
-#include <koStoreDrag.h>
 #include "kwtextdocument.h"
 #include "kwcreatebookmarkdia.h"
 #include "kwimportstyledia.h"
 #include "kwframe.h"
 #include "kwanchor.h"
 #include "kwinserthorizontallinedia.h"
-#include <qtabwidget.h>
+
+#include <qrichtext_p.h>
+#include <koAutoFormat.h>
+#include <koAutoFormatDia.h>
+#include <koChangeCaseDia.h>
+#include <koCharSelectDia.h>
+#include <koCommentDia.h>
+#include <koCreateStyleDia.h>
+#include <koDocumentInfo.h>
+#include <koFontDia.h>
+#include <koFrame.h>
+#include <koInsertLink.h>
+#include <koMainWindow.h>
+#include <koParagDia.h>
+#include <koPartSelectAction.h>
+#include <koPictureFilePreview.h>
+#include <koSearchDia.h>
+#include <koStore.h>
+#include <koStoreDrag.h>
+#include <koTemplateCreateDia.h>
+#include <koVariable.h>
+#include <koVariableDlgs.h>
+#include <kotextobject.h>
+
+#include <kaccel.h>
+#include <kaccelgen.h>
+#include <kdebug.h>
+#include <kdebugclasses.h>
+#include <kdeversion.h>
+#include <kfiledialog.h>
+#include <kimageio.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kparts/event.h>
+#include <kstandarddirs.h>
+#include <kstatusbar.h>
+#include <kstdaccel.h>
+#include <kstdaction.h>
+#include <ktempfile.h>
+#include <kurldrag.h>
+
 #include <qcheckbox.h>
+#include <qclipboard.h>
+#include <qgroupbox.h>
+#include <qlabel.h>
+#include <qpaintdevicemetrics.h>
+#include <qprogressdialog.h>
+#include <qregexp.h>
+#include <qtabwidget.h>
 #include <qtimer.h>
 #include <qvbox.h>
+
 #undef Bool
 #include <kspell.h>
 #include <kspelldlg.h>
 #include <tkcoloractions.h>
-#include <kstandarddirs.h>
-#include <kparts/event.h>
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
 
 #include <stdlib.h>
-#include <kurldrag.h>
 #ifdef HAVE_LIBASPELL
 #include <koSpell.h>
 #endif
@@ -461,14 +464,20 @@ void KWView::setupActions()
     actionEditReplace = KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
-
+    actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
+                                    this, SLOT( deletePage() ),
+                                    actionCollection(), "delete_page" );
+    kdDebug() <<  m_doc->numPages() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
+    // Duplicated with pageNumChanged
+    actionDeletePage->setEnabled( m_doc->numPages() > 1 && m_doc->processingType() == KWDocument::DTP );
+    kdDebug() << "isEnabled:" << actionDeletePage->isEnabled() << endl;
 
     (void) new KAction( i18n( "Configure Mai&l Merge..." ), "configure",0,
                         this, SLOT( editMailMergeDataBase() ),
                         actionCollection(), "edit_sldatabase" );
 
 
-    (void) new  KWMailMergeLabelAction::KWMailMergeLabelAction( i18n("Drag Mail Merge Variable"), 0,
+    (void) new KWMailMergeLabelAction::KWMailMergeLabelAction( i18n("Drag Mail Merge Variable"), 0,
                     this, SLOT(editMailMergeDataBase()), actionCollection(), "mailmerge_draglabel" );
 
 //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
@@ -477,13 +486,12 @@ void KWView::setupActions()
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,
                                       this, SLOT( editDeleteFrame() ),
                                       actionCollection(), "edit_delframe" );
-    actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame." ) ); // #### there can be more than one frame selected (DF)
-    actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame." ) );
+    actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame(s)." ) );
+    actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame(s)." ) );
 
-    // TODO
-    //actionCreateLinkedFrame = new KAction( i18n( "Create Linked Copy" ), 0, this, SLOT( createLinkedFrame() ), actionCollection(), "file_statistics" );
-    //actionCreateLinkedFrame->setToolTip( ... );
-    //actionCreateLinkedFrame->setWhatsThis( ... );
+    actionCreateLinkedFrame = new KAction( i18n( "Create Linked Copy" ), 0, this, SLOT( createLinkedFrame() ), actionCollection(), "create_linked_frame" );
+    actionCreateLinkedFrame->setToolTip( i18n( "Create a copy of the current frame, always showing the same contents" ) );
+    actionCreateLinkedFrame->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
 
     actionRaiseFrame = new KAction( i18n( "Ra&ise Frame" ), "raise",
                                     CTRL +SHIFT+ Key_R, this, SLOT( raiseFrame() ),
@@ -570,15 +578,26 @@ void KWView::setupActions()
     actionInsertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
     actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
 
-    actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
+    actionInsertFrameBreak = new KAction( QString::null, CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
-    actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame." ) );
-    actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
+    if ( m_doc->processingType() == KWDocument::WP ) {
+        actionInsertFrameBreak->setText( i18n( "Page Break" ) );
+        actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next page." ) );
+        actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next page." ) );
+    } else {
+        actionInsertFrameBreak->setText( i18n( "&Hard Frame Break" ) );
+        actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame." ) );
+        actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
+    }
 
-     actionInsertLink = new KAction( i18n( "Link..." ), 0,
-                                        this, SLOT( insertLink() ),
-                                        actionCollection(), "insert_link" );
+    /*actionInsertPage =*/ new KAction( i18n( "Page..." ), "newslide", 0,
+                                    this, SLOT( insertPage() ),
+                                    actionCollection(), "insert_page" );
+
+    actionInsertLink = new KAction( i18n( "Link..." ), 0,
+                                    this, SLOT( insertLink() ),
+                                    actionCollection(), "insert_link" );
     actionInsertLink->setToolTip( i18n( "Insert a web address, email address or hyperlink to a file." ) );
     actionInsertLink->setWhatsThis( i18n( "Insert a web address, email address or hyperlink to a file." ) );
 
@@ -1188,7 +1207,7 @@ void KWView::setupActions()
                                             actionCollection(), "select_frameset" );
 
 
-    actionAddBookmark= new KAction( i18n( "Bookmark..." ), 0,
+    actionAddBookmark= new KAction( i18n( "&Bookmark..." ), 0,
                                             this, SLOT( addBookmark() ),
                                             actionCollection(), "add_bookmark" );
     actionSelectBookmark= new KAction( i18n( "Select Bookmark..." ), 0,
@@ -1474,6 +1493,10 @@ void KWView::updatePageInfo()
         if ( edit && edit->currentFrame() )
         {
             m_currentPage = edit->currentFrame()->pageNum();
+        } else {
+            KWFrame* f = m_doc->getFirstSelectedFrame();
+            if ( f )
+                m_currentPage = f->pageNum();
         }
         /*kdDebug() << (void*)this << " KWView::updatePageInfo "
                   << " edit: " << edit << " " << ( edit?edit->frameSet()->getName():QString::null)
@@ -1481,7 +1504,6 @@ void KWView::updatePageInfo()
                   << " m_currentPage=" << m_currentPage << " m_sbPageLabel=" << m_sbPageLabel
                   << endl;*/
 
-        // ### TODO what's the current page when we have no edit object (e.g. frames are selected) ?
         // To avoid bugs, apply max page number in case a page was removed.
         m_currentPage = QMIN( m_currentPage, m_doc->numPages()-1 );
 
@@ -1504,6 +1526,10 @@ void KWView::pageNumChanged()
 {
      docStructChanged(TextFrames);
      updatePageInfo();
+     int pages = m_doc->numPages();
+     kdDebug() <<  pages <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
+     // For now it's only implemented in DTP mode.
+     actionDeletePage->setEnabled( pages > 1 && m_doc->processingType() == KWDocument::DTP );
 }
 
 void KWView::updateFrameStatusBarItem()
@@ -2634,6 +2660,27 @@ void KWView::deleteFrame( bool _warning )
     }
 }
 
+void KWView::createLinkedFrame()
+{
+    QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    if (selectedFrames.count() != 1)
+        return; // action is disabled in such a case
+    KWFrame* frame = selectedFrames.getFirst();
+    KWFrame* newFrame = new KWFrame(0L, frame->x()+20, frame->y()+20, frame->width(), frame->height() );
+    newFrame->setZOrder( m_doc->maxZOrder( newFrame->pageNum(m_doc) ) + 1 ); // make sure it's on top
+    newFrame->setCopy(true);
+    newFrame->setNewFrameBehavior( KWFrame::Copy );
+    frame->frameSet()->addFrame( newFrame );
+
+    frame->setSelected(false);
+    newFrame->setSelected(true);
+
+    KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create Linked Copy"), newFrame );
+    m_doc->addCommand( cmd );
+
+    m_doc->frameChanged( newFrame );
+}
+
 void KWView::editCustomVariable()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
@@ -3187,6 +3234,39 @@ void KWView::insertFrameBreak()
     if ( !edit )
         return;
     edit->insertFrameBreak();
+}
+
+void KWView::insertPage()
+{
+    if ( m_doc->processingType() == KWDocument::WP )
+    {
+        m_gui->canvasWidget()->editFrameSet( m_doc->frameSet(0) );
+        KWTextFrameSetEdit *edit = currentTextEdit();
+        Q_ASSERT(edit);
+        if ( edit )
+            edit->insertWPPage();
+    } else {
+        // TODO use a kpr-like dialog for "after or before current page?"
+        // (would look better with radibuttons than with the combobox)
+        // If 'before', subtract 1 to the page number
+        KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Insert, m_currentPage );
+        cmd->execute();
+        m_doc->addCommand( cmd );
+    }
+}
+
+void KWView::deletePage()
+{
+    if ( m_doc->processingType() == KWDocument::WP )
+    {
+        // TODO we have to remove text so that the page can be removed
+        // (e.g. everything between two (auto or manual) frame breaks)
+        // Note: This must also be done in DTP mode, in some cases.
+    } else {
+        KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Remove, m_currentPage );
+        cmd->execute();
+        m_doc->addCommand( cmd );
+    }
 }
 
 void KWView::insertLink()
@@ -5603,13 +5683,12 @@ void KWView::changeFootEndNoteState()
 {
     bool rw = koDocument()->isReadWrite();
     KWTextFrameSetEdit * edit = currentTextEdit();
-    bool state= edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager() && !edit->frameSet()->isFootEndNote();
-    QString mode=m_gui->canvasWidget()->viewMode()->type();
-    state =state && (mode!="ModeText");
-    actionInsertFootEndNote->setEnabled( state && (edit && (edit->frameSet()==m_doc->frameSet(0))));
-    state=  rw && edit && edit->frameSet() && !edit->frameSet()->isFootEndNote()&& (mode!="ModeText");
+    QString mode = m_gui->canvasWidget()->viewMode()->type();
 
-    actionEditFootEndNote->setEnabled( state);
+    bool isEditableFrameset = edit && edit->frameSet() && edit->frameSet()->isMainFrameset();
+    bool ok = rw && isEditableFrameset && (mode!="ModeText");
+    actionInsertFootEndNote->setEnabled( ok );
+    actionEditFootEndNote->setEnabled( ok );
 }
 
 void KWView::changeFootNoteMenuItem( bool _footnote)
@@ -5713,6 +5792,7 @@ void KWView::frameSelectedChanged()
     }
 
     actionCreateFrameStyle->setEnabled( nbFrame==1 );
+    actionCreateLinkedFrame->setEnabled( nbFrame==1 );
 
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
@@ -5721,20 +5801,20 @@ void KWView::frameSelectedChanged()
     actionTableDelRow->setEnabled( table && table->isRowsSelected());
     actionTableDelCol->setEnabled( table && table->isColsSelected());
     actionConvertTableToText->setEnabled( table && table->isFloating());
-    bool state=(table && nbFrame==1);
 
-    actionTableSplitCells->setEnabled( state );
+    bool oneCellSelected = (table && nbFrame==1);
+    actionTableSplitCells->setEnabled( oneCellSelected );
 
-    state=(table && nbFrame>0);
+    bool cellsSelected = (table && nbFrame>0);
 
-    actionTableInsertRow->setEnabled( state);
-    actionTableInsertCol->setEnabled( state);
-    actionTableDelete->setEnabled( state );
-    actionTableUngroup->setEnabled( state );
-    actionTableResizeCol->setEnabled( state );
-    actionTableProtectCells->setEnabled( state );
-    actionTablePropertiesMenu->setEnabled( state );
-    if ( state )
+    actionTableInsertRow->setEnabled( cellsSelected );
+    actionTableInsertCol->setEnabled( cellsSelected );
+    actionTableDelete->setEnabled( cellsSelected );
+    actionTableUngroup->setEnabled( cellsSelected );
+    actionTableResizeCol->setEnabled( cellsSelected );
+    actionTableProtectCells->setEnabled( cellsSelected );
+    actionTablePropertiesMenu->setEnabled( cellsSelected );
+    if ( cellsSelected )
     {
         unsigned int row = 0;
         unsigned int col = 0;
@@ -5745,25 +5825,26 @@ void KWView::frameSelectedChanged()
 
     m_doc->refreshFrameBorderButton();
 
+    updatePageInfo(); // takes care of slotUpdateRuler()
     updateFrameStatusBarItem();
-    slotUpdateRuler();
 
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
-    if ( lst.isEmpty() )
-        return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
-    KoTextFormat format=*(lst.first()->currentFormat());
-    showFormat( format );
+    if ( !lst.isEmpty() )
+    {
+        QPtrListIterator<KoTextFormatInterface> it( lst );
+        KoTextFormat format=*(lst.first()->currentFormat());
+        showFormat( format );
 
-    const KoParagLayout * paragLayout=lst.first()->currentParagLayoutFormat();
-    KoParagCounter counter;
-    if(paragLayout->counter)
-        counter = *(paragLayout->counter);
-    showCounter( counter );
-    int align = paragLayout->alignment;
-    if ( align == Qt::AlignAuto )
-        align = Qt::AlignLeft; // ## seems hard to detect RTL here
-    showAlign( align );
+        const KoParagLayout * paragLayout=lst.first()->currentParagLayoutFormat();
+        KoParagCounter counter;
+        if(paragLayout->counter)
+            counter = *(paragLayout->counter);
+        showCounter( counter );
+        int align = paragLayout->alignment;
+        if ( align == Qt::AlignAuto )
+            align = Qt::AlignLeft; // ## seems hard to detect RTL here
+        showAlign( align );
+    }
 }
 
 void KWView::docStructChanged(int _type)
@@ -6029,8 +6110,8 @@ void KWView::showDocStructure()
 
 void KWView::showRuler()
 {
-	m_doc->setShowRuler( actionShowRuler->isChecked());
-	m_doc->reorganizeGUI();
+    m_doc->setShowRuler( actionShowRuler->isChecked());
+    m_doc->reorganizeGUI();
 }
 
 void KWView::slotSoftHyphen()
@@ -6186,6 +6267,7 @@ void KWView::createStyleFromSelection()
     }
 }
 
+// Initially called by initGUIButton
 void KWView::switchModeView()
 {
     // Apply the same viewmode to all views (due to limitations in the text formatter)
@@ -6255,14 +6337,14 @@ void KWView::switchModeView()
     //recalc pgnum variable when we swith viewmode
     //because in text mode view we display field code and not value
     //normal because we don't have real page in this mode
-    m_doc->recalcVariables(  VT_PGNUM );
+    m_doc->recalcVariables( VT_PGNUM );
     if ( isTextMode )
     {
         // Make sure we edit the same frameset as the one shown in the textview ;-)
         m_gui->canvasWidget()->editFrameSet( static_cast<KWViewModeText* >(m_doc->viewMode())->textFrameSet() );
 
     }
-    //remove add "zoom to page" not necessary in text mode view
+    //remove/add "zoom to page". Not necessary in text mode view.
     changeZoomMenu( m_doc->zoom() );
     showZoom( m_doc->zoom() );
     updatePageInfo();

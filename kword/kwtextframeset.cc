@@ -444,10 +444,9 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
 
         int pages = m_doc->numPages();
         double left = m_doc->ptLeftBorder();
-        double factor = 100.0/m_doc->footNoteSeparatorLineLength();
         double pageWidth = m_doc->ptPaperWidth() - m_doc->ptRightBorder() - left ;
-        double width = pageWidth / factor; // ### is 1/5 ok?
-        int numColumns = m_doc->getColumns();
+        double width = pageWidth * m_doc->footNoteSeparatorLineLength() / 100.0;
+        int numColumns = m_doc->numColumns();
         for ( int pageNum = 0; pageNum < pages; pageNum++ )
         {
             //if ( viewMode->isPageVisible( pageNum ) )
@@ -2059,7 +2058,8 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             delFrame(frames.last(), true);
             m_doc->frameChanged( 0L );
         }
-        m_doc->tryRemovingPages();
+        if ( m_doc->processingType() == KWDocument::WP )
+            m_doc->tryRemovingPages();
     }
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
@@ -2415,10 +2415,9 @@ void KWTextFrameSet::insertTOC( KoTextCursor * cursor )
     m_doc->addCommand( macroCmd );
 }
 
-void KWTextFrameSet::insertFrameBreak( KoTextCursor *cursor )
+KNamedCommand* KWTextFrameSet::insertFrameBreakCommand( KoTextCursor *cursor )
 {
-    clearUndoRedoInfo();
-    KMacroCommand* macroCmd = new KMacroCommand( i18n( "Insert Break After Paragraph" ) );
+    KMacroCommand* macroCmd = new KMacroCommand( QString::null );
     macroCmd->addCommand( m_textobj->insertParagraphCommand( cursor ) );
     KWTextParag *parag = static_cast<KWTextParag *>( cursor->parag() );
     if(parag->prev()) {
@@ -2427,9 +2426,23 @@ void KWTextFrameSet::insertFrameBreak( KoTextCursor *cursor )
         cursor->setIndex( parag->length() - 1 );
     }
     macroCmd->addCommand( setPageBreakingCommand( cursor, parag->pageBreaking() | KoParagLayout::HardFrameBreakAfter ) );
-    m_doc->addCommand( macroCmd );
+    Q_ASSERT( parag->next() );
+    if ( parag->next() ) {
+        cursor->setParag( parag->next() );
+        cursor->setIndex( 0 );
+    }
+    return macroCmd;
+}
 
-    m_textobj->setLastFormattedParag( parag );
+void KWTextFrameSet::insertFrameBreak( KoTextCursor *cursor )
+{
+    clearUndoRedoInfo();
+    m_textobj->emitHideCursor();
+    KNamedCommand* cmd = insertFrameBreakCommand( cursor );
+    cmd->setName( i18n( "Insert Break After Paragraph" ) );
+    m_doc->addCommand( cmd );
+
+    m_textobj->setLastFormattedParag( cursor->parag() );
     m_textobj->formatMore( 2 );
     emit repaintChanged( this );
     m_textobj->emitEnsureCursorVisible();
@@ -3529,6 +3542,33 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /
         if ( var->type()==VT_CUSTOM && refreshCustomMenu)
             frameSet()->kWordDocument()->refreshMenuCustomVariable();
     }
+}
+
+void KWTextFrameSetEdit::insertWPPage()
+{
+    KWTextFrameSet* textfs = textFrameSet();
+    textfs->clearUndoRedoInfo();
+    KoTextObject* textobj = textObject();
+    KWDocument * doc = frameSet()->kWordDocument();
+    int pages = doc->numPages();
+    int columns = doc->numColumns();
+    // There could be N columns. In that case we may need to add up to N framebreaks.
+    int inserted = 0;
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Insert Page") );
+    do {
+        macroCmd->addCommand( textfs->insertFrameBreakCommand( cursor() ) );
+        textobj->setLastFormattedParag( cursor()->parag() );
+        textobj->formatMore( 2 );
+    } while ( pages == doc->numPages() && ++inserted <= columns );
+    if ( pages == doc->numPages() )
+        kdWarning(32002) << k_funcinfo << " didn't manage to insert a new page! inserted=" << inserted << " columns=" << columns << " pages=" << pages << endl;
+
+    doc->addCommand( macroCmd );
+
+    textfs->slotRepaintChanged();
+    textobj->emitEnsureCursorVisible();
+    textobj->emitUpdateUI( true );
+    textobj->emitShowCursor();
 }
 
 // Update the GUI toolbar button etc. to reflect the current cursor position.

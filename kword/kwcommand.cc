@@ -19,12 +19,12 @@
 
 #include "kwdoc.h"
 #include "kwtextframeset.h"
-#include "kwview.h"
 #include "kwcommand.h"
 #include "kwtablestyle.h"
 #include "kwtabletemplate.h"
 #include "kwtableframeset.h"
 #include "kwpartframeset.h"
+#include "kwtextparag.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
 #include "koVariable.h"
@@ -1850,6 +1850,37 @@ void KWProtectContentCommand::unexecute()
 
 }
 
+KWInsertRemovePageCommand::KWInsertRemovePageCommand( KWDocument *_doc, Command cmd, int pgNum)
+    : KCommand(), m_doc(_doc), m_cmd(cmd), m_pgNum(pgNum)
+{}
+
+QString KWInsertRemovePageCommand::name() const
+{
+    return m_cmd == Insert ? i18n("Insert Page") // problem with after/before page
+                  : i18n("Delete Page %1").arg(m_pgNum);
+}
+
+void KWInsertRemovePageCommand::execute()
+{
+    if ( m_cmd == Insert ) {
+        m_doc->insertPage( m_pgNum );
+        m_doc->afterAppendPage( m_pgNum ); // TODO rename to afterInsertPage
+    } else { // Remove
+        m_doc->removePage( m_pgNum );
+        m_doc->afterRemovePages();
+    }
+}
+
+void KWInsertRemovePageCommand::unexecute()
+{
+    if ( m_cmd == Insert ) { // remove the page that was inserted
+        m_doc->removePage( m_pgNum+1 );
+        m_doc->afterRemovePages();
+    } else { // Re-insert the page that was deleted
+        m_doc->insertPage( m_pgNum-1 );
+        m_doc->afterAppendPage( m_pgNum-1 ); // TODO rename to afterInsertPage
+    }
+}
 
 FrameMarginsStruct::FrameMarginsStruct( KWFrame *frame )
 {
@@ -2053,5 +2084,3 @@ void KWRenameBookmarkCommand::unexecute()
 {
         m_doc->renameBookMark( m_newName, m_oldName);
 }
-
-

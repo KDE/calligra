@@ -50,7 +50,7 @@ However, in Word Processing mode, some frames are special: main text frameset
 are laid out by the KWFrameLayout class, which is triggered by
 KWDocument::recalcFrames.
 
-When creating a new page, KWDocument::appendPage takes care of creating the
+When creating a new page, KWDocument::insertPage takes care of creating the
 followup frames for all frames with newFrameBehavior=Reconnect.
 
 The newFrameBehavior called "Copy" means "exact copy of the contents of
@@ -58,10 +58,10 @@ the frame". This is used for headers/footers (but the user can also use
 it for logos and stuff). In such a case we don't copy anything, we simply
 paint the same contents in many pages.
 
-Removing pages is done by KWDocument::tryRemovingPages().
+In WP mode, removing pages is automatically done by KWDocument::tryRemovingPages().
 
-In DTP mode pages should be completely user-controlled (as opposed to
-frame-controlled). TODO: UI to let the user add/remove pages, for DTP only.
+In DTP mode pages are user-controlled (insert and delete page actions),
+but overflowing text can still create a new page as well.
 
 The difficulty with frame layout is that in most cases the frame size and
 number depends on the text inside, and the text layout depends on the frames

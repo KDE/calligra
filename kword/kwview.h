@@ -209,6 +209,7 @@ public slots:
     void editCustomVariable();
     void editCustomVars();
     void editMailMergeDataBase();
+    void createLinkedFrame();
 
     void viewTextMode();
     void viewPageMode();
@@ -230,6 +231,9 @@ public slots:
     void insertComment();
     void removeComment();
     void copyTextOfComment();
+
+    void insertPage();
+    void deletePage();
 
     void formatFont();
     void formatParagraph();
@@ -483,12 +487,14 @@ protected:
 private:
     KWDocument *m_doc;
 
+    // TODO use m_ notation
     KAction *actionFileStatistics;
     KAction *actionEditCut;
     KAction *actionEditCopy;
     KAction *actionEditPaste;
     KAction *actionEditSelectAll;
     KAction *actionEditDelFrame;
+    KAction *actionCreateLinkedFrame;
     KAction *actionRaiseFrame;
     KAction *actionLowerFrame;
     KAction *actionSendBackward;
@@ -526,6 +532,8 @@ private:
     KAction *actionEditComment;
     KAction *actionRemoveComment;
     KAction *actionCopyTextOfComment;
+    //KAction *actionInsertPage;
+    KAction *actionDeletePage;
 
     KActionMenu *actionInsertVariable;
     struct VariableDef {
