@@ -46,6 +46,23 @@ VCanvas::focusInEvent( QFocusEvent * )
 }
 
 void
+VCanvas::setYMirroring( bool edit )
+{
+	VPainter *p;
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
+	mat.translate( -contentsX(), contentsY() - ( contentsHeight() / m_view->zoom() ) );
+	if( edit )
+	{
+		p = m_view->painterFactory()->editpainter();
+	}
+	else
+		p = m_view->painterFactory()->painter();
+	p->setWorldMatrix( mat );
+}
+
+void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
 	//kdDebug() << " e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
@@ -57,11 +74,12 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
 		p->begin();
 		p->setZoomFactor( m_view->zoom() );
-		QWMatrix mat;
+		/*QWMatrix mat;
 		mat.scale( 1, -1 );
 		kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
-		p->setWorldMatrix( mat );
+		p->setWorldMatrix( mat );*/
+		setYMirroring( false );
 
 		m_part->document().draw( p, r );
 
@@ -99,11 +117,12 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 	{
 		p->begin();
 		p->setZoomFactor( m_view->zoom() );
-		QWMatrix mat;
+		/*QWMatrix mat;
 		mat.scale( 1, -1 );
 		kdDebug() << "contentsHeight() : " << contentsHeight() << endl;
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
-		p->setWorldMatrix( mat );
+		p->setWorldMatrix( mat ); */
+		setYMirroring( false );
 
 		m_part->document().draw( p, KoRect::fromQRect( rect ) );
 

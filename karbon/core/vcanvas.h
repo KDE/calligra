@@ -21,6 +21,7 @@ public:
 	VCanvas( KarbonView* view, KarbonPart* part );
 
 	void repaintAll( bool drawVObjects = true );
+	void setYMirroring( bool edit );
 
 	QPixmap *pixmap() { return m_pixmap; }
 

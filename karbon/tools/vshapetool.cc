@@ -36,7 +36,14 @@ void
 VShapeTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
+	/*QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( -view()->canvasWidget()->contentsX(),
+					view()->canvasWidget()->contentsY() - view()->canvasWidget()->contentsHeight() );
+	painter->setWorldMatrix( mat );*/
+	view()->canvasWidget()->setYMirroring( true );
 	
+
 	VPath* path = shape();
 	path->setState( VObject::edit );
 	path->draw( painter, path->boundingBox() );
@@ -62,15 +69,6 @@ VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
 	//draw();
 
 	recalc();
-
-	// Y mirroring
-	m_p.setY( -m_p.y() + view()->canvasWidget()->contentsHeight() );
-	if( m_isPolar )
-	{
-		// TODO : fix polar, flip?
-	}
-	else
-		m_d2 = -m_d2;
 
 	VShapeCmd* cmd = new VShapeCmd(
 		&view()->part()->document(),
