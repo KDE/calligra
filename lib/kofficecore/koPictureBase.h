@@ -120,9 +120,9 @@ public:
 
     virtual bool hasAlphaBuffer() const
         { return false; }
-    virtual void setAlphaBuffer(bool enable)
-        { ; }
-    virtual QImage createAlphaMask(int conversion_flags = 0) const
+    virtual void setAlphaBuffer(bool /*enable*/)
+        { }
+    virtual QImage createAlphaMask(int /*conversion_flags*/ = 0) const
         { return QImage(); }
 
     virtual void clearCache(void);
