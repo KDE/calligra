@@ -76,6 +76,8 @@ void KPrDuplicatObjDia::slotReset()
     m_rotation->setValue( 0.0 );
     m_increaseX->setValue( 0.0 );
     m_increaseY->setValue( 0.0 );
+    m_moveY->setValue( 0.0 );
+    m_moveX->setValue( 0.0 );
 }
 
 int KPrDuplicatObjDia::nbCopy() const
