@@ -558,16 +558,21 @@ KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor, int 
     // until the next word. So the 'word under cursor' contained e.g. that trailing space.
     // To be on the safe side, we skip spaces/punctuations on both sides:
     KoTextString *s = cursor.parag()->string();
-    bool beginFound=false;
+    bool beginFound = false;
     for ( int i = c1.index(); i< c2.index(); i++)
     {
-        QChar ch = s->at(i).c;
-        if( !beginFound && !ch.isSpace() && !ch.isPunct() )
+        const QChar ch = s->at(i).c;
+        // This list comes from KoTextCursor::gotoPreviousWord.
+        // Can't use QChar::isPunct since "'" and "-" are not word separators
+        const bool isWordDelimiter = ch.isSpace() || ch == '.' ||
+                                     ch == ',' || ch == ':' || ch == ';';
+
+        if( !beginFound && !isWordDelimiter )
         {
             c1.setIndex(i);
-            beginFound=true;
+            beginFound = true;
         }
-        else if ( beginFound && (ch.isSpace() || ch.isPunct()) )
+        else if ( beginFound && isWordDelimiter )
         {
             c2.setIndex(i);
             break;
