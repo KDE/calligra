@@ -103,7 +103,7 @@ static void TreatAbiProps(QString strProps,QValueList<AbiProps> &abiPropsList)
 }
 
 enum StackItemElementType{
-    ElementTypeUnknown  = 0, 
+    ElementTypeUnknown  = 0,
     ElementTypeBottom   = 1, // Bottom of the stack
     ElementTypeAbiWord  = 2, // <abiword>
     ElementTypeSection  = 3, // <section>
@@ -116,12 +116,10 @@ class StackItem
 public:
     StackItem()
     {
-        kdDebug()<< "> Creating StackItem " << (void*) this <<endl;
         propertyFontName="times"; //Default font
     }
     ~StackItem()
     {
-        kdDebug()<< "< Destructing StackItem " << (void*) this <<endl;
     }
 public:
     StackItemElementType    elementType;
@@ -245,7 +243,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         paragraphElementOut.appendChild(layoutElementOut);
         FillStandardLayout(layoutElementOut);
 #endif
-        
+
         stackItem->elementType=ElementTypeParagraph;
         stackItem->stackNode=textElementOut; // <TEXT>
         stackItem->stackNode2=formatsPluralElementOut; // <FORMATS>
@@ -367,7 +365,7 @@ static QDomElement createMainFramesetElement(QDomDocument& qDomDocumentOut)
     frameElementOut.setAttribute("right",798);
     frameElementOut.setAttribute("runaround",1);
     framesetElementOut.appendChild(frameElementOut);
-    
+
     return framesetElementOut; // return the main <FRAMESET> where the body text will be under.
 }
 
