@@ -26,10 +26,10 @@ kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
 	commandhistory.cc preview.cc gotopage.cc footer_header.cc main.cc \
 	kpresenter_shell.cc kpresenter_factory.cc \
-	KPresenterDocIface_skel.cpp KPresenterDocIface.cc \
-	KPresenterViewIface_skel.cpp KPresenterViewIface.cc \
-	KPresenterObjectIface_skel.cpp KPresenterObjectIface.cc \
-	KPresenterBackgroundIface_skel.cpp KPresenterBackgroundIface.cc 
+	KPresenterDocIface.skel KPresenterDocIface.cc \
+	KPresenterViewIface.skel KPresenterViewIface.cc \
+	KPresenterObjectIface.skel KPresenterObjectIface.cc \
+	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc 
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h ktextobject.h styledia.h \
@@ -61,19 +61,6 @@ METASOURCES =	kpresenter_doc.moc kpresenter_view.moc \
 		spacingdia.moc confrectdia.moc \
 		commandhistory.moc gotopage.moc webpresentation.moc \
 		footer_header.moc kpresenter_shell.moc kpresenter_factory.moc
-
-KPresenterDocIface.kidl: KPresenterDocIface.h
-	( dcopidl KPresenterDocIface.h >KPresenterDocIface.kidl; dcopidl2cpp --no-stub KPresenterDocIface.kidl )
-KPresenterDocIface_skel.cpp: KPresenterDocIface.kidl
-KPresenterViewIface.kidl: KPresenterViewIface.h
-	( dcopidl KPresenterViewIface.h >KPresenterViewIface.kidl; dcopidl2cpp --no-stub KPresenterViewIface.kidl )
-KPresenterViewIface_skel.cpp: KPresenterViewIface.kidl
-KPresenterObjectIface.kidl: KPresenterObjectIface.h
-	( dcopidl KPresenterObjectIface.h >KPresenterObjectIface.kidl; dcopidl2cpp --no-stub KPresenterObjectIface.kidl )
-KPresenterObjectIface_skel.cpp: KPresenterObjectIface.kidl
-KPresenterBackgroundIface.kidl: KPresenterBackgroundIface.h
-	( dcopidl KPresenterBackgroundIface.h >KPresenterBackgroundIface.kidl; dcopidl2cpp --no-stub KPresenterBackgroundIface.kidl )
-KPresenterBackgroundIface_skel.cpp: KPresenterBackgroundIface.kidl
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

@@ -26,10 +26,10 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_sort.cc kspread_dlg_anchor.cc \
 	kspread_dlg_resize.cc kspread_factory.cc kspread_handler.cc \
 	kspread_events.cc  kspread_dlg_assistant2.cc kspread_dlg_show.cc \
-	kspread_dlg_insert.cc KSpreadDocIface_skel.cpp KSpreadMapIface_skel.cpp \
-	KSpreadTableIface_skel.cpp KSpreadDocIface.cc KSpreadMapIface.cc \
-	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface_skel.cpp \
-	KSpreadAppIface.cc KSpreadAppIface_skel.cpp
+	kspread_dlg_insert.cc KSpreadDocIface.skel KSpreadMapIface.skel \
+	KSpreadTableIface.skel KSpreadDocIface.cc KSpreadMapIface.cc \
+	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface.skel \
+	KSpreadAppIface.cc KSpreadAppIface.skel
 
 kspread_SOURCES = main.cc
 
@@ -49,15 +49,7 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
 	KSpreadAppIface.h
 
-libkspread_la_METASOURCES = kspread_shell.moc kspread_doc.moc \
-		  	    kspread_view.moc kspread_tabbar.moc kspread_canvas.moc \
-			    kspread_table.moc kspread_dlg_layout.moc kspread_cell.moc \
-			    kspread_dlg_scripts.moc kspread_part.moc kspread_dlg_cons.moc \
-			    kspread_editors.moc kspread_dlg_tabname.moc kspread_dlg_formula.moc \
-			    kspread_dlg_special.moc kspread_dlg_goto.moc kspread_dlg_replace.moc \
-			    kspread_dlg_sort.moc  kspread_dlg_create.moc \
-			    kspread_dlg_anchor.moc kspread_dlg_assistant2.moc kspread_dlg_show.moc kspread_dlg_insert.moc \
-			    kspread_dlg_resize.moc kspread_factory.moc kspread_handler.moc
+libkspread_la_METASOURCES = AUTO
 
 kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
@@ -69,22 +61,6 @@ rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc kspread_shell.rc
 
 SUBDIRS =  . plugins pics dtd toolbar scripts
-
-KSpreadDocIface.kidl: KSpreadDocIface.h
-	( dcopidl KSpreadDocIface.h >KSpreadDocIface.kidl; dcopidl2cpp --no-stub KSpreadDocIface.kidl )
-KSpreadDocIface_skel.cpp: KSpreadDocIface.kidl
-KSpreadTableIface.kidl: KSpreadTableIface.h
-	( dcopidl KSpreadTableIface.h >KSpreadTableIface.kidl; dcopidl2cpp --no-stub KSpreadTableIface.kidl )
-KSpreadTableIface_skel.cpp: KSpreadTableIface.kidl
-KSpreadMapIface.kidl: KSpreadMapIface.h
-	( dcopidl KSpreadMapIface.h >KSpreadMapIface.kidl; dcopidl2cpp --no-stub KSpreadMapIface.kidl )
-KSpreadMapIface_skel.cpp: KSpreadMapIface.kidl
-KSpreadCellIface.kidl: KSpreadCellIface.h
-	( dcopidl KSpreadCellIface.h >KSpreadCellIface.kidl; dcopidl2cpp --no-stub KSpreadCellIface.kidl )
-KSpreadCellIface_skel.cpp: KSpreadCellIface.kidl
-KSpreadAppIface.kidl: KSpreadAppIface.h
-	( dcopidl KSpreadAppIface.h >KSpreadAppIface.kidl; dcopidl2cpp --no-stub KSpreadAppIface.kidl )
-KSpreadAppIface_skel.cpp: KSpreadAppIface.kidl
 
 parser:
 	flex lex.l
