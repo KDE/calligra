@@ -11,6 +11,7 @@ class QCheckBox;
 class QRadioButton;
 class QLineEdit;
 class QSpinBox;
+class QCheckBox;
 
 class KChartParams;
 
@@ -26,6 +27,7 @@ public:
 private:
     KChartParams* _params;
     QLineEdit *title;
+    QCheckBox *pie3d;
 };
 
 #endif
