@@ -15,6 +15,3 @@ METASOURCES = AUTO
 
 service_DATA = ole_excel97_import.desktop
 servicedir = $(kde_servicesdir)
-
-data_DATA = x-excel97.desktop
-datadir = $(kde_mimedir)/application

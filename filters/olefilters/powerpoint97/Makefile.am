@@ -15,6 +15,3 @@ METASOURCES = AUTO
 
 service_DATA = ole_powerpoint97_import.desktop
 servicedir = $(kde_servicesdir)
-
-data_DATA = x-powerpoint97.desktop
-datadir = $(kde_mimedir)/application

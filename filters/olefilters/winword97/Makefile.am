@@ -26,6 +26,3 @@ METASOURCES = AUTO
 
 service_DATA = ole_winword97_import.desktop
 servicedir = $(kde_servicesdir)
-
-data_DATA = x-winword97.desktop
-datadir = $(kde_mimedir)/application
