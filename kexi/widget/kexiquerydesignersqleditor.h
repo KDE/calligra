@@ -52,7 +52,9 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 		void setText(const QString &text);
 
 	protected:
-//		virtual bool	eventFilter(QObject *w, QEvent *ev);
+//		virtual bool eventFilter(QObject *w, QEvent *ev);
+
+		virtual void updateActions(bool activated);
 
 	signals:
 		void execQ();
