@@ -1869,12 +1869,14 @@ inline void QTextFormat::setAnchorName(const QString &anchor)
 {
     if(!anchor.isEmpty())
 	anchor_name=anchor;
+    update();
 }
 
 inline void QTextFormat::setAnchorHref(const QString &anchor)
 {
     if(!anchor.isEmpty())
 	anchor_href=anchor;
+    update();
 }
 
 inline void QTextFormat::setUseLinkColor( bool _b)
