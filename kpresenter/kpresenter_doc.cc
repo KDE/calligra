@@ -1554,7 +1554,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                     newpage = m_pageList.at(pos);
                 }
             }
-            ++pos;
             //m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
 
             //necessary to create a unique name for page
@@ -1586,6 +1585,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             context.styleStack().restore();
             m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
             m_loadingInfo->clearAnimationHideDict(); // clear all hide animations style
+            ++pos;
         }
     }
 
@@ -1806,6 +1806,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                     // Only add a linebreak for every child.
                     QDomElement t = text.toElement();
                     note += t.text() + "\n";
+                    kdDebug()<<" note :"<<note<<endl;
                 }
                 m_pageList.at(pos)->setNoteText(note );
             }
