@@ -27,6 +27,7 @@ INCLUDES= -I$(srcdir)/../share -I$(srcdir)/.. $(all_includes)
 # claim, which subdirectories you want to install
 
 EXTRA_DIST = killustrator.xpm \
+	killustrator-doc.xpm killustrator-doc-mini.xpm \
 	killustrator.kdelnk x-killustrator.kdelnk \
 	default.pal
 
