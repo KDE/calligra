@@ -367,6 +367,107 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
         } \
 }
 
+bool KoOasisStyles::saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text )
+{
+    bool changed = false;
+    //we can also add time to date.
+    if ( format.startsWith( "hh" ) )
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:hours" );
+        elementWriter.addAttribute( "number:style", "long" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+    }
+    else if ( format.startsWith( "h" ) )
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:hours" );
+        elementWriter.addAttribute( "number:style", "short" );
+        elementWriter.endElement();
+        format = format.remove( 0, 1 );
+        changed = true;
+    }
+    else if ( format.startsWith( "mm" ) )
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:minutes" );
+        elementWriter.addAttribute( "number:style", "long" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+    }
+    else if ( format.startsWith( "m" ) )
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:minutes" );
+        elementWriter.addAttribute( "number:style", "short" );
+        elementWriter.endElement();
+        format = format.remove( 0, 1 );
+        changed = true;
+    }
+    else if ( format.startsWith( "ss" ) )
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:seconds" );
+        elementWriter.addAttribute( "number:style", "long" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+    }
+    else if ( format.startsWith( "s" ) )
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:seconds" );
+        elementWriter.addAttribute( "number:style", "short" );
+        elementWriter.endElement();
+        format = format.remove( 0, 1 );
+        changed = true;
+    }
+    else if ( format.startsWith( "ap" ) )
+    {
+        addTextNumber( text, elementWriter );
+
+        elementWriter.startElement( "number:am-pm" );
+        elementWriter.endElement();
+        format = format.remove( 0, 2 );
+        changed = true;
+    }
+    return changed;
+}
+
+QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format )
+{
+    kdDebug()<<"QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    QString format( _format );
+    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_TIME );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    QString text;
+    do
+    {
+        if ( !saveOasisTimeFormat( elementWriter, format, text ) )
+        {
+            text += format[0];
+            format = format.remove( 0, 1 );
+        }
+    }
+    while ( format.length() > 0 );
+    addTextNumber( text, elementWriter );
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentStyle.addChildElement( "number", elementContents );
+    return mainStyles.lookup( currentStyle, "N" );
+}
+
 
 QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format )
 {
@@ -474,8 +575,11 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
         }
         else
         {
-            text += format[0];
-            format = format.remove( 0, 1 );
+            if ( !saveOasisTimeFormat( elementWriter, format, text ) )
+            {
+                text += format[0];
+                format = format.remove( 0, 1 );
+            }
         }
     }
     while ( format.length() > 0 );

@@ -25,6 +25,7 @@
 #include <qmap.h>
 
 class KoGenStyles;
+class KoXmlWriter;
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -68,6 +69,8 @@ public:
     const DataFormatsMap& dataFormats() const { return m_dataFormats; }
 
     static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format );
+    static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format );
+    
 protected:
     /// Add styles to styles map
     void insertStyles( const QDomElement& styles );
@@ -76,6 +79,7 @@ private:
     void insertOfficeStyles( const QDomElement& styles );
     void insertStyle( const QDomElement& style );
     void importDataStyle( const QDomElement& parent );
+    static bool saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text );
 
     KoOasisStyles( const KoOasisStyles & ); // forbidden
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
