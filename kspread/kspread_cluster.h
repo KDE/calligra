@@ -1,3 +1,58 @@
+/* This file is part of the KDE project
+   Copyright (C) 2000 Torben Weis <weis@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+/*
+This class defines a pointer map to all cells, which makes access to them more performant
+and additionally limits memory consumption.
+
+In detail: The class defines 2 cluster, where the second cluster (LEVEL2) is a matrix for
+single cells, while the first cluster (LEVEL1) is a matrix to handle the matrices of LEVEL1.
+On initialization, one LEVEL1 matrix is generated only.
+Each time, a cell stores something, this class checks if for the given column and row if a
+matrix of LEVEL2 is already initialized and in case not generates it on the fly.
+This helps to reduce the memory usage to only consum one pointer matrix for LEVEL1 and all
+matrices of LEVEL2 that are necessary.
+
+LEVEL1 is defined as 128x128 matrix.
+LEVEL2 is defined as 256x256 matrices.
+Each direction then can have LEVEL1 * LEVEL2 = 128*256 = 2^15 different cells, which
+is in total 2^15^2 cells.
+
+It can be changed easily to different sizes, but it should be more senseful to have a small LEVEL1,
+as in most cases only one/two entries in LEVEL1 will be used.
+
+There are 2 special classes to store pointers for column and row formats.
+
+Future enhancements:
+To reduce memory consumption, it should be possible to enhance the functionality by
+another LEVEL0, which then keeps the LEVEL1 size smaller.
+
+Maybe the LEVEL1 should only be generate when there is a need for more than 1 LEVEL2.
+
+LEVEL1 maybe reallocated.
+
+Another interesting possibility would be to differenciate between x size and y size. Currently both
+are equal in both matrizes, but normally it will be the regular case, that you have more need for
+a lot of rows than columns. Maybe something like LEVEL1=128/256 and LEVEL2=256/128 (x/y), still keeping
+2^15 values/cells in each direction (benefit: you won't loose memory in empty columns).
+*/
+
 #ifndef kspread_cluster_h
 #define kspread_cluster_h
 
@@ -7,10 +62,9 @@ class RowLayout;
 
 class QPoint;
 
-#define KSPREAD_CLUSTER_LEVEL1 256
-#define KSPREAD_CLUSTER_LEVEL2 128
-/* KSPREAD_CLUSTER_MAX is CURRENTLY 2^15 only, so it's 256*256 divided by 2 */
-#define KSPREAD_CLUSTER_MAX (256*256/2)
+#define KSPREAD_CLUSTER_LEVEL1 128
+#define KSPREAD_CLUSTER_LEVEL2 256
+#define KSPREAD_CLUSTER_MAX (128*256)
 
 class KSpreadCluster
 {
