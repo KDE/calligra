@@ -183,6 +183,14 @@ PageBorders &PageBorders::operator=(const PageBorders &rhs) {
     return *this;
 }
 
+bool operator==(const PageBorders &lhs, const PageBorders &rhs) {
+    return lhs.top==rhs.top && lhs.left==rhs.left && lhs.right==rhs.right && lhs.bottom==rhs.bottom;
+}
+
+bool operator!=(const PageBorders &lhs, const PageBorders &rhs) {
+    return !(lhs==rhs);
+}
+
 PageLayout &PageLayout::operator=(const PageLayout &rhs) {
     orientation=rhs.orientation;
     layout=rhs.layout;

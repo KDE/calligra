@@ -114,12 +114,15 @@ void GraphitePart::setPageOrientation(const QPrinter::Orientation &orientation) 
 }
 
 void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders) {
-    m_pageLayout.borders=pageBorders;
-    // TODO -- update
+    if(m_pageLayout.borders!=pageBorders) {
+        m_pageLayout.borders=pageBorders;
+        emit layoutChanged();
+    }
 }
 
-bool GraphitePart::showPageLayoutDia(QWidget *parent) {
-    return PageLayoutDiaImpl::pageLayoutDia(m_pageLayout, this, parent);
+void GraphitePart::showPageLayoutDia(QWidget *parent) {
+    if(PageLayoutDiaImpl::pageLayoutDia(m_pageLayout, this, parent))
+        emit layoutChanged();
 }
 
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {

@@ -43,14 +43,16 @@ public:
     virtual int leftBorder() const { return 20; }
     virtual int topBorder() const { return 20; }
 
+public slots:
+    void layoutChanged();
+
 protected slots:
     void slotViewZoom(const QString &text);
 
     void recalcRulers(int x, int y);
     void rulerUnitChanged(Graphite::Unit);
     void openPageLayoutDia();
-    void horizBorderChanged(const Graphite::PageBorders &b);
-    void vertBorderChanged(const Graphite::PageBorders &b);
+    void borderChanged(const Graphite::PageBorders &b);
 
 protected:
     void resizeEvent(QResizeEvent *e);

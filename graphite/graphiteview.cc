@@ -37,11 +37,21 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
     // *never* remove from here -- will result in a crash (hen <--> egg)
     setupRulers();
     recalcRulers(0, 0);
+
+    // doc-view magic
+    connect(m_doc, SIGNAL(unitChanged(Graphite::Unit)), this,
+            SLOT(rulerUnitChanged(Graphite::Unit)));
+    connect(m_doc, SIGNAL(layoutChanged()), this, SLOT(layoutChanged()));
 }
 
 GraphiteView::~GraphiteView() {
     delete m_canvas;
     m_canvas=0L;
+}
+
+void GraphiteView::layoutChanged() {
+    m_vert->setPageBorders(m_doc->pageLayout().borders);
+    m_horiz->setPageBorders(m_doc->pageLayout().borders);
 }
 
 void GraphiteView::slotViewZoom(const QString &t) {
@@ -159,19 +169,10 @@ void GraphiteView::rulerUnitChanged(Graphite::Unit unit) {
 }
 
 void GraphiteView::openPageLayoutDia() {
-    if(m_doc->showPageLayoutDia(this)) {
-        m_vert->setPageBorders(m_doc->pageLayout().borders);
-        m_horiz->setPageBorders(m_doc->pageLayout().borders);
-    }
+    m_doc->showPageLayoutDia(this);
 }
 
-void GraphiteView::horizBorderChanged(const Graphite::PageBorders &b) {
-    m_vert->setPageBorders(b);
-    m_doc->setPageBorders(b);
-}
-
-void GraphiteView::vertBorderChanged(const Graphite::PageBorders &b) {
-    m_horiz->setPageBorders(b);
+void GraphiteView::borderChanged(const Graphite::PageBorders &b) {
     m_doc->setPageBorders(b);
 }
 
@@ -221,7 +222,7 @@ void GraphiteView::setupRulers() {
             SLOT(setUnit(Graphite::Unit)));
     connect(m_vert, SIGNAL(openPageLayoutDia()), this, SLOT(openPageLayoutDia()));
     connect(m_vert, SIGNAL(pageBordersChanged(const Graphite::PageBorders &)),
-            this, SLOT(vertBorderChanged(const Graphite::PageBorders &)));
+            this, SLOT(borderChanged(const Graphite::PageBorders &)));
 
     m_horiz=new Ruler(this, m_canvas->viewport(), Qt::Horizontal,
                      m_doc->pageLayout(), global->zoomedResolution());
@@ -231,13 +232,11 @@ void GraphiteView::setupRulers() {
             SLOT(setUnit(Graphite::Unit)));
     connect(m_horiz, SIGNAL(openPageLayoutDia()), this, SLOT(openPageLayoutDia()));
     connect(m_horiz, SIGNAL(pageBordersChanged(const Graphite::PageBorders &)),
-            this, SLOT(horizBorderChanged(const Graphite::PageBorders &)));
+            this, SLOT(borderChanged(const Graphite::PageBorders &)));
 
     m_canvas->setRulers(m_horiz, m_vert);
     connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
             SLOT(recalcRulers(int, int)));
-    connect(m_doc, SIGNAL(unitChanged(Graphite::Unit)), this,
-            SLOT(rulerUnitChanged(Graphite::Unit)));
 }
 
 #include <graphiteview.moc>

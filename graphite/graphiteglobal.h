@@ -125,6 +125,9 @@ struct PageBorders {
     double bottom;
 };
 
+bool operator==(const PageBorders &lhs, const PageBorders &rhs);
+bool operator!=(const PageBorders &lhs, const PageBorders &rhs);
+
 struct PageLayout {
     // ### read the defaults from a KConfig object
     PageLayout() : orientation(QPrinter::Portrait), layout(Norm),
