@@ -214,6 +214,7 @@ bool AbiWordWorker::doCloseFile(void)
 
 bool AbiWordWorker::doOpenDocument(void)
 {
+    kdDebug(30506)<< "AbiWordWorker::doOpenDocument" << endl;
     // Make the file header
 
     // First the XML header in UTF-8 version
@@ -242,36 +243,6 @@ bool AbiWordWorker::doOpenDocument(void)
     // ### TODO: perhaps we should add the comment: do not edit the file
     *m_streamOut << "\n";
 
-    // Put the rest of the information in the way AbiWord puts its debug info!
-    *m_streamOut << "<metadata>\n";
-    
-    // First all Dublin Core informations
-    *m_streamOut << "<m key=\"dc.format\">application/x-abiword</m>\n";
-    if (!m_docInfo.title.isEmpty())
-    {
-        *m_streamOut << "<m key=\"dc.title\">" << escapeAbiWordText(m_docInfo.title) << "</m>\n";    
-    }
-    if (!m_docInfo.abstract.isEmpty())
-    {
-        *m_streamOut << "<m key=\"dc.description\">" << escapeAbiWordText(m_docInfo.abstract) << "</m>\n";    
-    }
-    
-    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
-    *m_streamOut << "<m key=\"abiword.generator\">KWord Export Filter";
-
-    QString strVersion("$Revision$");
-    // Remove the dollar signs
-    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    *m_streamOut << strVersion.mid(10).replace('$',"");
-
-    *m_streamOut << "</m>\n";
-
-    QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
-    *m_streamOut << "<m key=\"abiword.date_last_changed\">"
-         << escapeAbiWordText(now.toString(Qt::ISODate)) // ### PROBLEM: AbiWord uses an unlocalized Qt::TextDate
-         << "</m>\n";
-    
-    *m_streamOut << "</metadata>\n";
 
     return true;
 }
@@ -1196,6 +1167,37 @@ bool AbiWordWorker::doFullSpellCheckIgnoreWord (const QString& ignoreword)
 bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
     m_docInfo=docInfo;
+    
+    *m_streamOut << "<metadata>\n";
+    
+    // First all Dublin Core data
+    *m_streamOut << "<m key=\"dc.format\">application/x-abiword</m>\n";
+    if (!m_docInfo.title.isEmpty())
+    {
+        *m_streamOut << "<m key=\"dc.title\">" << escapeAbiWordText(m_docInfo.title) << "</m>\n";    
+    }
+    if (!m_docInfo.abstract.isEmpty())
+    {
+        *m_streamOut << "<m key=\"dc.description\">" << escapeAbiWordText(m_docInfo.abstract) << "</m>\n";    
+    }
+    
+    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
+    *m_streamOut << "<m key=\"abiword.generator\">KWord Export Filter";
+
+    QString strVersion("$Revision$");
+    // Remove the dollar signs
+    //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
+    *m_streamOut << strVersion.mid(10).replace('$',"");
+
+    *m_streamOut << "</m>\n";
+
+    QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
+    *m_streamOut << "<m key=\"abiword.date_last_changed\">"
+         << escapeAbiWordText(now.toString(Qt::ISODate)) // ### PROBLEM: AbiWord uses an unlocalized Qt::TextDate
+         << "</m>\n";
+    
+    *m_streamOut << "</metadata>\n";
+
     return true;
 }
 
