@@ -52,8 +52,10 @@ protected:
 	KListViewItem*	m_reports;
 	
 protected slots:
-//	void		slotContextMenu(QListViewItem *i, const QPoit p);
+	void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
 	void		slotCreate();
+	void		slotDelete();
+	void		slotEdit();
 };
 
 #endif

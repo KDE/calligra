@@ -40,12 +40,9 @@ KexiBrowser::KexiBrowser(Kexi *mainWin, QWidget *parent, const char *name ) : QW
 
 	KIconLoader *iconLoader = KGlobal::iconLoader();
 
-	QGridLayout *g = new QGridLayout(this);
+	QVBoxLayout *l = new QVBoxLayout(this);
 	
 	m_list = new KListView(this);
-	
-/*	connect(m_list, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)), this,
-		SLOT(slotContextMenu(QListViewItem *, const QPoint)));*/
 	
 	m_list->header()->hide();
 	m_list->setRootIsDecorated(true);
@@ -68,28 +65,28 @@ KexiBrowser::KexiBrowser(Kexi *mainWin, QWidget *parent, const char *name ) : QW
 	
 	m_list->setOpen(m_database, true);
 		
-	KPushButton *btnCreate = new KPushButton(i18n("&create"), this);
-	connect(btnCreate, SIGNAL(clicked()), this, SLOT(slotCreate()));
-	KPushButton *btnDrop = new KPushButton(i18n("&drop"), this);
-	KPushButton *btnDevelop = new KPushButton(i18n("&develop"), this);
+	l->addWidget(m_list);
 	
-	g->addWidget(m_list,		0,	0);
-	g->addWidget(btnCreate,		1,	0);
-	g->addWidget(btnDrop,		2,	0);
-	g->addWidget(btnDevelop,	3,	0);
+	
+	connect(m_list, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
+		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
+	
+	connect(m_list, SIGNAL(executed(QListViewItem *)), SLOT(slotCreate()));
 }
 
-/*void KexiBrowser::slotContextMenu(QListViewItem *i, const QPoint p)
+void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p)
 {
 	kdDebug() << "context menu requested..." << endl;
 	if(i)
 	{
 		KPopupMenu *m = new KPopupMenu();
-		m->insertItem("create form", SLOT(slotCreate(QListViewItem *i));
+		m->insertItem(i18n("Create Form"), this, SLOT(slotCreate()));
+		m->insertItem(i18n("Delete Form"), this, SLOT(slotDelete()));
+		m->insertItem(i18n("Edit Form"), this, SLOT(slotEdit()));
 		m->exec(p);
 	}
 }
-*/
+
 
 void KexiBrowser::slotCreate()
 {
@@ -98,6 +95,10 @@ void KexiBrowser::slotCreate()
 	m_mainWin->setDocumentWidget(nef);
 	m_mainWin->setFormEdit(nef);
 }
+
+
+void KexiBrowser::slotDelete() {};
+void KexiBrowser::slotEdit() {};
 
 KexiBrowser::~KexiBrowser(){
 }
