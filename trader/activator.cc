@@ -59,9 +59,13 @@ CORBA::Object_ptr Activator::createReference( const char *_implreponame, const c
 {
   PortableServer::ObjectId id;
   unsigned int l = strlen( _implreponame );
-  id.length( l );
+  unsigned int r = strlen( _repoid );
+  id.length( l + 1 + r );
   for( unsigned int i = 0; i < l; i++ )
     id[i] = _implreponame[i];
+  id[l] = 0;
+  for( unsigned int i = 0; i < r; i++ )
+    id[l+1+i] = _repoid[i];
   
   CORBA::Object_ptr obj = s_vPoa->create_reference_with_id ( id, _repoid );
   assert( !CORBA::is_nil( obj ) );
@@ -81,10 +85,11 @@ PortableServer::Servant Activator::incarnate( const PortableServer::ObjectId & _
   for( CORBA::ULong l = 0; l < _oid.length(); ++l )
     buffer[ l ] = _oid[ l ];
   buffer[ _oid.length() ] = 0;
-
-  cerr << "Incarnating " << buffer;
+  const char* p = buffer + strlen( buffer ) + 1;
   
-  CORBA::Object_var obj = activate( buffer );
+  cerr << "Incarnating " << buffer << " with id " << p << endl;
+  
+  CORBA::Object_var obj = activate( buffer, p );
   if ( CORBA::is_nil( obj ) )
     return 0L;
   
@@ -114,7 +119,8 @@ void Activator::etherealize( const PortableServer::ObjectId & oid,
   }
 }
 
-CORBA::Object_ptr Activator::activate( const char *_server, CORBA::ImplRepository_ptr _imr, const char *_addr )
+CORBA::Object_ptr Activator::activate( const char *_server, const char *_repoid,
+				       CORBA::ImplRepository_ptr _imr, const char *_addr )
 {
   CORBA::ImplRepository_var imr;
   if ( _imr == 0L )
@@ -167,15 +173,15 @@ CORBA::Object_ptr Activator::activate( const char *_server, CORBA::ImplRepositor
   CORBA::ORB::ObjectTag_var tag = CORBA::ORB::string_to_tag( _server );
   obj = 0L;
   if( _addr )
-    obj = _orbnc()->bind ( "IDL:KOffice/DocumentFactory:1.0", tag, _addr );
+    obj = _orbnc()->bind ( _repoid, tag, _addr );
   if( CORBA::is_nil( obj ) )
   {
     // try address of the impl repo
     const CORBA::Address *addr = imr->_ior()->addr();
-    obj = _orbnc()->bind( "IDL:KOffice/DocumentFactory:1.0", tag, addr->stringify().c_str());
+    obj = _orbnc()->bind( _repoid, tag, addr->stringify().c_str());
   }
   if (CORBA::is_nil( obj ) )
-    obj = _orbnc()->bind( "IDL:KOffice/DocumentFactory:1.0", tag );
+    obj = _orbnc()->bind( _repoid, tag );
 
   if ( CORBA::is_nil( obj ) )
   {

@@ -126,7 +126,7 @@ module KOffice
 
 	interface FilterFactory : KOM::ComponentFactory
 	{
-		Filter create( in KOM::Component core );
+		Filter create();
 	};
 
 	/**

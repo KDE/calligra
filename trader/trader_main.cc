@@ -98,6 +98,7 @@ Trader::Trader( CORBA::Object_ptr _obj )
 
   initServiceTypes( this );
   koScanParts( this, m_pLookup->_orbnc() );
+  koScanFilters( this, m_pLookup->_orbnc() );
 }
 
 Trader::Trader( const CORBA::BOA::ReferenceData &tag )
@@ -119,6 +120,7 @@ Trader::Trader( const CORBA::BOA::ReferenceData &tag )
 
   initServiceTypes( this );
   koScanParts( this, m_pLookup->_orbnc() );
+  koScanFilters( this, m_pLookup->_orbnc() );
 }
   
 CosTrading::Lookup_ptr Trader::lookup_if()

@@ -254,20 +254,38 @@ KoFilterEntry koParseFilterProperties( CosTrading::PropertySeq& p  )
   {
     if ( strcmp( p[j].name, "Import" ) == 0 )
     {  
-      CosTrading::StringList lst;
-      if ( p[j].value >>= lst )
+      char *s;
+      if ( p[j].value >>= s )
       {  
-	for( unsigned int l = 0; l < lst.length(); ++l )
-	  e.import.append( lst[l].in() );
+	e.import = s;
+	CORBA::string_free( s );
+      }
+    }
+    else if ( strcmp( p[j].name, "ImportDescription" ) == 0 )
+    {  
+      char *s;
+      if ( p[j].value >>= s )
+      {  
+	e.importDescription = s;
+	CORBA::string_free( s );
       }
     }
     else if ( strcmp( p[j].name, "Export" ) == 0 )
     {  
-      CosTrading::StringList lst;
-      if ( p[j].value >>= lst )
+      char *s;
+      if ( p[j].value >>= s )
       {  
-	for( unsigned int l = 0; l < lst.length(); ++l )
-	  e.export.append( lst[l].in() );
+	e.export = s;
+	CORBA::string_free( s );
+      }
+    }
+    else if ( strcmp( p[j].name, "ExportDescription" ) == 0 )
+    {  
+      char *s;
+      if ( p[j].value >>= s )
+      {  
+	e.exportDescription = s;
+	CORBA::string_free( s );
       }
     }
   }

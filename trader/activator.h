@@ -18,7 +18,8 @@ public:
   
   CORBA::Object_ptr createReference( const char *_implreponame, const char* _repoid );
 
-  CORBA::Object_ptr activate( const char *_implreponame, CORBA::ImplRepository_ptr _imr = 0L, const char *_addr = 0L );
+  CORBA::Object_ptr activate( const char *_implreponame, const char *_repoid,
+			      CORBA::ImplRepository_ptr _imr = 0L, const char *_addr = 0L );
  
   static void initStatic( CORBA::ORB_ptr );
   static Activator* self();

@@ -4,6 +4,8 @@
 #include "kspread_view.h"
 
 #include <koAboutDia.h>
+#include <koFilterManager.h>
+
 #include <kfiledialog.h>
 #include <opMainWindowIf.h>
 #include <kapp.h>
@@ -286,8 +288,16 @@ void KSpreadShell::slotFileNew()
 
 void KSpreadShell::slotFileOpen()
 {
-  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
+  QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+							      "application/x-kspread",
+							      "*.ksp", "KSpread",
+							      true );
+      
+  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+  if ( file.isNull() )
+    return;
 
+  file = KoFilterManager::self()->import( file, "application/x-kspread" );
   if ( file.isNull() )
     return;
   

@@ -40,8 +40,10 @@ public:
   KoFilterEntry() { }
   KoFilterEntry( const KoComponentEntry& _e );
 
-  QStrList import;
-  QStrList export;
+  QString import;
+  QString importDescription;
+  QString export;
+  QString exportDescription;
 
   bool imports( const char *_m ) { return ( import.find( _m ) != -1 ); }
   bool exports( const char *_m ) { return ( export.find( _m ) != -1 ); }

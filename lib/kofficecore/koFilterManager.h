@@ -26,10 +26,9 @@
 #include <qstring.h>
 
 /**
- * This class manages all filters for a KOffice application. It handles filter 
- * registration and invoking.
+ * This class manages all filters for a KOffice application.
  * This class follows the singleton pattern. You don't create objects of this
- * class directly, but rather use the static method instance().
+ * class directly, but rather use the static method @ref #self.
  * @author Kalle Dalheimer <kalle@kde.org>
  * @author Torben Weis <weis@kde.org>
  * @version $Id$
@@ -41,15 +40,30 @@ public:
 
   /**
    * Returns a string list that is suitable for passing to
-   * {Q,K}FileDialog::setFilters().
+   * KFileDialog::setFilters().
    *
    * @param direction Whether the dialog is for opening or for
    * saving. Is either KoFilterManager::Import or
    * KoFilterManager::Export.
-   * @param allfiles Whether a wildcard should be added to the list.
+   * @param _format is the mimetype that has to be exported/imported,
+   *                for example "application/x-kspread".
+   * @param _native_pattern is the filename pattern for the native format
+   *                        of your application, for example "*.ksp".
+   *                        This variable may be 0L, then no native format
+   *                        is added.
+   * @param _native_name is the name for the native format
+   *                        of your application, for example "KSpread".
+   *                        This variable may be 0L, then no native format
+   *                        is added.
+   * @param allfiles Whether a wildcard that matches all files should be added to the list.
    */
-  QString fileSelectorList( Direction direction, const char *_format, bool allfiles ) const;
+  QString fileSelectorList( Direction direction, const char *_format,
+			    const char *_native_pattern,
+			    const char *_native_name,
+			    bool allfiles ) const;
 
+  QString import( const char* _url, const char *_native_format );
+  
   /** 
    * Returns a pointer to the only instance of the KoFilterManager.
    * @return The pointer to the KoFilterManager instance

@@ -100,7 +100,7 @@ Factory::Factory( CORBA::Object_ptr _obj ) : KOffice::FilterFactory_skel( _obj )
 {
 }
 
-KOffice::Filter_ptr Factory::create( const KOM::Component_ptr _core )
+KOffice::Filter_ptr Factory::create()
 {
   return KOffice::Filter::_duplicate( new Filter );
 }

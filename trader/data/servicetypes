@@ -97,11 +97,19 @@
   {
     'property' 'Import'
     {
-	'Type'<string> = '@string' ;
+	'Type'<string> = 'string' ;
+    };
+    'property' 'ImportDescription'
+    {
+	'Type'<string> = 'string' ;
     };
     'property' 'Export'
     {
-	'Type'<string> = '@string' ;
+	'Type'<string> = 'string' ;
+    };
+    'property' 'ExportDescription'
+    {
+	'Type'<string> = 'string' ;
     };
   };
 };

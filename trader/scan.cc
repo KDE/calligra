@@ -318,12 +318,6 @@ void koScanFilterFile( Trader *_trader, const char* _file, CORBA::ImplRepository
     koScanFiltersError( _file, "RepoID" );
     return;
   }
-  QStrList mimes;
-  if ( config.readListEntry( "MimeTypes", mimes ) == 0 || mimes.isEmpty() )
-  {
-    koScanFiltersError( _file, "MimeTypes" );
-    return;
-  }
   QString name = config.readEntry( "Name" );
   if ( name.isEmpty() )
   {
@@ -335,16 +329,28 @@ void koScanFilterFile( Trader *_trader, const char* _file, CORBA::ImplRepository
     if ( name.isEmpty() )
       return;
   }
-  QStrList imports;
-  if ( config.readListEntry( "Import", imports ) == 0 || imports.isEmpty() )
+  QString imports = config.readEntry( "Import" );
+  if ( imports.isEmpty() )
   {
     koScanFiltersError( _file, "Import" );
     return;
   }
-  QStrList exports;
-  if ( config.readListEntry( "Export", exports ) == 0 || exports.isEmpty() )
+  QString importDescription = config.readEntry( "ImportDescription" );
+  if ( importDescription.isEmpty() )
+  {
+    koScanFiltersError( _file, "ImportDescription" );
+    return;
+  }
+  QString exports = config.readEntry( "Export" );
+  if ( exports.isEmpty() )
   {
     koScanFiltersError( _file, "Export" );
+    return;
+  }
+  QString exportDescription = config.readEntry( "ExportDescription" );
+  if ( exportDescription.isEmpty() )
+  {
+    koScanFiltersError( _file, "ExportDescription" );
     return;
   }
   
@@ -361,7 +367,7 @@ void koScanFilterFile( Trader *_trader, const char* _file, CORBA::ImplRepository
   imrCreate( name, mode, cmd, repoids.first(), _imr );
 
   CosTrading::PropertySeq props;
-  props.length( 9 );
+  props.length( 11 );
   props[0].is_file = false;
   props[0].name = CORBA::string_dup( "Comment" );
   props[0].value <<= CORBA::Any::from_string( (char*)comment.data(), 0 );
@@ -391,31 +397,23 @@ void koScanFilterFile( Trader *_trader, const char* _file, CORBA::ImplRepository
   props[6].is_file = false;
   props[6].name = CORBA::string_dup( "RepoID" );
   props[6].value <<= lst;
-  s = imports.first();
-  lst.length( imports.count() );
-  for( unsigned int i = 0; i < imports.count(); ++i )
-  {    
-    lst[i] = CORBA::string_dup( s );
-    s = imports.next();
-  }
   props[7].is_file = false;
   props[7].name = CORBA::string_dup( "Import" );
-  props[7].value <<= lst;
-  s = exports.first();
-  lst.length( exports.count() );
-  for( unsigned int i = 0; i < exports.count(); ++i )
-  {    
-    lst[i] = CORBA::string_dup( s );
-    s = exports.next();
-  }
+  props[7].value <<= CORBA::Any::from_string( (char*)imports.data(), 0 );
   props[8].is_file = false;
   props[8].name = CORBA::string_dup( "Export" );
-  props[8].value <<= lst;
+  props[8].value <<= CORBA::Any::from_string( (char*)exports.data(), 0 );
+  props[9].is_file = false;
+  props[9].name = CORBA::string_dup( "ImportDescription" );
+  props[9].value <<= CORBA::Any::from_string( (char*)importDescription.data(), 0 );
+  props[10].is_file = false;
+  props[10].name = CORBA::string_dup( "ExportDescription" );
+  props[10].value <<= CORBA::Any::from_string( (char*)exportDescription.data(), 0 );
 
   CosTrading::ServiceTypeName_var stype;
   stype = CORBA::string_dup( "KOfficeFilter" );
   
-  CORBA::Object_var obj = Activator::self()->createReference( name, "IDL:KOffice/DocumentFactory:1.0" );
+  CORBA::Object_var obj = Activator::self()->createReference( name, "IDL:KOffice/FilterFactory:1.0" );
 
   // Register the service
   CosTrading::OfferId_var id;

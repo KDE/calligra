@@ -48,7 +48,7 @@ public:
   Factory( const CORBA::ORB::ObjectTag &_tag );
   Factory( CORBA::Object_ptr _obj );
 
-  KOffice::Filter_ptr create( const KOM::Component_ptr _comp );
+  KOffice::Filter_ptr create();
 };
 
 class Filter : virtual public KOMComponent,

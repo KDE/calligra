@@ -6,7 +6,7 @@ LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	../lib/store/libkstore.la -lkparts -lkpartsui \
-	-lkom -lkdeutil $(LIBMICO) $(LIBPYTHON) $(LIB_KFILE) 
+	-lkom -lkio -lkdeutil $(LIBMICO) $(LIBPYTHON) $(LIB_KFILE) 
 
 ####### Files
 
