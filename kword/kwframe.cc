@@ -2257,7 +2257,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
         KWAnchor * anchor = findAnchor( 0 );
         if ( anchor ) {
             KoTextFormat * format = anchor->format();
-            formula->setFontSize( format->font().pointSize() );
+            formula->setFontSize( format->pointSize() );
         }
     }
     */
@@ -2398,7 +2398,7 @@ int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
 void KWFormulaFrameSet::setAnchorFormat( KoTextFormat* format, int /*frameNum*/ )
 {
     if ( !frames.isEmpty() ) {
-        formula->setFontSizeDirect( format->font().pointSize()/20 );
+        formula->setFontSizeDirect( format->pointSize() );
     }
 }
 

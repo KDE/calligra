@@ -1747,7 +1747,7 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     // update the gui with the current format.
     //kdDebug() << "KWView::setFormat font family=" << currentFormat.font().family() << endl;
     actionFormatFontFamily->setFont( currentFormat.font().family() );
-    actionFormatFontSize->setFontSize( currentFormat.font().pointSize() );
+    actionFormatFontSize->setFontSize( currentFormat.pointSize() );
     actionFormatBold->setChecked( currentFormat.font().bold());
     actionFormatItalic->setChecked( currentFormat.font().italic() );
     actionFormatUnderline->setChecked( currentFormat.underline());
@@ -5662,8 +5662,7 @@ void KWView::frameSelectedChanged()
         return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
     KoTextFormat format=*(lst.first()->currentFormat());
-    format.setPointSize((int)KoTextZoomHandler::layoutUnitPtToPt(format.font().pointSize()));
-    showFormat(format );
+    showFormat( format );
 
     const KoParagLayout * paragLayout=lst.first()->currentParagLayoutFormat();
     KoParagCounter counter;

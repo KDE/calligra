@@ -310,10 +310,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     if ( ptSize == -1 ) // specified with a pixel size ?
         ptSize = QFontInfo(m_defaultFont).pointSize();
 
-    // Zoom its size to layout units
-    m_defaultFont.setPointSize( ptToLayoutUnitPt( ptSize ) );
-
-
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
     KWStyle * standardStyle = new KWStyle( "Standard" ); // This gets translated later on
