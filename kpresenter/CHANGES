@@ -1,4 +1,6 @@
 Changes after KPresenter 1.3.3
+==============================
+- Fixed loading and saving of picture objects marked "sticky"
 - Fixed crash in history of group/ungroup commands
 
 Changes after KPresenter 1.3.1

@@ -1842,6 +1842,8 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 
 
         if ( saveOnlyPage == -1 ) {
+            // ### following call independant of saveOnlyPage's value?
+            m_stickyPage->completeLoading( _clean, lastObj );
             QPtrListIterator<KPrPage> it( m_pageList );
             for ( ; it.current(); ++it )
                 it.current()->completeLoading( _clean, lastObj );
@@ -2386,6 +2388,9 @@ void KPresenterDoc::makeUsedPixmapList()
             continue;
         m_pageList.at(i)->makeUsedPixmapList();
     }
+    // ### following call independant of saveOnlyPage's value?
+    if ( saveOnlyPage == -1 )
+        m_stickyPage->makeUsedPixmapList();
 }
 
 void KPresenterDoc::makeUsedSoundFileList()
