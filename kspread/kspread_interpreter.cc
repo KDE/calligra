@@ -717,7 +717,7 @@ static int kspreadfunc_div_helper( KSContext & context,
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
       double val =(*it)->doubleValue();
-      
+
       if (val == 0)
         return -1;
 
@@ -732,7 +732,7 @@ static bool kspreadfunc_div( KSContext& context )
 {
   double result = 0.0;
   int b = kspreadfunc_div_helper( context,
-                                  context.value()->listValue(), 
+                                  context.value()->listValue(),
                                   result );
 
   if ( b == 1 )
@@ -827,7 +827,7 @@ static int kspreadfunc_lcd_lcd(int value1, int value2)
 {
   // start with the lower value.
   int n = (value1 <= value2 ? value1 : value2);
-  
+
   // check if this is already the result
   if ((value1 % n == 0) && (value2 % n == 0))
   {
@@ -844,8 +844,8 @@ static int kspreadfunc_lcd_lcd(int value1, int value2)
   return n;
 }
 
-static bool kspreadfunc_lcd_helper( KSContext & context, 
-                                    QValueList<KSValue::Ptr>& args, 
+static bool kspreadfunc_lcd_helper( KSContext & context,
+                                    QValueList<KSValue::Ptr>& args,
                                     int & result)
 {
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
@@ -868,7 +868,7 @@ static bool kspreadfunc_lcd_helper( KSContext & context,
         result = 0;
         return true;
       }
-      
+
       if ((result == 0) || (val < result))
         result = val;
     }
@@ -903,7 +903,7 @@ static bool kspreadfunc_lcd_helper( KSContext & context,
 
   context.setValue(new KSValue(result));
 
-  return true;  
+  return true;
 }
 
 static bool kspreadfunc_lcd( KSContext & context )
@@ -1997,8 +1997,17 @@ static bool kspreadfunc_istime( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "ISTIME", true ) )
     return false;
+  bool logic = false;
 
-  bool logic = KSUtil::checkType( context, args[0], KSValue::TimeType, true );
+  if (!KSUtil::checkType( context, args[0], KSValue::TimeType, true ))
+  {
+      if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ))
+          KGlobal::locale()->readTime(args[0]->stringValue(), &logic);
+      else
+          return false;
+  }
+  else
+      logic = true;
   context.setValue( new KSValue(logic));
   return true;
 }
@@ -2010,7 +2019,17 @@ static bool kspreadfunc_isdate( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "ISDATE", true ) )
     return false;
 
-  bool logic = KSUtil::checkType( context, args[0], KSValue::DateType, true );
+  bool logic = false;
+  if (!KSUtil::checkType( context, args[0], KSValue::DateType, true ))
+  {
+      if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ))
+          KGlobal::locale()->readDate(args[0]->stringValue(), &logic);
+      else
+          return false;
+  }
+  else
+      logic = true;
+
   context.setValue( new KSValue(logic));
   return true;
 }
@@ -2025,7 +2044,7 @@ static bool kspreadfunc_years( KSContext& context )
   // date1 is supposed to be the smaller one
   QDate date1;
   QDate date2;
-  
+
   if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
     return false;
 
@@ -2038,7 +2057,7 @@ static bool kspreadfunc_years( KSContext& context )
     date1 = args[0]->dateValue();
   }
   else
-    date1 = QDate::fromString(args[0]->stringValue());
+    date1 = KGlobal::locale()->readDate(args[0]->stringValue());
 
   if (!KSUtil::checkType( context, args[1], KSValue::StringType, true ))
   {
@@ -2048,14 +2067,14 @@ static bool kspreadfunc_years( KSContext& context )
     date2 = args[1]->dateValue();
   }
   else
-    date2 = QDate::fromString(args[1]->stringValue());
+    date2 = KGlobal::locale()->readDate(args[1]->stringValue());
 
   if (!date1.isValid())
     return false;
 
   if (!date2.isValid())
     return false;
-  
+
   int type  = args[2]->intValue();
   int years = 0;
 
@@ -2091,8 +2110,8 @@ static bool kspreadfunc_years( KSContext& context )
       date1.setYMD(date1.year() + 1, 1, 1);
 
     date2.setYMD(date2.year(), 1, 1);
-    
-    context.setValue( new KSValue( date2.year() - date1.year() ) );    
+
+    context.setValue( new KSValue( date2.year() - date1.year() ) );
   }
 
   return true;
@@ -2108,7 +2127,7 @@ static bool kspreadfunc_months( KSContext& context )
   // date1 is supposed to be the smaller one
   QDate date1;
   QDate date2;
-  
+
   if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
     return false;
 
@@ -2121,7 +2140,7 @@ static bool kspreadfunc_months( KSContext& context )
     date1 = args[0]->dateValue();
   }
   else
-    date1 = QDate::fromString(args[0]->stringValue());
+    date1 = KGlobal::locale()->readDate(args[0]->stringValue());
 
   if (!KSUtil::checkType( context, args[1], KSValue::StringType, true ))
   {
@@ -2131,14 +2150,15 @@ static bool kspreadfunc_months( KSContext& context )
     date2 = args[1]->dateValue();
   }
   else
-    date2 = QDate::fromString(args[1]->stringValue());
+    date2 = KGlobal::locale()->readDate(args[1]->stringValue());
+
 
   if (!date1.isValid())
     return false;
 
   if (!date2.isValid())
     return false;
-  
+
   int type   = args[2]->intValue();
   int months = 0;
 
@@ -2153,7 +2173,7 @@ static bool kspreadfunc_months( KSContext& context )
         --months;
     }
 
-    context.setValue( new KSValue( months ) );    
+    context.setValue( new KSValue( months ) );
   }
   else
   //  if (type == 1)
@@ -2168,7 +2188,7 @@ static bool kspreadfunc_months( KSContext& context )
     months  = (date2.year() - date1.year()) * 12;
     months += date2.month() - date1.month();
 
-    context.setValue( new KSValue( months ) );    
+    context.setValue( new KSValue( months ) );
   }
 
   return true;
@@ -2185,7 +2205,7 @@ static bool kspreadfunc_weeks( KSContext& context )
   // date1 is supposed to be the smaller one
   QDate date1;
   QDate date2;
-  
+
   if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
     return false;
 
@@ -2197,7 +2217,7 @@ static bool kspreadfunc_weeks( KSContext& context )
     date1 = args[0]->dateValue();
   }
   else
-    date1 = QDate::fromString(args[0]->stringValue());
+    date1 = KGlobal::locale()->readDate(args[0]->stringValue());
 
   if (!KSUtil::checkType( context, args[1], KSValue::StringType, true ))
   {
@@ -2207,14 +2227,15 @@ static bool kspreadfunc_weeks( KSContext& context )
     date2 = args[1]->dateValue();
   }
   else
-    date2 = QDate::fromString(args[1]->stringValue());
+    date2 = KGlobal::locale()->readDate(args[1]->stringValue());
+
 
   if (!date1.isValid())
     return false;
 
   if (!date2.isValid())
     return false;
-  
+
   int type = args[2]->intValue();
 
   int days = date1.daysTo(date2);
@@ -2233,7 +2254,7 @@ static bool kspreadfunc_weeks( KSContext& context )
 
     int dow1 = date1.dayOfWeek();
     int dow2 = date2.dayOfWeek();
-    
+
     if (mondayFirstDay)
     {
       days -= (8 - dow1);
@@ -2245,7 +2266,7 @@ static bool kspreadfunc_weeks( KSContext& context )
       days -= dow2;
     }
 
-    context.setValue( new KSValue( (int) (days / 7) ) );    
+    context.setValue( new KSValue( (int) (days / 7) ) );
   }
 
   return true;
@@ -2269,7 +2290,8 @@ static bool kspreadfunc_days( KSContext& context )
     date1 = args[0]->dateValue();
   }
   else
-    date1 = QDate::fromString(args[0]->stringValue());
+    date1 = KGlobal::locale()->readDate(args[0]->stringValue());
+
 
   if (!KSUtil::checkType( context, args[1], KSValue::StringType, true ))
   {
@@ -2279,7 +2301,8 @@ static bool kspreadfunc_days( KSContext& context )
     date2 = args[1]->dateValue();
   }
   else
-    date2 = QDate::fromString(args[1]->stringValue());
+    date2 = KGlobal::locale()->readDate(args[1]->stringValue());
+
 
   if (!date1.isValid())
     return false;
@@ -2569,7 +2592,7 @@ static bool kspreadfunc_currentDateTime( KSContext& context )
     if ( !KSUtil::checkArgumentsCount( context,0, "currentDateTime",true ) )
       return false;
 
-    context.setValue( new KSValue(KGlobal::locale()->formatDateTime(QDateTime::currentDateTime())));
+    context.setValue( new KSValue(KGlobal::locale()->formatDateTime(QDateTime::currentDateTime(), false)));
 
     return true;
 }

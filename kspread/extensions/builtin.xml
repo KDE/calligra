@@ -1075,7 +1075,7 @@
       <Help>
 	<Text>The REPLACE() function replaces a string s1 in the string s with string s2.</Text>
 	<Syntax>REPLACE(string; string1; string2; boolean)</Syntax>
-	<Example>REPLACE("KOffice"; "Office"; "Spread", TRUE) returns "KSpread"</Example>
+	<Example>REPLACE("KOffice"; "Office"; "Spread"; TRUE) returns "KSpread"</Example>
       </Help>
     </Function>
 
