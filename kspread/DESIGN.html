@@ -702,6 +702,12 @@ on also more difficult to understand.</p>
 lack of documentation as for now, whoever understands something about the
 classes and functions should write the documentation.</p>
 
+<p>In complex source files, list of header includes can be very long. Unless 
+there is special reason not do it, try to group them together, i.e. standard 
+C/C++ headers come first, followed by Qt headers, and then KDE headers, 
+KOffice core/UI headers and application specific headers. For each group, 
+sort the header files alphabetically. </p>
+
 <p>Write test cases. This will ease further maintenance. See also the section on Test 
 Framework above.</p>
 
