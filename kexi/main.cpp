@@ -53,8 +53,7 @@ static KCmdLineOptions options[] =
 	"database driver and database name.\n"
 	"You will be asked for confirmation."), 0 },
 
-  { ":", I18N_NOOP("Options related to opening objects\n"
-	"within a project:"), 0 },
+  { ":", I18N_NOOP("Options related to opening objects within a project:"), 0 },
   { "open [<object_type>:]<object_name>", I18N_NOOP(
 	"\nOpen object of type <object_type>\n"
 	"and name <object_name> from specified project\n"
@@ -85,9 +84,33 @@ static KCmdLineOptions options[] =
   { ":", I18N_NOOP("Options related to database servers:"), 0 },
   { "drv", 0, 0 },
   { "dbdriver <name>", I18N_NOOP(
-	"Database driver to be used.\n"
-	"Ignored if shortcut filename\n"
+	"Database driver to be used for\n"
+	"connecting to a database project.\n"
+	"Ignored if a shortcut filename\n"
 	"is provided.\n"), "SQLite" },
+  { "u", 0, 0 },
+  { "user <name>", I18N_NOOP(
+	"User name to be used for\n"
+	"connecting to a database project.\n"
+	"Ignored if a shortcut filename\n"
+	"is provided. If omitted, current \n"
+	"user's name will be used.\n"), 0 },
+  { "password <password>", I18N_NOOP(
+	"User password to be used for\n"
+	"connecting to a database project.\n"
+	"Ignored if a shortcut filename\n"
+	"is provided.\n"), 0 },
+  { "h", 0, 0 },
+  { "host <name>", I18N_NOOP(
+	"Server (host) name to be used for\n"
+	"connecting to a database project.\n"
+	"Ignored if a shortcut filename\n"
+	"is provided.\n"), 0 },
+  { "port <number>", I18N_NOOP(
+	"Server's port name to be used for\n"
+	"connecting to a database project.\n"
+	"Ignored if a shortcut filename\n"
+	"is provided.\n"), 0 },
 
   { "+[database-name]", I18N_NOOP(
 	"Database project filename\n"
@@ -109,7 +132,7 @@ extern "C" int kdemain(int argc, char *argv[])
 	KApplication app(true, true);
 //TODO: switch GUIenabled off when needed
 	
-	if (!Kexi::startupHandler().init())
+	if (!Kexi::startupHandler().init(argc, argv))
 		return 1;
 	
 	kdDebug() << "startupActions OK" <<endl;

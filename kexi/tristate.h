@@ -36,7 +36,12 @@ static const char dontKnow = cancelled; //!< the same as cancelled
     if (t) doSomethingIfTrue();
     if (!t) doSomethingIfFalse();
     if (~t) doSomethingIfCancelled();
- 
+
+ You can use "! ~" as "not cancelled".
+
+ With tristate class you can also forget 
+ about it's additional meaning and treat it just as a bool.
+
  @author Jaroslaw Staniek
 */
 class tristate

@@ -42,7 +42,7 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 		KexiStartupHandler();
 		virtual ~KexiStartupHandler();
 
-		virtual bool init();
+		virtual bool init(int argc, char **argv);
 		
 		/*! Used for opening existing projects. 
 		 Detects project file type by mime type and returns project data, if it can be detected,

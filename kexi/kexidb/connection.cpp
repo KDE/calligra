@@ -438,6 +438,7 @@ bool Connection::createDatabase( const QString &dbName )
 
 bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 {
+	kdDebug() << "Connection::useDatabase(" << dbName << "," << kexiCompatible <<")" << endl;
 	if (!checkConnected())
 		return false;
 	

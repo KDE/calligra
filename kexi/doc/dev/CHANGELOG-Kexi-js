@@ -279,9 +279,10 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 - reuse KexiNameWidget in KexiNewProjectWizard!
 
 === CLI TODO ===
-- add --user (-u), --port, --host (-h), 
-      --password <password-file> CL options
 - add kexicmd as a symlink to kexi binary, for totally non-gui usage
+- just drop all tables when database already exist 
+  (so recreating database will be available even 
+	if you have only access to one database).
 
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
@@ -322,6 +323,8 @@ TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
 
 2004-10-04
+- command line options added: --user (-u), --port, 
+   --host (-h), --password
 
 2004-10-01..02
 Kexi Startup

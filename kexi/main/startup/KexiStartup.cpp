@@ -46,9 +46,10 @@
 
 #include <qfileinfo.h>
 #include <qcstring.h>
+#include <qapplication.h>
 
 namespace Kexi {
-	KexiStartupHandler _startupHandler;
+	static KexiStartupHandler _startupHandler;
 	
 	KexiStartupHandler& startupHandler() { return _startupHandler; }
 }
@@ -139,7 +140,7 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 	return atLeastOneFound;
 }
 
-bool KexiStartupHandler::init()
+bool KexiStartupHandler::init(int argc, char **argv)
 {
 	m_action = DoNothing;
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
@@ -150,6 +151,37 @@ bool KexiStartupHandler::init()
 	cdata.driverName = args->getOption("dbdriver");
 	if (cdata.driverName.isEmpty())
 		cdata.driverName = "SQLite";
+	cdata.hostName = args->getOption("host");
+	cdata.userName = args->getOption("user");
+	cdata.password = args->getOption("password");
+	
+	//obfuscate the password, if present
+	for (int i=1; i<(argc-1); i++) {
+		if (qstrcmp("--password",argv[i])==0
+			|| qstrcmp("-password",argv[i])==0)
+		{
+			QCString pwd(argv[i+1]);
+			if (!pwd.isEmpty()) {
+				pwd.fill(' ');
+				pwd[0]='x';
+				qstrcpy(argv[i+1], (const char*)pwd);
+			}
+			break;
+		}
+	}
+	
+	const QString portStr = args->getOption("port");
+	if (!portStr.isEmpty()) {
+		bool ok;
+		const int p = portStr.toInt(&ok);
+		if (ok && p > 0)
+			cdata.port = p;
+		else {
+			KMessageBox::sorry( 0, 
+				i18n("You have specified invalid port number \"%1\"."));
+			return false;
+		}
+	}
 	const bool fileDriverSelected = cdata.driverName.lower()=="sqlite";
 	bool projectFileExists = false;
 
@@ -158,7 +190,9 @@ bool KexiStartupHandler::init()
 	m_createDB = args->isSet("createdb");
 	m_dropDB = args->isSet("dropdb");
 	const bool openExisting = !m_createDB && !m_dropDB;
-	const QString couldnotMsg = i18n("\nCould not start Kexi application this way.");
+	const QString couldnotMsg = QString::fromLatin1("\n")
+		+i18n("Could not start Kexi application this way.");
+	
 	if (m_createDB && m_dropDB) {
 		KMessageBox::sorry( 0, i18n("You have used both \"createdb\" and \"dropdb\" startup options.")+couldnotMsg);
 		return false;
@@ -184,9 +218,9 @@ bool KexiStartupHandler::init()
 
 	//database filenames, shortcut filenames or db names on a server
 	if (args->count()>=1) {
-		QString fname = args->arg(0);
+		QString prjName = args->arg(0);
 		if (fileDriverSelected) {
-			cdata.setFileName( fname );
+			cdata.setFileName( prjName );
 			QFileInfo finfo(cdata.dbFileName());
 			projectFileExists = finfo.exists();
 
@@ -198,9 +232,9 @@ bool KexiStartupHandler::init()
 		}
 
 		if (m_createDB)
-			m_projectData = new KexiProjectData(cdata, fname);
+			m_projectData = new KexiProjectData(cdata, prjName);
 		else
-			m_projectData = KexiStartupHandler::detectProjectData( cdata, fname, 0 );
+			m_projectData = KexiStartupHandler::detectProjectData( cdata, prjName, 0 );
 
 		if (!m_projectData)
 			return false;
