@@ -1991,6 +1991,7 @@ void KWView::textEnumList()
         c.setNumbering( Counter::NUM_NONE );
     }
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    ASSERT(edit);
     if ( edit )
         edit->setCounter( c );
 }
@@ -2010,6 +2011,7 @@ void KWView::textUnsortList()
     }
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
+    ASSERT(edit);
         edit->setCounter( c );
 }
 

@@ -876,7 +876,9 @@ void KWTextParag::save( QDomElement &parentElem )
     parentElem.appendChild( paragElem );
     QDomElement textElem = doc.createElement( "TEXT" );
     paragElem.appendChild( textElem );
-    textElem.appendChild( doc.createTextNode( string()->toString() ) );
+    QString text = string()->toString();
+    ASSERT( text.right(1)[0] == ' ' );
+    textElem.appendChild( doc.createTextNode( text.left( text.length()-1 ) ) );
 
     QDomElement formatsElem = doc.createElement( "FORMATS" );
     int startPos = -1;
