@@ -28,6 +28,8 @@
 */
 
 
+class DatePicker;
+
 class KexiDateTableEdit : public QLineEdit
 {
 
@@ -44,7 +46,7 @@ class KexiDateTableEdit : public QLineEdit
 		void mouseMoveEvent(QMouseEvent *ev);
 		/* gruml, we have to overwrite the cursor */
 
-		DatePicker	m_datePicker;
+		DatePicker	*m_datePicker;
 
 		QVariant	m_data;
 		QString		m_text;

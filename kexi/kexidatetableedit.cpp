@@ -43,6 +43,9 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 	m_text = KGlobal::_locale->formatDate(m_data.toDate(), true);
 	setText(m_text);
 	setCursor(QCursor(ArrowCursor));
+
+	m_mouseDown = false;
+	m_datePicker = 0;
 }
 
 void
@@ -115,10 +118,10 @@ KexiDateTableEdit::mouseReleaseEvent(QMouseEvent *ev)
 	{
 		m_mouseDown = false;
 		repaint();
-		DatePicker *d = new DatePicker(this);
+		m_datePicker = new DatePicker(this);
 		QPoint global = mapToGlobal(QPoint(width() - height(), height()));
-		d->move(global);
-		d->show();
+		m_datePicker->move(global);
+		m_datePicker->show();
 	}
 }
 
