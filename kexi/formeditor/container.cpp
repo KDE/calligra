@@ -416,7 +416,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				// We've been dragging a widget, but Ctrl was hold, so we start copy
 				if(m_state == MovingWidget)
 				{
-					m_form->manager()->undo(); // undo last moving
+					//m_form->manager()->undo(); // undo last moving
 					//m_moving->move(m_initialPos);
 					if(m_form->formWidget())
 					{
@@ -471,6 +471,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 				{
+					if(w == m_container)
+						continue;
 					if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 					{
 						w = w->parentWidget(); // widget is WidgetStack page
@@ -493,6 +495,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 				{
+					if(w == m_container)
+						continue;
 					if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 					{
 						w = w->parentWidget(); // widget is WidgetStack page
@@ -580,7 +584,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::Resize: // we are resizing a widget, so we set m_move to true -> the layout will be reloaded when releasing mouse
 		{
 			if(m_form->interactiveMode())
-			m_state = MovingWidget;
+				m_state = MovingWidget;
 			break;
 		}
 		case QEvent::KeyPress:
