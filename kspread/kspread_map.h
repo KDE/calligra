@@ -92,6 +92,14 @@ public:
   KSpreadTable* firstTable() { return m_lstTables.first();  }
 
   /**
+   * Use the @ref #previousTable function to get all the other tables.
+   * Attention: Function is not reentrant.
+   *
+   * @return a pointer to the last table in this map.
+   */
+  KSpreadTable* lastTable() { return m_lstTables.last();  }
+
+  /**
    * Call @ref #firstTable first. This will set the list pointer to
    * the first table. Attention: Function is not reentrant.
    *

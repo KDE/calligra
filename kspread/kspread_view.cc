@@ -472,6 +472,19 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_renameTable=new KAction( i18n("Rename table..."),0,this, SLOT( slotRename() ), actionCollection(), "renameTable" );
 
+    m_nextTable = new KAction( i18n("Next table"), SHIFT + Key_Right, this,
+                               SLOT( nextTable() ), actionCollection(),
+                               "nextTable");
+    m_prevTable = new KAction( i18n("Previous table"), SHIFT + Key_Left, this,
+                               SLOT( previousTable() ), actionCollection(),
+                               "previousTable");
+    m_firstTable = new KAction( i18n("First table"), SHIFT + Key_Home, this,
+                               SLOT( firstTable() ), actionCollection(),
+                               "firstTable");
+    m_lastTable = new KAction( i18n("Last table"), SHIFT + Key_End, this,
+                               SLOT( lastTable() ), actionCollection(),
+                               "lastTable");
+
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
     m_preference = new KAction( i18n("Configure KSpread..."),"configure", 0, this, SLOT( preference() ), actionCollection(), "preference" );
@@ -2447,6 +2460,39 @@ void KSpreadView::previousTable(){
 
 
 }
+void KSpreadView::firstTable(){
+
+    KSpreadTable *t = m_pDoc->map()->firstTable();
+    if ( !t )
+    {
+        kdDebug(36001) << "Unknown table " <<  endl;
+        return;
+    }
+    m_pCanvas->closeEditor();
+    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
+    activeTable()->setScrollPosY(m_pVertScrollBar->value());
+    setActiveTable( t,false );
+
+    t->setActiveTable();
+
+}
+void KSpreadView::lastTable(){
+
+    KSpreadTable *t = m_pDoc->map()->lastTable( );
+    if ( !t )
+    {
+        kdDebug(36001) << "Unknown table " <<  endl;
+        return;
+    }
+    m_pCanvas->closeEditor();
+    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
+    activeTable()->setScrollPosY(m_pVertScrollBar->value());
+    setActiveTable( t,false );
+
+    t->setActiveTable();
+
+}
+
 void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 {
 

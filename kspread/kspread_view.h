@@ -298,6 +298,8 @@ public slots:
     void changeTable( const QString& _name );
     void nextTable();
     void previousTable();
+    void firstTable();
+    void lastTable();
 
     void sortList();
 
@@ -468,6 +470,10 @@ private:
     KAction* m_insertTable;
     KAction* m_removeTable;
     KAction* m_renameTable;
+    KAction* m_nextTable;
+    KAction* m_prevTable;
+    KAction* m_firstTable;
+    KAction* m_lastTable;
     KAction* m_editGlobalScripts;
     KAction* m_editLocalScripts;
     KAction* m_reloadScripts;
