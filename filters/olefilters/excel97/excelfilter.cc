@@ -22,107 +22,112 @@
 #include <qstring.h>
 #include <xmltree.h>
 
-ExcelFilter::ExcelFilter(const QByteArray &mainStream):FilterBase(), length(mainStream.size())
+ExcelFilter::ExcelFilter(
+    const QByteArray &mainStream):
+        FilterBase(),
+        m_length(mainStream.size())
 {
-	length *= .85; // we reduce to 85% so that the progress-bar reachs 100%
+    m_s = new QDataStream(mainStream, IO_ReadOnly);
+    m_s->setByteOrder(QDataStream::LittleEndian);
 
-	s = new QDataStream(mainStream, IO_ReadOnly);
-	s->setByteOrder(QDataStream::LittleEndian);
-
-	tree = new XMLTree();
-	connect(tree, SIGNAL(gotAuthor(const QString &)), this, SLOT(slotGotAuthor(const QString &)));
+    m_tree = new XMLTree();
+    connect(
+        m_tree,
+        SIGNAL(gotAuthor(const QString &)), 
+        this, 
+        SLOT(slotGotAuthor(const QString &)));
 }
 
 ExcelFilter::~ExcelFilter()
 {
-	delete s;
-	s=0L;
-	delete tree;
-	tree=0L;
+    delete m_s;
+    m_s = 0L;
+    delete m_tree;
+    m_tree = 0L;
 }
 
 bool ExcelFilter::filter()
 {
-	bool continued = false;
-	double count = 0;
+    bool continued = false;
+    unsigned count = 0;
 
-	Q_UINT8 byte;
-	Q_UINT16 opcode, size, readAhead;
-	Q_UINT32 contSize = 0;
+    Q_UINT8 byte;
+    Q_UINT16 opcode, size, readAhead;
+    Q_UINT32 contSize = 0;
 
-	QByteArray record(MAX_RECORD_SIZE);
-	QDataStream *body;
+    QByteArray record(MAX_RECORD_SIZE);
+    QDataStream *body;
 
-	*s >> opcode;
-	*s >> size;
-	count += size;
+    *m_s >> opcode;
+    *m_s >> size;
+    count += size;
 
-        Q_ASSERT( size <= record.size() );
-	s->readRawBytes(record.data(), size);
-	*s >> readAhead;
+    Q_ASSERT( size <= record.size() );
+    m_s->readRawBytes(record.data(), size);
+    *m_s >> readAhead;
 
-	while (!s->atEnd() && m_success == true)
-	{
-		if (readAhead != 0x003c) // any other record, lets handle the current
-		{
-			body = new QDataStream(record, IO_ReadOnly);
-			body->setByteOrder(QDataStream::LittleEndian);
+    while (!m_s->atEnd() && m_success)
+    {
+        if (readAhead != 0x003c) // any other record, lets handle the current
+        {
+            body = new QDataStream(record, IO_ReadOnly);
+            body->setByteOrder(QDataStream::LittleEndian);
 
-			if (continued)
-				m_success = tree->invokeHandler(opcode, contSize, *body);
-			else
-				m_success = tree->invokeHandler(opcode, size, *body);
-			delete body;
+            if (continued)
+                m_success = m_tree->invokeHandler(opcode, contSize, *body);
+            else
+                m_success = m_tree->invokeHandler(opcode, size, *body);
+            delete body;
 
-			opcode = readAhead;
-			*s >> size;
-			count += size;
+            opcode = readAhead;
+            *m_s >> size;
+            count += size;
 
-                        // The other call to record.resize() might have made it much smaller (DF)
-                        if ( size > record.size() )
-                            record.resize( MAX_RECORD_SIZE );
+            // The other call to record.resize() might have made it much smaller (DF)
+            if ( size > record.size() )
+                record.resize( MAX_RECORD_SIZE );
 
-			if (size > MAX_RECORD_SIZE)
-				kdError(30511) << "Record larger than MAX_RECORD_SIZE!" << endl;
+            if (size > MAX_RECORD_SIZE)
+                kdError(30511) << "Record larger than MAX_RECORD_SIZE!" << endl;
 
-			s->readRawBytes(record.data(), size);
+            m_s->readRawBytes(record.data(), size);
 
-			if (continued)
-			{
-				continued = false;
-				contSize = 0;
-			}
-		}
-		else // a CONTINUE record, lets add it
-		{
-			continued = true;
-			*s >> size;
-			*s >> byte; // we do a look-ahead
-			record.resize(contSize + size);
+            if (continued)
+            {
+                continued = false;
+                contSize = 0;
+            }
+        }
+        else // a CONTINUE record, lets add it
+        {
+            continued = true;
+            *m_s >> size;
+            *m_s >> byte; // we do a look-ahead
+            record.resize(contSize + size);
 
-			if (byte == 0) // skip the zero
-			{
-				--size;
-				s->readRawBytes(record.data() + contSize, size);
-			}
-			else
-			{
-				*(record.data() + contSize) = byte;
-				s->readRawBytes(record.data() + contSize + 1, size - 1);
-			}
-		}
-		count += size;
-		*s >> readAhead;
+            if (byte == 0) // skip the zero
+            {
+                --size;
+                m_s->readRawBytes(record.data() + contSize, size);
+            }
+            else
+            {
+                *(record.data() + contSize) = byte;
+                m_s->readRawBytes(record.data() + contSize + 1, size - 1);
+            }
+        }
+        count += size;
+        *m_s >> readAhead;
 
-		if (readAhead == 0x003c)
-			contSize += size;
-		if (readAhead == 0) break; // we are at the end of the file
+        if (readAhead == 0x003c)
+            contSize += size;
+        if (readAhead == 0) break; // we are at the end of the file
 
-		emit sigProgress((int)(count*100/length));
-	}
-	m_ready = true;
-
-	return m_success;
+        // Ensure the progress gets to 100%
+        emit sigProgress((int)(count * 115 / m_length));
+    }
+    m_ready = true;
+    return m_success;
 }
 
 void ExcelFilter::slotGotAuthor(const QString &author)
@@ -135,7 +140,7 @@ const QDomDocument* const ExcelFilter::part()
 
 	if(m_ready && m_success)
 	{
-		return tree->part();
+		return m_tree->part();
 	}
 	else
 	{

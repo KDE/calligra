@@ -24,24 +24,30 @@
 class QDataStream;
 class XMLTree;
 
-class ExcelFilter : public FilterBase
+class ExcelFilter:
+    public FilterBase
 {
-	Q_OBJECT
-public:
-	ExcelFilter(const QByteArray &mainStream);
-	~ExcelFilter();
+    Q_OBJECT
 
-	virtual bool filter();
-	virtual const QDomDocument *const part();
+public:
+    ExcelFilter(
+        const QByteArray &mainStream);
+    ~ExcelFilter();
+
+    virtual bool filter();
+    virtual const QDomDocument *const part();
 
 private slots:
-	void slotGotAuthor(const QString &author);
+    void slotGotAuthor(const QString &author);
 
 private:
-	QDataStream *s;
-	XMLTree *tree;
-	double length;
-	static const int MAX_RECORD_SIZE = 0x2024;
+    ExcelFilter(const ExcelFilter &);
+    const ExcelFilter &operator=(const ExcelFilter &);
+
+    QDataStream *m_s;
+    XMLTree *m_tree;
+    const unsigned m_length;
+    static const int MAX_RECORD_SIZE = 0x2024;
 };
 
 #endif
