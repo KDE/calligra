@@ -198,7 +198,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_defaultLayout = new KSpreadLayout( this );
 
   m_emptyPen.setStyle( Qt::NoPen );
-  
+
   m_marker.setCoords( 1, 1, 1, 1 );
 
   m_pMap = _map;
@@ -2326,16 +2326,17 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    
     KSpreadUndoCellLayout *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
-	{
-	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-	    m_pDoc->undoBuffer()->appendUndo( undo );
-	}
+    {
+	undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	m_pDoc->undoBuffer()->appendUndo( undo );
+    }
 
     for ( int x = r.left(); x <= r.right(); x++ )
     {
-	for(int y=r.top();y<=r.bottom();y++)
+	for(int y = r.top();y <= r.bottom(); y++ )
         {
 	    KSpreadCell *cell = cellAt( x, y );
 	    cell->setBottomBorderStyle( NoPen );

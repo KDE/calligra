@@ -183,7 +183,10 @@ void KSpreadLayout::setPrecision( int _p )
 
 void KSpreadLayout::setLeftBorderPen( const QPen& _p )
 {
-    setProperty( PLeftBorder );
+    if ( _p.style() == Qt::NoPen )
+	clearProperty( PLeftBorder );
+    else
+	setProperty( PLeftBorder );
 	
     m_leftBorderPen = _p;
     layoutChanged();
@@ -212,7 +215,10 @@ void KSpreadLayout::setLeftBorderWidth( int _w )
 
 void KSpreadLayout::setTopBorderPen( const QPen& _p )
 {
-    setProperty( PTopBorder );
+    if ( _p.style() == Qt::NoPen )
+	clearProperty( PTopBorder );
+    else
+	setProperty( PTopBorder );
 	
     m_topBorderPen = _p;
     layoutChanged();
@@ -241,7 +247,10 @@ void KSpreadLayout::setTopBorderWidth( int _w )
 
 void KSpreadLayout::setRightBorderPen( const QPen& p )
 {
-    setProperty( PRightBorder );
+    if ( p.style() == Qt::NoPen )
+	clearProperty( PRightBorder );
+    else
+	setProperty( PRightBorder );
 	
     m_rightBorderPen = p;
     layoutChanged();
@@ -270,7 +279,10 @@ void KSpreadLayout::setRightBorderWidth( int _w )
 
 void KSpreadLayout::setBottomBorderPen( const QPen& p )
 {
-    setProperty( PBottomBorder );
+    if ( p.style() == Qt::NoPen )
+	clearProperty( PBottomBorder );
+    else
+	setProperty( PBottomBorder );
 	
     m_bottomBorderPen = p;
     layoutChanged();
@@ -299,7 +311,10 @@ void KSpreadLayout::setBottomBorderWidth( int _w )
 
 void KSpreadLayout::setFallDiagonalPen( const QPen& _p )
 {
-    setProperty( PFallDiagonal );
+    if ( _p.style() == Qt::NoPen )
+	clearProperty( PFallDiagonal );
+    else
+	setProperty( PFallDiagonal );
 	
     m_fallDiagonalPen = _p;
     layoutChanged();
@@ -328,7 +343,10 @@ void KSpreadLayout::setFallDiagonalWidth( int _w )
 
 void KSpreadLayout::setGoUpDiagonalPen( const QPen& _p )
 {
-    setProperty( PGoUpDiagonal );
+    if ( _p.style() == Qt::NoPen )
+	clearProperty( PGoUpDiagonal );
+    else
+	setProperty( PGoUpDiagonal );
 	
     m_goUpDiagonalPen = _p;
     layoutChanged();
@@ -569,6 +587,7 @@ const QPen& KSpreadLayout::leftBorderPen( int col, int row ) const
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
 	    return l->leftBorderPen( col, row );
+	return table()->emptyPen();
     }
 
     return m_leftBorderPen;
@@ -596,6 +615,7 @@ const QPen& KSpreadLayout::topBorderPen( int col, int row ) const
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
 	    return l->topBorderPen( col, row );
+	return table()->emptyPen();
     }
 
     return m_topBorderPen;
@@ -623,6 +643,7 @@ const QPen& KSpreadLayout::rightBorderPen( int col, int row ) const
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
 	    return l->rightBorderPen( col, row );
+	return table()->emptyPen();
     }
 
     return m_rightBorderPen;
@@ -650,6 +671,7 @@ const QPen& KSpreadLayout::bottomBorderPen( int col, int row ) const
 	const KSpreadLayout* l = fallbackLayout( col, row );
 	if ( l )
 	    return l->bottomBorderPen( col, row );
+	return table()->emptyPen();
     }
 
     return m_bottomBorderPen;

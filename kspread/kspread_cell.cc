@@ -2925,9 +2925,9 @@ const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
 	if ( _row != m_pObscuringCell->row() )
 	    return m_pTable->emptyPen();
 	
-	// Ask the obscuring cell for a bottom border
-	if ( m_pObscuringCell->hasProperty( PBottomBorder ) )
-	    return m_pObscuringCell->bottomBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
+	// Ask the obscuring cell for a top border
+	if ( m_pObscuringCell->hasProperty( PTopBorder ) )
+	    return m_pObscuringCell->topBorderPen( m_pObscuringCell->column(), m_pObscuringCell->row() );
 
 	// Ask the cell above
 	KSpreadCell * cell = m_pTable->cellAt( _col, _row - 1 );
