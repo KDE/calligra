@@ -182,6 +182,9 @@ void KPTTaskGeneralPanelBase::setEstimateFieldUnit( int field, QString unit )
 
 void KPTTaskGeneralPanelBase::startDateChanged()
 {
+    if (!scheduleStartDate->isEnabled()) {
+        return;
+    }
     QDate date = startDate();
     if (date > endDate()) 
     {
@@ -197,6 +200,9 @@ void KPTTaskGeneralPanelBase::startDateChanged()
 
 void KPTTaskGeneralPanelBase::startTimeChanged( const QTime &time )
 {
+    if (!scheduleStartTime->isEnabled()) {
+        return;
+    }
     if (time > endTime()) 
     {
         scheduleEndTime->blockSignals(true);
@@ -213,6 +219,9 @@ void KPTTaskGeneralPanelBase::startTimeChanged( const QTime &time )
 
 void KPTTaskGeneralPanelBase::endDateChanged()
 {
+    if (!scheduleEndDate->isEnabled()) {
+        return;
+    }
     QDate date = endDate();
     if (date < startDate()) 
     {
@@ -229,6 +238,9 @@ void KPTTaskGeneralPanelBase::endDateChanged()
 
 void KPTTaskGeneralPanelBase::endTimeChanged( const QTime &time )
 {
+    if (!scheduleEndTime->isEnabled()) {
+        return;
+    }
     if (time < startTime()) 
     {
         scheduleStartTime->blockSignals(true);
