@@ -79,6 +79,7 @@ const QString &KPTextObject::attrUnderline=KGlobal::staticQString("underline");
 const QString &KPTextObject::attrStrikeOut=KGlobal::staticQString("strikeOut");
 const QString &KPTextObject::attrColor=KGlobal::staticQString("color");
 const QString &KPTextObject::attrWhitespace=KGlobal::staticQString("whitespace");
+const QString &KPTextObject::attrTextBackColor=KGlobal::staticQString("textbackcolor");
 
 /*================ default constructor ===========================*/
 KPTextObject::KPTextObject(  KPresenterDoc *doc )
@@ -380,14 +381,13 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
             tmpAlign=1;
         }
         paragraph.setAttribute(attrAlign, tmpAlign);
-
 #if 0
         paragraph.setAttribute(attrType, (int)parag->type());
         paragraph.setAttribute(attrDepth, parag->listDepth());
         KTextEditFormat *lastFormat = 0;
 #endif
         KoTextFormat *lastFormat = 0;
-        QString tmpText, tmpFamily, tmpColor;
+        QString tmpText, tmpFamily, tmpColor, tmpTextBackColor;
         int tmpPointSize=10;
         unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false;
         for ( int i = 0; i < parag->length(); ++i ) {
@@ -396,7 +396,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
             if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
                 if ( lastFormat )
                     paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
-                                                     tmpBold, tmpItalic, tmpUnderline,tmpStrikeOut, doc));
+                                                     tmpBold, tmpItalic, tmpUnderline,tmpStrikeOut,tmpTextBackColor, doc));
                 lastFormat = static_cast<KoTextFormat*> (c.format());
                 tmpText="";
                 tmpFamily=lastFormat->font().family();
@@ -406,12 +406,14 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
                 tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
                 tmpStrikeOut=static_cast<unsigned int>(lastFormat->font().strikeOut());
                 tmpColor=lastFormat->color().name();
+                if(lastFormat->textBackgroundColor().isValid())
+                    tmpTextBackColor=lastFormat->textBackgroundColor().name();
             }
             tmpText+=c.c;
         }
         if ( lastFormat ) {
             paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
-                                             tmpBold, tmpItalic, tmpUnderline, tmpStrikeOut,doc));
+                                             tmpBold, tmpItalic, tmpUnderline, tmpStrikeOut,tmpTextBackColor ,doc));
         }
         textobj.appendChild(paragraph);
         parag = parag->next();
@@ -421,7 +423,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 
 QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpFamily, const QString &tmpColor,
                                      int tmpPointSize, unsigned int tmpBold, unsigned int tmpItalic,
-                                     unsigned int tmpUnderline, unsigned int tmpStrikeOut, QDomDocument &doc) {
+                                     unsigned int tmpUnderline, unsigned int tmpStrikeOut, const QString & tmpTextBackColor, QDomDocument &doc) {
     QDomElement element=doc.createElement(tagTEXT);
     element.setAttribute(attrFamily, tmpFamily);
     element.setAttribute(attrPointSize, tmpPointSize);
@@ -430,6 +432,8 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpF
     element.setAttribute(attrUnderline, tmpUnderline);
     element.setAttribute(attrStrikeOut, tmpStrikeOut);
     element.setAttribute(attrColor, tmpColor);
+    if(!tmpTextBackColor.isEmpty())
+        element.setAttribute(attrColor, tmpTextBackColor);
     if(tmpText.stripWhiteSpace().isEmpty())
         // working around a bug in QDom
         element.setAttribute(attrWhitespace, tmpText.length());
@@ -485,7 +489,17 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     fn.setUnderline( underline );
                     fn.setStrikeOut( strikeOut );
                     QColor col( color );
-                    QTextFormat *fm = textDocument()->formatCollection()->format( fn, col );
+
+                    //todo FIXME : KoTextFormat
+
+                    KoTextFormat *fm = static_cast<KoTextFormat*> (textDocument()->formatCollection()->format( fn, col ));
+                    QString textBackColor=n.attribute(attrTextBackColor);
+                    if(!textBackColor.isEmpty())
+                    {
+                        QColor tmpCol(textBackColor);
+                        tmpCol=tmpCol.isValid() ? tmpCol : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+                        fm->setTextBackgroundColor(tmpCol);
+                    }
                     QString txt = n.firstChild().toText().data();
                     if(n.hasAttribute(attrWhitespace)) {
                         int ws=n.attribute(attrWhitespace).toInt();

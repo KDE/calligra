@@ -93,7 +93,7 @@ protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
     QDomElement saveHelper(const QString &tmpText, const QString &tmpFamily, const QString &tmpColor,
                            int tmpPointSize, unsigned int tmpBold, unsigned int tmpItalic,
-                           unsigned int tmpUnderline, unsigned int tmpStrikeOut,QDomDocument &doc);
+                           unsigned int tmpUnderline, unsigned int tmpStrikeOut,const QString &tmpTextBackColor,QDomDocument &doc);
 
     virtual void loadKTextObject( const QDomElement &e, int type );
     void drawTextObject( QPainter* _painter );
@@ -115,7 +115,7 @@ private:
                            &attrBulletColor2, &attrBulletColor3, &attrBulletColor4,
                            &attrObjType, &tagP, &attrAlign, &attrType,
                            &attrDepth, &tagTEXT, &attrFamily, &attrPointSize,
-                           &attrBold, &attrItalic, & attrUnderline,& attrStrikeOut,&attrColor, &attrWhitespace;
+                           &attrBold, &attrItalic, & attrUnderline,& attrStrikeOut,&attrColor, &attrWhitespace, &attrTextBackColor;
 
     /** The contained text object */
     KoTextObject * m_textobj;

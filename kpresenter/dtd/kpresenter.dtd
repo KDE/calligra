@@ -237,7 +237,8 @@
                 italic ( 0 | 1 ) #REQUIRED
                 strikeOut (0 | 1) #REQUIRED
                 whitespace NMTOKEN #IMPLIED
-		color	CDATA	#REQUIRED>
+		color	CDATA	#REQUIRED
+                textbackcolor CDATA #REQUIRES>
 
 <!ELEMENT PEN EMPTY>
 <!ATTLIST PEN	color   CDATA	#REQUIRED

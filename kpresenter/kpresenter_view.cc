@@ -1561,18 +1561,23 @@ void KPresenterView::penChosen()
 void KPresenterView::brushChosen()
 {
     QColor c = actionBrushColor->color();
-    if ( !page->kTxtObj() ) {
+    KPTextView *edit=page->currentTextObjectView();
+    if ( !edit )
+    {
 	bool fill = true;
 
-	if ( !m_pKPresenterDoc->setBrushColor( c, fill ) ) {
+	if ( !m_pKPresenterDoc->setBrushColor( c, fill ) )
+        {
 	    if ( fill )
 		brush.setColor( c );
 	    else
 		brush = NoBrush;
 	}
-    } else {
+    }
+    else
+    {
 	tbColor = c;
-	page->setTextColor( tbColor );
+        edit->setTextBackgroundColor(c);
     }
 }
 
@@ -2409,7 +2414,7 @@ void KPresenterView::objectSelectedChanged()
     actionEditDelete->setEnabled(state);
     actionExtraRaise->setEnabled(state && m_pKPresenterDoc->numSelected()==1);
     actionExtraLower->setEnabled(state && m_pKPresenterDoc->numSelected()==1);
-    actionBrushColor->setEnabled(state);
+    //actionBrushColor->setEnabled(state);
     actionPenColor->setEnabled(state);
     //actionExtraPenStyle->setEnabled(state);
     //actionExtraPenWidth->setEnabled(state);
@@ -3581,12 +3586,10 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
     actionTextUnderline->setChecked( currentFormat.font().underline());
     actionFormatStrikeOut->setChecked( currentFormat.font().strikeOut());
 
-/*
     QColor col=currentFormat.textBackgroundColor();
-    actionBackgroundColor->setEnabled(true);
-    actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
-    actionBackgroundColor->setText(i18n("Text Background Color"));
-*/
+    actionBrushColor->setEnabled(true);
+    actionBrushColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
+    //actionBrushColor->setText(i18n("Text Background Color"));
     actionTextColor->setCurrentColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
