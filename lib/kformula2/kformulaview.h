@@ -117,6 +117,12 @@ protected slots:
     void slotCursorMoved(FormulaCursor* cursor);
 
     /**
+     * There was a major change that included a cursor move.
+     * We need to recalc it so it gets drawn correctly.
+     */
+    void slotCursorChanged(FormulaCursor* cursor);
+
+    /**
      * A new formula has been loaded.
      */
     void slotFormulaLoaded(FormulaElement*);

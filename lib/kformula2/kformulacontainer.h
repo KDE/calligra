@@ -160,10 +160,15 @@ public:
     void moveTo(int x, int y);
 
     /**
-     * Emits a formulaChanged signal if we are dirty.
+     * Recalcs the formula and emits the .*Changed signals if needed.
      */
     void testDirty();
 
+    /**
+     * Recalc the formula.
+     */
+    void recalc();
+    
     /**
      * @returns true if there is no element.
      */
@@ -178,9 +183,14 @@ signals:
 
     /**
      * The cursor has been moved but the formula hasn't been
-     * changed. The view that own the cursor needs to know this.
+     * changed. The view that owns the cursor needs to know this.
      */
     void cursorMoved(FormulaCursor* cursor);
+
+    /**
+     * The cursor has been moved because of a change at the formula.
+     */
+    void cursorChanged(FormulaCursor* cursor);
     
     /**
      * The formula has changed and needs to be redrawn.

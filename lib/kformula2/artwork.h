@@ -87,8 +87,7 @@ protected:
     void drawIntegral(QPainter& painter, const ContextStyle& style, int x, int y, int size);
     void drawArrow(QPainter& painter, int x, int y, int size);
 
-    void drawProduct(QPainter& painter, const ContextStyle& style, int x, int y);
-    void drawSum(QPainter& painter, const ContextStyle& style, int x, int y);
+    void drawCharacter(QPainter& painter, const ContextStyle& style, int x, int y, QChar ch);
 
 private:
 

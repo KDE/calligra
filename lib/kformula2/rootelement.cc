@@ -100,8 +100,9 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
         indexHeight = index->getHeight();
     }
     
-    int dist = style.getDistance();
-    int unit = (content->getHeight() + dist)/ 3;
+    //int distX = style.getDistanceX(mySize);
+    int distY = style.getDistanceY(mySize);
+    int unit = (content->getHeight() + distY)/ 3;
 
     if (hasIndex()) {
         if (indexWidth > unit) {
@@ -127,12 +128,12 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
     }
 
     setWidth(content->getWidth() + unit+unit/3+ rootOffset.x());
-    setHeight(content->getHeight() + dist + rootOffset.y());
+    setHeight(content->getHeight() + distY + rootOffset.y());
     setMidline(getHeight() - content->getHeight() + content->getMidline());
     calcBaseline();
     
     content->setX(rootOffset.x() + unit+unit/3);
-    content->setY(rootOffset.y() + dist);
+    content->setY(rootOffset.y() + distY);
 }
 
 /**
@@ -156,18 +157,19 @@ void RootElement::draw(QPainter& painter, const QRect& r,
 
     int x = myPos.x() + rootOffset.x();
     int y = myPos.y() + rootOffset.y();
-    int dist = style.getDistance();
-    int unit = (content->getHeight() + dist)/ 3;
+    //int distX = style.getDistanceX(mySize);
+    int distY = style.getDistanceY(mySize);
+    int unit = (content->getHeight() + distY)/ 3;
 
-    painter.setPen(QPen(style.getDefaultColor(), 2));
-    painter.drawLine(x+unit/3, y+unit+dist/2,
-                     x+unit/2+unit/3, y+content->getHeight()+dist/2);
+    painter.setPen(QPen(style.getDefaultColor(), 2*style.getLineWidth()));
+    painter.drawLine(x+unit/3, y+unit+distY/2,
+                     x+unit/2+unit/3, myPos.y()+getHeight());
 
-    painter.setPen(QPen(style.getDefaultColor(), 1));
+    painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
 
-    painter.drawLine(x+unit+unit/3, y+dist/2, x+unit/2+unit/3, y+content->getHeight()+dist/2);
-    painter.drawLine(x+unit+unit/3, y+dist/2, x+unit+unit/3+content->getWidth(), y+dist/2);
-    painter.drawLine(x+unit/3, y+unit+dist/2, x, y+unit+unit/2);
+    painter.drawLine(x+unit+unit/3, y+distY/2, x+unit/2+unit/3, myPos.y()+getHeight());
+    painter.drawLine(x+unit+unit/3, y+distY/2, x+unit+unit/3+content->getWidth(), y+distY/2);
+    painter.drawLine(x+unit/3, y+unit+distY/2, x, y+unit+unit/2);
 }
 
 /**

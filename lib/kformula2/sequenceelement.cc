@@ -173,10 +173,12 @@ void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
         setChildrenPositions();
     }
     else {
-        setWidth(10);
-        setHeight(10);
-        setBaseline(10);
-        setMidline(5);
+        int w = context.getEmptyRectWidth();
+        int h = context.getEmptyRectHeight();
+        setWidth( w );
+        setHeight( h );
+        setBaseline( h );
+        setMidline( h/2 );
     }
 }
 
@@ -226,7 +228,7 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
     }
     else {
         painter.setBrush(Qt::NoBrush);
-        painter.setPen(context.getEmptyColor());
+        painter.setPen(QPen(context.getEmptyColor(), context.getLineWidth()));
         painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
     }
 }
@@ -263,7 +265,7 @@ void SequenceElement::calcCursorSize(FormulaCursor* cursor, bool smallCursor)
     }
 
     cursor->cursorPoint.setX(point.x()+posX);
-    cursor->cursorPoint.setY(point.y()+height/2);
+    cursor->cursorPoint.setY(point.y()+getHeight()/2);
 }
 
 

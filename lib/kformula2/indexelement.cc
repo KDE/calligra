@@ -176,7 +176,8 @@ void IndexElement::setMiddleX(int xOffset, int middleWidth)
 void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
 {
     int mySize = parentSize;
-    int dist = contextStyle.getDistance();
+    //int distX = contextStyle.getDistanceX(mySize);
+    int distY = contextStyle.getDistanceY(mySize);
     
     // get the indexes size
     int ulWidth = 0, ulHeight = 0, ulMidline = 0;
@@ -193,7 +194,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
         upperMiddle->setSizeReduction(contextStyle);
         upperMiddle->calcSizes(contextStyle, mySize);
         umWidth = upperMiddle->getWidth();
-        umHeight = upperMiddle->getHeight() + dist;
+        umHeight = upperMiddle->getHeight() + distY;
         umMidline = upperMiddle->getMidline();
     }
 
@@ -220,7 +221,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
         lowerMiddle->setSizeReduction(contextStyle);
         lowerMiddle->calcSizes(contextStyle, mySize);
         lmWidth = lowerMiddle->getWidth();
-        lmHeight = lowerMiddle->getHeight() + dist;
+        lmHeight = lowerMiddle->getHeight() + distY;
         lmMidline = lowerMiddle->getMidline();
     }
 
@@ -291,7 +292,7 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
         lowerLeft->setY(height+llOffset);
     }
     if (hasLowerMiddle()) {
-        lowerMiddle->setY(height+content->getHeight()+dist);
+        lowerMiddle->setY(height+content->getHeight()+distY);
     }
     if (hasLowerRight()) {
         lowerRight->setY(height+lrOffset);

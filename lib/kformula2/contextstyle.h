@@ -52,6 +52,7 @@ public:
      */
     //ContextStyle(KConfig *config);
 
+    void setResolution(double zX, double zY);
     
     QColor getDefaultColor()  const { return defaultColor; }
     QColor getNumberColor()   const { return numberColor; }
@@ -65,16 +66,46 @@ public:
     QFont getOperatorFont()   const { return operatorFont; }
     QFont getSymbolFont()     const { return symbolFont; }
 
-    int getDistance() const { return distance; }
-    int getOperatorSpace(int /*size*/) const { return operatorSpace; }
-    int getBaseSize() const { return baseSize; }
-    int getMinimumSize() const { return minimumSize; }
-    int getSizeReduction() const { return sizeReduction; }
+    int getDistanceX(int size) const;
+    int getDistanceY(int size) const;
+    int getOperatorSpace(int size) const;
+    int getBaseSize() const;
+    int getMinimumSize() const;
+    int getSizeReduction() const;
+    int getLineWidth() const;
+    
+    int getEmptyRectWidth() const;
+    int getEmptyRectHeight() const;
 
     Alignment getMatrixAlignment() const { return center; }
     
 private:
+
+    // Shamelessly stolen from kword. (See kwdoc.h)
     
+    // Input: pt. Output: pixels. Resolution and zoom are applied.
+    int zoomItX( int z ) const {
+        return static_cast<int>(m_zoomedResolutionX * z);
+    }
+    unsigned int zoomItX( unsigned int z ) const {
+        return static_cast<unsigned int>(m_zoomedResolutionX * z);
+    }
+    double zoomItX( double z ) const {
+        return m_zoomedResolutionX * z;
+    }
+    int zoomItY( int z ) const {
+        return static_cast<int>(m_zoomedResolutionY * z);
+    }
+    unsigned int zoomItY( unsigned int z ) const {
+        return static_cast<unsigned int>(m_zoomedResolutionY * z);
+    }
+    double zoomItY( double z ) const {
+        return m_zoomedResolutionY * z;
+    }
+
+    double m_zoomedResolutionX;
+    double m_zoomedResolutionY;
+
     QFont defaultFont;
     QFont nameFont;
     QFont numberFont;
@@ -118,6 +149,18 @@ private:
      * The amount the indexes are smaller that their parent.
      */
     int sizeReduction;
+
+    /**
+     * The thickness of our lines.
+     */
+    int lineWidth;
+
+    /**
+     * The little rect (square in most cases) that marks the
+     * empty place where elements might be inserted.
+     */
+    int emptyRectWidth;
+    int emptyRectHeight;
 
     /**
      * All characters that are valid as exponent chars inside a number.

@@ -56,8 +56,7 @@ KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
             document->getHistory(), SIGNAL(commandExecuted()));
     rootElement = new FormulaElement(this);
     activeCursor = internCursor = createCursor();
-    dirty = true;
-    testDirty();
+    recalc();
 }
 
 KFormulaContainer::~KFormulaContainer()
@@ -133,11 +132,20 @@ bool KFormulaContainer::hasValidCursor() const
 void KFormulaContainer::testDirty()
 {
     if (dirty) {
-        dirty = false;
-        rootElement->calcSizes(getDocument()->getContextStyle());
-        emit cursorMoved(getActiveCursor());
-        emit formulaChanged(rootElement->getWidth(), rootElement->getHeight());
+        recalc();
     }
+}
+
+void KFormulaContainer::recalc()
+{
+    dirty = false;
+    rootElement->calcSizes(getDocument()->getContextStyle());
+    emit cursorChanged(getActiveCursor());
+
+    //emit formulaChanged(rootElement->getWidth() + getDocument()->getContextStyle().getEmptyRectWidth() / 2,
+    //                    rootElement->getHeight() + getDocument()->getContextStyle().getEmptyRectHeight() / 2);
+    emit formulaChanged(rootElement->getWidth(), rootElement->getHeight());
+    emit cursorMoved(getActiveCursor());
 }
 
 bool KFormulaContainer::isEmpty()
@@ -574,7 +582,7 @@ void KFormulaContainer::loadMathMl(QString file)
 {
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
-        cerr << "Error" << endl;
+        cerr << "Error opening file" << endl;
         return;
     }
     QDomDocument doc;
@@ -607,8 +615,7 @@ bool KFormulaContainer::load(QDomNode doc)
             rootElement = root;
             emit formulaLoaded(rootElement);
 
-            dirty = true;
-            testDirty();
+            recalc();
             return true;
         }
         else {

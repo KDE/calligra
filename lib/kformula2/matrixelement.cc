@@ -167,7 +167,8 @@ void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
         }
     }
 
-    int dist = style.getDistance();
+    int distX = style.getDistanceX(mySize);
+    int distY = style.getDistanceY(mySize);
 
     int yPos = 0;
     for (uint r = 0; r < rows; r++) {
@@ -188,13 +189,13 @@ void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
                 break;
             }
             element->setY(yPos - element->getMidline());
-            xPos += widths[c] + dist;
+            xPos += widths[c] + distX;
         }
-        yPos += fromMidlines[r] + dist;
+        yPos += fromMidlines[r] + distY;
     }
     
-    int width = dist * (columns - 1);
-    int height = dist * (rows - 1);
+    int width = distX * (columns - 1);
+    int height = distY * (rows - 1);
 
     for (uint r = 0; r < rows; r++) height += toMidlines[r] + fromMidlines[r];
     for (uint c = 0; c < columns; c++) width += widths[c];

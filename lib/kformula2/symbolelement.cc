@@ -98,7 +98,8 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
 void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
 {
     int mySize = parentSize;
-    int dist = style.getDistance();
+    int distX = style.getDistanceX(mySize);
+    int distY = style.getDistanceY(mySize);
 
     symbol.calcSizes(style, mySize*2);
     content->calcSizes(style, mySize);
@@ -111,7 +112,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
         upper->setSizeReduction(style);
         upper->calcSizes(style, mySize);
         upperWidth = upper->getWidth();
-        upperHeight = upper->getHeight() + dist;
+        upperHeight = upper->getHeight() + distY;
     }
 
     int lowerWidth = 0;
@@ -120,13 +121,13 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
         lower->setSizeReduction(style);
         lower->calcSizes(style, mySize);
         lowerWidth = lower->getWidth();
-        lowerHeight = lower->getHeight() + dist;
+        lowerHeight = lower->getHeight() + distY;
     }
 
     // widths
     int xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
     symbol.setX(xOffset - symbol.getWidth());
-    content->setX(xOffset + dist/2);
+    content->setX(xOffset + distX/2);
 
     setWidth(QMAX(content->getX() + content->getWidth(),
                   QMAX(upperWidth, lowerWidth)));
@@ -159,7 +160,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
         else {
             lower->setX(xOffset - lowerWidth);
         }
-        lower->setY(toMidline + symbol.getHeight()/2 + dist);
+        lower->setY(toMidline + symbol.getHeight()/2 + distY);
     }
 }
 

@@ -83,7 +83,7 @@ void Artwork::calcSizes(const ContextStyle& style, int parentSize)
     case LeftRoundBracket:
     case RightRoundBracket:
     case Empty:
-        setWidth(8);
+        setWidth(style.getEmptyRectWidth());
         break;
     case Integral:
         setWidth(7.0/12/2*parentSize);
@@ -143,10 +143,10 @@ void Artwork::draw(QPainter& painter, const ContextStyle& style,
         drawIntegral(painter, style, myX, myY+getHeight()/2, getHeight()/2);
         break;
     case Sum:
-        drawSum(painter, style, myX, myY);
+        drawCharacter(painter, style, myX, myY, 'S');
         break;
     case Product:
-        drawProduct(painter, style, myX, myY);
+        drawCharacter(painter, style, myX, myY, 'P');
         break;
     case Arrow:
         drawArrow(painter, myX, myY+getHeight()/2, getHeight());
@@ -182,28 +182,15 @@ void Artwork::drawIntegral(QPainter& painter, const ContextStyle& style, int x, 
     painter.drawPolygon(a);
 }
 
-void Artwork::drawSum(QPainter& painter, const ContextStyle& style, int x, int y)
+void Artwork::drawCharacter(QPainter& painter, const ContextStyle& style, int x, int y, QChar ch)
 {
     QFont f = style.getSymbolFont();
     f.setPointSize(fontSize);
 
     QFontMetrics fm(f);
-    QRect bound = fm.boundingRect('S');
+    QRect bound = fm.boundingRect(ch);
     painter.setFont(f);
-    painter.drawText(x-bound.x(), y+getHeight(), QString(QChar('S')));
-    //painter.drawRect(bound);
-    //cerr << bound.x() << " " << bound.y() << " " << bound.width() << " " << bound.height() << endl;
-}
-
-void Artwork::drawProduct(QPainter& painter, const ContextStyle& style, int x, int y)
-{
-    QFont f = style.getSymbolFont();
-    f.setPointSize(fontSize);
-
-    QFontMetrics fm(f);
-    QRect bound = fm.boundingRect('P');
-    painter.setFont(f);
-    painter.drawText(x-bound.x(), y+getHeight(), QString(QChar('P')));
+    painter.drawText(x-bound.x(), y+getHeight(), QString(ch));
     //painter.drawRect(bound);
     //cerr << bound.x() << " " << bound.y() << " " << bound.width() << " " << bound.height() << endl;
 }
@@ -331,7 +318,7 @@ void Artwork::drawLeftRoundBracket(QPainter& painter, const ContextStyle& style,
     int thickness = getWidth()/4+1;
     
     //painter.setBrush(style.getDefaultColor());
-    painter.setPen(QPen(style.getDefaultColor(), 2));
+    painter.setPen(QPen(style.getDefaultColor(), 2*style.getLineWidth()));
     
     painter.drawArc(x+thickness, y, getWidth(), getHeight(), 90*16, 180*16);
 }
@@ -341,7 +328,7 @@ void Artwork::drawRightRoundBracket(QPainter& painter, const ContextStyle& style
     int thickness = getWidth()/4+1;
     
     //painter.setBrush(style.getDefaultColor());
-    painter.setPen(QPen(style.getDefaultColor(), 2));
+    painter.setPen(QPen(style.getDefaultColor(), 2*style.getLineWidth()));
     
     painter.drawArc(x-thickness, y, getWidth(), getHeight(), 270*16, 180*16);
 }

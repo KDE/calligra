@@ -90,10 +90,12 @@ void FractionElement::calcSizes(const ContextStyle& style, int parentSize)
     numerator->calcSizes(style, mySize);
     denominator->calcSizes(style, mySize);
 
-    int dist = style.getDistance();
+    //int distX = style.getDistanceX(mySize);
+    int distY = style.getDistanceY(mySize);
+
     setWidth(QMAX(numerator->getWidth(), denominator->getWidth()));
-    setHeight(numerator->getHeight() + dist + denominator->getHeight());
-    setMidline(numerator->getHeight() + dist / 2);
+    setHeight(numerator->getHeight() + distY + denominator->getHeight());
+    setMidline(numerator->getHeight() + distY / 2);
     setBaseline(-1);
 
     numerator->setX((getWidth() - numerator->getWidth()) / 2);
@@ -121,7 +123,7 @@ void FractionElement::draw(QPainter& painter, const QRect& r,
     numerator->draw(painter, r, style, mySize, myPos);
     denominator->draw(painter, r, style, mySize, myPos);
 
-    painter.setPen(style.getDefaultColor());
+    painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
     painter.drawLine(myPos.x(), myPos.y() + getMidline(),
                      myPos.x() + getWidth(), myPos.y() + getMidline());
 }

@@ -62,6 +62,12 @@ public:
      * @returns the documents context style.
      */
     const ContextStyle& getContextStyle() const { return contextStyle; }
+
+    /**
+     * Sets the resolution (factor) to be used to draw the formula.
+     * Make sure to recalc all formulas after you called this.
+     */
+    void setResolution(double zX, double zY) { contextStyle.setResolution(zX, zY); }
     
     /**
      * Creates a new formula. The whole idea of the formula document

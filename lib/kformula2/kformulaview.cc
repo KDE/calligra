@@ -42,6 +42,8 @@ KFormulaView::KFormulaView(KFormulaContainer* doc)
             this, SLOT(slotFormulaLoaded(FormulaElement*)));
     connect(document, SIGNAL(cursorMoved(FormulaCursor*)),
             this, SLOT(slotCursorMoved(FormulaCursor*)));
+    connect(document, SIGNAL(cursorChanged(FormulaCursor*)),
+            this, SLOT(slotCursorChanged(FormulaCursor*)));
 
     cursor = document->createCursor();
     cursor->calcCursorSize(smallCursor);
@@ -219,6 +221,13 @@ void KFormulaView::slotCursorMoved(FormulaCursor* c)
     if (c == cursor) {
         cursorHasChanged = true;
         emitCursorChanged();
+    }
+}
+
+void KFormulaView::slotCursorChanged(FormulaCursor* c)
+{
+    if (c == cursor) {
+        cursor->calcCursorSize(smallCursor);
     }
 }
 

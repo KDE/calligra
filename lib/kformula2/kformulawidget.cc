@@ -117,7 +117,8 @@ void KFormulaWidget::wheelEvent(QWheelEvent* event)
 
 void KFormulaWidget::slotFormulaChanged(int width, int height)
 {
-    resize(width+5, height+5);
+    // Magic numbers just to see the cursor.
+    resize(width + 5, height + 5);
     // repaint is needed even if the size doesn't change.
     update();
 }
