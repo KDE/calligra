@@ -52,7 +52,8 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       m_db(0),
       m_handlersLoaded(false),
-      m_projectConnection(0)
+      m_projectConnection(0),
+      m_projectDB(0)
 {
 	dcop = 0;
 	setInstance( KexiFactory::global(), false );
