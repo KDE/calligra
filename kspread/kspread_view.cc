@@ -456,11 +456,72 @@ public:
 class ViewPrivate
 {
 public:
-    View* view;
+    KSpreadView* view;
 
     ViewActions* actions;
 
+    void initActions();
 };
+
+void ViewPrivate::initActions()
+{
+  actions = new ViewActions;
+
+  KActionCollection* ac = view->actionCollection();
+
+  // -- cell formatting actions --
+
+  actions->cellLayout = new KAction( i18n("Cell Format..."), "cell_layout",
+      Qt::CTRL+ Qt::ALT+ Qt::Key_F, view, SLOT( layoutDlg() ), ac, "cellLayout" );
+  actions->cellLayout->setToolTip( i18n("Set the cell formatting.") );
+
+  actions->defaultFormat = new KAction( i18n("Default"),
+      0, view, SLOT( defaultSelection() ), ac, "default" );
+  actions->defaultFormat->setToolTip( i18n("Resets to the default format.") );
+
+  actions->bold = new KToggleAction( i18n("Bold"), "text_bold",
+      Qt::CTRL+Qt::Key_B, ac, "bold");
+  QObject::connect( actions->bold, SIGNAL( toggled( bool) ),
+      view, SLOT( bold( bool ) ) );
+
+  actions->italic = new KToggleAction( i18n("Italic"), "text_italic",
+      Qt::CTRL+Qt::Key_I, ac, "italic");
+  QObject::connect( actions->italic, SIGNAL( toggled( bool) ),
+      view, SLOT( italic( bool ) ) );
+
+  actions->underline = new KToggleAction( i18n("Underline"), "text_under",
+      Qt::CTRL+Qt::Key_U, ac, "underline");
+  QObject::connect( actions->underline, SIGNAL( toggled( bool) ),
+      view, SLOT( underline( bool ) ) );
+
+  actions->strikeOut = new KToggleAction( i18n("Strike Out"), "text_strike",
+      0, ac, "strikeout");
+  QObject::connect( actions->strikeOut, SIGNAL( toggled( bool) ),
+      view, SLOT( strikeOut( bool ) ) );
+
+  actions->selectFont = new KFontAction( i18n("Select Font..."),
+      0, ac, "selectFont" );
+  QObject::connect( actions->selectFont, SIGNAL( activated( const QString& ) ),
+      view, SLOT( fontSelected( const QString& ) ) );
+
+  actions->selectFontSize = new KFontSizeAction( i18n("Select Font Size"),
+      0, ac, "selectFontSize" );
+  QObject::connect( actions->selectFontSize, SIGNAL( fontSizeChanged( int ) ),
+      view, SLOT( fontSizeSelected( int ) ) );
+
+  actions->fontSizeUp = new KAction( i18n("Increase Font Size"), "fontsizeup",
+      0, view, SLOT( increaseFontSize() ), ac,  "increaseFontSize" );
+
+  actions->fontSizeDown = new KAction( i18n("Decrease Font Size"), "fontsizedown",
+      0, view, SLOT( decreaseFontSize() ), ac, "decreaseFontSize" );
+
+  actions->textColor = new TKSelectColorAction( i18n("Text Color"),
+      TKSelectColorAction::TextColor, view, SLOT( changeTextColor() ),
+      ac, "textColor",true );
+  actions->textColor->setDefaultColor(QColor());
+
+
+}
 
 
 /*****************************************************************************
@@ -475,7 +536,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     ElapsedTime et( "KSpreadView constructor" );
 
     d = new ViewPrivate;
-    d->actions = new ViewActions;
+    d->view = this;
 
     m_popupMenuFirstToolId = 0;
     kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
@@ -599,6 +660,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     if (m_sbCalcLabel)
         connect(m_sbCalcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
 
+    d->initActions();
     initializeCalcActions();
     initializeInsertActions();
     initializeEditActions();
@@ -1136,15 +1198,6 @@ void KSpreadView::initializeCellPropertyActions()
   connect( d->actions->multiRow, SIGNAL( toggled( bool ) ), this,
            SLOT( multiRow( bool ) ) );
   d->actions->multiRow->setToolTip(i18n("Make the cell text wrap onto multiple lines."));
-
-  d->actions->cellLayout = new KAction( i18n("Cell Format..."),"cell_layout",
-                              CTRL + ALT + Key_F, this, SLOT( layoutDlg() ),
-                              actionCollection(), "cellLayout" );
-  d->actions->cellLayout->setToolTip(i18n("Set the cell formatting."));
-
-  d->actions->defaultFormat = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ),
-                           actionCollection(), "default" );
-  d->actions->defaultFormat->setToolTip(i18n("Resets to the default format."));
 
   d->actions->bgColor = new TKSelectColorAction( i18n("Background Color"),
                                        TKSelectColorAction::FillColor,
