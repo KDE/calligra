@@ -730,18 +730,16 @@ int KoTextParag::nextTab( int chnum, int x )
                     int w = 0;
                     int decimalPoint = KGlobal::locale()->decimalSymbol()[0].unicode();
                     bool digitFound = false;
-                    bool decimalPointFound = false;
                     while ( c < string()->length()-1 && string()->at( c ).c != '\t' && string()->at( c ).c != '\n' )
                     {
                         KoTextStringChar & ch = string()->at( c );
-                        
+
                         if ( ch.c.isDigit() )
                             digitFound = true;
                         else if ( digitFound && ( ch.c == '.' || ch.c.unicode() == decimalPoint ) )
                         {
                             if ( string()->isRightToLeft() )
                             {
-                                decimalPointFound = true;
                                 w = string()->width( c ) / 2; // center around the decimal point
                                 ++c;
                                 continue;
