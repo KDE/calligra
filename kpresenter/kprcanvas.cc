@@ -1245,6 +1245,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         switch ( modType ) {
         case MT_NONE: {
             if ( drawRubber ) {
+                // used for selecting multiple object in with the mouse
                 QPainter p;
                 p.begin( this );
                 p.setRasterOp( NotROP );
@@ -1256,25 +1257,30 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 rubber = rubber.normalize();
                 rubber.moveBy(diffx(),diffy());
 
+                KoRect selectedRect = m_view->zoomHandler()->unzoomRect( rubber );
                 QPtrListIterator<KPObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
                 {
-                    if ( it.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
-                        selectObj( it.current() );
+                    if ( it.current()->intersects( selectedRect ) )
+                        it.current()->setSelected( true );
                 }
 
-                QPtrListIterator<KPObject> sIt(stickyPage()->objectList() );
-                for ( ; sIt.current() ; ++sIt )
+                it = stickyPage()->objectList();
+                for ( ; it.current() ; ++it )
                 {
-                    if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
+                    if ( it.current()->intersects( selectedRect ) )
                     {
-                        if( objectIsAHeaderFooterHidden(sIt.current()))
+                        if( objectIsAHeaderFooterHidden(it.current()))
                             continue;
-                        selectObj( sIt.current() );
+                        it.current()->setSelected( true );
                     }
                 }
 
-
+                m_view->penColorChanged( m_activePage->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
+                m_view->brushColorChanged( m_activePage->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
+                mouseSelectedObject = true;
+                _repaint( false );
+                emit objectSelectedChanged();
             }
             if ( m_tmpVertHelpline != -1 || m_tmpHorizHelpline != -1)
                 moveHelpLine( e->pos() );
