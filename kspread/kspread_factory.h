@@ -26,6 +26,7 @@ public:
 private:
     static KInstance* s_global;
     static DCOPObject* s_dcopObject;
+    static KAboutData* s_aboutData;
 };
 
 #endif

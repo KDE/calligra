@@ -19,6 +19,7 @@ extern "C"
 };
 
 KInstance* KIllustratorFactory::s_global = 0;
+KAboutData* KIllustratorFactory::s_aboutData = 0;
 
 KIllustratorFactory::KIllustratorFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
@@ -28,9 +29,13 @@ KIllustratorFactory::KIllustratorFactory( QObject* parent, const char* name )
 
 KIllustratorFactory::~KIllustratorFactory()
 {
+  if( s_aboutData )
+  {
+    delete s_aboutData;
+    s_aboutData=0;
+  }
   if ( s_global )
   {
-    delete s_global->aboutData();
     delete s_global;
     s_global = 0L;
   }
@@ -38,13 +43,16 @@ KIllustratorFactory::~KIllustratorFactory()
 
 KAboutData* KIllustratorFactory::aboutData()
 {
-  KAboutData *aboutData= new KAboutData ("killustrator",
-                                         I18N_NOOP("KIllustrator"),
-                                         version, description,
-                                         KAboutData::License_GPL,
-                                         "(c) 1998-2000, Kai-Uwe Sattler");
-  aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
-  return aboutData;
+  if( !s_aboutData )
+  {
+    s_aboutData= new KAboutData ("killustrator",
+                                 I18N_NOOP("KIllustrator"),
+                                 version, description,
+                                 KAboutData::License_GPL,
+                                 "(c) 1998-2000, Kai-Uwe Sattler");
+    s_aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
+  }
+  return s_aboutData;
 }
 
 KParts::Part* KIllustratorFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )

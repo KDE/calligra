@@ -36,6 +36,7 @@ static const char *description=I18N_NOOP("graphite - Scientific Graphs");
 static const char *version="0.1";
 
 KInstance *GraphiteFactory::s_global=0;
+KAboutData *GraphiteFactory::s_aboutData=0;
 
 GraphiteFactory::GraphiteFactory(QObject *parent, const char *name)
                                 : KoFactory(parent, name) {
@@ -44,11 +45,10 @@ GraphiteFactory::GraphiteFactory(QObject *parent, const char *name)
 
 GraphiteFactory::~GraphiteFactory() {
 
-    if (s_global) {
-        delete s_global->aboutData();
-        delete s_global;
-        s_global = 0L;
-    }
+    delete s_aboutData;
+    s_aboutData=0;
+    delete s_global;
+    s_global=0;
 }
 
 KParts::Part* GraphiteFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & ) {
@@ -66,11 +66,13 @@ KParts::Part* GraphiteFactory::createPart( QWidget *parentWidget, const char *wi
 
 KAboutData* GraphiteFactory::aboutData() {
 
-    KAboutData *aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
-                                         version, description, KAboutData::License_GPL,
-                                         "(c) 2000, Werner Trobin");
-    aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
-    return aboutData;
+    if(!s_aboutData) {
+        s_aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
+                                   version, description, KAboutData::License_GPL,
+                                   "(c) 2000, Werner Trobin");
+        s_aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
+    }
+    return s_aboutData;
 }
 
 KInstance *GraphiteFactory::global() {

@@ -42,5 +42,7 @@ public:
 
 private:
     static KInstance *s_global;
+    static KAboutData *s_aboutData;
 };
+
 #endif

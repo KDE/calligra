@@ -24,6 +24,7 @@ extern "C"
 };
 
 KInstance* KChartFactory::s_global = 0;
+KAboutData* KChartFactory::s_aboutData = 0;
 
 KChartFactory::KChartFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
@@ -33,9 +34,13 @@ KChartFactory::KChartFactory( QObject* parent, const char* name )
 
 KChartFactory::~KChartFactory()
 {
+    if( s_aboutData )
+    {
+      delete s_aboutData;
+      s_aboutData = 0;
+    }
     if ( s_global )
     {
-      delete s_global->aboutData();
       delete s_global;
       s_global = 0L;
     }
@@ -56,11 +61,14 @@ KParts::Part* KChartFactory::createPart( QWidget *parentWidget, const char *widg
 
 KAboutData* KChartFactory::aboutData()
 {
-    KAboutData *aboutData = new KAboutData("kchart", I18N_NOOP("KChart"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Kalle Dalheimer");
-    aboutData->addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
-    return aboutData;
+    if( !s_aboutData )
+    {
+      s_aboutData = new KAboutData("kchart", I18N_NOOP("KChart"),
+                                   version, description, KAboutData::License_GPL,
+                                   "(c) 1998-2000, Kalle Dalheimer");
+      s_aboutData->addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
+    }
+    return s_aboutData;
 }
 
 KInstance* KChartFactory::global()
@@ -74,4 +82,4 @@ KInstance* KChartFactory::global()
     return s_global;
 }
 
-#include "kchart_factory.moc"
+#include <kchart_factory.moc>

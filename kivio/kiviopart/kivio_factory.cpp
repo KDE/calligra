@@ -39,6 +39,7 @@ extern "C"
 };
 
 KInstance* KivioFactory::s_global = 0;
+KAboutData* KivioFactory::s_aboutData = 0;
 
 KivioFactory::KivioFactory( QObject* parent, const char* name )
 : KoFactory( parent, name )
@@ -48,9 +49,13 @@ KivioFactory::KivioFactory( QObject* parent, const char* name )
 
 KivioFactory::~KivioFactory()
 {
+  if ( s_aboutData )
+  {
+    delete s_aboutData;
+    s_aboutData=0;
+  }
   if ( s_global )
   {
-    delete s_global->aboutData();
     delete s_global;
     s_global = 0L;
   }
@@ -77,14 +82,15 @@ KParts::Part* KivioFactory::createPart( QWidget *parentWidget, const char *widge
 
 KAboutData* KivioFactory::aboutData()
 {
-  KAboutData * aboutData = new KAboutData( "kivio", I18N_NOOP("Kivio"),
-        version, description, KAboutData::License_GPL,
-        "theKompany.com - Kivio",0,"www.thekompany.com");
-
-  aboutData->addAuthor("Dave Marotti","Main author and the original author of Queesio, from which this source is based","landshark@ameritech.net");
-  aboutData->addAuthor("Max Judin","GUI widgets","max@thekompany.com");
-
-  return aboutData;
+  if( !s_aboutData )
+  {
+    s_aboutData = new KAboutData( "kivio", I18N_NOOP("Kivio"),
+                                  version, description, KAboutData::License_GPL,
+                                  "theKompany.com - Kivio",0,"www.thekompany.com");
+    s_aboutData->addAuthor("Dave Marotti","Main author and the original author of Queesio, from which this source is based","landshark@ameritech.net");
+    s_aboutData->addAuthor("Max Judin","GUI widgets","max@thekompany.com");
+  }
+  return s_aboutData;
 }
 
 KInstance* KivioFactory::global()

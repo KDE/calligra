@@ -32,7 +32,7 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     viewport()->setMouseTracking(true);
     setMouseTracking(true);
     setFocus();
-    viewport()->setBackgroundMode(QWidget::NoBackground);
+    //viewport()->setBackgroundMode(QWidget::PaletteLight);
     installEventFilter(viewport());
     setFrameStyle(QFrame::NoFrame);
 }
@@ -64,7 +64,7 @@ void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
     m_doc->mouseMoveEvent(e, m_view);
 }
 
-void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
+void GCanvas::viewportPaintEvent(QPaintEvent *e) {
 
     // TODO: 1 - define the region which has to be
     //           repainted and  call m_doc->preparePainting(zoom)!!!
@@ -83,7 +83,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
     //   (flickering,...)
     // - Double buffers are invalidated via: zoomfactor
     //   changes, background changes,...
-    /*kdDebug(37001) << "paintEvent: x=" << e->rect().x()
+    kdDebug(37001) << "paintEvent: x=" << e->rect().x()
                    << " y=" << e->rect().y()
                    << " width=" << e->rect().width()
                    << " height=" << e->rect().height()
@@ -93,7 +93,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
                    << " | visible: width=" << visibleWidth()
                    << " height=" << visibleHeight()
                    << " | x-offset=" << contentsX()
-                   << " y-offet=" << contentsY() << endl;*/
+                   << " y-offet=" << contentsY() << endl;
 }
 
 bool GCanvas::eventFilter(QObject *obj, QEvent *e) {

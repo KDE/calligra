@@ -45,6 +45,7 @@ extern "C"
 
 
 KInstance* KPresenterFactory::s_global = 0;
+KAboutData* KPresenterFactory::s_aboutData = 0;
 
 KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
@@ -54,9 +55,13 @@ KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
 
 KPresenterFactory::~KPresenterFactory()
 {
+    if ( s_aboutData )
+    {
+        delete s_aboutData;
+        s_aboutData=0;
+    }
     if ( s_global )
     {
-      delete s_global->aboutData();
       delete s_global;
       s_global = 0L;
     }
@@ -77,11 +82,14 @@ KParts::Part* KPresenterFactory::createPart( QWidget *parentWidget, const char *
 
 KAboutData* KPresenterFactory::aboutData()
 {
-      KAboutData *aboutData= new KAboutData( "kpresenter", I18N_NOOP("KPresenter"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Reginald Stadlbauer");
-      aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
-      return aboutData;
+    if( !s_aboutData )
+    {
+      s_aboutData= new KAboutData( "kpresenter", I18N_NOOP("KPresenter"),
+                                   version, description, KAboutData::License_GPL,
+                                   "(c) 1998-2000, Reginald Stadlbauer");
+      s_aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
+    }
+    return s_aboutData;
 }
 
 KInstance* KPresenterFactory::global()

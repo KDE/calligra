@@ -25,14 +25,18 @@ extern "C"
 };
 
 KInstance* KFormulaFactory::s_global = 0;
+KAboutData* KFormulaFactory::s_aboutData = 0;
 
 KAboutData* KFormulaFactory::aboutData()
 {
-      KAboutData *aboutData= new KAboutData( "kformula", I18N_NOOP("KFormula"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Andrea Rizzi");
-      aboutData->addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
-      return aboutData;
+    if( !s_aboutData )
+    {
+      s_aboutData= new KAboutData( "kformula", I18N_NOOP("KFormula"),
+                                   version, description, KAboutData::License_GPL,
+                                   "(c) 1998-2000, Andrea Rizzi");
+      s_aboutData->addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
+    }
+    return s_aboutData;
 }
 
 
@@ -46,9 +50,13 @@ KFormulaFactory::KFormulaFactory( QObject* parent, const char* name )
 
 KFormulaFactory::~KFormulaFactory()
 {
+  if( s_aboutData )
+  {
+    delete s_aboutData;
+    s_aboutData=0;
+  }
   if ( s_global )
   {
-    delete s_global->aboutData();
     delete s_global;
     s_global = 0L;
   }
@@ -67,7 +75,6 @@ KParts::Part* KFormulaFactory::createPart( QWidget *parentWidget, const char *wi
   return doc;
 }
 
-
 KInstance* KFormulaFactory::global()
 {
     if ( !s_global )
@@ -82,4 +89,4 @@ KInstance* KFormulaFactory::global()
     return s_global;
 }
 
-#include "kformula_factory.moc"
+#include <kformula_factory.moc>
