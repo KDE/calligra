@@ -20,10 +20,14 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
+
 #include "KWEFBaseWorker.h"
 
 bool KWEFBaseWorker::doOpenFile(const QString& , const QString& )
 {
+    // As it would be the first method to be called, warn if we are called!
+    kdWarning() << "KWEFBaseWorker::doOpenFile was called (Worker not correctly defined?)" << endl;
     return false;
 }
 
@@ -34,7 +38,8 @@ bool KWEFBaseWorker::doCloseFile(void)
 
 bool KWEFBaseWorker::doAbortFile(void)
 {
-    return false;
+    // Mostly, aborting is the same than closing the file!
+    return doCloseFile();
 }
 
 bool KWEFBaseWorker::doOpenDocument(void)
@@ -47,7 +52,7 @@ bool KWEFBaseWorker::doCloseDocument(void)
     return false;
 }
 
-bool KWEFBaseWorker::doFullParagraph(QString&, ValueListFormatData&)
+bool KWEFBaseWorker::doFullParagraph(QString&, LayoutData&, ValueListFormatData&)
 {
     return false;
 }

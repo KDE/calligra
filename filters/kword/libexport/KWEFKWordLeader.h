@@ -38,7 +38,7 @@ class KWEFKWordLeader : public KWEFBaseClass
         bool filter(const QString& filenameIn, const QString& filenameOut,
             const QString& from, const QString& to, const QString& param);
     public: // public leader/worker functions (DO NOT use in your own code!)
-        bool doFullParagraph(QString& paraText, ValueListFormatData& paraFormatDataList);
+        bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
     protected: // leader/worker functions
         bool doOpenFile(const QString& filenameOut, const QString& to);
         bool doCloseFile(void);
