@@ -961,9 +961,17 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     int indexObj = 1;
     int partIndexObj = 0;
 //save page
-    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+
+    if ( saveOnlyPage != -1 )
     {
-        m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
+        m_pageList.at( saveOnlyPage )->saveOasisPage( store, contentTmpWriter, ( saveOnlyPage+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
+    }
+    else
+    {
+        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+        {
+            m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
+        }
     }
     if ( !_duplicatePage )
         m_masterPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj, manifestWriter );
@@ -1484,14 +1492,21 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             context.styleStack().save();
             kdDebug ()<<"insert new page "<<pos<<endl;
             KPrPage *newpage = 0L;
-            if ( pos != 0 )
+            if ( m_pageWhereLoadObject )
             {
-                newpage = new KPrPage( this, m_masterPage );
-                m_pageList.insert( pos,newpage);
+                newpage = m_pageWhereLoadObject;
             }
-            else //we create a first page into KPresenterDoc()
+            else
             {
-                newpage = m_pageList.at(pos);
+                if ( pos != 0 )
+                {
+                    newpage = new KPrPage( this, m_masterPage );
+                    m_pageList.insert( pos,newpage);
+                }
+                else //we create a first page into KPresenterDoc()
+                {
+                    newpage = m_pageList.at(pos);
+                }
             }
             ++pos;
             //m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
@@ -3486,7 +3501,32 @@ void KPresenterDoc::movePage( int from, int to )
 
 void KPresenterDoc::copyOasisPage( int from )
 {
-    //todo
+    _clean = false;
+    _duplicatePage=true;
+
+    kdDebug(33001) << "KPresenterDoc::copyOasisPage from=" << from << " to=" << from + 1 << endl;
+    bool wasSelected = isSlideSelected( from );
+    KTempFile tempFile( QString::null, ".oop" );
+    tempFile.setAutoDelete( true );
+    saveOasisPage( tempFile.name(), from );
+
+    //insert page.
+    KPrPage *newpage = new KPrPage( this, m_masterPage );
+
+    m_pageWhereLoadObject = newpage;
+
+    loadNativeFormat( tempFile.name() );
+
+    KPrInsertPageCmd *cmd = new KPrInsertPageCmd( i18n("Duplicate Slide"), from, IP_AFTER, newpage, this );
+    cmd->execute();
+    addCommand(cmd);
+
+    _duplicatePage=false;
+
+    _clean = true;
+    m_pageWhereLoadObject=0L;
+
+    selectPage( from + 1, wasSelected );
 }
 
 void KPresenterDoc::copyPage( int from )

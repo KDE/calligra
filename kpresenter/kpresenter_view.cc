@@ -160,6 +160,7 @@ using namespace KSpell2;
 
 #define MASTERPAGE 0
 
+#define COPYOASISFORMAT 0
 
 static const char * const pageup_xpm[] = {
     "    14    14        2            1",
@@ -581,19 +582,19 @@ void KPresenterView::editDeSelectAll()
 
 void KPresenterView::editCopyPage()
 {
-#if 1
-    m_pKPresenterDoc->copyPageToClipboard( currPg );
-#else
+#if COPYOASISFORMAT
     m_pKPresenterDoc->copyOasisPageToClipboard( currPg );
+#else
+    m_pKPresenterDoc->copyPageToClipboard( currPg );
 #endif
 }
 
 void KPresenterView::editDuplicatePage()
 {
-#if 1
-    m_pKPresenterDoc->copyPage( currPg );
-#else
+#if COPYOASISFORMAT
     m_pKPresenterDoc->copyOasisPage( currPg );
+#else
+    m_pKPresenterDoc->copyPage( currPg );
 #endif
     setRanges();
 }
