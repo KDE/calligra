@@ -43,10 +43,11 @@
 #include <koVariable.h>
 #include <knumvalidator.h>
 #include <kwcommand.h>
+#include <kformulaconfigpage.h>
 
 KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
-		KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
+		KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
 		KDialogBase::Ok)
 
 {
@@ -67,6 +68,11 @@ KWConfig::KWConfig( KWView* parent )
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
 
+  QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula defaults"),
+                              BarIcon("kformula", KIcon::SizeMedium) );
+  m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->getFormulaDocument(),
+                                             this, KWFactory::global()->config(), page5 );
+
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
 
@@ -80,6 +86,8 @@ void KWConfig::openPage(int flags)
         showPage(2);
     else if(flags & KP_DOCUMENT)
         showPage(3 );
+    else if(flags & KP_FORMULA)
+        showPage(4);
 }
 
 void KWConfig::slotApply()
@@ -88,6 +96,7 @@ void KWConfig::slotApply()
     m_interfacePage->apply();
     m_miscPage->apply();
     m_defaultDocPage->apply();
+    m_formulaPage->apply();
 }
 
 void KWConfig::slotDefault()
@@ -105,6 +114,9 @@ void KWConfig::slotDefault()
             break;
         case 3:
             m_defaultDocPage->slotDefault();
+            break;
+        case 4:
+            m_formulaPage->slotDefault();
             break;
         default:
             break;

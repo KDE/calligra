@@ -1738,26 +1738,15 @@ void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const 
         if ( resetChanged )
             m_changed = false;
 
-        /*
-          It's a bad idea to change the formula font size while drawing.
-          We need to be notified as soon as the change occurs. But this will
-          have to wait.
-        if ( isFloating() ) {
-            // we need to look for the anchor every time, don't cache this value.
-            // undo/redo creates/deletes anchors
-            KWAnchor * anchor = findAnchor( 0 );
-            if ( anchor ) {
-                QTextFormat * format = anchor->format();
-                bool forPrint = painter->device()->devType() != QInternal::Printer;
-                formula->setFontSize( format->font().pointSize(), forPrint );
-            }
-        }
-        */
-
         if ( edit )
         {
             KWFormulaFrameSetEdit * formulaEdit = static_cast<KWFormulaFrameSetEdit *>(edit);
-            formulaEdit->getFormulaView()->draw( *painter, crect, cg );
+            if ( formulaEdit->getFormulaView() ) {
+                formulaEdit->getFormulaView()->draw( *painter, crect, cg );
+            }
+            else {
+                formula->draw( *painter, crect, cg );
+            }
         }
         else
         {
@@ -1856,7 +1845,7 @@ void KWFormulaFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, co
 KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* canvas)
         : KWFrameSetEdit(fs, canvas)
 {
-    kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
+    //kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
     formulaView = new KFormula::View(fs->getFormula());
     //formulaView->setSmallCursor(true);
 
@@ -1869,10 +1858,13 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
 
 KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
 {
-    kdDebug(32001) << "KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit" << endl;
+    //kdDebug(32001) << "KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit" << endl;
     focusOutEvent();
     m_canvas->gui()->getView()->showFormulaToolbar(false);
     delete formulaView;
+    formulaView = 0;
+    formulaFrameSet()->setChanged();
+    m_canvas->repaintChanged( formulaFrameSet(), true );
 }
 
 void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )

@@ -22,6 +22,10 @@
 
 #include <kdialogbase.h>
 
+namespace KFormula {
+    class ConfigurePage;
+}
+
 class KWView;
 class QCheckBox;
 class KIntNumInput;
@@ -107,7 +111,7 @@ class KWConfig : public KDialogBase
 {
     Q_OBJECT
 public:
-    enum { KW_KSPELL=1,KP_INTERFACE=2,KP_MISC=4, KP_DOCUMENT=8};
+    enum { KW_KSPELL=1,KP_INTERFACE=2,KP_MISC=4, KP_DOCUMENT=8, KP_FORMULA=16};
     KWConfig( KWView* parent );
     void openPage(int flags);
 public slots:
@@ -118,6 +122,7 @@ private:
     ConfigureInterfacePage *m_interfacePage;
     ConfigureMiscPage *m_miscPage;
     ConfigureDefaultDocPage *m_defaultDocPage;
+    KFormula::ConfigurePage *m_formulaPage;
 };
 
 
