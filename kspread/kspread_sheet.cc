@@ -6485,7 +6485,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             {
                 QString masterPageStyleName = style->attribute( "style:master-page-name" );
                 kdDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
-                QDomElement *masterStyle = oasisStyles.styles()[masterPageStyleName];
+                QDomElement *masterStyle = oasisStyles.masterPages()[masterPageStyleName];
                 kdDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
                 if ( masterStyle )
                 {
