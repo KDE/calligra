@@ -35,6 +35,7 @@
 #include <qpaintdevicemetrics.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
+#include <qregexp.h>
 
 #include <klineeditdlg.h>
 #include <kprocio.h>
@@ -4549,11 +4550,11 @@ void KSpreadView::viewZoom( const QString & s )
   int oldZoom = d->doc->zoom();
 
   bool ok = false;
-  int newZoom = s.toInt(&ok);
-
+  QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
+  regexp.search(s);
+  int newZoom=regexp.cap(1).toInt(&ok);
   if ( !ok || newZoom < 10 ) //zoom should be valid and >10
     newZoom = oldZoom;
-
   if ( newZoom != oldZoom )
   {
     d->actions->viewZoom->setZoom( newZoom );
