@@ -38,14 +38,17 @@ KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
 {
   m_pView = parent;
 
-
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
+
+  QLabel *label = new QLabel( i18n("Select hidden page to show:"), this );
+  lay1->addWidget( label );
+
   list=new QListBox(this);
   lay1->addWidget( list );
 
-  setCaption( i18n("Hidden Pages") );
+  setCaption( i18n("Show Page") );
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();

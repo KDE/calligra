@@ -32,7 +32,7 @@ KWInsertPageDia::KWInsertPageDia( QWidget *parent, const char* name )
 {
     QVBox *page = makeVBoxMainWidget();
 
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Sort" ),page );
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Insert Page" ),page );
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     m_after = new QRadioButton( i18n("After"), grp );

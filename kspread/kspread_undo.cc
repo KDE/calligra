@@ -697,7 +697,7 @@ void KSpreadUndoShowColumn::redo()
 KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadSheet *_table )
     : KSpreadUndoAction( _doc )
 {
-    name=i18n("Set Paper Layout");
+    name=i18n("Set Page Layout");
     m_tableName = _table->tableName();
 
     m_pl = _table->print()->paperLayout();
@@ -812,7 +812,7 @@ void KSpreadUndoPaperLayout::redo()
 KSpreadUndoDefinePrintRange::KSpreadUndoDefinePrintRange( KSpreadDoc *_doc, KSpreadSheet *_table )
     : KSpreadUndoAction( _doc )
 {
-    name=i18n("Set Paper Layout");
+    name=i18n("Set Page Layout");
     m_tableName = _table->tableName();
 
     m_printRange = _table->print()->printRange();

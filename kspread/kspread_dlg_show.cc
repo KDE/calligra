@@ -27,16 +27,18 @@
 #include <qlayout.h>
 #include <klocale.h>
 #include <qlistbox.h>
-
+#include <qlabel.h>
 
 KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
-	: KDialogBase( parent, name,TRUE,i18n("Select Hidden Sheet to Show"),Ok|Cancel )
+	: KDialogBase( parent, name,TRUE,i18n("Show Sheet"),Ok|Cancel )
 {
   m_pView = parent;
   QWidget *page = new QWidget( this );
   setMainWidget(page);
   QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
+  QLabel *label = new QLabel( i18n("Select hidden sheets to show:"), page );
+  lay1->addWidget( label );
 
   list=new QListBox(page);
   lay1->addWidget( list );

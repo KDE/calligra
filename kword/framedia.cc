@@ -725,7 +725,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     myGroup->hide();
 
     rExistingFrameset = new QRadioButton( tab3, "rExistingFrameset" );
-    rExistingFrameset->setText( i18n("Select existing frameset to connect frame to") );
+    rExistingFrameset->setText( i18n("Select existing frameset to connect frame to:") );
     tabLayout->addWidget( rExistingFrameset );
     myGroup->insert(rExistingFrameset,1);
 

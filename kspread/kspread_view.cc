@@ -842,7 +842,7 @@ void KSpreadView::initializeGlobalOperationActions()
   connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
 
 
-  m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this,
+  m_paperLayout = new KAction( i18n("Page Layout..."), 0, this,
                                SLOT( paperLayoutDlg() ), actionCollection(),
                                "paperLayout" );
   m_paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout."));

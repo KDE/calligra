@@ -46,9 +46,12 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     QVBoxLayout *vbox = new QVBoxLayout( page, 0, spacingHint() );
+
+    QLabel *toplabel = new QLabel( i18n("Select the sheet style to apply:"), page );
     m_combo = new QComboBox( page );
     m_label = new QLabel( page );
 
+    vbox->addWidget( toplabel );
     vbox->addWidget( m_combo );
     vbox->addWidget( m_label );
 

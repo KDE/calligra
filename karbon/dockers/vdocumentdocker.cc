@@ -593,7 +593,7 @@ VLayersTab::renameItem( QListViewItem* item, const QPoint&, int col )
 		}
 		else
 		{
-			QString name = KLineEditDlg::getText( i18n( "Current Layer" ), i18n( "Change the name of the current layer:" ),
+			QString name = KLineEditDlg::getText( i18n( "Rename Layer" ), i18n( "Change the name of the current layer:" ),
 																	layerItem->layer()->name(), &ok, this );
 			if( ok )
 			{

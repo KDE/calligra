@@ -472,7 +472,7 @@ void KivioView::setupActions()
   connect(m_setLineWidth, SIGNAL(valueChanged(double)), SLOT(setLineWidth()));
   connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setLineWidthUnit(KoUnit::Unit)));
 
-  m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );
+  m_paperLayout = new KAction( i18n("Page Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );
   m_insertPage = new KAction( i18n("Insert Page"),"item_add", 0, this, SLOT(insertPage()), actionCollection(), "insertPage" );
   m_removePage = new KAction( i18n("Remove Page"), "item_remove",0,this, SLOT(removePage()), actionCollection(), "removePage" );
 
@@ -1630,7 +1630,7 @@ void KivioView::setupPrinter(KPrinter &p)
 void KivioView::exportPage()
 {
    // First build a filter list
-   QString extList = i18n("Image files: (");
+   QString extList = i18n("Image Files (");
    char *pStr;
    QStrList strList;
    ExportPageDialog dlg(this, "Export Page Dialog");

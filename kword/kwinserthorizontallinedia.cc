@@ -25,12 +25,19 @@
 #include "kwinserthorizontallinedia.h"
 #include <kpixmapio.h>
 #include <qdir.h>
+#include <qlayout.h>
+#include <qlabel.h>
 
 KWinsertHorizontalLineDia::KWinsertHorizontalLineDia( KWDocument *_doc, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
     setCaption( i18n("Insert Horizontal Line") );
     QVBox *page = makeVBoxMainWidget();
+    QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
+
+    QLabel *label = new QLabel( i18n("Select line type to insert:"), page );
+    lay1->addWidget( label );
+
     m_listHorizLine = new QListBox( page );
     m_listHorizLine->insertItem( i18n("Simple Line"));
     QStringList path =  _doc->horizontalLinePath();

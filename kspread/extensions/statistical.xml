@@ -921,7 +921,7 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>GAUSS</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>The number for which the integral value of standard normal distribution is to be calculated.</Comment>
+        <Comment>The number for which the integral value of standard normal distribution is to be calculated</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>
@@ -935,7 +935,7 @@ N data points (N divided by the sum of the inverses of the data points).</Text>
       <Name>PHI</Name>
       <Type>Float</Type>
       <Parameter>
-        <Comment>The number for which the standard normal distribution is to be calculated.</Comment>
+        <Comment>The number for which the standard normal distribution is to be calculated</Comment>
         <Type>Float</Type>
       </Parameter>
       <Help>

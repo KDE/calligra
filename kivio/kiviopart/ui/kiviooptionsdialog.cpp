@@ -389,7 +389,7 @@ void KivioOptionsDialog::defaultGuides()
 void KivioOptionsDialog::setLayoutText(const KoPageLayout& l)
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  QString txt = i18n("Format: %1 Width: %2 %4 Height: %3 %5").arg(
+  QString txt = i18n("Format: %1, Width: %2 %4, Height: %3 %5").arg(
     KoPageFormat::formatString(l.format)).arg(KoUnit::ptToUnit(l.ptWidth, unit))
     .arg(KoUnit::ptToUnit(l.ptHeight, unit)).arg(KoUnit::unitName(unit)).arg(
     KoUnit::unitName(unit));

@@ -288,7 +288,7 @@ the entire population using all numeric values in a column of a database specifi
       </Parameter>
       <Parameter>
         <Type>String</Type>
-        <Comment>Name of the field of which you want the summary data.</Comment>
+        <Comment>Name of the field of which you want the summary data</Comment>
       </Parameter>
       <Help>
       <Text>Fetches summary data from a pivot table.</Text>
