@@ -460,11 +460,14 @@ Record* Record::create( unsigned type )
   if( type == DimensionRecord::id )
     record = new DimensionRecord();
     
-  else if( type == FormatRecord::id )
-    record = new FormatRecord();
-    
   else if( type == FontRecord::id )
     record = new FontRecord();
+    
+  else if( type == FooterRecord::id )
+    record = new FooterRecord();
+    
+  else if( type == FormatRecord::id )
+    record = new FormatRecord();
     
   else if( type == HeaderRecord::id )
     record = new HeaderRecord();
@@ -1517,6 +1520,53 @@ void FontRecord::dump( std::ostream& out ) const
   out << "FONT" << std::endl;
   out << "  Height : " << height() << std::endl;
   out << " Font Name: " << fontName().ascii() << std::endl;
+}
+
+// ========== FOOTER ========== 
+
+const unsigned int FooterRecord::id = 0x0015;
+
+class FooterRecord::Private
+{
+public:
+  UString footer;
+};
+
+FooterRecord::FooterRecord():
+  Record()
+{
+  d = new FooterRecord::Private();
+}
+
+FooterRecord::~FooterRecord()
+{
+  delete d;
+}
+
+UString FooterRecord::footer() const
+{
+  return d->footer;
+}
+
+void FooterRecord::setFooter( const UString& footer )
+{
+  d->footer = footer;
+}
+
+void FooterRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 2 ) return;
+  
+  UString footer = ( version() >= Excel97 ) ?
+    EString::fromUnicodeString( data, size ).str() :
+    EString::fromByteString( data, false, size ).str();
+  setFooter( footer );
+}
+
+void FooterRecord::dump( std::ostream& out ) const
+{
+  out << "FOOTER" << std::endl;
+  out << " footer: " << footer().ascii() << std::endl;
 }
 
 // ========== FORMAT ========== 

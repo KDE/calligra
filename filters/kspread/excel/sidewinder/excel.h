@@ -1287,6 +1287,60 @@ private:
 };
 
 /**
+  Class FooterRecord holds information about sheet header.
+  
+ */
+class FooterRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  /**
+   * Creates a new Header record.
+   */
+  FooterRecord();
+  
+  /**
+   * Destroy the record.
+   */
+  ~FooterRecord();
+  
+  /**
+   * Gets the footer.
+   */
+  UString footer() const;
+  
+  /**
+   * Sets the footer.
+   */
+  void setFooter( const UString& f );
+  
+  /**
+   \reimpl
+   */
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  /**
+   \reimpl
+   */
+  virtual const char* name(){ return "FOOTER"; }
+
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  FooterRecord( const FooterRecord& );
+  FooterRecord& operator=( const FooterRecord& );
+
+  class Private;
+  Private* d;
+};
+
+/**
   Class FormatRecord contains information about a number format. 
   All Format records occur together in a sequential list.
   An XFRecord might refer to the specific Format record using
