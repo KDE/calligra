@@ -548,6 +548,8 @@ QString KSValue::toString( KSContext& context )
 	  tmp += (*it)->toString( context );
 	  tmp += ", ";
 	}
+	tmp.truncate( tmp.length() - 1 );
+	tmp[ tmp.length() - 1 ] = ' ';
 	tmp += "]";
 	return tmp;
       }
@@ -566,6 +568,8 @@ QString KSValue::toString( KSContext& context )
 	  tmp += it.data()->toString( context );
 	  tmp += " ), ";
 	}
+	tmp.truncate( tmp.length() - 1 );
+	tmp[ tmp.length() - 1 ] = ' ';
 	tmp += "}";
 	return tmp;
       }
