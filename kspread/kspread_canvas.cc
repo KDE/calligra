@@ -263,7 +263,6 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_bMousePressed = false;
 
   choose_visible = false;
-
   setFocus();
 
   (void)new KSpreadToolTip( this );
@@ -2739,6 +2738,7 @@ KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSprea
   setMouseTracking( TRUE );
   m_bResize = FALSE;
   m_bSelection = FALSE;
+  m_iSelectionAnchor=1;
 }
 
 void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
@@ -3205,6 +3205,7 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
   setMouseTracking( TRUE );
   m_bResize = FALSE;
   m_bSelection = FALSE;
+  m_iSelectionAnchor=1;
 }
 
 void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
