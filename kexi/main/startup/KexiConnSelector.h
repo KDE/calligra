@@ -45,7 +45,6 @@ public:
 
 
 class KexiOpenExistingFile;
-class KexiConnSelectorBase;
 class KexiConnSelectorWidgetPrivate;
 
 /*! Widget that allows to select a database connection (without choosing database itself)
