@@ -287,7 +287,6 @@ Detailed TODO for Beta3:
 -use one and multi-key relations from kexidb
 
 === Table View TODO ====
--add a function for inserting an empty row above the cursor
 -add a function for moving rows
 
 ==== ALTER TABLE TODO: =============
@@ -296,7 +295,6 @@ Detailed TODO for Beta3:
 -add all missing properties (even when most are not working)
 -add "key" information icon @ the left hand of line with primary key(s)
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
--add "insert empty row" action (to "Data" menu)
 -save schema changes before switching to "view mode"
 
 
@@ -320,6 +318,21 @@ TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
 CC_MAIL: dkite@shaw.ca
+
+2004-03-23
+2004-03-24
+Core, Main Window
+	- Volatile Actions introduced
+	- Menu updating and focusing fixed
+Kexi TableView, Kexi Table Data
+	- Empty row inserting implemented
+Kexi Alter Table
+	- Empty row inserting action added
+
+2004-03-22
+Main Window
+	- when toggling to other view mode (using radio action) failed, action for 
+	  previous mode is toggled back.
 
 2004-03-19
 2004-03-20

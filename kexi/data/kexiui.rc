@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="110">
+<kpartgui name="kexi" version="111">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -42,7 +42,8 @@
     <Separator/>
     <Action name="edit_delete"/>
     <Action name="edit_delete_row"/>
-    <Action name="edit_insert_empty_row"/>
+    <ActionList name="edit_insert_empty_row" />
+    <!-- Action name="edit_insert_empty_row"/ -->
     <DefineGroup name="edit_find"/>
     <Merge/>
   </Menu>

@@ -509,5 +509,12 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item)
 	return true;
 }
 
+void KexiTableViewData::insertRow(KexiTableItem& item, uint index)
+{
+	if (!insert( index = QMIN(index, count()), &item ))
+		return;
+	emit rowInserted(&item, index);
+}
+
 #include "kexitableviewdata.moc"
 

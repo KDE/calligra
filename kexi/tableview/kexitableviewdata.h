@@ -222,6 +222,14 @@ public:
 
 	bool deleteRow(KexiTableItem& item);
 
+	/*! Inserts new \a item at index \a index. 
+	 \a item will be owned by this data object.
+	 Note: Reasonable only for not not-db-aware version. */
+	void insertRow(KexiTableItem& item, uint index);
+
+/*TODO: add this as well? 
+	void insertRow(KexiTableItem& item, KexiTableItem& aboveItem); */
+
 signals:
 	/*! Emitted before change of the single, currently edited cell.
 	 Connect this signal to your slot and set \a allow value to false 
@@ -248,6 +256,9 @@ signals:
 	void rowUpdated(KexiTableItem*); //!< Current row has been updated
 	void rowInserted(KexiTableItem*); //!< A row has been inserted
 	void rowDeleted(); //!< Current row has been deleted
+
+	//! A row has been inserted at \a index position (not db-aware data only)
+	void rowInserted(KexiTableItem*, uint index);
 
 protected:
 	virtual int compareItems(Item item1, Item item2);

@@ -109,6 +109,8 @@ class KexiAlterTableDialog : public KexiDataTable
 		//! Called on row delete in a tableview.
 		void slotRowDeleted();
 
+		void slotEmptyRowInserted(KexiTableItem*, uint index);
+
 	private:
 //		KexiTableView *m_view;
 		const KexiDB::TableSchema *m_table; //!< original table schema

@@ -156,6 +156,8 @@ void KexiAlterTableDialog::init()
 //	connect(data, SIGNAL(aboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)),
 //		this, SLOT(slotAboutToUpdateRow(KexiTableItem*,KexiDB::RowEditBuffer*,KexiDB::ResultInfo*)));
 	connect(data, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
+	connect(data, SIGNAL(rowInserted(KexiTableItem*,uint)), 
+		this, SLOT(slotEmptyRowInserted(KexiTableItem*,uint)));
 	
 
 /*	//! before closing - we'are accepting editing
@@ -523,9 +525,28 @@ void KexiAlterTableDialog::slotRowDeleted()
 		m_buffers.insert( i , b );
 	}
 	m_buffers.insert( m_buffers.size()-1, 0 );
-	m_buffers.setAutoDelete(true);
+	m_buffers.setAutoDelete(true);//revert the flag
 
 	propertyBufferSwitched();
+}
+
+void KexiAlterTableDialog::slotEmptyRowInserted(KexiTableItem*, uint index)
+{
+	setDirty();
+
+	//let's move down all buffers that are below that deleted
+	m_buffers.setAutoDelete(false);//to avoid auto deleting in insert()
+	const int r = m_view->currentRow();
+	m_buffers.resize(m_buffers.size()+1);
+	for (int i=int(m_buffers.size()); i>r; i--) {
+		KexiPropertyBuffer *b = m_buffers[i-1];
+		m_buffers.insert( i , b );
+	}
+	m_buffers.insert( r, 0 );
+	m_buffers.setAutoDelete(true);//revert the flag
+
+	propertyBufferSwitched();
+	
 }
 
 KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata)

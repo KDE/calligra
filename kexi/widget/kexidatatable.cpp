@@ -99,7 +99,6 @@ KexiDataTable::~KexiDataTable()
 void
 KexiDataTable::initActions()
 {
-	plugSharedAction("edit_insert_empty_row", m_view, SLOT(insertEmptyRow()));
 	plugSharedAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
 	m_view->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
 
@@ -120,10 +119,16 @@ void KexiDataTable::reloadActions()
 	setXMLFile("kexidatatableui.rc");
 */
 	m_view->popup()->clear();
-	if (m_view->isEmptyRowInsertingEnabled())
+
+
+	if (m_view->isEmptyRowInsertingEnabled()) {
+		plugSharedAction("edit_insert_empty_row", m_view, SLOT(insertEmptyRow()));
 		plugSharedAction("edit_insert_empty_row", m_view->popup());
-	else
+	}
+	else {
+		unplugSharedAction("edit_insert_empty_row");
 		unplugSharedAction("edit_insert_empty_row", m_view->popup());
+	}
 
 	if (m_view->isDeleteEnabled())
 		plugSharedAction("edit_delete_row", m_view->popup());

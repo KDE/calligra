@@ -535,7 +535,7 @@ void KexiTableView::deleteCurrentRow()
 		return;
 	}
 
-	if (!deleteItem(d->pCurrentItem)) {
+	if (!deleteItem(d->pCurrentItem)) {//nothing
 	}
 }
 
@@ -545,7 +545,21 @@ void KexiTableView::insertEmptyRow(int row)
 		|| (row!=-1 && row >= (rows()+isInsertingEnabled()?1:0) ) )
 		return;
 
-	//TODO
+	d->pCurrentItem = new KexiTableItem(columns());
+	m_data->insertRow(*d->pCurrentItem, d->curRow);
+
+	QSize s(tableSize());
+	resizeContents(s.width(),s.height());
+
+	//redraw only this row and below:
+	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
+	updateContents( columnPos( leftcol ), rowPos(d->curRow), 
+		clipper()->width(), clipper()->height() - (rowPos(d->curRow) - contentsY()) );
+
+	d->pVerticalHeader->addLabel();
+
+	//update navigator's data
+	setNavRowCount(rows());
 }
 
 void KexiTableView::clearData(bool repaint)
@@ -1483,7 +1497,7 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
-	kdDebug() << "KexiTableView::keyPressEvent: key=" <<e->key() << " txt=" <<e->text()<<endl;
+//	kdDebug() << "KexiTableView::keyPressEvent: key=" <<e->key() << " txt=" <<e->text()<<endl;
 
 	const bool ro = isReadOnly();
 	QWidget *w = focusWidget();
@@ -2208,8 +2222,8 @@ QSize KexiTableView::tableSize() const
 			+ (d->navPanel->isVisible() ? QMAX( d->navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
 			+ margin() << endl;
 */
-		kdDebug()<< d->navPanel->isVisible() <<" "<<d->navPanel->height()<<" "
-		<<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0))<<endl;
+//		kdDebug()<< d->navPanel->isVisible() <<" "<<d->navPanel->height()<<" "
+//		<<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0))<<endl;
 
 		return QSize( 
 			columnPos( columns() - 1 ) + columnWidth( columns() - 1 ),
@@ -3223,7 +3237,7 @@ void KexiTableView::vScrollBarValueChanged(int v)
 	d->pVerticalHeader->update(); //<-- dirty but needed
 	
 	QRect r = verticalScrollBar()->sliderRect();
-	kdDebug(44021) << r.x() << " " << r.y()  << endl;
+//	kdDebug(44021) << r.x() << " " << r.y()  << endl;
 	int row = rowAt(contentsY())+1;
 	if (row<=0) {
 		d->scrollBarTipTimer.stop();
