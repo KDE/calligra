@@ -1170,6 +1170,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     setPageLayout( __pgLayout, __columns, __hf, false );
 
     getVariableCollection()->variableSetting()->load(word );
+    //by default display real variable value
+    if ( !isReadWrite())
+        getVariableCollection()->variableSetting()->setDisplayFiedCode(false);
 
     emit sigProgress(10);
 
