@@ -32,7 +32,7 @@ void GetNativePaperFormat(const int format,
     QString& width, QString& height, QString& units);
 };
 
-// Depreciated! Use KWEFUtil::EscapeSgmlText
+// Deprecated! Use KWEFUtil::EscapeSgmlText
 static inline QString EscapeXmlText(const QString& strIn,
     const bool quot = false, const bool apos = false )
 {

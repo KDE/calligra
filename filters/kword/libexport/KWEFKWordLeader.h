@@ -48,7 +48,9 @@ class KWEFKWordLeader
         QIODevice* getSubFileDevice(const QString& fileName);
     public: // public leader/worker functions (DO NOT use in your own code!)
         bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
+	bool doVariableSettings (const VariableSettingsData &varSettings);
         bool doFullDocument (const QValueList<ParaData> &);
+	bool doPageInfo (const int headerType, const int footerType);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
         bool doOpenHead (void);

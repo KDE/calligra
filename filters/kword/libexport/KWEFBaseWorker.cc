@@ -126,6 +126,7 @@ DO_FALSE_DEFINITION (doFullParagraph(const QString&, const LayoutData&, const Va
     }
 
 DO_TRUE_DEFINITION (doFullDocumentInfo (const KWEFDocumentInfo&))
+DO_TRUE_DEFINITION (doVariableSettings (const VariableSettingsData &))
 DO_TRUE_DEFINITION (doFullPaperFormat (const int, const double, const double, const int))
 DO_TRUE_DEFINITION (doFullPaperBorders (const double, const double, const double, const double))
 DO_TRUE_DEFINITION (doPageInfo(int,int))

@@ -419,6 +419,25 @@ struct FootnoteData
     QValueList<ParaData> para;
 };
 
+// see <VARIABLESETTINGS> in the KWord DTD
+class VariableSettingsData
+{
+public:
+    VariableSettingsData () : startingPageNumber (1),
+                              displaylink (true),
+                              underlinelink (true),
+                              displaycomment (true),
+                              displayfieldcode (false)
+    {
+    }
+
+    int startingPageNumber;
+    bool displaylink;
+    bool underlinelink;
+    bool displaycomment;
+    bool displayfieldcode;
+};
+
 class KWEFDocumentInfo
 {
 public:
@@ -439,7 +458,6 @@ public:
     QString city;
     QString street;
 };
-
 
 // Helper functions
 

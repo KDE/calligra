@@ -34,7 +34,7 @@ PRE
 <p>KWord's Export Filter Library (in short: Libexport) is a library to help
 developers writing an export filter for KWord. Basically, an export filter will
 read a KWord document and convert it to some other format. Since
-such filters will likely have a quite amount of common code,
+such filters will likely have quite an amount of common code,
 especially in parsing the KWord document, a base class for doing this
 should be useful.</p>
 
@@ -48,7 +48,7 @@ It is part of KWord filters and can be found in
 <p>An export filter consists of two parts, a &quot;Leader&quot;
 to parse KWord document and a &quot;Worker&quot; to create output
 document. The Worker itself will be &quot;directed&quot; by the
-Leader. Libexport has already provide a Leader, namely
+Leader. Libexport has already provided a Leader, namely
 <tt>KWEFKWordLeader</tt> so you won't need to write your own.
 while a Worker is unique to your filter.</p>
 
@@ -164,8 +164,8 @@ bool TextWorker::doFullParagraph(const QString&amp; paraText,
 }
 </pre>
 
-<p>As you might see, we are not interested in other that
-<tt>doFullParagraph</tt> so other methods will simply return
+<p>As you might see, we are not interested in other than
+<tt>doFullParagraph</tt> so the other methods will simply return
 <tt>true</tt>.</p>
 
 <p>To invoke the Leader/Worker:</p>
@@ -183,16 +183,19 @@ some other Workers found in several KWord export filters.
 The following filters are already using libexport:</p>
 
 <ul>
-<li>ASCII</li>
+<li>ASCII/Plain Text</li>
 <li>AbiWord</li>
-<li>HTML</li>
-<li>DocBook</li>
-<li>PalmDoc</li>
-<li>WML</li>
 <li>AmiPro</li>
+<li>DocBook</li>
+<li>HTML</li>
+<li>MS Write</li>
+<li>PalmDoc</li>
+<li>RTF</li>
+<li>WordPerfect</li>
+<li>WML</li>
 </ul>
 
-<p>ASCII filter is the easiest to understand. You might want
+<p>The ASCII filter is the easiest to understand. You might want
 take a look at PalmDoc filter, which is very similar to ASCII
 filter.</p>
 

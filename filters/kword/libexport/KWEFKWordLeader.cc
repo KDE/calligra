@@ -462,6 +462,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
     leader->setHeaderType( hType );
     leader->setFooterType( fType );
 
+    leader->doPageInfo ( hType, fType );
     leader->doFullPaperFormat (format, width, height, orientation);
 
     QValueList<TagProcessing> tagProcessingList;
@@ -470,6 +471,31 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
         ;
 
     ProcessSubtags (myNode, tagProcessingList, leader);
+}
+
+static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
+{
+    VariableSettingsData vs;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "startingPageNumber",
+                                           "int",
+                                           (void *) &vs.startingPageNumber )
+                       << AttrProcessing ( "displaylink",
+                                           "bool",
+                                           (void *) &vs.displaylink )
+                       << AttrProcessing ( "underlinelink",
+                                           "bool",
+                                           (void *) &vs.underlinelink )
+                       << AttrProcessing ( "displaycomment",
+                                           "bool",
+                                           (void *) &vs.displaycomment )
+                       << AttrProcessing ( "displayfieldcode",
+                                           "bool",
+                                           (void *) &vs.displayfieldcode );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    leader->doVariableSettings (vs);
 }
 
 static void ProcessSpellCheckIgnoreWordTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
@@ -642,6 +668,13 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     else
         ProcessPaperTag (nodePaper, NULL, leader);
 
+    // Process <VARIABLESETTINGS>
+    QDomNode nodeVariableSettings=myNode.namedItem("VARIABLESETTINGS");
+    if ( nodeVariableSettings.isNull () )
+	kdWarning (30508) << "No <VARIABLESETTINGS>" << endl;
+    else
+	ProcessVariableSettingsTag (nodeVariableSettings, NULL, leader);
+    
     // Then we process the styles
     QDomNode nodeStyles=myNode.namedItem("STYLES");
     if ( nodeStyles.isNull () )
@@ -748,6 +781,15 @@ bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
 }
 
 
+bool KWEFKWordLeader::doVariableSettings (const VariableSettingsData &varSettings)
+{
+    if ( m_worker )
+        return m_worker->doVariableSettings (varSettings);
+
+    return false;
+}
+
+
 bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList)
 {
     if ( m_worker )
@@ -756,6 +798,13 @@ bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList)
     return false;
 }
 
+bool KWEFKWordLeader::doPageInfo ( const int headerType, const int footerType )
+{
+    if ( m_worker )
+        return m_worker->doPageInfo ( headerType, footerType );
+
+    return false;
+}
 
 bool KWEFKWordLeader::doFullPaperFormat ( const int format, const double width, const double height, const int orientation )
 {
