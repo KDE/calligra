@@ -6697,7 +6697,12 @@ void KPresenterView::autoSpellCheck()
 void KPresenterView::insertFile(  )
 {
     KFileDialog fd( QString::null, QString::null, this, 0, TRUE );
-    fd.setMimeFilter( "application/x-kpresenter" );
+    QStringList filter;
+    filter<<"application/x-kpresenter";
+#if COPYOASISFORMAT
+    filter<<"application/vnd.oasis.openoffice.presentation";
+#endif
+    fd.setMimeFilter( filter );
     fd.setCaption(i18n("Insert File"));
 
     KURL url;
