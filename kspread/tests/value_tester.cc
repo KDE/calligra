@@ -24,7 +24,7 @@
 
 #include <kspread_value.h>
 
-#define CHECK(x,y)  check(#x,x,y)
+#define CHECK(x,y)  check(__FILE__,__LINE__,#x,x,y)
 
 using namespace KSpread;
 
@@ -38,7 +38,8 @@ QString ValueTester::name()
 }
 
 template<typename T>
-void ValueTester::check( const char* msg, const T& result, const T& expected )
+void ValueTester::check( const char *file, int line, const char* msg, const T& result, 
+  const T& expected )
 {
   testCount++;
   if( result != expected )
@@ -51,11 +52,11 @@ void ValueTester::check( const char* msg, const T& result, const T& expected )
     ts << ", ";
     ts << "Expected:";
     ts << expected;
-    fail( __FILE__, __LINE__, message );
+    fail( file, line, message );
   }
 }
 
-void ValueTester::check( const char* msg, bool result, bool expected )
+void ValueTester::check( const char *file, int line, const char* msg, bool result, bool expected )
 {
   testCount++;
   if( result != expected )
@@ -68,7 +69,7 @@ void ValueTester::check( const char* msg, bool result, bool expected )
     ts << ", ";
     ts << "Expected: ";
     if( expected ) ts << "True"; else "False";
-    fail( __FILE__, __LINE__, message );
+    fail( file, line, message );
   }
 }
 

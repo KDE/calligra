@@ -35,8 +35,8 @@ public:
   virtual void run();
 private:
   template<typename T>
-  void check( const char* msg, const T& result, const T& expected );
-  void check( const char* msg, bool result, bool expected );
+  void check( const char *file, int line, const char* msg, const T& result, const T& expected );
+  void check( const char *file, int line, const char* msg, bool result, bool expected );
 };
 
 }; // namespace KSpread
