@@ -115,3 +115,8 @@ void KPTextViewIface::insertVariable( const QString & var)
   else if (var=="STREET")
     m_textview->insertVariable(8,14);
 }
+
+void KPTextViewIface::insertNote(const QString &_note)
+{
+    m_textview->insertNote(_note);
+}

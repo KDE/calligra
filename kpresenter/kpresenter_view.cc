@@ -3084,6 +3084,8 @@ void KPresenterView::objectSelectedChanged()
 
     bool val=(edit!=0) && isText;
     actionInsertSpecialChar->setEnabled(val);
+    actionInsertNote->setEnabled( val );
+
     actionInsertLink->setEnabled(val);
     actionFormatParag->setEnabled(val);
     actionInsertVariable->setEnabled(val);

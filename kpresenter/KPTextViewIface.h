@@ -39,6 +39,8 @@ k_dcop:
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertVariable( const QString & var);
+    void insertNote(const QString &_note);
+
     void clearSelection();
     void selectAll();
 
