@@ -40,7 +40,6 @@
 #include "kprcanvas.moc"
 
 #include <kpresenter_view.h>
-#include <qwmf.h>
 #include <kpbackground.h>
 #include <kppixmapobject.h>
 #include <kpfreehandobject.h>

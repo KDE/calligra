@@ -18,7 +18,6 @@
 #include <string.h>
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
-#include <qwmf.h>
 #include <qcstring.h>
 #include <qstringlist.h>
 
