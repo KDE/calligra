@@ -2,10 +2,10 @@
 #include <kdebug.h>
 #include <kinstance.h>
 
-#include "kexidb/drivermanager.h"
-#include "kexidb/driver.h"
-#include "kexidb/connection.h"
-#include "kexidb/cursor.h"
+#include <kexidb/drivermanager.h>
+#include <kexidb/driver.h>
+#include <kexidb/connection.h>
+#include <kexidb/cursor.h>
 
 int main(int argc, char *argv[])
 {
@@ -124,6 +124,6 @@ int main(int argc, char *argv[])
 		kdDebug() << conn->errorMsg() << endl;
 		return 1;
 	}
-
+	delete conn;
 	return 0;
 }
