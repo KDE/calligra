@@ -1,14 +1,13 @@
 # There is no -dev package.
 kspread: non-dev-pkg-with-shlib-symlink usr/lib/kspread.so.0.0.0 usr/lib/kspread.so
-# These are modules in /usr/lib/kde2/.
-kspread: shlib-missing-in-control-file libkspreadpart.so usr/lib/kde2/libkspreadpart.so
-kspread: shlib-missing-in-control-file libcsvexport.so usr/lib/kde2/libcsvexport.so
-kspread: shlib-missing-in-control-file libcsvimport.so usr/lib/kde2/libcsvimport.so
-kspread: shlib-missing-in-control-file libgnumericexport.so usr/lib/kde2/libgnumericexport.so
-kspread: shlib-missing-in-control-file libgnumericimport.so usr/lib/kde2/libgnumericimport.so
-kspread: shlib-missing-in-control-file libkspreadhtmlexport.so usr/lib/kde2/libkspreadhtmlexport.so
-kspread: shlib-missing-in-control-file libqproimport.so usr/lib/kde2/libqproimport.so
-kspread: shlib-missing-in-control-file libkspreadcalc.so usr/lib/kde2/libkspreadcalc.so
+# These are modules in /usr/lib/kde3/.
+kspread: binary-or-shlib-defines-rpath ./usr/lib/kde3/libgnumericexport.so /usr/lib/kde3
+kspread: binary-or-shlib-defines-rpath ./usr/lib/kde3/libgnumericimport.so /usr/lib/kde3
+kspread: binary-or-shlib-defines-rpath ./usr/lib/kde3/libkspreadhtmlexport.so /usr/lib/kde3
+kspread: binary-or-shlib-defines-rpath ./usr/lib/kde3/libkspreadcalc.so /usr/lib/kde3
+kspread: binary-or-shlib-defines-rpath ./usr/lib/kde3/libcsvexport.so /usr/lib/kde3
+kspread: binary-or-shlib-defines-rpath ./usr/lib/kde3/libcsvimport.so /usr/lib/kde3
+kspread: binary-or-shlib-defines-rpath ./usr/lib/kde3/libqproimport.so /usr/lib/kde3
 # This is inserted by debhelper and is legal.
 kspread: postrm-calls-ldconfig
 # Menu item.

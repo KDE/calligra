@@ -1,11 +1,11 @@
 usr/bin/kivio
 usr/lib/kivio.*
 usr/lib/kde3/libkiviopart.*
-usr/lib/kde3/straight_connector.ksp
-usr/lib/libkivioconnectortool.*
-usr/lib/libkivioselecttool.*
-usr/lib/libkiviotexttool.*
-usr/lib/libkiviozoomtool.*
+usr/lib/kde3/straight_connector_ksp.so
+usr/lib/kde3/libkivioconnectortool.*
+usr/lib/kde3/libkivioselecttool.*
+usr/lib/kde3/libkiviotexttool.*
+usr/lib/kde3/libkiviozoomtool.*
 usr/share/applnk/Office/kivio.desktop
 usr/share/apps/kivio
 usr/share/services/kivio*

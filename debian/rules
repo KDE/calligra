@@ -83,10 +83,11 @@ install-stamp: build
 	mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
 	chmod 755 $(tmp)/usr/bin/kprconverter.pl
 
-	# Fix kivio's straight_connector.ksp.
+	# Deal with kivio's straight_connector.ksp.
 	$(INSTALL_DIR) $(tmp)/usr/lib/kde3
-	mv $(tmp)/usr/lib/straight_connector.ksp $(tmp)/usr/lib/kde3
-	chmod a-x $(tmp)/usr/lib/kde3/straight_connector.ksp
+	mv $(tmp)/usr/lib/straight_connector.ksp \
+		$(tmp)/usr/lib/kde3/straight_connector_ksp.so
+	chmod a-x $(tmp)/usr/lib/kde3/straight_connector_ksp.so
 
 	# Generate HTML docs.
 	for i in `find $(tmp) -name "index.docbook"`; do \
