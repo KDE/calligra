@@ -35,10 +35,11 @@ class KPTDateTime;
 class KPTCalendarDay {
 
 public:
-    KPTCalendarDay(int state=0);
+    KPTCalendarDay();
+    KPTCalendarDay(int state);
     KPTCalendarDay(QDate date, int state=0);
     KPTCalendarDay(KPTCalendarDay *day);
-    ~KPTCalendarDay() {}
+    ~KPTCalendarDay();
 
     bool load(QDomElement &element);
     void save(QDomElement &element);
@@ -51,7 +52,9 @@ public:
         m_workingIntervals.clear();
         m_workingIntervals = intervals;
     }
-
+    QTime startOfDay() const;
+    QTime endOfDay() const;
+    
     QDate date() const { return m_date; }
     void setDate(QDate date) { m_date = date; }
     int state() const { return m_state; }
@@ -78,7 +81,8 @@ public:
      */
     bool hasInterval(const QTime &start, const QTime &end) const;
     
-protected:
+    KPTDuration duration() const;
+    
     const KPTCalendarDay &copy(const KPTCalendarDay &day);
 
 private:
@@ -97,7 +101,7 @@ class KPTCalendarWeekdays {
 public:
     KPTCalendarWeekdays();
     KPTCalendarWeekdays(KPTCalendarWeekdays *weekdays);
-    ~KPTCalendarWeekdays() {}
+    ~KPTCalendarWeekdays();
 
     bool load(QDomElement &element);
     void save(QDomElement &element);
@@ -114,6 +118,13 @@ public:
     
     void setWeekday(KPTIntMap::iterator it, int state) { m_weekdays.at(it.key())->setState(state); }
 
+    int state(int weekday) const;
+    void setState(int weekday, int state);
+    
+    const QPtrList<QPair<QTime, QTime> > &intervals(int weekday) const;
+    void setIntervals(int weekday, QPtrList<QPair<QTime, QTime> >intervals);
+    void clearIntervals(int weekday);
+    
     bool operator==(const KPTCalendarWeekdays *weekdays) const;
     bool operator!=(const KPTCalendarWeekdays *weekdays) const;
 
@@ -133,7 +144,14 @@ public:
      */
     bool hasInterval(const QDate date, const QTime &start, const QTime &end) const;
 
-protected:
+    KPTDuration duration() const;
+    KPTDuration duration(int weekday) const;
+
+    /// Returns the time when the @param weekday starts
+    QTime startOfDay(int weekday) const;
+    /// Returns the time when the @param weekday ends
+    QTime endOfDay(int weekday) const;
+
     const KPTCalendarWeekdays &copy(const KPTCalendarWeekdays &weekdays);
 
 private:
@@ -152,7 +170,7 @@ class KPTCalendarWeeks {
 public:
     KPTCalendarWeeks();
     KPTCalendarWeeks(KPTCalendarWeeks *weeks);
-    ~KPTCalendarWeeks() {}
+    ~KPTCalendarWeeks();
 
     bool load(QDomElement &element);
     void save(QDomElement &element);
@@ -171,7 +189,6 @@ public:
     
     int state(const QDate &date);
 
-protected:
     KPTCalendarWeeks &copy(KPTCalendarWeeks &weeks);
 
 private:
@@ -276,24 +293,65 @@ class KPTStandardWorktime
 {
 public:
     KPTStandardWorktime();
+    KPTStandardWorktime(KPTStandardWorktime* worktime);
     ~KPTStandardWorktime();
     
-    /// The number of work hours in a normal year.
-    KPTDuration year();
-    /// The number of work hours in a normal month
-    KPTDuration month();
-    /// The number of work hours in a normal week
-    KPTDuration week();
-    /// The number of work hours in a normal day
-    KPTDuration day();
+    /// The work time of a normal year.
+    KPTDuration durationYear() const;
+    /// Set the work time of a normal year.
+    void setYear(KPTDuration year) { m_year = year; }
+    
+    /// The work time of a normal month
+    KPTDuration durationMonth() const;
+    /// Set the work time of a normal month
+    void setMonth(KPTDuration month) { m_month = month; }
+    
+    /// The work time of a normal week
+    KPTDuration durationWeek() const;
+    /// Set the work time of a normal week
+    void setWeek();
+    
+    /// The work time of a @param weekday
+    KPTDuration durationWeekday(int weekday) const;
+    
+    /// The work time of a normal day
+    KPTDuration durationDay() const;
+    /// The number of work time in a normal day
+    void setDay();
+    
     /// Returns the time when the @param weekday starts
-    QTime startOfDay(int weekday);
+    QTime startOfDay(int weekday) const;
     /// Returns the time when the @param weekday ends
-    QTime endOfDay(int weekday);
+    QTime endOfDay(int weekday) const;
+    
+    KPTCalendarDay day() const { return m_day;}
+    KPTCalendarWeekdays weekdays() const { return m_weekdays;}
     
     bool load(QDomElement &element);
     void save(QDomElement &element);
 
+    int state(int weekday) const;
+    void setState(int weekday, int state);
+    
+    const QPtrList<QPair<QTime, QTime> > &intervals() const { 
+        return m_day.workingIntervals(); 
+    }
+    const QPtrList<QPair<QTime, QTime> > &intervals(int weekday) const { 
+        return m_weekdays.intervals(weekday); 
+    }
+    void setIntervals(QPtrList<QPair<QTime, QTime> >intervals) {
+        m_day.setIntervals(intervals); 
+    }
+    void setIntervals(int weekday, QPtrList<QPair<QTime, QTime> >intervals) { 
+        m_weekdays.setIntervals(weekday, intervals); 
+    }
+
+    void clearIntervals() { m_day.clearIntervals(); }
+    void clearIntervals(int weekday) { m_weekdays.clearIntervals(weekday); }
+    
+protected:
+    void init();
+    
 private:
     KPTDuration m_year;
     KPTDuration m_month;

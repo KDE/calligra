@@ -303,73 +303,74 @@ bool KPTProject::load(QDomElement &element) {
     // Load the project children
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
-	if (list.item(i).isElement()) {
-	    QDomElement e = list.item(i).toElement();
-
-	    if (e.tagName() == "project") {
-		// Load the subproject
-		KPTProject *child = new KPTProject(this);
-		if (child->load(e))
-		    addChildNode(child);
-		else
-		    // TODO: Complain about this
-		    delete child;
-	    } else if (e.tagName() == "task") {
-		// Load the task. Depends on resources already loaded
-		KPTTask *child = new KPTTask(this);
-		if (child->load(e))
-		    addChildNode(child);
-		else
-		    // TODO: Complain about this
-		    delete child;
-//	    } else if (e.tagName() == "milestone") {
-//		    // Load the milestone
-//		    KPTMilestone *child = new KPTMilestone(this);
-//		    if (child->load(e))
-//		        addChildNode(child);
-//		    else
-//		        // TODO: Complain about this
-//		        delete child;
-	    } else if (e.tagName() == "startnode") {
-            start_node()->load(e);
-	    } else if (e.tagName() == "endnode") {
-            end_node()->load(e);
-	    } else if (e.tagName() == "relation") {
-		    // Load the relation
-		    KPTRelation *child = new KPTRelation();
-    		if (!child->load(e, *this)) {
-		        // TODO: Complain about this
-		        delete child;
-            }
-	    } else if (e.tagName() == "resource-group") {
-		// Load the resources
-		KPTResourceGroup *child = new KPTResourceGroup(this);
-    		if (child->load(e)) {
-                    addResourceGroup(child);
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+    
+            if (e.tagName() == "project") {
+            // Load the subproject
+            KPTProject *child = new KPTProject(this);
+            if (child->load(e))
+                addChildNode(child);
+            else
+                // TODO: Complain about this
+                delete child;
+            } else if (e.tagName() == "task") {
+            // Load the task. Depends on resources already loaded
+            KPTTask *child = new KPTTask(this);
+            if (child->load(e))
+                addChildNode(child);
+            else
+                // TODO: Complain about this
+                delete child;
+            } else if (e.tagName() == "startnode") {
+                start_node()->load(e);
+            } else if (e.tagName() == "endnode") {
+                end_node()->load(e);
+            } else if (e.tagName() == "relation") {
+                // Load the relation
+                KPTRelation *child = new KPTRelation();
+                if (!child->load(e, *this)) {
+                    // TODO: Complain about this
+                    delete child;
+                }
+            } else if (e.tagName() == "resource-group") {
+                // Load the resources
+                KPTResourceGroup *child = new KPTResourceGroup(this);
+                if (child->load(e)) {
+                        addResourceGroup(child);
                 } else {
                     // TODO: Complain about this
                     delete child;
                 }
-	    } else if (e.tagName() == "appointment") {
+            } else if (e.tagName() == "appointment") {
                 // Load the appointments. Resources and tasks must allready loaded
                 KPTAppointment *child = new KPTAppointment();
-    		if (! child->load(e, *this)) {
+                if (! child->load(e, *this)) {
                     // TODO: Complain about this
                     kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
-		    delete child;
+                    delete child;
                 }
-	    } else if (e.tagName() == "calendar") {
-		// Load the calendar.
-		KPTCalendar *child = new KPTCalendar();
-    		if (child->load(e)) {
+            } else if (e.tagName() == "calendar") {
+                // Load the calendar.
+                KPTCalendar *child = new KPTCalendar();
+                if (child->load(e)) {
                     addCalendar(child);
                 } else {
-		    // TODO: Complain about this
+                    // TODO: Complain about this
                     kdError()<<k_funcinfo<<"Failed to load calendar"<<endl;
-		    delete child;
+                    delete child;
                 }
-	    }
-	}
+            } else if (e.tagName() == "standard-worktime") {
+                // Load standard worktime
+                KPTStandardWorktime *child = new KPTStandardWorktime();
+                if (child->load(e)) {
+                    addStandardWorktime(child);
+                } else {
+                    kdError()<<k_funcinfo<<"Failed to load standard worktime"<<endl;
+                    delete child;
+                }
+            }
+        }
     }
     // fix calendar references
     QPtrListIterator<KPTCalendar> calit(m_calendars);
@@ -424,6 +425,9 @@ void KPTProject::save(QDomElement &element)  {
     for (calit.toFirst(); calit.current(); ++calit) {
         calit.current()->save(me);
     }
+    // save standard worktime
+    if (m_standardWorktime)
+        m_standardWorktime->save(me);
     
     // save project resources, must be after calendars
     m_maxGroupId = 0; m_maxResourceId = 0;  // we'll generate fresh ones
@@ -786,6 +790,12 @@ KPTCalendar *KPTProject::calendar(int id) const {
     return 0;
 }
 
+void KPTProject::addStandardWorktime(KPTStandardWorktime * worktime) {
+    if (m_standardWorktime != worktime) {
+        delete m_standardWorktime; 
+        m_standardWorktime = worktime; 
+    }
+}
 
 #ifndef NDEBUG
 void KPTProject::printDebug(bool children, QCString indent) {

@@ -84,6 +84,7 @@ public slots:
 
 protected slots:
     void slotProjectCalendar();
+    void slotProjectWorktime();
     void slotProjectCalculate();
     void slotReportDesign();
     void slotReportGenerate(int);

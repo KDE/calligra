@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="2">
+<kpartgui name="KPlato" version="3">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
             <Action name="koffice_undo"/>
@@ -28,6 +28,7 @@
         <Menu name="project"><text>&amp;Project</text>
             <Action name="project_edit"/>
             <Action name="project_calendar"/>
+            <Action name="project_worktime"/>
             <Action name="project_calculate"/>
         </Menu>
         <Menu name="Reports"><text>&amp;Reports</text>

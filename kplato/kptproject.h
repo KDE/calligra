@@ -151,6 +151,7 @@ public:
      * and presentation in gantt chart.
      */    
     KPTStandardWorktime *standardWorktime() { return m_standardWorktime; }
+    void addStandardWorktime(KPTStandardWorktime * worktime); //FIXME
 
 protected:
     /**

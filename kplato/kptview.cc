@@ -35,6 +35,7 @@
 #include "kptresourcedialog.h"
 #include "kptresource.h"
 #include "kptcalendarlistdialog.h"
+#include "kptstandardworktimedialog.h"
 #include "kptcanvasitem.h"
 
 #include "KDGanttView.h"
@@ -147,7 +148,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 		SLOT(slotProjectEdit()), actionCollection(), "project_edit");
     new KAction(i18n("Edit calendar..."), "project_calendar", 0, this,
 		SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
-    new KAction(i18n("Calculate..."), "project_calculate", 0, this,
+    new KAction(i18n("Edit standard worktime..."), "project_worktime", 0, this,
+		SLOT(slotProjectWorktime()), actionCollection(), "project_worktime");
+    new KAction(i18n("Calculate"), "project_calculate", 0, this,
 		SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
 
     // ------ Reports
@@ -299,6 +302,18 @@ void KPTView::slotProjectEdit() {
 
 void KPTView::slotProjectCalendar() {
     KPTCalendarListDialog *dia = new KPTCalendarListDialog(getProject());
+    if (dia->exec()) {
+        KMacroCommand *cmd = dia->buildCommand();
+        if (cmd) {
+            //kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
+            getPart()->addCommand(cmd); //also executes
+        }
+    }
+    delete dia;
+}
+
+void KPTView::slotProjectWorktime() {
+    KPTStandardWorktimeDialog *dia = new KPTStandardWorktimeDialog(getProject());
     if (dia->exec()) {
         KMacroCommand *cmd = dia->buildCommand();
         if (cmd) {
