@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=Kexi/ImportFilter
+Comment=Service type for any kind of kexi import filters (table,forms,queries,....)
+
+[PropertyDef::X-KEXI-Import]
+Type=QStringList
+
+[PropertyDef::X-KEXI-ImportTypes]
+Type=QStringList
+
+[PropertyDef::X-KEXI-OfficeChainImport]
+Type=QString
