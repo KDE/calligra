@@ -1158,19 +1158,19 @@ void KSpreadCell::setOutputText()
 
   clearFlag( Flag_TextFormatDirty );
 
-  if (hasError())
+  if ( hasError() )
   {
-    if (testFlag(Flag_ParseError))
+    if ( testFlag( Flag_ParseError ) )
     {
-      m_strOutText = "####Parse";
+      m_strOutText = "#" + i18n("Parse") + "!";
     }
-    else if (testFlag(Flag_CircularCalculation))
+    else if ( testFlag( Flag_CircularCalculation ) )
     {
-      m_strOutText = "####Circle";
+      m_strOutText = "#" + i18n("Circle") + "!";
     }
-    else if (testFlag(Flag_DependancyError))
+    else if ( testFlag( Flag_DependancyError ) )
     {
-      m_strOutText = "####Depend";
+      m_strOutText = "#" + i18n("Depend") + "!";
     }
     else
     {
@@ -1463,7 +1463,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
     {
      case KSpreadCell::Top:
       if ( tmpAngle == 0 )
-        m_dTextY = tmpTopBorderWidth + BORDER_SPACE 
+        m_dTextY = tmpTopBorderWidth + BORDER_SPACE
           + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
       else
       {
@@ -1475,7 +1475,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
             m_pTable->doc()->zoomedResolutionY();
       }
       break;
-      
+
      case KSpreadCell::Bottom:
       if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
         m_dTextY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
@@ -1494,7 +1494,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
           if ( tmpAngle < 0 )
             m_dTextY = tmpTopBorderWidth + BORDER_SPACE ;
           else
-            m_dTextY = tmpTopBorderWidth + BORDER_SPACE 
+            m_dTextY = tmpTopBorderWidth + BORDER_SPACE
               + (double) m_fmAscent * cos( tmpAngle * M_PI / 180 ) / m_pTable->doc()->zoomedResolutionY();
         }
       }
@@ -1506,12 +1506,12 @@ void KSpreadCell::offsetAlign( int _col, int _row )
         if( h - BORDER_SPACE - m_dOutTextHeight * m_nbLines - effBottomBorderPen( _col, _row ).width() > 0 )
           m_dTextY = h - BORDER_SPACE - m_dOutTextHeight * tmpline - effBottomBorderPen( _col, _row ).width();
         else
-          m_dTextY = tmpTopBorderWidth + BORDER_SPACE 
+          m_dTextY = tmpTopBorderWidth + BORDER_SPACE
             + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
       }
       else
         if ( h - BORDER_SPACE - m_dOutTextHeight - effBottomBorderPen( _col, _row ).width() > 0 )
-          m_dTextY = h - BORDER_SPACE - m_dOutTextHeight - effBottomBorderPen( _col, _row ).width() 
+          m_dTextY = h - BORDER_SPACE - m_dOutTextHeight - effBottomBorderPen( _col, _row ).width()
             + (double)m_fmAscent / m_pTable->doc()->zoomedResolutionY();
         else
           m_dTextY = tmpTopBorderWidth + BORDER_SPACE
@@ -1559,7 +1559,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
         if ( h - m_dOutTextHeight > 0 )
           m_dTextY = ( h - m_dOutTextHeight ) / 2 + (double)m_fmAscent / m_pTable->doc()->zoomedResolutionY();
         else
-          m_dTextY = tmpTopBorderWidth + BORDER_SPACE 
+          m_dTextY = tmpTopBorderWidth + BORDER_SPACE
             + (double)m_fmAscent / m_pTable->doc()->zoomedResolutionY();
       break;
     }
@@ -1613,7 +1613,7 @@ void KSpreadCell::textSize( QPainter &_paint )
 
       if ( m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SFontFlag, true ) )
         fontUnderlined = ( m_conditions->matchedStyle()->fontFlags() && (uint) KSpreadStyle::FUnderline );
-      else 
+      else
         fontUnderlined = textFontUnderline( _col, _row );
     }
     else
@@ -1791,7 +1791,7 @@ bool KSpreadCell::calc(bool delay)
     setFlag(Flag_CircularCalculation);
     m_strFormulaOut = "####";
     m_value.setError ( "####" );
-    
+
     setFlag(Flag_LayoutDirty);
     if ( m_style == ST_Select )
     {
@@ -1991,7 +1991,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
                              KSpreadView * view, const KoPoint & coordinate,
                              const QPoint &cellRef, bool paintBorderRight,
                              bool paintBorderBottom, bool paintBorderLeft,
-                             bool paintBorderTop, QPen & rightPen, 
+                             bool paintBorderTop, QPen & rightPen,
                              QPen & bottomPen, QPen & leftPen,
                              QPen & topPen, bool drawCursor )
 {
@@ -2057,7 +2057,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   }
 
   QColor backgroundColor;
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundColor, true ) )
     backgroundColor = m_conditions->matchedStyle()->bgColor();
   else
@@ -2224,8 +2224,8 @@ void KSpreadCell::paintObscuredCells(const KoRect& rect, QPainter& painter,
                                      const QPoint &cellRef,
                                      bool paintBorderRight,
                                      bool paintBorderBottom,
-                                     bool paintBorderLeft, bool paintBorderTop, 
-                                     QPen & rightPen, QPen & bottomPen, 
+                                     bool paintBorderLeft, bool paintBorderTop,
+                                     QPen & rightPen, QPen & bottomPen,
                                      QPen & leftPen, QPen & topPen )
 {
   // This cell is obscuring other ones? Then we redraw their
@@ -2323,7 +2323,7 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
 
   // Draw a background brush
   QBrush bb;
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundBrush, true ) )
     bb = m_conditions->matchedStyle()->backGroundBrush();
   else
@@ -2657,7 +2657,7 @@ void KSpreadCell::paintText( QPainter& painter,
   //Check for red font color for negativ values
   if ( !m_conditions || !m_conditions->matchedStyle() )
   {
-    if ( m_value.isNumber() 
+    if ( m_value.isNumber()
          && !( m_pTable->getShowFormula()
                && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
     {
@@ -2724,7 +2724,7 @@ void KSpreadCell::paintText( QPainter& painter,
   //apply indent if text is align to left not when text is at right or middle
   if (  a == KSpreadCell::Left && !isEmpty() )
   {
-    if ( m_conditions && m_conditions->matchedStyle() 
+    if ( m_conditions && m_conditions->matchedStyle()
          && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SIndent, true ) )
       indent = m_conditions->matchedStyle()->indent();
     else
@@ -2789,7 +2789,7 @@ void KSpreadCell::paintText( QPainter& painter,
     if ( angle > 0 )
       x = indent + cellRect.x() + m_dTextX;
     else
-      x = indent + cellRect.x() + m_dTextX 
+      x = indent + cellRect.x() + m_dTextX
         - ( fm.descent() + fm.ascent() ) * sin( angle * M_PI / 180 );
     double y;
     if ( angle > 0 )
@@ -2957,7 +2957,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   KSpreadDoc * doc = table()->doc();
 
   /* we might not paint some borders if this cell is merged with another in
-     that direction 
+     that direction
   bool paintLeft   = paintBorderLeft;
   bool paintRight  = paintBorderRight;
   bool paintTop    = paintBorderTop;
@@ -3098,7 +3098,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   int vert_penWidth, horz_penWidth;
 
   // Fix the borders which meet at the top left corner
-  if ( m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 ) 
+  if ( m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 )
        >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effRightBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
     vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
   else
@@ -3109,7 +3109,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
   if ( vert_pen.style() != Qt::NoPen )
   {
-    if ( m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effTopBorderValue( cellRef.x() - 1, cellRef.y() ) 
+    if ( m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effTopBorderValue( cellRef.x() - 1, cellRef.y() )
          >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() - 1 )->effBottomBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
       horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
     else
@@ -3138,7 +3138,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   }
 
   // Fix the borders which meet at the top right corner
-  if ( m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effRightBorderValue( cellRef.x(), cellRef.y() - 1 ) 
+  if ( m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effRightBorderValue( cellRef.x(), cellRef.y() - 1 )
        >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effLeftBorderValue( cellRef.x() + 1, cellRef.y() - 1 ) )
     vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
   else
@@ -3149,7 +3149,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   vert_pen.setWidth( vert_penWidth );
   if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) )
   {
-    if ( m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effTopBorderValue( cellRef.x() + 1, cellRef.y() ) 
+    if ( m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effTopBorderValue( cellRef.x() + 1, cellRef.y() )
          >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() - 1 )->effBottomBorderValue( cellRef.x() + 1, cellRef.y() - 1 ) )
       horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
     else
@@ -3182,7 +3182,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   if ( cellRef.y() < KS_rowMax )
   {
     // Fix the borders which meet at the bottom left corner
-    if ( m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effLeftBorderValue( cellRef.x(), cellRef.y() + 1 ) 
+    if ( m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effLeftBorderValue( cellRef.x(), cellRef.y() + 1 )
          >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effRightBorderValue( cellRef.x() - 1, cellRef.y() + 1 ) )
       vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
     else
@@ -3193,7 +3193,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     vert_pen.setWidth( vert_penWidth );
     if ( vert_pen.style() != Qt::NoPen )
     {
-      if ( m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effBottomBorderValue( cellRef.x() - 1, cellRef.y() ) 
+      if ( m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effBottomBorderValue( cellRef.x() - 1, cellRef.y() )
            >= m_pTable->cellAt( cellRef.x() - 1, cellRef.y() + 1 )->effTopBorderValue( cellRef.x() - 1, cellRef.y() + 1 ) )
         horz_pen = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
       else
@@ -3223,7 +3223,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
 
     // Fix the borders which meet at the bottom right corner
-    if ( m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effRightBorderValue( cellRef.x(), cellRef.y() + 1 ) 
+    if ( m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effRightBorderValue( cellRef.x(), cellRef.y() + 1 )
          >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effLeftBorderValue( cellRef.x() + 1, cellRef.y() + 1 ) )
       vert_pen = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
     else
@@ -3234,7 +3234,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     vert_pen.setWidth( vert_penWidth );
     if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) )
     {
-      if ( m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effBottomBorderValue( cellRef.x() + 1, cellRef.y() ) 
+      if ( m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effBottomBorderValue( cellRef.x() + 1, cellRef.y() )
            >= m_pTable->cellAt( cellRef.x() + 1, cellRef.y() + 1 )->effTopBorderValue( cellRef.x() + 1, cellRef.y() + 1 ) )
         horz_pen = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
       else
@@ -3308,7 +3308,7 @@ int KSpreadCell::defineAlignX()
 
 int KSpreadCell::effAlignX()
 {
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignX, true ) )
     return m_conditions->matchedStyle()->alignX();
 
@@ -3667,7 +3667,7 @@ const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
 
 const QColor & KSpreadCell::effTextColor( int col, int row ) const
 {
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::STextPen, true ) )
     return m_conditions->matchedStyle()->pen().color();
 
@@ -3682,7 +3682,7 @@ const QPen& KSpreadCell::effLeftBorderPen( int col, int row ) const
     return cell->effLeftBorderPen( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SLeftBorder, true ) )
     return m_conditions->matchedStyle()->leftBorderPen();
 
@@ -3697,7 +3697,7 @@ const QPen& KSpreadCell::effTopBorderPen( int col, int row ) const
     return cell->effTopBorderPen( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::STopBorder, true ) )
     return m_conditions->matchedStyle()->topBorderPen();
 
@@ -3712,7 +3712,7 @@ const QPen& KSpreadCell::effRightBorderPen( int col, int row ) const
     return cell->effRightBorderPen( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SRightBorder, true ) )
     return m_conditions->matchedStyle()->rightBorderPen();
 
@@ -3727,7 +3727,7 @@ const QPen& KSpreadCell::effBottomBorderPen( int col, int row ) const
     return cell->effBottomBorderPen( cell->column(), cell->row() );
   }
 
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SBottomBorder, true ) )
     return m_conditions->matchedStyle()->bottomBorderPen();
 
@@ -3736,7 +3736,7 @@ const QPen& KSpreadCell::effBottomBorderPen( int col, int row ) const
 
 const QPen & KSpreadCell::effGoUpDiagonalPen( int col, int row ) const
 {
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SGoUpDiagonal, true ) )
     return m_conditions->matchedStyle()->goUpDiagonalPen();
 
@@ -3745,7 +3745,7 @@ const QPen & KSpreadCell::effGoUpDiagonalPen( int col, int row ) const
 
 const QPen & KSpreadCell::effFallDiagonalPen( int col, int row ) const
 {
-  if ( m_conditions && m_conditions->matchedStyle() 
+  if ( m_conditions && m_conditions->matchedStyle()
        && m_conditions->matchedStyle()->hasFeature( KSpreadStyle::SFallDiagonal, true ) )
     return m_conditions->matchedStyle()->fallDiagonalPen();
 
