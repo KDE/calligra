@@ -61,9 +61,11 @@ protected:
     virtual void WriteOut(const QString& str)=0;
     void unGetCharacter(const QChar& ch);
     bool parseTag(bool tagClosing);
-	bool parseXmlProcessingInstruction(const QString& tagName);
-	bool parseSgmlProcessingInstruction(const QString& tagName);
-	bool parseProcessingInstruction(void);
+    bool parseXmlProcessingInstruction(const QString& tagName);
+    bool parseSgmlProcessingInstruction(const QString& tagName);
+    bool parseProcessingInstruction(void);
+    QString parseEntity(void);
+    QChar resolveEntity(const QString& strEntity);
 private:
     MapTag m_mapTag;
     QTextStream& m_streamIn;

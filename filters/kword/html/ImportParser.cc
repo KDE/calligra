@@ -712,6 +712,114 @@ bool HtmlParser::parseProcessingInstruction(void)
     return result;
 }
 
+QChar HtmlParser::resolveEntity(const QString& strEntity)
+{
+    // strEntity must not contain the '&'
+    if (strEntity[0]=='#')
+        // It is a numerical character reference
+    {
+        uint result;
+        if (strEntity[1]=='x')
+        {
+            result=strEntity.mid(2).toUInt(NULL,16); // base 16
+        }
+        else
+        {
+            result=strEntity.mid(2).toUInt(NULL,10); // base 10
+        }
+        return QChar(result);
+    }
+    else
+    {
+        // PROVISORY!
+        if (strEntity=="amp")
+            return '&';
+        else if (strEntity=="lt")
+            return '<';
+        else if (strEntity=="gt")
+            return '>';
+        else if (strEntity=="quot")
+            return '"';
+        else
+            return QChar(); // NULL!
+    }
+}
+
+QString HtmlParser::parseEntity(void)
+{
+    QString entity;
+    QChar ch;
+    bool valid=false;
+    bool firstCharater=true; // the first character apart may be a '#'
+
+    for (;;)
+    {
+        if (atEnd())
+        {
+            kdError(30503) << "Unexpected end of file! Aborting! (HtmlParse::parseEntity)"
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+            return entity;
+        }
+
+        ch=getCharacter();
+
+        if ( (ch==';')|| (ch=='<') || IsWhiteSpace(ch) )
+        {
+            valid=true; // Entity seems to be valid
+            break; // End of Entity
+        }
+        else if (ch.isLetterOrNumber())
+        {
+            entity+=ch;
+        }
+        else if (firstCharater && (ch=='#'))
+        {
+            entity+=ch;
+        }
+        else
+        { // Unknown character, so we are out of the entity
+            // We assume that the entiy is not valid!
+            entity+=ch;
+            break;
+        }
+        firstCharater=false;
+    }
+
+    QString strResult;
+
+    if (valid)
+    {
+        if (ch!=';')
+        {
+            unGetCharacter(ch);
+        }
+
+        QChar chResult=resolveEntity(entity);
+
+        if (chResult.isNull())
+        {
+            strResult+="&";
+            strResult+=entity;
+            if (ch==';')
+            {
+                strResult+=';';
+            }
+        }
+        else
+        {
+            strResult=chResult;
+        }
+    }
+    else
+    {
+        strResult+="&";
+        strResult+=entity;
+    }
+
+    return strResult;
+}
+
 bool HtmlParser::parse(void)
 {
 
@@ -755,6 +863,10 @@ bool HtmlParser::parse(void)
                     }
                     strBuffer=QString::null; // re-arm buffer
                     state=stateLesser;
+                }
+                else if (ch=='&')
+                {
+                    strBuffer+=parseEntity();
                 }
                 else
                 {
