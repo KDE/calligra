@@ -200,6 +200,11 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
             m_currentTextObjectView->keyPressEvent( keyev );
             return true;
         }
+        else if ( !m_currentTextObjectView && keyev->key()==Key_Tab  )
+        {
+            keyPressEvent(keyev);
+            return true;
+        }
     }
     case QEvent::FocusIn:
         if ( m_currentTextObjectView )
@@ -5406,11 +5411,13 @@ void KPrCanvas::selectNext()
 /*================================================================*/
 void KPrCanvas::selectPrev()
 {
+    kdDebug()<<"KPrCanvas::selectPrev()**********\n";
     if ( objectList().count() == 0 ) return;
-
+    kdDebug()<<" wwcwcwxc ==============\n";
     if ( m_activePage->numSelected() == 0 )
         objectList().at( objectList().count() - 1 )->setSelected( true );
     else {
+        kdDebug()<<" else********************\n";
         int i = objectList().findRef( m_activePage->getSelectedObj() );
         if ( i > 0 ) {
             m_view->kPresenterDoc()->deSelectAllObj();
@@ -5420,6 +5427,7 @@ void KPrCanvas::selectPrev()
             objectList().at( objectList().count() - 1 )->setSelected( true );
         }
     }
+    kdDebug()<<" apres 2222222222222222222222222\n";
     m_view->makeRectVisible( m_view->zoomHandler()->zoomRect(m_activePage->getSelectedObj()->getBoundingRect(m_view->zoomHandler() )) );
     _repaint( false );
 }
