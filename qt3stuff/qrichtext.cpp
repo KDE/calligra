@@ -2636,7 +2636,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	    if ( ir.y() + ir.height() < parag->next()->rect().y() ) {
 		QRect r( 0, ir.y() + ir.height(),
 			 parag->document()->x() + parag->document()->width(),
-			 parag->next()->rect().y() - ( ir.y() + ir.height() ) - 1 );
+			 parag->next()->rect().y() - ( ir.y() + ir.height() ) );
 		r &= crect;
 		if ( !r.isEmpty() )
 		    p->fillRect( r, cg.brush( QColorGroup::Base ) );
