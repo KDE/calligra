@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>838</width>
+            <width>577</width>
             <height>410</height>
         </rect>
     </property>
@@ -146,7 +146,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="0" column="0" rowspan="3" colspan="1">
+                    <widget class="QButtonGroup" row="0" column="0" rowspan="2" colspan="1">
                         <property name="name">
                             <cstring>m_delimiterBox</cstring>
                         </property>
@@ -235,69 +235,15 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QButtonGroup" row="0" column="1" rowspan="3" colspan="1">
+                    <widget class="QCheckBox" row="2" column="0">
                         <property name="name">
-                            <cstring>m_formatBox</cstring>
+                            <cstring>m_ignoreDuplicates</cstring>
                         </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>1</hsizetype>
-                                <vsizetype>1</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
+                        <property name="text">
+                            <string>Ignore duplicate delimiters</string>
                         </property>
-                        <property name="title">
-                            <string>Format</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QRadioButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>m_radioNumber</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Number</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="0" column="0">
-                                <property name="name">
-                                    <cstring>m_radioText</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Text</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="1" column="1">
-                                <property name="name">
-                                    <cstring>m_radioDate</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Date</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="0" column="1">
-                                <property name="name">
-                                    <cstring>m_radioCurrency</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Currency</string>
-                                </property>
-                            </widget>
-                        </grid>
                     </widget>
-                    <widget class="QLabel" row="0" column="2">
+                    <widget class="QLabel" row="1" column="1">
                         <property name="name">
                             <cstring>TextLabel2</cstring>
                         </property>
@@ -310,7 +256,26 @@
                             </sizepolicy>
                         </property>
                         <property name="text">
-                            <string>Textquote:</string>
+                            <string>Text&amp;quote:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>m_comboQuote</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="1">
+                        <property name="name">
+                            <cstring>textLabel1_4</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Format:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>m_formatComboBox</cstring>
+                        </property>
+                    </widget>
+                    <widget class="KComboBox" row="0" column="2">
+                        <property name="name">
+                            <cstring>m_formatComboBox</cstring>
                         </property>
                     </widget>
                     <widget class="QComboBox" row="1" column="2">
@@ -341,14 +306,40 @@
                             </sizepolicy>
                         </property>
                     </widget>
-                    <widget class="QCheckBox" row="2" column="2">
+                    <spacer row="0" column="3">
                         <property name="name">
-                            <cstring>m_ignoreDuplicates</cstring>
+                            <cstring>spacer19</cstring>
                         </property>
-                        <property name="text">
-                            <string>Ignore duplicate delimiters</string>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
                         </property>
-                    </widget>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>51</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <spacer row="1" column="3">
+                        <property name="name">
+                            <cstring>spacer20</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>51</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
                 </grid>
             </widget>
             <widget class="QWidget">
@@ -561,5 +552,6 @@
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
 </includehints>
 </UI>

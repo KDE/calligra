@@ -21,6 +21,8 @@
 #ifndef CSVDIALOG_H
 #define CSVDIALOG_H
 
+#include <qstringlist.h>
+
 #include <kdialogbase.h>
 
 class DialogUI;
@@ -60,10 +62,11 @@ private:
     QByteArray m_fileArray;
     DialogUI * m_dialog;
     QTextCodec* m_codec;
+    QStringList m_formatList; ///< List of the column formats
 
 private slots:
     void returnPressed();
-    void formatClicked(int id);
+    void formatChanged( const QString& );
     void delimiterClicked(int id);
     void textquoteSelected(const QString& mark);
     void currentCellChanged(int, int col);

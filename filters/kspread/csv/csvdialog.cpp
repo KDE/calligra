@@ -67,9 +67,17 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     encodings << description.arg("Apple Roman"); // Apple
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
     encodings << description.arg("CP 1258"); // Windows
-    
     m_dialog->comboBoxEncoding->insertStringList(encodings);
+
+    ;
+    m_formatList << i18n( "Text" );
+    m_formatList << i18n( "Number" );
+    m_formatList << i18n( "Currency" );
+    m_formatList << i18n( "Date" );
+    m_dialog->m_formatComboBox->insertStringList( m_formatList );
+
     m_dialog->m_table->setReadOnly( true );
+
     fillTable();
 
     //resize(sizeHint());
@@ -78,14 +86,14 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
 
     m_dialog->m_table->setSelectionMode( QTable::Multi );
 
-    connect(m_dialog->m_formatBox, SIGNAL(clicked(int)),
-            this, SLOT(formatClicked(int)));
+    connect(m_dialog->m_formatComboBox, SIGNAL(activated( const QString& )),
+            this, SLOT(formatChanged( const QString& )));
     connect(m_dialog->m_delimiterBox, SIGNAL(clicked(int)),
             this, SLOT(delimiterClicked(int)));
     connect(m_dialog->m_delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
     connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
-            this, SLOT(textChanged ( const QString & ) ));
+            this, SLOT(formatChanged ( const QString & ) ));
     connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString &)),
             this, SLOT(textquoteSelected(const QString &)));
     connect(m_dialog->m_table, SIGNAL(currentChanged(int, int)),
@@ -314,9 +322,8 @@ void CSVDialog::fillTable( )
 
     for (column = 0; column < m_dialog->m_table->numCols(); ++column)
     {
-        QString header = m_dialog->m_table->horizontalHeader()->label(column);
-        if (header != i18n("Text") && header != i18n("Number") &&
-            header != i18n("Date") && header != i18n("Currency"))
+        const QString header = m_dialog->m_table->horizontalHeader()->label(column);
+        if ( m_formatList.find( header ) == m_formatList.end() )
             m_dialog->m_table->horizontalHeader()->setLabel(column, i18n("Text"));
 
         m_dialog->m_table->adjustColumn(column);
@@ -376,7 +383,7 @@ int CSVDialog::getCols()
 int CSVDialog::getHeader(int col)
 {
     QString header = m_dialog->m_table->horizontalHeader()->label(col);
-
+    
     if (header == i18n("Text"))
         return TEXT;
     else if (header == i18n("Number"))
@@ -459,32 +466,15 @@ void CSVDialog::textChanged ( const QString & )
     delimiterClicked(4); // other
 }
 
-void CSVDialog::formatClicked(int id)
+void CSVDialog::formatChanged( const QString& newValue )
 {
-    QString header;
-
-    switch (id)
-    {
-    case 1: // text
-        header = i18n("Text");
-        break;
-    case 0: // number
-        header = i18n("Number");
-        break;
-    case 2: // date
-        header = i18n("Date");
-        break;
-    case 3: // currency
-        header = i18n("Currency");
-        break;
-    }
-
+    //kdDebug(30501) << "CSVDialog::formatChanged:" << newValue << endl;
     for ( int i = 0; i < m_dialog->m_table->numSelections(); ++i )
     {
         QTableSelection select ( m_dialog->m_table->selection( i ) );
         for ( int j = select.leftCol(); j <= select.rightCol() ; ++j )
         {
-            m_dialog->m_table->horizontalHeader()->setLabel( j, header );
+            m_dialog->m_table->horizontalHeader()->setLabel( j, newValue );
             
         }
     }
@@ -552,19 +542,8 @@ bool CSVDialog::checkUpdateRange()
 
 void CSVDialog::currentCellChanged(int, int col)
 {
-    int id;
-    QString header = m_dialog->m_table->horizontalHeader()->label(col);
-
-    if (header == i18n("Text"))
-        id = 1;
-    else if (header == i18n("Number"))
-        id = 0;
-    else if (header == i18n("Date"))
-        id = 3;
-    else
-        id = 2;
-
-    m_dialog->m_formatBox->setButton(id);
+    const QString header = m_dialog->m_table->horizontalHeader()->label(col);
+    m_dialog->m_formatComboBox->setCurrentText( header );
 }
 
 void CSVDialog::ignoreDuplicatesChanged(int)
