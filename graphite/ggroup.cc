@@ -257,21 +257,21 @@ GObjectM9r *GGroup::createM9r(GraphitePart *part, GraphiteView *view,
     return new GGroupM9r(this, mode, part, view, i18n("Group"));
 }
 
-const QPoint GGroup::origin() const {
-    return boundingRect().topLeft();
+const FxPoint GGroup::origin() const {
+    return FxPoint(boundingRect().topLeft());
 }
 
-void GGroup::setOrigin(const QPoint &o) {
+void GGroup::setOrigin(const FxPoint &o) {
 
-    int dx=o.x()-origin().x();
-    int dy=o.y()-origin().y();
+    double dx=o.x()-static_cast<double>(origin().x());
+    double dy=o.y()-static_cast<double>(origin().y());
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
         it.current()->move(dx, dy);
     setBoundingRectDirty();
 }
 
-void GGroup::moveX(const int &dx) {
+void GGroup::moveX(const double &dx) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
@@ -279,7 +279,7 @@ void GGroup::moveX(const int &dx) {
     setBoundingRectDirty();
 }
 
-void GGroup::moveY(const int &dy) {
+void GGroup::moveY(const double &dy) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
@@ -287,7 +287,7 @@ void GGroup::moveY(const int &dy) {
     setBoundingRectDirty();
 }
 
-void GGroup::move(const int &dx, const int &dy) {
+void GGroup::move(const double &dx, const double &dy) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
@@ -295,7 +295,7 @@ void GGroup::move(const int &dx, const int &dy) {
     setBoundingRectDirty();
 }
 
-void GGroup::rotate(const QPoint &center, const double &ang) {
+void GGroup::rotate(const FxPoint &center, const double &ang) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
@@ -304,7 +304,7 @@ void GGroup::rotate(const QPoint &center, const double &ang) {
     setBoundingRectDirty();
 }
 
-void GGroup::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {
+void GGroup::scale(const FxPoint &origin, const double &xfactor, const double &yfactor) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
@@ -312,10 +312,10 @@ void GGroup::scale(const QPoint &origin, const double &xfactor, const double &yf
     setBoundingRectDirty();
 }
 
-void GGroup::resize(const QRect &brect) {
+void GGroup::resize(const FxRect &brect) {
 
-    int dx=brect.width()-boundingRect().width();
-    int dy=brect.height()-boundingRect().height();
+    double dx=brect.width()-static_cast<double>(boundingRect().width());
+    double dy=brect.height()-static_cast<double>(boundingRect().height());
     double xfactor=static_cast<double>(dx)/static_cast<double>(boundingRect().width());
     double yfactor=static_cast<double>(dy)/static_cast<double>(boundingRect().height());
     scale(origin(), xfactor, yfactor);

@@ -29,6 +29,7 @@ class QPen;
 class QDomDocument;
 class QDomElement;
 class FxPoint;
+class FxRect;
 
 // This struct holds all the necessary information needed to represent
 // a KDE gradient
@@ -134,7 +135,10 @@ public:
     QPen toPen(const QDomElement &element) const;
 
     QDomElement createElement(const QString &tagName, const QRect &rect, QDomDocument &doc) const;
-    QRect toRect(const QDomElement &element) const;
+    QRect toQRect(const QDomElement &element) const;
+
+    QDomElement createElement(const QString &tagName, const FxRect &rect, QDomDocument &doc) const;
+    FxRect toFxRect(const QDomElement &element) const;
 
     // maybe I'll add a init(...) method which takes a KConfig file/pointer
     // and initializes all the "global" vars.
@@ -231,7 +235,7 @@ public:
     void setPoint(const FxValue &x, const FxValue &y) { m_x=x; m_y=y; }
     void setPoint(const double &x, const double &y) { m_x.setValue(x); m_y.setValue(y); }
 
-    const QPoint pxPoint() { return QPoint(pxX(), pxY()); }
+    const QPoint pxPoint() const { return QPoint(pxX(), pxY()); }
     void setPxPoint(const int &x, const int &y) { m_x.setPxValue(x); m_y.setPxValue(y); }
     void setPxPoint(const QPoint &p) { m_x.setPxValue(p.x()); m_y.setPxValue(p.y()); }
 
@@ -313,7 +317,8 @@ public:
     bool intersects(const QRect &r) const;
 
     void recalculate() { m_tl.recalculate(); m_br.recalculate(); }
-
+    QRect pxRect() const { return QRect(m_tl.pxX(), m_tl.pxY(), m_br.pxX()-m_tl.pxX(),
+                                 m_br.pxY()-m_tl.pxY()); }
 private:
     FxPoint m_tl, m_br;
 };

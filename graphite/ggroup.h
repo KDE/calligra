@@ -62,16 +62,16 @@ public:
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
                                   const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
 
-    virtual const QPoint origin() const;
-    virtual void setOrigin(const QPoint &origin);
-    virtual void moveX(const int &dx);
-    virtual void moveY(const int &dy);
-    virtual void move(const int &dx, const int &dy);
+    virtual const FxPoint origin() const;
+    virtual void setOrigin(const FxPoint &origin);
+    virtual void moveX(const double &dx);
+    virtual void moveY(const double &dy);
+    virtual void move(const double &dx, const double &dy);
 
-    virtual void rotate(const QPoint &center, const double &angle);
+    virtual void rotate(const FxPoint &center, const double &angle);
 
-    virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
-    virtual void resize(const QRect &boundingRect);
+    virtual void scale(const FxPoint &origin, const double &xfactor, const double &yfactor);
+    virtual void resize(const FxRect &boundingRect);
 
     virtual void setState(const State state);
     virtual void setFillStyle(const FillStyle &fillStyle);
@@ -79,12 +79,11 @@ public:
     virtual void setGradient(const Gradient &gradient);
     virtual void setPen(const QPen &pen);
 
-protected:
-    QList<GObject> m_members;
-    mutable QListIterator<GObject> *m_iterator;
-
 private:
     GGroup &operator=(const GGroup &rhs);
+
+    QList<GObject> m_members;
+    mutable QListIterator<GObject> *m_iterator;
 };
 
 

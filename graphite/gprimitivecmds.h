@@ -24,7 +24,9 @@
 #include <kcommand.h>
 
 class QPoint;
+class FxPoint;
 class QRect;
+class FxRect;
 class QBrush;
 class QPen;
 
@@ -33,21 +35,21 @@ class GMoveCmd : public KCommand {
 
 public:
     GMoveCmd(GObject *object, const QString &name);
-    GMoveCmd(GObject *object, const QString &name, const QPoint &from,
-             const QPoint &to);
+    GMoveCmd(GObject *object, const QString &name, const FxPoint &from,
+             const FxPoint &to);
     virtual ~GMoveCmd() {}
 
     virtual void execute();
     virtual void unexecute();
 
-    void setFrom(const QPoint &from) { m_from=from; }
-    const QPoint &from() const { return m_from; }
-    void setTo(const QPoint &to) { m_to=to; }
-    const QPoint &to() const { return m_to; }
+    void setFrom(const FxPoint &from) { m_from=from; }
+    const FxPoint &from() const { return m_from; }
+    void setTo(const FxPoint &to) { m_to=to; }
+    const FxPoint &to() const { return m_to; }
 
 private:
     GObject *m_object;
-    QPoint m_from, m_to;
+    FxPoint m_from, m_to;
 };
 
 
@@ -56,20 +58,20 @@ class GResizeCmd : public KCommand {
 public:
     GResizeCmd(GObject *object, const QString &name);
     GResizeCmd(GObject *object, const QString &name,
-               const QRect &oldSize, const QRect &newSize);
+               const FxRect &oldSize, const FxRect &newSize);
     virtual ~GResizeCmd() {}
 
     virtual void execute();
     virtual void unexecute();
 
-    void setOldSize(const QRect &oldSize) { m_old=oldSize; }
-    const QRect &oldSize() const { return m_old; }
-    void setNewSize(const QRect &newSize) { m_new=newSize; }
-    const QRect &newSize() const { return m_new; }
+    void setOldSize(const FxRect &oldSize) { m_old=oldSize; }
+    const FxRect &oldSize() const { return m_old; }
+    void setNewSize(const FxRect &newSize) { m_new=newSize; }
+    const FxRect &newSize() const { return m_new; }
 
 private:
     GObject *m_object;
-    QRect m_old, m_new;
+    FxRect m_old, m_new;
 };
 
 
@@ -77,21 +79,21 @@ class GRotateCmd : public KCommand {
 
 public:
     GRotateCmd(GObject *object, const QString &name);
-    GRotateCmd(GObject *object, const QString &name, const QPoint &center,
+    GRotateCmd(GObject *object, const QString &name, const FxPoint &center,
                const double &angle);
     virtual ~GRotateCmd() {}
 
     virtual void execute();
     virtual void unexecute();
 
-    void setCenter(const QPoint &center) { m_center=center; }
-    const QPoint &center() const { return m_center; }
+    void setCenter(const FxPoint &center) { m_center=center; }
+    const FxPoint &center() const { return m_center; }
     void setAngle(const double &angle) { m_angle=angle; }
     const double &angle() const { return m_angle; }
 
 private:
     GObject *m_object;
-    QPoint m_center;
+    FxPoint m_center;
     double m_angle;
 };
 
@@ -100,15 +102,15 @@ class GScaleCmd : public KCommand {
 
 public:
     GScaleCmd(GObject *object, const QString &name);
-    GScaleCmd(GObject *object, const QString &name, const QPoint &origin,
+    GScaleCmd(GObject *object, const QString &name, const FxPoint &origin,
               const double &xfactor, const double &yfactor);
     virtual ~GScaleCmd() {}
 
     virtual void execute();
     virtual void unexecute();
 
-    void setOrigin(const QPoint &origin) { m_origin=origin; }
-    const QPoint &origin() const { return m_origin; }
+    void setOrigin(const FxPoint &origin) { m_origin=origin; }
+    const FxPoint &origin() const { return m_origin; }
     void setXFactor(const double &xfactor) { m_xfactor=xfactor; }
     const double &xfactor() const { return m_xfactor; }
     void setYFactor(const double &yfactor) { m_yfactor=yfactor; }
@@ -116,7 +118,7 @@ public:
 
 private:
     GObject *m_object;
-    QPoint m_origin;
+    FxPoint m_origin;
     double m_xfactor, m_yfactor;
 };
 

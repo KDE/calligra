@@ -26,13 +26,15 @@
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     : QScrollView(view, "GCanvas", Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
-      m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L), m_showMousePos(true) {
+      m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L) {
 
     viewport()->setFocusPolicy(QWidget::StrongFocus);
     viewport()->setMouseTracking(true);
     setMouseTracking(true);
     setFocus();
     viewport()->setBackgroundMode(QWidget::NoBackground);
+    installEventFilter(viewport());
+    setFrameStyle(QFrame::NoFrame);
 }
 
 void GCanvas::setRulers(KoRuler *vertical, KoRuler *horizontal) {
@@ -56,12 +58,10 @@ void GCanvas::viewportResizeEvent(QResizeEvent */*e*/) {
 void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
 
     //kdDebug() << "GCanvas::contentsMouseMoveEvent: e->x(): " << e->x() << " e->y(): " << e->y() << endl;
-    if(m_showMousePos) {
-        if(m_vertical)
-            m_vertical->setMousePos(e->x(), e->y());
-        if(m_horizontal)
-            m_horizontal->setMousePos(e->x(), e->y());
-    }
+    if(m_vertical)
+        m_vertical->setMousePos(e->x(), e->y());
+    if(m_horizontal)
+        m_horizontal->setMousePos(e->x(), e->y());
     m_doc->mouseMoveEvent(e, m_view);
 }
 
@@ -97,15 +97,13 @@ void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {
                    << " y-offet=" << contentsY() << endl;*/
 }
 
-// FIXME: Wir brauchen einen eventFilter auf dem viewport()!!!
-void GCanvas::leaveEvent(QEvent *) {
-    //kdDebug() << "GCanvas::leaveEvent" << endl;
-    m_showMousePos=false;
-}
+bool GCanvas::eventFilter(QObject *obj, QEvent *e) {
 
-void GCanvas::enterEvent(QEvent *) {
-    //kdDebug() << "GCanvas::enterEvent" << endl;
-    m_showMousePos=true;
+    if(e->type()==QEvent::Enter)
+        showMousePos(true);
+    else if(e->type()==QEvent::Leave)
+        showMousePos(false);
+    return QScrollView::eventFilter(obj, e);
 }
 
 #include <gcanvas.moc>

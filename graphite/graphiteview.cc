@@ -118,4 +118,5 @@ void GraphiteView::setupRulers() {
     connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
             SLOT(recalcRulers(int, int)));
 }
+
 #include <graphiteview.moc>

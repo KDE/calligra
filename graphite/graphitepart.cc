@@ -32,7 +32,6 @@
 
 // test
 #include <ggroup.h>
-#include <math.h>
 
 
 GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
@@ -65,7 +64,7 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     // test
     // TODO: Check the view - if it's the same as "before" -> ok :)
     GObject *o=new GGroup(QString::fromLatin1("foo"));
-    o->rotate(QPoint(10, 10), 45.0*180.0*M_1_PI);
+    o->rotate(FxPoint(0, 0), 45.0*180.0*M_1_PI);
     GObjectM9r *m=o->createM9r(this, view);
     QRect r;
     m->mousePressEvent(e, r);

@@ -24,8 +24,8 @@ GMoveCmd::GMoveCmd(GObject *object, const QString &name) : KCommand(name),
                                                            m_object(object) {
 }
 
-GMoveCmd::GMoveCmd(GObject *object, const QString &name, const QPoint &from,
-                   const QPoint &to) : KCommand(name), m_object(object),
+GMoveCmd::GMoveCmd(GObject *object, const QString &name, const FxPoint &from,
+                   const FxPoint &to) : KCommand(name), m_object(object),
                                        m_from(from), m_to(to) {
 }
 
@@ -46,8 +46,8 @@ GResizeCmd::GResizeCmd(GObject *object, const QString &name) : KCommand(name),
                                                                m_object(object) {
 }
 
-GResizeCmd::GResizeCmd(GObject *object, const QString &name, const QRect &oldSize,
-                       const QRect &newSize) : KCommand(name), m_object(object),
+GResizeCmd::GResizeCmd(GObject *object, const QString &name, const FxRect &oldSize,
+                       const FxRect &newSize) : KCommand(name), m_object(object),
                                                m_old(oldSize), m_new(newSize) {
 }
 
@@ -68,7 +68,7 @@ GRotateCmd::GRotateCmd(GObject *object, const QString &name) : KCommand(name),
                                                                m_object(object) {
 }
 
-GRotateCmd::GRotateCmd(GObject *object, const QString &name, const QPoint &center,
+GRotateCmd::GRotateCmd(GObject *object, const QString &name, const FxPoint &center,
                        const double &angle) : KCommand(name), m_object(object),
                                               m_center(center), m_angle(angle) {
 }
@@ -91,7 +91,7 @@ GScaleCmd::GScaleCmd(GObject *object, const QString &name) : KCommand(name),
 }
 
 GScaleCmd::GScaleCmd(GObject *object, const QString &name,
-                     const QPoint &origin, const double &xfactor,
+                     const FxPoint &origin, const double &xfactor,
                      const double &yfactor) : KCommand(name), m_object(object),
                                               m_origin(origin), m_xfactor(xfactor),
                                               m_yfactor(yfactor) {

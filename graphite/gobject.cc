@@ -56,7 +56,7 @@ GObjectM9r::GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
     KDialogBase(KDialogBase::IconList, i18n("Change Properties"),
                 KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
                 KDialogBase::Ok, view->canvas(), "property dia", true, true),
-    m_object(object), m_mode(mode), first_call(true), m_part(part),
+    m_object(object), m_mode(mode), m_part(part), m_firstCall(true),
     m_pressed(false), m_changed(false), m_created(false), m_type(type),
     m_line(0L), m_view(view) {
 

@@ -73,7 +73,7 @@ class PWidget;
 // by the calling method.
 // Note: The M9r is bound to a specific view and it won't work (correctly)
 // if you use one M9r for more than one view. Maybe I need some sort of
-// map or dict which relates a view to a M9r?
+// map or dict which relates a view to a M9r? (TODO)
 // Whenever a repaint is needed (movement,...), the dirty rect has to be
 // set (i.e. something different to (0, 0, 0, 0)).
 // Some of the M9rs can be in two different "modes": Create and Manipulate
@@ -136,17 +136,19 @@ protected:
     virtual void createPropertyDialog();
 
     bool created() const { return m_created; }
+    bool firstCall() const { return m_firstCall; }
+    void setFirstCall(bool firstCall) { m_firstCall=firstCall; }
     QList<QRect> *handles() const { return m_handles; }
 
 private:
     GObject *m_object;
     Mode m_mode;
-    bool first_call; // Whether this is the first call for this M9r (no hit test!)
     GraphitePart *m_part;     // we need that for the history
     QList<QRect> *m_handles;  // contains all the handle rects
-    bool m_pressed;           // mouse button pressed?
-    bool m_changed;           // true, if the Apply button is "active"
-    bool m_created;           // dia created?
+    bool m_firstCall : 1; // Whether this is the first call for this M9r (no hit test!)
+    bool m_pressed : 1;           // mouse button pressed?
+    bool m_changed : 1;           // true, if the Apply button is "active"
+    bool m_created : 1;           // dia created?
 
     QString m_type;         // Type of object (e.g. "Line", "Rectangle")
     QLineEdit *m_line;      // line ed. for the name field
@@ -281,18 +283,18 @@ public:
     QString name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
 
-    virtual const QPoint origin() const = 0;             // the origin coordinate of the obj
-    virtual void setOrigin(const QPoint &origin) = 0;
-    virtual void moveX(const int &dx) = 0;
-    virtual void moveY(const int &dy) = 0;
-    virtual void move(const int &dx, const int &dy) = 0;
+    virtual const FxPoint origin() const = 0;             // the origin coordinate of the obj
+    virtual void setOrigin(const FxPoint &origin) = 0;
+    virtual void moveX(const double &dx) = 0;
+    virtual void moveY(const double &dy) = 0;
+    virtual void move(const double &dx, const double &dy) = 0;
 
     // Note: radians!
-    virtual void rotate(const QPoint &center, const double &angle) = 0;
+    virtual void rotate(const FxPoint &center, const double &angle) = 0;
     virtual const double &angle() const { return m_angle; }
 
-    virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor) = 0;
-    virtual void resize(const QRect &boundingRect) = 0;  // resize, that it fits in this rect
+    virtual void scale(const FxPoint &origin, const double &xfactor, const double &yfactor) = 0;
+    virtual void resize(const FxRect &boundingRect) = 0;  // resize, that it fits in this rect
 
     const State &state() const { return m_state; }              // what's the current state?
     virtual void setState(const State state) { m_state=state; } // set the state

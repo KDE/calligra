@@ -54,16 +54,15 @@ protected:
     // when we don't have focus... (TODO)
     virtual void focusInEvent(QFocusEvent */*e*/) {}
     virtual void focusOutEvent(QFocusEvent */*e*/) {}
-    virtual void leaveEvent(QEvent *);
-    virtual void enterEvent(QEvent *);
     virtual void resizeEvent(QResizeEvent *e) { QScrollView::resizeEvent(e); }
     virtual void paintEvent(QPaintEvent *e) { QScrollView::paintEvent(e); }
+
+    virtual bool eventFilter(QObject *obj, QEvent *e);
 
 private:
     GraphitePart *m_doc;
     GraphiteView *m_view;
     KoRuler *m_vertical, *m_horizontal;
-    bool m_showMousePos;
 };
 
 #endif // gcanvas_h

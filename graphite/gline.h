@@ -27,6 +27,7 @@ class GLine : public GObject {
 
 public:
     GLine(const QPoint &a, const QPoint &b, const QString &name=QString::null);
+    GLine(const FxPoint &a, const FxPoint &b, const QString &name=QString::null);
     GLine(const QString &name=QString::null);
     GLine(const GLine &rhs);
     GLine(const QDomElement &element);
@@ -51,24 +52,24 @@ public:
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
                                   const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
 
-    virtual const QPoint origin() const { return m_a; }
-    virtual void setOrigin(const QPoint &origin);
-    virtual void moveX(const int &dx);
-    virtual void moveY(const int &dy);
-    virtual void move(const int &dx, const int &dy);
+    virtual const FxPoint origin() const { return m_a; }
+    virtual void setOrigin(const FxPoint &origin);
+    virtual void moveX(const double &dx);
+    virtual void moveY(const double &dy);
+    virtual void move(const double &dx, const double &dy);
 
-    virtual void rotate(const QPoint &center, const double &angle);
-    virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor);
-    virtual void resize(const QRect &boundingRect);
+    virtual void rotate(const FxPoint &center, const double &angle);
+    virtual void scale(const FxPoint &origin, const double &xfactor, const double &yfactor);
+    virtual void resize(const FxRect &boundingRect);
 
-    const QPoint &a() const { return m_a; }
-    void setA(const QPoint &a) { m_a=a; }
-    const QPoint &b() const { return m_b; }
-    void setB(const QPoint &b) { m_b=b; }
+    const FxPoint &a() const { return m_a; }
+    void setA(const FxPoint &a) { m_a=a; }
+    const FxPoint &b() const { return m_b; }
+    void setB(const FxPoint &b) { m_b=b; }
 
 private:
     GLine &operator=(const GLine &rhs);    // don't assign the objects, clone them
-    QPoint m_a, m_b;
+    FxPoint m_a, m_b;
 };
 
 
@@ -98,4 +99,5 @@ private:
 
     GLine *m_line;
 };
+
 #endif
