@@ -134,3 +134,10 @@ VObject::name() const
 	return document() ? document()->objectName( this ) : QString();
 }
 
+void
+VObject::setName( const QString &s )
+{
+	if( document() )
+		document()->setObjectName( this, s );
+}
+

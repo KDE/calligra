@@ -152,6 +152,8 @@ public:
 	virtual void insertInfrontOf( VObject* /*newObject*/, VObject* /*oldObject*/ ) { }
 
 	virtual QString name() const;
+	void setName( const QString & );
+
 	VDocument *document() const;
 
 protected:
