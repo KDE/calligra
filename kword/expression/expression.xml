@@ -86,6 +86,9 @@
             <Expression>
 				<Text>Ladies and Gentlemen:</Text>
             </Expression>
+            <Expression>
+				<Text>Cordially,</Text>
+            </Expression>
 	</Type>
         <Type>
     		<TypeName>Attention:</TypeName>	
