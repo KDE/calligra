@@ -4279,29 +4279,28 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     int zoomedYPos = m_pCanvas->doc()->zoomItY( yPos );
     int height = m_pCanvas->doc()->zoomItY( yPos + row_lay->dblHeight() ) - zoomedYPos;
 
-
     if ( selected || current )
     {
-      QBrush fillSelected( colorGroup().highlight().light() );
-      qDrawShadePanel( &painter,
-                       0, zoomedYPos, width, height,
-                       colorGroup(), FALSE, 1, &fillSelected );
+      QColor c = colorGroup().highlight().light();
+      QBrush fillSelected( c );
+      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150), 
+           1, &fillSelected );
     }
     else if ( highlighted )
     {
-      QBrush fillHighlighted( colorGroup().highlight().light() );
-      qDrawShadePanel( &painter,
-                       0, zoomedYPos, width, height,
-                       colorGroup(), true, 1, &fillHighlighted );
+      QColor c = colorGroup().highlight().light();
+      QBrush fillHighlighted( c );
+      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150), 
+           1, &fillHighlighted );
     }
     else
     {
-      QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter,
-                       0, zoomedYPos, width, height,
-                       colorGroup(), FALSE, 1, &fill );
+      QColor c = colorGroup().background();
+      QBrush fill( c );
+      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150), 
+           1, &fill );
     }
-
+    
     QString rowText = QString::number( y );
 
     // Reset painter
@@ -5095,32 +5094,32 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       int zoomedXPos = m_pCanvas->doc()->zoomItX( xPos );
       int width = m_pCanvas->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
 
-      if ( selected )
+      if ( selected || current )
       {
-        QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
-        qDrawShadePanel( &painter,
-                         zoomedXPos, 0, width, height,
-                         colorGroup(), FALSE, 1, &fillSelected );
+        QColor c = colorGroup().highlight().light();
+        QBrush fillSelected( c );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150), 
+           1, &fillSelected );
       }
       else if ( highlighted )
       {
-        QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
-        qDrawShadePanel( &painter,
-                         zoomedXPos, 0, width, height,
-                         colorGroup(), true, 1, &fillHighlighted );
+        QColor c = colorGroup().highlight().light();
+        QBrush fillHighlighted( c );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150), 
+           1, &fillHighlighted );
       }
       else
       {
-        QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-        qDrawShadePanel( &painter,
-                         zoomedXPos, 0, width, height,
-                         colorGroup(), FALSE, 1, &fill );
+        QColor c = colorGroup().background();
+        QBrush fill( c );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150), 
+           1, &fill );
       }
 
       // Reset painter
       painter.setFont( normalFont );
       painter.setPen( colorGroup().text() );
-
+      
       if ( selected )
         painter.setPen( colorGroup().highlightedText() );
       else if ( highlighted || current )
@@ -5164,24 +5163,24 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
       if ( selected || current )
       {
-        QBrush fillSelected( colorGroup().highlight().light() );
-        qDrawShadePanel( &painter,
-                         zoomedXPos, 0, width, height,
-                         colorGroup(), FALSE, 1, &fillSelected );
+        QColor c = colorGroup().highlight().light();
+        QBrush fillSelected( c );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(), 
+           1, &fillSelected );
       }
       else if ( highlighted )
       {
-        QBrush fillHighlighted( colorGroup().highlight().light() );
-        qDrawShadePanel( &painter,
-                         zoomedXPos, 0, width, height,
-                         colorGroup(), true, 1, &fillHighlighted );
+        QColor c = colorGroup().highlight().light();
+        QBrush fillHighlighted( c );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(), 
+           1, &fillHighlighted );
       }
       else
       {
-        QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-        qDrawShadePanel( &painter,
-                         zoomedXPos, 0, width, height,
-                         colorGroup(), FALSE, 1, &fill );
+        QColor c = colorGroup().background();
+        QBrush fill( c );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150), 
+           1, &fill );
       }
 
       // Reset painter
