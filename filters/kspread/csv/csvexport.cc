@@ -135,7 +135,8 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCStr
                   text = cell->text(); // untested
                   break;
                 case KSpreadCell::Formula:
-                  cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened
+                  cell->setCalcDirtyFlag();
+                  cell->calc(); // Incredible, cells are not calculated if the document was just opened
                   text = cell->valueString();
                   break;
               }
