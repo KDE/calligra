@@ -571,17 +571,38 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     KoStyleStack& styleStack = context.styleStack();
     styleStack.setTypeProperties( "" ); //I think that it's not necessary, but for be safe
     // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
-    m_paddingLeft = KoUnit::parseValue( styleStack.attribute( "fo:padding", "left" ) );
-    m_paddingRight = KoUnit::parseValue( styleStack.attribute( "fo:padding", "right" ) );
-    m_paddingTop = KoUnit::parseValue( styleStack.attribute( "fo:padding", "top" ) );
-    m_paddingBottom = KoUnit::parseValue( styleStack.attribute( "fo:padding", "bottom" ) );
-
+    if ( styleStack.hasAttribute( "fo:padding" ) )
+    {
+        QString str = styleStack.attribute( "fo:padding" );
+        m_paddingLeft = KoUnit::parseValue(str);
+        m_paddingRight = KoUnit::parseValue(str);
+        m_paddingTop = KoUnit::parseValue(str);
+        m_paddingBottom = KoUnit::parseValue(str);
+    }
+    else
+    {
+        m_paddingLeft = KoUnit::parseValue( styleStack.attribute( "fo:padding", "left" ) );
+        m_paddingRight = KoUnit::parseValue( styleStack.attribute( "fo:padding", "right" ) );
+        m_paddingTop = KoUnit::parseValue( styleStack.attribute( "fo:padding", "top" ) );
+        m_paddingBottom = KoUnit::parseValue( styleStack.attribute( "fo:padding", "bottom" ) );
+    }
     // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
-    m_runAroundLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin", "left" ) );
-    m_runAroundRight = KoUnit::parseValue( styleStack.attribute( "fo:margin", "right" ) );
-    m_runAroundTop = KoUnit::parseValue( styleStack.attribute( "fo:margin", "top" ) );
-    m_runAroundBottom = KoUnit::parseValue( styleStack.attribute( "fo:margin", "bottom" ) );
+    if ( styleStack.hasAttribute( "fo:margin" ) )
+    {
+        QString str = styleStack.attribute( "fo:margin" );
+        m_runAroundLeft = KoUnit::parseValue( str );
+        m_runAroundRight = KoUnit::parseValue( str );
+        m_runAroundTop = KoUnit::parseValue( str );
+        m_runAroundBottom = KoUnit::parseValue( str );
 
+    }
+    else
+    {
+        m_runAroundLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin", "left" ) );
+        m_runAroundRight = KoUnit::parseValue( styleStack.attribute( "fo:margin", "right" ) );
+        m_runAroundTop = KoUnit::parseValue( styleStack.attribute( "fo:margin", "top" ) );
+        m_runAroundBottom = KoUnit::parseValue( styleStack.attribute( "fo:margin", "bottom" ) );
+    }
 
     // background color (3.11.25)
     if ( styleStack.hasAttribute( "fo:background-color" ) ) {
@@ -600,10 +621,21 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     // borders (3.11.27)
     // can be none/hidden, solid and double. General form is the XSL/FO "width|style|color"
     {
-        m_borderLeft.loadFoBorder( styleStack.attribute("fo:border", "left") );
-        m_borderRight.loadFoBorder( styleStack.attribute("fo:border", "right") );
-        m_borderTop.loadFoBorder( styleStack.attribute("fo:border", "top") );
-        m_borderBottom.loadFoBorder( styleStack.attribute("fo:border", "bottom") );
+        if ( styleStack.hasAttribute("fo:border" ) )
+        {
+            QString str = styleStack.attribute("fo:border" );
+            m_borderLeft.loadFoBorder( str );
+            m_borderRight.loadFoBorder( str );
+            m_borderTop.loadFoBorder( str );
+            m_borderBottom.loadFoBorder( str );
+        }
+        else
+        {
+            m_borderLeft.loadFoBorder( styleStack.attribute("fo:border", "left") );
+            m_borderRight.loadFoBorder( styleStack.attribute("fo:border", "right") );
+            m_borderTop.loadFoBorder( styleStack.attribute("fo:border", "top") );
+            m_borderBottom.loadFoBorder( styleStack.attribute("fo:border", "bottom") );
+        }
     }
     // TODO more refined border spec for double borders (3.11.28)
 
