@@ -90,15 +90,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_currentTool = 0L;
 	m_toolOptionsDocker = 0L;
 	m_documentDocker = 0L;
-	if( p->isReadWrite() )
-		m_toolFactory = new VToolFactory( this );
-	else
-		m_toolFactory = 0L;
+	m_toolFactory = 0L;
 
 	setInstance( KarbonFactory::instance() );
-
-	if( p->isReadWrite() )
-		m_toolbox->setupTools();
 
 	setAcceptDrops( true );
 
@@ -190,6 +184,8 @@ KarbonView::~KarbonView()
 	delete( m_canvas );
 
 	delete( m_dcop );
+
+	//delete( m_toolbox );
 }
 
 void
@@ -199,6 +195,9 @@ KarbonView::registerTool( VTool *tool )
 	if( !m_toolbox )
 	{
 		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
+		if( !m_toolFactory )
+			m_toolFactory = new VToolFactory( this );
+		m_toolbox->setupTools();
 		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 	}
 	m_toolbox->registerTool( tool );
@@ -211,7 +210,16 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 	if( element.attribute( "name" ) == "Tools" )
 	{
 		if( !m_toolbox )
+		{
 			m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
+			if( !m_toolFactory )
+				m_toolFactory = new VToolFactory( this );
+			m_toolbox->setupTools();
+		}
+		else
+			m_toolbox = shell()->toolBar( "Tools" );
+
+		m_currentTool = 0L;
 		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 
 		if( shell() )
@@ -246,7 +254,7 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	if( container )
 		kdDebug() << container << endl;
 
-	if( shell() && container && container == m_toolbox )
+	if( shell() && container == m_toolbox )
 	{
 		delete m_toolbox;
 		delete m_toolOptionsDocker;
