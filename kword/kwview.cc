@@ -401,7 +401,7 @@ void KWView::setupActions()
     actionViewPageMode = new KToggleAction( i18n( "&Page Mode" ), 0,
                                             this, SLOT( viewPageMode() ),
                                             actionCollection(), "view_pagemode" );
-    actionViewPageMode->setWhatsThis( i18n( "Switch from preview mode to page mode.<br><br> is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to Preview mode." ) );
+    actionViewPageMode->setWhatsThis( i18n( "Switch from preview mode to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to Preview mode." ) );
     actionViewPageMode->setToolTip( i18n( "Switch from preview mode to page editing mode." ) );
 
     actionViewPageMode->setExclusiveGroup( "viewmodes" );

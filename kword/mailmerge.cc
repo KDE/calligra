@@ -355,7 +355,7 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     row1->setSpacing( KDialog::spacingHint() );
     edit=new QPushButton(i18n("Edit Current"),row1);
     create=new QPushButton(i18n("Create New"),row1);
-    open=new QPushButton(i18n("Open Existent"),row1);
+    open=new QPushButton(i18n("Open Existing"),row1);
     QFrame *Line1 = new QFrame( back, "Line1" );
     layout->addWidget(Line1);
     Line1->setFrameShape( QFrame::HLine );
