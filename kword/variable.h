@@ -19,6 +19,14 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
+#include <iostream>
+#include <koStream.h>
+#include <koIMR.h>
+#include <komlMime.h>
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
+
 class KWordDocument;
 class KWVariable;
 class KWParag;
@@ -144,6 +152,9 @@ public:
 
   virtual void recalc() {}
 
+  virtual void save(ostream &out);
+  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+
 protected:
   KWordDocument *doc;
   KWVariableFormat *varFormat;
@@ -175,6 +186,8 @@ public:
   virtual void recalc() { pgNum = pageNum; }
   long unsigned int getPgNum() { return pgNum; }
 
+  virtual void save(ostream &out);
+  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
 
 protected:
   long unsigned int pgNum;
@@ -204,6 +217,9 @@ public:
 
   QDate getDate() { return date; }
   void setDate(QDate _date) { date = _date; }
+
+  virtual void save(ostream &out);
+  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
 
 protected:
   QDate date;
@@ -235,6 +251,9 @@ public:
   QTime getTime() { return time; }
   void setTime(QTime _time) { time = _time; }
 
+  virtual void save(ostream &out);
+  virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+
 protected:
   QTime time;
   bool fix;
@@ -242,4 +261,3 @@ protected:
 };
 
 #endif
-

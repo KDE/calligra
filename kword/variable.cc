@@ -89,6 +89,38 @@ QString KWVariableTimeFormat::convert(KWVariable *_var)
 }
 
 /******************************************************************/
+/* Class: KWVariable                                              */
+/******************************************************************/
+
+/*================================================================*/
+void KWVariable::save(ostream &out)
+{
+  out << indent << "<POS frameSet=\"" << frameSetNum << "\" frame=\"" << frameNum 
+      << "\" pageNum=\"" << pageNum << "\"/>" << endl;
+}
+
+/*================================================================*/
+void KWVariable::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
+}
+
+/******************************************************************/
+/* Class: KWPgNumVariable                                         */
+/******************************************************************/
+
+/*================================================================*/
+void KWPgNumVariable::save(ostream &out)
+{
+  KWVariable::save(out);
+  out << indent << "<PGNUM value=\"" << pgNum << "\"/>" << endl;
+}
+
+/*================================================================*/
+void KWPgNumVariable::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
+}
+
+/******************************************************************/
 /* Class: KWDateVariable                                          */
 /******************************************************************/
 
@@ -106,6 +138,19 @@ KWDateVariable::KWDateVariable(KWordDocument *_doc,bool _fix,QDate _date)
 
 /*================================================================*/
 void KWDateVariable::recalc()
+{
+}
+
+/*================================================================*/
+void KWDateVariable::save(ostream &out)
+{
+  KWVariable::save(out);
+  out << indent << "<DATE year=\"" << date.year() << "\" month=\"" << date.month()
+      << "\" day=\"" << date.day() << "\" fix=\"" << static_cast<int>(fix) << "\"/>" << endl;
+}
+
+/*================================================================*/
+void KWDateVariable::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
 }
 
@@ -129,3 +174,19 @@ KWTimeVariable::KWTimeVariable(KWordDocument *_doc,bool _fix,QTime _time)
 void KWTimeVariable::recalc()
 {
 }
+
+/*================================================================*/
+void KWTimeVariable::save(ostream &out)
+{
+  KWVariable::save(out);
+  out << indent << "<TIME hour=\"" << time.hour() << "\" minute=\"" << time.minute()
+      << "\" second=\"" << time.second() << "\" msecond=\"" << time.msec()
+      << "\" fix=\"" << static_cast<int>(fix) << "\"/>" << endl;
+}
+
+/*================================================================*/
+void KWTimeVariable::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
+}
+
+

@@ -931,3 +931,8 @@ Reggie, 17.3.1999:
 ------------------
 - Fixes in tables
 - Improved variables
+ 
+Reggie, 18.3.1999:
+------------------
+- Implemented saving of different types of variables
+- Some fixes in variables

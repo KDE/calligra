@@ -101,6 +101,9 @@ public:
 
   KWVariable *getVar() { return var; }
 
+  virtual void save(ostream &out)
+    { var->save(out); }
+
 protected:
   KWVariable *var;
 

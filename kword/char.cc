@@ -260,6 +260,12 @@ void KWString::saveFormat(ostream &out)
 		out << otag << "<FORMAT id=\"" << _data_[i].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
 		out << etag << "</FORMAT>" << endl;
 	      } break;
+	    case ID_KWCharVariable:
+	      {
+		out << otag << "<FORMAT id=\"" << _data_[i].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+		_data_[i].attrib->save(out);
+		out << etag << "</FORMAT>" << endl;
+	      } break;
 	    default: break;
 	    }
 	  start = i + 1;
