@@ -109,6 +109,127 @@ void GraphObj::save(ostream& out)
   out << indent << "<FILENAME value=\"" << fileName << "\"/>" << endl;
 }
 
+/*============================ load ==============================*/
+void GraphObj::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
+  string tag;
+  string name;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      
+      // lineType
+      if (name == "LINETYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		lineType = (LineType)atoi((*it).m_strValue.c_str());
+	    }
+	}
+      
+      // rectType
+      else if (name == "RECTTYPE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		rectType = (RectType)atoi((*it).m_strValue.c_str());
+	    }
+	}
+      
+      // pen
+      else if (name == "PEN")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "red")
+		oPen.setColor(QColor(atoi((*it).m_strValue.c_str()),oPen.color().green(),oPen.color().blue()));
+	      if ((*it).m_strName == "green")
+		oPen.setColor(QColor(oPen.color().red(),atoi((*it).m_strValue.c_str()),oPen.color().blue()));
+	      if ((*it).m_strName == "blue")
+		oPen.setColor(QColor(oPen.color().red(),oPen.color().green(),atoi((*it).m_strValue.c_str())));
+	      if ((*it).m_strName == "width")
+		oPen.setWidth(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "style")
+		oPen.setStyle((PenStyle)atoi((*it).m_strValue.c_str()));
+	    }
+	  setObjPen(oPen);
+	}
+      
+      // brush
+      else if (name == "BRUSH")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "red")
+		oBrush.setColor(QColor(atoi((*it).m_strValue.c_str()),oBrush.color().green(),oBrush.color().blue()));
+	      if ((*it).m_strName == "green")
+		oBrush.setColor(QColor(oBrush.color().red(),atoi((*it).m_strValue.c_str()),oBrush.color().blue()));
+	      if ((*it).m_strName == "blue")
+		oBrush.setColor(QColor(oBrush.color().red(),oBrush.color().green(),atoi((*it).m_strValue.c_str())));
+	      if ((*it).m_strName == "style")
+		oBrush.setStyle((BrushStyle)atoi((*it).m_strValue.c_str()));
+	    }
+	  setObjBrush(oBrush);
+	}
+      
+      // xRnd
+      else if (name == "XRND")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		xRnd = atoi((*it).m_strValue.c_str());
+	    }
+	}
+      
+      // yRnd
+      else if (name == "YRND")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		yRnd = atoi((*it).m_strValue.c_str());
+	    }
+	}
+      
+      // filename
+      else if (name == "FILENAME")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		fileName = (*it).m_strValue.c_str();
+	    }
+	}
+      
+      else
+	cerr << "Unknown tag '" << tag << "' in GRAPHOBJ" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
+}
+
 /*======================= paint event ============================*/
 void GraphObj::paintEvent(QPaintEvent* paintEvent)
 {

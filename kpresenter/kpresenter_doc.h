@@ -293,6 +293,7 @@ protected:
   void saveObjects(ostream&);
   void saveTxtObj(ostream&,KTextObject*);
   void loadBackground(KOMLParser&,vector<KOMLAttrib>&);
+  void loadObjects(KOMLParser&,vector<KOMLAttrib>&);
   void replaceObjs();
   
   // ************ variables ************

@@ -200,7 +200,7 @@ bool KPresenterDocument_impl::save(const char *_url)
 /*========================== save ===============================*/
 bool KPresenterDocument_impl::save(ostream& out)
 {
-  out << otag << "<DOC author=\"" << "Reginals Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
+  out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
   
   out << otag << "<PAPER format=\"" << pageLayout().format << "\" width=\"" << pageLayout().width
@@ -257,7 +257,7 @@ void KPresenterDocument_impl::saveObjects(ostream& out)
       out << indent << "<OBJTYPE value=\"" << objPtr->objType << "\"/>" << endl; 
       out << indent << "<ISSELECTED value=\"" << objPtr->isSelected << "\"/>" << endl; 
       out << indent << "<OBJNUM value=\"" << objPtr->objNum << "\"/>" << endl; 
-      out << indent << "<COORDINATES x=\"" << objPtr->ox << "\" x=\"" << objPtr->ox
+      out << indent << "<COORDINATES x=\"" << objPtr->ox << "\" y=\"" << objPtr->oy
 	  << "\" w=\"" << objPtr->ow << "\" h=\"" << objPtr->oh << "\"/>" << endl; 
       
       if (objPtr->objType == OT_TEXT)
@@ -517,6 +517,17 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	    }
 	  loadBackground(parser,lst);
 	}
+
+      else if (name == "OBJECTS")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  loadObjects(parser,lst);
+	}
+
       else
 	cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;    
 	
@@ -546,7 +557,7 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
       // page
       if (name == "PAGE")
 	{    
-	  insertNewPage(0,0);  _spPageConfig.setAutoDelete(true);
+	  insertNewPage(0,0);
 
 	  unsigned int _num = _pageList.count();
 	  pagePtr = _pageList.last();
@@ -682,6 +693,114 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 	}
       else
 	cerr << "Unknown tag '" << tag << "' in BACKGROUND" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
+}
+
+/*========================= load objects =========================*/
+void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
+  string tag;
+  string name;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      
+      // object
+      if (name == "OBJECT")
+	{    
+
+	  _objNums++;
+	  objPtr = new PageObjects;
+	  objPtr->isSelected = false;
+	  objPtr->objType = OT_LINE;
+	  objPtr->objNum = _objNums;
+	  _objList.append(objPtr);
+
+	  while (parser.open(0L,tag))
+	    {
+	      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      
+	      // objType
+	      if (name == "OBJTYPE")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			objPtr->objType = (ObjType)atoi((*it).m_strValue.c_str());
+		    }
+		}
+
+	      // isSelected
+	      else if (name == "ISSELECTED")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			objPtr->isSelected = (bool)atoi((*it).m_strValue.c_str());
+		    }
+		}
+	      
+	      // objNum
+	      else if (name == "OBJNUM")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			objPtr->objNum = atoi((*it).m_strValue.c_str());
+		    }
+		}
+
+	      // coordinates
+	      else if (name == "COORDINATES")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "x")
+			objPtr->ox = atoi((*it).m_strValue.c_str());
+		      if ((*it).m_strName == "y")
+			objPtr->oy = atoi((*it).m_strValue.c_str());
+		      if ((*it).m_strName == "w")
+			objPtr->ow = atoi((*it).m_strValue.c_str());
+		      if ((*it).m_strName == "h")
+			objPtr->oh = atoi((*it).m_strValue.c_str());
+		    }
+		}
+	      
+	      // graphic object
+ 	      else if (name == "GRAPHOBJ")
+ 		{
+ 		  objPtr->graphObj = new GraphObj(0,"graphObj",objPtr->objType);
+ 		  objPtr->graphObj->load(parser,lst);
+ 		  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+ 		}
+
+	      else
+		cerr << "Unknown tag '" << tag << "' in OBJECT" << endl;    
+	      
+	      if (!parser.close(tag))
+		{
+		  cerr << "ERR: Closing Child" << endl;
+		  return;
+		}
+	    }
+	}
+      else
+	cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;    
       
       if (!parser.close(tag))
 	{

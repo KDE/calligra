@@ -78,6 +78,7 @@ public:
 
   // save - load
   void save(ostream&);
+  void load(KOMLParser&,vector<KOMLAttrib>&);
 
 protected:
 
