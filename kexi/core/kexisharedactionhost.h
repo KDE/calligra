@@ -58,10 +58,10 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		 This method is used by focusWindow() to look up widgets hierarchy 
 		 for widget that can accept shared actions. 
 		 Default implementation always returns false. 
-		 You can reimplement it e.g. like in KexiMainWindow::acceptsSharedActions():
-		 <code>
-			return w->inherits("KexiDialogBase") || w->inherits("KexiDockBase");
-		 </code>
+		 You can reimplement it e.g. like in KexiMainWindowImpl::acceptsSharedActions():
+		 \code
+			return o->inherits("KexiDialogBase") || o->inherits("KexiViewBase");
+		 \code
 		 */
 		virtual bool acceptsSharedActions(QObject *o);
 
@@ -77,6 +77,9 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		/*! \return default shared actions host, used when no host is explicity specified for shared actions.
 		 There can be exactly one deault shared actions host. */
 		static KexiSharedActionHost& defaultHost();
+
+		/*! PROTOTYPE, DO NOT USE YET */
+		void setActionVolatile( KAction *a, bool set );
 
 	protected:
 

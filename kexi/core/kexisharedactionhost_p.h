@@ -31,6 +31,14 @@
 
 class KexiSharedActionHost;
 
+class KexiVolatileActionData
+{
+	public:
+		KexiVolatileActionData() { plugged=false; }
+//		KAction *kaction;
+		bool plugged : 1;
+};
+
 //! internal class
 class KEXICORE_EXPORT KexiSharedActionHostPrivate : public QObject
 {
@@ -47,6 +55,7 @@ class KEXICORE_EXPORT KexiSharedActionHostPrivate : public QObject
 		KMainWindow *mainWin;
 		KActionPtrList sharedActions;
 		QSignalMapper actionMapper;
+		QPtrDict<KexiVolatileActionData> volatileActions;
 
 		KexiSharedActionHost *host;
 };

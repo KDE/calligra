@@ -71,9 +71,6 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
-		void plugActionProxy(KexiActionProxy *proxy);
-		void updateActionAvailable(const char *action_name, bool set, QObject *obj);
-
 		virtual QPopupMenu* findPopupMenu(const char *popupName);
 
 		/**
@@ -156,7 +153,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		/** Invalidates action availability for current application state.
 		 These actions are dependent on curently selected dialog.
 		*/
-		void invalidateSharedActions(QWidget *w = 0);
+		void invalidateSharedActions(QWidget *w);
 
 		/** Invalidates action availability for current application state.
 		 These actions are only dependent on project availbility, not on curently selected dialog.
@@ -257,9 +254,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		 if \a dontAsk is true. */
 		bool removeObject( KexiPart::Item *item, bool dontAsk = true );
 
-		/*moved 
-		void setActionAvailable(const char *name, bool avail);
-		void slotAction(const QString& act_id);*/
+		void invalidateSharedActions();
+		void invalidateSharedActionsLater();
 
 		void slotViewNavigator();
 		void slotViewPropertyEditor();

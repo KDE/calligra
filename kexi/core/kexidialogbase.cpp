@@ -85,7 +85,7 @@ void KexiDialogBase::addView(KexiViewBase *view)
 void KexiDialogBase::addView(KexiViewBase *view, int mode)
 {
 	m_stack->addWidget(view, mode);
-	addActionProxyChild( view );
+//	addActionProxyChild( view );
 
 	//set focus proxy inside this view
 	QWidget *ch = static_cast<QWidget*>(view->child( 0, "QWidget", false ));
@@ -211,8 +211,11 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 	if (!supportsViewMode(viewMode))
 		return false;
 
-	if (view)
+	if (view) {
 		view->beforeSwitchTo(viewMode);
+		//take current proxy child
+		takeActionProxyChild( view );
+	}
 
 	//get view for viewMode
 	view = (m_stack->widget(viewMode) && m_stack->widget(viewMode)->inherits("KexiViewBase"))
@@ -226,6 +229,9 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 		}
 		addView(view, viewMode);
 	}
+	//new proxy child
+	addActionProxyChild( view );
+
 	m_stack->raiseWidget(view);
 	view->afterSwitchFrom(m_currentViewMode);
 	m_currentViewMode = viewMode;

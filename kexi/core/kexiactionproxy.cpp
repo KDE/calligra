@@ -57,9 +57,21 @@ KexiActionProxy::~KexiActionProxy()
 
 void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receiver, const char *slot)
 {
-	QPair<QSignal*,bool> *p = new QPair<QSignal*,bool>( new QSignal(&m_signal_parent), true );
+	QPair<QSignal*,bool> *p = m_signals[action_name];
+	if (!p) {
+		p = new QPair<QSignal*,bool>( new QSignal(&m_signal_parent), true );
+		m_signals.insert(action_name, p);
+	}
 	p->first->connect( receiver, slot );
-	m_signals.insert(action_name, p);
+}
+
+void KexiActionProxy::unplugSharedAction(const char *action_name)
+{
+	QPair<QSignal*,bool> *p = m_signals.take(action_name);
+	if (!p)
+		return;
+	delete p->first;
+	delete p;
 }
 
 int KexiActionProxy::plugSharedAction(const char *action_name, QWidget* w)
@@ -123,6 +135,15 @@ KAction* KexiActionProxy::sharedAction(const char* name)
 bool KexiActionProxy::isSupported(const char* action_name) const
 {
 	QPair<QSignal*,bool> *p = m_signals[action_name];
+	if (!p) {
+		//not supported explicity - try in children...
+		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
+		for( ; it.current(); ++it ) {
+			if (it.current()->isSupported(action_name))
+				return true;
+		}
+		return false; //not suported
+	}
 	return p != 0;
 }
 
@@ -139,7 +160,7 @@ bool KexiActionProxy::isAvailable(const char* action_name) const
 		return false; //not suported
 	}
 	//supported explicity:
-	return p->second;
+	return p->second != 0;
 }
 
 void KexiActionProxy::setAvailable(const char* action_name, bool set)

@@ -29,8 +29,10 @@ KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h
 : QObject(0,"KexiSharedActionHostPrivate")
 , actionProxies(401)
 , actionMapper( this )
+, volatileActions(401)
 , host(h)
 {
+	volatileActions.setAutoDelete(true);
 	connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
 }
 
@@ -117,7 +119,27 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
 	for (KActionPtrList::Iterator it=d->sharedActions.begin(); it!=d->sharedActions.end(); ++it) {
 //			setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
-		(*it)->setEnabled(p && p->isAvailable((*it)->name()));
+		KAction *a = *it;
+		const bool avail = p && p->isAvailable(a->name());
+		KexiVolatileActionData *va = d->volatileActions[ a ];
+		if (va != 0) {
+			if (p && p->isSupported(a->name())) {
+				QPtrList<KAction> actions_list;
+				actions_list.append( a );
+				if (!va->plugged) {
+					va->plugged=true;
+	//				d->mainWin->unplugActionList( a->name() );
+					d->mainWin->plugActionList( a->name(), actions_list );
+				}
+			}
+			else {
+				if (va->plugged) {
+					va->plugged=false;
+					d->mainWin->unplugActionList( a->name() );
+				}
+			}
+		}
+		a->setEnabled(p && p->isAvailable(a->name()));
 		kdDebug() << "Action " << (*it)->name() << (p && p->isAvailable((*it)->name()) ? " enabled." : " disabled.") << endl;
 	}
 }
@@ -155,6 +177,19 @@ KAction* KexiSharedActionHost::createSharedActionInternal( KAction *action )
 	return action;
 }
 
+/*class KexiAction : public KAction
+{
+	public:
+		KexiAction(const QString &text, const QIconSet &pix, 
+			const KShortcut &cut, const QObject *receiver, 
+			const char *slot, KActionCollection *parent, const char *name)
+		 : KAction(text,pix,cut,receiver,slot,parent,name)
+		{
+		}
+	
+	QPtrDict<QWidget> unplugged;
+};*/
+
 KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name, 
 	const KShortcut &cut, const char *name)
 {
@@ -171,6 +206,16 @@ KAction* KexiSharedActionHost::createSharedAction( KStdAction::StdAction id, con
 	);
 }
 
+void KexiSharedActionHost::setActionVolatile( KAction *a, bool set )
+{
+	if (!set) {
+		d->volatileActions.remove( a );
+		return;
+	}
+	if (d->volatileActions[ a ])
+		return;
+	d->volatileActions.insert( a, new KexiVolatileActionData() );
+}
 
 #include "kexisharedactionhost_p.moc"
 
