@@ -180,6 +180,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     //by default it's 1/5
     m_iFootNoteSeparatorLineLength = 20;
+    m_footNoteSeparatorLineWidth = 2.0;
 
     m_viewFormattingChars = false;
 
@@ -963,6 +964,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         __hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
         m_iFootNoteSeparatorLineLength = getAttribute( paper, "slFootNoteLength", 20);
+        m_footNoteSeparatorLineWidth = getAttribute( paper, "slFootNoteWidth",2.0);
+
         if ( paper.hasAttribute("slFootNotePosition"))
         {
             QString tmp =paper.attribute("slFootNotePosition");
@@ -1927,6 +1930,7 @@ QDomDocument KWDocument::saveXML()
             paper.setAttribute( "slFootNotePosition", "left" );
     }
     paper.setAttribute("slFootNoteLength", m_iFootNoteSeparatorLineLength);
+    paper.setAttribute("slFootNoteWidth", m_footNoteSeparatorLineWidth);
 
     // Now part of the app config
     //paper.setAttribute( "zoom",m_zoom );

@@ -618,6 +618,9 @@ public:
     int footNoteSeparatorLineLength() const { return m_iFootNoteSeparatorLineLength;}
     void setFootNoteSeparatorLineLength( int _length){  m_iFootNoteSeparatorLineLength = _length;}
 
+    double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
+    void setFootNoteSeparatorLineWidth( double _width){  m_footNoteSeparatorLineWidth=_width;}
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -786,6 +789,8 @@ private:
     SeparatorLinePos m_footNoteSeparatorLinePos;
     //it's a percentage of page.
     int m_iFootNoteSeparatorLineLength;
+
+    double m_footNoteSeparatorLineWidth;
 
     /** Page number -> section title array, for the Section variable.
      * Note that pages without a section title don't appear in the array. */

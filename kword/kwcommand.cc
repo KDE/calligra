@@ -390,7 +390,7 @@ KWFrameStyleCommand::KWFrameStyleCommand( const QString &name, KWFrame *_frame, 
 {
     m_frame = _frame;
     m_fs = _fs;
-    
+
     m_oldValues = new KWFrameStyle( "Old", m_frame );
 }
 
@@ -412,7 +412,7 @@ void KWFrameStyleCommand::unexecute()
     m_frame->setRightBorder( m_oldValues->rightBorder() );
     m_frame->setTopBorder( m_oldValues->topBorder() );
     m_frame->setBottomBorder( m_oldValues->bottomBorder() );
-    
+
     m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
 
@@ -421,7 +421,7 @@ KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, 
 {
     m_frame = _frame;
     m_ts = _ts;
-    
+
     // No need for i18n because it will never be displayed.
     m_fsc = new KWFrameStyleCommand( "Apply framestyle to frame", m_frame, m_ts->pFrameStyle() );
     m_sc = 0L;
@@ -437,7 +437,7 @@ void KWTableStyleCommand::execute()
 {
     if (m_fsc)
         m_fsc->execute();
-    
+
     if ( (m_ts) && ( m_frame->frameSet()->type() == FT_TEXT ) && ( m_ts->pStyle() ) )
     {
         KoTextObject *textObject = ((KWTextFrameSet*)m_frame->frameSet())->textObject();
@@ -445,7 +445,7 @@ void KWTableStyleCommand::execute()
         m_sc = textObject->applyStyle( 0L, m_ts->pStyle(), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, false );
         textObject->textDocument()->removeSelection( KoTextDocument::Temp );
     }
-    
+
     m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
 
@@ -455,7 +455,7 @@ void KWTableStyleCommand::unexecute()
         m_fsc->unexecute();
     if (m_sc)
         m_sc->unexecute();
-    
+
     m_frame->frameSet()->kWordDocument()->repaintAllViews();
 }
 
@@ -1616,29 +1616,33 @@ void KWChangeFootNoteParametersCommand::changeVariableParameter( FootNoteParamet
 }
 
 
-KWChangeFootNoteLineSeparatorParametersCommand::KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, KWDocument *_doc):
+KWChangeFootNoteLineSeparatorParametersCommand::KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, double _oldWidth, double _newWidth, KWDocument *_doc):
     KNamedCommand(name),
     m_doc( _doc ),
     m_oldValuePos(_oldValuePos),
     m_newValuePos(_newValuePos),
     m_oldLength(_oldLength),
-    m_newLength(_newLength)
+    m_newLength(_newLength),
+    m_oldWidth(_oldWidth),
+    m_newWidth(_newWidth)
+
 {
 }
 
 void KWChangeFootNoteLineSeparatorParametersCommand::execute()
 {
-    changeLineSeparatorParameter( m_newValuePos, m_newLength);
+    changeLineSeparatorParameter( m_newValuePos, m_newLength, m_newWidth);
 }
 
 void KWChangeFootNoteLineSeparatorParametersCommand::unexecute()
 {
-    changeLineSeparatorParameter( m_oldValuePos, m_oldLength);
+    changeLineSeparatorParameter( m_oldValuePos, m_oldLength, m_oldWidth);
 }
 
-void KWChangeFootNoteLineSeparatorParametersCommand::changeLineSeparatorParameter( SeparatorLinePos _pos, int _length)
+void KWChangeFootNoteLineSeparatorParametersCommand::changeLineSeparatorParameter( SeparatorLinePos _pos, int _length, double _width)
 {
     m_doc->setFootNoteSeparatorLinePosition( _pos );
     m_doc->setFootNoteSeparatorLineLength( _length);
+    m_doc->setFootNoteSeparatorLineWidth(_width );
     m_doc->slotRepaintAllViews();
 }

@@ -396,6 +396,9 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
         // of the maintextframeset for that page. Usually one, but could be more
         // if there are columns. However we want to draw the line only once, so we
         // do it here and not in drawFrame (we'd have problems with cliprect anyway).
+        if ( m_doc->footNoteSeparatorLineWidth() ==0.0)
+            return;
+
         int pages = m_doc->getPages();
         double left = m_doc->ptLeftBorder();
         double factor = 100.0/m_doc->footNoteSeparatorLineLength();
@@ -434,7 +437,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                         if ( flatRect.intersects( crect ) ) {
                             p->save();
                             QPen pen( KoTextFormat::defaultTextColor( p ),   // always in default fg color (and black when printing)
-                                      KoBorder::zoomWidthY( 2, m_doc, 1 ) ); // penwidth = zoomIt( 2 pt )
+                                      KoBorder::zoomWidthY( m_doc->footNoteSeparatorLineWidth(), m_doc, 1 ) ); // penwidth = zoomIt( 2 pt )
                             p->setPen( pen );
                             p->drawLine( flatRect.left(), flatRect.top(), flatRect.right(), flatRect.top() );
                             //kdDebug() << "  drawLine( " << flatRect.left() << ", " << flatRect.top() << ", " << flatRect.right() << ", " << flatRect.top() << endl;

@@ -86,6 +86,13 @@ void KWConfigFootNoteDia::setupTab3()
         rbPosRight->setChecked( true);
         break;
     }
+
+    QVButtonGroup *bgSeparatorWidth = new QVButtonGroup( i18n( "Separator Line Width" ), page );
+
+    lab = new QLabel(i18n("Width:"), bgSeparatorWidth);
+    spWidth = new KDoubleNumInput( 1, bgSeparatorWidth );
+    spWidth->setRange( 0, 5, 0.5 ,false );
+    spWidth->setValue( m_doc->footNoteSeparatorLineWidth());
 }
 
 
@@ -110,6 +117,7 @@ void KWConfigFootNoteDia::slotOk()
     }
 
     int val =spLength->value();
+    double width = spWidth->value();
     SeparatorLinePos tmp = SLP_LEFT;
     if ( rbPosRight->isChecked())
         tmp = SLP_RIGHT;
@@ -119,11 +127,12 @@ void KWConfigFootNoteDia::slotOk()
         tmp = SLP_LEFT;
 
     if ( (val != m_doc->footNoteSeparatorLineLength())||
-         tmp != m_doc->footNoteSeparatorLinePosition())
+         tmp != m_doc->footNoteSeparatorLinePosition()||
+        width!= m_doc->footNoteSeparatorLineWidth())
     {
         if ( !macro )
             macro = new KMacroCommand(i18n("Change Foot Note Line Separator Settings"));
-        cmd = new KWChangeFootNoteLineSeparatorParametersCommand( i18n("Change Foot Note Line Separator Settings") , m_doc->footNoteSeparatorLinePosition(), tmp, m_doc->footNoteSeparatorLineLength(), val,m_doc);
+        cmd = new KWChangeFootNoteLineSeparatorParametersCommand( i18n("Change Foot Note Line Separator Settings") , m_doc->footNoteSeparatorLinePosition(), tmp, m_doc->footNoteSeparatorLineLength(), val,m_doc->footNoteSeparatorLineWidth(), width, m_doc);
         macro->addCommand( cmd );
     }
 

@@ -716,3 +716,14 @@ QString KWordDocIface::footNoteSeparatorLinePosition()const
     }
     return tmp;
 }
+
+double KWordDocIface::footNoteSeparatorLineWidth() const
+{
+    return doc->footNoteSeparatorLineWidth();
+}
+
+void KWordDocIface::setFootNoteSeparatorLineWidth( double _width)
+{
+    doc->setFootNoteSeparatorLineWidth( _width );
+    doc->repaintAllViews();
+}

@@ -682,19 +682,21 @@ protected:
 class KWChangeFootNoteLineSeparatorParametersCommand : public KNamedCommand
 {
 public:
-    KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, KWDocument *_doc);
+    KWChangeFootNoteLineSeparatorParametersCommand( const QString &name, SeparatorLinePos _oldValuePos, SeparatorLinePos _newValuePos, int _oldLength, int _newLength, double _oldWidth, double _newWidth,KWDocument *_doc);
 
     ~KWChangeFootNoteLineSeparatorParametersCommand() {}
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    void changeLineSeparatorParameter( SeparatorLinePos _pos, int length);
+    void changeLineSeparatorParameter( SeparatorLinePos _pos, int length, double _width);
     KWDocument *m_doc;
     SeparatorLinePos m_oldValuePos;
     SeparatorLinePos m_newValuePos;
     int m_oldLength;
     int m_newLength;
+    double m_oldWidth;
+    double m_newWidth;
 };
 
 #endif

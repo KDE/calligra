@@ -204,6 +204,10 @@ k_dcop:
     void setFootNoteSeparatorLinePosition( const QString &pos);
     QString footNoteSeparatorLinePosition()const;
 
+    double footNoteSeparatorLineWidth() const;
+    void setFootNoteSeparatorLineWidth( double _width);
+
+
 private:
     KWDocument *doc;
 
