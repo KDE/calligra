@@ -166,6 +166,8 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
         pDoc->setURL( url );
     }
 
+    QApplication::setOverrideCursor( waitCursor );
+
     KURL u( url );
     if ( !u.isLocalFile() ) return false; // only local files
     if ( QFile::exists( u.path() ) ) { // this file exists => backup
@@ -179,20 +181,22 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     // Not native format : save using export filter
     if ( outputMimeType != _native_format ) {
         QString nativeFile=KoFilterManager::self()->prepareExport(url, _native_format);
-        if ( pDoc->saveToURL( nativeFile, _native_format ) && KoFilterManager::self()->export_() )
-            return true;
-        else
-            return false;
+        bool ret;
+        ret = pDoc->saveToURL( nativeFile, _native_format ) && KoFilterManager::self()->export_();
+        QApplication::restoreOverrideCursor();
+        return ret;
     }
 
+    bool ret = true;
     // Native format => normal save
     if ( !pDoc->saveToURL( url, _native_format ) ) {
         QString tmp;
         tmp.sprintf( i18n( "Could not save\n%s" ), url.ascii() );
         KMessageBox::error( this, i18n( "IO Error" ) );
-        return false;
+        ret = false;
     }
-    return true;
+    QApplication::restoreOverrideCursor();
+    return ret;
 }
 
 bool KoMainWindow::closeDocument()
