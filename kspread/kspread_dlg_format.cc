@@ -13,6 +13,7 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qfile.h>
+#include <qpushbutton.h>
 
 
 KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )

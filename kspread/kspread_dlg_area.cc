@@ -31,6 +31,7 @@
 #include <qlineedit.h>
 
 #include <kmessagebox.h>
+#include <qpushbutton.h>
 
 KSpreadarea::KSpreadarea( KSpreadView* parent, const char* name,const QPoint &_marker )
 	: QDialog( parent, name,TRUE )

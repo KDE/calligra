@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <qlabel.h>
 #include <qdrawutil.h>
+#include <qbutton.h>
+#include <qapplication.h>
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent, KSpreadView * _view )
   : QLineEdit( _parent, "KSpreadLocationEditWidget" )

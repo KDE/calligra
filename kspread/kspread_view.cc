@@ -76,6 +76,8 @@
 
 #include "KSpreadViewIface.h"
 #include <kdebug.h>
+#include <kstatusbar.h>
+#include <kapplication.h>
 
 /*****************************************************************************
  *

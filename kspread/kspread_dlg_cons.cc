@@ -31,6 +31,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <kdebug.h>
+#include <qpushbutton.h>
 
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 	: QDialog( parent, name )

@@ -26,6 +26,7 @@
 #include <qlayout.h>
 #include <kbuttonbox.h>
 #include <qmultilineedit.h>
+#include <qpushbutton.h>
 
 KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name,TRUE )

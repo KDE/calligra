@@ -25,6 +25,7 @@
 
 #include <qlayout.h>
 #include <kbuttonbox.h>
+#include <qpushbutton.h>
 
 
 KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
