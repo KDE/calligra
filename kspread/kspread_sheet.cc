@@ -6421,6 +6421,9 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 {
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", d->name );
+
+
+    //Laurent: for oasis format I think that we must use style:direction...
     table.setAttribute( "layoutDirection", (d->layoutDirection == RightToLeft) ? "rtl" : "ltr" );
     table.setAttribute( "columnnumber", (int)d->showColumnNumber);
     table.setAttribute( "borders", (int)d->showPageBorders);
