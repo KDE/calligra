@@ -23,25 +23,25 @@
 
 #include <qwidget.h>
 
-class Canvas;
-
 class CanvasView : public QWidget
 {
   Q_OBJECT
  
  public:
-  CanvasView(Canvas *can, QWidget *parent = 0L);
+  CanvasView(QWidget *parent = 0L);
   ~CanvasView();
 
  protected:
-  virtual void paintEvent(QPaintEvent *e);
-  virtual void mousePressEvent ( QMouseEvent * );
-  virtual void mouseMoveEvent ( QMouseEvent * );
-  virtual void mouseReleaseEvent ( QMouseEvent * );
+  virtual void paintEvent(QPaintEvent *);
+  virtual void mousePressEvent(QMouseEvent *);
+  virtual void mouseMoveEvent(QMouseEvent *);
+  virtual void mouseReleaseEvent(QMouseEvent *);
 
- private:
-  
-  Canvas *m_pCanvas;
+ signals:
+  void sigPaint(QPaintEvent *);
+  void sigMousePress(QMouseEvent *);
+  void sigMouseMove(QMouseEvent *);
+  void sigMouseRelease(QMouseEvent *);
 };
 
 #endif

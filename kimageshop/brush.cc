@@ -39,6 +39,7 @@ brush::loadBrush(QString file)
 	// the other channels
 	QString alphaName=file;
 	alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
+	printf("brush::loadBrushAlpha: %s\n",alphaName.latin1());
 	QImage alpha(alphaName);
 	if (!alpha.isNull() && (img.size()!=alpha.size())) {
 		puts("Incorrect sized alpha channel - not loaded");

@@ -25,7 +25,7 @@ struct canvasTileDescriptor
 };
 
 
-class Canvas : public QWidget
+class Canvas
 {
  public:
   Canvas(int width, int height);
@@ -35,8 +35,13 @@ class Canvas : public QWidget
   void addView(CanvasView *view);
   // remove a CanvasView from the "views" list
   void removeView(CanvasView *view);
-  // a CanvasView got a paintEvent -> repaint that single view
-  void repaintView(CanvasView *view, QPaintEvent *e);
+  // repaint a rectangular area in a canvasview
+  void repaintView(CanvasView *view, QRect area);
+  // repaint a rectangular area in all canvasviews
+  void repaintAll(QRect area);
+
+  // return current layer
+  layer* getCurrentLayer() { return currentLayer; }
 
   void addRGBLayer(QString file);
   void compositeImage(QRect r);
@@ -51,12 +56,6 @@ class Canvas : public QWidget
   void paintBrush(QPoint pt, brush *brsh);
   QList<layer> layerList() { return layers; };
 
-  void mousePressEvent ( QMouseEvent * );
-  void mouseMoveEvent ( QMouseEvent * );
-  void mouseReleaseEvent ( QMouseEvent * );
-  
-  brush *currentBrush;
-  
  public slots:
   void setCurrentLayerOpacity(double o) { setLayerOpacity((uchar)(o*255/100)); };
   

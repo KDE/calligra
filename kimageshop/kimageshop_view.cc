@@ -29,9 +29,11 @@
 #include <kcolordlg.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kstddirs.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>
 #include <kruler.h>
+#include <kpixmapcache.h>
 
 #include <opUIUtils.h>
 #include <opMainWindow.h>
@@ -49,6 +51,9 @@
 #include "canvas.h"
 #include "brush.h"
 #include "layerdlg.h"
+#include "tool.h"
+#include "movetool.h"
+#include "brushtool.h"
 
 #define CHECK_DOCUMENT \
 	if( m_pDoc->isEmpty() ) \
@@ -164,20 +169,44 @@ bool KImageShopView::event( const char* _event, const CORBA::Any& _value )
 
 bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
-  kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateToolbar" );
+  kdebug( KDEBUG_INFO, 0, "ImageShopView::mappingCreateToolbar" );
 
   if ( CORBA::is_nil( _factory ) )
   {
     // ToolBarFactory is nil -> we lost control over the toolbar
     kdebug( KDEBUG_INFO, 0, "Setting to nil" );
     m_vToolBarEdit = 0L;
+    m_vToolBarTools = 0L;
     return true;
   }
 
   // create and enable edit toolbar
-  m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-  m_vToolBarEdit->enable( OpenPartsUI::Show );
+  m_vToolBarEdit  = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
+  m_vToolBarEdit->enable(OpenPartsUI::Show);
+ 
+  // create and enable tools toolbar
+  m_vToolBarTools  = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
+  m_vToolBarTools->enable(OpenPartsUI::Show);
+  m_vToolBarTools->setFullWidth(false);
+  m_vToolBarTools->setBarPos(OpenPartsUI::Left);
 
+  CORBA::WString_var text;
+  OpenPartsUI::Pixmap_var pix;
+  
+  // move tool
+  text = Q2C(i18n("Move tool"));
+  pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("move.xpm"));
+  m_vToolBarTools->insertButton2(pix, TBTOOLS_MOVETOOL, SIGNAL(clicked()), this, "slotActivateMoveTool", true, text, -1);
+  m_vToolBarTools->setToggle(TBTOOLS_MOVETOOL, true);
+  m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
+
+  // paint brush
+  text = Q2C(i18n("Paint brush"));
+  pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("paintbrush.xpm"));
+  m_vToolBarTools->insertButton2(pix, TBTOOLS_BRUSHTOOL, SIGNAL(clicked()), this, "slotActivateBrushTool", true, text, -1);
+  m_vToolBarTools->setToggle(TBTOOLS_BRUSHTOOL, true);
+
+  kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateToolbar : done" );
   return true;
 }
 
@@ -207,7 +236,7 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   // view menu
   text = Q2C( i18n( "&View" ) );
   menubar->insertMenu( text , m_vMenuView, -1, -1 );
-  m_vMenuView->setCheckable( true );
+m_vMenuView->setCheckable( true );
 
   text = Q2C( i18n( "&Layer dialog" ) );
   m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "viewLayerDialog", 0 );
@@ -230,18 +259,32 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
 void KImageShopView::createGUI()
 {
   kimgioRegister();
-
-  m_pCanvasView = new CanvasView(m_pDoc->canvas_(), this);
-  m_pDoc->canvas_()->addView(m_pCanvasView);
   
-  // layerlist
-  m_pLayerDialog = new LayerDialog( m_pDoc->canvas_() );
-  m_pLayerDialog->show();
+  // create canvasview
+  m_pCanvasView = new CanvasView(this);
   
   // setup GUI
   setupScrollbars();
   setupRulers();
   setRanges();
+
+  // register canvasview at the canvas
+  m_pDoc->canvas_()->addView(m_pCanvasView);
+
+  // connect canvasview
+  QObject::connect(m_pCanvasView, SIGNAL(sigPaint(QPaintEvent*)), this, SLOT(slotCVPaint(QPaintEvent*)));
+  QObject::connect(m_pCanvasView, SIGNAL(sigMousePress(QMouseEvent*)), this, SLOT(slotCVMousePress(QMouseEvent*)));
+  QObject::connect(m_pCanvasView, SIGNAL(sigMouseMove(QMouseEvent*)), this, SLOT(slotCVMouseMove(QMouseEvent*)));
+  QObject::connect(m_pCanvasView, SIGNAL(sigMouseRelease(QMouseEvent*)), this, SLOT(slotCVMouseRelease(QMouseEvent*)));
+
+  // create default (move) tool
+  m_pMoveTool = new MoveTool(m_pDoc->canvas_());
+  m_pTool = m_pMoveTool;
+  
+  // layerlist
+  m_pLayerDialog = new LayerDialog(m_pDoc->canvas_());
+  m_pLayerDialog->show();
+  m_pLayerDialog->resize(150,200);
 
   resizeEvent( 0L );
 }
@@ -376,31 +419,142 @@ void KImageShopView::resizeEvent( QResizeEvent* )
   slotUpdateView();
 }
 
+void KImageShopView::slotActivateMoveTool()
+{
+  if (!m_pMoveTool)
+    {
+      m_pMoveTool = new MoveTool(m_pDoc->canvas_());
+    }
+
+  m_pTool = m_pMoveTool;
+  
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
+    {
+      // move tool is already on but will automatically be toggled by
+      // ktoolbar code -> toggle it by hand to keep it on.
+      m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL);
+    }
+
+  // shut off brushtool (move this to a function as soon as
+  // we have more tools.
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL))
+    m_vToolBarTools->toggleButton(TBTOOLS_BRUSHTOOL);
+}
+
+void KImageShopView::slotActivateBrushTool()
+{
+  if (!m_pBrush)
+    {
+      // we have no brush -> create a default one
+      QString _image = locate("data", "kimageshop/brushes/brush.jpg");
+      m_pBrush = new brush(_image);
+      m_pBrush->setHotSpot(QPoint(25,25));
+    }
+  
+  if (!m_pBrushTool)
+    m_pBrushTool = new BrushTool(m_pDoc->canvas_(), m_pBrush);
+
+  m_pTool = m_pBrushTool;
+
+  
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL))
+    {
+      // brush tool is already on but will automatically be toggled by
+      // ktoolbar code -> toggle it by hand to keep it on.
+      m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL);
+    }
+  
+  // shut off movetool (move this to a function as soon as
+  // we have more tools.
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
+    m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
+}
+
 void KImageShopView::slotUpdateView()
 {
-  if( m_pDoc->image().isNull() )
-  {
-    return;
-  }
+  // if( m_pDoc->image().isNull() )
+  //{
+  //  return;
+  // }
 
   //m_pixmap.convertFromImage( m_pDoc->image() );
   QWidget::update();
 }
 
+void KImageShopView::slotCVPaint(QPaintEvent *e)
+{
+  m_pDoc->canvas_()->repaintView(m_pCanvasView, e->rect());
+}
+
+void KImageShopView::slotCVMousePress(QMouseEvent *e)
+{
+  if(!m_pTool)
+    return;
+
+  KImageShop::MouseEvent mouseEvent;
+  mouseEvent.posX = e->x();
+  mouseEvent.posY = e->y();
+  mouseEvent.globalPosX = e->globalX();
+  mouseEvent.globalPosY = e->globalY();
+  
+  mouseEvent.leftButton = (e->button() & LeftButton) ? true : false;
+  mouseEvent.rightButton = (e->button() & RightButton) ? true : false;
+  mouseEvent.midButton = (e->button() & MidButton) ? true : false;
+  
+  mouseEvent.shiftButton = (e->state() & ShiftButton) ? true : false;
+  mouseEvent.controlButton = (e->state() & ControlButton) ? true : false;
+  mouseEvent.altButton = (e->state() & AltButton) ? true : false;
+
+  m_pTool->mousePress(mouseEvent);
+}
+
+void KImageShopView::slotCVMouseMove(QMouseEvent *e)
+{
+  if(!m_pTool)
+    return;
+
+  KImageShop::MouseEvent mouseEvent;
+  mouseEvent.posX = e->x();
+  mouseEvent.posY = e->y();
+  mouseEvent.globalPosX = e->globalX();
+  mouseEvent.globalPosY = e->globalY();
+  
+  mouseEvent.leftButton = (e->button() & LeftButton) ? true : false;
+  mouseEvent.rightButton = (e->button() & RightButton) ? true : false;
+  mouseEvent.midButton = (e->button() & MidButton) ? true : false;
+  
+  mouseEvent.shiftButton = (e->state() & ShiftButton) ? true : false;
+  mouseEvent.controlButton = (e->state() & ControlButton) ? true : false;
+  mouseEvent.altButton = (e->state() & AltButton) ? true : false;
+
+  m_pTool->mouseMove(mouseEvent);
+}
+
+void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
+{
+  if(!m_pTool)
+    return;
+
+  KImageShop::MouseEvent mouseEvent;
+  mouseEvent.posX = e->x();
+  mouseEvent.posY = e->y();
+  mouseEvent.globalPosX = e->globalX();
+  mouseEvent.globalPosY = e->globalY();
+  
+  mouseEvent.leftButton = (e->button() & LeftButton) ? true : false;
+  mouseEvent.rightButton = (e->button() & RightButton) ? true : false;
+  mouseEvent.midButton = (e->button() & MidButton) ? true : false;
+  
+  mouseEvent.shiftButton = (e->state() & ShiftButton) ? true : false;
+  mouseEvent.controlButton = (e->state() & ControlButton) ? true : false;
+  mouseEvent.altButton = (e->state() & AltButton) ? true : false;
+
+  m_pTool->mouseRelease(mouseEvent);
+}
+
 void KImageShopView::paintEvent( QPaintEvent * )
 {
-  /*
-  if( m_pixmap.isNull() )
-  {
-    return;
-  }
-  
-  QPainter painter;
-
-  painter.begin( this );
-  painter.drawPixmap( 0, 0, m_pixmap );
-  painter.end();
-  */
+  // FIME: do we need this? The child widgets handle the paintevent.
 }
 
 void KImageShopView::viewLayerDialog()

@@ -9,8 +9,6 @@
 //
 //   For more information see at the file COPYING in this package
 
-#include <iostream.h>
-
 #include "layer.h"
 #include "misc.h"
 #include "canvas.h"
@@ -97,7 +95,7 @@ void Canvas::removeView(CanvasView *view)
   views.removeRef(view);
 }
 
-void Canvas::repaintView(CanvasView *view, QPaintEvent *e)
+void Canvas::repaintView(CanvasView *view, QRect area)
 {
   if (!view)
     return;
@@ -112,7 +110,7 @@ void Canvas::repaintView(CanvasView *view, QPaintEvent *e)
       for(int x=0;x<xTiles;x++)
 	{
 	  QRect tileRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE);
-	  if (viewportRect.intersects(tileRect) && tileRect.intersects(e->rect()))
+	  if (viewportRect.intersects(tileRect) && tileRect.intersects(area))
 	    {
 	      if (!tiles[y*xTiles+x]->isNull())
 		{
@@ -123,6 +121,20 @@ void Canvas::repaintView(CanvasView *view, QPaintEvent *e)
 	    }
 	  p.drawRect(tileRect);
 	}
+    }
+}
+
+void Canvas::repaintAll(QRect area)
+{
+  if (views.isEmpty())
+    return;
+
+  // repaint area in all views
+  CanvasView *view = views.first();	  
+  while(view)
+    {
+      repaintView(view, area);
+      view = views.next();
     }
 }
 
@@ -175,6 +187,7 @@ void Canvas::addRGBLayer(QString file)
   // the other channels
   QString alphaName=file;
   alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
+  printf("Canvas::addRGBLayerAlpha: %s\n",alphaName.latin1());
   QImage alpha(alphaName);
   if (!alpha.isNull() && (img.size()!=alpha.size())) {
     puts("Incorrect sized alpha channel - not loaded");
@@ -242,17 +255,6 @@ void Canvas::compositeImage(QRect r)
 	convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
       }
   TIME_END("compositeImage");
-
-  if( !views.isEmpty() )
-  {
-    CanvasView *current = views.first();
- 
-    while( current )
-    {
-      current->repaint( false );
-      current = views.next();
-    }
-  }
 }
 
 void Canvas::renderLayerIntoTile(QRect tileBoundary, layer *srcLay, layer *dstLay,
@@ -488,64 +490,6 @@ void Canvas::moveLayer(int dx, int dy, layer *lay=0)
   lay=layerPtr(lay);
   lay->moveBy(dx, dy);
 }
-
-void Canvas::mousePressEvent ( QMouseEvent *e )
-{
-  if (e->state() & ControlButton)
-    {
-      paintBrush(e->pos(), currentBrush);
-      compositeImage(QRect(e->pos()-currentBrush->hotSpot(), currentBrush->brushSize()));
-      
-      if (!views.isEmpty())
-	{
-	  CanvasView *current = views.first();
-	  
-	  while(current)
-	    {
-	      current->repaint(QRect(e->pos()-currentBrush->hotSpot(),currentBrush->brushSize()));
-	      current = views.next();
-	    }
-	}
-    }
-  else
-    {
-      dragging=true;
-      dragStart=e->pos();
-    }
-}
-	
-void Canvas::mouseMoveEvent ( QMouseEvent *e )
-{
-  if (dragging)
-    {
-      QPoint dragSize=e->pos()-dragStart;
-      //SHOW_POINT(dragSize);
-      QRect updateRect(currentLayer->imageExtents());
-      moveLayer(dragSize.x(), dragSize.y());
-      updateRect=updateRect.unite(currentLayer->imageExtents());
-      compositeImage(updateRect);
-      dragStart=e->pos();
-
-      if (!views.isEmpty())
-	{
-	  CanvasView *current = views.first();
-	  
-	  while(current)
-	    {
-	      current->repaint(updateRect, false);
-	      current = views.next();
-	    }
-	}
-      
-    }
-}
-
-void Canvas::mouseReleaseEvent ( QMouseEvent * )
-{
-  if (dragging)
-    dragging=false;
-}
-
 
 void Canvas::convertImageToPixmap(QImage *image, QPixmap *pix)
 {

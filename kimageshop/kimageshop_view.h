@@ -40,6 +40,10 @@ class LayerDialog;
 class KImageShopDoc;
 class QScrollBar;
 class KRuler;
+class Tool;
+class MoveTool;
+class BrushTool;
+class brush;
 
 class KImageShopView : public QWidget,
 		       virtual public KoViewIf,
@@ -59,6 +63,13 @@ public:
 
 public slots:
   void slotUpdateView();
+  // slots the CanvasView connects to 
+  void slotCVPaint(QPaintEvent *e);
+  void slotCVMousePress(QMouseEvent *e);
+  void slotCVMouseMove(QMouseEvent *e);
+  void slotCVMouseRelease(QMouseEvent *e);
+  virtual void slotActivateMoveTool();
+  virtual void slotActivateBrushTool();
 
 protected:
   virtual void init();
@@ -83,6 +94,7 @@ protected:
   void viewLayerDialog();
 
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
+  OpenPartsUI::ToolBar_var m_vToolBarTools;
   OpenPartsUI::Menu_var m_vMenuEdit;
 
   OpenPartsUI::Menu_var m_vMenuView;
@@ -93,12 +105,22 @@ protected:
   OpenPartsUI::Menu_var m_vMenuOptions;
   
 private:
+<<<<<<< kimageshop_view.h
 
+  enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL };
+=======
+
+>>>>>>> 1.6
   KImageShopDoc *m_pDoc; 
-  CanvasView    *m_pCanvasView;
   LayerDialog   *m_pLayerDialog;
   QScrollBar    *m_pHorz, *m_pVert;
   KRuler        *m_pHRuler, *m_pVRuler;
+
+  CanvasView    *m_pCanvasView;
+  Tool          *m_pTool; // currently active tool
+  MoveTool      *m_pMoveTool;
+  BrushTool     *m_pBrushTool;
+  brush         *m_pBrush; // current brush
 };
 
 #endif

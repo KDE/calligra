@@ -1,5 +1,5 @@
 /*
- *  canvasview.cc - part of KImageShop
+ *  tool.h - part of KImageShop
  *
  *  Copyright (c) 1999 The KImageShop team (see file AUTHORS)
  *
@@ -18,30 +18,32 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "canvasview.h"
+#ifndef __tool_h__
+#define __tool_h__
 
+#include "qmessagebox.h"
+#include "kimageshop.h"
 
-CanvasView::CanvasView(QWidget *parent) : QWidget(parent) {}
-CanvasView::~CanvasView() {}
+class Canvas;
 
-void CanvasView::paintEvent(QPaintEvent *e)
+class Tool : public KImageShop::Tool_skel
 {
-  emit sigPaint(e);
-}
+ public:
+  Tool(Canvas *_canvas = 0L);
+  ~Tool();
 
-void CanvasView::mousePressEvent(QMouseEvent *e)
-{
-  emit sigMousePress(e);
-}
-	
-void CanvasView::mouseMoveEvent(QMouseEvent *e)
-{
-  emit sigMouseMove(e);
-}
+  virtual char* toolName();
+  virtual void optionsDialog();
 
-void CanvasView::mouseReleaseEvent(QMouseEvent *e)
-{
-  emit sigMouseRelease(e);
-}
+  // Perhaps we should make these KOM slots and let KImageShopView emit 
+  // KOM signals but the mouse-move resolution might decrease?!
+  virtual void mousePress(const KImageShop::MouseEvent& e) = 0; 
+  virtual void mouseMove(const KImageShop::MouseEvent& e) = 0;
+  virtual void mouseRelease(const KImageShop::MouseEvent& e) = 0;
+    
+ protected:
+  Canvas  *m_pCanvas;
+};
 
-#include "canvasview.moc"
+#endif
+

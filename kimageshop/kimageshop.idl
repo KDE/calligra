@@ -1,5 +1,5 @@
 /*
- *  kimageshop_view.h - part of KImageShop
+ *  kimageshop.idl - part of KImageShop
  *
  *  Copyright (c) 1999 The KImageShop team (see file AUTHORS)
  *
@@ -27,24 +27,41 @@
 
 module KImageShop
 {
+	struct MouseEvent_
+	{
+		long posX;
+		long posY;
+		long globalPosX;
+		long globalPosY;
+		boolean leftButton;
+		boolean rightButton;
+		boolean midButton;
+		boolean shiftButton;
+		boolean controlButton;
+		boolean altButton;
+	};
+  	typedef MouseEvent_ MouseEvent;
+
+	interface Tool
+	{
+		void optionsDialog();
+		string toolName();
+
+		void mousePress(in MouseEvent e); 
+		void mouseMove(in MouseEvent e);
+		void mouseRelease(in MouseEvent e);
+	};
+
 	interface View : KOffice::View
 	{
+		slot void slotActivateMoveTool();
+		slot void slotActivateBrushTool();
                 // View menu
                 slot void viewLayerDialog();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print
 	{
-	/*
-       		// View menu
-       		slot void viewZoomFactor();
-		slot void viewFitToView();
-       		slot void viewFitWithProportions();
-       		slot void viewOriginalSize();
-       		slot void viewCentered();
-       		slot void viewInfoImage();
-       		slot void viewBackgroundColor();
-	*/
 	};
     
 	interface DocumentFactory : KOffice::DocumentFactory

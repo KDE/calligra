@@ -1,5 +1,5 @@
 /*
- *  canvasview.cc - part of KImageShop
+ *  tool.cc - part of KImageShop
  *
  *  Copyright (c) 1999 The KImageShop team (see file AUTHORS)
  *
@@ -18,30 +18,21 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "canvasview.h"
+#include "tool.h"
 
-
-CanvasView::CanvasView(QWidget *parent) : QWidget(parent) {}
-CanvasView::~CanvasView() {}
-
-void CanvasView::paintEvent(QPaintEvent *e)
+Tool::Tool(Canvas *_canvas)
 {
-  emit sigPaint(e);
+  m_pCanvas = _canvas;
 }
 
-void CanvasView::mousePressEvent(QMouseEvent *e)
+Tool::~Tool() {}
+
+char* Tool::toolName()
 {
-  emit sigMousePress(e);
-}
-	
-void CanvasView::mouseMoveEvent(QMouseEvent *e)
-{
-  emit sigMouseMove(e);
+  return CORBA::string_dup("BaseTool");
 }
 
-void CanvasView::mouseReleaseEvent(QMouseEvent *e)
+void Tool::optionsDialog()
 {
-  emit sigMouseRelease(e);
+  QMessageBox::information (0L, "KimageShop", "No Options available for this tool.", 1);
 }
-
-#include "canvasview.moc"

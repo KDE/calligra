@@ -47,6 +47,7 @@ KImageShopShell::KImageShopShell()
     s_lstShells = new QList<KImageShopShell>;
 
   s_lstShells->append( this );
+  resize(700,500);
 }
 
 KImageShopShell::~KImageShopShell()

@@ -1,5 +1,5 @@
 /*
- *  canvasview.cc - part of KImageShop
+ *  brushtool.h - part of KImageShop
  *
  *  Copyright (c) 1999 The KImageShop team (see file AUTHORS)
  *
@@ -18,30 +18,33 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "canvasview.h"
+#ifndef __brushtool_h__
+#define __brushtool_h__
 
+#include <qpoint.h>
 
-CanvasView::CanvasView(QWidget *parent) : QWidget(parent) {}
-CanvasView::~CanvasView() {}
+#include "tool.h"
 
-void CanvasView::paintEvent(QPaintEvent *e)
+class brush;
+
+class BrushTool : public Tool
 {
-  emit sigPaint(e);
-}
+ public:
+  BrushTool(Canvas *_canvas, brush *_brush);
+  ~BrushTool();
 
-void CanvasView::mousePressEvent(QMouseEvent *e)
-{
-  emit sigMousePress(e);
-}
-	
-void CanvasView::mouseMoveEvent(QMouseEvent *e)
-{
-  emit sigMouseMove(e);
-}
+  virtual char* toolName() { return CORBA::string_dup("BrushTool"); }
 
-void CanvasView::mouseReleaseEvent(QMouseEvent *e)
-{
-  emit sigMouseRelease(e);
-}
+  virtual void mousePress(const KImageShop::MouseEvent& e); 
+  virtual void mouseMove(const KImageShop::MouseEvent& e);
+  virtual void mouseRelease(const KImageShop::MouseEvent& e);
 
-#include "canvasview.moc"
+  void setBrush(brush *_brush);
+
+ protected:
+  QPoint m_dragStart;
+  bool   m_dragging;
+  brush  *m_pBrush;
+};
+
+#endif //__brushtool_h__

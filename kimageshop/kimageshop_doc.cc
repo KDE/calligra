@@ -96,14 +96,7 @@ KImageShopDoc::KImageShopDoc()
   m_pCanvas->addRGBLayer(_image);
   m_pCanvas->setLayerOpacity(80);
   
-  _image = locate("data", "kimageshop/brushes/brush.jpg");
-  brush br(_image);
-  br.setHotSpot(QPoint(25,25));
-  m_pCanvas->currentBrush=&br;
-  
-  
   m_pCanvas->compositeImage(QRect());
-  //m_pCanvas->show();
 }
 
 CORBA::Boolean KImageShopDoc::initDoc()
