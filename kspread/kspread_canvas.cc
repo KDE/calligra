@@ -1962,7 +1962,6 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       if(!make_select)
 	  table->unselect();
       int x, y;
-      int rowMax;
       int colMax;
 
       switch(_ev->key()){
@@ -2014,51 +2013,59 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
       //Ctrl+Key_Down
       case Key_Down:
+
 	  //If we are already at the end, we skip
-          // we only need to go to rowMax
-          rowMax = activeTable()->maxRow();
-	  if ( !m_bChoose && markerRow() >= rowMax )
+	  if ( !m_bChoose && markerRow() >= KS_rowMax )
 	      return;
+
 	  //If we are already at the end, we skip
-	  if ( m_bChoose && chooseMarkerRow() >= rowMax )
+	  if ( m_bChoose && chooseMarkerRow() >= KS_rowMax )
 	      return;
 
 	  if ( m_bChoose )
 	      //If we are in choose mode, we only go 1 down
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( rowMax, chooseMarkerRow() + 1 ), 0, make_select );
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( KS_rowMax, chooseMarkerRow() + 1 ), 0, make_select );
 	  else{
 
 	      x = markerColumn();
 	      y = markerRow();
 
 	      //If we are at the end of a filled or empty block, then move one down
-	      if ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x, y+1, true)->isEmpty() )
+	      if ( ( y < KS_rowMax ) && ( activeTable()->cellAt(x, y, true)->isEmpty() != activeTable()->cellAt(x, y+1, true)->isEmpty() ) )
 		  y ++;
 	      else
 		  {
-		  // HELP! This is by far to slow and inefficent!
-
 		  // if this is a filled cell
 		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
 		      //Then we search as long as the next field is filled
-		      while ( (y+1 <= rowMax) && !(activeTable()->cellAt(x, y+1, true))->isEmpty() ){
+		      while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt(x, y+1, true))->isEmpty() ){
 			  y ++;
 		      }
 		  }
 		  else{
-		      //Otherwise we search as long as the next field is empty
-		      while ( (y+1 <= rowMax) && (activeTable()->cellAt(x, y+1, true))->isEmpty() ){
-			  y ++;
+		      if ( y >= activeTable()->maxRow() ) {
+			  y = KS_rowMax;
+		      }
+		      else {
+			  //Otherwise we search for the next filled field and use the last empty one
+			  KSpreadCell * _c = activeTable()->getNextCellDown( x, y );
+
+			  //Found an existing cell, but does it contain something?
+			  while ( _c && _c->isEmpty() ) {
+			      _c = activeTable()->getNextCellDown( x, _c->row() );
+			  }
+
+			  //If there is filled own, use the previous
+			  if ( _c )
+		              y = _c->row() - 1;
+			  //Otherwise go to the end
+			  else
+			      y = KS_rowMax;
 		      }
 		  }
 	      }
-              // don't go to KS_rowMax?, if there is nothing down there, stay where you are
-              // uncommented for visual feedback
-              if (y >= rowMax)
-                  y = KS_rowMax;
-
 	      gotoLocation( x, QMIN( KS_rowMax, y ), 0, make_select, true, true );
-	      repaint();
+//	      repaint(); //Philipp: For what do we need the repaint here?
 	  }
 
 	  return;
