@@ -21,9 +21,10 @@
 
 /******************************************************************/
 
-#include <koRuler.h>
+#include "koRuler.h"
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
@@ -53,6 +54,7 @@ public:
     KoTabulatorList::Iterator currTab;
     QPopupMenu *rb_menu;
     int mMM, mPT, mINCH, mRemoveTab;
+    int frameEnd;
     bool m_bReadWrite;
 };
 
@@ -104,9 +106,10 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     d->currTab = d->tabList.end();
 
     d->removeTab = d->tabList.end();
-    frameStart = -1;
+    frameStart = qRound( zoomIt(layout.ptLeft) );
+    d->frameEnd = qRound( zoomIt(layout.ptWidth - layout.ptRight) );
+    m_bFrameStartSet = false;
 
-    allowUnits = true;
     setupMenu();
 }
 
@@ -146,27 +149,28 @@ void KoRuler::setMousePos( int mx, int my )
 /*================================================================*/
 void KoRuler::drawHorizontal( QPainter *_painter )
 {
+    // Use a double-buffer pixmap
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
     double dist;
     int j = 0;
-    double pw = zoomIt(layout.ptWidth);
-    int i_pw=qRound(pw);
+    int totalw = qRound( zoomIt(layout.ptWidth) );
     QString str;
     QFont font = QFont( "helvetica", 8 ); // Ugh... hardcoded (Werner)
     QFontMetrics fm( font );
 
     p.setBrush( Qt::white );
 
+    // Draw white rect
     QRect r;
     if ( !d->whileMovingBorderLeft )
-        r.setLeft( -diffx + qRound(zoomIt(layout.ptLeft)) );
+        r.setLeft( -diffx + frameStart );
     else
         r.setLeft( d->oldMx );
     r.setTop( 0 );
     if ( !d->whileMovingBorderRight )
-        r.setRight( -diffx + i_pw - qRound(zoomIt(layout.ptRight)) );
+        r.setRight( -diffx + d->frameEnd );
     else
         r.setRight( d->oldMx );
     r.setBottom( height() );
@@ -174,6 +178,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.drawRect( r );
     p.setFont( font );
 
+    // Draw the numbers
     if ( unit == "inch" )
         dist = INCH_TO_POINT (m_zoom);
     else if ( unit == "pt" )
@@ -181,7 +186,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     else
         dist = MM_TO_POINT ( 10.0 * m_zoom );
 
-    for ( double i = 0.0;i <= pw;i += dist ) {
+    for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str=QString::number(j++);
         if ( unit == "pt" && j!=1)
             str+="00";
@@ -190,26 +195,31 @@ void KoRuler::drawHorizontal( QPainter *_painter )
                     fm.width( str ), height(), AlignLeft | AlignTop, str );
     }
 
-    for ( double i = dist * 0.5;i <= pw;i += dist ) {
+    // Draw the medium-sized lines
+    for ( double i = dist * 0.5;i <= (double)totalw;i += dist ) {
         int ii=qRound(i);
         p.drawLine( ii - diffx, 5, ii - diffx, height() - 5 );
     }
 
-    for ( double i = dist * 0.25;i <= pw;i += dist * 0.5 ) {
+    // Draw the small lines
+    for ( double i = dist * 0.25;i <= (double)totalw;i += dist * 0.5 ) {
         int ii=qRound(i);
         p.drawLine( ii - diffx, 7, ii - diffx, height() - 7 );
     }
 
+    // Draw ending bar (at page width)
     int constant=zoomIt(1);
-    p.drawLine( i_pw - diffx + constant, 1, i_pw - diffx + constant, height() - 1 );
+    p.drawLine( totalw - diffx + constant, 1, totalw - diffx + constant, height() - 1 );
     p.setPen( Qt::white );
-    p.drawLine( i_pw - diffx, 1, i_pw - diffx, height() - 1 );
+    p.drawLine( totalw - diffx, 1, totalw - diffx, height() - 1 );
 
+    // Draw starting bar (at 0) - can we see it ?
     p.setPen( Qt::black );
     p.drawLine( -diffx, 1, -diffx, height() - 1 );
     p.setPen( Qt::white );
     p.drawLine( -diffx - constant, 1, -diffx - constant, height() - 1 );
 
+    // Draw the indents triangles
     if ( d->flags & F_INDENTS ) {
         p.drawPixmap( qRound(zoomIt(i_first) - d->pmFirst.size().width() * 0.5 +
                                  static_cast<double>(r.left())), 2, d->pmFirst );
@@ -218,12 +228,14 @@ void KoRuler::drawHorizontal( QPainter *_painter )
                       height() - d->pmLeft.size().height() - 2, d->pmLeft );
     }
 
+    // Show the mouse position
     if ( d->action == A_NONE && showMPos ) {
         p.setPen( Qt::black );
         p.drawLine( mposX, 1, mposX, height() - 1 );
     }
     hasToDelete = false;
 
+    // Draw the tabs
     if ( d->tabChooser && ( d->flags & F_TABS ) && !d->tabList.isEmpty() )
         drawTabs( p );
 
@@ -240,8 +252,7 @@ void KoRuler::drawTabs( QPainter &_painter )
 
     KoTabulatorList::Iterator it = d->tabList.begin();
     for ( ; it != d->tabList.end() ; it++ ) {
-        ptPos = qRound(zoomIt((*it).ptPos)) - diffx + ( frameStart == -1 ? qRound( zoomIt(layout.ptLeft) ) :
-                                                            frameStart );
+        ptPos = qRound(zoomIt((*it).ptPos)) - diffx + frameStart;
         switch ( (*it).type ) {
         case T_LEFT: {
             ptPos -= 4;
@@ -394,17 +405,11 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             drawLine(d->oldMx, -1);
     } else if ( d->action == A_TAB ) {
         if ( d->canvas && d->currTab!=d->tabList.end()) {
-            double pt=zoomIt((*d->currTab).ptPos);
-            pt+=(frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(frameStart));
-            int i_pt=qRound(pt);
-            drawLine(i_pt, -1);
+            drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart, -1);
         }
     } else if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 ) {
-        int pw = qRound(zoomIt(layout.ptWidth));
-        int left = qRound(zoomIt(layout.ptLeft));
-        left -= diffx;
-        int right = qRound(zoomIt(layout.ptRight));
-        right = pw - right - diffx;
+        int left = frameStart - diffx;
+        int right = d->frameEnd - diffx;
 
         if( e->x()-left < 0 || right-e->x() < 0 )
             return;
@@ -424,10 +429,12 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             break;
         default: break;
         }
-        tab.ptPos = static_cast<double>( unZoomIt( e->x() + diffx - ( frameStart == -1 ? qRound(zoomIt(layout.ptLeft)) : frameStart ) ) );
+        tab.ptPos = unZoomIt( static_cast<double>( e->x() + diffx - frameStart ) );
 
         KoTabulatorList::Iterator it=d->tabList.begin();
         for( ; (it!=d->tabList.end() && tab > (*it)); ++it);   // DON'T remove that trailing ';'  :-)
+        // You know, a while() would clearer (DF) :)
+
         d->removeTab=d->tabList.insert(it, tab);
 
         emit tabListChanged( d->tabList );
@@ -482,10 +489,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         emit newFirstIndent( i_first );
     } else if ( d->action == A_TAB ) {
         if ( d->canvas && !fakeMovement ) {
-            double pt=zoomIt((*d->currTab).ptPos);
-            pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(frameStart));
-            int i_pt=qRound(pt);
-            drawLine(i_pt, -1);
+            drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart, -1);
         }
         if ( (e->y() < -50 || e->y() > height() + 50) && d->currTab!=d->tabList.end() )
             d->tabList.remove(d->currTab);
@@ -502,14 +506,12 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 {
     hasToDelete = false;
 
-    int pw = qRound(zoomIt(layout.ptWidth));
+    int pw = d->frameEnd - frameStart;
     int ph = qRound(zoomIt(layout.ptHeight));
-    int left = qRound(zoomIt(layout.ptLeft));
-    left -= diffx;
+    int left = frameStart - diffx;
     int top = qRound(zoomIt(layout.ptTop));
     top -= diffy;
-    int right = qRound(zoomIt(layout.ptRight));
-    right = pw - right - diffx;
+    int right = d->frameEnd - diffx;
     int bottom = qRound(zoomIt(layout.ptBottom));
     bottom = ph - bottom - diffy;
     int ip_left = qRound(zoomIt(i_left));
@@ -525,12 +527,26 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             if ( !d->mousePressed ) {
                 setCursor( ArrowCursor );
                 d->action = A_NONE;
-                if ( mx > left - 5 && mx < left + 5 ) {
-                    setCursor( Qt::sizeHorCursor );
-                    d->action = A_BR_LEFT;
-                } else if ( mx > right - 5 && mx < right + 5 ) {
-                    setCursor( Qt::sizeHorCursor );
-                    d->action = A_BR_RIGHT;
+                /////// ######
+                // At the moment, moving the left and right border indicators
+                // is disabled when setFrameStartEnd has been called (i.e. in KWord)
+                // Changing the layout margins directly from it would be utterly wrong
+                // (just try the 2-columns modes...). What needs to be done is:
+                // emitting a signal frameResized in mouseReleaseEvent, when a left/right
+                // border has been moved, and in kword we need to update the margins from
+                // there, if the left border of the 1st column or the right border of the
+                // last column was moved... and find what to do with the other borders.
+                // And for normal frames, resize the frame without touching the page layout.
+                // All that is too much for now -> disabling.
+                if ( !m_bFrameStartSet )
+                {
+                    if ( mx > left - 5 && mx < left + 5 ) {
+                        setCursor( Qt::sizeHorCursor );
+                        d->action = A_BR_LEFT;
+                    } else if ( mx > right - 5 && mx < right + 5 ) {
+                        setCursor( Qt::sizeHorCursor );
+                        d->action = A_BR_RIGHT;
+                    }
                 }
                 if ( d->flags & F_INDENTS ) {
                     if ( mx > left + ip_first - 5 && mx < left + ip_first + 5 &&
@@ -635,13 +651,12 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                         if ( d->canvas && mx-left >= 0 && right-mx >= 0) {
                             QPainter p( d->canvas );
                             p.setRasterOp( Qt::NotROP );
-                            double pt=zoomIt((*d->currTab).ptPos);
-                            double fr=(frameStart == -1 ? zoomIt( layout.ptLeft ) : static_cast<double>( frameStart ) );
-                            int pt_fr=qRound(pt+fr);
+                            double pt = zoomIt((*d->currTab).ptPos);
+                            int pt_fr = qRound(pt) + frameStart;
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
-                            (*d->currTab).ptPos = unZoomIt(static_cast<double>(mx) - fr );
-                            pt=zoomIt( (*d->currTab).ptPos );
-                            pt_fr=qRound(pt+fr);
+                            (*d->currTab).ptPos = unZoomIt(static_cast<double>(mx) - frameStart );
+                            pt = zoomIt( (*d->currTab).ptPos );
+                            pt_fr = qRound(pt) + frameStart;
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
                             p.end();
                             d->oldMx = mx;
@@ -834,8 +849,7 @@ void KoRuler::searchTab(int mx) {
     d->currTab = d->tabList.end();
     KoTabulatorList::Iterator it = d->tabList.begin();
     for ( ; it != d->tabList.end() ; ++it ) {
-        pos = qRound(zoomIt((*it).ptPos)) - diffx + ( frameStart == -1 ?
-                                                      qRound(zoomIt(layout.ptLeft)) : frameStart);
+        pos = qRound(zoomIt((*it).ptPos)) - diffx + frameStart;
         if ( mx > pos - 5 && mx < pos + 5 ) {
             setCursor( Qt::sizeHorCursor );
             d->action = A_TAB;
@@ -855,4 +869,33 @@ void KoRuler::drawLine(int oldX, int newX) {
     p.end();
 }
 
-#include <koRuler.moc>
+void KoRuler::showMousePos( bool _showMPos )
+{
+    showMPos = _showMPos;
+    hasToDelete = false;
+    mposX = -1;
+    mposY = -1;
+    repaint( false );
+}
+
+void KoRuler::setOffset( int _diffx, int _diffy )
+{
+    diffx = _diffx;
+    diffy = _diffy;
+    repaint( false );
+}
+
+void KoRuler::setFrameStartEnd( int _frameStart, int _frameEnd )
+{
+    if ( _frameStart != frameStart || _frameEnd != d->frameEnd || !m_bFrameStartSet )
+    {
+        frameStart = _frameStart;
+        d->frameEnd = _frameEnd;
+        // Remember that setFrameStartEnd was called. This activates a slightly
+        // different mode (when moving start and end positions).
+        m_bFrameStartSet = true;
+        repaint( false );
+    }
+}
+
+#include "koRuler.moc"

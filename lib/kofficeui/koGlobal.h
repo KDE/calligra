@@ -150,22 +150,34 @@ enum KoHFType {
     HF_EO_DIFF = 3
 };
 
-// structure for page layout
+/**
+ * This structure defines the page layout, including
+ * its size in pt, its format (e.g. A4), orientation, unit, margins etc.
+ */
 struct KoPageLayout
 {
+    /** Page format */
     KoFormat format;
+    /** Page orientation */
     KoOrientation orientation;
 
+    /** The user's preferred unit. Should probably be removed later. */
     KoUnit unit;
 
+    /** Page width in pt */
     double ptWidth;
+    /** Page height in pt */
     double ptHeight;
+    /** Left margin in pt */
     double ptLeft;
+    /** Right margin in pt */
     double ptRight;
+    /** Top margin in pt */
     double ptTop;
+    /** Bottom margin in pt */
     double ptBottom;
 
-    // Deprecated, don't use. pt* should be enough.
+    // Deprecated, DO NOT USE. pt* should be enough.
     double mmWidth;
     double mmHeight;
     double mmLeft;
@@ -212,7 +224,7 @@ struct KoPageLayout
     }
 };
 
-// structure for header-footer
+/** structure for header-footer */
 struct KoHeadFoot
 {
     QString headLeft;
@@ -223,14 +235,14 @@ struct KoHeadFoot
     QString footRight;
 };
 
-// structure for columns
+/** structure for columns */
 struct KoColumns
 {
     int columns;
     double ptColumnSpacing;
 };
 
-// structure for KWord header-Footer
+/** structure for KWord header-footer */
 struct KoKWHeaderFooter
 {
     KoHFType header;

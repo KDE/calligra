@@ -36,20 +36,26 @@
 
 class QPainter;
 
-/******************************************************************/
-/* Struct: KoTabulator                                            */
-/* Defines the position of a tabulation (in pt), and its type     */
-/******************************************************************/
-
 enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3 };
 
+/**
+ * Struct: KoTabulator
+ * Defines the position of a tabulation (in pt), and its type
+ */
 struct KoTabulator {
+    /**
+     * Position of the tab in pt
+     */
     double ptPos;
+    /**
+     * Type of tab (left/center/right/decimalpoint)
+     */
     KoTabulators type;
 
     bool operator==( const KoTabulator & t ) const {
         return ptPos == t.ptPos && type == t.type;
     }
+    // Operators used for sorting
     bool operator < ( const KoTabulator & t ) const {
         return ptPos < t.ptPos;
     }
@@ -65,10 +71,16 @@ typedef QValueList<KoTabulator> KoTabulatorList;
 
 class KoRulerPrivate;
 
-/******************************************************************/
-/* Class: KoRuler                                                 */
-/******************************************************************/
-
+/**
+ * KoRuler is the horizontal or vertical ruler, to be used around
+ * the drawing area of most KOffice programs.
+ *
+ * It shows the graduated ruler with numbering, in any of the 3 base units (mm/pt/inch),
+ * and supports zooming, tabulators, paragraph indents, showing the mouse position, etc.
+ *
+ * It also offers a popupmenu upon right-clicking, for changing the unit,
+ * the page layout, or removing a tab.
+ */
 class KoRuler : public QFrame
 {
     Q_OBJECT
@@ -81,36 +93,74 @@ public:
              KoPageLayout _layout, int _flags, KoTabChooser *_tabChooser = 0L );
     ~KoRuler();
 
+    /**
+     * Set the unit to be used. Currently supported are "mm", "pt" and "inch".
+     */
     void setUnit( const QString& _unit );
 
     void setZoom( const double& zoom=1.0 );
     const double& zoom() const { return m_zoom; }
 
+    /**
+     * Set the page layout, @see KoPageLayout.
+     * This defines the size of the page and the margins,
+     * from which the size of the ruler is deducted.
+     */
     void setPageLayout( KoPageLayout _layout )
     { layout = _layout; repaint( false ); }
 
-    void showMousePos( bool _showMPos )
-    { showMPos = _showMPos; hasToDelete = false; mposX = -1; mposY = -1; repaint( false ); }
-    // Not zoomed - real pixel coords!
+    /**
+     * Call showMousePos(true) if the ruler should indicate the position
+     * of the mouse. This is usually only the case for drawing applications,
+     * so it is not the case by default.
+     */
+    void showMousePos( bool _showMPos );
+    /**
+     * Set the position of the mouse, to update the indication in the ruler.
+     * This is only effective if showMousePos(true) was called previously.
+     * The position to give is not zoomed, it's in real pixel coordinates!
+     */
     void setMousePos( int mx, int my );
 
-    void setOffset( int _diffx, int _diffy )
-    { diffx = _diffx; diffy = _diffy; repaint( false ); }
+    /**
+     * Set a global offset to the X and Y coordinates.
+     * Usually the main drawing area is a QScrollView, and this is called
+     * with contentsX() and contentsY(), each time those values change.
+     */
+    void setOffset( int _diffx, int _diffy );
 
+    /**
+     * Set the [paragraph] left indent to the specified position (in the current unit)
+     */
     void setLeftIndent( double _left )
     { i_left = makeIntern( _left ); repaint( false ); }
+
+    /**
+     * Set the [paragraph] first-line left indent to the specified position (in the current unit)
+     */
     void setFirstIndent( double _first )
     { i_first = makeIntern( _first ); repaint( false ); }
 
-    void setTabList( const KoTabulatorList & tabList );
-    void setFrameStart( int _frameStart ) { frameStart = _frameStart; repaint( false ); }
-
-    void setAllowUnits( bool _allow ) { allowUnits = _allow; }
     /**
-     * put m_bReadWrite to true as default
-     * and used setReadWrite(false) to make in readOnly mode
+     * Set the list of tabulators to show in the ruler.
      */
-    void setReadWrite(bool _readWrite);
+    void setTabList( const KoTabulatorList & tabList );
+
+    /**
+     * Set the start and the end of the current 'frame', i.e. the part
+     * of the page in which we are currently working. See KWord frames
+     * for an example where this is used. The tab positions and paragraph
+     * indents then become relative to the beginning of the frame, and the
+     * ruler goes from frameStart to frameEnd instead of using the page margins.
+     * @p _frameStart et @p _frameEnd are in pixel coordinates.
+     */
+    void setFrameStartEnd( int _frameStart, int _frameEnd );
+
+    /**
+     * KoRuler is in "read write" mode by default.
+     * Use setReadWrite(false) to use it in read-only mode.
+     */
+    void setReadWrite( bool _readWrite );
 
 signals:
     void newPageLayout( KoPageLayout );
@@ -162,14 +212,14 @@ protected:
     bool showMPos;
     int mposX, mposY;
     int frameStart;
-    bool allowUnits;
+    bool m_bFrameStartSet;
 
     bool m_bReadWrite;
 
 protected slots:
-    void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( QString::fromLatin1("pt") ); }
-    void rbMM() { setUnit( QString::fromLatin1("mm") ); emit unitChanged( QString::fromLatin1("mm") ); }
-    void rbINCH() { setUnit( QString::fromLatin1("inch") ); emit unitChanged( QString::fromLatin1("inch") ); }
+    void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( unit ); }
+    void rbMM() { setUnit( QString::fromLatin1("mm") ); emit unitChanged( unit ); }
+    void rbINCH() { setUnit( QString::fromLatin1("inch") ); emit unitChanged( unit ); }
     void pageLayoutDia() { emit openPageLayoutDia(); }
     void rbRemoveTab();
 

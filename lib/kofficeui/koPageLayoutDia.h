@@ -45,9 +45,9 @@ const int KW_HEADER_AND_FOOTER = 16;
 const int DISABLE_UNIT = 32;
 
 /**
- *  KoPagePreview
+ *  KoPagePreview.
+ *  Internal to KoPageLayoutDia.
  */
-
 class KoPagePreview : public QGroupBox
 {
     Q_OBJECT
@@ -83,12 +83,12 @@ protected:
     int columns;
 };
 
-/**
- *  With this dialog the user can specify the layout of this papaer during printing.
- */
 
 class KoPageLayoutDiaPrivate;
 
+/**
+ *  With this dialog the user can specify the layout of this paper during printing.
+ */
 class KoPageLayoutDia : public KDialogBase
 {
     Q_OBJECT
