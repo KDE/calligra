@@ -57,6 +57,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
         m_rbManual->setChecked( true );
     m_footLine = new QLineEdit( grp);
     connect( m_footLine, SIGNAL( textChanged ( const QString & )), this, SLOT(footLineChanged( const QString & )));
+    connect( grp, SIGNAL( clicked ( int ) ), this, SLOT(footNoteTypeChanged()));
     grid->addWidget( m_footLine, 1, 1);
 
 
@@ -71,6 +72,14 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     else
         m_rbEndNote->setChecked( true );
 
+}
+
+void KWFootNoteDia::footNoteTypeChanged()
+{
+    if ( m_rbManual->isChecked())
+        m_footLine->setFocus();
+    else
+        setFocus();
 }
 
 void KWFootNoteDia::footLineChanged( const QString & )

@@ -43,6 +43,7 @@ protected:
     bool insertFootNote();
 protected slots:
     void footLineChanged( const QString & );
+    void footNoteTypeChanged();
 
 private:
 
