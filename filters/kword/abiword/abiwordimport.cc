@@ -123,12 +123,6 @@ enum StackItemElementType{
     ElementTypeField        // <field>
 };
 
-struct ListTabulator
-{
-    QString type;
-    double ptPos;
-};
-
 class StackItem
 {
 public:
@@ -143,14 +137,9 @@ public:
         green=0;
         blue=0;
         textPosition=0;
-	textBgRed=0;
+    	textBgRed=0;
         textBgGreen=0;
         textBgBlue=0;
-        leftMargin=0;
-	rightMargin=0;
-	textIndent=0;
-	margin_bottom=0;
-        margin_top=0;
     }
     ~StackItem()
     {
@@ -174,19 +163,13 @@ public:
     int         textBgGreen;
     int         textBgBlue;
     int         textPosition; //Normal (0), subscript(1), superscript (2)
-    double      leftMargin;
-    double      rightMargin;
-    double      textIndent;
-    double      margin_bottom;
-    double      margin_top;
-    QValueList<ListTabulator> TabulatorList;
 };
 
 class StackItemStack : public QPtrStack<StackItem>
 {
 public:
-	StackItemStack(void) { }
-	virtual ~StackItemStack(void) { }
+        StackItemStack(void) { }
+        virtual ~StackItemStack(void) { }
 };
 
 class StructureParser : public QXmlDefaultHandler
@@ -248,52 +231,49 @@ static inline double PicaToPoints(const double d)
     return d * 12.0;
 }
 
-static inline double IndentPos( QString _str)
+// Do not put this function inline (it's too long!)
+static double ValueWithLengthUnit( const QString& _str )
 {
-  double d;
-  int pos=0;
-  if ((pos=_str.find("cm"))>=0)
+    double d;
+    int pos=0;
+    if ((pos=_str.find("cm"))>=0)
     {
-      _str=_str.left (pos);
-      d=_str.toDouble();
-      d=CentimetresToPoints(d);
+        d=CentimetresToPoints(_str.left(pos).toDouble());
     }
-  else if ((pos=_str.find("in"))>=0)
+    else if ((pos=_str.find("in"))>=0)
     {
-      _str=_str.left (pos);
-      d=_str.toDouble();
-      d=InchesToPoints(d);
+        d=InchesToPoints(_str.left(pos).toDouble());
     }
-  else if ((pos=_str.find("mm"))>=0)
+    else if ((pos=_str.find("mm"))>=0)
     {
-      _str=_str.left (pos);
-      d=_str.toDouble();
-      d=MillimetresToPoints(d);
+        d=MillimetresToPoints(_str.left(pos).toDouble());
     }
-  else if((pos=_str.find("pt"))>=0)
+    else if((pos=_str.find("pt"))>=0)
     {
-      _str=_str.left (pos);
-      d=_str.toDouble();
+        d=_str.left(pos).toDouble();
     }
-  else if((pos=_str.find("pi"))>=0)
+    else if((pos=_str.find("pi"))>=0)
     {
-      _str=_str.left (pos);
-      d=_str.toDouble();
-      d=PicaToPoints(d);
+        d=PicaToPoints(_str.left(pos).toDouble());
     }
-  else
+    else
     {
-      bool b=false;
-      d=_str.toDouble(&b);
-      if(!b)
-	    {
-          d=0;
-	      kdWarning(30506) << "unknown indent pos: " << _str << endl;
-	    }
+        bool b=false;
+        d=_str.toDouble(&b);
+        if (!b)
+        {
+            d=0;
+            kdWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)" << endl;
+        }
     }
-  return d;
+    return d;
 }
 
+static inline double IndentPos( const QString& _str )
+// DEPRECIATED: use ValueWithLengthUnit
+{
+    return ValueWithLengthUnit(_str);
+}
 void PopulateProperties(StackItem* stackItem,
                         const QXmlAttributes& attributes,
                         AbiPropsMap& abiPropsMap, const bool allowInit)
@@ -351,42 +331,27 @@ void PopulateProperties(StackItem* stackItem,
     QString strColour=abiPropsMap["color"].getValue();
     if (!strColour.isEmpty())
     {
-      QColor col(strColour);
-      stackItem->red  =col.red();
-      stackItem->green=col.green();
-      stackItem->blue =col.blue();
+        // The coulour information is *not* lead by a hash (#)
+        QColor col("#"+strColour);
+        stackItem->red  =col.red();
+        stackItem->green=col.green();
+        stackItem->blue =col.blue();
    }
 
     QString strBackgroundTextColor=abiPropsMap["bgcolor"].getValue();
     if(!strBackgroundTextColor.isEmpty())
     {
-      QColor col(strBackgroundTextColor);
-      stackItem->textBgRed  =col.red();
-      stackItem->textBgGreen=col.green();
-      stackItem->textBgBlue =col.blue();
+        // The coulour information is *not* lead by a hash (#)
+        QColor col("#"+strBackgroundTextColor);
+        stackItem->textBgRed  =col.red();
+        stackItem->textBgGreen=col.green();
+        stackItem->textBgBlue =col.blue();
     }
 
     QString strFontSize=abiPropsMap["font-size"].getValue();
     if (!strFontSize.isEmpty())
     {
-        // FIXME: replace by IdentPos
-        int size=0;
-        int ch; // digit value of the character
-        for (int pos=0;;pos++)
-        {
-            ch=strFontSize.at(pos).digitValue();
-            if (ch==-1)
-            {
-                // Not a digit
-                break;
-            }
-            else
-            {
-                size*=10;
-                size+=ch;
-            }
-        }
-        // TODO: verify that the unit of the font size is really "pt"
+        const int size=int(ValueWithLengthUnit(strFontSize));
         if (size>0)
         {
             stackItem->fontSize=size;
@@ -399,87 +364,10 @@ void PopulateProperties(StackItem* stackItem,
         // TODO: transform the font-family in a font we have on the system on which KWord runs.
         stackItem->fontName=strFontFamily;
     }
-
-    QString strLeftMargin=abiPropsMap["margin-left"].getValue();
-    if(!strLeftMargin.isEmpty())
-      {
-	stackItem->leftMargin=IndentPos(strLeftMargin );
-      }
-
-    QString strRightMargin=abiPropsMap["margin-right"].getValue();
-    if(!strRightMargin.isEmpty())
-      {
-	stackItem->rightMargin=IndentPos(strRightMargin );
-      }
-    QString strTextIndent=abiPropsMap["text-indent"].getValue();
-    if(!strTextIndent.isEmpty())
-      {
-	stackItem->textIndent=IndentPos(strTextIndent);
-      }
-
-    QString strTopMargin=abiPropsMap["margin-top"].getValue();
-    if(!strTopMargin.isEmpty())
-      {
-	stackItem->margin_top=IndentPos(strTopMargin);
-      }
-    QString strTab=abiPropsMap["tabstops"].getValue();
-    if(!strTab.isEmpty())
-    {
-        QStringList listTab=QStringList::split(",",strTab);
-        for ( QStringList::Iterator it = listTab.begin(); it != listTab.end(); ++it )
-        {
-            QStringList tab=QStringList::split("/",*it);
-            ListTabulator tmp;
-            tmp.ptPos=IndentPos(tab[0]);
-            tmp.type=tab[1];
-            kdDebug()<<"tmp.type :"<<tmp.type <<" tmp.ptPos :"<<tmp.ptPos<<endl;
-            stackItem->TabulatorList.append(tmp);
-        }
-
-    }
-
-
 }
 
-// Element <c>
-
-bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
+static void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomDocument& mainDocument)
 {
-    // <c> elements can be nested in <p> elements or in other <c> elements
-    // AbiWord does not use it but explicitely allows external programs to write AbiWord files with nested <c> elements!
-    if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeContent))
-    {
-
-        AbiPropsMap abiPropsMap;
-        PopulateProperties(stackItem,attributes,abiPropsMap,true);
-
-        stackItem->elementType=ElementTypeContent;
-        stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
-        stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
-        stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
-        stackItem->pos=stackCurrent->pos; //Propagate the position
-    }
-    else
-    {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "Abiword Import: parse error <c> tag not nested in neither a <p>  nor a <c> tag" << endl;
-        return false;
-    }
-    return true;
-}
-
-bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch)
-{
-    QDomElement elementText=stackItem->stackElementText;
-    QDomElement elementFormatsPlural=stackItem->stackElementFormatsPlural;
-    elementText.appendChild(mainDocument.createTextNode(ch));
-
-    QDomElement formatElementOut=mainDocument.createElement("FORMAT");
-    formatElementOut.setAttribute("id",1); // Normal text!
-    formatElementOut.setAttribute("pos",stackItem->pos); // Start position
-    formatElementOut.setAttribute("len",ch.length()); // Start position
-    elementFormatsPlural.appendChild(formatElementOut); //Append to <FORMATS>
-    stackItem->pos+=ch.length(); // Adapt new starting position
-
     if (!stackItem->fontName.isEmpty())
     {
         QDomElement fontElementOut=mainDocument.createElement("FONT");
@@ -530,22 +418,66 @@ bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const
     }
 
     if (stackItem->red || stackItem->green || stackItem->blue)
-     {
-         QDomElement fontElementOut=mainDocument.createElement("COLOR");
+    {
+        // FIXME: we surely need black is the style is non-black
+        QDomElement fontElementOut=mainDocument.createElement("COLOR");
         fontElementOut.setAttribute("red",stackItem->red);
         fontElementOut.setAttribute("green",stackItem->green);
         fontElementOut.setAttribute("blue",stackItem->blue);
-	formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-     }
+        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+    }
 
     if (stackItem->textBgRed || stackItem->textBgGreen || stackItem->textBgBlue)
     {
+        // FIXME: we surely need black is the style is non-black
         QDomElement fontElementOut=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
         fontElementOut.setAttribute("red",stackItem->textBgRed);
         fontElementOut.setAttribute("green",stackItem->textBgGreen);
         fontElementOut.setAttribute("blue",stackItem->textBgBlue);
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
     }
+}
+
+// Element <c>
+
+bool StartElementC(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
+{
+    // <c> elements can be nested in <p> elements or in other <c> elements
+    // AbiWord does not use it but explicitely allows external programs to write AbiWord files with nested <c> elements!
+    if ((stackCurrent->elementType==ElementTypeParagraph)||(stackCurrent->elementType==ElementTypeContent))
+    {
+
+        AbiPropsMap abiPropsMap;
+        PopulateProperties(stackItem,attributes,abiPropsMap,true);
+
+        stackItem->elementType=ElementTypeContent;
+        stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
+        stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
+        stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
+        stackItem->pos=stackCurrent->pos; //Propagate the position
+    }
+    else
+    {//we are not nested correctly, so consider it a parse error!
+        kdError(30506) << "Abiword Import: parse error <c> tag not nested in neither a <p>  nor a <c> tag" << endl;
+        return false;
+    }
+    return true;
+}
+
+bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch)
+{
+    QDomElement elementText=stackItem->stackElementText;
+    QDomElement elementFormatsPlural=stackItem->stackElementFormatsPlural;
+    elementText.appendChild(mainDocument.createTextNode(ch));
+
+    QDomElement formatElementOut=mainDocument.createElement("FORMAT");
+    formatElementOut.setAttribute("id",1); // Normal text!
+    formatElementOut.setAttribute("pos",stackItem->pos); // Start position
+    formatElementOut.setAttribute("len",ch.length()); // Start position
+    elementFormatsPlural.appendChild(formatElementOut); //Append to <FORMATS>
+    stackItem->pos+=ch.length(); // Adapt new starting position
+
+    AddFormat(formatElementOut, stackItem, mainDocument);
 
 	return true;
 }
@@ -610,25 +542,37 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
     }
     layoutElement.appendChild(element);
 
-    if (stackItem->leftMargin || stackItem->rightMargin ||stackItem->textIndent )
+    QString strLeftMargin=abiPropsMap["margin-left"].getValue();
+    QString strRightMargin=abiPropsMap["margin-right"].getValue();
+    QString strTextIndent=abiPropsMap["text-indent"].getValue();
+
+    if ( !strLeftMargin.isEmpty()
+        || !strRightMargin.isEmpty()
+        || !strTextIndent.isEmpty() )
     {
-         element=mainDocument.createElement("INDENTS");
-	 if(stackItem->leftMargin)
-	   element.setAttribute("left",stackItem->leftMargin);
-	 if(stackItem->rightMargin)
-	   element.setAttribute("right",stackItem->rightMargin);
-	 if(stackItem->textIndent)
-	   element.setAttribute("first",stackItem->textIndent);
-	 layoutElement.appendChild(element);
+        element=mainDocument.createElement("INDENTS");
+        if (!strLeftMargin.isEmpty())
+            element.setAttribute("left",ValueWithLengthUnit(strLeftMargin));
+        if (!strRightMargin.isEmpty())
+            element.setAttribute("right",ValueWithLengthUnit(strRightMargin));
+        if (!strTextIndent.isEmpty())
+            element.setAttribute("first",ValueWithLengthUnit(strTextIndent));
+        layoutElement.appendChild(element);
     }
-    if (stackItem->margin_bottom || stackItem->margin_top )
+
+    QString strTopMargin=abiPropsMap["margin-top"].getValue();
+    QString strBottomMargin=abiPropsMap["margin-bottom"].getValue();
+    if (!strTopMargin.isEmpty() || !strBottomMargin.isEmpty() )
     {
-         element=mainDocument.createElement("OFFSETS");
-	 if(stackItem->margin_bottom)
-	   element.setAttribute("after",stackItem->margin_bottom);
-	 if(stackItem->margin_top)
-	   element.setAttribute("before",stackItem->margin_top);
-	 layoutElement.appendChild(element);
+        element=mainDocument.createElement("OFFSETS");
+        const double margin_top=ValueWithLengthUnit(strTopMargin);
+        const double margin_bottom=ValueWithLengthUnit(strTopMargin);
+        // Zero is propably a valid value!
+        if (!strBottomMargin.isEmpty())
+            element.setAttribute("after",margin_bottom);
+        if (!strTopMargin.isEmpty())
+            element.setAttribute("before",margin_top);
+        layoutElement.appendChild(element);
     }
 
     QString strLineHeight=abiPropsMap["line-height"].getValue();
@@ -668,97 +612,36 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomDocument& 
         layoutElement.appendChild(element);
     }
 
-
-    if(stackItem->TabulatorList.count()>0)
+    QString strTab=abiPropsMap["tabstops"].getValue();
+    if(!strTab.isEmpty())
     {
-        QValueList<ListTabulator>::iterator it;
-        for ( it = stackItem->TabulatorList.begin(); it !=stackItem->TabulatorList .end(); ++it )
+        QStringList listTab=QStringList::split(",",strTab);
+        for ( QStringList::Iterator it = listTab.begin(); it != listTab.end(); ++it )
         {
-            element=mainDocument.createElement("TABULATOR");
-            element.setAttribute("ptpos",(*it).ptPos);
-            int type=0;
-            if((*it).type=="L0")
+            QStringList tab=QStringList::split("/",*it);
+            int type;
+            if(tab[1]=="L0")
                 type=0;
-            else if( (*it).type=="C0")
+            else if(tab[1]=="C0")
                 type=1;
-            else if( (*it).type=="R0")
+            else if(tab[1]=="R0")
                 type=2;
-            else if((*it).type=="D0")
+            else if(tab[1]=="D0")
                 type=3;
+            else
+                type=0;
+            element=mainDocument.createElement("TABULATOR");
+            element.setAttribute("ptpos",ValueWithLengthUnit(tab[0]));
             element.setAttribute("type",type);
             layoutElement.appendChild(element);
         }
     }
 
+    // TODO: put FORMAT in <p> together we what we need in <c>
     QDomElement formatElementOut=mainDocument.createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
 
-    if (!stackItem->fontName.isEmpty())
-    {
-        QDomElement fontElementOut=mainDocument.createElement("FONT");
-        fontElementOut.setAttribute("name",stackItem->fontName); // Font name
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-    }
-
-    if (stackItem->fontSize)
-    {
-        QDomElement fontElementOut=mainDocument.createElement("SIZE");
-        fontElementOut.setAttribute("value",stackItem->fontSize);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
-    }
-
-    if (stackItem->italic)
-    {
-        element=mainDocument.createElement("ITALIC");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->bold)
-    {
-        element=mainDocument.createElement("WEIGHT");
-        element.setAttribute("value",75);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->underline)
-    {
-        element=mainDocument.createElement("UNDERLINE");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->strikeout)
-    {
-        element=mainDocument.createElement("STRIKEOUT");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->textPosition)
-    {
-        element=mainDocument.createElement("VERTALIGN");
-        element.setAttribute("value",stackItem->textPosition);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->red || stackItem->green || stackItem->blue)
-    {
-        element=mainDocument.createElement("COLOR");
-        element.setAttribute("red",stackItem->red);
-        element.setAttribute("green",stackItem->green);
-        element.setAttribute("blue",stackItem->blue);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-   if (stackItem->textBgRed || stackItem->textBgGreen || stackItem->textBgBlue)
-    {
-        element=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
-        element.setAttribute("red",stackItem->textBgRed);
-        element.setAttribute("green",stackItem->textBgGreen);
-        element.setAttribute("blue",stackItem->textBgBlue);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
+    AddFormat(formatElementOut, stackItem, mainDocument);
 
     return true;
 }
@@ -969,12 +852,12 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
             kdWarning(30506) << "Unknown unit type: " << strUnits << endl;
         }
     }
-	else
-	{
-		// We have a format know by KOffice, so use KOffice's functions
+    else
+    {
+        // We have a format know by KOffice, so use KOffice's functions
         kwordHeight = MillimetresToPoints(KoPageFormat::height(kwordFormat,PG_PORTRAIT));
         kwordWidth  = MillimetresToPoints(KoPageFormat::width (kwordFormat,PG_PORTRAIT));
-	}
+    }
 
     if ((kwordHeight <= 1.0) || (kwordWidth <=1.0))
         // At least one of the two values is ridiculous
@@ -1269,7 +1152,7 @@ void StructureParser :: createMainFramesetElement(void)
     mainFramesetElement.setAttribute("frameInfo",0);
     mainFramesetElement.setAttribute("autoCreateNewFrame",1);
     mainFramesetElement.setAttribute("removable",0);
-    // TODO: name attribute (needs I18N)
+    // TODO: "name" attribute (needs I18N)
     framesetsPluralElementOut.appendChild(mainFramesetElement);
 
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
