@@ -140,6 +140,24 @@ std::ostream& Swinder::operator<<( std::ostream& s, Swinder::UString ustring )
 
 using namespace Swinder;
 
+static Value errorAsValue( int errorCode )
+{
+  Value result( Value::Error );
+  
+  switch( errorCode )
+  {
+    case 0x00: result = Value::errorNULL();  break;
+    case 0x07: result = Value::errorDIV0();  break;
+    case 0x0f: result = Value::errorVALUE(); break;
+    case 0x17: result = Value::errorREF();   break;
+    case 0x1d: result = Value::errorNAME();  break;
+    case 0x24: result = Value::errorNUM();   break;
+    case 0x2A: result = Value::errorNA();    break;
+    default: break;
+  };
+  
+  return result;
+};
 
 //=============================================
 //          EString
@@ -812,22 +830,19 @@ const unsigned int BoolErrRecord::id = 0x0205;
 class BoolErrRecord::Private
 {
 public:
-  enum { Boolean, Error } type;
-  bool value;
-  int errorCode;  // raw code: 00=Null, 07=Div0, 0F=Value, ...
+  Value value;
 };
 
 BoolErrRecord::BoolErrRecord():
   Record(), CellInfo()
 {
   d = new BoolErrRecord::Private();
-  d->type = Private::Boolean;
-  d->value = false;
-  d->errorCode = 0;
+  d->value = Value( false );
 }
 
 BoolErrRecord::~BoolErrRecord()
 {
+  delete d;
 }
 
 void BoolErrRecord::setData( unsigned size, const unsigned char* data )
@@ -841,12 +856,10 @@ void BoolErrRecord::setData( unsigned size, const unsigned char* data )
   switch( data[7] )
   {
   case 0 :
-    d->type = Private::Boolean;
-    d->value = (data[6] != 0);
+    d->value = Value( data[6] ? true : false );
     break;
   case 1 :
-    d->type = Private::Error;
-    d->errorCode = data[6];
+    d->value = errorAsValue( data[6] );
     break;
   default:
     // bad bad bad
@@ -855,56 +868,10 @@ void BoolErrRecord::setData( unsigned size, const unsigned char* data )
   }
 }
 
-bool BoolErrRecord::isBool() const
-{
-  return d->type == Private::Boolean;
-}
-
-bool BoolErrRecord::isError() const
-{
-  return d->type == Private::Error;
-}
-
-bool BoolErrRecord::value() const
+Value BoolErrRecord::value() const
 {
   return d->value;
 }
-
-unsigned BoolErrRecord::errorCode() const
-{
-  unsigned result = ErrorUnknown;
-  switch( d->errorCode )
-  {
-    case 0x00:  result = ErrorNull; break;
-    case 0x07:  result = ErrorDivZero; break;
-    case 0x0f:  result = ErrorValue; break;
-    case 0x17:  result = ErrorRef; break;
-    case 0x1D:  result = ErrorName; break;
-    case 0x24:  result = ErrorNum; break;
-    case 0x2A:  result = ErrorNA; break;
-    default  :  result = ErrorUnknown; break;
-  };
-  
-  return result;
-}
-
-const char* BoolErrRecord::errorCodeAsString() const
-{
-  const char* result = "Unknown";
-  switch( errorCode() )
-  {
-    case ErrorNull    : result = "Intersection of two cell ranges is empty"; break;
-    case ErrorDivZero : result = "Division by zero"; break;
-    case ErrorValue   : result = "Wrong type of operand"; break;
-    case ErrorRef     : result = "Illegal or deleted cell reference"; break;
-    case ErrorName    : result = "Wrong function or range name"; break;
-    case ErrorNum     : result = "Value range overflow"; break;
-    case ErrorNA      : result = "Argument or function not available"; break;
-    default: result = "Unknown" ; break;
-  }
-  return result;
-}
-
 
 void BoolErrRecord::dump( std::ostream& out ) const
 {
@@ -912,18 +879,7 @@ void BoolErrRecord::dump( std::ostream& out ) const
   out << "             Column : " << column() << std::endl;
   out << "                Row : " << row() << std::endl;
   out << "            XFIndex : " << xfIndex() << std::endl;
-  if( isBool() )
-  {
-    out << "               Type : Bool" << std::endl;
-    std::string val = value() ? "True" : "False";
-    out << "              Value : " << val << std::endl;
-  }
-  if( isError() )
-  {
-    out << "               Type : Error" << std::endl;
-    out << "          ErrorCode : " << std::hex << d->errorCode << " ";
-    out << errorCodeAsString() << std::endl;
-  }
+  out << "              Value : " << value() << std::endl;
 }
 
 // ========== BOTTOMMARGIN ==========
@@ -1768,25 +1724,6 @@ void FormulaRecord::setResult( const Value& r )
 {
   d->result = r;
 }
-
-static Value errorAsValue( int errorCode )
-{
-  Value result( Value::Error );
-  
-  switch( errorCode )
-  {
-    case 0x00: result = Value::errorNULL();  break;
-    case 0x07: result = Value::errorDIV0();  break;
-    case 0x0f: result = Value::errorVALUE(); break;
-    case 0x17: result = Value::errorREF();   break;
-    case 0x1d: result = Value::errorNAME();  break;
-    case 0x24: result = Value::errorNUM();   break;
-    case 0x2A: result = Value::errorNA();    break;
-    default: break;
-  };
-  
-  return result;
-};
 
 void FormulaRecord::setData( unsigned size, const unsigned char* data )
 {
@@ -3652,28 +3589,10 @@ void ExcelReader::handleBoolErr( BoolErrRecord* record )
   unsigned row = record->row();
   unsigned xfIndex = record->xfIndex();
   
-  Value value;
-  if( record->isBool() )
-    value.setValue( record->value() );
-  else
-  {
-    switch( record->errorCode() )
-    {
-      case BoolErrRecord::ErrorNull:    value = Value::errorNULL(); break;
-      case BoolErrRecord::ErrorDivZero: value = Value::errorDIV0(); break;
-      case BoolErrRecord::ErrorValue:   value = Value::errorVALUE(); break;
-      case BoolErrRecord::ErrorRef:     value = Value::errorREF(); break;
-      case BoolErrRecord::ErrorName:    value = Value::errorNAME(); break;
-      case BoolErrRecord::ErrorNum:     value = Value::errorNUM(); break;
-      case BoolErrRecord::ErrorNA:      value = Value::errorNA(); break;
-      default: break;
-    }
-  }
-  
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
-    cell->setValue( value );
+    cell->setValue( record->value() );
     cell->setFormat( convertFormat( xfIndex ) );
   }
 }

@@ -477,18 +477,7 @@ public:
   */
   static const unsigned int id;
 
-  unsigned int rtti(){
-	  return this->id;
-  }
-
-  enum { ErrorUnknown, 
-   ErrorNull, 
-   ErrorDivZero, 
-   ErrorValue, 
-   ErrorRef, 
-   ErrorName,
-   ErrorNum, 
-   ErrorNA };
+  unsigned int rtti(){ return this->id; }
 
   /**
    * Creates a new BoolErr record.
@@ -501,32 +490,9 @@ public:
   virtual ~BoolErrRecord();
 
   /**
-   * Returns true if the record specifies boolean value.
+   * Returns value of the cell, could be either boolean or error.
    */
-  bool isBool() const;
-
-  /**
-   * Returns true if the record specifies error code.
-   */
-  bool isError() const;
-
-  /**
-   * Returns boolean value of the cell. It is valid only when isBool()
-   * returns true.
-   */
-  bool value() const;
-
-  /**
-   * Returns error code of the cell. It is valid only when isError()
-   * returns true.
-   */
-  unsigned errorCode() const;
-  
-  /**
-   * Returns error code of the cell as string. It is valid only when isError()
-   * returns true.
-   */
-  const char* errorCodeAsString() const;
+  Value value() const;
 
   virtual void setData( unsigned size, const unsigned char* data );
 
