@@ -1,0 +1,100 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH FILTER_WRAPPER 1 "May 9, 2001"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+filter_wrapper \- invoke a KOffice filter as a separate process
+.SH SYNOPSIS
+.B filter_wrapper
+.I constr file storePrefix mimeType nativeFormat config number
+.SH DESCRIPTION
+This manual page documents briefly the
+.B filter_wrapper
+command.
+This manual page was written for the Debian GNU/Linux distribution
+because the original program does not have a manual page.
+.PP
+\fBfilter_wrapper\fP is a small wrapper program used to invoke a KOffice
+filter as a separate process.  This is quite nice for "alpha-quality"
+filters which tend to crash from time to time.
+.PP
+This wrapper can only be used if you use the most simple of all
+possibilities to import/export files (via two temporary files).  To tell the
+filter manager that you'd like to use this wrapper, please simply
+replace \fIImplemented=file\fP with \fIImplemented=bulletproof\fP in your
+filter's .desktop file.
+.PP
+The wrapper gets the information about filtering from the filter manager
+as command-line arguments and prints progress and the name of the
+temporary file to standard output.
+.PP
+This utility is part of the KDE Office Suite.
+.SH OPTIONS
+.TP
+.I constr
+A constraint expression as used by KDED's trader interface.  This is used
+to select a subset of the available filters.
+.TP
+.I file
+The name of the file to convert.
+.TP
+.I storePrefix
+The name used for the converted object in the tar storage.  Use this as
+the prefix to name embedded objects.
+.TP
+.I mimeType
+The mime type of the file to convert.
+.TP
+.I nativeFormat
+The mime type that we are converting to.
+.TP
+.I config
+A string containing configuration information for the filter.
+.TP
+.I number
+An index that specifies which specific filter we wish to use from
+the subset described by \fIconstr\fP.
+.SH NOTES
+This utility will be automatically called by the filter manager if you follow
+the instructions in the DESCRIPTION section above.  Ordinary users
+should not need to run this utility themselves.
+.SH EXIT STATUS
+.TP
+0
+OK.
+.TP
+1
+Wrong number of command-line arguments.
+.TP
+2
+Error on reading the command-line arguments.
+.TP
+3
+The query described by \fIconstr\fP didn't return enough results.
+.TP
+4
+Couldn't create the filter.
+.TP
+5
+Unable to open the temporary file.
+.TP
+6
+Error on filtering (the filter didn't return OK).
+.SH AUTHOR
+filter_wrapper was written by Werner Trobin <trobin@kde.org>.
+.br
+This manual page was written by Ben Burton <benb@acm.org>
+for the Debian GNU/Linux system (but may be used by others).
