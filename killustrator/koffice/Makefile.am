@@ -41,7 +41,3 @@ rc_DATA = KIllustrator.rc KIllustrator_shell.rc
 
 # SUBDIRS =  . plugins pics dtd toolbar
 
-messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/killustrator.pot
-
-
