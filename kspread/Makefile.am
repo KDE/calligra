@@ -57,10 +57,10 @@ kspread_dlg_paper_border.cc: kspread_dlg_paper_border.moc
 kspread_dlg_paper_headings.cc: kspread_dlg_paper_headings.moc
 kspread_dlg_print.cc: kspread_dlg_print.moc
 kspread_dlg_scripts.cc: kspread_dlg_scripts.moc
-kspread_doc.cc: kspread_doc.moc
-kspread_main.cc: kspread_main.moc
-kspread_part.cc: kspread_part.moc
-kspread_shell.cc: kspread_shell.moc
-kspread_tabbar.cc: kspread_tabbar.moc
-kspread_table.cc: kspread_table.moc
-kspread_view.cc: kspread_view.moc  kspread.h
+kspread_doc.cc: kspread.h kspread_doc.moc
+kspread_main.cc: kspread.h kspread_main.moc
+kspread_part.cc: kspread.h kspread_part.moc
+kspread_shell.cc: kspread.h kspread_shell.moc
+kspread_tabbar.cc: kspread.h kspread_tabbar.moc
+kspread_table.cc: kspread.h kspread_table.moc
+kspread_view.cc: kspread.h kspread_view.moc
