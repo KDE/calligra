@@ -4146,7 +4146,7 @@ void KPresenterView::updatePageInfo()
 void KPresenterView::updateObjectStatusBarItem()
 {
   KStatusBar * sb = statusBar();
-  int nbObjects = m_canvas->activePage()->objNums();
+  int nbObjects = m_canvas->objNums();
 
   if ( sb && nbObjects > 0 ) {
     if ( !m_sbObjectLabel ) {

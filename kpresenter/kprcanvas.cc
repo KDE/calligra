@@ -5287,12 +5287,6 @@ const QPtrList<KPObject> &KPrCanvas::getObjectList() const
 }
 
 /*================================================================*/
-unsigned int KPrCanvas::objNums() const
-{
-    return m_activePage->objNums();
-}
-
-/*================================================================*/
 unsigned int KPrCanvas::currPgNum() const
 {
     return m_view->getCurrPgNum();
@@ -6162,4 +6156,9 @@ void KPrCanvas::changePicture( const QString & filename )
 {
     m_activePage->changePicture( filename );
     m_view->kPresenterDoc()->stickyPage()->changePicture( filename );
+}
+
+unsigned int KPrCanvas::objNums() const
+{
+    return (m_activePage->objNums() + m_view->kPresenterDoc()->stickyPage()->objNums());
 }

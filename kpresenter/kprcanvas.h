@@ -211,6 +211,9 @@ public:
     void ungroupObjects();
     void groupObjects();
 
+    unsigned int objNums() const;
+
+
 public slots:
     void exitEditMode();
 
@@ -298,7 +301,6 @@ protected:
     // setup popupmenus
     void setupMenus();
 
-    unsigned int objNums() const;
     unsigned int currPgNum() const;
     unsigned int rastX() const;
     unsigned int rastY() const;
