@@ -1823,8 +1823,9 @@ void KoTextParag::writeSpanText( KoXmlWriter& writer, const QString& text ) cons
                 writer.addTextNode( str );
             str = QString::null;
             writer.startElement( "text:tab" );
+            if ( m_tabCache.contains( i ) )
+                writer.addAttribute( "text:tab-ref", m_tabCache[i] + 1 );
             writer.endElement();
-            // TODO write tab-ref to make it easier for some export filters
             break;
         case '\n':
             if ( !str.isEmpty() )
@@ -1875,7 +1876,18 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
 
-    writer.startElement( "text:p", false /*no indent*/ );
+    bool outline = m_layout.style && m_layout.style->isOutline();
+
+    KoParagCounter* paragCounter = const_cast<KoTextParag *>( this )->counter(); // should be const!
+    if ( paragCounter )
+    {
+        writer.startElement( "text:numbered-paragraph" );
+        writer.addAttribute( "text:level", (int)paragCounter->depth() );
+        // TODO restart if ( m_paragLayout.counter->...
+        // TODO save the parag counter into a list style
+    }
+    // TODO: level for headings
+    writer.startElement( outline ? "text:p" : "text:h", false /*no indent inside this tag*/ );
     writer.addAttribute( "text:style-name", autoParagStyleName );
 
     if ( to == -1 ) {
@@ -1930,7 +1942,9 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         WRITESPAN( to + 1 )
     }
 
-    writer.endElement();
+    writer.endElement(); // text:p or text:h
+    if ( paragCounter )
+        writer.endElement(); // text:numbered-paragraph
 }
 
 void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )

@@ -552,8 +552,8 @@ QString KoParagCounter::levelText( const KoTextParag *paragraph )
             text = makeRomanNumber( m_cache.number ).upper();
             break;
         case STYLE_CUSTOM:
-        default: // shut up compiler
             ////// TODO
+        default: // shut up compiler
             text.setNum( m_cache.number );
             break;
         }

@@ -1457,7 +1457,6 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
         const QString tagName = tag.tagName();
         const bool textFoo = tagName.startsWith( "text:" );
         if ( textFoo && tagName == "text:p" ) {  // text paragraph
-            kdDebug(32500)<<" text paragraph \n";
             context.fillStyleStack( tag, "text:style-name" );
 
             KoTextParag *parag = createParag( this, lastParagraph );
@@ -1476,7 +1475,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
             bool listOK = false;
             // When a heading is inside a list, it seems that the list prevails.
             // Example:
-            //    <text:ordered-list text:style-name="Numbering 1">
+            //    <text:list text:style-name="Numbering 1">
             //      <text:list-item text:start-value="5">
             //        <text:h text:style-name="P2" text:level="4">The header</text:h>
             // where P2 has list-style-name="something else"
@@ -1502,7 +1501,7 @@ KoTextParag * KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasi
         }
         else if ( textFoo &&
                   (  tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
-                     || tagName == "text:list" ) )  // OASIS
+                     || tagName == "text:list" || tagName == "text:numbered-paragraph" ) )  // OASIS
         {
             kdDebug(32500)<<" list \n";
             lastParagraph = loadList( tag, context, lastParagraph, styleColl );
@@ -1534,29 +1533,51 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
 {
     //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
-    bool orderedList = list.tagName() == "text:ordered-list";
-    QString oldListStyleName = context.currentListStyleName();
+    const QString oldListStyleName = context.currentListStyleName();
     if ( list.hasAttribute( "text:style-name" ) )
         context.setCurrentListStyleName( list.attribute( "text:style-name" ) );
     bool listOK = !context.currentListStyleName().isEmpty();
-    const int level = context.listStyleStack().level() + 1;
+    int level;
+    if ( list.tagName() == "text:numbered-paragraph" )
+        level = list.attribute( "text:level", "1" ).toInt();
+    else
+        level = context.listStyleStack().level() + 1;
     if ( listOK )
         listOK = context.pushListLevelStyle( context.currentListStyleName(), level );
 
-    // Iterate over list items
-    for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
+    const QDomElement listStyle = context.listStyleStack().currentListStyle();
+    // The tag is either text:list-level-style-number or text:list-level-style-bullet
+    const bool orderedList = listStyle.tagName() == "text:list-level-style-number";
+
+    if ( list.tagName() == "text:numbered-paragraph" )
     {
-        QDomElement listItem = n.toElement();
+        // A numbered-paragraph contains paragraphs directly (it's both a list and a list-item)
         int restartNumbering = -1;
-        if ( listItem.hasAttribute( "text:start-value" ) )
-            restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+        if ( list.hasAttribute( "text:start-value" ) )
+            restartNumbering = list.attribute( "text:start-value" ).toInt();
         KoTextParag* oldLast = lastParagraph;
-        lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl );
+        lastParagraph = loadOasisText( list, context, lastParagraph, styleColl );
         KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
-        // It's either list-header (normal text on top of list) or list-item
-        if ( listItem.tagName() != "text:list-header" && firstListItem ) {
-            // Apply list style to first paragraph inside list-item
-            firstListItem->applyListStyle( context, restartNumbering, orderedList, false, context.listStyleStack().level() );
+        // Apply list style to first paragraph inside numbered-parag - there's only one anyway
+        firstListItem->applyListStyle( context, restartNumbering, orderedList, false, level );
+    }
+    else
+    {
+        // Iterate over list items
+        for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
+        {
+            QDomElement listItem = n.toElement();
+            int restartNumbering = -1;
+            if ( listItem.hasAttribute( "text:start-value" ) )
+                restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+            KoTextParag* oldLast = lastParagraph;
+            lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl );
+            KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
+            // It's either list-header (normal text on top of list) or list-item
+            if ( listItem.tagName() != "text:list-header" && firstListItem ) {
+                // Apply list style to first paragraph inside list-item
+                firstListItem->applyListStyle( context, restartNumbering, orderedList, false, level );
+            }
         }
     }
     if ( listOK )
@@ -1569,7 +1590,6 @@ void KoTextDocument::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
 {
     KoTextParag* parag = firstParag();
     while ( parag ) {
-        // TODO Oasis: list stuff
         parag->saveOasis( writer, context );
         parag = parag->next();
     }
