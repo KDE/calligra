@@ -122,6 +122,9 @@ void KWAutoFormatDia::setupTab2()
              SLOT(slotItemRenamed(QListViewItem *, const QString &, int)) );
     */
 
+    connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
+             SLOT(slotEditEntry()) );
+
     QMap< QString, KWAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
         ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );

@@ -72,4 +72,19 @@
 				<Text>Thanks,</Text>
 			</Expression>
 	</Type>
+        <Type>
+    		<TypeName>Subject:</TypeName>	
+			<Expression>
+				<Text>Subject</Text>
+                        </Expression>
+	</Type>
+        <Type>
+    		<TypeName>Salutation:</TypeName>	
+			<Expression>
+				<Text>Dear Sir or Madam:</Text>
+                        </Expression>
+                        <Expression>
+				<Text>Ladies and Gentlemen:</Text>
+                        </Expression>
+	</Type>
 </KWordExpression>
