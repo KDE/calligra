@@ -201,6 +201,8 @@ protected:
     void doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
 
 private:
+    void detectStartOfLink(const QString &word);
+
     KoDocument *m_doc;
     KoVariableCollection *m_varCollection;
     KoVariableFormatCollection *m_varFormatCollection;
@@ -220,6 +222,7 @@ private:
     QStringList twoUpperLetterException;
     uint m_maxlen;
     uint m_maxFindLength;
+    bool m_ignoreUpperCase;
 };
 
 #endif

@@ -51,7 +51,8 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_autoDetectUrl( false ),
       m_ignoreDoubleSpace( false ),
       m_typographicQuotes(),
-      m_maxlen( 0 )
+      m_maxlen( 0 ),
+      m_ignoreUpperCase(false)
 {
 }
 
@@ -267,6 +268,10 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
     if( ch.isSpace())
     {
+        //a link doesn't have a space
+        //=>m_ignoreUpperCase = false
+        m_ignoreUpperCase=false;
+
         QString word=getWordAfterSpace(parag,index);
         if ( m_autoChangeFormat && index > 3)
         {
@@ -279,7 +284,6 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
         }
         if ( m_autoReplaceNumber )
             doAutoReplaceNumber( textEditCursor, parag, index, word, txtObj );
-
     }
 
     if( ch =='\n' )
@@ -297,10 +301,11 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     if ( ( ch.isSpace() || ch.isPunct() ) && index > 0 )
     {
         QString lastWord = getLastWord(parag, index);
+        detectStartOfLink(lastWord);
         //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
         if ( !doAutoCorrect( textEditCursor, parag, index, txtObj ) )
         {
-            if ( m_convertUpperUpper || m_convertUpperCase )
+            if ( !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
                 doUpperCase( textEditCursor, parag, index, lastWord, txtObj );
         }
     }
@@ -516,6 +521,12 @@ void KoAutoFormat::doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag
 
 }
 
+void KoAutoFormat::detectStartOfLink(const QString &word)
+{
+    if (word.find("http")!=-1 || word.find("mailto")!=-1
+        || word.find("ftp")!=-1 || word.find("file")!=-1)
+        m_ignoreUpperCase=true;
+}
 
 void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
 {
