@@ -35,11 +35,11 @@
 
 #include <unistd.h>
 
-void KoPrintPreview::preview(QWidget* parent, const char* name, const QString & tmpFile )
+void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QString & tmpFile )
 {
     KTrader::OfferList offers = KTrader::self()->query("application/postscript", "'KParts/ReadOnlyPart' in ServiceTypes");
     //QWidget *contents = new QWidget(&dialog);
-    //QGridLayout *grid1 = new QGridLayout(contents,10,3,15,7); 
+    //QGridLayout *grid1 = new QGridLayout(contents,10,3,15,7);
 
     // Try to find a postscript component first
     KLibFactory *factory = 0;
@@ -54,12 +54,12 @@ void KoPrintPreview::preview(QWidget* parent, const char* name, const QString & 
               KDialogBase dialog( parent, "preview", true, i18n("Preview"), KDialogBase::Ok);
 	      m_pPartPreview = static_cast<KParts::ReadOnlyPart *>(factory->create(&dialog, ptr->name().latin1(), "KParts::ReadOnlyPart"));
 	      //grid1->addMultiCellWidget(m_pPartPreview->widget(),0,8,0,2);
-	      
+
 	      m_pPartPreview->openURL( tmpFile );
 	      dialog.setMainWidget(m_pPartPreview->widget());
 	      //dialog.resize(500,300);
 	      dialog.exec();
-	      
+
               unlink( QFile::encodeName(tmpFile) );
 	      return;
 	    }

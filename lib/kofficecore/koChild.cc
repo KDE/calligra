@@ -207,7 +207,7 @@ QPoint KoChild::rotationPoint() const
 void KoChild::transform( QPainter &painter )
 {
     setClipRegion( painter, true );
-    
+
     QWMatrix m = painter.worldMatrix();
     m = d->m_matrix * m;
     m.scale( d->m_scaleX, d->m_scaleY );
@@ -216,7 +216,8 @@ void KoChild::transform( QPainter &painter )
 
 QRect KoChild::contentRect() const
 {
-  return QRect( 0, 0, d->m_geometry.width() / d->m_scaleX, d->m_geometry.height() / d->m_scaleY );
+  return QRect( 0, 0, int(d->m_geometry.width() / d->m_scaleX),
+                int(d->m_geometry.height() / d->m_scaleY) );
 }
 
 QPointArray KoChild::framePointArray( const QWMatrix &matrix ) const

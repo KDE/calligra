@@ -172,8 +172,8 @@ KoDocument *KoView::hitTest( const QPoint &pos )
         return 0;
   }
 
-  return koDocument()->hitTest( QPoint( pos.x() / zoom(),
-                                        pos.y() / zoom() ) );
+  return koDocument()->hitTest( QPoint( int(pos.x() / zoom()),
+                                        int(pos.y() / zoom()) ) );
 }
 
 int KoView::leftBorder() const

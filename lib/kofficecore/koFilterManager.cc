@@ -19,7 +19,7 @@
 */
 
 #include <qfile.h>
-#include <qapp.h>
+#include <qapplication.h>
 
 #include <kmimetype.h>
 #include <kurl.h>

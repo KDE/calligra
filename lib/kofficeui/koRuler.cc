@@ -255,7 +255,7 @@ void KoRuler::drawTabs( QPainter &_painter )
         case T_CENTER: {
             ptPos -= 10;
             _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
-            _painter.drawLine( ptPos + 20 * 0.5, 4, ptPos + 20 * 0.5, height() - 4 );
+            _painter.drawLine( ptPos + 20 / 2, 4, ptPos + 20 / 2, height() - 4 );
         } break;
         case T_RIGHT: {
             ptPos -= 16;
@@ -265,8 +265,8 @@ void KoRuler::drawTabs( QPainter &_painter )
         case T_DEC_PNT: {
             ptPos -= 10;
             _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
-            _painter.drawLine( ptPos + 20 * 0.5, 4, ptPos + 20 * 0.5, height() - 4 );
-            _painter.fillRect( ptPos + 20 * 0.5 + 2, height() - 9, 3, 3, black );
+            _painter.drawLine( ptPos + 20 / 2, 4, ptPos + 20 / 2, height() - 4 );
+            _painter.fillRect( ptPos + 20 / 2 + 2, height() - 9, 3, 3, black );
         } break;
         default: break;
         }
