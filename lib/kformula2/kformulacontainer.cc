@@ -520,7 +520,8 @@ void KFormulaContainer::execute(KFormulaCommand* command)
 
 QRect KFormulaContainer::boundingRect()
 {
-    return QRect(0, 0, rootElement->getWidth(), rootElement->getHeight());
+    return QRect(rootElement->getX(), rootElement->getY(),
+                 rootElement->getWidth(), rootElement->getHeight());
 }
 
 void KFormulaContainer::moveTo(int x, int y)

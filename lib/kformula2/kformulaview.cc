@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include <qpainter.h>
+#include <qpixmap.h>
 
 #include <kapp.h>
 
@@ -70,12 +71,26 @@ void KFormulaView::draw(QPainter& painter, const QRect& rect, const QColorGroup&
 {
     //cerr << "KFormulaView::draw: " << rect.x() << " " << rect.y() << " "
     //     << rect.width() << " " << rect.height() << endl;
+
+    QRect formulaRect = document->boundingRect();
+    formulaRect.setWidth(formulaRect.width()+5);
+    formulaRect.setHeight(formulaRect.height()+5);
+    QPixmap buffer(formulaRect.width(), formulaRect.height());
+    QPainter p(&buffer);
+    p.translate(-formulaRect.x(), -formulaRect.y());
     
-    painter.fillRect(rect, cg.base());
-    document->draw(painter, rect);
+    p.fillRect(rect, cg.base());
+    //buffer.fill(cg.base());
+    document->draw(p, rect);
     if (cursorVisible) {
-        cursor->draw(painter, smallCursor);
+        cursor->draw(p, smallCursor);
     }
+    int sx = QMAX(0, rect.x() - formulaRect.x());
+    int sy = QMAX(0, rect.y() - formulaRect.y());
+    int sw = QMIN(formulaRect.width() - sx, rect.width());
+    int sh = QMIN(formulaRect.height() - sy, rect.height());
+    painter.drawPixmap(QMAX(formulaRect.x(), rect.x()), QMAX(formulaRect.y(), rect.y()),
+                       buffer, sx, sy, sw, sh);
 }
 
 void KFormulaView::keyPressEvent(QKeyEvent* event)

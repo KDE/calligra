@@ -44,7 +44,7 @@ KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const ch
             this, SLOT(slotCursorChanged(bool, bool)));
 
     setFocusPolicy(QWidget::StrongFocus);
-    setBackgroundMode(QWidget::PaletteBase);
+    setBackgroundMode(NoBackground/*QWidget::PaletteBase*/);
 
     QRect rect = doc->boundingRect();
     slotFormulaChanged(rect.width(), rect.height());
