@@ -212,7 +212,7 @@ void Document::unregisterFormula( Container* f )
     if ( m_formula == f ) {
         m_formula = 0;
     }
-    formulae.remove( f );
+    formulae.removeRef( f );
 }
 
 void Document::activate(Container* f)
