@@ -552,7 +552,7 @@ by any of the other four options.</para></listitem>
 </varlistentry>
 </variablelist>
 
-<para>The <guibutton>Customize</guibutton> is currently disabled, but will be available in future versions of &kword;.</para>
+<!--<para>The <guibutton>Customize</guibutton> is currently disabled, but will be available in future versions of &kword;.</para>-->
 
 <para>Placing a mark in the checkbox labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
 template to the table <emphasis>after adding or deleting the specified number of rows and/or columns</emphasis>.</para>

@@ -326,8 +326,7 @@ automatically numbered and formatted to appear similar.
 For more information on lists, see the section entitled <link linkend="lists">Lists</link>.</para>
 
 <para><guilabel>Chapter</guilabel> is used to
-number chapters and sections of a document.  For more information on chapter numbering, see the section entitled
-<link linkend="chapter-number">Chapter numbering</link>.</para>
+number chapters and sections of a document.</para>
 
 </sect2>
 

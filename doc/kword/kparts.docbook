@@ -33,8 +33,10 @@ as &kspread;.)</para>
 Click on the &kword; document where you want the upper left corner of the frame to be placed.</para>
 </sect2>
 <sect2 id="kparts-edit"><title>Working with the inserted component</title>
-<para>To edit the data within the component, simply click with the mouse pointer and &kword; will change the toolbars, menuitems and
+<para>To edit the data within the component, simply double click with the mouse pointer and &kword; will change the toolbars, menuitems and
 application structure to match the &koffice; application.  This way, you can use the application specific tools to refine your component.</para>
+<note><para>The frame that contains the embeded data, can be <link linkend="frames">manipulated</link> 
+the same as any other frame in &kword;.</para></note>
 <para>When you save your document, the component is saved within the &kword; document.</para>
 </sect2>
 </sect1>

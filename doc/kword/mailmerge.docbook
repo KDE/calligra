@@ -5,8 +5,8 @@ documents for individual members/clients/friends.</para>
 manual will not cover:</para>
 <itemizedlist>
 <listitem><para>Creating an external database.</para></listitem>
-<listitem><para>Security issues reguarding databases.</para></listitem>
-<listitem><para>Detailed instructions on SQL.  It is assumed you have some knowelege reguarding SQL if you are using a 
+<listitem><para>Security issues regarding databases.</para></listitem>
+<listitem><para>Detailed instructions on SQL.  It is assumed you have some knowledge regarding SQL if you are using a 
 SQL database for your data source.</para></listitem>
 <listitem><para>Accessing the network or internet.</para></listitem>
 </itemizedlist>
@@ -21,7 +21,7 @@ network or the internet.</para>
 <para>In order to use the database, you must know the following information:</para>
 <itemizedlist>
 <listitem><para>Name of the database</para></listitem>
-<listitem><para>Host name/ip address of the computer the database is located on</para></listitem>
+<listitem><para>Host name/IP address of the computer the database is located on</para></listitem>
 <listitem><para>The port address on the specified computer granting SQL access</para></listitem>
 <listitem><para>A valid user name for the database</para></listitem>
 <listitem><para>A valid password for the user name</para></listitem>
@@ -51,7 +51,7 @@ the menubar. A dialog box will appear.</para>
 
 <para>Click on <guibutton>Open Existing...</guibutton>.  Another small dialog will appear.</para>
 <para>There is currently only one option in this dialog box <guilabel>QT-SQL source</guilabel>. Click on
-<guibutton>OK</guibutton>.  A new dialog box will appear.</para>
+<guibutton>OK</guibutton>.  A new dialog box will appear.<anchor id="mail-merge-login"/></para>
 
 <screenshot>
 <mediaobject>
@@ -62,7 +62,7 @@ the menubar. A dialog box will appear.</para>
 
 <para>Enter the URL or IP address of the computer that holds the database in the text box labeled <guilabel>Hostname:</guilabel>.</para>
 <para>Select the correct driver from the dropdown box labeled <guilabel>Driver:</guilabel>.  </para>
-<para>Enter the database name you were provided in the text box labeld <guilabel>Database name:</guilabel> and a
+<para>Enter the database name you were provided in the text box labeled <guilabel>Database name:</guilabel> and a
 user name in the text box labeled <guilabel>Username:</guilabel>.</para>
 <para>If the database access is through a port other than the default port enter that port number in the text box labeled 
 <guilabel>Port:</guilabel>.</para>
@@ -91,6 +91,37 @@ the password in the text box, and click <guibutton>OK</guibutton>.</para>
 </mediaobject>
 </screenshot>
 
+<para>This dialog is designed to help you enter and test your database query.  The dialog is divided into three
+sections:  Database information, query information and query line.</para>
+<para>The database information section is labeled <guilabel>Information</guilabel> and consists of two combo boxes.  The
+left combo box (<guilabel>Available tables</guilabel>) gives you a list of all available tables within the current database.
+Select the desired table from the list.  A list of all available fields from that table will appear in the right combo box.</para>
+<para>The query line is a text box located near the bottom of the dialog labeled <guilabel>Query</guilabel>.  Simply type your 
+SQL query into this text box and click <guibutton>Execute</guibutton>.  &kword; will query the database and return the specified query
+in tabular format in the <guilabel>Query result</guilabel> box.  You can alter, or edit your query on the query line and each time you 
+click <guibutton>Execute</guibutton>, the new query results will appear.</para>
+<note><para>&kword; does not limit your query strings.  They can be simple and straight forward:</para>
+<para><userinput>select * from eMail</userinput></para>
+<para>Or complex multitable queries:</para>
+<para><userinput>select eMail.FirstName, eMail.LastName, eMail.address, data.Birthday, 
+data.EyeColour from eMail, data where data.FirstName=eMail.FirstName and 
+data.LastName=eMail.LastName and eMail.LastName
+</userinput></para>
+<para></para>
+<para></para></note>
+<para>Clicking <guibutton>Setup</guibutton>, will allow you to <link linkend="mail-merge-login">log into a different database</link>.</para>
+<para>When you have the correct query in the <guilabel>Query</guilabel> text box, click <guibutton>OK</guibutton> to select that query.
+</para>
+<para>This will return you to the mail merge main dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click <guibutton>Close</guibutton>.</para>
 
 <para>Now that you have selected your data query, it is time to insert the merge fields in the document.  Click 
 <link linkend="mail-merge-fields">here to continue</link>.</para>
@@ -140,24 +171,70 @@ the menubar. A dialog box will appear.</para>
 your entry/data pairs.</para>
 <sect4 id="mail-merge-internal-data-entry"><title>Defining the structure of your data table</title>
 <para>First, we need to add one or more entries (merge fields).  This is accomplished by clicking the
-<inlinemediaobject><imageobject><imagedata
-fileref="addentry.png" format="PNG"
-align="center"/></imageobject></inlinemediaobject> (<guilabel>Add entry</guilabel>)
+<inlinemediaobject><imageobject>
+<imagedata fileref="addentry.png" format="PNG" align="center"/></imageobject></inlinemediaobject> 
+(<guilabel>Add entry</guilabel>)
 button (third button from the right along the toolbar). A small dialog box will appear.  Type a descriptive name of your entry
 in the dialog box (Name, Address, Balance Due, etc....). </para>
 <note><para>This is for the name of the entry, not the data that is contained within the entry.</para></note>
 <para>Click <guibutton>OK</guibutton>, and the entry is added to the card.</para>
 <para>Repeat this process until all needed entries are visible on this first card.</para>
+<para>If you want to delete an entry, simply click once on the entry name with the &LMB; and select <inlinemediaobject><imageobject>
+<imagedata fileref="delentry.png" format="PNG" align="center"/></imageobject></inlinemediaobject>
+(<guilabel>Remove entry</guilabel>). </para>
+<warning><para>Be <emphasis>very</emphasis> sure you have selected the correct entry name.  Once you tell &kword; to delete 
+the entry, the entry <emphasis>and all of the data within those entries will be deleted immediately</emphasis>.  You will not be
+given the option to stop or reverse the process once it is begun.</para></warning>
+<para></para>
 </sect4>
 <sect4 id="mail-merge-internal-data-value"><title>Entering the data into the table</title>
 <para>Now that the structure of your data is defined, you can enter the data into your entries.</para>
-<para>MORE WORK TO DO HERE!!!</para>
+<para>At the top of the dialog box, are 4 buttons surrounding a spin box.  The spin box gives the current record number.  All
+records are numbered in the order they are added starting with number 1.  You can use the spin box to go directly to 
+the desired record or you can use the arrows to graphically move
+through the list of records.</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>button</entry><entry>Action</entry></row>
+</thead><tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="beginning.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move directly to record one</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="back.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move back one record</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="forward.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move forward one record</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="end.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move to the last record in the dataset</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>To enter the data, simply place the cursor in the text box to the right of the entry name, and type in the data. (&kword; uses 
+<quote>No Value</quote> as the default value for all entries in newly created records.)</para>
+<para>To add a record, click the 
+<inlinemediaobject><imageobject>
+<imagedata fileref="addrecord.png" format="PNG" align="center"/></imageobject></inlinemediaobject> button.</para>
+<para>To delete a record, click the 
+<inlinemediaobject><imageobject>
+<imagedata fileref="delrecord.png" format="PNG" align="center"/></imageobject></inlinemediaobject> button.</para>
+<warning><para>Be careful when you are deleting records.  Once deleted, the record can not be retrieved.</para></warning>
+<para>Continue to enter all data until your dataset is complete.</para>  
+<para>After your dataset is complete, click <guibutton>OK</guibutton> to 
+save the changes to your dataset.  This will bring up the mail merge main dialog:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click <guibutton>Close</guibutton>.  Now it is time to insert the merge fields in the document.</para>
+
 </sect4>
 
 </sect3>
 
 <sect3 id="mail-merge-fields">
-<title>Insert data fields in document</title>
+<title>Insert merge fields in document</title>
 <para>Now that &kword; knows the entries available in your data source, you can insert the merge fields into your document.</para>
 <para>A merge field is a placeholder within the document.  This placeholder will be replaced in each personalized document with the
 value of the entry for that individual record.</para>

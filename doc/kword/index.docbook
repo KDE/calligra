@@ -448,7 +448,7 @@ If any document variables were changed, &kword; will update their values through
 <!-- **************************************************************************************************** -->
 <chapter id="advanced-topics"><title>Advanced Topics</title>
 &struct;
-<sect1 id="chapter-number"><title>Chapter numbering</title><para></para></sect1>
+<!--<sect1 id="chapter-number"><title>Chapter numbering</title><para></para></sect1>-->
 &mmerge;
 </chapter>
 
@@ -645,25 +645,28 @@ additional templates, and other updates that are developed outside of the &kword
 <email>reggie@kde.org</email></para>
 
 <itemizedlist>
-<title>&kword; Developers</title>
-<listitem><para>David Faure <email>dfaure@kde.org</email></para></listitem>
+<title>&kword; Developers (Alphabetically)</title>
+<listitem><para>John Califf <email>jcaliff@compuzone.net</email></para></listitem>
+<listitem><para>David Faure <email>faure@kde.org</email></para></listitem>
 <listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
 <listitem><para>Simon Hausmann <email>hausmann@kde.org</email></para></listitem>
 <listitem><para>Stephan Kulow <email>coolo@kde.org</email></para></listitem>
 <listitem><para>Sven L&uuml;ppken <email>sven@kde.org></email></para></listitem>
-<listitem><para>Laurent Montel <email>lmontel@mandrakesoft.com</email></para></listitem>
+<listitem><para>Laurent Montel <email>montell@club-internet.fr</email></para></listitem>
+<listitem><para>Daniel Naber<email>daniel.naber@t-online.de</email></para></listitem>
 <listitem><para>Reginald Stadlbauer <email>reggie@kde.org</email></para></listitem>
 <listitem><para>Werner Trobin <email>trobin@kde.org</email></para></listitem>
 <listitem><para>Torben Weis <email>weis@kde.org</email></para></listitem>
+<listitem><para>Joseph Wenninger <email>jowenn@kde.org</email></para></listitem>
 <listitem><para>Thomas Zander <email>zander@kde.org</email></para></listitem>
 
 </itemizedlist>
 
 <itemizedlist>
-<title>&kword; Import/Export Filter developers</title>
+<title>&kword; Import/Export Filter Developers (Alphabetically)</title>
 <listitem><para>Enno Bartels <email>ebartels@nwn.de</email></para></listitem>
 <listitem><para>Wolf-Michael Bolle <email>Bolle@ID-PRO.de</email></para></listitem>
-<listitem><para>Matthias Kalle Dalheimer <email>mailto:kalle@dalheimer.de</email></para></listitem>
+<listitem><para>Matthias Kalle Dalheimer <email>kalle@dalheimer.de</email></para></listitem>
 <listitem><para>Clarence Dang <email>dang@kde.org</email></para></listitem>
 <listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
 <listitem><para>Nicolas Goutte <email>nicog@snafu.de</email></para></listitem>

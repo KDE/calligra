@@ -59,10 +59,10 @@ as of the date included in the note.</para>
 <row><entry></entry><entry>Formatting paragraph </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Using Tab Stops </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Formatting Characters </entry><entry>Checked (May 26, 2002)</entry></row>
-<row><entry></entry><entry>Styles </entry><entry><para>Checked (May 26, 2002)</para><para>Importing styles</para></entry></row>
+<row><entry></entry><entry>Styles </entry><entry><para>Checked (May 26, 2002)</para></entry></row>
 <row><entry></entry><entry>Columns </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Lists </entry><entry>Checked (May 26, 2002)</entry></row>
-<row><entry></entry><entry>Tables </entry><entry><para>Written (June 16, 2002)</para><para>Customize templates</para></entry></row>
+<row><entry></entry><entry>Tables </entry><entry><para>Written (June 16, 2002)</para><para>new screenshot for customize button (not)</para></entry></row>
 <row><entry></entry><entry>Headers/Footers </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Creating Templates/Saving a document as a template </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry></row>
@@ -85,7 +85,7 @@ as of the date included in the note.</para>
 <row><entry>Advanced Topics </entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Document structure </entry><entry>Checked (June 9, 2002)</entry></row>
 <row><entry></entry><entry>Chapter Numbering </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Mail Merge </entry><entry>Not Written</entry></row>
+<row><entry></entry><entry>Mail Merge </entry><entry>Checked (Jun 29, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>How do I... </entry><entry></entry><entry></entry></row>
@@ -132,20 +132,7 @@ as of the date included in the note.</para>
 <row><entry>KWord Command Line Options </entry><entry></entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
-<row><entry>Import/Export Filters </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Abiword Filter </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>AmiPro Filter </entry><entry>Written</entry></row>
-<row><entry></entry><entry>Applixware Filter </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>ASCII Filter </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>HTML Filter (HTML 4.01) </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>LaTeX Filter </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Maker Interchange Format (MIF)/Adobe Framemaker Filter </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Microsoft Word 97 and Word 2000 Filter </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Palmdoc Filter </entry><entry>Written</entry></row>
-<row><entry></entry><entry>Rich Text File (RTF) Filter </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Star Writer Filter </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>WML Filter </entry><entry>Written</entry></row>
-<row><entry></entry><entry>WordPerfect Filter </entry><entry>Written</entry></row>
+<row><entry>Import/Export Filters </entry><entry></entry><entry>Checked (June 28, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Key Bindings Summary </entry><entry></entry><entry>Checked (May 7, 2002)</entry></row>
