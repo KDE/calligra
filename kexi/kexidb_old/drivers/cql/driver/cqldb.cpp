@@ -53,7 +53,7 @@ bool
 CqlDB::load(QString file, bool)
 {
 	m_error.clear();
-	char *dir = file.latin1();
+	char *dir = (char * )file.latin1();
 	kdDebug() << "CqlDB::load()" << endl;
 	try
 	{
