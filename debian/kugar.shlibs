@@ -1,1 +1,2 @@
 libkugarpart 0 kugar
+libkugar 1 kugar (>= 1:1.2.0-0)

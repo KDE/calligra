@@ -10,8 +10,4 @@ usr/share/icons/hicolor/16x16/apps/kontour.png
 usr/share/icons/hicolor/32x32/apps/kontour.png
 usr/share/icons/hicolor/48x48/apps/kontour.png
 usr/share/pixmaps/kontour.xpm
-usr/share/doc/kde/HTML/en/kontour/*.bz2
-usr/share/doc/kde/HTML/en/kontour/*.docbook
-usr/share/doc/kde/HTML/en/kontour/*.png
-usr/share/doc/kde/HTML/en/kontour/common
 usr/share/lintian/overrides/kontour

@@ -1,6 +1,6 @@
---- karbon/Makefile.am	2002/06/18 07:37:48	1.41
-+++ karbon/Makefile.am	2002/07/05 11:01:39
-@@ -39,7 +39,7 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEU
+--- karbon/Makefile.am	2002/08/05 19:52:14	1.44
++++ karbon/Makefile.am	2002/09/08 00:33:29
+@@ -41,7 +41,7 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEU
  libkarbonpart_la_METASOURCES = AUTO
  
  karbon_la_SOURCES = main.cc
@@ -9,8 +9,8 @@
  karbon_la_LIBADD = libkarbonpart.la
  
  karbon_SOURCES = dummy.cc
---- kchart/Makefile.am	2002/04/17 11:42:35	1.97
-+++ kchart/Makefile.am	2002/07/05 11:01:39
+--- kchart/Makefile.am	2002/07/15 06:25:07	1.98
++++ kchart/Makefile.am	2002/09/08 00:33:30
 @@ -41,7 +41,7 @@ libkchartpart_la_LIBADD = $(top_builddir
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kchart.la
@@ -20,8 +20,8 @@
  kchart_la_LIBADD = $(LIB_KOFFICECORE)
  
  ## The executable
---- kformula/Makefile.am	2002/04/18 19:52:50	1.69
-+++ kformula/Makefile.am	2002/07/05 11:01:39
+--- kformula/Makefile.am	2002/07/14 12:25:12	1.70
++++ kformula/Makefile.am	2002/09/08 00:33:30
 @@ -14,7 +14,7 @@ libkformulapart_la_METASOURCES = AUTO
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kformulamain.la
@@ -31,8 +31,8 @@
  kformulamain_la_LIBADD = $(LIB_KOFFICECORE)
  
  ## The executable
---- kivio/kiviopart/Makefile.am	2002/05/28 08:11:39	1.23
-+++ kivio/kiviopart/Makefile.am	2002/07/05 11:01:39
+--- kivio/kiviopart/Makefile.am	2002/07/14 12:31:28	1.24
++++ kivio/kiviopart/Makefile.am	2002/09/08 00:33:31
 @@ -141,7 +141,7 @@ EXTRA_DIST = \
  #2########################################################!@#$
  lib_LTLIBRARIES = kivio.la
@@ -42,9 +42,53 @@
  kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
  
  libkiviopart_la_LDFLAGS = -avoid-version -module $(all_libraries)
---- kontour/Makefile.am	2002/04/07 21:32:50	1.70
-+++ kontour/Makefile.am	2002/07/05 11:01:40
-@@ -14,7 +14,7 @@ rc_DATA = kontour.rc
+--- kivio/plugins/kivioconnectortool/Makefile.am	2002/08/30 10:01:35	1.11
++++ kivio/plugins/kivioconnectortool/Makefile.am	2002/09/08 00:33:32
+@@ -3,7 +3,7 @@
+ #### WARNING! All changes made in this part will be lost! ####
+ ##############################################################
+ SUBDIRS = straight_connector 
+-lib_LTLIBRARIES =libkivioconnectortool.la
++kde_module_LTLIBRARIES =libkivioconnectortool.la
+ 
+ 
+ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+--- kivio/plugins/kivioselecttool/Makefile.am	2002/08/30 10:01:35	1.9
++++ kivio/plugins/kivioselecttool/Makefile.am	2002/09/08 00:33:32
+@@ -3,7 +3,7 @@
+ #### WARNING! All changes made in this part will be lost! ####
+ ##############################################################
+ SUBDIRS = select_pics 
+-lib_LTLIBRARIES =libkivioselecttool.la
++kde_module_LTLIBRARIES =libkivioselecttool.la
+ 
+ 
+ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+--- kivio/plugins/kiviotexttool/Makefile.am	2002/08/30 10:01:35	1.9
++++ kivio/plugins/kiviotexttool/Makefile.am	2002/09/08 00:33:32
+@@ -3,7 +3,7 @@
+ #### WARNING! All changes made in this part will be lost! ####
+ ##############################################################
+ 
+-lib_LTLIBRARIES =libkiviotexttool.la
++kde_module_LTLIBRARIES =libkiviotexttool.la
+ 
+ 
+ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+--- kivio/plugins/kiviozoomtool/Makefile.am	2002/08/30 10:01:35	1.10
++++ kivio/plugins/kiviozoomtool/Makefile.am	2002/09/08 00:33:32
+@@ -3,7 +3,7 @@
+ #### WARNING! All changes made in this part will be lost! ####
+ ##############################################################
+ SUBDIRS = zoom_pics 
+-lib_LTLIBRARIES =libkiviozoomtool.la
++kde_module_LTLIBRARIES =libkiviozoomtool.la
+ 
+ INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+ 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
+--- kontour/Makefile.am	2002/07/27 10:56:20	1.72
++++ kontour/Makefile.am	2002/09/08 00:33:33
+@@ -14,7 +14,7 @@ rc_DATA = kontour.rc kontour_readonly.rc
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kontour.la
  kontour_la_SOURCES = main.cc
@@ -54,7 +98,7 @@
  
  ## The executable
 --- koshell/Makefile.am	2001/03/22 14:02:17	1.25
-+++ koshell/Makefile.am	2002/07/05 11:01:40
++++ koshell/Makefile.am	2002/09/08 00:33:40
 @@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(all_in
  ## The kdeinit loadable module
  lib_LTLIBRARIES = koshell.la
@@ -64,8 +108,8 @@
  koshell_la_LIBADD = $(LIB_KOFFICEUI)
  
  ## The executable
---- kpresenter/Makefile.am	2002/06/10 11:11:45	1.198
-+++ kpresenter/Makefile.am	2002/07/05 11:01:40
+--- kpresenter/Makefile.am	2002/07/14 12:31:37	1.200
++++ kpresenter/Makefile.am	2002/09/08 00:33:40
 @@ -55,7 +55,7 @@ libkpresenterpart_la_METASOURCES = AUTO
  ## The kdeinit loadable module
  lib_LTLIBRARIES = kpresenter.la
@@ -75,8 +119,8 @@
  kpresenter_la_LIBADD = $(LIB_KOFFICECORE)
  
  ## The executable
---- kspread/Makefile.am	2002/06/09 01:26:37	1.173
-+++ kspread/Makefile.am	2002/07/05 11:01:40
+--- kspread/Makefile.am	2002/07/14 12:21:47	1.175
++++ kspread/Makefile.am	2002/09/08 00:33:40
 @@ -49,7 +49,7 @@ libkspreadpart_la_METASOURCES = AUTO
  ## The kdeinit loadable module
  lib_LTLIBRARIES =  kspread.la
@@ -87,7 +131,7 @@
  
  ## The executable
 --- kugar/part/Makefile.am	2002/02/27 13:41:41	1.5
-+++ kugar/part/Makefile.am	2002/07/05 11:01:44
++++ kugar/part/Makefile.am	2002/09/08 00:33:40
 @@ -2,7 +2,7 @@ INCLUDES = -I$(srcdir)/../lib $(KOFFICE_
  
  lib_LTLIBRARIES = libkugarpart.la
@@ -97,8 +141,8 @@
  libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS) $(LIB_KDEPRINT)
  
  libkugarpart_la_METASOURCES = AUTO
---- kword/Makefile.am	2002/06/14 09:56:35	1.186
-+++ kword/Makefile.am	2002/07/05 11:01:44
+--- kword/Makefile.am	2002/07/14 12:01:51	1.188
++++ kword/Makefile.am	2002/09/08 00:33:40
 @@ -57,7 +57,7 @@ kwmailmerge_servicetypedir=$(kde_service
  
  ## The kdeinit loadable module

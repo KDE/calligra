@@ -1,3 +1,11 @@
+koffice (1:1.2.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * Build-depends on libasound2-dev and libxslt1-dev.
+  * Changed build-depends from python2.1-dev to python2.2-dev.
+
+ -- Ben Burton <benb@acm.org>  Sat,  7 Sep 2002 23:38:34 +1000
+
 koffice (1:1.2-rc1-1) unstable; urgency=low
 
   * New upstream release.
