@@ -60,8 +60,6 @@ void ProcessTextTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
     QString *tagText = (QString *) tagData;
     
-    kdDebug(30508)<< "Not an element: " << myNode.nodeName() << " parent: " << myNode.parentNode().nodeName() << endl;
-
     *tagText = myNode.toElement().text(); // Get the text, also from a CDATA section
 
     AllowNoAttributes (myNode);
@@ -76,12 +74,10 @@ static void ProcessAboutTag ( QDomNode         myNode,
     KWEFDocumentInfo *docInfo = (KWEFDocumentInfo *) tagData;
 
     AllowNoAttributes (myNode);
-    kdDebug(30508) << "About node: " << myNode.nodeName() << endl;
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "title",    ProcessTextTag, &docInfo->title    ) );
     tagProcessingList.append ( TagProcessing ( "abstract", ProcessTextTag, &docInfo->abstract ) );
-    kdDebug(30508) << "Abstract: " << docInfo->abstract << endl;
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
