@@ -194,13 +194,15 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
 	    case ID_KWCharFormat: 
 	      {
 		KWCharFormat *attrib = (KWCharFormat*)_data[i].attrib; 
-		dynamic_cast<KWCharFormat*>(attrib)->getFormat()->incRef();
+		attrib->getFormat()->incRef();
 		KWCharFormat *f = new KWCharFormat(attrib->getFormat());
 		__data[i].attrib = f;
 	      } break;
 	    case ID_KWCharImage:
 	      {
-		KWCharImage *f = new KWCharImage();
+		KWCharImage *attrib = (KWCharImage*)_data[i].attrib; 
+		attrib->getImage()->incRef();
+		KWCharImage *f = new KWCharImage(attrib->getImage());
 		__data[i].attrib = f;
 	      } break;
 	    }

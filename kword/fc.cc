@@ -701,12 +701,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	// Do we have some format definition here ?
 	if ( c == 0 )
 	{
-	  /* // ?????
-	    font = tmpFormat.loadFont( document, _painter );
-	    // Skip the format definition
-	    textPos += 2 + sizeof( KWFormat* );
-	    tmpPTAscender = font->getPTAscender();
-	    tmpPTDescender = font->getPTDescender(); */
 	  ptPos += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
 	  tmpPTWidth += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
 	  specialHeight = ((KWCharImage*)text[textPos].attrib)->getImage()->height();
