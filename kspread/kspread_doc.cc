@@ -318,7 +318,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   {
       int ret = KMessageBox::warningContinueCancel(
           0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
-                  "Opening it in this version of KWord will lose some information.").arg(m_syntaxVersion),
+                  "Opening it in this version of KSpread will lose some information.").arg(m_syntaxVersion),
           i18n("File format mismatch"), i18n("Continue") );
       if ( ret == KMessageBox::Cancel )
       {
