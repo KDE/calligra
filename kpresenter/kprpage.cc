@@ -2662,7 +2662,7 @@ void KPrPage::recalcPageNum()
     for ( ; it.current() ; ++it )
     {
 	if ( it.current()->getType() == OT_TEXT )
-	    ( (KPTextObject*)it.current() )->recalcPageNum( m_doc );
+	    ( (KPTextObject*)it.current() )->recalcPageNum( m_doc, this );
     }
 }
 
@@ -2945,7 +2945,7 @@ void KPrPage::completeLoading( bool _clean, int lastObj )
             dynamic_cast<KPClipartObject*>( kpobject )->reload();
         else
             if ( kpobject->getType() == OT_TEXT )
-                dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( m_doc );
+                dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( m_doc,this );
     }
     kpbackground->restore(); // TODO rename to e.g. reload
 }

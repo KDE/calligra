@@ -795,20 +795,20 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
 }
 
 /*================================================================*/
-void KPTextObject::recalcPageNum( KPresenterDoc *doc )
+void KPTextObject::recalcPageNum( KPresenterDoc *doc, KPrPage *page )
 {
-    int h = doc->getPageRect( ).height();
-    int pgnum = -1;
-    for ( unsigned int i = 0; i < doc->getPageNums(); ++i ) {
-        if ( (int)orig.y() <= ( (int)i + 1 ) * h ) {
-            pgnum = i + 1;
-            break;
+    int pgnum=m_doc->pageList().findRef(page);
+    if ( pgnum==-1 )
+    {
+        if( page==m_doc->stickyPage())
+        {
+            //todo
         }
+        else
+            pgnum = doc->getPageNums();
     }
 
-    if ( pgnum == -1 )
-        pgnum = doc->getPageNums();
-
+    pgnum+=1;
     QPtrListIterator<Qt3::QTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {

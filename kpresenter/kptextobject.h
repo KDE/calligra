@@ -41,6 +41,7 @@ class KoVariable;
 class KPrTextDrag;
 class KPrTextDocument;
 class DCOPObject;
+class KPrPage;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -87,7 +88,7 @@ public:
 
     virtual void extendObject2Contents( KPresenterView *view = 0 );
 
-    void recalcPageNum( KPresenterDoc *doc );
+    void recalcPageNum( KPresenterDoc *doc, KPrPage *page );
 
 
     /** Return the contained text object */

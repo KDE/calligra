@@ -656,7 +656,7 @@ void InsertCmd::execute()
     m_page->appendObject( object );
     object->addToObjList();
     if ( object->getType() == OT_TEXT )
-	( (KPTextObject*)object )->recalcPageNum( doc );
+	( (KPTextObject*)object )->recalcPageNum( doc,m_page );
     doc->repaint( object );
 }
 
@@ -730,7 +730,7 @@ MoveByCmd::MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObj
     m_page=_page;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	if ( objects.at( i )->getType() == OT_TEXT ) {
-	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc,m_page );
 	    doc->repaint( objects.at( i ) );
 	}
 	objects.at( i )->incCmdRef();
@@ -754,7 +754,7 @@ void MoveByCmd::execute()
 	objects.at( i )->moveBy( diff );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
-	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc,m_page );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
@@ -774,7 +774,7 @@ void MoveByCmd::unexecute()
 	objects.at( i )->moveBy( -diff.x(), -diff.y() );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
-	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc,m_page );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
@@ -797,7 +797,7 @@ MoveByCmd2::MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs,
     doc = _doc;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	if ( objects.at( i )->getType() == OT_TEXT ) {
-	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	    //( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
 	    doc->repaint( objects.at( i ) );
@@ -825,7 +825,7 @@ void MoveByCmd2::execute()
 	objects.at( i )->moveBy( *diffs.at( i ) );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
-	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	    //( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
@@ -845,7 +845,7 @@ void MoveByCmd2::unexecute()
 	objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
-	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	    //( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
@@ -1723,7 +1723,7 @@ void ResizeCmd::execute()
     object->resizeBy( r_diff );
     if ( object->getType() == OT_TEXT )
     {
-	( (KPTextObject*)object )->recalcPageNum( doc );
+	//( (KPTextObject*)object )->recalcPageNum( doc );
         if(object->isSelected())
             doc->updateRuler();
     }
@@ -1747,7 +1747,7 @@ void ResizeCmd::unexecute( bool _repaint )
     object->resizeBy( -r_diff.width(), -r_diff.height() );
     if ( object->getType() == OT_TEXT )
     {
-	( (KPTextObject*)object )->recalcPageNum( doc );
+	//( (KPTextObject*)object )->recalcPageNum( doc );
         if(object->isSelected())
             doc->updateRuler();
     }

@@ -60,5 +60,7 @@ void KPTextObjectIface::selectAll( bool select )
 
 void KPTextObjectIface::recalcPageNum( )
 {
-    m_textobject->recalcPageNum(m_textobject->kPresenterDocument());
+    //FIXME
+    //m_textobject->recalcPageNum(m_textobject->kPresenterDocument());
+
 }

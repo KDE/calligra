@@ -2089,6 +2089,7 @@ void KPresenterDoc::recalcPageNum()
     KPrPage *page=0L;
     for(page=pageList().first(); page; page=pageList().next())
         page->recalcPageNum();
+    m_stickyPage->recalcPageNum();
 }
 
 void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
