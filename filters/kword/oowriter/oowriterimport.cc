@@ -27,7 +27,10 @@
 #include "oowriterimport.h"
 #include <ooutils.h>
 
+#include <kdeversion.h>
 #include <kdebug.h>
+#include <kzip.h>
+
 #include <koDocumentInfo.h>
 #include <koDocument.h>
 
@@ -37,6 +40,10 @@
 #include <koGlobal.h>
 #include <koPicture.h>
 #include "conversion.h"
+
+#if ! KDE_IS_VERSION(3,1,90)
+# include <kdebugclasses.h>
+#endif
 
 typedef KGenericFactory<OoWriterImport, KoFilter> OoWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriterimport" ) );
@@ -696,7 +703,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
         else if ( tagName == "draw:image" )
         {
             textData = '#'; // anchor placeholder
-            appendPicture(doc, p, formats, ts, pos);
+            appendPicture(doc, formats, ts, pos);
         }
         else if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
@@ -1064,36 +1071,76 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& e, const QDomEl
     // TODO
 }
 
-void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& para, QDomElement& formats, const QDomElement& object, uint pos)
+void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos)
 {
-    QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
-    double height=KoUnit::parseValue( object.attribute("svg:height") );
-    double width=KoUnit::parseValue( object.attribute("svg:width") );
-    QString href ( object.attribute("xlink:href") );
+    const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
+    const double height=KoUnit::parseValue( object.attribute("svg:height") );
+    const double width=KoUnit::parseValue( object.attribute("svg:width") );
+    const QString href ( object.attribute("xlink:href") );
+    
+    kdWarning(30518) << "Picture: " << frameName << " " << href << " (in OoWriterImport::appendPicture)" << endl;
     
     QString strExtension;
     const int result=href.findRev(".");
     if (result>=0)
     {
-        strExtension=href.mid(result);
+        strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
     }
     KoPicture picture;
     if ( href[0]=='#' )
     {
         QString filename(href.mid(1));
- 
-        KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
-        if (store->open("filename"))
-        {
-            if (!picture.load(store->device(),strExtension))
-                kdWarning(30518) << "Cannot load picture: " << frameName << " " << href << endl;
-            
-            store->close();
-        } 
-        else
-            kdWarning(30518) << "Cannot find picture: " << frameName << " " << href << endl;
         KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
         picture.setKey(key);
+        
+        // We cannot use KoStore, as it cooks the file names starting with a digit
+        // So we must open the file "by hand." The code is similar to what is insige KoZipStore
+        KZip* zip=new KZip(m_chain->inputFile());
+        if (!zip->open(IO_ReadOnly))
+        {
+            kdWarning(30518) << "Cannot open zip file! Skipping picture  " << frameName << " " << href << endl;
+            delete zip;
+            return;
+        }   
+        if (!zip->directory())
+        {
+            kdWarning(30518) << "Zip file is empty! Skipping picture  " << frameName << " " << href << endl;
+            zip->close();
+            delete zip;
+            return;
+        }
+        const KArchiveEntry* entry = zip->directory()->entry( filename );
+        if (!entry)
+        {
+            kdWarning(30518) << "Cannot find picture  " << frameName << " " << href << endl;
+            zip->close();
+            delete zip;
+            return;
+        }
+        if ( entry->isDirectory() )
+        {
+            kdWarning(30518) << "Picture is a directory! " << frameName << " " << href << endl;
+            zip->close();
+            delete zip;
+            return;
+        }
+        // Must cast to KZipFileEntry, not only KArchiveFile, because device() isn't virtual! (in KDE 3.1.x)
+        const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
+        QIODevice* io=f->device(); // Now the device is ours, so we will need to delete it.
+        kdDebug(30518) << "Size in KZipFileEntry: " << f->size() << endl;
+        if (!io)
+        {
+            kdWarning(30518) << "No QIODevice for picture  " << frameName << " " << href << endl;
+            zip->close();
+            delete zip;
+            return;
+        }
+        if (!picture.load(io,strExtension))
+            kdWarning(30518) << "Cannot load picture: " << frameName << " " << href << endl;
+        
+        delete io;
+        zip->close();
+        delete zip;        
     }
     else
     {
@@ -1102,16 +1149,33 @@ void OoWriterImport::appendPicture(QDomDocument& doc, QDomElement& para, QDomEle
         picture.setKeyAndDownloadPicture(url);
     }
     
+    kdDebug(30518) << "Picture ready! Key: " << picture.getKey().toString() << " Size:" << picture.getOriginalSize() << endl;
+    
     QString strStoreName;
     strStoreName="pictures/picture";
     strStoreName+=QString::number(++m_pictureNumber);
+    strStoreName+='.';
     strStoreName+=strExtension;
+    
+    kdDebug(30518) << "Storage name: " << strStoreName << endl;
+    
     KoStoreDevice* out = m_chain->storageFile( strStoreName , KoStore::Write );
-    if (!out)
+    if (out)
+    {
+        if (!out->open(IO_WriteOnly))
+        {
+            kdWarning(30518) << "Cannot open for saving picture: " << frameName << " " << href << endl;
+            return;
+        }
         if (!picture.save(out))
-            kdWarning(30518) << "Cannot save picture: " << frameName << " " << href << endl;
+        kdWarning(30518) << "Cannot save picture: " << frameName << " " << href << endl;
+        out->close();
+    }
     else
+    {
          kdWarning(30518) << "Cannot store picture: " << frameName << " " << href << endl;
+         return;
+    }
          
     // Now that we have copied the image, we need to make some bookkeeping
     
