@@ -98,7 +98,7 @@ bool Counter::isBullet() const
 
 void Counter::load( QDomElement & element )
 {
-    m_numbering = static_cast<Numbering>( element.attribute("numberingtype").toInt() );
+    m_numbering = static_cast<Numbering>( element.attribute("numberingtype", "2").toInt() );
     m_style = static_cast<Style>( element.attribute("type").toInt() );
     m_depth = element.attribute("depth").toInt();
     m_customBullet.character = QChar( element.attribute("bullet").toInt() );
@@ -277,7 +277,8 @@ void Counter::save( QDomElement & element )
     if ( !m_suffix.isEmpty() )
         element.setAttribute( "righttext", m_suffix );
     element.setAttribute( "start", m_startNumber );
-    element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
+    if ( m_numbering != NUM_NONE )
+        element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
     if ( !m_customBullet.font.isEmpty() )
         element.setAttribute( "bulletfont", m_customBullet.font );
     if ( !m_custom.isEmpty() )
