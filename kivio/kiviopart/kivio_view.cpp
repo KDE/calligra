@@ -447,8 +447,8 @@ void KivioView::initActions()
   toggleShowGrid(m_pDoc->grid().isShow);
   toggleSnapGrid(m_pDoc->grid().isSnap);
 
-  toggleShowGuides(true);
-  toggleSnapGuides(true);
+  toggleShowGuides(true && koDocument()->isReadWrite());
+  toggleSnapGuides(true && koDocument()->isReadWrite());
 
   viewZoom((int)(m_pCanvas->zoom()*100.1f));
   m_unitAct->setCurrentItem(m_pDoc->units());
