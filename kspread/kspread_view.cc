@@ -2955,43 +2955,32 @@ void KSpreadView::decreaseIndent()
 
 void KSpreadView::goalSeek()
 {
-  if ( m_pCanvas->editor() )
-  {
-    m_pCanvas->deleteEditor( true ); // save changes
-  }
+    m_pCanvas->closeEditor();
 
-  KSpreadGoalSeekDlg dlg( this, QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
-                          "KSpreadGoalSeekDlg" );
-  dlg.exec();
+    KSpreadGoalSeekDlg dlg( this, QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
+                            "KSpreadGoalSeekDlg" );
+    dlg.exec();
 }
 
 void KSpreadView::textToColumns()
 {
-  if ( m_pCanvas->editor() )
-  {
-    m_pCanvas->deleteEditor( true ); // save changes
-  }
+    m_pCanvas->closeEditor();
+    if (m_selectionInfo->selection().width() > 1)
+    {
+        KMessageBox::error( this, i18n("You must not select an area containing more than one column.") );
+        return;
+    }
 
-  if (m_selectionInfo->selection().width() > 1)
-  {
-    KMessageBox::error( this, i18n("You must not select an area containing more than one column.") );
-    return;
-  }
-
-  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Column );
-  dialog.exec();
+    KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Column );
+    dialog.exec();
 }
 
 void KSpreadView::consolidate()
 {
-  if ( m_pCanvas->editor() )
-  {
-    m_pCanvas->deleteEditor( true ); // save changes
-  }
-
-  KSpreadConsolidate * dlg = new KSpreadConsolidate( this, "Consolidate" );
-  dlg->show();
-  // dlg destroys itself
+    m_pCanvas->closeEditor();
+    KSpreadConsolidate * dlg = new KSpreadConsolidate( this, "Consolidate" );
+    dlg->show();
+    // dlg destroys itself
 }
 
 void KSpreadView::sortList()
@@ -3078,6 +3067,7 @@ void KSpreadView::validity()
 
 void KSpreadView::insertSeries()
 {
+    m_pCanvas->closeEditor();
     KSpreadSeriesDlg dlg( this, "Series", QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
     dlg.exec();
 }
@@ -3096,45 +3086,37 @@ void KSpreadView::sort()
 
 void KSpreadView::insertHyperlink()
 {
-  KSpreadLinkDlg dlg( this, "Insert Link" );
-  dlg.exec();
+    m_pCanvas->closeEditor();
+
+    KSpreadLinkDlg dlg( this, "Insert Link" );
+    dlg.exec();
 }
 
 void KSpreadView::insertFromDatabase()
 {
-  if ( m_pCanvas->editor() )
-  {
-    m_pCanvas->deleteEditor( true ); // save changes
-  }
+    m_pCanvas->closeEditor();
 
-  QRect rect = m_selectionInfo->selection();
+    QRect rect = m_selectionInfo->selection();
 
-  KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
-  dlg.exec();
+    KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
+    dlg.exec();
 }
 
 void KSpreadView::insertFromTextfile()
 {
-  if ( m_pCanvas->editor() )
-  {
-    m_pCanvas->deleteEditor( true ); // save changes
-  }
+    m_pCanvas->closeEditor();
+    //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
-  //KMessageBox::information( this, "Not implemented yet, work in progress...");
-
-  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", selection(), KSpreadCSVDialog::File );
-  dialog.exec();
+    KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", selection(), KSpreadCSVDialog::File );
+    dialog.exec();
 }
 
 void KSpreadView::insertFromClipboard()
 {
-  if ( m_pCanvas->editor() )
-  {
-    m_pCanvas->deleteEditor( true ); // save changes
-  }
+    m_pCanvas->closeEditor();
 
-  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Clipboard );
-  dialog.exec();
+    KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Clipboard );
+    dialog.exec();
 }
 
 void KSpreadView::setupPrinter( KPrinter &prt )
