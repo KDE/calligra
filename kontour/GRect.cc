@@ -146,8 +146,8 @@ void GRect::calcBoundingBox()
   KoPoint p2(ePoint.x(), sPoint.y());
   KoPoint p3(ePoint.x(), ePoint.y());
   KoPoint p4(sPoint.x(), ePoint.y());
-  adjustBBox(p1, p2, p3, p4);
-  calcUntransformedBoundingBox(p1, p2, p3, p4);
+  box = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  adjustBBox(box);
 }
 
 int GRect::getNeighbourPoint(const KoPoint &p)

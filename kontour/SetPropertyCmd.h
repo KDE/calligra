@@ -84,4 +84,24 @@ private:
   int width;
 };
 
+class SetJoinStyleCmd : public SetPropertyCmd
+{
+public:
+  SetJoinStyleCmd(GDocument *aGDoc, KoOutline::Join j);
+  void execute();
+
+private:
+  KoOutline::Join join;
+};
+
+class SetCapStyleCmd : public SetPropertyCmd
+{
+public:
+  SetCapStyleCmd(GDocument *aGDoc, KoOutline::Cap c);
+  void execute();
+
+private:
+  KoOutline::Cap cap;
+};
+
 #endif

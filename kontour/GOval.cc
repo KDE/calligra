@@ -29,6 +29,8 @@
 #include <qdom.h>
 
 #include <klocale.h>
+#include <koVectorPath.h>
+#include <koPainter.h>
 
 #include "kontour_global.h"
 #include "GPath.h"
@@ -142,67 +144,18 @@ QDomElement GOval::writeToXml(QDomDocument &document)
 
 void GOval::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool)
 {
-/*  p.save();
-  p.setWorldMatrix(tmpMatrix, true);
-  setPen(&p);
-  setBrush(&p);
-
-  p.drawEllipse((int)sPoint.x(), (int)sPoint.y(), (int)(ePoint.x() - sPoint.x()), (int)(ePoint.y() - sPoint.y()));
-
-  p.restore();*/
-
-/*  double alen = 0;
-  QPen pen;
-  QBrush brush;
-
-  initPen (pen);
-
-
-  
-
-  if (! workInProgress () && ! outline) {
-    initBrush (brush);
-    p.setBrush (brush);
-    if (gradientFill () &&
-        outlineInfo.shape != GObject::OutlineInfo::ArcShape) {
-      //if (! gShape.valid ())
-        updateGradientShape (p);
-      gShape.draw (p);
-    }
-  }
-
-  switch (outlineInfo.shape) {
-  case GObject::OutlineInfo::DefaultShape:
-    Painter::drawEllipse (p, sPoint.x (), sPoint.y (),
-                          ePoint.x () - sPoint.x (),
-                          ePoint.y () - sPoint.y ());
-    break;
-  case GObject::OutlineInfo::PieShape:
-    alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    Painter::drawPie (p, sPoint.x (), sPoint.y (),
-                      ePoint.x () - sPoint.x (),
-                      ePoint.y () - sPoint.y (),
-                      -eAngle * 16, -alen * 16);
-    break;
-  case GObject::OutlineInfo::ArcShape:
-    alen = (eAngle > sAngle ? 360 - eAngle + sAngle : sAngle - eAngle);
-    Painter::drawArc (p, sPoint.x (), sPoint.y (),
-                      ePoint.x () - sPoint.x (),
-                      ePoint.y () - sPoint.y (),
-                      -eAngle * 16, -alen * 16);
-    break;
-  }
-  p.restore ();
-  p.save ();
-  if (withBasePoints) {
-    p.setPen (black);
-    p.setBrush (white);
-    for (int i = 0; i < 2; i++) {
-      Coord c = segPoint[i].transform (tmpMatrix);
-      Painter::drawRect (p, c.x () - 2.0, c.y () - 2.0, 4, 4);
-    }
-  }
- */
+  setPen(p);
+  setBrush(p);
+  double rx = (ePoint.x() - sPoint.x()) * 0.5;
+  double ry = (ePoint.y() - sPoint.y()) * 0.5;
+  double cx = (ePoint.x() + sPoint.x()) * 0.5;
+  double cy = (ePoint.y() + sPoint.y()) * 0.5;
+  KoVectorPath *v = KoVectorPath::ellipse(cx, cy, rx, ry);
+  QWMatrix m;
+  m = m.translate(aXOffset, aYOffset);
+  v->transform(m * tmpMatrix);
+  p->drawVectorPath(v);
+  delete v;
 }
 
 void GOval::calcBoundingBox()
@@ -211,9 +164,9 @@ void GOval::calcBoundingBox()
   KoPoint p2(ePoint.x(), sPoint.y());
   KoPoint p3(ePoint.x(), ePoint.y());
   KoPoint p4(sPoint.x(), ePoint.y());
-  adjustBBox(p1, p2, p3, p4);
-  calcUntransformedBoundingBox(p1, p2, p3, p4);
-//  calcUntransformedBoundingBox(sPoint, KoPoint(ePoint.x(), sPoint.y()), ePoint, KoPoint(sPoint.x(), ePoint.y()));
+  box = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  adjustBBox(box);
+
   double x, y;
 
   KoRect r(sPoint, ePoint);

@@ -516,20 +516,6 @@ void GPage::drawContentsInRegion(KoPainter *p, int aXOffset, int aYOffset, const
   }
 }
 
-void GPage::invalidateClipRegions()
-{
-  for (QPtrListIterator<GLayer> li(layers); li.current(); ++li)
-  {
-    if ((*li)->isVisible ())
-    {
-      const QPtrList<GObject>& contents = (*li)->objects ();
-      QPtrListIterator<GObject> oi(contents);
-      for (; oi.current(); ++oi)
-        (*oi)->invalidateClipRegion ();
-    }
-  }
-}
-
 /**
  * Looks for an object of type <tt>otype</tt> which endpoints are distant
  * not more than <tt>max_dist</tt> from the point <tt>x, y</tt>.

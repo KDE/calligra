@@ -371,14 +371,14 @@ void KontourView::setupTools()
   mEditPointTool = new EditPointTool("EditPoint", tcontroller);
   tcontroller->registerTool(mEditPointTool);
 
+  mZoomTool = new ZoomTool("Zoom", tcontroller);
+  tcontroller->registerTool(mZoomTool);
+
   mRectTool = new RectTool("Rect", tcontroller);
   tcontroller->registerTool(mRectTool);
 
   mOvalTool = new OvalTool("Oval", tcontroller);
   tcontroller->registerTool(mOvalTool);
-
-  mZoomTool = new ZoomTool("Zoom", tcontroller);
-  tcontroller->registerTool(mZoomTool);
 
   tcontroller->initToolBar();
   tcontroller->selectTool("Select");

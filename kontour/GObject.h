@@ -219,8 +219,6 @@ public:
   
   const KoRect &boundingBox() const {return box; }
 
-  void invalidateClipRegion();
-
   /**
    * Convert object to path.
    * 
@@ -241,13 +239,13 @@ protected:
   QWMatrix toMatrix(const QDomElement &matrix);
   void updateBoundingBox(const KoRect &r);
   void updateBoundingBox(const KoPoint &p1, const KoPoint &p2);
-  void calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft);
+  KoRect calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft);
   void updateRegion(bool recalcBBox = true);
   void setPen(KoPainter *p);
   void setBrush(KoPainter *p);
 
   /* Adjust the bounding box by taking into account linewidth */
-  void adjustBBox(KoPoint &tleft, KoPoint &tright, KoPoint &bright, KoPoint &bleft);
+  void adjustBBox(KoRect &rect);
 
 protected:
   unsigned int rcount;            // the reference counter

@@ -461,6 +461,7 @@ void GPath::calcBoundingBox()
       ymax = y;
   }
   box = KoRect(xmin, ymin, xmax - xmin, ymax - ymin).transform(tmpMatrix);
+  adjustBBox(box);
 }
 
 GPath *GPath::convertToPath() const

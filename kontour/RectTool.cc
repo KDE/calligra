@@ -110,6 +110,7 @@ void RectTool::deactivate()
 void RectTool::processEvent(QEvent *e)
 {
   Canvas *canvas = toolController()->view()->canvas();
+  GPage *page = toolController()->view()->activeDocument()->activePage();
   if(e->type() == QEvent::MouseButtonPress)
   {
     if(state == S_Init)
@@ -153,35 +154,6 @@ void RectTool::processEvent(QEvent *e)
       p.setPen(blue);
       p.drawRect(r);
     }
-/*      if (rect == 0L)
-         return;
-
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      canvas->snapPositionToGrid (xpos, ypos);
-      rect->setEndPoint (Coord (xpos, ypos));
-      bool flag = me->state () & Qt::ControlButton;
-
-      Rect r = rect->boundingBox ();
-      MeasurementUnit unit =
-         PStateManager::instance ()->defaultMeasurementUnit ();
-      QString u = unitToString (unit);
-      float xval, yval, wval, hval;
-      xval = cvtPtToUnit (unit, r.x ());
-      yval = cvtPtToUnit (unit, r.y ());
-      wval = cvtPtToUnit (unit, r.width ());
-      hval = cvtPtToUnit (unit, r.height ());
-
-      msgbuf=flag ? i18n("Create Square") : i18n("Create Rectangle");
-      msgbuf+=" ["+QString::number(xval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(yval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(wval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString(", ");
-      msgbuf+=QString::number(hval, 'f', 3);
-      msgbuf+=QString(" ") + u + QString("]");
-      m_toolController->emitModeSelected (m_id,msgbuf);*/
   }
   else if(e->type() == QEvent::MouseButtonRelease)
   {
@@ -194,12 +166,7 @@ void RectTool::processEvent(QEvent *e)
       else
       {
         GRect *rect = new GRect(mRoundness);
-        kdDebug(38000) << "r.left() : " << r.left() << endl;
-        kdDebug(38000) << "r.bottom() : " << r.bottom() << endl;
-        kdDebug(38000) << "canvas.xOffset() : " << canvas->xOffset() << endl;
-        kdDebug(38000) << "canvas.yOffset() : " << canvas->yOffset() << endl;
         double zoom = toolController()->view()->activeDocument()->zoomFactor();
-        kdDebug(38000) << "RectTool zoom : " << zoom << endl;
         rect->startPoint(KoPoint((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom));
         rect->endPoint(KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
         CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
@@ -208,33 +175,10 @@ void RectTool::processEvent(QEvent *e)
 	if(!mFill)
 	  rect->style()->filled(GStyle::NoFill);
         doc->history()->addCommand(cmd);
-        canvas->updateBuf(r);
-        canvas->repaint(r);
+        page->updateSelection();
       }
       state = S_Init;
     }
-/*      if (rect == 0L)
-         return;
-
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
-      canvas->snapPositionToGrid (xpos, ypos);
-      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
-      rect->setEndPoint (Coord (xpos, ypos));
-      if (! rect->isValid ())
-      {
-         doc->activePage()->deleteObject (rect);
-      }
-      else
-      {
-         CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
-         history->addCommand (cmd);
-
-         doc->activePage()->unselectAllObjects ();
-         doc->activePage()->setLastObject (rect);
-      }
-      rect = 0L;*/
   }
   else if(e->type() == QEvent::KeyPress)
   {

@@ -246,7 +246,9 @@ void OutlinePanel::slotChangeOpacity(int o)
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->outlineOpacity(o);
+    SetOutlineOpacityCmd *cmd = new SetOutlineOpacityCmd(mView->activeDocument(), o);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }
@@ -274,7 +276,6 @@ void OutlinePanel::slotChangeLineWidth(int l)
   }
   else
   {
-    kdDebug() << "+" << endl;
     SetOutlineWidthCmd *cmd = new SetOutlineWidthCmd(mView->activeDocument(), l);
     KontourDocument *doc = (KontourDocument *)mView->koDocument();
     doc->history()->addCommand(cmd);
@@ -302,7 +303,9 @@ void OutlinePanel::slotJoinPressed(int w)
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->joinStyle(style);
+    SetJoinStyleCmd *cmd = new SetJoinStyleCmd(mView->activeDocument(), style);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }
@@ -322,7 +325,9 @@ void OutlinePanel::slotCapPressed(int w)
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->capStyle(style);
+    SetCapStyleCmd *cmd = new SetCapStyleCmd(mView->activeDocument(), style);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }

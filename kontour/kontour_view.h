@@ -228,9 +228,9 @@ private:
 
   SelectTool *mSelectTool;
   EditPointTool *mEditPointTool;
+  ZoomTool *mZoomTool;
   RectTool *mRectTool;
   OvalTool *mOvalTool;
-  ZoomTool *mZoomTool;
 
   /* */
   bool mShowRulers;

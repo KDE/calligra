@@ -134,6 +134,7 @@ void GObject::setZoomFactor(double f, double pf)
 void GObject::style(const GStyle *s)
 {
   *mStyle = *s;
+  calcBoundingBox();
 }
 
 void GObject::matrix(QWMatrix m)
@@ -227,7 +228,7 @@ void GObject::updateBoundingBox(const KoPoint &p1, const KoPoint &p2)
   updateBoundingBox(r);
 }
 
-void GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft)
+KoRect GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft)
 {
   KoPoint p[4];
   KoRect r;
@@ -249,11 +250,7 @@ void GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &
     r.setRight(QMAX(p[i].x(), r.right()));
     r.setBottom(QMAX(p[i].y(), r.bottom()));
   }
-  kdDebug(38000) << "Rect: L = " << r.left() << endl;
-  kdDebug(38000) << "Rect: T = " << r.top() << endl;
-  kdDebug(38000) << "Rect: R = " << r.right() << endl;
-  kdDebug(38000) << "Rect: B = " << r.bottom() << endl;
-  updateBoundingBox(r);
+  return r;
 }
 
 void GObject::updateRegion(bool recalcBBox)
@@ -270,19 +267,6 @@ void GObject::updateRegion(bool recalcBBox)
   layer()->page()->document()->emitChanged(newbox, true);*/
 }
 
-void GObject::invalidateClipRegion()
-{
-
-}
-
-/*---------------
-
-void GObject::invalidateClipRegion  () {
-  if (gradientFill ())
-    gShape.setInvalid ();
-}
----------------------*/
-
 void GObject::setPen(KoPainter *p)
 {
   p->outline(mStyle->outline());
@@ -293,17 +277,13 @@ void GObject::setBrush(KoPainter *p)
   p->fill(mStyle->fill());
 }
 
-void GObject::adjustBBox(KoPoint &tleft, KoPoint &tright, KoPoint &bright, KoPoint &bleft)
+void GObject::adjustBBox(KoRect &rect)
 {
-  int t = static_cast<int>(mStyle->outlineWidth() * 0.5) + 1;
-  tleft.setX(tleft.x() -  t);
-  tleft.setY(tleft.y() - t);
-  tright.setX(tright.x() + t);
-  tright.setY(tright.y() - t);
-  bright.setX(bright.x() + t);
-  bright.setY(bright.y() + t);
-  bleft.setX(bleft.x() - t);
-  bleft.setY(bleft.y() + t);
+  double t = mStyle->outlineWidth() * 0.5;
+  rect.setLeft(rect.left() - t);
+  rect.setRight(rect.right() + t);
+  rect.setTop(rect.top() - t);
+  rect.setBottom(rect.bottom() + t);
 }
 
 #include "GObject.moc"

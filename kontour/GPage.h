@@ -129,7 +129,6 @@ public:
   void drawContents(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
   void drawContentsInRegion(KoPainter *p, int aXOffset, int aYOffset, const KoRect &r, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
-  void invalidateClipRegions();
   GObject *findContainingObject(double x, double y);
   bool findNearestObject(const QString &otype, int x, int y, double max_dist, GObject *&obj, int &pidx, bool all = false);
   bool findContainingObjects(int x, int y, QPtrList<GObject> &olist);

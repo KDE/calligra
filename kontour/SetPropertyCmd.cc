@@ -40,19 +40,16 @@ Command(aGDoc, name)
   QPtrListIterator<GObject> it(document()->activePage()->getSelection());
   for(unsigned int i = 0; it.current(); ++it, ++i)
   {
-    (*it)->ref();
-    objects.insert(i, (*it));
-//    GStyle *pst = (*it)->style();
-//    GStyle st = *pst;
-//    kdDebug(38000) << "pst=" << pst << endl;
-//    states[i] = st;
+//    (*it)->ref();
+//    objects.insert(i, (*it));
+//    states[i] = *((*it)->style());
   }
 }
 
 SetPropertyCmd::~SetPropertyCmd()
 {
-  for(unsigned int i = 0; i < objects.count(); i++)
-    objects[i]->unref();
+//  for(unsigned int i = 0; i < objects.count(); i++)
+//    objects[i]->unref();
 }
 
 void SetPropertyCmd::unexecute()
@@ -60,7 +57,7 @@ void SetPropertyCmd::unexecute()
   document()->activePage()->unselectAllObjects();
   for(unsigned int i = 0; i < objects.count(); i++)
   {
-//    objects[i]->style(&states[i]);
+    objects[i]->style(&states[i]);
     document()->activePage()->selectObject(objects[i]);
   }
   document()->activePage()->updateSelection();
@@ -115,5 +112,35 @@ SetPropertyCmd(aGDoc, i18n("Set outline width"))
 void SetOutlineWidthCmd::execute()
 {
   for(unsigned int i = 0; i < objects.count(); i++)
+  {
     objects[i]->style()->outlineWidth(width);
+    objects[i]->calcBoundingBox();
+  }
+  document()->activePage()->updateSelection();
+}
+
+SetJoinStyleCmd::SetJoinStyleCmd(GDocument *aGDoc, KoOutline::Join j):
+SetPropertyCmd(aGDoc, i18n("Set join style"))
+{
+  join = j;
+}
+
+void SetJoinStyleCmd::execute()
+{
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->style()->joinStyle(join);
+  document()->activePage()->updateSelection();
+}
+
+SetCapStyleCmd::SetCapStyleCmd(GDocument *aGDoc, KoOutline::Cap c):
+SetPropertyCmd(aGDoc, i18n("Set cap style"))
+{
+  cap = c;
+}
+
+void SetCapStyleCmd::execute()
+{
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->style()->capStyle(cap);
+  document()->activePage()->updateSelection();
 }

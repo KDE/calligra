@@ -22,13 +22,11 @@
 
 */
 
-#include <InsertPixmapCmd.h>
+#include "CreateImageCmd.h"
 
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GPixmap.h>
-#include "GPage.h"
+#include "GImage.h"
 
 InsertPixmapCmd::InsertPixmapCmd (GDocument* doc, const QString &fname) :
  Command(i18n("Insert Pixmap"))
