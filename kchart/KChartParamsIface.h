@@ -33,7 +33,8 @@ public:
     KChartParamsIface( KChartParams *_params );
 
 k_dcop:
-    virtual void setChartType( /*ChartType chartType*/ );
+    virtual QString chartType()const;
+    virtual void setChartType( const QString & );
     
     //bar chart config
     virtual bool threeDBars();
@@ -45,6 +46,10 @@ k_dcop:
     virtual void setThreeDBarDepth( double depth );
     virtual double threeDBarDepth() const;
     
+
+    //line chart config
+    virtual bool lineMarker() const;
+    virtual void setLineMarker( bool );
     
     //pie config
     virtual bool threeDPies();

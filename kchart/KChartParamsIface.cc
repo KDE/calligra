@@ -29,9 +29,14 @@ KChartParamsIface::KChartParamsIface( KChartParams *params_ )
     params = params_;
 }
 
-void KChartParamsIface::setChartType( /*ChartType chartType*/ )
+QString KChartParamsIface::chartType()const
 {
-    //todo
+    return params->chartTypeToString(params->chartType());
+}
+
+void KChartParamsIface::setChartType( const QString &chart )
+{
+    params->setChartType(params->stringToChartType( chart ));
 }
 
 
@@ -130,4 +135,14 @@ void KChartParamsIface::setLegendSpacing( uint space )
 uint KChartParamsIface::legendSpacing()
 {
     return params->legendSpacing();
+}
+
+bool KChartParamsIface::lineMarker() const
+{
+    return params->lineMarker();
+}
+
+void KChartParamsIface::setLineMarker( bool b)
+{
+    params->setLineMarker(b);
 }
