@@ -121,7 +121,8 @@ void KWDocument::clearUndoRedoInfos()
  * Temporary storage for the initial edition info
  * (activeFrameset, cursorParagraph and cursorIndex attributes of the XML
  */
-struct KWDocument::InitialEditing {
+class KWDocument::InitialEditing {
+public:
     QString m_initialFrameSet;
     int m_initialCursorParag;
     int m_initialCursorIndex;

@@ -88,8 +88,9 @@ void KoReplaceDialog::slotOk()
     m_replace->addToHistory(replacement());
 }
 
-struct KoReplace::KoReplacePrivate
+class KoReplace::KoReplacePrivate
 {
+public:
     void setLabel( const QString& pattern, const QString& replacement ) {
         m_mainLabel->setText( i18n("Replace '%1' with '%2'?").arg(pattern).arg(replacement) );
     }

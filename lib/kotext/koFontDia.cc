@@ -31,8 +31,9 @@
 #include <qcombobox.h>
 #include <qradiobutton.h>
 
-struct KoFontChooser::KoFontChooserPrivate
+class KoFontChooser::KoFontChooserPrivate
 {
+public:
     QComboBox *m_strikeOut;
     QColor m_textColor;
 };
