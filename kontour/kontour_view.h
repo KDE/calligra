@@ -61,6 +61,7 @@ class TransformPanel;
 class Command;
 class KoColor;
 class GStyle;
+class DCOPObject;
 
 class KontourView : public KoView
 {
@@ -68,6 +69,7 @@ Q_OBJECT
 public:
   KontourView(QWidget *parent, const char *name = 0, KontourDocument *doc = 0);
   virtual ~KontourView();
+  virtual DCOPObject* dcopObject();
 
   virtual bool eventFilter(QObject *o, QEvent *e);
 
@@ -108,7 +110,7 @@ private:
   void writeConfig();
   void updateStyles();
 
-private slots:
+public slots:
   void popupForSelection();
   void popupForRulers();
   void changeSelection();
@@ -237,6 +239,9 @@ private:
   QWidget *mParent;
   bool mShowGUI;
   KAction *m_distribute;
+
+  DCOPObject *m_dcop;
+
 };
 
 #endif

@@ -71,10 +71,15 @@
 #include "ReorderCmd.h"
 #include "ToPathCmd.h"
 
+#include "KOntourViewIface.h"
+
 KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc):
 KoView(doc, parent, name)
 {
   mDoc = doc;
+ 
+  m_dcop = 0;
+  dcopObject(); // build it
 
   objMenu = 0;
   rulerMenu = 0;
@@ -116,7 +121,17 @@ KontourView::~KontourView()
     delete mOutlinePanel;
   if(mLayerPanel && !mLayerPanel->area())
     delete mLayerPanel;
+  delete m_dcop;
 }
+
+DCOPObject* KontourView::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KOntourViewIface( this );
+
+    return m_dcop;
+}
+
 
 void KontourView::unit(MeasurementUnit u)
 {
