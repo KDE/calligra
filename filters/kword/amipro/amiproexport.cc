@@ -121,6 +121,7 @@ static QString AmiProEscape( const QString& text )
       case '<': result += "<<"; break;
       case '>': result += "<;>"; break;
       case '[': result += "<[>"; break;
+      case '@': result += "@@"; break;
       default: result += ch; break;
     }
   }

@@ -160,8 +160,20 @@ bool AmiProParser::parseParagraph( const QString& partext )
 
     // handle style change
     if( ch == '@' )
+    {
+
+      // check for @@ which is decoded as @ (not style tag)
+      if( i+1 < partext.length() )
+        if( partext[i+1] == '@' )
+        {
+          m_text.append( '@' );
+          i++;
+        } 
+
+      else
       for( i++; (i < partext.length()) && 
          (partext[i] != '@'); i++);
+    }
 
      else 
        // normal character
