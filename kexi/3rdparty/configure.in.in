@@ -50,6 +50,7 @@ if test "$kexi_cv_lib_readline" = no ; then
 	AC_MSG_RESULT("not found - kexisql will not be compiled")
 else
 	AC_MSG_RESULT($LIBREADLINE)
+	AC_DEFINE(HAVE_READLINE, 1, [define if you have libreadline available])
 fi
 
 AM_CONDITIONAL(have_readline, test "$kexi_cv_lib_readline" = "yes")
