@@ -132,8 +132,6 @@ public:
     virtual void print( KPrinter &printer );
     virtual void setupPrinter( KPrinter &printer );
 
-    void paintContent( QPainter& painter, const QRect& rect, bool transparent );
-
     /**
      * Fills the @ref KSpreadEditWidget with the current cells
      * content. This function is usually called after the
@@ -378,7 +376,6 @@ public slots:
     void slotUpdateVBorder( KSpreadTable *_table );
     void slotChangeSelection( KSpreadTable *_table, const QRect &oldSelection,
                               const QPoint &_oldMarker );
-    void slotChangeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void slotAddTable( KSpreadTable *_table );
     void slotRemoveChild( KSpreadChild *_child );
     void slotUpdateChildGeometry( KSpreadChild *_child );
@@ -407,10 +404,9 @@ public slots:
 
 signals:
     void sig_selectionChanged( KSpreadTable* _table, const QRect& _selection );
-    void sig_chooseSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+    void sig_chooseSelectionChanged(KSpreadTable *table, const QRect& _selection);
 
 protected:
-    // bool eventKeyPressed( QKeyEvent* _event, bool choose );
 
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );

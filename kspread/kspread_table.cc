@@ -657,17 +657,6 @@ void KSpreadTable::calc()
   }
 }
 
-void KSpreadTable::setChooseRect( const QRect &_sel )
-{
-    if ( _sel == m_chooseRect )
-        return;
-
-    QRect old( m_chooseRect );
-    m_chooseRect = _sel;
-
-    emit sig_changeChooseSelection( this, old, m_chooseRect );
-}
-
 void KSpreadTable::unselect()
 {
     // No selection? Then do nothing.
@@ -802,6 +791,18 @@ void KSpreadTable::setSelection( QRect  newSelection, QPoint newMarker,
   }
 
   emit sig_changeSelection( this, oldSelection, oldMarker );
+}
+
+QRect KSpreadTable::getChooseRect()
+{
+  QRect chooseRect;
+
+  chooseRect.setLeft(QMIN(m_chooseMarker.x(), m_chooseAnchor.x()));
+  chooseRect.setRight(QMAX(m_chooseMarker.x(), m_chooseAnchor.x()));
+  chooseRect.setTop(QMIN(m_chooseMarker.y(), m_chooseAnchor.y()));
+  chooseRect.setBottom(QMAX(m_chooseMarker.y(), m_chooseAnchor.y()));
+
+  return chooseRect;
 }
 
 /*

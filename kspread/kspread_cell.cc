@@ -366,36 +366,6 @@ void KSpreadCell::unobscure( KSpreadCell *cell )
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 {
-  /************************/
-
-  /* This needs removed eventually, but I'll leave it for a couple weeks so
-     I can monitor it.
-
-     Basically, click on a cell to see the value of a few variables.
-  */
-  KSpreadCell* c = NULL;
-  for (int a = 0; a <= extraXCells() && !isDefault(); a++)
-  {
-    for (int b = 0; b <= extraYCells(); b++)
-    {
-      c = m_pTable->cellAt(m_iColumn + a, m_iRow + b);
-      QString msg = "I (" + util_cellName(c->column(), c->row()) + ") am obscured by: ";
-      KSpreadCell*d = NULL;
-      QPtrList<KSpreadCell> lst = c->obscuringCells();
-      for (d = lst.first(); d != NULL; d = lst.next())
-      {
-        msg += util_cellName(d->column(), d->row());
-        msg += " ";
-      }
-      kdDebug(36001) << msg << endl;
-      kdDebug(36001) << "extra x,y = " << c->extraXCells() << ", " << c->extraYCells() << endl;
-      kdDebug(36001) << "merge x,y = " << c->mergedXCells() << ", " << c->mergedYCells() << endl;
-      kdDebug(36001) << endl;
-    }
-  }
-  /************************/
-
-
   if ( m_style == KSpreadCell::ST_Normal )
     return;
   else if ( m_style == KSpreadCell::ST_Select )
@@ -1846,6 +1816,10 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   if ( !r2.intersects( rect ) )
     return;
 
+  // Erase the background of the cell.
+  if ( !painter.device()->isExtDev() )
+    painter.eraseRect( r2 );
+
   if (!isObscuringForced())
   {
     paintBackground(painter, corner, cellRef, selected);
@@ -1921,7 +1895,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
       painter.restore();
     }
   }
-
+  painter.flush();
 }
 /* the following code was commented out in the above function.  I'll leave
    it here in case this functionality is ever re-implemented and someone
@@ -2031,10 +2005,6 @@ void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
       painter.fillRect( corner.x(), corner.y(), width, height, bb );
     }
   }
-
-  // Erase the background of the cell.
-  if ( !painter.device()->isExtDev() )
-    painter.eraseRect( corner.x(), corner.y(), width, height );
 
   // Draw a background brush
   QBrush bb = backGroundBrush( cellRef.x(), cellRef.y() );

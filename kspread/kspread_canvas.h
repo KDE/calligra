@@ -112,58 +112,8 @@ public:
 
     KSpreadCellEditor* editor() { return m_pEditor ; }
 
-    // ###### Torben: Many of these functions are not used or can be made private
-    QPoint chooseMarker() const { return QPoint( m_i_chooseMarkerColumn, m_i_chooseMarkerRow ); }
-    int chooseMarkerColumn() const { return m_i_chooseMarkerColumn; }
-    int chooseMarkerRow() const { return m_i_chooseMarkerRow; }
-    /**
-     * Sets the marker and redraws it if it is visible.
-     * It does not scroll the canvas. If you want to do that, use
-     * @ref #chooseGotoLocation.
-     *
-     * In addition it does not handel selection
-     * of multiple cells. After calling setChooseMarker() the selection will
-     * consist of the single cell given by @p p.
-     */
-    void setChooseMarker( const QPoint& p );
-    /**
-     * Internal. DONT USE.
-     */
-    void setChooseMarkerColumn( int _c ) {  m_i_chooseMarkerColumn = _c; }
-    /**
-     * Internal. DONT USE.
-     */
-    void setChooseMarkerRow( int _r ) {  m_i_chooseMarkerRow = _r;  }
-    /**
-     * Move the choose selection. That may include switching the table.
-     * The canvas is scrolled to the appropriate position if needed.
-     *
-     * @param make_select determines wether this move if the marker is part of a
-     *                    selection, that means: The user holds the shift key and
-     *                    moves the cursor keys.
-     */
-    void chooseGotoLocation( int x, int y, KSpreadTable* table = 0, bool make_select = FALSE );
-    /**
-     * Internal. DONT USE.
-     */
-    void showChooseMarker(){if(choose_visible==true) {return;}
-    			drawChooseMarker();choose_visible=true;}
-    /**
-     * Internal. DONT USE.
-     */
-    void hideChooseMarker(){if(choose_visible==false) {return;}
-    			drawChooseMarker();choose_visible=false;}
-    /**
-     * Internal. DONT USE.
-     */
-    bool isChooseMarkerVisible() const { return choose_visible; }
 
-    /**
-     * Called from @ref KSpreadView::slotChangeChooseSelection to
-     * draw the selection with a rubber band.
-     */
-    void updateChooseMarker( const QRect& _old, const QRect& _new );
-    /**
+  /**
      * If the user chooses some cells during editing a formula, then
      * this function returns the length of the textual representation.
      * For example the user selects "Table1!A1:B2" then this function
@@ -384,22 +334,6 @@ private:
     QPoint m_ptGeometryStart;
     QPoint m_ptGeometryEnd;
 
-    /**
-     * The column in which a mouse drag started.  Used for the 'choose'
-     * operations.
-     */
-    int m_iMouseStartColumn;
-    /**
-     * The row in which a mouse drag started.  Used for the 'choose'
-     * operations.
-     */
-    int m_iMouseStartRow;
-
-    /**
-     * The fixed anchor of a selection.  For example, during a selection with
-     * a mouse drag, it is the fixed corner opposite to the mouse pointer.
-     */
-    QPoint m_selectionAnchor;
 
     /**
      * True when the mouse button is pressed
@@ -461,8 +395,6 @@ private:
      */
     // int m_iMarkerVisible;
 
-    int m_i_chooseMarkerRow;
-    int m_i_chooseMarkerColumn;
 
     /**
      * Is true if the user is to choose a cell.
@@ -478,7 +410,9 @@ private:
      */
     KSpreadTable* m_chooseStartTable;
 
-    // int m_choosePos;
+    QPoint m_chooseMarker;
+    QPoint m_chooseAnchor;
+    QPoint m_chooseCursor;
 
     /**
      * @see #setLastEditorWithFocus
@@ -487,13 +421,18 @@ private:
     EditorType m_focusEditorType;
 
 private:
+
+  void paintSelectionChange(QRect area1, QRect area2);
+
   /**
    * Small helper function to take a rect representing a selection onscreen and
    * extend it one cell in every direction (taking into account hidden columns
    * and rows)
    */
   void ExtendRectBorder(QRect& area);
+
   void PaintRegion(QRect paintRegion, QRect viewRegion, QPainter &painter);
+  void PaintChooseRect(QRect view, QPainter& painter);
   bool formatKeyPress( QKeyEvent * _ev );
   double getDouble( KSpreadCell * cell );
   void convertToDouble( KSpreadCell * cell );
@@ -529,6 +468,7 @@ private:
   void processOtherKey(QKeyEvent *event);
   void processControlArrowKey(QKeyEvent *event);
 
+  void updateChooseRect(QPoint newMarker, QPoint newAnchor);
 };
 
 /**

@@ -629,29 +629,140 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
+    /* update the entire visible area */
 
-    int left = xpos;
-    RowLayout *row_lay;
-    ColumnLayout *col_lay;
-    KSpreadCell *cell;
-    for ( int y = top_row; y <= bottom_row; y++ )
+    QValueList<QRect> cellAreaList;
+    cellAreaList.append(QRect(left_col, top_row, right_col - left_col + 1,
+                              bottom_row - top_row + 1));
+
+    paintCellRegions(painter, rect, cellAreaList, table, drawCursor);
+}
+
+void KSpreadDoc::paintCellRegions(QPainter& painter, QRect viewRect,
+                                  QValueList<QRect> cellRegions, KSpreadTable* table,
+                                  bool drawCursor)
+{
+  //
+  // Clip away children
+  //
+
+  QRegion rgn = painter.clipRegion();
+  if ( rgn.isEmpty() )
+    rgn = QRegion( QRect( 0, 0, viewRect.width(), viewRect.height() ) );
+  QPtrListIterator<KoDocumentChild> it( children() );
+  for( ; it.current(); ++it )
+  {
+//    if ( ((KSpreadChild*)it.current())->table() == table &&
+//         !m_pView->hasDocumentInWindow( it.current()->document() ) )
+    if ( ((KSpreadChild*)it.current())->table() == table)
+      rgn -= it.current()->region( painter.worldMatrix() );
+  }
+  painter.setClipRegion( rgn );
+
+  QPen pen;
+  pen.setWidth( 1 );
+  painter.setPen( pen );
+
+  QRect cellRegion;
+  for (unsigned int i=0; i < cellRegions.size(); i++)
+  {
+    cellRegion = cellRegions[i];
+
+    PaintRegion(painter, viewRect, cellRegion, table);
+  }
+
+
+  if (drawCursor)
+  {
+    PaintChooseRect(painter, viewRect, table);
+  }
+
+}
+
+void KSpreadDoc::PaintRegion(QPainter &painter, QRect viewRegion,
+                             QRect paintRegion, KSpreadTable* table)
+{
+  /* paint region has cell coordinates (col,row) while viewRegion has world
+     coordinates.  paintRegion is the cells to update and viewRegion is the
+     area actually onscreen.
+  */
+
+
+  if (paintRegion.left() <= 0 || paintRegion.top() <= 0)
+    return;
+
+  /* get the world coordinates of the upper left corner of the paintRegion */
+  QPoint corner(table->columnPos(paintRegion.left()),
+                table->rowPos(paintRegion.top()));
+
+  QPoint currentCellPos = corner;
+
+  for ( int y = paintRegion.top();
+        y <= paintRegion.bottom() && currentCellPos.y() <= viewRegion.bottom();
+        y++ )
+  {
+    RowLayout *row_lay = table->rowLayout( y );
+    currentCellPos.setX(corner.x());
+
+    for ( int x = paintRegion.left();
+          x <= paintRegion.right() && currentCellPos.x() <= viewRegion.right();
+          x++ )
     {
-        row_lay = table->rowLayout( y );
-        xpos = left;
+      ColumnLayout *col_lay = table->columnLayout( x );
+      KSpreadCell *cell = table->cellAt( x, y );
 
-        for ( int x = left_col; x <= right_col; x++ )
-        {
-            col_lay = table->columnLayout( x );
+      QPoint cellCoordinate( x, y );
+      cell->paintCell( viewRegion, painter, currentCellPos, cellCoordinate);
 
-            cell = table->cellAt( x, y );
-            cell->paintCell( rect, painter, QPoint(xpos, ypos),
-                             QPoint(x,y), drawCursor );
-
-            xpos += col_lay->width();
-        }
-
-        ypos += row_lay->height();
+      currentCellPos.setX(currentCellPos.x() + col_lay->width());
     }
+    currentCellPos.setY(currentCellPos.y() + row_lay->height());
+  }
+}
+
+void KSpreadDoc::PaintChooseRect(QPainter& painter, QRect viewRect,
+                                 KSpreadTable* table)
+{
+  QRect chooseRect = table->getChooseRect();
+
+  if ( chooseRect.left() != 0 )
+  {
+    /* TODO:  Use the input parameter view to see if we need to do any of the
+       painting?  Does it matter?
+    */
+
+    int xpos, ypos, w, h;
+
+    xpos = table->columnPos( chooseRect.left() );
+    ypos = table->rowPos( chooseRect.top() );
+
+    int x = table->columnPos( chooseRect.right() );
+    KSpreadCell *cell = table->cellAt( chooseRect.right(), chooseRect.top() );
+    int tw = cell->width( chooseRect.right() );
+    w = ( x - xpos ) + tw;
+    cell = table->cellAt( chooseRect.left(), chooseRect.bottom() );
+    int y = table->rowPos( chooseRect.bottom() );
+    int th = cell->height( chooseRect.bottom() );
+    h = ( y - ypos ) + th;
+
+    RasterOp rop = painter.rasterOp();
+
+    painter.setRasterOp( NotROP );
+    QPen pen;
+    pen.setWidth( 2 );
+    pen.setStyle(DashLine);
+    painter.setPen( pen );
+
+    painter.drawLine( xpos - 2, ypos - 1, xpos + w + 2, ypos - 1 );
+    painter.drawLine( xpos - 1, ypos + 1, xpos - 1, ypos + h + 3 );
+    painter.drawLine( xpos + 1, ypos + h + 1, xpos + w - 3, ypos + h + 1 );
+    painter.drawLine( xpos + w, ypos + 1, xpos + w, ypos + h - 2 );
+
+    // painter.fillRect( xpos + w - 2, ypos + h - 1, 5, 5, black );
+    /* restore the old raster mode */
+    painter.setRasterOp( rop );
+  }
+  return;
 }
 
 KSpreadDoc::~KSpreadDoc()

@@ -1879,7 +1879,7 @@ void KSpreadView::autoSum()
 
         if ( r + 1 < m_pCanvas->markerRow() )
         {
-            m_pTable->setChooseRect( QRect( m_pCanvas->markerColumn(), r + 1, 1, m_pCanvas->markerRow() - r - 1 ) );
+            m_pCanvas->startChoose( QRect( m_pCanvas->markerColumn(), r + 1, 1, m_pCanvas->markerRow() - r - 1 ) );
             return;
         }
     }
@@ -1897,7 +1897,7 @@ void KSpreadView::autoSum()
 
         if ( c + 1 < m_pCanvas->markerColumn() )
         {
-            m_pTable->setChooseRect( QRect( c + 1, m_pCanvas->markerRow(), m_pCanvas->markerColumn() - c - 1, 1 ) );
+            m_pCanvas->startChoose( QRect( c + 1, m_pCanvas->markerRow(), m_pCanvas->markerColumn() - c - 1, 1 ) );
             return;
         }
     }
@@ -2432,8 +2432,6 @@ void KSpreadView::addTable( KSpreadTable *_t )
                       SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
     QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QPoint & ) ),
                       SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QPoint & ) ) );
-    QObject::connect( _t, SIGNAL( sig_changeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ),
-                      SLOT( slotChangeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
                       this, SLOT( slotTableRenamed( KSpreadTable*, const QString& ) ) );
     QObject::connect( _t, SIGNAL( sig_TableHidden( KSpreadTable* ) ),
@@ -2918,8 +2916,13 @@ void KSpreadView::insertFromTextfile()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
+//  QRect rect = activeTable()->selection();
+
+  KMessageBox::information( this, "Not implemented yet, work in progress...");
+
   KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", activeTable()->selection(), KSpreadCSVDialog::File );
   dialog.exec();
+
 }
 
 void KSpreadView::insertFromClipboard()
@@ -4203,18 +4206,6 @@ void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )
     m_pVBorderWidget->update();
 }
 
-void KSpreadView::slotChangeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new )
-{
-    // Do we display this table ?
-    if ( _table != m_pTable )
-        return;
-
-    m_pCanvas->updateChooseMarker( _old, _new );
-
-    // Emit a signal for internal use
-    emit sig_chooseSelectionChanged( _table, _new );
-}
-
 void KSpreadView::slotChangeSelection( KSpreadTable *_table,
                                        const QRect &oldSelection,
                                        const QPoint& oldMarker )
@@ -4512,11 +4503,6 @@ void KSpreadView::repaintPolygon( const QPointArray& polygon )
         arr.setPoint( i, m.map( arr.point( i ) ) );
 
     emit regionInvalidated( QRegion( arr ), TRUE );
-}
-
-void KSpreadView::paintContent( QPainter& painter, const QRect& rect, bool transparent )
-{
-    m_pDoc->paintContent( painter, rect, transparent, activeTable() );
 }
 
 QWMatrix KSpreadView::matrix() const

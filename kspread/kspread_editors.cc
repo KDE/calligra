@@ -50,8 +50,8 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   connect( m_pEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
 
   // A choose should always start at the edited cell
-  canvas()->setChooseMarkerRow( canvas()->markerRow() );
-  canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
+//  canvas()->setChooseMarkerRow( canvas()->markerRow() );
+//  canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
 
   m_blockCheck = FALSE;
 
@@ -105,7 +105,7 @@ void KSpreadTextEditor::setEditorFont(QFont const & font, bool updateSize)
     int mh = fm.height();
     if (mh < height())
       mh = height();
-    
+
     setGeometry(x(), y(), mw, mh);
     m_sizeUpdate = true;
   }
@@ -126,15 +126,15 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
   {
     // allocate more space than needed. Otherwise it might be too slow
     m_length = t.length() + 5;
-   
+
     // Too slow for long texts
     // QFontMetrics fm( m_pEdit->font() );
     //  int mw = fm.width( t ) + fm.width('x');
     int mw = m_fontLength * m_length;
-    
+
     if (mw < width())
       mw = width();
-    
+
     setGeometry(x(), y(), mw, height());
     m_length -= 2;
   }

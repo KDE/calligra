@@ -151,6 +151,30 @@ public:
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
   void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table, bool drawCursor=true );
 
+
+  /**
+   * Primary entry point for painting.  Use this function to paint groups of cells
+   *
+   * @param painter the painter object to use.  This should already be
+   *                initialized with the world matrix.  The begin and end calls
+   *                should surround this function.
+   *
+   * @param viewRect the document coordinates showing what is actually visible in
+   *                 the screen
+   *
+   * @param cellRegions a list of rectangles indicating the cell ranges needing
+   *                    painted.
+   *
+   * @param table the table which the cells in cellRegions come from
+   *
+   * @param drawCursor whether or not to draw the selection rectangle and the choose
+   *                   marker
+   */
+  void paintCellRegions(QPainter& painter, QRect viewRect,
+                        QValueList<QRect> cellRegions, KSpreadTable* table,
+                        bool drawCursor);
+
+
   virtual DCOPObject* dcopObject();
 
   static QPtrList<KSpreadDoc>& documents();
@@ -473,6 +497,13 @@ protected:
   bool m_bDontCheckTitleCase;
     QStringList m_spellListIgnoreAll;
   KoUnit::Unit m_unit;
+private:
+
+  /* helper functions for painting */
+  void PaintRegion(QPainter& painter, QRect viewRegion, QRect paintRegion,
+                   KSpreadTable* table);
+  void PaintChooseRect(QPainter& painter, QRect viewRect, KSpreadTable* table);
+
 };
 
 #endif

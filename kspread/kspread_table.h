@@ -421,19 +421,6 @@ public:
      */
     void setText( int row, int column, const QString& text, bool updateDepends = true );
 
-    /**
-     * @return the rectangle of the choose selection.
-     *
-     * @see #setChooseRect
-     */
-    QRect chooseRect() const { return m_chooseRect; }
-    /**
-     * Set the rectangle of the choose selection. This will trigger
-     * the signal @ref #sig_changeChooseSelection.
-     *
-     * @see #chooseRect
-     */
-    void setChooseRect( const QRect& rect );
 
   /**
    * @return the marker point of the table.  Usually is the selected cell, or if
@@ -491,6 +478,17 @@ public:
    * You are probably wanting to use marker(), not this function
    */
   QPoint getCursorPosition();
+
+
+  void setChooseAnchor(QPoint chooseAnchor) { m_chooseAnchor = chooseAnchor; }
+  void setChooseMarker(QPoint chooseMarker) { m_chooseMarker = chooseMarker; }
+  void setChooseCursor(QPoint chooseCursor) { m_chooseCursor = chooseCursor; }
+
+  QRect getChooseRect();
+  QPoint getChooseCursor() { return m_chooseCursor; }
+  QPoint getChooseMarker() { return m_chooseMarker; }
+  QPoint getChooseAnchor() { return m_chooseAnchor; }
+
 
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
                            signed char _bold = -1, signed char _italic = -1, signed char _underline = -1,
@@ -1157,7 +1155,6 @@ signals:
     void sig_updateVBorder( KSpreadTable *_table );
     void sig_changeSelection( KSpreadTable *_table, const QRect &oldSelection,
                               const QPoint&_oldMarker );
-    void sig_changeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_removeChild( KSpreadChild *_child );
     void sig_maxColumn( int _max_column );
@@ -1225,14 +1222,9 @@ protected:
     QPoint m_marker;
     QPoint m_cursorPosition;
 
-    /**
-     * Contains the selection of a choose. If @ref QRect::left() returns 0, then
-     * there is no selection.
-     *
-     * @ref #chooseRect
-     * @ref #setChooseRect
-     */
-    QRect m_chooseRect;
+  QPoint m_chooseMarker;
+  QPoint m_chooseAnchor;
+  QPoint m_chooseCursor;
 
     /**
      * Indicates whether the table should paint the page breaks.
