@@ -1959,24 +1959,33 @@ void KWView::formatPage()
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
 
-        pageLayout tmpNewLayout;
-        tmpNewLayout._pgLayout=pgLayout;
-        tmpNewLayout._cl=cl;
-        tmpNewLayout._hf=kwhf;
+        if( !(tmpOldLayout._pgLayout==pgLayout)||
+            tmpOldLayout._cl.columns!=cl.columns ||
+            tmpOldLayout._cl.ptColumnSpacing!=cl.ptColumnSpacing||
+            tmpOldLayout._hf.header!=kwhf.header||
+            tmpOldLayout._hf.footer!=kwhf.footer||
+            tmpOldLayout._hf.ptHeaderBodySpacing != kwhf.ptHeaderBodySpacing ||
+            tmpOldLayout._hf.ptFooterBodySpacing != kwhf.ptFooterBodySpacing)
+        {
+            pageLayout tmpNewLayout;
+            tmpNewLayout._pgLayout=pgLayout;
+            tmpNewLayout._cl=cl;
+            tmpNewLayout._hf=kwhf;
 
-        KWTextFrameSetEdit *edit = currentTextEdit();
-        if (edit)
-            edit->textFrameSet()->clearUndoRedoInfo();
-        KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
-        m_doc->addCommand(cmd);
+            KWTextFrameSetEdit *edit = currentTextEdit();
+            if (edit)
+                edit->textFrameSet()->clearUndoRedoInfo();
+            KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),m_doc,tmpOldLayout,tmpNewLayout ) ;
+            m_doc->addCommand(cmd);
 
-        m_doc->setPageLayout( pgLayout, cl, kwhf );
-        m_doc->updateRuler();
+            m_doc->setPageLayout( pgLayout, cl, kwhf );
+            m_doc->updateRuler();
 
-        m_doc->updateResizeHandles();
+            m_doc->updateResizeHandles();
 #if 0
-        m_gui->canvasWidget()->frameSizeChanged( pgLayout );
+            m_gui->canvasWidget()->frameSizeChanged( pgLayout );
 #endif
+        }
     }
 }
 
@@ -2697,6 +2706,9 @@ void KWView::newPageLayout( KoPageLayout _layout )
     KoColumns cl;
     KoKWHeaderFooter hf;
     m_doc->getPageLayout( pgLayout, cl, hf );
+
+    if(_layout==pgLayout)
+        return;
 
     pageLayout tmpOldLayout;
     tmpOldLayout._pgLayout=pgLayout;
