@@ -57,6 +57,11 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
 
   if (m_fontLength == 0)
   {
+    // set font size according to zoom factor
+    QFont font(m_pEdit->font());
+    font.setPointSize( (int) (font.pointSize() * _parent->zoom()) );
+    m_pEdit->setFont( font );
+
     QFontMetrics fm( m_pEdit->font() );
     m_fontLength = fm.width('x');
   }
