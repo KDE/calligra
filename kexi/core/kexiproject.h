@@ -196,6 +196,8 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		/** instance pointed by \a item is removed */
 		void itemRemoved(const KexiPart::Item &item);
 
+		/** instance pointed by \a item is renamed */
+		void itemRenamed(const KexiPart::Item &item);
 
 	private:
 		friend class KexiMainWindowImpl;

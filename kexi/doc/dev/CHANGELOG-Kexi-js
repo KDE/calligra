@@ -326,6 +326,9 @@ Core
 KexiDB
 - Connection::drv_executeSQL() is now protected. Connection::executeSQL() public
   method added which remembers last executed sql statement for better error handling.
+Main
+- KexiBrowser: After item's successful rename, it's resorted, 
+  and if it's dialog is opened, it's caption is updated as well.
 
 2004-07-19
 Kexi

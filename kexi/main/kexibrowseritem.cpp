@@ -73,6 +73,7 @@ KexiBrowserItem::clearChildren()
 
 QString KexiBrowserItem::key( int column, bool ascending ) const
 {
+	kdDebug() << "KexiBrowserItem::key() : " << (m_fifoSorting ? m_sortKey : KListViewItem::key(column,ascending)) << endl;
 	return m_fifoSorting ? m_sortKey : KListViewItem::key(column,ascending);
 }
 

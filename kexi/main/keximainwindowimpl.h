@@ -270,9 +270,14 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		bool removeObject( KexiPart::Item *item, bool dontAsk = true );
 
 		/*! Renames object pointed by \a item to a new name \a _newName.
-		 Sets \a success to false on failure. Used as a slot for connected 
-		 to KexiBrowser::renameItem(). */
+		 Sets \a success to false on failure. Used as a slot connected 
+		 to KexiBrowser::renameItem() signal. */
 		void renameObject( KexiPart::Item *item, const QString& _newName, bool &succes );
+
+		/*! Reaction for object rename (signalled by KexiProject).
+		 If this item has opened dialog, it's caption is updated, 
+		 and also optionally application's caption. */
+		void slotObjectRenamed(const KexiPart::Item &item);
 
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();

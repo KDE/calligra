@@ -426,6 +426,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 		return false;
 	}
 	item.setName( newName );
+	emit itemRenamed(item);
 	return true;
 }
 

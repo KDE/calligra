@@ -398,7 +398,7 @@ KexiMainWindowImpl::initActions()
 	d->action_project_properties = new KAction(i18n("Project Properties"), "info", 0,
 		this, SLOT(slotProjectProperties()), actionCollection(), "project_properties");
 
-	d->action_close = new KAction(i18n("&Close Project"), 0, KStdAccel::shortcut(KStdAccel::Close),
+	d->action_close = new KAction(i18n("&Close Project"), "fileclose", KStdAccel::shortcut(KStdAccel::Close),
 		this, SLOT(slotProjectClose()), actionCollection(), "project_close" );
 	d->action_close->setToolTip(i18n("Close the current project"));
 	d->action_close->setWhatsThis(i18n("Closes the current project."));
@@ -1532,6 +1532,7 @@ KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 	d->prj = new KexiProject( new_data );
 	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
 	connect(d->prj, SIGNAL(error(const QString&,const QString&)), this, SLOT(showErrorMessage(const QString&,const QString&)));
+	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&)));
 
 	if (d->nav)
 		connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
@@ -2419,6 +2420,16 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 	if (!d->prj->renameObject(this, *item, newName)) {
 		success = false;
 		return;
+	}
+}
+
+void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item)
+{
+	KexiDialogBase *dlg = d->dialogs[item.identifier()];
+	if (dlg) {//change item
+		dlg->updateCaption();
+		if (static_cast<KexiDialogBase*>(d->curDialog)==dlg)//optionally, update app. caption
+			updateAppCaption();
 	}
 }
 

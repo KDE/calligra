@@ -21,6 +21,7 @@
 #include <qheader.h>
 #include <qpoint.h>
 
+#include <kapplication.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -47,7 +48,11 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  , m_baseItems(199, false)
  , m_normalItems(199)
 {
-	QHBoxLayout *lyr = new QHBoxLayout(this);
+	QVBoxLayout *lyr = new QVBoxLayout(this);
+	m_toolbar = new KToolBar(this, "kexibrowser_toolbar", false);
+	m_toolbar->setIconSize( kapp->iconLoader()->currentSize(KIcon::Small) );
+	m_toolbar->insertSeparator();
+	lyr->addWidget(m_toolbar);
 	m_list = new KexiBrowserListView(this);
 	lyr->addWidget(m_list);
 //	setFocusProxy(m_list);
@@ -88,12 +93,14 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	//init popups
 	m_itemPopup = new KPopupMenu(this, "itemPopup");
 	m_itemPopupTitle_id = m_itemPopup->insertTitle("");
-	KAction *a = new KAction(i18n("&Open"), SmallIcon("fileopen"), Key_Enter, this, 
+	m_openAction = new KAction(i18n("&Open"), "fileopen", Key_Enter, this, 
 		SLOT(slotOpenObject()), this, "open_object");
-	a->plug(m_itemPopup);
-	a = new KAction(i18n("&Design"), SmallIcon("edit"), CTRL + Key_Enter, this, 
+	m_openAction->plug(m_itemPopup);
+	m_openAction->plug(m_toolbar);
+	m_designAction = new KAction(i18n("&Design"), "edit", CTRL + Key_Enter, this, 
 		SLOT(slotDesignObject()), this, "design_object");
-	a->plug(m_itemPopup);
+	m_designAction->plug(m_itemPopup);
+	m_designAction->plug(m_toolbar);
 	m_itemPopup->insertSeparator();
 	plugSharedAction("edit_cut", m_itemPopup);
 	plugSharedAction("edit_copy", m_itemPopup);
@@ -226,7 +233,9 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	setAvailable("edit_delete",gotitem);
 	setAvailable("edit_cut",gotitem);
 	setAvailable("edit_copy",gotitem);
-	setAvailable("edit_paste",gotgroup);
+//	setAvailable("edit_paste",gotgroup);
+	m_openAction->setEnabled(gotitem);
+	m_designAction->setEnabled(gotitem);
 	m_renameObjectAction->setEnabled(gotitem);
 }
 
@@ -312,6 +321,7 @@ void KexiBrowser::slotItemRenamed(QListViewItem *item)
 		txt = it->item()->name(); //revert
 	}
 	item->setText(0, QString(" ") + txt + " ");
+	item->parent()->sort();
 	m_list->setFocus();
 }
 
