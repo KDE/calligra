@@ -333,16 +333,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
     //setWithoutDoubleBuffer( FALSE );
 
     if ( !firstParag() )
-	return 0;
-
-    //if ( drawCursor && cursor )
-    //    tmpCursor = cursor;
-/*    if ( cx < 0 && cy < 0 ) {
-	cx = 0;
-	cy = 0;
-	cw = width();
-	ch = height();
-        }*/
+        return 0;
 
     KoTextParag *lastFormatted = 0;
     KoTextParag *parag = firstParag();
