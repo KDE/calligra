@@ -29,6 +29,7 @@ private:
 	void headAuthor( const QString& in );
 
 	// path operators:
+	void parsePath( QTextStream& s, const QString& in );
 	void lineTo( QTextStream& s, double x, double y );
 };
 
