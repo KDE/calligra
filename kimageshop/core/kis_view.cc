@@ -5,7 +5,7 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *
- *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
+ *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
  * 
  *             
  *  This program is free software; you can redistribute it and/or modify
@@ -104,7 +104,9 @@
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     : KoView( doc, parent, name )
     , m_pDoc( doc )
+    , m_pTool( 0L )    
     , m_zoomFactor( 1.0 )
+
 {
     setInstance( KisFactory::global() );
     setXMLFile( "krayon.rc" );
@@ -342,7 +344,7 @@ void KisView::setupTools()
     m_pEraserTool = new EraserTool(m_pDoc, this, m_pBrush);
     m_pColorPicker = new ColorPicker(m_pDoc, this);
 
-    m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient );
+    m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient);
     m_pLineTool = new LineTool( m_pDoc, this, m_pCanvas );
     m_pPolyLineTool = new PolyLineTool( m_pDoc, this, m_pCanvas );
     m_pRectangleTool = new RectangleTool( m_pDoc, this, m_pCanvas );
@@ -499,12 +501,6 @@ void KisView::setupActions()
 
     m_tool_zoom->setExclusiveGroup( "tools" );
 
-    m_tool_draw = new KToggleAction( i18n("&Draw simple figure"),
-        "pencil", 0, this, SLOT( tool_pen() ),
-        actionCollection(), "tool_draw_figure");
-
-    m_tool_draw->setExclusiveGroup( "tools" );
-
     m_tool_pen = new KToggleAction( i18n("&Pen tool"),
         "pencil", 0, this, SLOT( tool_pen() ),
         actionCollection(), "tool_pen");
@@ -529,7 +525,7 @@ void KisView::setupActions()
 
     m_tool_fill->setExclusiveGroup( "tools" );
 
-    m_tool_stamp = new KToggleAction( i18n("&Stamp tool"),
+    m_tool_stamp = new KToggleAction( i18n("&Stamp (Pattern) tool"),
         "stamp", 0, this, SLOT( tool_stamp() ),
         actionCollection(), "tool_stamp");
 
@@ -590,7 +586,7 @@ void KisView::setupActions()
 
     // layer actions
 
-    (void) new KAction( i18n("&Insert layer..."),
+    (void) new KAction( i18n("&Add layer..."),
         0, this, SLOT( insert_layer() ),
         actionCollection(), "insert_layer" );
 
@@ -628,7 +624,7 @@ void KisView::setupActions()
 
     // layer transformations - should be generic, for selection too
     
-    (void) new KAction( i18n("Scale layer - smoothly"),
+    (void) new KAction( i18n("Scale layer smoothly"),
         0, this, SLOT( layer_scale_smooth() ),
         actionCollection(), "layer_scale_smooth");
 
@@ -658,11 +654,11 @@ void KisView::setupActions()
 
     // image actions
 
-    (void) new KAction( i18n("Add new image tab"),
+    (void) new KAction( i18n("Add new image"),
         0, this, SLOT( add_new_image_tab() ),
         actionCollection(), "add_new_image_tab");
 
-    (void) new KAction( i18n("Remove current image tab"),
+    (void) new KAction( i18n("Remove current image"),
         0, this, SLOT( remove_current_image_tab() ),
         actionCollection(), "remove_current_image_tab");
 
@@ -752,7 +748,6 @@ void KisView::setupActions()
 
     // disable at startup unused actions
 
-    // jwc - no undo - redo yet
     m_undo->setEnabled( false );
     m_redo->setEnabled( false );
 
@@ -761,6 +756,11 @@ void KisView::setupActions()
     m_layer_rotate90->setEnabled( false );
     m_layer_mirrorX->setEnabled( false );
     m_layer_mirrorY->setEnabled( false );
+    
+    m_tool_select_polygonal->setEnabled( false );
+    m_tool_select_elliptical->setEnabled( false );
+    m_tool_select_contiguous->setEnabled( false );
+    
 }
 
 void KisView::slotHalt()
@@ -792,7 +792,7 @@ void KisView::resizeEvent(QResizeEvent*)
     int rsideW = 0; 
     int lsideW = 0;
     
-    // show or hid sidebar - important!
+    // show or hide sidebar - important!
     if(!m_pSideBar)
     {
         rsideW = 0;
@@ -833,8 +833,8 @@ void KisView::resizeEvent(QResizeEvent*)
     }
     
     // ruler geometry
-    m_pHRuler->setGeometry(20 + lsideW, 0, width() - 20 - rsideW, 20);
-    m_pVRuler->setGeometry(0 + lsideW, 20, 20, height()-36);
+    m_pHRuler->setGeometry(20 + lsideW, 0, width() - 20 - rsideW -lsideW, 20);
+    m_pVRuler->setGeometry( 0 + lsideW, 20, 20, height()-36);
 
     // tabbar control buttons
     m_pTabFirst->setGeometry(0 + lsideW, height()-16, 16, 16);
@@ -873,8 +873,8 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pCanvas->setGeometry(20 + lsideW, 20, drawW, drawH);
         m_pCanvas->show();
 
-        m_pTabBar->setGeometry(64 + lsideW, height() - 16 , 
-           width() - rsideW - 64, 16);
+        m_pTabBar->setGeometry(64 + lsideW, height() - 16, 
+           width() - rsideW -lsideW - 64, 16);
         m_pTabBar->show();
     }
     // we need a horizontal scrollbar
@@ -884,15 +884,15 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pVert->setValue(0);
 
         m_pHorz->setRange(0, docW - drawW);
-        m_pHorz->setGeometry(64 + lsideW + (width() - rsideW - 64)/2, 
-            height() - 16, (width() - rsideW - 64)/2, 16);
+        m_pHorz->setGeometry(64 + lsideW + (width() - rsideW -lsideW - 64)/2, 
+            height() - 16, (width() - rsideW -lsideW - 64)/2, 16);
         m_pHorz->show();
 
         m_pCanvas->setGeometry(20 + lsideW, 20, drawW, drawH);
         m_pCanvas->show();
 
         m_pTabBar->setGeometry(64 + lsideW, height() - 16 , 
-           (width() - rsideW - 64)/2, 16);
+           (width() - rsideW - lsideW - 64)/2, 16);
         m_pTabBar->show();
     }
     // we need a vertical scrollbar
@@ -902,14 +902,14 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pHorz->setValue(0);
 
         m_pVert->setRange(0, docH - drawH);
-        m_pVert->setGeometry(width()-16-rsideW, 20, 16, height()-36);
+        m_pVert->setGeometry(width() - 16 - rsideW, 20, 16, height()-36);
         m_pVert->show();
       
         m_pCanvas->setGeometry(20 + lsideW, 20, drawW-16, drawH);
         m_pCanvas->show();
        
         m_pTabBar->setGeometry(64 + lsideW, height() - 16, 
-           width() - rsideW - 64, 16);
+           width() - rsideW -lsideW - 64, 16);
         m_pTabBar->show();
     }
     else // we need both scrollbars
@@ -919,15 +919,15 @@ void KisView::resizeEvent(QResizeEvent*)
         m_pVert->show();
       
         m_pHorz->setRange(0, docW - drawW);
-        m_pHorz->setGeometry(64 + lsideW + (width() - rsideW - 64)/2, 
-           height()-16, (width() - rsideW - 64)/2, 16);
+        m_pHorz->setGeometry(64 + lsideW + (width() - rsideW -lsideW - 64)/2, 
+           height()-16, (width() - rsideW -lsideW - 64)/2, 16);
         m_pHorz->show();
       
         m_pCanvas->setGeometry(20 + lsideW, 20, drawW-16, drawH);
         m_pCanvas->show();
 
         m_pTabBar->setGeometry(64 + lsideW, height() - 16 , 
-                (width() - rsideW - 64)/2, 16);
+                (width() - rsideW -lsideW - 64)/2, 16);
         m_pTabBar->show();
     }
 
@@ -968,6 +968,16 @@ void KisView::scrollV(int)
     m_pCanvas->repaint();
 }
 
+
+void KisView::slotUpdateImage()
+{
+  KisImage* img = m_pDoc->current();
+  if(img)
+  {
+     QRect updateRect(0, 0, img->width(), img->height());
+     img->markDirty(updateRect);
+  }   
+}
 
 void KisView::slotDocUpdated()
 {
@@ -1046,8 +1056,8 @@ void KisView::updateCanvas( QRect & ur )
     KisImage* img = m_pDoc->current();
     if (!img)
     {
-        kdDebug(0) << "ERROR - no curent image" << endl;
-        
+        kdDebug(0) << "No curent image" << endl;
+
         QPainter p; 
         p.begin(m_pCanvas);
         p.eraseRect(ur);
@@ -1100,7 +1110,7 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
     KisImage* img = m_pDoc->current();
     if (!img)
     {
-        kdDebug(0) << "ERROR - no m_pDoc->curent() image" << endl;
+        kdDebug(0) << "No m_pDoc->curent()" << endl;
         QPainter p; 
         p.begin(m_pCanvas);
         p.eraseRect(e->rect());
@@ -1152,12 +1162,9 @@ void KisView::activateTool(KisTool* t)
 {
     if (!t) return;
     
-    if(m_pTool == m_pRectangularSelectTool) m_pRectangularSelectTool->clearOld();
-    if(m_pTool == m_pPolygonalSelectTool) m_pPolygonalSelectTool->clearOld();    
-    if(m_pTool == m_pEllipticalSelectTool) m_pEllipticalSelectTool->clearOld();
-    if(m_pTool == m_pContiguousSelectTool) m_pContiguousSelectTool->clearOld();
+    if(m_pTool) m_pTool->clearOld();
+    if(m_pTool) QObject::disconnect(m_pTool);
 
-    if (m_pTool) QObject::disconnect(m_pTool);
     m_pTool = t;
 
     QObject::connect( this, SIGNAL( canvasMousePressEvent( QMouseEvent* ) ),
@@ -1282,11 +1289,7 @@ void KisView::tool_paste()
     {
         m_pPasteTool->setClip();
         activateTool(m_pPasteTool);
-
-        /* refresh canvas */
-        KisImage* img = m_pDoc->current();
-        QRect updateRect(0, 0, img->width(), img->height());
-        m_pDoc->current()->markDirty(updateRect);
+        slotUpdateImage();
     }    
     else
     {
@@ -1341,16 +1344,10 @@ void KisView::cut()
         kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
 
     // clear old selection outline
-    if((m_pTool == m_pRectangularSelectTool)
-    || (m_pTool == m_pPolygonalSelectTool)
-    || (m_pTool == m_pEllipticalSelectTool)
-    || (m_pTool == m_pContiguousSelectTool))
-        m_pTool->clearOld();
+    m_pTool->clearOld();
 
     /* refresh canvas */
-    KisImage* img = m_pDoc->current();
-    QRect updateRect(0, 0, img->width(), img->height());
-    m_pDoc->current()->markDirty(updateRect);
+    slotUpdateImage();
 }
 
 /*
@@ -1362,16 +1359,10 @@ void KisView::removeSelection()
         kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
 
     // clear old selection outline
-    if((m_pTool == m_pRectangularSelectTool)
-    || (m_pTool == m_pPolygonalSelectTool)
-    || (m_pTool == m_pEllipticalSelectTool)
-    || (m_pTool == m_pContiguousSelectTool))
-        m_pTool->clearOld();
+    m_pTool->clearOld();
 
     /* refresh canvas */
-    KisImage* img = m_pDoc->current();
-    QRect updateRect(0, 0, img->width(), img->height());
-    m_pDoc->current()->markDirty(updateRect);
+    slotUpdateImage();
 }
 
 
@@ -1381,11 +1372,7 @@ void KisView::paste()
     {
         m_pPasteTool->setClip();
         activateTool(m_pPasteTool);
-
-        /* refresh canvas */
-        KisImage* img = m_pDoc->current();
-        QRect updateRect(0, 0, img->width(), img->height());
-        m_pDoc->current()->markDirty(updateRect);
+        slotUpdateImage();
     }    
     else
     {
@@ -1424,15 +1411,13 @@ void KisView::crop()
     KisImage* img = m_pDoc->current();     
     if(!img) return;
     
-    int width = cImage.width();
-    int height = cImage.height();
-    QRect layerRect(0, 0, width, height);    
+    QRect layerRect(0, 0, cImage.width(), cImage.height());    
     QString name; name.sprintf("layer %d", img->layerList().count());
 
     img->addLayer(layerRect, white, false, name);
     uint indx = img->layerList().count() - 1;    
-    img->setCurrentLayer( indx );    
-    img->setFrontLayer( indx );    
+    img->setCurrentLayer(indx);    
+    img->setFrontLayer(indx);    
 
     m_pLayerView->layerTable()->updateTable();    
     m_pLayerView->layerTable()->updateAllCells();
@@ -1441,19 +1426,15 @@ void KisView::crop()
     // be handled by the framebuffer object, not the doc
     if(!m_pDoc->QtImageToLayer(&cImage, this))
     {
-         kdDebug(0) << "KisView::inset_layer_image: " 
-                    << "Can't load image into layer." 
-                    << endl;        
+         kdDebug(0) << "crop: can't load image into layer." << endl;        
     }
 
-    // make sure we get size of current image after 
-    // layer is added to it - could be larger
-    QRect updateRect(m_pDoc->current()->getCurrentLayer()->imageExtents());
-    m_pDoc->current()->markDirty(updateRect);
+    slotUpdateImage();
     
     // remove the current clip image which now belongs to the 
     // previous layer - selection also needs to be removed.
     // To crop again, make a selection in current layer first
+    
     m_pDoc->removeClipImage();
     m_pDoc->clearSelection();    
 }
@@ -1567,10 +1548,10 @@ void KisView::dialog_channels()
 
 void KisView::updateToolbarButtons()
 {
-    kdDebug() << "KisView::updateToolbarButtons" << endl;
+    //kdDebug() << "KisView::updateToolbarButtons" << endl;
 
-    m_dialog_gradient->setChecked( m_pGradientDialog->isVisible() );
-    m_dialog_gradienteditor->setChecked( m_pGradientEditorDialog->isVisible() );
+    //m_dialog_gradient->setChecked(m_pGradientDialog->isVisible() );
+    //m_dialog_gradienteditor->setChecked(m_pGradientEditorDialog->isVisible() );
 }
 
 
@@ -1631,9 +1612,7 @@ void KisView::insert_layer()
     // update layerview table so change show up there    
     m_pLayerView->layerTable()->updateTable();    
     m_pLayerView->layerTable()->updateAllCells(); 
-
-    QRect updateRect(m_pDoc->current()->getCurrentLayer()->imageExtents());
-    m_pDoc->current()->markDirty(updateRect);
+    slotUpdateImage();
 }
 
 /*
@@ -1785,12 +1764,11 @@ void KisView::insert_layer_image(bool newImage)
         lesser depth to a greater but not the other way around */
         
         QPixmap *filePixmap = new QPixmap(url.path());
-        uint w = (uint) filePixmap->width();
-        uint h = (uint) filePixmap->height();
-        
-        QPixmap *buffer = new QPixmap(w, h);
+        QPixmap *buffer = new QPixmap(filePixmap->width(), 
+            filePixmap->height());
         buffer->fill (Qt::white);
-        bitBlt (buffer, 0, 0, filePixmap, 0, 0, w, h);
+        bitBlt (buffer, 0, 0, filePixmap, 
+            0, 0, filePixmap->width(), filePixmap->height());
         QImage fileImage = buffer->convertToImage();
         
         delete filePixmap;
@@ -1824,21 +1802,21 @@ void KisView::insert_layer_image(bool newImage)
             bgMode bg = bm_White;
             
             if (bg == bm_White)
-	            newimg->addLayer(QRect(0, 0, w, h), 
+	            newimg->addLayer(QRect(0, 0, newimg->width(), newimg->height()), 
                     KisColor::white(), false, "background");
             else if (bg == bm_Transparent)
-	            newimg->addLayer(QRect(0, 0, w, h), 
+	            newimg->addLayer(QRect(0, 0, newimg->width(), newimg->height()), 
                     KisColor::white(), true, "background");
             else if (bg == bm_ForegroundColor)
-	            newimg->addLayer(QRect(0, 0, w, h), 
+	            newimg->addLayer(QRect(0, 0, newimg->width(), newimg->height()), 
                     KisColor::white(), false, "background");
             else if (bg == bm_BackgroundColor)
-	            newimg->addLayer(QRect(0, 0, w, h), 
+	            newimg->addLayer(QRect(0, 0, newimg->width(), newimg->height()), 
                     KisColor::white(), false, "background");
 
             //kdDebug() << "KisView ret. from addLayer() for new image" << endl;
 
-            newimg->markDirty(QRect(0, 0, w, h));
+            newimg->markDirty(QRect(0, 0, newimg->width(), newimg->height()));
             m_pDoc->setCurrentImage(newimg);
         }   
 
@@ -1846,15 +1824,11 @@ void KisView::insert_layer_image(bool newImage)
         // a new image or just a new layer was created for it above.
         if(!m_pDoc->QtImageToLayer(&fileImage, this))
         {
-            kdDebug(0) << "KisView::inset_layer_image: " 
-                       << "Can't load image into layer." 
-                       << endl;        
+            kdDebug(0) 
+                << "inset_layer_image: Can't load image into layer." << endl;
         }
 
-        // make sure we get size of current image after 
-        // layer is added to it - could be larger
-        QRect updateRect(m_pDoc->current()->getCurrentLayer()->imageExtents());
-        m_pDoc->current()->markDirty(updateRect);
+        slotUpdateImage();
     }
 }
 
@@ -1862,7 +1836,7 @@ void KisView::insert_layer_image(bool newImage)
 void KisView::save_layer_image(bool mergeLayers)
 {
     KURL url = KFileDialog::getSaveURL( getenv("HOME"),
-                KisUtil::readFilters(), 0, i18n("Image file for layer") );
+        KisUtil::readFilters(), 0, i18n("Image file for layer") );
 
     if( !url.isEmpty() )
     {
@@ -1876,12 +1850,22 @@ void KisView::save_layer_image(bool mergeLayers)
 
         //  save as standard image file (jpg, png, xpm, bmp, NO gif)
         if(!m_pDoc->saveAsQtImage(url.path()))
-            kdDebug(0) << "Can't save doc as standard image" << endl;
+            kdDebug(0) << "Can't save doc as image" << endl;
     }
 }
 
-
 void KisView::layer_scale_smooth()
+{
+    layerScale(true);
+}
+
+void KisView::layer_scale_rough()
+{
+    layerScale(false);
+}
+
+
+void KisView::layerScale(bool smooth)
 {
     KisImage * img = m_pDoc->current();
     if (!img)  return;    
@@ -1897,13 +1881,20 @@ void KisView::layer_scale_smooth()
     if(!pNewLayerDialog->result() == QDialog::Accepted)
         return;
 
-    int newWidth = pNewLayerDialog->width();
-    int newHeight = pNewLayerDialog->height();
     QRect srcR(lay->imageExtents());        
     
-    if(!fb->scaleSmooth(srcR, newWidth, newHeight))
+    bool ok;
+    
+    if(smooth)
+        ok = fb->scaleSmooth(srcR, 
+            pNewLayerDialog->width(), pNewLayerDialog->height());
+    else 
+        ok = fb->scaleRough(srcR, 
+            pNewLayerDialog->width(), pNewLayerDialog->height());
+           
+    if(!ok)
     {
-        kdDebug() << "scaleSmooth() failed" << endl; 
+        kdDebug() << "layer_scale() failed" << endl; 
     }
     else
     {
@@ -1913,43 +1904,6 @@ void KisView::layer_scale_smooth()
         img->markDirty(img->getCurrentLayer()->layerExtents());                
         m_pLayerView->layerTable()->selectLayer(indx);
 
-        m_pLayerView->layerTable()->updateTable();    
-        m_pLayerView->layerTable()->updateAllCells();    
-    }
-}
-
-
-void KisView::layer_scale_rough()
-{
-    KisImage * img = m_pDoc->current();
-    if (!img)  return;    
-
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay)  return;    
-
-    KisFrameBuffer *fb = m_pDoc->frameBuffer();    
-    if (!fb)  return;
-    
-    NewLayerDialog *pNewLayerDialog = new NewLayerDialog();
-    pNewLayerDialog->exec();
-    if(!pNewLayerDialog->result() == QDialog::Accepted)
-        return;
-
-    QRect srcR(lay->imageExtents());
-        
-    if(!fb->scaleRough(srcR, 
-        pNewLayerDialog->width(), pNewLayerDialog->height()))
-    {
-        kdDebug() << "scaleRough() failed" << endl; 
-    }
-    else
-    {
-        // bring new scaled layer to front
-        uint indx = img->layerList().count() - 1;    
-        img->setCurrentLayer(indx);
-        img->markDirty(img->getCurrentLayer()->layerExtents());                                       
-        m_pLayerView->layerTable()->selectLayer(indx);            
- 
         m_pLayerView->layerTable()->updateTable();    
         m_pLayerView->layerTable()->updateAllCells();    
     }

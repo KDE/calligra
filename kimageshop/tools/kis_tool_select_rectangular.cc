@@ -27,7 +27,9 @@
 #include "kis_cursor.h"
 #include "kis_tool_select_rectangular.h"
 
-RectangularSelectTool::RectangularSelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas )
+
+RectangularSelectTool::RectangularSelectTool( KisDoc* _doc, KisView* _view, 
+    KisCanvas* _canvas )
   : KisTool( _doc, _view)
   , m_dragging( false ) 
   , m_view( _view )  
@@ -35,9 +37,8 @@ RectangularSelectTool::RectangularSelectTool( KisDoc* _doc, KisView* _view, KisC
 
 {
       m_drawn = false;
-      m_init  = true;
       m_dragStart = QPoint(-1,-1);
-      m_dragEnd =   QPoint(-1,-1);
+      m_dragEnd   = QPoint(-1,-1);
       
       m_Cursor = KisCursor::selectCursor();
 }
@@ -76,7 +77,6 @@ void RectangularSelectTool::mousePress( QMouseEvent* event )
                 drawRect( m_dragStart, m_dragEnd ); 
         }
                 
-        m_init = false;
         m_dragging = true;
         m_dragStart = event->pos();
         m_dragEnd = event->pos();
@@ -100,9 +100,9 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
 
 void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
+    if (m_pDoc->isEmpty())
         return;
-
+    
     if( ( m_dragging ) && ( event->button() == LeftButton ) )
     {
         m_dragging = false;
@@ -142,14 +142,26 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
             m_selectRect.setBottom(zStart.y());            
         }
                     
-        m_pDoc->getSelection()->setRect(m_selectRect);
+        KisImage *img = m_pDoc->current();
+       
+        // if there are several partially overlapping or interior
+        // layers we must be sure to draw only on the current one
+        // imageExtents() will not do as it's the union of all layers
+        if (img && 
+            m_selectRect.intersects(img->getCurrentLayer()->layerExtents()))
+        {
+            m_selectRect 
+                = m_selectRect.intersect(img->getCurrentLayer()->layerExtents());
 
-        kdDebug(0) << "selectRect" 
+            m_pDoc->getSelection()->setRect(m_selectRect);
+
+            kdDebug(0) << "selectRect" 
             << " left: "   << m_selectRect.left() 
             << " top: "    << m_selectRect.top()
             << " right: "  << m_selectRect.right() 
             << " bottom: " << m_selectRect.bottom()
             << endl;
+        }    
     }
 }
 
@@ -163,7 +175,6 @@ void RectangularSelectTool::drawRect( const QPoint& start, const QPoint& end )
 
     float zF = m_view->zoomFactor();
     
-    //p.drawRect( QRect( start, end ) );
     /* adjust for scroll ofset as this draws on the canvas, not on
     the image itself QRect(left, top, width, height) */
     
@@ -174,8 +185,4 @@ void RectangularSelectTool::drawRect( const QPoint& start, const QPoint& end )
                       end.x() - start.x(), 
                       end.y() - start.y()) );
     p.end();
-    
-    // jwc - don't update retained graphics, only canvas
-    //QRect updateRect(0, 0, m_pDoc->current()->width(), m_pDoc->current()->height());
-    //m_view->updateCanvas(updateRect);
 }

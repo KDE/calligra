@@ -97,9 +97,11 @@ class KisView : public KoView
     
     void updateCanvas(  QRect & ur );
     void showScrollBars( );
+    void layerScale(bool smooth);
         
  public slots:
  
+    void slotUpdateImage();
     void slotDocUpdated();
     void slotDocUpdated(const QRect&);
     
@@ -168,7 +170,6 @@ class KisView : public KoView
 
     void layer_scale_smooth();
     void layer_scale_rough();
-
     void layer_rotate180();
     void layer_rotateleft90();
     void layer_rotateright90();
