@@ -2098,8 +2098,8 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
     bool lookInCache = paintfc.getParag() == cachedParag;
     cachedParag = paintfc.getParag();
 
-    QMap<QString,int>  tmpCachedLines;
-    QMap<QString,int>::Iterator it = cachedLines.begin(), lastEntry = cachedLines.end();
+    QStringList  tmpCachedLines;
+    QStringList::Iterator it = cachedLines.begin();
 
     KWFrame *frame = frameSet->getFrame( paintfc.getFrame() - 1 );
     KWFrame *oldFrame = frame;
@@ -2146,14 +2146,16 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
 								   paintfc.getLineStartPos() + 1,
 								   TRUE );
 
+	unsigned int pty = paintfc.getPTY();
+	str += QString( "%1" ).arg( pty );
 	bool drawIt = TRUE;
 	if ( !forceDraw && lookInCache ) {
 	    if ( it == cachedLines.end() )
 		it = cachedLines.begin();
-	    it = cachedLines.find( /*it,*/ str );
-	    if ( it != cachedLines.end() && *it == (int)paintfc.getPTY() ) {
+	    it = cachedLines.find( it, str );
+	    if ( it != cachedLines.end() ) {
 		drawIt = FALSE;
-// 		qDebug( "cached: %s", it.key().latin1() );
+// 		qDebug( "cached: %s", ( *it ).latin1() );
 	    } else {
 // 		qDebug( "%d %d", it != cachedLines.end() , *it == (int)paintfc.getPTY() );
 // 		if ( *it != (int)paintfc.getPTY() )
@@ -2163,21 +2165,19 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
 
 	unsigned int li = frame->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() );
 	unsigned int re = frame->getRightIndent( paintfc.getPTY(), paintfc.getLineHeight() );
-	unsigned int pty = paintfc.getPTY();
 	emptyRegion = emptyRegion.subtract( QRect( _x + li, paintfc.getPTY(), _wid - li - re,
 						   paintfc.getLineHeight() ) );
 	if ( drawIt || forceDraw ) {
-	    //qDebug( "draw: %s", str.latin1() );
+// 	    qDebug( "draw: %s", str.latin1() );
 	    doc->printLine( paintfc, painter, contentsX(), contentsY(), width(), height(),
 			    gui->getView()->getViewFormattingChars(), TRUE,
 			    _x + li, paintfc.getPTY() - contentsY(), _wid - li - re, paintfc.getLineHeight(),
 			    QBrush( frame->getBackgroundColor() ) );
-	    lastEntry = tmpCachedLines.insert( str, pty );
-	} else
-	    lastEntry = tmpCachedLines.insert( str, *it );
+	} 
+// 	qDebug( "append: %d %s", pty, str.latin1() );
+	tmpCachedLines.append( str );
 
 // 	qDebug( "----------------------" );
-	
 	    
 	bend = !paintfc.makeNextLineLayout();
 
@@ -2198,8 +2198,8 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
 
     painter.end();
 
-    if ( lastEntry != cachedLines.end() )
-	tmpCachedLines.remove( lastEntry );
+    if ( !cachedLines.isEmpty() )
+	tmpCachedLines.remove( tmpCachedLines.last() );
     cachedLines = tmpCachedLines;
 
     *formatFC = paintfc;

@@ -1585,3 +1585,6 @@ Reggie, 5.10.1999:
 - fixes and improvements in line caching for drawing
 - KWString does now some more caching => faster
 
+Reggie, 6.10.1999:
+--------------
+- More fixes in line cache => more flicker freeness
