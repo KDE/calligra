@@ -31,7 +31,8 @@ Xml2LatexParser::Xml2LatexParser(QString fileIn, QString fileOut):
 	kdDebug() << fileIn.latin1() << endl;
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
-	_document.setFileHeader(_fileHeader);
+	setFileHeader(_fileHeader);
+	setRoot(&_document);
 	_isEmbeded = false;
 }
 
@@ -41,7 +42,8 @@ Xml2LatexParser::Xml2LatexParser(QString fileIn, QString fileOut, QString config
 	kdDebug() << fileIn.latin1() << endl;
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
-	_document.setFileHeader(_fileHeader);
+	setFileHeader(_fileHeader);
+	setRoot(&_document);
 	_isEmbeded = false;
 	analyse_config(config);
 }
@@ -67,9 +69,10 @@ void Xml2LatexParser::analyse()
 	balise = init();
 	balise = getChild(balise, "DOC");
 	kdDebug() <<"ENTETE -> PAPER" << endl;
+	kdDebug() << getChildName(balise, 0) << endl;
 	_header.analysePaper(getChild(balise, "PAPER"));
 	kdDebug() <<"ENTETE -> ATTRIBUTES" << endl;
-	_header.analyseAttributs(getChild(balise, "ATTRIBUTS"));
+	_header.analyseAttributs(getChild(balise, "ATTRIBUTES"));
 	kdDebug() <<"ENTETE -> FRAMESETS" << endl;
 	_document.analyse(getChild(balise, "FRAMESETS"));
 	kdDebug() <<"ENTETE -> FIN FRAMESETS" << endl;

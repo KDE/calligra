@@ -55,17 +55,17 @@ FileHeader::~FileHeader()
 /*******************************************/
 void FileHeader::analysePaperParam(const QDomNode balise)
 {
-	setFormat(getAttr(balise, "FORMAT").toInt());
-	_width = getAttr(balise, "WIDTH").toInt();
-	_height = getAttr(balise, "HEIGHT").toInt();
-	setOrientation(getAttr(balise, "ORIENTATION").toInt());
-	setColumns(getAttr(balise, "COLUMNS").toInt());
-	_columnSpacing = getAttr(balise, "COLUMNSPACING").toInt();
-	setHeadType(getAttr(balise, "HTYPE").toInt());
-	setFootType(getAttr(balise, "FTYPE").toInt());
-	_headBody = getAttr(balise, "SPHEADBODY").toInt();
-	_footBody = getAttr(balise, "SPFOOTBODY").toInt();
-	//getAttr(balise, "ZOOM").toInt();
+	setFormat(getAttr(balise, "format").toInt());
+	_width = getAttr(balise, "width").toInt();
+	_height = getAttr(balise, "height").toInt();
+	setOrientation(getAttr(balise, "orientation").toInt());
+	setColumns(getAttr(balise, "columns").toInt());
+	_columnSpacing = getAttr(balise, "columnspacing").toInt();
+	setHeadType(getAttr(balise, "hType").toInt());
+	setFootType(getAttr(balise, "fType").toInt());
+	_headBody = getAttr(balise, "spHeadBody").toInt();
+	_footBody = getAttr(balise, "spFootBody").toInt();
+	//getAttr(balise, "zoom").toInt();
 }
 
 /*******************************************/
@@ -80,10 +80,10 @@ void FileHeader::analysePaper(const QDomNode balise)
 	//setTokenCurrent(balise_initiale->pContent);
 	// Analyse children markups --> PAPERBORDERS
 	fils = getChild(balise, "PAPERSBORDERS");
-	_leftBorder = getAttr(fils, "LEFT").toInt();
-	_rightBorder = getAttr(fils, "RIGHT").toInt();
-	_bottomBorder = getAttr(fils, "BOTTOM").toInt();
-	_topBorder = getAttr(fils, "TOP").toInt();
+	_leftBorder = getAttr(fils, "left").toInt();
+	_rightBorder = getAttr(fils, "right").toInt();
+	_bottomBorder = getAttr(fils, "bottom").toInt();
+	_topBorder = getAttr(fils, "top").toInt();
 }
 
 /*******************************************/
@@ -91,11 +91,11 @@ void FileHeader::analysePaper(const QDomNode balise)
 /*******************************************/
 void FileHeader::analyseAttributs(const QDomNode balise)
 {
-	setProcessing(getAttr(balise, "PROCESSING").toInt());
-	setStandardPge(getAttr(balise, "STANDARDPAGE").toInt());
-	_hasHeader = getAttr(balise, "HASHEADER").toInt();
-	_hasFooter = getAttr(balise, "HASFOOTER").toInt();
-	setUnit(getAttr(balise, "UNIT").toInt());
+	setProcessing(getAttr(balise, "processing").toInt());
+	setStandardPge(getAttr(balise, "standardpage").toInt());
+	_hasHeader = getAttr(balise, "hasHeader").toInt();
+	_hasFooter = getAttr(balise, "hasFooter").toInt();
+	setUnit(getAttr(balise, "unit").toInt());
 }
 
 /*******************************************/
@@ -199,6 +199,8 @@ void FileHeader::generatePreambule(QTextStream &out)
 void FileHeader::generatePackage(QTextStream &out)
 {
 	out << "% Package(s) to include" << endl;
+	if(getFormat() == TF_A4)
+		out << "\\usepackage[a4paper]{geometry}" << endl;
 	if(hasFooter() || hasHeader())
 		out << "\\usepackage{fancyhdr}" << endl;
 	if(hasColor())

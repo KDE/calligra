@@ -131,6 +131,7 @@ class Element: public XmlParser
 		SSect    getSection () const { return _section;        }
 		SType    getType    () const { return _type;           }
 		SInfo    getInfo    () const { return _hinfo;          }
+		QString  getName    () const { return _name;           }
 		bool     isVisible  () const { return _visible;        }
 		bool     isRemovable() const { return _removable;      }
 		QString  getGrpMgr  () const { return _grpMgr;         }

@@ -28,6 +28,7 @@
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "footnote.h"
 #include "texte.h"		/* for generate function (catch text footnote) */
+#include "document.h"
 
 Footnote::Footnote(Para* para): Format(para)
 {
@@ -141,7 +142,7 @@ void Footnote::analyseDescript(const QDomNode balise)
 
 void Footnote::generate(QTextStream &out)
 {
-	Para *footnote = 0;
+	Element *footnote = 0;
 
 	kdDebug() << "  GENERATION FOOTNOTE" << endl;
 	// Go to keep the footnote parag.
@@ -149,7 +150,7 @@ void Footnote::generate(QTextStream &out)
 	// like this : \,\footnote{the parag. }
 	out << "\\,\\footnote{";
 	kdDebug() << "footnote : " << _ref << endl;
-	if((footnote = getPara()->getTexte()->searchFootnote(_ref)) != 0)
+	if((footnote = getRoot()->searchFootnote(_ref)) != 0)
 		footnote->generate(out);
 	out << "}";
 	kdDebug() << "FOOTNOTE GENERATED" << endl;

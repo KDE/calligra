@@ -81,9 +81,11 @@ class Document: public XmlParser
 		//FileHeader* getFileHeader() const { return _fileHeader; }
 		//void setFileHeader(FileHeader *h) { _fileHeader = h; }
 
-		void  analyse(const QDomNode);
+		void analyse(const QDomNode);
 
-		void  generate(QTextStream&, bool);
+		void generate(QTextStream&, bool);
+		Element* searchAnchor(QString);
+		Element* searchFootnote(QString);
 
 	private:
 		/**

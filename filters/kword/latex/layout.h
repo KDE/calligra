@@ -75,7 +75,10 @@ class Layout: public TextFormat
 	EEnv         _env;
 	static QString _last_name;
 	static EType   _last_counter;
-
+	bool           _useHardBreakAfter;
+	bool           _useHardBreak;
+	bool           _keepLinesTogether;
+	
 	public:
 		/**
 		 * Constructors
@@ -96,28 +99,27 @@ class Layout: public TextFormat
 		/**
 		 * Accessors
 		 */
-		bool    isChapter        () const { return (_numberingType == 1); }
-		bool    isList           () const { return (_numberingType == 0); }
-		bool    isEnum           () const { return (_counterType != TL_NONE); }
-		bool    isLastSame       () const { return (_name == _last_name); }
-		bool    isNextSame       () const { return (_following == _name); }
-		//EType getType          () const { return _type;          }
-		//EType getTypeFollow    () const { return _follow_type;   }
-		QString getLastName      () const { return _last_name;     }
-		EType   getLastCounter   () const { return _last_counter;  }
-		EType   getCounterType   () const { return _counterType;   }
-		int     getCounterDepth  () const { return _counterDepth;  }
-		int     getCounterBullet () const { return _counterBullet; }
-		int     getCounterStart  () const { return _counterStart;  }
-		int     getNumberingType () const { return _numberingType; }
-		EEnv    getEnv           () const { return _env;           }
+		bool    isChapter          () const { return (_numberingType == 1); }
+		bool    isList             () const { return (_numberingType == 0); }
+		bool    isEnum             () const { return (_counterType != TL_NONE); }
+		bool    isLastSame         () const { return (_name == _last_name); }
+		bool    isNextSame         () const { return (_following == _name); }
+		QString getLastName        () const { return _last_name;     }
+		EType   getLastCounter     () const { return _last_counter;  }
+		EType   getCounterType     () const { return _counterType;   }
+		int     getCounterDepth    () const { return _counterDepth;  }
+		int     getCounterBullet   () const { return _counterBullet; }
+		int     getCounterStart    () const { return _counterStart;  }
+		int     getNumberingType   () const { return _numberingType; }
+		EEnv    getEnv             () const { return _env;           }
+		bool    isHardBreakAfter   () const { return _useHardBreakAfter; }
+		bool    isHardBreak        () const { return _useHardBreak;      }
+		bool    isKeppLinesTogether() const { return _keepLinesTogether; }
 
 		/**
 		 * Modifiers
 		 */
 		void setName         (QString name) { _name = name; }
-		//void setType         (EType type)   { _type = type;         }
-		//void setTypeFollow   (EType type)   { _follow_type = type;  }
 		void setLastName     ()             { _last_name   = _name; }
 		void setLastCounter  ()             { _last_counter= _counterType; }
 		void setFollowing    (QString name) { _following = name; }
@@ -127,6 +129,9 @@ class Layout: public TextFormat
 		void setCounterStart (int cs)       { _counterStart  = cs; }
 		void setNumberingType(int nt)       { _numberingType = nt; }
 		void setEnv          (int env)      { _env = (EEnv) env;   }
+		void useHardBreakAfter()            { _useHardBreakAfter = true; }
+		void useHardBreak     ()            { _useHardBreak      = true; }
+		void keepLinesTogether()            { _keepLinesTogether = true; }
 
 		/**
 		 * Helpfull functions
@@ -139,6 +144,7 @@ class Layout: public TextFormat
 		void analyseFollowing(const QDomNode);
 		void analyseName     (const QDomNode);
 		void analyseEnv      (const QDomNode);
+		void analyseBreakLine(const QDomNode);
 };
 
 #endif /* __KWORD_LAYOUT_H__ */

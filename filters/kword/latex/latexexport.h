@@ -28,9 +28,6 @@
 #include <koFilter.h>
 #include <koStore.h>
 
-#include "xml2latexparser.h"
-
-
 class LATEXExport : public KoFilter {
 
     Q_OBJECT

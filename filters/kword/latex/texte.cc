@@ -45,25 +45,18 @@ Texte::Texte()
 /*******************************************/
 /* searchFootnote                          */
 /*******************************************/
-Para* Texte::searchFootnote(const QString name)
+/*Para* Texte::searchFootnote(const QString name)
 {
-	/*ParaIter iter;
-
-	if(_footnotes != 0)
+	for(Para* current = _footnotes.first(); current!= 0; current = _footnotes.next())
 	{
-		iter.setList(*_footnotes);
-		while(!iter.isTerminate())*/
-		for(Para* current = _footnotes.first(); current!= 0; current = _footnotes.next())
-		{
-			QString* string = current->getName();
-			kdDebug() << *string << endl;
-			if(*string == name)
-				return current;
-			//iter.next();
-		}
-	//}
+		QString* string = current->getName();
+		kdDebug() << *string << endl;
+		if(*string == name)
+			return current;
+		//iter.next();
+	}
 	return 0;
-}
+}*/
 
 /*******************************************/
 /* analyse                                 */
@@ -93,7 +86,7 @@ void Texte::analyse(const QDomNode balise)
 				// 3. add this parag. in the footnote list
 				//if(_footnotes == 0)
 				//	_footnotes = new ListPara;
-				_footnotes.append(prg);
+				//_footnotes.append(prg);
 			}
 			else
 			{
@@ -113,63 +106,63 @@ void Texte::analyse(const QDomNode balise)
 void Texte::analyseParamFrame(const QDomNode balise)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
-	setLeft(getAttr(balise, "left").toInt());
-	setTop(getAttr(balise, "top").toInt());
-	setRight(getAttr(balise, "right").toInt());
-	setBottom(getAttr(balise, "bottom").toInt());
+	setLeft(getAttr(balise, "left").toDouble());
+	setTop(getAttr(balise, "top").toDouble());
+	setRight(getAttr(balise, "right").toDouble());
+	setBottom(getAttr(balise, "bottom").toDouble());
 	setRunAround(getAttr(balise, "runaround").toInt());
 	setAroundGap(getAttr(balise, "runaroundGap").toInt());
 	setAutoCreate(getAttr(balise, "autoCreateNewFrame").toInt());
 	setNewFrame(getAttr(balise, "newFrameBehaviour").toInt());
 	setSheetSide(getAttr(balise, "sheetSide").toInt());
-	if(getAttr(balise, "lwidth").toInt() > 0)
+	if(getAttr(balise, "lWidth").toInt() > 0)
 	{
-		setLeftWidth(getAttr(balise, "lwidth").toInt());
+		setLeftWidth(getAttr(balise, "lWidth").toInt());
 		useLeftBorder();
 	}
-	if(getAttr(balise, "rwidth").toInt() > 0)
+	if(getAttr(balise, "rWidth").toInt() > 0)
 	{
-		setRightWidth(getAttr(balise, "rwidth").toInt());
+		setRightWidth(getAttr(balise, "rWidth").toInt());
 		useRightBorder();
 	}
-	if(getAttr(balise, "twidth").toInt() > 0)
+	if(getAttr(balise, "tWidth").toInt() > 0)
 	{
-		setTopWidth(getAttr(balise, "twidth").toInt());
+		setTopWidth(getAttr(balise, "tWidth").toInt());
 		useTopBorder();
 	}
-	if(getAttr(balise, "bwidth").toInt() > 0)
+	if(getAttr(balise, "bWidth").toInt() > 0)
 	{
-		setBottomWidth(getAttr(balise, "bwidth").toInt());
+		setBottomWidth(getAttr(balise, "bWidth").toInt());
 		useBottomBorder();
 	}
-	setLeftRed(getAttr(balise, "lred").toInt());
-	setLeftGreen(getAttr(balise, "lgreen").toInt());
-	setLeftBlue(getAttr(balise, "lblue").toInt());
+	setLeftRed(getAttr(balise, "lRed").toInt());
+	setLeftGreen(getAttr(balise, "lGreen").toInt());
+	setLeftBlue(getAttr(balise, "lBlue").toInt());
 	
-	setRightRed(getAttr(balise, "rred").toInt());
-	setRightGreen(getAttr(balise, "rgreen").toInt());
-	setRightBlue(getAttr(balise, "rblue").toInt());
+	setRightRed(getAttr(balise, "rRed").toInt());
+	setRightGreen(getAttr(balise, "rGreen").toInt());
+	setRightBlue(getAttr(balise, "rBlue").toInt());
 	
-	setTopRed(getAttr(balise, "tred").toInt());
-	setTopGreen(getAttr(balise, "tgreen").toInt());
-	setTopBlue(getAttr(balise, "tblue").toInt());
+	setTopRed(getAttr(balise, "tRed").toInt());
+	setTopGreen(getAttr(balise, "tGreen").toInt());
+	setTopBlue(getAttr(balise, "tBlue").toInt());
 	
-	setBottomRed(getAttr(balise, "bred").toInt());
-	setBottomGreen(getAttr(balise, "bgreen").toInt());
-	setBottomBlue(getAttr(balise, "bblue").toInt());
+	setBottomRed(getAttr(balise, "bRed").toInt());
+	setBottomGreen(getAttr(balise, "bGreen").toInt());
+	setBottomBlue(getAttr(balise, "bBlue").toInt());
 	
-	setLeftStyle(getAttr(balise, "lstyle").toInt());
-	setRightStyle(getAttr(balise, "rstyle").toInt());
-	setTopStyle(getAttr(balise, "tstyle").toInt());
-	setBottomStyle(getAttr(balise, "bstyle").toInt());
+	setLeftStyle(getAttr(balise, "lStyle").toInt());
+	setRightStyle(getAttr(balise, "rStyle").toInt());
+	setTopStyle(getAttr(balise, "tStyle").toInt());
+	setBottomStyle(getAttr(balise, "bStyle").toInt());
 	setBkRed(getAttr(balise, "bkred").toInt());
 	setBkGreen(getAttr(balise, "bkgreen").toInt());
 	setBkBlue(getAttr(balise, "bkblue").toInt());
 /*
-	setLeftWidth(getAttr(balise, "bleftpt").toInt());
-	setLeftWidth(getAttr(balise, "brightpt").toInt());
-	setLeftWidth(getAttr(balise, "bktoppt").toInt());
-	setLeftWidth(getAttr(balise, "bkbottompt").toInt());
+	setLeftWidth(getAttr(balise, "bleftpt").toDouble());
+	setLeftWidth(getAttr(balise, "brightpt").toDouble());
+	setLeftWidth(getAttr(balise, "bktoppt").toDouble());
+	setLeftWidth(getAttr(balise, "bkbottompt").toDouble());
 */
 }
 
@@ -203,9 +196,12 @@ void Texte::generate(QTextStream &out)
 	{
 		//Para* currentPara = iter.getCourant();
 		/* layout managment */
-		if(!currentPara->isChapter() && _lastEnv != getNextEnv(_parags, _parags.at()) &&
+		if((!currentPara->isChapter() &&
 			_lastTypeEnum == TL_NONE && getSection() != SS_FOOTNOTES &&
-		getSection() != SS_HEADERS && getSection() != SS_FOOTERS)
+			getSection() != SS_HEADERS && getSection() != SS_FOOTERS &&
+			_lastEnv != getNextEnv(_parags, _parags.at()) &&
+			currentPara->notEmpty()) ||
+			_lastEnv != getNextEnv(_parags, _parags.at()) )
 		{
 			currentPara->generateBeginEnv(out);
 			_lastEnv = currentPara->getEnv();
@@ -229,9 +225,12 @@ void Texte::generate(QTextStream &out)
 			_lastTypeEnum = TL_NONE;
 		}
 		/* layout managment (left, center, justify, right) */
-		if(!lastPara->isChapter() && _lastEnv != getNextEnv(_parags, _parags.at()) &&
+		if((!lastPara->isChapter() &&
 				getSection() != SS_FOOTNOTES && getSection() != SS_HEADERS &&
-				getSection() != SS_FOOTERS)
+				getSection() != SS_FOOTERS &&
+				_lastEnv != getNextEnv(_parags, _parags.at()) &&
+				lastPara->notEmpty()) ||
+				_lastEnv != getNextEnv(_parags, _parags.at()))
 			lastPara->generateEndEnv(out);
 		out << endl << endl;
 	}

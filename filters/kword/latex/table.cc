@@ -28,16 +28,13 @@
 /*******************************************/
 Table::Table()
 {
-	_grpMgr = "";
-	_name   = "";
 	setMaxCol(0);
 	setMaxRow(0);
 }
 
 Table::Table(QString grpMgr)
 {
-	_grpMgr = grpMgr;
-	_name   = "";
+	setGrpMgr(grpMgr);
 	setMaxCol(0);
 	setMaxRow(0);
 }
@@ -47,15 +44,7 @@ Table::Table(QString grpMgr)
 /*******************************************/
 Table::~Table()
 {
-	//Element *elt = 0;
 	kdDebug() << "Destruction of a list of frames" << endl;
-	/*while(_start != 0)
-	{
-		elt    = _start;
-		_start = _start->getNext();
-		delete elt;
-		_size = _size - 1;
-	}*/
 }
 
 /*******************************************/
@@ -87,7 +76,7 @@ int Table::getCellSize(int col)
 		Element* elt = at(row * getMaxRow() + col);
 		if(elt->getType() == ST_TEXT)
 		{
-			kdDebug() << ((Texte*) elt)->getLeft() << endl;
+			kdDebug() << "size : " << ((Texte*) elt)->getLeft() << endl;
 			return ((Texte*) elt)->getRight() - ((Texte*) elt)->getLeft();
 		}
 	}

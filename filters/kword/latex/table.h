@@ -37,11 +37,11 @@
  * frame, ...). It use a special latex package.
  * The color table and the border of the tables is not yet supported.
  */
-class Table: public QList<Element>
+class Table: public QList<Element>, public Element
 {
 	/* MARKUP DATA */
-	QString _name;
-	QString _grpMgr;
+	//QString _name;
+	//QString _grpMgr;
 
 	/* USEFULL DATA */
 	int     _maxRow, _maxCol;	/* Size of the table (nb of cell) */
@@ -75,8 +75,8 @@ class Table: public QList<Element>
 		 * Accessors
 		 */
 
-		QString getName  () const { return _name;   }
-		QString getGrpMgr() const { return _grpMgr; }
+		//QString getName  () const { return _name;   }
+		//QString getGrpMgr() const { return _grpMgr; }
 		int     getMaxRow() const { return _maxRow; }
 		int     getMaxCol() const { return _maxCol; }
 

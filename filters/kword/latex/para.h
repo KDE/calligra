@@ -38,11 +38,11 @@ enum EP_INFO
 	EP_FOOTNOTE
 };
 
-enum EP_HARDBRK
+/*enum EP_HARDBRK
 {
 	EP_FLOW,
 	EP_NEXT
-};
+};*/
 
 class Texte;
 
@@ -61,7 +61,7 @@ class Para: public Layout
 	QString        _texte;
 	QString*       _name;
 	EP_INFO        _info;
-	EP_HARDBRK     _hardbrk;
+	//EP_HARDBRK     _hardbrk;
 	QList<Format>* _lines;
 
 	/* TO MANAGE THE LIST */
@@ -130,6 +130,7 @@ class Para: public Layout
 		 */
 		int getNbCharPara() const;
 
+		bool notEmpty() const { return (_lines == 0) ? false : (_lines->count() != 0); }
 		/**
 		 * Modifiers
 		 */
@@ -179,7 +180,7 @@ class Para: public Layout
 		void analyseParam     (const QDomNode);
 		void analyseName      (const QDomNode);
 		void analyseInfo      (const QDomNode);
-		void analyseBrk       (const QDomNode);
+		//void analyseBrk       (const QDomNode);
 		void analyseLayoutPara(const QDomNode);
 		void analyseFormat    (const QDomNode);
 		void analyseFormats   (const QDomNode);

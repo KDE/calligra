@@ -27,6 +27,7 @@
 #include "picturezone.h"
 #include "textzone.h"
 #include "footnote.h"
+#include "anchor.h"
 
 /* static data */
 QStack<EType> Para::_historicList;
@@ -40,7 +41,7 @@ Para::Para(Texte* texte)
 	_lines     = 0;
 	_name      = 0;
 	_info      = EP_NONE;	/* the parag is not a footnote */
-	_hardbrk   = EP_FLOW;	/* and it's not a new page */
+	//_hardbrk   = EP_FLOW;	/* and it's not a new page */
 	_currentPos= 0;		/* At the beginning of the paragraph */
 }
 
@@ -142,10 +143,10 @@ void Para::analyse(const QDomNode balise)
 		{
 			analyseInfo(getChild(balise, index));
 		}
-		else if(getChildName(balise, index).compare("HARDBRK")== 0)
+		/*else if(getChildName(balise, index).compare("HARDBRK")== 0)
 		{
 			analyseBrk(getChild(balise, index));
-		}
+		}*/
 		else if(getChildName(balise, index).compare("FORMATS")== 0)
 		{
 			// Garder pour la nouvelle dtd
@@ -195,12 +196,12 @@ void Para::analyseInfo(const QDomNode balise)
 /* There is a new page before this         */
 /* paragraph.                              */
 /*******************************************/
-void Para::analyseBrk(const QDomNode balise)
+/*void Para::analyseBrk(const QDomNode balise)
 {
 	//<NAME name="Footnote/Endnote_1">
 	
 	_hardbrk = (EP_HARDBRK) getAttr(balise, "FRAME").toInt();
-}
+}*/
 
 /*******************************************/
 /* AnalyseLayoutPara                       */
@@ -312,12 +313,12 @@ void Para::analyseFormat(const QDomNode balise)
 				zone->analyse(balise);
 			break;
 		case EF_ANCHOR: /* It's an anchor (6) */
-		//		zone = new Anchor(this);
-		//		zone->analyse(baslie);
+				zone = new Anchor(this);
+				zone->analyse(balise);
 			break;
 		default: /* Unknown */
 				kdDebug() << "Format not yet supported" << endl;
-		}
+	}
 	if(zone != 0)
 	{
 		if(_lines == 0)
@@ -347,7 +348,7 @@ void Para::generate(QTextStream &out)
 		 * parag not for footnote
 		 * If a parag. have a special format (begining)
 		 */
-		if(_hardbrk == EP_NEXT)
+		if(isHardBreak())
 			out << "\\newpage" << endl;
 		generateDebut(out);
 	}
@@ -372,6 +373,8 @@ void Para::generate(QTextStream &out)
 		 * only it's not a header, nor a footer nor a footnote/endnote
 		 */
 		generateFin(out);
+		if(isHardBreakAfter())
+			out << "\\newpage" << endl;
 	}
 	kdDebug() << "PARA GENERATED" << endl;
 }
@@ -618,3 +621,4 @@ void Para::generateTitle(QTextStream &out)
 			out << "\\textbf{";
 	}
 }
+

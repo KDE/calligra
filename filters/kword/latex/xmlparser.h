@@ -27,6 +27,7 @@
 #include "qdom.h"
 
 class FileHeader;
+class Document;
 
 class XmlParser
 {
@@ -43,30 +44,36 @@ class XmlParser
 		 * the header to specify to use special package
 		 */
 		static FileHeader *_fileHeader;
+		static Document   *_root;
 
 	public:
 		XmlParser(QString);
 		XmlParser();
 		virtual ~XmlParser();
 
+		bool        isKwordStyleUsed() const { return (_useLatexStyle == false); }
+		QString     getFilename     () const { return _filename;            }
+		QString     getDocument     () const { return _document.toString(); }
+		Document*   getRoot         () const { return _root;                }
+		FileHeader* getFileHeader   () const { return _fileHeader; }
+		QString     getChildName(QDomNode, int);
+		QDomNode    getChild(QDomNode, QString);
+		QDomNode    getChild(QDomNode, QString, int);
+		QDomNode    getChild(QDomNode, int);
+		int         getNbChild(QDomNode, QString);
+		int         getNbChild(QDomNode);
+		QString     getAttr(const QDomNode, QString) const;
+		bool        isChild(QDomNode, QString);
+
+		void setFileHeader(FileHeader* h) { _fileHeader = h; }
+		void setRoot      (Document*   r) { _root       = r; }
+
+		QDomNode init() { return _document.documentElement(); }
+
 		void        useUnicodeEnc   ()              { _useUnicode    = true;  }
 		void        useLatin1Enc    ()              { _useLatin1     = true;  }
 		void        useLatexStyle   ()              { _useLatexStyle = true;  }
 		void        useKwordStyle   ()              { _useLatexStyle = false; }
-		
-		QString     getFilename     () const  { return _filename;      }
-		QString     getDocument     () const  { return _document.toString(); };
-		FileHeader* getFileHeader   () const { return _fileHeader; }
-		QString  getChildName(QDomNode, int);
-		QDomNode getChild(QDomNode, QString);
-		QDomNode getChild(QDomNode, QString, int);
-		QDomNode getChild(QDomNode, int);
-		int      getNbChild(QDomNode, QString);
-		int      getNbChild(QDomNode);
-		QString  getAttr(const QDomNode, QString) const;
-		bool     isChild(QDomNode, QString);
-		void setFileHeader(FileHeader* h) { _fileHeader = h; }
-		QDomNode init() { return _document.documentElement(); }
 
 		/*void analyse(){};
 		void generate(){};*/

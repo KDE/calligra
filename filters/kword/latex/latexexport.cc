@@ -23,6 +23,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <qtextcodec.h>
+#include "latexexportdia.h"
+//#include "xml2latexparser.h"
 
 LATEXExport::LATEXExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -30,7 +32,8 @@ LATEXExport::LATEXExport(KoFilter *parent, const char *name) :
 
 bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
                          const QString& from, const QString& to,
-                         const QString &config) {
+                         const QString &) {
+    QString config;
 
     if(to != "text/x-tex" || from != "application/x-kword")
         return false;
@@ -41,7 +44,7 @@ bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
         in.close();
         return false;
     }
-    // input file Reading
+    /* input file Reading */
     QByteArray array=in.read(0xffffffff);
     QString buf = QString::fromUtf8((const char*)array, array.size());
     in.close();
@@ -52,52 +55,25 @@ bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
     if(tempIn.open(IO_WriteOnly))
     {
         QTextStream tempStream(&tempIn);
-	tempStream.setEncoding(QTextStream::Unicode);
+	tempStream.setEncoding(QTextStream::UnicodeUTF8);
 	tempStream << buf;
     }
     tempIn.close();
     
-    //int begin = buf.find( "<DOC" ); // skip <?...?>
-    //buf.remove(0, begin);
+    LATEXExportDia* dialog = new LATEXExportDia();
+    dialog->setInputFile(fileIn2);
+    dialog->setOutputFile(fileOut);
+
+    dialog->exec();
+    //config = dialog->state();
+    delete dialog;
+    /*kdDebug() << "config : " << config << endl;
     kdDebug() << "LATEX FILTER --> BEGIN" << endl;
     Xml2LatexParser LATEXParser(fileIn2, fileOut, config);
     LATEXParser.analyse();
     kdDebug() << "---------- generate file -------------" << endl;
     LATEXParser.generate();
-    kdDebug() << "LATEX FILTER --> END" << endl;
+    kdDebug() << "LATEX FILTER --> END" << endl;*/
 
-    // It would certainly be more efficient if the filter was writing
-    // into a QString (using fromUtf8 for the stuff coming from the xml file)
-    // instead of using a temporary file !
-    /*QFile f( "/tmp/kword2latex" );
-    if ( !f.open( IO_ReadOnly ) ) {
-        return false;
-    }
-
-    QTextStream s( &f );
-    s.setEncoding( QTextStream::UnicodeUTF8 ); // The contents comes from XML, it will always be utf 8
-    // Yes, your eyes are working well: we put everything we just wrote
-    // into a file back into a QString !
-    QString str = s.read();
-    f.close();
-
-    QFile out(fileOut);
-    if(!out.open(IO_WriteOnly)) {
-        kdError(30503) << "Unable to open output file!" << endl;
-        out.close();
-        return false;
-    }
-    QTextStream sout( &out );
-    QTextCodec * codec = QTextCodec::codecForName( charset );
-    if ( !codec )
-    {
-        kdError(30503) << "Unable to find codec for " << charset << " !" << endl;
-        out.close();
-        return false;
-    }
-    sout.setCodec( codec );
-    sout << str;
-
-    out.close();*/
     return true;
 }

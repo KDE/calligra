@@ -43,6 +43,9 @@ Layout::Layout()
 	_counterBullet =  0;
 	_counterStart  =  0;
 	_numberingType = -1;
+	_useHardBreakAfter = false;
+	_useHardBreak      = false;
+	_keepLinesTogether = false;
 }
 
 /*******************************************/
@@ -73,6 +76,11 @@ void Layout::analyseLayout(const QDomNode balise)
 			kdDebug() << "FLOW : " << endl;
 			analyseEnv(getChild(balise, index));
 		}
+		else if(getChildName(balise, index).compare("PAGEBREAKING")== 0)
+		{
+			kdDebug() << "PAGEBREAKING : " << endl;
+			analyseBreakLine(getChild(balise, index));
+		}
 		else if(getChildName(balise, index).compare("COUNTER")== 0)
 		{
 			kdDebug() << "COUNTER : " << endl;
@@ -81,7 +89,7 @@ void Layout::analyseLayout(const QDomNode balise)
 		else if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
 			kdDebug() << "FORMAT : " << endl;
-			Format::analyse(getChild(balise, index));
+			analyseTextFormat(getChild(balise, index));
 		}
 	}
 	kdDebug() << "END OF THE BEGINING OF A LAYOUT" << endl;
@@ -126,6 +134,19 @@ void Layout::analyseEnv(const QDomNode balise)
 		setEnv(ENV_CENTER);
 }
 
+void Layout::analyseBreakLine(const QDomNode balise)
+{
+	/* <NAME hardFrameBreakAfter="true"> */
+	kdDebug() << "PARAM" << endl;
+	if(getAttr(balise, "linesTogether") != 0)
+		keepLinesTogether();
+	else if(getAttr(balise, "hardFrameBreak") != 0)
+		useHardBreak();
+	else if(getAttr(balise, "hardFrameBreakAfter") != 0)
+		useHardBreakAfter();
+}
+
+
 /*******************************************/
 /* analyseCounter                          */
 /*******************************************/
@@ -146,5 +167,5 @@ void Layout::analyseCounter(const QDomNode balise)
 	setCounterDepth(getAttr(balise, "depth").toInt());
 	setCounterBullet(getAttr(balise, "bullet").toInt());
 	setCounterStart(getAttr(balise, "start").toInt());
-	setNumberingType(getAttr(balise, "numberingType").toInt());
+	setNumberingType(getAttr(balise, "numberingtype").toInt());
 }

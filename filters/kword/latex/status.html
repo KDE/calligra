@@ -127,19 +127,20 @@
 <table BORDER="0" WIDTH="100%">
 <tr><td>text with accent</td>			<td>DONE</td></tr>
 <tr><td>text with special characters</td>	<td>A LOT OF SPECIAL CHARS SUPPORTED !</td></tr>
-<tr><td>layout</td>				<td>DONE</td></tr>
-<tr><td>title</td>			<td>DONE</td></tr>
-<tr><td>list</td>			<td>DONE</td></tr>
-<tr><td>paper</td>			<td>DONE</td></tr>
-<tr><td>footnote, head</td>		<td>DONE (still a little bug for first foot/header and a line is added)</td></tr>
+<tr><td>layout</td>					<td>DONE</td></tr>
+<tr><td>title</td>					<td>DONE</td></tr>
+<tr><td>list</td>					<td>DONE</td></tr>
+<tr><td>paper</td>					<td>DONE</td></tr>
+<tr><td>footnote, head</td>			<td>DONE (still a little bug for first foot/header and a line is added)</td></tr>
 <tr><td>comments with kdoc</td>		<td>STARTED</td></tr>
 <tr><td>unicode support</td>		<td>STUDY (SEE omega package)</td></tr>
 <tr><td>break (line, page)</td>		<td>STARTED</td></tr>
+<tr><td>indent list</td>			<td></td></tr>
 </table>
 <B>VERSION 2</B>
 <table BORDER="0" WIDTH="100%">
-<tr><td>table</td> 			<td>STARTED</td></tr>
-<tr><td>picture</td>			<td>STARTED</td></tr>
+<tr><td>table</td> 					<td>STARTED</td></tr>
+<tr><td>picture</td>				<td>STARTED</td></tr>
 <tr><td>personalization</td>		<td></td></tr>
 </table>
 <B>VERSION 3</B>
@@ -156,8 +157,26 @@
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
+
      <td>
 	<ul>
+	<li>15 july 2001
+	<ul>
+		<li>bug fixes
+			<ul>
+				<li>characters encoding bug</li>
+				<li>somes table bugs</li>
+				<li>text zone inherit paragraph format</li>
+			</ul>
+		</li>
+		<li>features
+			<ul>
+				<li>news parameters dialog box</li>
+				<li>anchor support</li>
+			</ul>
+		</li>
+	</ul>
+	</li>
 	<li>07 july 2001
 	<ul>
 		<li>bug fixes
@@ -253,7 +272,7 @@
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
-     <td><!--a href="http://---">-</a></td>
+     <td><a href="http://elbobby.free.fr/kword/index.html">Some Screenshots (comments in french)</a></td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
@@ -382,10 +401,6 @@
 <tr><td>info</td>		<td></td>			<td>SUPPORTED</td></tr>
 <tr><td></td>			<td>0...No &quot;special&quot; information</td></tr>
 <tr><td></td>			<td>1...Footnote (see NAME)</td></tr>
-<tr><td colspan="2"><b><i>HARDBRK</i></b></td>			<tD>SUPPORTED</td><td>To verify</td></tr>
-<tr><td>frame</td>		<td></td></tr>
-<tr><td></td>			<td>0...let it flow</td></tr>
-<tr><td></td>			<td>1...hard brake -&gt; next frame</td></tr>
 <tr><td><b><i>FORMATS</i></b></td></tr>
 <tr><td colspan="2"><b><i>FORMAT</i></b></td></tr>
 <tr><td>id</td>			<td></td>			<td>ANALYSED</td></tr>
@@ -406,7 +421,10 @@
 <tr><td>UNDERLINE</td>		<td></td>			<td>SUPPORTED</td></tr>
 <tr><td>VERTALIGN</td>		<td></td>			<td>SUPPORTED</td></tr>
 <tr><td>STRIKEOUT</td>		<td></td>			<td>SUPPORTED</td><td>NEW</td></tr>
-
+<tr><td>HARDBREAKING</td>	<td></td>			<td>SUPPORTED</td><td></td></tr>
+<tr><td></td><td>hardBreak</td>					<td>SUPPORTED</td></tr>
+<tr><td></td><td>hardBreakAfter</td>			<td>SUPPORTED</td></tr>
+<tr><td></td><td>linesTogether</td>				<td>ANALYSED</td></tr>
 <tr><td><b><i>FORMAT picture</i></b></td></tr>
 <tr><td>FILENAME</td>		<td></td>			<td>ANALYSED</td><td>NEW</td></tr>
 <tr><td></td>			<td>value=&quot;/home/...&quot;</td></tr>
@@ -527,7 +545,7 @@
 <tr><td></td>			<td>4...dash-dot-dot-dash-dot-dot-...</td></tr>
 <tr><td>width</td>		<td></td></tr>
 
-<tr><td><b><i>FORMAT</i></b>	<td>The format of this &quot;style&quot; (see FORMAT)</td></tr>
+<tr><td><b><i>FORMAT</i></b>	<td>A text zone inherits format from its father paragraph.</td></tr>
 
 <tr><td><b><i>TABULATOR</i></b></td><td></td><td></td></tr>
 <tr><td>ptpos</td>		<td></td><td></td></tr>
@@ -538,8 +556,8 @@
 <tr><td></td>			<td>3...decimal point</td><td></td></tr>
 
 <tr><td><b><i>ANCHOR</i></b></td></tr>
-<tr><td>instance</td>		<td></td><td></td></tr>
-<tr><td>type</td>		<td></td><td></td></tr>
+<tr><td>instance</td>		<td></td><td>SUPPORTED</td></tr>
+<tr><td>type</td>			<td></td><td>SUPPORTED</td></tr>
 
 </table>
 

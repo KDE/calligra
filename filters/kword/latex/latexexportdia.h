@@ -35,8 +35,6 @@
 #ifndef __LATEXEXPORTDIA_H__
 #define __LATEXEXPORTDIA_H__
 
-#ifndef USE_QFD
-
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -44,12 +42,15 @@
 #include <qvbuttongroup.h>
 
 #include <klocale.h>
-#include <koFilterDialog.h>
+#include <kdialogbase.h>
+#include "xml2latexparser.h"
 
-class LATEXExportDia : public KoFilterDialog
+class LATEXExportDia : public KDialogBase
 {
 
 	Q_OBJECT
+	QString _fileIn;
+	QString _fileOut;
 
 	public:
 		LATEXExportDia(QWidget *parent=0L, const char *name=0L);
@@ -57,12 +58,17 @@ class LATEXExportDia : public KoFilterDialog
 		virtual ~LATEXExportDia() {}
 
 		virtual QString state();
+		void setInputFile(QString file)  { _fileIn = file; }
+		void setOutputFile(QString file) { _fileOut = file; }
 
 	private:
 		QVButtonGroup* styleBox,       *langBox,        *docBox;
 		QRadioButton*  latexStyleRBtn, *kwordStyleRBtn;	/* Document style */
 		QRadioButton*  unicodeRBtn,    *latin1RBtn;	/* Language       */
 		QRadioButton*  newDocRBtn,     *embededRBtn;	/* Language       */
+
+	public slots:
+		virtual void slotOk();
 };
-#endif
+
 #endif /* __LATEXEXPORTDIA_H__ */

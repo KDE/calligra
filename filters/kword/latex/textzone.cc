@@ -37,6 +37,11 @@
 TextZone::TextZone(Para *para)
 {
 	setPara(para);
+	setSize(para->getSize());
+	setWeight(para->getWeight());
+	setItalic(para->isItalic());
+	setUnderlined(para->isUnderlined());
+	setStrikeout(para->isStrikeout());
 }
 
 /*******************************************/
@@ -45,6 +50,11 @@ TextZone::TextZone(Para *para)
 TextZone::TextZone(QString texte, Para *para): _texte(texte)
 {
 	setPara(para);
+	setSize(para->getSize());
+	setWeight(para->getWeight());
+	setItalic(para->isItalic());
+	setUnderlined(para->isUnderlined());
+	setStrikeout(para->isStrikeout());
 }
 
 /*******************************************/
@@ -352,7 +362,7 @@ void TextZone::generate_format_begin(QTextStream & out)
 {
 	kdDebug() << "GENERATE FORMAT BEGIN" << endl;
 	/* Bold, Italic or underlined */
-	if(getWeight() > 0)
+	if(getWeight() > 50)
 		out << "\\textbf{";
 	if(isItalic())
 		out << "\\textit{";
@@ -386,10 +396,10 @@ void TextZone::generate_format_begin(QTextStream & out)
 		case EA_NONE:
 			break;
 		case EA_SUB: /* pass in math mode !! */
-			out << " $_{";
+			out << "$_{";
 			break;
 		case EA_SUPER:
-			out << " \\textsuperscript{";
+			out << "\\textsuperscript{";
 			break;
 	}
 }
@@ -424,7 +434,7 @@ void TextZone::generate_format_end(QTextStream & out)
 		out << "}";
 	if(isItalic())
 		out << "}";
-	if(getWeight() > 0)
+	if(getWeight() > 50)
 		out << "}";
 	if(isStrikeout())
 		out << "}";

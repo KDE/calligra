@@ -32,14 +32,19 @@
    License version 2.
 */
 
+#include <kapp.h>
 #include <latexexportdia.h>
-#ifndef __USE_QFD__
 #include <latexexportdia.moc>
 
 LATEXExportDia::LATEXExportDia(QWidget *parent, const char *name) :
-                           KoFilterDialog(parent, name) {
-
-	QBoxLayout *mainLayout = new QVBoxLayout(this);
+			KDialogBase(parent, name, true,
+			i18n("Latex export filter parameters"), Ok|Cancel)
+{
+	kapp->restoreOverrideCursor();
+	resize(size());
+	QWidget *page = new QWidget( this ); 
+	setMainWidget(page);
+	QBoxLayout *mainLayout = new QVBoxLayout(page, 0, spacingHint());
 	styleBox = new QVButtonGroup(i18n("Document Style"), this);
 	mainLayout->addWidget(styleBox);
 
@@ -127,4 +132,16 @@ QString LATEXExportDia::state()
 		result += "KWORD";
 	return result;
 }
-#endif /* __USE_QFD__ */
+
+void LATEXExportDia::slotOk()
+{
+	hide();
+	kdDebug() << "config : " << state() << endl;
+	kdDebug() << "LATEX FILTER --> BEGIN" << endl;
+	Xml2LatexParser LATEXParser(_fileIn, _fileOut, state());
+	LATEXParser.analyse();
+	kdDebug() << "---------- generate file -------------" << endl;
+	LATEXParser.generate();
+	kdDebug() << "LATEX FILTER --> END" << endl;
+	reject();
+}

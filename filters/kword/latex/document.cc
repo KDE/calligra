@@ -48,6 +48,7 @@ Document::~Document()
 /*******************************************/
 void Document::analyse(const QDomNode balise)
 {
+	//QDomNode balise = getChild(balise_initial, "FRAMESET");
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		Element *elt = 0;
@@ -174,8 +175,10 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 		_corps.getFirst()->generate(out);
 
 	/* Just for test */
-	if(_tables.getFirst() != 0)
+	/*if(_tables.getFirst() != 0)
 		_tables.getFirst()->generate(out);
+	if(_formulas.getFirst() != 0)
+		_formulas.getFirst()->generate(out);*/
 	if(hasPreambule)
 		out << "\\end{document}" << endl;
 
@@ -308,4 +311,39 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 		//out << "\\markright{}" << endl;
 		//out << "\\thispagestyle{heading}" << endl;
 	}
+}
+
+Element* Document::searchAnchor(QString anchor)
+{
+	Element *elt = _tables.first();
+	while(elt != 0)
+	{
+		kdDebug() << elt->getGrpMgr() << endl;
+		if(elt->getGrpMgr() == anchor)
+			return elt;
+		elt = _tables.next();
+	}
+	kdDebug() << "Pas de table, recherche dans les formules" << endl;
+	elt = _formulas.first();
+	while(elt != 0)
+	{
+		if(elt->getName() == anchor)
+			return elt;
+		elt = _formulas.next();
+	}
+	return NULL;
+
+}
+
+Element* Document::searchFootnote(QString footnote)
+{
+	Element* elt = _footnotes.first();
+	while(elt != 0)
+	{
+		if(elt->getName() == footnote)
+			return elt;
+		elt = _footnotes.next();
+	}
+	return NULL;
+
 }

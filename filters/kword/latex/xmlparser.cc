@@ -26,6 +26,7 @@
 
 /* Init static data */
 FileHeader* XmlParser::_fileHeader = 0;
+Document* XmlParser::_root = 0;
 
 XmlParser::XmlParser(QString filename):
 		_filename(filename)

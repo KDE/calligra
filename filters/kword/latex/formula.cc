@@ -22,6 +22,8 @@
 #include <stdlib.h>		/* for atoi function */
 #include <kdebug.h>		/* for kdDebug() stream */
 #include <qstack.h>		/* for getFormula() */
+#include <qdom.h>
+#include <kformulamimesource.h>
 #include "formula.h"
 
 /*******************************************/
@@ -62,9 +64,8 @@ void Formula::analyse(const QDomNode balise)
 		}
 		else if(getChildName(balise, index).compare("FORMULA")== 0)
 		{
-			//Token* p = balise->pContent;
-			//getFormula(p, 0);
-			//kdDebug() << _formula << endl;
+			getFormula(getChild(getChild(getChild(balise, "FORMULA"), "FORMULA"), "ROOT"), 0);
+			kdDebug() << _formula << endl;
 		}
 		
 	}
@@ -78,49 +79,47 @@ void Formula::analyse(const QDomNode balise)
 /*******************************************/
 void Formula::getFormula(QDomNode p, int indent)
 {
-/*	Markup* pM = 0;
-	Arg*  pArg = 0;
-
-	while( p )
-	{
-		switch( p->eType )
+/*	while( p.)
+	{*/
+		switch( p.nodeType() )
 		{
-			case TT_Word:
-				_formula = _formula + QString(p->zText) + " ";
-				//printf("%*s\"%s\"\n", indent, "", p->zText);
+			case QDomNode::TextNode:
+				_formula = _formula + QString(p.toText().data()) + " ";
 				break;
-			case TT_Space:
+		/*	case TT_Space:
 				_formula = _formula + p->zText;
 				//printf("%*s\"%s\"\n", indent, "", p->zText);
 				break;
 			case TT_EOL:
 				_formula = _formula + "\n";
 				//printf("%*s\n", indent, "");
-				break;
-			case TT_Markup:
-				_formula = _formula + "<" + p->zText;
-				//printf("%*s<%s", indent, "", p->zText); // The tag name
-				pM = (Markup*)p;
-				for(pArg = pM->pArg; pArg; pArg=pArg->pNext)
+				break;*/
+			case QDomNode::ElementNode:
+				_formula = _formula + "<" + p.nodeName();
+				QDomNamedNodeMap attr = p.attributes();
+				for(int index = 0; index < attr.length(); index++)
 				{ // The attributes
-					_formula = _formula + " " + pArg->zName + "=\"" + pArg->zValue + "\"";
-					//printf(" %s=\"%s\"", pArg->zName, pArg->zValue);
+					_formula = _formula + " " + attr.item(index).nodeName();
+					_formula = _formula + "=\"" + attr.item(index).nodeValue() + "\"";
 				}
-				if(pM->pContent == 0)
+				if(p.childNodes().length() == 0)
 					_formula = _formula + "/>";
 				else
 				{
 					_formula = _formula + ">";
-					//printf(">\n");
-					getFormula(pM->pContent, indent+3); // The child elements
-					_formula = _formula + "</" + p->zText + ">";
+					QDomNodeList child = p.childNodes();
+					for(int index = 0; index < child.length(); index++)
+					{
+						getFormula(child.item(index), indent+3); // The child elements
+					}
+					_formula = _formula + "</" + p.nodeName() + ">";
 				}
 				break;
-			default:
+			/*default:
 				kdError() << "Can't happen" << endl;
-				break;
+				break;*/
 		}
-		p = p->pNext;
+	/*	p = p.nextSibling();
 	}*/
 }
 
@@ -131,15 +130,15 @@ void Formula::analyseParamFrame(const QDomNode balise)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
 
-	_left = getAttr(balise, "LEFT").toInt();
-	_top = getAttr(balise, "TOP").toInt();
-	_right = getAttr(balise, "RIGHT").toInt();
-	_bottom = getAttr(balise, "BOTTOM").toInt();
-	setRunAround(getAttr(balise, "RUNAROUND").toInt());
-	setAroundGap(getAttr(balise, "RUNAROUNDGAP").toInt());
+	_left = getAttr(balise, "left").toInt();
+	_top = getAttr(balise, "top").toInt();
+	_right = getAttr(balise, "right").toInt();
+	_bottom = getAttr(balise, "bottom").toInt();
+	setRunAround(getAttr(balise, "runaround").toInt());
+	setAroundGap(getAttr(balise, "runaroundGap").toInt());
 	setAutoCreate(getAttr(balise, "AUTOCREATENEWFRAME").toInt());
-	setNewFrame(getAttr(balise, "NEWFRAMEBEHAVIOUR").toInt());
-	setSheetSide(getAttr(balise, "SHEETSIDE").toInt());
+	setNewFrame(getAttr(balise, "newFrameBehaviour").toInt());
+	setSheetSide(getAttr(balise, "sheetside").toInt());
 }
 
 /*******************************************/
@@ -148,6 +147,12 @@ void Formula::analyseParamFrame(const QDomNode balise)
 void Formula::generate(QTextStream &out)
 {
 	kdDebug() << "FORMULA GENERATION" << endl;
-	out << _formula << endl;
+
+	KFormula::KFormulaMimeSource *formula = 
+		new KFormula::KFormulaMimeSource(QDomDocument(_formula));
+	kdDebug() << QString(formula->encodedData("text/x-tex")) << endl;
+	out << QString(formula->encodedData("text/x-tex"));
+	
+	//out << _formula << endl;
 }
 

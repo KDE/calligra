@@ -26,7 +26,6 @@
 #include <qlist.h>
 #include "element.h"
 #include "border.h"
-//#include "listepara.h"
 #include "para.h"
 
 /***********************************************************************/
@@ -40,7 +39,7 @@
 class Texte: public Element, Border
 {
 	/* DATA MARKUP */
-	int      _left,
+	int  _left,
 		 _top,
 		 _right,
 		 _bottom;
@@ -52,7 +51,7 @@ class Texte: public Element, Border
 
 	/* CHILD MARKUP */
 	QList<Para> _parags;
-	QList<Para> _footnotes;
+	//QList<Para> _footnotes;
 
 	/* USEFULL DATA */
 	EEnv      _lastEnv;
@@ -108,7 +107,7 @@ class Texte: public Element, Border
 		void setNewFrame  (const int n)    { _newFrameBehaviour = (TNFrame) n; }
 		void setSheetSide (const int s)    { _sheetSide = (TSide) s;    }
 
-		Para* searchFootnote(const QString);
+		//Para* searchFootnote(const QString);
 
 		/**
 		 * Get informations from a markup tree.
