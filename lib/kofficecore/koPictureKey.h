@@ -37,7 +37,8 @@ namespace KoPictureType
      *
      * Possible values:
      * \li 3 for Qt 2.1.x and later Qt 2.x
-     * \li 4 for QT 3.x
+     * \li 4 for Qt 3.0
+     * \li 5 for Qt 3.1 and later Qt 3.x
      * \li -1 for current Qt
      */
     const int formatVersionQPicture=-1;
