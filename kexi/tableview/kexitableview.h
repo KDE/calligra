@@ -156,10 +156,10 @@ public:
 
 	/*! \return true if navigation panel is enabled (visible) for the view.
 	  True by default. */
-	bool navigationPanelEnabled() const;
+	bool navigatorEnabled() const;
 	
 	/*! Enables or disables navigation panel visibility for the view. */
-	void setNavigationPanelEnabled(bool set);
+	void setNavigatorEnabled(bool set);
 	
 	int currentColumn() const;
 	int currentRow() const;

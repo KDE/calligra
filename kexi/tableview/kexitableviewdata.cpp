@@ -61,7 +61,7 @@ KexiTableViewColumn::KexiTableViewColumn(
 		if (m_nameOrCaption.isEmpty())
 			m_nameOrCaption = field->name();
 	}
-	//setup column's readonly flag: true if this is patent table's field
+	//setup column's readonly flag: true if this is parent table's field
 	m_readOnly = (query.parentTable()!=f.table());
 }
 

@@ -123,7 +123,7 @@ class KexiTableViewPrivate
 
 	/*! true if navigation panel is enabled (visible) for the view.
 	 True by default. */
-	bool navigationPanelEnabled : 1;
+	bool navigatorEnabled : 1;
 
 	/*! used to force single skip keyPress event. */
 	bool skipKeyPress : 1;

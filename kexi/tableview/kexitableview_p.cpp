@@ -44,7 +44,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	
 	contentsMousePressEvent_dblClick = false;
 	isSortingEnabled = true;
-	navigationPanelEnabled = true;
+	navigatorEnabled = true;
 	navPanel = 0;
 	skipKeyPress = false;
 	vScrollBarValueChanged_enabled = true;

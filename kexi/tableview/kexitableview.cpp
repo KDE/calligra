@@ -1302,7 +1302,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	if (isInsertingEnabled()) {
 		if (rowAt(e->pos().y())==-1) {
 			newrow = rowAt(e->pos().y() - d->rowHeight);
-			if (newrow==-1)
+			if (newrow==-1 && m_data->count()>0)
 				return;
 			newrow++;
 			kdDebug(44021) << "Clicked just on 'insert' row." << endl;
@@ -2067,16 +2067,25 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 {
 	int newrow = row;
 	int newcol = col;
+
 	if(rows() <= 0)
 	{
-		d->curRow=0;
-		d->pCurrentItem=0;
 		d->pVerticalHeader->setCurrentRow(-1);
-		return;
+		if (isInsertingEnabled()) {
+			d->pCurrentItem=d->pInsertItem;
+			newrow=0;
+			if (col>=0)
+				newcol=col;
+			else
+				newcol=0;
+		}
+		else {
+			d->pCurrentItem=0;
+			d->curRow=-1;
+			d->curCol=-1;
+			return;
+		}
 	}
-
-//	int oldRow = d->curRow;
-//	int oldCol = d->curCol;
 
 	if(col>=0)
 	{
@@ -2593,16 +2602,16 @@ bool KexiTableView::rowEditing() const
 	return d->rowEditing;
 }
 
-bool KexiTableView::navigationPanelEnabled() const
+bool KexiTableView::navigatorEnabled() const
 {
-	return d->navigationPanelEnabled;
+	return d->navigatorEnabled;
 }
 	
-void KexiTableView::setNavigationPanelEnabled(bool set)
+void KexiTableView::setNavigatorEnabled(bool set)
 {
-	if (d->navigationPanelEnabled==set)
+	if (d->navigatorEnabled==set)
 		return;
-	d->navigationPanelEnabled = set;
+	d->navigatorEnabled = set;
 	if(!set)
 		d->navPanel->hide();
 	else
@@ -2613,7 +2622,7 @@ void KexiTableView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int
 {
 /*todo*/
 	kdDebug(44021)<<"KexiTableView::setHBarGeometry"<<endl;
-	if (d->navPanel && d->navigationPanelEnabled) {
+	if (navigatorEnabled()) {
 		hbar.setGeometry( x + d->navPanel->width(), y, w - d->navPanel->width(), h );
 	}
 	else
