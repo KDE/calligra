@@ -262,3 +262,5 @@ void KivioStencilSetAction::slotActivated(int id)
 
   emit activated(path);
 }
+
+#include "kiviostencilsetaction.moc"
