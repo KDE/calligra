@@ -69,6 +69,7 @@ void KexiBrowser::clearView()
 
 void KexiBrowser::generateView()
 {
+	kdDebug() << "KexiBrowser::generateView()" << endl;
 	clear();
 
 	m_database = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, this, i18n("Database"));

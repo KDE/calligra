@@ -20,6 +20,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kstartupinfo.h>
+#include <kurl.h>
 
 #include "kexiapplication.h"
 
@@ -61,5 +62,6 @@ int main(int argc, char *argv[])
 //	KexiDB *db = new KexiDB(0);
 //	QStringList drivers = db->getDrivers();
 //	db->add("mySQL");
+
 	return app.exec();
 }  

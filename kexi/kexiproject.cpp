@@ -134,6 +134,7 @@ KexiProject::saveProject()
 		
 		delete store;
 		m_modified = false;
+		kexi->mainWindow()->slotProjectModified();
 		return true;
 	}
 
@@ -194,7 +195,7 @@ KexiProject::loadProject(const QString& url)
 	parsedCred.user     = userElement.text();
 	parsedCred.password = passElement.text();
 	parsedCred.savePassword = stringToBool(savePassElement.text());
-	m_modified = false;
+	bool mod = false;
 	
 	if(!parsedCred.savePassword)
 	{
@@ -210,14 +211,18 @@ KexiProject::loadProject(const QString& url)
 			if(keep)
 			{
 				parsedCred.savePassword = true;
-				m_modified = true;
+				mod = true;
 			}
 		}
 	}
 	
 	initDbConnection(parsedCred);
 	
-	m_modified = false;
+	m_modified = mod;
+	kexi->mainWindow()->slotProjectModified();
+	
+	kdDebug() << "File opened!" << endl;
+	
 	return true;
 }
 
@@ -243,8 +248,8 @@ KexiProject::initDbConnection(const Credentials &cred, const bool create)
 	{
 		m_cred = cred;
 		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
-		kexi->mainWindow()->slotProjectModified();
 		m_modified = true;
+		kexi->mainWindow()->slotProjectModified();
 		return true;
 	}
 	else
@@ -287,6 +292,7 @@ KexiProject::clear()
 {
 	m_url = "";
 	m_modified = false;
+	kexi->mainWindow()->slotProjectModified();
 }
 
 void
