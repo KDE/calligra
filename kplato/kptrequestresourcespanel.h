@@ -20,7 +20,7 @@
 #ifndef KPTREQUESTRESOURCESPANEL_H
 #define KPTREQUESTRESOURCESPANEL_H
 
-#include "requestresourcespanelbase.h"
+#include "kpttaskresourcespanelbase.h"
 
 
 #include <qlistview.h>
@@ -71,7 +71,7 @@ public:
 };
 
 
-class KPTRequestResourcesPanel : public RequestResourcesPanelBase {
+class KPTRequestResourcesPanel : public KPTTaskResourcesPanelBase {
     Q_OBJECT
 public:
     KPTRequestResourcesPanel (QWidget *parent, KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups);

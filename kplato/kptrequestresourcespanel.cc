@@ -149,7 +149,7 @@ int KPTGroupLVItem::numRequests() {
 
 KPTRequestResourcesPanel::KPTRequestResourcesPanel
                                         (QWidget *parent, KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups)
-    : RequestResourcesPanelBase(parent),
+    : KPTTaskResourcesPanelBase(parent),
       m_task(task),
       m_resourceGroups(resourceGroups),
       selectedGroup(0),
