@@ -54,6 +54,7 @@
 #include "objecttreeview.h"
 #include "commands.h"
 #include "extrawidgets.h"
+#include "pixmapcollection.h"
 
 #include "formmanager.h"
 
@@ -199,6 +200,8 @@ FormManager::windowChanged(QWidget *w)
 			m_active = form;
 			if(m_treeview)
 				m_treeview->setForm(form);
+			if(m_buffer)
+				m_buffer->setCollection(activeForm()->pixmapCollection());
 
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
 			//if(m_collection)
@@ -668,6 +671,16 @@ FormManager::slotStyle()
 	for(QObject *o = l->first(); o; o = l->next())
 		(static_cast<QWidget*>(o))->setStyle( style );
 	delete l;
+}
+
+void
+FormManager::editFormPixmapCollection()
+{
+	if(!activeForm())
+		return;
+
+	PixmapCollectionEditor dialog(activeForm()->pixmapCollection(), activeForm()->toplevelContainer()->widget()->topLevelWidget());
+	dialog.exec();
 }
 
 void

@@ -29,6 +29,7 @@ KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const QString &type_name
  : QObject(parent, type_name.latin1())
 	,QAsciiDict<KexiProperty>(101, false)
 	,m_typeName( type_name )
+	,m_collection(0)
 {
 	setAutoDelete( true );
 }
@@ -45,14 +46,14 @@ KexiPropertyBuffer::changeProperty(const QCString &property, const QVariant &val
 	if (!prop)
 		return;
 
-	kdDebug() << "KexiPropertyBuffer::changeProperty(): changing: " << property 
+	kdDebug() << "KexiPropertyBuffer::changeProperty(): changing: " << property
 		<< " from '" << (prop->value().toString().isNull() ? QString("NULL") : prop->value().toString())
 		<< "' to '" << (value.toString().isNull() ? QString("NULL") : value.toString()) << "'" << endl;
 /*
 	bool ch = false;
 	if (prop->value().type()==QVariant::DateTime
 		|| prop->value().type()==QVariant::Time) {
-		//for date and datetime types: compare with strings, because there 
+		//for date and datetime types: compare with strings, because there
 		//can be miliseconds difference
 		ch = prop->value().toString() != value.toString();
 	}
@@ -100,6 +101,21 @@ void KexiPropertyBuffer::debug()
 	for (;it.current();++it) {
 		it.current()->debug();
 	}
+}
+
+void
+KexiPropertyBuffer::addCollectionPixmap(KexiProperty *prop, const QString pixmapName)
+{
+	m_pixmaps[prop->name()] = pixmapName;
+	emit collectionItemChoosed(*this, *prop, pixmapName);
+}
+
+QString
+KexiPropertyBuffer::pixmapName(const QString &name)
+{
+	if(!m_pixmaps.contains(name))
+		return QString::null;
+	return m_pixmaps[name];
 }
 
 #include "kexipropertybuffer.moc"

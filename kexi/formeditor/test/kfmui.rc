@@ -9,6 +9,7 @@
    <Action name="taborder"/>
    <Action name="adjust"/>
    <Action name="change_style"/>
+   <Action name="pixmap_collection"/>
   </Menu>
   <Menu name="widgets">
    <text>&amp;Widgets</text>
@@ -77,6 +78,7 @@
 </ToolBar>
 <ToolBar name="tools" fullWidth="false">
    <Action name="pointer"/>
+   <Action name="pixmap_collection"/>
    <Action name="change_style"/>
 </ToolBar>
 

@@ -32,6 +32,7 @@ class QDomElement;
 class KActionCollection;
 class KCommandHistory;
 class KCommand;
+class PixmapCollection;
 typedef QPtrList<QWidget> QtWidgetList;
 
 namespace KFormDesigner {
@@ -139,6 +140,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		KCommandHistory*	commandHistory() { return m_history; }
 		KActionCollection*	actionCollection() { return m_collection; }
 
+		PixmapCollection*	pixmapCollection() { return m_pixcollection; }
+
 		/*! Adds a widget in the form CommandList. Please use it instead of calling directly actionCollection()->addCommand(). */
 		void addCommand(KCommand *command, bool execute);
 
@@ -223,6 +226,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		ObjectTreeC		m_tabstops;
 		bool			m_autoTabstops;
+
+		PixmapCollection	*m_pixcollection;
 };
 
 }

@@ -35,6 +35,7 @@
 #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "spacer.h"
+#include "pixmapcollection.h"
 
 #include "form.h"
 
@@ -45,6 +46,7 @@ Form::Form(FormManager *manager, const char *name)
 {
 	m_toplevel = 0;
 	m_topTree = 0;
+	m_collection = 0;
 	m_manager = manager;
 	m_resizeHandles.setAutoDelete(true);
 	m_inter = true;
@@ -65,6 +67,7 @@ Form::createToplevel(QWidget *container, const QString &classname)
 	m_topTree = new ObjectTree(i18n("Form"), container->name(), container, eater, m_toplevel);
 	m_toplevel->setObjectTree(m_topTree);
 	m_toplevel->setForm(this);
+	m_pixcollection = new PixmapCollection(container->name(), this);
 
 	m_topTree->setWidget(container);
 	m_topTree->addModProperty("caption", name());

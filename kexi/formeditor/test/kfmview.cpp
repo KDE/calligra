@@ -63,6 +63,7 @@ KFMView::KFMView()
 	KStdAction::quit( kapp, SLOT(quit()), actionCollection());
 	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), manager, SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Adjust Size"), "viewmagfit", KShortcut(0), manager, SLOT(adjustWidgetSize()), actionCollection(), "adjust");
+	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
 #if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
 	KStdAction::clear(manager, SLOT(deleteWidget()), actionCollection());
@@ -89,7 +90,6 @@ KFMView::slotPreviewForm()
 void
 KFMView::loadUIFile(const QString &filename)
 {
-	kdDebug() << "Truing to load the UI FIle : " << filename << endl;
 	manager->loadForm(false, filename);
 }
 

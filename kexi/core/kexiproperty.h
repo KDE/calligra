@@ -33,21 +33,21 @@ class KexiPropertyBuffer;
 
 /** This class holds a single property, which can be any of the types supported by QVariant.
     It includes support for QStringList properties, an i18n'ed label and stores an old value to allow undo.
-    
+
     Create a property :
     \code
     property = KexiProperty(name, value); // name is a QCString, value is whatever type QVariant supports
     \endcode
-    
+
     There are two exceptions :
     \code
     property = KexiProperty(name, QVariant(bool, 3));  // You must use QVariant(bool, int) to create a bool property
     // See QVariant doc for more details
-    
+
     // To create a list property
     property = KexiProperty(name, "Current Value", list); // where list is the list of possible values for this property
     \endcode
-    
+
  **/
 class KEXICORE_EXPORT KexiProperty
 {
@@ -60,19 +60,19 @@ class KEXICORE_EXPORT KexiProperty
 //		/*! Creates a simple property with \a name as name and \a value as value. */
 //		KexiProperty(const QString &name, QVariant value);
 
-		/*! Creates a simple property with \a name as name, \a value as value 
+		/*! Creates a simple property with \a name as name, \a value as value
 		 and \a as i18n'ed description. */
 		KexiProperty(const QCString &name, QVariant value, const QString &desc = QString::null);
 
-		/*! Creates a list property with \a name as name, \a value as value 
-		  and \a key_list as the list of all possible keys. Value must be 
+		/*! Creates a list property with \a name as name, \a value as value
+		  and \a key_list as the list of all possible keys. Value must be
 		  an element from \a key_list list.
 		  \a name_list is a list of i18n'ed names that will be visible ont he screen,
 		  instead of keys.
 		  The user will be able to choose a value from \a key_list.
 		*/
-		KexiProperty(const QCString &name, const QString &value, 
-		 const QStringList &key_list, const QStringList &name_list, 
+		KexiProperty(const QCString &name, const QString &value,
+		 const QStringList &key_list, const QStringList &name_list,
 		 const QString &desc = QString::null);
 
 		//! Copy constructor.
@@ -82,21 +82,21 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty();
 
 		~KexiProperty();
-		
+
 		const KexiProperty& operator=(const KexiProperty &property);
 
-		/*! Adds \a prop as a child of this property. 
+		/*! Adds \a prop as a child of this property.
 		 The children will be owned by this property */
 		void addChild(KexiProperty *prop);
 
 		/*! \return parent for this property or NULL if this property has not parent.
 		 Properies that have parents, are called subproperties. For example property of type
-		 "Rectangle" has 4 subproperties: x, y, width, height. 
+		 "Rectangle" has 4 subproperties: x, y, width, height.
 		 Any change made to any subproperty is transferred to its parent property (if present),
 		 So both property and its parent becomes changed. */
 		KexiProperty *parent() const { return m_parent; }
 
-		/*! \return a map of all children for this property, or NULL of there 
+		/*! \return a map of all children for this property, or NULL of there
 		 is no children for this property */
 		KexiProperty::List* children() const { return m_children_list; }
 
@@ -114,28 +114,28 @@ class KEXICORE_EXPORT KexiProperty
 		  otherwise value (converted to text) is just returned. */
 		QString valueText() const;
 
-		/*! Sets this property value to a new value \a v. If this is a first change, 
+		/*! Sets this property value to a new value \a v. If this is a first change,
 		 and \a saveOldValue is true, an old value is saved, and can be later retrieved
-		 using oldValue(). If \a saveOldValue if false, old value is cleared and the 
+		 using oldValue(). If \a saveOldValue if false, old value is cleared and the
 		 property looks loke it was not changed.
 		 It the property has a parent property, the parent has set "changed" flag when needed.
 		*/
 		void setValue(const QVariant &v, bool saveOldValue = true);
 
-		/*! For property of type "list of values": 
-		 sets \a key_list as a new list of keys and \a name_list as a new list 
+		/*! For property of type "list of values":
+		 sets \a key_list as a new list of keys and \a name_list as a new list
 		 of i18n'e names (corresponding to keys). Sometimes it's necessary to change
-		 the list. You should ensure yourself that current value is a string that 
+		 the list. You should ensure yourself that current value is a string that
 		 is one of a new \a key_list.
 		 \sa keys(), \a names() */
 		void setList(const QStringList &key_list, const QStringList &name_list);
 
-		/*! Resets this property value to its old value. 
+		/*! Resets this property value to its old value.
 		 The property becames unchanged after that and old value becames null.
 		 This method is equal to setValue( oldValue(), false ); */
 		void resetValue();
 
-		/*! \return old property value. This makes only sense when changed() is true. 
+		/*! \return old property value. This makes only sense when changed() is true.
 		 The old value is saved on first change.
 		*/
 		QVariant	oldValue() const { return m_oldValue; }
@@ -147,37 +147,37 @@ class KEXICORE_EXPORT KexiProperty
 		QVariant::Type  type() const;
 
 		/*! \return a pointer to the string list containing all possible keys for this property
-		 or NULL if this is not a property of type stringlist. The values in this list are ordered, 
-		 so the first key element is associated with first element from the list returned by 
+		 or NULL if this is not a property of type stringlist. The values in this list are ordered,
+		 so the first key element is associated with first element from the list returned by
 		 KexiProperty::names(), and so on. */
 		QStringList* keys() const;
 
 		/*! \return a pointer to the string list containing all possible i18n'd names for this property
-		 or NULL if this is not a property of type stringlist. 
+		 or NULL if this is not a property of type stringlist.
 		 @sa keys() */
 		QStringList* names() const;
 
-		/*! \return 1 if the property should be synced automatically in Property Editor 
-		  as soon as editor contents change (e.g. when the user types text). If autoSync() == 0, property value 
+		/*! \return 1 if the property should be synced automatically in Property Editor
+		  as soon as editor contents change (e.g. when the user types text). If autoSync() == 0, property value
 		  will be updated when the user presses Enter or when another editor gets the focus.
 		  Property follow Property Editor global rule if autoSync() != 0 and 1 (default)
 		*/
 		int		autoSync() const { return m_autosync; }
 
-		/*! if \a sync == true, then the property will be synced automatically in Property Editor 
-		  as soon as editor contents change (e.g. when the user types text). If \a sync == false, property value 
+		/*! if \a sync == true, then the property will be synced automatically in Property Editor
+		  as soon as editor contents change (e.g. when the user types text). If \a sync == false, property value
 		  will be updated when the user presses Enter or when another editor gets the focus.
 		*/
 		void setAutoSync(int sync) { m_autosync = sync; }
 
-		//! \return true if this preperty value is changed. 
+		//! \return true if this preperty value is changed.
 		bool changed() const;
 
 		/*! Marks this property as changed if \a set is true, or unchanged if \a set is true. */
 		void setChanged(bool set);
 
-		/*! \return visiblility of this property. Property can be hidden, what can usually mean that 
-		 it wont be available to the GUI (or scripting). After construction, property is visible. 
+		/*! \return visiblility of this property. Property can be hidden, what can usually mean that
+		 it wont be available to the GUI (or scripting). After construction, property is visible.
 		 Parent property's visibility has a priority over visiblitity of this property. */
 		bool isVisible() const;
 
@@ -189,25 +189,27 @@ class KEXICORE_EXPORT KexiProperty
 		*/
 		static QString format(const QVariant &v);
 
+		KexiPropertyBuffer*  buffer() { return m_buf; }
+
 		void debug();
 	protected:
 		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue),
 		 but allows to skip updating values for children. */
 		void setValue(const QVariant &v, bool updateChildren, bool saveOldValue);
 
-		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue), 
+		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue),
 		 but \a v is set for the child named \a childName. */
-		void setChildValue(const QCString& childName, const QVariant &v, 
+		void setChildValue(const QCString& childName, const QVariant &v,
 			bool saveOldValue);
 
 		/*! Internal: Updates this property value using \a v value coming from a child
 		 named \a childName. This methid is only called by a child of this property,
-		 in setValue(), to update parent's value. This method has no meaning 
+		 in setValue(), to update parent's value. This method has no meaning
 		 for childless (atomic) properties.
 		 Example: if Rect.x property is cahnged in the child,
-		 the child calls parent->updateValueForChild("x", value_of_x). 
+		 the child calls parent->updateValueForChild("x", value_of_x).
 		*/
-		void updateValueForChild(const QCString& childName, const QVariant &v, 
+		void updateValueForChild(const QCString& childName, const QVariant &v,
 			bool saveOldValue);
 
 //	private:

@@ -27,6 +27,8 @@
 
 #include "kexiproperty.h"
 
+class PixmapCollection;
+
 /** This class is a QDict<KexiProperty> which holds properties to be shown in
     Property Editor. Properties are indexed by their names, case insensitively.
     \sa KexiPropertyEditor for help on how to use KexiPropertyBuffer.
@@ -72,6 +74,13 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 		*/
 		QString typeName() const { return m_typeName; }
 
+		void  setCollection(PixmapCollection *collection) { m_collection = collection; }
+		PixmapCollection*  collection()  { return m_collection; }
+		/*! The property \a prop value is now the pixmap in the PixmapCollection whose name is \a pixmapName.*/
+		void addCollectionPixmap(KexiProperty *prop, const QString pixmapName);
+		//! \return the name of the pixmap for the property whose name is \a name.
+		QString pixmapName(const QString &name);
+
 		/*! Removes all properties from the buffer and destroys them. */
 		virtual void clear();
 
@@ -85,14 +94,19 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 
 		/*! Parameterless version of the above method. */
 		void propertyChanged();
-		
+
 		void propertyReset(KexiPropertyBuffer &buf, KexiProperty &property);
+
+		//! This signal is emitted when the user chooses an item in the PixmapCollection
+		void collectionItemChoosed(KexiPropertyBuffer &buf, KexiProperty &property, const QString &name);
 
 		void destroying();
 
 	protected:
 		QString m_typeName;
 		KexiProperty::List m_list;
+		PixmapCollection  *m_collection;
+		QMap<QString, QString>  m_pixmaps;
 
 	friend class KexiProperty;
 };

@@ -20,7 +20,7 @@
 
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Move tab between two QTabWidgets by drag'n drop
-* Better editor for iconview and listview if they really are necessary
+* Better editor for iconview
 
 ^^^^^^^^^^^^^^^^ DONE ^^^^^^^^^^^^^^
 * Finish sync between Form and ObjectTreeView (2/21/04)
@@ -56,3 +56,4 @@
 * Make ObjectTreeView handle multiple widgets (11/05/04)
 * Manage label buddies using a popup menu (24/05/04)
 * dragging with CTRL key can cause object's copying (25/05/04)
+* Create a PixmapCollection with an editor which allow to choose pixmaps by path or from KDE icons, no inline saving of pixmaps (9/06/04)

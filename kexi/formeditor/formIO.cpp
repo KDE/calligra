@@ -26,7 +26,6 @@
 #include <qcursor.h>
 #include <qbuffer.h>
 #include <qimage.h>
-//#include <qtabwidget.h>
 #include <qlayout.h>
 #include <qobjectlist.h>
 #include <qdatetime.h>
@@ -42,6 +41,7 @@
 #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "spacer.h"
+#include "pixmapcollection.h"
 
 #include "formIO.h"
 
@@ -130,6 +130,9 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 		QDomText tabStopText = domDoc.createTextNode(it->name());
 		tabstop.appendChild(tabStopText);
 	}
+
+	// Save the Form 's PixmapCollection
+	form->pixmapCollection()->save(uiElement);
 
 	return 1;
 }
@@ -229,6 +232,9 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 		if(index == -1)
 			kdDebug() << "FormIO: error the item is not in list " << endl;
 	}
+
+	// Load the pixmap collection
+	form->pixmapCollection()->load(ui.namedItem("collection"));
 
 	return 1;
 }
