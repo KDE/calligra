@@ -33,3 +33,4 @@ kugar_la_SOURCES = main.cpp
 kugar_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kugar_la_LIBADD = $(LIB_KOFFICECORE)
 
+kde_services_DATA = kugarpart.desktop

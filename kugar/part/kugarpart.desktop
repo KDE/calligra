@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KOffice Report Generator Component
+MimeType=application/x-kugar;application/x-vnd.kde.kugar.mixed
+Type=Service
+Terminal=0
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,Browser/View
+X-KDE-Library=libkugarpart
+X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed

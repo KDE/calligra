@@ -71,6 +71,8 @@ kword_la_LIBADD = $(LIB_KOFFICECORE)
 kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
+kde_services_DATA = kwordpart.desktop
+
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc kword_readonly.rc
 

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KPresenter
+X-KDE-Library=libkpresenterpart
+MimeType=application/x-kpresenter;application/mspowerpoint
+Type=Service
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-kpresenter

@@ -33,3 +33,4 @@ rcdir = $(kde_datadir)/example
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc example_aboutdata.h -o $(podir)/example.pot
+kde_services_DATA = examplepart.desktop

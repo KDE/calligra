@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KOffice Word Processing Component
+X-KDE-Library=libkwordpart
+X-KDE-NativeMimeType=application/x-kword
+MimeType=application/x-kword;application/msword;text/rtf;text/plain;application/x-kword-crypt;application/x-mswrite
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart

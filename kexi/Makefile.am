@@ -54,3 +54,4 @@ messages: rc.cpp
 #uncomment this if you like doxygen docs for Kexi
 #include $(top_srcdir)/../admin/Doxyfile.am
 
+kde_services_DATA = kexipart.desktop

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=KOffice Scalable Graphics Component
+X-KDE-Library=libkarbonpart
+MimeType=application/x-karbon;application/illustrator;image/x-eps;application/postscript
+# kghostview has 6 for application/postscript, we need to be under that...
+InitialPreference=5
+Type=Service
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-karbon

@@ -89,6 +89,8 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
+kde_services_DATA = kpresenterpart.desktop
+
 rcdir = $(kde_datadir)/kpresenter
 rc_DATA = kpresenter.rc kpresenter_readonly.rc
 

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KOffice Spreadsheet Component
+X-KDE-Library=libkspreadpart
+MimeType=application/x-kspread;application/msexcel;text/x-csv;application/x-kspread-crypt;application/x-quattropro
+Type=Service
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-kspread

@@ -51,3 +51,4 @@ kivio_view.lo: ui/kivio_protection_panel_base.h \
 	ui/kivio_layer_panel_base.h ui/kivio_birdeye_panel_base.h \
 	ui/export_page_dialog_base.h  \
 	ui/aligndialog.h
+kde_services_DATA = kiviopart.desktop

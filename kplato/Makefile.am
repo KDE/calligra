@@ -49,3 +49,4 @@ rc_DATA = kplato.rc
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kptaboutdata.h -o $(podir)/kplato.pot
+kde_services_DATA = kplatopart.desktop

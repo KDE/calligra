@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KOffice Chart Component
+X-KDE-Library=libkchartpart
+Type=Service
+MimeType=application/x-kchart
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,KOfficeChart
+X-KDE-NativeMimeType=application/x-kchart

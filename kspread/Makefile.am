@@ -89,6 +89,8 @@ kspread_la_LIBADD = $(LIB_KOFFICECORE)
 kdelnk_DATA = kspread.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
+kde_services_DATA = kspreadpart.desktop
+
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc kspread_readonly.rc
 
