@@ -16,11 +16,37 @@
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
-	<Text>The LCM() function returns the lowest common multiple for two or more float values</Text>
+	<Text>The LCM() function returns the least common multiple for two or more float values</Text>
 	<Syntax>LCM(value; value)</Syntax>
 	<Example>LCM(6;4) returns 12</Example>
 	<Example>LCM(1.5;2.25) returns 4.5</Example>
 	<Example>LCM(2;3;4) returns 12</Example>
+	<Related>GCD</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>GCD</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>First number</Comment>
+        <Type range="true">Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Second Number</Comment>
+        <Type range="true">Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Third Number</Comment>
+        <Type range="true">Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The GCD() function returns the greatest common denominator for two or more integer values.</Text>
+	<Syntax>GCD(value; value)</Syntax>
+	<Example>GCD(6;4) returns 2</Example>
+	<Example>GCD(10;20) returns 10</Example>
+	<Example>GCD(20;15;10) returns 5</Example>
+	<Related>LCM</Related>
       </Help>
     </Function>
 
@@ -40,11 +66,9 @@
         <Type range="true">Int</Type>
       </Parameter>
       <Help>
-	<Text>The LCD() function returns the largest common denominator for two or more integer values.</Text>
+	<Text>The LCD() function returns the largest common denominator for two or more integer values. This function</Text>
+        <Text>This function is obsolete and will be removed in a later version of KSpread. It is provided only for compatibility. Please use the GCD function instead.</Text>
 	<Syntax>LCD(value; value)</Syntax>
-	<Example>LCD(6;4) returns 2</Example>
-	<Example>LCD(10;20) returns 10</Example>
-	<Example>LCD(20;15;10) returns 5</Example>
       </Help>
     </Function>
 

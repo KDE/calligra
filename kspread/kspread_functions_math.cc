@@ -59,9 +59,9 @@ bool kspreadfunc_fact( KSContext& context );
 bool kspreadfunc_factdouble( KSContext& context );
 bool kspreadfunc_fib( KSContext& context );
 bool kspreadfunc_floor( KSContext& context );
+bool kspreadfunc_gcd( KSContext & context );
 bool kspreadfunc_int( KSContext& context );
 bool kspreadfunc_inv( KSContext& context );
-bool kspreadfunc_lcd( KSContext & context );
 bool kspreadfunc_lcm( KSContext & context );
 bool kspreadfunc_ln( KSContext& context );
 bool kspreadfunc_log( KSContext& context );
@@ -110,12 +110,13 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "EVEN",        kspreadfunc_even );
   repo->registerFunction( "EXP",         kspreadfunc_exp );
   repo->registerFunction( "FACT",        kspreadfunc_fact );
-  repo->registerFunction( "FACTDOUBLE",  kspreadfunc_factdouble ); // KSpread-specific,
+  repo->registerFunction( "FACTDOUBLE",  kspreadfunc_factdouble ); 
   repo->registerFunction( "FIB",         kspreadfunc_fib ); // KSpread-specific, like Quattro-Pro's FIB
   repo->registerFunction( "FLOOR",       kspreadfunc_floor );
+  repo->registerFunction( "GCD",         kspreadfunc_gcd );
   repo->registerFunction( "INT",         kspreadfunc_int );
   repo->registerFunction( "INV",         kspreadfunc_inv );
-  repo->registerFunction( "LCD",         kspreadfunc_lcd );
+  repo->registerFunction( "LCD",         kspreadfunc_gcd ); // obsolete, use GCD instead, remove in 1.4
   repo->registerFunction( "LCM",         kspreadfunc_lcm );
   repo->registerFunction( "LN",          kspreadfunc_ln );
   repo->registerFunction( "LOG",         kspreadfunc_log );
@@ -587,7 +588,7 @@ bool kspreadfunc_max( KSContext& context )
   return b;
 }
 
-static int kspreadfunc_lcd_lcd(int value1, int value2)
+static int kspreadfunc_gcd_gcd(int value1, int value2)
 {
   // start with the lower value.
   int n = (value1 <= value2 ? value1 : value2);
@@ -608,7 +609,7 @@ static int kspreadfunc_lcd_lcd(int value1, int value2)
   return n;
 }
 
-static bool kspreadfunc_lcd_helper( KSContext & context,
+static bool kspreadfunc_gcd_helper( KSContext & context,
                                     QValueList<KSValue::Ptr>& args,
                                     int & result)
 {
@@ -620,7 +621,7 @@ static bool kspreadfunc_lcd_helper( KSContext & context,
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_lcd_helper( context, (*it)->listValue(), result ) )
+      if ( !kspreadfunc_gcd_helper( context, (*it)->listValue(), result ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::IntType, true ) )
@@ -645,12 +646,12 @@ static bool kspreadfunc_lcd_helper( KSContext & context,
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_lcd_helper( context, (*it)->listValue(), result ) )
+      if ( !kspreadfunc_gcd_helper( context, (*it)->listValue(), result ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::IntType, true ) )
     {
-      int n = kspreadfunc_lcd_lcd(result, (*it)->intValue());
+      int n = kspreadfunc_gcd_gcd(result, (*it)->intValue());
 
       if (n != result)
       {
@@ -670,12 +671,12 @@ static bool kspreadfunc_lcd_helper( KSContext & context,
   return true;
 }
 
-// Function: lcd
-bool kspreadfunc_lcd( KSContext & context )
+// Function: GCD
+bool kspreadfunc_gcd( KSContext & context )
 {
   int result = 0;
 
-  bool b = kspreadfunc_lcd_helper(context, context.value()->listValue(),
+  bool b = kspreadfunc_gcd_helper(context, context.value()->listValue(),
 				  result);
 
   if (b)
