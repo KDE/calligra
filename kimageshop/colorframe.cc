@@ -86,17 +86,23 @@ void ColorFrame::mousePressEvent (QMouseEvent *e)
 {
   if (e->button() & LeftButton)
     {
+	  emit clicked(e->pos());
+
 	  m_dragging = true;
 	  QPoint pos = QPoint(e->pos().x() - contentsRect().left(),
 						  e->pos().y() - contentsRect().top());
-	  
-	  if (pos.x() < 0
-		  || pos.y() < 0
-		  || pos.x() >= contentsRect().width()
-		  || pos.y() >= contentsRect().height())
-		return ;
-	  
-      QColor c = colorAt(pos);
+
+	  if (pos.x() < 0)
+		pos.setX(0);
+	  else if (pos.x() >= contentsRect().width())
+		pos.setX(contentsRect().width()-1);
+
+	  if (pos.y() < 0)
+		pos.setY(0);
+	  else if (pos.y() >= contentsRect().height())
+		pos.setY(contentsRect().height()-1);
+
+	  QColor c = colorAt(pos);
 	  emit colorSelected(c);
 	}
   else

@@ -18,8 +18,10 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qframe.h>
 #include <kdebug.h>
+
+#include <qpainter.h>
+#include <qpen.h>
 
 #include "colorframe.h"
 #include "colorslider.h"
@@ -33,7 +35,10 @@ ColorSlider::ColorSlider(QWidget *parent) : QWidget(parent)
   m_max = 255;
   m_value = 0;
 
-  connect(m_pSlider, SIGNAL(positionChanged(int)), this, SLOT(slotValueChanged(int)));
+  connect(m_pSlider, SIGNAL(positionChanged(int)),
+		  this, SLOT(slotSliderMoved(int)));
+  connect(m_pColorFrame, SIGNAL(clicked(const QPoint&)),
+		  this, SLOT(slotFrameClicked(const QPoint&)));
 }
 
 ColorSlider::~ColorSlider()
@@ -64,7 +69,10 @@ void ColorSlider::slotSetRange(int min, int max)
 void ColorSlider::resizeEvent (QResizeEvent *e)
 {
   QWidget::resizeEvent(e);
-  m_pColorFrame->setGeometry(3, 0, width()-6, height()-8);
+  // m_pSlider->width()/2 * 2 seems stupid but is not because for example 
+  // m_pSlider->width() == 11 I get 10.
+  m_pColorFrame->setGeometry(m_pSlider->width()/2, 0, width()- m_pSlider->width()/2 * 2,
+							 height() - m_pSlider->height());
   slotSetValue(m_value);
 }
 
@@ -93,10 +101,10 @@ void ColorSlider::slotSetValue(int value)
   float factor = v /range;
   int x = static_cast<int>(factor * m_pColorFrame->contentsRect().width());
 
-  m_pSlider->move(QPoint(x , height()-16));
+  m_pSlider->move(QPoint(x , height() - m_pSlider->height()));
 }
 
-void ColorSlider::slotValueChanged(int x)
+void ColorSlider::slotSliderMoved(int x)
 {
   if (x < 0)
 	x = 0;
@@ -117,13 +125,56 @@ void ColorSlider::slotValueChanged(int x)
   emit colorSelected(m_pColorFrame->colorAt(QPoint(x, m_pColorFrame->contentsRect().height()/2)));
 }
 
-SliderWidget::SliderWidget(QWidget *parent) : QFrame(parent)
+void ColorSlider::slotFrameClicked(const QPoint& p)
+{
+  QPoint local = m_pColorFrame->mapToParent(p);
+  QPoint pos = QPoint(local.x() - m_pSlider->width()/2, height() - m_pSlider->height());
+  
+  if (pos.x() < 0)
+	pos.setX(0);
+  else if (pos.x() > width() - m_pSlider->width())
+	pos.setX(width() - m_pSlider->width());
+  
+  m_pSlider->move(pos);
+  slotSliderMoved(pos.x());
+}
+
+void ColorSlider::mousePressEvent (QMouseEvent *e)
+{
+  if (e->button() & LeftButton)
+    {
+	  QPoint pos = QPoint(e->pos().x() - m_pSlider->width()/2, height() - m_pSlider->height());
+	  
+	  if (pos.x() < 0)
+		pos.setX(0);
+	  else if (pos.x() > width() - m_pSlider->width())
+		pos.setX(width() - m_pSlider->width());
+
+	  m_pSlider->move(pos);
+	  slotSliderMoved(pos.x());
+	}
+  else
+    QWidget::mousePressEvent(e);
+}
+
+SliderWidget::SliderWidget(QWidget *parent) : QWidget(parent)
 {
   m_dragging = false;
-  setFrameStyle(QFrame::Panel | QFrame::Raised);
-  setLineWidth(2);
-  setFixedHeight(16);
-  setFixedWidth(6);
+  setFixedHeight(6);
+  setFixedWidth(11);
+}
+
+void SliderWidget::paintEvent (QPaintEvent *)
+{
+  QPainter p;
+  QPen     pen(black, 1);
+  p.begin(this);
+
+  p.setPen(pen);
+  p.drawLine(0, 5, 5, 0); 
+  p.drawLine(10, 5, 5, 0);
+  p.drawLine(0, 5, 10, 5);
+  p.end();                     
 }
 
 void SliderWidget::mousePressEvent (QMouseEvent *e)
@@ -134,7 +185,7 @@ void SliderWidget::mousePressEvent (QMouseEvent *e)
 	  m_dragging = true;
 	}
   else
-    QFrame::mousePressEvent(e);
+    QWidget::mousePressEvent(e);
 }
 
 void SliderWidget::mouseReleaseEvent (QMouseEvent *e)
@@ -142,7 +193,7 @@ void SliderWidget::mouseReleaseEvent (QMouseEvent *e)
   if (e->button() & LeftButton)
 	m_dragging = false;
   else
-    QFrame::mouseReleaseEvent(e);
+    QWidget::mouseReleaseEvent(e);
 }
 
 void SliderWidget::mouseMoveEvent (QMouseEvent *e)
@@ -167,7 +218,7 @@ void SliderWidget::mouseMoveEvent (QMouseEvent *e)
 	  emit positionChanged(newPos.x());
     }
   else
-	QFrame::mouseMoveEvent(e);
+	QWidget::mouseMoveEvent(e);
 }
 
 

@@ -48,7 +48,8 @@ class ColorFrame : public QFrame
   void slotSetColor2(const QColor&);
 
  signals:
-  void  colorSelected(const QColor&);
+  void clicked(const QPoint&);
+  void colorSelected(const QColor&);
 
  protected:
   QColor    m_c1, m_c2;

@@ -299,15 +299,15 @@ RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
 {
   m_c = QColor(0,0,0);
   m_pRSlider = new ColorSlider(this);
-  m_pRSlider->setMaximumHeight(25);
+  m_pRSlider->setMaximumHeight(20);
   m_pRSlider->slotSetRange(0, 255);
 
   m_pGSlider = new ColorSlider(this);
-  m_pGSlider->setMaximumHeight(25);
+  m_pGSlider->setMaximumHeight(20);
   m_pGSlider->slotSetRange(0, 255);
 
   m_pBSlider = new ColorSlider(this);
-  m_pBSlider->setMaximumHeight(25);
+  m_pBSlider->setMaximumHeight(20);
   m_pBSlider->slotSetRange(0, 255);
  
   m_pRLabel = new QLabel("R", this);
@@ -506,12 +506,12 @@ GreyWidget::GreyWidget(QWidget *parent) : QWidget(parent)
 {
   m_c = QColor(0,0,0);
   m_pVSlider = new ColorSlider(this);
-  m_pVSlider->setMaximumHeight(25);
+  m_pVSlider->setMaximumHeight(20);
   m_pVSlider->slotSetRange(0, 255);
   m_pVSlider->slotSetColor1(QColor(255, 255, 255));
   m_pVSlider->slotSetColor2(QColor(0, 0, 0));
  
-  m_pVLabel = new QLabel("B", this);
+  m_pVLabel = new QLabel("K", this);
   m_pVLabel->setFixedWidth(20);
   m_pVLabel->setFixedHeight(20);
   

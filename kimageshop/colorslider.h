@@ -23,7 +23,6 @@
 
 #include <qpoint.h>
 #include <qwidget.h>
-#include <qframe.h>
 
 class ColorFrame;
 class SliderWidget;
@@ -41,6 +40,7 @@ class ColorSlider : public QWidget
 
  protected:
   virtual void resizeEvent (QResizeEvent *);
+  virtual void mousePressEvent (QMouseEvent *);
   
  public slots:
   void slotSetColor1(const QColor&);
@@ -50,7 +50,8 @@ class ColorSlider : public QWidget
   void slotSetRange(int min, int max);
   
  protected slots:
-  void slotValueChanged(int);
+  void slotSliderMoved(int);
+  void slotFrameClicked(const QPoint&);
 
  signals:
   void colorSelected(const QColor&);
@@ -63,7 +64,7 @@ class ColorSlider : public QWidget
   int           m_value;
 };
 
-class SliderWidget : public QFrame
+class SliderWidget : public QWidget
 {
   Q_OBJECT
  
@@ -73,7 +74,8 @@ class SliderWidget : public QFrame
  protected:
   virtual void mousePressEvent (QMouseEvent *); 
   virtual void mouseReleaseEvent (QMouseEvent *); 
-  virtual void mouseMoveEvent (QMouseEvent *); 
+  virtual void mouseMoveEvent (QMouseEvent *);
+  virtual void paintEvent (QPaintEvent *);
   
  signals:
   void  positionChanged(int);
