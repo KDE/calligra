@@ -327,11 +327,18 @@ Main Window
 	  structs as well
 	-in removeObject(): if object's dialog is opened -it's quietly closed before removing
 	-added check/hack to avoid inf. recursion between removeObject() and closeDialog()
+	-crash fixed: on dialog closing, it's properly removed from dictionary.
 Kexi Dialogs
 	-'neverSaved' flag is cleared on first successful saving
 	-active view is 0 on its parent dialog destruction
+	-Dialog's docID is not just id, and inherits part item's (KexiPart::Item) identifier
 Alter Table Dialog
 	-'name' and 'description' properties are updated on change
+	-on table schema saving, user is warned about: 1) duplicated field names
+	  2) not added fields at all; 3) fields without names
+Table View:
+	-'removeOld' flag is passed from TV to initializer, so given editor's implementation 
+	 can decide what to do
 
 2004-03-10
 Table View

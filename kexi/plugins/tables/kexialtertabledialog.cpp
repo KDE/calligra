@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
+#include <kmessagebox.h>
 
 #include <kexidb/cursor.h>
 #include <kexidb/tableschema.h>
@@ -421,55 +422,51 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		if (propertyBuffer()) {
 			//update field name
 			KexiPropertyBuffer &buf = *propertyBuffer();
-			buf["name"]->setValue(item->at(0));
+			buf["name"]->setValue(newValue);
 		}
-		
-		//save row
-//		m_view->acceptRowEdit();
 	}
 	else if (colnum==1) {//'type'
-		//if 'name' is already filled
-//if (!item->at(0).toString().isEmpty()) {
-			//save row
-//			m_view->acceptRowEdit();
-//}
 		if (newValue.isNull()) {
 			//'type' col will be cleared: clear row 0 as well
 			m_view->data()->updateRowEditBuffer(item, 0, QVariant(QString::null));
+			return;
 		}
-		else {
-			if (propertyBuffer()) {
-				KexiPropertyBuffer &buf = *propertyBuffer();
-				//'type' col is changed (existed before)
-				//-get type group number
-				KexiDB::Field::TypeGroup fieldTypeGroup;
-				int i_fieldTypeGroup = newValue.toInt()+1/*counting from 1*/;
-				if (i_fieldTypeGroup < 1 || i_fieldTypeGroup > (int)KexiDB::Field::LastTypeGroup)
-					return;
-				fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>(i_fieldTypeGroup);
 
-				//-get 1st type from this group, and update 'type' property
+		if (!propertyBuffer())
+			return;
 
-				KexiDB::Field::Type fieldType = firstTypeForSelectedGroup( i_fieldTypeGroup );
-				if (fieldType==KexiDB::Field::InvalidType)
-					fieldType = KexiDB::Field::Text;
-				buf["type"]->setValue((int)fieldType);
+		KexiPropertyBuffer &buf = *propertyBuffer();
+		//'type' col is changed (existed before)
+		//-get type group number
+		KexiDB::Field::TypeGroup fieldTypeGroup;
+		int i_fieldTypeGroup = newValue.toInt()+1/*counting from 1*/;
+		if (i_fieldTypeGroup < 1 || i_fieldTypeGroup > (int)KexiDB::Field::LastTypeGroup)
+			return;
+		fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>(i_fieldTypeGroup);
 
-				//-get subtypes for this type: keys (slist) and names (nlist)
-				const QStringList slist = KexiDB::typeStringsForGroup(fieldTypeGroup);
-				const QStringList nlist = KexiDB::typeNamesForGroup(fieldTypeGroup);
-				KexiProperty *subTypeProperty = buf["subType"];
-				//update subtype list and value
-				subTypeProperty->setList(slist, nlist);
-				subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
-				if (updatePropertiesVisibility(fieldType, buf)) {
-					//properties' visiblility changed: refresh buffer
-					propertyBufferReloaded();
-				}
-			}
+		//-get 1st type from this group, and update 'type' property
+		KexiDB::Field::Type fieldType = firstTypeForSelectedGroup( i_fieldTypeGroup );
+		if (fieldType==KexiDB::Field::InvalidType)
+			fieldType = KexiDB::Field::Text;
+		buf["type"]->setValue((int)fieldType);
+
+		//-get subtypes for this type: keys (slist) and names (nlist)
+		const QStringList slist = KexiDB::typeStringsForGroup(fieldTypeGroup);
+		const QStringList nlist = KexiDB::typeNamesForGroup(fieldTypeGroup);
+		KexiProperty *subTypeProperty = buf["subType"];
+
+		//update subtype list and value
+		subTypeProperty->setList(slist, nlist);
+		subTypeProperty->setValue( KexiDB::Field::typeString(fieldType) );
+		if (updatePropertiesVisibility(fieldType, buf)) {
+			//properties' visiblility changed: refresh buffer
+			propertyBufferReloaded();
 		}
 	}
 	else if (colnum==2) {//'description'
+		if (!propertyBuffer())
+			return;
+
 		//update field desc.
 		KexiPropertyBuffer &buf = *propertyBuffer();
 		buf["description"]->setValue(item->at(2));
@@ -483,7 +480,8 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 	//-check if the row was empty before updating
 	//if yes: we want to add a property buffer for this new row (field)
 	QString fieldName = item->at(0).toString();
-	const bool buffer_allowed = !fieldName.isEmpty() && !item->at(1).isNull();
+//	const bool buffer_allowed = !fieldName.isEmpty() && !item->at(1).isNull();
+	const bool buffer_allowed = !item->at(1).isNull();
 
 	if (!buffer_allowed && propertyBuffer()) {
 		//there is a buffer, but it's not allowed - remove it:
@@ -561,6 +559,8 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 {
 	if (m_dialog->schemaData()) //must not be
 		return 0;
+	
+	m_view->acceptRowEdit();
 
 	//create table schema definition
 	KexiDB::TableSchema *ts = new KexiDB::TableSchema(sdata.name());
@@ -568,8 +568,43 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	ts->setCaption( sdata.caption() );
 	ts->setDescription( sdata.description() );
 
+	//check for duplicates
+	KexiPropertyBuffer *b = 0;
+	bool no_fields = true;
+	int i;
+	QDict<char> names;
+	char dummy;
+	for (i=0;i<(int)m_fields.size();i++) {
+		b = m_fields[i];
+		if (b) {
+			no_fields = false;
+			const QString name = (*b)["name"]->value().toString();
+			if (name.isEmpty()) {
+				m_view->setCursor(i, 0);
+				m_view->startEditCurrentCell();
+				KMessageBox::information(this, i18n("You should enter field name.") );
+				return 0;
+			}
+			if (names[name]) {
+				break;
+			}
+			names.insert( name, &dummy ); //remember
+		}
+	}
+	if (no_fields) {//no fields added
+		KMessageBox::information(this, i18n("You have added no fields.\nEvery table should have at least one field.") );
+		return 0;
+	}
+	if (b && i<(int)m_fields.size()) {//found a duplicate
+		m_view->setCursor(i, 0);
+		m_view->startEditCurrentCell();
+		KMessageBox::information(this, i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. Correct name of the field.")
+			.arg((*b)["name"]->value().toString()) );
+		return 0;
+	}
+
 	//for every field, create KexiDB::Field definition
-	for (int i=0;i<(int)m_fields.size();i++) {
+	for (i=0;i<(int)m_fields.size();i++) {
 		KexiPropertyBuffer *b = m_fields[i];
 		if (!b)
 			continue;
@@ -625,6 +660,9 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 bool KexiAlterTableDialog::storeData()
 {
 	KexiDB::TableSchema *ts = static_cast<KexiDB::TableSchema*>(m_dialog->schemaData());
+	
+	m_view->acceptRowEdit();
+
 /*** TODO: ALTER TABLE CODE IN KEXIDB!
 	if (!ts || !mainWin()->project()->dbConnection()->alterTable(ts))
 		return 0;

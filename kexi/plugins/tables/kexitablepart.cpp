@@ -99,7 +99,7 @@ KexiTablePart::execute(KexiMainWindow *win, KexiPart::Item &item)
 	t->setMinimumSize(t->minimumSizeHint().width(),t->minimumSizeHint().height());
 
 	t->setIcon( DesktopIcon( info()->itemIcon() ) );
-	t->setDocID(item.identifier());
+	t->setId(item.identifier());
 }
 #endif
 
