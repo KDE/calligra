@@ -5,13 +5,13 @@
 #ifndef __VCCMDRECTANGLE_H__
 #define __VCCMDRECTANGLE_H__
 
-#include "vcommand.h"
+#include "vccommand.h"
 
 // create a rectangle-shape.
 
 class VPath;
 
-class VCCmdRectangle : public VCommand
+class VCCmdRectangle : public VCCommand
 {
 public:
 	VCCmdRectangle( KarbonPart* part, const double tlX, const double tlY,
@@ -25,7 +25,6 @@ public:
 	VPath* createPath();
 
 private:
-	VPath* m_object;
 	double m_tlX;
 	double m_tlY;
 	double m_brX;

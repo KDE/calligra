@@ -5,27 +5,23 @@
 #ifndef __VCCMDELLIPSE_H__
 #define __VCCMDELLIPSE_H__
 
-#include "vcommand.h"
+#include "vccommand.h"
 
 // create a ellipse-shape.
 
 class VPath;
 
-class VCCmdEllipse : public VCommand
+class VCCmdEllipse : public VCCommand
 {
 public:
 	VCCmdEllipse( KarbonPart* part, const double tlX, const double tlY,
 		 const double brX, const double brY );
 	virtual ~VCCmdEllipse() {}
 
-	virtual void execute();
-	virtual void unexecute();
-
 	// for complex shapes. needed to draw while creation (creation tool):
 	VPath* createPath();
 
 private:
-	VPath* m_object;
 	double m_tlX;
 	double m_tlY;
 	double m_brX;

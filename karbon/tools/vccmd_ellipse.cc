@@ -12,7 +12,7 @@
 VCCmdEllipse::VCCmdEllipse( KarbonPart* part,
 		const double tlX, const double tlY,
 		const double brX, const double brY )
-	: VCommand( part, i18n("Insert Ellipse") ), m_object( 0L )
+	: VCCommand( part, i18n("Insert Ellipse") )
 {
 	// make sure that tl is really top-left and br is bottom-right:
 	if ( tlX < brX )
@@ -35,26 +35,6 @@ VCCmdEllipse::VCCmdEllipse( KarbonPart* part,
 		m_tlY = brY;
 		m_brY = tlY;
 	}
-}
-
-void
-VCCmdEllipse::execute()
-{
-	if ( m_object )
-		m_object->setState( VObject::normal );
-	else
-	{
-		m_object = createPath();
-		// add path:
-		m_part->insertObject( m_object );
-	}
-}
-
-void
-VCCmdEllipse::unexecute()
-{
-	if ( m_object )
-		m_object->setState( VObject::deleted );
 }
 
 VPath*

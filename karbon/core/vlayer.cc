@@ -36,10 +36,23 @@ VLayer::insertObject( const VObject* object )
 void
 VLayer::selectObjects( const QRect &rect )
 {
+	// select all objects within the rect coords
 	QPtrListIterator<VObject> itr = m_objects;
     for ( ; itr.current() ; ++itr )
     {
 		if( rect.contains( itr.current()->boundingBox(), true ) )
 			itr.current()->setState( VObject::selected );
+    }
+}
+
+void
+VLayer::unselectObjects()
+{
+	// unselect all objects in this layer that were selected
+	QPtrListIterator<VObject> itr = m_objects;
+    for ( ; itr.current() ; ++itr )
+    {
+		if( itr.current()->state() == VObject::selected )
+			itr.current()->setState( VObject::normal );
     }
 }

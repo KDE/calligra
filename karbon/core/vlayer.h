@@ -22,6 +22,7 @@ public:
 	void insertObject( const VObject* object );
 
 	void selectObjects( const QRect &rect );
+	void unselectObjects();
 
 	const bool& isVisible() const { return m_isVisible; }
 	const bool& isReadOnly() const { return m_isReadOnly; }

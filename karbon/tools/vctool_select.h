@@ -93,14 +93,17 @@ VCToolSelect::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 
+	QPoint tl = view->canvasWidget()->contentsToViewport( m_tl );
+	QPoint br = view->canvasWidget()->contentsToViewport( m_br );
+
 	// Make a simple selection rectangle.
 	// Maybe a simple drawRect would be quicker though.
     VPath* path = new VPath();
 
-    path->moveTo( m_tl.x(), m_tl.y() );
-    path->lineTo( m_br.x(), m_tl.y() );
-    path->lineTo( m_br.x(), m_br.y() );
-    path->lineTo( m_tl.x(), m_br.y() );
+    path->moveTo( tl.x(), tl.y() );
+    path->lineTo( br.x(), tl.y() );
+    path->lineTo( br.x(), br.y() );
+    path->lineTo( tl.x(), br.y() );
     path->close();
 
 	path->setState( VObject::edit );

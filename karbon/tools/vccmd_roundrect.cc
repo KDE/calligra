@@ -54,7 +54,9 @@ VCCmdRoundRect::execute()
 	{
 		m_object = createPath();
 		// add path:
+		m_part->unselectObjects();
 		m_part->insertObject( m_object );
+		m_object->setState( VObject::selected );
 	}
 }
 

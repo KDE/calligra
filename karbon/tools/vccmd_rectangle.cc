@@ -10,7 +10,7 @@
 VCCmdRectangle::VCCmdRectangle( KarbonPart* part,
 		const double tlX, const double tlY,
 		const double brX, const double brY )
-	: VCommand( part, i18n("Insert Rectangle") ), m_object( 0L ),
+	: VCCommand( part, i18n("Insert Rectangle") ), 
 	  m_tlX( tlX ), m_tlY( tlY ), m_brX( brX ), m_brY( brY )
 {
 }
@@ -24,7 +24,9 @@ VCCmdRectangle::execute()
 	{
 		m_object = createPath();
 		// add path:
+		m_part->unselectObjects();
 		m_part->insertObject( m_object );
+		m_object->setState( VObject::selected );
 	}
 }
 
