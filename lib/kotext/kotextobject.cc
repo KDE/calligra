@@ -1675,6 +1675,20 @@ void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont
     emit showFormatObject(format);
 }
 
+#ifndef NDEBUG
+void KoTextObject::printRTDebug(int info)
+{
+    QTextDocument *textdoc = textDocument();
+    for (Qt3::QTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
+    {
+        KoTextParag * p = static_cast<KoTextParag *>(parag);
+        p->printRTDebug( info );
+    }
+    if ( info == 1 )
+        textdoc->formatCollection()->debug(); 
+}
+#endif
+
 void KoTextFormatInterface::setBold(bool on) {
     KoTextFormat format( *currentFormat() );
     format.setBold( on );

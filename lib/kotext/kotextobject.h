@@ -266,6 +266,10 @@ public:
     QString textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type);	
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
 
+#ifndef NDEBUG
+    void printRTDebug(int);
+#endif
+
 signals:
     /** Emitted by availableHeight() when the available height hasn't been
      * calculated yet or is invalid. Connect to a slot that calls setAvailableHeight() */
@@ -303,14 +307,6 @@ signals:
 
 public slots:
     void formatMore( bool emitAfterFormatting = true );
-
-private slots:
-    void doChangeInterval();
-    /** This is done in a singleShot timer because of macro-commands.
-     * We need to do this _after_ terminating the macro command (for instance
-     * in the case of undoing a floating-frame insertion, we need to delete
-     * the frame first) */
-    void slotAfterUndoRedo();
 
 public: // made public for KWTextFrameSet...
 
@@ -368,6 +364,14 @@ public: // made public for KWTextFrameSet...
 
     /** for KWTextFrameSet */
     UndoRedoInfo & undoRedoInfoStruct() { return undoRedoInfo; }
+
+private slots:
+    void doChangeInterval();
+    /** This is done in a singleShot timer because of macro-commands.
+     * We need to do this _after_ terminating the macro command (for instance
+     * in the case of undoing a floating-frame insertion, we need to delete
+     * the frame first) */
+    void slotAfterUndoRedo();
 
 private:
     void init();
