@@ -88,7 +88,7 @@ inline KVector::KVector(int x, int y, int z)
 { m_x=static_cast<double>(x); m_y=static_cast<double>(y); m_z=static_cast<double>(z); }
 
 inline KVector::KVector(long x, long y, long z)
-{ m_x=static_cast<long>(x); m_y=static_cast<long>(y); m_z=static_cast<long>(z); }
+{ m_x=static_cast<double>(x); m_y=static_cast<double>(y); m_z=static_cast<double>(z); }
 
 inline bool KVector::isNull() const
 { return m_x == 0 && m_y == 0 && m_z == 0; }
@@ -124,10 +124,10 @@ inline KVector &KVector::operator-=(const KVector &v)
 { m_x-=v.m_x; m_y-=v.m_y; m_z-=v.m_z; return *this; }
 
 inline KVector &KVector::operator*=(int c)
-{ m_x*=static_cast<double>(c); m_y*=static_cast<double>(c); m_z*=static_cast<double>(c); return *this; }
+{ m_x*=c; m_y*=c; m_z*=c; return *this; }
 
 inline KVector &KVector::operator*=(long c)
-{ m_x*=static_cast<double>(c); m_y*=static_cast<double>(c); m_z*=static_cast<double>(c); return *this; }
+{ m_x*=c; m_y*=c; m_z*=c; return *this; }
 
 inline KVector &KVector::operator*=(double c)
 { m_x*=c; m_y*=c; m_z*=c; return *this; }
@@ -145,16 +145,16 @@ inline KVector operator-(const KVector &v1, const KVector &v2)
 { return KVector(v1.m_x-v2.m_x, v1.m_y-v2.m_y, v1.m_z-v2.m_z); }
 
 inline KVector operator*(const KVector &v, int c)
-{ return KVector(static_cast<double>(v.m_x*c), static_cast<double>(v.m_y*c), static_cast<double>(v.m_z*c)); }
+{ return KVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
 inline KVector operator*(int c, const KVector &v)
-{ return KVector(static_cast<double>(v.m_x*c), static_cast<double>(v.m_y*c), static_cast<double>(v.m_z*c)); }
+{ return KVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
 inline KVector operator*(const KVector &v, long c)
-{ return KVector(static_cast<double>(v.m_x*c), static_cast<double>(v.m_y*c), static_cast<double>(v.m_z*c)); }
+{ return KVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
 inline KVector operator*(long c, const KVector &v)
-{ return KVector(static_cast<double>(v.m_x*c), static_cast<double>(v.m_y*c), static_cast<double>(v.m_z*c)); }
+{ return KVector((v.m_x*c), (v.m_y*c), (v.m_z*c)); }
 
 inline KVector operator*(const KVector &v, double c)
 { return KVector(v.m_x*c, v.m_y*c, v.m_z*c); }
@@ -169,9 +169,9 @@ inline KVector &KVector::operator/=(int c)
 {
   if (!c == 0)
     {
-      m_x/=static_cast<double>(c);
-      m_y/=static_cast<double>(c);
-      m_z/=static_cast<double>(c);
+      m_x/=c;
+      m_y/=c;
+      m_z/=c;
     }
     return *this;
 }
@@ -180,9 +180,9 @@ inline KVector &KVector::operator/=(long c)
 {
   if (!c == 0)
     {
-      m_x/=static_cast<double>(c);
-      m_y/=static_cast<double>(c);
-      m_z/=static_cast<double>(c);
+      m_x/=c;
+      m_y/=c;
+      m_z/=c;
     }
     return *this;
 }
@@ -197,6 +197,4 @@ inline KVector &KVector::operator/=(double c)
     }
     return *this;
 }
-
 #endif
-
