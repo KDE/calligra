@@ -1091,9 +1091,20 @@ void KPresenterDoc::saveOasisHeaderFooter( KoXmlWriter & stickyTmpWriter , KoSav
     stickyTmpWriter.endElement();
 }
 
-void KPresenterDoc::loadOasisHeaderFooter()
+void KPresenterDoc::loadOasisHeaderFooter(QDomNode & drawPage, KoOasisContext & context)
 {
-    //todo
+    QDomNode tmp = drawPage.namedItem( "style:header" );
+    if ( !tmp.isNull() )
+    {
+        kdDebug()<<" there is a header \n";
+        _header->textObject()->loadOasisContent( tmp.toElement(), context, styleCollection() );
+    }
+    tmp = drawPage.namedItem( "style:footer" );
+    if ( !tmp.isNull() )
+    {
+        kdDebug()<<" there is a footer \n";
+        _footer->textObject()->loadOasisContent( tmp.toElement(), context, styleCollection() );
+    }
 }
 
 void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
@@ -1406,6 +1417,8 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QDomNode node = *master;
     kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
     loadOasisObject( -1 , m_stickyPage, node , context);
+    loadOasisHeaderFooter( node,context );
+
     kdDebug()<<" end load sticky oasis object \n";
 
     Q_ASSERT( master );

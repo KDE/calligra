@@ -78,6 +78,7 @@ Done:
 	-> grayscal
 -> save/load general config (GridIsVisible etc.)
 -> save/load object transparency
+-> save/load header/footer object
 
 Todo:
 -> save/load cubic/quadric/freehand object (define as svg object)
@@ -91,13 +92,11 @@ Todo:
 Bugs:
 -> fix default value
 -> fix some arrow style  
--> specific object : header/footer is not sticky object into oo
 
 In Progress:
 -> save/load picture effect
 -> save/load protect object
 -> save/load embedded object
--> save/load header/footer object
 
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>
