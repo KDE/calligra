@@ -2,9 +2,9 @@ Import filter:
 ==============
 Paragraph direction (http://web4.w3.org/TR/xsl/sliceA.html#writing-mode-add, fo:writing-mode (lr-tb|rl-tb|tb-rl|tb-lr|lr|rl|tb|page) "lr-tb")
 Paragraph bullets/counters
-Fields/Variables
+Fields/Variables (Done?)
 Footnotes/Endnotes
-Images
+Images (Done?)
 Text boxes (framesets)
 Annotations (aka "note")
 Anchors
@@ -19,4 +19,17 @@ Cursor position, etc.
 
 Export filter:
 ==============
-[TODO list to be written]
+Paragraph direction
+Paragraph bullets/counters
+Footnotes/Endnotes
+Text boxes (framesets)
+Annotations (aka "note")
+Anchors
+Mail merge
+"Sections" (e.g. table of contents)
+Table styles, frame styles
+Bookmarks
+Embedded objects
+Spellcheck settings?
+Cursor position, etc.
+(probably more...)
