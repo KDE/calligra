@@ -774,7 +774,7 @@ void KWParagDia::setupTab4()
 
     grid4 = new QGridLayout( tab4, 4, 2, 15, 7 );
 
-    gType = new QGroupBox( "Type", tab4 );
+    gType = new QGroupBox( i18n("Type"), tab4 );
     tgrid = new QGridLayout( gType, 9, 2, 5, 5 );
 
     g1 = new QButtonGroup( gType );
@@ -885,7 +885,7 @@ void KWParagDia::setupTab4()
 
     grid4->addWidget( gType, 0, 0 );
 
-    gText = new QGroupBox( "Text", tab4 );
+    gText = new QGroupBox( i18n("Text"), tab4 );
     txtgrid = new QGridLayout( gText, 4, 2, 5, 5 );
 
     lcLeft = new QLabel( i18n( "Left" ), gText );
@@ -924,7 +924,7 @@ void KWParagDia::setupTab4()
 
     grid4->addWidget( gText, 1, 0 );
 
-    gOther = new QGroupBox( "Other Settings", tab4 );
+    gOther = new QGroupBox( i18n("Other Settings"), tab4 );
     ogrid = new QGridLayout( gOther, 5, 2, 5, 5 );
     g2 = new QButtonGroup( gOther );
     g2->hide();
