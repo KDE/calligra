@@ -1102,7 +1102,7 @@ or <guibutton>Cancel</guibutton> to forget your changes.</para>
 
 <warning>
 <para>Be aware that &kword; does not give you a chance to back out once
-you have deleted a string.  Be sure you have slected the correct string
+you have deleted a string.  Be sure you have selected the correct string
 <emphasis>before</emphasis> you click the <guibutton>Remove</guibutton>
 button.</para>
 </warning>
