@@ -2,11 +2,8 @@ The directory common_icons holds the identical icons for the templates of
 the different formats.
 
 The direcory common_desktop holds the identical desktop definitions for the 
-different formats
+different formats for easy translation
 
-the destop_ln.sh has to be executed in every format directory to allow 
-the Makefile.am to install the desktop in every target directory.
-(I know this is not very professional ...)
 
 f.gassauer@aon.at
 
