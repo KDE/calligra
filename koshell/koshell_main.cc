@@ -16,24 +16,35 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include <qprinter.h>
-
 #include <koApplication.h>
 
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 #include "koshell_shell.h"
 
+// Damn, how is this called in StarOffice ?
+static const char* description=I18N_NOOP("KOffice Common Window");
+static const char* version="0.3";
+
 int main( int argc, char **argv )
 {
-  KoApplication app( argc, argv, "koshell");
+  KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOShell"),
+     version, description, KAboutData::License_GPL,
+       "(c) 1998-2000, Torben Weis");
+  aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+
+  KCmdLineArgs::init( argc, argv, aboutData );
+  //KCmdLineArgs::addCmdLineOptions( options );
+
+  KoApplication app;
   
   KoShellWindow *shell = new KoShellWindow;
   
   shell->show();
 
-  app.exec();
-
-  return 0;
+  return app.exec();
 }
 
