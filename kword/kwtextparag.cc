@@ -377,14 +377,15 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
                                    QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
 {
+    QTextFormat * localFormat = 0L;
     // Resolve the color before calling the default implementation of drawParagString
     if ( lastFormat && !lastFormat->color().isValid() )
     {
-        QTextFormat format( *lastFormat );
-        format.setColor( KWDocument::defaultTextColor( &painter ) );
-        lastFormat = &format;
+        kdDebug() << "KWTextParag::drawParagString " << this << endl;
+        localFormat = new QTextFormat( *lastFormat );
+        localFormat->setColor( KWDocument::defaultTextColor( &painter ) );
+        lastFormat = localFormat;
     }
-
     QTextParag::drawParagString( painter, s, start, len, startX,
                                  lastY, baseLine, bw, h, drawSelections,
                                  lastFormat, i, selectionStarts,
@@ -470,6 +471,8 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
             painter.restore();
         }
     }
+    if ( localFormat )
+        delete localFormat;
 }
 
 void KoTextParag::setTabList( const KoTabulatorList &tabList )
