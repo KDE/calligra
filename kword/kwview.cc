@@ -1211,6 +1211,10 @@ void KWView::editCut()
     KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
         edit->cut();
+    else
+    {
+        m_gui->canvasWidget()->cutSelectedFrames();
+    }
 }
 
 void KWView::editCopy()
@@ -1272,6 +1276,11 @@ void KWView::editReplace()
 
 void KWView::editDeleteFrame()
 {
+    deleteFrame();
+}
+
+void KWView::deleteFrame(bool _warning)
+{
     QList<KWFrame> frames=m_doc->getSelectedFrames();
     ASSERT( frames.count() == 1 ); // the action isn't enabled otherwise.
     if( frames.count() != 1)
@@ -1286,13 +1295,17 @@ void KWView::editDeleteFrame()
 
     // frame is part of a table?
     if ( fs->getGroupManager() ) {
-        int result;
-        result = KMessageBox::warningContinueCancel(this,
-                                                    i18n( "You are about to delete a table.\n"
-                                                          "Doing so will delete all the text in the table.\n"
-                                                          "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
-        if (result != KMessageBox::Continue)
-            return;
+        if(_warning)
+        {
+            int result;
+
+            result = KMessageBox::warningContinueCancel(this,
+                                                        i18n( "You are about to delete a table.\n"
+                                                              "Doing so will delete all the text in the table.\n"
+                                                              "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
+            if (result != KMessageBox::Continue)
+                return;
+        }
         m_doc->deleteTable( fs->getGroupManager() );
         m_gui->canvasWidget()->emitFrameSelectedChanged();
         return;
@@ -1309,33 +1322,38 @@ void KWView::editDeleteFrame()
         QTextDocument * textdoc = textfs->textDocument();
         QTextParag * parag = textdoc->firstParag();
         if ( parag && parag->string()->length() > 0 ) {
-            int result = KMessageBox::warningContinueCancel(this,
-                                                        i18n( "You are about to delete the last Frame of the\n"
-                                                              "Frameset '%1'.\n"
-                                                              "The contents of this Frameset will not appear\n"
-                                                              "anymore!\n\n"
-                                                              "Are you sure you want to do that?").arg(fs->getName()),
-                                                        i18n("Delete Frame"), i18n("&Delete"));
-
-            if (result == KMessageBox::Continue)
+            if(_warning)
             {
-                m_doc->deleteFrame( theFrame );
-                m_gui->canvasWidget()->emitFrameSelectedChanged();
+                int result = KMessageBox::warningContinueCancel(this,
+                                                                i18n( "You are about to delete the last Frame of the\n"
+                                                                      "Frameset '%1'.\n"
+                                                                      "The contents of this Frameset will not appear\n"
+                                                                      "anymore!\n\n"
+                                                                      "Are you sure you want to do that?").arg(fs->getName()),
+                                                                i18n("Delete Frame"), i18n("&Delete"));
+
+                if (result != KMessageBox::Continue)
+                    return;
             }
+
+            m_doc->deleteFrame( theFrame );
+            m_gui->canvasWidget()->emitFrameSelectedChanged();
             return;
         }
 
     }
 
-    int result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("Do you want to delete this frame?"),
-                                                    i18n("Delete Frame"),
-                                                    i18n("&Delete"));
-    if (result == KMessageBox::Continue)
+    if(_warning)
     {
-        m_doc->deleteFrame( theFrame );
-        m_gui->canvasWidget()->emitFrameSelectedChanged();
+        int result = KMessageBox::warningContinueCancel(this,
+                                                        i18n("Do you want to delete this frame?"),
+                                                        i18n("Delete Frame"),
+                                                        i18n("&Delete"));
+        if (result != KMessageBox::Continue)
+            return;
     }
+    m_doc->deleteFrame( theFrame );
+    m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
 
 void KWView::editCustomVars()
@@ -2666,7 +2684,7 @@ void KWView::startKSpell()
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     m_kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
 
-#ifdef KSPELL_IGNORE_UPPER_WORD
+#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
      m_kspell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
      m_kspell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
 #endif
@@ -2880,7 +2898,7 @@ void KWView::frameSelectedChanged()
 
     actionBackgroundColor->setEnabled( nbFrame >= 1 );
     bool rw = koDocument()->isReadWrite();
-    // TODO actionEditCut->setEnabled( rw && nbFrame >= 1 );
+    actionEditCut->setEnabled( rw && nbFrame >= 1 );
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
 

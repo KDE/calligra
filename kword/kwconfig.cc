@@ -90,7 +90,7 @@ configureSpellPage::configureSpellPage( KWView *_view, QWidget *parent , char *n
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
   _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
   grid1->addWidget(_spellConfig,0,0);
-#ifdef KSPELL_IGNORE_UPPER_WORD
+#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
   _dontCheckUpperWord= new QCheckBox(i18n("Don't check a Upper word"),tmpQGroupBox);
   grid1->addWidget(_dontCheckUpperWord,1,0);
 
@@ -119,7 +119,7 @@ void configureSpellPage::apply()
 
   m_pView->kWordDocument()->setKSpellConfig(*_spellConfig);
 
-#ifdef KSPELL_IGNORE_UPPER_WORD
+#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
   bool state=_dontCheckUpperWord->isChecked();
   config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
   m_pView->kWordDocument()->setDontCheckUpperWord(state);
@@ -138,7 +138,7 @@ void configureSpellPage::slotDefault()
     _spellConfig->setDictFromList( FALSE);
     _spellConfig->setEncoding (KS_E_ASCII);
     _spellConfig->setClient (KS_CLIENT_ISPELL);
-#ifdef KSPELL_IGNORE_UPPER_WORD
+#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
     _dontCheckUpperWord->setChecked(false);
     _dontCheckTilteCase->setChecked(false);
 #endif

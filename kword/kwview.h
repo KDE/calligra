@@ -143,6 +143,8 @@ public:
 
     void refreshMenuExpression();
 
+    void deleteFrame(bool _warning=true);
+
 public slots:
     void fileStatistics();
     void editCut();

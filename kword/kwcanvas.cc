@@ -1584,7 +1584,7 @@ void KWCanvas::selectFrame( KWFrame * frame, bool select )
 void KWCanvas::cutSelectedFrames()
 {
     copySelectedFrames();
-    m_gui->getView()->editDeleteFrame();
+    m_gui->getView()->deleteFrame(false);
 }
 
 void KWCanvas::copySelectedFrames()
