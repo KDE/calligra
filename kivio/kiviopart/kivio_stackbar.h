@@ -22,7 +22,6 @@
 #include <qdockwindow.h>
 #include <qptrdict.h>
 
-class QVBoxLayout;
 class QFrame;
 
 namespace Kivio {
@@ -64,7 +63,6 @@ class KivioStackBar : public QDockWindow
     void newPlace(QDockWindow::Place place);
   
   private:
-    QVBoxLayout* m_layout;
     QPtrDict<QWidget> m_data;
     QWidget* m_visiblePage;
 };
