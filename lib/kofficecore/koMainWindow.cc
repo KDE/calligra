@@ -66,7 +66,7 @@ public:
   KoPartManager( QWidget * parent, const char * name = 0L )
     : KParts::PartManager( parent, name ) {}
   KoPartManager( QWidget *topLevel, QObject *parent, const char *name = 0L )
-    : KParts::PartManager( topLevel, parent, name ) {}    
+    : KParts::PartManager( topLevel, parent, name ) {}
   virtual bool eventFilter( QObject *obj, QEvent *ev )
   {
     if ( !obj->isWidgetType() || obj->inherits( "KoFrame" ) )
@@ -462,8 +462,9 @@ bool KoMainWindow::queryClose()
 {
   if ( rootDocument() == 0 )
     return true;
-  kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount() << endl;
-  if ( !d->m_forQuit && rootDocument()->viewCount() > 1 )
+  kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
+                 << " shellcount=" << rootDocument()->shellCount() << endl;
+  if ( !d->m_forQuit && rootDocument()->shellCount() > 1 )
     // there are more open, and we are closing just one, so no problem for closing
     return true;
 

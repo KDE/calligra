@@ -887,6 +887,10 @@ const KoMainWindow *KoDocument::nextShell()
     return d->m_shells.next();
 }
 
+unsigned int KoDocument::shellCount() const {
+    return d->m_shells.count();
+}
+
 DCOPObject * KoDocument::dcopObject()
 {
   if ( !d->m_dcopObject )

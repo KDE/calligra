@@ -400,6 +400,7 @@ public:
 
   virtual const KoMainWindow *firstShell();
   virtual const KoMainWindow *nextShell();
+  virtual unsigned int shellCount() const;
 
   /**
    * Returns the list of all the currently opened documents
