@@ -735,22 +735,23 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         strParaText="&nbsp;";
     }
 
+    QString align;
+    if ( !paraLayout.alignment.isEmpty() && paraLayout.alignment != "left" )
+        // left doesn't need to be set explicitely
+    {
+        align = QString(" align=\"%1\"").arg( paraLayout.alignment );
+        // center, right, or justify - is 'justify' correct in HTML ?
+    }
+
     if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
     {
         int depth = paraLayout.counter.depth + 1;
-        outputText += QString("<h%1>%2</h%3>\n").arg(depth).arg(strParaText).arg(depth);
+        outputText += QString("<h%1%2>%3</h%4>\n").arg(depth).arg(align).arg(strParaText).arg(depth);
     }
     // TODO NUM_LIST
-    else if ( !paraLayout.alignment.isEmpty() && paraLayout.alignment != "left" ) // left doesn't need to be set explicitely
-    {
-        QString align = paraLayout.alignment; // center, right, or justify - is justify correct in HTML ?
-        outputText += QString("<p align=%1>%2</p>\n").arg(align).arg(strParaText);
-    }
     else
     {
-        outputText += "<p>";
-        outputText += strParaText;
-        outputText += "</p>\n";
+        outputText += QString("<p%1>%2</p>\n").arg(align).arg(strParaText);
     }
 }
 
