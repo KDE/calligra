@@ -1,0 +1,637 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&kchart;"><!-- replace kapp here, do *not* replace kappname-->
+  <!ENTITY package "koffice"><!-- kdebase, kdeadmin, etc -->
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE"><!-- change language only here -->
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &kchart; Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Jonathan</firstname>
+<othername></othername>
+<surname>Drews</surname>
+<affiliation>
+<address><email>j.e.drews@att.net</email></address>
+</affiliation>
+</author>
+</authorgroup>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+
+<othercredit role="developer">
+<firstname>Matthias</firstname>
+<othername>Kalle</othername>
+<surname>Dalheimer</surname>
+<affiliation>
+<address><email>kalle@kde.org</email></address>
+</affiliation>
+<contrib>Developer</contrib>
+</othercredit>
+
+
+<!-- Translators: put here the copyright notice of the translation -->
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2002-07-20</date>
+<releaseinfo>1.01.00</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&kchart; is an application for drawing bar graphs, pie charts and line
+plots. It is intended to be used with &kspread;. &kchart; is still
+under development so some features do not work.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>kdeutils</keyword>
+<keyword>Kchart</keyword>
+<keyword>chart</keyword>
+<keyword>graph</keyword>
+<keyword>plot</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+
+<title>Introduction</title>
+
+<para>
+&kchart; is intended primarily for use with &kspread;. It is currently
+undergoing revision and should  be considered beta software.
+</para>
+
+<sect1 id="main_window">
+<title>Plotting with &kchart;</title>
+<para>To plot with &kchart;, when it is embedded in &kspread;, do the following:</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kchart-kspread.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<itemizedlist>
+<listitem><para>
+Highlight the second row of numbers.
+</para></listitem>
+
+<listitem><para>
+Next click on the <guilabel>Chart</guilabel> button 
+<inlinemediaobject><imageobject><imagedata fileref="frame_chart.png"
+format="PNG"/></imageobject></inlinemediaobject> to create the chart.
+</para></listitem>
+
+<listitem><para>Select the options you want from the chart Wizard. The
+chart Wizard will pop up after you insert the chart.</para></listitem>
+
+</itemizedlist>
+
+<para>To make a bar chart for individual items, put the numbers in a
+column, as shown below.</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="kchart-kspread-bar.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>The orientation of the numbers detremines how the plot will be
+made. </para>
+
+<itemizedlist>
+<listitem><para>
+A row of numbers defines the ordinates for a single plot.
+</para></listitem>
+
+<listitem><para>
+A column of numbers defines the heights for each bar, in a bar
+graph. It also determines the size of the slices in a pie chart.
+</para></listitem>
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<sect1 id="kchart-menus">
+<title>The main &kchart; window</title>
+
+<sect2>
+<title>The <guimenu>File</guimenu> Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new document</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a document</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a recently saved document</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the document with the specified format</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Prints the document</action></para>
+<important><para>Make sure the proper print system is selected in the
+<quote>Print system currently used:</quote> section. This option can
+be seen after clicking on the <guimenu>Expand</guimenu> button.</para></important></listitem>
+
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Print preview</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays a picture of what the printed
+document will look like.</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a dialog box</action> where you can enter
+information about your chart.</para>
+<note><para>This document information will be
+displayed in the &konqueror; file browser as a tool tip. The tool tips
+are pop-ups that show the contents of a file when you move your mouse over
+the file icon.</para></note></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Send File...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action></action></para>
+<warning><para>This feature does not work
+properly. Do not use it.</para></warning>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Closes the current chart.</action></para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quits</action> &kchart;</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+</sect2>
+
+<sect2>
+<title>The <guimenu>Edit</guimenu> Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Customize with Wizard...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Allows you to specify the chart
+type.</action>You can also insert titles and change the fonts, with
+the Wizard.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Edit Data...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Table for entering the data.</action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Configure...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Dialogs for configuring the
+chart.</action></para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+<sect3>
+<title>The Configure Tabs</title>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Colors</guimenu>
+</menuchoice></term>
+<listitem><para><action>Select graph colors</action>, grid colors and
+title colors here.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Font</guimenu>
+</menuchoice></term>
+<listitem><para><action>Select font style and size</action> here. The
+series colors can be selected here also. The series refer to the
+individual graphs. Each graphed set of data is a series</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Background</guimenu>
+</menuchoice></term>
+<listitem><para><action>Select the background color</action> for your
+graph.</para>
+<note><para>The picture backgrounds do not work at this time</para></note>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Legend</guimenu>
+</menuchoice></term>
+<listitem><para><action>Change the location of the legend</action> box. The
+color of the legend box can be changed also. The legend box contains
+the color key to the graph series.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Axes</guimenu>
+</menuchoice></term>
+<listitem><para><action>The axes can be turned on</action> or off
+here.</para>
+<note><para>Not all the features work here.</para></note>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>3D Parameters</guimenu>
+</menuchoice></term>
+<listitem><para><action>The perspective for the 3d bar graphs can be
+set here. </action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Chart Subtype</guimenu>
+</menuchoice></term>
+<listitem><para><action>Changes the arrangement of bar graphs.</action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Header/Footer</guimenu>
+</menuchoice></term>
+<listitem><para><action>Enter the titles you want for your graph</action>here.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+</sect2>
+
+<sect2>
+<title>The <guimenu>Settings</guimenu> Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Load Config</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Loads a previously saved configuration.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Save Config</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the configuration you set up in
+Edit Configure.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Default Config</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Loads the default configuration.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show File Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays the file toolbar for fast access.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Chart Toolbar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays the toolbar for the different
+charting styles (Pie Chart, Bar Chart, Area Chart and so on).</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
+<sect2>
+<title>Configuring Shortcuts</title>
+
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem></menuchoice>
+allows you to specify key bindings</para>
+
+
+<para>Below is an example of how to configure a short cut for opening
+the chart wizard.</para>
+
+<screenshot>
+<screeninfo>Picture of shortcut dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="shortcut.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<itemizedlist>
+<listitem><para>
+Click on the <guilabel>Custom</guilabel> button.
+</para></listitem>
+
+<listitem><para>
+Next click on the <guilabel>Primary</guilabel> button.
+</para></listitem>
+
+<listitem><para>
+Do <userinput><keycombo
+action="seq">&Alt;&Ctrl;<keycap>W</keycap></keycombo></userinput>
+and the dialog should disappear. The key binding is now entered. 
+</para></listitem>
+</itemizedlist>
+
+<para>Pressing the keys <userinput><keycombo
+action="seq">&Alt;&Ctrl;<keycap>W</keycap></keycombo></userinput>
+now opens the Wizard.</para>
+</sect2>
+
+
+<sect2>
+<title>Configuring Toolbars</title>
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
+Is used to add additional buttons to the toolbars.</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="toolbars.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<itemizedlist>
+
+<listitem>
+<para>To add a button to the File toolbar, 
+</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="file-toolbar.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>  make sure <guilabel>File
+  &lt;KOfficeShell&gt;</guilabel> is displayed in the top combo box.
+</para></listitem>
+
+<listitem><para>
+Click on one of the items in the left hand pane. This item will now have a
+blue background showing that it has been selected.
+</para></listitem>
+
+<listitem><para>
+Next click on the <keysym>Right arrow</keysym> button to place it in
+the right pane.
+</para></listitem>
+
+<listitem><para>
+Click on <userinput><guilabel>Apply</guilabel></userinput> and then
+click on <userinput><guilabel>OK</guilabel></userinput>
+</para></listitem>
+</itemizedlist>
+
+
+<para>The new Item should be in the toolbar. <inlinemediaobject><imageobject>
+	    <imagedata fileref="file-toolbar2.png" format="PNG"/>
+	  </imageobject></inlinemediaobject></para>
+
+
+</sect2>
+
+
+<sect2>
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect2>
+
+</sect1>
+</chapter>
+
+
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+&reporting.bugs;
+&updating.documentation;
+
+<qandaset id="faqlist">
+<qandaentry>
+<question>
+<para>Can &kchart; accept text files of data, such as columns of
+numbers, for plotting?</para>
+</question>
+<answer>
+<para>No. At this time &kchart; can only make graphs from inside
+&kspread;.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>Why do some of the commands from the <guimenu>Edit</guimenu>
+<guimenuitem>Configure...</guimenuitem> menu not function?</para>
+</question>
+<answer>
+<para>&kchart; is still under development and some features do not work.</para>
+</answer>
+</qandaentry>
+</qandaset>
+</chapter>
+
+<chapter id="credits">
+<title>Credits and License</title>
+
+<para>
+&kchart;
+</para>
+<para>
+Program copyright 1998-2002 Matthias Kalle Dalheimer <email>kalle@kde.org</email>
+</para>
+<para>
+Contributors:
+<itemizedlist>
+<listitem><para>Laurent Montel <email>lmontel@mandrakesoft.com</email></para>
+</listitem>
+<listitem><para>Karl-Heinz Zimmer <email>khz@kde.org</email></para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>
+Documentation copyright 2002 Jonathan Drews <email>j.e.drews@att.net</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;               <!-- FDL: do not remove -->
+&underGPL;        	 <!-- GPL License -->
+
+
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-kchart">
+<title>How to obtain &kchart;</title>
+
+&install.intro.documentation;
+
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>
+In order to successfully use &kchart;, you need &koffice; 1.2 and Qt-3.0.5. 
+</para>
+
+<para>
+All required libraries as well as &kchart; itself can be found
+on <ulink url="http://www.koffice.org">The &koffice; home page</ulink>.
+</para>
+
+<!-- For a list of updates, you may refer to the application web site
+or the ChangeLog file, or ... -->
+<para>
+You can find a list of changes at <ulink
+url="http://www.koffice.org/kchart/">http://www.koffice.org/kchart/</ulink>.
+</para>
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+&install.compile.documentation;
+
+</sect1>
+
+</appendix>
+
+&documentation.index;
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+-->
+
