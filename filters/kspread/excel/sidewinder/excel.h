@@ -2823,6 +2823,7 @@ private:
   void handleXF( XFRecord* record );    
   
   Color convertColor( unsigned colorIndex );
+  FormatFont convertFont( unsigned fontIndex );
   Format convertFormat( unsigned xfIndex );
   
   // no copy or assign

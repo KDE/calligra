@@ -3503,6 +3503,29 @@ void ExcelReader::handleSST( SSTRecord* record )
   
 }
 
+FormatFont ExcelReader::convertFont( unsigned fontIndex )
+{  
+  // speed-up trick: check in the cache first  
+  FormatFont font = d->fontCache[ fontIndex ];
+  if( font.isNull() && ( fontIndex < d->fontTable.size() ))
+  {
+    FontRecord fr = d->fontTable[ fontIndex ];
+    font.setFontSize( fr.height() / 20.0 );
+    font.setFontFamily( fr.fontName() );
+    font.setBold( fr.boldness() > 500 );
+    font.setItalic( fr.italic() );
+    font.setStrikeout( fr.strikeout() );    
+    font.setSubscript( fr.script() == FontRecord::Subscript );
+    font.setSuperscript( fr.script() == FontRecord::Superscript );
+    font.setUnderline( fr.underline() != FontRecord::None );
+    
+    // put in the cache for further use
+    d->fontCache[ fontIndex ] = font;    
+  }  
+  
+  return font;
+}
+
 Color ExcelReader::convertColor( unsigned colorIndex )
 {  
   if( ( colorIndex >= 8 ) && ( colorIndex < 0x40 ) )
@@ -3622,26 +3645,7 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
 
   XFRecord xf = d->xfTable[ xfIndex ];
     
-  // speed-up trick: check in the cache first  
-  unsigned fontIndex = xf.fontIndex();
-  FormatFont font = d->fontCache[ fontIndex ];
-  if( font.isNull() && ( fontIndex < d->fontTable.size() ))
-  {
-    FontRecord fr = d->fontTable[ fontIndex ];
-    font.setFontSize( fr.height() / 20.0 );
-    font.setFontFamily( fr.fontName() );
-    font.setBold( fr.boldness() > 500 );
-    font.setItalic( fr.italic() );
-    font.setStrikeout( fr.strikeout() );    
-    font.setSubscript( fr.script() == FontRecord::Subscript );
-    font.setSuperscript( fr.script() == FontRecord::Superscript );
-    font.setUnderline( fr.underline() != FontRecord::None );
-    
-    // put in the cache for further use
-    d->fontCache[ fontIndex ] = font;    
-  }  
-  
-  format.font() = font;
+  format.font() = convertFont( xf.fontIndex() );
 
   switch( xf.horizontalAlignment() )
   {
