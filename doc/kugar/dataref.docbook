@@ -5,14 +5,14 @@
 
 -->
 
-<chapter id="kugardata-element">
-<title><sgmltag class="element">KugarData</sgmltag></title>
+<sect1 id="kugardata-element">
+<title><sgmltag class="element">KugarData element</sgmltag></title>
 
 <para>
 The <sgmltag class="element">KugarData</sgmltag> element defines a
 report's data source.  The basic structure is a collection of rows and
-columns. This document does not define data types and their attributes
-at this time. The report template defines column data type information.
+columns. This document does not define data types and their attributes.
+<!--at this time. -->The report template defines column data type information.
 </para>
 
 <para>
@@ -23,43 +23,35 @@ can apply custom macros using &XSL; for column calculations, sorting,
 </para>
 
 <synopsis>
-&lt;!ELEMENT KugarData (<link linkend="row-element">Row</link>* )&gt;
+&lt;!ELEMENT KugarData (Row*)&gt;
 &lt;!ATTLIST KugarData
- <link linkend="template-att">Template</link> CDATA  #REQUIRED&gt;
+        Template      CDATA  #REQUIRED&gt;
 
-&lt;!ELEMENT <link linkend="row-element">Row</link> EMPTY&gt;
-&lt;!ATTLIST <link linkend="row-element">Row</link>
- <link linkend="column-att">col1</link>   CDATA  #REQUIRED
- <link linkend="column-att">col2</link>   CDATA  #REQUIRED
- <link linkend="column-att">...</link>    CDATA  #REQUIRED
- <link linkend="column-att">coln</link>   CDATA  #REQUIRED&gt;
+&lt;!ELEMENT Row EMPTY&gt;
+&lt;!ATTLIST Row
+        level         CDATA  #REQUIRED
+        col1          CDATA  #IMPLIED
+        col2          CDATA  #IMPLIED
+        ...           CDATA  #IMPLIED
+        coln          CDATA  #IMPLIED&gt;
 </synopsis>
 
-<variablelist>
-<varlistentry>
-<term>Elements</term>
-<listitem>
 
-<variablelist>
-<varlistentry id="row-element">
-<term><sgmltag class="element">Row</sgmltag></term>
-<listitem>
+<sect2 id="kugar-data-element">
+<title>Kugar data element</title>
 <para>
 The <sgmltag class="element">KugarData</sgmltag> element contains zero
 or more <sgmltag class="element">Row</sgmltag> elements.  A <sgmltag
-class="element">Row</sgmltag> must contain one or more attributes
-representing data columns.
+class="element">Row</sgmltag> must contain one <sgmltag class="attribute">level</sgmltag>
+attribute with value corresponding to detail level in the template. Other attributes
+represent data columns.
 </para>
-</listitem>
-</varlistentry>
-</variablelist>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>Attributes</term>
-<listitem>
-
+<para>
+<anchor id="template-att"/>The value of the <sgmltag class="attribute">Template</sgmltag>
+attribute is the &URL; of the report template
+used to format the data
+</para>
+<!--
 <variablelist>
 <varlistentry id="template-att">
 <term><sgmltag class="attribute">Template</sgmltag></term>
@@ -71,16 +63,40 @@ used to format the data.
 </para>
 </listitem>
 </varlistentry>
+-->
+</sect2>
 
-<varlistentry id="column-att">
-<term><sgmltag class="attribute">Column</sgmltag></term>
+<sect2 id="row-element">
+<title>Row element</title>
+
+<variablelist>
+
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+
+<varlistentry>
+<term><anchor id="level-att"/><sgmltag class="attribute">level</sgmltag></term>
 <listitem>
 <para>
-This is an attribute of the <link linkend="row-element"><sgmltag
-class="element">Row</sgmltag></link>.  The name of the attribute is the
-column name, and uses the format as given in the <sgmltag
-class="element">KugarData</sgmltag> definition.  The attribute name is
-used in the report template to bind the data to the report fields.
+The attribute value indicates which detail in the report template
+is used to display data. Rows can contain various column set for various levels,
+so any attribute except <sgmltag class="attribute">level</sgmltag> should
+be stated as #IMPLIED.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><anchor id="column-att"/><sgmltag class="attribute">column</sgmltag></term>
+<listitem>
+<para>
+The name of the attribute is the column name, and uses the format as given
+in the <sgmltag class="element">KugarData</sgmltag> definition.
+The attribute name is used in the report template to bind the data to the
+report fields.
 </para>
 </listitem>
 </varlistentry>
@@ -89,4 +105,7 @@ used in the report template to bind the data to the report fields.
 </varlistentry>
 </variablelist>
 
-</chapter>
+</sect2>
+
+</sect1>
+

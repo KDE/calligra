@@ -1,10 +1,10 @@
 <!-- If you want to edit or validate this document separately, uncomment
-this prolog 
+this prolog
 <?xml version="1.0" ?>
 <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
 -->
-<chapter id="kugartemplate">
-<title><sgmltag class="element">KugarTemplate</sgmltag></title>
+<sect1 id="kugartemplate">
+<title><sgmltag class="element">KugarTemplate</sgmltag> element</title>
 
 <para>
 The <sgmltag class="element">KugarTemplate</sgmltag> element defines
@@ -12,7 +12,7 @@ report attributes relating to page size, orientation, and margins.
 </para>
 
 <synopsis>
-&lt;!ELEMENT KugarTemplate (ReportHeader, PageHeader, Detail, PageFooter, ReportFooter)&gt;
+&lt;!ELEMENT KugarTemplate (<link linkend="report-header-and-footer">ReportHeader</link>, <link linkend="page-header-and-footer">PageHeader</link>, <link linkend="detail-header-and-footer">DetailHeader</link>*, <link linkend="detail">Detail</link>*, <link linkend="detail-header-and-footer">DetailFooter</link>*, <link linkend="page-header-and-footer">PageFooter</link>, <link linkend="report-header-and-footer">ReportFooter</link>)&gt;
 &lt;!ATTLIST KugarTemplate
 PageSize        CDATA #REQUIRED
 PageOrientation CDATA #REQUIRED
@@ -23,18 +23,20 @@ RightMargin     CDATA #REQUIRED&gt;
 </synopsis>
 
 <variablelist>
+
 <varlistentry>
 <term>Elements</term>
+
 <listitem>
 
 <para>
 The <sgmltag class="element">KugarTemplate</sgmltag> element contains
-the following required elements: 
+the following elements:
 </para>
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="element">ReportHeader</sgmltag></term>
+<term><link linkend="report-header-and-footer"><sgmltag class="element">ReportHeader</sgmltag></link></term>
 <listitem>
 <para>
 The <sgmltag class="element">ReportHeader</sgmltag> element defines
@@ -44,7 +46,7 @@ report sections that are usually printed at the beginning of the report.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">PageHeader</sgmltag></term>
+<term><link linkend="page-header-and-footer"><sgmltag class="element">PageHeader</sgmltag></link></term>
 <listitem>
 <para>
 The <sgmltag class="element">PageHeader</sgmltag> element defines report
@@ -55,17 +57,38 @@ report.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">Detail</sgmltag></term>
+<term><link linkend="detail-header-and-footer"><sgmltag class="element">DetailHeader</sgmltag></link></term>
 <listitem>
 <para>
-The <sgmltag class="element">Detail</sgmltag> element defines the report
-section that contains the report data.
+The <sgmltag class="element">DetailHeader</sgmltag> element defines report
+sections that are printed before details of given level on the report.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">PageFooter</sgmltag></term>
+<term><link linkend="detail"><sgmltag class="element">Detail</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">Detail</sgmltag> element defines the report
+section that contains the report data. The report can have unlimited number
+of details.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="detail-header-and-footer"><sgmltag class="element">DetailFooter</sgmltag></link></term>
+<listitem>
+<para>
+The <sgmltag class="element">DetailFooter</sgmltag> element defines report
+sections that are printed after details of given level and below on the report.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="page-header-and-footer"><sgmltag class="element">PageFooter</sgmltag></link></term>
 <listitem>
 <para>
 The <sgmltag class="element">PageFooter</sgmltag> element defines report
@@ -76,7 +99,7 @@ report.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">ReportFooter</sgmltag></term>
+<term><link linkend="report-header-and-footer"><sgmltag class="element">ReportFooter</sgmltag></link></term>
 <listitem>
 <para>
 The <sgmltag class="element">ReportFooter</sgmltag> element defines report
@@ -84,8 +107,11 @@ sections that are usually printed at the end of the report.
 </para>
 </listitem>
 </varlistentry>
+
 </variablelist>
+
 </listitem>
+
 </varlistentry>
 
 <varlistentry>
@@ -94,7 +120,7 @@ sections that are usually printed at the end of the report.
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="attribute">PageSize</sgmltag></term>
+<term><anchor id="kut-pagesize"/><sgmltag class="attribute">PageSize</sgmltag></term>
 <listitem>
 <para>
 Sets the size of the report page.  The following values are available:
@@ -176,51 +202,63 @@ Sets the size of the report page.  The following values are available:
 </row>
 <row>
 <entry>16</entry>
-<entry>B2</entry>
+<entry>B10</entry>
 </row>
 <row>
 <entry>17</entry>
-<entry>B3</entry>
+<entry>B2</entry>
 </row>
 <row>
 <entry>18</entry>
-<entry>B4</entry>
+<entry>B3</entry>
 </row>
 <row>
 <entry>19</entry>
-<entry>B6</entry>
+<entry>B4</entry>
 </row>
 <row>
 <entry>20</entry>
-<entry>B7</entry>
+<entry>B6</entry>
 </row>
 <row>
 <entry>21</entry>
-<entry>B8</entry>
+<entry>B7</entry>
 </row>
 <row>
 <entry>22</entry>
-<entry>B9</entry>
+<entry>B8</entry>
 </row>
 <row>
 <entry>23</entry>
-<entry>Comm10E</entry>
+<entry>B9</entry>
 </row>
 <row>
 <entry>24</entry>
-<entry>DLE</entry>
+<entry>C5E</entry>
 </row>
 <row>
 <entry>25</entry>
-<entry>Folio</entry>
+<entry>Comm10E</entry>
 </row>
 <row>
 <entry>26</entry>
-<entry>Ledger</entry>
+<entry>DLE</entry>
 </row>
 <row>
 <entry>27</entry>
+<entry>Folio</entry>
+</row>
+<row>
+<entry>28</entry>
+<entry>Ledger</entry>
+</row>
+<row>
+<entry>29</entry>
 <entry>Tabloid</entry>
+</row>
+<row>
+<entry>30</entry>
+<entry>NPageSize</entry>
 </row>
 
 </tbody>
@@ -231,7 +269,7 @@ Sets the size of the report page.  The following values are available:
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">PageOrientation</sgmltag></term>
+<term><anchor id="kut-pageorient"/><sgmltag class="attribute">PageOrientation</sgmltag></term>
 <listitem>
 <para>
 Sets the report page orientation.
@@ -261,35 +299,35 @@ Sets the report page orientation.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">TopMargin</sgmltag></term>
+<term><anchor id="kut-topmargin"/><sgmltag class="attribute">TopMargin</sgmltag></term>
 <listitem>
 <para>
-Sets the top margin of the report page <!-- in what scale? -->
+Sets the top margin of the report page. <!-- in what scale? -->
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">BottomMargin</sgmltag></term>
+<term><anchor id="kut-botmargin"/><sgmltag class="attribute">BottomMargin</sgmltag></term>
 <listitem>
 <para>
-Sets the bottom margin of the report page <!-- in what scale? -->
+Sets the bottom margin of the report page. <!-- in what scale? -->
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">LeftMargin</sgmltag></term>
+<term><anchor id="kut-leftmargin"/><sgmltag class="attribute">LeftMargin</sgmltag></term>
 <listitem>
 <para>
-Sets the left margin of the report page <!-- in what scale? -->
+Sets the left margin of the report page. <!-- in what scale? -->
 </para>
 </listitem>
 </varlistentry><varlistentry>
-<term><sgmltag class="attribute">RightMargin</sgmltag></term>
+<term><anchor id="kut-rightmargin"/><sgmltag class="attribute">RightMargin</sgmltag></term>
 <listitem>
 <para>
-Sets the right margin of the report page <!-- in what scale? -->
+Sets the right margin of the report page. <!-- in what scale? -->
 </para>
 </listitem>
 </varlistentry>
@@ -297,4 +335,4 @@ Sets the right margin of the report page <!-- in what scale? -->
 </listitem>
 </varlistentry>
 </variablelist>
-</chapter>
+</sect1>

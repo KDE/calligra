@@ -3,13 +3,55 @@
 <?xml version="1.0" ?>
 <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
 -->
-<chapter id="template-elements">
-<title><sgmltag class="element">KugarData</sgmltag> template
+<sect1 id="template-elements">
+<title><sgmltag class="element">KugarTemplate</sgmltag> template
 elements</title>
 
-<sect1 id="report-header-and-footer">
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Section bands</entry>
+<entry>Section elements</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry><link linkend="report-header-and-footer"><sgmltag class="element">ReportHeader</sgmltag></link></entry>
+<entry><link linkend="line-element"><sgmltag class="element">Line</sgmltag></link></entry>
+</row>
+<row>
+<entry><link linkend="page-header-and-footer"><sgmltag class="element">PageHeader</sgmltag></link></entry>
+<entry><link linkend="label-element"><sgmltag class="element">Label</sgmltag></link></entry>
+</row>
+<row>
+<entry><link linkend="detail-header-and-footer"><sgmltag class="element">DetailHeader</sgmltag></link></entry>
+<entry><link linkend="field-element"><sgmltag class="element">Field</sgmltag></link></entry>
+</row>
+<row>
+<entry><link linkend="detail"><sgmltag class="element">Detail</sgmltag></link></entry>
+<entry><link linkend="calculated-field-element"><sgmltag class="element">CalculatedField</sgmltag></link></entry>
+</row>
+<row>
+<entry><link linkend="detail-header-and-footer"><sgmltag class="element">DetailFooter</sgmltag></link></entry>
+<entry><link linkend="special-element"><sgmltag class="element">Special</sgmltag></link></entry>
+</row>
+<row>
+<entry><link linkend="page-header-and-footer"><sgmltag class="element">PageFooter</sgmltag></link></entry>
+<entry></entry>
+</row>
+<row>
+<entry><link linkend="report-header-and-footer"><sgmltag class="element">ReportFooter</sgmltag></link></entry>
+<entry></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+
+<sect2 id="report-header-and-footer">
 <title><sgmltag class="element">ReportHeader</sgmltag> and <sgmltag
-class="element">ReportFooter</sgmltag> Sections</title>
+class="element">ReportFooter</sgmltag> sections</title>
 
 <para>
 The <sgmltag class="element">ReportHeader</sgmltag> and <sgmltag
@@ -18,107 +60,20 @@ that are usually printed at the beginning and end of the report.
 </para>
 
 <synopsis>
-&lt;!ELEMENT ReportHeader (Line*, Label*, Special*)&gt;
+&lt;!ELEMENT ReportHeader (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
 &lt;!ATTLIST ReportHeader
      Height          CDATA #REQUIRED
      PrintFrequency  CDATA #REQUIRED&gt;
 </synopsis>
 
 <synopsis>
-&lt;!ELEMENT ReportFooter (Line*, Label*, Special*, CalculatedField*)&gt;
+&lt;!ELEMENT ReportFooter (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*, <link linkend="calculated-field-element">CalculatedField</link>*)&gt;
 &lt;!ATTLIST ReportFooter
      Height         CDATA #REQUIRED
      PrintFrequency CDATA #REQUIRED&gt;
 </synopsis>
 
 <variablelist>
-<varlistentry>
-<term>Elements</term>
-<listitem>
-<para>
-The <sgmltag class="element">ReportHeader</sgmltag> element can contain
-the following elements
-</para>
-
-<variablelist>
-<varlistentry>
-<term><sgmltag class="element">Line</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Line</sgmltag> element defines a report
-object used to draw lines on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Label</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Label</sgmltag> element defines a report
-object used to draw fixed text on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Special</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Special</sgmltag> element defines a report
-object used to draw page numbers and the current date on a report.
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<para>
-The <sgmltag class="element">ReportFooter</sgmltag> element can contain
-the following elements:
-</para>
-<variablelist>
-<varlistentry>
-<term><sgmltag class="element">Line</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Line</sgmltag> element defines a report
-object used to draw lines on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Label</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Label</sgmltag> element defines a report
-object used to draw fixed text on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Special</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Special</sgmltag> element defines a report
-object used to draw page numbers and the current date on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">CalculatedField</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">CalculatedField</sgmltag> element defines a
-report object used to draw calculated values on a report.
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</listitem>
-</varlistentry>
 
 <varlistentry>
 <term>Attributes</term>
@@ -126,7 +81,7 @@ report object used to draw calculated values on a report.
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="attribute">Height</sgmltag></term>
+<term><anchor id="rhf-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>Sets the height of the report section.  If you don't want
 this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
@@ -135,7 +90,7 @@ this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">PrintFrequency</sgmltag></term>
+<term><anchor id="rhf-printfrequency"/><sgmltag class="attribute">PrintFrequency</sgmltag></term>
 <listitem>
 <para>
 Set the print frequency of the section.
@@ -171,9 +126,9 @@ Set the print frequency of the section.
 </listitem>
 </varlistentry>
 </variablelist>
-</sect1>
+</sect2>
 
-<sect1 id="page-header-and-footer">
+<sect2 id="page-header-and-footer">
 <title><sgmltag class="element">PageHeader</sgmltag> and <sgmltag
 class="element">PageFooter</sgmltag> sections</title>
 
@@ -184,99 +139,20 @@ that are usually printed on every page of the report.
 </para>
 
 <synopsis>
-&lt;!ELEMENT PageHeader (Line*, Label*, Special*)&gt;
+&lt;!ELEMENT PageHeader (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
 &lt;!ATTLIST PageHeader
      Height          CDATA #REQUIRED
      PrintFrequency  CDATA #REQUIRED&gt;
 </synopsis>
 
 <synopsis>
-&lt;!ELEMENT PageFooter (Line*, Label*, Special*)&gt;
+&lt;!ELEMENT PageFooter (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
 &lt;!ATTLIST PageFooter
      Height          CDATA #REQUIRED
      PrintFrequency  CDATA #REQUIRED&gt;
 </synopsis>
 
 <variablelist>
-<varlistentry>
-<term>Elements</term>
-<listitem>
-<para>
-The <sgmltag class="element">PageHeader</sgmltag> element can contain
-the following elements:
-</para>
-
-<variablelist>
-<varlistentry>
-<term><sgmltag class="element">Line</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Line</sgmltag> element defines a report
-object used to draw lines on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Label</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Label</sgmltag> element defines a report
-object used to draw fixed text on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Special</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Special</sgmltag> element defines a report
-object used to draw page numbers and the current date on a report.
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<para>
-The <sgmltag class="element">PageFooter</sgmltag> element can contain
-the following elements:
-</para>
-
-<variablelist>
-<varlistentry>
-<term><sgmltag class="element">Line</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Line</sgmltag> element defines a report
-object used to draw lines on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Label</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Label</sgmltag> element defines a report
-object used to draw fixed text on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Special</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Special</sgmltag> element defines a report
-object used to draw page numbers and the current date on a report.
-</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-</listitem>
-</varlistentry>
 
 <varlistentry>
 <term>Attributes</term>
@@ -284,7 +160,7 @@ object used to draw page numbers and the current date on a report.
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="attribute">Height</sgmltag></term>
+<term><anchor id="phf-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>Sets the height of the report section.  If you don't want
 this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
@@ -293,7 +169,7 @@ this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">PrintFrequency</sgmltag></term>
+<term><anchor id="phf-printfrequency"/><sgmltag class="attribute">PrintFrequency</sgmltag></term>
 <listitem>
 <para>
 Set the print frequency of the section.
@@ -330,76 +206,33 @@ Set the print frequency of the section.
 </varlistentry>
 </variablelist>
 
-</sect1>
+</sect2>
 
-<sect1 id="detail">
-<title><sgmltag class="element">Detail</sgmltag> section</title>
+<sect2 id="detail-header-and-footer">
+<title><sgmltag class="element">DetailHeader</sgmltag> and <sgmltag
+class="element">DetailFooter</sgmltag> sections</title>
 
 <para>
-The <sgmltag class="element">Detail</sgmltag> element defines the report
-section that contains the report data.
+The <sgmltag class="element">DetailHeader</sgmltag> and <sgmltag
+class="element">DetailFooter</sgmltag> elements define report sections
+that are printed before and after details of given level and below on the report.
 </para>
 
 <synopsis>
-&lt;!ELEMENT Detail (Line*, Label*, Special*, Field*)&gt;
-&lt;!ATTLIST Detail
-     Height  CDATA   #REQUIRED&gt;
+&lt;!ELEMENT DetailHeader (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
+&lt;!ATTLIST DetailHeader
+     Height          CDATA #REQUIRED
+     Level           CDATA #REQUIRED&gt;
+</synopsis>
+
+<synopsis>
+&lt;!ELEMENT DetailFooter (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*)&gt;
+&lt;!ATTLIST DetailFooter
+     Height          CDATA #REQUIRED
+     Level           CDATA #REQUIRED&gt;
 </synopsis>
 
 <variablelist>
-<varlistentry>
-<term>Elements</term>
-<listitem>
-<para>
-The <sgmltag class="element">Detail</sgmltag> element can contain the
-following elements
-</para>
-
-<variablelist>
-<varlistentry>
-<term><sgmltag class="element">Line</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Line</sgmltag> element defines a report
-object used to draw lines on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Label</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Label</sgmltag> element defines a report
-object used to draw fixed text on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Special</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Special</sgmltag> element defines a report
-object used to draw page numbers and the current date on a report.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><sgmltag class="element">Field</sgmltag></term>
-<listitem>
-<para>
-The <sgmltag class="element">Field</sgmltag> element defines a report
-object used to draw data on a report.
-</para>
-</listitem>
-</varlistentry>
-
-</variablelist>
-
-</listitem>
-</varlistentry>
 
 <varlistentry>
 <term>Attributes</term>
@@ -407,20 +240,80 @@ object used to draw data on a report.
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="attribute">Height</sgmltag></term>
+<term><anchor id="dhf-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>Sets the height of the report section.  If you don't want
 this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><anchor id="dhf-level"/><sgmltag class="attribute">Level</sgmltag></term>
+<listitem>
+<para>
+Set the level in hierarchy of the section. Sections with higher levels will be printed
+before sections with lower ones. Level can be any number begining from 0.
+</para>
+
+</listitem>
+</varlistentry>
 </variablelist>
 </listitem>
 </varlistentry>
 </variablelist>
-</sect1>
 
-<sect1 id="line-element">
+</sect2>
+
+<sect2 id="detail">
+<title><sgmltag class="element">Detail</sgmltag> section</title>
+
+<para>
+The <sgmltag class="element">Detail</sgmltag> element defines the report
+section that contains the report data. The report can have multiple details,
+which accessed by detail's Level attribute.
+</para>
+
+<synopsis>
+&lt;!ELEMENT Detail (<link linkend="line-element">Line</link>*, <link linkend="label-element">Label</link>*, <link linkend="special-element">Special</link>*, <link linkend="field-element">Field</link>*)&gt;
+&lt;!ATTLIST Detail
+     Height  CDATA   #REQUIRED
+     Level   CDATA   #REQUIRED&gt;
+</synopsis>
+
+<variablelist>
+<varlistentry>
+<term>Attributes</term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><anchor id="d-height"/><sgmltag class="attribute">Height</sgmltag></term>
+<listitem>
+<para>Sets the height of the report section.  If you don't want
+this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="d-level"/><sgmltag class="attribute">Level</sgmltag></term>
+<listitem>
+<para>
+Set the level in hierarchy of the section. Sections with higher levels will be printed
+before sections with lower ones. Level can be any number begining from 0. This is an attribute
+from a <sgmltag class="attribute">row</sgmltag> element in a data file.
+</para>
+
+</listitem>
+</varlistentry>
+
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="line-element">
 <title><sgmltag class="element">Line</sgmltag></title>
 
 <para>
@@ -447,53 +340,62 @@ object used to draw lines on a report.
 <variablelist>
 
 <varlistentry>
-<term><sgmltag class="attribute">X1</sgmltag></term>
+<term><anchor id="l-x1"/><sgmltag class="attribute">X1</sgmltag></term>
 <listitem>
 <para>
-Sets the starting x coordinate for the line.
+Sets the starting x coordinate (relative to the section's upper left corner) for the line.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Y1</sgmltag></term>
+<term><anchor id="l-y1"/><sgmltag class="attribute">Y1</sgmltag></term>
 <listitem>
 <para>
-Sets the starting y coordinate for the line.
+Sets the starting y coordinate (relative to the section's upper left corner) for the line.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">X2</sgmltag></term>
+<term><anchor id="l-x2"/><sgmltag class="attribute">X2</sgmltag></term>
 <listitem>
 <para>
-Sets the ending x coordinate for the line.
+Sets the ending x coordinate (relative to the section's upper left corner) for the line.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Y2</sgmltag></term>
+<term><anchor id="l-y2"/><sgmltag class="attribute">Y2</sgmltag></term>
 <listitem>
 <para>
-Sets the width of the line
+Sets the ending y coordinate (relative to the section's upper left corner) for the line.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Color</sgmltag></term>
+<term><anchor id="l-width"/><sgmltag class="attribute">Width</sgmltag></term>
 <listitem>
 <para>
-Sets the color of the line.  The color is defined as an RGB value
+Sets the width of the line.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><anchor id="l-color"/><sgmltag class="attribute">Color</sgmltag></term>
+<listitem>
+<para>
+Sets the color of the line.  The color is defined as an RGB (Red Green Blue) value
 (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Style</sgmltag></term>
+<term><anchor id="l-style"/><sgmltag class="attribute">Style</sgmltag></term>
 <listitem>
 <para>
 Sets the drawing style for the line.
@@ -509,6 +411,10 @@ Sets the drawing style for the line.
 </thead>
 
 <tbody>
+<row>
+<entry><sgmltag class="attvalue">0</sgmltag></entry>
+<entry>No Pen</entry>
+</row>
 <row>
 <entry><sgmltag class="attvalue">1</sgmltag></entry>
 <entry>Solid</entry>
@@ -538,9 +444,9 @@ Sets the drawing style for the line.
 </listitem>
 </varlistentry>
 </variablelist>
-</sect1>
+</sect2>
 
-<sect1 id="label-element">
+<sect2 id="label-element">
 <title><sgmltag class="element">Label</sgmltag></title>
 
 <para>
@@ -577,7 +483,7 @@ object used to draw fixed text on a report.
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="attribute">Text</sgmltag></term>
+<term><anchor id="la-text"/><sgmltag class="attribute">Text</sgmltag></term>
 <listitem>
 <para>
 Sets the label's text.
@@ -586,25 +492,25 @@ Sets the label's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">X</sgmltag></term>
+<term><anchor id="la-x"/><sgmltag class="attribute">X</sgmltag></term>
 <listitem>
 <para>
-Sets the x coordinate for positioning the label.
+Sets the x coordinate (relative to the section's upper left corner) for positioning the label.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Y</sgmltag></term>
+<term><anchor id="la-y"/><sgmltag class="attribute">Y</sgmltag></term>
 <listitem>
 <para>
-Sets the y coordinate for positioning the label.
+Sets the y coordinate (relative to the section's upper left corner) for positioning the label.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Width</sgmltag></term>
+<term><anchor id="la-width"/><sgmltag class="attribute">Width</sgmltag></term>
 <listitem>
 <para>
 Sets the width of the label.
@@ -613,7 +519,7 @@ Sets the width of the label.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Height</sgmltag></term>
+<term><anchor id="la-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>
 Sets the height of the label.
@@ -622,37 +528,37 @@ Sets the height of the label.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">BackgroundColor</sgmltag></term>
+<term><anchor id="la-backgroundcolor"/><sgmltag class="attribute">BackgroundColor</sgmltag></term>
 <listitem>
 <para>
-Sets the background color of the label.  The The color is defined as an
-RGB value (r,g,b). r, g and b must be in the range 0..255.
+Sets the background color of the label. The color is defined as an
+RGB (Red Green Blue) value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">ForegroundColor</sgmltag></term>
+<term><anchor id="la-foregroundcolor"/><sgmltag class="attribute">ForegroundColor</sgmltag></term>
 <listitem>
 <para>
-Sets the foreground color of the label.   The color is defined as an RGB
+Sets the foreground color of the label. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderColor</sgmltag></term>
+<term><anchor id="la-bordercolor"/><sgmltag class="element">BorderColor</sgmltag></term>
 <listitem>
 <para>
-Sets the border color of the label.  The color is defined as an RGB
+Sets the border color of the label. The color is defined as an RGB (Red Green Blue)
 value (r,g,b).  r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderWidth</sgmltag></term>
+<term><anchor id="la-borderwidth"/><sgmltag class="element">BorderWidth</sgmltag></term>
 <listitem>
 <para>
 Sets the border width for the label.
@@ -661,7 +567,7 @@ Sets the border width for the label.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderStyle</sgmltag></term>
+<term><anchor id="la-borderstyle"/><sgmltag class="element">BorderStyle</sgmltag></term>
 <listitem>
 <para>
 Sets the border style for the label.
@@ -707,21 +613,21 @@ Sets the border style for the label.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontFamily</sgmltag></term>
+<term><anchor id="la-fontfamily"/><sgmltag class="attribute">FontFamily</sgmltag></term>
 <listitem>
 <para>
-Sets the font family for the label's text.  
+Sets the font family for the label's text.
 </para>
-<informalexample>
-<para><userinput><sgmltag
+<!--<informalexample>
+<para>For example: <userinput><sgmltag
 class="attribute">FontFamily</sgmltag>="<sgmltag
 class="attvalue">Helvetica</sgmltag>"</userinput></para>
-</informalexample>
+</informalexample>-->
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontSize</sgmltag></term>
+<term><anchor id="la-fontsize"/><sgmltag class="attribute">FontSize</sgmltag></term>
 <listitem>
 <para>
 Sets the font size for the label's text.
@@ -730,7 +636,7 @@ Sets the font size for the label's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontWeight</sgmltag></term>
+<term><anchor id="la-fontweight"/><sgmltag class="attribute">FontWeight</sgmltag></term>
 <listitem>
 <para>
 Sets the font weight for the label's text.
@@ -773,7 +679,7 @@ Sets the font weight for the label's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontItalic</sgmltag></term>
+<term><anchor id="la-fontitalic"/><sgmltag class="attribute">FontItalic</sgmltag></term>
 <listitem>
 <para>
 Sets the font italic flag for the label's text.
@@ -804,7 +710,7 @@ Sets the font italic flag for the label's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">HAlignment</sgmltag></term>
+<term><anchor id="la-halignment"/><sgmltag class="attribute">HAlignment</sgmltag></term>
 <listitem>
 <para>
 Sets the label's horizontal text alignment.
@@ -838,10 +744,10 @@ Sets the label's horizontal text alignment.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">VAlignment</sgmltag></term>
+<term><anchor id="la-valignment"/><sgmltag class="attribute">VAlignment</sgmltag></term>
 <listitem>
 <para>
-Sets the label's vertical text alignment
+Sets the label's vertical text alignment.
 </para>
 
 <informaltable>
@@ -872,7 +778,7 @@ Sets the label's vertical text alignment
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">WordWrap</sgmltag></term>
+<term><anchor id="la-wordwrap"/><sgmltag class="attribute">WordWrap</sgmltag></term>
 <listitem>
 <para>
 Sets the word wrap flag for the label's text.
@@ -905,9 +811,9 @@ Sets the word wrap flag for the label's text.
 </varlistentry>
 </variablelist>
 
-</sect1>
+</sect2>
 
-<sect1 id="field-element">
+<sect2 id="field-element">
 <title><sgmltag class="element">Field</sgmltag></title>
 
 <para>
@@ -951,18 +857,17 @@ object used to draw data on a report.
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="attribute">Field</sgmltag></term>
+<term><anchor id="f-field"/><sgmltag class="attribute">Field</sgmltag></term>
 <listitem>
 <para>
-Sets the data field for the object.  This is a <sgmltag
-class="attribute">row</sgmltag> attribute from a
-<quote>MetaphrastRowset</quote> data document.
+Sets the data field for the object. This is an attribute from <sgmltag
+class="attribute">row</sgmltag> element in a data file.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Text</sgmltag></term>
+<term><anchor id="f-text"/><sgmltag class="attribute">Text</sgmltag></term>
 <listitem>
 <para>
 Not used.
@@ -971,25 +876,25 @@ Not used.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">X</sgmltag></term>
+<term><anchor id="f-x"/><sgmltag class="attribute">X</sgmltag></term>
 <listitem>
 <para>
-Sets the x coordinate for positioning the field.
+Sets the x coordinate (relative to the section's upper left corner) for positioning the field.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Y</sgmltag></term>
+<term><anchor id="f-y"/><sgmltag class="attribute">Y</sgmltag></term>
 <listitem>
 <para>
-Sets the y coordinate for positioning the field.
+Sets the y coordinate (relative to the section's upper left corner) for positioning the field.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Width</sgmltag></term>
+<term><anchor id="f-width"/><sgmltag class="attribute">Width</sgmltag></term>
 <listitem>
 <para>
 Sets the width of the field.
@@ -998,7 +903,7 @@ Sets the width of the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Height</sgmltag></term>
+<term><anchor id="f-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>
 Sets the height of the field.
@@ -1007,37 +912,37 @@ Sets the height of the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">BackgroundColor</sgmltag></term>
+<term><anchor id="f-backgroundcolor"/><sgmltag class="attribute">BackgroundColor</sgmltag></term>
 <listitem>
 <para>
-Sets the background color of the field.  he color is defined as an RGB
+Sets the background color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term>><sgmltag class="attribute">ForegroundColor</sgmltag></term>
+<term><anchor id="f-foregroundcolor"/><sgmltag class="attribute">ForegroundColor</sgmltag></term>
 <listitem>
 <para>
-Sets the foreground color of the field.   The color is defined as an RGB
+Sets the foreground color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">BorderColor</sgmltag></term>
+<term><anchor id="f-bordercolor"/><sgmltag class="attribute">BorderColor</sgmltag></term>
 <listitem>
 <para>
-Sets the border color of the field.   The color is defined as an RGB
+Sets the border color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderWidth</sgmltag></term>
+<term><anchor id="f-borderwidth"/><sgmltag class="element">BorderWidth</sgmltag></term>
 <listitem>
 <para>
 Sets the border width for the field.
@@ -1046,7 +951,7 @@ Sets the border width for the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderStyle</sgmltag></term>
+<term><anchor id="f-borderstyle"/><sgmltag class="element">BorderStyle</sgmltag></term>
 <listitem>
 <para>
 Sets the border style for the field.
@@ -1092,21 +997,21 @@ Sets the border style for the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontFamily</sgmltag></term>
+<term><anchor id="f-fontfamily"/><sgmltag class="attribute">FontFamily</sgmltag></term>
 <listitem>
 <para>
 Sets the font family for the field's text.  
 </para>
-<informalexample>
+<!--<informalexample>
 <para><userinput><sgmltag
 class="attribute">FontFamily</sgmltag>="<sgmltag
 class="attvalue">Helvetica</sgmltag>"</userinput></para>
-</informalexample>
+</informalexample>-->
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontSize</sgmltag></term>
+<term><anchor id="f-fontsize"/><sgmltag class="attribute">FontSize</sgmltag></term>
 <listitem>
 <para>
 Sets the font size for the field's text.
@@ -1115,7 +1020,7 @@ Sets the font size for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontWeight</sgmltag></term>
+<term><anchor id="f-fontweight"/><sgmltag class="attribute">FontWeight</sgmltag></term>
 <listitem>
 <para>
 Sets the font weight for the field's text.
@@ -1158,7 +1063,7 @@ Sets the font weight for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontItalic</sgmltag></term>
+<term><anchor id="f-fontitalic"/><sgmltag class="attribute">FontItalic</sgmltag></term>
 <listitem>
 <para>
 Sets the font italic flag for the field's text.
@@ -1189,7 +1094,7 @@ Sets the font italic flag for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">HAlignment</sgmltag></term>
+<term><anchor id="f-halignment"/><sgmltag class="attribute">HAlignment</sgmltag></term>
 <listitem>
 <para>
 Sets the field's horizontal text alignment.
@@ -1223,7 +1128,7 @@ Sets the field's horizontal text alignment.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">VAlignment</sgmltag></term>
+<term><anchor id="f-valignment"/><sgmltag class="attribute">VAlignment</sgmltag></term>
 <listitem>
 <para>
 Sets the field's vertical text alignment
@@ -1257,7 +1162,7 @@ Sets the field's vertical text alignment
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">WordWrap</sgmltag></term>
+<term><anchor id="f-wordwrap"/><sgmltag class="attribute">WordWrap</sgmltag></term>
 <listitem>
 <para>
 Sets the word wrap flag for the field's text.
@@ -1285,12 +1190,12 @@ Sets the word wrap flag for the field's text.
 </informaltable>
 </listitem>
 </varlistentry>
-</variablelist>
+<!--</variablelist>
 </listitem>
-</varlistentry>
+</varlistentry>-->
 
 <varlistentry>
-<term><sgmltag class="attribute">DataType</sgmltag></term>
+<term><anchor id="f-datatype"/><sgmltag class="attribute">DataType</sgmltag></term>
 <listitem>
 <para>
 Sets the field's data type.
@@ -1332,12 +1237,12 @@ Sets the field's data type.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">DateFormat</sgmltag></term>
+<term><anchor id="f-dateformat"/><sgmltag class="attribute">DateFormat</sgmltag></term>
 <listitem>
 <para>
 Sets the field's date format. For this to work, the format of the date
 from the data document must be in the format mm/dd/yyyy or mm-dd-yyyy,
-otherwise the original date format is used.  If data type other than
+otherwise the original date format is used. If data type other than
 date, set to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 
@@ -1368,11 +1273,11 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 </row>
 <row>
 <entry><sgmltag class="attvalue">4</sgmltag></entry>
-<entry>m/d/yyy</entry>
+<entry>m/d/yyyy</entry>
 </row>
 <row>
 <entry><sgmltag class="attvalue">5</sgmltag></entry>
-<entry>m-d-yy</entry>
+<entry>m-d-yyyy</entry>
 </row>
 <row>
 <entry><sgmltag class="attvalue">6</sgmltag></entry>
@@ -1390,6 +1295,14 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 <entry><sgmltag class="attvalue">9</sgmltag></entry>
 <entry>yyyy-m-d</entry>
 </row>
+<row>
+<entry><sgmltag class="attvalue">10</sgmltag></entry>
+<entry>dd.mm.yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">11</sgmltag></entry>
+<entry>dd.mm.yyyy</entry>
+</row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -1397,7 +1310,7 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Precision</sgmltag></term>
+<term><anchor id="f-precision"/><sgmltag class="attribute">Precision</sgmltag></term>
 <listitem>
 <para>
 Sets the field's numeric precision.  If data type other than a numeric
@@ -1407,7 +1320,7 @@ type, set to 0.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Currency</sgmltag></term>
+<term><anchor id="f-currency"/><sgmltag class="attribute">Currency</sgmltag></term>
 <listitem>
 <para>
 Sets the field's currency symbol  If data type other than currency, set
@@ -1418,18 +1331,18 @@ representing a Unicode character.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">NegValueColor</sgmltag></term>
+<term><anchor id="f-negvaluecolor"/><sgmltag class="attribute">NegValueColor</sgmltag></term>
 <listitem>
 <para>
-Sets the color for negative numeric values.   The color is defined as an
-RGB value (r,g,b). r, g and b must be in the range 0..255.  If data is
+Sets the color for negative numeric values. The color is defined as an
+RGB (Red Green Blue) value (r,g,b). r, g and b must be in the range 0..255.  If data is
 other than a numeric type, set to 255,0,0.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">CommaSeparator</sgmltag></term>
+<term><anchor id="f-commaseparator"/><sgmltag class="attribute">CommaSeparator</sgmltag></term>
 <listitem>
 <para>
 Sets whether commas are used in numeric fields. If data type other than
@@ -1456,18 +1369,20 @@ a numeric type, set to <sgmltag class="attvalue">0</sgmltag>.
 </tbody>
 </tgroup>
 </informaltable>
-
+</listitem>
+</varlistentry>
+</variablelist>
 </listitem>
 </varlistentry>
 </variablelist>
 
-</sect1>
+</sect2>
 
-<sect1 id="calclated-field-element">
+<sect2 id="calculated-field-element">
 <title><sgmltag class="element">CalculatedField</sgmltag></title>
 
 <para>
-The <sgmltag class="element">Field</sgmltag> element defines a report
+The <sgmltag class="element">CalculatedField</sgmltag> element defines a report
 object used to draw calculated values on a report.
 </para>
 
@@ -1475,6 +1390,7 @@ object used to draw calculated values on a report.
 &lt;!ELEMENT CalculatedField EMPTY&gt;
 &lt;!ATTLIST CalculatedField
      CalculationType CDATA #REQUIRED
+     Field           CDATA #REQUIRED
      Text            CDATA #REQUIRED
      X               CDATA #REQUIRED
      Y               CDATA #REQUIRED
@@ -1507,7 +1423,7 @@ object used to draw calculated values on a report.
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="attribute">CalculationType</sgmltag></term>
+<term><anchor id="c-calculationtype"/><sgmltag class="attribute">CalculationType</sgmltag></term>
 <listitem>
 <para>
 Sets the calculation type for the field.
@@ -1550,7 +1466,17 @@ Sets the calculation type for the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Text</sgmltag></term>
+<term><anchor id="c-field"/><sgmltag class="attribute">Field</sgmltag></term>
+<listitem>
+<para>
+Sets the data field for the object. This is an attribute from <sgmltag
+class="attribute">row</sgmltag> element in a data file.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><anchor id="c-text"/><sgmltag class="attribute">Text</sgmltag></term>
 <listitem>
 <para>
 Not used.
@@ -1559,25 +1485,25 @@ Not used.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">X</sgmltag></term>
+<term><anchor id="c-x"/><sgmltag class="attribute">X</sgmltag></term>
 <listitem>
 <para>
-Sets the x coordinate for positioning the field.
+Sets the x coordinate (relative to the section's upper left corner) for positioning the field.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Y</sgmltag></term>
+<term><anchor id="c-y"/><sgmltag class="attribute">Y</sgmltag></term>
 <listitem>
 <para>
-Sets the y coordinate for positioning the field.
+Sets the y coordinate (relative to the section's upper left corner) for positioning the field.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Width</sgmltag></term>
+<term><anchor id="c-width"/><sgmltag class="attribute">Width</sgmltag></term>
 <listitem>
 <para>
 Sets the width of the field.
@@ -1586,7 +1512,7 @@ Sets the width of the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Height</sgmltag></term>
+<term><anchor id="c-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>
 Sets the height of the field.
@@ -1595,37 +1521,37 @@ Sets the height of the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">BackgroundColor</sgmltag></term>
+<term><anchor id="c-backgroundcolor"/><sgmltag class="attribute">BackgroundColor</sgmltag></term>
 <listitem>
 <para>
-Sets the background color of the field.  he color is defined as an RGB
+Sets the background color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term>><sgmltag class="attribute">ForegroundColor</sgmltag></term>
+<term><anchor id="c-foregroundcolor"/><sgmltag class="attribute">ForegroundColor</sgmltag></term>
 <listitem>
 <para>
-Sets the foreground color of the field.   The color is defined as an RGB
+Sets the foreground color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">BorderColor</sgmltag></term>
+<term><anchor id="c-bordercolor"/><sgmltag class="attribute">BorderColor</sgmltag></term>
 <listitem>
 <para>
-Sets the border color of the field.   The color is defined as an RGB
+Sets the border color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderWidth</sgmltag></term>
+<term><anchor id="c-borderwidth"/><sgmltag class="element">BorderWidth</sgmltag></term>
 <listitem>
 <para>
 Sets the border width for the field.
@@ -1634,7 +1560,7 @@ Sets the border width for the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderStyle</sgmltag></term>
+<term><anchor id="c-borderstyle"/><sgmltag class="element">BorderStyle</sgmltag></term>
 <listitem>
 <para>
 Sets the border style for the field.
@@ -1680,21 +1606,21 @@ Sets the border style for the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontFamily</sgmltag></term>
+<term><anchor id="c-fontfamily"/><sgmltag class="attribute">FontFamily</sgmltag></term>
 <listitem>
 <para>
-Sets the font family for the field's text.  
+Sets the font family for the field's text.
 </para>
-<informalexample>
+<!--<informalexample>
 <para><userinput><sgmltag
 class="attribute">FontFamily</sgmltag>="<sgmltag
 class="attvalue">Helvetica</sgmltag>"</userinput></para>
-</informalexample>
+</informalexample>-->
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontSize</sgmltag></term>
+<term><anchor id="c-fontsize"/><sgmltag class="attribute">FontSize</sgmltag></term>
 <listitem>
 <para>
 Sets the font size for the field's text.
@@ -1703,7 +1629,7 @@ Sets the font size for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontWeight</sgmltag></term>
+<term><anchor id="c-fontweight"/><sgmltag class="attribute">FontWeight</sgmltag></term>
 <listitem>
 <para>
 Sets the font weight for the field's text.
@@ -1746,7 +1672,7 @@ Sets the font weight for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontItalic</sgmltag></term>
+<term><anchor id="c-fontitalic"/><sgmltag class="attribute">FontItalic</sgmltag></term>
 <listitem>
 <para>
 Sets the font italic flag for the field's text.
@@ -1777,7 +1703,7 @@ Sets the font italic flag for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">HAlignment</sgmltag></term>
+<term><anchor id="c-halignment"/><sgmltag class="attribute">HAlignment</sgmltag></term>
 <listitem>
 <para>
 Sets the field's horizontal text alignment.
@@ -1811,10 +1737,10 @@ Sets the field's horizontal text alignment.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">VAlignment</sgmltag></term>
+<term><anchor id="c-valignment"/><sgmltag class="attribute">VAlignment</sgmltag></term>
 <listitem>
 <para>
-Sets the field's vertical text alignment
+Sets the field's vertical text alignment.
 </para>
 
 <informaltable>
@@ -1845,7 +1771,7 @@ Sets the field's vertical text alignment
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">WordWrap</sgmltag></term>
+<term><anchor id="c-wordwrap"/><sgmltag class="attribute">WordWrap</sgmltag></term>
 <listitem>
 <para>
 Sets the word wrap flag for the field's text.
@@ -1873,12 +1799,9 @@ Sets the word wrap flag for the field's text.
 </informaltable>
 </listitem>
 </varlistentry>
-</variablelist>
-</listitem>
-</varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">DataType</sgmltag></term>
+<term><anchor id="c-datatype"/><sgmltag class="attribute">DataType</sgmltag></term>
 <listitem>
 <para>
 Sets the field's data type.
@@ -1920,7 +1843,7 @@ Sets the field's data type.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">DateFormat</sgmltag></term>
+<term><anchor id="c-dateformat"/><sgmltag class="attribute">DateFormat</sgmltag></term>
 <listitem>
 <para>
 Sets the field's date format. For this to work, the format of the date
@@ -1956,11 +1879,11 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 </row>
 <row>
 <entry><sgmltag class="attvalue">4</sgmltag></entry>
-<entry>m/d/yyy</entry>
+<entry>m/d/yyyy</entry>
 </row>
 <row>
 <entry><sgmltag class="attvalue">5</sgmltag></entry>
-<entry>m-d-yy</entry>
+<entry>m-d-yyyy</entry>
 </row>
 <row>
 <entry><sgmltag class="attvalue">6</sgmltag></entry>
@@ -1978,6 +1901,14 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 <entry><sgmltag class="attvalue">9</sgmltag></entry>
 <entry>yyyy-m-d</entry>
 </row>
+<row>
+<entry><sgmltag class="attvalue">10</sgmltag></entry>
+<entry>dd.mm.yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">11</sgmltag></entry>
+<entry>dd.mm.yyyy</entry>
+</row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -1985,7 +1916,7 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Precision</sgmltag></term>
+<term><anchor id="c-precision"/><sgmltag class="attribute">Precision</sgmltag></term>
 <listitem>
 <para>
 Sets the field's numeric precision.  If data type other than a numeric
@@ -1995,7 +1926,7 @@ type, set to 0.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Currency</sgmltag></term>
+<term><anchor id="c-currency"/><sgmltag class="attribute">Currency</sgmltag></term>
 <listitem>
 <para>
 Sets the field's currency symbol  If data type other than currency, set
@@ -2006,18 +1937,18 @@ representing a Unicode character.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">NegValueColor</sgmltag></term>
+<term><anchor id="c-negvaluecolor"/><sgmltag class="attribute">NegValueColor</sgmltag></term>
 <listitem>
 <para>
-Sets the color for negative numeric values.   The color is defined as an
-RGB value (r,g,b). r, g and b must be in the range 0..255.  If data is
+Sets the color for negative numeric values. The color is defined as an
+RGB (Red Green Blue) value (r,g,b). r, g and b must be in the range 0..255. If data is
 other than a numeric type, set to 255,0,0.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">CommaSeparator</sgmltag></term>
+<term><anchor id="c-commaseparator"/><sgmltag class="attribute">CommaSeparator</sgmltag></term>
 <listitem>
 <para>
 Sets whether commas are used in numeric fields. If data type other than
@@ -2048,10 +1979,13 @@ a numeric type, set to <sgmltag class="attvalue">0</sgmltag>.
 </listitem>
 </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
 
-</sect1>
+</sect2>
 
-<sect1 id="special-element">
+<sect2 id="special-element">
 <title><sgmltag class="element">Special</sgmltag></title>
 
 <para>
@@ -2090,7 +2024,7 @@ object used to draw page numbers and the current date on a report.
 
 <variablelist>
 <varlistentry>
-<term><sgmltag class="attribute">Type</sgmltag></term>
+<term><anchor id="s-type"/><sgmltag class="attribute">Type</sgmltag></term>
 <listitem>
 <para>
 Sets the type of special object.
@@ -2120,7 +2054,7 @@ Sets the type of special object.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Text</sgmltag></term>
+<term><anchor id="s-text"/><sgmltag class="attribute">Text</sgmltag></term>
 <listitem>
 <para>
 Not used.
@@ -2129,25 +2063,25 @@ Not used.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">X</sgmltag></term>
+<term><anchor id="s-x"/><sgmltag class="attribute">X</sgmltag></term>
 <listitem>
 <para>
-Sets the x coordinate for positioning the field.
+Sets the x coordinate (relative to the section's upper left corner) for positioning the field.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Y</sgmltag></term>
+<term><anchor id="s-y"/><sgmltag class="attribute">Y</sgmltag></term>
 <listitem>
 <para>
-Sets the y coordinate for positioning the field.
+Sets the y coordinate (relative to the section's upper left corner) for positioning the field.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Width</sgmltag></term>
+<term><anchor id="s-width"/><sgmltag class="attribute">Width</sgmltag></term>
 <listitem>
 <para>
 Sets the width of the field.
@@ -2156,7 +2090,7 @@ Sets the width of the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Height</sgmltag></term>
+<term><anchor id="s-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>
 Sets the height of the field.
@@ -2165,20 +2099,20 @@ Sets the height of the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">BackgroundColor</sgmltag></term>
+<term><anchor id="s-backgroundcolor"/><sgmltag class="attribute">BackgroundColor</sgmltag></term>
 <listitem>
 <para>
-Sets the background color of the field.  he color is defined as an RGB
+Sets the background color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term>><sgmltag class="attribute">ForegroundColor</sgmltag></term>
+<term><anchor id="s-foregroundcolor"/><sgmltag class="attribute">ForegroundColor</sgmltag></term>
 <listitem>
 <para>
-Sets the foreground color of the field.   The color is defined as an RGB
+Sets the foreground color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
@@ -2186,17 +2120,17 @@ value (r,g,b). r, g and b must be in the range 0..255.
 
 
 <varlistentry>
-<term><sgmltag class="attribute">BorderColor</sgmltag></term>
+<term><anchor id="s-bordercolor"/><sgmltag class="attribute">BorderColor</sgmltag></term>
 <listitem>
 <para>
-Sets the border color of the field.   The color is defined as an RGB
+Sets the border color of the field. The color is defined as an RGB (Red Green Blue)
 value (r,g,b). r, g and b must be in the range 0..255.
 </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderWidth</sgmltag></term>
+<term><anchor id="s-borderwidth"/><sgmltag class="element">BorderWidth</sgmltag></term>
 <listitem>
 <para>
 Sets the border width for the field.
@@ -2205,7 +2139,7 @@ Sets the border width for the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="element">BorderStyle</sgmltag></term>
+<term><anchor id="s-borderstyle"/><sgmltag class="element">BorderStyle</sgmltag></term>
 <listitem>
 <para>
 Sets the border style for the field.
@@ -2251,21 +2185,21 @@ Sets the border style for the field.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontFamily</sgmltag></term>
+<term><anchor id="s-fontfamily"/><sgmltag class="attribute">FontFamily</sgmltag></term>
 <listitem>
 <para>
-Sets the font family for the field's text.  
+Sets the font family for the field's text.
 </para>
-<informalexample>
+<!--<informalexample>
 <para><userinput><sgmltag
 class="attribute">FontFamily</sgmltag>="<sgmltag
 class="attvalue">Helvetica</sgmltag>"</userinput></para>
-</informalexample>
+</informalexample>-->
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontSize</sgmltag></term>
+<term><anchor id="s-fontsize"/><sgmltag class="attribute">FontSize</sgmltag></term>
 <listitem>
 <para>
 Sets the font size for the field's text.
@@ -2274,7 +2208,7 @@ Sets the font size for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontWeight</sgmltag></term>
+<term><anchor id="s-fontweight"/><sgmltag class="attribute">FontWeight</sgmltag></term>
 <listitem>
 <para>
 Sets the font weight for the field's text.
@@ -2317,7 +2251,7 @@ Sets the font weight for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">FontItalic</sgmltag></term>
+<term><anchor id="s-fontitalic"/><sgmltag class="attribute">FontItalic</sgmltag></term>
 <listitem>
 <para>
 Sets the font italic flag for the field's text.
@@ -2348,7 +2282,7 @@ Sets the font italic flag for the field's text.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">HAlignment</sgmltag></term>
+<term><anchor id="s-halignment"/><sgmltag class="attribute">HAlignment</sgmltag></term>
 <listitem>
 <para>
 Sets the field's horizontal text alignment.
@@ -2382,10 +2316,10 @@ Sets the field's horizontal text alignment.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">VAlignment</sgmltag></term>
+<term><anchor id="s-valignment"/><sgmltag class="attribute">VAlignment</sgmltag></term>
 <listitem>
 <para>
-Sets the field's vertical text alignment
+Sets the field's vertical text alignment.
 </para>
 
 <informaltable>
@@ -2416,7 +2350,7 @@ Sets the field's vertical text alignment
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">WordWrap</sgmltag></term>
+<term><anchor id="s-wordwrap"/><sgmltag class="attribute">WordWrap</sgmltag></term>
 <listitem>
 <para>
 Sets the word wrap flag for the field's text.
@@ -2444,17 +2378,14 @@ Sets the word wrap flag for the field's text.
 </informaltable>
 </listitem>
 </varlistentry>
-</variablelist>
-</listitem>
-</varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">DateFormat</sgmltag></term>
+<term><anchor id="s-dateformat"/><sgmltag class="attribute">DateFormat</sgmltag></term>
 <listitem>
 <para>
 Sets the field's date format. For this to work, the format of the date
 from the data document must be in the format mm/dd/yyyy or mm-dd-yyyy,
-otherwise the original date format is used.  If data type other than
+otherwise the original date format is used. If data type other than
 date, set to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 
@@ -2485,11 +2416,11 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 </row>
 <row>
 <entry><sgmltag class="attvalue">4</sgmltag></entry>
-<entry>m/d/yyy</entry>
+<entry>m/d/yyyy</entry>
 </row>
 <row>
 <entry><sgmltag class="attvalue">5</sgmltag></entry>
-<entry>m-d-yy</entry>
+<entry>m-d-yyyy</entry>
 </row>
 <row>
 <entry><sgmltag class="attvalue">6</sgmltag></entry>
@@ -2507,6 +2438,14 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 <entry><sgmltag class="attvalue">9</sgmltag></entry>
 <entry>yyyy-m-d</entry>
 </row>
+<row>
+<entry><sgmltag class="attvalue">10</sgmltag></entry>
+<entry>dd.mm.yy</entry>
+</row>
+<row>
+<entry><sgmltag class="attvalue">11</sgmltag></entry>
+<entry>dd.mm.yyyy</entry>
+</row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -2514,19 +2453,22 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 </varlistentry>
 
 <varlistentry>
-<term><sgmltag class="attribute">Precision</sgmltag></term>
+<term><anchor id="s-precision"/><sgmltag class="attribute">Precision</sgmltag></term>
 <listitem>
 <para>
-Sets the field's numeric precision.  If data type other than a numeric
+Sets the field's numeric precision. If data type other than a numeric
 type, set to 0.
 </para>
 </listitem>
 </varlistentry>
 </variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
 
 </sect1>
 
-</chapter>
 
- 
 

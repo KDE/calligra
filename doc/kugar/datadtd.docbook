@@ -3,7 +3,7 @@
 <!DOCTYPE appendix PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
 -->
 
-<appendix id="kugardata-dtd">
+<sect1 id="kugardata-dtd">
 <title><sgmltag class="element">KugarData</sgmltag> Document Type
 Definition</title>
 
@@ -11,16 +11,17 @@ Definition</title>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
 &lt;!DOCTYPE KugarData [
-     &lt;!ELEMENT KugarData (Row* )&gt;
+     &lt;!ELEMENT <link linkend="kugar-data-element">KugarData</link> (<link linkend="row-element">Row</link>*)&gt;
      &lt;!ATTLIST KugarData
-         Template  CDATA  #REQUIRED&gt;
+         <link linkend="template-att">Template</link>  CDATA  #REQUIRED&gt;
 
-     &lt;!ELEMENT Row EMPTY&gt;
+     &lt;!ELEMENT <link linkend="row-element">Row</link> EMPTY&gt;
      &lt;!ATTLIST Row
-         col1  CDATA  #REQUIRED
-         col2  CDATA  #REQUIRED
-         ...   CDATA  #REQUIRED
-         coln  CDATA  #REQUIRED&gt;
+         <link linkend="level-att">level</link>     CDATA  #REQUIRED
+         <link linkend="column-att">col1</link>      CDATA  #IMPLIED
+         <link linkend="column-att">col2</link>      CDATA  #IMPLIED
+         <link linkend="column-att">...</link>       CDATA  #IMPLIED
+         <link linkend="column-att">coln</link>      CDATA  #IMPLIED&gt;
  ]&gt;
 </synopsis>
-</appendix>
+</sect1>
