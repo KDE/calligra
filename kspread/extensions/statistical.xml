@@ -779,7 +779,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The VARPA() function calculates the variance based on an entire population. Text and boolean values that evaluate to FALSE are counted as 0, boolean value that avaluate to TRUE are counted as 1.</Text>
+	<Text>The VARPA() function calculates the variance based on an entire population. Text and boolean values that evaluate to FALSE are counted as 0, boolean value that evaluate to TRUE are counted as 1.</Text>
 	<Syntax>VARPA(value;value;...)</Syntax>
 	<Example>VARPA(12;5;7) equals 8.666...</Example>
 	<Example>VARPA(15;80;3) equals 1144.22...</Example>

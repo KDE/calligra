@@ -253,7 +253,7 @@ this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
 <listitem>
 <para>
 Set the level in hierarchy of the section. Sections with higher levels will be printed
-before sections with lower ones. Level can be any number begining from 0.
+before sections with lower ones. Level can be any number beginning from 0.
 </para>
 
 </listitem>
@@ -300,7 +300,7 @@ this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
 <listitem>
 <para>
 Set the level in hierarchy of the section. Sections with higher levels will be printed
-before sections with lower ones. Level can be any number begining from 0. This is an attribute
+before sections with lower ones. Level can be any number beginning from 0. This is an attribute
 from a <sgmltag class="attribute">row</sgmltag> element in a data file.
 </para>
 

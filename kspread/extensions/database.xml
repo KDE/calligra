@@ -225,8 +225,7 @@ value or more than one value exist.</Text>
 	<Type range="true">String</Type>
       </Parameter>
       <Help>
-	<Text>Returns the standard deviation of a population based on
-the entire population using all numeric values in a column of a database specified by a set of conditions.</Text>
+	<Text>Returns the standard deviation of a population based on the entire population using all numeric values in a column of a database specified by a set of conditions.</Text>
 	<Syntax>DSTDEVP(Database; "Header"; Conditions)</Syntax>
 	<Example>DSTDEVP(A1:C5; "Salary"; A9:A11)</Example>
 	<Related>DSTDEV</Related>

@@ -684,7 +684,7 @@ using the menubar.</para></listitem></varlistentry>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Repeat the last search for characters starting at the current cursor positon and moving backwards.</action>
+<para><action>Repeat the last search for characters starting at the current cursor position and moving backwards.</action>
 The find features of &kword; are covered in more detail under <link
 linkend="search-and-replace">Searching for Text</link>.</para>
 
@@ -964,7 +964,7 @@ using the menubar. </para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This option will insert a horizontal line to seperate paragraphs at the cursor position.</action> More information can be
+<para><action>This option will insert a horizontal line to separate paragraphs at the cursor position.</action> More information can be
 found at <link linkend="hline">Horizontal lines</link> section.</para></listitem>
 </varlistentry>
 

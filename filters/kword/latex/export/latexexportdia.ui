@@ -176,7 +176,7 @@
                             <string>Don't generate neither the latex header nor the document environment.</string>
                         </property>
                         <property name="whatsThis" stdset="0">
-                            <string>The document will be generated as a latex document which will have to incldue in a main latex document. It's allow you to generate several little files for each chapter of your document.</string>
+                            <string>The document will be generated as a latex document which will have to include in a main latex document. It's allow you to generate several little files for each chapter of your document.</string>
                         </property>
                     </widget>
                 </widget>

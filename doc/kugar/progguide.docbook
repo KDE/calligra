@@ -113,7 +113,7 @@ only on &UNIX; platforms. but on &Windows; and &Mac; too.
 <para>
 In order to build program that uses kugar library, it should be linked
 with <filename>libkugar.so</filename> shared library, that is provided with kugar distribution on all
-&UNIX; plaforms.
+&UNIX; platforms.
 </para>
 <para>
 Include files are <filename>kugarqt.h</filename> and <filename>kugar.h</filename>
@@ -165,9 +165,9 @@ Call this before opening the new report.</funcsynopsisinfo>
 <paramdef>const QIODevice &amp;<parameter>data_io_device</parameter></paramdef>
 </funcprototype>
 <funcsynopsisinfo>Sets report data from <replaceable>data_io_device</replaceable> file.
-IO device can be any succesor of <classname>QIODevice</classname> class.
+IO device can be any successor of <classname>QIODevice</classname> class.
 For example, to fetch records directly from the database,
-create a <classname>QIODevice</classname> successor and redefine all nessesary
+create a <classname>QIODevice</classname> successor and redefine all necessary
 functionality.
 </funcsynopsisinfo>
 </funcsynopsis>
@@ -186,9 +186,9 @@ functionality.
 <paramdef>const QIODevice &amp;<parameter>template_io_device</parameter></paramdef>
 </funcprototype>
 <funcsynopsisinfo>Sets report template from <replaceable>template_io_device</replaceable> file.
-IO device can be any succesor of <classname>QIODevice</classname> class.
-For example, to obtail report template from network storage or database,
-create a QIODevice successor and redefine all nessesary functionality.
+IO device can be any successor of <classname>QIODevice</classname> class.
+For example, to obtain report template from network storage or database,
+create a QIODevice successor and redefine all necessary functionality.
 </funcsynopsisinfo>
 </funcsynopsis>
 

@@ -33,7 +33,7 @@
 /**
  * This class hold all general information about the doc : does it use a color markup, ... ?
  * paper size, ... and generate the information about the doc (packages and extensions
- * to include, ...). It's the configuration latex file used to incldue the needed packages,
+ * to include, ...). It's the configuration latex file used to include the needed packages,
  * define the paper format, ...
  */
 class FileHeader: public XmlParser

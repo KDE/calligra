@@ -82,7 +82,7 @@ when you first start to use &kspread; you set the default options in all pages
 of the &kspread; configuration dialog (obtained by selecting
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
 Kspread...</guimenuitem></menuchoice>) except for <guilabel>Completion mode
-</guilabel> in the <guisubmenu>Misc</guisubmenu> page, which shoud be set to 
+</guilabel> in the <guisubmenu>Misc</guisubmenu> page, which should be set to 
 <guimenuitem>None</guimenuitem>.
 </para> 
 <para>You may also find it helpful to enable Tooltips in the K menu
@@ -559,7 +559,7 @@ When you open a workbook &kspread; checks to see if an autosaved
 version exists, and if it finds one will offer to open that instead.</para>
 <para>Autosaved workbooks are saved with a file name of the form 
 <filename>.yourfilename.autosave</filename>, note the leading period 
-(<keysym>.</keysym>), so that <filename>spread1.ksp</filename> woud be 
+(<keysym>.</keysym>), so that <filename>spread1.ksp</filename> would be 
 autosaved as <filename>.spread1.ksp.autosave</filename>. The autosave feature 
 is <link linkend="configinterface">user configurable</link>.</para>
 
@@ -846,7 +846,7 @@ button marked with a large green tick to put the expression into the selected
 cell.</para>
 <para>You can of course do without the <guilabel>Function</guilabel> 
 dialog and simply type the complete expression into the Formula toolbar's 
-main edit box. Function names are not case sensistve. Do not forget that all 
+main edit box. Function names are not case sensitive. Do not forget that all 
 expressions must start with an <keysym>=</keysym> symbol.</para>
 </sect2>
 
@@ -1000,7 +1000,7 @@ and the reference of the cell that is to be changed
 box. Note that you need to have entered some initial value into the cell that 
 is to be changed before starting <guimenuitem>Goal Seek</guimenuitem>.</para>
 <para>Pressing the <guibutton>Start</guibutton> button in the <guilabel>
-Goal Seek</guilabel> menu will start the calulation. When it finishes and if 
+Goal Seek</guilabel> menu will start the calculation. When it finishes and if 
 it has found a solution press the <guibutton>OK</guibutton> button to accept 
 the result or <guibutton>Cancel</guibutton> to keep the original value. 
 </para>
@@ -2873,7 +2873,7 @@ occupy the space left by the removed cell(s).</action>
 <sect1 id="othershort">
 <title>Other Shortcuts</title>
 <para>This section describes those &kspread; shortcut keys used for operations 
-that do not appear in any of the menues.</para>
+that do not appear in any of the menus.</para>
 
 <variablelist>
 
@@ -2894,7 +2894,7 @@ the start or end of the block of unoccupied cells in the current row or column.
 <keycombo action="simul">&Ctrl;&Shift;<keysym>Arrow keys</keysym></keycombo>
 </term>
 <listitem><para><action>If the selected cell is occupied then select all 
-occupied cells to the start or end of that block of ocupied cells in the 
+occupied cells to the start or end of that block of occupied cells in the 
 current row or column. 
 If the selected cell is not occupied then select all unoccupied cells to the 
 start or end of that block of unoccupied cells in the current row or column.

@@ -48,7 +48,7 @@ i18n( "Style name", "Dark Blue" );
 i18n( "Style name", "Red" );
 i18n( "Style name", "Yellow" );
 i18n( "Style name", "Colorful" );
-i18n( "Style name", "Blueish" );
+i18n( "Style name", "Bluish" );
 
 // Translations for the standard tablestyle names
 i18n( "Style name", "Simple 1" );

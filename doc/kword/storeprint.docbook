@@ -227,7 +227,7 @@ If there are unsaved changes, the titlebar will have
 
   <para>If the save was
 successful, only the filename will be in the titlebar.  If there is a
-probelm with the save, an error box will appear.</para>
+problem with the save, an error box will appear.</para>
 
 <screenshot>
 <mediaobject>
@@ -317,12 +317,12 @@ role="extension">.pdf</literal>,etc). </para>
 
 <para>&kword; does not report a successful save.  Therefore, if the file
 was saved without incident, &kword; will return you to editing your
-document.  If there is a probelm with the save, an error box will
+document.  If there is a problem with the save, an error box will
 appear.</para>
 
 <note>
 <para>&kword; will only allow you to save your file where you are
-allowed to by the permisions listed by the operating system. If you try
+allowed to by the permissions listed by the operating system. If you try
 to save outside that area, &kword; will generate an error.</para>
 </note>
 </sect3>

@@ -1128,7 +1128,7 @@ with zero or more periods (.) at the end.</para>
 <varlistentry>
 <term><guilabel>TAB</guilabel></term>
 <listitem>
-<para>Once selected, &kword; will insert a back slash folllowed by a t (\t) into your string. &kword; will match any
+<para>Once selected, &kword; will insert a back slash followed by a t (\t) into your string. &kword; will match any
 string of characters with a tab character (for use with tab stops) in that portion of the string.</para>
 </listitem>
 </varlistentry>
@@ -1136,7 +1136,7 @@ string of characters with a tab character (for use with tab stops) in that porti
 <varlistentry>
 <term><guilabel>Newline</guilabel></term>
 <listitem>
-<para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>n</emphasis> (\n) into your string.
+<para>Once selected, &kword; will insert a back slash followed by a <emphasis>n</emphasis> (\n) into your string.
 &kword; will match any string of characters with a newline character in that portion of the string. (Newline characters are also referred to 
 as <emphasis>Line Breaks</emphasis>).</para>
 <tip><para>A newline character is inserted into a &kword; document by clicking <keycombo
@@ -1147,7 +1147,7 @@ action="simul">&Shift;<keycap>Return</keycap></keycombo></para></tip>
 <varlistentry>
 <term><guilabel>Carriage Return</guilabel></term>
 <listitem>
-<para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>r</emphasis> (\r) into your string.
+<para>Once selected, &kword; will insert a back slash followed by a <emphasis>r</emphasis> (\r) into your string.
 &kword; will match any string of characters with a carrage return character in that portion of the string.</para>
 <note><para>A carrage return is the same thing as a new paragraph.  When you press the <keycap>Enter</keycap> key,
 you are entering a carrage return.</para></note>
@@ -1158,7 +1158,7 @@ you are entering a carrage return.</para></note>
 <varlistentry>
 <term><guilabel>Whitespace</guilabel></term>
 <listitem>
-<para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>s</emphasis> (\s) into your string.
+<para>Once selected, &kword; will insert a back slash followed by a <emphasis>s</emphasis> (\s) into your string.
 &kword; will match any string of characters with a whitespace character in that portion of the string.</para>
 <note><para>Whitespace characters is a group of characters that change the flow or move the text around.
 Examples of whitespace characters are spaces, tabs, and carrage returns.</para></note>
@@ -1168,7 +1168,7 @@ Examples of whitespace characters are spaces, tabs, and carrage returns.</para><
 <varlistentry>
 <term><guilabel>Digit</guilabel></term>
 <listitem>
-<para>Once selected, &kword; will insert a back slash folllowed by a <emphasis>d</emphasis> (\d) into your string.
+<para>Once selected, &kword; will insert a back slash followed by a <emphasis>d</emphasis> (\d) into your string.
 &kword; will match any string of characters with a numerical digit (any number 0-9) in that portion of the string.</para>
 </listitem>
 </varlistentry>
@@ -1460,7 +1460,7 @@ words in between the two underscores.</para>
 <term><guilabel>Use autonumbering for numbered paragraphs</guilabel></term>
 <listitem>
 <para>If you start a paragraph with a number and a symbol (<emphasis> 1) </emphasis> for example).  &kword;  will automatically 
-convert that paragraph to a numbered paragraph.  All future paragraphs will be consecutivly numbered. </para>
+convert that paragraph to a numbered paragraph.  All future paragraphs will be consecutively numbered. </para>
 </listitem>
 </varlistentry>
 
@@ -1540,7 +1540,7 @@ Set the correct language using the drop down box labeled
 <guilabel>Replacement and exception for language</guilabel>.</para>
 
 <para>The checkbox labeled <guilabel>Enable word replacement</guilabel> is used to 
-toggle on and off the autoreplacment features of &kword;.  If there is no mark in the checkbox, 
+toggle on and off the autoreplacement features of &kword;.  If there is no mark in the checkbox, 
 then &kword; will not perform any autoreplacements from the list in this dialog.</para>
 
 <para>If there is a mark in the checkbox labeled <guilabel>Replace text with formatting</guilabel> 
@@ -1720,7 +1720,7 @@ and click on the <guibutton>Remove</guibutton> button.</para>
 <title>Manually applying autocorrection</title>
 <indexterm><primary>autocorrection</primary><secondary>manually applying</secondary></indexterm>
 
-<para>If autocorrection is turned off in your document, you can mannually enable <link linkend="autocorrect">autocorrection</link>.</para>
+<para>If autocorrection is turned off in your document, you can manually enable <link linkend="autocorrect">autocorrection</link>.</para>
 <para>To manually apply autocorrection, first configure your options by using the
 <link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
 <para>Then select <menuchoice>

@@ -88,7 +88,7 @@ TODO:
 - Horizontal lines
 - Correct screenshot "footend.png" - Footnotes/Endnotes.
 - Write Migrating section
-- Write Watermark proceedure
+- Write Watermark procedure
 - MDI vs SDI
 - Update Filters
 - Update screenshots/toobar icons
@@ -97,7 +97,7 @@ TODO:
 - Word by word strikout and underline
 - Add offset from baseline
 - Convert table to text
-- How to change page numbering between different sections of the document proceedure
+- How to change page numbering between different sections of the document procedure
 - Personal dictionary
 - Variable - date of last printing
 - "myspell = openoffice dictionary
@@ -1029,7 +1029,7 @@ supported. Styles and inline images will be lost during conversion.</para>
 <sect2 id="filters-docbook"><title>Docbook</title>
 
 <para>&kword; can save DocBook documents in the SGML version only. It saves texts, 
-lists, pictures, tables and hyperlinks.  Only the simpliest formatting (bold 
+lists, pictures, tables and hyperlinks.  Only the simplest formatting (bold 
 and italic) are supported. Pictures are saved into a sub-directory.</para>
 
 <para>&kword; cannot load any DocBook document. </para>
@@ -1104,7 +1104,7 @@ are nearly complete.</para>
 
 <sect2 id="filters-mswrite"><title>Microsoft Write</title>
 
-<para>Microsoft Write files usually end with extention .WRI.  It is the format used by Microsoft Write, 
+<para>Microsoft Write files usually end with extension .WRI.  It is the format used by Microsoft Write, 
 a very simple word processor which first appears in Microsoft Windows 3.1. &kword; can 
 read Microsoft Write documents fairly well.</para> 
 
@@ -1766,7 +1766,7 @@ probably use &FTP;.</para>
 <glossdef>
 <para>Normally, &kword; automatically adjusts text so it fits into a
 text frame. By inserting a hard frame break you can force &kword; to
-always start the next frame in the framset with the text that follows
+always start the next frame in the frameset with the text that follows
 the break.</para>
 </glossdef>
 </glossentry>

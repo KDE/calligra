@@ -53,7 +53,7 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
   m_displayBox->insertItem( i18n( "All Styles" ) );
   m_displayBox->insertItem( i18n( "Applied Styles" ) );
   m_displayBox->insertItem( i18n( "Custom Styles" ) );
-  m_displayBox->insertItem( i18n( "Hierachical" ) );
+  m_displayBox->insertItem( i18n( "Hierarchical" ) );
   connect( m_styleList, SIGNAL(doubleClicked ( QListViewItem *)),this, SIGNAL( modifyStyle()));
   resize( QSize(446, 384).expandedTo(minimumSizeHint()) );
 }

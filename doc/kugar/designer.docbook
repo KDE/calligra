@@ -8,7 +8,7 @@ this prolog
 <chapter id="designer-manual">
 <title>Report Template Designer Manual</title>
 
-<para>The &kudesigner; allows to interactivelly create and modify
+<para>The &kudesigner; allows to interactively create and modify
 report templates, place report sections and section items onto a
 report.  </para>
 

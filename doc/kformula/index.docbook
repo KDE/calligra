@@ -992,7 +992,7 @@ render the mathematical font properly, as shown below.</para>
 
 <para> The formula editor will accept most C language mathematical expressions, like the formulas from a 
 Runge-Kutta program below:</para>
-<programlisting><function>void derivs(float x, float y[], float dydx[])
+<programlisting><function>void derives(float x, float y[], float dydx[])
 {
  dydx[1] = y[2];
  dydx[2] = -0.8*x*y[2] - sin(x)*y[1];

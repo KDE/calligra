@@ -103,7 +103,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     xlabelLA->setBuddy( _xlabelCB );
     grid->addWidget( _xlabelCB, 5, 1 );
     wtstr = i18n( "Here you can configure the color that is used for "
-                  "labelling the X (horizontal) axis" );
+                  "labeling the X (horizontal) axis" );
     QWhatsThis::add( xlabelLA, wtstr );
     QWhatsThis::add( _xlabelCB, wtstr );
 
@@ -114,7 +114,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     ylabelLA->setBuddy( _ylabelCB );
     grid->addWidget( _ylabelCB, 6, 1 );
     wtstr = i18n( "Here you can configure the color that is used for "
-                  "labelling the Y (vertical) axis" );
+                  "labeling the Y (vertical) axis" );
     QWhatsThis::add( ylabelLA, wtstr );
     QWhatsThis::add( _ylabelCB, wtstr );
 
@@ -125,7 +125,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     ylabel2LA->setBuddy( _ylabel2CB );
     grid->addWidget( _ylabel2CB, 7, 1 );
     wtstr = i18n( "Here you can configure the color that is used for "
-                  "labelling the second Y (vertical) axis. Of course, "
+                  "labeling the second Y (vertical) axis. Of course, "
                   "this setting only takes effect if the chart is "
                   "configured to have two vertical axes." );
     QWhatsThis::add( ylabel2LA, wtstr );

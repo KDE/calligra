@@ -161,7 +161,7 @@ created, you are expected to reshape the frame to fit your needs.</para>
 <para>If you would prefer to establish the shape of your frame <emphasis>while you are
 creating</emphasis> the frame, simply click the &LMB; where you want the upper left corner to 
 be placed and hold the button down.  Drag the mouse towards the opposite corner of the frame to establish the 
-boundries of the new frame.  As
+boundaries of the new frame.  As
 you drag the mouse, you will see a box drawn.  This box represents the
 boundaries of your new text frame.  When you are satisfied with the size and shape of the new text
 frame, release the mouse button.  </para></tip>
@@ -395,7 +395,7 @@ fear but fear itself</quote></para>
 <emphasis>but</emphasis>.</para>
 
 <para>We will end up with one frame containing <quote>We have nothing
-to fear</quote>, and the next frame in the frameset begining with
+to fear</quote>, and the next frame in the frameset beginning with
 <quote>but fear itself</quote>.</para>
 
 <para>To add a Page Break, you should first place the keyboard
@@ -417,7 +417,7 @@ cursor where you want the break to be located in the document.</para>
 <para>If you want to remove a Page Break, you simply delete it
 like you would any other character.</para>
 <tip><para>Since this is not a character that
-you can normally see in &kword;, it will be easier to delete a Hard Frame Break with the following proceedure.</para>
+you can normally see in &kword;, it will be easier to delete a Hard Frame Break with the following procedure.</para>
 
 <orderedlist>
 

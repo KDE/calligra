@@ -104,7 +104,7 @@ is causing problems, the picture can always be <link linkend="switch-graphics">c
 <para>To delete a graphic in &kword;, simply <link linkend="delete-frame">delete the frame</link> around it.</para>
 </sect2>
 <sect2 id="save-graphics"><title>Saving Graphic in separate file</title>
-<indexterm><primary>graphics</primary><secondary>saving in a seperate file</secondary></indexterm>
+<indexterm><primary>graphics</primary><secondary>saving in a separate file</secondary></indexterm>
 
 <para>You can save a picture or graph to a separate file (for use in another document or to archive the graphic).</para>
 <para>Simply click once on the graphic with the &RMB;.  A submenu will appear.  Select <guilabel>Save Picture...</guilabel>. 

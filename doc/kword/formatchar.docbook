@@ -220,7 +220,7 @@ from the menubar.</para>
 <varlistentry>
 <term><guilabel>Toggle Case</guilabel></term>
 <listitem><para>Converts all lowercase letters to uppercase <emphasis>and</emphasis>
-converts all upppercase letters to lowercase.</para>
+converts all uppercase letters to lowercase.</para>
 </listitem>
 </varlistentry>
 

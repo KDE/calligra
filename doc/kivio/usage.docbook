@@ -28,7 +28,7 @@ To deselect all stencils select <menuchoice><guimenu>Edit</guimenu><guimenuitem>
 <sect2>
 <title>Moving Stencils</title>
 <para>
-To move a stencil to another position on the page. Move the mosue pointer over the stencil, note the pointer will change to a cross with four arrows. Hold down the &LMB; and move the stencil to the new position. Release the mouse button.</para>
+To move a stencil to another position on the page. Move the mouse pointer over the stencil, note the pointer will change to a cross with four arrows. Hold down the &LMB; and move the stencil to the new position. Release the mouse button.</para>
 </sect2>
 
 <sect2>
@@ -65,7 +65,7 @@ The adjustments will only affect the currently selected stencil.</para>
 
 2.	Move the mouse pointer to a blank area of the document near the stencils you want to select.
 	Hold down the &LMB; and move the mouse to the other side of the stencils you want to select, drawing a square around them.
-	The square must completely emcompass the stencils for them to be selected.
+	The square must completely encompass the stencils for them to be selected.
 </para>
 </sect2>
 
@@ -115,7 +115,7 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Stencil Geometry</title>
-<para>For accurately specifying the dimensions of a stencil use the Geometry docker. To display the docker select <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Stencil Geometry Panel</guimenuitem></menuchoice>. The panel contains four text boxes for specifying the horziontal and vertical position of the stencil and the width and height.</para>
+<para>For accurately specifying the dimensions of a stencil use the Geometry docker. To display the docker select <menuchoice><guimenu>View</guimenu><guisubmenu>Docker</guisubmenu><guimenuitem>Stencil Geometry Panel</guimenuitem></menuchoice>. The panel contains four text boxes for specifying the horizontal and vertical position of the stencil and the width and height.</para>
 <tip><para>Although the measurements are displayed in points it is possible to enter other units into the textbox. For example, entering 2.5cm will be convertedinto points. Millimeters (mm) and inches (in) are also accepted.</para></tip>
 </sect2>
 
@@ -126,10 +126,10 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Zooming In and Out</title>
-<para>To adjust the zoom level select <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom Level</guimenuitem></menuchoice>. This sub-menu contains a list of percentages from 33% to 500%, selecting one of these will adjust the magnifcation to show that percentage of the document.</para>
+<para>To adjust the zoom level select <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom Level</guimenuitem></menuchoice>. This sub-menu contains a list of percentages from 33% to 500%, selecting one of these will adjust the magnification to show that percentage of the document.</para>
 <para>There is also a list of zoom levels on the Edit toolbar, by default shown at the top of the screen.</para>
-<para>A second method of controlling in the magnification is to use the Zoom tool. This is available on the left-hand tools menu. This tool can be used in two ways. Clicking on the document with the zoom tool active will increase the magnification. Holding down the shift key whilst clicking will decrease the magnication, i.e. zoom out.</para>
-<para>Alternatively holding down the &LMB; and draging out a box, then releasing the mouse button will increase the magnification so that that portion of the document fills the available space.</para>
+<para>A second method of controlling in the magnification is to use the Zoom tool. This is available on the left-hand tools menu. This tool can be used in two ways. Clicking on the document with the zoom tool active will increase the magnification. Holding down the shift key whilst clicking will decrease the magnification, i.e. zoom out.</para>
+<para>Alternatively holding down the &LMB; and dragging out a box, then releasing the mouse button will increase the magnification so that that portion of the document fills the available space.</para>
 </sect2>
 
 <sect2>

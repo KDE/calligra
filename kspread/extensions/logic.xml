@@ -51,7 +51,7 @@
 	<Text>The AND() function returns True if all the values are true. Otherwise it returns False.</Text>
 	<Syntax>AND(value;value;...)</Syntax>
 	<Example>AND(true;true;true) returns True</Example>
-	<Example>AND(true;talse) returns False</Example>
+	<Example>AND(true;false) returns False</Example>
       </Help>
     </Function>
 

@@ -54,7 +54,7 @@
 
 <sect1 id="page-export">
 <title>Exporting a Page</title>
-<para>Individual pages can be exported as bitmap graphics files. To export the current page select <menuchoice><guimenu>Page</guimenu><guimenuitem>Export Page</guimenuitem></menuchoice>. A standard KDE file dialog box appears. The export format is determiend by the name you give the file, it must end with one of the extensions listed below.</para>
+<para>Individual pages can be exported as bitmap graphics files. To export the current page select <menuchoice><guimenu>Page</guimenu><guimenuitem>Export Page</guimenuitem></menuchoice>. A standard KDE file dialog box appears. The export format is determined by the name you give the file, it must end with one of the extensions listed below.</para>
 <para>The following formats are supported:</para>
 
 <itemizedlist>
@@ -77,7 +77,7 @@
 <title>The Grid</title>
 <para>&kivio; displays a regularly spaced grid over the document to aid stencil positioning. The visibility of the grid can be toggled by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Show Grid</guimenuitem></menuchoice>.</para>
 <para>Objects edges are snapped to the nearest point on the grid regardless of whether it is visible. To toggle this behavior select <menuchoice><guimenu>View</guimenu><guimenuitem>Snap Grid</guimenuitem></menuchoice>.</para>
-<para>To customise the grid select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Kivio...</guimenuitem></menuchoice> and click on the <guiicon>Grid</guiicon> on the icon list.</para>
+<para>To customize the grid select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Kivio...</guimenuitem></menuchoice> and click on the <guiicon>Grid</guiicon> on the icon list.</para>
 <para>This dialog box will let you adjust the color the grid is drawn in, the horizontal and vertical spacing and the snap distance.</para>
 <para>Tip: It is possible to have a non-square grid by specifying different horizontal and vertical spacings.</para>
 </sect1>

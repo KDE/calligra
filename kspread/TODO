@@ -16,7 +16,7 @@ Other things: (please add the things you are working on!)
 - WYSIWYG
 - insert manual page break
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
-        scrollbars, it works, but not very nice (not commited (Norbert))
+        scrollbars, it works, but not very nice (not committed (Norbert))
 - AutoFormat (already exists in a very limited way: Format -> table style)
 - Script, Script-Editor (like VBA in Excel)
 - Tools->Auditing:

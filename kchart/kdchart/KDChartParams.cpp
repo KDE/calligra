@@ -4141,7 +4141,7 @@ void KDChartParams::setThreeDBarAngle( uint angle )
    be drawn solidly or split.
 
    If \a solidArrows is true, the bars with excess values (like
-   infinity, or any other value that exceeds the y-axis labelling) will
+   infinity, or any other value that exceeds the y-axis labeling) will
    have an integrated arrow head. If \a solidArrows is false, they will
    still have an integrated arrow head at a lower position, but also
    two flat arrows on top of them to better indicate that there could

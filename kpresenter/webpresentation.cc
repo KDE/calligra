@@ -629,7 +629,7 @@ void KPWebPresentationWizard::setupPage1()
     label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout->addWidget( label2, 3, 0 );
 
-    QLabel *label3 = new QLabel( i18n("E-mail address:"), canvas );
+    QLabel *label3 = new QLabel( i18n("Email address:"), canvas );
     label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout->addWidget( label3, 4, 0 );
 

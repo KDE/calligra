@@ -162,7 +162,7 @@ with <link linkend="line-element">Lines</link>.
 
 <para>
 To add a report item click the corresponding item button on the <guilabel>Items Toolbar</guilabel>
-and place (click) it on the section. Choosen item will be placed on the selected section
+and place (click) it on the section. Chosen item will be placed on the selected section
 with the upper left corner at the given coordinates. Other properties are set to default
 values and can be changed with the <guilabel>Report Item Options</guilabel> dialog (the same way
 we used to change section's height).
@@ -217,7 +217,7 @@ Finally, our report template should look like this.
 <title>Creating the report data file</title>
 
 <para>
-Generally speaking, data files may be created in several vays. One can use xsl transformation tables
+Generally speaking, data files may be created in several ways. One can use xsl transformation tables
 to generate proper xml from another xml document (like KSpread spreadsheet), another will use
 own program to fetch data from a database and fill the data file. In this tutorial we will
 simply create it by hand. The source code for the example can be found in file <filename>sample1.kud</filename>

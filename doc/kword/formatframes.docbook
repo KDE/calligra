@@ -345,7 +345,7 @@ you want and all selected frames will automatically be formatting using the opti
 <title>Editing a framestyle</title>
 <indexterm><primary>frame style</primary><secondary>editing</secondary></indexterm>
 
-<para>To change the options of a framesyle, you will use the framestylist.</para>
+<para>To change the options of a framestyle, you will use the framestylist.</para>
 <para>Select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
