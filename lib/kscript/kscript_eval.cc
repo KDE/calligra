@@ -13,6 +13,8 @@
 #include "kscript_util.h"
 #include <stdio.h>
 
+#include <kregexp.h>
+
 // Get a left and right operand for arithmetic
 // operations like add, mul, div etc. If leftexpr
 // is true, then the left value must be assignable.
@@ -290,7 +292,7 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
 	FILL_VALUE( context, l, r );
 	context.value()->setValue( result );
 	return true;
-      }  
+      }
       break;
     case KSValue::MapType:
       {
@@ -1817,8 +1819,81 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
   return true;
 }
 
-bool KSEval_t_match( KSParseNode* , KSContext& ) { return false; }
-bool KSEval_t_subst( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_match( KSParseNode* node , KSContext& context )
+{
+    if ( !node->branch1()->eval( context ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, context.value(), KSValue::StringType, TRUE ) )
+	return FALSE;
+			     
+    KRegExp* exp = context.interpreter()->regexp();
+    exp->compile( node->getIdent() );
+    
+    qDebug("Matching %s against %s",context.value()->stringValue().latin1(), node->getIdent().latin1() );
+	       
+    context.setValue( new KSValue( exp->match( context.value()->stringValue().latin1() ) ) );
+    
+    return TRUE;
+}
+
+bool KSEval_t_subst( KSParseNode* node, KSContext& context )
+{
+    KSContext l( context, TRUE );
+    if ( !node->branch1()->eval( l ) )
+	return false;
+
+    if ( l.value()->mode() != KSValue::LeftExpr )
+    {
+	context.setException( new KSException( "NoLeftExpr", "Expected a left expression in substitute", node->getLineNo() ) );
+	return false;
+    }
+
+    if ( !KSUtil::checkType( l, l.value(), KSValue::StringType, TRUE ) )
+	return FALSE;
+			     
+    int pos = node->getIdent().find( '/' );
+    ASSERT( pos != -1 );
+    QString match = node->getIdent().left( pos );
+    QString subst = node->getIdent().mid( pos + 1 );
+    KRegExp* exp = context.interpreter()->regexp();
+    exp->compile( match );
+    
+    qDebug("Matching %s against %s",l.value()->stringValue().latin1(), node->getIdent().latin1() );
+	       
+    if ( !exp->match( l.value()->stringValue().latin1() ) )
+    {
+	context.setValue( new KSValue( FALSE ) );
+	return TRUE;
+    }
+    else
+    {
+	int len = subst.length();
+	int i = 0;
+	while( i < len )
+        {
+	    if ( subst[i] == '\\' && i + 1 < len && subst[i+1].isDigit() )
+	    {
+		const char* grp = exp->group( subst[i+1].latin1() - '0' );
+		QString repl;
+		if ( grp )
+		    repl = grp;
+		else
+		    repl = "";
+		subst.replace( i, 2, repl );
+		len += repl.length() + 1;
+		i += repl.length();
+	    }
+	    else
+		++i;
+	}
+	QString& str = l.value()->stringValue();
+	str.replace( exp->groupStart( 0 ), exp->groupEnd( 0 ) - exp->groupStart( 0 ), subst );
+    }
+    
+    context.setValue( new KSValue( TRUE ) );
+    return TRUE;
+}
 
 bool KSEval_t_not( KSParseNode* node, KSContext& context )
 {
@@ -2024,7 +2099,7 @@ bool KSEval_import( KSParseNode* node, KSContext& context )
 
   KSContext d( context );
   // This function puts a KSModule in d.value()
-  if ( !context.interpreter()->runModule( d, node->getIdent(), node->getIdent() + ".ks" ) )
+  if ( !context.interpreter()->runModule( d, node->getIdent(), node->getIdent() + ".ks", QStringList() ) )
   {
     context.setException( d );
     return false;
@@ -2125,7 +2200,7 @@ extern bool KSEval_t_scope( KSParseNode* node, KSContext& context )
     // a construction like "{ }" ?
     if ( !left )
 	return TRUE;
-  
+
     KSNamespace nspace;
     context.scope()->localScope()->pushNamespace( &nspace );
 
@@ -2271,7 +2346,7 @@ extern bool KSEval_from( KSParseNode* node, KSContext& context )
 
     KSContext d( context );
     // This function puts a KSModule in d.value()
-    if ( !context.interpreter()->runModule( d, node->getIdent(), node->getIdent() + ".ks" ) )
+    if ( !context.interpreter()->runModule( d, node->getIdent(), node->getIdent() + ".ks", QStringList() ) )
     {
 	context.setException( d );
 	return false;
@@ -2363,9 +2438,9 @@ bool KSEval_plus_assign( KSParseNode* node, KSContext& context )
     }
 
     l.value()->setMode( KSValue::LeftExpr );
-    
+
     context.setValue( l.shareValue() );
-    
+
     return TRUE;
 }
 
@@ -2399,4 +2474,16 @@ bool KSEval_bool_and( KSParseNode* node, KSContext& context )
     context.setValue( new KSValue( (KScript::Boolean)( l.value()->boolValue() && r.value()->boolValue() ) ) );
 
     return true;
+}
+
+bool KSEval_t_regexp_group( KSParseNode* node, KSContext& context )
+{
+    KRegExp* exp = context.interpreter()->regexp();
+    const char* grp = exp->group( node->getIntegerLiteral() );
+    if ( grp )
+	context.setValue( new KSValue( QString( grp ) ) );
+    else
+	context.setValue( new KSValue( QString( "" ) ) );
+    
+    return TRUE;
 }

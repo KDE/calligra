@@ -52,7 +52,7 @@ public:
    * @see #name
    */
   QString fullName() const;
-    
+
   /**
    * When getting a pointer to a KSObject via @ref KSValue::objectValue this function
    * helps to do some dynamic casting.
@@ -86,6 +86,11 @@ public:
   const KSStructClass* getClass() const { return m_class; }
   KSStructClass* getClass() { return m_class; }
 
+  /**
+   * A convenience function
+   */
+  QString className() const { return m_class->name(); }
+    
     // ########## Torben: Make real copies of the menus.
   virtual KSStruct* clone() { KSStruct *s = new KSStruct( m_class ); s->m_space = m_space; return s; }
 

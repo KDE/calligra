@@ -82,6 +82,7 @@ typedef union
 #define	T_PLUS_ASSIGN	330
 #define	T_AND	331
 #define	T_OR	332
+#define	T_DOLLAR	333
 
 
 extern YYSTYPE yylval;

@@ -7,9 +7,9 @@
 
 int main( int argc, char** argv )
 {
-  if ( argc != 2 )
+  if ( argc < 2 )
   {
-    printf("Syntax: kscript <script>\n");
+    printf("Syntax: kscript <script> [command line arguments]\n");
     return 0;
   }
 
@@ -17,11 +17,17 @@ int main( int argc, char** argv )
 
   kapp->dcopClient()->attach();
   kapp->dcopClient()->registerAs( argv[1] );
-  
-  KSInterpreter script;
-  QString ex = script.runScript( argv[1] );
-  if ( !ex.isEmpty() )
-    printf("%s\n",ex.ascii());
+
+  {
+      QStringList args;
+      for( int i = 2; i < argc; ++i )
+	  args.append( argv[i] );
+      
+      KSInterpreter script;
+      QString ex = script.runScript( argv[1], args );
+      if ( !ex.isEmpty() )
+	  printf("%s\n",ex.ascii());
+  }
 
   return 0;
 }

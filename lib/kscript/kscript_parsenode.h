@@ -96,7 +96,8 @@ typedef enum
   from,
   plus_assign,
   bool_or,
-  bool_and
+  bool_and,
+  t_regexp_group
 } KSParseNodeType;
 
 class KSContext;

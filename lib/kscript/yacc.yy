@@ -90,7 +90,7 @@ void yyerror( const char *s )
 %token T_MAIN
 %token T_FOREACH
 %token <ident> T_SUBST
-%token <ident> T_MATCH
+%token <_str> T_MATCH
 %token T_NOT
 %token T_RETURN
 %token T_SIGNAL
@@ -107,6 +107,7 @@ void yyerror( const char *s )
 %token T_PLUS_ASSIGN
 %token T_AND
 %token T_OR
+%token T_DOLLAR
 
 %type <node>   definitions
 %type <node>   definition
@@ -257,7 +258,11 @@ main
 	    $$->setBranch( 2, $3 );
 	    $$->setIdent( "main" );
 	  }
-
+	| T_MAIN T_LEFT_PARANTHESIS func_params T_RIGHT_PARANTHESIS T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET
+	  {
+	    $$ = new KSParseNode( func_dcl, $3, $6 );
+	    $$->setIdent( "main" );
+	  }
 
 /*10*/
 inheritance_spec
@@ -292,7 +297,7 @@ qualified_name
 	    $$->setIdent( $3 );
 	  }
 
-/* A usual identifier that my start with "::". For example "MyClass" or "::MyModule" */
+/* A usual identifier that may start with "::". For example "MyClass" or "::MyModule" */
 scoped_name
 	: T_IDENTIFIER
           {
@@ -653,6 +658,11 @@ literal
 	| T_LEFT_CURLY_BRACKET dict_elements T_RIGHT_CURLY_BRACKET
 	  {
 	    $$ = new KSParseNode( t_dict_const, $2 );
+	  }
+	| T_DOLLAR T_INTEGER_LITERAL
+	  {
+	    $$ = new KSParseNode( t_regexp_group );
+	    $$->setIntegerLiteral( $2 );
 	  }
 	;
 

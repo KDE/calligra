@@ -294,34 +294,34 @@ bool KSObject::emitSignal( const QString& name, KSContext& context )
 
 KSValue::Ptr KSObject::member( KSContext& context, const QString& name )
 {
-  if ( context.leftExpr() )
-  {
-    this->ref();
-    KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
-    ptr->setMode( KSValue::LeftExpr );
-    return ptr;
-  }
+    if ( context.leftExpr() )
+    {
+	this->ref();
+	KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
+	ptr->setMode( KSValue::LeftExpr );
+	return ptr;
+    }
 
-  KSValue *v = m_scope.object( name, false );
-  if ( !v )
-  {
-    QString tmp( "Unknown symbol '%1' in object of class '%2'" );
-    context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
-    return 0;
-  }
+    KSValue *v = m_scope.object( name, false );
+    if ( !v )
+    {
+	QString tmp( "Unknown symbol '%1' in object of class '%2'" );
+	context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
+	return 0;
+    }
 
-  v->ref();
-  return KSValue::Ptr( v );
+    v->ref();
+    return KSValue::Ptr( v );
 }
 
 bool KSObject::setMember( KSContext&, const QString& name, const KSValue::Ptr& v )
 {
-  // If no such member is present then it is created
-  KSValue* x = m_scope.object( name, true );
-  ASSERT( x );
-  *x = *v;
+    // If no such member is present then it is created
+    KSValue* x = m_scope.object( name, true );
+    ASSERT( x );
+    *x = *v;
 
-  return true;
+    return true;
 }
 
 /*****************************************
@@ -330,42 +330,31 @@ bool KSObject::setMember( KSContext&, const QString& name, const KSValue::Ptr& v
 
 bool KSObject::isA( KSContext& context )
 {
-  if ( !KSUtil::checkArgumentsCount( context, 0, "Object::isA" ) )
-    return false;
+    if ( !KSUtil::checkArgumentsCount( context, 0, "Object::isA" ) )
+	return false;
 
-  context.setValue( new KSValue( m_class->name() ) );
+    context.setValue( new KSValue( m_class->fullName() ) );
 
-  return true;
+    return true;
 }
 
 bool KSObject::inherits( KSContext& context )
 {
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "Object::inherits" ) )
-    return false;
+    if ( !KSUtil::checkArgs( context, args, "s", "QObject::inherits" ) )
+	return FALSE;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType ) )
-    return false;
-
-  QString name = args[0]->stringValue();
-
-  QValueList<KSValue::Ptr> super;
-  m_class->allSuperClasses( super );
-  m_class->ref();
-  super.append( new KSValue( m_class ) );
-
-  QValueList<KSValue::Ptr>::Iterator it = super.begin();
-  for(; it != super.end(); ++it )
-    if ( (*it)->classValue()->name() == name )
+    // Is the name scoped ?
+    QString name = args[0]->stringValue();
+    if ( name.find( ":" ) == -1 )
     {
-      context.setValue( new KSValue( true ) );
-      return true;
+	name.prepend( ":" );
+	name.prepend( context.module()->name() );
     }
+    context.setValue( new KSValue( getClass()->inherits( name.latin1() ) ) );
 
-  context.setValue( new KSValue( false ) );
-
-  return true;
+    return true;
 }
 
 /*******************************************************

@@ -3,6 +3,7 @@
 
 #include <qshared.h>
 #include <qstring.h>
+#include <qcstring.h>
 
 #include "kscript_context.h"
 
@@ -16,7 +17,8 @@ public:
   virtual ~KSClass() { }
 
   void setSuperClasses( const QValueList<KSValue::Ptr>& super ) { m_superClasses = super; }
-
+  void setSuperClass( const KSValue::Ptr& super ) { m_superClasses.clear(); m_superClasses.append( super ); }
+    
   KSModule* module() { return m_module; }
 
   KSNamespace* nameSpace() { return &m_space; }
@@ -37,10 +39,18 @@ public:
    * @return the full name of the class, like this: "qt:QWidget" or "kde:KColorDialog".
    */
   QString fullName() const;
-    
+
   virtual KSScriptObject* createObject( KSClass* c ) = 0;
 
   virtual bool hasSignal( const QString& name ) = 0;
+
+  /**
+   * @retrun TRUE if the class is of type @p name or inherits from this class.
+   *
+   * @param name is a full classname like "qt:QWidget" where "qt" is the module and "QWidget"
+   *             the class name.
+   */
+  virtual bool inherits( const QCString& name ) const;
 
 protected:
   QValueList<KSValue::Ptr> m_superClasses;

@@ -100,6 +100,34 @@ public:
      */
     static bool checkArgs( KSContext& context, const QValueList<KSValue::Ptr>& args,
 			   const QCString& signature, const QString& method, bool fatal = TRUE );
+    /**
+     * Checks wether the argument passed in @p args matches the @p signature.
+     *
+     * @param context is used if @p fatal is TRUE and an exception has to be created.
+     * @param arg is the argument to check
+     * @param signature is the functions signature (see below)
+     * @param method is the name of the method for which we test the argument list.
+     * @param fatal determines wether an exception is set on error.
+     *
+     * @return TRUE if the check was successfull.
+     *
+     * The signature is a sequence of the following characters:
+     * <ul>
+     * <li> f = float
+     * <li> b = bool
+     * <li> s = string
+     * <li> i = integer
+     * <li> [] = a list
+     * <li> {} = a map
+     * <li> Om:n; = An object of module "m" and name "n".
+     * <li> Sm:n; = An struct of module "m" and name "n".
+     * </ul>
+     *
+     * Example: "Sqt:QRect;" is a signature that takes
+     *          a struct named "QRect" in module "qt"
+     */
+    static bool checkArg( KSContext& context, const KSValue::Ptr& arg,
+			  const QCString& signature, const QString& method = "", bool fatal = FALSE );
 };
 
 #endif

@@ -181,16 +181,20 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
                         }
 "#"[^\n]*\n             ;
 
-"=~"" "*"s/"(\\.|[^\\/])*"/"(\\.|[^\\/])*"/""g"?	{
+"=~"" "*"s/"(\\.|[^\\/])*"/"(\\.|[^\\/])*"/"	{
 						  const char *c = yytext + 2;
 						  while( isspace( *c ) ) ++c;
-			 			  yylval.ident = new QString( c );
+						  ++c; ++c;
+			 			  yylval._str = new QString( c );
+						  yylval._str->truncate( yylval._str->length() - 1 );
 						  return T_SUBST;
 						}
 "=~"" "*"/"(\\.|[^\\/])*"/"			{
 						  const char *c = yytext + 2;
 						  while( isspace( *c ) ) ++c;
-			 			  yylval.ident = new QString( c );
+						  ++c;
+			 			  yylval._str = new QString( c );
+						  yylval._str->truncate( yylval._str->length() - 1 );
 						  return T_MATCH;
 						}
 
@@ -267,6 +271,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 ">"			return T_GREATER_THAN_SIGN;
 "."			return T_MEMBER;
 "+="			return T_PLUS_ASSIGN;
+"$"			return T_DOLLAR;
 
 const			return T_CONST;
 FALSE			return T_FALSE;

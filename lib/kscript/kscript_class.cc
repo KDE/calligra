@@ -10,13 +10,20 @@ KSScriptObject* KSScriptClass::createObject( KSClass* c )
 
 bool KSScriptClass::hasSignal( const QString& name )
 {
-  KSNamespace::Iterator it = m_space.begin();
-  for( ; it != m_space.end(); ++it )
-    if ( it.data()->type() == KSValue::FunctionType )
-      if ( it.data()->functionValue()->name() == name && it.data()->functionValue()->isSignal() )
-	return true;
+    KSNamespace::Iterator it = m_space.begin();
+    for( ; it != m_space.end(); ++it )
+	if ( it.data()->type() == KSValue::FunctionType )
+	    if ( it.data()->functionValue()->name() == name && it.data()->functionValue()->isSignal() )
+		return true;
 
-  return false;
+    QValueList<KSValue::Ptr>::Iterator it2 = m_superClasses.begin();
+    for( ; it2 != m_superClasses.end(); ++it2 )
+    {
+	if ( (*it2)->classValue()->hasSignal( name ) )
+	    return TRUE;
+    }
+    
+    return false;
 }
 
 bool KSScriptClass::constructor( KSParseNode* node, KSContext& context )
@@ -104,5 +111,22 @@ KSValue::Ptr KSClass::member( KSContext& context, const QString& name )
 
 QString KSClass::fullName() const
 {
-    return ( m_name + ":" + m_module->name() );
+    return ( m_module->name() + ":" + m_name );
+}
+
+bool KSClass::inherits( const QCString& name ) const
+{
+    qDebug("Comparing %s with %s", name.data(), fullName().latin1() );
+
+    if ( fullName() == name.data() )
+	return TRUE;
+
+    QValueList<KSValue::Ptr>::ConstIterator it = m_superClasses.begin();
+    for( ; it != m_superClasses.end(); ++it )
+    {
+	if ( (*it)->classValue()->inherits( name ) )
+	    return TRUE;
+    }
+
+    return FALSE;
 }

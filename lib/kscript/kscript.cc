@@ -42,12 +42,12 @@ KSModule::Ptr KSInterpreter::module( const QString& name )
   return it.data();
 }
 
-QString KSInterpreter::runScript( const QString& filename )
+QString KSInterpreter::runScript( const QString& filename, const QStringList& args )
 {
   KSContext context( m_globalContext );
   // The "" indicates that this is not a module but
   // a script in its original meaning.
-  if ( !runModule( context, "", filename ) )
+  if ( !runModule( context, "", filename, args ) )
     return context.exception()->toString( context );
 
   return QString::null;
@@ -85,7 +85,8 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
 	struct stat buff;
 	if ( ( stat( f, &buff ) == 0 ) && S_ISREG( buff.st_mode ) )
 	{
-	  return runModule( context, name, f );
+	  QStringList lst;
+	  return runModule( context, name, f, lst );
 	}
       }
     }
@@ -98,7 +99,7 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
   return false;
 }
 
-bool KSInterpreter::runModule( KSContext& result, const QString& name, const QString& filename )
+bool KSInterpreter::runModule( KSContext& result, const QString& name, const QString& filename, const QStringList& args )
 {
   // Did we load this module already ? Dont load it twice
   if ( m_modules.contains( name ) )
@@ -166,6 +167,14 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
     context.setValue( new KSValue( KSValue::ListType ) );
     context.setScope( new KSScope( m_global, module ) );
 
+    // Insert parameters
+    QStringList::ConstIterator sit = args.begin();
+    QStringList::ConstIterator send = args.end();
+    for( ; sit != send; ++sit )
+    {
+	context.value()->listValue().append( new KSValue( *sit ) );
+    }
+    
     if ( !code->functionValue()->call( context ) )
     {
       if ( context.exception() )
@@ -228,4 +237,9 @@ bool KSInterpreter::processExtension( KSContext& context, KSParseNode* node )
   context.setException( new KSException( "UnsupportedSyntaxExtension", tmp, node->getLineNo() ) );
 
   return false;
+}
+
+KRegExp* KSInterpreter::regexp()
+{
+    return &m_regexp;
 }

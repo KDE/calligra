@@ -104,7 +104,8 @@ static ParseNodeDoc parseNodeDoc[] = {
   { "from", 0 },
   { "plus_assign", 0 },
   { "bool_or", 0 },
-  { "bool_and", 0 }
+  { "bool_and", 0 },
+  { "t_regexp_group", 0 }
 };
 
 typedef bool (*KSEval)( KSParseNode*, KSContext& );
@@ -197,7 +198,8 @@ static KSEval KSEvalJump[] = {
   KSEval_from,
   KSEval_plus_assign,
   KSEval_bool_or,
-  KSEval_bool_and
+  KSEval_bool_and,
+  KSEval_t_regexp_group
 };
 
 KSParseNode::KSParseNode( KSParseNodeType aType, KSParseNode *one,
