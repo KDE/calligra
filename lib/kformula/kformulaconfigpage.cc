@@ -69,23 +69,23 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     numberFont = contextStyle.getNumberFont();
     operatorFont = contextStyle.getOperatorFont();
 
-    connect( buildFontLine( gbox, grid, 0, defaultFont, 
-            i18n( "Default font:" ), defaultFontName ), 
+    connect( buildFontLine( gbox, grid, 0, defaultFont,
+            i18n( "Default Font:" ), defaultFontName ),
             SIGNAL( clicked() ), SLOT( selectNewDefaultFont() ) );
 
-    connect( buildFontLine( gbox, grid, 1, nameFont, 
-            i18n( "Name font:" ), nameFontName ), 
+    connect( buildFontLine( gbox, grid, 1, nameFont,
+            i18n( "Name Font:" ), nameFontName ),
             SIGNAL( clicked() ), SLOT( selectNewNameFont() ) );
 
-    connect( buildFontLine( gbox, grid, 2, numberFont, 
-            i18n( "Number font:" ), numberFontName ),
+    connect( buildFontLine( gbox, grid, 2, numberFont,
+            i18n( "Number Font:" ), numberFontName ),
             SIGNAL( clicked() ), SLOT( selectNewNumberFont() ) );
 
-    connect( buildFontLine( gbox, grid, 3, operatorFont, 
-            i18n( "Operator font:" ), operatorFontName ), 
+    connect( buildFontLine( gbox, grid, 3, operatorFont,
+            i18n( "Operator Font:" ), operatorFontName ),
             SIGNAL( clicked() ), SLOT( selectNewOperatorFont() ) );
 
-    QLabel* sizeTitle = new QLabel( i18n( "Base size:" ), gbox );
+    QLabel* sizeTitle = new QLabel( i18n( "Default Base Size:" ), gbox );
     grid->addWidget( sizeTitle, 4, 0 );
 
     sizeSpin = new KIntNumInput( contextStyle.baseSize(), gbox );
@@ -93,7 +93,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
     grid->addMultiCellWidget( sizeSpin, 4, 4, 1, 2 );
 
-    connect( sizeSpin, SIGNAL( valueChanged( int ) ), 
+    connect( sizeSpin, SIGNAL( valueChanged( int ) ),
             SLOT( baseSizeChanged( int ) ) );
 
     // syntax highlighting
@@ -108,7 +108,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     grid->setSpacing( KDialog::spacingHint() );
 
     QLabel* defaultLabel = new QLabel( hlBox, "defaultLabel" );
-    defaultLabel->setText( i18n( "Default color:" ) );
+    defaultLabel->setText( i18n( "Default Color:" ) );
     grid->addWidget( defaultLabel, 0, 0 );
 
     defaultColorBtn = new KColorButton( hlBox, "defaultColor" );
@@ -117,7 +117,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* numberLabel = new QLabel( hlBox, "numberLabel" );
-    numberLabel->setText( i18n( "Number color:" ) );
+    numberLabel->setText( i18n( "Number Color:" ) );
     grid->addWidget( numberLabel, 1, 0 );
 
     numberColorBtn = new KColorButton( hlBox, "numberColor" );
@@ -126,7 +126,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* operatorLabel = new QLabel( hlBox, "operatorLabel" );
-    operatorLabel->setText( i18n( "Operator color:" ) );
+    operatorLabel->setText( i18n( "Operator Color:" ) );
     grid->addWidget( operatorLabel, 2, 0 );
 
     operatorColorBtn = new KColorButton( hlBox, "operatorColor" );
@@ -135,7 +135,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* emptyLabel = new QLabel( hlBox, "emptyLabel" );
-    emptyLabel->setText( i18n( "Empty color:" ) );
+    emptyLabel->setText( i18n( "Empty Color:" ) );
     grid->addWidget( emptyLabel, 3, 0 );
 
     emptyColorBtn = new KColorButton( hlBox, "emptyColor" );
@@ -144,7 +144,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* errorLabel = new QLabel( hlBox, "errorLabel" );
-    errorLabel->setText( i18n( "Error color:" ) );
+    errorLabel->setText( i18n( "Error Color:" ) );
     grid->addWidget( errorLabel, 4, 0 );
 
     errorColorBtn = new KColorButton( hlBox, "errorColor" );
@@ -158,8 +158,8 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 }
 
 
-QPushButton* ConfigurePage::buildFontLine( QWidget* parent, 
-            QGridLayout* layout, int number, QFont font, QString name, 
+QPushButton* ConfigurePage::buildFontLine( QWidget* parent,
+            QGridLayout* layout, int number, QFont font, QString name,
             QLabel*& fontName )
 {
     QLabel* fontTitle = new QLabel( name, parent );
