@@ -207,52 +207,85 @@ void KChartView::defaultConfig() {
 
 void KChartView::pieChart()
 {
-    KDChartParams* params = ((KChartPart*)koDocument())->params();
-    params->setChartType( KDChartParams::Pie );
-    params->setThreeDPies( true );
-    repaint();
+  if ( m_chartpie->isChecked() )
+    {
+      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      params->setChartType( KDChartParams::Pie );
+      params->setThreeDPies( true );
+      repaint();
+    }
+  else
+        m_chartpie->setChecked( true ); // always one has to be checked !
 }
 
 void KChartView::lineChart()
 {
-    KDChartParams* params = ((KChartPart*)koDocument())->params();
-    params->setChartType( KDChartParams::Line );
-    params->setLineChartSubType( KDChartParams::LineNormal );
-    repaint();
+  if ( m_chartline->isChecked() )
+    {
+      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      params->setChartType( KDChartParams::Line );
+      params->setLineChartSubType( KDChartParams::LineNormal );
+      repaint();
+    }
+  else
+    m_chartline->setChecked( true ); // always one has to be checked !
+
 }
 
 void KChartView::barsChart()
 {
-    KDChartParams* params = ((KChartPart*)koDocument())->params();
-    params->setChartType( KDChartParams::Bar );
-    params->setBarChartSubType( KDChartParams::BarNormal );
-    params->setThreeDBars( true );
-    repaint();
+  if ( m_chartbars->isChecked() )
+    {
+      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      params->setChartType( KDChartParams::Bar );
+      params->setBarChartSubType( KDChartParams::BarNormal );
+      params->setThreeDBars( true );
+      repaint();
+    }
+  else
+    m_chartbars->setChecked( true ); // always one has to be checked !
 }
 
 void KChartView::areasChart()
 {
-    KDChartParams* params = ((KChartPart*)koDocument())->params();
-    params->setChartType( KDChartParams::Area );
-    params->setAreaChartSubType( KDChartParams::AreaNormal );
-    repaint();
+  if ( m_chartareas->isChecked() )
+    {
+      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      params->setChartType( KDChartParams::Area );
+      params->setAreaChartSubType( KDChartParams::AreaNormal );
+      repaint();
+    }
+  else
+    m_chartareas->setChecked( true ); // always one has to be checked !
+
 }
 
 
 void KChartView::hiLoChart()
 {
+if ( m_charthilo->isChecked() )
+    {
     KDChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::HiLo );
     params->setHiLoChartSubType( KDChartParams::HiLoNormal );
     repaint();
+    }
+ else
+   m_charthilo->setChecked( true ); // always one has to be checked !
 }
 
 
 void KChartView::ringChart()
 {
-    KDChartParams* params = ((KChartPart*)koDocument())->params();
-    params->setChartType( KDChartParams::Ring );
-    repaint();
+  if ( m_chartring->isChecked() )
+    {
+      KDChartParams* params = ((KChartPart*)koDocument())->params();
+      params->setChartType( KDChartParams::Ring );
+      repaint();
+    }
+  else
+    m_chartring->setChecked( true ); // always one has to be checked !
+
 }
 
 #include "kchart_view.moc"
