@@ -413,7 +413,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 
     // Calculate startX in pixels (using the xadj value of the corresponding char)
     int startX_pix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
-    //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startX_pix << endl;
+    //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startX_pix << " bw=" << bw << endl;
     //kdDebug() << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
     //          << " h(PIX)=" << zh->layoutUnitToPixelY( lastY, h ) << " lastY(PIX)=" << zh->layoutUnitToPixelY( lastY ) << endl;
 
@@ -933,7 +933,7 @@ int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
 #ifndef NDEBUG
 void KoTextParag::printRTDebug( int info )
 {
-    kdDebug() << "Paragraph " << this << "   (" << paragId() << ") [changed="
+    kdDebug() << "Paragraph " << this << " (" << paragId() << ") [changed="
               << hasChanged() << ", valid=" << isValid()
               << ", needsSpellCheck=" << string()->needsSpellCheck()
               << ", wasMovedDown=" << wasMovedDown()
@@ -965,6 +965,7 @@ void KoTextParag::printRTDebug( int info )
                       << " depth=" << counter()->depth()
                       << " text='" << m_layout.counter->text( this ) << "'"
                       << " width=" << m_layout.counter->width( this ) << endl;
+        kdDebug() << "  align: " << alignment() << endl;
         kdDebug() << "  rect() : " << DEBUGRECT( rect() )
                   << "  pixelRect() : " << DEBUGRECT( pixelRect( textDocument()->paintingZoomHandler() ) ) << endl;
 
@@ -988,14 +989,17 @@ void KoTextParag::printRTDebug( int info )
                   << " fontsize:" << dynamic_cast<KoTextFormat *>(paragFormat())->font().pointSize() << endl;
 
         KoTextString * s = string();
+        int lastX = 0; // pixels
+        int lastW = 0; // pixels
         for ( int i = 0 ; i < s->length() ; ++i )
         {
             KoTextStringChar & ch = s->at(i);
+            int pixelx =  textDocument()->formattingZoomHandler()->layoutUnitToPixelX( ch.x )
+                          + ch.pixelxadj;
             kdDebug() << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
                       << " x(LU)=" << ch.x
                       << " w(LU)=" << ch.width//s->width(i)
-                      << " x(PIX)=" << textDocument()->formattingZoomHandler()->layoutUnitToPixelX( ch.x )
-                + ch.pixelxadj
+                      << " x(PIX)=" << pixelx
                       << " (xadj=" << + ch.pixelxadj << ")"
                       << " w(PIX)=" << ch.pixelwidth
                       << " height=" << ch.height()
@@ -1003,6 +1007,10 @@ void KoTextParag::printRTDebug( int info )
                       << " \"" << ch.format()->key() << "\" "
                 //<< " fontsize:" << dynamic_cast<KoTextFormat *>(ch.format())->pointSize()
                       << endl;
+            if ( !string()->isBidi() && !ch.lineStart )
+                Q_ASSERT( lastX + lastW == pixelx );
+            lastX = pixelx;
+            lastW = ch.pixelwidth;
             if ( ch.isCustom() )
             {
                 KoTextCustomItem * item = ch.customItem();

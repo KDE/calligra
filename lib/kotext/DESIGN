@@ -96,18 +96,6 @@ When printing... TODO, double-check whether Qt does pt->pixel conversion correct
 QFont multiplies by 10 and stores into a 'short'... So for QFont the maximum font size
 is 3276, and in KOffice the maximum font size in points is around 163.
 
-Justified spaces
-================
-Although the user sees it as:
-[--Letter--][--Letter--]              [--Letter--]
-it is in reality:
-[--Letter--][--Letter--]    [--Space--][--Letter--]
-where the space has the normal width for a space.
-It's just that the character containing the space has been
-moved a bit to the right. Its x value is there in the middle,
-which is why QTextCursor::x() needs to move the cursor back to
-the end of the last char.
-
 See also
 ========
 koffice/kword/DESIGN for more kword-specific things,

@@ -18,9 +18,6 @@
 */
 
 #include "kotextformatter.h"
-//#include "kotextformat.h"
-//#include "kotextdocument.h"
-//#include "kotextparag.h"
 #include "kozoomhandler.h"
 
 #include <kdebug.h>
@@ -152,7 +149,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
 	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4 ) : left;
 	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4 ) : 0 );
-	    KoTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
+	    KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
 	    c->customItem()->resize( parag->painter(), dw );
 	    if ( x != left || w != dw )
 		fullWidth = FALSE;
@@ -217,7 +214,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		    h = lineStart->baseLine + belowBaseLine;
 		    lineStart->h = h;
 		//}
-		KoTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
+		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
 #ifdef DEBUG_FORMATTER
@@ -256,7 +253,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    } else {
 		// Breakable char was found
 		i = lastBreak;
-		KoTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align,
+		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, parag->at( lastBreak ), align,
 		                                                w - string->at( i ).x - ( string->isRightToLeft() && lastChr == '\n'? (c - 1)->width: 0 ) );
 		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
 		y += lineStart->h;
@@ -413,7 +410,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	// last line in a paragraph is not justified
 	if ( align == Qt::AlignJustify )
 	    align = Qt::AlignAuto;
-	KoTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c, align,
+	KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align,
 	                                                w - x + ( string->isRightToLeft()? c->width: 0 ) ); // don't calc the line break when having right to left text
 	h += doc ? parag->lineSpacing( linenr++ ) : 0;
 	lineStart->h = h;
@@ -445,13 +442,22 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     return y;
 }
 
-KoTextParagLineStart *KoTextFormatter::formatLineKo(
+// Helper for koFormatLine and koBidiReorderLine
+void KoTextFormatter::moveChar( KoTextStringChar& chr, KoZoomHandler *zh,
+                                int deltaX, int deltaPixelX )
+{
+    int pixelx = chr.pixelxadj + zh->layoutUnitToPixelX( chr.x );
+    chr.x += deltaX;
+    chr.pixelxadj = pixelx + deltaPixelX - zh->layoutUnitToPixelX( chr.x );
+}
+
+KoTextParagLineStart *KoTextFormatter::koFormatLine(
     KoZoomHandler *zh,
     KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
     if( string->isBidi() )
-	return bidiReorderLine( parag, string, line, startChar, lastChar, align, space );
+	return koBidiReorderLine( zh, parag, string, line, startChar, lastChar, align, space );
     space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
     int start = (startChar - &string->at(0));
     int last = (lastChar - &string->at(0) );
@@ -459,8 +465,15 @@ KoTextParagLineStart *KoTextFormatter::formatLineKo(
     if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
 	if ( align & Qt::AlignHCenter )
 	    space /= 2;
-	for ( int j = start; j <= last; ++j )
-	    string->at( j ).x += space;
+        int toAddPix = zh->layoutUnitToPixelX( space );
+	for ( int j = last; j >= start; --j ) {
+            KoTextStringChar &chr = string->at( j );
+            //// Start at last tab, if any - BR #40472.
+            if ( chr.c == '\t' ) {
+                break;
+            }
+            moveChar( chr, zh, space, toAddPix );
+        }
     } else if ( align & Qt::AlignJustify ) {
 	int numSpaces = 0;
 	for ( int j = last; j >= start; --j ) {
@@ -474,25 +487,19 @@ KoTextParagLineStart *KoTextFormatter::formatLineKo(
 	    }
 	}
 	int toAdd = 0;
+        int toAddPix = 0;
 	for ( int k = start + 1; k <= last; ++k ) {
             KoTextStringChar &chr = string->at( k );
             if ( toAdd != 0 )
-            {
-                int pixelx = chr.pixelxadj + zh->layoutUnitToPixelX( chr.x );
-                chr.x += toAdd;
-                // Seems this is necessary. This means, pixelxadj really contains
-                // some rounding-related values, that have to be recalculated when
-                // pushing things to the right.
-                pixelx += zh->layoutUnitToPixelX( toAdd );
-                chr.pixelxadj = pixelx - zh->layoutUnitToPixelX( chr.x );
-            }
+                moveChar( chr, zh, toAdd, toAddPix );
 	    if( isBreakable( string, k ) && numSpaces ) {
 		int s = space / numSpaces;
 		toAdd += s;
+                toAddPix = zh->layoutUnitToPixelX( toAdd );
 		space -= s;
 		numSpaces--;
                 chr.width += s;
-                chr.pixelwidth += zh->layoutUnitToPixelX( s );
+                chr.pixelwidth += zh->layoutUnitToPixelX( s ); // ### rounding problem, recalculate
 	    }
 	}
     }
@@ -503,4 +510,158 @@ KoTextParagLineStart *KoTextFormatter::formatLineKo(
 	line->w = 0;
 
     return new KoTextParagLineStart();
+}
+
+// collects one line of the paragraph and transforms it to visual order
+KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
+    KoZoomHandler *zh,
+    KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
+    KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
+{
+    int start = (startChar - &text->at(0));
+    int last = (lastChar - &text->at(0) );
+#ifdef DEBUG_FORMATTER
+    qDebug("doing BiDi reordering from %d to %d!", start, last);
+#endif
+    KoBidiControl *control = new KoBidiControl( line->context(), line->status );
+    QString str;
+    str.setUnicode( 0, last - start + 1 );
+    // fill string with logically ordered chars.
+    KoTextStringChar *ch = startChar;
+    QChar *qch = (QChar *)str.unicode();
+    while ( ch <= lastChar ) {
+	*qch = ch->c;
+	qch++;
+	ch++;
+    }
+    int x = startChar->x;
+
+    QPtrList<KoTextRun> *runs;
+    runs = KoComplexText::bidiReorderLine(control, str, 0, last - start + 1,
+					 (text->isRightToLeft() ? QChar::DirR : QChar::DirL) );
+
+    // now construct the reordered string out of the runs...
+
+    int numSpaces = 0;
+    // set the correct alignment. This is a bit messy....
+    if( align == Qt::AlignAuto ) {
+	// align according to directionality of the paragraph...
+	if ( text->isRightToLeft() )
+	    align = Qt::AlignRight;
+    }
+
+    if ( align & Qt::AlignHCenter )
+	x += space/2;
+    else if ( align & Qt::AlignRight )
+	x += space;
+    else if ( align & Qt::AlignJustify ) {
+	for ( int j = last; j >= start; --j ) {
+            //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
+            if ( text->at( j ).c == '\t' ) {
+                start = j+1;
+                break;
+            }
+	    if( isBreakable( text, j ) ) {
+		numSpaces++;
+	    }
+	}
+    }
+    int pixelx = zh->layoutUnitToPixelX( x );
+    int toAdd = 0;
+    int toAddPix = 0;
+    bool first = TRUE;
+    KoTextRun *r = runs->first();
+    int xmax = -0xffffff;
+    while ( r ) {
+#ifdef DEBUG_FORMATTER
+        qDebug("koBidiReorderLine level: %d",r->level);
+#endif
+	if(r->level %2) {
+	    // odd level, need to reverse the string
+	    int pos = r->stop + start;
+	    while(pos >= r->start + start) {
+		KoTextStringChar &chr = text->at(pos);
+		if( numSpaces && !first && isBreakable( text, pos ) ) {
+		    int s = space / numSpaces;
+                    toAdd += s;
+                    toAddPix = zh->layoutUnitToPixelX( toAdd );
+		    space -= s;
+		    numSpaces--;
+                    chr.width += s;
+                    chr.pixelwidth += zh->layoutUnitToPixelX( s ); // ### rounding problem, recalculate
+		} else if ( first ) {
+		    first = FALSE;
+		    if ( chr.c == ' ' ) // trailing space
+                    {
+                        //x -= chr.format()->width( ' ' );
+                        x -= chr.width;
+                        pixelx -= chr.pixelwidth;
+                    }
+		}
+		chr.x = x + toAdd;
+                chr.pixelxadj = pixelx + toAddPix - zh->layoutUnitToPixelX( chr.x );
+#ifdef DEBUG_FORMATTER
+//                qDebug("koBidiReorderLine: pos=%d x(LU)=%d toAdd(LU)=%d -> chr.x=%d pixelx=%d+%d, pixelxadj=%d", pos, x, toAdd, chr.x, pixelx, zh->layoutUnitToPixelX( toAdd ), pixelx+zh->layoutUnitToPixelX( toAdd )-zh->layoutUnitToPixelX( chr.x ));
+#endif
+		chr.rightToLeft = TRUE;
+		chr.startOfRun = FALSE;
+		int ww = chr.width;
+		/*if ( chr.c.unicode() >= 32 || chr.c == '\t' || chr.c == '\n' || chr.isCustom() ) {
+		    ww = text->width( pos );
+		} else {
+		    ww = chr.format()->width( ' ' );
+                }*/
+		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
+		x += ww;
+                pixelx += chr.pixelwidth;
+#ifdef DEBUG_FORMATTER
+                qDebug("              ww=%d adding to x, now %d. pixelwidth=%d adding to pixelx, now %d xmax=%d", ww, x, chr.pixelwidth, pixelx, xmax );
+#endif
+		pos--;
+	    }
+	} else {
+	    int pos = r->start + start;
+	    while(pos <= r->stop + start) {
+		KoTextStringChar& chr = text->at(pos);
+		if( numSpaces && !first && isBreakable( text, pos ) ) {
+		    int s = space / numSpaces;
+		    toAdd += s;
+                    toAddPix = zh->layoutUnitToPixelX( toAdd );
+		    space -= s;
+		    numSpaces--;
+		} else if ( first ) {
+		    first = FALSE;
+		    if ( chr.c == ' ' ) // trailing space
+                    {
+                        //x -= chr.format()->width( ' ' );
+                        x -= chr.width;
+                        pixelx -= chr.pixelwidth;
+                    }
+		}
+		chr.x = x + toAdd;
+                chr.pixelxadj = pixelx + toAddPix - zh->layoutUnitToPixelX( chr.x );
+		chr.rightToLeft = FALSE;
+		chr.startOfRun = FALSE;
+		int ww = chr.width;
+		/*if ( chr.c.unicode() >= 32 || chr.c == '\t' || chr.isCustom() ) {
+		    ww = text->width( pos );
+		} else {
+		    ww = chr.format()->width( ' ' );
+                }*/
+		//qDebug("setting char %d at pos %d", pos, x);
+		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
+		x += ww;
+                pixelx += chr.pixelwidth;
+		pos++;
+	    }
+	}
+	text->at( r->start + start ).startOfRun = TRUE;
+	r = runs->next();
+    }
+
+    line->w = xmax + 10;
+    KoTextParagLineStart *ls = new KoTextParagLineStart( control->context, control->status );
+    delete control;
+    delete runs;
+    return ls;
 }

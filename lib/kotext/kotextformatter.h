@@ -38,10 +38,18 @@ public:
     virtual int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts );
 
 protected:
-    KoTextParagLineStart *formatLineKo(
+    KoTextParagLineStart *koFormatLine(
         KoZoomHandler *zh,
         KoTextParag * /*parag*/, KoTextString *string, KoTextParagLineStart *line,
         KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space );
+
+    KoTextParagLineStart *koBidiReorderLine(
+        KoZoomHandler *zh,
+        KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
+        KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space );
+
+    void moveChar( KoTextStringChar& chr, KoZoomHandler *zh,
+                   int deltaX, int deltaPixelX );
 };
 
 #endif
