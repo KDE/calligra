@@ -24,7 +24,7 @@ noinst_HEADERS = KIllustrator_main.h \
 	KIllustrator_view.h \
 	KIllustrator.h
 
-SRCMETA = KIllustrator_main.moc \
+BUILTSOURCES = KIllustrator_main.moc \
 	KIllustrator_shell.moc \
 	KIllustrator_doc.moc \
 	KIllustrator_view.moc

@@ -4,14 +4,70 @@
 #include <parts.idl>
 
 module KIllustrator {
-	interface View : OPParts::View {
-	};
+  interface Shell : OPParts::PartShell {
+    oneway void fileNew ();
+    oneway void fileOpen ();
+    oneway void fileClose ();
+    oneway void fileQuit ();
+    oneway void fileSave ();	
+    oneway void fileSaveAs ();
+    oneway void filePrint ();
 
-	interface Document : OPParts::Document {
-	};
+    oneway void editCut ();
+    oneway void editCopy ();
+    oneway void editPaste ();
 
-	interface Factory : OPParts::Factory {
-	};
+    oneway void setZoomFactor (in string size);
+
+    oneway void helpAbout();
+  };
+
+  interface View : OPParts::View {
+    oneway void editUndo ();
+    oneway void editRedo ();
+    oneway void editCut ();
+    oneway void editCopy ();
+    oneway void editPaste ();
+    oneway void editSelectAll ();
+    oneway void editDelete ();
+    oneway void editInsertOject ();
+    oneway void editProperties ();
+
+    oneway void transformPosition ();
+    oneway void transformDimension ();
+    oneway void transformRotation ();
+    oneway void transformMirror ();
+
+    oneway void arrangeAlign ();
+    oneway void arrangeToFront ();
+    oneway void arrangeToBack ();
+    oneway void arrangeOneForward ();
+    oneway void arrangeOneBack ();
+    oneway void arrangeGroup ();
+    oneway void arrangeUngroup ();
+
+    oneway void toggleRuler ();
+    oneway void toggleGrid ();
+
+    oneway void setupGrid ();
+    oneway void alignToGrid ();
+
+    oneway void activateSelectionTool ();
+    oneway void activateEditPointTool ();
+    oneway void activateLineTool ();
+    oneway void activateBezierTool ();
+    oneway void activateRectangleTool ();
+    oneway void activatePolygonTool ();
+    oneway void activateEllipseTool ();
+    oneway void activateTextTool ();
+    oneway void activateZoomTool ();
+  };
+  
+  interface Document : OPParts::Document {
+  };
+  
+  interface Factory : OPParts::Factory {
+  };
 };
 
 #endif

@@ -1,3 +1,27 @@
+/* -*- C++ -*-
+
+  $Id$
+
+  This file is part of KIllustrator.
+  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Library General Public License as
+  published by  
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Library General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
 #ifndef KIllustrator_view_h_
 #define KIllustrator_view_h_
 
@@ -8,6 +32,7 @@
 #include <toolbar_impl.h>
 
 #include <qlist.h>
+#include <qlayout.h>
 
 #include "KIllustrator.h"
 #include "KIllustrator_doc.h"
@@ -20,8 +45,6 @@ class Canvas;
 class GDocument;
 class QwViewport;
 class TransformationDialog;
-class ToolPalette;
-class ColorSelectionPalette;
 class ToolController;
 class Canvas;
 class Ruler;
@@ -70,12 +93,50 @@ public:
   void editInsertOject ();
   void editProperties ();
 
+  void transformPosition ();
+  void transformDimension ();
+  void transformRotation ();
+  void transformMirror ();
+
+  void arrangeAlign ();
+  void arrangeToFront ();
+  void arrangeToBack ();
+  void arrangeOneForward ();
+  void arrangeOneBack ();
+  void arrangeGroup ();
+  void arrangeUngroup ();
+
+  void toggleRuler ();
+  void toggleGrid ();
+
+  void setupGrid ();
+  void alignToGrid ();
+
+  void activateSelectionTool ();
+  void activateEditPointTool ();
+  void activateLineTool ();
+  void activateBezierTool ();
+  void activateRectangleTool ();
+  void activatePolygonTool ();
+  void activateEllipseTool ();
+  void activateTextTool ();
+  void activateZoomTool ();
+
 protected:
+  CORBA::Long addToolButton (const char* pictname, const char* tooltip,
+			     const char* func);
+  void showTransformationDialog (int id);
+
   void setupMenu ();
+  void setupColorToolbar ();
+  void setupMainToolbar ();
+  void setupToolsToolbar ();
   void setupCanvas ();
   void resizeEvent (QResizeEvent*);
 
   OPParts::MenuBarFactory_var m_vMenuBarFactory;
+  OPParts::ToolBarFactory_var m_vToolBarFactory;
+
   MenuBar_ref m_rMenuBar;
   /* Menu: Edit */
   CORBA::Long m_idMenuEdit, m_idMenuEdit_Undo, m_idMenuEdit_Redo,
@@ -92,7 +153,7 @@ protected:
     m_idMenuLayout_SetupGrid, m_idMenuLayout_AlignToGrid;
   /* Menu: Arrange */
   CORBA::Long m_idMenuArrange, m_idMenuTransform, m_idMenuTransform_Position,
-    m_idMenuTransform_Dimension, m_idMenuTranform_Rotation, 
+    m_idMenuTransform_Dimension, m_idMenuTransform_Rotation, 
     m_idMenuTransform_Mirror, m_idMenuArrange_Align, 
     m_idMenuArrange_ToFront, m_idMenuArrange_ToBack, 
     m_idMenuArrange_1Forward, m_idMenuArrange_1Back, 
@@ -102,23 +163,36 @@ protected:
   /* Menu: Help */
   CORBA::Long m_idMenuHelp_About;
 
+  /* Toolbar: Tools */
+  ToolBar_ref m_rToolBarTools;
+  CORBA::Long m_idSelectionTool;
+  CORBA::Long m_idEditPointTool;
+  CORBA::Long m_idPolylineTool;
+  CORBA::Long m_idBezierTool;
+  CORBA::Long m_idRectangleTool;
+  CORBA::Long m_idPolygonTool;
+  CORBA::Long m_idEllipseTool;
+  CORBA::Long m_idTextTool;
+  CORBA::Long m_idZoomTool;
+  CORBA::Long m_idActiveTool;
+
   Part_impl *m_pPart;
   KIllustratorDocument *m_pDoc;
 
   QList<KIllustratorChildFrame> m_lstFrames;
 
   bool m_bShowGUI;
+  bool m_bShowRulers;
 
-  ToolPalette *tpalette;
-  ColorSelectionPalette *cpalette;
   ToolController *tcontroller;
   QwViewport *viewport;
   Canvas *canvas;
   Ruler *hRuler, *vRuler;
   TransformationDialog *transformationDialog;
   QWidget *mainWidget;
-
+  QGridLayout *grid;
   CommandHistory cmdHistory;
+  static QList<GObject> clipboard;
 };
 
 #endif

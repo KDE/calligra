@@ -29,6 +29,11 @@ MICO_NAMESPACE_DECL KIllustrator {
 #if !defined(MICO_NO_TOPLEVEL_MODULES) || defined(MICO_MODULE_KIllustrator)
 
 // Generate forward declarations for this scope
+class Shell;
+typedef Shell *Shell_ptr;
+typedef Shell_ptr ShellRef;
+typedef ObjVar<Shell> Shell_var;
+
 class View;
 typedef View *View_ptr;
 typedef View_ptr ViewRef;
@@ -46,6 +51,77 @@ typedef ObjVar<Factory> Factory_var;
 
 
 
+// Common definitions for interface Shell
+class Shell : 
+  virtual public ::OPParts::PartShell
+{
+  public:
+    virtual ~Shell();
+    static Shell_ptr _duplicate( Shell_ptr obj );
+    static Shell_ptr _narrow( CORBA::Object_ptr obj );
+    static Shell_ptr _nil();
+
+    static vector<CORBA::Narrow_proto> *_narrow_helpers;
+    virtual void *_narrow_helper( const char *repoid );
+    static bool _narrow_helper2( CORBA::Object_ptr obj );
+
+    virtual void fileNew() = 0;
+    virtual void fileOpen() = 0;
+    virtual void fileClose() = 0;
+    virtual void fileQuit() = 0;
+    virtual void fileSave() = 0;
+    virtual void fileSaveAs() = 0;
+    virtual void filePrint() = 0;
+    virtual void editCut() = 0;
+    virtual void editCopy() = 0;
+    virtual void editPaste() = 0;
+    virtual void setZoomFactor( const char* size ) = 0;
+    virtual void helpAbout() = 0;
+  protected:
+    Shell() {};
+  private:
+    Shell( const Shell& );
+    void operator=( const Shell& );
+};
+
+MICO_EXPORT_DECL CORBA::TypeCode_ptr _tc_Shell;
+
+// Stub for interface Shell
+class Shell_stub : virtual public Shell,
+  virtual public ::OPParts::PartShell_stub
+{
+  public:
+    virtual ~Shell_stub();
+    void fileNew();
+    void fileOpen();
+    void fileClose();
+    void fileQuit();
+    void fileSave();
+    void fileSaveAs();
+    void filePrint();
+    void editCut();
+    void editCopy();
+    void editPaste();
+    void setZoomFactor( const char* size );
+    void helpAbout();
+  private:
+    void operator=( const Shell_stub& );
+};
+
+class Shell_skel :
+  virtual public MethodDispatcher,
+  virtual public Shell
+{
+  public:
+    Shell_skel( const CORBA::BOA::ReferenceData & = CORBA::BOA::ReferenceData() );
+    virtual ~Shell_skel();
+    Shell_skel( CORBA::Object_ptr obj );
+    virtual bool dispatch( CORBA::ServerRequest_ptr _req, CORBA::Environment &_env );
+    Shell_ptr _this();
+
+};
+
+
 // Common definitions for interface View
 class View : 
   virtual public ::OPParts::View
@@ -60,6 +136,39 @@ class View :
     virtual void *_narrow_helper( const char *repoid );
     static bool _narrow_helper2( CORBA::Object_ptr obj );
 
+    virtual void editUndo() = 0;
+    virtual void editRedo() = 0;
+    virtual void editCut() = 0;
+    virtual void editCopy() = 0;
+    virtual void editPaste() = 0;
+    virtual void editSelectAll() = 0;
+    virtual void editDelete() = 0;
+    virtual void editInsertOject() = 0;
+    virtual void editProperties() = 0;
+    virtual void transformPosition() = 0;
+    virtual void transformDimension() = 0;
+    virtual void transformRotation() = 0;
+    virtual void transformMirror() = 0;
+    virtual void arrangeAlign() = 0;
+    virtual void arrangeToFront() = 0;
+    virtual void arrangeToBack() = 0;
+    virtual void arrangeOneForward() = 0;
+    virtual void arrangeOneBack() = 0;
+    virtual void arrangeGroup() = 0;
+    virtual void arrangeUngroup() = 0;
+    virtual void toggleRuler() = 0;
+    virtual void toggleGrid() = 0;
+    virtual void setupGrid() = 0;
+    virtual void alignToGrid() = 0;
+    virtual void activateSelectionTool() = 0;
+    virtual void activateEditPointTool() = 0;
+    virtual void activateLineTool() = 0;
+    virtual void activateBezierTool() = 0;
+    virtual void activateRectangleTool() = 0;
+    virtual void activatePolygonTool() = 0;
+    virtual void activateEllipseTool() = 0;
+    virtual void activateTextTool() = 0;
+    virtual void activateZoomTool() = 0;
   protected:
     View() {};
   private:
@@ -75,6 +184,39 @@ class View_stub : virtual public View,
 {
   public:
     virtual ~View_stub();
+    void editUndo();
+    void editRedo();
+    void editCut();
+    void editCopy();
+    void editPaste();
+    void editSelectAll();
+    void editDelete();
+    void editInsertOject();
+    void editProperties();
+    void transformPosition();
+    void transformDimension();
+    void transformRotation();
+    void transformMirror();
+    void arrangeAlign();
+    void arrangeToFront();
+    void arrangeToBack();
+    void arrangeOneForward();
+    void arrangeOneBack();
+    void arrangeGroup();
+    void arrangeUngroup();
+    void toggleRuler();
+    void toggleGrid();
+    void setupGrid();
+    void alignToGrid();
+    void activateSelectionTool();
+    void activateEditPointTool();
+    void activateLineTool();
+    void activateBezierTool();
+    void activateRectangleTool();
+    void activatePolygonTool();
+    void activateEllipseTool();
+    void activateTextTool();
+    void activateZoomTool();
   private:
     void operator=( const View_stub& );
 };
@@ -198,6 +340,9 @@ class Factory_skel :
 #endif // !defined(MICO_NO_TOPLEVEL_MODULES) || defined(MICO_MODULE__GLOBAL)
 
 #if !defined(MICO_NO_TOPLEVEL_MODULES) || defined(MICO_MODULE__GLOBAL)
+
+CORBA::Boolean operator<<=( CORBA::Any &a, const KIllustrator::Shell_ptr obj );
+CORBA::Boolean operator>>=( const CORBA::Any &a, KIllustrator::Shell_ptr &obj );
 
 CORBA::Boolean operator<<=( CORBA::Any &a, const KIllustrator::View_ptr obj );
 CORBA::Boolean operator>>=( const CORBA::Any &a, KIllustrator::View_ptr &obj );
