@@ -29,7 +29,6 @@
 
 #include <kapp.h>
 #include <opApplication.h>
-#include <k2config.h>
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <kded_instance.h>
