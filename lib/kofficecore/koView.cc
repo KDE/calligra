@@ -223,7 +223,7 @@ int KoView::canvasYOffset() const
   return 0;
 }
 
-void KoView::canvasAddChild( KoViewChild *child ) 
+void KoView::canvasAddChild( KoViewChild * )
 {
 }
 
@@ -447,7 +447,7 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   d->m_bLock = false;
   m_parentView = _parentView;
   m_child = child;
-  
+
   m_frame = new KoFrame( parentView()->canvas() );
   KoView *view = child->document()->createView( m_frame );
   view->setXMLGUIBuildDocument( child->document()->viewBuildDocument( view ) );
@@ -461,11 +461,11 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   parentView()->canvasAddChild( this );
 
   QRect geom = child->geometry();
-  m_frame->setGeometry( geom.x() * parentView()->zoom() - parentView()->canvasXOffset(), 
+  m_frame->setGeometry( geom.x() * parentView()->zoom() - parentView()->canvasXOffset(),
                         geom.y() * parentView()->zoom() - parentView()->canvasYOffset(),
-                        geom.width() * parentView()->zoom(), 
-			geom.height() * parentView()->zoom() );
-			
+                        geom.width() * parentView()->zoom(),
+                        geom.height() * parentView()->zoom() );
+
   m_frame->show();
   m_frame->raise();
   /*
@@ -483,8 +483,8 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
            this, SLOT( slotFrameGeometryChanged() ) );
   connect( m_child, SIGNAL( changed( KoChild * ) ),
            this, SLOT( slotDocGeometryChanged() ) );
-  connect( view, SIGNAL( activated( bool ) ), 
-  	   parentView(), SLOT( slotChildActivated( bool ) ) );
+  connect( view, SIGNAL( activated( bool ) ),
+           parentView(), SLOT( slotChildActivated( bool ) ) );
 }
 
 KoViewChild::~KoViewChild()
