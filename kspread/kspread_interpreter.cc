@@ -2641,6 +2641,21 @@ static bool kspreadfunc_poisson( KSContext& context ) {
   return true;
 }
 
+static double GetFDist(double x, double fF1, double fF2) {
+  double arg = fF2/(fF2+fF1*x);
+  double alpha = fF2/2.0;
+  double beta = fF1/2.0;
+  return beta_helper(arg, alpha, beta);
+}
+
+static double GetTDist(double T, double fDF) {
+  return 0.5 * beta_helper(fDF/(fDF+T*T), fDF/2.0, 0.5);
+}
+
+static double GetChiDist(double fChi, double fDF) {
+  return 1.0 - GetGammaDist(fChi/2.0, fDF/2.0, 1.0);
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
