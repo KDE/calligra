@@ -205,9 +205,11 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
             e = parseParagraph( doc, t );
             // TODO parse text:level, the level of the heading
         }
-        else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // listitem
-            e = parseList( doc, t );
-        // TODO text:sequence-decls
+        else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // list
+        {
+            currentFramesetElement.appendChild( parseList( doc, t ) );
+            continue;
+        }
         else if ( name == "text:section" ) // Provisory support (###TODO)
         {
             kdDebug(30518) << "Section found!" << endl;
@@ -219,6 +221,7 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
             kdDebug(30518) << "Table found!" << endl;
             parseTable( doc, t, currentFramesetElement );
         }
+        // TODO text:sequence-decls
         else
         {
             kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
@@ -616,8 +619,7 @@ void OoWriterImport::addStyles( const QDomElement* style )
     m_styleStack.push( *style );
 }
 
-// Exact copy of OoImpressImport::parseList
-QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list )
+QDomDocumentFragment OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list )
 {
     //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
 
@@ -627,47 +629,46 @@ QDomElement OoWriterImport::parseList( QDomDocument& doc, const QDomElement& lis
     else
         isOrdered = false;
 
+    QDomDocumentFragment fragment = doc.createDocumentFragment();
+
     // take care of nested lists
     // ### DF: I think this doesn't take care of them the right way. We need to save/parse-whole-list/restore.
     QDomElement e;
-    for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
+    uint listCounter = 1;
+    for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        e = n.toElement();
+        e = n.firstChild().toElement();
         QString name = e.tagName();
-        if ( name == "text:unordered-list" )
-        {
-            isOrdered = false;
-            // parse the list-properties
-            fillStyleStack( e );
+
+        //kdDebug(30518) << k_funcinfo << "Got tag: " << name << endl;
+
+        // parse the list-properties
+        fillStyleStack( e );
+        QDomElement p = parseParagraph( doc, e );
+
+        QDomElement counter = doc.createElement( "COUNTER" ); // should be under <LAYOUT>
+        counter.setAttribute( "numberingtype", 0 );
+        counter.setAttribute( "depth", 0 );
+
+        if ( isOrdered ) {
+            counter.setAttribute("type", 1); // an arabic number
+            counter.setAttribute("righttext", ".");
+            counter.setAttribute("text", listCounter);
+            counter.setAttribute("align", 0);
         }
-        else if ( name == "text:ordered-list" )
-        {
-            isOrdered = true;
-            // parse the list-properties
-            fillStyleStack( e );
-        }
-        if ( name == "text:p" )
-            break;
+        else
+            counter.setAttribute( "type", 10 ); // a disc bullet
+
+        // Don't 'appendChild()'! Text elements have to be the last children of the
+        // paragraph element otherwise kpresenter will cut off the last character of
+        // every item!
+        p.insertBefore( counter, QDomNode() );
+
+        fragment.appendChild(p);
+        listCounter++;
     }
-    // ### Where are the sibling paragraphs of 'e' parsed?
 
-    QDomElement p = parseParagraph( doc, e );
-
-    QDomElement counter = doc.createElement( "COUNTER" );
-    counter.setAttribute( "numberingtype", 0 );
-    counter.setAttribute( "depth", 0 );
-
-    if ( isOrdered )
-        counter.setAttribute( "type", 1 );
-    else
-        counter.setAttribute( "type", 10 );
-
-    // Don't 'appendChild()'! Text elements have to be the last children of the
-    // paragraph element otherwise kpresenter will cut off the last character of
-    // every item!
-    p.insertBefore( counter, QDomNode() );
-
-    return p;
+    return fragment;
 }
 
 void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
@@ -806,7 +807,6 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         }
 
         pos += length;
-
     }
 }
 
@@ -907,6 +907,8 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         // with 'Times New Roman' that looks nearly the same.
         if ( fontName == "Thorndale" )
             fontName = "Times New Roman";
+
+        fontName.remove(QRegExp("\sCE$")); // Arial CE -> Arial
 
         QDomElement fontElem( doc.createElement( "FONT" ) );
         fontElem.setAttribute( "name", fontName );
@@ -1070,7 +1072,7 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
       style:text-scale, 3.10.33 - not implemented in kotext
       style:text-rotation-angle, 3.10.34 - not implemented in kotext (kpr rotates whole objects)
       style:text-rotation-scale, 3.10.35 - not implemented in kotext (kpr rotates whole objects)
-      style:puncuation-wrap, 3.10.36 - not implemented in kotext
+      style:punctuation-wrap, 3.10.36 - not implemented in kotext
       style:line-break, 3.10.37 - what's strict linebreaking?
     */
 
