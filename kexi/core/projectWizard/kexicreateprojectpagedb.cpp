@@ -61,6 +61,7 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 	m_databases = new KListView(this);
 	m_databases->addColumn(i18n("Database"));
 	connect(m_databases, SIGNAL(selectionChanged()), this, SLOT(slotDatabaseChanged()));
+	connect(m_databases, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(slotDatabaseDoubleClicked(QListViewItem*)));
 	connect(m_existingRBtn, SIGNAL(toggled(bool)), m_databases, SLOT(setEnabled(bool)));
 
 	//new database radiobutton
@@ -145,7 +146,7 @@ KexiCreateProjectPageDB::connectDB()
 void
 KexiCreateProjectPageDB::slotDatabaseChanged()
 {
-    if(!m_databases->currentItem() && m_existingRBtn->isChecked())
+	if(!m_databases->currentItem() && m_existingRBtn->isChecked())
 		return;
 
 	if(!data("create").toBool())
@@ -166,6 +167,14 @@ KexiCreateProjectPageDB::slotDatabaseChanged()
 			setProperty("finish", QVariant(false));
 		}
 	}
+}
+
+void
+KexiCreateProjectPageDB::slotDatabaseDoubleClicked(QListViewItem *item)
+{
+	kdDebug()<<item;
+	slotDatabaseChanged();
+	emit acceptPage(); //automatically select this database (like using Finish btn)
 }
 
 void

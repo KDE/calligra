@@ -21,6 +21,7 @@
 #include <kwizard.h>
 #include <qstringlist.h>
 #include <klibloader.h>
+#include <qpushbutton.h>
 
 #include "kexicreateprojectpage.h"
 #include "kexicreateprojectpageengine.h"
@@ -61,6 +62,9 @@ KexiProject *KexiCreateProject::project()const
     return m_project;
 }
 
+/*! adds the page to the pagelist
+ *  which enables showing on demand
+*/
 void
 KexiCreateProject::registerPage(KexiCreateProjectPage *page)
 {
@@ -73,6 +77,7 @@ KexiCreateProject::addItem(KexiCreateProjectPage *page, QString title, int index
 	insertPage(page, title, index);
 	connect(page, SIGNAL(valueChanged(KexiCreateProjectPage*, QString &)), this,
 	   SLOT(slotValueChanged(KexiCreateProjectPage*, QString &)));
+	connect(page, SIGNAL(acceptPage()), this, SLOT(slotPageAccepted()));
 	page->m_loaded = true;
 
 	if(page == m_pageFile)
@@ -90,6 +95,21 @@ KexiCreateProject::slotValueChanged(KexiCreateProjectPage *page, QString &data)
 	if(page && data == "finish")
 	{
 		setFinishEnabled(page, page->data("finish").toBool());
+	}
+}
+
+/*! Page signals that we should accept it. If we are at the last page and Finish buton
+	is enabled, we accpet our wizard dialog with accept(). Otherwise we try to
+	move to next page is exists.
+*/
+void
+KexiCreateProject::slotPageAccepted()
+{
+	if (finishButton()->isEnabled()) {
+		accept();
+	}
+	else if (nextButton()->isEnabled()) {
+		next();
 	}
 }
 
@@ -163,6 +183,10 @@ KexiCreateProject::accept()
 	KWizard::accept();
 }
 
+/*! adds pages, needed for a section
+ *  and removes pages, which are'n needed as well,
+ *  note: it requeries that the pages are added in the right order)
+ */
 void
 KexiCreateProject::requireSection(const QString &section)
 {

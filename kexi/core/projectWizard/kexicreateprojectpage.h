@@ -49,6 +49,7 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProjectPage : public QWidget
 		KexiProject *m_project;
 	signals:
 		void valueChanged(KexiCreateProjectPage *, QString &);
+		void acceptPage();
 };
 
 #endif

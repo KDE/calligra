@@ -27,6 +27,7 @@ class KListView;
 class QTimer;
 class QRadioButton;
 class KLineEdit;
+class QListViewItem;
 
 class KexiCreateProject;
 
@@ -51,6 +52,7 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProjectPageDB : public KexiCreateProjectPag
 
 	protected slots:
 		void		slotDatabaseChanged();
+		void		slotDatabaseDoubleClicked(QListViewItem *);
 		void		slotModeChanged(bool state);
 
 	private:

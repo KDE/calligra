@@ -52,26 +52,19 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProject : public KWizard, public KexiCreate
 		KexiCreateProject(QObject *project, const char *name=0, const QStringList & = QStringList());
 		~KexiCreateProject();
 
-		/*! adds the page to the pagelist
-		 *  which enables showing on demand
-		*/
-		void			registerPage(KexiCreateProjectPage *page);
+		void registerPage(KexiCreateProjectPage *page);
 
 		KexiProject *project()const ;
 		int execute() {return exec();}
 		virtual QString projectFileName();
 	protected:
-		void			addItem(KexiCreateProjectPage *page, QString title, int index=-1);
-		/*! adds pages, needed for a section
-		 *  and removes pages, which are'n needed as well,
-		 *  note: it requeries that the pages are added in the right order)
-		 */
-		void			requireSection(const QString &section);
+		void addItem(KexiCreateProjectPage *page, QString title, int index=-1);
+		void requireSection(const QString &section);
 
-		//always the same pixmap at the left
-		QPixmap			*m_wpic;
+		//! always the same pixmap at the left
+		QPixmap *m_wpic;
 
-		//all the pages
+		//! all the pages
 		KexiCreateProjectPage	*m_pageEngine;
 		KexiCreateProjectPage	*m_pageLocation;
 		KexiCreateProjectPage	*m_pageAuth;
@@ -85,9 +78,10 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProject : public KWizard, public KexiCreate
 	private:
 		KexiProject *m_project;
 	protected slots:
-		void			slotValueChanged(KexiCreateProjectPage *, QString &);
-		void			next();
-		void			accept();
+		virtual void slotValueChanged(KexiCreateProjectPage *, QString &);
+		virtual void slotPageAccepted();
+		virtual void next();
+		virtual void accept();
 };
 
 class KEXIPRJWIZARD_EXPORT KexiCreateProjectFactory : public KLibFactory {
