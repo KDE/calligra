@@ -311,8 +311,8 @@ void KWView::setupActions()
     actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
     actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
-    actionFileStatistics->setStatusText( i18n( "Sentence, word and letter counts of this document" ) );
-    actionFileStatistics->setWhatsThis( i18n( "Information on number of letters, words, syllables, and sentances of document.<p>  Evaluates readability using the Flesch reading score." ) );
+    actionFileStatistics->setStatusText( i18n( "Sentence, word and letter counts for this document" ) );
+    actionFileStatistics->setWhatsThis( i18n( "Information on number of letters, words, syllables and sentences for this document.<p>  Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
