@@ -753,7 +753,7 @@ void KIllustratorView::slotInsertBitmap()
                                     "*.xbm | X11 Bitmaps\n"
                                     "*.xpm | X11 Pixmaps"),
                 this);
-    if (!url.isLocalFile())
+    if (!url.isEmpty() && !url.isLocalFile())
         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
     QString fname = url.path();
     if (! fname.isEmpty ()) {
@@ -768,7 +768,7 @@ void KIllustratorView::slotInsertClipart()
 {
     KURL url = KFileDialog::getOpenURL( lastClipartDir,
                                         i18n("*.wmf *.WMF | Windows Metafiles"), this);
-    if (!url.isLocalFile())
+    if (!url.isEmpty() && !url.isLocalFile())
         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
     QString fname = url.path();
     if ( !fname.isEmpty ())
