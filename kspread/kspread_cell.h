@@ -198,6 +198,18 @@ public:
      */
     static QString columnName( int column );
     
+    /**
+     * Tells what is the content of the cell: text, formula or rich text.
+     * Set by @ref setDisplayText().
+     */
+    Content content() const;
+    
+    /**
+     * Returns true if this cell holds a formula.
+     */
+    bool isFormula() const;
+    
+    
     KSpreadCell* previousCell()const { return m_previousCell; }
     KSpreadCell* nextCell()const { return m_nextCell; }
     void setPreviousCell( KSpreadCell* c ) { m_previousCell = c; }
@@ -345,13 +357,6 @@ public:
      * @see KSpreadSheet::print
      */
     bool needsPrinting() const;
-
-    /**
-     * Tells what is the content of the cell (its nature).
-     * Text, formula, richtext, or visual formula.
-     * Set by @ref setDisplayText().
-     */
-    Content content() const { return m_content; }
 
     /**
      * Increases the precison of the
@@ -664,8 +669,6 @@ public:
     double extraWidth() const;
     double extraHeight() const;
 
-    bool isFormula() const { return m_content == Formula; }
-
     /**
      * encode a formula into a text representation
      *
@@ -951,16 +954,6 @@ private:
     QString m_strFormulaOut;
 
     KSpreadCellPrivate *m_pPrivate;
-
-    /**
-     * Tells which kind of content the cell holds.
-     *
-     * @see #content
-     * @see #setCellText
-     */
-    Content m_content;
-
-    KSpreadValue m_value;
 
     QSimpleRichText *m_pQML; // Set when the cell contains QML
 
