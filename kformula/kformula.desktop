@@ -65,4 +65,4 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kformula
 X-DCOP-ServiceType=Multi
 DocPath=kformula/index.html
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office

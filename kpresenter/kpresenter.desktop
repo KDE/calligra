@@ -64,4 +64,4 @@ X-KDE-NativeMimeType=application/x-kpresenter
 X-DCOP-ServiceType=multi
 DocPath=kpresenter/index.html
 X-KDE-StartupNotify=true
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office

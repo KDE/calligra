@@ -55,4 +55,4 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,KOfficeChart
 X-KDE-NativeMimeType=application/x-kchart
 X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office

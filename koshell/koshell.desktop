@@ -95,4 +95,4 @@ Type=Application
 Icon=koshell
 X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office

@@ -48,4 +48,4 @@ Type=Application
 Icon=karbon
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-karbon
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office

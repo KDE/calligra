@@ -35,4 +35,4 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-vnd.kde.kexi
 X-KDE-Library=libkexipart
 X-KDE-NOTKoDocumentEmbeddable=true
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office

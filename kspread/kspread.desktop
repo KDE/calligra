@@ -60,4 +60,4 @@ X-KDE-NativeMimeType=application/x-kspread
 X-DCOP-ServiceType=multi
 DocPath=kspread/index.html
 X-KDE-StartupNotify=true
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office

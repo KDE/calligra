@@ -38,4 +38,4 @@ Icon=kivio
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kivio
 X-DCOP-ServiceType=Multi
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office

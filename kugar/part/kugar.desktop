@@ -55,4 +55,4 @@ Terminal=0
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,Browser/View
 X-KDE-Library=libkugarpart
 X-KDE-NativeMimeType=application/x-kugarmixed
-Categories=QT;KDE;Office
+Categories=Qt;KDE;Office
