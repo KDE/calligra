@@ -41,7 +41,10 @@ int KChartEngine::init() {
 
   // For now, we are assuming that the data is in columns with no labels at all
   // Ergo, num_sets is the number of rows
-  num_sets = data->rows();
+  if ( data->usedRows() == 0 )   // Data from KSpread
+    num_sets = data->rows();
+  else
+    num_sets = data->usedRows();
 
   // No data sets left -> bail out
   if( num_sets < 1 ) {
@@ -52,9 +55,12 @@ int KChartEngine::init() {
   //num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
   //you are 2 curves
   num_hlc_sets = params->has_hlc_sets() ? 1 : 0;
-  // And num_points is the number of columns
 
-  num_points = data->cols(); //data->usedCols();
+  // And num_points is the number of columns
+  if ( data->usedCols() == 0 ) // Data from KSpread
+    num_points = data->cols();
+  else
+    num_points = data->usedCols();
 
   /* idiot checks */
   if( imagewidth <= 0 || imageheight <=0 || !p  )

@@ -16,11 +16,21 @@ kchartDataEditor::kchartDataEditor() :
 }
 
 void kchartDataEditor::setData(KoChart::Data* dat) {
+  int rowsCount, colsCount;
+  if ( dat->usedRows() == 0 && dat->usedCols() == 0) { // Data from KSpread
+    rowsCount = dat->rows();
+    colsCount = dat->cols();
+  }
+  else {
+    rowsCount = dat->usedRows();
+    colsCount = dat->usedCols();
+  }
+
   _widget->setUsedRows( dat->usedRows() );
   _widget->setUsedCols( dat->usedCols() );
 
-  for (unsigned int row = 0;row != dat->rows();row++)
-    for (unsigned int col = 0; col !=dat->cols(); col++) {
+  for (unsigned int row = 0;row != rowsCount;row++)
+    for (unsigned int col = 0; col != colsCount; col++) {
       kdDebug(35001) << "Set dialog cell for " << row << "," << col << endl;
       KoChart::Value t = dat->cell(row,col);
       // fill it in from the part
@@ -49,13 +59,13 @@ void kchartDataEditor::getData(KoChart::Data* dat) {
   dat->setUsedRows( _widget->usedRows() );
   dat->setUsedCols( _widget->usedCols() );
 
-    for (int row = 0;row < _widget->rows();row++) {
-      for (int col = 0;col < _widget->cols();col++) {
+    for (int row = 0;row < _widget->usedRows();row++) {
+      for (int col = 0;col < _widget->usedCols();col++) {
         // m_pData->setYValue( row, col, _widget->getCell(row,col) );
         KoChart::Value t;
         double val =  _widget->getCell(row,col);
-        if( ( row >= _widget->rows() )  ||
-            ( col >= _widget->cols() ) )
+        if( ( row >= _widget->usedRows() )  ||
+            ( col >= _widget->usedCols() ) )
         { /*t.exists = false; */ }
         else
             t = QVariant( val );
