@@ -46,7 +46,9 @@ class QIODevice;
  *
  * @author: David Faure <faure@kde.org>
  */
-class KoOasisStore
+#include <koffice_export.h>
+
+class KOFFICECORE_EXPORT KoOasisStore
 {
 public:
     /// @param store recontents the property of the caller
