@@ -1670,6 +1670,13 @@ bool KWFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& point, bool borderO
     return false;
 }
 
+void KWFrameSet::setZOrder()
+{
+    QPtrListIterator<KWFrame> fit = frameIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->setZOrder( m_doc->maxZOrder( fit.current()->pageNum(m_doc) ) + 1 );
+}
+
 #ifndef NDEBUG
 void KWFrameSet::printDebug()
 {
@@ -2071,13 +2078,23 @@ void KWPartFrameSet::endEditing()
     else
         delete m_cmdMoveChild;
     m_cmdMoveChild=0L;
-}
 
+}
 
 KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 {
     return new KWPartFrameSetEdit( this, canvas );
 }
+#ifndef NDEBUG
+void KWPartFrameSet::printDebug()
+{
+    KWFrameSet::printDebug();
+    kdDebug() << " +-- Object Document: " << endl;
+    kdDebug() << "     Url : " << getChild()->document()->url().url()<<endl;
+    kdDebug() << "     Rectangle : " << getChild()->geometry().x() << "," << getChild()->geometry().y() << " " << getChild()->geometry().width() << "x" << getChild()->geometry().height() << endl;
+}
+
+#endif
 
 KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )

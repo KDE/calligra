@@ -1948,7 +1948,27 @@ bool KWDocument::processFootNoteRequests()
     return ret;
 }
 
-void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote )
+QString KWDocument::uniqueFramesetName( const QString oldName )
+{
+    // make up a new name for the frameset, use Copy[digits]-[oldname] as template.
+    // Fully translatable naturally :)
+    int count=0;
+    QString searchString ("^("+ i18n("Copy%1-%2").arg("\\d*").arg("){0,1}"));
+    searchString=searchString.replace(QRegExp("\\-"), "\\-"); // escape the '-'
+    QString newName=oldName;
+    if (frameSetByName( oldName ))//rename it if name frameset exists
+    {
+        QRegExp searcher(searchString);
+        do {
+            newName=oldName;
+            newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):"").arg(""));
+            count++;
+        } while ( frameSetByName( newName ) );
+    }
+    return newName;
+}
+
+void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool copyFootNote )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
     //QPtrList<KWFrameSet> frameSetsToFinalize;
@@ -1974,23 +1994,8 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
         {
             // Prepare a new name for the frameset
             QString oldName = elem.attribute( "name" );
-            QString newName;
+            QString newName = uniqueFramesetName( oldName ); // make up a new name for the frame
 
-            // make up a new name for the frame, use Copy[digits]-[oldname] as template.
-            // Fully translatable naturally :)
-            int count=0;
-            QString searchString ("^("+ i18n("Copy%1-%2").arg("\\d*").arg("){0,1}"));
-            searchString=searchString.replace(QRegExp("\\-"), "\\-"); // escape the '-'
-            newName=oldName;
-            if (frameSetByName( oldName ))//rename it if name frameset exists
-            {
-                QRegExp searcher(searchString);
-                do {
-                    newName=oldName;
-                    newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):QString::null).arg(""));
-                    count++;
-                } while ( frameSetByName( newName ) );
-            }
             m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
             kdDebug(32001) << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
@@ -2100,6 +2105,61 @@ void KWDocument::completePasting()
         fit.current()->finalize();
 
     repaintAllViews();
+    delete m_pasteFramesetsMap;
+    m_pasteFramesetsMap = 0L;
+}
+
+void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd )
+{
+    m_pasteFramesetsMap = new QMap<QString, QString>();
+    QPtrList<KWFrameSet> frameSetsToFinalize;
+    QDomElement elem = topElem.firstChild().toElement();
+    for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
+    {
+        if ( elem.tagName() == "EMBEDDED" )
+        {
+            kdDebug()<<"KWDocument::insertEmbedded() Embedded object"<<endl;
+            QDomElement object = elem.namedItem( "OBJECT" ).toElement();
+            QDomElement settings = elem.namedItem( "SETTINGS" ).toElement();
+            if ( object.isNull() || settings.isNull() )
+            {
+                kdError() << "No <OBJECT> or <SETTINGS> tag" << endl;
+            }
+            else
+            {
+                KWChild *ch = new KWChild( this );
+                kdDebug()<<"KWDocument::insertEmbedded() loading document"<<endl;
+                if ( ch->load( object, true ) )
+                {
+                    ch->loadDocument( store );
+                    insertChild( ch );
+                    QString oldName = settings.attribute( "name" );
+                    QString newName = uniqueFramesetName( oldName );
+                    KWPartFrameSet *part = new KWPartFrameSet( this, ch, newName );
+                    m_lstFrameSet.append( part );
+                    kdDebug() << "KWDocument::insertEmbedded loading embedded object" << endl;
+                    part->load( settings );
+                    part->setZOrder();
+                    if ( macroCmd )
+                    {
+                        QPtrListIterator<KWFrame> frameIt( part->frameIterator() );
+                        for ( ; frameIt.current(); ++frameIt )
+                        {
+                            macroCmd->addCommand( new KWCreateFrameCommand( QString::null, frameIt.current() ) );
+                        }
+                    }
+                    if ( frameSetsToFinalize.findRef( part ) == -1 )
+                        frameSetsToFinalize.append( part );
+                }
+            }
+        }
+    }
+    // Do it on all of them (we'd need to store frameSetsToFinalize as member var if this is really slow)
+    for ( QPtrListIterator<KWFrameSet> fit( frameSetsToFinalize ); fit.current(); ++fit )
+        fit.current()->finalize();
+
+    repaintAllViews();
+    refreshDocStructure( (int)Embedded );
     delete m_pasteFramesetsMap;
     m_pasteFramesetsMap = 0L;
 }

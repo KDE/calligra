@@ -747,6 +747,10 @@ public:
 #endif
 
     virtual KWTextFrameSet* nextTextObject( KWFrameSet * ) { return 0L;}
+
+    /** set z-order fior all frames */
+    virtual void setZOrder();
+
 signals:
 
     // Emitted when something has changed in this frameset,
@@ -893,6 +897,11 @@ public:
     virtual bool isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false );
     void startEditing();
     void endEditing();
+
+#ifndef NDEBUG
+    virtual void printDebug();
+#endif
+
 
 private:
     KWChild *m_child;

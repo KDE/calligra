@@ -5892,12 +5892,61 @@ void KWView::insertFile()
 
 void KWView::insertFile(const QString & path)
 {
+    KMacroCommand* macroCmd = 0L;
     bool hasFixedFramesets = false;
     // ### TODO network transparency
     KoStore* store=KoStore::createStore( path, KoStore::Read );
+    QString maindoc = "maindoc.xml";
     if ( store )
     {
-        bool b = store->open("maindoc.xml");
+        // We load the embedded objects
+        bool b = store->open(maindoc);
+        if ( !b )
+        {
+            KMessageBox::sorry( this,
+                                i18n("File name is not a KWord file!."),
+                                i18n("Insert File"));
+            delete store;
+            return;
+        }
+        QDomDocument doc;
+        doc.setContent( store->device() );
+        QDomElement word = doc.documentElement();
+        QDomDocument domDoc( "SELECTION" ); // see KWCanvas::copySelectedFrames
+        QDomElement topElem = domDoc.createElement( "SELECTION" );
+        domDoc.appendChild( topElem );
+
+        QValueList<QDomElement> embeddedList;
+        QDomElement embeddedElem = word.namedItem( "EMBEDDED" ).toElement();
+        for ( ; !embeddedElem.isNull() ; embeddedElem = embeddedElem.nextSibling().toElement() )
+        {
+            if ( embeddedElem.tagName() == "EMBEDDED" )
+            {
+                embeddedList.append( embeddedElem );
+            }
+        }
+        QValueList<QDomElement>::Iterator it = embeddedList.begin();
+        QValueList<QDomElement>::Iterator end = embeddedList.end();
+        bool hasEmbedded = false;
+        for ( ; it!= end ; ++it )
+        {
+            topElem.appendChild( *it );
+            hasEmbedded = true;
+        }
+        store->close();
+        if ( hasEmbedded )
+        {
+            kdDebug()<<k_funcinfo<<" Embedded: \n"<<domDoc.toCString()<<endl;
+            if ( !macroCmd )
+                macroCmd = new KMacroCommand( i18n("Insert File") );
+            m_doc->insertEmbedded( store, topElem, macroCmd );
+        }
+    }
+    if ( store )
+    {
+        // We need to load the pictures before we treat framesets
+        // because KWDocument::pasteFrames() calls processPictureRequests().
+        bool b = store->open(maindoc);
         if ( !b )
         {
             KMessageBox::sorry( this,
@@ -5912,6 +5961,23 @@ void KWView::insertFile(const QString & path)
         QDomElement word = doc.documentElement();
 
         m_doc->loadPictureMap( word );
+        store->close();
+        m_doc->loadImagesFromStore( store );
+    }
+    if ( store )
+    {
+        bool b = store->open(maindoc);
+        if ( !b )
+        {
+            KMessageBox::sorry( this,
+                                i18n("File name is not a KWord file!."),
+                                i18n("Insert File"));
+            delete store;
+            return;
+        }
+        QDomDocument doc;
+        doc.setContent( store->device() );
+        QDomElement word = doc.documentElement();
 
         QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
         if ( !framesets.isNull() )
@@ -5930,7 +5996,6 @@ void KWView::insertFile(const QString & path)
                     textFrameSet = edit->textFrameSet();
                     insertionCursor = *edit->cursor();
                 }
-                KMacroCommand* macroCmd = 0L;
                 // Handle the main textframeset special - concatenate the text
                 QDomDocument domDoc( "PARAGRAPHS" );
                 QDomElement paragsElem = domDoc.createElement( "PARAGRAPHS" );

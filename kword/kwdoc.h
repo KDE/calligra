@@ -334,11 +334,13 @@ public:
     void frameChanged( KWFrame * frame, KWView * view = 0L );
     void framesChanged( const QPtrList<KWFrame> & frames, KWView * view = 0L );
 
+    QString uniqueFramesetName( const QString oldName );
     //use insert file attribute for footnote frameset
     //don't change it attibute otherwise we have a footnote with is not fixed
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false );
+    
+    void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd );
     void completePasting();
-
 
     KoStyleCollection * styleCollection()const  { return m_styleColl;}
     KWFrameStyleCollection * frameStyleCollection()const  { return m_frameStyleColl;}
