@@ -191,7 +191,7 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me, GDocument *doc, 
       ctype = C_Arrow;
       return;
   }
-  					       
+
   canvas->setCursor(Qt::arrowCursor);
   ctype = C_Arrow;
   Handle::Mode mode = Handle::HMode_Default;
@@ -374,18 +374,18 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
     if (ctype != C_Vert) {
       canvas->setCursor (Qt::sizeVerCursor);
       ctype = C_Vert;
-      return;
     }
+    return;
   }
   else if (canvas->indexOfVertHelpline (xpos) != -1) {
     if (ctype != C_Horiz) {
       canvas->setCursor (Qt::sizeHorCursor);
       ctype = C_Horiz;
-      return;
     }
+    return;
   }
-  else {
-    if (ctype != C_Arrow) {
+  else { // out of a helpline [but keep current cursor type if size/move/rotate]
+    if (ctype == C_Horiz || ctype == C_Vert) {
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
       return;
@@ -612,7 +612,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
   float xpos = me->x();
   float ypos = me->y();
   //  canvas->snapPositionToGrid (xpos, ypos);
-  
+
   /*****[HELPLINES]*****/
   dragHorizHelpline = canvas->indexOfHorizHelpline (ypos);
   if (dragHorizHelpline != -1) {
@@ -791,7 +791,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
 void SelectionTool::translate (GDocument* doc, Canvas* canvas,
                                float dx, float dy, bool snap,
                                bool permanent) {
-   
+
   if (snap) {
     const Rect& obox = origbox;
     Rect newbox = canvas->snapTranslatedBoxToGrid (obox.translate (dx, dy));
@@ -1031,7 +1031,7 @@ void SelectionTool::processTabKeyEvent (GDocument* doc, Canvas*) {
 void SelectionTool::activate (GDocument* doc, Canvas *canvas)
 {
    canvas->setCursor(Qt::arrowCursor);
- 
+
    dragHorizHelpline = dragVertHelpline = -1;
 
     doc->activePage()->handle ().show (true);
