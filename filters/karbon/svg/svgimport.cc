@@ -105,6 +105,13 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		fill.setColor( color );
 		gc->fill = fill;
 	}
+	if( !e.attribute( "stroke" ).isEmpty() )
+	{
+		c.setNamedColor( e.attribute( "stroke" ) );
+		VColor color( c );
+		stroke.setColor( color );
+		gc->stroke = stroke;
+	}
 
 	// try style attr
 	QString style = e.attribute( "style" ).simplifyWhiteSpace();
@@ -161,8 +168,6 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		else if( b.tagName() == "ellipse" )
 		{
-			//QDomElement object = b.namedItem( "gobject" ).toElement();
-			//QDomElement matrix = object.namedItem( "matrix" ).toElement();
 			double rx = b.attribute( "rx" ).toDouble();
 			double ry = b.attribute( "ry" ).toDouble();
 			double left	= b.attribute( "cx" ).toDouble() - ( rx / 2.0 );
@@ -189,6 +194,21 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			else
 				m_document.append( circle );
 			m_gc.pop();
+		}
+		else if( b.tagName() == "line" )
+		{
+			VComposite *path = new VComposite( &m_document );
+			double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : b.attribute( "x1" ).toDouble();
+			double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : b.attribute( "y1" ).toDouble();
+			double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : b.attribute( "x2" ).toDouble();
+			double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : b.attribute( "y2" ).toDouble();
+			path->moveTo( KoPoint( x1, y1 ) );
+			path->lineTo( KoPoint( x2, y2 ) );
+			parseStyle( path, b );
+			if( grp )
+				grp->append( path );
+			else
+				m_document.append( path );	
 		}
 		else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
 		{
