@@ -985,18 +985,16 @@ void KWord13OasisGenerator::writeMetaXml(void)
         writer.endElement();
     }
     
-#if 0
-    zipWriteData( "  <meta:document-statistic" );
+    writer.startElement( "meta:document-statistic" );
 
-    // KWord files coming from import filters mostly do not have no page count
+    // KWord files coming from import filters mostly do not have any page count
     const int numPages = m_kwordDocument->getProperty( "PAPER:pages" ).toInt();
     if ( numPages > 0 )
     {
-        zipWriteData( " meta:page-count=\"" );
-        zipWriteData( QString::number ( numPages ) );
-        zipWriteData( "\"" );
+        writer.addAttribute( "meta:page-count", numPages );
     }
 
+#if 0
     zipWriteData( " meta:image-count=\"" ); // This is not specified in the OO specification section 2.1.19, fixed in OASIS (### TODO)
 #if 1
     zipWriteData( "0" ); // ### TODO
@@ -1012,8 +1010,9 @@ void KWord13OasisGenerator::writeMetaXml(void)
     zipWriteData( QString::number ( m_tableNumber ) );
 #endif
     zipWriteData( "\"" );
-    zipWriteData( "/>\n" ); // meta:document-statistic
-#endif    
+#endif
+    writer.endElement(); // meta:document-statistic
+    
     writer.endElement();
     writer.endDocument();
     
