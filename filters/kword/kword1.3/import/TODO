@@ -13,15 +13,13 @@ correctly define the default style (by default "Standard", if not, the 1st style
 ...
 
 === What the old filter knew ===
-<LAYOUT>, <STYLE>, <FORMATS>
 KWord 0.8 character format
 KWord 0.8 layout <FLOW>, <ILEFT>, <IFIRST>
-Syntax 2/3 print/creation/modification dates
 Pictures
 Tables
 ...
 
-=== Changelog of the ol filter ===
+=== Changelog of the old filter ===
 - Support for text images (created by KWord 0.8 or re-saved by KWord 1.2/1.3)
 - Improved character and paragraph formatting
 - Bookmarks
@@ -77,5 +75,3 @@ Table
 ...
 
 === Long term ===
-Make the filter use less memory
-Change all kdDebugs to the area #30520 (when KOffice 1.3 and libexport compatibilty will not be needed anymore)
