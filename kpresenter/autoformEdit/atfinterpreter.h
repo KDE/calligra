@@ -160,7 +160,7 @@ protected:
   void interpret();
 
   // get varaible of a line
-  QPtrList<Sign> getVar(QString);
+  QPtrList<Sign> getVar(const QString&);
 
   // ********** variables **********
 

@@ -88,6 +88,7 @@ ATFInterpreter::ATFInterpreter() {
 ATFInterpreter::~ATFInterpreter()
 {
     coordList.setAutoDelete(true);
+    attrLs.setAutoDelete( true );
 }
 
 /*====================== load autoform ===========================*/
@@ -360,7 +361,7 @@ void ATFInterpreter::interpret()
 }
 
 /*====================== get variable ===========================*/
-QPtrList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString s)
+QPtrList<ATFInterpreter::Sign> ATFInterpreter::getVar(const QString &s)
 {
     QPtrList<Sign> list;
 
