@@ -36,6 +36,7 @@
 #include <kspread_interpreter.h>
 #include <kspread_doc.h>
 #include <kspread_functions.h>
+#include <kspread_functions_helper.h>
 #include <kspread_util.h>
 
 #include <qmemarray.h>
@@ -103,6 +104,9 @@ void KSpreadRegisterDatabaseFunctions()
  *
  *********************************************************************/
 
+/**
+ * Use the implementation from kspread_functions_helper.cc instead.
+ *
 static bool approx_equal (double a, double b)
 {
   if ( a == b )
@@ -110,6 +114,7 @@ static bool approx_equal (double a, double b)
   double x = a - b;
   return (x < 0.0 ? -x : x)  <  ((a < 0.0 ? -a : a) * DBL_EPSILON);
 }
+ */
 
 void getCond( KSpreadDB::Condition & cond, QString text )
 {
