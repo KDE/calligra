@@ -274,11 +274,11 @@ QString Conversion::lineSpacing( const wvWare::Word97::LSPD& lspd )
         // see sprmPDyaLine in generator_wword8.htm
         //float value = QABS((float)lspd.dyaLine / 20.0); // twip -> pt
         // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
-        // "at least" is not possible in kword yet.
-        // What's more, it's the size of the whole line, not the spacing between
-        // the line (!)
+        // "at least" is now possible in kword, but here it's the size of the whole
+        // line, not the spacing between the line (!)
         // To convert between the two, we'd need to find out the height of the
-        // highest character in the line, and substract it from the value..... TODO.
+        // highest character in the line, and substract it from the value..... Ouch.
+        // Better implement line-height-at-least like OOo has.
     }
     else
         kdWarning() << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace << endl;
