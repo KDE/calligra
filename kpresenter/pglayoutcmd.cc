@@ -30,7 +30,7 @@
 /*======================== constructor ===========================*/
 PgLayoutCmd::PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
                           KPresenterView *_view )
-    : Command( _name )
+    : KCommand( _name )
 {
     layout = _layout;
     oldLayout = _oldLayout;

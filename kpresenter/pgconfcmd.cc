@@ -31,7 +31,7 @@ PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
                       bool _oldManualSwitch, bool _oldInfinitLoop,
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed,
                       KPresenterDoc *_doc, int _pgNum )
-    : Command( _name )
+    : KCommand( _name )
 {
     manualSwitch = _manualSwitch;
     infinitLoop = _infinitLoop;

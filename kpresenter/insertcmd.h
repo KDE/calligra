@@ -20,7 +20,7 @@
 #ifndef insertcmd_h
 #define insertcmd_h
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -29,7 +29,7 @@ class KPObject;
 /* Class: InsertCmd                                               */
 /******************************************************************/
 
-class InsertCmd : public Command
+class InsertCmd : public KCommand
 {
 public:
     InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc );
@@ -39,8 +39,6 @@ public:
     virtual void unexecute();
 
 protected:
-    InsertCmd()
-    {; }
 
     KPObject *object;
     KPresenterDoc *doc;

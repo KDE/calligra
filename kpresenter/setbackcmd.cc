@@ -35,7 +35,7 @@ SetBackCmd::SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, B
 			const KPClipartKey & _oldBackPix, const KPClipartKey & _oldBackClip,
                         BackView _oldBackView, BackType _oldBackType,
 			bool _takeGlobal, int _currPgNum, KPresenterDoc *_doc )
-    : Command( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
+    : KCommand( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
       xfactor( _backXFactor ), yfactor( _backYFactor ), backPix( _backPix ), backClip( _backClip ),
       oldBackColor1( _oldBackColor1 ), oldBackColor2( _oldBackColor2 ), oldUnbalanced( _oldBackUnbalanced ),
       oldXFactor( _oldBackXFactor ), oldYFactor( _oldBackYFactor ), oldBackPix( _oldBackPix ), oldBackClip( _oldBackClip )

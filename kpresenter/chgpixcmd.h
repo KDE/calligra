@@ -20,7 +20,7 @@
 #ifndef chgpixcmd_h
 #define chgpixcmd_h
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPPixmapObject;
@@ -29,7 +29,7 @@ class KPPixmapObject;
 /* Class: ChgPixCmd                                               */
 /******************************************************************/
 
-class ChgPixCmd : public Command
+class ChgPixCmd : public KCommand
 {
 public:
     ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
@@ -40,8 +40,6 @@ public:
     virtual void unexecute();
 
 protected:
-    ChgPixCmd()
-    {; }
 
     KPPixmapObject *oldObject, *newObject;
     KPresenterDoc *doc;

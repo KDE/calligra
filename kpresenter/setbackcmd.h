@@ -21,7 +21,7 @@
 #define setbackcmd_h
 
 #include <qcolor.h>
-#include <command.h>
+#include <kcommand.h>
 #include <global.h>
 #include <kpimage.h>
 #include <kpclipartcollection.h>
@@ -31,7 +31,7 @@ class KPresenterDoc;
 /* Class: SetBackCmd						  */
 /******************************************************************/
 
-class SetBackCmd : public Command
+class SetBackCmd : public KCommand
 {
 public:
     SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, BCType _bcType,
@@ -48,8 +48,6 @@ public:
     virtual void unexecute();
 
 protected:
-    SetBackCmd()
-    {; }
 
     QColor backColor1, backColor2;
     bool unbalanced;

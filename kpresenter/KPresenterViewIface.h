@@ -34,8 +34,6 @@ public:
 
 k_dcop:
     // edit menu
-    virtual void editUndo();
-    virtual void editRedo();
     virtual void editCut();
     virtual void editCopy();
     virtual void editPaste();

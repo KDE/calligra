@@ -20,7 +20,7 @@
 #ifndef textcmd_h
 #define textcmd_h
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPTextObject;
@@ -29,7 +29,7 @@ class KPTextObject;
 /* Class: TextCmd                                               */
 /******************************************************************/
 
-class TextCmd : public Command
+class TextCmd : public KCommand
 {
 public:
     TextCmd(QString name, KPresenterDoc *doc, KPTextObject *tObj);
@@ -39,8 +39,6 @@ public:
     virtual void unexecute();
 
 private:
-    TextCmd()
-    {; }
 
     KPresenterDoc *document;
     KPTextObject *textObject;

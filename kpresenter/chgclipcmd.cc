@@ -28,7 +28,7 @@
 /*======================== constructor ===========================*/
 ChgClipCmd::ChgClipCmd( QString _name, KPClipartObject *_object, KPClipartCollection::Key _oldKey,
                         KPClipartCollection::Key _newKey, KPresenterDoc *_doc )
-    : Command( _name ), oldKey( _oldKey ), newKey( _newKey )
+    : KCommand( _name ), oldKey( _oldKey ), newKey( _newKey )
 {
     object = _object;
     doc = _doc;

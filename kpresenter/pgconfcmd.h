@@ -20,7 +20,7 @@
 #ifndef pgconfcmd_h
 #define pgconfcmd_h
 
-#include <command.h>
+#include <kcommand.h>
 
 #include <qmap.h>
 
@@ -30,7 +30,7 @@ class KPresenterDoc;
 /* Class: PgConfCmd                                               */
 /******************************************************************/
 
-class PgConfCmd : public Command
+class PgConfCmd : public KCommand
 {
 public:
     PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
@@ -43,9 +43,6 @@ public:
     virtual void unexecute();
 
 protected:
-    PgConfCmd()
-    {; }
-
     bool manualSwitch, oldManualSwitch;
     bool infinitLoop, oldInfinitLoop;
     PageEffect pageEffect, oldPageEffect;

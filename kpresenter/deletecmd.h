@@ -22,7 +22,7 @@
 
 #include <qptrlist.h>
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPObject;
 class KPresenterDoc;
@@ -31,7 +31,7 @@ class KPresenterDoc;
 /* Class: DeleteCmd                                               */
 /******************************************************************/
 
-class DeleteCmd : public Command
+class DeleteCmd : public KCommand
 {
 public:
     DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
@@ -41,8 +41,6 @@ public:
     virtual void unexecute();
 
 protected:
-    DeleteCmd()
-    {; }
 
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;

@@ -23,7 +23,7 @@
 #include <qpoint.h>
 #include <qsize.h>
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -32,7 +32,7 @@ class KPObject;
 /* Class: ResizeCmd                                               */
 /******************************************************************/
 
-class ResizeCmd : public Command
+class ResizeCmd : public KCommand
 {
 public:
     ResizeCmd( QString _name, QPoint _m_diff, QSize _r_diff, KPObject *_object, KPresenterDoc *_doc );
@@ -43,8 +43,6 @@ public:
     virtual void unexecute( bool _repaint );
 
 protected:
-    ResizeCmd()
-    {; }
 
     QPoint m_diff;
     QSize r_diff;

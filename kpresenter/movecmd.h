@@ -23,7 +23,7 @@
 #include <qptrlist.h>
 #include <qpoint.h>
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -32,7 +32,7 @@ class KPObject;
 /* Class: MoveByCmd                                               */
 /******************************************************************/
 
-class MoveByCmd : public Command
+class MoveByCmd : public KCommand
 {
 public:
     MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
@@ -42,8 +42,6 @@ public:
     virtual void unexecute();
 
 protected:
-    MoveByCmd()
-    {; }
 
     QPoint diff;
     QPtrList<KPObject> objects;
@@ -55,7 +53,7 @@ protected:
 /* Class: MoveByCmd2                                              */
 /******************************************************************/
 
-class MoveByCmd2 : public Command
+class MoveByCmd2 : public KCommand
 {
 public:
     MoveByCmd2( QString _name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
@@ -65,8 +63,6 @@ public:
     virtual void unexecute();
 
 protected:
-    MoveByCmd2()
-    {; }
 
     QPtrList<QPoint> diffs;
     QPtrList<KPObject> objects;

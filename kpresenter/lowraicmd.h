@@ -22,7 +22,7 @@
 
 #include <qptrlist.h>
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -31,7 +31,7 @@ class KPObject;
 /* Class: LowerRaiseCmd                                           */
 /******************************************************************/
 
-class LowerRaiseCmd : public Command
+class LowerRaiseCmd : public KCommand
 {
 public:
     LowerRaiseCmd( QString _name, QPtrList<KPObject> *_oldList, QPtrList<KPObject> *_newList, KPresenterDoc *_doc );
@@ -41,7 +41,6 @@ public:
     virtual void unexecute();
 
 protected:
-    LowerRaiseCmd() {}
 
     QPtrList<KPObject> *oldList, *newList;
     KPresenterDoc *doc;

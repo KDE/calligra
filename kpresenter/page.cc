@@ -537,7 +537,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
                                                       QPoint( mx - firstX, my - firstY ),
                                                       _objects, view->kPresenterDoc() );
-                view->kPresenterDoc()->commands()->addCommand( moveByCmd );
+                view->kPresenterDoc()->addCommand( moveByCmd );
             } else
                 if ( (int)objectList()->count() - 1 >= 0 ) {
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
@@ -558,7 +558,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
-                view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -574,7 +574,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
-                view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -590,7 +590,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
-                view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -606,7 +606,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
-                view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -622,7 +622,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
-                view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -638,7 +638,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
-                view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -654,7 +654,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
-                view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -670,7 +670,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
-                view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -3848,7 +3848,7 @@ void Page::scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize,
                                           QPoint( 0, 0 ), QSize( w - origSize.width(), h - origSize.height() ),
                                           obj, view->kPresenterDoc() );
     resizeCmd->execute();
-    view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+    view->kPresenterDoc()->addCommand( resizeCmd );
 }
 
 void Page::setTextBackground( KPTextObject *obj )
@@ -3935,7 +3935,7 @@ void Page::moveObject( int x, int y, bool key )
         MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
                                               QPoint( x, y ),
                                               _objects, view->kPresenterDoc() );
-        view->kPresenterDoc()->commands()->addCommand( moveByCmd );
+        view->kPresenterDoc()->addCommand( moveByCmd );
     }
 }
 

@@ -21,7 +21,7 @@
 #define shadowcmd_h
 
 #include <qptrlist.h>
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -30,7 +30,7 @@ class KPObject;
 /* Class: ShadowCmd                                               */
 /******************************************************************/
 
-class ShadowCmd : public Command
+class ShadowCmd : public KCommand
 {
 public:
     struct ShadowValues
@@ -48,9 +48,6 @@ public:
     virtual void unexecute();
 
 protected:
-    ShadowCmd()
-    {; }
-
     KPresenterDoc *doc;
     QPtrList<ShadowValues> oldShadow;
     QPtrList<KPObject> objects;

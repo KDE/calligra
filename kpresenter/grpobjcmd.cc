@@ -29,7 +29,7 @@
 GroupObjCmd::GroupObjCmd( const QString &_name,
 			  const QPtrList<KPObject> &_objects,
 			  KPresenterDoc *_doc )
-    : Command( _name ), objects( _objects )
+    : KCommand( _name ), objects( _objects )
 {
     objects.setAutoDelete( false );
     doc = _doc;
@@ -99,7 +99,7 @@ void GroupObjCmd::unexecute()
 UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
 			  KPGroupObject *grpObj_,
 			  KPresenterDoc *_doc )
-    : Command( _name ), objects( grpObj_->getObjects() )
+    : KCommand( _name ), objects( grpObj_->getObjects() )
 {
     objects.setAutoDelete( false );
     doc = _doc;

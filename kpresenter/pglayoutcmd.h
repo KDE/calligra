@@ -22,7 +22,7 @@
 
 #include <koPageLayoutDia.h>
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterView;
 
@@ -30,7 +30,7 @@ class KPresenterView;
 /* Class: PgLayoutCmd                                             */
 /******************************************************************/
 
-class PgLayoutCmd : public Command
+class PgLayoutCmd : public KCommand
 {
 public:
     PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
@@ -40,8 +40,6 @@ public:
     virtual void unexecute();
 
 protected:
-    PgLayoutCmd()
-    {; }
 
     KoPageLayout layout, oldLayout;
     KPresenterView *view;

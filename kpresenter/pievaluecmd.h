@@ -21,7 +21,7 @@
 #define pievaluecmd_h
 
 #include <qptrlist.h>
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -30,7 +30,7 @@ class KPObject;
 /* Class: PieValueCmd                                             */
 /******************************************************************/
 
-class PieValueCmd : public Command
+class PieValueCmd : public KCommand
 {
 public:
     struct PieValues
@@ -47,8 +47,6 @@ public:
     virtual void unexecute();
 
 protected:
-    PieValueCmd()
-    {; }
 
     KPresenterDoc *doc;
     QPtrList<PieValues> oldValues;

@@ -78,7 +78,7 @@
 #include <qrichtext_p.h>
 #include <kotextobject.h>
 #include <kostyle.h>
-
+#include <kcommand.h>
 #include <KPresenterDocIface.h>
 using namespace std;
 
@@ -117,7 +117,7 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
+      _gradientCollection(), _clipartCollection(), _hasHeader( false ),
       _hasFooter( false ), urlIntern()
 {
     //fCollection = new KTextEditFormatCollection;
@@ -179,16 +179,29 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     saveOnlyPage = -1;
 
-    connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
-		      this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
 
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
+
+    m_commandHistory = new KCommandHistory( actionCollection(),  false ) ;
+    connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
+    connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
     if ( name )
 	dcopObject();
 
 }
+
+void KPresenterDoc::slotDocumentRestored()
+{
+    setModified( false );
+}
+
+void KPresenterDoc::slotCommandExecuted()
+{
+    setModified( true );
+}
+
 
 void KPresenterDoc::initConfig()
 {
@@ -226,7 +239,7 @@ DCOPObject* KPresenterDoc::dcopObject()
 /*==============================================================*/
 KPresenterDoc::~KPresenterDoc()
 {
-    _commands.clear(); // done before deleting the objectlist (e.g. for lowraicmd)
+    //_commands.clear(); // done before deleting the objectlist (e.g. for lowraicmd)
     headerFooterEdit->allowClose();
     delete headerFooterEdit;
 
@@ -239,6 +252,16 @@ KPresenterDoc::~KPresenterDoc()
     _backgroundList.clear();
     delete m_standardStyle;
     //delete fCollection;
+
+    delete m_commandHistory;
+}
+
+
+void KPresenterDoc::addCommand( KCommand * cmd )
+{
+    kdDebug() << "KWDocument::addCommand " << cmd->name() << endl;
+    m_commandHistory->addCommand( cmd, false );
+    setModified( true );
 }
 
 /*======================= make child list intern ================*/
@@ -871,7 +894,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                 } else
                     _objectList->append( kplineobject );
             } break;
@@ -881,7 +904,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                 } else
                     _objectList->append( kprectobject );
             } break;
@@ -891,7 +914,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                 } else
                     _objectList->append( kpellipseobject );
             } break;
@@ -901,7 +924,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                 } else
                     _objectList->append( kppieobject );
             } break;
@@ -911,7 +934,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                 } else
                     _objectList->append( kpautoformobject );
             } break;
@@ -921,7 +944,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                     kpclipartobject->reload();
                 } else
                     _objectList->append( kpclipartobject );
@@ -932,7 +955,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                 } else
                     _objectList->append( kptextobject );
             } break;
@@ -942,7 +965,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                     kppixmapobject->reload();
                 } else
                     _objectList->append( kppixmapobject );
@@ -953,7 +976,7 @@ void KPresenterDoc::loadObjects( const QDomElement &element, bool _paste )
                 if ( _paste ) {
                     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this );
                     insertCmd->execute();
-                    _commands.addCommand( insertCmd );
+                    addCommand( insertCmd );
                 } else
                     _objectList->append( kpgroupobject );
             } break;
@@ -1084,7 +1107,7 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Embed Object" ), kppartobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 
     //emit sig_insertObject( ch, kppartobject );
 
@@ -1402,7 +1425,7 @@ bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le,
     if ( !_objects.isEmpty() ) {
 	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Apply Styles" ), _oldPen, _oldBrush,
 						    _newPen, _newBrush, _objects, this );
-	commands()->addCommand( penBrushCmd );
+	addCommand( penBrushCmd );
 	penBrushCmd->execute();
     } else {
 	_oldPen.setAutoDelete( true );
@@ -1467,7 +1490,7 @@ bool KPresenterDoc::setLineBegin( LineEnd lb )
     if ( !_objects.isEmpty() ) {
 	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Change Line Begin" ), _oldPen, _oldBrush,
 						    _newPen, _newBrush, _objects, this, PenBrushCmd::LB_ONLY );
-	commands()->addCommand( penBrushCmd );
+	addCommand( penBrushCmd );
 	penBrushCmd->execute();
     } else {
 	_oldPen.setAutoDelete( true );
@@ -1533,7 +1556,7 @@ bool KPresenterDoc::setLineEnd( LineEnd le )
     if ( !_objects.isEmpty() ) {
 	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Change Line End" ), _oldPen, _oldBrush,
 						    _newPen, _newBrush, _objects, this, PenBrushCmd::LE_ONLY );
-	commands()->addCommand( penBrushCmd );
+	addCommand( penBrushCmd );
 	penBrushCmd->execute();
     } else {
 	_oldPen.setAutoDelete( true );
@@ -1581,7 +1604,7 @@ bool KPresenterDoc::setPieSettings( PieType pieType, int angle, int len )
     if ( !_objects.isEmpty() ) {
 	PieValueCmd *pieValueCmd = new PieValueCmd( i18n( "Change Pie/Arc/Chord Values" ),
 						    _oldValues, _newValues, _objects, this );
-	commands()->addCommand( pieValueCmd );
+	addCommand( pieValueCmd );
 	pieValueCmd->execute();
     } else {
 	_oldValues.setAutoDelete( true );
@@ -1627,7 +1650,7 @@ bool KPresenterDoc::setRectSettings( int _rx, int _ry )
     if ( !_objects.isEmpty() && changed ) {
 	RectValueCmd *rectValueCmd = new RectValueCmd( i18n( "Change Rectangle values" ), _oldValues,
 						       _newValues, _objects, this );
-	commands()->addCommand( rectValueCmd );
+	addCommand( rectValueCmd );
 	rectValueCmd->execute();
     } else {
 	_oldValues.setAutoDelete( true );
@@ -1758,7 +1781,7 @@ bool KPresenterDoc::setPenColor( QColor c, bool fill )
     if ( !_objects.isEmpty() ) {
 	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Change Pen" ), _oldPen, _oldBrush, _newPen,
 						    _newBrush, _objects, this, PenBrushCmd::PEN_ONLY );
-	commands()->addCommand( penBrushCmd );
+	addCommand( penBrushCmd );
 	penBrushCmd->execute();
     } else {
 	_oldPen.setAutoDelete( true );
@@ -1888,7 +1911,7 @@ bool KPresenterDoc::setBrushColor( QColor c, bool fill )
     if ( !_objects.isEmpty() ) {
 	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Change Brush" ), _oldPen, _oldBrush, _newPen,
 						    _newBrush, _objects, this, PenBrushCmd::BRUSH_ONLY );
-	commands()->addCommand( penBrushCmd );
+	addCommand( penBrushCmd );
 	penBrushCmd->execute();
     } else {
 	_oldPen.setAutoDelete( true );
@@ -2536,7 +2559,7 @@ void KPresenterDoc::lowerObjs( int /*diffx*/, int /*diffy*/ )
 
     LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object(s)" ), _objectList, _new, this );
     lrCmd->execute();
-    _commands.addCommand( lrCmd );
+    addCommand( lrCmd );
 
     raiseAndLowerObject = true;
 }
@@ -2563,7 +2586,7 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
 
     LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object(s)" ), _objectList, _new, this );
     lrCmd->execute();
-    _commands.addCommand( lrCmd );
+    addCommand( lrCmd );
 
     raiseAndLowerObject = true;
 }
@@ -2578,7 +2601,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 
     QRect s = getPageRect( 0, 0, 0 );
     float fakt = 1;
@@ -2610,7 +2633,7 @@ void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 }
 
 /*======================= change picture ========================*/
@@ -2628,7 +2651,7 @@ void KPresenterDoc::changePicture( const QString & filename )
 	    ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change pixmap" ), dynamic_cast<KPPixmapObject*>( kpobject ),
 						  pix, this );
 	    chgPixCmd->execute();
-	    _commands.addCommand( chgPixCmd );
+	    addCommand( chgPixCmd );
 	    break;
 	}
     }
@@ -2651,7 +2674,7 @@ void KPresenterDoc::changeClipart( const QString & filename )
 						     dynamic_cast<KPClipartObject*>( kpobject )->getKey(),
 						     clipart.key(), this );
 	    chgClipCmd->execute();
-	    _commands.addCommand( chgClipCmd );
+	    addCommand( chgClipCmd );
 	    break;
 	}
     }
@@ -2669,7 +2692,7 @@ void KPresenterDoc::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineT
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 
 }
 
@@ -2685,7 +2708,7 @@ void KPresenterDoc::insertRectangle( QRect r, QPen pen, QBrush brush, FillType f
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 }
 
 /*===================== insert a circle or ellipse ===============*/
@@ -2700,7 +2723,7 @@ void KPresenterDoc::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, Fill
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 }
 
 /*================================================================*/
@@ -2716,7 +2739,7 @@ void KPresenterDoc::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QCo
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 }
 
 /*===================== insert a textobject =====================*/
@@ -2737,7 +2760,7 @@ void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPr
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 }
 
 /*======================= insert an autoform ====================*/
@@ -2753,7 +2776,7 @@ void KPresenterDoc::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb,
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this );
     insertCmd->execute();
-    _commands.addCommand( insertCmd );
+    addCommand( insertCmd );
 }
 
 /*======================= set rasters ===========================*/
@@ -3085,7 +3108,8 @@ void KPresenterDoc::deleteObjs( bool _add )
     DeleteCmd *deleteCmd = new DeleteCmd( i18n( "Delete object(s)" ), _objects, this );
     deleteCmd->execute();
 
-    if ( _add ) _commands.addCommand( deleteCmd );
+    if ( _add )
+        addCommand( deleteCmd );
 
     setModified(true);
 }
@@ -3171,7 +3195,7 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
 						      _orastX, _orastY, _txtBackCol, _otxtBackCol, this );
     setOptionsCmd->execute();
     if ( createUndoRedo )
-        _commands.addCommand( setOptionsCmd );
+        addCommand( setOptionsCmd );
     else
        delete setOptionsCmd;
 }
@@ -3243,7 +3267,7 @@ void KPresenterDoc::alignObjsLeft()
     if(newPosition)
     {
         MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) left" ), _diffs, _objects, this );
-        _commands.addCommand( moveByCmd2 );
+        addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -3278,7 +3302,7 @@ void KPresenterDoc::alignObjsCenterH()
     {
         MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) centered (horizontal)" ),
                                                  _diffs, _objects, this );
-        _commands.addCommand( moveByCmd2 );
+        addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -3311,7 +3335,7 @@ void KPresenterDoc::alignObjsRight()
     if(newPosition)
     {
         MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) right" ), _diffs, _objects, this );
-        _commands.addCommand( moveByCmd2 );
+        addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -3349,7 +3373,7 @@ void KPresenterDoc::alignObjsTop()
     if(newPosition)
     {
         MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) top" ), _diffs, _objects, this );
-        _commands.addCommand( moveByCmd2 );
+        addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -3388,7 +3412,7 @@ void KPresenterDoc::alignObjsCenterV()
     if(newPosition)
     {
         MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) center / vertical" ), _diffs, _objects, this );
-        _commands.addCommand( moveByCmd2 );
+        addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -3426,7 +3450,7 @@ void KPresenterDoc::alignObjsBottom()
     if(newPosition)
     {
         MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) bottom" ), _diffs, _objects, this );
-        _commands.addCommand( moveByCmd2 );
+        addCommand( moveByCmd2 );
         moveByCmd2->execute();
     }
     else
@@ -3436,19 +3460,6 @@ void KPresenterDoc::alignObjsBottom()
     }
 }
 
-/*================= undo redo changed ===========================*/
-void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
-{
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-    {
-	((KPresenterView*)it.current())->changeUndo( _undo, !_undo.isEmpty() );
-	((KPresenterView*)it.current())->changeRedo( _redo, !_redo.isEmpty() );
-    }
-    kdDebug(33001) << "slotUndoRedoChanged " << _undo << endl;
-    if ( !_undo.isEmpty() )
-        setModified(true);
-}
 
 /*==============================================================*/
 int KPresenterDoc::getPenBrushFlags()
@@ -3634,7 +3645,7 @@ void KPresenterDoc::groupObjects()
 				  i18n( "Group Objects" ) );
     else {
 	GroupObjCmd *groupObjCmd = new GroupObjCmd( i18n( "Group Objects" ), objs, this );
-	_commands.addCommand( groupObjCmd );
+	addCommand( groupObjCmd );
 	groupObjCmd->execute();
     }
 }
@@ -3646,7 +3657,7 @@ void KPresenterDoc::ungroupObjects()
     if ( kpobject && kpobject->getType() == OT_GROUP ) {
 	UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Objects" ),
 							  (KPGroupObject*)kpobject, this );
-	_commands.addCommand( unGroupObjCmd );
+	addCommand( unGroupObjCmd );
 	unGroupObjCmd->execute();
     }
 }

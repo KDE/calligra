@@ -24,7 +24,7 @@
 #include <qpen.h>
 #include <qbrush.h>
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -33,7 +33,7 @@ class KPObject;
 /* Class: PenBrushCmd						  */
 /******************************************************************/
 
-class PenBrushCmd : public Command
+class PenBrushCmd : public KCommand
 {
 public:
     struct Pen {
@@ -83,8 +83,6 @@ public:
     virtual void unexecute();
 
 protected:
-    PenBrushCmd()
-    {; }
 
     KPresenterDoc *doc;
     QPtrList<Pen> oldPen;

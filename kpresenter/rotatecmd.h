@@ -21,7 +21,7 @@
 #define rotatecmd_h
 
 #include <qptrlist.h>
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -30,7 +30,7 @@ class KPObject;
 /* Class: RotateCmd                                               */
 /******************************************************************/
 
-class RotateCmd : public Command
+class RotateCmd : public KCommand
 {
 public:
     struct RotateValues
@@ -46,9 +46,6 @@ public:
     virtual void unexecute();
 
 protected:
-    RotateCmd()
-    {; }
-
     KPresenterDoc *doc;
     QPtrList<RotateValues> oldRotate;
     QPtrList<KPObject> objects;

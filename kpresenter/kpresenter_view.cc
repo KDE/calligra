@@ -289,20 +289,6 @@ void KPresenterView::print( KPrinter &prt )
 }
 
 /*===============================================================*/
-void KPresenterView::editUndo()
-{
-    page->setToolEditMode( TEM_MOUSE );
-    m_pKPresenterDoc->commands()->undo();
-}
-
-/*===============================================================*/
-void KPresenterView::editRedo()
-{
-    page->setToolEditMode( TEM_MOUSE );
-    m_pKPresenterDoc->commands()->redo();
-}
-
-/*===============================================================*/
 void KPresenterView::editCut()
 {
     if ( !page->kTxtObj() ) {
@@ -849,7 +835,7 @@ void KPresenterView::extraLayout()
 	PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ),
 						    pgLayout, oldLayout, this );
 	pgLayoutCmd->execute();
-	kPresenterDoc()->commands()->addCommand( pgLayoutCmd );
+	kPresenterDoc()->addCommand( pgLayoutCmd );
     }
 }
 
@@ -1820,7 +1806,7 @@ void KPresenterView::newPageLayout( KoPageLayout _layout )
 
     PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, this );
     pgLayoutCmd->execute();
-    kPresenterDoc()->commands()->addCommand( pgLayoutCmd );
+    kPresenterDoc()->addCommand( pgLayoutCmd );
 }
 
 /*======================== create GUI ==========================*/
@@ -1891,8 +1877,10 @@ void KPresenterView::initGui()
     actionPenColor->setCurrentColor( Qt::black );
     ( (KColorAction*)actionScreenPenColor )->setColor( Qt::red );
     ( (KSelectAction*)actionScreenPenWidth )->setCurrentItem( 2 );
+#if 0
     actionEditUndo->setEnabled( false );
     actionEditRedo->setEnabled( false );
+#endif
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
     objectSelectedChanged();
     refreshPageButton();
@@ -1909,13 +1897,6 @@ void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 /*====================== construct ==============================*/
 void KPresenterView::setupActions()
 {
-    // -------------- Edit actions
-
-    actionEditUndo = KStdAction::undo( this, SLOT( editUndo() ), actionCollection(), "edit_undo" );
-    actionEditUndo->setText( i18n( "No Undo possible" ) );
-    actionEditRedo = KStdAction::redo( this, SLOT( editRedo() ), actionCollection(), "edit_redo" );
-    actionEditRedo->setText( i18n( "No Redo possible" ) );
-
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
     actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
@@ -2417,7 +2398,7 @@ void KPresenterView::backOk( bool takeGlobal )
 					     m_pKPresenterDoc->getBackType( currPg ),
 					     takeGlobal, getCurrPgNum(), m_pKPresenterDoc );
     setBackCmd->execute();
-    m_pKPresenterDoc->commands()->addCommand( setBackCmd );
+    m_pKPresenterDoc->addCommand( setBackCmd );
 }
 
 /*================== autoform chosen =============================*/
@@ -2482,7 +2463,7 @@ void KPresenterView::pgConfOk()
 					  kPresenterDoc()->getPresSpeed(),
 					  kPresenterDoc(), getCurrPgNum() - 1 );
     pgConfCmd->execute();
-    kPresenterDoc()->commands()->addCommand( pgConfCmd );
+    kPresenterDoc()->addCommand( pgConfCmd );
 }
 
 /*=================== effect dialog ok ===========================*/
@@ -2522,7 +2503,7 @@ void KPresenterView::rotateOk()
     if ( !_objects.isEmpty() && newAngle ) {
 	RotateCmd *rotateCmd = new RotateCmd( i18n( "Change Rotation" ),
 					      _oldRotate, _newAngle, _objects, kPresenterDoc() );
-	kPresenterDoc()->commands()->addCommand( rotateCmd );
+	kPresenterDoc()->addCommand( rotateCmd );
 	rotateCmd->execute();
     } else {
 	_oldRotate.setAutoDelete( true );
@@ -2567,7 +2548,7 @@ void KPresenterView::shadowOk()
     if ( !_objects.isEmpty() && newShadow ) {
 	ShadowCmd *shadowCmd = new ShadowCmd( i18n( "Change Shadow" ),
 					      _oldShadow, _newShadow, _objects, kPresenterDoc() );
-	kPresenterDoc()->commands()->addCommand( shadowCmd );
+	kPresenterDoc()->addCommand( shadowCmd );
 	shadowCmd->execute();
     } else {
 	_oldShadow.setAutoDelete( true );
@@ -2899,6 +2880,7 @@ void KPresenterView::updateReadWrite( bool readwrite )
     for (; aIt != aEnd; ++aIt )
 	(*aIt)->setEnabled( readwrite );
 }
+#if 0
 
 /*========================= change undo =========================*/
 void KPresenterView::changeUndo( QString _text, bool _enable )
@@ -2927,6 +2909,8 @@ void KPresenterView::changeRedo( QString _text, bool _enable )
 	actionEditRedo->setText( i18n( "No Redo possible" ) );
     }
 }
+
+#endif
 
 /*======================== setup popup menus ===================*/
 void KPresenterView::setupPopupMenus()

@@ -200,7 +200,7 @@ void EffectDia::slotEffectDiaOk()
     EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), objs,
 					  oldEffects, eff );
     effectCmd->execute();
-    view->kPresenterDoc()->commands()->addCommand( effectCmd );
+    view->kPresenterDoc()->addCommand( effectCmd );
     accept();
 }
 

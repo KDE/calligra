@@ -27,7 +27,7 @@
 
 /*======================== constructor ===========================*/
 InsertCmd::InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc )
-    : Command( _name )
+    : KCommand( _name )
 {
     object = _object;
     doc = _doc;

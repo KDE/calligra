@@ -97,8 +97,6 @@ signals:
 
 public slots:
     // edit menu
-    void editUndo();
-    void editRedo();
     void editCut();
     void editCopy();
     void editPaste();
@@ -253,10 +251,6 @@ public:
     void changeClipart( const QString & );
 
     Page* getPage() {return page; }
-
-    void changeUndo( QString, bool );
-    void changeRedo( QString, bool );
-
     void setRulerMouseShow( bool _show );
     void setRulerMousePos( int mx, int my );
 
@@ -484,8 +478,6 @@ protected:
     int screensaver_pid;
 
     // actions
-    KAction *actionEditUndo;
-    KAction *actionEditRedo;
     KAction *actionEditCut;
     KAction *actionEditCopy;
     KAction *actionEditPaste;

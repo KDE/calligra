@@ -30,16 +30,6 @@ KPresenterViewIface::KPresenterViewIface( KPresenterView *view_ )
     view = view_;
 }
 
-void KPresenterViewIface::editUndo()
-{
-    view->editUndo();
-}
-
-void KPresenterViewIface::editRedo()
-{
-    view->editRedo();
-}
-
 void KPresenterViewIface::editCut()
 {
     view->editCut();

@@ -21,7 +21,7 @@
 #define rectvaluecmd_h
 
 #include <qptrlist.h>
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -30,7 +30,7 @@ class KPObject;
 /* Class: RectValueCmd                                            */
 /******************************************************************/
 
-class RectValueCmd : public Command
+class RectValueCmd : public KCommand
 {
 public:
     struct RectValues
@@ -46,8 +46,6 @@ public:
     virtual void unexecute();
 
 protected:
-    RectValueCmd()
-    {; }
 
     KPresenterDoc *doc;
     QPtrList<RectValues> oldValues;

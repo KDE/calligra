@@ -28,7 +28,7 @@
 /*======================== constructor ===========================*/
 PieValueCmd::PieValueCmd( QString _name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
                           QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
-    : Command( _name ), oldValues( _oldValues ), objects( _objects )
+    : KCommand( _name ), oldValues( _oldValues ), objects( _objects )
 {
     objects.setAutoDelete( false );
     oldValues.setAutoDelete( false );

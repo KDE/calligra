@@ -23,7 +23,7 @@
 #include <qpoint.h>
 #include <qcolor.h>
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPObject;
@@ -32,7 +32,7 @@ class KPObject;
 /* Class: SetOptionsCmd                                           */
 /******************************************************************/
 
-class SetOptionsCmd : public Command
+class SetOptionsCmd : public KCommand
 {
 public:
     SetOptionsCmd( QString _name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
@@ -44,8 +44,6 @@ public:
     virtual void unexecute();
 
 protected:
-    SetOptionsCmd()
-    {; }
 
     QPtrList<QPoint> diffs;
     QPtrList<KPObject> objects;

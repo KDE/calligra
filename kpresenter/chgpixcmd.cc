@@ -28,7 +28,7 @@
 /*======================== constructor ===========================*/
 ChgPixCmd::ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
                       KPresenterDoc *_doc )
-    : Command( _name )
+    : KCommand( _name )
 {
     oldObject = _oldObject;
     newObject = _newObject;

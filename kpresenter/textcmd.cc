@@ -27,7 +27,7 @@
 
 /*======================== constructor ===========================*/
 TextCmd::TextCmd(QString name, KPresenterDoc *doc, KPTextObject *tObj)
-    : Command(name), document(doc), textObject(tObj) {
+    : KCommand(name), document(doc), textObject(tObj) {
 }
 
 /*====================== execute =================================*/

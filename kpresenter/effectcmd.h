@@ -23,7 +23,7 @@
 #include <qptrlist.h>
 #include <qvaluelist.h>
 
-#include <command.h>
+#include <kcommand.h>
 #include <global.h>
 
 class KPObject;
@@ -32,7 +32,7 @@ class KPObject;
 /* Class: EffectCmd                                               */
 /******************************************************************/
 
-class EffectCmd : public Command
+class EffectCmd : public KCommand
 {
 public:
     struct EffectStruct {
@@ -51,8 +51,6 @@ public:
     virtual void unexecute();
 
 protected:
-    EffectCmd()
-    {; }
 
     QValueList<EffectStruct> oldEffects;
     EffectStruct newEffect;

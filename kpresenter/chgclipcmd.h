@@ -20,7 +20,7 @@
 #ifndef chgclipcmd_h
 #define chgclipcmd_h
 
-#include <command.h>
+#include <kcommand.h>
 #include <kpclipartcollection.h>
 
 class KPresenterDoc;
@@ -30,7 +30,7 @@ class KPClipartObject;
 /* Class: ChgClipCmd                                              */
 /******************************************************************/
 
-class ChgClipCmd : public Command
+class ChgClipCmd : public KCommand
 {
 public:
     ChgClipCmd( QString _name, KPClipartObject *_object, KPClipartCollection::Key _oldName,
@@ -41,8 +41,6 @@ public:
     virtual void unexecute();
 
 protected:
-    ChgClipCmd()
-    {; }
 
     KPClipartObject *object;
     KPresenterDoc *doc;

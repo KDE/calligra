@@ -22,7 +22,7 @@
 
 #include <qptrlist.h>
 
-#include <command.h>
+#include <kcommand.h>
 
 class KPresenterDoc;
 class KPGroupObject;
@@ -32,7 +32,7 @@ class KPObject;
 /* Class: GroupObjCmd						  */
 /******************************************************************/
 
-class GroupObjCmd : public Command
+class GroupObjCmd : public KCommand
 {
 public:
     GroupObjCmd( const QString &_name,
@@ -44,8 +44,6 @@ public:
     virtual void unexecute();
 
 protected:
-    GroupObjCmd()
-    {; }
 
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;
@@ -57,7 +55,7 @@ protected:
 /* Class: UnGroupObjCmd						  */
 /******************************************************************/
 
-class UnGroupObjCmd : public Command
+class UnGroupObjCmd : public KCommand
 {
 public:
     UnGroupObjCmd( const QString &_name,
@@ -69,8 +67,6 @@ public:
     virtual void unexecute();
 
 protected:
-    UnGroupObjCmd()
-    {; }
 
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;

@@ -23,6 +23,9 @@
 class KPresenterDoc;
 class KPresenterView;
 class DCOPObject;
+class KCommand;
+class KMacroCommand;
+class KCommandHistory;
 //class KTextEditFormatCollection;
 
 #include <koDocument.h>
@@ -43,7 +46,6 @@ class DCOPObject;
 #include <kpimage.h>
 #include <kpgradientcollection.h>
 #include <kpclipartcollection.h>
-#include <commandhistory.h>
 
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
@@ -246,7 +248,9 @@ public:
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
     KPClipartCollection *getClipartCollection() { return &_clipartCollection; }
 
+#if 0
     CommandHistory *commands() { return &_commands; }
+#endif
 
     void alignObjsLeft();
     void alignObjsCenterH();
@@ -304,6 +308,9 @@ public:
 
     KoStyle* standardStyle();
 
+    void addCommand( KCommand * cmd );
+
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -324,7 +331,8 @@ signals:
     //void sig_updateChildGeometry( KPresenterChild *_child );
 
 protected slots:
-    void slotUndoRedoChanged( QString, QString );
+    void slotDocumentRestored();
+    void slotCommandExecuted();
 
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
@@ -383,7 +391,6 @@ protected:
     KPGradientCollection _gradientCollection;
     KPClipartCollection _clipartCollection;
 
-    CommandHistory _commands;
     bool pasting;
     int pasteXOffset, pasteYOffset;
 
@@ -411,6 +418,8 @@ protected:
     bool ignoreSticky;
 
     KoStyle *m_standardStyle;
+
+    KCommandHistory * m_commandHistory;
 
 
 private:
