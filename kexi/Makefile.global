@@ -3,5 +3,5 @@ KEXI_OPTIONS =
 KDE_CXXFLAGS = \
 $(USE_EXCEPTIONS) $(KEXI_OPTIONS)
 
-KDE_CXXFLAGS += -include $(top_srcdir)/kexi/kexi_export.h
+KDE_CXXFLAGS += -include $(top_srcdir)/kexi/kexi_global.h
 

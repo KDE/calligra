@@ -194,6 +194,14 @@
 # define KEXIMIGR_EXPORT //for apps
 #endif
 
+#ifdef MAKE_KEXIGUIUTILS_LIB
+# define KEXIGUIUTILS_EXPORT KDE_EXPORT
+#elif defined(KDE_MAKE_LIB)
+# define KEXIGUIUTILS_EXPORT KDE_IMPORT
+#else
+# define KEXIMIGR_EXPORT //for apps
+#endif
+
 /* -- compile-time settings -- */
 #if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
 /* defined in a .pro file or 'KEXI_OPTIONS' env. variable */

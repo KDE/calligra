@@ -29,7 +29,7 @@
 #include <kaction.h>
 #include <klocale.h>
 
-#include "kexi_global.h"
+#include "kexi_version.h"
 
 //! displays information that feature "feature_name" is not availabe in the current application version
 inline void KEXI_UNFINISHED(QString feature_name) {
