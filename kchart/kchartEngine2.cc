@@ -81,7 +81,7 @@ void KChartEngine::titleText() {
         {
         int tlen=0;
         QColor  titlecolor = params->TitleColor;
-        cnt_nl( params->title.latin1(), &tlen );
+        cnt_nl( (const char*)params->title.local8Bit(), &tlen );
         p->setFont( params->titleFont() );
         p->setPen( titlecolor );
         QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0,

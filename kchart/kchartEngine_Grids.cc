@@ -151,13 +151,13 @@ void KChartEngine::drawGridAndLabels(bool do_ylbl_fractions)
                         //remove %g
                         QString tmp=params->ylabel_fmt.right(len-3);
 
-                                strcat(ylbl_str,tmp.latin1());
+                                strcat(ylbl_str,(const char*)tmp.local8Bit());
                           }
                   }
                 else
                   {
                         ylbl_str= price_to_str( tmp_y,&n,&d,&w,
-                                                                        do_ylbl_fractions? 0L: params->ylabel_fmt.latin1() );
+                                                                        do_ylbl_fractions? 0L: (const char*)params->ylabel_fmt.local8Bit() );
                   }
 
                 if( do_ylbl_fractions && params->stack_type!=KCHARTSTACKTYPE_PERCENT)
@@ -251,7 +251,7 @@ void KChartEngine::drawGridAndLabels(bool do_ylbl_fractions)
                   char  vylbl[16];
                   /* opposite of PV(y) */
                   sprintf( vylbl,
-                                   !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt.latin1(): "%.0f",
+                                   !params->ylabel2_fmt.isEmpty()? (const char*)params->ylabel2_fmt.local8Bit(): "%.0f",
                                    ((float)(PY(tmp_y)+(setno*ydepth_3D)-vyorig))/vyscl );
 
                   setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
@@ -415,7 +415,7 @@ void KChartEngine::drawXTicks()
 #define LBXH params->xAxisFontHeight()
 #define LBXW params->xAxisFontWidth()
                   int xlen = 0;
-                  short xstrs_num = cnt_nl( params->xlbl[xi].latin1(), &xlen );
+                  short xstrs_num = cnt_nl( (const char*)params->xlbl[xi].local8Bit(), &xlen );
                   //char sub_xlbl[xlen+1];
                   //int xlbl_strt = -1+ PX((float)i+(float)(do_bar?((float)num_points/(float)num_xlbls):0.0)) - (int)((float)(LBXH-2)*((float)xstrs_num/2.0));
                   int xlbl_strt = -1+ PX(i) - (int)((float)(LBXH-2)*((float)xstrs_num/2.0));
@@ -435,7 +435,7 @@ void KChartEngine::drawXTicks()
 
                         p->drawText((15+PY(lowest) + 2 + 1 + LBXW*xlen) ,
                                                 -(xlbl_strt + (LBXH-1)*xstrs_num),
-                                                (*sublabelit).latin1() );
+                                                (*sublabelit)/*.local8Bit()*/ );
                         p->rotate( -90 );
 
                   }

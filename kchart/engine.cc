@@ -67,7 +67,7 @@ int KChartEngine::out_graph() {
     //  i.e., not up against Y axes
   do_ylbl_fractions =   // %f format not given, or
                 ( params->ylabel_fmt.isEmpty() ||                                       //  format doesn't have a %,g,e,E,f or F
-                  params->ylabel_fmt.length() == strcspn(params->ylabel_fmt.latin1(),"%geEfF") );
+                  params->ylabel_fmt.length() == strcspn((const char*)params->ylabel_fmt.local8Bit(),"%geEfF") );
     if( params->thumbnail ) {
                 params->grid = FALSE;
                 params->xaxis = FALSE;

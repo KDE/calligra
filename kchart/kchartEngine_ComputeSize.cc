@@ -20,7 +20,7 @@
 
 void KChartEngine::computeSize() {
   int   title_hgt  = !params->title.isEmpty()? 2 /* title? horizontal text line(s) */
-    + cnt_nl(params->title.latin1(),(int*)NULL)*params->titleFontHeight()
+    + cnt_nl((const char*)params->title.local8Bit(),(int*)NULL)*params->titleFontHeight()
     + 2:
     2;
   int xlabel_hgt = 0;
@@ -48,7 +48,7 @@ void KChartEngine::computeSize() {
   annote_hgt = params->annotation && !params->annotation->note.isEmpty()?
     1 +                                                                                 /* space to note */
     (1+params->annotationFontHeight()) *                /* number of '\n' substrs */
-    cnt_nl(params->annotation->note.latin1(),&annote_len) +
+    cnt_nl((const char*)params->annotation->note.local8Bit(),&annote_len) +
     1 +                                                                                 /* space under note */
     2: 0;                                                                               /* space to chart */
   annote_len *= params->annotationFontWidth();
@@ -164,13 +164,13 @@ void KChartEngine::computeSize() {
                 if( params->yaxis )     { /* XPG2 compatibility */
                   //kdDebug(35001) << "At least I am doing something" << endl;
 
-                  sprintf( foo, do_ylbl_fractions ? "%.0f": params->ylabel_fmt.latin1(), tmp_highest );
+                  sprintf( foo, do_ylbl_fractions ? "%.0f": (const char*)params->ylabel_fmt.local8Bit(), tmp_highest );
 
                   lbl_len = ylbl_interval<1.0? strlen( price_to_str(tmp_highest,
                                                                                                                         &nmrtr,
                                                                                                                         &dmntr,
                                                                                                                         &whole,
-                                                                                                                        do_ylbl_fractions? 0L: params->ylabel_fmt.latin1()) ):
+                                                                                                                        do_ylbl_fractions? 0L: (const char*)params->ylabel_fmt.local8Bit()) ):
                         strlen( foo );
                   longest_ylblen = QMAX( longest_ylblen, lbl_len );
                 }
@@ -193,8 +193,8 @@ void KChartEngine::computeSize() {
 
       if( params->yaxis2 ) {
                 char svlongest[32];
-                int lbl_len_low  = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt.latin1(): "%.0f", vlowest );
-                int lbl_len_high = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt.latin1(): "%.0f", vhighest );
+                int lbl_len_low  = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? (const char*)params->ylabel2_fmt.local8Bit(): "%.0f", vlowest );
+                int lbl_len_high = sprintf( svlongest, !params->ylabel2_fmt.isEmpty()? (const char*)params->ylabel2_fmt.local8Bit(): "%.0f", vhighest );
                 vlabel_wth = 1+ QMAX( lbl_len_low,lbl_len_high ) * params->yAxisFontWidth();
       }
     }

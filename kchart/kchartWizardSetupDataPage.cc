@@ -95,21 +95,21 @@ KChartWizardSetupDataPage::~KChartWizardSetupDataPage()
 
 void KChartWizardSetupDataPage::dataInRowsClicked()
 {
-  _parent->emitNeedNewData( _parent->dataArea().latin1(), KChartWizard::Row,
+  _parent->emitNeedNewData( (const char*)_parent->dataArea().local8Bit(), KChartWizard::Row,
                                                                  coldescript->isChecked(),
                                                                  rowdescript->isChecked() );
 }
 
 void KChartWizardSetupDataPage::dataInColsClicked()
 {
-  _parent->emitNeedNewData( _parent->dataArea().latin1(), KChartWizard::Col,
+  _parent->emitNeedNewData( (const char*)_parent->dataArea().local8Bit(), KChartWizard::Col,
                                                         coldescript->isChecked(),
                                                         rowdescript->isChecked() );
 }
 
 void KChartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
 {
-  _parent->emitNeedNewData( _parent->dataArea().latin1(),
+  _parent->emitNeedNewData( (const char*)_parent->dataArea().local8Bit(),
                                                         ( datarow->isChecked() ? KChartWizard::Row :
                                                           KChartWizard::Col ),
                                                         coldescript->isChecked(),
@@ -118,7 +118,7 @@ void KChartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
 
 void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 {
-  _parent->emitNeedNewData( _parent->dataArea().latin1(),
+  _parent->emitNeedNewData( (const char*)_parent->dataArea().local8Bit(),
                                                         ( datarow->isChecked() ? KChartWizard::Row :
                                                           KChartWizard::Col ),
                                                         coldescript->isChecked(),

@@ -132,7 +132,7 @@ pie_gif( short imagewidth,
     {
         int title_hgt  = !params->title.isEmpty() ? 1                   /*  title? horizontal text line */
             + params->titleFontHeight()
-            * (int)cnt_nl( params->title.latin1(), (int*)NULL )
+            * (int)cnt_nl( (const char*)params->title.local8Bit(), (int*)NULL )
             + 2:
             0;
         float   last = 0.0;
@@ -185,7 +185,7 @@ pie_gif( short imagewidth,
                         int pct_len;
                         int lbl_len = 0;
 
-                        lbl_hgt = ( cnt_nl(params->legend[i].latin1(), &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
+                        lbl_hgt = ( cnt_nl((const char*)params->legend[i].local8Bit(), &lbl_len) + (params->percent_labels == KCHARTPCTTYPE_ABOVE ||
 										    params->percent_labels == KCHARTPCTTYPE_BELOW? 1: 0) )
                           * (params->labelFontHeight()+1);
 			
@@ -631,7 +631,7 @@ pie_gif( short imagewidth,
 		char pct_str[1+4+1+1];
 		int pct_wdth;
 		int lbl_wdth;
-		short num_nl = cnt_nl( params->legend[i].latin1(), &lbl_wdth );
+		short num_nl = cnt_nl( (const char*)params->legend[i].local8Bit(), &lbl_wdth );
 		int lblx,  pctx;
 		int lbly,  pcty = 0;
 		int linex, liney;
