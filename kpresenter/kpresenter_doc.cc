@@ -2737,6 +2737,7 @@ void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
 		    {
 		      objPtr = new PageObjects;
 		      objPtr->isSelected = true;
+		      objPtr->textObj = 0;
 		    }
 		  else if (tag == "NEW_OBJECT_END")
 		    {
