@@ -13,12 +13,15 @@ libkiviopart_la_LIBADD = \
 		$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
 		$(top_builddir)/kivio/kiviopart/ui/libui.la
 
-INCLUDES = $(all_includes)\
-		-I$(srcdir)/ui\
-		-Iui\
-		-I$(srcdir)/kiviosdk\
-		-I$(srcdir)/tklib\
-		-I$(srcdir)/tools
+INCLUDES = -I$(srcdir)/ui\
+	-Iui\
+	-I$(srcdir)/kiviosdk\
+	-I$(srcdir)/tklib\
+	-I$(srcdir)/tools\
+	$(KOFFICE_INCLUDES)\
+        -I$(top_srcdir)/lib/kformula\
+	$(all_includes)
+
 libkiviopart_la_METASOURCES = AUTO
 libkiviopart_la_SOURCES = \
 		main.cpp\

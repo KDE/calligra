@@ -9,7 +9,7 @@ noinst_LTLIBRARIES =libtools.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-	-I$(top_srcdir)/kivio/kiviopart/tklib $(all_includes)
+	-I$(top_srcdir)/kivio/kiviopart/tklib $(KOFFICE_INCLUDES) $(all_includes)
 libtools_la_METASOURCES = AUTO
 libtools_la_SOURCES = \
 		tool.cpp\
