@@ -36,7 +36,7 @@ class KWord13FormatOne;
 /**
  * Type of element
  *
- * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>, \<FORMATS\>
+ * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>
  */
 enum StackItemElementType
 {
