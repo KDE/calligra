@@ -26,7 +26,7 @@
 
 
 VFillCmd::VFillCmd( VDocument *doc, const VFill &fill, const QString &icon )
-	: VCommand( doc, i18n( "Fill Objects" ), icon ), m_fill( fill ), m_executed( false )
+	: VCommand( doc, i18n( "Fill Objects" ), icon ), m_fill( fill )
 {
 	m_selection = document()->selection()->clone();
 
@@ -52,23 +52,22 @@ VFillCmd::execute()
 
 		itr.current()->setFill( m_fill );
 	}
-	m_executed = true;
+
+	setSuccess( true );
 }
 
 void
 VFillCmd::unexecute()
 {
 	VObjectListIterator itr( m_selection->objects() );
+
 	int i = 0;
+
 	for ( ; itr.current() ; ++itr )
 	{
 		itr.current()->setFill( m_oldcolors[ i++ ] );
 	}
-	m_executed = false;
+
+	setSuccess( false );
 }
 
-bool 
-VFillCmd::isExecuted()
-{
-	return m_executed;
-}

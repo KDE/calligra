@@ -43,13 +43,6 @@ VCleanUpCmd::unexecute()
 {
 }
 
-bool
-VCleanUpCmd::isExecuted()
-{
-		// TODO: change when implementing the unexecute method.
-	return true;
-}
-
 void
 VCleanUpCmd::visitVLayer( VLayer& layer )
 {

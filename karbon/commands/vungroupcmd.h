@@ -37,14 +37,11 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
-	virtual bool isExecuted() { return m_executed; }
 	
 protected:
 	VObjectList m_objects;
 
 	VGroup* m_group;
-	
-	bool m_executed;
 };
 
 #endif

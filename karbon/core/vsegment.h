@@ -203,11 +203,20 @@ public:
 	 */
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
+
 	/**
 	 * Returns the point on this segment at parameter 0 <= t <= 1.
 	 * This is a convenience wrapper for pointDerivatives().
 	 */
 	KoPoint pointAt( double t ) const;
+
+	/**
+	 * Calculates the point and the derivatives of first and second order
+	 * for 0 <= t <= 1.
+	 */
+	void pointDerivativesAt( double t, KoPoint* p = 0L,
+							 KoPoint* d1 = 0L, KoPoint* d2 = 0L ) const;
+
 
 	/**
 	 * Returns the normalized tangent vector (length=1) at the point
@@ -217,13 +226,6 @@ public:
 	 * at once.
 	 */
 	KoPoint tangentAt( double t ) const;
-
-	/**
-	 * Calculates the point and the derivatives of first and second order
-	 * for 0 <= t <= 1.
-	 */
-	void pointDerivativesAt( double t, KoPoint* p = 0L,
-							 KoPoint* d1 = 0L, KoPoint* d2 = 0L ) const;
 
 	/**
 	 * Calculates the point, the tangent vector and the normal vector for
@@ -256,7 +258,7 @@ public:
 	 * Returns the parameter of a point located at arclength len.
 	 * This is the exact inverse operation of length( t ).
 	 */
-	double param( double len ) const;
+	double lengthParam( double len ) const;
 
 	/**
 	 * Returns the parameter of the nearest point to the point p on this segment.
@@ -265,7 +267,7 @@ public:
 
 
 	/**
-	 * Returns true if tangent at p3 is exactly parallel to the tangent at
+	 * Returns true if tangent at knot is exactly parallel to the tangent at
 	 * p0 of the next segment. Returns false if the current segment is a "begin".
 	 */
 	bool isSmooth( const VSegment& next ) const;
@@ -276,12 +278,6 @@ public:
 			   ? isSmooth( *next() )
 			   : false;
 	}
-
-
-	/**
-	 * Returns the bounding box.
-	 */
-	KoRect boundingBox() const;
 
 
 	/**
@@ -361,6 +357,12 @@ public:
 	{
 		return m_nodeEdited[ index ];
 	}
+
+
+	/**
+	 * Returns the bounding box.
+	 */
+	KoRect boundingBox() const;
 
 
 	void draw( VPainter* painter ) const;

@@ -35,13 +35,18 @@ VInsertKnotsCmd::visitVPath( VPath& path )
 {
 	path.first();
 
+	double length;
+
 	// Ommit first segment.
 	while( path.next() )
 	{
+		length = path.current()->length();
+
 		for( uint i = m_knots; i > 0; --i )
 		{
 			path.insert(
-				path.current()->splitAt( 1.0 / ( i + 1.0 ) ) );
+				path.current()->splitAt(
+					path.current()->lengthParam( length / ( m_knots + 1.0 ) ) ) );
 
 			path.next();
 		}

@@ -44,9 +44,9 @@ void VHistoryItem::paint( QPainter* painter )
 	painter->save();
 	painter->setRasterOp( Qt::CopyROP );
 	QRect r ( 0, 0, width( listBox() ), height( listBox() ) );
-	painter->fillRect( r, ( m_command->isExecuted() ? Qt::white : Qt::lightGray ) );
+	painter->fillRect( r, ( m_command->success() ? Qt::white : Qt::lightGray ) );
 	painter->drawPixmap( 1, 1, QPixmap( il.iconPath( m_command->icon(), KIcon::Small ) ) );
-	painter->setPen( ( m_command->isExecuted() ? Qt::black : Qt::gray ) );
+	painter->setPen( ( m_command->success() ? Qt::black : Qt::gray ) );
 	painter->drawText( 25, 1, width( listBox() ) - 27,  height( listBox() ) - 2, Qt::AlignVCenter, m_command->name() );
 	painter->restore();
 	if ( isSelected() )
@@ -123,7 +123,7 @@ void VHistoryDocker::commandClicked( int button, QListBoxItem* item, const QPoin
     if ( !item )
         return;
 	VCommand* cmd = ( (VHistoryItem*)item )->command();
-	if ( cmd->isExecuted() )
+	if ( cmd->success() )
 		if ( button == 1 )
 			emit undoCommandsTo( ( (VHistoryItem*)item )->command() );
 		else

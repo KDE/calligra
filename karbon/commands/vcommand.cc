@@ -18,13 +18,15 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include "kaction.h"
 #include "klocale.h"
 
 #include "vcommand.h"
 
+
 VCommandHistory::VCommandHistory( KarbonPart* part )
-		: m_part( part ), m_undoLimit( 50 ), m_redoLimit( 30 ), m_savedPos( 0 )
+	: m_part( part ), m_undoLimit( 50 ), m_redoLimit( 30 ), m_savedPos( 0 )
 {
 	m_commands.setAutoDelete( true );
 
@@ -32,232 +34,305 @@ VCommandHistory::VCommandHistory( KarbonPart* part )
 	m_redo = KStdAction::redo( this, SLOT( redo() ), m_part->actionCollection(), "edit_redo" );
 
 	clear();
-} // VCommandHistory::VCommandHistory
+}
 
 VCommandHistory::~VCommandHistory()
 {
-} // VCommandHistory::~VCommandHistory
+}
 
-void VCommandHistory::clear()
+void
+VCommandHistory::clear()
 {
 	if( m_savedPos != int( m_commands.count() - 1 ) )
 		m_savedPos = -1;
 	else
 		m_savedPos = 0;
+
 	m_commands.clear();
+
 	emit historyCleared();
-	if ( m_undo != 0 ) {
+
+	if( m_undo != 0 )
+	{
 		m_undo->setEnabled( false );
 		m_undo->setText( i18n( "&Undo" ) );
 	}
-	if ( m_redo != 0 ) {
+
+	if( m_redo != 0 )
+	{
 		m_redo->setEnabled( false );
 		m_redo->setText( i18n( "&Redo" ) );
 	}
-} // VCommandHistory::clear
+}
 
-void VCommandHistory::addCommand( VCommand* command, bool execute )
+void
+VCommandHistory::addCommand( VCommand* command, bool execute )
 {
-	if ( command == 0L )
+	if( command == 0L )
 		return;
 
-	if ( !m_commands.isEmpty() )
+	if( !m_commands.isEmpty() )
 	{
-		while ( m_commands.last() && !m_commands.last()->isExecuted() )
+		while( m_commands.last() && !m_commands.last()->success() )
 		{
 			m_commands.removeLast();
 			emit lastCommandRemoved();
 		}
 	}
+
 	m_commands.append( command );
 	kdDebug() << "History: new command: " << m_commands.findRef( command ) << endl;
-	if ( execute )
-		command->execute();
-	updateActions();
-	emit commandAdded( command );
-} // VCommandHistory::addCommand()
 
-void VCommandHistory::setUndoLimit( unsigned int limit )
+	if( execute )
+		command->execute();
+
+	updateActions();
+
+	emit commandAdded( command );
+}
+
+void
+VCommandHistory::setUndoLimit( unsigned int limit )
 {
 	m_undoLimit = limit;
 	clipCommands();
-} // VCommandHistory::setUndoLimit
+}
 
-void VCommandHistory::setRedoLimit( unsigned int limit )
+void
+VCommandHistory::setRedoLimit( unsigned int limit )
 {
 	m_redoLimit = limit;
 	clipCommands();
-} // VCommandHistory::setRedoLimit
+}
 
-void VCommandHistory::undo()
+void
+VCommandHistory::undo()
 {
 	int i = m_commands.count() - 1;
-	if ( i == -1 )
+
+	if( i == -1 )
 		return;
 
-	while ( ( i >= 0 ) && !( m_commands.at( i )->isExecuted() ) )
+	while( ( i >= 0 ) && !( m_commands.at( i )->success() ) )
+	{
 		i--;
-	if ( i < 0 )
+	}
+
+	if( i < 0 )
 		return;
+
 	VCommand* cmd = m_commands.at( i );
+
 	cmd->unexecute();
+
 	emit commandExecuted( cmd );
+
 	emit commandExecuted();
+
 	clipCommands();
+
 	updateActions();
 
 	m_part->repaintAllViews();
-} // VCommandHistory::undo
+}
 
-void VCommandHistory::redo()
+void
+VCommandHistory::redo()
 {
 	int i = m_commands.count() - 1;
-	if ( i == -1 )
+
+	if( i == -1 )
 		return;
 
-	while ( ( i >= 0 ) && !( m_commands.at( i )->isExecuted() ) )
+	while( ( i >= 0 ) && !( m_commands.at( i )->success() ) )
+	{
 		i--;
+	}
+
 	i++;
 
-	if ( i >= int( m_commands.count() ) )
+	if( i >= int( m_commands.count() ) )
 		return;
 
 	VCommand* cmd;
-	if ( ( cmd = m_commands.at( i ) ) == 0L )
+
+	if( ( cmd = m_commands.at( i ) ) == 0L )
 		return;
 
 	cmd->execute();
+
 	emit commandExecuted( cmd );
 	emit commandExecuted();
+
 	updateActions();
 
 	m_part->repaintAllViews();
-} // VCommandHistory::redo
+}
 
-void VCommandHistory::undo( VCommand* command )
+void
+VCommandHistory::undo( VCommand* command )
 {
-	if ( ( m_commands.findRef( command ) == -1 ) || ( !command->isExecuted() ) )
+	if( ( m_commands.findRef( command ) == -1 ) || ( !command->success() ) )
 		return;
 
 	command->unexecute();
+
 	emit commandExecuted( command );
 	emit commandExecuted();
+
 	updateActions();
 
 	m_part->repaintAllViews();
-} // VCommandHistory::undo
+}
 
-void VCommandHistory::redo( VCommand* command )
+void
+VCommandHistory::redo( VCommand* command )
 {
-	if ( ( m_commands.findRef( command ) == -1 ) || ( command->isExecuted() ) )
+	if( ( m_commands.findRef( command ) == -1 ) || ( command->success() ) )
 		return;
 
 	command->execute();
+
 	emit commandExecuted( command );
 	emit commandExecuted();
+
 	updateActions();
 
 	m_part->repaintAllViews();
-} // VCommandHistory::redo
+}
 
-void VCommandHistory::undoAllTo( VCommand* command )
+void
+VCommandHistory::undoAllTo( VCommand* command )
 {
 	int to;
-	if ( ( to = m_commands.findRef( command ) ) == -1 )
+
+	if( ( to = m_commands.findRef( command ) ) == -1 )
 		return;
 
 	int i = m_commands.count() - 1;
+
 	VCommand* cmd;
-	while ( i > to )
+
+	while( i > to )
 	{
 		cmd = m_commands.at( i-- );
-		if ( cmd->isExecuted() )
+
+		if( cmd->success() )
 		{
 			cmd->unexecute();
 			emit commandExecuted( cmd );
 		}
 	}
+
 	emit commandExecuted();
 	updateActions();
 
 	m_part->repaintAllViews();
-} // VCommandHistory::undoAllTo
+}
 
-void VCommandHistory::redoAllTo( VCommand* command )
+void
+VCommandHistory::redoAllTo( VCommand* command )
 {
 	int to;
-	if ( ( to = m_commands.findRef( command ) ) == -1 )
+
+	if( ( to = m_commands.findRef( command ) ) == -1 )
 		return;
 
 	int i = 0;
+
 	VCommand* cmd;
-	while ( i <= to )
+
+	while( i <= to )
 	{
 		cmd = m_commands.at( i++ );
-		if ( !cmd->isExecuted() )
+
+		if( !cmd->success() )
 		{
 			cmd->execute();
 			emit commandExecuted( cmd );
 		}
 	}
+
 	emit commandExecuted();
 	updateActions();
 
 	m_part->repaintAllViews();
-} // VCommandHistory::redoAllTo
+}
 
-void VCommandHistory::documentSaved()
+void
+VCommandHistory::documentSaved()
 {
 	// I don't know how to make this work... This is a temporary hack...
 	// Maybe remove all undone commands before the current one ?
 	int i = m_commands.count() - 1;
 
-	while ( ( i >= 0 ) && !( m_commands.at( i )->isExecuted() ) )
+	while( ( i >= 0 ) && !( m_commands.at( i )->success() ) )
+	{
 		i--;
+	}
+
 	i++;
 
 	m_savedPos = i;
-} // VCommandHistory::documentSaved
+}
 
-void VCommandHistory::clipCommands()
+void
+VCommandHistory::clipCommands()
 {
-	while ( m_commands.count() > m_undoLimit )
-		if ( m_commands.removeFirst() )
+	while( m_commands.count() > m_undoLimit )
+	{
+		if( m_commands.removeFirst() )
 			m_savedPos--, emit firstCommandRemoved();
+	}
 
 	int i = 0;
-	int c = m_commands.count();
-	while ( ( i < c ) && ( !m_commands.at( c - 1 - i )->isExecuted() ) )
-		i++;
-	i = i - m_redoLimit;
-	for ( int j = 0; j < i; j++ )
-		if ( m_commands.removeLast() )
-			emit lastCommandRemoved();
-} // VCommandHistory::clipCommands()
 
-void VCommandHistory::updateActions()
-{
-	if ( m_commands.count() == 0 )
+	int c = m_commands.count();
+
+	while( ( i < c ) && ( !m_commands.at( c - 1 - i )->success() ) )
 	{
-		if ( m_undo != 0 )
+		i++;
+	}
+
+	i = i - m_redoLimit;
+
+	for( int j = 0; j < i; j++ )
+	{
+		if( m_commands.removeLast() )
+			emit lastCommandRemoved();
+	}
+}
+
+void
+VCommandHistory::updateActions()
+{
+	if( m_commands.count() == 0 )
+	{
+		if( m_undo != 0 )
 		{
 			m_undo->setEnabled( false );
 			m_undo->setText( i18n( "&Undo" ) );
 		}
-		if ( m_redo != 0 )
+
+		if( m_redo != 0 )
 		{
 			m_redo->setEnabled( false );
 			m_redo->setText( i18n( "&Redo" ) );
 		}
+
 		return;
 	}
 
 	int i = m_commands.count() - 1;
-	while ( ( i >= 0 ) && !( m_commands.at( i )->isExecuted() ) )
-		i--;
 
-	if ( m_undo != 0 )
-		if ( i < 0 )
+	while( ( i >= 0 ) && !( m_commands.at( i )->success() ) )
+	{
+		i--;
+	}
+
+	if( m_undo != 0 )
+	{
+		if( i < 0 )
 		{
 			m_undo->setEnabled( false );
 			m_undo->setText( i18n( "&Undo" ) );
@@ -267,9 +342,11 @@ void VCommandHistory::updateActions()
 			m_undo->setEnabled( true );
 			m_undo->setText( i18n( "&Undo: " ) + m_commands.at( i )->name() );
 		}
+	}
 
-	if ( m_redo != 0 )
-		if ( ++i == int( m_commands.count() ) )
+	if( m_redo != 0 )
+	{
+		if( ++i == int( m_commands.count() ) )
 		{
 			m_redo->setEnabled( false );
 			m_redo->setText( i18n( "&Redo" ) );
@@ -279,17 +356,25 @@ void VCommandHistory::updateActions()
 			m_redo->setEnabled( true );
 			m_redo->setText( i18n( "&Redo: " ) + m_commands.at( i )->name() );
 		}
+	}
 
 	if( m_savedPos >= 0 )
 	{
 		for( i = 0; i < m_savedPos; i++ )
-			if( !m_commands.at( i )->isExecuted() )
+		{
+			if( !m_commands.at( i )->success() )
 				return;
+		}
+
 		for( i = m_savedPos; i < int( m_commands.count() ); i++ )
-			if( m_commands.at( i )->isExecuted() )
+		{
+			if( m_commands.at( i )->success() )
 				return;
+		}
+
 		emit documentRestored();
 	}
-} // VCommandHistory::updateActions()
+}
 
 #include "vcommand.moc"
+

@@ -22,7 +22,7 @@
 #include "vlayercmd.h"
 
 VLayerCmd::VLayerCmd( VDocument* doc, const QString& name, VLayer* layer, VLayerCmdType order )
-	: VCommand( doc, name, "14_layers" ), m_layer( layer ), m_cmdType( order ), m_executed( false )
+	: VCommand( doc, name, "14_layers" ), m_layer( layer ), m_cmdType( order )
 {
 	if( order == addLayer )
 	{
@@ -54,7 +54,8 @@ VLayerCmd::execute()
 			document()->lowerLayer( m_layer );
 		break;
 	}
-	m_executed = true;
+
+	setSuccess( true );
 }
 
 void
@@ -78,11 +79,7 @@ VLayerCmd::unexecute()
 			document()->raiseLayer( m_layer );
 		break;
 	}
-	m_executed = false;
+
+	setSuccess( false );
 }
 
-bool
-VLayerCmd::isExecuted()
-{
-	return m_executed;
-}

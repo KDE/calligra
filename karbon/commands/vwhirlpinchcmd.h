@@ -37,7 +37,6 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
-	virtual bool isExecuted() { return true; }
 
 	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVPath( VPath& path );

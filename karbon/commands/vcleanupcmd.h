@@ -34,7 +34,6 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
-	virtual bool isExecuted();
 
 	virtual void visitVLayer( VLayer& layer );
 };

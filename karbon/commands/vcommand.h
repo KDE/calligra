@@ -29,87 +29,120 @@
 #include "karbon_part.h"
 #include "vvisitor.h"
 
-
 class VDocument;
 
 
 class VCommand : public VVisitor
 {
-	public:
-		VCommand( VDocument* doc, const QString& name, const QString& icon = "14_action" )
+public:
+	VCommand( VDocument* doc, const QString& name, const QString& icon = "14_action" )
 			: m_document( doc ), m_name( name ), m_icon( icon )
-		{
-			assert( doc );
-		}
-		virtual ~VCommand() {}
+	{
+		assert( doc );
+	}
 
-		virtual void execute() = 0;
-		virtual void unexecute() {}
-		virtual bool isExecuted() = 0;
+	virtual ~VCommand() {}
 
-		VDocument* document() const { return m_document; }
-		void       setName( const QString& name ) { m_name = name; }
-		QString    name() const { return m_name; }
-		QString    icon() const { return m_icon; }
+	virtual void execute() = 0;
+	virtual void unexecute() {}
 
-	private:
-		VDocument* m_document;
-		QString    m_name;
-		QString    m_icon;
-}; // VCommand
+
+	QString name() const
+	{
+		return m_name;
+	}
+
+	void setName( const QString& name )
+	{
+		m_name = name;
+	}
+
+
+	QString icon() const
+	{
+		return m_icon;
+	}
+
+	VDocument* document() const
+	{
+		return m_document;
+	}
+
+private:
+	VDocument* m_document;
+
+	QString m_name;
+	QString m_icon;
+};
 
 
 class VCommandHistory : public QObject
 {
 	Q_OBJECT
 
-	public:
-		VCommandHistory( KarbonPart* part );
-		~VCommandHistory();
+public:
+	VCommandHistory( KarbonPart* part );
+	~VCommandHistory();
 
-		 // command manipulation
-		void clear();
-		void addCommand( VCommand* command, bool execute = true );
-    
-		 // limits
-		unsigned int undoLimit() const { return m_undoLimit; }
-		void setUndoLimit( unsigned int limit );
-		unsigned int redoLimit() const { return m_redoLimit; }
-		void setRedoLimit( unsigned int limit );
- 
-		const QPtrList<VCommand>* commands() const { return &m_commands; }
+	// Command manipulation.
+	void clear();
 
-	public slots:
-		void undo();
-		void redo();
-		void undo( VCommand* command );
-		void redo( VCommand* command );
-		void undoAllTo( VCommand* command );
-		void redoAllTo( VCommand* command );
-		void documentSaved();
+	void addCommand( VCommand* command, bool execute = true );
 
-	signals:
-		void historyCleared();
-		void commandExecuted( VCommand* );
-		void commandExecuted();
-		void commandAdded( VCommand* );
-		void firstCommandRemoved();
-		void lastCommandRemoved();
-		void documentRestored();
-		
-	private:
-			// helpers
-		void clipCommands();
-		void updateActions();
-	
-		KarbonPart         *m_part;
-		unsigned int        m_undoLimit;
-		unsigned int        m_redoLimit;
-		KAction            *m_undo;
-		KAction            *m_redo;
-		QPtrList<VCommand>  m_commands;
-		int                 m_savedPos;
-}; // VCommandHistory
+
+	// limits
+	unsigned int undoLimit() const
+	{
+		return m_undoLimit;
+	}
+
+	void setUndoLimit( unsigned int limit );
+
+
+	unsigned int redoLimit() const
+	{
+		return m_redoLimit;
+	}
+
+	void setRedoLimit( unsigned int limit );
+
+
+	const QPtrList<VCommand>* commands() const
+	{
+		return & m_commands;
+	}
+
+public slots:
+	void undo();
+	void redo();
+	void undo( VCommand* command );
+	void redo( VCommand* command );
+	void undoAllTo( VCommand* command );
+	void redoAllTo( VCommand* command );
+	void documentSaved();
+
+signals:
+	void historyCleared();
+	void commandExecuted( VCommand* );
+	void commandExecuted();
+	void commandAdded( VCommand* );
+	void firstCommandRemoved();
+	void lastCommandRemoved();
+	void documentRestored();
+
+private:
+	// helpers
+	void clipCommands();
+	void updateActions();
+
+	KarbonPart *m_part;
+	unsigned int m_undoLimit;
+	unsigned int m_redoLimit;
+	KAction *m_undo;
+	KAction *m_redo;
+	QPtrList<VCommand> m_commands;
+	int m_savedPos;
+};
 
 #endif
 

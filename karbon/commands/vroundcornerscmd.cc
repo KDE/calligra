@@ -181,7 +181,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 		length = path.current()->length();
 
 		param = length > 2 * m_radius
-			? path.current()->param( m_radius )
+			? path.current()->lengthParam( m_radius )
 			: param = 0.5;
 
 
@@ -236,7 +236,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 		// because it was split already a t=0.5 during the former step.
 		if( length > m_radius )
 		{
-			param = path.current()->param( length - m_radius );
+			param = path.current()->lengthParam( length - m_radius );
 
 			path.insert(
 				path.current()->splitAt( param ) );
@@ -255,7 +255,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 		length = path.current()->length();
 
 		param = length > 2 * m_radius
-			? path.current()->param( m_radius )
+			? path.current()->lengthParam( m_radius )
 			: 0.5;
 
 		path.insert(
@@ -294,10 +294,10 @@ VRoundCornersCmd::visitVPath( VPath& path )
 			length = path.current()->length();
 
 			// If the current segment is too short to be split, just don't split it
-			// because it was split already a t=0.5 during the former step.
+			// because it was split already at t=0.5 during the former step.
 			if( length > m_radius )
 			{
-				param = path.current()->param( length - m_radius );
+				param = path.current()->lengthParam( length - m_radius );
 
 				path.insert(
 					path.current()->splitAt( param ) );

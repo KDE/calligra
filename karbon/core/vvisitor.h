@@ -34,7 +34,9 @@ class VVisitor
 {
 public:
 	VVisitor()
-		{ m_success = false; }
+	{
+		m_success = false;
+	}
 
 	virtual bool visit( VObject& object );
 
@@ -45,14 +47,15 @@ public:
 	virtual void visitVPath( VPath& path );
 	virtual void visitVText( VText& text );
 
+	bool success() const
+		{ return m_success; }
+
 protected:
 	/**
 	 * Make this class "abstract".
 	 */
 	virtual ~VVisitor() {}
 
-	bool success() const
-		{ return m_success; }
 	void setSuccess( bool success = true )
 		{ m_success = success; }
 

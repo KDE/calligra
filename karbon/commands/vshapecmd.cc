@@ -26,7 +26,7 @@
 
 
 VShapeCmd::VShapeCmd( VDocument* doc, const QString& name, VComposite* shape, const QString& icon )
-	: VCommand( doc, name, icon ), m_shape( shape ), m_executed( false )
+	: VCommand( doc, name, icon ), m_shape( shape )
 {
 }
 
@@ -49,7 +49,8 @@ VShapeCmd::execute()
 		document()->selection()->clear();
 		document()->selection()->append( m_shape );
 	}
-	m_executed = true;
+
+	setSuccess( true );
 }
 
 void
@@ -60,12 +61,7 @@ VShapeCmd::unexecute()
 
 	document()->selection()->take( *m_shape );
 	m_shape->setState( VObject::deleted );
-	
-	m_executed = false;
+
+	setSuccess( false );
 }
 
-bool 
-VShapeCmd::isExecuted()
-{
-	return m_executed;
-} 

@@ -439,7 +439,7 @@ VSegment::polyLength() const
 }
 
 double
-VSegment::param( double len ) const
+VSegment::lengthParam( double len ) const
 {
 	if(
 		len == 0.0 ||		// We divide by len below.
@@ -494,6 +494,7 @@ VSegment::nearestPointParam( const KoPoint& /*p*/ ) const
 		return 1.0;
 	}
 
+
 	/* This function solves the "nearest point on curve" problem. That means, it
 	 * calculates the point q (to be precise: it's paramter t) on this segment, which
 	 * is located nearest to the input point p.
@@ -505,8 +506,8 @@ VSegment::nearestPointParam( const KoPoint& /*p*/ ) const
 	 * For the nearest point q = C(t) on this segment, the first derivative is
 	 * orthogonal to the distance vector "C(t) - p". In other words we are looking for
 	 * solutions of f(t) = C'(t) * ( C(t) - p ) = 0.
-	 * ( C(t) - p ) is a cubic polynom, C'(t) is quadratic => f(t) is a 5th degree
-	 * polynom and thus has up to 5 distinct solutions.
+	 * ( C(t) - p ) is a nth degree curve, C'(t) a n-1th degree curve => f(t) is a
+	 * (2n - 1)th degree curve and thus has up to 2n - 1 distinct solutions.
 	 * To solve it, we apply the newton iteration: a parameter approximation t_i leads
 	 * to the next approximation t_{i+1}
 	 *
@@ -544,7 +545,7 @@ VSegment::isSmooth( const VSegment& next ) const
 	next.pointTangentNormalAt( 0.0, 0L, &t2 );
 
 
-	// Scalar product.
+	// Dot product.
 	if( t1 * t2 >= VGlobal::parallelTolerance )
 		return true;
 

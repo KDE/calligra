@@ -25,7 +25,7 @@
 
 
 VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
-	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat ), m_executed( false )
+	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
 {
 	m_selection = document()->selection()->clone();
 
@@ -34,7 +34,7 @@ VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
 }
 
 VTransformCmd::VTransformCmd( VDocument *doc, const QString& name, const QString& icon )
-		: VCommand( doc, name, icon ), m_executed( false )
+		: VCommand( doc, name, icon )
 {
 	m_selection = document()->selection()
 		? new VSelection( *document()->selection() )
@@ -54,7 +54,8 @@ VTransformCmd::execute()
 	{
 		itr.current()->transform( m_mat );
 	}
-	m_executed = true;
+
+	setSuccess( true );
 }
 
 void
@@ -66,7 +67,8 @@ VTransformCmd::unexecute()
 	{
 		itr.current()->transform( m_mat.invert() );
 	}
-	m_executed = false;
+
+	setSuccess( false );
 }
 
 VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2 )

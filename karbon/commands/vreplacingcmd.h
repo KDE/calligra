@@ -38,7 +38,6 @@ class VReplacingCmd : public VCommand
 public:
 	virtual void execute();
 	virtual void unexecute();
-	virtual bool isExecuted();
 
 protected:
 	/**
@@ -50,7 +49,6 @@ protected:
 private:
 	VSelection* m_oldObjects;
 	VSelection* m_newObjects;
-	bool m_executed;
 };
 
 #endif

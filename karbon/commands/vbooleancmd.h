@@ -48,7 +48,6 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
-	virtual bool isExecuted();
 
 	// We can only visit object pairs:
 	virtual bool visit( VObject& /*object*/ ) { return false; }

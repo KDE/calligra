@@ -39,7 +39,6 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
-	virtual bool isExecuted() { return m_executed; }
 
 protected:
 	VTransformCmd( VDocument *doc, const QString& name, const QString& icon );
@@ -47,7 +46,6 @@ protected:
 	VSelection* m_selection;
 
 	QWMatrix m_mat;
-	bool m_executed;
 };
 
 class VTranslateCmd : public VTransformCmd

@@ -37,12 +37,10 @@ public:
 
 	virtual void execute();
 	virtual void unexecute();
-	virtual bool isExecuted();
 
 protected:
 	/// Pointer to the created shape.
 	VComposite* m_shape;
-	bool m_executed;
 };
 
 #endif
