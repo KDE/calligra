@@ -91,18 +91,19 @@ Done:
 -> Save/load masterpage
 
 Todo:
--> save/load backgroud of master page
 -> save/load cubic/quadric/freehand object (define as svg object)
 -> save/load picture effect
 	-> picture effect (extend oasis format)
 	-> depth
 	-> mirror type (we must use rotate and draw:mirror element)
+-> save/load in old format master page attribute
 
 Bugs:
 -> fix default value
 -> fix some arrow style  
 
 In Progress:
+-> save/load backgroud of master page (save works not perfect)
 -> save/load picture effect
 -> save/load protect object
 -> save/load embedded object
