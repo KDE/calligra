@@ -230,7 +230,11 @@ public slots:
      * Update a given item in the sidebar
      */
     void updateSideBarItem( int pagenr );
-
+    
+    //statusbar updates
+    void updatePageInfo();
+    void updateObjectStatusBarItem();
+    void pageNumChanged();
 
     void objectSelectedChanged();
 
@@ -564,6 +568,10 @@ private:
     QSize oldSize;
 
     int screensaver_pid;
+
+    // Statusbar items
+    QLabel * m_sbPageLabel; // 'Current page number and page count' label
+    QLabel * m_sbObjectLabel; // Info about selected object
 
     // actions
     KAction *actionEditCut;

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="22">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="23">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -139,6 +139,7 @@
   <Separator/>
  </Menu>
 </MenuBar>
+<StatusBar/>
 <ToolBar name="mainToolBar"><Text>File</Text>
   <Action name="extra_webpres"/>
 </ToolBar>

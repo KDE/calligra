@@ -3070,6 +3070,9 @@ void KPresenterDoc::deletePage( int _page )
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBar();
+    
+    //update statusbar
+    emit pageNumChanged();
 }
 
 /*================================================================*/
@@ -3145,6 +3148,9 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     }
 
     recalcVariables( VT_PGNUM );
+
+    //update statusbar
+    emit pageNumChanged();
 
     // Update the sidebars
     QPtrListIterator<KoView> it( views() );
@@ -3823,6 +3829,9 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateSideBarItem( pgNum );
+
+    //update statusbar
+    emit pageNumChanged();
 }
 
 bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ ) const

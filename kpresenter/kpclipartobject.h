@@ -47,6 +47,9 @@ public:
 
     virtual ObjType getType() const
     { return OT_CLIPART; }
+    virtual QString getTypeString() const
+    { return i18n("Clipart"); }
+
     QString getFileName() const
     { return m_clipart.key().filename(); }
 

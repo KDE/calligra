@@ -51,6 +51,9 @@ public:
 
     virtual ObjType getType() const
     { return OT_LINE; }
+    virtual QString getTypeString() const
+    { return i18n("Line"); }
+
     virtual QPen getPen() const
     { return pen; }
     virtual LineEnd getLineBegin() const

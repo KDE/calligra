@@ -53,6 +53,21 @@ public:
 
     virtual ObjType getType() const
     { return OT_PIE; }
+    virtual QString getTypeString() const
+    { 
+      switch ( pieType ) {
+      case PT_PIE:
+        return i18n("Pie");
+        break;
+      case PT_ARC:
+        return i18n("Arc");
+        break;
+      case PT_CHORD:
+        return i18n("Chord");
+        break;
+      }
+    }
+
     virtual PieType getPieType() const
     { return pieType; }
     virtual int getPieAngle() const

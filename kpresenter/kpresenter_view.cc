@@ -107,6 +107,7 @@
 #include <koVariableDlgs.h>
 
 #include <kspell.h>
+#include <kstatusbar.h>
 
 #define DEBUG
 
@@ -260,6 +261,20 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect( h_ruler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), this,
              SLOT( tabListChanged( const KoTabulatorList & ) ) );
 
+    //statusbar stuff
+    connect( m_pKPresenterDoc, SIGNAL( pageNumChanged() ), this, SLOT( pageNumChanged()) );
+    connect( this, SIGNAL( currentPageChanged(int) ), this, SLOT( pageNumChanged()) );
+    connect( page, SIGNAL( objectSelectedChanged() ), this, SLOT( updateObjectStatusBarItem() ));
+
+    KStatusBar * sb = statusBar();
+    m_sbPageLabel = 0L;
+    if ( sb ) // No statusbar in e.g. konqueror
+    {
+        m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
+        addStatusBarItem( m_sbPageLabel, 0 );
+    }
+    m_sbObjectLabel = 0L; // Only added when objects are selected
+
     setAcceptDrops( TRUE );
 }
 
@@ -303,6 +318,7 @@ KPresenterView::~KPresenterView()
     delete page; // it's a child widget, but it emits a signal on destruction
     delete m_zoomHandler;
     delete m_specialCharDlg;
+    delete m_sbPageLabel;
 }
 
 /*=========================== file print =======================*/
@@ -2053,6 +2069,12 @@ void KPresenterView::initGui()
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
     objectSelectedChanged();
     refreshPageButton();
+
+    KStatusBar * sb = statusBar();
+    if ( sb )
+        sb->show();
+
+    updatePageInfo();
 }
 
 void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -2863,6 +2885,7 @@ void KPresenterView::confPieOk()
 	pieAngle = confPieDia->getAngle();
 	pieLength = confPieDia->getLength();
     }
+    updateObjectStatusBarItem();  //the type might have changed
 }
 
 /*================================================================*/
@@ -3613,6 +3636,52 @@ void KPresenterView::updateSideBarItem( int pagenr )
     //kdDebug(33001) << "KPresenterView::updateSideBarItem " << pagenr << endl;
     if (sidebar)
         sidebar->updateItem( pagenr );
+}
+
+void KPresenterView::updatePageInfo()
+{
+  if (m_sbPageLabel)
+    {
+      //m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
+      m_sbPageLabel->setText( QString(" ")+i18n("Slide %1/%2").arg(getCurrPgNum()).arg(m_pKPresenterDoc->getPageNums())+' ' );
+    }
+  //slotUpdateRuler();
+}
+
+void KPresenterView::updateObjectStatusBarItem()
+{
+  KStatusBar * sb = statusBar();
+  int nbObjects = m_pKPresenterDoc->objNums();
+
+  if ( sb && nbObjects > 0 ) {
+    if ( !m_sbObjectLabel ) {
+      m_sbObjectLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+      addStatusBarItem( m_sbObjectLabel );
+    }
+
+    int nbSelected = m_pKPresenterDoc->numSelected();
+
+    if (nbSelected == 1) {
+      KPObject * obj = m_pKPresenterDoc->getSelectedObj();
+      m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 -  (width: %2, height: %3)" )
+                                .arg(obj->getTypeString())
+                                .arg(obj->getSize().width())
+                                .arg(obj->getSize().height())
+                                );
+    }
+    else
+      m_sbObjectLabel->setText( i18n( "%1 objects selected" ).arg( nbSelected ) );
+  }
+  else if ( sb && m_sbObjectLabel ) {
+    removeStatusBarItem( m_sbObjectLabel );
+    delete m_sbObjectLabel;
+    m_sbObjectLabel = 0L;
+  }
+}
+
+void KPresenterView::pageNumChanged()
+{
+  updatePageInfo();
 }
 
 void KPresenterView::viewShowSideBar()

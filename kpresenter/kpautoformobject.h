@@ -63,6 +63,9 @@ public:
 
     virtual ObjType getType() const
     { return OT_AUTOFORM; }
+    virtual QString getTypeString() const
+    { return i18n("Autoform"); }
+
     QString getFileName() const
     { return filename; }
     virtual LineEnd getLineBegin() const

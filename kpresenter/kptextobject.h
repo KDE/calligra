@@ -60,6 +60,9 @@ public:
 
     virtual ObjType getType() const
     { return OT_TEXT; }
+    virtual QString getTypeString() const
+    { return i18n("Text"); }
+    
     virtual bool getDrawEditRect() const
     { return drawEditRect; }
     virtual bool getDrawEmpty() const

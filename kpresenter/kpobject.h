@@ -26,7 +26,9 @@
 #include <qcursor.h>
 
 #include <global.h>
+
 #include <kpgradient.h>
+#include <klocale.h>
 
 class QPainter;
 class DCOPObject;
@@ -103,6 +105,9 @@ public:
 
     virtual ObjType getType() const
     { return OT_UNDEFINED; }
+    virtual QString getTypeString() const
+    { return QString(); }
+
     virtual QRect getBoundingRect( int _diffx, int _diffy ) const;
     virtual bool isSelected() const
     { return selected; }

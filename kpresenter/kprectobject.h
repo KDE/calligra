@@ -44,6 +44,8 @@ public:
 
     virtual ObjType getType() const
     { return OT_RECT; }
+    virtual QString getTypeString() const
+    { return i18n("Rectangle"); }
     virtual void getRnds( int &_xRnd, int &_yRnd ) const
     { _xRnd = xRnd; _yRnd = yRnd; }
 

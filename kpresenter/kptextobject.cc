@@ -235,52 +235,41 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
     _painter->translate( ox, oy );
     if ( angle == 0 )
     {
-        _painter->setPen( Qt::NoPen );
-        _painter->setBrush( brush );
-        if ( fillType == FT_BRUSH || !gradient )
-            _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
-        else
-            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
-
-        _painter->setPen( pen );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
-        drawTextObject( _painter, onlyChanged, cursor, resetChanged );
+      if ( fillType == FT_BRUSH || !gradient )
+        _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+      else
+        _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+      
+      drawTextObject( _painter, onlyChanged, cursor, resetChanged );
     }
     else
     {
-        QRect br = QRect( 0, 0, ow, oh );
-        int pw = br.width();
-        int ph = br.height();
-        QRect rr = br;
-        int yPos = -rr.y();
-        int xPos = -rr.x();
-        br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
-        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+      QRect br = QRect( 0, 0, ow, oh );
+      int pw = br.width();
+      int ph = br.height();
+      QRect rr = br;
+      int yPos = -rr.y();
+      int xPos = -rr.x();
+      br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+      rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+      
+      QWMatrix m;
+      m.translate( pw / 2, ph / 2 );
+      m.rotate( angle );
+      
+      _painter->setWorldMatrix( m, true );
 
-        QWMatrix m;
-        m.translate( pw / 2, ph / 2 );
-        m.rotate( angle );
 
-        _painter->setWorldMatrix( m, true );
-
-        _painter->setPen( Qt::NoPen );
-        _painter->setBrush( brush );
-
-        if ( fillType == FT_BRUSH || !gradient )
-            _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
-        else
-            _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
-
-        _painter->setPen( pen );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ow - 2 * penw, oh - 2 * penw );
-
-        _painter->translate( rr.left() + xPos, rr.top() + yPos );
-        drawTextObject( _painter, onlyChanged, cursor, resetChanged );
+      if ( fillType == FT_BRUSH || !gradient )
+        _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+      else
+        _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+      
+      _painter->translate( rr.left() + xPos, rr.top() + yPos );
+      drawTextObject( _painter, onlyChanged, cursor, resetChanged );
     }
     _painter->restore();
-
+    
     KPObject::draw( _painter, _diffx, _diffy );
 }
 

@@ -57,6 +57,8 @@ public:
 
     virtual ObjType getType() const
     { return OT_PART; }
+    virtual QString getTypeString() const
+    { return i18n("Embedded object"); }
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 

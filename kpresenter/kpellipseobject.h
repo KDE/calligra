@@ -54,6 +54,8 @@ public:
 
     virtual ObjType getType() const
     { return OT_ELLIPSE; }
+    virtual QString getTypeString() const
+    { return i18n("Ellipse"); }
 
 protected:
     virtual void paint( QPainter *_painter );

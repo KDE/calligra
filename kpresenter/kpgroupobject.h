@@ -60,6 +60,8 @@ public:
 
     virtual ObjType getType() const
     { return OT_GROUP; }
+    virtual QString getTypeString() const
+    { return i18n("Group"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load(const QDomElement &element, KPresenterDoc *doc);
