@@ -1,0 +1,108 @@
+<DOC author="Reginald Stadlbauer" email="reggie@kde.org" editor="KPresenter" mime="application/x-kpresenter">
+ <PAPER format="5" width="240" height="180" orientation="0">
+  <PAPERBORDERS left="0" top="0" right="0" bottom="0"/>
+ </PAPER>
+ <BACKGROUND pages="1" rastX="10" rastY="10" xRnd="20" yRnd="20" bred="128" bgreen="128" bblue="0" sred="192" sgreen="192" sblue="192">
+  <PAGE>
+   <BACKTYPE value="1"/>
+   <BACKVIEW value="2"/>
+   <BACKCOLOR1 red="255" green="255" blue="255"/>
+   <BACKCOLOR2 red="255" green="255" blue="255"/>
+   <BCTYPE value="0"/>
+   <BACKPIC value="/usr/local/kde/share/wallpapers/sandman.jpg"/>
+   <TIMEPARTS>
+    <PART time="10"/>
+   </TIMEPARTS>
+  </PAGE>
+ </BACKGROUND>
+ <OBJECTS objects="4">
+  <OBJECT>
+   <OBJTYPE value="1"/>
+   <ISSELECTED value="0"/>
+   <OBJNUM value="1"/>
+   <COORDINATES x="10" y="20" w="680" h="30"/>
+   <PRESNUM value="0"/>
+   <EFFECT value="0"/>
+   <GRAPHOBJ>
+    <LINETYPE value="0"/>
+    <RECTTYPE value="0"/>
+    <PEN red="0" green="255" blue="255" width="2" style="1"/>
+    <BRUSH red="0" green="0" blue="0" style="0"/>
+    <XRND value="20"/>
+    <YRND value="20"/>
+    <FILENAME value="(null)"/>
+   </GRAPHOBJ>
+  </OBJECT>
+  <OBJECT>
+   <OBJTYPE value="4"/>
+   <ISSELECTED value="0"/>
+   <OBJNUM value="2"/>
+   <COORDINATES x="10" y="10" w="680" h="30"/>
+   <PRESNUM value="0"/>
+   <EFFECT value="0"/>
+   <TEXTOBJ objType="0">
+    <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
+    <UNSORTEDLISTTYPE type="1" family="symbol" pointSize="20" bold="0" italic="0" underline=0 red="255" green="0" blue="0" chr="45"/>
+    <PARAGRAPH horzAlign="0">
+     <LINE>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="20" bold="1" italic="1" underline="0"/>
+       <COLOR red="255" green="255" blue="0"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
+     </LINE>
+    </PARAGRAPH>
+   </TEXTOBJ>
+  </OBJECT>
+  <OBJECT>
+   <OBJTYPE value="4"/>
+   <ISSELECTED value="0"/>
+   <OBJNUM value="3"/>
+   <COORDINATES x="10" y="70" w="680" h="70"/>
+   <PRESNUM value="0"/>
+   <EFFECT value="0"/>
+   <TEXTOBJ objType="0">
+    <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
+    <UNSORTEDLISTTYPE type="1" family="symbol" pointSize="20" bold="0" italic="0" underline=0 red="255" green="0" blue="0" chr="45"/>
+    <PARAGRAPH horzAlign="1">
+     <LINE>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="50" bold="1" italic="0" underline="0"/>
+       <COLOR red="0" green="255" blue="0"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
+     </LINE>
+    </PARAGRAPH>
+   </TEXTOBJ>
+  </OBJECT>
+  <OBJECT>
+   <OBJTYPE value="4"/>
+   <ISSELECTED value="0"/>
+   <OBJNUM value="4"/>
+   <COORDINATES x="30" y="160" w="640" h="340"/>
+   <PRESNUM value="0"/>
+   <EFFECT value="0"/>
+   <TEXTOBJ objType="2">
+    <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
+    <UNSORTEDLISTTYPE type="1" family="symbol" pointSize="20" bold="0" italic="0" underline=0 red="255" green="0" blue="0" chr="222"/>
+    <PARAGRAPH horzAlign="0">
+     <LINE>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
+       <COLOR red="255" green="255" blue="255"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
+     </LINE>
+    </PARAGRAPH>
+   </TEXTOBJ>
+  </OBJECT>
+ </OBJECTS>
+ <INFINITLOOP value="0"/>
+ <MANUALSWITCH value="1"/>
+</DOC>
