@@ -1,10 +1,11 @@
-SOURCES	+= main.cpp \
-	../lib/mdatabasereportengine.cpp
-HEADERS	+= ../lib/mdatabasereportengine.h
+SOURCES	+= main.cpp
+# \
+#	../lib/mdatabasereportengine.cpp
+#HEADERS	+= ../lib/mdatabasereportengine.h
 unix {
 	INCLUDEPATH = ../lib
 	LIBS = -lkugar
-	LIBS += ../lib
+#	QMAKE_LIBDIR = ../lib
   	UI_DIR = .ui
   	MOC_DIR = .moc
   	OBJECTS_DIR = .obj
@@ -24,3 +25,4 @@ FORMS	= mainform.ui
 TEMPLATE	=app
 CONFIG	+= qt warn_on thread release
 LANGUAGE	= C++
+MAKEFILE=Makefile.qt

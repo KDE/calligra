@@ -13,7 +13,7 @@ CREATE TABLE salers (
   name varchar(100) NOT NULL default '',
   NumSaler int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (NumSaler)
-) TYPE=MyISAM CHARSET=latin1;
+) TYPE=MyISAM;
 
 --
 -- Dumping data for table 'salers'
@@ -38,7 +38,7 @@ CREATE TABLE software (
   platform varchar(100) NOT NULL default '',
   copies int(11) NOT NULL default '0',
   PRIMARY KEY  (NumSoftware)
-) TYPE=MyISAM CHARSET=latin1;
+) TYPE=MyISAM;
 
 --
 -- Dumping data for table 'software'
