@@ -327,7 +327,7 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                         this, SLOT(removeEnclosing()),
                                         collection, "formula_removeenclosing");
 
-    impl->makeGreekAction = new KAction(i18n("Convert to greek"),
+    impl->makeGreekAction = new KAction(i18n("Convert to Greek"),
                                   CTRL + Key_G,
                                   this, SLOT(makeGreek()),
                                   collection, "formula_makegreek");

@@ -678,7 +678,7 @@ void KoPageLayoutDia::setupTab2()
                            "<li>&lt;time&gt;: The current time</li>"
                            "<li>&lt;date&gt;: The current date</li>"
                            "<li>&lt;author&gt;: Your full name</li>"
-                           "<li>&lt;org&gt;: Your organisation</li>"
+                           "<li>&lt;org&gt;: Your organization</li>"
                            "<li>&lt;email&gt;: Your email address</li></ul></qt>"), tab2 );
     grid2->addMultiCellWidget( lMacros2, 6, 6, 0, 2 );
 }
