@@ -546,6 +546,9 @@ public:
     void switchModeView();
     void changeFootNoteConfig();
 
+    double tabStopValue() const { return m_tabStop; }
+    void setTabStopValue ( double _tabStop );
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -693,7 +696,7 @@ private:
      * Note that pages without a section title don't appear in the array. */
     QValueVector< QString > m_sectionTitles;
 
-
+    double m_tabStop;
     QStringList m_spellListIgnoreAll;
 };
 

@@ -182,6 +182,9 @@ k_dcop:
     bool showScrollBar()const;
     void setShowScrollBar( bool _status );
 
+    double ptTabStopValue() const;
+    void setPtTabStopValue ( double _tabStop );
+
 private:
     KWDocument *doc;
 

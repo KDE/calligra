@@ -1454,3 +1454,21 @@ void KWChangeFootEndNoteSettingsCommand::changeCounter( KoParagCounter counter)
     m_doc->changeFootNoteConfig();
 }
 
+
+KWChangeTabStopValueCommand::KWChangeTabStopValueCommand( const QString &name, double _oldValue, double _newValue, KWDocument *_doc):
+    KNamedCommand(name),
+    m_doc( _doc ),
+    m_oldValue(_oldValue),
+    m_newValue(_newValue)
+{
+}
+
+void KWChangeTabStopValueCommand::execute()
+{
+    m_doc->setTabStopValue ( m_newValue );
+}
+
+void KWChangeTabStopValueCommand::unexecute()
+{
+    m_doc->setTabStopValue ( m_oldValue );
+}

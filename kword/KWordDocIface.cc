@@ -616,3 +616,13 @@ void KWordDocIface::setShowScrollBar( bool _status )
     doc->setShowScrollBar(_status );
     doc->reorganizeGUI();
 }
+
+double KWordDocIface::ptTabStopValue() const
+{
+    return doc->tabStopValue();
+}
+
+void KWordDocIface::setPtTabStopValue ( double _tabStop )
+{
+    doc->setTabStopValue (_tabStop );
+}

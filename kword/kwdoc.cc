@@ -140,6 +140,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
       m_urlIntern()
 {
     dcop = 0;
+    m_tabStop = MM_TO_POINT( 15.0 );
+
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
@@ -915,6 +917,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
         unitName = KWDocument::getAttribute( attributes, "unit", "pt" );
         m_hasTOC =  static_cast<bool>(KWDocument::getAttribute( attributes,"hasTOC", 0 ) );
+        m_tabStop = KWDocument::getAttribute( attributes, "tabStopValue", MM_TO_POINT( 15) );
     } else {
         m_processingType = WP;
         m_headerVisible = false;
@@ -1680,6 +1683,7 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "hasFooter", static_cast<int>(isFooterVisible()) );
     docattrs.setAttribute( "unit", KoUnit::unitName(getUnit()) );
     docattrs.setAttribute( "hasTOC", static_cast<int>(m_hasTOC));
+    docattrs.setAttribute( "tabStopValue", m_tabStop );
 
     getVariableCollection()->variableSetting()->save(kwdoc );
 
@@ -3437,6 +3441,25 @@ void KWDocument::setDontCheckTitleCase(bool _b)
     m_bDontCheckTitleCase=_b;
     m_bgSpellCheck->setIgnoreTitleCase( _b );
 }
+
+
+void KWDocument::setTabStopValue ( double _tabStop )
+{
+    m_tabStop = _tabStop;
+    QPtrList<KWTextFrameSet> textFramesets;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit ) {
+        fit.current()->addTextFrameSets(textFramesets);
+    }
+
+    KWTextFrameSet *frm;
+    for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
+        frm->textDocument()->setTabStops( ptToLayoutUnitPt( _tabStop ));
+        repaintAllViews();
+    }
+
+}
+
 
 
 #include "kwdoc.moc"

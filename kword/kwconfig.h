@@ -109,9 +109,11 @@ private:
 
     KIntNumInput* autoSave;
     int oldAutoSaveValue;
+    double m_oldTabStopWidth;
 
     int m_oldStartingPage;
     KIntNumInput* m_variableNumberOffset;
+    KDoubleNumInput *m_tabStopWidth;
 };
 
 class KWConfig : public KDialogBase

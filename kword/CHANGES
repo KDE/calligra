@@ -156,3 +156,4 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Add new font format (improve underline, strikeout )
 - Add support to protect frameset size and position.
 - Fix the loading, displaying and saving of old images (KOffice 1.0 type)
+- Now we can change tab stop value

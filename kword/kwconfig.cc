@@ -624,6 +624,14 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
+
+
+    new QLabel(i18n("Tab Stop: (%1)").arg(doc->getUnitName()), gbDocumentSettings);
+    m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
+    m_oldTabStopWidth = doc->tabStopValue();
+    m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
+
+
 }
 
 void ConfigureDefaultDocPage::apply()
@@ -657,6 +665,16 @@ void ConfigureDefaultDocPage::apply()
         macroCmd->addCommand(cmd);
         m_oldStartingPage=newStartingPage;
     }
+    double newTabStop = KoUnit::ptFromUnit( m_tabStopWidth->value(), doc->getUnit() );
+    if ( newTabStop != m_oldTabStopWidth)
+    {
+
+        KWChangeTabStopValueCommand *cmd = new KWChangeTabStopValueCommand( i18n("Change Tab Stop Value"), m_oldTabStopWidth, newTabStop, doc);
+        cmd->execute();
+        doc->addCommand( cmd );
+        m_oldTabStopWidth = newTabStop;
+    }
+
 }
 
 void ConfigureDefaultDocPage::slotDefault()

@@ -195,6 +195,7 @@ don't put a </?xml...> at the end of the file!).
                                 inch...
             hasTOC:         0...the document has no TOC
                             1...the document has TOC
+            tabStopValue:   tabstop value
 -->
 <!ELEMENT ATTRIBUTES
     EMPTY>
@@ -204,7 +205,8 @@ don't put a </?xml...> at the end of the file!).
     hasHeader CDATA #IMPLIED
     hasFooter CDATA #IMPLIED
     unit CDATA #IMPLIED
-    hasTOC CDATA #IMPLIED>
+    hasTOC CDATA #IMPLIED
+    tabStopValue CDATA #IMPLIED>
 
 
 <!--    Contains general attributes variables. Has no children.

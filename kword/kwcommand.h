@@ -594,4 +594,20 @@ protected:
     KWDocument *m_doc;
 };
 
+class KWChangeTabStopValueCommand : public KNamedCommand
+{
+public:
+    KWChangeTabStopValueCommand( const QString &name,  double _oldValue, double _newValue, KWDocument *_doc);
+
+    ~KWChangeTabStopValueCommand() {}
+
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    KWDocument *m_doc;
+    double m_oldValue;
+    double m_newValue;
+};
+
+
 #endif

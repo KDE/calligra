@@ -100,6 +100,8 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
         new KoTextFormatCollection( _doc->defaultFont() ), new KWTextFormatter( this ) );
     textdoc->setFlow( this );
     textdoc->setPageBreakEnabled( true );              // get verticalBreak to be called
+    if ( _doc->tabStopValue() != -1 )
+        textdoc->setTabStops( _doc->ptToLayoutUnitPt( _doc->tabStopValue() ));
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ),
                                   this, (m_name+"-textobj").utf8() );
@@ -2258,7 +2260,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
     //activate new bg spell
     textobj->setNeedSpellCheck(true);
-    //fs->kWordDocument()->changeBackGroundSpellCheckTextFrameSet(fs);
+    fs->kWordDocument()->changeBackGroundSpellCheckTextFrameSet(fs);
 }
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
