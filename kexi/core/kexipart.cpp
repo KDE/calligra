@@ -241,7 +241,8 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 					+ i18n("Do you want to open it in Text View?"), 0, 
 					KStdGuiItem::open(), KStdGuiItem::cancel()))
 				{
-					dlg->close(); //this will destroy dlg
+//					dlg->close(); //this will destroy dlg
+					delete dlg;
 					return 0;
 				}
 				viewMode = Kexi::TextViewMode;
