@@ -169,17 +169,19 @@ QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
     layout.appendChild( b );
 
     // TOOD: Use only the id of the format
-    QDOM::Element f = format.save( doc );
+    QDOM::Element f = format->save( doc );
     if ( f.isNull() )
 	return f;
     layout.appendChild( f );
 
+    QDOM::Element tabs = doc.createElement( "TABULATORS" );
+    layout.appendChild( tabs );
     for ( unsigned int i = 0; i < tabList.count(); i++ )
     {
 	QDOM::Element tab = doc.createElement( "TABULATOR" );
 	if ( tab.isNull() )
 	    return tab;
-	layout.appendChild( tab );
+	tabs.appendChild( tab );
 	tab.setAttribute( "mmpos", tabList.at( i )->mmPos );
 	tab.setAttribute( "ptpos", tabList.at( i )->ptPos );
 	tab.setAttribute( "inchpos", tabList.at( i )->inchPos );
@@ -255,172 +257,19 @@ bool KWParagLayout::load( QDOM::Element& layout )
       return false;
     setFormat( form );
 
-	// following parag layout
-	else if ( _name == "TABULATOR" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    KoTabulator *tab = new KoTabulator;
-	    bool noinch = true;
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "mmpos" )
-		    tab->mmPos = atof( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "ptpos" )
-		    tab->ptPos = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "inchpos" )
-		{
-		    noinch = false;
-		    tab->inchPos = atof( ( *it ).m_strValue.c_str() );
-		}
-		if ( ( *it ).m_strName == "type" )
-		    tab->type = static_cast<KoTabulators>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	    if ( noinch ) tab->inchPos = MM_TO_INCH( tab->mmPos );
-	    tabList.append( tab );
-	}
-
-
-	// head offset
-
-	else if ( _name == "RIGHTBORDER" )
-	{
-	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red" )
-		{
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    left.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "green" )
-		{
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    left.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "blue" )
-		{
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    left.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "style" )
-		    left.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "width" )
-		    left.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
-
-	// right border
-	else if ( _name == "RIGHTBORDER" )
-	{
-	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red" )
-		{
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    right.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "green" )
-		{
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    right.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "blue" )
-		{
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    right.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "style" )
-		    right.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "width" )
-		    right.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
-
-	// bottom border
-	else if ( _name == "BOTTOMBORDER" )
-	{
-	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red" )
-		{
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    bottom.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "green" )
-		{
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    bottom.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "blue" )
-		{
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    bottom.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "style" )
-		    bottom.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "width" )
-		    bottom.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
-
-	// top border
-	else if ( _name == "TOPBORDER" )
-	{
-	    unsigned int r = 0, g = 0, b = 0;
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red" )
-		{
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    top.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "green" )
-		{
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    top.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "blue" )
-		{
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    top.color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "style" )
-		    top.style = static_cast<BorderStyle>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "width" )
-		    top.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
-
-	else if ( _name == "FORMAT" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-	    }
-	    format.load( parser, lst, document );
-	}
-
-	else
-	    cerr << "Unknown tag '" << tag << "' in PARAGRAPHLAYOUT" << endl;
-
-	if ( !parser.close( tag ) )
-	{
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
+    QDOM::Element tabs = layout.namedItem( "TABULATORS" );
+    QDOM::Element tab = tabs.firstChild().toElement();
+    for( ; !tab.isNull(); tab = tab.nextSibling().toElement() )
+    {
+      KoTabulator *tab = new KoTabulator;
+      tab->mmPos = tab.attribute( "mmpos" ).toInt();
+      tab->ptPos = tab.attribute( "ptpos" ).toInt();
+      tab->inchPos = tab.attribute( "inchpos" ).toInt();
+      tab->type = (KoTabulators)tab.attribute( "type" ).toInt();
+      tabList.append( tab );
     }
+
+    return true;
 }
 
 /*================================================================*/
