@@ -110,7 +110,7 @@ private:
     // Template method, triggered by embedPart calls
     virtual void savePartContents( QIODevice* file );
 
-    void convert();
+    void convert( const QCString& mimeTypeHint );
     void connectCommon(FilterBase **myFilter);
     QCString mimeTypeHelper();
 
