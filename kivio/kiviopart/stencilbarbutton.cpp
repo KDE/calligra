@@ -19,6 +19,7 @@
 #include "stencilbarbutton.h"
 
 #include <kiconloader.h>
+#include <kstringhandler.h>
 #include <qapplication.h>
 #include <qstyle.h>
 #include <qpainter.h>
@@ -129,10 +130,12 @@ void DragBarButton::drawButton( QPainter* paint )
     QSize sz = fm.size( ShowPrefix, text() );
     tw = sz.width();
     int x = m + pw + (tw!=0 && pw!=0 ?m:0);
+    QString t = KStringHandler::rPixelSqueeze(text(), fm, width() - (x + m + 22));
+    
     style().drawItem( paint, QRect( x, 0, tw, height() ),
                       AlignLeft | AlignVCenter|ShowPrefix,
                       colorGroup(), isEnabled(),
-                      0L, text(), -1,
+                      0L, t, -1,
                       &g.buttonText());
   }
 
@@ -174,7 +177,7 @@ QSize DragBarButton::sizeHint() const
   if ( !text().isEmpty() ) {
     QFontMetrics fm = fontMetrics();
     QSize sz = fm.size( ShowPrefix, text() );
-    tw = sz.width();
+    tw = 64; // Minimum size
     th = sz.height();
   }
 
