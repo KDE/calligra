@@ -285,7 +285,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
         m_value=obj->valueDouble();
         }
     else if(obj->isDate())
-    {
+        {
         m_bDate=true;
         m_date=obj->valueDate();
         }
@@ -1648,12 +1648,27 @@ void CellLayoutPageFloat::apply( RowLayout *_obj )
         if ( dlg->top <= row && dlg->bottom >= row
         &&!c->isObscuringForced())
         {
-           c->clearProperty(KSpreadCell::PPrecision);
-           c->clearNoFallBackProperties( KSpreadCell::PPrecision );
-           c->clearProperty(KSpreadCell::PPostfix);
-           c->clearNoFallBackProperties( KSpreadCell::PPostfix );
-           c->clearProperty(KSpreadCell::PPrefix);
-           c->clearNoFallBackProperties( KSpreadCell::PPrefix );
+           if ( dlg->precision != precision->value() )
+                {
+                c->clearProperty(KSpreadCell::PPrecision);
+                c->clearNoFallBackProperties( KSpreadCell::PPrecision );
+                }
+           if ( postfix->text() != dlg->postfix )
+                {
+                if ( postfix->text() != "########" )
+                        {
+                        c->clearProperty(KSpreadCell::PPostfix);
+                        c->clearNoFallBackProperties( KSpreadCell::PPostfix );
+                        }
+                }
+           if ( prefix->text() != dlg->prefix )
+                {
+                if ( postfix->text() != "########" )
+                        {
+                        c->clearProperty(KSpreadCell::PPrefix);
+                        c->clearNoFallBackProperties( KSpreadCell::PPrefix );
+                        }
+                }
            c->clearProperty(KSpreadCell::PFloatFormat);
            c->clearNoFallBackProperties( KSpreadCell::PFloatFormat );
            c->clearProperty(KSpreadCell::PFloatColor);
@@ -1676,12 +1691,27 @@ void CellLayoutPageFloat::apply( ColumnLayout *_obj )
         if ( dlg->left <= col && dlg->right >= col
         &&!c->isObscuringForced())
         {
-           c->clearProperty(KSpreadCell::PPrecision);
-           c->clearNoFallBackProperties( KSpreadCell::PPrecision );
-           c->clearProperty(KSpreadCell::PPostfix);
-           c->clearNoFallBackProperties( KSpreadCell::PPostfix );
-           c->clearProperty(KSpreadCell::PPrefix);
-           c->clearNoFallBackProperties( KSpreadCell::PPrefix );
+        if ( dlg->precision != precision->value() )
+                {
+                c->clearProperty(KSpreadCell::PPrecision);
+                c->clearNoFallBackProperties( KSpreadCell::PPrecision );
+                }
+        if ( postfix->text() != dlg->postfix )
+                {
+                if ( postfix->text() != "########" )
+                        {
+                        c->clearProperty(KSpreadCell::PPostfix);
+                        c->clearNoFallBackProperties( KSpreadCell::PPostfix );
+                        }
+                }
+        if ( prefix->text() != dlg->prefix )
+                {
+                if ( prefix->text() != "########" )
+                        {
+                        c->clearProperty(KSpreadCell::PPrefix);
+                        c->clearNoFallBackProperties( KSpreadCell::PPrefix );
+                        }
+                }
            c->clearProperty(KSpreadCell::PFloatFormat);
            c->clearNoFallBackProperties( KSpreadCell::PFloatFormat );
            c->clearProperty(KSpreadCell::PFloatColor);
@@ -2027,6 +2057,7 @@ if(!result.isNull())
 void CellLayoutPageFont::slotSetTextColor( const QColor &_color )
 {
 textColor=_color;
+bTextColorUndefined=false;
 }
 
 void CellLayoutPageFont::apply( ColumnLayout *_obj)
@@ -2093,7 +2124,7 @@ applyLayout(_obj);
 
 void CellLayoutPageFont::applyLayout( KSpreadLayout *_obj )
 {
-    //if ( !bTextColorUndefined )
+    if ( !bTextColorUndefined )
         _obj->setTextColor( textColor );
     if ( size_combo->currentItem() != 0 )
         _obj->setTextFontSize( selFont.pointSize() );
@@ -2478,8 +2509,11 @@ void CellLayoutPagePosition::apply( ColumnLayout *_obj )
         if ( dlg->left <= col && dlg->right >= col
         &&!c->isObscuringForced())
         {
-           c->clearProperty(KSpreadCell::PIndent);
-           c->clearNoFallBackProperties( KSpreadCell::PIndent );
+           if(dlg->indent!=indent->value() && indent->isEnabled())
+                {
+                c->clearProperty(KSpreadCell::PIndent);
+                c->clearNoFallBackProperties( KSpreadCell::PIndent );
+                }
            c->clearProperty(KSpreadCell::PAlign);
            c->clearNoFallBackProperties( KSpreadCell::PAlign );
            c->clearProperty(KSpreadCell::PAlignY);
@@ -2488,8 +2522,11 @@ void CellLayoutPagePosition::apply( ColumnLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PMultiRow );
            c->clearProperty(KSpreadCell::PVerticalText);
            c->clearNoFallBackProperties( KSpreadCell::PVerticalText );
-           c->clearProperty(KSpreadCell::PAngle);
-           c->clearNoFallBackProperties( KSpreadCell::PAngle );
+           if(dlg->textRotation!=angleRotation->value())
+                {
+                c->clearProperty(KSpreadCell::PAngle);
+                c->clearNoFallBackProperties( KSpreadCell::PAngle );
+                }
         }
       }
       applyLayout(_obj);
@@ -2525,8 +2562,11 @@ void CellLayoutPagePosition::apply( RowLayout *_obj )
         if ( dlg->top <= row && dlg->bottom >= row
         &&!c->isObscuringForced())
         {
-           c->clearProperty(KSpreadCell::PIndent);
-           c->clearNoFallBackProperties( KSpreadCell::PIndent );
+           if(dlg->indent!=indent->value() && indent->isEnabled())
+                {
+                c->clearProperty(KSpreadCell::PIndent);
+                c->clearNoFallBackProperties( KSpreadCell::PIndent );
+                }
            c->clearProperty(KSpreadCell::PAlign);
            c->clearNoFallBackProperties( KSpreadCell::PAlign );
            c->clearProperty(KSpreadCell::PAlignY);
@@ -2535,8 +2575,11 @@ void CellLayoutPagePosition::apply( RowLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PMultiRow );
            c->clearProperty(KSpreadCell::PVerticalText);
            c->clearNoFallBackProperties( KSpreadCell::PVerticalText );
-           c->clearProperty(KSpreadCell::PAngle);
-           c->clearNoFallBackProperties( KSpreadCell::PAngle );
+           if(dlg->textRotation!=angleRotation->value())
+                {
+                c->clearProperty(KSpreadCell::PAngle);
+                c->clearNoFallBackProperties( KSpreadCell::PAngle );
+                }
         }
       }
       applyLayout(_obj);
@@ -2575,7 +2618,8 @@ void CellLayoutPagePosition::applyLayout( KSpreadLayout *_obj )
   else
         _obj->setVerticalText(false);
 
-  _obj->setAngle((-angleRotation->value()));
+  if(dlg->textRotation!=angleRotation->value())
+        _obj->setAngle((-angleRotation->value()));
   if(dlg->indent!=indent->value() && indent->isEnabled())
         _obj->setIndent(indent->value());
 }
@@ -4001,10 +4045,16 @@ void CellLayoutPagePattern::apply( ColumnLayout *_obj )
         if ( dlg->left <= col && dlg->right >= col
         &&!c->isObscuringForced())
         {
-           c->clearProperty(KSpreadCell::PBackgroundBrush);
-           c->clearNoFallBackProperties( KSpreadCell::PBackgroundBrush );
-           c->clearProperty(KSpreadCell::PBackgroundColor);
-           c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
+           if(selectedBrush!=0L)
+                {
+                c->clearProperty(KSpreadCell::PBackgroundBrush);
+                c->clearNoFallBackProperties( KSpreadCell::PBackgroundBrush );
+                }
+           if(!bBgColorUndefined || b_notAnyColor)
+                {
+                c->clearProperty(KSpreadCell::PBackgroundColor);
+                c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
+                }
         }
       }
       applyLayout(_obj);
@@ -4038,10 +4088,16 @@ void CellLayoutPagePattern::apply( RowLayout *_obj )
         if ( dlg->top <= row && dlg->bottom >= row
         &&!c->isObscuringForced())
         {
-           c->clearProperty(KSpreadCell::PBackgroundBrush);
-           c->clearNoFallBackProperties( KSpreadCell::PBackgroundBrush );
-           c->clearProperty(KSpreadCell::PBackgroundColor);
-           c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
+           if(selectedBrush!=0L)
+                {
+                c->clearProperty(KSpreadCell::PBackgroundBrush);
+                c->clearNoFallBackProperties( KSpreadCell::PBackgroundBrush );
+                }
+           if(!bBgColorUndefined || b_notAnyColor)
+                {
+                c->clearProperty(KSpreadCell::PBackgroundColor);
+                c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
+                }
         }
       }
   applyLayout(_obj);

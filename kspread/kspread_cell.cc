@@ -648,9 +648,10 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
     /*m_leftBorderPen.setWidth(leftBorderWidth( _col, _row ));
-    m_topBorderPen.setWidth(topBorderWidth( _col, _row ));/*setTopBorderWidth( topBorderWidth( _col, _row ));*/
-    //m_fallDiagonalPen.setWidth(fallDiagonalWidth( _col, _row) );
-    //m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
+    m_topBorderPen.setWidth(topBorderWidth( _col, _row ));
+    setTopBorderWidth( topBorderWidth( _col, _row ));
+    m_fallDiagonalPen.setWidth(fallDiagonalWidth( _col, _row) );
+    m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );*/
 
     m_nbLines = 0;
     m_bCellTooShort=false;
