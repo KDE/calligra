@@ -1960,6 +1960,7 @@ bool KSpreadCell::calc(bool delay)
     m_pQML = 0;
     clearAllErrors();
 //FIXME    m_dataType = StringData;
+    m_value.setValue( KSpreadValue( context.value()->toString( context ) ) );
     m_strFormulaOut = context.value()->toString( context );
     if ( !m_strFormulaOut.isEmpty() && m_strFormulaOut[0] == '!' )
     {
