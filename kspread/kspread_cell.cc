@@ -97,16 +97,11 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_richHeight=0;
   m_iPrecision = -1;
 
-  for(int i=0;i<3;i++)
-        {
-        m_stCond[i].m_cond=None;
-        m_stCond[i].fontcond = font;
-        m_stCond[i].colorcond=Qt::black;
-        m_stCond[i].val1=0;
-        m_stCond[i].val2=0;
-        }
+  m_firstCondition = 0;
+  m_secondCondition = 0;
+  m_thirdCondition = 0;      
   conditionIsTrue=false;
-
+  numberOfCond=-1;
 }
 
 void KSpreadCell::copyLayout( int _column, int _row )
@@ -212,16 +207,20 @@ void KSpreadCell::defaultStyle()
   setPrecision( 0 );
   setPostfix( "" );
   setPrefix( "" );
-
-  for(int i=0;i<3;i++)
-        {
-        m_stCond[i].m_cond=None;
-        m_stCond[i].fontcond = font;
-        m_stCond[i].colorcond=Qt::black;
-        m_stCond[i].val1=0;
-        m_stCond[i].val2=0;
-        }
+  if(m_firstCondition!=0)
+  	delete m_firstCondition;
+  m_firstCondition=0;
+  
+  if(m_thirdCondition!=0)
+  	delete m_thirdCondition;
+  m_thirdCondition=0;
+  
+  if(m_secondCondition!=0)
+  	delete m_secondCondition;
+  m_secondCondition=0;
+  
   conditionIsTrue=false;
+  numberOfCond=-1;
 }
 
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
@@ -850,11 +849,27 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       m_strOutText += postfix();
 
 
-    int numberOfCond=verifyCondition();
+    verifyCondition();
     if ( floatColor() == KSpreadCell::NegRed && v < 0.0 )
       m_textPen.setColor( Qt::red );
     else if(conditionIsTrue)
-      m_textPen.setColor( m_stCond[numberOfCond].colorcond );
+    	{
+    	KSpreadConditional *tmpCondition=0;
+	switch(numberOfCond)
+		{	
+		case 0:
+			tmpCondition=m_firstCondition;
+			break;
+		case 1:
+			tmpCondition=m_secondCondition;
+			break;
+		case 2:
+			tmpCondition=m_thirdCondition;
+			break;
+		}
+	
+	m_textPen.setColor(tmpCondition->colorcond);
+ 	}
     else
       m_textPen.setColor( m_textColor );
 
@@ -866,9 +881,24 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   }
 
   _painter.setPen( m_textPen );
-  int numberOfCond=verifyCondition();
+  verifyCondition();
   if(conditionIsTrue)
-        _painter.setFont( m_stCond[numberOfCond].fontcond );
+        {
+        KSpreadConditional *tmpCondition=0;
+        switch(numberOfCond)
+		{	
+		case 0:
+			tmpCondition=m_firstCondition;
+			break;
+		case 1:
+			tmpCondition=m_secondCondition;
+			break;
+		case 2:
+			tmpCondition=m_thirdCondition;
+			break;
+		}
+        _painter.setFont( tmpCondition->fontcond );
+        }
   else
         _painter.setFont( m_textFont );
 
@@ -1127,19 +1157,36 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 }
 
 
-int KSpreadCell::verifyCondition()
+void KSpreadCell::verifyCondition()
 {
-int numberOfCond=-1;
+numberOfCond=-1;
 double v = m_dValue * m_dFaktor;
 conditionIsTrue=false;
+KSpreadConditional *tmpCondition=0;
+if(m_bValue)
+{
 for(int i=0;i<3;i++)
 {
-if(m_stCond[i].m_cond!=None)
+switch(i)
+	{	
+	case 0:
+		tmpCondition=m_firstCondition;
+		break;
+	case 1:
+		tmpCondition=m_secondCondition;
+		break;
+	case 2:
+		tmpCondition=m_thirdCondition;
+		break;
+	}
+	
+if(tmpCondition!=0 && tmpCondition->m_cond!=None)
         {
-        switch(m_stCond[i].m_cond)
+
+        switch(tmpCondition->m_cond)
                 {
                 case Equal :
-                if(v==m_stCond[i].val1)
+                if(v==tmpCondition->val1)
                         {
                         conditionIsTrue=true;
                         numberOfCond=i;
@@ -1147,7 +1194,7 @@ if(m_stCond[i].m_cond!=None)
                 break;
 
                 case Superior :
-                if(v>m_stCond[i].val1)
+                if(v>tmpCondition->val1)
                         {
                         conditionIsTrue=true;
                         numberOfCond=i;
@@ -1155,7 +1202,7 @@ if(m_stCond[i].m_cond!=None)
                 break;
 
                 case Inferior :
-                if(v<m_stCond[i].val1)
+                if(v<tmpCondition->val1)
                         {
                         conditionIsTrue=true;
                         numberOfCond=i;
@@ -1164,7 +1211,7 @@ if(m_stCond[i].m_cond!=None)
                 break;
 
                 case SuperiorEqual :
-                if(v>=m_stCond[i].val1)
+                if(v>=tmpCondition->val1)
                         {
                         conditionIsTrue=true;
                         numberOfCond=i;
@@ -1173,7 +1220,7 @@ if(m_stCond[i].m_cond!=None)
                 break;
 
                 case InferiorEqual :
-                if(v<=m_stCond[i].val1)
+                if(v<=tmpCondition->val1)
                         {
                         conditionIsTrue=true;
                         numberOfCond=i;
@@ -1182,7 +1229,7 @@ if(m_stCond[i].m_cond!=None)
                 break;
 
                 case Between :
-                if((v>QMIN(m_stCond[i].val1,m_stCond[i].val2))&&(v<QMAX(m_stCond[i].val1,m_stCond[i].val2)))
+                if((v>QMIN(tmpCondition->val1,tmpCondition->val2))&&(v<QMAX(tmpCondition->val1,tmpCondition->val2)))
                         {
                         conditionIsTrue=true;
                         numberOfCond=i;
@@ -1190,7 +1237,7 @@ if(m_stCond[i].m_cond!=None)
                 break;
 
                 case Different :
-                if((v<QMIN(m_stCond[i].val1,m_stCond[i].val2))||(v>QMAX(m_stCond[i].val1,m_stCond[i].val2)))
+                if((v<QMIN(tmpCondition->val1,tmpCondition->val2))||(v>QMAX(tmpCondition->val1,tmpCondition->val2)))
                         {
                         conditionIsTrue=true;
                         numberOfCond=i;
@@ -1206,9 +1253,9 @@ if(m_stCond[i].m_cond!=None)
                 }
 
         }
-}
+  }
+ }
 
-return numberOfCond;
 }
 
 void KSpreadCell::offsetAlign(int _col,int _row)
@@ -1749,18 +1796,33 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     }
     else
       _painter.setPen( m_textPen );
+    
 
-    int numberOfCond=verifyCondition();
+    verifyCondition();
     if(conditionIsTrue)
         {
-        _painter.setFont( m_stCond[numberOfCond].fontcond );
-        m_textPen.setColor( m_stCond[numberOfCond].colorcond );
+        KSpreadConditional *tmpCondition=0;
+        switch(numberOfCond)
+	{	
+	case 0:
+		tmpCondition=m_firstCondition;
+		break;
+	case 1:
+		tmpCondition=m_secondCondition;
+		break;
+	case 2:
+		tmpCondition=m_thirdCondition;
+		break;
+	}
+        _painter.setFont( tmpCondition->fontcond );
+        m_textPen.setColor( tmpCondition->colorcond );
         _painter.setPen( m_textPen );
         }
     else
+  	{
         _painter.setFont( m_textFont );
-
-
+	_painter.setPen( m_textPen.color() );
+	}
     //_painter.setFont( m_textFont );
 
     if ( !m_bMultiRow )
@@ -1908,9 +1970,25 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
     if ( !m_strOutText.isEmpty() )
     {
       _painter.setPen( m_textPen );
-      int numberOfCond=verifyCondition();
+      verifyCondition();
       if(conditionIsTrue)
-        _painter.setFont( m_stCond[numberOfCond].fontcond );
+      	{
+        KSpreadConditional *tmpCondition=0;
+        switch(numberOfCond)
+		{	
+		case 0:
+			tmpCondition=m_firstCondition;
+			break;
+		case 1:
+			tmpCondition=m_secondCondition;
+			break;
+		case 2:
+			tmpCondition=m_thirdCondition;
+			break;
+		}
+
+        _painter.setFont( tmpCondition->fontcond );
+      	}
       else
         _painter.setFont( m_textFont );
 

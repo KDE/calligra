@@ -103,6 +103,69 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
 
 }
 
+void KSpreadWidgetconditional::init(KSpreadConditional *tmp)
+{
+font=tmp->fontcond;
+color->setColor(tmp->colorcond);
+QString val;
+switch(tmp->m_cond)
+	{
+	case None :
+		break;
+	case Equal :
+	    	choose->setCurrentItem(1);
+	    	edit1->setEnabled(true);
+		val=val.setNum(tmp->val1);
+		edit1->setText(val);
+		break;
+	case Superior :
+		choose->setCurrentItem(2);
+	    	edit1->setEnabled(true);
+		val=val.setNum(tmp->val1);
+		edit1->setText(val);
+		break;
+	case Inferior :
+		choose->setCurrentItem(3);
+	    	edit1->setEnabled(true);
+	    	val=val.setNum(tmp->val1);
+		edit1->setText(val);
+		break;
+	case SuperiorEqual :
+		choose->setCurrentItem(4);
+	    	edit1->setEnabled(true);
+	    	val=val.setNum(tmp->val1);
+		edit1->setText(val);
+		break;
+	case InferiorEqual :
+		choose->setCurrentItem(5);
+		edit1->setEnabled(true);
+		val=val.setNum(tmp->val1);
+		edit1->setText(val);
+		break;
+		
+	case Between :
+		choose->setCurrentItem(6);
+		edit1->setEnabled(true);
+		edit2->setEnabled(true);
+		val=val.setNum(tmp->val1);
+		edit1->setText(val);
+		val=val.setNum(tmp->val2);
+		edit2->setText(val);
+		break;
+	case Different :
+		choose->setCurrentItem(7);
+		edit1->setEnabled(true);
+		edit2->setEnabled(true);
+		val=val.setNum(tmp->val1);
+		edit1->setText(val);
+		val=val.setNum(tmp->val2);
+		edit2->setText(val);
+		break;
+	}
+
+
+}
+
 void KSpreadWidgetconditional::changeLabelFont()
 {
 if (KFontDialog::getFont( font,true,this ) == QDialog::Rejected )
@@ -275,20 +338,53 @@ KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,co
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   grid1->addWidget(bb,3,0);
+  init();
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 
 }
 
+void KSpreadconditional::init()
+{
+//init different condition
+KSpreadConditional *tmpCondition=0;
+KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.x(), marker.y() );
+for(int i=0;i<3;i++)
+   {
+   switch(i)
+	{	
+	case 0:
+		tmpCondition=obj->getFirstCondition(0);
+		if(tmpCondition!=0)
+    			{
+    			firstCond->init(tmpCondition);
+    			}
+		break;
+	case 1:
+		tmpCondition=obj->getSecondCondition(0);
+		if(tmpCondition!=0)
+    			{
+    			secondCond->init(tmpCondition);
+    			}
 
+		break;
+	case 2:
+		tmpCondition=obj->getThirdCondition(0);
+		if(tmpCondition!=0)
+    			{
+    			thirdCond->init(tmpCondition);
+    			}
+
+		break;
+	}
+    
+    	
+    }
+
+}
 
 void KSpreadconditional::slotOk()
 {
-
-/*tmpCond.val1=val1;
-tmpCond.val2=val2;
-tmpCond.fontcond=font;
-tmpCond.colorcond=color->color();*/
 KSpreadConditional tmpCond[3];
 
 bool stat1=false;

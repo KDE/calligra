@@ -3026,7 +3026,8 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
 void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[3] )
 {
 m_pDoc->setModified( true );
-KSpreadConditional *m_stCond;
+KSpreadConditional *tmpCondition=0;
+
     bool selected = ( m_rctSelection.left() != 0 );
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
@@ -3038,18 +3039,59 @@ KSpreadConditional *m_stCond;
 	int row = l & 0xFFFF;
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
-
           it.current()->setDisplayDirtyFlag();
-          m_stCond=it.current()->getConditional();
-          for(int i=0;i<3;i++)
+            for(int i=0;i<3;i++)
                 {
-                m_stCond[i].val1=tmp[i].val1;
-                m_stCond[i].val2=tmp[i].val2;
-                m_stCond[i].colorcond=tmp[i].colorcond;
-                m_stCond[i].fontcond=tmp[i].fontcond;
-                m_stCond[i].m_cond=tmp[i].m_cond;
-                }
+                 switch(i)
+				{	
+				case 0:
+					
+					if(tmp[i].m_cond==None)
+						it.current()->removeFirstCondition();
+					else
+						{
+						tmpCondition=it.current()->getFirstCondition();
+                				tmpCondition->val1=tmp[i].val1;
+                				tmpCondition->val2=tmp[i].val2;
+                				tmpCondition->colorcond=tmp[i].colorcond;
+                				tmpCondition->fontcond=tmp[i].fontcond;
+                				tmpCondition->m_cond=tmp[i].m_cond;
+						}
+					break;
+				case 1:
+					
+					if(tmp[i].m_cond==None)
+						it.current()->removeSecondCondition();
+					else
+						{
+						tmpCondition=it.current()->getSecondCondition();
+                				tmpCondition->val1=tmp[i].val1;
+                				tmpCondition->val2=tmp[i].val2;
+                				tmpCondition->colorcond=tmp[i].colorcond;
+                				tmpCondition->fontcond=tmp[i].fontcond;
+                				tmpCondition->m_cond=tmp[i].m_cond;
+						}
+
+					break;
+				case 2:
+					
+					if(tmp[i].m_cond==None)
+						it.current()->removeThirdCondition();
+					else
+						{
+						tmpCondition=it.current()->getThirdCondition();
+                				tmpCondition->val1=tmp[i].val1;
+                				tmpCondition->val2=tmp[i].val2;
+                				tmpCondition->colorcond=tmp[i].colorcond;
+                				tmpCondition->fontcond=tmp[i].fontcond;
+                				tmpCondition->m_cond=tmp[i].m_cond;
+						}
+
+					break;
+				}
+		 }
 	  it.current()->clearDisplayDirtyFlag();
+	  
 	}
       }
 
@@ -3067,14 +3109,55 @@ KSpreadConditional *m_stCond;
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-          m_stCond=it.current()->getConditional();
+          
           for(int i=0;i<3;i++)
                 {
-                m_stCond[i].val1=tmp[i].val1;
-                m_stCond[i].val2=tmp[i].val2;
-                m_stCond[i].colorcond=tmp[i].colorcond;
-                m_stCond[i].fontcond=tmp[i].fontcond;
-                m_stCond[i].m_cond=tmp[i].m_cond;
+                switch(i)
+				{	
+   	             	case 0:
+					
+					if(tmp[i].m_cond==None)
+						it.current()->removeFirstCondition();
+					else
+						{
+						tmpCondition=it.current()->getFirstCondition();
+    	           				tmpCondition->val1=tmp[i].val1;
+     	          				tmpCondition->val2=tmp[i].val2;
+      	         				tmpCondition->colorcond=tmp[i].colorcond;
+       	        				tmpCondition->fontcond=tmp[i].fontcond;
+        	       			tmpCondition->m_cond=tmp[i].m_cond;
+						}
+					break;
+				case 1:
+					
+					if(tmp[i].m_cond==None)
+						it.current()->removeSecondCondition();
+					else
+						{
+					  	tmpCondition=it.current()->getSecondCondition();
+  	          				tmpCondition->val1=tmp[i].val1;
+   	             			tmpCondition->val2=tmp[i].val2;
+    	            			tmpCondition->colorcond=tmp[i].colorcond;
+    	            			tmpCondition->fontcond=tmp[i].fontcond;
+     	          				tmpCondition->m_cond=tmp[i].m_cond;
+						}	
+					break;
+				case 2:
+					
+					if(tmp[i].m_cond==None)
+						it.current()->removeThirdCondition();
+					else
+						{
+				    	tmpCondition=it.current()->getThirdCondition();
+   	           				tmpCondition->val1=tmp[i].val1;
+    	            			tmpCondition->val2=tmp[i].val2;
+     		           		tmpCondition->colorcond=tmp[i].colorcond;
+     	 	         		tmpCondition->fontcond=tmp[i].fontcond;
+        	       			tmpCondition->m_cond=tmp[i].m_cond;
+						}	
+
+					break;
+  			}	
                 }
           it.current()->clearDisplayDirtyFlag();
 	}
@@ -3109,16 +3192,56 @@ KSpreadConditional *m_stCond;
 		}
 
 		cell->setDisplayDirtyFlag();
-                m_stCond=cell->getConditional();
                 for(int i=0;i<3;i++)
                         {
-                        m_stCond[i].val1=tmp[i].val1;
-                        m_stCond[i].val2=tmp[i].val2;
-                        m_stCond[i].colorcond=tmp[i].colorcond;
-                        m_stCond[i].fontcond=tmp[i].fontcond;
-                        m_stCond[i].m_cond=tmp[i].m_cond;
+                	switch(i)
+				{	
+   	             	case 0:
+					
+					if(tmp[i].m_cond==None)
+						cell->removeFirstCondition();
+					else
+						{
+    						tmpCondition=cell->getFirstCondition();
+    	           				tmpCondition->val1=tmp[i].val1;
+     	          				tmpCondition->val2=tmp[i].val2;
+      	         				tmpCondition->colorcond=tmp[i].colorcond;
+       	        				tmpCondition->fontcond=tmp[i].fontcond;
+        	       			tmpCondition->m_cond=tmp[i].m_cond;
+						}
+					break;
+				case 1:
+
+					if(tmp[i].m_cond==None)
+						cell->removeSecondCondition();
+					else
+						{
+						tmpCondition=cell->getSecondCondition();
+  	          				tmpCondition->val1=tmp[i].val1;
+   	             			tmpCondition->val2=tmp[i].val2;
+    	            			tmpCondition->colorcond=tmp[i].colorcond;
+    	            			tmpCondition->fontcond=tmp[i].fontcond;
+     	          				tmpCondition->m_cond=tmp[i].m_cond;
+						}	
+					break;
+				case 2:
+					
+					if(tmp[i].m_cond==None)
+						cell->removeThirdCondition();
+					else
+						{
+						tmpCondition=cell->getThirdCondition();
+   	           				tmpCondition->val1=tmp[i].val1;
+    	            			tmpCondition->val2=tmp[i].val2;
+     		           		tmpCondition->colorcond=tmp[i].colorcond;
+     	 	         		tmpCondition->fontcond=tmp[i].fontcond;
+        	       			tmpCondition->m_cond=tmp[i].m_cond;
+						}	
+
+					break;  
                         }
-                cell->clearDisplayDirtyFlag();
+                    }
+                    cell->clearDisplayDirtyFlag();
 	    }
 
 	emit sig_updateView( this, r );

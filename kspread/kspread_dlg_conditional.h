@@ -44,7 +44,7 @@ public:
   QFont getFont(){return font;}
   QColor getColor();
   Conditional typeOfCondition();
-
+  void init(KSpreadConditional *tmp);
 public slots:
   void changeLabelFont();
   void changeIndex(const QString &text);
@@ -64,7 +64,7 @@ class KSpreadconditional : public QDialog
   Q_OBJECT
 public:
 KSpreadconditional(KSpreadView* parent, const char* name,const QPoint &_marker );
-
+void init();
 public slots:
   void slotOk();
   void slotClose();
@@ -78,7 +78,6 @@ protected:
   KSpreadWidgetconditional *secondCond;
   KSpreadWidgetconditional *thirdCond;
   KSpreadConditional result;
-
 };
 
 

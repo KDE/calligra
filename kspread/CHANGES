@@ -285,3 +285,9 @@ are a value equal to 5 you can attribut a color and a font.
 There is against a lot of work (save condition, reduce memory to store condition,
 and put the old condition when you active dialog.
 => I try to do this thinks this week if I have time
+
+2000-02-11 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Improved : Relational cell attribut
+Now parameter are setting when you open conditional dialog.
+Reduce memory to store condition.

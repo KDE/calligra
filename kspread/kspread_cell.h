@@ -532,11 +532,48 @@ public:
 
     void defaultStyle();
 
-    //return the number of condition which is true
-    //and valid or not conditionIsTrue
-    int verifyCondition();
-    KSpreadConditional * getConditional() {return  m_stCond;}
-
+    
+    //valid or not conditionIsTrue
+    void verifyCondition();
+    KSpreadConditional * getFirstCondition(int newStruct=-1) 
+    	{
+    	if((m_firstCondition==0)&&(newStruct==-1))
+    		m_firstCondition=new KSpreadConditional;
+    	return  m_firstCondition;
+    	}
+    	
+    KSpreadConditional * getSecondCondition(int newStruct=-1) 
+    	{
+    	if((m_secondCondition==0)&&(newStruct==-1))
+    		m_secondCondition=new KSpreadConditional;
+    	return m_secondCondition;
+    	}
+    	
+    KSpreadConditional * getThirdCondition(int newStruct=-1) 
+    	{
+    	if((m_thirdCondition==0)&&(newStruct==-1))
+    		m_thirdCondition=new KSpreadConditional;
+    	return  m_thirdCondition;
+    	}
+    void removeThirdCondition()
+    	{
+    	if(m_thirdCondition!=0)
+    		delete m_thirdCondition;
+    	m_thirdCondition=0;
+    	}
+    	
+    void removeSecondCondition()
+    	{
+    	if(m_secondCondition!=0)
+    		delete m_secondCondition;
+    	m_secondCondition=0;
+    	}
+    void removeFirstCondition()
+    	{
+    	if(m_firstCondition!=0)
+    		delete m_firstCondition;
+    	m_firstCondition=0;
+    	}
 protected:
 
     /**
@@ -721,8 +758,10 @@ protected:
 
     bool conditionIsTrue;
 
-    KSpreadConditional m_stCond[3];
-    
+    KSpreadConditional *m_firstCondition;
+    KSpreadConditional *m_secondCondition;
+    KSpreadConditional *m_thirdCondition;
+    int numberOfCond;
 };
 
 #endif
