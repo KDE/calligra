@@ -39,8 +39,9 @@ private:
     QByteArray SwPageStyleSheets;
     QByteArray StarWriterDocument;
 
-    // supplementary frames count
+    // supplementary variables
     Q_UINT8 frames;
+    QString tableFrames, pictureFrames;
 
     // needed for ATTRIBUTES
     bool hasHeader;

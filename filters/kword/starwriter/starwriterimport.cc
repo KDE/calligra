@@ -74,7 +74,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const
     stream->readRawBytes(SwPageStyleSheets.data(), SwPageStyleSheets.size());
 
     // Check the document version
-    if (!checkDocumentVersion()) return KoFilter::NotImplemented;
+    if (!checkDocumentVersion()) return KoFilter::WrongFormat;
 
     // Algorithm for creating the main document
     if (!addBody()) return KoFilter::ParsingError;
@@ -133,11 +133,8 @@ bool StarWriterImport::addKWordHeader()
     prolog.append("</PAPER>\n");
     prolog.append("<ATTRIBUTES standardpage=\"1\" unit=\"mm\" hasFooter=\"0\" hasHeader=\"0\" processing=\"0\" />\n");
     prolog.append("<FRAMESETS>\n");
-    prolog.append("<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" autoCreateNewFrame=\"1\">\n");
-    prolog.append("<FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n");
 
-    QString epilog = "</FRAMESET>\n";
-    epilog.append("</FRAMESETS>\n");
+    QString epilog.append("</FRAMESETS>\n");
     epilog.append("</DOC>");
 
     maindoc.prepend(prolog);
@@ -195,6 +192,11 @@ bool StarWriterImport::addBody()
     for (Q_UINT32 k=0; k<len; k++)
       data[k] = StarWriterDocument[p+k];
     return parseNodes(data);
+
+    // add proper tags to maindoc
+    maindoc.prepend("<FRAMESET removable=\"0\" frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" autoCreateNewFrame=\"1\">\n");
+    maindoc.prepend("<FRAME right=\"567\" left=\"28\" top=\"42\" bottom=\"799\" />\n");
+    maindoc.append("</FRAMESET>\n");
 }
 
 QString StarWriterImport::convertToKWordString(QByteArray s)
@@ -232,13 +234,13 @@ bool StarWriterImport::parseNodes(QByteArray n)
 
         switch (c) {
             case 'T':
-                if (!parseText(s)) return false;
+                if ((s[0x0A] == 0x01) && (s[0x0B] == 0x00) && (s[0x0C] == 0xFF))
+                    if (!parseGraphics(s)) return false;
+                else
+                    if (!parseText(s)) return false;
                 break;
             case 'E':
                 if (!parseTable(s)) return false;
-                break;
-            case 'G':
-                if (!parseGraphics(s)) return false;
                 break;
             default:
                 break;
