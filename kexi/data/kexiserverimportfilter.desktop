@@ -4,4 +4,23 @@ Type=ServiceType
 X-KDE-Derived=Kexi/ImportFilter
 X-KDE-ServiceType=Kexi/FileImportFilter
 Comment=Service type for any kind of server based kexi import filters (table,forms,queries, ...)
+Comment[ca]=Tipus de servei per a qualsevol tipus de filtre d'importació de kexi basats en servidors (taula, formularis, consultes...)
+Comment[da]=Service-type for vilkårlig slags serverbaseret kexi importfiltre (tabel,formular,forespørgsel, ...)
+Comment[de]=Servicetyp für server-basierte Kexi-Importfilter jeder Art (Tabellen, Formulare, Abfragen...)Comment=
+Comment[es]=Tipo de servicio para cualquier tipo de filtro de importación de kexi (tablas, formularios, consultas, ...)
+Comment[et]=Teenuse tüüp kõikvõimalikele serveritega seotud Kexi impordifiltritele (tabelid, vormid, päringud...)
+Comment[fr]=Type de service pour tout type de filtres d'importation de kexi basé sur un serveur (table, formulaires, requètes....) 
+Comment[hu]=Szolgáltatástípus kiszolgálóalapú Kexi importszűrőkhöz (táblák, űrlapok, lekérdezések...)
+Comment[it]=Tipo di servizio per qualsiasi filtro di importazione per Kexi basato su server (tabelle, form, query...)
+Comment[nl]=Servicetype voor elk type servergebaseerd kexi-importfilter (tabellen,formullieren,queries, ...) 
+Comment[pt]=Tipo de serviço para qualquer tipo de filtros de importação de servidores do kexi (tabelas, formulários, pesquisas,...)
+Comment[pt_BR]=Tipo de serviço para qualquer tipo de servidor baseado nos filtros de importação do kexi (tabelas, formulários, consultas, ...)
+Comment[ru]=Тип сервиса для любого вида фильтров импорта с сервера в Kexi (таблицы, формы, запросы,....)
+Comment[se]=Bálvalasšládja vaikko makkár bálvávuođđuduvvon Kexi-sisafievrridansilli várás (tabeallat, skovit, jearaldagat, ...)
+Comment[sk]=Typ služby pre filtre založené na serveroch pre import do kexi (tabuľky, formuláre,dotazy,...)
+Comment[sl]=Vrsta servisa za katerikoli uvozne filtre Kexi na osnovi strežnikov (tabele, obrazci, poizvedbe...)
+Comment[sr]=Сервисни тип за било који увозни филтер kexi-ја базиран на серверима (табеле, форме, упити, ...)
+Comment[sv]=Tjänsttyp för alla sorters serverbaserade Kexi-importfilter (tabell, formulär, förfrågningar...)
+Comment[xx]=xxService type for any kind of server based kexi import filters (table,forms,queries, ...)xx
+Comment[zh_CN]=任何种类的基于服务器的 kexi 导入过滤器服务类型(表、表单、查询，等等)
 

@@ -6,16 +6,27 @@ Comment=Service type for any kind of kexi import filters (table,forms,queries,..
 Comment[ca]=Tipus de servei per a qualsevol tipus de filtre d'importació de kexi (taula, formularis, consultes...)
 Comment[cs]=Typ projektu pro jakýkoliv druh importních filtrů Kexi (tabulka, formuláře, dotazy atd)
 Comment[da]=Service-type for vilkårlig slags kexi importfiltre (tabel,formular,forespørgsel,....)
+Comment[de]=Servicetyp für Kexi-Importfilter (Tabellen, Formulare, Abfragen...) 
 Comment[es]=Tipo de servicio para cualquier tipo de filtro de importación de kexi (tablas, formas, consultas, ...)
+Comment[et]=Teenuse tüüp kõikvõimalikele Kexi impordifiltritele (tabelid,vormid,päringud,....)
 Comment[fr]=Type de service pour tout genre de filtres d'importation de kexi (table, formulaires, requètes....) 
 Comment[hu]=Szolgáltatástípus Kexi importszűrőkhöz (tábla, űrlap, lekérdezés, ...)
+Comment[it]=Tipo di servizio per qualsiasi filtro di importazione per Kexi (tabelle, form, query...)
+Comment[nb]=Tjenestetype for alle typer importfiltre for kexi (tabeller, skjemaer, spørringer ...)
+Comment[nl]=Servicetype voor elk type kexi-importfilter (tabellen, formulieren, queries, ...)
+Comment[nn]=Tenestetype for alle slags Kexi-importfilter (tabellar, skjema, spørjingar, ...)
 Comment[pl]=Typ usługi dla wszelkich filtrów importu programu Kexi(tabele,formularze,zapytania,....)
 Comment[pt]=Tipo de serviço para qualquer tipo de filtros de importação do KExi (tabelas, formulários, pesquisas,...)
 Comment[pt_BR]=Tipo de serviço para qualquer tipo de filtros de importação do kexi (tabelas, formulários, consultas, ...)
 Comment[ru]=Тип сервиса для любого вида фильтров импорта в Kexi (таблицы, формы, запросы,....)
+Comment[se]=Bálvalusšládja vaikko makkár Kexi-sisafievrridansilli várás (tabeallat, skovit, jearaldagat, ...)
 Comment[sk]=Typ služby pre filtre pre import do Kexi (tabuľky, formuláre,dotazy,...)
+Comment[sl]=Vrsta servisa za katerokoli vrsto uvoznih filtrov Kexi (tabele, obrazci, poizvedbe...)
+Comment[sr]=Сервисни тип за било који увозни филтер kexi-ја (табеле, форме, упити, ...)
 Comment[sv]=Tjänsttyp för alla sorters Kexi-importfilter (tabell, formulär, förfrågningar....)
 Comment[tr]=Kexi alım filtreleri için servis türü (tablo,form,sorgular,...)
+Comment[xx]=xxService type for any kind of kexi import filters (table,forms,queries,....)xx
+Comment[zh_CN]=任何种类的 kexi 导入过滤器(表、表单、查询，等等)
 
 [PropertyDef::X-KEXI-Import]
 Type=QStringList

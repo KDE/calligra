@@ -3,7 +3,11 @@ Encoding=UTF-8
 Type=Service
 ServiceTypes=Kexi/Handler
 
-Name=Kexi Query Handler
-Comment=A Query Editor
-
+Name=Queries
 X-KDE-Library=kexihandler_query
+X-Kexi-PartVersion=1
+X-Kexi-TypeName=query
+X-Kexi-TypeMime=kexi/query
+X-Kexi-GroupIcon=query
+X-Kexi-ItemIcon=query
+

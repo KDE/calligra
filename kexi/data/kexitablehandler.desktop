@@ -3,7 +3,12 @@ Encoding=UTF-8
 Type=Service
 ServiceTypes=Kexi/Handler
 
-Name=Kexi Table Handler
-Comment=Manages database tables
-
+Name=Tables
 X-KDE-Library=kexihandler_table
+X-Kexi-PartVersion=1
+X-Kexi-TypeName=table
+X-Kexi-TypeMime=kexi/table
+X-Kexi-GroupIcon=tables
+X-Kexi-GroupIcon=tables
+X-Kexi-ItemIcon=table
+

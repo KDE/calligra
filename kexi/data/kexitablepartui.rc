@@ -8,4 +8,9 @@
 	</Menu>
 </MenuBar>
 
+<ToolBar name="table" fullWidth="false" noMerge="1">
+  <text>Table</text>
+  <Action name="filter"/>
+</ToolBar>
+
 </kpartgui>

@@ -3,7 +3,49 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Kexi/Handler
 Comment=Kexi Project Handlers
+Comment[bg]=Kexi Проект
+Comment[ca]=Manejadors de projectes de Kexi
+Comment[cs]=Ovladač projektů Kexi
+Comment[cy]=Trinyddion Prosiect Kexi
+Comment[da]=Kexi projekthåndtering
+Comment[de]=Kexi-Projektverwaltung
+Comment[el]=Διαχειριστές εργασιών του Kexi
 Comment[es]=Manejadores de proyecto de kexi
+Comment[et]=Kexi projektide käsitleja
+Comment[fa]=Kexi اداره کننده پروژه
+Comment[fr]=Gestionnaires de projet Kexi
+Comment[hu]=Kexi projektkezelők
+Comment[it]=Gestione progetto di Kexi
+Comment[lo]=ສ້າງແຟ້ມຂໍ້ຄວາມໃໝ่
+Comment[lv]=Kexi Projekta Apstrādātāji
+Comment[nb]=Kexi prosjektbehandlere
+Comment[nl]=Kexi Projecthandlers
+Comment[nn]=Kexi-prosjekthandtering
+Comment[pl]=Program obsługi projektu Kexi
 Comment[pt]=Gestores de Projecto do Kexi
-Comment[pt_BR]=Gestores de Projecto do Kexi
-Comment[sv]=Kexi projektfil
+Comment[pt_BR]=Manipulador de Projeto do Kexi
+Comment[ru]=Обработчик проектов Kexi
+Comment[se]=Kexi-prošeaktagieđahalli
+Comment[sk]=Spracovanie projektov Kexi
+Comment[sl]=Ravnalniki projektov Kexi
+Comment[sr]=Kexi-јев руковалац пројектима
+Comment[sv]=Kexi-projektfil
+Comment[tr]=Kexi Proje İşleci
+Comment[xx]=xxKexi Project Handlersxx
+Comment[zh_CN]=Kexi 项目处理器
+
+[PropertyDef::X-Kexi-PartVersion]
+Type=int
+
+[PropertyDef::X-Kexi-TypeName]
+Type=QString
+
+[PropertyDef::X-Kexi-GroupIcon]
+Type=QString
+
+[PropertyDef::X-Kexi-ItemIcon]
+Type=QString
+
+[PropertyDef::X-Kexi-TypeMime]
+Type=QString
+
