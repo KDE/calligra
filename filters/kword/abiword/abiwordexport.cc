@@ -249,6 +249,31 @@ static void ProcessFontTag (QDomNode myNode, void* , QString& abiprops, KWEFBase
     }
 }
 
+static void ProcessTextBackGroundColorTag(QDomNode myNode, void* , QString& abiprops, KWEFBaseClass*)
+{
+    int red,green,blue;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("red"   , "int", (void *)&red   ) );
+    attrProcessingList.append ( AttrProcessing ("green" , "int", (void *)&green ) );
+    attrProcessingList.append ( AttrProcessing ("blue"  , "int", (void *)&blue  ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    abiprops += "bgcolor:";
+
+    //We must have two hex digits for each colour channel!
+    abiprops += QString::number((red&0xf0)>>4,16);
+    abiprops += QString::number(red&0x0f,16);
+
+    abiprops += QString::number((green&0xf0)>>4,16);
+    abiprops += QString::number(green&0x0f,16);
+
+    abiprops += QString::number((blue&0xf0)>>4,16);
+    abiprops += QString::number(blue&0x0f,16);
+
+    abiprops += "; "; // Note: Trailing space is important!
+}
+
 static void ProcessColorTag (QDomNode myNode, void* , QString& abiprops, KWEFBaseClass*)
 {
     int red,green,blue;
@@ -273,6 +298,9 @@ static void ProcessColorTag (QDomNode myNode, void* , QString& abiprops, KWEFBas
 
     abiprops += "; "; // Note: Trailing space is important!
 }
+
+
+
 
 static void ProcessVertAlignTag (QDomNode myNode, void* , QString& abiprops, KWEFBaseClass*)
 {
@@ -340,7 +368,7 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, K
     tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    NULL ) );
     tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,NULL ) );
-
+    tagProcessingList.append ( TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessTextBackGroundColorTag,NULL ) );
     //Now let's the sub tags fill in the AbiWord's "props" attribute
     ProcessSubtags (myNode, tagProcessingList, formatData->abiprops,exportFilter);
 
