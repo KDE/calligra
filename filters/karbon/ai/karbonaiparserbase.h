@@ -134,10 +134,10 @@ public:
 
   bool parse (QIODevice& fin, QDomDocument &doc);
 private:
-  VComposite *m_curKarbonPath;
+  VPath *m_curKarbonPath;
   VDocument *m_document;
   VLayer *m_layer;
-  VComposite *m_combination;
+  VPath *m_combination;
   QPtrStack<VGroup> m_groupStack;
 
   FillMode m_fm;

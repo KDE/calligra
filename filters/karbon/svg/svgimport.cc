@@ -373,7 +373,7 @@ SvgImport::parseGradient( const QDomElement &e )
 	}
 	parseColorStops( &gradhelper.gradient, e );
 	//gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
-	gradhelper.gradientTransform = VComposite::parseTransform( e.attribute( "gradientTransform" ) );
+	gradhelper.gradientTransform = VPath::parseTransform( e.attribute( "gradientTransform" ) );
 	m_gradients.insert( e.attribute( "id" ), gradhelper );
 }
 
@@ -529,7 +529,7 @@ SvgImport::setupTransform( const QDomElement &e )
 {
 	SvgGraphicsContext *gc = m_gc.current();
 
-	QWMatrix mat = VComposite::parseTransform( e.attribute( "transform" ) );
+	QWMatrix mat = VPath::parseTransform( e.attribute( "transform" ) );
 	gc->matrix = mat * gc->matrix;
 }
 
@@ -577,8 +577,8 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	}
 
 	obj->setFill( gc->fill );
-	if( dynamic_cast<VComposite *>( obj ) )
-		dynamic_cast<VComposite *>( obj )->setFillRule( gc->fillRule );
+	if( dynamic_cast<VPath *>( obj ) )
+		dynamic_cast<VPath *>( obj )->setFillRule( gc->fillRule );
 	// stroke scaling
 	double lineWidth = gc->stroke.lineWidth();
 	gc->stroke.setLineWidth( lineWidth * sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
@@ -658,7 +658,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		{
 			addGraphicContext();
 			setupTransform( b );
-			VComposite *path = new VComposite( &m_document );
+			VPath *path = new VPath( &m_document );
 			double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
 			double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
 			double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
@@ -671,7 +671,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		{
 			addGraphicContext();
 			setupTransform( b );
-			VComposite *path = new VComposite( &m_document );
+			VPath *path = new VPath( &m_document );
 			bool bFirst = true;
 
 			QString points = b.attribute( "points" ).simplifyWhiteSpace();
@@ -696,7 +696,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		{
 			addGraphicContext();
 			setupTransform( b );
-			VComposite *path = new VComposite( &m_document );
+			VPath *path = new VPath( &m_document );
 			path->loadSvgPath( b.attribute( "d" ) );
 			obj = path;
 		}
@@ -713,7 +713,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			continue; // TODO : remove when text loading works
 			/*VText *text = new VText( &m_document );
 			text->setText( b.text() );
-			VPath base( 0L );
+			VSubpath base( 0L );
 			double x = parseUnit( b.attribute( "x" ) );
 			double y = parseUnit( b.attribute( "y" ) );
 			base.moveTo( KoPoint( x, y ) );

@@ -109,7 +109,7 @@ private:
     // Add pen, brush and points to a path
     void appendPen( VObject& obj );
     void appendBrush( VObject& obj );
-    void appendPoints(VComposite& path, const QPointArray& pa);
+    void appendPoints(VPath& path, const QPointArray& pa);
     // coordinate transformation
     // translate wmf to (0,0) -> scale to document size -> translate to karbon (0,0)
     // Wmf origin is (left,top) corner

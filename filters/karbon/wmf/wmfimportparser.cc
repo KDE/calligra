@@ -155,7 +155,7 @@ void WMFImportParser::moveTo( int left, int top ) {
 
 
 void WMFImportParser::lineTo( int left, int top ) {    
-    VComposite *line = new VComposite( mDoc );
+    VPath *line = new VPath( mDoc );
     line->moveTo( KoPoint( coordX(mCurrentPoint.x()), coordY(mCurrentPoint.y()) ) );
     line->lineTo( KoPoint( coordX(left), coordY(top) ) );
     appendPen( *line );
@@ -242,7 +242,7 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
 
 
 void WMFImportParser::drawPolyline( const QPointArray &pa ) {
-    VComposite *polyline = new VComposite( mDoc );
+    VPath *polyline = new VPath( mDoc );
     appendPen( *polyline );
     appendPoints( *polyline, pa );
     
@@ -251,7 +251,7 @@ void WMFImportParser::drawPolyline( const QPointArray &pa ) {
 
 
 void WMFImportParser::drawPolygon( const QPointArray &pa, bool ) {
-    VComposite *polygon = new VComposite( mDoc );
+    VPath *polygon = new VPath( mDoc );
     appendPen( *polygon );
     appendBrush( *polygon );
     appendPoints( *polygon, pa );
@@ -262,7 +262,7 @@ void WMFImportParser::drawPolygon( const QPointArray &pa, bool ) {
 
 
 void WMFImportParser::drawPolyPolygon( QPtrList<QPointArray>& listPa, bool ) {
-    VComposite *path = new VComposite( mDoc );
+    VPath *path = new VPath( mDoc );
     
     if ( listPa.count() > 0 ) {
         appendPen( *path );
@@ -271,7 +271,7 @@ void WMFImportParser::drawPolyPolygon( QPtrList<QPointArray>& listPa, bool ) {
         path->close();
 
         while ( listPa.next() ) {
-            VComposite *newPath = new VComposite( mDoc );
+            VPath *newPath = new VPath( mDoc );
             appendPoints( *newPath, *listPa.current() );
             newPath->close();
             path->combine( *newPath ); 
@@ -358,7 +358,7 @@ void WMFImportParser::appendBrush( VObject& obj )
 }
 
 
-void WMFImportParser::appendPoints(VComposite &path, const QPointArray& pa)
+void WMFImportParser::appendPoints(VPath &path, const QPointArray& pa)
 {
     // list of point array
     if ( pa.size() > 0 ) {

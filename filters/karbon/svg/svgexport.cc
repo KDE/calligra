@@ -165,11 +165,11 @@ SvgExport::visitVGroup( VGroup& group )
 }
 
 void
-SvgExport::visitVComposite( VComposite& composite )
+SvgExport::visitVPath( VPath& composite )
 {
 	*m_body << "<path" << getID( &composite );
 
-	VVisitor::visitVComposite( composite );
+	VVisitor::visitVPath( composite );
 
 	getFill( *( composite.fill() ) );
 	getStroke( *( composite.stroke() ) );
@@ -190,7 +190,7 @@ SvgExport::visitVComposite( VComposite& composite )
 }
 
 void
-SvgExport::visitVPath( VPath& )
+SvgExport::visitVSubpath( VSubpath& )
 {
 }
 

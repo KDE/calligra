@@ -32,7 +32,7 @@
 #include "svggraphiccontext.h"
 
 class VGroup;
-class VComposite;
+class VPath;
 
 class SvgImport : public KoFilter
 {

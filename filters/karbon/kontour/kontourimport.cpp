@@ -260,7 +260,7 @@ KontourImport::parseGroup( const QDomElement &e )
 			* we're done with connecting points with lines.
 			*/
 			QDomElement point = b.firstChild().toElement();
-			VComposite *path = new VComposite( &m_document );
+			VPath *path = new VPath( &m_document );
 			double x, y;
 			x = point.attribute( "x" ).toDouble();
 			y = point.attribute( "y" ).toDouble();
@@ -278,7 +278,7 @@ KontourImport::parseGroup( const QDomElement &e )
 		else if( b.tagName() == "polygon" )
 		{
 			QDomElement point = b.namedItem( "polyline" ).firstChild().toElement();
-			VComposite *path = new VComposite( &m_document );
+			VPath *path = new VPath( &m_document );
 			double x, y;
 			x = point.attribute( "x" ).toDouble();
 			y = point.attribute( "y" ).toDouble();
@@ -298,7 +298,7 @@ KontourImport::parseGroup( const QDomElement &e )
 		else if( b.tagName() == "bezier" )
 		{
 			QDomElement point = b.namedItem( "polyline" ).firstChild().toElement();
-			VComposite *path = new VComposite( &m_document );
+			VPath *path = new VPath( &m_document );
 			double x, y;
 			x = point.attribute( "x" ).toDouble();
 			y = point.attribute( "y" ).toDouble();

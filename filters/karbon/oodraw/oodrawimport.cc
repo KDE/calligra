@@ -289,7 +289,7 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 		else if( name == "draw:line" ) // line
 		{
 			storeObjectStyles( o );
-			VComposite *line = new VComposite( parent );
+			VPath *line = new VPath( parent );
 			double x1 = KoUnit::parseValue( o.attribute( "svg:x1" ) );
 			double y1 = ymirror( KoUnit::parseValue( o.attribute( "svg:y1" ) ) );
 			double x2 = KoUnit::parseValue( o.attribute( "svg:x2" ) );
@@ -303,7 +303,7 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 		else if( name == "draw:polyline" ) // polyline
 		{
 			storeObjectStyles( o );
-			VComposite *polyline = new VComposite( parent );
+			VPath *polyline = new VPath( parent );
 			appendPoints( *polyline, o);
 			appendPen( *polyline );
 			appendBrush( *polyline );
@@ -314,7 +314,7 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 			storeObjectStyles( o );
 			//VPolygon *polygon = new VPolygon( parent );
 			//polygon->load( o );
-			VComposite *polygon = new VComposite( parent );
+			VPath *polygon = new VPath( parent );
 			appendPoints( *polygon, o );
 			appendPen( *polygon );
 			appendBrush( *polygon );
@@ -323,7 +323,7 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 		else if( name == "draw:path" ) // path
 		{
 			storeObjectStyles( o );
-			VComposite *path = new VComposite( parent );
+			VPath *path = new VPath( parent );
 			path->loadSvgPath( o.attribute( "svg:d" ) );
 			KoRect rect = parseViewBox( o );
 			double x = KoUnit::parseValue( o.attribute( "svg:x" ) );
@@ -667,7 +667,7 @@ OoDrawImport::parseViewBox( const QDomElement& object )
 }
 
 void
-OoDrawImport::appendPoints(VComposite &path, const QDomElement& object)
+OoDrawImport::appendPoints(VPath &path, const QDomElement& object)
 {
 	double x = KoUnit::parseValue( object.attribute( "svg:x" ) );
 	double y = KoUnit::parseValue( object.attribute( "svg:y" ) );

@@ -52,7 +52,7 @@ private:
 	void storeObjectStyles( const QDomElement& object );
 	void appendPen( VObject &obj );
 	void appendBrush( VObject &obj );
-	void appendPoints(VComposite &path, const QDomElement& object);
+	void appendPoints(VPath &path, const QDomElement& object);
 	void convert();
 	void parseGroup( VGroup *parent, const QDomElement& object );
 	void parseColor( VColor &color, const QString &s );

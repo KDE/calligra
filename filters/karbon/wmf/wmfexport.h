@@ -27,9 +27,9 @@
 #include "vvisitor.h"
 
 class KoWmfWrite;
-class VComposite;
-class VDocument;
 class VPath;
+class VDocument;
+class VSubpath;
 class VText;
 
 class WmfExport : public KoFilter, private VVisitor
@@ -43,9 +43,9 @@ public:
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
-    void visitVComposite( VComposite& composite );
+    void visitVPath( VPath& composite );
     void visitVDocument( VDocument& document );
-    void visitVPath( VPath& path );
+    void visitVSubpath( VSubpath& path );
     void visitVText( VText& text );
     void getBrush( QBrush& brush, const VFill *fill );
     void getPen( QPen& pen, const VStroke *stroke );

@@ -122,14 +122,14 @@ void WmfExport::visitVDocument( VDocument& document ) {
 }
 
 
-void WmfExport::visitVComposite( VComposite& composite ) {
+void WmfExport::visitVPath( VPath& composite ) {
     QPen      pen;
     QBrush    brush;
     
     getPen( pen, composite.stroke() );
     getBrush( brush, composite.fill() );
     
-    VVisitor::visitVComposite( composite );
+    VVisitor::visitVPath( composite );
     
     if ( mListPa.count() > 0 ) {
         mWmf->setPen( pen );
@@ -154,9 +154,9 @@ void WmfExport::visitVComposite( VComposite& composite ) {
 
 
 // Export segment.
-void WmfExport::visitVPath( VPath& path ) {
-    VPath *newPath;
-    VPathIterator itr( path );
+void WmfExport::visitVSubpath( VSubpath& path ) {
+    VSubpath *newPath;
+    VSubpathIterator itr( path );
     VFlattenCmd cmd( 0L, INCH_TO_POINT(0.3 / (double)mDpi) ); 
     QPointArray *pa = new QPointArray( path.count() );            
     int  nbrPoint=0;      // number of points in the path
@@ -164,7 +164,7 @@ void WmfExport::visitVPath( VPath& path ) {
     for( ; itr.current(); ++itr ) {
         switch( itr.current()->type() ) {
             case VSegment::curve:   // convert curveTo into lineTo
-                newPath = new VPath( mDoc );
+                newPath = new VSubpath( mDoc );
                 
                 // newPath duplicate the list of curve
                 newPath->moveTo( itr.current()->prev()->knot() );
@@ -215,14 +215,14 @@ void WmfExport::visitVPath( VPath& path ) {
     else {
         delete pa;
         // TODO: check why we have empty path
-        kdDebug() << "WmfExport::visitVPath : Empty path ?" << endl;
+        kdDebug() << "WmfExport::visitVSubpath : Empty path ?" << endl;
     }
 }
 
 
 void WmfExport::visitVText( VText& text ) {
     // TODO: export text
-    visitVPath( text.basePath() );
+    visitVSubpath( text.basePath() );
 }
 
 

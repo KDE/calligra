@@ -235,11 +235,11 @@ EpsExport::visitVDocument( VDocument& document )
 }
 
 void
-EpsExport::visitVComposite( VComposite& composite )
+EpsExport::visitVPath( VPath& composite )
 {
 	*m_stream << l1_newpath << "\n";
 
-	VVisitor::visitVComposite( composite );
+	VVisitor::visitVPath( composite );
 
 	getFill( *composite.fill() );
 	getStroke( *composite.stroke() );
@@ -248,10 +248,10 @@ EpsExport::visitVComposite( VComposite& composite )
 }
 
 void
-EpsExport::visitVPath( VPath& path )
+EpsExport::visitVSubpath( VSubpath& path )
 {
 	// Export segments.
-	VPathIterator itr( path );
+	VSubpathIterator itr( path );
 
 	for( ; itr.current(); ++itr )
 	{
@@ -293,8 +293,8 @@ EpsExport::visitVText( VText& text )
 {
 	// TODO: currently we only export the glyphs if available.
 
-	// Export the glyphs (= VComposites).
-	VCompositeListIterator itr( text.glyphs() );
+	// Export the glyphs (= VPaths).
+	VPathListIterator itr( text.glyphs() );
 
 	for( ; itr.current(); ++itr )
 	{
