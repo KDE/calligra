@@ -1,8 +1,11 @@
 #ifndef STYLE_H
 #define STYLE_H
 
+#include <qobject.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <myfile.h>
+#include <kdebug.h>
 
 struct myBORDER {
     unsigned char red, green, blue;
@@ -13,18 +16,24 @@ struct myTAB {
     unsigned char type;
 };
 
-class CStyle {
+class CStyle : public QObject {
+
+    Q_OBJECT
 
 public:
-    CStyle(unsigned short &styleID, unsigned char id=1);
-    CStyle(CStyle &rhs);
+    CStyle(const myFile &main, const unsigned short &styleID, unsigned char id=1);
+    CStyle(const CStyle &rhs);
     ~CStyle();
+
+    void applyCHPX(const long &fcGrpprl, const unsigned short &cb);
 
     void setLayout(bool l=true);  // true->create only <FORMAT>, no <FORMAT id=...>
     const bool layout() const { return onlyLayout; }
 
     const QString format();   // create&get the <FORMAT> stuff
     const unsigned short styleID() const { return stID; }
+    void styleID(const unsigned short &style) { stID=style; }
+    const myFile main() const { return _main; }
 
     // general stuff
     const unsigned char id() const { return _id; }
@@ -145,9 +154,13 @@ public:
     void footnoteUnderline(const unsigned char &u) { if(_id==5 && u<2) data.footnote.underline=u; }
     void footnoteVertalign(const unsigned char &v) { if(_id==5 && v<3) data.footnote.vertalign=v; }
 
+signals:
+    void signalSavePic(unsigned long &fc);
+
 private:
     const CStyle &operator=(const CStyle &);     // don't assign CStyles :)
 
+    myFile _main;
     unsigned short stID;
     bool onlyLayout;
 
@@ -198,19 +211,24 @@ private:
 };
 
 
-class PStyle {
+class PStyle : public QObject {
+
+    Q_OBJECT
 
 public:
-    PStyle(const unsigned short &styleID, const unsigned short &cstyleID);
+    PStyle(const myFile &main, const unsigned short &styleID, const CStyle &cstyle);
     PStyle(const PStyle &rhs);
     ~PStyle();
 
-    const QString layout(const QString &cformat);  // return the <LAYOUT> or <STYLE>
+    void applyPAPX(const long &fcGrpprl, const unsigned short &cb);
+    void applyCHPX(const long &fcGrpprl, const unsigned short &cb);
+
+    const QString layout();  // return the <LAYOUT> or <STYLE>
 
     const unsigned short styleID() const { return _styleID; }
-    void styleID(const unsigned short &styleID) { _styleID=styleID; }
-    const unsigned short cstyleID() const { return _cstyleID; }
-    void cstyleID(const unsigned short &cstyleID) { _cstyleID=cstyleID; }
+    void styleID(const unsigned short &styleID) { _styleID=styleID; _cstyle.styleID(styleID); }
+    const CStyle cstyle() const { return _cstyle; }
+    const myFile main() const { return _main; }
 
     const bool layoutTag() const { return _layoutTag; }
     void setLayoutTag(const bool t=true) { _layoutTag=t; }
@@ -268,7 +286,8 @@ private:
     const QString tab(const myTAB &t);
 
     unsigned short _styleID;
-    unsigned short _cstyleID;   // which <FORMAT> belongs to me (index in QList)?
+    CStyle _cstyle;
+    myFile _main;
 
     bool _layoutTag;   // if _layoutTag==true, then the output will start with <LAYOUT>
                        // if not, it will output <STYLE> Default: <LAYOUT>

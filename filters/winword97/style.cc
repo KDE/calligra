@@ -1,9 +1,15 @@
 #include <style.h>
+#include <style.moc>
+
+// Size codes for the CHPX and PAPX sprm records
+// Note: 0...variable length!
+const unsigned char SPRM_Size[]= { 1, 1, 2, 4, 2, 2, 0, 3 };
 
 //////////////////////////////////////////////////////////////////////////////
 // CStyle - creates everything between <FORMAT> and </FORMAT>
 //////////////////////////////////////////////////////////////////////////////
-CStyle::CStyle(unsigned short &styleID, unsigned char id) {
+CStyle::CStyle(const myFile &main, const unsigned short &styleID, unsigned char id) :
+               QObject() {
 
     if(id>0 && id<6)
         _id=id;
@@ -11,6 +17,7 @@ CStyle::CStyle(unsigned short &styleID, unsigned char id) {
         _id=1;
 
     stID=styleID;
+    _main=main;
     onlyLayout=false;
     _pos=0;
     _len=0;
@@ -98,13 +105,14 @@ CStyle::CStyle(unsigned short &styleID, unsigned char id) {
     }
 }
 
-CStyle::CStyle(CStyle &rhs) {
+CStyle::CStyle(const CStyle &rhs) : QObject() {
 
     _id=rhs.id();
     _pos=rhs.pos();
     _len=rhs.len();
 
     stID=rhs.styleID();
+    _main=rhs.main();
     onlyLayout=rhs.layout();
 
     // init...
@@ -225,6 +233,64 @@ CStyle::~CStyle() {
             delete [] data.footnote.ref;
             data.footnote.ref=0L;
         }
+    }
+}
+
+void CStyle::applyCHPX(const long &fcGrpprl, const unsigned short &cb) {
+
+    unsigned short offset=0;
+    unsigned short value, size;
+
+    while(cb>offset) {
+        value=( *(_main.data+fcGrpprl+offset+1) << 8 ) + *(_main.data+fcGrpprl+offset);
+        size=value & 0xE000;
+        size=static_cast<unsigned short>(SPRM_Size[size]);
+
+        // variable length!
+        if(size==0) {
+            if(value==0xd606 || value==0xd608)
+                size=( *(_main.data+fcGrpprl+offset+3) << 8 ) + *(_main.data+fcGrpprl+offset+2) + 1;
+            else if(value==0xc615) {
+                unsigned char tmp=*(_main.data+fcGrpprl+offset+2);
+                if(tmp<255)
+                    size=tmp+1;
+                else {
+                    kdebug(KDEBUG_INFO, 31000, "Sigh - don't know the length of that sprm! Guessing :)");
+                    size=3;  // don't know really, but algorithm should be quite ok >:)
+                    tmp=*(_main.data+fcGrpprl+offset+3);
+                    tmp*=4;
+                    size+=tmp;
+                    size+=*(_main.data+fcGrpprl+offset+3+tmp)*3;
+                }
+            }
+            else
+                size=*(_main.data+fcGrpprl+offset+2)+1;
+        }
+
+        switch(value) {
+            case 0x6a03:
+                // picture! I'll have to handle this via a SIGNAL!
+                // will implement that later :)
+                // Note: Style will have to be changed - impossible -
+                // create new Style(s) :)
+                break;
+            case 0x0806:
+                // also via SIGNAL?
+                break;
+            case 0x6a09:
+                break;
+            case 0x800a:
+                break;
+            case 0x680e:
+                break;
+            case 0x6865:
+                break;
+            case 0x4866:
+                break;
+            default:
+                break;
+        }
+        offset+=2+size;      // offset to next sprm
     }
 }
 
@@ -457,11 +523,13 @@ void CStyle::footnoteRef(const QString &name) {
 //////////////////////////////////////////////////////////////////////////////
 // PStyle - creates everything between <LAYOUT> and </LAYOUT>
 //////////////////////////////////////////////////////////////////////////////
-PStyle::PStyle(const unsigned short &styleID, const unsigned short &cstyleID) {
+PStyle::PStyle(const myFile &main, const unsigned short &styleID, const CStyle &cstyle) :
+               QObject(), _cstyle(cstyle) {
 
     _styleID=styleID;
-    _cstyleID=cstyleID;
+    _main=main;
     _layoutTag=true;
+    _cstyle.setLayout();   // just to be sure!
 
     _name="Standard";
     _following="Standard";
@@ -487,11 +555,11 @@ PStyle::PStyle(const unsigned short &styleID, const unsigned short &cstyleID) {
     _right=_top=_bottom=_left;
 }
 
-PStyle::PStyle(const PStyle &rhs) {
+PStyle::PStyle(const PStyle &rhs) : QObject(), _cstyle(rhs.cstyle()) {
 
     _styleID=rhs.styleID();
-    _cstyleID=rhs.cstyleID();
     _layoutTag=rhs.layoutTag();
+    _main=rhs.main();
 
     _name=rhs.name();
     _following=rhs.following();
@@ -513,13 +581,21 @@ PStyle::PStyle(const PStyle &rhs) {
     _right=rhs.right();
     _top=rhs.top();
     _bottom=rhs.bottom();
+    _tabList=rhs.tabList();
 }
 
 PStyle::~PStyle() {
     _tabList.clear();
 }
 
-const QString PStyle::layout(const QString &cformat) {
+void PStyle::applyPAPX(const long &/*fcGrpprl*/, const unsigned short &/*cb*/) {
+}
+
+void PStyle::applyCHPX(const long &fcGrpprl, const unsigned short &cb) {
+    _cstyle.applyCHPX(fcGrpprl, cb);
+}
+
+const QString PStyle::layout() {
 
     QString layout;
 
@@ -569,7 +645,7 @@ const QString PStyle::layout(const QString &cformat) {
     layout+=border(_bottom);
     layout+="/>\n";
 
-    layout+=cformat;
+    layout+=_cstyle.format();
 
     unsigned int count=_tabList.count();
     for(unsigned int i=0; i<count; ++i)
