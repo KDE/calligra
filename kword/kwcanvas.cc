@@ -146,11 +146,12 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         m_currentFrameSetEdit->focusOutEvent();
     m_printing = true;
     KWViewMode *viewMode = new KWViewModePrint( m_doc );
-
-    QValueList<int> pageList;
+    //use page specify in kdeprint dialogbox
+    QValueList<int> pageList=printer->pageList();
     int from = printer->fromPage();
     int to = printer->toPage();
     kdDebug(32001) << "KWCanvas::print from=" << from << " to=" << to << endl;
+    /*
     if ( !from && !to ) // 0, 0 means everything
     {
         from = printer->minPage();
@@ -158,6 +159,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     }
     for ( int i = from; i <= to; i++ )
         pageList.append( i );
+    */
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               pageList.count() + 1, this );
     int j = 0;
