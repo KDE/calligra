@@ -26,6 +26,7 @@
 class QListBox;
 class QPushButton;
 class QLineEdit;
+class QSpinBox;
 class KWordDocument;
 
 /******************************************************************
@@ -51,11 +52,11 @@ public:
     int getNumRecords() const {
 	return (int)db.count();
     }
-    
+
 protected:
     typedef QMap< QString, QString > DbRecord;
     typedef QValueList< DbRecord > Db;
-    
+
     KWordDocument *doc;
     Db db;
     DbRecord sampleRecord;
@@ -94,7 +95,12 @@ class KWSerialLetterEditorListItem : public QListViewItem
 {
 public:
     KWSerialLetterEditorListItem( QListView *parent );
-
+    KWSerialLetterEditorListItem( QListView *parent, QListViewItem *after );
+    virtual ~KWSerialLetterEditorListItem();
+    
+    virtual void setText( int i, const QString &text );
+    virtual QString text( int i ) const;
+    
     void setup();
     void update();
 
@@ -114,14 +120,24 @@ class KWSerialLetterEditorList : public QListView
     Q_OBJECT
 
 public:
-    KWSerialLetterEditorList( QWidget *parent );
-
+    KWSerialLetterEditorList( QWidget *parent, KWSerialLetterDataBase *db_ );
+    virtual ~KWSerialLetterEditorList();
+    
     void updateItems();
+    void displayRecord( int i );
+
+    void setSorting( int, bool increasing = TRUE ) {
+	QListView::setSorting( -1, increasing );
+    }
 
 protected slots:
     void columnSizeChange( int c, int os, int ns );
     void sectionClicked( int c );
 
+protected:
+    KWSerialLetterDataBase *db;
+    int currentRecord;
+    
 };
 
 /******************************************************************
@@ -135,17 +151,23 @@ class KWSerialLetterEditor : public QDialog
     Q_OBJECT
 
 public:
-    KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db );
+    KWSerialLetterEditor( QWidget *parent, KWSerialLetterDataBase *db_ );
 
 protected:
     void resizeEvent( QResizeEvent *e );
 
-    QPushButton *first, *last, *prev, *next, *newRecord,
-	*removeRecord, *removeEntry, *addEntry, *addRecord;
-    QLineEdit *record;
-    KWSerialLetterEditorList *list;
+    QSpinBox *records;
+    KWSerialLetterEditorList *dbList;
     QVBox *back;
-
+    KWSerialLetterDataBase *db;
+    
+protected slots:
+    void changeRecord( int i );
+    void addEntry();
+    void addRecord();
+    void removeEntry();
+    void removeRecord();
+    
 };
 
 #endif

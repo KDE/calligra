@@ -810,6 +810,7 @@ void KWordView::editCustomVars()
     dia->exec();
     gui->getPaperWidget()->recalcWholeText();
     gui->getPaperWidget()->repaintScreen( FALSE );
+    delete dia;
 }
 
 /*===============================================================*/
@@ -819,6 +820,7 @@ void KWordView::editSerialLetterDataBase()
     dia->exec();
     gui->getPaperWidget()->recalcWholeText();
     gui->getPaperWidget()->repaintScreen( FALSE );
+    delete dia;
 }
 
 /*================================================================*/

@@ -135,7 +135,7 @@ QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
 	return QString();
     }
 
-    return dynamic_cast<KWSerialLetterVariable*>( _var )->getValue();
+    return "<" + dynamic_cast<KWSerialLetterVariable*>( _var )->getValue() + ">";
 }
 
 
@@ -412,7 +412,7 @@ void KWSerialLetterVariable::recalc()
 void KWSerialLetterVariable::save( ostream &out )
 {
     KWVariable::save( out );
-    out << indent << "<SERIALLETTER name=\"" << correctQString( name ).latin1() 
+    out << indent << "<SERIALLETTER name=\"" << correctQString( name ).latin1()
 	<< "\"/>" << endl;
 }
 

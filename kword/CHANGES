@@ -1494,5 +1494,13 @@ Reggie, 16.9.1999:
 ------------------
 - More work on the serial letter database (works finally)
 - Implemented printing serial letters => everything for serial
-  letters works now, only the editor for the serial letter 
+  letters works now, only the editor for the serial letter
   database is not working yet
+
+Reggie, 18.9.1999:
+------------------
+- Fixed a mem leak
+- More work on srial letter database editor:
+  - It's possible to navigate through the records
+  - It's possible to edit entries in a record
+  - Adding new records works
