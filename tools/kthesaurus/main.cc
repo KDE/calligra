@@ -32,7 +32,7 @@ static KCmdLineOptions options[] =
 	KCmdLineLastOption
 };
 
-int main(int argc, char **argv)
+extern "C" int kdemain(int argc, char **argv)
 {
 
 	KAboutData aboutData("kthesaurus", I18N_NOOP("KThesaurus"), "1.0",
@@ -41,8 +41,7 @@ int main(int argc, char **argv)
 
 	KCmdLineArgs::init(argc, argv, &aboutData);
 	KCmdLineArgs::addCmdLineOptions(options);
-	// "unused var" warning, but we need it because kdatatool needs an instance:
-	KApplication *a = new KApplication();
+	KApplication a; // KDataTool needs an instance
 
 	// TODO: take term from command line!
 
