@@ -85,8 +85,8 @@ void ProcessSubtags ( QDomNode                   parentNode,
 
             if ( !found )
             {
-                kdError(30503) << "Unexpected tag " << childNode.nodeName ()
-                               << " in " << parentNode.nodeName () << "!" << endl;
+                kdWarning(30508) << "Unexpected tag " << childNode.nodeName ()
+                    << " in " << parentNode.nodeName () << "!" << endl;
             }
         }
     }
@@ -157,23 +157,25 @@ void ProcessAttributes ( QDomNode                     myNode,
                         }
                         else
                         {
-                            kdError(30503) << "Unexpected data type " << (*attrProcessingIt).type << " in " <<
-                                           myNode.nodeName () << " attribute " << (*attrProcessingIt).name
-                                           << "!" << endl;
+                            kdWarning(30508) << "Unexpected data type " << (*attrProcessingIt).type
+                                << " in " << myNode.nodeName ()
+                                << " attribute " << (*attrProcessingIt).name
+                                << "!" << endl;
                         }
                     }
                     else
                     {
-//                      kdError(30503) << "<para>ignoring " << myNode.tagName << " attribute "
-//                                     << (*attrProcessingIt).name << "!</para>" << endl;
+//                      kdWarning(30508) << "<para>ignoring " << myNode.tagName
+//                          << " attribute " << (*attrProcessingIt).name
+//                          << "!</para>" << endl;
                     }
                 }
             }
 
             if ( !found )
             {
-                kdError(30503) << "Unexpected attribute " << myAttrib.name () << " in " <<
-                                  myNode.nodeName () << "!" << endl;
+                kdWarning(30508) << "Unexpected attribute " << myAttrib.name ()
+                    << " in " << myNode.nodeName () << "!" << endl;
             }
         }
     }
