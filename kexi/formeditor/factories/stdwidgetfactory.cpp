@@ -296,12 +296,6 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	m_classes.append(wDateTime);
 }
 
-KFormDesigner::WidgetInfo::List
-StdWidgetFactory::classes()
-{
-	return m_classes;
-}
-
 QWidget*
 StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
@@ -369,11 +363,9 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 
 	if(w)
 		return w;
-	else
-	{
-		kdDebug() << "WARNING :: w == 0 "  << endl;
-		return 0;
-	}
+
+	kdDebug() << "WARNING :: w == 0 "  << endl;
+	return 0;
 }
 
 void
@@ -489,8 +481,6 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 	else if((classname == "KTextEdit") || (classname == "KDateTimeWidget") || (classname == "KTimeWidget") ||
 		(classname == "KDateWidget") || (classname == "KIntSpinBox"))
 		disableFilter(w, container);
-
-	return;
 }
 
 void

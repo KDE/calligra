@@ -186,7 +186,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/**
 		 * \return all classes which are provided by this factory
 		 */
-		virtual WidgetInfo::List classes()=0;
+		const WidgetInfo::List classes() const { return m_classes; }
 
 		/*!
 		 * Creates a widget (and if needed a \ref Container)
@@ -305,6 +305,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		QString   m_firstText;
 		QGuardedPtr<ResizeHandleSet>  m_handles;
 		QGuardedPtr<Container>      m_container;
+		WidgetInfo::List m_classes;
 };
 
 }

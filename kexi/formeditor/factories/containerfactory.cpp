@@ -342,12 +342,6 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	m_classes.append(wSubForm);
 }
 
-KFormDesigner::WidgetInfo::List
-ContainerFactory::classes()
-{
-	return m_classes;
-}
-
 QWidget*
 ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {

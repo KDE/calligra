@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -139,6 +140,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		PropertyCommand	*m_lastcom;
 		GeometryPropertyCommand *m_lastgeocom;
 		bool		m_undoing;
+
+		QColorGroup* m_origActiveColors;
 
 		// i18n stuff
 		QMap<QString, QString> propDesc;

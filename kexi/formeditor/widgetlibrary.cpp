@@ -37,7 +37,7 @@ class WidgetLibraryPrivate
 	public:
 		WidgetLibraryPrivate()
 		 : widgets(101)
-		 , alternateWidgets(101)
+//		 , alternateWidgets(101)
 		 , services(101, false)
 		 , supportedFactoryGroups(17, false)
 		 , factoriesLoaded(false)
@@ -45,7 +45,7 @@ class WidgetLibraryPrivate
 			services.setAutoDelete(true);
 		}
 		// dict which associates a class name with a Widget class
-		WidgetInfo::Dict widgets, alternateWidgets;
+		WidgetInfo::Dict widgets;//, alternateWidgets;
 		QAsciiDict<KService::Ptr> services;
 		QAsciiDict<char> supportedFactoryGroups;
 		bool factoriesLoaded : 1;
@@ -83,19 +83,28 @@ WidgetLibrary::addFactory(WidgetFactory *f)
 	for(WidgetInfo *w = widgets.first(); w; w = widgets.next())
 	{
 //		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
-		d->widgets.insert(w->className(), w);
+		QStringList l = w->alternateClassNames();
+		l.prepend( w->className() );
+		//d->widgets.insert(w->className(), w);
 //		if(!w->alternateClassName().isEmpty()) {
 //			QStringList l = QStringList::split("|", w->alternateClassName());
-		const QStringList l = w->alternateClassNames();
 		QStringList::ConstIterator endIt = l.constEnd();
 		for(QStringList::ConstIterator it = l.constBegin(); it != endIt; ++it) {
-			WidgetInfo *widgetForClass = d->alternateWidgets.find(*it);
+			WidgetInfo *widgetForClass = d->widgets.find(*it);
+			if (!widgetForClass || (widgetForClass && !widgetForClass->isOverriddenClassName(*it))) {
+				//insert a widgetinfo, if:
+				//1) this class has no alternate class assigned yet, or
+				//2) this class has alternate class assigned but without 'override' flag
+				d->widgets.replace(*it, w);
+			}
+
+/*			WidgetInfo *widgetForClass = d->alternateWidgets.find(*it);
 			if (!widgetForClass || (widgetForClass && !widgetForClass->isOverriddenClassName(*it))) {
 				//insert a widgetinfo, if:
 				//1) this class has no alternate class assigned yet, or
 				//2) this class has alternate class assigned but without 'override' flag
 				d->alternateWidgets.replace(*it, w);
-			}
+			}*/
 		}
 	}
 }
@@ -322,7 +331,8 @@ WidgetLibrary::checkAlternateName(const QString &classname)
 	if(d->widgets.find(classname))
 		return classname;
 
-	WidgetInfo *wi =  d->alternateWidgets[classname];
+//	WidgetInfo *wi =  d->alternateWidgets[classname];
+	WidgetInfo *wi =  d->widgets[classname];
 	if (wi) {
 //		kdDebug() << "WidgetLibrary::alternateName() : The name " << classname << " will be replaced with " << wi->className() << endl;
 		return wi->className();

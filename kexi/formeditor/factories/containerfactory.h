@@ -146,7 +146,6 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		ContainerFactory(QObject *parent, const char *name, const QStringList &args);
 		~ContainerFactory();
 
-		virtual KFormDesigner::WidgetInfo::List classes();
 		virtual QWidget				*create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
 		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container, QValueVector<int> *menuIds);
@@ -173,7 +172,6 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		void reorderTabs(int oldpos, int newpos);
 
 	private:
-		KFormDesigner::WidgetInfo::List m_classes;
 		QWidget *m_widget;
 		KFormDesigner::Container *m_container;
 		KFormDesigner::FormManager  *m_manager;

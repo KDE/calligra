@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,7 +40,7 @@
 
 #include "objpropbuffer.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent, const char *name)
  : KexiPropertyBuffer(parent, name)
@@ -48,6 +49,7 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 	m_lastcom = 0;
 	m_lastgeocom = 0;
 	m_undoing = false;
+	m_origActiveColors = 0;
 
 	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotChangeProperty(KexiPropertyBuffer&, KexiProperty&)));
 	connect(this, SIGNAL(propertyReset(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotResetProperty(KexiPropertyBuffer&, KexiProperty&)));
@@ -89,9 +91,18 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 				continue;
 
 			QPalette p = w->palette();
-			QColorGroup cg = p.active();
-			p.setActive(p.disabled());
-			p.setDisabled(cg);
+			if (!m_origActiveColors)
+				m_origActiveColors = new QColorGroup( p.active() );
+			if (value.toBool()) {
+				if (m_origActiveColors)
+					p.setActive( *m_origActiveColors ); //revert
+			}
+			else {
+				QColorGroup cg = p.disabled();
+				//also make base color a bit disabled-like
+				cg.setColor(QColorGroup::Base, cg.color(QColorGroup::Background));
+				p.setActive(cg);
+			}
 			w->setPalette(p);
 
 			tree->setEnabled(value.toBool());
@@ -702,8 +713,7 @@ ObjectPropertyBuffer::updateOldValue(ObjectTreeItem *tree, const char *property)
 
 ObjectPropertyBuffer::~ObjectPropertyBuffer()
 {
-}
-
+	delete m_origActiveColors;
 }
 
 #include "objpropbuffer.moc"
