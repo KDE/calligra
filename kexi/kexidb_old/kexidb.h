@@ -53,6 +53,7 @@ class KEXIDB_EXPORT KexiDB : public QObject
 
 public:
 
+	//! db engine type
 	enum DBType
 	{
 		NoDB,
@@ -76,6 +77,8 @@ public:
 	//most current drivers make those a mutators
 	virtual QStringList       databases();
 	virtual QStringList       tableNames()=0;
+	//! Returns true if database named by dbName is considered as system database
+	virtual bool isSystemDatabase(QString &dbName)=0;
 
 	virtual QString           driverName() const;
 	virtual DBType            dbType() const;

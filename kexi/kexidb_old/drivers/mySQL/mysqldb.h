@@ -58,6 +58,7 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public KexiDB
 //					const char *db, unsigned int port = 0, const char *unix_socket = 0, unsigned int client_flag = 0);
 		QString		driverName()   const;
 		QStringList	databases();
+		virtual bool isSystemDatabase(QString &dbName);
 		QStringList	tableNames();
 		unsigned long	affectedRows() const;
 		KexiDBTableStruct	structure(const QString& table) const;

@@ -190,6 +190,11 @@ MySqlDB::databases()
 	return s;
 }
 
+bool MySqlDB::isSystemDatabase(QString &dbName)
+{
+	return dbName=="mysql";
+}
+
 QStringList
 MySqlDB::tableNames()
 {
