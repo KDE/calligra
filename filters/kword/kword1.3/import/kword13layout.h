@@ -29,7 +29,7 @@ public:
     QString key( void ) const;
     
     
-    QString KWord13Layout::getProperty( const QString& name ) const;
+    QString getProperty( const QString& name ) const;
 
 public:
     KWord13FormatOne m_format; ///< Character format properties
