@@ -3,15 +3,39 @@
 #include <kdebug.h>
 #include <ustring.h>
 #include <word97_generated.h>
+#include <parser.h>
+
+
+wvWare::U8 KWordCharacterHandler::hardLineBreak( wvWare::U32 )
+{
+    kdDebug() << "KWordCharacterHandler::hardLineBreak" << endl;
+    return '\n';
+}
+
+wvWare::U8 KWordCharacterHandler::nonBreakingHyphen( wvWare::U32 )
+{
+    kdDebug() << "KWordCharacterHandler::nonBreakingHyphen" << endl;
+    return '-'; // normal hyphen for now
+}
+
+wvWare::U8 KWordCharacterHandler::nonRequiredHyphen( wvWare::U32 )
+{
+    kdDebug() << "KWordCharacterHandler::nonRequiredHyphen" << endl;
+    return 0xad; // soft hyphen, according to kword.dtd
+}
+
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
     : wvWare::LLDocument( fileName ), m_mainDocument( mainDocument ),
       m_mainFramesetElement( mainFramesetElement ), m_index( 0 )
 {
+    m_handler = new KWordCharacterHandler;
+    parser()->setSpecialCharacterHandler( m_handler );
 }
 
 Document::~Document()
 {
+    delete m_handler;
 }
 
 void Document::paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap )
