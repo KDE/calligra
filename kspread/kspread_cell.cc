@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <math.h>
-#include <locale.h> // for localeconv
 
 #include <qpainter.h>
 #include <qdrawutl.h>
@@ -42,6 +41,7 @@
 #include <komlWriter.h>
 #include <torben.h>
 #include <kformula.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kscript_parsenode.h>
 
@@ -684,8 +684,14 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // First get some locale information
     if (!decimal_point)
     { // (decimal_point is static)
-      decimal_point = *(localeconv()->decimal_point);
+      decimal_point = KGlobal::locale()->decimalSymbol()[0].latin1();
+      // Hmm we should use QChar here and QString a lot more around
+      // here... (David)
       debug( "decimal_point is '%c'", decimal_point );
+
+      // HACK
+      // ok set it to '.' since kscript relies on that for now :(
+      decimal_point = '.';
     }
 
     QString f2;
