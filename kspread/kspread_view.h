@@ -51,7 +51,7 @@ class KSpreadSheet;
 class KSpreadSpell;
 class KSpreadVBorder;
 class KSpreadView;
-
+class KSpreadComboboxLocationEditWidget;
 class ViewPrivate;
 
 /**
@@ -120,7 +120,7 @@ public:
     /**
      * Returns the location widget.
      */
-    KSpreadLocationEditWidget* posWidget() const;
+    KSpreadComboboxLocationEditWidget* posWidget() const;
 
     /**
      * Returns the tab bar.

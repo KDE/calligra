@@ -4,6 +4,7 @@
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qpen.h>
+#include <kcombobox.h>
 
 #include <koQueryTrader.h>
 #include <kspread_view.h>
@@ -23,12 +24,22 @@ class KSpreadCell;
 class QWidget;
 class QTimer;
 class QButton;
-
+class KSpreadLocationEditWidget;
 class QPainter;
 class QLabel;
 
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
+
+
+class KSpreadComboboxLocationEditWidget : public KComboBox
+{
+public:
+    KSpreadComboboxLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
+    void refreshCombobox();
+private:
+    KSpreadLocationEditWidget *m_locationWidget;
+};
 
 
  /**
@@ -40,7 +51,7 @@ class KSpreadLocationEditWidget : public QLineEdit
 	Q_OBJECT
 public:
 	KSpreadLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
-
+	KSpreadView * view() const { return m_pView;}
 protected:
 	virtual void keyPressEvent( QKeyEvent * _ev );
 private:
@@ -411,7 +422,7 @@ private:
     QPoint m_dragStart;
     bool   m_dragging;
 
-    KSpreadLocationEditWidget *m_pPosWidget;
+    KSpreadComboboxLocationEditWidget *m_pPosWidget;
     KSpreadEditWidget *m_pEditWidget;
     KSpreadCellEditor *m_pEditor;
 

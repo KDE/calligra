@@ -314,7 +314,7 @@ public:
     QButton *okButton;
     QButton *cancelButton;
     KoTabBar *tabBar;
-    KSpreadLocationEditWidget *posWidget;
+    KSpreadComboboxLocationEditWidget *posWidget;
     KStatusBarLabel* calcLabel;
 
     // all UI actions
@@ -1572,7 +1572,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QHBoxLayout* hbox = new QHBoxLayout( d->toolWidget );
     hbox->addSpacing( 2 );
 
-    d->posWidget = new KSpreadLocationEditWidget( d->toolWidget, this );
+    d->posWidget = new KSpreadComboboxLocationEditWidget( d->toolWidget, this );
 
     d->posWidget->setMinimumWidth( 100 );
     hbox->addWidget( d->posWidget );
@@ -1761,7 +1761,7 @@ KSpreadEditWidget* KSpreadView::editWidget()const
     return d->editWidget;
 }
 
-KSpreadLocationEditWidget* KSpreadView::posWidget()const
+KSpreadComboboxLocationEditWidget* KSpreadView::posWidget()const
 {
     return d->posWidget;
 }
@@ -4970,14 +4970,14 @@ void KSpreadView::refreshView()
 
   d->vBorderWidget->setGeometry( left, heightColHeader + 1, widthRowHeader,
                                  d->frame->height() - heightColHeader );
-                                 
+
   if ( table->isRightToLeft() )
   {
     int hswidth = d->doc->showTabBar() ? (width()/2) : width();
-    d->horzScrollBar->setGeometry( 0, height() - heightHScrollbar, 
+    d->horzScrollBar->setGeometry( 0, height() - heightHScrollbar,
         hswidth - widthVScrollbar,                                   heightHScrollbar );
     d->horzScrollBar->setSteps( 20 /*linestep*/, d->horzScrollBar->width() /*pagestep*/);
-  
+
     if (!d->doc->showHorizontalScrollBar())
       d->tabBar->setGeometry( 0, height() - heightHScrollbar,
                             width(), heightHScrollbar );
@@ -4988,7 +4988,7 @@ void KSpreadView::refreshView()
       d->tabBar->show();
     else
       d->tabBar->hide();
-      
+
     d->tabBar->setReverseLayout( true );
   }
 

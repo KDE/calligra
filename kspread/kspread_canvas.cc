@@ -43,6 +43,20 @@
 #include <qpoint.h>
 #include <float.h>
 
+
+KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * _parent,
+                                                      KSpreadView * _view )
+    : KComboBox( _parent, "KSpreadComboboxLocationEditWidget" )
+{
+    m_locationWidget = new KSpreadLocationEditWidget( _parent, _view );
+    setLineEdit( m_locationWidget );
+}
+
+void KSpreadComboboxLocationEditWidget::refreshCombobox()
+{
+    //todo
+}
+
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
                                                       KSpreadView * _view )
     : QLineEdit( _parent, "KSpreadLocationEditWidget" ),
@@ -3271,8 +3285,8 @@ void KSpreadCanvas::updatePosWidget()
         }
   }
 
-    if (buffer != m_pPosWidget->text())
-      m_pPosWidget->setText(buffer);
+    if (buffer != m_pPosWidget->lineEdit()->text())
+      m_pPosWidget->lineEdit()->setText(buffer);
 }
 
 
