@@ -21,7 +21,9 @@
 #include "koPictureFilePreview.moc"
 #include <koClipartCollection.h>
 #include <kdialog.h>
+#include <klocale.h>
 #include <kurl.h>
+#include <qbitmap.h>
 #include <qlayout.h>
 #include <qfileinfo.h>
 #include <qpainter.h>
@@ -109,4 +111,9 @@ void KoPictureFilePreview::showPreview( const KURL &u )
 void KoPictureFilePreview::clearPreview()
 {
     m_widget->setPixmap( QPixmap() );
+}
+
+QString KoPictureFilePreview::clipartPattern()
+{
+    return i18n( "*.svg *.wmf|Cliparts (*.svg *.wmf)" );
 }

@@ -37,6 +37,13 @@ class KoPictureFilePreview : public KPreviewWidgetBase
 public:
     KoPictureFilePreview( QWidget *parent );
 
+    /**
+     * @return a list of patterns of all supported clipart formats.
+     * These patterns can be passed to @ref KFileDialog::getOpenFileName()
+     * for instance.
+     */
+    static QString clipartPattern();
+
 public slots:
     virtual void showPreview(const KURL &url);
     virtual void clearPreview();
