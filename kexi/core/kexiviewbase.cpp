@@ -36,18 +36,29 @@ KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char 
  , m_dirty(false)
  , m_viewWidget(0)
  , m_parentView(0)
+ , m_viewMode(0) //unknown!
  , m_newlyAssignedID(-1)
 {
 	QWidget *wi=this;
 	while ((wi = wi->parentWidget()) && !wi->inherits("KexiDialogBase"))
 		;
 	m_dialog = (wi && wi->inherits("KexiDialogBase")) ? static_cast<KexiDialogBase*>(wi) : 0;
+	if (m_dialog) {
+		//init view mode number for this view (obtained from dialog where this view is created)
+		if (m_dialog->supportsViewMode(m_dialog->m_creatingViewsMode))
+			m_viewMode = m_dialog->m_creatingViewsMode;
+	}
 
 	installEventFilter(this);
 }
 
 KexiViewBase::~KexiViewBase()
 {
+}
+
+KexiPart::Part* KexiViewBase::part() const
+{
+	return m_dialog ? m_dialog->m_part : 0;
 }
 
 bool KexiViewBase::beforeSwitchTo(int /* mode */, bool & /*cancelled*/, bool & /*dontStore*/)

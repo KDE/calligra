@@ -53,6 +53,7 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 	m_currentViewMode = 0; //override this!
 	m_parentWindow = parent;
 	m_newlySelectedView = 0;
+	m_creatingViewsMode = -1;
 
 	QVBoxLayout *lyr = new QVBoxLayout(this);
 	m_stack = new QWidgetStack(this, "stack");
@@ -250,6 +251,7 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 	if (!newView) {
 		Kexi::setWaitCursor();
 		//ask the part to create view for the new mode
+		m_creatingViewsMode = newViewMode;
 		newView = m_part->createView(m_stack, this, *m_item, newViewMode);
 		Kexi::removeWaitCursor();
 		if (!newView) {
@@ -258,6 +260,7 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 				<< m_currentViewMode << " restored." << endl;
 			return false;
 		}
+		m_creatingViewsMode = -1;
 		addView(newView, newViewMode);
 	}
 	if (!newView->beforeSwitchTo(newViewMode, cancelled, dontStore)) {

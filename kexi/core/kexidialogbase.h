@@ -251,6 +251,11 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		KexiViewBase *m_newlySelectedView; //!< Used in dirty(), temporary set in switchToViewMode()
 		                                   //!< during view setup, when a new view is not yet raised.
 		QGuardedPtr<KexiDialogTempData> m_tempData; //!< temporary data shared between views
+
+		/*! Created view's mode - helper for switchToViewMode(), 
+		 KexiViewBase ctor uses that info. >0 values are useful. */
+		int m_creatingViewsMode; 
+
 		bool m_destroying : 1; //!< true after entering to the dctor
 
 		friend class KexiMainWindow;

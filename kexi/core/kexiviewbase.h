@@ -60,6 +60,11 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		//! \return parent KexiDialogBase that contains this view, or 0 if no dialog contain this view
 		KexiDialogBase* parentDialog() const { return m_dialog; }
 
+		/*! Added for convenience.
+		 \return KexiPart object that was used to create this view (with a dialog) 
+		 or 0 if this view is not created using KexiPart. \sa parentDialog() */
+		KexiPart::Part* part() const;
+
 		/*! \return preferred size hint, that can be used to resize the view.
 		 It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size, 
 		 so the view won't exceed this maximum size. The method is used e.g. in KexiDialogBase::sizeHint().
@@ -80,6 +85,9 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 Reimplement this if you e.g. want reuse other "dirty" 
 		 flag from internal structures that may be changed. */
 		virtual bool dirty() const { return m_dirty; }
+
+		/*! \return the view mode for this view. */
+		int viewMode() { return m_viewMode; }
 
 	public slots:
 		virtual void setFocus();
@@ -208,6 +216,10 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 \sa KexiDialogBase::id()
 		 */
 		int m_newlyAssignedID;
+
+		/*! Mode for this view. Initialized by KexiDialogBase::switchToViewMode().
+		 Can be useful when single class is used for more than one view (e.g. KexiDBForm). */
+		int m_viewMode;
 
 		bool m_dirty : 1;
 
