@@ -112,6 +112,11 @@ KarbonFactory::aboutData()
 			0,
 			"tomislav.lukman@ck.hinet.hr",
 			0 );
+		s_aboutData->addAuthor(
+			"Benoît Vautrin",
+			0,
+			"benoit.vautrin@free.fr",
+			0 );
 // TODO: add the names of some helpfull souls
 	}
 	return s_aboutData;
