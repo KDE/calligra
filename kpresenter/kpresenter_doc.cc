@@ -144,7 +144,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_insertFilePage = 0;
     m_refreshSideBar = true;
     m_picturePath= KGlobalSettings::documentPath();
-
+    m_globalLanguage = KGlobal::locale()->language();
     _duplicatePage=false;
 
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
@@ -176,6 +176,14 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     /// KPresenter isn't color-scheme aware, it defaults to black on white.
     m_standardStyle->format().setColor( Qt::black );
+
+    if( config->hasGroup("Interface") ) {
+        config->setGroup( "Interface" );
+        m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
+    }
+
+    m_standardStyle->format().setLanguage( m_globalLanguage);
+
     m_zoomHandler = new KoZoomHandler;
 
     m_varFormatCollection = new KoVariableFormatCollection;
@@ -209,7 +217,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bSnapToGrid= false;
 
     m_cursorInProtectectedArea=true;
-    m_globalLanguage = KGlobal::locale()->language();
 
     usedSoundFile = QStringList();
     haveNotOwnDiskSoundFile = QStringList();
@@ -2850,7 +2857,9 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
+        {
             sty->format() = KPTextObject::loadFormat( formatElem, 0L, defaultFont(), globalLanguage() );
+        }
         else
             kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
