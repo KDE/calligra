@@ -29,7 +29,7 @@ class PowerPointFilter : public FilterBase {
 public:
     PowerPointFilter() : FilterBase() {}
     virtual ~PowerPointFilter() {}
-    virtual const QString part();
+    virtual const QDomDocument * const part();
     
 private:
     PowerPointFilter(const PowerPointFilter &);

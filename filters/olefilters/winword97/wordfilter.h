@@ -22,7 +22,6 @@
 
 #include <filterbase.h>
 #include <winworddoc.h>
-#include <kworddoc.h>
 #include <myfile.h>
 
 class WordFilter : public FilterBase {
@@ -33,7 +32,7 @@ public:
     WordFilter(const myFile &mainStream, const myFile &table0Stream,
                const myFile &table1Stream, const myFile &dataStream);
     virtual ~WordFilter();
-    virtual const QString part();
+    virtual const QDomDocument * const part();
     virtual const bool filter();
 
 private:
@@ -41,6 +40,5 @@ private:
     const WordFilter &operator=(const WordFilter &);
 
     WinWordDoc *myDoc;
-    KWordDoc *myKwd;
 };
 #endif // WORDFILTER_H

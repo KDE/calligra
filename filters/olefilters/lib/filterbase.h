@@ -21,7 +21,7 @@
 #define FILTERBASE_H
 
 #include <qobject.h>
-#include <qstring.h>
+#include <qdom.h>
 #include <myfile.h>
 
 class Picture;
@@ -37,7 +37,7 @@ public:
     virtual ~FilterBase() {}
 
     virtual const bool filter();
-    virtual const QString part() { return QString(""); }
+    virtual const QDomDocument * const part() { return &m_part; }
 
 signals:
     void signalSavePic(Picture *pic);
@@ -53,8 +53,9 @@ protected slots:
     void slotFilterError();
 
 protected:
-    bool success;      // ok, the filtering process was successful
-    bool ready;        // filtering took place, you may fetch the file now
+    bool m_success;        // ok, the filtering process was successful
+    bool m_ready;          // filtering took place, you may fetch the file now
+    QDomDocument m_part;   // this represents the part (document)
 
 private:
     FilterBase(const FilterBase &);

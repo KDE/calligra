@@ -8,11 +8,12 @@ LDFLAGS	= $(all_libraries) -version-info 1:0:0
 lib_LTLIBRARIES = libwinword97.la
 
 libwinword97_la_SOURCES = wordfilter.cc winworddoc.cc \
-kworddoc.cc paragraph.cc picture.cc style.cc \
-stylesheet.cc misc.cc
+paragraph.cc picture.cc style.cc stylesheet.cc misc.cc \
+section.cc
 
-noinst_HEADERS = winworddoc.h kworddoc.h fib.h wordfilter.h \
-paragraph.h picture.h style.h stylesheet.h misc.h
+noinst_HEADERS = winworddoc.h fib.h wordfilter.h \
+paragraph.h picture.h style.h stylesheet.h misc.h \
+section.h
 
 METASOURCES = AUTO
 

@@ -22,14 +22,14 @@
 
 
 FilterBase::FilterBase() : QObject() {
-    success=true;
-    ready=false;
+    m_success=true;
+    m_ready=false;
 }
 
 const bool FilterBase::filter() {
-    success=false;
-    ready=true;
-    return success;
+    m_success=false;
+    m_ready=true;
+    return m_success;
 }
 
 void FilterBase::slotSavePic(Picture *pic) {
@@ -41,5 +41,5 @@ void FilterBase::slotPart(const char *nameIN, char **nameOUT) {
 }
 
 void FilterBase::slotFilterError() {
-    success=false;
+    m_success=false;
 }

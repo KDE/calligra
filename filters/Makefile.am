@@ -1,1 +1,1 @@
-SUBDIRS = kspread kword olefilters
+SUBDIRS = kspread kword #olefilters

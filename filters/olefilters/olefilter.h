@@ -22,10 +22,14 @@
 
 #include <string.h>
 #include <qobject.h>
+#include <qbuffer.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qarray.h>
 #include <qfile.h>
+#include <qdom.h>
+#include <qtextstream.h>
+
 #include <koFilter.h>
 #include <koTarStore.h>
 #include <klaola.h>

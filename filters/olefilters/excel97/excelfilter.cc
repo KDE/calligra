@@ -27,15 +27,10 @@ ExcelFilter::ExcelFilter(const myFile &mainStream)
 
 ExcelFilter::~ExcelFilter() 
 {
-  if(s) {
-    delete s;
-    s=0L;
-  }
-
-  if(tree) {
-    delete tree;
-    tree=0L;
-  }
+  delete s;
+  s=0L;
+  delete tree;
+  tree=0L;
 }
 
 const bool ExcelFilter::filter()
@@ -46,7 +41,7 @@ const bool ExcelFilter::filter()
   QByteArray rec;
   Q_UINT16 opcode, size;
 
-  while (!s->eof() && success == true) {
+  while (!s->eof() && m_success == true) {
     *s >> opcode;
     if (opcode == 0) break;
      *s >> size;
@@ -61,7 +56,7 @@ const bool ExcelFilter::filter()
     for (i = 0; biff[i].opcode != opcode && biff[i].opcode != 0; i++);
 
     if (biff[i].opcode == opcode) {
-      success = (tree->*(biff[i].func))(size, *body);
+      m_success = (tree->*(biff[i].func))(size, *body);
     }
     else {
       debug("ExcelFilter: Oops, unknown opcode %x.", opcode);
@@ -69,21 +64,22 @@ const bool ExcelFilter::filter()
     delete body;
     rec.resetRawData(buffer, size);
   }
-  ready = true;
+  m_ready = true;
 
   delete [] buffer;
-  return success;
+  return m_success;
 }
 
-const QString ExcelFilter::part() 
+const QDomDocument * const ExcelFilter::part()
 {
 
-  if(ready && success) {
-    kdebug(KDEBUG_INFO, 31000, tree->part());
+  if(m_ready && m_success) {
+    //kdebug(KDEBUG_INFO, 31000, tree->part());
     return tree->part();
   }
   else {
-    return "<?xml version=\"1.0\"?>\n"
+    m_part=QDomDocument("spreadsheet");
+    m_part.setContent(QString("<?xml version=\"1.0\"?>\n"
       "<DOC author=\"Torben Weis\" email=\"weis@kde.org\" editor=\"KSpread\" mime=\"application/x-kspread\" >\n"
       "<PAPER format=\"A4\" orientation=\"Portrait\">\n"
       "<PAPERBORDERS left=\"20\" top=\"20\" right=\"20\" bottom=\"20\"/>\n"
@@ -98,6 +94,7 @@ const QString ExcelFilter::part()
       "</CELL>\n"
       "</TABLE>\n"
       "</MAP>\n"
-      "</DOC>";
+      "</DOC>"));
+    return &m_part;
   }
 }

@@ -22,7 +22,7 @@ XMLTree::XMLTree()
   pro = root->createProcessingInstruction("xml", "version=\"1.0\"");
   root->appendChild(pro);
 
-  doc = root->createElement("DOC"); 
+  doc = root->createElement("DOC");
   //doc.setAttribute("author", "OLEFilter");
   doc.setAttribute("email", "unknown");
   doc.setAttribute("editor", "KSpread");
@@ -47,22 +47,13 @@ XMLTree::XMLTree()
 
 XMLTree::~XMLTree() 
 {
-  if(root) {
-    delete root;
-    root=0L;
-  }
+  delete root;
+  root=0L;
 }
 
-const QString XMLTree::part()
+const QDomDocument * const XMLTree::part()
 {
-  QString s;
-  QTextStream t(s, IO_WriteOnly);
-
-  t << "<?xml version=\"1.0\"?>\n";
-  doc.save(t);
-  t << '\0';
-
-  return s;
+  return root;
 }
 
 const QDomElement XMLTree::getFont(Q_UINT16 xf)

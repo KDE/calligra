@@ -17,53 +17,43 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef WINWORDDOC_H
-#define WINWORDDOC_H
+#ifndef SECTION_H
+#define SECTION_H
 
+#include <qarray.h>
 #include <qstring.h>
-#include <qdom.h>
+#include <qlist.h>
 
-#include <paragraph.h>
-#include <stylesheet.h>
-#include <section.h>
-#include <myfile.h>
-#include <misc.h>
 #include <fib.h>
-#include <pcd.h>
+#include <myfile.h>
+#include <paragraph.h>
+#include <winworddoc.h>
 
-#include <kdebug.h>
+class WinWordDoc;
 
-class WinWordDoc {
+class Section {
 
 public:
-    WinWordDoc(QDomDocument &part, const myFile &mainStream,
-               const myFile &table0Stream, const myFile &table1Stream,
-               const myFile &dataStream);
-    ~WinWordDoc();
+    Section(const WinWordDoc * const parent, const unsigned char * const mainData,
+            const FIB * const fib, const QArray<long> &sectionMarks,
+            const QArray<long> &paragMarks, const QArray<long> &cellMarks,
+            const QArray<long> &rowMarks);
+    ~Section();
 
     const bool isOk() const { return m_success; }
-
     const bool convert();
-    const QDomDocument * const part();
-
-    const PCD readPCD(const long &pos);
+    const QString section() const { return m_section; }
 
 private:
-    WinWordDoc(const WinWordDoc &);
-    const WinWordDoc &operator=(const WinWordDoc &);
+    Section(const Section &);
+    const Section &operator=(const Section &);
 
-    void FIBInfo();
-    void readFIB();
-
-    const bool locatePieceTbl();
-    const bool checkBinTables();
-    bool m_success, m_ready;
-    FIB *m_fib;
-    QDomDocument m_part;
-    myFile m_main, m_table, m_data;
-    StyleSheet *m_styleSheet;
-
-    // piece table (pt)
-    long m_ptCPBase, m_ptSize, m_ptCount, m_ptPCDBase;
+    QString m_section;
+    QList<Paragraph> m_paragList;
+    bool m_success;
+    const WinWordDoc * const m_parent;
+    const unsigned char * const m_mainData;
+    const FIB * const m_fib;
+    QArray<long> m_sectionMarks, m_paragMarks, m_cellMarks, m_rowMarks;
 };
-#endif // WINWORDDOC_H
+#endif // SECTION_H

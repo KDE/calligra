@@ -26,7 +26,7 @@ public:
   XMLTree();
   ~XMLTree();
 
-  const QString part();
+  const QDomDocument * const part();
   const QDomElement getFont(Q_UINT16 xf);
   const QDomElement getFormat(Q_UINT16 xf);
 

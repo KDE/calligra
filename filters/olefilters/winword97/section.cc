@@ -17,26 +17,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kworddoc.h>
+#include <section.h>
 
-KWordDoc::KWordDoc() {
-    success=true;
-    ready=false;
+Section::Section(const WinWordDoc * const parent, const unsigned char * const mainData,
+                 const FIB * const fib, const QArray<long> &sectionMarks,
+                 const QArray<long> &paragMarks, const QArray<long> &cellMarks,
+                 const QArray<long> &rowMarks) : m_parent(parent), m_mainData(mainData),
+                 m_fib(fib), m_sectionMarks(sectionMarks), m_paragMarks(paragMarks),
+                 m_cellMarks(cellMarks), m_rowMarks(rowMarks) {
+
+    m_section=QString::null;
+    m_success=true;
 }
 
-KWordDoc::~KWordDoc() {
-}
-
-void KWordDoc::part(const QString &) { //part) {
-
-    ready=true;
-    success=false; // at the moment
-}
-
-const QString KWordDoc::kwdFile() {
-
-    if(ready && success)
-        return kwd;
-    else
-        return QString("");
+Section::~Section() {
 }

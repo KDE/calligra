@@ -26,7 +26,7 @@ public:
     ~ExcelFilter();
 
     virtual const bool filter();
-    virtual const QString part();
+    virtual const QDomDocument * const part();
 
 private:
     QDataStream *s;

@@ -233,7 +233,12 @@ void OLEFilter::convert(const QString &dirname) {
         }
 
         success=myFilter->filter();
-        QString file=myFilter->part();
+        const QDomDocument * const part=myFilter->part();
+        QBuffer file;
+        file.open(IO_WriteOnly);
+        QTextStream str(&file);
+        str << *part;
+        file.close();
         char *tmp=0L;
         slotPart(dirname, &tmp);
         if(!store->open(tmp, "")) {
@@ -241,7 +246,7 @@ void OLEFilter::convert(const QString &dirname) {
             kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Could not open KoTarStore!");
             return;
         }
-        store->write((const char*)(file.utf8()), file.length());
+        store->write(file.buffer().data(), file.buffer().size());
         store->close();
         delete [] tmp;
         delete myFilter;
