@@ -93,6 +93,15 @@ private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
         const ValueListFormatData& paraFormatDataList);
+    void processNormalText ( const QString& paraText,
+        const TextFormatting& formatLayout,
+        const FormatData& formatData);
+    void processVariable ( const QString& paraText,
+        const TextFormatting& formatLayout,
+        const FormatData& formatData);
+    void processPicture ( const QString& paraText,
+        const TextFormatting& formatLayout,
+        const FormatData& formatData);
     QString textFormatToAbiProps(const TextFormatting& formatOrigin,
         const TextFormatting& formatData, const bool force) const;
     QString layoutToCss(const LayoutData& layoutOrigin,
@@ -603,6 +612,113 @@ void AbiWordWorker::writeAbiProps (const TextFormatting& formatLayout, const Tex
     }
 }
 
+void AbiWordWorker::processNormalText ( const QString &paraText,
+    const TextFormatting& formatLayout,
+    const FormatData& formatData)
+{
+    // Retrieve text and escape it
+    QString partialText=escapeAbiWordText(paraText.mid(formatData.pos,formatData.len));
+
+    // Replace line feeds by line breaks
+    int pos;
+    while ((pos=partialText.find(QChar(10)))>-1)
+    {
+        partialText.replace(pos,1,"<br/>");
+    }
+
+    if (formatData.text.missing)
+    {
+        // It's just normal text, so we do not need a <c> element!
+        *m_streamOut << partialText;
+    }
+    else
+    { // Text with properties, so use a <c> element!
+        *m_streamOut << "<c";
+        writeAbiProps(formatLayout,formatData.text);
+        *m_streamOut << ">" << partialText << "</c>";
+    }
+}
+
+void AbiWordWorker::processVariable ( const QString&,
+    const TextFormatting& formatLayout,
+    const FormatData& formatData)
+{
+    if (0==formatData.variable.m_type)
+    {
+        // As AbiWord's field is inflexible, we cannot make the date custom
+        *m_streamOut << "<field type=\"date_ntdfl\"";
+        writeAbiProps(formatLayout,formatData.text);
+        *m_streamOut << "/>";
+    }
+    else if (2==formatData.variable.m_type)
+    {
+        // As AbiWord's field is inflexible, we cannot make the time custom
+        *m_streamOut << "<field type=\"time\"";
+        writeAbiProps(formatLayout,formatData.text);
+        *m_streamOut << "/>";
+    }
+    else if (4==formatData.variable.m_type)
+    {
+        // As AbiWord's field is inflexible, we cannot make the time custom
+        QString strFieldType;
+        if (formatData.variable.isPageNumber())
+        {
+            strFieldType="page_number";
+        }
+        else if (formatData.variable.isPageCount())
+        {
+            strFieldType="page_count";
+        }
+        if (strFieldType.isEmpty())
+        {
+            // Unknown subtype, therefore write out the result
+            *m_streamOut << formatData.variable.m_text;
+        }
+        else
+        {
+            *m_streamOut << "<field type=\"" << strFieldType <<"\"";
+            writeAbiProps(formatLayout,formatData.text);
+            *m_streamOut << "/>";
+        }
+    }
+    else if (9==formatData.variable.m_type)
+    {
+        // A link
+        *m_streamOut << "<a xlink:href=\""
+            << escapeAbiWordText(formatData.variable.getHrefName())
+            << "\"><c";  // In AbiWord, an anchor <a> has always a <c> child
+        writeAbiProps(formatLayout,formatData.text);
+        *m_streamOut << ">"
+            << escapeAbiWordText(formatData.variable.getLinkName())
+            << "</c></a>";
+    }
+    else
+    {
+        // Generic variable
+        *m_streamOut << formatData.variable.m_text;
+    }
+}
+
+void AbiWordWorker::processPicture ( const QString&,
+    const TextFormatting& /*formatLayout*/, //TODO
+    const FormatData& formatData)
+{
+    // We have an image or a table
+    // However, AbiWord does not support tables
+    if (2==formatData.frameAnchor.type)
+    {   // <IMAGE>
+        makeImage(formatData.frameAnchor,true);
+    }
+    else if (5==formatData.frameAnchor.type)
+    {   // <CLIPART>
+        makeImage(formatData.frameAnchor,false);
+    }
+    else
+    {
+        kdWarning(30506) << "Unsupported anchor type: "
+            << formatData.frameAnchor.type << endl;
+    }
+}
 
 void AbiWordWorker::processParagraphData ( const QString &paraText,
     const TextFormatting& formatLayout,
@@ -612,112 +728,23 @@ void AbiWordWorker::processParagraphData ( const QString &paraText,
     {
         ValueListFormatData::ConstIterator  paraFormatDataIt;
 
-        QString partialText;
-
         for ( paraFormatDataIt = paraFormatDataList.begin ();
               paraFormatDataIt != paraFormatDataList.end ();
               paraFormatDataIt++ )
         {
             if (1==(*paraFormatDataIt).id)
             {
-                // Retrieve text and escape it
-                partialText=escapeAbiWordText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
-
-                // Replace line feeds by line breaks
-                int pos;
-                while ((pos=partialText.find(QChar(10)))>-1)
-                {
-                    partialText.replace(pos,1,"<br/>");
-                }
-
-                if ((*paraFormatDataIt).text.missing)
-                {
-                    // It's just normal text, so we do not need a <c> element!
-                    *m_streamOut << partialText;
-                }
-                else
-                { // Text with properties, so use a <c> element!
-                    *m_streamOut << "<c";
-                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
-                    *m_streamOut << ">" << partialText << "</c>";
-                }
+                processNormalText(paraText, formatLayout, (*paraFormatDataIt));
             }
             else if (4==(*paraFormatDataIt).id)
             {
-                if (0==(*paraFormatDataIt).variable.m_type)
-                {
-                    // As AbiWord's field is inflexible, we cannot make the date custom
-                    *m_streamOut << "<field type=\"date_ntdfl\"";
-                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
-                    *m_streamOut << "/>";
-                }
-                else if (2==(*paraFormatDataIt).variable.m_type)
-                {
-                    // As AbiWord's field is inflexible, we cannot make the time custom
-                    *m_streamOut << "<field type=\"time\"";
-                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
-                    *m_streamOut << "/>";
-                }
-                else if (4==(*paraFormatDataIt).variable.m_type)
-                {
-                    // As AbiWord's field is inflexible, we cannot make the time custom
-                    QString strFieldType;
-                    if ((*paraFormatDataIt).variable.isPageNumber())
-                    {
-                        strFieldType="page_number";
-                    }
-                    else if ((*paraFormatDataIt).variable.isPageCount())
-                    {
-                        strFieldType="page_count";
-                    }
-                    if (strFieldType.isEmpty())
-                    {
-                        // Unknown subtype, therefore write out the result
-                        *m_streamOut << (*paraFormatDataIt).variable.m_text;
-                    }
-                    else
-                    {
-                        *m_streamOut << "<field type=\"" << strFieldType <<"\"";
-                        writeAbiProps(formatLayout,(*paraFormatDataIt).text);
-                        *m_streamOut << "/>";
-                    }
-                }
-                else if (9==(*paraFormatDataIt).variable.m_type)
-                {
-                    // A link
-                    *m_streamOut << "<a xlink:href=\""
-                        << escapeAbiWordText((*paraFormatDataIt).variable.getHrefName())
-                        << "\"><c";  // In AbiWord, an anchor <a> has always a <c> child
-                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
-                    *m_streamOut << ">"
-                        << escapeAbiWordText((*paraFormatDataIt).variable.getLinkName())
-                        << "</c></a>";
-                }
-                else
-                {
-                    // Generic variable
-                    *m_streamOut << (*paraFormatDataIt).variable.m_text;
-                }
+                processVariable(paraText, formatLayout, (*paraFormatDataIt));
             }
             else if (6==(*paraFormatDataIt).id)
             {
-                // We have an image or a table
-                // However, AbiWord does not support tables
-                if (2==(*paraFormatDataIt).frameAnchor.type)
-                {   // <IMAGE>
-                    makeImage((*paraFormatDataIt).frameAnchor,true);
-                }
-                else if (5==(*paraFormatDataIt).frameAnchor.type)
-                {   // <CLIPART>
-                    makeImage((*paraFormatDataIt).frameAnchor,false);
-                }
-                else
-                {
-                    kdWarning(30506) << "Unsupported anchor type: "
-                        << (*paraFormatDataIt).frameAnchor.type << endl;
-                }
-           }
-       }
+                processPicture(paraText, formatLayout, (*paraFormatDataIt));
+            }
+        }
     }
 }
 
@@ -743,6 +770,8 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
 
     // TODO/FIXME: what if all tabulators must be erased?
+#if 0
+    // DEPRECATED!
     if (!layout.tabulator.isEmpty()
         && (force || (layoutOrigin.tabulator!=layout.tabulator)))
     {
@@ -750,7 +779,39 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
         props += layout.tabulator;
         props += "; ";
     }
+#endif
+    if (!layout.tabulatorList.isEmpty()
+        && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
+    {
+        props += "tabstops:";
+        bool first=true;
+        TabulatorList::ConstIterator it;
+        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();it++)
+        {
+            if (first)
+            {
+                first=false;
+            }
+            else
+            {
+                props += ",";
+            }
+            props += QString::number((*it).m_ptpos);
+            props += "pt";
 
+            switch ((*it).m_type)
+            {
+                case 0:  props += "/L"; break;
+                case 1:  props += "/C"; break;
+                case 2:  props += "/R"; break;
+                case 3:  props += "/D"; break;
+                default: props += "/L";
+            }
+
+            props += "0"; // No filling
+        }
+        props += "; ";
+    }
 
     if ((layout.indentLeft>=0.0)
         && (force || (layoutOrigin.indentLeft!=layout.indentLeft)))
