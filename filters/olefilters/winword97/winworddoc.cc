@@ -276,7 +276,10 @@ QString WinWordDoc::generateBorder(
     QString border;
 
     border.append(prefix);
-    border.append(QString::fromLatin1("Width=\"%1\"").arg(brc.dptLineWidth * 0.125));
+
+    // TBD: we seem to have trouble with Word2000 border widths.
+    int width = (brc.dptLineWidth < 4) ? brc.dptLineWidth : 4;
+    border.append(QString::fromLatin1("Width=\"%1\"").arg(width * 0.125));
     border.append(prefix);
     border.append(QString::fromLatin1("Style=\"%1\"").arg(borderStyle(brc.brcType)));
 
