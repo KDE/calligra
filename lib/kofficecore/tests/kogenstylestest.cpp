@@ -26,18 +26,18 @@ int main( int, char** ) {
     KoGenStyles coll;
 
     KoGenStyle first;
-    first.setAttribute( "style:family", "paragraph" );
-    first.setAttribute( "style:master-page-name", "Standard" );
-    first.setProperty( "style:page-number", "0" );
+    first.addAttribute( "style:family", "paragraph" );
+    first.addAttribute( "style:master-page-name", "Standard" );
+    first.addProperty( "style:page-number", "0" );
 
     QString firstName = coll.lookup( first );
     kdDebug() << "The first style got assigned the name " << firstName << endl;
     assert( firstName == "A1" ); // it's fine if it's something else, but the koxmlwriter tests require a known name
 
     KoGenStyle second;
-    second.setAttribute( "style:family", "paragraph" );
-    second.setAttribute( "style:master-page-name", "Standard" );
-    second.setProperty( "style:page-number", "0" );
+    second.addAttribute( "style:family", "paragraph" );
+    second.addAttribute( "style:master-page-name", "Standard" );
+    second.addProperty( "style:page-number", "0" );
 
     QString secondName = coll.lookup( second );
     kdDebug() << "The second style got assigned the name " << secondName << endl;
@@ -51,8 +51,8 @@ int main( int, char** ) {
     // But that means we can't implement "diff with parent" in koGenStyles...
     // Hmm, well we'll see. Either it will have an exception, or this needs
     // to be done at the level above.
-    third.setAttribute( "style:family", "paragraph" );
-    third.setProperty( "style:margin-left", "1.249cm" );
+    third.addAttribute( "style:family", "paragraph" );
+    third.addProperty( "style:margin-left", "1.249cm" );
     assert( third.parentName() == secondName );
 
     QString thirdName = coll.lookup( third, "P" );
@@ -60,7 +60,7 @@ int main( int, char** ) {
     assert( thirdName == "P1" );
 
     KoGenStyle user; // differs from third since it doesn't inherit second
-    user.setProperty( "style:margin-left", "1.249cm" );
+    user.addProperty( "style:margin-left", "1.249cm" );
 
     QString userStyleName = coll.lookup( user, "User", false );
     kdDebug() << "The user style got assigned the name " << userStyleName << endl;

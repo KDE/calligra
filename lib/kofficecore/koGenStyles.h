@@ -108,14 +108,14 @@ public:
     QString parentName() const { return m_parentName; }
 
     /// Add a property to the style
-    void setProperty( const QString& propName, const QString& propValue ) {
+    void addProperty( const QString& propName, const QString& propValue ) {
         m_properties.insert( propName, propValue );
     }
 
     /// Add an attribute to the style
     /// The difference between property and attributes is a bit oasis-format-specific:
     /// attributes are for the style element itself, and properties are in the style:properties child element
-    void setAttribute( const QString& attrName, const QString& attrValue ) {
+    void addAttribute( const QString& attrName, const QString& attrValue ) {
         m_attributes.insert( attrName, attrValue );
     }
 
