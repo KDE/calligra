@@ -124,7 +124,7 @@ void GObjectM9r::createPropertyDialog() {
     enableButtonCancel(true);
 
     // Add an information frame
-    QFrame *information=addPage(i18n("Information"), i18n("Information about the Object"),
+    QFrame *information=addPage(i18n("Information"), i18n("Information about Object"),
                                 BarIcon(QString::fromLatin1("exec"), 32, KIcon::DefaultState, GraphiteFactory::global()));
     QGridLayout *grid=new QGridLayout(information, 9, 5, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
@@ -156,7 +156,7 @@ void GObjectM9r::createPropertyDialog() {
 
     grid->setRowStretch(4, 1);
 
-    label=new QLabel(i18n("Bounding rectangle:"), information);
+    label=new QLabel(i18n("Bounding Rectangle"), information);
     grid->addMultiCellWidget(label, 5, 5, 0, 3);
 
     label=new QLabel(i18n("Top-left:"), information);
@@ -349,14 +349,14 @@ void G2DObjectM9r::createPropertyDialog() {
     QStringList content;
     // Note: index+1 => fill style (NoBrush is missing!)
     // xgettext:no-c-format
-    content << i18n("100% filled (solid)") // xgettext:no-c-format
-            << i18n("94% filled") // xgettext:no-c-format
-            << i18n("88% filled") // xgettext:no-c-format
-            << i18n("63% filled") // xgettext:no-c-format
-            << i18n("50% filled") // xgettext:no-c-format
-            << i18n("37% filled") // xgettext:no-c-format
-            << i18n("12% filled") // xgettext:no-c-format
-            << i18n("6% filled") // xgettext:no-c-format
+    content << i18n("100% Filled (solid)") // xgettext:no-c-format
+            << i18n("94% Filled") // xgettext:no-c-format
+            << i18n("88% Filled") // xgettext:no-c-format
+            << i18n("63% Filled") // xgettext:no-c-format
+            << i18n("50% Filled") // xgettext:no-c-format
+            << i18n("37% Filled") // xgettext:no-c-format
+            << i18n("12% Filled") // xgettext:no-c-format
+            << i18n("6% Filled") // xgettext:no-c-format
             << i18n("Horizontal Lines")
             << i18n("Vertical Lines")
             << i18n("Crossing Lines")
@@ -422,7 +422,7 @@ void G2DObjectM9r::createPropertyDialog() {
 
     wbox->addStretch(1);
     QGridLayout *factorgrid=new QGridLayout(wbox, 2, 2, KDialog::spacingHint());
-    label=new QLabel(i18n("X-Factor:"), widget);
+    label=new QLabel(i18n("X-factor:"), widget);
     factorgrid->addWidget(label, 0, 0);
     m_xfactor=new QSlider(-200, 200, 10, gobject()->gradient().xfactor,
                           Qt::Horizontal, widget);
@@ -431,7 +431,7 @@ void G2DObjectM9r::createPropertyDialog() {
     m_xfactor->setEnabled(false);
     factorgrid->addWidget(m_xfactor, 0, 1);
 
-    label=new QLabel(i18n("Y-Factor:"), widget);
+    label=new QLabel(i18n("Y-factor:"), widget);
     factorgrid->addWidget(label, 1, 0);
     m_yfactor=new QSlider(-200, 200, 10, gobject()->gradient().yfactor,
                           Qt::Horizontal, widget);
