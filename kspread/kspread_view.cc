@@ -1544,14 +1544,18 @@ void KSpreadView::initialPosition()
     m_tableFormat->setEnabled(false);
     m_mergeCell->setEnabled(false);
     m_insertChartFrame->setEnabled(false);
-    /*recalc all dependent after loading*/
-    KSpreadTable *tbl;
-    for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-        {
-        if(tbl->getAutoCalc())
-                tbl->recalc();
-        tbl->refreshMergedCell();
-        }
+
+// I don't think we should recalculate everything after loading, this takes much to much time
+// and shouldn't be necessary at all - Philipp
+//    
+//     /*recalc all dependent after loading*/
+//     KSpreadTable *tbl;
+//     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
+//     {
+//         if( tbl->getAutoCalc() )
+//             tbl->recalc();
+//         tbl->refreshMergedCell();
+//     }
 
     slotUpdateView( activeTable() );
     m_bLoading =true;
