@@ -124,6 +124,10 @@ public:
     void deleteTable( KWGroupManager *groupManager );
     void deleteFrame();
 
+    //move canvas
+    void scrollToOffset( int _x, int _y );
+    void setContentsPos( int x, int y );
+
 public slots:
     void printRTDebug();
     /**

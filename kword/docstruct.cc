@@ -78,12 +78,10 @@ KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, QString _tex
 }
 
 /*================================================================*/
-void KWDocStructFrameItem::slotDoubleClicked( QListViewItem */*_item*/ )
+void KWDocStructFrameItem::slotDoubleClicked( QListViewItem *_item )
 {
-#if 0
     if ( _item == this )
         gui->canvasWidget()->scrollToOffset( frame->x(), frame->y() );
-#endif
 }
 
 /******************************************************************/
@@ -99,15 +97,13 @@ KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, QString _tex
 }
 
 /*================================================================*/
-void KWDocStructTableItem::slotDoubleClicked( QListViewItem */*_item*/ )
+void KWDocStructTableItem::slotDoubleClicked( QListViewItem *_item )
 {
-#if 0
     if ( _item == this )
-    {
-        KWFrame *frame = table->getFrameSet( 0, 0 )->getFrame( 0 );
-        gui->canvasWidget()->scrollToOffset( frame->x(), frame->y() );
-    }
-#endif
+        {
+            KWFrame *frame = table->getFrameSet( 0, 0 )->getFrame( 0 );
+            gui->canvasWidget()->scrollToOffset( frame->x(), frame->y() );
+        }
 }
 
 /******************************************************************/
@@ -123,15 +119,13 @@ KWDocStructPictureItem::KWDocStructPictureItem( QListViewItem *_parent, QString 
 }
 
 /*================================================================*/
-void KWDocStructPictureItem::slotDoubleClicked( QListViewItem */*_item*/ )
+void KWDocStructPictureItem::slotDoubleClicked( QListViewItem *_item )
 {
-#if 0
     if ( _item == this )
     {
         KWFrame *frame = pic->getFrame( 0 );
         gui->canvasWidget()->scrollToOffset( frame->x(), frame->y() );
     }
-#endif
 }
 
 /******************************************************************/
@@ -147,15 +141,13 @@ KWDocStructPartItem::KWDocStructPartItem( QListViewItem *_parent, QString _text,
 }
 
 /*================================================================*/
-void KWDocStructPartItem::slotDoubleClicked( QListViewItem */*_item*/ )
+void KWDocStructPartItem::slotDoubleClicked( QListViewItem *_item )
 {
-#if 0
     if ( _item == this )
     {
         KWFrame *frame = part->getFrame( 0 );
         gui->canvasWidget()->scrollToOffset( frame->x(), frame->y() );
     }
-#endif
 }
 
 /******************************************************************/
@@ -315,7 +307,6 @@ void KWDocStructRootItem::setupTextFrames()
     QString _name;
     KWDocStructFrameItem *child;
 
-    //int k = 0;
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );

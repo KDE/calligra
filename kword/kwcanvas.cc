@@ -1673,6 +1673,30 @@ void KWCanvas::slotContentsMoving( int, int cy )
     }
 }
 
+/*================================================================*/
+void KWCanvas::scrollToOffset( int _x, int _y )
+{
+#if 0
+    bool blinking = blinkTimer.isActive();
+    if ( blinking )
+        stopBlinkCursor();
+#endif
+
+    setContentsPos( _x, _y );
+
+#if 0
+    if ( blinking )
+        startBlinkCursor();
+#endif
+}
+
+/*================================================================*/
+void KWCanvas::setContentsPos( int x, int y )
+{
+    QScrollView::setContentsPos( x, y );
+    //calcVisiblePages();
+}
+
 bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 {
     if ( !o || !e )
