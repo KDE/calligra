@@ -91,6 +91,7 @@
 #include <kimageio.h>
 #include <koPictureFilePreview.h>
 #include "kwtextdocument.h"
+#include "kwcreatebookmarkdia.h"
 
 #undef Bool
 #include <kspell.h>
@@ -1058,6 +1059,13 @@ void KWView::setupActions()
                                             this, SLOT( selectFrameSet() ),
                                             actionCollection(), "select_frameset" );
 
+
+    actionAddBookmark= new KAction( i18n( "Add Bookmark" ), 0,
+                                            this, SLOT( addBookmark() ),
+                                            actionCollection(), "add_bookmark" );
+    actionSelectBookmark= new KAction( i18n( "Select Bookmark" ), 0,
+                                            this, SLOT( selectBookmark() ),
+                                            actionCollection(), "select_bookmark" );
 
 }
 
@@ -5756,15 +5764,20 @@ void KWView::insertFile()
 
 void KWView::addBookmark()
 {
-    //todo
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KWCreateBookmarkDia dia( m_doc->listOfBookmarkName(), this, 0 );
+        if ( dia.exec() ) {
+            //todo
+        }
+    }
 }
 
 void KWView::selectBookmark()
 {
     //todo
 }
-
-
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

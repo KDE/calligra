@@ -3947,4 +3947,15 @@ KWBookMark * KWDocument::bookMarkByName( const QString & name )
     return 0L;
 }
 
+QStringList KWDocument::listOfBookmarkName()const
+{
+    QStringList list;
+    QPtrListIterator<KWBookMark> book(m_bookmarkList);
+    for ( ; book.current() ; ++book )
+    {
+        list.append( book.current()->bookMarkName());
+    }
+    return list;
+}
+
 #include "kwdoc.moc"

@@ -361,7 +361,6 @@ public slots:
     void addBookmark();
     void selectBookmark();
 
-
 protected slots:
     void spellCheckerReady();
     void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
