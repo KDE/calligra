@@ -1,3 +1,9 @@
+koffice (1:1.1.1-6) unstable; urgency=low
+
+  * Incorporated new KOFFICE_1_1_BRANCH patches.
+
+ -- Ben Burton <benb@acm.org>  Sat, 23 Feb 2002 16:12:37 +1100
+
 koffice (1:1.1.1-5) unstable; urgency=low
 
   * Include demo kword/kspread files in binary packages (closes: Bug#132627).
