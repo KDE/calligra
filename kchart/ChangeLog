@@ -1,3 +1,10 @@
+2005-03-23  Fredrik Edemar <f_edemar@linux.se>
+
+	Fix a problem with the spinboxes in the data editor:
+	* kchartDataEditor.{h,cc} (kchartDataSpinBox): new class that
+	inherits QSpinBox.
+	(m_rowsSB, m_colsSB): Use kchartDataSpinBox instead of QSpinBox.
+
 2005-03-18  Inge Wallin  <inge@lysator.liu.se>
 
 	Improve layout for 3D bar chart parameters.
