@@ -24,6 +24,7 @@
 #include <qvariant.h>
 
 #include <kexidb/connection.h>
+#include <kexidb/object.h>
 
 namespace KexiDB {
 
@@ -32,7 +33,7 @@ namespace KexiDB {
 /*! 
 
 */
-class KEXI_DB_EXPORT Cursor
+class KEXI_DB_EXPORT Cursor: public Object
 {
 	public:
 		virtual ~Cursor();

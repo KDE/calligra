@@ -419,6 +419,7 @@ Cursor* Connection::executeQuery( const QString& statement )
 	if (!c)
 		return 0;
 	if (!c->open()) {//err - kill that
+		setError(c);
 		delete c;
 		return 0;
 	}

@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=mySQL
+Name[sr]=MySQL
+Name[sv]=MySQL
+Name[xx]=xxmySQLxx
+Comment=mySQL is a fast database engine. It is used for personal purposes as well as for huge databases in big companies and organizations. We recommend using mySQL for projects shared in networks.
+Comment[pt]=O mySQL é um motor de base de dados rápido. É utilizado para fins pessoais e também para enormes bases de dados em grandes companhias e empresas. Recomendamos que utilize o mySQL para projectos partilhados em rede.
+Comment[pt_BR]=O mySQL é um motor de base de dados rápido. É utilizado para fins pessoais e também para enormes bases de dados em grandes companhias e empresas. Recomendamos que utilize o mySQL para projectos partilhados em rede.
+Comment[sv]=mySQL är ett snabbt databasprogram. Det används både för personligt bruk samt för enorma databaser i stora företag och organisationer. Vi rekommenderar att mySQL används för projekt som delas via nätverk.
+X-KDE-Library=kexidb_mysqldriver
+ServiceTypes=Kexi/DBDriver
+Type=Service
+InitialPreference=8
+MimeType=text/plain
+X-Kexi-Location=RemoteDB
+X-Kexi-DriverName=mySQL

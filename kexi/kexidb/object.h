@@ -57,11 +57,11 @@ class KEXI_DB_EXPORT Object
 		Object();
 		virtual ~Object();
 
+	private:
 		int m_errno;
 		bool m_hasError;
 		QString m_errMsg;
 
-	private:
 		class Private;
 		Private *d_object; //for future extension
 };

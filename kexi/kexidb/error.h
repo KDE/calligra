@@ -12,6 +12,6 @@
 #define ERR_TRANSACTION_ACTIVE 7
 #define ERR_NO_TRANSACTION_ACTIVE 8
 #define ERR_DB_SPECIFIC 9
-
+#define ERR_CURSOR_NOT_OPEN 10
 #define ERR_OTHER 0xffff //! use this if you have not (yet?) the name for given error 
 #endif

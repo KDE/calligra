@@ -74,7 +74,8 @@ bool Cursor::open( const QString& statement )
 	m_at = 0;
 	if (!m_opened)
 		return false;
-	m_readAhead = drv_getNextRecord();
+	if (!m_readAhead)
+		m_readAhead = drv_getNextRecord();
 	m_afterLast = !m_readAhead; //we are after last if there is no record
 	m_beforeFirst = !m_readAhead; //we are before first if there is no record
 //	m_validRecord = false; //no record retrieved
