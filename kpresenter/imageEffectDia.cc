@@ -209,6 +209,7 @@ void ImageEffectDia::okClicked()
 void ImageEffectDia::setPixmap(QPixmap pix)
 {
     m_pix = pix;
+    m_pix.detach();
 }
 
 void ImageEffectDia::updatePreview()
