@@ -34,11 +34,8 @@ public:
     KPresenterDocIface( KPresenterDoc *doc_ );
 
 k_dcop:
-    virtual int getNumObjects();
-    virtual DCOPRef getObject( int num );
     virtual int getNumPages();
     virtual DCOPRef getPage( int num );
-    int getPageOfObj( int obj, double faktor );
     virtual double getIndentValue();
     virtual void setIndentValue(double _ind);
 

@@ -32,22 +32,6 @@ KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
    doc = doc_;
 }
 
-int KPresenterDocIface::getNumObjects()
-{
-    //FIXME---------
-    return -1;
-    //return doc->objNums();
-}
-
-DCOPRef KPresenterDocIface::getObject( int num )
-{
-    //FIXME
-#if 0
-    return DCOPRef( kapp->dcopClient()->appId(),
-		    doc->objectList()->at( num )->dcopObject()->objId() );
-#endif
-}
-
 int KPresenterDocIface::getNumPages()
 {
     return doc->getPageNums();
@@ -60,12 +44,6 @@ DCOPRef KPresenterDocIface::getPage( int num )
     return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->backgroundList()->at( num )->dcopObject()->objId() );
 #endif
-}
-
-int KPresenterDocIface::getPageOfObj( int obj, double faktor )
-{
-    //FIXME
-    return -1;//doc->getPageOfObj( obj, 0, 0, faktor ) - 1;
 }
 
 double KPresenterDocIface::getIndentValue()
