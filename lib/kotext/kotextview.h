@@ -101,6 +101,7 @@ public:
     void focusOutEvent();
     void handleKeyPressEvent( QKeyEvent * e );
     void handleKeyReleaseEvent( QKeyEvent * e );
+    // iPoint is in Layout Unit pixels
     void handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint );
     void handleMouseMoveEvent( QMouseEvent* e, const QPoint& iPoint );
     void handleMouseReleaseEvent();

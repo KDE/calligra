@@ -103,7 +103,7 @@ public:
      * zoomedResolution[XY] to the resolution[XY] parameters
      */
     virtual void setResolution( double resolutionX, double resolutionY );
- 
+
 
     int zoom() const { return m_zoom; }
 
@@ -121,6 +121,9 @@ public:
     QRect zoomRect( const KoRect & r ) const {
         return QRect( zoomItX( r.x() ), zoomItY( r.y() ),
                       zoomItX( r.width() ), zoomItY( r.height() ) );
+    }
+    QSize zoomSize( const KoSize & s ) const {
+        return QSize( zoomItX( s.width() ), zoomItY( s.height() ) );
     }
 
     // Input: pixels. Output: pt.
