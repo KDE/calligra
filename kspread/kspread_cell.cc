@@ -3200,7 +3200,7 @@ void KSpreadCell::incPrecision()
   {
     int pos = m_strOutText.find(decimal_point);
     if ( pos == -1 )
-      m_iPrecision = 1;
+      setPrecision(1);
     else
     {
       int start=0;
@@ -3212,15 +3212,15 @@ void KSpreadCell::incPrecision()
         start=m_strOutText.length()-start;
       else
         start=0;
-      m_iPrecision = m_strOutText.length() - pos-start;
+      setPrecision(m_strOutText.length() - pos-start);
       if ( m_iPrecision < 0 )
-        m_iPrecision = 0;
+        setPrecision(0);
     }
     m_bLayoutDirtyFlag = TRUE;
   }
   else if ( m_iPrecision < 10 )
   {
-    m_iPrecision++;
+    setPrecision(++m_iPrecision);
     m_bLayoutDirtyFlag = TRUE;
   }
 }
@@ -3244,14 +3244,14 @@ void KSpreadCell::decPrecision()
         start=0;
     if ( pos == -1 )
       return;
-    m_iPrecision = m_strOutText.length() - pos - 2-start;
+    setPrecision(m_strOutText.length() - pos - 2-start);
     if ( m_iPrecision < 0 )
-      m_iPrecision = 0;
+      setPrecision(m_iPrecision );
     m_bLayoutDirtyFlag = TRUE;
   }
   else if ( m_iPrecision > 0 )
   {
-    m_iPrecision--;
+    setPrecision(--m_iPrecision);
     m_bLayoutDirtyFlag = TRUE;
   }
 }
