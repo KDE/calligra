@@ -33,9 +33,6 @@ noinst_HEADERS =  kosoap_part.h soapsession.h\
 kdelnk_DATA = kosoap.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-kosoap.desktop
-kdemimedir = $(kde_mimedir)/application
-
 rc_DATA = kosoap.rc
 rcdir = $(kde_datadir)/kosoap
 
