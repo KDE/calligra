@@ -125,6 +125,11 @@ k_dcop:
     bool oneObjectTextExist() const ;
     bool isOneObjectSelected() const;
 
+    bool haveASelectedPictureObj() const;
+    bool haveASelectedPartObj() const;
+    bool haveASelectedGroupObj() const;
+
+
 private:
     KPrPage *m_page;
 

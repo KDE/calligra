@@ -28,6 +28,7 @@
 #include <kpresenter_doc.h>
 #include "kprcanvas.h"
 #include <kdebug.h>
+#include <kcommand.h>
 
 KPresenterPageIface::KPresenterPageIface( KPrPage *_page )
     : DCOPObject()
@@ -135,32 +136,38 @@ void KPresenterPageIface::copyObjs()
 
 void KPresenterPageIface::alignObjsLeft()
 {
-    m_page->alignObjsLeft();
+    KCommand *cmd=m_page->alignObjsLeft();
+    delete cmd;
 }
 
 void KPresenterPageIface::alignObjsCenterH()
 {
-    m_page->alignObjsCenterH();
+    KCommand *cmd=m_page->alignObjsCenterH();
+    delete cmd;
 }
 
 void KPresenterPageIface::alignObjsRight()
 {
-    m_page->alignObjsRight();
+    KCommand *cmd=m_page->alignObjsRight();
+    delete cmd;
 }
 
 void KPresenterPageIface::alignObjsTop()
 {
-    m_page->alignObjsTop();
+    KCommand *cmd=m_page->alignObjsTop();
+    delete cmd;
 }
 
 void KPresenterPageIface::alignObjsCenterV()
 {
-    m_page->alignObjsCenterV();
+    KCommand *cmd=m_page->alignObjsCenterV();
+    delete cmd;
 }
 
 void KPresenterPageIface::alignObjsBottom()
 {
-    m_page->alignObjsBottom();
+    KCommand *cmd=m_page->alignObjsBottom();
+    delete cmd;
 }
 
 void KPresenterPageIface::slotRepaintVariable()
@@ -645,3 +652,18 @@ bool KPresenterPageIface::isOneObjectSelected() const
     return m_page->isOneObjectSelected();
 }
 
+
+bool KPresenterPageIface::haveASelectedPictureObj() const
+{
+    return m_page->haveASelectedPictureObj();
+}
+
+bool KPresenterPageIface::haveASelectedPartObj() const
+{
+    return m_page->haveASelectedPartObj();
+}
+
+bool KPresenterPageIface::haveASelectedGroupObj() const
+{
+    return m_page->haveASelectedGroupObj();
+}

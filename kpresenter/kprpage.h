@@ -23,8 +23,8 @@
 #include <qwidget.h>
 #include <qptrlist.h>
 #include <global.h>
-#include "kpbackground.h"
 #include <koPoint.h>
+#include "kpbackground.h"
 
 class KPTextView;
 class KPObject;

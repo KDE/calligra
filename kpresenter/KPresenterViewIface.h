@@ -55,6 +55,8 @@ k_dcop:
     virtual void insertClipart();
     virtual void insertSpecialChar();
     virtual void insertLink();
+    virtual void insertComment();
+
 
     // tools menu
     virtual void toolsMouse();
@@ -168,6 +170,9 @@ k_dcop:
     virtual void refreshAllVariable();
 
     virtual void skipToPage( int _num );
+
+    virtual void configureCompletion();
+
 
 private:
     KPresenterView *view;

@@ -565,3 +565,13 @@ void KPresenterViewIface::toolsZoom()
 {
     view->toolsZoom();
 }
+
+void KPresenterViewIface::insertComment()
+{
+    view->insertComment();
+}
+
+void KPresenterViewIface::configureCompletion()
+{
+    view->configureCompletion();
+}
