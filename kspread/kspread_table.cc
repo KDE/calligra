@@ -6520,16 +6520,6 @@ bool KSpreadTable::loadXML( const QDomElement& table )
         if ( !right.isNull() )
           fright = right.text();
       }
-
-      if ( m_pDoc->syntaxVersion() < 1.0 ) //compatibility with old format - exchange <table> with <sheet>
-      {
-        hleft   = hleft.replace(   QRegExp("<table>"), "<sheet>" );
-        hcenter = hcenter.replace( QRegExp("<table>"), "<sheet>" );
-        hright  = hright.replace(  QRegExp("<table>"), "<sheet>" );
-        fleft   = fleft.replace(   QRegExp("<table>"), "<sheet>" );
-        fcenter = fcenter.replace( QRegExp("<table>"), "<sheet>" );
-        fright  = fright.replace(  QRegExp("<table>"), "<sheet>" );
-      }
       setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
     }
 

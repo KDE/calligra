@@ -353,7 +353,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   {
       int ret = KMessageBox::warningContinueCancel(
           0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
-                  "Opening it in this version of KSpread will lose some information.").arg(m_syntaxVersion),
+                  "When you open it with this version of KSpread some information may get lost.").arg(m_syntaxVersion),
           i18n("File format mismatch"), i18n("Continue") );
       if ( ret == KMessageBox::Cancel )
       {
@@ -467,6 +467,14 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
         if ( !right.isNull() )
           fright = right.text();
       }
+      //The macro "<sheet>" formerly was typed as "<table>"
+      hleft   = hleft.replace(   QRegExp("<table>"), "<sheet>" );
+      hcenter = hcenter.replace( QRegExp("<table>"), "<sheet>" );
+      hright  = hright.replace(  QRegExp("<table>"), "<sheet>" );
+      fleft   = fleft.replace(   QRegExp("<table>"), "<sheet>" );
+      fcenter = fcenter.replace( QRegExp("<table>"), "<sheet>" );
+      fright  = fright.replace(  QRegExp("<table>"), "<sheet>" );
+
       QPtrListIterator<KSpreadTable> it ( m_pMap->tableList() );
       for( ; it.current(); ++it )
       {
