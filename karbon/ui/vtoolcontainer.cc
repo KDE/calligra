@@ -31,7 +31,7 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	btngroup->insert( button, Select );
 
 	button = new QToolButton(btngroup);
-	pixmap = QPixmap(locate("appdata", "icons/hicolor/16x16/actions/scale.png"));
+	pixmap = QPixmap(locate("appdata", "icons/hicolor/22x22/actions/scale.png"));
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( scaleToolActivated() ) );
@@ -45,7 +45,7 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	btngroup->insert( button, Rotate );
 	
 	button = new QToolButton(btngroup);
-	pixmap = QPixmap(locate("appdata", "icons/hicolor/16x16/actions/shear.png"));
+	pixmap = QPixmap(locate("appdata", "icons/hicolor/22x22/actions/shear.png"));
 	button->setPixmap(pixmap);
 	button->setToggleButton( true );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( shearToolActivated() ) );

@@ -17,9 +17,7 @@ namespace VSegmentTools
 	bool isFlat(
 		const KoPoint& p0,
 		const KoPoint& p,
-		const KoPoint& p3 );
-
-	bool isFlat( const KoPoint& previous, const VSegment& segment );
+		const KoPoint& p1 );
 
 	bool linesIntersect(
 		const KoPoint& a0,
@@ -27,8 +25,8 @@ namespace VSegmentTools
 		const KoPoint& b0,
 		const KoPoint& b1 );
 
-	KoRect boundingBox( const KoPoint& previous, const VSegment& segment );
-/*
+/*	KoRect boundingBox( const KoPoint& previous, const VSegment& segment );
+
 	void findIntersections( const double t0, const double t1,
 	const VSegment* segB, const double u0, const double u1,
 	QValueList<double>& paramsA, QValueList<double>& paramsB ) const;

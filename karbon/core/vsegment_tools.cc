@@ -14,18 +14,18 @@ bool
 VSegmentTools::isFlat(
 	const KoPoint& p0,
 	const KoPoint& p,
-	const KoPoint& p3  )
+	const KoPoint& p1  )
 {
-	// calculate determinant of p0p and p0p3 to obtain projection of vector p0p to
-	// the orthogonal vector of p0p3:
+	// calculate determinant of p0p and p0p1 to obtain projection of vector p0p to
+	// the orthogonal vector of p0p1:
 	const double det =
-		p.x()  * p0.y() + p3.x() * p.y()  - p.x()  * p3.y() -
-		p0.x() * p.y()  + p0.x() * p3.y() - p3.x() * p0.y();
+		p.x()  * p0.y() + p1.x() * p.y()  - p.x()  * p1.y() -
+		p0.x() * p.y()  + p0.x() * p1.y() - p1.x() * p0.y();
 
-	// calculate norm = length(p0p3):
+	// calculate norm = length(p0p1):
 	const double norm = sqrt(
-		( p3.x() - p0.x() ) * ( p3.x() - p0.x() ) +
-		( p3.y() - p0.y() ) * ( p3.y() - p0.y() ) );
+		( p1.x() - p0.x() ) * ( p1.x() - p0.x() ) +
+		( p1.y() - p0.y() ) * ( p1.y() - p0.y() ) );
 
 	// if norm is very small, simply use distance p0p:
 	if( norm < 1.0e-6 )
@@ -37,26 +37,6 @@ VSegmentTools::isFlat(
 
 	// normalize:
 	return( det / norm < VGlobal::flatnessTolerance );
-}
-
-bool
-VSegmentTools::isFlat( const KoPoint& previous, const VSegment& segment )
-{
-	if(
-		segment.type() == VSegment::begin ||
-		segment.type() == VSegment::line ||
-		segment.type() == VSegment::end )
-			return true;
-
-	if( segment.type() == VSegment::curve1 )
-		return isFlat( previous, segment.point( 2 ), segment.point( 3 ) );
-
-	if( segment.type() == VSegment::curve2 )
-		return isFlat( previous, segment.point( 1 ), segment.point( 3 ) );
-
-	return (
-		isFlat( previous, segment.point( 1 ), segment.point( 3 ) ) &&
-		isFlat( previous, segment.point( 2 ), segment.point( 3 ) ) );
 }
 
 bool
@@ -87,7 +67,7 @@ VSegmentTools::linesIntersect(
 	return true;
 }
 
-KoRect
+/*KoRect
 VSegmentTools::boundingBox( const KoPoint& previous, const VSegment& segment )
 {
 	KoRect rect;
@@ -145,7 +125,7 @@ VSegmentTools::boundingBox( const KoPoint& previous, const VSegment& segment )
 	}
 
 	return rect;
-}
+}*/
 
 void
 VSegmentTools::polygonize(
