@@ -247,6 +247,9 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 KWView::~KWView()
 {
     clearSelection();
+    //delete special char dlg when we close view
+    slotSpecialCharDlgClosed();
+
     if ( m_findReplace )
     {
         // Abort any find/replace
@@ -259,7 +262,6 @@ KWView::~KWView()
     delete fsInline;
     delete dcop;
     delete m_fontDlg;
-    delete m_specialCharDlg;
     delete m_paragDlg;
 }
 
@@ -2965,7 +2967,15 @@ void KWView::insertSpecialChar()
 
 void KWView::slotSpecialCharDlgClosed()
 {
-    m_specialCharDlg = 0L;
+    if ( m_specialCharDlg )
+    {
+        disconnect( m_specialCharDlg, SIGNAL(insertChar(QChar,const QString &)),
+                    this, SLOT(slotSpecialChar(QChar,const QString &)));
+        disconnect( m_specialCharDlg, SIGNAL( finished() ),
+                    this, SLOT( slotSpecialCharDlgClosed() ) );
+        delete m_specialCharDlg;
+        m_specialCharDlg = 0L;
+    }
 }
 
 void KWView::slotSpecialChar(QChar c, const QString &_font)
