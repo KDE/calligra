@@ -64,7 +64,7 @@ Canvas::Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent,
   drawBasePoints = false;
   scrollview = sv;
 
-  installEventFilter (this);
+  installEventFilter(this);
 
   connect (document, SIGNAL (changed ()), this, SLOT (updateView ()));
   connect (document, SIGNAL (changed (const Rect&)),
@@ -840,7 +840,7 @@ void Canvas::updateGridInfos () {
   }
 }
 
-bool Canvas::eventFilter (QObject *, QEvent *e) {
+bool Canvas::eventFilter (QObject *o, QEvent *e) {
   if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == Key_Tab) {
@@ -853,7 +853,7 @@ bool Canvas::eventFilter (QObject *, QEvent *e) {
       keyPressEvent (ke);
     return true;
   }
-  return false;
+  return QWidget::eventFilter(o, e);
 }
 
 #include <Canvas.moc>

@@ -60,7 +60,6 @@ public:
 
     virtual bool saveChildren (KoStore* _store, const char *_path);
     virtual QDomDocument saveXML() { return m_gdocument->saveToXml(); }
-    //virtual bool save() { return KParts::ReadWritePart::save(); }
 
     //bool completeSaving (KoStore* store); // not needed? - what about embedded wmf files?
 
@@ -86,12 +85,12 @@ public:
      * Overloaded @ref ContainerPart::insertChild.
      */
     void insertChild( KoDocumentChild* child );
-	
+
     /**
      * Overloaded @ref Part::paintContent
      */
     void paintContent( QPainter& painter, const QRect& rect, bool transparent );
-	
+
     // Killustrator stuff
     GDocument* gdoc();
 

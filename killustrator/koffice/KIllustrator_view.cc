@@ -271,7 +271,9 @@ void KIllustratorView::createMyGUI()
     m_normal->setChecked( true );
     m_showRuler->setChecked( true );
     m_showHelplines->setChecked(canvas->showHelplines());
+    m_alignToHelplines->setChecked(canvas->alignToHelplines());
     m_showGrid->setChecked(canvas->showGrid());
+    m_alignToGrid->setChecked(canvas->snapToGrid());
 
     // Disable node actions
     slotPointTool( false );
@@ -450,7 +452,7 @@ void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
 void KIllustratorView::showTransformationDialog( int id )
 {
     TransformationDialog *transformationDialog = new TransformationDialog (&cmdHistory);
-    QObject::connect (m_pDoc, SIGNAL (selectionChanged ()),
+    QObject::connect (m_pDoc->gdoc(), SIGNAL (selectionChanged ()),
                       transformationDialog, SLOT (update ()));
     transformationDialog->setDocument ( m_pDoc->gdoc() );
     transformationDialog->showTab (id);

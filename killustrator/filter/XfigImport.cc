@@ -22,17 +22,17 @@
 
 */
 
-#include "XfigImport.h"
-#include "GGroup.h"
-#include "GPolyline.h"
+#include <XfigImport.h>
+#include <GDocument.h>
+#include <GGroup.h>
+#include <GPolyline.h>
 #include <cassert>
-#include "GOval.h"
-#include "GPolygon.h"
-#include "GText.h"
+#include <GOval.h>
+#include <GPolygon.h>
+#include <GText.h>
 #include <fstream.h>
 #include <limits.h>
 #include <math.h>
-#include <algorithm>
 
 using namespace std;
 
@@ -149,7 +149,6 @@ bool XfigImport::setup (GDocument* , const char* /*format*/) {
       colorTable.insert (i + 8, new QColor (colors[i]));
 
   objList.clear ();
-
   return true;
 }
 
@@ -386,8 +385,7 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
 
   // now set the properties
   setProperties (obj, pen_color, pen_style, thickness, area_fill, fill_color);
-
-  objList.push_back (pair<int, GObject*> (depth, obj));
+  objList.insert(depth, obj);
 }
 
 void XfigImport::parseEllipse (istream& fin, GDocument* ) {
@@ -414,8 +412,7 @@ void XfigImport::parseEllipse (istream& fin, GDocument* ) {
 
   // now set the properties
   setProperties (obj, pen_color, pen_style, thickness, area_fill, fill_color);
-
-  objList.push_back (pair<int, GObject*> (depth, obj));
+  objList.insert(depth, obj);
 }
 
 void XfigImport::parsePolyline (istream& fin, GDocument* ) {
@@ -501,7 +498,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* ) {
   setProperties (obj, pen_color, line_style, thickness, area_fill, fill_color);
 
   // and insert the object
-  objList.push_back (pair<int, GObject*> (depth, obj));
+  objList.insert(depth, obj);
 }
 
 void XfigImport::parseSpline (istream& fin, GDocument* ) {
@@ -572,7 +569,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* ) {
   setProperties (obj, pen_color, line_style, thickness, area_fill, fill_color);
 
   // and insert the object
-  objList.push_back (pair<int, GObject*> (depth, obj));
+  objList.insert(depth, obj);
 }
 
 void XfigImport::parseText (istream& fin, GDocument* ) {
@@ -676,7 +673,7 @@ void XfigImport::parseText (istream& fin, GDocument* ) {
     obj->transform (m3, true);
   }
 
-  objList.push_back (pair<int, GObject*> (depth, obj));
+  objList.insert(depth, obj);
 }
 
 void XfigImport::parseCompoundObject (istream& fin, GDocument* ) {
@@ -692,13 +689,9 @@ void XfigImport::parseCompoundObject (istream& fin, GDocument* ) {
  */
 void XfigImport::buildDocument (GDocument *doc) {
   doc->setAutoUpdate (false);
-  // the following operation is surely slower than sort(greater), but
-  // unfortunatly this feature of STL is not as portable ;(
-  objList.sort();
-  objList.reverse();
-  list<pair<int, GObject*> >::iterator i = objList.begin ();
-  for (; i != objList.end (); i++) {
-    GObject* obj = i->second;
+  QMapIterator<int, GObject*> it;
+  for (it=objList.end() ; it!=objList.begin(); --it) {
+    GObject* obj = it.data();
     obj->ref ();
     doc->insertObject (obj);
   }

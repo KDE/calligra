@@ -22,18 +22,16 @@
 
 */
 
-#include <iostream.h>
-#include "InsertPartTool.h"
-#include "InsertPartTool.moc"
-#include "GDocument.h"
-#include "KIllustrator_doc.h"
-#include "Canvas.h"
-#include "Coord.h"
-#include "CommandHistory.h"
+#include <InsertPartTool.h>
+
+#include <GDocument.h>
+#include <KIllustrator_doc.h>
+#include <Canvas.h>
+#include <Coord.h>
+#include <CommandHistory.h>
 #include <qkeycode.h>
 #include <qbitmap.h>
 #include <qpainter.h>
-#include <kapp.h>
 #include <klocale.h>
 
 InsertPartTool::InsertPartTool (CommandHistory* history) : Tool (history) {
@@ -55,7 +53,7 @@ void InsertPartTool::setPartEntry (KoDocumentEntry& entry) {
 }
 
 void InsertPartTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == (QEvent::Type)2 /*QEvent::KeyPress*/) {
+  if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
     if (ke->key () == Qt::Key_Escape) {
       /*
@@ -98,3 +96,5 @@ void InsertPartTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     emit operationDone ();
   }
 }
+
+#include <InsertPartTool.moc>

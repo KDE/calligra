@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -26,10 +26,13 @@
 #define XfigImport_h_
 
 #include <qintdict.h>
-#include <list>
-#include <qcolor.h>
-#include "GDocument.h"
-#include "ImportFilter.h"
+#include <qmap.h>
+#include <ImportFilter.h>
+
+class GDocument;
+class GObject;
+class QColor;
+class istream;
 
 class XfigImport : public ImportFilter {
 public:
@@ -50,14 +53,13 @@ private:
   void buildDocument (GDocument *doc);
 
   void setProperties (GObject* obj, int pen_color, int style, int thickness,
-		      int area_fill, int fill_color);
+                      int area_fill, int fill_color);
 
   float fig_resolution;
   int coordinate_system;
   int version;
   QIntDict<QColor> colorTable;
-  
-  list<std::pair<int, GObject*> > objList;
+  QMap<int, GObject*> objList;
 };
-  
+
 #endif

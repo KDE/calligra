@@ -24,11 +24,13 @@
 
 #include <RotateCmd.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 RotateCmd::RotateCmd (GDocument* doc, const Coord& center, float a) :
   ObjectManipCmd (doc, i18n("Rotate")) {
   rcenter = center;
   angle = a;
+  kdDebug() << "---------- angle: " << angle << endl;
 }
 
 void RotateCmd::execute () {
@@ -39,6 +41,12 @@ void RotateCmd::execute () {
 
   ObjectManipCmd::execute ();
 
+  kdDebug() << "M1 - dx: " << m1.dx() << " dy: " << m1.dy() << " m11: " << m1.m11()
+            << " m12: " << m1.m12() << " m21: " << m1.m21() << " m22: " << m1.m22() << endl;
+  kdDebug() << "M2 - dx: " << m2.dx() << " dy: " << m2.dy() << " m11: " << m2.m11()
+            << " m12: " << m2.m12() << " m21: " << m2.m21() << " m22: " << m2.m22() << endl;
+  kdDebug() << "M3 - dx: " << m3.dx() << " dy: " << m3.dy() << " m11: " << m3.m11()
+            << " m12: " << m3.m12() << " m21: " << m3.m21() << " m22: " << m3.m22() << endl;
   for (unsigned int i = 0; i < objects.count (); i++) {
     objects[i]->transform (m1);
     objects[i]->transform (m2);

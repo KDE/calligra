@@ -400,6 +400,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
   xcenter = horizRotCenter->getValue ();
   ycenter = vertRotCenter->getValue ();
   angle = rotAngle->getValue ();
+  kdDebug() << "xcenter: " << xcenter << " ycenter: " << ycenter << " angle: " << angle << endl;
 
   if (relativeRotCenter->isChecked ()) {
     // the given values are relative to the current bounding box

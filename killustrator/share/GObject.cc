@@ -101,6 +101,7 @@ GObject::GObject (const QDomElement &element) {
     inWork = false;
 
     outlineInfo.mask = 0;
+    outlineInfo.startArrowId = outlineInfo.endArrowId = 0;
     fillInfo.mask = 0;
     id = element.attribute("id");
     refid = element.attribute("ref");  // Done by the child itself! I'll have to check/fix this (Werner)
@@ -132,9 +133,7 @@ GObject::GObject (const QDomElement &element) {
     fillInfo.gradient.setStyle ((Gradient::Style) element.attribute("gradstyle").toInt());
     fillInfo.mask |= FillInfo::GradientInfo;
 
-    tMatrix=KIllustrator::toMatrix(element.namedItem("matrix").toElement());
-    iMatrix = tMatrix.invert ();
-    tmpMatrix = tMatrix;
+    transform(KIllustrator::toMatrix(element.namedItem("matrix").toElement()), false);
 }
 
 GObject::GObject (const GObject& obj) : QObject()
@@ -448,7 +447,7 @@ QDomElement GObject::writeToXml (QDomDocument &document) {
         // nothing more
         break;
     }
-    element.appendChild(KIllustrator::createMatrixElement("matrix", tMatrix, document));
+    element.appendChild(KIllustrator::createMatrixElement("matrix", tmpMatrix, document));
     return element;
 }
 

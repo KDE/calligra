@@ -27,6 +27,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <GradientShape.h>
 #include <GCurve.h>
@@ -167,6 +168,9 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
   p.save ();
   p.setPen (pen);
   p.setWorldMatrix (tmpMatrix, true);
+
+  kdDebug() << "tmpMatrix - dx: " << tmpMatrix.dx() << " dy: " << tmpMatrix.dy() << " m11: " << tmpMatrix.m11()
+             << " m12: " << tmpMatrix.m12() << " m21: " << tmpMatrix.m21() << " m22: " << tmpMatrix.m22() << endl;
 
   if (! workInProgress () && !outline) {
     initBrush (brush);
