@@ -304,7 +304,7 @@ void KWStylePreview::drawContents(QPainter *painter)
   fm = QFontMetrics(f);
   int y = height() / 2 - fm.height() / 2;
 
-  painter->drawText(20 + style->getPTFirstLineLeftIndent() + style->getPTLeftIndent(),
+  painter->drawText(20 + style->getFirstLineLeftIndent().pt() + style->getLeftIndent().pt(),
 		    y,fm.width(i18n("KWord, KOffice's Wordprocessor")),fm.height(),0,i18n("KWord, KOffice's Wordprocessor"));
 }
 
@@ -478,14 +478,14 @@ void KWStyleEditor::changeSpacing()
       delete paragDia;
       paragDia = 0;
     }
-  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_SPACING);
+  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_SPACING,doc);
   paragDia->setCaption(i18n("KWord - Paragraph Spacing"));
   connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
-  paragDia->setSpaceBeforeParag(style->getMMParagHeadOffset());
-  paragDia->setSpaceAfterParag(style->getMMParagFootOffset());
-  paragDia->setLineSpacing(style->getPTLineSpacing());
-  paragDia->setLeftIndent(style->getMMLeftIndent());
-  paragDia->setFirstLineIndent(style->getMMFirstLineLeftIndent());
+  paragDia->setSpaceBeforeParag(style->getParagHeadOffset());
+  paragDia->setSpaceAfterParag(style->getParagFootOffset());
+  paragDia->setLineSpacing(style->getLineSpacing());
+  paragDia->setLeftIndent(style->getLeftIndent());
+  paragDia->setFirstLineIndent(style->getFirstLineLeftIndent());
   paragDia->show();
 }
 
@@ -499,7 +499,7 @@ void KWStyleEditor::changeAlign()
       delete paragDia;
       paragDia = 0;
     }
-  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_FLOW);
+  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_FLOW,doc);
   paragDia->setCaption(i18n("KWord - Paragraph Flow (Alignment)"));
   connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
   paragDia->setFlow(style->getFlow());
@@ -516,7 +516,7 @@ void KWStyleEditor::changeBorders()
       delete paragDia;
       paragDia = 0;
     }
-  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_BORDERS);
+  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_BORDERS,doc);
   paragDia->setCaption(i18n("KWord - Paragraph Borders"));
   connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
   paragDia->setLeftBorder(style->getLeftBorder());
@@ -536,7 +536,7 @@ void KWStyleEditor::changeNumbering()
       delete paragDia;
       paragDia = 0;
     }
-  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_NUMBERING);
+  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_NUMBERING,doc);
   paragDia->setCaption(i18n("KWord - Numbering"));
   connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
   paragDia->setCounter(style->getCounter());
@@ -553,7 +553,7 @@ void KWStyleEditor::changeTabulators()
       delete paragDia;
       paragDia = 0;
     }
-  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_TABS);
+  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_TABS,doc);
   paragDia->setCaption(i18n("KWord - Tabulators"));
   connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
   paragDia->show();
@@ -566,11 +566,11 @@ void KWStyleEditor::paragDiaOk()
     {
     case KWParagDia::PD_SPACING:
       {
-	style->setMMParagHeadOffset(static_cast<int>(paragDia->getSpaceBeforeParag()));
-	style->setMMParagFootOffset(static_cast<int>(paragDia->getSpaceAfterParag()));
-	style->setPTLineSpacing(static_cast<int>(paragDia->getLineSpacing()));
-	style->setMMLeftIndent(static_cast<int>(paragDia->getLeftIndent()));
-	style->setMMFirstLineLeftIndent(static_cast<int>(paragDia->getFirstLineIndent()));
+	style->setParagHeadOffset(paragDia->getSpaceBeforeParag());
+	style->setParagFootOffset(paragDia->getSpaceAfterParag());
+	style->setLineSpacing(paragDia->getLineSpacing());
+	style->setLeftIndent(paragDia->getLeftIndent());
+	style->setFirstLineLeftIndent(paragDia->getFirstLineIndent());
       } break;
     case KWParagDia::PD_FLOW:
       style->setFlow(paragDia->getFlow());

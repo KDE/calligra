@@ -59,10 +59,12 @@ const int HEADER_AND_FOOTER = 2;
 const int COLUMNS = 4;
 const int DISABLE_BORDERS = 8;
 const int KW_HEADER_AND_FOOTER = 16;
+const int DISABLE_UNIT = 32;
+const int USE_NEW_STUFF = 64;
 
 enum KoFormat {PG_DIN_A3 = 0,PG_DIN_A4 = 1,PG_DIN_A5 = 2,PG_US_LETTER = 3,PG_US_LEGAL = 4,PG_SCREEN = 5,PG_CUSTOM = 6,PG_DIN_B5 = 7,PG_US_EXECUTIVE = 8};
 enum KoOrientation {PG_PORTRAIT = 0,PG_LANDSCAPE = 1};
-enum KoUnit {PG_MM = 0,PG_CM = 1,PG_INCH = 2};
+enum KoUnit {PG_MM = 0,PG_PT = 1,PG_INCH = 2};
 enum KoHFType {HF_SAME = 0,HF_FIRST_DIFF = 2,HF_EO_DIFF = 3};
 
 // structure for page layout
@@ -70,31 +72,35 @@ struct KoPageLayout
 {
   KoFormat format;
   KoOrientation orientation;
+
+  // WARNING: using these values is obsolote!!!!!!!!!!!
   double width,height;
   double left,right,top,bottom;
+
   KoUnit unit;
 
-  double ptWidth,ptHeight;
-  double ptLeft,ptRight,ptTop,ptBottom;
+  unsigned int ptWidth,ptHeight,ptLeft,ptRight,ptTop,ptBottom;
+  float mmWidth,mmHeight,mmLeft,mmTop,mmRight,mmBottom;
+  float inchWidth,inchHeight,inchLeft,inchTop,inchRight,inchBottom;
 
-  bool operator==(const KoPageLayout _l) {
-    return (_l.format == format &&
-	    _l.orientation == orientation &&
-	    _l.width == width &&
-	    _l.height == height &&
-	    _l.left == left && _l.right == right &&
-	    _l.top == top && _l.bottom == bottom &&
-	    _l.unit == unit);
-  }
-  bool operator!=(const KoPageLayout _l) {
-    return (_l.format != format &&
-	    _l.orientation != orientation ||
-	    _l.width != width ||
-	    _l.height != height ||
-	    _l.left != left || _l.right != right ||
-	    _l.top != top || _l.bottom != bottom ||
-	    _l.unit != unit);
-  }
+//   bool operator==(const KoPageLayout _l) {
+//     return (_l.format == format &&
+// 	    _l.orientation == orientation &&
+// 	    _l.width == width &&
+// 	    _l.height == height &&
+// 	    _l.left == left && _l.right == right &&
+// 	    _l.top == top && _l.bottom == bottom &&
+// 	    _l.unit == unit);
+//   }
+//   bool operator!=(const KoPageLayout _l) {
+//     return (_l.format != format &&
+// 	    _l.orientation != orientation ||
+// 	    _l.width != width ||
+// 	    _l.height != height ||
+// 	    _l.left != left || _l.right != right ||
+// 	    _l.top != top || _l.bottom != bottom ||
+// 	    _l.unit != unit);
+//   }
 };
 
 // structure for header-footer
@@ -112,7 +118,8 @@ struct KoHeadFoot
 struct KoColumns
 {
   int columns;
-  int columnSpacing;
+  unsigned int ptColumnSpacing;
+  float mmColumnSpacing,inchColumnSpacing;
 };
 
 // structure for KWord header-Footer
@@ -120,7 +127,9 @@ struct KoKWHeaderFooter
 {
   KoHFType header;
   KoHFType footer;
-  int ptHeaderBodySpacing,ptFooterBodySpacing;
+  unsigned int ptHeaderBodySpacing,ptFooterBodySpacing;
+  float mmHeaderBodySpacing,mmFooterBodySpacing;
+  float inchHeaderBodySpacing,inchFooterBodySpacing;
 };
 
 /******************************************************************/
@@ -206,7 +215,8 @@ protected:
   QLineEdit *eHeadLeft,*eHeadMid,*eHeadRight;
   QLabel *lFootLeft,*lFootMid,*lFootRight,*lFoot,*lMacros1,*lMacros2;
   QLineEdit *eFootLeft,*eFootMid,*eFootRight;
-  QSpinBox *nColumns,*nCSpacing,*nHSpacing,*nFSpacing;
+  QSpinBox *nColumns;
+  KRestrictedLine *nCSpacing,*nHSpacing,*nFSpacing;
   QLabel *lColumns,*lCSpacing,*lHSpacing,*lFSpacing;
   QRadioButton *rhSame,*rhFirst,*rhEvenOdd;
   QRadioButton *rfSame,*rfFirst,*rfEvenOdd;
@@ -219,6 +229,7 @@ protected:
 
   bool retPressed;
   bool enableBorders;
+  int flags;
 
 private slots:     
 
@@ -241,7 +252,7 @@ private slots:
 
   // spinboxes
   void nColChanged(int);
-  void nSpaceChanged(int);
+  void nSpaceChanged(const char*);
 
 };
 #endif //KOPGLAYOUTDIA_H

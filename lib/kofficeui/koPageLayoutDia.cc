@@ -15,8 +15,12 @@
 
 #include <klocale.h>
 
-#define POINT_TO_MM(px) (int((float)px/2.83465))
+#define POINT_TO_MM(px) ((float)px/2.83465)
 #define MM_TO_POINT(mm) (int((float)mm*2.83465))
+#define POINT_TO_INCH(px) ((float)px/72.0)
+#define INCH_TO_POINT(inch) (int((float)inch*72.0))
+#define MM_TO_INCH(mm) (mm/25.4)
+#define INCH_TO_MM(inch) (inch*25.4)
 
 /******************************************************************/
 /* class KoPagePreview                                            */
@@ -39,8 +43,8 @@ KoPagePreview::~KoPagePreview()
 void KoPagePreview::setPageLayout(KoPageLayout _layout)
 {
   double fact = 1;
-  if (_layout.unit == PG_CM) fact = 10;
-  if (_layout.unit == PG_INCH) fact = 25.4;
+//   if (_layout.unit == PG_CM) fact = 10;
+//   if (_layout.unit == PG_INCH) fact = 25.4;
 
   int bl = (int)(_layout.left * fact * 100)/100,br = (int)(_layout.right * fact * 100)/100;
   int bt = (int)(_layout.top * fact * 100)/100,bb = (int)(_layout.bottom * fact * 100)/100;
@@ -100,6 +104,7 @@ void KoPagePreview::drawContents(QPainter *painter)
 KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,int tabs)
   : QTabDialog(parent,name,true)
 {
+  flags = tabs;
   pgPreview = 0;
   pgPreview2 = 0;
 
@@ -128,6 +133,7 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
 				 KoColumns _cl,KoKWHeaderFooter _kwhf,int tabs)
   : QTabDialog(parent,name,true)
 {
+  flags = tabs;
   pgPreview = 0;
   pgPreview2 = 0;
 
@@ -204,12 +210,12 @@ KoPageLayout KoPageLayoutDia::standardLayout()
 
   _layout.format = PG_DIN_A4;
   _layout.orientation = PG_PORTRAIT;
-  _layout.width = PG_A4_WIDTH;
-  _layout.height = PG_A4_HEIGHT;
-  _layout.left = 20;
-  _layout.right = 20;
-  _layout.top = 20;
-  _layout.bottom = 20;
+  _layout.width = _layout.mmWidth = PG_A4_WIDTH;
+  _layout.height = _layout.mmHeight = PG_A4_HEIGHT;
+  _layout.left = _layout.mmLeft = 20;
+  _layout.right = _layout.mmRight = 20;
+  _layout.top = _layout.mmTop = 20;
+  _layout.bottom = _layout.mmBottom = 20;
   _layout.unit = PG_MM;
   _layout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
   _layout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
@@ -217,6 +223,12 @@ KoPageLayout KoPageLayoutDia::standardLayout()
   _layout.ptRight = MM_TO_POINT(20);
   _layout.ptTop = MM_TO_POINT(20);
   _layout.ptBottom = MM_TO_POINT(20);
+  _layout.inchWidth = MM_TO_INCH(PG_A4_WIDTH);
+  _layout.inchHeight = MM_TO_INCH(PG_A4_HEIGHT);
+  _layout.inchLeft = MM_TO_INCH(20);
+  _layout.inchRight = MM_TO_INCH(20);
+  _layout.inchTop = MM_TO_INCH(20);
+  _layout.inchBottom = MM_TO_INCH(20);
 
   return  _layout;
 }
@@ -238,7 +250,28 @@ KoHeadFoot KoPageLayoutDia::getHeadFoot()
 KoColumns KoPageLayoutDia::getColumns()
 {
   cl.columns = nColumns->value();
-  cl.columnSpacing = nCSpacing->value();
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	cl.ptColumnSpacing = MM_TO_POINT(atof(nCSpacing->text()));
+	cl.mmColumnSpacing = atof(nCSpacing->text());
+	cl.inchColumnSpacing = MM_TO_INCH(atof(nCSpacing->text()));
+      } break;
+    case PG_PT:
+      {
+	cl.ptColumnSpacing = atoi(nCSpacing->text());
+	cl.mmColumnSpacing = POINT_TO_MM(atoi(nCSpacing->text()));
+	cl.inchColumnSpacing = POINT_TO_INCH(atoi(nCSpacing->text()));
+      } break;
+    case PG_INCH:
+      {
+	cl.ptColumnSpacing = INCH_TO_POINT(atof(nCSpacing->text()));
+	cl.mmColumnSpacing = INCH_TO_MM(atof(nCSpacing->text()));
+	cl.inchColumnSpacing = atof(nCSpacing->text());
+      } break;
+    }
 
   return cl;
 }
@@ -252,7 +285,28 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
     kwhf.header = HF_FIRST_DIFF;
   else if (rhEvenOdd->isChecked())
     kwhf.header = HF_EO_DIFF;
-  kwhf.ptHeaderBodySpacing = nHSpacing->value();
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	kwhf.ptHeaderBodySpacing = MM_TO_POINT(atof(nHSpacing->text()));
+	kwhf.mmHeaderBodySpacing = atof(nHSpacing->text());
+	kwhf.inchHeaderBodySpacing = MM_TO_INCH(atof(nHSpacing->text()));
+      } break;
+    case PG_PT:
+      {
+	kwhf.ptHeaderBodySpacing = atoi(nHSpacing->text());
+	kwhf.mmHeaderBodySpacing = POINT_TO_MM(atoi(nHSpacing->text()));
+	kwhf.inchHeaderBodySpacing = POINT_TO_INCH(atoi(nHSpacing->text()));
+      } break;
+    case PG_INCH:
+      {
+	kwhf.ptHeaderBodySpacing = INCH_TO_POINT(atof(nHSpacing->text()));
+	kwhf.mmHeaderBodySpacing = INCH_TO_MM(atof(nHSpacing->text()));
+	kwhf.inchHeaderBodySpacing = atof(nHSpacing->text());
+      } break;
+    }
 
   if (rfSame->isChecked())
     kwhf.footer = HF_SAME;
@@ -260,7 +314,28 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
     kwhf.footer = HF_FIRST_DIFF;
   else if (rfEvenOdd->isChecked())
     kwhf.footer = HF_EO_DIFF;
-  kwhf.ptFooterBodySpacing = nFSpacing->value();
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	kwhf.ptFooterBodySpacing = MM_TO_POINT(atof(nFSpacing->text()));
+	kwhf.mmFooterBodySpacing = atof(nFSpacing->text());
+	kwhf.inchFooterBodySpacing = MM_TO_INCH(atof(nFSpacing->text()));
+      } break;
+    case PG_PT:
+      {
+	kwhf.ptFooterBodySpacing = atoi(nFSpacing->text());
+	kwhf.mmFooterBodySpacing = POINT_TO_MM(atoi(nFSpacing->text()));
+	kwhf.inchFooterBodySpacing = POINT_TO_INCH(atoi(nFSpacing->text()));
+      } break;
+    case PG_INCH:
+      {
+	kwhf.ptFooterBodySpacing = INCH_TO_POINT(atof(nFSpacing->text()));
+	kwhf.mmFooterBodySpacing = INCH_TO_MM(atof(nFSpacing->text()));
+	kwhf.inchFooterBodySpacing = atof(nHSpacing->text());
+      } break;
+    }
 
   return kwhf;
 }
@@ -272,21 +347,39 @@ void KoPageLayoutDia::setupTab1()
 
   grid1 = new QGridLayout(tab1,5,2,15,7);
 
-  // ------------- unit _______________
-  // label unit
-  lpgUnit = new QLabel(i18n("Unit:"),tab1);
-  lpgUnit->resize(lpgUnit->sizeHint());
-  grid1->addWidget(lpgUnit,0,0);
-
-  // combo unit
-  cpgUnit = new QComboBox(false,tab1,"cpgUnit");
-  cpgUnit->setAutoResize(false);
-  cpgUnit->insertItem(i18n("Millimeters (mm)"));
-  cpgUnit->insertItem(i18n("Centimeters (cm)"));
-  cpgUnit->insertItem(i18n("Inches (in)"));
-  cpgUnit->resize(cpgUnit->sizeHint());
-  grid1->addWidget(cpgUnit,1,0);
-  connect(cpgUnit,SIGNAL(activated(int)),this,SLOT(unitChanged(int)));
+  if (!(flags & DISABLE_UNIT))
+    {
+      // ------------- unit _______________
+      // label unit
+      lpgUnit = new QLabel(i18n("Unit:"),tab1);
+      lpgUnit->resize(lpgUnit->sizeHint());
+      grid1->addWidget(lpgUnit,0,0);
+      
+      // combo unit
+      cpgUnit = new QComboBox(false,tab1,"cpgUnit");
+      cpgUnit->setAutoResize(false);
+      cpgUnit->insertItem(i18n("Millimeters (mm)"));
+      cpgUnit->insertItem(i18n("Points (pt)"));
+      cpgUnit->insertItem(i18n("Inches (in)"));
+      cpgUnit->resize(cpgUnit->sizeHint());
+      grid1->addWidget(cpgUnit,1,0);
+      connect(cpgUnit,SIGNAL(activated(int)),this,SLOT(unitChanged(int)));
+      if (!(flags & USE_NEW_STUFF)) cpgUnit->setEnabled(false);
+    }
+  else
+    {
+      QString str;
+      switch (layout.unit)
+	{
+	case PG_MM: str = "mm"; break;
+	case PG_PT: str = "pt"; break;
+	case PG_INCH: str = "inch"; break;
+	}
+      
+      lpgUnit = new QLabel(i18n(QString("All values are given in " + str)),tab1);
+      lpgUnit->resize(lpgUnit->sizeHint());
+      grid1->addWidget(lpgUnit,0,0);
+    }
 
   // -------------- page format -----------------
   formatFrame = new QGroupBox(i18n("Page Format"),tab1);
@@ -497,14 +590,14 @@ void KoPageLayoutDia::setupTab1()
 
   // --------------- main grid ------------------
   grid1->addColSpacing(0,lpgUnit->width());
-  grid1->addColSpacing(0,cpgUnit->width());
+  grid1->addColSpacing(0,(flags & DISABLE_UNIT) ? 0 : cpgUnit->width());
   grid1->addColSpacing(0,formatFrame->width());
   grid1->addColSpacing(0,borderFrame->width());
   grid1->addColSpacing(1,280);
   grid1->setColStretch(1,1);
 
   grid1->addRowSpacing(0,lpgUnit->height());
-  grid1->addRowSpacing(1,cpgUnit->height());
+  grid1->addRowSpacing(1,(flags & DISABLE_UNIT) ? 0 : cpgUnit->height());
   grid1->addRowSpacing(2,formatFrame->height());
   grid1->addRowSpacing(2,120);
   grid1->addRowSpacing(3,borderFrame->height());
@@ -522,10 +615,16 @@ void KoPageLayoutDia::setupTab1()
 /*================= setup values for tab one =====================*/
 void KoPageLayoutDia::setValuesTab1()
 {
-  char tmp[10];
+  char tmp1[10];
+  char tmp2[10];
+  char tmp3[10];
+  char tmp4[10];
+  char tmp5[10];
+  char tmp6[10];
 
   // unit
-  cpgUnit->setCurrentItem(layout.unit);
+  if (!(flags & DISABLE_UNIT))
+    cpgUnit->setCurrentItem(layout.unit);
 
   // page format
   cpgFormat->setCurrentItem(layout.format);
@@ -533,29 +632,43 @@ void KoPageLayoutDia::setValuesTab1()
   // orientation
   cpgOrientation->setCurrentItem(layout.orientation);
 
-  // page width
-  sprintf(tmp,"%.2f",layout.width);
-  epgWidth->setText(tmp);
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	sprintf(tmp1,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmWidth : layout.width);
+	sprintf(tmp2,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmHeight : layout.height);
+	sprintf(tmp3,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmLeft : layout.left);
+	sprintf(tmp4,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmRight : layout.right);
+	sprintf(tmp5,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmTop : layout.top);
+	sprintf(tmp6,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmBottom : layout.bottom);
+      } break;
+    case PG_PT:
+      {
+	sprintf(tmp1,"%d",layout.ptWidth);
+	sprintf(tmp2,"%d",layout.ptHeight);
+	sprintf(tmp3,"%d",layout.ptLeft);
+	sprintf(tmp4,"%d",layout.ptRight);
+	sprintf(tmp5,"%d",layout.ptTop);
+	sprintf(tmp6,"%d",layout.ptBottom);
+      } break;
+    case PG_INCH:
+      {
+	sprintf(tmp1,"%.2f",layout.inchWidth);
+	sprintf(tmp2,"%.2f",layout.inchHeight);
+	sprintf(tmp3,"%.2f",layout.inchLeft);
+	sprintf(tmp4,"%.2f",layout.inchRight);
+	sprintf(tmp5,"%.2f",layout.inchTop);
+	sprintf(tmp6,"%.2f",layout.inchBottom);
+      } break;
+    }
 
-  // page height
-  sprintf(tmp,"%.2f",layout.height);
-  epgHeight->setText(tmp);
-
-  // border left
-  sprintf(tmp,"%.2f",layout.left);
-  ebrLeft->setText(tmp);
-
-  // border right
-  sprintf(tmp,"%.2f",layout.right);
-  ebrRight->setText(tmp);
-
-  // border top
-  sprintf(tmp,"%.2f",layout.top);
-  ebrTop->setText(tmp);
-
-  // border bottom
-  sprintf(tmp,"%.2f",layout.bottom);
-  ebrBottom->setText(tmp);
+  epgWidth->setText(tmp1);
+  epgHeight->setText(tmp2);
+  ebrLeft->setText(tmp3);
+  ebrRight->setText(tmp4);
+  ebrTop->setText(tmp5);
+  ebrBottom->setText(tmp6);
 
   pgPreview->setPageLayout(layout);
 }
@@ -697,15 +810,36 @@ void KoPageLayoutDia::setupTab3()
   nColumns->setValue(cl.columns);
   connect(nColumns,SIGNAL(valueChanged(int)),this,SLOT(nColChanged(int)));
 
-  lCSpacing = new QLabel(i18n("Columns Spacing (mm):"),tab3);
+  QString str;
+  switch (layout.unit)
+    {
+    case PG_MM: str = "mm"; break;
+    case PG_PT: str = "pt"; break;
+    case PG_INCH: str = "inch"; break;
+    }
+
+  lCSpacing = new QLabel(i18n(QString("Columns Spacing (" + str + "):")),tab3);
   lCSpacing->resize(lCSpacing->sizeHint());
   grid3->addWidget(lCSpacing,2,0);
 
-  nCSpacing = new QSpinBox(0,100,1,tab3);
+  nCSpacing = new KRestrictedLine(tab3,"","1234567890.");
+  nCSpacing->setText("0.00");
+  nCSpacing->setMaxLength(5);
+  nCSpacing->setEchoMode(QLineEdit::Normal);
+  nCSpacing->setFrame(true);
   nCSpacing->resize(nCSpacing->sizeHint());
   grid3->addWidget(nCSpacing,3,0);
-  nCSpacing->setValue(cl.columnSpacing);
-  connect(nCSpacing,SIGNAL(valueChanged(int)),this,SLOT(nSpaceChanged(int)));
+
+  switch (layout.unit)
+    {
+    case PG_MM: nCSpacing->setText(QString().setNum(cl.mmColumnSpacing));
+      break;
+    case PG_PT: nCSpacing->setText(QString().setNum(cl.ptColumnSpacing));
+      break;
+    case PG_INCH: nCSpacing->setText(QString().setNum(cl.inchColumnSpacing));
+      break;
+    }
+  connect(nCSpacing,SIGNAL(textChanged(const char*)),this,SLOT(nSpaceChanged(const char*)));
 
   // ------------- preview -----------
   pgPreview2 = new KoPagePreview(tab3,"Preview",layout);
@@ -735,6 +869,14 @@ void KoPageLayoutDia::setupTab3()
 /*================================================================*/
 void KoPageLayoutDia::setupTab4()
 {
+  QString str;
+  switch (layout.unit)
+    {
+    case PG_MM: str = "mm"; break;
+    case PG_PT: str = "pt"; break;
+    case PG_INCH: str = "inch"; break;
+    }
+
   tab4 = new QWidget(this);
   grid4 = new QGridLayout(tab4,3,1,15,7);
 
@@ -760,15 +902,28 @@ void KoPageLayoutDia::setupTab4()
   headerGrid->addMultiCellWidget(rhEvenOdd,3,3,0,1);
   if (kwhf.header == HF_EO_DIFF) rhEvenOdd->setChecked(true);
 
-  lHSpacing = new QLabel(i18n("Spacing between header and body (in pt):"),gHeader);
+  lHSpacing = new QLabel(i18n(QString("Spacing between header and body (" + str + "):")),gHeader);
   lHSpacing->resize(lHSpacing->sizeHint());
   lHSpacing->setAlignment(AlignRight | AlignVCenter);
   headerGrid->addWidget(lHSpacing,4,0);
 
-  nHSpacing = new QSpinBox(0,100,1,gHeader);
+  nHSpacing = new KRestrictedLine(gHeader,"","1234567890.");
+  nHSpacing->setText("0.00");
+  nHSpacing->setMaxLength(5);
+  nHSpacing->setEchoMode(QLineEdit::Normal);
+  nHSpacing->setFrame(true);
   nHSpacing->resize(nHSpacing->sizeHint());
   headerGrid->addWidget(nHSpacing,4,1);
-  nHSpacing->setValue(kwhf.ptHeaderBodySpacing);
+
+  switch (layout.unit)
+    {
+    case PG_MM: nHSpacing->setText(QString().setNum(kwhf.mmHeaderBodySpacing));
+      break;
+    case PG_PT: nHSpacing->setText(QString().setNum(kwhf.ptHeaderBodySpacing));
+      break;
+    case PG_INCH: nHSpacing->setText(QString().setNum(kwhf.inchHeaderBodySpacing));
+      break;
+    }
   
   headerGrid->addColSpacing(0,rhSame->width() / 2);
   headerGrid->addColSpacing(1,rhSame->width() / 2);
@@ -817,15 +972,28 @@ void KoPageLayoutDia::setupTab4()
   footerGrid->addMultiCellWidget(rfEvenOdd,3,3,0,1);
   if (kwhf.footer == HF_EO_DIFF) rfEvenOdd->setChecked(true);
 
-  lFSpacing = new QLabel(i18n("Spacing between footer and body (in pt):"),gFooter);
+  lFSpacing = new QLabel(i18n(QString("Spacing between footer and body (" + str + "):")),gFooter);
   lFSpacing->resize(lFSpacing->sizeHint());
   lFSpacing->setAlignment(AlignRight | AlignVCenter);
   footerGrid->addWidget(lFSpacing,4,0);
 
-  nFSpacing = new QSpinBox(0,100,1,gFooter);
+  nFSpacing = new KRestrictedLine(gFooter,"","1234567890.");
+  nFSpacing->setText("0.00");
+  nFSpacing->setMaxLength(5);
+  nFSpacing->setEchoMode(QLineEdit::Normal);
+  nFSpacing->setFrame(true);
   nFSpacing->resize(nFSpacing->sizeHint());
   footerGrid->addWidget(nFSpacing,4,1);
-  nFSpacing->setValue(kwhf.ptFooterBodySpacing);
+
+  switch (layout.unit)
+    {
+    case PG_MM: nFSpacing->setText(QString().setNum(kwhf.mmFooterBodySpacing));
+      break;
+    case PG_PT: nFSpacing->setText(QString().setNum(kwhf.ptFooterBodySpacing));
+      break;
+    case PG_INCH: nFSpacing->setText(QString().setNum(kwhf.inchFooterBodySpacing));
+      break;
+    }
   
   footerGrid->addColSpacing(0,rfSame->width() / 2);
   footerGrid->addColSpacing(1,rfSame->width() / 2);
@@ -878,63 +1046,111 @@ void KoPageLayoutDia::updatePreview(KoPageLayout)
 /*===================== unit changed =============================*/
 void KoPageLayoutDia::unitChanged(int _unit)
 {
-  if ((KoUnit)_unit != layout.unit)
-    {
-      double fact = 1;
-      if (layout.unit == PG_CM) fact = 10;
-      if (layout.unit == PG_INCH) fact = 25.4;
+//   if ((KoUnit)_unit != layout.unit)
+//     {
+//       double fact = 1;
+//       if (layout.unit == PG_CM) fact = 10;
+//       if (layout.unit == PG_INCH) fact = 25.4;
       
-      layout.width *= fact; 
-      layout.height *= fact; 
-      layout.left *= fact; 
-      layout.right *= fact; 
-      layout.top *= fact; 
-      layout.bottom *= fact; 
+//       layout.width *= fact; 
+//       layout.height *= fact; 
+//       layout.left *= fact; 
+//       layout.right *= fact; 
+//       layout.top *= fact; 
+//       layout.bottom *= fact; 
 
-      layout.ptWidth = MM_TO_POINT(layout.width);
-      layout.ptHeight = MM_TO_POINT(layout.height);
-      layout.ptLeft = MM_TO_POINT(layout.left);
-      layout.ptRight = MM_TO_POINT(layout.right);
-      layout.ptTop = MM_TO_POINT(layout.top);
-      layout.ptBottom = MM_TO_POINT(layout.bottom);
+//       layout.ptWidth = MM_TO_POINT(layout.width);
+//       layout.ptHeight = MM_TO_POINT(layout.height);
+//       layout.ptLeft = MM_TO_POINT(layout.left);
+//       layout.ptRight = MM_TO_POINT(layout.right);
+//       layout.ptTop = MM_TO_POINT(layout.top);
+//       layout.ptBottom = MM_TO_POINT(layout.bottom);
 
-      fact = 1;
-      if (_unit == PG_CM) fact = 0.1;
-      if (_unit == PG_INCH) fact = 1/25.4;
+//       fact = 1;
+//       if (_unit == PG_CM) fact = 0.1;
+//       if (_unit == PG_INCH) fact = 1/25.4;
 
-      layout.width *= fact; 
-      layout.height *= fact; 
-      layout.left *= fact; 
-      layout.right *= fact; 
-      layout.top *= fact; 
-      layout.bottom *= fact; 
+//       layout.width *= fact; 
+//       layout.height *= fact; 
+//       layout.left *= fact; 
+//       layout.right *= fact; 
+//       layout.top *= fact; 
+//       layout.bottom *= fact; 
 
-      layout.ptWidth = MM_TO_POINT(layout.width);
-      layout.ptHeight = MM_TO_POINT(layout.height);
-      layout.ptLeft = MM_TO_POINT(layout.left);
-      layout.ptRight = MM_TO_POINT(layout.right);
-      layout.ptTop = MM_TO_POINT(layout.top);
-      layout.ptBottom = MM_TO_POINT(layout.bottom);
+//       layout.ptWidth = MM_TO_POINT(layout.width);
+//       layout.ptHeight = MM_TO_POINT(layout.height);
+//       layout.ptLeft = MM_TO_POINT(layout.left);
+//       layout.ptRight = MM_TO_POINT(layout.right);
+//       layout.ptTop = MM_TO_POINT(layout.top);
+//       layout.ptBottom = MM_TO_POINT(layout.bottom);
 
-      layout.unit = (KoUnit)_unit;
-      setValuesTab1();
+//       layout.unit = (KoUnit)_unit;
+//       setValuesTab1();
 
-      layout.width = atof(epgWidth->text());
-      layout.height = atof(epgHeight->text());
-      layout.left = atof(ebrLeft->text());
-      layout.right = atof(ebrRight->text());
-      layout.top = atof(ebrTop->text());
-      layout.bottom = atof(ebrBottom->text());
+//       layout.width = atof(epgWidth->text());
+//       layout.height = atof(epgHeight->text());
+//       layout.left = atof(ebrLeft->text());
+//       layout.right = atof(ebrRight->text());
+//       layout.top = atof(ebrTop->text());
+//       layout.bottom = atof(ebrBottom->text());
 
-      layout.ptWidth = MM_TO_POINT(layout.width);
-      layout.ptHeight = MM_TO_POINT(layout.height);
-      layout.ptLeft = MM_TO_POINT(layout.left);
-      layout.ptRight = MM_TO_POINT(layout.right);
-      layout.ptTop = MM_TO_POINT(layout.top);
-      layout.ptBottom = MM_TO_POINT(layout.bottom);
+//       layout.ptWidth = MM_TO_POINT(layout.width);
+//       layout.ptHeight = MM_TO_POINT(layout.height);
+//       layout.ptLeft = MM_TO_POINT(layout.left);
+//       layout.ptRight = MM_TO_POINT(layout.right);
+//       layout.ptTop = MM_TO_POINT(layout.top);
+//       layout.ptBottom = MM_TO_POINT(layout.bottom);
 
-      updatePreview(layout);
+//       updatePreview(layout);
+//     }
+
+  layout.unit = static_cast<KoUnit>(_unit);
+
+  char tmp1[10];
+  char tmp2[10];
+  char tmp3[10];
+  char tmp4[10];
+  char tmp5[10];
+  char tmp6[10];
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	sprintf(tmp1,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmWidth : layout.width);
+	sprintf(tmp2,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmHeight : layout.height);
+	sprintf(tmp3,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmLeft : layout.left);
+	sprintf(tmp4,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmRight : layout.right);
+	sprintf(tmp5,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmTop : layout.top);
+	sprintf(tmp6,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmBottom : layout.bottom);
+      } break;
+    case PG_PT:
+      {
+	sprintf(tmp1,"%d",layout.ptWidth);
+	sprintf(tmp2,"%d",layout.ptHeight);
+	sprintf(tmp3,"%d",layout.ptLeft);
+	sprintf(tmp4,"%d",layout.ptRight);
+	sprintf(tmp5,"%d",layout.ptTop);
+	sprintf(tmp6,"%d",layout.ptBottom);
+      } break;
+    case PG_INCH:
+      {
+	sprintf(tmp1,"%.2f",layout.inchWidth);
+	sprintf(tmp2,"%.2f",layout.inchHeight);
+	sprintf(tmp3,"%.2f",layout.inchLeft);
+	sprintf(tmp4,"%.2f",layout.inchRight);
+	sprintf(tmp5,"%.2f",layout.inchTop);
+	sprintf(tmp6,"%.2f",layout.inchBottom);
+      } break;
     }
+
+  epgWidth->setText(tmp1);
+  epgHeight->setText(tmp2);
+  ebrLeft->setText(tmp3);
+  ebrRight->setText(tmp4);
+  ebrTop->setText(tmp5);
+  ebrBottom->setText(tmp6);
+
+  updatePreview(layout);
 }
 
 /*===================== format changed =============================*/
@@ -943,8 +1159,7 @@ void KoPageLayoutDia::formatChanged(int _format)
   if ((KoFormat)_format != layout.format)
     {
       bool enable = true;
-      char stmp[10];
-      double w = 0,h = 0,dtmp = 0;
+      float w = 0,h = 0,dtmp = 0;
       
       layout.format = (KoFormat)_format;
       if ((KoFormat)_format != PG_CUSTOM) enable = false;
@@ -1001,40 +1216,37 @@ void KoPageLayoutDia::formatChanged(int _format)
 	  h = dtmp;
 	}
       
-      layout.width = w;
-      layout.height = h;
+      layout.width = layout.mmWidth = w;
+      layout.height = layout.mmHeight = h;
+      layout.ptWidth = MM_TO_POINT(w);
+      layout.ptHeight = MM_TO_POINT(h);
+      layout.inchWidth = MM_TO_INCH(w);
+      layout.inchHeight = MM_TO_INCH(h);
+      
 
-      layout.ptWidth = MM_TO_POINT(layout.width);
-      layout.ptHeight = MM_TO_POINT(layout.height);
-
-      if (layout.unit == PG_CM)
+      char tmp1[10];
+      char tmp2[10];
+      switch (layout.unit)
 	{
-	  layout.width *= 0.1; 
-	  layout.height *= 0.1; 
+	case PG_MM:
+	  {
+	    sprintf(tmp1,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmWidth : layout.width);
+	    sprintf(tmp2,"%.2f",(flags & USE_NEW_STUFF) ? layout.mmHeight : layout.height);
+	  } break;
+	case PG_PT:
+	  {
+	    sprintf(tmp1,"%d",layout.ptWidth);
+	    sprintf(tmp2,"%d",layout.ptHeight);
+	  } break;
+	case PG_INCH:
+	  {
+	    sprintf(tmp1,"%.2f",layout.inchWidth);
+	    sprintf(tmp2,"%.2f",layout.inchHeight);
+	  } break;
 	}
-      else if (layout.unit == PG_INCH)
-	{
-	  layout.width *= 1/25.4; 
-	  layout.height *= 1/25.4;
-	}
- 
-      layout.ptWidth = MM_TO_POINT(layout.width);
-      layout.ptHeight = MM_TO_POINT(layout.height);
 
-      sprintf(stmp,"%.2f",layout.width);
-      epgWidth->setText(stmp);
-      sprintf(stmp,"%.2f",layout.height);
-      epgHeight->setText(stmp);
-
-      layout.left = atof(ebrLeft->text());
-      layout.right = atof(ebrRight->text());
-      layout.top = atof(ebrTop->text());
-      layout.bottom = atof(ebrBottom->text());
-
-      layout.ptLeft = MM_TO_POINT(layout.left);
-      layout.ptRight = MM_TO_POINT(layout.right);
-      layout.ptTop = MM_TO_POINT(layout.top);
-      layout.ptBottom = MM_TO_POINT(layout.bottom);
+      epgWidth->setText(tmp1);
+      epgHeight->setText(tmp2);
 
       updatePreview(layout);
     }
@@ -1098,8 +1310,32 @@ void KoPageLayoutDia::widthChanged()
 {
   if (strlen(epgWidth->text()) == 0 && retPressed)
     epgWidth->setText("0.00");
-  layout.width = atof(epgWidth->text());
-  layout.ptWidth = MM_TO_POINT(layout.width);
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	layout.width = atof(epgWidth->text());
+	layout.mmWidth = atof(epgWidth->text());
+	layout.ptWidth = MM_TO_POINT(atof(epgWidth->text()));
+	layout.inchWidth = MM_TO_INCH(atof(epgWidth->text()));
+      } break;
+    case PG_PT:
+      {
+	layout.width = POINT_TO_MM(atoi(epgWidth->text()));
+	layout.mmWidth = POINT_TO_MM(atoi(epgWidth->text()));
+	layout.ptWidth = atoi(epgWidth->text());
+	layout.inchWidth = POINT_TO_INCH(atoi(epgWidth->text()));
+      } break;
+    case PG_INCH:
+      {
+	layout.width = INCH_TO_MM(atof(epgWidth->text()));
+	layout.mmWidth = INCH_TO_MM(atof(epgWidth->text()));
+	layout.ptWidth = INCH_TO_POINT(atof(epgWidth->text()));
+	layout.inchWidth = atof(epgWidth->text());
+      } break;
+    }
+
   updatePreview(layout);
   retPressed = false;
 }
@@ -1109,8 +1345,32 @@ void KoPageLayoutDia::heightChanged()
 {
   if (strlen(epgHeight->text()) == 0 && retPressed)
     epgHeight->setText("0.00");
-  layout.height = atof(epgHeight->text());
-  layout.ptHeight = MM_TO_POINT(layout.height);
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	layout.height = atof(epgHeight->text());
+	layout.mmHeight = atof(epgHeight->text());
+	layout.ptHeight = MM_TO_POINT(atof(epgHeight->text()));
+	layout.inchHeight = MM_TO_INCH(atof(epgHeight->text()));
+      } break;
+    case PG_PT:
+      {
+	layout.height = POINT_TO_MM(atoi(epgHeight->text()));
+	layout.mmHeight = POINT_TO_MM(atoi(epgHeight->text()));
+	layout.ptHeight = atoi(epgHeight->text());
+	layout.inchHeight = POINT_TO_INCH(atoi(epgHeight->text()));
+      } break;
+    case PG_INCH:
+      {
+	layout.height = INCH_TO_MM(atof(epgHeight->text()));
+	layout.mmHeight = INCH_TO_MM(atof(epgHeight->text()));
+	layout.ptHeight = INCH_TO_POINT(atof(epgHeight->text()));
+	layout.inchHeight = atof(epgHeight->text());
+      } break;
+    }
+
   updatePreview(layout);
   retPressed = false;
 }
@@ -1120,8 +1380,32 @@ void KoPageLayoutDia::leftChanged()
 {
   if (strlen(ebrLeft->text()) == 0 && retPressed)
     ebrLeft->setText("0.00");
-  layout.left = atof(ebrLeft->text());
-  layout.ptLeft = MM_TO_POINT(layout.left);
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	layout.left = atof(ebrLeft->text());
+	layout.mmLeft = atof(ebrLeft->text());
+	layout.ptLeft = MM_TO_POINT(atof(ebrLeft->text()));
+	layout.inchLeft = MM_TO_INCH(atof(ebrLeft->text()));
+      } break;
+    case PG_PT:
+      {
+	layout.left = POINT_TO_MM(atoi(ebrLeft->text()));
+	layout.mmLeft = POINT_TO_MM(atoi(ebrLeft->text()));
+	layout.ptLeft = atoi(ebrLeft->text());
+	layout.inchLeft = POINT_TO_INCH(atoi(ebrLeft->text()));
+      } break;
+    case PG_INCH:
+      {
+	layout.left = INCH_TO_MM(atof(ebrLeft->text()));
+	layout.mmLeft = INCH_TO_MM(atof(ebrLeft->text()));
+	layout.ptLeft = INCH_TO_POINT(atof(ebrLeft->text()));
+	layout.inchLeft = atof(ebrLeft->text());
+      } break;
+    }
+
   updatePreview(layout);
   retPressed = false;
 }
@@ -1131,8 +1415,32 @@ void KoPageLayoutDia::rightChanged()
 {
   if (strlen(ebrRight->text()) == 0 && retPressed)
     ebrRight->setText("0.00");
-  layout.right = atof(ebrRight->text());
-  layout.ptRight = MM_TO_POINT(layout.right);
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	layout.right = atof(ebrRight->text());
+	layout.mmRight = atof(ebrRight->text());
+	layout.ptRight = MM_TO_POINT(atof(ebrRight->text()));
+	layout.inchRight = MM_TO_INCH(atof(ebrRight->text()));
+      } break;
+    case PG_PT:
+      {
+	layout.right = POINT_TO_MM(atoi(ebrRight->text()));
+	layout.mmRight = POINT_TO_MM(atoi(ebrRight->text()));
+	layout.ptRight = atoi(ebrRight->text());
+	layout.inchRight = POINT_TO_INCH(atoi(ebrRight->text()));
+      } break;
+    case PG_INCH:
+      {
+	layout.right = INCH_TO_MM(atof(ebrRight->text()));
+	layout.mmRight = INCH_TO_MM(atof(ebrRight->text()));
+	layout.ptRight = INCH_TO_POINT(atof(ebrRight->text()));
+	layout.inchRight = atof(ebrRight->text());
+      } break;
+    }
+
   updatePreview(layout);
   retPressed = false;
 }
@@ -1142,8 +1450,32 @@ void KoPageLayoutDia::topChanged()
 {
   if (strlen(ebrTop->text()) == 0 && retPressed)
     ebrTop->setText("0.00");
-  layout.top = atof(ebrTop->text());
-  layout.ptTop = MM_TO_POINT(layout.top);
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	layout.top = atof(ebrTop->text());
+	layout.mmTop = atof(ebrTop->text());
+	layout.ptTop = MM_TO_POINT(atof(ebrTop->text()));
+	layout.inchTop = MM_TO_INCH(atof(ebrTop->text()));
+      } break;
+    case PG_PT:
+      {
+	layout.top = POINT_TO_MM(atoi(ebrTop->text()));
+	layout.mmTop = POINT_TO_MM(atoi(ebrTop->text()));
+	layout.ptTop = atoi(ebrTop->text());
+	layout.inchTop = POINT_TO_INCH(atoi(ebrTop->text()));
+      } break;
+    case PG_INCH:
+      {
+	layout.top = INCH_TO_MM(atof(ebrTop->text()));
+	layout.mmTop = INCH_TO_MM(atof(ebrTop->text()));
+	layout.ptTop = INCH_TO_POINT(atof(ebrTop->text()));
+	layout.inchTop = atof(ebrTop->text());
+      } break;
+    }
+
   updatePreview(layout);
   retPressed = false;
 }
@@ -1153,8 +1485,32 @@ void KoPageLayoutDia::bottomChanged()
 {
   if (strlen(ebrBottom->text()) == 0 && retPressed)
     ebrBottom->setText("0.00");
-  layout.bottom = atof(ebrBottom->text());
-  layout.ptBottom = MM_TO_POINT(layout.bottom);
+
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	layout.bottom = atof(ebrBottom->text());
+	layout.mmBottom = atof(ebrBottom->text());
+	layout.ptBottom = MM_TO_POINT(atof(ebrBottom->text()));
+	layout.inchBottom = MM_TO_INCH(atof(ebrBottom->text()));
+      } break;
+    case PG_PT:
+      {
+	layout.bottom = POINT_TO_MM(atoi(ebrBottom->text()));
+	layout.mmBottom = POINT_TO_MM(atoi(ebrBottom->text()));
+	layout.ptBottom = atoi(ebrBottom->text());
+	layout.inchBottom = POINT_TO_INCH(atoi(ebrBottom->text()));
+      } break;
+    case PG_INCH:
+      {
+	layout.bottom = INCH_TO_MM(atof(ebrBottom->text()));
+	layout.mmBottom = INCH_TO_MM(atof(ebrBottom->text()));
+	layout.ptBottom = INCH_TO_POINT(atof(ebrBottom->text()));
+	layout.inchBottom = atof(ebrBottom->text());
+      } break;
+    }
+
   updatePreview(layout);
   retPressed = false;
 }
@@ -1167,9 +1523,30 @@ void KoPageLayoutDia::nColChanged(int _val)
 }
 
 /*==================================================================*/
-void KoPageLayoutDia::nSpaceChanged(int _val)
+void KoPageLayoutDia::nSpaceChanged(const char *_val)
 {
-  cl.columnSpacing = _val;
+  switch (layout.unit)
+    {
+    case PG_MM:
+      {
+	cl.ptColumnSpacing = MM_TO_POINT(atof(_val));
+	cl.mmColumnSpacing = atof(_val);
+	cl.inchColumnSpacing = MM_TO_INCH(atof(_val));
+      } break;
+    case PG_PT:
+      {
+	cl.ptColumnSpacing = atoi(_val);
+	cl.mmColumnSpacing = POINT_TO_MM(atoi(_val));
+	cl.inchColumnSpacing = POINT_TO_INCH(atoi(_val));
+      } break;
+    case PG_INCH:
+      {
+	cl.ptColumnSpacing = INCH_TO_POINT(atof(_val));
+	cl.mmColumnSpacing = INCH_TO_MM(atof(_val));
+	cl.inchColumnSpacing = atof(_val);
+      } break;
+    }
+
   updatePreview(layout);
 }
 

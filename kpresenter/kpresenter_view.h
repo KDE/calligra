@@ -414,7 +414,7 @@ protected slots:
   void newPageLayout(KoPageLayout _layout);
   void openPageLayoutDia()
     { extraLayout(); }
-
+  void unitChanged(QString);
 
 protected:
 

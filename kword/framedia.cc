@@ -168,13 +168,16 @@ void KWFrameDia::setupTab2TextFrame()
 
   grid2->addMultiCellWidget(runGroup,0,0,0,1);
 
-  lRGap = new QLabel(i18n("Runaround Gap: (in mm)"),tab2);
+  lRGap = new QLabel(i18n(QString("Runaround Gap (" + doc->getUnit() + "):")),tab2);
   lRGap->resize(lRGap->sizeHint());
   lRGap->setAlignment(AlignRight | AlignVCenter);
   grid2->addWidget(lRGap,1,0);
 
-  eRGap = new QSpinBox(1,20,1,tab2);
-  eRGap->setValue(0);
+  eRGap = new KRestrictedLine(tab2,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  eRGap->setText("0.00");
+  eRGap->setMaxLength(5);
+  eRGap->setEchoMode(QLineEdit::Normal);
+  eRGap->setFrame(true);
   eRGap->resize(eRGap->sizeHint());
   grid2->addWidget(eRGap,1,1);
 
@@ -202,7 +205,18 @@ void KWFrameDia::setupTab2TextFrame()
       break;
     }
 
-  eRGap->setValue(frame ? frame->getRunAroundGap() : doc->getRunAroundGap());
+  QString str;
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: str.sprintf("%g",frame ? frame->getRunAroundGap().mm() : doc->getRunAroundGap().mm());
+      break;
+    case U_INCH: str.sprintf("%g",frame ? frame->getRunAroundGap().inch() : doc->getRunAroundGap().inch());
+      break;
+    case U_PT: str.sprintf("%d",frame ? frame->getRunAroundGap().pt() : doc->getRunAroundGap().pt());
+      break;
+    }
+
+  eRGap->setText(str);
 }
 
 /*================================================================*/
@@ -252,14 +266,18 @@ void KWFrameDia::setupTab4Geometry()
   tab4 = new QWidget(this);
   grid4 = new QGridLayout(tab4,3,1,15,7);
 
-  grp1 = new QGroupBox(i18n("Position in pt"),tab4);
+  grp1 = new QGroupBox(i18n(QString("Position in " + doc->getUnit())),tab4);
   pGrid = new QGridLayout(grp1,5,2,7,7); 
 
   lx = new QLabel(i18n("Left:"),grp1);
   lx->resize(lx->sizeHint());
   pGrid->addWidget(lx,1,0);
 
-  sx = new QSpinBox(0,INT_MAX,1,grp1);
+  sx = new KRestrictedLine(grp1,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  sx->setText("0.00");
+  sx->setMaxLength(16);
+  sx->setEchoMode(QLineEdit::Normal);
+  sx->setFrame(true);
   sx->resize(sx->sizeHint());
   pGrid->addWidget(sx,2,0);
 
@@ -267,7 +285,11 @@ void KWFrameDia::setupTab4Geometry()
   ly->resize(ly->sizeHint());
   pGrid->addWidget(ly,1,1);
 
-  sy = new QSpinBox(0,INT_MAX,1,grp1);
+  sy = new KRestrictedLine(grp1,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  sy->setText("0.00");
+  sy->setMaxLength(16);
+  sy->setEchoMode(QLineEdit::Normal);
+  sy->setFrame(true);
   sy->resize(sy->sizeHint());
   pGrid->addWidget(sy,2,1);
 
@@ -275,7 +297,11 @@ void KWFrameDia::setupTab4Geometry()
   lw->resize(lw->sizeHint());
   pGrid->addWidget(lw,3,0);
 
-  sw = new QSpinBox(0,INT_MAX,1,grp1);
+  sw = new KRestrictedLine(grp1,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  sw->setText("0.00");
+  sw->setMaxLength(16);
+  sw->setEchoMode(QLineEdit::Normal);
+  sw->setFrame(true);
   sw->resize(sw->sizeHint());
   pGrid->addWidget(sw,4,0);
 
@@ -283,7 +309,11 @@ void KWFrameDia::setupTab4Geometry()
   lh->resize(lh->sizeHint());
   pGrid->addWidget(lh,3,1);
 
-  sh = new QSpinBox(0,INT_MAX,1,grp1);
+  sh = new KRestrictedLine(grp1,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  sh->setText("0.00");
+  sh->setMaxLength(16);
+  sh->setEchoMode(QLineEdit::Normal);
+  sh->setFrame(true);
   sh->resize(sh->sizeHint());
   pGrid->addWidget(sh,4,1);
 
@@ -317,14 +347,18 @@ void KWFrameDia::setupTab4Geometry()
   pGrid->activate();
   grid4->addWidget(grp1,0,0);
 
-  grp2 = new QGroupBox(i18n("Margins in pt"),tab4);
+  grp2 = new QGroupBox(i18n(QString("Margins in " + doc->getUnit())),tab4);
   mGrid = new QGridLayout(grp2,5,2,7,7); 
 
   lml = new QLabel(i18n("Left:"),grp2);
   lml->resize(lml->sizeHint());
   mGrid->addWidget(lml,1,0);
 
-  sml = new QSpinBox(0,20,1,grp2);
+  sml = new KRestrictedLine(grp2,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  sml->setText("0.00");
+  sml->setMaxLength(5);
+  sml->setEchoMode(QLineEdit::Normal);
+  sml->setFrame(true);
   sml->resize(sml->sizeHint());
   mGrid->addWidget(sml,2,0);
 
@@ -332,7 +366,11 @@ void KWFrameDia::setupTab4Geometry()
   lmr->resize(lmr->sizeHint());
   mGrid->addWidget(lmr,1,1);
 
-  smr = new QSpinBox(0,20,1,grp2);
+  smr = new KRestrictedLine(grp2,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  smr->setText("0.00");
+  smr->setMaxLength(5);
+  smr->setEchoMode(QLineEdit::Normal);
+  smr->setFrame(true);
   smr->resize(smr->sizeHint());
   mGrid->addWidget(smr,2,1);
 
@@ -340,7 +378,11 @@ void KWFrameDia::setupTab4Geometry()
   lmt->resize(lmt->sizeHint());
   mGrid->addWidget(lmt,3,0);
 
-  smt = new QSpinBox(0,20,1,grp2);
+  smt = new KRestrictedLine(grp2,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  smt->setText("0.00");
+  smt->setMaxLength(5);
+  smt->setEchoMode(QLineEdit::Normal);
+  smt->setFrame(true);
   smt->resize(smt->sizeHint());
   mGrid->addWidget(smt,4,0);
 
@@ -348,10 +390,13 @@ void KWFrameDia::setupTab4Geometry()
   lmb->resize(lmb->sizeHint());
   mGrid->addWidget(lmb,3,1);
 
-  smb = new QSpinBox(0,20,1,grp2);
+  smb = new KRestrictedLine(grp2,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
+  smb->setText("0.00");
+  smb->setMaxLength(5);
+  smb->setEchoMode(QLineEdit::Normal);
+  smb->setFrame(true);
   smb->resize(smb->sizeHint());
   mGrid->addWidget(smb,4,1);
-
   
   mGrid->addRowSpacing(0,7);
   mGrid->addRowSpacing(1,lml->height());
@@ -396,23 +441,77 @@ void KWFrameDia::setupTab4Geometry()
 
   addTab(tab4,i18n("Geometry"));
 
-  unsigned int l,r,t,b;
+  KWUnit l,r,t,b;
   doc->getFrameMargins(l,r,t,b);
-  sml->setValue(l);
-  smr->setValue(r);
-  smt->setValue(t);
-  smb->setValue(b);
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: 
+      {
+	sml->setText(QString().setNum(l.mm()));
+	smr->setText(QString().setNum(r.mm()));
+	smt->setText(QString().setNum(t.mm()));
+	smb->setText(QString().setNum(b.mm()));
+      } break;
+    case U_INCH:
+      {
+	sml->setText(QString().setNum(l.inch()));
+	smr->setText(QString().setNum(r.inch()));
+	smt->setText(QString().setNum(t.inch()));
+	smb->setText(QString().setNum(b.inch()));
+      } break;
+    case U_PT:
+      {
+	sml->setText(QString().setNum(l.pt()));
+	smr->setText(QString().setNum(r.pt()));
+	smt->setText(QString().setNum(t.pt()));
+	smb->setText(QString().setNum(b.pt()));
+      } break;
+    }
 
   if (doc->isOnlyOneFrameSelected() && (doc->getProcessingType() == KWordDocument::DTP || 
 					(doc->getProcessingType() == KWordDocument::WP && 
 					 doc->getFrameSetNum(doc->getFirstSelectedFrameSet()) > 0)))
     {
-      unsigned int x,y,w,h;
-      doc->getFrameCoords(x,y,w,h);
-      sx->setValue(x);
-      sy->setValue(y);
-      sw->setValue(w);
-      sh->setValue(h);
+      unsigned int x,y,w,h,_num;
+      
+      KWFrameSet *frms = doc->getFrameCoords(x,y,w,h,_num);
+      QString _x,_y,_w,_h;
+      y -= frms->getPageOfFrame(_num) * doc->getPTPaperHeight();
+
+      switch (KWUnit::unitType(doc->getUnit()))
+	{
+	case U_MM: 
+	  {
+	    _x.sprintf("%g",POINT_TO_MM(x));
+	    _y.sprintf("%g",POINT_TO_MM(y));
+	    _w.sprintf("%g",POINT_TO_MM(w));
+	    _h.sprintf("%g",POINT_TO_MM(h));
+	  } break;
+	case U_INCH:
+	  {
+	    _x.sprintf("%g",POINT_TO_INCH(x));
+	    _y.sprintf("%g",POINT_TO_INCH(y));
+	    _w.sprintf("%g",POINT_TO_INCH(w));
+	    _h.sprintf("%g",POINT_TO_INCH(h));
+	  } break;
+	case U_PT:
+	  {
+	    _x.sprintf("%d",x);
+	    _y.sprintf("%d",y);
+	    _w.sprintf("%d",w);
+	    _h.sprintf("%d",h);
+	  } break;
+	}
+
+      oldX = atof(_x);
+      oldY = atof(_y);
+      oldW = atof(_w);
+      oldH = atof(_h);
+
+      sx->setText(_x);
+      sy->setText(_y);
+      sw->setText(_w);
+      sh->setText(_h);
     }
   else
     {
@@ -468,7 +567,18 @@ void KWFrameDia::applyChanges()
 	    frame->setRunAround(RA_BOUNDINGRECT);
 	  else if (rRunContur->isChecked())
 	    frame->setRunAround(RA_CONTUR);
-	  frame->setRunAroundGap(eRGap->value());
+
+	  KWUnit u;
+	  switch (KWUnit::unitType(doc->getUnit()))
+	    {
+	    case U_MM: u.setMM(atof(eRGap->text()));
+	      break;
+	    case U_INCH: u.setINCH(atof(eRGap->text()));
+	      break;
+	    case U_PT: u.setPT(atoi(eRGap->text()));
+	      break;
+	    }
+	  frame->setRunAroundGap(u);
 	}
       else
 	{
@@ -478,7 +588,18 @@ void KWFrameDia::applyChanges()
 	    doc->setRunAround(RA_BOUNDINGRECT);
 	  else if (rRunContur->isChecked())
 	    doc->setRunAround(RA_CONTUR);
-	  doc->setRunAroundGap(eRGap->value());
+
+	  KWUnit u;
+	  switch (KWUnit::unitType(doc->getUnit()))
+	    {
+	    case U_MM: u.setMM(atof(eRGap->text()));
+	      break;
+	    case U_INCH: u.setINCH(atof(eRGap->text()));
+	      break;
+	    case U_PT: u.setPT(atoi(eRGap->text()));
+	      break;
+	    }
+	  doc->setRunAroundGap(u);
 	}
     }
 
@@ -502,8 +623,64 @@ void KWFrameDia::applyChanges()
       if (doc->isOnlyOneFrameSelected() && (doc->getProcessingType() == KWordDocument::DTP || 
 					    (doc->getProcessingType() == KWordDocument::WP && 
 					     doc->getFrameSetNum(doc->getFirstSelectedFrameSet()) > 0)))
-	doc->setFrameCoords(sx->value(),sy->value(),sw->value(),sh->value());
-      doc->setFrameMargins(sml->value(),smr->value(),smt->value(),smb->value());
+	{
+	  if (oldX != atof(sx->text()) || oldY != atof(sy->text()) || oldW != atof(sw->text()) || oldH != atof(sh->text()))
+	    {
+	      unsigned int px,py,pw,ph;
+	      switch (KWUnit::unitType(doc->getUnit()))
+		{
+		case U_MM: 
+		  {
+		    px = MM_TO_POINT(atof(sx->text()));
+		    py = MM_TO_POINT(atof(sy->text()));
+		    pw = MM_TO_POINT(atof(sw->text()));
+		    ph = MM_TO_POINT(atof(sh->text()));
+		  } break;
+		case U_INCH: 
+		  {
+		    px = INCH_TO_POINT(atof(sx->text()));
+		    py = INCH_TO_POINT(atof(sy->text()));
+		    pw = INCH_TO_POINT(atof(sw->text()));
+		    ph = INCH_TO_POINT(atof(sh->text()));
+		  } break;
+		case U_PT:
+		  {
+		    px = atoi(sx->text());
+		    py = atoi(sy->text());
+		    pw = atoi(sw->text());
+		    ph = atoi(sh->text());
+		  } break;
+		}
+	      doc->setFrameCoords(px,py,pw,ph);
+	    }
+	}
+
+      KWUnit u1,u2,u3,u4;
+      switch (KWUnit::unitType(doc->getUnit()))
+	{
+	case U_MM: 
+	  {
+	    u1.setMM(atof(sml->text()));
+	    u2.setMM(atof(smr->text()));
+	    u3.setMM(atof(smt->text()));
+	    u4.setMM(atof(smb->text()));
+	  } break;
+	case U_INCH: 
+	  {
+	    u1.setINCH(atof(sml->text()));
+	    u2.setINCH(atof(smr->text()));
+	    u3.setINCH(atof(smt->text()));
+	    u4.setINCH(atof(smb->text()));
+	  } break;
+	case U_PT:
+	  {
+	    u1.setPT(atoi(sml->text()));
+	    u2.setPT(atoi(smr->text()));
+	    u3.setPT(atoi(smt->text()));
+	    u4.setPT(atoi(smb->text()));
+	  } break;
+	}
+      doc->setFrameMargins(u1,u2,u3,u4);
     }
 
   page->repaint(false);

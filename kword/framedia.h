@@ -30,9 +30,11 @@
 #include <qevent.h>
 #include <qlistbox.h>
 #include <qbuttongroup.h>
-#include <qspinbox.h>
 
 #include <kapp.h>
+#include <krestrictedline.h>
+
+#include "defs.h"
 
 class KWFrame;
 class KWordDocument;
@@ -71,13 +73,15 @@ protected:
   QLabel *lRunNo,*lRunBounding,*lRunContur,*lRGap,*lFrameSet,*lNewFrame;
   QLabel *lx,*ly,*lw,*lh,*lml,*lmr,*lmt,*lmb;
   QListBox *lFrameSList;
-  QSpinBox *sx,*sy,*sw,*sh,*sml,*smr,*smt,*smb;
+  KRestrictedLine *sx,*sy,*sw,*sh,*sml,*smr,*smt,*smb;
 
   KWFrame *frame;
-  QSpinBox *eRGap;
+  KRestrictedLine *eRGap;
   int flags;
   KWordDocument *doc;
   KWPage *page;
+
+  float oldX,oldY,oldW,oldH;
 
   void closeEvent(QCloseEvent *e)
     { emit frameDiaClosed(); e->accept(); }

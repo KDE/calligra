@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <DOC author="Reginald Stadlbauer" email="reggie@kde.org" editor="KPresenter" mime="application/x-kpresenter">
- <PAPER format="5" width="240" height="180" orientation="0">
-  <PAPERBORDERS left="0" top="0" right="0" bottom="0"/>
+ <PAPER format="5" ptWidth="680" ptHeight="510" mmWidth ="240" mmHeight="180" inchWidth ="9.44882" inchHeight="7.08661" orientation="0" unit="0">
+  <PAPERBORDERS mmLeft="0" mmTop="0" mmRight="0" mmBottom="0" ptLeft="0" ptTop="0" ptRight="0" ptBottom="0" inchLeft="0" inchTop="0" inchRight="0" inchBottom="0"/>
  </PAPER>
  <BACKGROUND rastX="10" rastY="10" bred="255" bgreen="255" bblue="255">
   <PAGE>
@@ -21,10 +21,29 @@
    <EFFECTS effect="0" effect2="0"/>
    <PRESNUM value="0"/>
    <ANGLE value="0"/>
+   <FILLTYPE value="0"/>
+   <GRADIENT red1="255" green1="0" blue1="0" red2="0" green2="255" blue2="0" type="1"/>
+   <PEN red="0" green="0" blue="0" width="1" style="0"/>
+   <BRUSH red="0" green="0" blue="0" style="0"/>
    <TEXTOBJ objType="0">
     <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
-    <UNSORTEDLISTTYPE type="1" family="symbol" pointSize="20" bold="0" italic="0" underline=0 red="0" green="0" blue="0" chr="45"/>
-    <PARAGRAPH horzAlign="1">
+    <UNSORTEDLISTTYPE family="symbol" pointSize="20" bold="0" italic="0" underline="0" red="0" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <UNSORTEDLISTTYPE family="times" pointSize="20" bold="0" italic="0" underline="0" red="255" green="0" blue="0" chr="45"/>
+    <PARAGRAPH horzAlign="1" depth="0" lineSpacing="0" distBefore="0" distAfter="0">
      <LINE>
       <OBJ>
        <TYPE value="1"/>

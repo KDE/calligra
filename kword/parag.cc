@@ -298,11 +298,11 @@ void KWParag::applyStyle(QString _style)
 
       if (!document->getApplyStyleTemplate() & KWordDocument::U_INDENT)
 	{
-	  pl->setMMFirstLineLeftIndent(paragLayout->getMMFirstLineLeftIndent());
-	  pl->setMMLeftIndent(paragLayout->getMMLeftIndent());
-	  pl->setMMParagFootOffset(paragLayout->getMMParagFootOffset());
-	  pl->setMMParagHeadOffset(paragLayout->getMMParagHeadOffset());
-	  pl->setPTLineSpacing(paragLayout->getPTLineSpacing());
+	  pl->setFirstLineLeftIndent(paragLayout->getFirstLineLeftIndent());
+	  pl->setLeftIndent(paragLayout->getLeftIndent());
+	  pl->setParagFootOffset(paragLayout->getParagFootOffset());
+	  pl->setParagHeadOffset(paragLayout->getParagHeadOffset());
+	  pl->setLineSpacing(paragLayout->getLineSpacing());
 	}
 
       if (!document->getApplyStyleTemplate() & KWordDocument::U_BORDER)

@@ -8,17 +8,9 @@
 #include <unistd.h>
 
 KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name = "Standard")
-  : format(_doc)
+  : format(_doc), paragFootOffset(), paragHeadOffset(), firstLineLeftIndent(), leftIndent(), lineSpacing()
 {
     flow = LEFT;
-    mmParagFootOffset = 0;
-    mmParagHeadOffset = 0;
-    mmFirstLineLeftIndent = 0;
-    mmLeftIndent = 0;
-    ptParagFootOffset = 0;
-    ptParagHeadOffset = 0;
-    ptFirstLineLeftIndent = 0;
-    ptLeftIndent = 0;
     counter.counterType = CT_NONE;
     counter.counterDepth = 0;
     counter.counterBullet = '·';
@@ -26,7 +18,6 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name
     counter.counterRightText = "";
     followingParagLayout = "Standard";
     name = _name;
-    ptLineSpacing = 0;
     counter.startCounter = "0";
     counter.numberingType = NT_LIST;
     counter.bulletFont = "symbol";
@@ -64,21 +55,18 @@ KWParagLayout::~KWParagLayout()
 KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
 {
   flow = _layout.getFlow();
-  mmParagFootOffset = _layout.getMMParagFootOffset();
-  mmParagHeadOffset = _layout.getMMParagHeadOffset();
-  mmFirstLineLeftIndent = _layout.getMMFirstLineLeftIndent();
-  mmLeftIndent = _layout.getMMLeftIndent();
-  ptParagFootOffset = _layout.getPTParagFootOffset();
-  ptParagHeadOffset = _layout.getPTParagHeadOffset();
-  ptFirstLineLeftIndent = _layout.getPTFirstLineLeftIndent();
-  ptLeftIndent = _layout.getPTLeftIndent();
+  paragFootOffset = _layout.getParagFootOffset();
+  paragHeadOffset = _layout.getParagHeadOffset();
+  firstLineLeftIndent = _layout.getFirstLineLeftIndent();
+  leftIndent = _layout.getLeftIndent();
+  leftIndent = _layout.getLeftIndent();
   counter.counterType = static_cast<CounterType>(_layout.getCounterType());
   counter.counterDepth = _layout.getCounterDepth();
   counter.counterBullet = _layout.getCounterBullet();
   counter.counterLeftText = qstrdup(_layout.getCounterLeftText());
   counter.counterRightText = qstrdup(_layout.getCounterRightText());
   followingParagLayout = _layout.getFollowingParagLayout();
-  ptLineSpacing = _layout.getPTLineSpacing();
+  lineSpacing = _layout.getLineSpacing();
   counter.startCounter = _layout.getStartCounter();
   counter.numberingType = _layout.getNumberingType();
   counter.bulletFont = _layout.getBulletFont();
@@ -111,13 +99,15 @@ void KWParagLayout::save(ostream &out)
   out << indent << "<NAME value=\"" << name << "\"/>" << endl;
   out << indent << "<FOLLOWING name=\"" << followingParagLayout << "\"/>" << endl;
   out << indent << "<FLOW value=\"" << static_cast<int>(flow) << "\"/>" << endl;
-  out << indent << "<OFFSETS head=\"" << mmParagHeadOffset << "\" foot=\"" << mmParagFootOffset << "\"/>" << endl;
-  out << indent << "<INDENTS first=\"" << mmFirstLineLeftIndent << "\" left=\"" << mmLeftIndent << "\"/>" << endl;
+  out << indent << "<OHEAD " << paragHeadOffset << "/>" << endl;
+  out << indent << "<OFOOT " << paragFootOffset << "/>" << endl;
+  out << indent << "<IFIRST " << firstLineLeftIndent << "/>" << endl;
+  out << indent << "<ILEFT " << leftIndent << "/>" << endl;
+  out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
   out << indent << "<COUNTER type=\"" << static_cast<int>(counter.counterType) << "\" depth=\"" << counter.counterDepth 
       << "\" bullet=\"" << counter.counterBullet << "\" start=\"" << counter.startCounter << "\" numberingtype=\"" 
       << static_cast<int>(counter.numberingType) << "\" lefttext=\"" << counter.counterLeftText << "\" righttext=\"" 
       << counter.counterRightText << "\" bulletfont=\"" << counter.bulletFont << "\"/>" << endl;
-  out << indent << "<LINESPACING value=\"" << ptLineSpacing << "\"/>" << endl;
   out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
       << left.color.blue() << "\" style=\"" << static_cast<int>(left.style) << "\" width=\"" << left.ptWidth << "\"/>" << endl; 
   out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
@@ -131,14 +121,16 @@ void KWParagLayout::save(ostream &out)
   out << etag << "</FORMAT> " << endl;
   
   for (unsigned int i = 0;i < tabList.count();i++)
-    out << indent << "<TABULATOR mmpos=\"" << tabList.at(i)->mmPos << "\" ptpos=\"" << tabList.at(i)->ptPos << "\" type=\"" 
-	<< static_cast<int>(tabList.at(i)->type) << "\"/>" << endl;
+    out << indent << "<TABULATOR mmpos=\"" << tabList.at(i)->mmPos << "\" ptpos=\"" << tabList.at(i)->ptPos 
+	<< "\" inchpos=\"" << tabList.at(i)->inchPos << "\" type=\"" << static_cast<int>(tabList.at(i)->type) << "\"/>" << endl;
 }
 
 void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string _name;
+  unsigned int pt;
+  float mm,inch;
 
   while (parser.open(0L,tag))
     {
@@ -177,9 +169,11 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "mmpos")
-		tab->mmPos = atoi((*it).m_strValue.c_str());
+		tab->mmPos = atof((*it).m_strValue.c_str());
 	      if ((*it).m_strName == "ptpos")
 		tab->ptPos = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "inchpos")
+		tab->inchPos = atof((*it).m_strValue.c_str());
 	      if ((*it).m_strName == "type")
 		tab->type = static_cast<KoTabulators>(atoi((*it).m_strValue.c_str()));
 	    }
@@ -198,7 +192,102 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	}
 
-      // offsets
+      // head offset
+      else if (_name == "OHEAD")
+	{
+	  pt = 0;
+	  mm = inch = 0.0;
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "pt")
+		pt = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "mm")
+		mm = atof((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "inch")
+		inch = atof((*it).m_strValue.c_str());
+	    }
+	  paragHeadOffset.setPT_MM_INCH(pt,mm,inch);
+	}
+
+      // foot offset
+      else if (_name == "OFOOT")
+	{
+	  pt = 0;
+	  mm = inch = 0.0;
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "pt")
+		pt = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "mm")
+		mm = atof((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "inch")
+		inch = atof((*it).m_strValue.c_str());
+	    }
+	  paragFootOffset.setPT_MM_INCH(pt,mm,inch);
+	}
+
+      // first left line indent
+      else if (_name == "IFIRST")
+	{
+	  pt = 0;
+	  mm = inch = 0.0;
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "pt")
+		pt = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "mm")
+		mm = atof((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "inch")
+		inch = atof((*it).m_strValue.c_str());
+	    }
+	  firstLineLeftIndent.setPT_MM_INCH(pt,mm,inch);
+	}
+
+      // left indent
+      else if (_name == "ILEFT")
+	{
+	  pt = 0;
+	  mm = inch = 0.0;
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "pt")
+		pt = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "mm")
+		mm = atof((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "inch")
+		inch = atof((*it).m_strValue.c_str());
+	    }
+	  leftIndent.setPT_MM_INCH(pt,mm,inch);
+	}
+
+      // linespacing
+      else if (_name == "LINESPACE")
+	{
+	  pt = 0;
+	  mm = inch = 0.0;
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "pt")
+		pt = atoi((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "mm")
+		mm = atof((*it).m_strValue.c_str());
+	      if ((*it).m_strName == "inch")
+		inch = atof((*it).m_strValue.c_str());
+	    }
+	  lineSpacing.setPT_MM_INCH(pt,mm,inch);
+	}
+
+      // offsets (old but supported for compatibility)
       else if (_name == "OFFSETS")
 	{
 	  KOMLParser::parseTag(tag.c_str(),_name,lst);
@@ -206,19 +295,13 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "head")
-		{
-		  mmParagHeadOffset = atoi((*it).m_strValue.c_str());
-		  setMMParagHeadOffset(mmParagHeadOffset);
-		}
+		paragHeadOffset.setMM(atof((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "foot")
-		{	
-		  mmParagFootOffset = atoi((*it).m_strValue.c_str());
-		  setMMParagFootOffset(mmParagFootOffset);
-		}
+		paragFootOffset.setMM(atof((*it).m_strValue.c_str()));
 	    }
 	}
 
-      // indents
+      // indents (old but supported for compatibility)
       else if (_name == "INDENTS")
 	{
 	  KOMLParser::parseTag(tag.c_str(),_name,lst);
@@ -226,15 +309,21 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "first")
-		{
-		  mmFirstLineLeftIndent = atoi((*it).m_strValue.c_str());
-		  setMMFirstLineLeftIndent(mmFirstLineLeftIndent);
-		}
+		firstLineLeftIndent.setMM(atof((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "left")
-		{
-		  mmLeftIndent = atoi((*it).m_strValue.c_str());
-		  setMMLeftIndent(mmLeftIndent);
-		}
+		leftIndent.setMM(atof((*it).m_strValue.c_str()));
+	    }
+	}
+
+      // line spacing (old but supported for compatibility)
+      else if (_name == "LINESPACING")
+	{
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		lineSpacing.setPT(atoi((*it).m_strValue.c_str()));
 	    }
 	}
 
@@ -261,18 +350,6 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		counter.numberingType = static_cast<NumType>(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "bulletfont")
 		counter.bulletFont = (*it).m_strValue.c_str();
-	    }
-	}
-
-      // line spacing
-      else if (_name == "LINESPACING")
-	{
-	  KOMLParser::parseTag(tag.c_str(),_name,lst);
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for(;it != lst.end();it++)
-	    {
-	      if ((*it).m_strName == "value")
-		ptLineSpacing = atoi((*it).m_strValue.c_str());
 	    }
 	}
 
@@ -429,6 +506,7 @@ void KWParagLayout::setTabList(QList<KoTabulator> *_tabList)
       t->type = _tabList->at(i)->type;
       t->mmPos = _tabList->at(i)->mmPos;
       t->ptPos = _tabList->at(i)->ptPos;
+      t->inchPos = _tabList->at(i)->inchPos;
       tabList.append(t);
       if (t->type != T_LEFT) specialTabs = true;
     }

@@ -784,7 +784,8 @@ void KWordView::formatParagraph()
       delete paragDia;
       paragDia = 0;
     }
-  paragDia = new KWParagDia(0,"",fontList);
+  paragDia = new KWParagDia(0,"",fontList,KWParagDia::PD_SPACING | KWParagDia::PD_FLOW | KWParagDia::PD_BORDERS | 
+			    KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS,m_pKWordDoc);
   paragDia->setCaption(i18n("KWord - Paragraph settings"));
   QObject::connect(paragDia,SIGNAL(applyButtonPressed()),this,SLOT(paragDiaOk()));
   paragDia->setLeftIndent(gui->getPaperWidget()->getLeftIndent());
@@ -811,7 +812,7 @@ void KWordView::formatPage()
   m_pKWordDoc->getPageLayout(pgLayout,cl,kwhf);
 
   KoHeadFoot hf;
-  int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER;
+  int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | USE_NEW_STUFF | DISABLE_UNIT;
   if (m_pKWordDoc->getProcessingType() == KWordDocument::WP)
     flags = flags | COLUMNS;
   else
@@ -1214,7 +1215,9 @@ void KWordView::textAlignBlock()
 /*===============================================================*/
 void KWordView::textLineSpacing(const char *spc)
 {
-  gui->getPaperWidget()->setLineSpacing(atoi(spc));
+  KWUnit u;
+  u.setPT(atoi(spc));
+  gui->getPaperWidget()->setLineSpacing(u);
 }
 
 /*====================== enumerated list ========================*/
@@ -2314,8 +2317,26 @@ void KWordView::paragDiaOk()
   gui->getPaperWidget()->setSpaceBeforeParag(paragDia->getSpaceBeforeParag());
   gui->getPaperWidget()->setSpaceAfterParag(paragDia->getSpaceAfterParag());
   gui->getPaperWidget()->setLineSpacing(paragDia->getLineSpacing());
-  gui->getHorzRuler()->setLeftIndent(static_cast<int>(paragDia->getLeftIndent()));
-  gui->getHorzRuler()->setFirstIndent(static_cast<int>(paragDia->getFirstLineIndent()));
+
+  switch (KWUnit::unitType(m_pKWordDoc->getUnit()))
+    {
+    case U_MM: 
+      {
+	gui->getHorzRuler()->setLeftIndent(paragDia->getLeftIndent().mm());
+	gui->getHorzRuler()->setFirstIndent(paragDia->getFirstLineIndent().mm());
+      } break;
+    case U_INCH: 
+      {
+	gui->getHorzRuler()->setLeftIndent(paragDia->getLeftIndent().inch());
+	gui->getHorzRuler()->setFirstIndent(paragDia->getFirstLineIndent().inch());
+      } break;
+    case U_PT: 
+      {
+	gui->getHorzRuler()->setLeftIndent(paragDia->getLeftIndent().pt());
+	gui->getHorzRuler()->setFirstIndent(paragDia->getFirstLineIndent().pt());
+      } break;
+    }
+
   gui->getPaperWidget()->setFlow(paragDia->getFlow());
   gui->getPaperWidget()->setParagLeftBorder(paragDia->getLeftBorder());
   gui->getPaperWidget()->setParagRightBorder(paragDia->getRightBorder());
@@ -2323,7 +2344,7 @@ void KWordView::paragDiaOk()
   gui->getPaperWidget()->setParagBottomBorder(paragDia->getBottomBorder());
   gui->getPaperWidget()->setCounter(paragDia->getCounter());
   setFlow(paragDia->getFlow());
-  setLineSpacing(paragDia->getLineSpacing());
+  setLineSpacing(paragDia->getLineSpacing().pt());
 }
 
 /*================================================================*/
@@ -2515,11 +2536,32 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   connect(r_horz,SIGNAL(newLeftIndent(int)),paperWidget,SLOT(newLeftIndent(int)));
   connect(r_horz,SIGNAL(newFirstIndent(int)),paperWidget,SLOT(newFirstIndent(int)));
   connect(r_horz,SIGNAL(openPageLayoutDia()),view,SLOT(openPageLayoutDia()));
+  connect(r_horz,SIGNAL(unitChanged(QString)),this,SLOT(unitChanged(QString)));
   connect(r_vert,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
   connect(r_vert,SIGNAL(openPageLayoutDia()),view,SLOT(openPageLayoutDia()));
+  connect(r_vert,SIGNAL(unitChanged(QString)),this,SLOT(unitChanged(QString)));
 
-  r_horz->setLeftIndent(static_cast<int>(MM_TO_POINT(paperWidget->getLeftIndent())));
-  r_horz->setFirstIndent(static_cast<int>(MM_TO_POINT(paperWidget->getFirstLineIndent())));
+  r_horz->setUnit(doc->getUnit());
+  r_vert->setUnit(doc->getUnit());
+
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: 
+      {
+	r_horz->setLeftIndent(paperWidget->getLeftIndent().mm());
+	r_horz->setFirstIndent(paperWidget->getFirstLineIndent().mm());
+      } break;
+    case U_INCH: 
+      {
+	r_horz->setLeftIndent(paperWidget->getLeftIndent().inch());
+	r_horz->setFirstIndent(paperWidget->getFirstLineIndent().inch());
+      } break;
+    case U_PT: 
+      {
+	r_horz->setLeftIndent(paperWidget->getLeftIndent().pt());
+	r_horz->setFirstIndent(paperWidget->getFirstLineIndent().pt());
+      } break;
+    }
 
   r_horz->hide();
   r_vert->hide();
@@ -2650,3 +2692,9 @@ void KWordGUI::reorganize()
     }
 }
 
+/*================================================================*/
+void KWordGUI::unitChanged(QString u) 
+{ 
+  doc->setUnit(u); 
+  doc->setUnitToAll(); 
+}

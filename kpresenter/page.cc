@@ -2565,8 +2565,8 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   for (i = 0;i < static_cast<int>(objectList()->count());i++)
     objectList()->at(i)->drawSelection(false);
   
-  view->setDiffX(-static_cast<int>((left_margin * MM_TO_POINT * 100) / 100));
-  view->setDiffY(-static_cast<int>((top_margin * MM_TO_POINT * 100) / 100));
+  view->setDiffX(-static_cast<int>(MM_TO_POINT(left_margin)));
+  view->setDiffY(-static_cast<int>(MM_TO_POINT(top_margin)));
 
   QColor c = kapp->winStyleHighlightColor();
   kapp->setWinStyleHighlightColor(kapp->selectColor);
@@ -2578,7 +2578,7 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   progress.setProgress(0);
 
   if (printer->fromPage() > 1)
-    view->setDiffY((printer->fromPage() - 1) * (getPageSize(1,1.0,false).height()) - (top_margin * MM_TO_POINT * 100) / 100);
+    view->setDiffY((printer->fromPage() - 1) * (getPageSize(1,1.0,false).height()) - MM_TO_POINT(top_margin));
 
   for (i = printer->fromPage();i <= printer->toPage();i++)
     {
@@ -2601,7 +2601,7 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
       view->presentParts(1.0,painter,getPageSize(i - 1),diffx(),diffy());
       kapp->processEvents();
 
-      view->setDiffY(i * (getPageSize(1,1.0,false).height()) - (top_margin * MM_TO_POINT * 100) / 100);
+      view->setDiffY(i * (getPageSize(1,1.0,false).height()) - MM_TO_POINT(top_margin));
     }
 
   setToolEditMode(toolEditMode);

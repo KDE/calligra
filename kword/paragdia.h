@@ -48,6 +48,8 @@
 #include "defs.h"
 #include "paraglayout.h"
 
+class KWordDocument;
+
 /******************************************************************/
 /* class KWPagePreview                                            */
 /******************************************************************/
@@ -167,31 +169,26 @@ public:
   static const int PD_NUMBERING = 8;
   static const int PD_TABS = 16;
 
-  KWParagDia(QWidget*,const char*,QStrList _fontList,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING | PD_TABS);
+  KWParagDia(QWidget*,const char*,QStrList _fontList,int _flags,KWordDocument *_doc);
   ~KWParagDia();              
 
   int getFlags() { return flags; }
 
-  void setLeftIndent(float _left);
-  void setFirstLineIndent(float _first);
-  void setSpaceAfterParag(float _after);
-  void setSpaceBeforeParag(float _before);
-  void setLineSpacing(unsigned int _spacing);
+  void setLeftIndent(KWUnit _left);
+  void setFirstLineIndent(KWUnit _first);
+  void setSpaceAfterParag(KWUnit _after);
+  void setSpaceBeforeParag(KWUnit _before);
+  void setLineSpacing(KWUnit _spacing);
 
   void setFlow(KWParagLayout::Flow _flow);
 
   void setTabList(QList<KoTabulator> *tabList);
 
-  float getLeftIndent()
-    { return atof(eLeft->text()); } 
-  float getFirstLineIndent()
-    { return atof(eFirstLine->text()); } 
-  float getSpaceBeforeParag()
-    { return atof(eBefore->text()); } 
-  float getSpaceAfterParag()
-    { return atof(eAfter->text()); } 
-  unsigned int getLineSpacing()
-    { return atoi(eSpacing->text()); } 
+  KWUnit getLeftIndent();
+  KWUnit getFirstLineIndent();
+  KWUnit getSpaceBeforeParag();
+  KWUnit getSpaceAfterParag();
+  KWUnit getLineSpacing();
 
   KWParagLayout::Flow getFlow();
 
@@ -242,6 +239,7 @@ protected:
   int flags;
   KWParagLayout::Counter counter;
   QStrList fontList;
+  KWordDocument *doc;
 
 protected slots:
   void leftChanged(const char*);

@@ -32,12 +32,20 @@
 #include <qcursor.h>
 #include <qpixmap.h>
 #include <qlist.h>
+#include <qpopupmenu.h>
+#include <qpoint.h>
 
 #include "koTabChooser.h"
 
 #define _MM_TO_POINT 2.83465
-#define _POINT_TO_MM 0.3527772388    
+#define _INCH_TO_POINT 72.0
+
+#define cPOINT_TO_MM(px) ((float)px/2.83465)
 #define cMM_TO_POINT(mm) (int((float)mm*2.83465))
+#define cPOINT_TO_INCH(px) ((float)px/72.0)
+#define cINCH_TO_POINT(inch) (int((float)inch*72.0))
+#define cMM_TO_INCH(mm) (mm/25.4)
+#define cINCH_TO_MM(inch) (inch*25.4)
 
 /******************************************************************/
 /* Struct: KoTabulator                                            */
@@ -48,7 +56,8 @@ enum KoTabulators {T_LEFT = 0,T_CENTER = 1,T_RIGHT = 2,T_DEC_PNT = 3};
 struct KoTabulator
 {
   int ptPos;
-  int mmPos;
+  float mmPos;
+  float inchPos;
   KoTabulators type;
 };
 
@@ -70,6 +79,8 @@ public:
 	  KoPageLayout _layout,int _flags,KoTabChooser *_tabChooser = 0L);
   ~KoRuler();
 
+  void setUnit(QString _unit);
+
   void setPageLayout(KoPageLayout _layout)
     { layout = _layout; repaint(false); }
 
@@ -80,13 +91,15 @@ public:
   void setOffset(int _diffx,int _diffy)
     { diffx = _diffx; diffy = _diffy; repaint(false); }
 
-  void setLeftIndent(int _left)
-    { i_left = cMM_TO_POINT(_left); repaint(false); }
-  void setFirstIndent(int _first)
-    { i_first = cMM_TO_POINT(_first); repaint(false); }
+  void setLeftIndent(float _left)
+    { i_left = makeIntern(_left); repaint(false); }
+  void setFirstIndent(float _first)
+    { i_first = makeIntern(_first); repaint(false); }
 
   void setTabList(QList<KoTabulator>* _tabList);
   void setFrameStart(int _frameStart) { frameStart = _frameStart; repaint(false); }
+  
+  void setAllowUnits(bool _allow) { allowUnits = _allow; }
 
 signals:
   void newPageLayout(KoPageLayout);
@@ -94,6 +107,7 @@ signals:
   void newFirstIndent(int);
   void openPageLayoutDia();
   void tabListChanged(QList<KoTabulator>*);
+  void unitChanged(QString);
 
 protected:
   enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT,A_BR_TOP,A_BR_BOTTOM,A_LEFT_INDENT,A_FIRST_INDENT,A_TAB};
@@ -109,8 +123,11 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void mouseDoubleClickEvent(QMouseEvent*);
-
   void resizeEvent(QResizeEvent *e);
+
+  unsigned int makeIntern(float _v);
+  void setupMenu();
+  void uncheckMenu();
 
   Orientation orientation;
   QWidget *canvas;
@@ -132,6 +149,16 @@ protected:
   QList<KoTabulator> tabList;
   int currTab;
   int frameStart;
+  bool allowUnits;
+  QPopupMenu *rb_menu;
+  int mMM,mPT,mINCH;
+
+  QString unit;
+
+protected slots:
+  void rbPT() { setUnit("pt"); emit unitChanged("pt"); }
+  void rbMM() { setUnit("mm"); emit unitChanged("mm"); }
+  void rbINCH() { setUnit("inch"); emit unitChanged("inch"); }
 
 };
 

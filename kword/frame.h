@@ -28,9 +28,9 @@
 #include <qpainter.h>
 
 #include "image.h"
-
 #include "parag.h"
 #include "paraglayout.h"
+#include "defs.h"
 
 #include <iostream>
 #include <koStream.h>
@@ -61,7 +61,7 @@ public:
   KWFrame(const KPoint &topleft,const QPoint &bottomright);
   KWFrame(const KPoint &topleft,const KSize &size);
   KWFrame(int left,int top,int width,int height);
-  KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap);
+  KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap);
   KWFrame(const QRect &_rect);
 
   void setRunAround(RunAround _ra) { runAround = _ra; }
@@ -85,9 +85,9 @@ public:
 
   QCursor getMouseCursor(int mx,int my,bool table);
 
-  int getRunAroundGap()
+  KWUnit getRunAroundGap()
     { return runAroundGap; }
-  void setRunAroundGap(int gap)
+  void setRunAroundGap(KWUnit gap)
     { runAroundGap = gap; }
 
   bool isMostRight() { return mostRight; }
@@ -117,20 +117,20 @@ public:
 
   unsigned int getNextFreeYPos(unsigned int _y,unsigned int _h);
 
-  void setBLeft(unsigned int b) { bleft = b; }
-  void setBRight(unsigned int b) { bright = b; }
-  void setBTop(unsigned int b) { btop = b; }
-  void setBBottom(unsigned int b) { bbottom = b; }
+  void setBLeft(KWUnit b) { bleft = b; }
+  void setBRight(KWUnit b) { bright = b; }
+  void setBTop(KWUnit b) { btop = b; }
+  void setBBottom(KWUnit b) { bbottom = b; }
 
-  unsigned int getBLeft() { return bleft; }
-  unsigned int getBRight() { return bright; }
-  unsigned int getBTop() { return btop; }
-  unsigned int getBBottom() { return bbottom; }
+  KWUnit getBLeft() { return bleft; }
+  KWUnit getBRight() { return bright; }
+  KWUnit getBTop() { return btop; }
+  KWUnit getBBottom() { return bbottom; }
 
 protected:
   RunAround runAround;
   bool selected;
-  int runAroundGap;
+  KWUnit runAroundGap;
   bool mostRight;
   int pageNum;
 
@@ -139,7 +139,7 @@ protected:
   KWParagLayout::Border brd_left,brd_right,brd_top,brd_bottom;
   QBrush backgroundColor;
 
-  unsigned int bleft,bright,btop,bbottom;
+  KWUnit bleft,bright,btop,bbottom;
 
 private:
   KWFrame &operator=(KWFrame &_frame)

@@ -16,6 +16,7 @@
 #include "paragdia.h"
 #include "paragdia.moc"
 #include <kiconloader.h>
+#include "kword_doc.h"
 
 /******************************************************************/
 /* class KWPagePreview                                            */
@@ -252,11 +253,12 @@ void KWNumPreview::drawContents(QPainter* painter)
 
 /*================================================================*/
 KWParagDia::KWParagDia(QWidget* parent,const char* name,QStrList _fontList,
-		       int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING | PD_TABS)
+		       int _flags,KWordDocument *_doc)
   : QTabDialog(parent,name,true)
 {
   flags = _flags;
   fontList = _fontList;
+  doc = _doc;
 
   if (_flags & PD_SPACING)
     setupTab1();
@@ -279,46 +281,82 @@ KWParagDia::~KWParagDia()
 }
 
 /*================================================================*/
-void KWParagDia::setLeftIndent(float _left)
+void KWParagDia::setLeftIndent(KWUnit _left)
 {
   QString str;
-  str.sprintf("%g",_left);
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: str.sprintf("%g",_left.mm());
+      break;
+    case U_INCH: str.sprintf("%g",_left.inch());
+      break;
+    case U_PT: str.sprintf("%d",_left.pt());
+      break;
+    }
+
   eLeft->setText(str);
-  prev1->setLeft(_left);
+  prev1->setLeft(_left.mm());
 }
 
 /*================================================================*/
-void KWParagDia::setFirstLineIndent(float _first)
+void KWParagDia::setFirstLineIndent(KWUnit _first)
 {
   QString str;
-  str.sprintf("%g",_first);
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: str.sprintf("%g",_first.mm());
+      break;
+    case U_INCH: str.sprintf("%g",_first.inch());
+      break;
+    case U_PT: str.sprintf("%d",_first.pt());
+      break;
+    }
+
   eFirstLine->setText(str);
-  prev1->setFirst(_first);
+  prev1->setFirst(_first.mm());
 }
 
 /*================================================================*/
-void KWParagDia::setSpaceBeforeParag(float _before)
+void KWParagDia::setSpaceBeforeParag(KWUnit _before)
 {
   QString str;
-  str.sprintf("%g",_before);
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: str.sprintf("%g",_before.mm());
+      break;
+    case U_INCH: str.sprintf("%g",_before.inch());
+      break;
+    case U_PT: str.sprintf("%d",_before.pt());
+      break;
+    }
+
   eBefore->setText(str);
-  prev1->setBefore(_before);
+  prev1->setBefore(_before.mm());
 }
 
 /*================================================================*/
-void KWParagDia::setSpaceAfterParag(float _after)
+void KWParagDia::setSpaceAfterParag(KWUnit _after)
 {
   QString str;
-  str.sprintf("%g",_after);
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: str.sprintf("%g",_after.mm());
+      break;
+    case U_INCH: str.sprintf("%g",_after.inch());
+      break;
+    case U_PT: str.sprintf("%d",_after.pt());
+      break;
+    }
+
   eAfter->setText(str);
-  prev1->setAfter(_after);
+  prev1->setAfter(_after.mm());
 }
 
 /*================================================================*/
-void KWParagDia::setLineSpacing(unsigned int  _spacing)
+void KWParagDia::setLineSpacing(KWUnit _spacing)
 {
   QString str;
-  str.sprintf("%d",_spacing);
+  str.sprintf("%d",_spacing.pt());
   eSpacing->setText(str);
 }
 
@@ -367,12 +405,12 @@ void KWParagDia::setupTab1()
   indentFrame = new QGroupBox(i18n("Indent"),tab1);
   indentGrid = new QGridLayout(indentFrame,4,2,15,7);
 
-  lLeft = new QLabel(i18n("Left (mm):"),indentFrame);
+  lLeft = new QLabel(i18n(QString("Left (" + doc->getUnit() + "):")),indentFrame);
   lLeft->resize(lLeft->sizeHint());
   lLeft->setAlignment(AlignRight);
   indentGrid->addWidget(lLeft,1,0);
 
-  eLeft = new KRestrictedLine(indentFrame,"","1234567890.");
+  eLeft = new KRestrictedLine(indentFrame,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
   eLeft->setText("0.00");
   eLeft->setMaxLength(5);
   eLeft->setEchoMode(QLineEdit::Normal);
@@ -381,12 +419,12 @@ void KWParagDia::setupTab1()
   indentGrid->addWidget(eLeft,1,1);
   connect(eLeft,SIGNAL(textChanged(const char*)),this,SLOT(leftChanged(const char*)));
 
-  lRight = new QLabel(i18n("Right (mm):"),indentFrame);
+  lRight = new QLabel(i18n(QString("Right (" + doc->getUnit() + "):")),indentFrame);
   lRight->resize(lRight->sizeHint());
   lRight->setAlignment(AlignRight);
   indentGrid->addWidget(lRight,2,0);
 
-  eRight = new KRestrictedLine(indentFrame,"","1234567890.");
+  eRight = new KRestrictedLine(indentFrame,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
   eRight->setText("0.00");
   eRight->setMaxLength(5);
   eRight->setEchoMode(QLineEdit::Normal);
@@ -396,12 +434,12 @@ void KWParagDia::setupTab1()
   connect(eRight,SIGNAL(textChanged(const char*)),this,SLOT(rightChanged(const char*)));
   eRight->setEnabled(false);
 
-  lFirstLine = new QLabel(i18n("First Line (mm):"),indentFrame);
+  lFirstLine = new QLabel(i18n(QString("First Line (" + doc->getUnit() + "):")),indentFrame);
   lFirstLine->resize(lFirstLine->sizeHint());
   lFirstLine->setAlignment(AlignRight);
   indentGrid->addWidget(lFirstLine,3,0);
 
-  eFirstLine = new KRestrictedLine(indentFrame,"","1234567890.");
+  eFirstLine = new KRestrictedLine(indentFrame,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
   eFirstLine->setText("0.00");
   eFirstLine->setMaxLength(5);
   eFirstLine->setEchoMode(QLineEdit::Normal);
@@ -472,12 +510,12 @@ void KWParagDia::setupTab1()
   pSpaceFrame = new QGroupBox(i18n("Paragraph Space"),tab1);
   pSpaceGrid = new QGridLayout(pSpaceFrame,3,2,15,7);
   
-  lBefore = new QLabel(i18n("Before (mm):"),pSpaceFrame);
+  lBefore = new QLabel(i18n(QString("Before (" + doc->getUnit() + "):")),pSpaceFrame);
   lBefore->resize(lBefore->sizeHint());
   lBefore->setAlignment(AlignRight);
   pSpaceGrid->addWidget(lBefore,1,0);
 
-  eBefore = new KRestrictedLine(pSpaceFrame,"","1234567890.");
+  eBefore = new KRestrictedLine(pSpaceFrame,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
   eBefore->setText("0.00");
   eBefore->setMaxLength(5);
   eBefore->setEchoMode(QLineEdit::Normal);
@@ -486,12 +524,12 @@ void KWParagDia::setupTab1()
   connect(eBefore,SIGNAL(textChanged(const char*)),this,SLOT(beforeChanged(const char*)));
   pSpaceGrid->addWidget(eBefore,1,1);
  
-  lAfter = new QLabel(i18n("After (mm):"),pSpaceFrame);
+  lAfter = new QLabel(i18n(QString("After (" + doc->getUnit() + "):")),pSpaceFrame);
   lAfter->resize(lAfter->sizeHint());
   lAfter->setAlignment(AlignRight);
   pSpaceGrid->addWidget(lAfter,2,0);
 
-  eAfter = new KRestrictedLine(pSpaceFrame,"","1234567890.");
+  eAfter = new KRestrictedLine(pSpaceFrame,"",KWUnit::unitType(doc->getUnit()) == U_PT ? "1234567890" : "1234567890.");
   eAfter->setText("0.00");
   eAfter->setMaxLength(5);
   eAfter->setEchoMode(QLineEdit::Normal);
@@ -1369,3 +1407,80 @@ void KWParagDia::setTabList(QList<KoTabulator> *tabList)
       lTabs->insertItem(str);
     }
 }
+
+/*================================================================*/
+KWUnit KWParagDia::getLeftIndent()
+{ 
+  KWUnit u;
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: u.setMM(atof(eLeft->text()));
+      break;
+    case U_INCH: u.setINCH(atof(eLeft->text()));
+      break;
+    case U_PT: u.setPT(atoi(eLeft->text()));
+      break;
+    }
+
+  return u;
+} 
+
+/*================================================================*/
+KWUnit KWParagDia::getFirstLineIndent()
+{ 
+  KWUnit u;
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: u.setMM(atof(eFirstLine->text()));
+      break;
+    case U_INCH: u.setINCH(atof(eFirstLine->text()));
+      break;
+    case U_PT: u.setPT(atoi(eFirstLine->text()));
+      break;
+    }
+
+  return u;
+} 
+
+/*================================================================*/
+KWUnit KWParagDia::getSpaceBeforeParag()
+{ 
+  KWUnit u;
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: u.setMM(atof(eBefore->text()));
+      break;
+    case U_INCH: u.setINCH(atof(eBefore->text()));
+      break;
+    case U_PT: u.setPT(atoi(eBefore->text()));
+      break;
+    }
+
+  return u;
+} 
+
+/*================================================================*/
+KWUnit KWParagDia::getSpaceAfterParag()
+{ 
+  KWUnit u;
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: u.setMM(atof(eAfter->text()));
+      break;
+    case U_INCH: u.setINCH(atof(eAfter->text()));
+      break;
+    case U_PT: u.setPT(atoi(eAfter->text()));
+      break;
+    }
+
+  return u;
+} 
+
+/*================================================================*/
+KWUnit KWParagDia::getLineSpacing()
+{ 
+  KWUnit u;
+  u.setPT(atoi(eSpacing->text()));
+  return u;
+} 
+

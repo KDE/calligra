@@ -787,7 +787,7 @@ void KPresenterView::extraLayout()
   KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
   KoHeadFoot hf;
   
-  if (KoPageLayoutDia::pageLayout(pgLayout,hf,FORMAT_AND_BORDERS)) 
+  if (KoPageLayoutDia::pageLayout(pgLayout,hf,FORMAT_AND_BORDERS | USE_NEW_STUFF)) 
     {
       PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd(i18n("Set Pagelayout"),pgLayout,oldLayout,this);
       pgLayoutCmd->execute();
@@ -3565,10 +3565,42 @@ void KPresenterView::setupRulers()
   h_ruler->setGeometry(20,0,page->width(),20);
   v_ruler->setGeometry(0,20,20,page->height());
 
+  QObject::connect(h_ruler,SIGNAL(unitChanged(QString)),this,SLOT(unitChanged(QString)));
   QObject::connect(h_ruler,SIGNAL(newPageLayout(KoPageLayout)),this,SLOT(newPageLayout(KoPageLayout)));
   QObject::connect(h_ruler,SIGNAL(openPageLayoutDia()),this,SLOT(openPageLayoutDia()));
+  QObject::connect(v_ruler,SIGNAL(unitChanged(QString)),this,SLOT(unitChanged(QString)));
   QObject::connect(v_ruler,SIGNAL(newPageLayout(KoPageLayout)),this,SLOT(newPageLayout(KoPageLayout)));
   QObject::connect(v_ruler,SIGNAL(openPageLayoutDia()),this,SLOT(openPageLayoutDia()));
+
+  switch (m_pKPresenterDoc->pageLayout().unit)
+    {
+    case PG_MM:
+      {
+	h_ruler->setUnit("mm");
+	v_ruler->setUnit("mm");
+      } break;
+    case PG_PT:
+      {
+	h_ruler->setUnit("pt");
+	v_ruler->setUnit("pt");
+      } break;
+    case PG_INCH:
+      {
+	h_ruler->setUnit("inch");
+	v_ruler->setUnit("inch");
+      } break;
+    }
+}
+
+/*==============================================================*/
+void KPresenterView::unitChanged(QString u)
+{
+  if (u == "mm")
+    m_pKPresenterDoc->setUnit(PG_MM,u);
+  else if (u == "pt")
+    m_pKPresenterDoc->setUnit(PG_PT,u);
+  else if (u == "inch")
+    m_pKPresenterDoc->setUnit(PG_INCH,u);
 }
 
 /*===================== set ranges of scrollbars ===============*/

@@ -69,7 +69,7 @@ KWordChild::~KWordChild()
 /*================================================================*/
 KWordDocument::KWordDocument()
   : formatCollection(this), imageCollection(this), selStart(this,1), selEnd(this,1),
-    ret_pix(ICON("return.xpm"))
+    ret_pix(ICON("return.xpm")), unit("mm")
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
@@ -104,20 +104,20 @@ KWordDocument::KWordDocument()
 /*================================================================*/
 CORBA::Boolean KWordDocument::init()
 {
-  pageLayout.format = PG_DIN_A4;
-  pageLayout.orientation = PG_PORTRAIT;
-  pageLayout.width = PG_A4_WIDTH;
-  pageLayout.height = PG_A4_HEIGHT;
-  pageLayout.left = DEFAULT_LEFT_BORDER;
-  pageLayout.right = DEFAULT_RIGHT_BORDER;
-  pageLayout.top = DEFAULT_TOP_BORDER;
-  pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
-  pageLayout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
-  pageLayout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
-  pageLayout.ptLeft = MM_TO_POINT(DEFAULT_LEFT_BORDER);
-  pageLayout.ptRight = MM_TO_POINT(DEFAULT_RIGHT_BORDER);
-  pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
-  pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
+//   pageLayout.format = PG_DIN_A4;
+//   pageLayout.orientation = PG_PORTRAIT;
+//   pageLayout.width = PG_A4_WIDTH;
+//   pageLayout.height = PG_A4_HEIGHT;
+//   pageLayout.left = DEFAULT_LEFT_BORDER;
+//   pageLayout.right = DEFAULT_RIGHT_BORDER;
+//   pageLayout.top = DEFAULT_TOP_BORDER;
+//   pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
+//   pageLayout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
+//   pageLayout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
+//   pageLayout.ptLeft = MM_TO_POINT(DEFAULT_LEFT_BORDER);
+//   pageLayout.ptRight = MM_TO_POINT(DEFAULT_RIGHT_BORDER);
+//   pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
+//   pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
 
 //   defaultUserFont = new KWUserFont(this,"times");
@@ -128,12 +128,18 @@ CORBA::Boolean KWordDocument::init()
   pages = 1;
 
   pageColumns.columns = 1; //STANDARD_COLUMNS;
-  pageColumns.columnSpacing = STANDARD_COLUMN_SPACING;
+  pageColumns.ptColumnSpacing = STANDARD_COLUMN_SPACING;
+  pageColumns.mmColumnSpacing = POINT_TO_MM(STANDARD_COLUMN_SPACING);
+  pageColumns.inchColumnSpacing = POINT_TO_INCH(STANDARD_COLUMN_SPACING);
 
   pageHeaderFooter.header = HF_SAME;
   pageHeaderFooter.footer = HF_SAME;
   pageHeaderFooter.ptHeaderBodySpacing = 10;
   pageHeaderFooter.ptFooterBodySpacing = 10;
+  pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH(10);
+  pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH(10);
+  pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM(10);
+  pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM(10);
 
   QString _template;
   QString _globalTemplatePath = kapp->kde_datadir() + "/kword/templates/";
@@ -203,6 +209,14 @@ void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl,KoKWHeaderF
       pageLayout.ptRight = 0;
       pageLayout.ptTop = 0;
       pageLayout.ptBottom = 0;
+      pageLayout.mmLeft = 0;
+      pageLayout.mmRight = 0;
+      pageLayout.mmTop = 0;
+      pageLayout.mmBottom = 0;
+      pageLayout.inchLeft = 0;
+      pageLayout.inchRight = 0;
+      pageLayout.inchTop = 0;
+      pageLayout.inchBottom = 0;
       pageHeaderFooter = _hf;
     }
 
@@ -671,26 +685,35 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
   _loaded = true;
 
-  pageLayout.format = PG_DIN_A4;
-  pageLayout.orientation = PG_PORTRAIT;
-  pageLayout.width = PG_A4_WIDTH;
-  pageLayout.height = PG_A4_HEIGHT;
-  pageLayout.left = DEFAULT_LEFT_BORDER;
-  pageLayout.right = DEFAULT_RIGHT_BORDER;
-  pageLayout.top = DEFAULT_TOP_BORDER;
-  pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
-  pageLayout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
-  pageLayout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
-  pageLayout.ptLeft = MM_TO_POINT(DEFAULT_LEFT_BORDER);
-  pageLayout.ptRight = MM_TO_POINT(DEFAULT_RIGHT_BORDER);
-  pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
-  pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
+//   pageLayout.format = PG_DIN_A4;
+//   pageLayout.orientation = PG_PORTRAIT;
+//   pageLayout.width = PG_A4_WIDTH;
+//   pageLayout.height = PG_A4_HEIGHT;
+//   pageLayout.left = DEFAULT_LEFT_BORDER;
+//   pageLayout.right = DEFAULT_RIGHT_BORDER;
+//   pageLayout.top = DEFAULT_TOP_BORDER;
+//   pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
+//   pageLayout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
+//   pageLayout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
+//   pageLayout.ptLeft = MM_TO_POINT(DEFAULT_LEFT_BORDER);
+//   pageLayout.ptRight = MM_TO_POINT(DEFAULT_RIGHT_BORDER);
+//   pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
+//   pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
+
+  pageColumns.columns = 1; //STANDARD_COLUMNS;
+  pageColumns.ptColumnSpacing = STANDARD_COLUMN_SPACING;
+  pageColumns.mmColumnSpacing = POINT_TO_MM(STANDARD_COLUMN_SPACING);
+  pageColumns.inchColumnSpacing = POINT_TO_INCH(STANDARD_COLUMN_SPACING);
 
   pageHeaderFooter.header = HF_SAME;
   pageHeaderFooter.footer = HF_SAME;
   pageHeaderFooter.ptHeaderBodySpacing = 10;
   pageHeaderFooter.ptFooterBodySpacing = 10;
+  pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH(10);
+  pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH(10);
+  pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_MM(10);
+  pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM(10);
 
   defaultUserFont = findUserFont("times");
   defaultParagLayout = new KWParagLayout(this);
@@ -763,9 +786,6 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
   pages = 1;
 
-  pageColumns.columns = 1; //STANDARD_COLUMNS;
-  pageColumns.columnSpacing = STANDARD_COLUMN_SPACING;
-
   string tag;
   vector<KOMLAttrib> lst;
   string name;
@@ -778,6 +798,10 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   __hf.footer = HF_SAME;
   __hf.ptHeaderBodySpacing = 10;
   __hf.ptFooterBodySpacing = 10;
+  __hf.mmHeaderBodySpacing = POINT_TO_MM(10);
+  __hf.mmFooterBodySpacing = POINT_TO_MM(10);
+  __hf.inchHeaderBodySpacing = POINT_TO_INCH(10);
+  __hf.inchFooterBodySpacing = POINT_TO_INCH(10);
   
   
   // DOC
@@ -830,26 +854,70 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 		__pgLayout.orientation = (KoOrientation)atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "width")
 		{
-		  __pgLayout.width = static_cast<double>(atof((*it).m_strValue.c_str()));
+		  __pgLayout.width = __pgLayout.mmWidth = static_cast<double>(atof((*it).m_strValue.c_str()));
 		  __pgLayout.ptWidth = MM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		  __pgLayout.inchWidth = MM_TO_INCH(static_cast<double>(atof((*it).m_strValue.c_str())));
 		}	      
 	      else if ((*it).m_strName == "height")
 		{
-		  __pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
+		  __pgLayout.height = __pgLayout.mmHeight = static_cast<double>(atof((*it).m_strValue.c_str()));
 		  __pgLayout.ptHeight = MM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		  __pgLayout.inchHeight = MM_TO_INCH(static_cast<double>(atof((*it).m_strValue.c_str())));
 		}	      
 	      else if ((*it).m_strName == "columns")
 		__columns.columns = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "columnspacing")
-		__columns.columnSpacing = atoi((*it).m_strValue.c_str());
+		{
+		  __columns.ptColumnSpacing = atoi((*it).m_strValue.c_str());
+		  __columns.mmColumnSpacing = POINT_TO_MM(atoi((*it).m_strValue.c_str()));
+		  __columns.inchColumnSpacing = POINT_TO_INCH(atoi((*it).m_strValue.c_str()));
+		}
 	      else if ((*it).m_strName == "hType")
 		__hf.header = static_cast<KoHFType>(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "fType")
 		__hf.footer = static_cast<KoHFType>(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "spHeadBody")
-		__hf.ptHeaderBodySpacing = atoi((*it).m_strValue.c_str());
+		{
+		  __hf.ptHeaderBodySpacing = atoi((*it).m_strValue.c_str());
+		  __hf.mmHeaderBodySpacing = POINT_TO_MM(atoi((*it).m_strValue.c_str()));
+		  __hf.inchHeaderBodySpacing = POINT_TO_INCH(atoi((*it).m_strValue.c_str()));
+		}
 	      else if ((*it).m_strName == "spFootBody")
+		{		
+		  __hf.ptFooterBodySpacing = atoi((*it).m_strValue.c_str());
+		  __hf.mmFooterBodySpacing = POINT_TO_MM(atoi((*it).m_strValue.c_str()));
+		  __hf.inchFooterBodySpacing = POINT_TO_INCH(atoi((*it).m_strValue.c_str()));
+		}
+	      else if ((*it).m_strName == "ptWidth")
+		__pgLayout.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "inchWidth")
+		__pgLayout.inchWidth = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "mmWidth")
+		__pgLayout.mmWidth = __pgLayout.width = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "ptHeight")
+		__pgLayout.ptHeight = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "inchHeight")
+		__pgLayout.inchHeight = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "mmHeight")
+		__pgLayout.mmHeight = __pgLayout.height = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "ptHeadBody")
+		__hf.ptHeaderBodySpacing = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "inchHeadBody")
+		__hf.inchHeaderBodySpacing = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "mmHeadBody")
+		__hf.mmHeaderBodySpacing = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "ptFootBody")
 		__hf.ptFooterBodySpacing = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "inchFootBody")
+		__hf.inchFooterBodySpacing = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "mmFootBody")
+		__hf.mmFooterBodySpacing = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "mmColumnspc")
+		__columns.mmColumnSpacing = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "ptColumnspc")
+		__columns.ptColumnSpacing = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "inchColumnspc")
+		__columns.inchColumnSpacing = atof((*it).m_strValue.c_str());
 	      else
 		cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
 	    }
@@ -866,24 +934,52 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 		    {
 		      if ((*it).m_strName == "left")
 			{
-			  __pgLayout.left = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.left = __pgLayout.mmLeft = (double)atof((*it).m_strValue.c_str());
 			  __pgLayout.ptLeft = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.inchLeft = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
 			}
 		      else if ((*it).m_strName == "top")
 			{
-			  __pgLayout.top = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.top = __pgLayout.mmTop = (double)atof((*it).m_strValue.c_str());
 			  __pgLayout.ptTop = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.inchTop = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
 			}		      
 		      else if ((*it).m_strName == "right")
 			{
-			  __pgLayout.right = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.right = __pgLayout.mmRight = (double)atof((*it).m_strValue.c_str());
 			  __pgLayout.ptRight = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.inchRight = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
 			}		      
 		      else if ((*it).m_strName == "bottom")
 			{
-			  __pgLayout.bottom = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.bottom = __pgLayout.mmBottom = (double)atof((*it).m_strValue.c_str());
 			  __pgLayout.ptBottom = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.inchBottom = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
 			}		      
+		      else if ((*it).m_strName == "ptLeft")
+			__pgLayout.ptLeft = atoi((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "inchLeft")
+			__pgLayout.inchLeft = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "mmLeft")
+			__pgLayout.mmLeft = __pgLayout.left = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "ptRight")
+			__pgLayout.ptRight = atoi((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "inchRight")
+			__pgLayout.inchRight = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "mmRight")
+			__pgLayout.mmRight = __pgLayout.right = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "ptTop")
+			__pgLayout.ptTop = atoi((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "inchTop")
+			__pgLayout.inchTop = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "mmTop")
+			__pgLayout.mmTop = __pgLayout.top = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "ptBottom")
+			__pgLayout.ptBottom = atoi((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "inchBottom")
+			__pgLayout.inchBottom = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "mmBottom")
+			__pgLayout.mmBottom = __pgLayout.bottom = atof((*it).m_strValue.c_str());
 		      else
 			cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
 		    } 
@@ -914,6 +1010,8 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 		_header = static_cast<bool>(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "hasFooter")
 		_footer = static_cast<bool>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "unit")
+		unit = (*it).m_strValue.c_str();
 	    }
 	}
 
@@ -947,6 +1045,15 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	}
     }
 
+  switch (KWUnit::unitType(unit))
+    {
+    case U_MM: __pgLayout.unit = PG_MM;
+      break;
+    case U_PT: __pgLayout.unit = PG_PT;
+      break;
+    case U_INCH: __pgLayout.unit = PG_INCH;
+      break;
+    }
   setPageLayout(__pgLayout,__columns,__hf);
 
   bool _first_footer = false,_even_footer = false,_odd_footer = false;
@@ -1167,17 +1274,28 @@ bool KWordDocument::save( ostream &out, const char* /* _format */ )
   //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org" 
       << "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;
-  out << otag << "<PAPER format=\"" << static_cast<int>(pageLayout.format) << "\" width=\"" << pageLayout.width
-      << "\" height=\"" << pageLayout.height << "\" orientation=\"" << static_cast<int>(pageLayout.orientation) 
-      << "\" columns=\"" << pageColumns.columns << "\" columnspacing=\"" << pageColumns.columnSpacing 
+  out << otag << "<PAPER format=\"" << static_cast<int>(pageLayout.format) << "\" ptWidth=\"" << pageLayout.ptWidth
+      << "\" ptHeight=\"" << pageLayout.ptHeight 
+      << "\" mmWidth =\"" << pageLayout.mmWidth << "\" mmHeight=\"" << pageLayout.mmHeight
+      << "\" inchWidth =\"" << pageLayout.inchWidth << "\" inchHeight=\"" << pageLayout.inchHeight
+      << "\" orientation=\"" << static_cast<int>(pageLayout.orientation) 
+      << "\" columns=\"" << pageColumns.columns << "\" ptColumnspc=\"" << pageColumns.ptColumnSpacing
+      << "\" mmColumnspc=\"" << pageColumns.mmColumnSpacing << "\" inchColumnspc=\"" << pageColumns.inchColumnSpacing
       << "\" hType=\"" << static_cast<int>(pageHeaderFooter.header) << "\" fType=\"" << static_cast<int>(pageHeaderFooter.footer)
-      << "\" spHeadBody=\"" << pageHeaderFooter.ptHeaderBodySpacing << "\" spFootBody=\"" << pageHeaderFooter.ptFooterBodySpacing 
+      << "\" ptHeadBody=\"" << pageHeaderFooter.ptHeaderBodySpacing << "\" ptFootBody=\"" << pageHeaderFooter.ptFooterBodySpacing
+      << "\" mmHeadBody=\"" << pageHeaderFooter.mmHeaderBodySpacing << "\" mmFootBody=\"" << pageHeaderFooter.mmFooterBodySpacing
+      << "\" inchHeadBody=\"" << pageHeaderFooter.inchHeaderBodySpacing << "\" inchFootBody=\"" << pageHeaderFooter.inchFooterBodySpacing
       << "\">" << endl;
-  out << indent << "<PAPERBORDERS left=\"" << pageLayout.left << "\" top=\"" << pageLayout.top << "\" right=\"" << pageLayout.right
-      << "\" bottom=\"" << pageLayout.bottom << "\"/>" << endl;
+  out << indent << "<PAPERBORDERS mmLeft=\"" << pageLayout.mmLeft << "\" mmTop=\"" << pageLayout.mmTop << "\" mmRight=\"" 
+      << pageLayout.mmRight << "\" mmBottom=\"" << pageLayout.mmBottom 
+      << "\" ptLeft=\"" << pageLayout.ptLeft << "\" ptTop=\"" << pageLayout.ptTop << "\" ptRight=\"" 
+      << pageLayout.ptRight << "\" ptBottom=\"" << pageLayout.ptBottom
+      << "\" inchLeft=\"" << pageLayout.inchLeft << "\" inchTop=\"" << pageLayout.inchTop << "\" inchRight=\"" 
+      << pageLayout.inchRight << "\" inchBottom=\"" << pageLayout.inchBottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
   out << indent << "<ATTRIBUTES processing=\"" << static_cast<int>(processingType) << "\" standardpage=\"" << 1 
-      << "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter() << "\"/>" << endl;
+      << "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter() 
+      << "\" unit=\"" << getUnit() << "\"/>" << endl;
 
   out << otag << "<FRAMESETS>" << endl;
 
@@ -1644,7 +1762,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	  buffer[i] = '\0';
 	  _painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
 			     _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - 
-			     _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset + plus, buffer );
+			     _fc.getParag()->getParagLayout()->getLineSpacing().pt() - yOffset + plus, buffer );
 	  i = 0;
 
 	  switch (text[_fc.getTextPos()].attrib->getClassId())
@@ -1652,7 +1770,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	    case ID_KWCharImage:
 	      {
 		_painter.drawImage(KPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset + 
-					  ((_fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing()) 
+					  ((_fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt()) 
 					   - ((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage()->height())),
 				   *((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage());
 		_fc.cursorGotoNextChar( _painter );
@@ -1712,7 +1830,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	      buffer[i] = '\0';
 	      _painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
 				 _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset - 
-				 _fc.getParag()->getParagLayout()->getPTLineSpacing() + plus,buffer );
+				 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus,buffer );
 	      //cerr << "#'" << buffer << "'" << endl;
 	      i = 0;
 	      // Blanks are not printed at all - but we have to underline it in some cases
@@ -1734,7 +1852,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 			      
 			      _painter.setPen(QPen(_fc.getColor(),fm.lineWidth(),SolidLine));
 			      int ly = _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset - 
-				 _fc.getParag()->getParagLayout()->getPTLineSpacing() + plus + fm.underlinePos() + fm.lineWidth() / 2;
+				 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus + fm.underlinePos() + fm.lineWidth() / 2;
 			      int lx1 = _fc.getPTPos();
 			      _fc.cursorGotoNextChar(_painter);
 			      goneForward = true;
@@ -1853,7 +1971,7 @@ void KWordDocument::drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffs
   _painter->drawLine(_fc.getPTPos() - xOffset + diffx1,
 		     _fc.getPTY() - yOffset,
 		     _fc.getPTPos() - xOffset + diffx2,
-		     _fc.getPTY() + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset);
+		     _fc.getPTY() + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt() - yOffset);
 
   _painter->setRasterOp(rop);
 }
@@ -1866,14 +1984,42 @@ void KWordDocument::updateAllViews(KWordView *_view,bool _clear = false)
   if (!m_lstViews.isEmpty())
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
-	if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
-	  {	
-	    if (viewPtr != _view) 
-	      {
-		if (_clear) viewPtr->getGUI()->getPaperWidget()->clear();
-		viewPtr->getGUI()->getPaperWidget()->repaint(false);
-	      }
-	  }
+	{
+	  if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	    {	
+	      if (viewPtr != _view) 
+		{
+		  if (_clear) viewPtr->getGUI()->getPaperWidget()->clear();
+		  viewPtr->getGUI()->getPaperWidget()->repaint(false);
+		}
+	    }
+	}
+    }
+}
+
+/*================================================================*/
+void KWordDocument::setUnitToAll()
+{
+  if (unit == "mm")
+    pageLayout.unit = PG_MM;
+  else if (unit == "pt")
+    pageLayout.unit = PG_PT;
+  else if (unit == "inch")
+    pageLayout.unit = PG_INCH;
+ 
+
+  KWordView *viewPtr;
+
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	{
+	  if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	    {
+	      viewPtr->getGUI()->getHorzRuler()->setUnit(getUnit());
+	      viewPtr->getGUI()->getVertRuler()->setUnit(getUnit());
+	    }
+	}
     }
 }
 
@@ -1886,11 +2032,11 @@ void KWordDocument::updateAllRanges()
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	{
-	if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
-	  {	
-	    if (viewPtr->getGUI())
-	      viewPtr->getGUI()->setRanges();
-	  }
+	  if (viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget())
+	    {	
+	      if (viewPtr->getGUI())
+		viewPtr->getGUI()->setRanges();
+	    }
 	}
     }
 }
@@ -2610,6 +2756,7 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 
   for (i = 0;i < static_cast<unsigned int>(pages);i++)
     {
+      kapp->processEvents();
       KRect pageRect(0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
       printBorders(*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
       unsigned int minus = 0;
@@ -2656,6 +2803,7 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 	    case FT_TEXT:
 	      {
 		bool bend = false;
+		bool reinit = true;
 		fc = fcList.at(j - minus);
 		if (frames.at(j)->getFrameInfo() != FI_BODY)
 		  {
@@ -2711,12 +2859,22 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 			     frames.at(j)->getCurrent() + 1,i + 1);
 		    if (static_cast<int>(frames.at(j)->getNumFrames() - 1) > static_cast<int>(frames.at(j)->getCurrent()))
 		      frames.at(j)->setCurrent(frames.at(j)->getCurrent() + 1);
+		    reinit = false;
 		  }
-		while (fc->getPage() == i + 1 && !bend)
+		if (reinit)
+		  fc->init(dynamic_cast<KWTextFrameSet*>(frames.at(fc->getFrameSet() - 1))->getFirstParag(),*painter,false,true);
+		//fc->init(getFrameSetfc->getParag(),*painter,true,true);
+		//KWParag *pg = fc->getParag();
+		while (/*fc->getPage() == i + 1 &&*/ !bend)
 		  {
-		    if (i + 1 >= static_cast<unsigned int>(printer->fromPage()) && i + 1 <= static_cast<unsigned int>(printer->toPage()))
-		      printLine(*fc,*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
+		    //if (i + 1 >= static_cast<unsigned int>(printer->fromPage()) && i + 1 <= static_cast<unsigned int>(printer->toPage()))
+		    printLine(*fc,*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
 		    bend = !fc->makeNextLineLayout(*painter);
+// 		    if (pg != fc->getParag())
+// 		      {
+// 			fc->init(fc->getParag(),*painter,true,true);
+// 			pg = fc->getParag();
+// 		      }
 		  }
 	      } break;
 	    default: minus++; break;
@@ -2942,7 +3100,7 @@ RunAround KWordDocument::getRunAround()
 }
 
 /*================================================================*/
-int KWordDocument::getRunAroundGap()
+KWUnit KWordDocument::getRunAroundGap()
 {
   KWFrame *frame = getFirstSelectedFrame();
 
@@ -2978,7 +3136,7 @@ void KWordDocument::setRunAround(RunAround _ra)
 }
 
 /*================================================================*/
-void KWordDocument::setRunAroundGap(int _gap)
+void KWordDocument::setRunAroundGap(KWUnit _gap)
 {
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
@@ -2993,10 +3151,8 @@ void KWordDocument::setRunAroundGap(int _gap)
     }
 }
 /*================================================================*/
-void KWordDocument::getFrameMargins(unsigned int &l,unsigned int &r,unsigned int &t,unsigned int &b)
+void KWordDocument::getFrameMargins(KWUnit &l,KWUnit &r,KWUnit &t,KWUnit &b)
 {
-  l = r = t = b = 0;
-
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       if (getFrameSet(i)->hasSelectedFrame())
@@ -3037,7 +3193,7 @@ bool KWordDocument::isOnlyOneFrameSelected()
 }
 
 /*================================================================*/
-void KWordDocument::getFrameCoords(unsigned int &x,unsigned int &y,unsigned int &w,unsigned int &h)
+KWFrameSet *KWordDocument::getFrameCoords(unsigned int &x,unsigned int &y,unsigned int &w,unsigned int &h,unsigned int &num)
 {
   x = y = w = h = 0;
 
@@ -3053,15 +3209,17 @@ void KWordDocument::getFrameCoords(unsigned int &x,unsigned int &y,unsigned int 
 		  y = getFrameSet(i)->getFrame(j)->y();
 		  w = getFrameSet(i)->getFrame(j)->width();
 		  h = getFrameSet(i)->getFrame(j)->height();
-		  return;
+		  num = j;
+		  return getFrameSet(i);
 		}
 	    }
 	}
     }  
+  return 0L;
 }
 
 /*================================================================*/
-void KWordDocument::setFrameMargins(unsigned int l,unsigned int r,unsigned int t,unsigned int b)
+void KWordDocument::setFrameMargins(KWUnit l,KWUnit r,KWUnit t,KWUnit b)
 {
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
@@ -3091,7 +3249,10 @@ void KWordDocument::setFrameCoords(unsigned int x,unsigned int y,unsigned int w,
 	  for (unsigned int j = 0;j < getFrameSet(i)->getNumFrames();j++)
 	    {
 	      if (getFrameSet(i)->getFrame(j)->isSelected() && x + w < getPTPaperWidth() && y + h < pages * getPTPaperHeight())
-		getFrameSet(i)->getFrame(j)->setRect(x,y,w,h);
+		{
+		  if (!getFrameSet(i)->getGroupManager())
+		    getFrameSet(i)->getFrame(j)->setRect(x,y,w,h);
+		}
 	    }
 	}
     }

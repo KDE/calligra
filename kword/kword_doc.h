@@ -228,22 +228,16 @@ public:
   KWParag* findFirstParagOfPage(unsigned int _page,unsigned int _frameset);
   KWParag* findFirstParagOfRect(unsigned int _ypos,unsigned int _page,unsigned int _frameset);
     
-
-  float getMMTopBorder() { return pageLayout.top; }
-  float getMMBottomBorder() { return pageLayout.bottom; }
-  float getMMLeftBorder() { return pageLayout.left; }
-  float getMMRightBorder() { return pageLayout.right; }
-  float getMMPaperWidth() { return pageLayout.width; }
-  float getMMPaperHeight() { return pageLayout.height; }
-  
-  unsigned int getPTTopBorder() { return static_cast<unsigned int>(pageLayout.ptTop); }
-  unsigned int getPTBottomBorder() { return static_cast<unsigned int>(pageLayout.ptBottom); }
-  unsigned int getPTLeftBorder() { return static_cast<unsigned int>(pageLayout.ptLeft); }
-  unsigned int getPTRightBorder() { return static_cast<unsigned int>(pageLayout.ptRight); }
-  unsigned int getPTPaperHeight() { return static_cast<unsigned int>(pageLayout.ptHeight); }
-  unsigned int getPTPaperWidth() { return static_cast<unsigned int>(pageLayout.ptWidth); }
-  unsigned int getPTColumnWidth() { return static_cast<unsigned int>(ptColumnWidth); }
-  unsigned int getPTColumnSpacing() { return MM_TO_POINT(pageColumns.columnSpacing); }
+  unsigned int getPTTopBorder() { return pageLayout.ptTop; }
+  unsigned int getPTBottomBorder() { return pageLayout.ptBottom; }
+  unsigned int getPTLeftBorder() { return pageLayout.ptLeft; }
+  unsigned int getPTRightBorder() { return pageLayout.ptRight; }
+  unsigned int getPTPaperHeight() { return pageLayout.ptHeight; }
+  unsigned int getPTPaperWidth() { return pageLayout.ptWidth; }
+  unsigned int getPTColumnWidth() { return ptColumnWidth; }
+  unsigned int getPTColumnSpacing() { return pageColumns.ptColumnSpacing; }
+  float getMMPaperHeight() { return pageLayout.mmHeight; }
+  float getINCHPaperHeight() { return pageLayout.inchHeight; }
     
   unsigned int getColumns() { return pageColumns.columns; }
   
@@ -265,6 +259,7 @@ public:
   void drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset);
 
   void updateAllViews(KWordView *_view,bool _clear = false);
+  void setUnitToAll();
   void updateAllRanges();
   void updateAllCursors();
   void drawAllBorders(QPainter *_painter = 0);
@@ -365,18 +360,21 @@ public:
 
   bool getAutoCreateNewFrame();
   RunAround getRunAround();
-  int getRunAroundGap();
+  KWUnit getRunAroundGap();
 
   void setAutoCreateNewFrame(bool _auto);
   void setRunAround(RunAround _ra);
-  void setRunAroundGap(int _gap);
+  void setRunAroundGap(KWUnit _gap);
 
-  void getFrameMargins(unsigned int &l,unsigned int &r,unsigned int &t,unsigned int &b);
+  void getFrameMargins(KWUnit &l,KWUnit &r,KWUnit &t,KWUnit &b);
   bool isOnlyOneFrameSelected();
-  void getFrameCoords(unsigned int &x,unsigned int &y,unsigned int &w,unsigned int &h);
+  KWFrameSet *getFrameCoords(unsigned int &x,unsigned int &y,unsigned int &w,unsigned int &h,unsigned int &num);
 
-  void setFrameMargins(unsigned int l,unsigned int r,unsigned int t,unsigned int b);
+  void setFrameMargins(KWUnit l,KWUnit r,KWUnit t,KWUnit b);
   void setFrameCoords(unsigned int x,unsigned int y,unsigned int w,unsigned int h);
+
+  const QString getUnit() { return unit; }
+  void setUnit(QString _unit) { unit = _unit; }
 
 signals:
   void sig_imageModified();
@@ -469,6 +467,8 @@ protected:
   KWParagLayout *cParagLayout;
 
   bool _needRedraw;
+
+  QString unit;
   
 };
 

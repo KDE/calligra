@@ -75,20 +75,20 @@ KPresenterDoc::KPresenterDoc()
   _orastY = 10;
   _txtBackCol = lightGray;
   _otxtBackCol = lightGray;
-  _pageLayout.format = PG_SCREEN;
-  _pageLayout.orientation = PG_PORTRAIT;
-  _pageLayout.width = PG_SCREEN_WIDTH;
-  _pageLayout.height = PG_SCREEN_HEIGHT;
-  _pageLayout.left = 0;
-  _pageLayout.right = 0;
-  _pageLayout.top = 0;
-  _pageLayout.bottom = 0;
-  _pageLayout.ptWidth = cMM_TO_POINT(PG_SCREEN_WIDTH);
-  _pageLayout.ptHeight = cMM_TO_POINT(PG_SCREEN_HEIGHT);
-  _pageLayout.ptLeft = 0;
-  _pageLayout.ptRight = 0;
-  _pageLayout.ptTop = 0;
-  _pageLayout.ptBottom = 0;
+//   _pageLayout.format = PG_SCREEN;
+//   _pageLayout.orientation = PG_PORTRAIT;
+//   _pageLayout.width = PG_SCREEN_WIDTH;
+//   _pageLayout.height = PG_SCREEN_HEIGHT;
+//   _pageLayout.left = 0;
+//   _pageLayout.right = 0;
+//   _pageLayout.top = 0;
+//   _pageLayout.bottom = 0;
+//   _pageLayout.ptWidth = cMM_TO_POINT(PG_SCREEN_WIDTH);
+//   _pageLayout.ptHeight = cMM_TO_POINT(PG_SCREEN_HEIGHT);
+//   _pageLayout.ptLeft = 0;
+//   _pageLayout.ptRight = 0;
+//   _pageLayout.ptTop = 0;
+//   _pageLayout.ptBottom = 0;
   _pageLayout.unit = PG_MM;
   objStartY = 0;
   setPageLayout(_pageLayout,0,0);
@@ -187,12 +187,19 @@ bool KPresenterDoc::save( ostream& out, const char* /* format */ )
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
   
-  out << otag << "<PAPER format=\"" << static_cast<int>(pageLayout().format) << "\" width=\"" << pageLayout().width
-      << "\" height=\"" << pageLayout().height << "\" orientation=\"" << static_cast<int>(pageLayout().orientation) << "\">" << endl;
-  out << indent << "<PAPERBORDERS left=\"" << pageLayout().left << "\" top=\"" << pageLayout().top << "\" right=\"" << pageLayout().right
-      << "\" bottom=\"" << pageLayout().bottom << "\"/>" << endl;
+  out << otag << "<PAPER format=\"" << static_cast<int>(_pageLayout.format) << "\" ptWidth=\"" << _pageLayout.ptWidth
+      << "\" ptHeight=\"" << _pageLayout.ptHeight 
+      << "\" mmWidth =\"" << _pageLayout.mmWidth << "\" mmHeight=\"" << _pageLayout.mmHeight
+      << "\" inchWidth =\"" << _pageLayout.inchWidth << "\" inchHeight=\"" << _pageLayout.inchHeight
+      << "\" orientation=\"" << static_cast<int>(_pageLayout.orientation) << "\" unit=\"" << static_cast<int>(_pageLayout.unit) << "\">" << endl;
+  out << indent << "<PAPERBORDERS mmLeft=\"" << _pageLayout.mmLeft << "\" mmTop=\"" << _pageLayout.mmTop << "\" mmRight=\"" 
+      << _pageLayout.mmRight << "\" mmBottom=\"" << _pageLayout.mmBottom 
+      << "\" ptLeft=\"" << _pageLayout.ptLeft << "\" ptTop=\"" << _pageLayout.ptTop << "\" ptRight=\"" 
+      << _pageLayout.ptRight << "\" ptBottom=\"" << _pageLayout.ptBottom
+      << "\" inchLeft=\"" << _pageLayout.inchLeft << "\" inchTop=\"" << _pageLayout.inchTop << "\" inchRight=\"" 
+      << _pageLayout.inchRight << "\" inchBottom=\"" << _pageLayout.inchBottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
-  
+
   out << otag << "<BACKGROUND" << " rastX=\"" << _rastX << "\" rastY=\"" << _rastY
       << "\" bred=\"" << _txtBackCol.red() << "\" bgreen=\"" << _txtBackCol.green() << "\" bblue=\"" << _txtBackCol.blue() << "\">" << endl;
   saveBackground(out);
@@ -434,14 +441,30 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		__pgLayout.orientation = (KoOrientation)atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "width")
 		{
-		  __pgLayout.width = static_cast<double>(atof((*it).m_strValue.c_str()));
-		  __pgLayout.ptWidth = cMM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		  __pgLayout.width = __pgLayout.mmWidth = static_cast<double>(atof((*it).m_strValue.c_str()));
+		  __pgLayout.ptWidth = MM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		  __pgLayout.inchWidth = MM_TO_INCH(static_cast<double>(atof((*it).m_strValue.c_str())));
 		}	      
 	      else if ((*it).m_strName == "height")
 		{
-		  __pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
-		  __pgLayout.ptHeight = cMM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		  __pgLayout.height = __pgLayout.mmHeight = static_cast<double>(atof((*it).m_strValue.c_str()));
+		  __pgLayout.ptHeight = MM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		  __pgLayout.inchHeight = MM_TO_INCH(static_cast<double>(atof((*it).m_strValue.c_str())));
 		}	      
+	      else if ((*it).m_strName == "ptWidth")
+		__pgLayout.ptWidth = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "inchWidth")
+		__pgLayout.inchWidth = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "mmWidth")
+		__pgLayout.mmWidth = __pgLayout.width = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "ptHeight")
+		__pgLayout.ptHeight = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "inchHeight")
+		__pgLayout.inchHeight = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "mmHeight")
+		__pgLayout.mmHeight = __pgLayout.height = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "unit")
+		__pgLayout.unit = static_cast<KoUnit>(atoi((*it).m_strValue.c_str()));
 	      else
 		cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
 	    }
@@ -458,24 +481,52 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		    {
 		      if ((*it).m_strName == "left")
 			{
-			  __pgLayout.left = (double)atof((*it).m_strValue.c_str());
-			  __pgLayout.ptLeft = cMM_TO_POINT((double)atof((*it).m_strValue.c_str()));
-			}		      
+			  __pgLayout.left = __pgLayout.mmLeft = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptLeft = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.inchLeft = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
+			}
 		      else if ((*it).m_strName == "top")
 			{
-			  __pgLayout.top = (double)atof((*it).m_strValue.c_str());
-			  __pgLayout.ptTop = cMM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.top = __pgLayout.mmTop = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptTop = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.inchTop = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
 			}		      
 		      else if ((*it).m_strName == "right")
 			{
-			  __pgLayout.right = (double)atof((*it).m_strValue.c_str());
-			  __pgLayout.ptRight = cMM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.right = __pgLayout.mmRight = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptRight = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.inchRight = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
 			}		      
 		      else if ((*it).m_strName == "bottom")
 			{
-			  __pgLayout.bottom = (double)atof((*it).m_strValue.c_str());
-			  __pgLayout.ptBottom = cMM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.bottom = __pgLayout.mmBottom = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptBottom = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			  __pgLayout.inchBottom = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
 			}		      
+		      else if ((*it).m_strName == "ptLeft")
+			__pgLayout.ptLeft = atoi((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "inchLeft")
+			__pgLayout.inchLeft = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "mmLeft")
+			__pgLayout.mmLeft = __pgLayout.left = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "ptRight")
+			__pgLayout.ptRight = atoi((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "inchRight")
+			__pgLayout.inchRight = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "mmRight")
+			__pgLayout.mmRight = __pgLayout.right = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "ptTop")
+			__pgLayout.ptTop = atoi((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "inchTop")
+			__pgLayout.inchTop = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "mmTop")
+			__pgLayout.mmTop = __pgLayout.top = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "ptBottom")
+			__pgLayout.ptBottom = atoi((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "inchBottom")
+			__pgLayout.inchBottom = atof((*it).m_strValue.c_str());
+		      else if ((*it).m_strName == "mmBottom")
+			__pgLayout.mmBottom = __pgLayout.bottom = atof((*it).m_strValue.c_str());
 		      else
 			cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
 		    } 
@@ -897,6 +948,19 @@ void KPresenterDoc::setPageLayout(KoPageLayout pgLayout,int diffx,int diffy)
       _backgroundList.at(i)->setSize(r.width(),r.height());
       _backgroundList.at(i)->restore();
     }
+
+
+  QString unit;
+  switch (_pageLayout.unit)
+    {
+    case PG_MM: unit = "mm";
+      break;
+    case PG_PT: unit = "pt";
+      break;
+    case PG_INCH: unit = "inch";
+      break;
+    }
+  setUnit(_pageLayout.unit,unit);
 
   m_bModified = true;
   repaint(false);
@@ -2415,6 +2479,21 @@ void KPresenterDoc::repaint(bool erase)
 }
 
 /*==============================================================*/
+void KPresenterDoc::setUnit(KoUnit _unit,QString __unit)
+{
+  _pageLayout.unit = _unit;
+
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	{	
+	  viewPtr->getHRuler()->setUnit(__unit);
+	  viewPtr->getVRuler()->setUnit(__unit);
+	}
+    }
+}
+
+/*==============================================================*/
 void KPresenterDoc::hideAllFrames()
 {
   if (!m_lstViews.isEmpty())
@@ -2529,16 +2608,16 @@ int KPresenterDoc::getPageOfObj(int objNum,int diffx,int diffy,float fakt = 1.0)
 /*================== get size of page ===========================*/
 KRect KPresenterDoc::getPageSize(unsigned int num,int diffx,int diffy,float fakt=1.0,bool decBorders = true)
 {
-  double fact = 1;
-  if (_pageLayout.unit == PG_CM) fact = 10;
-  if (_pageLayout.unit == PG_INCH) fact = 25.4;
+//   double fact = 1;
+//   if (_pageLayout.unit == PG_CM) fact = 10;
+//   if (_pageLayout.unit == PG_INCH) fact = 25.4;
 
-  int pw,ph,bl = static_cast<int>(_pageLayout.ptLeft * fact * 100) / 100;
-  int br = static_cast<int>(_pageLayout.ptRight * fact * 100) / 100;
-  int bt = static_cast<int>(_pageLayout.ptTop * fact * 100) / 100;
-  int bb = static_cast<int>(_pageLayout.ptBottom * fact * 100) / 100;
-  int wid = static_cast<int>(_pageLayout.ptWidth * fact * 100) / 100;
-  int hei = static_cast<int>(_pageLayout.ptHeight * fact * 100) / 100;
+  int pw,ph,bl = _pageLayout.ptLeft;
+  int br = _pageLayout.ptRight;
+  int bt = _pageLayout.ptTop;
+  int bb = _pageLayout.ptBottom;
+  int wid = _pageLayout.ptWidth;
+  int hei = _pageLayout.ptHeight;
   
   if (!decBorders)
     {
@@ -2560,28 +2639,19 @@ KRect KPresenterDoc::getPageSize(unsigned int num,int diffx,int diffy,float fakt
 /*================================================================*/
 int KPresenterDoc::getLeftBorder()
 {
-  double fact = 1;
-  if (_pageLayout.unit == PG_CM) fact = 10;
-  if (_pageLayout.unit == PG_INCH) fact = 25.4;
-  return static_cast<int>(_pageLayout.ptLeft * fact * 100) / 100;
+  return _pageLayout.ptLeft;
 }
 
 /*================================================================*/
 int KPresenterDoc::getTopBorder()
 {
-  double fact = 1;
-  if (_pageLayout.unit == PG_CM) fact = 10;
-  if (_pageLayout.unit == PG_INCH) fact = 25.4;
-  return static_cast<int>(_pageLayout.ptTop * fact * 100) / 100;
+  return _pageLayout.ptTop;
 }
 
 /*================================================================*/
 int KPresenterDoc::getBottomBorder()
 {
-  double fact = 1;
-  if (_pageLayout.unit == PG_CM) fact = 10;
-  if (_pageLayout.unit == PG_INCH) fact = 25.4;
-  return static_cast<int>(_pageLayout.ptBottom * fact * 100) / 100;
+  return _pageLayout.ptBottom;
 }
 
 /*================================================================*/

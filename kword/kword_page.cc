@@ -95,8 +95,6 @@ unsigned int KWPage::ptTopBorder() { return doc->getPTTopBorder(); }
 unsigned int KWPage::ptBottomBorder() { return doc->getPTBottomBorder(); }
 unsigned int KWPage::ptPaperWidth() { return doc->getPTPaperWidth(); }
 unsigned int KWPage::ptPaperHeight() { return doc->getPTPaperHeight(); }
-unsigned int KWPage::mmPaperWidth() { return static_cast<unsigned int>(doc->getMMPaperWidth()); }
-unsigned int KWPage::mmPaperHeight() { return static_cast<unsigned int>(doc->getMMPaperHeight()); }
 unsigned int KWPage::ptColumnWidth() { return doc->getPTColumnWidth(); }
 unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 
@@ -108,13 +106,13 @@ void KWPage::init()
       gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
       gui->getView()->setFormat(*((KWFormat*)fc),true,false);
       gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
       gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
 				      fc->getParag()->getParagLayout()->getBottomBorder());
-      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+      setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+      setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
       gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
       gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
       gui->getVertRuler()->setOffset(0,-getVertRulerPos());
@@ -177,8 +175,8 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		    
 		    if (fc->getParag())
 		      {	  
-			gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-			gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+			setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+			setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
 		      }
 		  }
 		else
@@ -655,13 +653,13 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		      gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
 		      gui->getView()->setFormat(*((KWFormat*)fc),true,false);
 		      gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-		      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+		      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 		      gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
 					fc->getParag()->getParagLayout()->getBottomBorder());
-		      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-		      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+		      setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+		      setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
 		      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 		      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 		    }
@@ -805,13 +803,13 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
 	gui->getView()->setFormat(*((KWFormat*)fc),true,false);
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
 					fc->getParag()->getParagLayout()->getBottomBorder());
-	gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-	gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+	setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
 	gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 	gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	format = *((KWFormat*)fc);
@@ -1004,8 +1002,8 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 	  
 	  if (fc->getParag())
 	    {	  
-	      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-	      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	      setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+	      setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
 	      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 	      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	    }
@@ -1173,13 +1171,13 @@ void KWPage::footerHeaderDisappeared()
       gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
       gui->getView()->setFormat(*((KWFormat*)fc),true,false);
       gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
       gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
 				      fc->getParag()->getParagLayout()->getBottomBorder());
-      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+      setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+      setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
       gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
       gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
       format = *((KWFormat*)fc);
@@ -1478,11 +1476,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       
       gui->getVertRuler()->setOffset(0,-getVertRulerPos());
       gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
-      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+      setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+      setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
       gui->getView()->setFormat(*((KWFormat*)fc));
       gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
       gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1564,7 +1562,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoLineStart(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1575,7 +1573,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoLineEnd(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1593,7 +1591,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoRight(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1635,7 +1633,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoLeft(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1677,7 +1675,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoUp(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1719,7 +1717,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	fc->cursorGotoDown(painter);
 	gui->getView()->setFormat(*((KWFormat*)fc));
 	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+	gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					fc->getParag()->getParagLayout()->getRightBorder(),
 					fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1817,11 +1815,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	if (oldParag != fc->getParag() && fc->getParag())
 	  {	  
 	    gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
-	    gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-	    gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	    setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+	    setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
 	    gui->getView()->setFormat(*((KWFormat*)fc));
 	    gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-	    gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+	    gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 	    gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 					    fc->getParag()->getParagLayout()->getRightBorder(),
 					    fc->getParag()->getParagLayout()->getTopBorder(),
@@ -1979,13 +1977,13 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    if (oldParag != fc->getParag() && fc->getParag())
 	      {	  
 		gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
-		gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-		gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+		setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+		setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
 		gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 		gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 		gui->getView()->setFormat(*((KWFormat*)fc));
 		gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-		gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+		gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
 		gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 						fc->getParag()->getParagLayout()->getRightBorder(),
 						fc->getParag()->getParagLayout()->getTopBorder(),
@@ -2319,11 +2317,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
   if (oldParag != fc->getParag() && fc->getParag())
     {	  
       gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
-      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+      setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+      setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
       gui->getView()->setFormat(*((KWFormat*)fc));
       gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+      gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
       gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				      fc->getParag()->getParagLayout()->getRightBorder(),
 				      fc->getParag()->getParagLayout()->getTopBorder(),
@@ -2707,6 +2705,9 @@ void KWPage::drawFrameSelection(QPainter &_painter,KWFrame *_frame)
 /*================================================================*/
 void KWPage::frameSizeChanged(KoPageLayout _layout)
 {
+  setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
+  return;
+
   if (mouseMode != MM_EDIT_FRAME)
     {
       selectedFrame = fc->getFrame() - 1;
@@ -2760,10 +2761,15 @@ void KWPage::setRuler2Frame(unsigned int _frameset,unsigned int _frame)
 	}
     }
 
-  _layout.left = POINT_TO_MM(frame->left());
-  _layout.top = POINT_TO_MM(frame->top()) - page * mmPaperHeight();
-  _layout.right = _layout.width - POINT_TO_MM(frame->right());
-  _layout.bottom = _layout.height - POINT_TO_MM(frame->bottom()) + page * mmPaperHeight();
+  _layout.left = _layout.mmLeft = POINT_TO_MM(frame->left());
+  _layout.top = _layout.mmTop = POINT_TO_MM(frame->top()) - page * doc->getMMPaperHeight();
+  _layout.right = _layout.mmRight = _layout.mmWidth - POINT_TO_MM(frame->right());
+  _layout.bottom = _layout.mmBottom = _layout.mmHeight - POINT_TO_MM(frame->bottom()) + page * doc->getMMPaperHeight();
+  _layout.ptLeft = frame->left();
+  _layout.inchLeft = POINT_TO_INCH(frame->left());
+  _layout.inchTop = POINT_TO_INCH(frame->top()) - page * doc->getINCHPaperHeight();
+  _layout.inchRight = _layout.inchWidth - POINT_TO_INCH(frame->right());
+  _layout.inchBottom = _layout.inchHeight - POINT_TO_INCH(frame->bottom()) + page * doc->getINCHPaperHeight();
   _layout.ptLeft = frame->left();
   _layout.ptTop = frame->top() - page * ptPaperHeight();
   _layout.ptRight = _layout.ptWidth - frame->right();
@@ -2799,8 +2805,8 @@ void KWPage::setMouseMode(MouseMode _mm)
 	mm_menu->setItemChecked(mm_edit,true);
 	if (!inKeyEvent)
 	  {
-	    gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-	    gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	    setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+	    setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
 	    gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 	    gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	    if (doc->getProcessingType() == KWordDocument::DTP)
@@ -2933,17 +2939,43 @@ void KWPage::femProps()
 /*================================================================*/
 void KWPage::newLeftIndent(int _left) 
 { 
-  setLeftIndent(static_cast<float>(_left)); 
-  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+  KWUnit u;
+  u.setPT(_left);
+  setLeftIndent(u); 
+
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: 
+      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getLeftIndent().mm());
+      break;
+    case U_INCH: 
+      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getLeftIndent().inch());
+      break;
+    case U_PT: 
+      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getLeftIndent().pt());
+      break;
+    }
 }
 
 /*================================================================*/
 void KWPage::newFirstIndent(int _first)
 { 
-  setFirstLineIndent(static_cast<float>(_first));
-  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+  KWUnit u;
+  u.setPT(_first);
+  setFirstLineIndent(u);
+
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: 
+      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getFirstLineLeftIndent().mm());
+      break;
+    case U_INCH: 
+      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getFirstLineLeftIndent().inch());
+      break;
+    case U_PT: 
+      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getFirstLineLeftIndent().pt());
+      break;
+    }
 }
 
 /*================================================================*/
@@ -3001,7 +3033,7 @@ void KWPage::setEnumList()
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
   gui->getView()->setFormat(*((KWFormat*)fc));
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
 				  fc->getParag()->getParagLayout()->getTopBorder(),
@@ -3020,7 +3052,7 @@ void KWPage::setBulletList()
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
   gui->getView()->setFormat(*((KWFormat*)fc));
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
 				  fc->getParag()->getParagLayout()->getTopBorder(),
@@ -3039,7 +3071,7 @@ void KWPage::setNormalText()
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
   gui->getView()->setFormat(*((KWFormat*)fc));
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
 				  fc->getParag()->getParagLayout()->getTopBorder(),
@@ -3052,13 +3084,13 @@ void KWPage::forceFullUpdate()
   gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
   gui->getView()->setFormat(*((KWFormat*)fc),true,false);
   gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getPTLineSpacing());
+  gui->getView()->setLineSpacing(fc->getParag()->getParagLayout()->getLineSpacing().pt());
   gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
 				  fc->getParag()->getParagLayout()->getRightBorder(),
 				  fc->getParag()->getParagLayout()->getTopBorder(),
 				  fc->getParag()->getParagLayout()->getBottomBorder());
-  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
-  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+  setRulerFirstIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getFirstLineLeftIndent());
+  setRulerLeftIndent(gui->getHorzRuler(),fc->getParag()->getParagLayout()->getLeftIndent());
   gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
   gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
   format = *((KWFormat*)fc);
@@ -3083,16 +3115,16 @@ void KWPage::setFlow(KWParagLayout::Flow _flow)
 }
 
 /*================================================================*/
-void KWPage::setLeftIndent(float _left)
+void KWPage::setLeftIndent(KWUnit _left)
 { 
   if (!doc->has_selection())
-    fc->getParag()->getParagLayout()->setMMLeftIndent(static_cast<unsigned int>(_left)); 
+    fc->getParag()->getParagLayout()->setLeftIndent(_left); 
   else
     {
       KWParag *p = doc->getSelStart()->getParag();
       while (p && p != doc->getSelEnd()->getParag()->getNext())
 	{
-	  p->getParagLayout()->setMMLeftIndent(static_cast<unsigned int>(_left)); 
+	  p->getParagLayout()->setLeftIndent(_left); 
 	  p = p->getNext();
 	}
       recalcCursor(false,-1,doc->getSelStart());
@@ -3102,16 +3134,16 @@ void KWPage::setLeftIndent(float _left)
 }
 
 /*================================================================*/
-void KWPage::setFirstLineIndent(float _first)
+void KWPage::setFirstLineIndent(KWUnit _first)
 { 
   if (!doc->has_selection())
-    fc->getParag()->getParagLayout()->setMMFirstLineLeftIndent(static_cast<unsigned int>(_first)); 
+    fc->getParag()->getParagLayout()->setFirstLineLeftIndent(_first); 
   else
     {
       KWParag *p = doc->getSelStart()->getParag();
       while (p && p != doc->getSelEnd()->getParag()->getNext())
 	{
-	  p->getParagLayout()->setMMFirstLineLeftIndent(static_cast<unsigned int>(_first)); 
+	  p->getParagLayout()->setFirstLineLeftIndent(_first); 
 	  p = p->getNext();
 	}
       recalcCursor(false,-1,doc->getSelStart());
@@ -3121,17 +3153,17 @@ void KWPage::setFirstLineIndent(float _first)
 }
 
 /*================================================================*/
-void KWPage::setSpaceBeforeParag(float _before)
+void KWPage::setSpaceBeforeParag(KWUnit _before)
 { 
   recalcAll = true; 
   if (!doc->has_selection())
-    fc->getParag()->getParagLayout()->setMMParagHeadOffset(static_cast<unsigned int>(_before));
+    fc->getParag()->getParagLayout()->setParagHeadOffset(_before);
   else
     {
       KWParag *p = doc->getSelStart()->getParag();
       while (p && p != doc->getSelEnd()->getParag()->getNext())
 	{
-	  p->getParagLayout()->setMMParagHeadOffset(static_cast<unsigned int>(_before));
+	  p->getParagLayout()->setParagHeadOffset(_before);
 	  p = p->getNext();
 	}
       recalcCursor(false,-1,doc->getSelStart());
@@ -3142,17 +3174,17 @@ void KWPage::setSpaceBeforeParag(float _before)
 }
 
 /*================================================================*/
-void KWPage::setSpaceAfterParag(float _after)
+void KWPage::setSpaceAfterParag(KWUnit _after)
 { 
   recalcAll = true; 
   if (!doc->has_selection())
-    fc->getParag()->getParagLayout()->setMMParagFootOffset(static_cast<unsigned int>(_after));
+    fc->getParag()->getParagLayout()->setParagFootOffset(_after);
   else
     {
       KWParag *p = doc->getSelStart()->getParag();
       while (p && p != doc->getSelEnd()->getParag()->getNext())
 	{
-	  p->getParagLayout()->setMMParagFootOffset(static_cast<unsigned int>(_after));
+	  p->getParagLayout()->setParagFootOffset(_after);
 	  p = p->getNext();
 	}
       recalcCursor(false,-1,doc->getSelStart());
@@ -3163,17 +3195,17 @@ void KWPage::setSpaceAfterParag(float _after)
 }
 
 /*================================================================*/
-void KWPage::setLineSpacing(unsigned int _spacing)
+void KWPage::setLineSpacing(KWUnit _spacing)
 { 
   recalcAll = true; 
   if (!doc->has_selection())
-    fc->getParag()->getParagLayout()->setPTLineSpacing(_spacing);
+    fc->getParag()->getParagLayout()->setLineSpacing(_spacing);
   else
     {
       KWParag *p = doc->getSelStart()->getParag();
       while (p && p != doc->getSelEnd()->getParag()->getNext())
 	{
-	  p->getParagLayout()->setPTLineSpacing(_spacing);
+	  p->getParagLayout()->setLineSpacing(_spacing);
 	  p = p->getNext();
 	}
       recalcCursor(false,-1,doc->getSelStart());
@@ -3654,4 +3686,38 @@ void KWPage::setFrameBackgroundColor(QBrush _color)
 KWGroupManager *KWPage::getTable() 
 {
   return doc->getFrameSet(fc->getFrameSet() - 1)->getGroupManager(); 
+}
+
+/*================================================================*/
+void KWPage::setRulerFirstIndent(KoRuler *ruler,KWUnit _value)
+{
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: 
+      ruler->setFirstIndent(_value.mm());
+      break;
+    case U_INCH: 
+      ruler->setFirstIndent(_value.inch());
+      break;
+    case U_PT: 
+      ruler->setFirstIndent(_value.pt());
+      break;
+    }
+}
+
+/*================================================================*/
+void KWPage::setRulerLeftIndent(KoRuler *ruler,KWUnit _value)
+{
+  switch (KWUnit::unitType(doc->getUnit()))
+    {
+    case U_MM: 
+      ruler->setLeftIndent(_value.mm());
+      break;
+    case U_INCH: 
+      ruler->setLeftIndent(_value.inch());
+      break;
+    case U_PT: 
+      ruler->setLeftIndent(_value.pt());
+      break;
+    }
 }

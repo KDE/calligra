@@ -13,9 +13,6 @@
 
 #include "koRuler.h"
 
-#define POINT_TO_MM(px) (int((float)px/2.83465))
-#define MM_TO_POINT(mm) (int((float)mm*2.83465))
-
 /******************************************************************/
 /* Class: KoRuler                                                 */
 /******************************************************************/
@@ -23,7 +20,7 @@
 /*================================================================*/
 KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
 		 KoPageLayout _layout,int _flags,KoTabChooser *_tabChooser = 0L)
-  : QFrame(_parent), buffer(width(),height())
+  : QFrame(_parent), buffer(width(),height()), unit("mm")
 {
   setFrameStyle(Box | Raised);
   tabChooser = _tabChooser;
@@ -56,6 +53,9 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
 
   tabList.setAutoDelete(false);
   frameStart = -1;
+
+  allowUnits = true;
+  setupMenu();
 }
 
 /*================================================================*/
@@ -129,18 +129,27 @@ void KoRuler::drawHorizontal(QPainter *_painter)
 
   p.setPen(QPen(black,1,SolidLine));
   p.setFont(font);
-  dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
+  
+  if (unit == "inch")
+    dist = static_cast<int>((1000 * _INCH_TO_POINT) / 1000);
+  else if (unit == "pt")
+    dist = 100;
+  else
+    dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
 
-  for (int i = 0;i <= layout.ptWidth;i += dist)
+  for (unsigned int i = 0;i <= layout.ptWidth;i += dist)
     {    
-      str.sprintf("%d",j++);
+      if (unit == "pt")
+	str.sprintf("%d00",j++);
+      else
+	str.sprintf("%d",j++);
       p.drawText(i - diffx - fm.width(str) / 2,(height() - fm.height()) / 2,fm.width(str),height(),AlignLeft | AlignTop,str);
     }
 
-  for (int i = dist / 2;i <= layout.ptWidth;i += dist)
+  for (unsigned int i = dist / 2;i <= layout.ptWidth;i += dist)
     p.drawLine(i - diffx,5,i - diffx,height() - 5);
 
-  for (int i = dist / 4;i <= layout.ptWidth;i += dist / 2)
+  for (unsigned int i = dist / 4;i <= layout.ptWidth;i += dist / 2)
     p.drawLine(i - diffx,7,i - diffx,height() - 7);
 
   p.setPen(QPen(black));
@@ -255,18 +264,27 @@ void KoRuler::drawVertical(QPainter *_painter)
 
   p.setPen(QPen(black,1,SolidLine));
   p.setFont(font);
-  dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
 
-  for (int i = 0;i <= layout.ptHeight;i += dist)
+  if (unit == "inch")
+    dist = static_cast<int>((1000 * _INCH_TO_POINT) / 1000);
+  else if (unit == "pt")
+    dist = 100;
+  else
+    dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
+
+  for (unsigned int i = 0;i <= layout.ptHeight;i += dist)
     {    
-      str.sprintf("%d",j++);
+      if (unit == "pt")
+	str.sprintf("%d00",j++);
+      else
+	str.sprintf("%d",j++);
       p.drawText((width() - fm.width(str)) / 2,i - diffy - fm.height() / 2,width(),fm.height(),AlignLeft | AlignTop,str);
     }
 
-  for (int i = dist / 2;i <= layout.ptHeight;i += dist)
+  for (unsigned int i = dist / 2;i <= layout.ptHeight;i += dist)
     p.drawLine(5,i - diffy,width() - 5,i - diffy);
 
-  for (int i = dist / 4;i <= layout.ptHeight;i += dist / 2)
+  for (unsigned int i = dist / 4;i <= layout.ptHeight;i += dist / 2)
     p.drawLine(7,i - diffy,width() - 7,i - diffy);
 
   p.setPen(QPen(black));
@@ -298,6 +316,15 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
   oldMx = e->x();
   oldMy = e->y();
   mousePressed = true;
+
+  if (e->button() == RightButton)
+    {
+      QPoint pnt(QCursor::pos());
+      rb_menu->popup(pnt);
+      action = A_NONE;
+      mousePressed = false;
+      return;
+    }
 
   if (action == A_BR_RIGHT || action == A_BR_LEFT)
     {
@@ -382,7 +409,8 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
 	default: break;
 	}
       _tab->ptPos = e->x() + diffx - (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart);
-      _tab->mmPos = POINT_TO_MM(_tab->ptPos);
+      _tab->mmPos = cPOINT_TO_MM(_tab->ptPos);
+      _tab->inchPos = cPOINT_TO_INCH(_tab->ptPos);
 
       tabList.append(_tab);
       emit tabListChanged(&tabList);
@@ -444,7 +472,7 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 	}
       
       repaint(false);
-      emit newFirstIndent(POINT_TO_MM(i_first));
+      emit newFirstIndent(i_first);
     }
   else if (action == A_LEFT_INDENT)
     {
@@ -460,9 +488,9 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
       
       repaint(false);
       int _tmp = i_first;
-      emit newLeftIndent(POINT_TO_MM(i_left));
+      emit newLeftIndent(i_left);
       i_first = _tmp;
-      emit newFirstIndent(POINT_TO_MM(i_first));
+      emit newFirstIndent(i_first);
     }
   else if (action == A_TAB)
     {
@@ -573,7 +601,8 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(oldMx,0,oldMx,canvas->height());
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
-		      layout.left = (static_cast<float>(mx + diffx) * _POINT_TO_MM * 100) / 100;
+		      layout.left = layout.mmLeft = cPOINT_TO_MM(mx + diffx);
+		      layout.inchLeft = cPOINT_TO_INCH(mx + diffx);
 		      layout.ptLeft = mx + diffx;
 		      oldMx = e->x();
 		      oldMy = e->y();
@@ -591,8 +620,9 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(oldMx,0,oldMx,canvas->height());
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
-		      layout.right = (static_cast<float>(pw - (mx + diffx)) * _POINT_TO_MM * 100) / 100;
+		      layout.right = layout.mmRight = cPOINT_TO_MM(static_cast<int>(pw - (mx + diffx)));
 		      layout.ptRight = pw - (mx + diffx);
+		      layout.inchRight = cPOINT_TO_INCH(static_cast<int>(pw - (mx + diffx)));
 		      oldMx = e->x();
 		      oldMy = e->y();
 		      repaint(false);
@@ -664,7 +694,8 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 				 tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),
 				 canvas->height());
 		      tabList.at(currTab)->ptPos += (e->x() - oldMx);
-		      tabList.at(currTab)->mmPos = POINT_TO_MM(tabList.at(currTab)->ptPos);
+		      tabList.at(currTab)->mmPos = cPOINT_TO_MM(tabList.at(currTab)->ptPos);
+		      tabList.at(currTab)->inchPos = cPOINT_TO_INCH(tabList.at(currTab)->ptPos);
 		      p.drawLine(tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),0,
 				 tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),
 				 canvas->height());
@@ -710,8 +741,9 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(0,oldMy,canvas->width(),oldMy);
 		      p.drawLine(0,my,canvas->width(),my);
 		      p.end();
-		      layout.top = (static_cast<float>(my + diffy) * _POINT_TO_MM * 100) / 100;
+		      layout.top = layout.mmTop = cPOINT_TO_MM(my + diffy);
 		      layout.ptTop = my + diffy;
+		      layout.inchTop = cPOINT_TO_INCH(my + diffy);
 		      oldMx = e->x();
 		      oldMy = e->y();
 		      repaint(false);
@@ -728,8 +760,9 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(0,oldMy,canvas->width(),oldMy);
 		      p.drawLine(0,my,canvas->width(),my);
 		      p.end();
-		      layout.bottom = (static_cast<float>(ph - (my + diffy)) * _POINT_TO_MM * 100) / 100;
+		      layout.bottom = layout.mmBottom = cPOINT_TO_MM(static_cast<int>(ph - (my + diffy)));
 		      layout.ptBottom = ph - (my + diffy);
+		      layout.inchBottom = cPOINT_TO_INCH(static_cast<int>(ph - (my + diffy)));
 		      oldMx = e->x();
 		      oldMy = e->y();
 		      repaint(false);
@@ -776,10 +809,63 @@ void KoRuler::setTabList(QList<KoTabulator>* _tabList)
       KoTabulator *t = new KoTabulator;
       t->type = _tabList->at(i)->type;
       t->mmPos = _tabList->at(i)->mmPos;
+      t->inchPos = _tabList->at(i)->inchPos;
       t->ptPos = _tabList->at(i)->ptPos;
       tabList.append(t);
     }
   repaint(false); 
+}
+
+/*================================================================*/
+unsigned int KoRuler::makeIntern(float _v)
+{
+  if (unit == "mm") return cMM_TO_POINT(_v);
+  if (unit == "inch") return cINCH_TO_POINT(_v);
+  return static_cast<unsigned int>(_v);
+}
+
+/*================================================================*/
+void KoRuler::setupMenu()
+{
+  rb_menu = new QPopupMenu();
+  CHECK_PTR(rb_menu);
+  mMM = rb_menu->insertItem(i18n("Millimeters (mm)"),this,SLOT(rbMM()));
+  mPT = rb_menu->insertItem(i18n("Points (pt)"),this,SLOT(rbPT()));
+  mINCH = rb_menu->insertItem(i18n("Inches (inch)"),this,SLOT(rbINCH()));
+  rb_menu->setCheckable(false);
+  rb_menu->setItemChecked(mMM,true);
+}
+
+/*================================================================*/
+void KoRuler::uncheckMenu()
+{
+  rb_menu->setItemChecked(mMM,false);
+  rb_menu->setItemChecked(mPT,false);
+  rb_menu->setItemChecked(mINCH,false);
+}
+
+/*================================================================*/
+void KoRuler::setUnit(QString _unit) 
+{ 
+  unit = _unit; 
+  uncheckMenu();
+  
+  if (unit == "mm")
+    {
+      rb_menu->setItemChecked(mMM,true);
+      layout.unit = PG_MM;
+    }
+  else if (unit == "pt")
+    {
+      rb_menu->setItemChecked(mPT,true);
+      layout.unit = PG_PT;
+    }
+  else if (unit == "inch")
+    {
+      rb_menu->setItemChecked(mINCH,true);
+      layout.unit = PG_INCH;
+    }
+  repaint(false);
 }
 
 #include "koRuler.moc"

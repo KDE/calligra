@@ -102,11 +102,11 @@ public:
 
   void formatChanged(KWFormat &_format,bool _redraw = true);
   void setFlow(KWParagLayout::Flow _flow);
-  void setLeftIndent(float _left);
-  void setFirstLineIndent(float _first);
-  void setSpaceBeforeParag(float _before);
-  void setSpaceAfterParag(float _after);
-  void setLineSpacing(unsigned int _spacing);
+  void setLeftIndent(KWUnit _left);
+  void setFirstLineIndent(KWUnit _first);
+  void setSpaceBeforeParag(KWUnit _before);
+  void setSpaceAfterParag(KWUnit _after);
+  void setLineSpacing(KWUnit _spacing);
 
   void setParagLeftBorder(KWParagLayout::Border _brd);
   void setParagRightBorder(KWParagLayout::Border _brd);
@@ -115,16 +115,16 @@ public:
 
   KWParagLayout::Flow getFlow()
     { return fc->getParag()->getParagLayout()->getFlow(); }
-  float getLeftIndent()
-    { return static_cast<float>(fc->getParag()->getParagLayout()->getMMLeftIndent()); }
-  float getFirstLineIndent()
-    { return static_cast<float>(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent()); }
-  float getSpaceBeforeParag()
-    { return static_cast<float>(fc->getParag()->getParagLayout()->getMMParagHeadOffset()); }
-  float getSpaceAfterParag()
-    { return static_cast<float>(fc->getParag()->getParagLayout()->getMMParagFootOffset()); }
-  unsigned int getLineSpacing()
-    { return fc->getParag()->getParagLayout()->getPTLineSpacing(); }
+  KWUnit getLeftIndent()
+    { return fc->getParag()->getParagLayout()->getLeftIndent(); }
+  KWUnit getFirstLineIndent()
+    { return fc->getParag()->getParagLayout()->getFirstLineLeftIndent(); }
+  KWUnit getSpaceBeforeParag()
+    { return fc->getParag()->getParagLayout()->getParagHeadOffset(); }
+  KWUnit getSpaceAfterParag()
+    { return fc->getParag()->getParagLayout()->getParagFootOffset(); }
+  KWUnit getLineSpacing()
+    { return fc->getParag()->getParagLayout()->getLineSpacing(); }
   KWParagLayout::Border getLeftBorder()
     { return fc->getParag()->getParagLayout()->getLeftBorder(); }
   KWParagLayout::Border getRightBorder()
@@ -234,8 +234,6 @@ protected:
   unsigned int ptPaperHeight();
   unsigned int ptColumnWidth();
   unsigned int ptColumnSpacing();
-  unsigned int mmPaperWidth();
-  unsigned int mmPaperHeight();
 
   void enterEvent(QEvent *)
     { setFocus(); }
@@ -261,6 +259,9 @@ protected:
   void mmUncheckAll();
 
   void selectText(int _pos,int _len,int _frameSetNum,KWTextFrameSet *_frameset,KWParag *_parag,bool _select = true);
+
+  void setRulerFirstIndent(KoRuler *ruler,KWUnit _value);
+  void setRulerLeftIndent(KoRuler *ruler,KWUnit _value);
 
   KWordDocument *doc;
   bool markerIsVisible;

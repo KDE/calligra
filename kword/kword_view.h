@@ -523,6 +523,7 @@ public:
 protected slots:
   void scrollH(int);
   void scrollV(int);
+  void unitChanged(QString);
 
 protected:
   void resizeEvent(QResizeEvent *e);

@@ -37,7 +37,7 @@
 
 /*================================================================*/
 KWFrame::KWFrame() 
-  : KRect(), intersections(), oldIntersects()
+  : KRect(), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(false);
@@ -59,19 +59,16 @@ KWFrame::KWFrame()
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
-
-  bleft = bright = btop = bbottom = 0;
 }
 
 /*================================================================*/
 KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright) 
-  : KRect(topleft,bottomright), intersections(), oldIntersects()
+  : KRect(topleft,bottomright), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(false); 
   oldIntersects.setAutoDelete(true);
   selected = false;
-  runAroundGap = 1;
   mostRight = false;
 
   backgroundColor = QBrush(white);
@@ -87,19 +84,16 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
-
-  bleft = bright = btop = bbottom = 0;
 } 
 
 /*================================================================*/
 KWFrame::KWFrame(const KPoint &topleft,const KSize &size) 
-  : KRect(topleft,size), intersections(), oldIntersects()
+  : KRect(topleft,size), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(false); 
   oldIntersects.setAutoDelete(true);
   selected = false;
-  runAroundGap = 1;
   mostRight = false;
 
   backgroundColor = QBrush(white);
@@ -115,19 +109,16 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
-
-  bleft = bright = btop = bbottom = 0;
 }    
 
 /*================================================================*/
 KWFrame::KWFrame(int left,int top,int width,int height) 
-  : KRect(left,top,width,height), intersections(), oldIntersects()
+  : KRect(left,top,width,height), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(false); 
   oldIntersects.setAutoDelete(true);
   selected = false;
-  runAroundGap = 1;
   mostRight = false;
 
   backgroundColor = QBrush(white);
@@ -143,19 +134,16 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
-
-  bleft = bright = btop = bbottom = 0;
 }
 
 /*================================================================*/
-KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap) 
-  : KRect(left,top,width,height), intersections(), oldIntersects()
+KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap) 
+  : KRect(left,top,width,height), runAroundGap(_gap), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
 { 
   runAround = _ra; 
   intersections.setAutoDelete(false); 
   oldIntersects.setAutoDelete(true);
   selected = false;
-  runAroundGap = _gap;
   mostRight = false;
 
   backgroundColor = QBrush(white);
@@ -171,19 +159,16 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
-
-  bleft = bright = btop = bbottom = 0;
 }
 
 /*================================================================*/
 KWFrame::KWFrame(const QRect &_rect)
-  : KRect(_rect), intersections(), oldIntersects()
+  : KRect(_rect), runAroundGap(1.0), intersections(), oldIntersects(), bleft(), bright(), btop(), bbottom()
 {
   runAround = RA_NO; 
   intersections.setAutoDelete(false); 
   oldIntersects.setAutoDelete(true);
   selected = false;
-  runAroundGap = 1;
   mostRight = false;
 
   backgroundColor = QBrush(white);
@@ -199,8 +184,6 @@ KWFrame::KWFrame(const QRect &_rect)
   brd_bottom.color = getBackgroundColor().color();
   brd_bottom.style = KWParagLayout::SOLID;
   brd_bottom.ptWidth = 1;
-
-  bleft = bright = btop = bbottom = 0;
 }
 
 /*================================================================*/
@@ -241,7 +224,7 @@ int KWFrame::getLeftIndent(int _y,int _h)
       if (rect.intersects(KRect(left(),_y,width(),_h)))
 	{
 	  if (rect.left() == left())
-	    _left = max(_left,rect.width() + MM_TO_POINT(runAroundGap));
+	    _left = max(_left,static_cast<int>(rect.width() + runAroundGap.pt()));
 	}
     }
 
@@ -263,7 +246,7 @@ int KWFrame::getRightIndent(int _y,int _h)
       if (rect.intersects(KRect(left(),_y,width(),_h)))
 	{
 	  if (rect.right() == right())
-	    _right = max(_right,rect.width() + MM_TO_POINT(runAroundGap));
+	    _right = max(_right,static_cast<int>(rect.width() + runAroundGap.pt()));
 	}
     }
 
@@ -281,7 +264,7 @@ unsigned int KWFrame::getNextFreeYPos(unsigned int _y,unsigned int _h)
       rect = *intersections.at(i);
 
       if (rect.intersects(KRect(0,_y,INT_MAX,_h)))
-	__y = __y == _y ? rect.bottom() : min(__y,rect.bottom());
+	__y = __y == _y ? rect.bottom() : min(static_cast<int>(__y),rect.bottom());
     }
 
   return __y;
@@ -494,12 +477,26 @@ void KWFrameSet::save(ostream &out)
       out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
 	  << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() 
 	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) 
-	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\""
+	  << "\" runaGapPT=\"" << frame->getRunAroundGap().pt()
+	  << "\" runaGapMM=\"" << frame->getRunAroundGap().mm() 
+	  << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" " 
 	  << frame->leftBrd2String() << frame->rightBrd2String() << frame->topBrd2String() 
 	  << frame->bottomBrd2String() << "bkRed=\"" << frame->getBackgroundColor().color().red()
 	  << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
-	  << "\" bleft=\"" << frame->getBLeft() << "\" bright=\"" << frame->getBRight() << "\" btop=\""
-	  << frame->getBTop() << "\" bbottom=\"" << frame->getBBottom() << "\"/>" << endl;
+
+	  << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm() 
+	  << "\" bleftinch=\"" << frame->getBLeft().inch()  
+
+	  << "\" brightpt=\"" << frame->getBRight().pt() << "\" brightmm=\"" << frame->getBRight().mm() 
+	  << "\" brightinch=\"" << frame->getBRight().inch() 
+
+	  << "\" btoppt=\"" << frame->getBTop().pt() << "\" btopmm=\"" << frame->getBTop().mm()
+	  << "\" btopinch=\"" << frame->getBTop().inch()
+
+	  << "\" bbottompt=\"" << frame->getBBottom().pt() << "\" bbottommm=\"" << frame->getBBottom().mm()
+	  << "\" bbottominch=\"" << frame->getBBottom().inch()
+
+	  << "\"/>" << endl;
     }
 }
 
@@ -670,8 +667,8 @@ KWParag* KWTextFrameSet::getFirstParag()
 bool KWTextFrameSet::isPTYInFrame(unsigned int _frame,unsigned int _ypos)
 {
   KWFrame *frame = getFrame(_frame);
-  return (static_cast<int>(_ypos) >= static_cast<int>(frame->top() + frame->getBTop()) && 
-	  static_cast<int>(_ypos) <= static_cast<int>(frame->bottom() - frame->getBBottom()));
+  return (static_cast<int>(_ypos) >= static_cast<int>(frame->top() + frame->getBTop().pt()) && 
+	  static_cast<int>(_ypos) <= static_cast<int>(frame->bottom() - frame->getBBottom().pt()));
 }
 
 /*================================================================*/
@@ -844,6 +841,8 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	{
 	  KWFrame rect;
 	  KWParagLayout::Border l,r,t,b;
+	  float lmm = 0,linch = 0,rmm = 0,rinch = 0,tmm = 0,tinch = 0,bmm = 0,binch = 0,ramm = 0,rainch = -1;
+	  unsigned int lpt = 0,rpt = 0,tpt = 0,bpt = 0,rapt = 0;
 	  
 	  l.color = white;
 	  l.style = KWParagLayout::SOLID;
@@ -874,7 +873,13 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      else if ((*it).m_strName == "runaround")
 		rect.setRunAround(static_cast<RunAround>(atoi((*it).m_strValue.c_str())));
 	      else if ((*it).m_strName == "runaroundGap")
-		rect.setRunAroundGap(atoi((*it).m_strValue.c_str()));
+		rect.setRunAroundGap(KWUnit(atof((*it).m_strValue.c_str())));
+	      else if ((*it).m_strName == "runaGapPT")
+		rapt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "runaGapMM")
+		ramm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "runaGapINCH")
+		rainch = atof((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "lWidth")
 		l.ptWidth = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "rWidth")
@@ -921,25 +926,42 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		c.setRgb(c.red(),atoi((*it).m_strValue.c_str()),c.blue());
 	      else if ((*it).m_strName == "bkBlue")
 		c.setRgb(c.red(),c.green(),atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "bleft")
-		rect.setBLeft(atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "bright")
-		rect.setBRight(atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "btop")
-		rect.setBTop(atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "bbottom")
-		rect.setBBottom(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bleftpt")
+		lpt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "brightpt")
+		rpt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "btoppt")
+		tpt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bbottompt")
+		bpt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bleftmm")
+		lmm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "brightmm")
+		rmm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "btopmm")
+		tmm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bbottommm")
+		bmm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bleftinch")
+		linch = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "brightinch")
+		rinch = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "btopinch")
+		tinch = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bbottominch")
+		binch = atof((*it).m_strValue.c_str());
 	    }
-	  KWFrame *_frame = new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap());
+	  KWFrame *_frame = new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),
+					rainch == -1 ? rect.getRunAroundGap() : KWUnit(rapt,ramm,rainch));
 	  _frame->setLeftBorder(l);
 	  _frame->setRightBorder(r);
 	  _frame->setTopBorder(t);
 	  _frame->setBottomBorder(b);
 	  _frame->setBackgroundColor(QBrush(c));
-	  _frame->setBLeft(rect.getBLeft());
-	  _frame->setBRight(rect.getBRight());
-	  _frame->setBTop(rect.getBTop());
-	  _frame->setBBottom(rect.getBBottom());
+	  _frame->setBLeft(KWUnit(lpt,lmm,linch));
+	  _frame->setBRight(KWUnit(rpt,rmm,rinch));
+	  _frame->setBTop(KWUnit(tpt,tmm,tinch));
+	  _frame->setBBottom(KWUnit(bpt,bmm,binch));
 	  frames.append(_frame);
 	}
 
@@ -1169,10 +1191,13 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  setFileName(_image->getFilename());
 	  delete _image;
 	}
+
       else if (name == "FRAME")
 	{
 	  KWFrame rect;
 	  KWParagLayout::Border l,r,t,b;
+	  float lmm,linch,rmm,rinch,tmm,tinch,bmm,binch,ramm,rainch = -1;
+	  unsigned int lpt,rpt,tpt,bpt,rapt;
 	  
 	  l.color = white;
 	  l.style = KWParagLayout::SOLID;
@@ -1203,7 +1228,13 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      else if ((*it).m_strName == "runaround")
 		rect.setRunAround(static_cast<RunAround>(atoi((*it).m_strValue.c_str())));
 	      else if ((*it).m_strName == "runaroundGap")
-		rect.setRunAroundGap(atoi((*it).m_strValue.c_str()));
+		rect.setRunAroundGap(KWUnit(atof((*it).m_strValue.c_str())));
+	      else if ((*it).m_strName == "runaGapPT")
+		rapt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "runaGapMM")
+		ramm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "runaGapINCH")
+		rainch = atof((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "lWidth")
 		l.ptWidth = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "rWidth")
@@ -1250,27 +1281,45 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		c.setRgb(c.red(),atoi((*it).m_strValue.c_str()),c.blue());
 	      else if ((*it).m_strName == "bkBlue")
 		c.setRgb(c.red(),c.green(),atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "bleft")
-		rect.setBLeft(atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "bright")
-		rect.setBRight(atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "btop")
-		rect.setBTop(atoi((*it).m_strValue.c_str()));
-	      else if ((*it).m_strName == "bbottom")
-		rect.setBBottom(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bleftpt")
+		lpt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "brightpt")
+		rpt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "btoppt")
+		tpt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bbottompt")
+		bpt = atoi((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bleftmm")
+		lmm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "brightmm")
+		rmm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "btopmm")
+		tmm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bbottommm")
+		bmm = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bleftinch")
+		linch = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "brightinch")
+		rinch = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "btopinch")
+		tinch = atof((*it).m_strValue.c_str());
+	      else if ((*it).m_strName == "bbottominch")
+		binch = atof((*it).m_strValue.c_str());
 	    }
-	  KWFrame *_frame = new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap());
+	  KWFrame *_frame = new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),
+					rainch == -1 ? rect.getRunAroundGap() : KWUnit(rapt,ramm,rainch));
 	  _frame->setLeftBorder(l);
 	  _frame->setRightBorder(r);
 	  _frame->setTopBorder(t);
 	  _frame->setBottomBorder(b);
 	  _frame->setBackgroundColor(QBrush(c));
-	  _frame->setBLeft(rect.getBLeft());
-	  _frame->setBRight(rect.getBRight());
-	  _frame->setBTop(rect.getBTop());
-	  _frame->setBBottom(rect.getBBottom());
+	  _frame->setBLeft(KWUnit(lpt,lmm,linch));
+	  _frame->setBRight(KWUnit(rpt,rmm,rinch));
+	  _frame->setBTop(KWUnit(tpt,tmm,tinch));
+	  _frame->setBBottom(KWUnit(bpt,bmm,binch));
 	  frames.append(_frame);
 	}
+
       else
 	cerr << "Unknown tag '" << tag << "' in FRAMESET" << endl;    
       
@@ -1389,15 +1438,17 @@ void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsig
     {
       for (unsigned int j = 0;j < cols;j++)
 	{
+	  KWUnit u;
+	  u.setMM(1);
 	  frame = getFrameSet(i,j)->getFrame(0);
-	  frame->setBLeft(2);
-	  frame->setBRight(2);
-	  frame->setBTop(2);
-	  frame->setBBottom(2);
+	  frame->setBLeft(u);
+	  frame->setBRight(u);
+	  frame->setBTop(u);
+	  frame->setBBottom(u);
  	  _wid = wid;
- 	  _wid += frame->getBLeft() + frame->getBRight();
+ 	  _wid += frame->getBLeft().pt() + frame->getBRight().pt();
  	  _hei = hei;
- 	  _hei += frame->getBTop() + frame->getBBottom();
+ 	  _hei += frame->getBTop().pt() + frame->getBBottom().pt();
 	  frame->setRect(x + j * _wid + 2 * j,y + i * _hei + 2 * i,_wid,_hei);
 	}
     }
@@ -1435,8 +1486,8 @@ void KWGroupManager::recalcCols()
 	  for (j = 0;j < rows;j++)
 	    {
 	      KWFrame *frame = getFrameSet(j,i)->getFrame(0);
-	      if (wid < static_cast<int>(doc->getRastX() + frame->getBLeft() + frame->getBRight()))
-		frame->setWidth(doc->getRastX() + frame->getBLeft() + frame->getBRight());
+	      if (wid < static_cast<int>(doc->getRastX() + frame->getBLeft().pt() + frame->getBRight().pt()))
+		frame->setWidth(doc->getRastX() + frame->getBLeft().pt() + frame->getBRight().pt());
 	      else
 		frame->setWidth(wid);
 	    }
@@ -1659,12 +1710,14 @@ void KWGroupManager::insertRow(unsigned int _idx,QPainter &_painter)
 
   for (i = 0;i < nCells.count();i++)
     {
+      KWUnit u;
+      u.setMM(1);
       doc->addFrameSet(nCells.at(i));
       KWFrame *frame = nCells.at(i)->getFrame(0);
-      frame->setBLeft(2);
-      frame->setBRight(2);
-      frame->setBTop(2);
-      frame->setBBottom(2);
+      frame->setBLeft(u);
+      frame->setBRight(u);
+      frame->setBTop(u);
+      frame->setBBottom(u);
     }
 
   recalcRows(_painter);
@@ -1706,12 +1759,14 @@ void KWGroupManager::insertCol(unsigned int _idx)
 
   for (i = 0;i < nCells.count();i++)
     {
+      KWUnit u;
+      u.setMM(1);
       doc->addFrameSet(nCells.at(i));
       KWFrame *frame = nCells.at(i)->getFrame(0);
-      frame->setBLeft(2);
-      frame->setBRight(2);
-      frame->setBTop(2);
-      frame->setBBottom(2);
+      frame->setBLeft(u);
+      frame->setBRight(u);
+      frame->setBTop(u);
+      frame->setBBottom(u);
     }
 
   recalcCols();

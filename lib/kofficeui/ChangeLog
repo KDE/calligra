@@ -1,3 +1,10 @@
+Sun Jan  30 1999 Reginald Stadlbauer <reggie@kde.org>
+
+	* KoRuler: Ruler can now handle mm, pt and inch as units and it can change
+	  the units in runtime. A right click openes a menu, where the user can choose
+	  a unit.
+	* KoPageLayoutDia: Works now correctly with mm, pt and inch.
+
 Mon May  4 14:29:33 1998  Torben Weis  <weis@localhost>
 
 	* koPageLayoutDia.cc (KoPageLayoutDia): i18n stuff

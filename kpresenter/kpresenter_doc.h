@@ -348,6 +348,8 @@ public:
 
   void enableEmbeddedParts(bool f);
 
+  void setUnit(KoUnit _unit,QString __unit);
+
 signals:
 
   // document modified

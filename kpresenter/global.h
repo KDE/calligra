@@ -19,11 +19,15 @@
 #include <ksize.h>
 
 // factors
-#define MM_TO_POINT 2.83465
-#define POINT_TO_MM 0.3527772388    
+// #define MM_TO_POINT 2.83465
+// #define POINT_TO_MM 0.3527772388    
 
-#define cPOINT_TO_MM(px) (int((float)px/2.83465))
-#define cMM_TO_POINT(mm) (int((float)mm*2.83465)) 
+#define POINT_TO_MM(px) ((float)px/2.83465)
+#define MM_TO_POINT(mm) (int((float)mm*2.83465))
+#define POINT_TO_INCH(px) ((float)px/72.0)
+#define INCH_TO_POINT(inch) (int((float)inch*72.0))
+#define MM_TO_INCH(mm) (mm/25.4)
+#define INCH_TO_MM(inch) (inch*25.4)
 
 #define MAX_UNDO_REDO 100
 #define NUM_OBJ_TYPES 9

@@ -38,6 +38,7 @@
 #include <kfontdialog.h>
 
 #include "paragdia.h"
+#include "defs.h"
 
 class KWordDocument;
 class KWStyleEditor;

@@ -53,7 +53,7 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
     {
       // Offset from the top of the page
       if (document->getFrameSet(frameSet - 1)->getNumFrames() > 0)
-	ptY = document->getFrameSet(frameSet - 1)->getFrame(0)->top() + document->getFrameSet(frameSet - 1)->getFrame(0)->getBTop();
+	ptY = document->getFrameSet(frameSet - 1)->getFrame(0)->top() + document->getFrameSet(frameSet - 1)->getFrame(0)->getBTop().pt();
       else
 	ptY = 0;
       if (_frame != -1 && _page != -1 && doc->getFrameSet(frameSet - 1)->getFrameInfo() != FI_BODY)
@@ -61,7 +61,7 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
 	  frame = _frame;
 	  page = _page;
 	  ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top() + 
-	    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBTop();
+	    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBTop().pt();
 	}
       else
 	{
@@ -543,9 +543,9 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 		unsigned int tabPos = 0;
 		KoTabulators tabType;
 		if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left() +
-							document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft(),
+							document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt(),
 							document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->right() -
-							document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight(),tabPos,tabType))
+							document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt(),tabPos,tabType))
 		  {
 		    // next tab is in this line
 		    if (tabPos > ptPos)
@@ -694,9 +694,9 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 	    unsigned int tabPos = 0;
 	    KoTabulators tabType;
 	    if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left() +
-						    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft(),
+						    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt(),
 						    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->right() -
-						    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight(),tabPos,tabType))
+						    document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt(),tabPos,tabType))
 	      {
 		// next tab is in this line
 		if (tabPos > ptPos)
@@ -857,21 +857,21 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
       // Change fonts & stuff to match the paragraphs layout
       apply( parag->getParagLayout()->getFormat() );
       
-      indent = parag->getParagLayout()->getPTFirstLineLeftIndent();
+      indent = parag->getParagLayout()->getFirstLineLeftIndent().pt();
     }
     else
-      indent = parag->getParagLayout()->getPTLeftIndent();
+      indent = parag->getParagLayout()->getLeftIndent().pt();
     
     indent += _left;
 
     // Calculate the shift for the first visible character. This may be the counter, too
     unsigned int xShift = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left() +
-      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft() + indent;
+      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() + indent;
 
     ptLeft = xShift;
     ptWidth = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
-      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft() - 
-      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight() - indent - _right;
+      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() - 
+      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt() - indent - _right;
 
     // First line ? Draw the couter ?
     if (lineStartPos == 0 && parag->getParagLayout()->getCounterType() != KWParagLayout::CT_NONE)
@@ -917,8 +917,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 
     // Loop until we reach the end of line
     while (!_break && (ptPos < xShift + (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
-					 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft() -
-					 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight()) - indent - _right || !_broken) && 
+					 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() -
+					 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - indent - _right || !_broken) && 
 	   textPos < parag->getTextLen())
       {
 	char c = text[textPos].c;
@@ -938,16 +938,16 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	  {
 	    if (ptPos + displayFont->getPTWidth(c) >= 
 		xShift + (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
-			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft() -
-			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight()) - indent - _right && _broken)
+			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() -
+			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - indent - _right && _broken)
 	      break;
 	  }
 	else if (c == 0 && text[textPos].attrib->getClassId() == ID_KWCharImage)
 	  {
 	    if (((KWCharImage*)text[textPos].attrib)->getImage()->width() + ptPos >= 
 		xShift + (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
-			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft() -
-			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight()) - indent - _right && _broken)
+			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() -
+			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - indent - _right && _broken)
 	      break;
 	  }
 	
@@ -982,9 +982,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		  unsigned int tabPos = 0;
 		  KoTabulators tabType;
 		  if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left() +
-							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft(),
+							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt(),
 							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->right() -
-							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight(),tabPos,tabType))
+							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt(),tabPos,tabType))
 		    {
 		      // next tab is in this line
 		      if (tabPos > ptPos)
@@ -1054,24 +1054,24 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     if (parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
       {
 	ptPos = xShift + ((document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
-			   document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft() -
-			   document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight()) - 
+			   document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() -
+			   document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - 
 			   indent - left - right - ptTextLen - _right) / 2;
 	ptStartPos = ptPos;
       }
     else if (parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT)
       {      
 	ptPos = xShift + (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
-			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft() - 
-			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight()) - right - ptTextLen - indent - _right;
+			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() - 
+			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - right - ptTextLen - indent - _right;
 	ptStartPos = ptPos;
       }
     
     // Calculate the space between words if we have "block" formating.
     if (parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK && spaces > 0)
       ptSpacing = static_cast<float>((document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
-				      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft() -
-				      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight()) - ptTextLen - 
+				      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() -
+				      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - ptTextLen - 
 				     indent - _right) / static_cast<float>(spaces);
     else
       ptSpacing = 0;
@@ -1089,7 +1089,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	if (isAHeader(document->getFrameSet(frameSet - 1)->getFrameInfo()) || isAFooter(document->getFrameSet(frameSet - 1)->getFrameInfo()))
 	  {
 	    int diff = (ptY + getLineHeight()) - (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->bottom() -
-						  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBBottom());
+						  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBBottom().pt());
 		
 	    if (document->canResize(document->getFrameSet(frameSet - 1),document->getFrameSet(frameSet - 1)->getFrame(frame - 1),
 				    document->getFrameSet(frameSet - 1)->getPageOfFrame(frame - 1),diff + 1))
@@ -1124,13 +1124,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	  {
 	    frame++;
 	    if (static_cast<int>(document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top() +
-		 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBTop()) >
+		 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBTop().pt()) >
 		static_cast<int>(page) * static_cast<int>(document->getPTPaperHeight()))
 	      page++;
 	    parag->setEndPage(page);
 	    parag->setEndFrame(frame);
 	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top() +
-	      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBTop();
+	      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBTop().pt();
 	    return makeLineLayout(_painter);
 	  }
 	else // append a page or resize frame
@@ -1138,7 +1138,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    if (!dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getAutoCreateNewFrame())
 	      {
 		int diff = (ptY + getLineHeight()) - (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->bottom() -
-						      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBBottom());
+						      document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBBottom().pt());
 		
 		if (document->canResize(document->getFrameSet(frameSet - 1),document->getFrameSet(frameSet - 1)->getFrame(frame - 1),
 					document->getFrameSet(frameSet - 1)->getPageOfFrame(frame - 1),diff + 1))
@@ -1176,7 +1176,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		parag->setEndPage(page);
 		parag->setEndFrame(frame);
 		ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top() +
-		  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBTop();
+		  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBTop().pt();
 		return makeLineLayout(_painter);
 	  
 	      }
@@ -1198,7 +1198,7 @@ unsigned int KWFormatContext::getLineHeight()
   unsigned int hei = ptMaxAscender + ptMaxDescender;
   unsigned int plus = 0;
 
-  return max(hei,specialHeight) + getParag()->getParagLayout()->getPTLineSpacing() + plus; 
+  return max(hei,specialHeight) + getParag()->getParagLayout()->getLineSpacing().pt() + plus; 
 }
 
 void KWFormatContext::makeCounterLayout(QPainter &_painter)
@@ -1242,10 +1242,10 @@ void KWFormatContext::apply( KWFormat &_format )
   
   if (!offsetsAdded)
     {
-      if (isCursorInLastLine()  && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
-	ptMaxDescender += getParag()->getParagLayout()->getPTParagFootOffset(); 
-      if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
-	ptMaxAscender += getParag()->getParagLayout()->getPTParagHeadOffset(); 
+      if (isCursorInLastLine()  && getParag() && getParag()->getParagLayout()->getParagFootOffset().pt() != 0)
+	ptMaxDescender += getParag()->getParagLayout()->getParagFootOffset().pt(); 
+      if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getParagHeadOffset().pt() != 0)
+	ptMaxAscender += getParag()->getParagLayout()->getParagHeadOffset().pt(); 
       offsetsAdded = true;
     }
 }
