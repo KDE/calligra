@@ -40,15 +40,15 @@ GGroup::GGroup(const GGroup &rhs) : GObject(rhs), m_iterator(0L) {
     m_iterator=new QListIterator<GObject>(m_members);
 
     for(const GObject *object=rhs.firstChild(); object!=0L; object=rhs.nextChild()) {
-	const GObject *cloned=object->clone();
-	if(cloned!=0L) {
-	    if(cloned->state()!=GObject::Deleted) {
-		cloned->setParent(this);
-		m_members.append(cloned);
-	    }
-	    else
-		delete cloned;
-	}
+        const GObject *cloned=object->clone();
+        if(cloned!=0L) {
+            if(cloned->state()!=GObject::Deleted) {
+                cloned->setParent(this);
+                m_members.append(cloned);
+            }
+            else
+                delete cloned;
+        }
     }
 }
 
@@ -57,7 +57,7 @@ GGroup::GGroup(const QDomElement &element) :
     m_iterator(0L) {
 
     if(!m_ok)
-	return;
+        return;
 
     static const QString &tagChildren=KGlobal::staticQString("children");
 
@@ -65,21 +65,21 @@ GGroup::GGroup(const QDomElement &element) :
 
     QDomElement children=element.namedItem(tagChildren).toElement();
     if(children.isNull()) {
-	m_ok=false;
-	return;
+        m_ok=false;
+        return;
     }
 
     QDomElement e=children.firstChild().toElement();
     for( ; !e.isNull(); e=e.nextSibling().toElement()) {
-	const GObject *object=GObjectFactory::self()->create(e);
-	if(object!=0L) {
-	    if(object->isOk()) {
-		object->setParent(this);
-		m_members.append(object);
-	    }
-	    else
-		delete object;
-	}
+        const GObject *object=GObjectFactory::self()->create(e);
+        if(object!=0L) {
+            if(object->isOk()) {
+                object->setParent(this);
+                m_members.append(object);
+            }
+            else
+                delete object;
+        }
     }
 }
 
@@ -95,16 +95,16 @@ const bool GGroup::isOk() const {
     for( ; it!=0L && it.current()->isOk(); ++it);
 
     if(it==0L)
-	return true;
+        return true;
     else
-	return false;
+        return false;
 }
 
 void GGroup::setOk(const bool &ok) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->setOk(ok);
+        it.current()->setOk(ok);
 }
 
 GObject *GGroup::clone() const {
@@ -118,20 +118,20 @@ GObject *GGroup::instantiate(const QDomElement &element) const {
 const bool GGroup::plugChild(GObject *child, const Position &pos) {
 
     if(child==0L)
-	return false;
+        return false;
 
     child->setParent(this);
 
     if(pos==GObject::First)
-	m_members.prepend(child);
+        m_members.prepend(child);
     else if(pos==GObject::Last)
-	m_members.append(child);
+        m_members.append(child);
     else {
-	int index=m_members.findRef(m_iterator->current());
-	if(index!=-1)	
-	    m_members.insert(index, child);
-	else
-	    m_members.append(child);
+        int index=m_members.findRef(m_iterator->current());
+        if(index!=-1)
+            m_members.insert(index, child);
+        else
+            m_members.append(child);
     }
     m_boundingRectDirty=true;
     return true;
@@ -140,7 +140,7 @@ const bool GGroup::plugChild(GObject *child, const Position &pos) {
 const bool GGroup::unplugChild(GObject *child) {
 
     if(child==0L)
-	return false;
+        return false;
     child->setParent(0L);
     m_boundingRectDirty=true;
     return m_members.removeRef(child);
@@ -178,8 +178,8 @@ QDomElement GGroup::save(QDomDocument &doc) const {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it) {
-	if(it.current()->state()!=GObject::Deleted)
-	    children.appendChild(it.current()->save(doc));
+        if(it.current()->state()!=GObject::Deleted)
+            children.appendChild(it.current()->save(doc));
     }
     element.appendChild(children);
     element.appendChild(GObject::save(doc));
@@ -190,14 +190,14 @@ void GGroup::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->draw(p, reg, toPrinter);
+        it.current()->draw(p, reg, toPrinter);
 }
 
 void GGroup::recalculate() {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->recalculate();
+        it.current()->recalculate();
     m_boundingRectDirty=true;
 }
 
@@ -206,52 +206,52 @@ const GObject *GGroup::hit(const QPoint &p) const {
     QListIterator<GObject> it(m_members);
     it.toLast();
     for( ; it!=0L; --it) {
-	if(it.current()->hit(p))
-	    return it.current();
+        if(it.current()->hit(p))
+            return it.current();
     }
     if(boundingRect().contains(p))
-	return this;
+        return this;
     return 0L;
 }
 
 const bool GGroup::intersects(const QRect &r) const {
 
     if(r.intersects(boundingRect()))
-	return true;
+        return true;
     return false;
 }
 
 const QRect &GGroup::boundingRect() const {
 
     if(!m_boundingRectDirty)
-	return m_boundingRect;
+        return m_boundingRect;
 
     if(m_members.isEmpty()) {
-	m_boundingRect=QRect(0, 0, 0, 0);
-	m_boundingRectDirty=true;
-	return m_boundingRect;
+        m_boundingRect=QRect(0, 0, 0, 0);
+        m_boundingRectDirty=true;
+        return m_boundingRect;
     }
 
     QListIterator<GObject> it(m_members);
     m_boundingRect=it.current()->boundingRect();
     ++it;
     for( ; it!=0L; ++it) {
-	QRect r=it.current()->boundingRect();
-	if(r.top()<m_boundingRect.top())
-	    m_boundingRect.setTop(r.top());
-	if(r.left()<m_boundingRect.left())
-	    m_boundingRect.setLeft(r.left());
-	if(r.bottom()>m_boundingRect.bottom())
-	    m_boundingRect.setBottom(r.bottom());
-	if(r.right()>m_boundingRect.right())
-	    m_boundingRect.setRight(r.right());
+        QRect r=it.current()->boundingRect();
+        if(r.top()<m_boundingRect.top())
+            m_boundingRect.setTop(r.top());
+        if(r.left()<m_boundingRect.left())
+            m_boundingRect.setLeft(r.left());
+        if(r.bottom()>m_boundingRect.bottom())
+            m_boundingRect.setBottom(r.bottom());
+        if(r.right()>m_boundingRect.right())
+            m_boundingRect.setRight(r.right());
     }
     m_boundingRectDirty=false;
     return m_boundingRect;
 }
 
 GObjectM9r *GGroup::createM9r(GraphitePart *part, GraphiteView *view,
-			      const GObjectM9r::Mode &mode) {
+                              const GObjectM9r::Mode &mode) {
     return new GGroupM9r(this, mode, part, view, i18n("Group"));
 }
 
@@ -265,7 +265,7 @@ void GGroup::setOrigin(const QPoint &o) {
     int dy=o.y()-origin().y();
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->move(dx, dy);
+        it.current()->move(dx, dy);
     m_boundingRectDirty=true;
 }
 
@@ -273,7 +273,7 @@ void GGroup::moveX(const int &dx) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->moveX(dx);
+        it.current()->moveX(dx);
     m_boundingRectDirty=true;
 }
 
@@ -281,7 +281,7 @@ void GGroup::moveY(const int &dy) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->moveY(dy);
+        it.current()->moveY(dy);
     m_boundingRectDirty=true;
 }
 
@@ -289,7 +289,7 @@ void GGroup::move(const int &dx, const int &dy) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->move(dx, dy);
+        it.current()->move(dx, dy);
     m_boundingRectDirty=true;
 }
 
@@ -297,7 +297,7 @@ void GGroup::rotate(const QPoint &center, const double &angle) {
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->rotate(center, angle);
+        it.current()->rotate(center, angle);
     m_angle+=angle;
     m_angle=Graphite::normalizeRad(m_angle);
     m_boundingRectDirty=true;
@@ -307,7 +307,7 @@ void GGroup::scale(const QPoint &origin, const double &xfactor, const double &yf
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->scale(origin, xfactor, yfactor);
+        it.current()->scale(origin, xfactor, yfactor);
     m_boundingRectDirty=true;
 }
 
@@ -324,66 +324,66 @@ void GGroup::resize(const QRect &brect) {
 void GGroup::setState(const State state) {
 
     if(m_state==state)
-	return;
+        return;
     m_state=state;
     if(state==GObject::Handles || state==GObject::Rot_Handles)
-	return;
+        return;
 
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->setState(state);
+        it.current()->setState(state);
 }
 
 void GGroup::setFillStyle(const FillStyle &fillStyle) {
 
     if(m_fillStyle==fillStyle)
-	return;
+        return;
     m_fillStyle=fillStyle;
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->setFillStyle(fillStyle);
+        it.current()->setFillStyle(fillStyle);
 }
 
 void GGroup::setBrush(const QBrush &brush) {
 
     if(m_brush==brush)
-	return;
+        return;
     m_brush=brush;
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->setBrush(brush);
+        it.current()->setBrush(brush);
 }
 
 void GGroup::setGradient(const Gradient &gradient) {
 
     if(m_gradient==gradient)
-	return;
+        return;
     m_gradient=gradient;
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->setGradient(gradient);
+        it.current()->setGradient(gradient);
 }
 
 void GGroup::setPen(const QPen &pen) {
 
     if(m_pen==pen)
-	return;
+        return;
     m_pen=pen;
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->setPen(pen);
+        it.current()->setPen(pen);
 }
 
 
 GGroupM9r::GGroupM9r(GGroup *group, const Mode &mode, GraphitePart *part,
-		     GraphiteView *view, const QString &type) :
+                     GraphiteView *view, const QString &type) :
     G2DObjectM9r(group, mode, part, view, type), m_group(group) {
     m_group->setState(GObject::Handles);
 }
 
 GGroupM9r::~GGroupM9r() {
     if(m_group->state()==GObject::Handles || m_group->state()==GObject::Rot_Handles)
-	m_group->setState(GObject::Visible);
+        m_group->setState(GObject::Visible);
 }
 
 void GGroupM9r::draw(QPainter &p) {
@@ -402,34 +402,34 @@ const bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     kdDebug(37001) << "Name: " << m_object->name() << endl;
     kdDebug(37001) << "Pen: color: " << m_object->pen().color().name() << " width: "
-		   << m_object->pen().width() << " style: "
-		   << (int)m_object->pen().style() << endl;
+                   << m_object->pen().width() << " style: "
+                   << (int)m_object->pen().style() << endl;
     kdDebug(37001) << "Fill Style: " << m_object->fillStyle() << endl;
     kdDebug(37001) << "Brush: color: " << m_object->brush().color().name()
-		   << " style: " << (int)m_object->brush().style() << endl;
+                   << " style: " << (int)m_object->brush().style() << endl;
     kdDebug(37001) << "Gradient: color a: " << m_object->gradient().ca.name()
-		   << " color b: " << m_object->gradient().cb.name()
-		   << " type: " << (int)m_object->gradient().type
-		   << " xfactor: " << m_object->gradient().xfactor
-		   << " yfactor: " << m_object->gradient().yfactor
-		   << endl;
+                   << " color b: " << m_object->gradient().cb.name()
+                   << " type: " << (int)m_object->gradient().type
+                   << " xfactor: " << m_object->gradient().xfactor
+                   << " yfactor: " << m_object->gradient().yfactor
+                   << endl;
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     createPropertyDialog();
     exec();
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     kdDebug(37001) << "Name: " << m_object->name() << endl;
     kdDebug(37001) << "Pen: color: " << m_object->pen().color().name() << " width: "
-		   << m_object->pen().width() << " style: "
-		   << (int)m_object->pen().style() << endl;
+                   << m_object->pen().width() << " style: "
+                   << (int)m_object->pen().style() << endl;
     kdDebug(37001) << "Fill Style: " << m_object->fillStyle() << endl;
     kdDebug(37001) << "Brush: color: " << m_object->brush().color().name()
-		   << " style: " << (int)m_object->brush().style() << endl;
+                   << " style: " << (int)m_object->brush().style() << endl;
     kdDebug(37001) << "Gradient: color a: " << m_object->gradient().ca.name()
-		   << " color b: " << m_object->gradient().cb.name()
-		   << " type: " << (int)m_object->gradient().type
-		   << " xfactor: " << m_object->gradient().xfactor
-		   << " yfactor: " << m_object->gradient().yfactor
-		   << endl;
+                   << " color b: " << m_object->gradient().cb.name()
+                   << " type: " << (int)m_object->gradient().type
+                   << " xfactor: " << m_object->gradient().xfactor
+                   << " yfactor: " << m_object->gradient().yfactor
+                   << endl;
     kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     return false;
 }

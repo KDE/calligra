@@ -119,7 +119,7 @@ protected slots:
 
 protected:
     GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
-	       GraphiteView *view, const QString &type);
+               GraphiteView *view, const QString &type);
 
     // This menthod returns a property dialog for the object. It
     // creates a dialog (i.e. adds a few pages to *this). The
@@ -162,8 +162,8 @@ protected slots:
 
 protected:
     G1DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
-		 GraphiteView *view, const QString &type) :
-	GObjectM9r(object, mode, part, view, type) {}
+                 GraphiteView *view, const QString &type) :
+        GObjectM9r(object, mode, part, view, type) {}
     virtual void createPropertyDialog();
 
 private:
@@ -189,8 +189,8 @@ protected slots:
 
 protected:
     G2DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
-		 GraphiteView *view, const QString &type) :
-	G1DObjectM9r(object, mode, part, view, type) {}
+                 GraphiteView *view, const QString &type) :
+        G1DObjectM9r(object, mode, part, view, type) {}
     virtual void createPropertyDialog();
 
 private slots:
@@ -274,7 +274,7 @@ public:
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
-				  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
+                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
 
     QString name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
@@ -319,13 +319,13 @@ protected:
     // scalePoint scales a given point. The "point" (x, y, or QPoint) passed as
     // function argument is changed!
     void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
-		    const QPoint &center) const;
+                    const QPoint &center) const;
     void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
-		    const double &yfactor, const QPoint &center) const;
+                    const double &yfactor, const QPoint &center) const;
     void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
-		    const QPoint &center) const;
+                    const QPoint &center) const;
     void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
-		    const QPoint &center) const;
+                    const QPoint &center) const;
 
     QString m_name;                    // name of the object
     State m_state;                     // are there handles to draw or not?
@@ -353,11 +353,11 @@ namespace Graphite {
 inline const int double2Int(const double &value) {
 
     if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
-	return static_cast<int>(value)+1;
+        return static_cast<int>(value)+1;
     else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
-	return static_cast<int>(value)-1;
+        return static_cast<int>(value)-1;
     else
-	return static_cast<int>(value);
+        return static_cast<int>(value);
 }
 
 inline const double rad2deg(const double &rad) {
@@ -372,9 +372,9 @@ inline const double normalizeRad(const double &rad) {
 
     double nRad=rad;
     while(nRad>2*M_PI)
-	nRad-=2*M_PI;
+        nRad-=2*M_PI;
     while(nRad<0)
-	nRad+=2*M_PI;
+        nRad+=2*M_PI;
     return nRad;
 }
 
@@ -382,9 +382,9 @@ inline const double normalizeDeg(const double &deg) {
 
     double nDeg=deg;
     while(nDeg>360)
-	nDeg-=360;
+        nDeg-=360;
     while(nDeg<0)
-	nDeg+=360;
+        nDeg+=360;
     return nDeg;
 }
 
@@ -401,13 +401,13 @@ inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoi
     double gamma;
 
     if(dx>=0 && dy>=0)
-	gamma=-gamma1;
+        gamma=-gamma1;
     else if(dx<0 && dy>=0)
-	gamma=gamma1+M_PI;
+        gamma=gamma1+M_PI;
     else if(dx<0 && dy<0)
-	gamma=M_PI-gamma1;
+        gamma=M_PI-gamma1;
     else // dx>=0 && dy<0
-	gamma=gamma1;
+        gamma=gamma1;
 
     double beta=gamma+angle+M_PI_2-QABS(alpha);
     y+=Graphite::double2Int(s*std::sin(beta));
@@ -436,13 +436,13 @@ inline void GObject::rotatePoint(double &x, double &y, const double &angle, cons
     double gamma;
 
     if(dx>=0 && dy>=0)
-	gamma=-gamma1;
+        gamma=-gamma1;
     else if(dx<0 && dy>=0)
-	gamma=gamma1+M_PI;
+        gamma=gamma1+M_PI;
     else if(dx<0 && dy<0)
-	gamma=M_PI-gamma1;
+        gamma=M_PI-gamma1;
     else // dx>=0 && dy<0
-	gamma=gamma1;
+        gamma=gamma1;
 
     double beta=gamma+angle+M_PI_2-QABS(alpha);
     y+=s*std::sin(beta);
@@ -454,15 +454,15 @@ inline void GObject::rotatePoint(QPoint &p, const double &angle, const QPoint &c
 }
 
 inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
-			 const QPoint &center) const {
+                         const QPoint &center) const {
     if(xfactor<=0 || yfactor<=0)
-	return;
+        return;
     x=Graphite::double2Int( static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor );
     y=Graphite::double2Int( static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor );
 }
 
 inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
-			 const double &yfactor, const QPoint &center) const {
+                         const double &yfactor, const QPoint &center) const {
     // This awkward stuff with the tmp variables is a workaround for
     // "old" compilers (egcs-1.1.2 :)
     int _x=static_cast<int>(x);
@@ -473,15 +473,15 @@ inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &
 }
 
 inline void GObject::scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
-			 const QPoint &center) const {
+                         const QPoint &center) const {
     if(xfactor<=0 || yfactor<=0)
-	return;
+        return;
     x=static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor;
     y=static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor;
 }
 
 inline void GObject::scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
-			 const QPoint &center) const {
+                         const QPoint &center) const {
     scalePoint(p.rx(), p.ry(), xfactor, yfactor, center);
 }
 

@@ -25,154 +25,154 @@ GMoveCmd::GMoveCmd(GObject *object, const QString &name) : GCommand(name),
 }
 
 GMoveCmd::GMoveCmd(GObject *object, const QString &name, const QPoint &from,
-		   const QPoint &to) : GCommand(name), m_object(object),
-				       m_from(from), m_to(to) {
+                   const QPoint &to) : GCommand(name), m_object(object),
+                                       m_from(from), m_to(to) {
 }
 
 void GMoveCmd::execute() {
 
     if(m_object)
-	m_object->setOrigin(m_to);
+        m_object->setOrigin(m_to);
 }
 
 void GMoveCmd::unexecute() {
 
     if(m_object)
-	m_object->setOrigin(m_from);
+        m_object->setOrigin(m_from);
 }
 
 
 GResizeCmd::GResizeCmd(GObject *object, const QString &name) : GCommand(name),
-							       m_object(object) {
+                                                               m_object(object) {
 }
 
 GResizeCmd::GResizeCmd(GObject *object, const QString &name, const QRect &oldSize,
-		       const QRect &newSize) : GCommand(name), m_object(object),
-					       m_old(oldSize), m_new(newSize) {
+                       const QRect &newSize) : GCommand(name), m_object(object),
+                                               m_old(oldSize), m_new(newSize) {
 }
 
 void GResizeCmd::execute() {
 
     if(m_object)
-	m_object->resize(m_new);
+        m_object->resize(m_new);
 }
 
 void GResizeCmd::unexecute() {
 
     if(m_object)
-	m_object->resize(m_old);
+        m_object->resize(m_old);
 }
 
 
 GRotateCmd::GRotateCmd(GObject *object, const QString &name) : GCommand(name),
-							       m_object(object) {
+                                                               m_object(object) {
 }
 
 GRotateCmd::GRotateCmd(GObject *object, const QString &name, const QPoint &center,
-		       const double &angle) : GCommand(name), m_object(object),
-					      m_center(center), m_angle(angle) {
+                       const double &angle) : GCommand(name), m_object(object),
+                                              m_center(center), m_angle(angle) {
 }
 
 void GRotateCmd::execute() {
 
     if(m_object)
-	m_object->rotate(m_center, m_angle);
+        m_object->rotate(m_center, m_angle);
 }
 
 void GRotateCmd::unexecute() {
 
     if(m_object)
-	m_object->rotate(m_center, -m_angle);
+        m_object->rotate(m_center, -m_angle);
 }
 
 
 GScaleCmd::GScaleCmd(GObject *object, const QString &name) : GCommand(name),
-							     m_object(object) {
+                                                             m_object(object) {
 }
 
 GScaleCmd::GScaleCmd(GObject *object, const QString &name,
-		     const QPoint &origin, const double &xfactor,
-		     const double &yfactor) : GCommand(name), m_object(object),
-					      m_origin(origin), m_xfactor(xfactor),
-					      m_yfactor(yfactor) {
+                     const QPoint &origin, const double &xfactor,
+                     const double &yfactor) : GCommand(name), m_object(object),
+                                              m_origin(origin), m_xfactor(xfactor),
+                                              m_yfactor(yfactor) {
 }
 
 void GScaleCmd::execute() {
 
     if(m_object)
-	m_object->scale(m_origin, m_xfactor, m_yfactor);
+        m_object->scale(m_origin, m_xfactor, m_yfactor);
 }
 
 void GScaleCmd::unexecute() {
 
     if(m_object)
-	m_object->scale(m_origin, 1/m_xfactor, 1/m_yfactor);
+        m_object->scale(m_origin, 1/m_xfactor, 1/m_yfactor);
 }
 
 
 GSetBrushCmd::GSetBrushCmd(GObject *object, const QString &name) : GCommand(name),
-								   m_object(object) {
+                                                                   m_object(object) {
 }
 
 GSetBrushCmd::GSetBrushCmd(GObject *object, const QString &name, const QBrush &oldBrush,
-			   const QBrush &newBrush) : GCommand(name), m_object(object),
-						     m_old(oldBrush), m_new(newBrush) {
+                           const QBrush &newBrush) : GCommand(name), m_object(object),
+                                                     m_old(oldBrush), m_new(newBrush) {
 }
 
 void GSetBrushCmd::execute() {
 
     if(m_object)
-	m_object->setBrush(m_new);
+        m_object->setBrush(m_new);
 }
 
 void GSetBrushCmd::unexecute() {
 
     if(m_object)
-	m_object->setBrush(m_old);
+        m_object->setBrush(m_old);
 }
 
 
 GSetPenCmd::GSetPenCmd(GObject *object, const QString &name) : GCommand(name),
-							       m_object(object) {
+                                                               m_object(object) {
 }
 
 GSetPenCmd::GSetPenCmd(GObject *object, const QString &name, const QPen &oldPen,
-		       const QPen &newPen) : GCommand(name), m_object(object),
-						 m_old(oldPen), m_new(newPen) {
+                       const QPen &newPen) : GCommand(name), m_object(object),
+                                                 m_old(oldPen), m_new(newPen) {
 }
 
 void GSetPenCmd::execute() {
 
     if(m_object)
-	m_object->setPen(m_new);
+        m_object->setPen(m_new);
 }
 
 void GSetPenCmd::unexecute() {
 
     if(m_object)
-	m_object->setPen(m_old);
+        m_object->setPen(m_old);
 }
 
 
 GSetNameCmd::GSetNameCmd(GObject *object, const QString &name) : GCommand(name),
-								 m_object(object) {
+                                                                 m_object(object) {
 }
 
 GSetNameCmd::GSetNameCmd(GObject *object, const QString &name, const QString &oldName,
-			 const QString &newName) : GCommand(name), m_object(object),
-						   m_old(oldName), m_new(newName) {
+                         const QString &newName) : GCommand(name), m_object(object),
+                                                   m_old(oldName), m_new(newName) {
 }
 
 void GSetNameCmd::execute() {
 
     if(m_object)
-	m_object->setName(m_new);
+        m_object->setName(m_new);
 }
 
 void GSetNameCmd::unexecute() {
 
     if(m_object)
-	m_object->setName(m_old);
+        m_object->setName(m_old);
 }
 
 
@@ -181,21 +181,21 @@ GSetFillStyleCmd::GSetFillStyleCmd(GObject *object, const QString &name)
 }
 
 GSetFillStyleCmd::GSetFillStyleCmd(GObject *object, const QString &name,
-				   const GObject::FillStyle &oldFillStyle,
-				   const GObject::FillStyle &newFillStyle)
+                                   const GObject::FillStyle &oldFillStyle,
+                                   const GObject::FillStyle &newFillStyle)
     : GCommand(name), m_object(object), m_old(oldFillStyle), m_new(newFillStyle) {
 }
 
 void GSetFillStyleCmd::execute() {
 
     if(m_object)
-	m_object->setFillStyle(m_new);
+        m_object->setFillStyle(m_new);
 }
 
 void GSetFillStyleCmd::unexecute() {
 
     if(m_object)
-	m_object->setFillStyle(m_old);
+        m_object->setFillStyle(m_old);
 }
 
 
@@ -204,19 +204,19 @@ GSetGradientCmd::GSetGradientCmd(GObject *object, const QString &name)
 }
 
 GSetGradientCmd::GSetGradientCmd(GObject *object, const QString &name,
-				 const Gradient &oldGradient,
-				 const Gradient &newGradient)
+                                 const Gradient &oldGradient,
+                                 const Gradient &newGradient)
     : GCommand(name), m_object(object), m_old(oldGradient), m_new(newGradient) {
 }
 
 void GSetGradientCmd::execute() {
 
     if(m_object)
-	m_object->setGradient(m_new);
+        m_object->setGradient(m_new);
 }
 
 void GSetGradientCmd::unexecute() {
 
     if(m_object)
-	m_object->setGradient(m_old);
+        m_object->setGradient(m_old);
 }

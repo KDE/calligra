@@ -53,8 +53,8 @@ GraphiteGlobal *GraphiteGlobal::m_self=0;
 GraphiteGlobal *GraphiteGlobal::self() {
 
     if(m_self==0L)
-	m_self=new GraphiteGlobal();
-    return m_self;	
+        m_self=new GraphiteGlobal();
+    return m_self;
 }
 
 void GraphiteGlobal::setHandleSize(const int &handleSize) {
@@ -71,11 +71,11 @@ void GraphiteGlobal::setUnit(const Unit &unit) {
 
     m_unit=unit;
     if(unit==MM)
-	m_unitString=QString::fromLatin1("mm");
+        m_unitString=QString::fromLatin1("mm");
     else if(unit==Inch)
-	m_unitString=QString::fromLatin1("inch");
+        m_unitString=QString::fromLatin1("inch");
     else
-	m_unitString=QString::fromLatin1("pt");
+        m_unitString=QString::fromLatin1("pt");
 }
 
 void GraphiteGlobal::setZoom(const double &zoom) {
@@ -114,15 +114,15 @@ QPen GraphiteGlobal::toPen(const QDomElement &element) const {
     static const QString &attrPenCapStyle=KGlobal::staticQString("capstyle");
 
     if(element.hasAttribute(attrPenColor))
-	pen.setColor(QColor(element.attribute(attrPenColor)));
+        pen.setColor(QColor(element.attribute(attrPenColor)));
     if(element.hasAttribute(attrPenStyle))
-	pen.setStyle(static_cast<Qt::PenStyle>(element.attribute(attrPenStyle).toInt()));
+        pen.setStyle(static_cast<Qt::PenStyle>(element.attribute(attrPenStyle).toInt()));
     if(element.hasAttribute(attrWidth))
-	pen.setWidth(element.attribute(attrWidth).toInt());
+        pen.setWidth(element.attribute(attrWidth).toInt());
     if(element.hasAttribute(attrPenJoinStyle))
-	pen.setJoinStyle(static_cast<Qt::PenJoinStyle>(element.attribute(attrPenJoinStyle).toInt()));
+        pen.setJoinStyle(static_cast<Qt::PenJoinStyle>(element.attribute(attrPenJoinStyle).toInt()));
     if(element.hasAttribute(attrPenCapStyle))
-	pen.setCapStyle(static_cast<Qt::PenCapStyle>(element.attribute(attrPenCapStyle).toInt()));
+        pen.setCapStyle(static_cast<Qt::PenCapStyle>(element.attribute(attrPenCapStyle).toInt()));
     return pen;
 }
 
@@ -151,20 +151,20 @@ QRect GraphiteGlobal::toRect(const QDomElement &element) const {
     static const QString &attrHeight=KGlobal::staticQString("height");
 
     if(element.hasAttribute(attrX))
-	rect.setTop(element.attribute(attrX).toInt());
+        rect.setTop(element.attribute(attrX).toInt());
     if(element.hasAttribute(attrY))
-	rect.setTop(element.attribute(attrY).toInt());
+        rect.setTop(element.attribute(attrY).toInt());
     if(element.hasAttribute(attrWidth))
-	rect.setTop(element.attribute(attrWidth).toInt());
+        rect.setTop(element.attribute(attrWidth).toInt());
     if(element.hasAttribute(attrHeight))
-	rect.setTop(element.attribute(attrHeight).toInt());
+        rect.setTop(element.attribute(attrHeight).toInt());
     return rect;
 }
 
 GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
-				   m_rotHandleSize(4), m_thirdHandleTrigger(20),
-				   m_offset(2), m_unit(MM), m_zoom(1.0),
-				   m_resolution(2.8346457) {
+                                   m_rotHandleSize(4), m_thirdHandleTrigger(20),
+                                   m_offset(2), m_unit(MM), m_zoom(1.0),
+                                   m_resolution(2.8346457) {
     m_unitString=QString::fromLatin1("mm");
 }
 
@@ -206,11 +206,11 @@ void FxValue::setPxValue(const int &/*pixel*/) {
 const double FxValue::valueUnit() const {
 
     if(GraphiteGlobal::self()->unit()==GraphiteGlobal::MM)
-	return valueMM();
+        return valueMM();
     else if(GraphiteGlobal::self()->unit()==GraphiteGlobal::Inch)
-	return valueInch();
+        return valueInch();
     else
-	return valuePt();
+        return valuePt();
 }
 
 const double FxValue::valueMM() const {

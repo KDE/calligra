@@ -34,7 +34,7 @@ class GObjectFactory {
 
 public:
     static GObjectFactory *self();
-    
+
     void registerPrototype(const QString &classname, const GObject *prototype);
     void unregisterPrototype(const QString &classname);
 
@@ -44,7 +44,7 @@ public:
 private:
     GObjectFactory();
     ~GObjectFactory() {}
-    
+
     QDict<const GObject> m_registry;
     static GObjectFactory *m_self;
 };

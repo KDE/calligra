@@ -30,15 +30,15 @@
 
 
 GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
-			   const char *name) : KoView(doc, parent, name),
-					       m_oldX(1), m_oldY(1) {
+                           const char *name) : KoView(doc, parent, name),
+                                               m_oldX(1), m_oldY(1) {
     setInstance(GraphiteFactory::global());
     setXMLFile(QString::fromLatin1("graphite.rc"));
     setupActions();
 
     m_canvas=new GCanvas(this, doc);
     m_canvas->setGeometry(20, 20, m_canvas->viewport()->width()-20,
-			  m_canvas->viewport()->height()-20);
+                          m_canvas->viewport()->height()-20);
     setupRulers();
     recalcRulers(0, 0);
 }
@@ -61,9 +61,9 @@ void GraphiteView::slotViewZoom(int item) {
 void GraphiteView::recalcRulers(int x, int y) {
 
     if(x!=m_oldX)
-	m_horiz->setOffset(x, y);
+        m_horiz->setOffset(x, y);
     if(y!=m_oldY)
-	m_vert->setOffset(x, y);
+        m_vert->setOffset(x, y);
     m_oldX=x;
     m_oldY=y;
 }
@@ -87,7 +87,7 @@ void GraphiteView::updateReadWrite(bool /*readwrite*/) {
 void GraphiteView::setupActions() {
 
     KSelectAction *zoom=new KSelectAction(i18n("&Zoom"), 0,
-					  actionCollection(), "view_zoom");
+                                          actionCollection(), "view_zoom");
     connect(zoom, SIGNAL(activated(int)), this, SLOT(slotViewZoom(int)));
     QStringList lst;
     lst << i18n("50%");
@@ -107,15 +107,15 @@ void GraphiteView::setupRulers() {
     m_vert=new KoRuler(this, m_canvas->viewport(), Qt::Vertical, layout, 0);
     m_vert->showMousePos(true);
     connect(m_vert, SIGNAL(unitChanged(QString)), this,
-	    SLOT(rulerUnitChanged(QString)));
+            SLOT(rulerUnitChanged(QString)));
 
     m_horiz=new KoRuler(this, m_canvas->viewport(), Qt::Horizontal, layout, 0);
     m_horiz->showMousePos(true);
     connect(m_horiz, SIGNAL(unitChanged(QString)), this,
-	    SLOT(rulerUnitChanged(QString)));
+            SLOT(rulerUnitChanged(QString)));
 
     m_canvas->setRulers(m_vert, m_horiz);
     connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
-	    SLOT(recalcRulers(int, int)));
+            SLOT(recalcRulers(int, int)));
 }
 #include <graphiteview.moc>

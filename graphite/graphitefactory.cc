@@ -66,8 +66,8 @@ KParts::Part* GraphiteFactory::createPart( QWidget *parentWidget, const char *wi
 KAboutData* GraphiteFactory::aboutData() {
 
     KAboutData *aboutData=new KAboutData("graphite", I18N_NOOP("graphite"),
-					 version, description, KAboutData::License_GPL,
-					 "(c) 2000, Werner Trobin");
+                                         version, description, KAboutData::License_GPL,
+                                         "(c) 2000, Werner Trobin");
     aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
     return aboutData;
 }
@@ -76,8 +76,8 @@ KInstance *GraphiteFactory::global() {
 
     if (!s_global) {
         s_global=new KInstance(aboutData());
-	// Tell the iconloader about share/apps/koffice/icons
-	s_global->iconLoader()->addAppDir(QString::fromLatin1("koffice"));
+        // Tell the iconloader about share/apps/koffice/icons
+        s_global->iconLoader()->addAppDir(QString::fromLatin1("koffice"));
     }
     return s_global;
 }

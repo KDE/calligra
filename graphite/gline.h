@@ -49,7 +49,7 @@ public:
     virtual const QRect &boundingRect() const;
 
     virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
-				  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
+                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
 
     virtual const QPoint origin() const { return m_a; }
     virtual void setOrigin(const QPoint &origin);
@@ -78,7 +78,7 @@ class GLineM9r : public G1DObjectM9r {
     Q_OBJECT
 public:
     GLineM9r(GLine *line, const Mode &mode, GraphitePart *part,
-	     GraphiteView *view, const QString &type);
+             GraphiteView *view, const QString &type);
     virtual ~GLineM9r();
 
     virtual void draw(QPainter &p);

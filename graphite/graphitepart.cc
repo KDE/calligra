@@ -75,7 +75,7 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     GObject *o=new GGroup(QString::fromLatin1("foo"));
     o->rotate(QPoint(10, 10), 45.0*180.0*M_1_PI);
     kdDebug(37001) << "atan(0): " << std::atan(0)
-		   << "atan(pi/2)" << std::atan(M_PI_2) << endl;
+                   << "atan(pi/2)" << std::atan(M_PI_2) << endl;
     GObjectM9r *m=o->createM9r(this, view);
     QRect r;
     m->mousePressEvent(e, r);
@@ -138,7 +138,7 @@ void GraphitePart::edit_cut() {
 void GraphitePart::setGlobalZoom(const double &zoom) {
 
     if(GraphiteGlobal::self()->zoom()==zoom)
-	return;
+        return;
     GraphiteGlobal::self()->setZoom(zoom);
     // nodeZero->recalculate();
 }

@@ -35,7 +35,7 @@ class GraphiteView : public KoView {
 
 public:
     GraphiteView(GraphitePart *doc, QWidget *parent=0,
-		 const char *name=0);
+                 const char *name=0);
     virtual ~GraphiteView();
 
     virtual QWidget *canvas() { return m_canvas; }

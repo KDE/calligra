@@ -27,7 +27,7 @@
 
 
 GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(name),
-								      m_a(a), m_b(b) {
+                                                                      m_a(a), m_b(b) {
 }
 
 GLine::GLine(const QString &name) : GObject(name) {
@@ -40,7 +40,7 @@ GLine::GLine(const QDomElement &element) :
     GObject(element.namedItem(QString::fromLatin1("gobject")).toElement()) {
 
     if(!m_ok)
-	return;
+        return;
 
     bool ok;
     static const QString &tagGLine=KGlobal::staticQString("gline");
@@ -50,38 +50,38 @@ GLine::GLine(const QDomElement &element) :
     static const QString &attrY=KGlobal::staticQString("y");
 
     if(element.tagName()!=tagGLine) {
-	m_ok=false;
-	return;
+        m_ok=false;
+        return;
     }
 
     QDomElement point=element.namedItem(tagStart).toElement();
     if(!point.isNull()) {
-	m_a.setX(point.attribute(attrX).toInt(&ok));
-	if(!ok)
-	    m_a.setX(0);
-	
-	m_a.setY(point.attribute(attrY).toInt(&ok));
-	if(!ok)
-	    m_a.setX(0);
+        m_a.setX(point.attribute(attrX).toInt(&ok));
+        if(!ok)
+            m_a.setX(0);
+
+        m_a.setY(point.attribute(attrY).toInt(&ok));
+        if(!ok)
+            m_a.setX(0);
     }
     else {
-	m_a.setX(0);
-	m_a.setY(0);
+        m_a.setX(0);
+        m_a.setY(0);
     }
 
     point=element.namedItem(tagEnd).toElement();
     if(!point.isNull()) {
-	m_b.setX(point.attribute(attrX).toInt(&ok));
-	if(!ok)
-	    m_b.setX(0);
-	
-	m_b.setY(point.attribute(attrY).toInt(&ok));
-	if(!ok)
-	    m_b.setX(0);
+        m_b.setX(point.attribute(attrX).toInt(&ok));
+        if(!ok)
+            m_b.setX(0);
+
+        m_b.setY(point.attribute(attrY).toInt(&ok));
+        if(!ok)
+            m_b.setX(0);
     }
     else {
-	m_b.setX(0);
-	m_b.setY(0);
+        m_b.setX(0);
+        m_b.setY(0);
     }
 }
 
@@ -117,10 +117,10 @@ QDomElement GLine::save(QDomDocument &doc) const {
 void GLine::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
 
     if(m_state==GObject::Deleted || (toPrinter && m_state==GObject::Invisible))
-	return;
+        return;
 
     if(!reg.contains(boundingRect()))
-	return;
+        return;
 
     p.save();
     p.setPen(m_pen);
@@ -139,11 +139,11 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
 
     int size;
     if(m_state==Handles)
-	size=GraphiteGlobal::self()->handleSize();
+        size=GraphiteGlobal::self()->handleSize();
     else if(m_state==Rot_Handles)
-	size=GraphiteGlobal::self()->rotHandleSize();
+        size=GraphiteGlobal::self()->rotHandleSize();
     else
-	return; // no need to draw handles - shouldn't happen
+        return; // no need to draw handles - shouldn't happen
 
     int offset=GraphiteGlobal::self()->offset();
 
@@ -153,33 +153,33 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
 
     if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
        boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
-	r3=new QRect(m_a.x()+Graphite::double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
-		     m_a.y()+Graphite::double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
-		     size, size);
+        r3=new QRect(m_a.x()+Graphite::double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
+                     m_a.y()+Graphite::double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
+                     size, size);
 
     if(m_state==Handles) {
-	p.drawRect(*r1);
-	p.drawRect(*r2);
-	if(r3)
-	    p.drawRect(*r3);
+        p.drawRect(*r1);
+        p.drawRect(*r2);
+        if(r3)
+            p.drawRect(*r3);
     }
     else {
-	p.drawEllipse(*r1);
-	p.drawEllipse(*r2);
-	if(r3)
-	    p.drawEllipse(*r3);
+        p.drawEllipse(*r1);
+        p.drawEllipse(*r2);
+        if(r3)
+            p.drawEllipse(*r3);
     }
 
     if(handles) {
-	handles->append(r1);
-	handles->append(r2);
-	if(r3)
-	    handles->append(r3);
+        handles->append(r1);
+        handles->append(r2);
+        if(r3)
+            handles->append(r3);
     }
     else {
-	delete r1;
-	delete r2;
-	delete r3;
+        delete r1;
+        delete r2;
+        delete r3;
     }
     p.restore();
 }
@@ -191,39 +191,39 @@ void GLine::recalculate() {
 const GLine *GLine::hit(const QPoint &p) const {
 
     if(p==m_a)
-	return this;
+        return this;
     else if(p==m_b)
-	return this;
+        return this;
     else {
-	double dx=static_cast<double>(m_b.x()-m_a.x());
-	double dy=static_cast<double>(m_b.y()-m_a.y());
-	double r=std::sqrt( dx*dx + dy*dy );
-	int ir=Graphite::double2Int(r);
-	double alpha1=std::asin( QABS(dy)/r );
-	double alpha;
-	
-	if(dx>=0 && dy>=0)
-	    alpha=-alpha1;
-	else if(dx<0 && dy>=0)
-	    alpha=alpha1+M_PI;
-	else if(dx<0 && dy<0)
-	    alpha=M_PI-alpha1;
-	else // dx>=0 && dy<0
-	    alpha=alpha1;
-	
-	// make it easier for the user to select something by
-	// adding a (configurable) "fuzzy zone" :)
-	int w=Graphite::double2Int(static_cast<double>(m_pen.width())/2.0);
-	int fb=GraphiteGlobal::self()->fuzzyBorder();
-        QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x() + ir ) - fb - w,
-			       m_a.y() - fb - w,
-			       ir + 2*fb + w + 1, 2*fb + w + 1 );
-	// Don't change the original point!
-	QPoint tmp=p;
-	rotatePoint(tmp, -alpha, m_a);
+        double dx=static_cast<double>(m_b.x()-m_a.x());
+        double dy=static_cast<double>(m_b.y()-m_a.y());
+        double r=std::sqrt( dx*dx + dy*dy );
+        int ir=Graphite::double2Int(r);
+        double alpha1=std::asin( QABS(dy)/r );
+        double alpha;
 
-	if(fuzzyZone.contains(tmp))
-	    return this;
+        if(dx>=0 && dy>=0)
+            alpha=-alpha1;
+        else if(dx<0 && dy>=0)
+            alpha=alpha1+M_PI;
+        else if(dx<0 && dy<0)
+            alpha=M_PI-alpha1;
+        else // dx>=0 && dy<0
+            alpha=alpha1;
+
+        // make it easier for the user to select something by
+        // adding a (configurable) "fuzzy zone" :)
+        int w=Graphite::double2Int(static_cast<double>(m_pen.width())/2.0);
+        int fb=GraphiteGlobal::self()->fuzzyBorder();
+        QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x() + ir ) - fb - w,
+                               m_a.y() - fb - w,
+                               ir + 2*fb + w + 1, 2*fb + w + 1 );
+        // Don't change the original point!
+        QPoint tmp=p;
+        rotatePoint(tmp, -alpha, m_a);
+
+        if(fuzzyZone.contains(tmp))
+            return this;
     }
     return 0L;
 }
@@ -231,33 +231,33 @@ const GLine *GLine::hit(const QPoint &p) const {
 const bool GLine::intersects(const QRect &r) const {
 
     if(r.contains(m_a) || r.contains(m_b))
-	return true;
+        return true;
     else if(r.intersects(boundingRect()))
-	return true;
+        return true;
     else {
-	// f(x)=mx+d
-	double m=static_cast<double>(m_b.y()-m_a.y())/static_cast<double>(m_b.x()-m_a.x());
-	double d=m_a.y()-m*m_a.x();
-	
-	// top
-	double i=(static_cast<double>(r.top())-d)/m;
-	if(i>=r.left() && i<=r.right())
-	    return true;
-	
-	// bottom
-	i=(static_cast<double>(r.bottom())-d)/m;
-	if(i>=r.left() && i<=r.right())
-	    return true;
-	
-	// left
-	i=m*static_cast<double>(r.left())+d;
-	if(i>=r.top() && i<=r.bottom())
-	    return true;
-	
-	// right
-	i=m*static_cast<double>(r.right())+d;
-	if(i>=r.top() && i<=r.bottom())
-	    return true;	
+        // f(x)=mx+d
+        double m=static_cast<double>(m_b.y()-m_a.y())/static_cast<double>(m_b.x()-m_a.x());
+        double d=m_a.y()-m*m_a.x();
+
+        // top
+        double i=(static_cast<double>(r.top())-d)/m;
+        if(i>=r.left() && i<=r.right())
+            return true;
+
+        // bottom
+        i=(static_cast<double>(r.bottom())-d)/m;
+        if(i>=r.left() && i<=r.right())
+            return true;
+
+        // left
+        i=m*static_cast<double>(r.left())+d;
+        if(i>=r.top() && i<=r.bottom())
+            return true;
+
+        // right
+        i=m*static_cast<double>(r.right())+d;
+        if(i>=r.top() && i<=r.bottom())
+            return true;
     }
     return false;
 }
@@ -265,15 +265,15 @@ const bool GLine::intersects(const QRect &r) const {
 const QRect &GLine::boundingRect() const {
 
     if(!m_boundingRectDirty)
-	return m_boundingRect;
+        return m_boundingRect;
     m_boundingRect=QRect( QMIN(m_a.x(), m_b.x()), QMIN(m_a.y(), m_b.y()),
-			  QABS(m_a.x()-m_b.x()), QABS(m_a.y()-m_b.y()));
+                          QABS(m_a.x()-m_b.x()), QABS(m_a.y()-m_b.y()));
     m_boundingRectDirty=false;
-    return m_boundingRect;				
+    return m_boundingRect;
 }
 
 GObjectM9r *GLine::createM9r(GraphitePart *part, GraphiteView *view,
-			     const GObjectM9r::Mode &mode) {
+                             const GObjectM9r::Mode &mode) {
     return new GLineM9r(this, mode, part, view, i18n("Line"));
 }
 
@@ -315,7 +315,7 @@ void GLine::rotate(const QPoint &center, const double &angle) {
 const double &GLine::angle() const {
 
     m_angle=std::atan( static_cast<double>(m_b.y()-m_a.y()) /
-		       static_cast<double>(m_b.x()-m_a.x()) );
+                       static_cast<double>(m_b.x()-m_a.x()) );
     return m_angle;
 }
 
@@ -336,14 +336,14 @@ void GLine::resize(const QRect &boundingRect) {
 
 
 GLineM9r::GLineM9r(GLine *line, const Mode &mode, GraphitePart *part,
-		   GraphiteView *view, const QString &type) :
+                   GraphiteView *view, const QString &type) :
     G1DObjectM9r(line, mode, part, view, type), m_line(line) {
     m_line->setState(GObject::Handles);
 }
 
 GLineM9r::~GLineM9r() {
     if(m_line->state()==GObject::Handles || m_line->state()==GObject::Rot_Handles)
-	m_line->setState(GObject::Visible);
+        m_line->setState(GObject::Visible);
 }
 
 void GLineM9r::draw(QPainter &p) {

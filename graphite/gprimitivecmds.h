@@ -34,7 +34,7 @@ class GMoveCmd : public GCommand {
 public:
     GMoveCmd(GObject *object, const QString &name);
     GMoveCmd(GObject *object, const QString &name, const QPoint &from,
-	     const QPoint &to);
+             const QPoint &to);
     virtual ~GMoveCmd() {}
 
     virtual void execute();
@@ -56,7 +56,7 @@ class GResizeCmd : public GCommand {
 public:
     GResizeCmd(GObject *object, const QString &name);
     GResizeCmd(GObject *object, const QString &name,
-	       const QRect &oldSize, const QRect &newSize);
+               const QRect &oldSize, const QRect &newSize);
     virtual ~GResizeCmd() {}
 
     virtual void execute();
@@ -78,7 +78,7 @@ class GRotateCmd : public GCommand {
 public:
     GRotateCmd(GObject *object, const QString &name);
     GRotateCmd(GObject *object, const QString &name, const QPoint &center,
-	       const double &angle);
+               const double &angle);
     virtual ~GRotateCmd() {}
 
     virtual void execute();
@@ -101,7 +101,7 @@ class GScaleCmd : public GCommand {
 public:
     GScaleCmd(GObject *object, const QString &name);
     GScaleCmd(GObject *object, const QString &name, const QPoint &origin,
-	      const double &xfactor, const double &yfactor);
+              const double &xfactor, const double &yfactor);
     virtual ~GScaleCmd() {}
 
     virtual void execute();
@@ -126,7 +126,7 @@ class GSetBrushCmd : public GCommand {
 public:
     GSetBrushCmd(GObject *object, const QString &name);
     GSetBrushCmd(GObject *object, const QString &name, const QBrush &oldBrush,
-		 const QBrush &newBrush);
+                 const QBrush &newBrush);
     virtual ~GSetBrushCmd() {}
 
     virtual void execute();
@@ -148,7 +148,7 @@ class GSetPenCmd : public GCommand {
 public:
     GSetPenCmd(GObject *object, const QString &name);
     GSetPenCmd(GObject *object, const QString &name, const QPen &oldPen,
-	       const QPen &newPen);
+               const QPen &newPen);
     virtual ~GSetPenCmd() {}
 
     virtual void execute();
@@ -170,7 +170,7 @@ class GSetNameCmd : public GCommand {
 public:
     GSetNameCmd(GObject *object, const QString &name);
     GSetNameCmd(GObject *object, const QString &name, const QString &oldName,
-		const QString &newName);
+                const QString &newName);
     virtual ~GSetNameCmd() {}
 
     virtual void execute();
@@ -192,8 +192,8 @@ class GSetFillStyleCmd : public GCommand {
 public:
     GSetFillStyleCmd(GObject *object, const QString &name);
     GSetFillStyleCmd(GObject *object, const QString &name,
-		     const GObject::FillStyle &oldFillStyle,
-		     const GObject::FillStyle &newFillStyle);
+                     const GObject::FillStyle &oldFillStyle,
+                     const GObject::FillStyle &newFillStyle);
     virtual ~GSetFillStyleCmd() {}
 
     virtual void execute();
@@ -215,7 +215,7 @@ class GSetGradientCmd : public GCommand {
 public:
     GSetGradientCmd(GObject *object, const QString &name);
     GSetGradientCmd(GObject *object, const QString &name,
-		    const Gradient &oldGradient, const Gradient &newGradient);
+                    const Gradient &oldGradient, const Gradient &newGradient);
     virtual ~GSetGradientCmd() {}
 
     virtual void execute();

@@ -50,18 +50,18 @@ void GCanvas::showMousePos(const bool &pos) {
 void GCanvas::resizeEvent(QResizeEvent *e) {
     // for now
     //kdDebug() << "GCanvas::resizeEvent(): width=" << e->size().width()
-    //	      << " height=" << e->size().height() << endl;
+    //        << " height=" << e->size().height() << endl;
     m_widget->resize(e->size().width()-4, e->size().height()-4);
 }
 
 void GCanvas::viewportResizeEvent(QResizeEvent */*e*/) {
     //kdDebug() << "GCanvas::viewportResizeEvent() width=" << e->size().width()
-    //	      << " height=" << e->size().height() << endl;
+    //        << " height=" << e->size().height() << endl;
 }
 
 
 GCanvasWidget::GCanvasWidget(GCanvas *canvas, GraphiteView *view,
-			     GraphitePart *doc) :
+                             GraphitePart *doc) :
     QWidget(canvas->viewport(), 0L, WNorthWestGravity), m_view(view),
     m_doc(doc), m_canvas(canvas), m_updateRulers(false) {
 
@@ -74,7 +74,7 @@ GCanvasWidget::GCanvasWidget(GCanvas *canvas, GraphiteView *view,
 void GCanvasWidget::mouseMoveEvent(QMouseEvent *e) {
 
     if(m_updateRulers)
-	m_canvas->updateMousePos(e);
+        m_canvas->updateMousePos(e);
     m_doc->mouseMoveEvent(e, m_view);
 }
 
@@ -102,16 +102,16 @@ void GCanvasWidget::paintEvent(QPaintEvent */*e*/) {
     // - Double buffers are invalidated via: zoomfactor
     //   changes, background changes,...
     /*kdDebug(37001) << "paintEvent: x=" << e->rect().x()
-		   << " y=" << e->rect().y()
-		   << " width=" << e->rect().width()
-		   << " height=" << e->rect().height()
-		   << " erased=" << e->erased()
-		   << " | contents: width=" << contentsWidth()
-		   << " height=" << contentsHeight()
-		   << " | visible: width=" << visibleWidth()
-		   << " height=" << visibleHeight()
-		   << " | x-offset=" << contentsX()
-		   << " y-offet=" << contentsY() << endl;*/
+                   << " y=" << e->rect().y()
+                   << " width=" << e->rect().width()
+                   << " height=" << e->rect().height()
+                   << " erased=" << e->erased()
+                   << " | contents: width=" << contentsWidth()
+                   << " height=" << contentsHeight()
+                   << " | visible: width=" << visibleWidth()
+                   << " height=" << visibleHeight()
+                   << " | x-offset=" << contentsX()
+                   << " y-offet=" << contentsY() << endl;*/
 }
 
 void GCanvasWidget::leaveEvent(QEvent *) {
