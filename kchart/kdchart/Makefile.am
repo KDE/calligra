@@ -18,7 +18,8 @@ libkdchart_la_SOURCES = KDChartAreaPainter.cpp	\
 			KDFrame.cpp \
 			KDChartPolarPainter.cpp \
 			KDChartCustomBox.cpp \
-			KDChartData.cpp 
+			KDChartData.cpp \
+			KDDrawText.cpp 
 
 noinst_HEADERS =	KDChartAreaPainter.h	\
 			KDChartAxesPainter.h	\
