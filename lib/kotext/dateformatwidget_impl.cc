@@ -37,6 +37,17 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
     combo2->insertItem( i18n( "Month (possessive long name)" ) );
     combo2->insertItem( i18n( "Year (2 digits)" ) );
     combo2->insertItem( i18n( "Year (4 digits)" ) );
+
+    combo2->insertItem( i18n( "Hour" ) );
+    combo2->insertItem( i18n( "Hour (2 digits)" ) );
+    combo2->insertItem( i18n( "Minute" ) );
+    combo2->insertItem( i18n( "Minute (2 digits)" ) );
+    combo2->insertItem( i18n( "Second" ) );
+    combo2->insertItem( i18n( "Second (2 digits)" ) );
+    combo2->insertItem( i18n( "Millisecond (3 digits)" ) );
+    combo2->insertItem( i18n( "am/pm" ) );
+    combo2->insertItem( i18n( "AM/PM" ) );
+
     combo2->setCurrentItem( 0 );
 
     label_correction->setText(i18n("Correct in Days"));
@@ -104,6 +115,26 @@ void DateFormatWidget::comboActivated()
         combo1->lineEdit()->insert("yy");
     else if(string==i18n( "Year (4 digits)" ) )
         combo1->lineEdit()->insert("yyyy");
+
+    else if(string==i18n("Hour"))
+        combo1->lineEdit()->insert("h");
+    else if(string==i18n("Hour (2 digits)"))
+        combo1->lineEdit()->insert("hh");
+    else if(string==i18n("Minute"))
+        combo1->lineEdit()->insert("m");
+    else if(string==i18n("Minute (2 digits)"))
+        combo1->lineEdit()->insert("mm");
+    else if(string==i18n("Second"))
+        combo1->lineEdit()->insert("s");
+    else if(string==i18n("Second (2 digits)"))
+        combo1->lineEdit()->insert("ss");
+    else if(string==i18n("Millisecond (3 digits)"))
+        combo1->lineEdit()->insert("zzz");
+    else if(string==i18n("AM/PM"))
+        combo1->lineEdit()->insert("AP");
+    else if(string==i18n("am/pm"))
+        combo1->lineEdit()->insert("ap");
+
     updateLabel();
     combo1->setFocus();
 }
