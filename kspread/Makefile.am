@@ -61,7 +61,7 @@ kdemime_DATA = x-kspread.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/kspread
-rc_DATA = kspread.rc kspread_inplaceedit.rc
+rc_DATA = kspread.rc
 
 SUBDIRS =  . plugins pics dtd toolbar scripts extensions tablestyles
 
