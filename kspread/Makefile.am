@@ -74,7 +74,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc
 
-SUBDIRS =  . plugins pics dtd toolbar scripts extensions tablestyles
+SUBDIRS =  . plugins pics dtd toolbar extensions tablestyles
 
 parser:
 	flex lex.l
