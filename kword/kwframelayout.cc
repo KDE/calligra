@@ -365,7 +365,7 @@ void KWFrameLayout::checkFootNotes()
             //and force recalc, but with multi footnote deleted
             //paragraph is null before we apply attribute to
             //kotextcustom.
-            if ( !fnvar->paragraph() )
+            if ( !fnvar || !fnvar->paragraph() )
                 continue;
             double varY = fnvar->varY();
             if ( varY == 0 ) // not able to calculate it yet
