@@ -108,17 +108,36 @@ void ApplicationWindowSpell::spellCheckerMisspelling( const QString &text, const
     kdDebug()<<" void ApplicationWindowSpell::spellCheckerMisspelling( const QString &text, const QStringList &, unsigned int ) :"<<text<<" pos :"<<pos<<endl;
 //todo fix me parag id !!!!
     kdDebug()<<" pos :"<<pos<<" text :"<<text<<" text.length() :"<<text.length()<<endl;
-    multi->removeSelection();
-    multi->setSelection( 0, pos, 0, pos +text.length());
-
+    unsigned int l = 0;
+    unsigned int cnt = 0;
+    posToRowCol (pos, l, cnt);
+    multi->setSelection(l, cnt, l, cnt+text.length());
 }
 
 void ApplicationWindowSpell::spellCheckerCorrected( const QString &orig , const QString & newWord , unsigned int pos )
 {
-    kdDebug()<<"void ApplicationWindowSpell::spellCheckerCorrected( const QString &, const QString &, unsigned int ) :"<<orig<<" new :"<<newWord<<" pos :"<<pos <<endl;
-    multi->removeSelectedText();
-    multi->insert( newWord,0/*parag*/, pos);
+    if( orig != newWord )
+    {
+        unsigned int l = 0;
+        unsigned int cnt = 0;
+        kdDebug()<<"void ApplicationWindowSpell::spellCheckerCorrected( const QString &, const QString &, unsigned int ) :"<<orig<<" new :"<<newWord<<" pos :"<<pos <<endl;
+        posToRowCol (pos, l, cnt);
+        multi->setSelection(l, cnt, l, cnt+orig.length());
+        multi->removeSelectedText();
+        multi->insert(newWord);
+    }
 }
+
+void  ApplicationWindowSpell::posToRowCol(unsigned int pos, unsigned int &line, unsigned int &col)
+{
+  for (line = 0; line < static_cast<uint>(multi->lines()) && col <= pos; line++)
+  {
+    col += multi->paragraphLength(line)+1;
+  }
+  line--;
+  col = pos - col + multi->paragraphLength(line) + 1;
+}
+
 
 void ApplicationWindowSpell::spellCheckerDone( const QString & text)
 {

@@ -48,6 +48,8 @@ private slots:
     void slotModalSpellText();
 
 private:
+    void posToRowCol(unsigned int pos, unsigned int &line, unsigned int &col);
+
     QMultiLineEdit *multi;
     KOSpell *m_spell;
     KOSpellConfig *m_spellConfig;
