@@ -719,6 +719,16 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
             frameStyle.addPropertyPt( "fo:margin-bottom", m_runAroundBottom );
     }
 
+    //todo add other element !!!!
+    if ( runAround() == KWFrame::RA_SKIP )
+        frameStyle.addProperty( "style:wrap", "none" );
+    else if (  runAround() == KWFrame::RA_NO )
+        frameStyle.addProperty( "style:wrap", "run-through" );
+    if ( runAroundSide() ==  KWFrame::RA_LEFT )
+        frameStyle.addProperty( "style:wrap", "left" );
+    else if ( runAroundSide() == KWFrame::RA_RIGHT )
+        frameStyle.addProperty( "style:wrap", "right" );
+
     return mainStyles.lookup( frameStyle, "fr" );
 }
 
