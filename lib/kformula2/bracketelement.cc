@@ -220,13 +220,6 @@ SequenceElement* BracketElement::getMainChild()
     return content;
 }
 
-// void BracketElement::setMainChild(SequenceElement* child)
-// {
-//     formula()->elementRemoval(content);
-//     content = child;
-//     content->setParent(this);
-//     formula()->changed();
-// }
 
 /**
  * Sets the cursor to select the child. The mark is placed before,

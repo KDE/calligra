@@ -118,9 +118,10 @@ void KFormulaContainer::setActiveCursor(FormulaCursor* cursor)
         activeCursor = cursor;
     }
     else {
-        FormulaCursor::CursorData* data = activeCursor->getCursorData();
-        internCursor->setCursorData(data);
-        delete data;
+        //FormulaCursor::CursorData* data = activeCursor->getCursorData();
+        //internCursor->setCursorData(data);
+        //delete data;
+        *internCursor = *activeCursor;
         activeCursor = internCursor;
     }
 }
@@ -235,7 +236,8 @@ void KFormulaContainer::addMatrix(int rows, int columns)
 {
     if (!hasValidCursor())
         return;
-    KFCAddMatrix* command = new KFCAddMatrix(this, rows, columns);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("Add matrix"), this);
+    command->setElement(new MatrixElement(rows, columns));
     execute(command);
 }
 

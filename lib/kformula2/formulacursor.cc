@@ -547,8 +547,7 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
 {
     BasicElement* child = getElement();
     if (child == element->getParent()) {
-        child->moveHome(this);
-        setSelection(false);
+        child->childWillVanish(this, element);
         return;
     }
     while (child != 0) {
@@ -627,6 +626,21 @@ FormulaCursor::CursorData* FormulaCursor::getCursorData()
     return new CursorData(current, cursorPos, markPos,
                           selectionFlag, linearMovement, readOnly);
 }
+
+
+// Keep in sync with 'setCursorData'
+FormulaCursor& FormulaCursor::operator= (const FormulaCursor& other)
+{
+    current = other.current;
+    cursorPos = other.cursorPos;
+    markPos = other.markPos;
+    selectionFlag = other.selectionFlag;
+    linearMovement = other.linearMovement;
+    readOnly = other.readOnly;
+    hasChangedFlag = true;
+    return *this;
+}
+
 
 /**
  * Sets the cursor to where the CursorData points to. No checking is done

@@ -170,6 +170,12 @@ public:
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
+    /**
+     * Moves the cursor away from the given child. The cursor is
+     * guaranteed to be inside this element.
+     */
+    //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
+
     bool hasUpper() const { return upper != 0; }
     bool hasLower() const { return lower != 0; }
 

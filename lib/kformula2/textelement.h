@@ -78,6 +78,12 @@ public:
                       const QPoint& parentOrigin);
 
     /**
+     * Moves the cursor away from the given child. The cursor is
+     * guaranteed to be inside this element.
+     */
+    //virtual void childWillVanish(FormulaCursor*, BasicElement*) {}
+
+    /**
      * @returns whether we are a symbol (greek letter).
      */
     bool isSymbol() const { return symbol; }

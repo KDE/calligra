@@ -713,6 +713,21 @@ void SequenceElement::selectChild(FormulaCursor* cursor, BasicElement* child)
     }
 }
 
+void SequenceElement::childWillVanish(FormulaCursor* cursor, BasicElement* child)
+{
+    int childPos = children.find(child);
+    if (childPos > -1) {
+        int pos = cursor->getPos();
+        if (pos > childPos) {
+            pos--;
+        }
+        int mark = cursor->getMark();
+        if (mark > childPos) {
+            mark--;
+        }
+        cursor->setTo(this, pos, mark);
+    }
+}
 
 QString SequenceElement::getCurrentName(FormulaCursor* cursor)
 {

@@ -122,6 +122,12 @@ public:
      */
     virtual void selectChild(FormulaCursor*, BasicElement*);
 
+    /**
+     * Moves the cursor away from the given child. The cursor is
+     * guaranteed to be inside this element.
+     */
+    //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
+
     // Save&load
     //virtual QDomElement getElementDom(QDomDocument *doc);
     //virtual bool buildFromDom(QDomElement *elem);

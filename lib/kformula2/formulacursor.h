@@ -58,6 +58,8 @@ public:
      */
     FormulaCursor(FormulaElement* element);
 
+    FormulaCursor& operator= (const FormulaCursor&);
+    
     // where the cursor and the mark are
     int getPos() const { return cursorPos; }
     int getMark() const { return markPos; }

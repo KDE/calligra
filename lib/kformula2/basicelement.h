@@ -272,6 +272,13 @@ public:
     virtual void selectChild(FormulaCursor*, BasicElement*) {}
 
 
+    /**
+     * Moves the cursor away from the given child. The cursor is
+     * guaranteed to be inside this element.
+     */
+    virtual void childWillVanish(FormulaCursor*, BasicElement*) {}
+
+    
     // basic support
 
     BasicElement* getParent() { return parent; }

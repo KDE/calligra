@@ -191,6 +191,12 @@ public:
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
     /**
+     * Moves the cursor away from the given child. The cursor is
+     * guaranteed to be inside this element.
+     */
+    virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child);
+
+    /**
      * Selects the current name if there currently is a name.
      * If there is no name and the cursor is at the end of the sequence
      * it moves one step right.

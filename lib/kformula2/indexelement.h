@@ -174,6 +174,12 @@ public:
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
     /**
+     * Moves the cursor away from the given child. The cursor is
+     * guaranteed to be inside this element.
+     */
+    //virtual void childWillVanish(FormulaCursor* cursor, BasicElement* child) = 0;
+
+    /**
      * Returns wether the element has no more useful
      * children (except its main child) and should therefore
      * be replaced by its main child's content.
