@@ -574,18 +574,21 @@ VLayersTab::deleteLayer()
 	{
 		VLayer *layer = layerItem->layer();
 		if( layer )
+		{
 			cmd = new VLayerCmd( m_document, i18n( "Delete Layer" ), layer, VLayerCmd::deleteLayer );
+			m_view->part()->addCommand( cmd, true );
+			delete layerItem;
+		}
 	}
 	else
 	{
 		VObjectListViewItem* item = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
 		if( item )
+		{
 			cmd = new VDeleteCmd( m_document, item->object() );
-	}
-	if( cmd )
-	{
-		m_view->part()->addCommand( cmd, true );
-		updateLayers();
+			m_view->part()->addCommand( cmd, true );
+			delete item;
+		}
 	}
 } // VLayersTab::deleteLayer
 
