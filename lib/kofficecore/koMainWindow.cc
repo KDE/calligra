@@ -257,6 +257,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_rootViews.current()->show();
     d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
+    d->m_orientation->setEnabled(false);
   }
 
   updateCaption();
@@ -604,6 +605,7 @@ void KoMainWindow::slotSplitView() {
     d->m_rootViews.current()->setPartManager( d->m_manager );
     d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
     d->m_removeView->setEnabled(true);
+    d->m_orientation->setEnabled(true);
 }
 
 void KoMainWindow::slotCloseAllViews() {
@@ -631,7 +633,10 @@ void KoMainWindow::slotRemoveView() {
     d->m_rootViews.removeRef(view);
 
     if(d->m_rootViews.count()==1)
+    {
         d->m_removeView->setEnabled(false);
+        d->m_orientation->setEnabled(false);
+    }
     delete view;
     view=0L;
     d->m_rootViews.first()->setPartManager( d->m_manager );
