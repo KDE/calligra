@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+                 2001       Sven Leiber         <s.leiber@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include <kmessagebox.h>
 #include <kbuttonbox.h>
 #include <klistview.h>
+#include <klineedit.h>
 
 #include <qlayout.h>
 #include <qvbox.h>
@@ -194,7 +196,21 @@ void KWAutoFormatDia::setupTab2()
     QHBoxLayout *grid = new QHBoxLayout(tab2, 10, 5);
     grid->setAutoAdd( true );
 
-    m_pListView = new KListView( tab2 );
+    QVBox *right = new QVBox( tab2 );
+    QHBox *text = new QHBox( right );
+    text->setSpacing( 3 );
+    text->setMargin( 3 );
+    m_find = new KLineEdit( text );
+    connect( m_find, SIGNAL( textChanged( const QString & ) ),
+	     SLOT( slotfind( const QString & ) ) );
+    pbSpecialChar1 = new QPushButton( "...", text );
+    connect(pbSpecialChar1,SIGNAL(clicked()),this,SLOT(chooseSpecialChar1()));
+    m_replace = new KLineEdit( text );
+    connect( m_replace, SIGNAL( textChanged( const QString & ) ),
+	     SLOT( slotfind2( const QString & ) ) );
+    pbSpecialChar2 = new QPushButton( "...", text );
+    connect(pbSpecialChar2,SIGNAL(clicked()),this,SLOT(chooseSpecialChar2()));
+    m_pListView = new KListView( right );
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
     m_pListView->setAllColumnsShowFocus( true );
@@ -207,9 +223,8 @@ void KWAutoFormatDia::setupTab2()
 
     connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
              SLOT(slotEditEntry()) );
-
     connect(m_pListView, SIGNAL(clicked ( QListViewItem * ) ),
-            SLOT(slotChangeItem( QListViewItem * ) ));
+             SLOT(slotEditEntry()) );
 
     QMap< QString, KWAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
@@ -219,18 +234,14 @@ void KWAutoFormatDia::setupTab2()
     buttons->setSpacing( 5 );
     buttons->setMargin( 5 );
 
-    pbAdd = new QPushButton( i18n( "Add..."), buttons  );
+    pbAdd = new QPushButton( i18n( "Add"), buttons  );
     connect(pbAdd,SIGNAL(clicked()),this, SLOT(slotAddEntry()));
 
     pbRemove = new QPushButton( i18n( "Remove" ), buttons );
     connect(pbRemove,SIGNAL(clicked()),this,SLOT(slotRemoveEntry()));
     ( void )new QWidget( buttons );
-    pbEdit = new QPushButton( i18n( "Edit..." ), buttons );
-    connect(pbEdit,SIGNAL(clicked()),this,SLOT(slotEditEntry()));
-    ( void )new QWidget( buttons );
-    bool state=(m_pListView->currentItem()!=0);
-    pbRemove->setEnabled(state);
-    pbEdit->setEnabled(state);
+    pbRemove->setEnabled(false);
+    pbAdd->setEnabled(false);
 }
 
 
@@ -247,21 +258,35 @@ void KWAutoFormatDia::setupTab3()
 }
 
 
-void KWAutoFormatDia::slotChangeItem( QListViewItem * )
-{
-    bool state=(m_pListView->currentItem()!=0);
-    pbRemove->setEnabled(state);
-    pbEdit->setEnabled(state);
-}
-
 void KWAutoFormatDia::slotRemoveEntry()
 {
-    if(m_pListView->currentItem()!=0)
-    {
-        m_autoFormat.removeAutoFormatEntry(m_pListView->currentItem()->text(0));
-        refreshEntryList();
-    }
+    m_autoFormat.removeAutoFormatEntry(m_find->text());
+    refreshEntryList();
 }
+
+
+void KWAutoFormatDia::slotfind( const QString & )
+{
+    QMap< QString, KWAutoFormatEntry >::Iterator it = m_autoFormat.findFormatEntry(m_find->text());
+    if ( !(it == m_autoFormat.lastAutoFormatEntry()) )
+    {
+        m_replace->setText(it.data().replace().latin1());
+	pbAdd->setText(i18n("Modify"));
+    } else {
+        m_replace->setText("");
+	pbAdd->setText(i18n("Add"));
+    }
+    slotfind2("");
+}
+
+
+void KWAutoFormatDia::slotfind2( const QString & )
+{
+    bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
+    pbRemove->setEnabled(state && m_pListView->currentItem ());
+    pbAdd->setEnabled(state);
+}
+
 
 void KWAutoFormatDia::refreshEntryList()
 {
@@ -270,15 +295,17 @@ void KWAutoFormatDia::refreshEntryList()
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
         ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
     m_pListView->setCurrentItem(m_pListView->firstChild ());
-    bool state=(m_pListView->currentItem()!=0);
-    pbRemove->setEnabled(state);
-    pbEdit->setEnabled(state);
+    bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
+    pbRemove->setEnabled(state && m_pListView->currentItem () );
+    pbAdd->setEnabled(state);
 }
+
 
 void KWAutoFormatDia::addEntryList(const QString &key, KWAutoFormatEntry &_autoEntry)
 {
     m_autoFormat.addAutoFormatEntry( key, _autoEntry );
 }
+
 
 void KWAutoFormatDia::editEntryList(const QString &key,const QString &newFindString, KWAutoFormatEntry &_autoEntry)
 {
@@ -286,16 +313,49 @@ void KWAutoFormatDia::editEntryList(const QString &key,const QString &newFindStr
     m_autoFormat.addAutoFormatEntry( newFindString, _autoEntry );
 }
 
+
 void KWAutoFormatDia::slotAddEntry()
 {
-    QString strFind;
-    QString strReplace;
-    KWAutoFormatEditDia *dia=new KWAutoFormatEditDia(this,"addDia",i18n("Add Entry"),strFind,strReplace);
-    if(dia->exec())
+    QString repl = m_replace->text();
+    QString find = m_find->text();
+    if(repl.isEmpty() || find.isEmpty())
     {
-        refreshEntryList();
+        KMessageBox::sorry( 0L, i18n( "An area is empty" ) );
+        return;
     }
+    if(repl==find)
+    {
+        KMessageBox::sorry( 0L, i18n( "Find string is the same as replace string!" ) );
+	return;
+    }
+    KWAutoFormatEntry tmp = KWAutoFormatEntry( repl );
+
+    if(pbAdd->text()=="Add")
+        addEntryList(find, tmp);
+    else
+        editEntryList(find, find, tmp);
+
+    refreshEntryList();
 }
+
+
+void KWAutoFormatDia::chooseSpecialChar1()
+{
+    QString f = font().family();
+    QChar c = ' ';
+    if ( KCharSelectDia::selectChar( f, c, false ) )
+        m_find->setText( c );
+}
+
+
+void KWAutoFormatDia::chooseSpecialChar2()
+{
+    QString f = font().family();
+    QChar c = ' ';
+    if ( KCharSelectDia::selectChar( f, c, false ) )
+        m_replace->setText( c );
+}
+
 
 void KWAutoFormatDia::slotItemRenamed(QListViewItem *, const QString & , int )
 {
@@ -303,18 +363,19 @@ void KWAutoFormatDia::slotItemRenamed(QListViewItem *, const QString & , int )
     // -> inherit QListViewItem and store the KWAutoFormatEntry pointer in it.
 }
 
+
 void KWAutoFormatDia::slotEditEntry()
 {
     if(m_pListView->currentItem()==0)
         return;
-    QString strFind=m_pListView->currentItem()->text(0);
-    QString strReplace=m_pListView->currentItem()->text(1);
-    KWAutoFormatEditDia *dia=new KWAutoFormatEditDia(this,"addDia",i18n("Edit Entry"),strFind,strReplace,true,strFind);
-    if(dia->exec())
-    {
-        refreshEntryList();
-    }
+    m_find->setText(m_pListView->currentItem()->text(0));
+    m_replace->setText(m_pListView->currentItem()->text(1));
+    bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
+    pbRemove->setEnabled(state);
+    pbAdd->setEnabled(state);
 }
+
+
 bool KWAutoFormatDia::applyConfig()
 {
     // First tab
@@ -377,109 +438,4 @@ void KWAutoFormatDia::slotChangeState(bool b)
     pbQuote1->setEnabled(b);
     pbQuote2->setEnabled(b);
     pbDefault->setEnabled(b);
-}
-
-KWAutoFormatEditDia::KWAutoFormatEditDia( KWAutoFormatDia *parent, const char *name, const QString &title,const QString &findStr,const QString &replaceStr,bool _replaceEntry, const QString & _str )
-    : QDialog( parent, name,TRUE )
-{
-    replaceEntry=_replaceEntry;
-    replaceEntryString=_str;
-    parentWidget=parent;
-    setCaption(title);
-    QGridLayout *grid = new QGridLayout( this, 2, 3, 15, 15 );
-
-    QLabel *text=new QLabel(i18n("Find"),this);
-    grid->addWidget(text,0,0);
-
-    lineEditFind=new QLineEdit(this);
-    grid->addWidget(lineEditFind,0,1);
-    lineEditFind->setText(findStr);
-
-    pbSpecialChar1=new QPushButton(this);
-    grid->addWidget(pbSpecialChar1,0,2);
-
-    text=new QLabel(i18n("Replace"),this);
-    grid->addWidget(text,1,0);
-
-    lineEditReplace=new QLineEdit(this);
-    lineEditReplace->setText(replaceStr);
-
-    grid->addWidget(lineEditReplace,1,1);
-
-    pbSpecialChar2=new QPushButton(this);
-    grid->addWidget(pbSpecialChar2,1,2);
-
-    connect(pbSpecialChar1,SIGNAL(clicked()),this,SLOT(chooseSpecialChar1()));
-    connect(pbSpecialChar2,SIGNAL(clicked()),this,SLOT(chooseSpecialChar2()));
-
-    connect(lineEditReplace,SIGNAL(textChanged ( const QString & )),
-            this,SLOT(textChanged ( const QString & )));
-    connect(lineEditFind,SIGNAL(textChanged ( const QString & )),
-            this,SLOT(textChanged ( const QString & )));
-
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-    m_pOk = bb->addButton( i18n("OK") );
-    m_pOk->setDefault( TRUE );
-    m_pClose = bb->addButton( i18n( "Close" ) );
-    bb->layout();
-    connect(m_pOk,SIGNAL(clicked()),this,SLOT(slotOk()));
-    connect(m_pClose,SIGNAL(clicked()),this,SLOT(slotCancel()));
-    grid->addMultiCellWidget( bb,2,2,1,2 );
-    lineEditFind->setFocus();
-    m_pOk->setEnabled(!findStr.isEmpty() && !replaceStr.isEmpty());
-}
-
-void KWAutoFormatEditDia::textChanged ( const QString & )
-{
-    m_pOk->setEnabled((!lineEditReplace->text().isEmpty() && !lineEditFind->text().isEmpty()));
-}
-
-void KWAutoFormatEditDia::chooseSpecialChar1()
-{
-    QString f = font().family();
-    QChar c = ' ';
-    if ( KCharSelectDia::selectChar( f, c, false ) )
-    {
-        pbSpecialChar1->setText( c );
-        lineEditFind->setText( c );
-    }
-}
-
-void KWAutoFormatEditDia::chooseSpecialChar2()
-{
-    QString f = font().family();
-    QChar c = ' ';
-    if ( KCharSelectDia::selectChar( f, c, false ) )
-    {
-        pbSpecialChar2->setText( c );
-        lineEditReplace->setText( c );
-    }
-}
-
-void KWAutoFormatEditDia::slotOk()
-{
-    QString repl=lineEditReplace->text();
-    QString find=lineEditFind->text();
-    if(repl.isEmpty() || find.isEmpty())
-    {
-       KMessageBox::sorry( 0L, i18n( "An area is empty" ) );
-       return;
-    }
-    if(repl==find)
-    {
-        KMessageBox::sorry( 0L, i18n( "Find string is the same as replace string!" ) );
-        return;
-    }
-    KWAutoFormatEntry tmp = KWAutoFormatEntry( repl );
-    if(!replaceEntry)
-        parentWidget->addEntryList(find, tmp);
-    else
-        parentWidget->editEntryList(replaceEntryString,find ,tmp);
-    accept();
-}
-
-void KWAutoFormatEditDia::slotCancel()
-{
-    reject();
 }

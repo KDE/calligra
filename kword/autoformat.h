@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+                 2001       Sven Leiber         <s.leiber@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -116,6 +117,9 @@ public:
 
     QMap< QString, KWAutoFormatEntry >::Iterator lastAutoFormatEntry()
     { return m_entries.end(); }
+
+    QMap< QString, KWAutoFormatEntry >::Iterator findFormatEntry(QString find)
+    { return m_entries.find(find); }
 
     // Copy all autoformat entries from another KWAutoFormat. Called by the dialog
     void copyAutoFormatEntries( const KWAutoFormat & other )

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+                 2001       Sven Leiber         <s.leiber@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,7 @@ class QVBox;
 class QHBox;
 class KCharSelect;
 class KListView;
+class KLineEdit;
 class QLineEdit;
 class QListBox;
 
@@ -83,9 +85,11 @@ protected:
     QWidget *tab2;
     QWidget *tab3;
     QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper;
-    QPushButton *pbQuote1, *pbQuote2, *pbEdit, *pbRemove, *pbAdd, *pbDefault;
+    QPushButton *pbQuote1, *pbQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDefault,
+                *pbSpecialChar1, *pbSpecialChar2;
     KCharSelect *charselect;
-    KListView * m_pListView;
+    KLineEdit *m_find, *m_replace;
+    KListView *m_pListView;
 
     QChar oBegin, oEnd;
 
@@ -100,41 +104,17 @@ protected slots:
     void slotItemRenamed(QListViewItem * item, const QString & newText, int column);
     void slotRemoveEntry();
     void slotEditEntry();
+    void slotfind( const QString & );
+    void slotfind2( const QString & );
+    void chooseSpecialChar1();
+    void chooseSpecialChar2();
     void chooseQuote1();
     void chooseQuote2();
     void defaultQuote();
     void slotChangeState(bool);
     void slotAddEntry();
-    void slotChangeItem( QListViewItem * );
 
 };	
-
-/******************************************************************/
-/* Class: KWAutoFormatEditDia                                     */
-/******************************************************************/
-class KWAutoFormatEditDia : public QDialog
-{
-    Q_OBJECT
-public:
-    KWAutoFormatEditDia( KWAutoFormatDia *parent, const char *name, const QString &title,const QString &findStr,const QString &replaceStr, bool _replaceEntry=false,const QString &_str="" );
-
-protected slots:
-    void slotOk();
-    void slotCancel();
-    void chooseSpecialChar1();
-    void chooseSpecialChar2();
-    void textChanged ( const QString & );
-private:
-    QLineEdit *lineEditFind;
-    QLineEdit *lineEditReplace;
-
-    QPushButton* m_pOk;
-    QPushButton* m_pClose;
-    QPushButton *pbSpecialChar1, *pbSpecialChar2;
-    KWAutoFormatDia *parentWidget;
-    bool replaceEntry;
-    QString replaceEntryString;
-};
 #endif
 
 
