@@ -964,10 +964,41 @@ by &kspread;.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
+<guimenuitem>Show Status Bar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the Status Bar.</action>
+The Status Bar shows additional information for selected items and
+instant calculations of the selected cells.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Tab Bar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the Tab Bar.</action>
+All Sheets of the current Workbook can be accessed through the Tab Bar.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Show Formula Bar</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the Formula Bar.</action>
+The Formula Bar can be used to edit the content of the selected cell.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
 <guimenuitem>Toolbars</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Show or hide the toolbars: File, Edit, Math, Format
-and Color/Border toolbar.</action>
+<listitem><para><action>Show or hide the toolbars: File, Edit, Math,
+Navigation, Format and Color/Border toolbar.</action>
 </para></listitem>
 </varlistentry>
 
