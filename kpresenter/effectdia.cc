@@ -29,7 +29,7 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   objNum = _objNum;
   view = _view;
 
-  lNum = new QLabel("Number: ",this);
+  lNum = new QLabel(i18n("Number: "),this);
   lNum->move(10,10);
   lNum->resize(lNum->sizeHint());
 
@@ -40,36 +40,36 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   sprintf(str,"%d",view->KPresenterDoc()->objList()->at(_objNum-1)->presNum);
   eNum->setText(str);
 
-  lEffect = new QLabel("Effect (appearing): ",this);
+  lEffect = new QLabel(i18n("Effect (appearing): "),this);
   lEffect->move(10,eNum->y()+eNum->height()+20);
   lEffect->resize(lEffect->sizeHint());
 
   cEffect = new QComboBox(false,this,"cEffect");
-  cEffect->insertItem("No Effect");
-  cEffect->insertItem("Come from right");
-  cEffect->insertItem("Come from left");
-  cEffect->insertItem("Come from top");
-  cEffect->insertItem("Come from bottom");
-  cEffect->insertItem("Come from right/top");
-  cEffect->insertItem("Come from right/bottom");
-  cEffect->insertItem("Come from left/top");
-  cEffect->insertItem("Come from left/bottom");
+  cEffect->insertItem(i18n("No Effect"));
+  cEffect->insertItem(i18n("Come from right"));
+  cEffect->insertItem(i18n("Come from left"));
+  cEffect->insertItem(i18n("Come from top"));
+  cEffect->insertItem(i18n("Come from bottom"));
+  cEffect->insertItem(i18n("Come from right/top"));
+  cEffect->insertItem(i18n("Come from right/bottom"));
+  cEffect->insertItem(i18n("Come from left/top"));
+  cEffect->insertItem(i18n("Come from left/bottom"));
   cEffect->setCurrentItem((int)view->KPresenterDoc()->objList()->at(_objNum-1)->effect);
   cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y()-5);
   cEffect->resize(cEffect->sizeHint());
 
-  lEffect2 = new QLabel("Effect (object specific): ",this);
+  lEffect2 = new QLabel(i18n("Effect (object specific): "),this);
   lEffect2->move(cEffect->x()+cEffect->width()+20,eNum->y()+eNum->height()+20);
   lEffect2->resize(lEffect2->sizeHint());
 
   cEffect2 = new QComboBox(false,this,"cEffect2");
-  cEffect2->insertItem("No Effect");
+  cEffect2->insertItem(i18n("No Effect"));
 
   switch (view->KPresenterDoc()->objList()->at(_objNum-1)->objType)
     {
     case OT_TEXT:
       {
-	cEffect2->insertItem("Paragraph after paragraph");
+	cEffect2->insertItem(i18n("Paragraph after paragraph"));
       } break;
     }
 
@@ -91,10 +91,10 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   resize(cEffect2->x()+cEffect2->width()+10,cEffect->y()+cEffect->height()+10);
 
   cancelBut = new QPushButton(this,"BCancel");
-  cancelBut->setText("Cancel");
+  cancelBut->setText(i18n("Cancel"));
 
   okBut = new QPushButton(this,"BOK");
-  okBut->setText("OK");
+  okBut->setText(i18n("OK"));
   okBut->setAutoRepeat(false);
   okBut->setAutoResize(false);
   okBut->setAutoDefault(true);

@@ -239,8 +239,8 @@ void KPresenterView_impl::insertAutoform()
       delete afChoose;
       afChoose = 0;
     }
-  afChoose = new AFChoose(0,"Autoform-Choose");
-  afChoose->setCaption(klocale->translate("KPresenter - Insert an Autoform"));
+  afChoose = new AFChoose(0,i18n("Autoform-Choose"));
+  afChoose->setCaption(klocale->translate(i18n("KPresenter - Insert an Autoform")));
   afChoose->setMaximumSize(afChoose->width(),afChoose->height());
   afChoose->setMinimumSize(afChoose->width(),afChoose->height());
   QObject::connect(afChoose,SIGNAL(formChosen(const char*)),this,SLOT(afChooseOk(const char*)));
@@ -267,12 +267,12 @@ void KPresenterView_impl::extraPenBrush()
       delete styleDia;
       styleDia = 0;
     }
-  styleDia = new StyleDia(0,"StyleDia");
+  styleDia = new StyleDia(0,i18n("StyleDia"));
   styleDia->setMaximumSize(styleDia->width(),styleDia->height());
   styleDia->setMinimumSize(styleDia->width(),styleDia->height());
   styleDia->setPen(m_pKPresenterDoc->getPen(pen));
   styleDia->setBrush(m_pKPresenterDoc->getBrush(brush));
-  styleDia->setCaption(klocale->translate("KPresenter - Pen and Brush"));
+  styleDia->setCaption(klocale->translate(i18n("KPresenter - Pen and Brush")));
   QObject::connect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
   styleDia->show();
 }
@@ -313,7 +313,7 @@ void KPresenterView_impl::extraBackground()
 			m_pKPresenterDoc->getBPicView(getCurrPgNum()));
   backDia->setMaximumSize(backDia->width(),backDia->height());
   backDia->setMinimumSize(backDia->width(),backDia->height());
-  backDia->setCaption(klocale->translate("KPresenter - Page Background"));
+  backDia->setCaption(klocale->translate(i18n("KPresenter - Page Background")));
   QObject::connect(backDia,SIGNAL(backOk(bool)),this,SLOT(backOk(bool)));
   backDia->show();
 }
@@ -341,7 +341,7 @@ void KPresenterView_impl::extraOptions()
       optionDia = 0;
     }
   optionDia = new OptionDia(0,"OptionDia");
-  optionDia->setCaption("KPresenter - Options");
+  optionDia->setCaption(i18n("KPresenter - Options"));
   optionDia->setMaximumSize(optionDia->width(),optionDia->height());
   optionDia->setMinimumSize(optionDia->width(),optionDia->height());
   QObject::connect(optionDia,SIGNAL(applyButtonPressed()),this,SLOT(optionOk()));
@@ -392,14 +392,15 @@ void KPresenterView_impl::screenAssignEffect()
       effectDia = new EffectDia(0,"Effect",_pNum,_oNum,(KPresenterView_impl*)this);
       effectDia->setMaximumSize(effectDia->width(),effectDia->height());
       effectDia->setMinimumSize(effectDia->width(),effectDia->height());
-      effectDia->setCaption("KPresenter - Assign effects");
+      effectDia->setCaption(i18n("KPresenter - Assign effects"));
       QObject::connect(effectDia,SIGNAL(effectDiaOk()),this,SLOT(effectOk()));
       effectDia->show();
       page->deSelectAllObj();
       page->selectObj(_oNum);
     }
   else
-    QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),i18n("I can't assign an effect. You have to select EXACTLY one object!"),
+    QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),
+			  i18n("I can't assign an effect. You have to select EXACTLY one object!"),
 			  i18n("OK"));
 }
 
@@ -1209,13 +1210,14 @@ void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 {
   QFileInfo fileInfo(filename);
   QString file = KFileDialog::getOpenFileName(getenv("HOME"),
-					      "*.gif *GIF|GIF-Pictures\n"
-					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-					      "*.bmp *.BMP|Windows Bitmaps\n"
-					      "*.xbm *.XBM|XWindow Pitmaps\n"
-					      "*.xpm *.XPM|Pixmaps\n"
-					      "*.pnm *.PNM|PNM-Pictures\n"
-					      "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures",0);
+					      i18n("*.gif *GIF|GIF-Pictures\n"
+						   "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+						   "*.bmp *.BMP|Windows Bitmaps\n"
+						   "*.xbm *.XBM|XWindow Pitmaps\n"
+						   "*.xpm *.XPM|Pixmaps\n"
+						   "*.pnm *.PNM|PNM-Pictures\n"
+						   "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp "
+						   "*.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures"),0);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changePicture((const char*)file,xOffset,yOffset);
 }
@@ -1224,7 +1226,7 @@ void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 void KPresenterView_impl::changeClipart(unsigned int,const char* filename)
 {
   QFileInfo fileInfo(filename);
-  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),"*.wmf *.WMF|Windows Metafiles",0);
+  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),i18n("*.wmf *.WMF|Windows Metafiles"),0);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changeClipart((const char*)file,xOffset,yOffset);
 }
@@ -1324,58 +1326,58 @@ void KPresenterView_impl::setupMenu()
       // printf("rMenuBar %i %i\n",m_rMenuBar->refCount(),m_rMenuBar->_refcnt());
       
       // edit menu
-      m_idMenuEdit = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Edit")));
+      m_idMenuEdit = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Edit")));
       QString tmp = kapp->kde_toolbardir().copy();
       tmp += "/editcut.xpm";
       QString pix = loadPixmap(tmp);
-      m_idMenuEdit_Cut = m_rMenuBar->insertItemP(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("&Cut")),m_idMenuEdit,
+      m_idMenuEdit_Cut = m_rMenuBar->insertItemP(CORBA::string_dup(pix),CORBA::string_dup(i18n("&Cut")),m_idMenuEdit,
 						this,CORBA::string_dup("editCut"));
       tmp = kapp->kde_toolbardir().copy();
       tmp += "/editcopy.xpm";
       pix = loadPixmap(tmp);
-      m_idMenuEdit_Copy = m_rMenuBar->insertItemP(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("&Copy")),m_idMenuEdit,
+      m_idMenuEdit_Copy = m_rMenuBar->insertItemP(CORBA::string_dup(pix),CORBA::string_dup(i18n("&Copy")),m_idMenuEdit,
 						  this,CORBA::string_dup("editCopy"));
       tmp = kapp->kde_toolbardir().copy();
       tmp += "/editpaste.xpm";
       pix = loadPixmap(tmp);
-      m_idMenuEdit_Paste = m_rMenuBar->insertItemP(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("&Paste")),m_idMenuEdit,
+      m_idMenuEdit_Paste = m_rMenuBar->insertItemP(CORBA::string_dup(pix),CORBA::string_dup(i18n("&Paste")),m_idMenuEdit,
 						   this,CORBA::string_dup("editPaste"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/delete.xpm";
       pix = loadPixmap(tmp);
       m_idMenuEdit_Delete = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Delete")),m_idMenuEdit,
+						    CORBA::string_dup(i18n("&Delete")),m_idMenuEdit,
 						    this,CORBA::string_dup("editDelete"));
       m_rMenuBar->insertSeparator(m_idMenuEdit);
-      m_idMenuEdit_SelectAll = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Select &all")),m_idMenuEdit,
+      m_idMenuEdit_SelectAll = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Select &all")),m_idMenuEdit,
 						      this,CORBA::string_dup("editSelectAll"));
 
       // view menu
-      m_idMenuView = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&View")));
-      m_idMenuView_NewView = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&New View")),m_idMenuView,
+      m_idMenuView = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&View")));
+      m_idMenuView_NewView = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&New View")),m_idMenuView,
 						    this,CORBA::string_dup("newView"));
 
       // insert menu
-      m_idMenuInsert = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Insert")));
-      m_idMenuInsert_Page = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Pa&ge...")),m_idMenuInsert,
+      m_idMenuInsert = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Insert")));
+      m_idMenuInsert_Page = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Pa&ge...")),m_idMenuInsert,
 						   this,CORBA::string_dup("insertPage"));
       m_rMenuBar->insertSeparator(m_idMenuInsert);
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/picture.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Picture = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						       CORBA::string_dup(klocale->translate("&Picture...")),m_idMenuInsert,
+						       CORBA::string_dup(i18n("&Picture...")),m_idMenuInsert,
 						       this,CORBA::string_dup("insertPicture"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/clipart.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Clipart = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						       CORBA::string_dup(klocale->translate("&Clipart...")),m_idMenuInsert,
+						       CORBA::string_dup(i18n("&Clipart...")),m_idMenuInsert,
 						       this,CORBA::string_dup("insertClipart"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/line.xpm";
       pix = loadPixmap(tmp);
-      m_idMenuInsert_Line = m_rMenuBar->insertSubMenuP(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("&Line")),
+      m_idMenuInsert_Line = m_rMenuBar->insertSubMenuP(CORBA::string_dup(pix),CORBA::string_dup(i18n("&Line")),
 						       m_idMenuInsert);
 
 
@@ -1410,7 +1412,7 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/rectangle.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Rectangle = m_rMenuBar->insertSubMenuP(CORBA::string_dup(pix),
-							    CORBA::string_dup(klocale->translate("&Rectangle")),m_idMenuInsert);
+							    CORBA::string_dup(i18n("&Rectangle")),m_idMenuInsert);
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/rectangle2.xpm";
@@ -1430,40 +1432,40 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/circle.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Circle = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						      CORBA::string_dup(klocale->translate("C&ircle or Ellipse")),m_idMenuInsert,
+						      CORBA::string_dup(i18n("C&ircle or Ellipse")),m_idMenuInsert,
 						      this,CORBA::string_dup("insertCircleOrEllipse"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/text.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Text = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Text")),m_idMenuInsert,
+						    CORBA::string_dup(i18n("&Text")),m_idMenuInsert,
 						    this,CORBA::string_dup("insertText"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/autoform.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Autoform = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							CORBA::string_dup(klocale->translate("&Autoform...")),m_idMenuInsert,
+							CORBA::string_dup(i18n("&Autoform...")),m_idMenuInsert,
 							this,CORBA::string_dup("insertAutoform"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/parts.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Part = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Object...")),m_idMenuInsert,
+						    CORBA::string_dup(i18n("&Object...")),m_idMenuInsert,
 						    this,CORBA::string_dup("insertObject"));
 
       // extra menu
-      m_idMenuExtra = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Extra")));
-      m_idMenuExtra_TFont = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&Font...")),m_idMenuExtra,
+      m_idMenuExtra = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Extra")));
+      m_idMenuExtra_TFont = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Font...")),m_idMenuExtra,
 						   this,CORBA::string_dup("mtextFont"));
-      m_idMenuExtra_TColor = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Text &Color...")),m_idMenuExtra,
+      m_idMenuExtra_TColor = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Text &Color...")),m_idMenuExtra,
 						    this,CORBA::string_dup("textColor"));
-      m_idMenuExtra_TAlign = m_rMenuBar->insertSubMenu(CORBA::string_dup(klocale->translate("Text &Alignment")),m_idMenuExtra);
+      m_idMenuExtra_TAlign = m_rMenuBar->insertSubMenu(CORBA::string_dup(i18n("Text &Alignment")),m_idMenuExtra);
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/alignLeft.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_TAlign_Left = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							  CORBA::string_dup(klocale->translate("Align &Left")),m_idMenuExtra_TAlign,
+							  CORBA::string_dup(i18n("Align &Left")),m_idMenuExtra_TAlign,
 							  this,CORBA::string_dup("mtextAlignLeft"));
       m_rMenuBar->setCheckable(m_idMenuExtra_TAlign_Left,true);
       
@@ -1471,7 +1473,7 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/alignCenter.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_TAlign_Center = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							    CORBA::string_dup(klocale->translate("Align &Center")),m_idMenuExtra_TAlign,
+							    CORBA::string_dup(i18n("Align &Center")),m_idMenuExtra_TAlign,
 							    this,CORBA::string_dup("mtextAlignCenter"));
       m_rMenuBar->setCheckable(m_idMenuExtra_TAlign_Center,true);
 
@@ -1479,17 +1481,17 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/alignRight.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_TAlign_Right = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							   CORBA::string_dup(klocale->translate("Align &Right")),m_idMenuExtra_TAlign,
+							   CORBA::string_dup(i18n("Align &Right")),m_idMenuExtra_TAlign,
 							   this,CORBA::string_dup("mtextAlignRight"));
       m_rMenuBar->setCheckable(m_idMenuExtra_TAlign_Right,true);
 
-      m_idMenuExtra_TType = m_rMenuBar->insertSubMenu(CORBA::string_dup(klocale->translate("Text &Type")),m_idMenuExtra);
+      m_idMenuExtra_TType = m_rMenuBar->insertSubMenu(CORBA::string_dup(i18n("Text &Type")),m_idMenuExtra);
 
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/enumList.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_TType_EnumList = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("&Enumerated List")),
+							     CORBA::string_dup(i18n("&Enumerated List")),
 							     m_idMenuExtra_TType,
 							     this,CORBA::string_dup("textEnumList"));
 
@@ -1497,7 +1499,7 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/unsortedList.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_TType_UnsortList = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							       CORBA::string_dup(klocale->translate("&Unsorted List")),
+							       CORBA::string_dup(i18n("&Unsorted List")),
 							       m_idMenuExtra_TType,
 							       this,CORBA::string_dup("textUnsortList"));
 
@@ -1505,7 +1507,7 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/normalText.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_TType_NormalText = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							       CORBA::string_dup(klocale->translate("&Normal Text")),
+							       CORBA::string_dup(i18n("&Normal Text")),
 							       m_idMenuExtra_TType,
 							       this,CORBA::string_dup("textNormalText"));
 
@@ -1514,116 +1516,116 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/style.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_PenBrush = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						       CORBA::string_dup(klocale->translate("&Pen and Brush...")),m_idMenuExtra,
+						       CORBA::string_dup(i18n("&Pen and Brush...")),m_idMenuExtra,
 						       this,CORBA::string_dup("extraPenBrush"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/raise.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_Raise = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Raise object(s)")),m_idMenuExtra,
+						    CORBA::string_dup(i18n("&Raise object(s)")),m_idMenuExtra,
 						    this,CORBA::string_dup("extraRaise"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/lower.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_Lower = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Lower object(s)")),m_idMenuExtra,
+						    CORBA::string_dup(i18n("&Lower object(s)")),m_idMenuExtra,
 						    this,CORBA::string_dup("extraLower"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/rotate.xpm";
       pix = loadPixmap(tmp);
       m_idMenuExtra_Rotate = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						     CORBA::string_dup(klocale->translate("Rot&ate object(s)...")),m_idMenuExtra,
+						     CORBA::string_dup(i18n("Rot&ate object(s)...")),m_idMenuExtra,
 						     this,CORBA::string_dup("extraRotate"));
       m_rMenuBar->insertSeparator(m_idMenuExtra);
-      m_idMenuExtra_Background = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Page &Background...")),m_idMenuExtra,
+      m_idMenuExtra_Background = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Page &Background...")),m_idMenuExtra,
 							this,CORBA::string_dup("extraBackground"));
-      m_idMenuExtra_Layout = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Pa&ge Layout...")),m_idMenuExtra,
+      m_idMenuExtra_Layout = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Pa&ge Layout...")),m_idMenuExtra,
 						    this,CORBA::string_dup("extraLayout"));
       m_rMenuBar->insertSeparator(m_idMenuExtra);
-      m_idMenuExtra_Options = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&Options...")),m_idMenuExtra,
+      m_idMenuExtra_Options = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Options...")),m_idMenuExtra,
 						     this,CORBA::string_dup("extraOptions"));
       
       // screenpresentation menu
-      m_idMenuScreen = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Screen Presentations")));
-      m_idMenuScreen_ConfigPage = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&Configure pages...")),m_idMenuScreen,
+      m_idMenuScreen = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Screen Presentations")));
+      m_idMenuScreen_ConfigPage = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Configure pages...")),m_idMenuScreen,
 							 this,CORBA::string_dup("screenConfigPages"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/effect.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_AssignEffect = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							    CORBA::string_dup(klocale->translate("&Assign effect...")),m_idMenuScreen,
+							    CORBA::string_dup(i18n("&Assign effect...")),m_idMenuScreen,
 							    this,CORBA::string_dup("screenAssignEffect"));
       m_rMenuBar->insertSeparator(m_idMenuScreen);
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/start.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Start = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						     CORBA::string_dup(klocale->translate("&Start")),m_idMenuScreen,
+						     CORBA::string_dup(i18n("&Start")),m_idMenuScreen,
 						     this,CORBA::string_dup("screenStart"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/stop.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Stop = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("St&op")),m_idMenuScreen,
+						    CORBA::string_dup(i18n("St&op")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenStop"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/pause.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Pause = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						     CORBA::string_dup(klocale->translate("Pa&use")),m_idMenuScreen,
+						     CORBA::string_dup(i18n("Pa&use")),m_idMenuScreen,
 						     this,CORBA::string_dup("screenPause"));
       m_rMenuBar->insertSeparator(m_idMenuScreen);
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/first.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_First = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						     CORBA::string_dup(klocale->translate("&Go to start")),m_idMenuScreen,
+						     CORBA::string_dup(i18n("&Go to start")),m_idMenuScreen,
 						     this,CORBA::string_dup("screenFirst"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/prev.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Prev = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Previous steo")),m_idMenuScreen,
+						    CORBA::string_dup(i18n("&Previous steo")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenPrev"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/next.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Next = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Next step")),m_idMenuScreen,
+						    CORBA::string_dup(i18n("&Next step")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenNext"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/last.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Last = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("&Go to end")),m_idMenuScreen,
+						    CORBA::string_dup(i18n("&Go to end")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenLast"));
-      m_idMenuScreen_Skip = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Skip &to page")),m_idMenuScreen,
+      m_idMenuScreen_Skip = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Skip &to page")),m_idMenuScreen,
 						   this,CORBA::string_dup("screenSkip"));
       m_rMenuBar->insertSeparator(m_idMenuScreen);
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/screen.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_FullScreen = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-							  CORBA::string_dup(klocale->translate("Full sc&reen")),m_idMenuScreen,
+							  CORBA::string_dup(i18n("Full sc&reen")),m_idMenuScreen,
 							  this,CORBA::string_dup("screenFullScreen"));
       m_rMenuBar->insertSeparator(m_idMenuScreen);
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/pen.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Pen = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						   CORBA::string_dup(klocale->translate("&Marker or Pen")),m_idMenuScreen,
+						   CORBA::string_dup(i18n("&Marker or Pen")),m_idMenuScreen,
 						   this,CORBA::string_dup("screenPen"));
 
       // help menu
-      m_idMenuHelp = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Help")));
-      m_idMenuHelp_Contents = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&Contents")),m_idMenuHelp,
+      m_idMenuHelp = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Help")));
+      m_idMenuHelp_Contents = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Contents")),m_idMenuHelp,
 						     this,CORBA::string_dup("helpContents"));
       m_rMenuBar->insertSeparator(m_idMenuHelp);
-      m_idMenuHelp_About = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&About KPresenter...")),m_idMenuHelp,
+      m_idMenuHelp_About = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KPresenter...")),m_idMenuHelp,
 						  this,CORBA::string_dup("helpAbout"));
-      m_idMenuHelp_AboutKOffice = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&About KOffice...")),m_idMenuHelp,
+      m_idMenuHelp_AboutKOffice = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KOffice...")),m_idMenuHelp,
 							 this,CORBA::string_dup("helpAboutKOffice"));
-      m_idMenuHelp_AboutKDE = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("&About KDE...")),m_idMenuHelp,
+      m_idMenuHelp_AboutKDE = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KDE...")),m_idMenuHelp,
 						     this,CORBA::string_dup("helpAboutKDE"));
 
      }
@@ -1672,27 +1674,27 @@ void KPresenterView_impl::setupEditToolbar()
   if (!CORBA::is_nil(m_vToolBarFactory))
     {
       // toolbar
-      m_rToolBarEdit = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(klocale->translate("Edit")));
+      m_rToolBarEdit = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Edit")));
  
       // cut
       QString tmp = kapp->kde_toolbardir().copy();
       tmp += "/editcut.xpm";
       QString pix = loadPixmap(tmp);
-      m_idButtonEdit_Cut = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Cut")),
+      m_idButtonEdit_Cut = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Cut")),
 							this,CORBA::string_dup("editCut"));
 
       // copy
       tmp = kapp->kde_toolbardir().copy();
       tmp += "/editcopy.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonEdit_Copy = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Copy")),
+      m_idButtonEdit_Copy = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Copy")),
 							 this,CORBA::string_dup("editCopy"));
 
       // paste
       tmp = kapp->kde_toolbardir().copy();
       tmp += "/editpaste.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonEdit_Paste = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Paste")),
+      m_idButtonEdit_Paste = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Paste")),
 							  this,CORBA::string_dup("editPaste"));
       m_rToolBarEdit->insertSeparator();
 
@@ -1700,7 +1702,7 @@ void KPresenterView_impl::setupEditToolbar()
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/delete.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonEdit_Delete = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Delete")),
+      m_idButtonEdit_Delete = m_rToolBarEdit->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Delete")),
 							   this,CORBA::string_dup("editDelete"));
     }
 }
@@ -1712,14 +1714,14 @@ void KPresenterView_impl::setupInsertToolbar()
   if (!CORBA::is_nil(m_vToolBarFactory))
     {
       // toolbar
-      m_rToolBarInsert = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(klocale->translate("Insert")));
+      m_rToolBarInsert = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Insert")));
  
       // picture
       QString tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/picture.xpm";
       QString pix = loadPixmap(tmp);
       m_idButtonInsert_Picture = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-								CORBA::string_dup(klocale->translate("Insert Picture")),
+								CORBA::string_dup(i18n("Insert Picture")),
 								this,CORBA::string_dup("insertPicture"));
       
       // clipart
@@ -1727,7 +1729,7 @@ void KPresenterView_impl::setupInsertToolbar()
       tmp += "/kpresenter/toolbar/clipart.xpm";
       pix = loadPixmap(tmp);
       m_idButtonInsert_Clipart = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-								CORBA::string_dup(klocale->translate("Insert Clipart")),
+								CORBA::string_dup(i18n("Insert Clipart")),
 								this,CORBA::string_dup("insertClipart"));
 
       // line
@@ -1735,7 +1737,7 @@ void KPresenterView_impl::setupInsertToolbar()
       tmp += "/kpresenter/toolbar/line.xpm";
       pix = loadPixmap(tmp);
       m_idButtonInsert_Line = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Insert Line")),
+							     CORBA::string_dup(i18n("Insert Line")),
 							     this,CORBA::string_dup("insertLine"));
 
       // rectangle
@@ -1743,7 +1745,7 @@ void KPresenterView_impl::setupInsertToolbar()
       tmp += "/kpresenter/toolbar/rectangle.xpm";
       pix = loadPixmap(tmp);
       m_idButtonInsert_Rectangle = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-								  CORBA::string_dup(klocale->translate("Insert Rectangle")),
+								  CORBA::string_dup(i18n("Insert Rectangle")),
 								  this,CORBA::string_dup("insertRectangle"));
 
       // circle or ellipse
@@ -1751,7 +1753,7 @@ void KPresenterView_impl::setupInsertToolbar()
       tmp += "/kpresenter/toolbar/circle.xpm";
       pix = loadPixmap(tmp);
       m_idButtonInsert_Circle = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-							       CORBA::string_dup(klocale->translate("Insert Circle or Ellipse")),
+							       CORBA::string_dup(i18n("Insert Circle or Ellipse")),
 							       this,CORBA::string_dup("insertCircleOrEllipse"));
 
       // text
@@ -1759,7 +1761,7 @@ void KPresenterView_impl::setupInsertToolbar()
       tmp += "/kpresenter/toolbar/text.xpm";
       pix = loadPixmap(tmp);
       m_idButtonInsert_Text = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Insert Text")),
+							     CORBA::string_dup(i18n("Insert Text")),
 							     this,CORBA::string_dup("insertText"));
 
       // autoform
@@ -1767,7 +1769,7 @@ void KPresenterView_impl::setupInsertToolbar()
       tmp += "/kpresenter/toolbar/autoform.xpm";
       pix = loadPixmap(tmp);
       m_idButtonInsert_Autoform = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-								 CORBA::string_dup(klocale->translate("Insert Autoform")),
+								 CORBA::string_dup(i18n("Insert Autoform")),
 								 this,CORBA::string_dup("insertAutoform"));
 
       // parts
@@ -1775,7 +1777,7 @@ void KPresenterView_impl::setupInsertToolbar()
       tmp += "/kpresenter/toolbar/parts.xpm";
       pix = loadPixmap(tmp);
       m_idButtonInsert_Part = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Insert Object")),
+							     CORBA::string_dup(i18n("Insert Object")),
 							     this,CORBA::string_dup("insertObject"));
    }
 }
@@ -1787,10 +1789,10 @@ void KPresenterView_impl::setupTextToolbar()
   if (!CORBA::is_nil(m_vToolBarFactory))
     {
       // toolbar
-      m_rToolBarText = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(klocale->translate("Text")));
+      m_rToolBarText = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Text")));
  
       // size combobox
-      m_idComboText_FontSize = m_rToolBarText->insertCombo(false,CORBA::string_dup(klocale->translate("Font Size")),60,
+      m_idComboText_FontSize = m_rToolBarText->insertCombo(false,CORBA::string_dup(i18n("Font Size")),60,
 							   this,CORBA::string_dup("sizeSelected"));
       for(unsigned int i = 4;i <= 100;i++)
 	{
@@ -1803,7 +1805,7 @@ void KPresenterView_impl::setupTextToolbar()
 
       // fonts combobox
       getFonts();
-      m_idComboText_FontList = m_rToolBarText->insertCombo(false,CORBA::string_dup(klocale->translate("Font List")),200,
+      m_idComboText_FontList = m_rToolBarText->insertCombo(false,CORBA::string_dup(i18n("Font List")),200,
 							   this,CORBA::string_dup("fontSelected"));
       for(unsigned int i = 0;i <= fontList.count()-1;i++)
  	m_rToolBarText->insertComboItem(m_idComboText_FontList,CORBA::string_dup(fontList.at(i)),-1);
@@ -1816,7 +1818,7 @@ void KPresenterView_impl::setupTextToolbar()
       QString tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/bold.xpm";
       QString pix = loadPixmap(tmp);
-      m_idButtonText_Bold = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Bold")),
+      m_idButtonText_Bold = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Bold")),
 							 this,CORBA::string_dup("textBold"));
       m_rToolBarText->setToggle(m_idButtonText_Bold,true);
       m_rToolBarText->setButton(m_idButtonText_Bold,false);
@@ -1826,7 +1828,7 @@ void KPresenterView_impl::setupTextToolbar()
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/italic.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonText_Italic = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Italic")),
+      m_idButtonText_Italic = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Italic")),
 							   this,CORBA::string_dup("textItalic"));
       m_rToolBarText->setToggle(m_idButtonText_Italic,true);
       m_rToolBarText->setButton(m_idButtonText_Italic,false);
@@ -1836,14 +1838,14 @@ void KPresenterView_impl::setupTextToolbar()
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/underl.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonText_Underline = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Underline")),
+      m_idButtonText_Underline = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Underline")),
 							      this,CORBA::string_dup("textUnderline"));
       m_rToolBarText->setToggle(m_idButtonText_Underline,true);
       m_rToolBarText->setButton(m_idButtonText_Underline,false);
       tbFont.setUnderline(false);
 
       // color
-      m_idButtonText_Color = m_rToolBarText->insertButton(CORBA::string_dup(""),CORBA::string_dup(klocale->translate("Color")),
+      m_idButtonText_Color = m_rToolBarText->insertButton(CORBA::string_dup(""),CORBA::string_dup(i18n("Color")),
 							  this,CORBA::string_dup("textColor"));
       m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(black)));
       tbColor = black;
@@ -1853,7 +1855,7 @@ void KPresenterView_impl::setupTextToolbar()
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/alignLeft.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonText_ALeft = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Align Left")),
+      m_idButtonText_ALeft = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Align Left")),
 							  this,CORBA::string_dup("textAlignLeft"));
       m_rToolBarText->setToggle(m_idButtonText_ALeft,true);
       m_rToolBarText->setButton(m_idButtonText_ALeft,true);
@@ -1864,7 +1866,7 @@ void KPresenterView_impl::setupTextToolbar()
       tmp += "/kpresenter/toolbar/alignCenter.xpm";
       pix = loadPixmap(tmp);
       m_idButtonText_ACenter = m_rToolBarText->insertButton(CORBA::string_dup(pix),
-							    CORBA::string_dup(klocale->translate("Align Center")),
+							    CORBA::string_dup(i18n("Align Center")),
 							    this,CORBA::string_dup("textAlignCenter"));
       m_rToolBarText->setToggle(m_idButtonText_ACenter,true);
       m_rToolBarText->setButton(m_idButtonText_ACenter,false);
@@ -1873,7 +1875,7 @@ void KPresenterView_impl::setupTextToolbar()
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/alignRight.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonText_ARight = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Align Right")),
+      m_idButtonText_ARight = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Align Right")),
 							   this,CORBA::string_dup("textAlignRight"));
       m_rToolBarText->setToggle(m_idButtonText_ARight,true);
       m_rToolBarText->setButton(m_idButtonText_ARight,false);
@@ -1884,7 +1886,7 @@ void KPresenterView_impl::setupTextToolbar()
       tmp += "/kpresenter/toolbar/enumList.xpm";
       pix = loadPixmap(tmp);
       m_idButtonText_EnumList = m_rToolBarText->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Enumerated List")),
+							     CORBA::string_dup(i18n("Enumerated List")),
 							     this,CORBA::string_dup("textEnumList"));
 
       // unsorted list
@@ -1892,7 +1894,7 @@ void KPresenterView_impl::setupTextToolbar()
       tmp += "/kpresenter/toolbar/unsortedList.xpm";
       pix = loadPixmap(tmp);
       m_idButtonText_EnumList = m_rToolBarText->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Unsorted List")),
+							     CORBA::string_dup(i18n("Unsorted List")),
 							     this,CORBA::string_dup("textUnsortList"));
 
       // normal text
@@ -1900,7 +1902,7 @@ void KPresenterView_impl::setupTextToolbar()
       tmp += "/kpresenter/toolbar/normalText.xpm";
       pix = loadPixmap(tmp);
       m_idButtonText_EnumList = m_rToolBarText->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Normal Text")),
+							     CORBA::string_dup(i18n("Normal Text")),
 							     this,CORBA::string_dup("textNormalText"));
     }
 }      
@@ -1912,13 +1914,13 @@ void KPresenterView_impl::setupExtraToolbar()
   if (!CORBA::is_nil(m_vToolBarFactory))
     {
       // toolbar
-      m_rToolBarExtra = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(klocale->translate("Extra")));
+      m_rToolBarExtra = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Extra")));
  
       // pen and brush
       QString tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/style.xpm";
       QString pix = loadPixmap(tmp);
-      m_idButtonExtra_Style = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Pen & Brush")),
+      m_idButtonExtra_Style = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Pen & Brush")),
 							   this,CORBA::string_dup("extraPenBrush"));
       m_rToolBarExtra->insertSeparator();
 
@@ -1927,7 +1929,7 @@ void KPresenterView_impl::setupExtraToolbar()
       tmp += "/kpresenter/toolbar/raise.xpm";
       pix = loadPixmap(tmp);
       m_idButtonExtra_Raise = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),
-							    CORBA::string_dup(klocale->translate("Raise object(s)")),
+							    CORBA::string_dup(i18n("Raise object(s)")),
 							    this,CORBA::string_dup("extraRaise"));
 
       // lower
@@ -1935,7 +1937,7 @@ void KPresenterView_impl::setupExtraToolbar()
       tmp += "/kpresenter/toolbar/lower.xpm";
       pix = loadPixmap(tmp);
       m_idButtonExtra_Lower = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),
-							    CORBA::string_dup(klocale->translate("Lower object(s)")),
+							    CORBA::string_dup(i18n("Lower object(s)")),
 							    this,CORBA::string_dup("extraLower"));
       m_rToolBarExtra->insertSeparator();
 
@@ -1944,7 +1946,7 @@ void KPresenterView_impl::setupExtraToolbar()
       tmp += "/kpresenter/toolbar/rotate.xpm";
       pix = loadPixmap(tmp);
       m_idButtonExtra_Rotate = m_rToolBarExtra->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Rotate object(s)")),
+							     CORBA::string_dup(i18n("Rotate object(s)")),
 							     this,CORBA::string_dup("extraRotate"));
     }
 }
@@ -1956,27 +1958,27 @@ void KPresenterView_impl::setupScreenToolbar()
   if (!CORBA::is_nil(m_vToolBarFactory))
     {
       // toolbar
-      m_rToolBarScreen = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(klocale->translate("Screen Presentations")));
+      m_rToolBarScreen = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Screen Presentations")));
  
       // stop
       QString tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/stop.xpm";
       QString pix = loadPixmap(tmp);
-      m_idButtonScreen_Stop = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Stop")),
+      m_idButtonScreen_Stop = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Stop")),
 							     this,CORBA::string_dup("screenStop"));
 
       // pause
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/pause.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_Pause = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Pause")),
+      m_idButtonScreen_Pause = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Pause")),
 							      this,CORBA::string_dup("screenPause"));
 
       // start
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/start.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_Start = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Start")),
+      m_idButtonScreen_Start = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Start")),
 							      this,CORBA::string_dup("screenStart"));
       m_rToolBarScreen->insertSeparator();
 
@@ -1984,28 +1986,28 @@ void KPresenterView_impl::setupScreenToolbar()
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/first.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_First = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("First")),
+      m_idButtonScreen_First = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("First")),
 							      this,CORBA::string_dup("screenFirst"));
 
       // previous
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/prev.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_Prev = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Previous")),
+      m_idButtonScreen_Prev = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Previous")),
 							     this,CORBA::string_dup("screenPrev"));
 
       // next
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/next.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_Next = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Next")),
+      m_idButtonScreen_Next = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Next")),
 							     this,CORBA::string_dup("screenNext"));
 
       // last
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/last.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_Last = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Last")),
+      m_idButtonScreen_Last = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Last")),
 							     this,CORBA::string_dup("screenLast"));
       m_rToolBarScreen->insertSeparator();
 
@@ -2014,7 +2016,7 @@ void KPresenterView_impl::setupScreenToolbar()
       tmp += "/kpresenter/toolbar/effect.xpm";
       pix = loadPixmap(tmp);
       m_idButtonScreen_Effect = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),
-							       CORBA::string_dup(klocale->translate("Assign Effect")),
+							       CORBA::string_dup(i18n("Assign Effect")),
 							       this,CORBA::string_dup("screenAssignEffect"));
       m_rToolBarScreen->insertSeparator();
 
@@ -2023,14 +2025,14 @@ void KPresenterView_impl::setupScreenToolbar()
       tmp += "/kpresenter/toolbar/screen.xpm";
       pix = loadPixmap(tmp);
       m_idButtonScreen_Full = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Full Screen")),
+							     CORBA::string_dup(i18n("Full Screen")),
 							     this,CORBA::string_dup("screenFullScreen"));
 
       // pen
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/pen.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_Pen = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(klocale->translate("Merker/Pen")),
+      m_idButtonScreen_Pen = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Merker/Pen")),
 							    this,CORBA::string_dup("screenPen"));
     }
 }

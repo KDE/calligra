@@ -29,8 +29,9 @@ typedef AutoLoader<KPresenterFactory> KPresenterAutoLoader;
 
 /*====================== constrcutor =============================*/
 KPresenterApp::KPresenterApp(int argc,char** argv)
-  : OPApplication(argc,argv)
+  : OPApplication(argc,argv,"kpresenter")
 {
+    getLocale()->insertCatalogue("koffice");
 }
 
 /*====================== destrcutor ==============================*/
