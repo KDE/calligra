@@ -59,6 +59,8 @@ class KFORMEDITOR_EXPORT Widget
 		 * returns the real name e.g. 'Line Edit'
 		 */
 		virtual QString	name() { return m_name; }
+		
+		//virtual QString description() { return m_desc; }
 
 		/**
 		 * this is executed at doubleclick on the widget
@@ -70,11 +72,13 @@ class KFORMEDITOR_EXPORT Widget
 		void		setPixmap(const QPixmap &p) { m_pixmap = p; }
 		void		setClassName(const QString &s) { m_class = s; }
 		void		setName(const QString &n) { m_name = n; }
+		//void		setDescription(const QString &desc) { m_desc = desc;}
 
 	private:
 		QPixmap		m_pixmap;
 		QString		m_class;
 		QString		m_name;
+		//QString		m_desc;
 		WidgetFactory	*m_factory;
 
 };

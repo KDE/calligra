@@ -1,0 +1,112 @@
+/* This file is part of the KDE project
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#include <kdebug.h>
+#include <qstringlist.h>
+#include <qstrlist.h>
+#include <qmetaobject.h>
+#include <qvariant.h>
+
+#include "objpropbuffer.h"
+#include "kexipropertyeditor.h"
+
+ObjectPropertyBuffer::ObjectPropertyBuffer(QObject *parent, const char *name)
+ : KexiPropertyBuffer(parent, name)
+{
+	m_list = 0;
+	m_object = 0;
+}
+
+void
+ObjectPropertyBuffer::changeProperty(const char *property, const QVariant &value)
+{
+	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
+	KexiPropertyBuffer::changeProperty(property, value);
+	
+	if(qstrcmp(property, "name")==0)
+		emit nameChanged(m_object, value.toString());
+
+	if(value.type() == QVariant::StringList)
+	{
+		QStrList list;
+		QStringList StrList(value.toStringList());
+		for(QStringList::iterator it = StrList.begin(); it != StrList.end(); ++it)
+		{
+			list.append((*it).latin1());
+		}
+		int count = m_object->metaObject()->findProperty(property, true);
+		const QMetaProperty *meta = m_object->metaObject()->property(count, true);
+		QVariant val = meta->keysToValue(list);
+		m_object->setProperty(property, val);
+	}
+	m_object->setProperty(property, value);
+	emit propertyChanged(m_object, property, value);
+}
+
+void
+ObjectPropertyBuffer::setObject(QObject *obj)
+{
+	if(m_list)
+		m_list->reset(false);
+	clear();
+	kdDebug() << "setObject " << obj << obj->className() << endl; 
+
+	m_object = obj;
+	QStrList pList = obj->metaObject()->propertyNames(true);
+
+	int count = 0;
+	QStrListIterator it(pList);
+	for(; it.current() != 0; ++it)
+	{
+		count = obj->metaObject()->findProperty(*it, true);
+		const QMetaProperty *meta = obj->metaObject()->property(count, true);
+		if(meta->designable(obj))
+		{
+			QStrList keys = meta->enumKeys();
+			if(meta->isEnumType())
+			{
+			  if(meta->isSetType())
+			  {
+			  kdDebug() << "creating set property" << endl;
+			  add(KexiProperty(meta->name(), QStringList::fromStrList(meta->valueToKeys(obj->property(meta->name()).toInt()))
+				, QStringList::fromStrList(keys)));
+			  }
+			  else
+			add(KexiProperty(meta->name(), meta->valueToKey(obj->property(meta->name()).toInt()), QStringList::fromStrList(keys)));
+			}
+			else
+			add(KexiProperty( meta->name(), obj->property(meta->name())));
+		}
+	}
+	if(m_list)
+		m_list->setBuffer(this);
+	count = 0;
+}
+
+void
+ObjectPropertyBuffer::setList(KexiPropertyEditor *list)
+{
+	m_list = list;
+}
+
+ObjectPropertyBuffer::~ObjectPropertyBuffer()
+{
+}
+
+#include "objpropbuffer.moc"

@@ -26,6 +26,7 @@
 #include "widgetlibrary.h"
 
 class QWidget;
+class ObjectPropertyBuffer;
 
 namespace KFormDesigner {
 
@@ -42,7 +43,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 	Q_OBJECT
 
 	public:
-		Form(QObject *parent=0, const char *name=0, WidgetLibrary *lib=0);
+		Form(QObject *parent=0, const char *name=0, WidgetLibrary *lib=0, ObjectPropertyBuffer *buf=0);
 		~Form();
 
 		/**
@@ -92,7 +93,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		Actions			createActions(KActionCollection *parent);
 		
 		QWidget*		selectedWidget()  {return m_selWidget;}
-		void			setSelectedWidget(QWidget *w)  { m_selWidget = w;}
+		void			setSelectedWidget(QWidget *w);
 		
 		void			preparePaste(QWidget*w, bool cut)  {m_copiedw = w; m_cut=cut; }
 		QWidget*		copiedWidget()  {return m_copiedw;}
@@ -107,6 +108,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		WidgetLibrary		*m_widgetLib;
 		ObjectTree		*m_topTree;
 		QWidget			*m_selWidget;
+		ObjectPropertyBuffer	*m_buffer;
 		
 		QWidget 		*m_copiedw;
 		bool			m_cut;

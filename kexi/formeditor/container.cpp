@@ -391,10 +391,10 @@ Container::deleteItem()
 	{
 		kdDebug() << "deleting item : " << m_selected->name() << endl;
 		form()->objectTree()->removeChild(m_selected->name());
+		if(m_selected==form()->copiedWidget())
+			form()->preparePaste(0,false);
 		delete m_selected;
 		delete m_resizeHandles;
-		if(m_selected==m_copiedw)
-			m_copiedw = 0;
 		m_selected = 0;
 		m_resizeHandles = 0;
 	}

@@ -24,10 +24,11 @@
 
 #include "form.h"
 #include "container.h"
+#include "objpropbuffer.h"
 
 namespace KFormDesigner {
 
-Form::Form(QObject *parent, const char *name, WidgetLibrary *lib)
+Form::Form(QObject *parent, const char *name, WidgetLibrary *lib, ObjectPropertyBuffer *buffer)
 :QObject(parent, name)
 {
 	if(!lib)
@@ -38,6 +39,7 @@ Form::Form(QObject *parent, const char *name, WidgetLibrary *lib)
 	m_toplevel = 0;
 	m_selWidget = 0;
 	m_topTree = new ObjectTree("QWidget", "main", 0);
+	m_buffer = buffer;
 }
 
 void
@@ -96,6 +98,14 @@ Actions
 Form::createActions(KActionCollection *parent)
 {
 	return m_widgetLib->createActions(parent, this, SLOT(insertWidget(const QString &)));
+}
+
+void
+Form::setSelectedWidget(QWidget *w)
+{
+	m_selWidget = w;
+	if(w)
+		m_buffer->setObject(w);
 }
 
 Form::~Form()

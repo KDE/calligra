@@ -19,6 +19,8 @@
 #include "widgetlibrary.h"
 #include "container.h"
 #include "form.h"
+#include "kexipropertyeditor.h"
+#include "objpropbuffer.h"
 
 #include "kfmview.h"
 
@@ -38,32 +40,21 @@ KFMView::KFMView()
 	setCentralWidget(w);
 	w->show();
 
-	m_form = new KFormDesigner::Form(this, "", l);
+	ObjectPropertyBuffer *buff = new ObjectPropertyBuffer(this, 0);
+	KexiPropertyEditor *editor = new KexiPropertyEditor(0, true, 0);
+	buff->setList(editor);
+
+	m_form = new KFormDesigner::Form(this, "", l, buff);
 	QWidget *formV = new QWidget(w, "forms1");
 	m_form->createToplevel(formV);
 	formV->setCaption("Form1");
 	formV->show();
 	formV->resize(350, 300);
+	
+	buff->setObject(formV);
+	editor->setBuffer(buff);
+	editor->show();
 
-/*	QTabWidget *tab = new QTabWidget(formV, "tabwidget1");
-	KFormDesigner::ObjectTree *ttab = new KFormDesigner::ObjectTree(tab->className(), tab->name());
-	m_form->objectTree()->addChild(ttab);
-
-	QWidget *tabcontainer = new QWidget(tab, "tabc1");
-	KFormDesigner::Container *pc1 = new KFormDesigner::Container(m_form->toplevelContainer(), tabcontainer);
-	KFormDesigner::ObjectTree *tt1 = new KFormDesigner::ObjectTree(tabcontainer->className(), tabcontainer->name());
-	pc1->setObjectTree(tt1);
-	m_form->objectTree()->addChild(ttab, tt1);
-	tab->addTab(tabcontainer, "Page 1");
-	tab->show();
-	m_form->toplevelContainer()->addWidget(tab, QRect(20, 20, 130, 140));
-	QWidget *tabcontainer2 = new QWidget(tab, "tabc");
-	KFormDesigner::Container *pc2 = new KFormDesigner::Container(m_form->toplevelContainer(), tabcontainer2);
-	KFormDesigner::ObjectTree *tt2 = new KFormDesigner::ObjectTree(tabcontainer2->className(), tabcontainer2->name());
-	pc2->setObjectTree(tt2);
-	m_form->objectTree()->addChild(ttab, tt2);
-	tab->addTab(tabcontainer2, "Page 2");
-*/
 	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), this, SLOT(debugTree()), actionCollection(), "dtree");
 
 	m_form->createActions(actionCollection());
