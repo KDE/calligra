@@ -2135,18 +2135,16 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
             *it = (*it)+1;
             debugstr += QString::number(*it) + ',';
         }
-        //kdDebug(33001) << "selectedSlides : " << debugstr << endl;
+        kdDebug(33001) << "selectedSlides : " << debugstr << endl;
     }
     Q_ASSERT( slideList.count() );
     slideListIterator = slideList.begin();
-
     setCursor( blankCursor );
 
     currPresPage = (unsigned int) -1; // force gotoPage to do something
     gotoPage( *slideListIterator );
-
     doc->getHeaderFooterEdit()->updateSizes();
-    //kdDebug(33001) << "Page::startScreenPresentation - done" << endl;
+    kdDebug(33001) << "Page::startScreenPresentation - done" << endl;
 }
 
 /*====================== stop screenpresentation =================*/
@@ -2285,7 +2283,7 @@ bool KPrCanvas::pNext( bool )
                 tmpObjs.append( objectList().at( j ) );
         }
 #endif
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1 );
         currPresStep = *presStepList.begin();
 
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
@@ -4268,15 +4266,15 @@ void KPrCanvas::gotoPage( int pg )
 {
     if ( pg != static_cast<int>( currPresPage ) ) {
         currPresPage = pg;
-        //kdDebug(33001) << "Page::gotoPage currPresPage=" << currPresPage << endl;
-        slideListIterator = slideList.find( currPresPage );
+        kdDebug(33001) << "Page::gotoPage currPresPage=" << currPresPage << endl;
+        slideListIterator = slideList.find( currPresPage-1 );
         editMode = false;
         drawMode = false;
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage);
+        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1);
         currPresStep = *presStepList.begin();
         subPresStep = 0;
         //change active page
-        m_activePage=m_view->kPresenterDoc()->pageList().at(currPresPage);
+        m_activePage=m_view->kPresenterDoc()->pageList().at(currPresPage-1);
 
         //int yo = m_view->kPresenterDoc()->getPageRect( 0, 0, 0, presFakt(), false ).height() * ( pg - 1 );
         // ## shouldn't this center the slide if it's smaller ? (see KPresenterView::startScreenPresentation)
