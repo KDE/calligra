@@ -108,6 +108,24 @@ private:
         U32 cbLength;
     } MSOFBH;
 
+    // Blip signature as encoded in the MSOFBH.inst
+
+    typedef enum
+    {
+        msobiUNKNOWN = 0,
+        msobiWMF = 0x216,       // Metafile header then compressed WMF
+        msobiEMF = 0x3D4,       // Metafile header then compressed EMF
+        msobiPICT = 0x542,      // Metafile header then compressed PICT
+        msobiPNG = 0x6E0,       // One byte tag then PNG data
+        msobiJFIF = 0x46A,      // One byte tag then JFIF data
+        msobiJPEG = msobiJFIF,
+        msobiDIB = 0x7A8,       // One byte tag then DIB data
+        msobiClient = 0x800     // Clients should set this bit
+    } MSOBI;
+
+    MSOBI m_blipInstance;
+    bool m_blipHasPrimaryId;
+
     // Opcode handling and Metafile painter methods.
 
     void walk(U32 byteOperands, QDataStream &stream);

@@ -55,6 +55,7 @@ const bool MSODImport::filter(
     QStringList args = QStringList::split(";", config);
     unsigned i;
 
+    kdDebug(s_area) << "MSODImport::filter: config: " << config << endl;
     for (i = 0; i < args.count(); i++)
     {
         if (args[i].startsWith("shape-id="))
@@ -85,15 +86,12 @@ const bool MSODImport::filter(
     m_text += "</head>\n";
     m_text += "<layer>\n";
 
-kdError(s_area) << "MSODImport::calling parse: " << config << endl;
     if (!parse(shapeId, fileIn, delayStream))
         return false;
-
-    emit sigProgress(100);
-
     m_text += "</layer>\n";
     m_text += "</killustrator>\n";
-    //kdDebug(s_area) << "output: " << m_text << endl;
+
+    emit sigProgress(100);
 
     KoStore out = KoStore(QString(fileOut), KoStore::Write);
     if (!out.open("root"))

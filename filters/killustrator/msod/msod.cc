@@ -111,7 +111,7 @@ void Msod::invokeHandler(
 
     result = funcTab[i].handler;
     if (!result && (op.opcode.fields.fbt >= 0xF018) && (0xF117 >= op.opcode.fields.fbt))
-        result = funcTab[i + 1].handler;
+        result = funcTab[++i].handler;
     if (!result)
     {
         if (funcTab[i].name)
@@ -144,7 +144,6 @@ bool Msod::parse(
     const QString &fileIn,
     const char *delayStream)
 {
-kdError(s_area) << "MSOD::parse" << fileIn << endl;
     QFile in(fileIn);
     if (!in.open(IO_ReadOnly))
     {
@@ -188,75 +187,76 @@ void Msod::opArcrule(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::opBlip(MSOFBH &, U32, QDataStream &)
+void Msod::opBlip(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
-/*
-    int headerBytesToSkip = -1;
+    U32 data = 0;;
+    U8 isNotCompressed = (U8)true;
 
-    switch (data.inst)
+    // Skip any explicit primary header (m_rgbUidprimary)..
+
+    if (m_blipHasPrimaryId)
+    {
+        data += 16;
+        skip(16, operands);
+    }
+    switch (m_blipInstance)
     {
     case msobiWMF:
     case msobiEMF:
     case msobiPICT:
-        headerBytesToSkip = 34;
+        data += 18;
+        skip(18, operands);
+        operands >> isNotCompressed;
         break;
     case msobiPNG:
-    case msobiJFIF:
-    //case msobiJPEG:
+    case msobiJPEG:
     case msobiDIB:
-        headerBytesToSkip = 17;
+        // Skip the "tag".
+        data += 1;
+        skip(1, operands);
         break;
     default:
-        kdError(s_area) << "opBlip: unknown Blip signature: " <<
-            data.inst << endl;
+        kdWarning(s_area) << "opBlip: unknown Blip signature: " <<
+            m_blipInstance << endl;
         break;
     }
 
     // Only return data we can vouch for!
 
-    if (headerBytesToSkip >= 0)
+    QString pictureType;
+    switch (m_blipInstance)
     {
-        *pictureLength = data.cbLength - headerBytesToSkip;
-        *pictureData = in + bytes + headerBytesToSkip;
+    case msobiWMF:
+        pictureType = "wmf";
+        break;
+    case msobiEMF:
+        pictureType = "emf";
+        break;
+    case msobiPICT:
+        pictureType = "pic";
+        break;
+    case msobiPNG:
+        pictureType = "png";
+        break;
+    case msobiJPEG:
+        pictureType = "jpg";
+        break;
+    case msobiDIB:
+        pictureType = "dib";
+        break;
+    default:
+        pictureType = "img";
+        break;
     }
-*/
+
+    U32 pictureLength = byteOperands - data;
+    skip(pictureLength, operands);
 }
 
 // FBSE - File Blip Store Entry
 
 void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
 {
-    // GEL provided types...
-
-    typedef enum
-    {
-        msoblipERROR,               // An error occured during loading.
-        msoblipUNKNOWN,             // An unknown blip type.
-        msoblipEMF,                 // Windows Enhanced Metafile.
-        msoblipWMF,                 // Windows Metafile.
-        msoblipPICT,                // Macintosh PICT.
-        msoblipJPEG,                // JFIF.
-        msoblipPNG,                 // PNG.
-        msoblipDIB,                 // Windows DIB.
-        msoblipFirstClient = 32,    // First client defined blip type.
-        msoblipLastClient  = 255    // Last client defined blip type.
-    } MSOBLIPTYPE;
-
-    // Blip signature as encoded in the MSOFBH.inst
-
-    typedef enum
-    {
-        msobiUNKNOWN = 0,
-        msobiWMF = 0x216,       // Metafile header then compressed WMF
-        msobiEMF = 0x3D4,       // Metafile header then compressed EMF
-        msobiPICT = 0x542,      // Metafile header then compressed PICT
-        msobiPNG = 0x6E0,       // One byte tag then PNG data
-        msobiJFIF = 0x46A,      // One byte tag then JFIF data
-        msobiJPEG = msobiJFIF,
-        msobiDIB = 0x7A8,       // One byte tag then DIB data
-        msobiClient = 0x800     // Clients should set this bit
-    } MSOBI;
-
     struct
     {
         U8 btWin32;     // Required type on Win32.
@@ -273,16 +273,34 @@ void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
     } data;
     unsigned i;
 
-    enum MSOBI blipInstance = static_cast<MSOBI>(op.opcode.fields.inst & (~1));
-    bool hasPrimaryId = (op.opcode.fields.inst & 1);
+    m_blipInstance = static_cast<MSOBI>(op.opcode.fields.inst & (~1));
+    m_blipHasPrimaryId = (op.opcode.fields.inst & 1);
 
-    operands >> data.btWin32 >> data.btWin32;
+    operands >> data.btWin32 >> data.btMacOS;
     for (i = 0; i < sizeof(data.rgbUid); i++)
         operands >> data.rgbUid[i];
     operands >> data.tag >> data.size;
     operands >> data.cRef >> data.foDelay;
     operands >> data.usage >> data.cbName;
     operands >> data.unused2 >> data.unused2;
+        kdWarning(s_area) << "opBse: inst " <<
+            op.opcode.fields.inst << endl;
+        kdWarning(s_area) << "w32: inst " <<
+            data.btWin32 << endl;
+        kdWarning(s_area) << "mac: inst " <<
+            data.btMacOS << endl;
+
+    // If the Blip is not in this drawing file, process it "manually".
+
+    if (data.foDelay)
+    {
+        QByteArray bytes;
+        bytes.setRawData(m_delayStream + data.foDelay, data.size);
+        QDataStream stream(bytes, IO_ReadOnly);
+        stream.setByteOrder(QDataStream::LittleEndian);
+        walk(data.size, stream);
+        bytes.resetRawData(m_delayStream + data.foDelay, data.size);
+    }
     skip(byteOperands - sizeof(data), operands);
 }
 
@@ -910,7 +928,7 @@ void Msod::walk(U32 byteOperands, QDataStream &stream)
 
         // Package the arguments...
 
-        invokeHandler(op, op.cbLength , stream);
+        invokeHandler(op, op.cbLength, stream);
         length += op.cbLength + 8;
     }
 }
