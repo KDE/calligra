@@ -432,22 +432,22 @@ class KoLinkVariable : public KoVariable
 {
 public:
     KoLinkVariable( KoTextDocument *textdoc, const QString & _linkName, const QString & _ulr,KoVariableFormat *varFormat, KoVariableCollection *_varColl );
-    virtual void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
 
     virtual VariableType type() const
     { return VT_LINK; }
 
     static QStringList actionTexts();
-    
+
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    virtual QString text() { return value(); } 
+    virtual QString text() { return value(); }
     QString value() const { return m_linkName; }
     QString url() const { return m_url;}
-    
+
     virtual void recalc();
-    
+
     void setLink(const QString & _linkName, const QString &_url)
 	{
 	    m_linkName=_linkName;
