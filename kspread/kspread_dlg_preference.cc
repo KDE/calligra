@@ -776,17 +776,7 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   grid1->addWidget(label,0,0);
 
   defaultSizePage=new QComboBox( tmpQGroupBox);
-  QStringList listType;
-  listType+=i18n( "DIN A3" );
-  listType+=i18n( "DIN A4" );
-  listType+=i18n( "DIN A5" );
-  listType+=i18n( "US Letter");
-  listType+=i18n( "US Legal");
-  listType+=i18n( "Screen" );
-  listType+=i18n( "Custom" );
-  listType+=i18n( "DIN B5" );
-  listType+=i18n( "US Executive" );
-  defaultSizePage->insertStringList(listType);
+  defaultSizePage->insertStringList( KoPageFormat::allFormats() );
   defaultSizePage->setCurrentItem(1);
   grid1->addWidget(defaultSizePage,1,0);
 
@@ -795,7 +785,7 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   grid1->addWidget(label,2,0);
 
   defaultOrientationPage=new QComboBox( tmpQGroupBox);
-  listType.clear();
+  QStringList listType;
   listType+=i18n( "Portrait" );
   listType+=i18n( "Landscape" );
   defaultOrientationPage->insertStringList(listType);

@@ -709,37 +709,12 @@ void KWView::setupPrinter( KPrinter &prt )
     prt.setCurrentPage( currentPage() + 1 );
 #endif
     prt.setMinMax( 1, doc->getPages() );
-    bool makeLandscape = FALSE;
 
     KoPageLayout pgLayout = doc->pageLayout();
 
-    switch ( pgLayout.format ) {
-    case PG_DIN_A3: prt.setPageSize( KPrinter::A3 );
-        break;
-    case PG_DIN_A4: prt.setPageSize( KPrinter::A4 );
-        break;
-    case PG_DIN_A5: prt.setPageSize( KPrinter::A5 );
-        break;
-    case PG_US_LETTER: prt.setPageSize( KPrinter::Letter );
-        break;
-    case PG_US_LEGAL: prt.setPageSize( KPrinter::Legal );
-        break;
-    case PG_US_EXECUTIVE: prt.setPageSize( KPrinter::Executive );
-        break;
-    case PG_DIN_B5: prt.setPageSize( KPrinter::B5 );
-        break;
-    case PG_SCREEN: {
-        kdWarning() << "You use the page layout SCREEN. Printing in DIN A4 LANDSCAPE." << endl;
-        prt.setPageSize( KPrinter::A4 );
-        makeLandscape = TRUE;
-    } break;
-    default: {
-        kdWarning() << "The used page layout is not supported by KPrinter. Printing in A4." << endl;
-        prt.setPageSize( KPrinter::A4 );
-    } break;
-    }
+    prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pgLayout.format ) ) );
 
-    if ( pgLayout.orientation == PG_LANDSCAPE || makeLandscape )
+    if ( pgLayout.orientation == PG_LANDSCAPE || pgLayout.format == PG_SCREEN )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );

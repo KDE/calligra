@@ -529,6 +529,8 @@ void GPage::objectChanged (const Rect& r)
 
 QDomElement GPage::saveToXml (QDomDocument &document)
 {
+  // Many formats missing. Switching to KoPageFormat::formatString/formatFromString
+  // would be the best thing to do, but this would require some conversion code... (DF)
   static const char* formats[] = {
     "a3", "a4", "a5", "us_letter", "us_legal", "screen", "custom"};
   static const char* orientations[] = {"portrait", "landscape"};

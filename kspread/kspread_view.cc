@@ -1666,44 +1666,15 @@ void KSpreadView::print( KPrinter &prt )
     QPainter painter;
 
     //apply page layout parameters
-    prt.setOrientation((KPrinter::Orientation)m_pDoc->orientation());
-    switch(m_pDoc->paperFormat())
-      {
-      case  PG_DIN_A3:
-	prt.setPageSize(KPrinter::A3);
-	break;
-      case PG_DIN_A4:
-	prt.setPageSize(KPrinter::A4);
-	break;
-      case PG_DIN_A5:
-	prt.setPageSize(KPrinter::A5);
-	break;
-      case PG_US_LETTER:
-	prt.setPageSize(KPrinter::Letter);
-	break;
-      case PG_US_LEGAL:
-	prt.setPageSize(KPrinter::Legal);
-	break;
-      case PG_SCREEN :
-	//prt.setPageSize(KPrinter::PG_SCREEN);
-	kdDebug(36001) <<"We can't define this size of page, so I used A4 format\n";
-	prt.setPageSize(KPrinter::A4);
-	break;
-      case PG_CUSTOM:
-	kdDebug(36001) <<"We can't define custom size of page, so I used A4 format \n";
-	//prt.setPageSize(QSize(m_pDoc->paperWidth(),m_pDoc->paperHeight()));
-	prt.setPageSize(KPrinter::A4);
-	break;
-      case PG_DIN_B5:
-	prt.setPageSize(KPrinter::B5);
-	break;
-      case PG_US_EXECUTIVE:
-	prt.setPageSize(KPrinter::Executive);
-	break;
-      default:
-	kdDebug(36001) <<"Error in m_pDoc->paperFormat() \n";
-	break;
-      }
+    KoFormat pageFormat = m_pDoc->paperFormat();
+
+    prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
+
+    if ( m_pDoc->orientation() == PG_LANDSCAPE || pageFormat == PG_SCREEN )
+        prt.setOrientation( KPrinter::Landscape );
+    else
+        prt.setOrientation( KPrinter::Portrait );
+
     painter.begin( &prt );
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );

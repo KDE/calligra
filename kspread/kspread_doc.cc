@@ -452,37 +452,23 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
     KoFormat f = paperFormat();
     KoOrientation o = orientation();
 
-    if ( strcmp( "A3", _paper ) == 0L )
-        f = PG_DIN_A3;
-    else if ( strcmp( "A4", _paper ) == 0L )
-        f = PG_DIN_A4;
-    else if ( strcmp( "A5", _paper ) == 0L )
-        f = PG_DIN_A5;
-    else if ( strcmp( "B5", _paper ) == 0L )
-        f = PG_DIN_B5;
-    else if ( strcmp( "Executive", _paper ) == 0L )
-        f = PG_US_EXECUTIVE;
-    else if ( strcmp( "Letter", _paper ) == 0L )
-        f = PG_US_LETTER;
-    else if ( strcmp( "Legal", _paper ) == 0L )
-        f = PG_US_LEGAL;
-    else if ( strcmp( "Screen", _paper ) == 0L )
-        f = PG_SCREEN;
-    else if ( strcmp( "Custom", _paper ) == 0L )
+    QString paper( _paper );
+    if ( paper[0].isDigit() ) // Custom format
     {
       m_paperWidth = 0.0;
       m_paperHeight = 0.0;
       f = PG_CUSTOM;
-      QString tmp( _paper );
       m_paperWidth = atof( _paper );
-      int i = tmp.find( 'x' );
+      int i = paper.find( 'x' );
       if ( i != -1 )
-        m_paperHeight = tmp.toDouble() + i + 1;
+        m_paperHeight = paper.toDouble() + i + 1;
       if ( m_paperWidth < 10.0 )
         m_paperWidth = PG_A4_WIDTH;
       if ( m_paperHeight < 10.0 )
         m_paperWidth = PG_A4_HEIGHT;
     }
+    else
+        f = KoPageFormat::formatFromString( paper );
 
     if ( strcmp( "Portrait", _orientation ) == 0L )
         o = PG_PORTRAIT;
@@ -494,78 +480,22 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 
 void KSpreadDoc::calcPaperSize()
 {
-    switch( m_paperFormat )
+    if ( m_paperFormat != PG_CUSTOM )
     {
-    case PG_DIN_A5:
-        m_paperWidth = PG_A5_WIDTH;
-        m_paperHeight = PG_A5_HEIGHT;
-        break;
-    case PG_DIN_A4:
-        m_paperWidth = PG_A4_WIDTH;
-        m_paperHeight = PG_A4_HEIGHT;
-        break;
-    case PG_DIN_A3:
-        m_paperWidth = PG_A3_WIDTH;
-        m_paperHeight = PG_A3_HEIGHT;
-        break;
-    case PG_DIN_B5:
-        m_paperWidth = PG_B5_WIDTH;
-        m_paperHeight = PG_B5_HEIGHT;
-        break;
-    case PG_US_EXECUTIVE:
-        m_paperWidth = PG_US_EXECUTIVE_WIDTH;
-        m_paperHeight = PG_US_EXECUTIVE_HEIGHT;
-        break;
-    case PG_US_LETTER:
-        m_paperWidth = PG_US_LETTER_WIDTH;
-        m_paperHeight = PG_US_LETTER_HEIGHT;
-        break;
-    case PG_US_LEGAL:
-        m_paperWidth = PG_US_LEGAL_WIDTH;
-        m_paperHeight = PG_US_LEGAL_HEIGHT;
-        break;
-    case PG_SCREEN:
-        m_paperWidth = PG_SCREEN_WIDTH;
-        m_paperHeight = PG_SCREEN_HEIGHT;
-        break;
-    case PG_CUSTOM:
-        return;
-    }
-    if ( m_orientation == PG_LANDSCAPE ) {
-        double tmp=m_paperWidth;
-        m_paperWidth=m_paperHeight;
-        m_paperHeight=tmp;
+        m_paperWidth = KoPageFormat::width( m_paperFormat, m_orientation );
+        m_paperHeight = KoPageFormat::height( m_paperFormat, m_orientation );
     }
 }
 
 QString KSpreadDoc::paperFormatString()
 {
-    switch( m_paperFormat )
+    if ( m_paperFormat == PG_CUSTOM )
     {
-    case PG_DIN_A5:
-        return QString( "A5" );
-    case PG_DIN_A4:
-        return QString( "A4" );
-    case PG_DIN_A3:
-        return QString( "A3" );
-    case PG_DIN_B5:
-        return QString( "B5" );
-    case PG_US_EXECUTIVE:
-        return QString( "Executive" );
-    case PG_US_LETTER:
-        return QString( "Letter" );
-    case PG_US_LEGAL:
-        return QString( "Legal" );
-    case PG_SCREEN:
-        return QString( "Screen" );
-    case PG_CUSTOM:
       QString tmp;
       tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
-      return QString( tmp );
+      return tmp;
     }
-
-    assert( 0 );
-    return QString::null;
+    return KoPageFormat::formatString( m_paperFormat );
 }
 
 const char* KSpreadDoc::orientationString()

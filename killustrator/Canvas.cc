@@ -620,22 +620,8 @@ void Canvas::setupPrinter( KPrinter &printer )
 {
   printer.setDocName (document->fileName ());
   printer.setCreator ("KIllustrator");
-  switch (document->activePage()->pageLayout ().format) {
-  case PG_DIN_A4:
-    printer.setPageSize (KPrinter::A4);
-    break;
-  case PG_DIN_A5:
-    printer.setPageSize (KPrinter::B5);
-    break;
-  case PG_US_LETTER:
-    printer.setPageSize (KPrinter::Letter);
-    break;
-  case PG_US_LEGAL:
-    printer.setPageSize (KPrinter::Legal);
-    break;
-  default:
-    break;
-  }
+  KoFormat pageFormat = document->activePage()->pageLayout().format;
+  printer.setPageSize (static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
   printer.setOrientation (document->activePage()->pageLayout ().orientation == PG_PORTRAIT ?
                           KPrinter::Portrait : KPrinter::Landscape);
   printer.setFullPage(true);
