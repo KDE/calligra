@@ -2382,10 +2382,10 @@ void KPresenterView::setupActions()
 					 actionCollection(), "extra_configrect" );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), "raise",
-				    CTRL + Key_R, this, SLOT( extraRaise() ),
+				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
 				    actionCollection(), "extra_raise" );
 
-    actionExtraLower = new KAction( i18n( "&Lower object(s)" ), "lower", CTRL + Key_L,
+    actionExtraLower = new KAction( i18n( "&Lower object(s)" ), "lower", CTRL +SHIFT+ Key_L,
 				    this, SLOT( extraLower() ),
 				    actionCollection(), "extra_lower" );
 
