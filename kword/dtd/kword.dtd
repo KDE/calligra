@@ -261,6 +261,7 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes:    see counter !
 
+        Ignore bullet, restart and depth.
 -->
 <!ELEMENT FOOTNOTESETTING
     EMPTY>
@@ -280,6 +281,7 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes: see counter !
 
+        Ignore bullet, restart and depth.
 -->
 <!ELEMENT ENDNOTESETTING
     EMPTY>
