@@ -1,0 +1,15 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KDatabase" version="1">
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="copy"/>
+  <Action name="cut"/>
+  <Action name="paste"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="editToolBar">
+   <Text>Edit</Text>
+  <Action name="copy"/>
+  <Action name="cut"/>
+  <Action name="paste"/>
+</ToolBar>
+</kpartgui>
