@@ -67,8 +67,8 @@
 VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bool bDrawNodes )
 : VPainter( target, w, h ), m_target( target ), m_bDrawNodes( bDrawNodes )
 {
-	//kdDebug() << "w : " << w << endl;
-	//kdDebug() << "h : " << h << endl;
+	kdDebug() << "w : " << w << endl;
+	kdDebug() << "h : " << h << endl;
 	m_width = w;//( w > 0 ) ? w : target->width();
 	m_height= h;//( h > 0 ) ? h : target->height();
 	m_buffer = 0L;

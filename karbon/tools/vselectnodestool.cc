@@ -35,7 +35,6 @@
 #include <commands/vtransformcmd.h>
 #include <visitors/vdrawselection.h>
 #include <core/vselection.h>
-#include <core/vcanvas.h>
 #include "vselectnodestool.h"
 #include <vtransformnodes.h>
 #include <commands/vdeletenodescmd.h>
@@ -55,7 +54,7 @@ VSelectNodesTool::~VSelectNodesTool()
 void
 VSelectNodesTool::activate()
 {
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->showHandle( false );
 	view()->part()->document().selection()->setSelectObjects( false );
 }
@@ -142,10 +141,10 @@ VSelectNodesTool::setCursor() const
 		  segments.at( 0 )->pointIsSelected( 1 ) ||
 		  selrect.contains( segments.at( 0 )->knot() ) ) )
 	{
-		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
+		view()->setCursor( QCursor( Qt::CrossCursor ) );
 	}
 	else
-		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+		view()->setCursor( QCursor( Qt::arrowCursor ) );
 }
 
 void
@@ -158,7 +157,7 @@ VSelectNodesTool::mouseButtonPress()
 	recalc();
 
 	view()->part()->document().selection()->setState( VObject::edit );
-	view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	view()->part()->document().selection()->setState( VObject::selected );
 
 	draw();
@@ -270,7 +269,7 @@ VSelectNodesTool::cancel()
 	{
 		draw();
 		m_state = normal;
-		view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+		view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	}
 }
 

@@ -28,7 +28,6 @@
 #include <karbon_part.h>
 #include <karbon_view_base.h>
 #include <karbon_view.h>
-#include <core/vcanvas.h>
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>
 #include <kgenericfactory.h>
@@ -58,7 +57,7 @@ VZoomTool::contextHelp()
 void
 VZoomTool::activate()
 {
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 QString
@@ -104,11 +103,11 @@ VZoomTool::mouseButtonPress()
 void
 VZoomTool::mouseButtonRelease()
 {
-	double viewportX = view()->canvasWidget()->visibleWidth() * 0.75 / view()->zoom();
+	/*double viewportX = view()->canvasWidget()->visibleWidth() * 0.75 / view()->zoom();
 	double viewportY = view()->canvasWidget()->visibleHeight() * 0.75 / view()->zoom();
 	KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
 	rect = rect.normalize();
-	view()->canvasWidget()->setViewportRect( rect );
+	view()->canvasWidget()->setViewportRect( rect );*/
 }
 
 void
@@ -126,7 +125,7 @@ VZoomTool::mouseDragRelease()
 {
 	KoRect rect( first().x(), first().y(), last().x() - first().x(), last().y() - first().y() );
 	rect = rect.normalize();
-	view()->canvasWidget()->setViewportRect( rect );
+	//view()->setViewportRect( rect );
 }
 
 void

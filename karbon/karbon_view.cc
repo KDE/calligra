@@ -879,8 +879,31 @@ KarbonView::selectionChanged()
 
 	emit selectionChange();
 }
+void
+KarbonView::setCursor( const QCursor &c )
+{
+	m_canvas->setCursor( c );
+}
 
-void KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
+void
+KarbonView::repaintAll( const KoRect &r )
+{
+	m_canvas->repaintAll( r );
+}
+
+void
+KarbonView::repaintAll( bool repaint )
+{
+	m_canvas->repaintAll( repaint );
+}
+void
+KarbonView::setPos( const KoPoint& p )
+{
+	m_canvas->setPos( p );
+}
+
+void
+KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 {
 	if( m_currentTool )
 		m_currentTool->refreshUnit();

@@ -28,7 +28,6 @@
 #include <karbon_part.h>
 #include <karbon_view.h>
 #include <core/vcolor.h>
-#include <core/vcanvas.h>
 #include <core/vcomposite.h>
 #include <core/vfill.h>
 #include <core/vstroke.h>
@@ -67,7 +66,7 @@ void
 VPolylineTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Polyline Tool" ) );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::crossCursor ) );
 
 	m_bezierPoints.clear();
 	m_close = false;
@@ -250,7 +249,6 @@ VPolylineTool::mouseButtonRelease()
 
 		VPainter* painter = view()->painterFactory()->editpainter();
 		painter->save();
-//		view()->canvasWidget()->setYMirroring( true );
 		painter->setZoomFactor( view()->zoom() );
 		painter->setRasterOp( Qt::XorROP );
 		VStroke stroke( Qt::yellow, 0L, 1.0 );
@@ -394,7 +392,7 @@ VPolylineTool::mouseDragCtrlPressed()
 	// Moves the mouse to the other bezier vector position.
 	KoPoint p = *m_bezierPoints.at( m_bezierPoints.count() - 4) - *m_bezierPoints.at( m_bezierPoints.count() - 3 );
 
-	view()->canvasWidget()->setPos( p );
+	view()->setPos( p );
 }
 
 void
@@ -407,7 +405,7 @@ VPolylineTool::mouseDragCtrlReleased()
 {
 	KoPoint p = *m_bezierPoints.at( m_bezierPoints.count() - 3) - *m_bezierPoints.at( m_bezierPoints.count() - 4 );
 
-	view()->canvasWidget()->setPos( p );
+	view()->setPos( p );
 }
 
 void
@@ -436,7 +434,7 @@ VPolylineTool::cancelStep()
 		m_bezierPoints.append( new KoPoint( p1 ) );
 		KoPoint p = p1 - p2;
 
-		view()->canvasWidget()->setPos( p );
+		view()->setPos( p );
 	}
 	else
 	{

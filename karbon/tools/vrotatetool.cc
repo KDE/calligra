@@ -29,7 +29,6 @@
 #include <karbon_part.h>
 #include <karbon_view.h>
 #include <core/vglobal.h>
-#include <core/vcanvas.h>
 #include "vrotatetool.h"
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>
@@ -52,7 +51,7 @@ VRotateTool::~VRotateTool()
 void
 VRotateTool::activate()
 {
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->setState( VObject::selected );
 	view()->part()->document().selection()->showHandle( false );
 }
@@ -120,7 +119,7 @@ VRotateTool::cancel()
 	if ( isDragging() )
 	{
 		draw();
-		view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+		view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	}
 }
 

@@ -35,7 +35,6 @@
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>
 #include <core/vselection.h>
-#include <core/vcanvas.h>
 #include "vselecttool.h"
 #include <commands/vtransformcmd.h>
 #include <visitors/vselectiondesc.h>
@@ -75,7 +74,7 @@ VSelectTool::~VSelectTool()
 void
 VSelectTool::activate()
 {
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->showHandle();
 	view()->part()->document().selection()->setSelectObjects();
 	view()->part()->document().selection()->setState( VObject::selected );
@@ -144,22 +143,22 @@ VSelectTool::setCursor() const
 	{
 		case node_lt:
 		case node_rb:
-			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeFDiagCursor ) );
+			view()->setCursor( QCursor( Qt::SizeFDiagCursor ) );
 			break;
 		case node_rt:
 		case node_lb:
-			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeBDiagCursor ) );
+			view()->setCursor( QCursor( Qt::SizeBDiagCursor ) );
 			break;
 		case node_lm:
 		case node_rm:
-			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeHorCursor ) );
+			view()->setCursor( QCursor( Qt::SizeHorCursor ) );
 			break;
 		case node_mt:
 		case node_mb:
-			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeVerCursor ) );
+			view()->setCursor( QCursor( Qt::SizeVerCursor ) );
 			break;
 		default:
-			view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+			view()->setCursor( QCursor( Qt::arrowCursor ) );
 	}
 }
 
@@ -173,7 +172,7 @@ VSelectTool::mouseButtonPress()
 	recalc();
 
 	view()->part()->document().selection()->setState( VObject::edit );
-	view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	view()->part()->document().selection()->setState( VObject::selected );
 
 	draw();
@@ -321,7 +320,7 @@ VSelectTool::cancel()
 	{
 		draw();
 		m_state = normal;
-		view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+		view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	}
 }
 

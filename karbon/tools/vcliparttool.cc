@@ -34,7 +34,6 @@
 #include <karbon_resourceserver.h>
 #include <karbon_view.h>
 #include "vcliparttool.h"
-#include <core/vcanvas.h>
 #include <core/vdocument.h>
 #include <core/vgroup.h>
 #include <core/vobject.h>
@@ -213,7 +212,7 @@ void
 VClipartTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Clipart Tool" ) );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 void

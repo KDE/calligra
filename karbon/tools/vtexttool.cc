@@ -38,7 +38,6 @@
 
 #include <karbon_view.h>
 #include <karbon_part.h>
-#include <core/vcanvas.h>
 #include <core/vdocument.h>
 #include <core/vglobal.h>
 #include <core/vselection.h>
@@ -551,7 +550,7 @@ void
 VTextTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Text Tool" ) );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::crossCursor ) );
 
 	m_creating = true;
 	//delete m_text;
@@ -578,7 +577,6 @@ VTextTool::drawPathCreation()
 {
 	VPainter * painter = view()->painterFactory()->editpainter();
 
-//	view()->canvasWidget()->setYMirroring( true );
 	painter->setZoomFactor( view()->zoom() );
 
 	painter->setRasterOp( Qt::NotROP );
@@ -600,8 +598,6 @@ VTextTool::drawEditedText()
 	kdDebug() << "Drawing: " << m_editedText->text() << endl;
 
 	VPainter* painter = view()->painterFactory()->editpainter();
-
-//	view()->canvasWidget()->setYMirroring( true );
 
 	painter->setZoomFactor( view()->zoom() );
 
@@ -669,7 +665,7 @@ VTextTool::textChanged()
 	if( !m_creating && m_text && m_text->state() != VObject::hidden )
 	{
 		m_text->setState( VObject::hidden );
-		view()->canvasWidget()->repaintAll( true );
+		view()->repaintAll( true );
 	}
 	else
 		drawEditedText();

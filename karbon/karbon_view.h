@@ -44,6 +44,7 @@ class KoContextHelpAction;
 
 class KoUnitDoubleSpinComboBox;
 class KoPoint;
+class KoRect;
 
 class VColorDocker;
 class VDocumentDocker;
@@ -108,6 +109,13 @@ public:
 	virtual void registerTool( VTool * );
 
 	virtual void setZoom( double zoom );
+
+	void setCursor( const QCursor & );
+
+	void repaintAll( const KoRect & );
+	void repaintAll( bool = true );
+
+	void setPos( const KoPoint& p );
 
 public slots:
 	// editing:

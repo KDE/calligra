@@ -7,7 +7,6 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 noinst_LTLIBRARIES = libkarboncore.la
 
 noinst_HEADERS = \
-	vcanvas.h \
 	vcolor.h \
 	vcomposite.h \
 	vcomposite_iface.h \
@@ -36,7 +35,6 @@ noinst_HEADERS = \
 	svgpathparser.h
 
 libkarboncore_la_SOURCES = \
-	vcanvas.cc \
 	vcolor.cc \
 	vcomposite.cc \
 	vcomposite_iface.cc \

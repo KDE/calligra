@@ -4,9 +4,9 @@ kde_module_LTLIBRARIES = karbon_zoomtoolplugin.la
 
 karbon_zoomtoolplugin_la_SOURCES = zoomtoolplugin.cc
 karbon_zoomtoolplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
+									../../render/libvpainter.la \
 									../../core/libkarboncore.la \
 									../../tools/libkarbontools.la \
-									../../render/libvpainter.la \
 									../../dockers/libkarbondockers.la \
 									../../libkarbonbase.la
 

@@ -26,7 +26,6 @@
 #include "karbon_view.h"
 #include "vcomposite.h"
 #include "vglobal.h"
-#include "vcanvas.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vshapecmd.h"
@@ -53,7 +52,7 @@ VShapeTool::contextHelp()
 void
 VShapeTool::activate()
 {
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::crossCursor ) );
 	view()->part()->document().selection()->showHandle( true );
 }
 

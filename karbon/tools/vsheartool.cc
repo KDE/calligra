@@ -33,7 +33,6 @@
 #include <vselection.h>
 #include "vsheartool.h"
 #include <commands/vtransformcmd.h>
-#include <core/vcanvas.h>
 
 VShearTool::VShearTool( KarbonView* view, const char* name ) : VTool( view, name )
 {
@@ -48,7 +47,7 @@ VShearTool::~VShearTool()
 void
 VShearTool::activate()
 {
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->showHandle( true );
 	view()->part()->document().selection()->setState( VObject::selected );
 }
@@ -78,27 +77,22 @@ VShearTool::setCursor() const
 	{
 		case node_lt:
 		case node_rb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeFDiagCursor ) );
+			view()->setCursor( QCursor( Qt::SizeFDiagCursor ) );
 			break;
 		case node_rt:
 		case node_lb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeBDiagCursor ) );
+			view()->setCursor( QCursor( Qt::SizeBDiagCursor ) );
 			break;
 		case node_lm:
 		case node_rm:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeHorCursor ) );
+			view()->setCursor( QCursor( Qt::SizeHorCursor ) );
 			break;
 		case node_mt:
 		case node_mb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeVerCursor ) );
+			view()->setCursor( QCursor( Qt::SizeVerCursor ) );
 			break;
 		default:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::arrowCursor ) );
+			view()->setCursor( QCursor( Qt::arrowCursor ) );
 	}
 }
 
@@ -141,7 +135,7 @@ VShearTool::cancel()
 	if ( isDragging() )
 	{
 		draw();
-		view()->canvasWidget()->repaintAll( view()->part()->document().selection()->boundingBox() );
+		view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	}
 }
 

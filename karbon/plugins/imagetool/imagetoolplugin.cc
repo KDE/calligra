@@ -28,7 +28,6 @@
 #include <karbon_part.h>
 #include <karbon_view_base.h>
 #include <karbon_view.h>
-#include <core/vcanvas.h>
 #include <core/vimage.h>
 #include <core/vselection.h>
 #include <kgenericfactory.h>
@@ -56,7 +55,7 @@ VImageTool::contextHelp()
 void
 VImageTool::activate()
 {
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 QString
