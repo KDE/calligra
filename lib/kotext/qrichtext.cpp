@@ -6024,6 +6024,8 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         setOffsetFromBaseLine(nf.offsetFromBaseLine());
     if( flags & KoTextFormat::WordByWord)
         setWordByWord(nf.wordByWord());
+    if( flags & KoTextFormat::Attribute)
+        setAttributeFont(nf.attributeFont());
 
     //////
     update();
