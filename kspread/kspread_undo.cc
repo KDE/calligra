@@ -2452,6 +2452,7 @@ void KSpreadUndoCellPaste::undo()
     createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,table );
 
     doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
 
     if(nbCol!=0)
     {
@@ -2514,6 +2515,7 @@ void KSpreadUndoCellPaste::undo()
 
     if(table->getAutoCalc())
         table->recalc();
+    doc()->emitEndOperation();
     doc()->undoBuffer()->unlock();
 }
 
@@ -2524,6 +2526,8 @@ void KSpreadUndoCellPaste::redo()
 	return;
 
     doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
+
     if(nbCol!=0)
     {
         if( b_insert)
@@ -2578,6 +2582,8 @@ void KSpreadUndoCellPaste::redo()
     }
     if(table->getAutoCalc())
         table->recalc();
+
+    doc()->emitEndOperation();
 
     doc()->undoBuffer()->unlock();
 }
@@ -2676,6 +2682,7 @@ void KSpreadUndoStyleCell::undo()
     createListCell( m_lstRedoStyleCell, table );
 
     doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
 
 
     QValueList<styleCell>::Iterator it2;
@@ -2685,6 +2692,7 @@ void KSpreadUndoStyleCell::undo()
 	cell->setStyle((*it2).style);
 	cell->setAction((*it2).action);
       }
+    doc()->emitEndOperation();
     table->updateView(m_selection);
     doc()->undoBuffer()->unlock();
 }
@@ -2698,6 +2706,7 @@ void KSpreadUndoStyleCell::redo()
 	return;
 
     doc()->undoBuffer()->lock();
+    doc()->emitBeginOperation();
 
     QValueList<styleCell>::Iterator it2;
     for ( it2 = m_lstRedoStyleCell.begin(); it2 != m_lstRedoStyleCell.end(); ++it2 )
@@ -2706,6 +2715,7 @@ void KSpreadUndoStyleCell::redo()
 	cell->setStyle((*it2).style);
 	cell->setAction((*it2).action);
       }
+    doc()->emitEndOperation();
     table->updateView(m_selection);
 
     doc()->undoBuffer()->unlock();
