@@ -25,6 +25,7 @@
 class QPushButton;
 class QToolButton;
 class KListView;
+class QMultiLineEdit;
 
 class KoVersionDialog : public KDialogBase
 {
@@ -52,5 +53,16 @@ protected:
     QPushButton* m_pModify;
 };
 
+class KoVersionModifyDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    KoVersionModifyDialog(  QWidget* parent, const QString &_comment = QString::null , const char* name = 0L );
+
+    QString comment() const;
+
+private:
+    QMultiLineEdit *m_multiline;
+};
 
 #endif

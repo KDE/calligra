@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Laurent Montel <montel@kde.org>
+   Copyright (C) 2005 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,8 +20,6 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
 #include <qmultilineedit.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
@@ -33,6 +31,9 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <klistview.h>
+#include <kdebug.h>
+
+#include <qmultilineedit.h>
 
 #include "koversiondialog.h"
 
@@ -90,23 +91,52 @@ void KoVersionDialog::updateButton()
 
 void KoVersionDialog::slotAdd()
 {
+    //TODO create entry
 }
 
 void KoVersionDialog::slotRemove()
 {
+    //TODO remove entry
 }
 
 void KoVersionDialog::slotModify()
 {
+    KoVersionModifyDialog * dlg = new KoVersionModifyDialog(  this /*, const QString &_comment*/ /*TODO add*/ );
+    if ( dlg->exec() )
+    {
+        //TODO
+        kdDebug()<<" comment :"<<dlg->comment()<<endl;
+    }
+    delete dlg;
+
 }
 
 void KoVersionDialog::slotOpen()
 {
+    //TODO open file
 }
 
 void KoVersionDialog::slotOk()
 {
     accept();
+}
+
+KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, const QString &_comment, const char* name )
+    : KDialogBase( parent, name, true, i18n("Comment"), Ok|Cancel )
+{
+    QWidget* page = new QWidget( this );
+    setMainWidget( page );
+
+    QHBoxLayout *grid1 = new QHBoxLayout( page,KDialog::marginHint(), KDialog::spacingHint());
+
+    m_multiline=new QMultiLineEdit(page, "multiline");
+    grid1->addWidget( m_multiline );
+
+}
+
+QString KoVersionModifyDialog::comment() const
+{
+    return m_multiline->text();
 }
 
 
