@@ -27,19 +27,22 @@ class QObject;
 class QString;
 class QStringList;
 
-class KEXIPROPERTYEDITOR_EXPORT KexiProperty
+class KFORMEDITOR_EXPORT KexiProperty
 {
 	public:
 		KexiProperty(const QString &name, QVariant value);
 		KexiProperty(const QString &name, QVariant value, const QStringList &list);
+		KexiProperty(const KexiProperty &property);
 		//KexiProperty(const QString &name, QVariant value, QStringList *list);
-		KexiProperty() { m_name=""; m_value=QVariant(0);}
+		KexiProperty() { m_name=""; m_value=QVariant(0);m_list=0;}
 		~KexiProperty();
+		
+		const KexiProperty& operator=(const KexiProperty &property);
 
 		QString		name() { return m_name; }
 		QVariant	value() { return m_value; }
 		QVariant::Type  type();
-		const QStringList&	list() { return *m_list;}
+		QStringList*	list() { return m_list;}
 
 		void setValue(const QVariant &v) { m_value = v; }
 

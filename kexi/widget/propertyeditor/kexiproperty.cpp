@@ -45,6 +45,38 @@ KexiProperty::KexiProperty(const QString &name, QVariant value, const QStringLis
 	m_list = list;
 }*/
 
+KexiProperty::KexiProperty(const KexiProperty &property)
+{
+	m_name = property.m_name;
+	m_value = property.m_value;
+	if(property.m_list)
+		m_list = new QStringList(*(property.m_list));
+	else
+		m_list=0;
+}
+
+const KexiProperty&
+KexiProperty::operator=(const KexiProperty &property)
+{
+	if(&property!=this)
+	{
+	if(m_list)
+	{
+		delete m_list;
+		m_list=0;
+	}
+	
+	m_name = property.m_name;
+	m_value = property.m_value;
+
+	if(property.m_list)
+		m_list = new QStringList(*(property.m_list));
+	else
+		m_list=0;
+	}
+	return *this;
+}
+
 QVariant::Type  KexiProperty::type()
 {
 	if(m_list)
@@ -55,5 +87,6 @@ QVariant::Type  KexiProperty::type()
 
 KexiProperty::~KexiProperty()
 {
-	delete m_list;
+	if(m_list)
+		delete m_list;
 }
