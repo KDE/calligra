@@ -94,7 +94,7 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, 
     QWidget *page = plainPage();
     QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QPushButton *pbImage = new QPushButton( i18n( "Choose &Image" ), page );
+    QPushButton *pbImage = new QPushButton( i18n( "Choose &Picture..." ), page );
     grid->addWidget( pbImage, 0, 0 );
     connect( pbImage, SIGNAL( clicked() ), SLOT( slotChooseImage() ) );
 
@@ -168,7 +168,7 @@ int KWInsertPicDia::selectPictureDia( QString &filename, int flags, const QStrin
         mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     KFileDialog fd( _path, QString::null, 0, 0, TRUE );
     fd.setMimeFilter( mimetypes );
-    fd.setCaption(i18n("Choose Image")); // ### TODO: rename to "Choose Picture..."
+    fd.setCaption(i18n("Choose Picture"));
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
     {
