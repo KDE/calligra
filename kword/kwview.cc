@@ -5753,7 +5753,7 @@ void KWView::insertFile(const QString & path)
                 KWTextFrameSet *textFrameSet = dynamic_cast<KWTextFrameSet *>( m_doc->frameSet(0) );
                 KoTextCursor insertionCursor( textFrameSet->textDocument() );
                 KWTextFrameSetEdit* edit = currentTextEdit();
-                if ( edit ) {
+                if ( edit && !edit->textFrameSet()->protectContent()) {
                     textFrameSet = edit->textFrameSet();
                     insertionCursor = *edit->cursor();
                 }
