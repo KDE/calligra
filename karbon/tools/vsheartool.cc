@@ -133,7 +133,7 @@ VShearTool::drawTemporaryObject()
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->transform( mat );
-			itr2.current()->setState( state_edit );
+			itr2.current()->setState( VObject::edit );
 			itr2.current()->draw( painter, itr2.current()->boundingBox() );
 		}
 		painter->setZoomFactor( 1.0 );

@@ -63,9 +63,9 @@ void
 VPath::draw( VPainter *painter, const KoRect& rect ) const
 {
 	if(
-		state() == state_deleted ||
-		state() == state_hidden ||
-		state() == state_hidden_locked )
+		state() == deleted ||
+		state() == hidden ||
+		state() == hidden_locked )
 	{
 		return;
 	}
@@ -80,7 +80,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 
 	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 
-	if( state() != state_edit )
+	if( state() != edit )
 	{
 		// paint fill:
 		painter->newPath();
@@ -116,7 +116,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 	}
 
 	// draw simplistic contour:
-	if( state() == state_edit )//|| state() == state_selected )
+	if( state() == edit )//|| state() == selected )
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -172,7 +172,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 	}
 
 	// draw small boxes for path nodes:
-	if( state() == state_selected || state() == state_edit )
+	if( state() == selected || state() == edit )
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -374,7 +374,7 @@ VPath::clone() const
 void
 VPath::save( QDomElement& element ) const
 {
-	if( state() != state_deleted )
+	if( state() != deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "PATH" );
 		element.appendChild( me );
@@ -394,7 +394,7 @@ void
 VPath::load( const QDomElement& element )
 {
 	m_segmentLists.clear();
-	setState( state_normal );
+	setState( normal );
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )

@@ -189,7 +189,7 @@ VShapeTool::drawTemporaryObject() const
 	VPainter* painter = view()->painterFactory()->editpainter();
 	
 	VPath* path = shape();
-	path->setState( state_edit );
+	path->setState( VObject::edit );
 	path->draw( painter, path->boundingBox() );
 	delete( path );
 }

@@ -31,7 +31,7 @@ VDeleteCmd::execute()
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->setState( state_deleted );
+		itr.current()->setState( VObject::deleted );
 	}
 }
 
@@ -41,7 +41,7 @@ VDeleteCmd::unexecute()
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->setState( state_normal );
+		itr.current()->setState( VObject::normal );
 	}
 }
 

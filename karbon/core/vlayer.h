@@ -24,7 +24,7 @@ class QDomElement;
 class VLayer : public VGroup
 {
 public:
-	VLayer( VObject* parent, VState state = state_normal );
+	VLayer( VObject* parent, VState state = normal );
 	VLayer( const VLayer& layer );
 
 	virtual ~VLayer();
@@ -50,10 +50,6 @@ public:
 	void downwards( const VObject& object );
 
 	void sendToBack( const VObject& object );
-
-
-	/// selects all objects that intersect with rect.
-	VObjectList objectsWithinRect( const KoRect& rect ) const;
 
 	/// clean up object list.
 	/// All objects with state deleted are removed from the layer

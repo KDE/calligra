@@ -44,7 +44,7 @@ void
 VSelection::take( VObject& object )
 {
 	m_objects.removeRef( &object );
-	object.setState( state_normal );
+	object.setState( normal );
 	invalidateBoundingBox();
 }
 
@@ -65,7 +65,7 @@ VSelection::append()
 
 		for ( ; itr2.current(); ++itr2 )
 		{
-			if( static_cast<VObject *>( itr2.current() )->state() != state_deleted )
+			if( static_cast<VObject *>( itr2.current() )->state() != deleted )
 			{
 				append( itr2.current() );
 			}
@@ -79,7 +79,7 @@ void
 VSelection::append( VObject* object )
 {
 	m_objects.append( object );
-	object->setState( state_selected );
+	object->setState( selected );
 	invalidateBoundingBox();
 }
 
@@ -92,12 +92,17 @@ VSelection::append( const KoRect& rect )
 
 	for ( ; itr.current(); ++itr )
 	{
-		objects = itr.current()->objectsWithinRect( rect );
+		VObjectListIterator itr2( itr.current()->objects() );
 
-		VObjectListIterator itr2( objects );
 		for ( ; itr2.current(); ++itr2 )
 		{
-			append( itr2.current() );
+			if(
+				itr2.current()->state() == normal &&
+// TODO: use a zoom dependant vflatten visitor to achieve finer resolution:
+				itr2.current()->boundingBox().intersects( rect ) )
+			{
+				append( itr2.current() );
+			}
 		}
 	}
 
@@ -110,7 +115,7 @@ VSelection::clear()
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
 	{
-		itr.current()->setState( state_normal );
+		itr.current()->setState( normal );
 	}
 
 	m_objects.clear();

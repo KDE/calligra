@@ -28,6 +28,9 @@ public:
 	virtual void visitVText( VText& /*text*/ ) {}
 
 protected:
+	/**
+	 * Make this class "abstract".
+	 */
 	virtual ~VVisitor() {}
 };
 

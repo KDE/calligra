@@ -42,11 +42,12 @@ VDocument::~VDocument()
 void
 VDocument::draw( VPainter *painter, const KoRect& rect ) const
 {
-	QPtrListIterator<VLayer> i = m_layers;
+	QPtrListIterator<VLayer> itr = m_layers;
 
-	for ( ; i.current(); ++i )
-		if ( i.current()->state() == state_normal )
-			i.current()->draw( painter, rect );
+	for ( ; itr.current(); ++itr )
+	{
+		itr.current()->draw( painter, rect );
+	}
 }
 
 void

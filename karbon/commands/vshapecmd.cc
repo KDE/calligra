@@ -19,8 +19,8 @@ VShapeCmd::execute()
 	if( !m_path )
 		return;
 
-	if( m_path->state() == state_deleted )
-		m_path->setState( state_normal );
+	if( m_path->state() == VObject::deleted )
+		m_path->setState( VObject::normal );
 	else
 	{
 		m_doc->applyDefaultColors( *m_path );
@@ -38,6 +38,6 @@ VShapeCmd::unexecute()
 		return;
 
 	m_doc->selection()->take( *m_path );
-	m_path->setState( state_deleted );
+	m_path->setState( VObject::deleted );
 }
 

@@ -1,18 +1,22 @@
 TODO:
--	if selecting many shapes, the fill/stroke state should be "unknown",
-	preview widgets needs to paint questionmarks or something in this case
--	make vselection a visitor
--	add a point-list to vselection
--	add undo/redo to shape commands like VFlattenCmd etc
+-	check in other apps if this makes sense:
+	(make vselection a visitor and paint selected shapes instead of each shape)
+-	add a list of vsegment to vselection, add selection-flags to vsegment for 
+	node-selection
 -	if we come up that vpaths should always have a defined winding
 	(e.g. ccw), create all shapes accordingly. + check in close() and
 	combine().
 -	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
+-	make a cleanup visitor instead of VLayer::removeDeletedObjects() +
+	add default visit*() to VVisitor
 
 REAL BUGS:
 -	linewith doesnt update bbox anymore
 -	mirror coordinate-system so origin is bottom-left
+-	add undo/redo to shape commands like VFlattenCmd etc
 -	scale tool should only scale in one direction while dragging a slection node
+-	if selecting many shapes, the fill/stroke state should be "unknown",
+	preview widgets needs to paint questionmarks or something in this case
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.

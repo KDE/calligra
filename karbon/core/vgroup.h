@@ -25,7 +25,7 @@ typedef QPtrListIterator<VObject> VObjectListIterator;
 class VGroup : public VObject
 {
 public:
-	VGroup( VObject* parent, VState state = state_normal );
+	VGroup( VObject* parent, VState state = normal );
 	VGroup( const VGroup& group );
 
 	virtual ~VGroup();

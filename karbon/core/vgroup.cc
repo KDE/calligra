@@ -49,9 +49,9 @@ void
 VGroup::draw( VPainter* painter, const KoRect& rect ) const
 {
 	if(
-		state() == state_deleted ||
-		state() == state_hidden ||
-		state() == state_hidden_locked )
+		state() == deleted ||
+		state() == hidden ||
+		state() == hidden_locked )
 	{
 		return;
 	}

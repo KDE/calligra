@@ -83,7 +83,7 @@ void
 SvgExport::visitVDocument( VDocument& document )
 {
 	// select all objects:
-	document.select();
+	document.selection()->append();
 
 	// get the bounding box of all selected objects:
 	const KoRect& rect = document.selection()->boundingBox();
@@ -100,7 +100,7 @@ SvgExport::visitVDocument( VDocument& document )
 		rect.right() << "\" height=\"" << rect.bottom() << "\">" << endl;
 
 	// we dont need the selection anymore:
-	document.deselect();
+	document.selection()->clear();
 
 
 	// export layers:

@@ -108,7 +108,7 @@ void
 EpsExport::visitVDocument( VDocument& document )
 {
 	// Select all objects:
-	document.select();
+	document.selection()->append();
 
 	// Get the bounding box of all selected objects:
 	const KoRect& rect = document.selection()->boundingBox();
@@ -132,7 +132,7 @@ EpsExport::visitVDocument( VDocument& document )
 	<< endl;
 
 	// We dont need the selection anymore:
-	document.deselect();
+	document.selection()->clear();
 
 
 	// Process document info:

@@ -36,9 +36,9 @@ void
 VLayer::draw( VPainter* painter, const KoRect& rect ) const
 {
 	if(
-		state() == state_deleted ||
-		state() == state_hidden ||
-		state() == state_hidden_locked )
+		state() == deleted ||
+		state() == hidden ||
+		state() == hidden_locked )
 	{
 		return;
 	}
@@ -89,30 +89,12 @@ VLayer::sendToBack( const VObject& /*object*/ )
 {
 }
 
-VObjectList
-VLayer::objectsWithinRect( const KoRect& rect ) const
-{
-	VObjectList list;
-	VObjectListIterator itr( m_objects );
-
-	for ( ; itr.current(); ++itr )
-	{
-		if( itr.current()->state() != state_deleted &&
-			itr.current()->boundingBox().intersects( rect ) )
-		{
-			list.append( itr.current() );
-		}
-	}
-
-	return list;
-}
-
 void
 VLayer::removeDeletedObjects()
 {
 	for( m_objects.first(); m_objects.current(); m_objects.next() )
 	{
-		if( m_objects.current()->state() == state_deleted )
+		if( m_objects.current()->state() == deleted )
 		{
 			delete( m_objects.current() );
 			m_objects.remove();
@@ -128,7 +110,7 @@ VLayer::save( QDomElement& element ) const
 
 	me.setAttribute( "name", m_name );
 
-	if( state() == state_normal || state() == state_normal_locked )
+	if( state() == normal || state() == normal_locked )
 		me.setAttribute( "visible", 1 );
 
 	// save objects:
@@ -145,7 +127,7 @@ VLayer::load( const QDomElement& element )
 	m_objects.setAutoDelete( false );
 
 	m_name = element.attribute( "name" );
-	setState( element.attribute( "visible" ) == 0 ? state_hidden : state_normal );
+	setState( element.attribute( "visible" ) == 0 ? hidden : normal );
 
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )

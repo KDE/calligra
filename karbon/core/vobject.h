@@ -16,19 +16,6 @@ class VStroke;
 class VVisitor;
 
 
-enum VState
-{
-	state_normal        = 0,	/// visible, not active
-	state_normal_locked = 1,	/// visible, but locked (r/o)
-	state_hidden        = 2,	/// hidden
-	state_hidden_locked = 3,	/// hidden and locked (r/o)
-	state_deleted       = 4,	/// deleted, nearly dead
-
-	// shape specific states:
-	state_selected      = 5,	/// visible, active and can be manipulated by tools
-	state_edit          = 6		/// visible, active and is currently manipulated by a tool
-};
-
 /**
  * The base class for all karbon objects. Every object should
  * have the ability to draw itself using a painter, perform
@@ -39,7 +26,20 @@ enum VState
 class VObject
 {
 public:
-	VObject( VObject* parent, VState state = state_normal );
+	enum VState
+	{
+		normal        = 0,	/// visible, not active
+		normal_locked = 1,	/// visible, but locked (r/o)
+		hidden        = 2,	/// hidden
+		hidden_locked = 3,	/// hidden and locked (r/o)
+		deleted       = 4,	/// deleted, nearly dead
+
+		// shape specific states:
+		selected      = 5,	/// visible, active and can be manipulated by tools
+		edit          = 6		/// visible, active and is currently manipulated by a tool
+	};
+
+	VObject( VObject* parent, VState state = normal );
 	VObject( const VObject& obj );
 
 	virtual ~VObject();
