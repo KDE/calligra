@@ -468,8 +468,6 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             //p->fillRect( clip, QBrush( Qt::red, QBrush::Dense3Pattern ) );
 #endif
 
-            bool wasChanged = cursor->parag()->hasChanged();
-            cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
             p->save();
 
             p->setClipRegion( reg );
@@ -487,13 +485,16 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
             cg.setBrush( QColorGroup::Base, bgBrush );
 
+            bool wasChanged = cursor->parag()->hasChanged();
+            cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
             textDocument()->drawParagWYSIWYG(
-                p, cursor->parag(),
+                p, static_cast<KoTextParag *>(cursor->parag()),
                 iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
                 pix, cg, m_doc, // TODO view's zoom handler
-                cursorVisible, cursor,m_doc->viewFormattingChars());
-            p->restore();
+                cursorVisible, cursor, m_doc->viewFormattingChars());
             cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
+
+            p->restore();
 
             //XIM Position
             QPoint ximPoint = vPoint;
@@ -1935,7 +1936,6 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pag
     return new KoTextCommand( m_textobj, /*cmd, */i18n("Change Paragraph Attribute") );
 }
 
-
 KCommand * KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected )
 {
     // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
@@ -2309,6 +2309,11 @@ void KWTextFrameSetEdit::ensureCursorVisible()
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
 {
     textView()->handleKeyPressEvent( e );
+}
+
+void KWTextFrameSetEdit::keyReleaseEvent( QKeyEvent* e )
+{
+    textView()->handleKeyReleaseEvent( e );
 }
 
 void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const KoPoint & dPoint )

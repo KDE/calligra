@@ -128,7 +128,7 @@ public:
     };
 
     /**
-     * Calculate the absolute size of the complete table. 
+     * Calculate the absolute size of the complete table.
      *  From the first cell to the last, including page breaks et.
      *  @return KoRect which outlines the whole of the table.
      */
@@ -305,6 +305,7 @@ public:
 
     // Forward all events to the current cell
     virtual void keyPressEvent( QKeyEvent * e );
+    virtual void keyReleaseEvent( QKeyEvent * e );
     virtual void mousePressEvent( QMouseEvent * e, const QPoint &, const KoPoint & );
     virtual void mouseMoveEvent( QMouseEvent * e, const QPoint & n, const KoPoint & d )
     { if ( m_currentCell ) m_currentCell->mouseMoveEvent( e, n, d ); }

@@ -1934,6 +1934,12 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         m_currentCell->keyPressEvent( e );
 }
 
+void KWTableFrameSetEdit::keyReleaseEvent( QKeyEvent * e )
+{
+    if ( m_currentCell )
+        m_currentCell->keyReleaseEvent( e );
+}
+
 void KWTableFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &n, const KoPoint &d )
 {
     kdDebug()<<"m_currentCell :"<<m_currentCell<<endl;

@@ -2096,6 +2096,12 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
                     viewport()->setCursor( m_doc->getMouseCursor( normalPoint, false ) );
                 }
+
+                if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
+                {
+                    m_currentFrameSetEdit->keyReleaseEvent( keyev );
+                    return TRUE;
+                }
             }
             break;
             default:
