@@ -49,6 +49,7 @@ public:
   void addItem( int pos );
   void moveItem( int oldPos, int newPos );
   void removeItem( int pos );
+  void refreshItems ( bool offset = false );
   QRect tip(const QPoint &pos, QString &title);
 
   bool uptodate;
@@ -61,6 +62,7 @@ public slots:
 
 private slots:
   void itemClicked(QIconViewItem *i);
+  void slotContentsMoving(int x, int y);
 
 private:
   QPixmap getSlideThumb(int slideNr) const;
@@ -68,6 +70,8 @@ private:
   KPresenterDoc *doc;
   KPresenterView *view;
   ThumbToolTip *thumbTip;
+  int offsetX;
+  int offsetY;
 };
 
 

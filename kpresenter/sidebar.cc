@@ -89,6 +89,23 @@ public:
     }
 };
 
+class ThumbItem : public QIconViewItem
+{
+public:
+    ThumbItem( QIconView *parent, const QString & text, const QPixmap & icon )
+     : QIconViewItem( parent, text, icon )
+     { uptodate = true; }
+    ThumbItem( QIconView *parent, QIconViewItem *after, const QString & text, const QPixmap & icon )
+     : QIconViewItem( parent, after, text, icon )
+     { uptodate = true; }
+
+    virtual bool isUptodate() { return uptodate; };
+    virtual void setUptodate( bool _uptodate) { uptodate = _uptodate; };
+
+private:
+    bool uptodate;
+};
+
 SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
   :QTabWidget(parent), doc(d), view(v)
 {
@@ -125,6 +142,8 @@ void SideBar::currentChanged(QWidget *tab)
     if (tab == _thb) {
         if (!_thb->uptodate && _thb->isVisible())
             _thb->rebuildItems();
+        else
+            _thb->refreshItems();
     }
 }
 
@@ -156,6 +175,8 @@ ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
   :KIconView(parent), doc(d), view(v)
 {
   uptodate = false;
+  offsetX = 0;
+  offsetY = 0;
 
   setArrangement(QIconView::LeftToRight);
   setAutoArrange(true);
@@ -167,6 +188,8 @@ ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 
   connect(this, SIGNAL(currentChanged(QIconViewItem *)),
           this, SLOT(itemClicked(QIconViewItem *)));
+  connect(this, SIGNAL(contentsMoving(int, int)),
+          this, SLOT(slotContentsMoving(int, int)));
 }
 
 ThumbBar::~ThumbBar()
@@ -182,6 +205,8 @@ void ThumbBar::setCurrentPage( int pg )
             setCurrentItem( it );
             setSelected( it, FALSE ); // to avoid the blue "selected"-mark
             ensureItemVisible(it);
+            refreshItems();
+            return;
         }
     }
 
@@ -211,7 +236,7 @@ void ThumbBar::rebuildItems()
 
     clear();
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
-        QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
+        ThumbItem *item = new ThumbItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
         item->setDragEnabled(false);  //no dragging for now
     }
 
@@ -220,26 +245,77 @@ void ThumbBar::rebuildItems()
     QApplication::restoreOverrideCursor();
 }
 
+void ThumbBar::refreshItems(bool offset)
+{
+    QRect vRect = visibleRect();
+    if ( offset ) {
+        vRect.moveBy( offsetX, offsetY );
+    }
+    else {
+        vRect.moveBy( contentsX(), contentsY() );
+    }
+
+    QIconViewItem *it = findFirstVisibleItem( vRect );
+    while ( it )
+    {
+kdDebug(33001) << "visible page = " << it->text().toInt() << endl;
+        if ( ! dynamic_cast<ThumbItem *>(it)->isUptodate( ) ){
+            //todo refresh picture
+            it->setPixmap( getSlideThumb( it->text().toInt() - 1 ) );
+            dynamic_cast<ThumbItem *>(it)->setUptodate( true );
+        }
+          
+        if ( it == findLastVisibleItem( vRect ) )
+            break;
+        it = it->nextItem();
+    }
+    
+    offsetX = 0;
+    offsetY = 0;
+}
+
 void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
 {
+    if ( !uptodate )
+        return;
     int pagecnt = 0;
+    // calculate rect of visible objects
+    QRect vRect = visibleRect();
+    vRect.moveBy( contentsX(), contentsY() );
+
     // Find icon
-    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() )
+    QIconViewItem *it = firstItem();
+    do
     {
-/*      Commented out until only the visible objects are updated
+        //Commented out until only the visible objects are updated
         if ( sticky ) {
-            it->setPixmap(getSlideThumb( pagecnt ));
+            if ( it == findFirstVisibleItem( vRect ) ) {
+                //bool cont = true;
+                do 
+                {
+                    it->setPixmap(getSlideThumb( pagecnt ));
+                    dynamic_cast<ThumbItem *>(it)->setUptodate( true );
+                    if ( it == findLastVisibleItem( vRect ) )
+                        break;
+                    pagecnt++;
+                    it = it->nextItem();
+                } while ( true );
+            }
+            else {
+                dynamic_cast<ThumbItem *>(it)->setUptodate( false );
+            }
             pagecnt++;
         }
         else {
-*/
             if ( it->text().toInt() == pagenr + 1 )
             {
                 it->setPixmap(getSlideThumb( pagenr ));
+                dynamic_cast<ThumbItem *>(it)->setUptodate( true );
                 return;
             }
-//       }
-    }
+        }
+        it = it->nextItem();
+    } while ( it );
     if ( ! sticky )
         kdWarning() << "Item for page " << pagenr << " not found" << endl;
 }
@@ -253,14 +329,14 @@ void ThumbBar::addItem( int pos )
         // find page which should move
         // do stuff because a item can not be insert at the beginning
         if ( pos == 0 && page == pos ){
-            QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), it, QString::number(2), getSlideThumb(1));
+            ThumbItem *item = new ThumbItem(dynamic_cast<QIconView *>(this), it, QString::number(2), getSlideThumb(1));
             item->setDragEnabled(false);  //no dragging for now
             it->setPixmap(getSlideThumb( 0 ));
             // move on to next item as we have inserted one
             it = it->nextItem();
         }
         else if ( (page + 1) == pos ) {
-            QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), it, QString::number(pos+1), getSlideThumb(pos));
+            ThumbItem *item = new ThumbItem(dynamic_cast<QIconView *>(this), it, QString::number(pos+1), getSlideThumb(pos));
             item->setDragEnabled(false);  //no dragging for now
             it = it->nextItem();
         }
@@ -378,6 +454,14 @@ void ThumbBar::itemClicked(QIconViewItem *i)
   if ( !i )
     return;
   emit showPage( i->index() );
+}
+
+void ThumbBar::slotContentsMoving(int x, int y) 
+{
+    offsetX = x;
+    offsetY = y;
+kdDebug() << "offset x,y = " << x << ", " << y << endl;
+    refreshItems( true );
 }
 
 Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
