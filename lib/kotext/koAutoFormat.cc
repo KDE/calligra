@@ -917,6 +917,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
 {
     if( m_completion )
     {
+        bool part=false;
         QString lastWord, word;
         if (m_completionBox && m_completionBox->isShown() )
         {
@@ -925,12 +926,49 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
         }
         else
         {
+                QStringList wordlist, new_wordlist;
                 for (uint i=1; i <= m_countMaxWords; i++ )
                 {
                         lastWord = getLastWord(i, parag, index+1);
-                        word=m_listCompletion->makeCompletion( lastWord );
-                        if ( !word.isEmpty())
+                        wordlist=m_listCompletion->substringCompletion( lastWord );
+                        if ( !wordlist.isEmpty())
                                 break;
+                }
+                int maxlength = 0;
+                for ( QStringList::Iterator it = wordlist.begin(); it != wordlist.end(); ++it )
+                {
+                  if ((*it).startsWith(lastWord,false))
+                  {
+                    if ( (*it).length()>maxlength)
+                      maxlength = (*it).length();
+                    new_wordlist.append(*it);
+                    //kdDebug() << "adding word completion:" << *it << endl;
+                  }
+                }
+                if (new_wordlist.count()==1) //one word
+                  word = new_wordlist.first();
+                else
+                {
+                  QChar ch;
+                  QStringList::Iterator it;
+                  for (int i=0;i<maxlength;i++)
+                  {
+                    it = new_wordlist.begin();
+                    ch = (*it).at(i);
+                    for (  ; it != new_wordlist.end(); ++it )
+                    {
+                      if ((*it).at(i)!=ch.lower() && (*it).at(i)!=ch.upper())
+                      {
+                        if(i==0)
+                          return false;
+                        word = (*it).left(i);
+                        //kdDebug() << "set the word completion to:" << word << endl;
+                        part=true; // completion of a part of a word
+                        i=maxlength;
+                        break;
+                      }
+                    }
+                  }
                 }
                 if (word == lastWord)
                         return false;
@@ -948,7 +986,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
             cursor.setParag( parag );
             cursor.setIndex( start );
             KoTextDocument * textdoc = parag->textDocument();
-            if( m_completionAppendSpace )
+            if( m_completionAppendSpace && !part)
                 word+=" ";
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( start + lastword_length );
@@ -957,7 +995,8 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
             macro->addCommand( txtObj->replaceSelectionCommand( textEditCursor, word,
                                                               KoTextObject::HighlightSelection,
                                                               i18n("Completion Word") ));
-            if ( m_completionAppendSpace && !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
+            
+            if ( m_completionAppendSpace && !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) && !part)
             {
                 //find the first word
                 for (uint i=1; i < word.length(); i++)
@@ -1212,7 +1251,6 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                                 if (completionWord.at(0) == '-')
                                         completionWord.remove(0,1);
 
-                                completionWord = completionWord.lower();
                                 if (completionWord.length()>= m_minCompletionWordLength  && !completionWord.isEmpty() && m_listCompletion->makeCompletion(completionWord).isEmpty())
                                 {
                                         kdDebug() << "Adding:" << completionWord << endl;
@@ -1231,7 +1269,6 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                                         if (completionWord.at(completionWord.length()-1) == '-')
                                                 completionWord.truncate(completionWord.length()-1);
                                         completionWord.remove('=');
-                                        completionWord = completionWord.lower();
                                         if (completionWord.length()>= m_minCompletionWordLength && !completionWord.isEmpty() && m_listCompletion->makeCompletion(completionWord).isEmpty())
                                         {
                                                 kdDebug() << "Adding:" << completionWord << endl;
