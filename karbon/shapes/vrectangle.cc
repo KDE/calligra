@@ -21,6 +21,8 @@
 #include "vrectangle.h"
 #include <klocale.h>
 #include <koUnit.h>
+#include <koStore.h>
+#include <koxmlwriter.h>
 #include <qdom.h>
 #include <kdebug.h>
 #include "vglobal.h"
@@ -123,6 +125,23 @@ VRectangle::save( QDomElement& element ) const
 
 		writeTransform( me );
 	}
+}
+
+void
+VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+	docWriter->startElement( "draw:rect" );
+
+	//save all into pt
+	docWriter->addAttributePt( "svg:x",      m_topLeft.x() );
+	docWriter->addAttributePt( "svg:y",      m_topLeft.y() );
+	docWriter->addAttributePt( "svg:width",  m_width );
+	docWriter->addAttributePt( "svg:height", m_height );
+
+	if( !VObject::name().isEmpty() )
+		docWriter->addAttribute( "draw:name", VObject::name() );
+
+	docWriter->endElement();
 }
 
 void

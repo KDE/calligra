@@ -157,6 +157,7 @@ public:
 	const VLayerList& layers() const { return m_layers; }
 
 	QDomDocument saveXML() const;
+	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter );
 	bool loadXML( const QDomElement& doc );
 	virtual void save( QDomElement& me ) const;
 	virtual void load( const QDomElement& me );

@@ -26,6 +26,9 @@
 #include "vstroke.h"
 #include "vpainter.h"
 
+#include <koStore.h>
+#include <koxmlwriter.h>
+
 #include <kdebug.h>
 
 VDocument::VDocument()
@@ -194,6 +197,21 @@ VDocument::saveXML() const
 	// maybe we need to provide it as param or member var? (Rob)
 	save( me );
 	return doc;
+}
+
+void
+VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+	docWriter->startElement( "draw:page" );
+	//docWriter->addAttribute( "draw:name", name());
+
+	// save objects:
+	VLayerListIterator itr( m_layers );
+
+	for ( ; itr.current(); ++itr )
+		itr.current()->saveOasis( store, docWriter );
+
+	docWriter->endElement(); // draw:page
 }
 
 void

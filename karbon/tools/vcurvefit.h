@@ -8,3 +8,4 @@
 VPath *bezierFit(QPtrList<KoPoint> &points,float error);
 
 #endif
+

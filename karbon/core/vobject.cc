@@ -101,6 +101,11 @@ VObject::save( QDomElement& element ) const
 }
 
 void
+VObject::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+}
+
+void
 VObject::load( const QDomElement& element )
 {
 	if( !m_stroke )

@@ -32,6 +32,8 @@ class VPainter;
 class VStroke;
 class VVisitor;
 class DCOPObject;
+class KoStore;
+class KoXmlWriter;
 
 /**
  * The base class for all karbon objects. Every object should
@@ -130,6 +132,8 @@ public:
 	 * Save this object's state to xml.
 	 */
 	virtual void save( QDomElement& element ) const;
+
+	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter );
 
 	/**
 	 * Load this object's state from xml and initialize

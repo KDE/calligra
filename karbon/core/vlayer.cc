@@ -148,6 +148,16 @@ VLayer::save( QDomElement& element ) const
 }
 
 void
+VLayer::saveOasis( KoStore *store, KoXmlWriter *docWriter )
+{
+	// save objects:
+	VObjectListIterator itr = m_objects;
+
+	for ( ; itr.current(); ++itr )
+		itr.current()->saveOasis( store, docWriter );
+}
+
+void
 VLayer::load( const QDomElement& element )
 {
 	setState( element.attribute( "visible" ) == 0 ? hidden : normal );

@@ -27,6 +27,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <koTemplateChooseDia.h>
+#include <koStoreDevice.h>
+#include <koxmlwriter.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -181,6 +183,62 @@ QDomDocument
 KarbonPart::saveXML()
 {
 	return m_doc.saveXML();
+}
+
+bool
+KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
+{
+	KoStoreDevice storeDev( store );
+
+	if( !store->open( "styles.xml" ) )
+		return false;
+
+	KoXmlWriter styleWriter( &storeDev, "office:document-styles" );
+
+	styleWriter.startElement( "office:automatic-styles" );
+	//Kivio::savePageLayout(&styleWriter, Kivio::Config::defaultPageLayout(), "StandardPageLayout");
+	//m_pMap->saveLayouts(&styleWriter); // Save layouts for pages thst don't use StandardPageLayout
+	styleWriter.endElement(); // office:automatic-styles
+
+	// Save standard master page
+	styleWriter.startElement( "office:master-styles" );
+	styleWriter.startElement( "style:master-page" );
+	styleWriter.addAttribute( "style:name", "Standard" );
+	styleWriter.addAttribute( "style:page-layout-name", "StandardPageLayout" );
+	styleWriter.endElement(); // style:master-page
+	//m_pMap->saveMasterPages( &styleWriter ); // Save master pages for pages thst don't use Standard
+	styleWriter.endElement(); // office:master-styles
+
+	styleWriter.endElement(); // Root element
+	styleWriter.endDocument();
+
+	if( !store->close() )
+		return false;
+
+	manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+
+	if( !store->open( "content.xml" ) )
+		return false;
+
+	KoXmlWriter docWriter( &storeDev, "office:document-content" );
+
+	docWriter.startElement( "office:body" );
+	docWriter.startElement( "office:drawing" );
+
+	m_doc.saveOasis(store, &docWriter); // Save contents
+
+	docWriter.endElement(); // office:drawing
+	docWriter.endElement(); // office:body
+	docWriter.endElement(); // Root element
+	docWriter.endDocument();
+
+	if( !store->close() )
+		return false;
+
+	//manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+
+	setModified( false );
+	return true;
 }
 
 void

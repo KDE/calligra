@@ -63,6 +63,7 @@ public:
 	virtual bool loadXML( QIODevice*, const QDomDocument& document );
 	/// file-> save and file-> save as call this method
 	virtual QDomDocument saveXML();
+	virtual bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter );
 
 	virtual DCOPObject* dcopObject();
 
