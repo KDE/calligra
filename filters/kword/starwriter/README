@@ -1,0 +1,16 @@
+StarWriter 5.x Import Filter
+by Marco Zanon <info@marcozanon.com>
+
+This stuff is still under development, will probably crash a lot and
+may not work properly.
+
+The filter only imports StarWriter Document (SDW) version 5.  Older
+version is not supported at the moment and might or might not be in
+the future.  StarWriter 6 document uses XML format which should be
+handled by OpenOffice Writer filter.
+
+KOLE stuff (to read OLE storage) is written by Ariya Hidayat
+(ariya@kde.org) and should be considered as experimental, not even in
+alpha or beta quality.
+
+Helps, patches, bug reports are all welcomed.

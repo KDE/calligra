@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=KWord StarWriter 5.x Import Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=application/x-kword
+X-KDE-Import=application/vnd.stardivision.writer
+X-KDE-Library=libstarwriter5import
+X-KDE-Weight=1
