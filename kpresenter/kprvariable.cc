@@ -50,7 +50,7 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
     case VT_DATE:
         if ( !varFormat )
         {
-            if ( _forceDefaultFormat )
+            if ( _forceDefaultFormat || KoDateVariable::VST_DATE_LAST_PRINTING)
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
             {
