@@ -60,7 +60,7 @@ enum VHandleNode
  * Objects in a layer can be manipulated and worked on independant of objects
  * in other layers.
  */
-class VSelection : public VObject, private VVisitor
+class VSelection : public VObject, public VVisitor
 {
 public:
 	VSelection( VObject* parent = 0L );

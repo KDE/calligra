@@ -71,6 +71,11 @@ namespace VGlobal
 	 */
 	const double isNearRange = 0.001;
 
+	/**
+	 * A tolerance for multiplying normalized (length=1) vectors. A result of
+	 * >= parallelTolerance indicates parallel vectors.
+	 */
+	const double parallelTolerance = 0.99;
 
 	const short copyOffset = 10;        /// the amount at which copied objects get offset in x and y direction
 	const short maxRecentFiles = 10;    /// default max. number of files shown in open recent menu item

@@ -77,7 +77,6 @@ VSegment::VSegment( VSegmentType type )
 
 	m_type = type;
 	m_ctrlPointFixing = none;
-	m_smooth = false;
 }
 
 VSegment::VSegment( const VSegment& segment )
@@ -103,7 +102,6 @@ VSegment::VSegment( const VSegment& segment )
 	m_type = segment.m_type;
 
 	m_ctrlPointFixing = segment.m_ctrlPointFixing;
-	m_smooth = segment.m_smooth;
 }
 
 void
@@ -400,6 +398,30 @@ VSegment::param( double len ) const
 	return 0.0;
 }
 
+bool
+VSegment::isSmooth( const VSegment* next ) const
+{
+	// Return false if this segment is a "begin" or if there is no
+	// next segment.
+	if( type() == begin || !next )
+		return false;
+
+
+	// Calculate tangents.
+	KoPoint t1;
+	KoPoint t2;
+
+	pointTangentNormal( 1.0, 0L, &t1 );
+	next->pointTangentNormal( 0.0, 0L, &t2 );
+
+
+	// Scalar product.
+	if( t1.x() * t2.x() + t1.y() * t2.y() >= VGlobal::parallelTolerance )
+		return true;
+
+	return false;
+}
+
 KoRect
 VSegment::boundingBox() const
 {
@@ -575,8 +597,6 @@ VSegment::revert() const
 		segment->m_ctrlPointFixing = second;
 	else if( m_ctrlPointFixing == second )
 		segment->m_ctrlPointFixing = first;
-
-	segment->m_smooth = m_prev->m_smooth;
 
 	return segment;
 }

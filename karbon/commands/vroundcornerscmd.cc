@@ -56,8 +56,8 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	// The algorithm doesn't really produce circular arcs, but that's ok since
 	// the algorithm achieves nice looking results and is generic enough to be applied
 	// to all kind of paths.
-	// Note also, that this algorithm doesn't touch curve/curve joins, since they
-	// are usually smooth enough.
+	// Note also, that this algorithm doesn't touch smooth joins (in the sense of
+	// VSegment::isSmooth() ).
 	//
 	// We'll manipulate the input path for bookkeeping purposes and construct a new
 	// temporary path in parallel. We finally replace the input path with the new path.
@@ -175,10 +175,8 @@ VRoundCornersCmd::visitVPath( VPath& path )
 
 	if(
 		path.isClosed() &&
-		// Don't touch curve/curve joins.
-		!(
-			path.current()->type() == VSegment::curve &&
-			path.getLast()->type() == VSegment::curve ) )
+		// Don't touch smooth joins.
+		!path.getLast()->isSmooth( path.current() ) )
 	{
 		length = path.current()->length();
 
@@ -221,10 +219,8 @@ VRoundCornersCmd::visitVPath( VPath& path )
 			path.current()->next()->setType( VSegment::line );
 
 
-		// Don't touch curve/curve joins.
-		if(
-			path.current()->type() == VSegment::curve &&
-			path.current()->next()->type() == VSegment::curve )
+		// Don't touch smooth joins.
+		if( path.current()->isSmooth() )
 		{
 			newPath.append( path.current()->clone() );
 			path.next();
@@ -292,11 +288,8 @@ VRoundCornersCmd::visitVPath( VPath& path )
 		if( path.getFirst()->next()->isFlat() )
 			path.getFirst()->next()->setType( VSegment::line );
 
-		if(
-			// Don't touch curve/curve joins.
-			!(
-				path.current()->type() == VSegment::curve &&
-				path.getFirst()->next()->type() == VSegment::curve ) )
+		// Don't touch smooth joins.
+		if( !path.current()->isSmooth( path.getFirst()->next() ) )
 		{
 			length = path.current()->length();
 

@@ -159,7 +159,7 @@ public:
 	 * Returns the normalized tangent vector (length=1) at the point
 	 * parameterized by 0 <= t <= 1. This is a convenience wrapper
 	 * for pointTangentNormal(). Use the latter function directly if you
-	 * need to calculate the point and normal vector or tangetn vector
+	 * need to calculate the point and normal vector or tangent vector
 	 * at once.
 	 */
 	KoPoint tangent( double t ) const;
@@ -201,6 +201,18 @@ public:
 	 * This is the exact inverse operation of length( t ).
 	 */
 	double param( double len ) const;
+
+	/**
+	 * Returns true if tangent at p3 is exactly parallel to the tangent at
+	 * p0 of the next segment. Returns false if there is no next segment or
+	 * if the current segment is a "begin".
+	 */
+	bool isSmooth( const VSegment* next ) const;
+
+	bool isSmooth() const
+	{
+		return isSmooth( next() );
+	}
 
 	/**
 	 * Returns the bounding box.
@@ -281,9 +293,6 @@ private:
 
 	VSegmentType m_type;
 	VCtrlPointFixing m_ctrlPointFixing;
-
-	/// Second control point is "smooth".
-	bool m_smooth;
 };
 
 #endif
