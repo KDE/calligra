@@ -7,9 +7,17 @@
   <!ENTITY basics SYSTEM "kwordbasics.docbook">
   <!ENTITY guides1 SYSTEM "kwordguides1.docbook">
   <!ENTITY guides2 SYSTEM "kwordguides2.docbook">
-  <!ENTITY guides3 SYSTEM "kwordguides3.docbook">
-  <!ENTITY styles SYSTEM "kwordguides3b.docbook">
-  <!ENTITY tabls SYSTEM "kwordguides3c.docbook">
+  <!ENTITY pageformat SYSTEM "kwordguides3.docbook">
+  <!ENTITY frames SYSTEM "kwordguides3b.docbook">
+  <!ENTITY formatframe SYSTEM "kwordguides3c.docbook">
+  <!ENTITY formatpara SYSTEM "kwordguides3d.docbook">
+  <!ENTITY tabstops SYSTEM "kwordguides3e.docbook">
+  <!ENTITY formatcharacters SYSTEM "kwordguides3f.docbook">
+  <!ENTITY styles SYSTEM "kwordguides3g.docbook">
+  <!ENTITY columns SYSTEM "kwordguides3h.docbook">
+  <!ENTITY tabls SYSTEM "kwordguides3i.docbook">
+  <!ENTITY headersfooters SYSTEM "kwordguides3j.docbook">
+  <!ENTITY templatecreation SYSTEM "kwordguides3k.docbook">
   <!ENTITY guides4 SYSTEM "kwordguides4.docbook">
   <!ENTITY mbtb SYSTEM "kwordmbtb.docbook">
   <!ENTITY opt SYSTEM "kwordopt.docbook">
@@ -335,9 +343,36 @@ need to read before you begin using &kword;.</para>
 
 <chapter id="guides-3">
 <title>Detailed Guides: Document Layout</title>
-&guides3;
+<para><link linkend="guides">Two sections ago</link>, we talked about
+<link linkend="new-doc">creating</link>, <link
+linkend="saving">saving</link>, <link linkend="loading">loading</link>
+and <link linkend="printing">printing documents</link>. <link
+linkend="guides-2">In the section after that</link> (the previous
+section), we discussed <link linkend="select">entering the textual
+information</link>, <link linkend="clipboard">moving it around</link>,
+<link linkend="spell-check">spell checking</link>, and <link
+linkend="autocorrect">auto-correcting</link> your text.</para>
+
+<para>This section of the guide is designed to help you layout your
+documents.  We will begin with changing the size and shape of the page
+and the margins, and work progressively through smaller and smaller
+blocks of text (frames, then paragraphs, then characters).</para>
+
+<para>After we have discussed formatting individual characters, we
+will deal with some miscellaneous topics related to layout of your
+document.</para>
+
+&pageformat;
+&frames;
+&formatframe;
+&formatpara;
+&tabstops;
+&formatcharacters;
 &styles;
+&columns;
 &tabls;
+&headersfooters;
+&templatecreation;
 </chapter>
 
 &guides4;
