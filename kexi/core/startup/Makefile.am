@@ -1,31 +1,17 @@
-lib_LTLIBRARIES = libkexicore.la
-libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
-	kmultitabbar.cpp kexitabbrowser.cpp \
-	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceMDI.cpp  \
-	kexiworkspaceTabbedMDI.cpp \
-	kexibrowser.cpp kexiview.cpp \
-	KexiViewIface.skel KexiViewIface.cpp KexiProjectIface.skel \
-	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp \
-	kexiprojecthandlerproxy.cpp kexiprojecthandleritem.cpp \
-	KexiProjectIface.cpp kexihandlerpopupmenu.cpp kexiprojecthandler.cpp \
-	kexirelation.cpp kexidragobjects.cpp kexidataprovider.cpp \
-	kexicontexthelp.cpp kexidatasourcedlg.cpp \
-	kexidatasourcecombobox.cpp kexieventhandler.cpp kexisettings.cpp \
-	kexiworkspaceSDI.cpp \
-	kexipartitemaction.cpp kexiprojectconnectiondata.cpp kexiuuid.cpp kexiidentifier.cpp \
-	kexiprojectdata.cpp
+noinst_LTLIBRARIES = kexicorestartup.la
 
+kexicorestartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.ui \
+	KexiNewFileDBWidget.ui KexiOpenExistingFile.ui \
+	KexiConnSelector.cpp KexiProjectSelector.cpp \
+	KexiStartupDialog.cpp KexiDBConnectionSet.cpp KexiProjectSet.cpp \
+	KexiXMLStorage.cpp
 
+kexicorestartup_la_LDFLAGS = $(all_libraries) -Wnounresolved -module
+kexicorestartup_la_LIBADD =
 
-libkexicore_la_LDFLAGS = $(all_libraries) -Wnounresolved -no-undefined
-libkexicore_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../kexidb/libkexidb.la \
-./filters/libkexifilter.la \
-./startup/kexicorestartup.la \
-../3rdparty/uuid/libkexiuuid.la
+kexicorestartup_la_METASOURCES = AUTO
 
-#../formeditor/libkformeditor.la
-
-SUBDIRS = filters startup . projectWizard
+SUBDIRS = .
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
@@ -48,9 +34,6 @@ SUBDIRS = filters startup . projectWizard
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/projectWizard \
-	-I$(top_srcdir)/kexi/3rdparty/uuid $(all_includes) 
-
-METASOURCES = AUTO
+INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/startup -I$(top_srcdir)/kexi/core $(all_includes)
 
 include $(top_srcdir)/kexi/Makefile.global
