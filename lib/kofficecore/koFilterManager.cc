@@ -313,6 +313,12 @@ namespace  // in order not to mess with the global namespace ;)
     // This method builds up the graph in the passed ascii dict
     void buildGraph( QAsciiDict<Vertex>& vertices, KoFilterManager::Direction direction )
     {
+        QStringList stopList; // Lists of mimetypes that are considered end of chains
+        stopList << "text/plain";
+        stopList << "text/csv";
+        stopList << "text/x-tex";
+        stopList << "text/html";
+
         vertices.setAutoDelete( true );
 
         // partly copied from build graph, but I don't see any other
@@ -333,11 +339,47 @@ namespace  // in order not to mess with the global namespace ;)
         QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
         for ( ; it != end; ++it ) {
+
+            QStringList impList; // Import list
+            QStringList expList; // Export list
+
+            QStringList::Iterator stopEnd = stopList.end();
+            // Now we have to exclude the "stop" mimetypes (in the right direction!)
+            if ( direction == KoFilterManager::Import ) {
+                // Import: "stop" mime type should not appear in export
+                QStringList::ConstIterator testIt = ( *it )->export_.begin();
+                QStringList::ConstIterator testEnd = ( *it )->export_.end();
+                for ( ; testIt != testEnd ; ++testIt ) {
+                    if ( stopList.find( *testIt ) == stopEnd ) {
+                        expList.append( *testIt );
+                    }
+                }
+                impList = ( *it )->import;
+            }
+            else {
+                // Export: "stop" mime type should not appear in import
+                QStringList::ConstIterator testIt = ( *it )->import.begin();
+                QStringList::ConstIterator testEnd = ( *it )->import.end();
+                for ( ; testIt != testEnd ; ++testIt ) {
+                    if ( stopList.find( *testIt ) == stopEnd ) {
+                        impList.append( *testIt );
+                    }
+                }
+                expList = ( *it )->export_;
+            }
+
+            if ( impList.empty() || expList.empty() )
+            {
+                // This filter cannot be used under these conditions
+                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " ruled out" << endl;
+                continue;
+            }
+        
             // First add the "starting points" to the dict
-            QStringList::ConstIterator importIt = ( *it )->import.begin();
-            QStringList::ConstIterator importEnd = ( *it )->import.end();
+            QStringList::ConstIterator importIt = impList.begin();
+            QStringList::ConstIterator importEnd = impList.end();
             for ( ; importIt != importEnd; ++importIt ) {
-                QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
+                const QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
                 // already there?
                 if ( !vertices[ key ] )
                     vertices.insert( key, new Vertex( key ) );
@@ -345,12 +387,12 @@ namespace  // in order not to mess with the global namespace ;)
 
             // Are we allowed to use this filter at all?
             if ( KoFilterManager::filterAvailable( *it ) ) {
-                QStringList::ConstIterator exportIt = ( *it )->export_.begin();
-                QStringList::ConstIterator exportEnd = ( *it )->export_.end();
+                QStringList::ConstIterator exportIt = expList.begin();
+                QStringList::ConstIterator exportEnd = expList.end();
 
                 for ( ; exportIt != exportEnd; ++exportIt ) {
                     // First make sure the export vertex is in place
-                    QCString key = ( *exportIt ).latin1();  // latin1 is okay here
+                    const QCString key = ( *exportIt ).latin1();  // latin1 is okay here
                     Vertex* exp = vertices[ key ];
                     if ( !exp ) {
                         exp = new Vertex( key );
@@ -360,7 +402,7 @@ namespace  // in order not to mess with the global namespace ;)
                     // direction (import/export)
                     // This is the chunk of code which actually differs from the
                     // graph stuff (apart from the different vertex class)
-                    importIt = ( *it )->import.begin();
+                    importIt = impList.begin(); // ### TODO: why only the first one?
                     if ( direction == KoFilterManager::Import ) {
                         for ( ; importIt != importEnd; ++importIt )
                             exp->addEdge( vertices[ ( *importIt ).latin1() ] );
@@ -371,7 +413,7 @@ namespace  // in order not to mess with the global namespace ;)
                 }
             }
             else
-                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " doesn't apply." << endl;
+                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " does not apply." << endl;
         }
     }
 
