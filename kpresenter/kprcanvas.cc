@@ -4195,7 +4195,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
 
 void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin*/, float /*top_margin*/ )
 {
-    deSelectAllObj();
+    //deSelectAllObj(); // already done in KPresenterView::setupPrinter
     printer->setFullPage( true );
     int i = 0;
 
@@ -4224,7 +4224,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     /*if ( printer->fromPage() > 1 )
       m_view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageRect( 1, 1.0, false ).height() ) -
       (int)MM_TO_POINT( top_margin ) );*/
-    QValueList<int> list=printer->pageList();
+    QValueList<int> list=printer->pageList(); // 1-based
     QValueList<int>::iterator it;
     for( it=list.begin();it!=list.end();++it)
     {
@@ -4236,7 +4236,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
             break;
 
         currPresPage = i;
-        if ( i > printer->fromPage() )
+        if ( !list.isEmpty() && i > list.first() )
             printer->newPage();
 
         painter->resetXForm();
