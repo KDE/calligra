@@ -391,6 +391,10 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     for ( ; fsit.current() ; ++fsit )
         fsit.current()->updateFrames();
 
+    // ## TODO: only if something changed? (resizing, new frames, or deleted frames...)
+    for ( int pg = fromPage ; pg <= toPage ; ++pg )
+        m_doc->updateFramesOnTopOrBelow( pg );
+
     if ( mainTextFrameResized != -1 && mainTextFrameSet->type() == FT_TEXT ) {
 #ifdef DEBUG_FRAMELAYOUT
         kdDebug(32002) << " Done. First maintextframe resized: " << mainTextFrameResized << endl;
