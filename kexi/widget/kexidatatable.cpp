@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,16 +32,19 @@
 #include "kexidatatableview.h"
 #include "kexidatatable.h"
 
-KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption)
- : KexiDialogBase(win, caption)
+//KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption)
+KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+ : KexiViewBase(mainWin, parent, name)
 {
 	m_view = new KexiDataTableView(this, "view");
 	init();
 }
 
-KexiDataTable::KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor, 
-	const QString &caption)
- : KexiDialogBase(win, caption)
+//KexiDataTable::KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor, 
+//	const QString &caption)
+KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
+	KexiDB::Cursor *cursor, const char *name)
+ : KexiViewBase(mainWin, parent, name)
 {
 	m_view = new KexiDataTableView(this, "view", cursor);
 	init();

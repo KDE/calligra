@@ -107,7 +107,7 @@ class KexiMainWindow::Private
 			*action_edit_cut, *action_edit_copy, *action_edit_paste;
 		// view menu
 		KAction *action_view_nav;
-		KToggleAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
+		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
@@ -264,13 +264,13 @@ KexiMainWindow::initActions()
 		SHIFT+Key_Delete, "edit_delete_row");
 
 	//VIEW MENU
-	d->action_view_data_mode = new KToggleAction(i18n("&Data View"), "table", KShortcut(), 
+	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", KShortcut(), 
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
-	d->action_view_design_mode = new KToggleAction(i18n("D&esign View"), "state_edit", KShortcut(), 
+	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", KShortcut(), 
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
-	d->action_view_text_mode = new KToggleAction(i18n("&Text View"), "state_sql", KShortcut(), 
+	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", KShortcut(), 
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
 	d->action_view_text_mode->setExclusiveGroup("view_mode");
 
@@ -293,8 +293,6 @@ KexiMainWindow::initActions()
 
 	d->action_show_other = new KActionMenu(i18n("Other"), 
 		actionCollection(), "options_show_other");
-//	d->action_show_nav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
-//	 actionCollection(), "options_show_nav");
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
 	 actionCollection(), "options_show_contexthelp");
@@ -374,13 +372,24 @@ void KexiMainWindow::invalidateProjectWideActions()
 	const bool have_dialog = d->curDialog;
 	//VIEW MENU
 
-	d->action_view_data_mode->setEnabled( have_dialog );
-	d->action_view_design_mode->setEnabled( have_dialog );
-	d->action_view_text_mode->setEnabled( have_dialog );
+	d->action_view_data_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DataViewMode) );
+	d->action_view_design_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DesignViewMode) );
+	d->action_view_text_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::TextViewMode) );
 
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(d->prj);
 #endif
+}
+
+void KexiMainWindow::invalidateViewModeActions()
+{
+	//update toggle action
+	if (d->curDialog->currentViewMode()==Kexi::DataViewMode)
+		d->action_view_data_mode->setChecked( true );
+	else if (d->curDialog->currentViewMode()==Kexi::DesignViewMode) 
+		d->action_view_design_mode->setChecked( true );
+	else if (d->curDialog->currentViewMode()==Kexi::TextViewMode) 
+		d->action_view_text_mode->setChecked( true );
 }
 
 #if 0
@@ -601,7 +610,8 @@ KexiMainWindow::initNavigator()
 		d->nav = new KexiBrowser(this);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
-		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,bool)),this,SLOT(openObject(KexiPart::Item*,bool)));
+		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,int)),this,SLOT(openObject(KexiPart::Item*,int)));
+		connect(d->nav,SIGNAL(openOrActivateItem(KexiPart::Item*,int)),this,SLOT(openObjectFromNavigator(KexiPart::Item*,int)));
 		connect(d->nav,SIGNAL(newItem( KexiPart::Info* )),this,SLOT(newObject(KexiPart::Info*)));
 		connect(d->nav,SIGNAL(removeItem(KexiPart::Item*)),this,SLOT(removeObject(KexiPart::Item*)));
 		if (d->prj)//connect to project
@@ -899,6 +909,7 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 	if (update_dlg_caption) {
 		slotCaptionForCurrentMDIChild(d->curDialog->mdiParent()->state()==KMdiChildFrm::Maximized);
 	}
+	invalidateViewModeActions();
 	invalidateActions();
 }
 
@@ -1155,17 +1166,44 @@ void KexiMainWindow::slotViewNavigator()
 
 void KexiMainWindow::slotViewDataMode()
 {
-	//TODO
+	if (!d->curDialog)
+		return;
+	if (!d->curDialog->supportsViewMode( Kexi::DataViewMode )) {
+		// js TODO error...
+		return;
+	}
+	if (!d->curDialog->switchToViewMode( Kexi::DataViewMode )) {
+		// js TODO error...
+		return;
+	}
 }
 
 void KexiMainWindow::slotViewDesignMode()
 {
-	//TODO
+	if (!d->curDialog)
+		return;
+	if (!d->curDialog->supportsViewMode( Kexi::DesignViewMode )) {
+		// js TODO error...
+		return;
+	}
+	if (!d->curDialog->switchToViewMode( Kexi::DesignViewMode )) {
+		// js TODO error...
+		return;
+	}
 }
 
 void KexiMainWindow::slotViewTextMode()
 {
-	//TODO
+	if (!d->curDialog)
+		return;
+	if (!d->curDialog->supportsViewMode( Kexi::TextViewMode )) {
+		// js TODO error...
+		return;
+	}
+	if (!d->curDialog->switchToViewMode( Kexi::TextViewMode )) {
+		// js TODO error...
+		return;
+	}
 }
 
 void
@@ -1383,32 +1421,59 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	return KMdiMainFrm::eventFilter(obj,e);//let KMDI do its work
 }
 
-bool
-KexiMainWindow::openObject(const QString& mime, const QString& name, bool designMode)
+KexiDialogBase *
+KexiMainWindow::openObject(const QString& mime, const QString& name, int viewMode)
 {
 	KexiPart::Item *item = d->prj->item(mime,name);
 	if (!item)
-		return false;
-	return openObject(item, designMode);
+		return 0;
+	return openObject(item, viewMode);
 }
 
-bool
-KexiMainWindow::openObject(KexiPart::Item* item, bool designMode)
+KexiDialogBase *
+KexiMainWindow::openObject(KexiPart::Item* item, int viewMode)
 {
 	if (!item)
 		return false;
-	if (activateWindow(item->identifier()))
-		return true;
-
-	return d->prj->openObject(this, *item, designMode);
-/*
-	KexiPart::Part *part = Kexi::partManager().part(item->mime());
-	if (!part) {
-		//TODO js: error msg
-		return false;
+	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
+	if (dlg) {
+		if (dlg->currentViewMode()==viewMode) {
+			if (activateWindow(item->identifier())) {
+				invalidateViewModeActions();
+				return dlg;
+			}
+		}
+		//try to switch
+		if (!dlg->switchToViewMode(viewMode)) {
+			//js TODO: add error msg...
+			return 0;
+		}
 	}
-	return part->openInstance(this, *item, designMode) != 0;
-	*/
+	else {
+		dlg = d->prj->openObject(this, *item, viewMode);
+	}
+	invalidateViewModeActions();
+	return dlg;
+}
+
+/*! this slot handles event when user double clicked (or single -depending on settings)
+ or pressed return ky on the part item in the navigator.
+ This differs from openObject() signal in that if the object is already opened
+ in view mode other than \a viewMode, the mode is not changed. */
+KexiDialogBase *
+KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
+{
+	if (!item)
+		return false;
+	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
+	if (dlg) {
+		if (activateWindow(item->identifier())) {//just activate
+			invalidateViewModeActions();
+			return dlg;
+		}
+	}
+	//do the same as in openObject()
+	return openObject(item, viewMode);
 }
 
 bool KexiMainWindow::newObject( KexiPart::Info *info )

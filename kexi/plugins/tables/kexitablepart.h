@@ -21,6 +21,7 @@
 #ifndef KEXITABLEPART_H
 #define KEXITABLEPART_H
 
+#include <kexi.h>
 #include <kexipart.h>
 #include <kexipartitem.h>
 
@@ -40,8 +41,11 @@ class KexiTablePart : public KexiPart::Part
 //moved to Part:		virtual void createGUIClient(KexiMainWindow *win);
 
 //		virtual QString instanceName() const;
+
+		virtual QWidget* createView(QWidget *parent, KexiDialogBase* dialog, 
+			const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 	protected:
-		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode = false);
+//		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
 		virtual void initPartActions( KActionCollection *col );
 		virtual void initInstanceActions( KActionCollection *col );

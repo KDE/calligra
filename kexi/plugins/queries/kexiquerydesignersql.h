@@ -20,18 +20,18 @@
 #ifndef KEXIQUERYDESIGNERSQL_H
 #define KEXIQUERYDESIGNERSQL_H
 
-#include <qwidget.h>
+#include <kexiviewbase.h>
 
 class KexiQueryDesigner;
 class KexiQueryDesignerSQLEditor;
 class KexiQueryDesignerSQLHistory;
 
-class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQL : public QWidget
+class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQL : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerSQL(KexiQueryDesigner *parent);
+		KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		~KexiQueryDesignerSQL();
 
 		QString				getQuery();

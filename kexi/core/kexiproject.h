@@ -27,9 +27,9 @@
 
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
-#include <kexidb/object.h>
+#include "kexi.h"
 
-//class KexiProjectConnectionData;
+#include <kexidb/object.h>
 
 namespace KexiDB
 {
@@ -45,6 +45,7 @@ namespace KexiPart
 }
 
 class KexiMainWindow;
+class KexiDialogBase;
 
 /**
  * this class represents a project it contains data about connections, 
@@ -114,9 +115,10 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		KexiProjectData *data() const { return m_data; }
 
-		bool openObject(KexiMainWindow *wnd, const KexiPart::Item& item, bool designMode);
+		KexiDialogBase* openObject(KexiMainWindow *wnd, const KexiPart::Item& item, int viewMode = Kexi::DataViewMode);
+
 		//! For convenience
-		bool openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, bool designMode);
+		KexiDialogBase* openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
 		bool removeObject(KexiMainWindow *wnd, const KexiPart::Item& item);
 

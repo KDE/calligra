@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,12 +23,14 @@
 
 #include "kexipartguiclient.h"
 #include "kexiactionproxy.h"
+#include "kexi.h"
 
 #include <qguardedptr.h>
 
 #include <kmdichildview.h>
 #include <kxmlguiclient.h>
 
+class QWidgetStack;
 class KexiMainWindow;
 class KActionCollection;
 class KexiContextHelpInfo;
@@ -41,25 +44,26 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 	public:
 		KexiDialogBase(KexiMainWindow *parent, const QString &caption);
-		~KexiDialogBase();
+		virtual ~KexiDialogBase();
 		bool isRegistered();
 
-		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
+		//! Adds \a view for the dialog. It will be the only view (of unspecified mode) for the dialog
+		void addView(QWidget *view);
 
 		/*! \return main (top level) widget inside this dialog.
 		 This widget is used for e.g. determining minimum size hint and size hint. */
-		virtual QWidget* mainWidget() = 0;
+//		virtual QWidget* mainWidget() = 0;
 
 		/*! reimplemented: minimum size hint is inherited from mainWidget() */
-//		virtual QSize minimumSizeHint() const;
+		virtual QSize minimumSizeHint() const;
 		/*! reimplemented: size hint is inherited from mainWidget() */
-//		virtual QSize sizeHint() const;
+		virtual QSize sizeHint() const;
 
 		KexiMainWindow	*mainWin() { return m_parentWindow; }
 
 		void	setDocID(int id);
 		int	docID() { return m_docID; }
-		KInstance *instance();
+//		KInstance *instance();
 
 		//! Kexi part used to create this window
 		inline KexiPart::Part* part() const { return m_part; }
@@ -72,23 +76,25 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 If \a dontSaveChanges if true, changes are not saved iven if this dialog is dirty. */
 		bool tryClose(bool dontSaveChanges);
 
+		/*! \return name of icon provided by part that created this dialog.
+		 The name is used by KexiMainWindow to set/reset icon for this dialog. */
 		virtual QString itemIcon();
 
-		/*! \return true if this dialog supports switching to the "data view mode" 
-		 (true e.g. for table dialog). The flag is used e.g. for 
-		 testing by KexiMainWindow, if actions of switching to given view mode is available. 
-		 This flag is true by default.
-		 Set m_supportsDataViewMode in your subclass to override this flag. */
-		bool supportsDataViewMode() const { return m_supportsDataViewMode; }
+		/*! \return true if this dialog supports switching to \a mode. 
+		 \a mode is one of Kexi::ViewMode enum elements.
+		 The flags are used e.g. for testing by KexiMainWindow, if actions 
+		 of switching to given view mode is available. 
+		 This member is intialised in KexiPart that creates this KexiDialogBase object. */
+		bool supportsViewMode( int mode ) const { return m_supportedViewModes & mode; }
 
-		/*! Like above, for "design view mode". This flag is true by default.
-		 Set m_supportsDesignViewMode in your subclass to override this flag. */
-		bool supportsDesignViewMode() const { return m_supportsDesignViewMode; }
+		/*! \return current view mode for this dialog. */
+		int currentViewMode() const { return m_currentViewMode; }
 
-		/*! Like above, for "sql view mode" (e.g. true for queries). 
-		 This flag is false by default. 
-		 Set m_supportsSQLViewMode in your subclass to override this flag. */
-		bool supportsSQLViewMode() const { return m_supportsSQLViewMode; }
+		/*! Switches this dialog to \a viewMode.
+		 \a viewMode is one of Kexi::ViewMode enum elements. */
+		bool switchToViewMode( int viewMode );
+
+		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
 	public slots:
 //		virtual void detach();
@@ -113,17 +119,26 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 flag from internal structures that may be changed. */
 		virtual bool dirty();
 
-		bool m_supportsDataViewMode : 1; //!< see supportsDataViewMode()
-		bool m_supportsDesignViewMode : 1; //!< see supportsDesignViewMode()
-		bool m_supportsSQLViewMode : 1; //!< see supportsSQLViewMode()
+		int m_supportedViewModes;
+		int m_currentViewMode;
+
+		/*! Adds \a view for the dialog. It will be the view for mode \a viewMode.
+		 \a viewMode value is one from Kexi::ViewMode enum. */
+		void addView(QWidget *view, int viewMode);
+
+		inline QWidgetStack * stack() const { return m_stack; }
 
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;
+#ifdef KEXI_NO_CTXT_HELP
 		KexiContextHelpInfo *m_contextHelpInfo;
+#endif
 		int m_docID;
-		KInstance *m_instance;
+//		KInstance *m_instance;
 		QGuardedPtr<KexiPart::Part> m_part;
+		const KexiPart::Item *m_item;
+		QWidgetStack *m_stack;
 
 		friend class KexiMainWindow;
 		friend class KexiPart::Part;

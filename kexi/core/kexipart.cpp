@@ -27,6 +27,8 @@
 #include "kexipartguiclient.h"
 #include "keximainwindow.h"
 
+#include <qwidgetstack.h>
+
 #include <kiconloader.h>
 
 using namespace KexiPart;
@@ -36,6 +38,7 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 , m_guiClient(0)
 {
 	m_info = 0;
+	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 }
 
 Part::~Part()
@@ -66,19 +69,22 @@ void Part::createGUIClient(KexiMainWindow *win)
 	}
 }
 
-KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode)
+KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode )
 {
-	KexiDialogBase *dlg = createInstance(win,item,designMode);
-	if (!dlg)
-		return 0;
+//	KexiDialogBase *dlg = createInstance(win,item,viewMode);
+//	if (!dlg)
+//		return 0;
+	QString capt = QString("%1 : %2").arg(item.name()).arg(instanceName());
+	KexiDialogBase *dlg = new KexiDialogBase(win, capt);
+	dlg->m_supportedViewModes = m_supportedViewModes;
+//	dlg->m_currentViewMode = viewMode;
 	dlg->m_part = this;
-	dlg->resize(dlg->sizeHint());
-	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
+	dlg->m_item = &item;
 
 //js TODO: apply settings for caption displaying menthod; there can be option for
 //- displaying item.caption() as caption, if not empty, without instanceName
 //- displaying the same as above in tabCaption (or not)
-	dlg->setCaption( QString("%1 : %2").arg(item.name()).arg(instanceName()) );
+	dlg->setCaption( capt );
 	dlg->setTabCaption( dlg->caption() );
 //	dlg->setIcon( SmallIcon( info()->itemIcon() ) );
 	dlg->setDocID(item.identifier());
@@ -86,8 +92,26 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &it
 	dlg->setIcon( SmallIcon( dlg->itemIcon() ) );
 	if (dlg->mdiParent())
 		dlg->mdiParent()->setIcon( *dlg->icon() );
-	if (dlg->mainWidget())
-		dlg->mainWidget()->setIcon( *dlg->icon() );
+//	if (dlg->mainWidget())
+//		dlg->mainWidget()->setIcon( *dlg->icon() );
+	dlg->stack()->setIcon( *dlg->icon() );
+
+	if (!dlg->switchToViewMode( viewMode )) {
+		//js TODO ERROR???
+	}
+
+	dlg->resize(dlg->sizeHint());
+	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
+
+//	QWidget *view = createView(dlg->stack(), dlg, item, viewMode);
+/*
+	if (!view) {
+		//js TODO ERROR???
+	}
+	else {
+		dlg->addView(view, viewMode);
+	}*/
+	
 	return dlg;
 }
 

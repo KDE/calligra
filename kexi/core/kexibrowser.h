@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #ifndef KEXIBROWSER_H
 #define KEXIBROWSER_H
 
-#include "kexidockbase.h"
+#include "kexiviewbase.h"
 
 #include <qdict.h>
 
@@ -47,12 +47,13 @@ namespace KexiPart
 typedef QDict<KexiBrowserItem> BaseItemList;
 
 
-class KEXICORE_EXPORT KexiBrowser : public KexiDockBase
+class KEXICORE_EXPORT KexiBrowser : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiBrowser(KexiMainWindow *parent);
+		KexiBrowser(KexiMainWindow *mainWin);
+		virtual ~KexiBrowser(); 
 
 		void installEventFilter ( const QObject * filterObj );
 
@@ -65,7 +66,12 @@ class KEXICORE_EXPORT KexiBrowser : public KexiDockBase
 		virtual void setFocus();
 
 	signals: 
-		void openItem( KexiPart::Item*, bool designMode );
+		void openItem( KexiPart::Item*, int viewMode );
+		/*! this signal is emmited when user double clicked (or single -depending on settings)
+		 or pressed return ky on the part item.
+		 This signal differs from openItem() signal in that if the object is already opened
+		 in view mode other than \a viewMode, the mode is not changed. */
+		void openOrActivateItem( KexiPart::Item*, int viewMode );
 		void newItem( KexiPart::Info* );
 		void removeItem( KexiPart::Item* );
 

@@ -26,8 +26,8 @@
 #include "kexiquerydesignersqlhistory.h"
 #include "kexiquerydesignersql.h"
 
-KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiQueryDesigner *parent)
- : QWidget(parent)
+KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+ : KexiViewBase(mainWin, parent, name)
 {
 	QSplitter *l = new QSplitter(this);
 	l->setOrientation(Vertical);

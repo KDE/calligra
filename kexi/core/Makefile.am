@@ -3,7 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 lib_LTLIBRARIES = libkexicore.la
 libkexicore_la_SOURCES = kexi.cpp kexi_global.cpp \
 	kexiactionproxy.cpp kexisharedactionhost.cpp \
-	kexiproject.cpp keximainwindow.cpp kexidialogbase.cpp kexidockbase.cpp \
+	kexiproject.cpp keximainwindow.cpp kexidialogbase.cpp kexiviewbase.cpp \
 	kexipartmanager.cpp kexipartinfo.cpp kexipartitem.cpp kexipart.cpp \
 	kexibrowser.cpp kexibrowseritem.cpp \
 	kexiprojectdata.cpp kexistatusbar.cpp kexicontexthelp.cpp kexiinternalpart.cpp \

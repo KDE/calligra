@@ -20,7 +20,7 @@
 #ifndef KEXIQUERYDESIGNERGUIEDITOR_H
 #define KEXIQUERYDESIGNERGUIEDITOR_H
 
-#include <qwidget.h>
+#include <kexiviewbase.h>
 
 class KexiMainWindow;
 class KexiTableViewData;
@@ -33,12 +33,12 @@ namespace KexiDB
 	class Connection;
 };
 
-class KexiQueryDesignerGuiEditor : public QWidget
+class KexiQueryDesignerGuiEditor : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win);
+		KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		~KexiQueryDesignerGuiEditor();
 
 		KexiDB::QuerySchema	*schema();

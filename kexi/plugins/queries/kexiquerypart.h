@@ -35,8 +35,10 @@ class KexiQueryPart : public KexiPart::Part
 
 		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item);
 
+		virtual QWidget* createView(QWidget *parent, KexiDialogBase* dialog, 
+			const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 	protected:
-		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool design);
+//		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 //		virtual QString instanceName() const;
 };
 

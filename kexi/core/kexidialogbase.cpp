@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +24,8 @@
 #include "kexipart.h"
 #include "kexipartinfo.h"
 
+#include <qwidgetstack.h>
+
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -32,24 +35,56 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  , KexiActionProxy(this, parent)
  , m_isRegistered(false)
 {
-	m_supportsDataViewMode = true;
-	m_supportsDesignViewMode = true;
-	m_supportsSQLViewMode = false;
-
-	m_contextHelpInfo=new KexiContextHelpInfo();
+	m_supportedViewModes = 0; //will be set by KexiPart
+	m_currentViewMode = 0; //override this!
 	m_parentWindow=parent;
-	m_instance=parent->instance();
+
+	QVBoxLayout *lyr = new QVBoxLayout(this);
+	m_stack = new QWidgetStack(this, "stack");
+	lyr->addWidget(m_stack);
+
+#ifdef KEXI_NO_CTXT_HELP
+	m_contextHelpInfo=new KexiContextHelpInfo();
+#endif
+//	m_instance=parent->instance();
 	m_docID = -1;
-}
-
-
-KInstance *KexiDialogBase::instance() {
-	return m_instance;
+	m_item = 0;
 }
 
 KexiDialogBase::~KexiDialogBase()
 {
 }
+
+void KexiDialogBase::addView(QWidget *view)
+{
+	m_stack->addWidget(view, 0);
+}
+
+void KexiDialogBase::addView(QWidget *view, int viewMode)
+{
+	m_stack->addWidget(view, viewMode);
+}
+
+QSize KexiDialogBase::minimumSizeHint() const
+{
+	QWidget *v = m_stack->visibleWidget();
+	if (!v)
+		return KMdiChildView::minimumSizeHint();
+	return v->minimumSizeHint();
+}
+
+QSize KexiDialogBase::sizeHint() const
+{
+	QWidget *v = m_stack->visibleWidget();
+	if (!v)
+		return KMdiChildView::sizeHint();
+	return v->sizeHint();
+}
+
+/*
+KInstance *KexiDialogBase::instance() {
+	return m_instance;
+}*/
 
 void KexiDialogBase::registerDialog() {
 	m_parentWindow->registerChild(this);
@@ -85,22 +120,13 @@ KexiDialogBase::setDocID(int id)
 }
 
 void KexiDialogBase::setContextHelp(const QString& caption, const QString& text, const QString& iconName) {
+#ifdef KEXI_NO_CTXT_HELP
 	m_contextHelpInfo->caption=caption;
 	m_contextHelpInfo->text=text;
 	m_contextHelpInfo->text=iconName;
 	updateContextHelp();
-
+#endif
 }
-
-/*
-void KexiDialogBase::detach()
-{
-	KMdiChildView::detach();
-	// update icon
-	if (m_part) {
-//		setIcon( DesktopIcon(m_part->info()->itemIcon()) );
-	}
-}*/
 
 void KexiDialogBase::closeEvent( QCloseEvent * e )
 {
@@ -131,6 +157,28 @@ QString KexiDialogBase::itemIcon()
 	if (!m_part || !m_part->info())
 		return QString::null;
 	return m_part->info()->itemIcon();
+}
+
+bool KexiDialogBase::switchToViewMode( int viewMode )
+{
+	if (m_currentViewMode == viewMode)
+		return true;
+	if (!supportsViewMode(viewMode))
+		return false;
+
+	QWidget *view = m_stack->widget(viewMode);
+	if (!view) {
+		//ask the part to create view for the new mode
+		view = m_part->createView(m_stack, this, *m_item, viewMode);
+		if (!view) {
+			//js TODO error?
+			return false;
+		}
+		addView(view, viewMode);
+	}
+	m_stack->raiseWidget(view);
+	m_currentViewMode = viewMode;
+	return true;
 }
 
 #include "kexidialogbase.moc"

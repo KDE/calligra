@@ -39,14 +39,14 @@
 
 #include "widget/relations/kexirelationwidget.h"
 
-KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win)
- : QWidget(parent)
+KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+ : KexiViewBase(mainWin, parent, name)
 {
-	m_conn = win->project()->dbConnection();
+	m_conn = mainWin->project()->dbConnection();
 
 	QSplitter *s = new QSplitter(Vertical, this);
 //	KexiInternalPart::createWidgetInstance("relation", win, s, "relation");
-	m_relations = new KexiRelationWidget(win, s, "relations");
+	m_relations = new KexiRelationWidget(mainWin, s, "relations");
 //	addActionProxyChild( m_view->relationView() );
 /*	KexiRelationPart *p = win->relationPart();
 	if(p)

@@ -302,25 +302,26 @@ void KexiProject::setError( KexiDB::Object *obj )
 		emit error(m_error_title, obj);
 }
 
-bool KexiProject::openObject(KexiMainWindow *wnd, const KexiPart::Item& item, bool designMode)
+KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const KexiPart::Item& item, int viewMode)
 {
 	KexiPart::Part *part = Kexi::partManager().part(item.mime());
 	if (!part) {
 //js TODO:		setError(&Kexi::partManager());
-		return false;
+		return 0;
 	}
-	if (!part->openInstance(wnd, item, designMode)) {
+	KexiDialogBase *dlg  = part->openInstance(wnd, item, viewMode);
+	if (!dlg) {
 		//js TODO check for errors
-		return false;
+		return 0;
 	}
-	return true;
+	return dlg;
 }
 
-bool KexiProject::openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, 
-	bool designMode)
+KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, 
+	int viewMode)
 {
 	KexiPart::Item *it = item(mime, name);
-	return it ? openObject(wnd, *it, designMode) : false;
+	return it ? openObject(wnd, *it, viewMode) : 0;
 }
 
 bool KexiProject::removeObject(KexiMainWindow *wnd, const KexiPart::Item& item)

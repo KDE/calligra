@@ -30,6 +30,13 @@
 
 namespace Kexi
 {
+	/*! Modes of view for the dialogs. Used mostly for parts and KexiDialogBase. */
+	enum ViewMode { 
+		DataViewMode = 1,
+		DesignViewMode = 2,
+		TextViewMode = 4 //!< Also known as SQL View Mode
+	};
+
 	//! A set of known connections
 	KEXICORE_EXPORT KexiDBConnectionSet& connset();
 	

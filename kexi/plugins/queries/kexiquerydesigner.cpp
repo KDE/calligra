@@ -50,6 +50,8 @@
 KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, const KexiPart::Item &it)
 	: KexiDialogBase(win, it.name())
 {
+	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode;
+
 //	setIcon(SmallIcon("query"));
 	QVBoxLayout *l = new QVBoxLayout(this);
 

@@ -22,6 +22,7 @@
 #define KEXIMAINWINDOW_H
 
 #include "kexisharedactionhost.h"
+#include "kexi.h"
 
 #include <kmdimainfrm.h>
 
@@ -33,8 +34,6 @@ class KexiBrowser;
 class KexiActionProxy;
 class KMdiChildView;
 class KexiDialogBase;
-class KToggleAction;
-class KexiRelationPart;
 
 namespace KexiDB {
 	class Object;
@@ -87,7 +86,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		/**
 		 * @returns a pointer to the relation parts loads it if needed
 		 */
-		KexiRelationPart	*relationPart();
+//		KexiRelationPart	*relationPart();
 
 		/*! Generates ID for private "document" like Relations window.
 		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
@@ -103,9 +102,17 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
 
-		bool openObject(KexiPart::Item *item, bool designMode = false);
-		//! for convenience
-		bool openObject(const QString& mime, const QString& name, bool designMode = false);
+		//! Opens object pointed by \a item in a view \a viewMode
+		KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode);
+		//! For convenience
+		KexiDialogBase * openObject(const QString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
+
+		/*! this slot handles event when user double clicked (or single -depending on settings)
+		 or pressed return ky on the part item in the navigator.
+		 This differs from openObject() signal in that if the object is already opened
+		 in view mode other than \a viewMode, the mode is not changed. 
+		 \sa KexiBrowser::openOrActivateItem() */
+		KexiDialogBase * openObjectFromNavigator(KexiPart::Item* item, int viewMode);
 
 		bool newObject( KexiPart::Info *info );
 		bool removeObject( KexiPart::Item *item );
@@ -142,6 +149,8 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 These actions are only dependent on project availbility, not on curently selected dialog.
 		*/
 		void invalidateProjectWideActions();
+
+		void invalidateViewModeActions();
 
 		/*! Opens project pointed by \a projectData, \return true on success.
 		 Application state (e.g. actions) is updated. */

@@ -36,8 +36,6 @@
 #include <kpopupmenu.h>
 #include <kglobalsettings.h>
 
-#include <koApplication.h>
-
 #include <kexidb/tableschema.h>
 #include <kexidb/connection.h>
 #include <kexidb/indexschema.h>

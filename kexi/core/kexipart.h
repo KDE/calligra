@@ -24,9 +24,11 @@
 #include <qobject.h>
 #include <qmap.h>
 
+#include "kexi.h"
+
 class KexiMainWindow;
-class KexiDialogBase;
 class KActionCollection;
+class KexiDialogBase;
 
 namespace KexiPart
 {
@@ -46,9 +48,10 @@ class KEXICORE_EXPORT Part : public QObject
 		Part(QObject *parent, const char *name, const QStringList &);
 		virtual ~Part();
 
-		/*! "Opens" an instance that the part provides, pointed by \a item. 
-		 It is in design mode if \a designMode is true. */
-		KexiDialogBase* openInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode=false);
+		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
+		 \a viewMode is one of Kexi::ViewMode enum. */
+		KexiDialogBase* openInstance(KexiMainWindow *win, const KexiPart::Item &item, 
+			int viewMode = Kexi::DataViewMode);
 
 		/*! "Removes" any stored data pointed by \a item (example: table is dropped for table part). 
 		 From now this data is inaccesible, and \a item disappear.
@@ -67,9 +70,9 @@ class KEXICORE_EXPORT Part : public QObject
 
 		inline GUIClient *instanceGuiClient() const { return m_instanceGuiClient; }
 
+		virtual QWidget* createView(QWidget *parent, KexiDialogBase* dialog, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 	protected:
-		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode=false) = 0;
-
+//		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
 		//! Creates GUICLient for this part, attached to \a win
 		//! This method is called from KexiMainWindow
@@ -84,6 +87,15 @@ class KEXICORE_EXPORT Part : public QObject
 		//! The names are useful because the same action can have other name for each part
 		//! E.g. "New table" vs "New query" can have different forms for some languages...
 		QMap<QString,QString> m_names;
+
+		/*! Supported modes for dialogs created by this part.
+		 \a modes are one of Kexi::ViewMode enum elements.
+		 Set this member in your KexiPart subclass' ctor, if you need to override the default value
+		 that equals Kexi::DataViewMode | Kexi::DesignViewMode.
+		 Theis member is used to set supported view modes for every KexiDialogBase derived object
+		 created by this KexiPart.
+		 Default flag combination is Kexi::DataViewMode | Kexi::DesignViewMode. */
+		int m_supportedViewModes;
 
 	private:
 		Info *m_info;

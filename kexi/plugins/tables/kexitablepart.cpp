@@ -25,12 +25,14 @@
 
 #include "keximainwindow.h"
 #include "kexiproject.h"
+#include "kexipartinfo.h"
 #include "widget/kexidatatable.h"
 #include "widget/kexidatatableview.h"
+#include "kexialtertabledialog.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
-#include <kexipartinfo.h>
+#include <kexidialogbase.h>
 
 
 /*class KexiTablePartGUIClient: public KexiPart::GUIClient {
@@ -52,6 +54,9 @@ KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringLis
 {
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 	m_names["instance"] = i18n("Table");
+	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
+//js TODO: also add Kexi::TextViewMode when we'll have SQL ALTER TABLE EDITOR!!!
+
 //	m_names["new"] = i18n("New Table...");
 }
 
@@ -98,9 +103,12 @@ KexiTablePart::execute(KexiMainWindow *win, const KexiPart::Item &item)
 }
 #endif
 
-KexiDialogBase*
-KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool designMode)
+//KexiDialogBase*
+//KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode)
+QWidget* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog, 
+	const KexiPart::Item &item, int viewMode)
 {
+	KexiMainWindow *win = dialog->mainWin();
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return 0;
 
@@ -111,22 +119,23 @@ KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, b
 		return 0;
 	}
 
-	if (designMode) {
-		//DESIGN MODE
-
+	if (viewMode == Kexi::DesignViewMode) {
+		KexiAlterTableDialog *t = new KexiAlterTableDialog(win, parent, *sch, "altertable");
+		return t;
 	}
+	else if (viewMode == Kexi::DataViewMode) {
+		KexiDB::Cursor *c = win->project()->dbConnection()->prepareQuery(*sch);
 
-	//DATA VIEW MODE
-	KexiDB::Cursor *c = win->project()->dbConnection()->prepareQuery(*sch);
+		kdDebug() << "KexiTablePart::execute(): cursor is " << c << endl;
+		if(!c) {
+			//js TODO add error msg
+			return 0;
+		}
 
-	kdDebug() << "KexiTablePart::execute(): cursor is " << c << endl;
-	if(!c) {
-		//js TODO add error msg
-		return 0;
+		KexiDataTable *t = new KexiDataTable(win, parent, c, "datatable"); //QString("%1 - %2").arg(item.name()).arg(instanceName()), c);
+		return t;
 	}
-
-	KexiDataTable *t = new KexiDataTable(win, c); //QString("%1 - %2").arg(item.name()).arg(instanceName()), c);
-	return t;
+	return 0;
 }
 
 bool KexiTablePart::remove(KexiMainWindow *win, const KexiPart::Item &item)

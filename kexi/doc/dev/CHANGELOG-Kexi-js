@@ -227,6 +227,29 @@ TODO:
 - KMdiChildArea::getCaptionColors - change to KGlobalSettings::inactiveTextColor(), etc.
   (for win32 - reimpl. KGlobalSettings::inactiveTextColor() with code from getCaptionColors())
 
+2004-01-14
+CORE API CHANGED:
+- Kexi Dialogs : view modes functionality added -- KexiViewBase, and integrated with KexiMainWindow 
+   and KexiDialogBase
+- KexiDockBase removed because if KexiViewBase existence
+- If a dialog is already opened in given mode and user have dbl-clicked on the Navigator, 
+  the dialog is not switched to other mode
+
+2004-01-13
+KexiActionProxy:
+ -	isSupported(const char* action_name) added -returns true, if action is supported by the proxy
+ -	isAvailable() now lookups also in the childrens actions, if actual action proxy does 
+  	 not support a given action
+- Relation View:
+	some action availability updates
+
+- more icon sizes added: state_sql, table; state_text added for future "text view" mode
+
+- KexiMainWindow: actions are invalidated more accurate on dialogs switching/closing
+- KexiDialogBase: added flags t ocheck if given dialog's implementation accepts given view mode
+  (data/design/sql modes)
+- Kexi::ViewMode introduced - view modes for kexi dialogs (i.e. data/design/sql)
+
 2004-01-12
 - Relation View:
   - tables focusing fixed

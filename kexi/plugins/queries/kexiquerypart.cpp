@@ -17,31 +17,46 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kexiquerypart.h"
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
 #include <keximainwindow.h>
+#include <kexidialogbase.h>
 #include <kexiproject.h>
+#include <kexidatatable.h>
 
-#include "kexiquerydesigner.h"
-#include "kexiquerypart.h"
+#include "kexiquerydesignerguieditor.h"
+#include "kexiquerydesignersql.h"
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
 	m_names["instance"] = i18n("Query");
+	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode;
 }
 
 KexiQueryPart::~KexiQueryPart()
 {
 }
 
-KexiDialogBase*
-KexiQueryPart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool)
+//KexiDialogBase*
+//KexiQueryPart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode)
+QWidget* KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, 
+	const KexiPart::Item &item, int viewMode)
 {
-	KexiQueryDesigner *d = new KexiQueryDesigner(win, item);
-	return d;
+	if (viewMode == Kexi::DataViewMode) {
+		return new KexiDataTable(dialog->mainWin(), parent, "dataview");//todo
+	}
+	else if (viewMode == Kexi::DesignViewMode) {
+		return new KexiQueryDesignerGuiEditor(dialog->mainWin(), parent, "guieditor");
+	}
+	else if (viewMode == Kexi::TextViewMode) {
+		return new KexiQueryDesignerSQL(dialog->mainWin(), parent, "sqldesigner");
+	}
+//	KexiQueryDesigner *d = new KexiQueryDesigner(win, item);
+	return 0;
 }
 
 /*QString
