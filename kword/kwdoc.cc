@@ -19,6 +19,7 @@
 
 #include <kmessagebox.h>
 #include <qfileinfo.h>
+#include <qregexp.h>
 
 #include <koTemplateChooseDia.h>
 #include <koMainWindow.h>
@@ -1713,11 +1714,23 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
         {
             // Prepare a new name for the frameset
             QString oldName = elem.attribute( "name" );
-            QString newName=i18n("Copy-%1").arg( oldName );
-            if ( frameSetByName( newName ) )
-                newName = generateFramesetName( newName+"-%1" );
+            QString newName;
+
+            // make up a new name for the frame, use Copy[digits]-[oldname] as template. 
+            // Fully translatable naturally :)
+            int count=0;
+            QString searchString ("^("+ i18n("Copy%1-%2").arg("\\d*").arg("){0,1}"));
+            searchString=searchString.replace(QRegExp("\\-"), "\\-"); // escape the '-'
+
+            QRegExp searcher(searchString);
+            do {
+                newName=oldName;
+                newName.replace(searcher,i18n("Copy%1-%2").arg(count > 0? QString("%1").arg(count):"").arg(""));
+                count++;
+            } while ( frameSetByName( newName ) );
+
             m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
-            kdDebug() << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
+            //kdDebug() << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
             switch ( frameSetType ) {
             case FT_TABLE: {
