@@ -397,7 +397,7 @@ bool KoSpell::check(const QString &buffer)
 //	kdDebug(32500) << "KoSpell::check(\"" << buffer << "\")" << endl;
 	if(buffer.isEmpty())
 	{
-//		kdDebug(32500) << "KoSpell::done()" << endl;
+		//kdDebug(32500) << "Empty -> KoSpell::done()" << endl;
 		emit done();
 		return true;
 	}
@@ -454,20 +454,24 @@ void KoSpell::check2(KProcIO *)
         {
             QString buffer = m_buffer.front();
             pos--;	// for the '^' we sent, which ispell also counts as 1 char
-            for(int i=0; i < pos; i++)
+            // UTF8 is a multi-byte charset, adjust pos accordingly, without converting the whole string
+            // (like kspell does)
+            if ( ksconfig->encoding() == KS_E_UTF8 )
             {
-                ushort u = buffer[i].unicode();
-                if(u > 0x7f)
-                    pos--;
-                else if(u > 0x7ff)
-                    pos-=2;
-                /* ushort can't hold more than that, right?
-                   else if(u > 0xffff)
-                   pos-=3;
-                */
-
+                for(int i=0; i < pos; i++)
+                {
+                    ushort u = buffer[i].unicode();
+                    if(u > 0x7f)
+                        pos--;
+                    else if(u > 0x7ff)
+                        pos-=2;
+                    /* ushort can't hold more than that, right?
+                       else if(u > 0xffff)
+                       pos-=3;
+                    */
+                }
             }
-//				kdDebug(32500) << "KoSpell::misspelling(" << word << ", " << pos << ")" << endl;
+//            kdDebug(32500) << "KoSpell::misspelling(" << word << ", " << pos << ")" << endl;
             emit misspelling(word, pos);
             break;
         }
