@@ -98,11 +98,14 @@ bool KoTextFormatCollection::hasFormat( QTextFormat *f )
 class KoTextFormat::KoTextFormatPrivate
 {
 public:
-    KoTextFormatPrivate() : m_screenFont( 0L ), m_screenFontMetrics( 0L )
+    KoTextFormatPrivate() : m_screenFont( 0L ), m_screenFontMetrics( 0L ),
+                            m_screenFontNoZoom( 0L ), m_screenFontMetricsNoZoom( 0L )
     {}
     // caching for speedup when formatting
     QFont* m_screenFont; // font to be used when painting (zoom-dependent)
     QFontMetrics* m_screenFontMetrics; // font metrics on screen (zoom-dependent)
+    QFont* m_screenFontNoZoom; // font to be used when formatting text for layout units
+    QFontMetrics* m_screenFontMetricsNoZoom; // font metrics for m_screenFontMetricsNoZoom
 };
 
 KoTextFormat::KoTextFormat()
@@ -147,6 +150,8 @@ KoTextFormat::~KoTextFormat()
 #endif
     delete d->m_screenFontMetrics;
     delete d->m_screenFont;
+    delete d->m_screenFontMetricsNoZoom;
+    delete d->m_screenFontNoZoom;
     delete d;
 }
 
@@ -212,6 +217,10 @@ void KoTextFormat::generateKey()
     d->m_screenFontMetrics = 0L; // i.e. recalc at the next screenFontMetrics() call
     delete d->m_screenFont;
     d->m_screenFont = 0L; // i.e. recalc at the next screenFont() call
+    delete d->m_screenFontMetricsNoZoom;
+    d->m_screenFontMetricsNoZoom = 0L; // i.e. recalc at the next screenFontMetrics() call
+    delete d->m_screenFontNoZoom;
+    d->m_screenFontNoZoom = 0L; // i.e. recalc at the next screenFont() call
 }
 
 int KoTextFormat::compare( const KoTextFormat & format ) const
@@ -247,51 +256,162 @@ QColor KoTextFormat::defaultTextColor( QPainter * painter )
     return QApplication::palette().color( QPalette::Active, QColorGroup::Text );
 }
 
-float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
+float KoTextFormat::screenPointSize( const KoZoomHandler* zh, bool applyZoom ) const
 {
     int pointSizeLU = font().pointSize();
     if ( vAlign() != QTextFormat::AlignNormal )
         pointSizeLU = ( ( pointSizeLU * 2 ) / 3 );
 
-    return zh->layoutUnitToFontSize( pointSizeLU, false /* forPrint */ );
+    return applyZoom // true when painting, false when formatting
+        ? zh->layoutUnitToFontSize( pointSizeLU, false /* forPrint */ )
+        : KoTextZoomHandler::layoutUnitPtToPt( pointSizeLU );
 }
 
-QFont KoTextFormat::screenFont( const KoZoomHandler* zh )
+QFont KoTextFormat::screenFont( const KoZoomHandler* zh, bool applyZoom ) const
 {
-    float pointSize = screenPointSize( zh );
-    /*kdDebug() << "KoTextFormat::screenFont pointSize=" << pointSize << endl;
-    if ( d->m_screenFont )
-    kdDebug() << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;*/
+    float pointSize = screenPointSize( zh, applyZoom );
+    //kdDebug() << "KoTextFormat::screenFont applyZoom=" << applyZoom << " pointSize=" << pointSize << endl;
     // Compare if this is the size for which we cached the font metrics.
     // We have to do this very dynamically, because 2 views could be painting the same
     // stuff, with different zoom levels. So no absolute caching possible.
-    if ( !d->m_screenFont || pointSize != d->m_screenFont->pointSizeFloat() )
+    if ( applyZoom )
     {
-        delete d->m_screenFont;
-        d->m_screenFont = new QFont( font() );
-        d->m_screenFont->setPointSizeFloat( pointSize );
-        //kdDebug() << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
+        /*if ( d->m_screenFont )
+            kdDebug() << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;*/
+        if ( !d->m_screenFont || pointSize != d->m_screenFont->pointSizeFloat() )
+        {
+            delete d->m_screenFont;
+            d->m_screenFont = new QFont( font() );
+            d->m_screenFont->setPointSizeFloat( pointSize );
+            //kdDebug() << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
+        }
+        return *d->m_screenFont;
     }
-    return *d->m_screenFont;
+    else // cache in different vars
+    {
+        if ( !d->m_screenFontNoZoom || pointSize != d->m_screenFontNoZoom->pointSizeFloat() )
+        {
+            delete d->m_screenFontNoZoom;
+            d->m_screenFontNoZoom = new QFont( font() );
+            d->m_screenFontNoZoom->setPointSizeFloat( pointSize );
+            //kdDebug() << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
+        }
+        return *d->m_screenFontNoZoom;
+    }
 }
 
-QFontMetrics KoTextFormat::screenFontMetrics( const KoZoomHandler* zh )
+QFontMetrics KoTextFormat::screenFontMetrics( const KoZoomHandler* zh, bool applyZoom ) const
 {
-    float pointSize = screenPointSize( zh );
-    if ( !d->m_screenFont )
-        (void)screenFont( zh ); // we need it below, and this way it'll be ready for painting
-
-    // Compare if this is the size for which we cached the font metrics.
-    // We have to do this very dynamically, because 2 views could be painting the same
-    // stuff, with different zoom levels. So no absolute caching possible.
-    if ( !d->m_screenFontMetrics || pointSize != d->m_screenFont->pointSizeFloat() )
+    float pointSize = screenPointSize( zh, applyZoom );
+    if ( applyZoom )
     {
-        //kdDebug() << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;
-        QFont f( font() );
-        f.setPointSizeFloat( pointSize );
-        delete d->m_screenFontMetrics;
-        d->m_screenFontMetrics = new QFontMetrics( f );
-        //kdDebug() << "KoTextFormat::screenFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_screenFontMetrics->height() << endl;
+        if ( !d->m_screenFont )
+            (void)screenFont( zh, applyZoom ); // we need it below, and this way it'll be ready for painting
+
+        // Compare if this is the size for which we cached the font metrics.
+        // We have to do this very dynamically, because 2 views could be painting the same
+        // stuff, with different zoom levels. So no absolute caching possible.
+        if ( !d->m_screenFontMetrics || pointSize != d->m_screenFont->pointSizeFloat() )
+        {
+            //kdDebug() << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;
+            QFont f( font() );
+            f.setPointSizeFloat( pointSize );
+            delete d->m_screenFontMetrics;
+            d->m_screenFontMetrics = new QFontMetrics( f );
+            //kdDebug() << "KoTextFormat::screenFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_screenFontMetrics->height() << endl;
+        }
+        return *d->m_screenFontMetrics;
     }
-    return *d->m_screenFontMetrics;
+    else // cache in different vars
+    {
+        if ( !d->m_screenFontNoZoom )
+            (void)screenFont( zh, applyZoom ); // we need it below, and this way it'll be ready for painting
+
+        // Compare if this is the size for which we cached the font metrics.
+        // We have to do this very dynamically, because 2 views could be painting the same
+        // stuff, with different zoom levels. So no absolute caching possible.
+        if ( !d->m_screenFontMetricsNoZoom || pointSize != d->m_screenFontNoZoom->pointSizeFloat() )
+        {
+            //kdDebug() << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFontNoZoom->pointSizeFloat()=" << d->m_screenFontNoZoom->pointSizeFloat() << endl;
+            QFont f( font() );
+            f.setPointSizeFloat( pointSize );
+            delete d->m_screenFontMetricsNoZoom;
+            d->m_screenFontMetricsNoZoom = new QFontMetrics( f );
+            //kdDebug() << "KoTextFormat::screenFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_screenFontMetricsNoZoom->height() << endl;
+        }
+        return *d->m_screenFontMetricsNoZoom;
+    }
+}
+
+int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
+                             const Qt3::QTextParag* parag, int i ) const
+{
+    if ( c->c.unicode() == 0xad ) // soft hyphen
+	return 0;
+    Q_ASSERT( !c->isCustom() ); // actually it's a bit stupid to call this for custom items
+     if( c->isCustom() ) {
+	 if( c->customItem()->placement() == Qt3::QTextCustomItem::PlaceInline ) {
+             // customitem width is in LU pixels. Convert to 100%-zoom-pixels (pt2pt==pix2pix)
+             int w = qRound( KoTextZoomHandler::layoutUnitPtToPt( c->customItem()->width ) );
+             return applyZoom ? ( w * zh->zoom() / 100 ) : w;
+         }
+         else
+             return 0;
+    }
+     int pixelww;
+    int r = c->c.row();
+    if( r < 0x06 || r > 0x1f )
+    {
+        // The fast way: use the cached font metrics from KoTextFormat
+        pixelww = this->screenFontMetrics( zh, applyZoom ).width( c->c );
+    }
+    else {
+        // Here we have no choice, we need to create the format
+        KoTextFormat tmpFormat( *this );  // make a copy
+        tmpFormat.setPointSizeFloat( this->screenPointSize( zh, applyZoom ) );
+        // complex text. We need some hacks to get the right metric here
+        QString str;
+        int pos = 0;
+        if( i > 4 )
+            pos = i - 4;
+        int off = i - pos;
+        int end = QMIN( parag->length(), i + 4 );
+        while ( pos < end ) {
+            str += parag->at(pos)->c;
+            pos++;
+        }
+        pixelww = tmpFormat.width( str, off );
+    }
+
+#ifdef DEBUG_FORMATTER
+    if ( applyZoom ) // ###
+        qDebug( "\nKoTextFormatter::format: char=%s, LU-size=%d, LU-width=%d [equiv. to pix=%d] pixel-width=%d", // format=%s",
+                QString(c->c).latin1(), this->font().pointSize(),
+                ww, zh->layoutUnitToPixelX(ww), pixelww/*, this->key().latin1()*/ );
+#endif
+    return pixelww;
+}
+
+int KoTextFormat::height() const
+{
+    // Calculate height using 100%-zoom font
+    int h = this->screenFontMetrics( 0L, false ).height();
+    // Then scale to LU
+    return qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+}
+
+int KoTextFormat::ascent() const
+{
+    // Calculate ascent using 100%-zoom font
+    int h = this->screenFontMetrics( 0L, false ).ascent();
+    // Then scale to LU
+    return qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+}
+
+int KoTextFormat::descent() const
+{
+    // Calculate descent using 100%-zoom font
+    int h = this->screenFontMetrics( 0L, false ).descent();
+    // Then scale to LU
+    return qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
 }

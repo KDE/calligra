@@ -345,7 +345,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
     KAboutData* kad=new KAboutData("koffice", "KOffice Library", "");
     KConfig * config;
     KInstance* instance;
-    int count=1, noe=5, nope=5;
+    int count=1, noe=5;
     if ( varFormat == 0L )
     {
         // Get the default format for this variable (this method is only called in the interactive case, not when loading)
@@ -382,15 +382,15 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
                         count++;
                     }
                 }
-		
+
             }
             if(!stringList.isEmpty())
 	      {
                 dynamic_cast<DateFormatWidget*>(widget)->combo1->insertItem("---");
 		dynamic_cast<DateFormatWidget*>(widget)->combo1->insertStringList(stringList);
 	      }
-            
-	    
+
+
             if(selectLast) {
                 QComboBox *combo= dynamic_cast<DateFormatWidget*>(widget)->combo1;
                 combo->setCurrentItem(combo->count() -1);

@@ -103,52 +103,27 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 	    lastWasNonInlineCustom = FALSE;
 
 	if ( c->c != '\t' || c->isCustom() ) {
-	    ww = string->width( i );
+            // Instead of using the high-resolution font, let's use the 100%-zoom-font
+            // and calculate the LU size it is equivalent to. This gives better results
+            // at most usual zoom resolutions.
+	    // ww = string->width( i );
+            KoTextFormat *charFormat = static_cast<KoTextFormat *>(c->format());
+            if ( c->isCustom() )
+                ww = c->customItem()->width;
+            else {
+                ww = charFormat->charWidth( zh, false, c, parag, i );
+                // Now go from 100% to LU
+                ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
+            }
 
             if ( c->isCustom() )
                 pixelww = zh->layoutUnitToPixelX( ww );
-            else if ( c->c.unicode() == 0xad ) // soft hyphen
-                pixelww = 0;
             else
             {
                 // Pixel size - we want the metrics of the font that's going to be used.
-                KoTextFormat *origFormat = static_cast<KoTextFormat *>(c->format()); // remember it
-
-                // Code from KoTextString::width, duplicated to avoid having to set the format
-                int r = c->c.row();
-                if( r < 0x06 || r > 0x1f )
-                {
-                    // The fast way: use the cached font metrics from KoTextFormat
-                    pixelww = origFormat->screenFontMetrics( zh ).width( c->c );
-#ifdef DEBUG_FORMATTER
-                    qDebug( "\nKoTextFormatter::format: char=%s, LU-size=%d, LU-width=%d [equiv. to pix=%d] pixel-width=%d", // format=%s",
-                            QString(c->c).latin1(), origFormat->font().pointSize(),
-                            ww, zh->layoutUnitToPixelX(ww), pixelww/*, origFormat->key().latin1()*/ );
-#endif
-                }
-                else {
-                    // Here we have no choice, we need to create the format
-                    KoTextFormat tmpFormat( *origFormat );  // make a copy
-                    tmpFormat.setPointSizeFloat( zh->layoutUnitToFontSize( tmpFormat.font().pointSize(), false /* TODO forPrint*/ ) );
-                    // complex text. We need some hacks to get the right metric here
-                    QString str;
-                    int pos = 0;
-                    if( i > 4 )
-                        pos = i - 4;
-                    int off = i - pos;
-                    int end = QMIN( len, i + 4 );
-                    while ( pos < end ) {
-                        str += parag->at(pos)->c;
-                        pos++;
-                    }
-                    pixelww = tmpFormat.width( str, off );
-#ifdef DEBUG_FORMATTER
-                    qDebug( "KoTextFormatter::format: char=%s, LU-size=%d, font-size=%d LU-width=%d pixel-width=%d format=%s",
-                            QString(c->c).latin1(), origFormat->font().pointSize(),
-                            tmpFormat.font().pointSize(), ww, pixelww, origFormat->key().latin1() );
-#endif
-                }
+                pixelww = charFormat->charWidth( zh, true, c, parag, i );
             }
+
             // This was wrong - we paint the text word by word anyway
 #if 0
             bool breakable = ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ); // same test as below

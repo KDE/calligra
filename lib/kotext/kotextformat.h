@@ -62,22 +62,37 @@ public:
     /**
      * @return the point size to use on screen, given @p zh
      * This method takes care of superscript and subscript (smaller font).
+     * @param applyZoom if false, retrieve fontsize for 100%-zoom (for kotextformatter)
      */
-    float screenPointSize( const KoZoomHandler* zh ) const;
+    float screenPointSize( const KoZoomHandler* zh, bool applyZoom ) const;
 
     /**
      * Returns the font metrics for the font used at the zoom & resolution
      * given by 'zh'. Despite the name, this is probably valid for printing too.
      * This method takes care of superscript and subscript (smaller font).
+     * @param applyZoom if false, retrieve fontsize for 100%-zoom (for kotextformatter)
      */
-    QFontMetrics screenFontMetrics( const KoZoomHandler* zh );
+    QFontMetrics screenFontMetrics( const KoZoomHandler* zh, bool applyZoom = true ) const;
 
     /**
      * Returns the font to be used at the zoom & resolution given by 'zh'.
      * Despite the name, this is probably valid for printing too.
      * This method takes care of superscript and subscript (smaller font).
+     * @param applyZoom if false, retrieve fontsize for 100%-zoom (for kotextformatter)
      */
-    QFont screenFont( const KoZoomHandler* zh );
+    QFont screenFont( const KoZoomHandler* zh, bool applyZoom = true ) const;
+
+    /**
+     * Return the width of one char in one paragraph.
+     * Used by KoTextFormatter twice: once for the 100% zoom pointsize,
+     * and once for the current zoom pointsize.
+     */
+    int charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTextStringChar* c,
+                   const Qt3::QTextParag* parag, int i ) const;
+
+    virtual int height() const;
+    virtual int ascent() const;
+    virtual int descent() const;
 
 protected:
     virtual void generateKey();

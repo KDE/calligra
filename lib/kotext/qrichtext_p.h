@@ -1497,9 +1497,9 @@ public:
     //bool inFont( QChar c ) const { return fm.inFont( c ); }
     int width( const QChar &c ) const;
     int width( const QString &str, int pos ) const;
-    int height() const;
-    int ascent() const;
-    int descent() const;
+    virtual int height() const;
+    virtual int ascent() const;
+    virtual int descent() const;
     QString anchorHref() const;
     QString anchorName() const;
     bool isAnchor() const;
