@@ -150,15 +150,14 @@ public:
 protected:
 	/// Bounding box.
 	mutable KoRect m_boundingBox;
-	mutable bool m_boundingBoxIsInvalid;
+	mutable VState m_state				: 8;
+	mutable bool m_boundingBoxIsInvalid : 1;
 
 	VStroke* m_stroke;
 	VFill* m_fill;
 
 private:
 	VObject* m_parent;
-
-	mutable VState m_state;
 };
 
 #endif
