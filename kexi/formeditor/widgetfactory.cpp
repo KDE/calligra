@@ -171,6 +171,8 @@ WidgetFactory::editorDeleted()
 void
 WidgetFactory::changeProperty(const char *name, const QVariant &value, Container *container)
 {
+	if (!container->form()->manager())
+		return;
 	KFormDesigner::ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
 	(*buff)[name]->setValue(value, true);
 }

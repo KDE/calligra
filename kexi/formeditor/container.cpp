@@ -237,7 +237,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			{
 				if(!m_toplevel && m_moving == m_container)
 					break;
-				if(m_moving->parentWidget()->inherits("QWidgetStack"))
+				if(m_moving->parentWidget() && m_moving->parentWidget()->inherits("QWidgetStack"))
 					break;
 				int gridX = Form::gridX();
 				int gridY = Form::gridY();
