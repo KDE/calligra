@@ -3462,7 +3462,7 @@ void KWView::slotApplyParag()
 
     if(m_paragDlg->isLineSpacingChanged())
     {
-        cmd=edit->setLineSpacingCommand( m_paragDlg->lineSpacing() );
+        cmd=edit->setLineSpacingCommand( m_paragDlg->lineSpacing(),m_paragDlg->lineSpacingType() );
         if(cmd)
         {
             if ( !macroCommand )

@@ -4026,7 +4026,7 @@ void KPresenterView::changePicture( const QString & filename )
 
     if( url.isEmpty() || !url.isValid())
       return;
-    
+
     m_canvas->changePicture( url );
 }
 
@@ -5602,7 +5602,7 @@ void KPresenterView::slotApplyParag()
 
     if(m_paragDlg->isLineSpacingChanged())
     {
-        cmd=edit->setLineSpacingCommand( m_paragDlg->lineSpacing() );
+        cmd=edit->setLineSpacingCommand( m_paragDlg->lineSpacing(),m_paragDlg->lineSpacingType() );
         if(cmd)
         {
             macroCommand->addCommand(cmd);

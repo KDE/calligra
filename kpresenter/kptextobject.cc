@@ -631,8 +631,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                 bottomBorder = e.attribute( "distAfter" ).toInt();
 
             // Apply values coming from 1.0 or 1.1 documents
-            if ( paragLayout.lineSpacing == 0 )
-                paragLayout.lineSpacing = lineSpacing;
+            if ( paragLayout.lineSpacingValue() == 0 )
+                paragLayout.setLineSpacingValue(lineSpacing);
             if ( paragLayout.margins[ QStyleSheetItem::MarginTop ] == 0 )
                 paragLayout.margins[ QStyleSheetItem::MarginTop ] = topBorder;
             if ( paragLayout.margins[ QStyleSheetItem::MarginBottom ] == 0 )
@@ -908,6 +908,7 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
     element = parentElem.namedItem( "LINESPACING" ).toElement();
     if ( !element.isNull() )
     {
+#if 0
         QString value = element.attribute( "value" );
         if ( value == "oneandhalf" )
             layout.lineSpacing = KoParagLayout::LS_ONEANDHALF;
@@ -915,6 +916,7 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
             layout.lineSpacing = KoParagLayout::LS_DOUBLE;
         else
             layout.lineSpacing = value.toDouble();
+#endif
     }
 
     element = parentElem.namedItem( "OFFSETS" ).toElement();
@@ -1045,8 +1047,9 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
             element.setAttribute( "after", layout.margins[QStyleSheetItem::MarginBottom] );
     }
 
-    if ( layout.lineSpacing != 0 )
+    if ( layout.lineSpacingValue() != 0 )
     {
+#if 0 //fixme
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
         if ( layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
@@ -1055,6 +1058,7 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
             element.setAttribute( "value", "double" );
         else
             element.setAttribute( "value", layout.lineSpacing );
+#endif
     }
 
     if ( layout.leftBorder.penWidth() > 0 )
@@ -1476,7 +1480,7 @@ KCommand * KPTextObject::textContentsToHeight()
         return 0L;
     // Apply the new linespacing to the whole object
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
-    KCommand* cmd = m_textobj->setLineSpacingCommand( 0L, lineSpacing, KoTextDocument::Temp );
+    KCommand* cmd = m_textobj->setLineSpacingCommand( 0L, lineSpacing,KoParagLayout::LS_CUSTOM, KoTextDocument::Temp );
     m_textobj->textDocument()->removeSelection( KoTextDocument::Temp );
     return cmd;
 }
