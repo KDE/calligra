@@ -3094,8 +3094,8 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)
         m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct misspelled word"));
-    m_spell.macroCmdSpellCheck->addCommand(fs->replaceSelection( &cursor, corr, KWTextFrameSet::HighlightSelection,
-                          i18n("Correct misspelled word") ));
+    m_spell.macroCmdSpellCheck->addCommand(fs->replaceSelectionCommand(
+        &cursor, corr, KWTextFrameSet::HighlightSelection, QString::null ));
 }
 
 void KWView::spellCheckerDone( const QString & )

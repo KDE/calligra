@@ -2836,8 +2836,8 @@ KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int 
     return macroCmd;
 }
 
-KCommand* KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & replacement,
-                                       int selectionId, const QString & cmdName)
+KCommand* KWTextFrameSet::replaceSelectionCommand( QTextCursor * cursor, const QString & replacement,
+                                                   int selectionId, const QString & cmdName)
 {
     emit hideCursor();
     KMacroCommand * macroCmd = new KMacroCommand( cmdName );
@@ -2945,8 +2945,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
                 repl=text.mid(posStart-start.index(),posEnd-posStart);
                 textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
-                macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type),
-                                                       QTextDocument::Temp, "" ));
+                macroCmd->addCommand(replaceSelectionCommand( cursor,textChangedCase(repl,_type),
+                                                              QTextDocument::Temp, "" ));
                 do
                 {
                     ++i;
@@ -2965,8 +2965,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
         textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
         textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
         repl=text.mid(posStart-start.index(),end.index()-posStart);
-        macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
-                                                       QTextDocument::Temp, "" ));
+        macroCmd->addCommand(replaceSelectionCommand( cursor,textChangedCase(repl,_type) ,
+                                                      QTextDocument::Temp, "" ));
     }
     else
     {
@@ -2987,8 +2987,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
                 textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
                 repl=text.mid(posStart-start.index(),posEnd-posStart);
-                macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
-                                                       QTextDocument::Temp, "" ));
+                macroCmd->addCommand(replaceSelectionCommand( cursor,textChangedCase(repl,_type) ,
+                                                              QTextDocument::Temp, "" ));
                 do
                 {
                     ++i;
@@ -3007,8 +3007,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
         textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
         textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
         repl=text.mid(posStart-start.index(),end.index()-posStart);
-        macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
-                                                       QTextDocument::Temp, "" ));
+        macroCmd->addCommand(replaceSelectionCommand( cursor,textChangedCase(repl,_type) ,
+                                                      QTextDocument::Temp, "" ));
 
         QTextParag *p = start.parag()->next();
         while ( p && p != end.parag() )
@@ -3030,8 +3030,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
                     textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
                     textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
                     repl=text.mid(posStart,posEnd-posStart);
-                    macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type),
-                                                           QTextDocument::Temp, "" ));
+                    macroCmd->addCommand(replaceSelectionCommand( cursor,textChangedCase(repl,_type),
+                                                                  QTextDocument::Temp, "" ));
                     do
                     {
                         ++i;
@@ -3051,8 +3051,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
             textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
             textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
             repl=text.mid(posStart,text.length()-posStart);
-            macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
-                                                       QTextDocument::Temp, "" ));
+            macroCmd->addCommand(replaceSelectionCommand( cursor,textChangedCase(repl,_type) ,
+                                                          QTextDocument::Temp, "" ));
 
             p = p->next();
         }
@@ -3074,8 +3074,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
                 textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
                 repl=text.mid(posStart,posEnd-posStart);
-                macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
-                                                       QTextDocument::Temp, "" ));
+                macroCmd->addCommand(replaceSelectionCommand( cursor,textChangedCase(repl,_type) ,
+                                                              QTextDocument::Temp, "" ));
                 do
                 {
                     ++i;
@@ -3094,8 +3094,8 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
         textdoc->setSelectionStart( QTextDocument::Temp, &c1 );
         textdoc->setSelectionEnd( QTextDocument::Temp, &c2 );
         repl=text.mid(posStart,end.index()-posStart);
-        macroCmd->addCommand(replaceSelection( cursor,textChangedCase(repl,_type) ,
-                                               QTextDocument::Temp, "" ));
+        macroCmd->addCommand(replaceSelectionCommand( cursor,textChangedCase(repl,_type) ,
+                                                      QTextDocument::Temp, "" ));
 
     }
     m_doc->addCommand( macroCmd);
@@ -3307,24 +3307,26 @@ void KWTextFrameSet::setLastFormattedParag( QTextParag *parag )
         m_lastFormatted = parag;
 }
 
-void KWTextFrameSet::insertParagraph( QTextCursor *cursor, KWTextFormat *currentFormat )
+KCommand * KWTextFrameSet::insertParagraphCommand( QTextCursor *cursor )
 {
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
-        removeSelectedText( cursor );
-    doKeyboardAction( cursor, currentFormat, KWTextFrameSet::ActionReturn );
+    return replaceSelectionCommand( cursor, "\n", QTextDocument::Standard, QString::null );
 }
 
-void KWTextFrameSet::insertFrameBreak( QTextCursor *cursor, KWTextFormat *currentFormat )
+void KWTextFrameSet::insertFrameBreak( QTextCursor *cursor )
 {
+    clearUndoRedoInfo();
+    KMacroCommand* macroCmd = new KMacroCommand( i18n( "Insert Break After Paragraph" ) );
     // Ensure "Frame break" is at beginning of paragraph -> create new parag if necessary
     if ( cursor->index() > 0 )
-        insertParagraph( cursor, currentFormat );
+        macroCmd->addCommand( insertParagraphCommand( cursor ) );
 
     KWTextParag *parag = static_cast<KWTextParag *>( cursor->parag() );
-    parag->setPageBreaking( parag->pageBreaking() | KoParagLayout::HardFrameBreakAfter );
+    macroCmd->addCommand( setPageBreakingCommand( cursor, parag->pageBreaking() | KoParagLayout::HardFrameBreakAfter ) );
 
     if ( parag->next() == 0 )
-        insertParagraph( cursor, currentFormat );
+        macroCmd->addCommand( insertParagraphCommand( cursor ) );
+
+    m_doc->addCommand( macroCmd );
 
     setLastFormattedParag( parag );
     formatMore();
@@ -3762,7 +3764,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 }*/
                 QString text = e->text();
                 if(textFrameSet()->hasSelection() )
-                    frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection(  cursor, text, QTextDocument::Standard , i18n("Insert Text")));
+                    frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelectionCommand(  cursor, text, QTextDocument::Standard , i18n("Insert Text")));
                 else
                     textFrameSet()->insert( cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
 
@@ -4557,7 +4559,7 @@ void KWTextFrameSetEdit::setTextSuperScript(bool on)
 void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 {
     if(textFrameSet()->hasSelection() )
-        frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection(  cursor, _c, QTextDocument::Standard , i18n("Insert Special Char")));
+        frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelectionCommand(  cursor, _c, QTextDocument::Standard, i18n("Insert Special Char")));
     else
         textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
@@ -4565,7 +4567,7 @@ void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 void  KWTextFrameSetEdit::insertExpression(const QString &_c)
 {
     if(textFrameSet()->hasSelection() )
-        frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection(  cursor, _c, QTextDocument::Standard , i18n("Insert Expression")));
+        frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelectionCommand(  cursor, _c, QTextDocument::Standard , i18n("Insert Expression")));
     else
        textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Expression") );
 }
@@ -4864,7 +4866,7 @@ void KWTextFrameSetEdit::slotToolActivated( const KoDataToolInfo & info, const Q
             if ( !textFrameSet()->hasSelection() )
                 selectWordUnderCursor();
             // replace selection with 'text'
-            textFrameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection( cursor, text, QTextDocument::Standard, i18n("Replace word") ));
+            textFrameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelectionCommand( cursor, text, QTextDocument::Standard, i18n("Replace word") ));
         }
     }
 
@@ -4878,7 +4880,7 @@ void KWTextFrameSetEdit::changeCaseOfText(TypeOfCase _type)
         text = textFrameSet()->selectedText();
     if(!text.isEmpty()&& text.find(KWTextFrameSet::customItemChar())==-1)
     {
-        textFrameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection( cursor, textFrameSet()->textChangedCase(text,_type), QTextDocument::Standard, i18n("Change case") ));
+        textFrameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelectionCommand( cursor, textFrameSet()->textChangedCase(text,_type), QTextDocument::Standard, i18n("Change case") ));
     }
     else if(!text.isEmpty())
         textFrameSet()->changeCaseOfText(cursor,_type);

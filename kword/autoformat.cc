@@ -214,7 +214,7 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
             textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
 
             KWTextFrameSet * textfs = textdoc->textFrameSet();
-            m_doc->addCommand(textfs->replaceSelection( textEditCursor, it.data().replace(),
+            m_doc->addCommand(textfs->replaceSelectionCommand( textEditCursor, it.data().replace(),
                                       KWTextFrameSet::HighlightSelection,
                                       i18n("Autocorrect word") ));
             // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
@@ -251,7 +251,7 @@ void KWAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag
         replacement = m_typographicQuotes.begin;
 
     KWTextFrameSet * textfs = textdoc->textFrameSet();
-    m_doc->addCommand (textfs->replaceSelection( textEditCursor, replacement,
+    m_doc->addCommand (textfs->replaceSelectionCommand( textEditCursor, replacement,
                               KWTextFrameSet::HighlightSelection,
                               i18n("Typographic quote") ));
 }
@@ -305,7 +305,7 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
             textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
 
             KWTextFrameSet * textfs = textdoc->textFrameSet();
-            m_doc->addCommand(textfs->replaceSelection( textEditCursor, QString( firstChar.upper() ),
+            m_doc->addCommand(textfs->replaceSelectionCommand( textEditCursor, QString( firstChar.upper() ),
                                       KWTextFrameSet::HighlightSelection,
                                       i18n("Autocorrect (capitalize first letter)") ));
             bNeedMove = true;
@@ -332,7 +332,7 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
 
                 QString replacement = word[1].lower();
                 KWTextFrameSet * textfs = textdoc->textFrameSet();
-                m_doc->addCommand(textfs->replaceSelection( textEditCursor, replacement,
+                m_doc->addCommand(textfs->replaceSelectionCommand( textEditCursor, replacement,
                                           KWTextFrameSet::HighlightSelection,
                                           i18n("Autocorrect uppercase-uppercase") )); // hard to describe....
                 bNeedMove = true;

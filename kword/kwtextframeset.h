@@ -147,8 +147,8 @@ public:
                  CustomItemsMap customItemsMap = CustomItemsMap() );
     void removeSelectedText( QTextCursor * cursor, int selectionId = QTextDocument::Standard,
                              const QString & cmdName = QString::null );
-    KCommand *  replaceSelection( QTextCursor * cursor, const QString & replacement,
-                           int selectionId, const QString & cmdName );
+    KCommand * replaceSelectionCommand( QTextCursor * cursor, const QString & replacement,
+                                        int selectionId, const QString & cmdName );
     KCommand * removeSelectedTextCommand( QTextCursor * cursor, int selectionId );
 
     void changeCaseOfText(QTextCursor *cursor,TypeOfCase _type);
@@ -161,8 +161,8 @@ public:
     void pasteText( QTextCursor * cursor, const QString & text, KWTextFormat * currentFormat, bool removeSelected );
     KCommand* pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
     void insertTOC( QTextCursor * cursor );
-    void insertParagraph( QTextCursor * cursor, KWTextFormat * currentFormat );
-    void insertFrameBreak( QTextCursor * cursor, KWTextFormat *currentFormat );
+    KCommand* insertParagraphCommand( QTextCursor * cursor );
+    void insertFrameBreak( QTextCursor * cursor );
     void selectAll( bool select );
     void selectionChangedNotify( bool enableActions = true );
     QRect paragRect( QTextParag * parag ) const;
@@ -390,8 +390,7 @@ public:
 
     void drawCursor( bool b );
 
-    void insertParagraph() { textFrameSet()->insertParagraph( cursor, m_currentFormat ); }
-    void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor, m_currentFormat ); }
+    void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor ); }
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertVariable( KWVariable *var);

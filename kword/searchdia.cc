@@ -433,7 +433,8 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
-    m_macroCmd->addCommand(m_currentFrameSet->replaceSelection( &cursor,m_replaceDlg->replacement(),KWTextFrameSet::HighlightSelection, i18n("Insert Replacement")));
+    m_macroCmd->addCommand(m_currentFrameSet->replaceSelectionCommand(
+        &cursor, m_replaceDlg->replacement(), KWTextFrameSet::HighlightSelection, QString::null ));
 }
 
 #include "searchdia.moc"
