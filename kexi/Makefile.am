@@ -30,7 +30,7 @@ dummy.cc:
 	echo > dummy.cc
 
 
-SUBDIRS = kexiDB formeditor . interfaces pics setupWizard
+SUBDIRS = kexiDB formeditor . interfaces pics
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
