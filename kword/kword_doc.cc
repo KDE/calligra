@@ -2394,7 +2394,7 @@ void KWordDocument::drawAllBorders()
                 {
                     if ( !_painter )
                     {
-                        p.begin( viewPtr->getGUI()->getPaperWidget() );
+                        p.begin( viewPtr->getGUI()->getPaperWidget()->viewport() );
                         viewPtr->getGUI()->getPaperWidget()->drawBorders( p, viewPtr->getGUI()->getPaperWidget()->rect() );
                         p.end();
                     }
@@ -2767,7 +2767,6 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
     QStrList strList;
     KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
     int index;
-    QPainter painter;
 
     if ( _string.isEmpty() ) return;
 
@@ -2855,10 +2854,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-                painter.begin( _page );
                 for ( unsigned int j = 0; j < len; j++ )
                     _fc->cursorGotoRight();
-                painter.end();
                 delete format;
             }
             // ---------------- MIME: application/x-kword
@@ -2868,10 +2865,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 *str = *firstParag->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
 
-                painter.begin( _page );
                 for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
                     _fc->cursorGotoRight();
-                painter.end();
 
                 delete firstParag;
             }
@@ -2894,10 +2889,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-                painter.begin( _page );
                 for ( unsigned int j = 0; j <= len; j++ )
                     _fc->cursorGotoRight();
-                painter.end();
 
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
                 _page->keyPressEvent( &ev );
@@ -2907,10 +2900,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-                painter.begin( _page );
                 for ( unsigned int j = 0; j < len; j++ )
                     _fc->cursorGotoRight();
-                painter.end();
                 delete format;
             }
             else
@@ -2919,10 +2910,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 *str = *firstParag->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
 
-                painter.begin( _page );
                 for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
                     _fc->cursorGotoRight();
-                painter.end();
 
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
                 _page->keyPressEvent( &ev );
@@ -2931,10 +2920,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 *str2 = *firstParag->getNext()->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str2 );
 
-                painter.begin( _page );
                 for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
                     _fc->cursorGotoRight();
-                painter.end();
 
                 delete firstParag->getNext();
                 delete firstParag;
@@ -2957,18 +2944,14 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
 
-                painter.begin( _page );
                 for ( unsigned int j = 0; j < len; j++ )
                     _fc->cursorGotoRight();
-                painter.end();
 
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,13,0);
                 _page->keyPressEvent( &ev );
 
-                painter.begin( _page );
                 _fc->cursorGotoLeft();
                 _fc->cursorGotoLeft();
-                painter.end();
                 KWParag *p = _fc->getParag(), *next = _fc->getParag()->getNext();
 
                 for ( unsigned int i = 1; i < strList.count(); i++ )
@@ -2991,17 +2974,13 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 *str = *firstParag->getKWString();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
 
-                painter.begin( _page );
                 for ( unsigned int j = 0; j < firstParag->getTextLen(); j++ )
                     _fc->cursorGotoRight();
-                painter.end();
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
                 _page->keyPressEvent( &ev );
 
-                painter.begin( _page );
                 _fc->cursorGotoLeft();
                 _fc->cursorGotoLeft();
-                painter.end();
 
                 KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), *next = _fc->getParag()->getNext();
 
