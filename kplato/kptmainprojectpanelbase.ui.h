@@ -45,22 +45,60 @@ void KPTMainProjectPanelBase::slotChooseLeader()
     KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
     if (!a.isEmpty()) 
     {
- leaderfield->setText(a.fullEmail());
+        leaderfield->setText(a.fullEmail());
     }
 }
 
 
 void KPTMainProjectPanelBase::slotStartDateClicked()
 {
-    startDateTime->setEnabled(true);
-    endDateTime->setEnabled(false);
+    enableDateTime();    
 }
 
 
 void KPTMainProjectPanelBase::slotEndDateClicked()
 {
-    startDateTime->setEnabled(false);
-    endDateTime->setEnabled(true);
+    enableDateTime();
+}
+
+
+
+void KPTMainProjectPanelBase::enableDateTime()
+{
+    if (schedulingGroup->selected() == bStartDate)
+    {
+        startTime->setEnabled(true);
+        startDate->setEnabled(true);
+        endTime->setEnabled(false);
+        endDate->setEnabled(false);
+    }
+    if (schedulingGroup->selected() == bEndDate)
+    {
+        startTime->setEnabled(false);
+        startDate->setEnabled(false);
+        endTime->setEnabled(true);
+        endDate->setEnabled(true);
+    }
+    if (useDate->isChecked())
+    {
+        startTime->setTime(QTime());
+        endTime->setTime(QTime());
+        startTime->setEnabled(false);
+        endTime->setEnabled(false);
+    }
+}
+
+
+QDateTime KPTMainProjectPanelBase::startDateTime()
+{
+    return QDateTime(startDate->date(), startTime->time());
+}
+
+
+QDateTime KPTMainProjectPanelBase::endDateTime()
+{
+    return QDateTime(endDate->date(), endTime->time());
 }
 
 } // namespace KPlato
+

@@ -21,10 +21,13 @@
 
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qdatetime.h>
+#include <qdatetimeedit.h>
 
 #include <klineedit.h>
 #include <ktextedit.h>
-#include <kdatetimewidget.h>
+#include <kdatewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kcommand.h>
@@ -46,16 +49,26 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
     leaderfield->setText(project.leader());
     descriptionfield->setText(project.description());
 
-    startDateTime->setDateTime(project.startTime());
-    endDateTime->setDateTime(project.endTime());
+    useDate->setChecked(project.useDateOnly());
+    if (project.numChildren() > 0) {
+        useDate->setEnabled(false);
+    }
+    startDate->setDate(project.startTime().date());
+    endDate->setDate(project.endTime().date());
+    if (!project.useDateOnly()) {
+        startTime->setTime(project.startTime().time());
+        endTime->setTime(project.endTime().time());
+    }
     if (project.constraint() == KPTNode::MustStartOn) {
         schedulingGroup->setButton(0);
-        startDateTime->setEnabled(true);
     }
     else if (project.constraint() == KPTNode::MustFinishOn) {
         schedulingGroup->setButton(1);
-        endDateTime->setEnabled(true);
-    }
+    } else {
+        kdWarning()<<k_funcinfo<<"Illegal constraint: "<<project.constraint()<<endl;
+        schedulingGroup->setButton(0);
+    }    
+    enableDateTime();
     namefield->setFocus();
 }
 
@@ -96,13 +109,17 @@ KCommand *KPTMainProjectPanel::buildCommand(KPTPart *part) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new KPTNodeModifyConstraintCmd(part, project, KPTNode::MustFinishOn));
     } 
-    if (startDateTime->dateTime() != project.startTime()) {
+    if (startDateTime() != project.startTime()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyStartTimeCmd(part, project, startDateTime->dateTime()));
+        m->addCommand(new KPTNodeModifyStartTimeCmd(part, project, startDateTime()));
     }
-    if (endDateTime->dateTime() != project.endTime()) {
+    if (endDateTime() != project.endTime()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyEndTimeCmd(part, project, endDateTime->dateTime()));
+        m->addCommand(new KPTNodeModifyEndTimeCmd(part, project, endDateTime()));
+    }
+    if (useDate->isChecked() != project.useDateOnly()) {
+        if (!m) m = new KMacroCommand(c);
+        m->addCommand(new KPTProjectModifyUseDateOnlyCmd(part, project, useDate->isChecked()));    
     }
     return m;
 }

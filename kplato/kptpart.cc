@@ -50,12 +50,13 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
       m_project(0), m_projectDialog(0), m_view(0)
 {
     m_update = m_calculate = false;
-    m_project = new KPTProject();
     m_commandHistory = new KoCommandHistory(actionCollection());
 
     setInstance(KPTFactory::global());
     configuration.setReadWrite(isReadWrite()|| !isEmbedded());
     configuration.load();
+    
+    m_project = new KPTProject(); // after config is loaded
     
     connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
     connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));

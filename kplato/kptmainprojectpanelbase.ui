@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>477</width>
-            <height>383</height>
+            <width>464</width>
+            <height>408</height>
         </rect>
     </property>
     <property name="caption">
@@ -108,64 +108,128 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>schedulingGroup</cstring>
+                <cstring>groupBox2</cstring>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
             </property>
             <property name="title">
                 <string>Scheduling</string>
             </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QButtonGroup">
                     <property name="name">
-                        <cstring>layout22</cstring>
+                        <cstring>schedulingGroup</cstring>
                     </property>
-                    <vbox>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="lineWidth">
+                        <number>1</number>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QRadioButton">
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>0</number>
+                        </property>
+                        <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>bStartDate</cstring>
+                                <cstring>layout13</cstring>
                             </property>
-                            <property name="text">
-                                <string>Start date</string>
-                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <widget class="QRadioButton" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>bStartDate</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Start date</string>
+                                    </property>
+                                </widget>
+                                <widget class="QTimeEdit" row="0" column="2">
+                                    <property name="name">
+                                        <cstring>startTime</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="KDateWidget" row="1" column="1">
+                                    <property name="name">
+                                        <cstring>endDate</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton" row="1" column="0">
+                                    <property name="name">
+                                        <cstring>bEndDate</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>End date</string>
+                                    </property>
+                                </widget>
+                                <widget class="KDateWidget" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>startDate</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QTimeEdit" row="1" column="2">
+                                    <property name="name">
+                                        <cstring>endTime</cstring>
+                                    </property>
+                                </widget>
+                            </grid>
                         </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>bEndDate</cstring>
-                            </property>
-                            <property name="text">
-                                <string>End date</string>
-                            </property>
-                        </widget>
-                    </vbox>
+                    </hbox>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="QGroupBox">
                     <property name="name">
-                        <cstring>layout23</cstring>
+                        <cstring>groupBox3</cstring>
                     </property>
-                    <vbox>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <hbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="KDateTimeWidget">
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>0</number>
+                        </property>
+                        <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>startDateTime</cstring>
+                                <cstring>useDate</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Use date only</string>
                             </property>
                         </widget>
-                        <widget class="KDateTimeWidget">
-                            <property name="name">
-                                <cstring>endDateTime</cstring>
-                            </property>
-                        </widget>
-                    </vbox>
+                    </hbox>
                 </widget>
-            </hbox>
+            </vbox>
         </widget>
         <widget class="QLabel">
             <property name="name">
@@ -207,18 +271,6 @@
         <slot>slotChooseLeader()</slot>
     </connection>
     <connection>
-        <sender>endDateTime</sender>
-        <signal>valueChanged(const QDateTime&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
-        <sender>startDateTime</sender>
-        <signal>valueChanged(const QDateTime&amp;)</signal>
-        <receiver>KPTMainProjectPanelBase</receiver>
-        <slot>slotCheckAllFieldsFilled()</slot>
-    </connection>
-    <connection>
         <sender>bStartDate</sender>
         <signal>clicked()</signal>
         <receiver>KPTMainProjectPanelBase</receiver>
@@ -254,6 +306,42 @@
         <receiver>KPTMainProjectPanelBase</receiver>
         <slot>slotCheckAllFieldsFilled()</slot>
     </connection>
+    <connection>
+        <sender>endDate</sender>
+        <signal>changed(QDate)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>endTime</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>startDate</sender>
+        <signal>changed(QDate)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>startTime</sender>
+        <signal>valueChanged(const QTime&amp;)</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>useDate</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>slotCheckAllFieldsFilled()</slot>
+    </connection>
+    <connection>
+        <sender>useDate</sender>
+        <signal>clicked()</signal>
+        <receiver>KPTMainProjectPanelBase</receiver>
+        <slot>enableDateTime()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">kabc/addresseedialog.h</include>
@@ -269,18 +357,19 @@
     <slot>slotChooseLeader()</slot>
     <slot>slotStartDateClicked()</slot>
     <slot>slotEndDateClicked()</slot>
+    <slot>enableDateTime()</slot>
 </slots>
+<functions>
+    <function returnType="QDateTime">startDateTime()</function>
+    <function returnType="QDateTime">endDateTime()</function>
+</functions>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
-    <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
-    <includehint>ktimewidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>

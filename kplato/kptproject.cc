@@ -25,6 +25,8 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptcalendar.h"
+#include "kptpart.h"
+#include "kptconfig.h"
 
 #include <qdom.h>
 #include <qstring.h>
@@ -33,6 +35,7 @@
 #include <qcanvas.h>
 #include <qptrlist.h>
 
+#include <kdatetimewidget.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -42,6 +45,7 @@ KPTProject::KPTProject(KPTNode *parent)
     : KPTNode(parent)
 
 {
+    m_useDateOnly = KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date;
     m_constraint = KPTNode::MustStartOn;
     m_startTime = KPTDateTime::currentDateTime();
     m_endTime = m_startTime;
@@ -219,7 +223,8 @@ bool KPTProject::load(QDomElement &element) {
         kdError()<<k_funcinfo<<"Illegal constraint: "<<constraintToString()<<endl;
         setConstraint(KPTNode::MustStartOn);
     }
-
+    m_useDateOnly = (bool)element.attribute("use-date-only","0").toInt(&ok);
+    
     KPTDateTime dt( QDateTime::currentDateTime() );
     dt = dt.fromString( element.attribute("project-start", dt.toString()) );
     //kdDebug()<<k_funcinfo<<"Start="<<dt.toString()<<endl;
@@ -324,6 +329,8 @@ void KPTProject::save(QDomElement &element)  {
     me.setAttribute("project-start",startTime().toString());
     me.setAttribute("project-end",endTime().toString());
     me.setAttribute("scheduling",constraintToString());
+    
+    me.setAttribute("use-date-only",(int)m_useDateOnly);
     
     // save calendars
     QPtrListIterator<KPTCalendar> calit(m_calendars);

@@ -139,6 +139,9 @@ public:
 
     /// Check if node par can be linked to node child.
     bool legalToLink(KPTNode *par, KPTNode *child);
+    
+    void setUseDateOnly(bool on) { m_useDateOnly = on; }
+    bool useDateOnly() const { return m_useDateOnly; }
 
 protected:
     QPtrList<KPTResourceGroup> m_resourceGroups;
@@ -165,6 +168,7 @@ private:
     QPtrList<KPTNode> m_endNodes;
     QPtrList<KPTNode> m_summarytasks;
     
+    bool m_useDateOnly;
 #ifndef NDEBUG
 #include <qcstring.h>
 public:
