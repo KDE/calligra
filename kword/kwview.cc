@@ -5027,7 +5027,7 @@ void KWView::slotFrameSetEditChanged()
     actionInsertFrameBreak->setEnabled( state );
     QString mode=m_gui->canvasWidget()->viewMode()->type();
     state =state && (mode!="ModeText");
-    actionInsertFootEndNote->setEnabled( state);
+    actionInsertFootEndNote->setEnabled( state && (edit && (edit->frameSet()==m_doc->frameSet(0))));
     actionEditFootEndNote->setEnabled( state);
     slotUpdateRuler();
 }
