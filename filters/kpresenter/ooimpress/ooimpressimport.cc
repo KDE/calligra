@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#include <math.h>
 
 #include "ooimpressimport.h"
 
@@ -47,7 +48,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
 {
     kdDebug() << "Entering Ooimpress Import filter: " << from << " - " << to << endl;
 
-    if ( from != "application/x-ooimpress" || to != "application/x-kpresenter" )
+    if ( from != "application/vnd.sun.xml.impress" || to != "application/x-kpresenter" )
     {
         kdWarning() << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
