@@ -90,7 +90,7 @@ void ReportCanvas::deleteItem(QCanvasItemList &l)
 void ReportCanvas::editItem(QCanvasItemList &l)
 {
     //display editor for report items or sections
-/*    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+/*  for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
 	if ((*it)->rtti() >= 1800) //for my own report items
 	{

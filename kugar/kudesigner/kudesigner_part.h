@@ -25,6 +25,9 @@
 
 class MyCanvas;
 class QCanvas;
+class QDomNode;
+class CanvasReportItem;
+class CanvasBand;
 
 class KudesignerPart : public KoDocument
 {
@@ -53,6 +56,16 @@ private:
     KCommandHistory *history;
 
     MyCanvas *docCanvas;
+
+    void setReportItemAttributes(QDomNode *node, CanvasReportItem *item);
+    void addReportItems(QDomNode *node, CanvasBand *section);
+    void setReportHeaderAttributes(QDomNode *node);
+    void setReportFooterAttributes(QDomNode *node);
+    void setPageHeaderAttributes(QDomNode *node);
+    void setPageFooterAttributes(QDomNode *node);
+    void setDetailHeaderAttributes(QDomNode *node);
+    void setDetailAttributes(QDomNode *node);
+    void setDetailFooterAttributes(QDomNode *node);
 };
 
 #endif

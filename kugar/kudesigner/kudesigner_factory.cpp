@@ -24,6 +24,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 extern "C"
 {
@@ -78,6 +79,8 @@ KInstance* KudesignerFactory::global()
     {
         s_global = new KInstance( aboutData() );
         // Add any application-specific resource directories here
+        s_global->dirs()->addResourceType("kudesigner_template",
+            KStandardDirs::kde_default("data") + "kudesigner/templates/");
 
         // Tell the iconloader about share/apps/koffice/icons
         s_global->iconLoader()->addAppDir("koffice");
