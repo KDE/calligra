@@ -329,6 +329,7 @@ public slots:
     void insertLink();
     void changeLink();
     void copyLink();
+    void removeLink();
     void addToBookmark();
     void slotSoftHyphen();
 
@@ -972,6 +973,8 @@ private:
 
     KAction * actionChangeLink;
     KAction *actionCopyLink;
+    KAction *actionRemoveLink;
+
     KAction *actionAddLinkToBookmak;
     KAction *actionFormatParag;
     KAction *actionOpenLink;

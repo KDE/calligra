@@ -1271,7 +1271,17 @@ void KoTextView::removeLink()
 {
     KoLinkVariable * var=linkVariable();
     if(var)
-    {//todo
+    {
+        KoTextCursor c1 = *m_cursor;
+        KoTextCursor c2 = *m_cursor;
+        c1.setIndex(var->index());
+        c2.setIndex(var->index()+1);
+        textDocument()->setSelectionStart( KoTextDocument::Temp, &c1 );
+        textDocument()->setSelectionEnd( KoTextDocument::Temp, &c2 );
+        KCommand *cmd=textObject()->replaceSelectionCommand( &c1, var->value(),
+                                        KoTextDocument::Temp, i18n("Remove link") );
+        if ( cmd )
+            textObject()->emitNewCommand( cmd );
     }
 }
 

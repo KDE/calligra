@@ -1016,6 +1016,9 @@ void KWView::setupActions()
                                      this, SLOT( addToBookmark() ),
                                      actionCollection(), "add_to_bookmark" );
 
+    actionRemoveLink = new KAction( i18n( "Remove Link" ), 0,
+                                     this, SLOT( removeLink() ),
+                                     actionCollection(), "remove_link" );
 
     actionShowDocStruct = new KToggleAction( i18n( "Show Doc Structure" ), 0,
                                             this, SLOT( showDocStructure() ),
@@ -5820,6 +5823,13 @@ void KWView::copyLink()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->copyLink();
+}
+
+void KWView::removeLink()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->removeLink();
 }
 
 void KWView::addToBookmark()

@@ -3169,6 +3169,11 @@ void KPresenterView::setupActions()
                                      this, SLOT( copyLink() ),
                                      actionCollection(), "copy_link" );
 
+    actionRemoveLink = new KAction( i18n( "Remove Link" ), 0,
+                                     this, SLOT( removeLink() ),
+                                     actionCollection(), "remove_link" );
+
+
     actionAddLinkToBookmak = new KAction( i18n( "Add to bookmark" ), 0,
                                      this, SLOT( addToBookmark() ),
                                      actionCollection(), "add_to_bookmark" );
@@ -7355,5 +7360,11 @@ void KPresenterView::addToBookmark()
     }
 }
 
+void KPresenterView::removeLink()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+        edit->removeLink();
+}
 
 #include <kpresenter_view.moc>
