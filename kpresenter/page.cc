@@ -697,7 +697,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 
 	KPObject *kpobject;
 
-	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) && 
+	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
 	     toolEditMode == TEM_MOUSE ) {
 	    setCursor( arrowCursor );
 	    if ( (int)objectList()->count() - 1 >= 0 ) {
@@ -831,7 +831,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		oldMx = e->x();
 		oldMy = e->y();
 	    } break;
-	    case INS_TEXT: case INS_OBJECT: case INS_TABLE: 
+	    case INS_TEXT: case INS_OBJECT: case INS_TABLE:
 	    case INS_DIAGRAMM: case INS_FORMULA: case INS_AUTOFORM: {
 		QPainter p( this );
 		p.setPen( QPen( black, 1, SolidLine ) );
@@ -888,15 +888,15 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		if ( insRect.width() != 0 && insRect.height() != 0 ) {
 		    switch ( view->getPieType() ) {
 		    case PT_PIE:
-			p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2, 
+			p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2,
 				   insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 			break;
 		    case PT_ARC:
-			p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2, 
+			p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2,
 				   insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 			break;
 		    case PT_CHORD:
-			p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2, 
+			p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2,
 				     insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 			break;
 		    default: break;
@@ -906,15 +906,15 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
 		switch ( view->getPieType() ) {
 		case PT_PIE:
-		    p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2, 
+		    p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2,
 			       insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 		    break;
 		case PT_ARC:
-		    p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2, 
+		    p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2,
 			       insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 		    break;
 		case PT_CHORD:
-		    p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2, 
+		    p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2,
 				 insRect.height() - 2, view->getPieAngle(), view->getPieLength() );
 		    break;
 		default: break;
@@ -1044,7 +1044,7 @@ void Page::resizeEvent( QResizeEvent *e )
     if ( editMode )
 	QWidget::resizeEvent( e );
     else
-	QWidget::resizeEvent( new QResizeEvent( QSize( QApplication::desktop()->width(), 
+	QWidget::resizeEvent( new QResizeEvent( QSize( QApplication::desktop()->width(),
 						       QApplication::desktop()->height() ),
 						e->oldSize() ) );
     if ( editMode )
@@ -1587,23 +1587,21 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
 
     tmpObjs.clear();
 
-    if ( editNum != -1 )
-    {
+    if ( editNum != -1 ) {
 	kpobject = objectList()->at( editNum );
 	editNum = -1;
-	if ( kpobject->getType() == OT_TEXT )
-	{
+	if ( kpobject->getType() == OT_TEXT ) {
 	    KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 	    kpobject->deactivate();
 	    kptextobject->getKTextObject()->clearFocus();
-	    disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( toFontChanged( QFont* ) ) );
-	    disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( toColorChanged( QColor* ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), 
+			this, SLOT( toFontChanged( QFont* ) ) );
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), 
+			this, SLOT( toColorChanged( QColor* ) ) );
 	    disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
 	    kptextobject->getKTextObject()->setShowCursor( false );
-	}
-	else if ( kpobject->getType() == OT_PART )
-	{
+	} else if ( kpobject->getType() == OT_PART ) {
 	    kpobject->deactivate();
 	    _repaint( kpobject );
 	}
@@ -1611,27 +1609,26 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
 
     int i;
 
-    if ( zoom )
-    {
-	float _presFaktW = static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) > 0.0 ?
+    if ( zoom ) {
+	float _presFaktW = static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) > 
+			   0.0 ?
 			   static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) : 1.0;
-	float _presFaktH = static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) > 0.0 ?
-			   static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) : 1.0;
+	float _presFaktH = static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) > 
+			   0.0 ?
+			   static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) : 
+			   1.0;
 	_presFakt = min(_presFaktW,_presFaktH);
-    }
-    else _presFakt = 1.0;
+    } else _presFakt = 1.0;
 
     KPBackGround *kpbackground = 0;
 
-    for ( i = 0; i < static_cast<int>( backgroundList()->count() ); i++ )
-    {
+    for ( i = 0; i < static_cast<int>( backgroundList()->count() ); i++ ) {
 	kpbackground = backgroundList()->at( i );
 	kpbackground->setSize( getPageSize( i, _presFakt ).width(), getPageSize( i, _presFakt ).height() );
 	kpbackground->restore();
     }
 
-    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ )
-    {
+    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
 	kpobject->zoom( _presFakt );
 	kpobject->drawSelection( false );
@@ -3440,6 +3437,26 @@ void Page::slotGotoPage()
     int pg = currPresPage;
     pg = KPGotoPage::gotoPage( slideList, pg, this );
 
+    if ( pg != static_cast<int>( currPresPage ) ) {
+	currPresPage = pg;
+	slideListIterator = slideList.find( currPresPage );
+	editMode = false;
+	drawMode = false;
+	presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
+	currPresStep = *presStepList.begin();
+	subPresStep = 0;
+
+	int yo = view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height() * ( pg - 1 );
+	view->setDiffY( yo );
+	resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
+	repaint( false );
+	setFocus();
+    }
+}
+
+/*================================================================*/
+void Page::gotoPage( int pg )
+{
     if ( pg != static_cast<int>( currPresPage ) ) {
 	currPresPage = pg;
 	slideListIterator = slideList.find( currPresPage );

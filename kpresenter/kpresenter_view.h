@@ -105,6 +105,13 @@ public:
     void initGui();
     virtual DCOPObject* dcopObject();
 
+    // for dcop interface
+    int getCurrentPresPage();
+    int getCurrentPresStep();
+    int getPresStepsOfPage();
+    int getNumPresPages();
+    bool gotoPresPage( int pg );
+
 public slots:
     virtual bool printDlg();
     // edit menu

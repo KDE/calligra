@@ -95,10 +95,13 @@ public:
     bool pNext( bool );
     bool pPrev( bool );
 
-    unsigned int presPage() {return currPresPage; }
-    void setPresFakt( float f ) {_presFakt = f; }
-    float presFakt() {return _presFakt; }
-
+    unsigned int presPage() { return currPresPage; }
+    int presStep() { return currPresStep; }
+    void setPresFakt( float f ) { _presFakt = f; }
+    float presFakt() { return _presFakt; }
+    int numPresSteps() { return presStepList.count(); }
+    int numPresPages() { return slideList.count(); }
+    
     bool canAssignEffect( QList<KPObject> &objs );
 
     void keyPressEvent( QKeyEvent *e );
@@ -118,6 +121,8 @@ public:
     void drawPageInPix( QPixmap&, int );
     void drawPageInPix2( QPixmap&, int, int, float _zoom = 1.0 );
 
+    void gotoPage( int pg );
+    
 public slots:
 
     // public slots

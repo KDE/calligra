@@ -491,6 +491,51 @@ bool KPresenterViewIface::process(const QCString &fun, const QByteArray &data, Q
 		textObjectToContents( );
 		return TRUE;
 	}
+	if ( fun == "getCurrentPresPage()" )
+	{
+		replyType = "int";
+		QDataStream out( replyData, IO_WriteOnly );
+		out << getCurrentPresPage( );
+		return TRUE;
+	}
+	if ( fun == "getCurrentPresStep()" )
+	{
+		replyType = "int";
+		QDataStream out( replyData, IO_WriteOnly );
+		out << getCurrentPresStep( );
+		return TRUE;
+	}
+	if ( fun == "getPresStepsOfPage()" )
+	{
+		replyType = "int";
+		QDataStream out( replyData, IO_WriteOnly );
+		out << getPresStepsOfPage( );
+		return TRUE;
+	}
+	if ( fun == "getNumPresPages()" )
+	{
+		replyType = "int";
+		QDataStream out( replyData, IO_WriteOnly );
+		out << getNumPresPages( );
+		return TRUE;
+	}
+	if ( fun == "gotoPresPage(int)" )
+	{
+		QDataStream str( data, IO_ReadOnly );
+		int pg;
+		str >> pg;
+		replyType = "bool";
+		QDataStream out( replyData, IO_WriteOnly );
+		out << gotoPresPage(pg );
+		return TRUE;
+	}
+	if ( fun == "getCurrentPageNum()" )
+	{
+		replyType = "int";
+		QDataStream out( replyData, IO_WriteOnly );
+		out << getCurrentPageNum( );
+		return TRUE;
+	}
 	if ( DCOPObject::process( fun, data, replyType, replyData ) )
 		return TRUE;
 	return FALSE;

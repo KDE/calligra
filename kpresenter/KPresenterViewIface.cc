@@ -416,4 +416,33 @@ void KPresenterViewIface::textObjectToContents()
     view->textObjectToContents();
 }
 
+int KPresenterViewIface::getCurrentPresPage()
+{
+    return view->getCurrentPresPage();
+}
+
+int KPresenterViewIface::getCurrentPresStep()
+{
+    return view->getCurrentPresStep();
+}
+
+int KPresenterViewIface::getPresStepsOfPage()
+{
+    return view->getPresStepsOfPage();
+}
+
+int KPresenterViewIface::getNumPresPages()
+{
+    return view->getNumPresPages();
+}
+
+bool KPresenterViewIface::gotoPresPage( int pg )
+{
+    return view->gotoPresPage( pg );
+}
+
+int KPresenterViewIface::getCurrentPageNum()
+{
+    return view->getCurrPgNum();
+}
 

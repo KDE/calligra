@@ -82,6 +82,12 @@
 <FUNC name="textSpacing" qual=""><RET type="void"/></FUNC>
 <FUNC name="textContentsToHeight" qual=""><RET type="void"/></FUNC>
 <FUNC name="textObjectToContents" qual=""><RET type="void"/></FUNC>
+<FUNC name="getCurrentPresPage" qual=""><RET type="int"/></FUNC>
+<FUNC name="getCurrentPresStep" qual=""><RET type="int"/></FUNC>
+<FUNC name="getPresStepsOfPage" qual=""><RET type="int"/></FUNC>
+<FUNC name="getNumPresPages" qual=""><RET type="int"/></FUNC>
+<FUNC name="gotoPresPage" qual=""><RET type="bool"/><ARG name="pg" type="int"/></FUNC>
+<FUNC name="getCurrentPageNum" qual=""><RET type="int"/></FUNC>
 </CLASS>
 <INCLUDE file="qstring.h"/>
 <INCLUDE file="dcopref.h"/>

@@ -113,7 +113,16 @@ k_dcop:
     virtual void textSpacing();
     virtual void textContentsToHeight();
     virtual void textObjectToContents();
-    
+
+    // in presentation mode
+    virtual int getCurrentPresPage();
+    virtual int getCurrentPresStep();
+    virtual int getPresStepsOfPage();
+    virtual int getNumPresPages();
+    virtual bool gotoPresPage( int pg );
+
+    // in edit mode
+    virtual int getCurrentPageNum();
     
 private:
     KPresenterView *view;

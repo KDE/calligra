@@ -2873,8 +2873,55 @@ int KPresenterView::canvasXOffset() const
 {
     return -getDiffX();
 }
+
 /*================================================================*/
 int KPresenterView::canvasYOffset() const
 {
     return -getDiffY();
+}
+
+/*================================================================*/
+int KPresenterView::getCurrentPresPage()
+{
+    if ( !presStarted )
+	return -1;
+    
+    return page->presPage();
+}
+
+/*================================================================*/
+int KPresenterView::getCurrentPresStep()
+{
+    if ( !presStarted )
+	return -1;
+    
+    return page->presStep();
+}
+
+/*================================================================*/
+int KPresenterView::getPresStepsOfPage()
+{
+    if ( !presStarted )
+	return -1;
+    
+    return page->numPresSteps();
+}
+
+/*================================================================*/
+int KPresenterView::getNumPresPages()
+{
+    if ( !presStarted )
+	return -1;
+    
+    return page->numPresPages();
+}
+
+/*================================================================*/
+bool KPresenterView::gotoPresPage( int pg )
+{
+    if ( !presStarted )
+	return FALSE;
+    
+    page->gotoPage( pg );
+    return TRUE;
 }
