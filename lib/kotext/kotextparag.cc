@@ -1542,7 +1542,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 	if(2*((startX/offset)/2)==startX/offset)
 	    pos*=-1;
 	//draw first part of wave
-	p->drawArc( (startX/offset)*offset, y, offset, offset, 0, anc*16 );
+	p->drawArc( (startX/offset)*offset, y, offset, offset, 0, -pos*anc*16 );
         //now the main part
 	int zigzag_x = (startX/offset+1)*offset;
 	for ( ; zigzag_x + offset <= bw+startX; zigzag_x += offset)
