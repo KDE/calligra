@@ -4846,7 +4846,7 @@ void KWView::openPopupMenuChangeAction( const QPoint & _point )
 
 void KWView::openPopupMenuEditFrame( const QPoint & _point )
 {
-    if(!koDocument()->isReadWrite() )
+    if(!koDocument()->isReadWrite() || !factory())
         return;
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if(!table)
