@@ -111,17 +111,17 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
 
 bgMode NewDialog::backgroundMode()
 {
-  if( bground[bm_BackgroundColor]->isChecked() ) return BM_BACKGROUNDCOLOR;
-  if( bground[bm_ForegroundColor]->isChecked() ) return BM_FOREGROUNDCOLOR;
-  if( bground[bm_Transparent]->isChecked() ) return BM_TRANSPARENT;
-  if( bground[bm_White]->isChecked() ) return BM_WHITE;
+  if( bground[bm_BackgroundColor]->isChecked() ) return bm_BackgroundColor;
+  if( bground[bm_ForegroundColor]->isChecked() ) return bm_ForegroundColor;
+  if( bground[bm_Transparent]->isChecked() ) return bm_Transparent;
+  if( bground[bm_White]->isChecked() ) return bm_White;
 
   else return bm_White;
 }
 
 cMode NewDialog::colorMode()
 {
-  if( cmode[cm_Indexed]->isChecked() ) return CM_INDEXED;
+  if( cmode[cm_Indexed]->isChecked() ) return cm_Indexed;
   if( cmode[cm_Greyscale]->isChecked() ) return cm_Greyscale;
   if( cmode[cm_RGB]->isChecked() ) return cm_RGB;
   if( cmode[cm_RGBA]->isChecked() ) return cm_RGBA;
