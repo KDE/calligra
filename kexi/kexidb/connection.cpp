@@ -554,7 +554,10 @@ QStringList Connection::tableNames(bool also_system_tables)
 		return list;
 	for (c->moveFirst(); !c->eof(); c->moveNext())
 	{
-		list.append(c->value(0).toString()); //kexi__objects.o_name
+		QString tname = c->value(0).toString(); //kexi__objects.o_name
+		if (Kexi::isIdentifier( tname )) {
+			list.append(tname);
+		}
 	}
 
 	deleteCursor(c);
@@ -593,12 +596,15 @@ QValueList<int> Connection::objectIds(int objType)
 	if (!isDatabaseUsed())
 		return list;
 
-	Cursor *c = executeQuery(QString("select o_id from kexi__objects where o_type=%1").arg(objType));
+	Cursor *c = executeQuery(QString("select o_id, o_name from kexi__objects where o_type=%1").arg(objType));
 	if (!c)
 		return list;
 	for (c->moveFirst(); !c->eof(); c->moveNext())
 	{
-		list.append(c->value(0).toInt()); //kexi__objects.o_id
+		QString tname = c->value(1).toString(); //kexi__objects.o_name
+		if (Kexi::isIdentifier( tname )) {
+			list.append(c->value(0).toInt()); //kexi__objects.o_id
+		}
 	}
 
 	deleteCursor(c);
@@ -1410,6 +1416,13 @@ KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RowData &data )
 		if (!ok)
 			break;
 		
+		if (!Kexi::isIdentifier( cursor->value(2).asString() )) {
+			setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"")
+				.arg( cursor->value(2).asString() ));
+			ok=false;
+			break;
+		}
+
 		Field *f = new Field(
 			cursor->value(2).asString(), (Field::Type)f_type, f_constr, f_len, f_prec, f_opts );
 		f->setDefaultValue( cursor->value(7).toCString() );
