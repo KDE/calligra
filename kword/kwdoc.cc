@@ -3425,5 +3425,16 @@ QString KWDocument::sectionTitle( int pageNum ) const
     return QString::null;
 }
 
+void KWDocument::addIgnoreWordAll( const QString & word)
+{
+    if( m_spellListIgnoreAll.findIndex( word )==-1)
+        m_spellListIgnoreAll.append( word );
+}
+
+void KWDocument::clearIgnoreWordAll( )
+{
+    m_spellListIgnoreAll.clear();
+}
+
 
 #include "kwdoc.moc"

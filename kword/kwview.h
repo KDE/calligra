@@ -332,6 +332,7 @@ protected slots:
     void spellCheckerCorrected( const QString &, const QString &, unsigned int);
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
+    void spellCheckerIgnoreAll( const QString &);
 
 protected:
     void addVariableActions( int type, const QStringList & texts,
@@ -528,14 +529,12 @@ private:
     int m_zoomViewModePreview;
 
     bool m_viewFrameBorders /*, m_viewTableGrid*/;
-    QStringList m_ignoreWord;
 
     // Spell-checking
     struct {
 	KSpell *kspell;
 	int spellCurrFrameSetNum;
 	QPtrList<KWTextFrameSet> textFramesets;
-	QStringList ignoreWord;
 	KMacroCommand * macroCmdSpellCheck;
      } m_spell;
 

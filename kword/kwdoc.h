@@ -528,6 +528,10 @@ public:
     void updateHeaderButton();
     void updateFooterButton();
 
+    QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
+    void addIgnoreWordAll( const QString & );
+    void clearIgnoreWordAll( );
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void newContentsSize();
@@ -656,6 +660,9 @@ private:
     /** Page number -> section title array, for the Section variable.
      * Note that pages without a section title don't appear in the array. */
     QValueVector< QString > m_sectionTitles;
+
+
+    QStringList m_spellListIgnoreAll;
 };
 
 

@@ -4074,8 +4074,8 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 void KWView::startKSpell()
 {
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
-    if(m_doc->getKSpellConfig() && !m_ignoreWord.isEmpty())
-        m_doc->getKSpellConfig()->setIgnoreList(m_ignoreWord);
+    if(m_doc->getKSpellConfig() && !m_doc->spellListIgnoreAll().isEmpty())
+        m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
 
 
@@ -4090,6 +4090,9 @@ void KWView::startKSpell()
                       this, SLOT( spellCheckerCorrected( const QString &, const QString &, unsigned int ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
                       this, SLOT( spellCheckerDone( const QString & ) ) );
+    QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
+                      this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
+
 }
 
 void KWView::spellCheckerReady()
@@ -4125,7 +4128,6 @@ void KWView::spellCheckerReady()
     delete m_spell.kspell;
     m_spell.kspell = 0;
     m_spell.textFramesets.clear();
-    m_spell.ignoreWord.clear();
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
     m_spell.macroCmdSpellCheck=0L;
@@ -4184,9 +4186,6 @@ void KWView::spellCheckerDone( const QString & )
 
     int result = m_spell.kspell->dlgResult();
 
-    //store ignore word
-    m_spell.ignoreWord=m_spell.kspell->ksConfig().ignoreList ();
-
     m_spell.kspell->cleanUp();
     delete m_spell.kspell;
     m_spell.kspell = 0;
@@ -4200,7 +4199,6 @@ void KWView::spellCheckerDone( const QString & )
     {
         m_doc->setReadWrite(true);
         m_spell.textFramesets.clear();
-        m_ignoreWord.clear();
         if(m_spell.macroCmdSpellCheck)
             m_doc->addCommand(m_spell.macroCmdSpellCheck);
         m_spell.macroCmdSpellCheck=0L;
@@ -4233,7 +4231,6 @@ void KWView::spellCheckerFinished()
     }
     m_doc->setReadWrite(true);
     m_spell.textFramesets.clear();
-    m_ignoreWord.clear();
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
     m_spell.macroCmdSpellCheck=0L;
@@ -4248,6 +4245,12 @@ void KWView::spellCheckerFinished()
         configDia.exec();
     }
 }
+
+void KWView::spellCheckerIgnoreAll( const QString & word)
+{
+    m_doc->addIgnoreWordAll( word );
+}
+
 
 void KWView::configure()
 {
