@@ -314,6 +314,9 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 === Startup TODO ===
 - reuse KexiNameWidget in KexiNewProjectWizard!
 - use KPasswordDialog::disableCoreDumps() for security reasons
+- IDEA for connection shortcuts:
+  Mysql Query Borwser has a simple xml file defined:
+  http://dev.mysql.com/doc/query-browser/en/mysql-gui-appendix-store-connections.html
 
 === CLI TODO ===
 - add kexicmd as a symlink to kexi binary, for totally non-gui usage
@@ -336,16 +339,30 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
 === Mimetypes/icons TODO ===
+- new mimetypes: 
+   application/x-vnd.kexi.project.sqlite2
+   application/x-vnd.kexi.project.sqlite3
+   application/x-vnd.kexi.project.shortcut
+  other:
+   application/x-vnd.kexi.connections.shortcut
+   application/x-vnd.kexi.table.shortcut
+   application/x-vnd.kexi.query.shortcut
 - remove x-vnd.kexi.desktop in kdelibs
 - copy mimetypes and magic def. to kdelibs (keep it within Kexi for compat.)
 - remake kexi mime type svg icons
 - copy kexi mime icons to kdelibs, remove old one
+** Ask SQLite devs for a possibility for adding a field to indicate kexi-sqlite 
+   format without opening database
 
 
 2004-10-15
 - small speedup for Kexi global objects on startup
 - fixes for KexiStartupFileDialog 
 - tests/newapi is compield by default. Other tests disabled.
+Core, Plugins
+- SPEEDUP OF STARTUP: 
+  Part::initActions() splitted to Part::initPartActions() (default one)
+  and Part::initInstanceActions() (lazy one)
 
 2004-10-14
 Kexi

@@ -58,7 +58,8 @@ class KexiTablePart : public KexiPart::Part
 		};
 
 	protected:
-		virtual void initActions();
+		virtual void initPartActions();
+		virtual void initInstanceActions();
 
 	virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);
 };

@@ -147,7 +147,7 @@ FormManager::createActions(KActionCollection *parent)
 	m_style->setEditable(false);
 
 	KGlobal::config()->setGroup("General");
-	const QString currentStyle = kapp->style().name();
+	QString currentStyle = QString::fromLatin1(kapp->style().name()).lower();
 	const QStringList styles = QStyleFactory::keys();
 	m_style->setItems(styles);
 	m_style->setCurrentItem(0);

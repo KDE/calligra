@@ -67,7 +67,7 @@ WidgetLibrary::addFactory(WidgetFactory *f)
 	WidgetInfo::List widgets = f->classes();
 	for(WidgetInfo *w = widgets.first(); w; w = widgets.next())
 	{
-		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
+//		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
 		d->widgets.insert(w->className(), w);
 		if(!w->alternateClassName().isEmpty())
 			d->alternates.insert(w->alternateClassName(), w->className());
@@ -144,7 +144,7 @@ WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, cons
 	for(; it.current(); ++it)
 	{
 		LibActionWidget *a = new LibActionWidget(*it, parent);
-		kdDebug() << "WidgetLibrary::createActions(): action " << a << " added" << endl;
+//		kdDebug() << "WidgetLibrary::createActions(): action " << a << " added" << endl;
 		connect(a, SIGNAL(prepareInsert(const QString &)), receiver, slot);
 		actions.append(a);
 	}
@@ -156,7 +156,7 @@ QWidget*
 WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name, Container *c)
 {
 	WidgetInfo *wfactory = d->widgets[w];
-	kdDebug() << "WidgetLibrary::createWidget(): " << w << "  " << name << endl;
+//	kdDebug() << "WidgetLibrary::createWidget(): " << w << "  " << name << endl;
 	if(!wfactory)
 		return 0;
 
@@ -232,7 +232,7 @@ WidgetLibrary::checkAlternateName(const QString &classname)
 		return classname;
 	else if(d->alternates.contains(classname))
 	{
-		kdDebug() << "WidgetLibrary::alternateName() : The name " << classname << " will be replaced with " << d->alternates[classname] << endl;
+//		kdDebug() << "WidgetLibrary::alternateName() : The name " << classname << " will be replaced with " << d->alternates[classname] << endl;
 		return d->alternates[classname];
 	}
 	else // widget not supported

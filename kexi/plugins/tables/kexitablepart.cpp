@@ -50,7 +50,11 @@ KexiTablePart::~KexiTablePart()
 {
 }
 
-void KexiTablePart::initActions()
+void KexiTablePart::initPartActions()
+{
+}
+
+void KexiTablePart::initInstanceActions()
 {
 //moved to main window	createSharedAction(Kexi::DataViewMode, i18n("Filter"), "filter", 0, "tablepart_filter");
 

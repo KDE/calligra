@@ -76,7 +76,11 @@ void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 }
 #endif
 
-void KexiFormPart::initActions()
+void KexiFormPart::initPartActions()
+{
+}
+
+void KexiFormPart::initInstanceActions()
 {
 	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode));
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
@@ -108,6 +112,7 @@ void KexiFormPart::initActions()
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Narrowest"), "aonarrowest", 0, "formpart_adjust_width_small") );
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Widest"), "aowidest", 0, "formpart_adjust_width_big") );
 }
+
 
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	KexiPart::Item &item, int viewMode)

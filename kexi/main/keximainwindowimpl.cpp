@@ -80,7 +80,7 @@
 
 //Extreme verbose debug
 #if defined(Q_WS_WIN)
-# define KexiVDebug kdDebug()
+//# define KexiVDebug kdDebug()
 #endif
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) kdDebug()

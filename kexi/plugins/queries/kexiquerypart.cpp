@@ -102,7 +102,11 @@ void KexiQueryPart::initInstanceActions( int mode, KActionCollection *col )
 }
 #endif
 
-void KexiQueryPart::initActions()
+void KexiQueryPart::initPartActions()
+{
+}
+
+void KexiQueryPart::initInstanceActions()
 {
 //	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
 //		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");

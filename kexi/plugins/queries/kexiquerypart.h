@@ -70,7 +70,8 @@ class KexiQueryPart : public KexiPart::Part
 //		virtual void initPartActions( KActionCollection *col );
 //		virtual void initInstanceActions( int mode, KActionCollection *col );
 
-		virtual void initActions();
+		virtual void initPartActions();
+		virtual void initInstanceActions();
 
 		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);
 };

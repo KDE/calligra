@@ -37,11 +37,26 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
+namespace KexiPart {
+class PartPrivate
+{
+public:
+	PartPrivate()
+	: instanceActionsInitialized(false)
+	{
+	}
+	bool instanceActionsInitialized : 1;
+};
+}
+
+//----------------------------------------------------------------
+
 using namespace KexiPart;
 
 Part::Part(QObject *parent, const char *name, const QStringList &)
 : QObject(parent, name)
 , m_guiClient(0)
+, d(new PartPrivate())
 {
 	m_info = 0;
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
@@ -50,6 +65,7 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 
 Part::~Part()
 {
+	delete d;
 }
 
 void Part::createGUIClients(KexiMainWindow *win)
@@ -91,7 +107,8 @@ void Part::createGUIClients(KexiMainWindow *win)
 //		initInstanceActions( Kexi::AllViewModes , instanceGuiClient->actionCollection() );
 
 //todo
-		initActions();
+		initPartActions();
+//		initActions();
 	}
 }
 
@@ -169,6 +186,12 @@ void Part::setActionAvailable(const char *action_name, bool avail)
 
 KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode )
 {
+	//now it's the time for creating instance actions
+	if (!d->instanceActionsInitialized) {
+		initInstanceActions();
+		d->instanceActionsInitialized = true;
+	}
+
 	m_status.clearStatus();
 //	KexiDialogBase *dlg = createInstance(win,item,viewMode);
 //	if (!dlg)
@@ -259,6 +282,14 @@ bool Part::loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QStrin
 		return false;
 	}
 	return true;
+}
+
+void Part::initPartActions()
+{
+}
+
+void Part::initInstanceActions()
+{
 }
 
 //-------------------------------------------------------------------------

@@ -69,7 +69,8 @@ class KexiFormPart : public KexiPart::Part
 		};
 
 	protected:
-		virtual void initActions();
+		virtual void initPartActions();
+		virtual void initInstanceActions();
 
 	private:
 		QGuardedPtr<KFormDesigner::FormManager> m_manager;

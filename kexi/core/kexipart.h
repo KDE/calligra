@@ -39,6 +39,7 @@ namespace KexiPart
 	class Item;
 	class GUIClient;
 	class DataSource;
+	class PartPrivate;
 
 /**
  * The main class for kexi frontend parts like tables, queries, relations
@@ -150,7 +151,8 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual void initInstanceActions( int mode, KActionCollection *col ) {};
 #endif
 
-		virtual void initActions() {};
+		virtual void initPartActions();
+		virtual void initInstanceActions();
 
 		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);
 
@@ -208,6 +210,8 @@ class KEXICORE_EXPORT Part : public QObject
 		KexiMainWindow* m_mainWin;
 
 		Kexi::ObjectStatus m_status;
+
+		PartPrivate *d;
 
 	friend class Manager;
 	friend class KexiMainWindow;
