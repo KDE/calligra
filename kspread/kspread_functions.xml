@@ -432,7 +432,6 @@
 	<Syntax>EXACT( string1, string2 )</Syntax>
 	<Example>EXACT( "Koffice", "Koffice" ) returns True"</Example>
         <Example>EXACT( "kspread", "Koffice" ) returns False</Example>
-	</Example>
       </Help>
     </Function>
 
@@ -452,7 +451,6 @@
 	<Syntax>find( haystack, needle )</Syntax>
 	<Example>find( "Kof", "Koffice" ) returns True"</Example>
 	<Example>find( "kspread", "Koffice") returns False</Example>
-	</Example>
       </Help>
     </Function>
 

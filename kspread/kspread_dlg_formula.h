@@ -42,27 +42,6 @@ class KSpreadCell;
 
 #include "kspread_functions.h"
 
-struct KSpreadFunc
-{
-  int nb_param;
-  QString firstElementLabel;
-  KSpreadParameterType firstElementType;
-
-  QString secondElementLabel;
-  KSpreadParameterType secondElementType;
-
-  QString thirdElementLabel;
-  KSpreadParameterType thirdElementType;
-
-  QString fourElementLabel;
-  KSpreadParameterType fourElementType;
-
-  QString fiveElementLabel;
-  KSpreadParameterType fiveElementType;
-  bool multiple;
-  QString help;
-};
-
 class KSpreadDlgFormula : public QDialog
 {
     Q_OBJECT
@@ -70,13 +49,11 @@ public:
     KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName=0);
 
 private:
-    void changeFunction();
-
     /**
-     * Turns the @p text into a parameter of the desired type. The returned string is
-     * of a form that can be understood by kscript.
+     * Turns the @p text into a parameter that koscript can understand. The type
+     * of this parameter is extracted by looking at parameter number @p param in @ref #m_desc.
      */
-    QString createParameter( const QString& _text,KSpreadParameterType elementType );
+    QString createParameter( const QString& _text, int param );
     /**
      * Reads the text out of @ref #firstElement and friends and creates a parameter
      * list for the function.
@@ -150,6 +127,9 @@ private:
     QListBox *functions;
     QLineEdit *result;
 
+    KLineEdit *searchFunct;
+    KCompletion listFunct;
+    
     QLabel* label1;
     QLabel* label2;
     QLabel* label3;
@@ -171,19 +151,18 @@ private:
     int m_row;
     QString m_oldText;
 
-  QString m_funcName;
-  QString m_tableName;
-  KSpreadFunc funct;
+    QString m_funcName;
+    QString m_tableName;
 
-  QString m_rightText;
-  QString m_leftText;
+    QString m_rightText;
+    QString m_leftText;
     /**
      * A lock for @ref #slotChangeText.
      */
     bool refresh_result;
-
-  KLineEdit *searchFunct;
-  KCompletion listFunct;
+    
+    KSpreadFunctionRepository m_repo;
+    KSpreadFunctionDescription* m_desc;
 };
 
 #endif

@@ -121,12 +121,12 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const QDomElement& eleme
 		    if ( n2.isElement() )
 		    { 
 			QDomElement e2 = n2.toElement();
-			if ( e.tagName() == "Text" )
-			    m_help = i18n( e.text().latin1() );
-			else if ( e.tagName() == "Syntax" )
-			    m_syntax.append( i18n( e.text().latin1() ) );
-			else if ( e.tagName() == "Example" )
-			    m_examples.append( i18n( e.text().latin1() ) );
+			if ( e2.tagName() == "Text" )
+			    m_help = i18n( e2.text().latin1() );
+			else if ( e2.tagName() == "Syntax" )
+			    m_syntax.append( i18n( e2.text().latin1() ) );
+			else if ( e2.tagName() == "Example" )
+			    m_examples.append( i18n( e2.text().latin1() ) );
 		    }
 		}
 	    }
@@ -153,20 +153,6 @@ QString KSpreadFunctionDescription::toQML() const
     text += toString( type() );
     text += "</p>";
 
-    if ( !m_params.isEmpty() )
-    {
-	text += "<h2>Parameters</h2><ul>";
-	QValueList<KSpreadFunctionParameter>::ConstIterator it = m_params.begin();
-	for( ; it != m_params.end(); ++it )
-	{
-	    text += "<li><b>Comment:</b> ";
-	    text += (*it).helpText();
-	    text += "<b>Type:</b> ";
-	    text += toString( (*it).type(), (*it).hasRange );
-	}
-	text += "</ul>";
-    }
-    
     if ( !m_examples.isEmpty() )
     {
 	text += "<h2>Syntax</h2><ul>";
@@ -179,6 +165,20 @@ QString KSpreadFunctionDescription::toQML() const
 	text += "</ul>";
     }
 
+    if ( !m_params.isEmpty() )
+    {
+	text += "<h2>Parameters</h2><ul>";
+	QValueList<KSpreadFunctionParameter>::ConstIterator it = m_params.begin();
+	for( ; it != m_params.end(); ++it )
+	{
+	    text += "<li><b>Comment:</b> ";
+	    text += (*it).helpText();
+	    text += "<br><b>Type:</b> ";
+	    text += toString( (*it).type(), (*it).hasRange );
+	}
+	text += "</ul>";
+    }
+    
     if ( !m_examples.isEmpty() )
     {
 	text += "<h2>Example</h2><ul>";
