@@ -15,6 +15,8 @@
 #include <qpointarray.h>
 #include <qimage.h>
 
+#include <art_vpath.h>
+#include <art_bpath.h>
 #include <art_vpath_bpath.h>
 #include <art_svp_vpath.h>
 #include <art_svp_vpath_stroke.h>

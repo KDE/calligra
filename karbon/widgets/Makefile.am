@@ -1,6 +1,7 @@
 INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
+	-I$(srcdir)/../render \
 	$(all_includes)
 
 noinst_LTLIBRARIES = \

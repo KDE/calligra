@@ -11,11 +11,9 @@
 #include "vpainter.h"
 #include <qwmatrix.h>
 
-#include <art_misc.h>
-#include <art_vpath.h>
-#include <art_bpath.h>
-
 class QPainter;
+struct _ArtVpath;
+struct _ArtBpath;
 
 class VKoPainter : public VPainter
 {
@@ -64,12 +62,12 @@ public:
 private:
 	void clear();
 	void clear( unsigned int color );
-	void drawVPath( ArtVpath * );
+	void drawVPath( struct _ArtVpath * );
 
 private:
-	ArtBpath *m_path;
+	struct _ArtBpath *m_path;
 	unsigned int m_index;
-	art_u8 *m_buffer;
+	unsigned char *m_buffer;
 	QPaintDevice *m_target;
 	unsigned int m_width;
 	unsigned int m_height;
