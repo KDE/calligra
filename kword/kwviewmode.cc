@@ -152,15 +152,15 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
     Q_ASSERT(doc);
     if(viewModeType=="ModeNormal")
     {
-        return new KWViewModeNormal( doc );
+        return new KWViewModeNormal( doc, doc->viewFrameBorders() );
     }
     else if(viewModeType=="ModeEmbedded")
     {
-        return new KWViewModeEmbedded ( doc );
+        return new KWViewModeEmbedded( doc );
     }
     else if(viewModeType=="ModePreview")
     {
-        return new KWViewModePreview( doc, doc->nbPagePerRow() );
+        return new KWViewModePreview( doc, doc->viewFrameBorders(), doc->nbPagePerRow() );
     }
     else if(viewModeType=="ModeText")
     {

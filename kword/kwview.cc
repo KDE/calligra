@@ -2485,7 +2485,7 @@ void KWView::viewPageMode()
             m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
-        m_doc->switchViewMode( new KWViewModeNormal( m_doc ) );
+        m_doc->switchViewMode( new KWViewModeNormal( m_doc, viewFrameBorders() ) );
     }
     else
         actionViewPageMode->setChecked( true ); // always one has to be checked !
@@ -2498,7 +2498,7 @@ void KWView::viewPreviewMode()
         m_zoomViewModeNormal = m_doc->zoom();
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview, false );
-        m_doc->switchViewMode( new KWViewModePreview( m_doc, m_doc->nbPagePerRow() ) );
+        m_doc->switchViewMode( new KWViewModePreview( m_doc, viewFrameBorders(), m_doc->nbPagePerRow() ) );
     }
     else
         actionViewPreviewMode->setChecked( true ); // always one has to be checked !
@@ -5198,6 +5198,7 @@ void KWView::setViewFrameBorders(bool b)
     m_viewFrameBorders = b;
     // Store setting in doc, for further views and for saving
     m_doc->setViewFrameBorders( b );
+    m_doc->viewMode()->setDrawFrameBorders( b );
 }
 
 bool KWView::doubleClickActivation() const

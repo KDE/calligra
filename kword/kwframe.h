@@ -180,13 +180,13 @@ public:
     /** For KWFrameSet::updateFrames only. Add a frame on top of this one.
      * Note that order doesn't matter in that list, it's for clipping only. */
     void addFrameOnTop( KWFrame* fot ) { m_framesOnTop.append( fot ); }
-    
+
     /**
      * order DOES matter for this one tho. this one is for transparency & selection.
      **/
     void addFrameBelow( KWFrame* fbl ) { m_framesBelow.append( fbl ); }
     void sortFramesBelow() { m_framesBelow.sort(); }
-    
+
     const QPtrList<KWFrame>& framesOnTop() const { return m_framesOnTop; }
     const QPtrList<KWFrame>& framesBelow() const { return m_framesBelow; }
 
@@ -366,7 +366,7 @@ public:
      */
     virtual void drawContents( QPainter *, const QRect &,
                                QColorGroup &, bool onlyChanged, bool resetChanged,
-                               KWViewMode *viewMode, KWCanvas *canvas );
+                               KWViewMode *viewMode );
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * ) {}
@@ -513,17 +513,6 @@ public:
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
 
     /**
-     * Paint the borders for one frame of this frameset.
-     * @param painter The painter in which to draw the contents of the frameset
-     * @param frame The frame to be drawn
-     * @param settingsFrame The frame from which we take the settings (usually @p frame, but not with Copy behaviour)
-     * @param crect The rectangle (in "contents coordinates") to be painted
-     * @param canvas The canvas in which we are drawing (for settings)
-     */
-    void drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame,
-                          const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas );
-
-    /**
      * Paint this frameset
      * @param painter The painter in which to draw the contents of the frameset
      * @param crect The rectangle (in scrollview "contents coordinates", i.e. "view coords")
@@ -546,10 +535,27 @@ public:
      */
     virtual void drawContents( QPainter *painter, const QRect &crect,
                                QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas );
+                               KWFrameSetEdit *edit, KWViewMode *viewMode );
 
-    // This is used (e.g. by KWTextParag) to get the view settings
-    KWCanvas * currentDrawnCanvas() const { return m_currentDrawnCanvas; }
+    /**
+     * This one is called by drawContents for each frame.
+     * It sets up clip rect and painter translation, and calls drawFrame, drawFrameBorder and drawMargins
+     */
+    void drawFrameAndBorders( KWFrame *frame,
+                              QPainter *painter, const QRect &crect,
+                              QColorGroup &cg, bool, bool,
+                              KWFrameSetEdit *edit, KWViewMode *viewMode,
+                              KWFrame *settingsFrame );
+
+    /**
+     * Paint the borders for one frame of this frameset.
+     * @param painter The painter in which to draw the contents of the frameset
+     * @param frame The frame to be drawn
+     * @param settingsFrame The frame from which we take the settings (usually @p frame, but not with Copy behaviour)
+     * @param crect The rectangle (in "contents coordinates") to be painted
+     */
+    void drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame,
+                          const QRect &crect, KWViewMode *viewMode );
 
     /**
      * Draw a particular frame of this frameset.
@@ -734,10 +740,9 @@ protected:
     /**Determine the clipping rectangle for drawing the contents of @p frame with @p painter
      * in the rectangle delimited by @p crect.
      * This determines where to clip the painter to draw the contents of a given frame
-     * It clips to the frame if clipFrame=true, and clips out any "on top" frame if onlyChanged=true.
      */
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
-                             KWViewMode * viewMode, bool onlyChanged, bool clipFrame = true );
+                             KWViewMode * viewMode, bool /*onlyChanged*/, bool clipFrame = true );
 
     void deleteAnchor( KWAnchor * anchor );
     virtual void deleteAnchors();
@@ -761,7 +766,6 @@ protected:
     bool m_protectSize;
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;
-    KWCanvas * m_currentDrawnCanvas;           // The canvas currently being drawn.
     KWordFrameSetIface *m_dcop;
 };
 

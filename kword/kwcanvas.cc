@@ -275,9 +275,9 @@ void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
     QColorGroup gb = QApplication::palette().active();
     if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )
         // Currently edited frameset
-        m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged, viewMode, this );
+        m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged, viewMode );
     else
-        frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged, 0L, viewMode, this );
+        frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged, 0L, viewMode );
 }
 
 void KWCanvas::keyPressEvent( QKeyEvent *e )

@@ -149,7 +149,7 @@ public:
 
     virtual void drawContents( QPainter *p, const QRect &r,
                                QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit* edit, KWViewMode *viewMode, KWCanvas *canvas );
+                               KWFrameSetEdit* edit, KWViewMode *viewMode );
 
     virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect & crect,
                             QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit * edit );

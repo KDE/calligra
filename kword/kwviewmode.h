@@ -46,7 +46,7 @@ class KoPageLayout;
 class KWViewMode
 {
 protected:
-    KWViewMode( KWDocument * doc ) : m_doc( doc ) {}
+    KWViewMode( KWDocument * doc, bool drawFrameBorders ) : m_doc( doc ), m_drawFrameBorders( drawFrameBorders ) {}
 public:
     virtual ~KWViewMode() {}
 
@@ -90,6 +90,10 @@ public:
     // Should selected text be drawn as such?
     virtual bool drawSelections() {return true;}
 
+    // Should we see frame borders? This setting doesn't always come from KWView...
+    bool drawFrameBorders() const { return m_drawFrameBorders; }
+    void setDrawFrameBorders(bool b)  { m_drawFrameBorders = b; }
+
     // Should this frameset be visible in this viewmode? True by default, all are shown.
     virtual bool isFrameSetVisible( const KWFrameSet* /*frameset*/ ) { return true; }
 
@@ -117,13 +121,14 @@ protected:
     static const unsigned short s_shadowOffset;
 
     KWDocument * m_doc;
+    bool m_drawFrameBorders;
 };
 
 // The 'normal' view mode (pages below one another)
 class KWViewModeNormal : public KWViewMode
 {
 public:
-    KWViewModeNormal( KWDocument * doc ) : KWViewMode( doc ) {}
+    KWViewModeNormal( KWDocument * doc, bool drawFrameBorders ) : KWViewMode( doc, drawFrameBorders ) {}
     virtual ~KWViewModeNormal() {}
 
     // This view mode is very easy to implement ;-P
@@ -140,7 +145,7 @@ public:
 class KWViewModePrint : public KWViewModeNormal // we inherit the "normal" viewmode
 {
 public:
-    KWViewModePrint( KWDocument * doc ) : KWViewModeNormal( doc ) {}
+    KWViewModePrint( KWDocument * doc ) : KWViewModeNormal( doc, false /*drawFrameBorders*/ ) {}
     virtual ~KWViewModePrint() {}
     virtual bool drawSelections() { return false; }
 };
@@ -149,7 +154,7 @@ public:
 class KWViewModeEmbedded : public KWViewMode
 {
 public:
-    KWViewModeEmbedded ( KWDocument * doc ) : KWViewMode( doc ) {}
+    KWViewModeEmbedded ( KWDocument * doc ) : KWViewMode( doc, false /*drawFrameBorders*/ ) {}
     virtual ~ KWViewModeEmbedded() {}
 
     // This view mode is very easy to implement ;-P
@@ -169,7 +174,7 @@ public:
 class KWViewModePreview : public KWViewMode
 {
 public:
-    KWViewModePreview( KWDocument * doc, int _nbPagePerRow=4 ) : KWViewMode( doc ),
+    KWViewModePreview( KWDocument * doc, bool drawFrameBorders, int _nbPagePerRow=4 ) : KWViewMode( doc, drawFrameBorders ),
         m_pagesPerRow(_nbPagePerRow),
         m_spacing(10)
     {}
@@ -192,7 +197,7 @@ private:
 class KWViewModeText : public KWViewMode
 {
 public:
-    KWViewModeText( KWDocument * doc ) : KWViewMode( doc ) {}
+    KWViewModeText( KWDocument * doc ) : KWViewMode( doc, false ) {}
     virtual ~KWViewModeText() {}
 
     KWTextFrameSet *textFrameSet() const;

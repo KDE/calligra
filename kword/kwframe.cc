@@ -559,7 +559,7 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
       m_info( FI_BODY ),
       grpMgr( 0L ), m_removeableHeader( false ), m_visible( true ),
       m_protectSize( false ),
-      m_anchorTextFs( 0L ), m_currentDrawnCanvas( 0L ), m_dcop( 0L )
+      m_anchorTextFs( 0L ), m_dcop( 0L )
 {
     // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
@@ -703,7 +703,7 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect,QC
 }
 
 
-void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas )
+void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
     //kdDebug(32002) << "KWFrameSet::drawFrameBorder frame: " << frame
@@ -726,8 +726,7 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     // Draw default borders using view settings...
     QPen viewSetting( lightGray ); // TODO use qcolorgroup
     // ...except when printing, or embedded doc, or disabled.
-    if ( ( painter->device()->devType() == QInternal::Printer ) ||
-         !canvas || !canvas->gui()->getView()->viewFrameBorders() )
+    if ( !viewMode || !viewMode->drawFrameBorders() )
     {
         viewSetting.setColor( bgBrush.color() );
     }
@@ -1113,7 +1112,7 @@ const QPtrList<KWFrame> & KWFrameSet::framesInPage( int pageNum ) const
 
 void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
                                bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas )
+                               KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
 #ifdef DEBUG_DRAW
     kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
@@ -1121,111 +1120,121 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                    << " crect= " << crect
                    << endl;
 #endif
-    m_currentDrawnCanvas = canvas;
     if ( viewMode->hasFrames() || !isMainFrameset() )
     {
         QPtrListIterator<KWFrame> frameIt( frameIterator() );
         KWFrame * lastRealFrame = 0L;
-        double lastRealFrameTop = 0;
-        double totalHeight = 0; // in pt, to avoid accumulating rounding errors
+        //double lastRealFrameTop = 0;
+        //double totalHeight = 0; // in pt, to avoid accumulating rounding errors
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame *frame = frameIt.current();
-            if ( !frame->isValid() )
-            {
-                kdDebug(32002) << "KWFrameSet::drawContents invalid frame " << frame << endl;
-                continue;
-            }
+            // The settings come from this frame
+            KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
 
-            QRect r(crect);
-            QRect normalFrameRect( m_doc->zoomRect( frame->innerRect() ) );
-
-            QRect frameRect( viewMode->normalToView( normalFrameRect ) );
-            r = r.intersect( frameRect );
-#ifdef DEBUG_DRAW
-            kdDebug(32002) << "                    frame=" << frame << " " << *frame << endl;
-            kdDebug(32002) << "                    normalFrameRect=" << normalFrameRect << " frameRect=" << frameRect << endl;
-            kdDebug(32002) << "                    crect=" << crect << " intersec=" << r << " todraw=" << !r.isEmpty() << endl;
-#endif
-            if ( !r.isEmpty() )
-            {
-                // This translates the coordinates in the document contents
-                // ( frame and r are up to here in this system )
-                // into the frame's own coordinate system.
-                int offsetX = normalFrameRect.left();
-                double frameTopPt = ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight;
-                int offsetY = normalFrameRect.top() - m_doc->zoomItY( frameTopPt );
-
-                QRect fcrect = viewMode->viewToNormal( r );
-#ifdef DEBUG_DRAW
-                kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << fcrect << "."
-                          << " Will move by (" << -offsetX << ", -(" << normalFrameRect.top() << "-" << m_doc->zoomItY(frameTopPt) << ") == " << -offsetY << ")." << endl;
-#endif
-                // y=-1 means all (in QRT), so let's not go there !
-                //QPoint tl( QMAX( 0, fcrect.left() - offsetX ), QMAX( 0, fcrect.top() - offsetY ) );
-                //fcrect.moveTopLeft( tl );
-                fcrect.moveBy( -offsetX, -offsetY );
-                Q_ASSERT( fcrect.x() >= 0 );
-                Q_ASSERT( fcrect.y() >= 0 );
-
-                // fcrect is now the portion of the frame to be drawn,
-                // in the frame's coordinates and in pixels
-#ifdef DEBUG_DRAW
-                kdDebug() << "KWFrameSet::drawContents in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
-#endif
-                // The settings come from this frame
-                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-
-                QRegion reg = frameClipRegion( p, frame, r, viewMode, onlyChanged );
-                if ( !reg.isEmpty() )
-                {
-                    p->save();
-                    p->setClipRegion( reg );
-
-                    p->translate( r.x() - fcrect.x(), r.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
-                    p->setBrushOrigin( p->brushOrigin() + r.topLeft() - fcrect.topLeft() );
-
-                    QBrush bgBrush( settingsFrame->backgroundColor() );
-                    bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
-                    cg.setBrush( QColorGroup::Base, bgBrush );
-                    drawFrame( frame, p, fcrect, cg, onlyChanged, resetChanged, edit );
-
-                    p->restore();
-                }
-            }
-            if(! getGroupManager()) {
-                QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-                r = crect.intersect( outerRect );
-                if ( !r.isEmpty() )
-                {
-                    // Now draw the frame border
-                    // Clip frames on top if onlyChanged, but don't clip to the frame
-                    QRegion reg = frameClipRegion( p, frame, r, viewMode, onlyChanged, false );
-                    if ( !reg.isEmpty() )
-                    {
-                        p->save();
-                        p->setClipRegion( reg );
-                        KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-                        drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
-                        drawMargins( frame, p, r, cg, viewMode );
-
-                        p->restore();
-                    }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
-                }
-            }
-
+            drawFrameAndBorders( frame, p, crect, cg, onlyChanged, resetChanged, edit, viewMode, settingsFrame );
             if ( !lastRealFrame || !frame->isCopy() )
             {
                 lastRealFrame = frame;
-                lastRealFrameTop = totalHeight;
+                //lastRealFrameTop = totalHeight;
             }
-            totalHeight += frame->innerHeight();
+            //totalHeight += frame->innerHeight();
         }
     } else {
         // Text view mode
         drawFrame( 0L /*frame*/, p, crect, cg, onlyChanged, resetChanged, edit );
     }
-    m_currentDrawnCanvas = 0L;
+}
+
+void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
+                                      QPainter *painter, const QRect &crect,
+                                      QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                                      KWFrameSetEdit *edit, KWViewMode *viewMode,
+                                      KWFrame *settingsFrame )
+{
+    if ( !frame->isValid() )
+    {
+        kdDebug(32002) << "KWFrameSet::drawFrameAndBorders invalid frame " << frame << endl;
+        return;
+    }
+
+    QRect normalOuterFrameRect( frame->outerRect() );
+    QRect outerFrameRect( viewMode->normalToView( normalOuterFrameRect ) );
+    QRect outerCRect = crect.intersect( outerFrameRect );
+#ifdef DEBUG_DRAW
+    kdDebug(32001) << "                    frame=" << frame << " " << *frame << endl;
+    kdDebug(32001) << "                    (outer) normalFrameRect=" << normalOuterFrameRect << " frameRect=" << outerFrameRect << endl;
+    kdDebug(32001) << "                    crect=" << crect << " intersec=" << r << " todraw=" << !r.isEmpty() << endl;
+#endif
+    if ( !outerCRect.isEmpty() )
+    {
+        // Determine settingsFrame if not passed (for speedup)
+        if ( !settingsFrame )
+            settingsFrame = this->settingsFrame( frame );
+
+        QRect normalInnerFrameRect( m_doc->zoomRect( frame->innerRect() ) );
+        QRect innerFrameRect( viewMode->normalToView( normalInnerFrameRect ) );
+
+        // This translates the coordinates in the document contents
+        // ( frame and r are up to here in this system )
+        // into the frame's own coordinate system.
+        int offsetX = normalInnerFrameRect.left();
+        double frameTopPt = frame->internalY();
+        //double frameTopPt = ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight;
+        int offsetY = normalInnerFrameRect.top() - m_doc->zoomItY( frameTopPt );
+
+        QRect innerCRect = outerCRect.intersect( innerFrameRect );
+        QRect fcrect = viewMode->viewToNormal( innerCRect );
+#ifdef DEBUG_DRAW
+        kdDebug(32001) << "                    (inner) normalFrameRect=" << normalInnerFrameRect << " frameRect=" << innerFrameRect << endl;
+        kdDebug(32001) << "                    crect after view-to-normal:" << fcrect << "."
+                       << " Will move by (" << -offsetX << ", -(" << normalInnerFrameRect.top() << "-" << m_doc->zoomItY(frameTopPt) << ") == " << -offsetY << ")." << endl;
+#endif
+        // y=-1 means all (in QRT), so let's not go there !
+        //QPoint tl( QMAX( 0, fcrect.left() - offsetX ), QMAX( 0, fcrect.top() - offsetY ) );
+        //fcrect.moveTopLeft( tl );
+        fcrect.moveBy( -offsetX, -offsetY );
+        Q_ASSERT( fcrect.x() >= 0 );
+        Q_ASSERT( fcrect.y() >= 0 );
+
+        // fcrect is now the portion of the frame to be drawn,
+        // in the frame's coordinates and in pixels
+#ifdef DEBUG_DRAW
+        kdDebug() << "KWFrameSet::drawContents in internal coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << r.x()-fcrect.x() << "," << r.y()-fcrect.y() << "." << endl;
+#endif
+        QRegion reg = frameClipRegion( painter, frame, innerCRect, viewMode, onlyChanged );
+        if ( !reg.isEmpty() )
+        {
+            painter->save();
+            painter->setClipRegion( reg );
+
+            painter->translate( innerCRect.x() - fcrect.x(), innerCRect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
+            painter->setBrushOrigin( painter->brushOrigin() + innerCRect.topLeft() - fcrect.topLeft() );
+
+            QBrush bgBrush( settingsFrame->backgroundColor() );
+            bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
+            cg.setBrush( QColorGroup::Base, bgBrush );
+            drawFrame( frame, painter, fcrect, cg, onlyChanged, resetChanged, edit );
+
+            painter->restore();
+        }
+        if( !getGroupManager() ) // not for table cells
+        {
+            // Now draw the frame border
+            // Clip frames on top, but don't clip to the frame, the border is outside
+            // TODO (speed) : calc this one first, then reduce it to get the above inner-frame-region
+            QRegion reg = frameClipRegion( painter, frame, outerCRect, viewMode, onlyChanged, false );
+            if ( !reg.isEmpty() )
+            {
+                painter->save();
+                painter->setClipRegion( reg );
+                drawFrameBorder( painter, frame, settingsFrame, outerCRect, viewMode );
+                drawMargins( frame, painter, outerCRect, cg, viewMode );
+
+                painter->restore();
+            }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+        }
+    }
 }
 
 void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
@@ -1266,12 +1275,11 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
         {
             theCRect.moveBy( -frameRect.x(), -frameRect.y() );
             //// TODO KWFrame * settingsFrame = ( f->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-            KWFrame * settingsFrame = f;
+            //KWFrame * settingsFrame = f;
             doubleBufPainter->translate( -myFrameRect.x(), -myFrameRect.y() );
-            /// m_currentDrawnCanvas can be 0L when saving!
             /// TODO: pass viewmode as param if we really need it. Or better, use translated painter in drawFrameBorder
-            //f->frameSet()->drawFrameBorder( painter, f, settingsFrame, theCRect, m_currentDrawnCanvas->viewMode(), m_currentDrawnCanvas );
-            //f->frameSet()->drawMargins( f, painter, theCRect, cg, m_currentDrawnCanvas->viewMode() );
+            //f->frameSet()->drawFrameBorder( painter, f, settingsFrame, theCRect, viewMode );
+            //f->frameSet()->drawMargins( f, painter, theCRect, cg, viewMode );
             doubleBufPainter->translate( frameRect.x(), frameRect.y() );
             f->frameSet()->drawFrameContents( f, doubleBufPainter, theCRect, cg, 0 );
         }
@@ -1651,10 +1659,10 @@ KWFrameSetEdit::KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas )
 
 void KWFrameSetEdit::drawContents( QPainter *p, const QRect &crect,
                                    QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                                   KWViewMode *viewMode, KWCanvas *canvas )
+                                   KWViewMode *viewMode )
 {
     //kdDebug() << "KWFrameSetEdit::drawContents " << frameSet()->getName() << endl;
-    frameSet()->drawContents( p, crect, cg, onlyChanged, resetChanged, this, viewMode, canvas );
+    frameSet()->drawContents( p, crect, cg, onlyChanged, resetChanged, this, viewMode );
 }
 
 void KWFrameSetEdit::showPopup( KWFrame* frame, KWView* view, const QPoint & _point )

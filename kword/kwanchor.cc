@@ -169,7 +169,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 #endif
 
     QColorGroup cg2( cg );
-    m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
+    m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode() );
 
     if( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer )
     {

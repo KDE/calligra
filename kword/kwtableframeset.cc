@@ -100,12 +100,12 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
         m_doc->updateAllFrames();
 }
 
-KoRect KWTableFrameSet::floatingFrameKoRect( int frameNum )
+KoRect KWTableFrameSet::floatingFrameKoRect( int /*frameNum*/ )
 {
     return boundingRect();
 }
 
-QRect KWTableFrameSet::floatingFrameRect( int /*frameNum TODO */ )
+QRect KWTableFrameSet::floatingFrameRect( int /*frameNum */ )
 {
     KoRect r = boundingRect();
     if ( r.isNull() )
@@ -197,7 +197,7 @@ double KWTableFrameSet::topWithoutBorder()
     KWTableFrameSet::Cell *cell;
     double top = 0.0;
     int i;
-    for (i=0; cell = getCell(0,i); i++)
+    for (i=0; (cell = getCell(0,i)); i++)
     {
         top = QMAX( top, m_rowPositions[0] + cell->topBorder() );
     }
@@ -210,7 +210,7 @@ double KWTableFrameSet::leftWithoutBorder()
     KWTableFrameSet::Cell *cell;
     double left = 0.0;
     int i;
-    for (i=0; cell = getCell(i,0); i++)
+    for (i=0; (cell = getCell(i,0)); i++)
     {
         left = QMAX( left, m_colPositions[0] + cell->leftBorder() );
     }
@@ -1578,7 +1578,7 @@ void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyReg
     }
 }
 
-void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas ) {
+void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode ) {
 
     /*  Draw the borders on top of the lines stores in the m_rowPositions and m_colPositions arrays.
      *  check the relevant cells for borders and thus line thickness.
@@ -1590,8 +1590,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
     QPen minsizeLinePen( red ); // TODO use qcolorgroup
     QColor defaultBorderColor = KoTextFormat::defaultTextColor( &painter );
     const int minborder = 1;
-    bool drawPreviewLines = !(painter.device()->devType() == QInternal::Printer ||
-         !canvas || !canvas->gui()->getView()->viewFrameBorders());
+    bool drawPreviewLines = viewMode && viewMode->drawFrameBorders();
 
     // *** draw horizontal lines *** //
     unsigned int row=0;
@@ -1780,7 +1779,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                     QColorGroup & cg, bool onlyChanged, bool resetChanged,
-                                    KWFrameSetEdit * edit, KWViewMode * viewMode, KWCanvas *canvas )
+                                    KWFrameSetEdit * edit, KWViewMode * viewMode )
 {
     for (unsigned int i=0; i < m_cells.count() ; i++)
     {
@@ -1789,13 +1788,13 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
             KWTableFrameSetEdit * tableEdit = static_cast<KWTableFrameSetEdit *>(edit);
             if ( tableEdit->currentCell() && m_cells.at(i) == tableEdit->currentCell()->frameSet() )
             {
-                m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, tableEdit->currentCell(), viewMode, canvas );
+                m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, tableEdit->currentCell(), viewMode );
                 continue;
             }
         }
-        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode, canvas );
+        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode );
     }
-    drawBorders( *painter, crect, viewMode, canvas );
+    drawBorders( *painter, crect, viewMode );
 }
 
 void KWTableFrameSet::zoom( bool forPrint ) {

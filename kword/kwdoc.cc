@@ -2442,7 +2442,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
         KWFrameSet * frameset = fit.current();
         if ( frameset->isVisible( viewMode ) && !frameset->isFloating() )
             frameset->drawContents( &painter, rect, cg, false /*onlyChanged*/, true /*resetChanged*/,
-                                    0L, viewMode, 0L );
+                                    0L, viewMode );
     }
     delete viewMode;
 }

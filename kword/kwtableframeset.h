@@ -116,10 +116,10 @@ public:
      *                    allowing the caller to determine which areas remain to be painted.
      */
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
-    void drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas );
+    void drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode );
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas );
+                               KWFrameSetEdit *edit, KWViewMode *viewMode );
     // Dummy since we reimplement drawContents
     virtual void drawFrame(KWFrame *, QPainter *, const QRect &, QColorGroup &,
         bool, bool, KWFrameSetEdit *) {}

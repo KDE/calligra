@@ -418,10 +418,10 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
 
 void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
                                    bool onlyChanged, bool resetChanged,
-                                   KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas )
+                                   KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
     m_currentViewMode = viewMode;
-    KWFrameSet::drawContents( p, crect, cg, onlyChanged, resetChanged, edit, viewMode, canvas );
+    KWFrameSet::drawContents( p, crect, cg, onlyChanged, resetChanged, edit, viewMode );
 
     // Main textframeset: draw the footnote line if there are footnotes
     if ( isMainFrameset() && viewMode->hasFrames() )
@@ -590,7 +590,6 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *theFrame )
 {
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
-    m_currentDrawnCanvas = canvas;
     KWViewMode *viewMode = canvas->viewMode();
     bool hasFrames = viewMode->hasFrames();
     m_currentViewMode = viewMode;
@@ -705,7 +704,6 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                                     0, cursorHeight - cursor->parag()->lineSpacing( line ) );
         }
     }
-    m_currentDrawnCanvas = 0L;
     m_currentDrawnFrame = 0L;
 }
 
