@@ -424,7 +424,7 @@ void KexiStartupFileDialogBase::setFilter(const QString& filter)
 	QStringList filters = QStringList::split("\n",d->kde_filters);
 	QString current;
 	QString converted; //finally - converted filter
-	for (QStringList::Iterator it = filters.begin(); it!=filters.end();++it) {
+	for (QStringList::ConstIterator it = filters.constBegin(); it!=filters.constEnd();++it) {
 		current = *it;
 		QString new_f;//filter part
 		QString new_name;//filter name part

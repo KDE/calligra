@@ -64,7 +64,7 @@ Manager::lookup()
 	int offset = size; //we will insert not described parts from #offset
 	
 	//compute order
-	for(KTrader::OfferList::Iterator it(tlist.begin()); it != tlist.end(); ++it)
+	for(KTrader::OfferList::ConstIterator it(tlist.constBegin()); it != tlist.constEnd(); ++it)
 	{
 		KService::Ptr ptr = (*it);
 		QString mime = ptr->property("X-Kexi-TypeMime").toString();

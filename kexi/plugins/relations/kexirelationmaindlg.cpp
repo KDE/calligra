@@ -52,7 +52,7 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *paren
 	//show all tables
 	KexiDB::Connection *conn = mainWin->project()->dbConnection();
 	QStringList tables = conn->tableNames();
-	for (QStringList::Iterator it = tables.begin(); it!=tables.end(); ++it) {
+	for (QStringList::ConstIterator it = tables.constBegin(); it!=tables.constEnd(); ++it) {
 		m_rel->addTable( *it );
 	}
 }

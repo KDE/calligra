@@ -446,7 +446,7 @@ MySqlDB::tableNames()
 	delete result;
 
 	m_tableDefs.clear();
-	for(QStringList::const_iterator it=s.begin();it!=s.end();++it) {
+	for(QStringList::ConstIterator it=s.constBegin();it!=s.constEnd();++it) {
 		m_tableDefs.insert((*it),createTableDef(*it));
 	}
 

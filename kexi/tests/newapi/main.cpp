@@ -168,7 +168,7 @@ int main(int argc, char** argv)
 	KexiDB::DriverManager manager;// = new KexiDB::DriverManager;
 	QStringList names = manager.driverNames();
 	kdDebug() << "DRIVERS: " << endl;
-	for (QStringList::iterator it = names.begin(); it != names.end() ; ++it)
+	for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
 		kdDebug() << *it << endl;
 	if (manager.error() || names.isEmpty()) {
 		manager.debugError();

@@ -230,7 +230,6 @@ void KexiQueryDesignerGuiEditor::initTableRows()
 
 void KexiQueryDesignerGuiEditor::updateColumsData()
 {
-//	d->fieldColumnData
 	d->dataTable->tableView()->acceptRowEdit();
 
 	QStringList sortedTableNames;
@@ -247,7 +246,6 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 			if (sortedTableNames.end() == qFind( sortedTableNames.begin(), sortedTableNames.end(), tableName )) {
 				//table not found: mark this line for later remove
 				rowsToDelete += r;
-//				buf->add(new KexiProperty("_rm", 0) );
 			}
 		}
 	}
@@ -259,7 +257,7 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 //	d->tablesColumnData->clear();
 //	d->fieldColumnData->clear();
 
-	for (QStringList::Iterator it = sortedTableNames.begin(); it!=sortedTableNames.end(); ++it) {
+	for (QStringList::const_iterator it = sortedTableNames.constBegin(); it!=sortedTableNames.constEnd(); ++it) {
 		//table
 		KexiDB::TableSchema *table = d->relations->tables()->find(*it)->table();
 //	for (TablesDictIterator it(*d->relations->tables());it.current();++it) {

@@ -136,7 +136,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 	bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0!=Kexi::findParent<KexiDialogBase>(o, "KexiDialogBase"));
 
 	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
-	for (KActionPtrList::Iterator it=d->sharedActions.begin(); it!=d->sharedActions.end(); ++it) {
+	for (KActionPtrList::ConstIterator it=d->sharedActions.constBegin(); it!=d->sharedActions.constEnd(); ++it) {
 //			setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 		KAction *a = *it;
 		if (!insideDialogBase && d->mainWin->actionCollection()!=a->parentCollection()) {

@@ -67,7 +67,7 @@ KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata)
 	}
 	delete conn;
 	conn = 0;
-	for (QStringList::Iterator it = dbnames.begin(); it!=dbnames.end(); ++it) {
+	for (QStringList::ConstIterator it = dbnames.constBegin(); it!=dbnames.constEnd(); ++it) {
 		// project's caption is just the same as database name - nothing better is available
 		KexiProjectData *pdata = new KexiProjectData(conndata, *it, *it);
 		d->list.append( pdata );

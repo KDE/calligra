@@ -84,7 +84,7 @@ QValidator::State KexiMultiValidator::validate( QString & input, int & pos ) con
 		return Invalid;
 	State s;
 	QValueList<KexiValidator*>::const_iterator it;
-	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
+	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
 		s = (*it)->validate(input, pos);
 		if (s==Intermediate || s==Invalid)
 			return s;
@@ -95,7 +95,7 @@ QValidator::State KexiMultiValidator::validate( QString & input, int & pos ) con
 void KexiMultiValidator::fixup ( QString & input ) const
 {
 	QValueList<KexiValidator*>::const_iterator it;
-	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
+	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
 		(*it)->fixup(input);
 	}
 }

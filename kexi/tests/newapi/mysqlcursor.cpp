@@ -13,7 +13,7 @@ int main(int argc, char * argv[])
 	KexiDB::DriverManager manager;
 	QStringList names = manager.driverNames();
 	kdDebug() << "DRIVERS: " << endl;
-	for (QStringList::iterator it = names.begin(); it != names.end() ; ++it)
+	for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
 		kdDebug() << *it << endl;
 	if (manager.error()) {
 		kdDebug() << manager.errorMsg() << endl;
@@ -61,7 +61,7 @@ int main(int argc, char * argv[])
 	QStringList l=conn->databaseNames();
 	if (l.isEmpty()) kdDebug()<<conn->errorMsg()<<endl;
 	kdDebug()<<"Databases:"<<endl;
-	for (QStringList::iterator it = l.begin(); it != l.end() ; ++it)
+	for (QStringList::ConstIterator it = l.constBegin(); it != l.constEnd() ; ++it)
 		kdDebug() << *it << endl;
 
 	if (c) {

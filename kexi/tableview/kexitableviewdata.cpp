@@ -483,10 +483,10 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 	//check constraints:
 	//-check if every NOT NULL and NOT EMPTY field is filled
 	KexiTableViewColumn::ListIterator it_f(columns);
-	KexiDB::RowData::iterator it_r = item.begin();
+	KexiDB::RowData::ConstIterator it_r = item.constBegin();
 	int col = 0;
 	const QVariant *val;
-	for (;it_f.current() && it_r!=item.end();++it_f,++it_r,col++) {
+	for (;it_f.current() && it_r!=item.constEnd();++it_f,++it_r,col++) {
 		KexiDB::Field *f = it_f.current()->field();
 		val = 0;
 		if (f->isNotNull()) {
@@ -540,7 +540,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 	}
 	else {//js UNTESTED!!! - not db-aware version
 		KexiDB::RowEditBuffer::SimpleMap b = m_pRowEditBuffer->simpleBuffer();
-		for (KexiDB::RowEditBuffer::SimpleMap::Iterator it = b.begin();it!=b.end();++it) {
+		for (KexiDB::RowEditBuffer::SimpleMap::ConstIterator it = b.constBegin();it!=b.constEnd();++it) {
 			uint i=0;
 			for (KexiTableViewColumn::ListIterator it2(columns);it2.current();++it2, i++) {
 				if (it2.current()->field()->name()==it.key()) {
@@ -619,7 +619,7 @@ void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete, bool re
 		return;
 	int last_r=0;
 	first();
-	for (QValueList<int>::const_iterator r_it = rowsToDelete.begin(); r_it!=rowsToDelete.end(); ++r_it) {
+	for (QValueList<int>::ConstIterator r_it = rowsToDelete.constBegin(); r_it!=rowsToDelete.constEnd(); ++r_it) {
 		for (; last_r<(*r_it); last_r++) {
 			next();
 		}

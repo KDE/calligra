@@ -2143,7 +2143,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	sqlset.reserve(1024);
 	sqlwhere.reserve(1024);
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
-	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 		if (!sqlset.isEmpty())
 			sqlset+=",";
 		sqlset += (escapeIdentifier(it.key()->field->name()) + "=" +
@@ -2174,7 +2174,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	}
 	//success: now also assign new value in memory:
 	QMap<QueryColumnInfo*,uint> fieldsOrder = query.fieldsOrder();
-	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
 	return true;
@@ -2222,7 +2222,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		sqlvals += m_driver->valueToSQL(anyField,QVariant()/*NULL*/);
 	}
 	else {
-		for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
+		for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 			if (!sqlcols.isEmpty()) {
 				sqlcols+=",";
 				sqlvals+=",";
@@ -2242,7 +2242,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	}
 	//success: now also assign new value in memory:
 	QMap<QueryColumnInfo*,uint> fieldsOrder = query.fieldsOrder();
-	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
 

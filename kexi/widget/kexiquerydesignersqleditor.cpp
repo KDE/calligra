@@ -196,7 +196,7 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 
 			KActionCollection *ac = d->view->actionCollection();
 			KActionPtrList alist = ac->actions();
-			for (KActionPtrList::iterator it=alist.begin(); it!=alist.end(); ++it) {
+			for (KActionPtrList::ConstIterator it=alist.constBegin(); it!=alist.constEnd(); ++it) {
 				if (!enabledActionsDict[(*it)->name()]) {
 		//			ac->remove(*it);
 					(*it)->unplugAll();

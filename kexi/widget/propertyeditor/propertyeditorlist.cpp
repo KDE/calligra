@@ -84,7 +84,7 @@ PropComboBox::setSelected(const QStringList &list)
 {
 	QStringList strlist(list);
 	m_listbox->clearSelection();
-	for(QStringList::iterator it = strlist.begin(); it != strlist.end(); ++it)
+	for(QStringList::ConstIterator it = strlist.constBegin(); it != strlist.constEnd(); ++it)
 	{
 		QListBoxItem *item = m_listbox->findItem(*it, Qt::ExactMatch);
 		if(item)

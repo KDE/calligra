@@ -157,7 +157,7 @@ void KexiTableViewPropertyBuffer::slotRowsDeleted( const QValueList<int> &rows )
 	const int orig_size = size();
 	int prev_r = -1;
 	int num_removed = 0, cur_r = -1;
-	for (QValueList<int>::const_iterator r_it = rows.begin(); r_it!=rows.end() && *r_it < orig_size; ++r_it) {
+	for (QValueList<int>::ConstIterator r_it = rows.constBegin(); r_it!=rows.constEnd() && *r_it < orig_size; ++r_it) {
 		cur_r = *r_it;// - num_removed;
 		if (prev_r>=0) {
 //			kdDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2 << endl;

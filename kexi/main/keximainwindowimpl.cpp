@@ -801,8 +801,8 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
-	for (QValueList<KexiProjectData::ObjectInfo>::Iterator it = projectData->autoopenObjects.begin();
-		it != projectData->autoopenObjects.end(); ++it )
+	for (QValueList<KexiProjectData::ObjectInfo>::ConstIterator it = projectData->autoopenObjects.constBegin();
+		it != projectData->autoopenObjects.constEnd(); ++it )
 	{
 		KexiProjectData::ObjectInfo info = *it;
 		KexiPart::Info *i = Kexi::partManager().info( QCString("kexi/")+info["type"].lower().latin1() );

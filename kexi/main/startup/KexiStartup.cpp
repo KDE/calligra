@@ -125,9 +125,9 @@ KexiStartupHandler::~KexiStartupHandler()
 bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name)
 {
 	QCStringList list = args->getOptionList(action_name);
-	QCStringList::const_iterator it;
+	QCStringList::ConstIterator it;
 	bool atLeastOneFound = false;
-	for ( it = list.begin(); it!=list.end(); ++it) {
+	for ( it = list.constBegin(); it!=list.constEnd(); ++it) {
 		QString type_name, obj_name, item=*it;
 		int idx;
 		bool name_required = true;

@@ -310,10 +310,10 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 		if (ts) {//table.fieldname
 			//check if "table" is covered by an alias
 			const QValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
-			QValueList<int>::ConstIterator it = tPositions.begin();
+			QValueList<int>::ConstIterator it = tPositions.constBegin();
 			QCString tableAlias;
 			bool covered = true;
-			for (; it!=tPositions.end() && covered; ++it) {
+			for (; it!=tPositions.constEnd() && covered; ++it) {
 				tableAlias = parseInfo.querySchema->tableAlias(*it);
 				if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
 					covered = false; //uncovered

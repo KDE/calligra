@@ -121,9 +121,9 @@ PixmapCollection::save(QDomNode parentNode)
 	QDomElement collection = domDoc.createElement("collection");
 	parentNode.appendChild(collection);
 
-	PixmapMap::Iterator it;
-	PixmapMap::Iterator endIt = m_pixmaps.end();
-	for(it = m_pixmaps.begin(); it != endIt; ++it)
+	PixmapMap::ConstIterator it;
+	PixmapMap::ConstIterator endIt = m_pixmaps.constEnd();
+	for(it = m_pixmaps.constBegin(); it != endIt; ++it)
 	{
 		QDomElement item = domDoc.createElement("pixmap");
 		collection.appendChild(item);
@@ -273,9 +273,9 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 	connect(m_iconView, SIGNAL(contextMenuRequested(QIconViewItem*, const QPoint&)), this, SLOT(displayMenu(QIconViewItem*, const QPoint&)));
 	connect(m_iconView, SIGNAL(itemRenamed(QIconViewItem*, const QString &)), this, SLOT(renameCollectionItem(QIconViewItem*, const QString&)));
 
-	PixmapMap::Iterator it;
-	PixmapMap::Iterator endIt = collection->m_pixmaps.end();
-	for(it = collection->m_pixmaps.begin(); it != endIt; ++it)
+	PixmapMap::ConstIterator it;
+	PixmapMap::ConstIterator endIt = collection->m_pixmaps.end();
+	for(it = collection->m_pixmaps.constBegin(); it != endIt; ++it)
 		createIconViewItem(it.key());
 }
 
@@ -384,9 +384,9 @@ PixmapCollectionChooser::PixmapCollectionChooser(PixmapCollection *collection, c
 	m_iconView->setAutoArrange(true);
 	m_iconView->setMode(KIconView::Select);
 
-	PixmapMap::Iterator it;
-	PixmapMap::Iterator endIt = collection->m_pixmaps.end();
-	for(it = collection->m_pixmaps.begin(); it != endIt; ++it)
+	PixmapMap::ConstIterator it;
+	PixmapMap::ConstIterator endIt = collection->m_pixmaps.constEnd();
+	for(it = collection->m_pixmaps.constBegin(); it != endIt; ++it)
 		new PixmapIconViewItem(m_iconView, it.key(), getPixmap(it.key()));
 
 	QIconViewItem *item = m_iconView->findItem(selectedItem, Qt::ExactMatch);
@@ -428,9 +428,9 @@ PixmapCollectionChooser::slotUser1()
 	dialog.exec();
 
 	m_iconView->clear();
-	PixmapMap::Iterator it;
-	PixmapMap::Iterator endIt = m_collection->m_pixmaps.end();
-	for(it = m_collection->m_pixmaps.begin(); it != endIt; ++it)
+	PixmapMap::ConstIterator it;
+	PixmapMap::ConstIterator endIt = m_collection->m_pixmaps.constEnd();
+	for(it = m_collection->m_pixmaps.constBegin(); it != endIt; ++it)
 		 new PixmapIconViewItem(m_iconView, it.key(), getPixmap(it.key()));
 }
 
