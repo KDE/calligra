@@ -1354,8 +1354,8 @@ void ViewPrivate::adjustActions( bool mode )
   actions->showFormulaBar->setChecked( doc->showFormulaBar() );
   actions->showCommentIndicator->setChecked( doc->showCommentIndicator() );
 
-  view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
-
+  if ( activeSheet )
+    view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
 }
 
 void ViewPrivate::adjustActions( KSpreadSheet* sheet, KSpreadCell* cell )
@@ -1398,10 +1398,7 @@ void ViewPrivate::adjustWorkbookActions( bool mode )
       actions->hideSheet->setEnabled( state );
     }
     actions->showSheet->setEnabled( workbook->hiddenSheets().count() > 0 );
-    if ( activeSheet->isProtected() )
-      actions->renameSheet->setEnabled( false );
-    else
-      actions->renameSheet->setEnabled( true );
+    actions->renameSheet->setEnabled( activeSheet && !activeSheet->isProtected() );
   }
 }
 
@@ -1622,8 +1619,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 
-    QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
-
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
     d->calcLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
@@ -1633,36 +1628,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     d->initActions();
 
-    QPtrListIterator<KSpreadSheet> it( d->doc->map()->tableList() );
-    for( ; it.current(); ++it )
-      addTable( it.current() );
-
-    KSpreadSheet * tbl = 0L;
-    if ( d->doc->isEmbedded() )
-    {
-        tbl = d->doc->displayTable();
-    }
-
-    if ( !tbl )
-        tbl = d->doc->map()->initialActiveTable();
-    if ( tbl )
-      setActiveTable( tbl );
-    else
-    {
-      //activate first table which is not hiding
-      tbl = d->workbook->findTable( d->workbook->visibleSheets().first());
-      if ( !tbl )
-      {
-        tbl = d->workbook->firstTable();
-        if ( tbl )
-        {
-          tbl->setHidden( false );
-          QString tabName = tbl->tableName();
-          d->tabBar->addTab( tabName );
-        }
-      }
-      setActiveTable( tbl );
-    }
 
     QObject::connect( d->doc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
@@ -1685,10 +1650,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     viewZoom( QString::number( d->doc->zoom() ) );
 
+    // ## Might be wrong, if doc isn't loaded yet
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
 
-    d->adjustActions( !d->activeSheet->isProtected() );
-    d->adjustWorkbookActions( !d->workbook->isProtected() );
+    // If doc was already loaded, initialize things
+    // Otherwise the doc will do it in completeLoading.
+    if ( !d->doc->map()->tableList().isEmpty() )
+        initialPosition();
 }
 
 KSpreadView::~KSpreadView()
@@ -1939,15 +1907,15 @@ void KSpreadView::refreshLocale()
 
 void KSpreadView::recalcWorkSheet()
 {
-  d->doc->emitBeginOperation( true );
   if ( d->activeSheet != 0 )
   {
+    d->doc->emitBeginOperation( true );
     bool b = d->activeSheet->getAutoCalc();
     d->activeSheet->setAutoCalc( true );
     d->activeSheet->recalc();
     d->activeSheet->setAutoCalc( b );
+    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 
@@ -2332,6 +2300,41 @@ void KSpreadView::spellCheckerFinished()
 
 void KSpreadView::initialPosition()
 {
+    kdDebug() << "KSpreadView::initialPosition" << endl;
+
+    // Loading completed, pick initial worksheet
+    QPtrListIterator<KSpreadSheet> it( d->doc->map()->tableList() );
+    for( ; it.current(); ++it )
+      addTable( it.current() );
+
+    KSpreadSheet * tbl = 0L;
+    if ( d->doc->isEmbedded() )
+    {
+        tbl = d->doc->displayTable();
+    }
+
+    if ( !tbl )
+        tbl = d->doc->map()->initialActiveTable();
+    if ( tbl )
+      setActiveTable( tbl );
+    else
+    {
+      //activate first table which is not hiding
+      tbl = d->workbook->findTable( d->workbook->visibleSheets().first());
+      if ( !tbl )
+      {
+        tbl = d->workbook->firstTable();
+        if ( tbl )
+        {
+          tbl->setHidden( false );
+          QString tabName = tbl->tableName();
+          d->tabBar->addTab( tabName );
+        }
+      }
+      setActiveTable( tbl );
+    }
+    kdDebug() << "active table: " << tbl->tableName() << endl;
+
     // Set the initial position for the marker as store in the XML file,
     // (1,1) otherwise
     int col = d->workbook->initialMarkerColumn();
@@ -2373,6 +2376,8 @@ void KSpreadView::initialPosition()
 
     d->adjustActions( !d->activeSheet->isProtected() );
     d->adjustWorkbookActions( !d->workbook->isProtected() );
+
+    refreshView();
 }
 
 
@@ -2573,62 +2578,62 @@ void KSpreadView::oszilloscope()
 
 void KSpreadView::changeTextColor()
 {
-  d->doc->emitBeginOperation(false);
   if ( d->activeSheet != 0L )
   {
+    d->doc->emitBeginOperation(false);
     d->activeSheet->setSelectionTextColor( selectionInfo(), d->actions->textColor->color() );
+    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 void KSpreadView::setSelectionTextColor(const QColor &txtColor)
 {
-  d->doc->emitBeginOperation(false);
   if (d->activeSheet != 0L)
   {
+    d->doc->emitBeginOperation(false);
     d->activeSheet->setSelectionTextColor( selectionInfo(), txtColor );
+    d->doc->emitEndOperation( selectionInfo()->selection() );
   }
-  d->doc->emitEndOperation( selectionInfo()->selection() );
 }
 
 void KSpreadView::changeBackgroundColor()
 {
-  d->doc->emitBeginOperation(false);
   if ( d->activeSheet != 0L )
   {
+    d->doc->emitBeginOperation(false);
     d->activeSheet->setSelectionbgColor( selectionInfo(), d->actions->bgColor->color() );
+    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 void KSpreadView::setSelectionBackgroundColor(const QColor &bgColor)
 {
-  d->doc->emitBeginOperation(false);
   if (d->activeSheet != 0L)
   {
+    d->doc->emitBeginOperation(false);
     d->activeSheet->setSelectionbgColor( selectionInfo(), bgColor );
+    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 void KSpreadView::changeBorderColor()
 {
-  d->doc->emitBeginOperation(false);
   if ( d->activeSheet != 0L )
   {
+    d->doc->emitBeginOperation(false);
     d->activeSheet->setSelectionBorderColor( selectionInfo(), d->actions->borderColor->color() );
+    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 void KSpreadView::setSelectionBorderColor(const QColor &bdColor)
 {
-  d->doc->emitBeginOperation(false);
   if (d->activeSheet != 0L)
   {
+    d->doc->emitBeginOperation(false);
     d->activeSheet->setSelectionBorderColor( selectionInfo(), bdColor );
+    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 void KSpreadView::helpUsing()
@@ -4808,7 +4813,8 @@ int KSpreadView::bottomBorder() const
 void KSpreadView::refreshView()
 {
   KSpreadSheet * table = activeTable();
-
+  if ( !table )
+    return;
 
   bool active = table->getShowFormula();
 
@@ -6577,21 +6583,22 @@ int KSpreadView::canvasYOffset() const
 
 void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-  d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  if ( d->activeSheet )
+  {
+    d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 
-  if ( ev->activated() )
-  {
-    if ( d->calcLabel )
+    if ( ev->activated() )
     {
-      resultOfCalc();
+      if ( d->calcLabel )
+        resultOfCalc();
     }
-  }
-  else
-  {
-    /*if (d->calcLabel)
-      {
-      disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
-      }*/
+    else
+    {
+      /*if (d->calcLabel)
+        {
+        disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
+        }*/
+    }
   }
 
   KoView::guiActivateEvent( ev );
@@ -6679,9 +6686,11 @@ void KSpreadView::updateShowTableMenu()
 
 void KSpreadView::closeEditor()
 {
-  d->doc->emitBeginOperation( false );
-  d->canvas->closeEditor();
-  d->doc->emitEndOperation( selectionInfo()->selection() );
+  if ( d->activeSheet ) { // #45822
+    d->doc->emitBeginOperation( false );
+    d->canvas->closeEditor();
+    d->doc->emitEndOperation( selectionInfo()->selection() );
+  }
 }
 
 

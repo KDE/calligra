@@ -877,6 +877,10 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
   //  d->workbook->update();
 
+  QPtrListIterator<KoView> it( views() );
+  for (; it.current(); ++it )
+    ((KSpreadView*)it.current())->initialPosition();
+
   kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
   setModified( FALSE );
