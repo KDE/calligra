@@ -178,7 +178,7 @@ void OOWriterWorker::writeStylesXml(void)
         zipWriteData("portrait");
     }
     
-    zipWriteData(" fo:margin-top=\"");
+    zipWriteData("\" fo:margin-top=\"");
     zipWriteData(QString::number(m_paperBorderTop));
     zipWriteData("pt\" fo:margin-bottom=\"");
     zipWriteData(QString::number(m_paperBorderBottom));
@@ -186,10 +186,8 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData(QString::number(m_paperBorderLeft));
     zipWriteData("pt\" fo:margin-right=\"");
     zipWriteData(QString::number(m_paperBorderRight));
-    zipWriteData("pt\" ");
+    zipWriteData("pt\"/>\n");
     
-    
-    zipWriteData("/>\n");
     zipWriteData("  </style:page-master-name>\n");
     zipWriteData(" </style:automatic-styles>\n");
     
