@@ -583,6 +583,8 @@ void KWFrameMoveCommand::execute()
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
         frame->setCoords(tmpFrameMove->sizeOfEnd.left(),tmpFrameMove->sizeOfEnd.top(),tmpFrameMove->sizeOfEnd.right(),tmpFrameMove->sizeOfEnd.bottom());
+
+
         if(frame->isSelected())
             frame->setSelected(true);
         //it's necessary because the text doesn't move
@@ -608,6 +610,7 @@ void KWFrameMoveCommand::unexecute()
         KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
         FrameResizeStruct *tmpFrameMove=m_frameMove.at(m_IndexFrame.find(tmp));
         frame->setCoords(tmpFrameMove->sizeOfBegin.left(),tmpFrameMove->sizeOfBegin.top(),tmpFrameMove->sizeOfBegin.right(),tmpFrameMove->sizeOfBegin.bottom());
+
         if(frame->isSelected())
             frame->setSelected(true);
         if(frame->getFrameSet()->getFrameType() == FT_FORMULA)
