@@ -919,7 +919,6 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     {
         m_pageList.at( i )->saveOasisPage( xmlWriter, ( i+1 ) );
     }
-
     xmlWriter.endElement();
     xmlWriter.endElement(); // root element
     xmlWriter.endDocument();
@@ -1203,11 +1202,9 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         {
             fillStyleStack( o, context );
             KPGroupObject *kpgroupobject = new KPGroupObject();
-            QDomNode nodegroup = /*drawPage.namedItem( "draw:g" )*/object.firstChild();
+            QDomNode nodegroup = object.firstChild();
 
-            kdDebug()<<" nodegroup.isNull() :"<<nodegroup.isNull()<<endl;
-
-            kpgroupobject->loadOasisGroupObject( this, pos, newpage, /*nodegroup*/object, context, animationShow);
+            kpgroupobject->loadOasisGroupObject( this, pos, newpage, object, context, animationShow);
             if ( groupObject )
                 groupObject->addObjects( kpgroupobject );
             else
@@ -1274,22 +1271,22 @@ void KPresenterDoc::fillStyleStack( const QDomElement& object, KoOasisContext & 
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ))
     {
-        kdDebug()<<"Add 'presentation:style-name' \n";
+        //kdDebug()<<"Add 'presentation:style-name' \n";
         addStyles( context.oasisStyles().styles()[object.attribute( "presentation:style-name" )], context );
     }
     if ( object.hasAttribute( "draw:style-name" ) )
     {
-        kdDebug()<<"draw:style-name :"<<object.attribute( "draw:style-name" )<<endl;
+        //kdDebug()<<"draw:style-name :"<<object.attribute( "draw:style-name" )<<endl;
         addStyles( context.oasisStyles().styles()[object.attribute( "draw:style-name" )], context);
     }
     if ( object.hasAttribute( "draw:text-style-name" ) )
     {
-        kdDebug()<<"Add 'draw:text-style-name' \n";
+        //kdDebug()<<"Add 'draw:text-style-name' \n";
         addStyles( context.oasisStyles().styles()[object.attribute( "draw:text-style-name" )], context );
     }
     if ( object.hasAttribute( "text:style-name" ) )
     {
-        kdDebug()<<"Add 'text:style-name' \n";
+        //kdDebug()<<"Add 'text:style-name' \n";
         addStyles( context.oasisStyles().styles()[object.attribute( "text:style-name" )], context );
     }
 }

@@ -297,6 +297,7 @@ public:
     void getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects );
 
     bool saveOasisPage( KoXmlWriter &xmlWriter, int posPage );
+    bool saveOasisNote( KoXmlWriter &xmlWriter );
 
 
 protected:

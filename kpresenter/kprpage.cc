@@ -109,8 +109,21 @@ bool KPrPage::saveOasisPage( KoXmlWriter &xmlWriter, int posPage /*add style*/ )
     {
         it.current()->saveOasis( xmlWriter );
     }
-
+    saveOasisNote( xmlWriter );
     xmlWriter.endElement();
+    return true;
+}
+
+bool KPrPage::saveOasisNote( KoXmlWriter &xmlWriter )
+{
+    if ( m_noteText.isEmpty() )
+        return true;
+    xmlWriter.startElement( "presentation:notes" );
+    xmlWriter.startElement( "draw:text-box" );
+    //todo add note text here.
+    xmlWriter.endElement();
+    xmlWriter.endElement();
+
     return true;
 }
 
