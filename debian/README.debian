@@ -1,8 +1,13 @@
-koffice for DEBIAN
-----------------------
+KDE NOTICE
+==========
 
 There used to be two versions of kde.deb : one made by debian, and
 one made by the KDE team. Fortunatly this has changed to the better
 and this package is both: the debian package and the kde package.
 
-Stephan Kulow <coolo@kde.org>, Sat, 12 Jun 1999 03:30:02 +0100
+Andreas Jellinghaus <aj@debian.org> used to maintain the debian part
+and Stephan Kulow took them over, when he orphaned them.
+
+Since then Ivan Moore has been working on them with Stephan's guidance
+and has just recently taken them over completely.
+
