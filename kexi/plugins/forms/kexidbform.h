@@ -76,6 +76,8 @@ class KexiDBForm :
 
 		void updateTabStopsOrder(KFormDesigner::Form* form);
 
+		void updateTabStopsOrder();
+
 		virtual bool eventFilter ( QObject * watched, QEvent * e );
 
 		virtual bool valueIsNull();

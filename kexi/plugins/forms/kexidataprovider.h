@@ -21,7 +21,7 @@
 #define KEXIDATAPROVIDER_H
 
 #include "kexiformdataiteminterface.h"
-#include <qdict.h>
+#include <qptrdict.h>
 
 class KexiTableItem;
 namespace KexiDB {
@@ -75,7 +75,7 @@ class KexiFormDataProvider : public KexiDataItemChangesListener
 
 	protected:
 		QWidget *m_mainWidget;
-		QDict<char> *m_duplicatedItems;
+		QPtrDict<char> *m_duplicatedItems;
 		typedef QMap<KexiFormDataItemInterface*,uint> KexiFormDataItemInterfaceToIntMap;
 		QPtrList<KexiFormDataItemInterface> m_dataItems;
 		QStringList m_usedDataSources;

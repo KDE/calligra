@@ -363,7 +363,7 @@ bool KexiFormScrollView::columnEditable(int col)
 	kdDebug() << "KexiFormScrollView::columnEditable(" << col << ")" << endl;
 	foreach_list (QPtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
 		kdDebug() << (dynamic_cast<QWidget*>(it.current()) ? dynamic_cast<QWidget*>(it.current())->name() : "" ) 
-			<< it.current()->dataSource() << " " << endl;
+			<< " " << it.current()->dataSource() << endl;
 	}
 	kdDebug() << "-- focus widgets --" << endl;
 	foreach_list (QPtrListIterator<QWidget>, it, *dbFormWidget()->orderedFocusWidgets()) {
@@ -381,11 +381,9 @@ bool KexiFormScrollView::columnEditable(int col)
 	if (!item || item->isReadOnly())
 		return false;
 
-	KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
-	return KexiDataAwareObjectInterface::columnEditable( it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1 );
-
-//	KexiFormDataItemInterface *item = m_dataItems.at(col);
-//	return item && !item->isReadOnly() && KexiDataAwareObjectInterface::columnEditable(col);
+//	KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
+//	return KexiDataAwareObjectInterface::columnEditable( it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1 );
+	return KexiDataAwareObjectInterface::columnEditable( col );
 }
 
 void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
@@ -416,7 +414,7 @@ void KexiFormScrollView::initDataContents()
 
 KexiTableViewColumn* KexiFormScrollView::column(int col)
 {
-	const uint id = fieldNumberForColumn(col);
+	const int id = fieldNumberForColumn(col);
 	return (id >= 0) ? m_data->column( id ) : 0;
 }
 

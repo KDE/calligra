@@ -20,7 +20,7 @@ kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
   ./libkexiformutils.la
 
 lib_LTLIBRARIES = libkexiformutils.la
-libkexiformutils_la_SOURCES = kexiformdataiteminterface.cpp
+libkexiformutils_la_SOURCES = kexiformdataiteminterface.cpp kexidataawarewidgetinfo.cpp
 libkexiformutils_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiformutils_la_LIBADD = ../../core/libkexicore.la
 

@@ -139,11 +139,21 @@ KexiFormView::~KexiFormView()
 //	if (m_cursor)
 //		m_conn->deleteCursor(m_cursor);
 //	delete m_provider;
-	if (m_queryIsOwned)
-		delete m_query;
+	deleteQuery();
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	conn->deleteCursor(m_cursor);
 //	delete m_data;
+}
+
+void
+KexiFormView::deleteQuery()
+{
+	if (m_queryIsOwned) {
+		delete m_query;
+	} else {
+//! @todo remove this shared query from listened queries list
+	}
+	m_query = 0;
 }
 
 KFormDesigner::Form*
@@ -321,19 +331,28 @@ KexiFormView::afterSwitchFrom(int mode)
 //TMP!!
 		initDataSource();
 
-		//set focus on 1st focusable widget
-//		if (form()->tabStops()->first() && form()->tabStops()->first()->widget())
-//			form()->tabStops()->first()->widget()->setFocus();
-		if (m_dbform->orderedFocusWidgets()->first())
-			SET_FOCUS_USING_REASON(m_dbform->orderedFocusWidgets()->first(), QFocusEvent::Tab);
-//			m_dbform->orderedFocusWidgets()->first()->setFocus();
+		//set focus on 1st focusable widget which has valid dataSource property set
+		if (!m_dbform->orderedFocusWidgets()->isEmpty()) {
+			QPtrListIterator<QWidget> it(*m_dbform->orderedFocusWidgets());
+			for (;it.current(); ++it)
+				if (dynamic_cast<KexiFormDataItemInterface*>(it.current())
+					&& !dynamic_cast<KexiFormDataItemInterface*>(it.current())->dataSource().isEmpty())
+					break;
+			if (!it.current()) //eventually, focus first available widget if nothing other is available
+				it.toFirst();
+
+			SET_FOCUS_USING_REASON(it.current(), QFocusEvent::Tab);
+//			SET_FOCUS_USING_REASON(m_dbform->orderedFocusWidgets()->first(), QFocusEvent::Tab);
+		}
 	}
 	return true;
 }
 
 void KexiFormView::initDataSource()
 {
-	QString dataSourceString = m_dbform->dataSource();
+	deleteQuery();
+	QString dataSourceString( m_dbform->dataSource() );
+//! @todo also handle anonymous (not stored) queries provided as statements here
 	if (dataSourceString.isEmpty())
 		return;
 /*			if (m_previousDataSourceString.lower()==dataSourceString.lower() && !m_cursor) {
@@ -344,39 +363,64 @@ void KexiFormView::initDataSource()
 	m_previousDataSourceString = dataSourceString;
 	bool ok = true;
 	//collect all data-aware widgets and create query schema
-//	if (!m_provider)
-//		m_provider = new KexiDataProvider();
 	m_scrollView->setMainWidget(m_dbform);
-//			if (m_cursor)
-//				m_conn->deleteCursor(m_cursor);
-//	KexiDB::Cursor *cursor = 0;
-	if (m_queryIsOwned)
-		delete m_query;
-	m_query = new KexiDB::QuerySchema();
 	QStringList sources( m_scrollView->usedDataSources() );
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	KexiDB::TableSchema *tableSchema = conn->tableSchema( dataSourceString );
-	ok = tableSchema != 0;
+	if (tableSchema) {
+		/* We will build a _minimum_ query schema from selected table fields. */
+		m_query = new KexiDB::QuerySchema();
+		m_queryIsOwned = true;
+	}
+	else {
+		//No such table schema: try to find predefined query schema.
+		//Note: In general, we could not skip unused fields within this query because 
+		//      it can have GROUP BY clause.
+//! @todo check if the query could have skipped unused fields (no GROUP BY, no joins, etc.)
+		m_query = conn->querySchema( dataSourceString );
+		m_queryIsOwned = false;
+		ok = m_query != 0;
+	}
+
+	QValueList<uint> invalidSources;
+
 	if (ok) {
-		QValueList<uint> invalidSources;
+		KexiDB::IndexSchema *pkey = tableSchema ? tableSchema->primaryKey() : 0;
+		if (pkey) {
+			//always add all fields from table's primary key
+			// (don't worry about duplicated, unique list will be computed later)
+			sources += pkey->names();
+			KexiDBDbg << "KexiFormView::initDataSource(): pkey added to data sources: " << pkey->names() << endl;
+		}
+
 		uint index = 0;
-		for (QStringList::ConstIterator it = sources.constBegin(); 
+		for (QStringList::ConstIterator it = sources.constBegin();
 			it!=sources.constEnd(); ++it, index++) {
 /*! @todo add expression support */
-			KexiDB::Field *f = tableSchema->field(*it);
+			QString fieldName( (*it).lower() );
+			//remove "tablename." if it was prepended
+			if (tableSchema && fieldName.startsWith( tableSchema->name().lower()+"." ))
+				fieldName = fieldName.mid(tableSchema->name().length()+1);
+			//remove "queryname." if it was prepended
+			if (!tableSchema && fieldName.startsWith( m_query->name().lower()+"." ))
+				fieldName = fieldName.mid(m_query->name().length()+1);
+			KexiDB::Field *f = tableSchema ? tableSchema->field(fieldName) : m_query->field(fieldName);
 			if (!f) {
 /*! @todo show error */
 				//remove this widget from the set of data widgets in the provider
 				invalidSources += index;
 				continue;
 			}
-			m_query->addField( f );
+			if (tableSchema) {
+				if (!m_query->hasField( f )) {
+					//we're building a new query: add this field
+					m_query->addField( f );
+				}
+			}
 		}
 		if (invalidSources.count()==sources.count()) {
 			//all data sources are invalid! don't execute the query
-			if (m_queryIsOwned)
-				delete m_query;
-			m_query = 0;
+			deleteQuery();
 		}
 		else {
 			m_cursor = conn->executeQuery( *m_query );
@@ -384,13 +428,15 @@ void KexiFormView::initDataSource()
 		m_scrollView->invalidateDataSources( invalidSources, m_query );
 		ok = m_cursor!=0;
 	}
-//			delete m_data;
+
+	if (!invalidSources.isEmpty())
+		m_dbform->updateTabStopsOrder();
+
 	if (ok) {
 //! @todo PRIMITIVE!! data setting:
 //! @todo KexiTableViewData is not great name for data class here... rename/move?
 		KexiTableViewData* data = new KexiTableViewData(m_cursor);
 		data->preloadAllRows();
-//not needed here: cursor will be owned		conn->deleteCursor(cursor);
 
 ///*! @todo few backends return result count for free! - no need to reopen() */
 //			int resultCount = -1;

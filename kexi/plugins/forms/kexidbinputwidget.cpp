@@ -185,6 +185,7 @@ void KexiDBInputWidget::setInvalidState( const QString& text ) {
 	Setting this explicitly until the widgettype is set automatically
 	*/
 	setWidgetType( Undefined );
+	setFocusPolicy(QWidget::NoFocus);
 	QLabel* lbl = dynamic_cast<QLabel*>( p_widget );
 	if ( lbl != 0L ) {
 		lbl->setText( text );

@@ -254,6 +254,9 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 --add "autoTabStop" (bool) 
 ^^^ implement above so Form::autoAssignTabStops() will be called before form saving 
     and before switching to data mode (this is already performed in FormIO::saveFormToDom().
+- add setting expressions for data-aware widget's dataSource
+- add setting anonymous (not stored) queries as form's dataSource
+- display "Autonumber" string for data-aware widgets
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -375,7 +378,7 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 - reuse KexiNameWidget in KexiNewProjectWizard!
 - use KPasswordDialog::disableCoreDumps() for security reasons
 - IDEA for connection shortcuts:
-  Mysql Query Borwser has a simple xml file defined:
+  Mysql Query Browser has a simple xml file defined:
   http://dev.mysql.com/doc/query-browser/en/mysql-gui-appendix-store-connections.html
 - allow to choose if the file should be locked (opened in EXCLUSIVE mode) or not
   (THIS SHOULD BE DEFAULT BEHAVIOUR)
@@ -477,6 +480,39 @@ TODO:::::::
 	dipesh	column( col ) returns NULL
 	jstaniek	dipesh: it's only within your example project...
 	dipesh	therefore column( col )->readOnly() crashes...
+
+reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-2003.ps
+
+2005-04-01..04
+* Kexi Forms many improvements added for Kexi Forms, 
+  includeing editable query results. *
+KexiDB
+- BIC CHANGE:
+-- FieldList: field(const QString&) added
+-- QuerySchema: field(const QString&) added; 
+   insertField() and fieldsExpanded() improved;  
+- documentation improved
+Forms
+- setting (predefined) queries as form's dataSource works
+- editing data for _editable_ queries works (but not rows adding or removing)
+- setting "tablename.fieldname" for data-aware widget's dataSource works
+- setting "queryname.fieldname" for data-aware widget's dataSource works
+- when a table is set as form's data source, all primary key's fields 
+  are always fetched (so editing works well with autonumbers)
+- autoSync set to false for dataSource properties (using KexiDataAwareWidgetInfo)
+- improved support for invalid dataSource property
+- data-aware widgets with invalid dataSource property are now removed from tab-focus cycle
+  (setInvalidState() now implies setting ClickFocus flag)
+- on form opening: first data-aware widget with TabFocus is focused (if available)
+- void KexiFormDataProvider::fillDuplicatedDataItems() works well 
+  also if there are data sources like "tablename.fieldname"
+Forms Library
+- autoSync flag can be overriden independently within every widget factory 
+  for every single class, using WidgetInfo::setAutoSyncForProperty()
+- when deselecting a widget with autoSync set to false property value is now set properly
+Main
+- KexiBrowser: pressing Enter key to accept item renaming won't execute "open" action
+
 
 2005-03-30
 Forms

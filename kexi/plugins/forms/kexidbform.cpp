@@ -257,7 +257,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 	QWidget *topLevelWidget = form->widget()->topLevelWidget();
 //js	form->updateTabStopsOrder(); //certain widgets can have now updated focusPolicy properties, fix this
 	uint numberOfDataAwareWidgets = 0;
-	if (d->orderedFocusWidgets.isEmpty()) {
+//	if (d->orderedFocusWidgets.isEmpty()) {
 		//generate a new list
 		for (KFormDesigner::ObjectTreeListIterator it(form->tabStopsIterator()); it.current(); ++it) {
 			if (it.current()->widget()->focusPolicy() & QWidget::TabFocus) {
@@ -287,7 +287,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 				d->orderedDataAwareWidgets.append( it.current()->widget() );
 			}
 		}//for
-	}
+//	}
 /*	else {
 		//restore ordering
 		for (QPtrListIterator<QWidget> it(d->orderedFocusWidgets); it.current(); ++it) {
@@ -300,7 +300,17 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 		}
 //		SET_FOCUS_USING_REASON(focusWidget(), QFocusEvent::Tab);
 	}*/
- }
+}
+
+void KexiDBForm::updateTabStopsOrder()
+{
+	for (QPtrListIterator<QWidget> it( d->orderedFocusWidgets ); it.current();) {
+		if (! (it.current()->focusPolicy() & QWidget::TabFocus))
+			d->orderedFocusWidgets.remove( it.current() );
+		else
+			++it;
+	}
+}
 
 bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 {

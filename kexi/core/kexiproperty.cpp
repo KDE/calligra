@@ -174,7 +174,7 @@ void KexiProperty::init(QVariant value)
 	m_changed = false;
 	m_visible = true;
 	m_list = 0;
-	m_autosync = -1;
+	m_autosync = cancelled;
 	m_children_dict = 0;
 	m_children_list = 0;
 	m_parent = 0;

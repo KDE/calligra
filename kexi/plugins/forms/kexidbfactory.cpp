@@ -41,6 +41,7 @@
 #include "kexiformview.h"
 #include "kexilabel.h"
 #include "kexidbinputwidget.h"
+#include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
 
@@ -118,6 +119,9 @@ KexiDBLineEdit::~KexiDBLineEdit()
 void KexiDBLineEdit::setInvalidState( const QString& displayText )
 {
 	setReadOnly(true);
+//! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
+	if (focusPolicy() & TabFocus)
+		setFocusPolicy(QWidget::ClickFocus);
 	setText(displayText);
 }
 
@@ -179,7 +183,8 @@ void KexiDBLineEdit::clear()
 KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
 {
-	KFormDesigner::WidgetInfo *wView = new KFormDesigner::WidgetInfo(this);
+//	KFormDesigner::WidgetInfo *wView = new KFormDesigner::WidgetInfo(this);
+	KexiDataAwareWidgetInfo *wView = new KexiDataAwareWidgetInfo(this);
 	wView->setPixmap("form");
 	wView->setClassName("KexiDBForm");
 	wView->setName(i18n("Database Form"));
@@ -187,7 +192,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wView->setDescription(i18n("A db-aware form widget"));
 	m_classes.append(wView);
 
-	KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
+	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
 	wSubForm->setPixmap("form");
 	wSubForm->setClassName("KexiSubForm");
 	wSubForm->setName(i18n("Sub Form"));
@@ -196,7 +201,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_classes.append(wSubForm);
 
 /* @todo allow to inherit from stdwidgets' KLineEdit */
-	KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
+	KexiDataAwareWidgetInfo *wLineEdit = new KexiDataAwareWidgetInfo(this);
 	wLineEdit->setPixmap("lineedit");
 	wLineEdit->setClassName("KexiDBLineEdit");
 	wLineEdit->addAlternateClassName("QLineEdit", true/*override*/);
@@ -208,7 +213,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_classes.append(wLineEdit);
 
 	/* @todo allow to inherit from stdwidgets' KLineEdit */
-	KFormDesigner::WidgetInfo *wLabel = new KFormDesigner::WidgetInfo(this);
+	KexiDataAwareWidgetInfo *wLabel = new KexiDataAwareWidgetInfo(this);
 	wLabel->setPixmap("label");
 	wLabel->setClassName("KexiLabel");
 	wLabel->addAlternateClassName("QLabel", true/*override*/);
@@ -218,7 +223,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLabel->setDescription(i18n("A widget to display text"));
 	m_classes.append(wLabel);
 
-	KFormDesigner::WidgetInfo *wInput = new KFormDesigner::WidgetInfo(this);
+	KexiDataAwareWidgetInfo *wInput = new KexiDataAwareWidgetInfo(this);
 	wInput->setPixmap("edit");
 	wInput->setClassName("KexiDBInputWidget");
 	wInput->addAlternateClassName("QLabel", true/*override*/);

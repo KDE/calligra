@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003   Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004   Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
 #include <qvariant.h>
 #include <qasciidict.h>
 #include <qguardedptr.h>
+
+#include <tristate.h>
 
 class QObject;
 class QString;
@@ -186,18 +188,22 @@ class KEXICORE_EXPORT KexiProperty
 		/*! \return the QVariant::Type of property value and QVariant::StringList if this is a list property. */
 		QVariant::Type type() const;
 
-		/*! \return 1 if the property should be synced automatically in Property Editor
-		  as soon as editor contents change (e.g. when the user types text). If autoSync() == 0, property value
-		  will be updated when the user presses Enter or when another editor gets the focus.
-		  Property follow Property Editor global rule if autoSync() != 0 and 1 (default)
+		/*! \return true if the property should be synced automatically in Property Editor
+		  as soon as editor contents change (e.g. when the user types text). 
+		  Returns false, if property value will be updated when the user presses Enter 
+		  or when another editor gets the focus.
+		  Property follow Property Editor global rule if autoSync flag has cancelled value (the default).
 		*/
-		inline int autoSync() const { return m_autosync; }
+		inline tristate autoSync() const { return m_autosync; }
 
-		/*! if \a sync == true, then the property will be synced automatically in Property Editor
-		  as soon as editor contents change (e.g. when the user types text). If \a sync == false, property value
-		  will be updated when the user presses Enter or when another editor gets the focus.
+		/*! if \a sync value is true, then the property will be synced automatically in Property Editor
+		  as soon as editor contents change (e.g. when the user types text). 
+		  If \a sync value is false, property value will be updated when the user presses 
+		  Enter or when another editor gets the focus.
+		  If \a sync value is cancelled, default autoSync flag is used 
+		  (usually taken from Property Editor).
 		*/
-		inline void setAutoSync(int sync) { m_autosync = sync; }
+		inline void setAutoSync(tristate sync) { m_autosync = sync; }
 
 		//! \return true if this preperty value is changed.
 		bool changed() const;
@@ -274,7 +280,7 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty::Dict* m_children_dict;
 		KexiProperty::List* m_children_list;
 
-		int m_autosync;
+		tristate m_autosync;
 		bool m_changed : 1;
 		bool m_visible : 1;
 

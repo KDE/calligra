@@ -54,7 +54,7 @@ void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add,
 
 void KexiDataItemInterface::signalValueChanged()
 {
-	if (!m_listener || m_disable_signalValueChanged)
+	if (!m_listener || m_disable_signalValueChanged || isReadOnly())
 		return;
 	m_listener->valueChanged(this);
 }

@@ -72,12 +72,6 @@ void KexiFormDataProvider::setMainWidget(QWidget* mainWidget)
 	for (QDictIterator<char> it(tmpSources); it.current(); ++it) {
 		m_usedDataSources += it.currentKey();
 	}
-	//fill m_fieldNumbersForDataItems mapping from data item to field number
-	//(needed for fillDataItems)
-	for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-		m_fieldNumbersForDataItems.insert( it.current(), 
-			m_usedDataSources.findIndex(it.current()->dataSource().lower()) );
-	}
 }
 
 void KexiFormDataProvider::fillDataItems(KexiTableItem& row)
@@ -95,31 +89,31 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 	KexiFormDataItemInterface* item, const QVariant& value)
 {
 	if (!m_duplicatedItems) {
-		//build (once) a set of duplicated data items (having the same data sources)
+		//build (once) a set of duplicated data items (having the same fields assigned)
 		//so we can later check if an item is duplicated with a cost of o(1)
-		QMap<QString,int> tmpDuplicatedItems;
-		QMapIterator<QString,int> it_dup;
+		QMap<KexiDB::Field*,int> tmpDuplicatedItems;
+		QMapIterator<KexiDB::Field*,int> it_dup;
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			it_dup = tmpDuplicatedItems.find( it.current()->dataSource().lower() );
+			it_dup = tmpDuplicatedItems.find( it.current()->field() );
 			uint count;
 			if (it_dup==tmpDuplicatedItems.end())
 				count = 0;
 			else
 				count = it_dup.data();
-			tmpDuplicatedItems.insert( it.current()->dataSource().lower(), ++count );
+			tmpDuplicatedItems.insert( it.current()->field(), ++count );
 		}
-		m_duplicatedItems = new QDict<char>(1013);
+		m_duplicatedItems = new QPtrDict<char>(101);
 		for (it_dup = tmpDuplicatedItems.begin(); it_dup!=tmpDuplicatedItems.end(); ++it_dup) {
 			if (it_dup.data() > 1) {
         m_duplicatedItems->insert( it_dup.key(), (char*)1 );
-				kdDebug() << "duplicated item: " << it_dup.key() << " (" << it_dup.data() << " times)" << endl;
+				kdDebug() << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name() 
+					<< " (" << it_dup.data() << " times)" << endl;
 			}
 		}
 	}
-	if (m_duplicatedItems->find( item->dataSource().lower() )) {
-		QString dataSource( item->dataSource().lower() );
+	if (m_duplicatedItems->find( item->field() )) {
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			if (it.current()!=item && dataSource == it.current()->dataSource().lower()) {
+			if (it.current()!=item && item->field() == it.current()->field()) {
 				kdDebug() << "- setting value for item '" 
 					<< dynamic_cast<QObject*>(it.current())->name() << " == " << value.toString() << endl;
 				it.current()->setValue( value );
@@ -135,42 +129,81 @@ void KexiFormDataProvider::valueChanged(KexiDataItemInterface* item)
 void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invalidSources,
  KexiDB::QuerySchema* query)
 {
-	QValueVector<int> newIndices(m_dataItems.count());
-	uint i = 0, number = 0;
+	//fill m_fieldNumbersForDataItems mapping from data item to field number
+	//(needed for fillDataItems)
+	KexiDB::QueryColumnInfo::Vector fieldsExpanded;
+	uint dataFieldsCount; // == fieldsExpanded.count() if query is available or else == m_dataItems.count()
+	if (query) {
+		fieldsExpanded = query->fieldsExpanded();
+		dataFieldsCount = fieldsExpanded.count();
+		//for (uint i = 0; i < fieldsExpanded.size(); i++) 
+		QMap<KexiDB::QueryColumnInfo*,uint> fieldsOrder( query->fieldsOrder() );
+		for (QMapConstIterator<KexiDB::QueryColumnInfo*,uint> it = fieldsOrder.constBegin(); it!=fieldsOrder.constEnd(); ++it) {
+			kdDebug() << "query->fieldsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
+		}
+		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
+			KexiFormDataItemInterface *item = it.current();
+			KexiDB::QueryColumnInfo* ci = query->columnInfo( it.current()->dataSource() );
+			int index = ci ? query->fieldsOrder()[ ci ] : -1;
+			kdDebug() << "query->fieldsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index 
+				<< " (dataSource: " << item->dataSource() << ", name=" << dynamic_cast<QObject*>(item)->name() << ")" << endl;
+			if (index!=-1)
+				m_fieldNumbersForDataItems.insert( item, index );
+	//todo
+	//WRONG: not only used data sources can be fetched!
+	//			m_fieldNumbersForDataItems.insert( it.current(), 
+	//				m_usedDataSources.findIndex(it.current()->dataSource().lower()) );
+		}
+	}
+	else {//!query
+		dataFieldsCount = m_dataItems.count();
+	}
+
+//	QValueVector<int> newIndices(dataFieldsCount); //m_dataItems.count());
+//	uint i = 0, number = 0;
+	//KexiFormDataItemInterfaceToIntMap newFieldNumbersForDataItems;
+	//KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin();
 
 	//in 'newIndices' let's collect new indices for every data source
 	foreach(QValueList<uint>::ConstIterator, it, invalidSources) {
-		//all previous indices have corresponding DS
-		for (; i < (*it); i++) {
-			newIndices[i] = number++;
-			kexidbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
-		}
-		//this idex have no corresponding DS
-		newIndices[i]=-1;
-		kexidbg << "invalidateDataSources(): " << i << " -> " << -1 << endl;
-		i++;
+		//all previous indices have corresponding data source
+//		for (; i < (*it); i++) {
+//			newIndices[i] = number++;
+			//kexidbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
+//		}
+		//this index have no corresponding data source
+//		newIndices[i]=-1;
+		KexiFormDataItemInterface *item = m_dataItems.at( *it );
+		if (item)
+			item->setInvalidState( QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?") );
+		m_dataItems.remove(*it);
+		kexidbg << "invalidateDataSources(): " << (*it) << " -> " << -1 << endl;
+//		i++;
 	}
 	//fill remaining part of the vector
-	for (; i < m_dataItems.count(); i++) {
-		newIndices[i] = number++;
-		kexidbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
-	}
+//	for (; i < dataFieldsCount; i++) { //m_dataItems.count(); i++) {
+		//newIndices[i] = number++;
+		//kexidbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
+	//}
 
-	//recreate m_fieldNumbersForDataItems and mark widgets with invalid DS
+#if 0
+	//recreate m_fieldNumbersForDataItems and mark widgets with invalid data sources
 	KexiFormDataItemInterfaceToIntMap newFieldNumbersForDataItems;
 	foreach(KexiFormDataItemInterfaceToIntMap::ConstIterator, it, m_fieldNumbersForDataItems) {
-		const uint newIndex = newIndices[ it.data() ];
-		if (newIndex==-1) {
-			kexidbg << "invalidateDataSources(): removing" << endl;
-			m_dataItems.remove(it.key());
-			it.key()->setInvalidState( QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?") );
-		}
-		else {
+		bool ok;
+		const int newIndex = newIndices.at( it.data(), &ok );
+		if (ok && newIndex!=-1) {
 			kexidbg << "invalidateDataSources(): " << it.key()->dataSource() << ": " << it.data() << " -> " << newIndex << endl;
 			newFieldNumbersForDataItems.replace(it.key(), newIndex);
 		}
+		else {
+			kexidbg << "invalidateDataSources(): removing " << it.key()->dataSource() << endl;
+			m_dataItems.remove(it.key());
+			it.key()->setInvalidState( QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?") );
+		}
 	}
-	m_fieldNumbersForDataItems = newFieldNumbersForDataItems;
+#endif
+//	m_fieldNumbersForDataItems = newFieldNumbersForDataItems;
 
 	//update data sources set (some of them may be removed)
 	QDict<char> tmpUsedDataSources(1013);
@@ -184,10 +217,12 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 	//}
 	//i = 0;
 	foreach_list(QPtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
-		uint fieldNumber = m_fieldNumbersForDataItems[ it.current() ];
+		KexiFormDataItemInterface * item = it.current();
+		uint fieldNumber = m_fieldNumbersForDataItems[ item ];
 		if (query) {
+			KexiDB::QueryColumnInfo *ci = fieldsExpanded[fieldNumber];
 //! @todo what about using QueryColumnInfo here?
-			KexiDB::Field *f = query->fieldsExpanded().at(fieldNumber)->field;
+			KexiDB::Field *f = ci->field;
 			it.current()->setField(f);
 			kdDebug() << "- item=" << dynamic_cast<QObject*>(it.current())->name() 
 				<< " dataSource=" << it.current()->dataSource()
