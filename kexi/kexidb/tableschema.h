@@ -88,6 +88,34 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		/*! if table was created using a connection, 
 			returns this connection object, otherwise NULL. */
 		Connection* connection();
+		
+		/*! \return true if this is KexiDB storage system's table 
+		 (used internally by KexiDB). This helps in hiding such tables
+		 in applications (if desired) and will also enable lookup of system 
+		 tables for schema export/import functionality. 
+		 
+		 Any internal KexiDB system table's schema (kexi__*) has 
+		 cleared its SchemaData part, e.g. id=-1 for such table,
+		 and no helptext, caption and so on. This is because
+		 it represents a native database table rather that extended Kexi table.
+		 
+		 isKexiDBSystem()==true implies isNative()==true.
+		 
+		 By default (after allocation), TableSchema object 
+		 has this property set to false. */
+		bool isKexiDBSystem() const { return m_isKexiDBSystem; }
+
+		/*! Sets KexiDBSystem flag to on or off. When on, native flag is forced to be on.
+		 When off, native flag is not affected.
+		 \sa isKexiDBSystem() */
+		void setKexiDBSystem(bool set);
+
+		/*! \return true if this is schema of native database object,
+		 When this is kexiDBSystem table, native flag is forced to be on. */
+		virtual bool isNative() const { return m_native || m_isKexiDBSystem; }
+		
+		/* Sets native flag. Does not allow to set this off for system KexiDB table. */
+		virtual void setNative(bool set);
 	protected:
 		/*! Automatically retrieves table schema via connection. */
 		TableSchema(Connection *conn, const QString & name = QString::null);
@@ -101,6 +129,9 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		Connection *m_conn;
 		
 		IndexSchema *m_pkey;
+
+	private:
+		bool m_isKexiDBSystem : 1;
 
 	friend class Connection;
 };

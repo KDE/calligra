@@ -17,5 +17,5 @@ kde_servicetypes_DATA = kexidb_driver.desktop
 
 include $(top_srcdir)/kexi/Makefile.global
 
-KDE_CXXFLAGS += -D__KEXIDB__= -include $(top_srcdir)/kexidb/global.h
+KDE_CXXFLAGS += -D__KEXIDB__= -include $(top_srcdir)/kexi/kexidb/global.h
 

@@ -52,7 +52,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! Opened connection is automatically disconnected and removed 
 			from driver's connections list (see note). 
-			Note for drivers writers: 
+			Note for driver developers: 
 			you should call disconnect() from you Connection's
 			subclass' destructor. */
 		virtual ~Connection();
@@ -122,13 +122,29 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Drop database with name \a dbName, using this connection. */
 		bool dropDatabase( const QString &dbName = QString::null );
 
-		/*! \return names of all table schema names stored in currently 
-		 used database. */
-		QStringList tableNames();
+		/*! \return names of all table schemas stored in currently 
+		 used database. If \a also_system_tables is true, 
+		 internal KexiDB system table names (kexi__*) are also returned.
+		 \sa kexiDBSystemTableNames() */
+		QStringList tableNames(bool also_system_tables = false);
+		
+		/*! \return list of internal KexiDB system table names 
+		 (kexi__*). This does not mean that these tables can be found
+		 in currently opened database. Just static list of table 
+		 names is returned. 
+		 
+		 The list contents may depend on KexiDB library version;
+		 opened database can contain fewer 'system' tables than in current
+		 KexiDB implementation, if the current one is newer than the one used 
+		 to build the database. */
+		KEXI_DB_EXPORT static const QStringList& kexiDBSystemTableNames();
 		
 		/*! \return ids of all table schema names stored in currently 
 		 used database. These ids can be later used as argument for tableSchema().
-		 This is a shortcut for objectIds(TableObjectType). */
+		 This is a shortcut for objectIds(TableObjectType).
+		 If \a also_system_tables is true, 
+		 Internal KexiDB system tables (kexi__*) are not available here 
+		 because these have no identifiers assigned (more formally: id=-1). */
 		QValueList<int> tableIds();
 
 		/*! \return ids of all database query schemas stored in currently 
@@ -206,7 +222,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 handle is useless and can be safely dropped.
 		*/
 		const QValueList<Transaction>& transactions();
-//js: PROBABLY REMOVE:		bool duringTransaction();
 
 		/*! \return true if "auto commit" option is on. 
 
@@ -275,8 +290,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 used database. The schema is cached inside connection, 
 		 so retrieval is performed only once, on demand. */
 		TableSchema* tableSchema( const int tableId );
+		
 		/*! \return schema of a table pointed by \a tableName, retrieved from currently 
-		 used database. \sa tableSchema( const int tableId ) */
+		 used database. KexiDB system table schema can be also retrieved.
+		 \sa tableSchema( const int tableId ) */
 		TableSchema* tableSchema( const QString& tableName );
 		
 		/*! \return schema of \a tablename table retrieved from currently 
@@ -349,14 +366,37 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			anymore. */
 		virtual bool drv_dropDatabase( const QString &dbName = QString::null ) = 0;
 
+		/*! returns "CREATE TABLE ..." statement's string needed for \a tableSchema
+		 creation in the database.
+		*/
 		QString createTableStatement( const KexiDB::TableSchema& tableSchema );
 
+		/*! returns "SELECT ..." statement's string needed for executing query 
+		 defined by \a querySchema.
+		*/
 		QString queryStatement( const KexiDB::QuerySchema& querySchema );
 
+		/*! Creates table using \a tableSchema information.
+		 \return true on success. Default implementation 
+		 builds a statement using createTableStatement() and calls drv_executeSQL()
+		 Note for driver developers: reimplement this only if you want do to 
+		 this in other way.
+		 */
 		virtual bool drv_createTable( const KexiDB::TableSchema& tableSchema );
+
+		/*! 
+		 Creates table named by \a tableSchemaName. Schema object must be on
+		 schema tables' list before calling this method (otherwise false if returned).
+		 Just uses drv_createTable( const KexiDB::TableSchema& tableSchema ).
+		 Used internally, e.g. in createDatabase().
+		 \return true on success
+		*/
+		virtual bool drv_createTable( const QString& tableSchemaName );
+
 //		/*! Executes query \a statement and returns resulting rows 
 //			(used mostly for SELECT query). */
 //		virtual bool drv_executeQuery( const QString& statement ) = 0;
+		
 		/* Executes query \a statement, but without returning resulting 
 			rows (used mostly for functional queries). */
 		virtual bool drv_executeSQL( const QString& statement ) = 0;
@@ -452,8 +492,22 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		
 		/*! Setups full table schema for table \a t using 'kexi__*' system tables. 
 			Used internally by tableSchema() methods. */
-		KexiDB::TableSchema* setupTableSchema( const KexiDB::RecordData &data );//KexiDB::Cursor *table_cur );
+		KexiDB::TableSchema* setupTableSchema( const KexiDB::RecordData &data );
 
+		/*! Allocates all needed table KexiDB system objects for kexi__* KexiDB liblary's
+		 system tables schema.
+		 These objects are used internally in this connection
+		 and are added to list of tables (by name, 
+		 not by id because these have no ids).
+		*/
+		bool setupKexiDBSystemSchema();
+
+		/*! used internally by setupKexiDBSystemSchema():
+		 Allocates single table KexiDB system object named \a tsname 
+		 and adds this to list of such objects (for later removal on closeDatabase()). 
+		*/
+		TableSchema* newKexiDBSystemTableSchema(const QString& tsname);
+		
 		Driver *m_driver;
 		ConnectionData m_data;
 		QString m_name;
@@ -467,6 +521,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		QDict<TableSchema> m_tables_byname;
 		QIntDict<QuerySchema> m_queries;
 		QDict<QuerySchema> m_queries_byname;
+
+		//! used just for removing system TableSchema objects on db close.
+		QPtrList<TableSchema> m_kexiDBSystemtables;
 
 		//! cursors created for this connection
 		QPtrDict<KexiDB::Cursor> m_cursors;

@@ -32,6 +32,7 @@ TableSchema::TableSchema(const QString& name)
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn(0)
+	, m_isKexiDBSystem(false)
 {
 	m_name = name;
 	m_indices.setAutoDelete( true );
@@ -43,6 +44,7 @@ TableSchema::TableSchema()
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn(0)
+	, m_isKexiDBSystem(false)
 {
 	m_indices.setAutoDelete( true );
 	m_pkey = new IndexSchema(this);
@@ -54,6 +56,7 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn( conn )
+	, m_isKexiDBSystem(false)
 {
 	assert(conn);
 	m_name = name;
@@ -175,6 +178,23 @@ void TableSchema::debug() const
 {
 	KexiDBDbg << "TABLE " << schemaDataDebugString() << endl;
 	FieldList::debug();
+}
+
+void TableSchema::setKexiDBSystem(bool set)
+{
+	if (set)
+		m_native=true;
+	m_isKexiDBSystem = set;
+}
+
+void TableSchema::setNative(bool set)
+{
+	if (m_isKexiDBSystem && !set) {
+		KexiDBDbg << "TableSchema::setNative(): cannot set native off"
+			" when KexiDB system flag is set on!" << endl;
+		return;
+	}
+	m_native=set;
 }
 
 

@@ -43,8 +43,28 @@ class KEXI_DB_EXPORT SchemaData
 		const QString& caption() const;
 		const QString& helpText() const;
 
-		//! returns debug string useful for debugging
+		//! \return debug string useful for debugging
 		virtual QString schemaDataDebugString() const;
+		
+		/*! \return true if this is schema of native database object,
+		 like, for example like, native table. This flag 
+		 is set when object schema (currently -- database table) 
+		 is not retrieved using kexi__* schema storage system,
+		 but just based on the information about native table.
+		 
+		 By native object we mean the one that has no additional
+		 data like caption, helpText, etc. properties (no kexidb extensions).
+		 
+		 Native objects schemas are used mostly for representing 
+		 kexi system (kexi__*) tables in memory for later reference;
+		 see Connection::tableNames().
+		 
+		 By default (on allocation) SchemaData objects are not native.
+		*/
+		virtual bool isNative() const { return m_native; }
+		
+		/* Sets native flag */
+		virtual void setNative(bool set) { m_native=set; }
 	protected:
 		SchemaData(int obj_type = KexiDB::UnknownObjectType);
 		virtual ~SchemaData();
@@ -58,6 +78,7 @@ class KEXI_DB_EXPORT SchemaData
 		QString m_name;
 		QString m_caption;
 		QString m_helpText;
+		bool m_native : 1;
 
 	friend class Connection;
 };

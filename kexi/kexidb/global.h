@@ -46,14 +46,17 @@ int KEXI_DB_EXPORT majorVersion();
 //! returns KexiDB version info (least significant part)
 int KEXI_DB_EXPORT minorVersion();
 
-
 /*! Object types set like table or query. */
 enum ObjectTypes {
-	UnknownObjectType = -1, //! helper
-	AnyObjectType = 0, //! helper
+	UnknownObjectType = -1, //!< helper
+	AnyObjectType = 0,      //!< helper
 	TableObjectType = 1,
 	QueryObjectType = 2,
-	IndexObjectType = 3
+	IndexObjectType = 3,
+
+	KexiDBSystemTableObjectType = 128 //!< helper, not used in storage 
+	                                  //!< (allows to select kexidb system tables
+	                                  //!< may be or'd with TableObjectType)
 };
 
 }

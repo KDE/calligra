@@ -27,6 +27,7 @@ using namespace KexiDB;
 SchemaData::SchemaData(int obj_type)
 	: m_type(obj_type)
 	, m_id(-1)
+	, m_native(false)
 {
 }
 

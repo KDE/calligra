@@ -56,6 +56,9 @@ class ConnectionPrivate
 }
 
 using namespace KexiDB;
+
+//! static: list of internal KexiDB system table names 
+QStringList KexiDB_kexiDBSystemTableNames;
 		
 Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 	: QObject()
@@ -68,6 +71,7 @@ Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 {
 	m_tables.setAutoDelete(true);
 	m_tables_byname.setAutoDelete(false);//m_tables is owner, not me
+	m_kexiDBSystemtables.setAutoDelete(true);//only system tables
 	m_queries.setAutoDelete(true);
 	m_queries_byname.setAutoDelete(false);//m_queries is owner, not me
 	m_cursors.setAutoDelete(true);
@@ -122,12 +126,6 @@ bool Connection::disconnect()
 	if (!m_is_connected)
 		return true;
 	
-	//delete own cursors:
-	m_cursors.clear();
-	//delete own schemas
-	m_tables.clear();
-	m_queries.clear();
-
 	if (!closeDatabase())
 		return false;
 
@@ -275,66 +273,22 @@ bool Connection::createDatabase( const QString &dbName )
 //		return false;
 	
 	//-create system tables
-	KexiDB::TableSchema t_objects("kexi__objects");
-	t_objects.addField( new Field("o_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
-	.addField( new Field("o_type", Field::Byte, 0, Field::Unsigned) )
-	.addField( new Field("o_name", Field::Text) )
-	.addField( new Field("o_caption", Field::Text ) )
-	.addField( new Field("o_help", Field::LongText ) );
-	if (!drv_createTable( t_objects ))
+	setupKexiDBSystemSchema();
+	TableSchema *ts=m_kexiDBSystemtables.first();
+	while (ts) {
+		if (!drv_createTable( ts->name() ))
+			createDatabase_ERROR;
+		ts = m_kexiDBSystemtables.next();
+	}
+	
+	//-insert KexiDB version info:
+	TableSchema *t_db = tableSchema("kexi__db");
+	if (!t_db)
+		createDatabase_ERROR;
+	if ( !insertRecord(*t_db, "kexidb_major_ver", KexiDB::majorVersion())
+		|| !insertRecord(*t_db, "kexidb_minor_ver", KexiDB::minorVersion()))
 		createDatabase_ERROR;
 
-	KexiDB::TableSchema t_fields("kexi__fields");
-	t_fields.addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
-	.addField( new Field("f_type", Field::Byte, 0, Field::Unsigned) )
-	.addField( new Field("f_name", Field::Text ) )
-	.addField( new Field("f_length", Field::Integer ) )
-	.addField( new Field("f_precision", Field::Integer ) )
-	.addField( new Field("f_constraints", Field::Integer ) )
-	.addField( new Field("f_options", Field::Integer ) )
-	.addField( new Field("f_default", Field::Text ) )
-	//these are additional properties:
-	.addField( new Field("f_order", Field::Integer ) )
-	.addField( new Field("f_caption", Field::Text ) )
-	.addField( new Field("f_help", Field::LongText ) );
-	if (!drv_createTable( t_fields ))
-		createDatabase_ERROR;
-
-	KexiDB::TableSchema t_querydata("kexi__querydata");
-	t_querydata.addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
-	.addField( new Field("q_sql", Field::LongText ) )
-	.addField( new Field("q_valid", Field::Boolean ) );
-	if (!drv_createTable( t_querydata ))
-		createDatabase_ERROR;
-
-	KexiDB::TableSchema t_queryfields("kexi__queryfields");
-	t_queryfields.addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
-	.addField( new Field("f_order", Field::Integer ) )
-	.addField( new Field("f_id", Field::Integer ) )
-	.addField( new Field("f_tab_asterisk", Field::Integer, 0, Field::Unsigned) )
-	.addField( new Field("f_alltab_asterisk", Field::Boolean) );
-	if (!drv_createTable( t_queryfields ))
-		createDatabase_ERROR;
-
-	KexiDB::TableSchema t_querytables("kexi__querytables");
-	t_querytables.addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
-	.addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
-	.addField( new Field("t_order", Field::Integer, 0, Field::Unsigned) );
-	if (!drv_createTable( t_querytables ))
-		createDatabase_ERROR;
-
-	KexiDB::TableSchema t_db("kexi__db");
-	t_db.addField( new Field("db_property", Field::Text, Field::NoConstraints, Field::NoOptions, 32 ) )
-	.addField( new Field("db_value", Field::LongText ) );
-	if (!drv_createTable( t_db ))
-		createDatabase_ERROR;
-
-	//insert KexiDB version info:
-	if (   !insertRecord(t_db, "kexidb_major_ver", KexiDB::majorVersion())
-		|| !insertRecord(t_db, "kexidb_minor_ver", KexiDB::minorVersion()))
-		createDatabase_ERROR;
-
-//not needed	trans_g.commit();
 	if (trans.active() && !commitTransaction(trans))
 		createDatabase_ERROR;
 	
@@ -384,7 +338,7 @@ bool Connection::closeDatabase()
 
 	bool ret = true;
 
-/*! \todo (js) add CLEVER algoright here for nested transactions */
+/*! \todo (js) add CLEVER algorithm here for nested transactions */
 	if (m_driver->transactionsSupported()) {
 		//rollback all transactions
 		QValueList<Transaction>::iterator it;
@@ -398,7 +352,14 @@ bool Connection::closeDatabase()
 		}
 		d->m_transactions.clear(); //free trans. data
 	}
-		
+
+	//delete own cursors:
+	m_cursors.clear();
+	//delete own schemas
+	m_tables.clear();
+	m_kexiDBSystemtables.clear();
+	m_queries.clear();
+			
 	if (!drv_closeDatabase())
 		return false;
 
@@ -431,24 +392,44 @@ bool Connection::dropDatabase( const QString &dbName )
 	return drv_dropDatabase( dbToDrop );
 }
 
-QStringList Connection::tableNames()
+QStringList Connection::tableNames(bool also_system_tables)
 {
 	QStringList list;
 	
 	if (!isDatabaseUsed())
 		return list;
 
-	Cursor *c = executeQuery(QString("select * from kexi__objects where o_type=%1").arg(KexiDB::TableObjectType));
+	Cursor *c = executeQuery(QString(
+	 "select o_name from kexi__objects where o_type=%1").arg(KexiDB::TableObjectType));
 	if (!c)
 		return list;
 	for (c->moveFirst(); !c->eof(); c->moveNext())
 	{
-		list.append(c->value(2).toString()); //kexi__objects.o_name
+		list.append(c->value(0).toString()); //kexi__objects.o_name
 	}
 
 	deleteCursor(c);
 
+	if (also_system_tables) {
+		list += Connection::kexiDBSystemTableNames();
+	}
 	return list;
+}
+
+//! \todo (js): this will depend on KexiDB lib version
+const QStringList& Connection::kexiDBSystemTableNames()
+{
+	if (KexiDB_kexiDBSystemTableNames.isEmpty()) {
+		KexiDB_kexiDBSystemTableNames
+		<< "kexi__objects"
+		<< "kexi__fields"
+		<< "kexi__querydata"
+		<< "kexi__queryfields"
+		<< "kexi__querytables"
+		<< "kexi__db"
+		;
+	}
+	return KexiDB_kexiDBSystemTableNames;
 }
 
 QValueList<int> Connection::queryIds()
@@ -463,7 +444,7 @@ QValueList<int> Connection::objectIds(int objType)
 	if (!isDatabaseUsed())
 		return list;
 
-	Cursor *c = executeQuery(QString("select * from kexi__objects where o_type=%1").arg(objType));
+	Cursor *c = executeQuery(QString("select o_id from kexi__objects where o_type=%1").arg(objType));
 	if (!c)
 		return list;
 	for (c->moveFirst(); !c->eof(); c->moveNext())
@@ -577,7 +558,8 @@ bool Connection::createTable( const KexiDB::TableSchema& tableSchema )
 	
 	if (drv_createTable(tableSchema)) {
 		//TODO: add schema to kexi__* tables
-	
+//		insertRecord(KexiDB::TableSchema &tableSchema, const QVariant& c1, const QVariant& c2)
+		
 		return commitAutoCommitTransaction(trans);
 	}
 	rollbackAutoCommitTransaction(trans);
@@ -589,6 +571,14 @@ bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 	QString sql = createTableStatement(tableSchema);
 	KexiDBDbg<<"******** "<<sql<<endl;
 	return drv_executeSQL(sql);
+}
+
+bool Connection::drv_createTable( const QString& tableSchemaName )
+{
+	TableSchema *ts = m_tables_byname[tableSchemaName];
+	if (!ts)
+		return false;
+	return drv_createTable(*ts);
 }
 
 bool Connection::beginAutoCommitTransaction(Transaction &trans)
@@ -993,6 +983,62 @@ QuerySchema* Connection::querySchema( const int queryId )
 	m_queries.insert(q->m_id, q);
 	m_queries_byname.insert(q->m_name, q);
 	return q;	
+}
+
+TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
+{
+	TableSchema *ts = new TableSchema(tsname);
+	ts->setKexiDBSystem(true);
+	m_kexiDBSystemtables.append(ts);
+	m_tables_byname.insert(tsname,ts);
+	return ts;
+}
+	
+bool Connection::setupKexiDBSystemSchema()
+{
+	TableSchema *t_objects = newKexiDBSystemTableSchema("kexi__objects");
+	t_objects->addField( new Field("o_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
+	.addField( new Field("o_type", Field::Byte, 0, Field::Unsigned) )
+	.addField( new Field("o_name", Field::Text) )
+	.addField( new Field("o_caption", Field::Text ) )
+	.addField( new Field("o_help", Field::LongText ) );
+
+	TableSchema *t_fields = newKexiDBSystemTableSchema("kexi__fields");
+	t_fields->addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("f_type", Field::Byte, 0, Field::Unsigned) )
+	.addField( new Field("f_name", Field::Text ) )
+	.addField( new Field("f_length", Field::Integer ) )
+	.addField( new Field("f_precision", Field::Integer ) )
+	.addField( new Field("f_constraints", Field::Integer ) )
+	.addField( new Field("f_options", Field::Integer ) )
+	.addField( new Field("f_default", Field::Text ) )
+	//these are additional properties:
+	.addField( new Field("f_order", Field::Integer ) )
+	.addField( new Field("f_caption", Field::Text ) )
+	.addField( new Field("f_help", Field::LongText ) );
+
+	TableSchema *t_querydata = newKexiDBSystemTableSchema("kexi__querydata");
+	t_querydata->addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("q_sql", Field::LongText ) )
+	.addField( new Field("q_valid", Field::Boolean ) );
+
+	TableSchema *t_queryfields = newKexiDBSystemTableSchema("kexi__queryfields");
+	t_queryfields->addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("f_order", Field::Integer ) )
+	.addField( new Field("f_id", Field::Integer ) )
+	.addField( new Field("f_tab_asterisk", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("f_alltab_asterisk", Field::Boolean) );
+
+	TableSchema *t_querytables = newKexiDBSystemTableSchema("kexi__querytables");
+	t_querytables->addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("t_order", Field::Integer, 0, Field::Unsigned) );
+
+	TableSchema *t_db = newKexiDBSystemTableSchema("kexi__db");
+	t_db->addField( new Field("db_property", Field::Text, Field::NoConstraints, Field::NoOptions, 32 ) )
+	.addField( new Field("db_value", Field::LongText ) );
+	
+	return true;
 }
 
 #include "connection.moc"
