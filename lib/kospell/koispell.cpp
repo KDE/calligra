@@ -449,24 +449,23 @@ bool KOISpell::checkWord (const QString & buffer, bool _usedialog, bool synchron
 
   ksdlg->hide();
   if ( synchronous ) {
-      //ready signal is never call, after initialize
-#if 0
+    //ready signal is never call, after initialize
     if ( !m_ready ) {
       connect( this, SIGNAL(ready(KOSpell*)),
-               SL1OT(slotSynchronousReady()) );
+               SLOT(slotSynchronousReady()) );
+      //MAGIC 1: here we wait for the initialization to finish
       enter_loop();
     }
-#endif
     OUTPUT (checkWord2Synchronous);
   }
   else
     OUTPUT (checkWord2);
-  //  connect (this, SIGNAL (dialog3()), this, SLOT (checkWord3()));
+
   proc->fputs ("%"); // turn off terse mode
   cleanFputsWord( qs ); // send the word to ispell
 
-  // I don't know what we wait...
-  //enter_loop();
+  //MAGIC 2: and here we wait for the results
+  enter_loop();
   return true;
 }
 
@@ -1281,7 +1280,7 @@ void KOISpell::initialize( QWidget *_parent, const QString &_caption,
                          QObject *obj, const char *slot, KOSpellConfig *_ksc,
                          bool _progressbar, bool _modal )
 {
-    m_ready = false;
+  m_ready = false;
   m_bIgnoreUpperWords=false;
   m_bIgnoreTitleCase=false;
 
