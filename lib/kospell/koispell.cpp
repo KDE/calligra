@@ -104,22 +104,21 @@ void KOISpell::startIspell()
         *proc << "ispell";
         kdDebug(30006) << "Using ispell" << endl;
         break;
-#if 0 // we don't use apsell binary for the moment..
     case KOS_CLIENT_ASPELL:
+        // This can only happen if HAVE_LIBASPELL isn't defined
         *proc << "aspell";
         kdDebug(30006) << "Using aspell" << endl;
         break;
-#endif
     case KOS_CLIENT_HSPELL:
         *proc << "hspell";
         kdDebug(30006) << "Using hspell" << endl;
         break;
     default:
-        kdError(30006) << "Spelling configuration error" <<endl;
+        kdError(30006) << "Spelling configuration error, client=" << ksconfig->client() <<endl;
     }
 
     // TODO: add option -h to ignore HTML (XML) code
-    if (ksconfig->client() == KOS_CLIENT_ISPELL /*|| ksconfig->client() == KOS_CLIENT_ASPELL*/)
+    if (ksconfig->client() == KOS_CLIENT_ISPELL || ksconfig->client() == KOS_CLIENT_ASPELL)
     {
         *proc << "-a" << "-S";
         switch ( type )
