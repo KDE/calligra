@@ -1651,6 +1651,17 @@ void KWView::doFindReplace()
     findReplace->proceed();
 
     bool aborted = findReplace->aborted();
+    while(!aborted )
+    {
+        int ret=KMessageBox::questionYesNo(this,
+                                           i18n("Do you want to restart search at the beginning ?"));
+        if( ret != KMessageBox::Yes )
+            break;
+        m_findReplace->changeListObject( m_gui->canvasWidget()->kWordDocument()->frameTextObject() );
+        findReplace->proceed();
+        aborted = findReplace->aborted();
+    }
+
     delete findReplace;
     if ( !aborted ) // Only if we still exist....
         m_findReplace = 0L;
@@ -3912,6 +3923,7 @@ void KWView::spellCheckerReady()
         text += '\n'; // end of last paragraph
         text += '\n'; // empty line required by kspell
         m_spell.kspell->check( text );
+        textfs->textObject()->setNeedSpellCheck(true);
         return;
     }
     //kdDebug() << "KWView::spellCheckerReady done" << endl;
