@@ -2,13 +2,17 @@ INCLUDES = $(all_includes)
 
 noinst_LTLIBRARIES = libkarbonui.la
 
+noinst_HEADERS = \
+	vcdlg_rectangle.h
+
 libkarbonui_la_SOURCES = \
 	dummy.cc \
-	vtransformdlg_stub.ui
+	vcdlg_rectangle.cc
 
 METASOURCES = AUTO
 
-DISTCLEANFILES = dummy.cc
+DISTCLEANFILES = \
+	dummy.cc
 
 dummy.cc:
 	echo > dummy.cc

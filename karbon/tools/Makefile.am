@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../core -I$(srcdir)/../../lib/kofficeui $(all_includes)
+INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../core -I$(srcdir)/../ui -I$(srcdir)/../../lib/kofficeui $(all_includes)
 
 noinst_LTLIBRARIES = libkarbontools.la
 
@@ -19,6 +19,9 @@ libkarbontools_la_SOURCES = \
 	vccmd_spiral.cc \
 	vccmd_star.cc \
 	vctool_rectangle.cc
+
+libkarbontools_la_LIBADD = \
+        $(srcdir)/../ui/libkarbonui.la
 
 libkarbontools_la_METASOURCES = \
 	AUTO
