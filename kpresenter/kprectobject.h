@@ -51,7 +51,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element);
+    virtual void loadOasis(const QDomElement &element, const KoStyleStack &styleStack);
 
 protected:
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,

@@ -186,7 +186,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPObject::loadOasis(const QDomElement &element)
+void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
 {
     orig.setX( KoUnit::parseValue( element.attribute( "svg:x" ) ) );
     orig.setY( KoUnit::parseValue( element.attribute( "svg:y" ) ) );
@@ -897,11 +897,40 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KPShadowObject::loadOasis(const QDomElement &element)
+void KPShadowObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
 {
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
-    KPObject::loadOasis(element);
-    //todo load brush/etc.
+    KPObject::loadOasis(element, styleStack);
+
+    if ( styleStack.hasAttribute( "draw:stroke" ))
+    {
+        if ( styleStack.attribute( "draw:stroke" ) == "none" )
+            pen.setStyle(static_cast<Qt::PenStyle>( 0 ) );
+        else if ( styleStack.attribute( "draw:stroke" ) == "solid" )
+            pen.setStyle(static_cast<Qt::PenStyle>( 1 ) );
+        else if ( styleStack.attribute( "draw:stroke" ) == "dash" )
+        {
+            QString style = styleStack.attribute( "draw:stroke-dash" );
+            if ( style == "Ultrafine Dashed" || style == "Fine Dashed" ||
+                 style == "Fine Dashed (var)" || style == "Dashed (var)" )
+                pen.setStyle(static_cast<Qt::PenStyle>( 2 ) );
+            else if ( style == "Fine Dotted" || style == "Ultrafine Dotted (var)" ||
+                      style == "Line with Fine Dots" )
+                pen.setStyle(static_cast<Qt::PenStyle>( 3 ) );
+            else if ( style == "3 Dashes 3 Dots (var)" || style == "Ultrafine 2 Dots 3 Dashes" )
+                pen.setStyle(static_cast<Qt::PenStyle>( 4 ) );
+            else if ( style == "2 Dots 1 Dash" )
+                pen.setStyle(static_cast<Qt::PenStyle>( 5 ) );
+        }
+
+        if ( styleStack.hasAttribute( "svg:stroke-width" ) )
+            pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width" ) ) );
+        if ( styleStack.hasAttribute( "svg:stroke-color" ) )
+            pen.setColor( styleStack.attribute( "svg:stroke-color" ) );
+    }
+    else
+        pen = defaultPen();
+    kdDebug()<<"pen style :"<<pen<<endl;
 }
 
 double KPShadowObject::load(const QDomElement &element)
@@ -1026,11 +1055,11 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KP2DObject::loadOasis(const QDomElement &element)
+void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styleStack)
 {
     kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
 
-    KPShadowObject::loadOasis(element);
+    KPShadowObject::loadOasis(element, styleStack);
 }
 
 double KP2DObject::load(const QDomElement &element)

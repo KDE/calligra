@@ -1012,7 +1012,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             {
                 fillStyleStack( o, oasisStyles );
                 KPRectObject *kprectobject = new KPRectObject();
-                kprectobject->loadOasis(o);
+                kprectobject->loadOasis(o, m_styleStack);
                 newpage->appendObject(kprectobject);
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" )
@@ -1028,7 +1028,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                 else  // circle or ellipse
                 {
                     KPEllipseObject *kpellipseobject = new KPEllipseObject();
-                    kpellipseobject->loadOasis(o);
+                    kpellipseobject->loadOasis(o,  m_styleStack);
                     newpage->appendObject(kpellipseobject);
                 }
             }
@@ -1048,7 +1048,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
             else if (name=="draw:polygon") { // polygon
                 fillStyleStack( o, oasisStyles );
                 KPPolygonObject *kpPolygonObject = new KPPolygonObject();
-                kpPolygonObject->loadOasis( o );
+                kpPolygonObject->loadOasis( o,m_styleStack );
                 newpage->appendObject(kpPolygonObject);
             }
             else if ( name == "draw:image" ) // image
