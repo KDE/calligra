@@ -339,3 +339,14 @@ void KPTextObjectIface::setTextShadow( bool b )
     KCommand *cmd=m_textobject->textObject()->setShadowTextCommand( b );
     delete cmd;
 }
+
+double KPTextObjectIface::relativeTextSize() const
+{
+    return m_textobject->textObject()->relativeTextSize();
+}
+
+void KPTextObjectIface::setRelativeTextSize( double _size )
+{
+    KCommand *cmd=m_textobject->textObject()->setRelativeTextSizeCommand(_size );
+    delete cmd;
+}

@@ -71,6 +71,10 @@ public:
     void setShadowText( bool _b);
     bool getShadowText()const;
 
+    double getRelativeTextSize()const;
+    void setRelativeTextSize(double _size);
+
+
     int changedFlags() const { return m_changedFlags; }
     void setupTab1(bool _withSubSuperScript, uint fontListCriteria );
     void setupTab2();
@@ -85,6 +89,7 @@ protected slots:
     void slotChangeUnderlineType( int );
     void slotChangeStrikeOutType( int );
     void slotShadowClicked();
+    void slotRelativeSizeChanged( int );
 private:
     KFontChooser *m_chooseFont;
     QRadioButton *m_superScript;
@@ -123,6 +128,7 @@ public:
                KoTextFormat::UnderlineLineType _underlineType,
                KoTextFormat::StrikeOutLineType _strikeOutType,
                KoTextFormat::StrikeOutLineStyle _strikeOutLine,
+               double _relativeSize,
                bool _withSubSuperScript=true );
 
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
@@ -137,7 +143,8 @@ public:
     KoTextFormat::UnderlineLineStyle getUnderlineLineStyle() const { return m_chooser->getUnderlineLineStyle();}
     KoTextFormat::StrikeOutLineStyle getStrikeOutLineStyle() const { return m_chooser->getStrikeOutLineStyle();}
     bool getShadowText()const{ return m_chooser->getShadowText();}
-;
+    double getRelativeTextSize()const{ return m_chooser->getRelativeTextSize();}
+
 
     int changedFlags() const { return m_chooser->changedFlags(); }
 
@@ -162,6 +169,7 @@ private:
     KoTextFormat::StrikeOutLineStyle m_strikeOutLineStyle;
     KoTextFormat::StrikeOutLineType m_strikeOutType;
     bool m_shadowText;
+    double m_relativeSize;
 };
 
 #endif

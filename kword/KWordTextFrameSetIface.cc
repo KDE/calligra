@@ -268,3 +268,14 @@ void KWordTextFrameSetIface::setTextShadow( bool b )
     KCommand *cmd=m_frametext->textObject()->setShadowTextCommand( b );
     delete cmd;
 }
+
+double KWordTextFrameSetIface::relativeTextSize() const
+{
+    return m_frametext->textObject()->relativeTextSize();
+}
+
+void KWordTextFrameSetIface::setRelativeTextSize( double _size )
+{
+    KCommand *cmd=m_frametext->textObject()->setRelativeTextSizeCommand(_size );
+    delete cmd;
+}

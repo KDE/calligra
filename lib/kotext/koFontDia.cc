@@ -31,6 +31,7 @@
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <knuminput.h>
 
 class KoFontChooser::KoFontChooserPrivate
 {
@@ -38,6 +39,8 @@ public:
     QComboBox *m_strikeOut;
     QColor m_textColor;
     QCheckBox *m_shadow;
+    KIntNumInput *m_relativeSize;
+    QLabel *m_lRelativeSize;
 };
 
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
@@ -69,7 +72,7 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     m_chooseFont = new KFontChooser(page, "FontList", false, list);
     lay1->addWidget(m_chooseFont);
 
-    QGroupBox *grp = new QGroupBox(page);
+    QGroupBox *grp = new QGroupBox(i18n("Position"), page);
     lay1->addWidget(grp);
     QGridLayout *grid = new QGridLayout( grp, 2, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -79,17 +82,31 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     m_subScript = new QRadioButton(i18n("Subscript"),grp);
     grid->addWidget(m_subScript,1,0);
 
+    d->m_lRelativeSize = new QLabel ( i18n("Relative size:"), grp);
+    grid->addWidget(d->m_lRelativeSize,0,1);
+
+    d->m_relativeSize = new KIntNumInput( grp );
+    grid->addWidget(d->m_relativeSize,0,2);
+
+    d->m_relativeSize-> setRange(1, 100, 1,false);
+    d->m_relativeSize->setSuffix("%");
+
     if(!_withSubSuperScript)
     {
         m_subScript->setEnabled(false);
         m_superScript->setEnabled(false);
+        d->m_relativeSize->setEnabled( false );
+        d->m_lRelativeSize->setEnabled( false );
     }
 
+    grp = new QGroupBox(i18n("Colors:"), page);
+    lay1->addWidget(grp);
+    grid = new QGridLayout( grp, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
     m_colorButton = new QPushButton( i18n( "Change Color..." ), grp );
-    grid->addWidget(m_colorButton,0,3);
+    grid->addWidget(m_colorButton,0,0);
 
     m_backGroundColorButton = new QPushButton( i18n( "Change Background Color..." ), grp );
-    grid->addWidget(m_backGroundColorButton,1,3);
+    grid->addWidget(m_backGroundColorButton,0,1);
 
     connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
     connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
@@ -165,6 +182,7 @@ void KoFontChooser::setupTab2()
     connect( m_strikeOutType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeStrikeOutType( int )));
     connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
     connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
+    connect( d->m_relativeSize, SIGNAL( valueChanged(int) ), this, SLOT( slotRelativeSizeChanged( int )));
 }
 
 bool KoFontChooser::getShadowText()const
@@ -175,6 +193,16 @@ bool KoFontChooser::getShadowText()const
 void KoFontChooser::setShadowText( bool _b)
 {
     d->m_shadow->setChecked( _b);
+}
+
+double KoFontChooser::getRelativeTextSize()const
+{
+    return ((double)d->m_relativeSize->value()/100.0);
+}
+
+void KoFontChooser::setRelativeTextSize(double _size)
+{
+    d->m_relativeSize->setValue( (int)(_size * 100) );
 }
 
 void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript )
@@ -243,6 +271,11 @@ void KoFontChooser::slotSuperScriptClicked()
     if(m_subScript->isChecked())
         m_subScript->setChecked(false);
     m_changedFlags |= KoTextFormat::VAlign;
+}
+
+void KoFontChooser::slotRelativeSizeChanged( int )
+{
+   m_changedFlags |= KoTextFormat::VAlign;
 }
 
 void KoFontChooser::slotShadowClicked()
@@ -507,6 +540,7 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
                       KoTextFormat::UnderlineLineType _underlineType,
                       KoTextFormat::StrikeOutLineType _strikeOutType,
                       KoTextFormat::StrikeOutLineStyle _strikeOutLine,
+                      double _relativeSize,
                       bool _withSubSuperScript )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
@@ -520,7 +554,8 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_underlineLineStyle( _underlineLine ),
       m_strikeOutLineStyle( _strikeOutLine ),
       m_strikeOutType( _strikeOutType),
-      m_shadowText( _shadowText)
+      m_shadowText( _shadowText),
+      m_relativeSize( _relativeSize )
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
@@ -555,6 +590,7 @@ void KoFontDia::slotReset()
     m_chooser->setStrikeOutlineType( m_strikeOutType);
     m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
     m_chooser->setShadowText( m_shadowText);
+    m_chooser->setRelativeTextSize( m_relativeSize);
 }
 
 #include "koFontDia.moc"

@@ -551,7 +551,11 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
     if(!tmpTextBackColor.isEmpty())
         element.setAttribute(attrTextBackColor, tmpTextBackColor);
     if(tmpVerticalAlign!=-1)
+    {
         element.setAttribute(attrVertAlign,tmpVerticalAlign);
+        if(lastFormat->relativeTextSize()!=0.66)
+            element.setAttribute("relativetextsize",lastFormat->relativeTextSize());
+    }
 
     if ( !lastFormat->shadowText() )
         element.setAttribute("shadowtext", false);
@@ -850,6 +854,9 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
         format.setVAlign( static_cast<KoTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
     if ( n.hasAttribute("shadowtext") )
         format.setShadowText( static_cast<int>(n.attribute("shadowtext").toInt() ) );
+    if ( n.hasAttribute("relativetextsize") )
+        format.setRelativeTextSize( n.attribute("relativetextsize").toDouble() ) ;
+
     //kdDebug(33001)<<"loadFormat :"<<format.key()<<endl;
     return format;
 }

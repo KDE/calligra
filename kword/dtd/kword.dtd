@@ -671,7 +671,8 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT VERTALIGN
     EMPTY>
 <!ATTLIST VERTALIGN
-    value CDATA #REQUIRED>
+    value CDATA #REQUIRED
+    relativetextsize CDATA #REQUIRED>
 
 <!-- SHADOWTEXT
         Value is either 0 or 1 with 1=true and 0=false

@@ -91,6 +91,9 @@ k_dcop:
     bool textShadow() const;
     void setTextShadow( bool b );
 
+    double relativeTextSize() const;
+    void setRelativeTextSize( double _size );
+
 private:
     KPTextObject *m_textobject;
 };

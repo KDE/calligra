@@ -2195,6 +2195,12 @@ bool KoTextFormatInterface::textShadow() const
     return (currentFormat()->shadowText());
 }
 
+double KoTextFormatInterface::relativeTextSize() const
+{
+    return ( currentFormat()->relativeTextSize());
+}
+
+
 KoTextFormat::UnderlineLineType KoTextFormatInterface::underlineLineType()const
 {
     return currentFormat()->underlineLineType();
@@ -2233,7 +2239,7 @@ QString KoTextFormatInterface::spellCheckingLanguage() const
     return currentFormat()->spellCheckingLanguage();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, int flags)
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, double _relativeTextSize, int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -2245,6 +2251,7 @@ KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscri
     format.setStrikeOutLineStyle(_strikeOutStyle );
     format.setStrikeOutLineType ( _strikeOutType );
     format.setShadowText( _shadowText);
+    format.setRelativeTextSize( _relativeTextSize);
     if(!_subscript)
     {
         if(!_superscript)
@@ -2311,6 +2318,12 @@ KCommand *KoTextFormatInterface::setShadowTextCommand( bool _b )
     return setFormatCommand( &format, KoTextFormat::ShadowText );
 }
 
+KCommand *KoTextFormatInterface::setRelativeTextSizeCommand( double _size )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setRelativeTextSize( _size );
+    return setFormatCommand( &format, KoTextFormat::VAlign );
+}
 
 #if 0
 void KoTextFormatInterface::setAlign(int align)

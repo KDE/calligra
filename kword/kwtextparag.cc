@@ -321,11 +321,14 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         elem.setAttribute( "value", static_cast<int>(curFormat->font().charSet()) );
     }
     */
-    if( !refFormat || curFormat->vAlign() != refFormat->vAlign() )
+    if( !refFormat || (curFormat->vAlign() != refFormat->vAlign())
+        || (curFormat->relativeTextSize() != refFormat->relativeTextSize()))
     {
         elem = doc.createElement( "VERTALIGN" );
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->vAlign()) );
+        if ( curFormat->relativeTextSize()!=0.66)
+            elem.setAttribute( "relativetextsize", curFormat->relativeTextSize() );
     }
     if( !refFormat || curFormat->textBackgroundColor() != refFormat->textBackgroundColor() )
     {
@@ -557,7 +560,11 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
 
     elem = formatElem.namedItem( "VERTALIGN" ).toElement();
     if ( !elem.isNull() )
+    {
         format.setVAlign( static_cast<KoTextFormat::VerticalAlignment>( elem.attribute("value").toInt() ) );
+        if (elem.hasAttribute("relativetextsize"))
+            format.setRelativeTextSize(elem.attribute("relativetextsize").toDouble());
+    }
     elem = formatElem.namedItem( "COLOR" ).toElement();
     if ( !elem.isNull() )
     {

@@ -276,3 +276,4 @@ Changes after KWord-1.2
 - Add "Add to bookmark"
 - Now we can change "picture path" / "personal expression path"
 - Add "Remove link"
+- Add font properties : change relative font size when we sub/super script font

@@ -1886,7 +1886,8 @@ void KPresenterView::mtextFont()
                                textIface->underlineLineStyle(),
                                textIface->underlineLineType(),
                                textIface->strikeOutLineType(),
-                               textIface->strikeOutLineStyle());
+                               textIface->strikeOutLineStyle(),
+                               textIface->relativeTextSize());
 
     connect( m_fontDlg, SIGNAL( apply() ),
              this, SLOT( slotApplyFont() ) );
@@ -1914,6 +1915,7 @@ void KPresenterView::slotApplyFont()
                           m_fontDlg->getStrikeOutLineType(),
                           m_fontDlg->getStrikeOutLineStyle(),
                           m_fontDlg->getShadowText(),
+                          m_fontDlg->getRelativeTextSize(),
                           flags);
     }
 }

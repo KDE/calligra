@@ -326,7 +326,8 @@
 		color	CDATA	#REQUIRED
                 textbackcolor CDATA #REQUIRED
                 VERTALIGN CDATA #REQUIRED
-                shadowtext CDATA #REQUIRED>
+                shadowtext CDATA #REQUIRED
+                relativetextsize CDATA #REQUIRED>
 
 <!-- 
         A paragraph and a style can have counter data.
