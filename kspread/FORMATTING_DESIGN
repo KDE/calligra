@@ -58,7 +58,7 @@ and then the the 200ish bytes is shared among all cells with that same
 formatting information.
 
 The other possibility is to map it by region.  This involves storing
-a map of some sort in KSpreadTable to say, cells A2:E30 have this style,
+a map of some sort in KSpreadSheet to say, cells A2:E30 have this style,
 column H has this style, etc.  Here, the cell itself would store no
 formatting.  
 

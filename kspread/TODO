@@ -466,11 +466,11 @@ lots of dependencies and regressions etc. use external add-ins if you have any
 and real time links. Make links between sheets and then see how
 well Excel behaves.
 
-1. UNDERSTAND that putting a table->recalc() or table->recalc(true) in
+1. UNDERSTAND that putting a spread->recalc() or spread->recalc(true) in
 your code is an abosolute NO-NO! Complex spreadsheets with possible
 heavy mathematical calculations via dll/so add-ins as well as real
 time feeds will not be managable if you do not painstakingly check
-wether table->getAutoCalc() is true.
+wether spread->getAutoCalc() is true.
 
 
 2. Learn to understand that without the
