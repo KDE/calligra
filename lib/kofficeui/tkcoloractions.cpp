@@ -139,6 +139,7 @@ void TKSelectColorAction::setCurrentColor( const QColor& color )
 {
     m_pCurrentColor = color;
     setActiveColor( color );
+    m_pRecentColor->setActiveColor(color );
   updatePixmap();
 }
 
@@ -264,7 +265,7 @@ void TKColorPanel::insertColor( const QColor& color )
   TKColorPanelButton* f = new TKColorPanelButton(color,this);
   m_pColorDict.insert(color.name(),f);
   if ( m_activeColor == color )
-    f->setActive(true);
+      f->setActive(true);
 
   connect(f,SIGNAL(selected(const QColor&)),SLOT(selected(const QColor&)));
 
