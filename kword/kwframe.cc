@@ -687,6 +687,38 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     frameStyle.addProperty( "fo:border-top", m_borderTop.saveFoBorder() );
     frameStyle.addProperty( "fo:border-bottom", m_borderBottom.saveFoBorder() );
 
+    if ( m_paddingLeft != 0 && ( ( m_paddingLeft == m_paddingRight )
+                                 && ( m_paddingLeft == m_paddingTop )
+                                 && ( m_paddingLeft == m_paddingBottom ) ) )
+        frameStyle.addPropertyPt( "fo:padding", m_paddingLeft );
+    else
+    {
+        if ( m_paddingLeft != 0 )
+            frameStyle.addPropertyPt( "fo:padding-left", m_paddingLeft );
+        if ( m_paddingRight != 0 )
+            frameStyle.addPropertyPt( "fo:padding-right", m_paddingRight );
+        if ( m_paddingTop != 0 )
+            frameStyle.addPropertyPt( "fo:padding-top", m_paddingTop );
+        if ( m_paddingBottom != 0 )
+            frameStyle.addPropertyPt( "fo:padding-bottom", m_paddingBottom );
+    }
+
+    if ( m_runAroundLeft != 0 && ( ( m_runAroundLeft == m_runAroundRight )
+                                 && ( m_runAroundLeft == m_runAroundTop )
+                                 && ( m_runAroundLeft == m_runAroundBottom ) ) )
+        frameStyle.addPropertyPt( "fo:margin", m_runAroundLeft );
+    else
+    {
+        if ( m_runAroundLeft != 0 )
+            frameStyle.addPropertyPt( "fo:margin-left", m_runAroundLeft );
+        if ( m_runAroundRight != 0 )
+            frameStyle.addPropertyPt( "fo:margin-right", m_runAroundRight );
+        if ( m_runAroundTop != 0 )
+            frameStyle.addPropertyPt( "fo:margin-top", m_runAroundTop );
+        if ( m_runAroundBottom != 0 )
+            frameStyle.addPropertyPt( "fo:margin-bottom", m_runAroundBottom );
+    }
+
     return mainStyles.lookup( frameStyle, "fr" );
 }
 
