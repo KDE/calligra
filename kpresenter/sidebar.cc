@@ -226,10 +226,12 @@ void ThumbBar::setCurrentPage( int pg )
     for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() )
     {
         if ( it->text().toInt() - 1 == pg ) {
+            blockSignals( true );
             setCurrentItem( it );
             setSelected( it, FALSE ); // to avoid the blue "selected"-mark
             ensureItemVisible(it);
             refreshItems();
+            blockSignals( false );
             return;
         }
     }
