@@ -395,6 +395,7 @@
 	KexiDB::Field *field;
 	bool requiresTable;
 	QPtrList<KexiDB::Field> fieldList;
+	QPtrList<KexiDB::TableSchema> tableList;
 	KexiDB::TableSchema *dummy;
 	int current = 0;
 	QString ctoken = "";
@@ -434,12 +435,45 @@
 		requiresTable = false;
 		tokenize(data);
 		yyparse();
-		/*
-		if(requiresTable)
+
+		if(parser->operation() == KexiDB::Parser::OP_Select)
 		{
-			yyerror("No tables used");
+			kdDebug() << "parseData(): " << tableList.count() << " loaded tables" << endl;
+			for(KexiDB::TableSchema *s = tableList.first(); s; s = tableList.next())
+			{
+				kdDebug() << "  " << s->name() << endl;
+			}
+
+			KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
+			for(KexiDB::Field *item; (item = it.current()); ++it)
+			{
+				if(tableList.findRef(item->table()) == -1)
+				{
+					KexiDB::ParserError err(i18n("Field List Error"), i18n("Unknown table '%1' in field list").arg(item->table()->name()), ctoken, current);
+					parser->setError(err);
+
+					yyerror("fieldlisterror");
+				}
+			}
 		}
-		*/
+
+		tableList.clear();
+	}
+
+	void addTable(const QString &table)
+	{
+		kdDebug() << "addTable() " << table << endl;
+		KexiDB::TableSchema *s = parser->db()->tableSchema(table);
+		if(!s)
+		{
+			KexiDB::ParserError err(i18n("Field List Error"), i18n("Table '%1' doesn't exist").arg(table), ctoken, current);
+			parser->setError(err);
+			yyerror("field list error");
+		}
+		else
+		{
+			tableList.append(s);
+		}
 	}
 
 	extern "C"
@@ -629,27 +663,27 @@ FROM FlatTableList
 | Tables LEFT JOIN USER_DEFINED_NAME SQL_ON ColExpression
 {
 	kdDebug() << "LEFT JOIN: '" << $4 << "' ON " << $6 << endl;
-	requiresTable = false;
+	addTable($4);
 }
 | Tables LEFT OUTER JOIN USER_DEFINED_NAME SQL_ON ColExpression
 {
 	kdDebug() << "LEFT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
-	requiresTable = false;
+	addTable($5);
 }
 | Tables INNER JOIN USER_DEFINED_NAME SQL_ON ColExpression
 {
 	kdDebug() << "INNER JOIN: '" << $4 << "' ON " << $6 << endl;
-	requiresTable = false;
+	addTable($4);
 }
 | Tables RIGHT JOIN USER_DEFINED_NAME SQL_ON ColExpression
 {
 	kdDebug() << "RIGHT JOIN: '" << $4 << "' ON " << $6 << endl;
-	requiresTable = false;
+	addTable($4);
 }
 | Tables RIGHT OUTER JOIN USER_DEFINED_NAME SQL_ON ColExpression
 {
 	kdDebug() << "RIGHT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
-	requiresTable = false;
+	addTable($5);
 }
 ;
 
@@ -668,6 +702,7 @@ USER_DEFINED_NAME
 	parser->select()->setParentTable(schema);
 	parser->select()->addTable(schema);
 	requiresTable = false;
+	addTable($1);
 
 	KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
 	for(KexiDB::Field *item; (item = it.current()); ++it)
@@ -679,10 +714,10 @@ USER_DEFINED_NAME
 
 		if(!item->isQueryAsterisk())
 		{
-			KexiDB::Field *f = schema->field(item->name());
+			KexiDB::Field *f = item->table()->field(item->name());
 			if(!f)
 			{
-				KexiDB::ParserError err(i18n("FIeld List Error Error"), i18n("Unknow column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
+				KexiDB::ParserError err(i18n("FIeld List Error Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
 				parser->setError(err);
 				yyerror("field list error");
 			}	
