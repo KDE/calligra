@@ -44,11 +44,12 @@ KGGroup::KGGroup(const QDomElement &element) : m_exclusive(true),
 
 KGGroup::~KGGroup() {
 
-    for(KGObject *tmp=members.first(); tmp!=0; tmp=members.next()) {
-	if(tmp->group()==this)
-	    tmp->setGroup(0L);
-	else if(tmp->temporaryGroup()==this)
-	    tmp->setTemporaryGroup(0L);
+    QListIterator<KGObject> it(members);
+    for( ; it.current(); ++it) {
+	if(it.current()->group()==this)
+	    it.current()->setGroup(0L);
+	else if(it.current()->temporaryGroup()==this)
+	    it.current()->setTemporaryGroup(0L);
 	else
 	    kdWarning(37001) << "KGGroup::~KGGroup(): Member had no ptr to this group!" << endl;
     }
@@ -62,9 +63,11 @@ const bool KGGroup::isExclusive() {
 
     m_exclusive=true;
     m_exclCache=true;
-    const char *firstName=members.first()->className();
-    for(KGObject *tmp=members.next(); tmp!=0L && m_exclusive==true; tmp=members.next()) {
-	if(strcmp(firstName, tmp->className())!=0) {
+    QListIterator<KGObject> it(members);
+    const char *firstName=it.current()->className();
+    ++it;
+    for( ; it.current() && m_exclusive==true; ++it) {
+	if(strcmp(firstName, it.current()->className())!=0) {
 	    m_exclusive=false;
 	}
     }
@@ -98,19 +101,21 @@ const bool KGGroup::changeProperty(const char *property, const QVariant &value,
 
     bool ok=false;
 
+    QListIterator<KGObject> it(members);
+    
     // propagate it to all objects (if possible)
     if(object==0L) {
-	for(KGObject *tmp=members.first(); tmp!=0L; tmp=members.next()) {
-	    if(tmp->setProperty(property, value))
-		ok=true;  // at least one successful change
+	for( ; it.current(); ++it) {
+	    if(it.current()->setProperty(property, value))
+		ok=true;  // ok, at least one successful change :)
 	}
     }
     // propagate it only to one type of objects (e.g. KGPolygon)
     else {
 	const char *name=object->className();
-	for(KGObject *tmp=members.first(); tmp!=0L; tmp=members.next()) {
-	    if(strcmp(name, tmp->className())==0 && tmp->setProperty(property, value))
-		ok=true;  // at least one successful change
+	for( ; it.current(); ++it) {
+	    if(strcmp(name, it.current()->className())==0 && it.current()->setProperty(property, value))
+		ok=true;  // ok, at least one successful change :)
 	}
     }
     return ok;

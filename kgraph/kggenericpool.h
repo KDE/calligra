@@ -48,7 +48,7 @@ protected:
     KGGenericPool() { pool.setAutoDelete(true); }
     virtual ~KGGenericPool() { pool.clear(); }
 
-    mutable QList<type> pool;
+    QList<type> pool;
 
 private:
     KGGenericPool &operator=(const KGGenericPool &rhs);
