@@ -27,6 +27,7 @@ KChartFactory::KChartFactory( QObject* parent, const char* name )
 
 KChartFactory::~KChartFactory()
 {
+    delete s_global;
 }
 
 QObject* KChartFactory::create( QObject* parent, const char* name, const char*  )
@@ -35,8 +36,9 @@ QObject* KChartFactory::create( QObject* parent, const char* name, const char*  
 		qDebug("KChartFactory: parent does not inherit KoDocument");
 		return 0;
     }
-
-    return new KChartPart( (KoDocument*)parent, name );
+    KChartPart *part = new KChartPart( (KoDocument*)parent, name );
+    emit objectCreated(part);
+    return part;
 }
 
 KInstance* KChartFactory::global()

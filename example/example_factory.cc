@@ -21,6 +21,7 @@ ExampleFactory::ExampleFactory( QObject* parent, const char* name )
 
 ExampleFactory::~ExampleFactory()
 {
+    delete s_global;
 }
 
 QObject* ExampleFactory::create( QObject* parent, const char* name, const char* /*classname*/ )
@@ -30,8 +31,9 @@ QObject* ExampleFactory::create( QObject* parent, const char* name, const char* 
 	qDebug("ExampleFactory: parent does not inherit KoDocument");
 	return 0;
     }
-
-    return new ExamplePart( (KoDocument*)parent, name );
+    ExamplePart *part = new ExamplePart( (KoDocument*)parent, name );
+    emit objectCreated(part);
+    return part;
 }
 
 KInstance* ExampleFactory::global()

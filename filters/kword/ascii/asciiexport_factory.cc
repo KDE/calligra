@@ -22,6 +22,7 @@ ASCIIExportFactory::ASCIIExportFactory( QObject* parent, const char* name )
 
 ASCIIExportFactory::~ASCIIExportFactory()
 {
+    delete s_global;
 }
 
 QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const char* )
@@ -31,7 +32,9 @@ QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const ch
 	    qDebug("ASCIIExportFactory: parent does not inherit KoFilter");
 	    return 0L;
     }
-    return new ASCIIExport( (KoFilter*)parent, name );
+    ASCIIExport *f = new ASCIIExport( (KoFilter*)parent, name );
+    emit objectCreated(f);
+    return f;
 }
 
 KInstance* ASCIIExportFactory::global()

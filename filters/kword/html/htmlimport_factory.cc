@@ -22,6 +22,7 @@ HTMLImportFactory::HTMLImportFactory( QObject* parent, const char* name )
 
 HTMLImportFactory::~HTMLImportFactory()
 {
+    delete s_global;
 }
 
 QObject* HTMLImportFactory::create( QObject* parent, const char* name, const char* )
@@ -31,12 +32,12 @@ QObject* HTMLImportFactory::create( QObject* parent, const char* name, const cha
 	    qDebug("HTMLImportFactory: parent does not inherit KoFilter");
 	    return 0L;
     }
-    return new HTMLImport( (KoFilter*)parent, name );
+    HTMLImport *f = new HTMLImport( (KoFilter*)parent, name );
+    emit objectCreated(f);
+    return f;
 }
 
 KInstance* HTMLImportFactory::global()
 {
     return s_global;
 }
-
-

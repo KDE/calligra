@@ -22,6 +22,7 @@ HTMLExportFactory::HTMLExportFactory( QObject* parent, const char* name )
 
 HTMLExportFactory::~HTMLExportFactory()
 {
+    delete s_global;
 }
 
 QObject* HTMLExportFactory::create( QObject* parent, const char* name, const char* )
@@ -31,7 +32,9 @@ QObject* HTMLExportFactory::create( QObject* parent, const char* name, const cha
 	    qDebug("HTMLExportFactory: parent does not inherit KoFilter");
 	    return 0L;
     }
-    return new HTMLExport( (KoFilter*)parent, name );
+    HTMLExport *f = new HTMLExport( (KoFilter*)parent, name );
+    emit objectCreated(f);
+    return f;
 }
 
 KInstance* HTMLExportFactory::global()

@@ -53,6 +53,7 @@ KWordFactory::KWordFactory( QObject* parent, const char* name )
 
 KWordFactory::~KWordFactory()
 {
+    delete s_global;
 }
 
 QObject* KWordFactory::create( QObject* parent, const char* name, const char* classname )
@@ -62,8 +63,9 @@ QObject* KWordFactory::create( QObject* parent, const char* name, const char* cl
 	qDebug("KWordFactory: parent does not inherit KoDocument");
 	return 0;
     }
-
-    return new KWordDocument( (KoDocument*)parent, name );
+    KWordDocument *doc = new KWordDocument( (KoDocument*)parent, name );
+    emit objectCreated(doc);
+    return doc;
 }
 
 KInstance* KWordFactory::global()

@@ -53,6 +53,7 @@ KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
 
 KPresenterFactory::~KPresenterFactory()
 {
+    delete s_global;
 }
 
 QObject* KPresenterFactory::create( QObject* parent, const char* name, const char* classname )
@@ -62,8 +63,9 @@ QObject* KPresenterFactory::create( QObject* parent, const char* name, const cha
 	qDebug("KPresenterFactory: parent does not inherit KoDocument");
 	return 0;
     }
-
-    return new KPresenterDoc( (KoDocument*)parent, name );
+    KPresenterDoc *doc = new KPresenterDoc( (KoDocument*)parent, name );
+    emit objectCreated(doc);
+    return doc;
 }
 
 KInstance* KPresenterFactory::global()

@@ -22,6 +22,7 @@ CSVFilterFactory::CSVFilterFactory( QObject* parent, const char* name )
 
 CSVFilterFactory::~CSVFilterFactory()
 {
+    delete s_global;
 }
 
 QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char* )
@@ -31,7 +32,9 @@ QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char
 	    qDebug("CSVFilterFactory: parent does not inherit KoFilter");
 	    return 0L;
     }
-    return new CSVFilter( (KoFilter*)parent, name );
+    CSVFilter *f = new CSVFilter( (KoFilter*)parent, name );
+    emit objectCreated(f);
+    return f;
 }
 
 KInstance* CSVFilterFactory::global()

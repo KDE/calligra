@@ -22,6 +22,7 @@ OLEFilterFactory::OLEFilterFactory( QObject* parent, const char* name )
 
 OLEFilterFactory::~OLEFilterFactory()
 {
+    delete s_global;
 }
 
 QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char* )
@@ -31,7 +32,9 @@ QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char
 	    qDebug("OLEFilterFactory: parent does not inherit KoFilter");
 	    return 0L;
     }
-    return new OLEFilter( (KoFilter*)parent, name );
+    OLEFilter *f = new OLEFilter( (KoFilter*)parent, name );
+    emit objectCreated(f);
+    return f;
 }
 
 KInstance* OLEFilterFactory::global()
