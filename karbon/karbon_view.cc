@@ -797,22 +797,22 @@ KarbonView::initActions()
 		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
 
 	new KAction(
-		i18n( "Align left" ), 0, 0, this,
+		i18n( "Align left" ), "aoleft", 0, this,
 		SLOT( selectionAlignHorizontalLeft() ), actionCollection(), "object_align_horizontal_left" );
 	new KAction(
-		i18n( "Align center" ), 0, 0, this,
+		i18n( "Align center (Horizontal)" ), "aocenterh", 0, this,
 		SLOT( selectionAlignHorizontalCenter() ), actionCollection(), "object_align_horizontal_center" );
 	new KAction(
-		i18n( "Align right" ), 0, 0, this,
+		i18n( "Align right" ), "aoright", 0, this,
 		SLOT( selectionAlignHorizontalRight() ), actionCollection(), "object_align_horizontal_right" );
 	new KAction(
-		i18n( "Align top" ), 0, 0, this,
+		i18n( "Align top" ), "aotop", 0, this,
 		SLOT( selectionAlignVerticalTop() ), actionCollection(), "object_align_vertical_top" );
 	new KAction(
-		i18n( "Align center" ), 0, 0, this,
+		i18n( "Align center (Vertical)" ), "aocenterv", 0, this,
 		SLOT( selectionAlignVerticalCenter() ), actionCollection(), "object_align_vertical_center" );
 	new KAction(
-		i18n( "Align bottom" ), 0, 0, this,
+		i18n( "Align bottom" ), "aobottom", 0, this,
 		SLOT( selectionAlignVerticalBottom() ), actionCollection(), "object_align_vertical_bottom" );
 
 	m_groupObjects = new KAction(
