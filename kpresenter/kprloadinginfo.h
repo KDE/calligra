@@ -30,11 +30,12 @@ struct lstAnimation
 class KPRLoadingInfo
 {
 public:
-    KPRLoadingInfo( bool oldFormat = false) { 
-	m_oldFormat = oldFormat; 
-	presSpeed = -1; 
+    KPRLoadingInfo( bool oldFormat = false) {
+	m_oldFormat = oldFormat;
+	presSpeed = -1;
 	m_header = false;
 	m_footer = false;
+        m_headerFooterByPage=false;
     }
     ~KPRLoadingInfo() {}
 
@@ -72,6 +73,7 @@ public:
     CustomListMap m_tmpCustomListMap;
     bool m_header;
     bool m_footer;
+    bool m_headerFooterByPage;
 private:
     QDict<lstAnimation> m_animationsShowDict;
     QDict<lstAnimation> m_animationsHideDict;

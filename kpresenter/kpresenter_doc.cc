@@ -558,6 +558,10 @@ QDomDocument KPresenterDoc::saveXML()
     element.appendChild(_footer->save( doc,0 ));
     presenter.appendChild(element);
 
+    element = doc.createElement( "HEADERFOOTERBYPAGE" );
+    element.setAttribute( "value", "true" );
+    presenter.appendChild( element );
+
     element=doc.createElement("HELPLINES");
     element.setAttribute("show", static_cast<int>( showHelplines() ));
     saveHelpLines( doc, element );
@@ -770,12 +774,15 @@ void KPresenterDoc::compatibilityFromOldFileFormat()
             else if ( m_loadingInfo->presSpeed > 7 )
                 newValue = ES_FAST;
         }
-        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+        if ( !m_loadingInfo->m_headerFooterByPage )
         {
-            if ( presSpeedChanged )
-                m_pageList.at(i)->setPageEffectSpeed( newValue );
-            m_pageList.at( i )->setHeader( m_loadingInfo->m_header );
-            m_pageList.at( i )->setFooter( m_loadingInfo->m_footer );
+            for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+            {
+                if ( presSpeedChanged )
+                    m_pageList.at(i)->setPageEffectSpeed( newValue );
+                m_pageList.at( i )->setHeader( m_loadingInfo->m_header );
+                m_pageList.at( i )->setFooter( m_loadingInfo->m_footer );
+            }
         }
 
     }
@@ -2319,6 +2326,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                     setHeader(static_cast<bool>(elem.attribute("show").toInt()));
                 }
                 _header->load(elem);
+            }
+        } else if ( elem.tagName()=="HEADERFOOTERBYPAGE" ) {
+            if ( elem.hasAttribute( "value" ) ) {
+                m_loadingInfo->m_headerFooterByPage = true;
             }
         } else if(elem.tagName()=="FOOTER") {
             if ( _clean /*|| !hasFooter()*/ ) {
