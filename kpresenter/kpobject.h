@@ -180,6 +180,10 @@ protected:
     QDomElement createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc);
     QBrush toBrush(const QDomElement &element) const;
 
+    QColor retrieveColor(const QDomElement &element, const QString &cattr="color",
+                         const QString &rattr="red", const QString &gattr="green",
+                         const QString &battr="blue") const;
+
     float angle;
     QPoint orig;
     QSize ext;
@@ -212,6 +216,15 @@ protected:
 
     DCOPObject *dcop;
 
+private:
+    static const QString &tagORIG, &attrX, &attrY,
+        &tagSIZE, &attrWidth, &attrHeight, &tagSHADOW,
+        &attrDistance, &attrDirection, &attrColor, &attrC1,
+        &attrC2, &attrType, &attrUnbalanced, &attrXFactor,
+        &attrYFactor, &attrStyle, &tagEFFECTS, &attrEffect,
+        &attrEffect2, &tagPRESNUM, &tagANGLE,
+        &tagDISAPPEAR, &attrDoit, &attrNum, &tagFILLTYPE,
+        &tagGRADIENT, &tagPEN, &tagBRUSH, &attrValue;
 };
 
 

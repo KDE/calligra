@@ -40,7 +40,7 @@ using namespace std;
 
 /*================ default constructor ===========================*/
 KPAutoformObject::KPAutoformObject()
-    : KP2DObject(), atfInterp( 0, "" )
+    : KP2DObject(), atfInterp()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
@@ -52,7 +52,7 @@ KPAutoformObject::KPAutoformObject( QPen _pen, QBrush _brush, QString _filename,
                                     FillType _fillType, QColor _gColor1, QColor _gColor2, BCType _gType,
                                     bool _unbalanced, int _xfactor, int _yfactor)
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor ),
-      filename( _filename ), atfInterp( 0, "" )
+      filename( _filename ), atfInterp()
 {
     atfInterp.load( filename );
     lineBegin = _lineBegin;
@@ -175,6 +175,9 @@ void KPAutoformObject::load(const QDomElement &element)
     if(!e.isNull()) {
         if(e.hasAttribute("value"))
             filename=e.attribute("value");
+        // don't crash on invalid files, better insert something
+        if(filename.isEmpty())
+            filename="Connections/.source/Connection1.atf";
         // workaround for a bug in the (very) old file format
         if(filename[0]=='/') {
             kdDebug() << "rubbish ahead! cleaning up..." << endl;

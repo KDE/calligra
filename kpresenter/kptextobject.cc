@@ -39,6 +39,32 @@ using namespace std;
 /* Class: KPTextObject                                            */
 /******************************************************************/
 
+const QString &KPTextObject::tagTEXTOBJ=KGlobal::staticQString("TEXTOBJ");
+const QString &KPTextObject::attrLineSpacing=KGlobal::staticQString("lineSpacing");
+const QString &KPTextObject::attrParagSpacing=KGlobal::staticQString("paragSpacing");
+const QString &KPTextObject::attrMargin=KGlobal::staticQString("margin");
+const QString &KPTextObject::attrBulletType1=KGlobal::staticQString("bulletType1");
+const QString &KPTextObject::attrBulletType2=KGlobal::staticQString("bulletType2");
+const QString &KPTextObject::attrBulletType3=KGlobal::staticQString("bulletType3");
+const QString &KPTextObject::attrBulletType4=KGlobal::staticQString("bulletType4");
+const QString &KPTextObject::attrBulletColor1=KGlobal::staticQString("bulletColor1");
+const QString &KPTextObject::attrBulletColor2=KGlobal::staticQString("bulletColor2");
+const QString &KPTextObject::attrBulletColor3=KGlobal::staticQString("bulletColor3");
+const QString &KPTextObject::attrBulletColor4=KGlobal::staticQString("bulletColor4");
+const QString &KPTextObject::attrObjType=KGlobal::staticQString("objType");
+const QString &KPTextObject::tagP=KGlobal::staticQString("P");
+const QString &KPTextObject::attrAlign=KGlobal::staticQString("align");
+const QString &KPTextObject::attrType=KGlobal::staticQString("type");
+const QString &KPTextObject::attrDepth=KGlobal::staticQString("depth");
+const QString &KPTextObject::tagTEXT=KGlobal::staticQString("TEXT");
+const QString &KPTextObject::attrFamily=KGlobal::staticQString("family");
+const QString &KPTextObject::attrPointSize=KGlobal::staticQString("pointSize");
+const QString &KPTextObject::attrBold=KGlobal::staticQString("bold");
+const QString &KPTextObject::attrItalic=KGlobal::staticQString("italic");
+const QString &KPTextObject::attrUnderline=KGlobal::staticQString("underline");
+const QString &KPTextObject::attrColor=KGlobal::staticQString("color");
+const QString &KPTextObject::attrWhitespace=KGlobal::staticQString("whitespace");
+
 /*================ default constructor ===========================*/
 KPTextObject::KPTextObject(  KPresenterDoc *doc )
     : KP2DObject(), ktextobject( doc, this, 0, "" )
@@ -95,22 +121,22 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc )
 void KPTextObject::load(const QDomElement &element)
 {
     KP2DObject::load(element);
-    QDomElement e=element.namedItem("TEXTOBJ").toElement();
+    QDomElement e=element.namedItem(tagTEXTOBJ).toElement();
     if(!e.isNull()) {
-        ktextobject.document()->setLineSpacing( e.attribute( "lineSpacing" ).toInt() );
-        ktextobject.document()->setParagSpacing( e.attribute( "paragSpacing" ).toInt() );
-        ktextobject.document()->setMargin( e.attribute( "margin" ).toInt() );
+        ktextobject.document()->setLineSpacing( e.attribute( attrLineSpacing ).toInt() );
+        ktextobject.document()->setParagSpacing( e.attribute( attrParagSpacing ).toInt() );
+        ktextobject.document()->setMargin( e.attribute( attrMargin ).toInt() );
         KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
-        settings.bulletColor[0] = QColor( e.attribute( "bulletColor1", Qt::black.name() ) );
-        settings.bulletColor[1] = QColor( e.attribute( "bulletColor2", Qt::black.name() ) );
-        settings.bulletColor[2] = QColor( e.attribute( "bulletColor3", Qt::black.name() ) );
-        settings.bulletColor[3] = QColor( e.attribute( "bulletColor4", Qt::black.name() ) );
-        settings.bulletType[0] = (KTextEditDocument::Bullet)e.attribute( "bulletType1", 0 ).toInt();
-        settings.bulletType[1] = (KTextEditDocument::Bullet)e.attribute( "bulletType2", 0 ).toInt();
-        settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( "bulletType3", 0 ).toInt();
-        settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( "bulletType4", 0 ).toInt();
+        settings.bulletColor[0] = QColor( e.attribute( attrBulletColor1, Qt::black.name() ) );
+        settings.bulletColor[1] = QColor( e.attribute( attrBulletColor2, Qt::black.name() ) );
+        settings.bulletColor[2] = QColor( e.attribute( attrBulletColor3, Qt::black.name() ) );
+        settings.bulletColor[3] = QColor( e.attribute( attrBulletColor4, Qt::black.name() ) );
+        settings.bulletType[0] = (KTextEditDocument::Bullet)e.attribute( attrBulletType1, 0 ).toInt();
+        settings.bulletType[1] = (KTextEditDocument::Bullet)e.attribute( attrBulletType2, 0 ).toInt();
+        settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( attrBulletType3, 0 ).toInt();
+        settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( attrBulletType4, 0 ).toInt();
         ktextobject.document()->setTextSettings( settings );
-        QString type = e.attribute( "objType" );
+        QString type = e.attribute( attrObjType );
         int t = -1;
         if ( !type.isEmpty() ) {
             if ( type == "1" )
@@ -328,26 +354,27 @@ void KPTextObject::extendObject2Contents( KPresenterView */*view*/ )
 /*=========================== save ktextobject ===================*/
 QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 {
+
     KTextEditParag *parag = ktextobject.document()->firstParag();
     KTextEditDocument::TextSettings textSettings = ktextobject.document()->textSettings();
-    QDomElement textobj=doc.createElement("TEXTOBJ");
-    textobj.setAttribute("lineSpacing", ktextobject.document()->lineSpacing());
-    textobj.setAttribute("paragSpacing", ktextobject.document()->paragSpacing());
-    textobj.setAttribute("margin", ktextobject.document()->margin());
-    textobj.setAttribute("bulletType1", (int)textSettings.bulletType[0]);
-    textobj.setAttribute("bulletType2", (int)textSettings.bulletType[1]);
-    textobj.setAttribute("bulletType3", (int)textSettings.bulletType[2]);
-    textobj.setAttribute("bulletType4", (int)textSettings.bulletType[3]);
-    textobj.setAttribute("bulletColor1", textSettings.bulletColor[0].name());
-    textobj.setAttribute("bulletColor2", textSettings.bulletColor[1].name());
-    textobj.setAttribute("bulletColor3", textSettings.bulletColor[2].name());
-    textobj.setAttribute("bulletColor4", textSettings.bulletColor[3].name());
+    QDomElement textobj=doc.createElement(tagTEXTOBJ);
+    textobj.setAttribute(attrLineSpacing, ktextobject.document()->lineSpacing());
+    textobj.setAttribute(attrParagSpacing, ktextobject.document()->paragSpacing());
+    textobj.setAttribute(attrMargin, ktextobject.document()->margin());
+    textobj.setAttribute(attrBulletType1, (int)textSettings.bulletType[0]);
+    textobj.setAttribute(attrBulletType2, (int)textSettings.bulletType[1]);
+    textobj.setAttribute(attrBulletType3, (int)textSettings.bulletType[2]);
+    textobj.setAttribute(attrBulletType4, (int)textSettings.bulletType[3]);
+    textobj.setAttribute(attrBulletColor1, textSettings.bulletColor[0].name());
+    textobj.setAttribute(attrBulletColor2, textSettings.bulletColor[1].name());
+    textobj.setAttribute(attrBulletColor3, textSettings.bulletColor[2].name());
+    textobj.setAttribute(attrBulletColor4, textSettings.bulletColor[3].name());
     // ### fix this loop (Werner)
     while ( parag ) {
-        QDomElement paragraph=doc.createElement("P");
-        paragraph.setAttribute("align", parag->alignment());
-        paragraph.setAttribute("type", (int)parag->type());
-        paragraph.setAttribute("depth", parag->listDepth());
+        QDomElement paragraph=doc.createElement(tagP);
+        paragraph.setAttribute(attrAlign, parag->alignment());
+        paragraph.setAttribute(attrType, (int)parag->type());
+        paragraph.setAttribute(attrDepth, parag->listDepth());
         KTextEditFormat *lastFormat = 0;
         QString tmpText, tmpFamily, tmpColor;
         int tmpPointSize=10;
@@ -382,16 +409,16 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpFamily, const QString &tmpColor,
                                      int tmpPointSize, unsigned int tmpBold, unsigned int tmpItalic,
                                      unsigned int tmpUnderline, QDomDocument &doc) {
-    QDomElement element=doc.createElement("TEXT");
-    element.setAttribute("family", tmpFamily);
-    element.setAttribute("pointSize", tmpPointSize);
-    element.setAttribute("bold", tmpBold);
-    element.setAttribute("italic", tmpItalic);
-    element.setAttribute("underline", tmpUnderline);
-    element.setAttribute("color", tmpColor);
+    QDomElement element=doc.createElement(tagTEXT);
+    element.setAttribute(attrFamily, tmpFamily);
+    element.setAttribute(attrPointSize, tmpPointSize);
+    element.setAttribute(attrBold, tmpBold);
+    element.setAttribute(attrItalic, tmpItalic);
+    element.setAttribute(attrUnderline, tmpUnderline);
+    element.setAttribute(attrColor, tmpColor);
     if(tmpText.stripWhiteSpace().isEmpty())
         // working around a bug in QDom
-        element.setAttribute("whitespace", tmpText.length());
+        element.setAttribute(attrWhitespace, tmpText.length());
     element.appendChild(doc.createTextNode(tmpText));
     return element;
 }
@@ -408,24 +435,24 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
     int lineSpacing = 0, paragSpacing = 0;
     while ( !e.isNull() ) {
-        if ( e.tagName() == "P" ) {
+        if ( e.tagName() == tagP ) {
             QDomElement n = e.firstChild().toElement();
             if ( type != -1 )
                 lastParag->setType( (KTextEditParag::Type)type );
             else
-                lastParag->setType( (KTextEditParag::Type)e.attribute( "type" ).toInt() );
-            lastParag->setAlignment( e.attribute( "align" ).toInt() );
-            lastParag->setListDepth( e.attribute( "depth" ).toInt() );
-            lineSpacing = QMAX( e.attribute( "lineSpacing" ).toInt(), lineSpacing );
+                lastParag->setType( (KTextEditParag::Type)e.attribute( attrType ).toInt() );
+            lastParag->setAlignment( e.attribute( attrAlign ).toInt() );
+            lastParag->setListDepth( e.attribute( attrDepth ).toInt() );
+            lineSpacing = QMAX( e.attribute( attrLineSpacing ).toInt(), lineSpacing );
             paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
             while ( !n.isNull() ) {
-                if ( n.tagName() == "TEXT" ) {
-                    QString family = n.attribute( "family" );
-                    int size = n.attribute( "pointSize" ).toInt();
-                    bool bold = (bool)n.attribute( "bold" ).toInt();
-                    bool italic = (bool)n.attribute( "italic" ).toInt();
-                    bool underline = (bool)n.attribute( "underline" ).toInt();
-                    QString color = n.attribute( "color" );
+                if ( n.tagName() == tagTEXT ) {
+                    QString family = n.attribute( attrFamily );
+                    int size = n.attribute( attrPointSize ).toInt();
+                    bool bold = (bool)n.attribute( attrBold ).toInt();
+                    bool italic = (bool)n.attribute( attrItalic ).toInt();
+                    bool underline = (bool)n.attribute( attrUnderline ).toInt();
+                    QString color = n.attribute( attrColor );
                     QFont fn( family );
                     fn.setPointSize( size );
                     fn.setBold( bold );
@@ -434,8 +461,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     QColor col( color );
                     fm = ktextobject.document()->formatCollection()->format( fn, col );
                     QString txt = n.firstChild().toText().data();
-                    if(n.hasAttribute("whitespace")) {
-                        int ws=n.attribute("whitespace").toInt();
+                    if(n.hasAttribute(attrWhitespace)) {
+                        int ws=n.attribute(attrWhitespace).toInt();
                         txt.fill(' ', ws);
                     }
                     n=n.nextSibling().toElement();

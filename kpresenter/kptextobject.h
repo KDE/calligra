@@ -89,6 +89,14 @@ protected:
 
 private:
     KPTextObject &operator=( const KPTextObject & );
+
+    static const QString &tagTEXTOBJ, &attrLineSpacing, &attrParagSpacing,
+                           &attrMargin, &attrBulletType1, &attrBulletType2,
+                           &attrBulletType3, &attrBulletType4, &attrBulletColor1,
+                           &attrBulletColor2, &attrBulletColor3, &attrBulletColor4,
+                           &attrObjType, &tagP, &attrAlign, &attrType,
+                           &attrDepth, &tagTEXT, &attrFamily, &attrPointSize,
+                           &attrBold, &attrItalic, & attrUnderline, &attrColor, &attrWhitespace;
 };
 
 #endif

@@ -20,21 +20,15 @@
 #ifndef ATFINTERP_H
 #define ATFINTERP_H
 
-#include <qobject.h>
 #include <qpointarray.h>
 #include <qlist.h>
-#include <qstrlist.h>
-#include <qcstring.h>
-
-class QPointArray;
+#include <qstringlist.h>
 
 /******************************************************************/
 /* class ATFInterpreter                                           */
 /******************************************************************/
 
-class ATFInterpreter : public QObject
-{
-  Q_OBJECT
+class ATFInterpreter {
 
 public:
 
@@ -61,7 +55,7 @@ public:
   struct AttribStruct
   {
     QString isVariable;
-    QCString pwDiv;
+    QString pwDiv;
   };
 
   //point structure
@@ -94,28 +88,15 @@ public:
   };
 
   // constructure - destructure
-  ATFInterpreter(QObject* parent=0,const char* name=0);
+  ATFInterpreter();
   ~ATFInterpreter();
 
-  // load/new/save autifirm
+  // load autoform
   void load(const QString &);
-  void newAutoform();
-  void save(const QString &);
 
   // get pointarray/attribute list/points
   QPointArray getPointArray(int,int);
   QList<AttribList> getAttribList();
-  QList<PointStruct> getPoints() {return pointList;}
-
-  // change a variable
-  void changeVar(int,int,int,QString);
-
-  // get nuber of points
-  int getNumOfPoints();
-
-  // insert - delete point
-  void insertPoint(int,bool);
-  void deletePoint(int);
 
 protected:
 
@@ -183,46 +164,26 @@ protected:
     int pwDiv;
   };
 
-  // structure of an integer
-  struct ls
-  {
-    int l;
-  };
-
   // interpret the code
   void interpret();
 
-  // simplify a line
-  QString simplify(QString);
-
   // get varaible of a line
   QList<Sign> getVar(QString);
-
-  // make lines from interpretded code
-  void makeLines();
-
-  // stretch a line
-  QString stretch(QString);
-
-  // if a char is a number
-  bool isNum(char);
 
   // ********** variables **********
 
   // list of coordinates and pointers to coordinate/sign/value
   QList<Coord> coordList;
+  QList<AttribList> attrLs;
   Coord *coordPtr;
   Sign *signPtr;
   Value *valuePtr;
 
   // list of lines and points and pointer to a point
-  QStrList lines;
+  QStringList lines;
   QList<PointStruct> pointList;
   PointStruct *pntPtr;
 
 };
 
 #endif //ATFINTERP_H
-
-
-
