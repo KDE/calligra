@@ -101,7 +101,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 		{
 			kdDebug() << "Create new field!" << endl;
 			bool ok = kexi->project()->db()->createField(m_table, i->getValue(0).toString(),
-				static_cast<KexiDBField::ColumnType>(i->getValue(1).toInt()), i->getValue(2).toInt(),
+				static_cast<KexiDBField::ColumnType>(i->getValue(1).toInt() + 1), i->getValue(2).toInt(),
 				i->getValue(3).toBool(), i->getValue(4).toString(), i->getValue(5).toBool());
 			
 			if(ok)
@@ -121,7 +121,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 		int field = i->getHint().toInt();
 		kdDebug() << "KexiAlterTable::slotItemChanged(" << field << ")" << endl;
 		bool ok = kexi->project()->db()->alterField(m_table, m_fieldnames[field],
-			i->getValue(0).toString(), static_cast<KexiDBField::ColumnType> (i->getValue(1).toInt()),
+			i->getValue(0).toString(), static_cast<KexiDBField::ColumnType> (i->getValue(1).toInt() + 1),
 			i->getValue(2).toInt(), i->getValue(3).toBool(), i->getValue(4).toString(),
 			i->getValue(5).toBool());
 		
@@ -135,7 +135,7 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 			KexiDBRecord* record = kexi->project()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
 			record->next();
 			i->setValue(0, record->fieldInfo(field)->name());
-			i->setValue(1, record->fieldInfo(field)->sqlType());
+			i->setValue(1, record->fieldInfo(field)->sqlType() - 1);
 			i->setValue(2, record->fieldInfo(field)->length());
 			i->setValue(3, record->fieldInfo(field)->not_null());
 			i->setValue(4, record->fieldInfo(field)->defaultValue());

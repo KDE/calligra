@@ -624,7 +624,7 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 
 	if(m_pCurrentItem)
 	{
-		if(m_editOnDubleClick && columnEditable(m_curCol))
+		if(m_editOnDubleClick && columnEditable(m_curCol) && columnType(m_curCol) != QVariant::Bool)
 		{
 			createEditor(m_curRow, m_curCol, QString::null);
 		}
@@ -669,12 +669,18 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		m_pCurrentItem = itemAt(m_curRow);
 		emit itemSelected(m_pCurrentItem);
 	}
+	
 	if(m_pContextMenu && e->button() == RightButton)
-		m_pContextMenu->exec(QCursor::pos());
-
-	if(columnType(m_curCol) == QVariant::Bool)
 	{
-		itemAt(m_curRow)->setValue(m_curCol, true);
+		m_pContextMenu->exec(QCursor::pos());
+	}
+	else if(e->button() == LeftButton)
+	{
+		if(columnType(m_curCol) == QVariant::Bool && columnEditable(m_curCol))
+		{
+			boolToggled();
+			updateCell( m_curRow, m_curCol );
+		}
 	}
 }
 
@@ -727,7 +733,24 @@ void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *e)
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
-	qDebug("KexiTableView::KeyPressEvent()");
+	kdDebug() << "KexiTableView::KeyPressEvent()" << endl;
+	
+	if(m_pCurrentItem == 0 && m_numRows > 0)
+	{
+		m_curCol = m_curRow = 0;
+		int cw = columnWidth(m_curCol);
+
+		ensureVisible(columnPos(m_curCol) + cw / 2, rowPos(m_curRow) + m_rowHeight / 2, cw / 2, m_rowHeight / 2);
+		updateCell(m_curRow, m_curCol);
+		m_pVerticalHeader->setCurrentRow(m_curRow);
+		m_pCurrentItem = itemAt(m_curRow);
+		emit itemSelected(m_pCurrentItem);
+	}
+	else if(m_numRows == 0)
+	{
+		return;
+	}
+	
 	// if a cell is just editing, do some special stuff
 	if(m_pEditor)
 	{
