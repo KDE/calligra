@@ -167,6 +167,13 @@ public:
     void setRightIndent( double _right );
 
     /**
+     * Set the [paragraph] direction. By default (rtl=false), the left indent is on the
+     * left, and the right indent is on the right ;)
+     * If rtl=true, it's the opposite.
+     */
+    void setDirection( bool rtl );
+
+    /**
      * Set the list of tabulators to show in the ruler.
      */
     void setTabList( const KoTabulatorList & tabList );
@@ -256,6 +263,10 @@ protected:
     void uncheckMenu();
     void searchTab(int mx);
     void drawLine(int oldX, int newX);
+
+private:
+    double applyRtlAndZoom( double value, int width ) const;
+    double unZoomItRtl( int pixValue, int width ) const;
 
     KoRulerPrivate *d;
 

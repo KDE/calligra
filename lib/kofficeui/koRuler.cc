@@ -43,6 +43,7 @@ public:
     KoRuler::Action action;
     bool whileMovingBorderLeft, whileMovingBorderRight;
     bool whileMovingBorderTop, whileMovingBorderBottom;
+    bool rtl;
     QPixmap pmFirst, pmLeft;
     KoTabChooser *tabChooser;
     KoTabulatorList tabList;
@@ -96,6 +97,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
 
     d->oldMx = 0;
     d->oldMy = 0;
+    d->rtl = false;
 
     showMPos = false;
     mposX = 0;
@@ -255,12 +257,12 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     // Draw the indents triangles
     if ( d->flags & F_INDENTS ) {
         int top = 2;
-        p.drawPixmap( qRound(zoomIt(i_first) - d->pmFirst.width() * 0.5 +
+        p.drawPixmap( qRound(applyRtlAndZoom(i_first, r.width()) - d->pmFirst.width() * 0.5 +
                                  static_cast<double>(r.left())), top, d->pmFirst );
         int bottom = height() - d->pmLeft.height() - 2;
-        p.drawPixmap( qRound(zoomIt(i_left) - d->pmLeft.width() * 0.5 +
+        p.drawPixmap( qRound(applyRtlAndZoom(i_left, r.width()) - d->pmLeft.width() * 0.5 +
                              static_cast<double>(r.left())), bottom, d->pmLeft );
-        p.drawPixmap( qRound(static_cast<double>(r.right()) - zoomIt(d->i_right)
+        p.drawPixmap( qRound(static_cast<double>(r.right()) - applyRtlAndZoom(d->i_right, r.width())
                              - d->pmLeft.width() * 0.5 ), bottom, d->pmLeft );
     }
 
@@ -611,9 +613,9 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     int right = d->frameEnd - diffx;
     int bottom = qRound(zoomIt(layout.ptBottom));
     bottom = ph - bottom - diffy;
-    int ip_left = qRound(zoomIt(i_left));
-    int ip_first = qRound(zoomIt(i_first));
-    int ip_right = qRound(zoomIt(d->i_right));
+    int ip_left = qRound(applyRtlAndZoom(i_left, pw));
+    int ip_first = qRound(applyRtlAndZoom(i_first, pw));
+    int ip_right = qRound(applyRtlAndZoom(d->i_right, pw));
 
     int mx = e->x();
     mx = mx+diffx < 0 ? 0 : mx;
@@ -682,19 +684,19 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             if( ip_first > right-left-15 ) {
                                 ip_first=right-left-15;
                                 ip_first=ip_first<0 ? 0 : ip_first;
-                                i_first=unZoomIt(static_cast<double>(ip_first));
+                                i_first=unZoomItRtl( ip_first, pw );
                                 emit newFirstIndent( i_first );
                             }
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
-                                i_left=unZoomIt(static_cast<double>(ip_left));
+                                i_left=unZoomItRtl( ip_left, pw );
                                 emit newLeftIndent( i_left );
                             }
                             if ( ip_right > right-left-15 ) {
                                 ip_right=right-left-15;
                                 ip_right=ip_right<0? 0 : ip_right;
-                                d->i_right=unZoomIt(static_cast<double>(ip_right));
+                                d->i_right=unZoomItRtl( ip_right, pw );
                                 emit newRightIndent( d->i_right );
                             }
                             d->oldMx = mx;
@@ -711,19 +713,19 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             if( ip_first > right-left-15 ) {
                                 ip_first=right-left-15;
                                 ip_first=ip_first<0 ? 0 : ip_first;
-                                i_first=unZoomIt(static_cast<double>(ip_first));
+                                i_first=unZoomItRtl( ip_first, pw );
                                 emit newFirstIndent( i_first );
                             }
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
-                                i_left=unZoomIt(static_cast<double>(ip_left));
+                                i_left=unZoomItRtl( ip_left, pw );
                                 emit newLeftIndent( i_left );
                             }
                             if ( ip_right > right-left-15 ) {
                                 ip_right=right-left-15;
                                 ip_right=ip_right<0? 0 : ip_right;
-                                d->i_right=unZoomIt(static_cast<double>(ip_right));
+                                d->i_right=unZoomItRtl( ip_right, pw );
                                 emit newRightIndent( d->i_right );
                             }
                             d->oldMx = mx;
@@ -735,6 +737,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     } break;
                     case A_FIRST_INDENT: {
                         if ( d->canvas ) {
+                            if (d->rtl) newValue = unZoomIt(pw) - newValue;
                             if(newValue == i_first) break;
                             drawLine( d->oldMx, newPos);
                             d->oldMx=newPos;
@@ -745,6 +748,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     case A_LEFT_INDENT: {
                         if ( d->canvas ) {
                             if(newValue == i_left) break;
+                            if (d->rtl) newValue = unZoomIt(pw) - newValue;
                             double newFirst =(i_first - i_left) + newValue;
                             if(zoomIt(newFirst) + left > right) break;
 
@@ -758,6 +762,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     case A_RIGHT_INDENT: {
                         if ( d->canvas ) {
                             double rightValue = unZoomIt(right - newPos);
+                            if (d->rtl) rightValue = unZoomIt(pw) - rightValue;
                             if(rightValue == d->i_right) break;
                             drawLine( d->oldMx, newPos);
                             d->i_right=rightValue;
@@ -1057,6 +1062,12 @@ void KoRuler::setRightIndent( double _right )
     repaint( false );
 }
 
+void KoRuler::setDirection( bool rtl )
+{
+    d->rtl = rtl;
+    repaint( false );
+}
+
 void KoRuler::changeFlags(int _flags)
 {
     d->flags = _flags;
@@ -1065,6 +1076,16 @@ void KoRuler::changeFlags(int _flags)
 int KoRuler::flags() const
 {
     return d->flags;
+}
+
+double KoRuler::applyRtlAndZoom( double value, int width ) const
+{
+    return d->rtl ? ( width - zoomIt( value ) ) : zoomIt( value );
+}
+
+double KoRuler::unZoomItRtl( int pixValue, int width ) const
+{
+    return d->rtl ? ( unZoomIt( (double)(width - pixValue) ) ) : unZoomIt( (double)pixValue );
 }
 
 #include "koRuler.moc"
