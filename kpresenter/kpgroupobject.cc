@@ -85,8 +85,8 @@ void KPGroupObject::setOrig( KoPoint _point )
 /*================================================================*/
 void KPGroupObject::setOrig( double _x, double _y )
 {
-    int dx = 0;
-    int dy = 0;
+    double dx = 0;
+    double dy = 0;
     if ( !orig.isNull() ) {
         dx = _x - orig.x();
         dy = _y - orig.y();
@@ -288,7 +288,7 @@ void KPGroupObject::updateSizes( double fx, double fy )
 }
 
 /*================================================================*/
-void KPGroupObject::updateCoords( int dx, int dy )
+void KPGroupObject::updateCoords( double dx, double dy )
 {
     if ( !updateObjs )
         return;

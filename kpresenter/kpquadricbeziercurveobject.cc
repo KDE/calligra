@@ -165,13 +165,13 @@ void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHa
         else {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
-            QRect br = QRect( 0, 0, ow, oh );
-            int pw = br.width();
-            int ph = br.height();
-            QRect rr = br;
-            int yPos = -rr.y();
-            int xPos = -rr.x();
-            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            KoRect br = KoRect( 0, 0, ow, oh );
+            double pw = br.width();
+            double ph = br.height();
+            KoRect rr = br;
+            double yPos = -rr.y();
+            double xPos = -rr.x();
+            rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             double sx = 0;
             double sy = 0;
@@ -197,13 +197,13 @@ void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHa
     if ( angle == 0 )
         paint( _painter,_zoomHandler );
     else {
-        QRect br = QRect( 0, 0, ow, oh );
-        int pw = br.width();
-        int ph = br.height();
-        QRect rr = br;
-        int yPos = -rr.y();
-        int xPos = -rr.x();
-        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        KoRect br = KoRect( 0, 0, ow, oh );
+        double pw = br.width();
+        double ph = br.height();
+        KoRect rr = br;
+        double yPos = -rr.y();
+        double xPos = -rr.x();
+        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
         m.translate( pw / 2, ph / 2 );

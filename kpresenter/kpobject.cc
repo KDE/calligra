@@ -301,8 +301,8 @@ KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
         mtx.rotate( angle );
         KoRect rr = KoRect::fromQRect(mtx.mapRect( r.toQRect() )); /// TODO: we need a method in KoRect for this
 
-        double diffw = ::abs( rr.width() - r.width() );
-        double diffh = ::abs( rr.height() - r.height() );
+        double diffw = ::fabs( rr.width() - r.width() );
+        double diffh = ::fabs( rr.height() - r.height() );
 
         return KoRect( r.x() - diffw, r.y() - diffh,
                       r.width() + diffw * 2, r.height() + diffh * 2 );

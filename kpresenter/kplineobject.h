@@ -69,7 +69,7 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection );
 
 protected:
-    float getAngle( const QPoint &p1, const QPoint &p2 );
+    float getAngle( const KoPoint &p1, const KoPoint &p2 );
     void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
 
     QPen pen;

@@ -86,7 +86,7 @@ public:
 
 protected:
     void updateSizes( double fx, double fy );
-    void updateCoords( int dx, int dy );
+    void updateCoords( double dx, double dy );
 
     QPtrList<KPObject> objects;
     bool updateObjs;

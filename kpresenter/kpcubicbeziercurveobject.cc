@@ -163,13 +163,13 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
         else {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
-            QRect br = QRect( 0, 0, ow, oh );
-            int pw = br.width();
-            int ph = br.height();
-            QRect rr = br;
-            int yPos = -rr.y();
-            int xPos = -rr.x();
-            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            KoRect br = KoRect( 0, 0, ow, oh );
+            double pw = br.width();
+            double ph = br.height();
+            KoRect rr = br;
+            double yPos = -rr.y();
+            double xPos = -rr.x();
+            rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             double sx = 0;
             double sy = 0;
@@ -400,17 +400,17 @@ KoPointArray KPCubicBezierCurveObject::getCubicBezierPointsFrom( const KoPointAr
         unsigned int count = 0;
         while ( count < pointCount ) {
             if ( pointCount >= ( count + 4 ) ) { // for cubic bezier curve
-                int _firstX = _points.at( count ).x();
-                int _firstY = _points.at( count ).y();
+                double _firstX = _points.at( count ).x();
+                double _firstY = _points.at( count ).y();
 
-                int _fourthX = _points.at( count + 1 ).x();
-                int _fourthY = _points.at( count + 1 ).y();
+                double _fourthX = _points.at( count + 1 ).x();
+                double _fourthY = _points.at( count + 1 ).y();
 
-                int _secondX = _points.at( count + 2 ).x();
-                int _secondY = _points.at( count + 2 ).y();
+                double _secondX = _points.at( count + 2 ).x();
+                double _secondY = _points.at( count + 2 ).y();
 
-                int _thirdX = _points.at( count + 3 ).x();
-                int _thirdY = _points.at( count + 3 ).y();
+                double _thirdX = _points.at( count + 3 ).x();
+                double _thirdY = _points.at( count + 3 ).y();
 
                 KoPointArray _cubicBezierPoint;
                 _cubicBezierPoint.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );

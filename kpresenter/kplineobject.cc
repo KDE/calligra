@@ -128,13 +128,13 @@ void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool dr
         {
             _painter->translate( _zoomhandler->zoomItX(ox), _zoomhandler->zoomItY(oy) );
 
-            QRect br = QRect( 0, 0, ow, oh );
-            int pw = br.width();
-            int ph = br.height();
-            QRect rr = br;
-            int yPos = -rr.y();
-            int xPos = -rr.x();
-            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            KoRect br = KoRect( 0, 0, ow, oh );
+            double pw = br.width();
+            double ph = br.height();
+            KoRect rr = br;
+            double yPos = -rr.y();
+            double xPos = -rr.x();
+            rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             double sx = 0;
             double sy = 0;
@@ -161,13 +161,13 @@ void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool dr
         paint( _painter,_zoomhandler );
     else
     {
-        QRect br = QRect( 0, 0, ow, oh );
-        int pw = br.width();
-        int ph = br.height();
-        QRect rr = br;
-        int yPos = -rr.y();
-        int xPos = -rr.x();
-        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        KoRect br = KoRect( 0, 0, ow, oh );
+        double pw = br.width();
+        double ph = br.height();
+        KoRect rr = br;
+        double yPos = -rr.y();
+        double xPos = -rr.x();
+        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
         m.translate( pw / 2, ph / 2 );
@@ -184,7 +184,7 @@ void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool dr
 }
 
 /*===================== get angle ================================*/
-float KPLineObject::getAngle( const QPoint &p1, const QPoint &p2 )
+float KPLineObject::getAngle( const KoPoint &p1, const KoPoint &p2 )
 {
     float _angle = 0.0;
 
@@ -282,8 +282,8 @@ void KPLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
         if ( lineEnd != L_NORMAL )
             diff2 = getBoundingSize( lineEnd, _w,_zoomHandler );
 
-        QPoint pnt1( diff1.height() / 2 + _w / 2, diff1.width() / 2 + _w / 2 );
-        QPoint pnt2( ow - diff2.height() / 2 - _w / 2, oh - diff2.width() / 2 - _w / 2 );
+        KoPoint pnt1( diff1.height() / 2 + _w / 2, diff1.width() / 2 + _w / 2 );
+        KoPoint pnt2( ow - diff2.height() / 2 - _w / 2, oh - diff2.width() / 2 - _w / 2 );
         float _angle;
 
         _angle = getAngle( pnt1, pnt2 );
@@ -318,8 +318,8 @@ void KPLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
         if ( lineEnd != L_NORMAL )
             diff2 = getBoundingSize( lineEnd, _w,_zoomHandler );
 
-        QPoint pnt1( diff1.height() / 2 + _w / 2, oh - diff1.width() / 2 - _w / 2 );
-        QPoint pnt2( ow - diff2.height() / 2 - _w / 2, diff2.width() / 2 + _w / 2 );
+        KoPoint pnt1( diff1.height() / 2 + _w / 2, oh - diff1.width() / 2 - _w / 2 );
+        KoPoint pnt2( ow - diff2.height() / 2 - _w / 2, diff2.width() / 2 + _w / 2 );
         float _angle;
 
         _angle = getAngle( pnt1, pnt2 );
