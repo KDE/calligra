@@ -36,47 +36,43 @@
 
 PenTool::PenTool(KisDoc *doc, KisCanvas *canvas, KisBrush *_brush) : KisTool(doc)
 {
-    m_dragging = false;
-    m_pCanvas = canvas;
-    m_pDoc = doc;
+	m_dragging = false;
+	m_canvas = canvas;
+	m_doc = doc;
 
-    // initialize pen tool settings
-    penColorThreshold = 128;
-    opacity = 255;
-    usePattern = false;
-    useGradient = false;
-
-    lineThickness = 1;
-
-    setBrush(_brush);
+	// initialize pen tool settings
+	m_penColorThreshold = 128;
+	m_opacity = 255;
+	m_usePattern = false;
+	m_useGradient = false;
+	m_lineThickness = 1;
+	setBrush(_brush);
 }
-
 
 PenTool::~PenTool()
 {
 }
 
-
 void PenTool::setBrush(KisBrush *_brush)
 {
-    m_pBrush = _brush;
+    m_brush = _brush;
 
-    int w = m_pBrush->pixmap().width();
-    int h = m_pBrush->pixmap().height();
+    int w = m_brush->pixmap().width();
+    int h = m_brush->pixmap().height();
 
     if((w < 33 && h < 33) && (w > 9 && h > 9))
     {
         QBitmap mask(w, h);
-        QPixmap pix(m_pBrush->pixmap());
+        QPixmap pix(m_brush->pixmap());
         mask = pix.createHeuristicMask();
         pix.setMask(mask);
-        m_pView->kisCanvas()->setCursor(QCursor(pix));
-        m_Cursor = QCursor(pix);
+        m_view->kisCanvas()->setCursor(QCursor(pix));
+        m_cursor = QCursor(pix);
     }
     else
     {
-        m_pView->kisCanvas()->setCursor(KisCursor::penCursor());
-        m_Cursor = KisCursor::penCursor();
+        m_view->kisCanvas()->setCursor(KisCursor::penCursor());
+        m_cursor = KisCursor::penCursor();
     }
 }
 
@@ -88,7 +84,7 @@ void PenTool::mousePress(QMouseEvent *e)
     done in mouseMove and Paint routines.  Nothing
     happens unless mouse is first pressed anyway */
 
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     if(!img->getCurrentLayer())
@@ -100,7 +96,7 @@ void PenTool::mousePress(QMouseEvent *e)
     if (e->button() != QMouseEvent::LeftButton)
         return;
 
-    if(!m_pDoc->frameBuffer())
+    if(!m_doc->frameBuffer())
         return;
 
     m_dragging = true;
@@ -112,22 +108,22 @@ void PenTool::mousePress(QMouseEvent *e)
 
     if(paint(pos))
     {
-         m_pDoc->current()->markDirty(QRect(pos
-            - m_pBrush->hotSpot(), m_pBrush->size()));
+         m_doc->current()->markDirty(QRect(pos
+            - m_brush->hotSpot(), m_brush->size()));
     }
 }
 
 
 bool PenTool::paint(QPoint pos)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
-    KisFrameBuffer *fb = m_pDoc->frameBuffer();
+    KisFrameBuffer *m_fb = m_doc->frameBuffer();
 
-    int startx = (pos - m_pBrush->hotSpot()).x();
-    int starty = (pos - m_pBrush->hotSpot()).y();
+    int startx = (pos - m_brush->hotSpot()).x();
+    int starty = (pos - m_brush->hotSpot()).y();
 
-    QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
+    QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
 
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
@@ -143,15 +139,15 @@ bool PenTool::paint(QPoint pos)
     uchar bv;
     uchar r, g, b;
 
-    int red = m_pView->fgColor().R();
-    int green = m_pView->fgColor().G();
-    int blue = m_pView->fgColor().B();
+    int red = m_view->fgColor().R();
+    int green = m_view->fgColor().G();
+    int blue = m_view->fgColor().B();
 
     bool alpha = (img->colorMode() == cm_RGBA);
 
     for (int y = sy; y <= ey; y++)
     {
-        sl = m_pBrush->scanline(y);
+        sl = m_brush->scanline(y);
 
         for (int x = sx; x <= ex; x++)
 	    {
@@ -159,14 +155,14 @@ bool PenTool::paint(QPoint pos)
 	        // alpha blending only (maybe)
 
 	        bv = *(sl + x);
-	        if (bv < penColorThreshold) continue;
+	        if (bv < m_penColorThreshold) continue;
 
 		    r   = red;
             g   = green;
             b   = blue;
 
             // use foreround color
-            if(!usePattern)
+            if(!m_usePattern)
             {
 	            lay->setPixel(0, startx + x, starty + y, r);
 	            lay->setPixel(1, startx + x, starty + y, g);
@@ -175,7 +171,7 @@ bool PenTool::paint(QPoint pos)
             // map pattern to pen pixel
             else
             {
-	            fb->setPatternToPixel(lay, startx + x, starty + y, 0);
+	            m_fb->setPatternToPixel(lay, startx + x, starty + y, 0);
             }
 
             if (alpha)
@@ -191,9 +187,9 @@ bool PenTool::paint(QPoint pos)
 
 void PenTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
 
-    int spacing = m_pBrush->spacing();
+    int spacing = m_brush->spacing();
     if (spacing <= 0) spacing = 1;
 
     if(m_dragging)
@@ -240,7 +236,7 @@ void PenTool::mouseMove(QMouseEvent *e)
 	        QPoint p(qRound(step.x()), qRound(step.y()));
 
 	        if (paint(p))
-               img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
+               img->markDirty(QRect(p - m_brush->hotSpot(), m_brush->size()));
 
  	        dist -= spacing;
 	    }
@@ -263,15 +259,15 @@ void PenTool::optionsDialog()
 {
 	ToolOptsStruct ts;
 
-	ts.usePattern       = usePattern;
-	ts.useGradient      = useGradient;
-	ts.penThreshold     = penColorThreshold;
-	ts.opacity          = opacity;
+	ts.usePattern       = m_usePattern;
+	ts.useGradient      = m_useGradient;
+	ts.penThreshold     = m_penColorThreshold;
+	ts.opacity          = m_opacity;
 
-	bool old_usePattern         = usePattern;
-	bool old_useGradient        = useGradient;
-	int old_penColorThreshold   = penColorThreshold;
-	unsigned int old_opacity          = opacity;
+	bool old_usePattern         = m_usePattern;
+	bool old_useGradient        = m_useGradient;
+	int old_penColorThreshold   = m_penColorThreshold;
+	unsigned int old_opacity          = m_opacity;
 
 	ToolOptionsDialog opt_dlg(tt_pentool, ts);
 
@@ -280,15 +276,15 @@ void PenTool::optionsDialog()
 	if (opt_dlg.result() == QDialog::Rejected)
 		return;
 
-	usePattern          = opt_dlg.penToolTab()->usePattern();
-	useGradient         = opt_dlg.penToolTab()->useGradient();
-	penColorThreshold   = opt_dlg.penToolTab()->penThreshold();
-	opacity          = opt_dlg.penToolTab()->opacity();
+	m_usePattern          = opt_dlg.penToolTab()->usePattern();
+	m_useGradient         = opt_dlg.penToolTab()->useGradient();
+	m_penColorThreshold   = opt_dlg.penToolTab()->penThreshold();
+	m_opacity          = opt_dlg.penToolTab()->opacity();
 
 	// User change value ?
-	if ( old_usePattern != usePattern || old_useGradient != useGradient
-			|| old_penColorThreshold != penColorThreshold || old_opacity != opacity ) {
-		m_pDoc->setModified( true );
+	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient
+			|| old_penColorThreshold != m_penColorThreshold || old_opacity != m_opacity ) {
+		m_doc->setModified( true );
 	}
 }
 
@@ -303,10 +299,10 @@ QDomElement PenTool::saveSettings(QDomDocument& doc) const
 { 
 	QDomElement tool = doc.createElement("penTool");
 
-	tool.setAttribute("opacity", opacity);
-	tool.setAttribute("paintThreshold", penColorThreshold);
-	tool.setAttribute("paintWithPattern", static_cast<int>(usePattern));
-	tool.setAttribute("paintWithGradient", static_cast<int>(useGradient));
+	tool.setAttribute("opacity", m_opacity);
+	tool.setAttribute("paintThreshold", m_penColorThreshold);
+	tool.setAttribute("paintWithPattern", static_cast<int>(m_usePattern));
+	tool.setAttribute("paintWithGradient", static_cast<int>(m_useGradient));
 	return tool;
 }
 
@@ -316,10 +312,10 @@ bool PenTool::loadSettings(QDomElement& tool)
 
 	if (rc) {
 		kdDebug() << "PenTool::loadSettings\n";
-		opacity = tool.attribute("opacity").toInt();
-		penColorThreshold = tool.attribute("paintThreshold").toInt();
-		usePattern = static_cast<bool>(tool.attribute("paintWithPattern").toInt());
-		useGradient = static_cast<bool>(tool.attribute("paintWithGradient").toInt());
+		m_opacity = tool.attribute("opacity").toInt();
+		m_penColorThreshold = tool.attribute("paintThreshold").toInt();
+		m_usePattern = static_cast<bool>(tool.attribute("paintWithPattern").toInt());
+		m_useGradient = static_cast<bool>(tool.attribute("paintWithGradient").toInt());
 	}
 
 	return rc;

@@ -2,6 +2,7 @@
  *  kis_tool_ellipse.cc - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,16 +34,16 @@
 
 EllipseTool::EllipseTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
-	m_pDoc = doc;
+	m_doc = doc;
 	m_dragging = false;
-	pCanvas = canvas;
+	m_canvas = canvas;
 
 	// initialize ellipse tool settings
-	lineThickness = 4;
-	opacity = 255;
-	usePattern = false;
-	useGradient = false;
-	fillSolid = false;
+	m_lineThickness = 4;
+	m_opacity = 255;
+	m_usePattern = false;
+	m_useGradient = false;
+	m_fillSolid = false;
 }
 
 EllipseTool::~EllipseTool()
@@ -104,7 +105,7 @@ void EllipseTool::mouseRelease(QMouseEvent *event)
 		QRect rect = QRect(zoomed(topLeft), zoomed(bottomRight));
 
 		// draw final ellipse onto layer    
-		KisPainter *p = m_pView -> kisPainter();
+		KisPainter *p = m_view -> kisPainter();
 		p -> drawEllipse(rect);
 	}    
 }
@@ -114,15 +115,15 @@ void EllipseTool::drawEllipse(const QPoint& start, const QPoint& end)
 	QPainter p;
 	QPen pen;
 
-	pen.setWidth(lineThickness);
-	p.begin(pCanvas);
+	pen.setWidth(m_lineThickness);
+	p.begin(m_canvas);
 	p.setPen(pen);
 	p.setRasterOp(Qt::NotROP);
-	float zF = m_pView -> zoomFactor();
+	float zF = m_view -> zoomFactor();
 
 	p.drawEllipse( 
-			QRect(start.x() + m_pView->xPaintOffset() - (int)(zF * m_pView->xScrollOffset()),
-				start.y() + m_pView->yPaintOffset() - (int)(zF * m_pView->yScrollOffset()), 
+			QRect(start.x() + m_view->xPaintOffset() - (int)(zF * m_view->xScrollOffset()),
+				start.y() + m_view->yPaintOffset() - (int)(zF * m_view->yScrollOffset()), 
 				end.x() - start.x(), 
 				end.y() - start.y()));
 	p.end();
@@ -132,18 +133,17 @@ void EllipseTool::optionsDialog()
 {
 	ToolOptsStruct ts;    
 
-	ts.usePattern       = usePattern;
-	ts.useGradient      = useGradient;
-	ts.lineThickness    = lineThickness;
-	ts.opacity      = opacity;
-	ts.fillShapes       = fillSolid;
-	ts.opacity          = opacity;
+	ts.usePattern       = m_usePattern;
+	ts.useGradient      = m_useGradient;
+	ts.lineThickness    = m_lineThickness;
+	ts.opacity      = m_opacity;
+	ts.fillShapes       = m_fillSolid;
 
-	bool old_usePattern       = usePattern;
-	bool old_useGradient      = useGradient;
-	int  old_lineThickness    = lineThickness;
-	unsigned int  old_opacity      = opacity;
-	bool old_fillSolid        = fillSolid;
+	bool old_usePattern       = m_usePattern;
+	bool old_useGradient      = m_useGradient;
+	int  old_lineThickness    = m_lineThickness;
+	unsigned int  old_opacity      = m_opacity;
+	bool old_fillSolid        = m_fillSolid;
 
 	ToolOptionsDialog OptsDialog(tt_linetool, ts);
 
@@ -152,26 +152,26 @@ void EllipseTool::optionsDialog()
 	if (OptsDialog.result() == QDialog::Rejected)
 		return;
         
-	lineThickness = OptsDialog.lineToolTab()->thickness();
-        opacity   = OptsDialog.lineToolTab()->opacity();
-        usePattern    = OptsDialog.lineToolTab()->usePattern();
-        fillSolid     = OptsDialog.lineToolTab()->solid(); 
-        useGradient   = OptsDialog.lineToolTab()->useGradient();
+	m_lineThickness = OptsDialog.lineToolTab()->thickness();
+        m_opacity   = OptsDialog.lineToolTab()->opacity();
+        m_usePattern    = OptsDialog.lineToolTab()->usePattern();
+        m_fillSolid     = OptsDialog.lineToolTab()->solid(); 
+        m_useGradient   = OptsDialog.lineToolTab()->useGradient();
 
 	// User change value ?
-	if ( old_usePattern != usePattern || old_useGradient != useGradient 
-			|| old_opacity != opacity || old_lineThickness != lineThickness
-			|| old_fillSolid != fillSolid ) {    
-		KisPainter *p = m_pView->kisPainter();
+	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient 
+			|| old_opacity != m_opacity || old_lineThickness != m_lineThickness
+			|| old_fillSolid != m_fillSolid ) {    
+		KisPainter *p = m_view->kisPainter();
 
-		p->setLineThickness( lineThickness );
-		p->setLineOpacity( opacity );
-		p->setFilledEllipse( fillSolid );
-		p->setPatternFill( usePattern );
-		p->setGradientFill( useGradient );
+		p->setLineThickness( m_lineThickness );
+		p->setLineOpacity( m_opacity );
+		p->setFilledEllipse( m_fillSolid );
+		p->setPatternFill( m_usePattern );
+		p->setGradientFill( m_useGradient );
 
 		// set ellipse tool settings
-		m_pDoc->setModified( true );
+		m_doc->setModified( true );
 	}
 }
 
@@ -184,16 +184,16 @@ void EllipseTool::setupAction(QObject *collection)
 
 void EllipseTool::toolSelect()
 {
-	if (m_pView) {
-		KisPainter *gc = m_pView -> kisPainter();
+	if (m_view) {
+		KisPainter *gc = m_view -> kisPainter();
 
-		gc -> setLineThickness(lineThickness);
-	        gc -> setLineOpacity(opacity);
-		gc -> setFilledEllipse(usePattern);
-		gc -> setGradientFill(useGradient);
-		gc -> setPatternFill(fillSolid);
+		gc -> setLineThickness(m_lineThickness);
+	        gc -> setLineOpacity(m_opacity);
+		gc -> setFilledEllipse(m_usePattern);
+		gc -> setGradientFill(m_useGradient);
+		gc -> setPatternFill(m_fillSolid);
 
-		m_pView -> activateTool(this);
+		m_view -> activateTool(this);
 	}
 }
 
@@ -202,11 +202,11 @@ QDomElement EllipseTool::saveSettings(QDomDocument& doc) const
 	// ellipse tool element
 	QDomElement ellipseTool = doc.createElement("ellipseTool");
 
-	ellipseTool.setAttribute("thickness", lineThickness);
-	ellipseTool.setAttribute("opacity", opacity);
-	ellipseTool.setAttribute("fillInteriorRegions", static_cast<int>(fillSolid));
-	ellipseTool.setAttribute("useCurrentPattern", static_cast<int>(usePattern));
-	ellipseTool.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	ellipseTool.setAttribute("thickness", m_lineThickness);
+	ellipseTool.setAttribute("opacity", m_opacity);
+	ellipseTool.setAttribute("fillInteriorRegions", static_cast<int>(m_fillSolid));
+	ellipseTool.setAttribute("useCurrentPattern", static_cast<int>(m_usePattern));
+	ellipseTool.setAttribute("fillWithGradient", static_cast<int>(m_useGradient));
 	return ellipseTool;
 }
 
@@ -215,11 +215,11 @@ bool EllipseTool::loadSettings(QDomElement& elem)
         bool rc = elem.tagName() == "ellipseTool";
 
 	if (rc) {
-		lineThickness = elem.attribute("thickness").toInt();
-		opacity = elem.attribute("opacity").toInt();
-		fillSolid = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
-		usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
-		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+		m_lineThickness = elem.attribute("thickness").toInt();
+		m_opacity = elem.attribute("opacity").toInt();
+		m_fillSolid = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
+		m_usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
+		m_useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
 	}
 
 	return rc;

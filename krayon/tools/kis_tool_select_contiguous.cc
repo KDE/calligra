@@ -2,6 +2,7 @@
  *  selecttool.h - part of Krayon
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +38,7 @@ ContiguousSelectTool::ContiguousSelectTool(KisDoc *doc, KisCanvas *canvas) : Kis
 	m_init  = true;
 	m_dragStart = QPoint(-1,-1);
 	m_dragEnd = QPoint(-1,-1);
-	m_Cursor = KisCursor::selectCursor();
+	m_cursor = KisCursor::selectCursor();
 }
 
 ContiguousSelectTool::~ContiguousSelectTool()
@@ -46,14 +47,14 @@ ContiguousSelectTool::~ContiguousSelectTool()
 
 void ContiguousSelectTool::clearOld()
 {
-//   if (m_pDoc->isEmpty()) return;
+//   if (m_doc->isEmpty()) return;
         
    if(m_dragStart.x() != -1)
         drawRect( m_dragStart, m_dragEnd ); 
 
-    QRect updateRect(0, 0, m_pDoc->current()->width(), 
-        m_pDoc->current()->height());
-    m_pView->updateCanvas(updateRect);
+    QRect updateRect(0, 0, m_doc->current()->width(), 
+        m_doc->current()->height());
+    m_view->updateCanvas(updateRect);
 
     m_dragStart = QPoint(-1,-1);
     m_dragEnd =   QPoint(-1,-1);
@@ -61,7 +62,7 @@ void ContiguousSelectTool::clearOld()
 
 void ContiguousSelectTool::mousePress( QMouseEvent* event )
 {
- //   if ( m_pDoc->isEmpty() )
+ //   if ( m_doc->isEmpty() )
 //        return;
 
     if( event->button() == LeftButton )
@@ -85,7 +86,7 @@ void ContiguousSelectTool::mousePress( QMouseEvent* event )
 
 void ContiguousSelectTool::mouseMove( QMouseEvent* event )
 {
-//    if ( m_pDoc->isEmpty() )
+//    if ( m_doc->isEmpty() )
 //        return;
 
     if( m_dragging )
@@ -99,7 +100,7 @@ void ContiguousSelectTool::mouseMove( QMouseEvent* event )
 
 void ContiguousSelectTool::mouseRelease( QMouseEvent* event )
 {
-//    if ( m_pDoc->isEmpty() )
+//    if ( m_doc->isEmpty() )
 //        return;
 
     if( ( m_dragging ) && ( event->button() == LeftButton ) )
@@ -132,7 +133,7 @@ void ContiguousSelectTool::mouseRelease( QMouseEvent* event )
             m_selectRect.setBottom(zStart.y());            
         }
                     
-        m_pDoc->getSelection()->setBounds(m_selectRect);
+        m_doc->getSelection()->setBounds(m_selectRect);
 
         kdDebug(0) << "selectRect" 
             << " left: "   << m_selectRect.left() 
@@ -152,12 +153,12 @@ void ContiguousSelectTool::drawRect( const QPoint& start, const QPoint& end )
     p.setRasterOp( Qt::NotROP );
     p.setPen( QPen( Qt::DotLine ) );
 
-    float zF = m_pView->zoomFactor();
+    float zF = m_view->zoomFactor();
     
-    p.drawRect( QRect(start.x() + m_pView->xPaintOffset() 
-                                - (int)(zF * m_pView->xScrollOffset()),
-                      start.y() + m_pView->yPaintOffset() 
-                                - (int)(zF * m_pView->yScrollOffset()), 
+    p.drawRect( QRect(start.x() + m_view->xPaintOffset() 
+                                - (int)(zF * m_view->xScrollOffset()),
+                      start.y() + m_view->yPaintOffset() 
+                                - (int)(zF * m_view->yScrollOffset()), 
                       end.x() - start.x(), 
                       end.y() - start.y()) );
     p.end();

@@ -2,6 +2,7 @@
  *  kis_tool_ellipse.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,24 +42,18 @@ public:
 	virtual void optionsDialog();
 	virtual void toolSelect();
 
-public slots:
 	virtual void mousePress( QMouseEvent* event );
 	virtual void mouseMove( QMouseEvent* event );
 	virtual void mouseRelease( QMouseEvent* event );
 
 protected:
-	void drawEllipse( const QPoint&, const QPoint& );
+	void drawEllipse(const QPoint& start, const QPoint& stop);
 
 protected:
-
-    int     lineThickness;
-
-    QPoint  m_dragStart;
-    QPoint  m_dragEnd;
-
-    bool    m_dragging;
-    
-    KisCanvas   *pCanvas;
+	int m_lineThickness;
+	QPoint  m_dragStart;
+	QPoint  m_dragEnd;
+	bool    m_dragging;
 };
 
 #endif //__linetool_h__

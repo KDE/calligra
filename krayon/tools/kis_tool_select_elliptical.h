@@ -38,13 +38,13 @@ public:
 	virtual void clearOld();
 	virtual bool willModify() const;
 
-public slots:
+	virtual void paintEvent(QPaintEvent *e);
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
 
 protected:
-    void drawEllipse( const QPoint&, const QPoint& ); 
+	void drawEllipse(const QPoint&, const QPoint&); 
 
 protected:
     QPoint     m_dragStart;

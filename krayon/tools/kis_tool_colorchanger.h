@@ -42,10 +42,9 @@ public:
 	virtual void optionsDialog();
 	virtual void setCursor();
 
-	bool changeColors(int startx, int starty);
-
-public slots:
 	virtual void mousePress(QMouseEvent*); 
+
+	bool changeColors(int startx, int starty);
       
 protected:
                 

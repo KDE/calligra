@@ -33,10 +33,7 @@ public:
 	virtual void setCursor();
 	virtual void setupAction(QObject *collection);
 
-public slots:
 	virtual void mousePress(QMouseEvent *e);
-	virtual void mouseMove(QMouseEvent *e);
-	virtual void mouseRelease(QMouseEvent *e);
 };
 
 #endif //__zoomtool_h__

@@ -37,14 +37,14 @@
 
 BrushTool::BrushTool(KisDoc *doc, KisBrush *brush) : KisTool(doc)
 {
-    m_pDoc = doc;
+    m_doc = doc;
     m_dragging = false;
     m_dragdist = 0;
 
     // initialize brush tool settings
-    usePattern = false;
-    useGradient = false;
-    opacity = 255;
+    m_usePattern = false;
+    m_useGradient = false;
+    m_opacity = 255;
 
     setBrush(brush);
 }
@@ -55,39 +55,37 @@ BrushTool::~BrushTool()
 
 void BrushTool::setBrush(KisBrush *brush)
 {
-    m_pBrush = brush;
+    m_brush = brush;
 
-    brushWidth = m_pBrush->pixmap().width();
-    brushHeight = m_pBrush->pixmap().height();
-    hotSpot  = m_pBrush->hotSpot();
-    hotSpotX = m_pBrush->hotSpot().x();
-    hotSpotY = m_pBrush->hotSpot().y();
-    brushSize = QSize(brushWidth, brushHeight);
+    m_brushWidth = m_brush->pixmap().width();
+    m_brushHeight = m_brush->pixmap().height();
+    m_hotSpot  = m_brush->hotSpot();
+    m_hotSpotX = m_brush->hotSpot().x();
+    m_hotSpotY = m_brush->hotSpot().y();
+    m_brushSize = QSize(m_brushWidth, m_brushHeight);
 
     // make custom cursor from brush pixmap
     // if brush pixmap is of reasonable size
-    if((brushWidth < 33 && brushHeight < 33)
-    && (brushWidth > 9 && brushHeight > 9))
-    {
-        QBitmap mask(brushWidth, brushHeight);
-        QPixmap pix(m_pBrush->pixmap());
+    if(m_brushWidth < 33 && m_brushHeight < 33 && m_brushWidth > 9 && m_brushHeight > 9) {
+        QBitmap mask(m_brushWidth, m_brushHeight);
+        QPixmap pix(m_brush->pixmap());
         mask = pix.createHeuristicMask();
         pix.setMask(mask);
-        m_pView->kisCanvas()->setCursor(QCursor(pix));
-        m_Cursor = QCursor(pix);
+        m_view->kisCanvas()->setCursor(QCursor(pix));
+        m_cursor = QCursor(pix);
     }
     // use default brush cursor
     else
     {
-        m_pView->kisCanvas()->setCursor(KisCursor::brushCursor());
-        m_Cursor = KisCursor::brushCursor();
+        m_view->kisCanvas()->setCursor(KisCursor::brushCursor());
+        m_cursor = KisCursor::brushCursor();
     }
 }
 
 
 void BrushTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     if(!img->getCurrentLayer())
@@ -99,13 +97,13 @@ void BrushTool::mousePress(QMouseEvent *e)
     if (e->button() != QMouseEvent::LeftButton)
         return;
 
-    red = m_pView->fgColor().R();
-    green = m_pView->fgColor().G();
-    blue = m_pView->fgColor().B();
+    m_red = m_view->fgColor().R();
+    m_green = m_view->fgColor().G();
+    m_blue = m_view->fgColor().B();
 
-    alpha = (img->colorMode() == cm_RGBA);
-    spacing = m_pBrush->spacing();
-    if (spacing <= 0) spacing = 3;
+    m_alpha = (img->colorMode() == cm_RGBA);
+    m_spacing = m_brush->spacing();
+    if (m_spacing <= 0) m_spacing = 3;
 
     m_dragging = true;
 
@@ -116,7 +114,7 @@ void BrushTool::mousePress(QMouseEvent *e)
 
     if(paintMonochrome(pos))
     {
-         img->markDirty(QRect(pos - hotSpot, brushSize));
+         img->markDirty(QRect(pos - m_hotSpot, m_brushSize));
     }
 }
 
@@ -128,13 +126,13 @@ bool BrushTool::paintCanvas(const QPoint& /* pos */)
 
 bool BrushTool::paintMonochrome(const QPoint& pos)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
 
-    int startx = pos.x() - hotSpotX;
-    int starty = pos.y() - hotSpotY;
+    int startx = pos.x() - m_hotSpotX;
+    int starty = pos.y() - m_hotSpotY;
 
-    QRect clipRect(startx, starty, brushWidth, brushHeight);
+    QRect clipRect(startx, starty, m_brushWidth, m_brushHeight);
 
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
@@ -153,7 +151,7 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 
     for (int y = sy; y <= ey; y++)
     {
-        sl = m_pBrush->scanline(y);
+        sl = m_brush->scanline(y);
 
         for (int x = sx; x <= ex; x++)
 	    {
@@ -166,15 +164,15 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 
 	        invbv = 255 - bv;
 
-            b = ((blue * bv) + (b * invbv))/255;
-	        g = ((green * bv) + (g * invbv))/255;
-	        r = ((red * bv) + (r * invbv))/255;
+            b = ((m_blue * bv) + (b * invbv))/255;
+	        g = ((m_green * bv) + (g * invbv))/255;
+	        r = ((m_red * bv) + (r * invbv))/255;
 
 	        lay->setPixel(0, startx + x, starty + y, r);
 	        lay->setPixel(1, startx + x, starty + y, g);
 	        lay->setPixel(2, startx + x, starty + y, b);
 
-            if (alpha)
+            if (m_alpha)
 	        {
 	            a = lay->pixel(3, startx + x, starty + y);
 
@@ -195,7 +193,7 @@ bool BrushTool::paintMonochrome(const QPoint& pos)
 
 void BrushTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     if(m_dragging)
@@ -216,7 +214,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
         float new_dist = dragVec.length();
         float dist = saved_dist + new_dist;
 
-        if ((int)dist < spacing)
+        if ((int)dist < m_spacing)
 	    {
 	        m_dragdist += new_dist;
 	        m_dragStart = pos;
@@ -228,22 +226,22 @@ void BrushTool::mouseMove(QMouseEvent *e)
         dragVec.normalize();
         KisVector step = start;
 
-        while (dist >= spacing)
+        while (dist >= m_spacing)
 	    {
 	        if (saved_dist > 0)
 	        {
-	            step += dragVec * (spacing-saved_dist);
-	            saved_dist -= spacing;
+	            step += dragVec * (m_spacing-saved_dist);
+	            saved_dist -= m_spacing;
 	        }
 	        else
-	            step += dragVec * spacing;
+	            step += dragVec * m_spacing;
 
 	        QPoint p(qRound(step.x()), qRound(step.y()));
 
 	        if (paintMonochrome(p))
-               img->markDirty(QRect(p - hotSpot, brushSize));
+               img->markDirty(QRect(p - m_hotSpot, m_brushSize));
 
- 	        dist -= spacing;
+ 	        dist -= m_spacing;
 	    }
 
         if (dist > 0) m_dragdist = dist;
@@ -270,13 +268,13 @@ void BrushTool::optionsDialog()
 {
     ToolOptsStruct ts;
 
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.opacity          = opacity;
+    ts.usePattern       = m_usePattern;
+    ts.useGradient      = m_useGradient;
+    ts.opacity          = m_opacity;
 
-    bool old_usePattern   = usePattern;
-    bool old_useGradient  = useGradient;
-    unsigned int  old_opacity      = opacity;
+    bool old_usePattern   = m_usePattern;
+    bool old_useGradient  = m_useGradient;
+    unsigned int  old_opacity      = m_opacity;
 
     ToolOptionsDialog OptsDialog(tt_brushtool, ts);
 
@@ -285,14 +283,14 @@ void BrushTool::optionsDialog()
     if(OptsDialog.result() == QDialog::Rejected)
         return;
         
-    opacity      = OptsDialog.brushToolTab()->opacity();
-    usePattern   = OptsDialog.brushToolTab()->usePattern();
-    useGradient  = OptsDialog.brushToolTab()->useGradient();
+    m_opacity      = OptsDialog.brushToolTab()->opacity();
+    m_usePattern   = OptsDialog.brushToolTab()->usePattern();
+    m_useGradient  = OptsDialog.brushToolTab()->useGradient();
 
     // User change value ?
-    if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
+    if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity ) {
 	    // set brush tool settings
-	    m_pDoc->setModified( true );
+	    m_doc->setModified( true );
     }
 }
 
@@ -308,9 +306,9 @@ QDomElement BrushTool::saveSettings(QDomDocument& doc) const
 {
 	QDomElement tool = doc.createElement("brushTool");
 
-	tool.setAttribute("opacity", opacity);
-	tool.setAttribute("blendWithCurrentGradient", static_cast<int>(useGradient));
-	tool.setAttribute("blendWithCurrentPattern", static_cast<int>(usePattern));
+	tool.setAttribute("opacity", m_opacity);
+	tool.setAttribute("blendWithCurrentGradient", static_cast<int>(m_useGradient));
+	tool.setAttribute("blendWithCurrentPattern", static_cast<int>(m_usePattern));
 	return tool;
 }
 
@@ -319,9 +317,9 @@ bool BrushTool::loadSettings(QDomElement& elem)
 	bool rc = elem.tagName() == "brushTool";
 
 	if (rc) {
-		opacity = elem.attribute("opacity").toInt();
-		useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
-		usePattern = static_cast<bool>(elem.attribute("blendWithCurrentPattern").toInt());
+		m_opacity = elem.attribute("opacity").toInt();
+		m_useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
+		m_usePattern = static_cast<bool>(elem.attribute("blendWithCurrentPattern").toInt());
 	}
 
 	return rc;
@@ -329,8 +327,8 @@ bool BrushTool::loadSettings(QDomElement& elem)
 
 void BrushTool::toolSelect()
 {
-	if (m_pView)
-		m_pView -> activateTool(this);
+	if (m_view)
+		m_view -> activateTool(this);
 
 	m_toggle -> setChecked(true);
 }

@@ -39,10 +39,8 @@ RectangularSelectTool::RectangularSelectTool(KisDoc *doc, KisCanvas *canvas) : K
 	m_drawn = false;
 	m_dragStart = QPoint(-1,-1);
 	m_dragEnd   = QPoint(-1,-1);
-
-	m_Cursor = KisCursor::selectCursor();
-
-	moveSelectArea = false;
+	m_cursor = KisCursor::selectCursor();
+	m_moveSelectArea = false;
 }
 
 RectangularSelectTool::~RectangularSelectTool()
@@ -51,39 +49,36 @@ RectangularSelectTool::~RectangularSelectTool()
 
 void RectangularSelectTool::clearOld()
 {
-   if(m_dragStart.x() != -1)
-        drawRect( m_dragStart, m_dragEnd ); 
+	if(m_dragStart.x() != -1)
+		drawRect(m_dragStart, m_dragEnd); 
 
-    m_dragStart = QPoint(-1,-1);
-    m_dragEnd =   QPoint(-1,-1);
-    QRect updateRect(0, 0, m_pDoc->current()->width(), 
-        m_pDoc->current()->height());
-    m_pView->updateCanvas(updateRect);
-    m_selectRegion = QRegion();
-
+	m_dragStart = QPoint(-1,-1);
+	m_dragEnd = QPoint(-1,-1);
+	QRect updateRect(0, 0, m_doc->current() -> width(), m_doc -> current() -> height());
+	m_view -> updateCanvas(updateRect);
+	m_selectRegion = QRegion();
 }
 
-void RectangularSelectTool::mousePress( QMouseEvent* event )
+void RectangularSelectTool::mousePress(QMouseEvent *event)
 {
-	if( event->button() == LeftButton && !moveSelectArea ) {
+	if (event -> button() == LeftButton && !m_moveSelectArea) {
 		clearOld();
 		// erase old rectangle
-		if(m_drawn) 
-		{
+		if (m_drawn) {
 			m_drawn = false;
 
-			if(m_dragStart.x() != -1)
-				drawRect( m_dragStart, m_dragEnd ); 
+			if (m_dragStart.x() != -1)
+				drawRect(m_dragStart, m_dragEnd); 
 		}
 
 		m_dragging = true;
 		m_dragStart = event->pos();
 		m_dragEnd = event->pos();
 
-		dragSelectArea = false;
-	} else if( event->button() == LeftButton && moveSelectArea ) {
-		dragSelectArea = true;
-		dragFirst = true;
+		m_dragSelectArea = false;
+	} else if (event->button() == LeftButton && m_moveSelectArea) {
+		m_dragSelectArea = true;
+		m_dragFirst = true;
 		m_dragStart = event->pos();
 		m_dragdist = 0;
 
@@ -93,7 +88,7 @@ void RectangularSelectTool::mousePress( QMouseEvent* event )
 
 		m_hotSpot = QPoint( x - m_imageRect.topLeft().x(), y - m_imageRect.topLeft().y() );
 
-		oldDragPoint = event->pos();
+		m_oldDragPoint = event->pos();
 		setClipImage();
 	}
 }
@@ -102,35 +97,35 @@ void RectangularSelectTool::mousePress( QMouseEvent* event )
 void RectangularSelectTool::mouseMove( QMouseEvent* event )
 {
 
-    if( m_dragging && !dragSelectArea )
+    if( m_dragging && !m_dragSelectArea )
     {
         drawRect( m_dragStart, m_dragEnd );
         m_dragEnd = event->pos();
         drawRect( m_dragStart, m_dragEnd );
     }
-    else if ( !m_dragging && !dragSelectArea ) {
+    else if ( !m_dragging && !m_dragSelectArea ) {
         if ( !m_selectRegion.isNull() && m_selectRegion.contains( event->pos() ) ) {
             setMoveCursor();
-            moveSelectArea = true;
+            m_moveSelectArea = true;
         }
         else {
             setSelectCursor();
-            moveSelectArea = false;
+            m_moveSelectArea = false;
         }
     }
-    else if ( dragSelectArea ) {
-        if ( dragFirst ) {
+    else if ( m_dragSelectArea ) {
+        if ( m_dragFirst ) {
             // remove select image
-            m_pDoc->getSelection()->erase();
+            m_doc->getSelection()->erase();
 
             // refresh canvas
             clearOld();
-            m_pView->slotUpdateImage();
-            dragFirst = false;
+            m_view->slotUpdateImage();
+            m_dragFirst = false;
         }
 
         int spacing = 10;
-        float zF = m_pView->zoomFactor();
+        float zF = m_view->zoomFactor();
         QPoint pos = event->pos();
         int mouseX = pos.x();
         int mouseY = pos.y();
@@ -164,16 +159,16 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
 
             QPoint p( qRound( step.x() ), qRound( step.y() ) );
 
-            QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - m_pView->xScrollOffset(),
-                      zoomed( oldDragPoint.y() ) - m_hotSpot.y() - m_pView->yScrollOffset(),
-                      (int)( clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
-                      (int)( clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
+            QRect ur( zoomed( m_oldDragPoint.x() ) - m_hotSpot.x() - m_view->xScrollOffset(),
+                      zoomed( m_oldDragPoint.y() ) - m_hotSpot.y() - m_view->yScrollOffset(),
+                      (int)( m_clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
+                      (int)( m_clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
 
-            m_pView->updateCanvas( ur );
+            m_view->updateCanvas( ur );
 
             dragSelectImage( p, m_hotSpot );
 
-            oldDragPoint = p;
+            m_oldDragPoint = p;
             dist -= spacing;
         }
 
@@ -187,7 +182,7 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
 void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 {
     
-    if( ( m_dragging ) && ( event->button() == LeftButton ) && ( !moveSelectArea ) )
+    if( ( m_dragging ) && ( event->button() == LeftButton ) && ( !m_moveSelectArea ) )
     {
         m_dragging = false;
         m_drawn = true;
@@ -233,7 +228,7 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
         else
             m_selectRegion = QRegion();
                     
-        KisImage *img = m_pDoc->current();
+        KisImage *img = m_doc->current();
         if(!img) return;
         
         KisLayer *lay = img->getCurrentLayer();
@@ -247,7 +242,7 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 
             // the selection class handles getting the selection
             // content from the given rectangular area
-            m_pDoc->getSelection()->setRectangularSelection(m_selectRect, lay);
+            m_doc->getSelection()->setRectangularSelection(m_selectRect, lay);
 
             kdDebug(0) << "selectRect" 
             << " left: "   << m_selectRect.left() 
@@ -258,25 +253,26 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
     }
     else {
         // Initialize
-        dragSelectArea = false;
+        m_dragSelectArea = false;
         m_selectRegion = QRegion();
         setSelectCursor();
-        moveSelectArea = false;
+        m_moveSelectArea = false;
 
         QPoint pos = event->pos();
 
-        KisImage *img = m_pDoc->current();
+        KisImage *img = m_doc->current();
         if ( !img )
             return;
         if( !img->getCurrentLayer()->visible() )
             return;
-        if( pasteClipImage( zoomed( pos ) - m_hotSpot ) )
-            img->markDirty( QRect( zoomed( pos ) - m_hotSpot, clipPixmap.size() ) );
+        if( pasteClipImage( zoomed( pos ) - m_hotSpot ) ) {
+            img->markDirty( QRect( zoomed( pos ) - m_hotSpot, m_clipPixmap.size() ) );
+	    m_doc -> setModified(true);
+	}
     }
 }
 
-
-void RectangularSelectTool::drawRect( const QPoint& start, const QPoint& end )
+void RectangularSelectTool::drawRect(const QPoint& start, const QPoint& end)
 {
 	QPainter p;
 
@@ -284,13 +280,13 @@ void RectangularSelectTool::drawRect( const QPoint& start, const QPoint& end )
 	p.setRasterOp(Qt::NotROP);
 	p.setPen(QPen(Qt::DotLine));
 
-	float zF = m_pView -> zoomFactor();
+	float zF = m_view -> zoomFactor();
     
 	/* adjust for scroll ofset as this draws on the canvas, not on
 	   the image itself QRect(left, top, width, height) */
     
-	p.drawRect(QRect(start.x() + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset()),
-				start.y() + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset()), 
+	p.drawRect(QRect(start.x() + m_view -> xPaintOffset() - (int)(zF * m_view -> xScrollOffset()),
+				start.y() + m_view -> yPaintOffset() - (int)(zF * m_view -> yScrollOffset()), 
 				end.x() - start.x(), 
 				end.y() - start.y()));
 	p.end();
@@ -309,10 +305,9 @@ bool RectangularSelectTool::willModify() const
 	return false;
 }
 
-void RectangularSelectTool::paintEvent(QPaintEvent *e)
+void RectangularSelectTool::paintEvent(QPaintEvent *)
 {
 	if (m_dragStart.x() != -1)
 		drawRect(m_dragStart, m_dragEnd);
 }
-
 

@@ -40,12 +40,12 @@ StampTool::StampTool(KisDoc *doc, KisCanvas *canvas, KisPattern *pattern) : KisT
 {
 	m_dragging = false;
 	m_dragdist = 0;
-	m_pCanvas = canvas;
-	m_pDoc = doc;
+	m_canvas = canvas;
+	m_doc = doc;
 
 	// initialize stamp tool settings
-	opacity = 255;
-	useGradient = false;
+	m_opacity = 255;
+	m_useGradient = false;
 	setPattern(pattern);
 }
 
@@ -55,7 +55,7 @@ StampTool::~StampTool()
 
 void StampTool::setPattern(KisPattern *pattern)
 {
-	m_pPattern = pattern;
+	m_pattern = pattern;
 
 	/* Use this to establish pattern size and the
 	   "hot spot" in center of image. This will be the
@@ -64,13 +64,13 @@ void StampTool::setPattern(KisPattern *pattern)
 	   these are simple variables for speed to avoid
 	   copy constructors within loops. */
 
-	patternWidth = m_pPattern->width();
-	patternHeight = m_pPattern->height();
+	patternWidth = m_pattern->width();
+	patternHeight = m_pattern->height();
 	mPatternSize = QSize(patternWidth, patternHeight);
 	mHotSpotX = patternWidth/2;
 	mHotSpotY = patternHeight/2;
 	mHotSpot = QPoint(mHotSpotX, mHotSpotY);
-	spacing = m_pPattern->spacing();
+	spacing = m_pattern->spacing();
 
 	if (spacing < 1) 
 		spacing = 3;
@@ -95,7 +95,7 @@ void StampTool::mousePress(QMouseEvent *e)
 
 	// do sanity checking here, if possible, not inside loops
 	// when moving mouse!
-	KisImage *img = m_pDoc -> current();
+	KisImage *img = m_doc -> current();
 
 	if (!img)  
 		return;
@@ -110,7 +110,7 @@ void StampTool::mousePress(QMouseEvent *e)
 	if (!lay || !lay -> visible())
 		return;
 
-	QImage qImage = *(m_pPattern -> image());
+	QImage qImage = *(m_pattern -> image());
 
 	if (qImage.isNull()) {
 		kdDebug(0) << "Stamptool::no pattern image!" << endl;
@@ -122,7 +122,7 @@ void StampTool::mousePress(QMouseEvent *e)
 		return;
 	}
 
-	spacing = m_pPattern -> spacing();
+	spacing = m_pattern -> spacing();
 
 	if (spacing < 1) 
 		spacing = 3;
@@ -147,9 +147,9 @@ void StampTool::mousePress(QMouseEvent *e)
 
 bool StampTool::stampToCanvas(QPoint pos)
 {
-    KisImage* img = m_pDoc->current();
+    KisImage* img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
-    float zF = m_pView->zoomFactor();
+    float zF = m_view->zoomFactor();
 
     int pX = pos.x();
     int pY = pos.y();
@@ -158,7 +158,7 @@ bool StampTool::stampToCanvas(QPoint pos)
     pos = QPoint(pX, pY);
 
     QPainter p;
-    p.begin(m_pCanvas);
+    p.begin(m_canvas);
     p.scale(zF, zF);
 
     QRect ur(pos.x() - mHotSpotX, pos.y()- mHotSpotY,
@@ -208,13 +208,13 @@ bool StampTool::stampToCanvas(QPoint pos)
     if(startX > patternWidth)  startX = patternWidth;
     if(startY > patternHeight) startY = patternHeight;
 
-    int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
-    int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
+    int xt = m_view->xPaintOffset() - m_view->xScrollOffset();
+    int yt = m_view->yPaintOffset() - m_view->yScrollOffset();
 
     p.translate(xt, yt);
 
     p.drawPixmap( ur.left(), ur.top(),
-                  m_pPattern->pixmap(),
+                  m_pattern->pixmap(),
                   startX, startY,
                   ur.width(), ur.height());
 
@@ -229,9 +229,9 @@ bool StampTool::stampToCanvas(QPoint pos)
 
 bool StampTool::stampColor(QPoint pos)
 {
-    KisImage *img = m_pDoc->current();
+    KisImage *img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
-    QImage  *qimg = m_pPattern->image();
+    QImage  *qimg = m_pattern->image();
 
     int startx = pos.x();
     int starty = pos.y();
@@ -252,9 +252,9 @@ bool StampTool::stampColor(QPoint pos)
     int   v = 255;
     int   bv = 0;
 
-    int red     = m_pView->fgColor().R();
-    int green   = m_pView->fgColor().G();
-    int blue    = m_pView->fgColor().B();
+    int red     = m_view->fgColor().R();
+    int green   = m_view->fgColor().G();
+    int blue    = m_view->fgColor().B();
 
     bool colorBlending = false;
     bool grayscale = false;
@@ -353,13 +353,13 @@ bool StampTool::stampMonochrome(QPoint /*pos*/)
 
 void StampTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if(!img) return;
 
     KisLayer *lay = img->getCurrentLayer();
     if (!lay)  return;
 
-    float zF = m_pView->zoomFactor();
+    float zF = m_view->zoomFactor();
 
     QPoint pos = e->pos();
     int mouseX = e->x();
@@ -418,12 +418,12 @@ void StampTool::mouseMove(QMouseEvent *e)
             Refresh first - markDirty relies on timer,
             so we need force by directly updating the canvas. */
 
-            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_pView->xScrollOffset(),
-                zoomed(oldp.y()) - mHotSpotY - m_pView->yScrollOffset(),
+            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_view->xScrollOffset(),
+                zoomed(oldp.y()) - mHotSpotY - m_view->yScrollOffset(),
                 (int)(patternWidth  * (zF > 1.0 ? zF : 1.0)),
                 (int)(patternHeight * (zF > 1.0 ? zF : 1.0)));
 
-            m_pView->updateCanvas(ur);
+            m_view->updateCanvas(ur);
 
             // after old spot is refreshed, stamp image into canvas
             // at current location. This may be slow or messy if updates
@@ -458,11 +458,11 @@ void StampTool::mouseRelease(QMouseEvent *e)
 void StampTool::optionsDialog()
 {
 	ToolOptsStruct ts;
-	bool old_useGradient = useGradient;
-	unsigned int  old_opacity = opacity;
+	bool old_useGradient = m_useGradient;
+	unsigned int  old_opacity = m_opacity;
 
-	ts.useGradient = useGradient;
-	ts.opacity = opacity;
+	ts.useGradient = m_useGradient;
+	ts.opacity = m_opacity;
 
 	ToolOptionsDialog OptsDialog(tt_stamptool, ts);
 
@@ -471,11 +471,11 @@ void StampTool::optionsDialog()
 	if (OptsDialog.result() == QDialog::Rejected)
 		return;
         
-	opacity = OptsDialog.stampToolTab() -> opacity();
-	useGradient = OptsDialog.stampToolTab() -> useGradient();
+	m_opacity = OptsDialog.stampToolTab() -> opacity();
+	m_useGradient = OptsDialog.stampToolTab() -> useGradient();
 
-        if (old_useGradient != useGradient || old_opacity != opacity)
-		m_pDoc -> setModified(true);
+        if (old_useGradient != m_useGradient || old_opacity != m_opacity)
+		m_doc -> setModified(true);
 }
 
 void StampTool::setupAction(QObject *collection)
@@ -496,8 +496,8 @@ QDomElement StampTool::saveSettings(QDomDocument& doc) const
 	// Stamp (Pattern) tool element
 	QDomElement stampTool = doc.createElement("stampTool");
 
-	stampTool.setAttribute("opacity", opacity);
-	stampTool.setAttribute("blendWithCurrentGradient", static_cast<int>(useGradient));
+	stampTool.setAttribute("opacity", m_opacity);
+	stampTool.setAttribute("blendWithCurrentGradient", static_cast<int>(m_useGradient));
 	return stampTool;
 }
 
@@ -506,8 +506,8 @@ bool StampTool::loadSettings(QDomElement& elem)
         bool rc = elem.tagName() == "stampTool";
 
 	if (rc) {
-		opacity = elem.attribute("opacity").toInt();
-		useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
+		m_opacity = elem.attribute("opacity").toInt();
+		m_useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
 	}
 
 	return rc;

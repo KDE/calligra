@@ -33,12 +33,12 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 {
 	// set custom cursor.
 	setCursor();
-	m_pDoc = doc;
+	m_doc = doc;
 
 	// initialize color changer settings
-	fillOpacity = 255;
-	usePattern  = false;
-	useGradient = false;
+	m_opacity = 255;
+	m_usePattern  = false;
+	m_useGradient = false;
 
 	toleranceRed = 0;
 	toleranceGreen = 0;
@@ -47,15 +47,15 @@ ColorChangerTool::ColorChangerTool(KisDoc *doc) : KisTool(doc)
 	layerAlpha = true;
     
 	// get current colors
-	KisColor startColor( m_pView->fgColor().R(), m_pView->fgColor().G(), m_pView->fgColor().B() );
-	KisColor endColor( m_pView->bgColor().R(), m_pView->bgColor().G(), m_pView->bgColor().B() );        
+	KisColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
+	KisColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
     
 	// prepare for painting with pattern
-	if( usePattern )
-		m_pDoc->frameBuffer()->setPattern( m_pView->currentPattern() );
+	if( m_usePattern )
+		m_doc->frameBuffer()->setPattern( m_view->currentPattern() );
 
 	// prepare for painting with gradient
-	m_pDoc->frameBuffer()->setGradientPaint( useGradient, startColor, endColor );
+	m_doc->frameBuffer()->setGradientPaint( m_useGradient, startColor, endColor );
 }
 
 ColorChangerTool::~ColorChangerTool() 
@@ -67,7 +67,7 @@ bool ColorChangerTool::changeColors(int startX, int startY)
     int startx = startX;
     int starty = startY;
     
-    KisImage *img = m_pDoc->current();
+    KisImage *img = m_doc->current();
     if (!img) return false;    
 
     KisLayer *lay = img->getCurrentLayer();
@@ -85,9 +85,9 @@ bool ColorChangerTool::changeColors(int startX, int startY)
     sBlue   = lay->pixel(2, startx, starty);
 
     // new color values from color selector 
-    nRed     = m_pView->fgColor().R();
-    nGreen   = m_pView->fgColor().G();
-    nBlue    = m_pView->fgColor().B();
+    nRed     = m_view->fgColor().R();
+    nGreen   = m_view->fgColor().G();
+    nBlue    = m_view->fgColor().B();
     
     int left    = lay->imageExtents().left(); 
     int top     = lay->imageExtents().top();    
@@ -100,25 +100,25 @@ bool ColorChangerTool::changeColors(int startX, int startY)
               << "ur.top() "  << ur.top() << endl;
 
     // prepare for painting with gradient
-    if(useGradient)
+    if(m_useGradient)
     {
-        KisColor startColor(m_pView->fgColor().R(),
-            m_pView->fgColor().G(), m_pView->fgColor().B());
-        KisColor endColor(m_pView->bgColor().R(),
-            m_pView->bgColor().G(), m_pView->bgColor().B());        
+        KisColor startColor(m_view->fgColor().R(),
+            m_view->fgColor().G(), m_view->fgColor().B());
+        KisColor endColor(m_view->bgColor().R(),
+            m_view->bgColor().G(), m_view->bgColor().B());        
             
-        m_pDoc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
+        m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
     }
         
     // prepare for painting with pattern
-    if(usePattern)
+    if(m_usePattern)
     {
-        m_pDoc->frameBuffer()->setPattern(m_pView->currentPattern());
+        m_doc->frameBuffer()->setPattern(m_view->currentPattern());
     }
         
     // this does the painting
-    if(!m_pDoc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, fillOpacity), 
-        qRgba(nRed, nGreen, nBlue, fillOpacity), ur))
+    if(!m_doc->frameBuffer()->changeColors(qRgba(sRed, sGreen, sBlue, m_opacity), 
+        qRgba(nRed, nGreen, nBlue, m_opacity), ur))
     {     
         kdDebug() << "error changing colors" << endl;
         return false;    
@@ -133,7 +133,7 @@ bool ColorChangerTool::changeColors(int startX, int startY)
 
 void ColorChangerTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     if (e->button() != QMouseEvent::LeftButton
@@ -164,13 +164,13 @@ void ColorChangerTool::optionsDialog()
 {
 	ToolOptsStruct ts;    
     
-	ts.usePattern       = usePattern;
-	ts.useGradient      = useGradient;
-	ts.opacity          = fillOpacity;
+	ts.usePattern       = m_usePattern;
+	ts.useGradient      = m_useGradient;
+	ts.opacity          = m_opacity;
 
-	int old_fillOpacity   = fillOpacity;
-	bool old_usePattern   = usePattern;
-	bool old_useGradient  = useGradient;
+	unsigned int old_m_opacity   = m_opacity;
+	bool old_usePattern   = m_usePattern;
+	bool old_useGradient  = m_useGradient;
 
 	ToolOptionsDialog OptsDialog(tt_filltool, ts);
 
@@ -184,9 +184,9 @@ void ColorChangerTool::optionsDialog()
 	   local ones for individual tools, we need a master tool
 	   options tabbed dialog */
 
-	fillOpacity     = OptsDialog.fillToolTab()->opacity();
-	usePattern      = OptsDialog.fillToolTab()->usePattern();
-	useGradient     = OptsDialog.fillToolTab()->useGradient();
+	m_opacity     = OptsDialog.fillToolTab()->opacity();
+	m_usePattern      = OptsDialog.fillToolTab()->usePattern();
+	m_useGradient     = OptsDialog.fillToolTab()->useGradient();
 
 	// we need HSV tolerances even more
 	//toleranceRed    = OptsDialog->ToleranceRed();
@@ -194,30 +194,30 @@ void ColorChangerTool::optionsDialog()
 	//toleranceBlue   = OptsDialog->ToleranceBlue();
 
 	// User change value ?
-	if ( old_usePattern != usePattern || old_useGradient != useGradient || old_fillOpacity != fillOpacity ) {
+	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_m_opacity != m_opacity ) {
 		// note that gradients amd patterns are not associated with a
 		// particular tool, unlike the other options
 
 		// get current colors
-		KisColor startColor( m_pView->fgColor().R(), m_pView->fgColor().G(), m_pView->fgColor().B() );
-		KisColor endColor( m_pView->bgColor().R(), m_pView->bgColor().G(), m_pView->bgColor().B() );        
+		KisColor startColor( m_view->fgColor().R(), m_view->fgColor().G(), m_view->fgColor().B() );
+		KisColor endColor( m_view->bgColor().R(), m_view->bgColor().G(), m_view->bgColor().B() );        
 
 		// prepare for painting with pattern
-		if( usePattern )
-			m_pDoc->frameBuffer()->setPattern( m_pView->currentPattern() );
+		if( m_usePattern )
+			m_doc->frameBuffer()->setPattern( m_view->currentPattern() );
 
 		// prepare for painting with gradient
-		m_pDoc->frameBuffer()->setGradientPaint( useGradient, startColor, endColor );
+		m_doc->frameBuffer()->setGradientPaint( m_useGradient, startColor, endColor );
 
 		// set color changer settings
-		m_pDoc->setModified( true );
+		m_doc->setModified( true );
 	}        
 }
 
 void ColorChangerTool::setCursor()
 {
-	m_pView -> kisCanvas() -> setCursor(KisCursor::colorChangerCursor());
-	m_Cursor = KisCursor::colorChangerCursor();
+	m_view -> kisCanvas() -> setCursor(KisCursor::colorChangerCursor());
+	m_cursor = KisCursor::colorChangerCursor();
 }
 
 void ColorChangerTool::setupAction(QObject *collection)
@@ -232,9 +232,9 @@ QDomElement ColorChangerTool::saveSettings(QDomDocument& doc) const
 	// Color changer element
 	QDomElement colorChanger = doc.createElement("colorChanger");
 
-	colorChanger.setAttribute("opacity", opacity);
-	colorChanger.setAttribute("fillWithPattern", static_cast<int>(usePattern));
-	colorChanger.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	colorChanger.setAttribute("opacity", m_opacity);
+	colorChanger.setAttribute("fillWithPattern", static_cast<int>(m_usePattern));
+	colorChanger.setAttribute("fillWithGradient", static_cast<int>(m_useGradient));
 	return colorChanger;
 }
 
@@ -243,9 +243,9 @@ bool ColorChangerTool::loadSettings(QDomElement& elem)
 	bool rc = elem.tagName() == "colorChanger";
 
 	if (rc) {
-		opacity = elem.attribute("opacity").toInt();
-		usePattern = static_cast<bool>(elem.attribute("fillWithPattern").toInt());
-		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+		m_opacity = elem.attribute("opacity").toInt();
+		m_usePattern = static_cast<bool>(elem.attribute("fillWithPattern").toInt());
+		m_useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
 	}
 
 	return rc;

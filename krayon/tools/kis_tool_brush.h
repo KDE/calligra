@@ -46,25 +46,29 @@ public:
 	bool paintColor(const QPoint& pos);
 	bool paintCanvas(const QPoint& pos);
 
-public slots:
-	virtual void toolSelect();
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
 
-protected:
-	KToggleAction * m_toggle;
-	QPoint 	m_dragStart;
-	bool   	m_dragging;
-	float       m_dragdist;
+public slots:
+	virtual void toolSelect();
 
-	int red, blue, green;
-	int brushWidth, brushHeight;
-	QSize brushSize;
-	QPoint hotSpot;
-	int hotSpotX, hotSpotY;
-	int spacing;
-	bool alpha;
+protected:
+	KToggleAction *m_toggle;
+	QPoint m_dragStart;
+	bool m_dragging;
+	float m_dragdist;
+	int m_red; 
+	int m_blue; 
+	int m_green;
+	int m_brushWidth; 
+	int m_brushHeight;
+	QSize m_brushSize;
+	QPoint m_hotSpot;
+	int m_hotSpotX; 
+	int m_hotSpotY;
+	int m_spacing;
+	bool m_alpha;
 };
 
 #endif //__brushtool_h__

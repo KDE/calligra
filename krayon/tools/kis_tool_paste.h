@@ -37,15 +37,16 @@ public:
 	virtual bool shouldRepaint();
 	virtual bool setClip();
 
+	virtual void mousePress(QMouseEvent*); 
+	virtual void mouseMove(QMouseEvent*);
+	virtual void mouseRelease(QMouseEvent*);
+
 	void setOpacity(int opacity);
 	bool pasteMonochrome(QPoint pos);
 	bool pasteColor(QPoint pos);
 	bool pasteToCanvas(QPoint pos);
 
 public slots:
-	virtual void mousePress(QMouseEvent*); 
-	virtual void mouseMove(QMouseEvent*);
-	virtual void mouseRelease(QMouseEvent*);
 	virtual void toolSelect();
 
 protected:
@@ -54,8 +55,6 @@ protected:
 	   This will also contain effects and raster operations to
 	   be performed on selection and/or area pasted to */
 
-	KisCanvas   *m_pCanvas;
-	QImage      clipImage;
 	QPixmap     clipPix;   
 
 	QPoint      oldp;

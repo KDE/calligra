@@ -37,12 +37,12 @@ EraserTool::EraserTool(KisDoc *doc, KisBrush *_brush) : KisTool(doc)
 {
     m_dragging = false;
     m_dragdist = 0;
-    m_pDoc = doc;
+    m_doc = doc;
 
     // initialize eraser tool settings
-    usePattern = false;
-    useGradient = true;
-    opacity = 255;
+    m_usePattern = false;
+    m_useGradient = true;
+    m_opacity = 255;
 
     setBrush(_brush);
 }
@@ -51,31 +51,31 @@ EraserTool::~EraserTool() {}
 
 void EraserTool::setBrush(KisBrush *_brush)
 {
-    m_pBrush = _brush;
+    m_brush = _brush;
 
-    int w = m_pBrush->pixmap().width();
-    int h = m_pBrush->pixmap().height();
+    int w = m_brush->pixmap().width();
+    int h = m_brush->pixmap().height();
 
     // cursor cannot be larger than 32x32
     if((w < 33 && h < 33) && (w > 9 && h > 9))
     {
         QBitmap mask(w, h);
-        QPixmap pix(m_pBrush->pixmap());
+        QPixmap pix(m_brush->pixmap());
         mask = pix.createHeuristicMask();
         pix.setMask(mask);
-        m_pView->kisCanvas()->setCursor(QCursor(pix));
-        m_Cursor = QCursor(pix);
+        m_view->kisCanvas()->setCursor(QCursor(pix));
+        m_cursor = QCursor(pix);
     }
     else
     {
-        m_pView->kisCanvas()->setCursor(KisCursor::eraserCursor());
-        m_Cursor = KisCursor::eraserCursor();
+        m_view->kisCanvas()->setCursor(KisCursor::eraserCursor());
+        m_cursor = KisCursor::eraserCursor();
     }
 }
 
 void EraserTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     if(!img->getCurrentLayer())
@@ -96,29 +96,29 @@ void EraserTool::mousePress(QMouseEvent *e)
 
     if(paint(pos))
     {
-         m_pDoc->current()->markDirty(QRect(pos
-            - m_pBrush->hotSpot(), m_pBrush->size()));
+         m_doc->current()->markDirty(QRect(pos
+            - m_brush->hotSpot(), m_brush->size()));
     }
 }
 
 
 bool EraserTool::paint(QPoint pos)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
 
     if (!img)	return false;
     if (!lay)   return false;
-    if (!m_pBrush) return false;
+    if (!m_brush) return false;
 
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB  && !img->colorMode() == cm_RGBA)
 	return false;
 
-    int startx = (pos - m_pBrush->hotSpot()).x();
-    int starty = (pos - m_pBrush->hotSpot()).y();
+    int startx = (pos - m_brush->hotSpot()).x();
+    int starty = (pos - m_brush->hotSpot()).y();
 
-    QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
+    QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
 
     if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
         return false;
@@ -142,7 +142,7 @@ bool EraserTool::paint(QPoint pos)
 
         for (int y = sy; y <= ey; y++)
 	    {
-	        sl = m_pBrush->scanline(y);
+	        sl = m_brush->scanline(y);
 
 	        for (int x = sx; x <= ex; x++)
 	        {
@@ -162,13 +162,13 @@ bool EraserTool::paint(QPoint pos)
     else   // no alpha channel -> erase to background color
     {
         uchar r, g, b;
-	    int red = m_pView->bgColor().R();
-	    int green = m_pView->bgColor().G();
-	    int blue = m_pView->bgColor().B();
+	    int red = m_view->bgColor().R();
+	    int green = m_view->bgColor().G();
+	    int blue = m_view->bgColor().B();
 
 	    for (int y = sy; y <= ey; y++)
 	    {
-	        sl = m_pBrush->scanline(y);
+	        sl = m_brush->scanline(y);
 
 	        for (int x = sx; x <= ex; x++)
 	        {
@@ -198,10 +198,10 @@ bool EraserTool::paint(QPoint pos)
 
 void EraserTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
-    int spacing = m_pBrush->spacing();
+    int spacing = m_brush->spacing();
     if (spacing <= 0) spacing = 1;
 
     if(m_dragging)
@@ -251,7 +251,7 @@ void EraserTool::mouseMove(QMouseEvent *e)
 	        QPoint p(qRound(step.x()), qRound(step.y()));
 
 	        if (paint(p))
-               img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
+               img->markDirty(QRect(p - m_brush->hotSpot(), m_brush->size()));
 
  	        dist -= spacing;
 	    }
@@ -273,13 +273,13 @@ void EraserTool::optionsDialog()
 {
     ToolOptsStruct ts;
 
-    ts.usePattern  = usePattern;
-    ts.useGradient = useGradient;
-    ts.opacity     = opacity;
+    ts.usePattern  = m_usePattern;
+    ts.useGradient = m_useGradient;
+    ts.opacity     = m_opacity;
 
-    bool old_usePattern     = usePattern;
-    bool old_useGradient    = useGradient;
-    unsigned int  old_opacity    = opacity;
+    bool old_usePattern     = m_usePattern;
+    bool old_useGradient    = m_useGradient;
+    unsigned int  old_opacity    = m_opacity;
 
     ToolOptionsDialog OptsDialog(tt_erasertool, ts);
 
@@ -288,15 +288,15 @@ void EraserTool::optionsDialog()
     if(OptsDialog.result() == QDialog::Rejected)
         return;
         
-    opacity   = OptsDialog.eraserToolTab()->opacity();
-    usePattern    = OptsDialog.eraserToolTab()->usePattern();
-    useGradient   = OptsDialog.eraserToolTab()->useGradient();
+    m_opacity   = OptsDialog.eraserToolTab()->opacity();
+    m_usePattern    = OptsDialog.eraserToolTab()->usePattern();
+    m_useGradient   = OptsDialog.eraserToolTab()->useGradient();
 
     // User change value ?
-    if ( old_usePattern != usePattern || old_useGradient != useGradient 
-		    || old_opacity != opacity ) {
+    if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient 
+		    || old_opacity != m_opacity ) {
 	    // set eraser tool settings
-	    m_pDoc->setModified( true );
+	    m_doc->setModified( true );
     }
 }
 
@@ -311,9 +311,9 @@ QDomElement EraserTool::saveSettings(QDomDocument& doc) const
 {
 	QDomElement eraserTool = doc.createElement("eraserTool");
 
-	eraserTool.setAttribute("opacity", opacity);
-	eraserTool.setAttribute("blendWithCurrentGradient", static_cast<int>(useGradient));
-	eraserTool.setAttribute("blendWithCurrentPattern", static_cast<int>(usePattern));
+	eraserTool.setAttribute("opacity", m_opacity);
+	eraserTool.setAttribute("blendWithCurrentGradient", static_cast<int>(m_useGradient));
+	eraserTool.setAttribute("blendWithCurrentPattern", static_cast<int>(m_usePattern));
 	return eraserTool;
 }
 
@@ -322,9 +322,9 @@ bool EraserTool::loadSettings(QDomElement& elem)
         bool rc = elem.tagName() == "eraserTool";
 
 	if (rc) {
-		opacity = elem.attribute("opacity").toInt();
-		useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
-		usePattern = static_cast<bool>(elem.attribute("blendWithCurrentPattern" ).toInt());
+		m_opacity = elem.attribute("opacity").toInt();
+		m_useGradient = static_cast<bool>(elem.attribute("blendWithCurrentGradient").toInt());
+		m_usePattern = static_cast<bool>(elem.attribute("blendWithCurrentPattern" ).toInt());
 	}
 
 	return rc;

@@ -28,44 +28,44 @@
 #include "kis_tool_move.h"
 #include "kis_view.h"
 
-MoveCommand::MoveCommand( KisDoc *_doc, int _layer, 
-    QPoint _oldpos, QPoint _newpos )
-  : KisCommand( i18n( "Move layer" ), _doc )
-  , m_layer( _layer )
-  , m_oldPos( _oldpos )
-  , m_newPos( _newpos )
+MoveCommand::MoveCommand(KisDoc *doc, int layer, const QPoint& oldpos, const QPoint& newpos)
+  : KisCommand(i18n("Move layer"), doc)
 {
+	m_layer = layer;
+	m_oldPos = oldpos;
+	m_newPos = newpos;
+	m_doc = doc;
 }
 
 void MoveCommand::execute()
 {
-
-  moveTo( m_newPos );
+	moveTo(m_newPos);
 }
 
 void MoveCommand::unexecute()
 {
-
-  moveTo( m_oldPos );
+	moveTo(m_oldPos);
 }
 
-void MoveCommand::moveTo( QPoint _pos )
+void MoveCommand::moveTo(const QPoint& pos)
 {
-  KisImage* img = m_pDoc->current();
-  if (!img) return;
+	KisImage* img = m_doc->current();
 
-  img->setCurrentLayer( m_layer );
-  QRect oldRect = img->getCurrentLayer()->imageExtents();
-  img->getCurrentLayer()->moveTo( _pos.x(), _pos.y() );
-  img->markDirty( img->getCurrentLayer()->imageExtents() );
-  img->markDirty( oldRect );
+	if (!img) 
+		return;
+
+	img->setCurrentLayer( m_layer );
+	QRect oldRect = img->getCurrentLayer()->imageExtents();
+	img->getCurrentLayer()->moveTo( pos.x(), pos.y() );
+	img->markDirty( img->getCurrentLayer()->imageExtents() );
+	img->markDirty( oldRect );
 }
 
 MoveTool::MoveTool(KisDoc *doc) : KisTool(doc)
 {
-    // set custom cursor.
-    setCursor();
-    m_dragging = false;
+	// set custom cursor.
+	setCursor();
+	m_dragging = false;
 }
 
 MoveTool::~MoveTool()
@@ -74,77 +74,80 @@ MoveTool::~MoveTool()
 
 void MoveTool::mousePress( QMouseEvent *e )
 {
-    KisImage* img = m_pDoc->current();
-    if (!img)return;
+	KisImage *img = m_doc -> current();
 
-    if( e->button() != LeftButton )
-        return;
+	if (!img)
+		return;
 
-    if( !img->getCurrentLayer()->visible() )
-        return;
+	if (e -> button() != LeftButton)
+		return;
 
-    QPoint pos = e->pos();
-    QPoint zoomedPos(zoomed(pos));
-    if(!img->getCurrentLayer()->imageExtents().contains(zoomedPos))
-        return;
+	if (!img -> getCurrentLayer() -> visible())
+		return;
 
-    m_dragging = true;
-    m_dragStart.setX(e->x());
-    m_dragStart.setY(e->y());
-    m_layerStart = img->getCurrentLayer()->imageExtents().topLeft();
-    m_layerPosition = m_layerStart;
+	QPoint pos = e -> pos();
+	QPoint zoomedPos(zoomed(pos));
+
+	if (!img -> getCurrentLayer() -> imageExtents().contains(zoomedPos))
+		return;
+
+	m_dragging = true;
+	m_dragStart.setX(e -> x());
+	m_dragStart.setY(e -> y());
+	m_layerStart = img -> getCurrentLayer()->imageExtents().topLeft();
+	m_layerPosition = m_layerStart;
 }
 
 void MoveTool::mouseMove( QMouseEvent *e )
 {
-    KisImage* img = m_pDoc->current();
-    if (!img) return;
-  
-    if( m_dragging )
-    {
-        QPoint pos = e->pos();
-        QPoint zoomedPos(pos - m_dragStart);
-        m_dragPosition = zoomed(zoomedPos);
+	KisImage* img = m_doc->current();
+	if (!img) return;
 
-        QRect oldRect = img->getCurrentLayer()->imageExtents();
-        img->getCurrentLayer()->moveBy(m_dragPosition.x(), m_dragPosition.y());
-        img->markDirty( img->getCurrentLayer()->imageExtents() );
-	    img->markDirty( oldRect );
+	if( m_dragging )
+	{
+		QPoint pos = e->pos();
+		QPoint zoomedPos(pos - m_dragStart);
+		m_dragPosition = zoomed(zoomedPos);
 
-        m_layerPosition = img->getCurrentLayer()->imageExtents().topLeft();
-        m_dragStart = e->pos();
-        
-        m_pView->slotRefreshPainter();
-    }
+		QRect oldRect = img->getCurrentLayer()->imageExtents();
+		img->getCurrentLayer()->moveBy(m_dragPosition.x(), m_dragPosition.y());
+		img->markDirty( img->getCurrentLayer()->imageExtents() );
+		img->markDirty( oldRect );
+
+		m_layerPosition = img->getCurrentLayer()->imageExtents().topLeft();
+		m_dragStart = e->pos();
+
+		m_view->slotRefreshPainter();
+	}
 }
 
 
 void MoveTool::mouseRelease(QMouseEvent *e )
 {
-    KisImage* img = m_pDoc->current();
-    if (!img) return;
+	KisImage* img = m_doc->current();
+	if (!img) return;
 
-    if( e->button() != LeftButton ) return;
+	if( e->button() != LeftButton ) return;
 
-    if( !m_dragging ) return;
+	if( !m_dragging ) return;
 
 #if 0
-    if( m_layerPosition != m_layerStart )
-    {
-        MoveCommand *moveCommand = new MoveCommand( m_pDoc,
-        img->getCurrentLayerIndex(), m_layerStart, m_layerPosition );
+	if( m_layerPosition != m_layerStart )
+	{
+		MoveCommand *moveCommand = new MoveCommand( m_doc,
+				img->getCurrentLayerIndex(), m_layerStart, m_layerPosition );
 
-        //m_pDoc->commandHistory()->addCommand( moveCommand ); //jwc
-    }
+		//m_doc->commandHistory()->addCommand( moveCommand ); //jwc
+	}
 #endif
 
-    m_dragging = false;
+	m_dragging = false;
 }
 
 void MoveTool::setCursor()
 {
-    m_pView->kisCanvas()->setCursor( KisCursor::moveCursor() );
-    m_Cursor = KisCursor::moveCursor();
+	m_view->kisCanvas()->setCursor( KisCursor::moveCursor() );
+	m_cursor = KisCursor::moveCursor();
 }
 
 void MoveTool::setupAction(QObject *collection)

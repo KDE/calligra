@@ -27,22 +27,20 @@
 #include "kis_tool.h"
 #include "kis_undo.h"
 
-class MoveCommand : public KisCommand
-{
+class MoveCommand : public KisCommand {
 public:
+	MoveCommand(KisDoc *doc, int layer, const QPoint& oldpos, const QPoint& newpos);
 
-  MoveCommand( KisDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos );
-
-  virtual void execute();
-  virtual void unexecute();
+	virtual void execute();
+	virtual void unexecute();
 
 private:
+	void moveTo(const QPoint& pos);
 
-  void moveTo( QPoint _pos );
-
-  int m_layer;
-  QPoint m_oldPos;
-  QPoint m_newPos;
+	int m_layer;
+	QPoint m_oldPos;
+	QPoint m_newPos;
+	KisDoc *m_doc;
 };
 
 class MoveTool : public KisTool {
@@ -53,18 +51,17 @@ public:
 	virtual void setCursor();
 	virtual void setupAction(QObject *collection);
 
-public slots:
 	virtual void mousePress(QMouseEvent *e); 
 	virtual void mouseMove(QMouseEvent *e);
 	virtual void mouseRelease(QMouseEvent *e);
 
 protected:
-
-  QPoint m_dragStart;
-  QPoint m_dragPosition;
-  QPoint m_layerStart;
-  QPoint m_layerPosition;
-  bool   m_dragging;
+	QPoint m_dragStart;
+	QPoint m_dragPosition;
+	QPoint m_layerStart;
+	QPoint m_layerPosition;
+	bool   m_dragging;
 };
 
 #endif //__movetool_h__
+

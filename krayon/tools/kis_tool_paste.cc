@@ -39,8 +39,8 @@ PasteTool::PasteTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
 	m_dragging = false;
 	m_dragdist = 0;
-	m_pCanvas = canvas;
-	m_Cursor = KisCursor::crossCursor();
+	m_canvas = canvas;
+	m_cursor = KisCursor::crossCursor();
 }
 
 PasteTool::~PasteTool() 
@@ -49,9 +49,9 @@ PasteTool::~PasteTool()
 
 bool PasteTool::setClip()
 {
-    clipImage = kapp->clipboard()->image();
+    m_clipImage = kapp->clipboard()->image();
 
-    if (clipImage.isNull())
+    if (m_clipImage.isNull())
     {
         kdDebug(0) << "PasteTool:: clipboard image is null!" << endl;
         return false;
@@ -62,19 +62,19 @@ bool PasteTool::setClip()
     }
 
     /* if dealing with 1 or 8 bit images, convert to 16 bit */
-    if(clipImage.depth() < 16)
+    if(m_clipImage.depth() < 16)
     {
-        QImage sI = clipImage.smoothScale(clipImage.width(), clipImage.height());
-        clipImage = sI;
+        QImage sI = m_clipImage.smoothScale(m_clipImage.width(), m_clipImage.height());
+        m_clipImage = sI;
 
-        if(clipImage.isNull())
+        if(m_clipImage.isNull())
         {
             kdDebug(0) << "PasteTool:: can't smooth scale clip image!" << endl;
             return false;
         }
     }
 
-    clipPix.convertFromImage(clipImage, QPixmap::AutoColor);
+    clipPix.convertFromImage(m_clipImage, QPixmap::AutoColor);
     if(clipPix.isNull())
     {
         kdDebug(0) << "PasteTool:: can't convernt from image!" << endl;
@@ -91,8 +91,8 @@ bool PasteTool::setClip()
     mHotSpotY = 0;
     mHotSpot = QPoint(mHotSpotX, mHotSpotY);
 
-    if(!clipImage.hasAlphaBuffer())
-        kdDebug() << "paste tool - clipImage has no alpha buffer!" << endl;
+    if(!m_clipImage.hasAlphaBuffer())
+        kdDebug() << "paste tool - m_clipImage has no alpha buffer!" << endl;
 
     return true;
 }
@@ -112,7 +112,7 @@ void PasteTool::mousePress(QMouseEvent *e)
     if (e->button() != QMouseEvent::LeftButton)
         return;
 
-    KisImage *img = m_pDoc->current();
+    KisImage *img = m_doc->current();
     if (!img)  return;
 
     if(!img->getCurrentLayer()->visible()) return;
@@ -133,13 +133,13 @@ void PasteTool::mousePress(QMouseEvent *e)
 
 bool PasteTool::pasteColor(QPoint pos)
 {
-    KisImage *img = m_pDoc->current();
+    KisImage *img = m_doc->current();
     if (!img)   return false;
 
     KisLayer *lay = img->getCurrentLayer();
     if (!lay)   return false;
 
-    QImage *qimg = &clipImage;
+    QImage *qimg = &m_clipImage;
 
     int startx = pos.x();
     int starty = pos.y();
@@ -160,9 +160,9 @@ bool PasteTool::pasteColor(QPoint pos)
     int   v = 255;
     int   bv = 0;
 
-    int red     = m_pView->fgColor().R();
-    int green   = m_pView->fgColor().G();
-    int blue    = m_pView->fgColor().B();
+    int red     = m_view->fgColor().R();
+    int green   = m_view->fgColor().G();
+    int blue    = m_view->fgColor().B();
 
     bool grayscale = false;
     bool colorBlending = false;
@@ -236,13 +236,13 @@ bool PasteTool::pasteMonochrome(QPoint /* pos */)
 
 bool PasteTool::pasteToCanvas(QPoint pos)
 {
-    KisImage* img = m_pDoc->current();
+    KisImage* img = m_doc->current();
     if (!img) return false;
 
     KisLayer *lay = img->getCurrentLayer();
     if (!lay) return false;
 
-    float zF = m_pView->zoomFactor();
+    float zF = m_view->zoomFactor();
 
     int pX = pos.x();
     int pY = pos.y();
@@ -251,7 +251,7 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     pos = QPoint(pX, pY);
 
     QPainter p;
-    p.begin(m_pCanvas);
+    p.begin(m_canvas);
     p.scale( zF, zF );
 
     QRect ur(pos.x(), pos.y(), clipPix.width(), clipPix.height());
@@ -299,8 +299,8 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     if(startX > clipPix.width())  startX = clipPix.width();
     if(startY > clipPix.height()) startY = clipPix.height();
 
-    int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
-    int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
+    int xt = m_view->xPaintOffset() - m_view->xScrollOffset();
+    int yt = m_view->yPaintOffset() - m_view->yScrollOffset();
 
     p.translate(xt, yt);
 
@@ -317,12 +317,12 @@ bool PasteTool::pasteToCanvas(QPoint pos)
 
 void PasteTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     int spacing = 10;
 
-    float zF = m_pView->zoomFactor();
+    float zF = m_view->zoomFactor();
 
     QPoint pos = e->pos();
     int mouseX = e->x();
@@ -381,12 +381,12 @@ void PasteTool::mouseMove(QMouseEvent *e)
             Refresh first - markDirty relies on timer,
             so we need force by directly updating the canvas. */
 
-            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_pView->xScrollOffset(),
-                     zoomed(oldp.y()) - mHotSpotY - m_pView->yScrollOffset(),
+            QRect ur(zoomed(oldp.x()) - mHotSpotX - m_view->xScrollOffset(),
+                     zoomed(oldp.y()) - mHotSpotY - m_view->yScrollOffset(),
                      (int)(clipPix.width() * (zF > 1.0 ? zF : 1.0)),
                      (int)(clipPix.height() * (zF > 1.0 ? zF : 1.0)));
 
-            m_pView->updateCanvas(ur);
+            m_view->updateCanvas(ur);
 
             /* after old spot is refreshed, stamp image into canvas
             at current location. This may be slow or messy as updates
@@ -426,13 +426,13 @@ void PasteTool::setupAction(QObject *collection)
 
 void PasteTool::toolSelect()
 {
-	if (!m_pView)
+	if (!m_view)
 		return;
 
-	if(m_pDoc -> getClipImage()) {
+	if(m_doc -> getClipImage()) {
 		setClip();
-		m_pView -> activateTool(this);
-		m_pView -> slotUpdateImage();
+		m_view -> activateTool(this);
+		m_view -> slotUpdateImage();
 	}
 	else
 		KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", false);

@@ -36,16 +36,16 @@
 
 PolyGonTool::PolyGonTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
-	m_pDoc = doc;
+	m_doc = doc;
 	m_dragging = false;
-	pCanvas = canvas;
+	m_canvas = canvas;
 	lineThickness = 4;
-	opacity = 255;
+	m_opacity = 255;
 	cornersValue = 3;
 	sharpnessValue = 0;
-	usePattern = false;
-	useGradient = false;
-	useRegions = false;
+	m_usePattern = false;
+	m_useGradient = false;
+	m_useRegions = false;
 	checkPolygon = true;
 	checkConcavePolygon = false;
 	mStart = QPoint(-1, -1);
@@ -85,7 +85,7 @@ void PolyGonTool::mouseRelease(QMouseEvent *event)
 		m_dragging = false;
 
 		// draw final polygon onto layer 
-		KisPainter *p = m_pView -> kisPainter();
+		KisPainter *p = m_view -> kisPainter();
 		QRect rect = getDrawRect(drawPoints);
 		QPointArray points = zoomPointArray(drawPoints);
 		p -> drawPolygon(points, rect);
@@ -98,17 +98,17 @@ void PolyGonTool::drawPolygon(const QPoint& start, const QPoint& end)
 	QPen pen;
 
 	pen.setWidth(lineThickness);
-	p.begin(pCanvas);
+	p.begin(m_canvas);
 	p.setPen(pen);
 	p.setRasterOp(Qt::NotROP);
 
-	float zF = m_pView -> zoomFactor();
+	float zF = m_view -> zoomFactor();
 	double angle = 2 * M_PI / cornersValue;
 	float dx = (float) ::fabs(start.x() - end.x());
 	float dy = (float) ::fabs(start.y() - end.y());
 	float radius = (dx > dy ? dx / 2.0 : dy / 2.0);
-	float xoff = start.x() + (start.x() < end.x() ? radius : -radius) + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset());
-	float yoff = start.y() + (start.y() < end.y() ? radius : -radius) + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset());
+	float xoff = start.x() + (start.x() < end.x() ? radius : -radius) + m_view -> xPaintOffset() - (int)(zF * m_view -> xScrollOffset());
+	float yoff = start.y() + (start.y() < end.y() ? radius : -radius) + m_view -> yPaintOffset() - (int)(zF * m_view -> yScrollOffset());
 	float xoff_draw = start.x() + (start.x() < end.x() ? radius : -radius);
 	float yoff_draw = start.y() + (start.y() < end.y() ? radius : -radius);
 	QPointArray points(checkConcavePolygon ? cornersValue * 2 : cornersValue);
@@ -169,21 +169,21 @@ void PolyGonTool::optionsDialog()
 {
 	ToolOptsStruct ts;    
     
-	ts.usePattern       = usePattern;
-	ts.useGradient      = useGradient;
+	ts.usePattern       = m_usePattern;
+	ts.useGradient      = m_useGradient;
 	ts.lineThickness    = lineThickness;
-	ts.opacity      = opacity;
-	ts.fillShapes       = useRegions;
+	ts.opacity      = m_opacity;
+	ts.fillShapes       = m_useRegions;
 	ts.polygonCorners   = cornersValue;
 	ts.polygonSharpness = sharpnessValue;
 	ts.convexPolygon    = checkPolygon;
 	ts.concavePolygon   = checkConcavePolygon;
 
-	bool old_usePattern       = usePattern;
-	bool old_useGradient      = useGradient;
+	bool old_usePattern       = m_usePattern;
+	bool old_useGradient      = m_useGradient;
 	int  old_lineThickness    = lineThickness;
-	unsigned int  old_opacity      = opacity;
-	bool old_useRegions       = useRegions;
+	unsigned int  old_opacity      = m_opacity;
+	bool old_useRegions       = m_useRegions;
 	int old_cornersValue      = cornersValue;
 	int old_sharpnessValue    = sharpnessValue;
 	bool old_checkPolygon      = checkPolygon;
@@ -197,32 +197,32 @@ void PolyGonTool::optionsDialog()
 		return;
 
 	lineThickness = OptsDialog.polygonToolTab()->thickness();
-	opacity   = OptsDialog.polygonToolTab()->opacity();
+	m_opacity   = OptsDialog.polygonToolTab()->opacity();
 	cornersValue  = OptsDialog.polygonToolTab()->corners();
 	sharpnessValue = OptsDialog.polygonToolTab()->sharpness();
-	usePattern    = OptsDialog.polygonToolTab()->usePattern();
-	useGradient   = OptsDialog.polygonToolTab()->useGradient();
-	useRegions    = OptsDialog.polygonToolTab()->solid();
+	m_usePattern    = OptsDialog.polygonToolTab()->usePattern();
+	m_useGradient   = OptsDialog.polygonToolTab()->useGradient();
+	m_useRegions    = OptsDialog.polygonToolTab()->solid();
 	checkPolygon  = OptsDialog.polygonToolTab()->convexPolygon();
 	checkConcavePolygon = OptsDialog.polygonToolTab()->concavePolygon();
 
 	// User change value ?
-	if (old_usePattern != usePattern || old_useGradient != useGradient 
-			|| old_opacity != opacity || old_lineThickness != lineThickness
-			|| old_useRegions != useRegions || old_cornersValue != cornersValue
+	if (old_usePattern != m_usePattern || old_useGradient != m_useGradient 
+			|| old_opacity != m_opacity || old_lineThickness != lineThickness
+			|| old_useRegions != m_useRegions || old_cornersValue != cornersValue
 			|| old_sharpnessValue != sharpnessValue || old_checkPolygon != checkPolygon
 			|| old_checkConcavePolygon != checkConcavePolygon) {    
-		KisPainter *p = m_pView -> kisPainter();
+		KisPainter *p = m_view -> kisPainter();
 
 		Q_ASSERT(p);
 		p->setLineThickness(lineThickness);
-		p->setLineOpacity(opacity);
-		p->setPatternFill(usePattern);
-		p->setGradientFill(useGradient);
-		p->setFilledPolygon(useRegions);
+		p->setLineOpacity(m_opacity);
+		p->setPatternFill(m_usePattern);
+		p->setGradientFill(m_useGradient);
+		p->setFilledPolygon(m_useRegions);
 
 		// set polygon tool settings
-		m_pDoc->setModified(true);
+		m_doc->setModified(true);
 	}
 }
 
@@ -235,15 +235,15 @@ void PolyGonTool::setupAction(QObject *collection)
 
 void PolyGonTool::toolSelect()
 {
-	if (m_pView) {
-		KisPainter *gc = m_pView -> kisPainter();
+	if (m_view) {
+		KisPainter *gc = m_view -> kisPainter();
 
 		gc -> setLineThickness(lineThickness);
-		gc -> setLineOpacity(opacity);
-		gc -> setPatternFill(usePattern);
-		gc -> setGradientFill(useGradient);
+		gc -> setLineOpacity(m_opacity);
+		gc -> setPatternFill(m_usePattern);
+		gc -> setGradientFill(m_useGradient);
 
-		m_pView -> activateTool(this);
+		m_view -> activateTool(this);
 	}
 }
 
@@ -253,12 +253,12 @@ QDomElement PolyGonTool::saveSettings(QDomDocument& doc) const
 	QDomElement polygonTool = doc.createElement("polygonTool");
 
 	polygonTool.setAttribute("thickness", lineThickness);
-	polygonTool.setAttribute("opacity", opacity);
+	polygonTool.setAttribute("opacity", m_opacity);
 	polygonTool.setAttribute("corners", cornersValue);
 	polygonTool.setAttribute("sharpness", sharpnessValue);
-	polygonTool.setAttribute("fillInteriorRegions", static_cast<int>(useRegions));
-	polygonTool.setAttribute("useCurrentPattern", static_cast<int>(usePattern));
-	polygonTool.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	polygonTool.setAttribute("fillInteriorRegions", static_cast<int>(m_useRegions));
+	polygonTool.setAttribute("useCurrentPattern", static_cast<int>(m_usePattern));
+	polygonTool.setAttribute("fillWithGradient", static_cast<int>(m_useGradient));
 	polygonTool.setAttribute("polygon", static_cast<int>(checkPolygon));
 	polygonTool.setAttribute("concavePolygon", static_cast<int>(checkConcavePolygon));
 	return polygonTool;
@@ -270,12 +270,12 @@ bool PolyGonTool::loadSettings(QDomElement& elem)
 
 	if (rc) {
 		lineThickness = elem.attribute("thickness").toInt();
-		opacity = elem.attribute("opacity").toInt();
+		m_opacity = elem.attribute("opacity").toInt();
 		cornersValue = elem.attribute("corners").toInt();
 		sharpnessValue = elem.attribute("sharpness").toInt();
-		useRegions = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
-		usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
-		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+		m_useRegions = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
+		m_usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
+		m_useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
 		checkPolygon = static_cast<bool>(elem.attribute("polygon").toInt());
 		checkConcavePolygon = static_cast<bool>(elem.attribute("concavePolygon").toInt());
 	}

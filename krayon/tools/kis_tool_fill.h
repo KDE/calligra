@@ -54,13 +54,12 @@ public:
 	virtual bool loadSettings(QDomElement& elem);
 	virtual void optionsDialog();
 
+	virtual void mousePress(QMouseEvent*); 
+
 	// set custom cursor.
 	virtual void setCursor();
     
 	bool flood(int startX, int startY);
-
-public slots:
-	virtual void mousePress(QMouseEvent*); 
       
 protected:
 	// from gpaint
@@ -79,7 +78,6 @@ protected:
 	int sGreen;
 	int sBlue;
 
-	int  fillOpacity;
 	bool layerAlpha;
 
 	int toleranceRed;

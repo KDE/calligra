@@ -35,23 +35,23 @@
 AirBrushTool::AirBrushTool(KisDoc *doc, KisBrush *brush) : KisTool(doc)
 {
     m_dragging = false;
-    m_Cursor = KisCursor::airbrushCursor();
+    m_cursor = KisCursor::airbrushCursor();
     m_dragdist = 0;
     density = 64;
-    m_pDoc = doc;
+    m_doc = doc;
 
     // initialize airbrush tool settings
-    opacity = 255;
-    usePattern = false;
-    useGradient = false;
+    m_opacity = 255;
+    m_usePattern = false;
+    m_useGradient = false;
 
     setBrush(brush);
 
     pos.setX(-1);
     pos.setY(-1);
 
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
 }
 
 AirBrushTool::~AirBrushTool()
@@ -64,20 +64,20 @@ void AirBrushTool::timeoutPaint()
 
     if(paint(pos, true))
     {
-         m_pDoc->current()->markDirty(QRect(pos
-            - m_pBrush->hotSpot(), m_pBrush->size()));
+         m_doc->current()->markDirty(QRect(pos
+            - m_brush->hotSpot(), m_brush->size()));
     }
 }
 
 void AirBrushTool::setBrush(KisBrush *brush)
 {
-    m_pBrush = brush;
-    brushWidth =  (unsigned int) m_pBrush->width();
-    brushHeight = (unsigned int) m_pBrush->height();
+    m_brush = brush;
+    brushWidth =  (unsigned int) m_brush->width();
+    brushHeight = (unsigned int) m_brush->height();
 
     // set the array of points to same size as brush
-    brushArray.resize(brushWidth * brushHeight);
-    brushArray.fill(0);
+    m_brushArray.resize(brushWidth * brushHeight);
+    m_brushArray.fill(0);
 
     kdDebug() << "setBrush(): "
         << "brushwidth "   << brushWidth
@@ -85,14 +85,14 @@ void AirBrushTool::setBrush(KisBrush *brush)
         << endl;
 
     // set custom cursor
-    m_pView->kisCanvas()->setCursor( KisCursor::airbrushCursor() );
-    m_Cursor = KisCursor::airbrushCursor();
+    m_view->kisCanvas()->setCursor( KisCursor::airbrushCursor() );
+    m_cursor = KisCursor::airbrushCursor();
 }
 
 
 void AirBrushTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     if(!img->getCurrentLayer())
@@ -112,7 +112,7 @@ void AirBrushTool::mousePress(QMouseEvent *e)
     m_dragdist = 0;
 
     // clear array
-    brushArray.fill(0);
+    m_brushArray.fill(0);
     nPoints = 0;
 
     kdDebug() << "mousePress(): "
@@ -121,38 +121,38 @@ void AirBrushTool::mousePress(QMouseEvent *e)
         << endl;
 
     kdDebug() << "mousePress(): "
-        << "m_pBrush->hotSpot().x() " << m_pBrush->hotSpot().x()
-        << "m_pBrush->hotSpot().y() " << m_pBrush->hotSpot().y()
+        << "m_brush->hotSpot().x() " << m_brush->hotSpot().x()
+        << "m_brush->hotSpot().y() " << m_brush->hotSpot().y()
         << endl;
 
-    // Start the timer - 50 milliseconds or
+    // Start the m_timer - 50 milliseconds or
     // 20 timeouts/second (multishot)
-    timer->start(50, FALSE);
+    m_timer->start(50, FALSE);
 }
 
 
 bool AirBrushTool::paint(QPoint pos, bool timeout)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img)	    return false;
 
     KisLayer *lay = img->getCurrentLayer();
     if (!lay)       return false;
 
-    if (!m_pBrush)  return false;
+    if (!m_brush)  return false;
 
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
 	    return false;
 
     if(!m_dragging) return false;
 
-    int hotX = m_pBrush->hotSpot().x();
-    int hotY = m_pBrush->hotSpot().y();
+    int hotX = m_brush->hotSpot().x();
+    int hotY = m_brush->hotSpot().y();
 
     int startx = pos.x() - hotX;
     int starty = pos.y() - hotY;
 
-    QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
+    QRect clipRect(startx, starty, m_brush->width(), m_brush->height());
     if (!clipRect.intersects(lay->imageExtents()))
         return false;
 
@@ -168,15 +168,15 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
     uchar r, g, b, a;
     int   v;
 
-    int red   = m_pView->fgColor().R();
-    int green = m_pView->fgColor().G();
-    int blue  = m_pView->fgColor().B();
+    int red   = m_view->fgColor().R();
+    int green = m_view->fgColor().G();
+    int blue  = m_view->fgColor().B();
 
     bool alpha = (img->colorMode() == cm_RGBA);
 
     for (int y = sy; y <= ey; y++)
     {
-        sl = m_pBrush->scanline(y);
+        sl = m_brush->scanline(y);
 
         for (int x = sx; x <= ex; x++)
 	    {
@@ -194,7 +194,7 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
             // this makes image too dark and grany, eventually -
             // that effect is good with the regular brush tool,
             // but not with an airbrush or with the pen tool
-            if(timeout && (brushArray[brushWidth * (y-sy) + (x-sx) ] > 0))
+            if(timeout && (m_brushArray[brushWidth * (y-sy) + (x-sx) ] > 0))
             {
                 paintPoint = false;
             }
@@ -231,7 +231,7 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
                 // add this point to points already painted
                 if(timeout)
                 {
-                    brushArray[brushWidth * (y-sy) + (x-sx)] = 1;
+                    m_brushArray[brushWidth * (y-sy) + (x-sx)] = 1;
                     nPoints++;
                 }
             }
@@ -244,10 +244,10 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
 
 void AirBrushTool::mouseMove(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
-    int spacing = m_pBrush->spacing();
+    int spacing = m_brush->spacing();
     if (spacing <= 0) spacing = 1;
 
     if(m_dragging)
@@ -298,8 +298,8 @@ void AirBrushTool::mouseMove(QMouseEvent *e)
 
 	        if (paint(p, false))
             {
-                img->markDirty(QRect(p - m_pBrush->hotSpot(),
-                    m_pBrush->size()));
+                img->markDirty(QRect(p - m_brush->hotSpot(),
+                    m_brush->size()));
             }
 
  	        dist -= spacing;
@@ -317,11 +317,11 @@ void AirBrushTool::mouseRelease(QMouseEvent *e)
     // perhaps erase on right button
     if (e->button() != LeftButton)  return;
 
-    // stop the timer - restart when mouse pressed again
-    timer->stop();
+    // stop the m_timer - restart when mouse pressed again
+    m_timer->stop();
 
     //reset array of points
-    brushArray.fill(0);
+    m_brushArray.fill(0);
     nPoints = 0;
 
     m_dragging = false;
@@ -331,13 +331,13 @@ void AirBrushTool::optionsDialog()
 {
 	ToolOptsStruct ts;
 
-	ts.usePattern       = usePattern;
-	ts.useGradient      = useGradient;
-	ts.opacity          = opacity;
+	ts.usePattern       = m_usePattern;
+	ts.useGradient      = m_useGradient;
+	ts.opacity          = m_opacity;
 
-	bool old_usePattern   = usePattern;
-	bool old_useGradient  = useGradient;
-	unsigned int  old_opacity      = opacity;
+	bool old_usePattern   = m_usePattern;
+	bool old_useGradient  = m_useGradient;
+	unsigned int  old_opacity      = m_opacity;
 
 	ToolOptionsDialog OptsDialog(tt_airbrushtool, ts);
 
@@ -346,14 +346,14 @@ void AirBrushTool::optionsDialog()
 	if(OptsDialog.result() == QDialog::Rejected)
 		return;
 
-	opacity       = OptsDialog.airBrushToolTab()->opacity();
-	usePattern    = OptsDialog.airBrushToolTab()->usePattern();
-	useGradient   = OptsDialog.airBrushToolTab()->useGradient();
+	m_opacity       = OptsDialog.airBrushToolTab()->opacity();
+	m_usePattern    = OptsDialog.airBrushToolTab()->usePattern();
+	m_useGradient   = OptsDialog.airBrushToolTab()->useGradient();
 
 	// User change value ?
-	if ( old_usePattern != usePattern || old_useGradient != useGradient || old_opacity != opacity ) {
+	if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity ) {
 		// set airbrush tool settings
-		m_pDoc->setModified( true );
+		m_doc->setModified( true );
 	}
 }
 
@@ -369,9 +369,9 @@ QDomElement AirBrushTool::saveSettings(QDomDocument& doc) const
 {
 	QDomElement tool = doc.createElement("tool");
 
-	tool.setAttribute("opacity", opacity);
-	tool.setAttribute("useCurrentGradient", static_cast<int>(useGradient));
-	tool.setAttribute("useCurrentPattern", static_cast<int>(usePattern));
+	tool.setAttribute("opacity", m_opacity);
+	tool.setAttribute("useCurrentGradient", static_cast<int>(m_useGradient));
+	tool.setAttribute("useCurrentPattern", static_cast<int>(m_usePattern));
 	return tool;
 }
 
@@ -380,9 +380,9 @@ bool AirBrushTool::loadSettings(QDomElement& tool)
 	bool rc = tool.tagName() == "airbrushTool";
 
 	if (rc) {
-		opacity = tool.attribute("opacity").toInt();
-		useGradient = static_cast<bool>(tool.attribute("useCurrentGradient").toInt());
-		usePattern = static_cast<bool>(tool.attribute("useCurrentPattern").toInt());
+		m_opacity = tool.attribute("opacity").toInt();
+		m_useGradient = static_cast<bool>(tool.attribute("useCurrentGradient").toInt());
+		m_usePattern = static_cast<bool>(tool.attribute("useCurrentPattern").toInt());
 	}
 
 	return rc;

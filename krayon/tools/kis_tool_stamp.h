@@ -44,19 +44,16 @@ public:
 	virtual void setPattern(KisPattern *pattern);
 	virtual void optionsDialog();
 
+	virtual void mousePress(QMouseEvent*); 
+	virtual void mouseMove(QMouseEvent*);
+	virtual void mouseRelease(QMouseEvent*);
+
 	void setOpacity(int opacity);
 	bool stampMonochrome(QPoint pos);
 	bool stampColor(QPoint pos);
 	bool stampToCanvas(QPoint pos);
 
-public slots:
-	virtual void mousePress(QMouseEvent*); 
-	virtual void mouseMove(QMouseEvent*);
-	virtual void mouseRelease(QMouseEvent*);
-
 protected:
-
-	KisCanvas   *m_pCanvas;
 
 	QPoint      oldp;
 	QPoint      mHotSpot;

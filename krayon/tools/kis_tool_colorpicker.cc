@@ -27,14 +27,14 @@
 
 ColorPicker::ColorPicker(KisDoc *doc) : KisTool(doc)
 {
-    m_Cursor = KisCursor::pickerCursor();
+    m_cursor = KisCursor::pickerCursor();
 }
 
 ColorPicker::~ColorPicker() {}
 
 KisColor ColorPicker::pick(int x, int y)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     KisLayer *lay = img->getCurrentLayer();
     
     if (!img) return KisColor::white();
@@ -53,7 +53,7 @@ KisColor ColorPicker::pick(int x, int y)
 
 void ColorPicker::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     if (e->button() != QMouseEvent::LeftButton
@@ -70,10 +70,10 @@ void ColorPicker::mousePress(QMouseEvent *e)
         return;
   
     if (e->button() == QMouseEvent::LeftButton)
-        m_pView->slotSetFGColor(pick(pos.x(), pos.y()));
+        m_view->slotSetFGColor(pick(pos.x(), pos.y()));
         
     else if (e->button() == QMouseEvent::RightButton)
-        m_pView->slotSetBGColor(pick(pos.x(), pos.y()));
+        m_view->slotSetBGColor(pick(pos.x(), pos.y()));
 }
 
 void ColorPicker::setupAction(QObject *collection)

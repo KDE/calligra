@@ -2,6 +2,7 @@
  *  kis_tool_select_freehand.cc - part of Krayon
  *
  *  Copyright (c) 2001 Toshitaka Fujioka <fujioka@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,11 +70,11 @@ void FreehandSelectTool::finish( QPoint p )
 
 void FreehandSelectTool::clearOld()
 {
-//   if (m_pDoc->isEmpty()) return;
+//   if (m_doc->isEmpty()) return;
 
    // clear everything in 
-   QRect updateRect(0, 0, m_pDoc->current()->width(), m_pDoc->current()->height());
-   m_pView->updateCanvas(updateRect);
+   QRect updateRect(0, 0, m_doc->current()->width(), m_doc->current()->height());
+   m_view->updateCanvas(updateRect);
    m_selectRegion = QRegion();
 
    m_dragStart = QPoint(-1,-1);
@@ -82,7 +83,7 @@ void FreehandSelectTool::clearOld()
 
 void FreehandSelectTool::mousePress( QMouseEvent* event )
 {
-//    if ( m_pDoc->isEmpty() )
+//    if ( m_doc->isEmpty() )
 //        return;
 
     // start the freehand line.
@@ -119,7 +120,7 @@ void FreehandSelectTool::mousePress( QMouseEvent* event )
 
 void FreehandSelectTool::mouseMove( QMouseEvent* event )
 {
-//    if (m_pDoc->isEmpty()) return;
+//    if (m_doc->isEmpty()) return;
 
     if( event->button() == RightButton ) return;
 
@@ -145,16 +146,16 @@ void FreehandSelectTool::mouseMove( QMouseEvent* event )
     else if ( dragSelectArea ) {
         if ( dragFirst ) {
             // remove select image
-            m_pDoc->getSelection()->erase();
+            m_doc->getSelection()->erase();
 
             // refresh canvas
             clearOld();
-            m_pView->slotUpdateImage();
+            m_view->slotUpdateImage();
             dragFirst = false;
         }
 
         int spacing = 10;
-        float zF = m_pView->zoomFactor();
+        float zF = m_view->zoomFactor();
         QPoint pos = event->pos();
         int mouseX = pos.x();
         int mouseY = pos.y();
@@ -188,12 +189,12 @@ void FreehandSelectTool::mouseMove( QMouseEvent* event )
 
             QPoint p( qRound( step.x() ), qRound( step.y() ) );
 
-            QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - m_pView->xScrollOffset(),
-                      zoomed( oldDragPoint.y() ) - m_hotSpot.y() - m_pView->yScrollOffset(),
-                      (int)( clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
-                      (int)( clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
+            QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - m_view->xScrollOffset(),
+                      zoomed( oldDragPoint.y() ) - m_hotSpot.y() - m_view->yScrollOffset(),
+                      (int)( m_clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
+                      (int)( m_clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
 
-            m_pView->updateCanvas( ur );
+            m_view->updateCanvas( ur );
 
             dragSelectImage( p, m_hotSpot );
 
@@ -228,7 +229,7 @@ void FreehandSelectTool::mouseRelease( QMouseEvent* event )
         // we need a bounding rectangle and a point array of 
         // points in the freehand line        
 
-        m_pDoc->getSelection()->setPolygonalSelection( m_imageRect, points, m_pDoc->current()->getCurrentLayer() );
+        m_doc->getSelection()->setPolygonalSelection( m_imageRect, points, m_doc->current()->getCurrentLayer() );
 
         kdDebug(0) << "selectRect" 
                    << " left: "   << m_imageRect.left() 
@@ -255,13 +256,13 @@ void FreehandSelectTool::mouseRelease( QMouseEvent* event )
 
         QPoint pos = event->pos();
 
-        KisImage *img = m_pDoc->current();
+        KisImage *img = m_doc->current();
         if ( !img )
             return;
         if( !img->getCurrentLayer()->visible() )
             return;
         if( pasteClipImage( zoomed( pos ) - m_hotSpot ) )
-            img->markDirty( QRect( zoomed( pos ) - m_hotSpot, clipPixmap.size() ) );
+            img->markDirty( QRect( zoomed( pos ) - m_hotSpot, m_clipPixmap.size() ) );
     }
 }
 
@@ -273,16 +274,16 @@ void FreehandSelectTool::drawLine( const QPoint& start, const QPoint& end )
     p.begin( m_canvas );
     p.setRasterOp( Qt::NotROP );
     p.setPen( QPen( Qt::DotLine ) );
-    float zF = m_pView->zoomFactor();
+    float zF = m_view->zoomFactor();
 
-    p.drawLine( QPoint( start.x() + m_pView->xPaintOffset() 
-                          - (int)(zF * m_pView->xScrollOffset()),
-                        start.y() + m_pView->yPaintOffset() 
-                           - (int)(zF * m_pView->yScrollOffset())), 
-                QPoint( end.x() + m_pView->xPaintOffset() 
-                          - (int)(zF * m_pView->xScrollOffset()),
-                        end.y() + m_pView->yPaintOffset() 
-                           - (int)(zF * m_pView->yScrollOffset())) );
+    p.drawLine( QPoint( start.x() + m_view->xPaintOffset() 
+                          - (int)(zF * m_view->xScrollOffset()),
+                        start.y() + m_view->yPaintOffset() 
+                           - (int)(zF * m_view->yScrollOffset())), 
+                QPoint( end.x() + m_view->xPaintOffset() 
+                          - (int)(zF * m_view->xScrollOffset()),
+                        end.y() + m_view->yPaintOffset() 
+                           - (int)(zF * m_view->yScrollOffset())) );
 
     p.end();
 }

@@ -2,6 +2,7 @@
  *  selecttool.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,42 +42,40 @@ public:
 	virtual void clearOld();
 	virtual bool willModify() const;
 
-	void start(QPoint p);
-	void finish(QPoint p); 
-
-public slots:
+	virtual void paintEvent(QPaintEvent *e);
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
 
-protected:
+	void start(QPoint p);
+	void finish(QPoint p); 
 
-    void drawLine( const QPoint&, const QPoint& ); 
+protected:
+	void drawLine(const QPoint& start, const QPoint& end); 
  
 private:
+	QPoint m_dragStart;
+	QPoint m_dragEnd;
 
-    QPoint      m_dragStart;
-    QPoint      m_dragEnd;
-    
-    QPoint      mStart;
-    QPoint      mFinish;
+	QPoint m_start;
+	QPoint m_finish;
 
-    bool        m_dragging;
-    bool        m_drawn;   
+	bool m_dragging;
+	bool m_drawn;   
 
-    KisCanvas   *m_canvas;
+	QRect m_selectRect;
+	QPointArray m_pointArray;
+	int m_index;
 
-    QRect       m_selectRect;
-    QPointArray m_pointArray;
-    int         m_index;
-
-    bool        moveSelectArea;
-    bool        dragSelectArea;
-    QPoint      m_hotSpot, oldDragPoint;
-    QRegion     m_selectRegion;
-    QRect       m_imageRect;
-    bool        dragFirst;
-    float       m_dragdist;
+	bool moveSelectArea;
+	bool dragSelectArea;
+	QPoint m_hotSpot;
+	QPoint m_oldDragPoint;
+	QRegion m_selectRegion;
+	QRect m_imageRect;
+	bool m_dragFirst;
+	float m_dragdist;
 };
 
 #endif //__selecttoolpolygonal_h__
+

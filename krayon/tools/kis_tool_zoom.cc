@@ -39,28 +39,19 @@ ZoomTool::~ZoomTool()
 
 void ZoomTool::mousePress(QMouseEvent *e)
 {
-  if( (e->button() != LeftButton) &&
-      (e->button() != RightButton) )
-    return;
+	if (e -> button() != LeftButton && e -> button() != RightButton)
+		return;
 
-  if( e->button() == LeftButton )
-      m_pView->zoom_in();
-  else
-      m_pView->zoom_out();
-}
-
-void ZoomTool::mouseMove(QMouseEvent*)
-{
-}
-
-void ZoomTool::mouseRelease(QMouseEvent*)
-{
+	if (e -> button() == LeftButton)
+		m_view -> zoom_in();
+	else
+		m_view -> zoom_out();
 }
 
 void ZoomTool::setCursor()
 {
-    m_pView->kisCanvas()->setCursor( KisCursor::zoomCursor() );
-    m_Cursor = KisCursor::zoomCursor();
+	m_view -> kisCanvas() -> setCursor(KisCursor::zoomCursor());
+	m_cursor = KisCursor::zoomCursor();
 }
 
 void ZoomTool::setupAction(QObject *collection)

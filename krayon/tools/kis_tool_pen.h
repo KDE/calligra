@@ -42,29 +42,22 @@ public:
 	virtual void optionsDialog();
 	virtual void setBrush(KisBrush *brush);
 
-	bool paint(QPoint pos);
-
-public slots:
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
+
+	bool paint(QPoint pos);
 
 protected:
 	QPoint m_dragStart;
 	bool m_dragging;
 	float m_dragdist;
 
-	KisCanvas *m_pCanvas;
-	KisFrameBuffer *fb;
-
-	QPen pen;
-	int penW;
-	QPixmap *buffer;
+	KisFrameBuffer *m_fb;
 
 	// tool options
-	int lineThickness;
-
-	int penColorThreshold;
+	int m_lineThickness;
+	int m_penColorThreshold;
 };
 
 #endif //__pentool_h__

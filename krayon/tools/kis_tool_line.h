@@ -38,27 +38,24 @@ public:
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
 
-	virtual void optionsDialog();
-	virtual void toolSelect();
-
-public slots:
 	virtual void mousePress( QMouseEvent* event );
 	virtual void mouseMove( QMouseEvent* event );
 	virtual void mouseRelease( QMouseEvent* event );
+
+	virtual void optionsDialog();
+	virtual void toolSelect();
   
 protected:
 	void drawLine( const QPoint&, const QPoint& );
     
 protected:
 
-	int         lineThickness;
+	int         m_lineThickness;
 
 	QPoint      m_dragStart;
 	QPoint      m_dragEnd;
 
 	bool        m_dragging;
-
-	KisCanvas   *pCanvas;
 };
 
 #endif //__linetool_h__

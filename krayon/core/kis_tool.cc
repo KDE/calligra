@@ -33,10 +33,10 @@
 
 KisTool::KisTool(KisDoc *doc, const char * /*name*/) //: QObject(doc, name)
 {
-	m_pDoc = doc;
-	m_pView = doc -> currentView();
-	Q_ASSERT(m_pView);
-	m_Cursor = KisCursor::arrowCursor();
+	m_doc = doc;
+	m_view = doc -> currentView();
+	Q_ASSERT(m_view);
+	m_cursor = KisCursor::arrowCursor();
 }
 
 KisTool::~KisTool() 
@@ -54,7 +54,7 @@ void KisTool::setChecked(bool /*check*/)
 
 void KisTool::setCursor(const QCursor& c)
 {
-	m_Cursor = c;
+	m_cursor = c;
 }
 
 void KisTool::setCursor()
@@ -64,20 +64,20 @@ void KisTool::setCursor()
 
 QCursor KisTool::cursor() const
 {
-	return m_Cursor;
+	return m_cursor;
 }
 
 // translate integer for zoom factor
 int KisTool::zoomed(int n) const
 {
-	return static_cast<int>(n / m_pView -> zoomFactor());
+	return static_cast<int>(n / m_view -> zoomFactor());
 }
 
 // translate integer for zoom factor
 int KisTool::zoomedX(int n) const
 {
 	// current zoom factor for this view
-	float zF = m_pView -> zoomFactor();
+	float zF = m_view -> zoomFactor();
 
 	return static_cast<int>(n / zF);
 }
@@ -86,7 +86,7 @@ int KisTool::zoomedX(int n) const
 int KisTool::zoomedY(int n) const
 {
 	// current zoom factor for this view
-	float zF = m_pView -> zoomFactor();
+	float zF = m_view -> zoomFactor();
 
 	return static_cast<int>(n / zF);    
 }
@@ -95,7 +95,7 @@ int KisTool::zoomedY(int n) const
 QPoint KisTool::zoomed(const QPoint & pt) const
 {
 	// current zoom factor for this view
-	float zF = m_pView -> zoomFactor();
+	float zF = m_view -> zoomFactor();
    
 	// translate startpoint for zoom factor
 	// this is almost always a from a mouse event
@@ -178,38 +178,38 @@ QPointArray KisTool::zoomPointArray(const QPointArray& points) const
 void KisTool::setClipImage()
 {
     // set select area clip
-    if ( !m_pDoc->setClipImage() ) {
-        kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): m_pDoc->setClipImage() failed" << endl;
+    if ( !m_doc->setClipImage() ) {
+        kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): m_doc->setClipImage() failed" << endl;
         return;
     }
 
     // get select area clip
-    if ( m_pDoc->getClipImage() ) {
-        kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): m_pDoc->getClipImage() success!!" << endl;
-        clipImage = *m_pDoc->getClipImage();
+    if ( m_doc->getClipImage() ) {
+        kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): m_doc->getClipImage() success!!" << endl;
+        m_clipImage = *m_doc->getClipImage();
 
-        if ( clipImage.isNull() ) {
+        if ( m_clipImage.isNull() ) {
             kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): clip image is null!" << endl;
             return;
         }
         // if dealing with 1 or 8 bit image, convert to 16 bit
-        if ( clipImage.depth() < 16 ) {
-            QImage smoothImage = clipImage.smoothScale( clipImage.width(), clipImage.height() );
-            clipImage = smoothImage;
+        if ( m_clipImage.depth() < 16 ) {
+            QImage smoothImage = m_clipImage.smoothScale( m_clipImage.width(), m_clipImage.height() );
+            m_clipImage = smoothImage;
 
-            if ( clipImage.isNull() ) {
+            if ( m_clipImage.isNull() ) {
                 kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): smooth scale clip image is null!" << endl;
                 return;
             }
         }
 
-        clipPixmap.convertFromImage( clipImage, QPixmap::AutoColor );
-        if ( clipPixmap.isNull() ) {
+        m_clipPixmap.convertFromImage( m_clipImage, QPixmap::AutoColor );
+        if ( m_clipPixmap.isNull() ) {
             kdDebug() << "FreehandSelectTool::setClipImage(): can't convert from image!" << endl;
             return;
         }
 
-        if ( !clipImage.hasAlphaBuffer() )
+        if ( !m_clipImage.hasAlphaBuffer() )
             kdDebug( 0 ) << "FreehandSelectTool::setClipImage(): clip image has no alpha buffer!" << endl;
     }
 
@@ -219,7 +219,7 @@ void KisTool::setClipImage()
 // drag clip image
 void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) const
 {
-    KisImage *img = m_pDoc->current();
+    KisImage *img = m_doc->current();
     if ( !img )
         return;
 
@@ -227,7 +227,7 @@ void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) co
     if ( !lay )
         return;
 
-    float zF = m_pView->zoomFactor();
+    float zF = m_view->zoomFactor();
     int pX = dragPoint.x();
     int pY = dragPoint.y();
     pX = (int)( pX / zF );
@@ -235,11 +235,11 @@ void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) co
     QPoint point = QPoint( pX, pY );
 
     QPainter p;
-    p.begin( m_pView->kisCanvas() );
+    p.begin( m_view->kisCanvas() );
     p.scale( zF, zF );
 
     QRect imageRect( point.x() - hotSpot.x(), point.y() - hotSpot.y(), 
-                     clipPixmap.width(), clipPixmap.height() );
+                     m_clipPixmap.width(), m_clipPixmap.height() );
     imageRect = imageRect.intersect( img->imageExtents() );
 
     if ( imageRect.top() > img->height() || imageRect.left() > img->width()
@@ -258,28 +258,28 @@ void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) co
     int startX = 0;
     int startY = 0;
 
-    if ( clipPixmap.width() > imageRect.right() )
-        startX = clipPixmap.width() - imageRect.right();
-    if ( clipPixmap.height() > imageRect.bottom() )
-        startY = clipPixmap.height() - imageRect.bottom();
+    if ( m_clipPixmap.width() > imageRect.right() )
+        startX = m_clipPixmap.width() - imageRect.right();
+    if ( m_clipPixmap.height() > imageRect.bottom() )
+        startY = m_clipPixmap.height() - imageRect.bottom();
 
     // paranioa
     if( startX < 0 ) 
         startX = 0;
     if( startY < 0 )
         startY = 0;
-    if( startX > clipPixmap.width() )
-        startX = clipPixmap.width();
-    if( startY > clipPixmap.height() )
-        startY = clipPixmap.height();
+    if( startX > m_clipPixmap.width() )
+        startX = m_clipPixmap.width();
+    if( startY > m_clipPixmap.height() )
+        startY = m_clipPixmap.height();
 
-    int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
-    int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
+    int xt = m_view->xPaintOffset() - m_view->xScrollOffset();
+    int yt = m_view->yPaintOffset() - m_view->yScrollOffset();
 
     p.translate( xt, yt );
 
     p.drawPixmap( imageRect.left(), imageRect.top(),
-                  clipPixmap,
+                  m_clipPixmap,
                   startX, startY,
                   imageRect.width(), imageRect.height() );
 
@@ -289,7 +289,7 @@ void KisTool::dragSelectImage(const QPoint& dragPoint, const QPoint& hotSpot) co
 // pasete clip image
 bool KisTool::pasteClipImage(const QPoint& pos)
 {
-    KisImage *img = m_pDoc->current();
+    KisImage *img = m_doc->current();
     if ( !img )
         return false;
 
@@ -297,7 +297,7 @@ bool KisTool::pasteClipImage(const QPoint& pos)
     if ( !lay )
         return false;
 
-    QImage *qimg = &clipImage;
+    QImage *qimg = &m_clipImage;
 
     int startx = pos.x();
     int starty = pos.y();
@@ -318,9 +318,9 @@ bool KisTool::pasteClipImage(const QPoint& pos)
     int   v = 255;
     int   bv = 0;
 
-    int red     = m_pView->fgColor().R();
-    int green   = m_pView->fgColor().G();
-    int blue    = m_pView->fgColor().B();
+    int red     = m_view->fgColor().R();
+    int green   = m_view->fgColor().G();
+    int blue    = m_view->fgColor().B();
 
     bool grayscale = false;
     bool colorBlending = false;
@@ -390,7 +390,7 @@ bool KisTool::shouldRepaint() const
 
 void KisTool::setBrush(KisBrush *brush)
 {
-	m_pBrush = brush;
+	m_brush = brush;
 }
 
 void KisTool::clearOld()
@@ -399,13 +399,13 @@ void KisTool::clearOld()
 
 void KisTool::toolSelect()
 {
-	if (m_pView)
-		m_pView -> activateTool(this);
+	if (m_view)
+		m_view -> activateTool(this);
 }
 
 void KisTool::setPattern(KisPattern *pattern)
 {
-	m_pPattern = pattern;
+	m_pattern = pattern;
 }
 
 bool KisTool::willModify() const
@@ -416,19 +416,19 @@ bool KisTool::willModify() const
 // set select cursor
 void KisTool::setSelectCursor()
 {
-	m_Cursor = KisCursor::selectCursor();
+	m_cursor = KisCursor::selectCursor();
 
-	if (m_pView)
-		m_pView -> kisCanvas() -> setCursor(KisCursor::selectCursor());
+	if (m_view)
+		m_view -> kisCanvas() -> setCursor(KisCursor::selectCursor());
 }
 
 // set move cursor
 void KisTool::setMoveCursor()
 {
-	m_Cursor = KisCursor::moveCursor();
+	m_cursor = KisCursor::moveCursor();
 
-	if (m_pView)
-		m_pView -> kisCanvas() -> setCursor(KisCursor::moveCursor());
+	if (m_view)
+		m_view -> kisCanvas() -> setCursor(KisCursor::moveCursor());
 }
 
 QDomElement KisTool::saveSettings(QDomDocument& /*doc*/) const

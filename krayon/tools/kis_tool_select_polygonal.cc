@@ -2,6 +2,7 @@
  *  kis_tool_select_polygonal.h - part of Krayon
  *
  *  Copyright (c) 2000 John Califf <jcaliff@compuzone.net>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,10 +39,10 @@ PolygonalSelectTool::PolygonalSelectTool(KisDoc *doc, KisCanvas *canvas) : KisTo
 	m_dragStart = QPoint(-1,-1);
 	m_dragEnd =   QPoint(-1,-1);
 
-	mStart  = QPoint(-1, -1);
-	mFinish = QPoint(-1, -1);     
+	m_start  = QPoint(-1, -1);
+	m_finish = QPoint(-1, -1);     
 
-	m_Cursor = KisCursor::selectCursor();
+	m_cursor = KisCursor::selectCursor();
 
 	m_index = 0;
 	m_dragging = false;
@@ -55,257 +56,234 @@ PolygonalSelectTool::~PolygonalSelectTool()
 
 void PolygonalSelectTool::start(QPoint p)
 {
-    mStart = p;
+	m_start = p;
 }
 
 
 void PolygonalSelectTool::finish(QPoint p)
 {
-    mFinish = p;
-    drawLine( mStart, mFinish );
+	m_finish = p;
+	drawLine(m_start, m_finish);
 }
-
 
 void PolygonalSelectTool::clearOld()
 {
-//   if (m_pDoc->isEmpty()) return;
-        
-   // if(m_dragStart.x() != -1)
-        // drawRect( m_dragStart, m_dragEnd ); 
-
-    // clear everything in 
-    QRect updateRect(0, 0, m_pDoc->current()->width(), 
-        m_pDoc->current()->height());
-    m_pView->updateCanvas(updateRect);
-    m_selectRegion = QRegion();
-
-    m_dragStart = QPoint(-1,-1);
-    m_dragEnd =   QPoint(-1,-1);
+	m_dragStart = QPoint(-1,-1);
+	m_dragEnd = QPoint(-1,-1);
+	m_index = 0;
+	m_pointArray.resize(0);
+	
+	// clear everything in 
+	QRect updateRect(0, 0, m_doc->current()->width(), m_doc->current()->height());
+	m_view->updateCanvas(updateRect);
+	m_selectRegion = QRegion();
 }
 
 void PolygonalSelectTool::mousePress( QMouseEvent* event )
 {
-//    if ( m_pDoc->isEmpty() )
-//        return;
-
-    // start the polyline, and/or complete the segment
-    if( event->button() == LeftButton && !moveSelectArea )
-    {
-        if( m_dragging )
-        {
-            // erase old line on canvas
-            drawLine( m_dragStart, m_dragEnd );
-
-            // get current position
-            m_dragEnd = event->pos();
-
-            // draw new and final line for this segment
-            drawLine( m_dragStart, m_dragEnd );
-            
-            // here we need to add the point to the point array
-            // so it can be passed to the selection class to determine
-            // selection area and bounds.
-
-            // draw final line into layer
-            //KisPainter *p = m_pView->kisPainter();
-            //p->drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()),
-            //    zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
-        }
-        else
-        {
-            clearOld();
-            start(event->pos());
-            // todo: add the start point to the point array
-        }
+	// start the polyline, and/or complete the segment
+	if (event -> button() == LeftButton && !moveSelectArea) {
+		if (m_dragging) {
+			// erase old line on canvas
+			drawLine(m_dragStart, m_dragEnd);
+		
+			// get current position
+			m_dragEnd = event -> pos();
+			
+			// draw new and final line for this segment
+			drawLine(m_dragStart, m_dragEnd);
+		} 
+		else {
+			clearOld();
+			m_start = event -> pos();
+			m_pointArray.resize(m_index = 0);
+			m_pointArray.putPoints(m_index++, 1, m_start.x(), m_start.y());
+		}
         
-        m_dragging = true;
-        m_dragStart = event->pos();
-        m_dragEnd = event->pos();
-        dragSelectArea = false;
+		// here we need to add the point to the point array
+		// so it can be passed to the selection class to determine
+		// selection area and bounds.
+		m_dragging = true;
+		m_dragStart = event -> pos();
+		m_dragEnd = event -> pos();
+		dragSelectArea = false;
+		m_pointArray.putPoints(m_index++, 1, m_dragStart.x(), m_dragStart.y());
+	} 
+	else if (event -> button() == Qt::RightButton || event -> button() == Qt::MidButton && !moveSelectArea) {   
+		m_dragging = false;
+		finish(event -> pos());
 
-        m_pointArray.putPoints( m_index, 1, m_dragStart.x(),m_dragStart.y() );
-        ++m_index;
-    }
-    // stop drawing on right or middle click
-    else if ( ( event->button() == Qt::RightButton || event->button() == Qt::MidButton ) && !moveSelectArea )
-    {   
-        m_dragging = false;
-        finish(event->pos());
+		m_pointArray.putPoints(m_index++, 1, m_finish.x(), m_finish.y());
+		m_imageRect = getDrawRect(m_pointArray);
+		QPointArray points = zoomPointArray(m_pointArray);
 
-        m_pointArray.putPoints( m_index, 1, mFinish.x(), mFinish.y() );
-        m_imageRect = getDrawRect( m_pointArray );
-
-        QPointArray points = zoomPointArray( m_pointArray );
-
-        // need to connect start and end positions to close the
-        // polyline 
+		// need to connect start and end positions to close the
+		// polyline 
         
-        // we need a bounding rectangle and a point array of 
-        // points in the polyline
-        // m_pDoc->getSelection()->setBounds(m_selectRect);        
+		// we need a bounding rectangle and a point array of 
+		// points in the polyline
+		// m_doc->getSelection()->setBounds(m_selectRect);        
 
-        m_pDoc->getSelection()->setPolygonalSelection( m_imageRect, points, m_pDoc->current()->getCurrentLayer());
+		m_doc -> getSelection() -> setPolygonalSelection(m_imageRect, points, m_doc -> current() -> getCurrentLayer());
+		m_pointArray.putPoints(m_index++, 1, m_pointArray[0].x(), m_pointArray[0].y());
 
-        kdDebug(0) << "selectRect" 
-            << " left: "   << m_imageRect.left() 
-            << " top: "    << m_imageRect.top()
-            << " right: "  << m_imageRect.right() 
-            << " bottom: " << m_imageRect.bottom()
-            << endl;
+		kdDebug() << "selectRect" << " left: "   << m_imageRect.left() << " top: "    << m_imageRect.top();
+	       	kdDebug()  << " right: "  << m_imageRect.right() << " bottom: " << m_imageRect.bottom() << endl;
 
-        if ( m_pointArray.size() > 1 )
-            m_selectRegion = QRegion( m_pointArray, true );
-        else
-            m_selectRegion = QRegion();
+		if (m_pointArray.size() > 1)
+			m_selectRegion = QRegion(m_pointArray, true);
+		else
+			m_selectRegion = QRegion();
 
-        // Initialize
-        m_index = 0;
-        m_pointArray.resize( 0 );
-    }
-    else if( event->button() == Qt::LeftButton && moveSelectArea ) {
-        dragSelectArea = true;
-        dragFirst = true;
-        m_dragStart = event->pos();
-        m_dragdist = 0;
+		// Initialize
+//		m_index = 0;
+//		m_pointArray.resize( 0 );
+	}
+	else if (event -> button() == Qt::LeftButton && moveSelectArea) {
+		dragSelectArea = true;
+		m_dragFirst = true;
+		m_dragStart = event->pos();
+		m_dragdist = 0;
 
-        m_hotSpot = event->pos();
-        int x = zoomed( m_hotSpot.x() );
-        int y = zoomed( m_hotSpot.y() );
+		m_hotSpot = event->pos();
+		
+		int x = zoomed(m_hotSpot.x());
+		int y = zoomed(m_hotSpot.y());
 
-        m_hotSpot = QPoint( x - m_imageRect.topLeft().x(), y - m_imageRect.topLeft().y() );
+		m_hotSpot = QPoint(x - m_imageRect.topLeft().x(), y - m_imageRect.topLeft().y());
 
-        oldDragPoint = event->pos();
-        setClipImage();
-    }
+		m_oldDragPoint = event->pos();
+		setClipImage();
+	}
 }
-
 
 void PolygonalSelectTool::mouseMove( QMouseEvent* event )
 {
-//    if (m_pDoc->isEmpty()) return;
+	if (m_dragging) {
+		drawLine(m_dragStart, m_dragEnd);
+		m_dragEnd = event->pos();
+		drawLine(m_dragStart, m_dragEnd);
+	}
+	else if (!m_dragging && !dragSelectArea) {
+		if (!m_selectRegion.isNull() && m_selectRegion.contains(event->pos())) {
+			setMoveCursor();
+			moveSelectArea = true;
+		}
+		else {
+			setSelectCursor();
+			moveSelectArea = false;
+		}
+	}
+	else if (dragSelectArea) {
+		if (m_dragFirst) {
+			// remove select image
+			m_doc->getSelection()->erase();
 
-    if( m_dragging )
-    {
-        drawLine( m_dragStart, m_dragEnd );
-        m_dragEnd = event->pos();
-        drawLine( m_dragStart, m_dragEnd );
-    }
-    else if ( !m_dragging && !dragSelectArea ) {
-        if ( !m_selectRegion.isNull() && m_selectRegion.contains( event->pos() ) ) {
-            setMoveCursor();
-            moveSelectArea = true;
-        }
-        else {
-            setSelectCursor();
-            moveSelectArea = false;
-        }
-    }
-    else if ( dragSelectArea ) {
-        if ( dragFirst ) {
-            // remove select image
-            m_pDoc->getSelection()->erase();
+			// refresh canvas
+			clearOld();
+			m_view->slotUpdateImage();
+			m_dragFirst = false;
+		}
 
-            // refresh canvas
-            clearOld();
-            m_pView->slotUpdateImage();
-            dragFirst = false;
-        }
+		int spacing = 10;
+		float zF = m_view->zoomFactor();
+		QPoint pos = event->pos();
+		int mouseX = pos.x();
+		int mouseY = pos.y();
 
-        int spacing = 10;
-        float zF = m_pView->zoomFactor();
-        QPoint pos = event->pos();
-        int mouseX = pos.x();
-        int mouseY = pos.y();
+		KisVector end( mouseX, mouseY );
+		KisVector start( m_dragStart.x(), m_dragStart.y() );
 
-        KisVector end( mouseX, mouseY );
-        KisVector start( m_dragStart.x(), m_dragStart.y() );
+		KisVector dragVec = end - start;
+		float saved_dist = m_dragdist;
+		float new_dist = dragVec.length();
+		float dist = saved_dist + new_dist;
 
-        KisVector dragVec = end - start;
-        float saved_dist = m_dragdist;
-        float new_dist = dragVec.length();
-        float dist = saved_dist + new_dist;
+		if ( (int)dist < spacing ) {
+			m_dragdist += new_dist;
+			m_dragStart = pos;
+			return;
+		}
+		else
+			m_dragdist = 0;
 
-        if ( (int)dist < spacing ) {
-            m_dragdist += new_dist;
-            m_dragStart = pos;
-            return;
-        }
-        else
-            m_dragdist = 0;
+		dragVec.normalize();
+		KisVector step = start;
 
-        dragVec.normalize();
-        KisVector step = start;
+		while ( dist >= spacing ) {
+			if ( saved_dist > 0 ) {
+				step += dragVec * ( spacing - saved_dist );
+				saved_dist -= spacing;
+			}
+			else
+				step += dragVec * spacing;
 
-        while ( dist >= spacing ) {
-            if ( saved_dist > 0 ) {
-                step += dragVec * ( spacing - saved_dist );
-                saved_dist -= spacing;
-            }
-            else
-                step += dragVec * spacing;
+			QPoint p( qRound( step.x() ), qRound( step.y() ) );
 
-            QPoint p( qRound( step.x() ), qRound( step.y() ) );
+			QRect ur( zoomed( m_oldDragPoint.x() ) - m_hotSpot.x() - m_view->xScrollOffset(),
+					zoomed( m_oldDragPoint.y() ) - m_hotSpot.y() - m_view->yScrollOffset(),
+					(int)( m_clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
+					(int)( m_clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
 
-            QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - m_pView->xScrollOffset(),
-                      zoomed( oldDragPoint.y() ) - m_hotSpot.y() - m_pView->yScrollOffset(),
-                      (int)( clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
-                      (int)( clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
+			m_view->updateCanvas( ur );
 
-            m_pView->updateCanvas( ur );
+			dragSelectImage( p, m_hotSpot );
 
-            dragSelectImage( p, m_hotSpot );
+			m_oldDragPoint = p;
+			dist -= spacing;
+		}
 
-            oldDragPoint = p;
-            dist -= spacing;
-        }
-
-        if ( dist > 0 ) 
-            m_dragdist = dist;
-        m_dragStart = pos;
-    }
+		if ( dist > 0 ) 
+			m_dragdist = dist;
+		m_dragStart = pos;
+	}
 }
 
-
-void PolygonalSelectTool::mouseRelease( QMouseEvent* event )
+void PolygonalSelectTool::mouseRelease(QMouseEvent *event)
 {
-    if ( moveSelectArea ) {
-        // Initialize
-        dragSelectArea = false;
-        m_selectRegion = QRegion();
-        setSelectCursor();
-        moveSelectArea = false;
+	if (moveSelectArea) {
+		// Initialize
+		dragSelectArea = false;
+		m_selectRegion = QRegion();
+		setSelectCursor();
+		moveSelectArea = false;
 
-        QPoint pos = event->pos();
+		QPoint pos = event -> pos();
 
-        KisImage *img = m_pDoc->current();
-        if ( !img )
-            return;
-        if( !img->getCurrentLayer()->visible() )
-            return;
-        if( pasteClipImage( zoomed( pos ) - m_hotSpot ) )
-            img->markDirty( QRect( zoomed( pos ) - m_hotSpot, clipPixmap.size() ) );
-    }
+		KisImage *img = m_doc -> current();
+
+		if (!img)
+			return;
+
+		if(!img -> getCurrentLayer() -> visible())
+			return;
+
+		if (pasteClipImage(zoomed(pos) - m_hotSpot)) {
+			img -> markDirty(QRect(zoomed(pos) - m_hotSpot, m_clipPixmap.size()));
+			m_doc -> setModified(true);
+		}
+	}
 }
 
 void PolygonalSelectTool::drawLine( const QPoint& start, const QPoint& end )
 {
-    QPainter p;
-    
-    p.begin( m_canvas );
-    p.setRasterOp( Qt::NotROP );
-    p.setPen( QPen( Qt::DotLine ) );
-    float zF = m_pView->zoomFactor();
+	QPainter p;
 
-    p.drawLine( QPoint( start.x() + m_pView->xPaintOffset() 
-                          - (int)(zF * m_pView->xScrollOffset()),
-                        start.y() + m_pView->yPaintOffset() 
-                           - (int)(zF * m_pView->yScrollOffset())), 
-                QPoint( end.x() + m_pView->xPaintOffset() 
-                          - (int)(zF * m_pView->xScrollOffset()),
-                        end.y() + m_pView->yPaintOffset() 
-                           - (int)(zF * m_pView->yScrollOffset())) );
+	p.begin( m_canvas );
+	p.setRasterOp( Qt::NotROP );
+	p.setPen( QPen( Qt::DotLine ) );
+	float zF = m_view->zoomFactor();
 
-    p.end();
+	p.drawLine( QPoint( start.x() + m_view->xPaintOffset() 
+				- (int)(zF * m_view->xScrollOffset()),
+				start.y() + m_view->yPaintOffset() 
+				- (int)(zF * m_view->yScrollOffset())), 
+			QPoint( end.x() + m_view->xPaintOffset() 
+				- (int)(zF * m_view->xScrollOffset()),
+				end.y() + m_view->yPaintOffset() 
+				- (int)(zF * m_view->yScrollOffset())) );
+
+	p.end();
 }
 
 void PolygonalSelectTool::setupAction(QObject *collection)
@@ -320,3 +298,18 @@ bool PolygonalSelectTool::willModify() const
 {
 	return false;
 }
+
+void PolygonalSelectTool::paintEvent(QPaintEvent *e)
+{
+	QPainter gc(m_canvas);
+	QPen pen(Qt::DotLine);
+	float zF = m_view -> zoomFactor();
+
+	gc.setRasterOp(Qt::NotROP);
+	gc.setPen(pen);
+	gc.scale(zF, zF);
+	gc.translate(m_view -> xPaintOffset() - m_view -> xScrollOffset(), m_view -> yPaintOffset() - m_view -> yScrollOffset());
+	gc.setClipRect(e -> rect());
+	gc.drawPolyline(m_pointArray);
+}
+

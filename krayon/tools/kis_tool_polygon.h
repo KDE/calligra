@@ -41,14 +41,12 @@ public:
 	virtual void toolSelect();
 	virtual void optionsDialog();
 
-public slots:
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
     
 protected:
-
-    void drawPolygon( const QPoint&, const QPoint& );
+	void drawPolygon( const QPoint&, const QPoint& );
 
 private:
 
@@ -67,8 +65,6 @@ private:
     bool        m_dragging;
     bool        m_done;
     
-    KisCanvas   *pCanvas;
-
     QPointArray drawPoints;
 };
 

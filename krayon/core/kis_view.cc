@@ -24,7 +24,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-
 // qt includes
 #include <qevent.h>
 #include <qpainter.h>
@@ -441,8 +440,8 @@ void KisView::setupTabBar()
 void KisView::setupActions()
 {
 	// history actions
-	(void)KStdAction::undo(this, SLOT(undo()), actionCollection(), "undo");
-	(void)KStdAction::redo(this, SLOT(redo()), actionCollection(), "redo");
+	(void)KStdAction::undo(this, SLOT(undo()), actionCollection(), "edit_undo");
+	(void)KStdAction::redo(this, SLOT(redo()), actionCollection(), "edit_redo");
 
 	// navigation actions
 	(void)new KAction(i18n("Refresh Canvas"), "reload", 0, this, SLOT(slotDocUpdated()), actionCollection(), "refresh_canvas");

@@ -2,6 +2,7 @@
  *  selecttool.h - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +39,6 @@ public:
 	virtual void clearOld();
 	virtual bool willModify() const;
 
-public slots:
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
@@ -47,15 +47,13 @@ protected:
 	void drawRect(const QPoint&, const QPoint&); 
 
 protected:
-    QPoint     m_dragStart;
-    QPoint     m_dragEnd;
-    bool       m_dragging;
-    bool       m_drawn;   
-    bool       m_init;
-
-    KisCanvas *m_canvas;
-
-    QRect      m_selectRect;
+	QPoint m_dragStart;
+	QPoint m_dragEnd;
+	bool m_dragging;
+	bool m_drawn;   
+	bool m_init;
+	QRect m_selectRect;
 };
 
 #endif //__selecttoolcontiguous_h__
+

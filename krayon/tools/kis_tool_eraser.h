@@ -39,13 +39,12 @@ public:
 
 	virtual void optionsDialog();
 
-	void setBrush(KisBrush *_brush);
-	bool paint(QPoint pos);
-
-public slots:
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
+
+	void setBrush(KisBrush *_brush);
+	bool paint(QPoint pos);
 
 protected:
 	QPoint  m_dragStart;

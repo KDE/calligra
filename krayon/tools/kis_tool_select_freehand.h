@@ -2,6 +2,7 @@
  *  kis_tool_select_freehand.h - part of Krayon
  *
  *  Copyright (c) 2001 Toshitaka Fujioka <fujioka@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +27,6 @@
 
 #include "kis_tool.h"
 
-
 class KisDoc;
 class KisCanvas;
 class KisView;
@@ -41,29 +41,26 @@ public:
 	virtual void clearOld();
 	virtual bool willModify() const;
 
-	void start( QPoint p );
-	void finish( QPoint p ); 
-
-public slots:
 	virtual void mousePress(QMouseEvent *event);
 	virtual void mouseMove(QMouseEvent *event);
 	virtual void mouseRelease(QMouseEvent *event);
 
+	void start( QPoint p );
+	void finish( QPoint p ); 
+
 protected:
+	void drawLine(const QPoint& start, const QPoint& end); 
 
-    void drawLine( const QPoint&, const QPoint& ); 
+	QPoint      m_dragStart;
+	QPoint      m_dragEnd;
 
+	QPoint      mStart;
+	QPoint      mFinish;
 
-    QPoint      m_dragStart;
-    QPoint      m_dragEnd;
-    
-    QPoint      mStart;
-    QPoint      mFinish;
+	bool        m_dragging;
+	bool        m_drawn;   
 
-    bool        m_dragging;
-    bool        m_drawn;   
-
-    KisCanvas   *m_canvas;
+	KisCanvas   *m_canvas;
 
 private:
 

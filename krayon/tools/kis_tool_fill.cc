@@ -34,12 +34,12 @@ FillTool::FillTool(KisDoc *doc) : KisTool(doc)
 {
 	// set custom cursor.
 	setCursor();
-	m_pDoc = doc;
+	m_doc = doc;
 
 	// initialize filler tool settings
-	fillOpacity = 255;
-	usePattern  = false;
-	useGradient = false;
+	m_opacity = 255;
+	m_usePattern  = false;
+	m_useGradient = false;
 	toleranceRed = 0;
 	toleranceGreen = 0;
 	toleranceBlue = 0;
@@ -63,11 +63,11 @@ int FillTool::is_old_pixel_value(struct fillinfo *info, int x, int y)
 void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 {
 	// fill with pattern
-	if(useGradient)
-		m_pDoc -> frameBuffer() -> setGradientToPixel(fLayer, x, y);
+	if(m_useGradient)
+		m_doc -> frameBuffer() -> setGradientToPixel(fLayer, x, y);
 	// fill with pattern
-	else if(usePattern)
-		m_pDoc -> frameBuffer() -> setPatternToPixel(fLayer, x, y, 0);
+	else if(m_usePattern)
+		m_doc -> frameBuffer() -> setPatternToPixel(fLayer, x, y, 0);
 	// fill with color
 	else {
 		fLayer -> setPixel(0, x, y, info -> r);
@@ -77,7 +77,7 @@ void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
     
 	// alpha adjustment with either fill method
 	if (layerAlpha)
-		fLayer -> setPixel(3, x, y, fillOpacity);
+		fLayer -> setPixel(3, x, y, m_opacity);
 }
 
 
@@ -181,7 +181,7 @@ bool FillTool::flood(int startX, int startY)
     int startx = startX;
     int starty = startY;
     
-    KisImage *img = m_pDoc->current();
+    KisImage *img = m_doc->current();
     if (!img) return false;    
 
     KisLayer *lay = img->getCurrentLayer();
@@ -200,9 +200,9 @@ bool FillTool::flood(int startX, int startY)
 
     // new color values from color selector 
 
-    nRed     = m_pView->fgColor().R();
-    nGreen   = m_pView->fgColor().G();
-    nBlue    = m_pView->fgColor().B();
+    nRed     = m_view->fgColor().R();
+    nGreen   = m_view->fgColor().G();
+    nBlue    = m_view->fgColor().B();
     
     int left    = lay->imageExtents().left(); 
     int top     = lay->imageExtents().top();    
@@ -222,14 +222,14 @@ bool FillTool::flood(int startX, int startY)
     operation when this calculation is not needed - when the gradient
     array is already filled with current values */
     
-    if(useGradient)
+    if(m_useGradient)
     {
-        KisColor startColor(m_pView->fgColor().R(),
-            m_pView->fgColor().G(), m_pView->fgColor().B());
-        KisColor endColor(m_pView->bgColor().R(),
-            m_pView->bgColor().G(), m_pView->bgColor().B());        
+        KisColor startColor(m_view->fgColor().R(),
+            m_view->fgColor().G(), m_view->fgColor().B());
+        KisColor endColor(m_view->bgColor().R(),
+            m_view->bgColor().G(), m_view->bgColor().B());        
             
-        m_pDoc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
+        m_doc->frameBuffer()->setGradientPaint(true, startColor, endColor);        
     }
 
     seed_flood_fill( startx, starty, floodRect);
@@ -244,7 +244,7 @@ bool FillTool::flood(int startX, int startY)
 
 void FillTool::mousePress(QMouseEvent *e)
 {
-    KisImage * img = m_pDoc->current();
+    KisImage * img = m_doc->current();
     if (!img) return;
 
     if (e->button() != QMouseEvent::LeftButton
@@ -274,13 +274,13 @@ void FillTool::optionsDialog()
 {
     ToolOptsStruct ts;    
     
-    ts.opacity          = fillOpacity;
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
+    ts.opacity          = m_opacity;
+    ts.usePattern       = m_usePattern;
+    ts.useGradient      = m_useGradient;
 
-    int old_fillOpacity   = fillOpacity;
-    bool old_usePattern   = usePattern;
-    bool old_useGradient  = useGradient;
+    unsigned int old_opacity   = m_opacity;
+    bool old_usePattern   = m_usePattern;
+    bool old_useGradient  = m_useGradient;
 
     ToolOptionsDialog OptsDialog(tt_filltool, ts);
     
@@ -289,20 +289,20 @@ void FillTool::optionsDialog()
     if (OptsDialog.result() == QDialog::Rejected)
 	    return;
         
-    fillOpacity     = OptsDialog.fillToolTab()->opacity();
-    usePattern      = OptsDialog.fillToolTab()->usePattern();
-    useGradient     = OptsDialog.fillToolTab()->useGradient();
+    m_opacity     = OptsDialog.fillToolTab()->opacity();
+    m_usePattern      = OptsDialog.fillToolTab()->usePattern();
+    m_useGradient     = OptsDialog.fillToolTab()->useGradient();
 
     // User change value ?
-    if (old_usePattern != usePattern || old_useGradient != useGradient || old_fillOpacity != fillOpacity)
+    if (old_usePattern != m_usePattern || old_useGradient != m_useGradient || old_opacity != m_opacity)
 	    // set filler tool settings
-            m_pDoc -> setModified( true );
+            m_doc -> setModified( true );
 }
 
 void FillTool::setCursor()
 {
-	m_pView -> kisCanvas() -> setCursor(KisCursor::fillerCursor());
-	m_Cursor = KisCursor::fillerCursor();
+	m_view -> kisCanvas() -> setCursor(KisCursor::fillerCursor());
+	m_cursor = KisCursor::fillerCursor();
 }
 
 void FillTool::setupAction(QObject *collection)
@@ -317,9 +317,9 @@ QDomElement FillTool::saveSettings(QDomDocument& doc) const
 	// filler tool element
 	QDomElement fillerTool = doc.createElement("fillerTool");
 
-	fillerTool.setAttribute("opacity", opacity);
-	fillerTool.setAttribute("fillWithPattern", static_cast<int>(usePattern));
-	fillerTool.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	fillerTool.setAttribute("opacity", m_opacity);
+	fillerTool.setAttribute("fillWithPattern", static_cast<int>(m_usePattern));
+	fillerTool.setAttribute("fillWithGradient", static_cast<int>(m_useGradient));
 	return fillerTool;
 }
 
@@ -328,9 +328,9 @@ bool FillTool::loadSettings(QDomElement& elem)
 	bool rc = elem.tagName() == "fillerTool";
 
 	if (rc) {
-		opacity = elem.attribute("opacity").toInt();
-		usePattern = static_cast<bool>(elem.attribute("fillWithPattern").toInt());
-		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+		m_opacity = elem.attribute("opacity").toInt();
+		m_usePattern = static_cast<bool>(elem.attribute("fillWithPattern").toInt());
+		m_useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
 	}
 
 	return rc;

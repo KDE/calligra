@@ -39,31 +39,27 @@ public:
 	virtual bool loadSettings(QDomElement& elem);
 	virtual void setupAction(QObject *collection);
 
-	void start(QPoint p);
-	void finish(QPoint p); 
-
-public slots:
 	virtual void mousePress( QMouseEvent* event );
 	virtual void mouseMove( QMouseEvent* event );
 	virtual void mouseRelease( QMouseEvent* event );
+
+	void start(QPoint p);
+	void finish(QPoint p); 
     
 protected:
-
-    void drawLine( const QPoint&, const QPoint& );
+	void drawLine( const QPoint&, const QPoint& );
 
 private:
 
-    int         lineThickness;
+	int         m_lineThickness;
 
-    QPoint      m_dragStart;
-    QPoint      m_dragEnd;
-    QPoint      mStart;
-    QPoint      mFinish;
-    
-    bool        m_dragging;
-    bool        m_done;
-    
-    KisCanvas   *pCanvas;
+	QPoint      m_dragStart;
+	QPoint      m_dragEnd;
+	QPoint      mStart;
+	QPoint      mFinish;
+
+	bool        m_dragging;
+	bool        m_done;
 };
 
 #endif //__polylinetool_h__

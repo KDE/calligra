@@ -33,16 +33,16 @@
 
 PolyLineTool::PolyLineTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 {
-	m_pDoc = doc;
+	m_doc = doc;
 	m_dragging = false;
-	pCanvas = canvas;
+	m_canvas = canvas;
 
 	// initialize polyline tool settings
-	lineThickness = 4;
-	opacity = 255;
-	usePattern = false;
-	useGradient = false;
-	useRegions = false;
+	m_lineThickness = 4;
+	m_opacity = 255;
+	m_usePattern = false;
+	m_useGradient = false;
+	m_useRegions = false;
 	mStart  = QPoint(-1, -1);
 	mFinish = QPoint(-1, -1);     
 }
@@ -72,7 +72,7 @@ void PolyLineTool::mousePress(QMouseEvent *event)
 			m_dragEnd = event -> pos();
  
 			// draw final line into layer
-			KisPainter *p = m_pView -> kisPainter();
+			KisPainter *p = m_view -> kisPainter();
 			p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
 		}
 		else
@@ -88,7 +88,7 @@ void PolyLineTool::mousePress(QMouseEvent *event)
 		m_dragEnd = event -> pos();
  
 		// draw final line into layer
-		KisPainter *p = m_pView -> kisPainter();
+		KisPainter *p = m_view -> kisPainter();
 		p -> drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()), zoomed(m_dragEnd.x()), zoomed(m_dragEnd.y()));
 	}    
 }
@@ -111,17 +111,17 @@ void PolyLineTool::drawLine(const QPoint& start, const QPoint& end)
 	QPainter p;
 	QPen pen;
 
-	pen.setWidth(lineThickness);
-	p.begin(pCanvas);
+	pen.setWidth(m_lineThickness);
+	p.begin(m_canvas);
 	p.setPen(pen);
 	p.setRasterOp(Qt::NotROP);
-	float zF = m_pView -> zoomFactor();
+	float zF = m_view -> zoomFactor();
 
 	p.drawLine(
-			QPoint(start.x() + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset()),
-				start.y() + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset())), 
-			QPoint(end.x() + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset()),
-				end.y() + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset())));
+			QPoint(start.x() + m_view -> xPaintOffset() - (int)(zF * m_view -> xScrollOffset()),
+				start.y() + m_view -> yPaintOffset() - (int)(zF * m_view -> yScrollOffset())), 
+			QPoint(end.x() + m_view -> xPaintOffset() - (int)(zF * m_view -> xScrollOffset()),
+				end.y() + m_view -> yPaintOffset() - (int)(zF * m_view -> yScrollOffset())));
 	p.end();
 }
 
@@ -133,17 +133,17 @@ void PolyLineTool::optionsDialog()
 {
     ToolOptsStruct ts;    
     
-    ts.usePattern       = usePattern;
-    ts.useGradient      = useGradient;
-    ts.lineThickness    = lineThickness;
-    ts.opacity      = opacity;
-    ts.fillShapes       = useRegions;
+    ts.usePattern       = m_usePattern;
+    ts.useGradient      = m_useGradient;
+    ts.lineThickness    = m_lineThickness;
+    ts.opacity      = m_opacity;
+    ts.fillShapes       = m_useRegions;
 
-    bool old_usePattern       = usePattern;
-    bool old_useGradient      = useGradient;
-    int  old_lineThickness    = lineThickness;
-    unsigned int  old_opacity      = opacity;
-    bool old_useRegions       = useRegions;
+    bool old_usePattern       = m_usePattern;
+    bool old_useGradient      = m_useGradient;
+    int  old_lineThickness    = m_lineThickness;
+    unsigned int  old_opacity      = m_opacity;
+    bool old_useRegions       = m_useRegions;
     
     ToolOptionsDialog OptsDialog(tt_linetool, ts);
 
@@ -152,25 +152,25 @@ void PolyLineTool::optionsDialog()
     if(OptsDialog.result() == QDialog::Rejected)
         return;
         
-    lineThickness = OptsDialog.lineToolTab()->thickness();
-    opacity   = OptsDialog.lineToolTab()->opacity();
-    usePattern    = OptsDialog.lineToolTab()->usePattern();
-    useGradient   = OptsDialog.lineToolTab()->useGradient();
-    useRegions    = OptsDialog.lineToolTab()->solid();
+    m_lineThickness = OptsDialog.lineToolTab()->thickness();
+    m_opacity   = OptsDialog.lineToolTab()->opacity();
+    m_usePattern    = OptsDialog.lineToolTab()->usePattern();
+    m_useGradient   = OptsDialog.lineToolTab()->useGradient();
+    m_useRegions    = OptsDialog.lineToolTab()->solid();
 
     // User change value ?
-    if ( old_usePattern != usePattern || old_useGradient != useGradient 
-		    || old_opacity != opacity || old_lineThickness != lineThickness
-		    || old_useRegions != useRegions ) {    
-	    KisPainter *p = m_pView->kisPainter();
+    if ( old_usePattern != m_usePattern || old_useGradient != m_useGradient 
+		    || old_opacity != m_opacity || old_lineThickness != m_lineThickness
+		    || old_useRegions != m_useRegions ) {    
+	    KisPainter *p = m_view->kisPainter();
 
-	    p->setLineThickness( lineThickness );
-	    p->setLineOpacity( opacity );
-	    p->setPatternFill( usePattern );
-	    p->setGradientFill( useGradient );
+	    p->setLineThickness( m_lineThickness );
+	    p->setLineOpacity( m_opacity );
+	    p->setPatternFill( m_usePattern );
+	    p->setGradientFill( m_useGradient );
 
 	    // set polyline tool settings
-	    m_pDoc->setModified( true );
+	    m_doc->setModified( true );
     }
 }
 
@@ -185,11 +185,11 @@ QDomElement PolyLineTool::saveSettings(QDomDocument& doc) const
 {
 	QDomElement polylineTool = doc.createElement("polylineTool");
 
-	polylineTool.setAttribute("thickness", lineThickness);
-	polylineTool.setAttribute("opacity", opacity);
-	polylineTool.setAttribute("fillInteriorRegions", static_cast<int>(useRegions));
-	polylineTool.setAttribute("useCurrentPattern", static_cast<int>(usePattern));
-	polylineTool.setAttribute("fillWithGradient", static_cast<int>(useGradient));
+	polylineTool.setAttribute("thickness", m_lineThickness);
+	polylineTool.setAttribute("opacity", m_opacity);
+	polylineTool.setAttribute("fillInteriorRegions", static_cast<int>(m_useRegions));
+	polylineTool.setAttribute("useCurrentPattern", static_cast<int>(m_usePattern));
+	polylineTool.setAttribute("fillWithGradient", static_cast<int>(m_useGradient));
 	return polylineTool;
 }
 
@@ -198,11 +198,11 @@ bool PolyLineTool::loadSettings(QDomElement& elem)
 	bool rc = elem.tagName() == "polylineTool";
 
 	if (rc) {
-		lineThickness = elem.attribute("thickness").toInt();
-		opacity = elem.attribute("opacity").toInt();
-		useRegions = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
-		usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
-		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
+		m_lineThickness = elem.attribute("thickness").toInt();
+		m_opacity = elem.attribute("opacity").toInt();
+		m_useRegions = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
+		m_usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
+		m_useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());
 	}
 
 	return rc;

@@ -39,7 +39,7 @@ EllipticalSelectTool::EllipticalSelectTool(KisDoc *doc, KisCanvas *canvas) : Kis
 	m_init  = true;
 	m_dragStart = QPoint(-1,-1);
 	m_dragEnd =   QPoint(-1,-1);
-	m_Cursor = KisCursor::selectCursor();
+	m_cursor = KisCursor::selectCursor();
 	moveSelectArea = false;
 }
 
@@ -52,13 +52,14 @@ void EllipticalSelectTool::clearOld()
     if(m_dragStart.x() != -1)
         drawEllipse( m_dragStart, m_dragEnd ); 
 
-    QRect updateRect(0, 0, m_pDoc->current()->width(), 
-        m_pDoc->current()->height());
-    m_pView->updateCanvas(updateRect);
-    m_selectRegion = QRegion();
-
     m_dragStart = QPoint(-1,-1);
     m_dragEnd =   QPoint(-1,-1);
+
+    QRect updateRect(0, 0, m_doc->current()->width(), 
+        m_doc->current()->height());
+    m_view->updateCanvas(updateRect);
+    m_selectRegion = QRegion();
+
 }
 
 void EllipticalSelectTool::mousePress( QMouseEvent* event )
@@ -120,16 +121,16 @@ void EllipticalSelectTool::mouseMove( QMouseEvent* event )
     else if ( dragSelectArea ) {
         if ( dragFirst ) {
             // remove select image
-            m_pDoc->getSelection()->erase();
+            m_doc->getSelection()->erase();
 
             // refresh canvas
             clearOld();
-            m_pView->slotUpdateImage();
+            m_view->slotUpdateImage();
             dragFirst = false;
         }
 
         int spacing = 10;
-        float zF = m_pView->zoomFactor();
+        float zF = m_view->zoomFactor();
         QPoint pos = event->pos();
         int mouseX = pos.x();
         int mouseY = pos.y();
@@ -163,12 +164,12 @@ void EllipticalSelectTool::mouseMove( QMouseEvent* event )
 
             QPoint p( qRound( step.x() ), qRound( step.y() ) );
 
-            QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - m_pView->xScrollOffset(),
-                      zoomed( oldDragPoint.y() ) - m_hotSpot.y() - m_pView->yScrollOffset(),
-                      (int)( clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
-                      (int)( clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
+            QRect ur( zoomed( oldDragPoint.x() ) - m_hotSpot.x() - m_view->xScrollOffset(),
+                      zoomed( oldDragPoint.y() ) - m_hotSpot.y() - m_view->yScrollOffset(),
+                      (int)( m_clipPixmap.width() * ( zF > 1.0 ? zF : 1.0 ) ),
+                      (int)( m_clipPixmap.height() * ( zF > 1.0 ? zF : 1.0 ) ) );
 
-            m_pView->updateCanvas( ur );
+            m_view->updateCanvas( ur );
 
             dragSelectImage( p, m_hotSpot );
 
@@ -231,8 +232,8 @@ void EllipticalSelectTool::mouseRelease( QMouseEvent* event )
         else
            m_selectRegion = QRegion();
                     
-        m_pDoc->getSelection()->setEllipticalSelection( m_selectRect,
-        m_pDoc->current()->getCurrentLayer());
+        m_doc->getSelection()->setEllipticalSelection( m_selectRect,
+        m_doc->current()->getCurrentLayer());
 
         kdDebug(0) << "selectRect" 
             << " left: "   << m_selectRect.left() 
@@ -250,13 +251,15 @@ void EllipticalSelectTool::mouseRelease( QMouseEvent* event )
 
         QPoint pos = event->pos();
 
-        KisImage *img = m_pDoc->current();
+        KisImage *img = m_doc->current();
         if ( !img )
             return;
         if( !img->getCurrentLayer()->visible() )
             return;
-        if( pasteClipImage( zoomed( pos ) - m_hotSpot ) )
-            img->markDirty( QRect( zoomed( pos ) - m_hotSpot, clipPixmap.size() ) );
+        if( pasteClipImage( zoomed( pos ) - m_hotSpot ) ) {
+            img->markDirty( QRect( zoomed( pos ) - m_hotSpot, m_clipPixmap.size() ) );
+	    m_doc -> setModified(true);
+	}
     }
 }
 
@@ -265,7 +268,7 @@ void EllipticalSelectTool::drawEllipse( const QPoint& start, const QPoint& end )
 {
 	QPainter p;
 	QPen pen(Qt::DotLine);
-	float zF = m_pView -> zoomFactor();
+	float zF = m_view -> zoomFactor();
 
 	p.begin(m_canvas);
 	p.setPen(pen);
@@ -274,8 +277,8 @@ void EllipticalSelectTool::drawEllipse( const QPoint& start, const QPoint& end )
 	/* adjust for scroll ofset as this draws on the canvas, not on
 	   the image itself QRect(left, top, width, height) */
     
-	p.drawEllipse(QRect(start.x() + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset()),
-				start.y() + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset()), 
+	p.drawEllipse(QRect(start.x() + m_view -> xPaintOffset() - (int)(zF * m_view -> xScrollOffset()),
+				start.y() + m_view -> yPaintOffset() - (int)(zF * m_view -> yScrollOffset()), 
 				end.x() - start.x(), 
 				end.y() - start.y()));
 	p.end();
@@ -292,5 +295,11 @@ void EllipticalSelectTool::setupAction(QObject *collection)
 bool EllipticalSelectTool::willModify() const
 {
 	return false;
+}
+
+void EllipticalSelectTool::paintEvent(QPaintEvent *e)
+{
+	if (m_dragStart.x() != -1)
+		drawEllipse(m_dragStart, m_dragEnd);
 }
 

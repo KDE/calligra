@@ -38,6 +38,7 @@ class QEvent;
 class QPaintEvent;
 class QPainter;
 class QMouseEvent;
+class KisCanvas;
 class KisDoc;
 class KisView;
 
@@ -67,16 +68,17 @@ public:
 	virtual void setChecked(bool check);
 	virtual bool setClip();
 	
-	void setSelectCursor();
-	void setMoveCursor();
-
-public slots:
 	virtual void paintEvent(QPaintEvent *e);
 	virtual void enterEvent(QEvent *e);
 	virtual void leaveEvent(QEvent *e);
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
+	
+	void setSelectCursor();
+	void setMoveCursor();
+
+public slots:
 	virtual void toolSelect();
 
 protected:
@@ -97,24 +99,25 @@ private:
 	KisTool& operator=(const KisTool&);
 
 protected:
-	KisDoc *m_pDoc;
-	KisView *m_pView;
-	KisPattern *m_pPattern;
-	KisBrush *m_pBrush;
-	QCursor m_Cursor;
-	QPixmap clipPixmap;
-	QImage clipImage;
+	KisDoc *m_doc;
+	KisView *m_view;
+	KisPattern *m_pattern;
+	KisBrush *m_brush;
+	KisCanvas *m_canvas;
+	QCursor m_cursor;
+	QPixmap m_clipPixmap;
+	QImage m_clipImage;
 
-	unsigned int opacity; 
-	bool usePattern;
-	bool useGradient;
-	bool useRegions;
-	bool fillSolid;
+	unsigned int m_opacity; 
+	bool m_usePattern;
+	bool m_useGradient;
+	bool m_useRegions;
+	bool m_fillSolid;
 
 private:
-	uint paintThreshold;
-	bool paintWithPattern; 
-	bool paintWithGradient;
+	unsigned int m_paintThreshold;
+	bool m_paintWithPattern; 
+	bool m_paintWithGradient;
 };
 
 #endif

@@ -43,20 +43,17 @@ public:
 	virtual void setBrush(KisBrush *brush);
 	virtual void optionsDialog();
     
-	bool paint(QPoint pos, bool timeout);
-	void timeoutPaint();  
-      
-public slots:
 	virtual void mousePress(QMouseEvent*); 
 	virtual void mouseMove(QMouseEvent*);
 	virtual void mouseRelease(QMouseEvent*);
 
-protected:
+	bool paint(QPoint pos, bool timeout);
+	void timeoutPaint();  
 
-    QTimer *timer;
-    
-    QMemArray <int> brushArray; // array of points in brush
-    int nPoints;  // number of points marked in array
+protected:
+	QTimer *m_timer;
+	QMemArray<int> m_brushArray; // array of points in brush
+	int nPoints;  // number of points marked in array
     
     QPoint  pos; 
     QPoint 	m_dragStart;

@@ -34,9 +34,7 @@ public:
 	KisColor pick(int x, int y);
 	virtual void setupAction(QObject *collection);
 
-public slots:
 	virtual void mousePress(QMouseEvent*); 
-
 };
 
 #endif //__colorpicker_h__
