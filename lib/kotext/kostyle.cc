@@ -248,12 +248,10 @@ void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     // Load name
     m_name = styleElem.attribute( "style:name" );
 
-    // ### In KWord the style says "I'm part of the outline" (TOC)
-    // ### In OOo the paragraph says that (text:h)
-    // Hence this hack...
-    // This needs to be reviewed/understood. Can a paragraph's belonging
-    // to the outline be switched on/off? If not, why is it a parag property?
-    m_bOutline = m_name.startsWith( "Heading" );
+    // OOo hack
+    //m_bOutline = m_name.startsWith( "Heading" );
+    // real OASIS solution:
+    m_bOutline = styleElem.hasAttribute( "style:default-outline-level" );
 
     context.styleStack().save();
     context.addStyles( &styleElem ); // Load all parents - only because we don't support inheritance.
@@ -261,18 +259,29 @@ void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     KoParagLayout::loadOasisParagLayout( layout, context );
 
     // loadOasisParagLayout doesn't load the counter. It's modelled differently for parags and for styles.
-    // ### missing info in the format!
-    const int level = m_name.right(1).toInt(); // ## HACK
+    int level = 0;
     bool listOK = false;
-    if ( level > 0 ) {
-        if ( m_bOutline )
-            listOK = context.pushOutlineListLevelStyle( level );
-        else {
-            const QString listStyleName = styleElem.attribute( "style:list-style-name" );
-            listOK = !listStyleName.isEmpty();
-            if ( listOK )
-                listOK = context.pushListLevelStyle( listStyleName, level );
-        }
+    if ( m_bOutline ) {
+        // OOo hack
+        //level = m_name.right(1).toInt(); // HACK
+        level = styleElem.attribute( "style:default-outline-level" ).toInt();
+        listOK = context.pushOutlineListLevelStyle( level );
+    }
+    else {
+        // ######## BIG difference here. In the OOo/OASIS format, one list style has infos for 10 list levels...
+        // ###### so we can't know a level at this point...
+
+        // The only solution I can think of, to preserve document content when importing OO but
+        // not necessarily the styles used when editing, is:
+        // 1) when importing from OOo, convert each non-heading style with numbering
+        // into 10 kotext styles (at least those used by the document) [TODO]
+        // 2) for KWord's own loading/saving, to add a hack into the file format, say
+        // style:default-level.
+        level = styleElem.attribute( "style:default-level" ).toInt(); // defaults to 0, i.e. works for non-nested OOo lists too.
+        const QString listStyleName = styleElem.attribute( "style:list-style-name" );
+        listOK = !listStyleName.isEmpty();
+        if ( listOK )
+            listOK = context.pushListLevelStyle( listStyleName, level );
     }
     if ( listOK ) {
         const QDomElement listStyle = context.listStyleStack().currentListStyle();

@@ -228,7 +228,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
 }
 
 // Helper for load
-static void importTextPosition( const QString& text_position, KoTextFormat::VerticalAlignment& value, double& relativetextsize )
+static void importTextPosition( const QString& text_position, double fontSize, KoTextFormat::VerticalAlignment& value, double& relativetextsize, int& offset )
 {
     //OO: <vertical position (% or sub or super)> [<size as %>]
     //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
@@ -241,19 +241,24 @@ static void importTextPosition( const QString& text_position, KoTextFormat::Vert
         lst.pop_front();
         if ( !lst.isEmpty() )
             textSize = lst.front().stripWhiteSpace();
-        Q_ASSERT( lst.isEmpty() );
+        Q_ASSERT( lst.count() == 1 );
         bool super = textPos == "super";
         bool sub = textPos == "sub";
         if ( textPos.endsWith("%") )
         {
             textPos.truncate( textPos.length() - 1 );
+            double val = textPos.toDouble();
+#if 0
             // This is where we interpret the text position into kotext's simpler
             // "super" or "sub".
-            double val = textPos.toDouble();
             if ( val > 0 )
                 super = true;
             else if ( val < 0 )
                 sub = true;
+#else
+            offset = qRound( fontSize * val / 100.0 );
+            kdDebug(32500) << "offset=" << offset << endl;
+#endif
         }
         if ( super )
             value = KoTextFormat::AlignSuperScript;
@@ -370,11 +375,10 @@ void KoTextFormat::load( KoOasisContext& context )
     }
     va = AlignNormal;
     d->m_relativeTextSize = 0.58;
+    d->m_offsetFromBaseLine = 0;
     if( styleStack.hasAttribute("style:text-position")) { // 3.10.7
-        double relativetextsize = 0;
-        importTextPosition( styleStack.attribute("style:text-position"), va, relativetextsize );
-        if ( relativetextsize != 0 )
-            d->m_relativeTextSize = relativetextsize;
+        importTextPosition( styleStack.attribute("style:text-position"), fn.pointSizeFloat(),
+                            va, d->m_relativeTextSize, d->m_offsetFromBaseLine );
     }
     if ( styleStack.hasAttribute( "style:text-underline" ) ) { // 3.10.22
         importUnderline( styleStack.attribute( "style:text-underline" ),
@@ -417,8 +421,6 @@ void KoTextFormat::load( KoOasisContext& context )
     /// ######## TODO finish
     // ######### TODO - it seems OO has it as a paragraph property... (what about msword?)
     //d->m_bHyphenation = false;
-
-    d->m_offsetFromBaseLine= 0; // ### TODO (seems to be "vertical alignment" in OO, but it's not only for subscript/superscript, it's more general)
 
     /*
       Missing properties:
