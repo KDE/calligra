@@ -1,7 +1,7 @@
 <!DOCTYPE KWordExpression>
 <KWordExpression>
 	<Type>
-    		<TypeName>Personnal</TypeName>
+    		<TypeName>Personal</TypeName>
 			<Expression>
 				<Text>hi !</Text>
 			</Expression>
@@ -24,10 +24,10 @@
 				<Text>Good Afternoon</Text>
 			</Expression>
 			<Expression>
-				<Text>Good night</Text>
+				<Text>Good Evening</Text>
 			</Expression>
 	</Type>
-        <Type>
+    <Type>
     		<TypeName>Email:</TypeName>	
 			<Expression>
 				<Text>To:</Text>
@@ -38,17 +38,17 @@
 			<Expression>
 				<Text>Subject:</Text>
 			</Expression>
-                        <Expression>
+            <Expression>
 				<Text>CC:</Text>
 			</Expression>
-                        <Expression>
+            <Expression>
 				<Text>BCC:</Text>
 			</Expression>
-                        <Expression>
+            <Expression>
 				<Text>Fwd:</Text>
 			</Expression>
 	</Type>
-        <Type>
+    <Type>
     		<TypeName>Closing:</TypeName>	
 			<Expression>
 				<Text>Best regards,</Text>
@@ -59,32 +59,32 @@
 			<Expression>
 				<Text>Cordially,</Text>
 			</Expression>
-                        <Expression>
+            <Expression>
 				<Text>Love,</Text>
 			</Expression>
-                        <Expression>
+            <Expression>
 				<Text>Regards,</Text>
 			</Expression>
-                        <Expression>
+            <Expression>
 				<Text>Thank you,</Text>
 			</Expression>
-                        <Expression>
+            <Expression>
 				<Text>Thanks,</Text>
 			</Expression>
 	</Type>
-        <Type>
+    <Type>
     		<TypeName>Subject:</TypeName>	
 			<Expression>
 				<Text>Subject</Text>
-                        </Expression>
+            </Expression>
 	</Type>
-        <Type>
+    <Type>
     		<TypeName>Salutation:</TypeName>	
 			<Expression>
 				<Text>Dear Sir or Madam:</Text>
-                        </Expression>
-                        <Expression>
+            </Expression>
+            <Expression>
 				<Text>Ladies and Gentlemen:</Text>
-                        </Expression>
+            </Expression>
 	</Type>
 </KWordExpression>
