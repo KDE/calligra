@@ -21,7 +21,7 @@
 #ifndef __kspread_dlg_anchor__
 #define __kspread_dlg_anchor__
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qrect.h>
@@ -31,27 +31,71 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadLinkDlg : public QDialog
+class internetAnchor : public QWidget
+{
+  Q_OBJECT
+public:
+  internetAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  QString apply();
+private:
+    QString createLink();
+    KSpreadView* m_pView;
+
+    QLineEdit* text;
+    QLineEdit* l_internet;
+    QCheckBox *bold;
+    QCheckBox *italic;
+};
+
+class mailAnchor : public QWidget
+{
+  Q_OBJECT
+public:
+  mailAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  QString apply();
+private:
+    QString createLink();
+    KSpreadView* m_pView;
+
+    QLineEdit* text;
+    QLineEdit* l_mail;
+    QCheckBox *bold;
+    QCheckBox *italic;
+};
+
+class cellAnchor : public QWidget
+{
+  Q_OBJECT
+public:
+  cellAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  QString apply();
+private:
+    QString createLink();
+    KSpreadView* m_pView;
+
+    QLineEdit* text;
+    QLineEdit* l_cell;
+    QCheckBox *bold;
+    QCheckBox *italic;
+};
+
+class KSpreadLinkDlg : public KDialogBase
 {
     Q_OBJECT
 public:
     KSpreadLinkDlg( KSpreadView* parent, const char* name );
 
 public slots:
-    void slotOk();
-    void slotClose();
-
-private:
-    QString createLink();
-
+  void slotOk();
+  void setCellText(const QString &_text);
+ private:
     KSpreadView* m_pView;
-
-    QLineEdit* text;
-    QLineEdit* l_cell;
-    QPushButton* m_pOk;
-    QPushButton* m_pClose;
-    QCheckBox *bold;
-    QCheckBox *italic;
+    internetAnchor *_internetAnchor; 
+    mailAnchor *_mailAnchor;
+    cellAnchor *_cellAnchor;
 };
+
+
+
 
 #endif

@@ -16,6 +16,7 @@
 #include <kmessagebox.h>
 #include <kcursor.h>
 #include <kdebug.h>
+#include <krun.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -1078,7 +1079,11 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     // Start a marking action ?
     if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
     {
-        gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
+	if(m_strAnchor.find("http://")!=-1 || m_strAnchor.find("mailto:")!=-1
+	   || m_strAnchor.find("ftp://")!=-1)
+	    (void) new KRun( m_strAnchor );
+	else
+	    gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
         return;
     }
     else if ( _ev->button() == LeftButton )
