@@ -1507,7 +1507,7 @@ void Page::setupMenus()
     picMenu->insertItem( KPBarIcon( "rotate" ), i18n( "&Rotate..." ), this, SLOT( rotateObjs() ) );
     picMenu->insertItem( KPBarIcon( "shadow" ), i18n( "&Shadow..." ), this, SLOT( shadowObjs() ) );
     picMenu->insertSeparator();
-    picMenu->insertItem( KPBarIcon( "picture" ), i18n( "&Change Picture..." ), this, SLOT( chPic() ) );
+    picMenu->insertItem( KPBarIcon( "frame_image" ), i18n( "&Change Picture..." ), this, SLOT( chPic() ) );
     picMenu->insertItem( KPBarIcon( "style" ), i18n( "&Properties..." ), this, SLOT( objProperties() ) );
     picMenu->insertSeparator();
     picMenu->insertItem( KPBarIcon( "effect" ), i18n( "&Assign effect..." ), this, SLOT( assignEffect() ) );
