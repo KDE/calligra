@@ -1372,9 +1372,6 @@ bool KoDocument::openURL( const KURL & _url )
         }
     }
 
-    connect(this, SIGNAL(sigProgress(int)), this, SLOT(slotLoadFinished()));
-    connect(this, SIGNAL(completed()), this, SLOT(slotLoadFinished()));
-
     bool ret = KParts::ReadWritePart::openURL( url );
 
     if ( autosaveOpened )
@@ -1395,12 +1392,13 @@ bool KoDocument::openURL( const KURL & _url )
 bool KoDocument::openFile()
 {
     //kdDebug(30003) << "KoDocument::openFile for " << m_file << endl;
-    if ( ! QFile::exists(m_file) )
+    if ( !QFile::exists(m_file) )
     {
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
             // Maybe offer to create a new document with that name ?
             KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(m_file) );
+        d->m_bLoading = false;
         return false;
     }
 
@@ -1458,6 +1456,7 @@ bool KoDocument::openFile()
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
             KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
+        d->m_bLoading = false;
         return false;
     }
 
@@ -1475,6 +1474,7 @@ bool KoDocument::openFile()
                 // ### TODO Any way of passing a better error message from the filter?
                 KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
 
+            d->m_bLoading = false;
             return false;
         }
         kdDebug(30003) << "KoDocument::openFile - importedFile '" << importedFile
@@ -1546,6 +1546,7 @@ bool KoDocument::openFile()
     {
         setMimeTypeAfterLoading( typeName );
     }
+    d->m_bLoading = false;
     return ok;
 }
 
@@ -1559,13 +1560,6 @@ void KoDocument::setMimeTypeAfterLoading( const QString& mimeType )
     const bool needConfirm = !isNativeFormat( d->mimeType );
     setConfirmNonNativeSave( false, needConfirm  );
     setConfirmNonNativeSave( true, needConfirm );
-}
-
-void KoDocument::slotLoadFinished()
-{
-    d->m_bLoading = false;
-    disconnect(this, SIGNAL(sigProgress(int)), this, SLOT(slotLoadFinished()));
-    disconnect(this, SIGNAL(completed()), this, SLOT(slotLoadFinished()));
 }
 
 // The caller must call store->close() if loadAndParse returns true.

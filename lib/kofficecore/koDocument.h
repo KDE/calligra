@@ -933,7 +933,6 @@ private slots:
     void slotChildDestroyed();
     void slotAutoSave();
     void slotStarted( KIO::Job* );
-    void slotLoadFinished();
 
 private:
     static KService::Ptr readNativeService( KInstance *instance );
