@@ -55,13 +55,13 @@ namespace KOffice {
     public:
         PriorityQueue() {}
         PriorityQueue( const PriorityQueue<T>& rhs ) : m_vector( rhs.m_vector ) {}
-        PriorityQueue( const QAsciiDict<T>& items )
+        PriorityQueue( const QAsciiDict<T>& items ) : m_vector( items.count() )
         {
             // First put all items into the vector
             QAsciiDictIterator<T> it( items );
             for ( int i = 0; it.current(); ++it, ++i ) {
                 it.current()->setIndex( i );
-                m_vector.push_back( it.current() );
+                m_vector[ i ] = it.current();
             }
             // Then build a heap in that vector
             buildHeap();
