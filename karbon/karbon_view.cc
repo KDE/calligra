@@ -1025,7 +1025,7 @@ KarbonView::initActions()
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
 	new KAction(
-		i18n( "Context &help" ), "help", 0, this,
+		i18n( "Context &Help" ), "help", 0, this,
 		SLOT( viewContextHelp() ), actionCollection(), "view_context_help" );
 	// view <-----
 
