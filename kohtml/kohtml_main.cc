@@ -32,6 +32,8 @@
 
 #include <kio_job.h>
 #include <kio_cache.h>
+#include <kregistry.h>
+#include <kregfactories.h>
 #include <kmimetypes.h>
 #include <kmimemagic.h>
 
@@ -91,7 +93,10 @@ int main( int argc, char **argv )
 
   KIOJob::initStatic();
   KIOCache::initStatic();
-  KMimeType::initStatic();
+  KRegistry * registry = new KRegistry;
+  registry->addFactory( new KMimeTypeFactory );
+  registry->load();
+  KMimeType::check();
   KMimeMagic::initStatic();
   
   int i = 1;
