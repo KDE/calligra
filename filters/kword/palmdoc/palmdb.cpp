@@ -17,6 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+/*
+   The database layout for PalmDB files is described in 
+   http://www.palmos.com/dev/support/docs/protein_books/FileFormats/Intro.html
+*/
+
 #include "palmdb.h"
 
 #include <qcstring.h>
@@ -67,6 +72,8 @@ bool PalmDB::load( const char* filename )
   // now start to read PDB header (72 bytes)
 
   // read and encode database name
+  // The name field is 32 bytes long, and is NUL terminated.
+  // Use the length parameter of fromLatin1() anyway.
   Q_UINT8 name[32];
   for(int k = 0; k < 32; k++)
     stream >> name[k];
