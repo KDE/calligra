@@ -166,7 +166,7 @@ bool WPFiveWorker::doFullParagraph(const QString& paraText,
     if( formatData.id == 1 )
     {
 
-      Q_UINT8 attr = 0; //invalid
+       Q_UINT8 attr = 0; //invalid
        if( formatData.text.weight >= 75 ) attr = 12; // bold
        if( formatData.text.italic ) attr = 8;
        if( formatData.text.underline ) attr = 14;
@@ -180,6 +180,17 @@ bool WPFiveWorker::doFullParagraph(const QString& paraText,
 
        // attribute on
        if( attr > 0 ) output << (Q_UINT8)0xc3 << attr << (Q_UINT8)0xc3;
+
+       // set font color
+       QColor fgColor = formatData.text.fgColor;
+       if( fgColor.isValid() )
+       {
+         Q_UINT8 wp_color[] = { 0xd1, 0, 10, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0xd1 };
+         wp_color[7] = (Q_UINT8) fgColor.red();
+         wp_color[8] = (Q_UINT8) fgColor.green();
+         wp_color[9] = (Q_UINT8) fgColor.blue();
+         output.writeRawBytes( (const char*)wp_color, 14 );
+       }
 
        // the text itself, "escape" it first
        QCString out = WPFiveEscape( paraText.mid( formatData.pos, formatData.len ) );
