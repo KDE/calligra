@@ -27,9 +27,40 @@
 
 class KoUnitDoubleSpinBox;
 class KoUnitDoubleSpinBox;
+class KComboBox;
+class KIntSpinBox;
 class KarbonPart;
 class QLabel;
 class QWidget;
+
+class VEllipseOptionsWidget : public QGroupBox
+{
+Q_OBJECT
+public:
+	VEllipseOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );
+
+	double width() const;
+	double height() const;
+	uint startAngle() const;
+	uint endAngle() const;
+	uint type() const;
+	void setWidth( double value );
+	void setHeight( double value );
+	void refreshUnit();
+
+public slots:
+	void typeChanged( int );
+
+private:
+	KComboBox				*m_type;
+	KIntSpinBox				*m_startAngle;
+	KIntSpinBox				*m_endAngle;
+	KoUnitDoubleSpinBox		*m_width;
+	KoUnitDoubleSpinBox		*m_height;
+	KarbonPart				*m_part;
+	QLabel					*m_heightLabel;
+	QLabel					*m_widthLabel;
+};
 
 class VEllipseTool : public VShapeTool
 {
@@ -42,28 +73,9 @@ public:
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	
 	virtual VComposite *shape( bool interactive = false ) const;
-    void refreshUnit();
+	void refreshUnit();
 
 private:
-	class VEllipseOptionsWidget : public QGroupBox
-	{
-	public:
-		VEllipseOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );
-
-		double width() const;
-		double height() const;
-		void setWidth( double value );
-		void setHeight( double value );
-		void refreshUnit();
-
-	private:
-		KoUnitDoubleSpinBox		*m_width;
-		KoUnitDoubleSpinBox		*m_height;
-		KarbonPart				*m_part;
-		QLabel					*m_heightLabel;
-		QLabel					*m_widthLabel;
-	};
-
 	VEllipseOptionsWidget *m_optionsWidget;
 };
 

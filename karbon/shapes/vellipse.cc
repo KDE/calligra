@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2003, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,21 +21,44 @@
 #include "vellipse.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
-
+#include <vglobal.h>
 
 VEllipse::VEllipse( VObject* parent,
-		const KoPoint& topLeft, double width, double height )
-	: VComposite( parent )
+		const KoPoint& topLeft, double width, double height,
+		VEllipseType type, double startAngle, double endAngle )
+	: VComposite( parent ), m_type( type )
 {
 	setDrawCenterNode();
 
+	int q1 = floor( startAngle / 90.0 );
+	int q2 = floor( endAngle / 90.0 );
+	// to radials
+	startAngle = VGlobal::pi_2 * ( startAngle / 90.0 );
+	endAngle   = VGlobal::pi_2 * ( endAngle / 90.0 );
 	// Create (half-)unity circle with topLeft at (0|0):
-	moveTo( KoPoint( 0.0, -0.5 ) );
-	arcTo( KoPoint( 0.0, -1.0 ), KoPoint( 0.5, -1.0 ), 0.5 );
-	arcTo( KoPoint( 1.0, -1.0 ), KoPoint( 1.0, -0.5 ), 0.5 );
-	arcTo( KoPoint( 1.0,  0.0 ), KoPoint( 0.5,  0.0 ), 0.5 );
-	arcTo( KoPoint( 0.0,  0.0 ), KoPoint( 0.0, -0.5 ), 0.5 );
-	close();
+	KoPoint start( 0.5 * sin( -startAngle ), 0.5 * cos( -startAngle ) );
+	moveTo( KoPoint( start.x(), start.y() ) );
+	KoPoint current;
+	double rest = ( ( q1 + 1 ) * VGlobal::pi_2 - startAngle ) / 2.0;
+	double midAngle = ( q1 * VGlobal::pi_2 ) + rest + startAngle;
+	//double midAngle = VGlobal::pi_2 / 2.0;
+	int i = q1;
+	while( i < q2 - q1 )
+	{
+		i = ++i % 4;
+		current = KoPoint( 0.5 * sin( -VGlobal::pi_2 * i - startAngle ), 0.5 * cos( -VGlobal::pi_2 * i - startAngle ) );
+		midAngle += VGlobal::pi_2;
+		arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( VGlobal::pi_2 / 2.0 ) ),
+						sin( midAngle ) * ( 0.5 / cos( VGlobal::pi_2 / 2.0 ) ) ) , current, 0.5 );
+	}
+	rest = ( ( endAngle - ( i * VGlobal::pi_2 ) ) / 2.0 );
+	midAngle = ( ( i + 1 ) * VGlobal::pi_2 ) + rest;
+	KoPoint end( 0.5 * sin( -endAngle ), 0.5 * cos( -endAngle ) );
+	arcTo( KoPoint( cos( midAngle ) * ( 0.5 / cos( rest ) ), sin( midAngle ) * ( 0.5 / cos( rest ) ) ), end, 0.5 );
+	if( m_type == cut )
+		lineTo( KoPoint( 0.0, 0.0 ) );
+	if( m_type != arc )
+		close();
 
 	// Translate and scale:
 	QWMatrix m;

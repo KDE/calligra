@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,10 +25,20 @@
 class VEllipse : public VComposite
 {
 public:
+	enum VEllipseType
+	{
+		full,
+		section,
+		cut,
+		arc
+	};
 	VEllipse( VObject* parent,
-		const KoPoint& topLeft, double width, double height );
+		const KoPoint& topLeft, double width, double height,
+		VEllipseType type = full, double startAngle = 0, double endAngle = 0 );
 
 	virtual QString name() const;
+private:
+	VEllipseType m_type;
 };
 
 #endif
