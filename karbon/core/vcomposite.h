@@ -29,7 +29,7 @@
 #include "vobject.h"
 #include "vpath.h"
 #include "svgpathparser.h"
-#include "vfill.h"
+#include "vfillrule.h"
 
 
 class QDomElement;
@@ -135,7 +135,7 @@ public:
 	 */
 	void combinePath( const VPath& path );
 
-	VFill::VFillRule fillMode() const;
+	VFillRule fillMode() const;
 
 	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
@@ -167,11 +167,15 @@ public:
 	void loadSvgPath( const QString & );
 	void saveSvgPath( QString & ) const;
 
+	VFillRule fillRule() const { return m_fillRule; }
+	void setFillRule( VFillRule fillRule ) { m_fillRule = fillRule; }
+
 private:
 	VPathList m_paths;		// list of paths
 
 	/// Should a center node be drawn?
-	bool m_drawCenterNode;
+	bool		m_drawCenterNode;
+	VFillRule	m_fillRule	: 1;
 };
 
 #endif

@@ -26,6 +26,7 @@
 
 #include <qnamespace.h>
 #include <koRect.h>
+#include <vfillrule.h>
 
 class QWMatrix;
 class QPaintDevice;
@@ -67,6 +68,7 @@ public:
 	virtual void newPath() = 0;
 	virtual void strokePath() = 0;
 	virtual void fillPath() = 0;
+	virtual void setFillRule( VFillRule ) = 0;
 	virtual void setClipPath() = 0;
 	virtual void resetClipPath() = 0;
 

@@ -183,7 +183,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		else
 			fill.setColor( s.color() );
 
-		fill.setFillRule( VFill::evenOdd );
+		m_painter->setFillRule( evenOdd );
 
 		m_painter->setBrush( fill );
 
@@ -204,7 +204,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	else
 	{
 		VFill fill;
-		fill.setFillRule( VFill::evenOdd );
+		m_painter->setFillRule( evenOdd );
 		fill.setColor( Qt::white );
 
 		m_painter->setBrush( fill );

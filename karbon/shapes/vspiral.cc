@@ -46,10 +46,7 @@ VSpiral::VSpiral( VObject* parent,
 	if( fade <= 0.0 || fade >= 1.0 )
 		fade = 0.5;
 
-
-	VFill fill;
-	fill.setFillRule( VFill::winding );
-	setFill( fill );
+	setFillRule( winding );
 
 	// advance by pi/2 clockwise or cclockwise?
 	double adv_ang = ( clockwise ? -1.0 : 1.0 ) * VGlobal::pi_2;

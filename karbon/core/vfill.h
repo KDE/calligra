@@ -41,12 +41,6 @@ class QDomElement;
 class VFill
 {
 public:
-	enum VFillRule
-	{
-		evenOdd = 0,
-		winding = 1
-	};
-
 	enum VFillType
 	{
 		none     = 0,	/// no fill at all
@@ -72,9 +66,6 @@ public:
 	VFillType type() const { return m_type; }
 	void setType( VFillType type ) { m_type = type; }
 
-	VFillRule fillRule() const { return m_fillRule; }
-	void setFillRule( VFillRule fillRule ) { m_fillRule = fillRule; }
-
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
@@ -86,7 +77,6 @@ private:
 	VPattern	m_pattern;
 
 	VFillType	m_type		: 3;
-	VFillRule	m_fillRule	: 1;
 };
 
 #endif

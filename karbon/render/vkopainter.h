@@ -64,6 +64,7 @@ public:
     virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & );
     virtual void newPath();
     virtual void fillPath();
+	virtual void setFillRule( VFillRule );
     virtual void strokePath();
 	virtual void setClipPath();
 	virtual void resetClipPath();
@@ -116,6 +117,7 @@ private:
 	QWMatrix m_matrix;
 	VStroke *m_stroke;
 	VFill *m_fill;
+	VFillRule m_fillRule;
 	double m_zoomFactor;
 	KoRect m_bbox;
 	QPtrList<_ArtSVP> m_clipPaths;

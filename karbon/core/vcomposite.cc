@@ -37,7 +37,7 @@
 
 
 VComposite::VComposite( VObject* parent, VState state )
-	: VObject( parent, state )
+	: VObject( parent, state ), m_fillRule( winding )
 {
 	m_paths.setAutoDelete( true );
 
@@ -73,6 +73,7 @@ VComposite::VComposite( const VComposite& composite )
 		setFill( *composite.fill() );
 
 	m_drawCenterNode = false;
+	m_fillRule = composite.m_fillRule;
 }
 
 VComposite::~VComposite()
@@ -120,6 +121,7 @@ VComposite::draw( VPainter* painter, const KoRect * /*rect*/ ) const
 	{
 		// paint fill:
 		painter->newPath();
+		painter->setFillRule( m_fillRule );
 
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -226,13 +228,13 @@ VComposite::combinePath( const VPath& path )
 	// Make new segments clock wise oriented:
 
 	m_paths.append( p );
-	m_fill->setFillRule( fillMode() );
+	m_fillRule = fillMode();
 }
 
-VFill::VFillRule
+VFillRule
 VComposite::fillMode() const
 {
-	return ( m_paths.count() > 1 ) ? VFill::evenOdd : VFill::winding;
+	return ( m_paths.count() > 1 ) ? evenOdd : winding;
 }
 
 const KoRect&
@@ -282,6 +284,10 @@ VComposite::save( QDomElement& element ) const
 		QString d;
 		saveSvgPath( d );
 		me.setAttribute( "d", d );
+
+		// save fill rule if necessary:
+		if( !( m_fillRule == evenOdd ) )
+			me.setAttribute( "fillRule", m_fillRule );
 	}
 }
 
@@ -296,6 +302,7 @@ VComposite::load( const QDomElement& element )
 	{
 		loadSvgPath( data );
 	}
+	m_fillRule = element.attribute( "fillRule" ) == 0 ? evenOdd : winding;
 	QDomNodeList list = element.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{

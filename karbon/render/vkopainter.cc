@@ -279,6 +279,12 @@ VKoPainter::newPath()
 }
 
 void
+VKoPainter::setFillRule( VFillRule fillRule )
+{
+	m_fillRule = fillRule;
+}
+
+void
 VKoPainter::fillPath()
 {
 	if( m_index == 0 ) return;
@@ -516,7 +522,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		ArtSVP *temp;
 		temp = art_svp_from_vpath( vec );
 
-		if( m_fill->fillRule() == VFill::evenOdd )
+		if( m_fillRule == evenOdd )
 			swr = art_svp_writer_rewind_new( ART_WIND_RULE_ODDEVEN );
 		else
 			swr = art_svp_writer_rewind_new( ART_WIND_RULE_NONZERO );

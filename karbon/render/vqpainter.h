@@ -55,6 +55,7 @@ public:
     virtual void newPath();
     virtual void strokePath();
     virtual void fillPath();
+	virtual void setFillRule( VFillRule ) {}
 	virtual void setClipPath() {}
 	virtual void resetClipPath() {}
 

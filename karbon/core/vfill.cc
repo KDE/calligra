@@ -24,7 +24,7 @@
 #include "vfill.h"
 
 VFill::VFill()
-	: m_type( none ), m_fillRule( winding )
+	: m_type( none )
 {
 	/*m_gradient.addStop( VColor( Qt::red.rgb() ), 0.0 );
 	m_gradient.addStop( VColor( Qt::yellow.rgb() ), 1.0 );
@@ -35,7 +35,7 @@ VFill::VFill()
 }
 
 VFill::VFill( const VColor &c )
-	: m_type( solid ), m_fillRule( winding )
+	: m_type( solid )
 {
 	m_color = c;
 	//kdDebug() << "Size of VFill : " << sizeof(*this) << endl;
@@ -68,18 +68,11 @@ VFill::save( QDomElement& element ) const
 		// save pattern:
 		m_pattern.save( me );
 	}
-
-	// save fill rule if necessary:
-	if( !( m_fillRule == evenOdd ) )
-		me.setAttribute( "fillRule", m_fillRule );
 }
 
 void
 VFill::load( const QDomElement& element )
 {
-	m_fillRule = element.attribute( "fillRule" ) == 0 ?
-		evenOdd : winding;
-
 	m_type = none;
 
 	// load color:
@@ -118,7 +111,6 @@ VFill::operator=( const VFill& fill )
 		m_color = fill.m_color;
 		m_gradient = fill.m_gradient;
 		m_pattern = fill.m_pattern;
-		m_fillRule = fill.m_fillRule;
 	}
 
 	return *this;
