@@ -60,7 +60,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2004-09-12</date>
+<date>2004-09-15</date>
 <releaseinfo>1.4</releaseinfo>
 
 <abstract>
@@ -84,6 +84,8 @@ This manual describes &kword; 1.4.
 
 <!--
 TODO:
+
+- Write about "Autoinclude" in Autocorrection Tab
 - Correct screenshot "footend.png" - Footnotes/Endnotes.
 - Write Migrating section
 - Write Watermark procedure
@@ -1422,7 +1424,7 @@ action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo></entry>
 <row>
 <entry><link linkend="menu-create-text-frame">Create Text
 Frame</link></entry>
-<entry><keycombo action="simul"><keycap>F2</keycap></keycombo></entry>
+<entry><keycombo action="simul"><keycap>F10</keycap></keycombo></entry>
 </row>
 
 <row>

@@ -75,7 +75,7 @@ rearranged as you type.</para>
 to select. </para></listitem>
 <listitem><para>By holding down the &Ctrl; key and clicking anywhere within the frame.</para></listitem>
 </orderedlist>
-<para>There should now be 8 dark squares around the edges of the frame.</para>
+<para>There should now be 8 yellow squares around the edges of the frame.</para>
 
 </sect2>
 <sect2 id="add-text-frame">
@@ -93,7 +93,7 @@ Frame</guimenuitem></menuchoice> from the menubar</para>
 
 <listitem>
 <para>You can use the keyboard shortcut:
-<keycombo><keycap>F2</keycap></keycombo></para>
+<keycombo><keycap>F10</keycap></keycombo></para>
 </listitem>
 
 <listitem>
@@ -146,7 +146,7 @@ a member of the selected frameset.</para>
 <listitem><para>If you want this to be a new frame set, you should enter a descriptive
 name for your new frameset.  (A name which will tell you what you might
 find in that frame set).  This name should be entered in the text box
-labeled <guilabel>Name of new Frameset</guilabel>.</para>
+labeled <guilabel>Name of frameset</guilabel>.</para>
 <para>This newly added frame will be the
 only frame in the frameset.</para>
 </listitem></varlistentry>
@@ -190,7 +190,7 @@ possible.</para>
 to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)</para>
 
-<para>There is now 8 dark squares on the edges of the frame.</para>
+<para>There is now 8 yellow squares on the edges of the frame.</para>
 
 <para>If this is the frame you want to delete, you can do so by:</para>
 
@@ -239,7 +239,7 @@ frameset. No data will be deleted. </para>
 to move. (Or holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)</para>
 
-<para>There are now 8 dark squares on the edges of the frame.</para>
+<para>There are now 8 yellow squares on the edges of the frame.</para>
 
 <para>Click and hold the &LMB; on the border again and drag the cursor in the direction you want to move the
 frame.</para>
@@ -266,7 +266,7 @@ to change. (Or holding down the &Ctrl; key and clicking inside the frame with th
 &LMB;.)  This selects
 this frame as the current frame.</para>
 
-<para>There are now 8 dark squares on the edges of the frame. By moving
+<para>There are now 8 yellow squares on the edges of the frame. By moving
 these squares, you will be able to drag the frame border(s) to a new
 location.</para>
 
@@ -313,7 +313,7 @@ move to another frameset..</para>
 
 <para>You can change the frame set of the currently selected frame by
 selecting <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset...</guimenuitem></menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties...</guimenuitem></menuchoice>
 from the menubar</para>
 
 <tip><para>You can also accomplish this by clicking on the frame border once with the &RMB;, and selecting
@@ -385,36 +385,34 @@ same as selecting <guilabel>Lower Frame</guilabel> from the menubar.</para></tip
 </sect2>
 
 <sect2 id="hard-break">
-<title>Page Breaks</title>
+<title>Hard Frame Breaks</title>
 <indexterm><primary>frames</primary><secondary>frame breaks</secondary></indexterm>
 <indexterm><primary>page breaks</primary></indexterm>
 
-<para>A page break is a special formatting character.  It is
+<para>A hard frame break is a special formatting character.  It is
 invisible on the final printed output.</para>
 
-<para> <!-- Although this looks to be wrong or poorly phrased, it is
-in fact accurate, and is precisely what the insertion of a page break
-does in KWord --> The purpose of a page break, is to force all the
+<para>The purpose of a hard frame break, is to force all the
 text that follows it into the next frame in the frameset.</para>
 
 <para>If we have the following sentence:  <quote>We have nothing to
 fear but fear itself</quote></para>
 
-<para>and we insert a Page Break, just before the word
+<para>and we insert a Hard Frame Break, just before the word
 <emphasis>but</emphasis>.</para>
 
 <para>We will end up with one frame containing <quote>We have nothing
 to fear</quote>, and the next frame in the frameset beginning with
 <quote>but fear itself</quote>.</para>
 
-<para>To add a Page Break, you should first place the keyboard
+<para>To add a Hard Frame Break, you should first place the keyboard
 cursor where you want the break to be located in the document.</para>
 
-<para>A Page Break can be inserted one of two ways:</para>
+<para>A Hard Frame Break can be inserted one of two ways:</para>
 
 <itemizedlist>
 <listitem>
-<para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Page Break</guimenuitem></menuchoice> from the menubar</para>
+<para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Hard Frame Break</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 
 <listitem>
@@ -423,7 +421,7 @@ cursor where you want the break to be located in the document.</para>
 </listitem>
 </itemizedlist>
 
-<para>If you want to remove a Page Break, you simply delete it
+<para>If you want to remove a Hard Frame Break, you simply delete it
 like you would any other character.</para>
 <tip><para>Since this is not a character that
 you can normally see in &kword;, it will be easier to delete a Hard Frame Break with the following procedure.</para>
@@ -434,7 +432,7 @@ you can normally see in &kword;, it will be easier to delete a Hard Frame Break 
 <guimenu>View</guimenu><guimenuitem>Formatting
 Characters</guimenuitem></menuchoice> from the menubar.  This will make the paragraph marks visible.</para></listitem>
 
-<listitem><para>Find the newly revealed Page Break, labled <guilabel>---</guilabel>.
+<listitem><para>Find the newly revealed Page Break, labled <guilabel>--- Frame Break ---</guilabel>.
   Place the mouse pointer in
 front of this and click once with the &LMB;. This will place the cursor directly in front of the page break.</para></listitem>
 

@@ -66,7 +66,7 @@ you use for your document rulers. (In this example, we are using
 inches.)  To change the units, follow the instructions in the section entitled
 <link linkend="rulers">Using Rulers</link>.</para>
 
-<para>The dialog section labled <guilabel>Page Format</guilabel> is used to specify
+<para>The dialog section labled <guilabel>Page Size &amp; Margins</guilabel> is used to specify
 the paper size for the document.  </para>
 <para>&kword; includes many predefined paper sizes.  Select the appropriate paper size with the drop down
 box labled <guilabel>Format</guilabel>.</para>
@@ -97,12 +97,10 @@ linkend="defportrait">Portrait</link> or <link
 linkend="deflandscape">Landscape</link> layout for
 your document. </para>
 
-<para>Below the page format options, is the Page Borders subsection, which
-consists of 4 entry boxes labeled (<guilabel>Left:</guilabel>,
-<guilabel>Right:</guilabel>, <guilabel>Top:</guilabel> and
-<guilabel>Bottom:</guilabel>).</para>
+<para>Below the page format options, is the <guilabel>Margins</guilabel> subsection, which
+consists of 4 spin boxes.</para>
 
-<para>The <guilabel>Page Borders</guilabel> (also referred to as <emphasis>margins</emphasis>), define the
+<para>The <guilabel>Margins</guilabel> define the
 white-space surrounding the text in your main frame.  You can enter any
 number from 0 to the maximum size of the page in these boxes.  The units
 are the same for all four boxes, and is the same as the measurement
@@ -112,7 +110,7 @@ listed at the top of the dialog..</para>
 change the number of columns on each page.  Details on multi-column documents
 can be found <link linkend="columns">here</link>.</para>
 
-<para>Clicking on the <guilabel>Header and Footer</guilabel> tab allows the user to
+<para>Clicking on the <guilabel>Header &amp; Footer</guilabel> tab allows the user to
 specify header and footer information. </para>
 
 <screenshot>
@@ -138,11 +136,12 @@ will be able to specify a different format for the header on the first page.</pa
 
 <para>If you place a mark in front of <guilabel>Different header for even and odd pages</guilabel>,
 the even pages will use one header, the odd
-pages use another header.  You can use this to ensure the page numbers
+pages use another header. </para>
+<tip><para>You can use this to ensure the page numbers
 are always on the outside of the page, or to list the title of the
-document on odd pages and the chapter number on the even pages.</para>
+document on odd pages and the chapter number on the even pages.</para></tip>
 
-<para>In the text box labeled <guilabel>Spacing between header and
+<para>In the spin box labeled <guilabel>Spacing between header and
 body</guilabel>, you can specify how much empty space should be placed
 between the bottom of the header, and the top of the main frame.</para>
 
@@ -158,11 +157,11 @@ will be able to specify a different format for the footer on the first page.</pa
 the even pages will use one footer, the odd
 pages use another footer.  </para>
 
-<para>In the text box labeled <guilabel>Spacing between footer and
+<para>In the spin box labeled <guilabel>Spacing between footer and
 body</guilabel>, you can specify how much empty space should be placed
 between the bottom of the footer, and the top of the main frame.</para>
 
-<para>The bottom text box is labeled <guilabel>Spacing between footnote and body</guilabel>.  As the label
+<para>The bottom spin box is labeled <guilabel>Spacing between footnote and body</guilabel>.  As the label
 suggests, you can use this text
 box to specify the distance between the bottom edge of the main frame, and the top edge of the footnotes.  For more information on
 footnotes, see the section entitled <link linkend="endnotes-and-footnotes">footnotes</link>. </para>
@@ -195,7 +194,7 @@ rulers.</para>
 
 <para>A dialog box will appear.</para>
 
-<para>The <guilabel>Format and Borders</guilabel> tab is for altering
+<para>The <guilabel>Page Size &amp; Margins</guilabel> tab is for altering
 the paper size, and changing the margins.</para>
 
 <screenshot>
@@ -216,10 +215,10 @@ you use for your document rulers. (In this example, we are using
 inches.)  To change the units, follow the instructions in the section entitled
 <link linkend="rulers">Using Rulers</link>.</para>
 
-<para>The dialog section labled <guilabel>Page Format</guilabel> is used to specify
+<para>The dialog section labled <guilabel>Page Size</guilabel> is used to specify
 the paper size for the document.  </para>
 <para>&kword; includes many predefined paper sizes.  Select the appropriate paper size with the drop down
-box labled <guilabel>Format</guilabel>.</para>
+box labled <guilabel>Size</guilabel>.</para>
 
 <para>In addition to standard paper sizes, there are two selections that
 deserve special mention.</para>
@@ -247,16 +246,8 @@ linkend="defportrait">Portrait</link> or <link
 linkend="deflandscape">Landscape</link> layout for
 your document. </para>
 
-<para>Below the page format options, is the Page Borders subsection, which
-consists of 4 entry boxes labeled (<guilabel>Left:</guilabel>,
-<guilabel>Right:</guilabel>, <guilabel>Top:</guilabel> and
-<guilabel>Bottom:</guilabel>).</para>
-
-<para>The <guilabel>Page Borders</guilabel> (also referred to as <emphasis>margins</emphasis>), define the
-white-space surrounding the text in your main frame.  You can enter any
-number from 0 to the maximum size of the page in these boxes.  The units
-are the same for all four boxes, and is the same as the measurement
-listed at the top of the dialog..</para>
+<para>Below the page format options, is the <guilabel>Margins</guilabel> subsection, which
+consists of 4 entry boxes. All options in this subsection are disabled in Page Oriented documents.</para>
 
 </sect2>
 </sect1>

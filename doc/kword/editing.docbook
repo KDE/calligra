@@ -1330,14 +1330,18 @@ capitalization. As you could guess from its name, this all occurs
 automatically, while you are editing your document.</para>
 
 <sect2 id="autocorrection-enable">
-<title>Enable/Disable Autocorrection</title>
+<title>Enabling/Disabling Autocorrection</title>
 
-<para>To toggle autocorrection on and off, select <menuchoice>
+<para>To toggle autocorrection on, select <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
 <guimenuitem>Enable Autocorrection</guimenuitem></menuchoice>
 from the menubar.  When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>.  You can
 determine which changes to make by <link linkend="configure-autocorrection">configuring autocorrection</link></para>
-<para>If disabled, autocorrection changes are not made. You can, however,
+
+<para>To toggle autocorrection on, select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
+<guimenuitem>Disable Autocorrection</guimenuitem></menuchoice>
+from the menubar. If disabled, autocorrection changes are not made. You can, however,
 <link linkend="autoformat">apply autocorrection manually</link>.</para>
 </sect2>
 
@@ -1451,7 +1455,7 @@ convert that paragraph to a numbered paragraph.  All future paragraphs will be c
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Use lists formatting for bulleted paragraphs</guilabel></term>
+<term><guilabel>Use list-formatting for bulleted paragraphs</guilabel></term>
 <listitem>
 <para>When selected, &kword; will look for lines that begin with <emphasis>- </emphasis>, and automatically convert the paragraph style
 to a bulleted list.  The bullet is selected with the left button below this option.</para>
@@ -1509,7 +1513,7 @@ used abbreviations that you want spelled out, or abbreviations.</para>
 
 <para>&kword; uses different autocorrection strings depending on the language.  
 Set the correct language using the combo box labeled 
-<guilabel>Replacement and exception for language</guilabel>.</para>
+<guilabel>Replacement and exceptions for language</guilabel>.</para>
 
 <para>The check box labeled <guilabel>Enable word replacement</guilabel> is used to 
 toggle on and off the autoreplacement features of &kword;.  If there is no mark in the check box, 
@@ -1622,7 +1626,7 @@ to change the fonts to boldface or italicized fonts.</para>
 <varlistentry>
 <term><guilabel>Strikeout</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Simple</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
+<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
 <guilabel>Without</guilabel> to use for the replacement text.</para>
 </listitem>
 </varlistentry>
@@ -1630,7 +1634,7 @@ to change the fonts to boldface or italicized fonts.</para>
 <varlistentry>
 <term><guilabel>Underline</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Simple</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
+<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel>, <guilabel>Wave</guilabel>,  or
 <guilabel>Without</guilabel> to use for the replacement text.</para>
 </listitem>
 </varlistentry>
@@ -1640,6 +1644,28 @@ to change the fonts to boldface or italicized fonts.</para>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
 <guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to use.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Shadow:</guilabel> and <guilabel>Word by Word:</guilabel></term>
+<listitem>
+<para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
+to use shadow text and/or word by word underlining and strikethrough in the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Capitalization:</guilabel></term>
+<listitem>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
+<guilabel>Small caps</guilabel> to determine what capitalization to use for the replacement text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Language:</guilabel></term>
+<listitem>
+<para>You can select the language of the text you will use to replace the found text.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -1753,7 +1779,7 @@ than the <guilabel>Minimum word length</guilabel> to the list of proposed autoco
 <para>A word is not part of autocompletion until the list is <emphasis>saved</emphasis> to disk.  At that moment, &kword; 
 will use that saved list for all autocompletion, until the list is replaced with another saved list.</para>
 <para>Some of the words in the autocompletion list may not have been saved yet.</para></note>
-<para>By clicking the <guibutton>Add Completion Entry</guibutton> button you can add 
+<para>By clicking the <guibutton>Add Completion Entry...</guibutton> button you can add 
 an individual word to the completion list.</para>
 <para>To remove words from the completion list, select the word with the &LMB; from the list, then
 click <guibutton>Remove Completion Entry</guibutton>.</para>
