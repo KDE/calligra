@@ -25,11 +25,11 @@
 #include <qptrlist.h>
 #include "global.h"
 #include <koPoint.h>
-#include "kpbackground.h"
 #include <koRect.h>
 #include <kostyle.h>
 #include <qvariant.h>
 #include <koDocumentChild.h>
+#include <koPictureCollection.h>
 
 class KURL;
 class KPTextView;
@@ -46,6 +46,7 @@ class KoTextObject;
 class KPPixmapObject;
 class KoStyle;
 class KPPartObject;
+class KPBackGround;
 
 class KPrPage
 {

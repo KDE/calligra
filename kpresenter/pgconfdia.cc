@@ -20,6 +20,7 @@
 
 #include "pgconfdia.h"
 #include "kpresenter_doc.h"
+#include "kprpage.h"
 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>

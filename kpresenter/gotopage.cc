@@ -29,6 +29,7 @@
 #include <kdialog.h>
 
 #include "kpresenter_doc.h"
+#include "kprpage.h"
 
 KPGotoPage::KPGotoPage( const KPresenterDoc *doc,
                         const QValueList<int> &slides, int start,

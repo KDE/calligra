@@ -37,7 +37,10 @@
 
 #include "sidebar.h"
 #include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 #include "kprcanvas.h"
+#include "kprpage.h"
+#include "kpobject.h"
 #include <qapplication.h>
 #include "kprcommand.h"
 #include <qvalidator.h>

@@ -23,6 +23,7 @@
 #include <kapplication.h>
 #include "kpgradientcollection.h"
 #include "kptextobject.h"
+#include "kprpage.h"
 
 #include <qpainter.h>
 #include <qpicture.h>

@@ -22,6 +22,7 @@
 #include "kptextobject.h"
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
+#include "kprpage.h"
 
 #include <kapplication.h>
 #include <dcopclient.h>

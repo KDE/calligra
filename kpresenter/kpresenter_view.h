@@ -26,13 +26,16 @@
 
 #include <qguardedptr.h>
 #include <qtimer.h>
+#include <qdatetime.h>
+#include <qpen.h>
 
 #include <koView.h>
-#include "kpresenter_doc.h"
 #include "global.h"
 #include <koRuler.h>
 
 class QPopupMenu;
+class QSplitter;
+class QLabel;
 class DCOPObject;
 class KPresenterView;
 class BackDia;
@@ -59,10 +62,16 @@ class KActionMenu;
 class KToggleAction;
 class TKSelectColorAction;
 class KoPartSelectAction;
+class KoPicture;
+class KoStyle;
 
 class KoCharSelectDia;
 class KoTextFormat;
+class KoTextObject;
+class KoZoomHandler;
 
+class KCommand;
+class KMacroCommand;
 class KFontSizeAction;
 class KColorAction;
 class KSelectAction;
@@ -76,6 +85,9 @@ class KPrCanvas;
 class KoFontDia;
 class KoParagDia;
 class KPPixmapObject;
+class KPresenterDoc;
+class KPrPage;
+class KPTextObject;
 
 class KOSpell;
 

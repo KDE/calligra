@@ -20,6 +20,8 @@
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
 #include "kprcanvas.h"
+#include "kprpage.h"
+#include "kpobject.h"
 #include "kplineobject.h"
 #include "kprectobject.h"
 #include "kpellipseobject.h"

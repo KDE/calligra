@@ -19,8 +19,10 @@
 */
 
 #include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 #include "effectdia.h"
 #include "kprcommand.h"
+#include "kpobject.h"
 #include "kpresenter_sound_player.h"
 
 #include <qpushbutton.h>

@@ -49,6 +49,7 @@
 
 #include "kptextobject.moc"
 #include "kprcanvas.h"
+#include "kprpage.h"
 #include "koAutoFormat.h"
 #include <koparagcounter.h>
 #include <kaction.h>

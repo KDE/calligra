@@ -35,6 +35,7 @@
 #include <qdragobject.h>
 #include <qfile.h>
 
+#include "kprpage.h"
 #include "backdia.h"
 #include "autoformEdit/afchoose.h"
 #include "styledia.h"
@@ -43,6 +44,7 @@
 #include "rotationdialogimpl.h"
 #include "shadowdialogimpl.h"
 #include "imageEffectDia.h"
+#include "kpbackground.h"
 
 #include <koAutoFormat.h>
 
@@ -69,6 +71,7 @@
 #include <kio/netaccess.h>
 
 #include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 #include "webpresentation.h"
 #include "kptextobject.h"
 
@@ -1888,7 +1891,7 @@ void KPresenterView::penChosen()
             macro->addCommand(cmd);
         }
         cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
-                                  PenCmd::Color, page->objectList() );
+                                  PenCmd::Color, stickyPage()->objectList() );
         if(cmd)
         {
             if (!macro )

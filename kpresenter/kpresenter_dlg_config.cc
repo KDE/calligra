@@ -44,6 +44,7 @@
 #include "kpresenter_dlg_config.h"
 #include "kpresenter_view.h"
 #include "kpresenter_doc.h"
+#include "kprpage.h"
 #include <koUnit.h>
 
 #include <float.h>

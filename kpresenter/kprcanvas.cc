@@ -80,6 +80,7 @@
 #include "kprpage.h"
 #include "kprvariable.h"
 #include "kpgroupobject.h"
+#include "kpresenter_doc.h"
 
 #include "kprcanvas.h"
 #include "kprcanvas.moc"

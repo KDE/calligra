@@ -41,10 +41,9 @@ class KTempFile;
 class KoStyle;
 class KPrBgSpellCheck;
 class KoTextParag;
+class KoTextObject;
 
 class KOSpellConfig;
-
-#include "kprpage.h"
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -57,7 +56,6 @@ class KOSpellConfig;
 
 #include <koPageLayoutDia.h>
 
-#include "kpobject.h"
 #include "global.h"
 
 #include <koPictureCollection.h>
@@ -71,6 +69,9 @@ class KPFooterHeaderEditor;
 class KPTextObject;
 class StyleDia;
 class KPPartObject;
+class KPrPage;
+class KPObject;
+class KPresenterDoc;
 
 class KoStyle;
 class KSpellConfig;

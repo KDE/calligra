@@ -24,7 +24,9 @@
 #include "kpobject.h"
 #include "kptextobject.h"
 #include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 #include "kprcanvas.h"
+#include "kprpage.h"
 #include "kppageeffects.h"
 #include "kpresenter_sound_player.h"
 

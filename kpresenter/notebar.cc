@@ -29,6 +29,7 @@
 #include <kprinter.h>
 #include <kdebug.h>
 #include <ktextedit.h>
+#include <klocale.h>
 
 #include "notebar.h"
 #include "kpresenter_view.h"

@@ -20,6 +20,7 @@
 
 #include "presdurationdia.h"
 #include "kprcanvas.h"
+#include "kprpage.h"
 #include "kpresenter_doc.h"
 #include <qlabel.h>
 #include <qheader.h>
@@ -27,6 +28,7 @@
 #include <qlayout.h>
 #include <klistview.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 KPPresDurationDia::KPPresDurationDia( QWidget *parent, const char *name,
                                       KPresenterDoc *_doc, QStringList _durationListString,

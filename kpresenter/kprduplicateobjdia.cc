@@ -25,6 +25,7 @@
 #include <qbuttongroup.h>
 
 #include "kprduplicateobjdia.h"
+#include "kprpage.h"
 #include <knuminput.h>
 #include <qlineedit.h>
 #include <koUnit.h>

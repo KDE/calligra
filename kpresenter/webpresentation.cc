@@ -23,7 +23,9 @@
 #include "webpresentation.h"
 
 #include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 #include "kprcanvas.h"
+#include "kprpage.h"
 
 #include <kstandarddirs.h>
 #include <unistd.h>
