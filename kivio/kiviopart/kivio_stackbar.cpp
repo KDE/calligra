@@ -34,7 +34,7 @@ KivioStackBar::KivioStackBar( QWidget* parent, const char* name )
 
 KivioStackBar::~KivioStackBar()
 {
-  debug("KivioStackBar::~KivioStackBar()");
+  qDebug("KivioStackBar::~KivioStackBar()");
 }
 
 void KivioStackBar::insertPage( QWidget* w, const QString& title )
@@ -66,7 +66,7 @@ void KivioStackBar::insertPage( QWidget* w, const QString& title )
 void KivioStackBar::slotDeleteButton( DragBarButton *b )
 {
     QWidget *pWidget = m_data[b];
-    debug("Emitting deleteButton");
+    qDebug("Emitting deleteButton");
     emit deleteButton(b, pWidget, this);
 }
 
@@ -128,20 +128,20 @@ void KivioStackBar::deletePageAndButton( DragBarButton *pBtn )
 
     if( !pBtn )
     {
-        debug("KivioStackBar::deletePageAndButton() - pBtn is NULL!");
+        qDebug("KivioStackBar::deletePageAndButton() - pBtn is NULL!");
         return;
     }
 
     pPage = m_data[pBtn];
     if( !pPage )
     {
-        debug("KivioStackBar::deletePageAndButton() - failed to find the key/value pair");
+        qDebug("KivioStackBar::deletePageAndButton() - failed to find the key/value pair");
         return;
     }
 
     if( m_data.remove( pBtn )==false )
     {
-        debug("KivioStackBar::deletePageAndButton() - remove failed");
+        qDebug("KivioStackBar::deletePageAndButton() - remove failed");
         return;
     }
 

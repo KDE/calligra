@@ -289,7 +289,7 @@ void StencilBarDockManager::setDoc( KivioDoc *p )
 {
     if( m_pDoc )
     {
-        debug("StencilBarDockManager::setDoc() - This should never be called twice - error!!");
+        qDebug("StencilBarDockManager::setDoc() - This should never be called twice - error!!");
         return;
     }
     m_pDoc = p;

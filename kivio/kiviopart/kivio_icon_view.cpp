@@ -127,12 +127,12 @@ void KivioIconView::setStencilSpawnerSet( KivioStencilSpawnerSet *pSet )
         pItem->setKey(pSpawner->info()->title());
         pItem->setStencilSpawner(pSpawner);
 
-        debug("* %s", pSpawner->info()->title().ascii());
+        qDebug("* %s", pSpawner->info()->title().ascii());
 
         pSpawner = pSet->spawners()->next();
 
     }
-    debug("Leaving");
+    qDebug("Leaving");
 }
 
 void KivioIconView::drawBackground( QPainter *p, const QRect &r )
@@ -171,7 +171,7 @@ QDragObject *KivioIconView::dragObject()
     QIconDragItem id;
     QString full;
     full = item->spawner()->set()->dir() + "/" + item->spawner()->info()->title();
-    id.setData( QCString(full));
+    id.setData( QCString(full.latin1())); // ### unicode fixme !!! (Simon)
     drag->append( id,
         QRect( item->pixmapRect(FALSE).x() - orig.x(),
                item->pixmapRect(FALSE).y() - orig.y(),
@@ -208,7 +208,7 @@ void KivioIconView::slotDoubleClicked( QIconViewItem *pQtItem )
     
     if( !pItem )
     {
-        debug("KivioIconView::slotDoubleClicked() - Clicked item is not a KivioIconViewItem!");
+        qDebug("KivioIconView::slotDoubleClicked() - Clicked item is not a KivioIconViewItem!");
         return;
     }
     

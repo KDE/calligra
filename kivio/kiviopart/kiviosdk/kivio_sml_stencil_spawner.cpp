@@ -51,12 +51,12 @@ KivioSMLStencilSpawner::~KivioSMLStencilSpawner()
         m_pStencil = NULL;
     }
 
-    debug("* SMLStencilSpawner %s deleted\n", m_pInfo->title().ascii() );
+    qDebug("* SMLStencilSpawner %s deleted\n", m_pInfo->title().ascii() );
 }
 
 QDomElement KivioSMLStencilSpawner::saveXML( QDomDocument &doc )
 {
-    debug("+SAVE KivioSMLStencilSpawner");
+    qDebug("+SAVE KivioSMLStencilSpawner");
     QDomElement spawnE = doc.createElement("KivioSMLStencilSpawner");
 
     XmlWriteString( spawnE, "filename", m_filename );
@@ -74,7 +74,7 @@ bool KivioSMLStencilSpawner::load( const QString &file )
 
     if( f.open( IO_ReadOnly )==false )
     {
-        debug("Error opening stencil");
+        qDebug("Error opening stencil");
         return false;
     }
 
@@ -114,7 +114,7 @@ bool KivioSMLStencilSpawner::load( const QString &file )
         }
         else
         {
-            debug("******* Unknown node %s", nodeName.ascii() );
+            qDebug("******* Unknown node %s", nodeName.ascii() );
         }
         
         node = node.nextSibling();    
@@ -173,10 +173,10 @@ void KivioSMLStencilSpawner::loadShape( QDomNode &shapeNode )
             break;
         
         case KivioShapeData::kstRectangle:
-            debug("KivioSMLStencilSpawner::LoadRectangle");
+            qDebug("KivioSMLStencilSpawner::LoadRectangle");
             pShape = KivioShape::loadShapeRectangle( shapeElement );
             if( pShape )
-                debug("KivioSMLStencilSpawner::LoadRectangle YES!!!");
+                qDebug("KivioSMLStencilSpawner::LoadRectangle YES!!!");
             break;
         
         case KivioShapeData::kstRoundRectangle:

@@ -77,7 +77,7 @@ DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* 
   const char* close_xpm[] = {
   "8 7 2 1",
   "x c None",
-  (const char*)line,
+  (const char*)line.latin1(), // ### unicode fixme !!! (Simon)
   "xxxxxxxx",
   "x..xx..x",
   "xx....xx",
@@ -95,7 +95,7 @@ DragBarButton::~DragBarButton()
   if (m_pIcon)
     delete m_pIcon;
 
-  debug("DragBarButton - AHHHHHH I'M DYING!");
+  qDebug("DragBarButton - AHHHHHH I'M DYING!");
 }
 
 void DragBarButton::drawButton( QPainter* paint )
@@ -202,7 +202,7 @@ void DragBarButton::mouseReleaseEvent( QMouseEvent* ev )
     QRect closeRect(width()-20,0,m_pClosePix->width(),height());
     if ( closeRect.contains(ev->pos()))
     {
-        debug("Emitting closeRequest");
+        qDebug("Emitting closeRequest");
         emit closeRequired(this);
     }
     return;

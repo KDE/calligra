@@ -44,7 +44,7 @@ float XmlReadFloat( const QDomElement &e, const QString &att, const float &def)
     float fVal = val.toFloat( &ok );
     if( !ok )
     {
-        debug("Invalid XML-value read for %s, expected float", att.ascii());
+        qDebug("Invalid XML-value read for %s, expected float", att.ascii());
         return 1.0;
     }
     
@@ -92,7 +92,7 @@ int XmlReadInt( const QDomElement &e, const QString &att, const int &def)
     int iVal = val.toInt( &ok );
     if( !ok )
     {
-        debug("Invalid XML-value read for %s, expected int", att.ascii());
+        qDebug("Invalid XML-value read for %s, expected int", att.ascii());
         return 1;
     }
 
@@ -140,7 +140,7 @@ uint XmlReadUInt( const QDomElement &e, const QString &att, const uint &def)
     uint iVal = val.toUInt( &ok );
     if( !ok )
     {
-        debug("Invalid XML-value read for %s, expected uint", att.ascii());
+        qDebug("Invalid XML-value read for %s, expected uint", att.ascii());
         return 1;
     }
 
@@ -231,7 +231,7 @@ QColor XmlReadColor( const QDomElement &e, const QString &att, const QColor &def
     uint iVal = val.toUInt( &ok );
     if( !ok )
     {
-        debug("Invalid XML-value read for %s, expected QColor", att.ascii());
+        qDebug("Invalid XML-value read for %s, expected QColor", att.ascii());
         return 1;
     }
 
@@ -280,7 +280,7 @@ double XmlReadDouble( const QDomElement &e, const QString &att, const double &de
     double dVal = val.toDouble( &ok );
     if( !ok )
     {
-        debug("Invalid XML-value read for %s, expected double", att.ascii());
+        qDebug("Invalid XML-value read for %s, expected double", att.ascii());
         return 1.0;
     }
 

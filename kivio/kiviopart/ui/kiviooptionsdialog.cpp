@@ -31,7 +31,7 @@ void KivioOptionsDialog::apply()
 
 void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
 {
-  QString pname = i->text(1);
+  QCString pname = i->text(1).latin1(); // ### latin1() breaks unicode!!! (Simon)
   QWidget* page = 0;
 
   page = (QWidget*)stack->child(pname);

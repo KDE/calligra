@@ -229,7 +229,7 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
         }
         else
         {
-            debug("KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist.");
+            qDebug("KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist.");
             pTarget->m_pTextData->setText("");
             pTarget->m_pTextData->setIsHtml(false);
             pTarget->m_pTextData->setHTextAlign(Qt::AlignHCenter);
@@ -258,7 +258,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
     QDomNode node;
     QDomElement ele;
 
-    debug("-LOAD KivioShapeData::loadXML()");
+    qDebug("-LOAD KivioShapeData::loadXML()");
 
     // Maintain backwards compatibility with the eariler betas. They saved
     // fg color and line style in this node.
@@ -274,17 +274,17 @@ bool KivioShapeData::loadXML( const QDomElement &e )
 
         if( nodeName == "KivioLineStyle" )
         {
-            debug("-LOAD KivioShapeData::loadXML() - KivioLineStyle" );
+            qDebug("-LOAD KivioShapeData::loadXML() - KivioLineStyle" );
             m_pLineStyle->loadXML( ele );
         }
         else if( nodeName == "KivioFillStyle" )
         {
-            debug("-LOAD KivioShapeData::loadXML() - KivioFillStyle");
+            qDebug("-LOAD KivioShapeData::loadXML() - KivioFillStyle");
             m_pFillStyle->loadXML( ele );
         }
         else if( nodeName == "KivioTextStyle" )
         {
-            debug("-LOAD KivioShapeData::loadXML() - KivioText");
+            qDebug("-LOAD KivioShapeData::loadXML() - KivioText");
             
             // First make sure we are a text box
             if( m_shapeType == kstTextBox )
@@ -299,7 +299,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
         }
         else if( nodeName == "KivioText" )
         {
-            debug("-LOAD KivioShapeData::loadXML() - KivioText - deprecated");
+            qDebug("-LOAD KivioShapeData::loadXML() - KivioText - deprecated");
 
             // First make sure we are a text box
             if( m_shapeType == kstTextBox )
@@ -347,7 +347,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
             } // end if m_shapeType==kstTextBox
             else
             {
-                debug("KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!");
+                qDebug("KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!");
             }
         }
 
@@ -363,7 +363,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
  */
 QDomElement KivioShapeData::saveXML( QDomDocument &doc )
 {
-    debug("+SAVE KivioShapeData");
+    qDebug("+SAVE KivioShapeData");
     QDomElement e = doc.createElement("KivioShapeData");
 
     // FIXME: Do we need to save m_pOriginalPointList

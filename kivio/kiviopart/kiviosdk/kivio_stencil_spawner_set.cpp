@@ -42,7 +42,7 @@ KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
         delete m_pSpawners;
         m_pSpawners = NULL;
     }
-    debug("* StencilSpawnerSet %s deleted\n", m_name.ascii() );
+    qDebug("* StencilSpawnerSet %s deleted\n", m_name.ascii() );
 }
 
 
@@ -74,7 +74,7 @@ bool KivioStencilSpawnerSet::loadXML( const QDomElement & )
  */
 QDomElement KivioStencilSpawnerSet::saveXML( QDomDocument &doc )
 {
-    debug("+SAVE KivioStencilSpawnerSet");
+    qDebug("+SAVE KivioStencilSpawnerSet");
     QDomElement spawnE = doc.createElement("KivioStencilSpawnerSet");
 
     XmlWriteString( spawnE, "desc", m_name );
@@ -124,7 +124,7 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
     }
     else if( fileName.contains( ".ksp", false ) )
     {
-        debug("-LOAD KivioStencilSpawnerSet::loadDir() - Found a PLUGIN! %s", fileName.ascii() );
+        qDebug("-LOAD KivioStencilSpawnerSet::loadDir() - Found a PLUGIN! %s", fileName.ascii() );
         pSpawner = new KivioPluginStencilSpawner(this);
     }
     else
@@ -173,7 +173,7 @@ KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& title)
     while( pSpawner )
     {
         // If the title matches, this is it!
-        debug(QString("FIND %1 - %2").arg(title).arg(pSpawner->info()->title()));
+        qDebug(QString("FIND %1 - %2").arg(title).arg(pSpawner->info()->title()).latin1()); // arghl! (Simon)
         if( pSpawner->info()->title() == title )
         {
             return pSpawner;

@@ -49,7 +49,7 @@ KivioLayer::KivioLayer( KivioPage *pPage )
 
 KivioLayer::~KivioLayer()
 {
-    debug("KivioLayer() - In the end there can be only one");
+    qDebug("KivioLayer() - In the end there can be only one");
 
     if( m_pStencilList )
     {
@@ -95,14 +95,14 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
         title.length() == 0 )
         return NULL;
 
-    debug("-LOAD KivioLayer::loadSMLStencil() %s %s", setName.ascii(), title.ascii() );
+    qDebug("-LOAD KivioLayer::loadSMLStencil() %s %s", setName.ascii(), title.ascii() );
 
     // Locate the spawner set
     KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setName,title);
     if( pSpawner )
     {
         KivioStencil *pStencil = pSpawner->newStencil();
-        debug("-LOAD KivioLayer::loadSMLStencil() - Calling pStencil->loadXML( stencilE );" );
+        qDebug("-LOAD KivioLayer::loadSMLStencil() - Calling pStencil->loadXML( stencilE );" );
         pStencil->loadXML( stencilE );
 
         return pStencil;
@@ -125,10 +125,10 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
  */
 KivioStencil *KivioLayer::loadGroupStencil( const QDomElement &stencilE )
 {
-    debug("-LOAD KivioLayer::loadSMLStencil()" );
+    qDebug("-LOAD KivioLayer::loadSMLStencil()" );
 
     KivioGroupStencil *pStencil = new KivioGroupStencil();
-    debug("-LOAD KivioLayer::loadGroupStencil() - Calling pStencil->loadXML( stencilE );" );
+    qDebug("-LOAD KivioLayer::loadGroupStencil() - Calling pStencil->loadXML( stencilE );" );
 
     if(pStencil->loadXML( stencilE, this )==false)
     {
@@ -151,14 +151,14 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
         title.length() == 0 )
         return NULL;
 
-    debug("-LOAD KivioLayer::loadPluginStencil() %s %s", setName.ascii(), title.ascii() );
+    qDebug("-LOAD KivioLayer::loadPluginStencil() %s %s", setName.ascii(), title.ascii() );
     
     // Locate the spawner set
     KivioStencilSpawner *pSpawner = m_pPage->doc()->findStencilSpawner(setName,title);
     if( pSpawner )
     {
         KivioStencil *pStencil = pSpawner->newStencil();
-        debug("-LOAD KivioLayer::loadSMLStencil() - Calling pStencil->loadXML( stencilE );" );
+        qDebug("-LOAD KivioLayer::loadSMLStencil() - Calling pStencil->loadXML( stencilE );" );
         pStencil->loadXML( stencilE );
 
         return pStencil;
@@ -169,7 +169,7 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
 
 bool KivioLayer::loadXML( const QDomElement &layerE )
 {
-    debug("-LOAD KivioLayer");
+    qDebug("-LOAD KivioLayer");
 
     m_flags = XmlReadInt( layerE, "flags", 1 );
     m_name = XmlReadString( layerE, "name", "layerX" );
@@ -189,7 +189,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-                debug("-LOAD KivioLayer - Unknown KivioSMLStencil (title=%s set=%s) found",
+                qDebug("-LOAD KivioLayer - Unknown KivioSMLStencil (title=%s set=%s) found",
                         XmlReadString( node.toElement(), "title", "" ).ascii(), XmlReadString( node.toElement(), "setName", "" ).ascii() );
             }
         }
@@ -202,7 +202,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-                debug("-LOAD KivioLayer - Unable to load KivioGroupStencil");
+                qDebug("-LOAD KivioLayer - Unable to load KivioGroupStencil");
             }
         }
         else if( name == "KivioPluginStencil" )
@@ -214,7 +214,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-                debug("-LOAD KivioLayer - Unable to load KivioPluginStencil");
+                qDebug("-LOAD KivioLayer - Unable to load KivioPluginStencil");
             }
         }
 
@@ -226,7 +226,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
 
 QDomElement KivioLayer::saveXML( QDomDocument &doc )
 {
-    debug("+SAVE KivioLayer");
+    qDebug("+SAVE KivioLayer");
     QDomElement e = doc.createElement("KivioLayer");
 
     XmlWriteInt( e, "flags", m_flags );
@@ -390,7 +390,7 @@ void KivioLayer::searchForConnections( KivioPage *p )
         // Backup the current list position
         pCur = pStencil;
         
-        debug(" ... layer connection search");
+        qDebug(" ... layer connection search");
         pStencil->searchForConnections( p );
         
         // Restore it

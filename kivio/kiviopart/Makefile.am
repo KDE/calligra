@@ -8,19 +8,16 @@ lib_LTLIBRARIES =libkiviopart.la
 
 libkiviopart_la_LDFLAGS = -version-info 
 libkiviopart_la_LIBADD = \
-		$(top_srcdir)/kiviopart/tools/libtools.la\
-		$(top_srcdir)/kiviopart/tklib/libtklib.la\
-		$(top_srcdir)/kiviopart/kiviosdk/libkiviosdk.la\
-		$(top_srcdir)/kiviopart/ui/libui.la
+		$(top_builddir)/kivio/kiviopart/tools/libtools.la\
+		$(top_builddir)/kivio/kiviopart/tklib/libtklib.la\
+		$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
+		$(top_builddir)/kivio/kiviopart/ui/libui.la
 
 INCLUDES = $(all_includes)\
-		-I$(top_srcdir)/po\
-		-I$(top_srcdir)/kiviopart/ui\
-		-I$(top_srcdir)/kiviopart/kiviosdk\
-		-I$(top_srcdir)/kiviopart/tklib\
-		-I$(top_srcdir)/kiviopart/tools
-CXXFLAGS = -g -O2 -Wall 
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
+		-I$(srcdir)/ui\
+		-I$(srcdir)/kiviosdk\
+		-I$(srcdir)/tklib\
+		-I$(srcdir)/tools
 libkiviopart_la_METASOURCES = AUTO
 libkiviopart_la_SOURCES = \
 		main.cpp\
@@ -144,7 +141,7 @@ kivio_la_SOURCES = main.cpp
 kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
 kivio_la_LIBADD = libkiviopart.la
 
-libkiviopart_la_LDFLAGS = -avoid-version -module -lkofficeui $(all_libraries)
+libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
 
 bin_PROGRAMS = kiviopart
 kiviopart_SOURCES = dummy.cpp

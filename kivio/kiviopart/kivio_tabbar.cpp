@@ -422,7 +422,7 @@ void KivioTabBar::mousePressEvent( QMouseEvent* _ev )
             if ( x <= _ev->pos().x() && _ev->pos().y() <= x + 20 + text_width )
             {
                 activeTab = i;
-                active_text = text;
+                active_text = text.latin1(); // ### unicode fixme!!! (Simon)
             }
 
             x += 10 + text_width;

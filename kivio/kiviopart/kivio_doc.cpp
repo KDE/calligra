@@ -210,18 +210,18 @@ QDomDocument KivioDoc::saveXML()
 
 bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
-    debug("-LOAD Loading KivioDoc");
+    qDebug("-LOAD Loading KivioDoc");
   m_bLoading = true;
 
   if ( doc.doctype().name() != "kiviodoc" ) {
-    debug("-LOAD invalid doc type");
+    qDebug("-LOAD invalid doc type");
     m_bLoading = false;
     return false;
   }
 
   QDomElement kivio = doc.documentElement();
   if ( kivio.attribute( "mime" ) != "application/x-kivio" ) {
-    debug("-LOAD Invalid mime type");
+    qDebug("-LOAD Invalid mime type");
     m_bLoading = false;
     return false;
   }
@@ -243,7 +243,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
         QString desc = XmlReadString( node.toElement(), "desc", "_!@#$" );
         if( desc == "_!@#$" )
         {
-            debug("-LOAD Bad KivioStencilSpawnerSet found");
+            qDebug("-LOAD Bad KivioStencilSpawnerSet found");
         }
         else
         {
@@ -256,7 +256,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     }
     else
     {
-        debug("-LOAD Unknown node %s", name.ascii() );
+        qDebug("-LOAD Unknown node %s", name.ascii() );
     }
 
     node = node.nextSibling();
@@ -283,7 +283,7 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &desc )
     QStringList dirList = dirs->findDirs("data", "kivio/stencils");
     QString rootDir;
 
-    debug("-LOAD StencilSpawnerSet");
+    qDebug("-LOAD StencilSpawnerSet");
     // Iterate through all data directories
     for( QStringList::Iterator it = dirList.begin(); it != dirList.end(); ++it )
     {
@@ -330,11 +330,11 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &desc )
                             KivioStencilSpawnerSet *pSet = addSpawnerSetDuringLoad( innerFI->absFilePath() );
                             if( pSet )
                             {
-                                debug("-LOAD Sucessful load of KivioStencilSpawnerSet, %d stencils", pSet->spawners()->count());
+                                qDebug("-LOAD Sucessful load of KivioStencilSpawnerSet, %d stencils", pSet->spawners()->count());
                             }
                             else
                             {
-                                debug("-LOAD **** FAILED TO LOAD STENCIL SPAWNER SET %s ****", innerFI->absFilePath().ascii() );
+                                qDebug("-LOAD **** FAILED TO LOAD STENCIL SPAWNER SET %s ****", innerFI->absFilePath().ascii() );
                             }
                             return true;
                         }
@@ -362,7 +362,7 @@ KivioPage* KivioDoc::createPage( bool useDefaults )
   QString s( i18n("Page%1") );
   s = s.arg( m_iPageId++ );
 
-  KivioPage* t = new KivioPage(m_pMap,s);
+  KivioPage* t = new KivioPage(m_pMap,s.latin1()); // ### unicode fixme!! (Simon)
   t->setPageName(s,true);
 
   // Launch the page properties dialog.  If the user cancels,
@@ -415,7 +415,7 @@ void KivioDoc::printContent( QPrinter &prn )
 
     KivioPage *pPage;
 
-    debug("Printing from %d to %d", from, to);
+    qDebug("Printing from %d to %d", from, to);
 
     p.start(&prn);
     for( i=from; i<=to; i++ )
@@ -456,14 +456,14 @@ KivioStencilSpawnerSet *KivioDoc::addSpawnerSet( QString dirName )
 
     if( setIsAlreadyLoaded( dirName, desc ) )
     {
-        debug("Cannot load duplicate stencil sets");
+        qDebug("Cannot load duplicate stencil sets");
         return NULL;
     }
 
     set = new KivioStencilSpawnerSet();
     if( set->loadDir(dirName)==false )
     {
-        debug("Error loading dir set (KivioDoc)\n");
+        qDebug("Error loading dir set (KivioDoc)\n");
         delete set;
         return NULL;
     }
@@ -471,9 +471,9 @@ KivioStencilSpawnerSet *KivioDoc::addSpawnerSet( QString dirName )
     m_pLstSpawnerSets->append( set );
     setModified(true);
 
-    debug("-LOAD addSpawnerSet()  emitting signal");
+    qDebug("-LOAD addSpawnerSet()  emitting signal");
     emit sig_addSpawnerSet( set );
-    debug("-LOAD after emit");
+    qDebug("-LOAD after emit");
 
     return set;
 }
@@ -485,7 +485,7 @@ KivioStencilSpawnerSet *KivioDoc::addSpawnerSetDuringLoad( QString dirName )
     set = new KivioStencilSpawnerSet();
     if( set->loadDir(dirName)==false )
     {
-        debug("Error loading dir set (KivioDOc)\n");
+        qDebug("Error loading dir set (KivioDOc)\n");
         delete set;
         return NULL;
     }
@@ -509,13 +509,13 @@ KivioDoc::~KivioDoc()
         m_pClipboard = NULL;
     }
 
-    debug("About to delete m_pLstSpawnerSets");
+    qDebug("About to delete m_pLstSpawnerSets");
     if( m_pLstSpawnerSets )
     {
         delete m_pLstSpawnerSets;
         m_pLstSpawnerSets = NULL;
     }
-    debug("After delete m_pLstSpawnerSets");
+    qDebug("After delete m_pLstSpawnerSets");
 
     s_docs->removeRef(this);
 }

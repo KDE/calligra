@@ -296,7 +296,7 @@ void KivioLayerPanel::updateView()
         m_pCurItem = m_pListView->firstChild();
         if( !m_pCurItem )
         {
-            debug("KivioLayerPanel::updateView() - Very Bad Error.  There are no layers!");
+            qDebug("KivioLayerPanel::updateView() - Very Bad Error.  There are no layers!");
         }
         else
         {
@@ -429,7 +429,7 @@ void KivioLayerPanel::layerUp()
     pLayer = pPage->layers()->take();
     if( !pLayer )
     {
-        debug("KivioLayerPanel::layerUp() - Error taking layer... bad");
+        qDebug("KivioLayerPanel::layerUp() - Error taking layer... bad");
         return;
     }
 
@@ -459,7 +459,7 @@ void KivioLayerPanel::layerDown()
     pLayer = pPage->layers()->take();
     if( !pLayer )
     {
-        debug("KivioLayerPanel::layerDown() - Error taking layer... bad");
+        qDebug("KivioLayerPanel::layerDown() - Error taking layer... bad");
         return;
     }
 

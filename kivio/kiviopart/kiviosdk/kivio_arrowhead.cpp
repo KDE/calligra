@@ -21,6 +21,8 @@
 #include "kivio_painter.h"
 #include "kivio_point.h"
 
+#include <math.h>
+
 KivioArrowHead::KivioArrowHead()
 {
     // Both of these values are in pixels

@@ -137,7 +137,7 @@ bool KivioPoint::loadXML( const QDomElement &e )
 {
     if( e.tagName().compare( "KivioPoint" ) != 0 )
     {
-        debug("Attempted to load KivioPoint from non-KivioPoint element");
+        qDebug("Attempted to load KivioPoint from non-KivioPoint element");
         return false;
     }
 
@@ -167,3 +167,4 @@ QDomElement KivioPoint::saveXML( QDomDocument &doc )
     XmlWriteString( e, QString("type"), QString(KivioPointTypeNames[m_pointType]) );
     return e;
 }
+

@@ -18,6 +18,8 @@
  */
 #include "kivio_ruler.h"
 
+#include <stdlib.h>
+
 #define MARKER_WIDTH 1
 #define MARKER_HEIGHT 20
 

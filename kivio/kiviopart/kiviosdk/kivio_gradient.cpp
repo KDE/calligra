@@ -181,3 +181,4 @@ QDomElement KivioGradient::saveXML( QDomDocument &doc )
 
     return doc.createElement("KivioGradient");
 }
+

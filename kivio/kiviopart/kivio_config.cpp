@@ -46,7 +46,7 @@ KivioConfig *KivioConfig::s_config=0L;
 KivioConfig::KivioConfig( const QString &fileName )
     : KSimpleConfig( fileName, false )
 {
-    debug("KivioConfig - created");
+    qDebug("KivioConfig - created");
 
     QColor *defColor = new QColor(0x4BD2FF/* 154, 250, 154 */);
     m_stencilBGType  = (KivioConfig::StencilBGType)readNumEntry( "StencilBackgroundType", (int)sbgtColor );
@@ -69,19 +69,19 @@ KivioConfig::KivioConfig( const QString &fileName )
                 m_pStencilBGPixmap = NULL;
             }
             m_stencilBGType = sbgtColor;
-            debug("KivioConfig - Unable to load %s", m_stencilBGFile.ascii() );
+            qDebug("KivioConfig - Unable to load %s", m_stencilBGFile.ascii() );
         }
         else
         {
-            debug("KivioConfig - loaded background");
+            qDebug("KivioConfig - loaded background");
         }
     }
     
     m_pConnectorTargetPixmap = new QPixmap( (const char **)connectorTarget_xpm);
 
-    debug("KivioConfig - StencilBackgroundType: %d", m_stencilBGType);
-    debug("KivioConfig - StencilBackgroundFile: %s", m_stencilBGFile.ascii() );
-    debug("KivioConfig - StencilBackgroundColor: %d %d %d", m_stencilBGColor.red(), m_stencilBGColor.green(), m_stencilBGColor.blue() );
+    qDebug("KivioConfig - StencilBackgroundType: %d", m_stencilBGType);
+    qDebug("KivioConfig - StencilBackgroundFile: %s", m_stencilBGFile.ascii() );
+    qDebug("KivioConfig - StencilBackgroundColor: %d %d %d", m_stencilBGColor.red(), m_stencilBGColor.green(), m_stencilBGColor.blue() );
 
     writeConfig();
 }
@@ -106,7 +106,7 @@ KivioConfig::~KivioConfig()
         delete m_pConnectorTargetPixmap;
         m_pConnectorTargetPixmap = NULL;
     }
-    debug("KivioConfig - deleted");
+    qDebug("KivioConfig - deleted");
 }
 
 

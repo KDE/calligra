@@ -280,7 +280,7 @@ void KivioBaseConnectorStencil::customDrag( KivioCustomDragData *pData )
 
     if( !p )
     {
-        debug("KivioBaseConnectorStencil::customDrag() - KivioConnectorPoint id: %d, not found", id - (kctCustom+1) );
+        qDebug("KivioBaseConnectorStencil::customDrag() - KivioConnectorPoint id: %d, not found", id - (kctCustom+1) );
     }
 
     p->setPosition( _x, _y, true );

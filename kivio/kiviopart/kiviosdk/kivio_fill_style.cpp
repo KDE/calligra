@@ -129,7 +129,7 @@ bool KivioFillStyle::loadXML( const QDomElement &e )
  */
 QDomElement KivioFillStyle::saveXML( QDomDocument &doc )
 {
-    debug("+SAVE KivioFillStyle");
+    qDebug("+SAVE KivioFillStyle");
     // FIXME: make this complete.  It's incomplete because
     // kivio does not yet support gradients
 
@@ -137,7 +137,7 @@ QDomElement KivioFillStyle::saveXML( QDomDocument &doc )
 
     XmlWriteColor( e, "color", m_color );
 
-    debug("************+++++++++++ Writing colorstyle %d", (int)m_colorStyle );
+    qDebug("************+++++++++++ Writing colorstyle %d", (int)m_colorStyle );
     XmlWriteInt( e, "colorStyle", (int)m_colorStyle );
 
     return e;

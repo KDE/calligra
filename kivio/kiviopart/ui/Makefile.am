@@ -8,11 +8,9 @@ noinst_LTLIBRARIES =libui.la
 
 
 INCLUDES = $(all_includes)\
-		-I$(top_srcdir)/kiviopart\
-		-I$(top_srcdir)/kiviopart/kiviosdk\
-		-I$(top_srcdir)/kiviopart/tklib
-CXXFLAGS = -O2 -Wall 
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
+		-I$(top_srcdir)/kivio/kiviopart\
+		-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
+		-I$(top_srcdir)/kivio/kiviopart/tklib
 libui_la_METASOURCES = AUTO
 libui_la_SOURCES = \
 		guidessetupdialogbase.ui\

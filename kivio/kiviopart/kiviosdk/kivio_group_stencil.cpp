@@ -153,7 +153,7 @@ void KivioGroupStencil::addToGroup( KivioStencil *pStencil )
     top = pStencil->y();
     bottom = pStencil->y() + pStencil->h();
 
-    debug("--- OLD: %f %f %f %f",m_x,m_y,m_w,m_h);
+    qDebug("--- OLD: %f %f %f %f",m_x,m_y,m_w,m_h);
 
     // Adjust the borders
     if( left < m_x )
@@ -175,7 +175,7 @@ void KivioGroupStencil::addToGroup( KivioStencil *pStencil )
         m_h = bottom - m_y;
     }
 
-    debug("NEWGEO: %f %f %f %f", m_x, m_y, m_w, m_h);
+    qDebug("NEWGEO: %f %f %f %f", m_x, m_y, m_w, m_h);
 }
 
 KivioStencil *KivioGroupStencil::duplicate()
@@ -201,7 +201,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
     QDomNode node;
     KivioStencil *pStencil;
 
-    debug("------ LOAD GROUP");
+    qDebug("------ LOAD GROUP");
     node = e.firstChild();
     while( !node.isNull() )
     {
@@ -216,7 +216,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
             }
             else
             {
-                debug("------ LOADING ERROR GROUP");
+                qDebug("------ LOADING ERROR GROUP");
             }
         }
         else if( name == "KivioSMLStencil" )
@@ -228,7 +228,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
             }
             else
             {
-                debug("------ LOADING ERROR GROUPSTENCIL");
+                qDebug("------ LOADING ERROR GROUPSTENCIL");
             }
         }
 
@@ -242,7 +242,7 @@ QDomElement KivioGroupStencil::saveXML( QDomDocument &doc )
 {
     QDomElement e = doc.createElement("KivioGroupStencil");
 
-    debug("++++++++++ SAVING A GROUP");
+    qDebug("++++++++++ SAVING A GROUP");
     QDomElement stencilE;
     KivioStencil *pStencil = m_pGroupList->first();
     while( pStencil )

@@ -592,7 +592,7 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
 //  float xf = p.xToUnit(UnitMillimeter);
 //  float yf = p.yToUnit(UnitMillimeter);
 
-//  debug("%s %s",(const char*)QString::number(xf,'f',2),(const char*)QString::number(yf,'f',2));
+//  qDebug("%s %s",(const char*)QString::number(xf,'f',2),(const char*)QString::number(yf,'f',2));
   lastPoint = e->pos();
 }
 
@@ -688,7 +688,7 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
     // do so now.
     if( m_pDragStencil )
     {
-        debug("KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!");
+        qDebug("KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!");
         delete m_pDragStencil;
         m_pDragStencil = 0L;
     }
@@ -928,7 +928,7 @@ void KivioCanvas::borderTimerTimeout()
  */
 void KivioCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
-    debug("KivioCanvas::dragEnterEvent()");
+    qDebug("KivioCanvas::dragEnterEvent()");
     if( e->provides("kivio/stencilSpawner") )
     {
         e->accept();
@@ -972,7 +972,7 @@ void KivioCanvas::dropEvent( QDropEvent *e )
 {
     // Terminate the drawing object
     endSpawnerDragDraw();
-    debug("KivioCanvas::dropEvent()");
+    qDebug("KivioCanvas::dropEvent()");
 
 //    // Get as handle on the icon view
 //    KivioIconView *pIconView = (KivioIconView *)m_pView->stackBar()->visiblePage();
@@ -983,13 +983,13 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     if( !pSpawner )
         return;
 
-    debug("KivioCanvas - Stencil %s added to document", pSpawner->info()->title().ascii());
+    qDebug("KivioCanvas - Stencil %s added to document", pSpawner->info()->title().ascii());
 
     // Get a pointer to the current KivioPage
     KivioPage *pPage = activePage();
     if( !pPage )
     {
-        debug("KivioCanvas - No active page for stencil to drop on");
+        qDebug("KivioCanvas - No active page for stencil to drop on");
         return;
     }
 
@@ -1039,7 +1039,7 @@ void KivioCanvas::dropEvent( QDropEvent *e )
 void KivioCanvas::dragLeaveEvent( QDragLeaveEvent * )
 {
     endSpawnerDragDraw();
-    debug("KivioCanvas::dragLeaveEvent()");
+    qDebug("KivioCanvas::dragLeaveEvent()");
 }
 
 
