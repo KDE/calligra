@@ -128,7 +128,20 @@ public:
      */
     void setActiveCursor(FormulaCursor* cursor) { activeCursor = cursor; }
 
+    /**
+     * @returns the formula's size.
+     */
     QRect boundingRect();
+
+    /**
+     * Emits a formulaChanged signal if we are dirty.
+     */
+    void testDirty();
+
+    /**
+     * @returns true if there is no element.
+     */
+    bool isEmpty();
     
 signals:
 
@@ -147,7 +160,11 @@ signals:
      */
     void formulaLoaded(FormulaElement*);
     
-
+    /**
+     * A command has been executed.
+     */
+    void commandExecuted();
+    
 public slots:    
 
     // There are a lot of thing we can do with the formula.
@@ -225,6 +242,11 @@ private:
      */
     void removeSelection();
 
+    
+    /**
+     * If true we need to recalc the formula.
+     */
+    bool dirty;
     
     /**
      * The element tree's root.

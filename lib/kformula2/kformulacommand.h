@@ -39,16 +39,25 @@
  * two different things.
  *
  * If the command execution fails or has nothing to do in the first place
- * you must not put it in the command history. @ref KFormulaCommand::isSenseless
- * will return <pre>true</pre> then.
+ * you must not put it in the command history. @ref isSenseless
+ * will return true then.
  *
- * If you don't like what you've done feel free to unexecute.
+ * If you don't like what you've done feel free to @ref unexecute .
  */
 class KFormulaCommand : public KCommand
 {
 public:
 
-    KFormulaCommand(const QString &name, KFormulaContainer* document);
+    /**
+     * Sets up the command. Be careful not to change the cursor in
+     * the constructor of any command. Each command must use the selection
+     * it finds when it is executed for the first time. This way
+     * you can use the @ref KMacroCommand .
+     *
+     * @param name a description to be used as menu entry.
+     * @param document the container we are working for.
+     */
+    KFormulaCommand(const QString& name, KFormulaContainer* document);
     virtual ~KFormulaCommand();
 
     /**
@@ -69,17 +78,45 @@ public:
      */
     virtual bool isSenseless() { return false; }
 
-    // debug
+    /**
+     * debug only.
+     */
     static int getEvilDestructionCount() { return evilDestructionCount; }
 
 protected:
-    
+
+    /**
+     * @returns the cursor that is to be used to @ref execute the
+     * command.
+     */
     FormulaCursor* getExecuteCursor();
-    void setExecuteCursor(FormulaCursor* cursor);
+
+    /**
+     * @returns the cursor that is to be used to @ref unexecute the
+     * command.
+     */
     FormulaCursor* getUnexecuteCursor();
+
+    /**
+     * Sets the cursor that is to be used to @ref unexecute the
+     * command. This has to be called by @ref execute after the
+     * formula has been changed but before the cursor has been
+     * normalized.
+     */
     void setUnexecuteCursor(FormulaCursor* cursor);
 
+    /**
+     * @returns the cursor that is active. It will be used to @ref execute
+     * the command.
+     */
     FormulaCursor* getActiveCursor() { return doc->getActiveCursor(); }
+
+    /**
+     * Tells the document to check if the formula changed.
+     * Needs to be called by each @ref execute and @ref unexecute .
+     */
+    void testDirty() { doc->testDirty(); }
+
 
     // I would prefer to have private attributes.
     
@@ -93,6 +130,8 @@ private:
     
     void destroyUndoCursor() { delete undocursor; undocursor = 0; }
     
+    void setExecuteCursor(FormulaCursor* cursor);
+
     /**
      * Cursor position before the command execution.
      */
@@ -249,14 +288,18 @@ private:
 
 /**
  * Add an index. The element that gets the index needs to be there
- * already. The cursor needs to point to the place where the index
- * should be inserted.
+ * already.
  */
 class KFCAddGenericIndex : public KFCAdd
 {
 public:
 
-    KFCAddGenericIndex(KFormulaContainer* document);
+    KFCAddGenericIndex(KFormulaContainer* document, ElementIndexPtr index);
+
+    virtual void execute();
+
+private:
+    ElementIndexPtr index;
 };
 
 
@@ -279,7 +322,7 @@ public:
     virtual void unexecute();
     
 private:
-    KFCAddGenericIndex* addIndex;
+    KFCAddGenericIndex addIndex;
 };
 
 #endif // __KFORMULACOMMAND_H

@@ -50,8 +50,10 @@
 KFormulaContainer::KFormulaContainer(KCommandHistory& _history)
         : history(_history)
 {
+    connect(this, SIGNAL(commandExecuted()), &history, SIGNAL(commandExecuted()));
     rootElement = new FormulaElement(this);
-    changed();
+    dirty = true;
+    testDirty();
 }
 
 KFormulaContainer::~KFormulaContainer()
@@ -81,8 +83,21 @@ void KFormulaContainer::elementRemoval(BasicElement* child)
  */
 void KFormulaContainer::changed()
 {
-    rootElement->calcSizes(context);
-    emit formulaChanged(rootElement->getWidth(), rootElement->getHeight());
+    dirty = true;
+}
+
+void KFormulaContainer::testDirty()
+{
+    if (dirty) {
+        dirty = false;
+        rootElement->calcSizes(context);
+        emit formulaChanged(rootElement->getWidth(), rootElement->getHeight());
+    }
+}
+
+bool KFormulaContainer::isEmpty()
+{
+    return rootElement->countChildren() == 0;
 }
 
 
@@ -269,8 +284,7 @@ void KFormulaContainer::addGenericUpperIndex()
 void KFormulaContainer::addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index)
 {
     if (!index->hasIndex()) {
-        index->setToIndex(cursor);
-        KFCAddGenericIndex* command = new KFCAddGenericIndex(this);
+        KFCAddGenericIndex* command = new KFCAddGenericIndex(this, index);
         execute(command);
     }
     else {
@@ -346,6 +360,7 @@ void KFormulaContainer::execute(KFormulaCommand* command)
     command->execute();
     if (!command->isSenseless()) {
         history.addCommand(command, false);
+        emit commandExecuted();
     }
     else {
         delete command;
@@ -384,7 +399,7 @@ QRect KFormulaContainer::boundingRect()
 QDomDocument KFormulaContainer::domData()
 {
     QDomDocument doc("KFORMULA");
-    doc.appendChild(rootElement->getElementDom(doc));
+    save(doc);
     return doc;
 }
 
@@ -440,7 +455,8 @@ bool KFormulaContainer::load(QDomDocument doc)
         if (root->buildFromDom(fe)) {
             delete rootElement;
             rootElement = root;
-            changed();
+            dirty = true;
+            testDirty();
 
             emit formulaLoaded(rootElement);
             return true;
