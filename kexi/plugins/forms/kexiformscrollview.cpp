@@ -393,7 +393,13 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
 	if (!item)
 		return;
 	//only signal start editing when no row editing was started already
+	kdDebug() << "** KexiFormScrollView::valueChanged(): " 
+		<< (dbFormWidget()->editedItem ? dbFormWidget()->editedItem->value().toString() : QString::null)
+		<< ", "
+		<< (item ? item->value().toString() : QString::null)
+		<< endl;
 	if (dbFormWidget()->editedItem!=item) {
+		kdDebug() << "**>>>	dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)" << endl;
 		dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item);
 		startEditCurrentCell();
 	}
@@ -429,6 +435,13 @@ void KexiFormScrollView::updateAfterCancelRowEdit()
 		it.current()->undoChanges();
 	}
 	recordNavigator()->showEditingIndicator(false);
+	dbFormWidget()->editedItem = 0;
+}
+
+void KexiFormScrollView::updateAfterAcceptRowEdit()
+{
+	recordNavigator()->showEditingIndicator(false);
+	dbFormWidget()->editedItem = 0;
 }
 
 #include "kexiformscrollview.moc"

@@ -688,8 +688,8 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 		//indicate on the vheader that we are not editing
 		if (m_verticalHeader)
 			m_verticalHeader->setEditRow(-1);
-		//redraw
-		updateRow(m_curRow);
+
+		updateAfterAcceptRowEdit();
 
 		kdDebug() << "EDIT ROW ACCEPTED:" << endl;
 //		/*debug*/itemAt(m_curRow);
@@ -771,6 +771,11 @@ void KexiDataAwareObjectInterface::cancelRowEdit()
 }
 
 void KexiDataAwareObjectInterface::updateAfterCancelRowEdit()
+{
+	updateRow(m_curRow);
+}
+
+void KexiDataAwareObjectInterface::updateAfterAcceptRowEdit()
 {
 	updateRow(m_curRow);
 }
@@ -974,6 +979,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
 void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
 {
+	kdDebug() << "** KexiDataAwareObjectInterface::startEditCurrentCell("<<setText<<")"<<endl;
 //	if (columnType(d->curCol) == KexiDB::Field::Boolean)
 //		return;
 	if (isReadOnly() || !columnEditable(m_curCol))

@@ -535,6 +535,12 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 Reimplemented by KexiFormScrollView. */
 		virtual void updateAfterCancelRowEdit();
 
+		/*! @internal
+		 Updates row appearance after accepting row edit. 
+		 Used by acceptRowEdit(). By default just calls updateRow(m_curRow).
+		 Reimplemented by KexiFormScrollView. */
+		virtual void updateAfterAcceptRowEdit();
+
 		//! Handles KexiTableViewData::rowRepaintRequested() signal
 		virtual void slotRowRepaintRequested(KexiTableItem& item) {}
 

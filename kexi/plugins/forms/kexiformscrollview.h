@@ -217,9 +217,15 @@ class KexiFormScrollView :
 
 		/*! @internal
 		 Updates row appearance after canceling row edit. 
-		 Reimplemented from KexiDataAwareObjectInterface: just undoes chnages for every data item.
+		 Reimplemented from KexiDataAwareObjectInterface: just undoes changes for every data item.
 		 Used by cancelRowEdit(). */
 		virtual void updateAfterCancelRowEdit();
+
+		/*! @internal
+		 Updates row appearance after accepting row edit. 
+		 Reimplemented from KexiDataAwareObjectInterface: just clears 'edit' indicator.
+		 Used by cancelRowEdit(). */
+		virtual void updateAfterAcceptRowEdit();
 
 		//virtual bool focusNextPrevChild( bool next );
 
