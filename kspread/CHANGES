@@ -921,3 +921,11 @@ into this area
 * Fixed repainting problem when unmerging
 * Fixed undo on clear cell
 
+Summary 2000-08-19 -> 2000-08-22
+Montel laurent <montell@club-internet.fr>
+-----------------------------------------
+* Implemented Undo For "Find and Replace"
+* Implemented Undo For "Insert->series"
+* Bug fix in kspread_dlg_series
+* Undo works when I clear and used "find and replace" on entire row/col
+* Undo works again when I changed table name
