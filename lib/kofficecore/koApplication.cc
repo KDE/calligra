@@ -129,7 +129,7 @@ bool KoApplication::start()
 
     args->clear();
     // not calling this before since the program will quit there.
-	return true;
+    return true;
 }
 
 KoApplication::~KoApplication()

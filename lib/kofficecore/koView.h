@@ -274,6 +274,24 @@ public:
   KStatusBar * statusBar() const;
 
   /**
+   * This adds a widget to the statusbar for this view.
+   * If you use this method instead of using statusBar() directly,
+   * KoView will take care of removing the items when the view GUI is deactivated
+   * and readding them when it is reactivated.
+   * The parameters are the same as @ref QStatusBar::addWidget().
+   *
+   * Note that you can't use KStatusBar methods (inserting text items by id).
+   * But you can create a KStatusBarLabel with a dummy id instead, and use
+   * it directly, to get the same look and feel.
+   */
+  void addStatusBarItem( QWidget * widget, int stretch = 0, bool permanent = false );
+
+  /**
+   * Remove a widget from the statusbar for this view.
+   */
+  void removeStatusBarItem( QWidget * widget );
+
+  /**
    * You have to implement this method and disable/enable certain functionality (actions for example) in
    * your view to allow/disallow editing of the document.
    */

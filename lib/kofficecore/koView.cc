@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <kparts/plugin.h>
 #include <kparts/event.h>
+#include <kstatusbar.h>
 #include <assert.h>
 
 class KoViewPrivate
@@ -40,21 +41,62 @@ public:
     m_manager = 0L;
     m_tempActiveWidget = 0L;
     m_dcopObject = 0;
-    m_registered=false;  // are we registered at the part manager?
+    m_registered=false;
     m_documentDeleted=false;
   }
   ~KoViewPrivate()
   {
   }
 
-  QGuardedPtr<KoDocument> m_doc;
+  QGuardedPtr<KoDocument> m_doc; // our KoDocument
   QGuardedPtr<KParts::PartManager> m_manager;
   double m_zoom;
   QList<KoViewChild> m_children;
   QWidget *m_tempActiveWidget;
   KoViewIface *m_dcopObject;
-  bool m_registered;
-  bool m_documentDeleted;
+  bool m_registered;  // are we registered at the part manager?
+  bool m_documentDeleted; // true when m_doc gets deleted [can't use m_doc==0
+                          // since this only happens in ~QObject, and views
+                          // get deleted by ~KoDocument].
+
+  // Hmm sorry for polluting the private class with such a big inner class.
+  // At the beginning it was a little struct :)
+  class StatusBarItem {
+  public:
+      StatusBarItem() // for QValueList
+          : m_widget(0), m_visible(false)
+      {}
+      StatusBarItem( QWidget * widget, int stretch, bool permanent )
+          : m_widget(widget), m_stretch(stretch), m_permanent(permanent), m_visible(false)
+      {}
+
+      QWidget * widget() const { return m_widget; }
+
+      void ensureItemShown( KStatusBar * sb )
+      {
+            if ( !m_visible )
+            {
+                sb->addWidget( m_widget, m_stretch, m_permanent );
+                m_visible = true;
+                m_widget->show();
+            }
+      }
+      void ensureItemHidden( KStatusBar * sb )
+      {
+            if ( m_visible )
+            {
+                sb->removeWidget( m_widget );
+                m_visible = false;
+                m_widget->hide();
+            }
+      }
+  private:
+      QWidget * m_widget;
+      int m_stretch;
+      bool m_permanent;
+      bool m_visible;  // true when the item has been added to the statusbar
+  };
+  QValueList<StatusBarItem> m_statusBarItems; // Our statusbar items
 };
 
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
@@ -310,7 +352,52 @@ void KoView::partSelectEvent( KParts::PartSelectEvent *event )
     emit selected( event->selected() );
 }
 
-void KoView::guiActivateEvent( KParts::GUIActivateEvent * ) {
+void KoView::guiActivateEvent( KParts::GUIActivateEvent * ev )
+{
+    KStatusBar * sb = statusBar();
+    //kdDebug() << "KoView::guiActivateEvent activated=" << ev->activated()
+    //          << " sb=" << (void*)sb << endl;
+    if ( !sb )
+        return;
+    if ( ev->activated() )
+    {
+        QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
+        for ( ; it != d->m_statusBarItems.end() ; ++it )
+            (*it).ensureItemShown( sb );
+    }
+    else
+    {
+        QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
+        for ( ; it != d->m_statusBarItems.end() ; ++it )
+            (*it).ensureItemHidden( sb );
+    }
+}
+
+void KoView::addStatusBarItem( QWidget * widget, int stretch, bool permanent )
+{
+    KoViewPrivate::StatusBarItem item( widget, stretch, permanent );
+    d->m_statusBarItems.append(item);
+    QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.fromLast();
+    KStatusBar * sb = statusBar();
+    ASSERT(sb);
+    if (sb)
+        (*it).ensureItemShown( sb );
+}
+
+void KoView::removeStatusBarItem( QWidget * widget )
+{
+    KStatusBar * sb = statusBar();
+    QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
+    for ( ; it != d->m_statusBarItems.end() ; ++it )
+        if ( (*it).widget() == widget )
+        {
+            if ( sb )
+                (*it).ensureItemHidden( sb );
+            d->m_statusBarItems.remove( it );
+            break;
+        }
+    if ( it == d->m_statusBarItems.end() )
+        kdWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget << endl;
 }
 
 KoDocumentChild *KoView::selectedChild()
