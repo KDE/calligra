@@ -245,7 +245,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
         params.appendChild( title );
         QDomElement titlefont = doc.createElement("titlefont");
         params.appendChild(titlefont);
-        titlefont.appendChild( doc.createElement( "font",_params->titleFont() ) );
+        titlefont.appendChild( createElement( "font", doc, _params->titleFont() ) );
 
         }
 
@@ -256,7 +256,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
         xtitle.appendChild( doc.createTextNode( _params->xtitle ) );
         params.appendChild( xtitle );
         QDomElement xtitlefont = doc.createElement("xtitlefont");
-        xtitlefont.appendChild( doc.createElement( "font",_params->xTitleFont()  ) );
+        xtitlefont.appendChild( createElement( "font", doc, _params->xTitleFont()  ) );
         params.appendChild(xtitlefont);
         }
   if(!_params->ytitle.isEmpty())
@@ -265,7 +265,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
         ytitle.appendChild( doc.createTextNode( _params->ytitle ) );
         params.appendChild( ytitle );
         QDomElement ytitlefont = doc.createElement("ytitlefont");
-        ytitlefont.appendChild( doc.createElement( "font",_params->yTitleFont() ) );
+        ytitlefont.appendChild( createElement( "font", doc, _params->yTitleFont() ) );
         params.appendChild(ytitlefont);
         }
   if(!_params->ytitle2.isEmpty())
@@ -291,19 +291,19 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
 
         }
   QDomElement labelfont = doc.createElement("labelfont");
-  labelfont.appendChild( doc.createElement( "font",_params->labelFont() ) );
+  labelfont.appendChild( createElement( "font", doc, _params->labelFont() ) );
   params.appendChild(labelfont);
 
   QDomElement yaxisfont = doc.createElement("yaxisfont");
-  yaxisfont.appendChild( doc.createElement( "font",_params->yAxisFont() ) );
+  yaxisfont.appendChild( createElement( "font", doc, _params->yAxisFont() ) );
   params.appendChild(yaxisfont);
 
   QDomElement xaxisfont = doc.createElement("xaxisfont");
-  xaxisfont.appendChild( doc.createElement( "font",_params->xAxisFont() ) );
+  xaxisfont.appendChild( createElement( "font", doc, _params->xAxisFont() ) );
   params.appendChild(xaxisfont);
 
   QDomElement annotationFont = doc.createElement("annotationfont");
-  annotationFont.appendChild( doc.createElement( "font",_params->annotationFont() ) );
+  annotationFont.appendChild( createElement( "font", doc, _params->annotationFont() ) );
   params.appendChild(annotationFont);
 
   QDomElement yaxis = doc.createElement("yaxis");
@@ -523,7 +523,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         {
         QDomElement font = titlefont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
-		_params->setTitleFont(font.toFont());
+		_params->setTitleFont(toFont(font));
         }
   QDomElement xtitle = params.namedItem( "xtitle" ).toElement();
     if ( !xtitle.isNull())
@@ -536,7 +536,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         {
         QDomElement font = xtitlefont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
-		_params->setXTitleFont(font.toFont());
+		_params->setXTitleFont(toFont(font));
         }
   QDomElement ytitle = params.namedItem( "ytitle" ).toElement();
     if ( !ytitle.isNull())
@@ -555,7 +555,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         {
         QDomElement font = ytitlefont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
-		_params->setYTitleFont(font.toFont());
+		_params->setYTitleFont(toFont(font));
         }
   QDomElement ylabelfmt = params.namedItem( "ylabelfmt" ).toElement();
     if ( !ylabelfmt.isNull())
@@ -574,7 +574,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         {
         QDomElement font = labelfont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
-		_params->setLabelFont(font.toFont());
+		_params->setLabelFont(toFont(font));
         }
 
   QDomElement yaxisfont = params.namedItem( "yaxisfont" ).toElement();
@@ -582,7 +582,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         {
         QDomElement font = yaxisfont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
-		_params->setYAxisFont(font.toFont());
+		_params->setYAxisFont(toFont(font));
         }
 
   QDomElement xaxisfont = params.namedItem( "xaxisfont" ).toElement();
@@ -590,14 +590,14 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
         {
         QDomElement font = xaxisfont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
-		_params->setXAxisFont(font.toFont());
+		_params->setXAxisFont(toFont(font));
         }
   QDomElement annotationFont = params.namedItem("annotationfont").toElement();
     if ( !annotationFont.isNull())
         {
         QDomElement font = annotationFont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
-		_params->setAnnotationFont(font.toFont());
+		_params->setAnnotationFont(toFont(font));
         }
 
   QDomElement yaxis = params.namedItem( "yaxis" ).toElement();
@@ -886,7 +886,8 @@ bool KChartPart::load( istream& in, KoStore* store )
     buffer.close();
 
     buffer.open( IO_ReadOnly );
-    QDomDocument doc( &buffer );
+    QDomDocument doc;
+    doc.setContent( &buffer );
 
     bool b = loadXML( doc, store );
     //bool b = true;
@@ -898,11 +899,48 @@ bool KChartPart::load( istream& in, KoStore* store )
     return b;
 };
 
+QDomElement KChartPart::createElement(QString tagName, QDomDocument doc, const QFont &font) {
 
+    QDomElement e=doc.createElement( tagName );
+
+    e.setAttribute( "family", font.family() );
+    e.setAttribute( "size", font.pointSize() );
+    e.setAttribute( "weight", font.weight() );
+    if ( font.bold() )
+	e.setAttribute( "bold", "yes" );
+    if ( font.italic() )
+	e.setAttribute( "italic", "yes" );
+
+    return e;
+}
+
+QFont KChartPart::toFont(QDomElement &element) {
+
+    QFont f;
+    f.setFamily( element.attribute( "family" ) );
+
+    bool ok;
+    f.setPointSize( element.attribute("size").toInt( &ok ) );
+    if ( !ok ) return QFont();
+
+    f.setWeight( element.attribute("weight").toInt( &ok ) );
+    if ( !ok ) return QFont();
+
+    if ( element.hasAttribute( "italic" ) )
+	f.setItalic( TRUE );
+
+    if ( element.hasAttribute( "bold" ) )
+	f.setBold( TRUE );
+    
+    return f;
+}
 #include "kchart_part.moc"
 
 /**
  * $Log$
+ * Revision 1.33  2000/06/12 19:46:22  faure
+ * Ported to new kofficecore
+ *
  * Revision 1.32  2000/04/21 06:34:21  wtrobin
  * qDebug, debug, cerr, cout,... -> kdDebug(35001)
  *
