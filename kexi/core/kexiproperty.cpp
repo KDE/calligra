@@ -324,10 +324,11 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		ch = m_value.toString() != v.toString();
 	}
 	else if (m_value.type()==QVariant::String) {
-		ch = (m_value != v);
-		//property is also changed for string type, if one of value is empty and other isn't
-		if(m_value.toString().isEmpty() != v.toString().isEmpty())
-			ch = true;
+		//property is changed for string type, 
+		//if one of value is empty and other isn't..
+		ch = (m_value.toString().isEmpty() != v.toString().isEmpty()
+		//..or both are not empty and values differ
+			|| !m_value.toString().isEmpty() && !v.toString().isEmpty() && m_value != v);
 	}
 	else
 		ch = (m_value != v);
