@@ -554,25 +554,33 @@ void QTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<QText
 	QStringList::Iterator it = lst.begin();
 	int y = string->rect().y() + string->rect().height();
 	int lastIndex = 0;
-	for ( ; it != lst.end(); ++it ) {
+        QTextFormat *lastFormat = 0;
+        for ( ; it != lst.end(); ) {
 	    if ( it != lst.begin() ) {
 		splitAndInsertEmptyParag( FALSE, TRUE );
 		string->setEndState( -1 );
 		string->prev()->format( -1, FALSE );
-	    }
+                if ( lastFormat && formatting && string->prev() ) {
+                   lastFormat->addRef();
+                   string->prev()->string()->setFormat( string->prev()->length() - 1, lastFormat, TRUE );
+               }
+            }
+            lastFormat = 0;
 	    QString s = *it;
+            ++it;
 	    if ( !s.isEmpty() )
                 string->insert( idx, s );
 	    if ( formatting ) {
 		int len = s.length();
-		if ( it != --lst.end() )
-		    len++;
 		for ( int i = 0; i < len; ++i ) {
 		    if ( formatting->at( i + lastIndex ).format() ) {
 			formatting->at( i + lastIndex ).format()->addRef();
 			string->string()->setFormat( i + idx, formatting->at( i + lastIndex ).format(), TRUE );
 		    }
 		}
+                if ( it != lst.end() )
+                    lastFormat = formatting->at( len + lastIndex ).format();
+                ++len;
 		lastIndex += len;
 	    }
 
