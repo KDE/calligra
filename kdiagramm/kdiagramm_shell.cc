@@ -118,7 +118,7 @@ bool KDiagrammShell::newDocument()
   }
 
   m_pDoc = new KDiagrammDoc;
-  if ( !m_pDoc->init() )
+  if ( !m_pDoc->initDoc() )
   {
     cerr << "ERROR: Could not initialize document" << endl;
     return false;

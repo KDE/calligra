@@ -67,7 +67,7 @@ KDiagrammDoc::KDiagrammDoc()
   m_lstViews.setAutoDelete( false );
 }
 
-CORBA::Boolean KDiagrammDoc::init()
+CORBA::Boolean KDiagrammDoc::initDoc()
 {
   // Demo values
   m_table.xDesc.append( "Torben" );

@@ -76,7 +76,7 @@ public:
   virtual KDiagrammView* createDiagrammView(QWidget *_parent = 0);
 
   // IDL
-  virtual CORBA::Boolean init();
+  virtual CORBA::Boolean initDoc();
 
   /**
    * Wrapper for @ref #createDiagrammView
