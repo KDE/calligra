@@ -219,7 +219,7 @@ public:
     bool isOneObjectSelected();
     bool haveASelectedPictureObj();
     bool haveASelectedPartObj();
-    KoRect getBoundingRect(const KoRect &rect, KoZoomHandler *zoomhandler);
+    KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc);
 
     bool chPic( KPresenterView *_view);
     bool chClip(KPresenterView *_view);

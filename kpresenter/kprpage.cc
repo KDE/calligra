@@ -3256,15 +3256,18 @@ bool KPrPage::haveASelectedPartObj()
     return false;
 }
 
-KoRect KPrPage::getBoundingRect(const KoRect &rect, KoZoomHandler *zoomhandler)
+KoRect KPrPage::getBoundingRect(const KoRect &rect, KPresenterDoc *doc)
 {
     KoRect boundingRect =rect ;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
         {
-            boundingRect|=it.current()->getBoundingRect(zoomhandler);
+            boundingRect|=it.current()->getBoundingRect(doc->zoomHandler());
         }
     }
     return boundingRect;

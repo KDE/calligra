@@ -754,8 +754,8 @@ void KPrCanvas::calcBoundingRect()
 {
   m_boundingRect = KoRect();
 
-  m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->zoomHandler());
-  m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->zoomHandler());
+  m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->kPresenterDoc());
+  m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->kPresenterDoc());
 
 }
 
