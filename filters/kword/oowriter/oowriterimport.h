@@ -37,12 +37,14 @@ public:
 private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     void createPageDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
+    QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
     void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter );
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent );
     KoFilter::ConversionStatus openFile();
     bool createStyleMap( const QDomDocument & styles );
     void insertStyles( const QDomElement& element );
+    double toPoint( QString &value );
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;

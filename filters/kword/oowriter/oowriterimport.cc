@@ -21,6 +21,7 @@
 #include <qfile.h>
 #include <qfont.h>
 #include <qpen.h>
+#include <qregexp.h>
 
 #include "oowriterimport.h"
 
@@ -483,6 +484,245 @@ void OoWriterImport::insertStyles( const QDomElement& element )
   }
 }
 
+QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
+{
+#if 0
+    QDomElement p = doc.createElement( "PARAGRAPH" );
+
+    // parse the paragraph-properties
+    //fillStyleStack( paragraph );
+
+    if ( m_styleStack.hasAttribute( "fo:text-align" ) )
+    {
+        if ( m_styleStack.attribute( "fo:text-align" ) == "center" )
+            p.setAttribute( "align", "center" );
+        else if ( m_styleStack.attribute( "fo:text-align" ) == "justify" )
+            p.setAttribute( "align", "justify" );
+        else if ( m_styleStack.attribute( "fo:text-align" ) == "start" )
+            p.setAttribute( "align", "left" );
+        else if ( m_styleStack.attribute( "fo:text-align" ) == "end" )
+            p.setAttribute( "align", "right" );
+    }
+    else
+        p.setAttribute( "align","auto"); // use left aligned as default
+
+    // parse every childnode of the paragraph
+    for( QDomNode n = paragraph.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QString textData;
+        QDomText t = n.toText();
+        if ( t.isNull() ) // no textnode, so maybe it's a text:span
+        {
+            QDomElement ts = n.toElement();
+            if ( ts.tagName() != "text:span" ) // TODO: are there any other possible
+                continue;                      // elements or even nested test:spans?
+
+            //fillStyleStack( ts.toElement() );
+
+            // We do a look ahead to eventually find a text:span that contains
+            // only a line-break. If found, we'll add it to the current string
+            // and move on to the next sibling.
+            QDomNode next = n.nextSibling();
+            if ( !next.isNull() )
+            {
+                QDomNode lineBreak = next.namedItem( "text:line-break" );
+                if ( !lineBreak.isNull() ) // found a line-break
+                {
+                    textData = ts.text() + "\n";
+                    n = n.nextSibling(); // move on to the next sibling
+                }
+                else
+                    textData = ts.text();
+            }
+            else
+                textData = ts.text();
+        }
+        else
+            textData = t.data();
+        if( m_styleStack.hasAttribute("fo:margin-top") ||
+            m_styleStack.hasAttribute("fo:margin-bottom"))
+        {
+            double mtop = toPoint( m_styleStack.attribute( "fo:margin-top"));
+            double mbottom = toPoint( m_styleStack.attribute("fo:margin-bottom"));
+            if( mtop != 0 || mbottom!=0 )
+            {
+                QDomElement offset = doc.createElement( "OFFSETS" );
+                if( mtop!= 0)
+                    offset.setAttribute("before", mtop);
+                if( mbottom!=0)
+                    offset.setAttribute("after",mbottom);
+                p.appendChild( offset );
+            }
+        }
+        // take care of indentation
+        if ( m_styleStack.hasAttribute( "fo:margin-left" ) ||
+            m_styleStack.hasAttribute( "fo:margin-right" ) ||
+            m_styleStack.hasAttribute( "fo:text-indent"))
+        {
+            double marginLeft =toPoint( m_styleStack.attribute( "fo:margin-left" ) );
+            double marginRight = toPoint( m_styleStack.attribute( "fo:margin-right" ) );
+            double first = toPoint( m_styleStack.attribute("fo:text-indent"));
+            if ( (marginLeft!= 0) || marginRight!=0 || first!=0)
+            {
+                QDomElement indent = doc.createElement( "INDENTS" );
+                if( marginLeft != 0)
+                    indent.setAttribute( "left", marginLeft );
+                if( marginRight != 0 )
+                    indent.setAttribute( "right", marginLeft );
+                if( first != 0)
+                    indent.setAttribute( "first", first);
+                p.appendChild( indent );
+            }
+        }
+        if( m_styleStack.hasAttribute("fo:line-height"))
+        {
+            QString value = m_styleStack.attribute( "fo:line-height" );
+            QDomElement lineSpacing = doc.createElement( "LINESPACING" );
+            if( value=="150%")
+            {
+                lineSpacing.setAttribute("type","oneandhalf");
+            }
+            else if( value=="200%")
+            {
+                lineSpacing.setAttribute("type","double");
+            }
+            p.appendChild(lineSpacing );
+        }
+        QDomElement text = doc.createElement( "TEXT" );
+        text.appendChild( doc.createTextNode( textData ) );
+
+        //kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
+
+        // parse the text-properties
+        if ( m_styleStack.hasAttribute( "fo:color" ) )
+            text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
+        if ( m_styleStack.hasAttribute( "fo:font-family" ) )
+        {
+            // 'Thorndale' is not known outside OpenOffice so we substitute it
+            // with 'Times New Roman' that looks nearly the same.
+            if ( m_styleStack.attribute( "fo:font-family" ) == "Thorndale" )
+                text.setAttribute( "family", "Times New Roman" );
+            else
+                text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
+        }
+        if ( m_styleStack.hasAttribute( "fo:font-size" ) )
+            text.setAttribute( "pointSize", toPoint( m_styleStack.attribute( "fo:font-size" ) ) );
+        if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
+            if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
+                text.setAttribute( "bold", 1 );
+
+        if ( m_styleStack.hasAttribute( "fo:font-style" ) )
+            if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
+            {
+                QDomElement italic = doc.createElement( "ITALIC" );
+                italic.setAttribute( "value", 1 );
+
+            }
+        if( m_styleStack.hasAttribute("style:text-crossing-out" ))
+        {
+            QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
+            QDomElement strikeOut = doc.createElement( "STRIKEOUT" );
+            if( strikeOutType =="double-line")
+            {
+                //text.setAttribute("strikeOut", "double");
+                //text.setAttribute("strikeoutstyleline","solid");
+            }
+            else if( strikeOutType =="single-line")
+            {
+                //text.setAttribute("strikeOut", "single");
+                //text.setAttribute("strikeoutstyleline","solid");
+            }
+            else if( strikeOutType =="thick-line")
+            {
+                //text.setAttribute("strikeOut", "single-bold");
+                //text.setAttribute("strikeoutstyleline","solid");
+            }
+
+        }
+        if( m_styleStack.hasAttribute("style:text-position"))
+        {
+            QString textPos =m_styleStack.attribute("style:text-position");
+            //relativetextsize="0.58"
+            //"super 58%"
+            if( textPos.contains("super"))
+            {
+                textPos=textPos.remove("super");
+                textPos=textPos.remove("%");
+                double value = textPos.stripWhiteSpace().toDouble();
+                //text.setAttribute("VERTALIGN",2);
+                //text.setAttribute("relativetextsize", value/100 );
+            }
+            else if(textPos.contains("sub"))
+            {
+                textPos=textPos.remove("sub");
+                textPos=textPos.remove("%");
+                double value = textPos.stripWhiteSpace().toDouble();
+                //text.setAttribute("VERTALIGN",1);
+                //text.setAttribute("relativetextsize", value/100 );
+            }
+        }
+        if ( m_styleStack.hasAttribute( "style:text-underline" ) )
+        {
+            QString underType = m_styleStack.attribute( "style:text-underline" );
+            QString underLineColor = m_styleStack.attribute( "style:text-underline-color" );
+            QDomElement strikeOut = doc.createElement( "UNDERLINE" );
+            if ( underType == "single" )
+            {
+                //text.setAttribute( "underline", 1 );
+                ///text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
+                //text.setAttribute("underlinecolor", underLineColor);
+            }
+            else if(underType =="double")
+            {
+                //text.setAttribute( "underline", "double" );
+                //text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
+                //text.setAttribute("underlinecolor", underLineColor);
+            }
+            else if( underType == "bold" )
+            {
+                //text.setAttribute("underline","single-bold");
+                //text.setAttribute("underlinestyleline","solid");
+                //text.setAttribute("underlinecolor", underLineColor);
+            }
+            else if( underType =="wave")
+            {
+                //not implemented into kpresenter
+                //text.setAttribute("underline","wave");
+                //text.setAttribute("underlinestyleline","solid");
+                //text.setAttribute("underlinecolor", underLineColor);
+            }
+        }
+
+        //appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
+        //m_styleStack.clearObjectMark(); // remove possible test:span styles from the stack
+        p.appendChild( text );
+    }
+
+    return p;
+#endif
+}
+
+double OoWriterImport::toPoint( QString &value )
+{
+    value.simplifyWhiteSpace();
+    value.remove( ' ' );
+
+    int index = value.find( QRegExp( "[a-z]{1,2}$" ), -1 );
+    if ( index == -1 )
+        return 0;
+
+    QString unit = value.mid( index - 1 );
+    value.truncate ( index - 1 );
+
+    if ( unit == "cm" )
+        return CM_TO_POINT( value.toDouble() );
+    else if ( unit == "mm" )
+        return MM_TO_POINT( value.toDouble() );
+    else if ( unit == "pt" )
+        return value.toDouble();
+    else
+        return 0;
+}
 
 #include "oowriterimport.moc"
 
