@@ -40,21 +40,23 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     int wsteps = static_cast<int>( width / speedFaktor );
     switch ( effect )
     {
+
     case PEF_NONE:
         bitBlt( canv, 0, 0, &_pix2, 0, 0, width, height );
         break;
+
     case PEF_CLOSE_HORZ:
     {
         _steps = hsteps;
         _time.start();
 
-        for ( ; _step < _steps ; )
+        for ( _h = 0; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _h = ( height/( 2 * _steps ) ) * _step;
+                _h = 0.5 * height * _step / _steps;
                 _h = kMin( _h, height / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, 0, height / 2 - _h, width, _h );
@@ -62,21 +64,22 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
                 _time.restart();
             }
-            if ( ( height/( 2 * _steps ) ) * _step >= height / 2 ) break;
+            if ( _h >= height / 2 ) break;
         }
     } break;
+
     case PEF_CLOSE_VERT:
     {
         _steps = wsteps;
         _time.start();
 
-        for ( ; _step < _steps ; )
+        for ( _w = 0; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( width/( 2 * _steps ) ) * _step;
+                _w = 0.5 * width * _step / _steps;
                 _w = kMin( _w, width / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, width / 2 - _w, 0, _w, height );
@@ -84,9 +87,10 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
                 _time.restart();
             }
-            if ( ( width/( 2 * _steps ) ) * _step >= width / 2 ) break;
+            if ( _w >= width / 2 ) break;
         }
     } break;
+
     case PEF_CLOSE_ALL:
     {
         _steps = wsteps;
@@ -98,10 +102,9 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( width/( 2 * _steps ) ) * _step;
+                _w = 0.5 * width * _step / _steps;
                 _w = kMin( _w, width / 2 );
-
-                _h = ( height/( 2 * _steps ) ) * _step;
+                _h = 0.5 * height * _step / _steps;
                 _h = kMin( _h, height / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, 0, 0, _w, _h );
@@ -111,70 +114,59 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
                 _time.restart();
             }
-            if ( ( width/( 2 * _steps ) ) * _step >= width / 2
-                 && ( height/( 2 * _steps ) ) * _step >= height / 2 ) break;
+            if ( ( _w >= width / 2 ) && ( _h >= height / 2 ) ) break;
         }
     } break;
+
     case PEF_OPEN_HORZ:
     {
-        _y = height / 2;
-        int hdelta = _y / hsteps;
-        int h0 = 0;
+        _steps = hsteps;
         _time.start();
 
-        for ( ; _step < _steps ; )
+        for ( _h = 0; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _h = hdelta * _step;
-                _h = kMin( _h, _y );
-                bitBlt( canv, 0, _y - _h, &_pix2, 0, _y - _h, width, _h - h0 );
-                bitBlt( canv, 0, _y + h0, &_pix2, 0, _y + h0, width, _h - h0 );
-                h0 = _h;
+                _h = 0.5 * height * _step / _steps;
+                _h = kMin( _h, height / 2 );
+
+                bitBlt( canv, 0, height / 2 - _h, &_pix2, 0, 0, width, _h );
+                bitBlt( canv, 0, height / 2, &_pix2, 0, height - _h, width, _h );
 
                 _time.restart();
             }
-            if ( hdelta * _step >= _y )
-                break;
+            if ( _h >= height / 2 ) break;
         }
     } break;
+
     case PEF_OPEN_VERT:
     {
-        _x = width / 2;
-        int wdelta = _x / wsteps;
-        int w0 = 0;
+        _steps = wsteps;
         _time.start();
 
-        for ( ; _step < _steps ; )
+        for ( _w = 0; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = wdelta * _step;
-                _w = kMin( _w, _x );
-                bitBlt( canv, _x - _w, 0,
-                        &_pix2, _x - _w, 0, _w - w0, height );
-                bitBlt( canv, _x + w0, 0,
-                        &_pix2, _x + w0, 0, _w - w0, height );
-                w0 = _w;
+                _w = 0.5 * width * _step / _steps;
+                _w = kMin( _w, width / 2 );
+
+                bitBlt( canv, width / 2 - _w, 0, &_pix2, 0, 0, _w, height );
+                bitBlt( canv, width / 2, 0, &_pix2, width / 2 - _w, 0, _w, height );
 
                 _time.restart();
             }
-            if ( wdelta * _step >= _x )
-                break;
+            if ( _w >= width / 2 ) break;
         }
     } break;
+
     case PEF_OPEN_ALL:
     {
-        _x = width / 2;
-        _y = height / 2;
-        int wdelta = _x / wsteps;
-        int hdelta = _y / wsteps;
-        int w0 = 0, h0 = 0;
-
+        _steps = wsteps;
         _time.start();
 
         for ( ; _step < _steps ; )
@@ -183,33 +175,22 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = wdelta * _step;
-                _w = kMin( _w, _x );
+                _w = 0.5 * width * _step / _steps;
+                _w = kMin( _w, width / 2 );
+                _h = 0.5 * height * _step / _steps;
+                _h = kMin( _h, height / 2 );
 
-                _h = hdelta * _step;
-                _h = kMin( _h, _y );
-
-                // drawing rectangles without fill.
-		// horizontal stripes
-                bitBlt( canv, _x - _w, _y - _h,
-                        &_pix2, _x - _w, _y - _h, 2 * _w, _h - h0 );
-                bitBlt( canv, _x - _w, _y + h0,
-                        &_pix2, _x - _w, _y + h0, 2 * _w, _h - h0 );
-                // vertical stripes
-                bitBlt( canv, _x - _w, _y - _h,
-                        &_pix2, _x - _w, _y - _h, _w - w0, 2 * _h );
-                bitBlt( canv, _x + w0, _y - _h,
-                        &_pix2, _x + w0, _y - _h, _w - w0, 2 * _h );
-                w0 = _w;
-                h0 = _h;
+                bitBlt( canv, width / 2 - _w, height / 2 - _h, &_pix2, 0, 0, _w, _h );
+                bitBlt( canv, width / 2, height / 2 - _h, &_pix2, width - _w, 0, _w, _h );
+                bitBlt( canv, width / 2 - _w, height / 2, &_pix2, 0, height - _h, _w, _h );
+                bitBlt( canv, width / 2, height / 2, &_pix2, width - _w, height - _h, _w, _h );
 
                 _time.restart();
             }
-            if ( wdelta * _step >= width &&
-                 hdelta * _step >= height )
-                break;
+            if ( ( _w >= width / 2 ) && ( _h >= height / 2 ) ) break;
         }
     } break;
+
     case PEF_INTERLOCKING_HORZ_1:
     case PEF_INTERLOCKING_HORZ_2:
     {
@@ -996,26 +977,22 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _steps = wsteps;
         _time.start();
 
-        int dheight = height;
-        int dwidth = width;;
-
-        _w = _h = 0;
-        for ( ; _step < _steps ; )
+        for ( _w = _h = 0; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( dwidth / _steps ) * _step;
-                _w = _w > dwidth ? dwidth : _w;
-                _h = ( dheight / _steps ) * _step;
-                _h = _h > dheight ? dheight : _h;
+                _w = _step * width / _steps;
+                _w = _w > width ? width : _w;
+                _h = _step * height/ _steps;
+                _h = _h > height ? height : _h;
 
-                bitBlt( canv, 0, 0, &_pix2, dwidth-_w, dheight-_h, _w, _h );
+                bitBlt( canv, 0, 0, &_pix2, width-_w, height-_h, _w, _h );
 
                 _time.restart();
             }
-            if( _w >= dwidth ) break;
+            if( _w >= width ) break;
         }
     } break;
 
@@ -1025,28 +1002,24 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _steps = wsteps;
         _time.start();
 
-        int dheight = height;
-        int dwidth = width;;
-
-        _w = _h = 0;
-        for ( ; _step < _steps ; )
+        for ( _w = _h = 0; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( dwidth / _steps ) * _step;
-                _w = _w > dwidth ? dwidth : _w;
-                _h = ( dheight / _steps ) * _step;
-                _h = _h > dheight ? dheight : _h;
+                _w = _step * width / _steps;
+                _w = _w > width ? width : _w;
+                _h = _step * height/ _steps;
+                _h = _h > height ? height : _h;
 
-                bitBlt( canv, _w, _h, &_pix1, 0, 0, dwidth-_w, dheight-_h );
-                bitBlt( canv, 0, 0, &_pix2, 0, 0, _w, dheight );
-                bitBlt( canv, 0, 0, &_pix2, 0, 0, dwidth, _h );
+                bitBlt( canv, _w, _h, &_pix1, 0, 0, width-_w, height-_h );
+                bitBlt( canv, 0, 0, &_pix2, 0, 0, _w, height );
+                bitBlt( canv, 0, 0, &_pix2, 0, 0, width, _h );
 
                 _time.restart();
             }
-            if( _w >= dwidth ) break;
+            if( _w >= width ) break;
         }
     } break;
 
