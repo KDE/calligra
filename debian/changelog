@@ -2,7 +2,7 @@ koffice (2.1-20001216-1) unstable; urgency=low
 
   * more upstream fixes
   * Adding in missing conflicts for koffice and koffice-common
-  * Adding in kimageshop
+  * Adding in krayon
 
  -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 16 Dec 2000 23:00:00 -0700
 
