@@ -94,31 +94,36 @@ void KWord13OasisGenerator::preparePageLayout( void )
         style.addProperty("style:print-orientation", "portrait" );
     }
     // end of "inspiration"
-#if 0
     // ### TODO: verify that it fits OASIS spec (as it is OO spec.)
     bool ok = false;
     const int firstPageNumber = m_kwordDocument->getProperty( "VARIABLESETTINGS:startingPageNumber" ).toInt( &ok );
-    style.addProperty("style:first-page-number", ( firstPageNumber > 1 && ok ) ? firstPageNumber : 1 ) );
+    style.addProperty("style:first-page-number", ( ( ok && firstPageNumber > 1 ) ? firstPageNumber : 1 ) );
 
     const int columns = m_kwordDocument->getProperty( "PAPER:columns" ).toInt( &ok );
-    if ( columns > 1 )
+    if ( ok && columns > 1 )
     {
-        style.addElement("style:columns");
-        style.addProperty( "fo:column-count", columns );
-        style.addPropertyPt( "fo:column-gap=" positiveNumberOrNull( m_kwordDocument->getProperty( "PAPER:columnspacing", "PAPER:ptColumnspc" ) ) );
+        // ### TODO: test
+        QBuffer buffer;
+        buffer.open( IO_WriteOnly );
+        KoXmlWriter element ( &buffer );
+        element.startElement("style:columns");
+        element.addAttribute( "fo:column-count", columns );
+        element.addAttributePt( "fo:column-gap", positiveNumberOrNull( m_kwordDocument->getProperty( "PAPER:columnspacing", "PAPER:ptColumnspc" ) ) );
 
-        for (int i=0; i < columns; ++i)
+        for ( int i=0; i < columns; ++i )
         {
-            style.addElement( "style:column" );
-            style.addProperty( "style:rel-width", "1*" );
-            style.addPropertyPt( "fo:margin-left", 0.0 );
-            style.addPropertyPt( "fo:margin-right", 0.0 );
-            style.endElement();
+            element.startElement( "style:column" );
+            element.addAttribute( "style:rel-width", "1*" );
+            element.addAttributePt( "fo:margin-left", 0.0 );
+            element.addAttributePt( "fo:margin-right", 0.0 );
+            element.endElement();
         }
 
-        style.endElement();
+        element.endElement();
+        buffer.close();
+        const QString strElement( QString::fromUtf8( buffer.buffer(), buffer.buffer().size() ) );
+        style.addChildElement( "style:columns", strElement );
     }
-#endif
     const QString automaticPageStyle ( m_oasisGenStyles.lookup( style, "pm" ) );
     kdDebug(30520) << "Automatic page style: " << automaticPageStyle << endl;
 }
