@@ -19,7 +19,7 @@ KDE_PROG_LIBTOOL
 AC_PATH_KDE 
 
 dnl Check for MICO. The argument is the minimal version required.
-KDE_CHECK_MICO(2.0.6)
+KDE_CHECK_MICO(2.0.5)
 KDE_CHECK_MINI_STL
 
 idldir="\$(includedir)/idl"
