@@ -53,7 +53,7 @@ GraphObj::GraphObj(QWidget* parent=0,const char* name=0,ObjType _objType=OT_LINE
 /*===================== destructor ===============================*/
 GraphObj::~GraphObj()
 {
-  if (atfInterp) delete atfInterp;
+  if (objType == OT_AUTOFORM && atfInterp) delete atfInterp;
 }
 
 /*======================= get pic ================================*/
@@ -342,6 +342,10 @@ void GraphObj::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 GraphObj& GraphObj::operator=(GraphObj& go)
 {
   objType = go.getObjType();
+
+  if (objType == OT_AUTOFORM)
+    atfInterp = new ATFInterpreter(this,go.getFileName());
+
   setLineType((LineType)go.getLineType());
   setRectType((RectType)go.getRectType());
   setObjPen(go.getObjPen());
@@ -350,6 +354,10 @@ GraphObj& GraphObj::operator=(GraphObj& go)
   setRnds(go.getRndX(),go.getRndY());
   setLineBegin(go.getLineBegin());
   setLineEnd(go.getLineEnd());
+
+  if (objType == OT_AUTOFORM) atfInterp->load(fileName);
+  pix_data = "";
+  pix_data_native = "";
 
   resize(go.size());
 

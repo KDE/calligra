@@ -294,6 +294,9 @@ public:
   QPen presPen() {return _presPen;}
   void setPresPen(QPen p) {_presPen = p;}
 
+  int numSelected();
+  PageObjects* getSelectedObj();
+
 signals:
 
   // document modified

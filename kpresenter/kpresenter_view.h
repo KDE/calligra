@@ -72,6 +72,7 @@ class Page;
 #include "optiondia.h"
 #include "pgconfdia.h"
 #include "effectdia.h"
+#include "rotatedia.h"
 
 #include <X11/Xlib.h>
 #include <signal.h>
@@ -276,6 +277,7 @@ protected slots:
   void optionOk();
   void pgConfOk();
   void effectOk();
+  void rotateOk();
 
   // scrolling
   void scrollH(int);
@@ -516,6 +518,7 @@ protected:
   OptionDia *optionDia;
   PgConfDia *pgConfDia;
   EffectDia *effectDia;
+  RotateDia *rotateDia;
 
   // default pen and brush
   QPen pen;

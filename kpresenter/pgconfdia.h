@@ -26,9 +26,6 @@
 #include <qlabel.h>
 #include <qcombo.h>
 
-#include <kspinbox.h>
-#include <krestrictedline.h>
-
 #include "global.h"
 
 /******************************************************************/

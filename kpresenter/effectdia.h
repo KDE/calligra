@@ -28,7 +28,6 @@ class KPresenterView_impl;
 #include <qcombo.h>
 #include <qlabel.h>
 
-#include <kspinbox.h>
 #include <krestrictedline.h>
 
 #ifndef max

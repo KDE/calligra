@@ -2379,6 +2379,36 @@ void KPresenterDocument_impl::redo()
   undo_redo->redo();
 }
 
+/*================ return number of selected objs ================*/
+int KPresenterDocument_impl::numSelected()
+{
+  int num = 0;
+
+  if (!_objList.isEmpty())
+    {
+      for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
+	{
+	  if (objPtr->isSelected) num++;
+	}
+    }
+
+  return num;
+}
+
+/*==================== return selected obj ======================*/
+PageObjects* KPresenterDocument_impl::getSelectedObj()
+{
+  if (!_objList.isEmpty())
+    {
+      for (objPtr = _objList.first();objPtr != 0;objPtr = _objList.next())
+	{
+	  if (objPtr->isSelected) return objPtr;
+	}
+    }
+
+  return 0;
+}
+
 /*==================== rearrange objects =========================*/
 void KPresenterDocument_impl::reArrangeObjs()
 {

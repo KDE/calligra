@@ -60,6 +60,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   optionDia = 0;
   pgConfDia = 0;
   effectDia = 0;
+  rotateDia = 0;
   xOffset = 0;
   yOffset = 0;
   pen.operator=(QPen(black,1,SolidLine));
@@ -372,6 +373,28 @@ void KPresenterView_impl::extraLower()
 /*========================== extra rotate =======================*/
 void KPresenterView_impl::extraRotate()
 {
+  if (rotateDia)
+    {
+      QObject::disconnect(rotateDia,SIGNAL(rotateDiaOk()),this,SLOT(rotateOk()));
+      rotateDia->close();
+      delete rotateDia;
+      rotateDia = 0;
+    }
+
+  if (m_pKPresenterDoc->numSelected() == 1)
+    {
+      rotateDia = new RotateDia(0,"Rotate");
+      rotateDia->setMaximumSize(rotateDia->width(),rotateDia->height());
+      rotateDia->setMinimumSize(rotateDia->width(),rotateDia->height());
+      rotateDia->setCaption(i18n("KPresenter - Rotate"));
+      QObject::connect(rotateDia,SIGNAL(rotateDiaOk()),this,SLOT(rotateOk()));
+      rotateDia->setAngle(m_pKPresenterDoc->getSelectedObj()->angle);
+      rotateDia->show();
+    }
+  else
+    QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),
+			  i18n("I can only rotate ONE object!"),
+			  i18n("OK"));
 }
 
 /*====================== extra background =======================*/
@@ -1167,6 +1190,12 @@ void KPresenterView_impl::pgConfOk()
 /*=================== effect dialog ok ===========================*/
 void KPresenterView_impl::effectOk()
 {
+}
+
+/*=================== rotate dialog ok ===========================*/
+void KPresenterView_impl::rotateOk()
+{
+  KPresenterDoc()->getSelectedObj()->angle = rotateDia->getAngle();
 }
 
 /*================== scroll horizontal ===========================*/
@@ -2159,8 +2188,7 @@ void KPresenterView_impl::setupMenu()
       pix = loadPixmap(tmp);
       m_idMenuScreen_Pen = m_rMenuBar->insertSubMenuP(CORBA::string_dup(pix),
 						      CORBA::string_dup(i18n("&Choose Pen")),m_idMenuScreen);
-      m_idMenuScreen_PenWidth = m_rMenuBar->insertSubMenuP(CORBA::string_dup(pix),
-							  CORBA::string_dup(i18n("Pen width")),m_idMenuScreen_Pen);
+      m_idMenuScreen_PenWidth = m_rMenuBar->insertSubMenu(CORBA::string_dup(i18n("Pen width")),m_idMenuScreen_Pen);
       m_idMenuScreen_PenColor = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Pen color")),m_idMenuScreen_Pen,
 						       this,CORBA::string_dup("presPenColoridl"));
       m_idMenuScreen_PenW1 = m_rMenuBar->insertItem(CORBA::string_dup(i18n("1")),m_idMenuScreen_PenWidth,

@@ -109,7 +109,7 @@ public slots:
   void clipCopy();
   void clipPaste();
   void deleteObjs() {view->KPresenterDoc()->deleteObjs(); setCursor(arrowCursor);}
-  void rotateObjs() {view->KPresenterDoc()->rotateObjs(); setCursor(arrowCursor);}
+  void rotateObjs() {view->extraRotate(); setCursor(arrowCursor);}
   void restoreBackColor(unsigned int);
   
 protected:

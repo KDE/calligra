@@ -1673,17 +1673,11 @@ void KTextObject::clear(bool init=true)
   if (init)
     {
       paragraphList.clear();
-      cellWidths.clear();
       cellHeights.clear();
       
       TxtParagraph *para;
       para = new TxtParagraph(true);
       paragraphList.append(para);
-      
-      CellWidthHeight *wh = new CellWidthHeight;
-      wh->wh = width();
-      cellWidths.append(wh);
-      setNumCols(1);
       
       wh = new CellWidthHeight;
       wh->wh = 0;
@@ -1701,14 +1695,8 @@ void KTextObject::clear(bool init=true)
   else
     {
       paragraphList.clear();
-      cellWidths.clear();
       cellHeights.clear();
       setNumRows(0);
-      setNumCols(1);
-      
-      CellWidthHeight *wh = new CellWidthHeight;
-      wh->wh = width();
-      cellWidths.append(wh);
       setNumCols(1);
     }
 }

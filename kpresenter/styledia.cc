@@ -129,7 +129,7 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
 
   clineBegin = new QComboBox(false,penFrame,"lineBegin");
   clineBegin->move(choosePCol->x(),llineBegin->y()+llineBegin->height()+10);
-  clineBegin->resize(clineBegin->sizeHint());
+  clineBegin->resize(choosePStyle->width(),clineBegin->sizeHint().height());
   clineBegin->insertItem("Normal");
   clineBegin->insertItem("Arrow");
   clineBegin->insertItem("Square");
@@ -143,7 +143,7 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
 
   clineEnd = new QComboBox(false,penFrame,"lineEnd");
   clineEnd->move(choosePCol->x(),llineEnd->y()+llineEnd->height()+10);
-  clineEnd->resize(clineEnd->sizeHint());
+  clineEnd->resize(choosePStyle->width(),clineEnd->sizeHint().height());
   clineEnd->insertItem("Normal");
   clineEnd->insertItem("Arrow");
   clineEnd->insertItem("Square");

@@ -51,6 +51,7 @@ void ATFInterpreter::load(const char* fileName)
   coordList.clear();
   lines.clear();
   pointList.clear();
+
   if (ptA.open(IO_ReadOnly))
     {
       while (!ptA.atEnd())
