@@ -247,6 +247,14 @@ public:
      */
     void repaintAllViewsExcept( KWView *_view, bool _erase = false );
 
+
+    /**
+     * shedule a repaint of all views but don't execute immediately
+     **/
+     void delayedRepaintAllViews();
+     
+     
+     
     /**
      * Tell this method when a frame is moved / resized / created / deleted
      * and everything will be update / repainted accordingly.
@@ -586,7 +594,7 @@ signals:
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
-    void slotRepaintAllViews() { repaintAllViews( false ); }
+    void slotRepaintAllViews();
     void slotRepaintVariable();
 
     /** calls invalidate() on all framesets  */
@@ -691,7 +699,7 @@ private:
     bool m_hasTOC;
     bool m_bShowStatusBar;
     bool m_pgUpDownMovesCaret;
-
+    bool m_repaintAllViewsPending;
     bool m_bAllowAutoFormat;
     bool m_bShowScrollBar;
 

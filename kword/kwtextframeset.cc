@@ -1738,7 +1738,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 *abort = true;
                 return;
             }
-            QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
+	    m_doc->delayedRepaintAllViews();
         } break;
         case KWFrame::Ignore:
 #ifdef DEBUG_FORMAT_MORE
@@ -1877,9 +1877,8 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
         m_doc->invalidate();
     theFrame->updateRulerHandles();
 
-    // Can't call this directly, we might be in a paint event already
-    //m_doc->repaintAllViews();
-    QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
+    // Can't repaint directly, we might be in a paint event already
+    m_doc->delayedRepaintAllViews();
 }
 
 bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )

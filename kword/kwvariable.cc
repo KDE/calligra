@@ -316,8 +316,7 @@ void KWFootNoteVariable::finalize()
         fs->textObject()->abortFormatting();
 
         m_doc->recalcFrames( QMIN( pageNum, framePage ), -1 );
-
-        QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
+	m_doc->delayedRepaintAllViews();
     }
 }
 
@@ -381,7 +380,7 @@ void KWFootNoteVariable::setDeleted( bool del )
         m_frameset->layout(); // format its text, so that it resizes the frame
 
     // Does this compress? Probably not.
-    QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
+    m_doc->delayedRepaintAllViews();
 }
 
 int KWFootNoteVariable::pageNum() const

@@ -164,7 +164,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_viewFormattingChars = false;
     m_viewFrameBorders = true;
-
+    m_repaintAllViewsPending = false;
     m_bShowDocStruct = true;
     m_bShowRuler = true;
     m_bDontCheckUpperWord = false;
@@ -2025,6 +2025,19 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     emit sig_insertObject( ch, frameset );
 
     frameChanged( frame ); // repaint etc.
+}
+
+
+void KWDocument::delayedRepaintAllViews() {
+	if (!m_repaintAllViewsPending) {
+		QTimer::singleShot( 0, this, SLOT( slotRepaintAllViews() ) );
+		m_repaintAllViewsPending=true;
+	}
+}
+
+void KWDocument::slotRepaintAllViews() {
+	m_repaintAllViewsPending=false;
+	repaintAllViews( false );
 }
 
 void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
