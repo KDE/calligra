@@ -864,8 +864,10 @@ int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QStri
 	KexiDB::RecordData rdata;
 	if (row_id<=0 || !querySingleRecord(
 	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
-	 +"="+QString::number(row_id), rdata))
+	 +"="+QString::number(row_id), rdata)) {
+		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || !querySingleRecord()" << endl;
 	 	return -1;
+	}
 	return rdata[0].toInt();
 }
 
