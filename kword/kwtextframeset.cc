@@ -255,7 +255,7 @@ void KWTextFrameSet::setWidth( int w )
 
 int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
 {
-    kdDebug() << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
+    //kdDebug() << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
     // ### only first frame for now
     int left = frames.first()->left();
     int absoluteYp = yp + frames.first()->top();
@@ -273,13 +273,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
         if ( frameSet == this )
             foundThis = true;
 
-        FrameInfo fi = frameSet->getFrameInfo();
-
         if ( !foundThis ||
-             isAHeader( fi ) && !doc->hasHeader() ||
-             isAFooter( fi ) && !doc->hasFooter() ||
-             isAWrongHeader( fi, doc->getHeaderType() ) ||
-             isAWrongFooter( fi, doc->getFooterType() ) ||
              frameSet == this || !frameSet->isVisible() )
             continue;
 
@@ -321,13 +315,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int margin, int space )
        if ( frameSet == this )
             foundThis = true;
 
-         FrameInfo fi = frameSet->getFrameInfo();
-
         if ( !foundThis ||
-             isAHeader( fi ) && !doc->hasHeader() ||
-             isAFooter( fi ) && !doc->hasFooter() ||
-             isAWrongHeader( fi, doc->getHeaderType() ) ||
-             isAWrongFooter( fi, doc->getFooterType() ) ||
              frameSet == this || !frameSet->isVisible() )
             continue;
 
@@ -696,7 +684,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
     /* returns a deep copy of self */
     KWTextFrameSet *newFS = new KWTextFrameSet(doc);
     newFS->setFrameInfo(getFrameInfo());
-    newFS->setVisible(isVisible());
+    newFS->setVisible(visible);
     newFS->setName(getName());
     newFS->setIsRemoveableHeader(isRemoveableHeader());
     QListIterator<KWFrame> frameIt = frameIterator();
@@ -1514,6 +1502,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
+    hideCursor();
     delete cursor;
 }
 

@@ -1128,23 +1128,27 @@ void KWView::viewTableGrid()
 /*===============================================================*/
 void KWView::viewHeader()
 {
-    doc->setHeader( actionViewHeader->isChecked() );
+    doc->setHeaderVisible( actionViewHeader->isChecked() );
+    /*
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
     doc->getPageLayout( pgLayout, cl, hf );
     doc->setPageLayout( pgLayout, cl, hf );
+    */
 }
 
 /*===============================================================*/
 void KWView::viewFooter()
 {
-    doc->setFooter( actionViewFooter->isChecked() );
+    doc->setFooterVisible( actionViewFooter->isChecked() );
+    /*
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
     doc->getPageLayout( pgLayout, cl, hf );
     doc->setPageLayout( pgLayout, cl, hf );
+    */
 }
 
 /*===============================================================*/
@@ -1351,9 +1355,6 @@ void KWView::insertFootNoteEndNote()
 void KWView::insertContents()
 {
     doc->createContents();
-#if 0
-    gui->canvasWidget()->recalcWholeText();
-#endif
     gui->canvasWidget()->repaintAll();
 }
 

@@ -144,9 +144,9 @@ bool KWAutoFormatDia::applyConfig()
         KWAutoFormat::TypographicQuotes tq = m_autoFormat.getConfigTypographicQuotes();
         tq.replace = false;
         m_autoFormat.configTypographicQuotes( tq );
-        m_autoFormat.setEnabled( true );
-        //        doc->recalcWholeText();
-        m_autoFormat.setEnabled( false );
+        //m_autoFormat.setEnabled( true );
+        //        doc->recalcWholeText();  // doesn't exist anymore. What should happen here ?
+        //m_autoFormat.setEnabled( false );
     }
 
     KWAutoFormat::TypographicQuotes tq = m_autoFormat.getConfigTypographicQuotes();
@@ -160,7 +160,6 @@ bool KWAutoFormatDia::applyConfig()
 
     doc->getAutoFormat().setEnabled( true );
     doc->updateAllViews( 0L );
-    doc->updateAllCursors();
     doc->getAutoFormat().setEnabled( false );
 
     return true;

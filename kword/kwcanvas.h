@@ -55,7 +55,7 @@ public:
     KWFrameSet *currentFrameSet() const { return m_currentFrameSet; }
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
-    void repaintAll();
+    void repaintAll( bool erase = false );
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool );
 

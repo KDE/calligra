@@ -181,8 +181,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     applyStyleTemplate = U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
                          U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
-    m_header = false;
-    m_footer = false;
+    m_headerVisible = false;
+    m_footerVisible = false;
     _needRedraw = FALSE;
 
     m_lastStyle = 0L;
@@ -204,8 +204,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     contents = new KWContents( this );
     //tmpShell = 0;
 
-    connect( this, SIGNAL( completed() ),
-             this, SLOT( slotDocumentLoaded() ) );
     zoom = 100;
     syntaxVersion = CURRENT_SYNTAX_VERSION;
 
@@ -317,7 +315,6 @@ void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderF
     recalcFrames();
 
     updateAllFrames();
-    updateAllCursors();
 }
 
 unsigned int KWDocument::ptColumnWidth() const
@@ -347,45 +344,45 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
     int firstFootOffset = 0, evenFootOffset = 0, oddFootOffset = 0;
     KWTextFrameSet *firstHeader = 0L, *evenHeader = 0L, *oddHeader = 0L;
     KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
-    if ( hasHeader() || hasFooter() ) {
+    if ( isHeaderVisible() || isFooterVisible() ) {
         QListIterator<KWFrameSet> fit = framesetsIterator();
         for ( ; fit.current() ; ++fit )
         {
             KWFrameSet * frameset = fit.current();
             FrameInfo fi = frameset->getFrameInfo();
-            if ( fi == FI_FIRST_HEADER && hasHeader() ) {
+            if ( fi == FI_FIRST_HEADER && isHeaderVisible() ) {
                 firstHeader = dynamic_cast<KWTextFrameSet*>( frameset );
                 firstHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
                                                    frameset->getFrame( 0 )->height());
             }
-            if ( fi == FI_EVEN_HEADER && hasHeader() ) {
+            if ( fi == FI_EVEN_HEADER && isHeaderVisible() ) {
                 evenHeader = dynamic_cast<KWTextFrameSet*>( frameset );
                 evenHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
                                                   frameset->getFrame( 0 )->height());
             }
-            if ( fi == FI_ODD_HEADER && hasHeader() ) {
+            if ( fi == FI_ODD_HEADER && isHeaderVisible() ) {
                 oddHeader = dynamic_cast<KWTextFrameSet*>( frameset );
                 oddHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
                                                  frameset->getFrame( 0 )->height());
             }
 
-            if ( fi == FI_FIRST_FOOTER && hasFooter() ) {
+            if ( fi == FI_FIRST_FOOTER && isFooterVisible() ) {
                 firstFooter = dynamic_cast<KWTextFrameSet*>( frameset );
                 firstFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
                                                    frameset->getFrame( 0 )->height());
             }
-            if ( fi == FI_EVEN_FOOTER && hasFooter() ) {
+            if ( fi == FI_EVEN_FOOTER && isFooterVisible() ) {
                 evenFooter = dynamic_cast<KWTextFrameSet*>( frameset );
                 evenFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
                                                   frameset->getFrame( 0 )->height());
             }
-            if ( fi == FI_ODD_FOOTER && hasFooter() ) {
+            if ( fi == FI_ODD_FOOTER && isFooterVisible() ) {
                 oddFooter = dynamic_cast<KWTextFrameSet*>( frameset );
                 oddFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
                                                  frameset->getFrame( 0 )->height());
             }
         }
-        if ( hasHeader() ) {
+        if ( isHeaderVisible() ) {
             switch ( getHeaderType() ) {
             case HF_SAME:
                 oddHeader = evenHeader;
@@ -403,7 +400,7 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
                 break;
             }
         }
-        if ( hasFooter() ) {
+        if ( isFooterVisible() ) {
             switch ( getFooterType() ) {
             case HF_SAME:
                 oddFooter = evenFooter;
@@ -473,7 +470,7 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
 
     }
 
-    if ( hasHeader() ) {
+    if ( isHeaderVisible() ) {
         switch ( getHeaderType() ) {
         case HF_SAME: {
             int h = evenHeader->getFrame( 0 )->height();
@@ -598,7 +595,7 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
         }
     }
 
-    if ( hasFooter() ) {
+    if ( isFooterVisible() ) {
         switch ( getFooterType() ) {
         case HF_SAME: {
             int h = evenFooter->getFrame( 0 )->height();
@@ -727,7 +724,6 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
     }
 
     updateAllViewportSizes();
-    //recalcWholeText( _cursor );
 }
 
 /*================================================================*/
@@ -775,7 +771,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
 #if 0
-    // defaultUserFont = findUserFont( "times" ); // we don't like mem leaks that much (Werner)
     defaultParagLayout = new KWParagLayout( this );
     defaultParagLayout->setName( "Standard" );
     defaultParagLayout->setCounterType( KWParagLayout::CT_NONE );
@@ -999,8 +994,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     {
         m_processingType = static_cast<ProcessingType>( KWDocument::getAttribute( attributes, "processing", 0 ) );
         KWDocument::getAttribute( attributes, "standardpage", QString::null );
-        m_header = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
-        m_footer = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
+        m_headerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
+        m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
         unit = correctQString( KWDocument::getAttribute( attributes, "unit", "pt" ) );
     }
 
@@ -1283,8 +1278,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     emit sigProgress(-1);
 
     recalcFrames();
-    //recalcWholeText( false,true);
     updateAllFrames();
+    updateAllViews( 0L, true );     // in case any view exists already
 
     return TRUE;
 }
@@ -1577,8 +1572,8 @@ QDomDocument KWDocument::saveXML()
     kwdoc.appendChild( docattrs );
     docattrs.setAttribute( "processing", static_cast<int>( m_processingType ) );
     docattrs.setAttribute( "standardpage", 1 );
-    docattrs.setAttribute( "hasHeader", static_cast<int>(hasHeader()) );
-    docattrs.setAttribute( "hasFooter", static_cast<int>(hasFooter()) );
+    docattrs.setAttribute( "hasHeader", static_cast<int>(isHeaderVisible()) );
+    docattrs.setAttribute( "hasFooter", static_cast<int>(isFooterVisible()) );
     docattrs.setAttribute( "unit", getUnit() );
 
 //    out << otag << "<FOOTNOTEMGR>" << endl;
@@ -1938,12 +1933,6 @@ void KWDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, int
         frameset = getFrameSet( i );
         if ( !frameset->isVisible() )
             continue;
-
-        if ( isAHeader( frameset->getFrameInfo() ) && !hasHeader() ||
-             isAFooter( frameset->getFrameInfo() ) && !hasFooter() ||
-             isAWrongHeader( frameset->getFrameInfo(), getHeaderType() ) ||
-             isAWrongFooter( frameset->getFrameInfo(), getFooterType() ) )
-            continue;
         for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
             bool isRight = TRUE, isBottom = TRUE;
             if ( frameset->getGroupManager() ) {
@@ -2004,23 +1993,15 @@ void KWDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, int
 
 /*================================================================*/
 /* Update all views of this document, area can be cleared
-   before redrawing with the clean flag. (false=implied)
+   before redrawing with the _erase flag. (false implied)
    All views EXCEPT the argument _view are updated
  */
-void KWDocument::updateAllViews( KWView *_view, bool /*_clear*/ )
+void KWDocument::updateAllViews( KWView *_view, bool erase )
 {
-    KWView *viewPtr;
-
-    if ( !m_lstViews.isEmpty() ) {
-        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-            if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
-                if ( viewPtr != _view ) {
-#if 0
-                    if ( _clear )
-                        viewPtr->getGUI()->canvasWidget()->clear();
-                    viewPtr->getGUI()->canvasWidget()->repaintScreen( FALSE );
-#endif
-                }
+    for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
+        if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
+            if ( viewPtr != _view ) {
+                viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
             }
         }
     }
@@ -2043,34 +2024,10 @@ void KWDocument::setUnitToAll()
     else if ( unit == "inch" )
         pageLayout.unit = PG_INCH;
 
-
-    KWView *viewPtr;
-
-    if ( !m_lstViews.isEmpty() ) {
-        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-            if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
-                viewPtr->getGUI()->getHorzRuler()->setUnit( getUnit() );
-                viewPtr->getGUI()->getVertRuler()->setUnit( getUnit() );
-            }
-        }
-    }
-}
-
-/*================================================================*/
-void KWDocument::updateAllCursors()
-{
-    KWView *viewPtr;
-
-    if ( !m_lstViews.isEmpty() ) {
-        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-            if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
-                if ( viewPtr->getGUI() ) {
-#if 0
-                    viewPtr->getGUI()->canvasWidget()->recalcText();
-                    viewPtr->getGUI()->canvasWidget()->recalcCursor();
-#endif
-                }
-            }
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
+        if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
+            viewPtr->getGUI()->getHorzRuler()->setUnit( getUnit() );
+            viewPtr->getGUI()->getVertRuler()->setUnit( getUnit() );
         }
     }
 }
@@ -2156,7 +2113,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
 */
     updateAllViewportSizes();
 
-    if ( hasHeader() || hasFooter() )
+    if ( isHeaderVisible() || isFooterVisible() )
         recalcFrames( false);
     setModified(TRUE);
 }
@@ -2210,11 +2167,6 @@ KWFrameSet * KWDocument::getFrameSet( unsigned int mx, unsigned int my )
         if ( frameSet->contains( mx, my ) ) {
             if ( !frameSet->isVisible() )
                 continue;
-            if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
-                 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
-                 isAWrongHeader( frameSet->getFrameInfo(), getHeaderType() ) ||
-                 isAWrongFooter( frameSet->getFrameInfo(), getFooterType() ) )
-                continue;
             if ( frameSet->isRemoveableHeader() )
                 continue;
             return frameSet;
@@ -2237,11 +2189,6 @@ int KWDocument::selectFrame( unsigned int mx, unsigned int my, bool simulate )
         KWFrameSet * frameSet = fit.current();
         if ( frameSet->contains( mx, my ) ) {
             if ( !frameSet->isVisible() )
-                continue;
-            if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
-                 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
-                 isAWrongHeader( frameSet->getFrameInfo(), getHeaderType() ) ||
-                 isAWrongFooter( frameSet->getFrameInfo(), getFooterType() ) )
                 continue;
             if ( frameSet->isRemoveableHeader() )
                 continue;
@@ -2287,11 +2234,6 @@ QCursor KWDocument::getMouseCursor( unsigned int mx, unsigned int my )
         KWFrameSet *frameSet = fit.current();
         if ( !frameSet->isVisible() )
             continue;
-        if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
-             isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
-             isAWrongHeader( frameSet->getFrameInfo(), getHeaderType() ) ||
-             isAWrongFooter( frameSet->getFrameInfo(), getFooterType() ) )
-            continue;
         if ( frameSet->isRemoveableHeader() )
             continue;
         if ( frameSet->contains( mx, my ) )
@@ -2314,11 +2256,6 @@ QList<KWFrame> KWDocument::getSelectedFrames() {
             continue;
         if ( frameSet->isRemoveableHeader() )
             continue;
-        if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
-             isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
-             isAWrongHeader( frameSet->getFrameInfo(), getHeaderType() ) ||
-             isAWrongFooter( frameSet->getFrameInfo(), getFooterType() ) )
-            continue;
         QListIterator<KWFrame> frameIt = frameSet->frameIterator();
         for ( ; frameIt.current(); ++frameIt )
             if ( frameIt.current()->isSelected() )
@@ -2337,11 +2274,6 @@ KWFrame *KWDocument::getFirstSelectedFrame()
         KWFrameSet *frameSet = fit.current();
         for ( unsigned int j = 0; j < frameSet->getNumFrames(); j++ ) {
             if ( !frameSet->isVisible() )
-                continue;
-            if ( isAHeader( frameSet->getFrameInfo() ) && !hasHeader() ||
-                 isAFooter( frameSet->getFrameInfo() ) && !hasFooter() ||
-                 isAWrongHeader( frameSet->getFrameInfo(), getHeaderType() ) ||
-                 isAWrongFooter( frameSet->getFrameInfo(), getFooterType() ) )
                 continue;
             if ( frameSet->isRemoveableHeader() )
                 continue;
@@ -2376,7 +2308,7 @@ void KWDocument::print( QPainter */*painter*/, QPrinter */*printer*/,
     fcList.setAutoDelete( TRUE );
 
     KWFormatContext *fc = 0L;
-    unsigned int i = 0, j = 0;
+    unsigned int i = 0;
 
     for ( i = 0; i < frames.count(); i++ ) {
         if ( frames.at( i )->getFrameType() == FT_TEXT ) {
@@ -2404,19 +2336,18 @@ void KWDocument::print( QPainter */*painter*/, QPrinter */*printer*/,
         if ( i + 1 > static_cast<unsigned int>( printer->fromPage() ) )
             printer->newPage();
         printBorders( *painter, 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() );
-        for ( j = 0; j < frames.count(); j++ ) {
-            if ( !getFrameSet( j )->isVisible() )
+
+        QListIterator<KWFrameSet> fit = framesetsIterator();
+        for ( ; fit.current() ; ++fit )
+        {
+            KWFrameSet * frameset = fit.current();
+            if ( !frameset->isVisible() )
                 continue;
-            if ( isAHeader( getFrameSet( j )->getFrameInfo() ) && !hasHeader() ||
-                 isAFooter( getFrameSet( j )->getFrameInfo() ) && !hasFooter() ||
-                 isAWrongHeader( getFrameSet( j )->getFrameInfo(), getHeaderType() ) ||
-                 isAWrongFooter( getFrameSet( j )->getFrameInfo(), getFooterType() ) )
-                continue;
-            switch ( frames.at( j )->getFrameType() ) {
+            switch ( frameset->getFrameType() ) {
             case FT_PICTURE: {
                 minus++;
 
-                KWPictureFrameSet *picFS = dynamic_cast<KWPictureFrameSet*>( frames.at( j ) );
+                KWPictureFrameSet *picFS = dynamic_cast<KWPictureFrameSet*>( frameset );
                 KWFrame *frame = picFS->getFrame( 0 );
                 if ( !frame->intersects( pageRect ) ) break;
 
@@ -2429,7 +2360,7 @@ void KWDocument::print( QPainter */*painter*/, QPrinter */*printer*/,
             case FT_PART: {
                 minus++;
 
-                KWPartFrameSet *partFS = dynamic_cast<KWPartFrameSet*>( getFrameSet( j ) );
+                KWPartFrameSet *partFS = dynamic_cast<KWPartFrameSet*>( frameset );
                 KWFrame *frame = partFS->getFrame( 0 );
 
                 QPicture *pic = partFS->getPicture();
@@ -2446,7 +2377,7 @@ void KWDocument::print( QPainter */*painter*/, QPrinter */*printer*/,
             case FT_FORMULA: {
                 minus++;
 
-                KWFormulaFrameSet *formulaFS = dynamic_cast<KWFormulaFrameSet*>( getFrameSet( j ) );
+                KWFormulaFrameSet *formulaFS = dynamic_cast<KWFormulaFrameSet*>( frameset );
                 KWFrame *frame = formulaFS->getFrame( 0 );
 
                 QPicture *pic = formulaFS->getPicture();
@@ -2462,66 +2393,66 @@ void KWDocument::print( QPainter */*painter*/, QPrinter */*printer*/,
             case FT_TEXT: {
                 bool bend = FALSE;
                 bool reinit = TRUE;
-                fc = fcList.at(j - minus);
-                if ( frames.at( j )->getFrameInfo() != FI_BODY ) {
-                    if ( frames.at( j )->getFrameInfo() == FI_EVEN_HEADER ||
-                         frames.at( j )->getFrameInfo() == FI_FIRST_HEADER ||
-                         frames.at( j )->getFrameInfo() == FI_ODD_HEADER ) {
-                        if ( !hasHeader() ) continue;
+                ///////fc = fcList.at(j - minus);
+                if ( frameset->getFrameInfo() != FI_BODY ) {
+                    if ( frameset->getFrameInfo() == FI_EVEN_HEADER ||
+                         frameset->getFrameInfo() == FI_FIRST_HEADER ||
+                         frameset->getFrameInfo() == FI_ODD_HEADER ) {
+                        if ( !isHeaderVisible() ) continue;
                         switch ( getHeaderType() ) {
                         case HF_SAME: {
-                            if ( frames.at( j )->getFrameInfo() != FI_EVEN_HEADER )
+                            if ( frameset->getFrameInfo() != FI_EVEN_HEADER )
                                 continue;
                         } break;
                         case HF_EO_DIFF: {
-                            if ( frames.at( j )->getFrameInfo() == FI_FIRST_HEADER )
+                            if ( frameset->getFrameInfo() == FI_FIRST_HEADER )
                                 continue;
-                            if ( ( ( i + 1 ) / 2 ) * 2 == i + 1 && frames.at( j )->getFrameInfo() == FI_ODD_HEADER )
+                            if ( ( ( i + 1 ) / 2 ) * 2 == i + 1 && frameset->getFrameInfo() == FI_ODD_HEADER )
                                 continue;
-                            if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frames.at( j )->getFrameInfo() == FI_EVEN_HEADER )
+                            if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frameset->getFrameInfo() == FI_EVEN_HEADER )
                                 continue;
                         } break;
                         case HF_FIRST_DIFF: {
-                            if ( i == 0 && frames.at( j )->getFrameInfo() != FI_FIRST_HEADER )
+                            if ( i == 0 && frameset->getFrameInfo() != FI_FIRST_HEADER )
                                 continue;
-                            if ( i > 0 && frames.at( j )->getFrameInfo() != FI_EVEN_HEADER )
+                            if ( i > 0 && frameset->getFrameInfo() != FI_EVEN_HEADER )
                                 continue;
                         } break;
                         default: break;
                         }
                     }
-                    if ( frames.at( j )->getFrameInfo() == FI_EVEN_FOOTER ||
-                         frames.at( j )->getFrameInfo() == FI_FIRST_FOOTER ||
-                         frames.at( j )->getFrameInfo() == FI_ODD_FOOTER ) {
-                        if ( !hasFooter() ) continue;
+                    if ( frameset->getFrameInfo() == FI_EVEN_FOOTER ||
+                         frameset->getFrameInfo() == FI_FIRST_FOOTER ||
+                         frameset->getFrameInfo() == FI_ODD_FOOTER ) {
+                        if ( !isFooterVisible() ) continue;
                         switch ( getFooterType() ) {
                         case HF_SAME: {
-                            if ( frames.at( j )->getFrameInfo() != FI_EVEN_FOOTER )
+                            if ( frameset->getFrameInfo() != FI_EVEN_FOOTER )
                                 continue;
                         } break;
                         case HF_EO_DIFF: {
-                            if ( frames.at( j )->getFrameInfo() == FI_FIRST_FOOTER )
+                            if ( frameset->getFrameInfo() == FI_FIRST_FOOTER )
                                 continue;
-                            if ( ( ( i + 1 ) / 2 ) * 2 == i + 1 && frames.at( j )->getFrameInfo() == FI_ODD_FOOTER )
+                            if ( ( ( i + 1 ) / 2 ) * 2 == i + 1 && frameset->getFrameInfo() == FI_ODD_FOOTER )
                                 continue;
-                            if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frames.at( j )->getFrameInfo() == FI_EVEN_FOOTER )
+                            if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frameset->getFrameInfo() == FI_EVEN_FOOTER )
                                 continue;
                         } break;
                         case HF_FIRST_DIFF: {
-                            if ( i == 0 && frames.at( j )->getFrameInfo() != FI_FIRST_FOOTER )
+                            if ( i == 0 && frameset->getFrameInfo() != FI_FIRST_FOOTER )
                                 continue;
-                            if ( i > 0 && frames.at( j )->getFrameInfo() != FI_EVEN_FOOTER )
+                            if ( i > 0 && frameset->getFrameInfo() != FI_EVEN_FOOTER )
                                 continue;
                         } break;
                         default:
                             break;
                         }
                     }
-                    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( j ) )->getFirstParag(), TRUE,
-                              frames.at( j )->getCurrent() + 1, i + 1 );
-                    if ( static_cast<int>( frames.at( j )->getNumFrames() - 1 ) >
-                         static_cast<int>( frames.at( j )->getCurrent() ) )
-                        frames.at( j )->setCurrent( frames.at( j )->getCurrent() + 1 );
+                    fc->init( dynamic_cast<KWTextFrameSet*>( frameset )->getFirstParag(), TRUE,
+                              frameset->getCurrent() + 1, i + 1 );
+                    if ( static_cast<int>( frameset->getNumFrames() - 1 ) >
+                         static_cast<int>( frameset->getCurrent() ) )
+                        frameset->setCurrent( frameset->getCurrent() + 1 );
                     reinit = FALSE;
                 }
                 if ( reinit )
@@ -2617,34 +2548,19 @@ void KWDocument::updateAllFrames()
 }
 
 /*================================================================*/
-void KWDocument::setHeader( bool /*h*/ )
+void KWDocument::setHeaderVisible( bool h )
 {
-#if 0
-    m_header = h;
-    if ( !m_header ) {
-        for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-            viewPtr->getGUI()->canvasWidget()->footerHeaderDisappeared();
-        }
-    }
-
-    recalcFrames( TRUE );
-    updateAllViews( 0L, TRUE );
-#endif
+    m_headerVisible = h;
+    recalcFrames( true );
+    updateAllViews( 0L, true );
 }
 
 /*================================================================*/
-void KWDocument::setFooter( bool /*f*/ )
+void KWDocument::setFooterVisible( bool f )
 {
-#if 0
-    m_footer = f;
-    if ( !m_footer ) {
-        for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-            viewPtr->getGUI()->canvasWidget()->footerHeaderDisappeared();
-    }
-
-    recalcFrames( TRUE );
-    updateAllViews( 0L, TRUE );
-#endif
+    m_footerVisible = f;
+    recalcFrames( true );
+    updateAllViews( 0L, true );
 }
 
 /*================================================================*/
@@ -2807,17 +2723,6 @@ void KWDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int w,
 }
 
 /*================================================================*/
-QList <KWView> KWDocument::getAllViews() {
-    return m_lstViews;
-}
-
-/*================================================================*/
-void KWDocument::slotDocumentLoaded()
-{
-  updateAllViews( 0L, true );
-}
-
-/*================================================================*/
 void KWDocument::updateTableHeaders( QList<KWGroupManager> &grpMgrs )
 {
     KWGroupManager *grpMgr;
@@ -2908,8 +2813,6 @@ void KWDocument::setSerialLetterRecord( int r )
 void KWDocument::createContents()
 {
     contents->createContents();
-    //recalcWholeText();
-    updateAllCursors();
     updateAllViews( 0, TRUE );
 }
 
@@ -2951,15 +2854,6 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
         _hf.inchFooterBodySpacing = zoomIt( _hf.inchFooterBodySpacing );
 	}*/
 }
-
-#if 0
-KWUserFont* KWDocument::getDefaultUserFont() {
-
-    if(defaultUserFont==0L)
-        defaultUserFont=findUserFont( "times" );
-    return defaultUserFont;
-}
-#endif
 
 void KWDocument::updateFrameSizes( int oldZoom )
 {
@@ -3069,8 +2963,8 @@ void KWDocument::printDebug() {
     kdDebug() << "Document:" << doc <<endl;
     kdDebug() << "Type of document: (0=WP, 1=DTP) " << doc->processingType() <<endl;
     kdDebug() << "size: x:" << doc->ptLeftBorder()<< ", y:"<<doc->ptTopBorder() << ", w:"<< doc->ptPaperWidth() << ", h:"<<doc->ptPaperHeight()<<endl;
-    kdDebug() << "Has header: " << doc->hasHeader() << endl;
-    kdDebug() << "Has footer: " << doc->hasFooter() << endl;
+    kdDebug() << "Header visible: " << doc->isHeaderVisible() << endl;
+    kdDebug() << "Footer visible: " << doc->isFooterVisible() << endl;
     kdDebug() << "Units: " << doc->getUnit() <<endl;
     kdDebug() << "# Framesets: " << doc->getNumFrameSets() <<endl;
     for (unsigned int iFrameset = 0; iFrameset < doc->getNumFrameSets(); iFrameset++ ) {

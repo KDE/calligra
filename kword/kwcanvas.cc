@@ -96,9 +96,9 @@ void KWCanvas::repaintChanged()
     drawAll = TRUE;
 }
 
-void KWCanvas::repaintAll()
+void KWCanvas::repaintAll( bool erase /* = false */ )
 {
-    viewport()->repaint( FALSE );
+    viewport()->repaint( erase );
 }
 
 // Return true if @p r is out of the page @p page
@@ -140,21 +140,17 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
-        FrameInfo fi = frameset->getFrameInfo();
-        //if ( redrawOnlyCurrFrameset && frameset != m_currentFrameSet )
-        //    continue;
+        if ( frameset->isVisible() )
+        {
+            //if ( redrawOnlyCurrFrameset && frameset != m_currentFrameSet )
+            //    continue;
 
-        if ( isAHeader( fi ) && !doc->hasHeader() ||
-             isAFooter( fi ) && !doc->hasFooter() ||
-             isAWrongHeader( fi, doc->getHeaderType() ) ||
-             isAWrongFooter( fi, doc->getFooterType() ) ||
-             !frameset->isVisible() )
-            continue;
-        QColorGroup gb=QApplication::palette().active();
-        if ( focus && frameset == m_currentFrameSet && m_currentFrameSetEdit )
-            m_currentFrameSetEdit->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
-        else
-            frameset->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
+            QColorGroup gb=QApplication::palette().active();
+            if ( focus && frameset == m_currentFrameSet && m_currentFrameSetEdit )
+                m_currentFrameSetEdit->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
+            else
+                frameset->drawContents( painter, cx, cy, cw, ch, gb, !drawAll );
+        }
     }
 
 #if 0
@@ -174,13 +170,7 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, QReg
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameset = fit.current();
-        FrameInfo fi = frameset->getFrameInfo();
-
-        if ( isAHeader( fi ) && !doc->hasHeader() ||
-             isAFooter( fi ) && !doc->hasFooter() ||
-             isAWrongHeader( fi, doc->getHeaderType() ) ||
-             isAWrongFooter( fi, doc->getFooterType() ) ||
-             !frameset->isVisible() )
+        if ( !frameset->isVisible() )
             continue;
 
         QListIterator<KWFrame> frameIt = frameset->frameIterator();
@@ -823,7 +813,7 @@ void KWCanvas::mrEditFrame()
         //recalcAll = TRUE;
         //recalcText();
         //recalcCursor();
-        viewport()->repaint( TRUE );
+        repaintAll( true );
         //recalcAll = FALSE;
     } else {
         // Frame not resized - or moved
@@ -1599,7 +1589,7 @@ void KWCanvas::doAutoScroll()
 
 void KWCanvas::slotContentsMoving( int, int cy )
 {
-    kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
+    //kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
     // Update our "formatted paragraphs needs" in the text framesets
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )

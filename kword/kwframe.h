@@ -365,8 +365,15 @@ public:
     /** returns if one of our frames has been selected. */
     bool hasSelectedFrame();
 
-    /** returns the visibility of the frameset. */
-    bool isVisible() { return visible; }
+    /**
+     * Returns true if the frameset is visible.
+     * A frameset is visible if setVisible(false) wasn't called,
+     * but also, for a header frameset, if doc->isHeaderVisible is true, etc.
+     * For an "even pages header" frameset, the corresponding headerType setting
+     * must be selected (i.e. different headers for even and odd pages).
+     */
+    bool isVisible() const;
+
     /** get the visibility of the frameset. */
     void setVisible( bool v ) { visible = v; }
 

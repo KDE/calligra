@@ -713,6 +713,16 @@ bool KWFrameSet::hasSelectedFrame()
     return false;
 }
 
+/*================================================================*/
+bool KWFrameSet::isVisible() const
+{
+    return ( visible &&
+             (!isAHeader( frameInfo ) || doc->isHeaderVisible()) &&
+             (!isAFooter( frameInfo ) || doc->isFooterVisible()) &&
+             !isAWrongHeader( frameInfo, doc->getHeaderType() ) &&
+             !isAWrongFooter( frameInfo, doc->getFooterType() ) );
+}
+
 /******************************************************************/
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/

@@ -167,15 +167,12 @@ public:
 
     void printBorders( QPainter &_painter, int xOffset, int yOffset, int _w, int _h );
 
-    void updateAllViews( KWView *_view, bool _clear = false );
+    void updateAllViews( KWView *_view, bool _erase = false );
     void updateAllViewportSizes();
     void updateAllSelections();
     void setUnitToAll();
-    void updateAllCursors();
     void drawAllBorders( bool back = true);
     void refreshAllFrames();
-    //void recalcWholeText( bool _cursor = false, bool completeRender=false);
-    //void recalcWholeText( KWParag *start, unsigned int fs );
 
     //QList<KWStyle> & styleList() { return m_styleList; }
     const QList<KWStyle> & styleList() const { return m_styleList; }
@@ -187,7 +184,7 @@ public:
     KWImageCollection *getImageCollection() { return &imageCollection; }
 
     bool selection();
-    QList <KWView> getAllViews();
+    QList <KWView> getAllViews() { return m_lstViews; }
 
     void appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE*/ );
     void removePage( int num );
@@ -216,10 +213,10 @@ public:
     void updateAllStyles();
     void updateAllStyleLists();
 
-    bool hasHeader() const { return m_header; }
-    bool hasFooter() const { return m_footer; }
-    void setHeader( bool h );
-    void setFooter( bool f );
+    bool isHeaderVisible() const { return m_headerVisible; }
+    bool isFooterVisible() const { return m_footerVisible; }
+    void setHeaderVisible( bool h );
+    void setFooterVisible( bool f );
 
     void recalcFrames( bool _cursor = false );
 
@@ -298,9 +295,9 @@ public:
     }
 
     void createContents();
-    KWContents *getContents() {
-        return contents;
-    }
+    //KWContents *getContents() {
+    //    return contents;
+    //}
 
     bool canRemovePage( int num, KWFrame *f );
 
@@ -376,7 +373,6 @@ signals:
     void sig_newContentsSize( int width, int height );
 
 protected slots:
-    void slotDocumentLoaded();
     void slotDocumentRestored();
     void slotCommandExecuted();
     void slotChildChanged( KoDocumentChild * child );
@@ -407,14 +403,10 @@ private:
     KoKWHeaderFooter pageHeaderFooter;
     unsigned int m_ptColumnWidth;
 
-//    KWUserFont *cUserFont;
-//    KWUserFont *defaultUserFont;
     KWImageCollection imageCollection;
     QList<KWFrameSet> frames;
     QList<KWStyle> m_styleList;
     QList<KWGroupManager> grpMgrs;
-
-//    KWParagLayout *defaultParagLayout;
 
     // Cached value for findStyle()
     KWStyle *m_lastStyle;
@@ -426,7 +418,7 @@ private:
 
     int applyStyleTemplate;
 
-    bool m_header, m_footer;
+    bool m_headerVisible, m_footerVisible;
 
  //   KWDisplayFont *cDisplayFont;
 
@@ -466,7 +458,7 @@ private:
 
     KSpellConfig *m_pKSpellConfig;
 
-    bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;	
+    bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 };
 
 inline int KWDocument::zoomIt( int z ) const
