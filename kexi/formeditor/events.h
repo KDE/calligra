@@ -23,6 +23,8 @@
 #include <qptrlist.h>
 #include <qstring.h>
 
+class QDomNode;
+
 namespace KFormDesigner {
 
 class KFORMEDITOR_EXPORT Connection
@@ -53,16 +55,18 @@ typedef QPtrList<Connection> ConnectionList;
 
 class KFORMEDITOR_EXPORT ConnectionBuffer : public ConnectionList
 {
-	//Q_OBJECT
-
 	public:
-		ConnectionBuffer() {;}
+		ConnectionBuffer();
 		~ConnectionBuffer() {;}
 
-		//void    fixName(const QString &oldname, const QString &newName) {;}
+		void save(QDomNode &parentNode);
+		void load(QDomNode parentNode);
 
-		//ConnectionList    eventsForSender(const QString &widget) {;}
-		//ConnectionList    eventsForReceiver(const QString &widget) {;}
+		void    fixName(const QString &oldname, const QString &newName);
+
+		ConnectionBuffer*     allConnectionsForWidget(const QString &widget);
+		void     saveAllConnectionsForWidget(const QString &widget, QDomNode parentNode);
+		void     removeAllConnectionsForWidget(const QString &widget);
 };
 
 }

@@ -42,6 +42,7 @@
 #include "widgetlibrary.h"
 #include "spacer.h"
 #include "pixmapcollection.h"
+#include "events.h"
 
 #include "formIO.h"
 
@@ -143,6 +144,8 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 
 	// Save the Form 's PixmapCollection
 	form->pixmapCollection()->save(uiElement);
+	// Save the Form connections
+	form->connectionBuffer()->save(uiElement);
 
 	m_currentForm = 0;
 	m_currentItem = 0;
@@ -252,6 +255,9 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 		if(index == -1)
 			kdDebug() << "FormIO: error the item is not in list " << endl;
 	}
+
+	// Load the form connections
+	form->connectionBuffer()->load(ui.namedItem("connections"));
 
 	m_currentForm = 0;
 	//m_currentWidget = 0;

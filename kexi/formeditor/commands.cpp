@@ -33,6 +33,7 @@
 #include "objpropbuffer.h"
 #include "kexiproperty.h"
 #include "widgetlibrary.h"
+#include "events.h"
 
 #include "commands.h"
 
@@ -233,16 +234,25 @@ InsertWidgetCommand::execute()
 		return;
 
 	m_container->m_insertRect = m_insertRect;
-	// a label is resized to just fit its contents
-	if(w->inherits("QLabel"))
-		m_container->m_insertRect = QRect(m_insertRect.topLeft(), w->sizeHint());
 	// if the insertRect is invalid (ie only one point), we use widget' size hint
-	else if/*(!m_container->m_insertRect.isValid() || */( (m_insertRect.width() < 21) && (m_insertRect.height() < 21))
+	if/*(!m_container->m_insertRect.isValid() || */(( (m_insertRect.width() < 21) && (m_insertRect.height() < 21)) || (w->inherits("QLabel")))
 	{
 		QSize s = w->sizeHint();
+
 		if(s.isEmpty())
 			s = QSize(20, 20); // Minimum size to avoid creating a (0,0) widget
-		m_container->m_insertRect = QRect(m_insertRect.x(), m_insertRect.y(), s.width(), s.height());
+		int x, y;
+		if(m_insertRect.isValid())
+		{
+			x = m_insertRect.x();
+			y = m_insertRect.y();
+		}
+		else
+		{
+			x = m_point.x();
+			y = m_point.y();
+		}
+		m_container->m_insertRect = QRect(x, y, s.width(), s.height());
 	}
 	w->move(m_container->m_insertRect.x(), m_container->m_insertRect.y());
 	w->resize(m_container->m_insertRect.width()-1, m_container->m_insertRect.height()-1);
@@ -526,6 +536,7 @@ DeleteWidgetCommand::DeleteWidgetCommand(QtWidgetList &list, Form *form)
 		m_containers.insert(item->name(), m_form->parentContainer(item->widget())->widget()->name());
 		m_parents.insert(item->name(), item->parent()->name());
 		FormIO::saveWidget(item, parent, m_domDoc);
+		form->connectionBuffer()->saveAllConnectionsForWidget(w->name(), m_domDoc);
 	}
 }
 
@@ -553,6 +564,8 @@ DeleteWidgetCommand::unexecute()
 	m_form->setInteractiveMode(false);
 	for(QDomNode n = m_domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
 	{
+		if(n.toElement().tagName() == "connections") // restore the widget connections
+			m_form->connectionBuffer()->load(n);
 		if(n.toElement().tagName() != "widget")
 			continue;
 		// We need first to know the name of the widget

@@ -200,6 +200,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void layoutVBox();
 		void layoutGrid();
 
+		void slotConnectionCreated(Form*, Connection&);
+
 	protected:
 		void initForm(Form *form);
 		/*! Slot called by the "Lay out in..." menu items. It creates a layout from the currently selected widgets (that must have the same parent). */
@@ -212,7 +214,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void dirty(KFormDesigner::Form *form);
 
 		void createFormSlot(Form *form, const QString &widget, const QString &signal);
-		void createdConnection(Form *form, Connection &connection);
+		void connectionCreated(Form *form, Connection &connection);
+		void connectionAborted(Form *form);
 
 	private:
 		// Enum for menu items indexes

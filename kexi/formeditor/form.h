@@ -46,6 +46,7 @@ class FormManager;
 //class ResizeHandleSet;
 class ObjectTree;
 class ObjectTreeItem;
+class ConnectionBuffer;
 typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 
 //! Base (virtual) class for all form widgets
@@ -65,7 +66,7 @@ class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public FormWidget
 	Q_OBJECT
 
 	public:
-		FormWidgetBase(QWidget *parent = 0, const char *name = 0, int WFlags = 0)
+		FormWidgetBase(QWidget *parent = 0, const char *name = 0, int WFlags = WDestructiveClose)
 		: QWidget(parent, name, WFlags)  {}
 		~FormWidgetBase() {;}
 
@@ -175,7 +176,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		KCommandHistory*	commandHistory() { return m_history; }
 		KActionCollection*	actionCollection() { return m_collection; }
-
+		ConnectionBuffer*	connectionBuffer() { return m_connBuffer; }
 		PixmapCollection*	pixmapCollection() { return m_pixcollection; }
 
 		/*! Adds a widget in the form CommandList. Please use it instead of calling directly actionCollection()->addCommand(). */
@@ -262,6 +263,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		ObjectTreeC		m_tabstops;
 		bool			m_autoTabstops;
+		ConnectionBuffer	*m_connBuffer;
 
 		PixmapCollection	*m_pixcollection;
 		//! This map is used to store cursors before inserting (so we can restore it later)
@@ -272,6 +274,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		FormWidget		*m_formWidget;
 
 		friend class FormManager;
+		friend class ConnectionDialog;
 };
 
 }

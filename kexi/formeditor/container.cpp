@@ -188,12 +188,12 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(m_form->manager()->createdConnection()->sender().isNull())
 				{
 					m_form->manager()->createdConnection()->setSender(m_moving->name());
-					m_form->manager()->createSignalMenu(m_moving);
 					if(m_form->formWidget())
 					{
 						m_form->formWidget()->initRect();
 						m_form->formWidget()->highlightWidgets(m_moving, 0/*, QPoint()*/);
 					}
+					m_form->manager()->createSignalMenu(m_moving);
 					return true;
 				}
 				// the user clicked outside the menu, we cancel the connection
@@ -207,8 +207,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				{
 					m_form->manager()->createdConnection()->setReceiver(m_moving->name());
 					m_form->manager()->createSlotMenu(m_moving);
-					//if(m_form->formWidget())
-					//	m_form->formWidget()->clearRect();
+					m_container->repaint();
 					return true;
 				}
 				// the user clicked outside the menu, we cancel the connection
@@ -229,7 +228,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					{
 						m_insertRect = m_moving->geometry();
 						if(m_form->formWidget())
-						m_form->formWidget()->initRect();
+							m_form->formWidget()->initRect();
 					}
 				}
 				else // the widget is not yet selected, we add it
@@ -374,7 +373,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(m_form->manager()->inserting() && m_insertRect.isValid())
 				{
 					if(m_form->formWidget())
-						m_form->formWidget()->drawRect(m_insertRect, 2);
+					{
+						QRect drawRect = QRect(m_container->mapTo(m_form->toplevelContainer()->widget(), m_insertRect.topLeft())
+						 , m_insertRect.size());
+						m_form->formWidget()->drawRect(drawRect, 2);
+					}
 				}
 				return true;
 			}

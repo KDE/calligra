@@ -43,6 +43,7 @@
 #include "widgetlibrary.h"
 #include "spacer.h"
 #include "pixmapcollection.h"
+#include "events.h"
 
 #include "form.h"
 
@@ -63,6 +64,7 @@ Form::Form(FormManager *manager, const char *name)
 	m_collection = new KActionCollection(this);
 	m_history = new KCommandHistory(m_collection, true);
 	m_tabstops.setAutoDelete(false);
+	m_connBuffer = new ConnectionBuffer();
 }
 
 void
@@ -191,6 +193,8 @@ Form::changeName(const QString &oldname, const QString &newname)
 		kdDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
 		(*(m_manager->buffer()))["name"]->setValue(oldname);
 	}
+	else
+		m_connBuffer->fixName(oldname, newname);
 
 }
 
@@ -204,6 +208,8 @@ void
 Form::emitChildRemoved(ObjectTreeItem *item)
 {
 	m_tabstops.remove(item);
+	if(m_connBuffer)
+		m_connBuffer->removeAllConnectionsForWidget(item->name());
 	emit childRemoved(item);
 }
 
@@ -435,6 +441,8 @@ Form::~Form()
 {
 	delete m_history;
 	delete m_topTree;
+	delete m_connBuffer;
+	m_connBuffer = 0;
 	m_resizeHandles.setAutoDelete(false); // otherwise, it tries to delete widgets which doesn't exist anymore
 }
 
@@ -508,9 +516,10 @@ void
 FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 {
 	QPoint fromPoint, toPoint;
-	fromPoint = mapFrom(from->parentWidget(), from->pos());
-	if(to)
-		toPoint = mapFrom(to->parentWidget(), to->pos());
+	if(from->parentWidget())
+		fromPoint = from->parentWidget()->mapTo(this, from->pos());
+	if(to && to->parentWidget() && (to != this))
+		toPoint = to->parentWidget()->mapTo(this, to->pos());
 
 	QPainter p;
 	p.begin(this, true);
@@ -534,7 +543,8 @@ FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &po
 		else if(to == this)
 			p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), point);
 		else*/
-		p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), mapFrom(to->parentWidget(), to->geometry().center()) );
+		if((from != this) && (to != this))
+			p.drawLine( from->parentWidget()->mapTo(this, from->geometry().center()), to->parentWidget()->mapTo(this, to->geometry().center()) );
 
 		p.drawPixmap(fromPoint.x(), fromPoint.y(), pix1);
 		p.drawPixmap(toPoint.x(), toPoint.y(), pix2);
@@ -556,8 +566,8 @@ FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &po
 	{
 		prev_rect.setX( (fromPoint.x() < toPoint.x()) ? (fromPoint.x() - 5) : (toPoint.x() - 5) );
 		prev_rect.setY( (fromPoint.y() < toPoint.y()) ? (fromPoint.y() - 5) : (toPoint.y() - 5) );
-		prev_rect.setRight( (fromPoint.x() < toPoint.x()) ? (toPoint.x() + to->width() + 5) : (fromPoint.x() + from->width() + 5) );
-		prev_rect.setBottom( (fromPoint.y() < toPoint.y()) ? (toPoint.y() + to->height() + 5) : (fromPoint.y() + from->height() + 5) ) ;
+		prev_rect.setRight( (fromPoint.x() < toPoint.x()) ? (toPoint.x() + to->width() + 10) : (fromPoint.x() + from->width() + 10) );
+		prev_rect.setBottom( (fromPoint.y() < toPoint.y()) ? (toPoint.y() + to->height() + 10) : (fromPoint.y() + from->height() + 10) ) ;
 	}
 	else
 		prev_rect = QRect(fromPoint.x()- 5,  fromPoint.y() -5, from->width() + 10, from->height() + 10);

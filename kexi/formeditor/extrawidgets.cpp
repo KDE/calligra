@@ -48,8 +48,10 @@
 #include "kexipropertyeditor.h"
 #include "kexipropertybuffer.h"
 #include "form.h"
+#include "formmanager.h"
 #include "objecttreeview.h"
 #include "objecttree.h"
+#include "events.h"
 
 #include "extrawidgets.h"
 
@@ -785,14 +787,27 @@ TabStopDialog::slotRadioClicked(bool isOn)
 ///////////// The dialog to edit or add/remove connections //////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 ConnectionDialog::ConnectionDialog(QWidget *parent)
-: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form connections"), Ok|Cancel|Details, Ok, false)
+: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form connections"), Ok|Cancel|Details, Ok, false), m_buffer(0)
 {
 	QFrame *frame = makeMainWidget();
 	QHBoxLayout *layout = new QHBoxLayout(frame, 0, 6);
 
+	// Setup the details widget /////////
+	QHBox *details = new QHBox(frame);
+	setDetailsWidget(details);
+	setDetails(true);
+
+	m_pixmapLabel = new QLabel(details);
+	m_pixmapLabel->setFixedWidth( int(IconSize(KIcon::Desktop) * 1.5) );
+	m_pixmapLabel->setAlignment(AlignHCenter | AlignTop);
+
+	m_textLabel = new QLabel(details);
+	m_textLabel->setAlignment(AlignLeft | AlignTop);
+	setStatusOk();
+
 	// And the KexiTableView ////////
 	m_data = new KexiTableViewData();
-	m_table = new KexiTableView(m_data, frame, "connections_tableview");
+	m_table = new KexiTableView(0, frame, "connections_tableview");
 	m_table->setSpreadSheetMode();
 	initTable();
 	m_table->setData(m_data, false);
@@ -822,20 +837,8 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 	connect(delItem, SIGNAL(clicked()), this, SLOT(removeItem()));
 	vlayout->addStretch();
 
-	// Setup the details widget /////////
-	QHBox *details = new QHBox(frame);
-	setDetailsWidget(details);
-	setDetails(true);
-
-	m_pixmapLabel = new QLabel(details);
-	m_pixmapLabel->setFixedWidth( int(IconSize(KIcon::Desktop) * 1.5) );
-	m_pixmapLabel->setAlignment(AlignHCenter | AlignTop);
-
-	m_textLabel = new QLabel(details);
-	m_textLabel->setAlignment(AlignLeft | AlignTop);
-	setStatusOk();
-
 	setInitialSize(QSize(600, 300));
+	setWFlags(WDestructiveClose);
 }
 
 void
@@ -874,17 +877,36 @@ ConnectionDialog::initTable()
 	connect(m_table, SIGNAL(itemSelected(KexiTableItem *)), this, SLOT(checkConnection(KexiTableItem *)));
 }
 
-int
+void
 ConnectionDialog::exec(Form *form)
 {
 	m_form = form;
 	updateTableData();
 
-	int r = KDialogBase::exec();
-	if( r == QDialog::Accepted)
+	show();
+	return;
+}
+
+void
+ConnectionDialog::slotOk()
+{
+	// First we update our buffer contents
+	for(int i=0; i < m_table->rows(); i++)
 	{
+		KexiTableItem *item = m_table->itemAt(i);
+		Connection *c = m_buffer->at(i);
+
+		c->setSender( (*item)[0].toString() );
+		c->setSignal( (*item)[1].toString() );
+		c->setReceiver( (*item)[2].toString() );
+		c->setSlot( (*item)[3].toString() );
 	}
-	return r;
+
+	// then me make it replace form's current one
+	delete m_form->m_connBuffer;
+	m_form->m_connBuffer = m_buffer;
+
+	QDialog::accept();
 }
 
 void
@@ -901,10 +923,18 @@ ConnectionDialog::updateTableData()
 		m_widgetsColumnData->append(item);
 	}
 
-	/*for (int i=0; i<4; i++) {
+	// Then we fill the columns with the form connections
+	for(Connection *c = m_form->connectionBuffer()->first(); c ; c = m_form->connectionBuffer()->next())
+	{
 		KexiTableItem *item = new KexiTableItem(4);
-		m_data->append(item);
-	}*/
+		(*item)[0] = c->sender();
+		(*item)[1] = c->signal();
+		(*item)[2] = c->receiver();
+		(*item)[3] = c->slot();
+		m_table->insertItem(item, m_table->rows());
+	}
+
+	m_buffer = new ConnectionBuffer(*(m_form->connectionBuffer()));
 }
 
 void
@@ -985,7 +1015,7 @@ ConnectionDialog::updateSlotList(KexiTableItem *item, const QString &signal, con
 		// we add the slot only if it is compatible with the signal
 		QString slotArg(*it);
 		slotArg = slotArg.remove( QRegExp(".*[(]|[)]") );
-		kdDebug() << "Comparing arguments for signal : " << signalArg << " and slot " << slotArg << endl;
+
 		if(!signalArg.startsWith(slotArg, true) && (!signal.isEmpty())) // args not compatible
 			continue;
 
@@ -1016,7 +1046,7 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 	signal = signal.remove( QRegExp(".*[(]|[)]") ); // just keep the args list
 	QString slot = (*item)[3].toString();
 	slot = slot.remove( QRegExp(".*[(]|[)]") );
-	kdDebug() << "Comparing arguments for signal : " << signal << " and slot " << slot << endl;
+
 	if(!signal.startsWith(slot, true))
 	{
 		setStatusError( i18n("The signal/slot arguments are not compatible."));
@@ -1029,22 +1059,60 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 void
 ConnectionDialog::newItem()
 {
-	m_table->insertEmptyRow(m_table->rows() + 1);
+	int idx = m_table->rows() ? m_table->rows() : -1;
+	m_table->insertItem(new KexiTableItem(4), idx);
+	m_buffer->append(new Connection());
 }
 
 void
 ConnectionDialog::newItemByDragnDrop()
 {
-	// TODO
+	FormManager *manager = m_form->manager();
+	m_form->manager()->startDraggingConnection();
+	connect(manager, SIGNAL(connectionAborted(Form*)), this, SLOT(slotConnectionAborted(Form*)));
+	connect(manager, SIGNAL(connectionCreated(Form*, Connection&)), this, SLOT(slotConnectionCreated(Form*, Connection&)) );
+
+	hide();
+}
+
+void
+ConnectionDialog::slotConnectionCreated(Form *form, Connection &connection)
+{
+	show();
+	if(form != m_form)
+		return;
+
+	Connection *c = new Connection(connection);
+	KexiTableItem *item = new KexiTableItem(4);
+	(*item)[0] = c->sender();
+	(*item)[1] = c->signal();
+	(*item)[2] = c->receiver();
+	(*item)[3] = c->slot();
+	m_table->insertItem(item, m_table->rows());
+	m_buffer->append(c);
+}
+
+void
+ConnectionDialog::slotConnectionAborted(Form *form)
+{
+	show();
+	if(form != m_form)
+		return;
+
+	newItem();
 }
 
 void
 ConnectionDialog::removeItem()
 {
+	if(m_table->currentRow() == -1)
+		return;
+
 	int confirm = KMessageBox::questionYesNo(parentWidget(), i18n("<qt>Do you really want to remove this connection ?</qt>"));
 	if(confirm == KMessageBox::No)
 		return;
 
+	m_buffer->remove(m_table->currentRow());
 	m_table->deleteItem(m_table->selectedItem());
 }
 

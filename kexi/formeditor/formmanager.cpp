@@ -98,6 +98,7 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 
 	m_deleteWidgetLater_list.setAutoDelete(true);
 	connect( &m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
+	connect( this, SIGNAL(connectionCreated(Form*, Connection&)), this, SLOT(slotConnectionCreated(Form*, Connection&)));
 }
 
 void
@@ -302,6 +303,8 @@ FormManager::stopDraggingConnection()
 		form->m_mouseTrackers = 0;
 	}
 
+	if(m_connection->slot().isNull())
+		emit connectionAborted(activeForm());
 	delete m_connection;
 	m_connection = 0;
 	m_drawingSlot = false;
@@ -782,12 +785,23 @@ FormManager::menuSignalChoosed(int id)
 			m_connection->setSlot(m_sigSlotMenu->text(id));
 			kdDebug() << "Finished creating the connection: sender=" << m_connection->sender() << "; signal=" << m_connection->signal() <<
 			  "; receiver=" << m_connection->receiver() << "; slot=" << m_connection->slot() << endl;
-			emit createdConnection(activeForm(), *m_connection);
+			emit connectionCreated(activeForm(), *m_connection);
 			stopDraggingConnection();
 		}
 	}
 	else if(m_menuWidget)
 		emit(createFormSlot(m_active, m_menuWidget->name(), m_popup->text(id)));
+}
+
+void
+FormManager::slotConnectionCreated(Form *form, Connection &connection)
+{
+	if(!form)
+		return;
+
+	Connection *c = new Connection(connection);
+	form->connectionBuffer()->append(c);
+
 }
 
 void
@@ -883,7 +897,6 @@ FormManager::slotStyle()
 
 	KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
 	QString style = m_style->currentText();
-	kdDebug() << "Changing style of the form to " << style << endl;
 	activeForm()->toplevelContainer()->widget()->setStyle( style);
 
 	QObjectList *l = activeForm()->toplevelContainer()->widget()->queryList( "QWidget" );
@@ -908,8 +921,8 @@ FormManager::editConnections()
 	if(!activeForm())
 		return;
 
-	ConnectionDialog dialog(activeForm()->toplevelContainer()->widget()->topLevelWidget());
-	dialog.exec(activeForm());
+	ConnectionDialog *dialog = new ConnectionDialog(activeForm()->toplevelContainer()->widget()->topLevelWidget());
+	dialog->exec(activeForm());
 }
 
 void

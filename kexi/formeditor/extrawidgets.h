@@ -54,6 +54,8 @@ namespace KFormDesigner {
 
 class ObjectTreeView;
 class Form;
+class ConnectionBuffer;
+class Connection;
 
 class KFORMEDITOR_EXPORT RichTextDialog : public KDialogBase
 {
@@ -88,7 +90,7 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 
 	public:
 		EditListViewDialog(QWidget *parent);
-		~EditListViewDialog(){;}
+		~EditListViewDialog() {;}
 
 		int exec(QListView *listview);
 
@@ -152,7 +154,7 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		ConnectionDialog(QWidget *parent);
 		~ConnectionDialog() {;}
 
-		int exec(Form *form);
+		void exec(Form *form);
 
 	protected:
 		void setStatusOk();
@@ -169,9 +171,15 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		void newItem();
 		void removeItem();
 
+		void slotConnectionCreated(Form *form, Connection &connection);
+		void slotConnectionAborted(Form *form);
+
+		virtual void slotOk();
+
 	protected:
 		enum {BAdd = 10, BAddDrag, BRemove};
 		Form    *m_form;
+		ConnectionBuffer *m_buffer;
 		KexiTableView  *m_table;
 		KexiTableViewData  *m_data;
 		KexiTableViewData *m_widgetsColumnData, *m_slotsColumnData, *m_signalsColumnData;

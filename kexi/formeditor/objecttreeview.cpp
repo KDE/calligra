@@ -137,7 +137,11 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 		if(!item->isOpen())
 			p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
 		}*/
-		QString iconName = ((ObjectTreeView*)listView())->pixmapForClass(item->m_item->widget()->className());
+		QString iconName;
+		if(depth() == 0)
+			iconName = "form";
+		else
+			iconName = ((ObjectTreeView*)listView())->pixmapForClass(item->m_item->widget()->className());
 		p->drawPixmap((w - IconSize(KIcon::Small))/2, (item->height() - IconSize(KIcon::Small))/2 , SmallIcon(iconName));
 
 		p->translate(0, item->totalHeight());

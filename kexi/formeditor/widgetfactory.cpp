@@ -85,6 +85,7 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 
 	m_editor = editor;
 	m_widget = w;
+	m_firstText = text;
 
 	changeText(text); // to update size of the widget
 	return editor;
@@ -164,6 +165,12 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 		QKeyEvent *e = static_cast<QKeyEvent*>(ev);
 		if(((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->state() != ControlButton))
 			resetEditor();
+		if(e->key() == Qt::Key_Escape)
+		{
+			m_editor->setText(m_firstText);
+			//changeText(m_firstText);
+			resetEditor();
+		}
 	}
 	else if(ev->type() == QEvent::ContextMenu)
 		return true;

@@ -21,6 +21,7 @@
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
 * Move tab between two QTabWidgets by drag'n drop
 * Better editor for iconview
+* during inline editing: CTRL+Enter could insert \n
 
 ^^^^^^^^^^^^^^^^ DONE ^^^^^^^^^^^^^^
 * Finish sync between Form and ObjectTreeView (2/21/04)

@@ -213,6 +213,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 	protected:
 		QGuardedPtr<QWidget> m_widget;
 		QGuardedPtr<KLineEdit>  m_editor;
+		QString   m_firstText;
 		QGuardedPtr<ResizeHandleSet>  m_handles;
 		QGuardedPtr<Container>      m_container;
 };
