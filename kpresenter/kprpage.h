@@ -271,7 +271,7 @@ public:
     bool findTextObject( KPObject *obj );
     KPObject *nextTextObject(KPTextObject *obj);
 
-    void getAllObjectSelectedList(QPtrList<KPObject> &lst );
+    void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false );
 
 protected:
 

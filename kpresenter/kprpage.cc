@@ -3458,7 +3458,7 @@ KPPixmapObject * KPrPage::picViewOrigHelper() const
 void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
 {
     QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst );
+    getAllObjectSelectedList(lst,true /*force*/ );
     QPtrListIterator<KPObject> it( lst );
 
   for ( ; it.current() ; ++it )
@@ -3472,7 +3472,7 @@ void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, 
 void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
 {
     QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst );
+    getAllObjectSelectedList(lst,true /*force*/ );
     QPtrListIterator<KPObject> oIt( lst );
 
     for ( ; oIt.current() ; ++oIt )
@@ -3617,7 +3617,7 @@ KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
 void KPrPage::changeTabStopValue ( double _tabStop )
 {
     QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst );
+    getAllObjectSelectedList(lst,true /*force*/ );
     QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it )
     {
@@ -3670,11 +3670,11 @@ bool KPrPage::findTextObject( KPObject *obj )
     return (m_objectList.find( obj )>=0 );
 }
 
-void KPrPage::getAllObjectSelectedList(QPtrList<KPObject> &lst )
+void KPrPage::getAllObjectSelectedList(QPtrList<KPObject> &lst, bool force )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        it.current()->getAllObjectSelectedList( lst );
+        it.current()->getAllObjectSelectedList( lst,force );
     }
 }

@@ -5135,7 +5135,9 @@ void KPresenterView::extraSpelling()
 
     //for first page add text object in sticky page
     //move it in kprpage
-    QPtrListIterator<KPObject> it( stickyPage()->objectList() );
+    QPtrList<KPObject> lstObj;
+    stickyPage()->getAllObjectSelectedList(lstObj, true);
+    QPtrListIterator<KPObject> it( lstObj );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
@@ -5152,7 +5154,9 @@ void KPresenterView::spellAddTextObject()
 {
     m_spell.spellCurrTextObjNum = -1;
     m_spell.textObject.clear();
-    QPtrListIterator<KPObject> it( m_canvas->getObjectList() );
+    QPtrList<KPObject> lstObj;
+    m_canvas->activePage()->getAllObjectSelectedList(lstObj, true);
+    QPtrListIterator<KPObject> it( lstObj );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
