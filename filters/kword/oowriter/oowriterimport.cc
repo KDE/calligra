@@ -369,6 +369,27 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
 
     framesetsElem=mainDocument.createElement("FRAMESETS");
     docElement.appendChild(framesetsElem);
+
+    // Now create VARIABLESETTINGS, mostly from meta.xml
+    QDomElement varSettings = mainDocument.createElement( "VARIABLESETTINGS" );
+    docElement.appendChild( varSettings );
+    QDomNode meta   = m_meta.namedItem( "office:document-meta" );
+    QDomNode office = meta.namedItem( "office:meta" );
+    if ( !office.isNull() ) {
+        QDomElement date = office.namedItem( "dc:date" ).toElement();
+        if ( !date.isNull() && !date.text().isEmpty() ) {
+            // Both use ISO-8601, no conversion needed.
+            varSettings.setAttribute( "modificationDate", date.text() );
+        }
+        date = office.namedItem( "meta:creation-date" ).toElement();
+        if ( !date.isNull() && !date.text().isEmpty() ) {
+            varSettings.setAttribute( "creationDate", date.text() );
+        }
+        date = office.namedItem( "meta:print-date" ).toElement();
+        if ( !date.isNull() && !date.text().isEmpty() ) {
+            varSettings.setAttribute( "lastPrintingDate", date.text() );
+        }
+    }
 }
 
 void OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool headerFooter )
@@ -466,43 +487,45 @@ KoFilter::ConversionStatus OoWriterImport::openFile()
 // Very related to OoImpressImport::createDocumentInfo
 void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 {
-    docinfo.appendChild( docinfo.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomDocument doc = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
+    docinfo = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
 
     QDomNode meta   = m_meta.namedItem( "office:document-meta" );
     QDomNode office = meta.namedItem( "office:meta" );
 
     if ( office.isNull() )
         return;
-    QDomElement elementDocInfo  = doc.documentElement();
+    QDomElement elementDocInfo  = docinfo.documentElement();
 
     QDomElement e = office.namedItem( "dc:creator" ).toElement();
     if ( !e.isNull() && !e.text().isEmpty() )
     {
-        QDomElement author = doc.createElement( "author" );
-        QDomElement t = doc.createElement( "full-name" );
-        author.appendChild( t );
-        t.appendChild( doc.createTextNode( e.text() ) );
+        QDomElement author = docinfo.createElement( "author" );
         elementDocInfo.appendChild( author);
+        QDomElement t = docinfo.createElement( "full-name" );
+        author.appendChild( t );
+        t.appendChild( docinfo.createTextNode( e.text() ) );
     }
-
     e = office.namedItem( "dc:title" ).toElement();
     if ( !e.isNull() && !e.text().isEmpty() )
     {
-        QDomElement about = doc.createElement( "about" );
-        QDomElement title = doc.createElement( "title" );
-        about.appendChild( title );
-        title.appendChild( doc.createTextNode( e.text() ) );
+        QDomElement about = docinfo.createElement( "about" );
         elementDocInfo.appendChild( about );
+        QDomElement title = docinfo.createElement( "title" );
+        about.appendChild( title );
+        title.appendChild( docinfo.createTextNode( e.text() ) );
     }
-#if 0
     e = office.namedItem( "dc:description" ).toElement();
     if ( !e.isNull() && !e.text().isEmpty() )
     {
-
+        QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
+        if ( about.isNull() ) {
+            about = docinfo.createElement( "about" );
+            elementDocInfo.appendChild( about );
+        }
+        QDomElement title = docinfo.createElement( "abstract" );
+        about.appendChild( title );
+        title.appendChild( docinfo.createTextNode( e.text() ) );
     }
-#endif
-    docinfo.appendChild(doc);
 
     //kdDebug(30518)<<" meta-info :"<<m_meta.toCString()<<endl;
 }
