@@ -26,6 +26,7 @@
 #include <ktoolbar.h>
 #include <kxmlguifactory.h>
 #include <kpopupmenu.h>
+#include <kdebug.h>
 
 ToolSelectAction::ToolSelectAction( QObject* parent, const char* name )
 :KActionMenu("",parent,name)
@@ -60,7 +61,14 @@ int ToolSelectAction::plug( QWidget* widget, int index )
 {
   if ( widget->inherits("KToolBar") ) {
     KToolBar* bar = (KToolBar*)widget;
-    int i = ( m_count == 1 ) ? KAction::plug(widget,index):KActionMenu::plug(widget,index);
+    int i;
+
+    if( m_count == 1 ) {
+      i = KAction::plug(widget,index);
+    } else {
+      i = KActionMenu::plug(widget,index);
+    }
+
     bar->setToggle(itemId(i),true);
     return i;
   }
@@ -70,7 +78,6 @@ int ToolSelectAction::plug( QWidget* widget, int index )
 void ToolSelectAction::setDefaultAction( KAction* a )
 {
   KAction::setText(a->text());
-  setShortcut(KShortcut(a->shortcut().keyCodeQt()));
   setGroup(a->group());
   setWhatsThis(a->whatsThis());
   setToolTip(a->toolTip());
