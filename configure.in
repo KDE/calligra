@@ -35,7 +35,7 @@ KDE_CHECK_MICO(2.2.6)
 idldir="\$(includedir)/idl"
 AC_SUBST(idldir)
 
-KDE_CHECK_PYTHON(1.5)
+dnl KDE_CHECK_PYTHON(1.5)
 AC_CHECK_HEADERS(unistd.h sys/param.h floatingpoint.h)
 KDE_CHECK_KIMGIO
 AC_FIND_QIMGIO
@@ -129,6 +129,8 @@ AC_OUTPUT( \
 	kdiagramm/pics/Makefile \
 	koshell/Makefile \
 	lib/Makefile \
+	lib/kscript/Makefile \
+	lib/kscript/ksidl/Makefile \
 	lib/kofficecore/Makefile \
 	lib/kofficeui/Makefile \
 	lib/kofficeui/pics/Makefile \
