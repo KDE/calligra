@@ -118,16 +118,14 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
 }
 
 /*================================================================*/
-/*
-KWTableFrameSet::Cell *KWTableFrameSet::getCell( KWFrameSet *f ) {
-    for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
-        if ( m_cells.at( i ) == f) {
-            return m_cells.at(i);
-        }
-    }
+KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( int mx, int my )
+{
+    QListIterator<Cell> it( m_cells );
+    for ( ; it.current() ; ++it )
+        if ( it.current()->contains( mx, my ) )
+            return it.current();
     return 0L;
 }
-*/
 
 /*================================================================*/
 bool KWTableFrameSet::isTableHeader( Cell *cell )
@@ -1245,7 +1243,7 @@ void KWTableFrameSetEdit::setCurrentCell( int mx, int my )
     KWDocument * doc = m_fs->kWordDocument();
     int x = static_cast<int>( mx / doc->zoomedResolutionX() );
     int y = static_cast<int>( my / doc->zoomedResolutionY() );
-    KWFrameSet *fs = doc->getFrameSet( x, y ); // ######### change to tableFrameSet()->getFrameSet( x, y ) or so when the cells are inside the table
+    KWFrameSet *fs = tableFrameSet()->getCellByPos( x, y );
     if ( fs )
         setCurrentCell( fs );
 }
