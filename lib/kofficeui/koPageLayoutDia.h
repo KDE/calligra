@@ -31,6 +31,7 @@
 
 #include <kapp.h>
 #include <krestrictedline.h>
+#include <kspinbox.h>
 
 // paper formats (mm)
 #define PG_A3_WIDTH             297.0
@@ -51,7 +52,10 @@
 #define PG_SCREEN_HEIGHT        180.0
 
 // enums
-enum KoTabs {FORMAT_AND_BORDERS = 1,HEADER_AND_FOOTER = 2};
+const int FORMAT_AND_BORDERS = 1;
+const int HEADER_AND_FOOTER = 2;
+const int KWORD_SPECIAL = 4;
+
 enum KoFormat {PG_DIN_A3 = 0,PG_DIN_A4 = 1,PG_DIN_A5 = 2,PG_US_LETTER = 3,PG_US_LEGAL = 4,PG_SCREEN = 5,PG_CUSTOM = 6,PG_DIN_B5 = 7,PG_US_EXECUTIVE = 8};
 enum KoOrientation {PG_PORTRAIT = 0,PG_LANDSCAPE = 1};
 enum KoUnit {PG_MM = 0,PG_CM = 1,PG_INCH = 2};
@@ -75,6 +79,12 @@ struct KoHeadFoot
   QString footLeft;
   QString footMid;
   QString footRight;
+};
+
+struct KoKWord
+{
+  int columns;
+  int columnSpacing;
 };
 
 /******************************************************************/
@@ -116,10 +126,13 @@ public:
 
   // constructor - destructor
   KoPageLayoutDia(QWidget*,const char*,KoPageLayout,KoHeadFoot,int);
+  KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,
+		  KoKWord _kw,int tabs);
   ~KoPageLayoutDia();              
 
   // show page layout dialog
   static bool pageLayout(KoPageLayout&,KoHeadFoot&,int);
+  static bool pageLayout(KoPageLayout&,KoHeadFoot&,KoKWord&,int);
 
   // get a standard page layout
   static KoPageLayout standardLayout();
@@ -127,6 +140,7 @@ public:
   // should NOT be used by an app - just for internal use!
   KoPageLayout getLayout() {return layout;};
   KoHeadFoot getHeadFoot();
+  KoKWord getKWord();
 
 protected:
 
@@ -134,14 +148,15 @@ protected:
   void setupTab1();
   void setValuesTab1();
   void setupTab2();
+  void setupTab3();
 
   // update preview
   void updatePreview(KoPageLayout);
 
   // dialog objects
   QGroupBox *formatFrame,*borderFrame;
-  QWidget *tab1,*tab2;
-  QGridLayout *grid1,*formatGrid,*borderGrid,*grid2;
+  QWidget *tab1,*tab2,*tab3;
+  QGridLayout *grid1,*grid3,*formatGrid,*borderGrid,*grid2;
   QLabel *lpgFormat,*lpgOrientation,*lpgUnit,*lpgWidth,*lpgHeight,*lbrLeft,*lbrRight,*lbrTop,*lbrBottom;
   QComboBox *cpgFormat,*cpgOrientation,*cpgUnit;
   KRestrictedLine *epgWidth,*epgHeight,*ebrLeft,*ebrRight,*ebrTop,*ebrBottom;
@@ -150,10 +165,13 @@ protected:
   QLineEdit *eHeadLeft,*eHeadMid,*eHeadRight;
   QLabel *lFootLeft,*lFootMid,*lFootRight,*lFoot,*lMacros1,*lMacros2;
   QLineEdit *eFootLeft,*eFootMid,*eFootRight;
+  KNumericSpinBox *nColumns,*nCSpacing;
+  QLabel *lColumns,*lCSpacing;
 
   // layout
   KoPageLayout layout;
   KoHeadFoot hf;
+  KoKWord kw;
 
   bool retPressed;
 

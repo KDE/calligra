@@ -72,6 +72,8 @@ AC_OUTPUT( \
 	kspread/Makefile \
 	kspread/pics/Makefile \
 	kspread/scripts/Makefile \
+	kword/Makefile \
+	kword/toolbar/Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
 	lib/kofficeui/Makefile \

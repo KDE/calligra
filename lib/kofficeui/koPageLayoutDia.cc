@@ -102,6 +102,29 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
   setFocus();
 }
 
+/*==================== constructor ===============================*/
+KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,
+				 KoKWord _kw,int tabs)
+  : QTabDialog(parent,name,true)
+{
+  layout = _layout;
+  hf = _hf;
+  kw = _kw;
+
+  if (tabs & FORMAT_AND_BORDERS) setupTab1();
+  if (tabs & HEADER_AND_FOOTER) setupTab2();
+  if (tabs & KWORD_SPECIAL) setupTab3();
+
+  setCancelButton( i18n( "Cancel" ) );
+  setOkButton( i18n( "Ok" ) );
+
+  retPressed = false;
+
+  setCaption( i18n( "Page Layout") );
+  setFocusPolicy(QWidget::StrongFocus);
+  setFocus();
+}
+
 /*===================== destructor ===============================*/
 KoPageLayoutDia::~KoPageLayoutDia()
 {
@@ -118,6 +141,25 @@ bool KoPageLayoutDia::pageLayout(KoPageLayout& _layout,KoHeadFoot& _hf,int _tabs
       res = true;
       if (_tabs & FORMAT_AND_BORDERS) _layout = dlg->getLayout();
       if (_tabs & HEADER_AND_FOOTER) _hf = dlg->getHeadFoot();
+    }
+
+  delete dlg;
+
+  return res;
+}
+
+/*======================= show dialog ============================*/
+bool KoPageLayoutDia::pageLayout(KoPageLayout& _layout,KoHeadFoot& _hf,KoKWord& _kw,int _tabs)
+{
+  bool res = false;
+  KoPageLayoutDia *dlg = new KoPageLayoutDia(0,"PageLayout",_layout,_hf,_kw,_tabs);
+
+  if (dlg->exec() == QDialog::Accepted)
+    {
+      res = true;
+      if (_tabs & FORMAT_AND_BORDERS) _layout = dlg->getLayout();
+      if (_tabs & HEADER_AND_FOOTER) _hf = dlg->getHeadFoot();
+      if (_tabs & KWORD_SPECIAL) _kw = dlg->getKWord();
     }
 
   delete dlg;
@@ -154,6 +196,15 @@ KoHeadFoot KoPageLayoutDia::getHeadFoot()
   hf.footRight = qstrdup(eFootRight->text());
 
   return hf;
+}
+
+/*================================================================*/
+KoKWord KoPageLayoutDia::getKWord()
+{
+  kw.columns = nColumns->getValue();
+  kw.columnSpacing = nCSpacing->getValue();
+
+  return kw;
 }
 
 /*================ setup format and borders tab ==================*/
@@ -399,9 +450,9 @@ void KoPageLayoutDia::setupTab1()
   //grid1->setRowStretch(1,1);
 
   grid1->activate();
-  tab1->resize(0,0);
-  tab1->setMaximumSize(tab1->size());
-  tab1->setMinimumSize(tab1->size());
+//   tab1->resize(0,0);
+//   tab1->setMaximumSize(tab1->size());
+//   tab1->setMinimumSize(tab1->size());
 
   addTab(tab1,i18n("Format and Borders"));
 
@@ -566,11 +617,59 @@ void KoPageLayoutDia::setupTab2()
   grid2->addRowSpacing(7,2*lMacros2->height());
 
   grid2->activate();
-  tab2->resize(0,0);
-  tab2->setMaximumSize(tab2->size());
-  tab2->setMinimumSize(tab2->size());
+//   tab2->resize(0,0);
+//   tab2->setMaximumSize(tab2->size());
+//   tab2->setMinimumSize(tab2->size());
   
   addTab(tab2,i18n("Header and Footer"));
+}
+
+/*================================================================*/
+void KoPageLayoutDia::setupTab3()
+{
+  tab3 = new QWidget(this);
+
+  grid3 = new QGridLayout(tab3,3,3,15,7);
+
+  lColumns = new QLabel(i18n("Columns:"),tab3);
+  lColumns->resize(lColumns->sizeHint());
+  grid3->addWidget(lColumns,0,0);
+
+  nColumns = new KNumericSpinBox(tab3);
+  nColumns->resize(nColumns->sizeHint());
+  grid3->addWidget(nColumns,1,0);
+  nColumns->setEditable(false);
+  nColumns->setRange(1,5);
+  nColumns->setValue(kw.columns);
+
+  lCSpacing = new QLabel(i18n("Columns Spacing (mm):"),tab3);
+  lCSpacing->resize(lCSpacing->sizeHint());
+  grid3->addWidget(lCSpacing,0,1);
+
+  nCSpacing = new KNumericSpinBox(tab3);
+  nCSpacing->resize(nCSpacing->sizeHint());
+  grid3->addWidget(nCSpacing,1,1);
+  nCSpacing->setEditable(false);
+  nCSpacing->setRange(0,100);
+  nCSpacing->setValue(kw.columnSpacing);
+
+  // --------------- main grid ------------------
+  grid3->addColSpacing(0,lColumns->width());
+  grid3->addColSpacing(0,nColumns->width());
+  grid3->addColSpacing(1,lCSpacing->width());
+  grid3->addColSpacing(1,nCSpacing->width());
+  grid3->setColStretch(2,1);
+
+  grid3->addRowSpacing(0,lColumns->height());
+  grid3->addRowSpacing(1,nColumns->height());
+  grid3->setRowStretch(2,1);
+
+  grid3->activate();
+//   tab3->resize(0,0);
+//   tab3->setMaximumSize(tab3->size());
+//   tab3->setMinimumSize(tab3->size());
+  
+  addTab(tab3,i18n("Columns, etc"));
 }
 
 /*====================== update the preview ======================*/
@@ -627,7 +726,7 @@ void KoPageLayoutDia::formatChanged(int _format)
     {
       bool enable = true;
       char stmp[10];
-      double w,h,dtmp;
+      double w = 0,h = 0,dtmp = 0;
       
       layout.format = (KoFormat)_format;
       if ((KoFormat)_format != PG_CUSTOM) enable = false;
