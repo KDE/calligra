@@ -1,12 +1,12 @@
 <!DOCTYPE QConfig ><QConfig name="KIllustrator">
 <MenuBar>
- <Menu name="File"><text>File</text>
+ <Menu name="file"><text>File</text>
   <Action name="import"/>
   <Action name="export"/>
   <Separator/>
   <Action name="documentInfo"/>
  </Menu>
- <Menu name="Edit"><text>Edit</text>
+ <Menu name="edit"><text>Edit</text>
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
@@ -19,14 +19,14 @@
   <Separator/>
   <Action name="selectAll"/>
   <Separator/>
-  <Menu name="Insert"><text>Insert</text>
+  <Menu name="insert"><text>Insert</text>
    <Action name="insertBitmap"/>
    <Action name="insertClipart"/>
   </Menu>
   <Separator/>
   <Action name="properties"/>
  </Menu>
- <Menu name="View"><text>View</text>
+ <Menu name="view"><text>View</text>
   <Action name="outline"/>
   <Action name="normal"/>
   <Separator/>
@@ -36,7 +36,7 @@
   <Action name="showGrid"/>
   <Action name="showHelplines"/>
  </Menu>
- <Menu name="Layout"><text>Layout</text>
+ <Menu name="layout"><text>Layout</text>
   <Action name="page"/>
   <Action name="grid"/>
   <Action name="helplines"/>
@@ -44,7 +44,7 @@
   <Action name="alignToGrid"/>
   <Action name="alignToHelplines"/>
  </Menu>
- <Menu name="Arrange"><text>Arrange</text>
+ <Menu name="arrange"><text>Arrange</text>
   <Menu name="Transform"><text>Transform</text>
    <Action name="transformPosition"/>
    <Action name="transformDimension"/>
@@ -63,10 +63,10 @@
   <Action name="textAlongPath"/>
   <Action name="convertToCurve"/>
  </Menu>
- <Menu name="Effects"><text>Effects</text>
+ <Menu name="effects"><text>Effects</text>
   <Action name="blend"/>
  </Menu>
- <Menu name="Options"><text>Options</text>
+ <Menu name="options"><text>Options</text>
   <Action name="options"/>
  </Menu>
 </MenuBar>
@@ -101,10 +101,10 @@
 <!--
 <InPlaceEditing>
  <MenuBar>
-  <Menu name="View"><text>View</text>
+  <Menu name="view"><text>View</text>
    <Action name="newView"/>
   </Menu>
-  <Menu name="Help"><text>Help</text>
+  <Menu name="help"><text>Help</text>
    <Action name="about"/>
   </Menu>
  </MenuBar>
