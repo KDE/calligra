@@ -49,6 +49,7 @@ class KOTEXT_EXPORT KoTextFormatInterface
 {
 public:
     KoTextFormatInterface() {}
+    virtual ~KoTextFormatInterface() {}
 
     /** Interface for accessing the current format */
     virtual KoTextFormat * currentFormat() const = 0;
