@@ -1133,9 +1133,11 @@ void BrushCmd::unexecute()
 
 PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                       bool _showPresentationDuration, QPen _pen,
-                      QValueList<bool> _selectedSlides, bool _oldManualSwitch, bool _oldInfiniteLoop,
+                      QValueList<bool> _selectedSlides, const QString & _presentationName,
+                      bool _oldManualSwitch, bool _oldInfiniteLoop,
                       bool _oldShowPresentationDuration, QPen _oldPen,
-                      QValueList<bool> _oldSelectedSlides, KPresenterDoc *_doc )
+                      QValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
+                      KPresenterDoc *_doc )
     : KNamedCommand( _name )
 {
     manualSwitch = _manualSwitch;
@@ -1148,6 +1150,8 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLo
     oldShowPresentationDuration = _oldShowPresentationDuration;
     oldPen = _oldPen;
     oldSelectedSlides = _oldSelectedSlides;
+    oldPresentationName = _oldPresentationName;
+    presentationName = _presentationName;
     doc = _doc;
 }
 
@@ -1157,7 +1161,7 @@ void PgConfCmd::execute()
     doc->setInfiniteLoop( infiniteLoop );
     doc->setPresentationDuration( showPresentationDuration );
     doc->setPresPen( pen );
-
+    doc->setPresentationName( presentationName );
     QPtrList<KPrPage> pages = doc->pageList();
     unsigned count = selectedSlides.count();
     if( count > pages.count() ) count = pages.count();
@@ -1171,6 +1175,7 @@ void PgConfCmd::unexecute()
     doc->setInfiniteLoop( oldInfiniteLoop );
     doc->setPresentationDuration( oldShowPresentationDuration );
     doc->setPresPen( oldPen );
+    doc->setPresentationName( oldPresentationName );
 
     QPtrList<KPrPage> pages = doc->pageList();
     unsigned count = oldSelectedSlides.count();

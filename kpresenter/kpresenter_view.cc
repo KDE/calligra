@@ -3645,11 +3645,13 @@ void KPresenterView::pgConfOk()
                                           pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
                                           pgConfDia->getPresentationDuration(), pgConfDia->getPen(),
                                           pgConfDia->getSelectedSlides(),
+                                          pgConfDia->presentationName(),
                                           kPresenterDoc()->spManualSwitch(),
                                           kPresenterDoc()->spInfiniteLoop(),
                                           kPresenterDoc()->presentationDuration(),
                                           kPresenterDoc()->presPen(),
                                           selectedSlides,
+                                          kPresenterDoc()->presentationName(),
                                           kPresenterDoc() );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );

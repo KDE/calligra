@@ -155,7 +155,7 @@ void PgConfDia::setupPageSlides()
 
     QHBox *box = new QHBox( group );
 
-    QLabel *lab = new QLabel( i18n( "Custom Slide" ),box );
+    ( void )new QLabel( i18n( "Custom Slide" ),box );
 
     m_customSlideCombobox = new QComboBox( box );
     m_customSlideCombobox->insertStringList( m_doc->presentationList() );
@@ -192,13 +192,13 @@ void PgConfDia::setupPageSlides()
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
     slidesLayout->addMultiCellWidget( buttonGroup, 6, 6, 0, 1 );
 
-    if ( m_doc->presentationName().isEmpty() )
+    if ( !m_doc->presentationName().isEmpty() )
     {
-        m_selectedSlide->setChecked( true );
+        m_customSlide->setChecked( true );
         m_customSlideCombobox->setCurrentText( m_doc->presentationName() );
     }
     else
-        m_customSlide->setChecked( true );
+        m_selectedSlide->setChecked( true );
 
 }
 
@@ -266,7 +266,10 @@ void PgConfDia::deselectAllSlides()
 
 QString PgConfDia::presentationName() const
 {
-    return m_customSlideCombobox->currentText();
+    if ( m_customSlide->isChecked() )
+        return m_customSlideCombobox->currentText();
+    else
+        return QString::null;
 }
 
 #include "pgconfdia.moc"
