@@ -108,7 +108,7 @@ class KisView : public KoView
     int     yScrollOffset() { return m_pVert->value(); }
     void    scrollTo( QPoint p );
 
-    void    insert_layer_image(bool newLayer);
+    void    insert_layer_image(bool newLayer, const QString &filename = QString::null);
     void    save_layer_image(bool mergeLayers);
 
     void 	zoom( int x, int y, float zf );
@@ -184,6 +184,7 @@ class KisView : public KoView
 
     void insert_image_as_layer();
     void save_layer_as_image();
+    void slotEmbeddImage(const QString &filename);
 
     void layer_scale_smooth();
     void layer_scale_rough();

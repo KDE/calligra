@@ -135,6 +135,9 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
                     
     QObject::connect( m_pDoc, SIGNAL( docUpdated( const QRect& ) ),
         this, SLOT( slotDocUpdated ( const QRect& ) ) );
+	
+    QObject::connect( this, SIGNAL( embeddImage( const QString& ) ),
+	this, SLOT( slotEmbeddImage( const QString& ) ) );
 
     m_fg = KisColor::black();
     m_bg = KisColor::white();
@@ -2429,6 +2432,10 @@ void KisView::save_layer_as_image()
     save_layer_image(false);
 }
 
+void KisView::slotEmbeddImage(const QString &filename)
+{
+    insert_layer_image(true, filename);
+}
 
 /*
     insert_layer_image - Insert a standard image like png or jpg 
@@ -2442,10 +2449,13 @@ void KisView::save_layer_as_image()
     because it can also be used for importing an image file during
     doc init.  Eventually it needs to go into koffice/filters. 
 */
-void KisView::insert_layer_image(bool newImage)
+void KisView::insert_layer_image(bool newImage, const QString &filename)
 {
-    KURL url = KFileDialog::getOpenURL( QString::null,
-        KisUtil::readFilters(), 0, i18n("Image file for layer") );
+    KURL url(filename);
+    
+    if(filename.isEmpty())
+	url = KFileDialog::getOpenURL( QString::null,
+    	    KisUtil::readFilters(), 0, i18n("Image file for layer") );
 
     if( !url.isEmpty() )
     {
