@@ -107,6 +107,8 @@ void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoText
     assert( m_lastParag );
     m_currentParag = m_firstParag;
     kdDebug(32500) << "KoTextIterator::init from(" << *m_currentTextObj << "," << m_firstParag->paragId() << ") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) << "," << m_lastParag->paragId() << "), " << m_lstObjects.count() << " textObjects." << endl;
+
+    connectTextObjects();
 }
 
 void KoTextIterator::restart()
@@ -117,6 +119,47 @@ void KoTextIterator::restart()
         m_currentTextObj = m_lstObjects.begin();
     else
         m_currentTextObj = m_lstObjects.fromLast();
+}
+
+void KoTextIterator::connectTextObjects()
+{
+    QValueList<KoTextObject *>::Iterator it = m_lstObjects.begin();
+    for( ; it != m_lstObjects.end(); ++it ) {
+        connect( (*it), SIGNAL( paragraphDeleted( KoTextParag* ) ),
+                 this, SLOT( slotParagraphDeleted( KoTextParag* ) ) );
+    }
+}
+
+void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
+{
+    kdDebug() << "slotParagraphDeleted " << parag << endl;
+    bool forw = ! ( m_options & KFindDialog::FindBackwards );
+    if ( parag == m_lastParag )
+    {
+        if ( forw ) {
+            m_lastParag = m_lastParag->prev();
+            if ( m_lastParag )
+                m_lastIndex = m_lastParag->length()-1;
+        } else {
+            m_lastParag = m_lastParag->next();
+            m_lastIndex = 0;
+        }
+    }
+    if ( parag == m_firstParag )
+    {
+        if ( forw ) {
+            m_firstParag = m_firstParag->next();
+            m_firstIndex = 0;
+        } else {
+            m_firstParag = m_firstParag->next();
+            if ( m_firstParag )
+                m_firstIndex = m_firstParag->length()-1;
+        }
+    }
+    if ( parag == m_currentParag )
+    {
+        operator++();
+    }
 }
 
 // Go to next paragraph that we must iterate over
@@ -235,3 +278,5 @@ void KoTextIterator::setOptions( int options )
         m_options = options;
     }
 }
+
+#include "kotextiterator.moc"

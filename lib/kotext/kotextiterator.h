@@ -22,6 +22,7 @@
 #include <qvaluelist.h>
 #include <qstring.h>
 #include <qpair.h>
+#include <qobject.h>
 class KoTextParag;
 class KoTextObject;
 class KoTextView;
@@ -31,8 +32,9 @@ class KoTextView;
  * with many options (from cursor, backwards, in selection).
  * @short General purpose paragraph iterator
  */
-class KoTextIterator
+class KoTextIterator : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * @param options see KFindDialog
@@ -97,6 +99,12 @@ public:
      * for performance reasons.
      */
     QPair<int, QString> currentTextAndIndex() const;
+
+protected:
+    void connectTextObjects();
+
+protected slots:
+    void slotParagraphDeleted( KoTextParag* parag );
 
 private:
     // The reason we use a QValueList of pointers instead of QPtrList
