@@ -185,20 +185,24 @@ void KoMainWindow::createHelpMenu( OPMenuBar* _menubar )
     return;
   }
   
+  bool bInsertHelpMenu = false;
   m_pHelpMenu = _menubar->helpMenu();
   // No help menu yet ?
   if ( m_pHelpMenu == 0L )
   {    
     m_pHelpMenu = new OPMenu( _menubar );
-
-    _menubar->insertSeparator();
-    _menubar->insertItem( i18n( "&Help" ), m_pHelpMenu );
+    bInsertHelpMenu = true;
   }
   else
     m_pHelpMenu->insertSeparator();
 
   // Insert our item
   m_idMenuHelp_About = m_pHelpMenu->insertItem( i18n( "&About KOffice" ), this, SLOT( slotHelpAbout() ) );
+  if (bInsertHelpMenu)
+  {
+    _menubar->insertSeparator();
+    _menubar->insertItem( i18n( "&Help" ), m_pHelpMenu );
+  }
 }
 
 void KoMainWindow::slotFileNew()
