@@ -461,7 +461,7 @@ public:
     int extraWidth() const { return m_iExtraWidth; }
     int extraHeight() const { return m_iExtraHeight; }
 
-    bool isFormular() { return m_content == Formula; }
+    bool isFormular() const { return m_content == Formula; }
 
     QString encodeFormular( int _col = -1, int _row = -1 );
     QString decodeFormular( const char *_text, int _col = -1, int _row = -1 );
