@@ -236,6 +236,8 @@ void KSpreadCell::defaultStyle()
 
   m_conditionIsTrue=false;
   m_numberOfCond=-1;
+  m_strComment="";
+  m_bVerticalText=false;
 }
 
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )

@@ -113,6 +113,7 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   setPrefix( _l.prefix() );
   setPostfix( _l.postfix() );
   m_strComment = _l.getComment();
+  m_bVerticalText = _l.verticalText();
 }
 
 QString KSpreadLayout::prefix() const
