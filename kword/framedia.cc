@@ -656,10 +656,10 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sh->setText( QString::number( oldH ) );
 
         // QString::number leads to some rounding !
-        oldX = sx->toDouble();
-        oldY = sy->toDouble();
-        oldW = sw->toDouble();
-        oldH = sh->toDouble();
+        oldX = sx->text().toDouble();
+        oldY = sy->text().toDouble();
+        oldW = sw->text().toDouble();
+        oldH = sh->text().toDouble();
 
         KWFrameSet * fs = theFrame->getFrameSet();
         // parentFs is the table in case of a table, fs otherwise
