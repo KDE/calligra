@@ -313,10 +313,6 @@ void KPresenterView::editPaste()
     } else {
 	page->kTxtObj()->paste();
     }
-    setRanges();
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
-    sidebar->rebuildItems();
 }
 
 /*===============================================================*/
@@ -369,9 +365,9 @@ void KPresenterView::editDelPage()
 					       "This operation is not undoable.") ) != KMessageBox::Yes )
 	    return;
 	m_pKPresenterDoc->deletePage( currPg );
-	currPg = QMAX( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
 	setRanges();
 	sidebar->rebuildItems();
+	currPg = QMAX( 0, QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 ) );
 	skipToPage( currPg );
 	sidebar->setCurrentPage( currPg );
 	pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
@@ -2774,6 +2770,7 @@ void KPresenterView::skipToPage( int num )
     if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 )
 	return;
 
+    page->exitEditMode();
     vert->setValue( 0 );
     currPg = num;
     emit currentPageChanged( currPg );

@@ -3578,7 +3578,7 @@ void KPresenterDoc::restoreBackground( int pageNum )
 }
 
 /*==================== load pasted objects ==============================*/
-void KPresenterDoc::loadPastedObjs( const QString &in, int currPage )
+void KPresenterDoc::loadPastedObjs( const QString &in, int )
 {
     QDomDocument doc;
     doc.setContent( in );

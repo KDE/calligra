@@ -125,6 +125,7 @@ public:
     void gotoPage( int pg );
 
 public slots:
+    void exitEditMode();
 
     // public slots
     void clipCut();
@@ -279,7 +280,6 @@ private slots:
     void slotEditHF();
     void slotTextContents2Height();
     void slotTextObj2Contents();
-    void exitEditMode();
     void picViewOrig640x480();
     void picViewOrig800x600();
     void picViewOrig1024x768();

@@ -1196,6 +1196,8 @@ void KTextEdit::updateCurrentFormat()
     int i = cursor->index();
     if ( i > 0 )
 	--i;
+    else
+	return;
     if ( currentFormat->key() != cursor->parag()->at( i )->format->key() ) {
 	if ( currentFormat )
 	    currentFormat->removeRef();
