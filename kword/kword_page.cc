@@ -1036,7 +1036,7 @@ void KWPage::vmrEditFrame( int mx, int my )
 	recalcAll = TRUE;
 	recalcText();
 	recalcCursor();
-	repaintScreen( FALSE );
+	repaintScreen( TRUE );
 	recalcAll = FALSE;
 	updateSelections();
     }  else
