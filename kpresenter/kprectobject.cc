@@ -24,7 +24,6 @@
 #include <qregion.h>
 #include <qdom.h>
 #include <qpainter.h>
-#include <qwmatrix.h>
 using namespace std;
 
 /******************************************************************/

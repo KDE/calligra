@@ -26,7 +26,6 @@
 #include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>
-#include <qwmatrix.h>
 using namespace std;
 
 /******************************************************************/
