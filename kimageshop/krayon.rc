@@ -123,6 +123,7 @@
 
 <Menu name="settings"><text>Settings</text>
   <Action name="current_tool_properties"/>  
+  <Action name="dialog_gradient"/>    
   <Action name="preferences"/>    
   <Action name="save_options"/>
   <Separator/>
@@ -214,8 +215,8 @@
   <Action name="tool_fill"/>
   <Action name="tool_colorchanger"/>    
   <Action name="tool_stamp"/>
-  <Action name="tool_gradient"/>  
-  
+
+  <Action name="dialog_gradient"/>  
   <Action name="current_tool_properties"/>  
         
 </ToolBar>
