@@ -148,6 +148,9 @@ KoStyle::KoStyle( const QString & name )
 
     // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
     m_paragLayout.style = this;
+    m_parentStyle = 0L;
+    m_inheritedParagLayoutFlag = 0;
+    m_inheritedFormatFlag = 0;
 }
 
 void KoStyle::operator=( const KoStyle &rhs )
@@ -158,6 +161,10 @@ void KoStyle::operator=( const KoStyle &rhs )
     m_format = rhs.m_format;
     m_followingStyle = rhs.m_followingStyle;
     m_paragLayout.style = this; // must always be "this"
+    m_parentStyle = rhs.m_parentStyle;
+    m_inheritedParagLayoutFlag = rhs.m_inheritedParagLayoutFlag;
+    m_inheritedFormatFlag = rhs.m_inheritedFormatFlag;
+
 }
 
 QString KoStyle::translatedName() const
@@ -190,3 +197,60 @@ KoParagLayout KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
 }
 
 
+
+const KoParagLayout & KoStyle::paragLayout() const
+{
+    return m_paragLayout;
+}
+
+KoParagLayout & KoStyle::paragLayout()
+{
+    return m_paragLayout;
+}
+
+const KoTextFormat & KoStyle::format() const
+{
+    return m_format;
+}
+
+KoTextFormat & KoStyle::format()
+{
+    return m_format;
+}
+
+void KoStyle::propagateChanges( int paragLayoutFlag, int formatFlag )
+{
+    if ( !m_parentStyle )
+        return;
+    if ( !(paragLayoutFlag & KoParagLayout::Alignment) )
+        m_paragLayout.alignment = m_parentStyle->paragLayout().alignment;
+    if ( !(paragLayoutFlag & KoParagLayout::Margins) )
+        m_paragLayout.margins = m_parentStyle->paragLayout().margins;
+    if ( !(paragLayoutFlag & KoParagLayout::LineSpacing) )
+        m_paragLayout.lineSpacing = m_parentStyle->paragLayout().lineSpacing;
+    if ( !(paragLayoutFlag & KoParagLayout::Borders) )
+    {
+        m_paragLayout.leftBorder = m_parentStyle->paragLayout().leftBorder;
+        m_paragLayout.rightBorder = m_parentStyle->paragLayout().rightBorder;
+        m_paragLayout.topBorder = m_parentStyle->paragLayout().topBorder;
+        m_paragLayout.bottomBorder = m_parentStyle->paragLayout().bottomBorder;
+    }
+    if ( !(paragLayoutFlag & KoParagLayout::BulletNumber) )
+        m_paragLayout.counter = m_parentStyle->paragLayout().counter;
+    if ( !(paragLayoutFlag & KoParagLayout::Tabulator) )
+        m_paragLayout.setTabList(m_parentStyle->paragLayout().tabList());
+    if ( !(paragLayoutFlag & KoParagLayout::Shadow) )
+    {
+        m_paragLayout.shadowDistance = m_parentStyle->paragLayout().shadowDistance;
+        m_paragLayout.shadowDirection = m_parentStyle->paragLayout().shadowDirection;
+        m_paragLayout.shadowColor = m_parentStyle->paragLayout().shadowColor;
+    }
+#if 0
+    if ( paragLayoutFlag == KoParagLayout::All )
+    {
+        setDirection( static_cast<QChar::Direction>(layout.direction) );
+        // Don't call applyStyle from here, it would overwrite any paragraph-specific settings
+        setStyle( layout.style );
+    }
+#endif
+}

@@ -97,13 +97,13 @@ public:
         m_shortCut_name=_shortCut;
     }
 
-    const KoParagLayout & paragLayout() const { return m_paragLayout; }
-    KoParagLayout & paragLayout()  { return m_paragLayout; }
+    const KoParagLayout & paragLayout() const;
+    KoParagLayout & paragLayout();
 
     /** Return a format. Don't forget to use the format collection
      * of your KoTextDocument from the result of that method. */
-    const KoTextFormat & format() const { return m_format; }
-    KoTextFormat & format() { return m_format; }
+    const KoTextFormat & format() const;
+    KoTextFormat & format();
 
     KoStyle *followingStyle() const { return m_followingStyle; }
     void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
@@ -124,12 +124,22 @@ public:
 	return value.isNull() ? defaultValue : value.toDouble();
       }
 
+    KoStyle * parentStyle() const {return m_parentStyle;}
+    int inheritedParagLayoutFlag() const { return m_inheritedParagLayoutFlag; }
+    int inheritedFormatFlag() const { return m_inheritedFormatFlag; }
+
+
+    void propagateChanges( int paragLayoutFlag, int formatFlag );
+
 private:
     KoParagLayout m_paragLayout;
     QString m_name;
     QString m_shortCut_name;
     KoTextFormat m_format;
     KoStyle *m_followingStyle;
+    KoStyle *m_parentStyle;
+    int m_inheritedParagLayoutFlag;
+    int m_inheritedFormatFlag;
 };
 
 #endif
