@@ -3383,7 +3383,7 @@ void KSpreadCell::update()
 
 void KSpreadCell::updateDepending()
 {
-  if ( testFlag(Flag_UpdatingDeps) )
+  if ( testFlag(Flag_UpdatingDeps) || (!m_pTable->getAutoCalc()) )
   {
     return;
   }

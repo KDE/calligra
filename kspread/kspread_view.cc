@@ -1144,8 +1144,13 @@ void KSpreadView::RecalcWorkBook(){
     KSpreadTable *tbl;
 
     for ( tbl = m_pDoc->map()->firstTable();
-	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
+	  tbl != 0L; 
+          tbl = m_pDoc->map()->nextTable() )
+    {
+      bool b = tbl->getAutoCalc();
+      tbl->setAutoCalc(true);
       tbl->recalc();
+      tbl->setAutoCalc(b);
     }
 
     //    slotUpdateView( activeTable() );
@@ -1157,15 +1162,21 @@ void KSpreadView::slotRefreshLocale()
     kdDebug(36001)<<"KSpreadView::slotRefreshLocale()***************\n";
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable();
-	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
+	  tbl != 0L; 
+          tbl = m_pDoc->map()->nextTable() ){
       tbl->updateLocale();
     }
 }
 
 void KSpreadView::RecalcWorkSheet()
 {
-  if (m_pTable!= 0)
+  if (m_pTable != 0)
+  {
+    bool b = m_pTable->getAutoCalc();
+    m_pTable->setAutoCalc(true);
     m_pTable->recalc();
+    m_pTable->setAutoCalc(b);
+  }
 
   //slotUpdateView( activeTable() );
 }
