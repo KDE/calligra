@@ -1690,22 +1690,6 @@ bool KWFrameDia::applyChanges()
     //kdDebug()<<" rect :"<<px <<" py :"<<py<<" pw :"<<pw <<" ph "<<ph<<endl;
     // Undo/redo for frame properties
     if(frame) { // only do undo/redo when we edit 1 frame for now..
-        if(!isNewFrame && (frameCopy->isCopy()!=frame->isCopy()
-                           || frameCopy->frameBehavior()!=frame->frameBehavior()
-                           || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
-                           || frameCopy->runAround()!=frame->runAround()
-                           || frameCopy->runAroundSide()!=frame->runAroundSide()
-                           || frameCopy->runAroundGap()!=frame->runAroundGap()
-                           || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle())))
-        {
-            if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Frame Properties") );
-
-            KWFramePropertiesCommand*cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
-            macroCmd->addCommand(cmd);
-            frameCopy = 0L;
-        } else
-            delete frameCopy;
 
         if(frame->frameSet() == 0L ) { // if there is no frameset (anymore)
             KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
@@ -1727,6 +1711,23 @@ bool KWFrameDia::applyChanges()
             KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Text Frame"), frame) ;
             macroCmd->addCommand(cmd);
         }
+
+        if(!isNewFrame && (frameCopy->isCopy()!=frame->isCopy()
+                           || frameCopy->frameBehavior()!=frame->frameBehavior()
+                           || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
+                           || frameCopy->runAround()!=frame->runAround()
+                           || frameCopy->runAroundSide()!=frame->runAroundSide()
+                           || frameCopy->runAroundGap()!=frame->runAroundGap()
+                           || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle())))
+        {
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Frame Properties") );
+
+            KWFramePropertiesCommand*cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frame );
+            macroCmd->addCommand(cmd);
+            frameCopy = 0L;
+        } else
+            delete frameCopy;
     }
     if ( tab4 ) { // TAB Geometry
 
