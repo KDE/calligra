@@ -1,3 +1,22 @@
+/* This file is part of the KDE project
+   Copyright (C) 2004 David Faure <faure@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
 #include "kodom.h"
 #include "koxmlns.h"
 
@@ -66,6 +85,21 @@ void testKoDom( const QDomDocument& doc )
     QDomElement notexist = KoDom::namedItemNS( body, KoXmlNS::text, "notexist" );
     assert( notexist.isNull() );
 
+    int count = 0;
+    QDomElement elem;
+    forEachElement( elem, body ) {
+        assert( elem.localName() == "p" );
+        assert( elem.namespaceURI() == KoXmlNS::text );
+        ++count;
+    }
+    assert( count == 2 );
+
+    // Attributes
+    // ### Qt bug: it doesn't work if using style-name instead of text:style-name in the XML
+    const QString styleName = p.attributeNS( KoXmlNS::text, "style-name", QString::null );
+    qDebug( "%s", styleName.latin1() );
+    assert( styleName == "L1" );
+
     qDebug("testKoDom... ok");
 }
 
@@ -75,8 +109,10 @@ int main( int argc, char** argv ) {
     const QCString xml = QCString( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                                    "<o:document-content xmlns:o=\"" )
                          + KoXmlNS::office
-                         + "\" xmlns=\"" + KoXmlNS::text + "\">\n"
-		"<o:body><p style-name=\"L1\">foobar</p></o:body>\n"
+                         + "\" xmlns=\"" + KoXmlNS::text
+                         + "\" xmlns:text=\"" + KoXmlNS::text
+                         + "\">\n"
+		"<o:body><p text:style-name=\"L1\">foobar</p><p>2nd</p></o:body>\n"
 		"</o:document-content>\n";
     QDomDocument doc;
     //QXmlSimpleReader reader;

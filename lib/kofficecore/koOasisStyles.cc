@@ -19,6 +19,8 @@
 #include "koOasisStyles.h"
 #include <kdebug.h>
 #include <qdom.h>
+#include "kodom.h"
+#include "koxmlns.h"
 
 KoOasisStyles::KoOasisStyles()
 {
@@ -34,34 +36,34 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 {
     const QDomElement docElement  = doc.documentElement();
     // We used to have the office:version check here, but better let the apps do that
-    QDomNode fontStyles = docElement.namedItem( "office:font-decls" );
+    QDomElement fontStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "font-decls" );
 
     if ( !fontStyles.isNull() ) {
         //kdDebug(30003) << "Starting reading in font-decl..." << endl;
-        insertStyles( fontStyles.toElement() );
+        insertStyles( fontStyles );
     }// else
     //   kdDebug(30003) << "No items found" << endl;
 
     //kdDebug(30003) << "Starting reading in office:automatic-styles" << endl;
 
-    QDomNode autoStyles = docElement.namedItem( "office:automatic-styles" );
+    QDomElement autoStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "automatic-styles" );
     if ( !autoStyles.isNull() ) {
-        insertStyles( autoStyles.toElement() );
+        insertStyles( autoStyles );
     }// else
     //    kdDebug(30003) << "No items found" << endl;
 
 
     //kdDebug(30003) << "Reading in master styles" << endl;
 
-    QDomNode masterStyles = docElement.namedItem( "office:master-styles" );
+    QDomNode masterStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "master-styles" );
 
     if ( !masterStyles.isNull() ) {
-        QDomNode n = masterStyles.firstChild();
-        for ( ; !n.isNull() ; n = n.nextSibling() ) {
-            const QDomElement master = n.toElement();
-            if ( master.isNull() ) continue;
-            if ( master.tagName() ==  "style:master-page" ) {
-                QString name = master.attribute( "style:name" );
+        QDomElement master;
+        forEachElement( master, masterStyles )
+        {
+            if ( master.localName() == "master-page" &&
+                 master.namespaceURI() == KoXmlNS::style ) {
+                const QString name = master.attributeNS( KoXmlNS::style, "name", QString::null );
                 kdDebug(30003) << "Master style: '" << name << "' loaded " << endl;
                 m_masterPages.insert( name, new QDomElement( master ) );
             } else
@@ -73,7 +75,7 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 
     kdDebug(30003) << "Starting reading in office:styles" << endl;
 
-    const QDomElement officeStyle = docElement.namedItem( "office:styles" ).toElement();
+    const QDomElement officeStyle = KoDom::namedItemNS( docElement, KoXmlNS::office, "styles" );
 
     if ( !officeStyle.isNull() ) {
         m_officeStyle = officeStyle;
@@ -88,31 +90,41 @@ QValueVector<QDomElement> KoOasisStyles::userStyles() const
 {
     QValueVector<QDomElement> vec;
     // Collect user styles
-    QDomNodeList children = m_officeStyle.elementsByTagName( "style:style" );
-    vec.resize( children.length() );
-    for ( unsigned int i = 0 ; i < children.length(); ++i )
-        vec[i] = children.item( i ).toElement();
+    unsigned int i = 0;
+    QDomElement e;
+    forEachElement( e, m_officeStyle )
+    {
+        if ( e.localName() == "style" &&
+             e.namespaceURI() == KoXmlNS::style )
+        {
+            vec.resize( i+1 );
+            vec[i++] = e;
+        }
+    }
     return vec;
 }
 
 void KoOasisStyles::insertOfficeStyles( const QDomElement& styles )
 {
-    for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
+    QDomElement e;
+    forEachElement( e, styles )
     {
-        const QDomElement e = n.toElement();
-        if ( e.isNull() ) continue;
-        const QCString tagName = e.tagName().latin1();
-        if ( tagName == "draw:gradient"
-             || tagName == "svg:linearGradient"
-             || tagName == "svg:radialGradient"
-             || tagName == "draw:hatch"
-             || tagName == "draw:fill-image"
-             || tagName == "draw:marker"
-             || tagName == "draw:stroke-dash"
-             || tagName == "draw:opacity" )
+        const QString localName = e.localName();
+        const QString ns = e.namespaceURI();
+        if ( ( ns == KoXmlNS::svg && (
+                   localName == "linearGradient"
+                   || localName == "radialGradient" ) )
+             || ( ns == KoXmlNS::draw && (
+                      localName == "gradient"
+                      || localName == "hatch"
+                      || localName == "fill-image"
+                      || localName == "marker"
+                      || localName == "stroke-dash"
+                      || localName == "opacity" ) )
+             )
         {
-            Q_ASSERT( e.hasAttribute( "draw:name" ) );
-            const QString name = e.attribute( "draw:name" );
+            const QString name = e.attributeNS( KoXmlNS::draw, "name", QString::null );
+            Q_ASSERT( !name.isEmpty() );
             QDomElement* ep = new QDomElement( e );
             m_drawStyles.insert( name, ep );
         }
@@ -125,41 +137,41 @@ void KoOasisStyles::insertOfficeStyles( const QDomElement& styles )
 void KoOasisStyles::insertStyles( const QDomElement& styles )
 {
     //kdDebug(30003) << "Inserting styles from " << styles.tagName() << endl;
-    for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
-    {
-        const QDomElement e = n.toElement();
-        if ( e.isNull() ) continue;
+    QDomElement e;
+    forEachElement( e, styles )
         insertStyle( e );
-    }
 }
 
 void KoOasisStyles::insertStyle( const QDomElement& e )
 {
-    QCString tagName = e.tagName().latin1();
+    const QString localName = e.localName();
+    const QString ns = e.namespaceURI();
 
-    QString name = e.attribute( "style:name" );
-    if ( tagName == "style:style"
-         || tagName == "style:page-master" // OO-1.1 compatibility (probably not useful)
-         || tagName == "style:page-layout"
-         || tagName == "style:font-decl"
-         || tagName == "style:presentation-page-layout" )
+    const QString name = e.attributeNS( KoXmlNS::style, "name", QString::null );
+    if ( ns == KoXmlNS::style && (
+                localName == "style"
+             || localName == "page-master" // OO-1.1 compatibility (probably not useful)
+             || localName == "page-layout"
+             || localName == "font-decl"
+             || localName == "presentation-page-layout" ) )
     {
         QDomElement* ep = new QDomElement( e );
         m_styles.insert( name, ep );
         //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
-    } else if ( tagName == "style:default-style" ) {
+    } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
         m_defaultStyle = e;
-    } else if ( tagName == "text:list-style" ) {
+    } else if ( localName == "list-style" && ns == KoXmlNS::text ) {
         QDomElement* ep = new QDomElement( e );
         m_listStyles.insert( name, ep );
         //kdDebug(30003) << "List style: '" << name << "' loaded " << endl;
-    } else if ( tagName == "number:number-style"
-                || tagName == "number:currency-style"
-                || tagName == "number:percentage-style"
-                || tagName == "number:boolean-style"
-                || tagName == "number:text-style"
-                || tagName == "number:date-style"
-                || tagName == "number:time-style" ) {
+    } else if ( ns == KoXmlNS::number && (
+                   localName == "number-style"
+                || localName == "currency-style"
+                || localName == "percentage-style"
+                || localName == "boolean-style"
+                || localName == "text-style"
+                || localName == "date-style"
+                || localName == "time-style" ) ) {
         importDataStyle( e );
     }
     // The rest (text:*-configuration and text:outline-style) is to be done by the apps.
@@ -178,58 +190,56 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     bool negRed = false;
     bool ok = false;
     int i = 0;
-    for( QDomNode node( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
+    QDomElement e;
+    forEachElement( e, parent )
     {
-        const QDomElement e( node.toElement() );
-        if ( e.isNull() ) continue;
-        QString tagName = e.tagName();
-        if ( !tagName.startsWith( "number:" ) )
+        if ( e.namespaceURI() != KoXmlNS::number )
             continue;
-        tagName.remove( 0, 7 );
-        const QString numberStyle = e.attribute( "number:style" );
+        QString localName = e.localName();
+        const QString numberStyle = e.attributeNS( KoXmlNS::number, "style", QString::null );
         const bool shortForm = numberStyle == "short" || numberStyle.isEmpty();
-        if ( tagName == "day" ) {
+        if ( localName == "day" ) {
             format += shortForm ? "d" : "dd";
-        } else if ( tagName == "day-of-week" ) {
+        } else if ( localName == "day-of-week" ) {
             format += shortForm ? "ddd" : "dddd";
-        } else if ( tagName == "month" ) {
+        } else if ( localName == "month" ) {
             // TODO the spec has a strange mention of number:format-source
             if ( e.attribute( "number:textual" ) == "true" ) {
                 format += shortForm ? "MMM" : "MMMM";
             } else { // month number
                 format += shortForm ? "M" : "MM";
             }
-        } else if ( tagName == "year" ) {
+        } else if ( localName == "year" ) {
             format += shortForm ? "yy" : "yyyy";
-        } else if ( tagName == "era" ) {
+        } else if ( localName == "era" ) {
             //todo I don't know what is it... (define into oo spec)
-        } else if ( tagName == "week-of-year" || tagName == "quarter") {
+        } else if ( localName == "week-of-year" || localName == "quarter") {
             // ### not supported in Qt
-        } else if ( tagName == "hours" ) {
+        } else if ( localName == "hours" ) {
             format += shortForm ? "h" : "hh";
-        } else if ( tagName == "minutes" ) {
+        } else if ( localName == "minutes" ) {
             format += shortForm ? "m" : "mm";
-        } else if ( tagName == "seconds" ) {
+        } else if ( localName == "seconds" ) {
             format += shortForm ? "s" : "ss";
-        } else if ( tagName == "am-pm" ) {
+        } else if ( localName == "am-pm" ) {
             format += "ap";
-        } else if ( tagName == "text" ) { // litteral
+        } else if ( localName == "text" ) { // litteral
             format += e.text();
-        } else if ( tagName == "currency-symbol" ) {
+        } else if ( localName == "currency-symbol" ) {
             format += e.text();
             //todo
             // number:language="de" number:country="DE">€</number:currency-symbol>
-        } else if ( tagName == "number:number" ) {
+        } else if ( localName == "number" ) {
             // TODO: number:grouping="true"
-            if ( e.hasAttribute( "number:decimal-places" ) )
+            if ( e.hasAttributeNS( KoXmlNS::number, "decimal-places" ) )
             {
-                int d = e.attribute( "number:decimal-places" ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "decimal-places", QString::null ).toInt( &ok );
                 if ( ok )
                     precision = d;
             }
-            if ( e.hasAttribute( "number:min-integer-digits" ) )
+            if ( e.hasAttributeNS( KoXmlNS::number, "min-integer-digits" ) )
             {
-                int d = e.attribute( "number:min-integer-digits" ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString::null ).toInt( &ok );
                 if ( ok )
                     leadingZ = d;
             }
@@ -249,26 +259,26 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             for ( i = 0; i < precision; ++i )
                 format += '0';
         }
-        else if ( tagName == "scientific-number" ) {
+        else if ( localName == "scientific-number" ) {
             int exp = 2;
 
-            if ( e.hasAttribute( "number:decimal-places" ) )
+            if ( e.hasAttributeNS( KoXmlNS::number, "decimal-places" ) )
             {
-                int d = e.attribute( "number:decimal-places" ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "decimal-places", QString::null ).toInt( &ok );
                 if ( ok )
                     precision = d;
             }
 
-            if ( e.hasAttribute( "number:min-integer-digits" ) )
+            if ( e.hasAttributeNS( KoXmlNS::number, "min-integer-digits" ) )
             {
-                int d = e.attribute( "number:min-integer-digits" ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString::null ).toInt( &ok );
                 if ( ok )
                     leadingZ = d;
             }
 
-            if ( e.hasAttribute( "number:min-exponent-digits" ) )
+            if ( e.hasAttributeNS( KoXmlNS::number, "min-exponent-digits" ) )
             {
-                int d = e.attribute( "number:min-exponent-digits" ).toInt( &ok );
+                int d = e.attributeNS( KoXmlNS::number, "min-exponent-digits", QString::null ).toInt( &ok );
                 if ( ok )
                     exp = d;
                 if ( exp <= 0 )
@@ -296,26 +306,26 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             format+="E+";
             for ( i = 0; i < exp; ++i )
                 format+='0';
-        } else if ( tagName == "fraction" ) {
+        } else if ( localName == "fraction" ) {
                 int integer = 0;
                 int numerator = 1;
                 int denominator = 1;
 
-                if ( e.hasAttribute( "number:min-integer-digits" ) )
+                if ( e.hasAttributeNS( KoXmlNS::number, "min-integer-digits" ) )
                 {
-                    int d = e.attribute( "number:min-integer-digits" ).toInt( &ok );
+                    int d = e.attributeNS( KoXmlNS::number, "min-integer-digits", QString::null ).toInt( &ok );
                     if ( ok )
                         integer = d;
                 }
-                if ( e.hasAttribute( "number:min-numerator-digits" ) )
+                if ( e.hasAttributeNS( KoXmlNS::number, "min-numerator-digits" ) )
                 {
-                    int d = e.attribute( "number:min-numerator-digits" ).toInt( &ok );
+                    int d = e.attributeNS( KoXmlNS::number, "min-numerator-digits", QString::null ).toInt( &ok );
                     if ( ok )
                         numerator = d;
                 }
-                if ( e.hasAttribute( "number:min-denominator-digits" ) )
+                if ( e.hasAttributeNS( KoXmlNS::number, "min-denominator-digits" ) )
                 {
-                    int d = e.attribute( "number:min-denominator-digits" ).toInt( &ok );
+                    int d = e.attributeNS( KoXmlNS::number, "min-denominator-digits", QString::null ).toInt( &ok );
                     if ( ok )
                         denominator = d;
                 }
@@ -339,53 +349,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
 
     }
 
-#if 0
-    // QDate doesn't work both ways!!! It can't parse something back from
-    // a string and a format (e.g. 01/02/03 and dd/MM/yy, it will assume MM/dd/yy).
-    // So we also need to generate a KLocale-like format, to parse the value
-    // Update: we don't need to parse the date back.
-
-    QString kdeFormat;
-    for( QDomNode node( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
-    {
-        const QDomElement e( node.toElement() );
-        if ( e.isNull() ) continue;
-        QString tagName = e.tagName();
-        if ( !tagName.startsWith( "number:" ) )
-            continue;
-        tagName.remove( 0, 7 );
-        const QString numberStyle = e.attribute( "number:style" );
-        const bool shortForm = numberStyle == "short" || numberStyle.isEmpty();
-        if ( tagName == "day" ) {
-            kdeFormat += shortForm ? "%e" : "%d";
-        } else if ( tagName == "day-of-week" ) {
-            kdeFormat += shortForm ? "%a" : "%A";
-        } else if ( tagName == "month" ) {
-            // TODO the spec has a strange mention of number:format-source
-            if ( e.attribute( "number:textual" ) == "true" ) {
-                kdeFormat += shortForm ? "%b" : "%B";
-            } else { // month number
-                kdeFormat += shortForm ? "%n" : "%m";
-            }
-        } else if ( tagName == "year" ) {
-            kdeFormat += shortForm ? "%y" : "%Y";
-        } else if ( tagName == "week-of-year" || tagName == "quarter") {
-            // ### not supported in KLocale
-        } else if ( tagName == "hours" ) {
-            kdeFormat += shortForm ? "%k" : "%H"; // TODO should depend on presence of am/pm
-        } else if ( tagName == "minutes" ) {
-            kdeFormat += shortForm ? "%M" : "%M"; // KLocale doesn't have 1-digit minutes
-        } else if ( tagName == "seconds" ) {
-            kdeFormat += shortForm ? "%S" : "%S"; // KLocale doesn't have 1-digit seconds
-        } else if ( tagName == "am-pm" ) {
-            kdeFormat += "%p";
-        } else if ( tagName == "text" ) { // litteral
-            kdeFormat += e.text();
-        } // TODO number:decimal-places
-    }
-#endif
-
-    QString styleName = parent.attribute( "style:name" );
+    const QString styleName = parent.attributeNS( KoXmlNS::style, "name", QString::null );
     kdDebug(30518) << "datetime style: " << styleName << " qt format=" << format << endl;
     m_dataFormats.insert( styleName, format );
 }

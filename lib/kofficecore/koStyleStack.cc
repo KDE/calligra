@@ -21,6 +21,7 @@
 #include "koStyleStack.h"
 #include <koUnit.h>
 #include <kdebug.h>
+#include "koxmlns.h"
 
 //#define DEBUG_STYLESTACK
 
@@ -144,6 +145,7 @@ double KoStyleStack::fontSize() const
     return 0;
 }
 
+// TODO: make this namespace-aware (probably needs localName and nsURI in the API)
 bool KoStyleStack::hasChildNode(const QString & name) const
 {
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
@@ -158,6 +160,7 @@ bool KoStyleStack::hasChildNode(const QString & name) const
     return false;
 }
 
+// TODO: make this namespace-aware (probably needs localName and nsURI in the API)
 QDomNode KoStyleStack::childNode(const QString & name) const
 {
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
@@ -177,7 +180,7 @@ static bool isUserStyle( const QDomElement& e )
 {
     QDomElement parent = e.parentNode().toElement();
     //kdDebug(30003) << k_funcinfo << "tagName=" << e.tagName() << " parent-tagName=" << parent.tagName() << endl;
-    return parent.tagName() == "office:styles";
+    return parent.localName() == "styles" && parent.namespaceURI() == KoXmlNS::office;
 }
 
 QString KoStyleStack::userStyleName() const
@@ -188,7 +191,7 @@ QString KoStyleStack::userStyleName() const
         --it;
         //kdDebug(30003) << k_funcinfo << (*it).attribute("style:name") << endl;
         if ( isUserStyle( *it ) )
-            return (*it).attribute("style:name");
+            return (*it).attributeNS( KoXmlNS::style, "name", QString::null );
     }
     // Can this ever happen?
     return "Standard";

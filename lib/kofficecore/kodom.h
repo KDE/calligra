@@ -25,6 +25,28 @@
 /**
  * This namespace contains a few convenience functions to simplify code using QDom
  * (when loading OASIS documents, in particular).
+ *
+ * To find the child element with a given name, use KoDom::namedItemNS.
+ *
+ * To find all child elements with a given name, use
+ * QDomElement e;
+ * forEachElement( e, parent )
+ * {
+ *     if ( e.localName() == "..." && e.namespaceURI() == KoXmlNS::... )
+ *     {
+ *         ...
+ *     }
+ * }
+ * Note that this means you don't ever need to use QDomNode nor toElement anymore!
+ * Also note that localName is the part without the prefix, this is the whole point
+ * of namespace-aware methods.
+ *
+ * To find the attribute with a given name, use QDomElement::attributeNS.
+ *
+ * Do not use getElementsByTagNameNS, it's recursive (which is never needed in KOffice).
+ * Do not use tagName() or nodeName() or prefix(), since the prefix isn't fixed.
+ *
+ * @author David Faure <faure@kde.org>
  */
 namespace KoDom {
 
@@ -39,6 +61,10 @@ namespace KoDom {
     QDomElement namedItemNS( const QDomNode& node, const char* nsURI, const char* localName );
 
 };
+
+#define forEachElement( elem, parent ) \
+      for ( QDomNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+        if ( !( elem = _node.toElement() ).isNull() )
 
 #endif /* KODOM_H */
 

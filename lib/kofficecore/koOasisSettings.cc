@@ -18,6 +18,8 @@
 */
 
 #include "koOasisSettings.h"
+#include "koxmlns.h"
+#include "kodom.h"
 #include <kdebug.h>
 
 KoOasisSettings::KoOasisSettings( const QDomDocument &doc )
@@ -28,33 +30,36 @@ KoOasisSettings::KoOasisSettings( const QDomDocument &doc )
 bool KoOasisSettings::selectItemSet( const QString &itemSetName )
 {
     QDomElement contents = m_doc.documentElement();
-    QDomNode tmp = contents.namedItem("office:settings").toElement();
-    if ( tmp.isNull() )
+    QDomNode settingsElement = KoDom::namedItemNS( contents, "settings", KoXmlNS::office ).toElement();
+    if ( settingsElement.isNull() )
     {
         m_element = QDomElement();
         kdDebug()<<" document doesn't have tag 'office:settings' \n";
         return false;
     }
-    for ( QDomNode n = tmp.firstChild(); !n.isNull(); n = n.nextSibling() )
+    QDomElement e;
+    forEachElement( e, settingsElement )
     {
-        QDomElement e = n.toElement();
-        //kdDebug()<<"e.tagName() :"<<e.tagName()<<endl;
-        if ( e.tagName() == "config:config-item-set" && e.attribute( "config:name" ) == itemSetName )
+        if ( e.localName() == "config-item-set" &&
+             e.namespaceURI() == KoXmlNS::config &&
+             e.attributeNS( KoXmlNS::config, "name", QString::null ) == itemSetName )
         {
             m_element = e;
             return true;
         }
     }
+
     return false;
 }
 
 bool KoOasisSettings::selectItemMap( const QString &itemMapName )
 {
-    for ( QDomNode viewSetting = m_element.firstChild(); !viewSetting.isNull();
-          viewSetting = viewSetting.nextSibling() )
+    QDomElement configItem;
+    forEachElement( configItem, m_element )
     {
-        QDomElement configItem = viewSetting.toElement();
-        if ( configItem.tagName()== "config:config-item-map-indexed" && configItem.attribute( "config:name" ) == itemMapName )
+        if ( configItem.localName() == "config-item-map-indexed" &&
+             configItem.namespaceURI() == KoXmlNS::config &&
+             configItem.attributeNS( KoXmlNS::config, "name", QString::null ) == itemMapName )
         {
             m_element = configItem;
             return true;
@@ -66,23 +71,23 @@ bool KoOasisSettings::selectItemMap( const QString &itemMapName )
 
 bool KoOasisSettings::selectItemMapNamed( const QString &itemMapName )
 {
-    if ( !m_element.isNull() ) {
-        QDomNode n = m_element.firstChild();
-        for ( ; !n.isNull() ; n = n.nextSibling() ) {
-            const QDomElement element = n.toElement();
-            if ( element.isNull() ) continue;
-            if ( element.tagName() == "config:config-item-map-entry" )
+    if ( m_element.isNull() )
+        return false;
+    QDomElement element;
+    forEachElement( element, m_element )
+    {
+        if ( element.localName() == "config-item-map-entry" &&
+             element.namespaceURI() == KoXmlNS::config )
+        {
+            QDomElement viewItem;
+            forEachElement( viewItem, element )
             {
-                QDomNode tmp = element.firstChild();
-                for ( ; !tmp.isNull() ; tmp = tmp.nextSibling() )
+                if ( viewItem.localName() == "config-item-map-named" &&
+                     viewItem.namespaceURI() == KoXmlNS::config &&
+                     viewItem.attributeNS( KoXmlNS::config, "name", QString::null ) == itemMapName )
                 {
-                    const QDomElement viewItem = tmp.toElement();
-                    if ( viewItem.isNull() ) continue;
-                    if ( viewItem.tagName() == "config:config-item-map-named" && viewItem.attribute("config:name")==itemMapName)
-                    {
-                        m_element = viewItem;
-                        return true;
-                    }
+                    m_element = viewItem;
+                    return true;
                 }
             }
         }
@@ -92,12 +97,12 @@ bool KoOasisSettings::selectItemMapNamed( const QString &itemMapName )
 
 QString KoOasisSettings::parseConfigItemName( const QDomElement & element, const QString &item ) const
 {
-    QDomNode tmp = element.firstChild();
-    for ( ; !tmp.isNull() ; tmp = tmp.nextSibling() )
+    QDomElement viewItem;
+    forEachElement( viewItem, element )
     {
-        const QDomElement viewItem = tmp.toElement();
-        if ( viewItem.isNull() ) continue;
-        if ( viewItem.tagName() == "config:config-item" && viewItem.attribute("config:name")==item )
+        if ( viewItem.localName() == "config-item" &&
+             viewItem.namespaceURI() == KoXmlNS::config &&
+             viewItem.attributeNS( KoXmlNS::config, "name", QString::null ) == item )
         {
             return viewItem.text();
         }
@@ -107,23 +112,23 @@ QString KoOasisSettings::parseConfigItemName( const QDomElement & element, const
 
 QString KoOasisSettings::parseConfigItem( const QString &item, const QString &itemNameEntry ) const
 {
-    if ( !m_element.isNull() ) {
-        QDomNode n = m_element.firstChild();
-        for ( ; !n.isNull() ; n = n.nextSibling() ) {
-            const QDomElement element = n.toElement();
-            if ( element.isNull() ) continue;
-            if ( element.tagName() ==  "config:config-item-map-entry" )
+    if ( m_element.isNull() )
+        return QString::null;
+    QDomElement element;
+    forEachElement( element, m_element )
+    {
+        if ( element.localName() == "config-item-map-entry" &&
+             element.namespaceURI() == KoXmlNS::config )
+        {
+            if ( itemNameEntry.isEmpty() )
             {
-                if ( itemNameEntry.isEmpty() )
+                return parseConfigItemName( element, item );
+            }
+            else
+            {
+                if ( element.attributeNS( KoXmlNS::config, "name", QString::null ) == itemNameEntry )
                 {
                     return parseConfigItemName( element, item );
-                }
-                else
-                {
-                    if ( element.attribute( "config:name" ) == itemNameEntry )
-                    {
-                        return parseConfigItemName( element, item );
-                    }
                 }
             }
         }
