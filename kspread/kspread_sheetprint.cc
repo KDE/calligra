@@ -407,13 +407,14 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
               if ( x == regionRight )
               {
                 paintBordersRight = true;
-                if ( util_penCompare( rightPen, m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) < 0 )
+                if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
                   rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
               }
               else
               {
-                if ( util_penCompare( rightPen, m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) > 0 )
-                  paintBordersRight = true;
+                paintBordersRight = true;
+                if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+                  rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
               }
 
             // similiar for other borders...
@@ -424,13 +425,14 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
               if ( y == regionBottom )
               {
                 paintBordersBottom = true;
-                if ( util_penCompare( bottomPen, m_pSheet->cellAt( x + 1, y )->effTopBorderPen( x + 1, y ) ) < 0 )
-                  rightPen = m_pSheet->cellAt( x + 1, y )->effTopBorderPen( x + 1, y );
+                if ( cell->effBottomBorderValue( x, y ) < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+                  bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
               }
               else
               {
-                if ( util_penCompare( bottomPen, m_pSheet->cellAt( x + 1, y )->effTopBorderPen( x + 1, y ) ) > 0 )
-                  paintBordersBottom = true;
+                paintBordersBottom = true;
+                if ( cell->effBottomBorderValue( x, y ) < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+                  bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
               }
 
             // left border:
@@ -440,13 +442,14 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
               if ( x == regionLeft )
               {
                 paintBordersLeft = true;
-                if ( util_penCompare( leftPen, m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) < 0 )
+                if ( cell->effLeftBorderValue( x, y ) < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
                   leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
               }
               else
               {
-                if ( util_penCompare( leftPen, m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) >= 0 )
-                  paintBordersLeft = true;
+                paintBordersLeft = true;
+                if ( cell->effLeftBorderValue( x, y ) < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+                  leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
               }
 
             // top border:
@@ -456,13 +459,14 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
               if ( y == regionTop )
               {
                 paintBordersTop = true;
-                if ( util_penCompare( topPen, m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) < 0 )
+                if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
                   topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
               }
               else
               {
-                if ( util_penCompare( topPen, m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) >= 0 )
-                  paintBordersTop = true;          
+                paintBordersTop = true;
+                if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+                  topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
               }
 
             cell->paintCell( rect, painter, NULL,

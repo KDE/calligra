@@ -990,10 +990,6 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       QPen topPen( cell->effTopBorderPen( x, y ) );
       QPen bottomPen( cell->effBottomBorderPen( x, y ) );
 
-      // TODO: right now we paint every border twice: only paint border, if 
-      //       - the other cell is not painted at all
-      //       - if the border has a bigger value
-
       // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
       // of the cell on the left or if the cell on the right is not painted. In the latter case get
       // the pen that is of more "worth"
