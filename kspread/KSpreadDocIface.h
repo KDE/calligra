@@ -54,6 +54,14 @@ k_dcop:
     QString footLeft()const;
     QString footMid()const;
     QString footRight()const;
+
+    void setHeaderLeft(const QString & text);
+    void setHeaderMiddle(const QString & text);
+    void setHeaderRight(const QString & text);
+    void setFooterLeft(const QString & text);
+    void setFooterMiddle(const QString & text);
+    void setFooterRight(const QString & text);
+
 private:
     KSpreadDoc* doc;
 };
