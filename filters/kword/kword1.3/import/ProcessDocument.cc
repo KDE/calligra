@@ -613,8 +613,10 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
             AllowNoSubtags (myNode, leader);
             break;
         }
+    case 3: // KWord 0.8 tabulator
+    case 5: // KWord 0.8 footnote
     default:
-            kdWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << " !" << endl;
+            kdWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << endl;
             AllowNoSubtags (myNode, leader);
     }
 
@@ -883,7 +885,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
         {
             const char* flows[]={"left", "right", "center", "justify" };
 
-            kdDebug(30508) << "Syntax 1 flow: " << layout->alignment << endl;
+            kdDebug(30508) << "KWord 0.8 flow: " << layout->alignment << endl;
 
             int align = layout->alignment.toInt();
             if ( ( align < 0 ) || ( align > 3) )
