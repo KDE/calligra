@@ -17,6 +17,9 @@
  ***************************************************************************/
 
 #include "khtmlreader.h"
+
+#include "khtmlreader.moc"
+
 #include <dom/dom_text.h>
 #include <dom/dom2_views.h>
 #include <dom/dom_doc.h>
