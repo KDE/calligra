@@ -118,8 +118,9 @@ void KIllustratorView::setupCanvas () {
   
   grid = new QGridLayout (w, 2, 2);
   
-  hRuler = new Ruler (Ruler::Horizontal, Ruler::Point, w);
-  vRuler = new Ruler (Ruler::Vertical, Ruler::Point, w);
+  MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
+  hRuler = new Ruler (Ruler::Horizontal, mu, w);
+  vRuler = new Ruler (Ruler::Vertical, mu, w);
   grid->addWidget (hRuler, 0, 1);
   grid->addWidget (vRuler, 1, 0);
 
