@@ -158,19 +158,13 @@ void EString::setSize( unsigned s )
   d->size = s;
 }
 
-static inline unsigned long estring_readU16( const void* p )
-{
-  const unsigned char* ptr = (const unsigned char*) p;
-  return ptr[0]+(ptr[1]<<8);
-}
-
 // FIXME use maxsize for sanity check
 EString EString::fromUnicodeString( const void* p, unsigned maxsize )
 {
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
   
-  unsigned len = estring_readU16( data  );
+  unsigned len = readU16( data  );
   unsigned char flag = data[ 2 ];
   
   bool unicode = flag & 0x01;
@@ -184,7 +178,7 @@ EString EString::fromUnicodeString( const void* p, unsigned maxsize )
   
   if( richText )
   {
-    formatRuns = estring_readU16( data + offset );
+    formatRuns = readU16( data + offset );
     offset += 2;
   }
   
@@ -207,7 +201,7 @@ EString EString::fromUnicodeString( const void* p, unsigned maxsize )
     str = UString();
     for( unsigned k=0; k<len; k++ )
     {
-      unsigned uchar = estring_readU16( data + offset + k*2 );
+      unsigned uchar = readU16( data + offset + k*2 );
       str.append( UString(uchar) );
     }
   }
@@ -227,7 +221,7 @@ EString EString::fromByteString( const void* p, unsigned maxsize )
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
   
-  unsigned len = estring_readU16( data  );
+  unsigned len = readU16( data  );
   char* buffer = new char[ len+1 ];
   memcpy( buffer, data + 2, len );
   buffer[ len ] = 0;
@@ -252,7 +246,7 @@ EString EString::fromByteString( const void* p, bool longString,
   UString str = UString::null;
   
   unsigned offset = longString ? 2 : 1;  
-  unsigned len = longString ? estring_readU16( data  ): data[0];
+  unsigned len = longString ? readU16( data  ): data[0];
   
   char* buffer = new char[ len+1 ];
   memcpy( buffer, data + offset, len );
@@ -303,7 +297,7 @@ EString EString::fromSheetName( const void* p, unsigned datasize )
   {
     for( unsigned k=0; k<len; k++ )
     {
-      unsigned uchar = estring_readU16( data + offset + k*2 );
+      unsigned uchar = readU16( data + offset + k*2 );
       str.append( UString(uchar) );
     }
   }
