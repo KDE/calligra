@@ -1,6 +1,6 @@
 INCLUDES  = -I$(srcdir) -I$(srcdir)/core -I$(srcdir)/tools $(all_includes)
 
-SUBDIRS = core tools ui . data pics
+SUBDIRS = core ui tools . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \

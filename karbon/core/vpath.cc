@@ -588,3 +588,36 @@ VPath::transform( const VAffineMap& affMap )
 
 	return *this;
 }
+
+QPointArray
+VPath::getQPointArray( const double zoomFactor = 1.0 ) const
+{
+	QListIterator<VSegment> i( m_segments );
+	const VSegment* prev_seg( 0L );	// pointer to previous segment
+	QPointArray qpa;
+
+	// skip first point when path is closed:
+	if ( isClosed() )
+	{
+		prev_seg = i.current();
+		++i;
+	}
+
+	for ( ; i.current(); ++i )
+	{
+		const QPointArray& seg_qpa =
+			i.current()->getQPointArray( prev_seg, zoomFactor);
+
+		uint old_size( qpa.size() );
+		uint add_size( seg_qpa.size() );
+
+		qpa.resize( old_size + add_size );
+
+		for ( uint j = 0; j < add_size; ++j )
+			qpa.setPoint( old_size + j, seg_qpa.point( j ) );
+
+		prev_seg = i.current();	// remember previous segment
+	}
+
+	return qpa;
+}

@@ -2,41 +2,42 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#include "vccmd_rectangle.h"	// command
-#include "vcdlg_rectangle.h"	// dialog
-#include "vctool_rectangle.h"
+#include "vccmd_roundrect.h"	// command
+#include "vcdlg_roundrect.h"	// dialog
+#include "vctool_roundrect.h"
 #include "vpoint.h"
 
-VCToolRectangle* VCToolRectangle::s_instance = 0L;
+VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
 
-VCToolRectangle::VCToolRectangle( KarbonPart* part )
+VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
 	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
-	  m_isCentered( false )
+	  m_isCentered( false ), m_round( 20.0 )
 {
 	// create config dialog:
-	m_dialog = new VCDlgRectangle();
+	m_dialog = new VCDlgRoundRect();
 	m_dialog->setValueWidth( 100.0 );
 	m_dialog->setValueHeight( 100.0 );
+	m_dialog->setValueRound( m_round );
 }
 
-VCToolRectangle::~VCToolRectangle()
+VCToolRoundRect::~VCToolRoundRect()
 {
 	delete( m_dialog );
 }
 
-VCToolRectangle*
-VCToolRectangle::instance( KarbonPart* part )
+VCToolRoundRect*
+VCToolRoundRect::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolRectangle( part );
+		s_instance = new VCToolRoundRect( part );
 	}
 
 	return s_instance;
 }
 
 bool
-VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
+VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 {
 
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
@@ -79,11 +80,13 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 				VPoint tl;
 				tl.setFromQPoint( m_fp, view->zoomFactor() );
 
+				m_round = m_dialog->valueRound();
+
 				m_part->addCommand(
-					new VCCmdRectangle( m_part,
+					new VCCmdRoundRect( m_part,
 						tl.x(), tl.y(),
 						tl.x() + m_dialog->valueWidth(),
-						tl.y() + m_dialog->valueHeight() ) );
+						tl.y() + m_dialog->valueHeight(), m_round ) );
 			}
 		}
 		else
@@ -95,7 +98,7 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 			br.setFromQPoint( m_rect.bottomRight(), view->zoomFactor() );
 
 			m_part->addCommand(
-				new VCCmdRectangle( m_part, tl.x(), tl.y(), br.x(), br.y() ) );
+				new VCCmdRoundRect( m_part, tl.x(), tl.y(), br.x(), br.y(), m_round ) );
 		}
 
 		return true;

@@ -14,10 +14,10 @@
 
 #include <klocale.h>
 
-#include "vcdlg_rectangle.h"
+#include "vcdlg_roundrect.h"
 
-VCDlgRectangle::VCDlgRectangle()
-	: KDialog( 0L, i18n( "Rectangle" ), true, Qt::WStyle_Customize |
+VCDlgRoundRect::VCDlgRoundRect()
+	: KDialog( 0L, i18n( "Round Rectangle" ), true, Qt::WStyle_Customize |
 	  Qt::WStyle_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
 	setCaption( i18n( "Rectangle" ) );
@@ -33,6 +33,8 @@ VCDlgRectangle::VCDlgRectangle()
 	m_width = new QLineEdit( 0, group );
 	new QLabel( i18n( "Height:" ), group );
 	m_height = new QLineEdit( 0, group );
+	new QLabel( i18n( "Edge Radius:" ), group );
+	m_round = new QLineEdit( 0, group );
 
 	outerbox->addSpacing( 2 );
 
@@ -59,19 +61,25 @@ VCDlgRectangle::VCDlgRectangle()
 }
 
 double
-VCDlgRectangle::valueWidth()
+VCDlgRoundRect::valueWidth()
 {
 	return m_width->text().toDouble();
 }
 
 double
-VCDlgRectangle::valueHeight()
+VCDlgRoundRect::valueHeight()
 {
 	return m_height->text().toDouble();
 }
 
+double
+VCDlgRoundRect::valueRound()
+{
+	return m_round->text().toDouble();
+}
+
 void
-VCDlgRectangle::setValueWidth( const double value )
+VCDlgRoundRect::setValueWidth( const double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
@@ -79,11 +87,19 @@ VCDlgRectangle::setValueWidth( const double value )
 }
 
 void
-VCDlgRectangle::setValueHeight( const double value )
+VCDlgRoundRect::setValueHeight( const double value )
 {
 	QString s;
 	s.setNum( value, 'f', 3 );
 	m_height->setText( s );
 }
 
-#include "vcdlg_rectangle.moc"
+void
+VCDlgRoundRect::setValueRound( const double value )
+{
+	QString s;
+	s.setNum( value, 'f', 3 );
+	m_round->setText( s );
+}
+
+#include "vcdlg_roundrect.moc"

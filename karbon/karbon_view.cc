@@ -13,6 +13,7 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vctool_rectangle.h"
+#include "vctool_roundrect.h"
 
 #include <kdebug.h>
 
@@ -21,20 +22,21 @@ VTool* KarbonView::s_currentTool = 0L;
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
 {
-// TODO: this is temporary =>
-if ( s_currentTool == 0L )
-	s_currentTool = VCToolRectangle::instance( m_part );
-setCursor( crossCursor );
-// TODO: <= this is temporary
-
 	setInstance( KarbonFactory::instance() );
-	setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 
+	setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 	initActions();
 
 	m_canvas = new VCanvas( this, part );
 	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
+
+// TODO: this is temporary =>
+if ( s_currentTool == 0L )
+//	s_currentTool = VCToolRectangle::instance( m_part );
+	s_currentTool = VCToolRoundRect::instance( m_part );
+m_canvas->viewport()->setCursor( crossCursor );
+// TODO: <= this is temporary
 }
 
 KarbonView::~KarbonView()
@@ -91,8 +93,17 @@ KarbonView::initActions()
 		"insert_ellipse" );
 	new KAction( i18n("&Polygon"), "polygon", 0, actionCollection(),
 		"insert_polygon" );
-	new KAction( i18n("&Rectangle"), "rectangle", 0, actionCollection(),
-		"insert_rectangle" );
+
+	KActionMenu* rects =
+		new KActionMenu( i18n("&Rectangle"), "rectangle", actionCollection(),
+			"insert_rectangles" );
+	rects->insert(
+		new KAction( i18n("&Rectangle"), "rectangle", 0,actionCollection(),
+			"insert_rectangle" ) );
+	rects->insert(
+		new KAction( i18n("&Round Rectangle"), "roundrect", 0, actionCollection(),
+			"insert_roundrect" ) );
+
 	new KAction( i18n("S&inus"), "sinus", 0, actionCollection(),
 		"insert_sinus" );
 	new KAction( i18n("&Spiral"), "spiral", 0, actionCollection(),

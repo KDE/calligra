@@ -271,11 +271,13 @@ public:
 		const double x2, const double y2, const double r );
 
 	VPath& close();
-	const bool isClosed() { return( m_isClosed ); }
+	bool isClosed() const { return m_isClosed; }
 
 	const VPath& revert();
 
 	virtual VObject& transform( const VAffineMap& affMap );
+
+	QPointArray getQPointArray( const double zoomFactor = 1.0 ) const;
 
 private:
 	// m_segments store all segemnts ( lines or beziers)

@@ -2,41 +2,45 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VCTOOLRECTANGLE_H__
-#define __VCTOOLRECTANGLE_H__
+#ifndef __VCTOOLROUNDRECT_H__
+#define __VCTOOLROUNDRECT_H__
 
 #include <qpoint.h>
 #include <qrect.h>
 
 #include "karbon_view.h"
+#include "vccmd_roundrect.h"
+#include "vpath.h"
 #include "vpoint.h"
 #include "vtool.h"
 
 class KarbonPart;
-class VCDlgRectangle;
+class VCDlgRoundRect;
 
 // A singleton state to create a rectangle.
 
-class VCToolRectangle : public VTool
+class VCToolRoundRect : public VTool
 {
 public:
-	virtual ~VCToolRectangle();
-	static VCToolRectangle* instance( KarbonPart* part );
+	virtual ~VCToolRoundRect();
+	static VCToolRoundRect* instance( KarbonPart* part );
 
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
 protected:
-	VCToolRectangle( KarbonPart* part );
+	VCToolRoundRect( KarbonPart* part );
 
 private:
 	// inline helper functions:
 	void recalcRect();
 	void drawTemporaryRect( KarbonView* view );
 
-	static VCToolRectangle* s_instance;
+	static VCToolRoundRect* s_instance;
 
 	KarbonPart* m_part;
-	VCDlgRectangle* m_dialog;
+	VCDlgRoundRect* m_dialog;
+
+	double m_round;
 
 	bool m_isDragging;
 	bool m_isSquare;
@@ -49,7 +53,7 @@ private:
 };
 
 inline void
-VCToolRectangle::recalcRect()
+VCToolRoundRect::recalcRect()
 {
 	int width;
 	int height;
@@ -87,13 +91,30 @@ VCToolRectangle::recalcRect()
 }
 
 inline void
-VCToolRectangle::drawTemporaryRect( KarbonView* view )
+VCToolRoundRect::drawTemporaryRect( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setPen( Qt::black );
 	painter.setRasterOp( Qt::NotROP );
 
-	painter.drawRect( m_rect );
+	// Qt's drawRoundRect() behaves differntely, that's why we have
+	// to take the long way home here.
+
+	VPoint tl;
+	VPoint br;
+	tl.setFromQPoint( m_rect.topLeft(), view->zoomFactor() );
+	br.setFromQPoint( m_rect.bottomRight(), view->zoomFactor() );
+
+	// let the command create the necessary qpointarray for us:
+	VCCmdRoundRect* cmd =
+		new VCCmdRoundRect( m_part, tl.x(), tl.y(), br.x(), br.y(), m_round );
+
+	VPath* path = cmd->createPath();
+
+	painter.drawPolygon( path->getQPointArray( view->zoomFactor() ) );
+
+	delete( cmd );
+	delete( path );
 }
 
 #endif
