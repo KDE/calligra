@@ -257,6 +257,17 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_editCell = new KAction( i18n("Modify Cell"),"cell_edit", CTRL + Key_M, this, SLOT( editCell() ), actionCollection(), "editCell" );
     m_delete = new KAction( i18n("Delete"),"deletecell", 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
     m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );
+    // ---------------------------- Bernd -----------------------
+    //Key_Shift ..
+
+    m_recalc_workbook = new KAction( i18n("Recalculate Workbook"),Key_F9, this, SLOT( RecalcWorkBook() ), actionCollection(), "RecalcWorkBook" );
+    m_recalc_worksheet = new KAction( i18n("Recalculate Worksheet"),SHIFT + Key_F9, this, SLOT( RecalcWorkSheet() ), actionCollection(), "RecalcWorkSheet" );
+
+    // ---------------------------- Bernd -----------------------
+
+
+
+
     m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
     m_areaName = new KAction( i18n("Area name"), 0, this, SLOT( setAreaName() ), actionCollection(), "areaname" );
@@ -421,6 +432,27 @@ KSpreadView::~KSpreadView()
     delete m_pPopupMenu;
 }
 
+void KSpreadView::RecalcWorkBook(){
+
+    KSpreadTable *tbl;
+
+    for ( tbl = m_pDoc->map()->firstTable(); 
+	  tbl != 0L; tbl = m_pDoc->map()->nextTable() ){
+      tbl->recalc(true);
+    }
+
+    //    slotUpdateView( activeTable() );
+
+}
+
+void KSpreadView::RecalcWorkSheet(){
+
+  if (m_pTable!= 0)
+    m_pTable->recalc(true);
+
+  //slotUpdateView( activeTable() );
+
+}
 void KSpreadView::initialPosition()
 {
     // Set the initial position for the marker as store in the XML file,

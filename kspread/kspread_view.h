@@ -168,6 +168,8 @@ public slots:
     void cutSelection();
     void deleteSelection();
     void clearSelection();
+    void RecalcWorkBook();
+    void RecalcWorkSheet();
     void paste();
     void specialPaste();
     void editCell();
@@ -413,6 +415,8 @@ private:
     KAction* m_specialPaste;
     KAction* m_delete;
     KAction* m_clear;
+    KAction* m_recalc_workbook;
+    KAction* m_recalc_worksheet;
     KAction* m_adjust;
     KAction* m_editCell;
     KAction* m_undo;

@@ -140,6 +140,8 @@ static bool kspreadfunc_sin( KSContext& context )
 }
 
 
+
+
 static bool kspreadfunc_cos( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1087,6 +1089,17 @@ static bool kspreadfunc_PI( KSContext& context )
     return true;
 }
 
+static bool kspreadfunc_rand( KSContext& context )
+{
+    // QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 0, "rand", true ) )
+      return false;
+
+    context.setValue( new KSValue((double) rand()/(RAND_MAX + 1.0)));
+    return true;
+}
+
 static bool kspreadfunc_REPT( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -2027,6 +2040,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   //  module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
+  module->addObject( "rand", new KSValue( new KSBuiltinFunction( module, "rand",kspreadfunc_rand) ) );
   module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
   module->addObject( "ISLOGIC", new KSValue( new KSBuiltinFunction( module,"ISLOGIC",kspreadfunc_islogic) ) );
   module->addObject( "ISTEXT", new KSValue( new KSBuiltinFunction( module,"ISTEXT",kspreadfunc_istext) ) );
