@@ -3115,7 +3115,7 @@ int KWordDocument::getFrameSet( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
-int KWordDocument::selectFrame( unsigned int mx, unsigned int my )
+int KWordDocument::selectFrame( unsigned int mx, unsigned int my, bool simulate )
 {
     KWFrameSet *frameSet = 0L;
 
@@ -3132,11 +3132,12 @@ int KWordDocument::selectFrame( unsigned int mx, unsigned int my )
                 continue;
             if ( frameSet->isRemoveableHeader() )
                 continue;
-            return frameSet->selectFrame( mx, my );
+            return frameSet->selectFrame( mx, my, simulate );
         }
     }
 
-    deSelectAllFrames();
+    if ( !simulate )
+        deSelectAllFrames();
     return 0;
 }
 

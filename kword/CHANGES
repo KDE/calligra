@@ -1325,3 +1325,11 @@ Reggie, 19.6.1999:
 - Fixed initial repaint problem
 - Saving/Loading pictures into/from a document finally
   works now
+
+Reggie, 20.6.1999:
+------------------
+- Selecting/Deselecting Frames works correctly again
+- Selecting/Deselecting Table cells works correctly again
+- When moving/resizing frames, repaints are correct
+- Some other small fixes
+

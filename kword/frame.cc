@@ -448,15 +448,17 @@ bool KWFrameSet::contains( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
-int KWFrameSet::selectFrame( unsigned int mx, unsigned int my )
+int KWFrameSet::selectFrame( unsigned int mx, unsigned int my, bool simulate )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ )
     {
         if ( frames.at( i )->contains( QPoint( mx, my ) ) )
         {
             int r = 1;
-            if ( frames.at( i )->isSelected() ) r = 2;
-            frames.at( i )->setSelected( true );
+            if ( frames.at( i )->isSelected() ) 
+                r = 2;
+            if ( !simulate )
+                frames.at( i )->setSelected( true );
             return r;
         }
     }

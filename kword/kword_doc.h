@@ -305,7 +305,7 @@ public:
      * 2, if a frame gets selected which was already selected, and
      * 0 if no frame got selected.
      */
-    int selectFrame( unsigned int mx, unsigned int my );
+    int selectFrame( unsigned int mx, unsigned int my, bool simulate = false );
     void deSelectFrame( unsigned int mx, unsigned int my );
     void deSelectAllFrames();
     QCursor getMouseCursor( unsigned int mx, unsigned int my );

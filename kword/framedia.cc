@@ -625,7 +625,7 @@ void KWFrameDia::applyChanges()
     }
 
     int currFS = -1;
-    
+
     if ( flags & FD_FRAME_CONNECT && doc )
     {
         unsigned int _num = static_cast<unsigned int>( lFrameSList->currentItem() );
@@ -717,7 +717,7 @@ void KWFrameDia::applyChanges()
     if ( currFS != -1 )
         page->repaintScreen( currFS, true );
     else
-        page->repaintScreen( false );
+        page->repaintScreen( true );
 }
 
 /*================================================================*/

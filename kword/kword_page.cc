@@ -752,45 +752,47 @@ bool KWPage::vmpEdit( unsigned int mx, unsigned int my )
 /*================================================================*/
 void KWPage::vmpEditFrame( QMouseEvent *e, unsigned int mx, unsigned int my )
 {
-    int r = doc->selectFrame( mx, my );
-    bool goon = true;
+    // only simulate selection - we do real selection below
+    int r = doc->selectFrame( mx, my, true );
 
-    if ( r == 0 )
-        doc->deSelectAllFrames();
+    bool goon = true;
 
     if ( r != 0 && ( e->state() & ShiftButton ) && doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager() )
     {
+        doc->selectFrame( mx, my );
         doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager()->selectUntil( doc->getFrameSet( doc->getFrameSet( mx, my ) ) );
         curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
         goon = false;
+        repaintScreen( false );
     }
 
     if ( goon )
     {
+        if ( r == 0 )
+            selectAllFrames( false );
+
         if ( r == 1 )
         {
             if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
-                doc->deSelectAllFrames();
-            doc->selectFrame( mx, my );
+                selectAllFrames( false );
+            selectFrame( mx, my, true );
             curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
         }
         else if ( r == 2 )
         {
             if ( e->state() & ControlButton || e->state() & ShiftButton )
             {
-                doc->deSelectFrame( mx, my );
+                selectFrame( mx, my, false );
                 curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
             }
             else if ( viewport()->cursor().shape() != SizeAllCursor )
             {
-                doc->deSelectAllFrames();
-                doc->selectFrame( mx, my );
+                selectAllFrames( false );
+                selectFrame( mx, my, true );
                 curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
             }
         }
     }
-
-    repaintScreen( false );
 
     mousePressed = false;
     mouseMoveEvent( e );
@@ -885,8 +887,8 @@ void KWPage::vmpRightButton( QMouseEvent *e, unsigned int mx, unsigned int my )
             oldMx = mx;
             oldMy = my;
             if ( doc->selectFrame( mx, my ) == 1 && !( e->state() & ControlButton || e->state() & ShiftButton ) ) doc->deSelectAllFrames();
-            doc->selectFrame( mx, my );
-            repaintScreen( false );
+            selectAllFrames( false );
+            selectFrame( mx, my, true );
             QPoint pnt( QCursor::pos() );
             frame_edit_menu->popup( pnt );
         } break;
@@ -1014,9 +1016,11 @@ void KWPage::vmrEditFrame( unsigned int mx, unsigned int my )
         recalcAll = true;
         recalcText();
         recalcCursor();
+        repaintScreen( true );
         recalcAll = false;
     }
-    else doc->updateAllViews( 0L );
+    else 
+        doc->updateAllViews( gui->getView() );
 }
 
 /*================================================================*/
@@ -2753,7 +2757,7 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack )
             if ( mouseMode == MM_EDIT_FRAME && tmp->isSelected() )
             {
                 _painter.save();
-                //_painter.setRasterOp( NotROP );
+                _painter.setRasterOp( NotROP );
                 if ( !frameset->getGroupManager() )
                 {
                     _painter.fillRect( frame.x(), frame.y(), 6, 6, colorGroup().highlight() );
@@ -2834,16 +2838,19 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack )
 void KWPage::drawFrameSelection( QPainter &_painter, KWFrame *_frame )
 {
     _painter.save();
-    //_painter.setRasterOp( NotROP );
+    _painter.setRasterOp( NotROP );
 
-    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY(), 6, 6, colorGroup().highlight() );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() / 2 - 3, _frame->y() - contentsY(), 6, 6, colorGroup().highlight() );
-    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY() + _frame->height() / 2 - 3, 6, 6, colorGroup().highlight() );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY(), 6, 6, colorGroup().highlight() );
-    _painter.fillRect( _frame->x() - contentsX(), _frame->y() - contentsY() + _frame->height() - 6, 6, 6, colorGroup().highlight() );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() / 2 - 3, _frame->y() - contentsY() + _frame->height() - 6, 6, 6, colorGroup().highlight() );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY() + _frame->height() / 2 - 3, 6, 6, colorGroup().highlight() );
-    _painter.fillRect( _frame->x() - contentsX() + _frame->width() - 6, _frame->y() - contentsY() + _frame->height() - 6, 6, 6, colorGroup().highlight() );
+    QRect frame( _frame->x() - contentsX() - 1, _frame->y() - contentsY() - 1, 
+                 _frame->width() + 2, _frame->height() + 2 );
+    
+    _painter.fillRect( frame.x(), frame.y(), 6, 6, colorGroup().highlight() );
+    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y(), 6, 6, colorGroup().highlight() );
+    _painter.fillRect( frame.x(), frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
+    _painter.fillRect( frame.x() + frame.width() - 6, frame.y(), 6, 6, colorGroup().highlight() );
+    _painter.fillRect( frame.x(), frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
+    _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
+    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
+    _painter.fillRect( frame.x() + frame.width() - 6, frame.y() + frame.height() - 6, 6, 6, colorGroup().highlight() );
 
     _painter.restore();
 }
@@ -2906,6 +2913,9 @@ void KWPage::setMouseMode( MouseMode _mm )
         }
     }
 
+    if ( mouseMode != _mm )
+        selectAllFrames( false );
+        
     mouseMode = _mm;
     mmUncheckAll();
     gui->getView()->uncheckAllTools();
@@ -4538,6 +4548,69 @@ void KWPage::doAutoScroll()
         {
             setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
             setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
+        }
+    }
+}
+
+/*================================================================*/
+void KWPage::selectAllFrames( bool select )
+{
+    KWFrameSet *fs = 0L;
+    KWFrame *frame = 0L;
+    
+    QRect v_rect( contentsX(), contentsY(), 
+                  viewport()->width(), viewport()->height() );
+
+    bool dirty = false;
+    
+    QPainter p;
+    p.begin( viewport() );
+    
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i )
+    {
+        bool careAboutDirty = false;
+        fs = doc->getFrameSet( i );
+        if ( fs->getGroupManager() )
+            careAboutDirty = true;
+        
+        for ( unsigned int j = 0; j < fs->getNumFrames(); ++j )
+        {
+            frame = fs->getFrame( j );
+            if ( frame->isSelected() != select )
+            {
+                frame->setSelected( select );
+                if ( frame->intersects( v_rect ) )
+                    drawFrameSelection( p, frame );
+                if ( !dirty && careAboutDirty )
+                    dirty = true;
+            }
+        }
+    }
+        
+    p.end();
+    
+    if ( dirty )
+        repaintScreen( true );
+}
+
+/*================================================================*/
+void KWPage::selectFrame( int mx, int my, bool select )
+{
+    int fs = doc->getFrameSet( mx, my );
+    if ( fs != -1 ) 
+    {
+        KWFrameSet *frameset = doc->getFrameSet( fs );
+        int frm = frameset->getFrame( mx, my );
+        if ( frm != -1 )
+        {
+            KWFrame *frame = frameset->getFrame( frm );
+            if ( frame->isSelected() != select )
+            {
+                frame->setSelected( select );
+                QPainter p;
+                p.begin( viewport() );
+                drawFrameSelection( p, frame );
+            }
         }
     }
 }

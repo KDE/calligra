@@ -176,7 +176,7 @@ public:
     void repaintScreen( bool erase );
     void repaintScreen( const QRect &r, bool erase );
     void repaintScreen( int currFS, bool erase );
-    
+
 public slots:
     void newLeftIndent( int _left );
     void newFirstIndent( int _first );
@@ -297,6 +297,9 @@ protected:
     void startKeySelection();
     void continueKeySelection();
 
+    void selectAllFrames( bool select );
+    void selectFrame( int mx, int my, bool select );
+    
     KWordDocument *doc;
     bool markerIsVisible;
 
@@ -358,7 +361,7 @@ protected:
     QPoint cachedContentsPos;
     bool _erase, _setErase, _resizing, redrawOnlyCurrFrameset;
     int currFrameSet;
-    
+
 };
 
 #endif

@@ -184,7 +184,7 @@ public:
      * Return 1, if a frame gets selected which was not selected before,
      * 2, if a frame gets selected which was already selected
      */
-    virtual int selectFrame( unsigned int mx, unsigned int my );
+    virtual int selectFrame( unsigned int mx, unsigned int my, bool simulate = false );
     virtual void deSelectFrame( unsigned int mx, unsigned int my );
     virtual QCursor getMouseCursor( unsigned int mx, unsigned int my );
 
