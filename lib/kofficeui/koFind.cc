@@ -132,6 +132,7 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     m_selectedText = new QCheckBox(i18n("&Selected Text"), m_optionGrp);
     setHasSelection( hasSelection );
     m_promptOnReplace = new QCheckBox(i18n("&Prompt On Replace"), m_optionGrp);
+    m_promptOnReplace->setChecked( true );
 
     optionsLayout->addWidget(m_caseSensitive, 0, 0);
     optionsLayout->addWidget(m_wholeWordsOnly, 1, 0);
