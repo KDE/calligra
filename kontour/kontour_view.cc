@@ -59,9 +59,11 @@
 #include "SelectTool.h"
 #include "EditPointTool.h"
 #include "ZoomTool.h"
+#include "PathTool.h"
 #include "RectTool.h"
 #include "OvalTool.h"
 #include "PolygonTool.h"
+#include "TextTool.h"
 #include "InsertImageTool.h"
 #include "LayerPanel.h"
 #include "StylePanel.h"
@@ -386,6 +388,9 @@ void KontourView::setupTools()
   mZoomTool = new ZoomTool("Zoom", tcontroller);
   tcontroller->registerTool(mZoomTool);
 
+  mPathTool = new PathTool("Path", tcontroller);
+  tcontroller->registerTool(mPathTool);
+
   mRectTool = new RectTool("Rect", tcontroller);
   tcontroller->registerTool(mRectTool);
 
@@ -394,6 +399,9 @@ void KontourView::setupTools()
 
   mPolygonTool = new PolygonTool("Polygon", tcontroller);
   tcontroller->registerTool(mPolygonTool);
+
+  mTextTool = new TextTool("Text", tcontroller);
+  tcontroller->registerTool(mTextTool);
 
   mInsertImageTool = new InsertImageTool("InsertImage", tcontroller);
   tcontroller->registerTool(mInsertImageTool);

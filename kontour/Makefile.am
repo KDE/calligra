@@ -50,14 +50,17 @@ libkontourpart_la_SOURCES = \
 	LayerPanel.cc \
 	StylePanel.cc \
 	TransformPanel.cc \
+	AlignmentPanel.cc \
 	Tool.cc \
 	ToolController.cc \
 	SelectTool.cc \
 	EditPointTool.cc \
 	ZoomTool.cc \
+	PathTool.cc \
 	RectTool.cc \
 	OvalTool.cc \
 	PolygonTool.cc \
+	TextTool.cc \
 	InsertImageTool.cc \
 	Handle.cc \
 	Command.cc \

@@ -3,7 +3,6 @@
   $Id$
 
   This file is part of Kontour.
-  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
   Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
@@ -23,31 +22,26 @@
 
 */
 
-#ifndef __TextTool_h__
-#define __TextTool_h__
+#ifndef __PathTool_h__
+#define __PathTool_h__
 
 #include "Tool.h"
 
-class GPage;
-class Canvas;
+class GPath;
 
-class TextTool : public Tool
+class PathTool : public Tool
 {
   Q_OBJECT
 public:
-  TextTool(QString aId, ToolController *tc);
+  PathTool(QString aId, ToolController *tc);
 
   void activate();
   void deactivate();
   void processEvent(QEvent *e);
 
-protected:
-  void processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
-  void processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
-  void processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *canvas);
-  void processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas);
-
 private:
+  enum State{S_Init, S_Resize};
+  State state;
 };
 
 #endif

@@ -23,198 +23,65 @@
 
 */
 
-#include <TextTool.h>
+#include "TextTool.h"
 
-#include <qkeycode.h>
+#include <kaction.h>
 #include <klocale.h>
 
-#include "KIllustrator_doc.h"
-#include "GText.h"
-#include "GDocument.h"
+#include "kontour_view.h"
 #include "GPage.h"
-#include <Canvas.h>
-#include <Coord.h>
-#include <CreateTextCmd.h>
-#include <SetTextCmd.h>
-#include <CommandHistory.h>
+#include "Canvas.h"
 #include "ToolController.h"
 
-TextTool::TextTool (CommandHistory *history) : Tool (history)
+TextTool::TextTool(QString aId, ToolController *tc):
+Tool(aId, tc)
 {
-  text = 0L;
-  origState = 0L;
-  m_id=ToolText;
+  ToolSelectAction *text = new ToolSelectAction(actionCollection(), "ToolAction");
+  KAction *mT1 = new KAction(i18n("Text"), "texttool", 0, actionCollection());
+  text->insert(mT1);
 }
-void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+
+void TextTool::activate()
 {
-  if(!doc->document()->isReadWrite())
-      return;
-   if (e->type () == QEvent::MouseButtonPress)
-   {
-      QMouseEvent *me = (QMouseEvent *) e;
-      Coord pos (me->x (), me->y ());
-      if (text != 0L)
-      {
-         if (text->isEmpty ())
-         {
-            // an empty text was entered -> remove the object
-            doc->activePage()->deleteObject (text);
-         }
-         else
-         {
-             //store undo info
-             deactivate (doc, canvas);
-             //text->showCursor (false);
-         }
-        }
+//  toolController()->view()->canvas()->setCursor(Qt::crossCursor);
+}
 
-        text = 0L;
+void TextTool::deactivate()
+{
+}
 
-        QPtrList<GObject> olist;
-        if (doc->activePage()->findContainingObjects (me->x (), me->y (), olist)) {
-            QPtrListIterator<GObject> it (olist);
-            while (it.current ()) {
-                if (it.current ()->isA ("GText")) {
-                    text = (GText *) it.current ();
+void TextTool::processEvent(QEvent *e)
+{
+  KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+  GPage *page = toolController()->view()->activeDocument()->activePage();
+  Canvas *canvas = toolController()->view()->canvas();
 
-                    if (origState)
-                        origState->unref ();
-                    origState = text->saveState ();
-
-                    text->updateCursor (pos);
-                    text->showCursor (true);
-                    break;
-                }
-                ++it;
-            }
-        }
-        if (text == 0) {
-            text = new GText (doc);
-            float xpos = me->x (), ypos = me->y ();
-            canvas->snapPositionToGrid (xpos, ypos);
-
-            if (origState) {
-                origState->unref ();
-                origState = 0L;
-            }
-
-            text->setOrigin (Coord (xpos, ypos));
-            text->showCursor (true);
-            doc->activePage()->insertObject (text);
-        }
-
-        // XIM position
-        canvas->setXimPosition( text->global_posX, text->global_posY, 0, 0 );
-    }
-    else if (e->type () == QEvent::KeyPress) {
-        QKeyEvent *ke = (QKeyEvent *) e;
-        if (ke->key () == Qt::Key_Escape) {
-            // Cancel editing
-            if (text != 0L) {
-                if (origState == 0L) {
-                    // new text -> remove it
-                    doc->activePage()->deleteObject (text);
-                }
-                else {
-                    // undo modifications
-                    text->restoreState (origState);
-                }
-            }
-            m_toolController->emitOperationDone (m_id);
-        }
-        if (text == 0L)
-            return;
-        int x = text->cursorX (), y = text->cursorY ();
-        bool changed = false;
-        if (ke->key () == Qt::Key_Left) {
-            if (x > 0) {
-                x--;
-                changed = true;
-            }
-            else if (y > 0) {
-                y--;
-                x = text->line (y).length ();
-                changed = true;
-            }
-        }
-        else if (ke->key () == Qt::Key_Right) {
-            if (x < (int) text->line (y).length ()) {
-                x++;
-                changed = true;
-            }
-            else if (y < text->lines () - 1) {
-                y++; x = 0;
-                changed = true;
-            }
-        }
-        else if (ke->key () == Qt::Key_Up) {
-            if (y > 0) {
-                y--;
-                if (x >= (int) text->line (y).length ())
-                    x = text->line (y).length ();
-                changed = true;
-            }
-        }
-        else if (ke->key () == Qt::Key_Down) {
-            if (y < text->lines () - 1) {
-                y++;
-                if (x >= (int) text->line (y).length ())
-                    x = text->line (y).length ();
-                changed = true;
-            }
-        }
-        else if (ke->key () == Qt::Key_Home) {
-            x = 0;
-            changed = true;
-        }
-        else if (ke->key () == Qt::Key_End) {
-            x = text->line (y).length ();
-            changed = true;
-        }
-        else if (ke->key()==Qt::Key_Return ||ke->key()==Qt::Key_Enter )
-            text->insertChar("\n");
-        else if (ke->key()==Qt::Key_Backspace)
-            text->deleteBackward ();
-        else if(ke->key() == Qt::Key_Delete)
-            text->deleteChar ();
-        else if(!ke->text().isEmpty())
-            text->insertChar(ke->text());
-        if(changed) {
-            text->setCursor (x, y);
-        }
-
-        // XIM position
-        canvas->setXimPosition( text->global_posX, text->global_posY, 0, 0 );
-    }
+  if(!doc->isReadWrite())
     return;
+  if(e->type() == QEvent::MouseButtonPress)
+    processButtonPressEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::MouseMove)
+    processMouseMoveEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::MouseButtonRelease)
+    processButtonReleaseEvent((QMouseEvent *)e, page, canvas);
+  else if(e->type() == QEvent::KeyPress)
+    processKeyPressEvent((QKeyEvent *)e, page, canvas);
 }
 
-void TextTool::activate (GDocument* /*doc*/, Canvas* canvas)
+void TextTool::processButtonPressEvent(QMouseEvent *, GPage *, Canvas *)
 {
-   canvas->setCursor(Qt::ibeamCursor);
-   m_toolController->emitModeSelected (m_id,i18n("Write some prose..."));
 }
 
-void TextTool::deactivate (GDocument *doc, Canvas*) {
-  if (text) {
-    text->showCursor (false);
-    doc->activePage()->unselectAllObjects ();
-    doc->activePage()->setLastObject (text);
-    if (origState == 0L) {
-      if (text->isEmpty ()) {
-        // an empty text was entered -> remove the object
-        doc->activePage()->deleteObject (text);
-      }
-      else {
-        CreateTextCmd *cmd = new CreateTextCmd (doc, text);
-        history->addCommand (cmd);
-      }
-    }
-    else {
-      SetTextCmd *cmd = new SetTextCmd (doc, text, origState);
-      history->addCommand (cmd);
-    }
-    text = 0L;
-  }
+void TextTool::processMouseMoveEvent(QMouseEvent *, GPage *, Canvas *)
+{
 }
 
+void TextTool::processButtonReleaseEvent(QMouseEvent *, GPage *, Canvas *)
+{
+}
+
+void TextTool::processKeyPressEvent(QKeyEvent *, GPage *, Canvas *)
+{
+}
+
+#include "TextTool.moc"

@@ -2,8 +2,9 @@
 
    $Id$
 
-   This file is part of KIllustrator.
+   This file is part of Kontour.
    Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+   Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as
@@ -22,52 +23,22 @@
 
 */
 
-#ifndef AlignmentDialog_h
-#define AlignmentDialog_h
+#ifndef __AlignmentPanel_h__
+#define __AlignmentPanel_h__
 
-#include <kdialogbase.h>
+#include <qdockwindow.h>
 
-#include <AlignCmd.h>
-#include <DistributeCmd.h>
+class KontourView;
 
-class QRadioButton;
-class QCheckBox;
-
-class GDocument;
-class CommandHistory;
-
-enum AlignmentMode { AMode_Align, AMode_Distribute };
-
-class AlignmentDialog : public KDialogBase {
-
-    Q_OBJECT
-
+class AlignmentPanel : public QDockWindow
+{
+  Q_OBJECT
 public:
-    AlignmentDialog (QWidget* parent = 0L, const char* name = 0L);
-
-    HorizAlignment getHorizAlignment ();
-    VertAlignment getVertAlignment ();
-    AlignmentMode getMode ();
-    bool centerToPage ();
-    bool snapToGrid ();
-
-    HorizDistribution getHorizDistribution ();
-    VertDistribution getVertDistribution ();
-    DistributionMode getDistributionMode ();
-
-    static void alignSelection (GDocument* doc, CommandHistory *history);
-
-protected:
-    void createAlignmentWidget (QWidget* parent);
-    void createDistributionWidget (QWidget* parent);
+  AlignmentPanel(KontourView *aView, QWidget *parent = 0L, const char *name = 0L);
 
 private:
-    QPushButton* halignButton[3];
-    QPushButton* valignButton[3];
-    QPushButton* hdistButton[4];
-    QPushButton* vdistButton[4];
-    QCheckBox *gbutton, *cbutton;
-    QRadioButton *sbutton, *pbutton;
+  KontourView        *mView;
+  QWidget            *mAlignmentPanel;
 };
 
 #endif

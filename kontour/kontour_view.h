@@ -41,7 +41,6 @@ class TabBar;
 class QSplitter;
 class QLabel;
 class QHBoxLayout;
-class PluginManager;
 class ToolController;
 class KToggleAction;
 class KSelectAction;
@@ -49,9 +48,11 @@ class KPopupMenu;
 class SelectTool;
 class EditPointTool;
 class ZoomTool;
+class PathTool;
 class RectTool;
 class OvalTool;
 class PolygonTool;
+class TextTool;
 class InsertImageTool;
 class QDockArea;
 class QButton;
@@ -60,6 +61,7 @@ class LayerPanel;
 class PaintPanel;
 class OutlinePanel;
 class TransformPanel;
+class AlignmentPanel;
 class Command;
 class KoColor;
 class GStyle;
@@ -187,6 +189,7 @@ private:
   PaintPanel          *mPaintPanel;
   OutlinePanel        *mOutlinePanel;
   TransformPanel      *mTransformPanel;
+  AlignmentPanel      *mAlignmentPanel;
 
   // Actions
   KAction             *m_copy;
@@ -227,20 +230,21 @@ private:
 
   KAction             *m_options;
 
-  /* Tools */
+  // Tools
   ToolController *tcontroller;
 
   SelectTool          *mSelectTool;
   EditPointTool       *mEditPointTool;
   ZoomTool            *mZoomTool;
+  PathTool            *mPathTool;
   RectTool            *mRectTool;
   OvalTool            *mOvalTool;
   PolygonTool         *mPolygonTool;
+  TextTool            *mTextTool;
   InsertImageTool     *mInsertImageTool;
 
   /* */
   bool mShowRulers;
-  QWidget *mParent;
   bool mShowGUI;
 
   DCOPObject *mDCOP;
