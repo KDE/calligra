@@ -236,8 +236,7 @@ bool WinWordDoc::convert()
         m_body.append(
             "</DOC>\n");
         m_result = m_body.utf8();
-        //kdDebug() << m_result << endl;
-        m_isConverted = true;
+	m_isConverted = true;
     }
     return m_success;
 }

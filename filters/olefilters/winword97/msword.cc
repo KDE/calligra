@@ -51,7 +51,8 @@ QString MsWord::char2unicode(unsigned lid, char c)
 
         // Find the name of the new code page and open the codec.
         codepage = lid2codepage(lastLid);
-        codec = QTextCodec::codecForName(QString::fromLatin1(codepage).lower().stripWhiteSpace().latin1());
+        codec = QTextCodec::codecForName(codepage);
+
         if (codec)
         {
             kdDebug(s_area) <<
@@ -75,8 +76,15 @@ QString MsWord::char2unicode(unsigned lid, char c)
     else
 	result = '?';
 
+    // KWord (?) can't handle the " <- if it's like this, up, it just
+    // always draws the bottom-" , the real " is interpreted as shit :(
+    // so let's force the bottom-" for the moment (Niko)
+    if(result[0].unicode() == 8222)
+	result[0] = QChar(8220);
+
 #ifdef CHAR_DEBUG
-    kdDebug() << "CONVERTED " << c << " TO: " << result << endl;
+    qDebug("text: %c", c);
+    qDebug("unicode result: %04x", result[0].unicode());   
 #endif    
 
     return result;
@@ -1431,7 +1439,6 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
 //	    {
 	    	bytes += MsWordGenerated::read(in + bytes, &char16);
 		*out += QChar(char16);
-//	    }
 /*	    else
 	    {
 		// Office 95 always saved non-unicode
