@@ -116,7 +116,10 @@ void KoSpellConfigWidget::initDictionaryListWord()
         }
     }
     else
+    {
         m_dictionary->setEnabled( false );
+        m_clearDictionary->setEnabled( false );
+    }
 }
 
 bool KoSpellConfigWidget::backgroundSpellCheck()
