@@ -40,6 +40,7 @@ KAboutData * newKPresenterAboutData()
     aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
     aboutData->addAuthor("Lukáš Tinkl", 0, "lukas@kde.org");
     aboutData->addAuthor("Thorsten Zachmann", 0, "t.zachmann@zagge.de");
+    aboutData->addAuthor("Ariya Hidayat", 0, "ariya@kde.org");
     return aboutData;
 }
 
