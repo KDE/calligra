@@ -82,6 +82,9 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 void
 KexiRelationView::addTable(KexiDB::TableSchema *t)
 {
+	if(!t)
+		return;
+
 	kdDebug() << "KexiRelationView::addTable(): " << t->name() << ", " << viewport() << endl;
 
 	/*
