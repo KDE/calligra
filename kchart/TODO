@@ -44,7 +44,7 @@ Item								   Prio Status
        Fixed by new KDChart version
   + 101490: Error in drawing charts with logarithmic scale.	      1	KDCH
        Fixed by new KDChart version (hopefully)
-  + 102414: A chart in a spreadsheet opens the template dialog 	      1 ----
+  + 102414: A chart in a spreadsheet opens the template dialog 	      1 DONE
 	    before the wizard appears.
 
 * Wishes

@@ -1,5 +1,7 @@
 2005-03-25  Inge Wallin  <inge@lysator.liu.se>
 
+	Fix bug 102414: KChart shows the startup dialog even when embedded
+	into a spreadsheet. 
 	* kchart_part.cc (constructor): Initialize members but don't call
 	initDoc().
 	(initDoc): don't initialize members, and return immediately if
