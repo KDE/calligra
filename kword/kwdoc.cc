@@ -26,7 +26,7 @@
 #include <kapplication.h> // for KDE_VERSION
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kglobalsettings.h>
+#include <koGlobal.h>
 
 #include <kformuladocument.h>
 #include <koDocumentInfo.h>
@@ -195,7 +195,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     getFormulaDocument()->setZoom( m_zoomedResolutionX, m_zoomedResolutionY, false, false );
 
     // Get default font from KDE
-    m_defaultFont = KGlobalSettings::generalFont();
+    m_defaultFont = KoGlobal::defaultFont();
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
     m_defaultFont.setPointSize( ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
 
