@@ -1,4 +1,5 @@
 
+KDE_CXXFLAGS = $(USE_RTTI) 
 lib_LTLIBRARIES = libkstore.la
 LDFLAGS = -version-info 1:0:0 $(all_libraries)
 INCLUDES = $(all_includes)

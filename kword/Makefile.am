@@ -1,4 +1,5 @@
 
+KDE_CXXFLAGS = $(USE_RTTI) 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 LDFLAGS	= $(all_libraries) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la -lkspell -lkformula $(LIB_KIMGIO)

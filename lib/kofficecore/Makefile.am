@@ -1,5 +1,6 @@
 ####### General stuff
 
+KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) $(all_includes)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 libkofficecore_la_LIBADD  = -lkparts $(top_builddir)/lib/koml/libkoml.la \
