@@ -5,7 +5,7 @@ killustrator_LDADD = libkillustrator.la
 
 libkillustrator_la_LDFLAGS = -avoid-version -module
 
-libkillustrator_la_LIBADD = $(all_libraries) ../share/libkillu.a ../xmlutils/libxml.la ../filter/libfilter.la ../../lib/kofficeui/libkofficeui.la
+libkillustrator_la_LIBADD = $(all_libraries) ../share/libkillu.la ../xmlutils/libxml.la ../filter/libfilter.la ../../lib/kofficeui/libkofficeui.la
 
 ####### Files
 
