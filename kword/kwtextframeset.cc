@@ -1342,7 +1342,6 @@ void KWTextFrameSet::zoom( bool forPrint )
         unzoom();
     QTextFormatCollection * coll = textDocument()->formatCollection();
     // This is because we are setting pt sizes (so Qt applies x11AppDpiY already)
-    // If you change this, fix zoomedFontSize too.
     double factor = kWordDocument()->zoomedResolutionY() *
                     ( forPrint ? 1.0 : 72.0 / QPaintDevice::x11AppDpiY() );
     //kdDebugBody(32002) << "KWTextFrameSet::zoom factor=" << factor << endl;
