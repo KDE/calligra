@@ -84,6 +84,7 @@ private:
     {
     public:
         QString mimeType;
+        QString fullName;
         QString storageName;
         QString file;
     };

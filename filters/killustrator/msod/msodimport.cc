@@ -102,10 +102,12 @@ const bool MSODImport::filter1(
     KoStore out = KoStore(fileOut, KoStore::Write);
     if (!out.open("root"))
     {
-        kdError(s_area) << "Unable to open output file!" << endl;
-        out.close();
+        kdError(s_area) << "Cannot open output file " << fileOut << endl;
         return false;
     }
+    QCString cstring = m_text.utf8();
+    out.write((const char*)cstring, cstring.length());
+    out.close();
 
     // Now add in the data for all embedded parts.
 
@@ -113,10 +115,6 @@ const bool MSODImport::filter1(
 
     for (it = m_parts.begin(); it != m_parts.end(); ++it)
     {
-        kdError(s_area) << "file: " << it.data().file << endl;
-        kdError(s_area) << "storageName: " << it.data().storageName << endl;
-        kdError(s_area) << "mime: " << it.data().mimeType << endl;
-
         // Now fetch out the elements from the resulting KoStore and embed them in our KoStore.
 
         KoStore storedPart(it.data().file, KoStore::Read);
@@ -124,10 +122,6 @@ const bool MSODImport::filter1(
             kdError(s_area) << "Could not embed in KoStore!" << endl;
         unlink(it.data().file.local8Bit());
     }
-
-    QCString cstring = m_text.utf8();
-    out.write((const char*)cstring, cstring.length());
-    out.close();
     return true;
 }
 
@@ -172,12 +166,13 @@ void MSODImport::gotPicture(
 
             // It's not here, so let's generate one.
 
-            part.storageName = m_prefixOut + '/' + QString::number(m_nextPart);
+            part.fullName = m_prefixOut + '/' + QString::number(m_nextPart);
+            part.storageName = "tar:/" + QString::number(m_nextPart);
 
             // Save the data supplied into a temporary file, then run the filter
             // on it.
 
-            part.file = mgr->import(tempFile.name(), part.mimeType, "", part.storageName.mid(sizeof("tar:") - 1));
+            part.file = mgr->import(tempFile.name(), part.mimeType, "", part.fullName.mid(sizeof("tar:") - 1));
             if (part.file != QString::null)
             {
                 m_parts.insert(key, part);
@@ -189,6 +184,9 @@ void MSODImport::gotPicture(
             }
         }
         unlink(tempFile.name().local8Bit());
+        m_text += "<object url=\"" + part.fullName +
+                    "\" mime=\"" + part.mimeType +
+                    "\" x=\"0\" y=\"0\" width=\"100\" height=\"200\"/>\n";
     }
     else
     {
