@@ -2553,6 +2553,40 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>FISHER</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the Fisher transformation for x and creates a function close to a normal distribution.
+        </Text>
+        <Syntax>FISHER(number)</Syntax>
+        <Example>FISHER(0.2859) equals 0.294096</Example>
+        <Example>FISHER(0.8105) equals 1.128485</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>FISHERINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the inverse of the Fisher transformation for x and creates a function close to a normal distribution.
+        </Text>
+        <Syntax>FISHERINV(number)</Syntax>
+        <Example>FISHERINV(0.2859) equals 0.278357</Example>
+        <Example>FISHERINV(0.8105) equals 0.669866</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>

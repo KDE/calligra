@@ -2324,6 +2324,38 @@ static bool kspreadfunc_betadist( KSContext& context ) {
   return true;
 }
 
+static bool kspreadfunc_fisher( KSContext& context ) {
+  //Returns the Fisher transformation for x
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "FISHER", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double fVal = args[0]->doubleValue();
+
+  context.setValue( new KSValue(0.5*log((1.0+fVal)/(1.0-fVal))));
+  return true;
+}
+
+static bool kspreadfunc_fisherinv( KSContext& context ) {
+  //Returns the inverse of the Fisher transformation for x
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "FISHERINV", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double fVal = args[0]->doubleValue();
+
+  context.setValue( new KSValue((exp(2.0*fVal)-1.0)/(exp(2.0*fVal)+1.0)));
+  return true;
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
@@ -4819,6 +4851,8 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "PHI", new KSValue( new KSBuiltinFunction( module, "PHI", kspreadfunc_phi) ) );
   module->addObject( "GAMMADIST", new KSValue( new KSBuiltinFunction( module, "GAMMADIST", kspreadfunc_gammadist) ) );
   module->addObject( "BETADIST", new KSValue( new KSBuiltinFunction( module, "BETADIST", kspreadfunc_betadist) ) );
+  module->addObject( "FISHER", new KSValue( new KSBuiltinFunction( module, "FISHER", kspreadfunc_fisher) ) );
+  module->addObject( "FISHERINV", new KSValue( new KSBuiltinFunction( module, "FISHERINV", kspreadfunc_fisherinv) ) );
 
   return module;
 }
