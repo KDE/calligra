@@ -258,6 +258,8 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
     }
+    //kdDebug() << "KWPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
     QDomDocument domDoc;
@@ -275,10 +277,11 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
     {
         QDomElement paragElem = listParagraphs.item( item ).toElement();
         QString s = paragElem.namedItem( "TEXT" ).toElement().text();
-        if ( !text.isEmpty() )
+        if ( item > 0 )
             text += '\n';
         text += s;
     }
+    //kdDebug() << "KWPasteCommand::execute Inserting text: '" << text << "'" << endl;
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
     KWTextFrameSet * textFs = textdoc->textFrameSet();
     textFs->unzoom();
@@ -291,9 +294,19 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
     for ( int i = 0; i < (int)text.length(); ++i )
         c->gotoRight();
 
+    // Redo the parag lookup because if firstParag was empty, insert() has
+    // shifted it down (side effect of splitAndInsertEmptyParag)
+    firstParag = doc->paragAt( m_parag );
     KWTextParag * parag = static_cast<KWTextParag *>(firstParag);
+    //kdDebug() << "KWPasteCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
     for (unsigned int item = 0; item < count; item++)
     {
+        //kdDebug() << "KWPasteCommand::execute item=" << item << "/" << count << endl;
+        if (!parag)
+        {
+            kdWarning() << "KWPasteCommand: parag==0L ! KWord bug, please report." << endl;
+            break;
+        }
         QDomElement paragElem = listParagraphs.item( item ).toElement();
         // First line (if appending to non-empty line) : apply offset to formatting, don't apply parag layout
         if ( item == 0 && m_idx > 0 )
@@ -327,6 +340,7 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
         parag->format();
         parag->setChanged( TRUE );
         parag = static_cast<KWTextParag *>(parag->next());
+        //kdDebug() << "KWPasteCommand::execute going to next parag: " << parag << endl;
     }
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();

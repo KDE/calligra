@@ -722,7 +722,7 @@ KWTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KWTextFormat * re
                     elem.attribute("blue").toInt() );
         format.setColor( col );
     }
-    //kdDebug() << "KWTextParag::loadLayout format=" << format.key() << endl;
+    //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
     return format;
 }
 
