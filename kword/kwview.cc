@@ -7222,7 +7222,7 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
     pageAll = new QFrame( this );
     tab->addTab( pageAll,  i18n( "Text" ) );
 
-    addBox( pageAll, resultLabelAll );
+    addBox( pageAll, resultLabelAll, true );
 
     m_canceled = true;
     pageSelected = new QFrame( this );
@@ -7231,9 +7231,9 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
     bool b = docHasSelection();
     tab->setTabEnabled(pageSelected, b);
     if ( b ) {
-        addBox( pageSelected, resultLabelSelected);
+        addBox( pageSelected, resultLabelSelected,  false);
         // assign results to 'selected' tab.
-        if ( !calcStats( resultLabelSelected, true,false ) )
+        if ( !calcStats( resultLabelSelected, true,true ) )
             return;
         if ( !calcStats( resultLabelAll, false,false ) )
             return;
@@ -7245,9 +7245,6 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
         showPage( 1 );
     }
     topLayout->addWidget( tab );
-    QCheckBox *calcWithFootNote = new QCheckBox( i18n("Calc with foot/endnote"), page);
-    topLayout->addWidget( calcWithFootNote );
-    connect( calcWithFootNote, SIGNAL(toggled ( bool )), this, SLOT( slotRefreshValue(bool)));
     m_canceled = false;
 
 }
@@ -7259,7 +7256,7 @@ void KWStatisticsDialog::slotRefreshValue(bool state)
     bool b = docHasSelection();
     if ( b )
     {
-        if ( !calcStats( resultLabelSelected, true, state ) )
+        if ( !calcStats( resultLabelSelected, true, true ) )
             return;
         if ( !calcStats( resultLabelAll, false, state ) )
             return;
@@ -7442,10 +7439,18 @@ void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
     topLayout->addWidget( box );
 }
 
-void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel )
+void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox )
 {
     // Layout Managers
     QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
+    if ( calcWithFootNoteCheckbox )
+    {
+        QCheckBox *calcWithFootNote = new QCheckBox( i18n("Calc with foot/endnote"), page);
+        topLayout->addWidget( calcWithFootNote );
+        connect( calcWithFootNote, SIGNAL(toggled ( bool )), this, SLOT( slotRefreshValue(bool)));
+    }
+
+
     QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
     QGridLayout *grid = new QGridLayout( box, 8, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
