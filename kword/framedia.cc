@@ -177,7 +177,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     grid1->addWidget(cbCopy,1,0);
 
     cbCopy->setChecked( frame->isCopy() );
-    cbCopy->setEnabled( frame && frame->getFrameSet()->getFrame( 0 ) != frame ); // First one can't be a copy
+    cbCopy->setEnabled( frame->getFrameSet() && frame->getFrameSet()->getFrame( 0 ) != frame ); // First one can't be a copy
 
     int row = 2;
 
