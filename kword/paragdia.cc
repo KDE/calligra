@@ -285,7 +285,7 @@ void KWNumPreview::drawContents( QPainter* )
 /*================================================================*/
 KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList,
 			int _flags, KWordDocument *_doc )
-    : QTabDialog( parent, name, true )
+    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     flags = _flags;
     fontList = _fontList;
@@ -302,10 +302,7 @@ KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList
     if ( _flags & PD_TABS )
 	setupTab5();
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
-    resize( 600, 500 );
+    setInitialSize( QSize(600, 500) );
 }
 
 /*================================================================*/
@@ -425,8 +422,7 @@ KWParagLayout::Flow KWParagDia::getFlow()
 /*================================================================*/
 void KWParagDia::setupTab1()
 {
-    tab1 = new QWidget( this );
-
+    tab1 = addPage( i18n( "Indent and Spacing" ) );
     grid1 = new QGridLayout( tab1, 4, 2, 15, 7 );
 
     // --------------- indent ---------------
@@ -501,8 +497,6 @@ void KWParagDia::setupTab1()
     indentGrid->addRowSpacing( 3, eFirstLine->height() );
     indentGrid->addRowSpacing( 3, lFirstLine->height() );
 
-    // activate grid
-    indentGrid->activate();
     grid1->addWidget( indentFrame, 0, 0 );
 
     // --------------- spacing ---------------
@@ -541,10 +535,7 @@ void KWParagDia::setupTab1()
     spacingGrid->addRowSpacing( 1, cSpacing->height() );
     spacingGrid->addRowSpacing( 2, eSpacing->height() );
 
-    // activate grid
-    spacingGrid->activate();
     grid1->addWidget( spacingFrame, 1, 0 );
-
 
     cSpacing->setCurrentItem( 4 );
     cSpacing->setEnabled( false );
@@ -601,8 +592,6 @@ void KWParagDia::setupTab1()
     pSpaceGrid->addRowSpacing( 1, eBefore->height() );
     pSpaceGrid->addRowSpacing( 2, eAfter->height() );
 
-    // activate grid
-    pSpaceGrid->activate();
     grid1->addWidget( pSpaceFrame, 2, 0 );
 
     // --------------- preview --------------------
@@ -621,16 +610,12 @@ void KWParagDia::setupTab1()
     grid1->addRowSpacing( 2, pSpaceFrame->height() );
     grid1->addRowSpacing( 3, 20 );
     grid1->setRowStretch( 3, 1 );
-
-    grid1->activate();
-
-    addTab( tab1, i18n( "Indent and Spacing" ) );
 }
 
 /*================================================================*/
 void KWParagDia::setupTab2()
 {
-    tab2 = new QWidget( this );
+    tab2 = addPage( i18n( "Flows" ) );
 
     grid2 = new QGridLayout( tab2, 6, 2, 15, 7 );
 
@@ -681,16 +666,12 @@ void KWParagDia::setupTab2()
     grid2->addRowSpacing( 4, rBlock->height() );
     grid2->addRowSpacing( 5, 20 );
     grid2->setRowStretch( 5, 1 );
-
-    grid2->activate();
-
-    addTab( tab2, i18n( "Flows" ) );
 }
 
 /*================================================================*/
 void KWParagDia::setupTab3()
 {
-    tab3 = new QWidget( this );
+    tab3 = addPage( i18n( "Borders" ) );
 
     grid3 = new QGridLayout( tab3, 8, 2, 15, 7 );
 
@@ -784,16 +765,12 @@ void KWParagDia::setupTab3()
     grid3->addColSpacing( 1, 250 );
     grid3->setColStretch( 0, 0 );
     grid3->setColStretch( 1, 1 );
-
-    grid3->activate();
-
-    addTab( tab3, i18n( "Borders" ) );
 }
 
 /*================================================================*/
 void KWParagDia::setupTab4()
 {
-    tab4 = new QWidget( this );
+    tab4 = addPage( i18n( "Numbering" ) );
 
     grid4 = new QGridLayout( tab4, 4, 2, 15, 7 );
 
@@ -906,8 +883,6 @@ void KWParagDia::setupTab4()
     tgrid->setColStretch( 0, 1 );
     tgrid->setColStretch( 1, 0 );
 
-    tgrid->activate();
-
     grid4->addWidget( gType, 0, 0 );
 
     gText = new QGroupBox( "Text", tab4 );
@@ -946,8 +921,6 @@ void KWParagDia::setupTab4()
     txtgrid->addColSpacing( 1, ecRight->width() );
     txtgrid->setColStretch( 0, 1 );
     txtgrid->setColStretch( 1, 1 );
-
-    txtgrid->activate();
 
     grid4->addWidget( gText, 1, 0 );
 
@@ -1010,8 +983,6 @@ void KWParagDia::setupTab4()
     ogrid->setColStretch( 0, 1 );
     ogrid->setColStretch( 1, 1 );
 
-    ogrid->activate();
-
     grid4->addWidget( gOther, 2, 0 );
 
     prev4 = new KWNumPreview( tab4, "" );
@@ -1031,16 +1002,12 @@ void KWParagDia::setupTab4()
     grid4->addColSpacing( 1, 250 );
     grid4->setColStretch( 0, 1 );
     grid4->setColStretch( 1, 1 );
-
-    grid4->activate();
-
-    addTab( tab4, i18n( "Numbering" ) );
 }
 
 /*================================================================*/
 void KWParagDia::setupTab5()
 {
-    tab5 = new QWidget( this );
+    tab5 = addPage( i18n( "Tabulators" ) );
     grid5 = new QGridLayout( tab5, 4, 2, 15, 7 );
 
     lTab = new QLabel( i18n( "Tabulator positions are given in points ( pt )" ), tab5 );
@@ -1107,8 +1074,6 @@ void KWParagDia::setupTab5()
     tabGrid->addColSpacing( 0, rtDecimal->width() );
     tabGrid->setColStretch( 0, 1 );
 
-    tabGrid->activate();
-
     grid5->addWidget( g3, 3, 1 );
 
     grid5->addRowSpacing( 0, lTab->height() );
@@ -1128,10 +1093,6 @@ void KWParagDia::setupTab5()
     grid5->addColSpacing( 1, g3->width() );
     grid5->setColStretch( 0, 1 );
     grid5->setColStretch( 1, 1 );
-
-    grid5->activate();
-
-    addTab( tab5, i18n( "Tabulators" ) );
 }
 
 /*================================================================*/

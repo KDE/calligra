@@ -27,9 +27,8 @@
 
 #include <kbuttonbox.h>
 #include <kapp.h>
+#include <klocale.h>
 #include <kcharselect.h>
-
-#include <stdio.h>
 
 /******************************************************************/
 /* class KCharSelectDia                                           */
@@ -37,42 +36,23 @@
 
 /*================================================================*/
 KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont )
-    : QDialog( parent, name, true )
+    : KDialogBase( Plain, i18n("Select a character"), Ok | Cancel, Ok, parent, name, true )
 {
-    setCaption( "Select a character" );
+    QWidget *page = plainPage();
 
-    grid = new QGridLayout( this, 3, 1, 15, 7 );
+    grid = new QGridLayout( page, 1, 1, 15, 7 );
 
-    charSelect = new KCharSelect( this, "", _font, _chr );
+    charSelect = new KCharSelect( page, "", _font, _chr );
     charSelect->resize( charSelect->sizeHint() );
     charSelect->enableFontCombo( _enableFont );
     grid->addWidget( charSelect, 0, 0 );
 
-    grid->addWidget( new QWidget( this ), 1, 0 );
-
-    bbox = new KButtonBox( this, KButtonBox::HORIZONTAL, 7 );
-    bbox->addStretch( 20 );
-    bOk = bbox->addButton( "OK" );
-    bOk->setAutoRepeat( false );
-    bOk->setAutoResize( false );
-    bOk->setAutoDefault( true );
-    bOk->setDefault( true );
-    connect( bOk, SIGNAL( clicked() ), SLOT( accept() ) );
-    bCancel = bbox->addButton( "Cancel" );
-    connect( bCancel, SIGNAL( clicked() ), SLOT( reject() ) );
-    bbox->layout();
-    grid->addWidget( bbox, 2, 0 );
-
     grid->addColSpacing( 0, charSelect->width() );
-
     grid->addRowSpacing( 0, charSelect->height() );
-    grid->addRowSpacing( 1, 0 );
-    grid->addRowSpacing( 2, bCancel->height() );
     grid->setRowStretch( 0, 0 );
-    grid->setRowStretch( 1, 1 );
-    grid->setRowStretch( 2, 0 );
-
-    grid->activate();
+    
+    setButtonOKText(i18n("&Insert"),
+                    i18n("Insert the selected character in the text"));
 
     charSelect->setFocus();
 }
@@ -84,7 +64,7 @@ bool KCharSelectDia::selectChar( QString &_font, QChar &_chr, bool _enableFont )
 
     KCharSelectDia *dlg = new KCharSelectDia( 0L, "Select Character", _chr, _font, _enableFont );
 
-    if ( dlg->exec() == QDialog::Accepted )
+    if ( dlg->exec() == Accepted )
     {
         _font = dlg->font();
         _chr = dlg->chr();

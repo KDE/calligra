@@ -189,9 +189,7 @@ void KWordView::initGui()
     ( (KToggleAction*)actionViewTableGrid )->blockSignals( TRUE );
     ( (KToggleAction*)actionViewTableGrid )->setChecked( TRUE );
     ( (KToggleAction*)actionViewTableGrid )->blockSignals( FALSE );
-    ( (KToggleAction*)actionViewEndNotes )->blockSignals( TRUE );
-    ( (KToggleAction*)actionViewEndNotes )->setChecked( TRUE );
-    ( (KToggleAction*)actionViewEndNotes )->blockSignals( FALSE );
+    setNoteType(m_pKWordDoc->getNoteType(), false);
 
     ( (KColorAction*)actionFormatColor )->blockSignals( TRUE );
     ( (KColorAction*)actionFormatColor )->setColor( Qt::black );
@@ -1165,7 +1163,7 @@ void KWordView::editFind()
 
     searchDia = new KWSearchDia( this, "", m_pKWordDoc, gui->getPaperWidget(), this, searchEntry, replaceEntry, fontList );
     searchDia->setCaption( i18n( "KWord - Search & Replace" ) );
-    QObject::connect( searchDia, SIGNAL( cancelButtonPressed() ), this, SLOT( searchDiaClosed() ) );
+    connect( searchDia, SIGNAL( closeClicked() ), this, SLOT( searchDiaClosed() ) );
     searchDia->show();
 }
 
@@ -1259,7 +1257,7 @@ void KWordView::viewFootNotes()
 {
     if ( !( (KToggleAction*)actionViewFootNotes )->isChecked() )
 	return;
-    m_pKWordDoc->setNoteType( KWFootNoteManager::FootNotes );
+    setNoteType( KWFootNoteManager::FootNotes);
 }
 
 /*===============================================================*/
@@ -1267,7 +1265,29 @@ void KWordView::viewEndNotes()
 {
     if ( !( (KToggleAction*)actionViewEndNotes )->isChecked() )
 	return;
-    m_pKWordDoc->setNoteType( KWFootNoteManager::EndNotes );
+    setNoteType( KWFootNoteManager::EndNotes);
+}
+
+void KWordView::setNoteType( KWFootNoteManager::NoteType nt, bool change)
+{
+    if (change)
+        m_pKWordDoc->setNoteType( nt );
+    switch (nt)
+    {
+      case KWFootNoteManager::FootNotes:
+      ( (KToggleAction*)actionViewFootNotes )->blockSignals( TRUE );
+      ( (KToggleAction*)actionViewFootNotes )->setChecked( TRUE );
+      ( (KToggleAction*)actionViewFootNotes )->blockSignals( FALSE );
+      actionInsertFootEndNote->setText(i18n("&Footnote")); 
+      break;
+    case KWFootNoteManager::EndNotes:
+      default:
+      ( (KToggleAction*)actionViewEndNotes )->blockSignals( TRUE );
+      ( (KToggleAction*)actionViewEndNotes )->setChecked( TRUE );
+      ( (KToggleAction*)actionViewEndNotes )->blockSignals( FALSE );
+      actionInsertFootEndNote->setText(i18n("&Endnote")); 
+      break;
+    }
 }
 
 void KWordView::viewZoom( const QString &s )
@@ -1453,17 +1473,11 @@ void KWordView::formatFont()
 /*===============================================================*/
 void KWordView::formatParagraph()
 {
-    if ( paragDia ) {
-	QObject::disconnect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
-	paragDia->close();
-	delete paragDia;
-	paragDia = 0;
-    }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING | KWParagDia::PD_FLOW |
 			       KWParagDia::PD_BORDERS |
 			       KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_pKWordDoc );
     paragDia->setCaption( i18n( "KWord - Paragraph settings" ) );
-    QObject::connect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
+    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setLeftIndent( gui->getPaperWidget()->getLeftIndent() );
     paragDia->setFirstLineIndent( gui->getPaperWidget()->getFirstLineIndent() );
     paragDia->setSpaceBeforeParag( gui->getPaperWidget()->getSpaceBeforeParag() );
@@ -1477,6 +1491,8 @@ void KWordView::formatParagraph()
     paragDia->setCounter( gui->getPaperWidget()->getCounter() );
     paragDia->setTabList( gui->getPaperWidget()->getParagLayout()->getTabList() );
     paragDia->show();
+    delete paragDia;
+    paragDia = 0;
 }
 
 /*===============================================================*/
@@ -1543,13 +1559,12 @@ void KWordView::extraAutoFormat()
 void KWordView::extraStylist()
 {
     if ( styleManager ) {
-	QObject::disconnect( styleManager, SIGNAL( applyButtonPressed() ), this, SLOT( styleManagerOk() ) );
 	styleManager->close();
 	delete styleManager;
 	styleManager = 0;
     }
     styleManager = new KWStyleManager( this, m_pKWordDoc, fontList );
-    QObject::connect( styleManager, SIGNAL( applyButtonPressed() ), this, SLOT( styleManagerOk() ) );
+    connect( styleManager, SIGNAL( okClicked() ), this, SLOT( styleManagerOk() ) );
     styleManager->setCaption( i18n( "KWord - Stylist" ) );
     styleManager->show();
 }
@@ -2618,9 +2633,7 @@ void KWordView::spellCheckerFinished( )
 /*================================================================*/
 void KWordView::searchDiaClosed()
 {
-    QObject::disconnect( searchDia, SIGNAL( cancelButtonPressed() ), this, SLOT( searchDiaClosed() ) );
-    searchDia->close();
-    delete searchDia;
+    searchDia->delayedDestruct(); // This will delete the dialog.
     searchDia = 0L;
 }
 

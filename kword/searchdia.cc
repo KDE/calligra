@@ -38,7 +38,7 @@
 #include <qpushbutton.h>
 #include <qevent.h>
 #include <qstrlist.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 
 #include <stdlib.h>
 
@@ -49,7 +49,7 @@
 /*================================================================*/
 KWSearchDia::KWSearchDia( QWidget* parent, const char* name, KWordDocument *_doc, KWPage *_page, KWordView *_view,
                           KWSearchEntry *_searchEntry, KWSearchEntry *_replaceEntry, QStringList _fontlist )
-    : QTabDialog( parent, name, false )
+    : KDialogBase(Tabbed, QString::null, Close, Close, parent, name, false )
 {
     doc = _doc;
     page = _page;
@@ -73,17 +73,13 @@ KWSearchDia::KWSearchDia( QWidget* parent, const char* name, KWordDocument *_doc
     setupTab1();
     setupTab2();
 
-    resize( 600, 400 );
-
-    setCancelButton( i18n( "Close" ) );
-    setOkButton( QString::null );
+    setInitialSize( QSize(600, 400) );
 }
 
 /*================================================================*/
 void KWSearchDia::setupTab1()
 {
-    tab1 = new QWidget( this );
-
+    tab1 = addPage( i18n( "Find" ) );
     grid1 = new QGridLayout( tab1, 3, 1, 7, 7 );
 
     /**
@@ -298,7 +294,6 @@ void KWSearchDia::setupTab1()
     sGrid->setColStretch( 1, 0 );
     sGrid->setColStretch( 2, 0 );
 
-    sGrid->activate();
     grid1->addWidget( gSearch, 0, 0 );
 
     /**
@@ -331,10 +326,6 @@ void KWSearchDia::setupTab1()
     grid1->addColSpacing( 0, bbSearch->width() );
     grid1->setColStretch( 0, 1 );
 
-    grid1->activate();
-
-    addTab( tab1, i18n( "Find" ) );
-
     slotCheckFamily();
     slotCheckColor();
     slotCheckSize();
@@ -344,14 +335,13 @@ void KWSearchDia::setupTab1()
     slotCheckVertAlign();
     slotRegExp();
 
-    connect( this, SIGNAL( cancelButtonPressed() ), this, SLOT( saveSettings() ) );
+    connect( this, SIGNAL( closeClicked() ), this, SLOT( saveSettings() ) );
 }
 
 /*================================================================*/
 void KWSearchDia::setupTab2()
 {
-    tab2 = new QWidget( this );
-
+    tab2 = addPage( i18n( "Replace" ) );
     grid2 = new QGridLayout( tab2, 3, 1, 7, 7 );
 
     /**
@@ -531,7 +521,6 @@ void KWSearchDia::setupTab2()
     rGrid->setColStretch( 1, 0 );
     rGrid->setColStretch( 2, 0 );
 
-    rGrid->activate();
     grid2->addWidget( gReplace, 0, 0 );
 
     /**
@@ -566,7 +555,6 @@ void KWSearchDia::setupTab2()
     subgrid->setColStretch( 0, 0 );
     subgrid->setColStretch( 1, 1 );
 
-    subgrid->activate();
     grid2->addWidget( wid, 1, 0 );
 
     /**
@@ -583,10 +571,6 @@ void KWSearchDia::setupTab2()
     grid2->addColSpacing( 0, gReplace->width() );
     grid2->addColSpacing( 0, wid->width() );
     grid2->setColStretch( 0, 1 );
-
-    grid2->activate();
-
-    addTab( tab2, i18n( "Replace" ) );
 
     rslotCheckFamily();
     rslotCheckColor();
@@ -865,20 +849,27 @@ void KWSearchDia::replaceAll()
 
         if ( replace && cAsk->isChecked() )
         {
-            bool _exit = false;
-            switch ( QMessageBox::information( this, i18n( "Replace" ), i18n( "Replace selected text?" ),
-					       i18n( "&Yes" ), i18n( "&No" ), i18n( "&Skip" ) ) )
-            {
-            case 0: break;
-            case 1: _exit = true; break;
-            case 2:
-            {
+            int result = KMessageBox::warningYesNoCancel( this, 
+            			i18n( "Replace selected text?" ),
+            			i18n( "Replace" ),
+				i18n( "&Replace" ), i18n( "&Skip" ) );
+
+	    if (result == KMessageBox::Cancel)
+	    {
+	       // Cancel
+	       break;
+	    }
+	       
+	    if (result == KMessageBox::No)
+	    {
+	        // Skip
                 if ( addlen ) page->addLen();
                 page->repaintScreen( false );
                 continue;
-            } break;
-            }
-            if ( _exit ) break;
+            };
+
+            // KMessageBox::Yes
+            // Replace continues
         }
 
         if ( replace )

@@ -20,7 +20,7 @@
 #ifndef KCHARSELECTDIA_H
 #define KCHARSELECTDIA_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qstring.h>
 
 class QWidget;
@@ -33,7 +33,7 @@ class KButtonBox;
 /* class KCharSelectDia                                           */
 /******************************************************************/
 
-class KCharSelectDia : public QDialog
+class KCharSelectDia : public KDialogBase
 {
     Q_OBJECT
 

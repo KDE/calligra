@@ -20,7 +20,7 @@
 #ifndef stylist_h
 #define stylist_h
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 #include <qstringlist.h>
 
 #include "paragdia.h"
@@ -41,7 +41,7 @@ class QCheckBox;
 /* Class: KWStyleManager                                          */
 /******************************************************************/
 
-class KWStyleManager : public QTabDialog
+class KWStyleManager : public KDialogBase
 {
     Q_OBJECT
 
@@ -51,6 +51,7 @@ public:
 protected:
     void setupTab1();
     void setupTab2();
+    bool apply();
 
     QWidget *tab1, *tab2;
     QGridLayout *grid1, *grid2;
@@ -65,7 +66,7 @@ protected:
     QStringList fontList;
 
 protected slots:
-    void apply();
+    virtual void slotOk();
     void editStyle();
     void editStyle( int ) { editStyle(); }
     void addStyle();
@@ -73,7 +74,6 @@ protected slots:
     void updateStyleList();
     void updateButtons( const QString & );
     void smartClicked();
-
 };
 
 /******************************************************************/
@@ -99,7 +99,7 @@ protected:
 /* Class: KWStyleEditor                                           */
 /******************************************************************/
 
-class KWStyleEditor : public QTabDialog
+class KWStyleEditor : public KDialogBase
 {
     Q_OBJECT
 
@@ -109,6 +109,7 @@ public:
 
 protected:
     void setupTab1();
+    bool apply();
 
     QWidget *tab1, *nwid;
     QGridLayout *grid1, *grid2;
@@ -128,6 +129,7 @@ signals:
     void updateStyleList();
 
 protected slots:
+    virtual void slotOk();
     void changeFont();
     void changeColor();
     void changeSpacing();
@@ -136,9 +138,7 @@ protected slots:
     void changeNumbering();
     void changeTabulators();
     void paragDiaOk();
-    void apply();
     void fplChanged( const QString & n ) { style->setFollowingParagLayout( QString( n ) ); }
-
 };
 
 #endif

@@ -20,7 +20,7 @@
 #ifndef insdia_h
 #define insdia_h
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 
 class KWGroupManager;
 class KWordDocument;
@@ -36,7 +36,7 @@ class QSpinBox;
 /* Class: KWInsertDia                                             */
 /******************************************************************/
 
-class KWInsertDia : public QTabDialog
+class KWInsertDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -46,7 +46,7 @@ public:
 
 protected:
     void setupTab1();
-    void closeEvent( QCloseEvent * ) { emit cancelButtonPressed(); }
+    bool doInsert();
 
     QWidget *tab1;
     QGridLayout *grid1, *grid2;
@@ -61,8 +61,7 @@ protected:
     KWPage *page;
 
 protected slots:
-    void doInsert();
-
+    virtual void slotOk();
 };
 
 #endif

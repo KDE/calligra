@@ -20,7 +20,7 @@
 #ifndef paragdia_h
 #define paragdia_h
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 #include <qstringlist.h>
 #include <qlist.h>
 
@@ -150,7 +150,7 @@ protected:
 /* Class: KWParagDia						  */
 /******************************************************************/
 
-class KWParagDia : public QTabDialog
+class KWParagDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -263,7 +263,6 @@ protected slots:
     void rightTextChanged( const QString & );
     void startChanged( const QString & );
     void depthChanged( int );
-
 };
 
 #endif

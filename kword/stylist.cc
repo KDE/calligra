@@ -53,7 +53,7 @@
 
 /*================================================================*/
 KWStyleManager::KWStyleManager( QWidget *_parent, KWordDocument *_doc, QStringList _fontList )
-    : QTabDialog( _parent, "", true )
+    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, _parent, "", true )
 {
     fontList = _fontList;
     doc = _doc;
@@ -62,17 +62,13 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWordDocument *_doc, QStringLi
     setupTab1();
     setupTab2();
 
-    setOkButton( i18n( "Close" ) );
-
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( apply() ) );
-
-    resize( 500, 400 );
+    setInitialSize( QSize(500, 400) );
 }
 
 /*================================================================*/
 void KWStyleManager::setupTab1()
 {
-    tab1 = new QWidget( this );
+    tab1 = addPage( i18n( "Style Manager" ) );
 
     grid1 = new QGridLayout( tab1, 1, 2, 15, 7 );
 
@@ -105,10 +101,6 @@ void KWStyleManager::setupTab1()
     grid1->addRowSpacing( 0, bButtonBox->height() );
     grid1->setRowStretch( 0, 1 );
 
-    grid1->activate();
-
-    addTab( tab1, i18n( "Style Manager" ) );
-
     connect( lStyleList, SIGNAL( highlighted( const QString & ) ), this, SLOT( updateButtons( const QString & ) ) );
     lStyleList->setCurrentItem( 0 );
 }
@@ -116,8 +108,7 @@ void KWStyleManager::setupTab1()
 /*================================================================*/
 void KWStyleManager::setupTab2()
 {
-    tab2 = new QWidget( this );
-
+    tab2 = addPage( i18n( "Update Configuration" ) );
     grid2 = new QGridLayout( tab2, 9, 1, 15, 7 );
 
     cSmart = new QCheckBox( i18n( "&Smart updating of fonts and colors" ), tab2 );
@@ -196,10 +187,6 @@ void KWStyleManager::setupTab2()
     grid2->setRowStretch( 7, 0 );
     grid2->setRowStretch( 8, 1 );
 
-    grid2->activate();
-
-    addTab( tab2, i18n( "Update Configuration" ) );
-
     cSmart->setChecked( FALSE );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_SAME_SIZE )
 	cFont->setCurrentItem( 1 );
@@ -273,7 +260,7 @@ void KWStyleManager::deleteStyle()
 }
 
 /*================================================================*/
-void KWStyleManager::apply()
+bool KWStyleManager::apply()
 {
     int f = 0;
 
@@ -303,7 +290,17 @@ void KWStyleManager::apply()
 	f = f | KWordDocument::U_SMART;
 
     doc->setApplyStyleTemplate( f );
+    return true;
 }
+
+void KWStyleManager::slotOk()
+{
+   if (apply())
+   {
+      KDialogBase::slotOk();
+   }
+}
+
 
 /*================================================================*/
 void KWStyleManager::updateStyleList()
@@ -369,7 +366,7 @@ void KWStylePreview::drawContents( QPainter *painter )
 
 /*================================================================*/
 KWStyleEditor::KWStyleEditor( QWidget *_parent, KWParagLayout *_style, KWordDocument *_doc, QStringList _fontList )
-    : QTabDialog( _parent, "", true )
+    : KDialogBase( Tabbed, QString::null, Ok | Cancel, Ok, _parent, "", true )
 {
     fontList = _fontList;
     paragDia = 0;
@@ -379,18 +376,13 @@ KWStyleEditor::KWStyleEditor( QWidget *_parent, KWParagLayout *_style, KWordDocu
     doc = _doc;
     setupTab1();
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( apply() ) );
-
-    resize( 550, 400 );
+    setInitialSize( QSize(550, 400) );
 }
 
 /*================================================================*/
 void KWStyleEditor::setupTab1()
 {
-    tab1 = new QWidget( this );
+    tab1 = addPage( i18n( "Style Editor" ) );
 
     grid1 = new QGridLayout( tab1, 2, 2, 15, 7 );
 
@@ -446,8 +438,6 @@ void KWStyleEditor::setupTab1()
     grid2->setColStretch( 0, 0 );
     grid2->setColStretch( 1, 1 );
 
-    grid2->activate();
-
     grid1->addWidget( nwid, 0, 0 );
 
     preview = new KWStylePreview( i18n( "Preview" ), tab1, style );
@@ -488,10 +478,6 @@ void KWStyleEditor::setupTab1()
     grid1->addRowSpacing( 0, bButtonBox->height() / 3 );
     grid1->addRowSpacing( 1, 2 * bButtonBox->height() / 3 );
     grid1->setRowStretch( 1, 1 );
-
-    grid1->activate();
-
-    addTab( tab1, i18n( "Style Editor" ) );
 }
 
 /*================================================================*/
@@ -526,14 +512,13 @@ void KWStyleEditor::changeColor()
 void KWStyleEditor::changeSpacing()
 {
     if ( paragDia ) {
-	disconnect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
 	paragDia->close();
 	delete paragDia;
 	paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING, doc );
     paragDia->setCaption( i18n( "KWord - Paragraph Spacing" ) );
-    connect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
+    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setSpaceBeforeParag( style->getParagHeadOffset() );
     paragDia->setSpaceAfterParag( style->getParagFootOffset() );
     paragDia->setLineSpacing( style->getLineSpacing() );
@@ -546,14 +531,13 @@ void KWStyleEditor::changeSpacing()
 void KWStyleEditor::changeAlign()
 {
     if ( paragDia ) {
-	disconnect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
 	paragDia->close();
 	delete paragDia;
 	paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_FLOW, doc );
     paragDia->setCaption( i18n( "KWord - Paragraph Flow ( Alignment )" ) );
-    connect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
+    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setFlow( style->getFlow() );
     paragDia->show();
 }
@@ -562,14 +546,13 @@ void KWStyleEditor::changeAlign()
 void KWStyleEditor::changeBorders()
 {
     if ( paragDia ) {
-	disconnect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
 	paragDia->close();
 	delete paragDia;
 	paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_BORDERS, doc );
     paragDia->setCaption( i18n( "KWord - Paragraph Borders" ) );
-    connect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
+    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setLeftBorder( style->getLeftBorder() );
     paragDia->setRightBorder( style->getRightBorder() );
     paragDia->setTopBorder( style->getTopBorder() );
@@ -581,14 +564,13 @@ void KWStyleEditor::changeBorders()
 void KWStyleEditor::changeNumbering()
 {
     if ( paragDia ) {
-	disconnect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
 	paragDia->close();
 	delete paragDia;
 	paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_NUMBERING, doc );
     paragDia->setCaption( i18n( "KWord - Numbering" ) );
-    connect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
+    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setCounter( style->getCounter() );
     paragDia->show();
 }
@@ -597,14 +579,13 @@ void KWStyleEditor::changeNumbering()
 void KWStyleEditor::changeTabulators()
 {
     if ( paragDia ) {
-	disconnect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
 	paragDia->close();
 	delete paragDia;
 	paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_TABS, doc );
     paragDia->setCaption( i18n( "KWord - Tabulators" ) );
-    connect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
+    connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->show();
 }
 
@@ -637,7 +618,7 @@ void KWStyleEditor::paragDiaOk()
     preview->repaint( true );
 }
 /*================================================================*/
-void KWStyleEditor::apply()
+bool KWStyleEditor::apply()
 {
     *ostyle = *style;
 
@@ -654,4 +635,13 @@ void KWStyleEditor::apply()
 	}
     }
     doc->setStyleChanged( style->getName() );
+    return true;
+}
+
+void KWStyleEditor::slotOk()
+{
+   if (apply())
+   {
+      KDialogBase::slotOk();
+   }
 }

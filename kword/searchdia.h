@@ -20,7 +20,7 @@
 #ifndef search_h
 #define search_h
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 #include <qstringlist.h>
 #include <qcolor.h>
 #include <qstring.h>
@@ -45,7 +45,7 @@ class QCheckBox;
 /* Class: KWSearchDia                                             */
 /******************************************************************/
 
-class KWSearchDia : public QTabDialog
+class KWSearchDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -65,7 +65,7 @@ public:
             reverse = false;
             wholeWords = false;
             wildcard = false;
-            ask = false;
+            ask = true;
         }
 
         QString expr;
@@ -85,7 +85,6 @@ public:
 protected:
     void setupTab1();
     void setupTab2();
-    void closeEvent( QCloseEvent * ) { emit cancelButtonPressed(); }
 
     QWidget *tab1;
     QGridLayout *grid1, *sGrid;
@@ -151,7 +150,6 @@ protected slots:
     void rslotVertAlign( int );
     void saveSettings();
     void slotRegExp();
-
 };
 
 #endif

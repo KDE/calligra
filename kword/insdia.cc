@@ -29,13 +29,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qstring.h>
-#include <qevent.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
-#include <qpainter.h>
-
-#include <stdlib.h>
 
 /******************************************************************/
 /* Class: KWInsertDia                                             */
@@ -43,7 +39,7 @@
 
 /*================================================================*/
 KWInsertDia::KWInsertDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWordDocument *_doc, InsertType _type, KWPage *_page )
-    : QTabDialog( parent, name, true )
+    : KDialogBase( Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     type = _type;
     grpMgr = _grpMgr;
@@ -52,16 +48,13 @@ KWInsertDia::KWInsertDia( QWidget *parent, const char *name, KWGroupManager *_gr
 
     setupTab1();
 
-    setCancelButton( i18n( "Cancel" ) );
-    setOkButton( i18n( "OK" ) );
-
-    resize( 300, 250 );
+    setInitialSize( QSize(300, 250) );
 }
 
 /*================================================================*/
 void KWInsertDia::setupTab1()
 {
-    tab1 = new QWidget( this );
+    tab1 = addPage( type == ROW ? i18n( "Insert Row" ) : i18n( "Insert Column" ) );
 
     grid1 = new QGridLayout( tab1, 3, 1, 15, 7 );
 
@@ -92,8 +85,6 @@ void KWInsertDia::setupTab1()
     grid2->addColSpacing( 0, rAfter->width() );
     grid2->setColStretch( 0, 1 );
 
-    grid2->activate();
-
     grid1->addWidget( grp, 0, 0 );
 
     rc = new QLabel( type == ROW ? i18n( "Row:" ) : i18n( "Column:" ), tab1 );
@@ -117,18 +108,10 @@ void KWInsertDia::setupTab1()
     grid1->addColSpacing( 0, rc->width() );
     grid1->addColSpacing( 0, value->width() );
     grid1->setColStretch( 0, 1 );
-
-    grid1->activate();
-
-    addTab( tab1, type == ROW ? i18n( "Insert Row" ) : i18n( "Insert Column" ) );
-
-    connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( doInsert() ) );
-
-    resize(minimumSize());
 }
 
 /*================================================================*/
-void KWInsertDia::doInsert()
+bool KWInsertDia::doInsert()
 {
     if ( type == ROW )
         grpMgr->insertRow( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
@@ -139,4 +122,13 @@ void KWInsertDia::doInsert()
     doc->updateAllFrames();
     doc->updateAllViews( 0L );
     page->recalcCursor();
+    return true;
+}
+
+void KWInsertDia::slotOk()
+{
+   if (doInsert())
+   {
+      KDialogBase::slotOk();
+   }
 }

@@ -30,6 +30,7 @@
 #include "format.h"
 #include "paraglayout.h"
 #include "searchdia.h"
+#include "footnote.h"
 
 #include <koPageLayoutDia.h>
 
@@ -104,6 +105,8 @@ public:
     virtual void setLineSpacing( int _spc );
     virtual void setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
 				  KWParagLayout::Border _top, KWParagLayout::Border _bottom );
+				  
+    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
     KWordGUI *getGUI() { return gui; }
     void setTool( MouseMode _mouseMode );
