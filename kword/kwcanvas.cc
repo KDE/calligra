@@ -2036,6 +2036,7 @@ void KWCanvas::copySelectedFrames()
     QApplication::clipboard()->setData( dragObject );
 }
 
+// ####### obsolete
 void KWCanvas::pasteFrames()
 {
     QMimeSource *data = QApplication::clipboard()->data();

@@ -38,6 +38,7 @@
 #include "mailmerge.h"
 #include "kwloadinginfo.h"
 #include "kwdrag.h"
+#include "paragvisitors.h"
 
 #include <koPictureCollection.h>
 #include <koTemplateChooseDia.h>
@@ -2550,6 +2551,109 @@ void KWDocument::completePasting()
     m_pasteFramesetsMap = 0L;
 }
 
+// Warning, this method has no undo/redo support, it is *called* by the undo/redo commands.
+QValueList<KWFrame *> KWDocument::insertOasisData( KoStore* store, KoTextCursor* cursor )
+{
+    QValueList<KWFrame *> frames;
+    if ( store->bad() || !store->hasFile( "content.xml" ) )
+    {
+        kdError(32001) << "Invalid ZIP store in memory" << endl;
+        if ( !store->hasFile( "content.xml" ) )
+            kdError(32001) << "No content.xml file" << endl;
+        return frames;
+    }
+    store->disallowNameExpansion();
+
+    KoOasisStore oasisStore( store );
+    QDomDocument contentDoc;
+    QString errorMessage;
+    bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, errorMessage );
+    if ( !ok ) {
+        kdError(32001) << "Error parsing content.xml: " << errorMessage << endl;
+        return frames;
+    }
+
+    KoOasisStyles oasisStyles;
+    QDomDocument stylesDoc;
+    (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
+    // Load styles from style.xml
+    oasisStyles.createStyleMap( stylesDoc );
+    // Also load styles from content.xml
+    oasisStyles.createStyleMap( contentDoc );
+
+    QDomElement content = contentDoc.documentElement();
+
+    QDomElement body( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    if ( body.isNull() ) {
+        kdError(32001) << "No office:body found!" << endl;
+        return frames;
+    }
+    // We then want to use whichever element is the child of <office:body>,
+    // whether that's <office:text> or <office:presentation> or whatever.
+    QDomElement iter, realBody;
+    forEachElement( iter, body ) {
+        realBody = iter;
+    }
+    if ( realBody.isNull() ) {
+        kdError(32001) << "No element found inside office:body!" << endl;
+        return frames;
+    }
+
+    KoOasisContext context( this, *m_varColl, oasisStyles, store );
+    if ( cursor )
+    {
+        KWTextDocument * textdoc = static_cast<KWTextDocument *>(cursor->parag()->document());
+        KWTextFrameSet * textFs = textdoc->textFrameSet();
+
+        *cursor = textFs->textObject()->pasteOasisText( realBody, context, *cursor, styleCollection() );
+
+        textFs->textObject()->setNeedSpellCheck( true );
+    }
+    else // No cursor available, load only the frames
+    {
+        // The main loop from KoTextDocument::loadOasisText but for frames only
+        // (can't paste text if there is no text-frameset being edited, where would it go?)
+        QDomElement tag;
+        forEachElement( tag, realBody )
+        {
+            context.styleStack().save();
+            const QString bodyTagLocalName = tag.localName();
+            kdDebug() << k_funcinfo << bodyTagLocalName << endl;
+            if ( bodyTagLocalName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
+            {
+                // From KWTextDocument::loadFrame:
+                QDomElement elem;
+                forEachElement( elem, tag )
+                {
+                    if ( elem.namespaceURI() != KoXmlNS::draw )
+                        continue;
+                    const QString localName = elem.localName();
+                    if ( localName == "text-box" )
+                    {
+                        kdDebug()<<" TODO: text-box\n";
+                        // Hmmmm why is a text fs always needed? Won't be there in DTP mode...
+                        //return m_textfs->loadOasisTextBox( tag, elem, context );
+                    }
+                    else if ( localName == "image" )
+                    {
+                        KWFrameSet* fs = new KWPictureFrameSet( this, tag, elem, context );
+                        addFrameSet( fs, false );
+                        frames.append( fs->frame( 0 ) );
+                    }
+                }
+            }
+#if 0 // TODO OASIS table:table
+            else if ( bodyTagLocalName == "table" && tag.namespaceURI() == KoXmlNS::table )
+                ;
+#endif
+        }
+    }
+
+    //kdDebug() << "KWOasisPasteCommand::execute calling doc->completePasting" << endl;
+    completeOasisPasting();
+    return frames;
+}
+
 void KWDocument::completeOasisPasting()
 {
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2681,15 +2785,41 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
         // In theory we should pass a view to this method, in order to
         // copy what is currently selected in that view only. But selection
         // is currently part of the KoTextParag data, so it's shared between views.
-        if ( fs )
+        if ( fs ) {
             *plainText = fs->textDocument()->copySelection( *bodyWriter, savingContext, KoTextDocument::Standard );
-        // TODO add keys of inline pictures to pictureList (inside copySelection).
+            // Collect inline framesets for e.g. pictures
+            KWCollectFramesetsVisitor visitor;
+            fs->textDocument()->visitSelection( KoTextDocument::Standard, &visitor );
+            const QValueList<KWFrameSet *>& frameset = visitor.frameSets();
+            kdDebug(32001) << frameset.count() << " inline framesets" << endl;
+            for ( QValueList<KWFrameSet *>::ConstIterator it = frameset.begin(); it != frameset.end(); ++it )
+            {
+                switch ( (*it)->type() ) {
+                case FT_PICTURE:
+                {
+                    const KoPictureKey key = static_cast<KWPictureFrameSet *>( *it )->key();
+                    if ( !pictureList.contains( key ) )
+                        pictureList.append( key );
+                }
+                break;
+                case FT_PART:
+                    // TODO
+                default:
+                    break;
+                }
+            }
+        }
 
         // write selected (non-inline) frames
         QString newText;
-        // TODO add keys of non-inline pictures to pictureList (inside saveSelectedFrames).
-        saveSelectedFrames( *bodyWriter, store, savingContext, &newText, picture );
+        saveSelectedFrames( *bodyWriter, store, savingContext, pictureList,
+                            &newText ); // output vars
         *plainText += newText;
+        // Single image -> return it
+        if ( picture && pictureList.count() == 1 )
+        {
+            *picture = m_pictureCollection->findPicture( pictureList.first() );
+        }
     }
 
     bodyWriter->endElement(); // office:text
@@ -2767,7 +2897,9 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
     if ( !store->close() ) // done with styles.xml
         return false;
 
+    //kdDebug(32001) << "saveOasis: " << pictureList.count() << " pictures" << endl;
     m_pictureCollection->saveOasisToStore( store, pictureList, manifestWriter );
+
     if ( saveFlag == SaveAll )
     {
 
@@ -2843,7 +2975,9 @@ QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
     return multiDrag;
 }
 
-void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoSavingContext& savingContext, QString* plainText, KoPicture* picture ) const
+void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
+                                     KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
+                                     QString* plainText ) const
 {
     QPtrList<KoDocumentChild> embeddedObjects;
 
@@ -2867,7 +3001,6 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, Ko
             (void) childDoc->saveToStore( store, QString::number( i++ ) );
     }
 
-    QValueList<KoPictureKey> savePictures;
     fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -2884,13 +3017,16 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, Ko
                 KWFrame * frame = frameIt.current();
                 if ( frame->isSelected() )
                 {
+                    kdDebug(32001) << "Selected frame " << frame << " from " << fs->getName() << endl;
                     // Two cases to be distinguished here
                     // If it's the first frame of a frameset, then copy the frameset contents and the frame itself
                     // Otherwise copy only the frame information
                     if ( frame == firstFrame || isTable )
                     {
-                        // TODO pass plainText to KWFrame::saveOasis, as well as bool saveFrames, probably
+                        // TODO pass bool saveFrames to KWFrame::saveOasis, probably
                         fs->saveOasis( bodyWriter, savingContext /*, isTable ? true : false - was toXML's saveFrames parameter*/ );
+                        if ( plainText )
+                            *plainText += fs->toPlainText();
                     }
                     else if ( !isTable )
                     {
@@ -2905,34 +3041,25 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, Ko
                             frameElem.setAttribute( "parentFrameset", fs->getName() );
                         }
 #endif
-                        if ( fs->type() == FT_PICTURE ) {
-                            KoPictureKey key = static_cast<KWPictureFrameSet *>( fs )->key();
-                            if ( !savePictures.contains( key ) )
-                                savePictures.append( key );
-                        }
+                    }
+                    if ( fs->type() == FT_PICTURE ) {
+                        kdDebug(32001) << "found non-inline picture framesets" << endl;
+
+                        const KoPictureKey key = static_cast<KWPictureFrameSet *>( fs )->key();
+                        if ( !pictureList.contains( key ) )
+                            pictureList.append( key );
                     }
                     if ( isTable ) // Copy tables only once, even if they have many cells selected
                         break;
                 }
-            }
+            } // for each frame
         }
     }
 
-#if 0 // TODO embedded objects (port or remove)
+#if 0 // TODO embedded objects (probably to be moved to saveOasis)
     if ( !embeddedObjects.isEmpty() )
         m_doc->saveEmbeddedObjects( topElem, embeddedObjects );
 #endif
-    if ( !savePictures.isEmpty() ) {
-#if 0 // can't do that here.
-        // Save the actual picture data into the store
-        m_pictureCollection->saveOasisToStore( store, savePictures, manifestWriter );
-#endif
-        // Single image -> return it
-        if ( picture && savePictures.count() == 1 )
-        {
-            *picture = m_pictureCollection->findPicture( savePictures.first() );
-        }
-    }
 }
 
 void KWDocument::loadOasisIgnoreList( const KoOasisSettings& settings )
@@ -5690,31 +5817,34 @@ void KWDocument::setInsertDirectCursor(bool _b)
 
 void KWDocument::saveDialogShown()
 {
-        if ( !textFrameSet(0) )
-		return;
-	QString first_row = textFrameSet(0)->textDocument()->text(0).left(50);
-	bool truncate = false;
-	QChar ch;
-	for (int i=0;i<(signed int)first_row.length();i++)
-	{
-		ch =  first_row.at(i);
-		if (!truncate)
-			if (ch.isPunct() || ch.isSpace() || ch == '.' )
-			{
-				first_row.remove(i,1);
-				--i;
-			}
-			else
-				truncate = true;
-		else if ( truncate && (ch.isPunct() || ch == '.' ) )
-		{
-			first_row.truncate(i);
-			break;
-		}
-	}
-	first_row = first_row.stripWhiteSpace();
-	kdDebug() << "Suggested filename:" << first_row << endl;
-	setURL(first_row);
+    if ( !textFrameSet(0) )
+        return;
+    // Grab first 50 chars from the main frameset's document
+    // ### This is a somewhat slow method, if the document is huge - better iterate
+    // over the first few parags until 50 chars have been collected.
+    QString first_row = textFrameSet(0)->textDocument()->plainText().left(50);
+    bool truncate = false;
+    QChar ch;
+    for (int i=0; i < (int)first_row.length(); i++)
+    {
+        ch = first_row.at(i);
+        if (!truncate)
+            if (ch.isPunct() || ch.isSpace() || ch == '.' )
+            {
+                first_row.remove(i,1);
+                --i;
+            }
+            else
+                truncate = true;
+        else if ( truncate && (ch.isPunct() || ch == '.' ) )
+        {
+            first_row.truncate(i);
+            break;
+        }
+    }
+    first_row = first_row.stripWhiteSpace();
+    kdDebug() << "Suggested filename:" << first_row << endl;
+    setURL(first_row);
 }
 
 #if 0 // KWORD_HORIZONTAL_LINE

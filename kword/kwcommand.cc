@@ -65,7 +65,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
     QDomDocument domDoc;
     domDoc.setContent( m_data );
     QDomElement elem = domDoc.documentElement();
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * textFs = textdoc->textFrameSet();
     // We iterate twice over the list of paragraphs.
     // First time to gather the text,
@@ -210,8 +210,7 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
         return 0;
     }
     Q_ASSERT( lastParag->document() );
-    // Get hold of the document before deleting the parag
-    KoTextDocument* textdoc = lastParag->document();
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
 
     //kdDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
     //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
@@ -225,7 +224,7 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
 
     doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
 
-    KWTextFrameSet * textFs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
+    KWTextFrameSet * textFs = textdoc->textFrameSet();
 
     textFs->renumberFootNotes();
     if ( m_idx == 0 ) {
@@ -256,69 +255,13 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     c->setParag( firstParag );
     c->setIndex( m_idx );
 
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
+
     QBuffer buffer( m_data );
 
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
-    if ( store->bad() || !store->hasFile( "content.xml" ) )
-    {
-        delete store;
-        kdError(32001) << "Invalid ZIP store in memory" << endl;
-        if ( !store->hasFile( "content.xml" ) )
-            kdError(32001) << "No content.xml file" << endl;
-        return c;
-    }
-    store->disallowNameExpansion();
 
-    KoOasisStore oasisStore( store );
-    QDomDocument contentDoc;
-    QString errorMessage;
-    bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, errorMessage );
-    if ( !ok ) {
-        kdError(32001) << "Error parsing content.xml: " << errorMessage << endl;
-        delete store;
-        return c;
-    }
-
-    KoOasisStyles oasisStyles;
-    QDomDocument stylesDoc;
-    (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
-    // Load styles from style.xml
-    oasisStyles.createStyleMap( stylesDoc );
-    // Also load styles from content.xml
-    oasisStyles.createStyleMap( contentDoc );
-
-    QDomElement content = contentDoc.documentElement();
-
-    QDomElement body( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
-    if ( body.isNull() ) {
-        kdError(32001) << "No office:body found!" << endl;
-        delete store;
-        return c;
-    }
-    // We then want to use whichever element is the child of <office:body>,
-    // whether that's <office:text> or <office:presentation> or whatever.
-    QDomElement iter, realBody;
-    forEachElement( iter, body ) {
-        realBody = iter;
-    }
-    if ( realBody.isNull() ) {
-        kdError(32001) << "No element found inside office:body!" << endl;
-        delete store;
-        return c;
-    }
-
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
-    KWTextFrameSet * textFs = textdoc->textFrameSet();
-    KWDocument * doc = textFs->kWordDocument();
-
-    KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, store );
-    *c = textFs->textObject()->pasteOasisText( realBody, context, cursor, doc->styleCollection() );
-
-    textFs->textObject()->setNeedSpellCheck( true );
-
-    // In case loadFormatting queued any image request
-    //kdDebug() << "KWOasisPasteCommand::execute calling doc->pasteFrames" << endl;
-    doc->completePasting();
+    textdoc->textFrameSet()->kWordDocument()->insertOasisData( store, c );
 
     delete store;
 
@@ -345,7 +288,7 @@ KoTextCursor * KWOasisPasteCommand::unexecute( KoTextCursor *c )
     }
     Q_ASSERT( lastParag->document() );
     // Get hold of the document before deleting the parag
-    KoTextDocument* textdoc = lastParag->document();
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
 
     //kdDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
     //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
@@ -359,7 +302,7 @@ KoTextCursor * KWOasisPasteCommand::unexecute( KoTextCursor *c )
 
     doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
 
-    KWTextFrameSet * textFs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
+    KWTextFrameSet * textFs = textdoc->textFrameSet();
 
     textFs->renumberFootNotes();
     if ( m_idx == 0 ) {
@@ -2067,23 +2010,4 @@ void KWRenameBookmarkCommand::execute()
 void KWRenameBookmarkCommand::unexecute()
 {
     m_doc->renameBookMark( m_newName, m_oldName);
-}
-
-bool KWCollectFramesetsVisitor::visit( KoTextParag *parag, int start, int end )
-{
-  for ( int i = start ; i < end ; ++i )
-  {
-    KoTextStringChar * ch = parag->at( i );
-    if ( ch->isCustom() )
-    {
-      KoTextCustomItem *customitem = ch->customItem();
-      KWAnchor *anchor = static_cast<KWAnchor *>(customitem);
-      if (anchor)
-      {
-	kdDebug() << "Anchor found " << endl;
-	m_framesets.append(anchor->frameSet());
-      }
-    }
-  }
-  return true; //always return true
 }

@@ -2669,6 +2669,11 @@ QString KWTextFrameSet::selectedText() const
     return m_textobj->selectedText();
 }
 
+QString KWTextFrameSet::toPlainText() const
+{
+    return m_textobj->textDocument()->plainText();
+}
+
 void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint, KDialogBase* dialog )
 {
     Q_ASSERT( isVisible() );

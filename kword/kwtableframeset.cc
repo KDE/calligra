@@ -2358,6 +2358,8 @@ void KWTableFrameSet::setZOrder()
 
 }
 
+// TODO provide toPlainText() (reimplemented from KWFrameSet)
+
 void KWTableFrameSet::convertTableToText()
 {
     // TODO port to OASIS (see KWTextFrameSetEdit::newDrag)

@@ -696,7 +696,7 @@ void KWTableStyleManager::selectFrameStyle(int index)
 {
     kdDebug() << "KWTableStyleManager::selectFrameStyle index " << index << endl;
 
-    if ( (index>=0) && ( index < m_doc->frameStyleCollection()->frameStyleList().count() ) )
+    if ( (index>=0) && ( index < (int)m_doc->frameStyleCollection()->frameStyleList().count() ) )
         m_currentTableStyle->setFrameStyle( m_doc->frameStyleCollection()->frameStyleAt(index) );
     save();
     updateGUI();
@@ -705,7 +705,7 @@ void KWTableStyleManager::selectFrameStyle(int index)
 void KWTableStyleManager::selectStyle(int index)
 {
     kdDebug() << "KWTableStyleManager::selectStyle index " << index << endl;
-    if ( (index>=0) && ( index < m_doc->styleCollection()->styleList().count() ) )
+    if ( (index>=0) && ( index < (int)m_doc->styleCollection()->styleList().count() ) )
         m_currentTableStyle->setStyle( m_doc->styleCollection()->styleAt(index) );
     save();
     updateGUI();

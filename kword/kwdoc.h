@@ -346,6 +346,9 @@ public:
      */
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false, bool dontCreateFootNote = false, bool selectFrames = true );
 
+    /// OASIS version of pasteFrames and oasis-text-pasting. TODO: dontCreateFootNote
+    QValueList<KWFrame *> insertOasisData( KoStore* store, KoTextCursor* cursor );
+
     void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset );
     void completePasting();
     void completeOasisPasting();
@@ -890,7 +893,8 @@ protected:
 
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
     void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
-                             KoSavingContext& savingContext, QString* plainText, KoPicture* picture ) const;
+                             KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
+                             QString* plainText ) const;
 
     void loadOasisIgnoreList( const KoOasisSettings& settings );
 

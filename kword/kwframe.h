@@ -683,6 +683,8 @@ public:
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool /*useNames*/ = true )
     { load( framesetElem, loadFrames ); }
 
+    virtual QString toPlainText() const { return QString::null; }
+
     //virtual void preparePrinting( QPainter *, QProgressDialog *, int & ) { }
 
     /** Called once the frameset has been completely loaded or constructed.

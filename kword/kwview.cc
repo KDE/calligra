@@ -61,6 +61,7 @@
 #include "sortdia.h"
 #include "splitcellsdia.h"
 #include "tabledia.h"
+#include "paragvisitors.h"
 
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
@@ -93,6 +94,7 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
+#include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kparts/event.h>
@@ -114,6 +116,7 @@
 #include <qtabwidget.h>
 #include <qtimer.h>
 #include <qvbox.h>
+#include <qbuffer.h>
 
 #include <stdlib.h>
 
@@ -123,8 +126,6 @@
 #include "kospell.h"
 using namespace KSpell2;
 #endif
-
-#include <kio/netaccess.h>
 
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -2307,8 +2308,24 @@ void KWView::editPaste()
             KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
             if ( edit )
                 edit->paste();
-            // TODO port to OASIS, by merging into KWFrameSetEdit::paste
-            //m_gui->canvasWidget()->pasteFrames();
+
+            QCString returnedTypeMime;
+            // Not editing a frameset? We can't paste plain text then... only entire frames.
+            if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime) )
+            {
+                QByteArray arr = data->encodedData( returnedTypeMime );
+                if( !arr.isEmpty() )
+                {
+                    QBuffer buffer( arr );
+                    KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
+                    QValueList<KWFrame *> frames = m_doc->insertOasisData( store, 0 );
+                    delete store;
+                    QValueList<KWFrame *>::ConstIterator it = frames.begin();
+                    for ( ; it != frames.end() ; ++it )
+                        (*it)->setSelected( true );
+                    // TODO undo/redo command for the frames created above
+                }
+            }
         }
         else { // providesImage, must be after providesKWord
             KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
@@ -4500,13 +4517,13 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
 	lst.append( currentTextEdit() );
 	kdDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
 	KWCollectFramesetsVisitor visitor;
-	currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all KWFrameSet-objects in the selection
-	const QPtrList<KWFrameSet>& frameset = visitor.frameSets();
-	for (QPtrListIterator<KWFrameSet> it( frameset ); it.current(); ++it )
+	currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all framesets in the selection
+	const QValueList<KWFrameSet *>& frameset = visitor.frameSets();
+	for ( QValueList<KWFrameSet *>::ConstIterator it = frameset.begin(); it != frameset.end(); ++it )
 	{
-	  if ( it.current()->type() == FT_TABLE)
+	  if ( (*it)->type() == FT_TABLE )
 	  {
-	    KWTableFrameSet* kwtableframeset = static_cast<KWTableFrameSet *>( it.current() );
+	    KWTableFrameSet* kwtableframeset = static_cast<KWTableFrameSet *>( *it );
 	    //kdDebug() << "table found: " << kwtableframeset->getNumFrames() << endl;
 	    int const rows  = kwtableframeset->getRows();
 	    int const cols = kwtableframeset->getCols();

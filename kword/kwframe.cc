@@ -602,6 +602,12 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
             m_backgroundColor = QBrush( QColor( color ) /*, brush style is a dead feature, ignored */ );
         }
     }
+    // OOo compatibility: it uses background-transparency=100% instead of background-color="transparent"
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-transparency" ) ) {
+        QString transp = styleStack.attributeNS( KoXmlNS::fo, "background-transparency" );
+        if ( transp == "100%" )
+            m_backgroundColor.setStyle( Qt::NoBrush );
+    }
 
     // borders (3.11.27)
     // can be none/hidden, solid and double. General form is the XSL/FO "width|style|color"

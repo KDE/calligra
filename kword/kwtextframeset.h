@@ -156,6 +156,8 @@ public:
     /// Save a complete textbox (frame and text)
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
+    virtual QString toPlainText() const;
+
     virtual void finalize();
     //virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
 

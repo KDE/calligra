@@ -5,8 +5,7 @@
 # We use the kwd format as a "dump" of the KWord data, to check if everything is correct
 # in memory, but the point is of course to ensure that the .odt has all the information.
 
-# To use this script, you need to pass the full path to an existing kwd file as argument.
-# Don't use a relative path, dcopstart won't handle it
+# To use this script, you need to pass the path to an existing kwd file as argument.
 input="$1"
 
 # Set this to 1 in order to validate the saved oasis document using oasislint
@@ -16,6 +15,12 @@ appname=kword
 oldextension=kwd
 oasisextension=odt
 oasismimetype=application/vnd.oasis.opendocument.text
+
+# dcopstart won't handle a relative path (kdeinit has a different cwd)
+# so make it absolute
+if echo "$input" | grep -v '^/' >/dev/null 2>&1; then
+  input="$PWD/$input"
+fi
 
 test -f "$input" || { echo "No such file $input"; exit 1; }
 
