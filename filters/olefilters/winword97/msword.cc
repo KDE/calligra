@@ -1107,7 +1107,10 @@ unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out)
     out->grupx = in + bytes;
     if ((int)out->grupx & 1)
         out->grupx++;
-    bytes += out->bchUpe;
+
+    // Set the length to the offset of the last stored byte.
+
+    bytes = out->bchUpe;
     return bytes;
 } // STD
 
