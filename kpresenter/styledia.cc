@@ -892,9 +892,10 @@ void StyleDia::styleDone()
     if (m_confPolygonDia)
         m_confPolygonDia->setPenBrush(m_confPenDia->getPen(),
                                       m_confBrushDia->getBrush());
+    // if type is arc there is no m_confBrushDia
     if (m_confPieDia)
         m_confPieDia->setPenBrush(m_confPenDia->getPen(),
-                                  m_confBrushDia->getBrush());
+                                  (flags & SdBrush) ? m_confBrushDia->getBrush() : NoBrush );
 
     emit styleOk();
 }
