@@ -254,7 +254,6 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         }
     }
     if(!dialogMap.isEmpty()) {
-        kDebugInfo(30003, "----------------------------- setPreviewWidget");
         ps->raiseWidget(0);
         dialog->setPreviewWidget(ps);
     }
@@ -268,12 +267,11 @@ void KoFilterManager::cleanUp() {
         if(id!=0L) {
             KoFilterDialog *dia=originalDialogs.find(id).data();
             if(dia!=0L) {
-                kDebugInfo(30003, dia->state());
-                // Save the status and pass is on to the filter...
-                kDebugWarning(30003, "found dia!");
+                config=dia->state();
+                kDebugInfo(30003, config);
             }
             else
-                kDebugWarning(30003, "default dia!");
+                kDebugWarning(30003, "default dia - no config!");
         }
     }
 }
@@ -337,7 +335,11 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
     while(i<vec.count() && !ok) {
         KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
+#ifndef USE_QFD
+        ok=filter->filter( QCString(_url), QCString(tempfname), QCString(mimeType), QCString(_native_format), config );
+#else
         ok=filter->filter( QCString(_url), QCString(tempfname), QCString(mimeType), QCString(_native_format) );
+#endif
         delete filter;
         ++i;
     }
@@ -401,7 +403,11 @@ const bool KoFilterManager::export_() {
     while(i<vec.count() && !ok) {
         KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
+#ifndef USE_QFD
+        ok=filter->filter( QCString(tmpFile), QCString(exportFile), QCString(native_format), QCString(mimeType), config );
+#else
         ok=filter->filter( QCString(tmpFile), QCString(exportFile), QCString(native_format), QCString(mimeType) );
+#endif
         delete filter;
         ++i;
     }
@@ -439,9 +445,5 @@ void PreviewStack::showPreview(const KURL &url) {
     }
     else
         raiseWidget(0);
-}
-
-void PreviewStack::mousePressEvent(QMouseEvent &) {
-    kDebugInfo(30003, "MOUSE EVENT -------------------");
 }
 #endif

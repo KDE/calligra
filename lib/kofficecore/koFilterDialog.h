@@ -4,7 +4,6 @@
 #ifndef USE_QFD
 
 #include <qwidget.h>
-#include <qdom.h>
 
 /**
  * This is an abstract base class for filter config dialogs. Derive your 
@@ -25,9 +24,6 @@ public:
     KoFilterDialog(QWidget *parent=0L, QString name=QString::null);
     virtual ~KoFilterDialog() = 0;
     virtual const QString state() = 0;
-
-protected:
-    QDomDocument *m_state;
 };
 #endif
 #endif
