@@ -242,7 +242,7 @@ void KChartEngine::drawGridAndLabels(bool do_ylbl_fractions)
                           p->setFont( params->yAxisFont() );
                           p->drawText( PX(0)-2-strlen(ylbl_str)*params->yAxisFontWidth(),
                                                    PY(tmp_y)-params->yAxisFontHeight()/2,
-                                                   ylbl_str );
+                                                   QString::fromLocal8Bit(ylbl_str) );
                         }
 
                 //kdDebug(35001) << "drawing 4" << endl;
@@ -266,7 +266,7 @@ void KChartEngine::drawGridAndLabels(bool do_ylbl_fractions)
                   p->setFont( params->yAxisFont() );
                   p->drawText( PX(num_points-1+(params->do_bar()?2:0))+6,
                                            PY(tmp_y)-params->yAxisFontHeight()/2,
-                                           vylbl );
+                                           QString::fromLocal8Bit(vylbl) );
                   setno = 0;
                 }
         //kdDebug(35001) << "i=" << i << " tmp_y=" << tmp_y << " ylbl_interval=" << ylbl_interval << " highest=" << highest << " lowest=" << lowest << endl;
