@@ -301,16 +301,17 @@ VText::save( QDomElement& element ) const
 		VObject::save( me );
 
 		// save font properties
-		me.setAttribute( "text",		m_text );
-		me.setAttribute( "family",		m_font.family() );
-		me.setAttribute( "size",		m_font.pointSize() );
-		me.setAttribute( "italic",		m_font.italic() );
-		me.setAttribute( "bold",		m_font.bold() );
-		me.setAttribute( "position",	m_position );
-		me.setAttribute( "alignment",	m_alignment );
-		me.setAttribute( "shadow",		m_shadow );
-		me.setAttribute( "shadowangle",	m_shadowAngle );
-		me.setAttribute( "shadowdist",	m_shadowDistance );
+		me.setAttribute( "text",				m_text );
+		me.setAttribute( "family",				m_font.family() );
+		me.setAttribute( "size",				m_font.pointSize() );
+		me.setAttribute( "italic",				m_font.italic() );
+		me.setAttribute( "bold",				m_font.bold() );
+		me.setAttribute( "position",			m_position );
+		me.setAttribute( "alignment",			m_alignment );
+		me.setAttribute( "shadow",				m_shadow );
+		me.setAttribute( "translucentshadow",	m_translucentShadow );
+		me.setAttribute( "shadowangle",			m_shadowAngle );
+		me.setAttribute( "shadowdist",			m_shadowDistance );
 
 		element.appendChild( me );
 
@@ -335,12 +336,12 @@ VText::load( const QDomElement& element )
 	m_font.setItalic( element.attribute( "italic" ) == 0 ? false : true );
 	m_font.setWeight( QFont::Normal );
 	m_font.setBold( element.attribute( "bold" ) == 0 ? false : true );
-	m_position = (Position)element.attribute( "position", "0" ).toInt();
-	m_alignment = (Alignment)element.attribute( "alignment", "0" ).toInt();
-	m_shadow = ( element.attribute( "shadow" ).toInt() == 1 );
-	kdDebug() << "m_shadow : " << m_shadow << endl;
-	m_shadowAngle = element.attribute( "shadowangle" ).toInt();
-	m_shadowDistance = element.attribute( "shadowdist" ).toInt();
+	m_position			= (Position)element.attribute( "position", "0" ).toInt();
+	m_alignment			= (Alignment)element.attribute( "alignment", "0" ).toInt();
+	m_shadow			= ( element.attribute( "shadow" ).toInt() == 1 );
+	m_translucentShadow	= ( element.attribute( "translucentshadow" ).toInt() == 1 );
+	m_shadowAngle		= element.attribute( "shadowangle" ).toInt();
+	m_shadowDistance	= element.attribute( "shadowdist" ).toInt();
 
 	m_text = element.attribute( "text", "" );
 
