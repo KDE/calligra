@@ -2699,7 +2699,9 @@ void KPresenterView::setupScrollbars()
 void KPresenterView::setupRulers()
 {
     h_ruler = new KoRuler( pageBase, page, Qt::Horizontal, kPresenterDoc()->pageLayout(), 0 );
+    h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
     v_ruler = new KoRuler( pageBase, page, Qt::Vertical, kPresenterDoc()->pageLayout(), 0 );
+    v_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
     page->resize( page->width() - 20, page->height() - 20 );
     page->move( 20, 20 );
     h_ruler->setGeometry( 20, 0, page->width(), 20 );
