@@ -203,6 +203,7 @@ protected:
   KPresenterView *view;
   bool editMode,goingBack,drawMode;
   unsigned int currPresPage,currPresStep,subPresStep;
+  unsigned int oldPresPage,oldPresStep,oldSubPresStep;
   float _presFakt;
   QList<int> presStepList;
   int PM_DM,PM_SM;
@@ -212,6 +213,7 @@ protected:
   ToolEditMode toolEditMode;
   QRect insRect;
   KoPartEntry* partEntry;
+  QList <KPObject> tmpObjs;
   
 public slots:
   void chPic();

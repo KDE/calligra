@@ -49,6 +49,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0)
       drawRubber = false;
       toolEditMode = TEM_MOUSE;
       partEntry = 0;
+      tmpObjs.setAutoDelete(false);
     }
   else 
     {
@@ -1504,6 +1505,8 @@ void Page::startScreenPresentation(bool zoom)
   setCursor(waitCursor);
   KPObject *kpobject = 0;
 
+  tmpObjs.clear();
+
   if (editNum != -1)
     {
       kpobject = objectList()->at(editNum);
@@ -1549,6 +1552,9 @@ void Page::startScreenPresentation(bool zoom)
       kpobject = objectList()->at(i);
       kpobject->zoom(_presFakt);
       kpobject->drawSelection(false);
+      
+      if (getPageOfObj(i,_presFakt) == 1)
+	tmpObjs.append(kpobject);
     }
 
   currPresPage = 1;
@@ -1592,6 +1598,7 @@ void Page::stopScreenPresentation()
   editMode = true;
   repaint(true);
   setToolEditMode(toolEditMode);
+  tmpObjs.clear();
 }
 
 /*========================== next ================================*/
@@ -1643,7 +1650,7 @@ bool Page::pNext(bool)
     }
   else
     {
-      if (currPresPage+1 > pageNums())
+      if (currPresPage + 1 > pageNums())
 	{
 	  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
 	    {
@@ -1702,6 +1709,14 @@ bool Page::pNext(bool)
       drawPageInPix(_pix1,view->getDiffY());
       
       currPresPage++;
+
+      tmpObjs.clear();
+      for (int j = 0;j < static_cast<int>(objectList()->count());j++)
+	{
+	  if (getPageOfObj(j,_presFakt) == static_cast<int>(currPresPage))
+	    tmpObjs.append(objectList()->at(j));
+	}
+
       presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
       currPresStep = (int)(presStepList.first());
       
@@ -1738,6 +1753,14 @@ bool Page::pPrev(bool manual)
 	  return false;
 	}
       currPresPage--;
+
+      tmpObjs.clear();
+      for (int j = 0;j < static_cast<int>(objectList()->count());j++)
+	{
+	  if (getPageOfObj(j,_presFakt) == static_cast<int>(currPresPage))
+	    tmpObjs.append(objectList()->at(j));
+	}
+
       presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
       currPresStep = (int)(presStepList.last());
       return true;
@@ -2256,6 +2279,11 @@ void Page::doObjEffects()
 
 		  switch (kpobject->getEffect())
 		    {
+		    case EF_NONE:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
+			  drawObject(kpobject,screen,ox,oy,0,0,0,0);
+		      } break;
 		    case EF_COME_LEFT:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
@@ -2443,10 +2471,19 @@ void Page::drawObject(KPObject *kpobject,QPixmap *screen,int _x,int _y,int _w,in
       kpobject->doSpecificEffects(true);
       kpobject->setOwnClipping(ownClipping);
     }
+
   kpobject->draw(&p,diffx() - _x,diffy() - _y);
   kpobject->setSubPresStep(0);
   kpobject->doSpecificEffects(false);
   kpobject->setOwnClipping(true);
+
+  KPObject *obj = 0;
+  for (unsigned int i = tmpObjs.findRef(kpobject) + 1;i < tmpObjs.count();i++)
+    {
+      obj = tmpObjs.at(i);
+      if (kpobject->getBoundingRect(0,0).intersects(obj->getBoundingRect(0,0)) && obj->getPresNum() < static_cast<int>(currPresStep))
+	obj->draw(&p,diffx(),diffy());
+    }
 
   p.end();
 }
@@ -2472,9 +2509,6 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   for (i = 0;i < static_cast<int>(objectList()->count());i++)
     objectList()->at(i)->drawSelection(false);
   
-//   view->setDiffX(-(view->kPresenterDoc()->pageLayout().left - 5 + left_margin) * static_cast<int>((MM_TO_POINT * 100) / 100));
-//   view->setDiffY(10);
-//   view->setDiffY(diffy() - ((view->kPresenterDoc()->pageLayout().top - 5 + top_margin) * static_cast<int>((MM_TO_POINT * 100) / 100)));
   view->setDiffX(-static_cast<int>((left_margin * MM_TO_POINT * 100) / 100));
   view->setDiffY(-static_cast<int>((top_margin * MM_TO_POINT * 100) / 100));
 
