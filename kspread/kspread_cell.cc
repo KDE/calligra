@@ -5119,6 +5119,37 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
 
 bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter )
 {
+    xmlwriter.startElement( "table:table-cell" );
+    if ( d->value.isBoolean() )
+    {
+        xmlwriter.addAttribute( "table:value-type", "boolean" );
+        xmlwriter.addAttribute( "table:boolean-value", ( d->value.asBoolean() ? "true" : "false" ) );
+    }
+    else if ( d->value.isNumber() )
+    {
+      KSpreadFormat::FormatType type = formatType();
+
+      if ( type == KSpreadFormat::Percentage )
+        xmlwriter.addAttribute( "table:value-type", "percentage" );
+      else
+        xmlwriter.addAttribute( "table:value-type", "float" );
+
+      xmlwriter.addAttribute( "table:value", QString::number( d->value.asFloat() ) );
+    }
+    else
+    {
+      kdDebug() << "Type: " << d->value.type() << endl;
+    }
+
+    if ( isFormula() )
+    {
+      kdDebug() << "Formula found" << endl;
+#if 0 //FIXME
+      QString formula( convertFormula( text() ) );
+      cellElem.setAttribute( "table:formula", formula );
+#endif
+    }
+    xmlwriter.endElement();
     return true;
 }
 
