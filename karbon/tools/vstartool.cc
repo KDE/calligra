@@ -120,8 +120,8 @@ VStarTool::shape( bool interactive ) const
 			new VStar(
 				0L,
 				m_p,
-				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
-				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ),
+				m_optionsWidget->outerRadius(),
+				m_optionsWidget->innerRadius(),
 				m_optionsWidget->edges() );
 	}
 	else
@@ -130,8 +130,8 @@ VStarTool::shape( bool interactive ) const
 				0L,
 				m_p,
 				m_d1,
-				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ) * m_d1 /
-				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
+				m_optionsWidget->innerRadius() * m_d1 /
+				m_optionsWidget->outerRadius(),
 				m_optionsWidget->edges(),
 				m_d2 );
 }

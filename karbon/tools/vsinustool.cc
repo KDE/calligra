@@ -54,13 +54,13 @@ VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* 
 double
 VSinusTool::VSinusOptionsWidget::width() const
 {
-	return KoUnit::ptFromUnit( m_width->value(), m_part->unit() ) ;
+	return m_width->value();
 }
 
 double
 VSinusTool::VSinusOptionsWidget::height() const
 {
-	return KoUnit::ptFromUnit( m_height->value(), m_part->unit() ) ;
+	return m_height->value();
 }
 
 uint
@@ -72,13 +72,13 @@ VSinusTool::VSinusOptionsWidget::periods() const
 void
 VSinusTool::VSinusOptionsWidget::setWidth( double value )
 {
-	m_width->setValue( KoUnit::ptToUnit( value, m_part->unit() ) );
+	m_width->setValue( value );
 }
 
 void
 VSinusTool::VSinusOptionsWidget::setHeight( double value )
 {
-	m_height->setValue( KoUnit::ptToUnit( value, m_part->unit() ) );
+	m_height->setValue( value );
 }
 
 void

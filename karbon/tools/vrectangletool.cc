@@ -49,25 +49,25 @@ VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*par
 double
 VRectangleTool::VRectangleOptionsWidget::width() const
 {
-	return KoUnit::ptFromUnit( m_width->value(), m_part->unit() );
+	return m_width->value();
 }
 
 double
 VRectangleTool::VRectangleOptionsWidget::height() const
 {
-	return KoUnit::ptFromUnit( m_height->value(), m_part->unit() );
+	return m_height->value();
 }
 
 void
 VRectangleTool::VRectangleOptionsWidget::setWidth( double value )
 {
-	m_width->setValue( KoUnit::ptToUnit( value, m_part->unit() ) );
+	m_width->setValue( value );
 }
 
 void
 VRectangleTool::VRectangleOptionsWidget::setHeight( double value )
 {
-	m_height->setValue( KoUnit::ptToUnit( value, m_part->unit() ) );
+	m_height->setValue( value );
 }
 
 void

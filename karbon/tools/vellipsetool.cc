@@ -23,7 +23,7 @@
 #include <qlabel.h>
 
 #include <klocale.h>
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 #include <koUnit.h>
 
 #include "karbon_view.h"
@@ -37,8 +37,8 @@ VEllipseTool::VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QW
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new KoUnitDoubleComboBox( this, 0.0, 1000.0 );
-	m_width->setValueInUnit( 100.0, KoUnit::U_PT );
+	m_width = new KoUnitDoubleComboBox( this, 0.0, 100.0 );
+	m_width->setValueInUnit( 1000.0, KoUnit::U_MM );
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
 	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 	//m_height->setValueInUnit( 100.0, KoUnit::U_MM );
