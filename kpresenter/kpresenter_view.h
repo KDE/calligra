@@ -370,6 +370,7 @@ public slots:
     void zoomPlus();
     void zoomSelectedObject();
     void zoomPageHeight();
+    void zoomAllObject();
 
     void flipHorizontal();
     void flipVertical();
@@ -926,6 +927,7 @@ private:
     KAction *actionZoomPlus;
     KAction *actionZoomSelectedObject;
     KAction *actionZoomPageHeight;
+    KAction *actionZoomAllObject;
 
     KAction *actionFlipHorizontal;
     KAction *actionFlipVertical;

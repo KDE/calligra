@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="63">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="64">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -647,5 +647,6 @@
  <Action name="zoom_page_height"/>
  <Separator/>
  <Action name="zoom_selected_object"/>
+ <Action name="zoom_all_object"/>
 </Menu>
 </kpartgui>

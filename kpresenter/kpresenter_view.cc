@@ -3181,6 +3181,11 @@ void KPresenterView::setupActions()
                                    this, SLOT( zoomPageHeight() ),
                                    actionCollection(), "zoom_page_height" );
 
+    actionZoomAllObject= new KAction( i18n( "Zoom All Object" ), 0,
+                                   this, SLOT( zoomAllObject() ),
+                                   actionCollection(), "zoom_all_object" );
+;
+
     actionFlipHorizontal= new KAction( i18n( "Horizontal Flip" ), 0,
                                    this, SLOT( flipHorizontal() ),
                                    actionCollection(), "horizontal_flip" );
@@ -6294,6 +6299,8 @@ void KPresenterView::openPopupMenuZoom( const QPoint & _point )
     if(!koDocument()->isReadWrite() )
         return;
     actionZoomSelectedObject->setEnabled( m_canvas->isOneObjectSelected());
+    int nbObj=(m_pKPresenterDoc->stickyPage()->objectList().count()-2)+m_canvas->activePage()->objectList().count();
+    actionZoomAllObject->setEnabled( nbObj > 0);
     static_cast<QPopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
 }
 
@@ -6356,6 +6363,14 @@ void KPresenterView::zoomPageHeight()
     viewZoom( QString::number(zoom ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
 }
+
+void KPresenterView::zoomAllObject()
+{
+    m_canvas->selectAllObj();
+    zoomSelectedObject();
+    m_canvas->deSelectAllObj();
+}
+
 
 void KPresenterView::flipHorizontal()
 {
