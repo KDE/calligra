@@ -4838,7 +4838,7 @@ void KPresenterView::startKSpell()
                       this, SLOT(spellCheckerCorrected(const QString&, int, const QString&)) );
     QObject::connect( m_spell.dlg, SIGNAL(done(const QString&) ),
                       this, SLOT(spellCheckerDone(const QString&)) );
-    QObject::connect( m_spell.dlg, SIGNAL( finished() ),
+    QObject::connect( m_spell.dlg, SIGNAL( stop() ),
                       this, SLOT( spellCheckerFinished( ) ) );
     QObject::connect( m_spell.dlg, SIGNAL(cancel() ),
                       this, SLOT( spellCheckerCancel() ) );
