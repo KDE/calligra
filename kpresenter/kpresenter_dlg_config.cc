@@ -341,6 +341,7 @@ void ConfigureSpellPage::apply()
   config->writeEntry("KSpell_dont_check_title_case",(int)state);
   doc->setDontCheckTitleCase(state);
   doc->enableBackgroundSpellCheck( cbBackgroundSpellCheck->isChecked() );
+  doc->startBackgroundSpellCheck();
 }
 
 void ConfigureSpellPage::slotDefault()
