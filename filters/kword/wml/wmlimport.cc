@@ -133,6 +133,7 @@ bool WMLConverter::doCloseCard()
 {
   // add extra paragraph between cards
   doParagraph( " ", WMLFormatList(), WMLLayout() );
+  return TRUE;
 }
 
 bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList,
