@@ -1145,7 +1145,6 @@ public:
     void append( const QString &s, bool reallyAtEnd = FALSE );
     void truncate( int index );
     void remove( int index, int len );
-    void join( QTextParag *s );
 
     void invalidate( int chr );
 
@@ -1254,6 +1253,8 @@ public:
     QTextCursor *undo( QTextCursor *c = 0 );
     QTextCursor *redo( QTextCursor *c  = 0 );
     QTextCommandHistory *commands() const { return commandHistory; }
+
+    virtual void join( QTextParag *s );
     virtual void copyParagData( QTextParag *parag );
 
     void setBreakable( bool b ) { breakable = b; }
