@@ -86,7 +86,8 @@ QString VSelectTool::contextHelp()
 	QString s = i18n( "<qt><b>Selection tool:</b><br>" );
 	s += i18n( "<i>Select in current layer:</i><br>The selection is made in the layer selected in the layers docker.<br><br>" );
 	s += i18n( "<i>Select in visible layers:</i><br>The selection is made in the visible layers (eye in the layers docker).<br><br>" );
-	s += i18n( "<i>Select in selected layers:</i><br>The selection is made in the checked layers in the layers docker." );
+	s += i18n( "<i>Select in selected layers:</i><br>The selection is made in the checked layers in the layers docker.<br><br>" );
+	s += i18n( "<i>Position using arrow keys</i><br>The selection can be positioned up, down, left and right using the corresponding arrow keys." );
 	return s;
 } // VSelectTool::contextHelp
 
