@@ -1992,7 +1992,7 @@ void KPresenterView::newPageLayout( KoPageLayout _layout )
 void KPresenterView::updateRuler()
 {
     //update koruler
-    QRect r=m_pKPresenterDoc->getPageRect( currPg, m_canvas->diffx(), m_canvas->diffy() );
+    QRect r=m_canvas->activePage()->getZoomPageRect();
     getHRuler()->setFrameStartEnd( r.left() , r.right()+m_canvas->diffx() );
     getVRuler()->setFrameStartEnd( r.top() , r.bottom()+m_canvas->diffy() );
 }
