@@ -28,7 +28,7 @@ KPresenterShell::KPresenterShell( QWidget* parent, const char* name )
     : KoMainWindow( parent, name )
 {
     setDoPartActivation( FALSE );
-    resize( 800, 600 );
+    resize( 800, 630 );
 }
 
 KPresenterShell::~KPresenterShell()

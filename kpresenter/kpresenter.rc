@@ -115,7 +115,7 @@
  </Menu>
 </MenuBar>
 <ToolBars>
- <ToolBar position="top">
+ <ToolBar position="left">
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -125,13 +125,13 @@
   <Separator/>
   <Action name="edit_delete"/>
  </ToolBar>
- <ToolBar position="top">
+ <ToolBar position="right">
   <Action name="insert_page"/>
   <Separator/>
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
  </ToolBar>
- <ToolBar position="left">
+ <ToolBar position="top">
   <Action name="tools_mouse"/>
   <Action name="tools_line"/>
   <Action name="tools_rectangle"/>
@@ -165,7 +165,7 @@
   <Action name="text_depthMinus"/>
   <Action name="text_spacing"/>
  </ToolBar>
- <ToolBar position="top">
+ <ToolBar position="left">
   <Action name="extra_penbrush"/>
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
