@@ -136,7 +136,7 @@ public:
 	       double dx, double dy, Unicode *u, int uLen);
 
   // End the current string, sorting it into the list of strings.
-  void endString();
+  virtual void endString();
 
   // Add a string, sorting it into the list of strings.
   void addString(TextString *str);
@@ -163,7 +163,7 @@ public:
   void dump(void *outputStream, TextOutputFunc outputFunc);
 
   // Clear the page.
-  void clear();
+  virtual void clear();
 
 private:
 

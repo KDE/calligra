@@ -29,12 +29,33 @@
 
 
 //-----------------------------------------------------------------------------
-class SelectionRange : private QValueVector<QPair<uint, uint> >
+class SelectionRange
 {
- public:
+public:
     SelectionRange(const QString &);
 
-    bool inside(uint page) const;
+    uint nbPages() const;
+
+private:
+    QValueVector<QPair<uint, uint> > _ranges;
+
+    friend class SelectionRangeIterator;
+};
+
+class SelectionRangeIterator
+{
+public:
+    SelectionRangeIterator(const SelectionRange &);
+
+    // -1 means at end
+    int toFirst();
+    int current() const { return _current; }
+    int next();
+
+private:
+    uint _index;
+    int  _current;
+    const QValueVector<QPair<uint, uint> > &_ranges;
 };
 
 //-----------------------------------------------------------------------------

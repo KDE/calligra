@@ -28,32 +28,80 @@
 #include <qlayout.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 
 //-----------------------------------------------------------------------------
 SelectionRange::SelectionRange(const QString &s)
 {
+    // fill
+    QValueVector<QPair<uint, uint> > r;
     QStringList list = QStringList::split(',', s);
     QRegExp range("^([0-9]+)\\-([0-9]+)$");
     QRegExp one("^[0-9]+$");
     for (QStringList::iterator it = list.begin(); it!=list.end(); ++it) {
         if ( one.exactMatch(*it) ) {
             uint p = (*it).toUInt();
-            append( qMakePair(p, p) );
+            r.append( qMakePair(p, p) );
         } else if ( range.exactMatch(*it) ) {
             uint p1 = range.cap(1).toUInt();
             uint p2 = range.cap(2).toUInt();
             if ( p1>p2 ) continue;
-            append( qMakePair(p1, p2) );
+            r.append( qMakePair(p1, p2) );
         }
     }
+
+    // order
+    QPair<uint, uint> tmp;
+    for (uint i=1; i<r.size(); i++)
+        if ( r[i].first<r[i-1].first )
+            qSwap(r[i-1], r[i]);
+
+    // coalesce
+    for (uint i=0; i<r.size(); i++)
+        if ( i!=0 && r[i].first<=tmp.second )
+            tmp.second = kMax(tmp.second, r[i].second);
+        else {
+            _ranges.append(r[i]);
+            tmp = r[i];
+            kdDebug(30516) << "selection range: (" << tmp.first << ","
+                           << tmp.second << ") " << endl;
+        }
 }
 
-bool SelectionRange::inside(uint page) const
+uint SelectionRange::nbPages() const
 {
-    for (uint i=0; i<size(); i++)
-        if ( page>=at(i).first && page<=at(i).second ) return true;
-    return false;
+    uint nb = 0;
+    for (uint i=0; i<_ranges.size(); i++)
+        nb += _ranges[i].second - _ranges[i].first + 1;
+    return nb;
+}
+
+SelectionRangeIterator::SelectionRangeIterator(const SelectionRange &range)
+    : _ranges(range._ranges)
+{
+    toFirst();
+}
+
+int SelectionRangeIterator::toFirst()
+{
+    if ( _ranges.size()==0 ) _current = -1;
+    else {
+        _index = 0;
+        _current = _ranges[0].first;
+    }
+    return _current;
+}
+
+int SelectionRangeIterator::next()
+{
+    if ( _current==-1 ) return -1;
+    if ( _current==int(_ranges[_index].second) ) {
+        _index++;
+        _current = (_index==_ranges.size() ? -1
+                    : int(_ranges[_index].first));
+    } else _current++;
+    return _current;
 }
 
 //-----------------------------------------------------------------------------
@@ -90,8 +138,10 @@ PdfImportDialog::PdfImportDialog(uint nbPages, bool isEncrypted,
     grid->setSpacing(KDialogBase::spacingHint());
     (void)new QLabel(i18n("Owner"), grid);
     _owner = new KLineEdit(grid);
+    _owner->setEchoMode(QLineEdit::Password);
     (void)new QLabel(i18n("User"), grid);
     _user = new KLineEdit(grid);
+    _user->setEchoMode(QLineEdit::Password);
     grid->setEnabled(isEncrypted);
 }
 

@@ -19,51 +19,45 @@
 #include "FilterDevice.h"
 
 #include <math.h>
-#include <qimage.h>
 #include <koFilterChain.h>
 #include <kdebug.h>
 
 #include "GfxState.h"
 #include "Link.h"
-
 #include "FilterPage.h"
-#include "misc.h"
 
 
 FilterDevice::FilterDevice(FilterData &data)
-    : _data(data), _page(0)
+    : _data(data), _fillColor(Qt::white), _strokeColor(Qt::black)
 {
-    _image.ptr = 0;
+    _page = new FilterPage(_data);
 }
 
 FilterDevice::~FilterDevice()
 {
     clear();
+    delete _page;
 }
 
 void FilterDevice::clear()
 {
-    delete _page;
-    _page = 0;
-    for (uint i=0; i<_images.size(); i++)
-        delete _images[i].ptr;
-    _images.resize(0);
+    _page->clear();
+    _images.clear();
 }
 
 void FilterDevice::startPage(int, GfxState *)
 {
-    _data.newPage();
-    _page = new FilterPage(_data);
+    kdDebug(30516) << "start page" << endl;
+    _data.startPage();
 }
 
 void FilterDevice::endPage()
 {
-    _page->coalesce();
-    _page->prepare();
+    if ( !_currentImage.image.isNull() ) addImage();
     _page->dump();
-
-    if (_image.ptr) addImage();
     clear();
+    _data.endPage();
+    kdDebug(30516) << "end page" << endl;
 }
 
 void FilterDevice::updateFont(GfxState *state)
@@ -104,27 +98,21 @@ void FilterDevice::drawLink(Link* link, Catalog *cat)
 
 void FilterDevice::addImage()
 {
-    // check if same image already put at same place (don't know why this
-    // append sometimes : related to KWord printing to pdf ?)
-    for (uint i=0; i<_images.size(); i++) {
-        if ( !equal(_images[i].right, _image.right) ) continue;
-        if ( !equal(_images[i].left, _image.left) ) continue;
-        if ( !equal(_images[i].top, _image.top) ) continue;
-        if ( !equal(_images[i].bottom, _image.bottom) ) continue;
-        if ( (*_images[i].ptr)==(*_image.ptr) ) {
+    // check if same image already put at same place (don't know why it
+    // appends sometimes : related to KWord printing to pdf ?)
+    ImageList::iterator it;
+    for (it=_images.begin(); it!=_images.end(); ++it) {
+        if ( (*it).rect==_currentImage.rect
+             && (*it).image==_currentImage.image ) {
             kdDebug(30516) << "image already there !\n";
-            delete _image.ptr;
-            _image.ptr = 0;
+            _currentImage = Image();
             return;
         }
     }
 
     // add image
     QString name = QString("pictures/picture%1.png").arg(_data.imageIndex());
-    QDomElement frameset =
-        _data.createPictureFrameset(_image.left, _image.right,
-                                    _image.top, _image.bottom);
-
+    QDomElement frameset = _data.pictureFrameset(_currentImage.rect);
     QDomElement picture = _data.createElement("PICTURE");
     picture.setAttribute("keepAspectRatio", "false");
     frameset.appendChild(picture);
@@ -154,13 +142,13 @@ void FilterDevice::addImage()
 
     KoStoreDevice *sd = _data.chain()->storageFile(name, KoStore::Write);
     QImageIO io(sd, "PNG");
-    io.setImage(*_image.ptr);
+    io.setImage(_currentImage.image);
     bool ok = io.write();
     Q_ASSERT(ok);
     sd->close();
 
-    _images.append(_image);
-    _image.ptr = 0;
+    _images.append(_currentImage);
+    _currentImage = Image();
 }
 
 void FilterDevice::computeGeometry(GfxState *state, Image &image)
@@ -168,10 +156,10 @@ void FilterDevice::computeGeometry(GfxState *state, Image &image)
     double xt, yt, wt, ht;
     state->transform(0, 0, &xt, &yt);
     state->transformDelta(1, 1, &wt, &ht);
-    image.left = xt + (wt>0 ? 0 : wt);
-    image.right = image.left + fabs(wt);
-    image.top = yt + (ht>0 ? 0 : ht);
-    image.bottom = image.top + fabs(ht);
+    image.rect.left = xt + (wt>0 ? 0 : wt);
+    image.rect.right = image.rect.left + fabs(wt);
+    image.rect.top = yt + (ht>0 ? 0 : ht);
+    image.rect.bottom = image.rect.top + fabs(ht);
 
     // #### TODO : take care of image transform (rotation,...)
 }
@@ -185,25 +173,27 @@ uint FilterDevice::initImage(GfxState *state, int width, int height,
     computeGeometry(state, image);
 
     // check if new image
-    if ( _image.ptr &&
-         (_image.ptr->width()!=width || !equal(image.left, _image.left) ||
-          !equal(image.right, _image.right) ||
-          !equal(image.top, _image.bottom) ||
-          !equal(image.mask, _image.mask)) ) addImage();
+    if ( !_currentImage.image.isNull() &&
+         (_currentImage.image.width()!=width
+          || !equal(image.rect.left, _currentImage.rect.left)
+          || !equal(image.rect.right, _currentImage.rect.right)
+          || !equal(image.rect.top, _currentImage.rect.bottom)
+          || !equal(image.mask, _currentImage.mask)) )
+        addImage();
 
-    uint offset = (_image.ptr ? _image.ptr->height() : 0);
-    image.ptr = new QImage(width, offset + height, 32);
-    image.ptr->setAlphaBuffer(withMask);
-    if (_image.ptr) { // copy previous
-        for (int j=0; j<_image.ptr->height(); j++) {
-            QRgb *pix = (QRgb *)_image.ptr->scanLine(j);
-            QRgb *newPix = (QRgb *)image.ptr->scanLine(j);
+    uint offset =
+        (_currentImage.image.isNull() ? 0 : _currentImage.image.height());
+    image.image = QImage(width, offset + height, 32);
+    image.image.setAlphaBuffer(withMask);
+    if ( !_currentImage.image.isNull() ) { // copy previous
+        for (int j=0; j<_currentImage.image.height(); j++) {
+            QRgb *pix = (QRgb *)_currentImage.image.scanLine(j);
+            QRgb *newPix = (QRgb *)image.image.scanLine(j);
             for (int i=0; i<width; i++) newPix[i] = pix[i];
         }
-        delete _image.ptr;
-        _image.ptr = image.ptr;
-        _image.bottom = image.bottom;
-    } else _image = image;
+        _currentImage.image = image.image;
+        _currentImage.rect.bottom = image.rect.bottom;
+    } else _currentImage = image;
     return offset;
 }
 
@@ -224,7 +214,7 @@ void FilterDevice::drawImage(GfxState *state, Object *, Stream *str,
     istr->reset();
     for (int j=0; j<height; j++) {
         Guchar *p = istr->getLine();
-        QRgb *pix = (QRgb *)_image.ptr->scanLine(offset + j);
+        QRgb *pix = (QRgb *)_currentImage.image.scanLine(offset + j);
         for (int i=0; i<width; i++) {
             GfxRGB rgb;
             colorMap->getRGB(p, &rgb);
@@ -264,11 +254,94 @@ void FilterDevice::drawImageMask(GfxState *state, Object *, Stream *str,
     str->reset();
     for (int j=0; j<height; j++) {
         Guchar *p = istr->getLine();
-        QRgb *pix = (QRgb *)_image.ptr->scanLine(offset + j);
+        QRgb *pix = (QRgb *)_currentImage.image.scanLine(offset + j);
         for (int i=0; i<width; i++)
             pix[i] = qRgba(red, green, blue, 255 * p[i]);
     }
     delete istr;
 
-    if (invert) _image.ptr->invertPixels();
+    if (invert) _currentImage.image.invertPixels();
+}
+
+void FilterDevice::updateAll(GfxState *state)
+{
+    updateFillColor(state);
+    updateStrokeColor(state);
+    updateFont(state);
+}
+
+void FilterDevice::updateFillColor(GfxState *state)
+{
+    GfxRGB rgb;
+    state->getFillRGB(&rgb);
+    _fillColor = toColor(rgb);
+}
+
+void FilterDevice::updateStrokeColor(GfxState *state)
+{
+    GfxRGB rgb;
+    state->getStrokeRGB(&rgb);
+    _strokeColor = toColor(rgb);
+}
+
+void FilterDevice::stroke(GfxState */*state*/)
+{
+    kdDebug(30516) << "stroke" << endl;
+//    convertPath(state);
+}
+
+void FilterDevice::fill(GfxState */*state*/)
+{
+    kdDebug(30516) << "fill" << endl;
+//    doFill(state);
+}
+
+void FilterDevice::eoFill(GfxState */*state*/)
+{
+    kdDebug(30516) << "eoFill" << endl;
+//    doFill(state);
+}
+
+void FilterDevice::doFill(GfxState *state)
+{
+    DPathVector v = convertPath(state);
+    for (uint i=0; i<v.size(); i++) {
+        if ( v[i].isSegment() ) continue;
+        if ( v[i].isRectangle() ) {
+            kdDebug(30516) << "fill rectangle" << endl;
+            if ( !_currentImage.image.isNull() ) addImage();
+            _currentImage.rect = v[i].boundingRect();
+            _currentImage.image =
+                QImage(qRound(_currentImage.rect.width()),
+                       qRound(_currentImage.rect.height()), 32);
+            _currentImage.image.fill(_fillColor.pixel());
+            addImage();
+        }
+    }
+}
+
+DPathVector FilterDevice::convertPath(GfxState *state)
+{
+    GfxPath *path = state->getPath();
+    uint nbPaths = path->getNumSubpaths();
+    DPathVector vector;
+    for (uint i=0; i<nbPaths; i++) {
+        GfxSubpath *spath = path->getSubpath(i);
+        uint nbPoints = spath->getNumPoints();
+        DPath dpath;
+        for (uint k=0; k<nbPoints; k++) {
+            if ( k>=1 && spath->getCurve(k) ) {
+                kdDebug(30516) << "    bezier curve : ignore !" << endl;
+                dpath = DPath();
+                break;
+            } else {
+                DPoint dpoint;
+                state->transform(spath->getX(k), spath->getY(k),
+                                 &dpoint.x, &dpoint.y);
+                dpath.append(dpoint);
+            }
+        }
+        if ( dpath.size()!=0 ) vector.append(dpath);
+    }
+    return vector;
 }

@@ -146,7 +146,7 @@ private:
 
   void go(GBool topLevel);
   void execOp(Object *cmd, Object args[], int numArgs);
-  Operator *findOp(char *name);
+  Operator *findOp(const char *name);
   GBool checkArg(Object *arg, TchkType type);
   int getPos();
 

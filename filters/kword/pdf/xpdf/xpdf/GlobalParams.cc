@@ -14,7 +14,7 @@
 
 #include <string.h>
 #include <ctype.h>
-#if HAVE_PAPER_H
+#ifdef HAVE_PAPER_H
 #include <paper.h>
 #endif
 #include "gmem.h"
@@ -62,7 +62,8 @@ DisplayFontParam::DisplayFontParam(GString *nameA,
   }
 }
 
-DisplayFontParam::DisplayFontParam(char *nameA, char *xlfdA, char *encodingA) {
+DisplayFontParam::DisplayFontParam(const char *nameA, const char *xlfdA,
+                                   const char *encodingA) {
   name = new GString(nameA);
   kind = displayFontX;
   x.xlfd = new GString(xlfdA);
@@ -117,7 +118,7 @@ PSFontParam::~PSFontParam() {
 // parsing
 //------------------------------------------------------------------------
 
-GlobalParams::GlobalParams(char *cfgFileName) {
+GlobalParams::GlobalParams(const char *cfgFileName) {
   UnicodeMap *map;
   DisplayFontParam *dfp;
   GString *fileName;
@@ -144,7 +145,7 @@ GlobalParams::GlobalParams(char *cfgFileName) {
   displayFonts = new GHash();
   displayCIDFonts = new GHash();
   displayNamedCIDFonts = new GHash();
-#if HAVE_PAPER_H
+#ifdef HAVE_PAPER_H
   char *paperName;
   const struct paper *paperType;
   paperinit();
@@ -513,7 +514,7 @@ void GlobalParams::parseDisplayFont(GList *tokens, GHash *fontHash,
     goto err1;
   }
   param = new DisplayFontParam(((GString *)tokens->get(1))->copy(), kind);
-  
+
   switch (kind) {
   case displayFontX:
     if (tokens->getLength() != 4) {
@@ -622,7 +623,7 @@ void GlobalParams::parsePSFont(GList *tokens, GString *fileName, int line) {
   psFonts->add(param->pdfFontName, param);
 }
 
-void GlobalParams::parsePSFont16(char *cmdName, GList *fontList,
+void GlobalParams::parsePSFont16(const char *cmdName, GList *fontList,
 				 GList *tokens, GString *fileName, int line) {
   PSFontParam *param;
   int wMode;
@@ -702,7 +703,7 @@ void GlobalParams::parseInitialZoom(GList *tokens,
   initialZoom = ((GString *)tokens->get(1))->copy();
 }
 
-void GlobalParams::parseFontRastControl(char *cmdName, FontRastControl *val,
+void GlobalParams::parseFontRastControl(const char *cmdName, FontRastControl *val,
 					GList *tokens, GString *fileName,
 					int line) {
   GString *tok;
@@ -719,7 +720,7 @@ void GlobalParams::parseFontRastControl(char *cmdName, FontRastControl *val,
   }
 }
 
-void GlobalParams::parseCommand(char *cmdName, GString **val,
+void GlobalParams::parseCommand(const char *cmdName, GString **val,
 				GList *tokens, GString *fileName, int line) {
   if (tokens->getLength() != 2) {
     error(-1, "Bad '%s' config file command (%s:%d)",
@@ -732,7 +733,7 @@ void GlobalParams::parseCommand(char *cmdName, GString **val,
   *val = ((GString *)tokens->get(1))->copy();
 }
 
-void GlobalParams::parseYesNo(char *cmdName, GBool *flag,
+void GlobalParams::parseYesNo(const char *cmdName, GBool *flag,
 			      GList *tokens, GString *fileName, int line) {
   GString *tok;
 
@@ -800,15 +801,15 @@ GlobalParams::~GlobalParams() {
 // accessors
 //------------------------------------------------------------------------
 
-CharCode GlobalParams::getMacRomanCharCode(char *charName) {
+CharCode GlobalParams::getMacRomanCharCode(const char *charName) {
   return macRomanReverseMap->lookup(charName);
 }
 
-Unicode GlobalParams::mapNameToUnicode(char *charName) {
+Unicode GlobalParams::mapNameToUnicode(const char *charName) {
   return nameToUnicode->lookup(charName);
 }
 
-FILE *GlobalParams::getCIDToUnicodeFile(GString *collection) {
+FILE *GlobalParams::getCIDToUnicodeFile(const GString *collection) {
   GString *fileName;
 
   if (!(fileName = (GString *)cidToUnicodes->lookup(collection))) {
@@ -817,11 +818,11 @@ FILE *GlobalParams::getCIDToUnicodeFile(GString *collection) {
   return fopen(fileName->getCString(), "r");
 }
 
-UnicodeMap *GlobalParams::getResidentUnicodeMap(GString *encodingName) {
+UnicodeMap *GlobalParams::getResidentUnicodeMap(const GString *encodingName) {
   return (UnicodeMap *)residentUnicodeMaps->lookup(encodingName);
 }
 
-FILE *GlobalParams::getUnicodeMapFile(GString *encodingName) {
+FILE *GlobalParams::getUnicodeMapFile(const GString *encodingName) {
   GString *fileName;
 
   if (!(fileName = (GString *)unicodeMaps->lookup(encodingName))) {
@@ -830,7 +831,7 @@ FILE *GlobalParams::getUnicodeMapFile(GString *encodingName) {
   return fopen(fileName->getCString(), "r");
 }
 
-FILE *GlobalParams::findCMapFile(GString *collection, GString *cMapName) {
+FILE *GlobalParams::findCMapFile(const GString *collection, const GString *cMapName) {
   GList *list;
   GString *dir;
   GString *fileName;
@@ -852,7 +853,7 @@ FILE *GlobalParams::findCMapFile(GString *collection, GString *cMapName) {
   return NULL;
 }
 
-FILE *GlobalParams::findToUnicodeFile(GString *name) {
+FILE *GlobalParams::findToUnicodeFile(const GString *name) {
   GString *dir, *fileName;
   FILE *f;
   int i;
@@ -869,12 +870,12 @@ FILE *GlobalParams::findToUnicodeFile(GString *name) {
   return NULL;
 }
 
-DisplayFontParam *GlobalParams::getDisplayFont(GString *fontName) {
+DisplayFontParam *GlobalParams::getDisplayFont(const GString *fontName) {
   return (DisplayFontParam *)displayFonts->lookup(fontName);
 }
 
-DisplayFontParam *GlobalParams::getDisplayCIDFont(GString *fontName,
-						  GString *collection) {
+DisplayFontParam *GlobalParams::getDisplayCIDFont(const GString *fontName,
+						  const GString *collection) {
   DisplayFontParam *dfp;
 
   if (!fontName ||
@@ -917,8 +918,8 @@ PSFontParam *GlobalParams::getPSFont16(GString *fontName,
   return p;
 }
 
-GString *GlobalParams::findFontFile(GString *fontName,
-				    char *ext1, char *ext2) {
+GString *GlobalParams::findFontFile(const GString *fontName,
+				    const char *ext1, const char *ext2) {
   GString *dir, *fileName;
   FILE *f;
   int i;
@@ -1083,7 +1084,7 @@ GBool GlobalParams::setFreeTypeControl(char *s) {
   return setFontRastControl(&freetypeControl, s);
 }
 
-GBool GlobalParams::setFontRastControl(FontRastControl *val, char *s) {
+GBool GlobalParams::setFontRastControl(FontRastControl *val, const char *s) {
   if (!strcmp(s, "none")) {
     *val = fontRastNone;
   } else if (!strcmp(s, "plain")) {

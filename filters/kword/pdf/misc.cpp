@@ -24,6 +24,7 @@
 
 #include "Link.h"
 #include "Catalog.h"
+#include "GfxState.h"
 
 
 double toPoint(double mm)
@@ -36,12 +37,49 @@ bool equal(double d1, double d2, double delta)
     return ( fabs(d1 - d2)<delta );
 }
 
+QColor toColor(GfxRGB &rgb)
+{
+    return QColor(qRound(rgb.r*255), qRound(rgb.g*255), qRound(rgb.b*255));
+}
+
 //-----------------------------------------------------------------------------
-FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoPageLayout page,
-                       uint nbPages)
+bool DRect::operator ==(const DRect &r) const
+{
+    return ( equal(top, r.top) && equal(bottom, r.bottom)
+             && equal(left, r.left) && equal(right, r.right) );
+}
+
+bool DPath::isRectangle() const
+{
+    if ( size()!=5 ) return false;
+    if ( !equal(at(0).x, at(3).x) || !equal(at(0).x, at(4).x) ) return false;
+    if ( !equal(at(0).y, at(1).y) || !equal(at(0).y, at(4).y) ) return false;
+    if ( !equal(at(1).x, at(2).x) || !equal(at(2).y, at(3).y) ) return false;
+    return true;
+}
+
+DRect DPath::boundingRect() const
+{
+    DRect r;
+    if ( size()==0 ) return r;
+    r.top = at(0).y;
+    r.bottom = at(0).y;
+    r.left = at(0).x;
+    r.right = at(0).x;
+    for (uint i=1; i<size(); i++) {
+        r.top = kMin(r.top, at(i).y);
+        r.bottom = kMax(r.bottom, at(i).y);
+        r.left = kMin(r.left, at(i).x);
+        r.right = kMax(r.right, at(i).x);
+    }
+    return r;
+}
+
+//-----------------------------------------------------------------------------
+FilterData::FilterData(KoFilterChain *chain, const DRect &pageRect,
+                       KoPageLayout page, uint nbPages)
     : _chain(chain), _pageIndex(1), _imageIndex(1), _textIndex(1),
-      _needNewTextFrameset(false), _pageHeight(pageSize.height()),
-      _pageSize(pageSize)
+      _needNewTextFrameset(false), _pageRect(pageRect)
 {
     _document = QDomDocument("DOC");
     _document.appendChild(
@@ -63,8 +101,8 @@ FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoPageLayout page,
 
     QDomElement paper = _document.createElement("PAPER");
     paper.setAttribute("format", page.format);
-    paper.setAttribute("width", pageSize.width());
-    paper.setAttribute("height", pageSize.height());
+    paper.setAttribute("width", pageRect.width());
+    paper.setAttribute("height", pageRect.height());
     paper.setAttribute("orientation", page.orientation);
     paper.setAttribute("columns", 1);
     paper.setAttribute("pages", nbPages);
@@ -88,8 +126,7 @@ FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoPageLayout page,
     _mainElement.appendChild(_framesets);
 
     // main text frameset
-    _mainTextFrameset = createFrameset(FilterData::Text, 0, pageSize.width(),
-                                       0, pageSize.height());
+    _mainTextFrameset = createFrameset(Text, _pageRect);
     _pageIndex = 0;
 
     // standard style
@@ -120,8 +157,19 @@ FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoPageLayout page,
     _mainElement.appendChild(_bookmarks);
 }
 
-QDomElement FilterData::createFrameset(FramesetType type, double left,
-                                       double right, double top, double bottom)
+void FilterData::checkTextFrameset()
+{
+// #### only use main text frameset
+//    if ( !_needNewTextFrameset ) return;
+//    createFrameset(Text, _pageSize);
+}
+
+QDomElement FilterData::pictureFrameset(const DRect &r)
+{
+    return createFrameset(Picture, r);
+}
+
+QDomElement FilterData::createFrameset(FramesetType type, const DRect &r)
 {
     bool text = (type==Text);
     uint &index = (text ? _textIndex : _imageIndex);
@@ -132,36 +180,31 @@ QDomElement FilterData::createFrameset(FramesetType type, double left,
                     : QString("Picture %1")).arg(index);
     frameset.setAttribute("name", name);
     frameset.setAttribute("frameInfo", 0);
-    _framesets.appendChild(frameset);
+    _framesetList.append(frameset);
 
     QDomElement frame = _document.createElement("FRAME");
     if (text) frame.setAttribute("autoCreateNewFrame", 0); // ?
     frame.setAttribute("newFrameBehavior", (text && index==1 ? 0 : 1));
     frame.setAttribute("runaround", 0);
-    frame.setAttribute("left", left);
-    frame.setAttribute("right", right);
-    double offset = (_pageIndex-1) * _pageHeight;
-    frame.setAttribute("top", top + offset);
-    frame.setAttribute("bottom", bottom + offset);
+    frame.setAttribute("left", r.left);
+    frame.setAttribute("right", r.right);
+    double offset = (_pageIndex-1) * _pageRect.height();
+    frame.setAttribute("top", r.top + offset);
+    frame.setAttribute("bottom", r.bottom + offset);
     if ( text && index>1 ) frame.setAttribute("bkStyle", 0);
     frameset.appendChild(frame);
 
     if (text) _textFrameset = frameset;
     _needNewTextFrameset = !text;
-    kdDebug(30516) << "new frameset " << index << (text ? "text" : "image")
+    kdDebug(30516) << "new frameset " << index << (text ? " text" : " image")
                    << endl;
     index++;
     return frameset;
 }
 
-void FilterData::checkText()
+void FilterData::startPage()
 {
-    if (_needNewTextFrameset)
-        createFrameset(Text, 0, _pageSize.width(), 0, _pageSize.height());
-}
-
-void FilterData::newPage()
-{
+    kdDebug(30516) << "new page" << endl;
     _pageIndex++;
     _textFrameset = _mainTextFrameset;
     _needNewTextFrameset = false;
@@ -173,10 +216,16 @@ void FilterData::newPage()
     _lastMainLayout = QDomElement();
 }
 
-QDomElement
-FilterData::createParagraph(const QString &text,
-                            const QValueVector<QDomElement> &layouts,
-                            const QValueVector<QDomElement> &formats)
+void FilterData::endPage()
+{
+    FramesetList::const_iterator it;
+    for (it=_framesetList.begin(); it!=_framesetList.end(); ++it)
+        _framesets.appendChild(*it);
+}
+
+QDomElement FilterData::createParagraph(const QString &text,
+                                      const QValueVector<QDomElement> &layouts,
+                                      const QValueVector<QDomElement> &formats)
 {
     QDomElement paragraph = _document.createElement("PARAGRAPH");
     _textFrameset.appendChild(paragraph);
@@ -190,15 +239,15 @@ FilterData::createParagraph(const QString &text,
     QDomElement element = _document.createElement("NAME");
     element.setAttribute("value", "Standard");
     layout.appendChild(element);
-    for (uint i=0; i<layouts.count(); i++)
+    for (uint i=0; i<layouts.size(); i++)
         layout.appendChild(layouts[i]);
     if ( _textFrameset==_mainTextFrameset )
         _lastMainLayout = layout;
 
-    if ( formats.count() ) {
+    if ( formats.size() ) {
         QDomElement format = _document.createElement("FORMATS");
         paragraph.appendChild(format);
-        for (uint i=0; i<formats.count(); i++)
+        for (uint i=0; i<formats.size(); i++)
             format.appendChild(formats[i]);
     }
     return paragraph;

@@ -41,7 +41,8 @@ UnicodeMap *UnicodeMap::parse(GString *encodingNameA) {
   UnicodeMapExt *eMap;
   int size, eMapsSize;
   char buf[256];
-  int line, nBytes, i, x;
+  unsigned int x;
+  int line, nBytes, i;
   char *tok1, *tok2, *tok3;
 
   if (!(f = globalParams->getUnicodeMapFile(encodingNameA))) {
@@ -118,7 +119,7 @@ UnicodeMap::UnicodeMap(GString *encodingNameA) {
   refCnt = 1;
 }
 
-UnicodeMap::UnicodeMap(char *encodingNameA, GBool unicodeOutA,
+UnicodeMap::UnicodeMap(const char *encodingNameA, GBool unicodeOutA,
 		       UnicodeMapRange *rangesA, int lenA) {
   encodingName = new GString(encodingNameA);
   unicodeOut = unicodeOutA;
@@ -130,7 +131,7 @@ UnicodeMap::UnicodeMap(char *encodingNameA, GBool unicodeOutA,
   refCnt = 1;
 }
 
-UnicodeMap::UnicodeMap(char *encodingNameA, GBool unicodeOutA,
+UnicodeMap::UnicodeMap(const char *encodingNameA, GBool unicodeOutA,
 		       UnicodeMapFunc funcA) {
   encodingName = new GString(encodingNameA);
   unicodeOut = unicodeOutA;

@@ -31,8 +31,8 @@
 //------------------------------------------------------------------------
 
 struct StdFontMapEntry {
-  char *altName;
-  char *properName;
+  const char *altName;
+  const char *properName;
 };
 
 static StdFontMapEntry stdFontMap[] = {
@@ -87,7 +87,7 @@ static StdFontMapEntry stdFontMap[] = {
 // GfxFont
 //------------------------------------------------------------------------
 
-GfxFont *GfxFont::makeFont(XRef *xref, char *tagA, Ref idA, Dict *fontDict) {
+GfxFont *GfxFont::makeFont(XRef *xref, const char *tagA, Ref idA, Dict *fontDict) {
   GString *nameA;
   GfxFont *font;
   Object obj1;
@@ -123,7 +123,7 @@ GfxFont *GfxFont::makeFont(XRef *xref, char *tagA, Ref idA, Dict *fontDict) {
   return font;
 }
 
-GfxFont::GfxFont(char *tagA, Ref idA, GString *nameA) {
+GfxFont::GfxFont(const char *tagA, Ref idA, GString *nameA) {
   ok = gFalse;
   tag = new GString(tagA);
   id = idA;
@@ -366,7 +366,7 @@ char *GfxFont::readEmbFontFile(XRef *xref, int *len) {
 // Gfx8BitFont
 //------------------------------------------------------------------------
 
-Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
+Gfx8BitFont::Gfx8BitFont(XRef *xref, const char *tagA, Ref idA, GString *nameA,
 			 GfxFontType typeA, Dict *fontDict):
   GfxFont(tagA, idA, nameA)
 {
@@ -498,30 +498,30 @@ Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
     obj1.dictLookup("BaseEncoding", &obj2);
     if (obj2.isName("MacRomanEncoding")) {
       hasEncoding = gTrue;
-      baseEnc = macRomanEncoding;
+      baseEnc = (char **)macRomanEncoding;
     } else if (obj2.isName("MacExpertEncoding")) {
       hasEncoding = gTrue;
-      baseEnc = macExpertEncoding;
+      baseEnc = (char **)macExpertEncoding;
     } else if (obj2.isName("WinAnsiEncoding")) {
       hasEncoding = gTrue;
-      baseEnc = winAnsiEncoding;
+      baseEnc = (char **)winAnsiEncoding;
     } else if (obj2.isName("StandardEncoding")) {
       hasEncoding = gTrue;
-      baseEnc = standardEncoding;
+      baseEnc = (char **)standardEncoding;
     }
     obj2.free();
   } else if (obj1.isName("MacRomanEncoding")) {
     hasEncoding = gTrue;
-    baseEnc = macRomanEncoding;
+    baseEnc = (char **)macRomanEncoding;
   } else if (obj1.isName("MacExpertEncoding")) {
     hasEncoding = gTrue;
-    baseEnc = macExpertEncoding;
+    baseEnc = (char **)macExpertEncoding;
   } else if (obj1.isName("WinAnsiEncoding")) {
     hasEncoding = gTrue;
-    baseEnc = winAnsiEncoding;
+    baseEnc = (char **)winAnsiEncoding;
   } else if (obj1.isName("StandardEncoding")) {
     hasEncoding = gTrue;
-    baseEnc = standardEncoding;
+    baseEnc = (char **)standardEncoding;
   }
 
   // check embedded or external font file for base encoding
@@ -564,12 +564,12 @@ Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
   // get default base encoding
   if (!baseEnc) {
     if (builtinFont) {
-      baseEnc = builtinFont->defaultBaseEnc;
+      baseEnc = (char **)builtinFont->defaultBaseEnc;
       hasEncoding = gTrue;
     } else if (type == fontTrueType) {
-      baseEnc = winAnsiEncoding;
+      baseEnc = (char **)winAnsiEncoding;
     } else {
-      baseEnc = standardEncoding;
+      baseEnc = (char **)standardEncoding;
     }
   }
 
@@ -664,10 +664,14 @@ Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
 	  code2 = -1;
 	  if (hex && n == 3 && isalpha(charName[0]) &&
 	      isxdigit(charName[1]) && isxdigit(charName[2])) {
-	    sscanf(charName+1, "%x", &code2);
+        unsigned int tmp;
+	    sscanf(charName+1, "%x", &tmp);
+        code2 = tmp;
 	  } else if (hex && n == 2 &&
 		     isxdigit(charName[0]) && isxdigit(charName[1])) {
-	    sscanf(charName, "%x", &code2);
+        unsigned int tmp;
+	    sscanf(charName, "%x", &tmp);
+        code2 = tmp;
 	  } else if (!hex && n >= 2 && n <= 4 &&
 		     isdigit(charName[0]) && isdigit(charName[1])) {
 	    code2 = atoi(charName);
@@ -730,7 +734,7 @@ Gfx8BitFont::Gfx8BitFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
       }
     }
 
-  // couldn't find widths -- use defaults 
+  // couldn't find widths -- use defaults
   } else {
     // this is technically an error -- the Widths entry is required
     // for all but the Base-14 fonts -- but certain PDF generators
@@ -782,7 +786,7 @@ Gfx8BitFont::~Gfx8BitFont() {
   }
 }
 
-int Gfx8BitFont::getNextChar(char *s, int len, CharCode *code,
+int Gfx8BitFont::getNextChar(char *s, int /*len*/, CharCode *code,
 			     Unicode *u, int uSize, int *uLen,
 			     double *dx, double *dy, double *ox, double *oy) {
   CharCode c;
@@ -830,7 +834,7 @@ static int cmpWidthExcepV(const void *w1, const void *w2) {
          ((GfxFontCIDWidthExcepV *)w2)->first;
 }
 
-GfxCIDFont::GfxCIDFont(XRef *xref, char *tagA, Ref idA, GString *nameA,
+GfxCIDFont::GfxCIDFont(XRef *xref, const char *tagA, Ref idA, GString *nameA,
 		       Dict *fontDict):
   GfxFont(tagA, idA, nameA)
 {

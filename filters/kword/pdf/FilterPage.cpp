@@ -22,6 +22,7 @@
 
 #include <qfontmetrics.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include "GfxState.h"
 #include "misc.h"
@@ -52,11 +53,10 @@ FilterString::FilterString(GfxState *state, double x0, double y0,
 {
     GfxRGB rgb;
     state->getFillRGB(&rgb);
-    QColor color(qRound(rgb.r*255), qRound(rgb.g*255), qRound(rgb.b*255));
     GfxFont *font = state->getFont();
     GString *gname = (font ? font->getName() : 0);
     QString name = (gname ? gname->getCString() : 0);
-    _font = new FilterFont(name, qRound(fontSize), color);
+    _font = new FilterFont(name, qRound(fontSize), toColor(rgb));
 }
 
 FilterString::~FilterString()
@@ -66,13 +66,17 @@ FilterString::~FilterString()
 
 //-----------------------------------------------------------------------------
 FilterPage::FilterPage(FilterData &data)
-    : TextPage(false), _data(data)
+    : TextPage(false), _data(data), _empty(true)
 {}
 
-FilterPage::~FilterPage()
+void FilterPage::clear()
 {
+    TextPage::clear();
+    _empty = true;
     for (uint i=0; i<_links.size(); i++)
         delete _links[i];
+    _links.resize(0);
+    _pars.resize(0);
 }
 
 void FilterPage::beginString(GfxState *state, double x0, double y0) {
@@ -83,8 +87,9 @@ void FilterPage::beginString(GfxState *state, double x0, double y0) {
     return;
   }
 
-  _data.checkText();
+  _data.checkTextFrameset();
   curStr = new FilterString(state, x0, y0, fontSize, _data.textIndex());
+  _empty = false;
 }
 
 void FilterPage::prepare()
@@ -240,6 +245,10 @@ void FilterPage::prepare()
 
 void FilterPage::dump()
 {
+    if (_empty) return;
+    coalesce();
+    prepare();
+
     for (uint i=0; i<_pars.size(); i++) {
         QValueVector<QDomElement> layouts;
         QValueVector<QDomElement> formats;

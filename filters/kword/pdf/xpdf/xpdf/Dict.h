@@ -46,12 +46,12 @@ public:
   void add(char *key, Object *val);
 
   // Check if dictionary is of specified type.
-  GBool is(char *type);
+  GBool is(const char *type);
 
   // Look up an entry and return the value.  Returns a null object
   // if <key> is not in the dictionary.
-  Object *lookup(char *key, Object *obj);
-  Object *lookupNF(char *key, Object *obj);
+  Object *lookup(const char *key, Object *obj);
+  Object *lookupNF(const char *key, Object *obj);
 
   // Iterative accessors.
   char *getKey(int i);
@@ -71,7 +71,7 @@ private:
   int length;			// number of entries in dictionary
   int ref;			// reference count
 
-  DictEntry *find(char *key);
+  DictEntry *find(const char *key);
 };
 
 #endif

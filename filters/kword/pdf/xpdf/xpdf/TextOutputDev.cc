@@ -123,8 +123,8 @@ TextString::~TextString() {
   gfree(xRight);
 }
 
-void TextString::addChar(GfxState *state, double x, double y,
-			 double dx, double dy, Unicode u) {
+void TextString::addChar(GfxState */*state*/, double x, double /*y*/,
+                         double dx, double /*dy*/, Unicode u) {
   if (len == size) {
     size += 16;
     text = (Unicode *)grealloc(text, size * sizeof(Unicode));
@@ -1199,7 +1199,7 @@ TextOutputDev::~TextOutputDev() {
   }
 }
 
-void TextOutputDev::startPage(int pageNum, GfxState *state) {
+void TextOutputDev::startPage(int /*pageNum*/, GfxState */*state*/) {
   text->clear();
 }
 
@@ -1214,18 +1214,18 @@ void TextOutputDev::updateFont(GfxState *state) {
   text->updateFont(state);
 }
 
-void TextOutputDev::beginString(GfxState *state, GString *s) {
+void TextOutputDev::beginString(GfxState *state, GString */*s*/) {
   text->beginString(state, state->getCurX(), state->getCurY());
 }
 
-void TextOutputDev::endString(GfxState *state) {
+void TextOutputDev::endString(GfxState */*state*/) {
   text->endString();
 }
 
 void TextOutputDev::drawChar(GfxState *state, double x, double y,
 			     double dx, double dy,
-			     double originX, double originY,
-			     CharCode c, Unicode *u, int uLen) {
+                 double /*originX*/, double /*originY*/,
+                 CharCode /*c*/, Unicode *u, int uLen) {
   text->addChar(state, x, y, dx, dy, u, uLen);
 }
 

@@ -60,13 +60,13 @@ void OutputDev::updateAll(GfxState *state) {
   updateFont(state);
 }
 
-GBool OutputDev::beginType3Char(GfxState *state,
-				CharCode code, Unicode *u, int uLen) {
+GBool OutputDev::beginType3Char(GfxState */*state*/,
+                  CharCode /*code*/, Unicode */*u*/, int /*uLen*/) {
   return gFalse;
 }
 
-void OutputDev::drawImageMask(GfxState *state, Object *ref, Stream *str,
-			      int width, int height, GBool invert,
+void OutputDev::drawImageMask(GfxState */*state*/, Object */*ref*/,
+                  Stream *str, int width, int height, GBool /*invert*/,
 			      GBool inlineImg) {
   int i, j;
 
@@ -79,9 +79,9 @@ void OutputDev::drawImageMask(GfxState *state, Object *ref, Stream *str,
   }
 }
 
-void OutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
+void OutputDev::drawImage(GfxState */*state*/, Object */*ref*/, Stream *str,
 			  int width, int height, GfxImageColorMap *colorMap,
-			  int *maskColors, GBool inlineImg) {
+              int */*maskColors*/, GBool inlineImg) {
   int i, j;
 
   if (inlineImg) {
@@ -94,10 +94,10 @@ void OutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
   }
 }
 
-#if OPI_SUPPORT
-void OutputDev::opiBegin(GfxState *state, Dict *opiDict) {
+#ifdef OPI_SUPPORT
+void OutputDev::opiBegin(GfxState */*state*/, Dict */*opiDict*/) {
 }
 
-void OutputDev::opiEnd(GfxState *state, Dict *opiDict) {
+void OutputDev::opiEnd(GfxState */*state*/, Dict */*opiDict*/) {
 }
 #endif

@@ -84,7 +84,7 @@ char *Stream::getLine(char *buf, int size) {
   return buf;
 }
 
-GString *Stream::getPSFilter(char *indent) {
+GString *Stream::getPSFilter(const char */*indent*/) {
   return new GString();
 }
 
@@ -132,7 +132,7 @@ Stream *Stream::addFilters(Object *dict) {
   return str;
 }
 
-Stream *Stream::makeFilter(char *name, Stream *str, Object *params) {
+Stream *Stream::makeFilter(const char *name, Stream *str, Object *params) {
   int pred;			// parameters
   int colors;
   int bits;
@@ -304,7 +304,7 @@ void FilterStream::close() {
   str->close();
 }
 
-void FilterStream::setPos(Guint pos, int dir) {
+void FilterStream::setPos(Guint /*pos*/, int /*dir*/) {
   error(-1, "Internal: called setPos() on FilterStream");
 }
 
@@ -581,10 +581,10 @@ Stream *FileStream::makeSubStream(Guint startA, GBool limitedA,
 }
 
 void FileStream::reset() {
-#if HAVE_FSEEKO
+#ifdef HAVE_FSEEKO
   savePos = (Guint)ftello(f);
   fseeko(f, start, SEEK_SET);
-#elif HAVE_FSEEK64
+#elif defined(HAVE_FSEEK64) && defined(HAVE_FTELL64)
   savePos = (Guint)ftell64(f);
   fseek64(f, start, SEEK_SET);
 #else
@@ -602,9 +602,9 @@ void FileStream::reset() {
 
 void FileStream::close() {
   if (saved) {
-#if HAVE_FSEEKO
+#ifdef HAVE_FSEEKO
     fseeko(f, savePos, SEEK_SET);
-#elif HAVE_FSEEK64
+#elif defined(HAVE_FSEEK64) && defined(HAVE_FTELL64)
     fseek64(f, savePos, SEEK_SET);
 #else
     fseek(f, savePos, SEEK_SET);
@@ -648,19 +648,19 @@ void FileStream::setPos(Guint pos, int dir) {
   Guint size;
 
   if (dir >= 0) {
-#if HAVE_FSEEKO
+#ifdef HAVE_FSEEKO
     fseeko(f, pos, SEEK_SET);
-#elif HAVE_FSEEK64
+#elif defined(HAVE_FSEEK64) && defined(HAVE_FTELL64)
     fseek64(f, pos, SEEK_SET);
 #else
     fseek(f, pos, SEEK_SET);
 #endif
     bufPos = pos;
   } else {
-#if HAVE_FSEEKO
+#ifdef HAVE_FSEEKO
     fseeko(f, 0, SEEK_END);
     size = (Guint)ftello(f);
-#elif HAVE_FSEEK64
+#elif defined(HAVE_FSEEK64) && defined(HAVE_FTELL64)
     fseek64(f, 0, SEEK_END);
     size = (Guint)ftell64(f);
 #else
@@ -673,10 +673,10 @@ void FileStream::setPos(Guint pos, int dir) {
     //~ work around a bug in cygwin's implementation of fseek
     rewind(f);
 #endif
-#if HAVE_FSEEKO
+#ifdef HAVE_FSEEKO
     fseeko(f, -(int)pos, SEEK_END);
     bufPos = (Guint)ftello(f);
-#elif HAVE_FSEEK64
+#elif defined(HAVE_FSEEK64) && defined(HAVE_FTELL64)
     fseek64(f, -(int)pos, SEEK_END);
     bufPos = (Guint)ftell64(f);
 #else
@@ -789,13 +789,13 @@ EmbedStream::EmbedStream(Stream *strA, Object *dictA):
 EmbedStream::~EmbedStream() {
 }
 
-Stream *EmbedStream::makeSubStream(Guint start, GBool limited,
-				   Guint length, Object *dictA) {
+Stream *EmbedStream::makeSubStream(Guint /*start*/, GBool /*limited*/,
+                                   Guint /*length*/, Object */*dictA*/) {
   error(-1, "Internal: called makeSubStream() on EmbedStream");
   return NULL;
 }
 
-void EmbedStream::setPos(Guint pos, int dir) {
+void EmbedStream::setPos(Guint /*pos*/, int /*dir*/) {
   error(-1, "Internal: called setPos() on EmbedStream");
 }
 
@@ -804,7 +804,7 @@ Guint EmbedStream::getStart() {
   return 0;
 }
 
-void EmbedStream::moveStart(int delta) {
+void EmbedStream::moveStart(int /*delta*/) {
   error(-1, "Internal: called moveStart() on EmbedStream");
 }
 
@@ -881,7 +881,7 @@ int ASCIIHexStream::lookChar() {
   return buf;
 }
 
-GString *ASCIIHexStream::getPSFilter(char *indent) {
+GString *ASCIIHexStream::getPSFilter(const char *indent) {
   GString *s;
 
   if (!(s = str->getPSFilter(indent))) {
@@ -891,7 +891,7 @@ GString *ASCIIHexStream::getPSFilter(char *indent) {
   return s;
 }
 
-GBool ASCIIHexStream::isBinary(GBool last) {
+GBool ASCIIHexStream::isBinary(GBool /*last*/) {
   return str->isBinary(gFalse);
 }
 
@@ -959,7 +959,7 @@ int ASCII85Stream::lookChar() {
   return b[index];
 }
 
-GString *ASCII85Stream::getPSFilter(char *indent) {
+GString *ASCII85Stream::getPSFilter(const char *indent) {
   GString *s;
 
   if (!(s = str->getPSFilter(indent))) {
@@ -969,7 +969,7 @@ GString *ASCII85Stream::getPSFilter(char *indent) {
   return s;
 }
 
-GBool ASCII85Stream::isBinary(GBool last) {
+GBool ASCII85Stream::isBinary(GBool /*last*/) {
   return str->isBinary(gFalse);
 }
 
@@ -1138,7 +1138,7 @@ int LZWStream::getCode() {
   return code;
 }
 
-GString *LZWStream::getPSFilter(char *indent) {
+GString *LZWStream::getPSFilter(const char *indent) {
   GString *s;
 
   if (pred) {
@@ -1151,7 +1151,7 @@ GString *LZWStream::getPSFilter(char *indent) {
   return s;
 }
 
-GBool LZWStream::isBinary(GBool last) {
+GBool LZWStream::isBinary(GBool /*last*/) {
   return str->isBinary(gTrue);
 }
 
@@ -1175,7 +1175,7 @@ void RunLengthStream::reset() {
   eof = gFalse;
 }
 
-GString *RunLengthStream::getPSFilter(char *indent) {
+GString *RunLengthStream::getPSFilter(const char *indent) {
   GString *s;
 
   if (!(s = str->getPSFilter(indent))) {
@@ -1185,7 +1185,7 @@ GString *RunLengthStream::getPSFilter(char *indent) {
   return s;
 }
 
-GBool RunLengthStream::isBinary(GBool last) {
+GBool RunLengthStream::isBinary(GBool /*last*/) {
   return str->isBinary(gTrue);
 }
 
@@ -1725,7 +1725,7 @@ short CCITTFaxStream::lookBits(int n) {
   return (inputBuf >> (inputBits - n)) & (0xffff >> (16 - n));
 }
 
-GString *CCITTFaxStream::getPSFilter(char *indent) {
+GString *CCITTFaxStream::getPSFilter(const char *indent) {
   GString *s;
   char s1[50];
 
@@ -1759,7 +1759,7 @@ GString *CCITTFaxStream::getPSFilter(char *indent) {
   return s;
 }
 
-GBool CCITTFaxStream::isBinary(GBool last) {
+GBool CCITTFaxStream::isBinary(GBool /*last*/) {
   return str->isBinary(gTrue);
 }
 
@@ -3087,7 +3087,7 @@ int DCTStream::read16() {
   return (c1 << 8) + c2;
 }
 
-GString *DCTStream::getPSFilter(char *indent) {
+GString *DCTStream::getPSFilter(const char *indent) {
   GString *s;
 
   if (!(s = str->getPSFilter(indent))) {
@@ -3097,7 +3097,7 @@ GString *DCTStream::getPSFilter(char *indent) {
   return s;
 }
 
-GBool DCTStream::isBinary(GBool last) {
+GBool DCTStream::isBinary(GBool /*last*/) {
   return str->isBinary(gTrue);
 }
 
@@ -3277,11 +3277,11 @@ int FlateStream::getRawChar() {
   return c;
 }
 
-GString *FlateStream::getPSFilter(char *indent) {
+GString *FlateStream::getPSFilter(const char */*indent*/) {
   return NULL;
 }
 
-GBool FlateStream::isBinary(GBool last) {
+GBool FlateStream::isBinary(GBool /*last*/) {
   return str->isBinary(gTrue);
 }
 
@@ -3685,7 +3685,7 @@ void ASCIIHexEncoder::close() {
 }
 
 GBool ASCIIHexEncoder::fillBuf() {
-  static char *hex = "0123456789abcdef";
+  static const char *hex = "0123456789abcdef";
   int c;
 
   if (eof) {

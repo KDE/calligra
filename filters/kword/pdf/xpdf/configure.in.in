@@ -7,19 +7,10 @@ dnl ##### Check for fseeko/ftello or fseek64/ftell64
 dnl The LARGEFILE and FSEEKO macros have to be called in C, not C++, mode.
 AC_SYS_LARGEFILE
 AC_FUNC_FSEEKO
-AC_CHECK_FUNCS(fseek64, xpdf_cv_func_fseek64=yes, xpdf_cv_func_fseek64=no)
-AC_CHECK_FUNCS(ftell64, xpdf_cv_func_ftell64=yes, xpdf_cv_func_ftell64=no)
-if test "$xpdf_cv_func_fseek64" = yes -a "$xpdf_cv_func_ftell64" = yes; then
-  AC_DEFINE(HAVE_FSEEK64)
-fi
+AC_CHECK_FUNCS(fseek64)
+AC_CHECK_FUNCS(ftell64)
 
 dnl ##### Check for libpaper (Debian).
-AC_CHECK_LIB(libpaper, paper, [
-  LIBPAPER="$LDFLAGS -lt1"
-  AC_CHECK_HEADER(paper.h, [
-    AC_DEFINE(HAVE_PAPER_H, 1, [Define if you have Debian libpaper header file.])
-  ])
-  AC_SUBST(LIBPAPER)
-])
-
-AC_DEFINE(OPI_SUPPORT, 0, [Define if you want OPI comments.])
+AC_CHECK_HEADERS(paper.h)
+AC_CHECK_LIB(libpaper, paperinit, [LIBPAPER="-lpaper"])
+AC_SUBST(LIBPAPER)

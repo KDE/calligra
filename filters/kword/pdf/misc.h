@@ -22,14 +22,43 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qdom.h>
-#include <qvaluevector.h>
 #include <qsize.h>
+#include <qvaluevector.h>
 
 #include <koGlobal.h>
 
 
 double toPoint(double mm);
 bool equal(double d1, double d2, double delta = 0.1);
+class GfxRGB;
+QColor toColor(GfxRGB &);
+
+//-----------------------------------------------------------------------------
+class DRect {
+ public:
+    double width() const { return right - left; }
+    double height() const { return bottom - top; }
+
+    bool operator ==(const DRect &) const;
+
+    double top, bottom, right, left;
+};
+
+struct DPoint {
+    double x, y;
+};
+
+class DPath : public QValueVector<DPoint>
+{
+public:
+    DPath() {}
+
+    bool isSegment() const { return size()==2; }
+    bool isRectangle() const;
+    DRect boundingRect() const;
+};
+
+typedef QValueVector<DPath> DPathVector;
 
 //-----------------------------------------------------------------------------
 class KoFilterChain;
@@ -37,7 +66,7 @@ class KoFilterChain;
 class FilterData
 {
  public:
-    FilterData(KoFilterChain *, QSize pageSize, KoPageLayout,
+    FilterData(KoFilterChain *, const DRect &pageRect, KoPageLayout,
                uint nbPages);
 
     QDomElement createElement(const QString &name)
@@ -52,26 +81,26 @@ class FilterData
     uint textIndex() const { return _textIndex; }
     QDomElement bookmarks() const { return _bookmarks; }
     QDomElement pictures() const { return _pictures; }
-    void checkText();
 
-    QDomElement createPictureFrameset(double left, double right,
-                                      double top, double bottom)
-        { return createFrameset(Picture, left, right, top, bottom); }
-    void newPage();
+    void checkTextFrameset();
+    QDomElement pictureFrameset(const DRect &);
+
+    void startPage();
+    void endPage();
 
  private:
     KoFilterChain *_chain;
     QDomDocument   _document;
     uint           _pageIndex, _imageIndex, _textIndex;
     bool           _needNewTextFrameset;
-    double         _pageHeight;
     QDomElement    _mainElement, _framesets, _pictures, _bookmarks;
     QDomElement    _textFrameset, _mainTextFrameset, _lastMainLayout;
-    QSize          _pageSize;
+    DRect          _pageRect;
+    typedef QValueList<QDomElement> FramesetList;
+    FramesetList _framesetList;
 
     enum FramesetType { Text, Picture };
-    QDomElement createFrameset(FramesetType, double left, double right,
-                               double top, double bottom);
+    QDomElement createFrameset(FramesetType, const DRect &);
 };
 
 //-----------------------------------------------------------------------------

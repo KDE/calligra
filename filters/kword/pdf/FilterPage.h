@@ -78,18 +78,19 @@ class FilterPage : public TextPage
 {
  public:
     FilterPage(FilterData &data);
-    ~FilterPage();
 
     void beginString(GfxState *, double x0, double y0);
-    void prepare();
     void dump();
     void addLink(FilterLink *link) { _links.append(link); }
+    void clear();
 
  private:
     FilterData &_data;
-
+    bool        _empty;
     QValueVector<FilterParagraph> _pars;
     QValueVector<FilterLink *>    _links;
+
+    void prepare();
 };
 
 #endif

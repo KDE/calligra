@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
       printf(" (A4)");
     }
     printf("\n");
-  } 
+  }
 
   // print file size
 #ifdef VMS
@@ -183,10 +183,10 @@ int main(int argc, char *argv[]) {
   f = fopen(fileName->getCString(), "rb");
 #endif
   if (f) {
-#if HAVE_FSEEKO
+#ifdef HAVE_FSEEKO
     fseeko(f, 0, SEEK_END);
     printf("File size:    %u bytes\n", (Guint)ftello(f));
-#elif HAVE_FSEEK64
+#elif defined(HAVE_FSEEK64) && defined(HAVE_FTELL64)
     fseek64(f, 0, SEEK_END);
     printf("File size:    %u bytes\n", (Guint)ftell64(f));
 #else

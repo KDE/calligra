@@ -9,10 +9,8 @@
  * Copyright 2002 Glyph & Cog, LLC
  */
 
-/* for KWord Importer
- */
+/* for KWord Importer */
 #include "config.h"
-#define OPI_SUPPORT 0
 
 #ifndef ACONF2_H
 #define ACONF2_H

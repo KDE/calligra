@@ -19,17 +19,17 @@
 #ifndef FILTERDEVICE_H
 #define FILTERDEVICE_H
 
-#include <qvaluevector.h>
+#include <qimage.h>
 
 class Object;
 class Stream;
 
 #include "gtypes.h"
 #include "OutputDev.h"
+#include "misc.h"
 
 class FilterPage;
 class FilterData;
-class QImage;
 
 
 class FilterDevice : public OutputDev
@@ -43,11 +43,25 @@ class FilterDevice : public OutputDev
     virtual GBool interpretType3Chars() { return gFalse; }
     virtual GBool needNonText() { return gFalse; }
 
+    //----- initialization
     virtual void startPage(int pageNum, GfxState *state);
     virtual void endPage();
 
+    //----- update graphics state
+    virtual void updateAll(GfxState *state);
+//    virtual void updateLineDash(GfxState *state);
+//    virtual void updateFlatness(GfxState *state);
+//    virtual void updateLineJoin(GfxState *state);
+//    virtual void updateLineCap(GfxState *state);
+//    virtual void updateMiterLimit(GfxState *state);
+//    virtual void updateLineWidth(GfxState *state);
+    virtual void updateFillColor(GfxState *state);
+    virtual void updateStrokeColor(GfxState *state);
+
+    //----- update text state
     virtual void updateFont(GfxState *state);
 
+    //----- text drawing
     virtual void beginString(GfxState *state, GString *s);
     virtual void endString(GfxState *state);
     virtual void drawChar(GfxState *state, double x, double y,
@@ -55,8 +69,10 @@ class FilterDevice : public OutputDev
                           double originX, double originY,
                           CharCode c, Unicode *u, int uLen);
 
+    //----- link borders
     virtual void drawLink(Link* link, Catalog *cat);
 
+    //----- image drawing
     virtual void drawImageMask(GfxState *, Object *ref, Stream *,
                                int width, int height, GBool invert,
                                GBool inlineImg);
@@ -64,22 +80,32 @@ class FilterDevice : public OutputDev
                            int width, int height, GfxImageColorMap *colorMap,
                            int *maskColors, GBool inlineImg);
 
+    //----- path painting
+    virtual void stroke(GfxState *state);
+    virtual void fill(GfxState *state);
+    virtual void eoFill(GfxState *state);
+
  private:
     FilterData &_data;
     FilterPage *_page;
+    QColor _fillColor, _strokeColor;
 
-    struct Image {
-        QImage *ptr;
-        double left, right, top, bottom;
+    class Image {
+     public:
+        QImage image;
+        DRect  rect;
         bool   mask;
     };
-    Image               _image;
-    QValueVector<Image> _images;
+    Image     _currentImage;
+    typedef QValueList<Image> ImageList;
+    ImageList _images;
 
     static void computeGeometry(GfxState *, Image &);
     uint initImage(GfxState *, int width, int height, bool mask);
     void addImage();
     void clear();
+    static DPathVector convertPath(GfxState *);
+    void doFill(GfxState *);
 };
 
 #endif

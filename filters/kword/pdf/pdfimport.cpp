@@ -26,6 +26,8 @@
 #include <kdebug.h>
 #include <koGlobal.h>
 #include <koStore.h>
+#include <kapplication.h>
+#include <kprogress.h>
 
 #include "pdfdocument.h"
 #include "misc.h"
@@ -49,7 +51,6 @@ K_EXPORT_COMPONENT_FACTORY(libpdfimport, PdfImportFactory());
 
 //-----------------------------------------------------------------------------
 PdfImport::PdfImport(KoFilter *, const char *, const QStringList&)
-    : KoFilter()
 {}
 
 KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
@@ -71,22 +72,34 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
     // dialog
     PdfImportDialog* dialog =
         new PdfImportDialog(doc->nbPages(), doc->isEncrypted(), 0);
-    if ( !dialog->exec() ) {
-        delete dialog;
+    dialog->exec();
+    SelectionRange range = dialog->range();
+    QString ownerPassword = dialog->ownerPassword();
+    QString userPassword = dialog->userPassword();
+    delete dialog;
+    if ( dialog->result()==QDialog::Rejected ) {
         delete doc;
         return KoFilter::UserCancelled;
     }
-    SelectionRange range = dialog->range();
+
+    // progress dialog
+    KProgressDialog pd(0, "progress_dialog", i18n("PDF Import"),
+                       i18n("Initializing..."), true);
+    pd.setMinimumDuration(0);
+    pd.progressBar()->setTotalSteps(range.nbPages());
+    pd.progressBar()->setValue(1);
+    qApp->processEvents();
 
     // if passwords : reread file
-    if ( !dialog->ownerPassword().isEmpty() ||
-         !dialog->userPassword().isEmpty() ) {
+    if ( !ownerPassword.isEmpty() || !userPassword.isEmpty() ) {
         delete doc;
         doc = new PdfDocument(m_chain->inputFile(), dialog->ownerPassword(),
                               dialog->userPassword(), result);
-        Q_ASSERT( result==KoFilter::OK);
+        if ( result!=KoFilter::OK ) {
+            delete doc;
+            return result;
+        }
     }
-    delete dialog;
 
     // document information
     QDomDocument infoDocument("document-info");
@@ -113,27 +126,36 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
 
     // document
     KoPageLayout page;
-    QSize size = doc->paperSize(page.format);
-    kdDebug(30516) << "size=" << size << endl;
+    DRect rect = doc->paperSize(page.format);
+    kdDebug(30516) << "size=[" << rect.width() << "," << rect.height() << "]"
+                   << endl;
     page.orientation = doc->paperOrientation();
-    FilterData data(m_chain, size, page, doc->nbPages());
+    FilterData data(m_chain, rect, page, doc->nbPages());
+    doc->initDevice(data);
 
     // treat pages
-    doc->initDevice(data);
-    for (uint i=1; i<=doc->nbPages(); i++) {
-        if ( !range.inside(i) ) continue;
-        doc->treatPage(i);
+    SelectionRangeIterator it(range);
+    for (; it.current()!=-1; it.next()) {
+        pd.setLabel(i18n("Treating page %1...").arg(it.current()));
+        qApp->processEvents();
+        if (pd.wasCancelled()) {
+            delete doc;
+            return KoFilter::UserCancelled;
+        }
+        kdDebug(30516) << "treat page: " << it.current() << endl;
+        doc->treatPage( it.current() );
         QDomElement element = data.createElement("BOOKMARKITEM");
-        element.setAttribute("name", QString("page%1").arg(i));
+        element.setAttribute("name", QString("page%1").arg(it.current()));
         element.setAttribute("cursorIndexStart", 0); // ?
         element.setAttribute("cursorIndexEnd", 0); // ?
         element.setAttribute("frameset", "Text Frameset 1");
         element.setAttribute("startparag", 0); // ?
         element.setAttribute("endparag", 0); // ?
         data.bookmarks().appendChild(element);
+        pd.progressBar()->advance(1);
     }
 
-    // clean up
+    // cleanup
     delete doc;
 
     // save output
@@ -142,7 +164,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
         kdError(30516) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-    kdDebug(30516) << data.document().toCString() << endl;
+//    kdDebug(30516) << data.document().toCString() << endl;
     QCString cstr = data.document().toCString();
     out->writeBlock(cstr, cstr.length());
     out->close();

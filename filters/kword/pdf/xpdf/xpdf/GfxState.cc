@@ -90,7 +90,7 @@ GfxColorSpace *GfxColorSpace::parse(Object *csObj) {
 }
 
 void GfxColorSpace::getDefaultRanges(double *decodeLow, double *decodeRange,
-				     int maxImgPixel) {
+                                     int /*maxImgPixel*/) {
   int i;
 
   for (i = 0; i < getNComps(); ++i) {
@@ -612,7 +612,7 @@ void GfxLabColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
 }
 
 void GfxLabColorSpace::getDefaultRanges(double *decodeLow, double *decodeRange,
-					int maxImgPixel) {
+                                        int /*maxImgPixel*/) {
   decodeLow[0] = 0;
   decodeRange[0] = 100;
   decodeLow[1] = aMin;
@@ -733,7 +733,7 @@ void GfxICCBasedColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
 
 void GfxICCBasedColorSpace::getDefaultRanges(double *decodeLow,
 					     double *decodeRange,
-					     int maxImgPixel) {
+                         int /*maxImgPixel*/) {
   int i;
 
   for (i = 0; i < nComps; ++i) {
@@ -1125,15 +1125,15 @@ GfxColorSpace *GfxPatternColorSpace::parse(Array *arr) {
   return cs;
 }
 
-void GfxPatternColorSpace::getGray(GfxColor *color, double *gray) {
+void GfxPatternColorSpace::getGray(GfxColor */*color*/, double *gray) {
   *gray = 0;
 }
 
-void GfxPatternColorSpace::getRGB(GfxColor *color, GfxRGB *rgb) {
+void GfxPatternColorSpace::getRGB(GfxColor */*color*/, GfxRGB *rgb) {
   rgb->r = rgb->g = rgb->b = 0;
 }
 
-void GfxPatternColorSpace::getCMYK(GfxColor *color, GfxCMYK *cmyk) {
+void GfxPatternColorSpace::getCMYK(GfxColor */*color*/, GfxCMYK *cmyk) {
   cmyk->c = cmyk->m = cmyk->y = 0;
   cmyk->k = 1;
 }

@@ -36,14 +36,14 @@ PdfDocument::PdfDocument(const QString &name, const QString &ownerPassword,
 {
     _file = new QFile(name);
     if( !_file->open(IO_ReadOnly) ) {
-        kdError(30515) << "Unable to open input file!" << endl;
+        kdError(30516) << "Unable to open input file!" << endl;
         result =  KoFilter::FileNotFound;
         return;
     }
 
     FILE *fd = fdopen(_file->handle(), "r");
     if ( fd==0 ) {
-        kdError(30515) << "Unable to obtain FILE*" << endl;
+        kdError(30516) << "Unable to obtain FILE*" << endl;
         result =  KoFilter::InternalError;
         return;
     }
@@ -63,12 +63,12 @@ PdfDocument::PdfDocument(const QString &name, const QString &ownerPassword,
     delete owner;
 
     if ( !_document->isOk() ) {
-        kdError(30515) << "Unrecognized file!" << endl;
+        kdError(30516) << "Unrecognized file!" << endl;
         result = KoFilter::WrongFormat;
+        return;
     }
 
     result = KoFilter::OK;
-
     FilterFont::defaultFont = new FilterFont;
 }
 
@@ -129,16 +129,21 @@ KoOrientation PdfDocument::paperOrientation() const
              PG_PORTRAIT : PG_LANDSCAPE );
 }
 
-QSize PdfDocument::paperSize(KoFormat &format) const
+DRect PdfDocument::paperSize(KoFormat &format) const
 {
     KoOrientation orientation = paperOrientation();
 
+    DRect rect;
+    rect.top = 0;
+    rect.left = 0;
     double w, h;
     if ( nbPages()==0 ) {
         format = PG_DIN_A4;
         w = toPoint(KoPageFormat::width(format, orientation));
         h = toPoint(KoPageFormat::height(format, orientation));
-        return QSize(qRound(w), qRound(h));
+        rect.right = w;
+        rect.bottom = h;
+        return rect;
     }
 
     w = _document->getPageWidth(1);
@@ -164,7 +169,9 @@ QSize PdfDocument::paperSize(KoFormat &format) const
         }
     }
 
-    return QSize(qRound(width), qRound(height));
+    rect.bottom = height;
+    rect.right = width;
+    return rect;
 }
 
 void PdfDocument::initDevice(FilterData &data)
