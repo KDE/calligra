@@ -2358,7 +2358,7 @@ void KWView::backgroundColor()
         if ( gui )
             gui->canvasWidget()->setFrameBackgroundColor( backColor );
     }
-    borderSet();
+    //borderSet();
 }
 
 /*================================================================*/
