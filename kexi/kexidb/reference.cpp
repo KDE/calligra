@@ -34,6 +34,14 @@ Reference::Reference()
 	m_pairs.setAutoDelete(true);
 }
 
+Reference::Reference(IndexSchema* foreign, IndexSchema* referenced)
+	: m_index1(0)
+	, m_index2(0)
+{
+	m_pairs.setAutoDelete(true);
+	setIndices(foreign, referenced);
+}
+
 Reference::~Reference()
 {
 }
@@ -67,9 +75,27 @@ void Reference::setIndices(IndexSchema* foreign, IndexSchema* referenced)
 			m_pairs.clear();
 			return;
 		}
+		if ((f1->isUnsigned() && !f2->isUnsigned()) || (!f1->isUnsigned() && f1->isUnsigned())) {
+			KexiDBDbg << "Reference::setIndices(INDEX on '"<<foreign->table()->name()
+			<<"',INDEX on "<<referenced->table()->name()<<"): !equal signedness of field types: "
+			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
+			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
+			m_pairs.clear();
+			return;
+			
+		}
 		m_pairs.append( new Field::Pair(f1,f2) );
+	}
+	//ok: update information
+	if (m_index1) {//detach yourself
+		m_index1->detachReference(this);
+	}
+	if (m_index2) {//detach yourself
+		m_index2->detachReference(this);
 	}
 	m_index1 = foreign;
 	m_index2 = referenced;
+	m_index1->attachReference(this);
+	m_index2->attachReference(this);
 }
 

@@ -42,8 +42,11 @@ namespace KexiDB {
  -# pair of indices; use foreignIndex(), referencedIndex() for that
  -# ordered list of field pairs (<foreign_field>,<referenced_field); use fieldPairs() for that
 
- No assigned objects (like fields, indices) are owned by Reference object. THe exception is that 
+ No assigned objects (like fields, indices) are owned by Reference object. The exception is that 
  list of field-pairs is internally created (on demand) and owned.
+
+ Reference object is owned by IndexSchema object (the one that is defined at foreign reference's side).
+ If Reference object is not attached to IndexSchema object, you should care about destroying it by hand.
 */
 
 class IndexSchema;
@@ -52,9 +55,17 @@ class TableSchema;
 class KEXI_DB_EXPORT Reference
 {
 	public:
+		typedef QPtrList<Reference> List;
+
 		/*! Creates uninitialized Reference object. 
+			setIndices() will be required to call.
 		*/
 		Reference();
+
+		/*! Creates Reference object and initialises it just by 
+		 calling setIndices(). If setIndices() failed, object is still uninitialised.
+		*/
+		Reference(IndexSchema* foreign, IndexSchema* referenced);
 
 		virtual ~Reference();
 
@@ -84,20 +95,23 @@ class KEXI_DB_EXPORT Reference
 		 Notes: 
 		 - both indices must contain the same number of fields
 		 - both indices must not be owned by the same table, and table (owner) must be not null.
-		 - corresponding filed types must be compatible
-		 If above rules are not fulfilled, method information is cleared. */
+		 - corresponding filed types must be the same
+		 - corresponding filed types' signedness must be the same
+		 If above rules are not fulfilled, method information is cleared. 
+		 On success, Reference object is detached from previous IndexSchema object that 
+		 defined at foreign side, and is attached as a child to \a foreign IndexSchema object.
+		 */
 		void setIndices(IndexSchema* foreign, IndexSchema* referenced);
 
 	protected:
 		IndexSchema *m_index1;
 		IndexSchema *m_index2;
 
-//		TableSchema *m_table1;
-//		TableSchema *m_table2;
-
 		Field::PairList m_pairs;
+
 	friend class Connection;
 	friend class TableSchema;
+	friend class IndexSchema;
 };
 
 } //namespace KexiDB

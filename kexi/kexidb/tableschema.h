@@ -28,6 +28,7 @@
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
 #include <kexidb/indexschema.h>
+#include <kexidb/reference.h>
 
 namespace KexiDB {
 
@@ -121,11 +122,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		/*! Automatically retrieves table schema via connection. */
 		TableSchema(Connection *conn, const QString & name = QString::null);
 
-	//js	QStringList m_primaryKeys;
-//		Field::List m_fields;
 		IndexSchema::List m_indices;
-
-//		int m_id; //! unique identifier used in kexi__tables for this table
 
 		Connection *m_conn;
 		
@@ -136,30 +133,6 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 	friend class Connection;
 };
-
-/*
-class KEXI_DB_EXPORT TableDef : protected Table
-{
-	public:
-		TableDef(const QString & name);
-		TableDef();
-		~TableDef();
-		KexiDB::FieldDef field(unsigned int id) const;
-	protected:
-};*/
-
-/*
-class KexiDBTableFields: public QValueList<KexiDBField> {
-public:
-	KexiDBTable(const QString & name);
-	~KexiDBTable();
-	void addField(KexiDBField);
-//	const QString& tableName() const;
-
-private:
-//	QString m_tableName;
-};
-*/
 
 } //namespace KexiDB
 
