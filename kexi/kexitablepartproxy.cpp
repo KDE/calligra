@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 
 #include "kexitablepartproxy.h"
 #include "kexitablepart.h"
@@ -34,10 +35,17 @@
 #include "kexialtertable.h"
 
 KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
- : KexiProjectPartProxy(part,view)
+ : KexiProjectPartProxy(part,view),KXMLGUIClient()
 {
 	m_tablePart=part;
 	kdDebug() << "KexiTablePartProxy::KexiTablePartProxy()" << endl;
+
+	KAction *createAction = new KAction(i18n("Create Table ..."), 0,
+                this,SLOT(slotCreate()), actionCollection(), "tablepart_create");
+        
+	setXMLFile("kexitablepartui.rc");	
+
+	view->insertChildClient(this);
 }
 
 KexiPartPopupMenu*

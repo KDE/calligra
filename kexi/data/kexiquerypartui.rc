@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiquerypart" version="0.1">
+
+<MenuBar>
+	<Menu name="widgets">
+		<text>&amp;Create</text>
+		<Action name="querypart_create"/>
+	</Menu>
+</MenuBar>
+
+</kpartgui>

@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexitablepart" version="0.1">
+
+<MenuBar>
+	<Menu name="widgets">
+		<text>&amp;Create</text>
+		<Action name="tablepart_create"/>
+	</Menu>
+</MenuBar>
+
+</kpartgui>

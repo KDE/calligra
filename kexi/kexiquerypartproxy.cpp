@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 
 #include "kexiquerydesigner.h"
 #include "kexiquerypart.h"
@@ -33,10 +34,18 @@
 #include "kexiview.h"
 
 KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
- : KexiProjectPartProxy(part,view)
+ : KexiProjectPartProxy(part,view),KXMLGUIClient()
 {
 	m_queryPart=part;
 	kdDebug() << "KexiQueryPartProxy::KexiQueryPartProxy()" << endl;
+
+        KAction *createAction = new KAction(i18n("Create Query ..."), 0,
+                this,SLOT(slotCreateQuery()), actionCollection(), "querypart_create");
+
+        setXMLFile("kexiquerypartui.rc");
+
+        view->insertChildClient(this);
+
 }
 
 
