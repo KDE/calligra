@@ -1516,7 +1516,8 @@ QStringList KoNoteVariable::actionTexts()
 
 QString KoNoteVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
+    if (m_varColl->variableSetting()->displayComment() &&
+        m_varColl->variableSetting()->displayFiedCode()&&!realValue)
         return fieldCode();
     else
         //for a note return just a "space" we can look at
