@@ -22,8 +22,8 @@
 
 #include <kdialogbase.h>
 #include <qstringlist.h>
-class QListBox;
-class QPushButton;
+class KEditListBox;
+class KURLRequester;
 
 class KWEditPathDia : public KDialogBase
 {
@@ -32,14 +32,9 @@ public:
     KWEditPathDia( const QString & _path, QWidget *parent, const char *name );
     QString newPath()const;
 
-protected slots:
-    void slotDeletePath();
-    void slotAddPath();
-    void slotSelectionChanged();
 private:
-    QListBox *m_listpath;
-    QPushButton *m_pbDelete;
-    QPushButton *m_pbAdd;
+    KEditListBox *m_listpath;
+    KURLRequester *urlReq;
 };
 
 #endif

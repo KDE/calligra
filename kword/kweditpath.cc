@@ -24,8 +24,11 @@
 #include <qpushbutton.h>
 #include <qlistbox.h>
 #include "kweditpath.h"
+#include <keditlistbox.h>
 #include <kfiledialog.h>
-
+#include <kurlrequester.h>
+#include <qhbox.h>
+#include <klineedit.h>
 KWEditPathDia::KWEditPathDia( const QString & _path, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
@@ -33,57 +36,31 @@ KWEditPathDia::KWEditPathDia( const QString & _path, QWidget *parent, const char
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     QGridLayout * grid = new QGridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
-    m_listpath = new QListBox( page );
+
+    urlReq = new KURLRequester();
+    urlReq->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
+
+    KEditListBox::CustomEditor tmp(urlReq, urlReq->lineEdit());
+
+    m_listpath =  new KEditListBox( i18n("Expression path:"),
+                    tmp,page, "list_editor" , false, KEditListBox::Add|KEditListBox::Remove );
+
     grid->addMultiCellWidget(m_listpath, 0, 4, 0, 0);
-    m_listpath->insertStringList(QStringList::split(QString(";"), _path));
-    connect(m_listpath,  SIGNAL( selectionChanged ()), this, SLOT(slotSelectionChanged()));
-    m_pbAdd = new QPushButton( i18n("Add path...."), page );
-    grid->addWidget( m_pbAdd, 0, 1);
-    connect( m_pbAdd, SIGNAL(clicked()), this, SLOT(slotAddPath()));
-
-    m_pbDelete = new QPushButton( i18n("Delete path"), page );
-    grid->addWidget( m_pbDelete, 1, 1);
-
-    connect( m_pbDelete, SIGNAL(clicked()), this, SLOT(slotDeletePath()));
-
-
+    m_listpath->listBox()->insertStringList(QStringList::split(QString(";"), _path));
     setFocus();
-    slotSelectionChanged();
-    resize( 300, 200);
-
+    resize( 400, 200);
 }
 
 QString KWEditPathDia::newPath()const
 {
     QString tmp;
-    for (int i = 0; i <m_listpath->count(); i++)
+    for (int i = 0; i <(int)m_listpath->listBox()->count(); i++)
     {
         if ( i!=0)
             tmp +=";";
-        tmp += m_listpath->text( i );
+        tmp += m_listpath->listBox()->text( i );
     }
     return tmp;
 }
 
-void KWEditPathDia::slotSelectionChanged()
-{
-    bool state =!m_listpath->currentText().isEmpty();
-    enableButtonOK( state );
-    m_pbAdd->setEnabled( state);
-    m_pbDelete->setEnabled( state );
-}
-
-void KWEditPathDia::slotAddPath()
-{
-    QString path = KFileDialog::getExistingDirectory();
-    if ( !path.isEmpty())
-    {
-        m_listpath->insertItem( path );
-    }
-}
-
-void KWEditPathDia::slotDeletePath()
-{
-    m_listpath->removeItem( m_listpath->currentItem ());
-}
 #include "kweditpath.moc"
