@@ -305,7 +305,7 @@
 		type	0=normal, 1=bullet-list, 2=enum-list
 		depth	list depth
 -->
-<!ELEMENT P  (TEXT|COUNTER|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|TABULATOR|SHADOW)*>
+<!ELEMENT P  (TEXT|COUNTER|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|TABULATOR|SHADOW|NAME)*>
 <!ATTLIST P
 		align	NMTOKEN #REQUIRED
 		type	NMTOKEN #REQUIRED
@@ -326,6 +326,7 @@
      relativetextsize
              0.75 means 3/4 of the normal font size.
      [...]
+      wordbyword: 0 or 1. If 1, spaces are not striked out. Opposite of fo:score-spaces.
 
 TODO: finish documentation
 
@@ -715,5 +716,8 @@ TODO: finish documentation
 <!ELEMENT OBJECTSNAME ANY>
 <!ATTLIST OBJECTSNAME NAME CDATA #REQUIRED>
 
+<!--
+   Name of the style used by this paragraph
+-->
 <!ELEMENT NAME EMPTY>
 <!ATTLIST NAME value CDATA #REQUIRED>
