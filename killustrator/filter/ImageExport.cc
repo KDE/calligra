@@ -86,7 +86,7 @@ bool ImageExport::exportToFile (GDocument* doc) {
   p.scale (RESOLUTION / 72.0, RESOLUTION / 72.0);
 
   // draw the objects
-  doc->activePage()->drawContents (p);
+  doc->activePage()->drawContents (p,false,false,false);
 
   p.end ();
 

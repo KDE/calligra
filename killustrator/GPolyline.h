@@ -44,7 +44,7 @@ public:
   ~GPolyline () {}
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-                     bool outline = false);
+                     bool outline = false, bool withEditMarks=true);
   virtual bool contains (const Coord& p);
 
   virtual void setPoint (int idx, const Coord& p);

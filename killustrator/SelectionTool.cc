@@ -119,6 +119,7 @@ void SelectionTool::processButtonReleaseForHelpline(QMouseEvent *,GDocument *, C
       canvas->setCursor(Qt::arrowCursor);
       ctype = C_Arrow;
   }
+  state = S_Inactive;
 }
 
 void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,

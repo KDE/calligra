@@ -137,7 +137,7 @@ QString GText::typeName () const {
   return i18n("Text");
 }
 
-void GText::draw (QPainter& p, bool, bool) {
+void GText::draw (QPainter& p, bool , bool, bool withEditMarks) {
   QPen pen (outlineInfo.color, (uint) outlineInfo.width,
             outlineInfo.style);
   p.save ();
@@ -146,14 +146,14 @@ void GText::draw (QPainter& p, bool, bool) {
   p.setWorldMatrix (tmpMatrix, true);
 
   if (pathObj)
-    drawPathText (p);
+    drawPathText (p,withEditMarks);
   else
-    drawSimpleText (p);
+    drawSimpleText (p,withEditMarks);
   p.restore ();
 }
 
 
-void GText::drawSimpleText (QPainter& p) {
+void GText::drawSimpleText (QPainter& p, bool drawCursor) {
   QStringList::Iterator it = text.begin ();
   float y = fm->ascent ();
   for (; it != text.end (); ++it) {
@@ -167,7 +167,7 @@ void GText::drawSimpleText (QPainter& p) {
     p.drawText (pos, *it);
     y += fm->height ();
   }
-  if (cursorActive) {
+  if (cursorActive&&drawCursor) {
     float x1, y1, y2;
     y1 = cursy * fm->height () - 1;
     y2 = y1 + fm->height () + 2;
@@ -186,7 +186,7 @@ void GText::drawSimpleText (QPainter& p) {
   }
 }
 
-void GText::drawPathText (QPainter& p) {
+void GText::drawPathText (QPainter& p, bool drawCursor) {
   QStringList::Iterator it = text.begin ();
   int idx = 0;
 
@@ -201,7 +201,7 @@ void GText::drawPathText (QPainter& p) {
       p.drawText (0, 0, (QChar)s[i], 1);
     }
   }
-  if (cursorActive) {
+  if (cursorActive&&drawCursor) {
     idx = 0;
     int line = 0;
     QStringList::Iterator it = text.begin ();

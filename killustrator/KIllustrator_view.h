@@ -202,8 +202,10 @@ private slots:
     void slotZoomOut();
     void slotViewResize();
     void activatePart (Tool::ToolID,GObject *obj);
+    void createLayerPanel(bool enable);
     
 protected:
+ 
     KIllustratorDocument *m_pDoc;
     EditPointTool *editPointTool;
     InsertPartTool *insertPartTool;
@@ -225,6 +227,7 @@ protected:
 
     KAction* m_copy;
     KAction* m_cut;
+    KAction* m_duplicate;
     KAction *m_delete;
     KAction* m_undo;
     KAction* m_redo;

@@ -298,7 +298,7 @@ GCurve::GCurve (const GCurve& obj)
   segments = obj.segments;
 }
 
-void GCurve::draw (QPainter& p, bool withBasePoints, bool outline) {
+void GCurve::draw (QPainter& p, bool withBasePoints, bool outline, bool) {
   QPen pen;
   QBrush brush;
   initPen (pen);

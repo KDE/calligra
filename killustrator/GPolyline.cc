@@ -136,7 +136,7 @@ QString GPolyline::typeName () const {
   return i18n("Polyline");
 }
 
-void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/) {
+void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/, bool) {
   unsigned int i;
   QPen pen;
 

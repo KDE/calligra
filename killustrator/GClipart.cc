@@ -79,7 +79,7 @@ QString GClipart::typeName () const {
   return i18n("Clipart object");
 }
 
-void GClipart::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
+void GClipart::draw (QPainter& p, bool /*withBasePoints*/, bool outline, bool) {
   p.save ();
   if (outline) {
     p.setPen (black);

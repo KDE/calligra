@@ -168,7 +168,7 @@ bool GPolygon::isFilled () const {
   return fillInfo.fstyle != GObject::FillInfo::NoFill;
 }
 
-void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline)
+void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline, bool)
 {
    unsigned int i, num;
 

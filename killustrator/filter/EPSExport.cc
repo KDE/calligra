@@ -90,7 +90,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
                      box.height () + 2 + box.top ());
 #endif
   doc->activePage()->invalidateClipRegions ();
-  doc->activePage()->drawContents (paint);
+  doc->activePage()->drawContents (paint,false,false,true);
   doc->activePage()->invalidateClipRegions ();
   paint.end ();
   return true;

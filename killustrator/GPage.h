@@ -62,10 +62,10 @@ public:
   void setName(QString aName);
 
   void drawContents (QPainter& p, bool withBasePoints = false,
-                     bool outline = false);
+                     bool outline = false, bool withEditMarks=true);
   void drawContentsInRegion (QPainter& p, const Rect& r, const Rect& rr,
                              bool withBasePoints = false,
-                             bool outline = false);
+                             bool outline = false, bool withEditMarks=true);
 
   void invalidateClipRegions ();
 

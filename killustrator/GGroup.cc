@@ -96,7 +96,7 @@ void GGroup::addObject (GObject* obj) {
     updateRegion ();
 }
 
-void GGroup::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
+void GGroup::draw (QPainter& p, bool /*withBasePoints*/, bool outline, bool) {
     p.save ();
     p.setWorldMatrix (tmpMatrix, true);
     for (GObject *o=members.first(); o!=0L; o=members.next())

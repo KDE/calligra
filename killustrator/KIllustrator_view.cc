@@ -101,6 +101,9 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
    :KoView( doc, parent, name )
    ,objMenu(0)
    ,rulerMenu(0)
+    ,mToolDockManager(0)
+    ,mLayerPanel(0)
+    ,mLayerDockBase(0)
 {
    QTime time;
    time.start();
@@ -157,7 +160,7 @@ void KIllustratorView::createMyGUI()
     m_cut = KStdAction::cut(this, SLOT( slotCut() ), actionCollection(), "cut" );
     m_undo = KStdAction::undo(this, SLOT( slotUndo() ), actionCollection(), "undo" );
     m_redo = KStdAction::redo(this, SLOT( slotRedo() ), actionCollection(), "redo" );
-    new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
+    m_duplicate=new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
     m_delete=new KAction( i18n("&Delete"), "editdelete", Key_Delete, this, SLOT( slotDelete() ), actionCollection(), "delete" );
     KStdAction::selectAll( this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
@@ -382,16 +385,17 @@ void KIllustratorView::setupCanvas()
     layout->addMultiCellWidget(vBar,0,1,2,2);
     layout->addMultiCellLayout(tabLayout,2,2,0,1);
 
-    mToolDockManager = new ToolDockManager(canvas);
+/*    mToolDockManager = new ToolDockManager(canvas);
 
     //Layer Panel
     mLayerPanel = new LayerPanel(this);
-    mLayerDockBase = mToolDockManager->createToolDock(mLayerPanel, i18n("Layers"));
+    mLayerDockBase = mToolDockManager->createToolDock(mLayerPanel, i18n("Layers"));*/
     m_showLayers = new KToggleAction( i18n("Layers Panel"), "layers", CTRL+Key_L, actionCollection(), "layers" );
 
-    connect( m_showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
-    connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
-    slotLayersPanel(false);
+    connect( m_showLayers, SIGNAL(toggled(bool)), this, SLOT(createLayerPanel(bool)));
+//    connect( m_showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
+/*    connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
+    slotLayersPanel(false);*/
 
     connect(canvas,SIGNAL(visibleAreaChanged(const QRect&)),hRuler,SLOT(updateVisibleArea(const QRect&)));
     connect(canvas,SIGNAL(visibleAreaChanged(const QRect&)),vRuler,SLOT(updateVisibleArea(const QRect&)));
@@ -445,8 +449,11 @@ void KIllustratorView::readConfig()
    KConfig* config = kapp->config ();
    config->setGroup("Panels");
    bool b=config->readBoolEntry("Enabled",true);
-   if (!b)
+/*   if (!b)
       mLayerDockBase->makeVisible(b);
+   else*/
+   if (b)
+      createLayerPanel(false);
 }
 
 void KIllustratorView::writeConfig()
@@ -612,6 +619,7 @@ void KIllustratorView::popupForSelection ()
       objMenu = new KPopupMenu();
       m_copy->plug( objMenu );
       m_cut->plug( objMenu );
+      m_duplicate->plug(objMenu);
       m_delete->plug(objMenu);
       objMenu->insertSeparator ();
       m_distribute->plug( objMenu );
@@ -1367,5 +1375,23 @@ QButton* KIllustratorView::newIconButton( const char* file, bool kbutton, QWidge
   pb->setFixedSize(16,16);
   return pb;
 }
+
+void KIllustratorView::createLayerPanel(bool calledFromAction)
+{
+   if (mToolDockManager!=0)
+      return;
+   disconnect(m_showLayers,SIGNAL(toggled(bool)),this,SLOT(createLayerPanel(bool)));
+   mToolDockManager = new ToolDockManager(canvas);
+
+   //Layer Panel
+   mLayerPanel = new LayerPanel(this);
+   mLayerDockBase = mToolDockManager->createToolDock(mLayerPanel, i18n("Layers"));
+   connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
+   connect( m_showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
+   slotLayersPanel(false);
+   if (calledFromAction)
+      mLayerDockBase->makeVisible(calledFromAction);
+};
+
 
 #include <KIllustrator_view.moc>

@@ -325,7 +325,7 @@ public:
      *                       object.
      */
     virtual void draw (QPainter& /*p*/, bool /*withBasePoints*/ = false,
-                       bool /*outline*/ = false) {}
+                       bool /*outline*/ = false, bool /*withEditMarks*/=true) {}
 
     /**
      * Test, if the object contains the given point.

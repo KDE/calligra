@@ -84,7 +84,7 @@ QString GOval::typeName () const {
     return i18n("Ellipse");
 }
 
-void GOval::draw (QPainter& p, bool withBasePoints, bool outline) {
+void GOval::draw (QPainter& p, bool withBasePoints, bool outline, bool) {
   float alen = 0;
   QPen pen;
   QBrush brush;

@@ -82,7 +82,7 @@ void GPart::deactivate()
 
  }
 
-void GPart::draw (QPainter& p, bool /*withBasePoints*/, bool outline)
+void GPart::draw (QPainter& p, bool /*withBasePoints*/, bool outline, bool)
  {
   p.save ();
   QRect r = child->geometry ();

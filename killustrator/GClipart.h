@@ -45,7 +45,7 @@ public:
   ~GClipart () {}
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-                     bool outline = false);
+                     bool outline = false, bool withEditMarks=true);
 
   virtual QString typeName () const;
 

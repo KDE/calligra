@@ -59,7 +59,7 @@ public:
   ~GText ();
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-                     bool outline = false);
+                     bool outline = false, bool withEditMarks=true);
 
   void setOrigin (const Coord& p);
   //  const Coord& origin () const { return opos; }
@@ -109,8 +109,8 @@ protected:
 
   void initState (GOState* state);
 
-  void drawPathText (QPainter& p);
-  void drawSimpleText (QPainter& p);
+  void drawPathText (QPainter& p, bool drawCursor=true);
+  void drawSimpleText (QPainter& p, bool drawCursor=true);
 
 private:
   //  Coord opos;

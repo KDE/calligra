@@ -138,7 +138,7 @@ void GPage::emitHandleChanged()
   emit handleChanged();
 }
 
-void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline)
+void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline, bool withEditMarks)
 {
   for (QListIterator<GLayer> i(layers); i.current(); ++i)
   {
@@ -147,13 +147,13 @@ void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline)
       const QList<GObject> &contents = (*i)->objects ();
       QListIterator<GObject> oi(contents);
       for ( ; oi.current() ; ++oi)
-        (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
+        (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline,withEditMarks);
     }
   }
 }
 
-void GPage::drawContentsInRegion (QPainter& p, const Rect&/*r*/, const Rect& rr,
-                                      bool withBasePoints, bool outline)
+void GPage::drawContentsInRegion (QPainter& p, const Rect& , const Rect& rr,
+                                      bool withBasePoints, bool outline, bool withEditMarks)
 {
   for (QListIterator<GLayer> i(layers); i.current(); ++i)
   {
@@ -168,7 +168,7 @@ void GPage::drawContentsInRegion (QPainter& p, const Rect&/*r*/, const Rect& rr,
             //      const Rect& bbox = (*oi)->boundingBox ();
             //      if (r.intersects (bbox))
         if ((*oi)->intersects (rr))
-          (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
+          (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline, withEditMarks);
       }
     }
   }

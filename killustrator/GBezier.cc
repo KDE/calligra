@@ -215,7 +215,7 @@ QString GBezier::typeName () const
   return i18n("Bezier curve");
 }
 
-void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {
+void GBezier::draw (QPainter& p, bool withBasePoints, bool outline, bool) {
   QPen pen;
   QBrush brush;
   int sdx = 0;

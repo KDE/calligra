@@ -41,7 +41,7 @@ public:
   void addObject (GObject* obj);
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-                     bool outline = false);
+                     bool outline = false, bool withEditMarks=true);
   virtual bool contains (const Coord& p);
 
   virtual QString typeName () const;
