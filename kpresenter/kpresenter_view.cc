@@ -4662,7 +4662,24 @@ void KPresenterView::setEditMaster( bool editMaster )
             actionViewSlideMaster->setChecked( false );
             refreshPageButton();
         }
+        updateNoteBarText();
         m_canvas->repaint( false );
+    }
+}
+
+void KPresenterView::updateNoteBarText()
+{
+    if ( notebar ) {
+        if ( m_editMaster )
+        {
+            QString text = m_pKPresenterDoc->masterPage()->noteText();
+            notebar->setCurrentNoteText( text );
+        }
+        else
+        {
+            QString text = m_pKPresenterDoc->pageList().at( currPg )->noteText( );
+            notebar->setCurrentNoteText( text );
+        }
     }
 }
 

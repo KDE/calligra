@@ -376,6 +376,7 @@ class KPresenterDoc : public KoDocument
     KPrPage * findPage(QPtrList<KPObject> &objects);
 
     void refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView);
+    void refreshAllNoteBarMasterPage(const QString &text, KPresenterView *exceptView);
 
 
     bool backgroundSpellCheckEnabled() const;

@@ -166,7 +166,7 @@ public:
      */
     KSpell2::Broker *broker() const;
 #endif
-
+    bool editMaster() const { return m_editMaster;}
 
 signals:
     void currentPageChanged( int );
@@ -804,7 +804,7 @@ protected:
     void spellCheckerRemoveHighlight();
 
     void setEditMaster( bool editMaster );
-
+    void updateNoteBarText();
 private:
     void clearSpellChecker(bool cancelSpellCheck = false);
 

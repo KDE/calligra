@@ -4010,6 +4010,18 @@ void KPresenterDoc::updateRulerPageLayout()
     }
 }
 
+void KPresenterDoc::refreshAllNoteBarMasterPage(const QString &text, KPresenterView *exceptView)
+{
+    m_masterPage->setNoteText(text );
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        KPresenterView* view=(KPresenterView*)it.current();
+        if ( view->getNoteBar() && view != exceptView && view->editMaster() )
+            view->getNoteBar()->setCurrentNoteText(text );
+    }
+}
+
 void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView)
 {
     m_pageList.at(page)->setNoteText(text );
