@@ -95,6 +95,7 @@ public:
 
   static bool isUpper(const QChar &c);
   static bool isLower(const QChar &c);
+  static bool isMark(const QChar &c);
 
 protected:
   KWordDocument *doc;

@@ -1141,3 +1141,8 @@ Reggie, 27.4.1999:
   by autoformat, and if yes, it also knows it's original value which
   can be restored if the autoformat gets switched off)
 - More work on autoformat configuration
+
+Reggie, 28.4.1999:
+------------------
+- Some improvements in autoformat
+- Fixed a memory leak
