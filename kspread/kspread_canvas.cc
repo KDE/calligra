@@ -4144,7 +4144,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   int row = table->topRow( m_pCanvas->yOffset(), y );
 
   // Did the user click between two rows?
-  while ( y < dHeight && ( !m_bResize ) )
+  while ( y < ( dHeight + m_pCanvas->yOffset() ) && ( !m_bResize ) )
   {
     double h = table->rowFormat( row )->dblHeight();
     row++;
@@ -4821,7 +4821,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     int col = table->leftColumn( m_pCanvas->xOffset(), x );
 
     // Did the user click between two columns?
-    while ( x < dWidth && ( !m_bResize ) )
+    while ( x < ( dWidth + m_pCanvas->xOffset() ) && ( !m_bResize ) )
     {
       double w = table->columnFormat( col )->dblWidth();
       col++;

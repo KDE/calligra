@@ -740,15 +740,15 @@ QRect KSpreadSheet::visibleRect( KSpreadCanvas const * const _canvas ) const
   int top    = 0;
   int left   = 0;
 
-  int x      = 0;
-  int y      = 0;
-  int width  = 0;
-  int height = 0;
+  double x      = 0;
+  double y      = 0;
+  double width  = 0;
+  double height = 0;
 
   if ( _canvas )
   {
-    y     += int( _canvas->yOffset() );
-    x     += int( _canvas->xOffset() );
+    y     += _canvas->yOffset() * _canvas->zoom();
+    x     += _canvas->xOffset() * _canvas->zoom();
     width  = _canvas->width();
     height = _canvas->height();
   }
