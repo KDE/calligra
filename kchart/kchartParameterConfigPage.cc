@@ -215,14 +215,16 @@ void KChartParameterConfigPage::init()
     llabel->setChecked(_params->legendPosition()!=KDChartParams::NoLegend);
     grid->setChecked(_params->showGrid());
 
-//     if( _params->chartType() == KDChartParams::Line ) {
-//         cross->setEnabled(true);
-//         cross->setChecked(_params->cross);
-//     }
-//     else {
+     if( _params->chartType() == KDChartParams::Line )
+     {
+         cross->setEnabled(true);
+         cross->setChecked(_params->lineMarker());
+     }
+     else
+     {
         cross->setEnabled(false);
         cross->setChecked(false);
-//     }
+     }
     // PENDING(kalle) Adapt this
     //     if(_params->has_yaxis2())
     //     	{
@@ -329,8 +331,6 @@ void KChartParameterConfigPage::apply()
     //         _params->setAnnotationFont( annotationFont );
     //         }
 
-    if( _params->chartType() == KDChartParams::Line ) {
-        // PENDING(kalle) Readapt
-        //         _params->cross=cross->isChecked();
-    }
+    if( _params->chartType() == KDChartParams::Line )
+        _params->setLineMarker(cross->isChecked());
 }
