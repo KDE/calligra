@@ -215,8 +215,6 @@ public slots:
     void tableDeleteCol();
     void tableJoinCells();
     void tableSplitCells();
-    //void tableSplitCellsVerticaly();
-    //void tableSplitCellsHorizontaly();
     void tableUngroupTable();
     void tableDelete();
 

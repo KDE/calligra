@@ -2366,6 +2366,7 @@ void KWView::formatPage()
             m_doc->updateRuler();
 
             m_doc->updateResizeHandles();
+            m_doc->updateContentsSize();
 #if 0
             m_gui->canvasWidget()->frameSizeChanged( pgLayout );
 #endif

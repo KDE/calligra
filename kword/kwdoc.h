@@ -495,6 +495,8 @@ public:
     int undoRedoLimit();
     void setUndoRedoLimit(int _val);
 
+    void updateContentsSize(){emit newContentsSize();}
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void newContentsSize();
