@@ -26,27 +26,15 @@
 
 #include <koPageLayoutDia.h>
 
-#include <kapp.h>
-
 #include <qframe.h>
 #include <qwidget.h>
-#include <qpainter.h>
-#include <qcolor.h>
-#include <qpen.h>
-#include <qbrush.h>
 #include <qstring.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qrect.h>
-#include <qevent.h>
-#include <qcursor.h>
 #include <qpixmap.h>
-#include <qlist.h>
-#include <qpopupmenu.h>
-#include <qpoint.h>
 
 #include <koGlobal.h>
 #include <koTabChooser.h>
+
+class QPainter;
 
 /******************************************************************/
 /* Struct: KoTabulator                                            */
@@ -148,7 +136,6 @@ protected:
     double unZoomIt(const double &value) const;
     int unZoomIt(const int &value) const;
     unsigned int unZoomIt(const unsigned int &value) const;
-    int double2Int(const double &value) const;
     void setupMenu();
     void uncheckMenu();
 
@@ -187,13 +174,13 @@ inline double KoRuler::zoomIt(const double &value) const {
 inline int KoRuler::zoomIt(const int &value) const {
     if (m_zoom==1.0)
         return value;
-    return double2Int(m_zoom*value);
+    return qRound(m_zoom*value);
 }
 
 inline unsigned int KoRuler::zoomIt(const unsigned int &value) const {
     if (m_zoom==1.0)
         return value;
-    return static_cast<unsigned int>(double2Int(m_zoom*value));
+    return static_cast<unsigned int>(qRound(m_zoom*value));
 }
 
 inline double KoRuler::unZoomIt(const double &value) const {
@@ -205,23 +192,13 @@ inline double KoRuler::unZoomIt(const double &value) const {
 inline int KoRuler::unZoomIt(const int &value) const {
     if(m_zoom==1.0)
         return value;
-    return double2Int(value*m_1_zoom);
+    return qRound(value*m_1_zoom);
 }
 
 inline unsigned int KoRuler::unZoomIt(const unsigned int &value) const {
     if(m_zoom==1.0)
         return value;
-    return static_cast<unsigned int>(double2Int(value*m_1_zoom));
-}
-
-inline int KoRuler::double2Int(const double &value) const {
-
-    if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
-        return static_cast<int>(value)+1;
-    else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
-        return static_cast<int>(value)-1;
-    else
-        return static_cast<int>(value);
+    return static_cast<unsigned int>(qRound(value*m_1_zoom));
 }
 
 #endif
