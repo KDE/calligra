@@ -1,6 +1,6 @@
 
 picsdir = $(kde_datadir)/kdiagramm/pics
-pics_DATA = bars.xpm areas.xpm lines.xpm cakes.xpm
+pics_DATA = bars.png areas.png lines.png cakes.png
 
 KDE_ICON = kdiagramm
 
