@@ -112,7 +112,8 @@ public:
     void handleKeyPressEvent( QKeyEvent * e );
     void handleKeyReleaseEvent( QKeyEvent * e );
     // iPoint is in Layout Unit pixels
-    void handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint, bool canStartDrag = true, bool insertDirectCursor = false );
+    // return true if we add new parag with "insert direct cursor"
+    bool handleMousePressEvent( QMouseEvent* e, const QPoint& iPoint, bool canStartDrag = true, bool insertDirectCursor = false );
     void handleMouseMoveEvent( QMouseEvent* e, const QPoint& iPoint );
     void handleMouseReleaseEvent();
     void handleMouseDoubleClickEvent( QMouseEvent* e, const QPoint& iPoint );
@@ -202,7 +203,9 @@ protected:
      * and to call the parent implementation (in all cases)
      */
     virtual void drawCursor( bool b );
-    void placeCursor( const QPoint &pos /* in internal coordinates */, bool insertDirectCursor=false );
+
+    // return true if we "insert direct cursor" and we insert new parag
+    bool placeCursor( const QPoint &pos /* in internal coordinates */, bool insertDirectCursor=false );
 
     /** Reimplement this to handle PageUp. Example implementation:
         textView->cursor()->gotoPageUp( scrollview->visibleHeight() ); */
@@ -217,7 +220,7 @@ protected:
 
     void deleteWordLeft();
     void deleteWordRight();
-    void insertParagraph(const QPoint &pos);
+    bool insertParagraph(const QPoint &pos);
 
 private slots:
     void blinkCursor();

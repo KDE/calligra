@@ -570,25 +570,26 @@ QString KoTextView::wordUnderCursor( const KoTextCursor& cursor )
     return QString::null;
 }
 
-void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bool canStartDrag, bool insertDirectCursor )
+bool KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bool canStartDrag, bool insertDirectCursor )
 {
+    bool addParag = false;
     mightStartDrag = FALSE;
     hideCursor();
 
     if (possibleTripleClick)
     {
         handleMouseTripleClickEvent( e, iPoint );
-        return;
+        return addParag;
     }
 
     KoTextCursor oldCursor = *m_cursor;
-    placeCursor( iPoint, insertDirectCursor&& isReadWrite() );
+    addParag = placeCursor( iPoint, insertDirectCursor&& isReadWrite() );
     ensureCursorVisible();
 
     if ( e->button() != LeftButton )
     {
         showCursor();
-        return;
+        return addParag;
     }
 
     KoTextDocument * textdoc = textDocument();
@@ -597,7 +598,7 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
         m_textobj->emitShowCursor();
         dragStartTimer->start( QApplication::startDragTime(), TRUE );
         dragStartPos = e->pos();
-        return;
+        return addParag;
     }
 
     bool redraw = FALSE;
@@ -623,6 +624,7 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
     } else {
         textObject()->selectionChangedNotify();
     }
+    return addParag;
 }
 
 void KoTextView::handleMouseMoveEvent( QMouseEvent*, const QPoint& iPoint )
@@ -754,7 +756,7 @@ bool KoTextView::maybeStartDrag( QMouseEvent* e )
     return false;
 }
 
-void KoTextView::insertParagraph(const QPoint &pos)
+bool KoTextView::insertParagraph(const QPoint &pos)
 {
     KoTextParag *last = textDocument()->lastParag();
     KoTextFormat *f = 0;
@@ -776,16 +778,19 @@ void KoTextView::insertParagraph(const QPoint &pos)
         s->setCounter( counter );
         last = s;
     }
+    return (nbParag > 0 );
 }
 
-void KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
+bool KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
 {
+    bool addParag = false;
     m_cursor->restoreState();
     if ( insertDirectCursor && (pos.y()>textDocument()->height()) )
-        insertParagraph(pos);
+        addParag = insertParagraph(pos);
     KoTextParag *s = textDocument()->firstParag();
     m_cursor->place( pos, s, false, &variablePosition );
     updateUI( true );
+    return addParag;
 }
 
 void KoTextView::blinkCursor()
