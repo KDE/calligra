@@ -19,6 +19,7 @@
 */
 
 #include <qapplication.h>
+#include <qcursor.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 
@@ -54,6 +55,12 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 	setFocus();
 
 	m_bScrolling = false;
+}
+
+void
+VCanvas::setPos( const KoPoint& p )
+{
+	QCursor::setPos( p.x() * m_view->zoom(), p.y() * m_view->zoom() );
 }
 
 bool

@@ -43,6 +43,11 @@ public:
 
 	QPixmap *pixmap() { return m_pixmap; }
 
+	/**
+	 * Sets mouse position to point p.
+	 */
+	void setPos( const KoPoint& p );
+
 protected:
 	virtual void focusInEvent( QFocusEvent * );
 	virtual void viewportPaintEvent( QPaintEvent* );

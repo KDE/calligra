@@ -25,15 +25,11 @@ REAL BUGS:
 -	vpolylinetool creates beziers where it could create lines
 
 TODO:
--	move the X11-hacks from VPolylineTool to VCanvas so that other tools can benefit from that.
 -	make pattern and gradient coords absolute and not relative to the shape
 -	VImage
 -	VPattern like VImage with embedded binaries instead of paths
 -	bring text support back, ideally using fontconfig and freetype, and no xft.
 -	printing
--	use VPathIterator everywhere instead of direct VPath access where not necessary.
-	this way you'll get node undo/redo automatically.
--	add undo/redo to shape commands like VFlattenCmd etc
 -	select first/last segment's knot if one of each other's knot is selected
 -	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
 -	use inside/intersection tests in vpath::combine() for changing winding.
@@ -42,8 +38,6 @@ TODO:
 	if the 2 input curves are the same our code runs forever.
 
 WISHLIST:
--	clipart tool: single click should insert the clipart like a single click like with the shape tools
--	clipart tool: add ctrl-drag behaviour like with the shape tools
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
 -	krita export filter (with layers)
 -	gimp gradient import
@@ -60,6 +54,5 @@ MAKE IT NICE:
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
--	introduce centroid() for vpath. problem: CM for beziers?
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
 

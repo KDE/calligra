@@ -36,11 +36,8 @@
 #include "vpolylinetool.h"
 #include "vshapecmd.h"
 
-// MUST BE LAST !
-#include <qwindowdefs.h>
-#include <X11/Xlib.h>
 
-VPolylineTool::VPolylineTool( KarbonView* view )
+	VPolylineTool::VPolylineTool( KarbonView* view )
 	: VTool( view )
 {
 	m_bezierPoints.setAutoDelete( true );
@@ -394,8 +391,6 @@ void
 VPolylineTool::mouseDragShiftPressed()
 {
 	m_shiftPressed = true;
-	// Emits a mouse move event. Sorry...
-	XWarpPointer( qt_xdisplay(), 0, 0, 0, 0, 0, 0, 1, 1 );
 }
 
 void
@@ -403,9 +398,8 @@ VPolylineTool::mouseDragCtrlPressed()
 {
 	// Moves the mouse to the other bezier vector position.
 	KoPoint p = *m_bezierPoints.at( m_bezierPoints.count() - 4) - *m_bezierPoints.at( m_bezierPoints.count() - 3 );
-	int x = (int)( p.x() * view()->zoom() );
-	int y = (int)( p.y() * view()->zoom() );
-	XWarpPointer( qt_xdisplay(), 0, 0, 0, 0, 0, 0, x, -y );
+
+	view()->canvasWidget()->setPos( p );
 
 	m_ctrlPressed = true;
 }
@@ -414,16 +408,14 @@ void
 VPolylineTool::mouseDragShiftReleased()
 {
 	m_shiftPressed = false;
-	XWarpPointer( qt_xdisplay(), 0, 0, 0, 0, 0, 0, -1, -1 );
 }
 
 void
 VPolylineTool::mouseDragCtrlReleased()
 {
 	KoPoint p = *m_bezierPoints.at( m_bezierPoints.count() - 3) - *m_bezierPoints.at( m_bezierPoints.count() - 4 );
-	int x = (int)( p.x() * view()->zoom() );
-	int y = (int)( p.y() * view()->zoom() );
-	XWarpPointer( qt_xdisplay(), 0, 0, 0, 0, 0, 0, x, -y );
+
+	view()->canvasWidget()->setPos( p );
 
 	m_ctrlPressed = false;
 }
@@ -453,9 +445,8 @@ VPolylineTool::cancelStep()
 		m_bezierPoints.append( new KoPoint( p1 ) );
 		m_bezierPoints.append( new KoPoint( p1 ) );
 		KoPoint p = p1 - p2;
-		int x = (int)( p.x() * view()->zoom() );
-		int y = (int)( p.y() * view()->zoom() );
-		XWarpPointer( qt_xdisplay(), 0, 0, 0, 0, 0, 0, x, -y );
+
+		view()->canvasWidget()->setPos( p );
 	}
 	else
 	{
