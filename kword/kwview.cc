@@ -1269,8 +1269,8 @@ void KWView::changeZoomMenu( int zoom )
             z = (*it).replace( QRegExp( "%" ), "" );
             z = z.simplifyWhiteSpace();
             val=z.toInt(&ok);
-            //zoom : limit inferior=10
-            if(ok && val>9 &&list.contains(val)==0)
+            //zoom : limit inferior=10 limit superior=500
+            if(ok && (val>9 && val<501) &&list.contains(val)==0)
                 list.append( val );
         }
 
@@ -1391,7 +1391,7 @@ void KWView::viewZoom( const QString &s )
     //bad value
     if(!ok)
         zoom=doc->zoom();
-    else if(zoom<10) //zoom should be >10
+    else if(zoom<10 || zoom >501) //zoom should be >10 and <500
         zoom=doc->zoom();
     //refresh menu
     changeZoomMenu( zoom );
