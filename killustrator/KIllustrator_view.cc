@@ -1034,10 +1034,13 @@ void KIllustratorView::slotBrushChosen( const QColor & c )
     bool fill = true;
 
     GObject::OutlineInfo oInfo;
-    oInfo.mask = 0;
+    //oInfo.mask = 0;
+    oInfo.color = c;
+    oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style;
 
     GObject::FillInfo fInfo;
     fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
+
     fInfo.color = c;
     fInfo.fstyle = fill ? GObject::FillInfo::SolidFill :
                 GObject::FillInfo::NoFill;
