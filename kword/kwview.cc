@@ -419,7 +419,6 @@ void KWView::setupActions()
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
                                             actionCollection(), "insert_custom" );
      actionInsertVariable->insert(actionInsertCustom);
-     refreshCustomMenu();
 
     addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, QString::null );
     /*
@@ -1299,7 +1298,7 @@ void KWView::updateReadWrite( bool readwrite )
         // Tools
         actionExtraSpellCheck->setEnabled( true );
         actionAutoFormat->setEnabled( true );
-        //actionEditCustomVars->setEnabled( true );
+        refreshCustomMenu();
         actionEditPersonnalExpr->setEnabled( true );
         // Settings
         actionConfigure->setEnabled( true );
