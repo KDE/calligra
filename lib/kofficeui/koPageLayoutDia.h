@@ -222,6 +222,16 @@ protected:
     bool enableBorders;
     int flags;
 
+public slots:
+
+    // linedits
+    void widthChanged();
+    void heightChanged();
+    void leftChanged();
+    void rightChanged();
+    void topChanged();
+    void bottomChanged();
+
 private slots:
     // take changes
     void Ok() {}
@@ -231,13 +241,6 @@ private slots:
     void formatChanged( int );
     void orientationChanged( int );
 
-    // linedits
-    void widthChanged();
-    void heightChanged();
-    void leftChanged();
-    void rightChanged();
-    void topChanged();
-    void bottomChanged();
     void rPressed() {retPressed = true;}
 
     // spinboxes
