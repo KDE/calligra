@@ -321,5 +321,105 @@ QString DefinePrintRangeCommand::name() const
     return i18n("Set Page Layout");
 }
 
+// ----- PaperLayoutCommand -----
+
+
+PaperLayoutCommand::PaperLayoutCommand( KSpreadSheet *s )
+{
+  doc = s->doc();
+  sheetName = s->tableName();
+  pl = s->print()->paperLayout();
+  hf = s->print()->headFootLine();
+  unit = doc->getUnit();
+  printGrid = s->print()->printGrid();
+  printCommentIndicator = s->print()->printCommentIndicator();
+  printFormulaIndicator = s->print()->printFormulaIndicator();
+  printRange = s->print()->printRange();
+  printRepeatColumns = s->print()->printRepeatColumns();
+  printRepeatRows = s->print()->printRepeatRows();
+  zoom = s->print()->zoom();
+  pageLimitX = s->print()->pageLimitX();
+  pageLimitY = s->print()->pageLimitY();
+}
+
+void PaperLayoutCommand::execute()
+{
+    KSpreadSheet* sheet = doc->map()->findTable( sheetName );
+    if( !sheet ) return;
+    KSpreadSheetPrint* print = sheet->print();
+
+    print->setPaperLayout( plRedo.ptLeft,  plRedo.ptTop,
+                           plRedo.ptRight, plRedo.ptBottom,
+                           plRedo.format, plRedo.orientation );
+
+    print->setHeadFootLine( hfRedo.headLeft, hfRedo.headMid, hfRedo.headRight,
+                            hfRedo.footLeft, hfRedo.footMid, hfRedo.footRight );
+
+    doc->setUnit( unitRedo );
+
+    print->setPrintGrid( printGridRedo );
+    print->setPrintCommentIndicator( printCommentIndicatorRedo );
+    print->setPrintFormulaIndicator( printFormulaIndicatorRedo );
+
+    print->setPrintRange( printRangeRedo );
+    print->setPrintRepeatColumns( printRepeatColumnsRedo );
+    print->setPrintRepeatRows( printRepeatRowsRedo );
+
+    print->setZoom( zoomRedo );
+
+    print->setPageLimitX( pageLimitX );
+    print->setPageLimitY( pageLimitY );
+}
+
+void PaperLayoutCommand::unexecute()
+{
+    KSpreadSheet* sheet = doc->map()->findTable( sheetName );
+    if( !sheet ) return;
+    KSpreadSheetPrint* print = sheet->print();
+    plRedo = print->paperLayout();
+    print->setPaperLayout( pl.ptLeft,  pl.ptTop,
+                           pl.ptRight, pl.ptBottom,
+                           pl.format,  pl.orientation );
+
+    hfRedo = print->headFootLine();
+    print->setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight,
+                            hf.footLeft, hf.footMid, hf.footRight );
+
+    unitRedo = doc->getUnit();
+    doc->setUnit( unit );
+
+    printGridRedo = print->printGrid();
+    print->setPrintGrid( printGrid );
+
+    printCommentIndicatorRedo = print->printCommentIndicator();
+    print->setPrintCommentIndicator( printCommentIndicator );
+
+    printFormulaIndicatorRedo = print->printFormulaIndicator();
+    print->setPrintFormulaIndicator( printFormulaIndicator );
+
+    printRangeRedo = print->printRange();
+    print->setPrintRange( printRange );
+
+    printRepeatColumnsRedo = print->printRepeatColumns();
+    print->setPrintRepeatColumns( printRepeatColumns );
+
+    printRepeatRowsRedo = print->printRepeatRows();
+    print->setPrintRepeatRows( printRepeatRows );
+
+    zoomRedo = print->zoom();
+    print->setZoom( zoom );
+
+    pageLimitXRedo = print->pageLimitX();
+    print->setPageLimitX( pageLimitX );
+
+    pageLimitYRedo = print->pageLimitY();
+    print->setPageLimitY( pageLimitY );
+
+}
+
+QString PaperLayoutCommand::name() const
+{
+    return i18n("Set Page Layout");
+}
 
 

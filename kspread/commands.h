@@ -24,6 +24,13 @@
 #include <qstring.h>
 
 #include <kcommand.h>
+#include "koGlobal.h"
+
+#include <qptrstack.h>
+#include <qstring.h>
+#include <qrect.h>
+#include <qptrlist.h>
+#include <qvaluelist.h>
 
 class KSpreadDoc;
 class KSpreadSheet;
@@ -242,6 +249,46 @@ protected:
     KSpreadDoc* doc;
     QString sheetName;
     QRect printRangeRedo, printRange;
+};
+
+
+class PaperLayoutCommand : public KCommand
+{
+public:
+  PaperLayoutCommand( KSpreadSheet* sheet );
+
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+
+protected:
+    KSpreadDoc* doc;
+    QString sheetName;
+    KoPageLayout pl;
+    KoPageLayout plRedo;
+    KoHeadFoot hf;
+    KoHeadFoot hfRedo;
+    KoUnit::Unit unit;
+    KoUnit::Unit unitRedo;
+    bool printGrid;
+    bool printGridRedo;
+    bool printCommentIndicator;
+    bool printCommentIndicatorRedo;
+    bool printFormulaIndicator;
+    bool printFormulaIndicatorRedo;
+    QRect printRange;
+    QRect printRangeRedo;
+    QPair<int, int> printRepeatColumns;
+    QPair<int, int> printRepeatColumnsRedo;
+    QPair<int, int> printRepeatRows;
+    QPair<int, int> printRepeatRowsRedo;
+    double zoom;
+    double zoomRedo;
+    int pageLimitX;
+    int pageLimitXRedo;
+    int pageLimitY;
+    int pageLimitYRedo;
+
 };
 
 
