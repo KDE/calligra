@@ -102,8 +102,16 @@ void KIllustratorShell::enableToolBars () {
   m_rToolBarFile->setFileToolBar (true);
 
   QString tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/fileopen.xpm";
+  tmp += "/filenew.xpm";
   QString pix = loadPixmap (tmp);
+  m_idButtonFile_Open = 
+      m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
+				    CORBA::string_dup (i18n ("New")),
+				    this, CORBA::string_dup ("fileNew" ));
+
+  tmp = kapp->kde_toolbardir ().copy ();
+  tmp += "/fileopen.xpm";
+  pix = loadPixmap (tmp);
   m_idButtonFile_Open = 
     m_rToolBarFile->insertButton (CORBA::string_dup (pix), 
 				  CORBA::string_dup (i18n ("Open")),
