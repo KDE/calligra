@@ -9,3 +9,4 @@ Cursor position, etc.
 
 *** Export:
 Use the correct debug area 30518 (not 30520)
+Connect/glue the unconnected variables (num of columns and non-inline framesets)
