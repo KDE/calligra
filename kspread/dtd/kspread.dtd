@@ -184,7 +184,8 @@
                 hide              hide/show table (hide ="1", show="0")
                 hidezero          don't show zero value (hide="1",show="0")
                 firstletterupper  Upper first letter (upper="1",nothing="0")
-                grid              show/hide grid (hide="1", show="0")
+                grid              show/hide grid on screen (hide="1", show="0")
+                printGrid         show/hide grid on printout (hide="1", show="0")
                 formular          show/hide formular
                 lcmode            write on LxCx area selected 
 -->
@@ -196,6 +197,7 @@
                  hidezero           CDATA #REQUIRED
                  firstletterupper   CDATA #REQUIRED
                  grid               CDATA #REQUIRED
+                 printGrid          CDATA #REQUIRED
                  formular           CDATA #REQUIRED
                  lcmode             CDATA #REQUIRED
 		 borders1.2         CDATA #REQUIRED>
