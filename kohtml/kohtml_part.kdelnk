@@ -1,7 +1,6 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KoHTML
-Name[pt_BR]=KoHTML
 Exec=kohtml.bin --server
 Comment=KOffice HTML Viewer
 MimeTypes=application/x-kohtml,
