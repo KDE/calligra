@@ -1490,7 +1490,7 @@ void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
     // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
     QRect br = m_clipart.picture()->boundingRect();
     //kdDebug() << "KWClipartFrameSet::drawFrame boundingRect: " << br.width() << "x" << br.height() << endl;
-    if ( br.width() && br.height() ) // just to avoid an impossible crash
+    if ( br.width() && br.height() )
         painter->scale( (double)s.width() / (double)br.width(), (double)s.height() / (double)br.height() );
     painter->drawPicture( *m_clipart.picture() );
     painter->restore();

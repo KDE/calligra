@@ -28,6 +28,9 @@
 #include <qpicture.h>
 #include <qscrollview.h>
 
+#include <kdebug.h>
+#include <koRect.h>
+
 class PixmapView : public QScrollView
 {
 public:
@@ -52,7 +55,7 @@ public:
  	    pixmap.fill( Qt::white );
 
             QRect br = pic.boundingRect();
-            if ( br.width() && br.height() ) // just to avoid an impossible crash
+            if ( br.width() && br.height() )
                 p.scale( (double)pixmap.width() / (double)br.width(), (double)pixmap.height() / (double)br.height() );
  	    p.drawPicture( pic );
  	    p.end();

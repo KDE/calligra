@@ -33,6 +33,11 @@
 #include <koClipartCollection.h>
 #include <kdebug.h>
 
+/**
+ * This is the preview that appears on the right of the "Insert picture" dialog.
+ * Not to be confused with KoPictureFilePreview, the one inside the file dialog!
+ * (Note: this one has to remain separate, for the day we add options like flipping, rotating, etc.)
+ */
 class KWInsertPicPreview : public QFrame
 {
 public:
@@ -82,6 +87,9 @@ public:
         }
         else
         {
+            QRect br = m_picture.boundingRect();
+            if ( br.width() && br.height() )
+                p->scale( (double)width() / (double)br.width(), (double)height() / (double)br.height() );
             p->drawPicture( m_picture );
         }
         p->restore();
