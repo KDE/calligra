@@ -33,6 +33,7 @@ Until beta2:
   when the cell holds a formula). idea from Quattro Pro
 - added Greek to EURO() function
 - new function category: Engineering
+- added support with templates
 
 new functions added:
  ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,
