@@ -98,9 +98,10 @@ double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
     const QString sep( KGlobal::locale()->thousandsSeparator() );
     if ( !sep.isEmpty() )
         str2.remove( sep );
+    str2.remove( KoUnit::unitName( m_unit ) );
     const double dbl = KGlobal::locale()->readNumber( str2, ok );
     if ( ok )
-        kdDebug(30004) << "toDouble:" << str << ": => :" << str2 << ": => " << QString::number( dbl, 'f', 12 ) << endl;
+      kdDebug(30004) << "toDouble:" << str << ": => :" << str2 << ": => " << QString::number( dbl, 'f', 12 ) << endl;
     else
         kdWarning(30004) << "toDouble error:" << str << ": => :" << str2 << ":" << endl;
     return dbl;
@@ -256,7 +257,7 @@ KoUnitDoubleComboBox::slotActivated( int index )
 	double oldvalue = m_value;
 	bool ok;
 	double value = toDouble( text( index ), &ok );
-	m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
+  m_value = value < m_lower ? m_lower : ( value > m_upper ? m_upper : value );
 	if( m_value != oldvalue )
 		emit valueChanged( m_value );
 }
