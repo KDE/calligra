@@ -269,6 +269,13 @@ public:
   virtual void setModified( bool _mod );
 
   /**
+   *  Tells the document that its title has been modified, either because
+   *  the modified status changes (this is done by @ref setModified) or
+   *  because the URL or the document-info's title changed.
+   */
+  virtual void setTitleModified();
+
+  /**
    *  Sets wether a filter change this document.
    */
   virtual void changedByFilter( bool changed=true ) const;
@@ -522,25 +529,6 @@ protected:
    *  By default an empty string is returned.
    */
   virtual QString comment() const;
-
-  /**
-   *  An example implementation may look like this one:
-   *  <PRE>
-   *  QListIterator<KoDocumentChild> it( children() );
-   *  for( ; it.current(); ++it )
-   *  {
-   *    if ( !it.current()->isStoredExtern() )
-   *    {
-   *      return true;
-   *    }
-   *  }
-   *  return false;
-   *  </PRE>
-   *
-   * By default the function returns FALSE. That is ok if your document
-   * won't embed other documents, otherwise you have to overload the function.
-   */
-  virtual bool hasToWriteMultipart();
 
   /**
    * Return true if url() is a real filename, false if url() is

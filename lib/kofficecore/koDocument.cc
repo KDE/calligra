@@ -457,78 +457,53 @@ bool KoDocument::saveChildren( KoStore* /*_store*/, const char * /*_path*/ )
 
 bool KoDocument::saveNativeFormat( const QString & file )
 {
-// If KOffice documents are going to be in two different formats
-// (a tar.gz store if they contain children and a simple XML file if
-//   they don't), then writing filters (both the builtin ones and
-//   one day in other office apps) is going to be awful...
-//
-//  if ( hasToWriteMultipart() )
-  if ( true )
+  kdDebug(30003) << "Saving to store" << endl;
+
+  KoStore* store = new KoTarStore( file, KoStore::Write );
+
+  // Save childen first since they might get a new url
+  if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
   {
-    kdDebug(30003) << "Saving to store" << endl;
-
-    //Use this to save to a binary store (deprecated)
-    //KoStore * store = new KoBinaryStore ( url.path(), KOStore::Write );
-
-    KoStore* store = new KoTarStore( file, KoStore::Write );
-
-    // Save childen first since they might get a new url
-    if ( store->bad() || !saveChildren( store, STORE_PROTOCOL ) )
-    {
-      delete store;
-      return false;
-    }
-
-    kdDebug(30003) << "Saving root" << endl;
-    if ( store->open( "root" ) )
-    {
-      ostorestream out( store );
-      if ( !save( out, 0L /* to remove */ ) )
-      {
-	store->close();
-	return false;
-      }
-      out.flush();
-      store->close();
-    }
-    else
-      return false;
-
-    if ( store->open( "/documentinfo.xml" ) )
-    {
-      QBuffer buffer;
-      buffer.open( IO_WriteOnly );
-      QTextStream str( &buffer );
-      str << d->m_docInfo->save();
-      buffer.close();
-
-      ostorestream out( store );
-
-      out.write( buffer.buffer().data(), buffer.buffer().size() );
-
-      out.flush();
-
-      store->close();
-    }
-
-    bool ret = completeSaving( store );
-    kdDebug(30003) << "Saving done" << endl;
     delete store;
-    return ret;
+    return false;
+  }
+
+  kdDebug(30003) << "Saving root" << endl;
+  if ( store->open( "root" ) )
+  {
+    ostorestream out( store );
+    if ( !save( out, 0L /* to remove */ ) )
+    {
+      store->close();
+      return false;
+    }
+    out.flush();
+    store->close();
   }
   else
-  {
-    kdDebug(30003) << "Saving to XML file (no store) " << file << endl;
-    ofstream out( file );
-    bool ok = ( out != 0L );
-    if ( ok ) ok = save( out, 0L /* to remove */ );
-    if ( !ok )
-      KMessageBox::error( 0L, i18n("Could not write to\n%1" ).arg( file ) );
+    return false;
 
-    kdDebug(30003) << "Saving went " << ( ok ? "ok" : "BAD" ) << endl;
+  if ( store->open( "/documentinfo.xml" ) )
+  {
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    QTextStream str( &buffer );
+    str << d->m_docInfo->save();
+    buffer.close();
+
+    ostorestream out( store );
+
+    out.write( buffer.buffer().data(), buffer.buffer().size() );
+
     out.flush();
-    return ok;
+
+    store->close();
   }
+
+  bool ret = completeSaving( store );
+  kdDebug(30003) << "Saving done" << endl;
+  delete store;
+  return ret;
 }
 
 bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const QString & _path )
@@ -788,7 +763,14 @@ void KoDocument::setModified( bool mod )
     if ( mod )
 	m_bEmpty = FALSE;
 
-    // Now take care of the caption
+    // This influences the title
+    setTitleModified();
+
+}
+
+void KoDocument::setTitleModified()
+{
+    // Update caption in all related windows
     QListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )
         it.current()->updateCaption();
@@ -841,11 +823,6 @@ QString KoDocument::copyright() const
 QString KoDocument::comment() const
 {
     return "";
-}
-
-bool KoDocument::hasToWriteMultipart()
-{
-    return FALSE;
 }
 
 QCString KoDocument::nativeFormatMimeType()

@@ -356,7 +356,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         } while ( !bOk );
         m_recent->addURL( newURL );
         bool ret = pDoc->saveAs( newURL );
-        updateCaption(); // in case we display the URL
+        pDoc->setTitleModified();
         return ret;
     }
     else
@@ -483,6 +483,7 @@ void KoMainWindow::slotDocumentInfo()
   {
     dlg->save();
     d->m_rootDoc->setModified( true );
+    d->m_rootDoc->setTitleModified();
   }
 
   delete dlg;
