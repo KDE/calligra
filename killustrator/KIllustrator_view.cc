@@ -92,6 +92,7 @@
 #include <GPart.h>
 #include <qlayout.h>
 #include <qdatetime.h>
+#include <qtl.h>
 
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
@@ -278,7 +279,6 @@ void KIllustratorView::createMyGUI()
     zooms << "600%";
     zooms << "800%";
     zooms << "1000%";
-    zooms << "100%";
 
     m_viewZoom->setItems (zooms);
     m_viewZoom->setEditable (true);
@@ -313,7 +313,7 @@ void KIllustratorView::createMyGUI()
     m_splitLine = new KToggleAction( i18n("Split line"), "split", 0, actionCollection(), "splitLine" );
     m_splitLine->setExclusiveGroup( "Node" );
     connect( m_splitLine, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
-    
+
     m_normal->setChecked( true );
     m_showRuler->setChecked( true );
     m_showHelplines->setChecked(activeDocument()->showHelplines());
@@ -1226,13 +1226,39 @@ void KIllustratorView::slotLoadPalette () {
 
 void KIllustratorView::slotViewZoom (const QString& s)
 {
-   //kdDebug()<<"slotViewZoom(): -"<<s<<"-"<<endl;
-   QString z (s);
-   z = z.replace (QRegExp ("%"), "");
-   z = z.simplifyWhiteSpace ();
-   float zoom = z.toFloat () / 100.0;
-   //if (zoom != canvas->getZoomFactor ())
-   canvas->setZoomFactor (zoom);
+//kdDebug()<<"slotViewZoom(): -"<<s<<"-"<<endl;
+    QString z (s);
+    z = z.replace (QRegExp ("%"), "");
+    z = z.simplifyWhiteSpace ();
+    float zoom = z.toFloat () / 100.0;
+    if(zoom<=0)
+        return;
+    QStringList lst;
+    QValueList<int> list;
+    int val;
+    bool ok;
+    QStringList itemsList = m_viewZoom->items();
+    for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
+    {
+        z = (*it).replace( QRegExp( "%" ), "" );
+        z = z.simplifyWhiteSpace();
+        val=z.toInt(&ok);
+        if(ok && val>1  &&list.contains(val)==0)
+            list.append( val );
+    }
+
+    qHeapSort( list );
+
+    for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+        lst.append( (QString::number(*it)+'%') );
+
+    m_viewZoom->setItems( lst );
+
+    QString zoomStr = QString::number( zoom ) + '%';
+    m_viewZoom->setCurrentItem( lst.findIndex(zoomStr)  );
+
+    //if (zoom != canvas->getZoomFactor ())
+    canvas->setZoomFactor (zoom);
 }
 
 void KIllustratorView::slotZoomIn()
