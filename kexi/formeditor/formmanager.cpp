@@ -280,6 +280,8 @@ FormManager::copyWidget()
 	if (!activeForm() || !activeForm()->objectTree())
 		return;
 	QWidget *w = activeForm()->selectedWidget();
+	if (!w)
+		return;
 	ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
 
 	if (!it)
