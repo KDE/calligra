@@ -234,7 +234,7 @@ void KSpreadreference::slotCancel()
 KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
                                           const char * name,
                                           QString const & areaname )
-  : QDialog( parent, name )
+    : KDialogBase( parent, name ,true,i18n( "Edit Area" ) , Ok|Cancel )
 {
   m_pView = parent;
 
@@ -242,55 +242,44 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
   setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5,
                               (QSizePolicy::SizeType)4, 0, 0,
                               sizePolicy().hasHeightForWidth() ) );
-  setCaption( i18n( "Edit Area" ) );
-  setSizeGripEnabled( TRUE );
+
+  QWidget * page = new QWidget( this );
+  setMainWidget(page);
+
   QGridLayout * KSpreadEditAreaNameLayout
-    = new QGridLayout( this, 1, 1, 11, 6, "KSpreadEditAreaNameLayout");
+    = new QGridLayout( page, 1, 1, 11, 6, "KSpreadEditAreaNameLayout");
 
   QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
   QSpacerItem * spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding,
                                           QSizePolicy::Minimum );
   Layout1->addItem( spacer );
 
-  m_buttonOk = new QPushButton( this, "m_buttonOk" );
-  m_buttonOk->setText( i18n( "&OK" ) );
-  m_buttonOk->setAccel( 0 );
-  m_buttonOk->setAutoDefault( TRUE );
-  m_buttonOk->setDefault( TRUE );
-  Layout1->addWidget( m_buttonOk );
-
-  m_buttonCancel = new QPushButton( this, "buttonCancel" );
-  m_buttonCancel->setText( i18n( "&Cancel" ) );
-  m_buttonCancel->setAccel( 0 );
-  m_buttonCancel->setAutoDefault( TRUE );
-  Layout1->addWidget( m_buttonCancel );
-
   KSpreadEditAreaNameLayout->addMultiCellLayout( Layout1, 3, 3, 0, 1 );
 
-  QLabel * TextLabel4 = new QLabel( this, "TextLabel4" );
+  QLabel * TextLabel4 = new QLabel( page, "TextLabel4" );
   TextLabel4->setText( i18n( "Cells:" ) );
 
   KSpreadEditAreaNameLayout->addWidget( TextLabel4, 2, 0 );
 
-  m_area = new QLineEdit( this, "m_area" );
+  m_area = new QLineEdit( page, "m_area" );
 
   KSpreadEditAreaNameLayout->addWidget( m_area, 2, 1 );
 
-  QLabel * TextLabel1 = new QLabel( this, "TextLabel1" );
+  QLabel * TextLabel1 = new QLabel( page, "TextLabel1" );
   TextLabel1->setText( i18n( "Sheet:" ) );
 
   KSpreadEditAreaNameLayout->addWidget( TextLabel1, 1, 0 );
 
-  m_sheets = new QComboBox( FALSE, this, "m_sheets" );
+  m_sheets = new QComboBox( FALSE, page, "m_sheets" );
 
   KSpreadEditAreaNameLayout->addWidget( m_sheets, 1, 1 );
 
-  QLabel * TextLabel2 = new QLabel( this, "TextLabel2" );
+  QLabel * TextLabel2 = new QLabel( page, "TextLabel2" );
   TextLabel2->setText( i18n( "Area name:" ) );
 
   KSpreadEditAreaNameLayout->addWidget( TextLabel2, 0, 0 );
 
-  m_areaName = new QLabel( this, "m_areaName" );
+  m_areaName = new QLabel( page, "m_areaName" );
   m_areaName->setText( areaname );
 
   KSpreadEditAreaNameLayout->addWidget( m_areaName, 0, 1 );
@@ -323,9 +312,6 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
   m_sheets->setCurrentText( (*it).table_name );
   m_area->setText( tmpName );
 
-  // signals and slots connections
-  connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
 KSpreadEditAreaName::~KSpreadEditAreaName()

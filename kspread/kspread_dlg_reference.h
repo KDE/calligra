@@ -20,7 +20,7 @@
 #ifndef __kspread_dlg_reference__
 #define __kspread_dlg_reference__
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 
 class QComboBox;
 class QLabel;
@@ -59,7 +59,7 @@ private:
   void displayAreaValues(QString const & areaName);
 };
 
-class KSpreadEditAreaName : public QDialog
+class KSpreadEditAreaName : public KDialogBase
 {
     Q_OBJECT
 
@@ -69,13 +69,11 @@ public:
     ~KSpreadEditAreaName();
 
 public slots:
-  void slotOk();
+  virtual void slotOk();
 
 private:
     KSpreadView * m_pView;
 
-    QPushButton * m_buttonOk;
-    QPushButton * m_buttonCancel;
     QLineEdit   * m_area;
     QComboBox   * m_sheets;
     QLabel      * m_areaName;
