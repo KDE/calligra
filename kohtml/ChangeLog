@@ -79,3 +79,8 @@ Wed Jan 20 21:52:30 1999 Simon Hausmann <tronical@gmx.net>
           there's already nice caching support in libkio ...
 
         * fixed redirection
+
+Sat Jan 23 14:16:18 1999 Simon Hausmann <tronical@gmx.net>
+
+        * imported two icons by Jost Schenck <uzsnty@uni-bonn.de> (thanks Jost!!!)
+

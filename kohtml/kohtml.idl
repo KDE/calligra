@@ -58,6 +58,7 @@ module KoHTML
 		slot void slotHome();
 		slot void slotReload();
 		slot void slotStop();
+		slot void slotOpenURLDlg();
 		
 		slot void slotDocumentStarted();
 		slot void slotDocumentDone();

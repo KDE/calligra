@@ -37,6 +37,8 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 pics_DATA = kohtml.xpm
 picsdir = $(kde_icondir)/kohtml.xpm
 
+SUBDIRS = toolbar
+
 ####### Implicit rules
 
 ####### Build rules

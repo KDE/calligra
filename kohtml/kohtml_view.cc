@@ -54,6 +54,7 @@
 #include "khtmlwidget_patched.h"
 #include "settingsdlg.h"
 #include "edithtmldlg.h"
+#include "openurldlg.h"
 
 KoHTMLFrame::KoHTMLFrame(KoHTMLView *_view, KoHTMLChild *_child)
 :KoFrame(_view)
@@ -300,11 +301,14 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   pix = OPUIUtils::convertPixmap(ICON("reload.xpm"));
   m_idReload = m_vMainToolBar->insertButton2(pix, ID_RELOAD, SIGNAL(clicked()), this, "slotReload", true, i18n("Reload Page"), -1);
 
-  //grmpfl... there's already a stop icon in koffice/pics/toolbar, but we
-  //don't want to use it, we want the original kfm icon
+  //grmpfl... there's already a stop icon in koffice/pics/toolbar, but I
+  //don't want to use it, I want the original kfm icon
   pix = OPUIUtils::convertPixmap(ICON( kapp->kde_toolbardir() + "/stop.xpm" ));
   m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", m_pDoc->documentLoading(), i18n("Stop"), -1);
-  
+
+  pix = OPUIUtils::convertPixmap(ICON("go-url3.xpm"));
+  m_idOpenURL = m_vMainToolBar->insertButton2(pix, ID_OPENURL, SIGNAL(clicked()), this, "slotOpenURLDlg", true, i18n("Open URL"), -1);
+    
   m_vMainToolBar->insertSeparator(-1);
   
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
@@ -318,8 +322,11 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_vMainToolBar->insertSeparator(-1);
   
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idButton_Insert_Object = m_vMainToolBar->insertButton2(pix, ID_EDIT_INSERT_OBJECT, SIGNAL(clicked()), this, "insertObject", true, i18n("Insert Object"), -1);
+  m_idInsert_Object = m_vMainToolBar->insertButton2(pix, ID_EDIT_INSERT_OBJECT, SIGNAL(clicked()), this, "insertObject", true, i18n("Insert Object"), -1);
 
+  pix = OPUIUtils::convertPixmap(ICON("edit-html.xpm"));
+  m_idEditHTMLCode = m_vMainToolBar->insertButton2(pix, ID_EDIT_HTMLCODE, SIGNAL(clicked()), this, "editHTMLCode", true, i18n("Edit current HTML code"), -1);
+  
   m_vLocationToolBar = factory->create(OpenPartsUI::ToolBarFactory::Transient);
 
   m_vLocationToolBar->setFullWidth(true);
@@ -377,7 +384,8 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
 
   m_vMenuEdit->insertSeparator(-1);
   
-  m_vMenuEdit->insertItem4(i18n("Edit HTML code"), this, "editHTMLCode", 0, ID_EDIT_HTMLCODE, -1);
+  pix = OPUIUtils::convertPixmap(ICON("edit-html.xpm"));
+  m_vMenuEdit->insertItem6(pix, i18n("Edit HTML code"), this, "editHTMLCode", 0, ID_EDIT_HTMLCODE, -1);
 
   menuBar->insertMenu(i18n("Bookmarks"), m_vMenuBookmarks, -1, -1);
   
@@ -599,6 +607,7 @@ void KoHTMLView::statusCallback(CORBA::Long ID)
       case ID_HOME		     : slotStatusMsg(i18n("Load the start document")); break;
       case ID_RELOAD		     : slotStatusMsg(i18n("Reload the current document")); break;      
       case ID_STOP		     : slotStatusMsg(i18n("Stop loading the current document")); break;
+      case ID_OPENURL                : slotStatusMsg(i18n("Open an URL dialog")); break;
       default                        : slotStatusMsg(i18n("Ready."));
     }
 }
@@ -757,6 +766,21 @@ void KoHTMLView::slotStop()
 {
   m_pDoc->stopLoading();
   slotDocumentDone();
+}
+
+void KoHTMLView::slotOpenURLDlg()
+{
+  OpenURLDlg openURLDlg;
+  
+  if (openURLDlg.exec() == QDialog::Accepted)
+     {
+       K2URL url( openURLDlg.url() );
+       
+       if (!url.isMalformed())
+          {
+	    m_pDoc->openURL( url.url().c_str() );
+	  }
+     }
 }
 
 void KoHTMLView::slotDocumentStarted()

@@ -103,6 +103,7 @@ public:
   virtual void slotHome();
   virtual void slotReload();
   virtual void slotStop();
+  virtual void slotOpenURLDlg();
   
   virtual void slotDocumentStarted();
   virtual void slotDocumentDone();
@@ -164,9 +165,11 @@ protected:
   CORBA::Long m_idHome;
   CORBA::Long m_idReload;
   CORBA::Long m_idStop;
+  CORBA::Long m_idOpenURL;
   CORBA::Long m_idButton_Copy;
   CORBA::Long m_idConfigure;
-  CORBA::Long m_idButton_Insert_Object;
+  CORBA::Long m_idInsert_Object;
+  CORBA::Long m_idEditHTMLCode;
   
   OpenPartsUI::ToolBar_var m_vLocationToolBar;
   CORBA::Long m_idLocation;
@@ -193,6 +196,7 @@ protected:
   static const int ID_HOME                   = 12;
   static const int ID_RELOAD                 = 13;
   static const int ID_STOP                   = 14;
+  static const int ID_OPENURL                = 15;
 
   KoHTMLDoc *m_pDoc;
   
