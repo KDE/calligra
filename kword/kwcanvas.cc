@@ -1849,7 +1849,7 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     emit updateRuler();
 }
 
-bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText)
+bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
 {
     bool emitChanged = false;
     if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
@@ -1881,14 +1881,7 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText)
             return false;
 
         //just text frameset
-        if(fs->type()==FT_TABLE || fs->type()==FT_TEXT)
-        {
-            m_currentFrameSetEdit = fs->createFrameSetEdit( this );
-            KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
-            if ( textedit )
-                textedit->ensureCursorVisible();
-        }
-        else if ( !onlyText )
+        if(fs->type()==FT_TABLE || fs->type()==FT_TEXT || !onlyText)
         {
             m_currentFrameSetEdit = fs->createFrameSetEdit( this );
         }
