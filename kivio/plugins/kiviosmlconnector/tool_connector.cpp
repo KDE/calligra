@@ -170,6 +170,7 @@ bool SMLConnector::startRubberBanding( QMouseEvent *e )
 
   // Create the stencil
   m_pStencil = (KivioSMLConnector*)ss->newStencil("basic_line");
+  m_pStencil->setTextFont(doc->defaultFont());
 
   // Unselect everything, add the stencil to the page, and select it
   pPage->unselectAllStencils();

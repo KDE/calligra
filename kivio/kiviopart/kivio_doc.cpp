@@ -62,6 +62,7 @@
 
 #include <qpainter.h>
 #include <qpen.h>
+#include <qfont.h>
 
 
 #include <kstandarddirs.h>
@@ -130,7 +131,8 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
     m_pInternalSet->loadFile(*pIt);
   }
 
-  m_units = KoUnit::U_PT;
+  m_units = KoUnit::U_MM;
+  m_font = KoGlobal::defaultFont();
 
   viewItemList = new ViewItemList(this);
 
@@ -167,25 +169,26 @@ bool KivioDoc::initDoc()
   KoTemplateChooseDia::ReturnType ret;
   KoTemplateChooseDia::DialogType dlgtype;
 
-  if (KoApplication::isStarting())
+  if (KoApplication::isStarting()) {
     dlgtype = KoTemplateChooseDia::Everything;
-  else
+    initConfig();
+  } else {
     dlgtype = KoTemplateChooseDia::OnlyTemplates;
+  }
 
   ret = KoTemplateChooseDia::choose(  KivioFactory::global(), f,
-                                      "application/x-kivio", "*.flw", i18n("Kivio"),
+                                      MIME_TYPE, "*.flw", i18n("Kivio"),
                                       dlgtype, "kivio_template");
 
   if ( ret == KoTemplateChooseDia::File ) {
     KURL url(f);
     return openURL(url);
   } else if ( ret == KoTemplateChooseDia::Empty ) {
-      KivioPage *t = createPage();
-      m_pMap->addPage( t );
-      resetURL();
-      initConfig();
-      setEmpty();
-      return true;
+    KivioPage *t = createPage();
+    m_pMap->addPage( t );
+    resetURL();
+    setEmpty();
+    return true;
   } else {
     return false;
   }
@@ -206,7 +209,7 @@ QDomDocument KivioDoc::saveXML()
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
   QDomElement kivio = doc.createElement( "kiviosheet" );
   kivio.setAttribute( "editor", "Kivio" );
-  kivio.setAttribute( "mime", "application/x-kivio" );
+  kivio.setAttribute( "mime", MIME_TYPE );
 
   kivio.setAttribute( "units", KoUnit::unitName(m_units) );
   gridData.save(kivio,"grid");
@@ -266,8 +269,10 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   }
 
   QDomElement kivio = doc.documentElement();
-  if ( kivio.attribute( "mime" ) != "application/x-kivio" && kivio.attribute( "mime" ) != "application/vnd.kde.kivio" ) {
-     kdDebug() << "KivioDoc::loadXML() - Invalid mime type" << endl;
+  if ( kivio.attribute( "mime" ) != "application/x-kivio" &&
+    kivio.attribute( "mime" ) != "application/vnd.kde.kivio" )
+  {
+    kdDebug() << "KivioDoc::loadXML() - Invalid mime type" << endl;
     m_bLoading = false;
     return false;
   }
@@ -658,6 +663,7 @@ void KivioDoc::saveConfig()
     config->writeEntry("GridXSnap", grid().snap.width());
     config->writeEntry("GridYSnap", grid().snap.height());
     config->writeEntry("Unit", KoUnit::unitName(m_units));
+    config->writeEntry("Font", m_font);
 }
 
 void KivioDoc::initConfig()
@@ -677,6 +683,8 @@ void KivioDoc::initConfig()
         d.snap.setHeight(config->readDoubleNumEntry("GridYSnap", 10.0));
         setGrid(d);
         m_units = KoUnit::unit(config->readEntry("Unit", "mm"));
+        QFont def = KoGlobal::defaultFont();
+        m_font = config->readFontEntry("Font", &def);
     }
 }
 

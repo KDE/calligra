@@ -56,6 +56,7 @@ class QPainter;
 class KPrinter;
 class KCommand;
 class KoZoomHandler;
+class QFont;
 
 #define MIME_TYPE "application/x-kivio"
 
@@ -147,12 +148,16 @@ class KivioDoc : public KoDocument
     void resetLayerPanel();
     void updateProtectPanelCheckBox();
 
+    QFont defaultFont() { return m_font; }
+
   public slots:
     void updateView(KivioPage*, bool modified=true);
 
     void slotDeleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * );
     void slotSelectionChanged();
     void setUnits(KoUnit::Unit);
+
+    void setDefaultFont(const QFont& f) { m_font = f; }
 
   protected slots:
     void slotDocumentRestored();
@@ -235,6 +240,8 @@ class KivioDoc : public KoDocument
     KivioOptions* m_options;
     DCOPObject *dcop;
     KCommandHistory * m_commandHistory;
+
+    QFont m_font;
 };
 
 #endif

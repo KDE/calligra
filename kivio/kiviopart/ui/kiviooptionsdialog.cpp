@@ -38,6 +38,7 @@
 #include <koUnitWidgets.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <kfontdialog.h>
 
 #include <qlabel.h>
 #include <qbuttongroup.h>
@@ -105,6 +106,7 @@ void KivioOptionsDialog::initPage()
   KivioView* view = static_cast<KivioView*>(parent());
   KoUnit::Unit unit = view->doc()->units();
   m_layout = view->doc()->config()->globalDefaultPageLayout();
+  m_font = view->doc()->defaultFont();
 
   QLabel* unitLbl = new QLabel(i18n("Default &units:"), page);
   m_unitCombo = new QComboBox(page);
@@ -117,7 +119,16 @@ void KivioOptionsDialog::initPage()
   m_layoutTxtLbl->setSizePolicy(QSizePolicy(
     QSizePolicy::Minimum, QSizePolicy::Fixed));
   setLayoutText(m_layout);
-  KPushButton* layoutBtn = new KPushButton(i18n("C&hange..."), page);
+  KPushButton* layoutBtn = new KPushButton(i18n("Change..."), page);
+  layoutBtn->setSizePolicy(QSizePolicy(
+    QSizePolicy::Fixed, QSizePolicy::Fixed));
+  QLabel* fontLbl = new QLabel(i18n("Default font:"), page);
+  m_fontTxtLbl = new QLabel(page);
+  m_fontTxtLbl->setFrameStyle(QFrame::LineEditPanel | QFrame::Sunken);
+  m_fontTxtLbl->setSizePolicy(QSizePolicy(
+    QSizePolicy::Minimum, QSizePolicy::Fixed));
+  setFontText(m_font);
+  KPushButton* fontBtn = new KPushButton(i18n("Change..."), page);
   layoutBtn->setSizePolicy(QSizePolicy(
     QSizePolicy::Fixed, QSizePolicy::Fixed));
   m_bordersChBox = new QCheckBox(i18n("Show page &borders"), page);
@@ -134,12 +145,16 @@ void KivioOptionsDialog::initPage()
   gl->addWidget(layoutLbl, 1, 0);
   gl->addWidget(m_layoutTxtLbl, 1, 1);
   gl->addWidget(layoutBtn, 1, 2);
-  gl->addMultiCellWidget(m_bordersChBox, 2, 2, 0, 2);
-  gl->addMultiCellWidget(m_marginsChBox, 3, 3, 0, 2);
-  gl->addMultiCellWidget(m_rulersChBox, 4, 4, 0, 2);
-  gl->addMultiCell(new QSpacerItem(0, 0), 5, 5, 0, 2);
+  gl->addWidget(fontLbl, 2, 0);
+  gl->addWidget(m_fontTxtLbl, 2, 1);
+  gl->addWidget(fontBtn, 2, 2);
+  gl->addMultiCellWidget(m_bordersChBox, 3, 3, 0, 2);
+  gl->addMultiCellWidget(m_marginsChBox, 4, 4, 0, 2);
+  gl->addMultiCellWidget(m_rulersChBox, 5, 5, 0, 2);
+  gl->addMultiCell(new QSpacerItem(0, 0), 6, 6, 0, 2);
 
   connect(layoutBtn, SIGNAL(clicked()), SLOT(pageLayoutDlg()));
+  connect(fontBtn, SIGNAL(clicked()), SLOT(fontDlg()));
   connect(m_unitCombo, SIGNAL(activated(int)), SLOT(unitChanged(int)));
 }
 
@@ -330,6 +345,7 @@ void KivioOptionsDialog::applyPage()
   KivioView* view = static_cast<KivioView*>(parent());
   view->doc()->setUnits(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
   view->doc()->config()->setGlobalDefaultPageLayout(m_layout);
+  view->doc()->setDefaultFont(m_font);
   view->togglePageBorders(m_bordersChBox->isChecked());
   view->togglePageMargins(m_marginsChBox->isChecked());
   view->toggleShowRulers(m_rulersChBox->isChecked());
@@ -386,6 +402,7 @@ void KivioOptionsDialog::applyGuides()
 void KivioOptionsDialog::defaultPage()
 {
   m_layout = KoPageLayoutDia::standardLayout();
+  m_font = KoGlobal::defaultFont();
   m_unitCombo->setCurrentItem(KoUnit::U_MM);
   setLayoutText(m_layout);
   m_bordersChBox->setChecked(true);
@@ -610,6 +627,19 @@ void KivioOptionsDialog::delGuide()
       delete item;
       item = 0;
     }
+  }
+}
+
+void KivioOptionsDialog::setFontText(const QFont& f)
+{
+  QString txt = f.family() + " " + QString::number(f.pointSize());
+  m_fontTxtLbl->setText(txt);
+}
+
+void KivioOptionsDialog::fontDlg()
+{
+  if(KFontDialog::getFont(m_font, false, this) == QDialog::Accepted) {
+    setFontText(m_font);
   }
 }
 

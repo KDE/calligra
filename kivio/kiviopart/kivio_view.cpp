@@ -1268,8 +1268,8 @@ void KivioView::updateToolBars()
     pStencil = m_pActivePage->selectedStencils()->first();
     if( !pStencil )
     {
-        m_setFontFamily->setFont( KoGlobal::defaultFont().family() );
-        m_setFontSize->setFontSize( 12 );
+        m_setFontFamily->setFont( doc()->defaultFont().family() );
+        m_setFontSize->setFontSize( doc()->defaultFont().pointSize() );
         m_setBold->setChecked( false );
         m_setItalics->setChecked( false );
         m_setUnderline->setChecked( false );
@@ -1282,9 +1282,6 @@ void KivioView::updateToolBars()
 
         m_setArrowHeads->setCurrentStartArrow(0);
         m_setArrowHeads->setCurrentEndArrow(0);
-
-//        m_setStartArrowSize->setSize(10.0, 10.0);
-//        m_setEndArrowSize->setSize(10.0, 10.0);
     }
     else
     {
@@ -1310,9 +1307,6 @@ void KivioView::updateToolBars()
 
         m_setArrowHeads->setCurrentStartArrow( pStencil->startAHType() );
         m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );
-
-//        m_setStartArrowSize->setSize( pStencil->startAHWidth(), pStencil->startAHLength() );
-//        m_setEndArrowSize->setSize( pStencil->endAHWidth(), pStencil->endAHLength() );
     }
 
     m_pProtectionPanel->updateCheckBoxes();
@@ -1564,6 +1558,7 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner )
     pStencil = pSpawner->newStencil();
 
     pStencil->setPosition( 0.0f, 0.0f );
+    pStencil->setTextFont(doc()->defaultFont());
 
     // Only set these properties if we held ctrl down
     // FIXME: Make this happen!
@@ -2034,7 +2029,7 @@ void KivioView::textFormat()
     dlg.setHAlign(stencil->hTextAlign());
     dlg.setVAlign(stencil->vTextAlign());
   } else {
-    dlg.setFont(KoGlobal::defaultFont());
+    dlg.setFont(doc()->defaultFont());
     dlg.setTextColor(QColor(0, 0, 0));
     dlg.setHAlign(Qt::AlignHCenter);
     dlg.setVAlign(Qt::AlignVCenter);

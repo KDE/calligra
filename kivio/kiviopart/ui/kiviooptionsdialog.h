@@ -34,6 +34,7 @@ class KURLRequester;
 class KoUnitDoubleSpinBox;
 class KivioGuideLineData;
 class QGroupBox;
+class QFont;
 
 class GuidesListViewItem : public KListViewItem
 {
@@ -57,28 +58,30 @@ class KivioOptionsDialog : public KDialogBase
   Q_OBJECT
   public:
     KivioOptionsDialog(KivioView* parent, const char* name = 0);
-  
+
   protected:
     void initPage();
     void initStencil();
     void initGrid();
     void initGuides();
-    
+
     void applyPage();
     void applyStencil();
     void applyGrid();
     void applyGuides();
-    
+
     void defaultPage();
     void defaultStencil();
     void defaultGrid();
     void defaultGuides();
-    
+
     void setLayoutText(const KoPageLayout& l);
+    void setFontText(const QFont& f);
     void fillGuideList();
-    
+
   protected slots:
     void pageLayoutDlg();
+    void fontDlg();
     void unitChanged(int u);
     void slotOk();
     void slotApply();
@@ -90,20 +93,22 @@ class KivioOptionsDialog : public KDialogBase
     void guideHoriz(bool);
     void addGuide();
     void delGuide();
-    
+
   private:
     // Page indecies
     int m_pageIndex;
     int m_stencilIndex;
     int m_gridIndex;
     int m_guidesIndex;
-    
+
     QComboBox* m_unitCombo;
     QCheckBox* m_bordersChBox;
     QCheckBox* m_marginsChBox;
     QCheckBox* m_rulersChBox;
     QLabel* m_layoutTxtLbl;
     KoPageLayout m_layout;
+    QLabel* m_fontTxtLbl;
+    QFont m_font;
     QRadioButton* m_bgColorRBtn;
     QRadioButton* m_bgPicRBtn;
     KColorButton* m_bgColorBtn;

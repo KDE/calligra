@@ -29,6 +29,7 @@
 #include <klocale.h>
 
 #include "kivio_view.h"
+#include "kivio_doc.h"
 
 KivioTextFormatDlg::KivioTextFormatDlg(KivioView* parent, const char* name)
   : KDialogBase(Tabbed, i18n("Text Format"), Ok|Cancel|Default, Ok, parent, name)
@@ -180,7 +181,7 @@ void KivioTextFormatDlg::setTextColor(QColor c)
 
 void KivioTextFormatDlg::slotDefault()
 {
-  setFont(KoGlobal::defaultFont());
+  setFont((static_cast<KivioView*>(parent()))->doc()->defaultFont());
   setTextColor(QColor(0, 0, 0));
   setHAlign(Qt::AlignHCenter);
   setVAlign(Qt::AlignVCenter);

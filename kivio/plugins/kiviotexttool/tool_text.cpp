@@ -185,6 +185,7 @@ void TextTool::text(QRect r)
     stencil->setPosition(x,y);
     stencil->setDimensions(w,h);
     stencil->setText("");
+    stencil->setTextFont(doc->defaultFont());
     page->unselectAllStencils();
     page->addStencil(stencil);
     page->selectStencil(stencil);

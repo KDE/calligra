@@ -983,6 +983,7 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     pNewStencil->setY( pagePoint.y() );
     pNewStencil->setW( pSpawner->defWidth() );
     pNewStencil->setH( pSpawner->defHeight() );
+    pNewStencil->setTextFont(doc()->defaultFont());
 
     // Only set these properties if we held ctrl down
     // FIXME: Make this happen!
