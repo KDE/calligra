@@ -13,7 +13,8 @@
 #include <kdebug.h>
 
 #include <qcombobox.h>
-#include <qcheckbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qhbox.h>
@@ -84,26 +85,43 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     intensityLA->setBuddy( intensitySB );
     QString ttstr = i18n( "Here you can select how much the image should be "
                           "brightened up so that it does not disturb the "
-                          "chart itself too much.<br> Different images require "
+                          "selected area too much.<br> Different images require "
                           "different settings, but 25% is a good value to start "
                           "with." );
     QWhatsThis::add( intensityLA, ttstr );
     QWhatsThis::add( intensitySB, ttstr );
 
-    scaledCB = new QCheckBox( i18n( "Scaled" ), right );
-    QWhatsThis::add( scaledCB, i18n( "If you check this box, the selected image "
-                                     "will be scaled to fit the total chart "
-                                     "size." ) );
-    centeredCB = new QCheckBox( i18n( "Centered" ), right );
-    QWhatsThis::add( centeredCB, i18n( "If you check this box, the selected "
-                                       "image will be centered over the chart. "
-                                       "If the image is larger then the chart, "
-                                       "you will only see the middle part of "
-                                       "it.<br> This setting is only available "
-                                       "if the <i>Scaled</i> checkbox is not "
-                                       "checked." ) );
-    connect( scaledCB, SIGNAL( toggled( bool ) ),
-             this, SLOT( setScaledToggled( bool ) ) );
+
+    stretchedRB = new QRadioButton( i18n( "Stretched" ), right );
+    QWhatsThis::add( stretchedRB,
+                     i18n( "If you check this box, the selected image will "
+                           "be scaled to fit the total size of the selected "
+                           "area. Image ratio will be adjusted to match "
+                           "the area size and height if neccessary." ) );
+    scaledRB = new QRadioButton( i18n( "Scaled" ), right );
+    QWhatsThis::add( scaledRB,
+                     i18n( "If you check this box, the selected image will "
+                           "be scaled to match the height or width of the "
+                           "selected area - whichever is reached first." ) );
+    centeredRB = new QRadioButton( i18n( "Centered" ), right );
+    QWhatsThis::add( centeredRB,
+                     i18n( "If you check this box, the selected image will "
+                           "be centered over the selected area. If the image "
+                           "is larger then the area, you will only see the "
+                           "middle part of it." ) ); 
+    tiledRB = new QRadioButton( i18n( "Tiled" ), right );
+    QWhatsThis::add( tiledRB,
+                     i18n( "If you check this box, the selected image will "
+                           "be used as background tile. If the image is "
+                           "larger then the selected area, you will only see "
+                           "the upper left part of it." ) );
+    QButtonGroup* alignmentBG;
+    alignmentBG = new QButtonGroup( right, "GroupBox_Alignment" );
+    alignmentBG->setFrameStyle( QFrame::NoFrame );
+    alignmentBG->insert( stretchedRB );
+    alignmentBG->insert( scaledRB );
+    alignmentBG->insert( centeredRB );
+    alignmentBG->insert( tiledRB );
 }
 
 
@@ -115,8 +133,6 @@ void KChartBackgroundPixmapConfigPage::init()
 //     intensitySB->setValue( (int)(_params->backgroundPixmapIntensity * 100.0) );
 //     scaledCB->setChecked( _params->backgroundPixmapScaled );
 //     centeredCB->setChecked( _params->backgroundPixmapCentered );
-//     if( scaledCB )
-	centeredCB->setEnabled( false );
 }
 
 void KChartBackgroundPixmapConfigPage::apply()
@@ -155,12 +171,6 @@ void KChartBackgroundPixmapConfigPage::apply()
 // 	_params->backgroundPixmapCentered = centeredCB->isChecked();
 // 	_params->backgroundPixmapIsDirty = true;
 //     }
-}
-
-
-void KChartBackgroundPixmapConfigPage::setScaledToggled( bool b )
-{
-    centeredCB->setEnabled( !b );
 }
 
 

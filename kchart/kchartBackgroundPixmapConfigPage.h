@@ -12,7 +12,7 @@
 
 class KChartParams;
 class QSpinBox;
-class QCheckBox;
+class QRadioButton;
 class QComboBox;
 class QPixmap;
 
@@ -27,7 +27,6 @@ public:
     void apply();
 
 private slots:
-    void setScaledToggled( bool b );
     void showSettings( const QString& ); 
     void slotBrowse();
     void slotWallPaperChanged( int );
@@ -39,8 +38,10 @@ private:
     QComboBox* wallCB;
     QWidget* wallWidget;
     QSpinBox* intensitySB;
-    QCheckBox* scaledCB;
-    QCheckBox* centeredCB;
+    QRadioButton* stretchedRB;
+    QRadioButton* scaledRB;
+    QRadioButton* centeredRB;
+    QRadioButton* tiledRB;
     QString wallFile;
     QPixmap wallPixmap;
 };	
