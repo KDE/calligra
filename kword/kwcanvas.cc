@@ -1574,9 +1574,16 @@ void KWCanvas::deleteFrame()
     if ( theFrame->getFrameSet()->getNumFrames() == 1 && theFrame->getFrameSet()->getFrameType() == FT_TEXT) {
         if ( doc->processingType() == KWDocument::WP && doc->getFrameSetNum( theFrame->getFrameSet() ) == 0 )
             return;
-#if 0L
-        KWParag *parag= dynamic_cast <KWTextFrameSet *> (theFrame->getFrameSet())->getFirstParag();
-        if(!( parag!=parag->getNext() && parag->getKWString()->size()==0)) {
+
+        KWTextFrameSet * textfs = 0L;
+        if ( !textfs )
+            textfs = dynamic_cast<KWTextFrameSet *>(doc->getFrameSet( 0 ) );
+        if ( !textfs )
+            return;
+
+        QTextDocument * textdoc = textfs->textDocument();
+        QTextParag * parag = textdoc->firstParag();
+        if(!( parag!=parag->next() && parag->string()->length()==0)) {
             int result;
             result = KMessageBox::warningContinueCancel(this,
                                                         i18n( "You are about to delete the last Frame of the\n"
@@ -1589,8 +1596,9 @@ void KWCanvas::deleteFrame()
             if (result != KMessageBox::Continue)
                 return;
         }
-#endif
+
     }
+
 #if 0
     bool blinking = blinkTimer.isActive();
     if ( blinking )
@@ -1611,11 +1619,12 @@ void KWCanvas::deleteFrame()
     }
     else
     {
+        FrameIndex index;
+        index.m_iFrameIndex=theFrame->getFrameSet()->getFrameFromPtr(theFrame);
+        index.m_iFrameSetIndex=doc->getFrameSetNum(theFrame->getFrameSet());
+
         if(theFrame->getFrameSet()->getFrameType() == FT_TEXT)
         {
-            FrameIndex index;
-            index.m_iFrameIndex=theFrame->getFrameSet()->getFrameFromPtr(theFrame);
-            index.m_iFrameSetIndex=doc->getFrameSetNum(theFrame->getFrameSet());
             QDomDocument domDoc( "PARAGRAPHS" );
             QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
             domDoc.appendChild( elem );
@@ -1623,11 +1632,28 @@ void KWCanvas::deleteFrame()
 
             KWTextFrameSetCommand *cmd = new KWTextFrameSetCommand(i18n("Delete text frame"),doc,domDoc,index);
             doc->addCommand(cmd);
+             //don't remove frameset Otherwise undo/redo text doesn't work
+            //as discuted with david faure
+            //doc->delFrameSet( theFrame->getFrameSet() );
+            theFrame->getFrameSet()->delFrame( theFrame );
         }
-        theFrame->getFrameSet()->delFrame( theFrame );
-        //don't remove frameset Otherwise undo/redo text doesn't work
-        //as discuted with david faure
-        //doc->delFrameSet( theFrame->getFrameSet() );
+        else if(theFrame->getFrameSet()->getFrameType() == FT_FORMULA)
+        {
+            QDomDocument domDoc( "PARAGRAPHS" );
+            QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+            domDoc.appendChild( elem );
+            theFrame->getFrameSet()->save(elem);
+            KWFormulaFrameCommand *cmd = new KWFormulaFrameCommand(i18n("Delete formula frame"),doc,domDoc,index);
+            doc->addCommand(cmd);
+             //don't remove frameset Otherwise undo/redo text doesn't work
+            //as discuted with david faure
+            //doc->delFrameSet( theFrame->getFrameSet() );
+            theFrame->getFrameSet()->delFrame( theFrame );
+        }
+        else
+        {
+            doc->delFrameSet( theFrame->getFrameSet() );
+        }
     }
 #if 0
     // set FC to new frameset

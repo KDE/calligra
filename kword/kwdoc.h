@@ -419,7 +419,6 @@ public:
      */
     KFormulaDocument* getFormulaDocument();
 
-
 signals:
     void sig_imageModified();
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );

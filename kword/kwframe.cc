@@ -1147,7 +1147,6 @@ void KWFormulaFrameSet::save(QDomElement& parentElem)
 void KWFormulaFrameSet::load(QDomElement& attributes)
 {
     KWFrameSet::load(attributes);
-
     QDomElement formulaElem = attributes.namedItem("FORMULA").toElement();
     if (!formulaElem.isNull()) {
         if (formula == 0) {

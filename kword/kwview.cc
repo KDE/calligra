@@ -1107,6 +1107,7 @@ void KWView::editReplace()
 /*================================================================*/
 void KWView::editDeleteFrame()
 {
+
     int result;
     result = KMessageBox::warningContinueCancel(this,                                                i18n("Do you want to delete this frame?"),
                                                 i18n("Delete Frame"),

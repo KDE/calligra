@@ -629,3 +629,30 @@ void KWTextFrameSetCommand::unexecute()
     tmpParag->formatMore();
     m_pDoc->repaintAllViews();
 }
+
+
+KWFormulaFrameCommand::KWFormulaFrameCommand( const QString &name,KWDocument *_doc,const QDomDocument &_saveFormula,FrameIndex _frameIndex):
+    KCommand(name),
+    m_pDoc(_doc),
+    frameIndex(_frameIndex),
+    saveFormula(_saveFormula)
+{
+}
+
+void KWFormulaFrameCommand::execute()
+{
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
+    KWFrame *frame=frameSet->getFrame(frameIndex.m_iFrameIndex);
+    frame->getFrameSet()->delFrame( frame );
+    m_pDoc->repaintAllViews();
+}
+
+void KWFormulaFrameCommand::unexecute()
+{
+    QDomElement saveParam=saveFormula.documentElement();
+    KWFrameSet *frameSet =m_pDoc->getFrameSet(frameIndex.m_iFrameSetIndex);
+    KWFormulaFrameSet *tmpParag = dynamic_cast<KWFormulaFrameSet*> (frameSet) ;
+    tmpParag->load(saveParam);
+    m_pDoc->repaintAllViews();
+}
+
