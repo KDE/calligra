@@ -93,7 +93,7 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
         if ( direction == Import )
             mime = vec[i].import;
         else
-            mime = vec[i].export;
+            mime = vec[i].export_;
 
         t = KMimeType::find( mime );
         // Did we get exact this mime type ?
@@ -239,7 +239,7 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
     return QString("/tmp/kofficefilter");
 }
 
-void KoFilterManager::export( const char *_tmpFile, const char* _url, const char *_native_format )
+void KoFilterManager::export_( const char *_tmpFile, const char* _url, const char *_native_format )
 {
     KURL url( _url );
 

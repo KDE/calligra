@@ -153,7 +153,7 @@ public:
   /**
    *    The exported mimetype.
    */
-  QString export;
+  QString export_;
 
   /**
    *  Comment regarding the exported data format.
@@ -170,7 +170,7 @@ public:
    *  @return TRUE if the filter can exports the requested mimetype.
    */
   bool exports( const char *_m ) const
-  { return ( export.find( _m ) != -1 ); }
+  { return ( export_.find( _m ) != -1 ); }
 
   /**
    *  This function will query KDED to find all available filters.

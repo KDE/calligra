@@ -61,7 +61,7 @@ public:
                               bool allfiles ) const;
 
     QString import( const char* _url, const char *_native_format );
-    void export( const char *_tmpFile, const char* _url, const char *_native_format );
+    void export_( const char *_tmpFile, const char* _url, const char *_native_format );
 
     /**
      * Returns a pointer to the only instance of the KoFilterManager.
