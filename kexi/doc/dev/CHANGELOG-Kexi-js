@@ -324,6 +324,48 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 
 CC_MAIL: dkite@shaw.ca
 
+2004-04-02
+KexiDialogBase
+	- beforeSwitchTo(int mode, bool &cancelled) is called also on newly created view
+
+2004-04-01
+2004-03-31
+2004-03-30
+2004-03-29
+Kexi Query Designer Editor
+	- KexiSectionHeader class introduced
+	- section's size hind fixed
+Relations widget
+	- asterisks added to table boxes
+	- asterisks are not drag&drop enabled
+	- hiding tables implemented (connections are removable as well)
+Table View
+	- Temporary FIX: BLOB editors are disabled 
+	 (in KexiBlobEditorFactoryItem::createEditor()) because of unstability.
+TODO: reenable this
+	- setData(): when the same data object is passed, tableview is just refreshed
+	- setDropsAtRowEnabled() added; row-droping-indicator implemented
+	- KexiTableView::editor(): only if ignoreMissingEditor is false (the default),
+	 and editor cannot be instantiated, current row editing (if present) is cancelled.
+	 Thus: Now it's possible to edit data for tables where there are cells 
+	 that have no valid editors (yet?), such as BLOB now.
+	- paintCell(): if there is no editor defined, just a focus box is displayed,
+	  filled with additional grayed diagonal pattern
+Table View Editors
+	- clicking on date table popup selects current date
+	- QScrollView is passed on editors creation instead of QWidget
+	- QScrollView::moveChild() is used for moving external widgets, instead of QWidget::move()
+	- fixed uninitialized leftMargin value for FP-Number editor (on win32)
+Alter Table Dialog
+	- Temporary: 'defaultValue' property hidden- we'll show this after we 
+	  get properly working editor for QVariant
+Kexi
+	- Welcome screen now uses html 'welcome_<locale>' fiels.
+	  These are Temporary! Do Not Translate!
+Kexi Core
+	- KexiPartManager is now KexiDB::Object-derived; error texts are set now
+	- Action Proxies: child focus is better handled 
+	- KexiViewBase: focus change tracking and actions updating improved
 
 2004-03-27
 Form Editor
@@ -342,6 +384,19 @@ KexiTableView
 	- "dontAskBeforeDeleteRow" config key is better
 	- after removing a row, all rows below are updated
 	- repaint of bottom few pixels (empty) area fixed when scrolling and resizing
+Kexi
+	- "-new <object_type>" CLI option added: "Start new object design of type <object_type>"
+	   (also convenient for everyday tests)
+Main Window
+	- MDI mode is now stored and restored
+	- fixed problems with property dock window when using IDEAl mode
+KMDI
+	- Fixed memory leak & crash: 
+	  Tab/IDEAl mode: mdiview was never destroyed but just moved out of the tab widget
+	- KMdiChildFrm: Mouse button press filtering is checked against every client's child, 
+	  not just client
+TODO: backport this to qextmdi???
+
 
 2004-03-25
 KexiTableView
@@ -826,7 +881,6 @@ Property Editor:
   -methods added for showing/hiding vertical and horizontal header
   -framework for showing cell's focus depending on editor type added to cell 
    editor (eg. dropdown btn for combobox)
-COMMIT THIS************^^^^^^^^
 
 - Main Window:
 	Fixed problem with autoincremented identifier in kexi__object
