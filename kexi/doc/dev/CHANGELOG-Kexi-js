@@ -250,8 +250,6 @@ lucijan	#3 0x414dbf54 in strdup () from /lib/tls/libc.so.6
 lucijan	js^: yes simply add a new kexi__object but o_caption as NULL
 ::FIXIT
 
-
-
 FIXIT::: open Dialog:
 jowenn	by the way I have a problem with your open dialog. I can only open db's not in current directory, if I add the full path in the file name edit box
 jowenn	Not sure were that comes from, had no time to investigate
@@ -262,6 +260,15 @@ jowenn	fails here both, using the keyboard or the mouse
 ::FIXIT
 
 TODO: Put Conenction::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
+
+TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
+- ODBC driver (hello mattr!)
+- Access -> Kexi migration tool
+- scripting
+
+
+2004-01-26
+
 
 ===================== Kexi 0.1 Beta 2 =====================
 
