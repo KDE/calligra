@@ -36,22 +36,25 @@ area where text (or other data), can be placed.</para>
 <varlistentry>
 <term>Frameset</term>
 <listitem>
-<para>A frame set is a group of frames.  Each frame in the frameset has a
+<para>A frameset is a group of frames.  Each frame in the frameset has a
 position within the frameset</para>
 
-<para>The position is determined by their placement on the page.  The frame which begins closest 
-to the top of the page is Frame #1.  The next frame that is closest to the top of the page is Frame #2, etc.</para>
+<para>The position is determined by their placement on the page.  If frames extend across the entire width of the page, the frame which begins closest 
+to the top of the page is Frame #1.  The next frame that is closest to the top of the page is Frame #2, etc. 
+If the frames do not extend across the width of the page, the frame whose 
+left edge is closest to the left margin will be frame #1.  In this case, 
+the vertical position of the frame is ignored.</para>
 
 <para>All text flows from one frame to another <emphasis>within a
-frame set, and only within a frame set.</emphasis> Text flows from frame
-to frame within the frame set <emphasis>according to the position of each
+frameset, and only within a frameset.</emphasis> Text flows from frame
+to frame within the frameset <emphasis>according to the position of each
 frame</emphasis> on the page (and therefore the order of the frames within the frameset).</para>
 
-<para>As an example:  If we have a frame set that consists of three
+<para>As an example:  If we have a frameset that consists of three
 frames (#1, #2, and #3).</para>
 
 <para>As we type text into Frame #1, the text is shaped to the outline
-of Frame #1</para>
+of Frame #1.</para>
 
 <para>When the text will no longer fit within Frame #1, it is
 automatically continued into Frame #2.</para>
@@ -70,11 +73,11 @@ rearranged as you type.</para>
 <indexterm><primary>frames</primary><secondary>selecting</secondary></indexterm>
 
 <para>You can select a frame within a frameset two ways:</para>
-<orderedlist>
+<itemizedlist>
 <listitem><para>By clicking on the text frame border of the frame you want
 to select. </para></listitem>
 <listitem><para>By holding down the &Ctrl; key and clicking anywhere within the frame.</para></listitem>
-</orderedlist>
+</itemizedlist>
 <para>There should now be 8 yellow squares around the edges of the frame.</para>
 
 </sect2>
@@ -122,8 +125,8 @@ new text frame.</para>
 <para>This dialog box is used to determine which frameset this new frame will belong to.</para>
 
 <para>Using the screenshot as an example, a new text frame has been created in a
-document which currently has two framesets (called <guilabel>Frameset
-1</guilabel>, and <guilabel>Frameset 2</guilabel>).</para>
+document which currently has two framesets (called <guilabel>Text Frameset
+1</guilabel>, and <guilabel>Text Frameset 2</guilabel>).</para>
 
 <para>You now have the option of either:</para>
 
@@ -143,9 +146,9 @@ a member of the selected frameset.</para>
 
 <varlistentry><term>Create a new frameset.  </term>
 
-<listitem><para>If you want this to be a new frame set, you should enter a descriptive
+<listitem><para>If you want this to be a new frameset, you should enter a descriptive
 name for your new frameset.  (A name which will tell you what you might
-find in that frame set).  This name should be entered in the text box
+find in that frameset).  This name should be entered in the text box
 labeled <guilabel>Name of frameset</guilabel>.</para>
 <para>This newly added frame will be the
 only frame in the frameset.</para>
@@ -190,7 +193,7 @@ possible.</para>
 to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)</para>
 
-<para>There is now 8 yellow squares on the edges of the frame.</para>
+<para>There are now 8 yellow squares on the edges of the frame.</para>
 
 <para>If this is the frame you want to delete, you can do so by:</para>
 
@@ -207,30 +210,16 @@ Frame</guimenuitem></menuchoice> from the menubar</para>
 
 <listitem>
 <para>While the cursor is on the border of the frame you want to delete,
-click once with the &RMB;.</para>
-
-<para>A small menu will appear.  Select <guimenuitem>Delete
+click once with the &RMB;. A small menu will appear.  Select <guimenuitem>Delete
 Frame</guimenuitem>.</para>
 </listitem>
 </itemizedlist>
 
-<warning><para>If you are trying to delete the last frame in a frame set, &kword;
-will ask you if you want to delete the current text frame.  If you click
-<guibutton>Delete</guibutton>, the frame, all frames connected to it,
-and the data within these frames, will be deleted.</para>
-<para>If
-you click <guibutton>Cancel</guibutton>, the frame will not be
-deleted.</para></warning>
-
-<para>If you are trying to delete a frame that is not the last frame in
-a frame set, &kword; will not ask for a confirmation.  It will delete the
-current frame immediately, and move the data into the next frame in a
-frameset. No data will be deleted. </para>
 
 </sect2>
 
 <sect2 id="move-frame">
-<title>Moving an Existing Frame</title>
+<title>Moving a Frame</title>
 <indexterm><primary>frames</primary><secondary>moving</secondary></indexterm>
 
 <para>Moving a frame around on the page is easy.</para>
@@ -256,7 +245,7 @@ the &LMB;.</para></tip>
 </sect2>
 
 <sect2 id="resize-frame">
-<title>Resizing an Existing Frame</title>
+<title>Resizing a Frame</title>
 <indexterm><primary>frames</primary><secondary>resizing</secondary></indexterm>
 
 <para>It is also easy to change the size or shape of a frame.</para>
@@ -291,7 +280,7 @@ simply release the mouse button, and the changes will become
 permanent.</para>
 
 <note>
-<para>If you are using a Text Layout Template, you cannot change
+<para>If you are using a Text Oriented Template, you cannot change
 the size of the primary frame by dragging the edges of the frame.  If you
 want to resize this frame, you must do so by <link
 linkend="page-format">Changing the margins</link> </para>
@@ -300,7 +289,7 @@ linkend="page-format">Changing the margins</link> </para>
 </sect2>
 
 <sect2 id="connect-frame">
-<title>Reconnecting Frames in a Frameset/Changing text flow..</title>
+<title>Reconnecting Frames in a Frameset/Changing text flow.</title>
 <indexterm><primary>frames</primary><secondary>create/edit framesets</secondary></indexterm>
 
 <para>Normally, each new text frame is created with a specific
@@ -309,15 +298,15 @@ will need to be made.  To accomplish this, you will need
 to know how to move a frame from one frameset to another.</para>
 
 <para>First click on the frame border of the frame you want to
-move to another frameset..</para>
+move to another frameset.</para>
 
-<para>You can change the frame set of the currently selected frame by
+<para>You can change the frameset of the currently selected frame by
 selecting <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties...</guimenuitem></menuchoice>
 from the menubar</para>
 
 <tip><para>You can also accomplish this by clicking on the frame border once with the &RMB;, and selecting
-<guilabel>Frame/Frameset...</guilabel> from the submenu.</para></tip>
+<guilabel>Frame/Frameset Properties...</guilabel> from the submenu.</para></tip>
 
 <para>This will bring up a dialog box with five tabs.  Select the tab
 labeled <guilabel>Connect Text Frames</guilabel>.</para>
@@ -399,9 +388,7 @@ text that follows it into the next frame in the frameset.</para>
 fear but fear itself</quote></para>
 
 <para>and we insert a Hard Frame Break, just before the word
-<emphasis>but</emphasis>.</para>
-
-<para>We will end up with one frame containing <quote>We have nothing
+<quote>but</quote>, we will end up with one frame containing <quote>We have nothing
 to fear</quote>, and the next frame in the frameset beginning with
 <quote>but fear itself</quote>.</para>
 
@@ -430,9 +417,9 @@ you can normally see in &kword;, it will be easier to delete a Hard Frame Break 
 
 <listitem><para>Select <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Formatting
-Characters</guimenuitem></menuchoice> from the menubar.  This will make the paragraph marks visible.</para></listitem>
+Characters</guimenuitem></menuchoice> from the menubar.  This will make the breaks visible.</para></listitem>
 
-<listitem><para>Find the newly revealed Page Break, labled <guilabel>--- Frame Break ---</guilabel>.
+<listitem><para>Find the newly revealed Page Break, labeled <guilabel>--- Frame Break ---</guilabel>.
   Place the mouse pointer in
 front of this and click once with the &LMB;. This will place the cursor directly in front of the page break.</para></listitem>
 

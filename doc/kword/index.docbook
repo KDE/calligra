@@ -559,8 +559,6 @@ from the menubar.</para></listitem>
 the page numbers on the outside corners of the pages.  </para>
 <para>If you want page numbers on the bottom of the pages, you can use <link linkend="headers-and-footers">Footers</link> instead of
 headers in your document.</para>
-<para>To adjust the look of the tables, including where their margins are, see the section entitled
-<link linkend="tables">Tables</link>.</para>
 </sect1>
 
 <sect1 id="qd-pdf">
@@ -1565,7 +1563,7 @@ linkend="installation">Installation</link>.</para></glossdef>
 <para>Using custom variables you can store certain values (&eg; numbers
 or text) for later use in your document or in a script. If you want to
 find out more about custom variables, see <link
-linkend="variables">Inserting Variables</link>.</para>
+linkend="variables">Document Variables</link>.</para>
 </glossdef>
 </glossentry>
 

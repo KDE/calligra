@@ -29,6 +29,8 @@ window, it is divided into 5 major areas:</para>
 <listitem><para><link linkend="tb">An assortment of
 Toolbars</link>.</para></listitem>
 
+<listitem><para><link linkend="kde-docstruct">The Document Structure Area</link>.</para></listitem>
+
 <listitem><para><link linkend="da">The Document
 Area</link>, including the rulers and scrollbars.</para></listitem>
 
@@ -63,8 +65,16 @@ entitled: <link linkend="basic-menubar">The Menubar</link>.</para>
 &kword; uses 8 toolbars, with similar functions grouped together.</para>
 </listitem>
 </varlistentry>
-<varlistentry>
 
+<varlistentry>
+<term><emphasis><anchor id="kde-docstruct"/>Document Structure Area</emphasis></term>
+<listitem><para>The Document Structure Area places individual types of data into useful groups 
+(pictures, tables, text, etc) to help you find the correct data in a complicated document.  For 
+more information, see the section on <link linkend="doc-structure">Document Structure</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term><emphasis><anchor id="statb"/>The Statusbar</emphasis></term>
 <listitem><para>The status bar provides important information during the editing of your document.
 In the lower left corner, &kword; gives you the current page number and the total number of pages.  There will be helpful text shown in
