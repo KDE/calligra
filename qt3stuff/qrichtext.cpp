@@ -4786,10 +4786,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	}
         //qDebug("c='%c' i=%d/%d x=%d ww=%d w=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,w,lastBreak,isBreakable(string,i));
         // Wrapping at end of line
-	if ( isWrapEnabled() &&
-             ( !isBreakable( string, i ) /* ||
-               // break after '  ' even if a third breakable follows
-               ( i > 1 && isBreakable( string, i - 1 ) && isBreakable( string, i - 2 ) ) */ ) &&
+	if ( isWrapEnabled() && !isBreakable( string, i ) &&
              ( lastBreak != -1 || allowBreakInWords() ) &&
 	     ( wrapAtColumn() == -1 && x + ww > w && lastBreak != -1 ||
 	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
