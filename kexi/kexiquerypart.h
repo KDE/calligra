@@ -30,14 +30,14 @@ class KexiQueryPart : public KexiProjectPart
 
 	public:
 		KexiQueryPart(KexiProject *project);
-		~KexiQueryPart();
 
 		QString				name();
 		QString				mime();
 		bool				visible();
 
-		KexiPartPopupMenu		*groupContext();
-		KexiPartPopupMenu		*itemContext();
+		KexiPartPopupMenu		*groupContext(KexiView* view);
+		KexiPartPopupMenu		*itemContext(KexiView* view);
+		void executeItem(KexiView* view, QString identifier);
 
 //		KexiBrowserItem	*group();
 //		KexiBrowserItem	*itemTemplate();
@@ -46,9 +46,6 @@ class KexiQueryPart : public KexiProjectPart
 		QPixmap				itemPixmap();
 
 		ItemList			*items();
-
-		void				open(QString identifier);
-		KexiDialogBase			*view(QString identifier);
 
 	signals:
 		void				itemListChanged(KexiProjectPart*);

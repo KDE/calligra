@@ -22,6 +22,8 @@
 KexiProjectPart::KexiProjectPart(KexiProject *project)
  : QObject(project)
 {
+	m_currentView = 0;
+	
 	if(project)
 		project->registerProjectPart(this);
 }

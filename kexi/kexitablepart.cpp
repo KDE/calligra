@@ -28,6 +28,8 @@
 
 #include "kexitablepart.h"
 #include "kexiprojectpartitem.h"
+#include "kexidatatable.h"
+#include "kexialtertable.h"
 
 KexiTablePart::KexiTablePart(KexiProject *project)
  : KexiProjectPart(project)
@@ -59,8 +61,9 @@ KexiTablePart::visible()
 }
 
 KexiPartPopupMenu*
-KexiTablePart::groupContext()
+KexiTablePart::groupContext(KexiView* view)
 {
+	setCurrentView(view);
 	kdDebug() << "KexiTablePart::groupContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Table"), SLOT(slotCreate()));
@@ -69,11 +72,12 @@ KexiTablePart::groupContext()
 }
 
 KexiPartPopupMenu*
-KexiTablePart::itemContext()
+KexiTablePart::itemContext(KexiView* view)
 {
+	setCurrentView(view);
 	kdDebug() << "KexiTablePart::itemContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Open Table"), SLOT(slotOpen()));
+	m->insertAction(i18n("Open Table"), SLOT(slotOpen(QString)));
 	m->insertAction(i18n("Alter Table"), SLOT(slotAlter()));
 	m->insertAction(i18n("Delete Table"), SLOT(slotDrop()));
 	
@@ -115,17 +119,6 @@ KexiTablePart::itemPixmap()
 	return QPixmap();
 }
 
-
-void
-KexiTablePart::open(QString identifier)
-{
-}
-
-KexiDialogBase*
-KexiTablePart::view(QString identifier)
-{
-}
-
 void
 KexiTablePart::getTables()
 {
@@ -148,18 +141,40 @@ KexiTablePart::slotCreate()
 
 	if(ok && name.length() > 0)
 	{
-//		if(m_view->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
-//		{
-//			KexiAlterTable* kat = new KexiAlterTable(m_view, 0,name, "alterTable");
-//			kat->show();
+		if(m_project->db()->query("CREATE TABLE " + name + " (id INT(10))"))
+		{
+			KexiAlterTable* kat = new KexiAlterTable(currentView(), 0, name, "alterTable");
+			kat->show();
 //			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, parent, name);
 //			item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
-//		}
+		}
 	}
 }
 
-KexiTablePart::~KexiTablePart()
+void
+KexiTablePart::slotOpen(QString identifier)
 {
+	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
+	kdDebug() << "KexiTablePart::slotOpen(): currentView = " << currentView() << endl;
+	
+	KexiDataTable *kt = new KexiDataTable(currentView(), 0, identifier, "table");
+	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
+	
+	if(kt->executeQuery("select * from " + identifier))
+	{
+		kt->show();
+	}
+	else
+	{
+		delete kt;
+	}
+}
+
+void
+KexiTablePart::executeItem(KexiView* view, QString identifier)
+{
+	setCurrentView(view);
+	slotOpen(identifier);
 }
 
 #include "kexitablepart.moc"

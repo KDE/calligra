@@ -46,6 +46,7 @@
 #include "kexiprojectpart.h"
 #include "kexiprojectpartitem.h"
 #include "kexipartpopupmenu.h"
+#include "kexidialogbase.h"
 
 KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, const char *name )
  : KListView(parent,name)
@@ -60,6 +61,7 @@ KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, c
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
+	connect(this, SIGNAL(executed(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
 
 	if(part)
 	{
@@ -125,12 +127,15 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 		KexiPartPopupMenu *pg = 0;
 		if(it->identifier() == QString::null)
 		{
-			pg = it->part()->groupContext();
+			// FIXME: Make this less hacky please :)
+			pg = it->part()->groupContext(static_cast<KexiDialogBase*>(parent()->parent())->kexiView());
 		}
 		else
 		{
 			kdDebug() << "KexiBrowser::slotContextMenu() item @ " << it->item() << endl;
-			pg = static_cast<KexiProjectPart*>(it->item()->parent())->itemContext();
+			// FIXME: Make this less hacky please :)
+			pg = static_cast<KexiProjectPart*>(it->item()->parent())->itemContext(
+				static_cast<KexiDialogBase*>(parent()->parent())->kexiView());
 		}
 	
 		pg->setIdentifier(it->identifier());
@@ -138,8 +143,21 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 	}
 }
 
-KexiBrowser::~KexiBrowser()
+void
+KexiBrowser::slotExecuteItem(QListViewItem *item)
 {
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
+	if(!it)
+		return;
+
+	if(it->part() || it->item())
+	{
+		if(it->identifier() != QString::null)
+		{
+			static_cast<KexiProjectPart*>(it->item()->parent())->executeItem(
+				static_cast<KexiDialogBase*>(parent()->parent())->kexiView(), it->identifier());
+		}
+	}
 }
 
 #include "kexibrowser.moc"

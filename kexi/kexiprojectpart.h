@@ -28,6 +28,7 @@
 #include "kexidialogbase.h"
 #include "kexipartpopupmenu.h"
 #include "kexiprojectpartitem.h"
+#include "kexiview.h"
 
 /*struct ProjectPartItem
 {
@@ -59,19 +60,23 @@ class KexiProjectPart : public QObject
 		virtual QString			mime() = 0;
 		virtual bool			visible() = 0;
 
-		virtual KexiPartPopupMenu	*groupContext() = 0;
-		virtual KexiPartPopupMenu	*itemContext() = 0;
+		virtual KexiPartPopupMenu	*groupContext(KexiView* view) = 0;
+		virtual KexiPartPopupMenu	*itemContext(KexiView* view) = 0;
+		virtual void executeItem(KexiView* view, QString identifier) = 0;
 
 		virtual QPixmap			groupPixmap() = 0;
 		virtual QPixmap			itemPixmap() = 0;
 
 		virtual ItemList		*items() = 0;
-
-		virtual void			open(QString identifier) = 0;
-		virtual KexiDialogBase		*view(QString identifier) = 0;
+		
+		void setCurrentView(KexiView* view) { m_currentView = view; }
+		KexiView* currentView() { return m_currentView; }
 
 	signals:
 		void				itemListChanged(KexiProjectPart*);
+		
+	protected:
+		KexiView* m_currentView;
 		
 };
 

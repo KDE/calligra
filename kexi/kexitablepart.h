@@ -30,14 +30,14 @@ class KexiTablePart : public KexiProjectPart
 
 	public:
 		KexiTablePart(KexiProject *project);
-		~KexiTablePart();
 
 		QString				name();
 		QString				mime();
 		bool				visible();
 
-		KexiPartPopupMenu		*groupContext();
-		KexiPartPopupMenu		*itemContext();
+		KexiPartPopupMenu		*groupContext(KexiView* view);
+		KexiPartPopupMenu		*itemContext(KexiView* view);
+		void executeItem(KexiView* view, QString identifier);
 
 //		KexiBrowserItem	*group();
 //		KexiBrowserItem	*itemTemplate();
@@ -47,10 +47,6 @@ class KexiTablePart : public KexiProjectPart
 
 		ItemList			*items();
 
-		void				open(QString identifier);
-		KexiDialogBase			*view(QString identifier);
-
-
 		void				getTables();
 
 	private:
@@ -59,6 +55,7 @@ class KexiTablePart : public KexiProjectPart
 
 	public slots:
 		void				slotCreate();
+		void				slotOpen(QString identifier);
 };
 
 #endif

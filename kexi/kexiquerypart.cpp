@@ -52,20 +52,22 @@ KexiQueryPart::visible()
 }
 
 KexiPartPopupMenu*
-KexiQueryPart::groupContext()
+KexiQueryPart::groupContext(KexiView* view)
 {
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Query"), SLOT(slotCreateQuery()));
+	setCurrentView(view);
 
 	return m;
 }
 
 KexiPartPopupMenu*
-KexiQueryPart::itemContext()
+KexiQueryPart::itemContext(KexiView* view)
 {
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Open Query"), SLOT(slotOpenQuery()));
 	m->insertAction(i18n("Delete Query"), SLOT(slotDeleteQuery()));
+	setCurrentView(view);
 	
 	return m;
 }
@@ -105,19 +107,10 @@ KexiQueryPart::itemPixmap()
 	return QPixmap();
 }
 
-
 void
-KexiQueryPart::open(QString identifier)
+KexiQueryPart::executeItem(KexiView* view, QString identifier)
 {
-}
-
-KexiDialogBase*
-KexiQueryPart::view(QString identifier)
-{
-}
-
-KexiQueryPart::~KexiQueryPart()
-{
+	setCurrentView(view);
 }
 
 #include "kexiquerypart.moc"

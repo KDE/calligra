@@ -50,7 +50,7 @@ KexiPartPopupMenu::setIdentifier(QString identifier)
 void
 KexiPartPopupMenu::slotActivated(int id)
 {
-	connect(this, SIGNAL(execute(QString)), m_receiver, m_slots.at(id));
+	connect(this, SIGNAL(execute(QString)), m_receiver, m_slots.at(indexOf(id)));
 
 	emit execute(m_identifier);
 

@@ -42,7 +42,6 @@ class KexiBrowser : public KListView
 
 	public:
 		KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, const char *name=0);
-		~KexiBrowser();
 
 	private:
 		KexiView	*m_view;
@@ -58,6 +57,7 @@ class KexiBrowser : public KListView
 	protected slots:
 		void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
 		void		slotItemListChanged(KexiProjectPart *);
+		void		slotExecuteItem(QListViewItem *item);
 };
 
 #endif
