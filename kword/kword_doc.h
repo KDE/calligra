@@ -156,7 +156,7 @@ public:
 
     KWUserFont* findUserFont( QString _fontname );
 
-    KWDisplayFont* findDisplayFont( KWUserFont* _font, unsigned int _size, int _weight, bool _italic, bool _underline );
+    KWDisplayFont* findDisplayFont( KWUserFont* _font, int _size, int _weight, bool _italic, bool _underline );
 
     KWParagLayout* findParagLayout( QString _name );
 

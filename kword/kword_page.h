@@ -373,7 +373,7 @@ protected:
     bool kDefault( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
 
     void vmmEdit( int mx, int my );
-    void vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool left, bool right);
+    void vmmEditFrameResize(unsigned int mx,unsigned int my , bool top, bool bottom, bool left, bool right);
     void vmmEditFrameSizeAll( int mx, int my );
     void vmmCreate( int mx, int my );
     bool vmpEdit( int mx, int my );

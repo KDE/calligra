@@ -973,7 +973,9 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
         if ( parag->getNext() == 0L || outOfFrame ) {
             ptY += getLineHeight();
             parag->setPTYEnd( ptY );
-            outOfFrame = FALSE;
+            //outOfFrame = FALSE;
+            //if ( !outOfFrame )
+            //    doc->checkNumberOfPages( this );
             return FALSE;
         }
 
@@ -981,8 +983,9 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
         enterNextParag();
     } else {
         lineStartPos = lineEndPos;
+        //if(getLineHeight() ==0) return false;
         ptY += getLineHeight();
-        makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
+        return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
     }
 
     return TRUE;
@@ -1097,10 +1100,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
         if(ptY != newptY) {
             ptY = newptY+2;
             return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );
-        } else {
-            lineEndPos == parag->getTextLen();
-            return false;
-        }
+        } else return false;
     }
 
     bool _broken = FALSE;
