@@ -380,7 +380,7 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QList<KWFrameSet> m_ListFrame;
+    QList<KWFrameSet> m_ListFrameSet;
     unsigned int m_colPos;
 };
 
@@ -398,9 +398,45 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QList<KWFrameSet> m_ListFrame;
+    QList<KWFrameSet> m_ListFrameSet;
     unsigned int m_rowPos;
 };
 
+/**
+ * Command created when removing a row
+ */
+class KWRemoveRowCommand : public KCommand
+{
+public:
+    KWRemoveRowCommand( const QString &name, KWTableFrameSet * _table, int _pos);
+    ~KWRemoveRowCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWTableFrameSet *m_pTable;
+    QList<KWFrameSet> m_ListFrameSet;
+    QList<KWFrame> m_copyFrame;
+    unsigned int m_rowPos;
+};
+
+
+/**
+ * Command created when removing a column
+ */
+class KWRemoveColumnCommand : public KCommand
+{
+public:
+    KWRemoveColumnCommand( const QString &name, KWTableFrameSet * _table, int _pos);
+    ~KWRemoveColumnCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWTableFrameSet *m_pTable;
+    QList<KWFrameSet> m_ListFrameSet;
+    QList<KWFrame> m_copyFrame;	
+    unsigned int m_colPos;
+};
 
 #endif

@@ -23,6 +23,7 @@
 #include "kwcanvas.h"
 #include "deldia.h"
 #include "deldia.moc"
+#include "kwcommand.h"
 
 #include <klocale.h>
 
@@ -87,11 +88,24 @@ void KWDeleteDia::setupTab1()
 
 bool KWDeleteDia::doDelete()
 {
-    doc->terminateEditing(table);
+    unsigned int remove= value->value() - 1;
     if ( type == ROW )
-        table->deleteRow( value->value() - 1 );
+    {
+        KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove row"), table, remove);
+         cmd->execute();
+         doc->addCommand(cmd);
+        //table->deleteRow( value->value() - 1 );
+    }
     else
-        table->deleteCol( value->value() - 1 );
+    {
+         KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, remove);
+        cmd->execute();
+        doc->addCommand(cmd);
+        //table->deleteCol( value->value() - 1 );
+    }
+
+
+
 #if 0
     QPainter p;
     p.begin( canvas );
@@ -110,12 +124,6 @@ bool KWDeleteDia::doDelete()
 
     canvas->recalcCursor();
 #endif
-
-    doc->recalcFrames();
-    doc->updateAllFrames();
-    doc->repaintAllViews();
-    doc->layout();
-    canvas->repaintAll();
     return true;
 }
 

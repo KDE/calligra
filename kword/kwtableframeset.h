@@ -172,14 +172,14 @@ public:
     bool isOneSelected( unsigned int &row, unsigned int &col );
 
     /** insert a row of new cells, use the getCols() call to decide how many cells are created */
-    void insertRow( unsigned int _idx,const QList<KWFrameSet> list=QList<KWFrameSet>(), bool _recalc = true, bool _removeable = false );
+    void insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSet=QList<KWFrameSet>(),QList<KWFrame>listFrame=QList<KWFrame>(), bool _recalc = true, bool _removeable = false );
     /** insert a column of new cells use the getRows() call to decide how many cells are created */
-    void insertCol( unsigned int _idx,const QList<KWFrameSet> list=QList<KWFrameSet>());
+    void insertCol( unsigned int _idx,QList<KWFrameSet> listFrameSet=QList<KWFrameSet>(), QList<KWFrame> listFrame=QList<KWFrame>());
 
     /** remove all the cells in a certain row */
     void deleteRow( unsigned int _idx, bool _recalc = true );
     /** remove all the cells in a certain col */
-    void deleteCol( unsigned int _idx,const QList<KWFrameSet> list=QList<KWFrameSet>());
+    void deleteCol( unsigned int _idx);
 
     // the boolean actually works, but is not saved (to xml) yet :(
     void setShowHeaderOnAllPages( bool s ) { m_showHeaderOnAllPages = s; }

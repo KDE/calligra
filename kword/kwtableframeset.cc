@@ -565,8 +565,9 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
 
             if ( m_showHeaderOnAllPages ) {
                 m_hasTmpHeaders = true;
-                QList<KWFrameSet> list=QList<KWFrameSet>();
-                insertRow( j,list, false, true );
+                QList<KWFrameSet> listFrameSet=QList<KWFrameSet>();
+                QList<KWFrame> listFrame=QList<KWFrame>();
+                insertRow( j,listFrameSet,listFrame, false, true );
             }
             for(i = 0; i < m_cells.count(); i++) {
                 Cell *cell = m_cells.at(i);
@@ -795,7 +796,7 @@ bool KWTableFrameSet::getFirstSelected( unsigned int &row, unsigned int &col )
     return false;
 }
 
-void KWTableFrameSet::insertRow( unsigned int _idx,const QList<KWFrameSet> list, bool _recalc, bool isAHeader )
+void KWTableFrameSet::insertRow( unsigned int _idx,QList<KWFrameSet> listFrameSet, QList<KWFrame> listFrame,bool _recalc, bool isAHeader )
 {
     unsigned int i = 0;
     unsigned int _rows = m_rows;
@@ -856,18 +857,23 @@ void KWTableFrameSet::insertRow( unsigned int _idx,const QList<KWFrameSet> list,
             tmpWidth-=tableCellSpacing;
         /*else
           tmpWidth+=1;*/
-        KWFrame *frame = new KWFrame(0L, colStart[i], br.y(), tmpWidth, height, KWFrame::RA_NO);
 
-        frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
-        frame->setNewFrameBehaviour(KWFrame::NoFollowup);
+        KWFrame *frame = 0L;
+        if(listFrame.isEmpty())
+        {
+            frame=new KWFrame(0L, colStart[i], br.y(), tmpWidth, height, KWFrame::RA_NO);
+            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
+        }
+        else
+            frame=listFrame.at(i);
 
         Cell *newCell=0L;
-        if(list.isEmpty())
+        if(listFrameSet.isEmpty())
             newCell=new Cell( this, _idx, i, QString::null );
         else
         {
-            QList<KWFrameSet>tmp(list);
-            newCell = static_cast<KWTableFrameSet::Cell*> (tmp.at(i));
+            newCell = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
             addCell( newCell );
         }
         newCell->m_cols=colSpan;
@@ -896,7 +902,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx,const QList<KWFrameSet> list,
         finalize();
 }
 
-void KWTableFrameSet::insertCol( unsigned int col,const QList<KWFrameSet> list )
+void KWTableFrameSet::insertCol( unsigned int col,QList<KWFrameSet> listFrameSet, QList<KWFrame>listFrame )
 {
     unsigned int _cols = m_cols;
     double x=0, width = 60;
@@ -939,16 +945,25 @@ void KWTableFrameSet::insertCol( unsigned int col,const QList<KWFrameSet> list )
             height = cell->getFrame(0)->height();
         }
         Cell *newCell=0L;
-        if(list.isEmpty())
+
+        if(listFrameSet.isEmpty())
             newCell = new Cell( this, i, col, QString::null );
         else
         {
-            QList<KWFrameSet>tmp(list);
-            newCell = static_cast<KWTableFrameSet::Cell*> (tmp.at(i));
+            newCell = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
             addCell( newCell );
         }
-        KWFrame *frame = new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height, KWFrame::RA_NO );
-        frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+
+        KWFrame *frame = 0L;
+        if(listFrame.isEmpty())
+        {
+            frame=new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height, KWFrame::RA_NO );
+            frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
+        }
+        else
+        {
+            frame=listFrame.at(i);
+        }
         newCell->addFrame( frame );
         if(cell->m_rows >1) {
             newCell->m_rows = cell->m_rows;
@@ -1003,7 +1018,7 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
 }
 
 /* Delete all cells that are completely in this col.              */
-void KWTableFrameSet::deleteCol( unsigned int col,const QList<KWFrameSet> list )
+void KWTableFrameSet::deleteCol( unsigned int col )
 {
     double width=0;
     unsigned int colspan=1;

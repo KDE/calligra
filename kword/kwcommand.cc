@@ -877,15 +877,14 @@ KWInsertColumnCommand::KWInsertColumnCommand( const QString &name, KWTableFrameS
     m_colPos(_col)
 {
     ASSERT(m_pTable);
-    m_ListFrame.clear();
+    m_ListFrameSet.clear();
 }
 
 void KWInsertColumnCommand::execute()
 {
     kdDebug() << "KWInsertColumnCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    m_pTable->insertCol( m_colPos,m_ListFrame);
-    doc->terminateEditing(m_pTable);
+    m_pTable->insertCol( m_colPos,m_ListFrameSet);
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
@@ -895,16 +894,16 @@ void KWInsertColumnCommand::unexecute()
 {
     kdDebug() << "KWInsertColumnCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    if(m_ListFrame.isEmpty())
+    if(m_ListFrameSet.isEmpty())
     {
         for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
             KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
             if(cell->m_col==m_colPos)
-                m_ListFrame.append(cell);
+                m_ListFrameSet.append(cell);
         }
     }
     doc->terminateEditing(m_pTable);
-    m_pTable->deleteCol( m_colPos/*,m_ListFrame*/);
+    m_pTable->deleteCol( m_colPos);
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
@@ -918,15 +917,14 @@ KWInsertRowCommand::KWInsertRowCommand( const QString &name, KWTableFrameSet * _
     m_rowPos(_row)
 {
     ASSERT(m_pTable);
-    m_ListFrame.clear();
+    m_ListFrameSet.clear();
 }
 
 void KWInsertRowCommand::execute()
 {
     kdDebug() << "KWInsertRowCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    m_pTable->insertRow( m_rowPos,m_ListFrame);
-    doc->terminateEditing(m_pTable);
+    m_pTable->insertRow( m_rowPos,m_ListFrameSet);
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
@@ -936,16 +934,105 @@ void KWInsertRowCommand::unexecute()
 {
     kdDebug() << "KWInsertRowCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    if(m_ListFrame.isEmpty())
+    if(m_ListFrameSet.isEmpty())
     {
         for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
             KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
             if(cell->m_row==m_rowPos)
-                m_ListFrame.append(cell);
+                m_ListFrameSet.append(cell);
         }
     }
     doc->terminateEditing(m_pTable);
-    m_pTable->deleteRow( m_rowPos/*,m_ListFrame*/);
+    m_pTable->deleteRow( m_rowPos);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+
+
+
+KWRemoveRowCommand::KWRemoveRowCommand( const QString &name, KWTableFrameSet * _table, int _row ):
+    KCommand(name),
+    m_pTable(_table),
+    m_rowPos(_row)
+{
+    ASSERT(m_pTable);
+}
+
+void KWRemoveRowCommand::execute()
+{
+    kdDebug() << "KWRemoveRowCommand::execute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    doc->terminateEditing(m_pTable);
+
+    m_ListFrameSet.clear();
+    m_copyFrame.clear();
+    for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ )
+    {
+        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
+        if(cell->m_row==m_rowPos)
+        {
+            m_ListFrameSet.append(cell);
+            m_copyFrame.append(cell->getFrame(0)->getCopy());
+        }
+    }
+
+    m_pTable->deleteRow( m_rowPos);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+void KWRemoveRowCommand::unexecute()
+{
+    kdDebug() << "KWRemoveRowCommand::unexecute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    m_pTable->insertRow( m_rowPos,m_ListFrameSet,m_copyFrame);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+
+KWRemoveColumnCommand::KWRemoveColumnCommand( const QString &name, KWTableFrameSet * _table, int _col ):
+    KCommand(name),
+    m_pTable(_table),
+    m_colPos(_col)
+{
+    ASSERT(m_pTable);
+}
+
+void KWRemoveColumnCommand::execute()
+{
+    kdDebug() << "KWRemoveColumnCommand::execute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    doc->terminateEditing(m_pTable);
+
+    m_ListFrameSet.clear();
+    m_copyFrame.clear();
+    for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ )
+    {
+        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
+        if(cell->m_col==m_colPos)
+        {
+            m_ListFrameSet.append(cell);
+            m_copyFrame.append(cell->getFrame(0)->getCopy());
+        }
+    }
+
+    m_pTable->deleteCol( m_colPos);
+
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+void KWRemoveColumnCommand::unexecute()
+{
+    kdDebug() << "KWRemoveColumnCommand::unexecute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    m_pTable->insertCol( m_colPos,m_ListFrameSet,m_copyFrame);
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
