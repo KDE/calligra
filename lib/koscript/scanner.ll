@@ -412,16 +412,15 @@ from                    return T_FROM;
                           return T_CHARACTER_LITERAL;
                         }
 {String_Literal}        {
-                          QString s( yytext );
+                          QString s=QString::fromUtf8( yytext );
                           yylval._str = new QString( s.mid( 1, s.length() - 2 ) );
                           if ( yylval._str->isNull() )
                                 *(yylval._str) = "";
                           translate_string( *(yylval._str) );
                           return T_STRING_LITERAL;
                         }
-.                       {
-                          return T_UNKNOWN;
-                        }
+
+.                       return T_UNKNOWN;
 
 %%
 

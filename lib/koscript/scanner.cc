@@ -1781,7 +1781,7 @@ case 98:
 YY_RULE_SETUP
 #line 414 "scanner.ll"
 {
-                          QString s( yytext );
+                          QString s=QString::fromUtf8( yytext );
                           yylval._str = new QString( s.mid( 1, s.length() - 2 ) );
                           if ( yylval._str->isNull() )
                                 *(yylval._str) = "";
@@ -1791,17 +1791,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 422 "scanner.ll"
-{
-                          return T_UNKNOWN;
-                        }
+#line 423 "scanner.ll"
+return T_UNKNOWN;
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 426 "scanner.ll"
+#line 425 "scanner.ll"
 ECHO;
 	YY_BREAK
-#line 1805 "scanner.cc"
+#line 1803 "scanner.cc"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(KSPREAD):
 			case YY_STATE_EOF(PLAIN):
@@ -2683,7 +2681,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 426 "scanner.ll"
+#line 425 "scanner.ll"
 
 
 void kscriptInitFlex( const char *_code, int extension, KLocale* locale )
