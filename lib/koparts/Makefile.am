@@ -1,14 +1,14 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir)/../ -I$(top_srcdir)/libltdl $(all_includes)
+INCLUDES= -I$(top_srcdir) $(all_includes)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
-libkparts_la_LIBADD  = $(LIB_KDEUI)
+libkoparts_la_LIBADD  = $(LIB_KDEUI)
 
 ####### Files
 
-lib_LTLIBRARIES = libkparts.la
+lib_LTLIBRARIES = libkoparts.la
 
-libkparts_la_SOURCES = container.cpp  handler.cpp  part.cpp    shell.cpp    view.cpp \
+libkoparts_la_SOURCES = container.cpp  handler.cpp  part.cpp    shell.cpp    view.cpp \
 		       frame.cpp      plugin.cpp  toolbox.cpp   \
 		kcoloractions.cpp
 
@@ -16,10 +16,7 @@ include_HEADERS = container.h  handler.h  part.h    shell.h    view.h \
 		  frame.h      plugin.h  toolbox.h  \
 		kcoloractions.h
 
-libkparts_la_METASOURCES = container.moc  handler.moc  part.moc    shell.moc    view.moc \
+libkoparts_la_METASOURCES = container.moc  handler.moc  part.moc    shell.moc    view.moc \
 			   frame.moc      plugin.moc  toolbox.moc  \
 			kcoloractions.moc
-
-servicetype_DATA = kpart.desktop
-servicetypedir = $(kde_servicetypesdir)
 
