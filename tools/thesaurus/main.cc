@@ -19,7 +19,8 @@
 
 /*
 FIXME:
--no trash at end of output!
+-Get rid of the broken icon
+-KDataTool in general: can it be accessed without using the mouse?
 -see the fixme's in the source below
 -function words (like "if" etc) are not part of wordnet. There  are not *that*
  many of them, so maybe we should add them. See search tools' stop word list for
@@ -27,7 +28,7 @@ FIXME:
 */
 
 /* QA:
--example for an multi-part-word "mental faculty"
+-example for a multi-part-word: "mental faculty"
 */
 
 #include "main.h"
@@ -58,6 +59,8 @@ FIXME:
  *
  ***************************************************/
 
+ // TODO: simplify with macro as Simon says:
+
 extern "C"
 {
     void* init_libthesaurustool()
@@ -78,8 +81,6 @@ ThesaurusFactory::~ThesaurusFactory()
 QObject* ThesaurusFactory::createObject(QObject* parent, const char* name, const char* /*classname*/, const QStringList &)
 {
     Thesaurus *wn = new Thesaurus(parent, name);
-    // TODO: where to delete this?
-    emit objectCreated(wn);
     return wn;
 }
 
@@ -89,7 +90,7 @@ QObject* ThesaurusFactory::createObject(QObject* parent, const char* name, const
  ***************************************************/
 
 Thesaurus::Thesaurus(QObject* parent, const char* name)
-    : KDataTool( parent, name )
+    : KDataTool(parent, name)
 {
     dialog = new KDialogBase("Thesaurus", KDialogBase::User1|KDialogBase::Cancel,
         KDialogBase::Yes, KDialogBase::Cancel,
@@ -97,7 +98,6 @@ Thesaurus::Thesaurus(QObject* parent, const char* name)
     dialog->setInitialSize(QSize(350, 400));
 
     layout = dialog->makeVBoxMainWidget();
-    // fixme: selecting one item from the history should immediately go there
 
     combobox = new QComboBox(layout);
     combobox->setEditable(false);
@@ -106,19 +106,19 @@ Thesaurus::Thesaurus(QObject* parent, const char* name)
     combobox->insertItem(i18n("Antonyms"));
     combobox->insertItem(i18n("Hyponyms - ...is a (kind of) X"));
     combobox->insertItem(i18n("Meroyms - X has a..."));
-    // TODO: add all the other relations
+    // TODO: add all the other relations?
     connect(combobox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
 
     edit = new KHistoryCombo(layout);
-    KCompletion *comp = edit->completionObject();
-
-    // fixme: doesn't work?:
-    connect(edit, SIGNAL(returnPressed(const QString&)), comp, SLOT(addItem(const QString&)));
+    // Do not use Return as default key...
+    edit->setTrapReturnKey(true);
+    // ...but search term when return is pressed or old term is selected:
     connect(edit, SIGNAL(returnPressed(const QString&)), this, SLOT(slotFindTerm(const QString&)));
-    // fixme: doesn't work?:
     connect(edit, SIGNAL(activated(const QString &)), this, SLOT(slotFindTerm(const QString &)));
 
-    indent = "   ";
+    // remember input:
+    connect(edit, SIGNAL(returnPressed(const QString&)), edit, SLOT(addToHistory(const QString&)));
+
     thesaurusproc = new KProcess;
     connect(thesaurusproc, SIGNAL(processExited(KProcess*)),
         this, SLOT(thesaurusExited(KProcess*)));
@@ -129,6 +129,9 @@ Thesaurus::Thesaurus(QObject* parent, const char* name)
 
     listbox = new QListBox(layout);
     connect(listbox, SIGNAL(selected(int)), this, SLOT(slotFindTerm(int)));
+
+    // indentation for items in the listbox:
+    indent = "   ";
 }
 
 Thesaurus::~Thesaurus()
@@ -177,7 +180,11 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     }
 
     if( dialog->exec() == KDialogBase::User1 ) {    // Replace
-        *((QString*)data) = listbox->currentText().stripWhiteSpace();
+        QString replace_text = listbox->currentText().stripWhiteSpace();
+        if( replace_text.isEmpty() ) {
+            replace_text = edit->currentText();
+        }
+        *((QString*)data) = replace_text;
     }
                 
     return TRUE;
@@ -186,7 +193,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
 
 bool Thesaurus::slotFindTerm(int index)
 {
-    kdDebug(31000) << "##KWWordInfo::slotFindTerm(" << index << ")" << endl;
+    //kdDebug(31000) << "##KWWordInfo::slotFindTerm(" << index << ")" << endl;
     if( listbox->currentItem() != -1 && listbox->text(index).left(indent.length()) != indent ) {
         return false;
     }
@@ -245,7 +252,7 @@ bool Thesaurus::findTerm(const QString &term)
 }
 
 
-void Thesaurus::thesaurusExited(KProcess *proc)
+void Thesaurus::thesaurusExited(KProcess *)
 {
     if( !procresult_stderr.isEmpty() ) {
       KMessageBox::error(0, i18n("Failed to execute thesaurus program 'wn' (wordnet)."
@@ -284,18 +291,13 @@ void Thesaurus::thesaurusExited(KProcess *proc)
 }
 
 
-void Thesaurus::receivedStdout(KProcess *proc, char *result, int len)
+void Thesaurus::receivedStdout(KProcess *, char *result, int len)
 {
-    char result_tmp[len+1];
-    strncpy(result_tmp, result, len);
-    procresult_stdout += QString(result_tmp);
-    //printf("##### %s\n", result);
-    //printf("##### %s\n", result_tmp);
-    //kdDebug(31000) << "#### stdout: " << QString(result_tmp) << endl;
+    procresult_stdout += QString::fromLocal8Bit( QCString(result, len+1) );
 }
 
 
-void Thesaurus::receivedStderr(KProcess *proc, char *result, int len)
+void Thesaurus::receivedStderr(KProcess *, char *result, int len)
 {
     procresult_stderr.replace(procresult_stderr.length(), len, result);
     //kdDebug(31000) << "#### stderr: " << QString(procresult_stderr) << endl;

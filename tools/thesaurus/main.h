@@ -34,6 +34,7 @@ class Thesaurus : public KDataTool
     Q_OBJECT
 
 public:
+    //Thesaurus(QObject* parent = 0, const char* name = 0, const QStringList* = 0);
     Thesaurus(QObject* parent = 0, const char* name = 0);
     ~Thesaurus();
     virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype);
@@ -66,7 +67,7 @@ class ThesaurusFactory : public KLibFactory
 public:
     ThesaurusFactory( QObject* parent = 0, const char* name = 0 );
     ~ThesaurusFactory();
-    virtual QObject* createObject( QObject* parent = 0, const char* name = 0, 
+    virtual QObject* createObject( QObject* parent = 0, const char* name = 0,
         const char* classname = "QObject", const QStringList &args = QStringList() );
 };
 
