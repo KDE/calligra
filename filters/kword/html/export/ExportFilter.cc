@@ -20,6 +20,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <math.h>
+
 #include <qstring.h>
 #include <qregexp.h>
 #include <qtextcodec.h>
@@ -169,8 +171,6 @@ QString HtmlWorker::textFormatToCss(const TextFormatting& formatData) const
     }
     // As this is the last property, do not put a semi-colon
     //strElement+="; ";
-
-    // TODO: KWord's <SHADOW>
 
     return strElement;
 }
@@ -473,37 +473,36 @@ QString HtmlWorker::layoutToCss(const LayoutData& layout) const
 {
     QString strLayout;
 
-    // We do not set "left" explicitly, since KWord cannot do bi-di
-    //  (FIXME/TODO: H'm, that is no more true!)
-    if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
+    if ( (layout.alignment=="left") || (layout.alignment== "right")
+        || (layout.alignment=="center") || (layout.alignment=="justify"))
     {
-        strLayout+=QString("text-align:%1; ").arg(layout.alignment);
+        strLayout += QString("text-align:%1; ").arg(layout.alignment);
+    }
+    else
+    {
+        kdWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
     }
 
-    // FIXME/TODO: H'm, why is 0.0 not a valid value?
-
-    if ( layout.indentLeft!=0.0 )
+    if ( layout.indentLeft>=0.0 )
     {
-        strLayout+=QString("margin-left:%1pt; ").arg(layout.indentLeft);
+        strLayout += QString("margin-left:%1pt; ").arg(layout.indentLeft);
     }
 
-    if ( layout.indentRight!=0.0 )
+    if ( layout.indentRight>=0.0 )
     {
-        strLayout+=QString("margin-right:%1pt; ").arg(layout.indentRight);
+        strLayout += QString("margin-right:%1pt; ").arg(layout.indentRight);
     }
 
-    if ( layout.indentFirst!=0.0 )
+    strLayout += QString("text-indent:%1pt; ").arg(layout.indentFirst);
+
+    if( layout.marginBottom>=0.0)
     {
-        strLayout+=QString("text-indent:%1pt; ").arg(layout.indentFirst);
+       strLayout += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
     }
 
-    if( layout.marginBottom!=0.0)
+    if( layout.marginTop>=0.0  )
     {
-        strLayout += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
-    }
-    if( layout.marginTop!=0.0  )
-    {
-        strLayout += QString("margin-top:%1pt; ").arg(layout.marginTop);
+       strLayout += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
 
     if ( !layout.lineSpacingType )
@@ -523,6 +522,85 @@ QString HtmlWorker::layoutToCss(const LayoutData& layout) const
     {
         kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
+
+    strLayout += "text-shadow:";
+    if ((!layout.shadowDirection) || (!layout.shadowDistance))
+    {
+        strLayout+="none; ";
+    }
+    else
+    {
+        double xDistance,yDistance;
+        double distance=rint(layout.shadowDistance); // rounf to nearest integer
+        switch (layout.shadowDirection)
+        {
+        case 1: // SD_LEFT_UP
+            {
+                xDistance= (-distance);
+                yDistance= (-distance);
+                break;
+            }
+        case 2: // SD_UP
+            {
+                xDistance= 0;
+                yDistance= (-distance);
+                break;
+            }
+        case 3: // SD_RIGHT_UP
+            {
+                xDistance= (distance);
+                yDistance= (-distance);
+                break;
+            }
+        case 4: // SD_RIGHT
+            {
+                xDistance= (distance);
+                yDistance= 0;
+                break;
+            }
+        case 5: // SD_RIGHT_BOTTOM
+            {
+                xDistance= (distance);
+                yDistance= (distance);
+                break;
+            }
+        case 6: // SD_BOTTOM
+            {
+                xDistance= 0;
+                yDistance= (distance);
+                break;
+            }
+        case 7: // SD_LEFT_BOTTOM
+            {
+                xDistance= (-distance);
+                yDistance= (distance);
+                break;
+            }
+        case 8: // SD_LEFT
+            {
+                xDistance= (distance);
+                yDistance= 0;
+                break;
+            }
+        default:
+            {
+                xDistance=0;
+                yDistance=0;
+                break;
+            }
+        }
+        if ( (!xDistance) && (!yDistance) )
+        {
+            strLayout+="none; ";
+        }
+        else
+        {
+            strLayout+=QString("%1 %2pt %3pt; ").arg(layout.shadowColor.name())
+                .arg(xDistance).arg(yDistance);
+        }
+    }
+
+    // TODO: borders
 
     // This must remain last, as the last property does not have a semi-colon
     strLayout+=textFormatToCss(layout.formatData.text);
