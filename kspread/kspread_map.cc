@@ -18,6 +18,7 @@
 */
 
 
+#include "kspread_changes.h"
 #include "kspread_map.h"
 #include "kspread_doc.h"
 #include "kspread_canvas.h"
@@ -30,14 +31,14 @@
 #include <stdlib.h>
 
 KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
-    : QObject( _doc, name )
+  : QObject( _doc, name ),
+    m_pDoc( _doc ),
+    m_pChanges( 0 ),
+    m_initialActiveTable( 0 ),
+    m_initialMarkerColumn( 0 ),
+    m_initialMarkerRow( 0 ),
+    m_dcop( 0 )
 {
-  m_pDoc = _doc;
-  m_dcop = 0;
-  m_initialActiveTable = 0L;
-  m_initialMarkerColumn = 0;
-  m_initialMarkerRow = 0;
-
   m_lstTables.setAutoDelete( true );
 }
 
@@ -49,6 +50,18 @@ KSpreadMap::~KSpreadMap()
 void KSpreadMap::setProtected( QCString const & passwd )
 {
   m_strPassword = passwd;
+}
+
+void KSpreadMap::startRecordingChanges()
+{
+  delete m_pChanges;
+  m_pChanges = new KSpreadChanges( this );
+}
+
+void KSpreadMap::stopRecordingChanges()
+{
+  delete m_pChanges;
+  m_pChanges = 0;
 }
 
 void KSpreadMap::addTable( KSpreadSheet *_table )
@@ -108,6 +121,9 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
       mymap.setAttribute( "protected", "" );      
   }
 
+  if ( m_pChanges )
+    m_pChanges->saveXml( doc, mymap );
+
   QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
   {
@@ -146,6 +162,17 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
     n = n.nextSibling();
   }
 
+  n = mymap.namedItem( "tracked-changes" );
+  if ( !n.isNull() )
+  {
+    QDomElement ch = n.toElement();
+    if ( !ch.isNull() )
+    {
+      m_pChanges = new KSpreadChanges( this );
+      m_pChanges->loadXml( ch );
+    }
+  }
+
   if ( mymap.hasAttribute( "protected" ) )
   {
     QString passwd = mymap.attribute( "protected" );
@@ -177,7 +204,7 @@ void KSpreadMap::update()
 
 KSpreadSheet* KSpreadMap::findTable( const QString & _name )
 {
-    KSpreadSheet *t;
+    KSpreadSheet * t;
 
     for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
     {
@@ -188,9 +215,9 @@ KSpreadSheet* KSpreadMap::findTable( const QString & _name )
     return 0L;
 }
 
-KSpreadSheet* KSpreadMap::nextTable( KSpreadSheet* currentTable )
+KSpreadSheet * KSpreadMap::nextTable( KSpreadSheet * currentTable )
 {
-    KSpreadSheet *t;
+    KSpreadSheet * t;
 
     if( currentTable == m_lstTables.last())
       return currentTable;
@@ -204,9 +231,9 @@ KSpreadSheet* KSpreadMap::nextTable( KSpreadSheet* currentTable )
     return 0L;
 }
 
-KSpreadSheet* KSpreadMap::previousTable( KSpreadSheet* currentTable )
+KSpreadSheet * KSpreadMap::previousTable( KSpreadSheet * currentTable )
 {
-    KSpreadSheet *t;
+    KSpreadSheet * t;
 
     if( currentTable == m_lstTables.first())
       return currentTable;
@@ -220,7 +247,7 @@ KSpreadSheet* KSpreadMap::previousTable( KSpreadSheet* currentTable )
     return 0L;
 }
 
-bool KSpreadMap::saveChildren( KoStore* _store )
+bool KSpreadMap::saveChildren( KoStore * _store )
 {
   QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
@@ -232,7 +259,7 @@ bool KSpreadMap::saveChildren( KoStore* _store )
   return true;
 }
 
-bool KSpreadMap::loadChildren( KoStore* _store )
+bool KSpreadMap::loadChildren( KoStore * _store )
 {
   QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
@@ -242,7 +269,7 @@ bool KSpreadMap::loadChildren( KoStore* _store )
   return true;
 }
 
-DCOPObject* KSpreadMap::dcopObject()
+DCOPObject * KSpreadMap::dcopObject()
 {
     if ( !m_dcop )
         m_dcop = new KSpreadMapIface( this );
@@ -250,22 +277,22 @@ DCOPObject* KSpreadMap::dcopObject()
     return m_dcop;
 }
 
-KSpreadDoc* KSpreadMap::doc() const
+KSpreadDoc * KSpreadMap::doc() const
 {
     return m_pDoc;
 }
 
-void KSpreadMap::takeTable( KSpreadSheet* table )
+void KSpreadMap::takeTable( KSpreadSheet * table )
 {
-    int pos=m_lstTables.findRef(table);
+    int pos = m_lstTables.findRef( table );
     m_lstTables.take( pos );
     m_lstDeletedTables.append( table );
 }
 
-void KSpreadMap::insertTable( KSpreadSheet* table )
+void KSpreadMap::insertTable( KSpreadSheet * table )
 {
-    int pos=m_lstDeletedTables.findRef(table);
+    int pos = m_lstDeletedTables.findRef( table );
     if ( pos != -1 )
-        m_lstDeletedTables.take( pos);
+        m_lstDeletedTables.take( pos );
     m_lstTables.append(table);
 }

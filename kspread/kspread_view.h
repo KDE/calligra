@@ -244,7 +244,13 @@ public slots:
     void togglePageBorders( bool );
     void toggleProtectSheet( bool );
     void toggleProtectDoc( bool );
-    void viewZoom(const QString &);
+    void toggleRecordChanges( bool );
+    void toggleProtectChanges( bool );
+    void filterChanges();
+    void acceptRejectChanges();
+    void commentChanges();
+    void mergeDocument();
+    void viewZoom( const QString & );
     void find();
     void findNext();
     void findPrevious();
@@ -631,6 +637,13 @@ private:
     KToggleAction* m_protectSheet;
     KToggleAction* m_protectDoc;
 
+    KToggleAction* m_recordChanges;
+    KToggleAction* m_protectChanges;
+    KAction* m_filterChanges;
+    KAction* m_acceptRejectChanges;
+    KAction* m_commentChanges;    
+    KAction* m_mergeDocument;
+
     KToggleAction* m_menuCalcMin;
     KToggleAction* m_menuCalcMax;
     KToggleAction* m_menuCalcAverage;
@@ -785,7 +798,7 @@ private:
   void adjustActions( bool mode );
   void adjustActions( KSpreadSheet const * const table,
                       KSpreadCell const * const cell );
-
+  bool checkChangeRecordPassword();
 
 };
 

@@ -632,6 +632,8 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool up
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
+    kdDebug() << "SetCellText" << endl;
+
     // The cell will force a display refresh itself, so we dont have to care here.
     cell->setCellText( _text, updateDepends );
     //refresh anchor

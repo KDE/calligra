@@ -58,6 +58,7 @@
 
 #include <kparts/partmanager.h>
 
+#include "kspread_changes.h"
 #include "kspread_sheetprint.h"
 #include "kspread_map.h"
 #include "kspread_dlg_scripts.h"
@@ -709,20 +710,57 @@ void KSpreadView::initializeGlobalOperationActions()
            SLOT( togglePageBorders( bool ) ) );
   m_showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be." ) );
 
-  m_viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
-                                  actionCollection(), "view_zoom" );
-
-  m_protectSheet = new KToggleAction( i18n( "Protect &Sheet" ), 0,
+  m_protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ), 0,
                                       actionCollection(), "protectSheet" );
   m_protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
   connect( m_protectSheet, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectSheet( bool ) ) );
 
-  m_protectDoc = new KToggleAction( i18n( "Protect &Doc" ), 0,
+  m_protectDoc = new KToggleAction( i18n( "Protect &Doc..." ), 0,
                                       actionCollection(), "protectDoc" );
   m_protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
   connect( m_protectDoc, SIGNAL( toggled( bool ) ), this,
            SLOT( toggleProtectDoc( bool ) ) );
+
+  m_recordChanges = new KToggleAction( i18n( "&Record Changes" ), 0,
+                                       actionCollection(), "recordChanges" );
+  m_recordChanges->setToolTip( i18n( "Record changes made to this document" ) );
+  connect( m_recordChanges, SIGNAL( toggled( bool ) ), this,
+           SLOT( toggleRecordChanges( bool ) ) );
+
+
+  m_protectChanges = new KToggleAction( i18n( "&Protect Changes..." ), 0,
+                                        actionCollection(), "protectRecords" );
+  m_protectChanges->setToolTip( i18n( "Protect the change records from being accepted or rejected" ) );
+  m_protectChanges->setEnabled( false );
+  connect( m_protectChanges, SIGNAL( toggled( bool ) ), this,
+           SLOT( toggleProtectChanges( bool ) ) );
+
+  m_filterChanges = new KAction( i18n( "&Filter Changes..." ), 0, this,
+                                 SLOT( filterChanges() ), actionCollection(),
+                                 "filterChanges" );
+  m_filterChanges->setToolTip( i18n( "Change display settings for changes" ) );
+  m_filterChanges->setEnabled( false );
+
+  m_acceptRejectChanges = new KAction( i18n( "&Accept or Reject..." ), 0, this,
+                                       SLOT( acceptRejectChanges() ), actionCollection(),
+                                       "acceptRejectChanges" );
+  m_acceptRejectChanges->setToolTip( i18n( "Accept or reject changes made to this document" ) );
+  m_acceptRejectChanges->setEnabled( false );
+
+  m_commentChanges = new KAction( i18n( "&Comment Changes..." ), 0, this, 
+                                  SLOT( commentChanges() ), actionCollection(),
+                                  "commentChanges" );
+  m_commentChanges->setToolTip( i18n( "Add comments to changes you made" ) );
+  m_commentChanges->setEnabled( false );
+
+  m_mergeDocument = new KAction( i18n( "&Merge Document..." ), 0, this,
+                                 SLOT( mergeDocument() ), actionCollection(),
+                                 "mergeDocument" );
+  m_mergeDocument->setToolTip( i18n( "Merge this document with a document that recorded changes" ) );
+
+  m_viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
+                                  actionCollection(), "view_zoom" );
 
   connect( m_viewZoom, SIGNAL( activated( const QString & ) ),
            this, SLOT( viewZoom( const QString & ) ) );
@@ -3894,7 +3932,8 @@ void KSpreadView::toggleProtectDoc( bool mode )
 
      QCString hash;
      QString password( passwd );
-     SHA1::getHash( password, hash );
+     if ( password.length() > 0 )
+       SHA1::getHash( password, hash );
      m_pDoc->map()->setProtected( hash );
    }
    else
@@ -3966,7 +4005,8 @@ void KSpreadView::toggleProtectSheet( bool mode )
 
      QCString hash;
      QString password( passwd );
-     SHA1::getHash( password, hash );
+     if ( password.length() > 0 )
+       SHA1::getHash( password, hash );
      m_pTable->setProtected( hash );
    }
    else
@@ -4121,6 +4161,116 @@ void KSpreadView::adjustActions( bool mode )
     m_renameTable->setEnabled( false );
 
   canvasWidget()->gotoLocation( m_selectionInfo->marker(), m_pTable );
+}
+
+void KSpreadView::toggleRecordChanges( bool mode )
+{
+  if ( !mode )
+  {
+    if ( KMessageBox::questionYesNo( this,
+                                     i18n( "You are about to exit the change recording mode. All the informations about changes will be lost. Do you want to continue?" ) )
+         != KMessageBox::Yes )
+      return;   
+  }
+
+  if ( m_protectChanges->isChecked() )
+  {
+    if ( !checkChangeRecordPassword() )
+      return;
+    m_protectChanges->setChecked( false );
+  }
+
+  if ( mode )
+    m_pTable->map()->startRecordingChanges();
+  else
+    m_pTable->map()->stopRecordingChanges();
+
+  m_protectChanges->setEnabled( mode );
+  m_filterChanges->setEnabled( mode );
+  m_acceptRejectChanges->setEnabled( mode );
+  m_commentChanges->setEnabled( mode );
+}
+
+void KSpreadView::toggleProtectChanges( bool mode )
+{
+  if ( !m_recordChanges->isChecked() )
+  {
+    m_protectChanges->setChecked( false );
+    return;
+  }
+
+   if ( mode )
+   {
+     QCString passwd;
+     int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect recorded changes" ) );
+     if ( result != KPasswordDialog::Accepted )
+     {
+       m_protectChanges->setChecked( false );
+       return;
+     }
+
+     QCString hash;
+     QString password( passwd );
+     if ( password.length() > 0 )
+       SHA1::getHash( password, hash );
+     m_pTable->map()->changes()->setProtected( hash );
+   }
+   else
+   {
+     checkChangeRecordPassword();
+   }  
+}
+
+bool KSpreadView::checkChangeRecordPassword()
+{
+  QCString passwd;
+  m_pTable->map()->changes()->password( passwd );
+  if ( passwd.isNull() || passwd.length() == 0 )
+    return true;
+
+  int result = KPasswordDialog::getPassword( passwd, i18n( "Unprotect recorded changes" ) );
+  if ( result != KPasswordDialog::Accepted )
+  {
+    m_protectChanges->setChecked( true );
+    return false;
+  }
+  
+  QCString hash( "" );
+  QString password( passwd );
+  if ( password.length() > 0 )
+    SHA1::getHash( password, hash );
+  if ( !m_pTable->map()->changes()->checkPassword( hash ) )
+  {
+    KMessageBox::error( 0, i18n( "Incorrect password" ) );
+    m_protectChanges->setChecked( true );
+    return false;
+  }
+  
+  m_pTable->map()->changes()->setProtected( QCString() );
+  m_protectChanges->setChecked( false );
+  return true;
+}
+
+void KSpreadView::filterChanges()
+{
+  if ( !m_recordChanges->isChecked() )
+    return;
+}
+
+void KSpreadView::acceptRejectChanges()
+{
+  if ( !m_recordChanges->isChecked() )
+    return;
+}
+
+void KSpreadView::commentChanges()
+{
+  if ( !m_recordChanges->isChecked() )
+    return;
+}
+
+void KSpreadView::mergeDocument()
+{
 }
 
 void KSpreadView::togglePageBorders( bool mode )
