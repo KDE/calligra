@@ -34,7 +34,7 @@ static const KCmdLineOptions options[]=
 	{"+in", I18N_NOOP("Input file"),0},
 	{"+out", I18N_NOOP("Output file"),0},
     {"batch", I18N_NOOP("Batch mode, do not show dialogs"),0},
-    {"interactive", I18N_NOOP("Interactive mode, show dialogs (dafault)"),0},
+    {"interactive", I18N_NOOP("Interactive mode, show dialogs (default)"),0},
 	{"mimetype <mime>", I18N_NOOP("Mimetype of the output file"),0},
 	KCmdLineLastOption
 };
