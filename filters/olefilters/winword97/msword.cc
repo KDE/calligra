@@ -30,7 +30,7 @@
 #include <qtextcodec.h>
 #include <string.h>
 
-//#define CHAR_DEBUG
+#define CHAR_DEBUG
 
 // We currently only take note of the document's main non-Far Eastern
 // language, and ignore character properties. TBD: remove these restrictions!
@@ -77,14 +77,24 @@ QString MsWord::char2unicode(unsigned lid, char c)
 	result = '?';
 
     // KWord (?) can't handle the " <- if it's like this, up, it just
-    // always draws the bottom-" , the real " is interpreted as shit :(
+    // always draws the bottom-" , the real " is interpreted as shit
+    // in some documents (mostly german ones)
     // so let's force the bottom-" for the moment (Niko)
+    
+    // UNICODE WORKAROUNDS
+    // If you see a wrong character, get the unicode specs
+    // convert the containing hex values to dec values
+    // and use CHAR_DEBUG to find out the unicode value of
+    // the wrong char and replace them (Niko) 
     if(result[0].unicode() == 8222)
 	result[0] = QChar(8220);
 
+    if(result[0].unicode() == 8217)
+	result[0] = QChar(39);
+
 #ifdef CHAR_DEBUG
-    qDebug("text: %c", c);
-    qDebug("unicode result: %04x", result[0].unicode());   
+    kdDebug() << "text: " << c << endl;
+    kdDebug() << "unicode value: " << result[0].unicode() << endl;
 #endif    
 
     return result;
