@@ -362,7 +362,6 @@ void KWFrameResizeCommand::execute()
            table->recalcCols();
            table->recalcRows();
         }
-        table->updateTempHeaders();
         table->refreshSelectedCell();
         //repaintTableHeaders( table );
     }
@@ -393,7 +392,6 @@ void KWFrameResizeCommand::unexecute()
            table->recalcCols();
            table->recalcRows();
         }
-        table->updateTempHeaders();
         table->refreshSelectedCell();
         //repaintTableHeaders( table );
     }

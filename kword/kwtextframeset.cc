@@ -1747,7 +1747,6 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame )
         KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
         table->recalcCols(cell->m_col,cell->m_row);
         table->recalcRows(cell->m_col,cell->m_row);
-        table->updateTempHeaders();
     }
 
     // m_doc->frameChanged( theFrame );

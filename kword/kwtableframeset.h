@@ -79,6 +79,11 @@ public:
         double rightBorder();
         double topBorder();
         double bottomBorder();
+
+        void setLeftBorder(KoBorder newBorder);
+        void setRightBorder(KoBorder newBorder);
+        void setTopBorder(KoBorder newBorder);
+        void setBottomBorder(KoBorder newBorder);
     private:
         KWTableFrameSet *m_table;
     };
@@ -193,7 +198,6 @@ public:
     bool getShowHeaderOnAllPages() { return m_showHeaderOnAllPages; }
 
     /** redraw contents of temp headers. */
-    void updateTempHeaders();
     bool hasTempHeaders() { return m_hasTmpHeaders; }
 
     /** release the constrains of the table and allow all frames to be

@@ -26,6 +26,7 @@
 #include "defs.h"
 #include "kwutils.h"
 #include "kwtextframeset.h"
+#include "kwtableframeset.h"
 #include "kwanchor.h"
 #include "resizehandles.h"
 #include <kotextobject.h> // for customItemChar!
@@ -432,6 +433,7 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     bbottom = frameElem.attribute( "bbottompt" ).toDouble();
     m_bCopy = KWDocument::getAttribute( frameElem, "copy", headerOrFooter /* default to true for h/f */ );
 }
+
 
 /******************************************************************/
 /* Class: KWFrameSet                                              */
@@ -894,7 +896,6 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                    << " crect= " << DEBUGRECT(crect)
                    << endl; */
     m_currentDrawnCanvas = canvas;
-    bool drawBorders = ( getGroupManager() == 0 );
 
     QPtrListIterator<KWFrame> frameIt( frameIterator() );
     KWFrame * lastRealFrame = 0L;
@@ -956,25 +957,23 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->restore();
             }
         }
-        if ( drawBorders )
+        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+        r = crect.intersect( outerRect );
+        if ( !r.isEmpty() )
         {
-            QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-            r = crect.intersect( outerRect );
-            if ( !r.isEmpty() )
+            // Now draw the frame border
+            // Clip frames on top if onlyChanged, but don't clip to the frame
+            QRegion reg = frameClipRegion( p, 0L, r, viewMode, onlyChanged );
+            if ( !reg.isEmpty() )
             {
-                // Now draw the frame border
-                // Clip frames on top if onlyChanged, but don't clip to the frame
-                QRegion reg = frameClipRegion( p, 0L, r, viewMode, onlyChanged );
-                if ( !reg.isEmpty() )
-                {
-                    p->save();
-                    p->setClipRegion( reg );
-                    KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-                    drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
-                    p->restore();
-                }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
-            }
+                p->save();
+                p->setClipRegion( reg );
+                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+                drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
+                p->restore();
+            }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
         }
+
         if ( !lastRealFrame || !frame->isCopy() )
         {
             lastRealFrame = frame;

@@ -81,13 +81,14 @@ public:
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool );
 
-    // --
-    // frame border
-    void setLeftFrameBorder( KoBorder _frmBrd, bool _b );
-    void setRightFrameBorder( KoBorder _frmBrd, bool _b );
-    void setTopFrameBorder( KoBorder _frmBrd, bool _b );
-    void setBottomFrameBorder( KoBorder _frmBrd, bool _b );
-    void setOutlineFrameBorder( KoBorder _frmBrd, bool _b );
+    /**
+    * set frame border. Sets frame border to newBorder, or to 0 if on==false.
+    */
+    void setLeftFrameBorder( KoBorder newBorder, bool on );
+    void setRightFrameBorder( KoBorder newBorder, bool on );
+    void setTopFrameBorder( KoBorder newBorder, bool on );
+    void setBottomFrameBorder( KoBorder newBorder, bool on );
+    void setOutlineFrameBorder( KoBorder newBorder, bool on );
 
     void setFrameBackgroundColor( const QBrush &backColor );
 

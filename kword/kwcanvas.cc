@@ -1003,7 +1003,6 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
         if (table) {
             table->recalcCols();
             table->recalcRows();
-            table->updateTempHeaders();
             if(m_frameResized)
                 table->refreshSelectedCell();
             //repaintTableHeaders( table );
@@ -1256,8 +1255,9 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
     m_mousePressed = true; // needed for the dbl-click + move feature.
 }
 
-void KWCanvas::setLeftFrameBorder( KoBorder _frmBrd, bool _b )
+void KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
 {
+kdDebug() << "KWCanvas::setLeftFrameBorder (on==" << on << ")" << endl;
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
@@ -1265,13 +1265,13 @@ void KWCanvas::setLeftFrameBorder( KoBorder _frmBrd, bool _b )
     QPtrList<FrameIndex> frameindexList;
     bool leftFrameBorderChanged=false;
 
-    if (!_b)
-        _frmBrd.ptWidth=0;
+    if (!on)
+        newBorder.ptWidth=0;
 
 
     KWFrame *frame=0L;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-    {
+    {  // do all selected frames
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
@@ -1280,33 +1280,26 @@ void KWCanvas::setLeftFrameBorder( KoBorder _frmBrd, bool _b )
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
-        if (_b)
+        if (newBorder!=frame->leftBorder()) // only commit when it has actually changed
         {
-            if (_frmBrd!=frame->leftBorder())
-            {
-                leftFrameBorderChanged=true;
-                frame->setLeftBorder(_frmBrd);
-            }
-        }
-        else
-        {
-            if(frame->leftBorder().ptWidth!=0)
-            {
-                leftFrameBorderChanged=true;
-                frame->setLeftBorder(_frmBrd);
-            }
+            leftFrameBorderChanged=true;
+            KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->getFrameSet());
+            if(cell!=0L) // is a table cell
+                cell->setLeftBorder(newBorder);
+            else
+                frame->setLeftBorder(newBorder);
         }
         frame->updateResizeHandles();
     }
     if(leftFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),frameindexList,tmpBorderList,_frmBrd);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
     }
 }
 
-void KWCanvas::setRightFrameBorder( KoBorder _frmBrd, bool _b )
+void KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
@@ -1315,11 +1308,11 @@ void KWCanvas::setRightFrameBorder( KoBorder _frmBrd, bool _b )
     QPtrList<FrameIndex> frameindexList;
     bool rightFrameBorderChanged=false;
     KWFrame *frame=0L;
-    if (!_b)
-        _frmBrd.ptWidth=0;
+    if (!on)
+        newBorder.ptWidth=0;
 
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-    {
+    { // do all selected frames
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
@@ -1329,33 +1322,26 @@ void KWCanvas::setRightFrameBorder( KoBorder _frmBrd, bool _b )
         tmpBorderList.append(tmp);
         frameindexList.append(index);
 
-        if (_b)
+        if (newBorder!=frame->rightBorder())
         {
-            if (_frmBrd!=frame->rightBorder())
-            {
-                rightFrameBorderChanged=true;
-                frame->setRightBorder(_frmBrd);
-            }
-        }
-        else
-        {
-            if(frame->rightBorder().ptWidth!=0)
-            {
-                frame->setRightBorder(_frmBrd);
-                rightFrameBorderChanged=true;
-            }
+            rightFrameBorderChanged=true;
+            KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->getFrameSet());
+            if(cell!=0L) // is a table cell
+                cell->setRightBorder(newBorder);
+            else
+                frame->setRightBorder(newBorder);
         }
         frame->updateResizeHandles();
     }
     if( rightFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),frameindexList,tmpBorderList,_frmBrd);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
     }
 }
 
-void KWCanvas::setTopFrameBorder( KoBorder _frmBrd, bool _b )
+void KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
@@ -1366,10 +1352,10 @@ void KWCanvas::setTopFrameBorder( KoBorder _frmBrd, bool _b )
     bool topFrameBorderChanged=false;
 
     KWFrame *frame=0L;
-    if (!_b)
-        _frmBrd.ptWidth=0;
+    if (!on)
+        newBorder.ptWidth=0;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-    {
+    { // do all selected frames
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
@@ -1378,33 +1364,26 @@ void KWCanvas::setTopFrameBorder( KoBorder _frmBrd, bool _b )
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
-        if (_b)
+        if (newBorder!=frame->topBorder())
         {
-            if (_frmBrd!=frame->topBorder())
-            {
-                topFrameBorderChanged=true;
-                frame->setTopBorder(_frmBrd);
-            }
-        }
-        else
-        {
-            if(frame->topBorder().ptWidth!=0)
-            {
-                topFrameBorderChanged=true;
-                frame->setTopBorder(_frmBrd);
-            }
+            topFrameBorderChanged=true;
+            KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->getFrameSet());
+            if(cell!=0L) // is a table cell
+                cell->setTopBorder(newBorder);
+            else
+                frame->setTopBorder(newBorder);
         }
         frame->updateResizeHandles();
     }
     if(topFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),frameindexList,tmpBorderList,_frmBrd);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
     }
 }
 
-void KWCanvas::setBottomFrameBorder( KoBorder _frmBrd, bool _b )
+void KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
@@ -1413,11 +1392,11 @@ void KWCanvas::setBottomFrameBorder( KoBorder _frmBrd, bool _b )
     QPtrList<FrameBorderTypeStruct> tmpBorderList;
     QPtrList<FrameIndex> frameindexList;
     KWFrame *frame=0L;
-    if (!_b)
-        _frmBrd.ptWidth=0;
+    if (!on)
+        newBorder.ptWidth=0;
 
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-    {
+    { // do all selected frames
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex( frame );
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
@@ -1426,40 +1405,33 @@ void KWCanvas::setBottomFrameBorder( KoBorder _frmBrd, bool _b )
 
         tmpBorderList.append(tmp);
         frameindexList.append(index);
-        if (_b)
+        if (newBorder!=frame->bottomBorder())
         {
-            if (_frmBrd!=frame->bottomBorder())
-            {
-                bottomFrameBorderChanged=true;
-                frame->setBottomBorder(_frmBrd);
-            }
-        }
-        else
-        {
-            if(frame->bottomBorder().ptWidth!=0)
-            {
-                bottomFrameBorderChanged=true;
-                frame->setBottomBorder(_frmBrd);
-            }
+            bottomFrameBorderChanged=true;
+            KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->getFrameSet());
+            if(cell!=0L) // is a table cell
+                cell->setBottomBorder(newBorder);
+            else
+                frame->setBottomBorder(newBorder);
         }
         frame->updateResizeHandles();
     }
     if(bottomFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),frameindexList,tmpBorderList,_frmBrd);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
     }
 }
 
-void KWCanvas::setOutlineFrameBorder( KoBorder _frmBrd, bool _b )
+void KWCanvas::setOutlineFrameBorder( KoBorder newBorder, bool on )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
         return;
     KWFrame *frame=0L;
-    if (!_b)
-        _frmBrd.ptWidth=0;
+    if (!on)
+        newBorder.ptWidth=0;
 
     QPtrList<FrameBorderTypeStruct> tmpBorderListRight;
     QPtrList<FrameBorderTypeStruct> tmpBorderListTop;
@@ -1473,7 +1445,7 @@ void KWCanvas::setOutlineFrameBorder( KoBorder _frmBrd, bool _b )
     int m_IindexFrame;
     //int m_IindexFrameSet;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-    {
+    { // do all selected frames
         frame=KWFrameSet::settingsFrame(frame);
         FrameIndex *index=new FrameIndex;
         FrameBorderTypeStruct *tmp=new FrameBorderTypeStruct;
@@ -1523,37 +1495,34 @@ void KWCanvas::setOutlineFrameBorder( KoBorder _frmBrd, bool _b )
         tmpBorderListLeft.append(tmp);
         frameindexListLeft.append(index);
 
-        if (_b)
-        {
-            if (_frmBrd!=frame->bottomBorder())
-                frame->setBottomBorder(_frmBrd);
-            if (_frmBrd!=frame->topBorder())
-                frame->setTopBorder(_frmBrd);
-            if (_frmBrd!=frame->leftBorder())
-                frame->setLeftBorder(_frmBrd);
-            if (_frmBrd!=frame->rightBorder())
-                frame->setRightBorder(_frmBrd);
-        }
-        else
-        {
-            frame->setTopBorder(_frmBrd);
-            frame->setBottomBorder(_frmBrd);
-            frame->setLeftBorder(_frmBrd);
-            frame->setRightBorder(_frmBrd);
-        }
+        KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>(frame->getFrameSet());
+
+        if (newBorder!=frame->bottomBorder())
+            if(cell) cell->setBottomBorder(newBorder); // is a table cell
+            else frame->setBottomBorder(newBorder);
+        if (newBorder!=frame->topBorder())
+            if(cell) cell->setTopBorder(newBorder);
+            else frame->setTopBorder(newBorder);
+        if (newBorder!=frame->leftBorder())
+            if(cell) cell->setLeftBorder(newBorder);
+            else frame->setLeftBorder(newBorder);
+        if (newBorder!=frame->rightBorder())
+            if(cell) cell->setRightBorder(newBorder);
+            else frame->setRightBorder(newBorder);
+
         frame->updateResizeHandles();
     }
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change Outline Border") );
-    KWFrameBorderCommand *cmd=new KWFrameBorderCommand(QString::null,frameindexListBottom,tmpBorderListBottom,_frmBrd);
+    KWFrameBorderCommand *cmd=new KWFrameBorderCommand(QString::null,frameindexListBottom,tmpBorderListBottom,newBorder);
     macroCmd->addCommand(cmd);
 
-    cmd=new KWFrameBorderCommand(QString::null,frameindexListLeft,tmpBorderListLeft,_frmBrd);
+    cmd=new KWFrameBorderCommand(QString::null,frameindexListLeft,tmpBorderListLeft,newBorder);
     macroCmd->addCommand(cmd);
 
-    cmd=new KWFrameBorderCommand(QString::null,frameindexListTop,tmpBorderListTop,_frmBrd);
+    cmd=new KWFrameBorderCommand(QString::null,frameindexListTop,tmpBorderListTop,newBorder);
     macroCmd->addCommand(cmd);
 
-    cmd=new KWFrameBorderCommand(QString::null,frameindexListRight,tmpBorderListRight,_frmBrd);
+    cmd=new KWFrameBorderCommand(QString::null,frameindexListRight,tmpBorderListRight,newBorder);
     macroCmd->addCommand(cmd);
 
     m_doc->addCommand(macroCmd);
