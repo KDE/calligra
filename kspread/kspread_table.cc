@@ -411,7 +411,7 @@ int KSpreadTable::columnRangeMax()
     int x = columnPos( maxColumn() + 1 );
 
     // Then add the default width for the unused
-    x += ( KS_colMax - maxColumn() ) * colWidth;
+    x += ( KS_colMax - maxColumn() ) * m_pDefaultColumnLayout->width();
 
     return x;
 }
@@ -427,7 +427,7 @@ int KSpreadTable::rowRangeMax()
     int y = rowPos( maxRow() + 1 );
 
     // Then add the default height for the unused
-    y += ( KS_rowMax - maxRow() ) * heightOfRow;
+    y += ( KS_rowMax - maxRow() ) * m_pDefaultRowLayout->height();
 
     return y;
 }
