@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+  <!ENTITY package "koffice">
   <!ENTITY kappname "&kpresenter;">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY tutorial SYSTEM "tutorial.docbook">
@@ -29,6 +30,13 @@
 
 <date>2000-01-31</date>
 <releaseinfo>1.10.00</releaseinfo>
+
+<copyright>
+<year>1999</year><year>2000</year>
+<holder>Krishna Tateneni</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
 
 <abstract>
 <para>
@@ -261,7 +269,9 @@ Documentation copyright 1999-2000 by Krishna Tateneni
 <appendix id="installation">
 <title>Installation</title>
 
-<para></para>
+&install.intro.documentation;
+
+&install.compile.documentation;
 
 </appendix>
 
