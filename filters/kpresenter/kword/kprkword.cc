@@ -199,7 +199,7 @@ void KprKword::convert()
 
     int curPage = -1;
 
-    for ( QListIterator<KprObject> it(objList); it.current(); ++it )
+    for ( QPtrListIterator<KprObject> it(objList); it.current(); ++it )
     {
         QDomElement elem = it.current()->elem;
         // Detect the first object of each page
