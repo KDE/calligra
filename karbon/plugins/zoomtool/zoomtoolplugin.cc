@@ -103,11 +103,6 @@ VZoomTool::mouseButtonPress()
 void
 VZoomTool::mouseButtonRelease()
 {
-	/*double viewportX = view()->canvasWidget()->visibleWidth() * 0.75 / view()->zoom();
-	double viewportY = view()->canvasWidget()->visibleHeight() * 0.75 / view()->zoom();
-	KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
-	rect = rect.normalize();
-	view()->canvasWidget()->setViewportRect( rect );*/
 	view()->setZoomAt( view()->zoom() * 1.5, last() );
 }
 

@@ -88,7 +88,7 @@ VCanvas::~VCanvas()
 void
 VCanvas::setPos( const KoPoint& p )
 {
-	QCursor::setPos( p.x() * m_view->zoom(), p.y() * m_view->zoom() );
+	QCursor::setPos( int( p.x() * m_view->zoom() ), int( p.y() * m_view->zoom() ) );
 }
 
 bool
@@ -213,7 +213,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
-	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect.toQRect() );
+	bitBlt( viewport(), QPoint( int( rect.x() ), int( rect.y() ) ), p->device(), rect.toQRect() );
 	viewport()->setUpdatesEnabled( true );
 	//bitBlt( this, QPoint( rect.x(), rect.y() - pageOffsetY() ), p->device(), rect );
 }
@@ -221,8 +221,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 void
 VCanvas::setViewport( double centerX, double centerY )
 {
-	setContentsPos( centerX * contentsWidth() - visibleWidth() / 2,
-					centerY * contentsHeight() - visibleHeight() / 2 );
+	setContentsPos( int( centerX * contentsWidth() - visibleWidth() / 2 ),
+					int( centerY * contentsHeight() - visibleHeight() / 2 ) );
 }
 
 void
@@ -234,8 +234,8 @@ VCanvas::setViewportRect( const KoRect &r )
 	double centerX = double( r.center().x() * m_view->zoom() ) / double( contentsWidth() );
 	double centerY = double( r.center().y() * m_view->zoom() ) / double( contentsHeight() );
 	double zoom = zoomX < zoomY ? zoomX : zoomY;
-	resizeContents( ( zoom / m_view->zoom() ) * contentsWidth(),
-					( zoom / m_view->zoom() ) * contentsHeight() );
+	resizeContents( int( ( zoom / m_view->zoom() ) * contentsWidth() ),
+					int( ( zoom / m_view->zoom() ) * contentsHeight() ) );
 	setViewport( centerX, 1.0 - centerY );
 	m_view->setZoomAt( zoom );
 	viewport()->setUpdatesEnabled( true );
@@ -249,7 +249,7 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 }
 
 void
-VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObjects )
+VCanvas::drawDocument( QPainter* /*painter*/, const KoRect&, bool drawVObjects )
 {
 	setYMirroring( m_view->painterFactory()->editpainter() );
 	//kdDebug() << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
@@ -306,7 +306,7 @@ VCanvas::repaintAll( const KoRect & )
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
-	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect.toQRect() );
+	bitBlt( viewport(), QPoint( int( rect.x() ), int( rect.y() ) ), p->device(), rect.toQRect() );
 }
 
 void
