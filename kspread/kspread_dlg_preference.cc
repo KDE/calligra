@@ -37,6 +37,7 @@
 #include <kcolorbutton.h>
 #include <qgrid.h>
 
+
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
 		KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
@@ -60,6 +61,11 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   _colorParameter=new colorParameters(parent,page );
   page=addVBoxPage(i18n("Page layout"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
   _layoutPage=new configureLayoutPage(parent,page );
+
+  page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
+                          BarIcon("spellcheck", KIcon::SizeMedium) );
+  _spellPage=new configureSpellPage(parent,page);
+
 }
 
 void KSpreadpreference::slotApply()
@@ -69,6 +75,7 @@ void KSpreadpreference::slotApply()
   _miscParameter->apply();
   _colorParameter->apply();
   _layoutPage->apply();
+  _spellPage->apply();
   m_pView->doc()->refreshInterface();
 }
 
@@ -669,14 +676,11 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
   tmpQGroupBox->setTitle(i18n("Default parameters"));
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
-  /*QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
-  lay1->setMargin( 20 );
-  lay1->setSpacing( 10 );*/
   config = KSpreadFactory::global()->config();
 
   QLabel *label=new QLabel(tmpQGroupBox);
   label->setText(i18n("Default page size:"));
-  //lay1->addWidget(label);
+
   grid1->addWidget(label,0,0);
   
   defaultSizePage=new QComboBox( tmpQGroupBox);
@@ -692,12 +696,10 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   listType+=i18n( "US Executive" );
   defaultSizePage->insertStringList(listType);
   defaultSizePage->setCurrentItem(1);
-  //lay1->addWidget(defaultSizePage);
   grid1->addWidget(defaultSizePage,1,0);
   
   label=new QLabel(tmpQGroupBox);
   label->setText(i18n("Default page orientation:"));
-  //lay1->addWidget(label);
   grid1->addWidget(label,2,0);
   
   defaultOrientationPage=new QComboBox( tmpQGroupBox);
@@ -706,7 +708,6 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   listType+=i18n( "Landscape" );
   defaultOrientationPage->insertStringList(listType);
   defaultOrientationPage->setCurrentItem(0);
-  //lay1->addWidget(defaultOrientationPage);
   grid1->addWidget(defaultOrientationPage,3,0);
   initCombo();
   box->addWidget( tmpQGroupBox);
@@ -752,5 +753,24 @@ void configureLayoutPage::apply()
    }
 }
 
+configureSpellPage::configureSpellPage( KSpreadView* _view,QWidget *parent , char *name )
+ :QWidget ( parent,name)
+{
+  m_pView = _view;
 
+  QVBoxLayout *box = new QVBoxLayout( this );
+  box->setMargin( 5 );
+  box->setSpacing( 10 );
+
+  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  tmpQGroupBox->setTitle(i18n("Spelling"));
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
+  _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L ,0, false );
+  grid1->addWidget(_spellConfig,0,0);
+  box->addWidget( tmpQGroupBox);
+}
+void configureSpellPage::apply()
+{
+  _spellConfig->writeGlobalSettings ();
+}
 #include "kspread_dlg_preference.moc"

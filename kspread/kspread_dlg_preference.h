@@ -29,6 +29,7 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kcolorbutton.h>
+#include <kspell.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -132,6 +133,20 @@ protected:
   KConfig* config;
 } ;
 
+class configureSpellPage : public QWidget
+{
+  Q_OBJECT
+public:
+  configureSpellPage( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  void apply();
+/*
+  void slotDefault();
+  void init();*/
+protected:
+  KSpreadView* m_pView;
+  KSpellConfig * _spellConfig;
+  //KConfig* config;
+} ;
 
 class KSpreadpreference : public KDialogBase
 {
@@ -148,6 +163,7 @@ private :
   miscParameters *_miscParameter;
   colorParameters *_colorParameter;
   configureLayoutPage *_layoutPage;
+  configureSpellPage *_spellPage;
 };
 
 

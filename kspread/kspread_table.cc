@@ -5026,7 +5026,7 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
             && !cell->isObscured())
             {
                    cell->conditionAlign(painter(),x,y);
-                   if(cell->textWidth() > long_max )
+		   if(cell->textWidth() > long_max )
                                 {
                                 int indent=0;
 

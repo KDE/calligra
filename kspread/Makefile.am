@@ -35,12 +35,12 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_cluster.cc
 
 libkspreadpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkspreadpart_la_LIBADD = $(all_libraries) $(top_builddir)/interfaces/libkochart.la ../lib/koscript/libkoscript.la ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la
+libkspreadpart_la_LIBADD = $(all_libraries) $(top_builddir)/interfaces/libkochart.la ../lib/koscript/libkoscript.la ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la -lkspell
 libkspreadpart_la_METASOURCES = AUTO
 
 kspread_la_SOURCES = main.cc
 kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kspread_la_LIBADD = libkspreadpart.la
+kspread_la_LIBADD = libkspreadpart.la 
 
 kspread_SOURCES = dummy.cc
 kspread_LDFLAGS = $(all_libraries) $(KDE_RPATH)
