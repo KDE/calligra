@@ -244,7 +244,7 @@ public:
     /** Set the bottom of the view - in LU */
     void setViewArea( QWidget* w, int maxY );
     /** Make sure that @p parag is formatted */
-    void ensureFormatted( Qt3::QTextParag * parag );
+    void ensureFormatted( Qt3::QTextParag * parag, bool emitAfterFormatting = true );
     void setLastFormattedParag( Qt3::QTextParag *parag );
 
     static QChar customItemChar() { return QChar( s_customItemChar ); }
@@ -302,7 +302,7 @@ signals:
     void showFormatObject(const KoTextFormat &);
 
 public slots:
-    void formatMore();
+    void formatMore( bool emitAfterFormatting = true );
 
 private slots:
     void doChangeInterval();

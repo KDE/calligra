@@ -28,7 +28,8 @@
 #include <kdebug.h>
 #include <kotextformat.h>
 
-#define DEBUG_FORMATS
+//#define DEBUG_FORMATS
+//#define DEBUG_FORMAT_MORE
 
 struct KoTextObject::KoTextObjectPrivate
 {
@@ -1321,17 +1322,17 @@ void KoTextObject::setLastFormattedParag( Qt3::QTextParag *parag )
         m_lastFormatted = parag;
 }
 
-void KoTextObject::ensureFormatted( Qt3::QTextParag * parag )
+void KoTextObject::ensureFormatted( Qt3::QTextParag * parag, bool emitAfterFormatting /* = true */ )
 {
     while ( !parag->isValid() )
     {
         if ( !m_lastFormatted || m_availableHeight == -1 )
             return; // formatMore will do nothing -> give up
-        formatMore();
+        formatMore( emitAfterFormatting );
     }
 }
 
-void KoTextObject::formatMore()
+void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
 {
     if ( !m_lastFormatted /* || !isVisible()*/ || m_availableHeight == -1 )
         return;
@@ -1345,7 +1346,7 @@ void KoTextObject::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
 #ifdef DEBUG_FORMAT_MORE
-    kdDebug(32002) << "formatMore " << getName()
+    kdDebug(32002) << "formatMore " << name()
                    << " lastFormatted id=" << m_lastFormatted->paragId()
                    << " lastFormatted's top=" << m_lastFormatted->rect().top()
                    << " lastFormatted's height=" << m_lastFormatted->rect().height()
@@ -1355,7 +1356,7 @@ void KoTextObject::formatMore()
 #ifdef TIMING_FORMAT
     if ( m_lastFormatted->prev() == 0 )
     {
-        kdDebug(32002) << "formatMore " << getName() << ". First parag -> starting timer" << endl;
+        kdDebug(32002) << "formatMore " << name() << ". First parag -> starting timer" << endl;
         m_time.start();
     }
 #endif
@@ -1389,10 +1390,13 @@ void KoTextObject::formatMore()
                    << endl;
 #endif
 
-    bool abort = false;
-    emit afterFormatting( bottom, m_lastFormatted, &abort );
-    if ( abort )
-        return;
+    if ( emitAfterFormatting )
+    {
+        bool abort = false;
+        emit afterFormatting( bottom, m_lastFormatted, &abort );
+        if ( abort )
+            return;
+    }
 
     // Now let's see when we'll need to get back here.
     if ( m_lastFormatted )
@@ -1410,7 +1414,7 @@ void KoTextObject::formatMore()
 #endif
 #ifdef TIMING_FORMAT
         //if ( frameSetInfo() == FI_BODY )
-            kdDebug(32002) << "formatMore: " << getName() << " all formatted. Took "
+            kdDebug(32002) << "formatMore: " << name() << " all formatted. Took "
                            << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
 #endif
     }
