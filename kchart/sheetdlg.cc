@@ -101,6 +101,18 @@ int SheetDlg::usedRows()
 }
 
 
+void SheetDlg::setUsedCols( int val )
+{
+  usedcolsSB->setValue( val );
+}
+
+
+void SheetDlg::setUsedRows( int val )
+{
+  usedrowsSB->setValue( val );
+}
+
+
 QString SheetDlg::getX(int col)
 {
   return t->getX(col);

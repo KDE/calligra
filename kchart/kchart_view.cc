@@ -115,6 +115,8 @@ void KChartView::createTempData()
     {
 	  kdDebug(35001) << "Initialize with some data!!!" << endl;
 	  dat->expand(4,4);
+	  dat->setUsedCols( 4 );
+	  dat->setUsedRows( 4 );
 	  for (row = 0;row < nbrow;row++)
 	    for (col = 0;col < nbcol;col++)
 		  {
@@ -173,6 +175,7 @@ void KChartView::edit()
   KChartParameters* params=((KChartPart*)koDocument())->params();
 
   KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
+  qDebug( "***Before calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
   ed.setData(dat);
   ed.setLegend(params->legend);
   ed.setXLabel(params->xlbl);
@@ -180,6 +183,7 @@ void KChartView::edit()
     return;
   }
   ed.getData(dat);
+  qDebug( "***Before calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
   ed.getLegend(params);
   ed.getXLabel(params);
   repaint();

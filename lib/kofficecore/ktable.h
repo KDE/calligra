@@ -174,6 +174,7 @@ template<class RowT, class ColT, class CellT> class KTable
 {
 private:
   typedef KTablePrivate<RowT,ColT,CellT> Priv;
+  uint _usedRows, _usedCols;
 
 public:
   /**
@@ -191,8 +192,8 @@ public:
   /**
    * API
    */
-  KTable() { sh = new Priv; }
-  KTable( uint _rows, uint _cols ) { sh = new Priv( _rows, _cols ); }
+  KTable() { sh = new Priv; _usedCols = 0; _usedRows = 0; }
+  KTable( uint _rows, uint _cols ) { sh = new Priv( _rows, _cols ); _usedRows = _rows; _usedCols = _cols; }
   KTable( const KTable& _t ) { sh = _t.sh; sh->ref(); }
   ~KTable() { if ( sh->deref() ) delete sh; }
 
@@ -236,6 +237,21 @@ public:
   void removeRow( uint _r ) { detach(); sh->removeRow( _r ); }
 
   void expand( uint _rows, uint _cols ) { detach(); sh->expand( _rows, _cols ); }
+
+  void setUsedRows( uint _rows ) {
+	ASSERT( _rows <= rows() );
+	_usedRows = _rows;
+  }
+  uint usedRows() const {
+	return _usedRows;
+  }
+  void setUsedCols( uint _cols ) {
+	ASSERT( _cols <= cols() );
+	_usedCols = _cols;
+  }
+  uint usedCols() const {
+	return _usedCols;
+  }
 
 private:
   /**

@@ -16,6 +16,9 @@ kchartDataEditor::kchartDataEditor() :
 }
 
 void kchartDataEditor::setData(KoChart::Data* dat) {
+  _widget->setUsedRows( dat->usedRows() );
+  _widget->setUsedCols( dat->usedCols() );
+
   for (unsigned int row = 0;row != dat->rows();row++)
     for (unsigned int col = 0; col !=dat->cols(); col++) {
       kdDebug(35001) << "Set dialog cell for " << row << "," << col << endl;
@@ -38,13 +41,21 @@ void kchartDataEditor::setData(KoChart::Data* dat) {
 }
 
 void kchartDataEditor::getData(KoChart::Data* dat) {
+  // Make sure that the data table is not smaller than the used data
+  if( dat->rows() < _widget->usedRows() ||
+	  dat->cols() < _widget->usedCols() )
+	dat->expand( _widget->usedRows(), _widget->usedCols() );
+
+  dat->setUsedRows( _widget->usedRows() );
+  dat->setUsedCols( _widget->usedCols() );
+
     for (int row = 0;row < _widget->rows();row++) {
       for (int col = 0;col < _widget->cols();col++) {
         // m_pData->setYValue( row, col, _widget->getCell(row,col) );
         KoChart::Value t;
         double val =  _widget->getCell(row,col);
-        if( ( row >= _widget->usedRows() )  ||
-            ( col >= _widget->usedCols() ) )
+        if( ( row >= _widget->rows() )  ||
+            ( col >= _widget->cols() ) )
         { /*t.exists = false; */ }
         else
             t = QVariant( val );

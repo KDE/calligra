@@ -74,6 +74,8 @@ void KChartPart::initRandomData()
   if (currentData.rows() == 0) {
     kdDebug(35001) << "Initialize with some data!!!" << endl;
     currentData.expand(4,4);
+	currentData.setUsedRows( 4 );
+	currentData.setUsedCols( 4 );
     for (row = 0;row < 4;row++)
       for (col = 0;col < 4;col++) {
         KoChart::Value t( (double)row+col );
@@ -105,8 +107,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
     painter.eraseRect( rect );
 
   // kdDebug(35001) << "KChartPart::paintContent called, rows = "
-  //                << currentData.rows() << ", cols = "
-  //                << currentData.cols() << endl;
+  //                << currentData.usedRows() << ", cols = "
+  //                << currentData.usedCols() << endl;
 
   // Need to draw only the document rectangle described in the parameter rect.
   //  return;
@@ -146,17 +148,17 @@ void KChartPart::initLabelAndLegend()
   }
 
   if( _params->xlbl.isEmpty() ) {
-    for(unsigned int i=0;i<currentData.cols();i++) {
+    for( unsigned int i=0;i<currentData.usedCols();i++) {
       QString tmp;
       tmp=i18n("Year 200%1").arg(tmp.setNum(i));
       _params->xlbl+=tmp;
     }
   }
 
-  QArray<int> tmpExp(currentData.cols()*currentData.rows());
-  QArray<bool> tmpMissing(currentData.cols()*currentData.rows());
+  QArray<int> tmpExp(currentData.usedCols()*currentData.rows());
+  QArray<bool> tmpMissing(currentData.usedCols()*currentData.rows());
 
-  for(unsigned int i=0; i<(currentData.cols()*currentData.rows()); ++i )
+  for(unsigned int i=0; i<(currentData.usedCols()*currentData.rows()); ++i )
     {
       tmpExp[i]=0;
       tmpMissing[i]=FALSE;
@@ -198,6 +200,8 @@ QDomDocument KChartPart::saveXML() {
   QDomElement data = doc.createElement("data");
   data.setAttribute("rows", currentData.rows());
   data.setAttribute("cols", currentData.cols());
+  data.setAttribute("usedRows", currentData.usedRows() );
+  data.setAttribute("usedCols", currentData.usedCols() );
   for (unsigned int row = 0;row < currentData.rows();row++) {
     for (unsigned int col = 0;col < currentData.cols();col++) {
       // later we need a value
@@ -433,13 +437,21 @@ bool KChartPart::loadXML( QIODevice *, const QDomDocument& doc )
   QDomElement data = chart.namedItem("data").toElement();
   bool ok;
   int cols = data.attribute("cols").toInt(&ok);
-  kdDebug(35001) << "cols readed as:" << cols << endl;
   if (!ok)  { return false; }
+  kdDebug(35001) << "cols read as:" << cols << endl;
+  int usedCols = data.attribute( "usedCols" ).toInt( &ok );
+  if( !ok )
+	usedCols = cols;
   int rows = data.attribute("rows").toInt(&ok);
   if (!ok)  { return false; }
   kdDebug(35001) << rows << " x " << cols << endl;
+  int usedRows = data.attribute( "usedRows" ).toInt( &ok );
+  if( !ok )
+	usedRows = rows;
   currentData.expand(rows, cols);
   kdDebug(35001) << "Expanded!" << endl;
+  currentData.setUsedCols( usedCols );
+  currentData.setUsedRows( usedRows );
   QDomNode n = data.firstChild();
   QArray<int> tmpExp(rows*cols);
   QArray<bool> tmpMissing(rows*cols);
@@ -945,6 +957,9 @@ QFont KChartPart::toFont( QDomElement &element ) const
 
   /**
    * $Log$
+   * Revision 1.51  2000/10/14 15:30:40  faure
+   * Patch from Laurent (background pixmap, and some cleanup).
+   *
    * Revision 1.50  2000/10/11 14:54:33  faure
    * +  setInstance( KChartFactory::global(), false );
    * This fixes saving a kchart child (it was saved with mime="application/x-kspread"),

@@ -19,10 +19,10 @@
 
 int KChartEngine::doLabels() {
   // Finally, the x labels are taken from the first row
-  QArray<QString> xlbl( data->cols() );
+  QArray<QString> xlbl( data->usedCols() );
 #ifdef NOXLABELSFORNOW
-  kdDebug(35001) <<  "Creating xlbl with " << data->cols() << " entries" << endl;
-  for( int labels = 0; labels < data->cols(); labels++ ) {
+  kdDebug(35001) <<  "Creating xlbl with " << data->usedCols() << " entries" << endl;
+  for( int labels = 0; labels < data->usedCols(); labels++ ) {
     kdDebug(35001) <<  "Retrieving value at position "  << labels << endl;
     const KChartValue& cellval = data->cell( 0, labels );
     kdDebug(35001) <<  "type of field " << labels << " in row 0 is "

@@ -36,7 +36,9 @@ public:
   int rows();
   int usedCols();
   int usedRows();
-  
+  void setUsedCols( int );
+  void setUsedRows( int );
+ 
   QString getX(int);
   QString getY(int);
   double getCell(int,int);
@@ -48,7 +50,7 @@ protected:
   
 private:
 
-  Sheet *t;
+   Sheet *t;
   QPushButton *cancel,*ok;
   void resizeHandle( QSize );
   QLabel *usedrowsLA, *usedcolsLA;

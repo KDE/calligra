@@ -54,7 +54,7 @@ int KChartEngine::init() {
   num_hlc_sets = params->has_hlc_sets() ? 1 : 0;
   // And num_points is the number of columns
 
-  num_points = data->cols();
+  num_points = data->usedCols();
 
   /* idiot checks */
   if( imagewidth <= 0 || imageheight <=0 || !p  )
