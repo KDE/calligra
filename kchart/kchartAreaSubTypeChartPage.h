@@ -10,6 +10,7 @@
 
 #include "kchartSubTypeChartPage.h"
 
+class QLabel;
 class QRadioButton;
 class KChartParams;
 
@@ -22,10 +23,13 @@ public:
     virtual void init();
     virtual void apply();
 
+private slots:
+	  void slotChangeSubType( int type );
+
 private:
     QRadioButton *depth;
     QRadioButton *beside;
-    QRadioButton *sum;
+	QLabel* exampleLA;
 };
 
 #endif

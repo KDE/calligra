@@ -10,6 +10,7 @@
 #include <koView.h>
 
 class KAction;
+class KToggleAction;
 class QPaintEvent;
 
 class KChartPart;
@@ -45,10 +46,10 @@ private:
     KAction* m_saveconfig;
     KAction* m_loadconfig;
     KAction* m_defaultconfig;
-    KAction* m_chartpie;
-    KAction* m_chartareas;
-    KAction* m_chartbars;
-    KAction* m_chartline;
+    KToggleAction* m_chartpie;
+    KToggleAction* m_chartareas;
+    KToggleAction* m_chartbars;
+    KToggleAction* m_chartline;
 };
 
 #endif

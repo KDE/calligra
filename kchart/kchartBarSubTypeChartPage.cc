@@ -26,7 +26,7 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParameters* params,
 {
   QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
   QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Subtype" ), this );
-  toplevel->addWidget( subtypeBG, AlignCenter | AlignVCenter );
+  toplevel->addWidget( subtypeBG, AlignCenter );
   depth = new QRadioButton( i18n( "Depth" ), subtypeBG ); ;
   subtypeBG->insert( depth, KCHARTSTACKTYPE_DEPTH );
   layer = new QRadioButton( i18n( "Layer" ), subtypeBG );
@@ -35,16 +35,15 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParameters* params,
   subtypeBG->insert( beside, KCHARTSTACKTYPE_BESIDE );
   percent = new QRadioButton( i18n( "Percent" ), subtypeBG );
   subtypeBG->insert( percent, KCHARTSTACKTYPE_PERCENT );
-  subtypeBG->setFixedSize( subtypeBG->sizeHint() );
+  subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
   connect( subtypeBG, SIGNAL( clicked( int ) ),
 		   this, SLOT( slotChangeSubType( int ) ) );
 
   QHGroupBox* exampleGB = new QHGroupBox( i18n( "Example" ), this );
   toplevel->addWidget( exampleGB, 2 );
   exampleLA = new QLabel( exampleGB );
-  exampleLA->setMinimumSize( 142, 142 );
+  exampleLA->setAlignment( AlignCenter | AlignVCenter );
   // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
-  exampleGB->setFixedSize( exampleGB->sizeHint() );
 }
 
 void KChartBarSubTypeChartPage::init()

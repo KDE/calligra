@@ -11,17 +11,33 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
+#include <qlabel.h>
+#include <qhgroupbox.h>
+#include <qlayout.h>
 
 KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage(KChartParameters* params,QWidget* parent ) :
   KChartSubTypeChartPage(  params, parent )
 {
+  QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
   QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Subtype" ), this );
-  depth = new QRadioButton( i18n( "Depth" ), subtypeBG ); ;
+  toplevel->addWidget( subtypeBG, AlignCenter| AlignVCenter );
+  depth = new QRadioButton( i18n( "Depth" ), subtypeBG );
+  subtypeBG->insert( depth, KCHARTSTACKTYPE_DEPTH );
   beside = new QRadioButton( i18n( "Beside" ), subtypeBG );
-  sum = new QRadioButton( i18n( "Sum" ), subtypeBG );
+  subtypeBG->insert( beside, KCHARTSTACKTYPE_BESIDE );
+  subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
+  connect( subtypeBG, SIGNAL( clicked( int ) ),
+		   this, SLOT( slotChangeSubType( int ) ) );
+
+  QHGroupBox* exampleGB = new QHGroupBox( i18n( "Example" ), this );
+  toplevel->addWidget( exampleGB, 2 );
+  exampleLA = new QLabel( exampleGB );
+  exampleLA->setAlignment( AlignCenter | AlignVCenter );
+  // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
 }
 
 void KChartAreaSubTypeChartPage::init()
@@ -38,18 +54,30 @@ void KChartAreaSubTypeChartPage::init()
 		beside->setChecked(true);
 		break;
 	  }
-	case (int)KCHARTSTACKTYPE_SUM:
-	  {
-		sum->setChecked(true);
-		break;
-	  }
 	default:
 	  {
 		kdDebug( 35001 ) << "Error in stack_type" << endl;
+		abort();
 		break;
 	  }
 	}
+
+  slotChangeSubType( _params->stack_type );
 }
+
+void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
+{
+  switch( type ) {
+  case KCHARTSTACKTYPE_DEPTH:
+	exampleLA->setPixmap( UserIcon( "areasubtypedepth" ) );
+	break;
+  case KCHARTSTACKTYPE_BESIDE:
+	exampleLA->setPixmap( UserIcon( "areasubtypebeside" ) );
+	break;
+  };
+}
+
+
 
 void KChartAreaSubTypeChartPage::apply()
 {
@@ -57,8 +85,6 @@ void KChartAreaSubTypeChartPage::apply()
 	_params->stack_type = KCHARTSTACKTYPE_DEPTH;
   } else if( beside->isChecked() ) {
 	_params->stack_type = KCHARTSTACKTYPE_BESIDE;
-  } else if( sum->isChecked() ) {
-	_params->stack_type = KCHARTSTACKTYPE_SUM;
   } else {
 	kdDebug( 35001 ) << "Error in groupbutton" << endl;
   }

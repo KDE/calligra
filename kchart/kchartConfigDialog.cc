@@ -27,7 +27,8 @@
 KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 					QWidget* parent ) :
     QTabDialog( parent, "Chart config dialog", true ),
-    _params( params )
+    _params( params ),
+	_subTypePage( 0 )
 {
     // Geometry page
     // PENDING(kalle) _xstep only for axes charts
@@ -53,11 +54,10 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     _parameterfontpage = new KChartFontConfigPage(_params,this );
     addTab( _parameterfontpage, i18n( "&Font" ) );
 
-    if(!_params->isPie()&&_params->threeD())
-    	{
+    if(!_params->isPie()&&_params->threeD()) {
         _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
         addTab( _parameter3dpage,i18n("3D Parameters"));
-        }
+	}
 	// Lines and pies might need config pages as well, but not yet
 	switch( _params->type ) {
 	case KCHARTTYPE_BAR:
@@ -116,7 +116,7 @@ void KChartConfigDialog::apply()
         {
         _parameterpage->apply();
         if(_params->threeD())
-                _parameter3dpage->apply();
+		  _parameter3dpage->apply();
 
         }
     else
@@ -126,15 +126,12 @@ void KChartConfigDialog::apply()
     	}
 
     _parameterfontpage->apply();
-    if((_params->type==KCHARTTYPE_BAR) || ((_params->type==KCHARTTYPE_3DBAR)
-        ||(_params->type==KCHARTTYPE_3DLINE)))
-        {
-        _subTypePage->apply();
-        }
+
+	if( _subTypePage )
+	  _subTypePage->apply();
+
     if(_params->has_hlc_sets())
-        {
-        _hlcChart->apply();
-        }
+	  _hlcChart->apply();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
 }
@@ -173,15 +170,13 @@ void KChartConfigDialog::defaults()
     	}
 
     _parameterfontpage->init();
-    if((_params->type==KCHARTTYPE_BAR) || ((_params->type==KCHARTTYPE_3DBAR)
-        ||(_params->type==KCHARTTYPE_3DLINE)))
-        {
-        _subTypePage->init();
-        }
-    if(_params->has_hlc_sets())
-        {
-        _hlcChart->init();
-        }
+
+	if( _subTypePage )
+	  _subTypePage->init();
+
+    if(_params->has_hlc_sets()) {
+	  _hlcChart->init();
+	}
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
 }

@@ -52,18 +52,23 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 				   SLOT( defaultConfig() ),
 				   actionCollection(), "defaultconfig");
 
-    m_chartpie = new KAction( i18n("&Pie"), "cakes", 0, this,
+    m_chartpie = new KToggleAction( i18n("&Pie"), "cakes", 0, this,
 			      SLOT( pieChart() ), actionCollection(),
 			      "piechart");
-    m_chartline = new KAction( i18n("&Line"), "lines", 0, this,
+	m_chartpie->setExclusiveGroup( "charttypes" );
+    m_chartline = new KToggleAction( i18n("&Line"), "lines", 0, this,
 			       SLOT( lineChart() ), actionCollection(),
 			       "linechart");
-    m_chartareas = new KAction( i18n("&Areas"), "areas", 0, this,
+	m_chartline->setExclusiveGroup( "charttypes" );
+    m_chartareas = new KToggleAction( i18n("&Areas"), "areas", 0, this,
 				SLOT( areasChart() ), actionCollection(),
 				"areaschart");
-    m_chartbars = new KAction( i18n("&Bars"), "bars", 0, this,
+	m_chartareas->setExclusiveGroup( "charttypes" );
+    m_chartbars = new KToggleAction( i18n("&Bars"), "bars", 0, this,
 			       SLOT( barsChart() ), actionCollection(),
 			       "barschart");
+	m_chartbars->setExclusiveGroup( "charttypes" );
+	m_chartbars->setChecked( true );
 
     // initialize the configuration
     //    loadConfig();
