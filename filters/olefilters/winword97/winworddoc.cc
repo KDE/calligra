@@ -169,8 +169,8 @@ bool WinWordDoc::convert()
 
     if (!m_isConverted)
     {
-        m_body = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE DOC >\n"
-            "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\">\n"
+        m_body = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE DOC>\n"
+            "<DOC editor=\"KWord\" mime=\"application/x-kword\" syntaxVersion=\"1\">\n"
             " <PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" columnspacing=\"2\" hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\">\n"
             "  <PAPERBORDERS left=\"");
         m_body.append(QString::number(s_hMargin));
@@ -732,7 +732,15 @@ void WinWordDoc::gotTableBegin(
     m_body.append("<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
     m_body.append("<ANCHOR type=\"frameset\" instance=\"floattable_");
     m_body.append(QString::number(tableNumber));
-    m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n</PARAGRAPH>\n");
+    m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n");
+    m_body.append(
+        " <LAYOUT>\n"
+        "  <NAME value=\"");
+    m_body.append(m_styles.names[0]);
+    m_body.append("\"/>\n");
+    m_body.append(
+        " </LAYOUT>\n");
+    m_body.append("</PARAGRAPH>\n");
 }
 
 void WinWordDoc::gotTableEnd(
@@ -810,7 +818,16 @@ void WinWordDoc::gotTableEnd(
             encode(xml_friendly);
             cell.append(xml_friendly);
             cell.append("</TEXT>\n");
-            cell.append(generateFormats(*m_table[y]->m_styles[x]));
+            Attributes *styles = m_table[y]->m_styles[x];
+            const PAP *pap = styles->baseStyle().getPap();
+            cell.append(generateFormats(*styles));
+            cell.append(
+                " <LAYOUT>\n"
+                "  <NAME value=\"");
+            cell.append(m_styles.names[pap->istd]);
+            cell.append("\"/>\n");
+            cell.append(
+                " </LAYOUT>\n");
             cell.append("</PARAGRAPH>\n");
             cell.append("</FRAMESET>\n");
             m_tables.append(cell);
