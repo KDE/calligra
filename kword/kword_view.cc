@@ -1650,6 +1650,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   updateStyle("Standard");
   setFormat(format,false);
   gui->getPaperWidget()->forceFullUpdate();
+  gui->getPaperWidget()->init();
 
   return true;
 }      

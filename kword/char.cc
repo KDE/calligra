@@ -459,9 +459,44 @@ int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,
   else return -1;
 }
 
-int KWString::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index)
+int KWString::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false)
 {
-  return -1;
+  QString str = toString(0,size());
+  _regexp.setWildcard(_wildcard);
+  _regexp.setCaseSensitive(_cs);
+  int res = _regexp.match(str,_index,&_len);
+
+  if (res != -1)
+    {
+      if (!_format) return res;
+      
+      KWFormat *format;
+      for (int i = 0;i < _len;i++)
+	{	
+	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
+	    return -2;
+	  
+	  format = dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat();
+	  
+	  if (_format->checkFamily && _format->family != format->getUserFont()->getFontName())
+	    return -2;
+	  if (_format->checkColor && _format->color != format->getColor())
+	    return -2;
+	  if (_format->checkSize && _format->size != format->getPTFontSize())
+	    return -2;
+	  if (_format->checkBold && _format->bold != (format->getWeight() == QFont::Bold))
+	    return -2;
+	  if (_format->checkItalic && _format->italic != format->getItalic())
+	    return -2;
+	  if (_format->checkUnderline && _format->underline != format->getUnderline())
+	    return -2;
+	  if (_format->checkVertAlign && _format->vertAlign != format->getVertAlign())
+	    return -2;
+	}
+
+      return res;
+    }
+  else return -1;
 }
 
 int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole)
@@ -520,7 +555,7 @@ int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _ind
   else return -1;
 }
 
-int KWString::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index)
+int KWString::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false)
 {
   return -1;
 }

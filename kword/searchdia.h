@@ -65,6 +65,7 @@ public:
       regexp = false;
       reverse = false;
       wholeWords = false;
+      wildcard = false;
     }
 
     QString expr;
@@ -74,7 +75,7 @@ public:
     int size;
     bool bold,italic,underline;
     KWFormat::VertAlign vertAlign;
-    bool caseSensitive,regexp,reverse,wholeWords;
+    bool caseSensitive,regexp,reverse,wholeWords,wildcard;
   };
 
   KWSearchDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page,KWordView *_view,
@@ -99,13 +100,12 @@ protected:
   QWidget *tab2;
   QGridLayout *grid2,*rGrid;
   QGroupBox *gReplace;
-  QCheckBox *rcRegExp,*rcFamily,*rcSize,*rcColor,*rcBold,*rcItalic,*rcUnderline,*rcVertAlign,*rcmBold,*rcmItalic,*rcmUnderline,*rcCase,
-    *rcWholeWords,*rcRev;
+  QCheckBox *rcFamily,*rcSize,*rcColor,*rcBold,*rcItalic,*rcUnderline,*rcVertAlign,*rcmBold,*rcmItalic,*rcmUnderline,*cAsk,*cWildcard;
   QComboBox *rcmFamily,*rcmSize,*rcmVertAlign;
   KColorButton *rbColor;
   QLabel *lReplace;
   KButtonBox *bbReplace;
-  QPushButton *bReplaceFirst,*bReplaceNext,*bReplaceAllWA,*bReplaceAllWoA;
+  QPushButton *bReplaceFirst,*bReplaceNext,*bReplaceAll;
   QLineEdit *eReplace;
 
   KWordDocument *doc;
@@ -131,8 +131,9 @@ protected slots:
   void slotItalic();
   void slotUnderline();
   void slotVertAlign(int);
-  void rsearchFirst();
-  void rsearchNext();
+  void replaceFirst();
+  void replaceNext();
+  void replaceAll();
   void rslotCheckFamily();
   void rslotCheckColor();
   void rslotCheckSize();
@@ -148,6 +149,7 @@ protected slots:
   void rslotUnderline();
   void rslotVertAlign(int);
   void saveSettings();
+  void slotRegExp();
 
 };
 

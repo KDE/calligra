@@ -63,6 +63,7 @@ public:
 
   void setDocument(KWordDocument *_doc)
     { doc = _doc; }
+  void init();
 
   void mousePressEvent(QMouseEvent* e);
   void mouseMoveEvent(QMouseEvent* e);
@@ -172,8 +173,10 @@ public:
 
   void clear() { buffer.fill(white); drawBuffer(); }
 
-  bool find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false);
-  bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false);
+  bool find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
+	    bool _regexp = false,bool _wildcard = false);
+  bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
+	       bool _regexp = false,bool _wildcard = false);
   
   void removeSelection();
 

@@ -617,3 +617,10 @@ Reggie, 7.1.1999:
 -----------------
 - Added filedialog preview widgets for pictures and cliparts
 - Started with replacing text (with the dialog - somehow I have to decrease the size of this dialog)
+
+Reggie, 8.1.1998:
+-----------------
+- Decreased size of search/replace dialog a bit
+- It's possible to use regular expressions and wildcards for searching now
+- Initialization of vertical ruler works correctly now too
+- More work on internal stuff for replacing text

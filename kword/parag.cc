@@ -417,9 +417,9 @@ int KWParag::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,b
   return text.find(_expr,_format,_index,_cs,_whole);
 }
 
-int KWParag::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index)
+int KWParag::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false)
 {
-  return text.find(_regexp,_format,_index);
+  return text.find(_regexp,_format,_index,_len,_cs,_wildcard);
 }
 
 int KWParag::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole)
@@ -427,9 +427,9 @@ int KWParag::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _inde
   return text.findRev(_expr,_format,_index,_cs,_whole);
 }
 
-int KWParag::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index)
+int KWParag::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false)
 {
-  return text.findRev(_regexp,_format,_index);
+  return text.findRev(_regexp,_format,_index,_len,_cs,_wildcard);
 }
 
 void KWParag::replace(int _pos,int _len,QString _text,KWFormat &_format)

@@ -130,9 +130,9 @@ public:
   void loadFormat(KOMLParser&,vector<KOMLAttrib>&,KWordDocument*,KWTextFrameSet*);
 
   int find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole);
-  int find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index);
+  int find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false);
   int findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs,bool _whole);
-  int findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index);
+  int findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index,int &_len,bool _cs,bool _wildcard = false);
 
 protected:
   KWChar* alloc(unsigned int _size);

@@ -33,6 +33,7 @@ KWSearchDia::KWSearchDia(QWidget* parent,const char* name,KWordDocument *_doc,KW
   page = _page;
   view = _view;
   searchEntry = _searchEntry;
+  replaceEntry = _replaceEntry;
   fontlist = _fontlist;
 
   if (!searchEntry)
@@ -49,6 +50,8 @@ KWSearchDia::KWSearchDia(QWidget* parent,const char* name,KWordDocument *_doc,KW
 
   setupTab1();
   setupTab2();
+
+  resize(minimumSize());
     
   setCancelButton(i18n("Close"));
   setOkButton(0L);
@@ -59,14 +62,14 @@ void KWSearchDia::setupTab1()
 {
   tab1 = new QWidget(this);
 
-  grid1 = new QGridLayout(tab1,2,2,15,7);
+  grid1 = new QGridLayout(tab1,3,1,7,7);
 
   /**
    * ---------------- search group --------------------
    */
 
   gSearch = new QGroupBox(i18n("Search"),tab1);
-  sGrid = new QGridLayout(gSearch,9,3,15,7);
+  sGrid = new QGridLayout(gSearch,9,3,7,7);
 
   lSearch = new QLabel(i18n("Search String:"),gSearch);
   lSearch->resize(lSearch->sizeHint());
@@ -78,63 +81,69 @@ void KWSearchDia::setupTab1()
   sGrid->addWidget(eSearch,2,0);
   eSearch->setText(searchEntry->expr);
 
+  cWholeWords = new QCheckBox(i18n("Find Whole Words only"),gSearch);
+  cWholeWords->resize(cWholeWords->sizeHint());
+  sGrid->addWidget(cWholeWords,3,0);
+  cWholeWords->setChecked(searchEntry->wholeWords);
+
   cCase = new QCheckBox(i18n("Case Sensitive"),gSearch);
   cCase->resize(cCase->sizeHint());
-  sGrid->addWidget(cCase,3,0);
+  sGrid->addWidget(cCase,4,0);
   cCase->setChecked(searchEntry->caseSensitive);
 
   cRegExp = new QCheckBox(i18n("Regular Expression"),gSearch);
   cRegExp->resize(cRegExp->sizeHint());
-  sGrid->addWidget(cRegExp,4,0);
+  sGrid->addWidget(cRegExp,5,0);
   cRegExp->setChecked(searchEntry->regexp);
+  connect(cRegExp,SIGNAL(clicked()),this,SLOT(slotRegExp()));
 
-  cWholeWords = new QCheckBox(i18n("Find Whole Words only"),gSearch);
-  cWholeWords->resize(cWholeWords->sizeHint());
-  sGrid->addWidget(cWholeWords,5,0);
-  cWholeWords->setChecked(searchEntry->wholeWords);
+  cWildcard = new QCheckBox(i18n("Use Wildcards"),gSearch);
+  cWildcard->resize(cWildcard->sizeHint());
+  sGrid->addWidget(cWildcard,6,0);
+  cWildcard->setChecked(searchEntry->wildcard);
 
   cRev = new QCheckBox(i18n("Find Backwards"),gSearch);
   cRev->resize(cRev->sizeHint());
-  sGrid->addWidget(cRev,6,0);
+  sGrid->addWidget(cRev,7,0);
   cRev->setChecked(searchEntry->reverse);
 
-  cFamily = new QCheckBox(i18n("Check Family"),gSearch);
+  cFamily = new QCheckBox(i18n("Family"),gSearch);
   cFamily->resize(cFamily->sizeHint());
   sGrid->addWidget(cFamily,1,1);
   connect(cFamily,SIGNAL(clicked()),this,SLOT(slotCheckFamily()));
   cFamily->setChecked(searchEntry->checkFamily);
 
-  cSize = new QCheckBox(i18n("Check Size"),gSearch);
+  cSize = new QCheckBox(i18n("Size"),gSearch);
   cSize->resize(cSize->sizeHint());
   sGrid->addWidget(cSize,2,1);
   connect(cSize,SIGNAL(clicked()),this,SLOT(slotCheckSize()));
   cSize->setChecked(searchEntry->checkSize);
 
-  cColor = new QCheckBox(i18n("Check Color"),gSearch);
+  cColor = new QCheckBox(i18n("Color"),gSearch);
   cColor->resize(cColor->sizeHint());
   sGrid->addWidget(cColor,3,1);
   connect(cColor,SIGNAL(clicked()),this,SLOT(slotCheckColor()));
   cColor->setChecked(searchEntry->checkColor);
 
-  cBold = new QCheckBox(i18n("Check Bold"),gSearch);
+  cBold = new QCheckBox(i18n("Bold"),gSearch);
   cBold->resize(cBold->sizeHint());
   sGrid->addWidget(cBold,4,1);
   connect(cBold,SIGNAL(clicked()),this,SLOT(slotCheckBold()));
   cBold->setChecked(searchEntry->checkBold);
 
-  cItalic = new QCheckBox(i18n("Check Italic"),gSearch);
+  cItalic = new QCheckBox(i18n("Italic"),gSearch);
   cItalic->resize(cItalic->sizeHint());
   sGrid->addWidget(cItalic,5,1);
   connect(cItalic,SIGNAL(clicked()),this,SLOT(slotCheckItalic()));
   cItalic->setChecked(searchEntry->checkItalic);
 
-  cUnderline = new QCheckBox(i18n("Check Underline"),gSearch);
+  cUnderline = new QCheckBox(i18n("Underline"),gSearch);
   cUnderline->resize(cUnderline->sizeHint());
   sGrid->addWidget(cUnderline,6,1);
   connect(cUnderline,SIGNAL(clicked()),this,SLOT(slotCheckUnderline()));
   cUnderline->setChecked(searchEntry->checkUnderline);
 
-  cVertAlign = new QCheckBox(i18n("Check Vertical Alignment"),gSearch);
+  cVertAlign = new QCheckBox(i18n("Vertical Alignment"),gSearch);
   cVertAlign->resize(cVertAlign->sizeHint());
   sGrid->addWidget(cVertAlign,7,1);
   connect(cVertAlign,SIGNAL(clicked()),this,SLOT(slotCheckVertAlign()));
@@ -218,18 +227,19 @@ void KWSearchDia::setupTab1()
   sGrid->addRowSpacing(2,eSearch->height());
   sGrid->addRowSpacing(2,cSize->height());
   sGrid->addRowSpacing(2,cmSize->height());
-  sGrid->addRowSpacing(3,cCase->height());
+  sGrid->addRowSpacing(4,cCase->height());
   sGrid->addRowSpacing(3,cColor->height());
   sGrid->addRowSpacing(3,bColor->height());
-  sGrid->addRowSpacing(4,cRegExp->height());
+  sGrid->addRowSpacing(5,cRegExp->height());
   sGrid->addRowSpacing(4,cBold->height());
   sGrid->addRowSpacing(4,cmBold->height());
-  sGrid->addRowSpacing(5,cWholeWords->height());
+  sGrid->addRowSpacing(3,cWholeWords->height());
   sGrid->addRowSpacing(5,cItalic->height());
   sGrid->addRowSpacing(5,cmItalic->height());
   sGrid->addRowSpacing(6,cUnderline->height());
   sGrid->addRowSpacing(6,cmUnderline->height());
-  sGrid->addRowSpacing(4,cRev->height());
+  sGrid->addRowSpacing(6,cWildcard->height());
+  sGrid->addRowSpacing(7,cRev->height());
   sGrid->addRowSpacing(7,cVertAlign->height());
   sGrid->addRowSpacing(7,cmVertAlign->height());
   sGrid->setRowStretch(0,0);
@@ -273,7 +283,7 @@ void KWSearchDia::setupTab1()
    * ------------------ search buttonbox --------------
    */
 
-  bbSearch = new KButtonBox(tab1,KButtonBox::VERTICAL);
+  bbSearch = new KButtonBox(tab1,KButtonBox::HORIZONTAL);
   bSearchFirst = bbSearch->addButton(i18n("Find &First"),false);
   connect(bSearchFirst,SIGNAL(clicked()),this,SLOT(searchFirst()));
   bSearchNext = bbSearch->addButton(i18n("Find &Next"),false);
@@ -282,21 +292,22 @@ void KWSearchDia::setupTab1()
   bbSearch->layout();
   bbSearch->resize(bbSearch->sizeHint());
 
-  grid1->addWidget(bbSearch,0,1);
+  grid1->addWidget(bbSearch,1,0);
  
   /**
    * ----------------- general -----------------
    */
 
   grid1->addRowSpacing(0,gSearch->height());
-  grid1->addRowSpacing(0,bbSearch->height());
+  grid1->addRowSpacing(1,bbSearch->height());
+  grid1->addRowSpacing(2,0);
   grid1->setRowStretch(0,0);
-  grid1->setRowStretch(1,1);
+  grid1->setRowStretch(1,0);
+  grid1->setRowStretch(2,1);
 
   grid1->addColSpacing(0,gSearch->width());
-  grid1->addColSpacing(1,bbSearch->width());
+  grid1->addColSpacing(0,bbSearch->width());
   grid1->setColStretch(0,1);
-  grid1->setColStretch(1,0);
 
   grid1->activate();
 
@@ -309,6 +320,7 @@ void KWSearchDia::setupTab1()
   slotCheckItalic();
   slotCheckUnderline();
   slotCheckVertAlign();
+  slotRegExp();
 
   connect(this,SIGNAL(cancelButtonPressed()),this,SLOT(saveSettings()));
 }
@@ -318,14 +330,14 @@ void KWSearchDia::setupTab2()
 {
   tab2 = new QWidget(this);
 
-  grid2 = new QGridLayout(tab2,2,2,15,7);
+  grid2 = new QGridLayout(tab2,3,1,7,7);
 
   /**
    * ---------------- search group --------------------
    */
 
   gReplace = new QGroupBox(i18n("Replace"),tab2);
-  rGrid = new QGridLayout(gReplace,9,3,15,7);
+  rGrid = new QGridLayout(gReplace,9,3,7,7);
 
   lReplace = new QLabel(i18n("Replace String:"),gReplace);
   lReplace->resize(lReplace->sizeHint());
@@ -337,63 +349,43 @@ void KWSearchDia::setupTab2()
   rGrid->addWidget(eReplace,2,0);
   eReplace->setText(replaceEntry->expr);
 
-  rcCase = new QCheckBox(i18n("Case Sensitive"),gReplace);
-  rcCase->resize(rcCase->sizeHint());
-  rGrid->addWidget(rcCase,3,0);
-  rcCase->setChecked(replaceEntry->caseSensitive);
-
-  rcRegExp = new QCheckBox(i18n("Regular Expression"),gReplace);
-  rcRegExp->resize(rcRegExp->sizeHint());
-  rGrid->addWidget(rcRegExp,4,0);
-  rcRegExp->setChecked(replaceEntry->regexp);
-
-  rcWholeWords = new QCheckBox(i18n("Find Whole Words only"),gReplace);
-  rcWholeWords->resize(rcWholeWords->sizeHint());
-  rGrid->addWidget(rcWholeWords,5,0);
-  rcWholeWords->setChecked(replaceEntry->wholeWords);
-
-  rcRev = new QCheckBox(i18n("Find Backwards"),gReplace);
-  rcRev->resize(rcRev->sizeHint());
-  rGrid->addWidget(rcRev,6,0);
-  rcRev->setChecked(replaceEntry->reverse);
-
-  rcFamily = new QCheckBox(i18n("Change Family"),gReplace);
+  rcFamily = new QCheckBox(i18n("Family"),gReplace);
   rcFamily->resize(rcFamily->sizeHint());
   rGrid->addWidget(rcFamily,1,1);
   connect(rcFamily,SIGNAL(clicked()),this,SLOT(rslotCheckFamily()));
   rcFamily->setChecked(replaceEntry->checkFamily);
 
-  rcSize = new QCheckBox(i18n("Change Size"),gReplace);
+  rcSize = new QCheckBox(i18n("Size"),gReplace);
   rcSize->resize(rcSize->sizeHint());
   rGrid->addWidget(rcSize,2,1);
   connect(rcSize,SIGNAL(clicked()),this,SLOT(rslotCheckSize()));
   rcSize->setChecked(replaceEntry->checkSize);
 
-  rcColor = new QCheckBox(i18n("Change Color"),gReplace);
+  rcColor = new QCheckBox(i18n("Color"),gReplace);
   rcColor->resize(rcColor->sizeHint());
   rGrid->addWidget(rcColor,3,1);
   connect(rcColor,SIGNAL(clicked()),this,SLOT(rslotCheckColor()));
   rcColor->setChecked(replaceEntry->checkColor);
 
-  rcBold = new QCheckBox(i18n("Change Bold"),gReplace);
+  rcBold = new QCheckBox(i18n("Bold"),gReplace);
   rcBold->resize(rcBold->sizeHint());
   rGrid->addWidget(rcBold,4,1);
   connect(rcBold,SIGNAL(clicked()),this,SLOT(rslotCheckBold()));
   rcBold->setChecked(replaceEntry->checkBold);
 
-  rcItalic = new QCheckBox(i18n("Change Italic"),gReplace);
+  rcItalic = new QCheckBox(i18n("Italic"),gReplace);
   cItalic->resize(rcItalic->sizeHint());
   rGrid->addWidget(rcItalic,5,1);
   connect(rcItalic,SIGNAL(clicked()),this,SLOT(rslotCheckItalic()));
   rcItalic->setChecked(replaceEntry->checkItalic);
 
-  rcUnderline = new QCheckBox(i18n("Change Underline"),gReplace);
+  rcUnderline = new QCheckBox(i18n("Underline"),gReplace);
   rcUnderline->resize(rcUnderline->sizeHint());
   rGrid->addWidget(rcUnderline,6,1);
   connect(rcUnderline,SIGNAL(clicked()),this,SLOT(rslotCheckUnderline()));
   rcUnderline->setChecked(replaceEntry->checkUnderline);
 
-  rcVertAlign = new QCheckBox(i18n("Change Vertical Alignment"),gReplace);
+  rcVertAlign = new QCheckBox(i18n("Vertical Alignment"),gReplace);
   rcVertAlign->resize(rcVertAlign->sizeHint());
   rGrid->addWidget(rcVertAlign,7,1);
   connect(rcVertAlign,SIGNAL(clicked()),this,SLOT(rslotCheckVertAlign()));
@@ -477,18 +469,14 @@ void KWSearchDia::setupTab2()
   rGrid->addRowSpacing(2,eReplace->height());
   rGrid->addRowSpacing(2,rcSize->height());
   rGrid->addRowSpacing(2,rcmSize->height());
-  rGrid->addRowSpacing(3,rcCase->height());
   rGrid->addRowSpacing(3,rcColor->height());
   rGrid->addRowSpacing(3,rbColor->height());
-  rGrid->addRowSpacing(4,rcRegExp->height());
   rGrid->addRowSpacing(4,rcBold->height());
   rGrid->addRowSpacing(4,rcmBold->height());
-  rGrid->addRowSpacing(5,rcWholeWords->height());
   rGrid->addRowSpacing(5,rcItalic->height());
   rGrid->addRowSpacing(5,rcmItalic->height());
   rGrid->addRowSpacing(6,rcUnderline->height());
   rGrid->addRowSpacing(6,rcmUnderline->height());
-  rGrid->addRowSpacing(4,rcRev->height());
   rGrid->addRowSpacing(7,rcVertAlign->height());
   rGrid->addRowSpacing(7,rcmVertAlign->height());
   rGrid->setRowStretch(0,0);
@@ -507,10 +495,6 @@ void KWSearchDia::setupTab2()
   rGrid->addColSpacing(0,eReplace->width());
   rGrid->addColSpacing(1,rcSize->width());
   rGrid->addColSpacing(2,rcmSize->width());
-  rGrid->addColSpacing(0,rcRegExp->width());
-  rGrid->addColSpacing(0,rcCase->width());
-  rGrid->addColSpacing(0,rcWholeWords->width());
-  rGrid->addColSpacing(0,rcRev->width());
   rGrid->addColSpacing(1,rcColor->width());
   rGrid->addColSpacing(2,rbColor->width());
   rGrid->addColSpacing(1,rcBold->width());
@@ -532,30 +516,50 @@ void KWSearchDia::setupTab2()
    * ------------------ replace buttonbox --------------
    */
 
-  bbReplace = new KButtonBox(tab2,KButtonBox::VERTICAL);
-  bReplaceFirst = bbReplace->addButton(i18n("Find &First"),false);
+  QWidget *wid = new QWidget(tab2);
+  QGridLayout *subgrid = new QGridLayout(wid,1,2,0,10);
+
+  bbReplace = new KButtonBox(wid,KButtonBox::HORIZONTAL);
+  bReplaceFirst = bbReplace->addButton(i18n("Replace &First"));
   connect(bReplaceFirst,SIGNAL(clicked()),this,SLOT(replaceFirst()));
-  bReplaceNext = bbReplace->addButton(i18n("Find &Next"),false);
+  bReplaceNext = bbReplace->addButton(i18n("Replace &Next"));
   connect(bReplaceNext,SIGNAL(clicked()),this,SLOT(replaceNext()));
-  bReplaceAllWA = bbReplace->addButton(i18n("Replace &All"),false);
+  bReplaceAll = bbReplace->addButton(i18n("Replace &All"));
+  connect(bReplaceAll,SIGNAL(clicked()),this,SLOT(replaceAll()));
   bbReplace->layout();
   bbReplace->resize(bbReplace->sizeHint());
-
-  grid2->addWidget(bbReplace,0,1);
+  subgrid->addWidget(bbReplace,0,0);
  
+  cAsk = new QCheckBox(i18n("Ask before replacing"),wid);
+  cAsk->resize(cAsk->sizeHint());
+  subgrid->addWidget(cAsk,0,1);
+
+  subgrid->addRowSpacing(0,bbReplace->height());
+  subgrid->addRowSpacing(0,cAsk->height());
+  subgrid->setRowStretch(0,0);
+  
+  subgrid->addColSpacing(0,bbReplace->width());
+  subgrid->addColSpacing(1,cAsk->width());
+  subgrid->setColStretch(0,0);
+  subgrid->setColStretch(1,1);
+
+  subgrid->activate();
+  grid2->addWidget(wid,1,0);
+
   /**
    * ----------------- general -----------------
    */
 
   grid2->addRowSpacing(0,gReplace->height());
-  grid2->addRowSpacing(0,bbReplace->height());
+  grid2->addRowSpacing(1,wid->height());
+  grid2->addRowSpacing(2,0);
   grid2->setRowStretch(0,0);
-  grid2->setRowStretch(1,1);
+  grid2->setRowStretch(1,0);
+  grid2->setRowStretch(2,1);
 
   grid2->addColSpacing(0,gReplace->width());
-  grid2->addColSpacing(1,bbReplace->width());
+  grid2->addColSpacing(0,wid->width());
   grid2->setColStretch(0,1);
-  grid2->setColStretch(1,0);
 
   grid2->activate();
 
@@ -579,9 +583,9 @@ void KWSearchDia::searchFirst()
   page->removeSelection();
 
   if (!cRev->isChecked())
-    page->find(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked());
+    page->find(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked());
   else
-    page->findRev(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked());
+    page->findRev(expr,searchEntry,true,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked());
 }
 
 /*================================================================*/
@@ -593,9 +597,9 @@ void KWSearchDia::searchNext()
   page->removeSelection();
 
   if (!cRev->isChecked())
-    page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked());
+    page->find(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked());
   else
-    page->findRev(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked());
+    page->findRev(expr,searchEntry,false,cCase->isChecked(),cWholeWords->isChecked(),cRegExp->isChecked());
 }
 
 /*================================================================*/
@@ -757,17 +761,23 @@ void KWSearchDia::saveSettings()
   searchEntry->caseSensitive = cCase->isChecked();
   searchEntry->wholeWords = cWholeWords->isChecked();
   searchEntry->reverse = cRev->isChecked();
+  searchEntry->wildcard = cWildcard->isChecked();
 
   view->setSearchEntry(searchEntry);
 }
 
 /*================================================================*/
-void KWSearchDia::rsearchFirst()
+void KWSearchDia::replaceFirst()
 {
 }
 
 /*================================================================*/
-void KWSearchDia::rsearchNext()
+void KWSearchDia::replaceNext()
+{
+}
+
+/*================================================================*/
+void KWSearchDia::replaceAll()
 {
 }
 
@@ -841,3 +851,19 @@ void KWSearchDia::rslotVertAlign(int)
 {
 }
 
+/*================================================================*/
+void KWSearchDia::slotRegExp()
+{
+  if (cRegExp->isChecked())
+    {
+      cWholeWords->setEnabled(false);
+      cWildcard->setEnabled(true);
+      cRev->setEnabled(false);
+    }
+  else
+    {
+      cWholeWords->setEnabled(true);
+      cWildcard->setEnabled(false);
+      cRev->setEnabled(true);
+    }
+}

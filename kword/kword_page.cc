@@ -93,6 +93,26 @@ unsigned int KWPage::ptColumnWidth() { return doc->getPTColumnWidth(); }
 unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 
 /*================================================================*/
+void KWPage::init()
+{
+  if (fc->getParag())
+    {	  
+      gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
+      gui->getView()->setFormat(*((KWFormat*)fc),true,false);
+      gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+      gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+				      fc->getParag()->getParagLayout()->getRightBorder(),
+				      fc->getParag()->getParagLayout()->getTopBorder(),
+				      fc->getParag()->getParagLayout()->getBottomBorder());
+      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
+      gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+    }
+}
+
+/*================================================================*/
 void KWPage::mouseMoveEvent(QMouseEvent *e)
 {
   if (mousePressed)
@@ -2950,8 +2970,11 @@ void KWPage::tabListChanged(QList<KoTabulator> *_tablist)
 }
 
 /*================================================================*/
-bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false)
+bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
+		  bool _regexp = false,bool _wildcard = false)
 {
+  int len = 0;
+
   if (_first || !currFindParag)
     {
       for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
@@ -2969,17 +2992,24 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
   while (true)
     {
       int tmpFindPos = currFindPos;
-      currFindPos = currFindParag->find(_expr,_format,currFindPos,_cs,_whole);
+      if (!_regexp)
+	{
+	  currFindPos = currFindParag->find(_expr,_format,currFindPos,_cs,_whole);
+	  len = _expr.length();
+	}
+      else
+	currFindPos = currFindParag->find(QRegExp(_expr),_format,currFindPos,len,_cs,_wildcard);
+
       if (currFindPos >= 0)
 	{
-	  selectText(currFindPos,_expr.length(),currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
-	  currFindPos += _expr.length();
+	  selectText(currFindPos,len,currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
+	  currFindPos += len;
 	  return true;
 	}
       else
 	{
-	  if (currFindPos == -2 && tmpFindPos + _expr.length() < currFindParag->getTextLen())
-	    currFindPos = tmpFindPos + _expr.length();
+	  if (currFindPos == -2 && tmpFindPos + len < static_cast<int>(currFindParag->getTextLen()))
+	    currFindPos = tmpFindPos + len;
 	  else if (currFindParag->getNext())
 	    {
 	      currFindParag = currFindParag->getNext();
@@ -3008,8 +3038,11 @@ bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first 
 }
 
 /*================================================================*/
-bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false)
+bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false,bool _whole = false,
+		     bool _regexp = false,bool _wildcard = false)
 {
+  int len = 0;
+
   if (_first || !currFindParag)
     {
       for (unsigned int i = doc->getNumFrameSets() - 1;i >= 0;i--)
@@ -3027,17 +3060,24 @@ bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _fir
   while (true)
     {
       int tmpFindPos = currFindPos;
-      currFindPos = currFindParag->findRev(_expr,_format,currFindPos,_cs,_whole);
+      if (!_regexp)
+	{
+	  currFindPos = currFindParag->findRev(_expr,_format,currFindPos,_cs,_whole);
+	  len = _expr.length();
+	}
+      else
+	currFindPos = currFindParag->findRev(QRegExp(_expr),_format,currFindPos,len,_cs,_wildcard);
+
       if (currFindPos >= 0)
 	{
-	  selectText(currFindPos,_expr.length(),currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
+	  selectText(currFindPos,len,currFindFS,dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(currFindFS)),currFindParag);
 	  if (currFindPos > 0) currFindPos--;
 	  return true;
 	}
       else
 	{
-	  if (currFindPos == -2 && tmpFindPos - _expr.length() > 0)
-	    currFindPos = tmpFindPos - _expr.length();
+	  if (currFindPos == -2 && tmpFindPos - len > 0)
+	    currFindPos = tmpFindPos - len;
 	  else if (currFindParag->getPrev())
 	    {
 	      currFindParag = currFindParag->getPrev();
