@@ -317,6 +317,8 @@ CCPASTEUR:
 - IDEA for connection shortcuts:
   Mysql Query Borwser has a simple xml file defined:
   http://dev.mysql.com/doc/query-browser/en/mysql-gui-appendix-store-connections.html
+- allow to choose if the file should be locked (opened in EXCLUSIVE mode) or not
+  (THIS SHOULD BE DEFAULT BEHAVIOUR)
 
 === CLI TODO ===
 - add kexicmd as a symlink to kexi binary, for totally non-gui usage
@@ -355,6 +357,41 @@ CCPASTEUR:
 
 CCMAIL: dkite@shaw.ca
 
+TableView
+- record navigator
+-- update width when number of digits in row count changes
+-- on row inserting, enable "next" button
+-- on row inserting, do nothing when "add" button is clicked 
+   when we're editing autonumber field and it's empty
+- disable "delete row" action on row editing
+- add and enable "cancel row editing" action on row editing
+
+
+2004-10-20
+Main
+- "file_open" and "file_new" actions now start a new process 
+	for creating/opening database, if needed.
+- KEXI_SHOW_UNIMPLEMENTED macro added
+KexiDB Parser
+- fixed handling large integer constants 
+Table Designer
+- primary-key-fields: BigInteger type is enforced; subtypes are hidden
+Kexi Properties
+- KexiPropertyEditor::setBuffer() can be now safely called even from 
+  KexiPropertyBuffer::propertyChanged() signal handlers (refreshing is delayed).
+Core
+- KexiViewBase::propertyBufferReloaded(): bool preservePrevSelection added
+
+2004-10-19
+Main
+- "delete_row" action shortcut is now CTRL+Delete, to avoid conflict with edit_cut (Shift Delete)
+- fixes for KexiBrowser
+TableView
+- KexiComboBoxTableEdit improved
+- KexiTableViewColumn: try harder to get a column name
+Startup
+- --password option removed
+- --create-opendb CL option added
 
 2004-10-18
 KexiDB Parser, KexiDB
@@ -368,12 +405,6 @@ Query View
 - Expressions are now displayed, with header names
 Core
 - KexiDialogBase::activate() -another focus-related fix
-Main
-- "delete_row" action shortcut is now CTRL+Delete, to avoid conflict with edit_cut (Shift Delete)
-- fixes for KexiBrowser
-TableView
-- KexiComboBoxTableEdit improved
-- KexiTableViewColumn: try harder to get a column name
 
 2004-10-16
 Core
