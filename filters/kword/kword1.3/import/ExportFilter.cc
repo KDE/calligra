@@ -575,17 +575,22 @@ void OOWriterWorker::writeMetaXml(void)
 
 bool OOWriterWorker::doCloseFile(void)
 {
-    kdDebug(30518)<< "OOWriterWorker::doCloseFile" << endl;
+    kdDebug(30520)<< "OOWriterWorker::doCloseFile start" << endl;
     if (m_zip)
     {
+        kdDebug(30520) << "Writing content..." << endl;
         writeContentXml();
+        kdDebug(30520) << "Writing meta..." << endl;
         writeMetaXml();
+        kdDebug(30520) << "Writing styles..." << endl;
         writeStylesXml();
+        kdDebug(30520) << "Closing ZIP..." << endl;
         m_zip->close();
     }
-
+    kdDebug(30520) << "Deleting ZIP..." << endl;
     delete m_zip;
     m_zip=NULL;
+    kdDebug(30520)<< "OOWriterWorker::doCloseFile end" << endl;
     return true;
 }
 

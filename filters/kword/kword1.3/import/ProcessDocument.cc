@@ -784,6 +784,7 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, KWEFKWordLe
     attrProcessingList << AttrProcessing ( "linesTogether",       "bool", &layout->keepLinesTogether  );
     attrProcessingList << AttrProcessing ( "hardFrameBreak",      "bool", &layout->pageBreakBefore );
     attrProcessingList << AttrProcessing ( "hardFrameBreakAfter", "bool", &layout->pageBreakAfter  );
+    attrProcessingList << AttrProcessing ( "keepWithNext" ); // RTF import filter
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
