@@ -1,6 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KIllustrator
+Name[hu]=KIllusztrátor
 Name[is]=Teiknir
 Name[no]=Illustratør
 Name[pt]=Ilustrações
@@ -9,6 +10,7 @@ Name[ru]=éÌÌÀÓÔÒÁÔÏÒ
 Name[sv]=Illustrattioner
 Exec=killustrator.bin --server
 Comment=KIllustrator Vector Graphics Application
+Comment[br]=Arload kevregañ sturiadel KIllustrator
 Comment[ca]=Aplicació de gràfics vectorials
 Comment[cs]=Aplikace pro práci s vektorovou grafikou
 Comment[da]=KIllustrator vektorgrafik anvendelse
@@ -17,6 +19,7 @@ Comment[es]=Aplicación de Gráficos Vectoriales KIllustrator
 Comment[fi]=Vektorigrafiikkaohjelmisto
 Comment[fr]=KIllustrator est une Application de dessin vectoriel
 Comment[hr]=Killustrator program za vektorsku grafiku
+Comment[hu]=KIllusztrátor vektor grafikus rajzolóprogram
 Comment[is]=killustrator:  Hlutbundið teikniforrit K vöndulsins
 Comment[no]=Vektorgrafikkprogrammet KIllustrator
 Comment[pl]=Program do grafiki wektorowej

@@ -1,8 +1,10 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KWordAsciiFilter
+Name[de]=KWord ASCII-Filter
 Exec=kword_ascii.bin --server
 Comment=Reggie's KWord Ascii Filter
+Comment[de]=Reggies KWord ASCII-Filter
 Comment[pt_BR]=Filtro do KWord
 Export=application/x-kword
 ExportDescription=KWord
