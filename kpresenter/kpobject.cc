@@ -198,8 +198,6 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
         kdDebug()<<" load animation style **************************************\n";
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
-        int effVal=0;
-
         kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
         if (effectStr=="fade")
         {
@@ -256,6 +254,51 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
 
 #endif
     }
+#if 0 //hide object 
+    if( animation)
+    {
+        kdDebug()<<" load animation style **************************************\n";
+        QString effectStr = animation->attribute("presentation:effect");
+        QString dir = animation->attribute("presentation:direction");
+        kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
+        if (effectStr=="fade")
+        {
+            if (dir=="from-right")
+                effect3 = EF3_WIPE_RIGHT;
+            else if (dir=="from-left")
+                effect = EF3_WIPE_LEFT;
+            else if (dir=="from-top")
+                effect=  EF3_WIPE_TOP;
+            else if (dir=="from-bottom")
+                effect = EF3_WIPE_BOTTOM;
+            else
+                kdDebug()<<" not supported :"<<effectStr<<endl;
+        }
+        else if (effectStr=="move")
+        {
+            if (dir=="from-right")
+                effect = EF_GO_RIGHT;
+            else if (dir=="from-left")
+                effect = EF_GO_LEFT;
+            else if (dir=="from-top")
+                effect = EF_GO_TOP;
+            else if (dir=="from-bottom")
+                effect = EF_GO_BOTTOM;
+            else if (dir=="from-upper-right")
+                effect = EF_GO_RIGHT_TOP;
+            else if (dir=="from-lower-right")
+                effect = EF_GO_RIGHT_BOTTOM;
+            else if (dir=="from-upper-left")
+                effect = EF_GO_LEFT_TOP;
+            else if (dir=="from-lower-left")
+                effect = EF_GO_LEFT_BOTTOM;
+            else
+                kdDebug ()<<" not supported :"<<effectStr<<endl;
+        }
+        else
+            kdDebug()<<" not supported :"<<effectStr<<endl;
+    }
+#endif
 }
 
 double KPObject::load(const QDomElement &element) {
