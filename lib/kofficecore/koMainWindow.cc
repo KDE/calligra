@@ -1015,7 +1015,7 @@ void KoMainWindow::slotProgress(int value) {
         d->m_progress->show();
         d->m_firstTime=false;
     }
-    d->m_progress->setValue(value);
+    d->m_progress->setProgress(value);
     kapp->processEvents();
 }
 

@@ -168,14 +168,14 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 
     QDir( path ).mkdir( path + "/html" );
 
-    p = progressBar->value();
-    progressBar->setValue( ++p );
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
     kapp->processEvents();
 
     QDir( path ).mkdir( path + "/pics" );
 
-    p = progressBar->value();
-    progressBar->setValue( ++p );
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
     kapp->processEvents();
 
     QString format = "." + imageFormat( imgFormat );
@@ -190,8 +190,8 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
         system( QFile::encodeName( QString( "cp %1 %2/pics/%3" ).
                 arg( locate( "slideshow", filename, KPresenterFactory::global() ) ).
                 arg( path ).arg( filename ) ) );
-        p = progressBar->value();
-        progressBar->setValue( ++p );
+        p = progressBar->progress();
+        progressBar->setProgress( ++p );
         kapp->processEvents();
         index++;
     }
@@ -225,8 +225,8 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
         }
         pix.save( filename, format.upper().latin1() );   //lukas: provide the option to choose image quality
 
-        p = progressBar->value();
-        progressBar->setValue( ++p );
+        p = progressBar->progress();
+        progressBar->setProgress( ++p );
         kapp->processEvents();
     }
     view->zoomDocument(oldZoom);
@@ -346,8 +346,8 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         t << html;
         file.close();
 
-        p = progressBar->value();
-        progressBar->setValue( ++p );
+        p = progressBar->progress();
+        progressBar->setProgress( ++p );
         kapp->processEvents();
     }
 }
@@ -404,7 +404,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     t << html;
     file.close();
 
-    progressBar->setValue( progressBar->maxValue() );
+    progressBar->setProgress( progressBar->totalSteps() );
     kapp->processEvents();
 }
 
@@ -807,13 +807,13 @@ void KPWebPresentationCreateDialog::initCreation()
     f.setBold( true );
     step1->setFont( f );
 
-    progressBar->setValue( 0 );
-    progressBar->setRange( 0, webPres.initSteps() );
+    progressBar->setProgress( 0 );
+    progressBar->setTotalSteps( webPres.initSteps() );
 
     webPres.initCreation( progressBar );
 
     step1->setFont( f2 );
-    progressBar->setValue( progressBar->maxValue() );
+    progressBar->setProgress( progressBar->totalSteps() );
 }
 
 /*================================================================*/
@@ -823,14 +823,15 @@ void KPWebPresentationCreateDialog::createSlidesPictures()
     f.setBold( true );
     step2->setFont( f );
 
-    progressBar->setValue( 0 );
+    progressBar->setProgress( 0 );
     if ( webPres.slides1Steps() > 0 )
     {
-        progressBar->setRange( 0, webPres.slides1Steps() );
+        progressBar->setTotalSteps( webPres.slides1Steps() );
         webPres.createSlidesPictures( progressBar );
     }
+
     step2->setFont( f2 );
-    progressBar->setValue( progressBar->maxValue() );
+    progressBar->setProgress( progressBar->totalSteps() );
 }
 
 /*================================================================*/
@@ -840,14 +841,15 @@ void KPWebPresentationCreateDialog::createSlidesHTML()
     f.setBold( true );
     step3->setFont( f );
 
-    progressBar->setValue( 0 );
+    progressBar->setProgress( 0 );
     if ( webPres.slides1Steps() > 0 )
     {
-        progressBar->setRange( 0, webPres.slides1Steps() );
+        progressBar->setTotalSteps( webPres.slides1Steps() );
         webPres.createSlidesHTML( progressBar );
     }
+
     step3->setFont( f2 );
-    progressBar->setValue( progressBar->maxValue() );
+    progressBar->setProgress( progressBar->totalSteps() );
 }
 
 /*================================================================*/
@@ -857,13 +859,13 @@ void KPWebPresentationCreateDialog::createMainPage()
     f.setBold( true );
     step4->setFont( f );
 
-    progressBar->setValue( 0 );
-    progressBar->setRange( 0, webPres.slides1Steps() );
+    progressBar->setProgress( 0 );
+    progressBar->setTotalSteps( webPres.slides1Steps() );
 
     webPres.createMainPage( progressBar );
 
     step4->setFont( f2 );
-    progressBar->setValue( progressBar->maxValue() );
+    progressBar->setProgress( progressBar->totalSteps() );
 }
 
 /*================================================================*/
