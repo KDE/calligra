@@ -382,7 +382,7 @@ don't put a </?xml...> at the end of the file!).
     (STYLE*)>
 <!ELEMENT STYLE
     (NAME|FOLLOWING|
-     FLOW|INDENTS|OFFSETS|LINESPACING|
+     FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
      LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
      COUNTER|FORMAT|TABULATOR)*>
 
@@ -458,21 +458,15 @@ don't put a </?xml...> at the end of the file!).
         other than its text and formatting.
 -->
 <!ELEMENT LAYOUT
-    (NAME|FLOW|INDENTS|OFFSETS|LINESPACING|
+    (NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
      LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
-     COUNTER|FORMAT|TABULATOR|COUNTERSTART)*>
-
-<!-- COUNTERSTART
-        Initialises this paragraph to a specific counter start.
-        ##### What is the difference with COUNTER.start ? (DF)
--->
-<!ELEMENT COUNTERSTART
-    EMPTY>
-<!ATTLIST COUNTERSTART
-    value CDATA #REQUIRED>
+     COUNTER|FORMAT|TABULATOR)*>
 
 <!-- NAME
-        The name of a style
+        The name of a style.
+        If inside a <STYLE> tag, this defines the name of the style.
+        If inside a <LAYOUT> tag, this refers to an existing style,
+        to be used for this paragraph.
 -->
 <!ELEMENT NAME
     EMPTY>
@@ -569,12 +563,25 @@ don't put a </?xml...> at the end of the file!).
     bulletfont CDATA #REQUIRED>
 
 <!-- 
+        The space to be added between two consecutive lines in a given paragraph.
         value in points 
 -->
 <!ELEMENT LINESPACING
     EMPTY>
 <!ATTLIST LINESPACING
     value CDATA #REQUIRED>
+
+<!--
+        Attributes relating to the way paragraphs are broken at the end of a frame/page.
+        If this element isn't specified, the default is to break between lines of a parag.
+
+        linesTogether: if "true", all the lines of a given paragraph remain together.
+        Possible future extension: paragraphsTogether.
+-->
+<!ELEMENT PAGEBREAKING
+    EMPTY>
+<!ATTLIST PAGEBREAKING
+    linesTogether CDATA #REQUIRED>
 
 <!--
         The borders can be used on a frame and on a paragraph.
