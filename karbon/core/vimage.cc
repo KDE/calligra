@@ -104,12 +104,24 @@ VImage::save( QDomElement& element ) const
 	element.appendChild( me );
 
 	me.setAttribute( "fname", m_fname );
+	me.setAttribute( "m11", m_matrix.m11() );
+	me.setAttribute( "m12", m_matrix.m12() );
+	me.setAttribute( "m21", m_matrix.m21() );
+	me.setAttribute( "m22", m_matrix.m22() );
+	me.setAttribute( "dx", m_matrix.dx() );
+	me.setAttribute( "dy", m_matrix.dy() );
 }
 
 void
 VImage::load( const QDomElement& element )
 {
 	m_fname = element.attribute( "fname" );
+	m_matrix.setMatrix( element.attribute( "m11", "1.0" ).toDouble(),
+						element.attribute( "m12", "0.0" ).toDouble(),
+						element.attribute( "m21", "0.0" ).toDouble(),
+						element.attribute( "m22", "1.0" ).toDouble(),
+						element.attribute( "dx", "0.0" ).toDouble(),
+						element.attribute( "dy", "0.0" ).toDouble() );
 	kdDebug() << "VImage::load : " << m_fname.latin1() << endl;
 	delete m_image;
 	m_image = new QImage( m_fname );

@@ -81,6 +81,7 @@ void
 VToolBox::slotPressButton( int id )
 {
 	buttonGroup->setButton( id );
+	slotButtonPressed( id );
 }
 
 void
