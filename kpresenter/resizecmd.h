@@ -23,7 +23,7 @@
 #include "command.h"
 #include "kpobject.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: ResizeCmd                                               */
@@ -34,7 +34,7 @@ class ResizeCmd : public Command
   Q_OBJECT
 
 public:
-  ResizeCmd(QString _name,QPoint _m_diff,QSize _r_diff,KPObject *_object,KPresenterDocument_impl *_doc);
+  ResizeCmd(QString _name,QPoint _m_diff,QSize _r_diff,KPObject *_object,KPresenterDoc *_doc);
   ~ResizeCmd();
   
   virtual void execute();
@@ -48,7 +48,7 @@ protected:
   QPoint m_diff;
   QSize r_diff;
   KPObject *object;
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
 
 };
 

@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ResizeCmd::ResizeCmd(QString _name,QPoint _m_diff,QSize _r_diff,KPObject *_object,KPresenterDocument_impl *_doc)
+ResizeCmd::ResizeCmd(QString _name,QPoint _m_diff,QSize _r_diff,KPObject *_object,KPresenterDoc *_doc)
   : Command(_name), m_diff(_m_diff), r_diff(_r_diff)
 {
   object = _object;

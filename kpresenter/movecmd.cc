@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd::MoveByCmd(QString _name,QPoint _diff,QList<KPObject> &_objects,KPresenterDocument_impl *_doc)
+MoveByCmd::MoveByCmd(QString _name,QPoint _diff,QList<KPObject> &_objects,KPresenterDoc *_doc)
   : Command(_name), diff(_diff), objects(_objects)
 {
   objects.setAutoDelete(false);
@@ -71,7 +71,7 @@ void MoveByCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd2::MoveByCmd2(QString _name,QList<QPoint> &_diffs,QList<KPObject> &_objects,KPresenterDocument_impl *_doc)
+MoveByCmd2::MoveByCmd2(QString _name,QList<QPoint> &_diffs,QList<KPObject> &_objects,KPresenterDoc *_doc)
   : Command(_name), diffs(_diffs), objects(_objects)
 {
   objects.setAutoDelete(false);

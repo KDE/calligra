@@ -15,14 +15,14 @@
 #ifndef __kpresenter_doc_h__
 #define __kpresenter_doc_h__
 
-class KPresenterDocument_impl;
-class KPresenterView_impl;
+class KPresenterDoc;
+class KPresenterView;
 
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <document_impl.h>
-#include <view_impl.h>
+#include <koDocument.h>
+#include <koView.h>
 
 #include <qapp.h>
 #include <qlist.h>
@@ -97,30 +97,30 @@ class KPresenterChild : public KoDocumentChild
 public:
 
   // constructor - destructor
-  KPresenterChild( KPresenterDocument_impl *_kpr,const QRect& _rect,OPParts::Document_ptr _doc,int,int);
-  KPresenterChild( KPresenterDocument_impl *_kpr );
+  KPresenterChild( KPresenterDoc *_kpr,const QRect& _rect,KOffice::Document_ptr _doc,int,int);
+  KPresenterChild( KPresenterDoc *_kpr );
   ~KPresenterChild();
 
   QRect _geometry() {return __geometry;}
   void _setGeometry(QRect g) {__geometry = g;}
   
   // get parent
-  KPresenterDocument_impl* parent() {return m_pKPresenterDoc;}
+  KPresenterDoc* parent() {return m_pKPresenterDoc;}
   
 protected:
 
   // parent, document and geometry
-  KPresenterDocument_impl *m_pKPresenterDoc;
+  KPresenterDoc *m_pKPresenterDoc;
   QRect __geometry;
 };
 
 /*****************************************************************/
-/* class KPresenterDocument_impl                                 */
+/* class KPresenterDoc                                           */
 /*****************************************************************/
-class KPresenterDocument_impl : public QObject,
-				virtual public KoDocument,
-				virtual public KoPrintExt,
-				virtual public KPresenter::KPresenterDocument_skel
+class KPresenterDoc : public QObject,
+		      virtual public KoDocument,
+		      virtual public KoPrintExt,
+		      virtual public KPresenter::KPresenterDocument_skel
 {
   Q_OBJECT
 
@@ -128,40 +128,42 @@ public:
 
   // ------ C++ ------ 
   // constructor - destructor
-  KPresenterDocument_impl(const CORBA::BOA::ReferenceData &refdata);
-  KPresenterDocument_impl();
-  ~KPresenterDocument_impl();
+  KPresenterDoc();
+  ~KPresenterDoc();
   
   // clean
   virtual void cleanUp();
   
   // save
-  virtual bool save(ostream&);
+  virtual bool save( ostream&, const char *_format );
   virtual bool exportHTML(QString _filename);
 
   // load
   virtual bool load_template(const char *_url);
-  virtual bool load(KOMLParser&);
-  virtual bool loadChildren(OPParts::MimeMultipartDict_ptr _dict);
+  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr );
+  virtual bool loadChildren( KOStore::Store_ptr _store );
 
+  virtual KPresenterView* createPresenterView();
+  
   // ------ IDL ------
   virtual CORBA::Boolean init() {return insertNewTemplate(0,0);}
 
   // create a view
-  virtual OPParts::View_ptr createView();
+  virtual OpenParts::View_ptr createView();
 
   // get list of views
-  virtual void viewList(OPParts::Document::ViewList*& _list);
+  virtual void viewList(KOffice::Document::ViewList*& _list);
 
   // get mime type
   virtual char* mimeType() {return CORBA::string_dup(MIME_TYPE);}
   
   // ask, if document is modified
   virtual CORBA::Boolean isModified() {return m_bModified;}
-  virtual void setModified(bool _c) {m_bModified = _c;}
-  
-  // url of part
-  const char* url() {return m_strFileURL.data();}
+  virtual void setModified(bool _c) {m_bModified = _c; if ( _c ) m_bEmpty = false; }
+  virtual bool isEmpty() { return m_bEmpty; }
+
+  // ------ C++ ------
+  virtual int viewCount();
 
   // ------ C++ ------
   // get output- and inputformats
@@ -169,8 +171,8 @@ public:
   virtual QStrList inputFormats();
 
   // add - remove a view
-  virtual void addView(KPresenterView_impl *_view);
-  virtual void removeView(KPresenterView_impl *_view);
+  virtual void addView(KPresenterView *_view);
+  virtual void removeView(KPresenterView *_view);
   
   // insert an object
   virtual void insertObject(const QRect&,const char*,int,int);
@@ -350,7 +352,7 @@ protected:
    * saving. We must know about every direct and indirect child so that we
    * can save them all.
    */
-  virtual void makeChildListIntern( OPParts::Document_ptr _root, const char *_path );  
+  virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );  
   /*
    * Overloaded function from @ref KoDocument.
    *
@@ -377,13 +379,14 @@ protected:
   };
 
   // list of views and children
-  QList<KPresenterView_impl> m_lstViews;
+  QList<KPresenterView> m_lstViews;
   QList<KPresenterChild> m_lstChildren;
-  KPresenterView_impl *viewPtr;
+  KPresenterView *viewPtr;
 
   // modified?
   bool m_bModified;
-
+  bool m_bEmpty;
+  
   // page layout and background
   KoPageLayout _pageLayout;
   QList<KPBackGround> _backgroundList;
@@ -404,9 +407,6 @@ protected:
   QColor _otxtBackCol;
   QColor _otxtSelCol;
 
-  // url
-  QString m_strFileURL;
-
   bool _clean;
   int objStartY,objStartNum;
 
@@ -419,7 +419,6 @@ protected:
   KPGradientCollection _gradientCollection;
 
   CommandHistory _commands;
-
 };
 
 #endif

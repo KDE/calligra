@@ -14,21 +14,29 @@
 
 #include "kpresenter_main.h"
 #include "kpresenter_main.moc"
+#include "kpresenter_doc.h"
 #include <string.h>
-#include <factory_impl.h>
 #include <koScanParts.h>
+#include <koFactory.h>
+#include <koDocument.h>
+#include <opAutoLoader.h>
+#include "kpresenter_shell.h"
+#include <koIMR.h>
+#include "formats.h"
 
 bool g_bWithGUI = true;
 
-FACTORY(KPresenterDocument_impl,KPresenter::Factory_skel,KPresenterFactory)
-typedef AutoLoader<KPresenterFactory> KPresenterAutoLoader;
+list<string> g_openFiles;
+
+KOFFICE_DOCUMENT_FACTORY( KPresenterDoc, KPresenterFactory )
+typedef OPAutoLoader<KPresenterFactory> KPresenterAutoLoader;
 
 /******************************************************************/
 /* class KPresenterApp - KPresenter Application                   */
 /******************************************************************/
 
 /*====================== constrcutor =============================*/
-KPresenterApp::KPresenterApp(int argc,char** argv)
+KPresenterApp::KPresenterApp( int &argc, char** argv )
   : OPApplication(argc,argv,"kpresenter")
 {
     getLocale()->insertCatalogue("koffice");
@@ -42,35 +50,50 @@ KPresenterApp::~KPresenterApp()
 /*=================== start application ==========================*/
 void KPresenterApp::start()
 {
-  koScanParts();
-
   if ( g_bWithGUI )
+  {
+    imr_init();
+    koScanParts();
+
+    if ( g_openFiles.size() == 0 )
     {
-      KPresenterShell_impl* m_pShell;
-      m_pShell = new KPresenterShell_impl;
-      m_pShell->enableMenuBar();
-      m_pShell->PartShell_impl::enableStatusBar();
-      m_pShell->enableToolBars();
-      m_pShell->show();
+      KPresenterShell* shell = new KPresenterShell;
+      shell->show();
+      shell->newDocument();
     }
-  printf("Started\n");
+    else
+    {
+      list<string>::iterator it = g_openFiles.begin();
+      for( ; it != g_openFiles.end(); ++it )
+      {
+	KPresenterShell* shell = new KPresenterShell;
+	shell->show();
+	shell->openDocument( it->c_str(), "" );
+      }
+    }
+  }
 }
 
 /*======================== main ==================================*/
 int main(int argc,char **argv)
 {
+  KPresenterAutoLoader loader("IDL:KOffice/DocumentFactory:1.0");
+
+  KPresenterApp app(argc,argv);
+
   FormatManager *formatMngr;
   formatMngr = new FormatManager();
 
-  for(int i = 1;i < argc;i++)
+  int i = 1;
+  if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )
   {
-    if (strcmp(argv[i],"-s") == 0 || strcmp(argv[i],"--server") == 0)
-      g_bWithGUI = false;
+    i++;
+    g_bWithGUI = false;
   }
-  
-  KPresenterAutoLoader loader("IDL:KPresenter/Factory:1.0");
 
-  KPresenterApp app(argc,argv);
+  for( ; i < argc; i++ )
+    g_openFiles.push_back( (const char*)argv[i] );
+
   app.exec();
 
   return 0;

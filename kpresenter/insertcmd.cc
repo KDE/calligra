@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-InsertCmd::InsertCmd(QString _name,KPObject *_object,KPresenterDocument_impl *_doc)
+InsertCmd::InsertCmd(QString _name,KPObject *_object,KPresenterDoc *_doc)
   : Command(_name)
 {
   object = _object;

@@ -24,7 +24,7 @@
 /******************************************************************/
 
 /*====================== constructor =============================*/
-Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
+Page::Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0)
   : QWidget(parent,name)
 {
   if (parent)
@@ -124,8 +124,8 @@ void Page::drawBackground(QPainter *painter,QRect rect)
 	    kpbackground->draw(painter,QPoint(getPageSize(i,_presFakt).x(),
 					      getPageSize(i,_presFakt).y()),editMode);
 	  else
-	    kpbackground->draw(painter,QPoint(getPageSize(i,_presFakt,false).x() + view->KPresenterDoc()->getLeftBorder() * _presFakt,
-					      getPageSize(i,_presFakt,false).y() + view->KPresenterDoc()->getTopBorder() * _presFakt),
+	    kpbackground->draw(painter,QPoint(getPageSize(i,_presFakt,false).x() + view->kPresenterDoc()->getLeftBorder() * _presFakt,
+					      getPageSize(i,_presFakt,false).y() + view->kPresenterDoc()->getTopBorder() * _presFakt),
 			       editMode);
 	}
     }
@@ -393,8 +393,8 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 		  }
 	      }
 	    MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object(s)"),QPoint(mx - firstX,my - firstY),
-						 _objects,view->KPresenterDoc());
-	    view->KPresenterDoc()->commands()->addCommand(moveByCmd);
+						 _objects,view->kPresenterDoc());
+	    view->kPresenterDoc()->commands()->addCommand(moveByCmd);
 	  } 
 	else
 	  if (objectList()->count() - 1 >= 0)
@@ -417,11 +417,11 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object up"),QPoint(0,my - firstY),QSize(0,firstY - my),
-						 kpobject,view->KPresenterDoc());
+						 kpobject,view->kPresenterDoc());
 	    kpobject->setMove(false);
 	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
-	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	    view->kPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
        	kpobject = objectList()->at(resizeObjNum);
 	kpobject->setMove(false);
@@ -435,11 +435,11 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object down"),QPoint(0,0),QSize(0,my - firstY),
-						 kpobject,view->KPresenterDoc());
+						 kpobject,view->kPresenterDoc());
 	    kpobject->setMove(false);
 	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
-	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	    view->kPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
 	kpobject = objectList()->at(resizeObjNum);
 	kpobject->setMove(false);
@@ -453,11 +453,11 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left"),QPoint(mx - firstX,0),QSize(firstX - mx,0),
-						 kpobject,view->KPresenterDoc());
+						 kpobject,view->kPresenterDoc());
 	    kpobject->setMove(false);
 	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
-	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	    view->kPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
 	kpobject = objectList()->at(resizeObjNum);
 	kpobject->setMove(false);
@@ -471,11 +471,11 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right"),QPoint(0,0),QSize(mx - firstX,0),
-						 kpobject,view->KPresenterDoc());
+						 kpobject,view->kPresenterDoc());
 	    kpobject->setMove(false);
 	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
-	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	    view->kPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
 	kpobject = objectList()->at(resizeObjNum);
 	kpobject->setMove(false);
@@ -489,11 +489,11 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left up"),QPoint(mx - firstX,my - firstY),
-						 QSize(firstX - mx,firstY - my),kpobject,view->KPresenterDoc());
+						 QSize(firstX - mx,firstY - my),kpobject,view->kPresenterDoc());
 	    kpobject->setMove(false);
 	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
-	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	    view->kPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
 	kpobject = objectList()->at(resizeObjNum);
 	kpobject->setMove(false);
@@ -507,11 +507,11 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object left down"),QPoint(mx - firstX,0),
-						 QSize(firstX - mx,my - firstY),kpobject,view->KPresenterDoc());
+						 QSize(firstX - mx,my - firstY),kpobject,view->kPresenterDoc());
 	    kpobject->setMove(false);
 	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
-	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	    view->kPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
 	kpobject = objectList()->at(resizeObjNum);
 	kpobject->setMove(false);
@@ -525,11 +525,11 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right up"),QPoint(0,my - firstY),
-						 QSize(mx - firstX,firstY - my),kpobject,view->KPresenterDoc());
+						 QSize(mx - firstX,firstY - my),kpobject,view->kPresenterDoc());
 	    kpobject->setMove(false);
 	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
-	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	    view->kPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
 	kpobject = objectList()->at(resizeObjNum);
 	kpobject->setMove(false);
@@ -543,11 +543,11 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    kpobject = objectList()->at(resizeObjNum);
 	    ResizeCmd *resizeCmd = new ResizeCmd(i18n("Resize object right down"),QPoint(0,0),QSize(mx - firstX,my - firstY),
-						 kpobject,view->KPresenterDoc());
+						 kpobject,view->kPresenterDoc());
 	    kpobject->setMove(false);
 	    resizeCmd->unexecute(false);
 	    resizeCmd->execute();
-	    view->KPresenterDoc()->commands()->addCommand(resizeCmd);
+	    view->kPresenterDoc()->commands()->addCommand(resizeCmd);
 	  }
 	kpobject = objectList()->at(resizeObjNum);
 	kpobject->setMove(false);
@@ -695,7 +695,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
     {
       QPainter p;
       p.begin(this);
-      p.setPen(view->KPresenterDoc()->presPen());
+      p.setPen(view->kPresenterDoc()->presPen());
       p.drawLine(oldMx,oldMy,e->x(),e->y());
       oldMx = e->x();
       oldMy = e->y();
@@ -791,7 +791,7 @@ int Page::diffx(int i = -1)
 //   if (editMode)
 //     return view->getDiffX();
 
-//   return static_cast<int>(view->getDiffX() + view->KPresenterDoc()->getLeftBorder() * _presFakt);
+//   return static_cast<int>(view->getDiffX() + view->kPresenterDoc()->getLeftBorder() * _presFakt);
 }
 
 /*================================================================*/
@@ -803,8 +803,8 @@ int Page::diffy(int i = -1)
 //   if (editMode)
 //     return view->getDiffY();
 
-//   return static_cast<int>(view->getDiffY() + ((i + 1) * view->KPresenterDoc()->getTopBorder() + 
-// 					      i * view->KPresenterDoc()->getBottomBorder()) * _presFakt);
+//   return static_cast<int>(view->getDiffY() + ((i + 1) * view->kPresenterDoc()->getTopBorder() + 
+// 					      i * view->kPresenterDoc()->getBottomBorder()) * _presFakt);
 }
 /*======================= select object ==========================*/
 void Page::selectObj(int num)
@@ -1293,7 +1293,7 @@ void Page::startScreenPresentation(bool zoom)
   currPresPage = 1;
   editMode = false;
   drawMode = false;
-  presStepList = view->KPresenterDoc()->reorderPage(1,diffx(),diffy(),_presFakt);
+  presStepList = view->kPresenterDoc()->reorderPage(1,diffx(),diffy(),_presFakt);
   currPresStep = (int)(presStepList.first());
   subPresStep = 0;
   repaint(true);
@@ -1408,7 +1408,7 @@ bool Page::pNext(bool)
 
 	  emit stopPres();
 
-	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+	  presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
 	  currPresStep = (int)(presStepList.last());
 	  doObjEffects();
 	  return false;
@@ -1441,11 +1441,11 @@ bool Page::pNext(bool)
       drawPageInPix(_pix1,view->getDiffY());
       
       currPresPage++;
-      presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+      presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
       currPresStep = (int)(presStepList.first());
       
       QPixmap _pix2(QApplication::desktop()->width(),QApplication::desktop()->height());
-      drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(0,0,0,_presFakt,false).height());
+      drawPageInPix(_pix2,view->getDiffY() + view->kPresenterDoc()->getPageSize(0,0,0,_presFakt,false).height());
       
       changePages(_pix1,_pix2,backgroundList()->at(currPresPage - 2)->getPageEffect());
       
@@ -1471,13 +1471,13 @@ bool Page::pPrev(bool manual)
     {
       if (currPresPage-1 <= 0)
 	{
-	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+	  presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
 	  currPresStep = (int)(presStepList.first());
 	  repaint(false);
 	  return false;
 	}
       currPresPage--;
-      presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+      presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
       currPresStep = (int)(presStepList.last());
       return true;
     }
@@ -2206,9 +2206,9 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   currPresStep = 1000;
   subPresStep = 1000;
 
-//   view->setDiffX(-(view->KPresenterDoc()->pageLayout().left - 5 + left_margin) * static_cast<int>((MM_TO_POINT * 100) / 100));
+//   view->setDiffX(-(view->kPresenterDoc()->pageLayout().left - 5 + left_margin) * static_cast<int>((MM_TO_POINT * 100) / 100));
 //   view->setDiffY(10);
-//   view->setDiffY(diffy() - ((view->KPresenterDoc()->pageLayout().top - 5 + top_margin) * static_cast<int>((MM_TO_POINT * 100) / 100)));
+//   view->setDiffY(diffy() - ((view->kPresenterDoc()->pageLayout().top - 5 + top_margin) * static_cast<int>((MM_TO_POINT * 100) / 100)));
   view->setDiffX(-static_cast<int>((left_margin * MM_TO_POINT * 100) / 100));
   view->setDiffY(-static_cast<int>((top_margin * MM_TO_POINT * 100) / 100));
 

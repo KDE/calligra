@@ -21,7 +21,7 @@
 
 #include "global.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: PgConfCmd                                               */
@@ -36,7 +36,7 @@ public:
 	    PageEffect _pageEffect,PresSpeed _presSpeed,
 	    bool _oldManualSwitch,bool _oldInfinitLoop,
 	    PageEffect _oldPageEffect,PresSpeed _oldPresSpeed,
-	    KPresenterDocument_impl *_doc,int _pgNum);
+	    KPresenterDoc *_doc,int _pgNum);
   
   virtual void execute();
   virtual void unexecute();
@@ -50,7 +50,7 @@ protected:
   PageEffect pageEffect,oldPageEffect;
   PresSpeed presSpeed,oldPresSpeed;
   int pgNum;
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
 
 };
 

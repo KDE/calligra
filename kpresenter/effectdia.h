@@ -16,7 +16,7 @@
 #ifndef EFFECTDIA_H
 #define EFFECTDIA_H
 
-class KPresenterView_impl;
+class KPresenterView;
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,7 +49,7 @@ class EffectDia : public QDialog
 public:
 
   // constructor - destructor
-  EffectDia(QWidget* parent,const char*,int,int,KPresenterView_impl*);
+  EffectDia(QWidget* parent,const char*,int,int,KPresenterView*);
   ~EffectDia();                                             
 
 protected:
@@ -59,7 +59,7 @@ protected:
   QPushButton *cancelBut,*okBut;
 
   int objNum,pageNum;
-  KPresenterView_impl *view;
+  KPresenterView *view;
 
 public slots:
   void slotEffectDiaOk();

@@ -22,18 +22,18 @@
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild(KPresenterDocument_impl *_kpr, const QRect& _rect,OPParts::Document_ptr _doc,
+KPresenterChild::KPresenterChild(KPresenterDoc *_kpr, const QRect& _rect,KOffice::Document_ptr _doc,
 				 int _diffx,int _diffy)
   : KoDocumentChild(_rect,_doc)
 {
   m_pKPresenterDoc = _kpr;
-  m_rDoc = OPParts::Document::_duplicate(_doc);
+  m_rDoc = KOffice::Document::_duplicate(_doc);
   m_geometry = _rect;
   __geometry = QRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.right(),_rect.bottom());
 }
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild( KPresenterDocument_impl *_kpr ) :
+KPresenterChild::KPresenterChild( KPresenterDoc *_kpr ) :
   KoDocumentChild()
 {
   m_pKPresenterDoc = _kpr;
@@ -46,11 +46,11 @@ KPresenterChild::~KPresenterChild()
 }
 
 /******************************************************************/
-/* class KPresenterDocument_impl                                  */
+/* class KPresenterDoc                                  */
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterDocument_impl::KPresenterDocument_impl()
+KPresenterDoc::KPresenterDoc()
   : _pixmapCollection(), _gradientCollection(), _commands()
 {
   ADD_INTERFACE("IDL:OPParts/Print:1.0")
@@ -101,71 +101,19 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
 
-/*====================== constructor =============================*/
-KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData &_refdata)
-  : KPresenter::KPresenterDocument_skel(_refdata), _pixmapCollection(), _gradientCollection(), _commands()
-{
-  ADD_INTERFACE("IDL:OPParts/Print:1.0")
-  // Use CORBA mechanism for deleting views
-  m_lstViews.setAutoDelete(false);
-  m_lstChildren.setAutoDelete(true);
-
-  m_bModified = false;
-
-  // init
-  _objectList.setAutoDelete(false);
-  _backgroundList.setAutoDelete(true);
-  _spInfinitLoop = false;
-  _spManualSwitch = true;
-  _rastX = 20;
-  _rastY = 20;
-  _xRnd = 20;
-  _yRnd = 20;
-  _orastX = 10;
-  _orastY = 10;
-  _oxRnd = 20;
-  _oyRnd = 20;
-  _txtBackCol = white;
-  _txtSelCol = lightGray;
-  _otxtBackCol = white;
-  _otxtSelCol = lightGray;
-  _pageLayout.format = PG_SCREEN;
-  _pageLayout.orientation = PG_PORTRAIT;
-  _pageLayout.width = PG_SCREEN_WIDTH;
-  _pageLayout.height = PG_SCREEN_HEIGHT;
-  _pageLayout.left = 0;
-  _pageLayout.right = 0;
-  _pageLayout.top = 0;
-  _pageLayout.bottom = 0;
-  _pageLayout.unit = PG_MM;
-  _pageLayout.ptWidth = cMM_TO_POINT(PG_SCREEN_WIDTH);
-  _pageLayout.ptHeight = cMM_TO_POINT(PG_SCREEN_HEIGHT);
-  _pageLayout.ptLeft = 0;
-  _pageLayout.ptRight = 0;
-  _pageLayout.ptTop = 0;
-  _pageLayout.ptBottom = 0;
-  setPageLayout(_pageLayout,0,0);
-  objStartY = 0;
-  insertNewTemplate(0,0,true);
-  _presPen = QPen(red,3,SolidLine);
-  presSpeed = PS_NORMAL;
-
-  QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
-}
-
 /*====================== destructor ==============================*/
-KPresenterDocument_impl::~KPresenterDocument_impl()
+KPresenterDoc::~KPresenterDoc()
 {
-  sdeb("KPresenterDocument_impl::~KPresenterDocument_impl()\n");
+  sdeb("KPresenterDoc::~KPresenterDoc()\n");
 
   _objectList.clear();
   _backgroundList.clear();
   cleanUp();
-  edeb("...KPresenterDocument_impl::~KPresenterDocument_impl() %i\n",_refcnt());
+  edeb("...KPresenterDoc::~KPresenterDoc() %i\n",_refcnt());
 }
 
 /*======================== draw contents as QPicture =============*/
-void KPresenterDocument_impl::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height)
+void KPresenterDoc::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height)
 {
   warning("***********************************************");
   warning(i18n("KPresenter doesn't support KoDocument::draw(...) now!"));
@@ -184,7 +132,7 @@ void KPresenterDocument_impl::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::
 }
 
 /*======================= clean up ===============================*/
-void KPresenterDocument_impl::cleanUp()
+void KPresenterDoc::cleanUp()
 {
   if (m_bIsClean) return;
 
@@ -192,11 +140,11 @@ void KPresenterDocument_impl::cleanUp()
   
   m_lstChildren.clear();
 
-  Document_impl::cleanUp();
+  KoDocument::cleanUp();
 }
 
 /*========================== save ===============================*/
-bool KPresenterDocument_impl::hasToWriteMultipart()
+bool KPresenterDoc::hasToWriteMultipart()
 {  
   QListIterator<KPresenterChild> it(m_lstChildren);
   for(;it.current();++it)
@@ -208,7 +156,7 @@ bool KPresenterDocument_impl::hasToWriteMultipart()
 }
 
 /*======================= make child list intern ================*/
-void KPresenterDocument_impl::makeChildListIntern(OPParts::Document_ptr _doc,const char *_path)
+void KPresenterDoc::makeChildListIntern(KOffice::Document_ptr _doc,const char *_path)
 {
   int i = 0;
   
@@ -220,13 +168,13 @@ void KPresenterDocument_impl::makeChildListIntern(OPParts::Document_ptr _doc,con
       QString path(_path);
       path += tmp.data();
       
-      OPParts::Document_var doc = it.current()->document();    
+      KOffice::Document_var doc = it.current()->document();    
       doc->makeChildList(_doc,path);
     }
 }
 
 /*========================== save ===============================*/
-bool KPresenterDocument_impl::save(ostream& out)
+bool KPresenterDoc::save( ostream& out, const char* /* format */ )
 {
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
@@ -265,14 +213,14 @@ bool KPresenterDocument_impl::save(ostream& out)
 }
 
 /*====================== export HTML ============================*/
-bool KPresenterDocument_impl::exportHTML(QString _filename)
+bool KPresenterDoc::exportHTML(QString _filename)
 {
   QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),i18n("HTML export is not implemented!"),i18n("OK"));
   return true;
 }
 
 /*========================== save background ====================*/
-void KPresenterDocument_impl::saveBackground(ostream& out)
+void KPresenterDoc::saveBackground(ostream& out)
 {
   KPBackGround *kpbackground = 0;
   
@@ -286,7 +234,7 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
 }
 
 /*========================== save objects =======================*/
-void KPresenterDocument_impl::saveObjects(ostream& out)
+void KPresenterDoc::saveObjects(ostream& out)
 {
   KPObject *kpobject = 0;
   
@@ -300,12 +248,12 @@ void KPresenterDocument_impl::saveObjects(ostream& out)
 }
 
 /*========================== load ===============================*/
-bool KPresenterDocument_impl::loadChildren( OPParts::MimeMultipartDict_ptr _dict )
+bool KPresenterDoc::loadChildren( KOStore::Store_ptr _store )
 {
   QListIterator<KPresenterChild> it(m_lstChildren);
   for(;it.current();++it)
     {
-      if (!it.current()->loadDocument(_dict))
+      if (!it.current()->loadDocument( _store, it.current()->mimeType() ) )
 	return false;
     }
   
@@ -313,7 +261,7 @@ bool KPresenterDocument_impl::loadChildren( OPParts::MimeMultipartDict_ptr _dict
 }
 
 /*========================= load a template =====================*/
-bool KPresenterDocument_impl::load_template(const char *_url)
+bool KPresenterDoc::load_template(const char *_url)
 {
   KURL u(_url);
   if (u.isMalformed())
@@ -335,7 +283,7 @@ bool KPresenterDocument_impl::load_template(const char *_url)
   KOMLStreamFeed feed(in);
   KOMLParser parser(&feed);
   
-  if (!load(parser))
+  if ( !loadXML( parser, 0L ) )
     return false;
  
   m_bModified = true;
@@ -343,7 +291,7 @@ bool KPresenterDocument_impl::load_template(const char *_url)
 }
 
 /*========================== load ===============================*/
-bool KPresenterDocument_impl::load(KOMLParser& parser)
+bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
   string tag;
   vector<KOMLAttrib> lst;
@@ -569,7 +517,7 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 }
 
 /*====================== load background =========================*/
-void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttrib>& lst)
+void KPresenterDoc::loadBackground(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
@@ -597,7 +545,7 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 }
 
 /*========================= load objects =========================*/
-void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
+void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
@@ -686,45 +634,52 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 }
 
 /*========================= create a view ========================*/
-OPParts::View_ptr KPresenterDocument_impl::createView()
+KPresenterView* KPresenterDoc::createPresenterView()
 {
-  KPresenterView_impl *p = new KPresenterView_impl(0L);
-  p->setDocument(this);
+  KPresenterView *p = new KPresenterView( 0L, 0L, this );
+  p->QWidget::show();
+  m_lstViews.append( p );
   
-  return OPParts::View::_duplicate(p);
+  return p;
+}
+
+/*========================= create a view ========================*/
+OpenParts::View_ptr KPresenterDoc::createView()
+{
+  return OpenParts::View::_duplicate( createPresenterView() );
 }
 
 /*========================== view list ===========================*/
-void KPresenterDocument_impl::viewList(OPParts::Document::ViewList*& _list)
+void KPresenterDoc::viewList(KOffice::Document::ViewList*& _list)
 {
   (*_list).length(m_lstViews.count());
 
   int i = 0;
-  QListIterator<KPresenterView_impl> it(m_lstViews);
+  QListIterator<KPresenterView> it(m_lstViews);
   for(;it.current();++it)
-    (*_list)[i++] = OPParts::View::_duplicate(it.current());
+    (*_list)[i++] = OpenParts::View::_duplicate(it.current());
 }
 
 /*========================== output formats ======================*/
-QStrList KPresenterDocument_impl::outputFormats()
+QStrList KPresenterDoc::outputFormats()
 {
   return new QStrList();
 }
 
 /*========================== input formats =======================*/
-QStrList KPresenterDocument_impl::inputFormats()
+QStrList KPresenterDoc::inputFormats()
 {
   return new QStrList();
 }
 
 /*========================= add view =============================*/
-void KPresenterDocument_impl::addView(KPresenterView_impl *_view)
+void KPresenterDoc::addView(KPresenterView *_view)
 {
   m_lstViews.append(_view);
 }
 
 /*======================== remove view ===========================*/
-void KPresenterDocument_impl::removeView(KPresenterView_impl *_view)
+void KPresenterDoc::removeView(KPresenterView *_view)
 {
   m_lstViews.setAutoDelete(false);
   m_lstViews.removeRef(_view);
@@ -732,9 +687,9 @@ void KPresenterDocument_impl::removeView(KPresenterView_impl *_view)
 }
 
 /*========================= insert an object =====================*/
-void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _server_name,int _diffx,int _diffy)
+void KPresenterDoc::insertObject(const QRect& _rect, const char* _server_name,int _diffx,int _diffy)
 {
-  OPParts::Document_var doc = imr_createDocByServerName( _server_name);
+  KOffice::Document_var doc = imr_createDocByServerName( _server_name);
   if (CORBA::is_nil(doc))
     return;
   
@@ -751,7 +706,7 @@ void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _serv
 }
 
 /*========================= insert a child object =====================*/
-void KPresenterDocument_impl::insertChild(KPresenterChild *_child)
+void KPresenterDoc::insertChild(KPresenterChild *_child)
 {
   m_lstChildren.append(_child);
   
@@ -760,7 +715,7 @@ void KPresenterDocument_impl::insertChild(KPresenterChild *_child)
 }
 
 /*======================= change child geometry ==================*/
-void KPresenterDocument_impl::changeChildGeometry(KPresenterChild *_child,const QRect& _rect,int _diffx,int _diffy)
+void KPresenterDoc::changeChildGeometry(KPresenterChild *_child,const QRect& _rect,int _diffx,int _diffy)
 {
   _child->setGeometry(_rect);
   _child->_setGeometry(QRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.right(),_rect.bottom()));
@@ -771,13 +726,13 @@ void KPresenterDocument_impl::changeChildGeometry(KPresenterChild *_child,const 
 }
 
 /*======================= child iterator =========================*/
-QListIterator<KPresenterChild> KPresenterDocument_impl::childIterator()
+QListIterator<KPresenterChild> KPresenterDoc::childIterator()
 {
   return QListIterator<KPresenterChild> (m_lstChildren);
 }
 
 /*===================== set page layout ==========================*/
-void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int diffy)
+void KPresenterDoc::setPageLayout(KoPageLayout pgLayout,int diffx,int diffy)
 {
   _pageLayout = pgLayout;
   QRect r = getPageSize(0,diffx,diffy);
@@ -793,7 +748,7 @@ void KPresenterDocument_impl::setPageLayout(KoPageLayout pgLayout,int diffx,int 
 }
 
 /*==================== insert a new page =========================*/
-unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy,bool _restore=true)
+unsigned int KPresenterDoc::insertNewPage(int diffx,int diffy,bool _restore=true)
 {
 
   KPBackGround *kpbackground = new KPBackGround(&_pixmapCollection,&_gradientCollection);
@@ -812,7 +767,7 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy,bool _re
 }
 
 /*==================== insert a new page with template ===========*/
-bool KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool clean=false)
+bool KPresenterDoc::insertNewTemplate(int diffx,int diffy,bool clean=false)
 {
   QString templateDir = KApplication::kde_datadir();
 
@@ -836,7 +791,7 @@ bool KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool clean=f
 }
 
 /*==================== set background color ======================*/
-void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor1,QColor backColor2,BCType bcType)
+void KPresenterDoc::setBackColor(unsigned int pageNum,QColor backColor1,QColor backColor2,BCType bcType)
 {
   KPBackGround *kpbackground = 0;
 
@@ -851,7 +806,7 @@ void KPresenterDocument_impl::setBackColor(unsigned int pageNum,QColor backColor
 }
 
 /*==================== set background picture ====================*/
-void KPresenterDocument_impl::setBackPixFilename(unsigned int pageNum,QString backPix)
+void KPresenterDoc::setBackPixFilename(unsigned int pageNum,QString backPix)
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setBackPixFilename(backPix);
@@ -859,7 +814,7 @@ void KPresenterDocument_impl::setBackPixFilename(unsigned int pageNum,QString ba
 }
 
 /*==================== set background clipart ====================*/
-void KPresenterDocument_impl::setBackClipFilename(unsigned int pageNum,QString backClip)
+void KPresenterDoc::setBackClipFilename(unsigned int pageNum,QString backClip)
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setBackClipFilename(backClip);
@@ -867,7 +822,7 @@ void KPresenterDocument_impl::setBackClipFilename(unsigned int pageNum,QString b
 }
 
 /*================= set background pic view ======================*/
-void KPresenterDocument_impl::setBackView(unsigned int pageNum,BackView backView)
+void KPresenterDoc::setBackView(unsigned int pageNum,BackView backView)
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setBackView(backView);
@@ -875,7 +830,7 @@ void KPresenterDocument_impl::setBackView(unsigned int pageNum,BackView backView
 }
 
 /*==================== set background type =======================*/
-void KPresenterDocument_impl::setBackType(unsigned int pageNum,BackType backType)
+void KPresenterDoc::setBackType(unsigned int pageNum,BackType backType)
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setBackType(backType);
@@ -883,7 +838,7 @@ void KPresenterDocument_impl::setBackType(unsigned int pageNum,BackType backType
 }
 
 /*========================== set page effect =====================*/
-void KPresenterDocument_impl::setPageEffect(unsigned int pageNum,PageEffect pageEffect)
+void KPresenterDoc::setPageEffect(unsigned int pageNum,PageEffect pageEffect)
 {
   if (pageNum < _backgroundList.count())
     backgroundList()->at(pageNum)->setPageEffect(pageEffect);
@@ -891,8 +846,8 @@ void KPresenterDocument_impl::setPageEffect(unsigned int pageNum,PageEffect page
 }
 
 /*===================== set pen and brush ========================*/
-bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
-					  BCType gt)
+bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
+					  BCType gt,int diffx,int diffy)
 {
   KPObject *kpobject = 0;
   bool ret = false;
@@ -993,7 +948,7 @@ bool KPresenterDocument_impl::setPieSettings(PieType pieType,int angle,int len)
 }
 
 /*=================== get background type ========================*/
-BackType KPresenterDocument_impl::getBackType(unsigned int pageNum)
+BackType KPresenterDoc::getBackType(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackType();
@@ -1002,7 +957,7 @@ BackType KPresenterDocument_impl::getBackType(unsigned int pageNum)
 }
 
 /*=================== get background pic view ====================*/
-BackView KPresenterDocument_impl::getBackView(unsigned int pageNum)
+BackView KPresenterDoc::getBackView(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackView();
@@ -1011,7 +966,7 @@ BackView KPresenterDocument_impl::getBackView(unsigned int pageNum)
 }
 
 /*=================== get background picture =====================*/
-QString KPresenterDocument_impl::getBackPixFilename(unsigned int pageNum)
+QString KPresenterDoc::getBackPixFilename(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackPixFilename();
@@ -1020,7 +975,7 @@ QString KPresenterDocument_impl::getBackPixFilename(unsigned int pageNum)
 }
 
 /*=================== get background clipart =====================*/
-QString KPresenterDocument_impl::getBackClipFilename(unsigned int pageNum)
+QString KPresenterDoc::getBackClipFilename(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackClipFilename();
@@ -1029,7 +984,7 @@ QString KPresenterDocument_impl::getBackClipFilename(unsigned int pageNum)
 }
 
 /*=================== get background color 1 ======================*/
-QColor KPresenterDocument_impl::getBackColor1(unsigned int pageNum)
+QColor KPresenterDoc::getBackColor1(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackColor1();
@@ -1038,7 +993,7 @@ QColor KPresenterDocument_impl::getBackColor1(unsigned int pageNum)
 }
 
 /*=================== get background color 2 ======================*/
-QColor KPresenterDocument_impl::getBackColor2(unsigned int pageNum)
+QColor KPresenterDoc::getBackColor2(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackColor2();
@@ -1047,7 +1002,7 @@ QColor KPresenterDocument_impl::getBackColor2(unsigned int pageNum)
 }
 
 /*=================== get background color type ==================*/
-BCType KPresenterDocument_impl::getBackColorType(unsigned int pageNum)
+BCType KPresenterDoc::getBackColorType(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackColorType();
@@ -1056,7 +1011,7 @@ BCType KPresenterDocument_impl::getBackColorType(unsigned int pageNum)
 }
 
 /*====================== get page effect =========================*/
-PageEffect KPresenterDocument_impl::getPageEffect(unsigned int pageNum)
+PageEffect KPresenterDoc::getPageEffect(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getPageEffect();
@@ -1065,7 +1020,7 @@ PageEffect KPresenterDocument_impl::getPageEffect(unsigned int pageNum)
 }
 
 /*========================= get pen ==============================*/
-QPen KPresenterDocument_impl::getPen(QPen pen)
+QPen KPresenterDoc::getPen(QPen pen)
 {
   KPObject *kpobject = 0;
   
@@ -1100,7 +1055,7 @@ QPen KPresenterDocument_impl::getPen(QPen pen)
 }
 
 /*========================= get line begin ========================*/
-LineEnd KPresenterDocument_impl::getLineBegin(LineEnd lb)
+LineEnd KPresenterDoc::getLineBegin(LineEnd lb)
 {
   KPObject *kpobject = 0;
   
@@ -1129,7 +1084,7 @@ LineEnd KPresenterDocument_impl::getLineBegin(LineEnd lb)
 }
 
 /*========================= get line end =========================*/
-LineEnd KPresenterDocument_impl::getLineEnd(LineEnd le)
+LineEnd KPresenterDoc::getLineEnd(LineEnd le)
 {
   KPObject *kpobject = 0;
   
@@ -1158,7 +1113,7 @@ LineEnd KPresenterDocument_impl::getLineEnd(LineEnd le)
 }
 
 /*========================= get brush =============================*/
-QBrush KPresenterDocument_impl::getBrush(QBrush brush)
+QBrush KPresenterDoc::getBrush(QBrush brush)
 {
   KPObject *kpobject = 0;
   
@@ -1190,7 +1145,7 @@ QBrush KPresenterDocument_impl::getBrush(QBrush brush)
 }
 
 /*================================================================*/
-FillType KPresenterDocument_impl::getFillType(FillType ft)
+FillType KPresenterDoc::getFillType(FillType ft)
 {
   KPObject *kpobject = 0;
   
@@ -1222,7 +1177,7 @@ FillType KPresenterDocument_impl::getFillType(FillType ft)
 }
 
 /*================================================================*/
-QColor KPresenterDocument_impl::getGColor1(QColor g1)
+QColor KPresenterDoc::getGColor1(QColor g1)
 {
   KPObject *kpobject = 0;
   
@@ -1254,7 +1209,7 @@ QColor KPresenterDocument_impl::getGColor1(QColor g1)
 }
 
 /*================================================================*/
-QColor KPresenterDocument_impl::getGColor2(QColor g2)
+QColor KPresenterDoc::getGColor2(QColor g2)
 {
   KPObject *kpobject = 0;
   
@@ -1286,7 +1241,7 @@ QColor KPresenterDocument_impl::getGColor2(QColor g2)
 }
 
 /*================================================================*/
-BCType KPresenterDocument_impl::getGType(BCType gt)
+BCType KPresenterDoc::getGType(BCType gt)
 {
   KPObject *kpobject = 0;
   
@@ -1363,7 +1318,7 @@ int KPresenterDocument_impl::getPieAngle(int pieAngle)
 }
 
 /*======================== lower objects =========================*/
-void KPresenterDocument_impl::lowerObjs(int diffx,int diffy)
+void KPresenterDoc::lowerObjs(int diffx,int diffy)
 {
   KPObject *kpobject = 0;
   
@@ -1382,7 +1337,7 @@ void KPresenterDocument_impl::lowerObjs(int diffx,int diffy)
 }
 
 /*========================= raise object =========================*/
-void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
+void KPresenterDoc::raiseObjs(int diffx,int diffy)
 {
   KPObject *kpobject = 0;
   
@@ -1401,7 +1356,7 @@ void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
 }
 
 /*=================== insert a picture ==========================*/
-void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy)
+void KPresenterDoc::insertPicture(QString filename,int diffx,int diffy)
 {
   KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection,filename);
   kppixmapobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
@@ -1415,7 +1370,7 @@ void KPresenterDocument_impl::insertPicture(QString filename,int diffx,int diffy
 }
 
 /*=================== insert a clipart ==========================*/
-void KPresenterDocument_impl::insertClipart(QString filename,int diffx,int diffy)
+void KPresenterDoc::insertClipart(QString filename,int diffx,int diffy)
 {
   KPClipartObject *kpclipartobject = new KPClipartObject(filename);
   kpclipartobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
@@ -1430,7 +1385,7 @@ void KPresenterDocument_impl::insertClipart(QString filename,int diffx,int diffy
 }
 
 /*======================= change picture ========================*/
-void KPresenterDocument_impl::changePicture(QString filename,int diffx,int diffy)
+void KPresenterDoc::changePicture(QString filename,int diffx,int diffy)
 {
   KPObject *kpobject = 0;
   
@@ -1453,7 +1408,7 @@ void KPresenterDocument_impl::changePicture(QString filename,int diffx,int diffy
 }
 
 /*======================= change clipart ========================*/
-void KPresenterDocument_impl::changeClipart(QString filename,int diffx,int diffy)
+void KPresenterDoc::changeClipart(QString filename,int diffx,int diffy)
 {
   KPObject *kpobject = 0;
   
@@ -1474,7 +1429,7 @@ void KPresenterDocument_impl::changeClipart(QString filename,int diffx,int diffy
 }
 
 /*===================== insert a line ===========================*/
-void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType lt,int diffx,int diffy)
+void KPresenterDoc::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType lt,int diffx,int diffy)
 {
   KPLineObject *kplineobject = new KPLineObject(pen,lb,le,lt);
   kplineobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
@@ -1489,7 +1444,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType
 }
 
 /*===================== insert a rectangle =======================*/
-void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,FillType ft,QColor g1,QColor g2,
+void KPresenterDoc::insertRectangle(QPen pen,QBrush brush,RectType rt,FillType ft,QColor g1,QColor g2,
 					      BCType gt,int diffx,int diffy)
 {
   KPRectObject *kprectobject = new KPRectObject(pen,brush,rt,ft,g1,g2,gt,getRndX(),getRndY());
@@ -1505,7 +1460,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
 }
 
 /*===================== insert a circle or ellipse ===============*/
-void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+void KPresenterDoc::insertCircleOrEllipse(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
 						    BCType gt,int diffx,int diffy)
 {
   KPEllipseObject *kpellipseobject = new KPEllipseObject(pen,brush,ft,g1,g2,gt);
@@ -1537,7 +1492,7 @@ void KPresenterDocument_impl::insertPie(QPen pen,QBrush brush,FillType ft,QColor
 }
 
 /*===================== insert a textobject =====================*/
-void KPresenterDocument_impl::insertText(int diffx,int diffy)
+void KPresenterDoc::insertText(int diffx,int diffy)
 {
   KPTextObject *kptextobject = new KPTextObject();
   kptextobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
@@ -1552,7 +1507,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
 }
 
 /*======================= insert an autoform ====================*/
-void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
+void KPresenterDoc::insertAutoform(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
 					     BCType gt,QString fileName,int diffx,int diffy)
 {
   KPAutoformObject *kpautoformobject = new KPAutoformObject(pen,brush,fileName,lb,le,ft,g1,g2,gt);
@@ -1568,7 +1523,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
 }
 
 /*======================= set rnds ==============================*/
-void KPresenterDocument_impl::setRnds(unsigned int rx,unsigned int ry,bool _replace = true)
+void KPresenterDoc::setRnds(unsigned int rx,unsigned int ry,bool _replace = true)
 {
   _oxRnd = _xRnd;
   _oyRnd = _yRnd;
@@ -1578,7 +1533,7 @@ void KPresenterDocument_impl::setRnds(unsigned int rx,unsigned int ry,bool _repl
 }
 
 /*======================= set rasters ===========================*/
-void KPresenterDocument_impl::setRasters(unsigned int rx,unsigned int ry,bool _replace = true)
+void KPresenterDoc::setRasters(unsigned int rx,unsigned int ry,bool _replace = true)
 {
   _orastX = _rastX;
   _orastY = _rastY;
@@ -1588,7 +1543,7 @@ void KPresenterDocument_impl::setRasters(unsigned int rx,unsigned int ry,bool _r
 }
 
 /*=================== repaint all views =========================*/
-void KPresenterDocument_impl::repaint(bool erase)
+void KPresenterDoc::repaint(bool erase)
 {
   if (!m_lstViews.isEmpty())
     {
@@ -1598,7 +1553,7 @@ void KPresenterDocument_impl::repaint(bool erase)
 }
 
 /*===================== repaint =================================*/
-void KPresenterDocument_impl::repaint(QRect rect)
+void KPresenterDoc::repaint(QRect rect)
 {
   if (!m_lstViews.isEmpty())
     {
@@ -1615,7 +1570,7 @@ void KPresenterDocument_impl::repaint(QRect rect)
 }
 
 /*===================== repaint =================================*/
-void KPresenterDocument_impl::repaint(KPObject *kpobject)
+void KPresenterDoc::repaint(KPObject *kpobject)
 {
   if (!m_lstViews.isEmpty())
     {
@@ -1632,7 +1587,7 @@ void KPresenterDocument_impl::repaint(KPObject *kpobject)
 }
 
 /*==================== reorder page =============================*/
-QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int diffy,float fakt = 1.0)
+QList<int> KPresenterDoc::reorderPage(unsigned int num,int diffx,int diffy,float fakt = 1.0)
 {
   QList<int> orderList;
   bool inserted;
@@ -1676,7 +1631,7 @@ QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int d
 }
 
 /*====================== get page of object ======================*/
-int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float fakt = 1.0)
+int KPresenterDoc::getPageOfObj(int objNum,int diffx,int diffy,float fakt = 1.0)
 {
   QRect rect;
 
@@ -1700,7 +1655,7 @@ int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float f
 }
 
 /*================== get size of page ===========================*/
-QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,float fakt=1.0,bool decBorders = true)
+QRect KPresenterDoc::getPageSize(unsigned int num,int diffx,int diffy,float fakt=1.0,bool decBorders = true)
 {
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
@@ -1731,7 +1686,7 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,
 }
 
 /*================================================================*/
-int KPresenterDocument_impl::getLeftBorder()
+int KPresenterDoc::getLeftBorder()
 {
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
@@ -1740,7 +1695,7 @@ int KPresenterDocument_impl::getLeftBorder()
 }
 
 /*================================================================*/
-int KPresenterDocument_impl::getTopBorder()
+int KPresenterDoc::getTopBorder()
 {
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
@@ -1749,7 +1704,7 @@ int KPresenterDocument_impl::getTopBorder()
 }
 
 /*================================================================*/
-int KPresenterDocument_impl::getBottomBorder()
+int KPresenterDoc::getBottomBorder()
 {
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
@@ -1758,7 +1713,7 @@ int KPresenterDocument_impl::getBottomBorder()
 }
 
 /*================================================================*/
-void KPresenterDocument_impl::deletePage(int _page,DelPageMode _delPageMode)
+void KPresenterDoc::deletePage(int _page,DelPageMode _delPageMode)
 {
   KPObject *kpobject = 0;
   int _h = getPageSize(0,0,0).height();
@@ -1790,7 +1745,7 @@ void KPresenterDocument_impl::deletePage(int _page,DelPageMode _delPageMode)
 }
 
 /*================================================================*/
-void KPresenterDocument_impl::insertPage(int _page,InsPageMode _insPageMode,InsertPos _insPos)
+void KPresenterDoc::insertPage(int _page,InsPageMode _insPageMode,InsertPos _insPos)
 {
   KPObject *kpobject = 0;
   int _h = getPageSize(0,0,0).height();
@@ -1835,7 +1790,7 @@ void KPresenterDocument_impl::insertPage(int _page,InsPageMode _insPageMode,Inse
 }
 
 /*================ return number of selected objs ================*/
-int KPresenterDocument_impl::numSelected()
+int KPresenterDoc::numSelected()
 {
   int num = 0;
 
@@ -1851,7 +1806,7 @@ int KPresenterDocument_impl::numSelected()
 }
 
 /*==================== return selected obj ======================*/
-KPObject* KPresenterDocument_impl::getSelectedObj()
+KPObject* KPresenterDoc::getSelectedObj()
 {
   KPObject *kpobject = 0;
   
@@ -1865,7 +1820,7 @@ KPObject* KPresenterDocument_impl::getSelectedObj()
 }
 
 /*======================= delete objects =========================*/
-void KPresenterDocument_impl::deleteObjs()
+void KPresenterDoc::deleteObjs()
 {
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
@@ -1885,7 +1840,7 @@ void KPresenterDocument_impl::deleteObjs()
 }
 
 /*========================== copy objects ========================*/
-void KPresenterDocument_impl::copyObjs(int diffx,int diffy)
+void KPresenterDoc::copyObjs(int diffx,int diffy)
 {
   QClipboard *cb = QApplication::clipboard();
   string clip_str;
@@ -1910,7 +1865,7 @@ void KPresenterDocument_impl::copyObjs(int diffx,int diffy)
 }
 
 /*========================= paste objects ========================*/
-void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
+void KPresenterDoc::pasteObjs(int diffx,int diffy)
 {
   deSelectAllObj();
 
@@ -1925,7 +1880,7 @@ void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
 }
 
 /*====================== replace objects =========================*/
-void KPresenterDocument_impl::replaceObjs()
+void KPresenterDoc::replaceObjs()
 {
   KPObject *kpobject = 0;
   int ox,oy;
@@ -1957,14 +1912,14 @@ void KPresenterDocument_impl::replaceObjs()
 }
 
 /*========================= restore background ==================*/
-void KPresenterDocument_impl::restoreBackground(int pageNum)
+void KPresenterDoc::restoreBackground(int pageNum)
 {
   if (pageNum < static_cast<int>(_backgroundList.count()))
     backgroundList()->at(pageNum)->restore();
 }
 
 /*==================== load stream ==============================*/
-void KPresenterDocument_impl::loadStream(istream &in)
+void KPresenterDoc::loadStream(istream &in)
 {
   KOMLStreamFeed feed(in);
   KOMLParser parser(&feed);
@@ -2001,7 +1956,7 @@ void KPresenterDocument_impl::loadStream(istream &in)
 }
 
 /*================= deselect all objs ===========================*/
-void KPresenterDocument_impl::deSelectAllObj()
+void KPresenterDoc::deSelectAllObj()
 {
   if (!m_lstViews.isEmpty())
     {
@@ -2011,7 +1966,7 @@ void KPresenterDocument_impl::deSelectAllObj()
 }
 
 /*======================== align objects left ===================*/
-void KPresenterDocument_impl::alignObjsLeft()
+void KPresenterDoc::alignObjsLeft()
 {
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
@@ -2036,7 +1991,7 @@ void KPresenterDocument_impl::alignObjsLeft()
 }
 
 /*==================== align objects center h ===================*/
-void KPresenterDocument_impl::alignObjsCenterH()
+void KPresenterDoc::alignObjsCenterH()
 {
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
@@ -2062,7 +2017,7 @@ void KPresenterDocument_impl::alignObjsCenterH()
 }
 
 /*==================== align objects right ======================*/
-void KPresenterDocument_impl::alignObjsRight()
+void KPresenterDoc::alignObjsRight()
 {
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
@@ -2087,7 +2042,7 @@ void KPresenterDocument_impl::alignObjsRight()
 }
 
 /*==================== align objects top ========================*/
-void KPresenterDocument_impl::alignObjsTop()
+void KPresenterDoc::alignObjsTop()
 {
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
@@ -2117,7 +2072,7 @@ void KPresenterDocument_impl::alignObjsTop()
 }
 
 /*==================== align objects center v ===================*/
-void KPresenterDocument_impl::alignObjsCenterV()
+void KPresenterDoc::alignObjsCenterV()
 {
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
@@ -2148,7 +2103,7 @@ void KPresenterDocument_impl::alignObjsCenterV()
 }
 
 /*==================== align objects top ========================*/
-void KPresenterDocument_impl::alignObjsBottom()
+void KPresenterDoc::alignObjsBottom()
 {
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
@@ -2178,7 +2133,7 @@ void KPresenterDocument_impl::alignObjsBottom()
 }
 
 /*================= undo redo changed ===========================*/
-void KPresenterDocument_impl::slotUndoRedoChanged(QString _undo,QString _redo)
+void KPresenterDoc::slotUndoRedoChanged(QString _undo,QString _redo)
 {
   if (!m_lstViews.isEmpty())
     {
@@ -2188,4 +2143,10 @@ void KPresenterDocument_impl::slotUndoRedoChanged(QString _undo,QString _redo)
 	  viewPtr->changeRedo(_redo,!_redo.isEmpty());
 	}
     }
+}
+
+/*================= count of views ===========================*/
+int KPresenterDoc::viewCount()
+{
+  return m_lstViews.count();
 }

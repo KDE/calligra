@@ -51,8 +51,8 @@
 #include "movecmd.h"
 #include "resizecmd.h"
 
-class KPresenterView_impl;
-class KPresenterDocument_impl;
+class KPresenterView;
+class kPresenterDoc;
 
 #ifndef min
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -72,7 +72,7 @@ class Page : public QWidget
 public:
 
   // constructor - destructor
-  Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0);
+  Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0);
   ~Page(); 
   
   // public functions
@@ -113,7 +113,7 @@ public slots:
   void clipCut();
   void clipCopy();
   void clipPaste();
-  void deleteObjs() {view->KPresenterDoc()->deleteObjs(); setCursor(arrowCursor);}
+  void deleteObjs() {view->kPresenterDoc()->deleteObjs(); setCursor(arrowCursor);}
   void rotateObjs() {view->extraRotate(); setCursor(arrowCursor);}
   void shadowObjs() {view->extraShadow(); setCursor(arrowCursor);}
   
@@ -148,28 +148,28 @@ protected:
   void setupMenus();
 
   // get - set data
-  QList<KPBackGround> *backgroundList() {return view->KPresenterDoc()->backgroundList();}
-  QList<KPObject> *objectList() {return view->KPresenterDoc()->objectList();}
-  unsigned int objNums() {return view->KPresenterDoc()->objNums();}
+  QList<KPBackGround> *backgroundList() {return view->kPresenterDoc()->backgroundList();}
+  QList<KPObject> *objectList() {return view->kPresenterDoc()->objectList();}
+  unsigned int objNums() {return view->kPresenterDoc()->objNums();}
   int diffx(int i = -1);
   int diffy(int i = -1);
   unsigned int currPgNum() {return view->getCurrPgNum();}
-  unsigned int rastX() {return view->KPresenterDoc()->rastX();}
-  unsigned int rastY() {return view->KPresenterDoc()->rastY();}
-  QColor txtBackCol() {return view->KPresenterDoc()->txtBackCol();}
-  QColor txtSelCol() {return view->KPresenterDoc()->txtSelCol();}
-  bool spInfinitLoop() {return view->KPresenterDoc()->spInfinitLoop();}
-  bool spManualSwitch() {return view->KPresenterDoc()->spManualSwitch();}
+  unsigned int rastX() {return view->kPresenterDoc()->rastX();}
+  unsigned int rastY() {return view->kPresenterDoc()->rastY();}
+  QColor txtBackCol() {return view->kPresenterDoc()->txtBackCol();}
+  QColor txtSelCol() {return view->kPresenterDoc()->txtSelCol();}
+  bool spInfinitLoop() {return view->kPresenterDoc()->spInfinitLoop();}
+  bool spManualSwitch() {return view->kPresenterDoc()->spManualSwitch();}
   QRect getPageSize(unsigned int p,float fakt=1.0,bool decBorders = true) 
-    {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt,decBorders);}
-  unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
-  int getPageOfObj(int i,float fakt = 1.0) {return view->KPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
-  float objSpeedFakt() {return ObjSpeed[static_cast<int>(view->KPresenterDoc()->getPresSpeed())];}
-  float pageSpeedFakt() {return PageSpeed[static_cast<int>(view->KPresenterDoc()->getPresSpeed())];}
+    {return view->kPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt,decBorders);}
+  unsigned int pageNums() {return view->kPresenterDoc()->getPageNums();}
+  int getPageOfObj(int i,float fakt = 1.0) {return view->kPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
+  float objSpeedFakt() {return ObjSpeed[static_cast<int>(view->kPresenterDoc()->getPresSpeed())];}
+  float pageSpeedFakt() {return PageSpeed[static_cast<int>(view->kPresenterDoc()->getPresSpeed())];}
 
-  void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(false);}
-  void _repaint(QRect r) {view->KPresenterDoc()->repaint(r);}
-  void _repaint(KPObject *o) {view->KPresenterDoc()->repaint(o);}
+  void _repaint(bool erase=true) {view->kPresenterDoc()->repaint(false);}
+  void _repaint(QRect r) {view->kPresenterDoc()->repaint(r);}
+  void _repaint(KPObject *o) {view->kPresenterDoc()->repaint(o);}
 
   void drawPageInPix(QPixmap&,int);
   void drawPageInPainter(QPainter*,int,QRect);
@@ -186,7 +186,7 @@ protected:
   unsigned int oldMx,oldMy;                
   int resizeObjNum,editNum;
   bool fillBlack;
-  KPresenterView_impl *view;
+  KPresenterView *view;
   bool editMode,goingBack,drawMode;
   unsigned int currPresPage,currPresStep,subPresStep;
   float _presFakt;

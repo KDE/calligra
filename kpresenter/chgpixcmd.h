@@ -21,7 +21,7 @@
 #include "command.h"
 #include "kppixmapobject.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: ChgPixCmd                                               */
@@ -33,7 +33,7 @@ class ChgPixCmd : public Command
 
 public:
   ChgPixCmd(QString _name,KPPixmapObject *_oldObject,KPPixmapObject *_newObject,
-	    KPresenterDocument_impl *_doc);
+	    KPresenterDoc *_doc);
   ~ChgPixCmd();
   
   virtual void execute();
@@ -44,7 +44,7 @@ protected:
     {;}
 
   KPPixmapObject *oldObject,*newObject;
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
 
 };
 

@@ -1,11 +1,13 @@
 #ifndef __kpresenter_idl__
 #define __kpresenter_idl__
 
-#include <parts.idl>
+#include <openparts.idl>
+#include <koffice.idl>
+#include <openparts_ui.idl>
 
 module KPresenter
 {
-  interface KPresenterView : OPParts::View
+  interface KPresenterView : KOffice::View
     {
       slot void editUndo();
       slot void editRedo();
@@ -82,9 +84,6 @@ module KPresenter
       slot void presPenColoridl();
 
       slot void helpContents();
-      slot void helpAbout();
-      slot void helpAboutKOffice();
-      slot void helpAboutKDE();
 
       slot void sizeSelected(in string size);
       slot void fontSelected(in string font);
@@ -104,11 +103,11 @@ module KPresenter
       slot void textNormalText();
     };
   
-  interface KPresenterDocument : OPParts::Document, OPParts::Print
+  interface KPresenterDocument : KOffice::Document, KOffice::Print
     {
     };
 
-  interface Factory : OPParts::Factory
+  interface Factory : KOffice::DocumentFactory
     {
     };
 };

@@ -21,7 +21,7 @@
 #include "command.h"
 #include "kpclipartobject.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: ChgClipCmd                                              */
@@ -32,7 +32,7 @@ class ChgClipCmd : public Command
   Q_OBJECT
 
 public:
-  ChgClipCmd(QString _name,KPClipartObject *_object,QString _oldName,QString _newName,KPresenterDocument_impl *_doc);
+  ChgClipCmd(QString _name,KPClipartObject *_object,QString _oldName,QString _newName,KPresenterDoc *_doc);
   ~ChgClipCmd();
   
   virtual void execute();
@@ -43,7 +43,7 @@ protected:
     {;}
 
   KPClipartObject *object;
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
   QString oldName,newName;
 
 };

@@ -15,56 +15,61 @@
 #ifndef __kpresenter_shell_h__
 #define __kpresenter_shell_h__
 
-class KPresenterShell_impl;
+#include <koMainWindow.h>
 
-#include <default_shell_impl.h>
-#include <document_impl.h>
+class KPresenterDoc;
+class KPresenterView;
 
+#include <qlist.h>
+#include <qtimer.h>
 #include <qstring.h>
-#include <qfileinf.h>
 
-#include "kpresenter.h"
-#include "kpresenter_doc.h"
-
-/******************************************************************/
-/* class KPresenterShell_impl                                     */
-/******************************************************************/
-class KPresenterShell_impl : public DefaultShell_impl
+class KPresenterShell : public KoMainWindow
 {
   Q_OBJECT
-
 public:
+  // C++
+  KPresenterShell();
+  ~KPresenterShell();
 
-  // ------ C++ ------
-  // constructor - destructor
-  KPresenterShell_impl();
-  ~KPresenterShell_impl();
-  
-  // set a document
-  virtual void setDocument(KPresenterDocument_impl *_doc);
-  
-  // open - save document
-  virtual bool openDocument(const char *_filename);
-  virtual bool saveDocument(const char *_file,const char *_format);
-  virtual void fileSave();
-
-  // new document
-  virtual void fileNew();
-
-  // clean
+  // C++
   virtual void cleanUp();
+  void setDocument( KPresenterDoc *_doc );
 
-  virtual void helpAbout();
-  virtual bool printDlg();
-  
+  // C++
+  virtual bool newDocument();
+  virtual bool openDocument( const char *_filename, const char* _format );
+  virtual bool saveDocument( const char *_file, const char *_format );
+  virtual bool closeDocument();
+  virtual bool closeAllDocuments();
+
+protected slots:
+  void slotFileNew();
+  void slotFileOpen();
+  void slotFileSave();
+  void slotFileSaveAs();
+  void slotFilePrint();
+  void slotFileClose();
+  void slotFileQuit();
+
 protected:
+  // C++
+  virtual KoDocument* document();
+  virtual KoViewIf* view();
 
-  // reference to a document
-  Document_ref m_rDoc;
-  KPresenterDocument_impl *kp_doc;
-  OPParts::View_var m_vView;
-  const char *filename,*format;
+  virtual bool printDlg();
+  virtual void helpAbout();
+  virtual int documentCount();
 
+  bool isModified();
+  bool requestClose();
+
+  void releaseDocument();
+  
+  KPresenterDoc* m_pDoc;
+  KPresenterView* m_pView;
+
+  static QList<KPresenterShell>* s_lstShells;
 };
 
 #endif

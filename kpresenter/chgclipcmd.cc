@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ChgClipCmd::ChgClipCmd(QString _name,KPClipartObject *_object,QString _oldName,QString _newName,KPresenterDocument_impl *_doc)
+ChgClipCmd::ChgClipCmd(QString _name,KPClipartObject *_object,QString _oldName,QString _newName,KPresenterDoc *_doc)
   : Command(_name), oldName(_oldName), newName(_newName)
 {
   object = _object;

@@ -15,17 +15,7 @@
 #ifndef __kpresenter_main_h__
 #define __kpresenter_main_h__
 
-class PartShell_impl;
-class KPresenterApp;
-class KPresenterDocument_impl;
-
-#include <op_app.h>
-#include <part_shell_impl.h>
-#include <parts.h>
-
-#include "kpresenter_doc.h"
-#include "kpresenter_shell.h"
-#include "formats.h"
+#include <opApplication.h>
 
 /******************************************************************/
 /* class KPresenterApp - KPresenter Application                   */
@@ -37,12 +27,11 @@ class KPresenterApp : public OPApplication
 public:
 
   // constructor - destructor
-  KPresenterApp(int argc,char** argv);
+  KPresenterApp(int &argc,char** argv);
   ~KPresenterApp();
   
   // start application
   virtual void start();
-  
 };
 
 #endif

@@ -23,7 +23,7 @@
 #include "command.h"
 #include "kpobject.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: InsertCmd                                               */
@@ -34,7 +34,7 @@ class InsertCmd : public Command
   Q_OBJECT
 
 public:
-  InsertCmd(QString _name,KPObject *_object,KPresenterDocument_impl *_doc);
+  InsertCmd(QString _name,KPObject *_object,KPresenterDoc *_doc);
   ~InsertCmd();
   
   virtual void execute();
@@ -45,7 +45,7 @@ protected:
     {;}
 
   KPObject *object;
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
 
 };
 

@@ -15,23 +15,20 @@
 #ifndef kpresenter_view_h
 #define kpresenter_view_h
 
-class KPresenterView_impl;
-class KPresenterShell_impl;
-class KPresenterDocument_impl;
+class KPresenterView;
+class KPresenterShell;
+class KPresenterDocument;
 class KPresenterChild;
 class BackDia;
 class Page;
 
 #include <stdlib.h>
 
-#include <view_impl.h>
-#include <document_impl.h>
-#include <part_frame_impl.h>
-#include <menu_impl.h>
-#include <toolbar_impl.h>
-#include <op_app.h>
-#include <utils.h>
-#include <part_frame_impl.h>
+#include <koView.h>
+#include <koDocument.h>
+#include <koFrame.h>
+#include <opToolBarIf.h>
+#include <opApplication.h>
 #include <koPartSelectDia.h>
 
 #include <qwidget.h>
@@ -90,20 +87,20 @@ class Page;
 /******************************************************************/
 /* class KPresenterFrame                                          */
 /******************************************************************/
-class KPresenterFrame : public PartFrame_impl
+class KPresenterFrame : public KoFrame
 {
   Q_OBJECT
 
 public:
 
   // constructor
-  KPresenterFrame(KPresenterView_impl*,KPresenterChild*);
+  KPresenterFrame(KPresenterView*,KPresenterChild*);
   
   // get child
   KPresenterChild* child() {return m_pKPresenterChild;}
 
   // get view
-  KPresenterView_impl* view() {return m_pKPresenterView;}
+  KPresenterView* presenterView() {return m_pKPresenterView;}
   
 protected:
 
@@ -111,16 +108,16 @@ protected:
   KPresenterChild *m_pKPresenterChild;
 
   // view
-  KPresenterView_impl *m_pKPresenterView;
+  KPresenterView *m_pKPresenterView;
 
 };
 
 /*****************************************************************/
-/* class KPresenterView_impl                                     */
+/* class KPresenterView                                          */
 /*****************************************************************/
-class KPresenterView_impl : public QWidget,
-			    virtual public View_impl,
-			    virtual public KPresenter::KPresenterView_skel
+class KPresenterView : public QWidget,
+		       virtual public KoViewIf,
+		       virtual public KPresenter::KPresenterView_skel
 {
   Q_OBJECT
 
@@ -128,9 +125,11 @@ public:
 
   // ------ C++ ------
   // constructor - destructor
-  KPresenterView_impl(QWidget *_parent = 0L,const char *_name = 0L);
-  ~KPresenterView_impl();
+  KPresenterView(QWidget *_parent, const char *_name, KPresenterDoc* _doc );
+  ~KPresenterView();
 
+  void init();
+  
   // clean
   virtual void cleanUp();
   
@@ -217,9 +216,6 @@ public:
 
   // help menu
   virtual void helpContents();
-  virtual void helpAbout();
-  virtual void helpAboutKOffice();
-  virtual void helpAboutKDE();
 
   // text toolbar
   virtual void sizeSelected(const char*);
@@ -239,12 +235,7 @@ public:
   virtual void textUnsortList();
   virtual void textNormalText();
   
-  virtual void setMode(OPParts::Part::Mode _mode);
-  virtual void setFocus(CORBA::Boolean mode);
-
   // ------ C++ ------
-  // set document
-  virtual void setDocument(KPresenterDocument_impl *_doc);
 
   // create GUI - construct
   virtual void createGUI();
@@ -260,7 +251,7 @@ public:
   unsigned int getCurrPgNum() {return(static_cast<int>(vert->value()+this->height()/2) / vert->pageStep() + 1);}
 
   // return pointer to document
-  class KPresenterDocument_impl *KPresenterDoc() {return m_pKPresenterDoc;}
+  class KPresenterDoc *kPresenterDoc() {return m_pKPresenterDoc;}
 
   // repaint page
   void repaint(bool);
@@ -307,8 +298,8 @@ public slots:
   void slotUpdateChildGeometry(KPresenterChild *_child);
   
   // KPresenterFrame signals
-  void slotGeometryEnd(PartFrame_impl*);
-  void slotMoveEnd(PartFrame_impl*);
+  void slotGeometryEnd( KoFrame* );
+  void slotMoveEnd( KoFrame* );
 
 protected slots:
 
@@ -387,17 +378,17 @@ protected:
 
   // ********* functions ***********
 
+  // C++
+  virtual bool event( const char* _event, const CORBA::Any& _value );
+  // C++
+  virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
+  virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
+
   // resize event
   void resizeEvent(QResizeEvent*);
 
   // GUI
-  void setupMenu();
   void setupPopupMenus();
-  void setupEditToolbar();
-  void setupInsertToolbar();
-  void setupTextToolbar();
-  void setupExtraToolbar();
-  void setupScreenToolbar();
   void setupScrollbars();
   void setupAccelerators();
   void setupRulers();
@@ -415,19 +406,15 @@ protected:
   // ********** variables **********
 
   // document
-  KPresenterDocument_impl *m_pKPresenterDoc;
+  KPresenterDoc *m_pKPresenterDoc;
 
   // flags
   bool m_bKPresenterModified;
   bool m_bUnderConstruction;
   bool searchFirst,continuePres,exitPres;
   
-  // menubar
-  OPParts::MenuBarFactory_var m_vMenuBarFactory;
-  MenuBar_ref m_rMenuBar;
-
   // edit menu
-  CORBA::Long m_idMenuEdit;
+  OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Undo;
   CORBA::Long m_idMenuEdit_Redo;
   CORBA::Long m_idMenuEdit_Cut;
@@ -440,20 +427,20 @@ protected:
   CORBA::Long m_idMenuEdit_FindReplace;
 
   // view menu
-  CORBA::Long m_idMenuView;
+  OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_NewView;
  
   // insert menu
-  CORBA::Long m_idMenuInsert;
+  OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuInsert_Page;
   CORBA::Long m_idMenuInsert_Picture;
   CORBA::Long m_idMenuInsert_Clipart;
-  CORBA::Long m_idMenuInsert_Line;
+  OpenPartsUI::Menu_var m_vMenuInsert_Line;
   CORBA::Long m_idMenuInsert_LineHorz;
   CORBA::Long m_idMenuInsert_LineVert;
   CORBA::Long m_idMenuInsert_LineD1;
   CORBA::Long m_idMenuInsert_LineD2;
-  CORBA::Long m_idMenuInsert_Rectangle;
+  OpenPartsUI::Menu_var m_vMenuInsert_Rectangle;
   CORBA::Long m_idMenuInsert_RectangleNormal;
   CORBA::Long m_idMenuInsert_RectangleRound;
   CORBA::Long m_idMenuInsert_Circle;
@@ -463,14 +450,14 @@ protected:
   CORBA::Long m_idMenuInsert_Part;
  
   // extra menu
-  CORBA::Long m_idMenuExtra;
+  OpenPartsUI::Menu_var m_vMenuExtra;
   CORBA::Long m_idMenuExtra_TFont;
   CORBA::Long m_idMenuExtra_TColor;
-  CORBA::Long m_idMenuExtra_TAlign;
+  OpenPartsUI::Menu_var m_vMenuExtra_TAlign;
   CORBA::Long m_idMenuExtra_TAlign_Left;
   CORBA::Long m_idMenuExtra_TAlign_Center;
   CORBA::Long m_idMenuExtra_TAlign_Right;
-  CORBA::Long m_idMenuExtra_TType;
+  OpenPartsUI::Menu_var m_vMenuExtra_TType;
   CORBA::Long m_idMenuExtra_TType_EnumList;
   CORBA::Long m_idMenuExtra_TType_UnsortList;
   CORBA::Long m_idMenuExtra_TType_NormalText;
@@ -480,7 +467,7 @@ protected:
   CORBA::Long m_idMenuExtra_Lower;
   CORBA::Long m_idMenuExtra_Rotate;
   CORBA::Long m_idMenuExtra_Shadow;
-  CORBA::Long m_idMenuExtra_AlignObj;
+  OpenPartsUI::Menu_var m_vMenuExtra_AlignObj;
   CORBA::Long m_idMenuExtra_AlignObj_Left;
   CORBA::Long m_idMenuExtra_AlignObj_CenterH;
   CORBA::Long m_idMenuExtra_AlignObj_Right;
@@ -492,7 +479,7 @@ protected:
   CORBA::Long m_idMenuExtra_Options;
   
   // screenpresentation menu
-  CORBA::Long m_idMenuScreen;
+  OpenPartsUI::Menu_var m_vMenuScreen;
   CORBA::Long m_idMenuScreen_ConfigPage;
   CORBA::Long m_idMenuScreen_PresStructView;
   CORBA::Long m_idMenuScreen_AssignEffect;
@@ -505,8 +492,8 @@ protected:
   CORBA::Long m_idMenuScreen_Last;
   CORBA::Long m_idMenuScreen_Skip;
   CORBA::Long m_idMenuScreen_FullScreen;
-  CORBA::Long m_idMenuScreen_Pen;
-  CORBA::Long m_idMenuScreen_PenWidth;
+  OpenPartsUI::Menu_var m_vMenuScreen_Pen;
+  OpenPartsUI::Menu_var m_vMenuScreen_PenWidth;
   CORBA::Long m_idMenuScreen_PenColor;
   CORBA::Long m_idMenuScreen_PenW1;
   CORBA::Long m_idMenuScreen_PenW2;
@@ -520,22 +507,16 @@ protected:
   CORBA::Long m_idMenuScreen_PenW10;
 
   // help menu
-  CORBA::Long m_idMenuHelp;
+  OpenPartsUI::Menu_var m_vMenuHelp;
   CORBA::Long m_idMenuHelp_Contents;
-  CORBA::Long m_idMenuHelp_About;
-  CORBA::Long m_idMenuHelp_AboutKOffice;
-  CORBA::Long m_idMenuHelp_AboutKDE;
 
   // right button popup menus
   QPopupMenu *rb_line,*rb_rect,*rb_pen,*rb_pen_width,*rb_oalign;
 
   int W1,W2,W3,W4,W5,W6,W7,W8,W9,W10,P_COL;
 
-  // toolbar
-  OPParts::ToolBarFactory_var m_vToolBarFactory;
-
   // edit toolbar
-  ToolBar_ref m_rToolBarEdit;
+  OpenPartsUI::ToolBar_var m_vToolBarEdit;
   CORBA::Long m_idButtonEdit_Undo;
   CORBA::Long m_idButtonEdit_Redo;
   CORBA::Long m_idButtonEdit_Cut;
@@ -544,7 +525,7 @@ protected:
   CORBA::Long m_idButtonEdit_Delete;
 
   // insert toolbar
-  ToolBar_ref m_rToolBarInsert;
+  OpenPartsUI::ToolBar_var m_vToolBarInsert;
   CORBA::Long m_idButtonInsert_Picture;
   CORBA::Long m_idButtonInsert_Clipart;
   CORBA::Long m_idButtonInsert_Line;
@@ -556,7 +537,7 @@ protected:
   CORBA::Long m_idButtonInsert_Part;
 
   // text toolbar
-  ToolBar_ref m_rToolBarText;
+  OpenPartsUI::ToolBar_var m_vToolBarText;
   CORBA::Long m_idComboText_FontSize;
   CORBA::Long m_idComboText_FontList;
   CORBA::Long m_idButtonText_Bold;
@@ -571,7 +552,7 @@ protected:
   CORBA::Long m_idButtonText_NormalText;
 
   // extra toolbar
-  ToolBar_ref m_rToolBarExtra;
+  OpenPartsUI::ToolBar_var m_vToolBarExtra;
   CORBA::Long m_idButtonExtra_Style;
   CORBA::Long m_idButtonExtra_Pie;
   CORBA::Long m_idButtonExtra_Raise;
@@ -581,7 +562,7 @@ protected:
   CORBA::Long m_idButtonExtra_Align;
 
   // screen toolbar
-  ToolBar_ref m_rToolBarScreen;
+  OpenPartsUI::ToolBar_var m_vToolBarScreen;
   CORBA::Long m_idButtonScreen_Stop;
   CORBA::Long m_idButtonScreen_Pause;
   CORBA::Long m_idButtonScreen_Start;
@@ -644,7 +625,6 @@ protected:
   bool m_bShowGUI;
   bool presStarted;
 
-  KPresenterShell_impl* shell;
   QSize oldSize;
 
   int screensaver_pid;

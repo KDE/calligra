@@ -23,7 +23,7 @@
 
 /*======================== constructor ===========================*/
 ChgPixCmd::ChgPixCmd(QString _name,KPPixmapObject *_oldObject,KPPixmapObject *_newObject,
-		     KPresenterDocument_impl *_doc)
+		     KPresenterDoc *_doc)
   : Command(_name)
 {
   oldObject = _oldObject;

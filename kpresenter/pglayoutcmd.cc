@@ -24,7 +24,7 @@
 
 /*======================== constructor ===========================*/
 PgLayoutCmd::PgLayoutCmd(QString _name,KoPageLayout _layout,KoPageLayout _oldLayout,
-			 KPresenterView_impl *_view)
+			 KPresenterView *_view)
   : Command(_name)
 {
   layout = _layout;
@@ -35,7 +35,7 @@ PgLayoutCmd::PgLayoutCmd(QString _name,KoPageLayout _layout,KoPageLayout _oldLay
 /*====================== execute =================================*/
 void PgLayoutCmd::execute()
 {
-  view->KPresenterDoc()->setPageLayout(layout,view->getDiffX(),view->getDiffY());
+  view->kPresenterDoc()->setPageLayout(layout,view->getDiffX(),view->getDiffY());
   view->getHRuler()->setPageLayout(layout);
   view->getVRuler()->setPageLayout(layout);
   view->setRanges();
@@ -44,7 +44,7 @@ void PgLayoutCmd::execute()
 /*====================== unexecute ===============================*/
 void PgLayoutCmd::unexecute()
 {
-  view->KPresenterDoc()->setPageLayout(oldLayout,view->getDiffX(),view->getDiffY());
+  view->kPresenterDoc()->setPageLayout(oldLayout,view->getDiffX(),view->getDiffY());
   view->getHRuler()->setPageLayout(oldLayout);
   view->getVRuler()->setPageLayout(oldLayout);
   view->setRanges();

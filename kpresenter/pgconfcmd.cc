@@ -26,7 +26,7 @@ PgConfCmd::PgConfCmd(QString _name,bool _manualSwitch,bool _infinitLoop,
 		     PageEffect _pageEffect,PresSpeed _presSpeed,
 		     bool _oldManualSwitch,bool _oldInfinitLoop,
 		     PageEffect _oldPageEffect,PresSpeed _oldPresSpeed,
-		     KPresenterDocument_impl *_doc,int _pgNum)
+		     KPresenterDoc *_doc,int _pgNum)
   : Command(_name)
 {
   manualSwitch = _manualSwitch;

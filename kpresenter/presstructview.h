@@ -52,8 +52,8 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
-class KPresenterDocument_impl;
-class KPresenterView_impl;
+class KPresenterDoc;
+class KPresenterView;
 
 const QString ObjName[] = {"Picture","Line","Rectangle","Ellipse","Text","Autoform",
 			   "Clipart","Undefined","Pie/Arc/Chord"};
@@ -90,7 +90,7 @@ class PVTimeTable : public QTableView
   Q_OBJECT
 
 public:
-  PVTimeTable(QWidget *parent,KPresenterDocument_impl *_doc);
+  PVTimeTable(QWidget *parent,KPresenterDoc *_doc);
 
   void setPageNum(int _num);
 
@@ -98,7 +98,7 @@ protected:
   void paintCell(QPainter *painter,int row,int col);
 
   int page;
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
 
   QList<KPObject> objList;
 
@@ -113,7 +113,7 @@ class PresStructViewer : public QDialog
   Q_OBJECT
 
 public:
-  PresStructViewer(QWidget *parent,const char *name,KPresenterDocument_impl *_doc,KPresenterView_impl *_view);
+  PresStructViewer(QWidget *parent,const char *name,KPresenterDoc *_doc,KPresenterView *_view);
 
 signals:
   void presStructViewClosed();
@@ -168,8 +168,8 @@ protected:
   KNewPanner *panner,*h_panner;
   KTreeList *treelist;
   KTabListBox *list;
-  KPresenterDocument_impl *doc;
-  KPresenterView_impl *view;
+  KPresenterDoc *doc;
+  KPresenterView *view;
   QList<ItemInfo> pageList,objList;
   KPObject *lastSelected;
   KToolBar *toolbar;

@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,KPresenterView_impl *_view)
+EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,KPresenterView *_view)
   :QDialog(parent,name,true)
 {
   pageNum = _pageNum;
@@ -37,7 +37,7 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   eNum->move(lNum->width()+15,10);
   eNum->resize(eNum->sizeHint().width()/2,eNum->sizeHint().height());
   char str[5];
-  sprintf(str,"%d",view->KPresenterDoc()->objectList()->at(_objNum)->getPresNum());
+  sprintf(str,"%d",view->kPresenterDoc()->objectList()->at(_objNum)->getPresNum());
   eNum->setText(str);
 
   lEffect = new QLabel(i18n("Effect (appearing): "),this);
@@ -58,7 +58,7 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   cEffect->insertItem(i18n("Wipe from right"));
   cEffect->insertItem(i18n("Wipe from top"));
   cEffect->insertItem(i18n("Wipe from bottom"));
-  cEffect->setCurrentItem(static_cast<int>(view->KPresenterDoc()->objectList()->at(_objNum)->getEffect()));
+  cEffect->setCurrentItem(static_cast<int>(view->kPresenterDoc()->objectList()->at(_objNum)->getEffect()));
   cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y()-5);
   cEffect->resize(cEffect->sizeHint());
 
@@ -69,7 +69,7 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   cEffect2 = new QComboBox(false,this,"cEffect2");
   cEffect2->insertItem(i18n("No Effect"));
 
-  switch (view->KPresenterDoc()->objectList()->at(_objNum)->getType())
+  switch (view->kPresenterDoc()->objectList()->at(_objNum)->getType())
     {
     case OT_TEXT:
       {
@@ -78,14 +78,14 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
     default: break;
     }
 
-  if (view->KPresenterDoc()->objectList()->at(_objNum)->getEffect2() == EF2_NONE)
-    cEffect2->setCurrentItem(static_cast<int>(view->KPresenterDoc()->objectList()->at(_objNum)->getEffect2()));
+  if (view->kPresenterDoc()->objectList()->at(_objNum)->getEffect2() == EF2_NONE)
+    cEffect2->setCurrentItem(static_cast<int>(view->kPresenterDoc()->objectList()->at(_objNum)->getEffect2()));
   else
     {
-      switch (view->KPresenterDoc()->objectList()->at(_objNum)->getType())
+      switch (view->kPresenterDoc()->objectList()->at(_objNum)->getType())
 	{
 	case OT_TEXT:
-	  cEffect2->setCurrentItem(static_cast<int>(view->KPresenterDoc()->objectList()->at(_objNum)->getEffect2() + TxtObjOffset));
+	  cEffect2->setCurrentItem(static_cast<int>(view->kPresenterDoc()->objectList()->at(_objNum)->getEffect2() + TxtObjOffset));
 	  break;
 	default: break;
 	}
@@ -132,12 +132,12 @@ void EffectDia::slotEffectDiaOk()
 {
   EffectCmd *effectCmd = new EffectCmd(i18n("Assign Object Effects"),atoi(eNum->text()),
 				      (Effect)cEffect->currentItem(),(Effect2)cEffect2->currentItem(),
-				      view->KPresenterDoc()->objectList()->at(objNum)->getPresNum(),
-				      view->KPresenterDoc()->objectList()->at(objNum)->getEffect(),
-				      view->KPresenterDoc()->objectList()->at(objNum)->getEffect2(),
-				      view->KPresenterDoc()->objectList()->at(objNum));
+				      view->kPresenterDoc()->objectList()->at(objNum)->getPresNum(),
+				      view->kPresenterDoc()->objectList()->at(objNum)->getEffect(),
+				      view->kPresenterDoc()->objectList()->at(objNum)->getEffect2(),
+				      view->kPresenterDoc()->objectList()->at(objNum));
   effectCmd->execute();
-  view->KPresenterDoc()->commands()->addCommand(effectCmd);
+  view->kPresenterDoc()->commands()->addCommand(effectCmd);
   emit effectDiaOk();
 }
 

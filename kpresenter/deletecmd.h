@@ -24,7 +24,7 @@
 #include "command.h"
 #include "kpobject.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: DeleteCmd                                               */
@@ -35,7 +35,7 @@ class DeleteCmd : public Command
   Q_OBJECT
 
 public:
-  DeleteCmd(QString _name,QList<KPObject> &_objects,KPresenterDocument_impl *_doc);
+  DeleteCmd(QString _name,QList<KPObject> &_objects,KPresenterDoc *_doc);
   ~DeleteCmd();
   
   virtual void execute();
@@ -46,7 +46,7 @@ protected:
     {;}
 
   QList<KPObject> objects;
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
 
 };
 

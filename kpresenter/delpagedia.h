@@ -26,7 +26,7 @@
 
 #include "global.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -41,12 +41,12 @@ class DelPageDia : public QDialog
   Q_OBJECT
 
 public:
-  DelPageDia(QWidget* parent,const char* name,KPresenterDocument_impl *_doc,int currPageNum);  
+  DelPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int currPageNum);  
 
 protected:
   void uncheckAll();
 
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
   
   QLabel *label;
   KNumericSpinBox *spinBox;

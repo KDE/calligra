@@ -12,153 +12,383 @@
 /* Module: KPresenter Shell                                       */
 /******************************************************************/
 
+#include <qprinter.h>
 #include "kpresenter_shell.h"
-#include "kpresenter_shell.moc"
+#include "kpresenter_doc.h"
+#include "kpresenter_view.h"
 
-/******************************************************************/
-/* class KPresenterShell_impl                                     */
-/******************************************************************/
+#include <koAboutDia.h>
+#include <kfiledialog.h>
+#include <opMainWindowIf.h>
+#include <opMenuIf.h>
+#include <kapp.h>
+#include <qmsgbox.h>
 
-/*====================== constructor =============================*/
-KPresenterShell_impl::KPresenterShell_impl()
+QList<KPresenterShell>* KPresenterShell::s_lstShells = 0L;
+
+KPresenterShell::KPresenterShell()
 {
-  filename = 0;
-  format = 0;
-  kp_doc = 0;
+  m_pDoc = 0L;
+  m_pView = 0L;
+  
+  if ( s_lstShells == 0L )
+    s_lstShells = new QList<KPresenterShell>;
+  
+  s_lstShells->append( this );
 }
 
-/*======================= destrcutor =============================*/
-KPresenterShell_impl::~KPresenterShell_impl()
-{
-  sdeb("KPresenterShell_impl::~KPresenterShell_impl()\n");
+KPresenterShell::~KPresenterShell()
+{ 
+  cerr << "KPresenterShell::~KPresenterShell()" << endl;
+  
   cleanUp();
-  edeb("...KPresenterShell_impl::~KPresenterShell_impl()\n");
+  
+  s_lstShells->removeRef( this );
 }
 
-/*========================= save file ============================*/
-void KPresenterShell_impl::fileSave()
+bool KPresenterShell::isModified()
 {
-  if (!filename)
-    fileSaveAs();
-  else
-    m_rDoc->saveAs(filename,format);
+  if ( m_pDoc )
+    return (bool)m_pDoc->isModified();
+  
+  return false;
 }
 
-/*====================== set document ============================*/ 
-void KPresenterShell_impl::setDocument(KPresenterDocument_impl *_doc)
+bool KPresenterShell::requestClose()
 {
-  m_rDoc = OPParts::Document::_duplicate(_doc);
-  kp_doc = _doc;
-
-  m_vView = _doc->createView();  
-  m_vView->setPartShell(this);
-  setRootPart(m_vView);
+  int res = QMessageBox::warning( 0L, i18n("Warning"), i18n("The document has been modified\nDo you want to save it ?" ),
+				  i18n("Yes"), i18n("No"), i18n("Cancel") );
+  
+  if ( res == 0 )
+    return saveDocument( "", "" );
+  
+  if ( res == 1 )
+    return true;
+  
+  return false;
 }
 
-/*======================== open document =========================*/
-bool KPresenterShell_impl::openDocument(const char *_filename)
+void KPresenterShell::cleanUp()
 {
-  m_rDoc = 0L;
-  
-  m_rDoc = OPParts::Document::_duplicate(new KPresenterDocument_impl);
-  if (!m_rDoc->open(_filename)) return false;
-  
-  m_vView = m_rDoc->createView();
-  m_vView->setPartShell(this);
-  setRootPart(m_vView);
+  releaseDocument();
 
-  m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
-  m_rMenuBar->setItemEnabled(m_idMenuFile_Save,true);
-  m_rToolBarFile->setItemEnabled(m_idButtonFile_Print,true);
-  m_rToolBarFile->setItemEnabled(m_idButtonFile_Save,true);
-  m_rToolBarFile->setFullWidth(false);
+  KoMainWindow::cleanUp();
+}
 
-  filename = qstrdup(_filename);
-
-  QFileInfo tmp(_filename);
+void KPresenterShell::setDocument( KPresenterDoc *_doc )
+{
+  if ( m_pDoc )
+    releaseDocument();
   
-  if (tmp.extension().isEmpty())
-    format = qstrdup("kpr");
-  else
-    format = qstrdup(tmp.extension());
+  m_pDoc = _doc;
+  m_pDoc->_ref();
+  m_pView = _doc->createPresenterView();
+  m_pView->incRef();
+  m_pView->setMode( KOffice::View::RootMode );
+  m_pView->setMainWindow( interface() );
+  
+  setRootPart( m_pView->id() );
+  interface()->setActivePart( m_pView->id() );
+
+  if( m_pFileMenu )
+  {
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+  }
+  
+  opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
+  opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+}
+
+bool KPresenterShell::newDocument()
+{
+  if ( m_pDoc )
+  {
+    KPresenterShell *s = new KPresenterShell();
+    s->show();
+    s->newDocument();
+    return true;
+  }
+  
+  m_pDoc = new KPresenterDoc;
+  if ( !m_pDoc->init() )
+  {
+    cerr << "ERROR: Could not initialize document" << endl;
+    return false;
+  }
+  
+  m_pView = m_pDoc->createPresenterView();
+  m_pView->incRef();
+  m_pView->setMode( KOffice::View::RootMode );
+  cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  m_pView->setMainWindow( interface() );
+  
+  setRootPart( m_pView->id() );
+  interface()->setActivePart( m_pView->id() );
+  
+  if( m_pFileMenu )
+  {
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+  }
+  
+  opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
+  opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+
+  cerr << "*2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   return true;
 }
 
-/*========================== save document =======================*/
-bool KPresenterShell_impl::saveDocument(const char *_filename,const char *_format)
+bool KPresenterShell::openDocument( const char *_url, const char *_format )
 {
-  QFileInfo fileInfo(_filename);
-  if (_format == 0L || *_format == 0)
+  if ( _format == 0L || *_format == 0 )
+    _format = "application/x-kPresenter";
+
+  if ( m_pDoc && m_pDoc->isEmpty() )
+    releaseDocument();
+  else if ( m_pDoc && !m_pDoc->isEmpty() )
+  {
+    KPresenterShell *s = new KPresenterShell();
+    s->show();
+    return s->openDocument( _url, _format );
+  }
+  
+  cerr << "Creating new document" << endl;
+  
+  m_pDoc = new KPresenterDoc;
+  if ( !m_pDoc->loadFromURL( _url, _format ) )
+    return false;
+  
+  m_pView = m_pDoc->createPresenterView();
+  m_pView->incRef();
+  m_pView->setMode( KOffice::View::RootMode );
+  m_pView->setMainWindow( interface() );
+  
+  setRootPart( m_pView->id() );
+  interface()->setActivePart( m_pView->id() );
+  
+  if ( m_pFileMenu )
+  {    
+    m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
+  }
+  
+  opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
+  opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  
+  return true;
+}
+
+bool KPresenterShell::saveDocument( const char *_url, const char *_format )
+{
+  assert( m_pDoc != 0L );
+
+  CORBA::String_var url;
+  if ( _url == 0L || *_url == 0 )
+  {
+    url = m_pDoc->url();
+    _url = url.in();
+  }
+  
+  QString file;
+  if ( _url == 0L || *_url == 0 )
+  {
+    file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
+
+    if ( file.isNull() )
+      return false;
+    _url = file.data();
+  }
+  
+  if ( _format == 0L || *_format == 0 )
+    _format = "application/x-kPresenter";
+  
+  return m_pDoc->saveToURL( _url, _format );
+}
+
+bool KPresenterShell::printDlg()
+{
+  assert( m_pView != 0L );
+
+  return m_pView->printDlg();
+}
+
+void KPresenterShell::helpAbout()
+{
+  KoAboutDia::about( KoAboutDia::KPresenter, "0.0.2" );
+}
+
+bool KPresenterShell::closeDocument()
+{
+  if ( isModified() )
+  {
+    if ( !requestClose() )
+      return false;
+  }
+
+  return true;
+}
+
+bool KPresenterShell::closeAllDocuments()
+{
+  KPresenterShell* s;
+  for( s = s_lstShells->first(); s != 0L; s = s_lstShells->next() )
+  {
+    if ( s->isModified() )
     {
-      if (fileInfo.extension().isEmpty()) _format = "kpr";
-      else _format = qstrdup(fileInfo.extension());
+      if ( !s->requestClose() )
+	return false;
     }
- 
-  assert(!CORBA::is_nil(m_rDoc));
-
-  if (filename) delete filename;
-  if (format) delete format;
-
-  filename = qstrdup(_filename);
-  format = qstrdup(_format);
+  }
   
-  if (strcmp(format,"kpr") == 0 || strcmp(format,"kpt") == 0)
-    return m_rDoc->saveAs(_filename,_format);
-  else if (strcmp(format,"html") == 0 || strcmp(format,"htm") == 0)
-    return kp_doc->exportHTML(_filename);
-
-  return false;
+  return true;
 }
 
-/*========================= file new ============================*/
-void KPresenterShell_impl::fileNew()
+int KPresenterShell::documentCount()
 {
-  m_rDoc = 0L;
+  return s_lstShells->count();
+}
+
+void KPresenterShell::releaseDocument()
+{
+  int views = 0;
+  if ( m_pDoc )
+    views = m_pDoc->viewCount();
+  cerr << "############## VIEWS=" << views << " #####################" << endl;
   
-  kp_doc = new KPresenterDocument_impl;
-  m_rDoc = OPParts::Document::_duplicate(kp_doc);
+  cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+
+  setRootPart( 0 );
+
+  cerr << "-2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+
+  interface()->setActivePart( 0 );
+
+  // cerr << "-3) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   
-  if (!m_rDoc->init()) return;
+  if ( m_pView )
+    m_pView->decRef();
   
-  if (filename) delete filename;
-  if (format) delete format;
-  filename = 0;
-  format = 0;
+  /* if ( m_pView )
+    m_pView->cleanUp(); */
 
-  m_vView = m_rDoc->createView();
-  m_vView->setPartShell(this);
-  setRootPart(m_vView);
-  m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
-  m_rMenuBar->setItemEnabled(m_idMenuFile_Save,true);
-  m_rToolBarFile->setItemEnabled(m_idButtonFile_Print,true);
-  m_rToolBarFile->setItemEnabled(m_idButtonFile_Save,true);
-  m_rToolBarFile->setFullWidth(false);
+  // cerr << "-4) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  if ( m_pDoc && views <= 1 )
+    m_pDoc->cleanUp();
+  // cerr << "-5) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  // if ( m_pView )
+  // CORBA::release( m_pView );
+  // cerr << "-6) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  if ( m_pDoc )
+    CORBA::release( m_pDoc );
+  // cerr << "-7) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
+  m_pView = 0L;
+  m_pDoc = 0L;
 }
 
-/*======================== clean up ==============================*/
-void KPresenterShell_impl::cleanUp()
+void KPresenterShell::slotFileNew()
 {
-  if (m_bIsClean) return;
-
-  DefaultShell_impl::cleanUp();
-
-  mdeb("========DOC=======================\n");
-  m_rDoc = 0L;
+  if ( !newDocument() )    
+    QMessageBox::critical( this, i18n("KPresenter Error"), i18n("Could not create new document"), i18n("Ok") );
 }
 
-/*======================== help about ============================*/
-void KPresenterShell_impl::helpAbout()
+void KPresenterShell::slotFileOpen()
 {
-  KoAboutDia::about(KoAboutDia::KPresenter,"0.1.0");
+  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
+
+  if ( file.isNull() )
+    return;
+  
+  if ( !openDocument( file, "" ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
+    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+  }
 }
 
-/*========================= file print ===========================*/
-bool KPresenterShell_impl::printDlg()
+void KPresenterShell::slotFileSave()
 {
-  assert(!CORBA::is_nil(m_vView));
-
-  return m_vView->printDlg();
+  assert( m_pDoc != 0L );
+  
+  CORBA::String_var url = m_pDoc->url();
+  if ( strlen( url.in() ) == 0 )
+  {
+    slotFileSaveAs();
+    return;
+  }
+  
+  if ( !saveDocument( url.in(), "" ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n( "Could not save\n%s" ), url.in() );
+    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+  }
 }
+
+void KPresenterShell::slotFileSaveAs()
+{
+  if ( !saveDocument( "", "" ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n( "Could not save file" ) );
+    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+  }
+}
+
+void KPresenterShell::slotFileClose()
+{
+  if ( documentCount() <= 1 )
+  {
+    slotFileQuit();
+    return;
+  }
+  
+  if ( isModified() )
+    if ( !requestClose() )
+      return;
+  
+  delete this;
+}
+
+void KPresenterShell::slotFilePrint()
+{
+  assert( m_pView );
+  
+  (void)m_pView->printDlg();
+}
+
+void KPresenterShell::slotFileQuit()
+{
+  cerr << "EXIT 1" << endl;
+
+  if ( !closeAllDocuments() )
+    return;
+
+  cerr << "EXIT 2" << endl;
+  
+  delete this;
+  kapp->exit();
+}
+
+KoDocument* KPresenterShell::document()
+{
+  return m_pDoc;
+}
+
+KoViewIf* KPresenterShell::view()
+{
+  return m_pView;
+}
+
+#include "kpresenter_shell.moc"
+
 
 

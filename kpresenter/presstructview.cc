@@ -24,7 +24,7 @@
 /******************************************************************/
 
 /*================================================================*/
-PVTimeTable::PVTimeTable(QWidget *parent,KPresenterDocument_impl *_doc)
+PVTimeTable::PVTimeTable(QWidget *parent,KPresenterDoc *_doc)
   : QTableView(parent)
 {
   doc = _doc;
@@ -155,7 +155,7 @@ void PVTimeTable::paintCell(QPainter *painter,int row,int col)
 /******************************************************************/
 
 /*================================================================*/
-PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDocument_impl *_doc,KPresenterView_impl *_view)
+PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDoc *_doc,KPresenterView *_view)
   : QDialog(parent,name,false)
 {
   doc = _doc;

@@ -21,7 +21,7 @@
 #include "command.h"
 #include "kpbackground.h"
 
-class KPresenterView_impl;
+class KPresenterView;
 
 /******************************************************************/
 /* Class: PgLayoutCmd                                             */
@@ -33,7 +33,7 @@ class PgLayoutCmd : public Command
 
 public:
   PgLayoutCmd(QString _name,KoPageLayout _layout,KoPageLayout _oldLayout,
-	      KPresenterView_impl *_view);
+	      KPresenterView *_view);
 
   virtual void execute();
   virtual void unexecute();
@@ -43,7 +43,7 @@ protected:
     {;}
 
   KoPageLayout layout,oldLayout;
-  KPresenterView_impl *view;
+  KPresenterView *view;
 
 };
 

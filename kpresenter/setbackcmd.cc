@@ -26,7 +26,7 @@ SetBackCmd::SetBackCmd(QString _name,QColor _backColor1,QColor _backColor2,BCTyp
 		       QString _backPix,QString _backClip,BackView _backView,BackType _backType,
 		       QColor _oldBackColor1,QColor _oldBackColor2,BCType _oldBcType,
 		       QString _oldBackPix,QString _oldBackClip,BackView _oldBackView,BackType _oldBackType,
-		       bool _takeGlobal,int _currPgNum,KPresenterDocument_impl *_doc)
+		       bool _takeGlobal,int _currPgNum,KPresenterDoc *_doc)
   : Command(_name), backColor1(_backColor1), backColor2(_backColor2), backPix(_backPix), backClip(_backClip),
     oldBackColor1(_oldBackColor1), oldBackColor2(_oldBackColor2), oldBackPix(_oldBackPix), oldBackClip(_oldBackClip)
 {

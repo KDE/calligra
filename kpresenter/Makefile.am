@@ -1,12 +1,13 @@
 
-INCLUDES = $(MICO_INCLUDES) -I../lib/kofficecore -I../lib/kofficeui \
+INCLUDES = $(MICO_INCLUDES) -I../lib/kofficecore -I../lib/store -I../lib/kofficeui \
 	-I../lib/koml $(all_includes) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
+	../lib/store/libkstore.la \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
-	-lkom -ljpeg $(LIBSOCKET) -ldl
+	-lkparts -lkpartsui -lkom -lkfile -lkfm -lkstore -lkdeui -lkdeutil -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
+	-ljpeg $(LIBSOCKET) -ldl
 
 ####### Files
 
@@ -92,7 +93,7 @@ messages:
 
 kpresenter.h: kpresenter.idl
 	rm -f kpresenter.h
-	$(IDL) --query-server-for-narrow -I$(idldir) kpresenter.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) kpresenter.idl
 
 kpresenter.cc: kpresenter.h
 kpresenter_doc.cc: kpresenter_doc.moc

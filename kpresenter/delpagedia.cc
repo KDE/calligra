@@ -23,7 +23,7 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-DelPageDia::DelPageDia(QWidget* parent,const char* name,KPresenterDocument_impl *_doc,int currPageNum)
+DelPageDia::DelPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int currPageNum)
   : QDialog(parent,name,true)
 {
   doc = _doc;

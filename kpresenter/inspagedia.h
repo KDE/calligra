@@ -26,7 +26,7 @@
 
 #include "global.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -41,13 +41,13 @@ class InsPageDia : public QDialog
   Q_OBJECT
 
 public:
-  InsPageDia(QWidget* parent,const char* name,KPresenterDocument_impl *_doc,int _currPage);  
+  InsPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int _currPage);  
 
 protected:
   void uncheckAllPos();
   void uncheckAllMode();
 
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
   
   KNumericSpinBox *spinBox;
   QRadioButton *before,*after,*leave,*_move;

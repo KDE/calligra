@@ -23,7 +23,7 @@
 
 #include "global.h"
 
-class KPresenterDocument_impl;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: SetBackCmd                                              */
@@ -38,7 +38,7 @@ public:
 	     QString _backPix,QString _backClip,BackView _backView,BackType _backType,
 	     QColor _oldBackColor1,QColor _oldBackColor2,BCType _oldBcType,
 	     QString _oldBackPix,QString _oldBackClip,BackView _oldBackView,BackType _oldBackType,
-	     bool _takeGlobal,int _currPgNum,KPresenterDocument_impl *_doc);
+	     bool _takeGlobal,int _currPgNum,KPresenterDoc *_doc);
   
   virtual void execute();
   virtual void unexecute();
@@ -59,7 +59,7 @@ protected:
   BackType oldBackType;
   bool takeGlobal;
   int currPgNum;
-  KPresenterDocument_impl *doc;
+  KPresenterDoc *doc;
 
 };
 
