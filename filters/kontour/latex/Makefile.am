@@ -19,13 +19,13 @@ kde_module_LTLIBRARIES = libtexgraphexport.la
 libtexgraphexport_la_SOURCES = bezier.cc document.cc element.cc ellipse.cc \
 font.cc group.cc header.cc layer.cc \
 page.cc point.cc polygone.cc polyline.cc \
-texgraphexport.cc texgraphexportdia.cc texgraphexport_factory.cc rectangle.cc \
+texgraphexport.cc texgraphexportdia.cc rectangle.cc \
 text.cc xmlparser.cc
 
  noinst_HEADERS = bezier.h document.h element.h ellipse.h \
 font.h group.h header.h layer.h \
 page.h point.h polygone.h polyline.h \
-texgraphexport.h texgraphexportdia.h texgraphexport_factory.h rectangle.h \
+texgraphexport.h texgraphexportdia.h rectangle.h \
 text.h xmlparser.h
 
 ######## Debug

@@ -19,36 +19,43 @@
 
 #include <texgraphexport.h>
 #include <texgraphexport.moc>
+
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <texgraphexportdia.h>
 
-TEXGRAPHExport::TEXGRAPHExport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) {
+typedef KGenericFactory<TEXGRAPHExport, KoFilter> TEXGRAPHExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libtexgraphexport, TEXGRAPHExportFactory( "kontourlatexfilter" ) );
+
+
+TEXGRAPHExport::TEXGRAPHExport(KoFilter *, const char *, const QStringList&) :
+                     KoFilter()
+{
 }
 
-bool TEXGRAPHExport::filter(const QString &fileIn, const QString &fileOut,
-                         const QString& from, const QString& to,
-                         const QString &) {
+KoFilter::ConversionStatus TEXGRAPHExport::convert(const QCString& from, const QCString& to)
+{
 
     if(to != "text/x-tex" || from != "application/x-kontour")
-        return false;
+        return KoFilter::NotImplemented;
 
-    KoStore in = KoStore(QString(fileIn), KoStore::Read);
+    KoStore in = KoStore(QString(m_chain->inputFile()), KoStore::Read);
     if(!in.open("root")) {
         kdError(30503) << "Unable to open input file!" << endl;
         in.close();
-        return false;
+        return KoFilter::FileNotFound;;
     }
     /* input file Reading */
     //QByteArray array = in.read(in.size());
     in.close();
 
     TEXGRAPHExportDia* dialog = new TEXGRAPHExportDia(in);
-    dialog->setOutputFile(fileOut);
+    dialog->setOutputFile(m_chain->outputFile());
     dialog->exec();
     delete dialog;
 
-    return true;
+    return KoFilter::OK;
 }

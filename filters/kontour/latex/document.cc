@@ -47,7 +47,8 @@ Document::Document(QByteArray in, QString fileOut): XmlParser(in), _file(fileOut
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
-Document::Document(KoStore& in, QString fileOut, QString config): XmlParser(in), _file(fileOut)
+Document::Document(KoStore& in, QString fileOut, QString config):
+						XmlParser(in), _file(fileOut)
 {
 	_in = new KoStore(in);
 	kdDebug() << fileOut.latin1() << endl;
@@ -63,7 +64,7 @@ void Document::analyse_config(QString config)
 	kdDebug() << config << endl;
 	if(config.contains("EMBEDED") > 0)
 		_isEmbeded = true;
-	if(config.contains("PSTRICK") > 0)
+	if(config.contains("PSTRICKS") > 0)
 		setLatexType(LT_PSTRICKS);
 	else if(config.contains("KWORD") > 0)
 		useKwordStyle();

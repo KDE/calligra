@@ -58,7 +58,7 @@ void Layer::analyse(const QDomNode balise)
 		Element *elt = 0;
 		kdDebug() << "NEW ELEMENT" << endl;
 		kdDebug() << getChildName(balise, index) << endl;
-		if(getChildName(balise, index).compare("rectangle") == 0)
+		if(getChildName(balise, index).compare("rect") == 0)
 		{
 			elt = new Rectangle;
 			elt->analyse(getChild(balise, index));

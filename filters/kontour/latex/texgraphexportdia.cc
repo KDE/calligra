@@ -140,7 +140,7 @@ QString TEXGRAPHExportDia::state()
 	else if(latin1RBtn == langBox->selected())
 		result += "LATIN1";
 	result += '-';
-	
+	result += "PSTRICKS";
 	/*if(latexStyleRBtn == styleBox->selected())
 		result += "PSTRICKS";
 	else if(kwordStyleRBtn == styleBox->selected())

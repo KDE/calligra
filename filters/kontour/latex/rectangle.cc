@@ -49,7 +49,7 @@ void Rectangle::analyse(const QDomNode balise)
 
 	Element::analyse(balise);
 	analyseParam(balise);
-	Element::analyseGObject(getChild(balise, "gobject"));
+	Element::analyseGObject(getChild(balise, "go"));
 	kdDebug() << "END OF ANALYSE OF A RECTANGLE" << endl;
 }
 
@@ -63,8 +63,8 @@ void Rectangle::analyseParam(const QDomNode balise)
 	/* Get parameters */
 	setX(getAttr(balise, "x").toInt());
 	setY(getAttr(balise, "y").toInt());
-	setWidth(getAttr(balise, "width").toInt());
-	setHeight(getAttr(balise, "height").toInt());
+	setWidth(getAttr(balise, "sx").toInt());
+	setHeight(getAttr(balise, "sy").toInt());
 	setRound(getAttr(balise, "rounding").toInt());
 
 	getMatrix().map(getX(), getY(), &x1, &y1);

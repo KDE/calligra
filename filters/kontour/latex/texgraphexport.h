@@ -20,8 +20,6 @@
 #ifndef __TEXGRAPHEXPORT_H__
 #define __TEXGRAPHEXPORT_H__
 
-//#include <qstring.h>
-//#include <qtextstream.h>
 #include <qfile.h>
 #include <qobject.h>
 
@@ -31,16 +29,15 @@
 #include "document.h"
 
 
-class TEXGRAPHExport : public KoFilter {
+class TEXGRAPHExport : public KoFilter
+{
 
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    TEXGRAPHExport(KoFilter *parent, const char *name);
-    virtual ~TEXGRAPHExport() {}
-    /** filtering :) */
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
+	public:
+		TEXGRAPHExport(KoFilter *parent, const char *name, const QStringList&);
+		virtual ~TEXGRAPHExport() {}
+		virtual KoFilter::ConversionStatus convert(const QCString &from, const QCString &to);
 };
-#endif // __TEXGRAPHEXPORT_H__
+
+#endif /* __TEXGRAPHEXPORT_H__ */
