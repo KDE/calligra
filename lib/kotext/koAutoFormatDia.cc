@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-                 2001       Sven Leiber         <s.leiber@web.de>
+                 2001, 2002 Sven Leiber         <s.leiber@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -276,8 +276,13 @@ void KoAutoFormatDia::setupTab3()
 
 void KoAutoFormatDia::slotRemoveEntry()
 {
-    m_autoFormat.removeAutoFormatEntry(m_find->text());
-    refreshEntryList();
+    //find entry in listbox
+   if(m_pListView->currentItem())
+    {
+        m_autoFormat.removeAutoFormatEntry(m_pListView->currentItem()->text(0));
+        pbAdd->setText(i18n("Add"));
+        refreshEntryList();
+    }
 }
 
 
@@ -311,8 +316,9 @@ void KoAutoFormatDia::refreshEntryList()
     for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
         ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
     m_pListView->setCurrentItem(m_pListView->firstChild ());
-    bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
-    pbRemove->setEnabled(state && m_pListView->currentItem () );
+    bool state = !(m_replace->text().isEmpty()) && !(m_find->text().isEmpty());
+    //we can delete item, as we search now in listbox and not in m_find lineedit
+    pbRemove->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
     pbAdd->setEnabled(state);
 }
 
@@ -353,6 +359,8 @@ void KoAutoFormatDia::slotAddEntry()
     else
         editEntryList(find, find, tmp);
 
+    m_find->setText( "" );
+    m_replace->setText( "" );
     refreshEntryList();
 }
 
