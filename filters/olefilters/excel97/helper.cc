@@ -818,7 +818,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "ATAN2",            97,   2 },  /* EXCEL: ARCTAN2 */
 	{ "ASIN",             98,   1 },  /* EXCEL: ARCSIN */
 	{ "ACOS",             99,   1 },  /* EXCEL: ARCCOS */
-	{ "CHOSE",            100,  0 },
+	{ "CHOOSE",            100,  0 },
 	{ "HLOOKUP",          101,  0 },
 	{ "VLOOKUP",          102,  0 },
 	{ "ISREF",            105,  1 },
