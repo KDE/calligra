@@ -499,7 +499,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getRunAroundGap().mm()!=1)
             frameElem.setAttribute( "runaroundGap", frame->getRunAroundGap().pt() );
 
-        if(frame->getLeftBorder().ptWidth!=1)
+        if(frame->getLeftBorder().ptWidth!=0)
             frameElem.setAttribute( "lWidth", frame->getLeftBorder().ptWidth );
 
         if(frame->getLeftBorder().color != Qt::white)
@@ -511,7 +511,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getLeftBorder().style != Border::SOLID)
             frameElem.setAttribute( "lStyle", static_cast<int>( frame->getLeftBorder().style ) );
 
-        if(frame->getRightBorder().ptWidth!=1)
+        if(frame->getRightBorder().ptWidth!=0)
             frameElem.setAttribute( "rWidth", frame->getRightBorder().ptWidth );
 
         if(frame->getRightBorder().color != Qt::white)
@@ -523,7 +523,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getRightBorder().style != Border::SOLID)
             frameElem.setAttribute( "rStyle", static_cast<int>( frame->getRightBorder().style ) );
 
-        if(frame->getTopBorder().ptWidth!=1)
+        if(frame->getTopBorder().ptWidth!=0)
             frameElem.setAttribute( "tWidth", frame->getTopBorder().ptWidth );
 
         if(frame->getTopBorder().color != Qt::white)
@@ -535,7 +535,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getTopBorder().style != Border::SOLID)
             frameElem.setAttribute( "tStyle", static_cast<int>( frame->getTopBorder().style ) );
 
-        if(frame->getBottomBorder().ptWidth!=1) {
+        if(frame->getBottomBorder().ptWidth!=0) {
             frameElem.setAttribute( "bWidth", frame->getBottomBorder().ptWidth );
         }
         if(frame->getBottomBorder().color != Qt::white) {
