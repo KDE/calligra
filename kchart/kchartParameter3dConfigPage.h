@@ -11,6 +11,7 @@
 #include <knuminput.h>
 
 class KChartParams;
+class QCheckBox;
 
 class KChartParameter3dConfigPage : public QWidget
 {
@@ -21,11 +22,13 @@ public:
                                  QWidget* parent );
     void init();
     void apply();
-
+protected slots:
+    void slotChange3DParameter(bool);
 private:
     KChartParams* _params;
     KIntNumInput* angle3d;
     KDoubleNumInput* depth;
+    QCheckBox* bar3d;
 };
 
 #endif

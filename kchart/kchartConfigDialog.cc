@@ -99,8 +99,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             addTab( _piepage, i18n( "&Pie" ) );
         }
 
-        if( ( _params->chartType() == KDChartParams::Bar &&
-              _params->threeDBars() ) )
+        if( _params->chartType() == KDChartParams::Bar )
         {
             _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
             addTab( _parameter3dpage,i18n("3D Parameters"));
@@ -185,8 +184,7 @@ void KChartConfigDialog::apply()
         }
     }
 
-    if( _parameter3dpage &&( _params->chartType() == KDChartParams::Bar &&
-          _params->threeDBars() ) )
+    if( _parameter3dpage && _params->chartType() == KDChartParams::Bar  )
         _parameter3dpage->apply();
 
     if(_parameterfontpage)
@@ -254,8 +252,7 @@ void KChartConfigDialog::defaults()
         }
     }
 
-    if(_parameter3dpage && ( _params->chartType() == KDChartParams::Bar &&
-          _params->threeDBars() ) )
+    if(_parameter3dpage && _params->chartType() == KDChartParams::Bar  )
         _parameter3dpage->init();
     if(_parameterfontpage)
         _parameterfontpage->init();
