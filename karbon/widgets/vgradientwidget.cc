@@ -172,10 +172,10 @@ void VGradientWidget::mousePressEvent( QMouseEvent* e )
 	VColorStop* stop, *nextstop = 0;
 	for ( stop = colorStops.last(); i >= 0; i--, stop = colorStops.prev() )
 	{
-		r = stop->rampPoint * ( width() - 4 );
+		r = int( stop->rampPoint * ( width() - 4 ) );
 		if ( nextstop )
 		{
-			m = ( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint ) * ( width() - 4 );
+			m = int( stop->rampPoint + ( nextstop->rampPoint - stop->rampPoint ) * stop->midPoint ) * ( width() - 4 );
 			if ( ( e->x() - 2 > m - 4 ) && ( e->x() - 2 < m + 4 ) )
 			{
 				currentPoint = 2*i + 2;
@@ -237,9 +237,9 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 		if ( currentPoint % 2 == 1 )
 		{
 			int x = e->x();
-				// Clip the color stop between to others.
-			x = QMIN( x, ( currentPoint < ( colorStops.count() - 1 ) * 2 ? colorStops.at( currentPoint / 2 + 1 )->rampPoint * ( width() - 4 ) + 2 : width() - 3 ) );
-			x = QMAX( x, ( currentPoint > 1 ? colorStops.at( currentPoint / 2 - 1 )->rampPoint * ( width() - 4 ) + 2 : 2 ) );
+			// Clip the color stop between to others.
+			x = QMIN( x, ( currentPoint < ( colorStops.count() - 1 ) * 2 ? int( colorStops.at( currentPoint / 2 + 1 )->rampPoint * ( width() - 4 ) + 2 ) : width() - 3 ) );
+			x = QMAX( x, ( currentPoint > 1 ? int( colorStops.at( currentPoint / 2 - 1 )->rampPoint * ( width() - 4 ) ) + 2 : 2 ) );
 			colorStops.at( currentPoint / 2 )->rampPoint = (float)( x - 2 ) / ( width() - 4 );
 			update();
 			emit changed();
@@ -247,9 +247,9 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 		else if ( currentPoint > 0 )
 		{
 			int x = e->x();
-				// Clip the mid point between to ramp points.
-			x = QMIN( x, colorStops.at( currentPoint / 2 )->rampPoint * ( width() - 4 ) + 2 );
-			x = QMAX( x, colorStops.at( currentPoint / 2 - 1 )->rampPoint * ( width() - 4 ) + 2 );
+			// Clip the mid point between to ramp points.
+			x = QMIN( x, int( colorStops.at( currentPoint / 2 )->rampPoint * ( width() - 4 ) + 2 ) );
+			x = QMAX( x, int( colorStops.at( currentPoint / 2 - 1 )->rampPoint * ( width() - 4 ) + 2 ) );
 			colorStops.at( currentPoint / 2 - 1 )->midPoint = ( ( (float)( x-2 ) ) / ( width() - 4 ) - ( colorStops.at( currentPoint / 2 - 1 )->rampPoint ) ) / ( colorStops.at( currentPoint / 2 )->rampPoint - colorStops.at( currentPoint / 2 - 1 )->rampPoint );
 			update();
 			emit changed();

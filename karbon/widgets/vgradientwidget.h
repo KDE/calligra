@@ -31,29 +31,29 @@ class VGradientWidget : public QWidget
 {
 	Q_OBJECT
 
-	public:
-		VGradientWidget( VGradient*& gradient, QWidget* parent = 0L, const char* name = 0L );
-		~VGradientWidget();
+public:
+	VGradientWidget( VGradient*& gradient, QWidget* parent = 0L, const char* name = 0L );
+	~VGradientWidget();
 
-		virtual void paintEvent( QPaintEvent* );
+	virtual void paintEvent( QPaintEvent* );
 
-		signals:
-			void changed();
+signals:
+	void changed();
 
-	protected:
-			/** mouse events... For color stops manipulation */
-		void mousePressEvent( QMouseEvent* );
-		void mouseReleaseEvent( QMouseEvent* );
-		void mouseDoubleClickEvent( QMouseEvent* );
-		void mouseMoveEvent( QMouseEvent* );
+protected:
+	/** mouse events... For color stops manipulation */
+	void mousePressEvent( QMouseEvent* );
+	void mouseReleaseEvent( QMouseEvent* );
+	void mouseDoubleClickEvent( QMouseEvent* );
+	void mouseMoveEvent( QMouseEvent* );
 
-		void paintColorStop( QPainter& p, int x, VColor& color );
-		void paintMidPoint( QPainter& p, int x );
+	void paintColorStop( QPainter& p, int x, VColor& color );
+	void paintMidPoint( QPainter& p, int x );
 
-			/** The gradient to modify. */
-		VGradient**             m_lpgradient;
-			/** The point to modify. */
-		int currentPoint;
+	/** The gradient to modify. */
+	VGradient**             m_lpgradient;
+	/** The point to modify. */
+	unsigned int currentPoint;
 }; // VGradientWidget
 
 #endif /* _VGRADIENTWIDGET_H_ */
