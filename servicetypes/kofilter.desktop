@@ -4,11 +4,11 @@ X-KDE-ServiceType=KOfficeFilter
 Comment=KOffice Filter
 Comment[ca]=Filtre KOffice
 Comment[cs]=Filtr KOffice
-Comment[da]=Koffice filter
+Comment[da]=KOffice filter
 Comment[de]=KOffice-Filter
 Comment[el]=Φίλτρο του KOffice
 Comment[eo]=KOficejo-filtrilo
-Comment[es]=Filtro KOffice
+Comment[es]=Filtro de KOffice
 Comment[et]=KOffice'i filter
 Comment[fi]=KOffice-suodin
 Comment[fr]=Filtre KOffice
@@ -20,12 +20,11 @@ Comment[is]=Sía f. K-vöndulinn
 Comment[it]=Filtro per KOffice
 Comment[ja]=KOfficeフィルター
 Comment[lt]=KOffice Filtras
-Comment[mk]=KOffice филтер
 Comment[no]=KOffice-filter
 Comment[no_NY]=KOffice-filter
 Comment[pl]=Filtr KOffice
-Comment[pt]=Filtro do KOffice
 Comment[pt_BR]=Filtro do KOffice
+Comment[pt]=Filtro do KOffice
 Comment[ro]=Filtru KOffice
 Comment[ru]=Фильтр KOffice
 Comment[sk]=Filter Koffice
@@ -41,13 +40,7 @@ Comment[zh_TW.Big5]=KOffice 過濾器
 [PropertyDef::Import]
 Type=QStringList
 
-[PropertyDef::ImportDescription]
-Type=QStringList
-
 [PropertyDef::Export]
-Type=QStringList
-
-[PropertyDef::ExportDescription]
 Type=QStringList
 
 [PropertyDef::Implemented]
