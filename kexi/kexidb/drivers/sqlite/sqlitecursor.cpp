@@ -198,7 +198,8 @@ void SQLiteCursor::drv_appendCurrentRecordToBuffer()
 	const char **dest_col = record;
 	for (uint i=0; i<m_fieldCount; i++,src_col++,dest_col++) {
 //		KexiDBDrvDbg << i <<": '" << *src_col << "'" <<endl;
-		*dest_col = strdup(*src_col);
+//		KexiDBDrvDbg << "src_col: " << src_col << endl;
+		*dest_col = *src_col ? strdup(*src_col) : 0;
 	}
 	d->records.insert(m_records_in_buf,record);
 //	KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer() ok." <<endl;
