@@ -4376,13 +4376,13 @@ unsigned int KPrCanvas::currPgNum() const
 /*================================================================*/
 unsigned int KPrCanvas::rastX() const
 {
-    return m_view->kPresenterDoc()->rastX();
+    return m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->rastX());
 }
 
 /*================================================================*/
 unsigned int KPrCanvas::rastY() const
 {
-    return m_view->kPresenterDoc()->rastY();
+    return m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->rastY());
 }
 
 /*================================================================*/
