@@ -3755,103 +3755,103 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     }
 
 
-  QDomElement condition = cell.namedItem( "condition" ).toElement();
-  if ( !condition.isNull())
-  	{
-  	 QDomElement first = condition.namedItem( "first" ).toElement();
-  	 if(!first.isNull())
-  	 	{
-  	 	m_firstCondition=new KSpreadConditional;
-  	 	if ( first.hasAttribute( "cond" ) )
-  	 		{
-			m_firstCondition->m_cond =(Conditional) first.attribute("cond").toInt( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(first.hasAttribute("val1"))
-  	 		{
-  	 		m_firstCondition->val1 =first.attribute("val1").toDouble( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(first.hasAttribute("val2"))
-  	 		{
-  	 		m_firstCondition->val2 =first.attribute("val2").toDouble( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(first.hasAttribute("color"))
-  	 		{
-			m_firstCondition->colorcond=QColor(first.attribute( "color"));
-			}
-		QDomElement font = first.namedItem( "font" ).toElement();
-		if ( !font.isNull() )
-	    		m_firstCondition->fontcond=toFont(font) ;
-		
-  	 	}
-
-  	 QDomElement second = condition.namedItem( "second" ).toElement();
-  	 if(!second.isNull())
-  	 	{
-  	 	m_secondCondition=new KSpreadConditional;
-  	 	if ( second.hasAttribute( "cond" ) )
-  	 		{
-			m_secondCondition->m_cond =(Conditional) second.attribute("cond").toInt( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(second.hasAttribute("val1"))
-  	 		{
-  	 		m_secondCondition->val1 =second.attribute("val1").toDouble( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(second.hasAttribute("val2"))
-  	 		{
-  	 		m_secondCondition->val2 =second.attribute("val2").toDouble( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(second.hasAttribute("color"))
-  	 		{
-			m_secondCondition->colorcond=QColor(second.attribute( "color"));
-			}
-		QDomElement font = second.namedItem( "font" ).toElement();
-		if ( !font.isNull() )
-	    		m_secondCondition->fontcond=toFont(font) ;
-		
-  	 	}
-  	 	
-	 QDomElement third = condition.namedItem( "third" ).toElement();
-  	 if(!third.isNull())
-  	 	{
-  	 	m_thirdCondition=new KSpreadConditional;
-  	 	if ( third.hasAttribute( "cond" ) )
-  	 		{
-			m_thirdCondition->m_cond =(Conditional) third.attribute("cond").toInt( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(third.hasAttribute("val1"))
-  	 		{
-  	 		m_thirdCondition->val1 =third.attribute("val1").toDouble( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(third.hasAttribute("val2"))
-  	 		{
-  	 		m_thirdCondition->val2 =third.attribute("val2").toDouble( &ok );
-	    		if ( !ok ) return false;
-  	 		}
-  	 	if(third.hasAttribute("color"))
-  	 		{
-			m_thirdCondition->colorcond=QColor(third.attribute( "color"));
-			}
-		QDomElement font = third.namedItem( "font" ).toElement();
-		if ( !font.isNull() )
-	    		m_thirdCondition->fontcond=toFont(font) ;
-  	 	}
-
-  	}
-    QDomCDATASection comment = cell.namedItem( "comment" ).firstChild().toCDATASection();
-    if ( !comment.isNull() && ( pm == ::Normal ||pm == ::Comment || pm == ::NoBorder ))
+    QDomElement condition = cell.namedItem( "condition" ).toElement();
+    if ( !condition.isNull())
+    {
+	QDomElement first = condition.namedItem( "first" ).toElement();
+	if(!first.isNull())
         {
+	    m_firstCondition=new KSpreadConditional;
+	    if ( first.hasAttribute( "cond" ) )
+	    {
+		m_firstCondition->m_cond =(Conditional) first.attribute("cond").toInt( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(first.hasAttribute("val1"))
+	    {
+		m_firstCondition->val1 =first.attribute("val1").toDouble( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(first.hasAttribute("val2"))
+	    {
+		m_firstCondition->val2 =first.attribute("val2").toDouble( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(first.hasAttribute("color"))
+	    {
+		m_firstCondition->colorcond=QColor(first.attribute( "color"));
+	    }
+	    QDomElement font = first.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		m_firstCondition->fontcond=toFont(font) ;
+		
+	}
+
+	QDomElement second = condition.namedItem( "second" ).toElement();
+	if(!second.isNull())
+        {
+	    m_secondCondition=new KSpreadConditional;
+	    if ( second.hasAttribute( "cond" ) )
+	    {
+		m_secondCondition->m_cond =(Conditional) second.attribute("cond").toInt( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(second.hasAttribute("val1"))
+	    {
+		m_secondCondition->val1 =second.attribute("val1").toDouble( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(second.hasAttribute("val2"))
+	    {
+		m_secondCondition->val2 =second.attribute("val2").toDouble( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(second.hasAttribute("color"))
+	    {
+		m_secondCondition->colorcond=QColor(second.attribute( "color"));
+	    }
+	    QDomElement font = second.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		m_secondCondition->fontcond=toFont(font) ;
+		
+	}
+  	 	
+	QDomElement third = condition.namedItem( "third" ).toElement();
+	if(!third.isNull())
+        {
+	    m_thirdCondition=new KSpreadConditional;
+	    if ( third.hasAttribute( "cond" ) )
+	    {
+		m_thirdCondition->m_cond =(Conditional) third.attribute("cond").toInt( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(third.hasAttribute("val1"))
+	    {
+		m_thirdCondition->val1 =third.attribute("val1").toDouble( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(third.hasAttribute("val2"))
+	    {
+		m_thirdCondition->val2 =third.attribute("val2").toDouble( &ok );
+		if ( !ok ) return false;
+	    }
+	    if(third.hasAttribute("color"))
+	    {
+		m_thirdCondition->colorcond=QColor(third.attribute( "color"));
+	    }
+	    QDomElement font = third.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		m_thirdCondition->fontcond=toFont(font) ;
+	}
+
+    }
+    QDomCDATASection comment = cell.namedItem( "comment" ).firstChild().toCDATASection();
+    if ( !comment.isNull() && ( pm == ::Normal || pm == ::Comment || pm == ::NoBorder ))
+    {
         QString t = comment.data();
 	//t = t.stripWhiteSpace();
         setComment(t);
-        }
+    }
 
     QDomElement text = cell.namedItem( "text" ).toElement();
     if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder ) )
