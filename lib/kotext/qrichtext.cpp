@@ -4219,7 +4219,8 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
 	       f->font().weight() != of->font().weight() ||
 	       f->font().italic() != of->font().italic() ||
 	       f->vAlign() != of->vAlign() ||
-               f->relativeTextSize() != of->relativeTextSize()) ) {
+               f->relativeTextSize() != of->relativeTextSize() ||
+               f->offsetFromBaseLine() != of->offsetFromBaseLine() )) {
 	    invalidate( 0 );
 	}
 	if ( flags == -1 || flags == KoTextFormat::Format || !fc ) {
