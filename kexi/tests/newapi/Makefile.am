@@ -7,7 +7,7 @@ SUBDIRS = .
 METASOURCES = AUTO
 
 kexidbtest_SOURCES = main.cpp
-kexidbtest_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_srcdir)/kexi/kexidb/libkexidb.la $(top_srcdir)/kexi/tableview/libkexidatatable.la $(all_libraries)
+kexidbtest_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_srcdir)/kexi/kexidb/libkexidb.la $(top_srcdir)/kexi/widget/libkexiextendedwidgets.la $(all_libraries)
 kexidbtest_LDFLAGS = $(all_libraries) $(KDE_RPATH) --no-undefined
 
 kexidbmysqlcursor_SOURCES = mysqlcursor.cpp
