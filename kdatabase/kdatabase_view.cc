@@ -22,6 +22,7 @@
 #include "kdatabase_part.h"
 #include "kdbdocbrowser.h"
 
+#include <qlayout.h>
 #include <qpainter.h>
 #include <qiconset.h>
 #include <kaction.h>
@@ -44,12 +45,15 @@ KDatabaseView::KDatabaseView( KDatabasePart* part, QWidget* parent, const char* 
     m_actionToggleDocBrowser->setChecked(true);
     
     
-    m_docBrowser = new KDBDocBrowser(this,name);
+    m_docBrowser = new KDBDocBrowser(this, this, name);
     connect(m_docBrowser, SIGNAL(hideing()), this, SLOT(toggleDocBrowser()));
     m_docBrowser->initStruct(part->getKDBFile());
     m_docBrowser->show();
     m_docBrowserVisible = true;
 
+	m_gridLayout = new QGridLayout(this);
+
+	
     // Note: Prefer KStdAction::* to any custom action if possible.
     //m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
     //                   actionCollection(), "cut");
@@ -106,4 +110,22 @@ void KDatabaseView::toggleDocBrowser()
 	m_actionToggleDocBrowser->setChecked(true);
     }
 }
+
+void KDatabaseView::openView(QWidget* w)
+{
+	if(m_docVisible)
+	{
+		m_currentWidget->hide();
+		delete m_currentWidget;
+	}
+	m_gridLayout->addWidget(w, 0, 0);
+	w->show();
+	m_currentWidget = w;
+
+	m_docVisible = true;
+	
+	
+
+}
+
 #include "kdatabase_view.moc"

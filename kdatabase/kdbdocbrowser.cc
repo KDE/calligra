@@ -20,8 +20,9 @@
 #include <klistview.h>
 #include <qlayout.h>
 #include "ktabctl.h"
+#include "kdatabase_view.h"
 
-KDBDocBrowser::KDBDocBrowser(QWidget *parentWidget, const char * widgetName, bool isModal):KDialog(parentWidget,widgetName,isModal){
+KDBDocBrowser::KDBDocBrowser(KDatabaseView *parent, QWidget *parentWidget, const char * widgetName, bool isModal):KDialog(parentWidget,widgetName,isModal){
    tabWidget = new KTabCtl(this, "tabWidget");
    QGridLayout *g = new QGridLayout(this);
    g->addWidget(tabWidget, 0, 0);
@@ -51,7 +52,9 @@ KDBDocBrowser::KDBDocBrowser(QWidget *parentWidget, const char * widgetName, boo
 	connect(KListView2,SIGNAL(clicked(QListViewItem *)),this,SLOT(slotViewItemClicked(QListViewItem *)));
 	connect(KListView3,SIGNAL(clicked(QListViewItem *)),this,SLOT(slotFormItemClicked(QListViewItem *)));
 
-
+	m_parentWidget = parentWidget;
+	m_parent = parent;
+	
    resize(525,360);
    }
 
@@ -62,8 +65,9 @@ void KDBDocBrowser::slotTblItemClicked(QListViewItem *itemClicked){
 
      if(!(itemClicked == NULL)) {
         kdDebug() << "KDatabase:MainDlg tbl Item Clicked - " << itemClicked->text(0) << endl;
-        m_tblDesigner=new KDBTableDesigner(m_struct);
-        m_tblDesigner->populateTblDesigner(itemClicked->text(0));
+        m_tblDesigner=new KDBTableDesigner(m_parentWidget, m_struct);
+		m_parent->openView(m_tblDesigner);
+		//m_tblDesigner->populateTblDesigner(itemClicked->text(0));
         m_tblDesigner->show();
         }
 }

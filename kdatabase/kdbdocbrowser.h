@@ -30,11 +30,13 @@
   *@author root
   */
 
+class KDatabaseView;
+
 class KDBDocBrowser : public KDialog  {
        Q_OBJECT
 
 public:
-	KDBDocBrowser(QWidget *parentWidget=0, const char * widgetName=0, bool isModal=false);
+	KDBDocBrowser(KDatabaseView *parent=0, QWidget *parentWidget=0, const char * widgetName=0, bool isModal=false);
 	~KDBDocBrowser(void);
    bool initStruct(QDomDocument *kdbFile);
 public slots:
@@ -52,13 +54,16 @@ private:
     QBuildDlg *myQueryBuilder;
     KDBStruct *m_struct;
 
-    KTabCtl *tabWidget;
-    QDomDocument* myKDBFile;
-    QListView* KListView1;
-    QListView* KListView2;
-    QListView* KListView3;
-    QListView* KListView4;
+    KTabCtl			*tabWidget;
+    QDomDocument*	myKDBFile;
+    QListView*		KListView1;
+    QListView*		KListView2;
+    QListView*		KListView3;
+    QListView*		KListView4;
+	QWidget*		m_parentWidget;
+	KDatabaseView*	m_parent;
 
+	
 protected:
     void closeEvent(QCloseEvent *ev);
 

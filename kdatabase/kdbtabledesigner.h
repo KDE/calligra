@@ -30,11 +30,11 @@
 class QTable;
 class QStringList;
 
-class KDBTableDesigner : public KDialog  {
+class KDBTableDesigner : public QWidget  {
          Q_OBJECT
 public: 
 		
-	KDBTableDesigner(KDBStruct *KDBStruct);
+	KDBTableDesigner(QWidget *parent=0, KDBStruct *KDBStruct=0);
 	~KDBTableDesigner();
 	bool populateTblDesigner(QString tblName);
 	void addRow(bool primary_key, QString name, DataType type, int size, QString default_v, bool allow_null);

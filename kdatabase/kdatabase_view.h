@@ -27,6 +27,7 @@
 class KAction;
 class KToggleAction;
 class QPaintEvent;
+class QGridLayout;
 
 class KDatabasePart;
 
@@ -34,25 +35,30 @@ class KDatabaseView : public KoView
 {
     Q_OBJECT
 public:
-    KDatabaseView( KDatabasePart* part, QWidget* parent = 0, const char* name = 0 );
+	KDatabaseView( KDatabasePart* part, QWidget* parent = 0, const char* name = 0 );
+
+	void openView(QWidget *w);
 
 protected slots:
-    void cut();
-    void copy();
-    void paste();
-    void toggleDocBrowser();
+	void cut();
+	void copy();
+	void paste();
+	void toggleDocBrowser();
 
 protected:
-    void paintEvent( QPaintEvent* );
+	void			paintEvent( QPaintEvent* );
+	virtual void	updateReadWrite( bool readwrite );
 
-    virtual void updateReadWrite( bool readwrite );
-
+	QWidget			*m_currentWidget;
+	
 private:
-    //KAction* m_cut;
-    KToggleAction *m_actionToggleDocBrowser;
-    KDBDocBrowser* m_docBrowser;
-    
-    bool m_docBrowserVisible;
+	//KAction* m_cut;
+	KToggleAction*	m_actionToggleDocBrowser;
+	KDBDocBrowser*	m_docBrowser;
+	bool			m_docBrowserVisible;
+	bool			m_docVisible;
+	QGridLayout*	m_gridLayout;
+
 };
 
 #endif

@@ -21,7 +21,7 @@
 #include <kdebug.h>
 #include <kdatabase_struct.h>
 
-KDBTableDesigner::KDBTableDesigner(KDBStruct *KDBStruct){
+KDBTableDesigner::KDBTableDesigner(QWidget *parent, KDBStruct *KDBStruct) : QWidget(parent, 0) {
     myKDBStruct = KDBStruct;
 	QGridLayout *g = new QGridLayout(this);
 
@@ -52,7 +52,7 @@ KDBTableDesigner::KDBTableDesigner(KDBStruct *KDBStruct){
 	m_rows = 0;
 
 	
-//	this->addRow(true, "id", t_int, 12, "");
+	this->addRow(true, "id", t_int, 12, "", true);
 //	this->addRow(false, "name", t_char, 10, "nobody");
 }
 
