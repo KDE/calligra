@@ -222,7 +222,7 @@
 		type	0=normal, 1=bullet-list, 2=enum-list
 		depth	list depth
 -->
-<!ELEMENT P  (TEXT|COUNTER|INDENTS)*>
+<!ELEMENT P  (TEXT|COUNTER|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER)*>
 <!ATTLIST P
 		align	NMTOKEN #REQUIRED
 		type	NMTOKEN #REQUIRED
@@ -290,6 +290,68 @@
     left CDATA #REQUIRED
     right CDATA #REQUIRED>
 
+
+<!-- 
+        The space to be added between two consecutive lines in a given paragraph.
+        value in points. Can also be "oneandhalf" for 1.5 lines and "double".
+-->
+<!ELEMENT LINESPACING
+    EMPTY>
+<!ATTLIST LINESPACING
+    value CDATA #REQUIRED>
+
+<!--
+        The borders can be used on a frame and on a paragraph.
+        the border has a color, displayed in the RGB value. 
+        The width is in points.
+        Style   0 = solid
+                1 = dashes
+                2 = dots
+                3 = dash - dot patterns
+                4 = dash dot dot patterns
+-->
+<!ELEMENT LEFTBORDER
+    EMPTY>
+<!ATTLIST LEFTBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT RIGHTBORDER
+    EMPTY>
+<!ATTLIST RIGHTBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT TOPBORDER
+    EMPTY>
+<!ATTLIST TOPBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+<!ELEMENT BOTTOMBORDER
+    EMPTY>
+<!ATTLIST BOTTOMBORDER
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED
+    style CDATA #REQUIRED
+    width CDATA #REQUIRED>
+
+<!-- OFFSETS
+        before: space before the paragraph, or "head offset" (KWord-0.8), aka "top margin" (KWord-1.0) (pt)
+        after: space after the paragraph, or "foot offset" (KWord-0.8), aka "bottom margin" (KWord-1.0) (pt)
+-->
+<!ELEMENT OFFSETS
+    EMPTY>
+<!ATTLIST OFFSETS
+    before CDATA #IMPLIED
+    after CDATA #IMPLIED>
 
 <!-- VERTALIGN
             Super/sub script.
