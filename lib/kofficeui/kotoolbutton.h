@@ -60,13 +60,15 @@ protected:
     virtual void focusInEvent( QFocusEvent* e );
 
 private:
-    void finalizeInsertion();
+    void finalizeInsertion( const Position& pos );
     bool insertColor( const QColor& color, bool checking );
     bool insertColor( const QColor& color, const QString& toolTip, bool checking );
     bool isAvailable( const QColor& color );
 
     Position mapToPosition( const QPoint& point ) const;
     QRect mapFromPosition( const Position& position ) const;
+    Position validPosition( const Position& position );
+
     int lines() const;
     void paintArea( const QRect& rect, int& startRow, int& endRow, int& startCol, int& endCol ) const;
     void updateFocusPosition( const Position& newPosition );
