@@ -732,7 +732,7 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
   {
     list1 << "&[TAB]" << "&[DATE]" << "&[PAGE]"
           << "&[PAGES]";
-    list2 << table->tableName() << "<date>" << "<page>"
+    list2 << "<sheet>" << "<date>" << "<page>"
           << "<pages>";
     count = list1.count();
   }
