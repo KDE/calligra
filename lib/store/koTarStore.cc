@@ -134,9 +134,13 @@ bool KoTarStore::enterAbsoluteDirectory( const QString& path )
         m_currentDir = 0;
         return true;
     }
-    m_currentDir = dynamic_cast<const KArchiveDirectory*>( m_pTar->directory()->entry( path ) );
-    Q_ASSERT( m_currentDir );
-    return m_currentDir != 0;
+    if ( m_mode == Read ) {
+        m_currentDir = dynamic_cast<const KArchiveDirectory*>( m_pTar->directory()->entry( path ) );
+        Q_ASSERT( m_currentDir );
+        return m_currentDir != 0;
+    }
+    else
+        return true;
 }
 
 bool KoTarStore::fileExists( const QString& absPath )
