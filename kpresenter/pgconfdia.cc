@@ -82,6 +82,7 @@ void PgConfDia::setupPageGeneral()
     m_manualButton = new QRadioButton( i18n("&Manual transition to next step or slide"), switchGroup );
     m_manualButton->setChecked( m_doc->spManualSwitch() );
     m_autoButton = new QRadioButton( i18n("&Automatic transition to next step or slide"), switchGroup );
+    m_autoButton->setChecked( !m_doc->spManualSwitch() );
 
     QLabel *speedLabel = new QLabel( i18n("Speed:"), generalPage );
     QWhatsThis::add( speedLabel, i18n("<p>This slider allows you to configure the speed "
