@@ -6,6 +6,7 @@ Fixes:
 - Fixed show the duration for the correct page if not all slides are shown
 - Fixed crash in infinite loop presentation mode when first slide is not shown
 - Fixed redrawing of lines in drawing mode in case of a repaint event
+- Fixed aligning of rotated lines and line with pen.width() > 1
 
 Changes:
 - If a page is shown more than once during a presentation add the time for 
