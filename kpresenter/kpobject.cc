@@ -141,10 +141,11 @@ QCursor KPObject::getCursor(QPoint _point,int _diffx,int _diffy,ModifyType &_mod
       _modType = MT_RESIZE_RT;
       return sizeHorCursor;
     }
+
   if (px >= ox + ow - 6 && py >= oy + oh - 6 && px <= ox + ow && py <= oy + oh)
     {
       _modType = MT_RESIZE_RD;
-     return sizeFDiagCursor;
+      return sizeFDiagCursor;
     }
 
   _modType = MT_MOVE;
