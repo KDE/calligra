@@ -633,33 +633,35 @@ VSubpath::saveSvgPath( QString &d ) const
 
 	while( segment )
 	{
-		if( segment->degree() <= 2 )
+		if( segment->state() == VSegment::normal )
 		{
-			// Line.
-			if( segment->prev() )
+			if( segment->degree() <= 2 )
 			{
-				d += QString( "L%1 %2" ).
-						arg( segment->knot().x() ).arg( segment->knot().y() );
+				// Line.
+				if( segment->prev() )
+				{
+					d += QString( "L%1 %2" ).
+							arg( segment->knot().x() ).arg( segment->knot().y() );
+				}
+				// Moveto.
+				else
+				{
+					d += QString( "M%1 %2" ).
+							arg( segment->knot().x() ).arg( segment->knot().y() );
+				}
 			}
-			// Moveto.
+			// Bezier ( degree >= 3 ).
 			else
 			{
-				d += QString( "M%1 %2" ).
-						arg( segment->knot().x() ).arg( segment->knot().y() );
+				// We currently treat all beziers as cubic beziers.
+				d += QString( "C%1 %2 %3 %4 %5 %6" ).
+							arg( segment->point( segment->degree() - 3 ).x() ).
+							arg( segment->point( segment->degree() - 3 ).y() ).
+							arg( segment->point( segment->degree() - 2 ).x() ).
+							arg( segment->point( segment->degree() - 2 ).y() ).
+							arg( segment->knot().x() ).
+							arg( segment->knot().y() );
 			}
-
-		}
-		// Bezier ( degree >= 3 ).
-		else
-		{
-			// We currently treat all beziers as cubic beziers.
-			d += QString( "C%1 %2 %3 %4 %5 %6" ).
-						arg( segment->point( segment->degree() - 3 ).x() ).
-						arg( segment->point( segment->degree() - 3 ).y() ).
-						arg( segment->point( segment->degree() - 2 ).x() ).
-						arg( segment->point( segment->degree() - 2 ).y() ).
-						arg( segment->knot().x() ).
-						arg( segment->knot().y() );
 		}
 
 		segment = segment->m_next;
