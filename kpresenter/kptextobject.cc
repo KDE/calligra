@@ -1344,8 +1344,9 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
         return;
     }
 
-    QPoint iPoint;
-    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( e->pos() - kpTextObject()->getOrig() );
+    QPoint iPoint=e->pos() - kpTextObject()->getOrig();
+    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_page->diffx(),iPoint.y()+m_page->diffy()) );
+
     textObject()->emitHideCursor();
     placeCursor( iPoint );
     textObject()->emitShowCursor();
@@ -1363,8 +1364,9 @@ void KPTextView::dropEvent( QDropEvent * e )
     {
         e->acceptAction();
         QTextCursor dropCursor( textDocument() );
-        QPoint dropPoint;
-        dropPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( e->pos() - kpTextObject()->getOrig() );
+        QPoint dropPoint=e->pos() - kpTextObject()->getOrig();
+        dropPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_page->diffx(),dropPoint.y()+m_page->diffy()) );
+
         // ####### Factorize code in libkotext!
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );

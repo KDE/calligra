@@ -333,8 +333,8 @@ void Page::mousePressEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( e->pos(), diffx(), diffy() ))
         {
-            QPoint pos;
-            pos=view->zoomHandler()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            QPoint pos=e->pos() - txtObj->getOrig();
+            pos=view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x()+ diffx(),pos.y()+diffy()));
             mousePressed=true;
             if(e->button() == RightButton)
             {
@@ -838,8 +838,9 @@ void Page::mouseMoveEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( e->pos(), diffx(), diffy() )&&mousePressed)
         {
-            QPoint pos;
-            pos=view->zoomHandler()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            QPoint pos=e->pos() - txtObj->getOrig();
+            pos=view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x()+ diffx(),pos.y()+diffy()));
+
             m_currentTextObjectView->mouseMoveEvent( e, pos);
             return;
         }
@@ -1047,8 +1048,9 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( e->pos(), diffx(), diffy() ))
         {
-            QPoint pos;
-            pos=view->zoomHandler()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
+            QPoint pos=e->pos() - txtObj->getOrig();
+            pos=view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x()+ diffx(),pos.y()+diffy()));
+
             m_currentTextObjectView->mouseDoubleClickEvent( e, pos);
             return;
         }
