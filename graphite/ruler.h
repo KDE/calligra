@@ -36,7 +36,7 @@ public:
           const Graphite::PageLayout &layout, const double &zoomedRes);
     ~Ruler();
 
-    void setUnit(const GraphiteGlobal::Unit &unit);
+    void setUnit(const Graphite::Unit &unit);
     void setPageLayout(const Graphite::PageLayout &layout) { m_layout=layout; repaint(false); }
 
     void showMousePos(bool showMPos);
@@ -51,8 +51,8 @@ public:
     void setZoomedRes(const double &zoomedRes);
 
 signals:
-    void pageLayoutChanged(const Graphite::PageLayout &);
-    void unitChanged(GraphiteGlobal::Unit);
+    void pageBordersChanged(const Graphite::PageBorders &);
+    void unitChanged(Graphite::Unit);
     void openPageLayoutDia();
 
 protected:
@@ -64,9 +64,9 @@ protected:
     void drawContents(QPainter *p) { m_orientation==Qt::Horizontal ? drawHorizontal(p) : drawVertical(p); }
 
 private slots:
-    void rbPT() { setUnit(GraphiteGlobal::Pt); emit unitChanged(GraphiteGlobal::Pt); }
-    void rbMM() { setUnit(GraphiteGlobal::MM); emit unitChanged(GraphiteGlobal::MM); }
-    void rbINCH() { setUnit(GraphiteGlobal::Inch); emit unitChanged(GraphiteGlobal::Inch); }
+    void rbPT() { setUnit(Graphite::Pt); emit unitChanged(Graphite::Pt); }
+    void rbMM() { setUnit(Graphite::MM); emit unitChanged(Graphite::MM); }
+    void rbINCH() { setUnit(Graphite::Inch); emit unitChanged(Graphite::Inch); }
 
 private:
     Ruler(const Ruler &rhs);
@@ -81,7 +81,7 @@ private:
     Graphite::PageLayout m_layout;
     double m_zoomedRes;
     double m_1_zoomedRes; // 1/m_zoomedRes
-    GraphiteGlobal::Unit m_unit;
+    Graphite::Unit m_unit;
     int m_dx, m_dy;
     int m_MX, m_MY;
     int m_oldMX, m_oldMY;

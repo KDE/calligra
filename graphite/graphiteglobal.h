@@ -23,7 +23,6 @@
 #include <qobject.h>
 #include <qprinter.h>
 #include <kimageeffect.h>
-#include <koGlobal.h>
 #include <float.h>
 
 class QColor;
@@ -63,6 +62,21 @@ double inch2pt(const double &inch);
 double pt2mm(const double &pt);
 double pt2inch(const double &pt);
 
+// I didn't need that up to now, but as I already coded it (and choose a different approach
+// afterwards)... maybe I need it later
+// code to use in the method:
+// Look up the correct conversion function using the LUT in
+// graphiteglobal.h -- Check against 0!!!
+//Graphite::CONVERT convert=Graphite::conversionTable[static_cast<int>(m_unit)][static_cast<int>(unit)];
+//if(convert==0)
+//    return;
+// convert(123.4);
+// LUT:
+//typedef double (*const CONVERT) (const double &);
+//const CONVERT conversionTable[3][3] = { { 0, &mm2pt, &mm2inch },
+//                                  { &pt2mm, 0, &pt2inch },
+//                                  { &inch2mm, &inch2pt, 0 } };
+
 const int double2Int(const double &value);
 
 const double rad2deg(const double &rad);
@@ -82,6 +96,8 @@ void scalePoint(double &x, double &y, const double &xfactor, const double &yfact
 void scalePoint(QPoint &p, const double &xfactor, const double &yfactor, const QPoint &center);
 void scalePoint(FxPoint &p, const double &xfactor, const double &yfactor, const FxPoint &center);
 
+enum Unit { MM, Pt, Inch };
+
 // paper size (portrait, mm)
 // This is the Qt-enum. Use that one as index for the LUT
 //    enum PageSize    { A4, B5, Letter, Legal, Executive,
@@ -100,7 +116,7 @@ const short pageHeight[]={ 297, 257, 279, 356, 254, 1189, 841, 594,
 
 // page borders in mm
 struct PageBorders {
-    // TODO: Initialize w/ real values
+    // ### Initialize w/ real values
     PageBorders() : left(10.0), top(20.0), right(30.0), bottom(40.0) {}
     PageBorders &operator=(const PageBorders &rhs);
     double left;
@@ -110,14 +126,16 @@ struct PageBorders {
 };
 
 struct PageLayout {
-    // TODO: read the defaults from a KConfig object
-    PageLayout() : orientation(PG_PORTRAIT), layout(Norm),
+    // ### read the defaults from a KConfig object
+    PageLayout() : orientation(QPrinter::Portrait), layout(Norm),
         size(QPrinter::A4), customWidth(-1.0), customHeight(-1.0) {}
     PageLayout &operator=(const PageLayout &rhs);
+    void setWidth(const double &width);
     double width() const;
+    void setHeight(const double &height);
     double height() const;
 
-    KoOrientation orientation;
+    QPrinter::Orientation orientation;
     enum { Norm, Custom } layout;
     QPrinter::PageSize size;
     double customWidth;
@@ -131,13 +149,9 @@ struct PageLayout {
 // This class is used to access some configurable values.
 // We also use this class to save the rc file.
 // Note: Follows the singleton pattern
-class GraphiteGlobal : public QObject {
-
-    Q_OBJECT
+class GraphiteGlobal {
 
 public:
-    enum Unit { MM, Pt, Inch };
-
     static GraphiteGlobal *self();
 
     // size of the "fuzzy" zone for selections
@@ -161,10 +175,7 @@ public:
     const int &thirdHandleTrigger() const { return m_thirdHandleTrigger; }
     void setThirdHandleTrigger(const int &thirdHandleTrigger) { m_thirdHandleTrigger=thirdHandleTrigger; }
 
-    const Unit &unit() const { return m_unit; }
-    QString unitString() const { return m_unitString; }
-
-    // current zoom factor (for the "active" view), 1.0 == 100%
+    // current zoom factor (for the "active" (read: being painted on currently) view), 1.0 == 100%
     const double &zoom() const { return m_zoom; }
     void setZoom(const double &zoom);
 
@@ -190,14 +201,8 @@ public:
     // maybe I'll add a init(...) method which takes a KConfig file/pointer
     // and initializes all the "global" vars.
 
-public slots:
-    void setUnit(GraphiteGlobal::Unit);
-
-signals:
-    void unitChanged(GraphiteGlobal::Unit);
-
 private:
-    friend class gcc_you_freak;  // to avoid an ugly warning
+    //friend class gcc_you_freak;  // to avoid an ugly warning
     GraphiteGlobal();
     // don't try to copy or assing this object
     GraphiteGlobal(const GraphiteGlobal &rhs);
@@ -210,8 +215,6 @@ private:
     int m_thirdHandleTrigger;
     int m_handleOffset;
     int m_rotHandleOffset;
-    Unit m_unit;
-    QString m_unitString;
     double m_zoom;
     double m_resolution;
     double m_zoomedResolution;
@@ -237,12 +240,6 @@ public:
 
     const int &pxValue() const { return m_pixel; }
     void setPxValue(const int &pixel);
-
-    // value in the current unit (convenience method)
-    // Note: value() is always in MM (->missing here ;)
-    const double valueUnit() const;
-    const double valueInch() const;
-    const double valuePt() const;
 
     // When the zoom factor and/or the resoltuion changes
     // we have to recalculate the pixel value

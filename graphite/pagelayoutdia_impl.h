@@ -41,17 +41,19 @@ private:
 };
 
 
+class GraphitePart;
+
 class PageLayoutDiaImpl : public PageLayoutDia {
 
     Q_OBJECT
 
 public:
-    PageLayoutDiaImpl(Graphite::PageLayout &layout, QWidget *parent=0,
-                      const char *name=0, bool modal=false, WFlags fl=0);
+    PageLayoutDiaImpl(Graphite::PageLayout &layout, const GraphitePart * const doc,
+                      QWidget *parent=0, const char *name=0, bool modal=false, WFlags fl=0);
     ~PageLayoutDiaImpl() {}
 
-    static void pageLayoutDia(Graphite::PageLayout &layout, QWidget *parent=0);
-
+    static void pageLayoutDia(Graphite::PageLayout &layout, GraphitePart * const doc,
+                              QWidget *parent=0);
 signals:
     void updatePreview();
 
@@ -69,6 +71,8 @@ private slots:
     void restoreDefaults();
 
 private:
+    void correctBorders();
+
     Graphite::PageLayout &m_layout;
 };
 

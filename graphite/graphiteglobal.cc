@@ -192,32 +192,46 @@ PageLayout &PageLayout::operator=(const PageLayout &rhs) {
     return *this;
 }
 
+void PageLayout::setWidth(const double &width) {
+    if(orientation==QPrinter::Portrait)
+        customWidth=width;
+    else
+        customHeight=width;
+}
+
 double PageLayout::width() const {
 
     if(layout==Graphite::PageLayout::Norm) {
-        if(orientation==PG_PORTRAIT)
+        if(orientation==QPrinter::Portrait)
             return Graphite::pageWidth[size];
         else
             return Graphite::pageHeight[size];
     }
     else {
-        if(orientation==PG_PORTRAIT)
+        if(orientation==QPrinter::Portrait)
             return customWidth;
         else
             return customHeight;
     }
 }
 
+void PageLayout::setHeight(const double &height) {
+    if(orientation==QPrinter::Portrait)
+        customHeight=height;
+    else
+        customWidth=height;
+}
+
 double PageLayout::height() const {
 
     if(layout==Graphite::PageLayout::Norm) {
-        if(orientation==PG_PORTRAIT)
+        if(orientation==QPrinter::Portrait)
             return Graphite::pageHeight[size];
         else
             return Graphite::pageWidth[size];
     }
     else {
-        if(orientation==PG_PORTRAIT)
+        if(orientation==QPrinter::Portrait)
             return customHeight;
         else
             return customWidth;
@@ -250,20 +264,6 @@ void GraphiteGlobal::setHandleSize(const int &handleSize) {
 void GraphiteGlobal::setRotHandleSize(const int &rotHandleSize) {
     m_rotHandleSize=rotHandleSize;
     m_rotHandleOffset=Graphite::double2Int(static_cast<double>(rotHandleSize)*0.5);
-}
-
-void GraphiteGlobal::setUnit(GraphiteGlobal::Unit unit) {
-
-    if(m_unit==unit)
-        return;
-    m_unit=unit;
-    if(unit==MM)
-        m_unitString=QString::fromLatin1("mm");
-    else if(unit==Inch)
-        m_unitString=QString::fromLatin1("inch");
-    else
-        m_unitString=QString::fromLatin1("pt");
-    emit unitChanged(unit);
 }
 
 void GraphiteGlobal::setZoom(const double &zoom) {
@@ -386,11 +386,10 @@ FxRect GraphiteGlobal::toFxRect(const QDomElement &element) const {
     return rect;
 }
 
-GraphiteGlobal::GraphiteGlobal() : QObject(), m_fuzzyBorder(3), m_handleSize(4),
+GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
                                    m_rotHandleSize(4), m_thirdHandleTrigger(20),
                                    m_handleOffset(2), m_rotHandleOffset(2),
-                                   m_unit(MM), m_zoom(1.0) {
-    m_unitString=QString::fromLatin1("mm");
+                                   m_zoom(1.0) {
     m_resolution=1.0/Graphite::inch2mm(1.0/static_cast<double>(QPaintDevice::x11AppDpiY()));  // we use *only* Y, because Qt also does that :)
     m_zoomedResolution=m_zoom*m_resolution;
 }
@@ -411,24 +410,6 @@ void FxValue::setValue(const double &value) {
 void FxValue::setPxValue(const int &pixel) {
     m_value=static_cast<double>(pixel)/GraphiteGlobal::self()->zoomedResolution();
     m_pixel=pixel;
-}
-
-const double FxValue::valueUnit() const {
-
-    if(GraphiteGlobal::self()->unit()==GraphiteGlobal::MM)
-        return value();
-    else if(GraphiteGlobal::self()->unit()==GraphiteGlobal::Inch)
-        return valueInch();
-    else
-        return valuePt();
-}
-
-const double FxValue::valueInch() const {
-    return Graphite::mm2inch(m_value);
-}
-
-const double FxValue::valuePt() const {
-    return Graphite::mm2pt(m_value);
 }
 
 void FxValue::recalculate() const {
@@ -711,5 +692,3 @@ bool operator!=(const FxRect &lhs, const FxRect &rhs) {
              lhs.bottomRight().pxX()!=rhs.bottomRight().pxX() ||
              lhs.bottomRight().pxY()!=rhs.bottomRight().pxY() );
 }
-
-#include <graphiteglobal.moc>

@@ -28,7 +28,7 @@ Ruler::Ruler(QWidget *parent, QWidget *canvas, Qt::Orientation orientation,
              const Graphite::PageLayout &layout, const double &zoomedRes) :
     QFrame(parent, "ruler", Qt::WResizeNoErase | Qt::WRepaintNoErase),
     m_canvas(canvas), m_orientation(orientation), m_layout(layout),
-    m_zoomedRes(zoomedRes), m_unit(GraphiteGlobal::MM), m_dx(0),
+    m_zoomedRes(zoomedRes), m_unit(Graphite::MM), m_dx(0),
     m_dy(0), m_MX(0), m_MY(0), m_oldMX(0), m_oldMY(0), m_action(A_NONE),
     m_mousePressed(false), m_showMPos(false), m_haveToDelete(false),
     m_movingFirstBorder(false), m_movingSecondBorder(false), m_editable(true) {
@@ -52,7 +52,7 @@ Ruler::~Ruler() {
     delete m_menu;
 }
 
-void Ruler::setUnit(const GraphiteGlobal::Unit &unit) {
+void Ruler::setUnit(const Graphite::Unit &unit) {
 
     if(m_unit==unit)
         return;
@@ -62,11 +62,11 @@ void Ruler::setUnit(const GraphiteGlobal::Unit &unit) {
     m_menu->setItemChecked(m_PTIndex, false);
     m_menu->setItemChecked(m_INCHIndex, false);
 
-    if(unit==GraphiteGlobal::MM)
+    if(unit==Graphite::MM)
         m_menu->setItemChecked(m_MMIndex, true);
-    else if(unit==GraphiteGlobal::Pt)
+    else if(unit==Graphite::Pt)
         m_menu->setItemChecked(m_PTIndex, true);
-    else if(unit==GraphiteGlobal::Inch)
+    else if(unit==Graphite::Inch)
         m_menu->setItemChecked(m_INCHIndex, true);
     repaint(false);
 }
@@ -142,9 +142,9 @@ void Ruler::drawHorizontal(QPainter *p) {
     p->setFont(font);
 
     double dist;
-    if(m_unit==GraphiteGlobal::Inch)
+    if(m_unit==Graphite::Inch)
         dist=QPaintDevice::x11AppDpiY()*zoom;
-    else if(m_unit==GraphiteGlobal::Pt)
+    else if(m_unit==Graphite::Pt)
         dist=QPaintDevice::x11AppDpiY()*1.38888888888889*zoom;
     else
         dist=10.0*m_zoomedRes;
@@ -153,9 +153,9 @@ void Ruler::drawHorizontal(QPainter *p) {
     int j=0;
     for(double i=0.0; i<=pw; i+=dist) {
         str=QString::number(j++);
-        if(m_unit==GraphiteGlobal::MM && j!=1) // x10
+        if(m_unit==Graphite::MM && j!=1) // x10
             str+='0';
-        if(m_unit==GraphiteGlobal::Pt && j!=1) // x100
+        if(m_unit==Graphite::Pt && j!=1) // x100
             str+=QString::fromLatin1("00");
         p->drawText(Graphite::double2Int(i)-m_dx-Graphite::double2Int(fm.width(str)*0.5),
                     Graphite::double2Int((height()-fm.height())*0.5),
@@ -212,9 +212,9 @@ void Ruler::drawVertical(QPainter *p) {
     p->setFont(font);
 
     double dist;
-    if(m_unit==GraphiteGlobal::Inch)
+    if(m_unit==Graphite::Inch)
         dist=QPaintDevice::x11AppDpiY()*zoom;
-    else if(m_unit==GraphiteGlobal::Pt)
+    else if(m_unit==Graphite::Pt)
         dist=QPaintDevice::x11AppDpiY()*1.38888888888889*zoom;
     else
         dist=10.0*m_zoomedRes;
@@ -223,9 +223,9 @@ void Ruler::drawVertical(QPainter *p) {
     int j=0;
     for(double i=0.0; i<=ph; i+=dist) {
         str=QString::number(j++);
-        if(m_unit==GraphiteGlobal::MM && j!=1)  // x10
+        if(m_unit==Graphite::MM && j!=1)  // x10
             str+='0';
-        if(m_unit==GraphiteGlobal::Pt && j!=1)  // x100
+        if(m_unit==Graphite::Pt && j!=1)  // x100
             str+=QString::fromLatin1("00");
         p->drawText(Graphite::double2Int((width()-fm.width(str))*0.5),
                     Graphite::double2Int(i)-m_dy-Graphite::double2Int(fm.height()*0.5),
@@ -317,7 +317,7 @@ void Ruler::mouseReleaseEvent(QMouseEvent *) {
             p.end();
         }
         repaint(false);
-        emit pageLayoutChanged(m_layout);
+        emit pageBordersChanged(m_layout.borders);
     } else if(m_action==A_BR_TOP || m_action==A_BR_BOTTOM) {
         m_movingFirstBorder=false;
         m_movingSecondBorder=false;
@@ -329,7 +329,7 @@ void Ruler::mouseReleaseEvent(QMouseEvent *) {
             p.end();
         }
         repaint(false);
-        emit pageLayoutChanged(m_layout);
+        emit pageBordersChanged(m_layout.borders);
     }
 }
 

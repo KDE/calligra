@@ -54,13 +54,16 @@ public:
     void pageSize(double &width, double &height) const;
     void setPageSize(const QPrinter::PageSize &pageSize); // implies Norm
     void setPageSize(const double &width, const double &height); // implies Custom
-    KoOrientation pageOrientation() const { return m_pageLayout.orientation; }
-    void setPageOrientation(const KoOrientation &orientation);
+    QPrinter::Orientation pageOrientation() const { return m_pageLayout.orientation; }
+    void setPageOrientation(const QPrinter::Orientation &orientation);
     Graphite::PageBorders pageBorders() const { return m_pageLayout.borders; }
     void setPageBorders(const Graphite::PageBorders &pageBorders);
     const Graphite::PageLayout &pageLayout() const { return m_pageLayout; }
     // This method is used to shot the page layout dialog (e.g. on a dbl click on the ruler)
     void showPageLayoutDia(QWidget *parent);
+
+    // The unit is a document wide setting!
+    const Graphite::Unit &unit() const { return m_unit; }
 
     // The canvas forwards the Events to us. We test if any
     // object has been hit (z-order!) and handle the event.
@@ -74,6 +77,12 @@ public:
 
     void keyPressEvent(QKeyEvent *e, GraphiteView *view);
     void keyReleaseEvent(QKeyEvent *e, GraphiteView *view);
+
+public slots:
+    void setUnit(Graphite::Unit);
+
+signals:
+    void unitChanged(Graphite::Unit);
 
 protected slots:
     void edit_undo();
@@ -94,6 +103,7 @@ private:
     //       drawing the whole tree.
     // TODO: Do we need isLoading() like in KSpread?
     Graphite::PageLayout m_pageLayout;
+    Graphite::Unit m_unit;
 };
 
 #endif

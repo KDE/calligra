@@ -153,7 +153,7 @@ void GraphiteView::recalcRulers(int x, int y) {
     m_oldY=y;
 }
 
-void GraphiteView::rulerUnitChanged(GraphiteGlobal::Unit unit) {
+void GraphiteView::rulerUnitChanged(Graphite::Unit unit) {
     m_vert->setUnit(unit);
     m_horiz->setUnit(unit);
 }
@@ -185,7 +185,6 @@ void GraphiteView::setupActions() {
     m_zoomAction=new KSelectAction(i18n("&Zoom"), 0,
                                    actionCollection(), "view_zoom");
     connect(m_zoomAction, SIGNAL(activated(const QString &)), this, SLOT(slotViewZoom(const QString &)));
-    // don't change that order!
     QStringList lst;
     lst << i18n("50%");
     lst << i18n("100%");
@@ -204,24 +203,24 @@ void GraphiteView::setupRulers() {
     m_vert=new Ruler(this, m_canvas->viewport(), Qt::Vertical,
                      m_doc->pageLayout(), global->zoomedResolution());
     m_vert->showMousePos(true);
-    m_vert->setUnit(global->unit());
-    connect(m_vert, SIGNAL(unitChanged(GraphiteGlobal::Unit)), global,
-            SLOT(setUnit(GraphiteGlobal::Unit)));
+    m_vert->setUnit(m_doc->unit());
+    connect(m_vert, SIGNAL(unitChanged(Graphite::Unit)), m_doc,
+            SLOT(setUnit(Graphite::Unit)));
     connect(m_vert, SIGNAL(openPageLayoutDia()), this, SLOT(openPageLayoutDia()));
 
     m_horiz=new Ruler(this, m_canvas->viewport(), Qt::Horizontal,
                      m_doc->pageLayout(), global->zoomedResolution());
     m_horiz->showMousePos(true);
-    m_horiz->setUnit(global->unit());
-    connect(m_horiz, SIGNAL(unitChanged(GraphiteGlobal::Unit)), global,
-            SLOT(setUnit(GraphiteGlobal::Unit)));
+    m_horiz->setUnit(m_doc->unit());
+    connect(m_horiz, SIGNAL(unitChanged(Graphite::Unit)), m_doc,
+            SLOT(setUnit(Graphite::Unit)));
     connect(m_horiz, SIGNAL(openPageLayoutDia()), this, SLOT(openPageLayoutDia()));
 
     m_canvas->setRulers(m_horiz, m_vert);
     connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
             SLOT(recalcRulers(int, int)));
-    connect(global, SIGNAL(unitChanged(GraphiteGlobal::Unit)), this,
-            SLOT(rulerUnitChanged(GraphiteGlobal::Unit)));
+    connect(m_doc, SIGNAL(unitChanged(Graphite::Unit)), this,
+            SLOT(rulerUnitChanged(Graphite::Unit)));
 }
 
 #include <graphiteview.moc>

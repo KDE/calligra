@@ -47,7 +47,7 @@ protected slots:
     void slotViewZoom(const QString &text);
 
     void recalcRulers(int x, int y);
-    void rulerUnitChanged(GraphiteGlobal::Unit);
+    void rulerUnitChanged(Graphite::Unit);
     void openPageLayoutDia();
 
 protected:

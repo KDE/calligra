@@ -12,8 +12,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>492</width>
-            <height>460</height>
+            <width>475</width>
+            <height>480</height>
         </rect>
     </property>
     <property stdset="1">
@@ -638,12 +638,6 @@
                                                                         <property>
                                                                             <name>text</name>
                                                                             <string>DIN B4</string>
-                                                                        </property>
-                                                                    </item>
-                                                                    <item>
-                                                                        <property>
-                                                                            <name>text</name>
-                                                                            <string>DIN B5</string>
                                                                         </property>
                                                                     </item>
                                                                     <item>

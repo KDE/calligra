@@ -46,6 +46,7 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut");
 
     // Settings -> Configure... (nice dialog to configure e.g. units)
+    m_unit=Graphite::MM;  // ### load that from a rc file
 }
 
 GraphitePart::~GraphitePart() {
@@ -66,7 +67,7 @@ QPrinter::PageSize GraphitePart::pageSize() const {
 void GraphitePart::pageSize(double &width, double &height) const {
 
     if(m_pageLayout.layout==Graphite::PageLayout::Norm) {
-        if(m_pageLayout.orientation==PG_PORTRAIT) {
+        if(m_pageLayout.orientation==QPrinter::Portrait) {
             width=Graphite::pageWidth[m_pageLayout.size];
             height=Graphite::pageHeight[m_pageLayout.size];
         }
@@ -76,7 +77,7 @@ void GraphitePart::pageSize(double &width, double &height) const {
         }
     }
     else {
-        if(m_pageLayout.orientation==PG_PORTRAIT) {
+        if(m_pageLayout.orientation==QPrinter::Portrait) {
             width=m_pageLayout.customWidth;
             height=m_pageLayout.customHeight;
         }
@@ -95,7 +96,7 @@ void GraphitePart::setPageSize(const QPrinter::PageSize &pageSize) {
 
 void GraphitePart::setPageSize(const double &width, const double &height) {
 
-    if(m_pageLayout.orientation==PG_PORTRAIT) {
+    if(m_pageLayout.orientation==QPrinter::Portrait) {
         m_pageLayout.customWidth=width;
         m_pageLayout.customHeight=height;
     }
@@ -107,7 +108,7 @@ void GraphitePart::setPageSize(const double &width, const double &height) {
     // TODO -- update
 }
 
-void GraphitePart::setPageOrientation(const KoOrientation &orientation) {
+void GraphitePart::setPageOrientation(const QPrinter::Orientation &orientation) {
     m_pageLayout.orientation=orientation;
     // TODO -- update
 }
@@ -118,7 +119,7 @@ void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders) {
 }
 
 void GraphitePart::showPageLayoutDia(QWidget *parent) {
-    PageLayoutDiaImpl::pageLayoutDia(m_pageLayout, parent);
+    PageLayoutDiaImpl::pageLayoutDia(m_pageLayout, this, parent);
 }
 
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
@@ -169,6 +170,13 @@ KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
 void GraphitePart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool /*transparent*/) {
     kdDebug(37001) << "GraphitePart::painEvent()" << endl;
     // TODO: setGlobalZoom()
+}
+
+void GraphitePart::setUnit(Graphite::Unit unit) {
+    if(m_unit==unit)
+        return;
+    m_unit=unit;
+    emit unitChanged(unit);
 }
 
 void GraphitePart::edit_undo() {

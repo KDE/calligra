@@ -36,6 +36,8 @@ public:
     GCanvas(GraphiteView *view, GraphitePart *doc);
     virtual ~GCanvas() {}
 
+    // Note: This has to be called immideately after constructtion, we rely on that
+    // to avoid lots of if statements
     void setRulers(Ruler *hruler, Ruler *vruler);
     void showMousePos(bool show);
 
