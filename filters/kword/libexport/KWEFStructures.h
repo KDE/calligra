@@ -56,11 +56,12 @@
 class TextFormatting
 {
     public:
-        TextFormatting(): italic (false), underline (false), strikeout (false),
+        TextFormatting(): italic (false), underline (false), 
+            strikeout (false), underlineWord(false),
             weight (50), fontSize (0), verticalAlignment (0), missing (true) {}
 
         TextFormatting(const bool newMissing) : italic (false),
-            underline (false), strikeout (false),
+            underline (false), strikeout (false), underlineWord(false),
             weight (50), fontSize (0), verticalAlignment (0),
             missing (newMissing) {}
 
@@ -73,8 +74,9 @@ class TextFormatting
                          QColor  fg,
                          QColor  bg,
                          int     v) :
-            fontName (f), italic (i), underline (u),
-            strikeout (s), weight (w), fontSize (sz), fgColor (fg),
+            fontName (f), italic (i), underline (u), 
+            strikeout(s), underlineWord(false), 
+            weight (w), fontSize (sz), fgColor (fg),
             bgColor (bg), verticalAlignment (v), missing (false) {}
 
         QString fontName;
@@ -88,6 +90,9 @@ class TextFormatting
         bool    strikeout;
 
         QString    underlineValue; // "value" of the underline: single, double, bold-single...
+        QString    underlineStyle; // underline style: solid, dash, dot dash, ....
+        bool       underlineWord;  // true if word-by-word (i.e spaces aren't underlined)
+        QColor     underlineColor; // color of the line
         
         int     weight;
         int     fontSize;
