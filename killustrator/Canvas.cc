@@ -327,7 +327,6 @@ void Canvas::paintEvent (QPaintEvent* e)
 
    QPainter p;
    float s = scaleFactor ();
-
    int w = (int) (document->activePage()->getPaperWidth () * resolution * zoomFactor / 72.0);
    int h = (int) (document->activePage()->getPaperHeight () * resolution * zoomFactor / 72.0);
 

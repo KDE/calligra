@@ -103,7 +103,10 @@ void TabBar::scrollLast()
 
 void TabBar::setActiveTab()
 {
-  doc->setActivePage(activeTab - 1);
+    if(activeTab >= 1)
+        doc->setActivePage(activeTab - 1);
+    else
+        doc->setActivePage(0);//first page
   update();
 }
 
