@@ -21,6 +21,26 @@
 			<Action name="edit_purge_history"/>
 		</Menu>
 	</Menu>
+	<Menu name="view">
+		<text>&amp;View</text>
+		<Action name="view_newview"/>
+		<ActionList name="view_closeallviews"/>
+		<Separator/>
+		<ActionList name="view_split"/>
+		<Action name="view_zoom_in"/>
+		<Action name="view_zoom_out"/>
+		<Action name="view_zoom"/>
+        <Action name="view_mode"/>
+	<Separator/>
+	<Action name="view_color_manager"/>
+	<Action name="view_tool_options"/>
+	<Action name="view_context_help"/>
+	<Action name="view_stroke_docker"/>
+	<Action name="view_style_docker"/>
+	<Action name="view_transform_docker"/>
+	<Separator/>
+	<Action name="view_show_ruler"/>
+	</Menu>
 	<Menu name="object">
 		<text>&amp;Object</text>
 		<Menu name="object_order">
@@ -44,26 +64,6 @@
 	</Menu>
 	<Menu name="plugins">
 		<text>&amp;Plugins</text>
-	</Menu>
-	<Menu name="view">
-		<text>&amp;View</text>
-		<Action name="view_newview"/>
-		<ActionList name="view_closeallviews"/>
-		<Separator/>
-		<ActionList name="view_split"/>
-		<Action name="view_zoom_in"/>
-		<Action name="view_zoom_out"/>
-		<Action name="view_zoom"/>
-        <Action name="view_mode"/>
-	<Separator/>
-	<Action name="view_color_manager"/>
-	<Action name="view_tool_options"/>
-	<Action name="view_context_help"/>
-	<Action name="view_stroke_docker"/>
-	<Action name="view_style_docker"/>
-	<Action name="view_transform_docker"/>
-	<Separator/>
-	<Action name="view_show_ruler"/>
 	</Menu>
 	 <Menu name="settings"><text>&amp;Settings</text>
 		<Separator group="settings_show"/>
