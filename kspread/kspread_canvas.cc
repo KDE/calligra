@@ -856,8 +856,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
 	table->unselect();
 
-    if ( selection.right() != 0x7fff && selection.bottom() != 0x7fff &&
-	 m_bMousePressed && _ev->state() & ShiftButton )
+    // Extending an existing selection with the shift button ?
+    if ( selection.right() != 0x7fff && selection.bottom() != 0x7fff && _ev->state() & ShiftButton )
     {
 	if( col != old_column || row != old_row )
         {
@@ -888,29 +888,31 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	    selection.setRight( col );
 	    selection.setTop(old_row);
 	    selection.setBottom( row );
-	    table->setSelection( selection, this );
+	    table->setSelection( selection, QPoint( old_column, old_row ), this );
 	    //always put Marker in top and left
 	    //otherwise all functions don't work
-	    activeTable()->setMarker( QPoint( old_column, old_row ) );
+	    // table->setMarker( QPoint( old_column, old_row ) );
 
 	    return;
 	}
     }
 
-    activeTable()->setMarker( QPoint( col, row ) );
+    // activeTable()->setMarker( QPoint( col, row ) );
 
-    KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
+    KSpreadCell *cell = table->cellAt( col, row );
 
     // Go to the upper left corner of the obscuring object
     if ( cell->isObscured() )
     {
-	activeTable()->setMarker( QPoint( cell->obscuringCellsColumn(), cell->obscuringCellsRow() ) );
-	cell = table->cellAt( markerColumn(), markerRow() );
+	// activeTable()->setSelection( QPoint( cell->obscuringCellsColumn(), cell->obscuringCellsRow() ) );
+	col = cell->obscuringCellsColumn();
+	row = cell->obscuringCellsRow();
+	cell = table->cellAt( col, row );
     }
 
     // Test whether the mouse is over some anchor
     {
-	KSpreadCell *cell = table->visibleCellAt( markerColumn(), markerRow() );
+	KSpreadCell *cell = table->visibleCellAt( col, row );
 	QString anchor = cell->testAnchor( _ev->pos().x() - xpos,
 					   _ev->pos().y() - ypos, this );
 	if ( !anchor.isEmpty() && anchor != m_strAnchor )
@@ -919,26 +921,31 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     }
 
     // Start a marking action ?
-    if ( m_strAnchor.isEmpty() && _ev->button() == LeftButton )
-    {
-	m_eMouseAction = Mark;
-	selection.setCoords( markerColumn(), markerRow(),
-			     markerColumn() + cell->extraXCells(),
-			     markerRow() + cell->extraYCells() );
-
-	// if ( old_selection.left() != 0 || cell->extraXCells() != 0 || cell->extraYCells() != 0 )
-	table->setSelection( selection, this );
-	m_iMouseStartColumn = markerColumn();
-	m_iMouseStartRow = markerRow();
-    }
-
-    // Update the edit box
-    m_pView->updateEditWidget();
-
-    if ( !m_strAnchor.isEmpty() )
+    if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
     {
 	gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
+	return;
     }
+    else if ( _ev->button() == LeftButton )
+    {
+	m_eMouseAction = Mark;
+	selection.setCoords( col, row,
+			     col + cell->extraXCells(),
+			     row + cell->extraYCells() );
+
+	table->setSelection( selection, this );
+	m_iMouseStartColumn = col;
+	m_iMouseStartRow = row;
+    }
+    else if ( _ev->button() == RightButton )
+    {
+	// No selection or the mouse press was outside of an existing selection ?
+	if ( selection.left() == 0 || !selection.contains( col, row ) )
+	    table->setMarker( QPoint( col, row ) );
+    }
+    
+    // Update the edit box
+    m_pView->updateEditWidget();
 
     updatePosWidget();
 
@@ -949,7 +956,9 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	QPoint p = mapToGlobal( _ev->pos() );
 	m_pView->openPopupMenu( p );
     }
-    if(_ev->button() == MidButton )
+    
+    // Paste operation with the middle button ?
+    if( _ev->button() == MidButton )
         table->paste( QPoint( markerColumn(), markerRow() ) );
 }
 
@@ -1541,7 +1550,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
     QRect new_sel = table->selectionRect();
     QPoint new_marker = table->marker();
     // QRect new_marker_rect = table->markerRect();
-    
+
     QRect old_sel = _old_sel;
     QRect old_marker_outer;
     old_marker_outer.setCoords( QMAX( 1, old_marker.x() - 1 ), QMAX( 1, old_marker.y() - 1 ),
@@ -1621,7 +1630,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 	    KSpreadCell *cell = table->cellAt( x, y, TRUE );
 
 	    QPoint p( x, y );
-		    
+		
 	    //
 	    // Determine which parts of the marker this cell used to
 	    // display.
@@ -1631,11 +1640,11 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 	    QRect larger;
 	    larger.setCoords( old_sel.left() - 1, old_sel.top() - 1,
 			      old_sel.right() + 1, old_sel.bottom() + 1 );
-	    
+	
 	    QPoint lr = old_sel.bottomRight();
-	    
+	
 	    int old_border = 0;
-	    
+	
 	    if ( old_sel.left() == x && old_sel.right() == x &&
 		 old_sel.top() == y && old_sel.bottom() == y &&
 		 ( cell->extraXCells() || cell->extraYCells() ) )
@@ -1703,9 +1712,9 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 	    larger.setCoords( new_sel.left() - 1, new_sel.top() - 1,
 			      new_sel.right() + 1, new_sel.bottom() + 1 );
 	    lr = new_sel.bottomRight();
-	    
+	
 	    int new_border = 0;
-	    
+	
 	    if ( new_sel.left() == x && new_sel.right() == x &&
 		 new_sel.top() == y && new_sel.bottom() == y &&
 		 ( cell->extraXCells() || cell->extraYCells() ) )
@@ -1764,7 +1773,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 		if ( x == lr.x() + 1 && y == lr.y() )
 		    old_border |= 2048;
 	    }
-	    
+	
 	    // Draw if the cell
 	    // a) was part of the selection, but is no longer.
 	    // b) the exact opposite of a)

@@ -1888,7 +1888,7 @@ static void paintCellHelper( QPainter& _painter, int _tx, int _ty, int col, int 
 			     int w, int h, int pos, const QRect& marker )
 {
     QPoint p = marker.bottomRight();
-		       
+		
     switch( pos )
     {
     // top
@@ -2136,6 +2136,26 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 			   backGroundBrush( _col, _row ) );
     }
 
+    //
+    // Look at the cells on our corners. It may happen that we
+    // just erased parts of their borders corner, so we might need
+    // to repaint these corners.
+    //
+    KSpreadCell* cell_t = m_pTable->cellAt( _col, _row - 1 );
+    KSpreadCell* cell_r = m_pTable->cellAt( _col + 1, _row );
+    KSpreadCell* cell_l = m_pTable->cellAt( _col - 1, _row );
+    KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
+   
+    // Get the borders which meat at the respective corners.
+    QPen vert_pen = cell_t->leftBorderPen( _col, _row - 1 );
+    QPen horz_pen = cell_l->topBorderPen( _col - 1, _row );
+    if ( vert_pen.style() != Qt::NoPen )
+    {
+	int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+	_painter.setPen( vert_pen );
+	_painter.drawLine( _tx, _ty, _tx, _ty + bottom );
+    }
+    
     //
     // Draw diagonal borders.
     //
@@ -2415,7 +2435,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
 	int w = cl->width();
 	int h = rl->height();
-	    
+	
 	// Upper border ?
 	if ( _row == marker.top() )
 	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
