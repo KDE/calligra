@@ -1,20 +1,21 @@
 /* This file is part of the KDE project
-Copyright (C) 2003 Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2003 Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA 02111-1307, USA.
+   You should have received a copy of the GNU Library General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "mysqlcursor.h"
@@ -108,10 +109,23 @@ void MySqlCursor::drv_getNextRecord() {
 
 // This isn't going to work right now as it uses d->mysqlrow
 QVariant MySqlCursor::value(uint pos) {
-	if (!d->mysqlrow) return QVariant();
-	if (pos>=m_fieldCount) return QVariant();
-	if (d->mysqlrow[pos]==0) return QVariant();
-	//js TODO: encode for type using m_fieldsExpanded like in SQLiteCursor::value()
+	if (!d->mysqlrow || pos>=m_fieldCount || d->mysqlrow[pos]==0)
+		return QVariant();
+
+	KexiDB::Field *f = (m_fieldsExpanded && pos<m_fieldsExpanded->count())
+		? m_fieldsExpanded->at(pos)->field : 0;
+	
+//! @todo js: handle DateTime, Date, Time, BLOB types!
+
+	//from most to least frequently used types:
+	if (!f || f->isTextType())
+		return QVariant( QString::fromUtf8((const char*)d->mysqlrow[pos]) );
+	else if (f->isIntegerType())
+		return QVariant( QCString((const char*)d->mysqlrow[pos]).toInt() );
+	else if (f->isFPNumericType())
+		return QVariant( QCString((const char*)d->mysqlrow[pos]).toDouble() );
+
+	//default
 	return QVariant(QString::fromUtf8((const char*)d->mysqlrow[pos]));
 }
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -531,7 +531,8 @@ QVariant SQLiteCursor::value(uint i)
 		return QVariant();
 //TODO: allow disable range checking! - performance reasons
 //	const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
-	KexiDB::Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
+	KexiDB::Field *f = (m_fieldsExpanded && i<m_fieldsExpanded->count())
+		? m_fieldsExpanded->at(i)->field : 0;
 #ifdef SQLITE2
 	//from most to least frequently used types:
 	if (!f || f->isTextType())
