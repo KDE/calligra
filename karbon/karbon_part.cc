@@ -10,6 +10,7 @@
 #include "karbon_view.h"
 #include "vcommand.h"
 #include "vpainterfactory.h"
+#include "vpainter.h"
 
 #include <kdebug.h>
 
@@ -312,10 +313,22 @@ KarbonPart::repaintAllViews( bool /*erase*/ )
 
 
 void
-KarbonPart::paintContent( QPainter& /*p*/, const QRect& /*rect*/,
+KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
 	kdDebug() << "**** part->paintContent()" << endl;
+	VPainterFactory *painterFactory = new VPainterFactory;
+	painterFactory->setPainter( painter.device(), rect.width(), rect.height() );
+	VPainter *p = painterFactory->painter();
+	//VPainter *p = new VKoPainter( painter.device() );
+	p->begin();
+	QPtrListIterator<VLayer> itr( m_layers );
+	for ( ; itr.current(); ++itr )
+		if ( itr.current()->visible() )
+			itr.current()->draw( p, rect, 1 );
+
+	p->end();
+	delete painterFactory;
 }
 
 #include "karbon_part.moc"
