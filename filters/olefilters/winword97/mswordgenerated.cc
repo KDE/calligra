@@ -78,26 +78,30 @@ unsigned MsWordGenerated::read(const U8 *in, S32 *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, DTTM *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->mint = shiftRegister;
-        shiftRegister >>= 6;
-        out->hr = shiftRegister;
-        shiftRegister >>= 5;
-        out->dom = shiftRegister;
-        shiftRegister >>= 5;
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->mon = shiftRegister;
-        shiftRegister >>= 4;
-        out->yr = shiftRegister;
-        shiftRegister >>= 9;
-        out->wdy = shiftRegister;
-        shiftRegister >>= 3;
+        bytes += read(in + bytes, &shifterU16);
+        out->mint = shifterU16;
+        shifterU16 >>= 6;
+        out->hr = shifterU16;
+        shifterU16 >>= 5;
+        out->dom = shifterU16;
+        shifterU16 >>= 5;
+        bytes += read(in + bytes, &shifterU16);
+        out->mon = shifterU16;
+        shifterU16 >>= 4;
+        out->yr = shifterU16;
+        shifterU16 >>= 9;
+        out->wdy = shifterU16;
+        shifterU16 >>= 3;
         out++;
     }
     return bytes;
@@ -105,19 +109,23 @@ unsigned MsWordGenerated::read(const U8 *in, DTTM *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, SHD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->icoFore = shiftRegister;
-        shiftRegister >>= 5;
-        out->icoBack = shiftRegister;
-        shiftRegister >>= 5;
-        out->ipat = shiftRegister;
-        shiftRegister >>= 6;
+        bytes += read(in + bytes, &shifterU16);
+        out->icoFore = shifterU16;
+        shifterU16 >>= 5;
+        out->icoBack = shifterU16;
+        shifterU16 >>= 5;
+        out->ipat = shifterU16;
+        shifterU16 >>= 6;
         out++;
     }
     return bytes;
@@ -125,23 +133,27 @@ unsigned MsWordGenerated::read(const U8 *in, SHD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, DOPTYPOGRAPHY *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fKerningPunct = shiftRegister;
-        shiftRegister >>= 1;
-        out->iJustification = shiftRegister;
-        shiftRegister >>= 2;
-        out->iLevelOfKinsoku = shiftRegister;
-        shiftRegister >>= 2;
-        out->f2on1 = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused0_6 = shiftRegister;
-        shiftRegister >>= 10;
+        bytes += read(in + bytes, &shifterU16);
+        out->fKerningPunct = shifterU16;
+        shifterU16 >>= 1;
+        out->iJustification = shifterU16;
+        shifterU16 >>= 2;
+        out->iLevelOfKinsoku = shifterU16;
+        shifterU16 >>= 2;
+        out->f2on1 = shifterU16;
+        shifterU16 >>= 1;
+        out->unused0_6 = shifterU16;
+        shifterU16 >>= 10;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 154);
         out++;
     }
@@ -150,19 +162,23 @@ unsigned MsWordGenerated::read(const U8 *in, DOPTYPOGRAPHY *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, PRM *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fComplex = shiftRegister;
-        shiftRegister >>= 1;
-        out->isprm = shiftRegister;
-        shiftRegister >>= 7;
-        out->val = shiftRegister;
-        shiftRegister >>= 8;
+        bytes += read(in + bytes, &shifterU16);
+        out->fComplex = shifterU16;
+        shifterU16 >>= 1;
+        out->isprm = shifterU16;
+        shifterU16 >>= 7;
+        out->val = shifterU16;
+        shifterU16 >>= 8;
         out++;
     }
     return bytes;
@@ -170,18 +186,22 @@ unsigned MsWordGenerated::read(const U8 *in, PRM *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, ATRD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 11);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->ak = shiftRegister;
-        shiftRegister >>= 2;
-        out->unused22_2 = shiftRegister;
-        shiftRegister >>= 14;
+        bytes += read(in + bytes, &shifterU16);
+        out->ak = shifterU16;
+        shifterU16 >>= 2;
+        out->unused22_2 = shifterU16;
+        shifterU16 >>= 14;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
         out++;
@@ -191,50 +211,54 @@ unsigned MsWordGenerated::read(const U8 *in, ATRD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, ANLD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 3);
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->jc = shiftRegister;
-        shiftRegister >>= 2;
-        out->fPrev = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHang = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetBold = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetItalic = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetSmallCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetCaps = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fSetStrike = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetKul = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPrevSpace = shiftRegister;
-        shiftRegister >>= 1;
-        out->fBold = shiftRegister;
-        shiftRegister >>= 1;
-        out->fItalic = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSmallCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->fCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->fStrike = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->kul = shiftRegister;
-        shiftRegister >>= 3;
-        out->ico = shiftRegister;
-        shiftRegister >>= 5;
+        bytes += read(in + bytes, &shifterU8);
+        out->jc = shifterU8;
+        shifterU8 >>= 2;
+        out->fPrev = shifterU8;
+        shifterU8 >>= 1;
+        out->fHang = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetBold = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetItalic = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetSmallCaps = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetCaps = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->fSetStrike = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetKul = shifterU8;
+        shifterU8 >>= 1;
+        out->fPrevSpace = shifterU8;
+        shifterU8 >>= 1;
+        out->fBold = shifterU8;
+        shifterU8 >>= 1;
+        out->fItalic = shifterU8;
+        shifterU8 >>= 1;
+        out->fSmallCaps = shifterU8;
+        shifterU8 >>= 1;
+        out->fCaps = shifterU8;
+        shifterU8 >>= 1;
+        out->fStrike = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->kul = shifterU8;
+        shifterU8 >>= 3;
+        out->ico = shifterU8;
+        shifterU8 >>= 5;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 5);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 4);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 32);
@@ -245,50 +269,54 @@ unsigned MsWordGenerated::read(const U8 *in, ANLD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, ANLV *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 3);
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->jc = shiftRegister;
-        shiftRegister >>= 2;
-        out->fPrev = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHang = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetBold = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetItalic = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetSmallCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetCaps = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fSetStrike = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSetKul = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPrevSpace = shiftRegister;
-        shiftRegister >>= 1;
-        out->fBold = shiftRegister;
-        shiftRegister >>= 1;
-        out->FItalic = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSmallCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->fCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->fStrike = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->kul = shiftRegister;
-        shiftRegister >>= 3;
-        out->ico = shiftRegister;
-        shiftRegister >>= 5;
+        bytes += read(in + bytes, &shifterU8);
+        out->jc = shifterU8;
+        shifterU8 >>= 2;
+        out->fPrev = shifterU8;
+        shifterU8 >>= 1;
+        out->fHang = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetBold = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetItalic = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetSmallCaps = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetCaps = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->fSetStrike = shifterU8;
+        shifterU8 >>= 1;
+        out->fSetKul = shifterU8;
+        shifterU8 >>= 1;
+        out->fPrevSpace = shifterU8;
+        shifterU8 >>= 1;
+        out->fBold = shifterU8;
+        shifterU8 >>= 1;
+        out->FItalic = shifterU8;
+        shifterU8 >>= 1;
+        out->fSmallCaps = shifterU8;
+        shifterU8 >>= 1;
+        out->fCaps = shifterU8;
+        shifterU8 >>= 1;
+        out->fStrike = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->kul = shifterU8;
+        shifterU8 >>= 3;
+        out->ico = shifterU8;
+        shifterU8 >>= 5;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 5);
         out++;
     }
@@ -297,10 +325,14 @@ unsigned MsWordGenerated::read(const U8 *in, ANLV *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, ASUMY *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
@@ -311,23 +343,27 @@ unsigned MsWordGenerated::read(const U8 *in, ASUMY *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, ASUMYI *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fValid = shiftRegister;
-        shiftRegister >>= 1;
-        out->fView = shiftRegister;
-        shiftRegister >>= 1;
-        out->iViewBy = shiftRegister;
-        shiftRegister >>= 2;
-        out->fUpdateProps = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused0_5 = shiftRegister;
-        shiftRegister >>= 11;
+        bytes += read(in + bytes, &shifterU16);
+        out->fValid = shifterU16;
+        shifterU16 >>= 1;
+        out->fView = shifterU16;
+        shifterU16 >>= 1;
+        out->iViewBy = shifterU16;
+        shifterU16 >>= 2;
+        out->fUpdateProps = shifterU16;
+        shifterU16 >>= 1;
+        out->unused0_5 = shifterU16;
+        shifterU16 >>= 11;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
         out++;
@@ -337,10 +373,14 @@ unsigned MsWordGenerated::read(const U8 *in, ASUMYI *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, BTE *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
@@ -351,26 +391,30 @@ unsigned MsWordGenerated::read(const U8 *in, BTE *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, BKD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 3);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->icol = shiftRegister;
-        shiftRegister >>= 8;
-        out->fTableBreak = shiftRegister;
-        shiftRegister >>= 1;
-        out->fColumnBreak = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMarked = shiftRegister;
-        shiftRegister >>= 1;
-        out->fUnk = shiftRegister;
-        shiftRegister >>= 1;
-        out->fTextOverflow = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->icol = shifterU16;
+        shifterU16 >>= 8;
+        out->fTableBreak = shifterU16;
+        shifterU16 >>= 1;
+        out->fColumnBreak = shifterU16;
+        shifterU16 >>= 1;
+        out->fMarked = shifterU16;
+        shifterU16 >>= 1;
+        out->fUnk = shifterU16;
+        shifterU16 >>= 1;
+        out->fTextOverflow = shifterU16;
+        shifterU16 >>= 1;
         out++;
     }
     return bytes;
@@ -378,22 +422,26 @@ unsigned MsWordGenerated::read(const U8 *in, BKD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, BKF *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->itcFirst = shiftRegister;
-        shiftRegister >>= 7;
-        out->fPub = shiftRegister;
-        shiftRegister >>= 1;
-        out->itcLim = shiftRegister;
-        shiftRegister >>= 7;
-        out->fCol = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->itcFirst = shifterU16;
+        shifterU16 >>= 7;
+        out->fPub = shifterU16;
+        shifterU16 >>= 1;
+        out->itcLim = shifterU16;
+        shifterU16 >>= 7;
+        out->fCol = shifterU16;
+        shifterU16 >>= 1;
         out++;
     }
     return bytes;
@@ -401,10 +449,14 @@ unsigned MsWordGenerated::read(const U8 *in, BKF *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, BKL *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
@@ -415,28 +467,32 @@ unsigned MsWordGenerated::read(const U8 *in, BKL *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, BRC *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->dptLineWidth = shiftRegister;
-        shiftRegister >>= 8;
-        out->brcType = shiftRegister;
-        shiftRegister >>= 8;
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->ico = shiftRegister;
-        shiftRegister >>= 8;
-        out->dptSpace = shiftRegister;
-        shiftRegister >>= 5;
-        out->fShadow = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFrame = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused2_15 = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->dptLineWidth = shifterU16;
+        shifterU16 >>= 8;
+        out->brcType = shifterU16;
+        shifterU16 >>= 8;
+        bytes += read(in + bytes, &shifterU16);
+        out->ico = shifterU16;
+        shifterU16 >>= 8;
+        out->dptSpace = shifterU16;
+        shifterU16 >>= 5;
+        out->fShadow = shifterU16;
+        shifterU16 >>= 1;
+        out->fFrame = shifterU16;
+        shifterU16 >>= 1;
+        out->unused2_15 = shifterU16;
+        shifterU16 >>= 1;
         out++;
     }
     return bytes;
@@ -444,25 +500,29 @@ unsigned MsWordGenerated::read(const U8 *in, BRC *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, BRC10 *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->dxpLine2Width = shiftRegister;
-        shiftRegister >>= 3;
-        out->dxpSpaceBetween = shiftRegister;
-        shiftRegister >>= 3;
-        out->dxpLine1Width = shiftRegister;
-        shiftRegister >>= 3;
-        out->dxpSpace = shiftRegister;
-        shiftRegister >>= 5;
-        out->fShadow = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSpare = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->dxpLine2Width = shifterU16;
+        shifterU16 >>= 3;
+        out->dxpSpaceBetween = shifterU16;
+        shifterU16 >>= 3;
+        out->dxpLine1Width = shifterU16;
+        shifterU16 >>= 3;
+        out->dxpSpace = shifterU16;
+        shifterU16 >>= 5;
+        out->fShadow = shifterU16;
+        shifterU16 >>= 1;
+        out->fSpare = shifterU16;
+        shifterU16 >>= 1;
         out++;
     }
     return bytes;
@@ -470,76 +530,80 @@ unsigned MsWordGenerated::read(const U8 *in, BRC10 *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, CHP *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fBold = shiftRegister;
-        shiftRegister >>= 1;
-        out->FItalic = shiftRegister;
-        shiftRegister >>= 1;
-        out->fRMarkDel = shiftRegister;
-        shiftRegister >>= 1;
-        out->fOutline = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFldVanish = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSmallCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->fCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->fVanish = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fRMark = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSpec = shiftRegister;
-        shiftRegister >>= 1;
-        out->fStrike = shiftRegister;
-        shiftRegister >>= 1;
-        out->fObj = shiftRegister;
-        shiftRegister >>= 1;
-        out->fShadow = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLowerCase = shiftRegister;
-        shiftRegister >>= 1;
-        out->fData = shiftRegister;
-        shiftRegister >>= 1;
-        out->fOle2 = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fEmboss = shiftRegister;
-        shiftRegister >>= 1;
-        out->fImprint = shiftRegister;
-        shiftRegister >>= 1;
-        out->fDStrike = shiftRegister;
-        shiftRegister >>= 1;
-        out->fUsePgsuSettings = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused2_4 = shiftRegister;
-        shiftRegister >>= 12;
+        bytes += read(in + bytes, &shifterU8);
+        out->fBold = shifterU8;
+        shifterU8 >>= 1;
+        out->FItalic = shifterU8;
+        shifterU8 >>= 1;
+        out->fRMarkDel = shifterU8;
+        shifterU8 >>= 1;
+        out->fOutline = shifterU8;
+        shifterU8 >>= 1;
+        out->fFldVanish = shifterU8;
+        shifterU8 >>= 1;
+        out->fSmallCaps = shifterU8;
+        shifterU8 >>= 1;
+        out->fCaps = shifterU8;
+        shifterU8 >>= 1;
+        out->fVanish = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->fRMark = shifterU8;
+        shifterU8 >>= 1;
+        out->fSpec = shifterU8;
+        shifterU8 >>= 1;
+        out->fStrike = shifterU8;
+        shifterU8 >>= 1;
+        out->fObj = shifterU8;
+        shifterU8 >>= 1;
+        out->fShadow = shifterU8;
+        shifterU8 >>= 1;
+        out->fLowerCase = shifterU8;
+        shifterU8 >>= 1;
+        out->fData = shifterU8;
+        shifterU8 >>= 1;
+        out->fOle2 = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->fEmboss = shifterU16;
+        shifterU16 >>= 1;
+        out->fImprint = shifterU16;
+        shifterU16 >>= 1;
+        out->fDStrike = shifterU16;
+        shifterU16 >>= 1;
+        out->fUsePgsuSettings = shifterU16;
+        shifterU16 >>= 1;
+        out->unused2_4 = shifterU16;
+        shifterU16 >>= 12;
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 5);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->iss = shiftRegister;
-        shiftRegister >>= 3;
-        out->kul = shiftRegister;
-        shiftRegister >>= 4;
-        out->fSpecSymbol = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->ico = shiftRegister;
-        shiftRegister >>= 5;
-        out->unused23_5 = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSysVanish = shiftRegister;
-        shiftRegister >>= 1;
-        out->hpsPos = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->iss = shifterU8;
+        shifterU8 >>= 3;
+        out->kul = shifterU8;
+        shifterU8 >>= 4;
+        out->fSpecSymbol = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->ico = shifterU8;
+        shifterU8 >>= 5;
+        out->unused23_5 = shifterU8;
+        shifterU8 >>= 1;
+        out->fSysVanish = shifterU8;
+        shifterU8 >>= 1;
+        out->hpsPos = shifterU8;
+        shifterU8 >>= 1;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 4);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
@@ -549,21 +613,21 @@ unsigned MsWordGenerated::read(const U8 *in, CHP *out, unsigned count)
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 6);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->icoHighlight = shiftRegister;
-        shiftRegister >>= 5;
-        out->fHighlight = shiftRegister;
-        shiftRegister >>= 1;
-        out->kcd = shiftRegister;
-        shiftRegister >>= 3;
-        out->fNavHighlight = shiftRegister;
-        shiftRegister >>= 1;
-        out->fChsDiff = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMacChs = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFtcAsciSym = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->icoHighlight = shifterU16;
+        shifterU16 >>= 5;
+        out->fHighlight = shifterU16;
+        shifterU16 >>= 1;
+        out->kcd = shifterU16;
+        shifterU16 >>= 3;
+        out->fNavHighlight = shifterU16;
+        shifterU16 >>= 1;
+        out->fChsDiff = shifterU16;
+        shifterU16 >>= 1;
+        out->fMacChs = shifterU16;
+        shifterU16 >>= 1;
+        out->fFtcAsciSym = shifterU16;
+        shifterU16 >>= 1;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (DTTM *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 3);
@@ -582,10 +646,14 @@ unsigned MsWordGenerated::read(const U8 *in, CHP *out, unsigned count)
 
 //unsigned MsWordGenerated::read(const U8 *in, CHPX *out, unsigned count)
 //{
-//    unsigned long shiftRegister;
-//    U8 *ptr = (U8 *)out;
+//    U32 shifterU32;
+//    U16 shifterU16;
+//    U8 shifterU8;
+//    U8 *ptr;
 //    unsigned bytes = 0;
 //
+//    ptr = (U8 *)out;
+//    shifterU32 = shifterU16 = shifterU8 = 0;
 //    for (unsigned i = 0; i < count; i++)
 //    {
 //        bytes += read(in + bytes, (U8 *)(ptr + bytes), 1);
@@ -597,17 +665,21 @@ unsigned MsWordGenerated::read(const U8 *in, CHP *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, DCS *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fdct = shiftRegister;
-        shiftRegister >>= 3;
-        out->unused0_3 = shiftRegister;
-        shiftRegister >>= 5;
+        bytes += read(in + bytes, &shifterU8);
+        out->fdct = shifterU8;
+        shifterU8 >>= 3;
+        out->unused0_3 = shifterU8;
+        shifterU8 >>= 5;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         out++;
     }
@@ -616,22 +688,26 @@ unsigned MsWordGenerated::read(const U8 *in, DCS *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, DOGRID *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 4);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->dyGridDisplay = shiftRegister;
-        shiftRegister >>= 7;
-        out->fTurnItOff = shiftRegister;
-        shiftRegister >>= 1;
-        out->dxGridDisplay = shiftRegister;
-        shiftRegister >>= 7;
-        out->fFollowMargins = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->dyGridDisplay = shifterU16;
+        shifterU16 >>= 7;
+        out->fTurnItOff = shifterU16;
+        shifterU16 >>= 1;
+        out->dxGridDisplay = shifterU16;
+        shifterU16 >>= 7;
+        out->fFollowMargins = shifterU16;
+        shifterU16 >>= 1;
         out++;
     }
     return bytes;
@@ -639,153 +715,157 @@ unsigned MsWordGenerated::read(const U8 *in, DOGRID *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, DOP *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fFacingPages = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWidowControl = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPMHMainDoc = shiftRegister;
-        shiftRegister >>= 1;
-        out->grfSuppression = shiftRegister;
-        shiftRegister >>= 2;
-        out->fpc = shiftRegister;
-        shiftRegister >>= 2;
-        out->unused0_7 = shiftRegister;
-        shiftRegister >>= 1;
-        out->grpfIhdt = shiftRegister;
-        shiftRegister >>= 8;
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->rncFtn = shiftRegister;
-        shiftRegister >>= 2;
-        out->nFtn = shiftRegister;
-        shiftRegister >>= 14;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fOutlineDirtySave = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused4_1 = shiftRegister;
-        shiftRegister >>= 7;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fOnlyMacPics = shiftRegister;
-        shiftRegister >>= 1;
-        out->fOnlyWinPics = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLabelDoc = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHyphCapitals = shiftRegister;
-        shiftRegister >>= 1;
-        out->fAutoHyphen = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFormNoFields = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLinkStyles = shiftRegister;
-        shiftRegister >>= 1;
-        out->fRevMarking = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fBackup = shiftRegister;
-        shiftRegister >>= 1;
-        out->fExactCWords = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPagHidden = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPagResults = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLockAtn = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMirrorMargins = shiftRegister;
-        shiftRegister >>= 1;
-        out->fDfltTrueType = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fPagSuppressTopSpacing = shiftRegister;
-        shiftRegister >>= 1;
-        out->fProtEnabled = shiftRegister;
-        shiftRegister >>= 1;
-        out->fDispFormFldSel = shiftRegister;
-        shiftRegister >>= 1;
-        out->fRMView = shiftRegister;
-        shiftRegister >>= 1;
-        out->fRMPrint = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLockRev = shiftRegister;
-        shiftRegister >>= 1;
-        out->fEmbedFonts = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->copts_fNoTabForInd = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fNoSpaceRaiseLower = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fSuppressSpbfAfterPageBreak = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fWrapTrailSpaces = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fMapPrintTextColor = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fNoColumnBalance = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fConvMailMergeEsc = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fSupressTopSpacing = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fOrigWordTableRules = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fTransparentMetafiles = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fShowBreaksInFrames = shiftRegister;
-        shiftRegister >>= 1;
-        out->copts_fSwapBordersFacingPgs = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused8_12 = shiftRegister;
-        shiftRegister >>= 4;
+        bytes += read(in + bytes, &shifterU16);
+        out->fFacingPages = shifterU16;
+        shifterU16 >>= 1;
+        out->fWidowControl = shifterU16;
+        shifterU16 >>= 1;
+        out->fPMHMainDoc = shifterU16;
+        shifterU16 >>= 1;
+        out->grfSuppression = shifterU16;
+        shifterU16 >>= 2;
+        out->fpc = shifterU16;
+        shifterU16 >>= 2;
+        out->unused0_7 = shifterU16;
+        shifterU16 >>= 1;
+        out->grpfIhdt = shifterU16;
+        shifterU16 >>= 8;
+        bytes += read(in + bytes, &shifterU16);
+        out->rncFtn = shifterU16;
+        shifterU16 >>= 2;
+        out->nFtn = shifterU16;
+        shifterU16 >>= 14;
+        bytes += read(in + bytes, &shifterU8);
+        out->fOutlineDirtySave = shifterU8;
+        shifterU8 >>= 1;
+        out->unused4_1 = shifterU8;
+        shifterU8 >>= 7;
+        bytes += read(in + bytes, &shifterU8);
+        out->fOnlyMacPics = shifterU8;
+        shifterU8 >>= 1;
+        out->fOnlyWinPics = shifterU8;
+        shifterU8 >>= 1;
+        out->fLabelDoc = shifterU8;
+        shifterU8 >>= 1;
+        out->fHyphCapitals = shifterU8;
+        shifterU8 >>= 1;
+        out->fAutoHyphen = shifterU8;
+        shifterU8 >>= 1;
+        out->fFormNoFields = shifterU8;
+        shifterU8 >>= 1;
+        out->fLinkStyles = shifterU8;
+        shifterU8 >>= 1;
+        out->fRevMarking = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->fBackup = shifterU8;
+        shifterU8 >>= 1;
+        out->fExactCWords = shifterU8;
+        shifterU8 >>= 1;
+        out->fPagHidden = shifterU8;
+        shifterU8 >>= 1;
+        out->fPagResults = shifterU8;
+        shifterU8 >>= 1;
+        out->fLockAtn = shifterU8;
+        shifterU8 >>= 1;
+        out->fMirrorMargins = shifterU8;
+        shifterU8 >>= 1;
+        out->fDfltTrueType = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->fPagSuppressTopSpacing = shifterU8;
+        shifterU8 >>= 1;
+        out->fProtEnabled = shifterU8;
+        shifterU8 >>= 1;
+        out->fDispFormFldSel = shifterU8;
+        shifterU8 >>= 1;
+        out->fRMView = shifterU8;
+        shifterU8 >>= 1;
+        out->fRMPrint = shifterU8;
+        shifterU8 >>= 1;
+        out->fLockRev = shifterU8;
+        shifterU8 >>= 1;
+        out->fEmbedFonts = shifterU8;
+        shifterU8 >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->copts_fNoTabForInd = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fNoSpaceRaiseLower = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fSuppressSpbfAfterPageBreak = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fWrapTrailSpaces = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fMapPrintTextColor = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fNoColumnBalance = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fConvMailMergeEsc = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fSupressTopSpacing = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fOrigWordTableRules = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fTransparentMetafiles = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fShowBreaksInFrames = shifterU16;
+        shifterU16 >>= 1;
+        out->copts_fSwapBordersFacingPgs = shifterU16;
+        shifterU16 >>= 1;
+        out->unused8_12 = shifterU16;
+        shifterU16 >>= 4;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 5);
         bytes += read(in + bytes, (DTTM *)(ptr + bytes), 3);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->rncEdn = shiftRegister;
-        shiftRegister >>= 2;
-        out->nEdn = shiftRegister;
-        shiftRegister >>= 14;
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->epc = shiftRegister;
-        shiftRegister >>= 2;
-        out->nfcFtnRef = shiftRegister;
-        shiftRegister >>= 4;
-        out->nfcEdnRef = shiftRegister;
-        shiftRegister >>= 4;
-        out->fPrintFormData = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSaveFormData = shiftRegister;
-        shiftRegister >>= 1;
-        out->fShadeFormData = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused54_13 = shiftRegister;
-        shiftRegister >>= 2;
-        out->fWCFtnEdn = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->rncEdn = shifterU16;
+        shifterU16 >>= 2;
+        out->nEdn = shifterU16;
+        shifterU16 >>= 14;
+        bytes += read(in + bytes, &shifterU16);
+        out->epc = shifterU16;
+        shifterU16 >>= 2;
+        out->nfcFtnRef = shifterU16;
+        shifterU16 >>= 4;
+        out->nfcEdnRef = shifterU16;
+        shifterU16 >>= 4;
+        out->fPrintFormData = shifterU16;
+        shifterU16 >>= 1;
+        out->fSaveFormData = shifterU16;
+        shifterU16 >>= 1;
+        out->fShadeFormData = shifterU16;
+        shifterU16 >>= 1;
+        out->unused54_13 = shifterU16;
+        shifterU16 >>= 2;
+        out->fWCFtnEdn = shifterU16;
+        shifterU16 >>= 1;
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->wvkSaved = shiftRegister;
-        shiftRegister >>= 3;
-        out->wScaleSaved = shiftRegister;
-        shiftRegister >>= 9;
-        out->zkSaved = shiftRegister;
-        shiftRegister >>= 2;
-        out->fRotateFontW6 = shiftRegister;
-        shiftRegister >>= 1;
-        out->iGutterPos = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->wvkSaved = shifterU16;
+        shifterU16 >>= 3;
+        out->wScaleSaved = shifterU16;
+        shifterU16 >>= 9;
+        out->zkSaved = shifterU16;
+        shifterU16 >>= 2;
+        out->fRotateFontW6 = shifterU16;
+        shifterU16 >>= 1;
+        out->iGutterPos = shifterU16;
+        shifterU16 >>= 1;
         out++;
     }
     return bytes;
@@ -793,53 +873,57 @@ unsigned MsWordGenerated::read(const U8 *in, DOP *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, DOP102 *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U32 *)&shiftRegister);
-        out->fNoTabForInd = shiftRegister;
-        shiftRegister >>= 1;
-        out->fNoSpaceRaiseLower = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSupressSpbfAfterPageBreak = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWrapTrailSpaces = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMapPrintTextColor = shiftRegister;
-        shiftRegister >>= 1;
-        out->fNoColumnBalance = shiftRegister;
-        shiftRegister >>= 1;
-        out->fConvMailMergeEsc = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSupressTopSpacing = shiftRegister;
-        shiftRegister >>= 1;
-        out->fOrigWordTableRules = shiftRegister;
-        shiftRegister >>= 1;
-        out->fTransparentMetafiles = shiftRegister;
-        shiftRegister >>= 1;
-        out->fShowBreaksInFrames = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSwapBordersFacingPgs = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused84_12 = shiftRegister;
-        shiftRegister >>= 4;
-        out->fSuppressTopSpacingMac5 = shiftRegister;
-        shiftRegister >>= 1;
-        out->fTruncDxaExpand = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPrintBodyBeforeHdr = shiftRegister;
-        shiftRegister >>= 1;
-        out->fNoLeading = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused84_20 = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMWSmallCaps = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused84_22 = shiftRegister;
-        shiftRegister >>= 10;
+        bytes += read(in + bytes, &shifterU32);
+        out->fNoTabForInd = shifterU32;
+        shifterU32 >>= 1;
+        out->fNoSpaceRaiseLower = shifterU32;
+        shifterU32 >>= 1;
+        out->fSupressSpbfAfterPageBreak = shifterU32;
+        shifterU32 >>= 1;
+        out->fWrapTrailSpaces = shifterU32;
+        shifterU32 >>= 1;
+        out->fMapPrintTextColor = shifterU32;
+        shifterU32 >>= 1;
+        out->fNoColumnBalance = shifterU32;
+        shifterU32 >>= 1;
+        out->fConvMailMergeEsc = shifterU32;
+        shifterU32 >>= 1;
+        out->fSupressTopSpacing = shifterU32;
+        shifterU32 >>= 1;
+        out->fOrigWordTableRules = shifterU32;
+        shifterU32 >>= 1;
+        out->fTransparentMetafiles = shifterU32;
+        shifterU32 >>= 1;
+        out->fShowBreaksInFrames = shifterU32;
+        shifterU32 >>= 1;
+        out->fSwapBordersFacingPgs = shifterU32;
+        shifterU32 >>= 1;
+        out->unused84_12 = shifterU32;
+        shifterU32 >>= 4;
+        out->fSuppressTopSpacingMac5 = shifterU32;
+        shifterU32 >>= 1;
+        out->fTruncDxaExpand = shifterU32;
+        shifterU32 >>= 1;
+        out->fPrintBodyBeforeHdr = shifterU32;
+        shifterU32 >>= 1;
+        out->fNoLeading = shifterU32;
+        shifterU32 >>= 1;
+        out->unused84_20 = shifterU32;
+        shifterU32 >>= 1;
+        out->fMWSmallCaps = shifterU32;
+        shifterU32 >>= 1;
+        out->unused84_22 = shifterU32;
+        shifterU32 >>= 10;
         out++;
     }
     return bytes;
@@ -847,58 +931,62 @@ unsigned MsWordGenerated::read(const U8 *in, DOP102 *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, DOP105 *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (DOPTYPOGRAPHY *)(ptr + bytes), 1);
         bytes += read(in + bytes, (DOGRID *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->reserved = shiftRegister;
-        shiftRegister >>= 1;
-        out->lvl = shiftRegister;
-        shiftRegister >>= 4;
-        out->fGramAllDone = shiftRegister;
-        shiftRegister >>= 1;
-        out->fGramAllClean = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSubsetFonts = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHideLastVersion = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHtmlDoc = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused410_11 = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSnapBorder = shiftRegister;
-        shiftRegister >>= 1;
-        out->fIncludeHeader = shiftRegister;
-        shiftRegister >>= 1;
-        out->fIncludeFooter = shiftRegister;
-        shiftRegister >>= 1;
-        out->fForcePageSizePag = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMinFontSizePag = shiftRegister;
-        shiftRegister >>= 1;
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fHaveVersions = shiftRegister;
-        shiftRegister >>= 1;
-        out->fAutoVersion = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused412_2 = shiftRegister;
-        shiftRegister >>= 14;
+        bytes += read(in + bytes, &shifterU16);
+        out->reserved = shifterU16;
+        shifterU16 >>= 1;
+        out->lvl = shifterU16;
+        shifterU16 >>= 4;
+        out->fGramAllDone = shifterU16;
+        shifterU16 >>= 1;
+        out->fGramAllClean = shifterU16;
+        shifterU16 >>= 1;
+        out->fSubsetFonts = shifterU16;
+        shifterU16 >>= 1;
+        out->fHideLastVersion = shifterU16;
+        shifterU16 >>= 1;
+        out->fHtmlDoc = shifterU16;
+        shifterU16 >>= 1;
+        out->unused410_11 = shifterU16;
+        shifterU16 >>= 1;
+        out->fSnapBorder = shifterU16;
+        shifterU16 >>= 1;
+        out->fIncludeHeader = shifterU16;
+        shifterU16 >>= 1;
+        out->fIncludeFooter = shifterU16;
+        shifterU16 >>= 1;
+        out->fForcePageSizePag = shifterU16;
+        shifterU16 >>= 1;
+        out->fMinFontSizePag = shifterU16;
+        shifterU16 >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->fHaveVersions = shifterU16;
+        shifterU16 >>= 1;
+        out->fAutoVersion = shifterU16;
+        shifterU16 >>= 1;
+        out->unused412_2 = shifterU16;
+        shifterU16 >>= 14;
         bytes += read(in + bytes, (ASUMYI *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
-        bytes += read(in + bytes, (U32 *)&shiftRegister);
-        out->fVirusPrompted = shiftRegister;
-        shiftRegister >>= 1;
-        out->fVirusLoadSafe = shiftRegister;
-        shiftRegister >>= 1;
-        out->KeyVirusSession30 = shiftRegister;
-        shiftRegister >>= 30;
+        bytes += read(in + bytes, &shifterU32);
+        out->fVirusPrompted = shifterU32;
+        shifterU32 >>= 1;
+        out->fVirusLoadSafe = shifterU32;
+        shifterU32 >>= 1;
+        out->KeyVirusSession30 = shifterU32;
+        shifterU32 >>= 30;
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 30);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 5);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 4);
@@ -909,17 +997,21 @@ unsigned MsWordGenerated::read(const U8 *in, DOP105 *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, FLD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->ch = shiftRegister;
-        shiftRegister >>= 5;
-        out->unused0_5 = shiftRegister;
-        shiftRegister >>= 3;
+        bytes += read(in + bytes, &shifterU8);
+        out->ch = shifterU8;
+        shifterU8 >>= 5;
+        out->unused0_5 = shifterU8;
+        shifterU8 >>= 3;
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 1);
         out++;
     }
@@ -928,30 +1020,34 @@ unsigned MsWordGenerated::read(const U8 *in, FLD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, FSPA *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 5);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fHdr = shiftRegister;
-        shiftRegister >>= 1;
-        out->bx = shiftRegister;
-        shiftRegister >>= 2;
-        out->by = shiftRegister;
-        shiftRegister >>= 2;
-        out->wr = shiftRegister;
-        shiftRegister >>= 4;
-        out->wrk = shiftRegister;
-        shiftRegister >>= 4;
-        out->fRcaSimple = shiftRegister;
-        shiftRegister >>= 1;
-        out->fBelowText = shiftRegister;
-        shiftRegister >>= 1;
-        out->fAnchorLock = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->fHdr = shifterU16;
+        shifterU16 >>= 1;
+        out->bx = shifterU16;
+        shifterU16 >>= 2;
+        out->by = shifterU16;
+        shifterU16 >>= 2;
+        out->wr = shifterU16;
+        shifterU16 >>= 4;
+        out->wrk = shifterU16;
+        shifterU16 >>= 4;
+        out->fRcaSimple = shifterU16;
+        shifterU16 >>= 1;
+        out->fBelowText = shifterU16;
+        shifterU16 >>= 1;
+        out->fAnchorLock = shifterU16;
+        shifterU16 >>= 1;
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
         out++;
     }
@@ -960,24 +1056,28 @@ unsigned MsWordGenerated::read(const U8 *in, FSPA *out, unsigned count)
 
 //unsigned MsWordGenerated::read(const U8 *in, FFN *out, unsigned count)
 //{
-//    unsigned long shiftRegister;
-//    U8 *ptr = (U8 *)out;
+//    U32 shifterU32;
+//    U16 shifterU16;
+//    U8 shifterU8;
+//    U8 *ptr;
 //    unsigned bytes = 0;
 //
+//    ptr = (U8 *)out;
+//    shifterU32 = shifterU16 = shifterU8 = 0;
 //    for (unsigned i = 0; i < count; i++)
 //    {
 //        bytes += read(in + bytes, (U8 *)(ptr + bytes), 1);
-//        bytes += read(in + bytes, (U8 *)&shiftRegister);
-//        out->prq = shiftRegister;
-//        shiftRegister >>= 2;
-//        out->fTrueType = shiftRegister;
-//        shiftRegister >>= 1;
-//        out->unused1_3 = shiftRegister;
-//        shiftRegister >>= 1;
-//        out->ff = shiftRegister;
-//        shiftRegister >>= 3;
-//        out->unused1_7 = shiftRegister;
-//        shiftRegister >>= 1;
+//        bytes += read(in + bytes, &shifterU8);
+//        out->prq = shifterU8;
+//        shifterU8 >>= 2;
+//        out->fTrueType = shifterU8;
+//        shifterU8 >>= 1;
+//        out->unused1_3 = shifterU8;
+//        shifterU8 >>= 1;
+//        out->ff = shifterU8;
+//        shifterU8 >>= 3;
+//        out->unused1_7 = shifterU8;
+//        shifterU8 >>= 1;
 //        bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
 //        bytes += read(in + bytes, (U8 *)(ptr + bytes), 36);
 //        out++;
@@ -987,56 +1087,60 @@ unsigned MsWordGenerated::read(const U8 *in, FSPA *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, FIB *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 5);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fDot = shiftRegister;
-        shiftRegister >>= 1;
-        out->fGlsy = shiftRegister;
-        shiftRegister >>= 1;
-        out->fComplex = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHasPic = shiftRegister;
-        shiftRegister >>= 1;
-        out->cQuickSaves = shiftRegister;
-        shiftRegister >>= 4;
-        out->fEncrypted = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWhichTblStm = shiftRegister;
-        shiftRegister >>= 1;
-        out->fReadOnlyRecommended = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWriteReservation = shiftRegister;
-        shiftRegister >>= 1;
-        out->fExtChar = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLoadOverride = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFarEast = shiftRegister;
-        shiftRegister >>= 1;
-        out->fCrypto = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->fDot = shifterU16;
+        shifterU16 >>= 1;
+        out->fGlsy = shifterU16;
+        shifterU16 >>= 1;
+        out->fComplex = shifterU16;
+        shifterU16 >>= 1;
+        out->fHasPic = shifterU16;
+        shifterU16 >>= 1;
+        out->cQuickSaves = shifterU16;
+        shifterU16 >>= 4;
+        out->fEncrypted = shifterU16;
+        shifterU16 >>= 1;
+        out->fWhichTblStm = shifterU16;
+        shifterU16 >>= 1;
+        out->fReadOnlyRecommended = shifterU16;
+        shifterU16 >>= 1;
+        out->fWriteReservation = shifterU16;
+        shifterU16 >>= 1;
+        out->fExtChar = shifterU16;
+        shifterU16 >>= 1;
+        out->fLoadOverride = shifterU16;
+        shifterU16 >>= 1;
+        out->fFarEast = shifterU16;
+        shifterU16 >>= 1;
+        out->fCrypto = shifterU16;
+        shifterU16 >>= 1;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fMac = shiftRegister;
-        shiftRegister >>= 1;
-        out->fEmptySpecial = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLoadOverridePage = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFutureSavedUndo = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWord97Saved = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSpare0 = shiftRegister;
-        shiftRegister >>= 3;
+        bytes += read(in + bytes, &shifterU8);
+        out->fMac = shifterU8;
+        shifterU8 >>= 1;
+        out->fEmptySpecial = shifterU8;
+        shifterU8 >>= 1;
+        out->fLoadOverridePage = shifterU8;
+        shifterU8 >>= 1;
+        out->fFutureSavedUndo = shifterU8;
+        shifterU8 >>= 1;
+        out->fWord97Saved = shifterU8;
+        shifterU8 >>= 1;
+        out->fSpare0 = shifterU8;
+        shifterU8 >>= 3;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 16);
@@ -1050,10 +1154,14 @@ unsigned MsWordGenerated::read(const U8 *in, FIB *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, FIBFCLCB *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
@@ -1064,10 +1172,14 @@ unsigned MsWordGenerated::read(const U8 *in, FIBFCLCB *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, FRD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
@@ -1078,10 +1190,14 @@ unsigned MsWordGenerated::read(const U8 *in, FRD *out, unsigned count)
 
 //unsigned MsWordGenerated::read(const U8 *in, CHPXFKP *out, unsigned count)
 //{
-//    unsigned long shiftRegister;
-//    U8 *ptr = (U8 *)out;
+//    U32 shifterU32;
+//    U16 shifterU16;
+//    U8 shifterU8;
+//    U8 *ptr;
 //    unsigned bytes = 0;
 //
+//    ptr = (U8 *)out;
+//    shifterU32 = shifterU16 = shifterU8 = 0;
 //    for (unsigned i = 0; i < count; i++)
 //    {
 //        bytes += read(in + bytes, (U8 *)(ptr + bytes), 1);
@@ -1092,10 +1208,14 @@ unsigned MsWordGenerated::read(const U8 *in, FRD *out, unsigned count)
 
 //unsigned MsWordGenerated::read(const U8 *in, PAPXFKP *out, unsigned count)
 //{
-//    unsigned long shiftRegister;
-//    U8 *ptr = (U8 *)out;
+//    U32 shifterU32;
+//    U16 shifterU16;
+//    U8 shifterU8;
+//    U8 *ptr;
 //    unsigned bytes = 0;
 //
+//    ptr = (U8 *)out;
+//    shifterU32 = shifterU16 = shifterU8 = 0;
 //    for (unsigned i = 0; i < count; i++)
 //    {
 //        bytes += read(in + bytes, (FC *)(ptr + bytes), fkp.crun+1);
@@ -1108,29 +1228,33 @@ unsigned MsWordGenerated::read(const U8 *in, FRD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, LVLF *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->jc = shiftRegister;
-        shiftRegister >>= 2;
-        out->fLegal = shiftRegister;
-        shiftRegister >>= 1;
-        out->fNoRestart = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPrev = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPrevSpace = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWord6 = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused5_7 = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU8);
+        out->jc = shifterU8;
+        shifterU8 >>= 2;
+        out->fLegal = shifterU8;
+        shifterU8 >>= 1;
+        out->fNoRestart = shifterU8;
+        shifterU8 >>= 1;
+        out->fPrev = shifterU8;
+        shifterU8 >>= 1;
+        out->fPrevSpace = shifterU8;
+        shifterU8 >>= 1;
+        out->fWord6 = shifterU8;
+        shifterU8 >>= 1;
+        out->unused5_7 = shifterU8;
+        shifterU8 >>= 1;
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 10);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
@@ -1142,10 +1266,14 @@ unsigned MsWordGenerated::read(const U8 *in, LVLF *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, LSPD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
@@ -1156,21 +1284,25 @@ unsigned MsWordGenerated::read(const U8 *in, LSPD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, LSTF *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 9);
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fSimpleList = shiftRegister;
-        shiftRegister >>= 1;
-        out->fRestartHdn = shiftRegister;
-        shiftRegister >>= 1;
-        out->unsigned26_2 = shiftRegister;
-        shiftRegister >>= 6;
+        bytes += read(in + bytes, &shifterU8);
+        out->fSimpleList = shifterU8;
+        shifterU8 >>= 1;
+        out->fRestartHdn = shifterU8;
+        shifterU8 >>= 1;
+        out->unsigned26_2 = shifterU8;
+        shifterU8 >>= 6;
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 1);
         out++;
     }
@@ -1179,10 +1311,14 @@ unsigned MsWordGenerated::read(const U8 *in, LSTF *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, LFO *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
@@ -1194,22 +1330,26 @@ unsigned MsWordGenerated::read(const U8 *in, LFO *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, LFOLVL *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->ilvl = shiftRegister;
-        shiftRegister >>= 4;
-        out->fStartAt = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFormatting = shiftRegister;
-        shiftRegister >>= 1;
-        out->unsigned4_6 = shiftRegister;
-        shiftRegister >>= 2;
+        bytes += read(in + bytes, &shifterU8);
+        out->ilvl = shifterU8;
+        shifterU8 >>= 4;
+        out->fStartAt = shifterU8;
+        shifterU8 >>= 1;
+        out->fFormatting = shifterU8;
+        shifterU8 >>= 1;
+        out->unsigned4_6 = shifterU8;
+        shifterU8 >>= 2;
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 3);
         out++;
     }
@@ -1218,10 +1358,14 @@ unsigned MsWordGenerated::read(const U8 *in, LFOLVL *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, OLST *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (ANLV *)(ptr + bytes), 1);
@@ -1234,10 +1378,14 @@ unsigned MsWordGenerated::read(const U8 *in, OLST *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, NUMRM *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
@@ -1254,39 +1402,43 @@ unsigned MsWordGenerated::read(const U8 *in, NUMRM *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, PGD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fContinue = shiftRegister;
-        shiftRegister >>= 1;
-        out->fUnk = shiftRegister;
-        shiftRegister >>= 1;
-        out->fRight = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPgnRestart = shiftRegister;
-        shiftRegister >>= 1;
-        out->fEmptyPage = shiftRegister;
-        shiftRegister >>= 1;
-        out->fAllFtn = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused0_6 = shiftRegister;
-        shiftRegister >>= 1;
-        out->fTableBreaks = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMarked = shiftRegister;
-        shiftRegister >>= 1;
-        out->fColumnBreaks = shiftRegister;
-        shiftRegister >>= 1;
-        out->fTableHeader = shiftRegister;
-        shiftRegister >>= 1;
-        out->fNewPage = shiftRegister;
-        shiftRegister >>= 1;
-        out->bkc = shiftRegister;
-        shiftRegister >>= 4;
+        bytes += read(in + bytes, &shifterU16);
+        out->fContinue = shifterU16;
+        shifterU16 >>= 1;
+        out->fUnk = shifterU16;
+        shifterU16 >>= 1;
+        out->fRight = shifterU16;
+        shifterU16 >>= 1;
+        out->fPgnRestart = shifterU16;
+        shifterU16 >>= 1;
+        out->fEmptyPage = shifterU16;
+        shifterU16 >>= 1;
+        out->fAllFtn = shifterU16;
+        shifterU16 >>= 1;
+        out->unused0_6 = shifterU16;
+        shifterU16 >>= 1;
+        out->fTableBreaks = shifterU16;
+        shifterU16 >>= 1;
+        out->fMarked = shifterU16;
+        shifterU16 >>= 1;
+        out->fColumnBreaks = shifterU16;
+        shifterU16 >>= 1;
+        out->fTableHeader = shifterU16;
+        shifterU16 >>= 1;
+        out->fNewPage = shifterU16;
+        shifterU16 >>= 1;
+        out->bkc = shifterU16;
+        shifterU16 >>= 4;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
         out++;
@@ -1296,23 +1448,27 @@ unsigned MsWordGenerated::read(const U8 *in, PGD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, PHE *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fSpare = shiftRegister;
-        shiftRegister >>= 1;
-        out->fUnk = shiftRegister;
-        shiftRegister >>= 1;
-        out->fDiffLines = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused0_3 = shiftRegister;
-        shiftRegister >>= 5;
-        out->clMac = shiftRegister;
-        shiftRegister >>= 8;
+        bytes += read(in + bytes, &shifterU16);
+        out->fSpare = shifterU16;
+        shifterU16 >>= 1;
+        out->fUnk = shifterU16;
+        shifterU16 >>= 1;
+        out->fDiffLines = shifterU16;
+        shifterU16 >>= 1;
+        out->unused0_3 = shifterU16;
+        shifterU16 >>= 5;
+        out->clMac = shifterU16;
+        shifterU16 >>= 8;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
         out++;
@@ -1322,25 +1478,29 @@ unsigned MsWordGenerated::read(const U8 *in, PHE *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 4);
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->fBrLnAbove = shiftRegister;
-        shiftRegister >>= 1;
-        out->fBrLnBelow = shiftRegister;
-        shiftRegister >>= 1;
-        out->fUnused = shiftRegister;
-        shiftRegister >>= 2;
-        out->pcVert = shiftRegister;
-        shiftRegister >>= 2;
-        out->pcHorz = shiftRegister;
-        shiftRegister >>= 2;
+        bytes += read(in + bytes, &shifterU8);
+        out->fBrLnAbove = shifterU8;
+        shifterU8 >>= 1;
+        out->fBrLnBelow = shifterU8;
+        shifterU8 >>= 1;
+        out->fUnused = shifterU8;
+        shifterU8 >>= 2;
+        out->pcVert = shifterU8;
+        shifterU8 >>= 2;
+        out->pcHorz = shifterU8;
+        shifterU8 >>= 2;
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 5);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 6);
@@ -1350,25 +1510,25 @@ unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
         bytes += read(in + bytes, (PHE *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 10);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fVertical = shiftRegister;
-        shiftRegister >>= 1;
-        out->fBackward = shiftRegister;
-        shiftRegister >>= 1;
-        out->fRotateFont = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused68_3 = shiftRegister;
-        shiftRegister >>= 13;
+        bytes += read(in + bytes, &shifterU16);
+        out->fVertical = shifterU16;
+        shifterU16 >>= 1;
+        out->fBackward = shifterU16;
+        shifterU16 >>= 1;
+        out->fRotateFont = shifterU16;
+        shifterU16 >>= 1;
+        out->unused68_3 = shifterU16;
+        shifterU16 >>= 13;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 4);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 4);
         bytes += read(in + bytes, (BRC *)(ptr + bytes), 6);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->dyaHeight = shiftRegister;
-        shiftRegister >>= 15;
-        out->fMinHeight = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->dyaHeight = shifterU16;
+        shifterU16 >>= 15;
+        out->fMinHeight = shifterU16;
+        shifterU16 >>= 1;
         bytes += read(in + bytes, (SHD *)(ptr + bytes), 1);
         bytes += read(in + bytes, (DCS *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
@@ -1384,10 +1544,14 @@ unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
 
 //unsigned MsWordGenerated::read(const U8 *in, PAPX *out, unsigned count)
 //{
-//    unsigned long shiftRegister;
-//    U8 *ptr = (U8 *)out;
+//    U32 shifterU32;
+//    U16 shifterU16;
+//    U8 shifterU8;
+//    U8 *ptr;
 //    unsigned bytes = 0;
 //
+//    ptr = (U8 *)out;
+//    shifterU32 = shifterU16 = shifterU8 = 0;
 //    for (unsigned i = 0; i < count; i++)
 //    {
 //        bytes += read(in + bytes, (U8 *)(ptr + bytes), 3);
@@ -1400,10 +1564,14 @@ unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, PICF *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
@@ -1415,23 +1583,27 @@ unsigned MsWordGenerated::read(const U8 *in, PICF *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, PCD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fNoParaLast = shiftRegister;
-        shiftRegister >>= 1;
-        out->fPaphNil = shiftRegister;
-        shiftRegister >>= 1;
-        out->fCopied = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused0_3 = shiftRegister;
-        shiftRegister >>= 5;
-        out->fn = shiftRegister;
-        shiftRegister >>= 8;
+        bytes += read(in + bytes, &shifterU16);
+        out->fNoParaLast = shifterU16;
+        shifterU16 >>= 1;
+        out->fPaphNil = shifterU16;
+        shifterU16 >>= 1;
+        out->fCopied = shifterU16;
+        shifterU16 >>= 1;
+        out->unused0_3 = shifterU16;
+        shifterU16 >>= 5;
+        out->fn = shifterU16;
+        shifterU16 >>= 8;
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (PRM *)(ptr + bytes), 1);
         out++;
@@ -1441,10 +1613,14 @@ unsigned MsWordGenerated::read(const U8 *in, PCD *out, unsigned count)
 
 //unsigned MsWordGenerated::read(const U8 *in, PLCF *out, unsigned count)
 //{
-//    unsigned long shiftRegister;
-//    U8 *ptr = (U8 *)out;
+//    U32 shifterU32;
+//    U16 shifterU16;
+//    U8 shifterU8;
+//    U8 *ptr;
 //    unsigned bytes = 0;
 //
+//    ptr = (U8 *)out;
+//    shifterU32 = shifterU16 = shifterU8 = 0;
 //    for (unsigned i = 0; i < count; i++)
 //    {
 //        out++;
@@ -1454,17 +1630,21 @@ unsigned MsWordGenerated::read(const U8 *in, PCD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, PRM2 *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fComplex = shiftRegister;
-        shiftRegister >>= 1;
-        out->igrpprl = shiftRegister;
-        shiftRegister >>= 15;
+        bytes += read(in + bytes, &shifterU16);
+        out->fComplex = shifterU16;
+        shifterU16 >>= 1;
+        out->igrpprl = shifterU16;
+        shifterU16 >>= 15;
         out++;
     }
     return bytes;
@@ -1472,10 +1652,14 @@ unsigned MsWordGenerated::read(const U8 *in, PRM2 *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, RS *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 8);
@@ -1486,10 +1670,14 @@ unsigned MsWordGenerated::read(const U8 *in, RS *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, RR *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
@@ -1500,10 +1688,14 @@ unsigned MsWordGenerated::read(const U8 *in, RR *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, SED *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
@@ -1517,10 +1709,14 @@ unsigned MsWordGenerated::read(const U8 *in, SED *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, SEP *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 10);
@@ -1536,13 +1732,13 @@ unsigned MsWordGenerated::read(const U8 *in, SEP *out, unsigned count)
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 5);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->pgbApplyTo = shiftRegister;
-        shiftRegister >>= 3;
-        out->pgbPageDepth = shiftRegister;
-        shiftRegister >>= 2;
-        out->pgbOffsetFrom = shiftRegister;
-        shiftRegister >>= 3;
+        bytes += read(in + bytes, &shifterU16);
+        out->pgbApplyTo = shifterU16;
+        shifterU16 >>= 3;
+        out->pgbPageDepth = shifterU16;
+        shifterU16 >>= 2;
+        out->pgbOffsetFrom = shifterU16;
+        shifterU16 >>= 3;
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 11);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
@@ -1557,10 +1753,14 @@ unsigned MsWordGenerated::read(const U8 *in, SEP *out, unsigned count)
 
 //unsigned MsWordGenerated::read(const U8 *in, SEPX *out, unsigned count)
 //{
-//    unsigned long shiftRegister;
-//    U8 *ptr = (U8 *)out;
+//    U32 shifterU32;
+//    U16 shifterU16;
+//    U8 shifterU8;
+//    U8 *ptr;
 //    unsigned bytes = 0;
 //
+//    ptr = (U8 *)out;
+//    shifterU32 = shifterU16 = shifterU8 = 0;
 //    for (unsigned i = 0; i < count; i++)
 //    {
 //        bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
@@ -1571,18 +1771,22 @@ unsigned MsWordGenerated::read(const U8 *in, SEP *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, STSHI *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fStdStylenamesWritten = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused4_2 = shiftRegister;
-        shiftRegister >>= 15;
+        bytes += read(in + bytes, &shifterU16);
+        out->fStdStylenamesWritten = shifterU16;
+        shifterU16 >>= 1;
+        out->unused4_2 = shifterU16;
+        shifterU16 >>= 15;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 6);
         out++;
     }
@@ -1591,41 +1795,45 @@ unsigned MsWordGenerated::read(const U8 *in, STSHI *out, unsigned count)
 
 //unsigned MsWordGenerated::read(const U8 *in, STD *out, unsigned count)
 //{
-//    unsigned long shiftRegister;
-//    U8 *ptr = (U8 *)out;
+//    U32 shifterU32;
+//    U16 shifterU16;
+//    U8 shifterU8;
+//    U8 *ptr;
 //    unsigned bytes = 0;
 //
+//    ptr = (U8 *)out;
+//    shifterU32 = shifterU16 = shifterU8 = 0;
 //    for (unsigned i = 0; i < count; i++)
 //    {
-//        bytes += read(in + bytes, (U16 *)&shiftRegister);
-//        out->sti = shiftRegister;
-//        shiftRegister >>= 12;
-//        out->fScratch = shiftRegister;
-//        shiftRegister >>= 1;
-//        out->fInvalHeight = shiftRegister;
-//        shiftRegister >>= 1;
-//        out->fHasUpe = shiftRegister;
-//        shiftRegister >>= 1;
-//        out->fMassCopy = shiftRegister;
-//        shiftRegister >>= 1;
-//        bytes += read(in + bytes, (U16 *)&shiftRegister);
-//        out->sgc = shiftRegister;
-//        shiftRegister >>= 4;
-//        out->istdBase = shiftRegister;
-//        shiftRegister >>= 12;
-//        bytes += read(in + bytes, (U16 *)&shiftRegister);
-//        out->cupx = shiftRegister;
-//        shiftRegister >>= 4;
-//        out->istdNext = shiftRegister;
-//        shiftRegister >>= 12;
+//        bytes += read(in + bytes, &shifterU16);
+//        out->sti = shifterU16;
+//        shifterU16 >>= 12;
+//        out->fScratch = shifterU16;
+//        shifterU16 >>= 1;
+//        out->fInvalHeight = shifterU16;
+//        shifterU16 >>= 1;
+//        out->fHasUpe = shifterU16;
+//        shifterU16 >>= 1;
+//        out->fMassCopy = shifterU16;
+//        shifterU16 >>= 1;
+//        bytes += read(in + bytes, &shifterU16);
+//        out->sgc = shifterU16;
+//        shifterU16 >>= 4;
+//        out->istdBase = shifterU16;
+//        shifterU16 >>= 12;
+//        bytes += read(in + bytes, &shifterU16);
+//        out->cupx = shifterU16;
+//        shifterU16 >>= 4;
+//        out->istdNext = shifterU16;
+//        shifterU16 >>= 12;
 //        bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
-//        bytes += read(in + bytes, (U16 *)&shiftRegister);
-//        out->fAutoRedef = shiftRegister;
-//        shiftRegister >>= 1;
-//        out->fHidden = shiftRegister;
-//        shiftRegister >>= 1;
-//        out->unused8_3 = shiftRegister;
-//        shiftRegister >>= 14;
+//        bytes += read(in + bytes, &shifterU16);
+//        out->fAutoRedef = shifterU16;
+//        shifterU16 >>= 1;
+//        out->fHidden = shifterU16;
+//        shifterU16 >>= 1;
+//        out->unused8_3 = shifterU16;
+//        shifterU16 >>= 14;
 //        bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
 //        out++;
 //    }
@@ -1634,19 +1842,23 @@ unsigned MsWordGenerated::read(const U8 *in, STSHI *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, TBD *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U8 *)&shiftRegister);
-        out->jc = shiftRegister;
-        shiftRegister >>= 3;
-        out->tlc = shiftRegister;
-        shiftRegister >>= 3;
-        out->unused0_6 = shiftRegister;
-        shiftRegister >>= 2;
+        bytes += read(in + bytes, &shifterU8);
+        out->jc = shifterU8;
+        shifterU8 >>= 3;
+        out->tlc = shifterU8;
+        shifterU8 >>= 3;
+        out->unused0_6 = shifterU8;
+        shifterU8 >>= 2;
         out++;
     }
     return bytes;
@@ -1654,31 +1866,35 @@ unsigned MsWordGenerated::read(const U8 *in, TBD *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, TC *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fFirstMerged = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMerged = shiftRegister;
-        shiftRegister >>= 1;
-        out->fVertical = shiftRegister;
-        shiftRegister >>= 1;
-        out->fBackward = shiftRegister;
-        shiftRegister >>= 1;
-        out->fRotateFont = shiftRegister;
-        shiftRegister >>= 1;
-        out->fVertMerge = shiftRegister;
-        shiftRegister >>= 1;
-        out->fVertRestart = shiftRegister;
-        shiftRegister >>= 1;
-        out->vertAlign = shiftRegister;
-        shiftRegister >>= 2;
-        out->fUnused = shiftRegister;
-        shiftRegister >>= 7;
+        bytes += read(in + bytes, &shifterU16);
+        out->fFirstMerged = shifterU16;
+        shifterU16 >>= 1;
+        out->fMerged = shifterU16;
+        shifterU16 >>= 1;
+        out->fVertical = shifterU16;
+        shifterU16 >>= 1;
+        out->fBackward = shifterU16;
+        shifterU16 >>= 1;
+        out->fRotateFont = shifterU16;
+        shifterU16 >>= 1;
+        out->fVertMerge = shifterU16;
+        shifterU16 >>= 1;
+        out->fVertRestart = shifterU16;
+        shifterU16 >>= 1;
+        out->vertAlign = shifterU16;
+        shifterU16 >>= 2;
+        out->fUnused = shifterU16;
+        shifterU16 >>= 7;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (BRC *)(ptr + bytes), 4);
         out++;
@@ -1688,32 +1904,36 @@ unsigned MsWordGenerated::read(const U8 *in, TC *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, TLP *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fBorders = shiftRegister;
-        shiftRegister >>= 1;
-        out->fShading = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFont = shiftRegister;
-        shiftRegister >>= 1;
-        out->fColor = shiftRegister;
-        shiftRegister >>= 1;
-        out->fBestFit = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHdrRows = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLastRow = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHdrCols = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLastCol = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += read(in + bytes, &shifterU16);
+        out->fBorders = shifterU16;
+        shifterU16 >>= 1;
+        out->fShading = shifterU16;
+        shifterU16 >>= 1;
+        out->fFont = shifterU16;
+        shifterU16 >>= 1;
+        out->fColor = shifterU16;
+        shifterU16 >>= 1;
+        out->fBestFit = shifterU16;
+        shifterU16 >>= 1;
+        out->fHdrRows = shifterU16;
+        shifterU16 >>= 1;
+        out->fLastRow = shifterU16;
+        shifterU16 >>= 1;
+        out->fHdrCols = shifterU16;
+        shifterU16 >>= 1;
+        out->fLastCol = shifterU16;
+        shifterU16 >>= 1;
         out++;
     }
     return bytes;
@@ -1721,10 +1941,14 @@ unsigned MsWordGenerated::read(const U8 *in, TLP *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, TAP *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
@@ -1732,17 +1956,17 @@ unsigned MsWordGenerated::read(const U8 *in, TAP *out, unsigned count)
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (TLP *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fCaFull = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFirstRow = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLastRow = shiftRegister;
-        shiftRegister >>= 1;
-        out->fOutline = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused20_12 = shiftRegister;
-        shiftRegister >>= 12;
+        bytes += read(in + bytes, &shifterU16);
+        out->fCaFull = shifterU16;
+        shifterU16 >>= 1;
+        out->fFirstRow = shifterU16;
+        shifterU16 >>= 1;
+        out->fLastRow = shifterU16;
+        shifterU16 >>= 1;
+        out->fOutline = shifterU16;
+        shifterU16 >>= 1;
+        out->unused20_12 = shifterU16;
+        shifterU16 >>= 12;
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 130);
@@ -1756,10 +1980,14 @@ unsigned MsWordGenerated::read(const U8 *in, TAP *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, FTXBXS *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
@@ -1772,18 +2000,22 @@ unsigned MsWordGenerated::read(const U8 *in, FTXBXS *out, unsigned count)
 
 unsigned MsWordGenerated::read(const U8 *in, WKB *out, unsigned count)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 3);
-        bytes += read(in + bytes, (U16 *)&shiftRegister);
-        out->fnpt = shiftRegister;
-        shiftRegister >>= 4;
-        out->fnpd = shiftRegister;
-        shiftRegister >>= 12;
+        bytes += read(in + bytes, &shifterU16);
+        out->fnpt = shifterU16;
+        shifterU16 >>= 4;
+        out->fnpd = shifterU16;
+        shifterU16 >>= 12;
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 1);
         out++;
     }

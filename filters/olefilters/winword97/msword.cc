@@ -1040,8 +1040,6 @@ unsigned MsWord::read(const U8 *in, PAPXFKP *out)
     }
     else
     {
-        U8 tmp;
-
         out->grpprlBytes = 2 * (cw - 1);
         // The spec says that the Word6 istd is a byte, but that seems to be wrong.
         bytes += MsWordGenerated::read(in + bytes, &out->istd);
@@ -1051,222 +1049,226 @@ unsigned MsWord::read(const U8 *in, PAPXFKP *out)
     return bytes;
 }
 
-unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsigned count)
+unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
-    for (unsigned i = 0; i < count; i++)
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+
+    bytes += MsWordGenerated::read(in + bytes, &shifterU16);
+    out->sti = shifterU16;
+    shifterU16 >>= 12;
+    out->fScratch = shifterU16;
+    shifterU16 >>= 1;
+    out->fInvalHeight = shifterU16;
+    shifterU16 >>= 1;
+    out->fHasUpe = shifterU16;
+    shifterU16 >>= 1;
+    out->fMassCopy = shifterU16;
+    shifterU16 >>= 1;
+    bytes += MsWordGenerated::read(in + bytes, &shifterU16);
+    out->sgc = shifterU16;             
+    shifterU16 >>= 4;
+    out->istdBase = shifterU16;
+    shifterU16 >>= 12;
+    bytes += MsWordGenerated::read(in + bytes, &shifterU16);
+    out->cupx = shifterU16;
+    shifterU16 >>= 4;
+    out->istdNext = shifterU16;
+    shifterU16 >>= 12;
+    bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+    bytes += MsWordGenerated::read(in + bytes, &shifterU16);
+    out->fAutoRedef = shifterU16;
+    shifterU16 >>= 1;
+    out->fHidden = shifterU16;
+    shifterU16 >>= 1;
+    out->unused8_3 = shifterU16;
+    shifterU16 >>= 14;
+
+    // If the baseInFile is less than 10, then the style name is not stored in unicode!
+
+    S8 offset = 10 - baseInFile;
+    in -= offset;
+    if (offset > 0)
     {
-        U8 offset;
+        U8 nameLength;
+        U8 terminator;
 
-        offset = 0;
-        offset += MsWordGenerated::read(in + offset, (U16 *)&shiftRegister);
-        out->sti = shiftRegister;
-        shiftRegister >>= 12;
-        out->fScratch = shiftRegister;
-        shiftRegister >>= 1;
-        out->fInvalHeight = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHasUpe = shiftRegister;
-        shiftRegister >>= 1;
-        out->fMassCopy = shiftRegister;
-        shiftRegister >>= 1;
-        offset += MsWordGenerated::read(in + offset, (U16 *)&shiftRegister);
-        out->sgc = shiftRegister;
-        shiftRegister >>= 4;
-        out->istdBase = shiftRegister;
-        shiftRegister >>= 12;
-        offset += MsWordGenerated::read(in + offset, (U16 *)&shiftRegister);
-        out->cupx = shiftRegister;
-        shiftRegister >>= 4;
-        out->istdNext = shiftRegister;
-        shiftRegister >>= 12;
-        offset += MsWordGenerated::read(in + offset, (U16 *)(ptr + bytes), 1);
-        offset += MsWordGenerated::read(in + offset, (U16 *)&shiftRegister);
-        out->fAutoRedef = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHidden = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused8_3 = shiftRegister;
-        shiftRegister >>= 14;
-        memset((ptr + bytes) + baseInFile, 0, 10 - baseInFile);
-        offset -= 10 - baseInFile;
-
-        // If the baseInFile is less than 10, then the style name is not stored in unicode!
-
-        if (baseInFile < 10)
-        {
-            U8 nameLength;
-            U8 terminator;
-
-            offset += MsWordGenerated::read(in + offset, &nameLength);
-            offset += read(lid, in + offset, &out->xstzName, nameLength, false);
-            offset += MsWordGenerated::read(in + offset, &terminator);
-        }
-        else
-        {
-            U16 nameLength;
-            U16 terminator;
-
-            offset += MsWordGenerated::read(in + offset, &nameLength);
-            offset += read(lid, in + offset, &out->xstzName, nameLength, true);
-            offset += MsWordGenerated::read(in + offset, &terminator);
-        }
-        out->grupx = in + offset;
-        if ((int)out->grupx & 1)
-            out->grupx++;
-        bytes += out->bchUpe;
-        out++;
+        memset(ptr + baseInFile, 0, offset);
+        bytes += MsWordGenerated::read(in + bytes, &nameLength);
+        bytes += read(lid, in + bytes, &out->xstzName, nameLength, false);
+        bytes += MsWordGenerated::read(in + bytes, &terminator);
     }
+    else
+    {
+        U16 nameLength;
+        U16 terminator;
+
+        bytes += MsWordGenerated::read(in + bytes, &nameLength);
+        bytes += read(lid, in + bytes, &out->xstzName, nameLength, true);
+        bytes += MsWordGenerated::read(in + bytes, &terminator);
+    }
+    out->grupx = in + bytes;
+    if ((int)out->grupx & 1)
+        out->grupx++;
+    bytes += out->bchUpe;
     return bytes;
 } // STD
 
-unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
+unsigned MsWord::read(const U8 *in, FIB *out)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
-    for (unsigned i = 0; i < count; i++)
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+
+    // What version of Word are we dealing with?
+    // Word 6 for the PC writes files with nFib = 101-102.
+    // Word 6 for the Mac writes files with nFib = 103-104.
+    // Word 8 (a.k.a. Winword 97) and later products write files with nFib > 105.
+
+    // Bytes 0 to 31 are common.
+
+    bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 5);
+    bytes += MsWordGenerated::read(in + bytes, &shifterU16);
+    out->fDot = shifterU16;
+    shifterU16 >>= 1;
+    out->fGlsy = shifterU16;
+    shifterU16 >>= 1;
+    out->fComplex = shifterU16;
+    shifterU16 >>= 1;
+    out->fHasPic = shifterU16;
+    shifterU16 >>= 1;
+    out->cQuickSaves = shifterU16;
+    shifterU16 >>= 4;
+    out->fEncrypted = shifterU16;
+    shifterU16 >>= 1;
+    out->fWhichTblStm = shifterU16;
+    shifterU16 >>= 1;
+    out->fReadOnlyRecommended = shifterU16;
+    shifterU16 >>= 1;
+    out->fWriteReservation = shifterU16;
+    shifterU16 >>= 1;
+    out->fExtChar = shifterU16;
+    shifterU16 >>= 1;
+    out->fLoadOverride = shifterU16;
+    shifterU16 >>= 1;
+    out->fFarEast = shifterU16;
+    shifterU16 >>= 1;
+    out->fCrypto = shifterU16;
+    shifterU16 >>= 1;
+    bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+    bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 1);
+    bytes += MsWordGenerated::read(in + bytes, (U8 *)(ptr + bytes), 1);
+    bytes += MsWordGenerated::read(in + bytes, (U8 *)&shifterU8);
+    out->fMac = shifterU8;
+    shifterU8 >>= 1;
+    out->fEmptySpecial = shifterU8;
+    shifterU8 >>= 1;
+    out->fLoadOverridePage = shifterU8;
+    shifterU8 >>= 1;
+    out->fFutureSavedUndo = shifterU8;
+    shifterU8 >>= 1;
+    out->fWord97Saved = shifterU8;
+    shifterU8 >>= 1;
+    out->fSpare0 = shifterU8;
+    shifterU8 >>= 3;
+    bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 2);
+    bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 2);
+    if (out->nFib > s_maxWord6Version)
     {
-        // What version of Word are we dealing with?
-        // Word 6 for the PC writes files with nFib = 101-102.
-        // Word 6 for the Mac writes files with nFib = 103-104.
-        // Word 8 (a.k.a. Winword 97) and later products write files with nFib > 105.
-
-        // Bytes 0 to 31 are common.
-
-        bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 5);
-        bytes += MsWordGenerated::read(in + bytes, (U16 *)&shiftRegister);
-        out->fDot = shiftRegister;
-        shiftRegister >>= 1;
-        out->fGlsy = shiftRegister;
-        shiftRegister >>= 1;
-        out->fComplex = shiftRegister;
-        shiftRegister >>= 1;
-        out->fHasPic = shiftRegister;
-        shiftRegister >>= 1;
-        out->cQuickSaves = shiftRegister;
-        shiftRegister >>= 4;
-        out->fEncrypted = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWhichTblStm = shiftRegister;
-        shiftRegister >>= 1;
-        out->fReadOnlyRecommended = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWriteReservation = shiftRegister;
-        shiftRegister >>= 1;
-        out->fExtChar = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLoadOverride = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFarEast = shiftRegister;
-        shiftRegister >>= 1;
-        out->fCrypto = shiftRegister;
-        shiftRegister >>= 1;
+        bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 16);
+        bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 22);
         bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
-        bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 1);
-        bytes += MsWordGenerated::read(in + bytes, (U8 *)(ptr + bytes), 1);
-        bytes += MsWordGenerated::read(in + bytes, (U8 *)&shiftRegister);
-        out->fMac = shiftRegister;
-        shiftRegister >>= 1;
-        out->fEmptySpecial = shiftRegister;
-        shiftRegister >>= 1;
-        out->fLoadOverridePage = shiftRegister;
-        shiftRegister >>= 1;
-        out->fFutureSavedUndo = shiftRegister;
-        shiftRegister >>= 1;
-        out->fWord97Saved = shiftRegister;
-        shiftRegister >>= 1;
-        out->fSpare0 = shiftRegister;
-        shiftRegister >>= 3;
-        bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 2);
-        bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 2);
-        if (out->nFib > s_maxWord6Version)
-        {
-            bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 16);
-            bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 22);
-            bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
-            bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 186);
-        }
-        else
-        if (out->nFib > s_minWordVersion)
-        {
-            // We will convert the FIB into the same form as for Winword
+        bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 186);
+    }
+    else
+    if (out->nFib > s_minWordVersion)
+    {
+        // We will convert the FIB into the same form as for Winword
 
-            out->csw = 14;
-            out->wMagicCreated = 0;
-            out->wMagicRevised = 0;
-            out->wMagicCreatedPrivate = 0;
-            out->wMagicRevisedPrivate = 0;
-            out->pnFbpChpFirst_W6 = 0;
-            out->pnChpFirst_W6 = 0;
-            out->cpnBteChp_W6 = 0;
-            out->pnFbpPapFirst_W6 = 0;
-            out->pnPapFirst_W6 = 0;
-            out->cpnBtePap_W6 = 0;
-            out->pnFbpLvcFirst_W6 = 0;
-            out->pnLvcFirst_W6 = 0;
-            out->cpnBteLvc_W6 = 0;
-            out->lidFE = out->lid;
-            out->clw = 22;
-            bytes += MsWordGenerated::read(in + bytes, &out->cbMac);
-            bytes += 16;
-            out->lProductCreated = 0;
-            out->lProductRevised = 0;
+        out->csw = 14;
+        out->wMagicCreated = 0;
+        out->wMagicRevised = 0;
+        out->wMagicCreatedPrivate = 0;
+        out->wMagicRevisedPrivate = 0;
+        out->pnFbpChpFirst_W6 = 0;
+        out->pnChpFirst_W6 = 0;
+        out->cpnBteChp_W6 = 0;
+        out->pnFbpPapFirst_W6 = 0;
+        out->pnPapFirst_W6 = 0;
+        out->cpnBtePap_W6 = 0;
+        out->pnFbpLvcFirst_W6 = 0;
+        out->pnLvcFirst_W6 = 0;
+        out->cpnBteLvc_W6 = 0;
+        out->lidFE = out->lid;
+        out->clw = 22;
+        bytes += MsWordGenerated::read(in + bytes, &out->cbMac);
+        bytes += 16;
+        out->lProductCreated = 0;
+        out->lProductRevised = 0;
 
-            // ccpText through ccpHdrTxbx.
+        // ccpText through ccpHdrTxbx.
 
-            bytes += MsWordGenerated::read(in + bytes, &out->ccpText, 8);
+        bytes += MsWordGenerated::read(in + bytes, &out->ccpText, 8);
 
-            // ccpSpare2.
+        // ccpSpare2.
 
-            bytes += 4;
-            out->cfclcb = 93;
+        bytes += 4;
+        out->cfclcb = 93;
 
-            // fcStshfOrig through lcbSttbfAtnbkmk.
+        // fcStshfOrig through lcbSttbfAtnbkmk.
 
-            bytes += MsWordGenerated::read(in + bytes, &out->fcStshfOrig, 76);
+        bytes += MsWordGenerated::read(in + bytes, &out->fcStshfOrig, 76);
 
-            // wSpare4Fib.
+        // wSpare4Fib.
 
-            bytes += 2;
+        bytes += 2;
 
-            // pnChpFirst through cpnBtePap.
+        // pnChpFirst through cpnBtePap.
 
-            U16 tmp;
-            bytes += MsWordGenerated::read(in + bytes, &tmp);
-            out->pnChpFirst = tmp;
-            bytes += MsWordGenerated::read(in + bytes, &tmp);
-            out->pnPapFirst = tmp;
-            bytes += MsWordGenerated::read(in + bytes, &tmp);
-            out->cpnBteChp = tmp;
-            bytes += MsWordGenerated::read(in + bytes, &tmp);
-            out->cpnBtePap = tmp;
+        U16 tmp;
+        bytes += MsWordGenerated::read(in + bytes, &tmp);
+        out->pnChpFirst = tmp;
+        bytes += MsWordGenerated::read(in + bytes, &tmp);
+        out->pnPapFirst = tmp;
+        bytes += MsWordGenerated::read(in + bytes, &tmp);
+        out->cpnBteChp = tmp;
+        bytes += MsWordGenerated::read(in + bytes, &tmp);
+        out->cpnBtePap = tmp;
 
-            // fcPlcdoaMom through lcbSttbFnm.
+        // fcPlcdoaMom through lcbSttbFnm.
 
-            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcdoaMom, 70);
-        }
-        else
-        {
-            // We don't support this.
+        bytes += MsWordGenerated::read(in + bytes, &out->fcPlcdoaMom, 70);
+    }
+    else
+    {
+        // We don't support this.
 
-            kdError(s_area) << "unsupported version of Word (nFib" << out->nFib << ")";
-            break;
-        }
-        out++;
+        kdError(s_area) << "unsupported version of Word (nFib" << out->nFib << ")";
     }
     return bytes;
 } // FIB
 
 unsigned MsWord::read(const U8 *in, BTE *out)
 {
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
-    U16 tmp;
+
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
 
     if (m_fib.nFib > s_maxWord6Version)
     {
@@ -1274,6 +1276,8 @@ unsigned MsWord::read(const U8 *in, BTE *out)
     }
     else
     {
+        U16 tmp;
+
         bytes += MsWordGenerated::read(in + bytes, &tmp);
         out->pn = tmp;
     }
@@ -1282,19 +1286,29 @@ unsigned MsWord::read(const U8 *in, BTE *out)
 
 unsigned MsWord::read(const U8 *in, PCD *out)
 {
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
 
-    bytes = MsWordGenerated::read(in, out);
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+
+    bytes = MsWordGenerated::read(in + bytes, out);
     return bytes;
 } // PCD
 
 unsigned MsWord::read(const U8 *in, PHE *out)
 {
-    unsigned long shiftRegister;
-    U8 *ptr = (U8 *)out;
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
     unsigned bytes = 0;
-    U16 tmp;
+
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
 
     if (m_fib.nFib > s_maxWord6Version)
     {
@@ -1302,17 +1316,19 @@ unsigned MsWord::read(const U8 *in, PHE *out)
     }
     else
     {
-        bytes += MsWordGenerated::read(in + bytes, (U16 *)&shiftRegister);
-        out->fSpare = shiftRegister;
-        shiftRegister >>= 1;
-        out->fUnk = shiftRegister;
-        shiftRegister >>= 1;
-        out->fDiffLines = shiftRegister;
-        shiftRegister >>= 1;
-        out->unused0_3 = shiftRegister;
-        shiftRegister >>= 5;
-        out->clMac = shiftRegister;
-        shiftRegister >>= 8;
+        U16 tmp;
+
+        bytes += MsWordGenerated::read(in + bytes, &shifterU16);
+        out->fSpare = shifterU16;
+        shifterU16 >>= 1;
+        out->fUnk = shifterU16;
+        shifterU16 >>= 1;
+        out->fDiffLines = shifterU16;
+        shifterU16 >>= 1;
+        out->unused0_3 = shifterU16;
+        shifterU16 >>= 5;
+        out->clMac = shifterU16;
+        shifterU16 >>= 8;
         out->unused2 = 0;
         bytes += MsWordGenerated::read(in + bytes, &tmp);
         out->dxaCol = tmp;
@@ -1321,4 +1337,3 @@ unsigned MsWord::read(const U8 *in, PHE *out)
     }
     return bytes;
 } // PHE
-

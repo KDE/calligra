@@ -143,9 +143,9 @@ public:
         //
         const U8 *grupx;
     } STD;
-    unsigned read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsigned count=1);
+    unsigned read(U16 lid, const U8 *in, unsigned baseInFile, STD *out);
 
-    static unsigned read(const U8 *in, FIB *out, unsigned count=1);
+    static unsigned read(const U8 *in, FIB *out);
     unsigned read(const U8 *in, BTE *out);
     unsigned read(const U8 *in, PCD *out);
     unsigned read(const U8 *in, PHE *out);
