@@ -1100,8 +1100,6 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
   KXMLGUIFactory *factory = guiFactory();
 
-  QPtrList<KParts::Plugin> plugins;
-
   setUpdatesEnabled( false );
 
   if ( d->m_activeView )
@@ -1110,13 +1108,16 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     QApplication::sendEvent( d->m_activePart, &ev );
     QApplication::sendEvent( d->m_activeView, &ev );
 
-    plugins = KParts::Plugin::pluginObjects( d->m_activeView );
+    // As of KDE-3.1, the plugins are child XMLGUI objects of the part
+#if KDE_VERSION < 305
+    QPtrList<KParts::Plugin> plugins = KParts::Plugin::pluginObjects( d->m_activeView );
     KParts::Plugin *plugin = plugins.last();
     while ( plugin )
     {
       factory->removeClient( plugin );
       plugin = plugins.prev();
     }
+#endif
 
     factory->removeClient( d->m_activeView );
 
@@ -1135,10 +1136,13 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
     factory->addClient( d->m_activeView );
 
-    plugins = KParts::Plugin::pluginObjects( d->m_activeView );
+    // As of KDE-3.1, the plugins are child XMLGUI objects of the part
+#if KDE_VERSION < 305
+    QPtrList<KParts::Plugin> plugins = KParts::Plugin::pluginObjects( d->m_activeView );
     QPtrListIterator<KParts::Plugin> pIt( plugins );
     for (; pIt.current(); ++pIt )
       factory->addClient( pIt.current() );
+#endif
 
     // This gets plugged in even for embedded views
     factory->plugActionList(d->m_activeView, "view_closeallviews",
