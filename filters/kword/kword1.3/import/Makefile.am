@@ -19,7 +19,7 @@ libkwordkword1dot3import_la_LIBADD  = $(KOFFICE_LIBS)
 noinst_HEADERS = TagProcessing.h KWEFStructures.h \
 ProcessDocument.h KWEFKWordLeader.h ExportFilter.h \
 kword13document.h kword13parser.h kword13frameset.h kword13layout.h \
-kword13paragraph.h kword13utils.h oowriterexport.h kword13import.h \
+kword13paragraph.h kword13utils.h kword13import.h \
 kword13oasisgenerator.h
 
 METASOURCES = AUTO
