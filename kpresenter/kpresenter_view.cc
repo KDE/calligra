@@ -2748,7 +2748,8 @@ void KPresenterView::skipToPage( int num )
     vert->setValue( 0 );
     currPg = num;
     emit currentPageChanged( currPg );
-    sidebar->setCurrentPage( currPg );
+    if( sidebar )
+        sidebar->setCurrentPage( currPg );
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
     yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
