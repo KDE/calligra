@@ -510,7 +510,11 @@ protected:
   static const int ID_EDIT_CUT = 44;
   static const int ID_EDIT_COPY = 45;
   static const int ID_EDIT_PASTE = 46;
-
+  static const int ID_TABLE_INSROW = 47;
+  static const int ID_TABLE_DELROW = 48;
+  static const int ID_TABLE_INSCOL = 49;
+  static const int ID_TABLE_DELCOL = 50;
+  
 };
 
 /******************************************************************/

@@ -992,3 +992,9 @@ Reggie, 27.3.1999:
 - Implemented joining table cells in vertical direction
   (only the auto-resize of vertical joined table cells screws
    up a table a bit - will fix it)
+
+Reggie, 28.3.1999:
+------------------
+- Clicking on joined/hidden tables cells works correctly now
+- Some menu items/toolbar pics for table manipulations get disabled/enabled
+  correctly to avoid mistakes by the user

@@ -637,7 +637,41 @@ void KWordView::setTool(MouseMode _mouseMode)
 	    oldFramePos = m_vToolBarFrame->barPos();
 	  m_vToolBarFrame->setBarPos(OpenPartsUI::Floating);
 	}
-  }
+
+      m_vMenuTable->setItemEnabled(m_idMenuTable_InsertRow,false);
+      m_vToolBarTable->setItemEnabled(ID_TABLE_INSROW,false);
+      m_vMenuTable->setItemEnabled(m_idMenuTable_DeleteRow,false);
+      m_vToolBarTable->setItemEnabled(ID_TABLE_DELROW,false);
+      m_vMenuTable->setItemEnabled(m_idMenuTable_InsertCol,false);
+      m_vToolBarTable->setItemEnabled(ID_TABLE_INSCOL,false);
+      m_vMenuTable->setItemEnabled(m_idMenuTable_DeleteCol,false);
+      m_vToolBarTable->setItemEnabled(ID_TABLE_DELCOL,false);
+      m_vMenuTable->setItemEnabled(m_idMenuTable_JoinCells,false);
+      m_vMenuTable->setItemEnabled(m_idMenuTable_SplitCells,false);
+      m_vMenuTable->setItemEnabled(m_idMenuTable_UngroupTable,false);
+
+      switch (_mouseMode)
+	{
+	case MM_EDIT:
+	  {
+	    m_vMenuTable->setItemEnabled(m_idMenuTable_InsertRow,true);
+	    m_vToolBarTable->setItemEnabled(ID_TABLE_INSROW,true);
+	    m_vMenuTable->setItemEnabled(m_idMenuTable_DeleteRow,true);
+	    m_vToolBarTable->setItemEnabled(ID_TABLE_DELROW,true);
+	    m_vMenuTable->setItemEnabled(m_idMenuTable_InsertCol,true);
+	    m_vToolBarTable->setItemEnabled(ID_TABLE_INSCOL,true);
+	    m_vMenuTable->setItemEnabled(m_idMenuTable_DeleteCol,true);
+	    m_vToolBarTable->setItemEnabled(ID_TABLE_DELCOL,true);
+	    m_vMenuTable->setItemEnabled(m_idMenuTable_UngroupTable,true);
+	  } break;
+	case MM_EDIT_FRAME:
+	  {
+	    m_vMenuTable->setItemEnabled(m_idMenuTable_JoinCells,true);
+	    m_vMenuTable->setItemEnabled(m_idMenuTable_SplitCells,true);
+	  } break;
+	default: break;
+	}
+    }
 }
 
 /*===============================================================*/
@@ -2026,19 +2060,19 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarTable->setFullWidth(false);
 
   pix = OPUIUtils::convertPixmap(ICON("rowin.xpm"));
-  m_idButtonTable_InsertRow = m_vToolBarTable->insertButton2(pix,1,SIGNAL(clicked()),this,"tableInsertRow",
+  m_idButtonTable_InsertRow = m_vToolBarTable->insertButton2(pix,ID_TABLE_INSROW,SIGNAL(clicked()),this,"tableInsertRow",
 							     true,i18n("Insert Row"),-1);
 
   pix = OPUIUtils::convertPixmap(ICON("colin.xpm"));
-  m_idButtonTable_InsertCol = m_vToolBarTable->insertButton2(pix,1,SIGNAL(clicked()),this,"tableInsertCol",
+  m_idButtonTable_InsertCol = m_vToolBarTable->insertButton2(pix,ID_TABLE_INSCOL,SIGNAL(clicked()),this,"tableInsertCol",
 							     true,i18n("Insert Column"),-1);
 
   pix = OPUIUtils::convertPixmap(ICON("rowout.xpm"));
-  m_idButtonTable_DeleteRow = m_vToolBarTable->insertButton2(pix,1,SIGNAL(clicked()),this,"tableDeleteRow",
+  m_idButtonTable_DeleteRow = m_vToolBarTable->insertButton2(pix,ID_TABLE_DELROW,SIGNAL(clicked()),this,"tableDeleteRow",
 							     true,i18n("Delete Row"),-1);
 
   pix = OPUIUtils::convertPixmap(ICON("colout.xpm"));
-  m_idButtonTable_DeleteCol = m_vToolBarTable->insertButton2(pix,1,SIGNAL(clicked()),this,"tableDeleteCol",
+  m_idButtonTable_DeleteCol = m_vToolBarTable->insertButton2(pix,ID_TABLE_DELCOL,SIGNAL(clicked()),this,"tableDeleteCol",
 							     true,i18n("Delete Column"),-1);
 
   m_vToolBarTable->enable(OpenPartsUI::Show);

@@ -1623,7 +1623,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 {
   if (!getFrameSet(_fc.getFrameSet() - 1)->isVisible())
     return false;
-  
+
   _painter.save();
 
   unsigned int xShift = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left();
@@ -1891,7 +1891,7 @@ void KWordDocument::printBorders(QPainter &_painter,int xOffset,int yOffset,int 
     {
       frameset = getFrameSet(i);
       if (!frameset->isVisible()) continue;
-      
+
       if (isAHeader(getFrameSet(i)->getFrameInfo()) && !hasHeader() ||
 	  isAFooter(getFrameSet(i)->getFrameInfo()) && !hasFooter() ||
 	  isAWrongHeader(getFrameSet(i)->getFrameInfo(),getHeaderType()) ||
@@ -2795,6 +2795,7 @@ int KWordDocument::getFrameSet(unsigned int mx,unsigned int my)
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       if (frameSet->contains(mx,my))
 	{
+	  if (!frameSet->isVisible()) continue;
 	  if (isAHeader(frameSet->getFrameInfo()) && !hasHeader() ||
 	      isAFooter(frameSet->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
@@ -2819,6 +2820,7 @@ int KWordDocument::selectFrame(unsigned int mx,unsigned int my)
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       if (frameSet->contains(mx,my))
 	{
+	  if (!frameSet->isVisible()) continue;
 	  if (isAHeader(frameSet->getFrameInfo()) && !hasHeader() ||
 	      isAFooter(frameSet->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
@@ -2870,6 +2872,7 @@ QCursor KWordDocument::getMouseCursor(unsigned int mx,unsigned int my)
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       if (frameSet->contains(mx,my))
 	{
+	  if (!frameSet->isVisible()) continue;
 	  if (isAHeader(frameSet->getFrameInfo()) && !hasHeader() ||
 	      isAFooter(frameSet->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
@@ -2894,6 +2897,7 @@ KWFrame *KWordDocument::getFirstSelectedFrame()
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
+	  if (!frameSet->isVisible()) continue;
 	  if (isAHeader(frameSet->getFrameInfo()) && !hasHeader() ||
 	      isAFooter(frameSet->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
@@ -2921,6 +2925,7 @@ KWFrame *KWordDocument::getFirstSelectedFrame(int &_frameset)
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
+	  if (!frameSet->isVisible()) continue;
 	  if (isAHeader(frameSet->getFrameInfo()) && !hasHeader() ||
 	      isAFooter(frameSet->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(frameSet->getFrameInfo(),getHeaderType()) ||
