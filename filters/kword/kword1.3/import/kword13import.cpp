@@ -210,13 +210,11 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
         file.close();      
     }
 
-#if 0
     if ( ! postParse( store, kwordDocument ) )
     {
         kdError(30520) << "Error during post-parsing! Aborting!" << endl;
         return  KoFilter::StupidError;
     }
-#endif
     
     // We have finished with the input store/file, so close the store (already done for a raw XML file)
     kdDebug(30520) << "Deleting input store..." << endl;

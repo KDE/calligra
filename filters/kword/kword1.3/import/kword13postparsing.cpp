@@ -36,7 +36,6 @@ KWord13PostParsing::KWord13PostParsing(void) : m_kwordDocument( 0 )
 
 KWord13PostParsing::~KWord13PostParsing(void)
 {
-    delete m_kwordDocument;
 }
 
 bool KWord13PostParsing::postParsePictures( KoStore* store )
