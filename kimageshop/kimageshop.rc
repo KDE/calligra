@@ -52,6 +52,7 @@
   <Action name="tool_zoom"/>
   <Action name="tool_pen"/>	
   <Action name="tool_brush"/>
+  <Action name="tool_colorpicker"/>
   <Action name="tool_gradient"/>
  </ToolBar>
 </ToolBars>

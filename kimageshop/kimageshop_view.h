@@ -49,6 +49,7 @@ class BrushTool;
 class PenTool;
 class ZoomTool;
 class GradientTool;
+class ColorPicker;
 
 class KImageShopView : public ContainerView
 {
@@ -106,6 +107,7 @@ class KImageShopView : public ContainerView
   void tool_brush();
   void tool_pen();
   void tool_gradient();
+  void tool_colorpicker();
 
   // misc action slots
   void preferences();
@@ -139,7 +141,8 @@ class KImageShopView : public ContainerView
   // dialog actions
   KToggleAction *m_dialog_layer, *m_dialog_color, *m_dialog_brush, *m_dialog_gradient, *m_dialog_gradienteditor;
   // tool actions
-  KToggleAction *m_tool_move, *m_tool_zoom, *m_tool_brush, *m_tool_pen, *m_tool_gradient;
+  KToggleAction *m_tool_move, *m_tool_zoom, *m_tool_brush, *m_tool_pen
+    , *m_tool_gradient, *m_tool_colorpicker;
   // layer actions
   KAction *m_layer_rotate180, *m_layer_rotateleft90, *m_layer_rotateright90, *m_layer_mirrorX, *m_layer_mirrorY;
   // misc actions
@@ -154,6 +157,7 @@ class KImageShopView : public ContainerView
   PenTool              *m_pPenTool;
   ZoomTool             *m_pZoomTool;
   GradientTool         *m_pGradientTool;
+  ColorPicker          *m_pColorPicker;
   const Brush          *m_pBrush; // current brush
   const BrushesWidget  *m_pBrushChooser;
 

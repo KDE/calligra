@@ -40,6 +40,7 @@
 #include "pentool.h"
 #include "zoomtool.h"
 #include "gradienttool.h"
+#include "colorpicker.h"
 
 #include <kruler.h>
 #include <klocale.h>
@@ -103,6 +104,9 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
   m_tool_brush = new KToggleAction( i18n("&Brush tool"), KImageShopBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
+  m_tool_colorpicker = new KToggleAction( i18n("&Color picker"), KImageShopBarIcon("colorpicker"), 0, this,
+			      SLOT( tool_colorpicker() ),actionCollection(), "tool_colorpicker");
+  m_tool_colorpicker->setExclusiveGroup( "tools" );
   m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), KImageShopBarIcon("gradient"), 0, this,
   				 SLOT( tool_gradient() ),actionCollection(), "tool_gradient");
   m_tool_gradient->setExclusiveGroup( "tools" );
@@ -199,6 +203,11 @@ KImageShopView::KImageShopView( KImageShopDoc* doc, QWidget* parent, const char*
 
   // create pen tool
   m_pPenTool = new PenTool(m_pDoc, this, m_pBrush);
+
+  // create color picker
+  m_pColorPicker = new ColorPicker(m_pDoc, this);
+  connect(m_pColorPicker, SIGNAL(fgColorPicked(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
+  connect(m_pColorPicker, SIGNAL(bgColorPicked(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
   
   // create zoom tool
   m_pZoomTool = new ZoomTool(this);
@@ -434,6 +443,11 @@ void KImageShopView::tool_pen()
   activateTool(m_pPenTool);
 }
 
+void KImageShopView::tool_colorpicker()
+{
+  activateTool(m_pColorPicker);
+}
+
 void KImageShopView::tool_gradient()
 {
 }
@@ -610,7 +624,6 @@ void KImageShopView::slotSetBrush(const Brush* b)
     m_pBrushTool->setBrush(b);
   if (m_pPenTool)
     m_pPenTool->setBrush(b);
-  m_pBrush->dump();
 }
 
 void KImageShopView::slotSetFGColor(const KColor& c)
