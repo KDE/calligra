@@ -3,107 +3,107 @@
 <include location="global">klocale.h</include>
 <widget>
     <class>QDialog</class>
-    <property>
+    <property stdset="1">
         <name>name</name>
         <cstring>TextDialog</cstring>
     </property>
-    <property>
+    <property stdset="1">
         <name>geometry</name>
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>477</width>
-            <height>305</height>
+            <width>433</width>
+            <height>317</height>
         </rect>
     </property>
-    <property>
+    <property stdset="1">
         <name>caption</name>
         <string>Text Object Settings</string>
     </property>
-    <property>
+    <property stdset="1">
         <name>sizeGripEnabled</name>
         <bool>true</bool>
     </property>
     <vbox>
-        <property>
+        <property stdset="1">
             <name>margin</name>
             <number>11</number>
         </property>
-        <property>
+        <property stdset="1">
             <name>spacing</name>
             <number>6</number>
         </property>
         <widget>
             <class>QLayoutWidget</class>
-            <property>
+            <property stdset="1">
                 <name>name</name>
                 <cstring>Layout7</cstring>
             </property>
             <hbox>
-                <property>
+                <property stdset="1">
                     <name>margin</name>
                     <number>0</number>
                 </property>
-                <property>
+                <property stdset="1">
                     <name>spacing</name>
                     <number>6</number>
                 </property>
                 <widget>
                     <class>QLayoutWidget</class>
-                    <property>
+                    <property stdset="1">
                         <name>name</name>
                         <cstring>Layout6</cstring>
                     </property>
                     <vbox>
-                        <property>
+                        <property stdset="1">
                             <name>margin</name>
                             <number>0</number>
                         </property>
-                        <property>
+                        <property stdset="1">
                             <name>spacing</name>
                             <number>6</number>
                         </property>
                         <widget>
                             <class>QGroupBox</class>
-                            <property>
+                            <property stdset="1">
                                 <name>name</name>
                                 <cstring>GroupBox1</cstring>
                             </property>
-                            <property>
+                            <property stdset="1">
                                 <name>title</name>
                                 <string>&amp;Bullet Lists</string>
                             </property>
                             <vbox>
-                                <property>
+                                <property stdset="1">
                                     <name>margin</name>
                                     <number>11</number>
                                 </property>
-                                <property>
+                                <property stdset="1">
                                     <name>spacing</name>
                                     <number>6</number>
                                 </property>
                                 <widget>
                                     <class>QLayoutWidget</class>
-                                    <property>
+                                    <property stdset="1">
                                         <name>name</name>
                                         <cstring>Layout11</cstring>
                                     </property>
                                     <hbox>
-                                        <property>
+                                        <property stdset="1">
                                             <name>margin</name>
                                             <number>0</number>
                                         </property>
-                                        <property>
+                                        <property stdset="1">
                                             <name>spacing</name>
                                             <number>6</number>
                                         </property>
                                         <widget>
                                             <class>QLabel</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>TextLabel1</cstring>
                                             </property>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>text</name>
                                                 <string>&amp;1. Level:</string>
                                             </property>
@@ -138,42 +138,49 @@
                                                     <string>Outlined Square</string>
                                                 </property>
                                             </item>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>comboBullet1</cstring>
                                             </property>
                                         </widget>
                                         <widget>
                                             <class>KColorButton</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>colorBullet1</cstring>
+                                            </property>
+                                            <property stdset="1">
+                                                <name>sizePolicy</name>
+                                                <sizepolicy>
+                                                    <hsizetype>3</hsizetype>
+                                                    <vsizetype>1</vsizetype>
+                                                </sizepolicy>
                                             </property>
                                         </widget>
                                     </hbox>
                                 </widget>
                                 <widget>
                                     <class>QLayoutWidget</class>
-                                    <property>
+                                    <property stdset="1">
                                         <name>name</name>
                                         <cstring>Layout3</cstring>
                                     </property>
                                     <hbox>
-                                        <property>
+                                        <property stdset="1">
                                             <name>margin</name>
                                             <number>0</number>
                                         </property>
-                                        <property>
+                                        <property stdset="1">
                                             <name>spacing</name>
                                             <number>6</number>
                                         </property>
                                         <widget>
                                             <class>QLabel</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>TextLabel1_2</cstring>
                                             </property>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>text</name>
                                                 <string>&amp;2. Level:</string>
                                             </property>
@@ -208,42 +215,49 @@
                                                     <string>Outlined Square</string>
                                                 </property>
                                             </item>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>comboBullet2</cstring>
                                             </property>
                                         </widget>
                                         <widget>
                                             <class>KColorButton</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>colorBullet2</cstring>
+                                            </property>
+                                            <property stdset="1">
+                                                <name>sizePolicy</name>
+                                                <sizepolicy>
+                                                    <hsizetype>3</hsizetype>
+                                                    <vsizetype>1</vsizetype>
+                                                </sizepolicy>
                                             </property>
                                         </widget>
                                     </hbox>
                                 </widget>
                                 <widget>
                                     <class>QLayoutWidget</class>
-                                    <property>
+                                    <property stdset="1">
                                         <name>name</name>
                                         <cstring>Layout4</cstring>
                                     </property>
                                     <hbox>
-                                        <property>
+                                        <property stdset="1">
                                             <name>margin</name>
                                             <number>0</number>
                                         </property>
-                                        <property>
+                                        <property stdset="1">
                                             <name>spacing</name>
                                             <number>6</number>
                                         </property>
                                         <widget>
                                             <class>QLabel</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>TextLabel1_3</cstring>
                                             </property>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>text</name>
                                                 <string>&amp;3. Level:</string>
                                             </property>
@@ -278,44 +292,51 @@
                                                     <string>Outlined Square</string>
                                                 </property>
                                             </item>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>comboBullet3</cstring>
                                             </property>
                                         </widget>
                                         <widget>
                                             <class>KColorButton</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>colorBullet3</cstring>
+                                            </property>
+                                            <property stdset="1">
+                                                <name>sizePolicy</name>
+                                                <sizepolicy>
+                                                    <hsizetype>3</hsizetype>
+                                                    <vsizetype>1</vsizetype>
+                                                </sizepolicy>
                                             </property>
                                         </widget>
                                     </hbox>
                                 </widget>
                                 <widget>
                                     <class>QLayoutWidget</class>
-                                    <property>
+                                    <property stdset="1">
                                         <name>name</name>
                                         <cstring>Layout5</cstring>
                                     </property>
                                     <hbox>
-                                        <property>
+                                        <property stdset="1">
                                             <name>margin</name>
                                             <number>0</number>
                                         </property>
-                                        <property>
+                                        <property stdset="1">
                                             <name>spacing</name>
                                             <number>6</number>
                                         </property>
                                         <widget>
                                             <class>QLabel</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>TextLabel1_4</cstring>
                                             </property>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>text</name>
-                                                <string>4&amp;. Level:</string>
+                                                <string>&amp;4. Level:</string>
                                             </property>
                                             <property>
                                                 <name>buddy</name>
@@ -348,16 +369,23 @@
                                                     <string>Outlined Square</string>
                                                 </property>
                                             </item>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>comboBullet4</cstring>
                                             </property>
                                         </widget>
                                         <widget>
                                             <class>KColorButton</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>colorBullet4</cstring>
+                                            </property>
+                                            <property stdset="1">
+                                                <name>sizePolicy</name>
+                                                <sizepolicy>
+                                                    <hsizetype>3</hsizetype>
+                                                    <vsizetype>1</vsizetype>
+                                                </sizepolicy>
                                             </property>
                                         </widget>
                                     </hbox>
@@ -366,45 +394,45 @@
                         </widget>
                         <widget>
                             <class>QGroupBox</class>
-                            <property>
+                            <property stdset="1">
                                 <name>name</name>
                                 <cstring>GroupBox2</cstring>
                             </property>
-                            <property>
+                            <property stdset="1">
                                 <name>title</name>
                                 <string>&amp;Enumerated lists</string>
                             </property>
                             <hbox>
-                                <property>
+                                <property stdset="1">
                                     <name>margin</name>
                                     <number>11</number>
                                 </property>
-                                <property>
+                                <property stdset="1">
                                     <name>spacing</name>
                                     <number>6</number>
                                 </property>
                                 <widget>
                                     <class>QLayoutWidget</class>
-                                    <property>
+                                    <property stdset="1">
                                         <name>name</name>
                                         <cstring>Layout9</cstring>
                                     </property>
                                     <vbox>
-                                        <property>
+                                        <property stdset="1">
                                             <name>margin</name>
                                             <number>0</number>
                                         </property>
-                                        <property>
+                                        <property stdset="1">
                                             <name>spacing</name>
                                             <number>6</number>
                                         </property>
                                         <widget>
                                             <class>QLabel</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>TextLabel1_5</cstring>
                                             </property>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>text</name>
                                                 <string>&amp;Type:</string>
                                             </property>
@@ -415,13 +443,13 @@
                                         </widget>
                                         <widget>
                                             <class>QLabel</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>TextLabel2</cstring>
                                             </property>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>text</name>
-                                                <string>&amp;Color</string>
+                                                <string>Colo&amp;r</string>
                                             </property>
                                             <property>
                                                 <name>buddy</name>
@@ -432,16 +460,16 @@
                                 </widget>
                                 <widget>
                                     <class>QLayoutWidget</class>
-                                    <property>
+                                    <property stdset="1">
                                         <name>name</name>
                                         <cstring>Layout10</cstring>
                                     </property>
                                     <vbox>
-                                        <property>
+                                        <property stdset="1">
                                             <name>margin</name>
                                             <number>0</number>
                                         </property>
-                                        <property>
+                                        <property stdset="1">
                                             <name>spacing</name>
                                             <number>6</number>
                                         </property>
@@ -459,14 +487,14 @@
                                                     <string>Characters</string>
                                                 </property>
                                             </item>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>comboEnumType</cstring>
                                             </property>
                                         </widget>
                                         <widget>
                                             <class>KColorButton</class>
-                                            <property>
+                                            <property stdset="1">
                                                 <name>name</name>
                                                 <cstring>enumColor</cstring>
                                             </property>
@@ -479,30 +507,30 @@
                 </widget>
                 <widget>
                     <class>QGroupBox</class>
-                    <property>
+                    <property stdset="1">
                         <name>name</name>
                         <cstring>GroupBox3</cstring>
                     </property>
-                    <property>
+                    <property stdset="1">
                         <name>title</name>
                         <string>&amp;Spacing</string>
                     </property>
                     <vbox>
-                        <property>
+                        <property stdset="1">
                             <name>margin</name>
                             <number>11</number>
                         </property>
-                        <property>
+                        <property stdset="1">
                             <name>spacing</name>
                             <number>6</number>
                         </property>
                         <widget>
                             <class>QLabel</class>
-                            <property>
+                            <property stdset="1">
                                 <name>name</name>
                                 <cstring>TextLabel1_6</cstring>
                             </property>
-                            <property>
+                            <property stdset="1">
                                 <name>text</name>
                                 <string>&amp;Lines-Spacing:</string>
                             </property>
@@ -513,18 +541,18 @@
                         </widget>
                         <widget>
                             <class>QSpinBox</class>
-                            <property>
+                            <property stdset="1">
                                 <name>name</name>
                                 <cstring>spinLineSpacing</cstring>
                             </property>
                         </widget>
                         <widget>
                             <class>QLabel</class>
-                            <property>
+                            <property stdset="1">
                                 <name>name</name>
                                 <cstring>TextLabel1_6_2</cstring>
                             </property>
-                            <property>
+                            <property stdset="1">
                                 <name>text</name>
                                 <string>&amp;Paragraph-Spacing:</string>
                             </property>
@@ -535,18 +563,18 @@
                         </widget>
                         <widget>
                             <class>QSpinBox</class>
-                            <property>
+                            <property stdset="1">
                                 <name>name</name>
                                 <cstring>spinParagSpacing</cstring>
                             </property>
                         </widget>
                         <widget>
                             <class>QLabel</class>
-                            <property>
+                            <property stdset="1">
                                 <name>name</name>
                                 <cstring>TextLabel1_6_2_2</cstring>
                             </property>
-                            <property>
+                            <property stdset="1">
                                 <name>text</name>
                                 <string>&amp;Margin</string>
                             </property>
@@ -557,7 +585,7 @@
                         </widget>
                         <widget>
                             <class>QSpinBox</class>
-                            <property>
+                            <property stdset="1">
                                 <name>name</name>
                                 <cstring>spinMargin</cstring>
                             </property>
@@ -568,16 +596,16 @@
         </widget>
         <widget>
             <class>QLayoutWidget</class>
-            <property>
+            <property stdset="1">
                 <name>name</name>
                 <cstring>Layout1</cstring>
             </property>
             <hbox>
-                <property>
+                <property stdset="1">
                     <name>margin</name>
                     <number>0</number>
                 </property>
-                <property>
+                <property stdset="1">
                     <name>spacing</name>
                     <number>6</number>
                 </property>
@@ -586,48 +614,46 @@
                         <name>name</name>
                         <cstring>Spacer1</cstring>
                     </property>
-                    <property>
-                        <name>geometry</name>
-                        <rect>
-                            <x>1</x>
-                            <y>5</y>
-                            <width>281</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property>
+                    <property stdset="1">
                         <name>orientation</name>
                         <enum>Horizontal</enum>
                     </property>
-                    <property>
+                    <property stdset="1">
                         <name>sizeType</name>
                         <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
                     </property>
                 </spacer>
                 <widget>
                     <class>QPushButton</class>
-                    <property>
+                    <property stdset="1">
                         <name>name</name>
                         <cstring>PushButton2</cstring>
                     </property>
-                    <property>
+                    <property stdset="1">
                         <name>text</name>
-                        <string>&amp;OK</string>
+                        <string>OK</string>
                     </property>
-                    <property>
+                    <property stdset="1">
                         <name>default</name>
                         <bool>true</bool>
                     </property>
                 </widget>
                 <widget>
                     <class>QPushButton</class>
-                    <property>
+                    <property stdset="1">
                         <name>name</name>
                         <cstring>PushButton1</cstring>
                     </property>
-                    <property>
+                    <property stdset="1">
                         <name>text</name>
-                        <string>&amp;Cancel</string>
+                        <string>Cancel</string>
                     </property>
                 </widget>
             </hbox>
@@ -637,11 +663,12 @@
 <customwidgets>
     <customwidget>
         <class>KColorButton</class>
-        <header location="global">kcolorbutton.h</header>
+        <header location="global">kcolorbtn.h</header>
         <sizehint>
             <width>40</width>
             <height>25</height>
         </sizehint>
+        <container>0</container>
         <sizepolicy>
             <hordata>7</hordata>
             <verdata>1</verdata>
@@ -652,7 +679,7 @@
 <images>
     <image>
         <name>image0</name>
-        <data format="XPM.GZ" length="1112">789c9d924d8f9b301086eff91568735b55bb016c02aa7a082cc7563d56aa7ab0c7d97cd919620c2ca9fadfeb99ddb43d54aad4b19178783d5f661eef932f9f3f26f78f8b3ea8708004f6ca27f766706efefaedc3f7c55d962571e77992debd5bdc6102c9b21295ac04a16384ca544008844a28a9583d109a2d2dc23de1b6a045b86364237c267c2e68114e84ab7205ab92704398ae5291ae081bc6328594d587889ff0cc716692b25526323e19086526a5cc089f382c1b614d5864852c581d1955610a45a8b91d505bc5dd5d3972954156112e09b5d085e6662f9c48c94ab26f4f98a7b9c8f9de5e18ab1c72f61d08452a8460f54cb8ced7729d137a46bd366b4dd8119679294b562da32e4dc9aae2328cde6a43782204090548c223a3812db0bae54b66236cb90c254070cd86ff97348561df87bfda3f9425995a2aa5f84d6b0d4b56e22070dedd6eb7df1f8c399e94b6dc01ec0fc7e3e914f789dd3480b3675654841881bec4ed1c2076171e3cfaeafb3e20b8e01dd8c1a37d5300c6e925cc57749b5ae3dcdbdf3e38d51ab009d0d4d0c703b60b6f4abd710ea19edd3c5e66ebd0bef9800e734cecfcc6cefdd3100bb0bfa2b5514156a6a1e99cb59e15047dd93844181b9c5be87b8a165e15b0b12670d7c1c50abaa976d6bf56101baca7505f37d635c1b976f278f38939eab9e93b87c318d3f7177cf5c1981d636c447aac8ddbde941b77f66663cd237df6de9ffdf90f1b5b9eee07182f6db4a11dd8da104654ff35073fde2f7e0212bd308d</data>
+        <data format="XPM.GZ" length="4254">789c7dd7595323470c00e0777e850bbd6da59419db73552a0f1c86057c82cd95ca83e630186363c0184c2aff3d9a96d44b52496a96856f5bd3526bba07efcfdf1ad7c35ee3dbcf3baf6b5acf8a46714f2f8d6fe5db62b1fdedf75fffd8d96d361bfc27cc924673f7a79d5d0a1b45a3ffb4ac6ac0330382b4be9c53731838bfd40e83fa723e55a7a18bc7c039f53e33375d3c4a3c4b4c4fde999b0f6bd7a31a7febedc6e9ca396b5afe8db7d40bea54e79bd56e85ada015bafbf7d569db198e9db376202697afcdf19aef5ddcd6fbf1d95bc6af9dc97ba54e35df81b71bc7ae59f33f789373208e82581ece7deda8e9c7e7e22888647ce4ece7c317711468fc8759e2e1bb3ad3f596de2e3ecfcd3aff83b71ba74eedb81965ba5e32eb3888e350eb3f77261fbf16fbf189daf2dd98757ce62deb59899330c9ddf8c69cb6dc78563b69c5a1d483a15ae783476f99ef539c84ea57e73c09b55ffbe644e6dfaa33cd7f543b6d25b6feb1388d643eec99b5be776fb9df3d8f34b77828d5a5c4d3ab396bbbf93ae24cef8723735638bbf396b5d348eac35775a9f51e8bb348d64373b3ce776896f9e8ceb94823ed47e22debcdd4367f20e6fba5deadbad4f90bb3cc8f4762d27a696926c95f9873371fb8f3466d7b3ed414a7a5ee97489c69bfe9426df50dcd5a4f68967a61e12df94fc464cfebd1acf5f7cd24f7e7def23cf6d495da9d07f2fd8337b5d5bf1567a5ec0792f90a9f6fa3ae241f8ebc65fcc3acfd9a88f3aa889cddfb246f2776de5231e97ec8c1acfdb9516b3ea8bca53f67e23cd6fd7761d67a0666a90763b5d6477b66a90fdd7ecacbb4d4f32bf94bb2f374a2ae74ff2666797ed415737ef1a759f39daa2b7dbe03b3aeaf63d6feb5bc4be72b7161eb199aa5fedcedd722e2fa64bff4c5363f5d8a8b58f753cfacfd3a376b3f2ebc25ff81ba12933baf85ef0fb5d4953827b3be0f56e23cd6fe3d9be5bc8cd66aabf74d6cf5c0526dfb69ecedea41ada7d47ae9c55cbacf17e87edf9711ef17377f8eea4acf6b5b6cfdc1b5daf6c7bbb8b4febc794bfea6b994facc95e677efdbb2b2fc14ab353f44e252f3c39d59df0f43b3e6fff496f52ecc921f73b59dd72bb3de9f98b5de5b6fa9776cae6267f7feab62ab1f4ec485ada712977a1e90bc657f2dcdbadf0a71a5e7050fcc921fc82cf909bd65bca7aed46df3d4c583eb6f55d9fec207b5f57be42dfd5e9bb57e10fbfdb010fb7a8fbd653d7b66edffbeb7f4f3516dcfa334eb798eccb21ebc34eb7a9ec4d3584cd3dad3d8d683736f39df1fe2428d3371a9ef4bacc4953d8fa959df3f7db3d673279edafbe7de5bde0f53b3aebf6dd6fa2fbda7ce03f5548ceefdc1d0784cd553dd0f5db38e4fbca7f2fe4040c21c0b2cf9aa708a7778cf5f15cef001e7f8880b1e23febe94f701aef0195ff015d7f8861b7cc70fdce227ffbc87fbee3ac043ece0111ecbf9c5133cc533ec620ffb38c0217f8df01c2f708c137f5de2154abfaff1066f31c0109bd8c236461cd7e4f898ef4bbedc9122e9fc19de0202f01d6f404018f117df013914d883122a560453b893f9e1decd1fc00c1e600e8fb080653d233cf13d2b3c836778e1bf5f7121fb1bde60c3f3bcc3076ce11347b007f52a275c59130ee0103a7004c7f05dea81138e3f8533e8420ffa6ede01c70cbf542ed721caefdf119ce3695d3d5cf07cdc1398705dff88874bb8d2fae770cdf1c8d5dcc02d0e610c016c208426b47ef407dabc6e793fc590400a19f46140c831235871938872ee524bd7dde6cf1ffc1b47ce07ddd13d7e72d505cde881e6d8a7477e0e13eeed983b34a6052de98956d21f8e7fe6bc6d9ee305de794fd4f93f6041af30a73594e49e096de81d1fe57cd196bbb54f9fb4c4ad74c8f5e812c73cef0c37b4075bdaa703d96f74080975e8888ee93b9dd0299d51977ad4a7010d6944e774c1dfc75cfd842ee5f31cef32bd38fb95db75cf74cdabb8a15b0af869177291d4137eb9bad4840e85d8e5758750518babf932fef77868b94f8df5cff7dccfdafcdf9aff89eff0c9e9ff88e72bc115dff51ff1bcc614075fe3e182e2af157d8d77d5642a8befe4c88ff9dfe33b39f153723fe739f746fe3dc98b1f15edfef9cbce5fa057e358</data>
     </image>
 </images>
 <connections>
