@@ -31,6 +31,7 @@ Until beta2:
 - now it's "Sheet" everywhere, not more "Table" :-)
 - added formula indicator (small blue rectangle on the corner,
   when the cell holds a formula). idea from Quattro Pro
+- added Greek to EURO() function
 
 new functions added:
  ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,
