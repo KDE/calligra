@@ -939,7 +939,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
     pGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
-    grid4->addMultiCellWidget( grp1, row, (++row), 0,1 );
+    row++;
+    grid4->addMultiCellWidget( grp1, row, row, 0,1 );
 
     if(frame) {
         QGroupBox *grp2 = new QGroupBox( i18n("Margins (%1)").arg(doc->getUnitName()), tab4 );
@@ -1004,7 +1005,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         connect( m_inputLeftMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
         connect( m_inputRightMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
         connect( m_inputTopMargin, SIGNAL( valueChanged(double)), this, SLOT( slotMarginsChanged( double )));
-        grid4->addMultiCellWidget( grp2, row, (++row), 0,1 );
+        row++;
+        grid4->addMultiCellWidget( grp2, row, row, 0,1 );
         mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
         if (tab1 && cbProtectContent )
