@@ -12,7 +12,7 @@ bin_PROGRAMS = kimageshop
 #canvastest
 #canvastest_SOURCES = canvastest.cc channeldata.cc layer.cc canvas.cc misc.cc
 
-kimageshop_SOURCES =  kimageshop_view.cc tool.cc channeldata.cc layer.cc canvas.cc \
+kimageshop_SOURCES = kimageshop.idl kimageshop_view.cc tool.cc channeldata.cc layer.cc canvas.cc \
 	brush.cc misc.cc kvector.cc kcolor.cc canvasview.cc \
 	kfloatingdialog.cc kfloatingtabdialog.cc kfloatingdialogowner.cc \
 	kimageshop_undo.cc kimageshop_config.cc \
@@ -33,6 +33,8 @@ METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 
 idl_DATA = kimageshop.idl
 kimageshop.h: $(top_builddir)/lib/kofficecore/koffice.idl
+
+IDL_FLAGS = --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
 kdelnk_DATA = kimageshop.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

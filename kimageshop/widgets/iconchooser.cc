@@ -128,6 +128,7 @@ void IconChooser::setCurrentItem( IconItem *item )
     curRow = index / nCols;
     curCol = index - (curRow * nCols);
 
+    // repaint the old and the new item
     updateCell( oldRow, oldCol, true );
     updateCell( curRow, curCol, true );
   }
@@ -141,6 +142,7 @@ void IconChooser::calculateCells()
   if ( nCols == 0 )
     return;
 
+  bool update = autoUpdate();
   setAutoUpdate( false );
 
   int rows = itemCount / nCols;
@@ -149,13 +151,13 @@ void IconChooser::calculateCells()
 
   setNumRows( rows );
 
-  setAutoUpdate( true );
+  setAutoUpdate( update );
   repaint();
 }
 
 
 
-// recalculate the number of items that fit in one row
+// recalculate the number of items that fit into one row
 // set the current item again after calculating the new grid
 void IconChooser::resizeEvent ( QResizeEvent *e )
 {
@@ -166,7 +168,7 @@ void IconChooser::resizeEvent ( QResizeEvent *e )
   int oldNCols = nCols;
   nCols = viewWidth() / cellWidth();
 
-  if ( oldNCols != nCols ) {
+  if ( nCols != oldNCols ) {
     setNumCols( nCols );
     calculateCells();
     setCurrentItem( item );
