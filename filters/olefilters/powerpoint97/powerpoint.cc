@@ -327,7 +327,7 @@ bool Powerpoint::parse(
 
 void Powerpoint::opColorSchemeAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32,
     QDataStream &operands)
 {
     struct
@@ -370,12 +370,12 @@ void Powerpoint::opCString(
 
 void Powerpoint::opCurrentUserAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32 /*bytes*/,
     QDataStream &operands)
 {
 
     const Q_UINT32 MAGIC_NUMBER = (Q_UINT32)(-476987297);
-    unsigned i;
+    //unsigned i;
 
     operands >> mCurrentUserAtom.size >> mCurrentUserAtom.magic >> mCurrentUserAtom.offsetToCurrentEdit >>
         mCurrentUserAtom.lenUserName >> mCurrentUserAtom.docFileVersion >> mCurrentUserAtom.majorVersion >>
@@ -433,8 +433,8 @@ void Powerpoint::opDocument(
 
 void Powerpoint::opDocumentAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
@@ -498,8 +498,8 @@ void Powerpoint::opFontCollection(
 
 void Powerpoint::opFontEntityAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
@@ -513,8 +513,8 @@ void Powerpoint::opHeadersFooters(
 
 void Powerpoint::opHeadersFootersAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
@@ -565,7 +565,7 @@ void Powerpoint::opNotes(
 
 void Powerpoint::opNotesAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32 /*bytes*/,
     QDataStream &operands)
 {
     struct
@@ -604,21 +604,21 @@ void Powerpoint::opExObjListAtom(
 
 void Powerpoint::opExObjRefAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
 void Powerpoint::opExOleObj(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
 void Powerpoint::opExOleObjAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32 /*bytes*/,
     QDataStream &operands)
 {
     struct
@@ -641,8 +641,8 @@ void Powerpoint::opExOleObjAtom(
 
 void Powerpoint::opExOleObjStg(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
@@ -656,18 +656,19 @@ void Powerpoint::opOutlineViewInfo(
 
 void Powerpoint::opPersistPtrIncrementalBlock2(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
-    PSR_UserEditAtom userEdit;
-    Q_INT16 offsetToEdit = mCurrentUserAtom.offsetToCurrentEdit;
+    //PSR_UserEditAtom userEdit;
+    //Q_INT16 offsetToEdit = mCurrentUserAtom.offsetToCurrentEdit;
 
+    /* huh?
     while(0 < offsetToEdit)
     {
 
-    }
+    }*/
 
-       mpLastUserEditAtom;
+//       mpLastUserEditAtom;
 
 }
 
@@ -772,7 +773,7 @@ void Powerpoint::opSlide(
 
 void Powerpoint::opSlideAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32 /*bytes*/,
     QDataStream &operands)
 {
     struct
@@ -808,7 +809,7 @@ void Powerpoint::opSlideListWithText(
 
 void Powerpoint::opSlidePersistAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32 /*bytes*/,
     QDataStream &operands)
 {
     struct
@@ -866,14 +867,14 @@ void Powerpoint::opSrKinsoku(
 
 void Powerpoint::opSSDocInfoAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
 void Powerpoint::opSSSlideLayoutAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32 /*bytes*/,
     QDataStream &operands)
 {
 
@@ -1040,7 +1041,7 @@ void Powerpoint::opTextCharsAtom(
 
 void Powerpoint::opTextHeaderAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32 /*bytes*/,
     QDataStream &operands)
 {
     struct
@@ -1062,7 +1063,7 @@ void Powerpoint::opTextHeaderAtom(
 
     kdDebug(s_area) << "\nopTextHeaderAtom:" <<
     		       "\n\ttxType: " << data.txType << endl;
-    
+
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
@@ -1075,22 +1076,22 @@ void Powerpoint::opTextHeaderAtom(
 
 void Powerpoint::opTextSpecInfoAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
 void Powerpoint::opTxMasterStyleAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
 void Powerpoint::opTxSIStyleAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
-    QDataStream &operands)
+    Q_UINT32 /*bytes*/,
+    QDataStream &/*operands*/)
 {
 }
 
@@ -1100,14 +1101,14 @@ void Powerpoint::opTxSIStyleAtom(
 //
 void Powerpoint::opUserEditAtom(
     Header & /* op */,
-    Q_UINT32 bytes,
+    Q_UINT32 /*bytes*/,
     QDataStream &operands)
 {
 
     operands >> mUserEditAtom.lastSlideID  >> mUserEditAtom.version >> mUserEditAtom.offsetLastEdit >>
         mUserEditAtom.offsetPersistDirectory >> mUserEditAtom.documentRef >>
         mUserEditAtom.maxPersistWritten >> mUserEditAtom.lastViewType;
-    
+
     if(mEditOffset == 0)mEditOffset = mUserEditAtom.offsetLastEdit;
 
     kdDebug(s_area) << "\nPSR_UserEditAtom:" <<

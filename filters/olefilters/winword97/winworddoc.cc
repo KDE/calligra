@@ -447,7 +447,6 @@ QString WinWordDoc::generateFormats(
                     uid,
                     mimeType,
                     vectorGraphic->type,
-                    filterArgs,
                     vectorGraphic->length,
                     vectorGraphic->data);
 
@@ -808,7 +807,7 @@ void WinWordDoc::gotTableEnd(
 
     for (y = 0; y < m_table.count(); y++)
     {
-        unsigned x;
+        int x;
         MsWordGenerated::TAP row = m_table[y]->m_row;
         QString xml_friendly;
 
@@ -900,7 +899,7 @@ void WinWordDoc::gotTableRow(
     const QValueList<Attributes *> styles,
     MsWordGenerated::TAP &row)
 {
-    unsigned i;
+    int i;
     TableRow *newRow = new TableRow(texts, styles, row);
 
     // Add the left and right edge of each cell to our array.

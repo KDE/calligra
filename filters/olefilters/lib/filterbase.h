@@ -86,10 +86,9 @@ signals:
         QString &storageId,
         QString &mimeType,
         const QString &extension,
-        const QString &config,
         unsigned int length,
         const char *data);
-    void signalPart(const char *nameIN, QString &storageId, QString &mimeType);
+    void signalPart(const QString& nameIN, QString &storageId, QString &mimeType);
     void signalGetStream(const int &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
     // (searching only in current dir)

@@ -18,8 +18,6 @@
 */
 
 #include <filterbase.h>
-#include <filterbase.moc>
-#include <qstringlist.h>
 
 FilterBase::FilterBase() : QObject() {
     m_success=true;
@@ -89,3 +87,5 @@ bool FilterBase::filter() {
     m_ready=true;
     return m_success;
 }
+
+#include <filterbase.moc>

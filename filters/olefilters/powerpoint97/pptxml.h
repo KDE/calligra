@@ -66,12 +66,11 @@ signals:
         QString &storageId,
         QString &mimeType,
         const QString &extension,
-        const QString &config,
         unsigned int length,
         const char *data);
 
     void signalPart(
-        const char *nameIN,
+        const QString& nameIN,
         QString &storageId,
         QString &mimeType);
 

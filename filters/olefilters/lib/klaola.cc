@@ -18,7 +18,7 @@
 */
 
 #include <klaola.h>
-#include <myfile.h>
+#include <kdebug.h>
 
 KLaola::KLaola(const myFile &file) {
 

@@ -26,15 +26,11 @@
 
 #include <filterbase.h>
 #include <koFilter.h>
-#include <koStore.h>
 #include <klaola.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qmap.h>
 
-class myFile;
+class KoStore;
 
-class OLEFilter : public KoFilter {
+class OLEFilter : public KoEmbeddingFilter {
 
     Q_OBJECT
 
@@ -77,14 +73,13 @@ protected slots:
         QString &storageId,
         QString &mimeType,
         const QString &extension,
-        const QString &config,
         unsigned int length,
         const char *data);
 
     // Generate a name for a new part to store it in the KOffice tar storage,
     // or find the name and type of an existing one.
     void slotPart(
-        const char *nameIN,
+        const QString &nameIN,
         QString &storageId,
         QString &mimeType);
 
@@ -103,21 +98,26 @@ private:
     OLEFilter(const OLEFilter &);
     const OLEFilter &operator=(const OLEFilter &);
 
-    unsigned convert(const QString &parentPath, const QString &dirname);
-    void connectCommon(FilterBase **myFilter);
+    // Template method, triggered by embedPart calls
+    virtual void savePartContents( QIODevice* file );
 
-    QMap<QString, QString> partMap;
-    QMap<QString, QString> mimeMap;
+    void convert();
+    void connectCommon(FilterBase **myFilter);
+    QCString mimeTypeHelper();
+
     QMap<QString, QString> imageMap;
-    QString m_path;
 
     myFile olefile;
-    QString m_prefixOut;
     int numPic;                      // for the "unique name generation"
     int m_nextPart;
     KLaola *docfile;                 // used to split up the OLE 2 file
-    KoStore *store;               // KOffice Storage structure
+
+    // Needed for the template method callback savePartContents
+    const char* m_embeddeeData;
+    unsigned int m_embeddeeLength;
+
     bool success;
     static const int s_area = 30510;
 };
+
 #endif // OLEFILTER_H

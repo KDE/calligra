@@ -30,9 +30,9 @@ WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
 
     connect(
         myDoc,
-        SIGNAL(signalPart(const char *, QString &, QString &)),
+        SIGNAL(signalPart(const QString&, QString &, QString &)),
         this,
-        SIGNAL(signalPart(const char *, QString &, QString &)));
+        SIGNAL(signalPart(const QString&, QString &, QString &)));
 
     // Hook up the document info support.
 
@@ -54,9 +54,9 @@ WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
 
     connect(
         myDoc,
-        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)),
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, unsigned int, const char *)),
         this,
-        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)));
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, unsigned int, const char *)));
 }
 
 WordFilter::~WordFilter()

@@ -96,11 +96,11 @@ QString Document::getFont(unsigned fc)
     // Use Qt to look up our canonical equivalent of the font name.
     QFont xFont( font );
     QFontInfo info( xFont );
-    
+
 #ifdef FONT_DEBUG
     kdDebug() << "QT-FONT: " << info.family() << endl;
 #endif
-    
+
     return info.family();
 }
 
@@ -163,7 +163,7 @@ void Document::gotTableRow(
 {
     QString *outTexts = new QString[row.itcMac];
     QValueList<Attributes *> outStyles;
-    unsigned i;
+    int i;
 
     for (i = 0; i < row.itcMac; i++)
     {
@@ -229,7 +229,7 @@ void Document::Attributes::rewriteField(
     unsigned lhsLength = chpxs[m_field.separator].startFc - chpxs[m_field.start].startFc + 1;
     unsigned rhsLength = chpxs[m_field.end].startFc - chpxs[m_field.separator].startFc;
     unsigned run;
-    int length;
+    unsigned int length;
     int adjusted;
     int adjustment;
     QString newLhs;

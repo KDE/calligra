@@ -27,7 +27,6 @@ DESCRIPTION
 #ifndef KLAOLA_H
 #define KLAOLA_H
 
-#include <kdebug.h>
 #include <myfile.h>
 #include <qstring.h>
 #include <qptrlist.h>

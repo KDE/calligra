@@ -153,7 +153,6 @@ void PptXml::gotDrawing(
             uid,
             mimeType,
             type,
-            filterArgs,
             length,
             data);
 
@@ -207,13 +206,13 @@ void PptXml::setPlaceholder(PptSlide &slide)
 	QString 	height ;			//height of placeholder
 	QString 	width ;			//width of placeholder
 	QString 	pointSize;			//font size
-	
+
  	xml_friendly = *slide.getPlaceholderText().at(i);
   	encode(xml_friendly);
- 	
+
 	type = slide.getPlaceholderType();
 	Q_UINT16 y = 0;
-	
+
 	switch (type)
 	{
 	case TITLE_TEXT:
@@ -267,7 +266,7 @@ void PptXml::setPlaceholder(PptSlide &slide)
 			width = QString::number(300);
 			m_half = false;
 		}
-		else 
+		else
 		{
 			x = QString::number(30);
 			width = QString::number(300);

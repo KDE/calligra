@@ -31,9 +31,9 @@ PowerPointFilter::PowerPointFilter(
 
     connect(
         m_tree,
-        SIGNAL(signalPart(const char *, QString &, QString &)),
+        SIGNAL(signalPart(const QString&, QString &, QString &)),
         this,
-        SIGNAL(signalPart(const char *, QString &, QString &)));
+        SIGNAL(signalPart(const QString&, QString &, QString &)));
 
     // Hook up the embedded picture support.
 
@@ -47,9 +47,9 @@ PowerPointFilter::PowerPointFilter(
 
     connect(
         m_tree,
-        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)),
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, unsigned int, const char *)),
         this,
-        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)));
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, unsigned int, const char *)));
 }
 
 PowerPointFilter::~PowerPointFilter()

@@ -38,7 +38,7 @@ const char *ChartSeriesText[] =
 	"Dates", "Numbers", "Sequences", "Strings"
 };
 
-const char *ChartBlankText[] = 
+const char *ChartBlankText[] =
 {
 	"Skip blanks", "Blanks are zero", "Interpolate blanks"
 };
@@ -326,9 +326,9 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		border = root->createElement("right-border");
 		pen = root->createElement("pen");
 		penStyle = (xfs[xf]->borderStyle >> 4) & 0x0f;
-		
+
 		PenFormat qtpen = borderStyleToQtStyle(penStyle);
-		
+
 		pen.setAttribute("width", qtpen.width());
 		pen.setAttribute("style", qtpen.style());
 		pen.setAttribute("color", ((xfs[xf]->sideBColor >>7 ) & 0x7f) == 64 ?
@@ -344,9 +344,9 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		border = root->createElement("top-border");
 		pen = root->createElement("pen");
 		penStyle = (xfs[xf]->borderStyle >> 8) & 0x0f;
-		
+
 		PenFormat qtpen = borderStyleToQtStyle(penStyle);
-		
+
 		pen.setAttribute("width", qtpen.width());
 		pen.setAttribute("style", qtpen.style());
 		pen.setAttribute("color", ((xfs[xf]->topBColor ) & 0x7f) == 64 ?
@@ -360,9 +360,9 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		border = root->createElement("bottom-border");
 		pen = root->createElement("pen");
 		penStyle = (xfs[xf]->borderStyle >> 12) & 0x0f;
-		
+
 		PenFormat qtpen = borderStyleToQtStyle(penStyle);
-		
+
 		pen.setAttribute("width", qtpen.width());
 		pen.setAttribute("style", qtpen.style());
 		pen.setAttribute("color",  ((xfs[xf]->topBColor >> 7) & 0x7f) == 64 ?
@@ -389,7 +389,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 				pen = root->createElement("pen");
 
 				PenFormat qtpen = borderStyleToQtStyle(penStyle);
-				
+
 				pen.setAttribute("width", qtpen.width());
 				pen.setAttribute("style", qtpen.style());
 				pen.setAttribute("color", ((xfs[xf]->topBColor >> 14) & 0x7f) == 64 ?
@@ -403,7 +403,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		pen = root->createElement("pen");
 
 		PenFormat qtpen = borderStyleToQtStyle(penStyle);
-		
+
 		pen.setAttribute("width", qtpen.width());
 		pen.setAttribute("style", qtpen.style());
 		// the following is necessary to handle Excels "Automatic" color option
@@ -690,7 +690,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 			case 0x01:  // ptgExpr
 				Q_UINT16 tlrow, tlcol;
 				rgce >> tlrow >> tlcol;
-				
+
 				kdDebug(s_area) << "WARNING: ptgExpr requested in Row " << row << " Col " << column << " !" << endl;
 				kdDebug(s_area) << "HASH Table: top-Left-Row " << tlrow << ", top-Left-Col " << tlcol << endl;
 
@@ -701,12 +701,12 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 					{
 						kdDebug(s_area) << "*********** Found a shared formula for this row/col!" << endl;
 
-						kdDebug() << "***************************** START!" << endl;					
+						kdDebug() << "***************************** START!" << endl;
 						QString formula = getFormula(row, column, *fmla->stream());
 						kdDebug() << "***************************** END!" << endl;
 					}
 				}
-	
+
 				return ""; // Return empty formula-string on error
 				break;
 			case 0x03:  // ptgAdd
@@ -816,7 +816,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
 			case 0x14:  // ptgPercent
 				kdDebug(s_area) << "WARNING: ptgPercent formula not supported, yet" << endl;
 				return ""; // Return empty formula-string on error
-				break;	    
+				break;
 			case 0x15:  // ptgParen
 				stringPtr = parsedFormula.fromLast();
 				--stringPtr;
@@ -1503,7 +1503,7 @@ bool XMLTree::_bof(Q_UINT32, QDataStream &body)
 				//        the boundsheet stuff isn't _fully_ implemented
 				//		  (macrosheet etc..) (Niko)
 				if(!table)
-					break;	
+					break;
 				kdDebug(s_area) << "BOF: Chart: " << table->attribute("name") << endl;
 				break;
 			default:
@@ -1644,7 +1644,7 @@ bool XMLTree::_chart_chart(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool XMLTree::_chart_begin(Q_UINT32, QDataStream &body)
+bool XMLTree::_chart_begin(Q_UINT32, QDataStream &)
 {
 	m_chartDepth++;
 
@@ -1703,13 +1703,13 @@ bool XMLTree::_chart_lineformat(Q_UINT32, QDataStream &body)
 	kdDebug(s_area) << "CHART: Lines have a " << LinePatternText[pat] << " pattern" << endl;
 
 	if(weight <= WGT_MODE_MIN)
-	{	
+	{
 		kdDebug(s_area) << "CHART: Weight lower than WGT_MODE_MIN-1! Should never happen!" << endl;
 		return false;
 	}
 
 	if(weight >= WGT_MODE_MAX)
-	{	
+	{
 		kdDebug(s_area) << "CHART: Weight higher than WGT_MODE_MAX-1! Should never happen!" << endl;
 		return false;
 	}
@@ -1726,7 +1726,7 @@ bool XMLTree::_chart_lineformat(Q_UINT32, QDataStream &body)
 	g = (color >> 8) & 0xff;
 	b = (color >> 16) & 0xff;
 
-	kdDebug(s_area) << "CHART: Color R: " << r << " G: " << g << " B: " << b << endl;        
+	kdDebug(s_area) << "CHART: Color R: " << r << " G: " << g << " B: " << b << endl;
 	return true;
 }
 
@@ -1747,7 +1747,7 @@ bool XMLTree::_chart_areaformat(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool XMLTree::_chart_end(Q_UINT32, QDataStream &body)
+bool XMLTree::_chart_end(Q_UINT32, QDataStream &)
 {
 	m_chartDepth--;
 
@@ -1785,7 +1785,7 @@ bool XMLTree::_chart_series(Q_UINT32, QDataStream &body)
 		{
 			kdDebug(s_area) << "CHART: Bubbles Type Number higher than CHART_SERIES_MAX-1! Should never happen!" << endl;
 			return false;
-		}	
+		}
 
 		kdDebug(s_area) << "CHART: " << bubblescount << " Bubbles are " << ChartSeriesText[bubblestype] << endl;
 	}
@@ -1796,7 +1796,7 @@ bool XMLTree::_chart_series(Q_UINT32, QDataStream &body)
 bool XMLTree::_chart_ai(Q_UINT32, QDataStream &body)
 {
 	Q_UINT8 linkType, refType;
-	Q_UINT16 flags, length, skip;
+	Q_UINT16 flags; //, length, skip;
 
 	body >> linkType >> refType >> flags;
 
@@ -1833,7 +1833,7 @@ bool XMLTree::_chart_ai(Q_UINT32, QDataStream &body)
 			break;
 
 		default:
-			kdDebug(s_area) << "CHART: Unknown linkType: " << linkType << endl; 
+			kdDebug(s_area) << "CHART: Unknown linkType: " << linkType << endl;
 			break;
 	}
 
@@ -1852,7 +1852,7 @@ bool XMLTree::_chart_ai(Q_UINT32, QDataStream &body)
 			break;
 
 		default:
-			kdDebug(s_area) << "CHART: Unknown refType: " << refType << endl; 
+			kdDebug(s_area) << "CHART: Unknown refType: " << refType << endl;
 			break;
 	}
 
@@ -1957,7 +1957,7 @@ bool XMLTree::_chart_shtprops(Q_UINT32, QDataStream &body)
 		kdDebug(s_area) << "CHART: Manually formatted!" << endl;
 
 	if(onlyPlotVisibleCells)
-		kdDebug(s_area) << "CHART: Only plot visible cells!" << endl;    
+		kdDebug(s_area) << "CHART: Only plot visible cells!" << endl;
 
 	return true;
 }
@@ -2009,8 +2009,8 @@ bool XMLTree::_chart_axis(Q_UINT32, QDataStream &body)
 bool XMLTree::_chart_tick(Q_UINT32, QDataStream &body)
 {
 	Q_UINT8 major, minor, pos, flags;
-	Q_UINT16 skipl, r, g, b;
-	Q_UINT32 skip;
+	Q_UINT16 /*skipl,*/ r, g, b;
+	//Q_UINT32 skip;
 
 	body >> major >> minor >> pos;
 
@@ -2336,7 +2336,7 @@ bool XMLTree::_eof(Q_UINT32, QDataStream &)
 		QDomElement e = n.toElement();
 		if (!e.isNull() && e.tagName() == "table")
 		{
-			QDomNode n2 = e.firstChild();  
+			QDomNode n2 = e.firstChild();
 			while (!n2.isNull() && !mergelist.isEmpty())
 			{
 				QDomElement e2 = n2.toElement();
@@ -2641,7 +2641,7 @@ bool XMLTree::_mergecell(Q_UINT32, QDataStream &body)
 	body >> count;
 
 	for (int i=0; i < count; ++i) {
-		body >> firstrow >> lastrow >> firstcol >> lastcol; 
+		body >> firstrow >> lastrow >> firstcol >> lastcol;
 		mergelist.append(new MergeInfo(firstrow, lastrow, firstcol, lastcol));
 	}
 
@@ -2674,7 +2674,7 @@ bool XMLTree::_mulrk(Q_UINT32 size, QDataStream &body)
 		return true;
 	}
 
-	char *store = new char[size];
+	//char *store = new char[size];
 	double value = 0;
 
 	QString s;
@@ -2708,7 +2708,7 @@ bool XMLTree::_mulrk(Q_UINT32 size, QDataStream &body)
 
 		switch (xfs[xf]->ifmt) {
 			case 0:
-				s = QString::number((int) value);  
+				s = QString::number((int) value);
 				break;
 			case 14: // Dates
 			case 15:
@@ -2806,7 +2806,7 @@ bool XMLTree::_number(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool XMLTree::_objproj(Q_UINT32, QDataStream &body)
+bool XMLTree::_objproj(Q_UINT32, QDataStream &)
 {
 	return true;
 }

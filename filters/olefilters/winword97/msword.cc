@@ -247,7 +247,7 @@ void MsWord::decodeParagraph(
         const U8 *ptr = m_tableStream + m_fib.fcPlfLfo; //lcbPlfLfo.
         const U8 *ptr2;
         const U8 *ptr3 = 0L;
-        U32 lfoCount;
+        S32 lfoCount;
         int i;
 
         // TBD: discretion is the better part of valour! Our list logic below
@@ -1941,7 +1941,7 @@ unsigned MsWord::read(const U8 *in, FFN *out)
     U16 shifterU16;
     U8 shifterU8;
     unsigned bytes;
-    int i;
+    unsigned int i;
 
     i = bytes = shifterU8 = shifterU16 = shifterU32 = 0;
     bytes += MsWordGenerated::read(in + bytes, &out->cbFfnM1);

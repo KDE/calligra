@@ -23,19 +23,24 @@ DESCRIPTION
    its child objects have been processed.
 */
 
-#include <excelfilter.h>
+#include <olefilter.h>
+
+#include <qfile.h>
+#include <ktempfile.h>
+#include <kgenericfactory.h>
+#include <kmimetype.h>
+#include <kurl.h>
 #include <koFilterManager.h>
 #include <koFilterChain.h>
 #include <koQueryTrader.h>
 #include <koDocumentInfo.h>
-#include <ktempfile.h>
-#include <kgenericfactory.h>
-#include <myfile.h>
-#include <olefilter.h>
+
+#include <excelfilter.h>
 #include <powerpointfilter.h>
-#include <unistd.h>
 #include <wordfilter.h>
-#include <qfile.h>
+#include <myfile.h>
+
+#include <unistd.h>
 
 class OLEFilterFactory : KGenericFactory<OLEFilter, KoFilter>
 {
@@ -52,23 +57,17 @@ protected:
 K_EXPORT_COMPONENT_FACTORY( libolefilter, OLEFilterFactory() );
 
 OLEFilter::OLEFilter(KoFilter *, const char *, const QStringList&) :
-                     KoFilter() {
+                     KoEmbeddingFilter(), numPic( 0 ), m_nextPart( 0 ),
+                     docfile( 0 ), m_embeddeeData( 0 ),
+                     m_embeddeeLength( 0 ), success( true )
+{
     olefile.data=0L;
-    docfile=0L;
-    store=0L;
-    success=true;
-    numPic=0;
-    m_nextPart=0;
 }
 
-OLEFilter::~OLEFilter() {
-
+OLEFilter::~OLEFilter()
+{
     delete [] olefile.data;
-    olefile.data=0L;
     delete docfile;
-    docfile=0L;
-    delete store;
-    store=0L;
 }
 
 KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCString& to )
@@ -84,8 +83,6 @@ KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCStr
        from!="application/mspowerpoint")
         return KoFilter::NotImplemented;
 
-    QString prefixOut = "tar:"; // ###### FIXME: Disabled till we find a nice solution (Werner)
-    m_prefixOut = prefixOut;
     QFile in(m_chain->inputFile());
     if(!in.open(IO_ReadOnly)) {
         kdError(s_area) << "OLEFilter::filter(): Unable to open input" << endl;
@@ -108,30 +105,8 @@ KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCStr
         return KoFilter::StupidError;
     }
 
-    QString fileOut( m_chain->outputFile() );
-    QCString appIdentification( "KOffice " );
-    appIdentification += to;
-    appIdentification += '\004';
-    appIdentification += '\006';
-    store=KoStore::createStore(fileOut, KoStore::Write, appIdentification);
-    if(store->bad()) {
-        kdError(s_area) << "OLEFilter::filter(): Unable to open output file! " << fileOut << endl;
-        delete [] olefile.data;
-        olefile.data=0L;
-        delete store;
-        store=0L;
-        return KoFilter::StorageCreationError;
-    }
-
-    // Special treatment for the "root" element: add a precanned name
-    // conversion for what is expected by koStore.
-    partMap.insert("tar:root", "root");
-
     // Recursively convert the file
-    convert(prefixOut, "root");
-    kdDebug(s_area) << "OLEFilter::filter(): created " << fileOut << endl;
-    delete store;
-    store=0L;
+    convert();
     if ( success )
         return KoFilter::OK;
     else
@@ -143,62 +118,49 @@ void OLEFilter::slotSavePart(
     QString &storageId,
     QString &mimeType,
     const QString &extension,
-    const QString &/*config*/,
     unsigned int length,
     const char *data)
 {
     if(nameIN.isEmpty())
         return;
 
-    QString key = m_path + nameIN;
-    QString id;
-    QMap<QString, QString>::Iterator it = partMap.find(key);
+    int id = internalPartReference( nameIN );
 
-    if (it != partMap.end())
+    if (id != -1)
     {
-        // The key is already here - return the part id.
-        id = partMap[key];
-        mimeType = mimeMap[key];
+        // The part is already there, this is a lookup operation
+        // -> return the part id.
+        storageId = QString::number( id );
+        mimeType = internalPartMimeType( nameIN );
     }
     else
     {
-        KTempFile tempFileIN(QString::null, "." + extension);
-        tempFileIN.setAutoDelete(true);
+        // Set up the variables for the template method callback
+        m_embeddeeData = data;
+        m_embeddeeLength = length;
 
-        // It's not here, so let's generate one.
-        id = m_path + '/' + QString::number(m_nextPart);
-        m_nextPart++;
+        // We need to resort to an ugly hack to determine the mimetype
+        // from the extension, as kservicetypefactory.h isn't installed
+        KURL url;
+        url.setPath( QString( "dummy.$1" ).arg( extension ) );
+        KMimeType::Ptr m( KMimeType::findByURL( url, 0, true, true ) );
+        if ( m->name() == KMimeType::defaultMimeType() )
+            kdWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
 
-        // Save the data supplied into a temporary file, then run the filter
-        // on it.
+        KoFilter::ConversionStatus status;
+        QCString destMime( mimeType.latin1() );
+        storageId = QString::number( embedPart( m->name().latin1(), destMime, status, nameIN ) );
 
-        tempFileIN.file()->writeBlock(data, length);
-        tempFileIN.close();
+        // copy back what the method returned
+        mimeType = destMime;
 
-        KoFilterManager *mgr = new KoFilterManager(tempFileIN.name());
+        // Reset the variables to be on the safe side
+        m_embeddeeData = 0;
+        m_embeddeeLength = 0;
 
-        KTempFile tempFileOUT(QString::null, "." + extension);
-        tempFileOUT.setAutoDelete(true);
-
-        // ##### FIXME: Ensure that the prefix is handled (Werner)
-        QCString mime( mimeType.latin1() );
-        KoFilter::ConversionStatus status = mgr->exp0rt( tempFileOUT.name(), mime );
-	mimeType = mime;
         if ( status != KoFilter::OK )
             kdDebug(s_area) << "Huh??? Couldn't convert that file" << endl;
-
-        partMap.insert(key, id);
-        mimeMap.insert(key, mimeType);
-
-        // Now fetch out the elements from the resulting KoStore and embed them in our KoStore.
-
-        KoStore* storedPart = KoStore::createStore(tempFileOUT.name(), KoStore::Read);
-        if (!store->embed(id, storedPart))
-            kdError(s_area) << "Could not embed in KoStore!" << endl;
-	delete storedPart;
-        delete mgr;
     }
-    storageId = id;
 }
 
 void OLEFilter::slotSaveDocumentInformation(
@@ -231,20 +193,21 @@ void OLEFilter::slotSaveDocumentInformation(
     about->setTitle(docTitle);
     about->setTitle(docAbstract);
 
-    QString id = m_path + "/documentinfo.xml";
+    KoStoreDevice* docInfo = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
 
-    if(!store->open(id))
+    if(!docInfo)
     {
-	kdError(s_area) << "OLEFilter::slotSaveDocumentInformation(): Could not open KoStore!" << endl;
+	kdError(s_area) << "OLEFilter::slotSaveDocumentInformation(): Could not open documentinfo.xml!" << endl;
     	return;
     }
 
-    QString data = info->save().toString();
-    int length = data.utf8().length();
+    QCString data = info->save().toCString();
+    // Important: don't use data.length() here. It's slow, and dangerous (in case of a '\0' somewhere)
+    // The -1 is because we don't want to write the final \0.
+    Q_LONG length = data.size()-1;
 
-    if(store->write(data.utf8(), length) != length)
+    if(docInfo->writeBlock(data, length) != length)
 	kdError(s_area) << "OLEFilter::slotSaveDocumentInformation(): Could not write to KoStore!" << endl;
-    store->close();
 }
 
 void OLEFilter::slotSavePic(
@@ -257,65 +220,50 @@ void OLEFilter::slotSavePic(
     if(nameIN.isEmpty())
         return;
 
-    QString key = m_path + nameIN;
-    QString id;
-    QMap<QString, QString>::Iterator it = imageMap.find(key);
+    QMap<QString, QString>::ConstIterator it = imageMap.find(nameIN);
 
     if (it != imageMap.end())
-    {
         // The key is already here - return the part id.
-        id = imageMap[key];
-    }
+        storageId = it.data();
     else
     {
         // It's not here, so let's generate one.
-        id = m_path + "/pictures/picture" + QString::number(numPic++) + '.' + extension;
-        imageMap.insert(key, id);
-        if(!store->open(id))
+        storageId = QString( "pictures/picture%1.%2" ).arg( numPic++ ).arg( extension );
+        imageMap.insert(nameIN, storageId);
+        KoStoreDevice* pic = m_chain->storageFile( storageId, KoStore::Write );
+        if(!pic)
         {
             success = false;
             kdError(s_area) << "OLEFilter::slotSavePic(): Could not open KoStore!" << endl;
             return;
         }
         // Write it to the gzipped tar file
-        bool ret = store->write(data, length) == length;
+        // Let's hope we never have to save images bigger than 2GB :-)
+        bool ret = pic->writeBlock(data, length) == static_cast<int>( length );
         if (!ret)
             kdError(s_area) << "OLEFilter::slotSavePic(): Could not write to KoStore!" << endl;
-        store->close();
     }
-    //storageId = QFile::encodeName(id);
-    storageId = (id);
 }
 
+// ##### Only used for lookup now!
 void OLEFilter::slotPart(
-    const char *nameIN,
+    const QString& nameIN,
     QString &storageId,
     QString &mimeType)
 {
-    if (!nameIN)
+    if (nameIN.isEmpty())
         return;
 
-    QString key = m_path + nameIN;
-    QString id;
-    QMap<QString, QString>::Iterator it = partMap.find(key);
+    int id = internalPartReference( nameIN );
 
-    if (it != partMap.end())
+    if (id != -1)
     {
         // The key is already here - return the part id.
-        id = partMap[key];
-        mimeType = mimeMap[key];
+        storageId = QString::number( id );
+        mimeType = internalPartMimeType( nameIN );
     }
     else
-    {
-        // It's not here, so let's generate one. Note that since any
-        // references to the part will be from one level above, we trim
-        // the key by one level first!
-        id = m_path;
-        key = m_path.left(m_path.findRev('/')) + nameIN;
-        partMap.insert(key, id);
-        mimeMap.insert(key, mimeType);
-    }
-    storageId = QFile::encodeName(id);
+        kdWarning( s_area ) << "slotPart() can be used for lookup operations only" << endl;
 }
 
 // Don't forget the delete [] the stream.data ptr!
@@ -340,38 +288,43 @@ void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
     }
 }
 
-// The recursive method to do all the work
-unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
+void OLEFilter::savePartContents( QIODevice* file )
+{
+    if ( m_embeddeeData != 0 && m_embeddeeLength != 0 )
+        file->writeBlock( m_embeddeeData, m_embeddeeLength );
+}
 
+// The recursive method to do all the work
+void OLEFilter::convert()
+{
     KLaola::NodeList list=docfile->parseCurrentDir();
     KLaola::OLENode *node;
     bool onlyDirs=true;
-    unsigned part=0;
-    unsigned nextPart=0;
 
     // Search for the directories
     for(node=list.first(); node!=0; node=list.next()) {
         if(node->isDirectory()) {   // It's a dir!
             if(docfile->enterDir(node)) {
-
                 // Go one level deeper, but don't increase the depth
                 // for ObjectPools.
                 if (node->name() == "ObjectPool")
-                    nextPart=convert(parentPath, node->name());
-                else
-                    nextPart=convert(parentPath + '/' + QString::number(part), node->name());
-                part++;
-
+                    convert();
+                else {
+                    // Get the storage name of the part (dirname==key), and associate the
+                    // mimeType with it for later use.
+                    startInternalEmbedding( node->name(), mimeTypeHelper() );
+                    convert();
+                    endInternalEmbedding();
+                }
                 docfile->leaveDir();
             }
         }
-        else {
-            onlyDirs=false;   // To prevent useless looping in the
-        }                     // next loop
+        else
+            onlyDirs=false;   // To prevent useless looping in the next loop
     }
 
-    QString mimeType;
-    m_path = parentPath;
+    // ###### FIXME: For now there's some useless mimetype checking going on
+    QCString mimeType;
     if(!onlyDirs) {
         FilterBase *myFilter=0L;
         QStringList nodeNames;
@@ -500,7 +453,6 @@ file.close();
         connectCommon(&myFilter);
 
         // Launch the filtering process...
-        m_nextPart = nextPart;
         success=myFilter->filter();
         // ...and fetch the file
         QCString file;
@@ -511,26 +463,19 @@ file.close();
         else
             file=myFilter->CString();
 
-        // Get the storage name of the part (dirname==key), and associate the
-        // mimeType with it for later use.
-        QString tmp;
-        slotPart(QFile::encodeName(dirname), tmp, mimeType);
-        if(!store->open(tmp)) {
+        KoStoreDevice* dev = m_chain->storageFile( "root", KoStore::Write );
+        if(!dev) {
             success=false;
             kdError(s_area) << "OLEFilter::convert(): Could not open KoStore!" << endl;
-            return part;
+            return;
         }
 
         // Write it to the gzipped tar file
-        bool ret = store->write(file.data(), file.length()) == file.length();
+        bool ret = dev->writeBlock(file.data(), file.size()-1) == static_cast<Q_LONG>( file.size() - 1 );
         if (!ret)
             kdError(s_area) << "OLEFilter::slotSavePic(): Could not write to KoStore!" << endl;
-        store->close();
         delete myFilter;
     }
-
-    // Track the last part number used at this level.
-    return part;
 }
 
 void OLEFilter::connectCommon(FilterBase **myFilter) {
@@ -547,16 +492,35 @@ void OLEFilter::connectCommon(FilterBase **myFilter) {
         SLOT(slotSavePic(const QString &, QString &, const QString &, unsigned int, const char *)));
     QObject::connect(
         *myFilter,
-        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)),
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, unsigned int, const char *)),
         this,
-        SLOT(slotSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)));
-    QObject::connect(*myFilter, SIGNAL(signalPart(const char *, QString &, QString &)),
-                     this, SLOT(slotPart(const char *, QString &, QString &)));
+        SLOT(slotSavePart(const QString &, QString &, QString &, const QString &, unsigned int, const char *)));
+    QObject::connect(*myFilter, SIGNAL(signalPart(const QString&, QString &, QString &)),
+                     this, SLOT(slotPart(const QString&, QString &, QString &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const int &, myFile &)), this,
                      SLOT(slotGetStream(const int &, myFile &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const QString &, myFile &)), this,
                      SLOT(slotGetStream(const QString &, myFile &)));
     QObject::connect(*myFilter, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));
+}
+
+QCString OLEFilter::mimeTypeHelper()
+{
+    KLaola::NodeList list = docfile->parseCurrentDir();
+    KLaola::OLENode* node = list.first();
+
+    while ( node ) {
+        if ( node->name() == "WordDocument" )
+            return "application/x-kword";
+        else if ( node->name() == "Workbook" || node->name() == "Book" )
+            return "application/x-kspread";
+        else if ( node->name() == "PowerPoint Document" )
+            return "application/x-kpresenter";
+        else
+            node = list.next();
+    }
+    kdWarning( s_area ) << "No known mimetype detected -> dummy KWord" << endl;
+    return "application/x-kword";
 }
 
 #include <olefilter.moc>
