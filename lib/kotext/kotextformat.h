@@ -47,7 +47,7 @@ public:
     ushort m_screenWidths[ 256 ];
     // m_refWidths[ 256 ] would speed things up too, but ushort might not be enough for it
     bool m_bShadowText;
-    float m_relativeTextSize;
+    double m_relativeTextSize;
     int m_offsetFromBaseLine;
 };
 
