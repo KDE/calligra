@@ -1677,7 +1677,7 @@ void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     for ( ; it.current(); ++it )
     {
-        if(it.current()->isFormular())
+        if(it.current()->isFormular() || it.current()->content()==KSpreadCell::RichText)
         {
             if(it.current()->text().find(old_name)!=-1)
             {
