@@ -22,7 +22,7 @@
 #define RTFEXPORT_H
 
 #include <qstring.h>
-#include <qcstring.h> 
+#include <qcstring.h>
 #include <qfile.h>
 #include <qobject.h>
 
@@ -45,16 +45,13 @@ class RTFExport : public KoFilter
         Q_OBJECT
 
     public:
-        RTFExport ( KoFilter    *parent,
-                        const char  *name    ) : KoFilter (parent, name) {}
+        RTFExport ( KoFilter    *,
+                    const char  *,
+                    const QStringList& ) : KoFilter () {}
 
         virtual ~RTFExport () {}
 
-        virtual bool filter ( const QString &fileIn,
-                              const QString &fileOut,
-                              const QString &from,
-                              const QString &to,
-                              const QString &config = QString::null );
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
 
 

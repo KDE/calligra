@@ -26,7 +26,11 @@
 #include <qdatetime.h>
 #include <kiExport.h>
 #include <kiRTFExport.h>
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
 
+typedef KGenericFactory<RTFExport, KoFilter> RTFExportFactory;
+K_EXPORT_COMPONENT_FACTORY( librtfexport, RTFExportFactory( "rtfexport" ) );
 
 // global variables
 QValueList<FontTable> fontTable; // holds all fonts found in the parsed text
@@ -505,11 +509,7 @@ bool ProcessStoreFile ( QString   storeFileName,
 // The virtual function called by the file dialog to export the RTF file
 // It is the starting point in the file converson process.
 
-bool RTFExport::filter ( const QString  &filenameIn,
-                                   const QString  &filenameOut,
-                                   const QString  &from,
-                                   const QString  &to,
-                                   const QString  &             )
+KoFilter::ConversionStatus RTFExport::convert( const QCString& from, const QCString& to )
 {
 
     // The following initializes the color table
@@ -532,9 +532,11 @@ bool RTFExport::filter ( const QString  &filenameIn,
        }
     else
        {
-       return false;
+       return KoFilter::NotImplemented;
        }
 
+    QString filenameIn = m_chain->inputFile();
+    QString filenameOut = m_chain->outputFile();
     QString stringBufOut;
     QString mainDoc;
     QString kiDoc;
@@ -591,13 +593,13 @@ bool RTFExport::filter ( const QString  &filenameIn,
         fileOut.close ();
 
         kdError (KDEBUG_RTFFILTER) << "Unable to open output file!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     fileOut.writeBlock ( (const char *) stringBufOut.local8Bit (), stringBufOut.length () );
     fileOut.close ();
 
-    return true;
+    return KoFilter::OK;
 }  // enf filter()
 
 

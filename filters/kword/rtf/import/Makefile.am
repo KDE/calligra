@@ -8,9 +8,9 @@ librtfimport_la_LIBADD = $(KOFFICE_LIBS)
 
 kde_module_LTLIBRARIES = librtfimport.la
 
-librtfimport_la_SOURCES = rtfimport.cpp rtfimport_factory.cpp rtfimport_dom.cpp rtfimport_tokenizer.cpp
-    
-noinst_HEADERS = rtfimport.h rtfimport_factory.h rtfimport_dom.h rtfimport_tokenizer.h
+librtfimport_la_SOURCES = rtfimport.cpp rtfimport_dom.cpp rtfimport_tokenizer.cpp
+
+noinst_HEADERS = rtfimport.h rtfimport_dom.h rtfimport_tokenizer.h
 
 METASOURCES = AUTO
 

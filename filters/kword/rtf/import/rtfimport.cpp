@@ -18,12 +18,16 @@
 #include <string.h>
 #include "rtfimport.h"
 #include "rtfimport.moc"
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
 
 #ifdef HAVE_LIBWMF
 #include <libwmf/api.h>
 #include <libwmf/svg.h>
 #endif
 
+typedef KGenericFactory<RTFImport, KoFilter> RTFImportFactory;
+K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "rtfimport" ) );
 
 // defines a property
 #define PROP(a,b,c,d,e)		{ a, b, &RTFImport::c, d, e }
@@ -216,8 +220,8 @@ static const char *boolN[2]	= { "false", "true" };
 static const char *borderN[4]	= { "LEFTBORDER", "RIGHTBORDER", "TOPBORDER", "BOTTOMBORDER" };
 
 
-RTFImport::RTFImport( KoFilter *parent, const char *name )
-    : KoFilter( parent, name )
+RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
+    : KoFilter()
 {
     for (uint i=0; i < sizeof(propertyTable) /sizeof(propertyTable[0]); i++)
     {
@@ -233,22 +237,20 @@ RTFImport::RTFImport( KoFilter *parent, const char *name )
  * @param to the mimetype for KWord
  * @return true if the document was succesfully converted
  */
-bool RTFImport::filter( const QString &fileIn, const QString &fileOut,
-			const QString &from, const QString &to,
-			const QString & )
+KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCString& to )
 {
     // This filter only supports RTF to KWord conversion
     if ((from != "text/rtf") || (to != "application/x-kword"))
-        return false;
+        return KoFilter::NotImplemented;
 
     // Open input file
-    QFile in( fileIn );
+    QFile in( m_chain->inputFile() );
 
     if (!in.open( IO_ReadOnly ))
     {
 	kdError() << "Unable to open input file!" << endl;
 	in.close();
-	return false;
+	return KoFilter::FileNotFound;
     }
 
     // Document should start with an opening brace
@@ -259,7 +261,7 @@ bool RTFImport::filter( const QString &fileIn, const QString &fileOut,
     {
 	kdError() << "Not an RTF file" << endl;
 	in.close();
-	return false;
+	return KoFilter::WrongFormat;
     }
 
     // Verify document type and version (RTF version 1.x)
@@ -270,17 +272,17 @@ bool RTFImport::filter( const QString &fileIn, const QString &fileOut,
     {
 	kdError() << "Wrong document type or version (RTF version 1.x expected)" << endl;
 	in.close();
-	return false;
+	return KoFilter::WrongFormat;
     }
 
     // Open output file
-    KoStore out = KoStore( fileOut, KoStore::Write );
+    KoStore out = KoStore( m_chain->outputFile(), KoStore::Write );
 
     if (out.bad())
     {
 	kdError() << "Unable to open output file!" << endl;
 	in.close();
-	return false;
+	return KoFilter::StorageCreationError;
     }
     kostore	= &out;
     table	= 0;
@@ -578,7 +580,7 @@ bool RTFImport::filter( const QString &fileIn, const QString &fileOut,
     writeOutPart( "documentinfo.xml", docInfo.data() );
     in.close();
 
-    return true;
+    return KoFilter::OK;
 }
 
 /**
@@ -885,7 +887,7 @@ void RTFImport::insertCellDef( RTFProperty * )
     cell.x		= token.value;
     state.tableRow.cells << cell;
     cell.bgcolor	= -1;
- 
+
     for (uint i=0; i < 4; i++)
     {
 	RTFBorder &border = cell.borders[i];
@@ -900,7 +902,7 @@ void RTFImport::insertCellDef( RTFProperty * )
  */
 void RTFImport::insertTabDef( RTFProperty * )
 {
-    RTFTab tab = state.layout.tab; 
+    RTFTab tab = state.layout.tab;
     tab.position	= token.value;
     state.layout.tablist.push( tab );
     tab.type		= RTFTab::Left;
@@ -966,7 +968,7 @@ void RTFImport::insertHexSymbol( RTFProperty * )
 	    QTextCodec* tc=QTextCodec::codecForName(codepage);
 	    if(!tc)
 		tc=QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
-	    char tmpch[2]={ch, '\0'}; 
+	    char tmpch[2]={ch, '\0'};
 
 	    // TODO: Is it always a single character?
 	    insertUTF8( tc->toUnicode( tmpch ).at( 0 ).unicode() );
@@ -985,7 +987,7 @@ void RTFImport::insertUnicodeSymbol( RTFProperty * )
     // Ignore the next N characters (or control words)
     for (uint i=state.format.uc; i > 0; )
     {
-	token.next();  
+	token.next();
 
 	if (token.type == RTFTokenizer::ControlWord)
 	    --i;	// Ignore as single token
