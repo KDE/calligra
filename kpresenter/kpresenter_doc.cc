@@ -1351,7 +1351,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	resetURL();
 	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
-	QString fileName( locate("kpresenter_template", "Screenpresentations/Plain.kpt",
+	QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
 				 KPresenterFactory::global() ) );
 	objStartY = 0;
 	_clean = true;
@@ -1366,7 +1366,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 /*================================================================*/
 void KPresenterDoc::initEmpty()
 {
-  QString fileName( locate("kpresenter_template", "Screenpresentations/Plain.kpt",
+  QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
 			    KPresenterFactory::global() ) );
   objStartY = 0;
   _clean = true;
