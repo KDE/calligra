@@ -284,6 +284,7 @@ int QTextFormat::descent() const
 
 void QTextFormat::generateKey()
 {
+    k = QString::null;
     QTextOStream ts( &k );
     ts << fn.pointSize() << "/"
        << fn.weight() << "/"
