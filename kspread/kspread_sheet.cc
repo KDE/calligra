@@ -6343,6 +6343,26 @@ bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
             kdDebug() << "Header right: " << hright << endl;
         }
     }
+    //todo implement it under kspread
+    QDomNode headerleft = style->namedItem( "style:header-left" );
+    if ( !headerleft.isNull() )
+    {
+        QDomElement e = headerleft.toElement();
+        if ( e.hasAttribute( "style:display" ) )
+            kdDebug()<<"header.hasAttribute( style:display ) :"<<e.hasAttribute( "style:display" )<<endl;
+        else
+            kdDebug()<<"header left doesn't has attribute  style:display  \n";
+    }
+    //implement it under kspread
+    QDomNode footerleft = style->namedItem( "style:footer-left" );
+    if ( !footerleft.isNull() )
+    {
+        QDomElement e = footerleft.toElement();
+        if ( e.hasAttribute( "style:display" ) )
+            kdDebug()<<"footer.hasAttribute( style:display ) :"<<e.hasAttribute( "style:display" )<<endl;
+        else
+            kdDebug()<<"footer left doesn't has attribute  style:display  \n";
+    }
 
     QDomNode footer = style->namedItem( "style:footer" );
 
