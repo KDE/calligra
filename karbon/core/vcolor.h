@@ -31,10 +31,13 @@ public:
 	};
 
 	VColor();
+	VColor( const VColor& color );
 	VColor( const QRgb & );
 
 	/// color values in all color spaces range from 0.0 to 1.0
 	void pseudoValues( int& v1, int& v2, int& v3 ) const;
+
+	float value( uint i ) const { return m_value[i]; }
 	void values(
 		float* v1 = 0L, float* v2 = 0L,
 		float* v3 = 0L, float* v4 = 0L ) const;

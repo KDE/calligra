@@ -8,12 +8,25 @@
 #include "vcolor.h"
 
 VColor::VColor()
-	: m_colorSpace( rgb ), m_opacity( 1.0 )
 {
+	m_colorSpace = rgb;
+	m_opacity = 1.0;
+
 	m_value[0] = 0.0;
 	m_value[1] = 0.0;
 	m_value[2] = 0.0;
 	m_value[3] = 0.0;
+}
+
+VColor::VColor( const VColor& color )
+{
+	m_colorSpace = color.m_colorSpace;
+	m_opacity = color.m_opacity;
+
+	m_value[0] = color.m_value[0];
+	m_value[1] = color.m_value[1];
+	m_value[2] = color.m_value[2];
+	m_value[3] = color.m_value[3];
 }
 
 VColor::VColor( const QRgb &c )
