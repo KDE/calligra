@@ -1,5 +1,6 @@
 
 #include "kivio_py_stencil.h"
+#include "kivio_view.h"
 
 KivioPage *page;
 KivioView *view;
@@ -21,7 +22,6 @@ KivioView *view;
 #include "kivio_py_stencil_spawner.h"
 
 #include "kivio_page.h"
-#include "kivio_view.h"
 
 #include <qpainter.h>
 #include <qbrush.h>
