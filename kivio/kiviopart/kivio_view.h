@@ -98,6 +98,7 @@ public:
   KivioTabBar* tabBar() { return  m_pTabBar;}
   ToolDockManager* toolDockManager() { return m_pToolDock; }
   void openPopupMenuMenuPage( const QPoint & _point );
+  void updateMenuPage( );
 
   virtual void setupPrinter(KPrinter&);
   virtual void print(KPrinter&);

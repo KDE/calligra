@@ -60,6 +60,7 @@ KivioTabBar::KivioTabBar( QWidget* parent, KivioView* view )
 void KivioTabBar::addTab( const QString& _text )
 {
   tabsList.append( _text );
+  m_pView->updateMenuPage();
   update();
 }
 
@@ -80,7 +81,7 @@ void KivioTabBar::removeTab( const QString& _text )
         leftTab = activeTab;
 
     tabsList.remove( _text );
-
+    m_pView->updateMenuPage();
     update();
 }
 
@@ -607,6 +608,7 @@ void KivioTabBar::hidePage()
 
         emit tabChanged( tabsList.first() );
     }
+    m_pView->updateMenuPage();
 }
 
 void KivioTabBar::showPage(const QString& text)
@@ -615,6 +617,7 @@ void KivioTabBar::showPage(const QString& text)
     addTab( text );
 
     m_pView->activePage()->setHidden( false );
+    m_pView->updateMenuPage();
 }
 
 void KivioTabBar::addHiddenTab(const QString & text)

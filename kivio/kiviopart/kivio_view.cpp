@@ -498,6 +498,7 @@ void KivioView::updateReadWrite( bool readwrite )
 
   m_showPage->setEnabled( true );
   m_hidePage->setEnabled( true );
+  updateMenuPage();
 }
 
 
@@ -1437,4 +1438,8 @@ void KivioView::openPopupMenuMenuPage( const QPoint & _point )
      static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
 }
 
+void KivioView::updateMenuPage()
+{
+    m_removePage->setEnabled((doc()->map()->count() > 1 && m_pTabBar->listshow().count()>1));
+}
 #include "kivio_view.moc"
