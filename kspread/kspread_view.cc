@@ -3793,7 +3793,7 @@ void KSpreadView::print( KPrinter &prt )
     int dpiX = metrics.logicalDpiX();
     int dpiY = metrics.logicalDpiY();
 
-    m_pDoc->setZoomAndResolution( 100, dpiX, dpiY );
+    m_pDoc->setZoomAndResolution( int( print->zoom() * 100 ), dpiX, dpiY );
 
     //store the current setting in a temporary variable
     KoOrientation _orient = print->orientation();

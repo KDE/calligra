@@ -44,12 +44,36 @@ public:
     float printableWidth()const { return m_paperWidth - m_leftBorder - m_rightBorder; }
 
     /**
+     * @return the printable width of the paper in zoomed points.
+     */
+    float printableWidthPts()const { return MM_TO_POINT( printableWidth() / m_dZoom ); }
+
+    /**
      * @return the printable height of the paper in millimeters.
      */
     float printableHeight()const { return m_paperHeight - m_topBorder - m_bottomBorder; }
 
+    /**
+     * @return the printable height of the paper in zoomed points.
+     */
+    float printableHeightPts()const { return MM_TO_POINT( printableHeight() / m_dZoom ); }
+
+    /**
+     * @return the height of the paper in millimeters.
+     */
     float paperHeight()const { return m_paperHeight; }
+    /**
+     * @return the height of the paper in zoomed points.
+     */
+    float paperHeightPts()const { return MM_TO_POINT( m_paperHeight / m_dZoom ); }
+    /**
+     * @return the width of the paper in millimeters.
+     */
     float paperWidth()const { return m_paperWidth; }
+    /**
+     * @return the width of the paper in zoomed points.
+     */
+    float paperWidthPts()const { return MM_TO_POINT( m_paperWidth / m_dZoom ); }
 
     void setPaperHeight(float _val) { m_paperHeight=_val; }
     void setPaperWidth(float _val) { m_paperWidth=_val; }
@@ -59,17 +83,33 @@ public:
      */
     float leftBorder()const { return m_leftBorder; }
     /**
+     * @return the left border in zoomed points
+     */
+    float leftBorderPts()const { return MM_TO_POINT( m_leftBorder / m_dZoom ); }
+    /**
      * @return the right border in millimeters
      */
     float rightBorder()const { return m_rightBorder; }
+    /**
+     * @return the right border in zoomed points
+     */
+    float rightBorderPts()const { return MM_TO_POINT( m_rightBorder / m_dZoom ); }
     /**
      * @return the top border in millimeters
      */
     float topBorder()const { return m_topBorder; }
     /**
+     * @return the top border in zoomed points
+     */
+    float topBorderPts()const { return MM_TO_POINT( m_topBorder / m_dZoom ); }
+    /**
      * @return the bottom border in millimeters
      */
     float bottomBorder()const { return m_bottomBorder; }
+    /**
+     * @return the bottom border in zoomed points
+     */
+    float bottomBorderPts()const { return MM_TO_POINT( m_bottomBorder / m_dZoom ); }
 
     /**
      * @return the orientation of the paper.
@@ -281,6 +321,16 @@ public:
      */
     void removeRow( int row, int nbRow );
 
+    /**
+     * Sets the zoom level of the printout
+     */
+    void setZoom( double _zoom );
+
+    /**
+     * Returns the zoom level of the printout as double
+     */
+    double zoom(){ return m_dZoom; }
+
 signals:
     void sig_updateView( KSpreadSheet *_table );
 
@@ -437,6 +487,10 @@ private:
      */
      QValueList<int> m_lnewPageListY;
 
+    /**
+     * Zoom level of printout
+     */
+    double m_dZoom;
 };
 
 #endif

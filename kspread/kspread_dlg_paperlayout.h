@@ -19,10 +19,12 @@
 #ifndef __kspread_dlg_paperlayout__
 #define __kspread_dlg_paperlayout__
 
+#include <qcombobox.h>
 #include <kdialogbase.h>
 #include <koPageLayoutDia.h>
 class KSpreadSheet;
 class QCheckBox;
+class QComboBox;
 class QLineEdit;
 class KSpreadView;
 
@@ -59,6 +61,7 @@ private:
   QLineEdit * eRepeatCols;
   QLineEdit * eRepeatRows;
   QLineEdit * m_focus;
+  QComboBox * m_cZoom;
 };
 
 #endif

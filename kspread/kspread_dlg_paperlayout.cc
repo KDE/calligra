@@ -57,7 +57,7 @@ void KSpreadPaperLayout::initTab()
     KSpreadSheetPrint* print = m_pSheet->print();
 
     QWidget *tab = addPage(i18n( "Options" ));
-    QGridLayout *grid = new QGridLayout( tab, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( tab, 9, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     pApplyToAll = new QCheckBox ( i18n( "&Apply to all sheets" ), tab );
     pApplyToAll->setChecked( print->printGrid() );
@@ -102,6 +102,40 @@ void KSpreadPaperLayout::initTab()
                               ":" +
                               QString().setNum( print->printRepeatRows().second ) );
 
+    QLabel *pZoom = new QLabel ( i18n("Zoom printout:"), tab );
+    grid->addWidget( pZoom, 7, 0 );
+
+    m_cZoom = new QComboBox( true, tab, "Zoom" );
+    grid->addWidget( m_cZoom, 7, 1 );
+
+    QStringList lst;
+    lst.append("");
+    for( int i = 5; i < 500; i += 5 )
+    {
+        lst.append( QString( "%1" ).arg( i ) );
+        if( qRound( print->zoom() * 100 ) > i &&
+            qRound( print->zoom() * 100 ) < i + 5 )
+        {
+            lst.append( QString( "%1" ).arg( print->zoom() * 100 ) );
+        }
+    }
+
+    m_cZoom->insertStringList( lst );
+
+    int number_of_entries = m_cZoom->count();
+    QString string;
+    string.setNum( qRound( print->zoom() * 100 ) );
+
+    for (int i = 0; i < number_of_entries ; i++)
+    {
+        if ( string == (QString) m_cZoom->text(i) )
+        {
+            m_cZoom->setCurrentItem( i );
+            break;
+        }
+    }
+
+
     // --------------- main grid ------------------
     grid->addColSpacing( 0, pApplyToAll->width() );
     grid->addColSpacing( 0, pPrintGrid->width() );
@@ -110,9 +144,11 @@ void KSpreadPaperLayout::initTab()
     grid->addColSpacing( 0, pPrintRange->width() );
     grid->addColSpacing( 0, pRepeatRows->width() );
     grid->addColSpacing( 0, pRepeatCols->width() );
+    grid->addColSpacing( 0, pZoom->width() );
     grid->addColSpacing( 1, ePrintRange->width() );
     grid->addColSpacing( 1, eRepeatRows->width() );
     grid->addColSpacing( 1, eRepeatCols->width() );
+    grid->addColSpacing( 1, m_cZoom->width() );
 
     grid->addRowSpacing( 0, pApplyToAll->height() );
     grid->addRowSpacing( 1, pPrintGrid->height() );
@@ -124,7 +160,9 @@ void KSpreadPaperLayout::initTab()
     grid->addRowSpacing( 5, eRepeatRows->height() );
     grid->addRowSpacing( 6, pRepeatCols->height() );
     grid->addRowSpacing( 6, eRepeatCols->height() );
-    grid->setRowStretch( 7, 1 );
+    grid->addRowSpacing( 7, pZoom->height() );
+    grid->addRowSpacing( 7, m_cZoom->height() );
+    grid->setRowStretch( 8, 1 );
 
 }
 
@@ -246,6 +284,8 @@ void KSpreadPaperLayout::slotOk()
         if ( error )
           KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (eg. 2:3)" ) );
       }
+      print->setZoom( 0.01 * m_cZoom->currentText().toDouble() );
+
       sheet->doc()->setModified( true );
 
       if ( pl.format == PG_CUSTOM )
