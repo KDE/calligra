@@ -15,3 +15,4 @@ KoApplication::KoApplication(int &argc, char **argv,
 
 KoApplication::~KoApplication() {}
     
+#include "koApplication.moc"

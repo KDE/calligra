@@ -565,3 +565,4 @@ void KoFrameMove::mouseReleaseEvent( QMouseEvent *_ev )
   m_pFrame->moveEnd();
 }
 
+#include "koFrame.moc"

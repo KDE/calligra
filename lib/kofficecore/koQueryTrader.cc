@@ -1,11 +1,193 @@
 #include "koQueryTrader.h"
 #include "koIMR.h"
+#include <trader.h>
+#include <typerepo.h>
+#include <torben.h>
 
 #include <qstring.h>
 #include <qstrlist.h>
 
 #include <kapp.h>
 #include <opApplication.h>
+#include <k2config.h>
+
+#include <string>
+#include <list>
+#include <string.h>
+#include <iostream>
+#include <sys/stat.h>
+
+/*******************************************************************
+ *
+ * Preferences
+ *
+ *******************************************************************/
+
+K2Config* g_offerPrefs = 0L;
+K2Config* g_serviceTypePrefs = 0L;
+K2Config* g_prefs = 0L;
+
+void koInitPreferences()
+{
+  // Try to read the config file with the users preferences
+  QString file = kapp->localkdedir().data();
+  file += "/share/apps/koffice/preferences.kfg";
+  struct stat buff;
+  if ( stat( file, &buff ) == -1 )
+    return;
+
+  g_prefs = new K2Config( file );
+  
+  g_offerPrefs = g_prefs->findGroup( "OfferPreferences" );
+  if ( !g_offerPrefs )
+    g_offerPrefs = g_prefs->insertGroup( "OfferPreferences", "OfferPreferences" );
+  g_serviceTypePrefs = g_prefs->findGroup( "ServiceTypePreferences" );
+  if ( !g_serviceTypePrefs )
+    g_serviceTypePrefs = g_prefs->insertGroup( "ServiceTypePreferences",
+					       "ServiceTypePreferences" );
+}
+
+int koPreferencesHelper( ostream& _out, K2Config *_cfg )
+{
+  int weight = 0;
+  
+  K2Config::iterator it = _cfg->begin();
+  for( ; it != _cfg->end(); it++ )
+  {
+    int importance;
+    string type;
+    if ( it.group() && strcmp( it.group()->type(), "Property" ) == 0 &&
+	 it.group()->readLong( "importance", importance ) &&
+	 it.group()->readString( "type", type ) )
+    {
+      if ( type == "num" )
+      {
+	string value;
+	if ( it.group()->readString( "value", value ) )
+	{
+	  weight++;
+	  if ( value == "max" )
+	    _out << "( ( max " << it.group()->name() << " ) * " << importance << " ) + "
+		 << endl;
+	  else
+	    _out << "( ( min " << it.group()->name() << " ) * " << importance << " ) + "
+		 << endl;
+	}
+      }
+      else if ( type == "bool" )
+      {
+	string value;
+	if ( it.group()->readString( "value", value ) )
+	{
+	  weight++;
+	  if ( value == "yes" )
+	    _out << "( " << it.group()->name() << " * " << importance << " ) + ";
+	  else
+	    _out << "( " << it.group()->name() << " * -" << importance << " ) + ";
+	}
+      }
+      else if ( type == "string" )
+      {
+	list<string> value;
+	if ( it.group()->readStringList( "value", value ) )
+	{
+	  weight++;
+	  _out << "( ( ";
+	  list<string>::iterator sit = value.begin();
+	  while( sit != value.end() )
+	  {    
+	    _out << it.group()->name() << " == '" << sit->c_str() << "'";
+	    sit++;
+	    if ( sit != value.end() )
+	      _out << " or ";
+	  }
+	  _out << " ) * " << importance << " ) + " << endl;
+	}
+      }
+      else if ( type == "string_list" )
+      {
+	list<string> value;
+	if ( it.group()->readStringList( "value", value ) )
+	{
+	  weight++;
+	  _out << "( ( ";
+	  list<string>::iterator sit = value.begin();
+	  while( sit != value.end() )
+	  {    
+	    _out << "'" << sit->c_str() << "' in " << it.group()->name();
+	    sit++;
+	    if ( sit != value.end() )
+	      _out << " or ";
+	  }
+	  _out << " ) * " << importance << " ) + " << endl;
+	}
+      }
+    }
+  }
+
+  return weight;
+}
+
+string koCreatePreferences( CosTradingRepos::ServiceTypeRepository_ptr _repo,
+			    const char* _service_type )
+{
+  string result = "";
+
+  if ( !g_prefs || ( !g_serviceTypePrefs && !g_offerPrefs ) )
+    return result;
+
+  {
+    tostrstream out( result );
+  
+    CosTradingRepos::ServiceTypeRepository::TypeStruct_var ts;
+    ts = _repo->describe_type( _service_type );
+    
+    out << "max " << endl;
+
+    int weight = 0;
+    
+    if ( g_serviceTypePrefs )
+    {
+      K2Config *c = g_serviceTypePrefs->findGroup( _service_type );
+      if ( c && strcmp( c->type(), "ServiceType" ) == 0L )
+	weight += koPreferencesHelper( out, c );
+  
+      for( CORBA::ULong l = 0; l < ts->super_types.length(); ++l )
+      {    
+	K2Config *c = g_serviceTypePrefs->findGroup( ts->super_types[l].in() );
+	if ( c && strcmp( c->type(), "ServiceType" ) == 0L )
+	  weight += koPreferencesHelper( out, c );
+      }
+    }
+    else
+      weight = 1;
+    
+    out << " 0";
+  
+    if ( g_offerPrefs )
+    {
+      K2Config::iterator it = g_offerPrefs->begin();
+      if ( it != g_offerPrefs->end() )
+      {
+	out << " + ( ";
+    
+	while( it != g_offerPrefs->end() )
+        {
+	  int importance = it.item()->integer();
+
+	  out << "( Name == '" << it.item()->name() << "' ) * " << importance;
+	  it++;
+	  if ( it != g_offerPrefs->end() )
+	    out << " + " << endl;
+	}
+	
+	out << " ) * " << weight * 10 << endl;
+      }
+    }
+  }
+  
+  return result;
+}
 
 /*******************************************************************
  *
@@ -16,7 +198,7 @@
 void koInitTrader()
 {
   QString exec = kapp->kde_bindir();
-  exec += "/kotrader";
+  exec += "/kotrader.bin";
   
   QStrList repos;
   repos.append( "IDL:omg.org/CosTrading/Lookup:1.0" );
@@ -27,6 +209,8 @@ void koInitTrader()
   assert( !CORBA::is_nil( imr ) );
   
   imr_create( "Trader", "shared", exec, repos, imr );
+
+  koInitPreferences();
 }
 
 void koQueryTrader( const char *_service_type, const char *_constr, unsigned int _count,
@@ -38,6 +222,14 @@ void koQueryTrader( const char *_service_type, const char *_constr, unsigned int
   CosTrading::Lookup_var lookup = CosTrading::Lookup::_narrow( obj );
   assert( !CORBA::is_nil( lookup ) );
 
+  obj = lookup->type_repos();
+  assert( !CORBA::is_nil( obj ) );
+  CosTradingRepos::ServiceTypeRepository_var repo =
+    CosTradingRepos::ServiceTypeRepository::_narrow( obj );
+  assert( !CORBA::is_nil( repo ) );
+
+  string preferences = koCreatePreferences( repo, _service_type );
+
   CosTrading::ServiceTypeName_var type;
   CosTrading::Constraint_var constr;
   CosTrading::Lookup::Preference_var prefs;
@@ -45,10 +237,11 @@ void koQueryTrader( const char *_service_type, const char *_constr, unsigned int
   desired._d( CosTrading::Lookup::all );
   CosTrading::PolicySeq policyseq;
   policyseq.length( 0 );
-  prefs = CORBA::string_dup( "" );
+  prefs = CORBA::string_dup( preferences.c_str() );
   constr = CORBA::string_dup( _constr );
   type = CORBA::string_dup( _service_type );
-  lookup->query( type, constr, prefs, policyseq, desired, (CORBA::ULong)_count, offers, offer_itr, limits_applied );
+  lookup->query( type, constr, prefs, policyseq, desired, (CORBA::ULong)_count,
+		 offers, offer_itr, limits_applied );
 
   /***
    * DEBUG

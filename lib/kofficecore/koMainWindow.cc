@@ -301,3 +301,5 @@ void KoMainWindowIf::unmarkPart()
 
   m_iMarkedPart = 0;
 }
+
+#include "koMainWindow.moc"
